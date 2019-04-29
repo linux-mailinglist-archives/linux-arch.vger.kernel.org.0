@@ -2,93 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A5ADBB2
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Apr 2019 07:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8EEDC8F
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Apr 2019 09:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727317AbfD2FxF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Apr 2019 01:53:05 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:55920 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726758AbfD2FxE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Apr 2019 01:53:04 -0400
-Received: by mail-wm1-f66.google.com with SMTP id o25so12182570wmf.5
-        for <linux-arch@vger.kernel.org>; Sun, 28 Apr 2019 22:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=isdxOJu0yyaPJTD+TRpvL3sx0A1P3TxEiS8bGbrVxqc=;
-        b=XzCkN6VvkT/VrO+gF71k9FRHxk3mLZNGPIebaJYPKEXkps2vwN6lX0iwnoWetjv404
-         SwMCy2Tkxyq6+kvzI6NU7nicFeBfNhfgq4nZR+FKdyif4AX0rwu5Z6JqnKsfxmfoXWvh
-         MsizBozGjStMY9I64mxzwHnfGK9zKEAOCSDvkOSiRhKV4eC7Ek0XEuZmStKoPaZ4wCf6
-         fHUfOknyNyWVjo69Q0E55JmpEexSB2H4WHi90urAKaXbIYhctzSzHzm6/r3S9E5VoVRk
-         whu4cD3W/0IC/xvqy5HuPOlpAX1DdvbYx6x22Gb2Q+v1O4RwU13/rh4+DOUfJesGdSLP
-         xn2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=isdxOJu0yyaPJTD+TRpvL3sx0A1P3TxEiS8bGbrVxqc=;
-        b=bc24F5V0/KARr6qySjmgryM1EUq0StpoI+ovuvMh5GIbqvLK1fXIQtT48yco6w2z1E
-         3Zi0HKZMdAB4h9H5MNycVQ9N1oqsr4pMwCG5oycJl6nUDUQ8okakSJWz1Uj3zWHTxE/P
-         VR8zYEMMxThjqpkomlxlkwfGty7F1trhqSX7aqhRM+g358gp+/pCaiB5TeX5agbfRtq6
-         CBgqINegFvZWFCApu1zK6/YO826jp0xYWi2eYh01jOHILYvhIikiVs4DAVpJYV/ijgrK
-         6cJTof1qI2CqgzczJaoa32E509zfcPL+M11gSSbeFyEcO2+sanZe7g+PO5GyItSw+jbG
-         j/rg==
-X-Gm-Message-State: APjAAAUkntiikL41EVuPr8OJfcFT2BrUh0IBzOoE20zHDWd/vCY7fDDO
-        xE2L6RKiCmvd3lU7j6cus9c091M+HIYIo1mWUQ8=
-X-Google-Smtp-Source: APXvYqwtTvHr50yXsImWk6BfknL/PGU391DnGNjXqoJqf+cvbt0b7UPKwO25b1/qNsUbMQMdUbwvy26wYKTa9LaSfSk=
-X-Received: by 2002:a1c:6783:: with SMTP id b125mr16570699wmc.41.1556517183079;
- Sun, 28 Apr 2019 22:53:03 -0700 (PDT)
+        id S1726846AbfD2HEF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Apr 2019 03:04:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48992 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726589AbfD2HEE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Apr 2019 03:04:04 -0400
+Received: from [10.44.0.22] (unknown [103.48.210.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EDDEB2147A;
+        Mon, 29 Apr 2019 07:04:01 +0000 (UTC)
+Subject: Re: endianness swapped
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Angelo Dureghello <angelo@sysam.it>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20190427153222.GA9613@jerusalem>
+ <20190427202150.GB9613@jerusalem>
+ <CAMuHMdXNCxHP=BWPOy70LjNJoMH+zy7yYOHj29gYt79_5=4ffg@mail.gmail.com>
+ <CAK8P3a2F6KW3M7ZaK=WL8429j_z=y_wXrx6rthxni8vBmsMPyg@mail.gmail.com>
+ <c75092d5-0bbf-cd8e-d0a2-ff1384ac5a48@linux-m68k.org>
+ <CAK8P3a16O57dvUYUPVZJpvZ7Hm6WA-jc_svQHTAEdDpbyLRv7w@mail.gmail.com>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+Message-ID: <50f49e95-95f3-4fdb-bcf6-6165382a5168@linux-m68k.org>
+Date:   Mon, 29 Apr 2019 17:03:59 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Reply-To: mrshenritapieres1@gmail.com
-Received: by 2002:a5d:4591:0:0:0:0:0 with HTTP; Sun, 28 Apr 2019 22:53:02
- -0700 (PDT)
-From:   Henrita Pieres <piereshenrita61@gmail.com>
-Date:   Sun, 28 Apr 2019 22:53:02 -0700
-X-Google-Sender-Auth: 9UxBwKi2WlTz77n2BF-sQPrtFpI
-Message-ID: <CADbBREAE_XsXmQdHmRSAQCNzTswXzMCnCiWKDN+hLDOuxkszeg@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAK8P3a16O57dvUYUPVZJpvZ7Hm6WA-jc_svQHTAEdDpbyLRv7w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Dear,
+Hi Arnd,
 
-Please forgive me for stressing you with my predicaments as I know
-that this letter may come to you as big surprise.  Actually, I came
-across your E-mail from my personal search afterward I decided to
-email you directly believing that you will be honest to fulfill my
-final wish before i die. Meanwhile, I am Mrs. Henrita Pieres, 62 years
-old, from France, and I am  suffering from a long time cancer and from
-all indication my condition is really deteriorating as my doctors have
-confirmed and courageously Advised me that I may not live beyond two
-months from now for the reason that my tumor has reached a  critical
-stage which has defiled all forms of medical treatment, As a matter of
-fact, registered nurse by profession while my  husband was dealing on
-Gold Dust and Gold Dory Bars in Burkina Faso till his sudden death the
-year 2012 then I took over his business till date. In fact, at this
-moment I have a deposit sum of four million five hundred thousand US
-dollars   [$4,500,000.00] with one of the leading bank in Burkina Faso
-but unfortunately I cannot visit the bank since I=E2=80=99m critically sick
-and powerless to do anything myself but my bank account officer
-advised me to assign any of my trustworthy relative, friends or
-partner with authorization letter to stand as the recipient of my
-money but sorrowfully I don=E2=80=99t have any reliable relative and no chi=
-ld.
+On 29/4/19 4:44 am, Arnd Bergmann wrote:
+> On Sun, Apr 28, 2019 at 3:59 PM Greg Ungerer <gerg@linux-m68k.org> wrote:
+>> On 28/4/19 7:21 pm, Arnd Bergmann wrote:
+>>> On Sun, Apr 28, 2019 at 10:46 AM Geert Uytterhoeven
+>>> <geert@linux-m68k.org> wrote:
+>>>> On Sat, Apr 27, 2019 at 10:22 PM Angelo Dureghello <angelo@sysam.it> wrote:
+>>>>> On Sat, Apr 27, 2019 at 05:32:22PM +0200, Angelo Dureghello wrote:
+>>>
+>>> Coldfire makes the behavior of readw()/readl() depend on the
+>>> MMIO address, presumably since that was the easiest way to
+>>> get drivers working originally, but it breaks the assumption
+>>> in the asm-generic code.
+>>
+>> Yes, that is right.
+>>
+>> There is a number of common hardware modules that Freescale have
+>> used in the ColdFire SoC parts and in their ARM based parts (iMX
+>> families). The ARM parts are pretty much always little endian, and
+>> the ColdFire is always big endian. The hardware registers in those
+>> hardware blocks are always accessed in native endian of the processor.
+> 
+> In later Freescale/NXP ARM SoCs (i.MX and Layerscape), we
+> also get a lot of devices pulled over from PowerPC, with random
+> endianess. In some cases, the same device that had big-endian
+> registers originally ends up in two different ARM products and one of
+> them uses big-endian while the other one uses little-endian registers.
+> 
+>> So the address range checks are to deal with those internal
+>> hardware blocks (i2c, spi, dma, etc), since we know those are
+>> at fixed addresses. That leaves the usual endian swapping in place for
+>> other general (ie external) devices (PCI devices, network chips, etc).
+> 
+> Is there a complete list of coldfire on-chip device drivers?
+> 
+> Looking at some of the drivers:
+> 
+> - drivers/i2c/busses/i2c-imx.c uses only 8-bit accesses and works either way,
+>    same for drivers/tty/serial/mcf.c
+> - drivers/spi/spi-coldfire-qspi.c is apparently coldfire-only and could use
+>    ioread32be for a portable to do big-endian register access.
+> - edma-common has a wrapper to support both big-endian and little-endian
+>    configurations in the same kernel image, but the mcf interrupt handler
+>    is hardcoded to the (normally) little-endian ioread32 function.
+> - drivers/net/ethernet/freescale/fec_main.c is shared between coldfire
+>    and i.MX (but not mpc52xx), and is hardcoded to readl/writel, and
+>    would need the same trick as edma to make it portable.
 
-Therefore, I want you to receive the money and take 50% to take care
-of yourself and family while 50% should be use basically  on
-humanitarian purposes mostly to orphanages home, Motherless babies
-home, less privileged and disable citizens and widows around the
-world. And as soon as I receive your respond I shall send you the full
-details with my pictures, banking records and with full contacts of my
-banking institution to communicate them on the matter.
+That matches up with what we list out in arch/m68k/coldfire/devices.c.
+I can't think of any other drivers.
 
-Hope to hear from you soon.
-Yours Faithfully,
-Mrs. Henrita Pieres
+There is a lot of use readl/writel and friends in the architecture
+specific code too, in arch/m68k/coldfire. At first I used __raw_readl/
+__raw_writel to always get native endianess. But quote a few uses of
+readl/writel have crept in over the years.
+
+Regards
+Greg
+
+
