@@ -2,152 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A268E496
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Apr 2019 16:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC2FE6A0
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Apr 2019 17:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728315AbfD2OWW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Apr 2019 10:22:22 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41046 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728267AbfD2OWV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Apr 2019 10:22:21 -0400
-Received: by mail-pf1-f193.google.com with SMTP id 188so5385935pfd.8
-        for <linux-arch@vger.kernel.org>; Mon, 29 Apr 2019 07:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q2RFfAyrf9RFoM43ktNZPcHmGWgFL8fnuov2nkBPWS8=;
-        b=nSUn3qnawAssSs6MaxKqsGt7m2rQuwz8iuV7UDRO4XwagTQcUwQLKJChDfpo2Y42Xk
-         dLm04wkPLwmDDcGlfi33gt+mgTjEgazJ0pWoNgMCBCgvVwv5SPNGO+R0wOTcgS/YyTDI
-         MMCTRBCf6Y5X7Op946XZIErDxOVRLAN1uJUSs6b8aMjiipEdz924r1uFPAVVEONFnBC1
-         eRjcEW3uL1UMy4VUvg8gNA4Pg7nsW7DCRDuZC0iLpBAnBGkKHCDzwyf3Uq04LayvwlmL
-         Hgpedt4edzE9KmfV/TNfyjqaPwOmLbR2KI1O6u2H+6Cx6SK8d3Pu0MrHeMD38gdpjP27
-         JeSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q2RFfAyrf9RFoM43ktNZPcHmGWgFL8fnuov2nkBPWS8=;
-        b=r8zQ7W5EyEKZPk9X2KSWkXeI29bZCFeuITzNoaOODQtZwHRsVvbpn/EsaAyxwyGOyg
-         5H3TXt5IxIddW8Ukh5LsLqyjhxsIMs0IlXSItI6cRSn7vI8OoK6owUU/QesBa1cbaKzt
-         0ZjbhIMCz7FL9UwitbUCIT5gYIQsUGDPBU718wk+TR/IMsn8aznb8OUJCljM4mC1ztAX
-         ODPdEcfFz+X1hBqY3HB0W/GejzqwG0gvezilrIuqc2NPbcoaSIrrTKKINzUMg5A3/a0/
-         m5gMXEWGnbTpfNRGq7QepKKhrKknlRMcjoe8R3M0HiyT3o5jWWe0rJBLADrRDMCBc/Tl
-         cJSg==
-X-Gm-Message-State: APjAAAX/BgHtSTq63qNk7XLys6u5VfpJMoHqTsprNS0EzTSsB7unia2s
-        RSmd4iA9js29ydmpqK9YgmpbK7pDkdM/fN1sE27Vjg==
-X-Google-Smtp-Source: APXvYqyjdyjRGlJ4AtmMgCZd/Nm8Zu8D+p70gtT5fOtGOIKXAcrI3uZOPLT4eOOdJOYGY3S3MZtVzM6xnMJJE/TXbvw=
-X-Received: by 2002:a62:51c5:: with SMTP id f188mr24041707pfb.239.1556547740003;
- Mon, 29 Apr 2019 07:22:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1553093420.git.andreyknvl@google.com> <44ad2d0c55dbad449edac23ae46d151a04102a1d.1553093421.git.andreyknvl@google.com>
- <20190322114357.GC13384@arrakis.emea.arm.com> <CAAeHK+xE-ywfpVHRhBJVGiqOe0+BYW9awUa10ZP4P6Ggc8nxMg@mail.gmail.com>
- <20190328141934.38960af0@gandalf.local.home> <20190329103039.GA44339@arrakis.emea.arm.com>
- <CAAeHK+xe-zWn8WpCxUxBB2tXL8oiLkshkPi1J3Ly87mACaA4-A@mail.gmail.com> <20190426141742.GB54863@arrakis.emea.arm.com>
-In-Reply-To: <20190426141742.GB54863@arrakis.emea.arm.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 29 Apr 2019 16:22:08 +0200
-Message-ID: <CAAeHK+xx_kB_U_ws8eUHOE8SkhGCcERNVcJoaMYbP9TGb+q2tg@mail.gmail.com>
-Subject: Re: [PATCH v13 04/20] mm, arm64: untag user pointers passed to memory syscalls
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1728619AbfD2Pf5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Apr 2019 11:35:57 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:39727 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728501AbfD2Pf5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Apr 2019 11:35:57 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 44t7z96kGcz9vD31;
+        Mon, 29 Apr 2019 17:35:49 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=Q5o3w0VV; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id kbO7e4z3Oado; Mon, 29 Apr 2019 17:35:49 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 44t7z95Zr4z9vD30;
+        Mon, 29 Apr 2019 17:35:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1556552149; bh=XXe83/pZb9AFMZAVXoUoxnryoMR8eaO+qKHpnqnFOB8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Q5o3w0VVtDkuaQJ720CrXVg1D1EEff1tyfslomh/gdc4+yk1/Dkug0ZmjOpliak9E
+         SNq24Cb/75QU4Vbo8GkPeMa5ZqrlcCuuxHVxWzptG/UbSIeVfGgHzF9GoK962b/vuv
+         2GQOk16RVxWf7DSmpu538h1my8dNOApiD0oga2ow=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id EDA2C8B8B4;
+        Mon, 29 Apr 2019 17:35:54 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id P3bLUxeO-Wfq; Mon, 29 Apr 2019 17:35:54 +0200 (CEST)
+Received: from PO15451 (po15451.idsi0.si.c-s.fr [172.25.231.6])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AEE718B8B3;
+        Mon, 29 Apr 2019 17:35:54 +0200 (CEST)
+Subject: Re: [RESEND PATCH v3 09/11] powerpc/mm/radix: mark
+ __radix__flush_tlb_range_psize() as __always_inline
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-arch <linux-arch@vger.kernel.org>
+Cc:     linux-s390@vger.kernel.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Mathieu Malaterre <malat@debian.org>
+References: <20190423034959.13525-1-yamada.masahiro@socionext.com>
+ <20190423034959.13525-10-yamada.masahiro@socionext.com>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <40b48947-b80e-7971-376d-52b594e26d17@c-s.fr>
+Date:   Mon, 29 Apr 2019 17:35:53 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190423034959.13525-10-yamada.masahiro@socionext.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Apr 26, 2019 at 4:17 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Tue, Apr 02, 2019 at 02:47:34PM +0200, Andrey Konovalov wrote:
-> > On Fri, Mar 29, 2019 at 11:30 AM Catalin Marinas
-> > <catalin.marinas@arm.com> wrote:
-> > > On Thu, Mar 28, 2019 at 02:19:34PM -0400, Steven Rostedt wrote:
-> > > > On Thu, 28 Mar 2019 19:10:07 +0100
-> > > > Andrey Konovalov <andreyknvl@google.com> wrote:
-> > > >
-> > > > > > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > > > > > > ---
-> > > > > > >  ipc/shm.c      | 2 ++
-> > > > > > >  mm/madvise.c   | 2 ++
-> > > > > > >  mm/mempolicy.c | 5 +++++
-> > > > > > >  mm/migrate.c   | 1 +
-> > > > > > >  mm/mincore.c   | 2 ++
-> > > > > > >  mm/mlock.c     | 5 +++++
-> > > > > > >  mm/mmap.c      | 7 +++++++
-> > > > > > >  mm/mprotect.c  | 1 +
-> > > > > > >  mm/mremap.c    | 2 ++
-> > > > > > >  mm/msync.c     | 2 ++
-> > > > > > >  10 files changed, 29 insertions(+)
-> > > > > >
-> > > > > > I wonder whether it's better to keep these as wrappers in the arm64
-> > > > > > code.
-> > > > >
-> > > > > I don't think I understand what you propose, could you elaborate?
-> > > >
-> > > > I believe Catalin is saying that instead of placing things like:
-> > > >
-> > > > @@ -1593,6 +1593,7 @@ SYSCALL_DEFINE3(shmat, int, shmid, char __user *, shmaddr, int, shmflg)
-> > > >       unsigned long ret;
-> > > >       long err;
-> > > >
-> > > > +     shmaddr = untagged_addr(shmaddr);
-> > > >
-> > > > To instead have the shmaddr set to the untagged_addr() before calling
-> > > > the system call, and passing the untagged addr to the system call, as
-> > > > that goes through the arm64 architecture specific code first.
-> > >
-> > > Indeed. For example, we already have a SYSCALL_DEFINE6(mmap, ...) in
-> > > arch/arm64/kernel/sys.c, just add the untagging there. We could do
-> > > something similar for the other syscalls. I don't mind doing this in the
-> > > generic code but if it's only needed for arm64, I'd rather keep the
-> > > generic changes to a minimum.
-> >
-> > Do I understand correctly, that I'll need to add ksys_ wrappers for
-> > each of the memory syscalls, and then redefine them in
-> > arch/arm64/kernel/sys.c with arm64_ prefix, like it is done for the
-> > personality syscall right now? This will require generic changes as
-> > well.
->
-> Yes. My aim is to keep the number of untagged_addr() calls in the
-> generic code to a minimum (rather than just keeping the generic code
-> changes small).
 
-OK, will do in v14 (despite it still being unclear whether we should
-do untagging here or not).
 
->
-> --
-> Catalin
+Le 23/04/2019 à 05:49, Masahiro Yamada a écrit :
+> This prepares to move CONFIG_OPTIMIZE_INLINING from x86 to a common
+> place. We need to eliminate potential issues beforehand.
+
+How did you identify the functions requiring __always_inline as this one 
+? Just by 'test and see if it fails', or did you have some script or so ?
+
+Here the problem is that one of the parameters of the function are used 
+as "immediate" constraint for the inline assembly, therefore requiring 
+the function to always be inline.
+
+I guess this should be explained in the commit log and I'm wondering how 
+you ensure that you did identify all functions like this.
+
+Christophe
+
+> 
+> If it is enabled for powerpc, the following error is reported:
+> 
+> arch/powerpc/mm/tlb-radix.c: In function '__radix__flush_tlb_range_psize':
+> arch/powerpc/mm/tlb-radix.c:104:2: error: asm operand 3 probably doesn't match constraints [-Werror]
+>    asm volatile(PPC_TLBIEL(%0, %4, %3, %2, %1)
+>    ^~~
+> arch/powerpc/mm/tlb-radix.c:104:2: error: impossible constraint in 'asm'
+> 
+> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> ---
+> 
+> Changes in v3: None
+> Changes in v2:
+>    - split into a separate patch
+> 
+>   arch/powerpc/mm/tlb-radix.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/mm/tlb-radix.c b/arch/powerpc/mm/tlb-radix.c
+> index 6a23b9ebd2a1..a2b2848f0ae3 100644
+> --- a/arch/powerpc/mm/tlb-radix.c
+> +++ b/arch/powerpc/mm/tlb-radix.c
+> @@ -928,7 +928,7 @@ void radix__tlb_flush(struct mmu_gather *tlb)
+>   	tlb->need_flush_all = 0;
+>   }
+>   
+> -static inline void __radix__flush_tlb_range_psize(struct mm_struct *mm,
+> +static __always_inline void __radix__flush_tlb_range_psize(struct mm_struct *mm,
+>   				unsigned long start, unsigned long end,
+>   				int psize, bool also_pwc)
+>   {
+> 
