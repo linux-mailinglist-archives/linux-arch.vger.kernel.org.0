@@ -2,134 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E621EF2D
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2019 05:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2047BF53F
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2019 13:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729960AbfD3D30 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Apr 2019 23:29:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46862 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729931AbfD3D30 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 29 Apr 2019 23:29:26 -0400
-Received: from guoren-Inspiron-7460 (23.83.240.247.16clouds.com [23.83.240.247])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 70D0720835;
-        Tue, 30 Apr 2019 03:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556594964;
-        bh=Lx4zhmDpfFLdvDNOmZItK0OkGfHXAn+WVer+CA5yQzs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h8nDHK2i2XvOB2SbBEiwKEgXePMWpbpMBGK8OHQ0e151AMLXVtjPtpdVr6ZxizTuw
-         ocFwd6hLq6PvJikv0D0081kzLRa+9eju/QpQn1owDqFWq9+Sn8U0rSIabdxdiC8pFV
-         u1gk2/HKfauJGtEqhNJRiVAuJKRMctXrkxlBJjBU=
-Date:   Tue, 30 Apr 2019 11:29:16 +0800
-From:   Guo Ren <guoren@kernel.org>
-To:     Palmer Dabbelt <palmer@sifive.com>
-Cc:     ren_guo@c-sky.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        tech-privileged@lists.riscv.org,
-        Andrew Waterman <andrew@sifive.com>, anup.patel@wdc.com,
-        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
-        green.hu@gmail.com, m.szyprowski@samsung.com, rppt@linux.ibm.com,
-        robin.murphy@arm.com, swood@redhat.com, vincentc@andestech.com,
-        xiaoyan_xiang@c-sky.com
-Subject: Re: [PATCH] riscv: Support non-coherency memory model
-Message-ID: <20190430032916.GA649@guoren-Inspiron-7460>
-References: <1555947870-23014-1-git-send-email-guoren@kernel.org>
- <mhng-4889b94b-2734-4657-83c2-654d3677733e@palmer-si-x1e>
+        id S1727590AbfD3LQd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 Apr 2019 07:16:33 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:44734 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726648AbfD3LQc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 30 Apr 2019 07:16:32 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C20380D;
+        Tue, 30 Apr 2019 04:16:32 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E981E3F5C1;
+        Tue, 30 Apr 2019 04:16:27 -0700 (PDT)
+Date:   Tue, 30 Apr 2019 12:16:25 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Subject: Re: [PATCH v13 16/20] IB/mlx4, arm64: untag user pointers in
+ mlx4_get_umem_mr
+Message-ID: <20190430111625.GD29799@arrakis.emea.arm.com>
+References: <cover.1553093420.git.andreyknvl@google.com>
+ <1e2824fd77e8eeb351c6c6246f384d0d89fd2d58.1553093421.git.andreyknvl@google.com>
+ <20190429180915.GZ6705@mtr-leonro.mtl.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-4889b94b-2734-4657-83c2-654d3677733e@palmer-si-x1e>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190429180915.GZ6705@mtr-leonro.mtl.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 01:11:43PM -0700, Palmer Dabbelt wrote:
-> On Mon, 22 Apr 2019 08:44:30 PDT (-0700), guoren@kernel.org wrote:
-> >From: Guo Ren <ren_guo@c-sky.com>
-> >
-> >The current riscv linux implementation requires SOC system to support
-> >memory coherence between all I/O devices and CPUs. But some SOC systems
-> >cannot maintain the coherence and they need support cache clean/invalid
-> >operations to synchronize data.
-> >
-> >Current implementation is no problem with SiFive FU540, because FU540
-> >keeps all IO devices and DMA master devices coherence with CPU. But to a
-> >traditional SOC vendor, it may already have a stable non-coherency SOC
-> >system, the need is simply to replace the CPU with RV CPU and rebuild
-> >the whole system with IO-coherency is very expensive.
-> >
-> >So we should make riscv linux also support non-coherency memory model.
-> >Here are the two points that riscv linux needs to be modified:
-> >
-> > - Add _PAGE_COHERENCY bit in current page table entry attributes. The bit
-> >   designates a coherence for this page mapping. Software set the bit to
-> >   tell the hardware that the region of the page's memory area must be
-> >   coherent with IOs devices in SOC system by PMA settings.
-> >   If IOs and CPU are already coherent in SOC system, CPU just ignore
-> >   this bit.
-> >
-> >   PTE format:
-> >   | XLEN-1  10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-> >         PFN      C  RSW  D   A   G   U   X   W   R   V
-> >                  ^
-> >   BIT(9): Coherence attribute bit
-> >          0: hardware needn't keep the page coherenct and software will
-> >             maintain the coherence with cache clear/invalid operations.
-> >          1: hardware must keep the page coherenct and software needn't
-> >             maintain the coherence.
-> >   BIT(8): Reserved for software and now it's _PAGE_SPECIAL in linux
-> >
-> >   Add a new hardware bit in PTE also need to modify Privileged
-> >   Architecture Supervisor-Level ISA:
-> >   https://github.com/riscv/riscv-isa-manual/pull/374
-> 
-> This is a RISC-V ISA modification, which isn't really appropriate to suggest on
-> the kernel mailing lists.  The right place to talk about this is at the RISC-V
-> foundation, which owns the ISA -- we can't change the hardware with a patch to
-> Linux :).
-I just want a discussion and a wide discussion is good for all of us :)
+(trimmed down the cc list slightly as the message bounces)
 
+On Mon, Apr 29, 2019 at 09:09:15PM +0300, Leon Romanovsky wrote:
+> On Wed, Mar 20, 2019 at 03:51:30PM +0100, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > mlx4_get_umem_mr() uses provided user pointers for vma lookups, which can
+> > only by done with untagged pointers.
+> >
+> > Untag user pointers in this function.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > ---
+> >  drivers/infiniband/hw/mlx4/mr.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/infiniband/hw/mlx4/mr.c b/drivers/infiniband/hw/mlx4/mr.c
+> > index 395379a480cb..9a35ed2c6a6f 100644
+> > --- a/drivers/infiniband/hw/mlx4/mr.c
+> > +++ b/drivers/infiniband/hw/mlx4/mr.c
+> > @@ -378,6 +378,7 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
+> >  	 * again
+> >  	 */
+> >  	if (!ib_access_writable(access_flags)) {
+> > +		unsigned long untagged_start = untagged_addr(start);
+> >  		struct vm_area_struct *vma;
+> >
+> >  		down_read(&current->mm->mmap_sem);
+> > @@ -386,9 +387,9 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
+> >  		 * cover the memory, but for now it requires a single vma to
+> >  		 * entirely cover the MR to support RO mappings.
+> >  		 */
+> > -		vma = find_vma(current->mm, start);
+> > -		if (vma && vma->vm_end >= start + length &&
+> > -		    vma->vm_start <= start) {
+> > +		vma = find_vma(current->mm, untagged_start);
+> > +		if (vma && vma->vm_end >= untagged_start + length &&
+> > +		    vma->vm_start <= untagged_start) {
+> >  			if (vma->vm_flags & VM_WRITE)
+> >  				access_flags |= IB_ACCESS_LOCAL_WRITE;
+> >  		} else {
+> > --
 > 
-> > - Add SBI_FENCE_DMA 9 in riscv-sbi.
-> >   sbi_fence_dma(start, size, dir) could synchronize CPU cache data with
-> >   DMA device in non-coherency memory model. The third param's definition
-> >   is the same with linux's in include/linux/dma-direction.h:
-> >
-> >   enum dma_data_direction {
-> >	DMA_BIDIRECTIONAL = 0,
-> >	DMA_TO_DEVICE = 1,
-> >	DMA_FROM_DEVICE = 2,
-> >	DMA_NONE = 3,
-> >   };
-> >
-> >   The first param:start must be physical address which could be handled
-> >   in M-state.
-> >
-> >   Here is a pull request to the riscv-sbi-doc:
-> >   https://github.com/riscv/riscv-sbi-doc/pull/15
-> >
-> >We have tested the patch on our fpga SOC system which network controller
-> >connected to a non-cache-coherency interconnect in and it couldn't work
-> >without the patch.
-> >
-> >There is no side effect for FU540 whose CPU don't care _PAGE_COHERENCY
-> >in PTE, but FU540's bbl also need to implement a simple sbi_fence_dma
-> >by directly return. In fact, if you give a correct configuration for
-> >dev_is_dma_conherent(), linux dma framework wouldn't call sbi_fence_dma
-> >any more.
-> 
-> Non-coherent fences also need to be discussed as part of a RISC-V ISA
-  ^^^^^^^^^^^^ ^^^^^^
-  fences instructions? not page attributes?
-> extension.  
-> I know people have expressed interest, but I don't know of a
-> working group that's already been set up.
-Is that mean current RISC-V ISA forces the SOC to be coherent memory model?
+> Thanks,
+> Reviewed-by: Leon Romanovsky <leonro@mellanox.com>
 
-Best Regards
- Guo Ren
+Thanks for the review.
+
+> Interesting, the followup question is why mlx4 is only one driver in IB which
+> needs such code in umem_mr. I'll take a look on it.
+
+I don't know. Just using the light heuristics of find_vma() shows some
+other places. For example, ib_umem_odp_get() gets the umem->address via
+ib_umem_start(). This was previously set in ib_umem_get() as called from
+mlx4_get_umem_mr(). Should the above patch have just untagged "start" on
+entry?
+
+BTW, what's the provenience of such "start" address here? Is it
+something that the user would have malloc()'ed? We try to impose some
+restrictions one what is allowed to be tagged in user so that we don't
+have to untag the addresses in the kernel. For example, if it was the
+result of an mmap() on the device file, we don't allow tagging.
+
+Thanks.
+
+-- 
+Catalin
