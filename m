@@ -2,66 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4DDFAA7
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2019 15:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8BB10C24
+	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2019 19:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726388AbfD3NlA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 Apr 2019 09:41:00 -0400
-Received: from a9-99.smtp-out.amazonses.com ([54.240.9.99]:55078 "EHLO
-        a9-99.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726145AbfD3NlA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 30 Apr 2019 09:41:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1556631659;
-        h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:MIME-Version:Content-Type:Feedback-ID;
-        bh=beBu285rmqBNDiQNDcTz2JoVAX9N/IQQNqAAuEjGf9w=;
-        b=QEyLbGOEOCUS+pzuVbWu7CfTSXtyfCXiSu09ABe7LGl3MQTXMcdv5F6CYG7Mn9m9
-        Cr2tVt+C3bCs9O4bKVDgiFAK0s7ET2m4BRnOyzLL0HT/l29zNxm4UfubaGLY/kPzA8v
-        J2Qz0gIalm+NimzzeXwHdPJ+XRPsb0atevd5DX+M=
-Date:   Tue, 30 Apr 2019 13:40:59 +0000
-From:   Christopher Lameter <cl@linux.com>
-X-X-Sender: cl@nuc-kabylake
-To:     Christoph Hellwig <hch@infradead.org>
-cc:     "Luck, Tony" <tony.luck@intel.com>, Meelis Roos <mroos@linux.ee>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>
-Subject: Re: DISCONTIGMEM is deprecated
-In-Reply-To: <20190429200957.GB27158@infradead.org>
-Message-ID: <0100016a6e7a22d8-dcd24705-508f-4acc-8883-e5d61f4c0fa4-000000@email.amazonses.com>
-References: <20190419094335.GJ18914@techsingularity.net> <20190419140521.GI7751@bombadil.infradead.org> <0100016a461809ed-be5bd8fc-9925-424d-9624-4a325a7a8860-000000@email.amazonses.com> <25cabb7c-9602-2e09-2fe0-cad3e54595fa@linux.ee> <20190428081353.GB30901@infradead.org>
- <3908561D78D1C84285E8C5FCA982C28F7E9140BA@ORSMSX104.amr.corp.intel.com> <20190429200957.GB27158@infradead.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1726079AbfEARkX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 May 2019 13:40:23 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:34818 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726019AbfEARkX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 May 2019 13:40:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=QqltW55b8MUQJ4hT00KXOPTP8JAvi8T4BIhthG30Yx4=; b=Siqt2t2t4zEqN0iLnZ24k3d+G
+        m82DDcwqoZT5k50q5BTCcMKa9H/ZjhdrxxVMbvw0X84aALXe96hXoi+M8jXdAaMkLtfD35nXhwQ/j
+        j6v9Eqb9c5oEJHEWYzvOkaM3yRkKH/AOTh4DbKtkliloZyGQIToOHq3cjzZMuJTIG1lexvBOCqwV2
+        3JZvLH8Bcv0R/w5z0VAfKIQezaMIteokjtW3COC7nesut2A/fcsLFphoXc9+z38BaT7MkEB9u9i4y
+        g+IucfVsN5mxw4RRjt9zVQdSFpTp4DwV9+waGcdbovSiuEsdfpHbvAzIiThaSOoECuJM3rY2rDeAz
+        SZCd2toTA==;
+Received: from adsl-173-228-226-134.prtc.net ([173.228.226.134] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hLtDQ-0005te-Ro; Wed, 01 May 2019 17:40:21 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Oleg Nesterov <oleg@redhat.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: remove asm-generic/ptrace.h
+Date:   Wed,  1 May 2019 13:39:38 -0400
+Message-Id: <20190501173943.5688-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-SES-Outgoing: 2019.04.30-54.240.9.99
-Feedback-ID: 1.us-east-1.fQZZZ0Xtj2+TD7V5apTT/NrT6QKuPgzCT/IC7XYgDKI=:AmazonSES
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 29 Apr 2019, Christoph Hellwig wrote:
+Hi all,
 
-> So maybe it it time to mark SN2 broken and see if anyone screams?
->
-> Without SN2 the whole machvec mess could basically go away - the
-> only real difference between the remaining machvecs is which iommu
-> if any we set up.
-
-SPARSEMEM with VMEMMAP was developed to address these
-issues and allow one mapping scheme across the different platforms.
-
-You do not need DISCONTIGMEM support for SN2. And as far as I know (from a
-decade ago ok....) the distributions were using VMEMMAP instead.
-
-
+asm-generic/ptrace.h is a little weird in that it doesn't actually
+implement any functionality, but it provided multiple layers of macros
+that just implement trivial inline functions.  We implement those
+directly in the few architectures and be off with a much simpler
+design.
