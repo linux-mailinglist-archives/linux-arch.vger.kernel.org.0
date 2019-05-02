@@ -2,153 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B87C12050
-	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2019 18:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B42120AC
+	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2019 18:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726524AbfEBQd0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 May 2019 12:33:26 -0400
-Received: from mga12.intel.com ([192.55.52.136]:6989 "EHLO mga12.intel.com"
+        id S1726787AbfEBQ4N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 May 2019 12:56:13 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:38953 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726451AbfEBQd0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 2 May 2019 12:33:26 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 May 2019 09:33:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,422,1549958400"; 
-   d="scan'208";a="296427717"
-Received: from yyu32-desk1.sc.intel.com ([143.183.136.147])
-  by orsmga004.jf.intel.com with ESMTP; 02 May 2019 09:33:23 -0700
-Message-ID: <91611b9e159799bbf603b65cf7bb6b37dd81b075.camel@intel.com>
-Subject: Re: [PATCH] binfmt_elf: Extract .note.gnu.property from an ELF file
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        libc-alpha@sourceware.org
-Date:   Thu, 02 May 2019 09:25:56 -0700
-In-Reply-To: <20190502161424.GQ3567@e103592.cambridge.arm.com>
-References: <20190501211217.5039-1-yu-cheng.yu@intel.com>
-         <20190502111003.GO3567@e103592.cambridge.arm.com>
-         <5b2c6cee345e00182e97842ae90c02cdcd830135.camel@intel.com>
-         <20190502161424.GQ3567@e103592.cambridge.arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.1-2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726472AbfEBQ4M (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 2 May 2019 12:56:12 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 44w1cS5Fwsz9v0Sx;
+        Thu,  2 May 2019 18:56:08 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=b8I7W1X+; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id 4wFI9OSqYAkB; Thu,  2 May 2019 18:56:08 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 44w1cS3z29z9v0Sy;
+        Thu,  2 May 2019 18:56:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1556816168; bh=Q15LZ3d9bdq9dEoD9BccUn9mlT4iR41PhF1gwPGTDdo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=b8I7W1X+eD9E6f4QICHVyiGb2O+HBaJpc4Gwg6pUFtlpNKygpjn8VED8m8xg+JkOB
+         IY+qSAZGLB4WFz+ZuAhNE6IOZlIPudaswik9x6vnbwMIKU3+fxYh/fSD0okZc5lnaA
+         cdvwJC11zLQtHCiz8Kggoo4ZlThkHqB1Sg9CxUag=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3A25B8B8FE;
+        Thu,  2 May 2019 18:56:10 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id RamEpSyy5iYB; Thu,  2 May 2019 18:56:10 +0200 (CEST)
+Received: from PO15451 (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CE4878B899;
+        Thu,  2 May 2019 18:56:08 +0200 (CEST)
+Subject: Re: [PATCH 12/15] powerpc/nohash/64: switch to generic version of pte
+ allocation
+To:     Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Palmer Dabbelt <palmer@sifive.com>, linux-mips@vger.kernel.org,
+        Guo Ren <guoren@kernel.org>, linux-hexagon@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        Helge Deller <deller@gmx.de>, x86@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Sam Creasey <sammy@sammy.net>, Arnd Bergmann <arnd@arndb.de>,
+        linux-um@lists.infradead.org, Richard Weinberger <richard@nod.at>,
+        linux-m68k@lists.linux-m68k.org, Greentime Hu <green.hu@gmail.com>,
+        nios2-dev@lists.rocketboards.org, Guan Xuetao <gxt@pku.edu.cn>,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Richard Kuo <rkuo@codeaurora.org>,
+        Paul Burton <paul.burton@mips.com>,
+        linux-alpha@vger.kernel.org, Ley Foon Tan <lftan@altera.com>,
+        linuxppc-dev@lists.ozlabs.org
+References: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
+ <1556810922-20248-13-git-send-email-rppt@linux.ibm.com>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <adcb6ae6-48d9-5ba9-2732-a0ab1d96667c@c-s.fr>
+Date:   Thu, 2 May 2019 18:56:07 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <1556810922-20248-13-git-send-email-rppt@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 2019-05-02 at 17:14 +0100, Dave Martin wrote:
-> On Thu, May 02, 2019 at 08:47:06AM -0700, Yu-cheng Yu wrote:
-> > On Thu, 2019-05-02 at 12:10 +0100, Dave Martin wrote:
-> > > On Wed, May 01, 2019 at 02:12:17PM -0700, Yu-cheng Yu wrote:
-> > > > An ELF file's .note.gnu.property indicates features the executable file
-> > > > can support.  For example, the property GNU_PROPERTY_X86_FEATURE_1_AND
-> > > > indicates the file supports GNU_PROPERTY_X86_FEATURE_1_IBT and/or
-> > > > GNU_PROPERTY_X86_FEATURE_1_SHSTK.
-> > 
-> > [...]
-> > > A couple of questions before I look in more detail:
-> > > 
-> > > 1) Can we rely on PT_GNU_PROPERTY being present in the phdrs to describe
-> > > the NT_GNU_PROPERTY_TYPE_0 note?  If so, we can avoid trying to parse
-> > > irrelevant PT_NOTE segments.
-> > 
-> > Some older linkers can create multiples of NT_GNU_PROPERTY_TYPE_0.  The code
-> > scans all PT_NOTE segments to ensure there is only one
-> > NT_GNU_PROPERTY_TYPE_0. 
-> > If there are multiples, then all are considered invalid.
-> 
-> I'm concerned that in the arm64 case we would waste some effort by
-> scanning multiple notes.
-> 
-> Could we do something like iterating over the phdrs, and if we find
-> exactly one PT_GNU_PROPERTY then use that, else fall back to scanning
-> all PT_NOTEs?
 
-That makes sense to me, but the concern is that we don't know the
-PT_GNU_PROPERTY the only one.  This probably needs to be discussed with more
-people.
 
-> > > 2) Are there standard types for things like the program property header?
-> > > If not, can we add something in elf.h?  We should try to coordinate with
-> > > libc on that.  Something like
-> > > 
-> > > typedef __u32 Elf_Word;
-> > > 
-> > > typedef struct {
-> > > 	Elf_Word pr_type;
-> > > 	Elf_Word pr_datasz;
-> > > } Elf_Gnu_Prophdr;
-> > > 
-> > > (i.e., just the header part from [1], with a more specific name -- which
-> > > I just made up).
-> > 
-> > Yes, I will fix that.
-> > 
-> > [...]
-> > > 3) It looks like we have to go and re-parse all the notes for every
-> > > property requested by the arch code.
-> > 
-> > As explained above, it is necessary to scan all PT_NOTE segments.  But there
-> > should be only one NT_GNU_PROPERTY_TYPE_0 in an ELF file.  Once that is
-> > found,
-> > perhaps we can store it somewhere, or call into the arch code as you
-> > mentioned
-> > below.  I will look into that.
-> 
-> Just to get something working on arm64, I'm working on some hacks that
-> move things around a bit -- I'll post when I have something.
-> 
-> Did you have any view on my other point, below?
+Le 02/05/2019 à 17:28, Mike Rapoport a écrit :
+> The 64-bit book-E powerpc implements pte_alloc_one(),
+> pte_alloc_one_kernel(), pte_free_kernel() and pte_free() the same way as
+> the generic version.
 
-That should work.  I will also make some changes for that.
+Will soon be converted to the same as the 3 other PPC subarches, see
+https://patchwork.ozlabs.org/patch/1091590/
+
+Christophe
 
 > 
-> Cheers
-> ---Dave
+> Switch it to the generic version that does exactly the same thing.
 > 
-> > > For now there is only one property requested anyway, so this is probably
-> > > not too bad.  But could we flip things around so that we have some
-> > > CONFIG_ARCH_WANTS_ELF_GNU_PROPERTY (say), and have the ELF core code
-> > > call into the arch backend for each property found?
-> > > 
-> > > The arch could provide some hook
-> > > 
-> > > 	int arch_elf_has_gnu_property(const Elf_Gnu_Prophdr *prop,
-> > > 					const void *data);
-> > > 
-> > > to consume the properties as they are found.
-> > > 
-> > > This would effectively replace the arch_setup_property() hook you
-> > > currently have.
-> > > 
-> > > Cheers
-> > > ---Dave
-> > > 
-> > > [1] https://github.com/hjl-tools/linux-abi/wiki/Linux-Extensions-to-gABI
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>   arch/powerpc/include/asm/nohash/64/pgalloc.h | 35 ++--------------------------
+>   1 file changed, 2 insertions(+), 33 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/nohash/64/pgalloc.h b/arch/powerpc/include/asm/nohash/64/pgalloc.h
+> index 66d086f..bfb53a0 100644
+> --- a/arch/powerpc/include/asm/nohash/64/pgalloc.h
+> +++ b/arch/powerpc/include/asm/nohash/64/pgalloc.h
+> @@ -11,6 +11,8 @@
+>   #include <linux/cpumask.h>
+>   #include <linux/percpu.h>
+>   
+> +#include <asm-generic/pgalloc.h>	/* for pte_{alloc,free}_one */
+> +
+>   struct vmemmap_backing {
+>   	struct vmemmap_backing *list;
+>   	unsigned long phys;
+> @@ -92,39 +94,6 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
+>   	kmem_cache_free(PGT_CACHE(PMD_CACHE_INDEX), pmd);
+>   }
+>   
+> -
+> -static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
+> -{
+> -	return (pte_t *)__get_free_page(GFP_KERNEL | __GFP_ZERO);
+> -}
+> -
+> -static inline pgtable_t pte_alloc_one(struct mm_struct *mm)
+> -{
+> -	struct page *page;
+> -	pte_t *pte;
+> -
+> -	pte = (pte_t *)__get_free_page(GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT);
+> -	if (!pte)
+> -		return NULL;
+> -	page = virt_to_page(pte);
+> -	if (!pgtable_page_ctor(page)) {
+> -		__free_page(page);
+> -		return NULL;
+> -	}
+> -	return page;
+> -}
+> -
+> -static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
+> -{
+> -	free_page((unsigned long)pte);
+> -}
+> -
+> -static inline void pte_free(struct mm_struct *mm, pgtable_t ptepage)
+> -{
+> -	pgtable_page_dtor(ptepage);
+> -	__free_page(ptepage);
+> -}
+> -
+>   static inline void pgtable_free(void *table, int shift)
+>   {
+>   	if (!shift) {
+> 
