@@ -2,44 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD4411E6C
-	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2019 17:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDC111E9E
+	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2019 17:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728528AbfEBP3s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 May 2019 11:29:48 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60810 "EHLO
+        id S1728107AbfEBPiw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 May 2019 11:38:52 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33496 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727817AbfEBP3r (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 May 2019 11:29:47 -0400
+        by vger.kernel.org with ESMTP id S1728543AbfEBP3y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 May 2019 11:29:54 -0400
 Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42FSIkH138774
-        for <linux-arch@vger.kernel.org>; Thu, 2 May 2019 11:29:46 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2s81d7dkdj-1
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42FSIkf138849
+        for <linux-arch@vger.kernel.org>; Thu, 2 May 2019 11:29:53 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2s81d7dkkm-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Thu, 02 May 2019 11:29:45 -0400
+        for <linux-arch@vger.kernel.org>; Thu, 02 May 2019 11:29:53 -0400
 Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-arch@vger.kernel.org> from <rppt@linux.ibm.com>;
-        Thu, 2 May 2019 16:29:43 +0100
+        Thu, 2 May 2019 16:29:50 +0100
 Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 2 May 2019 16:29:35 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x42FTYnT27132096
+        Thu, 2 May 2019 16:29:41 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x42FTe3a53215466
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 May 2019 15:29:34 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B1E2F4C040;
-        Thu,  2 May 2019 15:29:34 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F94A4C04A;
-        Thu,  2 May 2019 15:29:30 +0000 (GMT)
+        Thu, 2 May 2019 15:29:40 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 617B852052;
+        Thu,  2 May 2019 15:29:40 +0000 (GMT)
 Received: from rapoport-lnx (unknown [9.148.205.209])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  2 May 2019 15:29:30 +0000 (GMT)
-Received: by rapoport-lnx (sSMTP sendmail emulation); Thu, 02 May 2019 18:29:29 +0300
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id C91C15204F;
+        Thu,  2 May 2019 15:29:35 +0000 (GMT)
+Received: by rapoport-lnx (sSMTP sendmail emulation); Thu, 02 May 2019 18:29:34 +0300
 From:   Mike Rapoport <rppt@linux.ibm.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -66,101 +63,109 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
         nios2-dev@lists.rocketboards.org,
         Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH 08/15] mips: switch to generic version of pte allocation
-Date:   Thu,  2 May 2019 18:28:35 +0300
+Subject: [PATCH 09/15] nds32: switch to generic version of pte allocation
+Date:   Thu,  2 May 2019 18:28:36 +0300
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
 References: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
 X-TM-AS-GCONF: 00
-x-cbid: 19050215-4275-0000-0000-00000330AE68
+x-cbid: 19050215-0012-0000-0000-000003179C5E
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19050215-4276-0000-0000-000038400E1C
-Message-Id: <1556810922-20248-9-git-send-email-rppt@linux.ibm.com>
+x-cbparentid: 19050215-0013-0000-0000-000021500C32
+Message-Id: <1556810922-20248-10-git-send-email-rppt@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-02_08:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=750 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905020103
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-MIPS allocates kernel PTE pages with
+The nds32 implementation of pte_alloc_one_kernel() differs from the generic
+in the use of __GFP_RETRY_MAYFAIL flag, which is removed after the
+conversion.
 
-	__get_free_pages(GFP_KERNEL | __GFP_ZERO, PTE_ORDER)
+The nds32 version of pte_alloc_one() missed the call to pgtable_page_ctor()
+and also used __GFP_RETRY_MAYFAIL. Switching it to use generic
+__pte_alloc_one() for the PTE page allocation ensures that page table
+constructor is run and the user page tables are allocated with
+__GFP_ACCOUNT.
 
-and user PTE pages with
+The conversion to the generic version of pte_free_kernel() removes the NULL
+check for pte.
 
-	alloc_pages(GFP_KERNEL | __GFP_ZERO, PTE_ORDER)
-
-The PTE_ORDER is hardwired to zero, which makes MIPS implementation almost
-identical to the generic one.
-
-Switch MIPS to the generic version that does exactly the same thing for the
-kernel page tables and adds __GFP_ACCOUNT for the user PTEs.
-
-The pte_free_kernel() and pte_free() versions on mips are identical to the
-generic ones and can be simply dropped.
+The pte_free() version on nds32 is identical to the generic one and can be
+simply dropped.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- arch/mips/include/asm/pgalloc.h | 33 ++-------------------------------
- 1 file changed, 2 insertions(+), 31 deletions(-)
+ arch/nds32/include/asm/pgalloc.h | 31 ++++---------------------------
+ 1 file changed, 4 insertions(+), 27 deletions(-)
 
-diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
-index 27808d9..aa16b85 100644
---- a/arch/mips/include/asm/pgalloc.h
-+++ b/arch/mips/include/asm/pgalloc.h
-@@ -13,6 +13,8 @@
- #include <linux/mm.h>
- #include <linux/sched.h>
+diff --git a/arch/nds32/include/asm/pgalloc.h b/arch/nds32/include/asm/pgalloc.h
+index 3c5fee5..954696c 100644
+--- a/arch/nds32/include/asm/pgalloc.h
++++ b/arch/nds32/include/asm/pgalloc.h
+@@ -9,6 +9,9 @@
+ #include <asm/tlbflush.h>
+ #include <asm/proc-fns.h>
  
++#define __HAVE_ARCH_PTE_ALLOC_ONE
 +#include <asm-generic/pgalloc.h>	/* for pte_{alloc,free}_one */
 +
- static inline void pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmd,
- 	pte_t *pte)
- {
-@@ -50,37 +52,6 @@ static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
- 	free_pages((unsigned long)pgd, PGD_ORDER);
- }
+ /*
+  * Since we have only two-level page tables, these are trivial
+  */
+@@ -22,22 +25,11 @@ extern void pgd_free(struct mm_struct *mm, pgd_t * pgd);
+ 
+ #define check_pgt_cache()		do { } while (0)
  
 -static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
 -{
--	return (pte_t *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, PTE_ORDER);
--}
+-	pte_t *pte;
 -
--static inline struct page *pte_alloc_one(struct mm_struct *mm)
--{
--	struct page *pte;
+-	pte =
+-	    (pte_t *) __get_free_page(GFP_KERNEL | __GFP_RETRY_MAYFAIL |
+-				      __GFP_ZERO);
 -
--	pte = alloc_pages(GFP_KERNEL, PTE_ORDER);
--	if (!pte)
--		return NULL;
--	clear_highpage(pte);
--	if (!pgtable_page_ctor(pte)) {
--		__free_page(pte);
--		return NULL;
--	}
 -	return pte;
 -}
 -
--static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
+ static inline pgtable_t pte_alloc_one(struct mm_struct *mm)
+ {
+ 	pgtable_t pte;
+ 
+-	pte = alloc_pages(GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_ZERO, 0);
++	pte = __pte_alloc_one(mm, GFP_PGTABLE_USER);
+ 	if (pte)
+ 		cpu_dcache_wb_page((unsigned long)page_address(pte));
+ 
+@@ -45,21 +37,6 @@ static inline pgtable_t pte_alloc_one(struct mm_struct *mm)
+ }
+ 
+ /*
+- * Free one PTE table.
+- */
+-static inline void pte_free_kernel(struct mm_struct *mm, pte_t * pte)
 -{
--	free_pages((unsigned long)pte, PTE_ORDER);
+-	if (pte) {
+-		free_page((unsigned long)pte);
+-	}
 -}
 -
 -static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
 -{
--	pgtable_page_dtor(pte);
--	__free_pages(pte, PTE_ORDER);
+-	__free_page(pte);
 -}
 -
- #define __pte_free_tlb(tlb,pte,address)			\
- do {							\
- 	pgtable_page_dtor(pte);				\
+-/*
+  * Populate the pmdp entry with a pointer to the pte.  This pmd is part
+  * of the mm address space.
+  *
 -- 
 2.7.4
 
