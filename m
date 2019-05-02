@@ -2,182 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0298911E0B
-	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2019 17:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D488811F90
+	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2019 17:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728747AbfEBPa3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 May 2019 11:30:29 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48912 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728739AbfEBPa3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 May 2019 11:30:29 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42FS9CR127401
-        for <linux-arch@vger.kernel.org>; Thu, 2 May 2019 11:30:27 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2s81ej5e7j-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Thu, 02 May 2019 11:30:27 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-arch@vger.kernel.org> from <rppt@linux.ibm.com>;
-        Thu, 2 May 2019 16:30:24 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 2 May 2019 16:30:15 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x42FUEvu28835860
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 May 2019 15:30:14 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 56FB84C058;
-        Thu,  2 May 2019 15:30:14 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E40C54C052;
-        Thu,  2 May 2019 15:30:09 +0000 (GMT)
-Received: from rapoport-lnx (unknown [9.148.205.209])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  2 May 2019 15:30:09 +0000 (GMT)
-Received: by rapoport-lnx (sSMTP sendmail emulation); Thu, 02 May 2019 18:30:08 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, Guo Ren <guoren@kernel.org>,
-        Helge Deller <deller@gmx.de>, Ley Foon Tan <lftan@altera.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Richard Kuo <rkuo@codeaurora.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Sam Creasey <sammy@sammy.net>, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        nios2-dev@lists.rocketboards.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH 15/15] unicore32: switch to generic version of pte allocation
-Date:   Thu,  2 May 2019 18:28:42 +0300
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
-References: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19050215-0020-0000-0000-00000338993E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19050215-0021-0000-0000-0000218B21F5
-Message-Id: <1556810922-20248-16-git-send-email-rppt@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-02_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=731 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905020103
+        id S1726334AbfEBPyf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 May 2019 11:54:35 -0400
+Received: from mga05.intel.com ([192.55.52.43]:43578 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726321AbfEBPyf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 2 May 2019 11:54:35 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 May 2019 08:54:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,422,1549958400"; 
+   d="scan'208";a="320874382"
+Received: from yyu32-desk1.sc.intel.com ([143.183.136.147])
+  by orsmga005.jf.intel.com with ESMTP; 02 May 2019 08:54:33 -0700
+Message-ID: <5b2c6cee345e00182e97842ae90c02cdcd830135.camel@intel.com>
+Subject: Re: [PATCH] binfmt_elf: Extract .note.gnu.property from an ELF file
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        libc-alpha@sourceware.org
+Date:   Thu, 02 May 2019 08:47:06 -0700
+In-Reply-To: <20190502111003.GO3567@e103592.cambridge.arm.com>
+References: <20190501211217.5039-1-yu-cheng.yu@intel.com>
+         <20190502111003.GO3567@e103592.cambridge.arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.1-2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Replace __get_free_page() and alloc_pages() calls with the generic
-__pte_alloc_one_kernel() and __pte_alloc_one().
+On Thu, 2019-05-02 at 12:10 +0100, Dave Martin wrote:
+> On Wed, May 01, 2019 at 02:12:17PM -0700, Yu-cheng Yu wrote:
+> > An ELF file's .note.gnu.property indicates features the executable file
+> > can support.  For example, the property GNU_PROPERTY_X86_FEATURE_1_AND
+> > indicates the file supports GNU_PROPERTY_X86_FEATURE_1_IBT and/or
+> > GNU_PROPERTY_X86_FEATURE_1_SHSTK.
 
-There is no functional change for the kernel PTE allocation.
+[...]
+> A couple of questions before I look in more detail:
+> 
+> 1) Can we rely on PT_GNU_PROPERTY being present in the phdrs to describe
+> the NT_GNU_PROPERTY_TYPE_0 note?  If so, we can avoid trying to parse
+> irrelevant PT_NOTE segments.
 
-The difference for the user PTEs, is that the clear_pte_table() is now
-called after pgtable_page_ctor() and the addition of __GFP_ACCOUNT to the
-GFP flags.
+Some older linkers can create multiples of NT_GNU_PROPERTY_TYPE_0.  The code
+scans all PT_NOTE segments to ensure there is only one NT_GNU_PROPERTY_TYPE_0. 
+If there are multiples, then all are considered invalid.
 
-The pte_free() and pte_free_kernel() versions are identical to the generic
-ones and can be simply dropped.
+> 
+> 
+> 2) Are there standard types for things like the program property header?
+> If not, can we add something in elf.h?  We should try to coordinate with
+> libc on that.  Something like
+> 
+> typedef __u32 Elf_Word;
+> 
+> typedef struct {
+> 	Elf_Word pr_type;
+> 	Elf_Word pr_datasz;
+> } Elf_Gnu_Prophdr;
+> 
+> (i.e., just the header part from [1], with a more specific name -- which
+> I just made up).
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- arch/unicore32/include/asm/pgalloc.h | 36 ++++++++----------------------------
- 1 file changed, 8 insertions(+), 28 deletions(-)
+Yes, I will fix that.
 
-diff --git a/arch/unicore32/include/asm/pgalloc.h b/arch/unicore32/include/asm/pgalloc.h
-index 7cceabe..dd09af6 100644
---- a/arch/unicore32/include/asm/pgalloc.h
-+++ b/arch/unicore32/include/asm/pgalloc.h
-@@ -17,6 +17,10 @@
- #include <asm/cacheflush.h>
- #include <asm/tlbflush.h>
- 
-+#define __HAVE_ARCH_PTE_ALLOC_ONE_KERNEL
-+#define __HAVE_ARCH_PTE_ALLOC_ONE
-+#include <asm-generic/pgalloc.h>
-+
- #define check_pgt_cache()		do { } while (0)
- 
- #define _PAGE_USER_TABLE	(PMD_TYPE_TABLE | PMD_PRESENT)
-@@ -28,17 +32,14 @@ extern void free_pgd_slow(struct mm_struct *mm, pgd_t *pgd);
- #define pgd_alloc(mm)			get_pgd_slow(mm)
- #define pgd_free(mm, pgd)		free_pgd_slow(mm, pgd)
- 
--#define PGALLOC_GFP	(GFP_KERNEL | __GFP_ZERO)
--
- /*
-  * Allocate one PTE table.
-  */
- static inline pte_t *
- pte_alloc_one_kernel(struct mm_struct *mm)
- {
--	pte_t *pte;
-+	pte_t *pte = __pte_alloc_one_kernel(mm);
- 
--	pte = (pte_t *)__get_free_page(PGALLOC_GFP);
- 	if (pte)
- 		clean_dcache_area(pte, PTRS_PER_PTE * sizeof(pte_t));
- 
-@@ -50,35 +51,14 @@ pte_alloc_one(struct mm_struct *mm)
- {
- 	struct page *pte;
- 
--	pte = alloc_pages(PGALLOC_GFP, 0);
-+	pte = __pte_alloc_one(mm, GFP_PGTABLE_USER);
- 	if (!pte)
- 		return NULL;
--	if (!PageHighMem(pte)) {
--		void *page = page_address(pte);
--		clean_dcache_area(page, PTRS_PER_PTE * sizeof(pte_t));
--	}
--	if (!pgtable_page_ctor(pte)) {
--		__free_page(pte);
--	}
--
-+	if (!PageHighMem(pte))
-+		clean_pte_table(page_address(pte));
- 	return pte;
- }
- 
--/*
-- * Free one PTE table.
-- */
--static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
--{
--	if (pte)
--		free_page((unsigned long)pte);
--}
--
--static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
--{
--	pgtable_page_dtor(pte);
--	__free_page(pte);
--}
--
- static inline void __pmd_populate(pmd_t *pmdp, unsigned long pmdval)
- {
- 	set_pmd(pmdp, __pmd(pmdval));
--- 
-2.7.4
+[...]
+> 3) It looks like we have to go and re-parse all the notes for every
+> property requested by the arch code.
+
+As explained above, it is necessary to scan all PT_NOTE segments.  But there
+should be only one NT_GNU_PROPERTY_TYPE_0 in an ELF file.  Once that is found,
+perhaps we can store it somewhere, or call into the arch code as you mentioned
+below.  I will look into that.
+
+> 
+> For now there is only one property requested anyway, so this is probably
+> not too bad.  But could we flip things around so that we have some
+> CONFIG_ARCH_WANTS_ELF_GNU_PROPERTY (say), and have the ELF core code
+> call into the arch backend for each property found?
+> 
+> The arch could provide some hook
+> 
+> 	int arch_elf_has_gnu_property(const Elf_Gnu_Prophdr *prop,
+> 					const void *data);
+> 
+> to consume the properties as they are found.
+> 
+> This would effectively replace the arch_setup_property() hook you
+> currently have.
+> 
+> Cheers
+> ---Dave
+> 
+> [1] https://github.com/hjl-tools/linux-abi/wiki/Linux-Extensions-to-gABI
 
