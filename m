@@ -2,101 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B30F01322C
-	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2019 18:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C19113245
+	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2019 18:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726720AbfECQ2y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 May 2019 12:28:54 -0400
-Received: from foss.arm.com ([217.140.101.70]:36690 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726444AbfECQ2y (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 3 May 2019 12:28:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17C7FA78;
-        Fri,  3 May 2019 09:28:54 -0700 (PDT)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E4AE3F557;
-        Fri,  3 May 2019 09:28:49 -0700 (PDT)
-Date:   Fri, 3 May 2019 17:28:46 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v13 16/20] IB/mlx4, arm64: untag user pointers in
- mlx4_get_umem_mr
-Message-ID: <20190503162846.GI55449@arrakis.emea.arm.com>
-References: <cover.1553093420.git.andreyknvl@google.com>
- <1e2824fd77e8eeb351c6c6246f384d0d89fd2d58.1553093421.git.andreyknvl@google.com>
- <20190429180915.GZ6705@mtr-leonro.mtl.com>
- <20190430111625.GD29799@arrakis.emea.arm.com>
- <20190502184442.GA31165@ziepe.ca>
+        id S1726681AbfECQeO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 May 2019 12:34:14 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52528 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725809AbfECQeO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 May 2019 12:34:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=f8wSjJ87f85s5sybHGpZ4OlS7anrKlXCSX6wnmocWaQ=; b=nPlN06eYiVMd4BhKWEoEltJe1
+        vjzyN8kpvtiCH1EQrdhcogrwESSz+S8qU6Sn7tOEPrXod1jpE7u95MMYWKCD726B8WC6/PMoQwhV1
+        AnNhHauYZVDaDpoXzfOL0V1iVW9iZ5Iq6/NHI2tGzPvQMZsRbhM6KEL5A/9XylkKdDOzLs7B0Xz5y
+        Khvu9nxVpLFEuyjDQGIaQobcabArOPrtMt9NJBYUd+iXI1g512MiCD4RDfNxsevt2IT749vge3Xgb
+        isvwpO7MAG1dqOdncnaBP0JBZQNDOpnzhAx5jerNuy4Vl/fT4GlJUdkTAl3AtJtIIagrsP3mRME2G
+        qY6UkwKcQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hMb8X-00068T-3j; Fri, 03 May 2019 16:34:13 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 98487286B6529; Fri,  3 May 2019 18:34:11 +0200 (CEST)
+Date:   Fri, 3 May 2019 18:34:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: f68f031d ("Documentation: atomic_t.txt: Explain ordering
+ provided by smp_mb__{before,after}_atomic()")
+Message-ID: <20190503163411.GH2606@hirez.programming.kicks-ass.net>
+References: <20190503151915.GD2606@hirez.programming.kicks-ass.net>
+ <Pine.LNX.4.44L0.1905031216310.1437-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190502184442.GA31165@ziepe.ca>
+In-Reply-To: <Pine.LNX.4.44L0.1905031216310.1437-100000@iolanthe.rowland.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Thanks Jason and Leon for the information.
-
-On Thu, May 02, 2019 at 03:44:42PM -0300, Jason Gunthorpe wrote:
-> On Tue, Apr 30, 2019 at 12:16:25PM +0100, Catalin Marinas wrote:
-> > > Interesting, the followup question is why mlx4 is only one driver in IB which
-> > > needs such code in umem_mr. I'll take a look on it.
+On Fri, May 03, 2019 at 12:19:21PM -0400, Alan Stern wrote:
+> On Fri, 3 May 2019, Peter Zijlstra wrote:
+> 
+> > On Fri, May 03, 2019 at 07:53:26AM -0700, Paul E. McKenney wrote:
+> > > Hello, Alan,
+> > > 
+> > > Just following up on the -rcu commit below.  I believe that it needs
+> > > some adjustment given Peter Zijlstra's addition of "memory" to the x86
+> > > non-value-returning atomics, but thought I should double-check.
 > > 
-> > I don't know. Just using the light heuristics of find_vma() shows some
-> > other places. For example, ib_umem_odp_get() gets the umem->address via
-> > ib_umem_start(). This was previously set in ib_umem_get() as called from
-> > mlx4_get_umem_mr(). Should the above patch have just untagged "start" on
-> > entry?
+> > Right; I should get back to that thread...
 > 
-> I have a feeling that there needs to be something for this in the odp
-> code..
-> 
-> Presumably mmu notifiers and what not also use untagged pointers? Most
-> likely then the umem should also be storing untagged pointers.
+> The real question, still outstanding, is whether smp_mb__before_atomic 
+> orders anything following the RMW instruction (and similarly, whether 
+> smp_mb__after_atomic orders anything preceding the RMW instruction).
 
-Yes.
-
-> This probably becomes problematic because we do want the tag in cases
-> talking about the base VA of the MR..
-
-It depends on whether the tag is relevant to the kernel or not. The only
-useful case so far is for the kernel performing copy_form_user() etc.
-accesses so they'd get checked in the presence of hardware memory
-tagging (MTE; but it's not mandatory, a 0 tag would do as well).
-
-If we talk about a memory range where the content is relatively opaque
-(or irrelevant) to the kernel code, we don't really need the tag. I'm
-not familiar to RDMA but I presume it would be a device accessing such
-MR but not through the user VA directly. The tag is a property of the
-buffer address/pointer when accessed by the CPU at that specific address
-range. Any DMA or even kernel accessing it through the linear mapping
-(get_user_pages()) would drop such tag.
-
--- 
-Catalin
+Yes -- that was very much the intent, and only (some) x86 ops and (some)
+MIPS config have issues with that.
