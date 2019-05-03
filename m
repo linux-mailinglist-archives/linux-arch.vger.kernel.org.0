@@ -2,24 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0DB12DCD
-	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2019 14:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD6B12E64
+	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2019 14:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727905AbfECMjt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 May 2019 08:39:49 -0400
-Received: from foss.arm.com ([217.140.101.70]:59886 "EHLO foss.arm.com"
+        id S1727231AbfECMr1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 May 2019 08:47:27 -0400
+Received: from ms.lwn.net ([45.79.88.28]:48110 "EHLO ms.lwn.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726897AbfECMjs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 3 May 2019 08:39:48 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3057A374;
-        Fri,  3 May 2019 05:39:48 -0700 (PDT)
-Received: from fuggles.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 487923F220;
-        Fri,  3 May 2019 05:39:43 -0700 (PDT)
-Date:   Fri, 3 May 2019 13:39:40 +0100
-From:   Will Deacon <will.deacon@arm.com>
-To:     Jonathan Corbet <corbet@lwn.net>
+        id S1727992AbfECMr0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 May 2019 08:47:26 -0400
+Received: from localhost.localdomain (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 4EA677DE;
+        Fri,  3 May 2019 12:47:22 +0000 (UTC)
+Date:   Fri, 3 May 2019 06:47:19 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Will Deacon <will.deacon@arm.com>
 Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-kernel@vger.kernel.org, x86@kernel.org,
@@ -47,34 +46,35 @@ Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Steven Price <steven.price@arm.com>,
         Phil Auld <pauld@redhat.com>
 Subject: Re: [PATCH] Documentation: Add ARM64 to kernel-parameters.rst
-Message-ID: <20190503123940.GC32046@fuggles.cambridge.arm.com>
+Message-ID: <20190503064719.45d79af9@lwn.net>
+In-Reply-To: <20190503123940.GC32046@fuggles.cambridge.arm.com>
 References: <cover.1555085500.git.jpoimboe@redhat.com>
- <24039e1370ed57e8075730c0b88c505afd9e0ab7.1555085500.git.jpoimboe@redhat.com>
- <25174c3c-0e39-0562-7d02-bb7d51cd2b43@infradead.org>
- <20190413035621.tohihjksatqushwf@treble>
- <20190503063756.09c74f6e@lwn.net>
+        <24039e1370ed57e8075730c0b88c505afd9e0ab7.1555085500.git.jpoimboe@redhat.com>
+        <25174c3c-0e39-0562-7d02-bb7d51cd2b43@infradead.org>
+        <20190413035621.tohihjksatqushwf@treble>
+        <20190503063756.09c74f6e@lwn.net>
+        <20190503123940.GC32046@fuggles.cambridge.arm.com>
+Organization: LWN.net
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190503063756.09c74f6e@lwn.net>
-User-Agent: Mutt/1.11.1+86 (6f28e57d73f2) ()
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 03, 2019 at 06:37:56AM -0600, Jonathan Corbet wrote:
-> On Fri, 12 Apr 2019 22:56:21 -0500
-> Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> 
-> > Add ARM64 to the legend of architectures.  It's already used in several
-> > places in kernel-parameters.txt.
-> > 
-> > Suggested-by: Randy Dunlap <rdunlap@infradead.org>
-> > Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> 
-> It looks like nobody has picked this up...so I've applied it.
+On Fri, 3 May 2019 13:39:40 +0100
+Will Deacon <will.deacon@arm.com> wrote:
 
-It's queued and tagged in the arm64 tree, which should also be in next!
+> > It looks like nobody has picked this up...so I've applied it.  
+> 
+> It's queued and tagged in the arm64 tree, which should also be in next!
 
-Will
+Just looked again, I still don't see it there.  Josh's mitigations= change
+is there, but not this one.  In any case, I've unapplied it, so it's all
+yours.
+
+Thanks,
+
+jon
