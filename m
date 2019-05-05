@@ -2,136 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1222C13662
-	for <lists+linux-arch@lfdr.de>; Sat,  4 May 2019 01:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8109313DAC
+	for <lists+linux-arch@lfdr.de>; Sun,  5 May 2019 08:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727079AbfECXw7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 May 2019 19:52:59 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:39212 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726779AbfECXw7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 May 2019 19:52:59 -0400
-Received: by mail-qt1-f194.google.com with SMTP id y42so8714633qtk.6
-        for <linux-arch@vger.kernel.org>; Fri, 03 May 2019 16:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Y9uds37g7f4813/ZqlKEDnGn948IiuDvboVC7bPadlI=;
-        b=N9BE3PqMA0nL0NvpOU63kepSs17NWxuaQGMx7Tupv6wpFQNuRqB6tenh0G/BWpJ1PP
-         HEd7ZRYuplIPMrp/i3Cbd8pyLv65lE/Kcn6MATxFD0LAM764ONzAI9CGs51aZh5QkF2i
-         IUvMmfzMxlcfJSqngQx2TZEML8ZbCAHWTFmHtqfhFJeQ8JVqaTAgfiqfKRaZhlNd6jZX
-         Xiy8j3oAf41/Kg4WEp6FuwvI9DlafHuBxOiRzLclafXL2AMIXhBmFJmJrK5KHtm2pgmi
-         Pkc8sfsyJqh6zaTpfCu0T9ewb4rk6AtpL8uJLJA4xZTB0LSOR9blqcrj5s/eIqJuMPaw
-         q8oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Y9uds37g7f4813/ZqlKEDnGn948IiuDvboVC7bPadlI=;
-        b=TYbdQPcz07eNt/ulVHhpWGBzj6HzjLaCCM9NduI3hlZ4/juFClxOhqMngvIo2Fcaeg
-         GhDnUAcDY7Dx22REKPHWw6MRg1Mmd0C4PBBNdOxKbq+xg9gVj3smIcKxGCdi+oqpmXqp
-         ewEHILQYtH8t57BaNiI5XCKqxBgYUL6PML+pFBbcUbVZzi9Z+BQPIxTM1CI5VCSB94yH
-         1ZtemhiPZNK9z2/eWMUCiE8kO8JFF06j72l7xiDitawvvhHEjujri954anaeYdPA3r5N
-         YsWKG1pOFORCQ0GjWM+mO4MPia8u+W3xjLwkKyp8uxLREB1ZfCoPz8potcfWrQWuSOJu
-         RJLw==
-X-Gm-Message-State: APjAAAUMxU02EDCVzq+xP8tbVrky4TX6PdSip7JXyXGQOOJsKE14ddvf
-        0skmUCJouN6Zl3RBUodbTBOz7Q==
-X-Google-Smtp-Source: APXvYqziKdH2wZvx3iC97K6c8A4weeprYaQkrXpo4FxMM1oMFrPSRq/nQcOHMobAnKPDvieS6kD22g==
-X-Received: by 2002:ac8:8ad:: with SMTP id v42mr10692638qth.337.1556927577786;
-        Fri, 03 May 2019 16:52:57 -0700 (PDT)
-Received: from ziepe.ca ([65.119.211.164])
-        by smtp.gmail.com with ESMTPSA id r1sm1636491qtp.77.2019.05.03.16.52.56
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 03 May 2019 16:52:56 -0700 (PDT)
-Received: from jgg by jggl.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1hMhz6-0001lg-BL; Fri, 03 May 2019 20:52:56 -0300
-Date:   Fri, 3 May 2019 20:52:56 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v13 16/20] IB/mlx4, arm64: untag user pointers in
- mlx4_get_umem_mr
-Message-ID: <20190503235256.GB6660@ziepe.ca>
-References: <cover.1553093420.git.andreyknvl@google.com>
- <1e2824fd77e8eeb351c6c6246f384d0d89fd2d58.1553093421.git.andreyknvl@google.com>
- <20190429180915.GZ6705@mtr-leonro.mtl.com>
- <20190430111625.GD29799@arrakis.emea.arm.com>
- <20190502184442.GA31165@ziepe.ca>
- <20190503162846.GI55449@arrakis.emea.arm.com>
+        id S1726310AbfEEGPm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 May 2019 02:15:42 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57824 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725792AbfEEGPm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 May 2019 02:15:42 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4566etu020181
+        for <linux-arch@vger.kernel.org>; Sun, 5 May 2019 02:15:40 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2s9r1av04c-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Sun, 05 May 2019 02:15:40 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <rppt@linux.ibm.com>;
+        Sun, 5 May 2019 07:15:38 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Sun, 5 May 2019 07:15:31 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x456FUUd61079648
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 5 May 2019 06:15:30 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB15F42042;
+        Sun,  5 May 2019 06:15:29 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BE8ED42047;
+        Sun,  5 May 2019 06:15:27 +0000 (GMT)
+Received: from rapoport-lnx (unknown [9.148.8.112])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sun,  5 May 2019 06:15:27 +0000 (GMT)
+Date:   Sun, 5 May 2019 09:15:26 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, Guo Ren <guoren@kernel.org>,
+        Helge Deller <deller@gmx.de>, Ley Foon Tan <lftan@altera.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Richard Kuo <rkuo@codeaurora.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Creasey <sammy@sammy.net>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "nios2-dev@lists.rocketboards.org" <nios2-dev@lists.rocketboards.org>
+Subject: Re: [PATCH 01/15] asm-generic, x86: introduce generic
+ pte_{alloc,free}_one[_kernel]
+References: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
+ <1556810922-20248-2-git-send-email-rppt@linux.ibm.com>
+ <20190502190310.voenw3pwgpelmdgw@pburton-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190503162846.GI55449@arrakis.emea.arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190502190310.voenw3pwgpelmdgw@pburton-laptop>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-TM-AS-GCONF: 00
+x-cbid: 19050506-0028-0000-0000-0000036A7624
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19050506-0029-0000-0000-00002429E811
+Message-Id: <20190505061525.GC15755@rapoport-lnx>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-05_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=790 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905050056
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 03, 2019 at 05:28:46PM +0100, Catalin Marinas wrote:
-> Thanks Jason and Leon for the information.
+On Thu, May 02, 2019 at 07:03:11PM +0000, Paul Burton wrote:
+> Hi Mike,
 > 
-> On Thu, May 02, 2019 at 03:44:42PM -0300, Jason Gunthorpe wrote:
-> > On Tue, Apr 30, 2019 at 12:16:25PM +0100, Catalin Marinas wrote:
-> > > > Interesting, the followup question is why mlx4 is only one driver in IB which
-> > > > needs such code in umem_mr. I'll take a look on it.
-> > > 
-> > > I don't know. Just using the light heuristics of find_vma() shows some
-> > > other places. For example, ib_umem_odp_get() gets the umem->address via
-> > > ib_umem_start(). This was previously set in ib_umem_get() as called from
-> > > mlx4_get_umem_mr(). Should the above patch have just untagged "start" on
-> > > entry?
-> > 
-> > I have a feeling that there needs to be something for this in the odp
-> > code..
-> > 
-> > Presumably mmu notifiers and what not also use untagged pointers? Most
-> > likely then the umem should also be storing untagged pointers.
+> On Thu, May 02, 2019 at 06:28:28PM +0300, Mike Rapoport wrote:
+> > +/**
+> > + * pte_free_kernel - free PTE-level user page table page
+> > + * @mm: the mm_struct of the current context
+> > + * @pte_page: the `struct page` representing the page table
+> > + */
+> > +static inline void pte_free(struct mm_struct *mm, struct page *pte_page)
+> > +{
+> > +	pgtable_page_dtor(pte_page);
+> > +	__free_page(pte_page);
+> > +}
 > 
-> Yes.
-> 
-> > This probably becomes problematic because we do want the tag in cases
-> > talking about the base VA of the MR..
-> 
-> It depends on whether the tag is relevant to the kernel or not. The only
-> useful case so far is for the kernel performing copy_form_user() etc.
-> accesses so they'd get checked in the presence of hardware memory
-> tagging (MTE; but it's not mandatory, a 0 tag would do as well).
-> 
-> If we talk about a memory range where the content is relatively opaque
-> (or irrelevant) to the kernel code, we don't really need the tag. I'm
-> not familiar to RDMA but I presume it would be a device accessing such
-> MR but not through the user VA directly. 
+> Nit: the comment names the wrong function (s/pte_free_kernel/pte_free/).
 
-RDMA exposes the user VA directly (the IOVA) as part of the wire
-protocol, we must preserve the tag in these cases as that is what the
-userspace is using for the pointer.
+Argh, evil copy-paste :)
+Thanks!
+ 
+> Thanks,
+>     Paul
+> 
 
-So the ODP stuff will definately need some adjusting when it interacts
-with the mmu notifiers and get user pages.
+-- 
+Sincerely yours,
+Mike.
 
-Jason
