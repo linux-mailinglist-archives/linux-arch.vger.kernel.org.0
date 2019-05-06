@@ -2,135 +2,298 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF5513E7D
-	for <lists+linux-arch@lfdr.de>; Sun,  5 May 2019 10:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8FA14A26
+	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2019 14:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727416AbfEEIxd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 May 2019 04:53:33 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41260 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725873AbfEEIxd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 May 2019 04:53:33 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x458qBC3033838
-        for <linux-arch@vger.kernel.org>; Sun, 5 May 2019 04:53:31 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2s9r5hfgh1-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Sun, 05 May 2019 04:53:31 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-arch@vger.kernel.org> from <rppt@linux.ibm.com>;
-        Sun, 5 May 2019 09:53:29 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Sun, 5 May 2019 09:53:26 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x458rPKe63242432
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 5 May 2019 08:53:25 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7928852052;
-        Sun,  5 May 2019 08:53:25 +0000 (GMT)
-Received: from rapoport-lnx (unknown [9.148.8.112])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 9E0295204F;
-        Sun,  5 May 2019 08:53:24 +0000 (GMT)
-Date:   Sun, 5 May 2019 11:53:23 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-parisc@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org
-Subject: Re: DISCONTIGMEM is deprecated
-References: <20190419094335.GJ18914@techsingularity.net>
- <20190419140521.GI7751@bombadil.infradead.org>
- <20190419142835.GM18914@techsingularity.net>
- <9e7b80a9-b90e-ac04-8b30-b2f285cd4432@gmx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9e7b80a9-b90e-ac04-8b30-b2f285cd4432@gmx.de>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-TM-AS-GCONF: 00
-x-cbid: 19050508-0012-0000-0000-0000031878B9
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19050508-0013-0000-0000-00002150EEE3
-Message-Id: <20190505085322.GH15755@rapoport-lnx>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-05_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=755 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905050080
+        id S1726393AbfEFMrG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 May 2019 08:47:06 -0400
+Received: from mga14.intel.com ([192.55.52.115]:9185 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725852AbfEFMrG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 6 May 2019 08:47:06 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 May 2019 05:44:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,438,1549958400"; 
+   d="scan'208";a="146817375"
+Received: from lilitang-mobl.ccr.corp.intel.com ([10.249.168.111])
+  by fmsmga008.fm.intel.com with ESMTP; 06 May 2019 05:44:01 -0700
+Message-ID: <1557146640.2456.2.camel@intel.com>
+Subject: Re: [PATCH 3/7] thermal/drivers/core: Add init section table for
+ self-encapsulation
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, edubezval@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Date:   Mon, 06 May 2019 20:44:00 +0800
+In-Reply-To: <d6bc1efc-e944-09a4-e010-bfea985c66cb@linaro.org>
+References: <20190402161256.11044-1-daniel.lezcano@linaro.org>
+         <20190402161256.11044-3-daniel.lezcano@linaro.org>
+         <1555922585.26198.19.camel@intel.com>
+         <fb45157c-38c4-7940-3252-af459d446323@linaro.org>
+         <1555999165.26198.39.camel@intel.com>
+         <d6bc1efc-e944-09a4-e010-bfea985c66cb@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On Fri, Apr 19, 2019 at 10:08:31PM +0200, Helge Deller wrote:
-> On 19.04.19 16:28, Mel Gorman wrote:
-> > On Fri, Apr 19, 2019 at 07:05:21AM -0700, Matthew Wilcox wrote:
-> >> On Fri, Apr 19, 2019 at 10:43:35AM +0100, Mel Gorman wrote:
-> >>> DISCONTIG is essentially deprecated and even parisc plans to move to
-> >>> SPARSEMEM so there is no need to be fancy, this patch simply disables
-> >>> watermark boosting by default on DISCONTIGMEM.
-> >>
-> >> I don't think parisc is the only arch which uses DISCONTIGMEM for !NUMA
-> >> scenarios.  Grepping the arch/ directories shows:
-> >>
-> >> alpha (does support NUMA, but also non-NUMA DISCONTIGMEM)
-> >> arc (for supporting more than 1GB of memory)
-> >> ia64 (looks complicated ...)
-> >> m68k (for multiple chunks of memory)
-> >> mips (does support NUMA but also non-NUMA)
-> >> parisc (both NUMA and non-NUMA)
-> >>
-> >> I'm not sure that these architecture maintainers even know that DISCONTIGMEM
-> >> is deprecated.  Adding linux-arch to the cc.
-> >
-> > Poor wording then -- yes, DISCONTIGMEM is still used but look where it's
-> > used. I find it impossible to believe that any new arch would support
-> > DISCONTIGMEM or that DISCONTIGMEM would be selected when SPARSEMEM is
-> > available.`It's even more insane when you consider that SPARSEMEM can be
-> > extended to support VMEMMAP so that it has similar overhead to FLATMEM
-> > when mapping pfns to struct pages and vice-versa.
+On 五, 2019-05-03 at 22:28 +0200, Daniel Lezcano wrote:
+> On 23/04/2019 07:59, Zhang Rui wrote:
+> > 
+> > Hi, Daniel,
+> > 
+> > thanks for clarifying.
+> > It is true that we need to make thermal framework ready as early as
+> > possible. And a static table works for me as long as vmlinux.lds.h
+> > is
+> > the proper place.
+> > 
+> > Arnd,
+> > are you okay with this patch? if yes, I suppose I can take it
+> > through
+> > my tree, right?
+> Hi Zhang,
 > 
-> FYI, on parisc we will switch from DISCONTIGMEM to SPARSEMEM with kernel 5.2.
-> The patch was quite simple and it's currently in the for-next tree:
-> https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/commit/?h=for-next&id=281b718721a5e78288271d632731cea9697749f7
-
-A while ago I've sent a patch that removes ARCH_DISCARD_MEMBLOCK option [1]
-so the hunk below is not needed:
-
-diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index c8038165b81f..26c215570adf 100644
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -36,6 +36,7 @@ config PARISC
- 	select GENERIC_STRNCPY_FROM_USER
- 	select SYSCTL_ARCH_UNALIGN_ALLOW
- 	select SYSCTL_EXCEPTION_TRACE
-+	select ARCH_DISCARD_MEMBLOCK
- 	select HAVE_MOD_ARCH_SPECIFIC
- 	select VIRT_TO_BUS
- 	select MODULES_USE_ELF_RELA
-
-
-[1] https://lore.kernel.org/lkml/1556102150-32517-1-git-send-email-rppt@linux.ibm.com/
- 
-> Helge
+> given the Acked-by from Arnd, will you add the missing patches in the
+> tree for 5.2?
 > 
+I got a lot of checkpatch warnings when applying this patch.
+"total: 9 errors, 6 warnings, 45 lines checked"
+please resend with those errors/warnings addressed.
 
--- 
-Sincerely yours,
-Mike.
+I don't think I will include it in the pull request for this merge
+window. But I will try to queue them for -rc2 as cleanups.
 
+thanks,
+rui
+
+> 
+> 
+> > 
+> > On 一, 2019-04-22 at 14:11 +0200, Daniel Lezcano wrote:
+> > > 
+> > > Hi Zhang,
+> > > 
+> > > 
+> > > On 22/04/2019 10:43, Zhang Rui wrote:
+> > > > 
+> > > > 
+> > > > Hi, Daniel,
+> > > > 
+> > > > Thanks for the patches, it looks good to me except this one and
+> > > > patch
+> > > > 4/7.
+> > > > 
+> > > > First, I don't think this is a cyclic dependency issue as they
+> > > > are
+> > > > in
+> > > > the same module.
+> > > The governors have to export their [un]register functions in
+> > > order to
+> > > have the core to use them.
+> > > 
+> > > The core has to export the [un]register function in order to have
+> > > the
+> > > governors to use them.
+> > > 
+> > > From my point of view it is a cyclic dependency. In any other
+> > > subsystems, the plugins/governor/drivers/whatever don't have to
+> > > export
+> > > their functions to the core, they use the core's exported
+> > > functions.
+> > > 
+> > > > 
+> > > > 
+> > > > Second, I have not read include/asm-generic/vmlinux.lds.h
+> > > > before,
+> > > > it
+> > > > seems that it is used for architecture specific stuff. Fix a
+> > > > thermal
+> > > > issue in this way seems overkill to me.
+> > > It is not architecture specific, it belongs to asm-generic. All
+> > > init
+> > > calls are defined in it and more. It is a common way to define
+> > > static
+> > > tables from different files without adding dependency and unload
+> > > it
+> > > after init.
+> > > 
+> > > All clk, timers, acpi tables, irq chip, cpuidle and cpu methods
+> > > are
+> > > defined this way.
+> > > 
+> > > When the thermal_core.c uses at the end fs_initcall it uses the
+> > > same
+> > > mechanism.
+> > > 
+> > > 
+> > > > 
+> > > > 
+> > > > IMO, to make the code clean, we can build the governors as
+> > > > separate
+> > > > modules just like we do for cpu governors.
+> > > > This brings to the old commit 80a26a5c22b9("Thermal: build
+> > > > thermal
+> > > > governors into thermal_sys module"), and that was introduced to
+> > > > fix
+> > > > a
+> > > > problem when CONFIG_THERMAL is set to 'm'. So I think we can
+> > > > switch
+> > > > back to the old way as the problem is gone now.
+> > > > 
+> > > > what do you think?
+> > > IMO, having the governors built as module is not a good thing
+> > > because
+> > > the SoC needs the governor to be ready as soon as possible at
+> > > boot
+> > > time.
+> > > I've been told some boards reboot at boot time because the
+> > > governor
+> > > comes too late with the userspace governor for example.
+> > > 
+> > > If you don't like the vmlinuz.lds.h approch (but again it is a
+> > > common
+> > > way to initialize table and I wrote it to extend to more thermal
+> > > table
+> > > in the future) we can change the thermal core to replace
+> > > fs_initcall()
+> > > by core_initcall() and use postcore_initcall() in the governor.
+> > > 
+> > > 
+> > > 
+> > > > 
+> > > > 
+> > > > Patch 1,2,5,6,7 applied first.
+> > > > 
+> > > > thanks,
+> > > > rui
+> > > > 
+> > > > On 二, 2019-04-02 at 18:12 +0200, Daniel Lezcano wrote:
+> > > > > 
+> > > > > 
+> > > > > Currently the governors are declared in their respective
+> > > > > files
+> > > > > but
+> > > > > they
+> > > > > export their [un]register functions which in turn call the
+> > > > > [un]register
+> > > > > the governors core's functions. That implies a cyclic
+> > > > > dependency
+> > > > > which is
+> > > > > not desirable. There is a way to self-encapsulate the
+> > > > > governors
+> > > > > by
+> > > > > letting
+> > > > > them to declare themselves in a __init section table.
+> > > > > 
+> > > > > Define the table in the asm generic linker description like
+> > > > > the
+> > > > > other
+> > > > > tables and provide the specific macros to deal with.
+> > > > > 
+> > > > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > > > > ---
+> > > > >  drivers/thermal/thermal_core.h    | 16 ++++++++++++++++
+> > > > >  include/asm-generic/vmlinux.lds.h | 11 +++++++++++
+> > > > >  2 files changed, 27 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/thermal/thermal_core.h
+> > > > > b/drivers/thermal/thermal_core.h
+> > > > > index 0df190ed82a7..28d18083e969 100644
+> > > > > --- a/drivers/thermal/thermal_core.h
+> > > > > +++ b/drivers/thermal/thermal_core.h
+> > > > > @@ -15,6 +15,22 @@
+> > > > >  /* Initial state of a cooling device during binding */
+> > > > >  #define THERMAL_NO_TARGET -1UL
+> > > > >  
+> > > > > +/* Init section thermal table */
+> > > > > +extern struct thermal_governor * __governor_thermal_table[];
+> > > > > +extern struct thermal_governor *
+> > > > > __governor_thermal_table_end[];
+> > > > > +
+> > > > > +#define THERMAL_TABLE_ENTRY(table, name)			
+> > > > > \
+> > > > > +        static typeof(name) * __thermal_table_entry_##name	
+> > > > > \
+> > > > > +	__used __section(__##table##_thermal_table)		
+> > > > > \
+> > > > > +		= &name;
+> > > > > +
+> > > > > +#define THERMAL_GOVERNOR_DECLARE(name)	THERMAL_TABLE_
+> > > > > ENTR
+> > > > > Y(go
+> > > > > vernor, name)
+> > > > > +
+> > > > > +#define for_each_governor_table(__governor)		\
+> > > > > +	for (__governor = __governor_thermal_table;	\
+> > > > > +	     __governor < __governor_thermal_table_end;	
+> > > > > \
+> > > > > +	     __governor++)
+> > > > > +
+> > > > >  /*
+> > > > >   * This structure is used to describe the behavior of
+> > > > >   * a certain cooling device on a certain trip point
+> > > > > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-
+> > > > > generic/vmlinux.lds.h
+> > > > > index f8f6f04c4453..9893a3ed242a 100644
+> > > > > --- a/include/asm-generic/vmlinux.lds.h
+> > > > > +++ b/include/asm-generic/vmlinux.lds.h
+> > > > > @@ -239,6 +239,16 @@
+> > > > >  #define ACPI_PROBE_TABLE(name)
+> > > > >  #endif
+> > > > >  
+> > > > > +#ifdef CONFIG_THERMAL
+> > > > > +#define THERMAL_TABLE(name)					
+> > > > > 	
+> > > > > \
+> > > > > +        . = ALIGN(8);					
+> > > > > 	
+> > > > > 	\
+> > > > > +        __##name##_thermal_table = .;			
+> > > > > 	
+> > > > > 	\
+> > > > > +        KEEP(*(__##name##_thermal_table))			
+> > > > > 	
+> > > > > \
+> > > > > +        __##name##_thermal_table_end = .;
+> > > > > +#else
+> > > > > +#define THERMAL_TABLE(name)
+> > > > > +#endif
+> > > > > +
+> > > > >  #define KERNEL_DTB()						
+> > > > > 	
+> > > > > \
+> > > > >  	STRUCT_ALIGN();					
+> > > > > 	
+> > > > > 	\
+> > > > >  	__dtb_start = .;					
+> > > > > 	
+> > > > > \
+> > > > > @@ -609,6 +619,7 @@
+> > > > >  	IRQCHIP_OF_MATCH_TABLE()				
+> > > > > 	
+> > > > > \
+> > > > >  	ACPI_PROBE_TABLE(irqchip)				
+> > > > > 	
+> > > > > \
+> > > > >  	ACPI_PROBE_TABLE(timer)				
+> > > > > 	
+> > > > > 	\
+> > > > > +	THERMAL_TABLE(governor)				
+> > > > > 	
+> > > > > 	\
+> > > > >  	EARLYCON_TABLE()					
+> > > > > 	
+> > > > > \
+> > > > >  	LSM_TABLE()
+> > > > >  
+> 
