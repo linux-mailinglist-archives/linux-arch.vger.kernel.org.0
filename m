@@ -2,161 +2,168 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1EA16E79
-	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2019 02:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66C1170DD
+	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2019 08:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726313AbfEHAza (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 May 2019 20:55:30 -0400
-Received: from mx1.mailbox.org ([80.241.60.212]:15292 "EHLO mx1.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726276AbfEHAza (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 7 May 2019 20:55:30 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx1.mailbox.org (Postfix) with ESMTPS id 43F7D4DE51;
-        Wed,  8 May 2019 02:55:25 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id aH1WSlgN_x_O; Wed,  8 May 2019 02:55:13 +0200 (CEST)
-Date:   Wed, 8 May 2019 10:54:56 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v6 5/6] binfmt_*: scope path resolution of interpreters
-Message-ID: <20190508005456.th5pkxljz536cq6w@yavin>
-References: <20190506165439.9155-1-cyphar@cyphar.com>
- <20190506165439.9155-6-cyphar@cyphar.com>
- <CAG48ez0-CiODf6UBHWTaog97prx=VAd3HgHvEjdGNz344m1xKw@mail.gmail.com>
- <20190506191735.nmzf7kwfh7b6e2tf@yavin>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="m3sipayj4evvlhxl"
-Content-Disposition: inline
-In-Reply-To: <20190506191735.nmzf7kwfh7b6e2tf@yavin>
+        id S1727123AbfEHGRb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 May 2019 02:17:31 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:35014 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726861AbfEHGRa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 May 2019 02:17:30 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x486GVtH031152
+        for <linux-arch@vger.kernel.org>; Wed, 8 May 2019 02:17:29 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2sbs3hhjnb-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Wed, 08 May 2019 02:17:29 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <rppt@linux.ibm.com>;
+        Wed, 8 May 2019 07:17:27 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 8 May 2019 07:17:17 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x486HGdZ56426730
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 May 2019 06:17:16 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1500A405F;
+        Wed,  8 May 2019 06:17:16 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7C43EA406B;
+        Wed,  8 May 2019 06:17:13 +0000 (GMT)
+Received: from rapoport-lnx (unknown [9.148.8.112])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  8 May 2019 06:17:13 +0000 (GMT)
+Received: by rapoport-lnx (sSMTP sendmail emulation); Wed, 08 May 2019 09:17:12 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, Guo Ren <guoren@kernel.org>,
+        Helge Deller <deller@gmx.de>, Ley Foon Tan <lftan@altera.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Richard Kuo <rkuo@codeaurora.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Creasey <sammy@sammy.net>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-um@lists.infradead.org, nios2-dev@lists.rocketboards.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCH v2 00/14] introduce generic pte_{alloc,free}_one[_kernel]
+Date:   Wed,  8 May 2019 09:16:57 +0300
+X-Mailer: git-send-email 2.7.4
+X-TM-AS-GCONF: 00
+x-cbid: 19050806-0008-0000-0000-000002E466E7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19050806-0009-0000-0000-00002250E6BE
+Message-Id: <1557296232-15361-1-git-send-email-rppt@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-08_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=367 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905080040
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi,
 
---m3sipayj4evvlhxl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Many architectures have similar, if not identical implementation of
+pte_alloc_one_kernel(), pte_alloc_one(), pte_free_kernel() and pte_free().
 
-On 2019-05-07, Aleksa Sarai <cyphar@cyphar.com> wrote:
-> On 2019-05-06, Jann Horn <jannh@google.com> wrote:
-> > On Mon, May 6, 2019 at 6:56 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> > > The need to be able to scope path resolution of interpreters became
-> > > clear with one of the possible vectors used in CVE-2019-5736 (which
-> > > most major container runtimes were vulnerable to).
-> > >
-> > > Naively, it might seem that openat(2) -- which supports path scoping =
---
-> > > can be combined with execveat(AT_EMPTY_PATH) to trivially scope the
-> > > binary being executed. Unfortunately, a "bad binary" (usually a symli=
-nk)
-> > > could be written as a #!-style script with the symlink target as the
-> > > interpreter -- which would be completely missed by just scoping the
-> > > openat(2). An example of this being exploitable is CVE-2019-5736.
-> > >
-> > > In order to get around this, we need to pass down to each binfmt_*
-> > > implementation the scoping flags requested in execveat(2). In order to
-> > > maintain backwards-compatibility we only pass the scoping AT_* flags.
-> > >
-> > > To avoid breaking userspace (in the exceptionally rare cases where you
-> > > have #!-scripts with a relative path being execveat(2)-ed with dfd !=
-=3D
-> > > AT_FDCWD), we only pass dfd down to binfmt_* if any of our new flags =
-are
-> > > set in execveat(2).
-> >=20
-> > This seems extremely dangerous. I like the overall series, but not this=
- patch.
-> >=20
-> > > @@ -1762,6 +1774,12 @@ static int __do_execve_file(int fd, struct fil=
-ename *filename,
-> > >
-> > >         sched_exec();
-> > >
-> > > +       bprm->flags =3D flags & (AT_XDEV | AT_NO_MAGICLINKS | AT_NO_S=
-YMLINKS |
-> > > +                              AT_THIS_ROOT);
-> > [...]
-> > > +#define AT_THIS_ROOT           0x100000 /* - Scope ".." resolution t=
-o dirfd (like chroot(2)). */
-> >=20
-> > So now what happens if there is a setuid root ELF binary with program
-> > interpreter "/lib64/ld-linux-x86-64.so.2" (like /bin/su), and an
-> > unprivileged user runs it with execveat(..., AT_THIS_ROOT)? Is that
-> > going to let the unprivileged user decide which interpreter the
-> > setuid-root process should use? From a high-level perspective, opening
-> > the interpreter should be controlled by the program that is being
-> > loaded, not by the program that invoked it.
->=20
-> I went a bit nuts with openat_exec(), and I did end up adding it to the
-> ELF interpreter lookup (and you're completely right that this is a bad
-> idea -- I will drop it from this patch if it's included in the next
-> series).
->=20
-> The proposed solutions you give below are much nicer than this patch so
-> I can drop it and work on fixing those issues separately.
+A while ago Anshuman suggested to introduce a common definition of
+GFP_PGTABLE and during the discussion it was suggested to rather
+consolidate the allocators.
 
-Another possible solution would be to only allow (for instance)
-AT_NO_MAGICLINKS for execveat(2). That way you cannot scope the
-resolution but you can block the most concerning cases -- those
-involving /proc-related access.
+These patches introduce generic version of PTE allocation and free and
+enable their use on several architectures.
 
-I've posted a v7 with this patch dropped (because we can always add AT_*
-flags later in time), but I think having at least NO_MAGICLINKS would be
-useful.
+The conversion introduces some changes for some of the architectures.
+Here's the executive summary and the details are described at each patch.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+* Most architectures do not set __GFP_ACCOUNT for the user page tables.
+Switch to the generic functions is "spreading that goodness to all other
+architectures"
+* arm, arm64 and unicore32 used to check if the pte is not NULL before
+freeing its memory in pte_free_kernel(). It's dropped during the
+conversion as it seems superfluous.
+* x86 used to BUG_ON() is pte was not page aligned duirng
+pte_free_kernel(), the generic version simply frees the memory without any
+checks.
 
---m3sipayj4evvlhxl
-Content-Type: application/pgp-signature; name="signature.asc"
+This set only performs the straightforward conversion, the architectures
+with different logic in pte_alloc_one() and pte_alloc_one_kernel() are not
+touched, as well as architectures that have custom page table allocators.
 
------BEGIN PGP SIGNATURE-----
+v2 changes:
+* rebase on the current upstream
+* fix copy-paste error in the description of pte_free()
+* fix changelog for MIPS to match actual changes
+* drop powerpc changes
+* add Acked/Reviewed tags
 
-iQIzBAABCAAdFiEEb6Gz4/mhjNy+aiz1Snvnv3Dem58FAlzSKOAACgkQSnvnv3De
-m5+sVw//bA9Tf90p30BmnpG1nXFGi3o1Bvcw4bBtju6je0jL0EhCa6/D3MOOfYS3
-6Hy2pArRB/bP7Q2EWPS9xcoB65JMLigAMxa2kMiNjbHW12fShWBidjFqMEVBM6cS
-mitc+utlJWYL0HYPOvyGz6POpDofulAvfiYBVgFeqlJA+/C3EvdEOAGTBCv705aM
-7cNPTRJj+bcJ0Yvu6oXERxC+txG0AaM7CHeONhkZMxlkziZvwGyZYpui8pQgGm9D
-6aMp++KpubhSiRZVq3XHEJtg1323ujlQBDW8Y2i5LtjizwXWCf1x+gj5yKbM7Yzt
-gVDcVDOrTfunC3DP9eiJtjVm4y722CBR+XSyGi/iGY9cs5GOWwkhtI7LV98/d6B+
-N6P9V2HhAeRFWId1exLYlD03qwesXUSiMymObj0zsKhRotJ8dcUx66wJtOvrumZf
-lUf9FKXZF5b8cbUOAnSCcVZ/YdZcwwItWAD0ZT2sGD5ZttnC0sKnrFtEkbeMGGpN
-NG9v1lNYhqpmVE9jsSBXFSKVaDB1ipqqtxB0mSaK0/6aTOg8YMwKqxonuBra9sz3
-SqXwP25Qk5++syB2vZVdJNFAl9gjlapYrtTAqdYdrTQCSkIHeyiEIl9IT4lMupWR
-JgdYo6OEjpob11GKYnNjixo0REwy2cDXSqWvauZEBbriQ2b0jbI=
-=YctX
------END PGP SIGNATURE-----
+[1] https://lore.kernel.org/lkml/1547619692-7946-1-git-send-email-anshuman.khandual@arm.com
 
---m3sipayj4evvlhxl--
+Mike Rapoport (14):
+  asm-generic, x86: introduce generic pte_{alloc,free}_one[_kernel]
+  alpha: switch to generic version of pte allocation
+  arm: switch to generic version of pte allocation
+  arm64: switch to generic version of pte allocation
+  csky: switch to generic version of pte allocation
+  hexagon: switch to generic version of pte allocation
+  m68k: sun3: switch to generic version of pte allocation
+  mips: switch to generic version of pte allocation
+  nds32: switch to generic version of pte allocation
+  nios2: switch to generic version of pte allocation
+  parisc: switch to generic version of pte allocation
+  riscv: switch to generic version of pte allocation
+  um: switch to generic version of pte allocation
+  unicore32: switch to generic version of pte allocation
+
+ arch/alpha/include/asm/pgalloc.h     |  40 +------------
+ arch/arm/include/asm/pgalloc.h       |  41 +++++---------
+ arch/arm/mm/mmu.c                    |   2 +-
+ arch/arm64/include/asm/pgalloc.h     |  47 +++------------
+ arch/arm64/mm/mmu.c                  |   2 +-
+ arch/arm64/mm/pgd.c                  |   9 ++-
+ arch/csky/include/asm/pgalloc.h      |  30 +---------
+ arch/hexagon/include/asm/pgalloc.h   |  34 +----------
+ arch/m68k/include/asm/sun3_pgalloc.h |  41 +-------------
+ arch/mips/include/asm/pgalloc.h      |  33 +----------
+ arch/nds32/include/asm/pgalloc.h     |  31 ++--------
+ arch/nios2/include/asm/pgalloc.h     |  37 +-----------
+ arch/parisc/include/asm/pgalloc.h    |  33 +----------
+ arch/riscv/include/asm/pgalloc.h     |  29 +---------
+ arch/um/include/asm/pgalloc.h        |  16 +-----
+ arch/um/kernel/mem.c                 |  22 -------
+ arch/unicore32/include/asm/pgalloc.h |  36 +++---------
+ arch/x86/include/asm/pgalloc.h       |  19 +------
+ arch/x86/mm/pgtable.c                |  33 +++--------
+ include/asm-generic/pgalloc.h        | 107 +++++++++++++++++++++++++++++++++--
+ virt/kvm/arm/mmu.c                   |   2 +-
+ 21 files changed, 178 insertions(+), 466 deletions(-)
+
+-- 
+2.7.4
+
