@@ -2,54 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B996180C2
-	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2019 22:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3E31827F
+	for <lists+linux-arch@lfdr.de>; Thu,  9 May 2019 00:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727245AbfEHUAK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 May 2019 16:00:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53476 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727189AbfEHUAK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 8 May 2019 16:00:10 -0400
-Subject: Re: [GIT PULL] csky fixes for v5.1-rc7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557345609;
-        bh=+RbsCVc0D1Vp7kPBcoQ7WWuR9heN09HLyUNJwzQyv84=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=d8moxosP8NBek18dTydTkVX3VU5pCp5oCRcneipYd4mFVMSTKbpfF68Euhn5MKmUF
-         By1JpNIMvG/ZnQw9uNg299GZ+ttJ0RlYFSkmTJzUNoaNyNJMZh9t03MC4eYejU7335
-         4jXMrnemPsCSFjShPqqhTX+PO4jJkDUkpoZuQ0LY=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1556181403-3881-1-git-send-email-guoren@kernel.org>
-References: <1556181403-3881-1-git-send-email-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1556181403-3881-1-git-send-email-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git
- tags/csky-for-linus-5.1-rc7
-X-PR-Tracked-Commit-Id: a691f3334d58b833e41d56de1b9820e687edcd78
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ce45327ca044415a5832dacfb76cdcfb747e3240
-Message-Id: <155734560963.27473.1371616025731122852.pr-tracker-bot@kernel.org>
-Date:   Wed, 08 May 2019 20:00:09 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        ren_guo@c-sky.com
+        id S1728102AbfEHW7D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 May 2019 18:59:03 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40898 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726830AbfEHW7D (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 May 2019 18:59:03 -0400
+Received: by mail-pf1-f193.google.com with SMTP id u17so210289pfn.7;
+        Wed, 08 May 2019 15:59:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=3skeGRJ5pRr7+D0+GcBeYq1z7ba6TiYFkEy56aNuN4w=;
+        b=f6E0Q9JV/oK81qEUGBzLotW8ivaqqSHQj7zCw/2vC4n6WMxqICOe4J18CGHEnErqml
+         8wbXgFKBwRG1uwSDnr5Nkn/yCLqp0wlAiItz+AYTS7CWrdy3bMeTFC0yXK4CkYMks5yS
+         qQqA5u3k0/MIGmqy5d0sr/1l+9LuLYarLCbc3pZhwmpX2Emen/uTBbGAbtd0Sj5FXEaX
+         A3Tf/jGtFYql7ptoRop4ZSC4OQxhjEzN5jZ1VD4upkNn8MJoDEc31FtjJ3ZJmAWtNTas
+         B0DgM3KudTDi1acsEkSoFtPV66r3dP+Ak6uPJLO8/hT9sfmFREvZkxJ6qmkjWjC7axjn
+         2s/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3skeGRJ5pRr7+D0+GcBeYq1z7ba6TiYFkEy56aNuN4w=;
+        b=n1usrSXd36sRvrrDOMuXyl5P/DkJq7uK/sYBru4E3db4m+lJwqPdqMHannh3dTR7PT
+         Qy6SKIEMzEMveQNr6j4C3//6EFzamgaO+wmd3/+5x/+GO+RYL0GyRbSb6/ncpL8r97db
+         Wfntpr/K8CJp3M5ohwR20NKUxJCx88jA5KouK//7NgCE0KjHUa+gj1KV4BiNZhS3C+G6
+         3V/T+qhMcnN4SCAYexa/g4ND422BneztFzX0WgMy+2ufs83bfoZYYC1nLXRYxb2yssE7
+         8PiyFNJdQKGSevF67bSHXNPyPJwX5UnE8Z37Uhu8DFiN+1V1pfCU8P8CBWTOtSuOw02P
+         PvRw==
+X-Gm-Message-State: APjAAAXD97/6rs2Gqe3SFipR0jqEKO9cMpFsePL808kEN/xtq6hsBjZc
+        ASL6MoIup4HqEayfrBo7eXI=
+X-Google-Smtp-Source: APXvYqyrohy1M3ppdW6lU7eKE2owmntyLl4B+K6DHGaWoh7InMPIPpSi5AI1dedYXt/CdhdeAcHu/g==
+X-Received: by 2002:a63:6f8e:: with SMTP id k136mr969393pgc.104.1557356342554;
+        Wed, 08 May 2019 15:59:02 -0700 (PDT)
+Received: from localhost ([2601:640:0:ebed:19d3:11c4:475e:3daa])
+        by smtp.gmail.com with ESMTPSA id i65sm327948pgc.3.2019.05.08.15.59.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 08 May 2019 15:59:01 -0700 (PDT)
+Date:   Wed, 8 May 2019 15:59:00 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Yury Norov <ynorov@caviumnetworks.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, Adam Borowski <kilobyte@angband.pl>,
+        Alexander Graf <agraf@suse.de>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Andreas Schwab <schwab@suse.de>,
+        Andrew Pinski <pinskia@gmail.com>,
+        Bamvor Zhangjian <bamv2005@gmail.com>,
+        Chris Metcalf <cmetcalf@mellanox.com>,
+        Christoph Muellner <christoph.muellner@theobroma-systems.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        James Hogan <james.hogan@imgtec.com>,
+        James Morse <james.morse@arm.com>,
+        Joseph Myers <joseph@codesourcery.com>,
+        Lin Yongting <linyongting@huawei.com>,
+        Manuel Montezelo <manuel.montezelo@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+        Nathan_Lynch <Nathan_Lynch@mentor.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
+        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
+        Steve Ellcey <sellcey@caviumnetworks.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>
+Subject: Re: [PATCH v9 00/24] ILP32 for ARM64
+Message-ID: <20190508225900.GA14091@yury-thinkpad>
+References: <20180516081910.10067-1-ynorov@caviumnetworks.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20180516081910.10067-1-ynorov@caviumnetworks.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The pull request you sent on Thu, 25 Apr 2019 16:36:43 +0800:
+Hi all,
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.1-rc7
+On Wed, May 16, 2018 at 11:18:45AM +0300, Yury Norov wrote:
+> This series enables AARCH64 with ILP32 mode.
+> 
+> As supporting work, it introduces ARCH_32BIT_OFF_T configuration
+> option that is enabled for existing 32-bit architectures but disabled
+> for new arches (so 64-bit off_t userspace type is used by new userspace).
+> Also it deprecates getrlimit and setrlimit syscalls prior to prlimit64.
+> 
+> Based on kernel v4.16. Tested with LTP, glibc testsuite, trinity, lmbench,
+> CPUSpec.
+> 
+> This series on github: 
+> https://github.com/norov/linux/tree/ilp32-4.16
+> Linaro toolchain:
+> http://snapshots.linaro.org/components/toolchain/binaries/7.3-2018.04-rc1/aarch64-linux-gnu_ilp32/
+> Debian repo:
+> http://people.linaro.org/~wookey/ilp32/
+> OpenSUSE repo:
+> https://build.opensuse.org/project/show/devel:ARM:Factory:Contrib:ILP32
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ce45327ca044415a5832dacfb76cdcfb747e3240
+This is the 5.1-based version.
+Changes comparing to 5.0:
+ - drop arch patches that has been taken upstream:
+   80d7da1cac62 asm-generic: Drop getrlimit and setrlimit syscalls from default list
+   942fa985e9f1 32-bit userspace ABI: introduce ARCH_32BIT_OFF_T config option
+   0d0216c03a7a compat ABI: use non-compat openat and open_by_handle_at variants
+ - in include/linux/thread_bits.h define current_thread_info() prior to
+   inclusion of asm/thread_info.h, to avoid circullar dependencies (thread: move
+   thread bits accessors to separated file);
+ - enable old IPC interfaces for ilp32, according to mainline changes
+   (arm64: ilp32: introduce syscall table for ILP32).
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Thanks,
+Yury
