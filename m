@@ -2,180 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9B917142
-	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2019 08:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09B61749D
+	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2019 11:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728771AbfEHGS3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 May 2019 02:18:29 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36206 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727064AbfEHGS0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 May 2019 02:18:26 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x486HoqO034168
-        for <linux-arch@vger.kernel.org>; Wed, 8 May 2019 02:18:25 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2sbpupfdwp-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Wed, 08 May 2019 02:18:25 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-arch@vger.kernel.org> from <rppt@linux.ibm.com>;
-        Wed, 8 May 2019 07:18:22 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 8 May 2019 07:18:13 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x486ICnC48693404
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 May 2019 06:18:12 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0FC5252051;
-        Wed,  8 May 2019 06:18:12 +0000 (GMT)
-Received: from rapoport-lnx (unknown [9.148.8.112])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id C2D5252057;
-        Wed,  8 May 2019 06:18:08 +0000 (GMT)
-Received: by rapoport-lnx (sSMTP sendmail emulation); Wed, 08 May 2019 09:18:08 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, Guo Ren <guoren@kernel.org>,
-        Helge Deller <deller@gmx.de>, Ley Foon Tan <lftan@altera.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Richard Kuo <rkuo@codeaurora.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Sam Creasey <sammy@sammy.net>, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-um@lists.infradead.org, nios2-dev@lists.rocketboards.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH v2 14/14] unicore32: switch to generic version of pte allocation
-Date:   Wed,  8 May 2019 09:17:11 +0300
+        id S1726995AbfEHJJJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 May 2019 05:09:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34144 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725815AbfEHJJI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 8 May 2019 05:09:08 -0400
+Received: from localhost.localdomain (unknown [60.186.222.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F18C2053B;
+        Wed,  8 May 2019 09:09:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557306547;
+        bh=GHCYT1XmP+24pyTq9CjTLCpwc20T3v0y/2xfhCR/8Ao=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Wrhimn8yCreLExGiBUkIfzXMP53Zlb4V4jxlTrJWAsBWWaQCy9eCCUe9ISaUkacbF
+         mScFSOV4T05aV3fpLx96TFAX3f8IsaewodD9W/9NdI/qYjJicxTRv5FnK1z5M6zkBl
+         KjyAlw0aodthuAaVyeHgMR3o90zfsFbY9j4wbd1k=
+From:   guoren@kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, ren_guo@c-sky.com
+Subject: [GIT PULL] csky changes for v5.2-rc1
+Date:   Wed,  8 May 2019 17:09:01 +0800
+Message-Id: <1557306541-12814-1-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1557296232-15361-1-git-send-email-rppt@linux.ibm.com>
-References: <1557296232-15361-1-git-send-email-rppt@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19050806-0028-0000-0000-0000036B6E67
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19050806-0029-0000-0000-0000242AEA29
-Message-Id: <1557296232-15361-15-git-send-email-rppt@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-08_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=713 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905080040
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Replace __get_free_page() and alloc_pages() calls with the generic
-__pte_alloc_one_kernel() and __pte_alloc_one().
+The following changes since commit 085b7755808aa11f78ab9377257e1dad2e6fa4bb:
 
-There is no functional change for the kernel PTE allocation.
+  Linux 5.1-rc6 (2019-04-21 10:45:57 -0700)
 
-The difference for the user PTEs, is that the clear_pte_table() is now
-called after pgtable_page_ctor() and the addition of __GFP_ACCOUNT to the
-GFP flags.
+are available in the git repository at:
 
-The pte_free() and pte_free_kernel() versions are identical to the generic
-ones and can be simply dropped.
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.2-rc1
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- arch/unicore32/include/asm/pgalloc.h | 36 ++++++++----------------------------
- 1 file changed, 8 insertions(+), 28 deletions(-)
+for you to fetch changes up to a691f3334d58b833e41d56de1b9820e687edcd78:
 
-diff --git a/arch/unicore32/include/asm/pgalloc.h b/arch/unicore32/include/asm/pgalloc.h
-index 7cceabe..dd09af6 100644
---- a/arch/unicore32/include/asm/pgalloc.h
-+++ b/arch/unicore32/include/asm/pgalloc.h
-@@ -17,6 +17,10 @@
- #include <asm/cacheflush.h>
- #include <asm/tlbflush.h>
- 
-+#define __HAVE_ARCH_PTE_ALLOC_ONE_KERNEL
-+#define __HAVE_ARCH_PTE_ALLOC_ONE
-+#include <asm-generic/pgalloc.h>
-+
- #define check_pgt_cache()		do { } while (0)
- 
- #define _PAGE_USER_TABLE	(PMD_TYPE_TABLE | PMD_PRESENT)
-@@ -28,17 +32,14 @@ extern void free_pgd_slow(struct mm_struct *mm, pgd_t *pgd);
- #define pgd_alloc(mm)			get_pgd_slow(mm)
- #define pgd_free(mm, pgd)		free_pgd_slow(mm, pgd)
- 
--#define PGALLOC_GFP	(GFP_KERNEL | __GFP_ZERO)
--
- /*
-  * Allocate one PTE table.
-  */
- static inline pte_t *
- pte_alloc_one_kernel(struct mm_struct *mm)
- {
--	pte_t *pte;
-+	pte_t *pte = __pte_alloc_one_kernel(mm);
- 
--	pte = (pte_t *)__get_free_page(PGALLOC_GFP);
- 	if (pte)
- 		clean_dcache_area(pte, PTRS_PER_PTE * sizeof(pte_t));
- 
-@@ -50,35 +51,14 @@ pte_alloc_one(struct mm_struct *mm)
- {
- 	struct page *pte;
- 
--	pte = alloc_pages(PGALLOC_GFP, 0);
-+	pte = __pte_alloc_one(mm, GFP_PGTABLE_USER);
- 	if (!pte)
- 		return NULL;
--	if (!PageHighMem(pte)) {
--		void *page = page_address(pte);
--		clean_dcache_area(page, PTRS_PER_PTE * sizeof(pte_t));
--	}
--	if (!pgtable_page_ctor(pte)) {
--		__free_page(pte);
--	}
--
-+	if (!PageHighMem(pte))
-+		clean_pte_table(page_address(pte));
- 	return pte;
- }
- 
--/*
-- * Free one PTE table.
-- */
--static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
--{
--	if (pte)
--		free_page((unsigned long)pte);
--}
--
--static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
--{
--	pgtable_page_dtor(pte);
--	__free_page(pte);
--}
--
- static inline void __pmd_populate(pmd_t *pmdp, unsigned long pmdval)
- {
- 	set_pmd(pmdp, __pmd(pmdval));
--- 
-2.7.4
+  csky/syscall_trace: Fixup return processing flow (2019-04-22 15:55:28 +0800)
 
+----------------------------------------------------------------
+arch/csky patches for 5.2-rc1
+
+Here are the patches which made on 5.1-rc6 and all are tested in our
+buildroot gitlab CI:
+https://gitlab.com/c-sky/buildroot/pipelines/57892579
+
+ - Fixup vdsp&fpu issues in kernel
+ - Add dynamic function tracer
+ - Use in_syscall & forget_syscall instead of r11_sig
+ - Reconstruct signal processing
+ - Support dynamic start physical address
+ - Fixup wrong update_mmu_cache implementation
+ - Support vmlinux bootup with MMU off
+ - Use va_pa_offset instead of phys_offset
+ - Fixup syscall_trace return processing flow
+ - Add perf callchain support
+ - Add perf_arch_fetch_caller_regs support
+ - Add page fault perf event support
+ - Add support for perf registers sampling
+
+----------------------------------------------------------------
+Guo Ren (12):
+      csky: Fixup vdsp&fpu issues in kernel
+      csky/ftrace: Add dynamic function tracer (include graph tracer)
+      csky: Update syscall_trace_enter/exit implementation
+      csky: Add non-uapi asm/ptrace.h namespace
+      csky: Use in_syscall & forget_syscall instead of r11_sig
+      csky: Reconstruct signal processing
+      csky: Support dynamic start physical address
+      csky: Fixup wrong update_mmu_cache implementation
+      csky: Support vmlinux bootup with MMU off
+      csky: Use va_pa_offset instead of phys_offset
+      csky: Fixup compile warning
+      csky/syscall_trace: Fixup return processing flow
+
+Jagadeesh Pagadala (1):
+      csky: mm/fault.c: Remove duplicate header
+
+Mao Han (4):
+      csky: Add perf callchain support
+      csky: Add perf_arch_fetch_caller_regs support
+      csky: add page fault perf event support
+      csky: Add support for perf registers sampling
+
+Masahiro Yamada (1):
+      csky: remove redundant generic-y
+
+ arch/csky/Kconfig                      |   7 +-
+ arch/csky/Makefile                     |   2 +-
+ arch/csky/abiv1/inc/abi/ckmmu.h        |  24 ++-
+ arch/csky/abiv1/inc/abi/entry.h        |  41 ++--
+ arch/csky/abiv1/inc/abi/regdef.h       |   5 +-
+ arch/csky/abiv2/cacheflush.c           |  13 +-
+ arch/csky/abiv2/inc/abi/ckmmu.h        |  34 +++-
+ arch/csky/abiv2/inc/abi/entry.h        |  87 +++++++--
+ arch/csky/abiv2/inc/abi/regdef.h       |   5 +-
+ arch/csky/abiv2/mcount.S               |  39 +++-
+ arch/csky/abiv2/memmove.S              |   6 +-
+ arch/csky/include/asm/Kbuild           |   1 -
+ arch/csky/include/asm/ftrace.h         |  18 +-
+ arch/csky/include/asm/mmu_context.h    |  17 +-
+ arch/csky/include/asm/page.h           |  39 ++--
+ arch/csky/include/asm/perf_event.h     |   8 +
+ arch/csky/include/asm/ptrace.h         |  41 ++++
+ arch/csky/include/asm/syscall.h        |   9 +
+ arch/csky/include/asm/thread_info.h    |  27 ++-
+ arch/csky/include/asm/unistd.h         |   2 +
+ arch/csky/include/uapi/asm/perf_regs.h |  51 +++++
+ arch/csky/include/uapi/asm/ptrace.h    |  15 --
+ arch/csky/kernel/Makefile              |   2 +
+ arch/csky/kernel/atomic.S              |  26 +--
+ arch/csky/kernel/entry.S               |  77 +++-----
+ arch/csky/kernel/ftrace.c              | 148 +++++++++++++-
+ arch/csky/kernel/head.S                |  60 +-----
+ arch/csky/kernel/perf_callchain.c      | 119 +++++++++++
+ arch/csky/kernel/perf_regs.c           |  40 ++++
+ arch/csky/kernel/ptrace.c              |  51 +++--
+ arch/csky/kernel/setup.c               |  12 +-
+ arch/csky/kernel/signal.c              | 348 +++++++++++++--------------------
+ arch/csky/mm/fault.c                   |  15 +-
+ scripts/recordmcount.pl                |   3 +
+ 34 files changed, 890 insertions(+), 502 deletions(-)
+ create mode 100644 arch/csky/include/asm/ptrace.h
+ create mode 100644 arch/csky/include/uapi/asm/perf_regs.h
+ create mode 100644 arch/csky/kernel/perf_callchain.c
+ create mode 100644 arch/csky/kernel/perf_regs.c
