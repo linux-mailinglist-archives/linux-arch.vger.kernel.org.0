@@ -2,170 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA97018678
-	for <lists+linux-arch@lfdr.de>; Thu,  9 May 2019 10:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB330186CC
+	for <lists+linux-arch@lfdr.de>; Thu,  9 May 2019 10:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbfEIIBS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 May 2019 04:01:18 -0400
-Received: from conuserg-07.nifty.com ([210.131.2.74]:20772 "EHLO
-        conuserg-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725963AbfEIIBS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 May 2019 04:01:18 -0400
-Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
-        by conuserg-07.nifty.com with ESMTP id x497xj2q012573;
-        Thu, 9 May 2019 16:59:46 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com x497xj2q012573
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1557388786;
-        bh=jub7bB0RFseuMn3f9vTFge0BDW0edV2DzaD6c3dAiQA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gZou6hCj3tbogxwjicKwMCixLy35m9sNFb8Dmpz2aK4xYQrkVyYiZo/DkZgQkNEpz
-         zcem2So5e6G5IrKS+bzKlVHtzPP1kHIPA5S5WSPdkFNlUuT5PvQyA/rd9YIpxq50UT
-         SqbrvmSvrvooJKtMuNSq1l1hVHstwznIQHQdbzGEZ7I6gn9sKP3f0SP4gjxAqJNmb7
-         wu03p5mEpDt/pZPyWzv7rudw7YIx3uyiNX/Scy3stjMSLIXlHl1MzfhMBbvnfHzNhR
-         n/uZdlXeIjx5vwCuBbrhoBgtAWNhqj0KuPLMH6PqiGLEb2I09Nrblyqwko1WiV28fl
-         /3zJI3cVHzCGA==
-X-Nifty-SrcIP: [153.142.97.92]
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        linux-xtensa@linux-xtensa.org, Greentime Hu <green.hu@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        linux-riscv@lists.infradead.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Subject: [PATCH] arch: remove dangling asm-generic wrappers
-Date:   Thu,  9 May 2019 16:59:34 +0900
-Message-Id: <20190509075934.12185-1-yamada.masahiro@socionext.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726054AbfEIIbR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 May 2019 04:31:17 -0400
+Received: from mail-wm1-f46.google.com ([209.85.128.46]:35474 "EHLO
+        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725991AbfEIIbR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 May 2019 04:31:17 -0400
+Received: by mail-wm1-f46.google.com with SMTP id y197so2005379wmd.0;
+        Thu, 09 May 2019 01:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=FzWOYssN0isWIIe9zGhm6nETA9v2GV7Jir7OO9+o9Vw=;
+        b=E2kz1FMl83tN2ABjW1mJurOeaAAcQShe1pSdN0kxvumUhNTI+TqC+JXIZb1PePIKJJ
+         ysk3UkyIsJU1IyF0QX1bzY9ls8u7jx8KohqfGd2WpkooA64l95qf7m/i1PXKKqW34KQF
+         NNcpCM/IAQlJ5s4gyXGZ9cMqAAd7CUf1vozzxU8QOI5PMk0lgpQQKZzWT1hz9HGssOvu
+         uKSWLGBKVYuEifUSTdaTScT7ZUK/rBVNeKSLxaCEgLJEzr+DuN5HYR3Wm+13avez/Z+N
+         IK5ls6J3TdDfsYGUe0WoryVlVbiG8KYRYsN6OokIHADtlhOTcp6Zf1M8DSc7jpHqbyfy
+         gN6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FzWOYssN0isWIIe9zGhm6nETA9v2GV7Jir7OO9+o9Vw=;
+        b=G+mHqoPaVIkhLpPYUKiUYAKh25vWzs3c/hGMLe/oXBgglU+XeLIymYF7f1KyU/6Woh
+         0wEgVrg8w5HHxUPOoa8dlzIh8WYC9zCgei61craZbdyrADQ93RcmcXCBoyNRgHdjc1OI
+         xB6vOSPk7s3F1hniqHtVZ8s1IT2T4YoSS86a0VjltW19gaa+rqSUoigYyQCspuZJcbaO
+         9385zNfnyGTSxNMmDxzC6oxbB41QxgIn/ajv91+LnqrMBcNT97x4fYM7JkQ4R1mii+f0
+         SlJEhEJkeD3v6z94GhRlitl2JHB7iOuid/fIIIrucCNQjtdnVP26BRcZGcWmTsaS1Kdn
+         Bm7Q==
+X-Gm-Message-State: APjAAAV8yQogelD4Is27GaBtbd2k8jcIsWAguwnsQjOWXK84TxjeXaCP
+        EAEWPrW0IqZTVYL3bBePAyUwz7oL
+X-Google-Smtp-Source: APXvYqwbP80+SsW7YO75fRTZDEwGG81tyowfGAEzJg/Pgbxk1mNQT7/K4RNdohJEwe6Atj6WEY8WAQ==
+X-Received: by 2002:a7b:c309:: with SMTP id k9mr1995617wmj.45.1557390675018;
+        Thu, 09 May 2019 01:31:15 -0700 (PDT)
+Received: from gmail.com (2E8B0CD5.catv.pool.telekom.hu. [46.139.12.213])
+        by smtp.gmail.com with ESMTPSA id x17sm1474400wru.27.2019.05.09.01.31.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 09 May 2019 01:31:14 -0700 (PDT)
+Date:   Thu, 9 May 2019 10:31:11 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, rguenther@suse.de,
+        hjl.tools@gmail.com, yang.shi@linux.alibaba.com, mhocko@suse.com,
+        vbabka@suse.cz, luto@amacapital.net, x86@kernel.org,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-um@lists.infradead.org, benh@kernel.crashing.org,
+        paulus@samba.org, mpe@ellerman.id.au, linux-arch@vger.kernel.org,
+        gxt@pku.edu.cn, jdike@addtoit.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com
+Subject: Re: [PATCH] [v2] x86/mpx: fix recursive munmap() corruption
+Message-ID: <20190509083111.GA75918@gmail.com>
+References: <20190419194747.5E1AD6DC@viggo.jf.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190419194747.5E1AD6DC@viggo.jf.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-These generic-y defines do not have the corresponding generic header
-in include/asm-generic/, so they are definitely invalid.
 
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
----
+* Dave Hansen <dave.hansen@linux.intel.com> wrote:
 
- arch/csky/include/asm/Kbuild   | 4 ----
- arch/h8300/include/asm/Kbuild  | 1 -
- arch/nds32/include/asm/Kbuild  | 3 ---
- arch/riscv/include/asm/Kbuild  | 4 ----
- arch/xtensa/include/asm/Kbuild | 1 -
- 5 files changed, 13 deletions(-)
+> Reported-by: Richard Biener <rguenther@suse.de>
+> Reported-by: H.J. Lu <hjl.tools@gmail.com>
+> Fixes: dd2283f2605e ("mm: mmap: zap pages with read mmap_sem in munmap")
+> Cc: Yang Shi <yang.shi@linux.alibaba.com>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: x86@kernel.org
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Cc: stable@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-um@lists.infradead.org
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: linux-arch@vger.kernel.org
+> Cc: Guan Xuetao <gxt@pku.edu.cn>
+> Cc: Jeff Dike <jdike@addtoit.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
 
-diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
-index a9b63efef416..c1a6c0f31150 100644
---- a/arch/csky/include/asm/Kbuild
-+++ b/arch/csky/include/asm/Kbuild
-@@ -1,6 +1,5 @@
- generic-y += asm-offsets.h
- generic-y += bugs.h
--generic-y += clkdev.h
- generic-y += compat.h
- generic-y += current.h
- generic-y += delay.h
-@@ -29,15 +28,12 @@ generic-y += local64.h
- generic-y += mm-arch-hooks.h
- generic-y += mmiowb.h
- generic-y += module.h
--generic-y += mutex.h
- generic-y += pci.h
- generic-y += percpu.h
- generic-y += preempt.h
- generic-y += qrwlock.h
--generic-y += scatterlist.h
- generic-y += sections.h
- generic-y += serial.h
--generic-y += shm.h
- generic-y += timex.h
- generic-y += topology.h
- generic-y += trace_clock.h
-diff --git a/arch/h8300/include/asm/Kbuild b/arch/h8300/include/asm/Kbuild
-index 123d8f54be4a..63e5ab115e3c 100644
---- a/arch/h8300/include/asm/Kbuild
-+++ b/arch/h8300/include/asm/Kbuild
-@@ -38,7 +38,6 @@ generic-y += pci.h
- generic-y += percpu.h
- generic-y += pgalloc.h
- generic-y += preempt.h
--generic-y += scatterlist.h
- generic-y += sections.h
- generic-y += serial.h
- generic-y += shmparam.h
-diff --git a/arch/nds32/include/asm/Kbuild b/arch/nds32/include/asm/Kbuild
-index 5bd2b4ee951f..6897045e7be5 100644
---- a/arch/nds32/include/asm/Kbuild
-+++ b/arch/nds32/include/asm/Kbuild
-@@ -4,10 +4,8 @@ generic-y += bitops.h
- generic-y += bug.h
- generic-y += bugs.h
- generic-y += checksum.h
--generic-y += clkdev.h
- generic-y += cmpxchg.h
- generic-y += compat.h
--generic-y += cputime.h
- generic-y += device.h
- generic-y += div64.h
- generic-y += dma.h
-@@ -26,7 +24,6 @@ generic-y += kdebug.h
- generic-y += kmap_types.h
- generic-y += kprobes.h
- generic-y += kvm_para.h
--generic-y += limits.h
- generic-y += local.h
- generic-y += local64.h
- generic-y += mm-arch-hooks.h
-diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-index cccd12cf27d4..f86d68dabaf0 100644
---- a/arch/riscv/include/asm/Kbuild
-+++ b/arch/riscv/include/asm/Kbuild
-@@ -1,7 +1,6 @@
- generic-y += bugs.h
- generic-y += checksum.h
- generic-y += compat.h
--generic-y += cputime.h
- generic-y += device.h
- generic-y += div64.h
- generic-y += dma.h
-@@ -11,7 +10,6 @@ generic-y += emergency-restart.h
- generic-y += exec.h
- generic-y += fb.h
- generic-y += hardirq.h
--generic-y += hash.h
- generic-y += hw_irq.h
- generic-y += irq_regs.h
- generic-y += irq_work.h
-@@ -21,10 +19,8 @@ generic-y += kvm_para.h
- generic-y += local.h
- generic-y += local64.h
- generic-y += mm-arch-hooks.h
--generic-y += mutex.h
- generic-y += percpu.h
- generic-y += preempt.h
--generic-y += scatterlist.h
- generic-y += sections.h
- generic-y += serial.h
- generic-y += shmparam.h
-diff --git a/arch/xtensa/include/asm/Kbuild b/arch/xtensa/include/asm/Kbuild
-index 35f83c4bf239..f1686d919178 100644
---- a/arch/xtensa/include/asm/Kbuild
-+++ b/arch/xtensa/include/asm/Kbuild
-@@ -27,7 +27,6 @@ generic-y += preempt.h
- generic-y += qrwlock.h
- generic-y += qspinlock.h
- generic-y += sections.h
--generic-y += socket.h
- generic-y += topology.h
- generic-y += trace_clock.h
- generic-y += vga.h
--- 
-2.17.1
+I've also added your:
 
+  Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+
+Because I suppose you intended to sign off on it?
+
+Thanks,
+
+	Ingo
