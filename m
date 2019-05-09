@@ -2,33 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4823318A59
-	for <lists+linux-arch@lfdr.de>; Thu,  9 May 2019 15:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E23818A64
+	for <lists+linux-arch@lfdr.de>; Thu,  9 May 2019 15:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbfEINKV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 May 2019 09:10:21 -0400
-Received: from mga02.intel.com ([134.134.136.20]:37976 "EHLO mga02.intel.com"
+        id S1726604AbfEINOC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 May 2019 09:14:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56338 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726583AbfEINKV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 9 May 2019 09:10:21 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 May 2019 06:05:18 -0700
-X-ExtLoop1: 1
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.86])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2019 06:05:13 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hOijY-0006lB-3R; Thu, 09 May 2019 16:05:12 +0300
-Date:   Thu, 9 May 2019 16:05:12 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1726054AbfEINOB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 9 May 2019 09:14:01 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BFEF52089E;
+        Thu,  9 May 2019 13:13:58 +0000 (UTC)
+Date:   Thu, 9 May 2019 09:13:57 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         "Tobin C . Harding" <me@tobin.cc>, Michal Hocko <mhocko@suse.cz>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
         Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
         linux-kernel@vger.kernel.org,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -38,21 +33,23 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
         Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH] vsprintf: Do not break early boot with probing addresses
-Message-ID: <20190509130512.GS9224@smile.fi.intel.com>
-References: <20190509121923.8339-1-pmladek@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Subject: Re: [PATCH] vsprintf: Do not break early boot with probing
+ addresses
+Message-ID: <20190509091357.0af3fcd7@gandalf.local.home>
 In-Reply-To: <20190509121923.8339-1-pmladek@suse.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190509121923.8339-1-pmladek@suse.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 09, 2019 at 02:19:23PM +0200, Petr Mladek wrote:
+On Thu,  9 May 2019 14:19:23 +0200
+Petr Mladek <pmladek@suse.com> wrote:
+
 > The commit 3e5903eb9cff70730 ("vsprintf: Prevent crash when dereferencing
 > invalid pointers") broke boot on several architectures. The common
 > pattern is that probe_kernel_read() is not working during early
@@ -128,19 +125,13 @@ On Thu, May 09, 2019 at 02:19:23PM +0200, Petr Mladek wrote:
 > been setup on s390, which happens with setup_arch()->paging_init().
 > 
 > Any probe_kernel_address() invocation before that will return -EFAULT.
+
+Hmm, this sounds to me that probe_kernel_address() is broken for these
+architectures. Perhaps the system_state check should be in
+probe_kernel_address() for those architectures?
+
+
 > 
-
-It's seems as a good enough fix.
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Though in all cases would be nice to distinguish error pointers as well.
-Something like
-
-if (IS_ERR(ptr))
-	return err_pointer_str(ptr);
-
-in check_pointer_msg().
-
 > Fixes: 3e5903eb9cff70730 ("vsprintf: Prevent crash when dereferencing invalid pointers")
 > Signed-off-by: Petr Mladek <pmladek@suse.com>
 > ---
@@ -157,22 +148,26 @@ in check_pointer_msg().
 >  
 > -	if (probe_kernel_address(ptr, byte))
 > -		return "(efault)";
+
+Either that, or we add a macro to those architectures and add:
+
+#ifdef ARCH_NO_EARLY_PROBE_KERNEL_ADDRESS
+
 > +	/* User space address handling is not ready during early boot. */
 > +	if (system_state <= SYSTEM_BOOTING) {
 > +		if ((unsigned long)ptr < PAGE_SIZE)
 > +			return "(efault)";
 > +	} else {
+
+#endif
+
+Why add an unnecessary branch for archs this is not a problem for?
+
+-- Steve
+
 > +		if (probe_kernel_address(ptr, byte))
 > +			return "(efault)";
 >  
 >  	return NULL;
 >  }
-> -- 
-> 2.16.4
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
 
