@@ -2,105 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB330186CC
-	for <lists+linux-arch@lfdr.de>; Thu,  9 May 2019 10:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A56C1887D
+	for <lists+linux-arch@lfdr.de>; Thu,  9 May 2019 12:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbfEIIbR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 May 2019 04:31:17 -0400
-Received: from mail-wm1-f46.google.com ([209.85.128.46]:35474 "EHLO
-        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725991AbfEIIbR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 May 2019 04:31:17 -0400
-Received: by mail-wm1-f46.google.com with SMTP id y197so2005379wmd.0;
-        Thu, 09 May 2019 01:31:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FzWOYssN0isWIIe9zGhm6nETA9v2GV7Jir7OO9+o9Vw=;
-        b=E2kz1FMl83tN2ABjW1mJurOeaAAcQShe1pSdN0kxvumUhNTI+TqC+JXIZb1PePIKJJ
-         ysk3UkyIsJU1IyF0QX1bzY9ls8u7jx8KohqfGd2WpkooA64l95qf7m/i1PXKKqW34KQF
-         NNcpCM/IAQlJ5s4gyXGZ9cMqAAd7CUf1vozzxU8QOI5PMk0lgpQQKZzWT1hz9HGssOvu
-         uKSWLGBKVYuEifUSTdaTScT7ZUK/rBVNeKSLxaCEgLJEzr+DuN5HYR3Wm+13avez/Z+N
-         IK5ls6J3TdDfsYGUe0WoryVlVbiG8KYRYsN6OokIHADtlhOTcp6Zf1M8DSc7jpHqbyfy
-         gN6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FzWOYssN0isWIIe9zGhm6nETA9v2GV7Jir7OO9+o9Vw=;
-        b=G+mHqoPaVIkhLpPYUKiUYAKh25vWzs3c/hGMLe/oXBgglU+XeLIymYF7f1KyU/6Woh
-         0wEgVrg8w5HHxUPOoa8dlzIh8WYC9zCgei61craZbdyrADQ93RcmcXCBoyNRgHdjc1OI
-         xB6vOSPk7s3F1hniqHtVZ8s1IT2T4YoSS86a0VjltW19gaa+rqSUoigYyQCspuZJcbaO
-         9385zNfnyGTSxNMmDxzC6oxbB41QxgIn/ajv91+LnqrMBcNT97x4fYM7JkQ4R1mii+f0
-         SlJEhEJkeD3v6z94GhRlitl2JHB7iOuid/fIIIrucCNQjtdnVP26BRcZGcWmTsaS1Kdn
-         Bm7Q==
-X-Gm-Message-State: APjAAAV8yQogelD4Is27GaBtbd2k8jcIsWAguwnsQjOWXK84TxjeXaCP
-        EAEWPrW0IqZTVYL3bBePAyUwz7oL
-X-Google-Smtp-Source: APXvYqwbP80+SsW7YO75fRTZDEwGG81tyowfGAEzJg/Pgbxk1mNQT7/K4RNdohJEwe6Atj6WEY8WAQ==
-X-Received: by 2002:a7b:c309:: with SMTP id k9mr1995617wmj.45.1557390675018;
-        Thu, 09 May 2019 01:31:15 -0700 (PDT)
-Received: from gmail.com (2E8B0CD5.catv.pool.telekom.hu. [46.139.12.213])
-        by smtp.gmail.com with ESMTPSA id x17sm1474400wru.27.2019.05.09.01.31.13
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 09 May 2019 01:31:14 -0700 (PDT)
-Date:   Thu, 9 May 2019 10:31:11 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, rguenther@suse.de,
-        hjl.tools@gmail.com, yang.shi@linux.alibaba.com, mhocko@suse.com,
-        vbabka@suse.cz, luto@amacapital.net, x86@kernel.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        stable@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-um@lists.infradead.org, benh@kernel.crashing.org,
-        paulus@samba.org, mpe@ellerman.id.au, linux-arch@vger.kernel.org,
-        gxt@pku.edu.cn, jdike@addtoit.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com
-Subject: Re: [PATCH] [v2] x86/mpx: fix recursive munmap() corruption
-Message-ID: <20190509083111.GA75918@gmail.com>
-References: <20190419194747.5E1AD6DC@viggo.jf.intel.com>
+        id S1726174AbfEIKrG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 May 2019 06:47:06 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53272 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725892AbfEIKrG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 May 2019 06:47:06 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x49ARUhA116823
+        for <linux-arch@vger.kernel.org>; Thu, 9 May 2019 06:47:05 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2scgtw5wyy-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Thu, 09 May 2019 06:47:05 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <heiko.carstens@de.ibm.com>;
+        Thu, 9 May 2019 11:47:03 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 9 May 2019 11:47:00 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x49Al0RH5570676
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 May 2019 10:47:00 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8EB811C04A;
+        Thu,  9 May 2019 10:46:59 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A9DD011C04C;
+        Thu,  9 May 2019 10:46:59 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.21])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  9 May 2019 10:46:59 +0000 (GMT)
+Date:   Thu, 9 May 2019 12:46:58 +0200
+From:   Heiko Carstens <heiko.carstens@de.ibm.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-s390@vger.kernel.org,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: Early printk breakage due to 3e5903eb9cff ("vsprintf: Prevent crash
+ when dereferencing invalid pointers")
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190419194747.5E1AD6DC@viggo.jf.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-TM-AS-GCONF: 00
+x-cbid: 19050910-0028-0000-0000-0000036BE55F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19050910-0029-0000-0000-0000242B6630
+Message-Id: <20190509104658.GB5758@osiris>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-09_02:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=259 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905090065
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hello Petr,
 
-* Dave Hansen <dave.hansen@linux.intel.com> wrote:
+I just realized that early printks, or more specific vsnprintf invocations,
+are broken on s390 due to
 
-> Reported-by: Richard Biener <rguenther@suse.de>
-> Reported-by: H.J. Lu <hjl.tools@gmail.com>
-> Fixes: dd2283f2605e ("mm: mmap: zap pages with read mmap_sem in munmap")
-> Cc: Yang Shi <yang.shi@linux.alibaba.com>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Andy Lutomirski <luto@amacapital.net>
-> Cc: x86@kernel.org
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> Cc: stable@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-um@lists.infradead.org
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: linux-arch@vger.kernel.org
-> Cc: Guan Xuetao <gxt@pku.edu.cn>
-> Cc: Jeff Dike <jdike@addtoit.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+3e5903eb9cff ("vsprintf: Prevent crash when dereferencing invalid pointers").
 
-I've also added your:
+E.g. the early boot output now looks like this where the first
+(efault) should be the linux_banner:
 
-  Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+[    0.099985] (efault)
+[    0.099985] setup: Linux is running as a z/VM guest operating system in 64-bit mode
+[    0.100066] setup: The maximum memory size is 8192MB
+[    0.100070] cma: Reserved 4 MiB at (efault)
+[    0.100100] numa: NUMA mode: (efault)
 
-Because I suppose you intended to sign off on it?
+The reason for this, is that your code assumes that
+probe_kernel_address() works very early. This however is not true on
+at least s390. Uaccess on KERNEL_DS works only after page tables have
+been setup on s390, which happens with setup_arch()->paging_init().
 
-Thanks,
+Any probe_kernel_address() invocation before that will return -EFAULT.
 
-	Ingo
+So how should we fix this? We could e.g. again add an arch specific
+version of probe_kernel_read() for s390, which would be more or less a
+copy of the generic variant, just that it would do something different
+if page tables aren't setup yet.
+
+Or... any other idea?
+
+Cc'ing linux-arch, just in case other architectures are also affected.
+
