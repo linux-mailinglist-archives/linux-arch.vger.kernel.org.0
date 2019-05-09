@@ -2,86 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B35918AF3
-	for <lists+linux-arch@lfdr.de>; Thu,  9 May 2019 15:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846B418B37
+	for <lists+linux-arch@lfdr.de>; Thu,  9 May 2019 16:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbfEINrJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 9 May 2019 09:47:09 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:22124 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726449AbfEINrI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 May 2019 09:47:08 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id uk-mta-2-cILVDsqaNZKuy6_7SA1Hbw-1;
- Thu, 09 May 2019 14:47:00 +0100
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
- (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu,
- 9 May 2019 14:46:59 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 9 May 2019 14:46:59 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     =?iso-8859-1?Q?=27Michal_Such=E1nek=27?= <msuchanek@suse.de>,
-        Petr Mladek <pmladek@suse.com>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        id S1726694AbfEIOGP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 May 2019 10:06:15 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60536 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726192AbfEIOGP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 9 May 2019 10:06:15 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 9158BAC31;
+        Thu,  9 May 2019 14:06:12 +0000 (UTC)
+Date:   Thu, 9 May 2019 16:06:09 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Michal Hocko <mhocko@suse.cz>,
+        "Tobin C . Harding" <me@tobin.cc>, Michal Hocko <mhocko@suse.cz>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, Russell Currey <ruscur@russell.cc>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
         Stephen Rothwell <sfr@ozlabs.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "Martin Schwidefsky" <schwidefsky@de.ibm.com>,
-        "Tobin C . Harding" <me@tobin.cc>
-Subject: RE: [PATCH] vsprintf: Do not break early boot with probing addresses
-Thread-Topic: [PATCH] vsprintf: Do not break early boot with probing addresses
-Thread-Index: AQHVBmyk/iTC8Q7sI0elwkZY5/gFJaZizfQA
-Date:   Thu, 9 May 2019 13:46:59 +0000
-Message-ID: <8ad8bb83b7034f7e92df12040fb8c2c2@AcuMS.aculab.com>
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: Re: [PATCH] vsprintf: Do not break early boot with probing addresses
+Message-ID: <20190509140609.n44v6kj27wb77jck@pathway.suse.cz>
 References: <20190509121923.8339-1-pmladek@suse.com>
- <20190509153829.06319d0c@kitsune.suse.cz>
-In-Reply-To: <20190509153829.06319d0c@kitsune.suse.cz>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <20190509091357.0af3fcd7@gandalf.local.home>
 MIME-Version: 1.0
-X-MC-Unique: cILVDsqaNZKuy6_7SA1Hbw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190509091357.0af3fcd7@gandalf.local.home>
+User-Agent: NeoMutt/20170912 (1.9.0)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Michal Suchánek
-> Sent: 09 May 2019 14:38
-...
+On Thu 2019-05-09 09:13:57, Steven Rostedt wrote:
+> On Thu,  9 May 2019 14:19:23 +0200
+> Petr Mladek <pmladek@suse.com> wrote:
+> 
+> > The commit 3e5903eb9cff70730 ("vsprintf: Prevent crash when dereferencing
+> > invalid pointers") broke boot on several architectures. The common
+> > pattern is that probe_kernel_read() is not working during early
+> > boot because userspace access framework is not ready.
+> > 
+> > The check is only the best effort. Let's not rush with it during
+> > the early boot.
+> > 
+> > Details:
+> > 
+> > 1. Report on Power:
+> > 
+> > Kernel crashes very early during boot with with CONFIG_PPC_KUAP and
+> > CONFIG_JUMP_LABEL_FEATURE_CHECK_DEBUG
+> > 
 > > The problem is the combination of some new code called via printk(),
 > > check_pointer() which calls probe_kernel_read(). That then calls
 > > allow_user_access() (PPC_KUAP) and that uses mmu_has_feature() too early
-> > (before we've patched features).
+> > (before we've patched features). With the JUMP_LABEL debug enabled that
+> > causes us to call printk() & dump_stack() and we end up recursing and
+> > overflowing the stack.
+> > 
+> > Because it happens so early you don't get any output, just an apparently
+> > dead system.
+> > 
+> > The stack trace (which you don't see) is something like:
+> > 
+> >   ...
+> >   dump_stack+0xdc
+> >   probe_kernel_read+0x1a4
+> >   check_pointer+0x58
+> >   string+0x3c
+> >   vsnprintf+0x1bc
+> >   vscnprintf+0x20
+> >   printk_safe_log_store+0x7c
+> >   printk+0x40
+> >   dump_stack_print_info+0xbc
+> >   dump_stack+0x8
+> >   probe_kernel_read+0x1a4
+> >   probe_kernel_read+0x19c
+> >   check_pointer+0x58
+> >   string+0x3c
+> >   vsnprintf+0x1bc
+> >   vscnprintf+0x20
+> >   vprintk_store+0x6c
+> >   vprintk_emit+0xec
+> >   vprintk_func+0xd4
+> >   printk+0x40
+> >   cpufeatures_process_feature+0xc8
+> >   scan_cpufeatures_subnodes+0x380
+> >   of_scan_flat_dt_subnodes+0xb4
+> >   dt_cpu_ftrs_scan_callback+0x158
+> >   of_scan_flat_dt+0xf0
+> >   dt_cpu_ftrs_scan+0x3c
+> >   early_init_devtree+0x360
+> >   early_setup+0x9c
+> > 
+> > 2. Report on s390:
+> > 
+> > vsnprintf invocations, are broken on s390. For example, the early boot
+> > output now looks like this where the first (efault) should be
+> > the linux_banner:
+> > 
+> > [    0.099985] (efault)
+> > [    0.099985] setup: Linux is running as a z/VM guest operating system in 64-bit mode
+> > [    0.100066] setup: The maximum memory size is 8192MB
+> > [    0.100070] cma: Reserved 4 MiB at (efault)
+> > [    0.100100] numa: NUMA mode: (efault)
+> > 
+> > The reason for this, is that the code assumes that
+> > probe_kernel_address() works very early. This however is not true on
+> > at least s390. Uaccess on KERNEL_DS works only after page tables have
+> > been setup on s390, which happens with setup_arch()->paging_init().
+> > 
+> > Any probe_kernel_address() invocation before that will return -EFAULT.
 > 
-> There is early_mmu_has_feature for this case. mmu_has_feature does not
-> work before patching so parts of kernel that can run before patching
-> must use the early_ variant which actually runs code reading the
-> feature bitmap to determine the answer.
+> Hmm, this sounds to me that probe_kernel_address() is broken for these
+> architectures. Perhaps the system_state check should be in
+> probe_kernel_address() for those architectures?
 
-Does the early_ variant get patched so the it is reasonably
-efficient after the 'patching' is done?
-Or should there be a third version which gets patched across?
+Yeah. Well, these problems are hard to debug. It left a dead power
+system with a blank screen. I am not sure if the added check is
+worth the pain.
 
-	David
+I hope that the check would help to debug problems. But it is yet
+another complexity in printk() path. I think that it is fine
+to keep it enabled only on the booted system for a while
+and get some more feedback.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Best Regards,
+Petr
