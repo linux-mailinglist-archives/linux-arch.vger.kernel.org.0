@@ -2,86 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB3619A08
-	for <lists+linux-arch@lfdr.de>; Fri, 10 May 2019 10:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBEC19B75
+	for <lists+linux-arch@lfdr.de>; Fri, 10 May 2019 12:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727076AbfEJIv0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 May 2019 04:51:26 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38437 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726964AbfEJIvZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 May 2019 04:51:25 -0400
-Received: by mail-pg1-f193.google.com with SMTP id j26so2691135pgl.5;
-        Fri, 10 May 2019 01:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=gL9lx8kVDxGBvBDPY9ofQJR5Y2JHIPbQZd/gZRgawmg=;
-        b=OQ92lVBs9QTSEI+m13cYS13d0/0pR5CaNigXu41OihDpr1PXII9RPeev5oofTgQeT5
-         tzWHJPRVksgdeMEmBLdiSTmw4aZ99QBK202mO1y5D2SV0yiM3Cmc65kPoSn6WK9ve+i2
-         WzqzuZYDee8pllOGV+ZWYu7kIzym6K/megZTIsgn4boqc+YuBf7yXDKoLx9u+TaZWyV2
-         ZbcSMXOvVQc6P3GzOMmbTs9sYDxMgIgS1fnWySOEHFZm2HYcbj0hTfX34BxN7BqI5flW
-         pYyXsBrLLUrYXD7hLLP9GLtBgvme95OwYDZUyt+bOFS+sDESyDFsKE8SsSvIe509KoOj
-         CxcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gL9lx8kVDxGBvBDPY9ofQJR5Y2JHIPbQZd/gZRgawmg=;
-        b=qyF3t/6dQwu4AAD5N7q2T2UJMb/gmMBwSS38sUAhZ0uo9fAi0V6cn/30tgd3ql/N8I
-         xJjRd6wqCB/mPDro0iOvpf/75G3Mi6eP9FIQJJprQDRGlnEDIQJiSHIXKNq+h3h1McA/
-         flxvQWj/mXCp8dKQPK2ZQG9BADMeMPBacdIGtBQqufLG2raVwWbGxrYEa8FM1Ed37AYl
-         AcC53X3sq1O+ebWC4xYA9sOMVAC7eiHZG63Gyci7A09ljmJjUCeRjV1snNJ3O+32Q5uv
-         n0UK8qhaKNJTZZShCn59QBD7u6cdpFsicyVmaVfsXHD+gWPJVJxQTr3GBBTN8NimQ19r
-         Pr5w==
-X-Gm-Message-State: APjAAAVz30OIOzaLLPVlPp+uSbe/n+fw/hKPK234p4aofqVudwfUm0qY
-        acVxnLGUJ36rRuv7wYQ96n8=
-X-Google-Smtp-Source: APXvYqz73bpUIGnNQKzUcF4Kv0BOgEYh18rjzWzVuPqLZqaSK693aC3PMkYpkGDq0RRylFJyRjOoKw==
-X-Received: by 2002:a63:6f0b:: with SMTP id k11mr11887557pgc.342.1557478284993;
-        Fri, 10 May 2019 01:51:24 -0700 (PDT)
-Received: from localhost ([39.7.15.25])
-        by smtp.gmail.com with ESMTPSA id b63sm8458414pfj.54.2019.05.10.01.51.23
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 10 May 2019 01:51:23 -0700 (PDT)
-Date:   Fri, 10 May 2019 17:51:21 +0900
-From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-To:     Petr Mladek <pmladek@suse.com>
+        id S1727251AbfEJKVH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Fri, 10 May 2019 06:21:07 -0400
+Received: from ozlabs.org ([203.11.71.1]:44463 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727053AbfEJKVH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 May 2019 06:21:07 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 450mSt2tmqz9sD4;
+        Fri, 10 May 2019 20:21:02 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Michal =?utf-8?Q?Such=C3=A1ne?= =?utf-8?Q?k'?= 
+        <msuchanek@suse.de>, Petr Mladek <pmladek@suse.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "Tobin C . Harding" <me@tobin.cc>, Michal Hocko <mhocko@suse.cz>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>,
         Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, Russell Currey <ruscur@russell.cc>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Stephen Rothwell <sfr@ozlabs.org>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH] vsprintf: Do not break early boot with probing addresses
-Message-ID: <20190510085121.GA17632@jagdpanzerIV>
-References: <20190510081635.GA4533@jagdpanzerIV>
- <20190510084213.22149-1-pmladek@suse.com>
+        "linux-s390\@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Michal Hocko <mhocko@suse.cz>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Stephen Rothwell <sfr@ozlabs.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "linuxppc-dev\@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        "Tobin C . Harding" <me@tobin.cc>
+Subject: RE: [PATCH] vsprintf: Do not break early boot with probing addresses
+In-Reply-To: <8ad8bb83b7034f7e92df12040fb8c2c2@AcuMS.aculab.com>
+References: <20190509121923.8339-1-pmladek@suse.com> <20190509153829.06319d0c@kitsune.suse.cz> <8ad8bb83b7034f7e92df12040fb8c2c2@AcuMS.aculab.com>
+Date:   Fri, 10 May 2019 20:21:02 +1000
+Message-ID: <87ef56vcdt.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190510084213.22149-1-pmladek@suse.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On (05/10/19 10:42), Petr Mladek wrote:
-[..]
-> Fixes: 3e5903eb9cff70730 ("vsprintf: Prevent crash when dereferencing invalid pointers")
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
+David Laight <David.Laight@ACULAB.COM> writes:
+> From: Michal Suchánek
+>> Sent: 09 May 2019 14:38
+> ...
+>> > The problem is the combination of some new code called via printk(),
+>> > check_pointer() which calls probe_kernel_read(). That then calls
+>> > allow_user_access() (PPC_KUAP) and that uses mmu_has_feature() too early
+>> > (before we've patched features).
+>> 
+>> There is early_mmu_has_feature for this case. mmu_has_feature does not
+>> work before patching so parts of kernel that can run before patching
+>> must use the early_ variant which actually runs code reading the
+>> feature bitmap to determine the answer.
+>
+> Does the early_ variant get patched so the it is reasonably
+> efficient after the 'patching' is done?
 
-FWIW
-Reviewed-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+No they don't get patched ever. The name is a bit misleading I guess.
 
-	-ss
+> Or should there be a third version which gets patched across?
+
+For a case like this it's entirely safe to just skip the code early in
+boot, so if it was a static_key_false everything would just work.
+
+Unfortunately the way the code is currently written we would have to
+change all MMU features to static_key_false and that risks breaking
+something else.
+
+We have a long standing TODO to rework all our feature logic and unify
+CPU/MMU/firmware/etc. features. Possibly as part of that we can come up
+with a scheme where the default value is per-feature bit.
+
+Having said all that, in this case the overhead of the test and branch
+is small compared to the cost of writing to the SPR which controls user
+access and then doing an isync, so it's all somewhat premature
+optimisation.
+
+cheers
