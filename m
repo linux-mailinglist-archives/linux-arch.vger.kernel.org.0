@@ -2,52 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB251A40A
-	for <lists+linux-arch@lfdr.de>; Fri, 10 May 2019 22:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8151A46C
+	for <lists+linux-arch@lfdr.de>; Fri, 10 May 2019 23:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727964AbfEJUlv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 May 2019 16:41:51 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:34124 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727943AbfEJUlv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 May 2019 16:41:51 -0400
-Received: by mail-ed1-f68.google.com with SMTP id p27so6817191eda.1
-        for <linux-arch@vger.kernel.org>; Fri, 10 May 2019 13:41:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ganxwCo69+MjYlGVZok+ayq0HYAVtlcSkabz2Ai2RCk=;
-        b=PX2FYdIQmLYOG9DttH4kv0cprRCB1CVkzY1eQ8hgHHfnNYlZVbH8CkFKMApWWjI0HT
-         j5gDUyr+dgeMEfMtJZKOl6Avf3+OFUhwoaDxYrbETZB0PXHFBlolbkxshIsiYJkw3xz0
-         ExmEM4ZdWgWVb98u3zlAzqBG13c4bV1FqysXsiqDc5fSBrP1nVEiCOuom7lIrU27F3+T
-         PtJXUG+7sxBGLlZaplytARycQIqD1n7MGS0a1TxzoFrFhJ+W+rN/vxN8sj3a1jAx/DoJ
-         aQAW8vAu2sRduqDDMMN5IWslifXd7edG+2owQD24IU5u1FkoJ80+KhpJxTdUd+90l+Ne
-         ihmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ganxwCo69+MjYlGVZok+ayq0HYAVtlcSkabz2Ai2RCk=;
-        b=rwmrCBTnAh2jb9jToO5S296Ds8njVaxBu+4alAsp7idumHuFrPrI0c9YsVKVcLVbNN
-         C6q7Of57zSmavokxre1tJFHA1CpvdjjVw0upc0vRqkgpJHiLhR3fqS5P5iHj+Hj88m4Q
-         JrEZW7ky3LXiGlkSrV3RGiNdmUfbqnrWc6oWbcQ43xkyZXHqQ3BwqzzVG7S8B9fOc6AD
-         AVgwkL+KftHj25u7LJyUH4X0WFIqU+vdiZDQKFSZM1dRp5e6HSCqSgy0c6aaOo+xyF6U
-         R4eZ75Vc0CyyrS1vGzLVFHyYXAUhboF9wMP1SdVRHyH1X3stMg2Sxj/eBaVc9vDavTjb
-         C4bw==
-X-Gm-Message-State: APjAAAVibvYcavnAlwi123k0nGjEwnfFJ1lpLi73vISJbEpAo0jiiNzK
-        GtKUamMDL36NkGQPv9MIt1YgSg==
-X-Google-Smtp-Source: APXvYqwrQpOQMxFo7pL64woeiMd6ENZAMPxG/EeBd9+8Jln82x4vS7EDIT7ItJ2WpRWhrlGsKx5V/Q==
-X-Received: by 2002:a50:9968:: with SMTP id l37mr13505242edb.143.1557520909008;
-        Fri, 10 May 2019 13:41:49 -0700 (PDT)
-Received: from google.com ([2a00:79e0:1b:201:ee0a:cce3:df40:3ac5])
-        by smtp.gmail.com with ESMTPSA id q4sm878740ejb.65.2019.05.10.13.41.47
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 10 May 2019 13:41:47 -0700 (PDT)
-Date:   Fri, 10 May 2019 22:41:41 +0200
-From:   Jann Horn <jannh@google.com>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
+        id S1727917AbfEJVUj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 May 2019 17:20:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32846 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727897AbfEJVUj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 May 2019 17:20:39 -0400
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0145A2184C
+        for <linux-arch@vger.kernel.org>; Fri, 10 May 2019 21:20:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557523238;
+        bh=eVSDLxFRJtNqvSdy6nzYE0dpoYEOh2L4bbdtCHYcgX4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=0fS3cTmHczG1ssOc5teJdrM/TgWQ6nVTFhgCqAq8ASGKhIkMVg92wafAOLYiI3MWl
+         INOHmViBS9cNEKaDJzcRJl2lEH3LwAKUHnacjQ8LBm+I8aoDSG2JbRqJtx70KX/w7K
+         pTHZRqYnAaT5e2/zJ0Nn7aMXre7H8IOi3HsAkp+Y=
+Received: by mail-wm1-f45.google.com with SMTP id 7so2726733wmo.2
+        for <linux-arch@vger.kernel.org>; Fri, 10 May 2019 14:20:37 -0700 (PDT)
+X-Gm-Message-State: APjAAAWvZeqdvDzS1MRKAGwD/4VSzsbApjq5ieUPlynD0PyoA6wj5rxk
+        eVzr+/U0bIYmjUZ10GxQeyXg6U3aMTidcVElfDGzJw==
+X-Google-Smtp-Source: APXvYqxmLWOSJzfnM1hN1P+7VEpgHvDb4cHKF5KSb97t7Bb1E5U/runa9boZbrE+HP301qSI8wrEMedzUhCobT/8uJY=
+X-Received: by 2002:a7b:cb58:: with SMTP id v24mr8095092wmj.107.1557523234745;
+ Fri, 10 May 2019 14:20:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190506165439.9155-1-cyphar@cyphar.com> <20190506165439.9155-6-cyphar@cyphar.com>
+ <CAG48ez0-CiODf6UBHWTaog97prx=VAd3HgHvEjdGNz344m1xKw@mail.gmail.com>
+ <20190506191735.nmzf7kwfh7b6e2tf@yavin> <20190510204141.GB253532@google.com>
+In-Reply-To: <20190510204141.GB253532@google.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 10 May 2019 14:20:23 -0700
+X-Gmail-Original-Message-ID: <CALCETrW2nn=omqJb4p+m-BDsCOhg+YZQ3ELd4BdhODV3G44gfA@mail.gmail.com>
+Message-ID: <CALCETrW2nn=omqJb4p+m-BDsCOhg+YZQ3ELd4BdhODV3G44gfA@mail.gmail.com>
+Subject: Re: [PATCH v6 5/6] binfmt_*: scope path resolution of interpreters
+To:     Jann Horn <jannh@google.com>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Jeff Layton <jlayton@kernel.org>,
         "J. Bruce Fields" <bfields@fieldses.org>,
@@ -63,69 +58,39 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Chanho Min <chanho.min@lge.com>,
         Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org,
+        Linux Containers <containers@lists.linux-foundation.org>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
         kernel list <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v6 5/6] binfmt_*: scope path resolution of interpreters
-Message-ID: <20190510204141.GB253532@google.com>
-References: <20190506165439.9155-1-cyphar@cyphar.com>
- <20190506165439.9155-6-cyphar@cyphar.com>
- <CAG48ez0-CiODf6UBHWTaog97prx=VAd3HgHvEjdGNz344m1xKw@mail.gmail.com>
- <20190506191735.nmzf7kwfh7b6e2tf@yavin>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190506191735.nmzf7kwfh7b6e2tf@yavin>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 07, 2019 at 05:17:35AM +1000, Aleksa Sarai wrote:
-> On 2019-05-06, Jann Horn <jannh@google.com> wrote:
-> > In my opinion, CVE-2019-5736 points out two different problems:
+On Fri, May 10, 2019 at 1:41 PM Jann Horn <jannh@google.com> wrote:
+>
+> On Tue, May 07, 2019 at 05:17:35AM +1000, Aleksa Sarai wrote:
+> > On 2019-05-06, Jann Horn <jannh@google.com> wrote:
+> > > In my opinion, CVE-2019-5736 points out two different problems:
+> > >
+> > > The big problem: The __ptrace_may_access() logic has a special-case
+> > > short-circuit for "introspection" that you can't opt out of; this
+> > > makes it possible to open things in procfs that are related to the
+> > > current process even if the credentials of the process wouldn't permit
+> > > accessing another process like it. I think the proper fix to deal with
+> > > this would be to add a prctl() flag for "set whether introspection is
+> > > allowed for this process", and if userspace has manually un-set that
+> > > flag, any introspection special-case logic would be skipped.
 > >
-> > The big problem: The __ptrace_may_access() logic has a special-case
-> > short-circuit for "introspection" that you can't opt out of; this
-> > makes it possible to open things in procfs that are related to the
-> > current process even if the credentials of the process wouldn't permit
-> > accessing another process like it. I think the proper fix to deal with
-> > this would be to add a prctl() flag for "set whether introspection is
-> > allowed for this process", and if userspace has manually un-set that
-> > flag, any introspection special-case logic would be skipped.
-> 
-> We could do PR_SET_DUMPABLE=3 for this, I guess?
+> > We could do PR_SET_DUMPABLE=3 for this, I guess?
+>
+> Hmm... I'd make it a new prctl() command, since introspection is
+> somewhat orthogonal to dumpability. Also, dumpability is per-mm, and I
+> think the introspection flag should be per-thread.
 
-Hmm... I'd make it a new prctl() command, since introspection is
-somewhat orthogonal to dumpability. Also, dumpability is per-mm, and I
-think the introspection flag should be per-thread.
-
-> > An additional problem: /proc/*/exe can be used to open a file for
-> > writing; I think it may have been Andy Lutomirski who pointed out some
-> > time ago that it would be nice if you couldn't use /proc/*/fd/* to
-> > re-open files with more privileges, which is sort of the same thing.
-> 
-> This is something I'm currently working on a series for, which would
-> boil down to some restrictions on how re-opening of file descriptors
-> works through procfs.
-
-Ah, nice!
-
-> However, execveat() of a procfs magiclink is a bit hard to block --
-> there is no way for userspace to to represent a file being "open for
-> execute" so they are all "open for execute" by default and blocking it
-> outright seems a bit extreme (though I actually hope to eventually add
-> the ability to mark an O_PATH as "open for X" to resolveat(2) -- hence
-> why I've reserved some bits).
-
-(For what it's worth, I'm mostly concerned about read vs write, not
-really about execute, since execute really is just another form of
-reading in my opinion.)
-
-> (Thinking more about it, there is an argument that I should include the
-> above patch into this series so that we can block re-opening of fds
-> opened through resolveat(2) without explicit flags from the outset.)
-
+I've lost track of the context here, but it seems to me that
+mitigating attacks involving accidental following of /proc links
+shouldn't depend on dumpability.  What's the actual problem this is
+trying to solve again?
