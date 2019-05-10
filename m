@@ -2,112 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B17091A264
-	for <lists+linux-arch@lfdr.de>; Fri, 10 May 2019 19:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D4F1A3BC
+	for <lists+linux-arch@lfdr.de>; Fri, 10 May 2019 22:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727676AbfEJRfl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 May 2019 13:35:41 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:52813 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727670AbfEJRfk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 10 May 2019 13:35:40 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 450y6M3jtnz9v0v1;
-        Fri, 10 May 2019 19:35:39 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=kZKWCqAu; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id FMwJ20pNBoD4; Fri, 10 May 2019 19:35:39 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 450y6M2STLz9v0v0;
-        Fri, 10 May 2019 19:35:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1557509739; bh=ETIfNWdjheDxK6ulmt7rGhw92PhKDX8Ycxhn3WkzwA4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kZKWCqAuMvyQxiML6fLhAw5/0pfXItFjQa/WP8HryQoMo2SaXCx5RD90E1v1VJeD7
-         XtJInDqwjmZhGYl7KxtOiD84soq4bEeRxlsUH+Vmjaj/OOkkPD4puHedQLGBQsGrhT
-         4k2ym7p54S2XNtZMmeViLG0TrwciZq81wTIhMXy8=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4A2788B95A;
-        Fri, 10 May 2019 19:35:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id DBYHnOZ0LvOs; Fri, 10 May 2019 19:35:39 +0200 (CEST)
-Received: from [192.168.232.53] (unknown [192.168.232.53])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 777778B940;
-        Fri, 10 May 2019 19:35:38 +0200 (CEST)
-Subject: Re: [PATCH] vsprintf: Do not break early boot with probing addresses
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "Tobin C . Harding" <me@tobin.cc>, Michal Hocko <mhocko@suse.cz>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, Russell Currey <ruscur@russell.cc>,
-        Stephen Rothwell <sfr@ozlabs.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-References: <20190510081635.GA4533@jagdpanzerIV>
- <20190510084213.22149-1-pmladek@suse.com>
- <20190510122401.21a598f6@gandalf.local.home>
-From:   christophe leroy <christophe.leroy@c-s.fr>
-Message-ID: <daf4dfd1-7f4f-8b92-6866-437c3a2be28b@c-s.fr>
-Date:   Fri, 10 May 2019 19:35:29 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727993AbfEJUKm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 May 2019 16:10:42 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:39450 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727657AbfEJUKm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 May 2019 16:10:42 -0400
+Received: by mail-ed1-f68.google.com with SMTP id e24so6673136edq.6
+        for <linux-arch@vger.kernel.org>; Fri, 10 May 2019 13:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lt6uPVHRTb6qycTyfS8wkIJ7UlOCcAUHHaR/0rJBxrQ=;
+        b=QV72T8OMOUUuvtH5oPeL7SVsQpebI/2757iB7nfbi1QgQeFEOr2Pzznb+d2dTeQJaB
+         75txDSZZkqVnX5uQQsVZIGR7r1ncJFMx40HiqBczLATKX+lLzoAyQ1V+YExXXPTkrUaN
+         X1M2+twWwnDTuIqBKLxkHrxqOmrDznz1TXYRI9Lc0vSRp6S2FI2NSwJhVeLJM4hzPC8X
+         QJhJL217BpKHtcGFYN/Evmo/EX1PKkh85bbGMdRJ93FXIygL7dHcx843s3QZlSHEfmn4
+         R+NqS8iRGL49r2mAQfDtJGZi2y12ooafACxZWAizNtF2SobCC1chFXd0fWimueXDK9Gs
+         FtoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lt6uPVHRTb6qycTyfS8wkIJ7UlOCcAUHHaR/0rJBxrQ=;
+        b=jllF9L9ViTnqQyaiTPucdNEiZXyWqpuJRrqsfyTz/BN4XsP/cAg1Pf2Ex8SSUs3Bkh
+         MUA52CbCFAL3t2RsMQfrEXKqjEUErkdxcCglmw7OEl9Wv3yHhjmII0eBBFpLqeCC5RiT
+         PJ9z6iHjpTwLR426TVqun4MsAoke5pJMTds/9vMrnafF8mQo73AboER7RRtR6vCvLUOO
+         MVkKKel2rnFG1rfaK9MVjHFdGtYzXqW8V0eKNZFVNj1qs0+ZmwXf9/hMgjYiX+HMkLSJ
+         V3FBqzaYNT7M2niVvCrLW6B9LxGqDla0wbBoOs1MrQsgiuD6gSt4uPNQGS86PhGUDiiG
+         +eTw==
+X-Gm-Message-State: APjAAAW+aJPXABSwC9ntGifL5DS10x09u4tNVsPXB5JNhwbkFo2BNiXF
+        DAqcFflJKvxKmdkrDQ2mms8c4w==
+X-Google-Smtp-Source: APXvYqzUgNqtgrYldPEctqQFjJcqlqIpZBpRrpOZjmBasE/wUyTEH0k9GdgYn5cen2XiV7pz/Q0joQ==
+X-Received: by 2002:a50:982f:: with SMTP id g44mr13613170edb.278.1557519040152;
+        Fri, 10 May 2019 13:10:40 -0700 (PDT)
+Received: from google.com ([2a00:79e0:1b:201:ee0a:cce3:df40:3ac5])
+        by smtp.gmail.com with ESMTPSA id k37sm1719073edb.11.2019.05.10.13.10.38
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 10 May 2019 13:10:38 -0700 (PDT)
+Date:   Fri, 10 May 2019 22:10:32 +0200
+From:   Jann Horn <jannh@google.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <christian@brauner.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v6 5/6] binfmt_*: scope path resolution of interpreters
+Message-ID: <20190510201032.GA253532@google.com>
+References: <20190506165439.9155-1-cyphar@cyphar.com>
+ <20190506165439.9155-6-cyphar@cyphar.com>
+ <CAG48ez0-CiODf6UBHWTaog97prx=VAd3HgHvEjdGNz344m1xKw@mail.gmail.com>
+ <87o94d6aql.fsf@xmission.com>
 MIME-Version: 1.0
-In-Reply-To: <20190510122401.21a598f6@gandalf.local.home>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
-X-Antivirus: Avast (VPS 190510-2, 10/05/2019), Outbound message
-X-Antivirus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o94d6aql.fsf@xmission.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 10/05/2019 à 18:24, Steven Rostedt a écrit :
-> On Fri, 10 May 2019 10:42:13 +0200
-> Petr Mladek <pmladek@suse.com> wrote:
+On Tue, May 07, 2019 at 07:38:58PM -0500, Eric W. Biederman wrote:
+> Jann Horn <jannh@google.com> writes:
+> > In my opinion, CVE-2019-5736 points out two different problems:
+> >
+> > The big problem: The __ptrace_may_access() logic has a special-case
+> > short-circuit for "introspection" that you can't opt out of;
 > 
->>   static const char *check_pointer_msg(const void *ptr)
->>   {
->> -	char byte;
->> -
->>   	if (!ptr)
->>   		return "(null)";
->>   
->> -	if (probe_kernel_address(ptr, byte))
->> +	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
->>   		return "(efault)";
->>   
+> Once upon a time in a galaxy far far away I fixed a bug where we missing
+> ptrace_may_access checks on various proc files and systems using selinux
+> stopped working.  At the time selinux did not allow ptrace like access
+> to yourself.  The "introspection" special case was the quick and simple
+> work-around.
 > 
-> 
-> 	< PAGE_SIZE ?
-> 
-> do you mean: < TASK_SIZE ?
+> There is nothing fundamental in having the "introspection" special case
+> except that various lsms have probably grown to depend upon it being
+> there.  I expect without difficulty we could move the check down
+> into the various lsms.  Which would get that check out of the core
+> kernel code.
 
-I guess not.
+Oh, if that's an option, that would be great, I think.
 
-Usually, < PAGE_SIZE means NULL pointer dereference (via the member of a 
-struct)
 
-Christophe
+But this means, for example, that a non-root, non-dumpable process can't
+open /proc/self/maps anymore, or open /proc/self/fd/*, and things like
+that, without making itself dumpable. I would be surprised if there is
+no code out there that relies on that.
 
----
-L'absence de virus dans ce courrier électronique a été vérifiée par le logiciel antivirus Avast.
-https://www.avast.com/antivirus
+From what I can tell, without the introspection special case,
+introspection would fail in the following cases (assuming that the
+process is not capable and isn't using sys_setfs[ug]id()):
 
+ - ruid/euid/suid are not all the same
+ - rgid/egid/sgid are not all the same
+ - process is not dumpable
+
+I think that there probably should be some way for a non-dumpable
+process to look at its own procfs entries? If we could start from a
+clean slate, I'd propose an opt-in flag to openat() for that, but
+since we don't have a clean slate, I'd be afraid of breaking things
+with that. But maybe I'm just being overly careful here?
