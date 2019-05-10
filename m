@@ -2,58 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AEB19968
-	for <lists+linux-arch@lfdr.de>; Fri, 10 May 2019 10:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C6D199D1
+	for <lists+linux-arch@lfdr.de>; Fri, 10 May 2019 10:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727010AbfEJIQk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 May 2019 04:16:40 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:44720 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726984AbfEJIQk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 May 2019 04:16:40 -0400
-Received: by mail-pg1-f194.google.com with SMTP id z16so2633034pgv.11;
-        Fri, 10 May 2019 01:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=tmrArLlqX0+g8dO65H9KErVBV4iwBC4vplgVby2I7tY=;
-        b=pi676OP1FRhqbBbpb7fOeUNTiVaJG652h+lbTMGFhbLW2aHAPornrN8wTMZXVlgNxl
-         W4BB6oJI8eT5ewIiyVGrzKYVuW9DRSSPWxGnbWSW+Ndedu6GJoUyQ3y/PgWW77qlcw6G
-         2K3ngsOj1EzudIqLQY3Pv3bW/Uo8QOE0RKDM/G2n2MKLlvq5G32CQmiJ4tJt1eVKKfw2
-         FJNt9YkI8VdNggOxd10ie4KY7+2hyQwHe618/y9gJGoXaaVC7tu0mkaM1DcSD7DR1e/1
-         pQQgGtrSt/riF+FkuY9LeHLXQkZAa87ftpIW1dZnvIkh0uDIpIWMkZzfDlrKxKmq2uc4
-         zYdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tmrArLlqX0+g8dO65H9KErVBV4iwBC4vplgVby2I7tY=;
-        b=DqjzEFB4qwr/2GvaPg1eEUKtEJ1st/L4oNasNNHK+x81owz4TjRps+D0e67CG7n9z6
-         NnU30/IYvZqlY+yJ2TZ6TcPruEqeQTFUpXuohZmy0lYqjmnBpNVeHC4YI40Bu65d6pIS
-         ZF8P/l3im755kbk1hxW3VOlL0D/AIRcJ+rMk1eZLe9y+Ve47cfDcDZqgiuLhZTdw86C5
-         Ega4M3XRNIx8LSmEcZ4I3IWMPlqs6KczWW7PNVVbaTXAPXU44lO9qU7nUzeMbjdNhR5t
-         ypWgze77luaGW32FXLGHSY6sYkjspPEi/ldYLyiBs/UIqYsYjAQeUnznOV+4RkGWv/Yz
-         TPUg==
-X-Gm-Message-State: APjAAAVlYISH7+gofqkqdnkgxYj8nx0esH1vXv8CQUMkNRHX1UYEgtML
-        ZG9td1l8tSs4ymAY12bDrEs=
-X-Google-Smtp-Source: APXvYqwOHP1arI/G1HtdqJ0tQ0k3aIkPVbkmDhzh/AFABpPSUF5dUQqIu8sQTWKyE8OeI4KXFIElPQ==
-X-Received: by 2002:a63:246:: with SMTP id 67mr11946180pgc.145.1557476199809;
-        Fri, 10 May 2019 01:16:39 -0700 (PDT)
-Received: from localhost ([39.7.15.25])
-        by smtp.gmail.com with ESMTPSA id h1sm8999019pfq.3.2019.05.10.01.16.37
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 10 May 2019 01:16:38 -0700 (PDT)
-Date:   Fri, 10 May 2019 17:16:35 +0900
-From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        id S1727079AbfEJImU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 May 2019 04:42:20 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47044 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727053AbfEJImU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 May 2019 04:42:20 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id D6C62AF24;
+        Fri, 10 May 2019 08:42:17 +0000 (UTC)
+From:   Petr Mladek <pmladek@suse.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         "Tobin C . Harding" <me@tobin.cc>, Michal Hocko <mhocko@suse.cz>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
         linux-kernel@vger.kernel.org,
         Michael Ellerman <mpe@ellerman.id.au>,
         linuxppc-dev@lists.ozlabs.org, Russell Currey <ruscur@russell.cc>,
@@ -61,33 +30,133 @@ Cc:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
         Stephen Rothwell <sfr@ozlabs.org>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH] vsprintf: Do not break early boot with probing addresses
-Message-ID: <20190510081635.GA4533@jagdpanzerIV>
-References: <20190509121923.8339-1-pmladek@suse.com>
- <20190510043200.GC15652@jagdpanzerIV>
- <CAHk-=wiP+hwSqEW0dM6AYNWUR7jXDkeueq69et6ahfUgV7hC3w@mail.gmail.com>
- <20190510050709.GA1831@jagdpanzerIV>
- <20190510080602.mdfk54f6lpyg6unw@pathway.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190510080602.mdfk54f6lpyg6unw@pathway.suse.cz>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Petr Mladek <pmladek@suse.com>
+Subject: [PATCH] vsprintf: Do not break early boot with probing addresses
+Date:   Fri, 10 May 2019 10:42:13 +0200
+Message-Id: <20190510084213.22149-1-pmladek@suse.com>
+X-Mailer: git-send-email 2.16.4
+In-Reply-To: <20190510081635.GA4533@jagdpanzerIV>
+References: <20190510081635.GA4533@jagdpanzerIV>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On (05/10/19 10:06), Petr Mladek wrote:
-[..]
-> I am going to send a patch replacing probe_kernel_address() with
-> a simple check:
-> 
-> 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
-> 		return "(efault)";
+The commit 3e5903eb9cff70730 ("vsprintf: Prevent crash when dereferencing
+invalid pointers") broke boot on several architectures. The common
+pattern is that probe_kernel_read() is not working during early
+boot because userspace access framework is not ready.
 
-I'm OK with this.
-Probing ptrs was a good idea, it just didn't work out.
+It is a generic problem. We have to avoid any complex external
+functions in vsprintf() code, especially in the common path.
+They might break printk() easily and are hard to debug.
 
-	-ss
+Replace probe_kernel_read() with some simple checks for obvious
+problems.
+
+Details:
+
+1. Report on Power:
+
+Kernel crashes very early during boot with with CONFIG_PPC_KUAP and
+CONFIG_JUMP_LABEL_FEATURE_CHECK_DEBUG
+
+The problem is the combination of some new code called via printk(),
+check_pointer() which calls probe_kernel_read(). That then calls
+allow_user_access() (PPC_KUAP) and that uses mmu_has_feature() too early
+(before we've patched features). With the JUMP_LABEL debug enabled that
+causes us to call printk() & dump_stack() and we end up recursing and
+overflowing the stack.
+
+Because it happens so early you don't get any output, just an apparently
+dead system.
+
+The stack trace (which you don't see) is something like:
+
+  ...
+  dump_stack+0xdc
+  probe_kernel_read+0x1a4
+  check_pointer+0x58
+  string+0x3c
+  vsnprintf+0x1bc
+  vscnprintf+0x20
+  printk_safe_log_store+0x7c
+  printk+0x40
+  dump_stack_print_info+0xbc
+  dump_stack+0x8
+  probe_kernel_read+0x1a4
+  probe_kernel_read+0x19c
+  check_pointer+0x58
+  string+0x3c
+  vsnprintf+0x1bc
+  vscnprintf+0x20
+  vprintk_store+0x6c
+  vprintk_emit+0xec
+  vprintk_func+0xd4
+  printk+0x40
+  cpufeatures_process_feature+0xc8
+  scan_cpufeatures_subnodes+0x380
+  of_scan_flat_dt_subnodes+0xb4
+  dt_cpu_ftrs_scan_callback+0x158
+  of_scan_flat_dt+0xf0
+  dt_cpu_ftrs_scan+0x3c
+  early_init_devtree+0x360
+  early_setup+0x9c
+
+2. Report on s390:
+
+vsnprintf invocations, are broken on s390. For example, the early boot
+output now looks like this where the first (efault) should be
+the linux_banner:
+
+[    0.099985] (efault)
+[    0.099985] setup: Linux is running as a z/VM guest operating system in 64-bit mode
+[    0.100066] setup: The maximum memory size is 8192MB
+[    0.100070] cma: Reserved 4 MiB at (efault)
+[    0.100100] numa: NUMA mode: (efault)
+
+The reason for this, is that the code assumes that
+probe_kernel_address() works very early. This however is not true on
+at least s390. Uaccess on KERNEL_DS works only after page tables have
+been setup on s390, which happens with setup_arch()->paging_init().
+
+Any probe_kernel_address() invocation before that will return -EFAULT.
+
+Fixes: 3e5903eb9cff70730 ("vsprintf: Prevent crash when dereferencing invalid pointers")
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+---
+ lib/vsprintf.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 7b0a6140bfad..2f003cfe340e 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -628,19 +628,16 @@ static char *error_string(char *buf, char *end, const char *s,
+ }
+ 
+ /*
+- * This is not a fool-proof test. 99% of the time that this will fault is
+- * due to a bad pointer, not one that crosses into bad memory. Just test
+- * the address to make sure it doesn't fault due to a poorly added printk
+- * during debugging.
++ * Do not call any complex external code here. Nested printk()/vsprintf()
++ * might cause infinite loops. Failures might break printk() and would
++ * be hard to debug.
+  */
+ static const char *check_pointer_msg(const void *ptr)
+ {
+-	char byte;
+-
+ 	if (!ptr)
+ 		return "(null)";
+ 
+-	if (probe_kernel_address(ptr, byte))
++	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
+ 		return "(efault)";
+ 
+ 	return NULL;
+-- 
+2.16.4
+
