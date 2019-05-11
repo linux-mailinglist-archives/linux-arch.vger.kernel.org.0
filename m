@@ -2,57 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E451A893
-	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2019 19:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BD11A8B7
+	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2019 19:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbfEKRAx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 May 2019 13:00:53 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:37798 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbfEKRAw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 May 2019 13:00:52 -0400
-Received: by mail-pf1-f193.google.com with SMTP id g3so4891087pfi.4
-        for <linux-arch@vger.kernel.org>; Sat, 11 May 2019 10:00:52 -0700 (PDT)
+        id S1726272AbfEKR0m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 May 2019 13:26:42 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:40433 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727589AbfEKR0m (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 May 2019 13:26:42 -0400
+Received: by mail-lj1-f193.google.com with SMTP id d15so7622411ljc.7
+        for <linux-arch@vger.kernel.org>; Sat, 11 May 2019 10:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=jZwCSftxJ8jGLP4AOxqI82+D69OlL58PjFg7M2MhcPg=;
-        b=MLbHwTI1YOsIPzVKr77SniYja0eFxYm6pUzvO6ZOGv6xtO1LSTe7DrZ5OnxOMxLOYj
-         BCJK/KQHgD9Bo2Cms6d/suLf3ujHpz6Q6wSX6BTSEPOYmdc+uobvATnhQ1gxsSFMNEFx
-         15ie5t1upui2XLIrMplBHkFq8NaEnsPGXE1WOVW7Xy6h/wCR8Xugr4NIa+GwPer8chMo
-         24aAsFtZ/ye7n+0/mLGDbAkLYugePfX9RRINUb+ZhyTIzmMwtXZjNqTpwSvJNn+RpVIF
-         v90ZAgJyGlmQwdpMW+y/xvzXjE00AVz/EqPo1hI7s4oZDxTp8MxYoaFX19LOXZflO+As
-         HRvw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/KXVrXCOoOJzYs9luHiRMdkROvz6GYngOgjcnMA4n3A=;
+        b=Hety9aPlucNn5YIwnDgl8T3xjH+kXuoGBPFuY/OFtMOJcXBxT9yY1dN0jhbCAtXCK0
+         Fa6aOPlBmmvU40A7F6POImQufHmWg9Vb9DX0ym6/HYmPb7jC+B4zImEGQr9edmzZr+8E
+         D7AZsufzimvvqZsX7ErQ2Z7DvHrgK4oj1AIJI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=jZwCSftxJ8jGLP4AOxqI82+D69OlL58PjFg7M2MhcPg=;
-        b=e/a59/tPlftozOR/Rjr1UXmJ/42PzxqQepLCj8U/zzGtHx2mbCZ4+6hNsmSr+7dwqI
-         +ABT608zm1mjd3IdyZmovBA2Vi6WsZBJHwqOO6aBz1eSQUG5qHBP6DjhPI5OEccmIx/H
-         oSlpNvE1z8P7jPXEgqIFq0a40gRLIze0tYJsUAtZAPfpDApVZuF1CP2dmHkA/D7KwQw2
-         B3OZD/SO+XFxu7/ntl6N8MnyIcH5eI0+/VDu0QXKiFnpVLNpDipZQ28LqknPS+3/ljsb
-         AcGYnxU/afEmDUzKH6pCikqQVN6nfKPqbZ2Bb+KXVlnzYTwCeesxKzoSXHD0RtjMI3G4
-         iwEg==
-X-Gm-Message-State: APjAAAUwAumdcsMK5r2RjiAXZrYx9MSA/0OPQufwg/gidqGYR6fCHUQp
-        YrhqYxBvaq7o5dxkUDQ7l4Y7EA==
-X-Google-Smtp-Source: APXvYqxDTUyInHaUluwo6C7js6tTl9bgGutACKTBYZ7Zz8eRhD+O5JQUeYs9OffRM+3dXwWvEQa3hg==
-X-Received: by 2002:a63:d816:: with SMTP id b22mr21540940pgh.16.1557594051790;
-        Sat, 11 May 2019 10:00:51 -0700 (PDT)
-Received: from ?IPv6:2600:1010:b006:1d0d:7d97:e542:5c4a:fdf6? ([2600:1010:b006:1d0d:7d97:e542:5c4a:fdf6])
-        by smtp.gmail.com with ESMTPSA id a3sm9014995pgl.74.2019.05.11.10.00.49
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/KXVrXCOoOJzYs9luHiRMdkROvz6GYngOgjcnMA4n3A=;
+        b=D5wZVqPXBOeG1YFzEYZ7J60tjAPs01plzcVLlh/wZkvpOCYN0CtRLIXev9I6jnIEHw
+         WmBXouhOl46MDRxvVzeVuJAGYs1dSE2fzP2pu1SjJjDfLB5jsbaUCyjHmd4ND1QTyuNM
+         xibnEzt8oFTyDJ/ynj+rLFaxWxnR6d/StlQ46L7XxXNfDbvXtTYWkdGcNJZrT1E8d96F
+         f681E3xc48sQbUfUmFR7ygUgZefzM19j4ltHszgThWBE+Bz/qerruE8yuzpOmXvdYmlt
+         6oY7JSz6aBB0+GWkXlCL9li9jpGrAj5J9Xg+eP/mL8tWQuAzNme3xaGi83eBzuu9KoKZ
+         wi/g==
+X-Gm-Message-State: APjAAAUrvCyRtV3R44Kj/R0zd2X1pmu8oIV1a8Ww1D36jpeAdOBUTkoo
+        pwCdu20rJ1ULmpPjJdcXLQY1VEV2KYE=
+X-Google-Smtp-Source: APXvYqxFoK4MgOt6e5HYbDfutPQYxxZw7lJP5FwYheHqyCb2JhI4/ocfaPR4f1+nMk1UBMTq6EcYHQ==
+X-Received: by 2002:a2e:89cc:: with SMTP id c12mr5042164ljk.90.1557595598799;
+        Sat, 11 May 2019 10:26:38 -0700 (PDT)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
+        by smtp.gmail.com with ESMTPSA id f4sm2284571ljm.80.2019.05.11.10.26.38
+        for <linux-arch@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 11 May 2019 10:00:49 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
+        Sat, 11 May 2019 10:26:38 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id m20so7632682lji.2
+        for <linux-arch@vger.kernel.org>; Sat, 11 May 2019 10:26:38 -0700 (PDT)
+X-Received: by 2002:a2e:9d86:: with SMTP id c6mr9078356ljj.135.1557595287924;
+ Sat, 11 May 2019 10:21:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190506165439.9155-1-cyphar@cyphar.com> <20190506165439.9155-6-cyphar@cyphar.com>
+ <CAG48ez0-CiODf6UBHWTaog97prx=VAd3HgHvEjdGNz344m1xKw@mail.gmail.com>
+ <20190506191735.nmzf7kwfh7b6e2tf@yavin> <20190510204141.GB253532@google.com>
+ <CALCETrW2nn=omqJb4p+m-BDsCOhg+YZQ3ELd4BdhODV3G44gfA@mail.gmail.com>
+ <20190510225527.GA59914@google.com> <C60DC580-854D-478D-AF23-5F29FB7C3E50@amacapital.net>
+In-Reply-To: <C60DC580-854D-478D-AF23-5F29FB7C3E50@amacapital.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 11 May 2019 13:21:11 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wh1JJD_RabMaFfinsAQp1vHGJOQ1rKqihafY=r7yHc8sQ@mail.gmail.com>
+Message-ID: <CAHk-=wh1JJD_RabMaFfinsAQp1vHGJOQ1rKqihafY=r7yHc8sQ@mail.gmail.com>
 Subject: Re: [PATCH v6 5/6] binfmt_*: scope path resolution of interpreters
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16E227)
-In-Reply-To: <20190510225527.GA59914@google.com>
-Date:   Sat, 11 May 2019 10:00:47 -0700
-Cc:     Andy Lutomirski <luto@kernel.org>,
+To:     Andy Lutomirski <luto@amacapital.net>
+Cc:     Jann Horn <jannh@google.com>, Andy Lutomirski <luto@kernel.org>,
         Aleksa Sarai <cyphar@cyphar.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Jeff Layton <jlayton@kernel.org>,
@@ -68,120 +75,68 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         David Drysdale <drysdale@google.com>,
         Chanho Min <chanho.min@lge.com>,
         Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Containers <containers@lists.linux-foundation.org>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
         kernel list <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <C60DC580-854D-478D-AF23-5F29FB7C3E50@amacapital.net>
-References: <20190506165439.9155-1-cyphar@cyphar.com> <20190506165439.9155-6-cyphar@cyphar.com> <CAG48ez0-CiODf6UBHWTaog97prx=VAd3HgHvEjdGNz344m1xKw@mail.gmail.com> <20190506191735.nmzf7kwfh7b6e2tf@yavin> <20190510204141.GB253532@google.com> <CALCETrW2nn=omqJb4p+m-BDsCOhg+YZQ3ELd4BdhODV3G44gfA@mail.gmail.com> <20190510225527.GA59914@google.com>
-To:     Jann Horn <jannh@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Sat, May 11, 2019 at 1:00 PM Andy Lutomirski <luto@amacapital.net> wrote=
+:
+>
+> A better =E2=80=9Cspawn=E2=80=9D API should fix this.
 
+Andy, stop with the "spawn would be better".
 
-> On May 10, 2019, at 3:55 PM, Jann Horn <jannh@google.com> wrote:
->=20
->> On Fri, May 10, 2019 at 02:20:23PM -0700, Andy Lutomirski wrote:
->>> On Fri, May 10, 2019 at 1:41 PM Jann Horn <jannh@google.com> wrote:
->>>=20
->>>> On Tue, May 07, 2019 at 05:17:35AM +1000, Aleksa Sarai wrote:
->>>>> On 2019-05-06, Jann Horn <jannh@google.com> wrote:
->>>>> In my opinion, CVE-2019-5736 points out two different problems:
->>>>>=20
->>>>> The big problem: The __ptrace_may_access() logic has a special-case
->>>>> short-circuit for "introspection" that you can't opt out of; this
->>>>> makes it possible to open things in procfs that are related to the
->>>>> current process even if the credentials of the process wouldn't permit=
+Spawn is garbage. It's garbage because it's fundamentally too
+inflexible, and it's garbage because it is quite complex to try to
+work around the inflexibility by having those complex "action pointer
+arrays" to make up for its failings.
 
->>>>> accessing another process like it. I think the proper fix to deal with=
+And spawn() would fundamentally have all the same permission issues
+that you now point to execve() as having, so it doesn't even *solve*
+anything.
 
->>>>> this would be to add a prctl() flag for "set whether introspection is
->>>>> allowed for this process", and if userspace has manually un-set that
->>>>> flag, any introspection special-case logic would be skipped.
->>>>=20
->>>> We could do PR_SET_DUMPABLE=3D3 for this, I guess?
->>>=20
->>> Hmm... I'd make it a new prctl() command, since introspection is
->>> somewhat orthogonal to dumpability. Also, dumpability is per-mm, and I
->>> think the introspection flag should be per-thread.
->>=20
->> I've lost track of the context here, but it seems to me that
->> mitigating attacks involving accidental following of /proc links
->> shouldn't depend on dumpability.  What's the actual problem this is
->> trying to solve again?
->=20
-> The one actual security problem that I've seen related to this is
-> CVE-2019-5736. There is a write-up of it at
-> <https://blog.dragonsector.pl/2019/02/cve-2019-5736-escape-from-docker-and=
-.html>
-> under "Successful approach", but it goes more or less as follows:
->=20
-> A container is running that doesn't use user namespaces (because for
-> some reason I don't understand, apparently some people still do that).
-> An evil process is running inside the container with UID 0 (as in,
-> GLOBAL_ROOT_UID); so if the evil process inside the container was able
-> to reach root-owned files on the host filesystem, it could write into
-> them.
->=20
-> The container engine wants to spawn a new process inside the container.
-> It forks off a child that joins the container's namespaces (including
-> PID and mount namespaces), and then the child calls execve() on some
-> path in the container.
+You've said this whole "spawn would fix things" thing before, and it's
+wrong. Spawn isn't better. Really. If fixes absolutely zero things,
+and the only reason for spawn existing is because VMS and NT had that
+broken and inflexible model.
 
-I think that, at this point, the task should be considered owned by the cont=
-ainer.  Maybe we should have a better API than execve() to execute a program=
- in a safer way, but fiddling with dumpability seems like a band-aid.  In fa=
-ct, the process is arguably pwned even *before* execve.
+There's at least one paper from some MS people about how "spawn()" is
+wonderful, and maybe you bought into the garbage from that. But that
+paper is about how they hate fork(), not because of execve(). And if
+you hate fork, use "vfork()" instead (preferably with an immediate
+call to a non-returning function in the child to avoid the stack
+re-use issue that makes it so simple to screw up vfork() in hard to
+debug ways).
 
-A better =E2=80=9Cspawn=E2=80=9D API should fix this.  In the mean time, I t=
-hink it should be assumed that, if you join a container=E2=80=99s namespaces=
-, you are at its mercy.
+execve() is a _fine_ model. That's not the problem in this whole issue
+at all - never was, and never will be.
 
-> The attacker replaces the executable in the container with a symlink
-> to /proc/self/exe and replaces a library inside the container with a
-> malicious one.
+The problem in this discussion is (a) having privileges you shouldn't
+have and (b) having other interfaces that make it easyish to change
+the filesystem layout to confuse those entities with privileges.
 
-Cute.
+So the reason the open flags can be problematic is exactly because
+they effectively change filesystem layout. And no, it's not just
+AT_THIS_ROOT, although that's the obvious one. Things like "you can't
+follow symlinks" can also effectively change the layout: imagine if
+you have a PATH-like lookup model, and you end up having symlinks as
+part of the standard filesystem layout.. Now a "don't follow symlinks"
+can turn the *standard* executable into something that isn't found,
+and then you might end up executing something else instead (think root
+having '.' as the last entry in path, which some people used to
+suggest as the fix for the completely bad "first entry" case)..
 
-> When the container engine calls execve(), intending to run an executable
-> inside the container, it instead goes through ptrace_may_access() using
-> the introspection short-circuit and re-executes its own executable
-> through the jumped symlink /proc/self/exe (which is normally unreachable
-> for the container). After the execve(), the process loads an evil
-> library from inside the container and is under the control of the
-> container.
-> Now the container controls a process whose /proc/self/exe is a jumped
-> symlink to a host executable, and the container can write into it.
->=20
-> Some container engines are now using an extremely ugly hack to work
-> around this - whenever they want to enter a container, they copy the
-> host binary into a new memfd and execute that to avoid exposing the
-> original host binary to containers:
-> <https://github.com/opencontainers/runc/commit/0a8e4117e7f715d5fbeef398405=
-813ce8e88558b>
->=20
->=20
-> In my opinion, the problems here are:
->=20
-> - Apparently some people run untrusted containers without user
->   namespaces. It would be really nice if people could not do that.
->   (Probably the biggest problem here.)
+Notice? None of the real problems are about execve or would be solved
+by any spawn API. You just think that because you've apparently been
+talking to too many MS people that think fork (and thus indirectly
+execve()) is bad process management.
 
-> - ptrace_may_access() has a short-circuit that permits a process to
->   unintentionally look at itself even if it has dropped privileges -
->   here, it permits the execve("/proc/self/exe", ...) that would
->   normally be blocked by the check for CAP_SYS_PTRACE if the process
->   is nondumpable.
-
-I don=E2=80=99t see this as a problem.  Dumpable is about protecting a task f=
-rom others, not about protecting a task against itself.
-
-> - You can use /proc/*/exe to get a writable fd.
-
-This is IMO the real bug.=
+                Linus
