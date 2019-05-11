@@ -2,61 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9C71A8EA
-	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2019 19:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C0B1A8F3
+	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2019 20:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbfEKRs7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 May 2019 13:48:59 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46530 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726099AbfEKRs7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 May 2019 13:48:59 -0400
-Received: by mail-pg1-f196.google.com with SMTP id t187so4573332pgb.13
-        for <linux-arch@vger.kernel.org>; Sat, 11 May 2019 10:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=date:user-agent:in-reply-to:references:mime-version
-         :content-transfer-encoding:subject:to:cc:from:message-id;
-        bh=P4y88h0juv/wSdSJ+5tYBt22omcjz7XQLON95qdiSUs=;
-        b=RFt36aKWzpvo0FHSxCMxH0MRXX/4bwWQVo9yhWfBqmD/Gmcl/Qspvke8IM4iMCDkLw
-         cYMJQnRF4KleONc2nVeG53KfTjPQdB8eXF08CT9E2UEv0GJkyHzVt3nvPidolKI1C2fv
-         CNNzthL42YeTTJbhoYAmHlRi4qc5nM9AEiqrWQ3ieuRscYJab+2nRNKf4GBnzAAm8WE3
-         hz/Lz0cuatbQBVxD/cFF+YI8ALATseC5tWTFIwWDV66DRAoKAXDbzftCQ26+NYzpJ3Zh
-         hzpJPLfmck7XRJt5tU2kCyp0fF1y4r/vbdq1tLppsV5yE+VOA1RcLQKEuznbXWAQ7Kv0
-         1Ceg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:user-agent:in-reply-to:references
-         :mime-version:content-transfer-encoding:subject:to:cc:from
-         :message-id;
-        bh=P4y88h0juv/wSdSJ+5tYBt22omcjz7XQLON95qdiSUs=;
-        b=a2NX8nkc3Y3aT1W1bpy8Hz+NyYKQP8wXkq5hWmpKEFb5eEQiVMn7nSRz2QLCdMlT9g
-         dAxCyMoIBjMw1fTMR3u9dUpF5YNw6yE7Z/lPIaMPEYWOPC0v2AUJDoTpTDACYpULx9ZT
-         VzAae3C6k0dUrZ7YvLpw+R1W4/vCfrBX4BCLDJSfjuFytd4SG3JFU9b1c3JsE1rOK9Zo
-         a1PZ8nI3eitcAGfSdc8XzI/EG4hck613V5I4JF1AFyN8mXDimXaMFcflidc5XgsBkE7e
-         9NXqSeoxfIFxcxmdjiKrjAZcycICo3H6XTNQWMWFg97CipEehC0IRV3ye0QO9WdHFgW0
-         2MwA==
-X-Gm-Message-State: APjAAAVJr33SZV+BgPriQfYrtqZnjbidfakCXxWhMAwn+RAdbZDTg+Hs
-        Om7Ke7QkJoTP0xnu7DquVRnbYQ==
-X-Google-Smtp-Source: APXvYqxM9wGNf6ooBA7Hi+m5FSX/PWzUkqapgRlWwOaMAo+Z5saYjd0/lmwrSD+F/NGnNfOtkZIvZQ==
-X-Received: by 2002:a65:60cd:: with SMTP id r13mr7213542pgv.58.1557596938251;
-        Sat, 11 May 2019 10:48:58 -0700 (PDT)
-Received: from [25.171.29.203] ([172.56.30.186])
-        by smtp.gmail.com with ESMTPSA id f5sm4212739pfn.161.2019.05.11.10.48.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 11 May 2019 10:48:57 -0700 (PDT)
-Date:   Sat, 11 May 2019 19:48:47 +0200
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAHk-=wgo-X9pDbVf8khfDsgEKn3wSvLJkB890OxHL+42Hosypw@mail.gmail.com>
-References: <20190506165439.9155-1-cyphar@cyphar.com> <20190506165439.9155-6-cyphar@cyphar.com> <CAG48ez0-CiODf6UBHWTaog97prx=VAd3HgHvEjdGNz344m1xKw@mail.gmail.com> <20190506191735.nmzf7kwfh7b6e2tf@yavin> <20190510204141.GB253532@google.com> <CALCETrW2nn=omqJb4p+m-BDsCOhg+YZQ3ELd4BdhODV3G44gfA@mail.gmail.com> <20190510225527.GA59914@google.com> <C60DC580-854D-478D-AF23-5F29FB7C3E50@amacapital.net> <CAHk-=wh1JJD_RabMaFfinsAQp1vHGJOQ1rKqihafY=r7yHc8sQ@mail.gmail.com> <CAHk-=whOL-NBso8X5S8s597yZEOMBoU8chkMFVTi8b-ff2qARg@mail.gmail.com> <20190511173113.qhqmv5q5f74povix@yavin> <CAHk-=wgo-X9pDbVf8khfDsgEKn3wSvLJkB890OxHL+42Hosypw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v6 5/6] binfmt_*: scope path resolution of interpreters
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>
-CC:     Andy Lutomirski <luto@amacapital.net>,
+        id S1726043AbfEKSBU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 May 2019 14:01:20 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:29254 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725914AbfEKSBU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 11 May 2019 14:01:20 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id A711C4EBA7;
+        Sat, 11 May 2019 20:01:16 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter02.heinlein-hosting.de (spamfilter02.heinlein-hosting.de [80.241.56.116]) (amavisd-new, port 10030)
+        with ESMTP id lj_58bGFozcr; Sat, 11 May 2019 20:00:58 +0200 (CEST)
+Date:   Sun, 12 May 2019 04:00:43 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
         Jann Horn <jannh@google.com>,
         Andy Lutomirski <luto@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
@@ -68,6 +35,7 @@ CC:     Andy Lutomirski <luto@amacapital.net>,
         Andrew Morton <akpm@linux-foundation.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Kees Cook <keescook@chromium.org>,
+        Christian Brauner <christian@brauner.io>,
         Tycho Andersen <tycho@tycho.ws>,
         David Drysdale <drysdale@google.com>,
         Chanho Min <chanho.min@lge.com>,
@@ -77,51 +45,101 @@ CC:     Andy Lutomirski <luto@amacapital.net>,
         Linux API <linux-api@vger.kernel.org>,
         kernel list <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
-From:   Christian Brauner <christian@brauner.io>
-Message-ID: <3DFB2DAE-C66F-427D-BF0A-EB31DC590B4D@brauner.io>
+Subject: Re: [PATCH v6 5/6] binfmt_*: scope path resolution of interpreters
+Message-ID: <20190511180043.mfwwcz5j2fnxe6lp@yavin>
+References: <CAG48ez0-CiODf6UBHWTaog97prx=VAd3HgHvEjdGNz344m1xKw@mail.gmail.com>
+ <20190506191735.nmzf7kwfh7b6e2tf@yavin>
+ <20190510204141.GB253532@google.com>
+ <CALCETrW2nn=omqJb4p+m-BDsCOhg+YZQ3ELd4BdhODV3G44gfA@mail.gmail.com>
+ <20190510225527.GA59914@google.com>
+ <C60DC580-854D-478D-AF23-5F29FB7C3E50@amacapital.net>
+ <CAHk-=wh1JJD_RabMaFfinsAQp1vHGJOQ1rKqihafY=r7yHc8sQ@mail.gmail.com>
+ <CAHk-=whOL-NBso8X5S8s597yZEOMBoU8chkMFVTi8b-ff2qARg@mail.gmail.com>
+ <20190511173113.qhqmv5q5f74povix@yavin>
+ <CAHk-=wgo-X9pDbVf8khfDsgEKn3wSvLJkB890OxHL+42Hosypw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="x6j6zu2zk3nponfr"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgo-X9pDbVf8khfDsgEKn3wSvLJkB890OxHL+42Hosypw@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On May 11, 2019 7:43:44 PM GMT+02:00, Linus Torvalds <torvalds@linux-founda=
-tion=2Eorg> wrote:
->On Sat, May 11, 2019 at 1:31 PM Aleksa Sarai <cyphar@cyphar=2Ecom> wrote:
->>
->> Yup, I've dropped the patch for the next version=2E (To be honest, I'm
->not
->> sure why I included any of the other flags -- the only one that
->would've
->> been necessary to deal with CVE-2019-5736 was AT_NO_MAGICLINKS=2E)
->
->I do wonder if we could try to just set AT_NO_MAGICLINKS
->unconditionally for execve() (and certainly for the suid case)=2E
->
->I'd rather try to do these things across the board, than have "suid
->binaries are treated specially" if at all possible=2E
->
->The main use case for having /proc/<pid>/exe thing is for finding open
->file descriptors, and for 'ps' kind of use, or to find the startup
->directory when people don't populate the execve() environment fully
->(ie "readlink(/proc/self/exe)" is afaik pretty common=2E
->
->Sadly, googling for
->
->    execve /proc/self/exe
->
->does actually find hits, including one that implies that chrome does
->exactly that=2E  So it might not be possible=2E
->
->Somewhat odd, but it does just confirm the whole "users will at some
->point do everything in their power to use every odd special case,
->intended or not"=2E
->
->                  Linus
 
-Sadly I have to admit that we are using this=2E
-Also, execveat on glibc is implemented via
-/proc/self/fd/<nr> on kernels that do not
-have a proper execveat=2E
-See fexecve=2E=2E=2E
+--x6j6zu2zk3nponfr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Christian
+On 2019-05-11, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Sat, May 11, 2019 at 1:31 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> > Yup, I've dropped the patch for the next version. (To be honest, I'm not
+> > sure why I included any of the other flags -- the only one that would've
+> > been necessary to deal with CVE-2019-5736 was AT_NO_MAGICLINKS.)
+>=20
+> I do wonder if we could try to just set AT_NO_MAGICLINKS
+> unconditionally for execve() (and certainly for the suid case).
+>=20
+> I'd rather try to do these things across the board, than have "suid
+> binaries are treated specially" if at all possible.
+>=20
+> The main use case for having /proc/<pid>/exe thing is for finding open
+> file descriptors, and for 'ps' kind of use, or to find the startup
+> directory when people don't populate the execve() environment fully
+> (ie "readlink(/proc/self/exe)" is afaik pretty common.
+>=20
+> Sadly, googling for
+>=20
+>     execve /proc/self/exe
+>=20
+> does actually find hits, including one that implies that chrome does
+> exactly that.  So it might not be possible.
+>=20
+> Somewhat odd, but it does just confirm the whole "users will at some
+> point do everything in their power to use every odd special case,
+> intended or not".
+
+*sheepishly* Actually we use this in runc very liberally.
+
+It's done because we need to run namespace-related code but runc is
+written in Go so (long story short) we re-exec ourselves in order to
+run some __attribute__((constructor)) code which sets up the namespaces
+and then lets the Go runtime boot.
+
+I suspect just writing everything in C would've been orders of magnitude
+simpler, but I wasn't around when that decision was made. :P
+
+Also as Christian mentioned, fexecve(3) in glibc is implemented using
+/proc/self/fd on old kernels (then again, if we change the behaviour on
+new kernels it won't matter because glibc uses execveat(AT_EMPTY_PATH)
+if it's available).
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--x6j6zu2zk3nponfr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEb6Gz4/mhjNy+aiz1Snvnv3Dem58FAlzXDcoACgkQSnvnv3De
+m5/VQg//cNbE0gWGWd67U4KsSDs6MVJJyqjF6LOvkYQ7ZDla/7TmoJD8gMLeRiEr
+JEg4aoL53swukD16188CiyfgExJOaecf1WWuDM74MelW1FYIrlf2pqD214UO3sq7
+K40GqdW9H/JKL+yZrH6+zzQXIYOpf0xNDFwF6yf4yb1vFCk/yEp5+LsewxwDzYVp
+u/5L6KcndExqtyHhgY5iS19/rGKtEvqiYSYrpYSpFAtkN3ROb2xe6b7oO4b6Y30q
+HQslOeSH11Qw5XU+nV4QkZoIw14pJLV4laPkYHfUyJLNwAjqQEp4CtCuegOH3P95
+Zo1PSu1DItJwNgGAM6UcFAF9ctcN0fE4rh5+3szsOIN72vEVHHj6899Y87X+9eEH
+OTjiV5I39KAaznMg65tFp4pC8N8wK1jQangilrGuvUOrQdhdr0bA6Yw3eWQ2fWVB
+5MlVZzgAvBW1nPasgt9wzbFzj7h+ijXy1H9fGJ88M2t+gT0y7d1f5eu597vAF9An
+ZsFiuiRA9tJAFdujgC764s8ujlkI9gELE5fvUQtoXW0WlVoGh0q+y4ffAWFf90o8
+pzIv7qxZ/N20ORB1kpUUi0aLBGAjGnksOOUbK/wU1dmTNKxOqQn0HUEOg7EdjPa6
+tg84KmSTwS04JizzCtv+4T2oWleq81UUhRvLnmyyF1UZiiJiEHU=
+=m7LL
+-----END PGP SIGNATURE-----
+
+--x6j6zu2zk3nponfr--
