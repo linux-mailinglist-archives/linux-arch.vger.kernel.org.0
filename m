@@ -2,175 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8152A1A59B
-	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2019 01:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FBC1A5EB
+	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2019 02:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728034AbfEJXgw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 May 2019 19:36:52 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37222 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728008AbfEJXgv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 May 2019 19:36:51 -0400
-Received: by mail-lj1-f196.google.com with SMTP id h19so14057ljj.4
-        for <linux-arch@vger.kernel.org>; Fri, 10 May 2019 16:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UCHjfY8ffpbEmMSgw3athUzkrjNiBk31tuUuOHfkH0E=;
-        b=SObLv4AvXYIrUFwvgxqqJzOJ2V92LqChl1+4qkDW9oRt6uYTBuqgGeYXehc6lunlS0
-         WOi20UjpfhFKIt7GAejYR6JkXn+du2032xYUCPTsw8KIplwp0QIOYf+wmiFdJdsVSvnm
-         tY1BdLVmpbwMUdhJNF7tzn3SCKxPGKz6HBG+k8RDtDR3BEMTaYF6Gn+s+ocewQgwD21/
-         J7UK8FTHZnS0+VyOasXkg60jp1yVFsV9SWY7l2DwZTm3YenVwEIGPGRuAb19M6HgLxf6
-         SOU2iF9zUmYQCurzaildkMAe0vsxwPYHp9AjmpAxnIegeVv5BkiS0k1FQ3gZGq5hlntK
-         dLbg==
+        id S1728079AbfEKAvb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 May 2019 20:51:31 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:38098 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727961AbfEKAvb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 May 2019 20:51:31 -0400
+Received: by mail-qt1-f193.google.com with SMTP id d13so1598567qth.5;
+        Fri, 10 May 2019 17:51:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UCHjfY8ffpbEmMSgw3athUzkrjNiBk31tuUuOHfkH0E=;
-        b=jPPcY4v3WcS0dEEo+tPlMc4bvrdro9kUQeHE6EaW+jLiOkP7bY8hafReigo7zlBEz1
-         I1/gmJqEzhmWKUvKXJIdr2u4meCtL47eXel4ak9aGdWgP6GdYDyB4HOo0t1fk6lT0mzB
-         pmhYdmR9OR9d+xbFzJn9N0Fd/AWon3I4tN5cZbMroor+NxZnd3N9PZ/s7R/8Q0wZURMC
-         iP3ej/se1F3e3ZpT9FfO8z9LBC5zMt2Harh/kcz4GFXGBmwQt8o6K380gJeGLKjd5Veu
-         qVvn4DQyDdSvS2TPKFkFvNnwaZQ30NY9kHkKhAS67ZHkkMBz6aejDIGxhZoy2FQbPC5G
-         TB9A==
-X-Gm-Message-State: APjAAAXbYb8VuQOs4TSDucPkyX7TCHNRUvJ4Y0D1Xi/YbHNypY6iAOn4
-        RiCsIuoto0WoZo2aUaT6W38RZlhJ38URzQyrSMJ9eA==
-X-Google-Smtp-Source: APXvYqwBw+D2wbm/jYmKoBNPSWcGv60F4u2IzN+qmva779guxg3NE/QEjxPitdeYXgQTpHW3uRqhaxlB5IpYP37eA7o=
-X-Received: by 2002:a2e:1293:: with SMTP id 19mr7423135ljs.120.1557531408970;
- Fri, 10 May 2019 16:36:48 -0700 (PDT)
+        bh=2yJyMuj40ehLn1VJjGCyDbn5ZrzNMv6yLbIutJnLbw0=;
+        b=oslF2ILCtz6Ra76n5Gdli4mg1t5uTVK7flOHFONAcO6QR/C1HZJyMnQhDnsDBICH5n
+         /DPlgM+yrTiIRHefxIdZVJTdVzACEdIyOxVdtF3lypZIf8IFfqtX42lm/iYW4z9h0WoB
+         V2viRR6n4BfhTZB0nMuA4VTM2HO4Jpy271uaygsjvCVS4YOKjRqg05ZDWFwldAokokyc
+         pXW0IWQoH59hDEwPp1wVpQySlIPbOaQV8NrBJ8XvudPBj6yKz6q0duBu7l7sz65WCaF3
+         9B9T68OZTB8RmxyXanUii4lk9QlxtPHQCgFXcYzr1c9lCTFiuUL+aDPvTqMzvmaxPxID
+         72yw==
+X-Gm-Message-State: APjAAAXdPTq2g06a2VWs1UaWFq4r95Yq8XqEcaH4Aa2pTlqZ2TKoxzw1
+        pSjpbBiCpO3qvSah9KDzPvsOTdFFlYdmAYBw/Ho=
+X-Google-Smtp-Source: APXvYqxFKEloXfs+RHuMKqqDTkbQ2DMYSkXhWhHARTrTqb4xCGfWCNfnszBb+Rc+y0gwljMkH4orfi2JM8qYr2q0Dhk=
+X-Received: by 2002:a0c:87f4:: with SMTP id 49mr11681367qvk.149.1557535885304;
+ Fri, 10 May 2019 17:51:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190506165439.9155-1-cyphar@cyphar.com> <20190506165439.9155-6-cyphar@cyphar.com>
- <CAG48ez0-CiODf6UBHWTaog97prx=VAd3HgHvEjdGNz344m1xKw@mail.gmail.com>
- <20190506191735.nmzf7kwfh7b6e2tf@yavin> <20190510204141.GB253532@google.com>
- <CALCETrW2nn=omqJb4p+m-BDsCOhg+YZQ3ELd4BdhODV3G44gfA@mail.gmail.com> <20190510225527.GA59914@google.com>
-In-Reply-To: <20190510225527.GA59914@google.com>
-From:   Christian Brauner <christian@brauner.io>
-Date:   Sat, 11 May 2019 01:36:37 +0200
-Message-ID: <CAHrFyr5vjTZfgtMsHwr6iwVVFxVsU3UCOiEq=FM-rjr0kPGHUw@mail.gmail.com>
-Subject: Re: [PATCH v6 5/6] binfmt_*: scope path resolution of interpreters
-To:     Jann Horn <jannh@google.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+References: <20190412143538.11780-1-hch@lst.de> <CAK8P3a2bg9YkbNpAb9uZkXLFZ3juCmmbF7cRw+Dm9ZiLFno2OQ@mail.gmail.com>
+ <fd59e6e22594f740eaf86abad76ee04d@mailhost.ics.forth.gr> <CACT4Y+aKGKm9Wbc1owBr51adkbesHP_Z81pBAoZ5HmJ+uZdsaw@mail.gmail.com>
+In-Reply-To: <CACT4Y+aKGKm9Wbc1owBr51adkbesHP_Z81pBAoZ5HmJ+uZdsaw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 10 May 2019 20:51:12 -0400
+Message-ID: <CAK8P3a3xRBZrgv16sSigJhY0vGmb=qF9o=6dC_5DqAJtW3qPGQ@mail.gmail.com>
+Subject: Re: [PATCH, RFC] byteorder: sanity check toolchain vs kernel endianess
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Nick Kossifidis <mick@ics.forth.gr>,
+        Christoph Hellwig <hch@lst.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, May 11, 2019 at 12:55 AM Jann Horn <jannh@google.com> wrote:
->
-> On Fri, May 10, 2019 at 02:20:23PM -0700, Andy Lutomirski wrote:
-> > On Fri, May 10, 2019 at 1:41 PM Jann Horn <jannh@google.com> wrote:
-> > >
-> > > On Tue, May 07, 2019 at 05:17:35AM +1000, Aleksa Sarai wrote:
-> > > > On 2019-05-06, Jann Horn <jannh@google.com> wrote:
-> > > > > In my opinion, CVE-2019-5736 points out two different problems:
-> > > > >
-> > > > > The big problem: The __ptrace_may_access() logic has a special-case
-> > > > > short-circuit for "introspection" that you can't opt out of; this
-> > > > > makes it possible to open things in procfs that are related to the
-> > > > > current process even if the credentials of the process wouldn't permit
-> > > > > accessing another process like it. I think the proper fix to deal with
-> > > > > this would be to add a prctl() flag for "set whether introspection is
-> > > > > allowed for this process", and if userspace has manually un-set that
-> > > > > flag, any introspection special-case logic would be skipped.
-> > > >
-> > > > We could do PR_SET_DUMPABLE=3 for this, I guess?
-> > >
-> > > Hmm... I'd make it a new prctl() command, since introspection is
-> > > somewhat orthogonal to dumpability. Also, dumpability is per-mm, and I
-> > > think the introspection flag should be per-thread.
+On Fri, May 10, 2019 at 6:53 AM Dmitry Vyukov <dvyukov@google.com> wrote:
 > >
-> > I've lost track of the context here, but it seems to me that
-> > mitigating attacks involving accidental following of /proc links
-> > shouldn't depend on dumpability.  What's the actual problem this is
-> > trying to solve again?
->
-> The one actual security problem that I've seen related to this is
-> CVE-2019-5736. There is a write-up of it at
-> <https://blog.dragonsector.pl/2019/02/cve-2019-5736-escape-from-docker-and.html>
-> under "Successful approach", but it goes more or less as follows:
->
-> A container is running that doesn't use user namespaces (because for
-> some reason I don't understand, apparently some people still do that).
-> An evil process is running inside the container with UID 0 (as in,
-> GLOBAL_ROOT_UID); so if the evil process inside the container was able
-> to reach root-owned files on the host filesystem, it could write into
-> them.
->
-> The container engine wants to spawn a new process inside the container.
-> It forks off a child that joins the container's namespaces (including
-> PID and mount namespaces), and then the child calls execve() on some
-> path in the container.
-> The attacker replaces the executable in the container with a symlink
-> to /proc/self/exe and replaces a library inside the container with a
-> malicious one.
-> When the container engine calls execve(), intending to run an executable
-> inside the container, it instead goes through ptrace_may_access() using
-> the introspection short-circuit and re-executes its own executable
-> through the jumped symlink /proc/self/exe (which is normally unreachable
-> for the container). After the execve(), the process loads an evil
-> library from inside the container and is under the control of the
-> container.
-> Now the container controls a process whose /proc/self/exe is a jumped
-> symlink to a host executable, and the container can write into it.
->
-> Some container engines are now using an extremely ugly hack to work
-> around this - whenever they want to enter a container, they copy the
-> host binary into a new memfd and execute that to avoid exposing the
-> original host binary to containers:
-> <https://github.com/opencontainers/runc/commit/0a8e4117e7f715d5fbeef398405813ce8e88558b>
+> > I think it's good to have a sanity check in-place for consistency.
 >
 >
-> In my opinion, the problems here are:
+> Hi,
 >
->  - Apparently some people run untrusted containers without user
->    namespaces. It would be really nice if people could not do that.
->    (Probably the biggest problem here.)
+> This broke our cross-builds from x86. I am using:
+>
+> $ powerpc64le-linux-gnu-gcc --version
+> powerpc64le-linux-gnu-gcc (Debian 7.2.0-7) 7.2.0
+>
+> and it says that it's little-endian somehow:
+>
+> $ powerpc64le-linux-gnu-gcc -dM -E - < /dev/null | grep BYTE_ORDER
+> #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+>
+> Is it broke compiler? Or I always hold it wrong? Is there some
+> additional flag I need to add?
 
-I know I sound like a broken record since I've been going on about this
-forever together with a lot of other people but honestly,
-the fact that people are running untrusted workloads in privileged containers
-is the real issue here.
+It looks like a bug in the kernel Makefiles to me. powerpc32 is always
+big-endian,
+powerpc64 used to be big-endian but is now usually little-endian. There are
+often three separate toolchains that default to the respective user
+space targets
+(ppc32be, ppc64be, ppc64le), but generally you should be able to build
+any of the
+three kernel configurations with any of those compilers, and have the Makefile
+pass the correct -m32/-m64/-mbig-endian/-mlittle-endian command line options
+depending on the kernel configuration. It seems that this is not happening
+here. I have not checked why, but if this is the problem, it should be
+easy enough
+to figure out.
 
-Aleksa is a good friend of mine and we have discussed this a lot so I hope
-he doesn't hate me for saying this again: it is crazy that there are container
-runtimes out there that promise (or at least do not state the opposite)
-containers without user namespaces or containers with user namespaces
-that allow to map the host root id to anything can be safe. They cannot.
-
-Even if this /proc/*/exe thing is somehow blocked there
-are other ways of escaping from a privileged container.
-We (i.e. LXC) literally do not accept CVEs for privileged containers
-because we do not consider them safe by design.
-It seems to me to be heading in the wrong direction to keep up the
-illusion that with enough effort we can make this all nice and safe.
-Yes, the userspace memfd hack we came up with is as ugly as a security
-patch can be but if you make promises you can't keep you better be
-prepared to pay the price when things start to fall apart.
-So if this part of the patch is just needed to handle this do we really
-want to do all that tricky work or is there more to gain from this that
-makes it worth it.
-
-Christian
+       Arnd
