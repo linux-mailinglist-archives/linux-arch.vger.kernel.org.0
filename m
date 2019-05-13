@@ -2,52 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 406801B579
-	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2019 14:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56421B5C7
+	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2019 14:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729607AbfEMME4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 May 2019 08:04:56 -0400
-Received: from verein.lst.de ([213.95.11.211]:38873 "EHLO newverein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728268AbfEMME4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 13 May 2019 08:04:56 -0400
-Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 4D9D868AFE; Mon, 13 May 2019 14:04:35 +0200 (CEST)
-Date:   Mon, 13 May 2019 14:04:35 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Christoph Hellwig <hch@lst.de>,
+        id S1728833AbfEMMY3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 May 2019 08:24:29 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33716 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727414AbfEMMY2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 May 2019 08:24:28 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 3605CAEFC;
+        Mon, 13 May 2019 12:24:27 +0000 (UTC)
+Date:   Mon, 13 May 2019 14:24:24 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Martin Schwidefsky <schwidefsky@de.ibm.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Andrew Donnellan <andrew.donnellan@au1.ibm.com>
-Subject: Re: [PATCH, RFC] byteorder: sanity check toolchain vs kernel
- endianess
-Message-ID: <20190513120435.GB22993@lst.de>
-References: <20190412143538.11780-1-hch@lst.de> <CAK8P3a2bg9YkbNpAb9uZkXLFZ3juCmmbF7cRw+Dm9ZiLFno2OQ@mail.gmail.com> <fd59e6e22594f740eaf86abad76ee04d@mailhost.ics.forth.gr> <CACT4Y+aKGKm9Wbc1owBr51adkbesHP_Z81pBAoZ5HmJ+uZdsaw@mail.gmail.com> <CAK8P3a3xRBZrgv16sSigJhY0vGmb=qF9o=6dC_5DqAJtW3qPGQ@mail.gmail.com> <CACT4Y+ad5z6z0Dweh5hGwYcUUebPEtqsznmX9enPvYB20J16aA@mail.gmail.com> <87woiutwq4.fsf@concordia.ellerman.id.au> <CACT4Y+YT52wGuARxe9RqUsMYGNZTwaBowWWUUawyqTBq4G1NDg@mail.gmail.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "Tobin C . Harding" <me@tobin.cc>, Michal Hocko <mhocko@suse.cz>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, Russell Currey <ruscur@russell.cc>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Stephen Rothwell <sfr@ozlabs.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH] vsprintf: Do not break early boot with probing addresses
+Message-ID: <20190513122424.ynaox4v77uhgmvn6@pathway.suse.cz>
+References: <20190510081635.GA4533@jagdpanzerIV>
+ <20190510084213.22149-1-pmladek@suse.com>
+ <20190510122401.21a598f6@gandalf.local.home>
+ <20190510183258.1f6c4153@mschwideX1>
+ <20190510124058.0d44b441@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+YT52wGuARxe9RqUsMYGNZTwaBowWWUUawyqTBq4G1NDg@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20190510124058.0d44b441@gandalf.local.home>
+User-Agent: NeoMutt/20170912 (1.9.0)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 13, 2019 at 01:50:19PM +0200, Dmitry Vyukov wrote:
-> > We did have some bugs in the past (~1-2 y/ago) but AFAIK they are all
-> > fixed now. These days I build most of my kernels with a bi-endian 64-bit
-> > toolchain, and switching endian without running `make clean` also works.
+On Fri 2019-05-10 12:40:58, Steven Rostedt wrote:
+> On Fri, 10 May 2019 18:32:58 +0200
+> Martin Schwidefsky <schwidefsky@de.ibm.com> wrote:
 > 
-> For the record, yes, it turn out to be a problem in our code (a latent
-> bug). We actually used host (x86) gcc to build as-if ppc code that can
-> run on the host, so it defined neither LE no BE macros. It just
-> happened to work in the past :)
+> > On Fri, 10 May 2019 12:24:01 -0400
+> > Steven Rostedt <rostedt@goodmis.org> wrote:
+> > 
+> > > On Fri, 10 May 2019 10:42:13 +0200
+> > > Petr Mladek <pmladek@suse.com> wrote:
+> > >   
+> > > >  static const char *check_pointer_msg(const void *ptr)
+> > > >  {
+> > > > -	char byte;
+> > > > -
+> > > >  	if (!ptr)
+> > > >  		return "(null)";
+> > > >  
+> > > > -	if (probe_kernel_address(ptr, byte))
+> > > > +	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
+> > > >  		return "(efault)";
+> > > >      
+> > > 
+> > > 
+> > > 	< PAGE_SIZE ?
+> > > 
+> > > do you mean: < TASK_SIZE ?  
+> > 
+> > The check with < TASK_SIZE would break on s390. The 'ptr' is
+> > in the kernel address space, *not* in the user address space.
+> > Remember s390 has two separate address spaces for kernel/user
+> > the check < TASK_SIZE only makes sense with a __user pointer.
+> > 
+> 
+> So we allow this to read user addresses? Can't that cause a fault?
 
-So Nick was right and these checks actually are useful..
+I did some quick check and did not found anywhere a user pointer
+being dereferenced via vsprintf().
+
+In each case, %s did the check (ptr < PAGE_SIZE) even before this
+patchset. The other checks are in %p format modifiers that are
+used to print various kernel structures.
+
+Finally, it accesses the pointer directly. I am not completely sure
+but I think that it would not work that easily with an address
+from the user address space.
+
+Best Regards,
+Petr
