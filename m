@@ -2,95 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 812D01B295
-	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2019 11:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA931B504
+	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2019 13:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728620AbfEMJN1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 May 2019 05:13:27 -0400
-Received: from mga07.intel.com ([134.134.136.100]:34770 "EHLO mga07.intel.com"
+        id S1728504AbfEMLdo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 May 2019 07:33:44 -0400
+Received: from ozlabs.org ([203.11.71.1]:37433 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728616AbfEMJN1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 13 May 2019 05:13:27 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 May 2019 02:13:26 -0700
-X-ExtLoop1: 1
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.86])
-  by orsmga007.jf.intel.com with ESMTP; 13 May 2019 02:13:21 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hQ71M-0007f0-23; Mon, 13 May 2019 12:13:20 +0300
-Date:   Mon, 13 May 2019 12:13:20 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'christophe leroy' <christophe.leroy@c-s.fr>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Petr Mladek <pmladek@suse.com>,
+        id S1729381AbfEMLdo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 May 2019 07:33:44 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 452dxK1vDjz9s4Y;
+        Mon, 13 May 2019 21:33:41 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Dmitry Vyukov <dvyukov@google.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Nick Kossifidis <mick@ics.forth.gr>,
+        Christoph Hellwig <hch@lst.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "Tobin C . Harding" <me@tobin.cc>, Michal Hocko <mhocko@suse.cz>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Russell Currey <ruscur@russell.cc>,
-        Stephen Rothwell <sfr@ozlabs.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH] vsprintf: Do not break early boot with probing addresses
-Message-ID: <20190513091320.GK9224@smile.fi.intel.com>
-References: <20190510081635.GA4533@jagdpanzerIV>
- <20190510084213.22149-1-pmladek@suse.com>
- <20190510122401.21a598f6@gandalf.local.home>
- <daf4dfd1-7f4f-8b92-6866-437c3a2be28b@c-s.fr>
- <096d6c9c17b3484484d9d9d3f3aa3a7c@AcuMS.aculab.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH, RFC] byteorder: sanity check toolchain vs kernel endianess
+In-Reply-To: <CACT4Y+ad5z6z0Dweh5hGwYcUUebPEtqsznmX9enPvYB20J16aA@mail.gmail.com>
+References: <20190412143538.11780-1-hch@lst.de> <CAK8P3a2bg9YkbNpAb9uZkXLFZ3juCmmbF7cRw+Dm9ZiLFno2OQ@mail.gmail.com> <fd59e6e22594f740eaf86abad76ee04d@mailhost.ics.forth.gr> <CACT4Y+aKGKm9Wbc1owBr51adkbesHP_Z81pBAoZ5HmJ+uZdsaw@mail.gmail.com> <CAK8P3a3xRBZrgv16sSigJhY0vGmb=qF9o=6dC_5DqAJtW3qPGQ@mail.gmail.com> <CACT4Y+ad5z6z0Dweh5hGwYcUUebPEtqsznmX9enPvYB20J16aA@mail.gmail.com>
+Date:   Mon, 13 May 2019 21:33:39 +1000
+Message-ID: <87woiutwq4.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <096d6c9c17b3484484d9d9d3f3aa3a7c@AcuMS.aculab.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 13, 2019 at 08:52:41AM +0000, David Laight wrote:
-> From: christophe leroy
-> > Sent: 10 May 2019 18:35
-> > Le 10/05/2019 à 18:24, Steven Rostedt a écrit :
-> > > On Fri, 10 May 2019 10:42:13 +0200
-> > > Petr Mladek <pmladek@suse.com> wrote:
+Dmitry Vyukov <dvyukov@google.com> writes:
+> From: Arnd Bergmann <arnd@arndb.de>
+> Date: Sat, May 11, 2019 at 2:51 AM
+> To: Dmitry Vyukov
+> Cc: Nick Kossifidis, Christoph Hellwig, Linus Torvalds, Andrew Morton,
+> linux-arch, Linux Kernel Mailing List, linuxppc-dev
+>
+>> On Fri, May 10, 2019 at 6:53 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+>> > >
+>> > > I think it's good to have a sanity check in-place for consistency.
+>> >
+>> >
+>> > Hi,
+>> >
+>> > This broke our cross-builds from x86. I am using:
+>> >
+>> > $ powerpc64le-linux-gnu-gcc --version
+>> > powerpc64le-linux-gnu-gcc (Debian 7.2.0-7) 7.2.0
+>> >
+>> > and it says that it's little-endian somehow:
+>> >
+>> > $ powerpc64le-linux-gnu-gcc -dM -E - < /dev/null | grep BYTE_ORDER
+>> > #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+>> >
+>> > Is it broke compiler? Or I always hold it wrong? Is there some
+>> > additional flag I need to add?
+>>
+>> It looks like a bug in the kernel Makefiles to me. powerpc32 is always
+>> big-endian,
+>> powerpc64 used to be big-endian but is now usually little-endian. There are
+>> often three separate toolchains that default to the respective user
+>> space targets
+>> (ppc32be, ppc64be, ppc64le), but generally you should be able to build
+>> any of the
+>> three kernel configurations with any of those compilers, and have the Makefile
+>> pass the correct -m32/-m64/-mbig-endian/-mlittle-endian command line options
+>> depending on the kernel configuration. It seems that this is not happening
+>> here. I have not checked why, but if this is the problem, it should be
+>> easy enough
+>> to figure out.
+>
+>
+> Thanks! This clears a lot.
+> This may be a bug in our magic as we try to build kernel files outside
+> of make with own flags (required to extract parts of kernel
+> interfaces).
+> So don't spend time looking for the Makefile bugs yet.
 
-> > >> -	if (probe_kernel_address(ptr, byte))
-> > >> +	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
-> > >>   		return "(efault)";
-> 
-> "efault" looks a bit like a spellling mistake for "default".
+OK :)
 
-It's a special, thus it's in parenthesis, though somebody can be
-misguided.
+We did have some bugs in the past (~1-2 y/ago) but AFAIK they are all
+fixed now. These days I build most of my kernels with a bi-endian 64-bit
+toolchain, and switching endian without running `make clean` also works.
 
-> > Usually, < PAGE_SIZE means NULL pointer dereference (via the member of a
-> > struct)
-> 
-> Maybe the caller should pass in a short buffer so that you can return
-> "(err-%d)"
-> or "(null+%#x)" ?
-
-In both cases it should be limited to the size of pointer (8 or 16
-characters). Something like "(e:%4d)" would work for error codes.
-
-The "(null)" is good enough by itself and already an established
-practice..
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+cheers
