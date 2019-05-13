@@ -2,110 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DF51B145
-	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2019 09:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDC21B212
+	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2019 10:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727339AbfEMHj6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 May 2019 03:39:58 -0400
-Received: from mail-it1-f194.google.com ([209.85.166.194]:40653 "EHLO
-        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727202AbfEMHj5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 May 2019 03:39:57 -0400
-Received: by mail-it1-f194.google.com with SMTP id g71so18760229ita.5
-        for <linux-arch@vger.kernel.org>; Mon, 13 May 2019 00:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OCBAgYZcl/Mx9I9kBUc9k0z+VS+2s/+/8BKjMe5L/4M=;
-        b=SZjZHRBaI2LN21jyRT5EZkLIQdXHRrkgReZnW+swFod0bdKDie3+g+WGtklY0kC311
-         D1KKaZ2x7uQDR0V2qnPwQzvKPDzqAA94Zpm8YHT/sOwgUG6HPRnEqu85XA+O1k0sypE5
-         bbop+wUKsZ4yMehyLmsJ9459MhRGj3LYgqRz4uO/ypZ8wYUyM8rWxxtLJhVeYmIoNPzJ
-         P0BGjN9KPs18zjGreU5S/Jg8qeugpnE19O6Fjj/RYomOU65m0ow3YaAVxRMZqaRgh++4
-         kfjbw31MpcBw/JJVWa6iRCoFOI7x3lquY0Qvqmfqv/Cd/3KZ+WPUFvwRRIVAPicbMYQz
-         mSPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OCBAgYZcl/Mx9I9kBUc9k0z+VS+2s/+/8BKjMe5L/4M=;
-        b=SAHDQdvPnmMuU5CuVU5Za1p6Euq0imKF/9rUa7HFaEl+9xvOQRIViwU+TQ1VAks+hy
-         j2KU+Y7DzAxqQQj1UB4wORoxmhMjwHpZK+0VNlgLSfiTvWSw4Oo6Owqt4rDHnGpfL+Z0
-         K2m3t42nvVOccpxgvpJZVeA21xinz6GQ7RVxetGS5OVsgzy8iy7GrVtetkZUK7zPeF4c
-         wIdFj7P5bC9t7r8e6f5ygKOIxvdtuaFnGY7VM82WbROBUOxr1fwxlQsREKtMPJFNe4Ry
-         UqXAwmhWxdT3t3U3gLQgmtNHGaY+X9KJN7NpLIzpE4+3Ajwx90grmvJC1gJ5fjDchSr+
-         Wamg==
-X-Gm-Message-State: APjAAAWfB0s3DwZ3TIr+k7EOBYKpROgmlxVMGCDIRXdS1fM4W64LwW0N
-        f5CAWNVBQnktdEgdgvZiWvI+0Rzb1cS5TOrp0/bXsLJh
-X-Google-Smtp-Source: APXvYqx3ThZE+Yj0kNbVwe1j3uegPjtZ90tj9AYcwjCq3pZNd6Fh+sqbqj1PKRwpmit1sNvknwuQU89gTtGOhYZrWFU=
-X-Received: by 2002:a05:660c:10f:: with SMTP id w15mr11634340itj.166.1557733196690;
- Mon, 13 May 2019 00:39:56 -0700 (PDT)
+        id S1728014AbfEMIsz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 May 2019 04:48:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52088 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726103AbfEMIsy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 May 2019 04:48:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id E4E2BAECD;
+        Mon, 13 May 2019 08:48:51 +0000 (UTC)
+From:   Andreas Schwab <schwab@suse.de>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Yury Norov <ynorov@caviumnetworks.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, Adam Borowski <kilobyte@angband.pl>,
+        Alexander Graf <agraf@suse.de>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Andrew Pinski <pinskia@gmail.com>,
+        Bamvor Zhangjian <bamv2005@gmail.com>,
+        Chris Metcalf <cmetcalf@mellanox.com>,
+        Christoph Muellner <christoph.muellner@theobroma-systems.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        James Hogan <james.hogan@imgtec.com>,
+        James Morse <james.morse@arm.com>,
+        Joseph Myers <joseph@codesourcery.com>,
+        Lin Yongting <linyongting@huawei.com>,
+        Manuel Montezelo <manuel.montezelo@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+        Nathan_Lynch <Nathan_Lynch@mentor.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
+        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
+        Steve Ellcey <sellcey@caviumnetworks.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>
+Subject: Re: [PATCH v9 00/24] ILP32 for ARM64
+References: <20180516081910.10067-1-ynorov@caviumnetworks.com>
+        <20190508225900.GA14091@yury-thinkpad>
+X-Yow:  Is this ANYWHERE, USA?
+Date:   Mon, 13 May 2019 10:48:48 +0200
+In-Reply-To: <20190508225900.GA14091@yury-thinkpad> (Yury Norov's message of
+        "Wed, 8 May 2019 15:59:00 -0700")
+Message-ID: <mvmtvdyoi33.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20190412143538.11780-1-hch@lst.de> <CAK8P3a2bg9YkbNpAb9uZkXLFZ3juCmmbF7cRw+Dm9ZiLFno2OQ@mail.gmail.com>
- <fd59e6e22594f740eaf86abad76ee04d@mailhost.ics.forth.gr> <CACT4Y+aKGKm9Wbc1owBr51adkbesHP_Z81pBAoZ5HmJ+uZdsaw@mail.gmail.com>
- <CAK8P3a3xRBZrgv16sSigJhY0vGmb=qF9o=6dC_5DqAJtW3qPGQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3xRBZrgv16sSigJhY0vGmb=qF9o=6dC_5DqAJtW3qPGQ@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 13 May 2019 09:39:45 +0200
-Message-ID: <CACT4Y+ad5z6z0Dweh5hGwYcUUebPEtqsznmX9enPvYB20J16aA@mail.gmail.com>
-Subject: Re: [PATCH, RFC] byteorder: sanity check toolchain vs kernel endianess
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Nick Kossifidis <mick@ics.forth.gr>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Sat, May 11, 2019 at 2:51 AM
-To: Dmitry Vyukov
-Cc: Nick Kossifidis, Christoph Hellwig, Linus Torvalds, Andrew Morton,
-linux-arch, Linux Kernel Mailing List, linuxppc-dev
+There is a problem with the stack size accounting during execve when
+there is no stack limit:
 
-> On Fri, May 10, 2019 at 6:53 AM Dmitry Vyukov <dvyukov@google.com> wrote:
-> > >
-> > > I think it's good to have a sanity check in-place for consistency.
-> >
-> >
-> > Hi,
-> >
-> > This broke our cross-builds from x86. I am using:
-> >
-> > $ powerpc64le-linux-gnu-gcc --version
-> > powerpc64le-linux-gnu-gcc (Debian 7.2.0-7) 7.2.0
-> >
-> > and it says that it's little-endian somehow:
-> >
-> > $ powerpc64le-linux-gnu-gcc -dM -E - < /dev/null | grep BYTE_ORDER
-> > #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
-> >
-> > Is it broke compiler? Or I always hold it wrong? Is there some
-> > additional flag I need to add?
->
-> It looks like a bug in the kernel Makefiles to me. powerpc32 is always
-> big-endian,
-> powerpc64 used to be big-endian but is now usually little-endian. There are
-> often three separate toolchains that default to the respective user
-> space targets
-> (ppc32be, ppc64be, ppc64le), but generally you should be able to build
-> any of the
-> three kernel configurations with any of those compilers, and have the Makefile
-> pass the correct -m32/-m64/-mbig-endian/-mlittle-endian command line options
-> depending on the kernel configuration. It seems that this is not happening
-> here. I have not checked why, but if this is the problem, it should be
-> easy enough
-> to figure out.
+$ ulimit -s
+8192
+$ ./hello.ilp32 
+Hello World!
+$ ulimit -s unlimited
+$ ./hello.ilp32 
+Segmentation fault
+$ strace ./hello.ilp32 
+execve("./hello.ilp32", ["./hello.ilp32"], 0xfffff10548f0 /* 77 vars */) = -1 ENOMEM (Cannot allocate memory)
++++ killed by SIGSEGV +++
+Segmentation fault (core dumped)
 
+Andreas.
 
-Thanks! This clears a lot.
-This may be a bug in our magic as we try to build kernel files outside
-of make with own flags (required to extract parts of kernel
-interfaces).
-So don't spend time looking for the Makefile bugs yet.
+-- 
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."
