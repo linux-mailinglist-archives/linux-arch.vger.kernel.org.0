@@ -2,113 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 049201ACA6
-	for <lists+linux-arch@lfdr.de>; Sun, 12 May 2019 16:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DF51B145
+	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2019 09:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbfELOe3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 12 May 2019 10:34:29 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41098 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726775AbfELOe2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 12 May 2019 10:34:28 -0400
-Received: by mail-pg1-f193.google.com with SMTP id z3so5389344pgp.8
-        for <linux-arch@vger.kernel.org>; Sun, 12 May 2019 07:34:28 -0700 (PDT)
+        id S1727339AbfEMHj6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 May 2019 03:39:58 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:40653 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727202AbfEMHj5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 May 2019 03:39:57 -0400
+Received: by mail-it1-f194.google.com with SMTP id g71so18760229ita.5
+        for <linux-arch@vger.kernel.org>; Mon, 13 May 2019 00:39:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=rj1xYp3bdbLmB5I4rmF5eddBCdDybeCIweQdtWz6Qds=;
-        b=uBjJnZYujXqLDjdsyGju48YBheW3/jE8xCPZQJjpgJd9RZWkns4nx6DTpkmfTtRT1k
-         ei249ShnwoxPskGiuNU2YeD9/BPNrZPrtoYO8ZyHf0ot27+I+0f1WBbkzVZZpEeLt/kW
-         jMSMhpzEhHai35mqb0aIYC/YGM/oqvuYZs9wYq3ePwDMbwoZmFU3rxbRBhaDIDN1S6R1
-         a/KqZ5WR+U0qpaUapt170v2T+DDaFp0TqrA+OPkRdWL9hxxezVgcp5Cs0gSS7DpwKd7t
-         sqfCFn5Ds12xQx0WBUYk9RVzc2LzeATQ4N9jnrzRwoWXYd1UOcCnKnfe74JIJjmISotF
-         tvxw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OCBAgYZcl/Mx9I9kBUc9k0z+VS+2s/+/8BKjMe5L/4M=;
+        b=SZjZHRBaI2LN21jyRT5EZkLIQdXHRrkgReZnW+swFod0bdKDie3+g+WGtklY0kC311
+         D1KKaZ2x7uQDR0V2qnPwQzvKPDzqAA94Zpm8YHT/sOwgUG6HPRnEqu85XA+O1k0sypE5
+         bbop+wUKsZ4yMehyLmsJ9459MhRGj3LYgqRz4uO/ypZ8wYUyM8rWxxtLJhVeYmIoNPzJ
+         P0BGjN9KPs18zjGreU5S/Jg8qeugpnE19O6Fjj/RYomOU65m0ow3YaAVxRMZqaRgh++4
+         kfjbw31MpcBw/JJVWa6iRCoFOI7x3lquY0Qvqmfqv/Cd/3KZ+WPUFvwRRIVAPicbMYQz
+         mSPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=rj1xYp3bdbLmB5I4rmF5eddBCdDybeCIweQdtWz6Qds=;
-        b=BHVahkq9h8qrYrok3JcSG2kA2TB7fJrPrRo2NEfwOyfulK02W6Du955lLq7i7TMjov
-         xSSJcELJWQHajJjtTzBiGPCkdwdq0+LVnA0mePk2RsBOe1LAOzW+CErMbXe77jAAqa95
-         AVIheK5WfB0BxWMYBziyjfSt1tE32cVv9423jg69lBzTguZia+GX+m/BBCW7W306sdkJ
-         /7CzHZUTc6LREUGVV4qZoFZtgopYycEi1GeEG9cg/CttXig7vfxBSmegMISg683GmaME
-         81/loCyXfdbIew+Dt35vMWGjWqcyFPGcwVgC9+PJCXM8XW84FaguHNRPBS5aTSDThEat
-         Xw+Q==
-X-Gm-Message-State: APjAAAWFdMrdJHjYenJl7wv6HBQTh9SPGUz757/HyktTr08ZP+0QhQoV
-        Voq9e+geHoTxsdxAgNpgVhvltw==
-X-Google-Smtp-Source: APXvYqxtlm8OaNR9+qSGiL3A5V/7CCZj49vprk8OtBfg/XFvVYf4ruk29Ug1AqpNP0BNvhXhL8FQyQ==
-X-Received: by 2002:a62:3892:: with SMTP id f140mr27329042pfa.128.1557671668210;
-        Sun, 12 May 2019 07:34:28 -0700 (PDT)
-Received: from ?IPv6:2601:646:c200:1ef2:1112:65f7:3af0:f60d? ([2601:646:c200:1ef2:1112:65f7:3af0:f60d])
-        by smtp.gmail.com with ESMTPSA id k10sm11400208pgo.82.2019.05.12.07.34.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 12 May 2019 07:34:27 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v6 5/6] binfmt_*: scope path resolution of interpreters
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16E227)
-In-Reply-To: <20190512133549.ymx5yg5rdqvavzyq@yavin>
-Date:   Sun, 12 May 2019 07:34:26 -0700
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Lutomirski <luto@kernel.org>,
-        Jann Horn <jannh@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OCBAgYZcl/Mx9I9kBUc9k0z+VS+2s/+/8BKjMe5L/4M=;
+        b=SAHDQdvPnmMuU5CuVU5Za1p6Euq0imKF/9rUa7HFaEl+9xvOQRIViwU+TQ1VAks+hy
+         j2KU+Y7DzAxqQQj1UB4wORoxmhMjwHpZK+0VNlgLSfiTvWSw4Oo6Owqt4rDHnGpfL+Z0
+         K2m3t42nvVOccpxgvpJZVeA21xinz6GQ7RVxetGS5OVsgzy8iy7GrVtetkZUK7zPeF4c
+         wIdFj7P5bC9t7r8e6f5ygKOIxvdtuaFnGY7VM82WbROBUOxr1fwxlQsREKtMPJFNe4Ry
+         UqXAwmhWxdT3t3U3gLQgmtNHGaY+X9KJN7NpLIzpE4+3Ajwx90grmvJC1gJ5fjDchSr+
+         Wamg==
+X-Gm-Message-State: APjAAAWfB0s3DwZ3TIr+k7EOBYKpROgmlxVMGCDIRXdS1fM4W64LwW0N
+        f5CAWNVBQnktdEgdgvZiWvI+0Rzb1cS5TOrp0/bXsLJh
+X-Google-Smtp-Source: APXvYqx3ThZE+Yj0kNbVwe1j3uegPjtZ90tj9AYcwjCq3pZNd6Fh+sqbqj1PKRwpmit1sNvknwuQU89gTtGOhYZrWFU=
+X-Received: by 2002:a05:660c:10f:: with SMTP id w15mr11634340itj.166.1557733196690;
+ Mon, 13 May 2019 00:39:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190412143538.11780-1-hch@lst.de> <CAK8P3a2bg9YkbNpAb9uZkXLFZ3juCmmbF7cRw+Dm9ZiLFno2OQ@mail.gmail.com>
+ <fd59e6e22594f740eaf86abad76ee04d@mailhost.ics.forth.gr> <CACT4Y+aKGKm9Wbc1owBr51adkbesHP_Z81pBAoZ5HmJ+uZdsaw@mail.gmail.com>
+ <CAK8P3a3xRBZrgv16sSigJhY0vGmb=qF9o=6dC_5DqAJtW3qPGQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a3xRBZrgv16sSigJhY0vGmb=qF9o=6dC_5DqAJtW3qPGQ@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 13 May 2019 09:39:45 +0200
+Message-ID: <CACT4Y+ad5z6z0Dweh5hGwYcUUebPEtqsznmX9enPvYB20J16aA@mail.gmail.com>
+Subject: Re: [PATCH, RFC] byteorder: sanity check toolchain vs kernel endianess
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Nick Kossifidis <mick@ics.forth.gr>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0ED963D0-4C31-45B1-B361-E4A75DFBF7C1@amacapital.net>
-References: <20190506191735.nmzf7kwfh7b6e2tf@yavin> <20190510204141.GB253532@google.com> <CALCETrW2nn=omqJb4p+m-BDsCOhg+YZQ3ELd4BdhODV3G44gfA@mail.gmail.com> <20190510225527.GA59914@google.com> <C60DC580-854D-478D-AF23-5F29FB7C3E50@amacapital.net> <CAHk-=wh1JJD_RabMaFfinsAQp1vHGJOQ1rKqihafY=r7yHc8sQ@mail.gmail.com> <CALCETrUOj=4VWp=B=QT0BQ8X_Ds_b+pt68oDwfjGb+K0StXmWA@mail.gmail.com> <CAHk-=wg3+3GfHsHdB4o78jNiPh_5ShrzxBuTN-Y8EZfiFMhCvw@mail.gmail.com> <9CD2B97D-A6BD-43BE-9040-B410D996A195@amacapital.net> <CAHk-=wh3dT7=SMjvSZreXSu36Cg7gsfSipLhfTz5ioDKXV5uHg@mail.gmail.com> <20190512133549.ymx5yg5rdqvavzyq@yavin>
-To:     Aleksa Sarai <cyphar@cyphar.com>
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Sat, May 11, 2019 at 2:51 AM
+To: Dmitry Vyukov
+Cc: Nick Kossifidis, Christoph Hellwig, Linus Torvalds, Andrew Morton,
+linux-arch, Linux Kernel Mailing List, linuxppc-dev
 
-> On May 12, 2019, at 6:35 AM, Aleksa Sarai <cyphar@cyphar.com> wrote:
->=20
->> On 2019-05-12, Linus Torvalds <torvalds@linux-foundation.org> wrote:
->>> On Sat, May 11, 2019 at 7:37 PM Andy Lutomirski <luto@amacapital.net> wr=
-ote:
->>> I bet this will break something that already exists. An execveat()
->>> flag to turn off /proc/self/exe would do the trick, though.
->>=20
->> Thinking more about it, I suspect it is (once again) wrong to let the
->> thing that does the execve() control that bit.
->>=20
->> Generally, the less we allow people to affect the lifetime and
->> environment of a suid executable, the better off we are.
->>=20
->> But maybe we could limit /proc/*/exe to at least not honor suid'ness
->> of the target? Or does chrome/runc depend on that too?
->=20
-> Speaking on the runc side, we don't depend on this. It's possible
-> someone depends on this for fexecve(3) -- but as mentioned before in
-> newer kernels glibc uses execve(AT_EMPTY_PATH).
+> On Fri, May 10, 2019 at 6:53 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+> > >
+> > > I think it's good to have a sanity check in-place for consistency.
+> >
+> >
+> > Hi,
+> >
+> > This broke our cross-builds from x86. I am using:
+> >
+> > $ powerpc64le-linux-gnu-gcc --version
+> > powerpc64le-linux-gnu-gcc (Debian 7.2.0-7) 7.2.0
+> >
+> > and it says that it's little-endian somehow:
+> >
+> > $ powerpc64le-linux-gnu-gcc -dM -E - < /dev/null | grep BYTE_ORDER
+> > #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+> >
+> > Is it broke compiler? Or I always hold it wrong? Is there some
+> > additional flag I need to add?
+>
+> It looks like a bug in the kernel Makefiles to me. powerpc32 is always
+> big-endian,
+> powerpc64 used to be big-endian but is now usually little-endian. There are
+> often three separate toolchains that default to the respective user
+> space targets
+> (ppc32be, ppc64be, ppc64le), but generally you should be able to build
+> any of the
+> three kernel configurations with any of those compilers, and have the Makefile
+> pass the correct -m32/-m64/-mbig-endian/-mlittle-endian command line options
+> depending on the kernel configuration. It seems that this is not happening
+> here. I have not checked why, but if this is the problem, it should be
+> easy enough
+> to figure out.
 
-Why are we concerned about suid?  Don=E2=80=99t we already block suid if the=
- path being execed doesn=E2=80=99t come from the current mountns?  That shou=
-ld mostly cover the things we care about, no?
 
-I suppose we could also block suid for deleted files, so that deleting a kno=
-wn-buggy suid binary becomes more reliable. But every sensible package tool s=
-hould already be chmoding the suid away before unlinking.=
+Thanks! This clears a lot.
+This may be a bug in our magic as we try to build kernel files outside
+of make with own flags (required to extract parts of kernel
+interfaces).
+So don't spend time looking for the Makefile bugs yet.
