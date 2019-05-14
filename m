@@ -2,104 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E251C725
-	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2019 12:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D571CF2F
+	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2019 20:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726314AbfENKnQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 May 2019 06:43:16 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39300 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725893AbfENKnQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 14 May 2019 06:43:16 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id D4BF7AC3F;
-        Tue, 14 May 2019 10:43:13 +0000 (UTC)
-Date:   Tue, 14 May 2019 12:43:11 +0200
-From:   Cyril Hrubis <chrubis@suse.cz>
-To:     Yuri Norov <ynorov@marvell.com>
-Cc:     Andreas Schwab <schwab@suse.de>, Yury Norov <yury.norov@gmail.com>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
-        Joseph Myers <joseph@codesourcery.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Steve Ellcey <sellcey@caviumnetworks.com>,
-        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
-        Alexander Graf <agraf@suse.de>,
-        Bamvor Zhangjian <bamv2005@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Adam Borowski <kilobyte@angband.pl>,
-        Manuel Montezelo <manuel.montezelo@gmail.com>,
-        James Hogan <james.hogan@imgtec.com>,
-        Chris Metcalf <cmetcalf@mellanox.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Pinski <pinskia@gmail.com>,
-        Lin Yongting <linyongting@huawei.com>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Nathan_Lynch <Nathan_Lynch@mentor.com>,
+        id S1726429AbfENShy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 May 2019 14:37:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48392 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726229AbfENShy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 May 2019 14:37:54 -0400
+Received: from oasis.local.home (50-204-120-225-static.hfc.comcastbusiness.net [50.204.120.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 863D8204FD;
+        Tue, 14 May 2019 18:37:52 +0000 (UTC)
+Date:   Tue, 14 May 2019 14:37:51 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        christophe leroy <christophe.leroy@c-s.fr>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "Tobin C . Harding" <me@tobin.cc>, Michal Hocko <mhocko@suse.cz>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Christoph Muellner <christoph.muellner@theobroma-systems.com>
-Subject: Re: [LTP] [EXT] Re: [PATCH v9 00/24] ILP32 for ARM64
-Message-ID: <20190514104311.GA24708@rei>
-References: <20180516081910.10067-1-ynorov@caviumnetworks.com>
- <20190508225900.GA14091@yury-thinkpad>
- <mvmtvdyoi33.fsf@suse.de>
- <MN2PR18MB30865B950D85C6463EB0E1D4CB0F0@MN2PR18MB3086.namprd18.prod.outlook.com>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Russell Currey <ruscur@russell.cc>,
+        Stephen Rothwell <sfr@ozlabs.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: Re: [PATCH] vsprintf: Do not break early boot with probing
+ addresses
+Message-ID: <20190514143751.48e81e05@oasis.local.home>
+In-Reply-To: <CAMuHMdXaMObq9h2Sb49PW1-HUysPeaWXB7wJmKFz=xLmSoUDZg@mail.gmail.com>
+References: <20190510081635.GA4533@jagdpanzerIV>
+        <20190510084213.22149-1-pmladek@suse.com>
+        <20190510122401.21a598f6@gandalf.local.home>
+        <daf4dfd1-7f4f-8b92-6866-437c3a2be28b@c-s.fr>
+        <096d6c9c17b3484484d9d9d3f3aa3a7c@AcuMS.aculab.com>
+        <20190513091320.GK9224@smile.fi.intel.com>
+        <20190513124220.wty2qbnz4wo52h3x@pathway.suse.cz>
+        <20190514020730.GA651@jagdpanzerIV>
+        <45348cf615fe40d383c1a25688d4a88f@AcuMS.aculab.com>
+        <CAMuHMdXaMObq9h2Sb49PW1-HUysPeaWXB7wJmKFz=xLmSoUDZg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN2PR18MB30865B950D85C6463EB0E1D4CB0F0@MN2PR18MB3086.namprd18.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi!
-> > There is a problem with the stack size accounting during execve when
-> > there is no stack limit:
+
+[ Purple is a nice shade on the bike shed. ;-) ]
+
+On Tue, 14 May 2019 11:02:17 +0200
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+
+> On Tue, May 14, 2019 at 10:29 AM David Laight <David.Laight@aculab.com> wrote:
+> > > And I like Steven's "(fault)" idea.
+> > > How about this:
+> > >
+> > >       if ptr < PAGE_SIZE              -> "(null)"
+> > >       if IS_ERR_VALUE(ptr)            -> "(fault)"
+> > >
+> > >       -ss  
 > >
-> > $ ulimit -s
-> > 8192
-> > $ ./hello.ilp32 
-> > Hello World!
-> > $ ulimit -s unlimited
-> > $ ./hello.ilp32 
-> > Segmentation fault
-> > $ strace ./hello.ilp32 
-> > execve("./hello.ilp32", ["./hello.ilp32"], 0xfffff10548f0 /* 77 vars */) = -1 ENOMEM (Cannot allocate memory)
-> > +++ killed by SIGSEGV +++
-> > Segmentation fault (core dumped)
-> >
-> > Andreas.
+> > Or:
+> >         if (ptr < PAGE_SIZE)
+> >                 return ptr ? "(null+)" : "(null)";
+
+Hmm, that is useful.
+
+> >         if IS_ERR_VALUE(ptr)
+> >                 return "(errno)"  
+
+I still prefer "(fault)" as is pretty much all I would expect from a
+pointer dereference, even if it is just bad parsing of, say, a parsing
+an MAC address. "fault" is generic enough. "errno" will be confusing,
+because that's normally a variable not a output.
+
 > 
-> Thanks Andreas, I will take a look. Do we have such test in LTP?
+> Do we care about the value? "(-E%u)"?
 
-We do have a test that we can run a binary with very small stack size
-i.e. 512kB but there does not seem to be anything that would catch this
-specific problem.
+That too could be confusing. What would (-E22) be considered by a user
+doing an sprintf() on some string. I know that would confuse me, or I
+would think that it was what the %pX displayed, and wonder why it
+displayed it that way. Whereas "(fault)" is quite obvious for any %p
+use case.
 
-Can you please open an issue and describe how to reproduce the problem
-at our github tracker:
-
-https://github.com/linux-test-project/ltp/issues
-
-Then we can create testcase based on that reproducer later on.
-
--- 
-Cyril Hrubis
-chrubis@suse.cz
+-- Steve
