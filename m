@@ -2,24 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F383B1F77A
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2019 17:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB401F78E
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2019 17:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727880AbfEOPae (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 May 2019 11:30:34 -0400
-Received: from ou.quest-ce.net ([195.154.187.82]:38534 "EHLO ou.quest-ce.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726335AbfEOPad (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 May 2019 11:30:33 -0400
-Received: from [2a01:e35:39f2:1220:2452:dd6c:fe2f:be2c] (helo=opteyam2)
-        by ou.quest-ce.net with esmtpsa (TLS1.1:RSA_AES_256_CBC_SHA1:256)
-        (Exim 4.80)
-        (envelope-from <ydroneaud@opteya.com>)
-        id 1hQvqH-0005C0-ER; Wed, 15 May 2019 17:29:17 +0200
-Message-ID: <7afb23699142a3a15f06afde43506458a58614a6.camel@opteya.com>
-From:   Yann Droneaud <ydroneaud@opteya.com>
-To:     Christian Brauner <christian@brauner.io>
-Cc:     jannh@google.com, oleg@redhat.com, viro@zeniv.linux.org.uk,
+        id S1728405AbfEOPas (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 May 2019 11:30:48 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:42055 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728415AbfEOPas (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 May 2019 11:30:48 -0400
+Received: by mail-ed1-f67.google.com with SMTP id l25so377432eda.9
+        for <linux-arch@vger.kernel.org>; Wed, 15 May 2019 08:30:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=aA/9xJj7LTMF1BWw8aRur3CJhiNYxnU3NsvAQ/tm1xk=;
+        b=cVOJomieev/iQakiPOTryvyjScY68JwrcjZ9tnp9aeBqv3wRx4Edk6Zam5C4dpe1lU
+         ogJ1bz/0uxayIY+dTGNRsGRKQE6a7udSOJYX/3GGdfJsVPiUlo9NIVE5wtEn+5hBwiSU
+         gwP9J1DGbHYliH8LbuzUv/B66fmaNK+5+P4Nf0pkHXalxp2DHQe3TjDimH0gP6oUwq5l
+         okb7EvO9DMTE9eTKyMdqlLNyrY47JfXoH49cTCN0H2L4KRmjYeMaDxi5FvoPvo3asXpV
+         5VjgjpZVUupeOdTmVGMkhRg4ZLi1nCgbsXBRTgk7m9FRnUbqV0616Vj7CPnf3pkdvUzD
+         ZpUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=aA/9xJj7LTMF1BWw8aRur3CJhiNYxnU3NsvAQ/tm1xk=;
+        b=oQ5TPGZCUh3QqWVuOVzet3geq9XtEtRGLfdytKisQ++loBIy6GMzKjQ7+FGvkZI5+H
+         I9X+TgY+L6jxC+hxwwrXFXmqfn3k45V7Qp/fYTKdnxIpwl08nf9P3OOY2CsrHj1hPjsQ
+         FeIobm4RpsplLHUnV6yugLZaSmJOkn7yUZEFHAWIPO+YYxP1Z7UGYFAyco39L4ZQd0vj
+         B102w6YWSUivJfxXwOhU2fpazNYkffWp9PnR2xQiXHScTfRoHPxgkB4fjVlqCBquFhw8
+         n2rdYbr1J+zogmI6ZcR9HVSNFGmh5jp5gA+Ly3PL3oVyzAWVBW9Mh4jYBJyISiRo7r1y
+         RVhg==
+X-Gm-Message-State: APjAAAUDxdEaW3Ka7BaZfRl86uo4YUXHpNOgyVpqvhnPF+OqNpi2ZdXe
+        z7NFF1ATO1Z+44D7X2Z8NgfdWw==
+X-Google-Smtp-Source: APXvYqw0QCYB7YlBSERFfTRieSPZ+dY7tEzUwoL9QiWp8tjx2MbhTffXtauytMVbchs42mNvhzDMIw==
+X-Received: by 2002:a50:99ca:: with SMTP id n10mr44141540edb.279.1557934246270;
+        Wed, 15 May 2019 08:30:46 -0700 (PDT)
+Received: from brauner.io ([193.96.224.243])
+        by smtp.gmail.com with ESMTPSA id d4sm924077edk.46.2019.05.15.08.30.43
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 15 May 2019 08:30:45 -0700 (PDT)
+Date:   Wed, 15 May 2019 17:30:42 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     jannh@google.com, viro@zeniv.linux.org.uk,
         torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
         arnd@arndb.de, dhowells@redhat.com, akpm@linux-foundation.org,
         cyphar@cyphar.com, ebiederm@xmission.com,
@@ -32,113 +60,67 @@ Cc:     jannh@google.com, oleg@redhat.com, viro@zeniv.linux.org.uk,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, linux-api@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date:   Wed, 15 May 2019 17:29:16 +0200
-In-Reply-To: <20190515141634.lrc5ynllcmjr64mn@brauner.io>
-References: <20190515100400.3450-1-christian@brauner.io>
-         <4c5ae46657e1931a832def5645db61eb0bf1accd.camel@opteya.com>
-         <20190515141634.lrc5ynllcmjr64mn@brauner.io>
-Organization: OPTEYA
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.2 (3.32.2-1.fc30) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a01:e35:39f2:1220:2452:dd6c:fe2f:be2c
-X-SA-Exim-Mail-From: ydroneaud@opteya.com
-X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on ou.quest-ce.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=ham version=3.3.2
 Subject: Re: [PATCH 1/2] pid: add pidfd_open()
-X-SA-Exim-Version: 4.2.1 (built Mon, 26 Dec 2011 16:24:06 +0000)
-X-SA-Exim-Scanned: Yes (on ou.quest-ce.net)
+Message-ID: <20190515153041.cshzaj7xhf2p4zv7@brauner.io>
+References: <20190515100400.3450-1-christian@brauner.io>
+ <20190515143857.GB18892@redhat.com>
+ <20190515144927.f2yxyi6w6lhn3xx7@brauner.io>
+ <20190515151912.GE18892@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190515151912.GE18892@redhat.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-Le mercredi 15 mai 2019 à 16:16 +0200, Christian Brauner a écrit :
-> On Wed, May 15, 2019 at 04:00:20PM +0200, Yann Droneaud wrote:
-> > Le mercredi 15 mai 2019 à 12:03 +0200, Christian Brauner a écrit :
-> > > diff --git a/kernel/pid.c b/kernel/pid.c
-> > > index 20881598bdfa..237d18d6ecb8 100644
-> > > --- a/kernel/pid.c
-> > > +++ b/kernel/pid.c
-> > > @@ -451,6 +452,53 @@ struct pid *find_ge_pid(int nr, struct
-> > > pid_namespace *ns)
-> > >  	return idr_get_next(&ns->idr, &nr);
-> > >  }
-> > >  
-> > > +/**
-> > > + * pidfd_open() - Open new pid file descriptor.
-> > > + *
-> > > + * @pid:   pid for which to retrieve a pidfd
-> > > + * @flags: flags to pass
-> > > + *
-> > > + * This creates a new pid file descriptor with the O_CLOEXEC flag set for
-> > > + * the process identified by @pid. Currently, the process identified by
-> > > + * @pid must be a thread-group leader. This restriction currently exists
-> > > + * for all aspects of pidfds including pidfd creation (CLONE_PIDFD cannot
-> > > + * be used with CLONE_THREAD) and pidfd polling (only supports thread group
-> > > + * leaders).
-> > > + *
-> > 
-> > Would it be possible to create file descriptor with "restricted"
-> > operation ?
-> > 
-> > - O_RDONLY: waiting for process completion allowed (for example)
-> > - O_WRONLY: sending process signal allowed
+On Wed, May 15, 2019 at 05:19:13PM +0200, Oleg Nesterov wrote:
+> On 05/15, Christian Brauner wrote:
+> >
+> > On Wed, May 15, 2019 at 04:38:58PM +0200, Oleg Nesterov wrote:
+> > >
+> > > it seems that you can do a single check
+> > >
+> > > 	tsk = pid_task(p, PIDTYPE_TGID);
+> > > 	if (!tsk)
+> > > 		ret = -ESRCH;
+> > >
+> > > this even looks more correct if we race with exec changing the leader.
+> >
+> > The logic here being that you can only reach the thread_group leader
+> > from struct pid if PIDTYPE_PID == PIDTYPE_TGID for this struct pid?
 > 
-> Yes, something like this is likely going to be possible in the future.
-> We had discussion around this. But mapping this to O_RDONLY and O_WRONLY
-> is not the right model. It makes more sense to have specialized flags
-> that restrict actions.
-
-Yes, dedicated flags are the way to go. I've used the old open() flags
-here as examples as an echo of the O_CLOEXEC flag used in the comment.
-
-> > For example, a process could send over a Unix socket a process a pidfd,
-> > allowing this to only wait for completion, but not sending signal ?
-> > 
-> > I see the permission check is not done in pidfd_open(), so what prevent
-> > a user from sending a signal to another user owned process ?
+> Not exactly... it is not that PIDTYPE_PID == PIDTYPE_TGID for this pid,
+> struct pid has no "type" or something like this.
 > 
-> That's supposed to be possible. You can do the same right now already
-> with pids. Tools like LMK need this probably very much.
-> Permission checking for signals is done at send time right now.
-> And if you can't signal via a pid you can't signal via a pidfd as
-> they're both subject to the same permissions checks.
+> The logic is that pid->tasks[PIDTYPE_XXX] is the list of task which use
+> this pid as "XXX" type.
 > 
+> For example, clone(CLONE_THREAD) creates a pid which has a single non-
+> empty list, pid->tasks[PIDTYPE_PID]. This pid can't be used as TGID or
+> SID.
+> 
+> So if pid_task(PIDTYPE_TGID) returns non-NULL we know that this pid was
+> used for a group-leader, see copy_process() which does
 
-I would have expect it to behave like most other file descriptor,
-permission check done at opening time, which allow more privileged
-process to open the file descriptor, then pass it to a less privileged
-process, or change its own privileged with setuid() and such. Then the
-less privileged process can act on behalf of the privileged process
-through the file descriptor.
+Ah, this was what I was asking myself when I worked on thread-specific
+signal sending. This clarifies quite a lot of things!
 
-> > If it's in pidfd_send_signal(), then, passing the socket through
-> > SCM_RIGHT won't be useful if the target process is not owned by the
-> > same user, or root.
-> > 
+Though I wonder how one reliably gets a the PGID or SID from a
+PIDTYPE_PID.
 
-If the permission check is done at sending time, the scenario above
-case cannot be implemented.
+> 
+> 	if (thread_group_leader(p))
+> 		attach_pid(p, PIDTYPE_TGID);
+> 
+> 
+> If we race with exec which changes the leader pid_task(TGID) can return
+> the old leader. We do not care, but this means that we should not check
+> thread_group_leader().
 
-Sending a pidfd through SCM_RIGHT is only useful if the receiver
-process is equally or more privileged than the sender then.
+Nice!
 
-For isolation purpose, I would have expect to be able to give a right
-to send a signal to a highly privileged process a specific less
-privileged process though Unix socket.
-
-But I can't come up with a specific use case. So I dunno.
-
-Regards.
-
--- 
-Yann Droneaud
-OPTEYA
-
-
+Thank you, Oleg! :)
+Christian
