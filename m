@@ -2,199 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E321EDB1
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2019 13:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C611F45F
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2019 14:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729543AbfEOLMa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 May 2019 07:12:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47592 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729323AbfEOLM3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 May 2019 07:12:29 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 47EEF2166E;
-        Wed, 15 May 2019 11:12:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557918747;
-        bh=WgsScHMpisY5aHLwlPFjumJ7HZxUMIqhdz3l32X74DU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AwrhmcDe3APCyYte4AZ0L4fpoPstC1d34sSe/R31bqXm6BqRudYPblij35EobdXMM
-         u6pozZf9zpJ5FFIw2kl8MGs3kX9sN2eo2Zjo9yJ0Rs3yd3burXA58Y3EcVSjAn2CGU
-         1Uj4yamOfHqLGIMZO5rfBnVn97dgCHhpvK8ZAhxU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Kosina <jkosina@suse.cz>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Jon Masters <jcm@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Tyler Hicks <tyhicks@canonical.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Steven Price <steven.price@arm.com>,
-        Phil Auld <pauld@redhat.com>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.4 248/266] x86/speculation: Support mitigations= cmdline option
-Date:   Wed, 15 May 2019 12:55:55 +0200
-Message-Id: <20190515090731.402525457@linuxfoundation.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190515090722.696531131@linuxfoundation.org>
-References: <20190515090722.696531131@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1726997AbfEOM32 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 May 2019 08:29:28 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:37222 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726803AbfEOM31 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 May 2019 08:29:27 -0400
+Received: by mail-vs1-f68.google.com with SMTP id o5so1566244vsq.4;
+        Wed, 15 May 2019 05:29:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cgdsZEIH2W5eTMf3uaLx4q/hdk2jHzw6fNgJE2/Ss+k=;
+        b=Kl1WAuyv9mYDtkcZTKYWwrcEjYd5h2UITDxQ0i8bc3etfxEnmdO91neWn/D44ScI5o
+         2dPdO26CQ2qpDl0OYOdMME31KZPnk7J8rqt+3+UpgGHGJf3t+chzENYfs7KbrbcznjdH
+         vIvZbymPN0VSnn0Lvj2a3Rkl5szI2YD322jgtVWxlH4lV7ufSmV17xZStx7q5sWryg49
+         pBT++UmGoudT2A4o0d6xVTbTeqSpws9htAsHYUAgQg0bJaeFwQQVrHN7HYMFZ8iOvBTX
+         ZHz5cXs/jzxNfwyxJFN2ZaYbWBoR9+6Ak/XcQ7PIif51U6J0arvK8IuGEdf44ZxsMA44
+         4y9A==
+X-Gm-Message-State: APjAAAUaz+8HolnY8TfWhHskyIP01Y9I2M/xPNoy+LiPFTZvtYNQJwpj
+        XRwh9qVedYi6mqWJlHL+YhcutX43utUGBoWcLrM=
+X-Google-Smtp-Source: APXvYqzDAJzfhabDwTYAYFXSOnY37iC0IXZoLvq4QwE8CVpdlrcgi5gg8xMkv97L4kuyL6Wc28Zhp7a2DMatRjdZeGY=
+X-Received: by 2002:a67:8e03:: with SMTP id q3mr20471095vsd.152.1557923365973;
+ Wed, 15 May 2019 05:29:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20190515100400.3450-1-christian@brauner.io>
+In-Reply-To: <20190515100400.3450-1-christian@brauner.io>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 15 May 2019 14:29:14 +0200
+Message-ID: <CAMuHMdUKJOP2H4cVy0Na5hjn2-HUbfvE_zbctS4L9d-h9Oru4Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] pid: add pidfd_open()
+To:     Christian Brauner <christian@brauner.io>
+Cc:     Jann Horn <jannh@google.com>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        elena.reshetova@intel.com, Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>, cyphar@cyphar.com,
+        Andy Lutomirski <luto@amacapital.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
+On Wed, May 15, 2019 at 12:04 PM Christian Brauner <christian@brauner.io> wrote:
+> This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
+> pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
+> process that is created via traditional fork()/clone() calls that is only
+> referenced by a PID:
+>
+> int pidfd = pidfd_open(1234, 0);
+> ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
+>
+> With the introduction of pidfds through CLONE_PIDFD it is possible to
+> created pidfds at process creation time.
+> However, a lot of processes get created with traditional PID-based calls
+> such as fork() or clone() (without CLONE_PIDFD). For these processes a
+> caller can currently not create a pollable pidfd. This is a huge problem
+> for Android's low memory killer (LMK) and service managers such as systemd.
+> Both are examples of tools that want to make use of pidfds to get reliable
+> notification of process exit for non-parents (pidfd polling) and race-free
+> signal sending (pidfd_send_signal()). They intend to switch to this API for
+> process supervision/management as soon as possible. Having no way to get
+> pollable pidfds from PID-only processes is one of the biggest blockers for
+> them in adopting this api. With pidfd_open() making it possible to retrieve
+> pidfd for PID-based processes we enable them to adopt this api.
+>
+> In line with Arnd's recent changes to consolidate syscall numbers across
+> architectures, I have added the pidfd_open() syscall to all architectures
+> at the same time.
+>
+> Signed-off-by: Christian Brauner <christian@brauner.io>
 
-commit d68be4c4d31295ff6ae34a8ddfaa4c1a8ff42812 upstream.
+>  arch/m68k/kernel/syscalls/syscall.tbl       |  1 +
 
-Configure x86 runtime CPU speculation bug mitigations in accordance with
-the 'mitigations=' cmdline option.  This affects Meltdown, Spectre v2,
-Speculative Store Bypass, and L1TF.
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-The default behavior is unchanged.
+Gr{oetje,eeting}s,
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Jiri Kosina <jkosina@suse.cz> (on x86)
-Reviewed-by: Jiri Kosina <jkosina@suse.cz>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: "H . Peter Anvin" <hpa@zytor.com>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Jon Masters <jcm@redhat.com>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
-Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-Cc: linux-s390@vger.kernel.org
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will.deacon@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-arch@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Tyler Hicks <tyhicks@canonical.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Steven Price <steven.price@arm.com>
-Cc: Phil Auld <pauld@redhat.com>
-Link: https://lkml.kernel.org/r/6616d0ae169308516cfdf5216bedd169f8a8291b.1555085500.git.jpoimboe@redhat.com
-[bwh: Backported to 4.4:
- - Drop the auto,nosmt option and the l1tf mitigation selection, which we can't
-   support
- - Adjust filenames, context]
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- Documentation/kernel-parameters.txt |   14 +++++++++-----
- arch/x86/kernel/cpu/bugs.c          |    6 ++++--
- arch/x86/mm/kaiser.c                |    4 +++-
- 3 files changed, 16 insertions(+), 8 deletions(-)
+                        Geert
 
---- a/Documentation/kernel-parameters.txt
-+++ b/Documentation/kernel-parameters.txt
-@@ -2174,15 +2174,19 @@ bytes respectively. Such letter suffixes
- 			http://repo.or.cz/w/linux-2.6/mini2440.git
- 
- 	mitigations=
--			Control optional mitigations for CPU vulnerabilities.
--			This is a set of curated, arch-independent options, each
--			of which is an aggregation of existing arch-specific
--			options.
-+			[X86] Control optional mitigations for CPU
-+			vulnerabilities.  This is a set of curated,
-+			arch-independent options, each of which is an
-+			aggregation of existing arch-specific options.
- 
- 			off
- 				Disable all optional CPU mitigations.  This
- 				improves system performance, but it may also
- 				expose users to several CPU vulnerabilities.
-+				Equivalent to: nopti [X86]
-+					       nospectre_v2 [X86]
-+					       spectre_v2_user=off [X86]
-+					       spec_store_bypass_disable=off [X86]
- 
- 			auto (default)
- 				Mitigate all CPU vulnerabilities, but leave SMT
-@@ -2190,7 +2194,7 @@ bytes respectively. Such letter suffixes
- 				users who don't want to be surprised by SMT
- 				getting disabled across kernel upgrades, or who
- 				have other ways of avoiding SMT-based attacks.
--				This is the default behavior.
-+				Equivalent to: (default behavior)
- 
- 	mminit_loglevel=
- 			[KNL] When CONFIG_DEBUG_MEMORY_INIT is set, this
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -479,7 +479,8 @@ static enum spectre_v2_mitigation_cmd __
- 	char arg[20];
- 	int ret, i;
- 
--	if (cmdline_find_option_bool(boot_command_line, "nospectre_v2"))
-+	if (cmdline_find_option_bool(boot_command_line, "nospectre_v2") ||
-+	    cpu_mitigations_off())
- 		return SPECTRE_V2_CMD_NONE;
- 
- 	ret = cmdline_find_option(boot_command_line, "spectre_v2", arg, sizeof(arg));
-@@ -743,7 +744,8 @@ static enum ssb_mitigation_cmd __init ss
- 	char arg[20];
- 	int ret, i;
- 
--	if (cmdline_find_option_bool(boot_command_line, "nospec_store_bypass_disable")) {
-+	if (cmdline_find_option_bool(boot_command_line, "nospec_store_bypass_disable") ||
-+	    cpu_mitigations_off()) {
- 		return SPEC_STORE_BYPASS_CMD_NONE;
- 	} else {
- 		ret = cmdline_find_option(boot_command_line, "spec_store_bypass_disable",
---- a/arch/x86/mm/kaiser.c
-+++ b/arch/x86/mm/kaiser.c
-@@ -10,6 +10,7 @@
- #include <linux/mm.h>
- #include <linux/uaccess.h>
- #include <linux/ftrace.h>
-+#include <linux/cpu.h>
- 
- #undef pr_fmt
- #define pr_fmt(fmt)     "Kernel/User page tables isolation: " fmt
-@@ -297,7 +298,8 @@ void __init kaiser_check_boottime_disabl
- 			goto skip;
- 	}
- 
--	if (cmdline_find_option_bool(boot_command_line, "nopti"))
-+	if (cmdline_find_option_bool(boot_command_line, "nopti") ||
-+	    cpu_mitigations_off())
- 		goto disable;
- 
- skip:
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
