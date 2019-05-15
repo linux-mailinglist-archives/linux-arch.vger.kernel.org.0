@@ -2,136 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D55C1E5AA
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2019 01:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FF01E836
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2019 08:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbfENXlx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 May 2019 19:41:53 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:34680 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726246AbfENXlw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 May 2019 19:41:52 -0400
-Received: by mail-pg1-f193.google.com with SMTP id c13so353950pgt.1;
-        Tue, 14 May 2019 16:41:52 -0700 (PDT)
+        id S1725871AbfEOGVR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 May 2019 02:21:17 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:34063 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725857AbfEOGVQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 May 2019 02:21:16 -0400
+Received: by mail-pl1-f194.google.com with SMTP id w7so820478plz.1;
+        Tue, 14 May 2019 23:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=DY6OWxXL6Mkjdnz9bKItmOBCwg7lWspCryDrZpJJELw=;
-        b=X4mfkQznNYHZpXmFQYc7WK7z6OUmo6Sk25Nz/vjKV2dkhuYPBTUE6ya8Uuvkk/gBjh
-         yA9ixJsoOl6ZMN9xYtfiFtg3vHtMFGQ1iOyOf+mqu3wjSEummwRW/BRDCd+QtgiQZPHj
-         pa7E7QrakEnijd59IO6EK+x0NSpSwHa5cORHnMYA76qNEjYcLFOmQ1p30SGuBQR708zp
-         CygDrnfb/RYOSwMJwPiynqo8DLa4PyaW8HtNT/zDcyu4TUn3xmi3AVBPGtHTxz+qem38
-         Nxe3M+AbbxfJsYvo5uXQMhJnOobYuVgUeifiaAKUUDLjXnmhcvT22u4FH00JEvinEmNk
-         a4zA==
+        bh=vpr9qeWej7/xdaLzfL7kzDfFrVNMEMZWeQ2yDGuvcWA=;
+        b=o375KU68c6cq1L9rhDvFqMLy/36KzkumU5eyglTJpzMIPwAslM+THguYtGV24yszrB
+         AfYo9WtSVI4YPeApa2se9off1OySDBkrKN7buQLJmfCNI/aUK7RfjMnE/bGxwyACd7HW
+         g43h4W/w7cF1ebM7p3GlKDoMC/No0MM/60V7FFaBW4jE3VheGcBQfsSDliKPbh80RMYI
+         dOTUBqDXrX4eE2LtTtSOQAHYRUCrNB5AZxKgRYAE1MmJfuYWQBqZx6l5sqSUhtrZ1gg1
+         924TKUokkcN8xRTqUfEE68pHktdBzMgi/pqoWUNqh/12ErYeobF1s95PpggCN9DKAtsk
+         f1rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DY6OWxXL6Mkjdnz9bKItmOBCwg7lWspCryDrZpJJELw=;
-        b=MhFrLICxYeyG1sLxG005khR4XzbPUPvwVaSGdLkhQB2LPSbri+aCSuL2DEAAWDIncm
-         whd+FefsCD6Tv+74PyJ6vg9wwbPGuEzOL8a2/g/6Z8QkTHbC1dOBC/zthloX3/f3sT40
-         4wDaM+jeawho9E5SSUhwYm6lyAMoYNZVyha2Ix6VQlL/7TMLMcTEtumUkjPylo1MJCn+
-         5Z2Eu/ug9TMLNToS0D5r/GZrqV637UihhUL/oTeIhlh1duTbbW4Q7e61f8H9TSzx969t
-         II5nfyi2ZBq40sZ24GfrZs6HDw7XQfLstKB0qD2tU2KYH8YeqhAveUeuwL1UyDZ2UgWu
-         8CZQ==
-X-Gm-Message-State: APjAAAXVlRbOpSeBT53jmiW0GQMhHP/Yn8WWB/xupgMlWR40yEx8V6yI
-        3D1aQBHUu0gVHeZ1lmtt3Go=
-X-Google-Smtp-Source: APXvYqwNBpkrVnbSQYAwgohdGmjunNQdCGyoDBa+JV+/+DN57azD9XaTe7h6TpYw5x0TTy4MoQNjgQ==
-X-Received: by 2002:a63:4346:: with SMTP id q67mr40722725pga.241.1557877311862;
-        Tue, 14 May 2019 16:41:51 -0700 (PDT)
-Received: from localhost ([2601:640:5:a19f:19d3:11c4:475e:3daa])
-        by smtp.gmail.com with ESMTPSA id u123sm290199pfu.67.2019.05.14.16.41.50
+        bh=vpr9qeWej7/xdaLzfL7kzDfFrVNMEMZWeQ2yDGuvcWA=;
+        b=f8nL02xSEYVSbcj6sJKVmwUBPhGsE4ITx1ly+NWa0OYFUyFGyYGRWfoL5YNj46+0hT
+         qRCZeAFD2MHkWsLxZ2I1gEVzKQ7fqPfopCQTAai3Nqib5FzIBrzfCxg6G/bF1dhbykPU
+         bZweLAuWJcjxVg64qxDgTt/TvGYD+yjRycN3FzffI3chGVYwd0ZqNyIj+/OIIUQnF+mP
+         gt3e0y1+9uF4SQdgeSYK2E7HOXm/OD/4b1UKfo7nhC5hCZIu9hfmZhmC3U/t5iCjwZjd
+         c60dyfnbzfONgwCXTrzS7zz+3CnEdGQ9x2kb8/E1VS/eKEsJFHVvw8m4La8dJrReiMA2
+         IZyQ==
+X-Gm-Message-State: APjAAAUoi/Lg/x/VT3FgLL1CnuH/RZJSrZcEWbYnKKJSmVCM3DJOnyO4
+        mPzG4XMVCNU2/diw0kZFz3I=
+X-Google-Smtp-Source: APXvYqzRJKRDGGgSFBUw3D9wrq2bEKNWyL8HrksRCPNPrE+2T1MlywAkkHnSpqiXENFfwknkCI68dQ==
+X-Received: by 2002:a17:902:6bc8:: with SMTP id m8mr41177371plt.227.1557901275995;
+        Tue, 14 May 2019 23:21:15 -0700 (PDT)
+Received: from localhost ([110.70.52.120])
+        by smtp.gmail.com with ESMTPSA id f4sm1300687pfn.118.2019.05.14.23.21.14
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 May 2019 16:41:51 -0700 (PDT)
-Date:   Tue, 14 May 2019 16:41:49 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Cyril Hrubis <chrubis@suse.cz>
-Cc:     Yuri Norov <ynorov@marvell.com>, Andreas Schwab <schwab@suse.de>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
-        Joseph Myers <joseph@codesourcery.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Steve Ellcey <sellcey@caviumnetworks.com>,
-        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
-        Alexander Graf <agraf@suse.de>,
-        Bamvor Zhangjian <bamv2005@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Adam Borowski <kilobyte@angband.pl>,
-        Manuel Montezelo <manuel.montezelo@gmail.com>,
-        James Hogan <james.hogan@imgtec.com>,
-        Chris Metcalf <cmetcalf@mellanox.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Pinski <pinskia@gmail.com>,
-        Lin Yongting <linyongting@huawei.com>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Nathan_Lynch <Nathan_Lynch@mentor.com>,
+        Tue, 14 May 2019 23:21:14 -0700 (PDT)
+Date:   Wed, 15 May 2019 15:21:11 +0900
+From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        David Laight <David.Laight@aculab.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        christophe leroy <christophe.leroy@c-s.fr>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "Tobin C . Harding" <me@tobin.cc>, Michal Hocko <mhocko@suse.cz>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Christoph Muellner <christoph.muellner@theobroma-systems.com>
-Subject: Re: [LTP] [EXT] Re: [PATCH v9 00/24] ILP32 for ARM64
-Message-ID: <20190514234149.GA12077@yury-thinkpad>
-References: <20180516081910.10067-1-ynorov@caviumnetworks.com>
- <20190508225900.GA14091@yury-thinkpad>
- <mvmtvdyoi33.fsf@suse.de>
- <MN2PR18MB30865B950D85C6463EB0E1D4CB0F0@MN2PR18MB3086.namprd18.prod.outlook.com>
- <20190514104311.GA24708@rei>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Russell Currey <ruscur@russell.cc>,
+        Stephen Rothwell <sfr@ozlabs.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: Re: [PATCH] vsprintf: Do not break early boot with probing addresses
+Message-ID: <20190515062111.GA30030@jagdpanzerIV>
+References: <20190510122401.21a598f6@gandalf.local.home>
+ <daf4dfd1-7f4f-8b92-6866-437c3a2be28b@c-s.fr>
+ <096d6c9c17b3484484d9d9d3f3aa3a7c@AcuMS.aculab.com>
+ <20190513091320.GK9224@smile.fi.intel.com>
+ <20190513124220.wty2qbnz4wo52h3x@pathway.suse.cz>
+ <20190514020730.GA651@jagdpanzerIV>
+ <45348cf615fe40d383c1a25688d4a88f@AcuMS.aculab.com>
+ <CAMuHMdXaMObq9h2Sb49PW1-HUysPeaWXB7wJmKFz=xLmSoUDZg@mail.gmail.com>
+ <20190514143751.48e81e05@oasis.local.home>
+ <CAMuHMdUhy3uB+G23uXh__F2Y_Jsam5uS1Q5jJC95kWAOEM8WRA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190514104311.GA24708@rei>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAMuHMdUhy3uB+G23uXh__F2Y_Jsam5uS1Q5jJC95kWAOEM8WRA@mail.gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 14, 2019 at 12:43:11PM +0200, Cyril Hrubis wrote:
-> Hi!
-> > > There is a problem with the stack size accounting during execve when
-> > > there is no stack limit:
-> > >
-> > > $ ulimit -s
-> > > 8192
-> > > $ ./hello.ilp32 
-> > > Hello World!
-> > > $ ulimit -s unlimited
-> > > $ ./hello.ilp32 
-> > > Segmentation fault
-> > > $ strace ./hello.ilp32 
-> > > execve("./hello.ilp32", ["./hello.ilp32"], 0xfffff10548f0 /* 77 vars */) = -1 ENOMEM (Cannot allocate memory)
-> > > +++ killed by SIGSEGV +++
-> > > Segmentation fault (core dumped)
-> > >
-> > > Andreas.
-> > 
-> > Thanks Andreas, I will take a look. Do we have such test in LTP?
-> 
-> We do have a test that we can run a binary with very small stack size
-> i.e. 512kB but there does not seem to be anything that would catch this
-> specific problem.
-> 
-> Can you please open an issue and describe how to reproduce the problem
-> at our github tracker:
-> 
-> https://github.com/linux-test-project/ltp/issues
-> 
-> Then we can create testcase based on that reproducer later on.
+On (05/14/19 21:13), Geert Uytterhoeven wrote:
+> I would immediately understand there's a missing IS_ERR() check in a
+> function that can return  -EINVAL, without having to add a new printk()
+> to find out what kind of bogus value has been received, and without
+> having to reboot, and trying to reproduce...
 
-This is it:
-https://github.com/linux-test-project/ltp/issues/530
+But chances are that missing IS_ERR() will crash the kernel sooner
+or later (in general case), if not in sprintf() then somewhere else.
 
-Yury
+	-ss
