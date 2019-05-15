@@ -2,28 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7266E1F7A3
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2019 17:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B651F7CC
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2019 17:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbfEOPfY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 May 2019 11:35:24 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:60786 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726335AbfEOPfY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 May 2019 11:35:24 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 8E07930842A2;
-        Wed, 15 May 2019 15:35:23 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.43.17.159])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 884EC60BE5;
-        Wed, 15 May 2019 15:35:18 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 15 May 2019 17:35:20 +0200 (CEST)
-Date:   Wed, 15 May 2019 17:35:15 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Christian Brauner <christian@brauner.io>
+        id S1727511AbfEOPkV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 May 2019 11:40:21 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:34783 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728074AbfEOPkU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 May 2019 11:40:20 -0400
+Received: by mail-ed1-f68.google.com with SMTP id p27so499891eda.1
+        for <linux-arch@vger.kernel.org>; Wed, 15 May 2019 08:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xdgkq7E7+92ZW8x2Wkn7bfn+NRy1PNeG8DcUh6bxPio=;
+        b=bfuTPZdAtZJEgr+LRkX72jzoj84BPgpwvQPX7TINdboNhdzKNjJGvDzVvqvaaAh8Km
+         iqTakFfgT4CJH4/cI6DSpX88s8Sfap4XoOKg2RDeLLxirLNHPqbOEbbj/6aCt06XF/9P
+         X/us6CYYROr8DPKhgLY3SLh3ZeL1/eih/MR9PMbtrWfnl7CFIcBUAogBL0DY90Buod6x
+         uECgJQv/SirIkuk/ECloyg95oA5R0oldoWVKg0CvJmRDjoeJEJ6edtPOwuBN6C4fcGnO
+         BW2YYNw0hfraOKLIXAT/1qzfZOA/kv0yJLeVZCoYp69fdwL2bHQEsKScA+TLGS8z8aPr
+         de9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xdgkq7E7+92ZW8x2Wkn7bfn+NRy1PNeG8DcUh6bxPio=;
+        b=RxF6f5AyrnDmyi9t/k6yqKL2bIbGWQ8pTSnnkbW9RmdAhjngA539Jnisl6zlXn7ZFB
+         7TYTmNzsfgMbuuUpTlG28Kt+ETzuHHECccxZzbAdQP8Q4kL5HYCt3fhj4rnnoD5th1cQ
+         0Zbz6Nt/efHtFNtnPA3ZesMlX4mrzL+ccDn6Ukhfc1NiPYrJO4FFwDCW1UTMc/FZYORx
+         PuXWQScOA/On64P51pu0hTZUMCSPXUrkyRgPttLG1towl7vK3Rz5T9XngBcCQa1eYZ/4
+         eLEkwWPUP0lP0B7POSXYwofPSbR2fV+JRdBLuCMeG/mvRQzcaK4W6WPmmAoUykwEFTJr
+         0Jmg==
+X-Gm-Message-State: APjAAAVinJ/4E3z/Qv+jckHay0aLxmqQ3ZtxyDONKmha/lkJVIOEyyPZ
+        00hN6CzXSeXfbuj4hNn8QXtYE+ru8Dy4AA==
+X-Google-Smtp-Source: APXvYqwxmqRE9VJlOAD22A4kr7WHnyESSHU1d/yh8q05kzTP6OSdD5czfo3EsMWHZUHFy4XAQOiyOg==
+X-Received: by 2002:a50:87b5:: with SMTP id a50mr42379905eda.118.1557934819122;
+        Wed, 15 May 2019 08:40:19 -0700 (PDT)
+Received: from brauner.io ([193.96.224.243])
+        by smtp.gmail.com with ESMTPSA id p52sm887134eda.79.2019.05.15.08.40.16
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 15 May 2019 08:40:18 -0700 (PDT)
+Date:   Wed, 15 May 2019 17:40:15 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Oleg Nesterov <oleg@redhat.com>
 Cc:     jannh@google.com, viro@zeniv.linux.org.uk,
         torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
         arnd@arndb.de, dhowells@redhat.com, akpm@linux-foundation.org,
@@ -38,51 +61,52 @@ Cc:     jannh@google.com, viro@zeniv.linux.org.uk,
         linux-xtensa@linux-xtensa.org, linux-api@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH 1/2] pid: add pidfd_open()
-Message-ID: <20190515153515.GA20783@redhat.com>
+Message-ID: <20190515154014.4jaxuw4fcgbusnbt@brauner.io>
 References: <20190515100400.3450-1-christian@brauner.io>
  <20190515143857.GB18892@redhat.com>
+ <20190515153515.GA20783@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190515143857.GB18892@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Wed, 15 May 2019 15:35:24 +0000 (UTC)
+In-Reply-To: <20190515153515.GA20783@redhat.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 05/15, Oleg Nesterov wrote:
->
-> On 05/15, Christian Brauner wrote:
+On Wed, May 15, 2019 at 05:35:15PM +0200, Oleg Nesterov wrote:
+> On 05/15, Oleg Nesterov wrote:
 > >
-> > +SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
-> > +{
-> > +	int fd, ret;
-> > +	struct pid *p;
-> > +	struct task_struct *tsk;
-> > +
-> > +	if (flags)
-> > +		return -EINVAL;
-> > +
-> > +	if (pid <= 0)
-> > +		return -EINVAL;
-> > +
-> > +	p = find_get_pid(pid);
-> > +	if (!p)
-> > +		return -ESRCH;
-> > +
-> > +	rcu_read_lock();
-> > +	tsk = pid_task(p, PIDTYPE_PID);
->
-> You do not need find_get_pid() before rcu_lock and put_pid() at the end.
-> You can just do find_vpid() under rcu_read_lock().
+> > On 05/15, Christian Brauner wrote:
+> > >
+> > > +SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+> > > +{
+> > > +	int fd, ret;
+> > > +	struct pid *p;
+> > > +	struct task_struct *tsk;
+> > > +
+> > > +	if (flags)
+> > > +		return -EINVAL;
+> > > +
+> > > +	if (pid <= 0)
+> > > +		return -EINVAL;
+> > > +
+> > > +	p = find_get_pid(pid);
+> > > +	if (!p)
+> > > +		return -ESRCH;
+> > > +
+> > > +	rcu_read_lock();
+> > > +	tsk = pid_task(p, PIDTYPE_PID);
+> >
+> > You do not need find_get_pid() before rcu_lock and put_pid() at the end.
+> > You can just do find_vpid() under rcu_read_lock().
+> 
+> Ah, sorry. Somehow I forgot you need to call pidfd_create(pid), you can't
+> do this under rcu_read_lock().
+> 
+> So I was wrong, you can't avoid get/put_pid.
 
-Ah, sorry. Somehow I forgot you need to call pidfd_create(pid), you can't
-do this under rcu_read_lock().
+Yeah, I haven't made any changes yet.
 
-So I was wrong, you can't avoid get/put_pid.
-
-Oleg.
-
+Christian
