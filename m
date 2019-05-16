@@ -2,190 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C841FFF0
-	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2019 09:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCA420657
+	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2019 13:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726363AbfEPHE4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 May 2019 03:04:56 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:37480 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726277AbfEPHE4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 May 2019 03:04:56 -0400
-Received: by mail-vs1-f66.google.com with SMTP id o5so1641602vsq.4;
-        Thu, 16 May 2019 00:04:54 -0700 (PDT)
+        id S1727534AbfEPLul (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 May 2019 07:50:41 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42099 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726723AbfEPLuk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 May 2019 07:50:40 -0400
+Received: by mail-lj1-f193.google.com with SMTP id 188so2796600ljf.9
+        for <linux-arch@vger.kernel.org>; Thu, 16 May 2019 04:50:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZfZWKHa7k32vSF2Rgion0TnHTAjuA1aCE2qsRonqXP0=;
+        b=axwfrku8av26C74Qcnj8NMFl8LQW3ytVsyxJwHyHrABKFSul4eTIQRAgniBSpRNR2T
+         SUCKllbRVUhjH9a5M8vQ2ZctPU2aRCPW2zzHfrExJfmGQGGJKj+UZ8gMQKIIKMCg8q+W
+         d71EwYTR3Nq/rACyFL4CAxYsp4QgSeBRv2U7Q+fNBUsAFO7pdw4soy6W9pOYAyCeXSbD
+         CqdAcuzevt6wp/8joMtEkxOTMm36jy27fYgJD0kUVC1x24NqeVW7JvAfFlnUf7AVqtb0
+         wSTH5rhMPlygfwvgCPaK4TGfEgwd4+eSNjsCqRVenL0HNST+g99Optp097VsBxKhX9Dm
+         4j2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=q015/QHSXrok6Bw3iqMxHNHZLCbCNdwdW05xVaqSbFA=;
-        b=Adg2mPG3Opp+lMa037EF7O/Z1k8qcMAVRXY/0GcL5pmFYE4HfMGm08a0FIZgCUx/R5
-         8p0gqUgNp1uXo83fe0Bvp+XcCTJ+f7CL1DZYA2871cudz2eKINib1AMy7ZoH4O7XEKgj
-         cnNYXnnpGXoaqesWVesiJuB/7AHR53r8ohgG/JJ/ZMkfJIR5oz/YDxTaOzbw7Aw4LCsY
-         ZmwoXeDMXEW37JXu8THg6noFDcbR2CDSRP5KUVn8hL6jA/sla/eKVoOuHWyBaaTqr/8R
-         h7u4TlCjVHWXOuKyLSRRIxdidBroJHs9SBWaj3y9u/Pp1RyZDPvuu2afgGjJUVpnb30v
-         240Q==
-X-Gm-Message-State: APjAAAU2EBzwMfTpnl15FnXKz03Rx4nSwgbdczpkO7u/F24d7+uOXEH1
-        N/QHtB3e9hA76qWno7WlR3DpuxUzPyAbzoIo8O8=
-X-Google-Smtp-Source: APXvYqw6dkP3FpbWRddQ96QVJAiiTPvgI18vgQaVewrbrBgFk7NwzmrgB/94Q+BFkCvWo9DPpaDiVAnXWQvZ+5swDfg=
-X-Received: by 2002:a67:f303:: with SMTP id p3mr11428563vsf.166.1557990294356;
- Thu, 16 May 2019 00:04:54 -0700 (PDT)
+        bh=ZfZWKHa7k32vSF2Rgion0TnHTAjuA1aCE2qsRonqXP0=;
+        b=gVoovvoz5HylZmfCxKeXrZqdtAzN/ua/QTTAOm2VkJlC4R99QHystAD7Iot9Onw5Sg
+         Cayx7F1LMOS5TtekpmRhCCkgB0R7hjbAW8MTT7rRKb/frum7Cev1mfbgyfpwBva1Vv40
+         g3ZlWIJaLpGde0yVX7717qNyiQbUV5GXBdOAeyBiHPlQZbMATfJkFmegoCik6JNLt8is
+         7G0ikPcmZv+T2FxEgh6tupOOAWTMGrvGPEWCiPxRq2SX/GkywMvBdTPsu9JLs4QhsJ7h
+         0Gsai4TsQeKJUR6Pz4nWbmMV7tqbqNOoep9pQ46gEXzXiFKF/fqh9qJODINMjIQ228TI
+         ScSg==
+X-Gm-Message-State: APjAAAUJYv4Q472C6vYcFkSFdbwWqNF239iWtMhBn6zkJyd1AKudEGHb
+        FIYEFJxiaAgeMzRrwdJ9ADK8TwQEsMnDEkiZ5ogCqA==
+X-Google-Smtp-Source: APXvYqwaxRjeq7pjR9npAXmwgyhZKdqhC73PwgIVTdnHjqNpDaNtDJResi7MGSU8C3U2sKn8oJY/87TKdcHLFfT0UHI=
+X-Received: by 2002:a2e:60a:: with SMTP id 10mr3127929ljg.126.1558007438447;
+ Thu, 16 May 2019 04:50:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190515090722.696531131@linuxfoundation.org> <20190515090731.364702401@linuxfoundation.org>
-In-Reply-To: <20190515090731.364702401@linuxfoundation.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 16 May 2019 09:04:41 +0200
-Message-ID: <CAMuHMdVFaQLbH7F=Ard5MzUzG1FTfwLH=7xz=LpA3YaZyj2+Zg@mail.gmail.com>
-Subject: Re: [PATCH 4.4 247/266] cpu/speculation: Add mitigations= cmdline option
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ben Hutchings <ben@decadent.org.uk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Steven Price <steven.price@arm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jon Masters <jcm@redhat.com>, Waiman Long <longman@redhat.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Jiri Kosina <jikos@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+References: <cover.1553828158.git.vilhelm.gray@gmail.com> <1cc8b30bb3954ca2a0961ffb0a2eed8a005ed670.1553828158.git.vilhelm.gray@gmail.com>
+In-Reply-To: <1cc8b30bb3954ca2a0961ffb0a2eed8a005ed670.1553828158.git.vilhelm.gray@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 16 May 2019 13:50:26 +0200
+Message-ID: <CACRpkdbCt1PAJ1rBvKvZ2ydLgJmKXuLN4mRtSU8CaW=U7EcFbQ@mail.gmail.com>
+Subject: Re: [PATCH v14 01/11] bitops: Introduce the for_each_set_clump8 macro
+To:     William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Phil Auld <pauld@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        stable <stable@vger.kernel.org>,
-        Tyler Hicks <tyhicks@canonical.com>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Phil Reid <preid@electromag.com.au>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Greg, Ben,
+On Fri, Mar 29, 2019 at 4:03 AM William Breathitt Gray
+<vilhelm.gray@gmail.com> wrote:
 
-On Wed, May 15, 2019 at 1:12 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> From: Josh Poimboeuf <jpoimboe@redhat.com>
+> This macro iterates for each 8-bit group of bits (clump) with set bits,
+> within a bitmap memory region. For each iteration, "start" is set to the
+> bit offset of the found clump, while the respective clump value is
+> stored to the location pointed by "clump". Additionally, the
+> bitmap_get_value8 and bitmap_set_value8 functions are introduced to
+> respectively get and set an 8-bit value in a bitmap memory region.
 >
-> commit 98af8452945c55652de68536afdde3b520fec429 upstream.
->
-> Keeping track of the number of mitigations for all the CPU speculation
-> bugs has become overwhelming for many users.  It's getting more and more
-> complicated to decide which mitigations are needed for a given
-> architecture.  Complicating matters is the fact that each arch tends to
-> have its own custom way to mitigate the same vulnerability.
->
-> Most users fall into a few basic categories:
->
-> a) they want all mitigations off;
->
-> b) they want all reasonable mitigations on, with SMT enabled even if
->    it's vulnerable; or
->
-> c) they want all reasonable mitigations on, with SMT disabled if
->    vulnerable.
->
-> Define a set of curated, arch-independent options, each of which is an
-> aggregation of existing options:
->
-> - mitigations=off: Disable all mitigations.
->
-> - mitigations=auto: [default] Enable all the default mitigations, but
->   leave SMT enabled, even if it's vulnerable.
->
-> - mitigations=auto,nosmt: Enable all the default mitigations, disabling
->   SMT if needed by a mitigation.
->
-> Currently, these options are placeholders which don't actually do
-> anything.  They will be fleshed out in upcoming patches.
->
-> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
-> [bwh: Backported to 4.4:
->  - Drop the auto,nosmt option which we can't support
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-This doesn't really stand out. I.e. I completely missed it, and started
-wondering why "auto,nosmt" was not documented in
-kernel-parameters.txt below...
-
-> --- a/Documentation/kernel-parameters.txt
-> +++ b/Documentation/kernel-parameters.txt
-> @@ -2173,6 +2173,25 @@ bytes respectively. Such letter suffixes
->                         in the "bleeding edge" mini2440 support kernel at
->                         http://repo.or.cz/w/linux-2.6/mini2440.git
->
-> +       mitigations=
-> +                       Control optional mitigations for CPU vulnerabilities.
-> +                       This is a set of curated, arch-independent options, each
-> +                       of which is an aggregation of existing arch-specific
-> +                       options.
-> +
-> +                       off
-> +                               Disable all optional CPU mitigations.  This
-> +                               improves system performance, but it may also
-> +                               expose users to several CPU vulnerabilities.
-> +
-> +                       auto (default)
-> +                               Mitigate all CPU vulnerabilities, but leave SMT
-> +                               enabled, even if it's vulnerable.  This is for
-> +                               users who don't want to be surprised by SMT
-> +                               getting disabled across kernel upgrades, or who
-> +                               have other ways of avoiding SMT-based attacks.
-> +                               This is the default behavior.
-> +
->         mminit_loglevel=
->                         [KNL] When CONFIG_DEBUG_MEMORY_INIT is set, this
->                         parameter allows control of the logging verbosity for
-
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -842,3 +842,16 @@ void init_cpu_online(const struct cpumas
->  {
->         cpumask_copy(to_cpumask(cpu_online_bits), src);
->  }
-> +
-> +enum cpu_mitigations cpu_mitigations = CPU_MITIGATIONS_AUTO;
-> +
-> +static int __init mitigations_parse_cmdline(char *arg)
-> +{
-> +       if (!strcmp(arg, "off"))
-> +               cpu_mitigations = CPU_MITIGATIONS_OFF;
-> +       else if (!strcmp(arg, "auto"))
-> +               cpu_mitigations = CPU_MITIGATIONS_AUTO;
-
-Perhaps
-
-    else
-            pr_crit("mitigations=%s is not supported\n", arg);
-
-?
-
-Actually that makes sense on mainline, too.
-Cooking a patch...
-
-> +
-> +       return 0;
-> +}
-> +early_param("mitigations", mitigations_parse_cmdline);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Yours,
+Linus Walleij
