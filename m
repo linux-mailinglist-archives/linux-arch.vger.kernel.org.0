@@ -2,47 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C76212CA
-	for <lists+linux-arch@lfdr.de>; Fri, 17 May 2019 06:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43C3212D3
+	for <lists+linux-arch@lfdr.de>; Fri, 17 May 2019 06:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbfEQETY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 May 2019 00:19:24 -0400
-Received: from conssluserg-05.nifty.com ([210.131.2.90]:47280 "EHLO
-        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725929AbfEQETY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 May 2019 00:19:24 -0400
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id x4H4J8rk020004;
-        Fri, 17 May 2019 13:19:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com x4H4J8rk020004
+        id S1727015AbfEQEY4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 May 2019 00:24:56 -0400
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:49060 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726755AbfEQEY4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 May 2019 00:24:56 -0400
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id x4H4OW2a016993;
+        Fri, 17 May 2019 13:24:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com x4H4OW2a016993
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1558066749;
-        bh=J7yAUK19cep0kEYDzk4DJ/4J6NgS5gQ7gjFkMhf0nf0=;
+        s=dec2015msa; t=1558067073;
+        bh=XSdURHr+DFj73XgjlE8DVqoSorih7QO9jSg+HW1D8TM=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=c0LtECK4wG0ntD78HJSVal1PgIaDPnG3TYgZdKUwPQb1na1TUOyc7O8nFlNd6CaCm
-         AXsspHBBBxyBH+xc+yKwpj4hyYVIlPFcjcW/vHsJL5fSi5Q2gSwjjErNYCHX7DoDJk
-         uzHnaxZfaH6FQsso8f00WBIqbL0o02CmwbkFxF8m6vBwnpe79+CLRENPKmsLOuBRZS
-         H1BuxVeZipFZOyAH3A/7goUgdI8wKHrHt3j0pC8tQP/JX2YVrYwXhbMxIntV2ieT5M
-         FSH/2b85VtqV4XO16MdlVD3fBZ0eNwSQDAHODI3YrVqSmTCnoT21JK380X6v99doLI
-         2TTH2dRT0iNEA==
-X-Nifty-SrcIP: [209.85.222.47]
-Received: by mail-ua1-f47.google.com with SMTP id 49so2202636uas.0;
-        Thu, 16 May 2019 21:19:08 -0700 (PDT)
-X-Gm-Message-State: APjAAAWydtx2tRS6jJKO5xqCPv+Vt3FwVdD9ASPinktF8SumIpi9HPS3
-        i2bpdlZOxCPwGHcr4Eofl46WJIVzZ/yje7rdJvc=
-X-Google-Smtp-Source: APXvYqw2YDleh3v/xnLGvb0ytg007xtjBjm7KsoOOxcHJpN/6dfsgAIRhFvSJ0T46JhQEFnSRL0PruWBvw6llY+KDwI=
-X-Received: by 2002:ab0:3058:: with SMTP id x24mr23094567ual.95.1558066747792;
- Thu, 16 May 2019 21:19:07 -0700 (PDT)
+        b=MjmYEj/7xZIYGboJToCEBgv5PN/8CD6sDWZgip2cIfkO7e3Ii9sfP5C3OkJ+w+bmf
+         nV6cmWzKaBSSjsZhyrn4bys5Y4Q6I+OEw7Kw5shBSlS1idFvlydMF1XAeStprazHXe
+         YEbmOvO03hshhgHZXMzPoXOKrUM23BsqSOjE9eL/rkptHR8OUhQKwyp/IklD0+/Dl9
+         owyazsPp24tpqnpga80RjHHMgFR00FgPaqDWKyOVGScKcv6zoiLl/Anuo6IiuxTxjf
+         qbtJQzYFIsrlK27Oe+MJKRLUUuHhjaC4kJm7cNQh1CbYjHyDzVm4085SMLX6fx2uBd
+         H18+0yFykqaGg==
+X-Nifty-SrcIP: [209.85.217.49]
+Received: by mail-vs1-f49.google.com with SMTP id o10so3750740vsp.12;
+        Thu, 16 May 2019 21:24:32 -0700 (PDT)
+X-Gm-Message-State: APjAAAUM7tMr8SHSizjNRn02KJyzLHVXpwOUD1M81+T2t10lCH1GD3ZS
+        gOrlhGZjT2w8LXvKFSaC90rpzIRamTE26OnpgKU=
+X-Google-Smtp-Source: APXvYqwRom2nfToM4jL1gKybhnXBZPLM/8GRypEcR2drcSxkNBd5y+Id9rfE+eiIpAnAfm5gkg5AbPeOHdYPagE+d9M=
+X-Received: by 2002:a67:ad0f:: with SMTP id t15mr7896301vsl.179.1558067071748;
+ Thu, 16 May 2019 21:24:31 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190423034959.13525-1-yamada.masahiro@socionext.com>
- <20190423034959.13525-11-yamada.masahiro@socionext.com> <ca74c830-fe1b-7bff-8dfd-353fca57b647@redhat.com>
-In-Reply-To: <ca74c830-fe1b-7bff-8dfd-353fca57b647@redhat.com>
+ <20190423034959.13525-5-yamada.masahiro@socionext.com> <aa73f81d-5d5a-a1d2-5239-3e8eb1278ec4@redhat.com>
+In-Reply-To: <aa73f81d-5d5a-a1d2-5239-3e8eb1278ec4@redhat.com>
 From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Fri, 17 May 2019 13:18:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASjc8rmJvv5kgk6Mxo3mcB4EgB4XJG_8JY47ZQbrsSSXg@mail.gmail.com>
-Message-ID: <CAK7LNASjc8rmJvv5kgk6Mxo3mcB4EgB4XJG_8JY47ZQbrsSSXg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3 10/11] powerpc/mm/radix: mark as __tlbie_pid()
- and friends as__always_inline
+Date:   Fri, 17 May 2019 13:23:55 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAST5y9Khg0BBz6W0mekPpuLPwWa9nPvvVENidWhHZ-avw@mail.gmail.com>
+Message-ID: <CAK7LNAST5y9Khg0BBz6W0mekPpuLPwWa9nPvvVENidWhHZ-avw@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3 04/11] s390/cpacf: mark scpacf_query() as __always_inline
 To:     Laura Abbott <labbott@redhat.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
@@ -63,55 +62,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Laura,
-
-
-On Fri, May 17, 2019 at 7:55 AM Laura Abbott <labbott@redhat.com> wrote:
-
-> What gcc version was this tested with?
-
-I use kernel.org toolchains
-https://mirrors.edge.kernel.org/pub/tools/crosstool/
-
-It is GCC 8.1
-
-
-> We're still seeing errors on
-> Fedora rawhide with gcc 9.1.1 on a version (8c05f3b965da14e7790711026b32cc10a4c06213)
-> that should have this fix in it:
+On Fri, May 17, 2019 at 8:01 AM Laura Abbott <labbott@redhat.com> wrote:
 >
-> BUILDSTDERR: arch/powerpc/mm/book3s64/radix_tlb.c: In function '_tlbiel_pid':
-> BUILDSTDERR: arch/powerpc/mm/book3s64/radix_tlb.c:104:2: warning: asm operand 3 probably doesn't match constraints
-> BUILDSTDERR:   104 |  asm volatile(PPC_TLBIEL(%0, %4, %3, %2, %1)
+> On 4/22/19 8:49 PM, Masahiro Yamada wrote:
+> > This prepares to move CONFIG_OPTIMIZE_INLINING from x86 to a common
+> > place. We need to eliminate potential issues beforehand.
+> >
+> > If it is enabled for s390, the following error is reported:
+> >
+> > In file included from arch/s390/crypto/des_s390.c:19:
+> > ./arch/s390/include/asm/cpacf.h: In function 'cpacf_query':
+> > ./arch/s390/include/asm/cpacf.h:170:2: warning: asm operand 3 probably doesn't match constraints
+> >    asm volatile(
+> >    ^~~
+> > ./arch/s390/include/asm/cpacf.h:170:2: error: impossible constraint in 'asm'
+> >
+>
+> This also seems to still be broken, again with gcc 9.1.1
+>
+> BUILDSTDERR: In file included from arch/s390/crypto/prng.c:29:
+> BUILDSTDERR: ./arch/s390/include/asm/cpacf.h: In function 'cpacf_query_func':
+> BUILDSTDERR: ./arch/s390/include/asm/cpacf.h:170:2: warning: asm operand 3 probably doesn't match constraints
+> BUILDSTDERR:   170 |  asm volatile(
 > BUILDSTDERR:       |  ^~~
-> BUILDSTDERR: arch/powerpc/mm/book3s64/radix_tlb.c:104:2: error: impossible constraint in 'asm'
-> BUILDSTDERR: make[3]: *** [scripts/Makefile.build:279: arch/powerpc/mm/book3s64/radix_tlb.o] Error 1
-> BUILDSTDERR: make[2]: *** [scripts/Makefile.build:489: arch/powerpc/mm/book3s64] Error 2
-> BUILDSTDERR: make[1]: *** [scripts/Makefile.build:489: arch/powerpc/mm] Error 2
-
-Thanks for the report.
-
-Does this work for you?
+> BUILDSTDERR: ./arch/s390/include/asm/cpacf.h:170:2: error: impossible constraint in 'asm'
+>
+> I realized we're still carrying a patch to add -fno-section-anchors
+> but it's a similar failure to powerpc.
 
 
-diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c
-b/arch/powerpc/mm/book3s64/radix_tlb.c
-index 4d841369399f..9a6befdd5e74 100644
---- a/arch/powerpc/mm/book3s64/radix_tlb.c
-+++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+Christophe had already pointed out potential issues for "i" constraint,
+and I have fixups in hand:
 
-@@ -239,7 +239,7 @@ static inline void fixup_tlbie_lpid(unsigned long lpid)
- /*
-  * We use 128 set in radix mode and 256 set in hpt mode.
-  */
--static inline void _tlbiel_pid(unsigned long pid, unsigned long ric)
-+static __always_inline void _tlbiel_pid(unsigned long pid, unsigned long ric)
- {
-        int set;
+See
+https://lkml.org/lkml/2019/5/3/459
 
 
+My plan was to send it after all of my base patches
+were merged.
 
+This s390 cparf.h is included in the TODO list.
 
---
+Will fix soon.
+
+Thanks.
+
+-- 
 Best Regards
 Masahiro Yamada
