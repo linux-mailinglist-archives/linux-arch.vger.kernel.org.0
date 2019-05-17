@@ -2,81 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C132D210B9
-	for <lists+linux-arch@lfdr.de>; Fri, 17 May 2019 00:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C76212CA
+	for <lists+linux-arch@lfdr.de>; Fri, 17 May 2019 06:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfEPWvN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 May 2019 18:51:13 -0400
-Received: from mail-lj1-f181.google.com ([209.85.208.181]:38382 "EHLO
-        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbfEPWvN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 May 2019 18:51:13 -0400
-Received: by mail-lj1-f181.google.com with SMTP id 14so4574376ljj.5
-        for <linux-arch@vger.kernel.org>; Thu, 16 May 2019 15:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=68ArjN0wa3lf1aOiRDVUTIQK5CrzgPXu4Jev+44ZCaU=;
-        b=ZkmbJ6jP3obgZQ3rn0M9QXzzM0MDNkkO2SFtqSHyLYEk5pVSWq2QI4Rb39tCRjJ/Fc
-         K4gBKQT45ncSY/sNglMvHT1MI2FqYxbfh2UWo26BC0aGzbF+0Go0S2rvvamSS7QLfU7w
-         wEpr6052AXt0NMlwwtDFDzu7rFOrNcLcKznj0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=68ArjN0wa3lf1aOiRDVUTIQK5CrzgPXu4Jev+44ZCaU=;
-        b=SW4C/lzyEVdbtfxn6USiqNPCU/ynzYROd1MsL3IL9Lo3+J5wR232Nvxh/Q4C8MTeg3
-         Ba4PNyHXozf/ufv83VnWU8aCKNMsV5PlWTfkg21bsbHvOxjEZHR8JRBTa76p3hgJaAyW
-         H1DpBXrOgKdrFZUgNrY6RDWCMlVUl4I5Kl2iRlGySVOKEzNZYJqOHHY3T3rOF94sH4vr
-         BQSYoYcVtJz6e8qT9ruPSLmcXIjz39jjREsr6y4rDV8dccheYruLE8wQiH1QHum1vptA
-         8+hD39xWN8xmiWOYyBnSEqMeoqdmHz5j2568z/JCgx1GnvWPDN62Rew96JC18PoJ/dO4
-         OzUg==
-X-Gm-Message-State: APjAAAXFG1CQL+FOCTJkYCPfG09n0s63DLfGu6F20qJYAHyHRUewM2Nl
-        Jd0m3k0pBETBJBDyB40/w85eeSFLUjM=
-X-Google-Smtp-Source: APXvYqxhiCzmHGSxoJvzdP+QGrS+piE6zQsr7y6RdVCW+1oW8Or6nq/GWtx/jV351fZ75P29YxsfnQ==
-X-Received: by 2002:a2e:7f12:: with SMTP id a18mr1906411ljd.144.1558047071774;
-        Thu, 16 May 2019 15:51:11 -0700 (PDT)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
-        by smtp.gmail.com with ESMTPSA id u3sm1186611lfc.73.2019.05.16.15.51.10
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 16 May 2019 15:51:11 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id c17so3908449lfi.2
-        for <linux-arch@vger.kernel.org>; Thu, 16 May 2019 15:51:10 -0700 (PDT)
-X-Received: by 2002:ac2:59c7:: with SMTP id x7mr21576802lfn.75.1558047070605;
- Thu, 16 May 2019 15:51:10 -0700 (PDT)
+        id S1726523AbfEQETY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 May 2019 00:19:24 -0400
+Received: from conssluserg-05.nifty.com ([210.131.2.90]:47280 "EHLO
+        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725929AbfEQETY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 May 2019 00:19:24 -0400
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id x4H4J8rk020004;
+        Fri, 17 May 2019 13:19:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com x4H4J8rk020004
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1558066749;
+        bh=J7yAUK19cep0kEYDzk4DJ/4J6NgS5gQ7gjFkMhf0nf0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=c0LtECK4wG0ntD78HJSVal1PgIaDPnG3TYgZdKUwPQb1na1TUOyc7O8nFlNd6CaCm
+         AXsspHBBBxyBH+xc+yKwpj4hyYVIlPFcjcW/vHsJL5fSi5Q2gSwjjErNYCHX7DoDJk
+         uzHnaxZfaH6FQsso8f00WBIqbL0o02CmwbkFxF8m6vBwnpe79+CLRENPKmsLOuBRZS
+         H1BuxVeZipFZOyAH3A/7goUgdI8wKHrHt3j0pC8tQP/JX2YVrYwXhbMxIntV2ieT5M
+         FSH/2b85VtqV4XO16MdlVD3fBZ0eNwSQDAHODI3YrVqSmTCnoT21JK380X6v99doLI
+         2TTH2dRT0iNEA==
+X-Nifty-SrcIP: [209.85.222.47]
+Received: by mail-ua1-f47.google.com with SMTP id 49so2202636uas.0;
+        Thu, 16 May 2019 21:19:08 -0700 (PDT)
+X-Gm-Message-State: APjAAAWydtx2tRS6jJKO5xqCPv+Vt3FwVdD9ASPinktF8SumIpi9HPS3
+        i2bpdlZOxCPwGHcr4Eofl46WJIVzZ/yje7rdJvc=
+X-Google-Smtp-Source: APXvYqw2YDleh3v/xnLGvb0ytg007xtjBjm7KsoOOxcHJpN/6dfsgAIRhFvSJ0T46JhQEFnSRL0PruWBvw6llY+KDwI=
+X-Received: by 2002:ab0:3058:: with SMTP id x24mr23094567ual.95.1558066747792;
+ Thu, 16 May 2019 21:19:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAK8P3a2+RHAReOZdo8nEvqDeC1EPj83L2Ug4JuVRiUh943AuNw@mail.gmail.com>
- <CAHk-=wgiv5ftb+dq7N8cN4n2YX3VkyzeQccywn07Xu9xhOLTSw@mail.gmail.com>
- <CAK8P3a2EEuxh3uhsqauEC_vROZ7tQHhFwxgiLUnrgtpMdb3kuA@mail.gmail.com>
- <CAHk-=wiH=vGjsW9MdWFGsgto2W+71sA4XJ7CSubpXkbpC_bGKA@mail.gmail.com>
- <1558043623.29359.44.camel@HansenPartnership.com> <CAK8P3a0QsURY+QrkvBh5zS12cCLYD=ssVtus_6Q_DSnB1=1y3A@mail.gmail.com>
-In-Reply-To: <CAK8P3a0QsURY+QrkvBh5zS12cCLYD=ssVtus_6Q_DSnB1=1y3A@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 16 May 2019 15:50:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi+CyMkQJahExx0FNtJf+cd9VqjWNx3z6Em_xW11ScViw@mail.gmail.com>
-Message-ID: <CAHk-=wi+CyMkQJahExx0FNtJf+cd9VqjWNx3z6Em_xW11ScViw@mail.gmail.com>
-Subject: Re: [GIT PULL] asm-generic: kill <asm/segment.h> and improve nommu
- generic uaccess helpers
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+References: <20190423034959.13525-1-yamada.masahiro@socionext.com>
+ <20190423034959.13525-11-yamada.masahiro@socionext.com> <ca74c830-fe1b-7bff-8dfd-353fca57b647@redhat.com>
+In-Reply-To: <ca74c830-fe1b-7bff-8dfd-353fca57b647@redhat.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Fri, 17 May 2019 13:18:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASjc8rmJvv5kgk6Mxo3mcB4EgB4XJG_8JY47ZQbrsSSXg@mail.gmail.com>
+Message-ID: <CAK7LNASjc8rmJvv5kgk6Mxo3mcB4EgB4XJG_8JY47ZQbrsSSXg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3 10/11] powerpc/mm/radix: mark as __tlbie_pid()
+ and friends as__always_inline
+To:     Laura Abbott <labbott@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-riscv@lists.infradead.org
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mathieu Malaterre <malat@debian.org>, X86 ML <x86@kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 16, 2019 at 3:49 PM Arnd Bergmann <arnd@arndb.de> wrote:
+Hi Laura,
+
+
+On Fri, May 17, 2019 at 7:55 AM Laura Abbott <labbott@redhat.com> wrote:
+
+> What gcc version was this tested with?
+
+I use kernel.org toolchains
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
+
+It is GCC 8.1
+
+
+> We're still seeing errors on
+> Fedora rawhide with gcc 9.1.1 on a version (8c05f3b965da14e7790711026b32cc10a4c06213)
+> that should have this fix in it:
 >
-> Strangely, the copy I have on my local machine does have the 'S'
-> flag. I sent it back to the server now.
+> BUILDSTDERR: arch/powerpc/mm/book3s64/radix_tlb.c: In function '_tlbiel_pid':
+> BUILDSTDERR: arch/powerpc/mm/book3s64/radix_tlb.c:104:2: warning: asm operand 3 probably doesn't match constraints
+> BUILDSTDERR:   104 |  asm volatile(PPC_TLBIEL(%0, %4, %3, %2, %1)
+> BUILDSTDERR:       |  ^~~
+> BUILDSTDERR: arch/powerpc/mm/book3s64/radix_tlb.c:104:2: error: impossible constraint in 'asm'
+> BUILDSTDERR: make[3]: *** [scripts/Makefile.build:279: arch/powerpc/mm/book3s64/radix_tlb.o] Error 1
+> BUILDSTDERR: make[2]: *** [scripts/Makefile.build:489: arch/powerpc/mm/book3s64] Error 2
+> BUILDSTDERR: make[1]: *** [scripts/Makefile.build:489: arch/powerpc/mm] Error 2
 
-Yup, now when I refreshed your key, I got an update, and your
-signature looks all good.
+Thanks for the report.
 
-              Linus
+Does this work for you?
+
+
+diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c
+b/arch/powerpc/mm/book3s64/radix_tlb.c
+index 4d841369399f..9a6befdd5e74 100644
+--- a/arch/powerpc/mm/book3s64/radix_tlb.c
++++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+
+@@ -239,7 +239,7 @@ static inline void fixup_tlbie_lpid(unsigned long lpid)
+ /*
+  * We use 128 set in radix mode and 256 set in hpt mode.
+  */
+-static inline void _tlbiel_pid(unsigned long pid, unsigned long ric)
++static __always_inline void _tlbiel_pid(unsigned long pid, unsigned long ric)
+ {
+        int set;
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
