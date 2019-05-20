@@ -2,54 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA4423840
-	for <lists+linux-arch@lfdr.de>; Mon, 20 May 2019 15:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE05238A2
+	for <lists+linux-arch@lfdr.de>; Mon, 20 May 2019 15:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388556AbfETNf5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 May 2019 09:35:57 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:10828 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725951AbfETNf4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 20 May 2019 09:35:56 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id C59DBA1156;
-        Mon, 20 May 2019 15:35:51 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id MekZNDxt4WEW; Mon, 20 May 2019 15:35:47 +0200 (CEST)
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH RFC v8 10/10] selftests: add resolveat(2) selftests
-Date:   Mon, 20 May 2019 23:33:05 +1000
-Message-Id: <20190520133305.11925-11-cyphar@cyphar.com>
-In-Reply-To: <20190520133305.11925-1-cyphar@cyphar.com>
-References: <20190520133305.11925-1-cyphar@cyphar.com>
+        id S1732501AbfETNqj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 May 2019 09:46:39 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36026 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730225AbfETNqc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 May 2019 09:46:32 -0400
+Received: by mail-wr1-f68.google.com with SMTP id s17so14712998wru.3
+        for <linux-arch@vger.kernel.org>; Mon, 20 May 2019 06:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oVaG2UauaR9vj3yryOR+m+3UOXCKK0FL2c+RhB+Oxmo=;
+        b=PmbXM4nqGpRsrXwN0mWhsNiU71a5IPvHFUvuWw0JF5i2lXD6CBX/P8HsGDNMx8Dk3r
+         gRUaoZ+uU5NKecYvq24D/6byIxMzC1d/eTJQ56BH2gikkBVWTWESf0eIfuKb7oYNsA8x
+         HQKUyNLssnSwx1A50bP9ZEh4lJhAxIZ1ZYAqRqIZ/CaIloR9t7vJaeMI4xMWNIy/zsKl
+         gsuL0qGLsKS0tJ4bFVkSNmHhlpPEztAkI4Aa/wu0djjR/hP1RoHM3nI1GjfyFDr9EJt/
+         E5+yuXqwqszfl1GFIhAzJrG6HBCS9vy3Nb+kJkHX0avLZTA7XJBr/rMyj0hgy1zuigIT
+         lYEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oVaG2UauaR9vj3yryOR+m+3UOXCKK0FL2c+RhB+Oxmo=;
+        b=ZNyxCF3xuF3DyP8hApX5LIXbZw6rQPgtAnAx8LHv43A2XDVugDOYHkcWviYmlzeq9B
+         DtB5rcDznKnN5fEIgUlzDUt4B2Ntop/YQP3pFIygAlY9Zmv0mWX56kCt7mpjCDxz935/
+         0bzRSNffovkmJdNh7BMdgFBMbA93sO9Mhs5GieF6nS02UH5Kp2legMWx4cuMeDbPp1HU
+         DvciGX5SUFuig6Z+VdWzdLDJa6i9MAh1qUy4apqWfE12+lMyDTU/Ww+85n7rctzfyc5x
+         N1iKkVucBKUtCXAUZ+R6TvDI1S+wLdGKoP60kGif+2rP3PiImXCKJ7swyufhp7dsM3ne
+         YQug==
+X-Gm-Message-State: APjAAAUSeAkoS0DAdlEdZAvrmKdsV5OWAloTQ6vceV7GlAAYQ+oInykY
+        aeJGs88zerAq9XSfHDrqV+623A==
+X-Google-Smtp-Source: APXvYqzr/Y5sIjHVcRHmSNSgylllDyZ9BvOb+aml+6rIUUFOCdp+HSi2RPIQZqy48m5HlGjEeGZ14A==
+X-Received: by 2002:adf:fc46:: with SMTP id e6mr17267433wrs.298.1558359988390;
+        Mon, 20 May 2019 06:46:28 -0700 (PDT)
+Received: from localhost.localdomain ([212.91.227.56])
+        by smtp.gmail.com with ESMTPSA id k17sm14506592wrm.73.2019.05.20.06.46.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 May 2019 06:46:27 -0700 (PDT)
+From:   Christian Brauner <christian@brauner.io>
+To:     jannh@google.com, oleg@redhat.com, viro@zeniv.linux.org.uk,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de
+Cc:     akpm@linux-foundation.org, cyphar@cyphar.com, dhowells@redhat.com,
+        ebiederm@xmission.com, elena.reshetova@intel.com,
+        keescook@chromium.org, luto@amacapital.net, luto@kernel.org,
+        tglx@linutronix.de, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, joel@joelfernandes.org,
+        dancol@google.com, serge@hallyn.com, surenb@google.com,
+        kernel-team@android.com, Christian Brauner <christian@brauner.io>
+Subject: [PATCH v2 1/2] pid: add pidfd_open()
+Date:   Mon, 20 May 2019 15:46:04 +0200
+Message-Id: <20190520134605.29116-1-christian@brauner.io>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -57,976 +72,360 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Test all of the various resolveat(2) flags, as well as how file
-descriptor re-opening works. A small stress-test of a symlink-rename
-attack is included to show that the protections against ".."-based
-attacks are sufficient.
+This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
+pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
+process that is created via traditional fork()/clone() calls that is only
+referenced by a PID:
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+int pidfd = pidfd_open(1234, 0);
+ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
+
+With the introduction of pidfds through CLONE_PIDFD it is possible to
+created pidfds at process creation time.
+However, a lot of processes get created with traditional PID-based calls
+such as fork() or clone() (without CLONE_PIDFD). For these processes a
+caller can currently not create a pollable pidfd. This is a problem for
+Android's low memory killer (LMK) and service managers such as systemd.
+Both are examples of tools that want to make use of pidfds to get reliable
+notification of process exit for non-parents (pidfd polling) and race-free
+signal sending (pidfd_send_signal()). They intend to switch to this API for
+process supervision/management as soon as possible. Having no way to get
+pollable pidfds from PID-only processes is one of the biggest blockers for
+them in adopting this api. With pidfd_open() making it possible to retrieve
+pidfds for PID-based processes we enable them to adopt this api.
+
+In line with Arnd's recent changes to consolidate syscall numbers across
+architectures, I have added the pidfd_open() syscall to all architectures
+at the same time.
+
+Signed-off-by: Christian Brauner <christian@brauner.io>
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Jann Horn <jannh@google.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Andy Lutomirsky <luto@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Aleksa Sarai <cyphar@cyphar.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-api@vger.kernel.org
 ---
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/resolveat/.gitignore  |   1 +
- tools/testing/selftests/resolveat/Makefile    |   6 +
- tools/testing/selftests/resolveat/helpers.h   | 195 +++++++++
- .../selftests/resolveat/linkmode_test.c       | 306 ++++++++++++++
- .../selftests/resolveat/resolveat_test.c      | 400 ++++++++++++++++++
- 6 files changed, 909 insertions(+)
- create mode 100644 tools/testing/selftests/resolveat/.gitignore
- create mode 100644 tools/testing/selftests/resolveat/Makefile
- create mode 100644 tools/testing/selftests/resolveat/helpers.h
- create mode 100644 tools/testing/selftests/resolveat/linkmode_test.c
- create mode 100644 tools/testing/selftests/resolveat/resolveat_test.c
+v1:
+- kbuild test robot <lkp@intel.com>:
+  - add missing entry for pidfd_open to arch/arm/tools/syscall.tbl
+- Oleg Nesterov <oleg@redhat.com>:
+  - use simpler thread-group leader check
+v2:
+- Oleg Nesterov <oleg@redhat.com>:
+  - avoid using additional variable
+  - remove unneeded comment
+- Arnd Bergmann <arnd@arndb.de>:
+  - switch from 428 to 434 since the new mount api has taken it
+  - bump syscall numbers in arch/arm64/include/asm/unistd.h
+- Joel Fernandes (Google) <joel@joelfernandes.org>:
+  - switch from ESRCH to EINVAL when the passed-in pid does not refer to a
+    thread-group leader
+- Christian Brauner <christian@brauner.io>:
+  - rebase on v5.2-rc1
+  - adapt syscall number to account for new mount api syscalls
+---
+ arch/alpha/kernel/syscalls/syscall.tbl      |  1 +
+ arch/arm/tools/syscall.tbl                  |  1 +
+ arch/arm64/include/asm/unistd.h             |  2 +-
+ arch/arm64/include/asm/unistd32.h           |  2 +
+ arch/ia64/kernel/syscalls/syscall.tbl       |  1 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |  1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |  1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |  1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     |  1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |  1 +
+ arch/s390/kernel/syscalls/syscall.tbl       |  1 +
+ arch/sh/kernel/syscalls/syscall.tbl         |  1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |  1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |  1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |  1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |  1 +
+ include/linux/pid.h                         |  1 +
+ include/linux/syscalls.h                    |  1 +
+ include/uapi/asm-generic/unistd.h           |  4 +-
+ kernel/fork.c                               |  2 +-
+ kernel/pid.c                                | 43 +++++++++++++++++++++
+ 21 files changed, 66 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 971fc8428117..f558d6f21c4b 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -37,6 +37,7 @@ TARGETS += powerpc
- TARGETS += proc
- TARGETS += pstore
- TARGETS += ptrace
-+TARGETS += resolveat
- TARGETS += rseq
- TARGETS += rtc
- TARGETS += seccomp
-diff --git a/tools/testing/selftests/resolveat/.gitignore b/tools/testing/selftests/resolveat/.gitignore
-new file mode 100644
-index 000000000000..bd68f6c3fd07
---- /dev/null
-+++ b/tools/testing/selftests/resolveat/.gitignore
-@@ -0,0 +1 @@
-+/*_test
-diff --git a/tools/testing/selftests/resolveat/Makefile b/tools/testing/selftests/resolveat/Makefile
-new file mode 100644
-index 000000000000..375eaf4a55e7
---- /dev/null
-+++ b/tools/testing/selftests/resolveat/Makefile
-@@ -0,0 +1,6 @@
-+CFLAGS += -g -I../../../../usr/include/
-+
-+TEST_GEN_PROGS := linkmode_test resolveat_test
-+
-+include ../lib.mk
-+
-diff --git a/tools/testing/selftests/resolveat/helpers.h b/tools/testing/selftests/resolveat/helpers.h
-new file mode 100644
-index 000000000000..c765f606cdbc
---- /dev/null
-+++ b/tools/testing/selftests/resolveat/helpers.h
-@@ -0,0 +1,195 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Author: Aleksa Sarai <cyphar@cyphar.com>
-+ * Copyright (C) 2018-2019 SUSE LLC.
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index 9e7704e44f6d..1db9bbcfb84e 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -473,3 +473,4 @@
+ 541	common	fsconfig			sys_fsconfig
+ 542	common	fsmount				sys_fsmount
+ 543	common	fspick				sys_fspick
++544	common	pidfd_open			sys_pidfd_open
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index aaf479a9e92d..81e6e1817c45 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -447,3 +447,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++434	common	pidfd_open			sys_pidfd_open
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 70e6882853c0..e8f7d95a1481 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -44,7 +44,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		434
++#define __NR_compat_syscalls		435
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index c39e90600bb3..7a3158ccd68e 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -886,6 +886,8 @@ __SYSCALL(__NR_fsconfig, sys_fsconfig)
+ __SYSCALL(__NR_fsmount, sys_fsmount)
+ #define __NR_fspick 433
+ __SYSCALL(__NR_fspick, sys_fspick)
++#define __NR_pidfd_open 434
++__SYSCALL(__NR_pidfd_open, sys_pidfd_open)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
+index e01df3f2f80d..ecc44926737b 100644
+--- a/arch/ia64/kernel/syscalls/syscall.tbl
++++ b/arch/ia64/kernel/syscalls/syscall.tbl
+@@ -354,3 +354,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++434	common	pidfd_open			sys_pidfd_open
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index 7e3d0734b2f3..9a3eb2558568 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -433,3 +433,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++434	common	pidfd_open			sys_pidfd_open
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 26339e417695..ad706f83c755 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -439,3 +439,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++434	common	pidfd_open			sys_pidfd_open
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index 0e2dd68ade57..97035e19ad03 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -372,3 +372,4 @@
+ 431	n32	fsconfig			sys_fsconfig
+ 432	n32	fsmount				sys_fsmount
+ 433	n32	fspick				sys_fspick
++434	n32	pidfd_open			sys_pidfd_open
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index c9e377d59232..5022b9e179c2 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -430,3 +430,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++434	common	pidfd_open			sys_pidfd_open
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index 103655d84b4b..f2c3bda2d39f 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -515,3 +515,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++434	common	pidfd_open			sys_pidfd_open
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index e822b2964a83..6ebacfeaf853 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -436,3 +436,4 @@
+ 431  common	fsconfig		sys_fsconfig			sys_fsconfig
+ 432  common	fsmount			sys_fsmount			sys_fsmount
+ 433  common	fspick			sys_fspick			sys_fspick
++434  common	pidfd_open		sys_pidfd_open			sys_pidfd_open
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index 016a727d4357..834c9c7d79fa 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -436,3 +436,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++434	common	pidfd_open			sys_pidfd_open
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index e047480b1605..c58e71f21129 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -479,3 +479,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++434	common	pidfd_open			sys_pidfd_open
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index ad968b7bac72..43e4429a5272 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -438,3 +438,4 @@
+ 431	i386	fsconfig		sys_fsconfig			__ia32_sys_fsconfig
+ 432	i386	fsmount			sys_fsmount			__ia32_sys_fsmount
+ 433	i386	fspick			sys_fspick			__ia32_sys_fspick
++434	i386	pidfd_open		sys_pidfd_open			__ia32_sys_pidfd_open
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index b4e6f9e6204a..1bee0a77fdd3 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -355,6 +355,7 @@
+ 431	common	fsconfig		__x64_sys_fsconfig
+ 432	common	fsmount			__x64_sys_fsmount
+ 433	common	fspick			__x64_sys_fspick
++434	common	pidfd_open		__x64_sys_pidfd_open
+ 
+ #
+ # x32-specific system call numbers start at 512 to avoid cache impact
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 5fa0ee1c8e00..782b81945ccc 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -404,3 +404,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++434	common	pidfd_open			sys_pidfd_open
+diff --git a/include/linux/pid.h b/include/linux/pid.h
+index 3c8ef5a199ca..c938a92eab99 100644
+--- a/include/linux/pid.h
++++ b/include/linux/pid.h
+@@ -67,6 +67,7 @@ struct pid
+ extern struct pid init_struct_pid;
+ 
+ extern const struct file_operations pidfd_fops;
++extern int pidfd_create(struct pid *pid);
+ 
+ static inline struct pid *get_pid(struct pid *pid)
+ {
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index e2870fe1be5b..989055e0b501 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -929,6 +929,7 @@ asmlinkage long sys_clock_adjtime32(clockid_t which_clock,
+ 				struct old_timex32 __user *tx);
+ asmlinkage long sys_syncfs(int fd);
+ asmlinkage long sys_setns(int fd, int nstype);
++asmlinkage long sys_pidfd_open(pid_t pid, unsigned int flags);
+ asmlinkage long sys_sendmmsg(int fd, struct mmsghdr __user *msg,
+ 			     unsigned int vlen, unsigned flags);
+ asmlinkage long sys_process_vm_readv(pid_t pid,
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index a87904daf103..e5684a4512c0 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -844,9 +844,11 @@ __SYSCALL(__NR_fsconfig, sys_fsconfig)
+ __SYSCALL(__NR_fsmount, sys_fsmount)
+ #define __NR_fspick 433
+ __SYSCALL(__NR_fspick, sys_fspick)
++#define __NR_pidfd_open 434
++__SYSCALL(__NR_pidfd_open, sys_pidfd_open)
+ 
+ #undef __NR_syscalls
+-#define __NR_syscalls 434
++#define __NR_syscalls 435
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/kernel/fork.c b/kernel/fork.c
+index b4cba953040a..c3df226f47a1 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1724,7 +1724,7 @@ const struct file_operations pidfd_fops = {
+  * Return: On success, a cloexec pidfd is returned.
+  *         On error, a negative errno number will be returned.
+  */
+-static int pidfd_create(struct pid *pid)
++int pidfd_create(struct pid *pid)
+ {
+ 	int fd;
+ 
+diff --git a/kernel/pid.c b/kernel/pid.c
+index 89548d35eefb..8fc9d94f6ac1 100644
+--- a/kernel/pid.c
++++ b/kernel/pid.c
+@@ -37,6 +37,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/proc_ns.h>
+ #include <linux/proc_fs.h>
++#include <linux/sched/signal.h>
+ #include <linux/sched/task.h>
+ #include <linux/idr.h>
+ 
+@@ -450,6 +451,48 @@ struct pid *find_ge_pid(int nr, struct pid_namespace *ns)
+ 	return idr_get_next(&ns->idr, &nr);
+ }
+ 
++/**
++ * pidfd_open() - Open new pid file descriptor.
++ *
++ * @pid:   pid for which to retrieve a pidfd
++ * @flags: flags to pass
++ *
++ * This creates a new pid file descriptor with the O_CLOEXEC flag set for
++ * the process identified by @pid. Currently, the process identified by
++ * @pid must be a thread-group leader. This restriction currently exists
++ * for all aspects of pidfds including pidfd creation (CLONE_PIDFD cannot
++ * be used with CLONE_THREAD) and pidfd polling (only supports thread group
++ * leaders).
++ *
++ * Return: On success, a cloexec pidfd is returned.
++ *         On error, a negative errno number will be returned.
 + */
-+
-+#ifndef __RESOLVEAT_H__
-+#define __RESOLVEAT_H__
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <sys/mount.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <limits.h>
-+#include <unistd.h>
-+
-+#include "../kselftest.h"
-+
-+#define ARRAY_LEN(X) (sizeof (X) / sizeof (*(X)))
-+
-+#ifndef __NR_resolveat
-+#define __NR_resolveat 435
-+#define RESOLVE_UPGRADE_NOWRITE	0x002 /* Disallow re-opening for write. */
-+#define RESOLVE_UPGRADE_NOREAD	0x004 /* Disallow re-opening for read. */
-+#define RESOLVE_NO_FOLLOW	0x008 /* Don't follow trailing symlinks. */
-+#define RESOLVE_BENEATH		0x010 /* Block "lexical" trickery like "..", symlinks, absolute paths, etc. */
-+#define RESOLVE_XDEV		0x020 /* Block mount-point crossings (includes bind-mounts). */
-+#define RESOLVE_NO_MAGICLINKS	0x040 /* Block procfs-style "magic" symlinks. */
-+#define RESOLVE_NO_SYMLINKS	0x080 /* Block all symlinks (implies AT_NO_MAGICLINKS). */
-+#define RESOLVE_IN_ROOT		0x100 /* Scope ".." and "/" resolution to dirfd (like chroot(2)). */
-+#endif /* __NR_resolveat */
-+
-+#ifndef O_EMPTYPATH
-+#define O_EMPTYPATH 040000000
-+#endif /* O_EMPTYPATH */
-+
-+#define E_func(func, ...)						\
-+	do {								\
-+		if (func(__VA_ARGS__) < 0)				\
-+			ksft_exit_fail_msg("%s:%d %s failed\n", \
-+					   __FILE__, __LINE__, #func);\
-+	} while (0)
-+
-+#define E_mkdirat(...)   E_func(mkdirat,   __VA_ARGS__)
-+#define E_symlinkat(...) E_func(symlinkat, __VA_ARGS__)
-+#define E_touchat(...)   E_func(touchat,   __VA_ARGS__)
-+#define E_readlink(...)  E_func(readlink,  __VA_ARGS__)
-+#define E_fstatat(...)   E_func(fstatat,   __VA_ARGS__)
-+#define E_asprintf(...)  E_func(asprintf,  __VA_ARGS__)
-+#define E_fchdir(...)    E_func(fchdir,    __VA_ARGS__)
-+#define E_mount(...)     E_func(mount,     __VA_ARGS__)
-+#define E_unshare(...)   E_func(unshare,   __VA_ARGS__)
-+#define E_setresuid(...) E_func(setresuid, __VA_ARGS__)
-+#define E_chmod(...)     E_func(chmod,     __VA_ARGS__)
-+
-+#define E_assert(expr, msg, ...)					\
-+	do {								\
-+		if (!(expr))						\
-+			ksft_exit_fail_msg("ASSERT(%s:%d) failed (%s): " msg "\n", \
-+					   __FILE__, __LINE__, #expr, ##__VA_ARGS__); \
-+	} while (0)
-+
-+typedef int (*openfunc_t)(int dfd, const char *path, unsigned int flags);
-+
-+static int sys_resolveat(int dfd, const char *path, unsigned int flags)
++SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
 +{
-+	int ret = syscall(__NR_resolveat, dfd, path, flags);
-+	return ret >= 0 ? ret : -errno;
-+}
++	int fd, ret;
++	struct pid *p;
 +
-+static int sys_openat(int dfd, const char *path, unsigned int flags)
-+{
-+	int ret = openat(dfd, path, flags);
-+	return ret >= 0 ? ret : -errno;
-+}
++	if (flags)
++		return -EINVAL;
 +
-+static int sys_execveat(int dfd, const char *path,
-+			char *const argv[], char *const envp[], int flags)
-+{
-+	int ret = syscall(SYS_execveat, dfd, path, argv, envp, flags);
-+	return ret >= 0 ? ret : -errno;
-+}
++	if (pid <= 0)
++		return -EINVAL;
 +
-+static char *resolveat_flags(unsigned int flags)
-+{
-+	char *flagset, *p;
++	p = find_get_pid(pid);
++	if (!p)
++		return -ESRCH;
 +
-+	E_asprintf(&flagset, "%s%s%s%s%s%s%s%s0",
-+		   (flags & RESOLVE_UPGRADE_NOWRITE)	? "RESOLVE_UPGRADE_NOWRITE|" : "",
-+		   (flags & RESOLVE_UPGRADE_NOREAD)	? "RESOLVE_UPGRADE_NOREAD|" : "",
-+		   (flags & RESOLVE_NO_FOLLOW)		? "RESOLVE_NO_FOLLOW|" : "",
-+		   (flags & RESOLVE_BENEATH)		? "RESOLVE_BENEATH|" : "",
-+		   (flags & RESOLVE_XDEV)		? "RESOLVE_XDEV|" : "",
-+		   (flags & RESOLVE_NO_MAGICLINKS)	? "RESOLVE_NO_MAGICLINKS|" : "",
-+		   (flags & RESOLVE_NO_SYMLINKS)	? "RESOLVE_NO_SYMLINKS|" : "",
-+		   (flags & RESOLVE_IN_ROOT)		? "RESOLVE_IN_ROOT|" : "");
++	ret = 0;
++	rcu_read_lock();
++	if (!pid_task(p, PIDTYPE_TGID))
++		ret = -EINVAL;
++	rcu_read_unlock();
 +
-+	/* Fix up the trailing |0. */
-+	p = strstr(flagset, "|0");
-+	if (p)
-+		*p = '\0';
-+	return flagset;
-+}
-+
-+static char *openat_flags(unsigned int flags)
-+{
-+	char *flagset;
-+	const char *modeflag = "(none)";
-+
-+	/* Handle the peculiarity of the ACC_MODE flags. */
-+	switch (flags & 0x03) {
-+		case O_RDWR:
-+			modeflag = "O_RDWR";
-+			break;
-+		case O_RDONLY:
-+			modeflag = "O_RDONLY";
-+			break;
-+		case O_WRONLY:
-+			modeflag = "O_WRONLY";
-+			break;
-+	}
-+
-+	/* TODO: Add more open flags. */
-+	E_asprintf(&flagset, "%s", modeflag);
-+	return flagset;
-+}
-+
-+static int touchat(int dfd, const char *path)
-+{
-+	int fd = openat(dfd, path, O_CREAT);
-+	if (fd >= 0)
-+		close(fd);
++	fd = ret ?: pidfd_create(p);
++	put_pid(p);
 +	return fd;
 +}
 +
-+static char *fdreadlink(int fd)
-+{
-+	char *target, *tmp;
-+
-+	E_asprintf(&tmp, "/proc/self/fd/%d", fd);
-+
-+	target = malloc(PATH_MAX);
-+	if (!target)
-+		ksft_exit_fail_msg("fdreadlink: malloc failed\n");
-+	memset(target, 0, PATH_MAX);
-+
-+	E_readlink(tmp, target, PATH_MAX);
-+	free(tmp);
-+	return target;
-+}
-+
-+static bool fdequal(int fd, int dfd, const char *path)
-+{
-+	char *fdpath, *dfdpath, *other;
-+	bool cmp;
-+
-+	fdpath = fdreadlink(fd);
-+	dfdpath = fdreadlink(dfd);
-+
-+	if (!path)
-+		E_asprintf(&other, "%s", dfdpath);
-+	else if (*path == '/')
-+		E_asprintf(&other, "%s", path);
-+	else
-+		E_asprintf(&other, "%s/%s", dfdpath, path);
-+
-+	cmp = !strcmp(fdpath, other);
-+	if (!cmp)
-+		ksft_print_msg("fdequal: expected '%s' but got '%s'\n", other, fdpath);
-+
-+	free(fdpath);
-+	free(dfdpath);
-+	free(other);
-+	return cmp;
-+}
-+
-+static void test_resolveat_supported(void)
-+{
-+	int fd = sys_resolveat(AT_FDCWD, ".", 0);
-+	if (fd == -ENOSYS)
-+		ksft_exit_skip("resolveat(2) unsupported on this kernel\n");
-+	if (fd < 0)
-+		ksft_exit_fail_msg("resolveat(2) supported check failed: %s\n", strerror(-fd));
-+	close(fd);
-+}
-+
-+#endif /* __RESOLVEAT_H__ */
-diff --git a/tools/testing/selftests/resolveat/linkmode_test.c b/tools/testing/selftests/resolveat/linkmode_test.c
-new file mode 100644
-index 000000000000..b60375099494
---- /dev/null
-+++ b/tools/testing/selftests/resolveat/linkmode_test.c
-@@ -0,0 +1,306 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Author: Aleksa Sarai <cyphar@cyphar.com>
-+ * Copyright (C) 2018-2019 SUSE LLC.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <libgen.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <sys/mount.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <limits.h>
-+#include <unistd.h>
-+
-+#include "../kselftest.h"
-+#include "helpers.h"
-+
-+static mode_t fdmode(int fd)
-+{
-+	char *fdpath;
-+	struct stat statbuf;
-+	mode_t mode;
-+
-+	E_asprintf(&fdpath, "/proc/self/fd/%d", fd);
-+	E_fstatat(AT_FDCWD, fdpath, &statbuf, AT_SYMLINK_NOFOLLOW);
-+	mode = (statbuf.st_mode & ~S_IFMT);
-+	free(fdpath);
-+
-+	return mode;
-+}
-+
-+static int reopen_proc(int fd, unsigned int flags)
-+{
-+	int ret, saved_errno;
-+	char *fdpath;
-+
-+	E_asprintf(&fdpath, "/proc/self/fd/%d", fd);
-+	ret = open(fdpath, flags);
-+	saved_errno = errno;
-+	free(fdpath);
-+
-+	return ret >= 0 ? ret : -saved_errno;
-+}
-+
-+static int reopen_oemptypath(int fd, unsigned int flags)
-+{
-+	int ret = openat(fd, "", O_EMPTYPATH | flags);
-+	return ret >= 0 ? ret : -errno;
-+}
-+
-+struct reopen_test {
-+	openfunc_t open;
-+	mode_t chmod_mode;
-+	struct {
-+		unsigned int flags;
-+		mode_t mode;
-+		int err;
-+	} orig, new;
-+};
-+
-+static bool reopen(int fd, struct reopen_test *test)
-+{
-+	int newfd;
-+	mode_t proc_mode;
-+	bool failed = false;
-+
-+	/* Check that the proc mode is correct. */
-+	proc_mode = fdmode(fd);
-+	if (proc_mode != test->orig.mode) {
-+		ksft_print_msg("incorrect fdmode (got[%o] != want[%o])\n",
-+			       proc_mode, test->orig.mode);
-+		failed = true;
-+	}
-+
-+	/* Re-open through /proc. */
-+	newfd = reopen_proc(fd, test->new.flags);
-+	if (newfd != test->new.err && (newfd < 0 || test->new.err < 0)) {
-+		ksft_print_msg("/proc failure (%d != %d [%s])\n",
-+			       newfd, test->new.err, strerror(-test->new.err));
-+		failed = true;
-+	}
-+	if (newfd >= 0) {
-+		proc_mode = fdmode(newfd);
-+		if (proc_mode != test->new.mode) {
-+			ksft_print_msg("/proc wrong fdmode (got[%o] != want[%o])\n",
-+				       proc_mode, test->new.mode);
-+			failed = true;
-+		}
-+		close(newfd);
-+	}
-+
-+	/* Re-open with O_EMPTYPATH. */
-+	newfd = reopen_oemptypath(fd, test->new.flags);
-+	if (newfd != test->new.err && (newfd < 0 || test->new.err < 0)) {
-+		ksft_print_msg("O_EMPTYPATH failure (%d != %d [%s])\n",
-+			       newfd, test->new.err, strerror(-test->new.err));
-+		failed = true;
-+	}
-+	if (newfd >= 0) {
-+		proc_mode = fdmode(newfd);
-+		if (proc_mode != test->new.mode) {
-+			ksft_print_msg("O_EMPTYPATH wrong fdmode (got[%o] != want[%o])\n",
-+				       proc_mode, test->new.mode);
-+			failed = true;
-+		}
-+		close(newfd);
-+	}
-+
-+	return failed;
-+}
-+
-+void test_reopen_ordinary(bool privileged)
-+{
-+	int fd;
-+	int err_access = privileged ? 0 : -EACCES;
-+	char tmpfile[] = "/tmp/reopen-testfile.XXXXXX";
-+
-+	fd = mkstemp(tmpfile);
-+	E_assert(fd >= 0, "mkstemp failed: %m\n");
-+	close(fd);
-+
-+	struct reopen_test tests[] = {
-+		/* Re-opening with the same mode should succeed. */
-+		{ .open = sys_openat,	  .chmod_mode = 0400,
-+		  .orig.flags = O_RDONLY, .orig.mode  = privileged ? 0777 : 0555,
-+		  .new.flags  = O_RDONLY, .new.mode   = privileged ? 0777 : 0555},
-+		{ .open = sys_openat,	  .chmod_mode = 0200,
-+		  .orig.flags = O_WRONLY, .orig.mode  = privileged ? 0777 : 0333,
-+		  .new.flags  = O_WRONLY, .new.mode   = privileged ? 0777 : 0333 },
-+		{ .open = sys_openat,	  .chmod_mode = 0600,
-+		  .orig.flags =   O_RDWR, .orig.mode  = 0777,
-+		  .new.flags  =   O_RDWR, .new.mode   = 0777 },
-+		{ .open = sys_openat,	  .chmod_mode = 0600,
-+		  .orig.flags =   O_RDWR, .orig.mode  = 0777,
-+		  .new.flags  = O_RDONLY, .new.mode   = 0777 },
-+		{ .open = sys_openat,	  .chmod_mode = 0600,
-+		  .orig.flags =   O_RDWR, .orig.mode  = 0777,
-+		  .new.flags  = O_WRONLY, .new.mode   = 0777 },
-+
-+		/*
-+		 * Upgrading the mode of a normal file works if the user had the
-+		 * required access at original-open time.
-+		 */
-+		{ .open = sys_openat,	  .chmod_mode = 0600,
-+		  .orig.flags = O_RDONLY, .orig.mode  = 0777,
-+		  .new.flags  = O_WRONLY, .new.mode   = 0777 },
-+		{ .open = sys_openat,	  .chmod_mode = 0600,
-+		  .orig.flags = O_WRONLY, .orig.mode  = 0777,
-+		  .new.flags  = O_RDONLY, .new.mode   = 0777 },
-+		{ .open = sys_openat,	  .chmod_mode = 0600,
-+		  .orig.flags = O_RDONLY, .orig.mode  = 0777,
-+		  .new.flags  =   O_RDWR, .new.mode   = 0777 },
-+		{ .open = sys_openat,	  .chmod_mode = 0600,
-+		  .orig.flags = O_WRONLY, .orig.mode  = 0777,
-+		  .new.flags  =   O_RDWR, .new.mode   = 0777 },
-+
-+		/* However, re-open will be blocked given insufficient permissions. */
-+		{ .open = sys_openat,	  .chmod_mode = 0400,
-+		  .orig.flags = O_RDONLY, .orig.mode  = privileged ? 0777 : 0555,
-+		  .new.flags  = O_WRONLY, .new.mode   = 0777, .new.err = err_access },
-+		{ .open = sys_openat,	  .chmod_mode = 0200,
-+		  .orig.flags = O_WRONLY, .orig.mode  = privileged ? 0777 : 0333,
-+		  .new.flags  = O_RDONLY, .new.mode   = 0777, .new.err = err_access },
-+		{ .open = sys_openat,	  .chmod_mode = 0400,
-+		  .orig.flags = O_RDONLY, .orig.mode  = privileged ? 0777 : 0555,
-+		  .new.flags  =   O_RDWR, .new.mode   = 0777, .new.err = err_access },
-+		{ .open = sys_openat,	  .chmod_mode = 0200,
-+		  .orig.flags = O_WRONLY, .orig.mode  = privileged ? 0777 : 0333,
-+		  .new.flags  =   O_RDWR, .new.mode   = 0777, .new.err = err_access },
-+
-+		/* O_PATH re-opens (of ordinary files) will always work. */
-+		{ .open = sys_openat,	  .chmod_mode = 0000,
-+		  .orig.flags =   O_PATH, .orig.mode  = 0777,
-+		  .new.flags  = O_WRONLY, .new.mode   = 0777 },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags =        0, .orig.mode  = 0777,
-+		  .new.flags  = O_WRONLY, .new.mode   = 0777 },
-+		{ .open = sys_openat,	  .chmod_mode = 0000,
-+		  .orig.flags =   O_PATH, .orig.mode  = 0777,
-+		  .new.flags  = O_RDONLY, .new.mode   = 0777 },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags =        0, .orig.mode  = 0777,
-+		  .new.flags  = O_RDONLY, .new.mode   = 0777 },
-+		{ .open = sys_openat,	  .chmod_mode = 0000,
-+		  .orig.flags =   O_PATH, .orig.mode  = 0777,
-+		  .new.flags  =   O_RDWR, .new.mode   = 0777 },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags =        0, .orig.mode  = 0777,
-+		  .new.flags  =   O_RDWR, .new.mode   = 0777 },
-+
-+		/*
-+		 * resolveat(2) RESOLVE_UPGRADE_NO* flags. In the privileged case, the
-+		 * re-open will work but the mode will still be scoped to the mode
-+		 * (or'd with the open acc_mode).
-+		 */
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags = RESOLVE_UPGRADE_NOREAD | RESOLVE_UPGRADE_NOWRITE,
-+		                          .orig.mode  = 0111,
-+		  .new.flags  = O_RDONLY, .new.mode   = 0555, .new.err = err_access },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags = RESOLVE_UPGRADE_NOREAD | RESOLVE_UPGRADE_NOWRITE,
-+		                          .orig.mode  = 0111,
-+		  .new.flags  = O_WRONLY, .new.mode   = 0333, .new.err = err_access },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags = RESOLVE_UPGRADE_NOREAD | RESOLVE_UPGRADE_NOWRITE,
-+		                          .orig.mode  = 0111,
-+		  .new.flags  =   O_RDWR, .new.mode   = 0777, .new.err = err_access },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags = RESOLVE_UPGRADE_NOWRITE,
-+		                          .orig.mode  = 0555,
-+		  .new.flags  = O_RDONLY, .new.mode   = 0555 },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags = RESOLVE_UPGRADE_NOREAD,
-+		                          .orig.mode  = 0333,
-+		  .new.flags  = O_WRONLY, .new.mode   = 0333 },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags = RESOLVE_UPGRADE_NOWRITE,
-+		                          .orig.mode  = 0555,
-+		  .new.flags  = O_RDONLY, .new.mode   = 0555 },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags = RESOLVE_UPGRADE_NOREAD,
-+		                          .orig.mode  = 0333,
-+		  .new.flags  = O_RDONLY, .new.mode   = 0777, .new.err = err_access },
-+		{ .open = sys_resolveat,  .chmod_mode = 0000,
-+		  .orig.flags = RESOLVE_UPGRADE_NOWRITE,
-+		                          .orig.mode  = 0555,
-+		  .new.flags  = O_WRONLY, .new.mode   = 0777, .new.err = err_access },
-+	};
-+
-+	for (int i = 0; i < ARRAY_LEN(tests); i++) {
-+		int fd;
-+		char *orig_flagset, *new_flagset;
-+		struct reopen_test *test = &tests[i];
-+		void (*resultfn)(const char *msg, ...) = ksft_test_result_pass;
-+
-+		E_chmod(tmpfile, test->chmod_mode);
-+
-+		fd = test->open(AT_FDCWD, tmpfile, test->orig.flags);
-+		E_assert(fd >= 0, "open '%s' failed: %m\n", tmpfile);
-+
-+		/* Make sure that any EACCES we see is not from inode permissions. */
-+		E_chmod(tmpfile, 0777);
-+
-+		if (reopen(fd, test))
-+			resultfn = ksft_test_result_fail;
-+
-+		close(fd);
-+
-+		new_flagset = openat_flags(test->new.flags);
-+		if (test->open == sys_openat)
-+			orig_flagset = openat_flags(test->orig.flags);
-+		else if (test->open == sys_resolveat)
-+			orig_flagset = resolveat_flags(test->orig.flags);
-+		else
-+			ksft_exit_fail_msg("unknown test->open\n");
-+
-+		resultfn("%sordinary reopen of (orig[%s]=%s, new=%s) chmod=%.3o %s\n",
-+			 privileged ? "privileged " : "",
-+			 test->open == sys_openat ? "openat" : "resolveat",
-+			 orig_flagset, new_flagset, test->chmod_mode,
-+			 test->new.err < 0 ? strerror(-test->new.err) : "works");
-+
-+		free(new_flagset);
-+		free(orig_flagset);
-+	}
-+
-+	unlink(tmpfile);
-+}
-+
-+
-+int main(int argc, char **argv)
-+{
-+	bool privileged;
-+
-+	ksft_print_header();
-+	test_resolveat_supported();
-+
-+	/*
-+	 * Technically we should be checking CAP_DAC_OVERRIDE, but it's easier to
-+	 * just assume that euid=0 has the full capability set.
-+	 */
-+	privileged = (geteuid() == 0);
-+	if (!privileged)
-+		ksft_test_result_skip("privileged tests require euid == 0\n");
-+	else {
-+		test_reopen_ordinary(privileged);
-+
-+		E_setresuid(65534, 65534, 65534);
-+		privileged = (geteuid() == 0);
-+	}
-+
-+	test_reopen_ordinary(privileged);
-+
-+	if (ksft_get_fail_cnt() + ksft_get_error_cnt() > 0)
-+		ksft_exit_fail();
-+	else
-+		ksft_exit_pass();
-+}
-diff --git a/tools/testing/selftests/resolveat/resolveat_test.c b/tools/testing/selftests/resolveat/resolveat_test.c
-new file mode 100644
-index 000000000000..72f2e8c5dfe0
---- /dev/null
-+++ b/tools/testing/selftests/resolveat/resolveat_test.c
-@@ -0,0 +1,400 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Author: Aleksa Sarai <cyphar@cyphar.com>
-+ * Copyright (C) 2018-2019 SUSE LLC.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <libgen.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <sys/mount.h>
-+#include <sys/mman.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <limits.h>
-+#include <unistd.h>
-+
-+#include "../kselftest.h"
-+#include "helpers.h"
-+
-+/*
-+ * Construct a test directory with the following structure:
-+ *
-+ * root/
-+ * |-- procexe -> /proc/self/exe
-+ * |-- procroot -> /proc/self/root
-+ * |-- root/
-+ * |-- mnt/ [mountpoint]
-+ * |   |-- self -> ../mnt/
-+ * |   `-- absself -> /mnt/
-+ * |-- etc/
-+ * |   `-- passwd
-+ * |-- relsym -> etc/passwd
-+ * |-- abssym -> /etc/passwd
-+ * |-- abscheeky -> /cheeky
-+ * |-- abscheeky -> /cheeky
-+ * `-- cheeky/
-+ *     |-- absself -> /
-+ *     |-- self -> ../../root/
-+ *     |-- garbageself -> /../../root/
-+ *     |-- passwd -> ../cheeky/../cheeky/../etc/../etc/passwd
-+ *     |-- abspasswd -> /../cheeky/../cheeky/../etc/../etc/passwd
-+ *     |-- dotdotlink -> ../../../../../../../../../../../../../../etc/passwd
-+ *     `-- garbagelink -> /../../../../../../../../../../../../../../etc/passwd
-+ */
-+int setup_testdir(void)
-+{
-+	int dfd, tmpfd;
-+	char dirname[] = "/tmp/resolveat-testdir.XXXXXX";
-+
-+	/* Unshare and make /tmp a new directory. */
-+	E_unshare(CLONE_NEWNS);
-+	E_mount("", "/tmp", "", MS_PRIVATE, "");
-+
-+	/* Make the top-level directory. */
-+	if (!mkdtemp(dirname))
-+		ksft_exit_fail_msg("setup_testdir: failed to create tmpdir\n");
-+	dfd = open(dirname, O_PATH | O_DIRECTORY);
-+	if (dfd < 0)
-+		ksft_exit_fail_msg("setup_testdir: failed to open tmpdir\n");
-+
-+	/* A sub-directory which is actually used for tests. */
-+	E_mkdirat(dfd, "root", 0755);
-+	tmpfd = openat(dfd, "root", O_PATH | O_DIRECTORY);
-+	if (tmpfd < 0)
-+		ksft_exit_fail_msg("setup_testdir: failed to open tmpdir\n");
-+	close(dfd);
-+	dfd = tmpfd;
-+
-+	E_symlinkat("/proc/self/exe", dfd, "procexe");
-+	E_symlinkat("/proc/self/root", dfd, "procroot");
-+	E_mkdirat(dfd, "root", 0755);
-+
-+	/* There is no mountat(2), so use chdir. */
-+	E_mkdirat(dfd, "mnt", 0755);
-+	E_fchdir(dfd);
-+	E_mount("tmpfs", "./mnt", "tmpfs", MS_NOSUID | MS_NODEV, "");
-+	E_symlinkat("../mnt/", dfd, "mnt/self");
-+	E_symlinkat("/mnt/", dfd, "mnt/absself");
-+
-+	E_mkdirat(dfd, "etc", 0755);
-+	E_touchat(dfd, "etc/passwd");
-+
-+	E_symlinkat("etc/passwd", dfd, "relsym");
-+	E_symlinkat("/etc/passwd", dfd, "abssym");
-+	E_symlinkat("/cheeky", dfd, "abscheeky");
-+
-+	E_mkdirat(dfd, "cheeky", 0755);
-+
-+	E_symlinkat("/", dfd, "cheeky/absself");
-+	E_symlinkat("../../root/", dfd, "cheeky/self");
-+	E_symlinkat("/../../root/", dfd, "cheeky/garbageself");
-+
-+	E_symlinkat("../cheeky/../etc/../etc/passwd", dfd, "cheeky/passwd");
-+	E_symlinkat("/../cheeky/../etc/../etc/passwd", dfd, "cheeky/abspasswd");
-+
-+	E_symlinkat("../../../../../../../../../../../../../../etc/passwd",
-+		    dfd, "cheeky/dotdotlink");
-+	E_symlinkat("/../../../../../../../../../../../../../../etc/passwd",
-+		    dfd, "cheeky/garbagelink");
-+
-+	return dfd;
-+}
-+
-+struct basic_test {
-+	const char *dir;
-+	const char *path;
-+	unsigned int flags;
-+	bool pass;
-+	union {
-+		int err;
-+		const char *path;
-+	} out;
-+};
-+
-+void test_resolveat_basic_tests(void)
-+{
-+	int rootfd;
-+	char *procselfexe;
-+
-+	E_asprintf(&procselfexe, "/proc/%d/exe", getpid());
-+	rootfd = setup_testdir();
-+
-+	struct basic_test tests[] = {
-+		/** RESOLVE_BENEATH **/
-+		/* Attempts to cross dirfd should be blocked. */
-+		{ .path = "/",			.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "cheeky/absself",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "abscheeky/absself",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "..",			.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "../root/",		.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "cheeky/self",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "abscheeky/self",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "cheeky/garbageself",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "abscheeky/garbageself", .flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		/* Only relative paths that stay inside dirfd should work. */
-+		{ .path = "root",		.flags = RESOLVE_BENEATH,
-+		  .out.path = "root",		.pass = true },
-+		{ .path = "etc",		.flags = RESOLVE_BENEATH,
-+		  .out.path = "etc",		.pass = true },
-+		{ .path = "etc/passwd",		.flags = RESOLVE_BENEATH,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "relsym",		.flags = RESOLVE_BENEATH,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "cheeky/passwd",	.flags = RESOLVE_BENEATH,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "abscheeky/passwd",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "abssym",		.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "/etc/passwd",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "cheeky/abspasswd",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "abscheeky/abspasswd", .flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		/* Tricky paths should fail. */
-+		{ .path = "cheeky/dotdotlink",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "abscheeky/dotdotlink", .flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "cheeky/garbagelink",	.flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "abscheeky/garbagelink", .flags = RESOLVE_BENEATH,
-+		  .out.err = -EXDEV,		.pass = false },
-+
-+		/** RESOLVE_IN_ROOT **/
-+		/* All attempts to cross the dirfd will be scoped-to-root. */
-+		{ .path = "/",			.flags = RESOLVE_IN_ROOT,
-+		  .out.path = NULL,		.pass = true },
-+		{ .path = "cheeky/absself",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = NULL,		.pass = true },
-+		{ .path = "abscheeky/absself",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = NULL,		.pass = true },
-+		{ .path = "..",			.flags = RESOLVE_IN_ROOT,
-+		  .out.path = NULL,		.pass = true },
-+		{ .path = "../root/",		.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "root",		.pass = true },
-+		{ .path = "../root/",		.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "root",		.pass = true },
-+		{ .path = "cheeky/self",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "root",		.pass = true },
-+		{ .path = "cheeky/garbageself",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "root",		.pass = true },
-+		{ .path = "abscheeky/garbageself", .flags = RESOLVE_IN_ROOT,
-+		  .out.path = "root",		.pass = true },
-+		{ .path = "root",		.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "root",		.pass = true },
-+		{ .path = "etc",		.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc",		.pass = true },
-+		{ .path = "etc/passwd",		.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "relsym",		.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "cheeky/passwd",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "abscheeky/passwd",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "abssym",		.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "/etc/passwd",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "cheeky/abspasswd",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "abscheeky/abspasswd",.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "cheeky/dotdotlink",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "abscheeky/dotdotlink", .flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "/../../../../abscheeky/dotdotlink", .flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "cheeky/garbagelink",	.flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "abscheeky/garbagelink", .flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		{ .path = "/../../../../abscheeky/garbagelink", .flags = RESOLVE_IN_ROOT,
-+		  .out.path = "etc/passwd",	.pass = true },
-+
-+		/** RESOLVE_XDEV **/
-+		/* Crossing *down* into a mountpoint is disallowed. */
-+		{ .path = "mnt",		.flags = RESOLVE_XDEV,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "mnt/",		.flags = RESOLVE_XDEV,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "mnt/.",		.flags = RESOLVE_XDEV,
-+		  .out.err = -EXDEV,		.pass = false },
-+		/* Crossing *up* out of a mountpoint is disallowed. */
-+		{ .dir = "mnt", .path = ".",	.flags = RESOLVE_XDEV,
-+		  .out.path = "mnt",		.pass = true },
-+		{ .dir = "mnt", .path = "..",	.flags = RESOLVE_XDEV,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .dir = "mnt", .path = "../mnt", .flags = RESOLVE_XDEV,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .dir = "mnt", .path = "self",	.flags = RESOLVE_XDEV,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .dir = "mnt", .path = "absself", .flags = RESOLVE_XDEV,
-+		  .out.err = -EXDEV,		.pass = false },
-+		/* Jumping to "/" is ok, but later components cannot cross. */
-+		{ .dir = "mnt", .path = "/",	.flags = RESOLVE_XDEV,
-+		  .out.path = "/",		.pass = true },
-+		{ .dir = "/", .path = "/",	.flags = RESOLVE_XDEV,
-+		  .out.path = "/",		.pass = true },
-+		{ .path = "/proc/1",		.flags = RESOLVE_XDEV,
-+		  .out.err = -EXDEV,		.pass = false },
-+		{ .path = "/tmp",		.flags = RESOLVE_XDEV,
-+		  .out.err = -EXDEV,		.pass = false },
-+
-+		/** RESOLVE_NO_MAGICLINKS **/
-+		/* Regular symlinks should work. */
-+		{ .path = "relsym",		.flags = RESOLVE_NO_MAGICLINKS,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		/* Magic-links should not work. */
-+		{ .path = "procexe",		.flags = RESOLVE_NO_MAGICLINKS,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "/proc/self/exe",	.flags = RESOLVE_NO_MAGICLINKS,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "procroot/etc",	.flags = RESOLVE_NO_MAGICLINKS,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "/proc/self/root/etc", .flags = RESOLVE_NO_MAGICLINKS,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "/proc/self/root/etc", .flags = RESOLVE_NO_MAGICLINKS | RESOLVE_NO_FOLLOW,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "/proc/self/exe",	.flags = RESOLVE_NO_MAGICLINKS | RESOLVE_NO_FOLLOW,
-+		  .out.path = procselfexe,	.pass = true },
-+
-+		/** RESOLVE_NO_SYMLINKS **/
-+		/* Normal paths should work. */
-+		{ .path = ".",			.flags = RESOLVE_NO_SYMLINKS,
-+		  .out.path = NULL,		.pass = true },
-+		{ .path = "root",		.flags = RESOLVE_NO_SYMLINKS,
-+		  .out.path = "root",		.pass = true },
-+		{ .path = "etc",		.flags = RESOLVE_NO_SYMLINKS,
-+		  .out.path = "etc",		.pass = true },
-+		{ .path = "etc/passwd",		.flags = RESOLVE_NO_SYMLINKS,
-+		  .out.path = "etc/passwd",	.pass = true },
-+		/* Regular symlinks are blocked. */
-+		{ .path = "relsym",		.flags = RESOLVE_NO_SYMLINKS,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "abssym",		.flags = RESOLVE_NO_SYMLINKS,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "cheeky/garbagelink",	.flags = RESOLVE_NO_SYMLINKS,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "abscheeky/garbagelink", .flags = RESOLVE_NO_SYMLINKS,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "abscheeky/absself",	.flags = RESOLVE_NO_SYMLINKS,
-+		  .out.err = -ELOOP,		.pass = false },
-+		/* Trailing symlinks with NO_FOLLOW. */
-+		{ .path = "relsym",		.flags = RESOLVE_NO_SYMLINKS | RESOLVE_NO_FOLLOW,
-+		  .out.path = "relsym",		.pass = true },
-+		{ .path = "abssym",		.flags = RESOLVE_NO_SYMLINKS | RESOLVE_NO_FOLLOW,
-+		  .out.path = "abssym",		.pass = true },
-+		{ .path = "cheeky/garbagelink",	.flags = RESOLVE_NO_SYMLINKS | RESOLVE_NO_FOLLOW,
-+		  .out.path = "cheeky/garbagelink", .pass = true },
-+		{ .path = "abscheeky/garbagelink", .flags = RESOLVE_NO_SYMLINKS | RESOLVE_NO_FOLLOW,
-+		  .out.err = -ELOOP,		.pass = false },
-+		{ .path = "abscheeky/absself",	.flags = RESOLVE_NO_SYMLINKS | RESOLVE_NO_FOLLOW,
-+		  .out.err = -ELOOP,		.pass = false },
-+	};
-+
-+	for (int i = 0; i < ARRAY_LEN(tests); i++) {
-+		int dfd, fd;
-+		bool failed;
-+		void (*resultfn)(const char *msg, ...) = ksft_test_result_pass;
-+
-+		struct basic_test *test = &tests[i];
-+		char *flagstr = resolveat_flags(test->flags);
-+
-+		if (test->dir)
-+			dfd = openat(rootfd, test->dir, O_PATH | O_DIRECTORY);
-+		else
-+			dfd = dup(rootfd);
-+		if (dfd < 0) {
-+			resultfn = ksft_test_result_error;
-+			goto next;
-+		}
-+
-+		fd = sys_resolveat(dfd, test->path, test->flags);
-+		if (test->pass)
-+			failed = (fd < 0 || !fdequal(fd, rootfd, test->out.path));
-+		else
-+			failed = (fd != test->out.err);
-+		if (fd >= 0)
-+			close(fd);
-+		close(dfd);
-+
-+		if (failed)
-+			resultfn = ksft_test_result_fail;
-+
-+next:
-+		if (test->pass)
-+			resultfn("resolveat(root[%s], %s, %s) ==> %s\n",
-+				 test->dir ?: ".", test->path, flagstr,
-+				 test->out.path ?: ".");
-+		else
-+			resultfn("resolveat(root[%s], %s, %s) ==> %d (%s)\n",
-+				 test->dir ?: ".", test->path, flagstr,
-+				 test->out.err, strerror(-test->out.err));
-+		free(flagstr);
-+	}
-+
-+	free(procselfexe);
-+	close(rootfd);
-+}
-+
-+
-+static int proc_exec(int fd)
-+{
-+	int err, saved_errno;
-+	char *procpath;
-+	char *argv[] = {"foo", NULL};
-+	char *envp[] = {"bar", NULL};
-+
-+	E_asprintf(&procpath, "/proc/self/fd/%d", fd);
-+	err = execve(procpath, argv, envp);
-+	saved_errno = errno;
-+	free(procpath);
-+
-+	return err >= 0 ? err : -saved_errno;
-+}
-+
-+static int fd_exec(int fd)
-+{
-+	char *argv[] = {"foo", NULL};
-+	char *envp[] = {"bar", NULL};
-+
-+	return sys_execveat(fd, "", argv, envp, AT_EMPTY_PATH);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	ksft_print_header();
-+	test_resolveat_supported();
-+
-+	/* NOTE: We should be checking for CAP_SYS_ADMIN here... */
-+	if (geteuid() != 0)
-+		ksft_exit_skip("resolveat(2) tests require euid == 0\n");
-+
-+	test_resolveat_basic_tests();
-+
-+	if (ksft_get_fail_cnt() + ksft_get_error_cnt() > 0)
-+		ksft_exit_fail();
-+	else
-+		ksft_exit_pass();
-+}
+ void __init pid_idr_init(void)
+ {
+ 	/* Verify no one has done anything silly: */
 -- 
 2.21.0
 
