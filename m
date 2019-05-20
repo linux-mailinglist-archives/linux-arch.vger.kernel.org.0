@@ -2,111 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1D023B67
-	for <lists+linux-arch@lfdr.de>; Mon, 20 May 2019 16:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F1324143
+	for <lists+linux-arch@lfdr.de>; Mon, 20 May 2019 21:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387587AbfETO7e (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 May 2019 10:59:34 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:45868 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730927AbfETO7e (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 May 2019 10:59:34 -0400
-Received: by mail-qt1-f194.google.com with SMTP id t1so16601268qtc.12;
-        Mon, 20 May 2019 07:59:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iH7q7ju5ViVE2L49uUn5QLFQ5DZ8FjITgD5GKa2X2Zo=;
-        b=Rvz6Kw6u7lHk9Kf4z6dJBscjYiMxVkwz9RSK4WQ99kijDKo4/Hx4OL/mbzOuPGlLug
-         us/bQexY+QlbTVnuQgkSmqxtPVniXstghTLKbeodJgVANjQJXj6xYxNnS3khw6BVVDFU
-         bd/290l+I0x4CdDOZ8LnKemyt+xiUdbqGNrYpw/uBETE8qrqpjXGeJzYJXjpOFExw2gt
-         qNRcDHUt/YR3cabR7j1slj8zD7EBH6tkwO7CUutDhITP5xB0YfapOmrfUIPWZi6UhB8Y
-         Zczkl+j53RjWAwvfY9v5nD1blI23r2z9BJo0zRFm7Q0/G+/fDQ241N0mTC4LMOfn3xzH
-         26ZA==
-X-Gm-Message-State: APjAAAWrOlSJzyo0u3oFTswKEZA/2/LUfmWd/LNmaO0Do3YRIgaEkJ+E
-        zdmeXNb4oJm47ZHN9OYMW4Cg8zFzPt260dplO30=
-X-Google-Smtp-Source: APXvYqwOT7nfn0Ec9lVwVForvy74QSNQH5ELZWBScMVTNkQThEwunqzpps+HxqPvYzZryhqp4taHn31cUSXBj95IN0s=
-X-Received: by 2002:ac8:2a05:: with SMTP id k5mr46480681qtk.304.1558364372377;
- Mon, 20 May 2019 07:59:32 -0700 (PDT)
+        id S1726187AbfETTdK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 May 2019 15:33:10 -0400
+Received: from westpalmbeachmassagegroup.com ([45.35.221.60]:50956 "EHLO
+        wolfgangdigital.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725554AbfETTdK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 May 2019 15:33:10 -0400
+X-Greylist: delayed 3622 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 May 2019 15:33:10 EDT
+To:     linux-arch@vger.kernel.org
+Subject: Print your logo
+Message-ID: <6b53b3cdc16e5eab2ffb87c26014afaa@esquire.com>
+Date:   Mon, 20 May 2019 17:02:19 +0200
+From:   "Heather" <heather@usblogo.space>
+Reply-To: flashdrive@aliyun.com
 MIME-Version: 1.0
-References: <20190520134605.29116-1-christian@brauner.io> <CAK8P3a1cZZ6SQe5mGjhga=MgTvCGF6OKyjvosR8J6z6EpH+rVA@mail.gmail.com>
- <20190520144822.xfaifawi65jus6ng@brauner.io>
-In-Reply-To: <20190520144822.xfaifawi65jus6ng@brauner.io>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 20 May 2019 16:59:16 +0200
-Message-ID: <CAK8P3a2u2gftAuzTfspAUCvWPPE0YVNOATFPN__tEQoO4GXg-g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] pid: add pidfd_open()
-To:     Christian Brauner <christian@brauner.io>
-Cc:     Jann Horn <jannh@google.com>, Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, cyphar@cyphar.com,
-        David Howells <dhowells@redhat.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Daniel Colascione <dancol@google.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 20, 2019 at 4:48 PM Christian Brauner <christian@brauner.io> wrote:
->
-> On Mon, May 20, 2019 at 04:37:03PM +0200, Arnd Bergmann wrote:
-> > On Mon, May 20, 2019 at 3:46 PM Christian Brauner <christian@brauner.io> wrote:
-> > >
-> > > In line with Arnd's recent changes to consolidate syscall numbers across
-> > > architectures, I have added the pidfd_open() syscall to all architectures
-> > > at the same time.
-> >
-> > Thanks! I've checked that the ones you have added are all
-> > done correctly. However, double-checking that you got all of them,
-> > I noticed that you missed mips-o32 and mips-n64. With those added:
-> >
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
->
-> Perfect, will plumb mips-o32 and mips-n64 and resend once more with your
-> ack added.
-> Sidenote: You plan on merging the common syscall tables or will there be
-> a script to do this work per-arch in the future?
+Hi,
 
-David Howells also asked about this. I think having a common table will
-be best in the long run, patches welcome.
+I didn’t know if you had received my email from last week?
 
-As you noticed, there are still a few minor differences between the files
-on mips, arm, x86, alpha and s390, and we are missing the .tbl files
-for arm-compat and asm-generic, as well as an architecture independent
-script.
+We manufacture ALL custom LOGO and branded products – over 300,000 to
+choose from.
 
-Once that is all taken care of, we can move the entries for syscall
-403 and higher into a common file, and change the script to pick
-up the contents from there in addition to the architecture specific
-file.
+The most asked about product that we make, is the custom printed USB flash
+drives!
+We can print your logo on them and load your digital images, videos and
+files!
 
-      Arnd
+Here is what we include:
+-Any size memory you need: 64MB up to 128GB
+-We will print your logo on both sides, just ask!
+-Very Low Order Minimums
+-Need them quickly?  Not a problem, we offer Rush Service
+
+Email over a copy of your logo and we will create a design mock up for you
+at no cost!
+
+Our higher memory sizes are a really good option right now!
+
+Pricing is low right now, so let us know what you need and we will get you
+a quick quote.
+
+We always offer great rates for schools and nonprofits as well.
+
+Let us know what you would like quoted?
+
+Regards,
+
+Heather Millons
+Custom USB Account Manager
+
