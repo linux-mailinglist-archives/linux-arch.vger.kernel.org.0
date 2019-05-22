@@ -2,87 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14245264F9
-	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2019 15:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E081265CB
+	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2019 16:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728388AbfEVNsh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 May 2019 09:48:37 -0400
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:32908 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728370AbfEVNsh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 May 2019 09:48:37 -0400
-Received: by mail-ua1-f68.google.com with SMTP id 49so886976uas.0
-        for <linux-arch@vger.kernel.org>; Wed, 22 May 2019 06:48:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YNth5U4VpnoOGp2MIw15Nbzgf/Pxzs8ZMasphDKc4to=;
-        b=k41smxpJ5+iQw0gjo/bA5cIQySzp0vYmImPRNnW0kLy1tbaGSnK6gM2IHmMIbtVgx8
-         W4+yF5mBs4FR71cnnNDxfUL7iGU60JBYONZDa87JPKDSviGQUP0DUKqKwTuvvy+b7EV/
-         /cuz/U2ZjdE8+6ZxDuAGN61dE2vllL5jmHTG6WUybo/4Ql9OuHn38/48zaKm9MgJsqv7
-         x6pmfGpHI3itfjXRZqLNtYCCAh9UTnQAy6RtVRFLrdIW+8RFWFzEh7MMEJV+cVeULsJ3
-         ZFZnNBnHVXQf4dCtmZS0Fko/Hqy6+qULFB7psreHT6PC+MJbA1V7pTJaAj+fdWgPwy+4
-         z3YQ==
-X-Gm-Message-State: APjAAAXZSKk5zAswjPmq8MW8GglCpkKfnORMCSfKPgV2qyaWymRNRF9g
-        kMgzDYeC06R4Pp9tp3Zn1Kpw5j1wIHyZbc2j/zk=
-X-Google-Smtp-Source: APXvYqz3DyT94dapeJVWAZg9UCKvOQ5s6Qe3W339iXw99/vUQsKQCs0lrfG0Jet4tua9hvM0JXiDmzZ1NrKiZi7MiD0=
-X-Received: by 2002:ab0:42e4:: with SMTP id j91mr22921892uaj.28.1558532916107;
- Wed, 22 May 2019 06:48:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190522132754.46640-1-vincenzo.frascino@arm.com>
-In-Reply-To: <20190522132754.46640-1-vincenzo.frascino@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 May 2019 15:48:22 +0200
-Message-ID: <CAMuHMdXoUWHk-RvgwbDc0YZ+KnBSaL+1XE2n134oAVR7Y5jazg@mail.gmail.com>
+        id S1728638AbfEVOco (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 May 2019 10:32:44 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:52610 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728409AbfEVOco (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 May 2019 10:32:44 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F32F80D;
+        Wed, 22 May 2019 07:32:43 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 567FA3F718;
+        Wed, 22 May 2019 07:32:42 -0700 (PDT)
 Subject: Re: [PATCH] checkpatch: Fix spdxcheck.py
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>, jcline@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+References: <20190522132754.46640-1-vincenzo.frascino@arm.com>
+ <CAMuHMdXoUWHk-RvgwbDc0YZ+KnBSaL+1XE2n134oAVR7Y5jazg@mail.gmail.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <c4592dfd-6b56-2837-8c32-495b113e80ee@arm.com>
+Date:   Wed, 22 May 2019 15:32:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <CAMuHMdXoUWHk-RvgwbDc0YZ+KnBSaL+1XE2n134oAVR7Y5jazg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Vincenzo,
+Hi Geert,
 
-On Wed, May 22, 2019 at 3:28 PM Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
-> The LICENSE directory has recently changed structure and this makes
-> spdxcheck fails as per below:
->
-> FAIL: "Blob or Tree named 'other' not found"
-> Traceback (most recent call last):
->   File "scripts/spdxcheck.py", line 240, in <module>
-> spdx = read_spdxdata(repo)
->   File "scripts/spdxcheck.py", line 41, in read_spdxdata
-> for el in lictree[d].traverse():
-> [...]
-> KeyError: "Blob or Tree named 'other' not found"
->
-> Fix the script to restore the correctness on checkpatch License
-> checking.
->
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Jeremy Cline <jcline@redhat.com>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+On 22/05/2019 14:48, Geert Uytterhoeven wrote:
+> Hi Vincenzo,
+> 
+> On Wed, May 22, 2019 at 3:28 PM Vincenzo Frascino
+> <vincenzo.frascino@arm.com> wrote:
+>> The LICENSE directory has recently changed structure and this makes
+>> spdxcheck fails as per below:
+>>
+>> FAIL: "Blob or Tree named 'other' not found"
+>> Traceback (most recent call last):
+>>   File "scripts/spdxcheck.py", line 240, in <module>
+>> spdx = read_spdxdata(repo)
+>>   File "scripts/spdxcheck.py", line 41, in read_spdxdata
+>> for el in lictree[d].traverse():
+>> [...]
+>> KeyError: "Blob or Tree named 'other' not found"
+>>
+>> Fix the script to restore the correctness on checkpatch License
+>> checking.
+>>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Jeremy Cline <jcline@redhat.com>
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> 
+> Thanks for your patch!
+> 
+> Looks the issue is already fixed in linux-next:
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/scripts/spdxcheck.py
+> 
 
-Thanks for your patch!
+Thank you for pointing this out, I missed it.
 
-Looks the issue is already fixed in linux-next:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/scripts/spdxcheck.py
+I had a look at the patch in linux-next and seems that the problem is not
+completely solved by the patch you are referring to, in fact:
+ - For how the code it is written, exceptions directory needs to be parsed as
+   last. The only reason why it seems ok at the moment in linux-next it is
+   because there is no "dual" license appears in SPDX-Licenses field of any
+   "exception". A simple test that consists in adding Apache-2.0 to the SPDX-
+   Licenses of Linux-syscall-note generates still an exception.
+ - The SPDXException calls in the case of "SPDX-Licenses" and "License-Text" use
+   undefined parameters.
 
-Gr{oetje,eeting}s,
+My patch addresses both the issues, if it helps, I can rebase it on linux-next.
 
-                        Geert
+Please let me know.
+
+
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Vincenzo
