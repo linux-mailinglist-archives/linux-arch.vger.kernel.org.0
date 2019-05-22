@@ -2,269 +2,213 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B98C32675C
-	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2019 17:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E6126837
+	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2019 18:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729979AbfEVPxi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 May 2019 11:53:38 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46708 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729947AbfEVPxi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 May 2019 11:53:38 -0400
-Received: by mail-wr1-f65.google.com with SMTP id r7so2859631wrr.13
-        for <linux-arch@vger.kernel.org>; Wed, 22 May 2019 08:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yF9i8CBoIre9ittu6TL9sPlugb9HPbhX86BuS4x2hi8=;
-        b=RYzExnyoOv3w5Fb8VLaJHKEDYxs4aenFqlTgzrIoyILRfHlvMh2wGo5lxkZtzBmSIr
-         kOGCfp5ne9EqBjqB6SzVHfmT6akW35gkdJVszwCJfKB8OV9YsU+yLxNBGrh9EpI2AGJh
-         UC9CvWQkTTUhhU+Qs7HlgDA9/qRwQSTqEeE1QaaLxOvM3rcT5L1U8BZ/5wc1ZG5x0i7E
-         oVzw1tA9/4XF6mpiT+HTIGS38DpLhBMAGWhCo8hqTjqdKKGpJ7IGV/2j7ZITikN0fESr
-         Plage1J7mGBtdyltzXMUFjtQKVS37nFTFKuGUm5GPSBVyEtAs/0A2m/IvTHzNtOz+P81
-         l4yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yF9i8CBoIre9ittu6TL9sPlugb9HPbhX86BuS4x2hi8=;
-        b=eGOpZsp/JkgjTehRk8Vav/OXNvuUYEc7evt0UsFn5l4bl/aCP4c3wA9FKVx59JJt3D
-         S6c4ACiEcEurWj9KwSUJhQ8+GFpPWocSfQgUZ61QMSA9UxjVhhWxfHdj4x995drJDzng
-         sIySi5xxpSfGxScONKn29o7yiMRZVLy0miPgLRuA2HFIK/iSnVQyDh3fkJ/dg3GhSoRg
-         ipQIeZKVDbe8GNm4DvDT9hwpjQ/+ZHUAiXidV3Kf4jaVpWKCliDQCoDbPpkkgi7LS0pl
-         r/0otw6iRgpot3wmgAJuvBGgB0Z9QSyze0x+guy8TK3PPf7n7mPeapkVaHMhLMVFJ5si
-         uXnQ==
-X-Gm-Message-State: APjAAAVSsCuKRsLt0SxIAcxTQjIAkG4Ae8zdZc4eDnTjQE8b7mLsYX3b
-        04IO3Weh4U+xjA0kZsJI2bRgoQ==
-X-Google-Smtp-Source: APXvYqxptX7r7Y8CjJpjVCMVuUuAEbDzgoOyVNwuGDnMbTihy60ncTFvjTKE97l9juX0zFfMwBxjdQ==
-X-Received: by 2002:adf:ce89:: with SMTP id r9mr6992995wrn.300.1558540415392;
-        Wed, 22 May 2019 08:53:35 -0700 (PDT)
-Received: from localhost.localdomain ([185.197.132.10])
-        by smtp.gmail.com with ESMTPSA id t12sm15677263wro.2.2019.05.22.08.53.33
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 08:53:34 -0700 (PDT)
-From:   Christian Brauner <christian@brauner.io>
-To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        torvalds@linux-foundation.org, fweimer@redhat.com
-Cc:     jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
-        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
-        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org,
-        Christian Brauner <christian@brauner.io>
-Subject: [PATCH v1 2/2] tests: add close_range() tests
-Date:   Wed, 22 May 2019 17:52:59 +0200
-Message-Id: <20190522155259.11174-2-christian@brauner.io>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190522155259.11174-1-christian@brauner.io>
-References: <20190522155259.11174-1-christian@brauner.io>
+        id S1729576AbfEVQ2o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 May 2019 12:28:44 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:54950 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729475AbfEVQ2n (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 May 2019 12:28:43 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ECDAF341;
+        Wed, 22 May 2019 09:28:40 -0700 (PDT)
+Received: from [10.1.30.21] (apickardsiphone.cambridge.arm.com [10.1.30.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC0113F5AF;
+        Wed, 22 May 2019 09:28:38 -0700 (PDT)
+Subject: Re: [PATCH] module/ksymtab: use 64-bit relative reference for target
+ symbol
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     marc.zyngier@arm.com, james.morse@arm.com, will.deacon@arm.com,
+        guillaume.gardet@arm.com, mark.rutland@arm.com, mingo@kernel.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, arnd@arndb.de, x86@kernel.org
+References: <20190522150239.19314-1-ard.biesheuvel@arm.com>
+From:   Ard Biesheuvel <ard.biesheuvel@arm.com>
+Message-ID: <293c9d0f-dc14-1413-e4b4-4299f0acfb9e@arm.com>
+Date:   Wed, 22 May 2019 17:28:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190522150239.19314-1-ard.biesheuvel@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This adds basic tests for the new close_range() syscall.
-- test that no invalid flags can be passed
-- test that a range of file descriptors is correctly closed
-- test that a range of file descriptors is correctly closed if there there
-  are already closed file descriptors in the range
-- test that max_fd is correctly capped to the current fdtable maximum
 
-Signed-off-by: Christian Brauner <christian@brauner.io>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Jann Horn <jannh@google.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Dmitry V. Levin <ldv@altlinux.org>
-Cc: Oleg Nesterov <oleg@redhat.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: linux-api@vger.kernel.org
----
-v1: unchanged
----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/core/.gitignore       |   1 +
- tools/testing/selftests/core/Makefile         |   6 +
- .../testing/selftests/core/close_range_test.c | 128 ++++++++++++++++++
- 4 files changed, 136 insertions(+)
- create mode 100644 tools/testing/selftests/core/.gitignore
- create mode 100644 tools/testing/selftests/core/Makefile
- create mode 100644 tools/testing/selftests/core/close_range_test.c
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 9781ca79794a..06e57fabbff9 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cgroup
-+TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
-new file mode 100644
-index 000000000000..6e6712ce5817
---- /dev/null
-+++ b/tools/testing/selftests/core/.gitignore
-@@ -0,0 +1 @@
-+close_range_test
-diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
-new file mode 100644
-index 000000000000..de3ae68aa345
---- /dev/null
-+++ b/tools/testing/selftests/core/Makefile
-@@ -0,0 +1,6 @@
-+CFLAGS += -g -I../../../../usr/include/ -I../../../../include
-+
-+TEST_GEN_PROGS := close_range_test
-+
-+include ../lib.mk
-+
-diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
-new file mode 100644
-index 000000000000..ab10cd205ab9
---- /dev/null
-+++ b/tools/testing/selftests/core/close_range_test.c
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/kernel.h>
-+#include <limits.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <unistd.h>
-+
-+#include "../kselftest.h"
-+
-+static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
-+				  unsigned int flags)
-+{
-+	return syscall(__NR_close_range, fd, max_fd, flags);
-+}
-+
-+#ifndef ARRAY_SIZE
-+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-+#endif
-+
-+int main(int argc, char **argv)
-+{
-+	const char *test_name = "close_range";
-+	int i, ret;
-+	int open_fds[100];
-+	int fd_max, fd_mid, fd_min;
-+
-+	ksft_set_plan(7);
-+
-+	for (i = 0; i < ARRAY_SIZE(open_fds); i++) {
-+		int fd;
-+
-+		fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
-+		if (fd < 0) {
-+			if (errno == ENOENT)
-+				ksft_exit_skip(
-+					"%s test: skipping test since /dev/null does not exist\n",
-+					test_name);
-+
-+			ksft_exit_fail_msg(
-+				"%s test: %s - failed to open /dev/null\n",
-+				strerror(errno), test_name);
-+		}
-+
-+		open_fds[i] = fd;
-+	}
-+
-+	fd_min = open_fds[0];
-+	fd_max = open_fds[99];
-+
-+	ret = sys_close_range(fd_min, fd_max, 1);
-+	if (!ret)
-+		ksft_exit_fail_msg(
-+			"%s test: managed to pass invalid flag value\n",
-+			test_name);
-+	ksft_test_result_pass("do not allow invalid flag values for close_range()\n");
-+
-+	fd_mid = open_fds[50];
-+	ret = sys_close_range(fd_min, fd_mid, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 4 to 50\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_min, fd_mid);
-+
-+	for (i = 0; i <= 50; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 4 to 50\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_min, fd_mid);
-+
-+	/* create a couple of gaps */
-+	close(57);
-+	close(78);
-+	close(81);
-+	close(82);
-+	close(84);
-+	close(90);
-+
-+	fd_mid = open_fds[51];
-+	/* Choose slightly lower limit and leave some fds for a later test */
-+	fd_max = open_fds[92];
-+	ret = sys_close_range(fd_mid, fd_max, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
-+
-+	for (i = 51; i <= 92; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
-+
-+	fd_mid = open_fds[93];
-+	fd_max = open_fds[99];
-+	/* test that the kernel caps and still closes all fds */
-+	ret = sys_close_range(fd_mid, UINT_MAX, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
-+
-+	for (i = 93; i < 100; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
-+
-+	return ksft_exit_pass();
-+}
--- 
-2.21.0
+On 5/22/19 4:02 PM, Ard Biesheuvel wrote:
+> The following commit
+> 
+>    7290d5809571 ("module: use relative references for __ksymtab entries")
+> 
+> updated the ksymtab handling of some KASLR capable architectures
+> so that ksymtab entries are emitted as pairs of 32-bit relative
+> references. This reduces the size of the entries, but more
+> importantly, it gets rid of statically assigned absolute
+> addresses, which require fixing up at boot time if the kernel
+> is self relocating (which takes a 24 byte RELA entry for each
+> member of the ksymtab struct).
+> 
+> Since ksymtab entries are always part of the same module as the
+> symbol they export (or of the core kernel), it was assumed at the
+> time that a 32-bit relative reference is always sufficient to
+> capture the offset between a ksymtab entry and its target symbol.
+> 
+> Unfortunately, this is not always true: in the case of per-CPU
+> variables, a per-CPU variable's base address (which usually differs
+> from the actual address of any of its per-CPU copies) could be at
+> an arbitrary offset from the ksymtab entry, and so it may be out
+> of range for a 32-bit relative reference.
+> 
+> To make matters worse, we identified an issue in the arm64 module
+> loader, where the overflow check applied to 32-bit place relative
+> relocations uses the range that is specified in the AArch64 psABI,
+> which is documented as having a 'blind spot' unless you explicitly
+> narrow the range to match the signed vs unsigned interpretation of
+> the relocation target [0]. This means that, in some cases, code
+> importing those per-CPU variables from other modules may obtain a
+> bogus reference and corrupt unrelated data.
+> 
+> So let's fix this issue by switching to a 64-bit place relative
+> reference on 64-bit architectures for the ksymtab entry's target
+> symbol. This uses a bit more memory in the entry itself, which is
+> unfortunate, but it preserves the original intent, which was to
+> make the value invariant under runtime relocation of the core
+> kernel.
+> 
+> [0] https://lore.kernel.org/linux-arm-kernel/20190521125707.6115-1-ard.biesheuvel@arm.com
+> 
+> Cc: Jessica Yu <jeyu@kernel.org>
+> Cc: <stable@vger.kernel.org> # v4.19+
+> Signed-off-by: Ard Biesheuvel <ard.biesheuvel@arm.com>
+> ---
+> 
+> Note that the name 'CONFIG_HAVE_ARCH_PREL32_RELOCATIONS' is no longer
+> entirely accurate after this patch, so I will follow up with a patch
+> to rename it to CONFIG_HAVE_ARCH_PREL_RELOCATIONS, but that doesn't
+> require a backport to -stable so I have omitted it here.
+> 
+> Also note that for x86, this patch depends on b40a142b12b5 ("x86: Add
+> support for 64-bit place relative relocations"), which will need to
+> be backported to v4.19 (from v4.20) if this patch is applied to
+> -stable.
+> 
 
+Unfortunately, this is not quite true. In addition to that patch, we 
+need some changes to the x86 'relocs' tool so it can handle 64-bit 
+relative references to per-CPU symbols, much like the support it has 
+today for 32-bit relative references. I have coded it up, and will send 
+it out as soon as I have confirmed that it works.
+
+
+>   include/asm-generic/export.h |  9 +++++++--
+>   include/linux/compiler.h     |  9 +++++++++
+>   include/linux/export.h       | 14 ++++++++++----
+>   kernel/module.c              |  2 +-
+>   4 files changed, 27 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
+> index 294d6ae785d4..4d658b1e4707 100644
+> --- a/include/asm-generic/export.h
+> +++ b/include/asm-generic/export.h
+> @@ -4,7 +4,7 @@
+>   #ifndef KSYM_FUNC
+>   #define KSYM_FUNC(x) x
+>   #endif
+> -#ifdef CONFIG_64BIT
+> +#if defined(CONFIG_64BIT) && !defined(CONFIG_HAVE_ARCH_PREL32_RELOCATIONS)
+>   #ifndef KSYM_ALIGN
+>   #define KSYM_ALIGN 8
+>   #endif
+> @@ -19,7 +19,12 @@
+>   
+>   .macro __put, val, name
+>   #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+> -	.long	\val - ., \name - .
+> +#ifdef CONFIG_64BIT
+> +	.quad	\val - .
+> +#else
+> +	.long	\val - .
+> +#endif
+> +	.long	\name - .
+>   #elif defined(CONFIG_64BIT)
+>   	.quad	\val, \name
+>   #else
+> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> index 8aaf7cd026b0..33c65ebb7cfe 100644
+> --- a/include/linux/compiler.h
+> +++ b/include/linux/compiler.h
+> @@ -305,6 +305,15 @@ static inline void *offset_to_ptr(const int *off)
+>   	return (void *)((unsigned long)off + *off);
+>   }
+>   
+> +/**
+> + * loffset_to_ptr - convert a relative memory offset to an absolute pointer
+> + * @off:	the address of the signed long offset value
+> + */
+> +static inline void *loffset_to_ptr(const long *off)
+> +{
+> +	return (void *)((unsigned long)off + *off);
+> +}
+> +
+>   #endif /* __ASSEMBLY__ */
+>   
+>   /* Compile time object size, -1 for unknown */
+> diff --git a/include/linux/export.h b/include/linux/export.h
+> index fd8711ed9ac4..8f805b9f1c25 100644
+> --- a/include/linux/export.h
+> +++ b/include/linux/export.h
+> @@ -43,6 +43,12 @@ extern struct module __this_module;
+>   
+>   #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+>   #include <linux/compiler.h>
+> +#ifdef CONFIG_64BIT
+> +#define __KSYMTAB_REL	".quad "
+> +#else
+> +#define __KSYMTAB_REL	".long "
+> +#endif
+> +
+>   /*
+>    * Emit the ksymtab entry as a pair of relative references: this reduces
+>    * the size by half on 64-bit architectures, and eliminates the need for
+> @@ -52,16 +58,16 @@ extern struct module __this_module;
+>   #define __KSYMTAB_ENTRY(sym, sec)					\
+>   	__ADDRESSABLE(sym)						\
+>   	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
+> -	    "	.balign	8					\n"	\
+> +	    "	.balign	4					\n"	\
+>   	    "__ksymtab_" #sym ":				\n"	\
+> -	    "	.long	" #sym "- .				\n"	\
+> +	    __KSYMTAB_REL #sym "- .				\n"	\
+>   	    "	.long	__kstrtab_" #sym "- .			\n"	\
+>   	    "	.previous					\n")
+>   
+>   struct kernel_symbol {
+> -	int value_offset;
+> +	long value_offset;
+>   	int name_offset;
+> -};
+> +} __packed;
+>   #else
+>   #define __KSYMTAB_ENTRY(sym, sec)					\
+>   	static const struct kernel_symbol __ksymtab_##sym		\
+> diff --git a/kernel/module.c b/kernel/module.c
+> index 6e6712b3aaf5..43efd46feeee 100644
+> --- a/kernel/module.c
+> +++ b/kernel/module.c
+> @@ -541,7 +541,7 @@ static bool check_exported_symbol(const struct symsearch *syms,
+>   static unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
+>   {
+>   #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+> -	return (unsigned long)offset_to_ptr(&sym->value_offset);
+> +	return (unsigned long)loffset_to_ptr(&sym->value_offset);
+>   #else
+>   	return sym->value;
+>   #endif
+> 
