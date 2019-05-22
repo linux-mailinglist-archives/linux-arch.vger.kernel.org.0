@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2428F262B7
-	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2019 13:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD840262BB
+	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2019 13:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728680AbfEVLHl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 May 2019 07:07:41 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:48104 "EHLO
+        id S1728835AbfEVLHo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 May 2019 07:07:44 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:48130 "EHLO
         foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727464AbfEVLHl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 22 May 2019 07:07:41 -0400
+        id S1727464AbfEVLHn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 May 2019 07:07:43 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4B69341;
-        Wed, 22 May 2019 04:07:40 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5BFDF15AB;
+        Wed, 22 May 2019 04:07:43 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7BE073F575;
-        Wed, 22 May 2019 04:07:38 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F32FC3F575;
+        Wed, 22 May 2019 04:07:40 -0700 (PDT)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org
@@ -28,11 +28,13 @@ Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         Shuah Khan <shuah@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v3 0/3] Fix vDSO clock_getres()
-Date:   Wed, 22 May 2019 12:07:19 +0100
-Message-Id: <20190522110722.28094-1-vincenzo.frascino@arm.com>
+        Arnd Bergmann <arnd@arndb.de>, stable@vger.kernel.org
+Subject: [PATCH v3 1/3] powerpc: Fix vDSO clock_getres()
+Date:   Wed, 22 May 2019 12:07:20 +0100
+Message-Id: <20190522110722.28094-2-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190522110722.28094-1-vincenzo.frascino@arm.com>
+References: <20190522110722.28094-1-vincenzo.frascino@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -49,63 +51,125 @@ In particular, posix_get_hrtimer_res() does:
 and hrtimer_resolution depends on the enablement of the high
 resolution timers that can happen either at compile or at run time.
 
-A possible fix is to change the vdso implementation of clock_getres,
-keeping a copy of hrtimer_resolution in vdso data and using that
-directly [1].
+Fix the powerpc vdso implementation of clock_getres keeping a copy of
+hrtimer_resolution in vdso data and using that directly.
 
-This patchset implements the proposed fix for arm64, powerpc, s390,
-nds32 and adds a test to verify that the syscall and the vdso library
-implementation of clock_getres return the same values.
-
-Even if these patches are unified by the same topic, there is no
-dependency between them, hence they can be merged singularly by each
-arch maintainer.
-
-Note: arm64 and nds32 respective fixes have been merged in 5.2-rc1,
-hence they have been removed from this series.
-
-[1] https://marc.info/?l=linux-arm-kernel&m=155110381930196&w=2
-
-Changes:
---------
-v3:
-  - Rebased on 5.2-rc1.
-  - Addressed review comments.
-v2:
-  - Rebased on 5.1-rc5.
-  - Addressed review comments.
-
-Cc: Christophe Leroy <christophe.leroy@c-s.fr>
+Fixes: a7f290dad32e ("[PATCH] powerpc: Merge vdso's and add vdso support
+to 32 bits kernel")
+Cc: stable@vger.kernel.org
 Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 Cc: Paul Mackerras <paulus@samba.org>
 Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
-Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Reviewed-by: Christophe Leroy <christophe.leroy@c-s.fr>
+---
 
-Vincenzo Frascino (3):
-  powerpc: Fix vDSO clock_getres()
-  s390: Fix vDSO clock_getres()
-  kselftest: Extend vDSO selftest to clock_getres
+Note: This patch is independent from the others in this series, hence it
+can be merged singularly by the powerpc maintainers.
 
- arch/powerpc/include/asm/vdso_datapage.h      |   2 +
- arch/powerpc/kernel/asm-offsets.c             |   2 +-
- arch/powerpc/kernel/time.c                    |   1 +
- arch/powerpc/kernel/vdso32/gettimeofday.S     |   7 +-
- arch/powerpc/kernel/vdso64/gettimeofday.S     |   7 +-
- arch/s390/include/asm/vdso.h                  |   1 +
- arch/s390/kernel/asm-offsets.c                |   2 +-
- arch/s390/kernel/time.c                       |   1 +
- arch/s390/kernel/vdso32/clock_getres.S        |  12 +-
- arch/s390/kernel/vdso64/clock_getres.S        |  10 +-
- tools/testing/selftests/vDSO/Makefile         |   2 +
- .../selftests/vDSO/vdso_clock_getres.c        | 137 ++++++++++++++++++
- 12 files changed, 168 insertions(+), 16 deletions(-)
- create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+ arch/powerpc/include/asm/vdso_datapage.h  | 2 ++
+ arch/powerpc/kernel/asm-offsets.c         | 2 +-
+ arch/powerpc/kernel/time.c                | 1 +
+ arch/powerpc/kernel/vdso32/gettimeofday.S | 7 +++++--
+ arch/powerpc/kernel/vdso64/gettimeofday.S | 7 +++++--
+ 5 files changed, 14 insertions(+), 5 deletions(-)
 
+diff --git a/arch/powerpc/include/asm/vdso_datapage.h b/arch/powerpc/include/asm/vdso_datapage.h
+index bbc06bd72b1f..4333b9a473dc 100644
+--- a/arch/powerpc/include/asm/vdso_datapage.h
++++ b/arch/powerpc/include/asm/vdso_datapage.h
+@@ -86,6 +86,7 @@ struct vdso_data {
+ 	__s32 wtom_clock_nsec;			/* Wall to monotonic clock nsec */
+ 	__s64 wtom_clock_sec;			/* Wall to monotonic clock sec */
+ 	struct timespec stamp_xtime;		/* xtime as at tb_orig_stamp */
++	__u32 hrtimer_res;			/* hrtimer resolution */
+    	__u32 syscall_map_64[SYSCALL_MAP_SIZE]; /* map of syscalls  */
+    	__u32 syscall_map_32[SYSCALL_MAP_SIZE]; /* map of syscalls */
+ };
+@@ -107,6 +108,7 @@ struct vdso_data {
+ 	__s32 wtom_clock_nsec;
+ 	struct timespec stamp_xtime;	/* xtime as at tb_orig_stamp */
+ 	__u32 stamp_sec_fraction;	/* fractional seconds of stamp_xtime */
++	__u32 hrtimer_res;		/* hrtimer resolution */
+    	__u32 syscall_map_32[SYSCALL_MAP_SIZE]; /* map of syscalls */
+ 	__u32 dcache_block_size;	/* L1 d-cache block size     */
+ 	__u32 icache_block_size;	/* L1 i-cache block size     */
+diff --git a/arch/powerpc/kernel/asm-offsets.c b/arch/powerpc/kernel/asm-offsets.c
+index 8e02444e9d3d..dfc40f29f2b9 100644
+--- a/arch/powerpc/kernel/asm-offsets.c
++++ b/arch/powerpc/kernel/asm-offsets.c
+@@ -389,6 +389,7 @@ int main(void)
+ 	OFFSET(WTOM_CLOCK_NSEC, vdso_data, wtom_clock_nsec);
+ 	OFFSET(STAMP_XTIME, vdso_data, stamp_xtime);
+ 	OFFSET(STAMP_SEC_FRAC, vdso_data, stamp_sec_fraction);
++	OFFSET(CLOCK_REALTIME_RES, vdso_data, hrtimer_res);
+ 	OFFSET(CFG_ICACHE_BLOCKSZ, vdso_data, icache_block_size);
+ 	OFFSET(CFG_DCACHE_BLOCKSZ, vdso_data, dcache_block_size);
+ 	OFFSET(CFG_ICACHE_LOGBLOCKSZ, vdso_data, icache_log_block_size);
+@@ -419,7 +420,6 @@ int main(void)
+ 	DEFINE(CLOCK_REALTIME_COARSE, CLOCK_REALTIME_COARSE);
+ 	DEFINE(CLOCK_MONOTONIC_COARSE, CLOCK_MONOTONIC_COARSE);
+ 	DEFINE(NSEC_PER_SEC, NSEC_PER_SEC);
+-	DEFINE(CLOCK_REALTIME_RES, MONOTONIC_RES_NSEC);
+ 
+ #ifdef CONFIG_BUG
+ 	DEFINE(BUG_ENTRY_SIZE, sizeof(struct bug_entry));
+diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
+index 325d60633dfa..4ea4e9d7a58e 100644
+--- a/arch/powerpc/kernel/time.c
++++ b/arch/powerpc/kernel/time.c
+@@ -963,6 +963,7 @@ void update_vsyscall(struct timekeeper *tk)
+ 	vdso_data->wtom_clock_nsec = tk->wall_to_monotonic.tv_nsec;
+ 	vdso_data->stamp_xtime = xt;
+ 	vdso_data->stamp_sec_fraction = frac_sec;
++	vdso_data->hrtimer_res = hrtimer_resolution;
+ 	smp_wmb();
+ 	++(vdso_data->tb_update_count);
+ }
+diff --git a/arch/powerpc/kernel/vdso32/gettimeofday.S b/arch/powerpc/kernel/vdso32/gettimeofday.S
+index afd516b572f8..2b5f9e83c610 100644
+--- a/arch/powerpc/kernel/vdso32/gettimeofday.S
++++ b/arch/powerpc/kernel/vdso32/gettimeofday.S
+@@ -160,12 +160,15 @@ V_FUNCTION_BEGIN(__kernel_clock_getres)
+ 	cror	cr0*4+eq,cr0*4+eq,cr1*4+eq
+ 	bne	cr0,99f
+ 
++	mflr	r12
++  .cfi_register lr,r12
++	bl	__get_datapage@local
++	lwz	r5,CLOCK_REALTIME_RES(r3)
++	mtlr	r12
+ 	li	r3,0
+ 	cmpli	cr0,r4,0
+ 	crclr	cr0*4+so
+ 	beqlr
+-	lis	r5,CLOCK_REALTIME_RES@h
+-	ori	r5,r5,CLOCK_REALTIME_RES@l
+ 	stw	r3,TSPC32_TV_SEC(r4)
+ 	stw	r5,TSPC32_TV_NSEC(r4)
+ 	blr
+diff --git a/arch/powerpc/kernel/vdso64/gettimeofday.S b/arch/powerpc/kernel/vdso64/gettimeofday.S
+index 1f324c28705b..f07730f73d5e 100644
+--- a/arch/powerpc/kernel/vdso64/gettimeofday.S
++++ b/arch/powerpc/kernel/vdso64/gettimeofday.S
+@@ -190,12 +190,15 @@ V_FUNCTION_BEGIN(__kernel_clock_getres)
+ 	cror	cr0*4+eq,cr0*4+eq,cr1*4+eq
+ 	bne	cr0,99f
+ 
++	mflr	r12
++  .cfi_register lr,r12
++	bl	V_LOCAL_FUNC(__get_datapage)
++	lwz	r5,CLOCK_REALTIME_RES(r3)
++	mtlr	r12
+ 	li	r3,0
+ 	cmpldi	cr0,r4,0
+ 	crclr	cr0*4+so
+ 	beqlr
+-	lis	r5,CLOCK_REALTIME_RES@h
+-	ori	r5,r5,CLOCK_REALTIME_RES@l
+ 	std	r3,TSPC64_TV_SEC(r4)
+ 	std	r5,TSPC64_TV_NSEC(r4)
+ 	blr
 -- 
 2.21.0
 
