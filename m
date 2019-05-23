@@ -2,65 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3302825B
-	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2019 18:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD0D282F1
+	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2019 18:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730893AbfEWQPN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 May 2019 12:15:13 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:50014 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730790AbfEWQPN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 May 2019 12:15:13 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2191F341;
-        Thu, 23 May 2019 09:15:13 -0700 (PDT)
-Received: from fuggles.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE3473F703;
-        Thu, 23 May 2019 09:15:11 -0700 (PDT)
-Date:   Thu, 23 May 2019 17:15:09 +0100
-From:   Will Deacon <will.deacon@arm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>, linux-arch@vger.kernel.org,
-        Dave Martin <Dave.Martin@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: Re: [REVIEW][PATCHv2 03/26] signal/arm64: Use force_sig not
- force_sig_fault for SIGKILL
-Message-ID: <20190523161509.GE31896@fuggles.cambridge.arm.com>
-References: <20190523003916.20726-1-ebiederm@xmission.com>
- <20190523003916.20726-4-ebiederm@xmission.com>
- <20190523101702.GG26646@fuggles.cambridge.arm.com>
- <875zq1gnh4.fsf_-_@xmission.com>
+        id S1731473AbfEWQUl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 May 2019 12:20:41 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:59706 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731256AbfEWQUl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 23 May 2019 12:20:41 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 408BA6698C;
+        Thu, 23 May 2019 16:20:18 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.43.17.159])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 9C59759441;
+        Thu, 23 May 2019 16:20:08 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 23 May 2019 18:20:15 +0200 (CEST)
+Date:   Thu, 23 May 2019 18:20:05 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Christian Brauner <christian@brauner.io>
+Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        torvalds@linux-foundation.org, fweimer@redhat.com,
+        jannh@google.com, tglx@linutronix.de, arnd@arndb.de,
+        shuah@kernel.org, dhowells@redhat.com, tkjos@android.com,
+        ldv@altlinux.org, miklos@szeredi.hu, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2 1/2] open: add close_range()
+Message-ID: <20190523162004.GC23070@redhat.com>
+References: <20190523154747.15162-1-christian@brauner.io>
+ <20190523154747.15162-2-christian@brauner.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <875zq1gnh4.fsf_-_@xmission.com>
-User-Agent: Mutt/1.11.1+86 (6f28e57d73f2) ()
+In-Reply-To: <20190523154747.15162-2-christian@brauner.io>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Thu, 23 May 2019 16:20:41 +0000 (UTC)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 23, 2019 at 11:11:19AM -0500, Eric W. Biederman wrote:
-> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-> index ade32046f3fe..e45d5b440fb1 100644
-> --- a/arch/arm64/kernel/traps.c
-> +++ b/arch/arm64/kernel/traps.c
-> @@ -256,7 +256,10 @@ void arm64_force_sig_fault(int signo, int code, void __user *addr,
->  			   const char *str)
->  {
->  	arm64_show_signal(signo, str);
-> -	force_sig_fault(signo, code, addr, current);
-> +	if (signo == SIGKILL)
-> +		force_sig(SIGKILL, current);
-> +	else
-> +		force_sig_fault(signo, code, addr, current);
->  }
+On 05/23, Christian Brauner wrote:
+>
+> +int __close_range(struct files_struct *files, unsigned fd, unsigned max_fd)
+> +{
+> +	unsigned int cur_max;
+> +
+> +	if (fd > max_fd)
+> +		return -EINVAL;
+> +
+> +	rcu_read_lock();
+> +	cur_max = files_fdtable(files)->max_fds;
+> +	rcu_read_unlock();
+> +
+> +	/* cap to last valid index into fdtable */
+> +	max_fd = max(max_fd, (cur_max - 1));
+                 ^^^
 
-Acked-by: Will Deacon <will.deacon@arm.com>
+Hmm. min() ?
 
-Are you planning to send this series on, or would you like me to pick this
-into the arm64 tree?
+Oleg.
 
-Will
