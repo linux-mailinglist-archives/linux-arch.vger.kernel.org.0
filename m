@@ -2,74 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CEC32736B
-	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2019 02:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA83273CB
+	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2019 03:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729687AbfEWAnL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 May 2019 20:43:11 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:60230 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729511AbfEWAnK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 May 2019 20:43:10 -0400
+        id S1728511AbfEWBGx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 May 2019 21:06:53 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:51354 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728050AbfEWBGx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 May 2019 21:06:53 -0400
 Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.87)
         (envelope-from <ebiederm@xmission.com>)
-        id 1hTbp7-0004Gu-Ak; Wed, 22 May 2019 18:43:09 -0600
+        id 1hTbp8-0002L9-0G; Wed, 22 May 2019 18:43:10 -0600
 Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.int.ebiederm.org)
         by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_CBC_SHA256:128)
         (Exim 4.87)
         (envelope-from <ebiederm@xmission.com>)
-        id 1hTbo6-0005Z3-UC; Wed, 22 May 2019 18:42:15 -0600
+        id 1hTboG-0005Z3-Oo; Wed, 22 May 2019 18:42:18 -0600
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Linux Containers <containers@lists.linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>, linux-arch@vger.kernel.org
-Date:   Wed, 22 May 2019 19:39:12 -0500
-Message-Id: <20190523003916.20726-23-ebiederm@xmission.com>
+Date:   Wed, 22 May 2019 19:39:13 -0500
+Message-Id: <20190523003916.20726-24-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.21.0.dirty
 In-Reply-To: <20190523003916.20726-1-ebiederm@xmission.com>
 References: <20190523003916.20726-1-ebiederm@xmission.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1hTbo6-0005Z3-UC;;;mid=<20190523003916.20726-23-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19f1D+e/1BfTbUenFf81yBjfafK2F1Fs2A=
+X-XM-SPF: eid=1hTboG-0005Z3-Oo;;;mid=<20190523003916.20726-24-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/XSmEdBp3G/DfkJAV+7Yk3a+X2rFZTN9Y=
 X-SA-Exim-Connect-IP: 72.206.97.68
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa01.xmission.com
-X-Spam-Level: *****
-X-Spam-Status: No, score=5.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,XMGappySubj_01,XMNoVowels,XMSubLong,XM_H_QuotedFrom
-        autolearn=disabled version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: ****
+X-Spam-Status: No, score=4.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TooManySym_01,T_TooManySym_02,
+        XMNoVowels,XMSubLong,XM_H_QuotedFrom autolearn=disabled version=3.4.2
 X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4993]
-        *  1.0 XM_H_QuotedFrom Sender address is in double quotes
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.5 XMGappySubj_01 Very gappy subject
+        *      [score: 0.5000]
         *  1.5 TR_Symld_Words too many words that have symbols inside
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
         *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        *  1.0 XM_H_QuotedFrom Sender address is in double quotes
         * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
+        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
         *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *****;linux-kernel@vger.kernel.org
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;linux-kernel@vger.kernel.org
 X-Spam-Relay-Country: 
-X-Spam-Timing: total 8015 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 3.4 (0.0%), b_tie_ro: 2.4 (0.0%), parse: 0.99
-        (0.0%), extract_message_metadata: 11 (0.1%), get_uri_detail_list: 1.49
-        (0.0%), tests_pri_-1000: 9 (0.1%), tests_pri_-950: 1.09 (0.0%),
-        tests_pri_-900: 0.82 (0.0%), tests_pri_-90: 16 (0.2%), check_bayes: 15
-        (0.2%), b_tokenize: 4.4 (0.1%), b_tok_get_all: 4.9 (0.1%),
-        b_comp_prob: 1.15 (0.0%), b_tok_touch_all: 2.5 (0.0%), b_finish: 0.62
-        (0.0%), tests_pri_0: 1173 (14.6%), check_dkim_signature: 0.36 (0.0%),
-        check_dkim_adsp: 2.1 (0.0%), poll_dns_idle: 6785 (84.7%),
-        tests_pri_10: 2.8 (0.0%), tests_pri_500: 6794 (84.8%), rewrite_mail:
-        0.00 (0.0%)
-Subject: [REVIEW][PATCH 22/26] signal: Properly set TRACE_SIGNAL_LOSE_INFO in __send_signal
+X-Spam-Timing: total 1510 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 3.9 (0.3%), b_tie_ro: 2.9 (0.2%), parse: 1.06
+        (0.1%), extract_message_metadata: 13 (0.8%), get_uri_detail_list: 2.3
+        (0.2%), tests_pri_-1000: 13 (0.8%), tests_pri_-950: 1.36 (0.1%),
+        tests_pri_-900: 1.16 (0.1%), tests_pri_-90: 27 (1.8%), check_bayes: 25
+        (1.6%), b_tokenize: 9 (0.6%), b_tok_get_all: 7 (0.5%), b_comp_prob:
+        2.5 (0.2%), b_tok_touch_all: 3.0 (0.2%), b_finish: 0.96 (0.1%),
+        tests_pri_0: 1432 (94.8%), check_dkim_signature: 0.64 (0.0%),
+        check_dkim_adsp: 2.6 (0.2%), poll_dns_idle: 0.65 (0.0%), tests_pri_10:
+        2.8 (0.2%), tests_pri_500: 12 (0.8%), rewrite_mail: 0.00 (0.0%)
+Subject: [REVIEW][PATCH 23/26] signal: Move the computation of force into send_signal and correct it.
 X-Spam-Flag: No
 X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
 X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
@@ -78,61 +75,112 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Any time siginfo is not stored in the signal queue information is
-lost.  Therefore set TRACE_SIGNAL_LOSE_INFO every time the code does
-not allocate a signal queue entry, and a queue overflow abort is not
-triggered.
+Forcing a signal or not allowing a pid namespace init to ignore
+SIGKILL or SIGSTOP is more cleanly computed in send_signal.
 
-Fixes: ba005e1f4172 ("tracepoint: Add signal loss events")
+There are two cases where we don't allow a pid namespace init
+to ignore SIGKILL or SIGSTOP.  If the sending process is
+from an ancestor pid namespace and as such is effectively
+the god to the target process, and if the it is the kernel
+that is sending the signal, not another application.
+
+It is known that a process is from an ancestor pid namespace if
+it can see it's target but it's target does not have a pid for
+the sender in it's pid namespace.
+
+It is know that a signal is sent from the kernel if si_code is set to
+SI_KERNEL or info is SEND_SIG_PRIV (which ultimately generates
+a signal with si_code == SI_KERNEL).
+
+The only signals that matter are SIGKILL and SIGSTOP neither of
+which can really be caught, and both of which always have a siginfo
+layout that includes si_uid and si_pid.  Therefore we never need
+to worry about forcing a signal when si_pid and si_uid are absent.
+
+So handle the two special cases of info and the case when si_pid and
+si_uid are present.
+
 Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- kernel/signal.c | 33 ++++++++++++++++-----------------
- 1 file changed, 16 insertions(+), 17 deletions(-)
+ kernel/signal.c | 35 ++++++++++++++++++++++-------------
+ 1 file changed, 22 insertions(+), 13 deletions(-)
 
 diff --git a/kernel/signal.c b/kernel/signal.c
-index d92b636b4e9d..b2f0cf3a68aa 100644
+index b2f0cf3a68aa..0da35880261e 100644
 --- a/kernel/signal.c
 +++ b/kernel/signal.c
-@@ -1131,23 +1131,22 @@ static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struc
- 			copy_siginfo(&q->info, info);
- 			break;
- 		}
--	} else if (!is_si_special(info)) {
--		if (sig >= SIGRTMIN && info->si_code != SI_USER) {
--			/*
--			 * Queue overflow, abort.  We may abort if the
--			 * signal was rt and sent by user using something
--			 * other than kill().
--			 */
--			result = TRACE_SIGNAL_OVERFLOW_FAIL;
--			ret = -EAGAIN;
--			goto ret;
--		} else {
--			/*
--			 * This is a silent loss of information.  We still
--			 * send the signal, but the *info bits are lost.
--			 */
--			result = TRACE_SIGNAL_LOSE_INFO;
--		}
-+	} else if (!is_si_special(info) &&
-+		   sig >= SIGRTMIN && info->si_code != SI_USER) {
-+		/*
-+		 * Queue overflow, abort.  We may abort if the
-+		 * signal was rt and sent by user using something
-+		 * other than kill().
-+		 */
-+		result = TRACE_SIGNAL_OVERFLOW_FAIL;
-+		ret = -EAGAIN;
-+		goto ret;
-+	} else {
-+		/*
-+		 * This is a silent loss of information.  We still
-+		 * send the signal, but the *info bits are lost.
-+		 */
-+		result = TRACE_SIGNAL_LOSE_INFO;
- 	}
+@@ -1057,7 +1057,7 @@ static inline bool legacy_queue(struct sigpending *signals, int sig)
+ }
  
- out_set:
+ static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struct *t,
+-			enum pid_type type, int from_ancestor_ns)
++			enum pid_type type, bool force)
+ {
+ 	struct sigpending *pending;
+ 	struct sigqueue *q;
+@@ -1067,8 +1067,7 @@ static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struc
+ 	assert_spin_locked(&t->sighand->siglock);
+ 
+ 	result = TRACE_SIGNAL_IGNORED;
+-	if (!prepare_signal(sig, t,
+-			from_ancestor_ns || (info == SEND_SIG_PRIV)))
++	if (!prepare_signal(sig, t, force))
+ 		goto ret;
+ 
+ 	pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+@@ -1198,13 +1197,17 @@ static inline bool has_si_pid_and_uid(struct kernel_siginfo *info)
+ static int send_signal(int sig, struct kernel_siginfo *info, struct task_struct *t,
+ 			enum pid_type type)
+ {
+-	int from_ancestor_ns = 0;
+-
+-#ifdef CONFIG_PID_NS
+-	from_ancestor_ns = si_fromuser(info) &&
+-			   !task_pid_nr_ns(current, task_active_pid_ns(t));
+-#endif
+-	if (!is_si_special(info) && has_si_pid_and_uid(info)) {
++	/* Should SIGKILL or SIGSTOP be received by a pid namespace init? */
++	bool force = false;
++
++	if (info == SEND_SIG_NOINFO) {
++		/* Force if sent from an ancestor pid namespace */
++		force = !task_pid_nr_ns(current, task_active_pid_ns(t));
++	} else if (info == SEND_SIG_PRIV) {
++		/* Don't ignore kernel generated signals */
++		force = true;
++	} else if (has_si_pid_and_uid(info)) {
++		/* SIGKILL and SIGSTOP is special or has ids */
+ 		struct user_namespace *t_user_ns;
+ 
+ 		rcu_read_lock();
+@@ -1215,10 +1218,16 @@ static int send_signal(int sig, struct kernel_siginfo *info, struct task_struct
+ 		}
+ 		rcu_read_unlock();
+ 
+-		if (!task_pid_nr_ns(current, task_active_pid_ns(t)))
++		/* A kernel generated signal? */
++		force = (info->si_code == SI_KERNEL);
++
++		/* From an ancestor pid namespace? */
++		if (!task_pid_nr_ns(current, task_active_pid_ns(t))) {
+ 			info->si_pid = 0;
++			force = true;
++		}
+ 	}
+-	return __send_signal(sig, info, t, type, from_ancestor_ns);
++	return __send_signal(sig, info, t, type, force);
+ }
+ 
+ static void print_fatal_signal(int signr)
+@@ -1509,7 +1518,7 @@ int kill_pid_usb_asyncio(int sig, int errno, sigval_t addr,
+ 
+ 	if (sig) {
+ 		if (lock_task_sighand(p, &flags)) {
+-			ret = __send_signal(sig, &info, p, PIDTYPE_TGID, 0);
++			ret = __send_signal(sig, &info, p, PIDTYPE_TGID, false);
+ 			unlock_task_sighand(p, &flags);
+ 		} else
+ 			ret = -ESRCH;
 -- 
 2.21.0
 
