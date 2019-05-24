@@ -2,151 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AB72A170
-	for <lists+linux-arch@lfdr.de>; Sat, 25 May 2019 01:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B80FF2A1A7
+	for <lists+linux-arch@lfdr.de>; Sat, 25 May 2019 01:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732148AbfEXXHy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 May 2019 19:07:54 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38810 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727091AbfEXXHx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 May 2019 19:07:53 -0400
-Received: by mail-lj1-f196.google.com with SMTP id 14so10017837ljj.5
-        for <linux-arch@vger.kernel.org>; Fri, 24 May 2019 16:07:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pQINizPFkNPnto59K0HZACSWR9ngvO3M7aOeMX8dPW8=;
-        b=GmxgEiG+jMRxi4LmBi9k7J2C8n7RpiC2NBCZ3DLX08K85gcoyywZ4tl+P32/mMwcqG
-         O4Y184LyNs6/HdVttJYg26SnTEZenmTPwRlWi8OYmFedIXmlG1SXqhBugOdxMaqrphSg
-         0/iJn6C0x9KeeqMxCK7RF+v4pYfhlNizqxwtc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pQINizPFkNPnto59K0HZACSWR9ngvO3M7aOeMX8dPW8=;
-        b=IyX8p+2fnfrEjh6NIdKTqRURk5jDqzEPhvyu3oPfx+KXmFiZGzjmeHGecdNhuMkJ/h
-         jqKa44yMzWfNSiZgf2kqL2UeVq8Sl10SHo8eI+/sZV8BuAadqiN4x65J0jN/mjQKw7RI
-         ZD3YA5XJtJXuW0WdmU1ebWoiWIh71lHOsDIaVn3QXsQQHFfPM123uCsNRDxJxv+nILrR
-         xII9/JQw27j9jkZtue1yUiF9wFLDpR/frp/RkSsXCTJv0KpQF+GrfQfacA89YjzhPC6S
-         tzF1+NGsyN/aNk5vU9Y54nPfpw4izgCUPjRfgJCrDWHgBQDxbnt1+yHvwpt4CgbQIlI1
-         fatg==
-X-Gm-Message-State: APjAAAVq7BYhxxZtV1ddnEoBTbxKutt+B8gilEhkOSWvbDsJBAAolfgD
-        XadXHChhCoDDcqQPpo/7hS5DGw+G0/8=
-X-Google-Smtp-Source: APXvYqz8HODJNe3hxHxSulnQdHQqaz50vh8RlwQ74/u3HalfZ5/01FBMfOwpP/7HZJjDaVDCf0IeXA==
-X-Received: by 2002:a05:651c:1032:: with SMTP id w18mr30277446ljm.170.1558739271028;
-        Fri, 24 May 2019 16:07:51 -0700 (PDT)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id a16sm794884lfg.93.2019.05.24.16.07.50
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 24 May 2019 16:07:50 -0700 (PDT)
-Received: by mail-lj1-f181.google.com with SMTP id h11so10035161ljb.2
-        for <linux-arch@vger.kernel.org>; Fri, 24 May 2019 16:07:50 -0700 (PDT)
-X-Received: by 2002:a2e:97d8:: with SMTP id m24mr44440219ljj.52.1558738775052;
- Fri, 24 May 2019 15:59:35 -0700 (PDT)
+        id S1725996AbfEXXfn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 May 2019 19:35:43 -0400
+Received: from out02.mta.xmission.com ([166.70.13.232]:49389 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725816AbfEXXfn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 May 2019 19:35:43 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hUJiw-0002yc-DP; Fri, 24 May 2019 17:35:42 -0600
+Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hUJiv-0006Bx-Uh; Fri, 24 May 2019 17:35:42 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     linux-kernel@vger.kernel.org
+Cc:     Linux Containers <containers@lists.linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>, linux-arch@vger.kernel.org
+References: <20190523003916.20726-1-ebiederm@xmission.com>
+Date:   Fri, 24 May 2019 18:35:31 -0500
+In-Reply-To: <20190523003916.20726-1-ebiederm@xmission.com> (Eric
+        W. Biederman's message of "Wed, 22 May 2019 19:38:50 -0500")
+Message-ID: <87imtzctoc.fsf@xmission.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20190507164317.13562-1-cyphar@cyphar.com> <20190507164317.13562-6-cyphar@cyphar.com>
-In-Reply-To: <20190507164317.13562-6-cyphar@cyphar.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 24 May 2019 15:59:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whbFMg4+HuWOBuHpvDNiAyowX2HUowv3+pt8vPWk5W-YQ@mail.gmail.com>
-Message-ID: <CAHk-=whbFMg4+HuWOBuHpvDNiAyowX2HUowv3+pt8vPWk5W-YQ@mail.gmail.com>
-Subject: Re: [PATCH v7 5/5] namei: resolveat(2) syscall
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-XM-SPF: eid=1hUJiv-0006Bx-Uh;;;mid=<87imtzctoc.fsf@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+B20jF1ziR89m3eWO13gGZa3HRiSPsR2M=
+X-SA-Exim-Connect-IP: 72.206.97.68
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
+X-Spam-Level: ***
+X-Spam-Status: No, score=3.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
+        T_TooManySym_01,XMNoVowels,XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4534]
+        *  1.5 TR_Symld_Words too many words that have symbols inside
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa02 1397; Body=1 Fuz1=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 
+X-Spam-Combo: ***;linux-kernel@vger.kernel.org
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 140 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 2.8 (2.0%), b_tie_ro: 1.86 (1.3%), parse: 0.93
+        (0.7%), extract_message_metadata: 2.3 (1.6%), get_uri_detail_list:
+        0.22 (0.2%), tests_pri_-1000: 3.1 (2.2%), tests_pri_-950: 1.06 (0.8%),
+        tests_pri_-900: 0.87 (0.6%), tests_pri_-90: 11 (7.9%), check_bayes: 10
+        (7.1%), b_tokenize: 2.7 (1.9%), b_tok_get_all: 3.0 (2.1%),
+        b_comp_prob: 0.85 (0.6%), b_tok_touch_all: 2.0 (1.4%), b_finish: 0.61
+        (0.4%), tests_pri_0: 101 (72.0%), check_dkim_signature: 0.34 (0.2%),
+        check_dkim_adsp: 3.0 (2.1%), poll_dns_idle: 1.24 (0.9%), tests_pri_10:
+        1.85 (1.3%), tests_pri_500: 6 (3.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [REVIEW][PATCH 00/26] signal: Remove task argument from force_sig_info
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 7, 2019 at 9:44 AM Aleksa Sarai <cyphar@cyphar.com> wrote:
->
-> The most obvious syscall to add support for the new LOOKUP_* scoping
-> flags would be openat(2) (along with the required execveat(2) change
-> included in this series). However, there are a few reasons to not do
-> this:
 
-So honestly, this last patch is what turns me off the whole thing.
+Oleg,
 
-It goes from a nice new feature ("you can use O_NOSYMLINKS to disallow
-symlink traversal") to a special-case joke that isn't worth it any
-more. You get a useless path descrptor back from s special hacky
-system call, you don't actually get the useful data that you probably
-*want* the open to get you.
+Any comments on this patchset?
 
-Sure, you could eventually then use a *second* system call (openat
-with O_EMPTYPATH) to actually get something you can *use*, but at this
-point you've just wasted everybodys time and effort with a pointless
-second system call.
-
-So I really don't see the point of this whole thing. Why even bother.
-Nobody sane will ever use that odd two-systemcall model, and even if
-they did, it would be slower and inconvenient.
-
-The whole and only point of this seems to be the two lines that say
-
-       if (flags & ~VALID_RESOLVE_FLAGS)
-              return -EINVAL;
-
-but that adds absolutely zero value to anything.  The argument is that
-"we can't add it to existing flags, because old kernels won't honor
-it", but that's a completely BS argument, since the user has to have a
-fallback anyway for the old kernel case - so we literally could much
-more conveniently just expose it as a prctl() or something to _ask_
-the kernel what flags it honors.
-
-So to me, this whole argument means that "Oh, we'll make it really
-inconvenient to actually use this".
-
-If we want to introduce a new system call that allows cool new
-features, it should have *more* powerful semantics than the existing
-ones, not be clearly weaker and less useful.
-
-So how about making the new system call be something that is a
-*superset* of "openat()" so that people can use that, and then if it
-fails, just fall back to openat(). But if it succeeds, it just
-succeeds, and you don't need to then do other system calls to actually
-make it useful.
-
-Make the new system call something people *want* to use because it's
-useful, not a crippled useless thing that has some special case use
-for some limited thing and just wastes system call space.
-
-Example *useful* system call attributes:
-
- - make it like openat(), but have another argument with the "limit flags"
-
- - maybe return more status of the resulting file. People very
-commonly do "open->fstat" just to get the size for mmap or to check
-some other detail of the file before use.
-
-In other words, make the new system call *useful*. Not some castrated
-"not useful on its own" thing.
-
-So I still support the whole "let's make it easy to limit path lookup
-in sane ways", but this model of then limiting using the result sanely
-just makes me a sad panda.
-
-                     Linus
+Eric
