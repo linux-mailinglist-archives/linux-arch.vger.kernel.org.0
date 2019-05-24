@@ -2,199 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CD9295D7
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2019 12:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C744E29668
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2019 12:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390483AbfEXKbt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 May 2019 06:31:49 -0400
-Received: from mail-it1-f195.google.com ([209.85.166.195]:34268 "EHLO
-        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390391AbfEXKbt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 May 2019 06:31:49 -0400
-Received: by mail-it1-f195.google.com with SMTP id g23so10648190iti.1
-        for <linux-arch@vger.kernel.org>; Fri, 24 May 2019 03:31:48 -0700 (PDT)
+        id S2390678AbfEXKyN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 May 2019 06:54:13 -0400
+Received: from mail-it1-f193.google.com ([209.85.166.193]:38945 "EHLO
+        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390716AbfEXKyM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 May 2019 06:54:12 -0400
+Received: by mail-it1-f193.google.com with SMTP id 9so13161830itf.4
+        for <linux-arch@vger.kernel.org>; Fri, 24 May 2019 03:54:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brauner.io; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=t6QPS5lwd7cr471Dg03A0AXuNJ/CrzRoO1xYODuKhbA=;
-        b=Vxe1OcgbXiqgWJS2x6TaYm+Cn6jhah0Qj5bXPrvsCh/P7F74y/HXVPKJgfba1esHAh
-         pwR5mq5lwAljwztFYdwuQRV8yQdOUdArsoOfy733CwBcrJjtFBZmm+2psNdK9a0f6LRt
-         rLVXaIubfp97S/kaUSegG/zw06TKZWV2uGoYdfz/HBZMYvpqO26ETRVlzOvec4BsvfMF
-         b/tEWUN6EkieS8aeK40Tf6C3HdOU3ue/E/Pe+SN7+Bn/JSvbY38QUqiXMJBvf9Eosi4J
-         jqg/ZTc6HhZAgAgv8MD/8YVQKF6dun5zVxcWHFX4FzRjCjDe6ZiDbFDHVp+8BPV1oxjx
-         me4A==
+        bh=CfQCPeLhxIRZNFUFprUfxjdraaUe3oFHAGmuDz7teoQ=;
+        b=Em430Lcwry47jSvpo2CX3tGth2isfe0jStpDuxS7CMmLdA3d0PXEVPlYO1LA5R1mzt
+         HY4rafqjGQJavFGnE3XaT/sGBtGX54ySCbaX7DVDZMmxBcy/N79r+hv4lU4j2oA3k9uH
+         3qZj79cuHnNGNu2oYXdLcTSXDzUD2I8KQ+AfcVybt1p+pDbSSV/BxOdIjemHzveC4b7q
+         duRReG8ScM5eer/3Afm7cUzTfGgmoE34PFQheJOvRIbKuqLqZGUfkiFLLL9ErcrO39tc
+         F/9MwQeUr7EmYtaiFsYdYlVOLNriujpFjX0na3vmEkcAGEzSA9rJkFtPpvRuu71lHiOs
+         lhuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=t6QPS5lwd7cr471Dg03A0AXuNJ/CrzRoO1xYODuKhbA=;
-        b=a5lgadqB7kLYju8XGlBqtkyxMSQSueVceNvIBSqnck8hXtSusx7N8qV0kjvJvw6KYl
-         2L7OVfc1JG9Ga+QS00uuDW9t4jmyv7T5pm9iNT/2XBV+0lxK8aDUF3r4DJsWi59KQiPN
-         eQ9EgaW2e8eNNnm0JJ6DAYEdw2WptBwDv+hpMLfXSeypHv/nOSA5I8v8/lOCMPICFOb7
-         aCOZ8cnyfDs/yoLG0ntu8+z3W7MX9o1dVAiO9l5EtLrtXFZmell87hk54wTKgXj/CYOR
-         Jvvss7x9gESljGtgPQWp4SC37oW1Yr8t8n3JwZ00IfdFJ4yY6f4EfsBCnILK4lr4FQjw
-         6jwg==
-X-Gm-Message-State: APjAAAUi2rKXLN54vghoA1s4yrlvVMZsI6FeojSOWGsp6kmZj5p9IwD3
-        jV1IlfWMk9lcraaZaQZfZrpNaQ==
-X-Google-Smtp-Source: APXvYqzsmLzfolt9XPm7istwtQ8OTvFuPcrdmMMZuaT+6LV9wiCluPiGeCgPdZY3zO0tzizi0DzZng==
-X-Received: by 2002:a24:28c1:: with SMTP id h184mr18752225ith.105.1558693908188;
-        Fri, 24 May 2019 03:31:48 -0700 (PDT)
+        bh=CfQCPeLhxIRZNFUFprUfxjdraaUe3oFHAGmuDz7teoQ=;
+        b=NxVM+dEx3chy3U1Zo/rODAQX0gtujIcXnT1ztUbOVMugj+nRjhfASSAccT4Sdd7G65
+         Lando1dMhwba2dyUiJtP1s+cmGNV6FQa21cxnNPq96oP+fXZg/28Vcq5MgBH8Fu/97s9
+         iRgXOhkNHQtjWElTpBOH7Ww9z2ZxTwQN14g0yZ+p/7zJZhRkl6H1hF7PYlNwTWEuXAxu
+         m8bPyPP14hMOAJ7TAouEA1xZq1OEp8pG19vgEt/pNZ7BwK4PtS9IfGmXHgraqnwP273L
+         9wyCeYxg3wQySd2r5Ls2FtlnjaNARaEGQr+7aQigjlbgd2do4UGL6IgS6kR187neCXeA
+         zN8A==
+X-Gm-Message-State: APjAAAXsDQ4TkrSGJDmlaSLtEJK1LServLS7j0jAi8UYh4MTrmVMoGGF
+        VUTiSeFjyEpcuVHHUXV0JF2lBw==
+X-Google-Smtp-Source: APXvYqzek4vSIIuFlylSllnN9c1fb45hmMMLlcQcM2y40ZIswZUPrKTiVfMzOtV1j/enrZtL4iFGng==
+X-Received: by 2002:a24:4043:: with SMTP id n64mr17805822ita.25.1558695251429;
+        Fri, 24 May 2019 03:54:11 -0700 (PDT)
 Received: from brauner.io ([172.56.12.37])
-        by smtp.gmail.com with ESMTPSA id p2sm1028528itb.29.2019.05.24.03.31.41
+        by smtp.gmail.com with ESMTPSA id f14sm955704itb.31.2019.05.24.03.54.02
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 24 May 2019 03:31:47 -0700 (PDT)
-Date:   Fri, 24 May 2019 12:31:39 +0200
+        Fri, 24 May 2019 03:54:10 -0700 (PDT)
+Date:   Fri, 24 May 2019 12:54:00 +0200
 From:   Christian Brauner <christian@brauner.io>
-To:     Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        torvalds@linux-foundation.org, fweimer@redhat.com,
-        jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
-        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
-        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v1 1/2] open: add close_range()
-Message-ID: <20190524103137.otw7tbmagiqnf6u6@brauner.io>
-References: <20190522155259.11174-1-christian@brauner.io>
- <67e4458a-9cc4-d1aa-608c-73ebe9e2f7a3@yandex-team.ru>
+To:     jannh@google.com, oleg@redhat.com, viro@zeniv.linux.org.uk,
+        torvalds@linux-foundation.org, arnd@arndb.de
+Cc:     akpm@linux-foundation.org, cyphar@cyphar.com, dhowells@redhat.com,
+        ebiederm@xmission.com, elena.reshetova@intel.com,
+        keescook@chromium.org, luto@amacapital.net, luto@kernel.org,
+        tglx@linutronix.de, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, joel@joelfernandes.org,
+        dancol@google.com, serge@hallyn.com, surenb@google.com,
+        kernel-team@android.com
+Subject: Re: [PATCH v3 1/2] pid: add pidfd_open()
+Message-ID: <20190524105358.dfnelxhxodkvwbcn@brauner.io>
+References: <20190520155630.21684-1-christian@brauner.io>
+ <20190521143220.crb2zyvdov3fl4g7@brauner.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <67e4458a-9cc4-d1aa-608c-73ebe9e2f7a3@yandex-team.ru>
+In-Reply-To: <20190521143220.crb2zyvdov3fl4g7@brauner.io>
 User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 23, 2019 at 07:22:17PM +0300, Konstantin Khlebnikov wrote:
-> On 22.05.2019 18:52, Christian Brauner wrote:> This adds the close_range() syscall. It allows to efficiently close a range
-> > of file descriptors up to all file descriptors of a calling task.
-> >
-> > The syscall came up in a recent discussion around the new mount API and
-> > making new file descriptor types cloexec by default. During this
-> > discussion, Al suggested the close_range() syscall (cf. [1]). Note, a
-> > syscall in this manner has been requested by various people over time.
-> >
-> > First, it helps to close all file descriptors of an exec()ing task. This
-> > can be done safely via (quoting Al's example from [1] verbatim):
-> >
-> >          /* that exec is sensitive */
-> >          unshare(CLONE_FILES);
-> >          /* we don't want anything past stderr here */
-> >          close_range(3, ~0U);
-> >          execve(....);
-> >
-> > The code snippet above is one way of working around the problem that file
-> > descriptors are not cloexec by default. This is aggravated by the fact that
-> > we can't just switch them over without massively regressing userspace. For
-> > a whole class of programs having an in-kernel method of closing all file
-> > descriptors is very helpful (e.g. demons, service managers, programming
-> > language standard libraries, container managers etc.).
-> > (Please note, unshare(CLONE_FILES) should only be needed if the calling
-> >   task is multi-threaded and shares the file descriptor table with another
-> >   thread in which case two threads could race with one thread allocating
-> >   file descriptors and the other one closing them via close_range(). For the
-> >   general case close_range() before the execve() is sufficient.)
-> >
-> > Second, it allows userspace to avoid implementing closing all file
-> > descriptors by parsing through /proc/<pid>/fd/* and calling close() on each
-> > file descriptor. From looking at various large(ish) userspace code bases
-> > this or similar patterns are very common in:
-> > - service managers (cf. [4])
-> > - libcs (cf. [6])
-> > - container runtimes (cf. [5])
-> > - programming language runtimes/standard libraries
-> >    - Python (cf. [2])
-> >    - Rust (cf. [7], [8])
-> > As Dmitry pointed out there's even a long-standing glibc bug about missing
-> > kernel support for this task (cf. [3]).
-> > In addition, the syscall will also work for tasks that do not have procfs
-> > mounted and on kernels that do not have procfs support compiled in. In such
-> > situations the only way to make sure that all file descriptors are closed
-> > is to call close() on each file descriptor up to UINT_MAX or RLIMIT_NOFILE,
-> > OPEN_MAX trickery (cf. comment [8] on Rust).
-> >
-> > The performance is striking. For good measure, comparing the following
-> > simple close_all_fds() userspace implementation that is essentially just
-> > glibc's version in [6]:
-> >
-> > static int close_all_fds(void)
-> > {
-> >          int dir_fd;
-> >          DIR *dir;
-> >          struct dirent *direntp;
-> >
-> >          dir = opendir("/proc/self/fd");
-> >          if (!dir)
-> >                  return -1;
-> >          dir_fd = dirfd(dir);
-> >          while ((direntp = readdir(dir))) {
-> >                  int fd;
-> >                  if (strcmp(direntp->d_name, ".") == 0)
-> >                          continue;
-> >                  if (strcmp(direntp->d_name, "..") == 0)
-> >                          continue;
-> >                  fd = atoi(direntp->d_name);
-> >                  if (fd == dir_fd || fd == 0 || fd == 1 || fd == 2)
-> >                          continue;
-> >                  close(fd);
-> >          }
-> >          closedir(dir);
-> >          return 0;
-> > }
-> >
-> > to close_range() yields:
-> > 1. closing 4 open files:
-> >     - close_all_fds(): ~280 us
-> >     - close_range():    ~24 us
-> >
-> > 2. closing 1000 open files:
-> >     - close_all_fds(): ~5000 us
-> >     - close_range():   ~800 us
-> >
-> > close_range() is designed to allow for some flexibility. Specifically, it
-> > does not simply always close all open file descriptors of a task. Instead,
-> > callers can specify an upper bound.
-> > This is e.g. useful for scenarios where specific file descriptors are
-> > created with well-known numbers that are supposed to be excluded from
-> > getting closed.
-> > For extra paranoia close_range() comes with a flags argument. This can e.g.
-> > be used to implement extension. Once can imagine userspace wanting to stop
-> > at the first error instead of ignoring errors under certain circumstances.
+On Tue, May 21, 2019 at 04:32:20PM +0200, Christian Brauner wrote:
+> On Mon, May 20, 2019 at 05:56:29PM +0200, Christian Brauner wrote:
+> > This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
+> > pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
+> > process that is created via traditional fork()/clone() calls that is only
+> > referenced by a PID:
+> > 
+> > int pidfd = pidfd_open(1234, 0);
+> > ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
+> > 
+> > With the introduction of pidfds through CLONE_PIDFD it is possible to
+> > created pidfds at process creation time.
+> > However, a lot of processes get created with traditional PID-based calls
+> > such as fork() or clone() (without CLONE_PIDFD). For these processes a
+> > caller can currently not create a pollable pidfd. This is a problem for
+> > Android's low memory killer (LMK) and service managers such as systemd.
+> > Both are examples of tools that want to make use of pidfds to get reliable
+> > notification of process exit for non-parents (pidfd polling) and race-free
+> > signal sending (pidfd_send_signal()). They intend to switch to this API for
+> > process supervision/management as soon as possible. Having no way to get
+> > pollable pidfds from PID-only processes is one of the biggest blockers for
+> > them in adopting this api. With pidfd_open() making it possible to retrieve
+> > pidfds for PID-based processes we enable them to adopt this api.
+> > 
+> > In line with Arnd's recent changes to consolidate syscall numbers across
+> > architectures, I have added the pidfd_open() syscall to all architectures
+> > at the same time.
+> > 
+> > Signed-off-by: Christian Brauner <christian@brauner.io>
+> > Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 > 
-> > There might be other valid ideas in the future. In any case, a flag
-> > argument doesn't hurt and keeps us on the safe side.
+> This now also carries a Reviewed-by from David.
 > 
-> Here is another strange but real-live scenario: crash handler for dumping core.
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> > Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Jann Horn <jannh@google.com>
+> > Cc: David Howells <dhowells@redhat.com>
+> > Cc: Andy Lutomirsky <luto@kernel.org>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: Aleksa Sarai <cyphar@cyphar.com>
+> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > Cc: linux-api@vger.kernel.org
 > 
-> If applications has network connections it would be better to close them all,
-> otherwise clients will wait until end of dumping process or timeout.
-> Also closing normal files might be a good idea for releasing locks.
+> I've moved pidfd_open() into my for-next branch together with Joel's
+> pidfd polling changes. Everything is based on v5.2-rc1.
 > 
-> But simple closing might race with other threads - closed fd will be reused
-> while some code still thinks it refers to original file.
-> 
-> Our solution closes files without freeing fd: it opens /dev/null and
-> replaces all opened descriptors using dup2.
-> 
-> So, special flag for close_range() could close files without clearing bitmap.
-> Effect should be the same - fd wouldn't be reused.
-> 
-> Actually two flags for two phases: closing files and releasing fd.
+> The chosen syscall number for now is 434. David is going to send out
+> another pile of mount api related syscalls. I'll coordinate with him
+> accordingly prior to the 5.3 merge window.
 
-Konstantin, I'm sorry, I totally missed that part of your mail
-yesterday.
-Without speaking to the feasibility of this it's at least a good
-illustration that people really do have the possible need for a flag
-argument.
+After talking to Arnd, I split the syscall addition and the per-arch
+wiring-up of pidfd_open() into two patches. There are no functional
+changes and everything is still sitting in for-next.
 
 Thanks!
 Christian
