@@ -2,42 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21419291F9
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2019 09:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC9A29541
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2019 11:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389044AbfEXHoL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 May 2019 03:44:11 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:47089 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388911AbfEXHoL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 May 2019 03:44:11 -0400
-Received: by mail-qk1-f196.google.com with SMTP id a132so6005115qkb.13;
-        Fri, 24 May 2019 00:44:10 -0700 (PDT)
+        id S2390203AbfEXJ5S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 May 2019 05:57:18 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:38355 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390156AbfEXJ5Q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 May 2019 05:57:16 -0400
+Received: by mail-io1-f68.google.com with SMTP id x24so7294959ion.5
+        for <linux-arch@vger.kernel.org>; Fri, 24 May 2019 02:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=M/EcKSjlMMdWfcfrmWG3Y6oYYZWgbCmZ8EBb04SSgDI=;
+        b=EeksouSAZsbhL5PUeN9hhOGBqYxIdgSKG5pQ+CgypqeDVq7bvpYcPXpk4nvjOuW49N
+         Cd4uShxLwvxYqjNcKJ1dy0vgFQCi2T8kxvU7ymug9tdoWc48ogQukvWRqj+rDoH/lZdi
+         mk5z5JSaGumuXh7MuLtf/caHxjlNoDkGebMRL5Kle1S+UkUeFxrzzUYh15VlBefAAZZh
+         CGz2xqNtbDLY3X4iOkDE4cj/9EBRAAN5LtdJXmQiizdA26ixBiIxuDmHOO8snmNVAUCf
+         D9hWTi20mwBr6A6qLADbL5T84zefMNStJO0L4UzAz8DoygTZHCKwLfWm5uYPmb4D8osW
+         kQzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k2hM4uRH+xcF6VZw3zZp57FHF0UiIEpfXR9WFJl84UE=;
-        b=PYXq1Idzv0Di7KLMknzWpNB+eY+yAOjbVLGoI5HUbfbPvDLGbeqCylQHAYwjvuSa0e
-         IkMKSeoe3IR3aNnjCBw+MHwc5WWQdgsseuj/aC59yOVLI4d0Twksyz4v5wc494lIhagG
-         tI6f8JhIFaoCJFSmJxKQFc1dQ+AEZABwqBiQEMUXnGdfiMTZB2Gs3uPZ3vGAsGa/AdF7
-         LCIl7WMuGS5y0Bo6e8XQO/aJiEDa/nlQqrbspcGRQGNzl23DvPUNFRrB+4NRjwo/OfAB
-         atqkh0iKBC0EFrVTNrQ50gbR+7yV90h01bA/rQNSKkLlx5BjivcZnCzdDU1XcWXk/L1l
-         WKfA==
-X-Gm-Message-State: APjAAAXwfXByxZKYfWiMo9NPVH0LPLmzUDK7pZnqtwgzF0APfN1TY0OJ
-        4eLsFdXsvJQkA4Q8mb4D3BVwKXzWUO3mq3l/+tQ=
-X-Google-Smtp-Source: APXvYqy/WqyRL4BlbMWLM5GdeDgLkBJI6XwCNcVvXGonN+2oV2dtTQWrObje5U17OKbtEn0pWH9nlYsDR25/fOWgBDY=
-X-Received: by 2002:ac8:2433:: with SMTP id c48mr70119188qtc.18.1558683849757;
- Fri, 24 May 2019 00:44:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190522155259.11174-1-christian@brauner.io> <67e4458a-9cc4-d1aa-608c-73ebe9e2f7a3@yandex-team.ru>
- <20190523163345.q5ynd2ytk7nxcvqf@brauner.io>
-In-Reply-To: <20190523163345.q5ynd2ytk7nxcvqf@brauner.io>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 24 May 2019 09:43:53 +0200
-Message-ID: <CAK8P3a26uvqmExJZsezhB+cp2ADM0Ai9jVUKWOFM6kg848bCKg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] open: add close_range()
-To:     Christian Brauner <christian@brauner.io>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=M/EcKSjlMMdWfcfrmWG3Y6oYYZWgbCmZ8EBb04SSgDI=;
+        b=AZ404JU3GkgKagZB6NtvjW8qCAI7AP9U4kt7EK3wkh7/6yvah+lpwFhAQgFLcTuL6c
+         9Y+gS2cl3JhQJZr0pYOTJPhO2/g6F43so7QWUiSs60e3g1FYiOf61ksBDdmDqxO/TZch
+         F1IJGKGoZ8za+wtP+oct1jwCj0IedEWJic9hK33o8qLChTYv7tLrpW+a9wk1gHDRdNxV
+         6O+bpcHUblKu5YaMDfLbA4xnJEa5NaoHzKK12ly7v77kSi46J+KLkJlDwiwXgMBDdGnW
+         wY+RBPUGZwj8pV3cFTMio05OmmyNAAWtwfbvgW5qSKCPZJWrHjbP/Kj/ambpc0GExnOa
+         m42A==
+X-Gm-Message-State: APjAAAXoRrtDOxDhdyzxjzfxqZKtu6yP9IR+HOxNZeK/3TR46l664925
+        QHgpV2eU48tbYdVOOt6dMlJQEQ==
+X-Google-Smtp-Source: APXvYqz+et+m459Xc/MMXDSFkPYbu9py1MoPd8KKsOjtuxRk1ZkOpU0M8gCI3dUvadZvqxc3xELSrQ==
+X-Received: by 2002:a5e:8207:: with SMTP id l7mr5693770iom.232.1558691835391;
+        Fri, 24 May 2019 02:57:15 -0700 (PDT)
+Received: from brauner.io ([172.56.12.37])
+        by smtp.gmail.com with ESMTPSA id 194sm973879itm.40.2019.05.24.02.57.06
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 24 May 2019 02:57:14 -0700 (PDT)
+Date:   Fri, 24 May 2019 11:57:04 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -66,26 +75,41 @@ Cc:     Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
         linux-arch <linux-arch@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [PATCH v1 1/2] open: add close_range()
+Message-ID: <20190524095701.b7ioi5gg573vmajh@brauner.io>
+References: <20190522155259.11174-1-christian@brauner.io>
+ <67e4458a-9cc4-d1aa-608c-73ebe9e2f7a3@yandex-team.ru>
+ <20190523163345.q5ynd2ytk7nxcvqf@brauner.io>
+ <CAK8P3a26uvqmExJZsezhB+cp2ADM0Ai9jVUKWOFM6kg848bCKg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a26uvqmExJZsezhB+cp2ADM0Ai9jVUKWOFM6kg848bCKg@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 23, 2019 at 6:33 PM Christian Brauner <christian@brauner.io> wrote:
-> On Thu, May 23, 2019 at 07:22:17PM +0300, Konstantin Khlebnikov wrote:
-> > On 22.05.2019 18:52, Christian Brauner wrote:> This adds the close_range() syscall. It allows to efficiently close a range
-> > >   22 files changed, 100 insertions(+), 9 deletions(-)
+On Fri, May 24, 2019 at 09:43:53AM +0200, Arnd Bergmann wrote:
+> On Thu, May 23, 2019 at 6:33 PM Christian Brauner <christian@brauner.io> wrote:
+> > On Thu, May 23, 2019 at 07:22:17PM +0300, Konstantin Khlebnikov wrote:
+> > > On 22.05.2019 18:52, Christian Brauner wrote:> This adds the close_range() syscall. It allows to efficiently close a range
+> > > >   22 files changed, 100 insertions(+), 9 deletions(-)
+> > > >
 > > >
+> > > It would be better to split arch/ wiring into separate patch for better readability.
 > >
-> > It would be better to split arch/ wiring into separate patch for better readability.
->
-> Ok. You mean only do x86 - seems to be the standard - and then move the
-> others into a separate patch? Doesn't seem worth to have a patch
-> per-arch, I'd think.
+> > Ok. You mean only do x86 - seems to be the standard - and then move the
+> > others into a separate patch? Doesn't seem worth to have a patch
+> > per-arch, I'd think.
+> 
+> I think I would prefer the first patch to just add the call without wiring it up
+> anywhere, and a second patch do add it on all architectures including x86.
 
-I think I would prefer the first patch to just add the call without wiring it up
-anywhere, and a second patch do add it on all architectures including x86.
+I've split this into two patches and also bumped arm64
+__NR_compat_syscalls that I've missed before as you mentioned!
 
-     Arnd
+Thanks!
+Christian
