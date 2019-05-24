@@ -2,233 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFA229B47
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2019 17:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9CD29B8E
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2019 17:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389891AbfEXPiy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 May 2019 11:38:54 -0400
-Received: from foss.arm.com ([217.140.101.70]:45466 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389385AbfEXPiy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 24 May 2019 11:38:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A62380D;
-        Fri, 24 May 2019 08:38:53 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D06143F575;
-        Fri, 24 May 2019 08:38:50 -0700 (PDT)
-Date:   Fri, 24 May 2019 16:38:48 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-arch@vger.kernel.org, "H.J. Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Paul Elliott <paul.elliott@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sudakshina Das <sudi.das@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 4/8] arm64: Basic Branch Target Identification support
-Message-ID: <20190524153847.GE15566@lakrids.cambridge.arm.com>
-References: <1558693533-13465-1-git-send-email-Dave.Martin@arm.com>
- <1558693533-13465-5-git-send-email-Dave.Martin@arm.com>
- <20190524130217.GA15566@lakrids.cambridge.arm.com>
- <20190524145306.GZ28398@e103592.cambridge.arm.com>
+        id S2389927AbfEXPzu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 May 2019 11:55:50 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:38205 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389902AbfEXPzu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 May 2019 11:55:50 -0400
+Received: by mail-io1-f67.google.com with SMTP id x24so8140640ion.5
+        for <linux-arch@vger.kernel.org>; Fri, 24 May 2019 08:55:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uPv8IlVUlBLwszar8g8FSyr6oh1PreAw0BWGgT17m24=;
+        b=zN/BTNZn0LZGxpBEPIZhk1wKtEpFPiCHlRTjgucAdR18Pt7sRBKyqapFTzQyhxavY8
+         UI9bigXT2uxU4dzlGdUqnTLLuRHADTEv4IoyQ7/Ek/WCrpae8idVHwyoMjHmlZjpV7Tr
+         IPs4ocWr8NpRtBoH/MiVU6Unhc7niQvJLstnUwcT1L2llRU6lc/z+UY7XydKUmc8yfDU
+         xkXzyzd4CSsL83TThPC29ntfrRnbR4P9DG2ugI8LxnBzULCzYMWMskIiP8AzjoITY8JD
+         EDeG+3UWY6QoSErXUeqBr1tlUf1UTppFw8ei2Bp/rbx1c6DsAiAz5h8OASbGc0vpOqAZ
+         V1cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uPv8IlVUlBLwszar8g8FSyr6oh1PreAw0BWGgT17m24=;
+        b=XLBXS2TzwJFH01ZmrTGB8hn6YhKcYJp0RxF+Ad7JEv2crZpGhVJLSYVbGRauRrHG+L
+         wkgzxfylmcZr3wxKn/RpVCBR7QRfj5euY385OzEtDcrJ+u/YIQxA5Iw2UB2mVGJwQEq+
+         qXl8M9FydwC0w6mp2T3JpdFg1aRvfCdBeo8wba/XEajQsoYWgPmmgxjT3koFKVLmhuGm
+         sRjmN0cwwnWnEcRquEtsKmQrXfi6qh8Yv+2C1nQ2SgU4TS4o+FNCiRwC8VXW9qwxsJoN
+         7shuUhlxgoS5gF9ec+bJFj09+uujtV080NzK60GYn6sBtGvEdZ9Dr31oY+SYu+qGknpg
+         0l0Q==
+X-Gm-Message-State: APjAAAXZtE/BhQC/vaF1YWL6G4rXbdtSHC8/NKUAUgejDl+5TMIez5CK
+        Dr9nXcIkMHug0aw7Rk4kCbzZiwlim7x7qrLUfwipyw==
+X-Google-Smtp-Source: APXvYqwhm3jEW34q28TbZPmwtVwwgOdDHaEQ/30VOmVViott9njZcxNX77f2A7JMRhUtrAwaC0WF+d0k/un9tP4kEos=
+X-Received: by 2002:a05:6602:2109:: with SMTP id x9mr17805156iox.128.1558713348970;
+ Fri, 24 May 2019 08:55:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190524145306.GZ28398@e103592.cambridge.arm.com>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+References: <20190522150239.19314-1-ard.biesheuvel@arm.com>
+ <293c9d0f-dc14-1413-e4b4-4299f0acfb9e@arm.com> <f2141ee5-d07a-6dd9-47c6-97e8fbdccf34@arm.com>
+ <20190523091811.GA26646@fuggles.cambridge.arm.com> <907a9681-cd1d-3326-e3dd-5f6965497720@arm.com>
+ <20190524152045.w3syntzp4bb5jb7u@treble>
+In-Reply-To: <20190524152045.w3syntzp4bb5jb7u@treble>
+From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Date:   Fri, 24 May 2019 17:55:37 +0200
+Message-ID: <CAKv+Gu9DLf9y2uqTo407gLK3AX3pq+HGFxytsoR9C2zfGdUc-A@mail.gmail.com>
+Subject: Re: [PATCH] module/ksymtab: use 64-bit relative reference for target symbol
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Ard Biesheuvel <ard.biesheuvel@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, guillaume.gardet@arm.com,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Jessica Yu <jeyu@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 24, 2019 at 03:53:06PM +0100, Dave Martin wrote:
-> On Fri, May 24, 2019 at 02:02:17PM +0100, Mark Rutland wrote:
-> > On Fri, May 24, 2019 at 11:25:29AM +0100, Dave Martin wrote:
-> > > +#define arch_calc_vm_prot_bits(prot, pkey) arm64_calc_vm_prot_bits(prot)
-> > > +static inline unsigned long arm64_calc_vm_prot_bits(unsigned long prot)
-> > > +{
-> > > +	if (system_supports_bti() && (prot & PROT_BTI_GUARDED))
-> > > +		return VM_ARM64_GP;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +#define arch_vm_get_page_prot(vm_flags) arm64_vm_get_page_prot(vm_flags)
-> > > +static inline pgprot_t arm64_vm_get_page_prot(unsigned long vm_flags)
-> > > +{
-> > > +	return (vm_flags & VM_ARM64_GP) ? __pgprot(PTE_GP) : __pgprot(0);
-> > > +}
-> > 
-> > While the architectural name for the PTE bit is GP, it might make more
-> > sense to call the vm flag VM_ARM64_BTI, since people are more likely to
-> > recognise BTI than GP as a mnemonic.
-> > 
-> > Not a big deal either way, though.
-> 
-> I'm happy to change it.  It's a kernel internal flag used in
-> approximately zero places.  So whatever name is most intuitive for
-> kernel maintainers is fine.  Nobody else needs to look at it.
+On Fri, 24 May 2019 at 17:21, Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>
+> On Thu, May 23, 2019 at 10:29:39AM +0100, Ard Biesheuvel wrote:
+> >
+> >
+> > On 5/23/19 10:18 AM, Will Deacon wrote:
+> > > On Thu, May 23, 2019 at 09:41:40AM +0100, Ard Biesheuvel wrote:
+> > > >
+> > > >
+> > > > On 5/22/19 5:28 PM, Ard Biesheuvel wrote:
+> > > > >
+> > > > >
+> > > > > On 5/22/19 4:02 PM, Ard Biesheuvel wrote:
+> > > > > > The following commit
+> > > > > >
+> > > > > >     7290d5809571 ("module: use relative references for __ksymtab entries")
+> > > > > >
+> > > > > > updated the ksymtab handling of some KASLR capable architectures
+> > > > > > so that ksymtab entries are emitted as pairs of 32-bit relative
+> > > > > > references. This reduces the size of the entries, but more
+> > > > > > importantly, it gets rid of statically assigned absolute
+> > > > > > addresses, which require fixing up at boot time if the kernel
+> > > > > > is self relocating (which takes a 24 byte RELA entry for each
+> > > > > > member of the ksymtab struct).
+> > > > > >
+> > > > > > Since ksymtab entries are always part of the same module as the
+> > > > > > symbol they export (or of the core kernel), it was assumed at the
+> > > > > > time that a 32-bit relative reference is always sufficient to
+> > > > > > capture the offset between a ksymtab entry and its target symbol.
+> > > > > >
+> > > > > > Unfortunately, this is not always true: in the case of per-CPU
+> > > > > > variables, a per-CPU variable's base address (which usually differs
+> > > > > > from the actual address of any of its per-CPU copies) could be at
+> > > > > > an arbitrary offset from the ksymtab entry, and so it may be out
+> > > > > > of range for a 32-bit relative reference.
+> > > > > >
+> > > >
+> > > > (Apologies for the 3-act monologue)
+> > >
+> > > Exposition, development and recapitulation ;)
+> > >
+> > > > This turns out to be incorrect. The symbol address of per-CPU variables
+> > > > exported by modules is always in the vicinity of __per_cpu_start, and so it
+> > > > is simply a matter of making sure that the core kernel is in range for
+> > > > module ksymtab entries containing 32-bit relative references.
+> > > >
+> > > > When running the arm64 with kaslr enabled, we currently randomize the module
+> > > > space based on the range of ADRP/ADD instruction pairs, which have a -/+ 4
+> > > > GB range rather than the -/+ 2 GB range of 32-bit place relative data
+> > > > relocations. So we can fix this by simply reducing the randomization window
+> > > > to 2 GB.
+> > >
+> > > Makes sense. Do you see the need for an option to disable PREL relocs
+> > > altogether in case somebody wants the additional randomization range?
+> > >
+> >
+> > No, not really. To be honest, I don't think
+> > CONFIG_RANDOMIZE_MODULE_REGION_FULL is that useful to begin with, and the
+> > only reason we enabled it by default at the time was to ensure that the PLT
+> > code got some coverage after we introduced it.
+>
+> In code, percpu variables are accessed with absolute relocations, right?
 
-Sure thing; I just know that I'm going to remember what BTI is much more
-easily than I'll remember what GP is.
+No, they are accessed just like ordinary symbols, so PC32 references
+on x86 or ADRP/ADD references on arm64 are both quite common.
 
-> > > diff --git a/arch/arm64/include/asm/ptrace.h b/arch/arm64/include/asm/ptrace.h
-> > > index b2de329..b868ef11 100644
-> > > --- a/arch/arm64/include/asm/ptrace.h
-> > > +++ b/arch/arm64/include/asm/ptrace.h
-> > > @@ -41,6 +41,7 @@
-> > >  
-> > >  /* Additional SPSR bits not exposed in the UABI */
-> > >  #define PSR_IL_BIT		(1 << 20)
-> > > +#define PSR_BTYPE_CALL		(2 << 10)
-> > 
-> > I thought BTYPE was a 2-bit field, so isn't there at leat one other
-> > value to have a mnemonic for?
-> > 
-> > Is it an enumeration or a bitmask?
-> 
-> It's a 2-bit enumeration, and for now this is the only value that the
-> kernel uses: this determines the types of BTI landing pad permitted at
-> signal handler entry points in BTI guarded pages.
-> 
-> Possibly it would be clearer to write it
-> 
-> #define PSR_BTYPE_CALL		(0b10 << 10)
-> 
-> but we don't write other ptrace.h constants this way.  In UAPI headers
-> we should avoid GCC-isms, but here it's OK since we already rely on this
-> syntax internally.
-> 
-> I can change it if you prefer, though my preference is to leave it.
+> Before I read your 3rd act, I was wondering if it would make sense to do
+> the same with the ksymtab relocations.
+>
+> Like if we somehow [ insert much hand waving ] ensured that everybody
+> uses EXPORT_PER_CPU_SYMBOL() for percpu symbols instead of just
+> EXPORT_SYMBOL() then we could use a different macro to create the
+> ksymtab relocations for percpu variables, such that they use absolute
+> relocations.
+>
+> Just an idea.  Maybe the point is moot now.
+>
 
-I have no issue with the (2 << 10) form, but could we add mnemonics for
-the other values now, even if we're not using them at this instant?
+The problem is that we already have four different ksymtab sections:
+normal, GPL, future GPL and unused, and adding the orthogonal per-CPU
+property to that would double it to 8.
 
-> > >  #endif /* _UAPI__ASM_HWCAP_H */
-> > > diff --git a/arch/arm64/include/uapi/asm/mman.h b/arch/arm64/include/uapi/asm/mman.h
-> > > new file mode 100644
-> > > index 0000000..4776b43
-> > > --- /dev/null
-> > > +++ b/arch/arm64/include/uapi/asm/mman.h
-> > > @@ -0,0 +1,9 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > > +#ifndef _UAPI__ASM_MMAN_H
-> > > +#define _UAPI__ASM_MMAN_H
-> > > +
-> > > +#include <asm-generic/mman.h>
-> > > +
-> > > +#define PROT_BTI_GUARDED	0x10		/* BTI guarded page */
-> > 
-> > From prior discussions, I thought this would be PROT_BTI, without the
-> > _GUARDED suffix. Do we really need that?
-> > 
-> > AFAICT, all other PROT_* definitions only have a single underscore, and
-> > the existing arch-specific flags are PROT_ADI on sparc, and PROT_SAO on
-> > powerpc.
-> 
-> No strong opinon.  I was trying to make the name less obscure, but I'm
-> equally happy with PROT_BTI if people prefer that.
+Since the purpose of the place relative ksymtabs applies to the core
+kernel only, another thing I contemplated is using a different ksymtab
+format between modules and the core kernel, but that is another can of
+worms that I'd rather not open.
 
-My personal opinion is that PROT_BTI is preferable, but I'll let others
-chime in.
-
-> > > diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-> > > index b82e0a9..3717b06 100644
-> > > --- a/arch/arm64/kernel/ptrace.c
-> > > +++ b/arch/arm64/kernel/ptrace.c
-> > > @@ -1860,7 +1860,7 @@ void syscall_trace_exit(struct pt_regs *regs)
-> > >   */
-> > >  #define SPSR_EL1_AARCH64_RES0_BITS \
-> > >  	(GENMASK_ULL(63, 32) | GENMASK_ULL(27, 25) | GENMASK_ULL(23, 22) | \
-> > > -	 GENMASK_ULL(20, 13) | GENMASK_ULL(11, 10) | GENMASK_ULL(5, 5))
-> > > +	 GENMASK_ULL(20, 13) | GENMASK_ULL(5, 5))
-> > >  #define SPSR_EL1_AARCH32_RES0_BITS \
-> > >  	(GENMASK_ULL(63, 32) | GENMASK_ULL(22, 22) | GENMASK_ULL(20, 20))
-> > 
-> > Phew; I was worried this would be missed!
-> 
-> It was.  I had fun debugging that one :)
-> 
-> > > @@ -741,6 +741,11 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
-> > >  	regs->regs[29] = (unsigned long)&user->next_frame->fp;
-> > >  	regs->pc = (unsigned long)ka->sa.sa_handler;
-> > >  
-> > > +	if (system_supports_bti()) {
-> > > +		regs->pstate &= ~(regs->pstate & PSR_BTYPE_MASK);
-> > 
-> > Nit: that can be:
-> > 
-> > 		regs->pstate &= ~PSR_BTYPE_MASK;
-> 
-> x & ~y is sensitive to the type of y and can clobber high bits, so I
-> prefer not to write it.  GCC generates the same code either way.
-
-Ah, I thought this might befor type promotion.
-
-> However, this will also trip us up elsewhere when the time comes, so
-> maybe it's a waste of time working around it here.
-> 
-> If you feel strongly, I'm happy to change it.
-
-I'd rather we followed the same pattern as elsewhere, as having this
-special case is confusing, and we'd still have the same bug elsewhere.
-
-My concern here is consistency, so if you want to fix up all instances
-to preserve the upper 32 bits of regs->pstate, I'd be happy. :)
-
-I also think there are nicer/clearer ways to fix the type promotion
-issue, like using UL in the field definitions, using explicit casts, or
-adding helpers to set/clear bits with appropriate promotion.
-
-> > > diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-> > > index 5610ac0..85b456b 100644
-> > > --- a/arch/arm64/kernel/syscall.c
-> > > +++ b/arch/arm64/kernel/syscall.c
-> > > @@ -66,6 +66,7 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
-> > >  	unsigned long flags = current_thread_info()->flags;
-> > >  
-> > >  	regs->orig_x0 = regs->regs[0];
-> > > +	regs->pstate &= ~(regs->pstate & PSR_BTYPE_MASK);
-> > 
-> > Likewise:
-> > 
-> > 	regs->pstate &= ~PSR_BTYPE_MASK;
-> > 
-> > ... though I don't understand why that would matter to syscalls, nor how
-> > those bits could ever be set given we had to execute an SVC to get here.
-> > 
-> > What am I missing?
-> 
-> The behaviour is counterintuivite here.  The architecture guarantees to
-> preserve BTYPE for traps, faults and asynchronous exceptions, but for a
-> synchronous execption from normal architectural execution of an
-> exception-generating instruction (SVC/HVC/SMC) the architecture leaves
-> it IMP DEF whether BTYPE is preserved or zeroed in SPSR.
-
-I'm still missing something here. IIUC were BTYPE was non-zero, we
-should take the BTI trap before executing the SVC/HVC/SMC, right?
-
-Otherwise, it would be possible to erroneously branch to an SVC/HVC/SMC,
-which would logically violate the BTI protection.
-
-If the assumption is that software can fix that case up, and the ??C
-exception is prioritized above the BTI exception, then I think that we
-should check whether it was permitted rather than silently fixing it up.
-
-> I suppose precisely because there's only one way to reach the SVC
-> handler, software knows for certain whether zero SPSR.BTYPE in that
-> case.  So hardware doesn't need to do it.
-
-As above, I thought BTYPE had to be zero in order for it to be possible
-to execute the SVC/HVC/SMC, but there might be caveats.
-
-Thanks,
-Mark.
+But it is indeed moot now ...
