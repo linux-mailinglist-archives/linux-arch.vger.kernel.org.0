@@ -2,27 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 569412A342
-	for <lists+linux-arch@lfdr.de>; Sat, 25 May 2019 09:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8A72A5B0
+	for <lists+linux-arch@lfdr.de>; Sat, 25 May 2019 19:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbfEYHDz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 25 May 2019 03:03:55 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:22600 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726145AbfEYHDy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 25 May 2019 03:03:54 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id A0EB7A0141;
-        Sat, 25 May 2019 09:03:49 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id gj9lETxU9zxQ; Sat, 25 May 2019 09:03:24 +0200 (CEST)
-Date:   Sat, 25 May 2019 17:03:07 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        id S1727195AbfEYRBy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 25 May 2019 13:01:54 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:39004 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727273AbfEYRBy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 25 May 2019 13:01:54 -0400
+Received: by mail-lj1-f196.google.com with SMTP id a10so484707ljf.6
+        for <linux-arch@vger.kernel.org>; Sat, 25 May 2019 10:01:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NBdLovlpt9AZuIiNUZbGP+lZb3Sg/PGshfq8cZbUBd0=;
+        b=amJvf4Mf4+qu8tdwTdbzD3weELsw5ul+SeN2Y2A+KXwri5iCvpoMv3QsDHz5iHYNmb
+         9+v4lc5LTsDIJzQmSUaXGS7dtebcYbd+O0qcSFEqasYPEdaL6AaYnO9V/W0Y3SguqyHp
+         LogCMsi64f4r6N92eF/bc7hFdaM5KrEmZfqoM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NBdLovlpt9AZuIiNUZbGP+lZb3Sg/PGshfq8cZbUBd0=;
+        b=n8lCFx871N507oxvUD0Tr8o0bz06lZQUe9w2GAxc09of+wjqZOlDcF3MFSLtzNlE7J
+         wyb1u27yXwmt/GtRDkTaJhYpR6lQnmKVQ2O/HqDpC+n46NnnlBPhNRVnmV6HEjjJv0dD
+         wSCD+B0Eu42OVj+nHftRzLFVbQoQ9qwJeXofexMFFDdrWmuVnaJhkMbz/fAvOcsAByM1
+         3oeSCXhrFIXz9DZS+MtLYSbGTnn5WgTo2k1T+RayritgjFhb0TCq+BajITHNtmjrY3pg
+         eycxJwPzZh+aGD7+/XGyexihxU9FO/p7dbCjUC1ZHk3bZF3m5hLIqCguo9ymgYK7CQ1P
+         jh/g==
+X-Gm-Message-State: APjAAAV/mlTrImjpWlftgXwAzuq46hUgywH1J+tsTiWgvZ4zpUEW31nn
+        BuvhSJ/qtI4W1smsTWuBZBB4U/7ghfE=
+X-Google-Smtp-Source: APXvYqx/m/MqOkKr/Jwp2uYb8dJRs9UQZ4Ft95xijYzVnVjNMnsRN0Tl9yLb99Jn25dnWX2J5hgfFA==
+X-Received: by 2002:a2e:b0fc:: with SMTP id h28mr37908238ljl.55.1558803710215;
+        Sat, 25 May 2019 10:01:50 -0700 (PDT)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
+        by smtp.gmail.com with ESMTPSA id s19sm144189lfb.54.2019.05.25.10.01.49
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 25 May 2019 10:01:49 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id m15so11233908ljg.13
+        for <linux-arch@vger.kernel.org>; Sat, 25 May 2019 10:01:49 -0700 (PDT)
+X-Received: by 2002:a2e:97d8:: with SMTP id m24mr46505164ljj.52.1558803305972;
+ Sat, 25 May 2019 09:55:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190507164317.13562-1-cyphar@cyphar.com> <20190507164317.13562-6-cyphar@cyphar.com>
+ <CAHk-=whbFMg4+HuWOBuHpvDNiAyowX2HUowv3+pt8vPWk5W-YQ@mail.gmail.com> <20190525070307.bxbvjh2254sx2z6g@yavin>
+In-Reply-To: <20190525070307.bxbvjh2254sx2z6g@yavin>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 25 May 2019 09:54:49 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiKFi5wi33AmJ4XJmzQaCMHa21-Z-GD_OKPNz=js7R7ig@mail.gmail.com>
+Message-ID: <CAHk-=wiKFi5wi33AmJ4XJmzQaCMHa21-Z-GD_OKPNz=js7R7ig@mail.gmail.com>
+Subject: Re: [PATCH v7 5/5] namei: resolveat(2) syscall
+To:     Aleksa Sarai <cyphar@cyphar.com>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Jeff Layton <jlayton@kernel.org>,
         "J. Bruce Fields" <bfields@fieldses.org>,
@@ -43,184 +76,140 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Linux API <linux-api@vger.kernel.org>,
         Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v7 5/5] namei: resolveat(2) syscall
-Message-ID: <20190525070307.bxbvjh2254sx2z6g@yavin>
-References: <20190507164317.13562-1-cyphar@cyphar.com>
- <20190507164317.13562-6-cyphar@cyphar.com>
- <CAHk-=whbFMg4+HuWOBuHpvDNiAyowX2HUowv3+pt8vPWk5W-YQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zfccyjj5qo4ral52"
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whbFMg4+HuWOBuHpvDNiAyowX2HUowv3+pt8vPWk5W-YQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
---zfccyjj5qo4ral52
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 2019-05-24, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Tue, May 7, 2019 at 9:44 AM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> >
-> > The most obvious syscall to add support for the new LOOKUP_* scoping
-> > flags would be openat(2) (along with the required execveat(2) change
-> > included in this series). However, there are a few reasons to not do
-> > this:
->=20
-> So honestly, this last patch is what turns me off the whole thing.
->=20
-> It goes from a nice new feature ("you can use O_NOSYMLINKS to disallow
-> symlink traversal") to a special-case joke that isn't worth it any
-> more. You get a useless path descrptor back from s special hacky
-> system call, you don't actually get the useful data that you probably
-> *want* the open to get you.
->=20
-> Sure, you could eventually then use a *second* system call (openat
-> with O_EMPTYPATH) to actually get something you can *use*, but at this
-> point you've just wasted everybodys time and effort with a pointless
-> second system call.
->=20
-> So I really don't see the point of this whole thing. Why even bother.
-> Nobody sane will ever use that odd two-systemcall model, and even if
-> they did, it would be slower and inconvenient.
->=20
-> The whole and only point of this seems to be the two lines that say
->=20
->        if (flags & ~VALID_RESOLVE_FLAGS)
->               return -EINVAL;
->=20
-> but that adds absolutely zero value to anything.  The argument is that
-> "we can't add it to existing flags, because old kernels won't honor
-> it", but that's a completely BS argument, since the user has to have a
-> fallback anyway for the old kernel case - so we literally could much
-> more conveniently just expose it as a prctl() or something to _ask_
-> the kernel what flags it honors.
->=20
-> So to me, this whole argument means that "Oh, we'll make it really
-> inconvenient to actually use this".
->=20
-> If we want to introduce a new system call that allows cool new
-> features, it should have *more* powerful semantics than the existing
-> ones, not be clearly weaker and less useful.
-
-You might not have seen the v8 of this set I sent a few days ago[1]. The
-new set includes an example of a feature that is possible with
-resolveat(2) but not with the current openat(O_PATH) interface. The
-feature is that you can set RESOLVE_UPGRADE_NO{READ,WRITE} which then
-blocks the re-opening of the file descriptor with those MAY_* modes.
-(Though of course you might be against the entire idea of this feature
-which allows for restricting the opening of magic-links.)
-
-This can't be done with openat(2) without adding even more flags such as
-O_PATH_UPGRADE_NOWRITE -- because O_RDONLY =3D 0, which means you can't
-distinguish the "don't allow read or write" case (we could define 0x3
-for that, but that feels a tad ugly). Not to mention that broken
-userspace programs might already be setting O_PATH|O_RDWR.
-
-So, while making it easier for userspace to be sure these flags are
-working is one benefit, it's not the only reason. And outside arguments
-for future features, several folks (some on-list, some on LWN) argued
-that adding more "open" flags which aren't clearly related to the mode
-the file is opened with makes not-much-more sense than a separate
-syscall for it. Another (weaker) argument is that O_PATH should've been
-separate from the beginning because of how unlike an ordinary fd it is.
-
-Funnily enough, v8 does contain O_EMPTYPATH. However, this is just an
-example of another /proc-less interface and we need it for O_PATH
-descriptors even if you can do an full open in one shot with restricted
-path resolution. Having an O_PATH can be useful on its own (LXC takes an
-O_PATH of /dev/pts/ptmx inside the container and then re-opens it each
-time a new console is required to avoid touching paths inside the
-container).
-
-But it would be neat to have a way for userspace to easily check what
-flags the kernel honours, regardless of this patchset.
-
-> So how about making the new system call be something that is a
-> *superset* of "openat()" so that people can use that, and then if it
-> fails, just fall back to openat(). But if it succeeds, it just
-> succeeds, and you don't need to then do other system calls to actually
-> make it useful.
->=20
-> Make the new system call something people *want* to use because it's
-> useful, not a crippled useless thing that has some special case use
-> for some limited thing and just wastes system call space.
-
-At the moment, I'm working on implementing userspace library wrappers
-which use resolveat(2) for safe handling of an untrusted rootfs. I would
-expect that most users of resolveat(2) would be using a library to
-handle it -- because to do an "mkdir -p" you need to do a fair bit of
-work for it to be safe unless we add LOOKUP_* flags to mkdirat(2) and
-every other syscall. This is true whether or not openat(2) provides this
-feature or if it's a separate syscall.
-
-> Example *useful* system call attributes:
->=20
->  - make it like openat(), but have another argument with the "limit flags"
-
-Sure, this would also work. I didn't know if anyone was open to the idea
-of openat2(2). There is a follow-up question of how RESOLVE_UPGRADE_NO*
-flags would be handled (they aren't obviously "lookup" flags so we'd
-need to add more openat(2) flags to accommodate them) but I'm sure that
-can be ironed out once you've taken a look at that patchset.
-
->  - maybe return more status of the resulting file. People very
-> commonly do "open->fstat" just to get the size for mmap or to check
-> some other detail of the file before use.
-
-So something like
-
-  resolveat(rootfd, "path/to/file", RESOLVE_IN_ROOT, &statbuf);
-
-or
-
-  openat2(rootfd, "path/to/file", O_PATH, RESOLVE_IN_ROOT, &statbuf);
-
-? Is there a large amount of overhead or downside to the current
-open->fstat way of doing things, or is this more of a "if we're going to
-add more ways of opening we might as well add more useful things"?
-
-> In other words, make the new system call *useful*. Not some castrated
-> "not useful on its own" thing.
+On Sat, May 25, 2019 at 12:03 AM Aleksa Sarai <cyphar@cyphar.com> wrote:
 >
-> So I still support the whole "let's make it easy to limit path lookup
-> in sane ways", but this model of then limiting using the result sanely
-> just makes me a sad panda.
+> You might not have seen the v8 of this set I sent a few days ago[1]. The
+> new set includes an example of a feature that is possible with
+> resolveat(2) but not with the current openat(O_PATH) interface.
 
-I am glad that you agree with the general thrust, and it's just the
-interface that is the hang-up.
+It's the "forced O_PATH" model that makes resolveat() basically
+entirely pointless to me.
 
-[1]: https://marc.info/?l=3Dlinux-fsdevel&m=3D155835923516235&w=3D2
+You can do almost nothing with an O_PATH file descriptor. Yes, it's a
+really cool feature, and it's great for what it is, but it's less than
+0.001% of all opens people have.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+Even among security-conscious users, it's pointless. Yes, an O_PATH
+file descriptor is somewhat more "secure", but it's secure because
+it's mostly USELESS, and has to be converted into something else to be
+used.
 
---zfccyjj5qo4ral52
-Content-Type: application/pgp-signature; name="signature.asc"
+So say you are something like a static web server that actually wants
+to use the "don't traverse '..', don't follow symlinks" features etc.
+What you want to do with the end result is read() it or mmap it, or
+sendpage or whatever.
 
------BEGIN PGP SIGNATURE-----
+This is why I think resolveat() is entirely pointless. Even with
+O_EMPTYPATH it's pointless - because you shouldn't *need* that extra
+"ok, now get me the actual useful fd" phase.
 
-iQIzBAABCAAdFiEEb6Gz4/mhjNy+aiz1Snvnv3Dem58FAlzo6KsACgkQSnvnv3De
-m59dYQ/+IV3T5Z0NfRInVUcqfcaXAM4i55A3E9tRksohV9d2P8zMM1cdWoixttdJ
-sk+5f+/mt+rSpD0ffdBS+wzILPWbZJWf6qm1PfJMvMQYcZeXERMIv/r6HvE+FgpX
-vqZlDNRRgi6grg47edz7DAUOtIk9L/I22MVoosswSYI6YGB0Se2TlFNJy0E5IUSg
-768Aed86aYdiWuFl9S1umGde9U/PZMKpM3vA0FJGVeOBvUD5PaUDz+I7YYcWCx8V
-rwLJHbV2zJA287dfHAwcCYs8w1FL5zWvrCtzziCfsGWss3C5lWueszxeheGYKbAN
-cSb9798OMst73fTJ0R3vI0RQZyycbg3j6Ykc9hSPgGOk3JC4MaWoiD209J2FFJPR
-qw5vjra2m6scHQSC77eYIbKjLoIFGm6zGHLizJ1Fiwv34jN2EcJbVhhC7nntt3/h
-2wp/SOrSpnilExmq54/3u6PDeyQMXS4dMXAjDI0CG4m8kJYzpPL3I05V6xxcUlue
-vbtygj1qTGz4UpIrYQ0VueGmu3gpV4eRLyT/5g6KLxyy+Gug15xeiJEdRzv3hspp
-7XcrbscqX7caKQVDVlqKM1rWi0x3jVAfw6GmhLn6D2wMWQe9+QMRUZT8qS1VgVPg
-/tOO7pHT6bQElO6ib8JPsqZIwfR2eZyEJWT0lsvxfhE3WdC930Q=
-=pGWn
------END PGP SIGNATURE-----
+In fact, I think resolveat() as a model is fundamentally wrong for yet
+another reason: O_CREAT. If you want to _create_ a new file, and you
+want to still have the path resolution modifiers in place, the
+resolveat() model is broken, because it only gives you path resolution
+for the lookup, and then when you do openat(O_CREAT) for the final
+component, you now don't have any way to limit that last component.
 
---zfccyjj5qo4ral52--
+Sure,  you can probably effectively hack around it with resolveat() on
+everything but the last component, and then
+openat(O_CREAT|O_EXCL|O_NOFOLLOW) on the last component, because the
+O_EXCL|O_NOFOLLOW should mean that it won't do any of the unsafe
+things. And then (if you didn't actually want the O_EXCL), you handle
+the race between "somebody else got there first" by re-trying etc. So
+I suspect the O_CREAT thing could be worked around with extra
+complexity, but it's an example of how the O_PATH model really screws
+you over.
+
+End result: I really think resolveat() is broken. It absolutely
+*needs* to be a full-fledged "openat()" system call, just with added
+path resolution flags.
+
+>   openat2(rootfd, "path/to/file", O_PATH, RESOLVE_IN_ROOT, &statbuf);
+
+Note that for O_CREAT, it either needs the 'mode' parameter too, or
+the statbuf would need to be an in-out thing. I think the in-out model
+might be nice (the varargs model with a conditional 'mode' parameter
+is horrid, I think), but at some point it's just bike-shedding.
+
+Also, I'm not absolutely married to the statbuf, but I do think it
+might be a useful extension. A *lot* of users need the size of the
+file for subsequent mmap() calls (or for buffer management for
+read/write interface) or for things like just headers (ie
+"Content-length:" in html etc).
+
+I'm not sure people actually want a full 'struct stat', but people
+historically also do st_ino/st_dev for indexing into existing
+user-space caches (or to check permissions like that it's on the right
+filesystem, but the resolve flags kind of make that less of an issue).
+And st_mode to verify that it's a proper regular file etc etc.
+
+You can always just leave it as NULL if you don't care, there's almost
+no downside to adding it, and I do think that people who want a "walk
+pathname carefully" model almost always would want to also check the
+end result anyway.
+
+Again, I'm thinking of the most obvious use cases where you want these
+kinds of special pathname traversals: file servers, static web content
+serving etc. They *all* want the file size and type when they open a
+file.
+
+> Is there a large amount of overhead or downside to the current
+> open->fstat way of doing things, or is this more of a "if we're going to
+> add more ways of opening we might as well add more useful things"?
+
+Right now, system calls are sadly very expensive on a lot of hardware.
+We used to be very proud of the fact that Linux system calls were
+fast, but with meltdown and retpoline etc, we're back to "system calls
+can be several thousand cycles each, just in overhead, on commonly
+available hardware".
+
+Is "several thousand cycles" fatal? Not necessarily. But I think that
+if we do add a new system call, particularly a fancy one for special
+security-conscious models, we should look at what people need and use,
+and want. And performance should always be a concern.
+
+I realize that people who come at this from primarily just a security
+issue background may think that security is the primary goal. But no.
+Security always needs to realize that the _primary_ goal is to have
+people _use_ it. Without users, security is entirely pointless. And
+the users part is partly performance, but mostly "it's convenient".
+
+The whole "this is Linux-specific" is a big inconvenience point, but
+aside from that, let's make any new interface as welcoming and simple
+and useful as possible. Not a "you have to do extra work" interface.
+Quite the reverse. Make it something that makes people go "ahh, yes,
+this actually means I don't have to do anything extra, because it
+already does everything I want for opening and checking a pathname".
+
+So the way to sell the path lookup improvements should not be "look,
+here's a secure way to look up paths". No. That's entirely missing the
+point.
+
+No, the way to do path lookup improvements is to say "look, here's a
+_convenient_ way to look up paths, and btw, it's also easy to make
+secure".
+
+Talking about securely opening things - another flag that we may want
+to avoid issues is a "don't open device nodes" flag. Sure, O_NONBLOCK
+plus checking the st_mode of the result is usually sufficient, but
+it's actually fairly easy to get that wrong. Things like /dev/tty and
+/dev/zero often need to be available for various reasons, and have
+been used to screw careless "open and read" users up that missed a
+check.
+
+I also do wonder that if the only actual user-facing interface for the
+resolution flags is a new system call, should we not make the
+*default* value be "don't open anything odd at all".
+
+So instead of saying RESOLVE_XDEV for "don't cross mount points",
+maybe the flags should be the other way around, and say "yes, allow
+mount point crossings", and "yes, explicitly allow device node
+opening", and "yes, allow DOTDOT" etc.
+
+               Linus
