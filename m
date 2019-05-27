@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 126172AE76
-	for <lists+linux-arch@lfdr.de>; Mon, 27 May 2019 08:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11172AE79
+	for <lists+linux-arch@lfdr.de>; Mon, 27 May 2019 08:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725996AbfE0GRs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 May 2019 02:17:48 -0400
-Received: from 59-120-53-16.HINET-IP.hinet.net ([59.120.53.16]:30678 "EHLO
+        id S1726268AbfE0GRy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 May 2019 02:17:54 -0400
+Received: from 59-120-53-16.HINET-IP.hinet.net ([59.120.53.16]:64274 "EHLO
         ATCSQR.andestech.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726046AbfE0GRs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 May 2019 02:17:48 -0400
+        with ESMTP id S1726219AbfE0GRx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 May 2019 02:17:53 -0400
 Received: from mail.andestech.com (atcpcs16.andestech.com [10.0.1.222])
-        by ATCSQR.andestech.com with ESMTP id x4R6CDWm059699;
-        Mon, 27 May 2019 14:12:13 +0800 (GMT-8)
+        by ATCSQR.andestech.com with ESMTP id x4R6CIId059725;
+        Mon, 27 May 2019 14:12:18 +0800 (GMT-8)
         (envelope-from vincentc@andestech.com)
 Received: from atcsqa06.andestech.com (10.0.15.65) by ATCPCS16.andestech.com
  (10.0.1.222) with Microsoft SMTP Server id 14.3.123.3; Mon, 27 May 2019
- 14:17:31 +0800
+ 14:17:35 +0800
 From:   Vincent Chen <vincentc@andestech.com>
 To:     <linux-kernel@vger.kernel.org>, <arnd@arndb.de>,
         <linux-arch@vger.kernel.org>, <greentime@andestech.com>,
         <green.hu@gmail.com>, <deanbo422@gmail.com>
 CC:     <vincentc@andestech.com>
-Subject: [PATCH v2 1/3] nds32: Avoid IEX status being incorrectly modified
-Date:   Mon, 27 May 2019 14:17:19 +0800
-Message-ID: <1558937841-4222-2-git-send-email-vincentc@andestech.com>
+Subject: [PATCH v2 2/3] nds32: add new emulations for floating point instruction
+Date:   Mon, 27 May 2019 14:17:20 +0800
+Message-ID: <1558937841-4222-3-git-send-email-vincentc@andestech.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1558937841-4222-1-git-send-email-vincentc@andestech.com>
 References: <1558937841-4222-1-git-send-email-vincentc@andestech.com>
@@ -33,286 +33,588 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.0.15.65]
 X-DNSRBL: 
-X-MAIL: ATCSQR.andestech.com x4R6CDWm059699
+X-MAIL: ATCSQR.andestech.com x4R6CIId059725
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-  In order for kernel to capture each denormalized output, the UDF
-trapping enable bit is always raised in $fpcsr. Because underflow case will
-issue not an underflow exception but also an inexact exception, it causes
-that the IEX, IEX cumulative exception, flag in $fpcsr to be raised in each
-denormalized output handling. To make the emulation transparent to the
-user, the emulator needs to clear the IEX flag in $fpcsr if the result is a
-denormalized number. However, if the IEX flag has been raised before this
-floating point emulation, this cleanup may be incorrect. To avoid the IEX
-flags in $fpcsr be raised in each denormalized output handling, the IEX
-trap shall be always enabled.
+The existing floating point emulations is only available for floating
+instruction that possibly issue denormalized input and underflow
+exceptions. These existing FPU emulations are not sufficient when IEx
+Trap is enabled because some floating point instructions only issue inexact
+exception. This patch adds the emulations of such floating point
+instructions.
 
 Signed-off-by: Vincent Chen <vincentc@andestech.com>
 ---
  Changes in v2
  - No changes
 
+ arch/nds32/include/asm/fpuemu.h |   12 ++++++++
+ arch/nds32/math-emu/Makefile    |    5 +++-
+ arch/nds32/math-emu/fd2si.c     |   30 ++++++++++++++++++++
+ arch/nds32/math-emu/fd2siz.c    |   30 ++++++++++++++++++++
+ arch/nds32/math-emu/fd2ui.c     |   30 ++++++++++++++++++++
+ arch/nds32/math-emu/fd2uiz.c    |   30 ++++++++++++++++++++
+ arch/nds32/math-emu/fpuemu.c    |   57 ++++++++++++++++++++++++++++++++++++---
+ arch/nds32/math-emu/fs2si.c     |   29 ++++++++++++++++++++
+ arch/nds32/math-emu/fs2siz.c    |   29 ++++++++++++++++++++
+ arch/nds32/math-emu/fs2ui.c     |   29 ++++++++++++++++++++
+ arch/nds32/math-emu/fs2uiz.c    |   30 ++++++++++++++++++++
+ arch/nds32/math-emu/fsi2d.c     |   22 +++++++++++++++
+ arch/nds32/math-emu/fsi2s.c     |   22 +++++++++++++++
+ arch/nds32/math-emu/fui2d.c     |   22 +++++++++++++++
+ arch/nds32/math-emu/fui2s.c     |   22 +++++++++++++++
+ 15 files changed, 394 insertions(+), 5 deletions(-)
+ create mode 100644 arch/nds32/math-emu/fd2si.c
+ create mode 100644 arch/nds32/math-emu/fd2siz.c
+ create mode 100644 arch/nds32/math-emu/fd2ui.c
+ create mode 100644 arch/nds32/math-emu/fd2uiz.c
+ create mode 100644 arch/nds32/math-emu/fs2si.c
+ create mode 100644 arch/nds32/math-emu/fs2siz.c
+ create mode 100644 arch/nds32/math-emu/fs2ui.c
+ create mode 100644 arch/nds32/math-emu/fs2uiz.c
+ create mode 100644 arch/nds32/math-emu/fsi2d.c
+ create mode 100644 arch/nds32/math-emu/fsi2s.c
+ create mode 100644 arch/nds32/math-emu/fui2d.c
+ create mode 100644 arch/nds32/math-emu/fui2s.c
 
- arch/nds32/include/asm/bitfield.h            |    2 +-
- arch/nds32/include/asm/fpu.h                 |    2 +-
- arch/nds32/include/asm/syscalls.h            |    2 +-
- arch/nds32/include/uapi/asm/fp_udfiex_crtl.h |   16 ++++++++++++++++
- arch/nds32/include/uapi/asm/sigcontext.h     |   24 +++++++++++++++++-------
- arch/nds32/include/uapi/asm/udftrap.h        |   13 -------------
- arch/nds32/include/uapi/asm/unistd.h         |    4 ++--
- arch/nds32/kernel/fpu.c                      |   15 ++++++---------
- arch/nds32/kernel/sys_nds32.c                |   26 ++++++++++++++------------
- 9 files changed, 58 insertions(+), 46 deletions(-)
- create mode 100644 arch/nds32/include/uapi/asm/fp_udfiex_crtl.h
- delete mode 100644 arch/nds32/include/uapi/asm/udftrap.h
-
-diff --git a/arch/nds32/include/asm/bitfield.h b/arch/nds32/include/asm/bitfield.h
-index 7414fcb..03bbb6d 100644
---- a/arch/nds32/include/asm/bitfield.h
-+++ b/arch/nds32/include/asm/bitfield.h
-@@ -937,7 +937,7 @@
- #define FPCSR_mskDNIT           ( 0x1  << FPCSR_offDNIT )
- #define FPCSR_mskRIT		( 0x1  << FPCSR_offRIT )
- #define FPCSR_mskALL		(FPCSR_mskIVO | FPCSR_mskDBZ | FPCSR_mskOVF | FPCSR_mskUDF | FPCSR_mskIEX)
--#define FPCSR_mskALLE_NO_UDFE	(FPCSR_mskIVOE | FPCSR_mskDBZE | FPCSR_mskOVFE | FPCSR_mskIEXE)
-+#define FPCSR_mskALLE_NO_UDF_IEXE (FPCSR_mskIVOE | FPCSR_mskDBZE | FPCSR_mskOVFE)
- #define FPCSR_mskALLE		(FPCSR_mskIVOE | FPCSR_mskDBZE | FPCSR_mskOVFE | FPCSR_mskUDFE | FPCSR_mskIEXE)
- #define FPCSR_mskALLT           (FPCSR_mskIVOT | FPCSR_mskDBZT | FPCSR_mskOVFT | FPCSR_mskUDFT | FPCSR_mskIEXT |FPCSR_mskDNIT | FPCSR_mskRIT)
+diff --git a/arch/nds32/include/asm/fpuemu.h b/arch/nds32/include/asm/fpuemu.h
+index c4bd0c7..63e7ef5 100644
+--- a/arch/nds32/include/asm/fpuemu.h
++++ b/arch/nds32/include/asm/fpuemu.h
+@@ -13,6 +13,12 @@
+ void fmuls(void *ft, void *fa, void *fb);
+ void fdivs(void *ft, void *fa, void *fb);
+ void fs2d(void *ft, void *fa);
++void fs2si(void *ft, void *fa);
++void fs2si_z(void *ft, void *fa);
++void fs2ui(void *ft, void *fa);
++void fs2ui_z(void *ft, void *fa);
++void fsi2s(void *ft, void *fa);
++void fui2s(void *ft, void *fa);
+ void fsqrts(void *ft, void *fa);
+ void fnegs(void *ft, void *fa);
+ int fcmps(void *ft, void *fa, void *fb, int cop);
+@@ -26,6 +32,12 @@
+ void fdivd(void *ft, void *fa, void *fb);
+ void fsqrtd(void *ft, void *fa);
+ void fd2s(void *ft, void *fa);
++void fd2si(void *ft, void *fa);
++void fd2si_z(void *ft, void *fa);
++void fd2ui(void *ft, void *fa);
++void fd2ui_z(void *ft, void *fa);
++void fsi2d(void *ft, void *fa);
++void fui2d(void *ft, void *fa);
+ void fnegd(void *ft, void *fa);
+ int fcmpd(void *ft, void *fa, void *fb, int cop);
  
-diff --git a/arch/nds32/include/asm/fpu.h b/arch/nds32/include/asm/fpu.h
-index 019f1bc..8294ed4 100644
---- a/arch/nds32/include/asm/fpu.h
-+++ b/arch/nds32/include/asm/fpu.h
-@@ -36,7 +36,7 @@
-  * enabled by default and kerenl will re-execute it by fpu emulator
-  * when getting underflow exception.
-  */
--#define FPCSR_INIT  FPCSR_mskUDFE
-+#define FPCSR_INIT  (FPCSR_mskUDFE | FPCSR_mskIEXE)
- #else
- #define FPCSR_INIT  0x0UL
- #endif
-diff --git a/arch/nds32/include/asm/syscalls.h b/arch/nds32/include/asm/syscalls.h
-index da32101..b9c9bec 100644
---- a/arch/nds32/include/asm/syscalls.h
-+++ b/arch/nds32/include/asm/syscalls.h
-@@ -7,7 +7,7 @@
- asmlinkage long sys_cacheflush(unsigned long addr, unsigned long len, unsigned int op);
- asmlinkage long sys_fadvise64_64_wrapper(int fd, int advice, loff_t offset, loff_t len);
- asmlinkage long sys_rt_sigreturn_wrapper(void);
--asmlinkage long sys_udftrap(int option);
-+asmlinkage long sys_fp_udfiex_crtl(int cmd, int act);
+diff --git a/arch/nds32/math-emu/Makefile b/arch/nds32/math-emu/Makefile
+index 947fe0c..e7a746d 100644
+--- a/arch/nds32/math-emu/Makefile
++++ b/arch/nds32/math-emu/Makefile
+@@ -4,4 +4,7 @@
  
- #include <asm-generic/syscalls.h>
- 
-diff --git a/arch/nds32/include/uapi/asm/fp_udfiex_crtl.h b/arch/nds32/include/uapi/asm/fp_udfiex_crtl.h
+ obj-y	:= fpuemu.o \
+ 	   fdivd.o fmuld.o fsubd.o faddd.o fs2d.o fsqrtd.o fcmpd.o fnegs.o \
+-	   fdivs.o fmuls.o fsubs.o fadds.o fd2s.o fsqrts.o fcmps.o fnegd.o
++	   fd2si.o fd2ui.o fd2siz.o fd2uiz.o fsi2d.o fui2d.o \
++	   fdivs.o fmuls.o fsubs.o fadds.o fd2s.o fsqrts.o fcmps.o fnegd.o \
++	   fs2si.o fs2ui.o fs2siz.o fs2uiz.o fsi2s.o fui2s.o
++
+diff --git a/arch/nds32/math-emu/fd2si.c b/arch/nds32/math-emu/fd2si.c
 new file mode 100644
-index 0000000..d54a5d6
+index 0000000..fae3e16
 --- /dev/null
-+++ b/arch/nds32/include/uapi/asm/fp_udfiex_crtl.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2005-2019 Andes Technology Corporation */
-+#ifndef	_FP_UDF_IEX_CRTL_H
-+#define	_FP_UDF_IEX_CRTL_H
++++ b/arch/nds32/math-emu/fd2si.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
 +
-+/*
-+ * The cmd list of sys_fp_udfiex_crtl()
-+ */
-+/* Disable UDF or IEX trap based on the content of parameter act */
-+#define DISABLE_UDF_IEX_TRAP	0
-+/* Enable UDF or IEX trap based on the content of parameter act */
-+#define ENABLE_UDF_IEX_TRAP	1
-+/* Get current status of UDF and IEX trap */
-+#define GET_UDF_IEX_TRAP	2
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/double.h>
 +
-+#endif /* _FP_UDF_IEX_CRTL_H */
-diff --git a/arch/nds32/include/uapi/asm/sigcontext.h b/arch/nds32/include/uapi/asm/sigcontext.h
-index 58afc41..b536340 100644
---- a/arch/nds32/include/uapi/asm/sigcontext.h
-+++ b/arch/nds32/include/uapi/asm/sigcontext.h
-@@ -13,14 +13,24 @@ struct fpu_struct {
- 	unsigned long long fd_regs[32];
- 	unsigned long fpcsr;
- 	/*
--	 * UDF_trap is used to recognize whether underflow trap is enabled
--	 * or not. When UDF_trap == 1, this process will be traped and then
--	 * get a SIGFPE signal when encountering an underflow exception.
--	 * UDF_trap is only modified through setfputrap syscall. Therefore,
--	 * UDF_trap needn't be saved or loaded to context in each context
--	 * switch.
-+	 * When CONFIG_SUPPORT_DENORMAL_ARITHMETIC is defined, kernel prevents
-+	 * hardware from treating the denormalized output as an underflow case
-+	 * and rounding it to a normal number. Hence kernel enables the UDF and
-+	 * IEX trap in the fpcsr register to step in the calculation.
-+	 * However, the UDF and IEX trap enable bit in $fpcsr also lose
-+	 * their use.
-+	 *
-+	 * UDF_IEX_trap replaces the feature of UDF and IEX trap enable bit in
-+	 * $fpcsr to control the trap of underflow and inexact. The bit filed
-+	 * of UDF_IEX_trap is the same as $fpcsr, 10th bit is used to enable UDF
-+	 * exception trapping and 11th bit is used to enable IEX exception
-+	 * trapping.
-+	 *
-+	 * UDF_IEX_trap is only modified through fp_udfiex_crtl syscall.
-+	 * Therefore, UDF_IEX_trap needn't be saved and restored in each
-+	 * context switch.
++void fd2si(void *ft, void *fa)
++{
++	int r;
++
++	FP_DECL_D(A);
++	FP_DECL_EX;
++
++	FP_UNPACK_DP(A, fa);
++
++	if (A_c == FP_CLS_INF) {
++		*(int *)ft = (A_s == 0) ? 0x7fffffff : 0x80000000;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else if (A_c == FP_CLS_NAN) {
++		*(int *)ft = 0xffffffff;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else {
++		FP_TO_INT_ROUND_D(r, A, 32, 1);
++		__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++		*(int *)ft = r;
++	}
++
++}
+diff --git a/arch/nds32/math-emu/fd2siz.c b/arch/nds32/math-emu/fd2siz.c
+new file mode 100644
+index 0000000..92fe677
+--- /dev/null
++++ b/arch/nds32/math-emu/fd2siz.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/double.h>
++
++void fd2si_z(void *ft, void *fa)
++{
++	int r;
++
++	FP_DECL_D(A);
++	FP_DECL_EX;
++
++	FP_UNPACK_DP(A, fa);
++
++	if (A_c == FP_CLS_INF) {
++		*(int *)ft = (A_s == 0) ? 0x7fffffff : 0x80000000;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else if (A_c == FP_CLS_NAN) {
++		*(int *)ft = 0xffffffff;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else {
++		FP_TO_INT_D(r, A, 32, 1);
++		__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++		*(int *)ft = r;
++	}
++
++}
+diff --git a/arch/nds32/math-emu/fd2ui.c b/arch/nds32/math-emu/fd2ui.c
+new file mode 100644
+index 0000000..a0423b6
+--- /dev/null
++++ b/arch/nds32/math-emu/fd2ui.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/double.h>
++
++void fd2ui(void *ft, void *fa)
++{
++	unsigned int r;
++
++	FP_DECL_D(A);
++	FP_DECL_EX;
++
++	FP_UNPACK_DP(A, fa);
++
++	if (A_c == FP_CLS_INF) {
++		*(unsigned int *)ft = (A_s == 0) ? 0xffffffff : 0x00000000;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else if (A_c == FP_CLS_NAN) {
++		*(unsigned int *)ft = 0xffffffff;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else {
++		FP_TO_INT_ROUND_D(r, A, 32, 0);
++		__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++		*(unsigned int *)ft = r;
++	}
++
++}
+diff --git a/arch/nds32/math-emu/fd2uiz.c b/arch/nds32/math-emu/fd2uiz.c
+new file mode 100644
+index 0000000..8ae17cf
+--- /dev/null
++++ b/arch/nds32/math-emu/fd2uiz.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/double.h>
++
++void fd2ui_z(void *ft, void *fa)
++{
++	unsigned int r;
++
++	FP_DECL_D(A);
++	FP_DECL_EX;
++
++	FP_UNPACK_DP(A, fa);
++
++	if (A_c == FP_CLS_INF) {
++		*(unsigned int *)ft = (A_s == 0) ? 0xffffffff : 0x00000000;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else if (A_c == FP_CLS_NAN) {
++		*(unsigned int *)ft = 0xffffffff;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else {
++		FP_TO_INT_D(r, A, 32, 0);
++		__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++		*(unsigned int *)ft = r;
++	}
++
++}
+diff --git a/arch/nds32/math-emu/fpuemu.c b/arch/nds32/math-emu/fpuemu.c
+index 75cf164..46558a1 100644
+--- a/arch/nds32/math-emu/fpuemu.c
++++ b/arch/nds32/math-emu/fpuemu.c
+@@ -113,6 +113,30 @@ static int fpu_emu(struct fpu_struct *fpu_reg, unsigned long insn)
+ 					func.b = fs2d;
+ 					ftype = S1D;
+ 					break;
++				case fs2si_op:
++					func.b = fs2si;
++					ftype = S1S;
++					break;
++				case fs2si_z_op:
++					func.b = fs2si_z;
++					ftype = S1S;
++					break;
++				case fs2ui_op:
++					func.b = fs2ui;
++					ftype = S1S;
++					break;
++				case fs2ui_z_op:
++					func.b = fs2ui_z;
++					ftype = S1S;
++					break;
++				case fsi2s_op:
++					func.b = fsi2s;
++					ftype = S1S;
++					break;
++				case fui2s_op:
++					func.b = fui2s;
++					ftype = S1S;
++					break;
+ 				case fsqrts_op:
+ 					func.b = fsqrts;
+ 					ftype = S1S;
+@@ -182,6 +206,30 @@ static int fpu_emu(struct fpu_struct *fpu_reg, unsigned long insn)
+ 					func.b = fd2s;
+ 					ftype = D1S;
+ 					break;
++				case fd2si_op:
++					func.b = fd2si;
++					ftype = D1S;
++					break;
++				case fd2si_z_op:
++					func.b = fd2si_z;
++					ftype = D1S;
++					break;
++				case fd2ui_op:
++					func.b = fd2ui;
++					ftype = D1S;
++					break;
++				case fd2ui_z_op:
++					func.b = fd2ui_z;
++					ftype = D1S;
++					break;
++				case fsi2d_op:
++					func.b = fsi2d;
++					ftype = D1S;
++					break;
++				case fui2d_op:
++					func.b = fui2d;
++					ftype = D1S;
++					break;
+ 				case fsqrtd_op:
+ 					func.b = fsqrtd;
+ 					ftype = D1D;
+@@ -305,16 +353,16 @@ static int fpu_emu(struct fpu_struct *fpu_reg, unsigned long insn)
+ 	 * If an exception is required, generate a tidy SIGFPE exception.
  	 */
--	unsigned long UDF_trap;
-+	unsigned long UDF_IEX_trap;
- };
- 
- struct zol_struct {
-diff --git a/arch/nds32/include/uapi/asm/udftrap.h b/arch/nds32/include/uapi/asm/udftrap.h
-deleted file mode 100644
-index 433f79d..0000000
---- a/arch/nds32/include/uapi/asm/udftrap.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/* Copyright (C) 2005-2018 Andes Technology Corporation */
--#ifndef	_ASM_SETFPUTRAP
--#define	_ASM_SETFPUTRAP
--
--/*
-- * Options for setfputrap system call
-- */
--#define	DISABLE_UDFTRAP	0	/* disable underflow exception trap */
--#define	ENABLE_UDFTRAP	1	/* enable undeflos exception trap */
--#define	GET_UDFTRAP	2	/* only get undeflos exception trap status */
--
--#endif /* _ASM_CACHECTL */
-diff --git a/arch/nds32/include/uapi/asm/unistd.h b/arch/nds32/include/uapi/asm/unistd.h
-index 4ec8f54..6b9ff90 100644
---- a/arch/nds32/include/uapi/asm/unistd.h
-+++ b/arch/nds32/include/uapi/asm/unistd.h
-@@ -11,6 +11,6 @@
- 
- /* Additional NDS32 specific syscalls. */
- #define __NR_cacheflush		(__NR_arch_specific_syscall)
--#define __NR_udftrap		(__NR_arch_specific_syscall + 1)
-+#define __NR_fp_udfiex_crtl	(__NR_arch_specific_syscall + 1)
- __SYSCALL(__NR_cacheflush, sys_cacheflush)
--__SYSCALL(__NR_udftrap, sys_udftrap)
-+__SYSCALL(__NR_fp_udfiex_crtl, sys_fp_udfiex_crtl)
-diff --git a/arch/nds32/kernel/fpu.c b/arch/nds32/kernel/fpu.c
-index fddd40c..cf0b876 100644
---- a/arch/nds32/kernel/fpu.c
-+++ b/arch/nds32/kernel/fpu.c
-@@ -14,7 +14,7 @@
- 	.fd_regs = {[0 ... 31] = sNAN64},
- 	.fpcsr = FPCSR_INIT,
  #if IS_ENABLED(CONFIG_SUPPORT_DENORMAL_ARITHMETIC)
--	.UDF_trap = 0
-+	.UDF_IEX_trap = 0
- #endif
- };
- 
-@@ -178,7 +178,7 @@ inline void do_fpu_context_switch(struct pt_regs *regs)
- 		/* First time FPU user.  */
- 		load_fpu(&init_fpuregs);
- #if IS_ENABLED(CONFIG_SUPPORT_DENORMAL_ARITHMETIC)
--		current->thread.fpu.UDF_trap = init_fpuregs.UDF_trap;
-+		current->thread.fpu.UDF_IEX_trap = init_fpuregs.UDF_IEX_trap;
- #endif
- 		set_used_math();
- 	}
-@@ -206,7 +206,7 @@ inline void handle_fpu_exception(struct pt_regs *regs)
- 	unsigned int fpcsr;
- 	int si_code = 0, si_signo = SIGFPE;
- #if IS_ENABLED(CONFIG_SUPPORT_DENORMAL_ARITHMETIC)
--	unsigned long redo_except = FPCSR_mskDNIT|FPCSR_mskUDFT;
-+	unsigned long redo_except = FPCSR_mskDNIT|FPCSR_mskUDFT|FPCSR_mskIEXT;
+-	if (((fpu_reg->fpcsr << 5) & fpu_reg->fpcsr & FPCSR_mskALLE_NO_UDFE) ||
+-	    ((fpu_reg->fpcsr & FPCSR_mskUDF) && (fpu_reg->UDF_trap)))
++	if (((fpu_reg->fpcsr << 5) & fpu_reg->fpcsr & FPCSR_mskALLE_NO_UDF_IEXE)
++	    || ((fpu_reg->fpcsr << 5) & (fpu_reg->UDF_IEX_trap))) {
  #else
- 	unsigned long redo_except = FPCSR_mskDNIT;
+-	if ((fpu_reg->fpcsr << 5) & fpu_reg->fpcsr & FPCSR_mskALLE)
++	if ((fpu_reg->fpcsr << 5) & fpu_reg->fpcsr & FPCSR_mskALLE) {
  #endif
-@@ -215,21 +215,18 @@ inline void handle_fpu_exception(struct pt_regs *regs)
- 	fpcsr = current->thread.fpu.fpcsr;
- 
- 	if (fpcsr & redo_except) {
--#if IS_ENABLED(CONFIG_SUPPORT_DENORMAL_ARITHMETIC)
--		if (fpcsr & FPCSR_mskUDFT)
--			current->thread.fpu.fpcsr &= ~FPCSR_mskIEX;
--#endif
- 		si_signo = do_fpuemu(regs, &current->thread.fpu);
- 		fpcsr = current->thread.fpu.fpcsr;
--		if (!si_signo)
-+		if (!si_signo) {
-+			current->thread.fpu.fpcsr &= ~(redo_except);
- 			goto done;
-+		}
- 	} else if (fpcsr & FPCSR_mskRIT) {
- 		if (!user_mode(regs))
- 			do_exit(SIGILL);
- 		si_signo = SIGILL;
- 	}
- 
--
- 	switch (si_signo) {
- 	case SIGFPE:
- 		fill_sigfpe_signo(fpcsr, &si_code);
-diff --git a/arch/nds32/kernel/sys_nds32.c b/arch/nds32/kernel/sys_nds32.c
-index 0835277..cb2d1e2 100644
---- a/arch/nds32/kernel/sys_nds32.c
-+++ b/arch/nds32/kernel/sys_nds32.c
-@@ -6,8 +6,8 @@
- 
- #include <asm/cachectl.h>
- #include <asm/proc-fns.h>
--#include <asm/udftrap.h>
- #include <asm/fpu.h>
-+#include <asm/fp_udfiex_crtl.h>
- 
- SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
- 	       unsigned long, prot, unsigned long, flags,
-@@ -51,31 +51,33 @@
+ 		return SIGFPE;
++	}
  	return 0;
  }
  
--SYSCALL_DEFINE1(udftrap, int, option)
-+SYSCALL_DEFINE2(fp_udfiex_crtl, unsigned int, cmd, unsigned int, act)
+-
+ int do_fpuemu(struct pt_regs *regs, struct fpu_struct *fpu)
  {
- #if IS_ENABLED(CONFIG_SUPPORT_DENORMAL_ARITHMETIC)
--	int old_udftrap;
-+	int old_udf_iex;
+ 	unsigned long insn = 0, addr = regs->ipc;
+@@ -336,6 +384,7 @@ int do_fpuemu(struct pt_regs *regs, struct fpu_struct *fpu)
  
- 	if (!used_math()) {
- 		load_fpu(&init_fpuregs);
--		current->thread.fpu.UDF_trap = init_fpuregs.UDF_trap;
-+		current->thread.fpu.UDF_IEX_trap = init_fpuregs.UDF_IEX_trap;
- 		set_used_math();
- 	}
- 
--	old_udftrap = current->thread.fpu.UDF_trap;
--	switch (option) {
--	case DISABLE_UDFTRAP:
--		current->thread.fpu.UDF_trap = 0;
-+	old_udf_iex = current->thread.fpu.UDF_IEX_trap;
-+	act &= (FPCSR_mskUDFE | FPCSR_mskIEXE);
+ 	if (NDS32Insn_OPCODE(insn) != cop0_op)
+ 		return SIGILL;
 +
-+	switch (cmd) {
-+	case DISABLE_UDF_IEX_TRAP:
-+		current->thread.fpu.UDF_IEX_trap &= ~act;
- 		break;
--	case ENABLE_UDFTRAP:
--		current->thread.fpu.UDF_trap = FPCSR_mskUDFE;
-+	case ENABLE_UDF_IEX_TRAP:
-+		current->thread.fpu.UDF_IEX_trap |= act;
- 		break;
--	case GET_UDFTRAP:
-+	case GET_UDF_IEX_TRAP:
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
--	return old_udftrap;
-+	return old_udf_iex;
- #else
- 	return -ENOTSUPP;
- #endif
+ 	switch (NDS32Insn_OPCODE_COP0(insn)) {
+ 	case fs1_op:
+ 	case fs2_op:
+diff --git a/arch/nds32/math-emu/fs2si.c b/arch/nds32/math-emu/fs2si.c
+new file mode 100644
+index 0000000..b4931d6
+--- /dev/null
++++ b/arch/nds32/math-emu/fs2si.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/single.h>
++
++void fs2si(void *ft, void *fa)
++{
++	int r;
++
++	FP_DECL_S(A);
++	FP_DECL_EX;
++
++	FP_UNPACK_SP(A, fa);
++
++	if (A_c == FP_CLS_INF) {
++		*(int *)ft = (A_s == 0) ? 0x7fffffff : 0x80000000;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else if (A_c == FP_CLS_NAN) {
++		*(int *)ft = 0xffffffff;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else {
++		FP_TO_INT_ROUND_S(r, A, 32, 1);
++		__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++		*(int *)ft = r;
++	}
++}
+diff --git a/arch/nds32/math-emu/fs2siz.c b/arch/nds32/math-emu/fs2siz.c
+new file mode 100644
+index 0000000..1c2b99c
+--- /dev/null
++++ b/arch/nds32/math-emu/fs2siz.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/single.h>
++
++void fs2si_z(void *ft, void *fa)
++{
++	int r;
++
++	FP_DECL_S(A);
++	FP_DECL_EX;
++
++	FP_UNPACK_SP(A, fa);
++
++	if (A_c == FP_CLS_INF) {
++		*(int *)ft = (A_s == 0) ? 0x7fffffff : 0x80000000;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else if (A_c == FP_CLS_NAN) {
++		*(int *)ft = 0xffffffff;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else {
++		FP_TO_INT_S(r, A, 32, 1);
++		__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++		*(int *)ft = r;
++	}
++}
+diff --git a/arch/nds32/math-emu/fs2ui.c b/arch/nds32/math-emu/fs2ui.c
+new file mode 100644
+index 0000000..c337f03
+--- /dev/null
++++ b/arch/nds32/math-emu/fs2ui.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/single.h>
++
++void fs2ui(void *ft, void *fa)
++{
++	unsigned int r;
++
++	FP_DECL_S(A);
++	FP_DECL_EX;
++
++	FP_UNPACK_SP(A, fa);
++
++	if (A_c == FP_CLS_INF) {
++		*(unsigned int *)ft = (A_s == 0) ? 0xffffffff : 0x00000000;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else if (A_c == FP_CLS_NAN) {
++		*(unsigned int *)ft = 0xffffffff;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else {
++		FP_TO_INT_ROUND_S(r, A, 32, 0);
++		__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++		*(unsigned int *)ft = r;
++	}
++}
+diff --git a/arch/nds32/math-emu/fs2uiz.c b/arch/nds32/math-emu/fs2uiz.c
+new file mode 100644
+index 0000000..22c5e47
+--- /dev/null
++++ b/arch/nds32/math-emu/fs2uiz.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/single.h>
++
++void fs2ui_z(void *ft, void *fa)
++{
++	unsigned int r;
++
++	FP_DECL_S(A);
++	FP_DECL_EX;
++
++	FP_UNPACK_SP(A, fa);
++
++	if (A_c == FP_CLS_INF) {
++		*(unsigned int *)ft = (A_s == 0) ? 0xffffffff : 0x00000000;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else if (A_c == FP_CLS_NAN) {
++		*(unsigned int *)ft = 0xffffffff;
++		__FPU_FPCSR |= FP_EX_INVALID;
++	} else {
++		FP_TO_INT_S(r, A, 32, 0);
++		__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++		*(unsigned int *)ft = r;
++	}
++
++}
+diff --git a/arch/nds32/math-emu/fsi2d.c b/arch/nds32/math-emu/fsi2d.c
+new file mode 100644
+index 0000000..6b04cec
+--- /dev/null
++++ b/arch/nds32/math-emu/fsi2d.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/double.h>
++
++void fsi2d(void *ft, void *fa)
++{
++	int a = *(int *)fa;
++
++	FP_DECL_D(R);
++	FP_DECL_EX;
++
++	FP_FROM_INT_D(R, a, 32, int);
++
++	FP_PACK_DP(ft, R);
++
++	__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++
++}
+diff --git a/arch/nds32/math-emu/fsi2s.c b/arch/nds32/math-emu/fsi2s.c
+new file mode 100644
+index 0000000..689864a
+--- /dev/null
++++ b/arch/nds32/math-emu/fsi2s.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/single.h>
++
++void fsi2s(void *ft, void *fa)
++{
++	int a = *(int *)fa;
++
++	FP_DECL_S(R);
++	FP_DECL_EX;
++
++	FP_FROM_INT_S(R, a, 32, int);
++
++	FP_PACK_SP(ft, R);
++
++	__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++
++}
+diff --git a/arch/nds32/math-emu/fui2d.c b/arch/nds32/math-emu/fui2d.c
+new file mode 100644
+index 0000000..9689d33
+--- /dev/null
++++ b/arch/nds32/math-emu/fui2d.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/double.h>
++
++void fui2d(void *ft, void *fa)
++{
++	unsigned int a = *(unsigned int *)fa;
++
++	FP_DECL_D(R);
++	FP_DECL_EX;
++
++	FP_FROM_INT_D(R, a, 32, int);
++
++	FP_PACK_DP(ft, R);
++
++	__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++
++}
+diff --git a/arch/nds32/math-emu/fui2s.c b/arch/nds32/math-emu/fui2s.c
+new file mode 100644
+index 0000000..f70f076
+--- /dev/null
++++ b/arch/nds32/math-emu/fui2s.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2005-2019 Andes Technology Corporation
++#include <linux/uaccess.h>
++
++#include <asm/sfp-machine.h>
++#include <math-emu/soft-fp.h>
++#include <math-emu/single.h>
++
++void fui2s(void *ft, void *fa)
++{
++	unsigned int a = *(unsigned int *)fa;
++
++	FP_DECL_S(R);
++	FP_DECL_EX;
++
++	FP_FROM_INT_S(R, a, 32, int);
++
++	FP_PACK_SP(ft, R);
++
++	__FPU_FPCSR |= FP_CUR_EXCEPTIONS;
++
++}
 -- 
 1.7.1
 
