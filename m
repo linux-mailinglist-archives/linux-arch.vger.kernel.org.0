@@ -2,149 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7015D2CD17
-	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2019 19:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB21B2CD81
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2019 19:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbfE1RFm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 May 2019 13:05:42 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:33266 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726515AbfE1RFm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 May 2019 13:05:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74093341;
-        Tue, 28 May 2019 10:05:41 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C6A43F59C;
-        Tue, 28 May 2019 10:05:39 -0700 (PDT)
-Subject: Re: [PATCH v4 3/3] kselftest: Extend vDSO selftest to clock_getres
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-References: <20190523112116.19233-1-vincenzo.frascino@arm.com>
- <20190523112116.19233-4-vincenzo.frascino@arm.com>
- <87lfyrp0d2.fsf@concordia.ellerman.id.au>
- <afb7395f-43e9-c304-2db2-349e6727b687@arm.com>
- <20190528190132.Horde.a454OBLbW8Q4Xvx6vYRfSA1@messagerie.si.c-s.fr>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <bc9a8567-500f-46d4-8574-2148dbf478b5@arm.com>
-Date:   Tue, 28 May 2019 18:05:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726418AbfE1RUD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 May 2019 13:20:03 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:52878 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726236AbfE1RUC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 May 2019 13:20:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=qsxG6nrZHIG6W3Utol1ADoMvGd1Fu++xoBrnNWF+g6w=; b=1Supj4ahiukX6UPbvHZyF03YR
+        JO7bTjVrRlpg3pXBYsQwJVeAlQKNYjDNcrxz6LxCL3NRIKiPGHN86GcNMarsgpOe/yDDBOX+qd9HX
+        t0eDk7tmUTTGVo4y4ZvvSj8c6dogbCtG2WZleFI/klu1NQNWDS816bL2y3mQre1xbSbEaWoDlWP4H
+        yW47YPj0WIH/Cd4jIA4hLnLjXOmbAglKlOPTM0RRRilh+UWVC6ci3C6Dsu0qMsAqe0uJ7nDyOEsxO
+        QfA362ClWXh1pOCLsldHPuSlnzWnbtzrTpe5ei0+3SKvxsnQfR4EVUrpMJnrLgHwFrsoJ8juDVKfd
+        guKqq55Eg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hVflI-0005pf-Tr; Tue, 28 May 2019 17:19:45 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4AAD52007CDEA; Tue, 28 May 2019 19:19:42 +0200 (CEST)
+Date:   Tue, 28 May 2019 19:19:42 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     aryabinin@virtuozzo.com, dvyukov@google.com, glider@google.com,
+        andreyknvl@google.com, corbet@lwn.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        arnd@arndb.de, jpoimboe@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: Re: [PATCH 2/3] tools/objtool: add kasan_check_* to uaccess whitelist
+Message-ID: <20190528171942.GV2623@hirez.programming.kicks-ass.net>
+References: <20190528163258.260144-1-elver@google.com>
+ <20190528163258.260144-2-elver@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20190528190132.Horde.a454OBLbW8Q4Xvx6vYRfSA1@messagerie.si.c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190528163258.260144-2-elver@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Christophe,
+On Tue, May 28, 2019 at 06:32:57PM +0200, Marco Elver wrote:
+> This is a pre-requisite for enabling bitops instrumentation. Some bitops
+> may safely be used with instrumentation in uaccess regions.
+> 
+> For example, on x86, `test_bit` is used to test a CPU-feature in a
+> uaccess region:   arch/x86/ia32/ia32_signal.c:361
 
-On 28/05/2019 18:01, Christophe Leroy wrote:
-> Vincenzo Frascino <vincenzo.frascino@arm.com> a écrit :
-> 
->> Hi Michael,
->>
->> thank you for your reply.
->>
->> On 28/05/2019 07:19, Michael Ellerman wrote:
->>> Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
->>>
->>>> The current version of the multiarch vDSO selftest verifies only
->>>> gettimeofday.
->>>>
->>>> Extend the vDSO selftest to clock_getres, to verify that the
->>>> syscall and the vDSO library function return the same information.
->>>>
->>>> The extension has been used to verify the hrtimer_resoltion fix.
->>>
->>> This is passing for me even without patch 1 applied, shouldn't it fail
->>> without the fix? What am I missing?
->>>
->>
->> This is correct, because during the refactoring process I missed an "n" :)
->>
->> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_sec·!=·y.tv_sec))
->>
->> Should be:
->>
->> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_nsec·!=·y.tv_nsec))
-> 
-> Maybe you'd better use timercmp() from sys/time.h
-> 
+That one can easily be moved out of the uaccess region. Any else?
 
-timercmp() takes "struct timeval" not "struct timespec".
-
-> Christophe
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+>  tools/objtool/check.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
->>
->> My mistake, I am going to fix the test and re-post v5 of this set.
->>
->> Without my patch if you pass "highres=off" to the kernel (as a command line
->> parameter) it leads to a broken implementation of clock_getres since  
->> the value
->> of CLOCK_REALTIME_RES does not change at runtime.
->>
->> Expected result (with highres=off):
->>
->> # uname -r
->> 5.2.0-rc2
->> # ./vdso_clock_getres
->> clock_id: CLOCK_REALTIME [FAIL]
->> clock_id: CLOCK_BOOTTIME [PASS]
->> clock_id: CLOCK_TAI [PASS]
->> clock_id: CLOCK_REALTIME_COARSE [PASS]
->> clock_id: CLOCK_MONOTONIC [FAIL]
->> clock_id: CLOCK_MONOTONIC_RAW [PASS]
->> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
->>
->> The reason of this behavior is that the only clocks supported by getres on
->> powerpc are CLOCK_REALTIME and CLOCK_MONOTONIC, the rest on the clocks use
->> always syscalls.
->>
->>> # uname -r
->>> 5.2.0-rc2-gcc-8.2.0
->>>
->>> # ./vdso_clock_getres
->>> clock_id: CLOCK_REALTIME [PASS]
->>> clock_id: CLOCK_BOOTTIME [PASS]
->>> clock_id: CLOCK_TAI [PASS]
->>> clock_id: CLOCK_REALTIME_COARSE [PASS]
->>> clock_id: CLOCK_MONOTONIC [PASS]
->>> clock_id: CLOCK_MONOTONIC_RAW [PASS]
->>> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
->>>
->>> cheers
->>>
->>>> Cc: Shuah Khan <shuah@kernel.org>
->>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>> ---
->>>>
->>>> Note: This patch is independent from the others in this series, hence it
->>>> can be merged singularly by the kselftest maintainers.
->>>>
->>>>  tools/testing/selftests/vDSO/Makefile         |   2 +
->>>>  .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
->>>>  2 files changed, 126 insertions(+)
->>>>  create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
->>
->> --
->> Regards,
->> Vincenzo
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 172f99195726..eff0e5209402 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -443,6 +443,8 @@ static void add_ignores(struct objtool_file *file)
+>  static const char *uaccess_safe_builtin[] = {
+>  	/* KASAN */
+>  	"kasan_report",
+> +	"kasan_check_read",
+> +	"kasan_check_write",
+>  	"check_memory_region",
+>  	/* KASAN out-of-line */
+>  	"__asan_loadN_noabort",
+> -- 
+> 2.22.0.rc1.257.g3120a18244-goog
 > 
-> 
-
--- 
-Regards,
-Vincenzo
