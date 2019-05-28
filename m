@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6522C629
-	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2019 14:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CB52C62A
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2019 14:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726812AbfE1MIz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 May 2019 08:08:55 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35306 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726620AbfE1MIz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 May 2019 08:08:55 -0400
-Received: by mail-pf1-f195.google.com with SMTP id d126so9170649pfd.2
-        for <linux-arch@vger.kernel.org>; Tue, 28 May 2019 05:08:55 -0700 (PDT)
+        id S1726826AbfE1MI7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 May 2019 08:08:59 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43393 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726620AbfE1MI7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 May 2019 08:08:59 -0400
+Received: by mail-pf1-f196.google.com with SMTP id c6so11355652pfa.10
+        for <linux-arch@vger.kernel.org>; Tue, 28 May 2019 05:08:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eTusNcynv/bdHJGyOGAguPJgIGBXkK8mZssjLj2XyYA=;
-        b=gePFim6zy/Px8intSzG3g1lUm9vIEviqyResVqM6CMdmkHMLPZyzYcfuwwNOxWJfyT
-         PrAf+88EhsQYxRofAWQhwIpvu02BtlRxH6B7y9bPp7IW4+Pw9hlXglaG+/T1Rl7dEf2c
-         Ig3Z4yWui4X8BvFJKwhblZtN94P9o9ze/YWo3gZ4Y/oLOWaOth0PPKAWRL02FmRw+ZhO
-         eCyYQZ5uc/WVq9pca8eZV/pt/jB5V+O/cby5U0eP2B94eRM+PQasAlPHQZ/0QI2iJOch
-         MXkQGbR47WKp7efgV3Z9hfcGZr2aRt3ImGKBmxlbUwF+NHv7L3aSaV9JLouvyVVxraO8
-         wbxQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ebFdeU/x57ZdMACMC1qwFSZewCnBUbRvAij1iV66B8w=;
+        b=rzjb4ij10+/XxoGw4xo1USbcEjpbBtBE67CAkFvaT9rnRvwjnReaCSNwGBTafidpDd
+         N2KAZFQmrx3PSfEKRlrzktw3gmIH2OmNKm0hzSG9LR5hM4Eo2CbGrIT8u0BJh/qQBmZR
+         QTDWfDr+Ze3TiRRx/z9qozasTMLZECBVBvKtz3g9LsN14GkjdFgbcSwqBPrnbWSFdk4z
+         YLILvXkBDdmuFtLGN8yh1V+5gfjBWhFxxxJQ96oOe3WwUrH8xJ4cOCm3K7SmegRz/WJm
+         NwPVC/RjxwaMlySFNSNpGXbpE496iOnPSzMUcVJ/ZHkVFLCYpebb8OAaA+R92Of82ReU
+         CuNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eTusNcynv/bdHJGyOGAguPJgIGBXkK8mZssjLj2XyYA=;
-        b=boenxwcgzlUliekvpci/c0OxnUm57Kcak/RKZnsvuP+mpsI1UN4cfOMI+PJnfNTIUS
-         vWW2T23gLKQf16NJGCVfS+Gl2wAAWIIzLPkagCQ4rlfUDGRWJgGnxyCnnBviy0Gf4LMq
-         HtL6n6bFB21NA/9PeCU6oJu032FTjnsTCdHhF493di+45etiE+Muv12wMI+vo26CP7+b
-         W3f8i1BDNv3hol5uPxD0rh+67LgPfkppxy/vA05Ir+0OUbbwIf1+Sj/ZK5Lq7ltOmads
-         9x57hp3pesTHa8gAHqRvk7UU4m4Rkd2ns5YPXRUgCXGDi3A0ErKX1Y5XoO668tx7UiaZ
-         4GHQ==
-X-Gm-Message-State: APjAAAXlXD+AiFvIZROLt3eFHrXJdEsCiizCdXIystS1n0AEkMZsIlP/
-        rxiFVxrMD0X3qNCisfj3j8s=
-X-Google-Smtp-Source: APXvYqxouyX+FBCZ+/B4VzV3O/6LZwxnEZp2c8WyrjNaNIPzurMIp7er5TLrN3wxXTQP4ciUsmcvow==
-X-Received: by 2002:a62:38d8:: with SMTP id f207mr82932613pfa.131.1559045334758;
-        Tue, 28 May 2019 05:08:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ebFdeU/x57ZdMACMC1qwFSZewCnBUbRvAij1iV66B8w=;
+        b=U2MOGtnO8N0exINpXazqkZ/dqIOFMCYt0S6oYyUYcHXZZUkONK4cf3vVngylVywxcf
+         X7wBQoqahU1s8MlAlr6B+8uZdlbpyLG4I5YNM6Bai2mO8r78+rwoieI0Cn3AYmuwBq+K
+         mJk2fvdYaa+DeZrofswwvVJxf5+dToaeyuip3eOJnyOCDNtMkcJkY9ucvriR/f+zU8/7
+         C/EiVpUu57qRcLq0pPQ/b+AYD3tQDGHK61Gh5e/X3XH0OZRK9pIU0iM8ZzWgIAIFZ0JH
+         m2nafQgeAg3HbJViUlt9lzoVJFPKbTM2fCZZcYFx7fgz9gVXeBf/o2aTFq9qkbiISWu+
+         vo1g==
+X-Gm-Message-State: APjAAAX8sR2UlobBiA/6KjwfKqTgPbWy+dRcMCahpH46reFgeR3fCW7b
+        +rtANMnQSvGbX3QrnbuY4qI=
+X-Google-Smtp-Source: APXvYqxWlHJ6CGIXx8iWA545z8hn9HZiC2rBd/N0Q5OS/i01zrRYILt795J+oHF1Ho4PVBFyoRgN2g==
+X-Received: by 2002:a63:ee0b:: with SMTP id e11mr80785802pgi.453.1559045339023;
+        Tue, 28 May 2019 05:08:59 -0700 (PDT)
 Received: from bobo.local0.net (193-116-79-40.tpgi.com.au. [193.116.79.40])
-        by smtp.gmail.com with ESMTPSA id d15sm37463327pfm.186.2019.05.28.05.08.50
+        by smtp.gmail.com with ESMTPSA id d15sm37463327pfm.186.2019.05.28.05.08.55
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 05:08:53 -0700 (PDT)
+        Tue, 28 May 2019 05:08:58 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
@@ -52,10 +52,12 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
         Ard Biesheuvel <ard.biesheuvel@linaro.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Uladzislau Rezki <urezki@gmail.com>
-Subject: [PATCH 1/4] mm/large system hash: use vmalloc for size > MAX_ORDER when !hashdist
-Date:   Tue, 28 May 2019 22:04:50 +1000
-Message-Id: <20190528120453.27374-1-npiggin@gmail.com>
+Subject: [PATCH 2/4] mm/large system hash: avoid vmap for non-NUMA machines when hashdist
+Date:   Tue, 28 May 2019 22:04:51 +1000
+Message-Id: <20190528120453.27374-2-npiggin@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190528120453.27374-1-npiggin@gmail.com>
+References: <20190528120453.27374-1-npiggin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -63,44 +65,29 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The kernel currently clamps large system hashes to MAX_ORDER when
-hashdist is not set, which is rather arbitrary.
-
-vmalloc space is limited on 32-bit machines, but this shouldn't
-result in much more used because of small physical memory limiting
-system hash sizes.
+hashdist currently always uses vmalloc when hashdist is true. When
+there is only 1 online node and size <= MAX_ORDER, vmalloc can be
+avoided.
 
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- mm/page_alloc.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ mm/page_alloc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index d66bc8abe0af..dd419a074141 100644
+index dd419a074141..15478dba1144 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -8029,7 +8029,7 @@ void *__init alloc_large_system_hash(const char *tablename,
+@@ -8029,7 +8029,8 @@ void *__init alloc_large_system_hash(const char *tablename,
  			else
  				table = memblock_alloc_raw(size,
  							   SMP_CACHE_BYTES);
--		} else if (hashdist) {
-+		} else if (get_order(size) >= MAX_ORDER || hashdist) {
+-		} else if (get_order(size) >= MAX_ORDER || hashdist) {
++		} else if (get_order(size) >= MAX_ORDER ||
++				(hashdist && num_online_nodes() > 1)) {
  			table = __vmalloc(size, gfp_flags, PAGE_KERNEL);
  		} else {
  			/*
-@@ -8037,10 +8037,8 @@ void *__init alloc_large_system_hash(const char *tablename,
- 			 * some pages at the end of hash table which
- 			 * alloc_pages_exact() automatically does
- 			 */
--			if (get_order(size) < MAX_ORDER) {
--				table = alloc_pages_exact(size, gfp_flags);
--				kmemleak_alloc(table, size, 1, gfp_flags);
--			}
-+			table = alloc_pages_exact(size, gfp_flags);
-+			kmemleak_alloc(table, size, 1, gfp_flags);
- 		}
- 	} while (!table && size > PAGE_SIZE && --log2qty);
- 
 -- 
 2.20.1
 
