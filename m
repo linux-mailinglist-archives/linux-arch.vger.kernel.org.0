@@ -2,167 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D5E2E11D
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 17:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DB82E12D
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 17:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbfE2PdE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 May 2019 11:33:04 -0400
-Received: from foss.arm.com ([217.140.101.70]:48232 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725914AbfE2PdE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 May 2019 11:33:04 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 004AB341;
-        Wed, 29 May 2019 08:33:04 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BEAA3F5AF;
-        Wed, 29 May 2019 08:33:00 -0700 (PDT)
-Date:   Wed, 29 May 2019 16:32:58 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marco Elver <elver@google.com>, peterz@infradead.org
-Cc:     aryabinin@virtuozzo.com, dvyukov@google.com, glider@google.com,
-        andreyknvl@google.com, corbet@lwn.net, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        arnd@arndb.de, jpoimboe@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 3/3] asm-generic, x86: Add bitops instrumentation for
- KASAN
-Message-ID: <20190529153258.GJ31777@lakrids.cambridge.arm.com>
-References: <20190529141500.193390-1-elver@google.com>
- <20190529141500.193390-4-elver@google.com>
+        id S1726892AbfE2Pec (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 May 2019 11:34:32 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:50759 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725914AbfE2Pec (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 May 2019 11:34:32 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hW0b1-00060s-1p; Wed, 29 May 2019 09:34:31 -0600
+Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hW0b0-0003Kb-7Q; Wed, 29 May 2019 09:34:30 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Will Deacon <will.deacon@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>, linux-arch@vger.kernel.org,
+        Dave Martin <Dave.Martin@arm.com>,
+        James Morse <james.morse@arm.com>
+References: <20190523003916.20726-1-ebiederm@xmission.com>
+        <20190523003916.20726-4-ebiederm@xmission.com>
+        <20190523101702.GG26646@fuggles.cambridge.arm.com>
+        <875zq1gnh4.fsf_-_@xmission.com>
+        <20190523161509.GE31896@fuggles.cambridge.arm.com>
+        <8736l4evkn.fsf@xmission.com>
+        <20190524100008.GE3432@fuggles.cambridge.arm.com>
+        <87o93rcwee.fsf@xmission.com>
+        <20190529151227.GF11154@fuggles.cambridge.arm.com>
+Date:   Wed, 29 May 2019 10:34:25 -0500
+In-Reply-To: <20190529151227.GF11154@fuggles.cambridge.arm.com> (Will Deacon's
+        message of "Wed, 29 May 2019 16:12:27 +0100")
+Message-ID: <87muj51dha.fsf@xmission.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190529141500.193390-4-elver@google.com>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+Content-Type: text/plain
+X-XM-SPF: eid=1hW0b0-0003Kb-7Q;;;mid=<87muj51dha.fsf@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+JWnDMTAC4U8y81mkWSmRaxfqYNr09zag=
+X-SA-Exim-Connect-IP: 72.206.97.68
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
+        T_TooManySym_01,XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4453]
+        *  1.5 TR_Symld_Words too many words that have symbols inside
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Will Deacon <will.deacon@arm.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 418 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 2.5 (0.6%), b_tie_ro: 1.72 (0.4%), parse: 0.87
+        (0.2%), extract_message_metadata: 12 (2.8%), get_uri_detail_list: 1.53
+        (0.4%), tests_pri_-1000: 9 (2.0%), tests_pri_-950: 1.33 (0.3%),
+        tests_pri_-900: 1.10 (0.3%), tests_pri_-90: 22 (5.2%), check_bayes: 20
+        (4.8%), b_tokenize: 7 (1.6%), b_tok_get_all: 6 (1.5%), b_comp_prob:
+        2.3 (0.6%), b_tok_touch_all: 3.3 (0.8%), b_finish: 0.59 (0.1%),
+        tests_pri_0: 357 (85.4%), check_dkim_signature: 0.65 (0.2%),
+        check_dkim_adsp: 3.4 (0.8%), poll_dns_idle: 0.29 (0.1%), tests_pri_10:
+        2.6 (0.6%), tests_pri_500: 8 (1.8%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [REVIEW][PATCHv2 03/26] signal/arm64: Use force_sig not force_sig_fault for SIGKILL
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 29, 2019 at 04:15:01PM +0200, Marco Elver wrote:
-> This adds a new header to asm-generic to allow optionally instrumenting
-> architecture-specific asm implementations of bitops.
-> 
-> This change includes the required change for x86 as reference and
-> changes the kernel API doc to point to bitops-instrumented.h instead.
-> Rationale: the functions in x86's bitops.h are no longer the kernel API
-> functions, but instead the arch_ prefixed functions, which are then
-> instrumented via bitops-instrumented.h.
-> 
-> Other architectures can similarly add support for asm implementations of
-> bitops.
-> 
-> The documentation text has been copied/moved, and *no* changes to it
-> have been made in this patch.
-> 
-> Tested: using lib/test_kasan with bitops tests (pre-requisite patch).
-> 
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=198439
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
-> Changes in v2:
-> * Instrument word-sized accesses, as specified by the interface.
-> ---
->  Documentation/core-api/kernel-api.rst     |   2 +-
->  arch/x86/include/asm/bitops.h             | 210 ++++----------
->  include/asm-generic/bitops-instrumented.h | 317 ++++++++++++++++++++++
->  3 files changed, 370 insertions(+), 159 deletions(-)
->  create mode 100644 include/asm-generic/bitops-instrumented.h
+Will Deacon <will.deacon@arm.com> writes:
 
-[...]
+> On Fri, May 24, 2019 at 05:36:41PM -0500, Eric W. Biederman wrote:
+>> Will Deacon <will.deacon@arm.com> writes:
+>> 
+>> > On Thu, May 23, 2019 at 03:59:20PM -0500, Eric W. Biederman wrote:
+>> >> Will Deacon <will.deacon@arm.com> writes:
+>> >> 
+>> >> > On Thu, May 23, 2019 at 11:11:19AM -0500, Eric W. Biederman wrote:
+>> >> >> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+>> >> >> index ade32046f3fe..e45d5b440fb1 100644
+>> >> >> --- a/arch/arm64/kernel/traps.c
+>> >> >> +++ b/arch/arm64/kernel/traps.c
+>> >> >> @@ -256,7 +256,10 @@ void arm64_force_sig_fault(int signo, int code, void __user *addr,
+>> >> >>  			   const char *str)
+>> >> >>  {
+>> >> >>  	arm64_show_signal(signo, str);
+>> >> >> -	force_sig_fault(signo, code, addr, current);
+>> >> >> +	if (signo == SIGKILL)
+>> >> >> +		force_sig(SIGKILL, current);
+>> >> >> +	else
+>> >> >> +		force_sig_fault(signo, code, addr, current);
+>> >> >>  }
+>> >> >
+>> >> > Acked-by: Will Deacon <will.deacon@arm.com>
+>> >> >
+>> >> > Are you planning to send this series on, or would you like me to pick this
+>> >> > into the arm64 tree?
+>> >> 
+>> >> I am planning on taking this through siginfo tree, unless it causes
+>> >> problems.
+>> >
+>> > Okey doke, it would just be nice to see this patch land in 5.2, that's
+>> > all.
+>> 
+>> As this does not appear to have any real world consequences I am aiming
+>> at 5.3.  If someone else would like to take it and feed it to Linus
+>> sooner I won't object.
+>
+> Thanks. I've picked this patch up as part of the arm64 fixes I plan to send
+> for -rc3.
 
-> diff --git a/include/asm-generic/bitops-instrumented.h b/include/asm-generic/bitops-instrumented.h
-> new file mode 100644
-> index 000000000000..b01b0dd93964
-> --- /dev/null
-> +++ b/include/asm-generic/bitops-instrumented.h
-> @@ -0,0 +1,317 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +/*
-> + * This file provides wrappers with sanitizer instrumentation for bit
-> + * operations.
-> + *
-> + * To use this functionality, an arch's bitops.h file needs to define each of
-> + * the below bit operations with an arch_ prefix (e.g. arch_set_bit(),
-> + * arch___set_bit(), etc.), #define each provided arch_ function, and include
-> + * this file after their definitions. For undefined arch_ functions, it is
-> + * assumed that they are provided via asm-generic/bitops, which are implicitly
-> + * instrumented.
-> + */
+Sounds good.
 
-If using the asm-generic/bitops.h, all of the below will be defined
-unconditionally, so I don't believe we need the ifdeffery for each
-function.
+We might have a trivial conflict between our branches as I am also
+including this in my for-next branch, as I have further patches that go
+on to remove the task argument from force_sig and force_sig_fault.
 
-> +#ifndef _ASM_GENERIC_BITOPS_INSTRUMENTED_H
-> +#define _ASM_GENERIC_BITOPS_INSTRUMENTED_H
-> +
-> +#include <linux/kasan-checks.h>
-> +
-> +#if defined(arch_set_bit)
-> +/**
-> + * set_bit - Atomically set a bit in memory
-> + * @nr: the bit to set
-> + * @addr: the address to start counting from
-> + *
-> + * This function is atomic and may not be reordered.  See __set_bit()
-> + * if you do not require the atomic guarantees.
-> + *
-> + * Note: there are no guarantees that this function will not be reordered
-> + * on non x86 architectures, so if you are writing portable code,
-> + * make sure not to rely on its reordering guarantees.
+But I don't think it is anything to worry about.
 
-These two paragraphs are contradictory.
+Eric
 
-Since this is not under arch/x86, please fix this to describe the
-generic semantics; any x86-specific behaviour should be commented under
-arch/x86.
 
-AFAICT per include/asm-generic/bitops/atomic.h, generically this
-provides no ordering guarantees. So I think this can be:
-
-/**
- * set_bit - Atomically set a bit in memory
- * @nr: the bit to set
- * @addr: the address to start counting from
- *
- * This function is atomic and may be reordered.
- *
- * Note that @nr may be almost arbitrarily large; this function is not
- * restricted to acting on a single-word quantity.
- */
-
-... with the x86 ordering beahviour commented in x86's arch_set_bit.
-
-Peter, do you have a better wording for the above?
-
-[...]
-
-> +#if defined(arch___test_and_clear_bit)
-> +/**
-> + * __test_and_clear_bit - Clear a bit and return its old value
-> + * @nr: Bit to clear
-> + * @addr: Address to count from
-> + *
-> + * This operation is non-atomic and can be reordered.
-> + * If two examples of this operation race, one can appear to succeed
-> + * but actually fail.  You must protect multiple accesses with a lock.
-> + *
-> + * Note: the operation is performed atomically with respect to
-> + * the local CPU, but not other CPUs. Portable code should not
-> + * rely on this behaviour.
-> + * KVM relies on this behaviour on x86 for modifying memory that is also
-> + * accessed from a hypervisor on the same CPU if running in a VM: don't change
-> + * this without also updating arch/x86/kernel/kvm.c
-> + */
-
-Likewise, please only specify the generic semantics in this header, and
-leave the x86-specific behaviour commented under arch/x86.
-
-Otherwise this looks sound to me.
-
-Thanks,
-Mark.
