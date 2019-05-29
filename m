@@ -2,213 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C15FB2DFDF
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 16:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8EF72E09B
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 17:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbfE2Of3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 May 2019 10:35:29 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:57053 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbfE2Of2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 May 2019 10:35:28 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1hVzfr-00065H-7y; Wed, 29 May 2019 08:35:27 -0600
-Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1hVzfh-0007Nh-R4; Wed, 29 May 2019 08:35:27 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     linux-kernel@vger.kernel.org
-Cc:     Linux Containers <containers@lists.linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>, linux-arch@vger.kernel.org
-References: <20190523003916.20726-1-ebiederm@xmission.com>
-        <20190523003916.20726-3-ebiederm@xmission.com>
-Date:   Wed, 29 May 2019 09:35:13 -0500
-In-Reply-To: <20190523003916.20726-3-ebiederm@xmission.com> (Eric
-        W. Biederman's message of "Wed, 22 May 2019 19:38:52 -0500")
-Message-ID: <87muj52use.fsf@xmission.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1hVzfh-0007Nh-R4;;;mid=<87muj52use.fsf@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18NaYNOL1gSuhdyGHjOepIuBQO9rB0y5bg=
-X-SA-Exim-Connect-IP: 72.206.97.68
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.9 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,XMBrknScrpt_02,XMNoVowels,XMSubLong autolearn=disabled
-        version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4998]
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.4 XMBrknScrpt_02 Possible Broken Spam Script
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 9059 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 6 (0.1%), b_tie_ro: 3.5 (0.0%), parse: 1.14
-        (0.0%), extract_message_metadata: 14 (0.2%), get_uri_detail_list: 3.9
-        (0.0%), tests_pri_-1000: 9 (0.1%), tests_pri_-950: 1.03 (0.0%),
-        tests_pri_-900: 0.86 (0.0%), tests_pri_-90: 29 (0.3%), check_bayes: 27
-        (0.3%), b_tokenize: 8 (0.1%), b_tok_get_all: 11 (0.1%), b_comp_prob:
-        2.2 (0.0%), b_tok_touch_all: 3.7 (0.0%), b_finish: 0.63 (0.0%),
-        tests_pri_0: 3439 (38.0%), check_dkim_signature: 0.44 (0.0%),
-        check_dkim_adsp: 3031 (33.5%), poll_dns_idle: 8575 (94.7%),
-        tests_pri_10: 1.78 (0.0%), tests_pri_500: 5555 (61.3%), rewrite_mail:
-        0.00 (0.0%)
-Subject: Re: [REVIEW][PATCH 02/26] signal/ptrace: Simplify and fix PTRACE_KILL
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+        id S1726759AbfE2PKF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 May 2019 11:10:05 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40011 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726522AbfE2PKF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 May 2019 11:10:05 -0400
+Received: by mail-pg1-f195.google.com with SMTP id d30so74882pgm.7
+        for <linux-arch@vger.kernel.org>; Wed, 29 May 2019 08:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=3NHqlVoLnqt1FPrdV3/ouU8QWVDF9XpBsDFRA3M9mXw=;
+        b=l+25soU2r8L+HSnZwz7EAeGteROjLCaBLCfS46AdyKGmDYKRETwB+6CGZChZimiUfP
+         ngVccUx/aZUDVBs0m8Q6cnbIeBz+Ja6u69OL2s7TVX30cdjUYRMMccUhgfG1CYKw78w+
+         V1GIr0ftPCaKGc4AmHhHWk3Zogl1mCnO9ptqHVKKToXX415UW1dMo35OeNYX06d1JgZD
+         xhdFQfY5MumAWyV4kWY8VLCPmPdGF+cKN9nOJ3CM5JcUSf8XUJaAk+xc7Mfifq2VAu+u
+         D30p/HP8SCPBwTglWYYKym7xOMHHs9DhBLdqzjV3ph0mfKCf4upZUCDb0df1YbQF2S8d
+         aO0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=3NHqlVoLnqt1FPrdV3/ouU8QWVDF9XpBsDFRA3M9mXw=;
+        b=IBDiuiW9zLHhQzaOjG+ShMpNDK+HAhu+oqMq9wD7kt979SBi3UdGoqAcY/HwYfrvyM
+         ha8lB+oareUZL7LTlhtV1SGl2fJMGpH2NGc08vm3MhI2KOcgIEDVrNNTn0AVgVpY5teu
+         +JExhq+JsWN0g9mDBX7KJLnaE3li1Q6OBB3K6FxxSo1htbKVZyJYtsThcOJs/M6YYO1V
+         LO8grdKm13K2SW5O3kGdxlAdNzwxwC3LRYwvVMjcy6k8AsyBL4Gqgg+LZw2cbKanHlh4
+         QWcsDVT4/ysglmjY0OjA9dg5C5vVQ0M0KJZm+y0oq7EVz702dOuBInragBtZFovTz3bb
+         /i7Q==
+X-Gm-Message-State: APjAAAXkqffxv+TmHJnQx8QGX2knQ3r6LPzCgqWhifBbh4UVAbE4CJy0
+        V8qttfKpsc+9t3A8MPFBewRTqA==
+X-Google-Smtp-Source: APXvYqxm6x95Oz3ytQOQ6KJ6h+yMYOZG9THlrGBNRRjjiDeEhH7rSiaxnIXU6uXMK+p7Io1TQQBNsQ==
+X-Received: by 2002:a62:1ec1:: with SMTP id e184mr83655828pfe.185.1559142604091;
+        Wed, 29 May 2019 08:10:04 -0700 (PDT)
+Received: from ?IPv6:2600:100f:b10c:ace6:b862:4204:5f4a:fe22? ([2600:100f:b10c:ace6:b862:4204:5f4a:fe22])
+        by smtp.gmail.com with ESMTPSA id f38sm14162147pgm.85.2019.05.29.08.10.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 May 2019 08:10:02 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC permissions
+From:   Andy Lutomirski <luto@amacapital.net>
+X-Mailer: iPhone Mail (16E227)
+In-Reply-To: <20190524031109.v24r6typyug2rlto@yavin>
+Date:   Wed, 29 May 2019 08:10:00 -0700
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9712F80E-1016-4DB7-996D-B423E07A1C1F@amacapital.net>
+References: <20190520133305.11925-1-cyphar@cyphar.com> <20190520133305.11925-2-cyphar@cyphar.com> <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com> <20190523020009.mi25uziu2b3whf4l@yavin> <20190524031109.v24r6typyug2rlto@yavin>
+To:     Aleksa Sarai <cyphar@cyphar.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-I am dropping this one for now, as there are no dependencies with
-the other patches, and this probably deserves some discussion on it's
-own.
 
-Eric
+> On May 23, 2019, at 8:11 PM, Aleksa Sarai <cyphar@cyphar.com> wrote:
+>=20
+>> On 2019-05-23, Aleksa Sarai <cyphar@cyphar.com> wrote:
+>>> On 2019-05-22, Andy Lutomirski <luto@kernel.org> wrote:
+>>> What are actual examples of uses for this exception?  Breaking
+>>> selftests is not, in and of itself, a huge problem.
+>>=20
+>> Not as far as I know. All of the re-opening users I know of do re-opens
+>> of O_PATH or are re-opening with the same (or fewer) privileges. I also
+>> ran this for a few days on my laptop without this exception, and didn't
+>> have any visible issues.
+>=20
+> I have modified the patch to WARN_ON(may_open_magiclink() =3D=3D -EACCES).=
 
-"Eric W. Biederman" <ebiederm@xmission.com> writes:
-
-> Since PTRACE_KILL was introduced in 1.1.78 it has only worked if the
-> process is stopped in do_signal.  On a ptraced but non-stopped process
-> PTRACE_KILL has always returned success and done nothing.
->
-> Separate the noop case of PTRACE_KILL from the case where it does
-> nothing.  This fixes the fact that taking sighand lock in
-> ptrace_resume is not safe if the process could be in the middle of
-> exec or do_exit.  The current test for child->state is insufficient to
-> prevent that race.
->
-> With the code explicitly implementing the noop people maintaining
-> ptrace no longer need to worry what happens in PTRACE_KILL if the
-> process is not stopped.
->
-> The alternative fix is to change the implementation of PTRACE_KILL
-> to just be send_sig(SIGKILL, child, 1);  But I don't know if anything
-> depends on the current documented behavior.
->
-> Cc: Oleg Nesterov <oleg@redhat.com>
-> Cc: stable@vger.kernel.org
-> Fixes: b72c186999e6 ("ptrace: fix race between ptrace_resume() and wait_task_stopped()")
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->  kernel/ptrace.c | 43 ++++++++++++++++++++++++++-----------------
->  1 file changed, 26 insertions(+), 17 deletions(-)
->
-> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-> index 6f357f4fc859..5d6ff7040863 100644
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -212,15 +212,18 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
->   *
->   * Check whether @child is being ptraced by %current and ready for further
->   * ptrace operations.  If @ignore_state is %false, @child also should be in
-> - * %TASK_TRACED state and on return the child is guaranteed to be traced
-> - * and not executing.  If @ignore_state is %true, @child can be in any
-> - * state.
-> + * %TASK_TRACED state and on succesful return the child is guaranteed to be
-> + * traced and not executing.  If @ignore_state is %true, @child can be in
-> + * any state on succesful return.
->   *
->   * CONTEXT:
->   * Grabs and releases tasklist_lock and @child->sighand->siglock.
->   *
->   * RETURNS:
-> - * 0 on success, -ESRCH if %child is not ready.
-> + * 0 on success,
-> + * -ESRCH if %child is not traced
-> + * -EAGAIN if %child can not be frozen
-> + * -EBUSY if the wait for %child fails
->   */
->  static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
+>=20
+> So far (in the past day on my openSUSE machines) I have only seen two
+> programs which have hit this case: kbd[1]'s "loadkeys" and "kbd_mode"
+> binaries. In addition to there not being any user-visible errors -- they
+> actually handle permission errors gracefully!
+>=20
+>  static int
+>  open_a_console(const char *fnam)
 >  {
-> @@ -240,6 +243,7 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
->  		 * child->sighand can't be NULL, release_task()
->  		 * does ptrace_unlink() before __exit_signal().
->  		 */
-> +		ret = -EAGAIN;
->  		if (ignore_state || ptrace_freeze_traced(child))
->  			ret = 0;
->  	}
-> @@ -253,7 +257,7 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
->  			 * so we should not worry about leaking __TASK_TRACED.
->  			 */
->  			WARN_ON(child->state == __TASK_TRACED);
-> -			ret = -ESRCH;
-> +			ret = -EBUSY;
->  		}
->  	}
->  
-> @@ -1074,8 +1078,6 @@ int ptrace_request(struct task_struct *child, long request,
->  		return ptrace_resume(child, request, data);
->  
->  	case PTRACE_KILL:
-> -		if (child->exit_state)	/* already dead */
-> -			return 0;
->  		return ptrace_resume(child, request, SIGKILL);
->  
->  #ifdef CONFIG_HAVE_ARCH_TRACEHOOK
-> @@ -1147,14 +1149,17 @@ SYSCALL_DEFINE4(ptrace, long, request, long, pid, unsigned long, addr,
->  		goto out_put_task_struct;
->  	}
->  
-> -	ret = ptrace_check_attach(child, request == PTRACE_KILL ||
-> -				  request == PTRACE_INTERRUPT);
-> -	if (ret < 0)
-> -		goto out_put_task_struct;
-> -
-> -	ret = arch_ptrace(child, request, addr, data);
-> -	if (ret || request != PTRACE_DETACH)
-> -		ptrace_unfreeze_traced(child);
-> +	ret = ptrace_check_attach(child, request == PTRACE_INTERRUPT);
-> +	if (!ret) {
-> +		ret = arch_ptrace(child, request, addr, data);
-> +		if (ret || request != PTRACE_DETACH)
-> +			ptrace_unfreeze_traced(child);
-> +	}
-> +	/* PTRACE_KILL is a noop when not attached */
-> +	else if ((request == PTRACE_KILL) && (ret != -ESRCH))
-> +		ret = 0;
-> +	else
-> +		ret = -ESRCH;
->  
->   out_put_task_struct:
->  	put_task_struct(child);
-> @@ -1292,13 +1297,17 @@ COMPAT_SYSCALL_DEFINE4(ptrace, compat_long_t, request, compat_long_t, pid,
->  		goto out_put_task_struct;
->  	}
->  
-> -	ret = ptrace_check_attach(child, request == PTRACE_KILL ||
-> -				  request == PTRACE_INTERRUPT);
-> +	ret = ptrace_check_attach(child, request == PTRACE_INTERRUPT);
->  	if (!ret) {
->  		ret = compat_arch_ptrace(child, request, addr, data);
->  		if (ret || request != PTRACE_DETACH)
->  			ptrace_unfreeze_traced(child);
->  	}
-> +	/* PTRACE_KILL is a noop when not attached */
-> +	else if ((request == PTRACE_KILL) && (ret != -ESRCH))
-> +		ret = 0;
-> +	else
-> +		ret = -ESRCH;
->  
->   out_put_task_struct:
->  	put_task_struct(child);
+>      int fd;
+>=20
+>      /*
+>       * For ioctl purposes we only need some fd and permissions
+>       * do not matter. But setfont:activatemap() does a write.
+>       */
+>      fd =3D open(fnam, O_RDWR);
+>      if (fd < 0)
+>          fd =3D open(fnam, O_WRONLY);
+>      if (fd < 0)
+>          fd =3D open(fnam, O_RDONLY);
+>      if (fd < 0)
+>          return -1;
+>      return fd;
+>  }
+>=20
+> The above gets called with "/proc/self/fd/0" as an argument (as well as
+> other console candidates like "/dev/console"). And setfont:activatemap()
+> actually does handle read-only fds:
+>=20
+>  static void
+>  send_escseq(int fd, const char *seq, int n)
+>  {
+>      if (write(fd, seq, n) !=3D n) /* maybe fd is read-only */
+>          printf("%s", seq);
+>  }
+>=20
+>  void activatemap(int fd)
+>  {
+>      send_escseq(fd, "\033(K", 3);
+>  }
+>=20
+> So, thus far, not only have I not seen anything go wrong -- the only
+> program which actually hits this case handles the error gracefully.
+> Obviously we got lucky here, but the lack of any users of this
+> mis-feature leads me to have some hope that we can block it without
+> anyone noticing.
+>=20
+> But I emphatically do not want to break userspace here (except for
+> attackers, obviously).
+
+Hmm. This will break any script that does echo foo >/dev/stdin too.
+
+Just to throw an idea out there, what if the open were allowed if the file m=
+ode is sufficient or if the magic link target is openable with the correct m=
+ode without magic?  In other words, first check as in your code but without t=
+he exception and, if that check fails, then walk the same path that d_path w=
+ould return and see if it would work as a normal open?  Of course, that seco=
+nd attempt would need to disable magic links to avoid recursing.  I=E2=80=99=
+m not sure I love this idea...
+
+Otherwise, I imagine we can live with the exception, especially if the new o=
+pen API turns it off by default.
