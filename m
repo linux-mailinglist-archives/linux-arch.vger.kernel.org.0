@@ -2,165 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EF72E09B
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 17:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4A12E0B0
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 17:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbfE2PKF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 May 2019 11:10:05 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:40011 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726522AbfE2PKF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 May 2019 11:10:05 -0400
-Received: by mail-pg1-f195.google.com with SMTP id d30so74882pgm.7
-        for <linux-arch@vger.kernel.org>; Wed, 29 May 2019 08:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=3NHqlVoLnqt1FPrdV3/ouU8QWVDF9XpBsDFRA3M9mXw=;
-        b=l+25soU2r8L+HSnZwz7EAeGteROjLCaBLCfS46AdyKGmDYKRETwB+6CGZChZimiUfP
-         ngVccUx/aZUDVBs0m8Q6cnbIeBz+Ja6u69OL2s7TVX30cdjUYRMMccUhgfG1CYKw78w+
-         V1GIr0ftPCaKGc4AmHhHWk3Zogl1mCnO9ptqHVKKToXX415UW1dMo35OeNYX06d1JgZD
-         xhdFQfY5MumAWyV4kWY8VLCPmPdGF+cKN9nOJ3CM5JcUSf8XUJaAk+xc7Mfifq2VAu+u
-         D30p/HP8SCPBwTglWYYKym7xOMHHs9DhBLdqzjV3ph0mfKCf4upZUCDb0df1YbQF2S8d
-         aO0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=3NHqlVoLnqt1FPrdV3/ouU8QWVDF9XpBsDFRA3M9mXw=;
-        b=IBDiuiW9zLHhQzaOjG+ShMpNDK+HAhu+oqMq9wD7kt979SBi3UdGoqAcY/HwYfrvyM
-         ha8lB+oareUZL7LTlhtV1SGl2fJMGpH2NGc08vm3MhI2KOcgIEDVrNNTn0AVgVpY5teu
-         +JExhq+JsWN0g9mDBX7KJLnaE3li1Q6OBB3K6FxxSo1htbKVZyJYtsThcOJs/M6YYO1V
-         LO8grdKm13K2SW5O3kGdxlAdNzwxwC3LRYwvVMjcy6k8AsyBL4Gqgg+LZw2cbKanHlh4
-         QWcsDVT4/ysglmjY0OjA9dg5C5vVQ0M0KJZm+y0oq7EVz702dOuBInragBtZFovTz3bb
-         /i7Q==
-X-Gm-Message-State: APjAAAXkqffxv+TmHJnQx8QGX2knQ3r6LPzCgqWhifBbh4UVAbE4CJy0
-        V8qttfKpsc+9t3A8MPFBewRTqA==
-X-Google-Smtp-Source: APXvYqxm6x95Oz3ytQOQ6KJ6h+yMYOZG9THlrGBNRRjjiDeEhH7rSiaxnIXU6uXMK+p7Io1TQQBNsQ==
-X-Received: by 2002:a62:1ec1:: with SMTP id e184mr83655828pfe.185.1559142604091;
-        Wed, 29 May 2019 08:10:04 -0700 (PDT)
-Received: from ?IPv6:2600:100f:b10c:ace6:b862:4204:5f4a:fe22? ([2600:100f:b10c:ace6:b862:4204:5f4a:fe22])
-        by smtp.gmail.com with ESMTPSA id f38sm14162147pgm.85.2019.05.29.08.10.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 May 2019 08:10:02 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC permissions
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16E227)
-In-Reply-To: <20190524031109.v24r6typyug2rlto@yavin>
-Date:   Wed, 29 May 2019 08:10:00 -0700
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1726069AbfE2PMc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 May 2019 11:12:32 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:47880 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726068AbfE2PMc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 29 May 2019 11:12:32 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86AA8341;
+        Wed, 29 May 2019 08:12:31 -0700 (PDT)
+Received: from fuggles.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FC923F5AF;
+        Wed, 29 May 2019 08:12:30 -0700 (PDT)
+Date:   Wed, 29 May 2019 16:12:27 +0100
+From:   Will Deacon <will.deacon@arm.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org,
         Linux Containers <containers@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9712F80E-1016-4DB7-996D-B423E07A1C1F@amacapital.net>
-References: <20190520133305.11925-1-cyphar@cyphar.com> <20190520133305.11925-2-cyphar@cyphar.com> <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com> <20190523020009.mi25uziu2b3whf4l@yavin> <20190524031109.v24r6typyug2rlto@yavin>
-To:     Aleksa Sarai <cyphar@cyphar.com>
+        Oleg Nesterov <oleg@redhat.com>, linux-arch@vger.kernel.org,
+        Dave Martin <Dave.Martin@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: Re: [REVIEW][PATCHv2 03/26] signal/arm64: Use force_sig not
+ force_sig_fault for SIGKILL
+Message-ID: <20190529151227.GF11154@fuggles.cambridge.arm.com>
+References: <20190523003916.20726-1-ebiederm@xmission.com>
+ <20190523003916.20726-4-ebiederm@xmission.com>
+ <20190523101702.GG26646@fuggles.cambridge.arm.com>
+ <875zq1gnh4.fsf_-_@xmission.com>
+ <20190523161509.GE31896@fuggles.cambridge.arm.com>
+ <8736l4evkn.fsf@xmission.com>
+ <20190524100008.GE3432@fuggles.cambridge.arm.com>
+ <87o93rcwee.fsf@xmission.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o93rcwee.fsf@xmission.com>
+User-Agent: Mutt/1.11.1+86 (6f28e57d73f2) ()
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, May 24, 2019 at 05:36:41PM -0500, Eric W. Biederman wrote:
+> Will Deacon <will.deacon@arm.com> writes:
+> 
+> > On Thu, May 23, 2019 at 03:59:20PM -0500, Eric W. Biederman wrote:
+> >> Will Deacon <will.deacon@arm.com> writes:
+> >> 
+> >> > On Thu, May 23, 2019 at 11:11:19AM -0500, Eric W. Biederman wrote:
+> >> >> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> >> >> index ade32046f3fe..e45d5b440fb1 100644
+> >> >> --- a/arch/arm64/kernel/traps.c
+> >> >> +++ b/arch/arm64/kernel/traps.c
+> >> >> @@ -256,7 +256,10 @@ void arm64_force_sig_fault(int signo, int code, void __user *addr,
+> >> >>  			   const char *str)
+> >> >>  {
+> >> >>  	arm64_show_signal(signo, str);
+> >> >> -	force_sig_fault(signo, code, addr, current);
+> >> >> +	if (signo == SIGKILL)
+> >> >> +		force_sig(SIGKILL, current);
+> >> >> +	else
+> >> >> +		force_sig_fault(signo, code, addr, current);
+> >> >>  }
+> >> >
+> >> > Acked-by: Will Deacon <will.deacon@arm.com>
+> >> >
+> >> > Are you planning to send this series on, or would you like me to pick this
+> >> > into the arm64 tree?
+> >> 
+> >> I am planning on taking this through siginfo tree, unless it causes
+> >> problems.
+> >
+> > Okey doke, it would just be nice to see this patch land in 5.2, that's
+> > all.
+> 
+> As this does not appear to have any real world consequences I am aiming
+> at 5.3.  If someone else would like to take it and feed it to Linus
+> sooner I won't object.
 
+Thanks. I've picked this patch up as part of the arm64 fixes I plan to send
+for -rc3.
 
-> On May 23, 2019, at 8:11 PM, Aleksa Sarai <cyphar@cyphar.com> wrote:
->=20
->> On 2019-05-23, Aleksa Sarai <cyphar@cyphar.com> wrote:
->>> On 2019-05-22, Andy Lutomirski <luto@kernel.org> wrote:
->>> What are actual examples of uses for this exception?  Breaking
->>> selftests is not, in and of itself, a huge problem.
->>=20
->> Not as far as I know. All of the re-opening users I know of do re-opens
->> of O_PATH or are re-opening with the same (or fewer) privileges. I also
->> ran this for a few days on my laptop without this exception, and didn't
->> have any visible issues.
->=20
-> I have modified the patch to WARN_ON(may_open_magiclink() =3D=3D -EACCES).=
-
->=20
-> So far (in the past day on my openSUSE machines) I have only seen two
-> programs which have hit this case: kbd[1]'s "loadkeys" and "kbd_mode"
-> binaries. In addition to there not being any user-visible errors -- they
-> actually handle permission errors gracefully!
->=20
->  static int
->  open_a_console(const char *fnam)
->  {
->      int fd;
->=20
->      /*
->       * For ioctl purposes we only need some fd and permissions
->       * do not matter. But setfont:activatemap() does a write.
->       */
->      fd =3D open(fnam, O_RDWR);
->      if (fd < 0)
->          fd =3D open(fnam, O_WRONLY);
->      if (fd < 0)
->          fd =3D open(fnam, O_RDONLY);
->      if (fd < 0)
->          return -1;
->      return fd;
->  }
->=20
-> The above gets called with "/proc/self/fd/0" as an argument (as well as
-> other console candidates like "/dev/console"). And setfont:activatemap()
-> actually does handle read-only fds:
->=20
->  static void
->  send_escseq(int fd, const char *seq, int n)
->  {
->      if (write(fd, seq, n) !=3D n) /* maybe fd is read-only */
->          printf("%s", seq);
->  }
->=20
->  void activatemap(int fd)
->  {
->      send_escseq(fd, "\033(K", 3);
->  }
->=20
-> So, thus far, not only have I not seen anything go wrong -- the only
-> program which actually hits this case handles the error gracefully.
-> Obviously we got lucky here, but the lack of any users of this
-> mis-feature leads me to have some hope that we can block it without
-> anyone noticing.
->=20
-> But I emphatically do not want to break userspace here (except for
-> attackers, obviously).
-
-Hmm. This will break any script that does echo foo >/dev/stdin too.
-
-Just to throw an idea out there, what if the open were allowed if the file m=
-ode is sufficient or if the magic link target is openable with the correct m=
-ode without magic?  In other words, first check as in your code but without t=
-he exception and, if that check fails, then walk the same path that d_path w=
-ould return and see if it would work as a normal open?  Of course, that seco=
-nd attempt would need to disable magic links to avoid recursing.  I=E2=80=99=
-m not sure I love this idea...
-
-Otherwise, I imagine we can live with the exception, especially if the new o=
-pen API turns it off by default.
+Will
