@@ -2,54 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 770802DA32
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 12:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C030B2DAC7
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 12:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726016AbfE2KQn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 May 2019 06:16:43 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39558 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725894AbfE2KQn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 May 2019 06:16:43 -0400
-Received: by mail-ot1-f65.google.com with SMTP id r7so1458854otn.6
-        for <linux-arch@vger.kernel.org>; Wed, 29 May 2019 03:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Abxu/H1sImqXuhwWhYSOk5xvOYnoBkkpjqInhihBcCI=;
-        b=uPCsWh9fRkWJuwlKpXHz/RZG8nW7YVKwC5/i0AHmBQAElVNCKYPnYDRGPWr2Sdiy7J
-         FGbrAZmtywaEWHYlECjBy38lyCo+kUWgsOoyLdN9JcCHLXuHsVfd0CNld++/Ri8YnZAJ
-         /wEL+fD8DmpH+o4Nkygolmx0hfSISheT3J6qbDzFobiY0PK2bQiYhh7ywr38sKK0BfCi
-         bKrsgKW4qELWcwep0HGbl3J/E2D/Bx3IVrWqSQnvtjtFNFIflWwXuZAN5zDPK0liW9L8
-         JPaEVv4Vgk0MKUmIcicVi2gUce7F86R9k6BO/LqHPVAm0TaPXLX2Ht8Eb3X9GKl6IB8C
-         Gp/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Abxu/H1sImqXuhwWhYSOk5xvOYnoBkkpjqInhihBcCI=;
-        b=ZLbTSSHhoENbqbULfM9yt1sLmKFnElLFOYzh3yEbZUoHTxOXjNZE/ujoisITw5mqni
-         YK48G/eOQDICn6qfHBN2SWCYwRY86IvCdn2Eu5muYLPRlq1o+s446AX6GFDbETsML1vK
-         4hJp3cqDa0usziCzjkUHTimFPKnRSnTzEurDbOjDjdtaNvmGNLbzIIjcycVuBPH6xrhA
-         XqGSof7dcNWG/vuMqge1P9TJMX5Pg854cK/bGVzDUV+tkyxSW/41r3At65yzavSFm+OL
-         A+niwKYOLdwYAowjQuRItYuXB+NnRKc8N2JbN5x+UXS79kK06ZZMM+m72NcqOERNIWAr
-         zzpw==
-X-Gm-Message-State: APjAAAUNhUCGxfVfRZvdpxLRfFkTOjp+rGKINvhk4Tc2m+ia3HLGZ4gl
-        f0hXm+Mvs7GyTu/S9bg7zDIBX5UEJAYg2X0xbtMnSw==
-X-Google-Smtp-Source: APXvYqyIW+HHgmO4UbA1lWAYQ9U1IvOgE1sk2LyiOyRvq+lk+NzeDhjzN0ojhEHe/Jj7gOCSDDh+51NrikrTdytRzS0=
-X-Received: by 2002:a9d:362:: with SMTP id 89mr37406316otv.17.1559125002323;
- Wed, 29 May 2019 03:16:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190528163258.260144-1-elver@google.com> <20190528163258.260144-3-elver@google.com>
- <20190528165036.GC28492@lakrids.cambridge.arm.com> <CACT4Y+bV0CczjRWgHQq3kvioLaaKgN+hnYEKCe5wkbdngrm+8g@mail.gmail.com>
- <CANpmjNNtjS3fUoQ_9FQqANYS2wuJZeFRNLZUq-ku=v62GEGTig@mail.gmail.com> <20190529100116.GM2623@hirez.programming.kicks-ass.net>
-In-Reply-To: <20190529100116.GM2623@hirez.programming.kicks-ass.net>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 29 May 2019 12:16:31 +0200
-Message-ID: <CANpmjNMvwAny54udYCHfBw1+aphrQmiiTJxqDq7q=h+6fvpO4w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] asm-generic, x86: Add bitops instrumentation for KASAN
-To:     Peter Zijlstra <peterz@infradead.org>
+        id S1726085AbfE2Kad (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 May 2019 06:30:33 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:33956 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725990AbfE2Kad (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 May 2019 06:30:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=1dAPKEgrdA77wQkAtd5gC6oh+a8AzS+LHB60Y9C2ymk=; b=XQxR27+WnVTmp5Ulgy4i5STtT
+        Tah9eldsP7kIUyYVcFMpcV2yfiLUNrTuxq7NrctEBZY/BTA5VkVO0y3AG0JU1L7l3DIUdZ0uGqe+W
+        HGj2dMWylU+fuC3tbzcuTHkxanPs5RpoOrF0KRZyUwXHA1i3y/6asMWyvb9MPjfDtrLeTYdRgat96
+        PV++Vrl5gIlZyVldbQpRWiv71ourwwNj2fyMFURDzRnQUjQ3RXsab5FDy3brTD6QFF79shi3VMh5D
+        IXzqdS1f8pqvORPrdrbvVa7LdmBiFmkwRPBPKWrz/uvWtx/hb5UMphU2JrU2FaVKbJ6TWE2pB8A7H
+        alLHgBeWw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hVvqV-0003TW-Mw; Wed, 29 May 2019 10:30:12 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 45FBD201A7E6D; Wed, 29 May 2019 12:30:10 +0200 (CEST)
+Date:   Wed, 29 May 2019 12:30:10 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
 Cc:     Dmitry Vyukov <dvyukov@google.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrey Ryabinin <aryabinin@virtuozzo.com>,
@@ -59,48 +40,70 @@ Cc:     Dmitry Vyukov <dvyukov@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 3/3] asm-generic, x86: Add bitops instrumentation for
+ KASAN
+Message-ID: <20190529103010.GP2623@hirez.programming.kicks-ass.net>
+References: <20190528163258.260144-1-elver@google.com>
+ <20190528163258.260144-3-elver@google.com>
+ <20190528165036.GC28492@lakrids.cambridge.arm.com>
+ <CACT4Y+bV0CczjRWgHQq3kvioLaaKgN+hnYEKCe5wkbdngrm+8g@mail.gmail.com>
+ <CANpmjNNtjS3fUoQ_9FQqANYS2wuJZeFRNLZUq-ku=v62GEGTig@mail.gmail.com>
+ <20190529100116.GM2623@hirez.programming.kicks-ass.net>
+ <CANpmjNMvwAny54udYCHfBw1+aphrQmiiTJxqDq7q=h+6fvpO4w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNMvwAny54udYCHfBw1+aphrQmiiTJxqDq7q=h+6fvpO4w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 29 May 2019 at 12:01, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, May 29, 2019 at 11:20:17AM +0200, Marco Elver wrote:
-> > For the default, we decided to err on the conservative side for now,
-> > since it seems that e.g. x86 operates only on the byte the bit is on.
->
-> This is not correct, see for instance set_bit():
->
-> static __always_inline void
-> set_bit(long nr, volatile unsigned long *addr)
-> {
->         if (IS_IMMEDIATE(nr)) {
->                 asm volatile(LOCK_PREFIX "orb %1,%0"
->                         : CONST_MASK_ADDR(nr, addr)
->                         : "iq" ((u8)CONST_MASK(nr))
->                         : "memory");
->         } else {
->                 asm volatile(LOCK_PREFIX __ASM_SIZE(bts) " %1,%0"
->                         : : RLONG_ADDR(addr), "Ir" (nr) : "memory");
->         }
-> }
->
-> That results in:
->
->         LOCK BTSQ nr, (addr)
->
-> when @nr is not an immediate.
+On Wed, May 29, 2019 at 12:16:31PM +0200, Marco Elver wrote:
+> On Wed, 29 May 2019 at 12:01, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Wed, May 29, 2019 at 11:20:17AM +0200, Marco Elver wrote:
+> > > For the default, we decided to err on the conservative side for now,
+> > > since it seems that e.g. x86 operates only on the byte the bit is on.
+> >
+> > This is not correct, see for instance set_bit():
+> >
+> > static __always_inline void
+> > set_bit(long nr, volatile unsigned long *addr)
+> > {
+> >         if (IS_IMMEDIATE(nr)) {
+> >                 asm volatile(LOCK_PREFIX "orb %1,%0"
+> >                         : CONST_MASK_ADDR(nr, addr)
+> >                         : "iq" ((u8)CONST_MASK(nr))
+> >                         : "memory");
+> >         } else {
+> >                 asm volatile(LOCK_PREFIX __ASM_SIZE(bts) " %1,%0"
+> >                         : : RLONG_ADDR(addr), "Ir" (nr) : "memory");
+> >         }
+> > }
+> >
+> > That results in:
+> >
+> >         LOCK BTSQ nr, (addr)
+> >
+> > when @nr is not an immediate.
+> 
+> Thanks for the clarification. Given that arm64 already instruments
+> bitops access to whole words, and x86 may also do so for some bitops,
+> it seems fine to instrument word-sized accesses by default. Is that
+> reasonable?
 
-Thanks for the clarification. Given that arm64 already instruments
-bitops access to whole words, and x86 may also do so for some bitops,
-it seems fine to instrument word-sized accesses by default. Is that
-reasonable?
+Eminently -- the API is defined such; for bonus points KASAN should also
+do alignment checks on atomic ops. Future hardware will #AC on unaligned
+[*] LOCK prefix instructions.
+
+(*) not entirely accurate, it will only trap when crossing a line.
+    https://lkml.kernel.org/r/1556134382-58814-1-git-send-email-fenghua.yu@intel.com
