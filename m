@@ -2,55 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 684462D8F0
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 11:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2780C2D95A
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 11:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726816AbfE2JUa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 May 2019 05:20:30 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:35842 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbfE2JUa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 May 2019 05:20:30 -0400
-Received: by mail-ot1-f65.google.com with SMTP id c3so1328200otr.3
-        for <linux-arch@vger.kernel.org>; Wed, 29 May 2019 02:20:29 -0700 (PDT)
+        id S1726470AbfE2JqX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 May 2019 05:46:23 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:43089 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725874AbfE2JqX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 May 2019 05:46:23 -0400
+Received: by mail-ot1-f68.google.com with SMTP id i8so1356692oth.10
+        for <linux-arch@vger.kernel.org>; Wed, 29 May 2019 02:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tOlYVVLvf1bFW7DEqIy65vvXcvlYUsyO7Mq7IqL0SoQ=;
-        b=QQZVTGNCg3LioVwsXAFHwhg2CoTZJaD4RO2ICM7XB4FazwBQnOUAkd0k7haRz4Vtoa
-         N9bMaDJ//2/wBo+8QMhJKKs/OOsDRgE/4zCnH3bDVEYM55a6t/XuV5Vf9P+vPH8zCRiD
-         LLTEv9TrSkxF/Fsht32uuFrlbQnUMuS52I7vT385+XUNEUmbs/Aj/WgVxdzPy+HX1IUQ
-         2D9rSBv8i3As2qGZdLneX32AU6lpqJNU4ZFNnkNfb4c+TYwzMtXaqv/VEA8Vlonr7jMY
-         C/mCazc7hKNsmc6QRqqr3PKyRV3CqD/HK6SABQr+EFlPNw9v0zq0LZaC9TEZVU2eFGoK
-         pLyg==
+        bh=GAjjxbCt4+5cgrjM01YSZfWgmJp/G0TutPxW6NVwEDU=;
+        b=WQaepMq9EUAZlBGja8x+6V2uZFtIQk3PNlb6V0omGbOscHfRltBYF1H4Sz4MgglHTr
+         H1HdGO5gNzCww1LCKLX4yPTpXByz8a35WWSD7LpTu2YiHF0MHykRR2b+zDM7yITrzjqm
+         gRcrGXb7qp9VaKtASl++u8hHIu4bZa61zyGrpEYuwvmtUEOb6rFMTYBid7k+DfkGRQ/m
+         8+QYU3zYSg8TNsBgk67wuDSftmNvLVzhA1qRv/B113ggurbfWKEeJigFqKqSBiJXGkMk
+         HzCxVyQYFPqPWBj01lKkBb5SH89GoRLV8PCkmiEv7qEuHSidudmbvhbk3lbyySBFo5KJ
+         pU9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tOlYVVLvf1bFW7DEqIy65vvXcvlYUsyO7Mq7IqL0SoQ=;
-        b=t67sddOkjCasuPDzhWdIHlLsme+8ty3DMa/N2oYcuaAVG6em5V33iE6i4u4C0a4axA
-         mOjXwH9adPS44cdjfOUbK0yUosSdFg7d0fyXoUyNNFeaisN6AfTy9L0N40m3Aic2p0XU
-         yPLm9uro+Wm8FUeiKo/6elMH3rC0iMvLC1/u0m76HFF6Ux9XeHCh2wej3bfrZ5/F3BAD
-         w6UI6icU5xiDPp0wht/iisu9gQl2fROLpzJZmLtDYHFSA/mhyoUNW8T0Ii6ibWsdotGH
-         X6DsnzLPsweBZKFC3uBcfQJ3Ww+OjJKgtUIrKpwfRVIiH/DwuQjpJKrL/Z0Ss0hw8ywj
-         s0PA==
-X-Gm-Message-State: APjAAAVZ7LdzjLnGae153wMtkfSM1gegZGfAqfcGWWKzGRACg4VawTl1
-        eocWqKDtrbmn8P1sJyrHnVq5o9nl2RWdr7HoJDOcrw==
-X-Google-Smtp-Source: APXvYqwgN+ncNU0IwOIo9jHKQMn0C4Gxk5MYFtrkjPm6C0A/k1IQNZrOKxjDYzrsSLBm80TaHVkC2Rho0AowXhc+Rho=
-X-Received: by 2002:a9d:6f8a:: with SMTP id h10mr28904206otq.2.1559121628572;
- Wed, 29 May 2019 02:20:28 -0700 (PDT)
+        bh=GAjjxbCt4+5cgrjM01YSZfWgmJp/G0TutPxW6NVwEDU=;
+        b=sTtsM4l3cU9hi9dp/zSeGgshvTlSzC+axn/aUSQpFmh2GUtZ+MdE4UDAyVOEFLx3D0
+         s2/h0AjDOY5QXkFdBhXAw6cUP5I2Ni5Gq+tOw+3KKB+y/6c/GLuAPdB4ntaNUxqpDzOo
+         MzoTdvxpBS8ZdcEv0PYtBaGhD6YbbD1GSq2dbH9TiIkjJNURvwojtwc0rxc7lTXzl1UG
+         znWBjfu56Ox/JlQ9RfQ48VCJtC6EBPJjyKYKXBwXGR4L2gKuQiajudixWhOfNOdmoDpm
+         s4UCuIECzoPcAFQxzzfaRSJKnmCuLKd2i8lJxa+RBqSO+yERAR59KlNWy490Z4MT4TiN
+         6fPg==
+X-Gm-Message-State: APjAAAUtffUxfRORPyFS6rx+QkiaBuu/X6nPHNLDerUjLB6NRcjFkzqa
+        /1paJDO25gj1OavH9O3W5yApqcIyMXYUzvmH/yeGgw==
+X-Google-Smtp-Source: APXvYqyLP4MZKeZUKtaWWXhxl83UK6QddmJ7w7xbwzhKkP69jfLbidndYG/yefEQZQ6LO2DO7d5bpShx7K/ubAx01C4=
+X-Received: by 2002:a9d:62cd:: with SMTP id z13mr2621053otk.251.1559123182136;
+ Wed, 29 May 2019 02:46:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190528163258.260144-1-elver@google.com> <20190528163258.260144-3-elver@google.com>
- <20190528165036.GC28492@lakrids.cambridge.arm.com> <CACT4Y+bV0CczjRWgHQq3kvioLaaKgN+hnYEKCe5wkbdngrm+8g@mail.gmail.com>
-In-Reply-To: <CACT4Y+bV0CczjRWgHQq3kvioLaaKgN+hnYEKCe5wkbdngrm+8g@mail.gmail.com>
+References: <20190528163258.260144-1-elver@google.com> <20190528163258.260144-2-elver@google.com>
+ <20190528171942.GV2623@hirez.programming.kicks-ass.net> <CACT4Y+ZK5i0r0GSZUOBGGOE0bzumNor1d89W8fvphF6EDqKqHg@mail.gmail.com>
+In-Reply-To: <CACT4Y+ZK5i0r0GSZUOBGGOE0bzumNor1d89W8fvphF6EDqKqHg@mail.gmail.com>
 From:   Marco Elver <elver@google.com>
-Date:   Wed, 29 May 2019 11:20:17 +0200
-Message-ID: <CANpmjNNtjS3fUoQ_9FQqANYS2wuJZeFRNLZUq-ku=v62GEGTig@mail.gmail.com>
-Subject: Re: [PATCH 3/3] asm-generic, x86: Add bitops instrumentation for KASAN
+Date:   Wed, 29 May 2019 11:46:10 +0200
+Message-ID: <CANpmjNP7nNO36p03_1fksx1O2-MNevHzF7revUwQ3b7+RR0y+w@mail.gmail.com>
+Subject: Re: [PATCH 2/3] tools/objtool: add kasan_check_* to uaccess whitelist
 To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Andrey Ryabinin <aryabinin@virtuozzo.com>,
         Alexander Potapenko <glider@google.com>,
         Andrey Konovalov <andreyknvl@google.com>,
@@ -71,72 +70,27 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 29 May 2019 at 10:53, Dmitry Vyukov <dvyukov@google.com> wrote:
+On Wed, 29 May 2019 at 10:55, Dmitry Vyukov <dvyukov@google.com> wrote:
 >
-> On Tue, May 28, 2019 at 6:50 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> On Tue, May 28, 2019 at 7:19 PM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > On Tue, May 28, 2019 at 06:32:58PM +0200, Marco Elver wrote:
-> > > This adds a new header to asm-generic to allow optionally instrumenting
-> > > architecture-specific asm implementations of bitops.
+> > On Tue, May 28, 2019 at 06:32:57PM +0200, Marco Elver wrote:
+> > > This is a pre-requisite for enabling bitops instrumentation. Some bitops
+> > > may safely be used with instrumentation in uaccess regions.
 > > >
-> > > This change includes the required change for x86 as reference and
-> > > changes the kernel API doc to point to bitops-instrumented.h instead.
-> > > Rationale: the functions in x86's bitops.h are no longer the kernel API
-> > > functions, but instead the arch_ prefixed functions, which are then
-> > > instrumented via bitops-instrumented.h.
-> > >
-> > > Other architectures can similarly add support for asm implementations of
-> > > bitops.
-> > >
-> > > The documentation text has been copied/moved, and *no* changes to it
-> > > have been made in this patch.
-> > >
-> > > Tested: using lib/test_kasan with bitops tests (pre-requisite patch).
-> > >
-> > > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=198439
-> > > Signed-off-by: Marco Elver <elver@google.com>
-> > > ---
-> > >  Documentation/core-api/kernel-api.rst     |   2 +-
-> > >  arch/x86/include/asm/bitops.h             | 210 ++++----------
-> > >  include/asm-generic/bitops-instrumented.h | 327 ++++++++++++++++++++++
-> > >  3 files changed, 380 insertions(+), 159 deletions(-)
-> > >  create mode 100644 include/asm-generic/bitops-instrumented.h
+> > > For example, on x86, `test_bit` is used to test a CPU-feature in a
+> > > uaccess region:   arch/x86/ia32/ia32_signal.c:361
 > >
-> > [...]
-> >
-> > > +#if !defined(BITOPS_INSTRUMENT_RANGE)
-> > > +/*
-> > > + * This may be defined by an arch's bitops.h, in case bitops do not operate on
-> > > + * single bytes only. The default version here is conservative and assumes that
-> > > + * bitops operate only on the byte with the target bit.
-> > > + */
-> > > +#define BITOPS_INSTRUMENT_RANGE(addr, nr)                                  \
-> > > +     (const volatile char *)(addr) + ((nr) / BITS_PER_BYTE), 1
-> > > +#endif
-> >
-> > I was under the impression that logically, all the bitops operated on
-> > the entire long the bit happend to be contained in, so checking the
-> > entire long would make more sense to me.
-> >
-> > FWIW, arm64's atomic bit ops are all implemented atop of atomic_long_*
-> > functions, which are instrumented, and always checks at the granularity
-> > of a long. I haven't seen splats from that when fuzzing with Syzkaller.
-> >
-> > Are you seeing bugs without this?
+> > That one can easily be moved out of the uaccess region. Any else?
 >
-> bitops are not instrumented on x86 at all at the moment, so we have
-> not seen any splats. What we've seen are assorted crashes caused by
-> previous silent memory corruptions by incorrect bitops :)
+> Marco, try to update config with "make allyesconfig" and then build
+> the kernel without this change.
 >
-> Good point. If arm already does this, I guess we also need to check
-> whole long's.
 
-For the default, we decided to err on the conservative side for now,
-since it seems that e.g. x86 operates only on the byte the bit is on.
-Other architectures that need bitops-instrumented.h may redefine
-BITOPS_INSTRUMENT_RANGE.
+Done. The only instance of the uaccess warning is still in
+arch/x86/ia32/ia32_signal.c.
 
-Let me know what you prefer.
+Change the patch to move this access instead? Let me know what you prefer.
 
 Thanks,
 -- Marco
