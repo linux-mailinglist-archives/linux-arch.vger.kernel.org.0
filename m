@@ -2,177 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 941842E0CC
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 17:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A802E0F2
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2019 17:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbfE2PPN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 May 2019 11:15:13 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:47994 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726012AbfE2PPN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 May 2019 11:15:13 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7737341;
-        Wed, 29 May 2019 08:15:12 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E0F0A3F5AF;
-        Wed, 29 May 2019 08:15:09 -0700 (PDT)
-Date:   Wed, 29 May 2019 16:15:07 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marco Elver <elver@google.com>
-Cc:     peterz@infradead.org, aryabinin@virtuozzo.com, dvyukov@google.com,
-        glider@google.com, andreyknvl@google.com, corbet@lwn.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, arnd@arndb.de, jpoimboe@redhat.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 1/3] lib/test_kasan: Add bitops tests
-Message-ID: <20190529151507.GI31777@lakrids.cambridge.arm.com>
-References: <20190529141500.193390-1-elver@google.com>
- <20190529141500.193390-2-elver@google.com>
+        id S1726012AbfE2PXR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 May 2019 11:23:17 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:45979 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726112AbfE2PXQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 May 2019 11:23:16 -0400
+Received: by mail-wr1-f67.google.com with SMTP id b18so2053478wrq.12
+        for <linux-arch@vger.kernel.org>; Wed, 29 May 2019 08:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sEU/6jo/VWdUWlOyGNZQKsa0Hbh5Kew23C4AwHcHeOY=;
+        b=cxf6FGCWzQXEk7cUsYBGphB6EHup1dBk3Ti5WgycwzrZ4P2SvoS1IFsZhZalAfXbeb
+         DTmGlc6SreSP3V68maP1P2GHr4vl3fiR68a7LYtsGu99ifzbTtENj5V4f87/3TSUh0zH
+         BjQ3s+0X9oYoMpo/iElk2U7WXBueVT4LAGy2LUil3ygMCFwvm7vA8Ug+ezui0l313mlZ
+         CeTSqvkBuGMeLXo9QwhmUh3hVJdkN/XQ4lwQ2xhxg8kYlXWzFRsyTjgIpwAvB9ZfkIO7
+         +TokJsJiTVObhuUShGqw4ehFOq0Z80X1iuMzgydyJIGClxFNn8bllXXo8UNsrH7IrcRa
+         Lb9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sEU/6jo/VWdUWlOyGNZQKsa0Hbh5Kew23C4AwHcHeOY=;
+        b=lDp3Dh5luJizccYmGgsCY85erZl5AKQsf60p3Y6TwVI+KRRhghT4S7L9/bcYMn9ZpD
+         TS0b727K3oRBNbM3rKf+M3ipE+9Ru2PnALeluT7bSlnW40ofVb4MOGa9YlYHtjR5mJjY
+         h1rtdLJvvWSRsYO6pbCZ3hq7e9PJkjiknSWa70nlMmB24O5OGzy6Utth2vqmp+qMEHBh
+         Y6pEOA+bV5iZDFtkubqXVd7wCK3DQfBf7CTDW4d5g8xExGRoXbfawWH8fqGp5pEAOgwe
+         9q0uJjVQpjwcZY7VESXfiS3O7fyoNlnC2Ue1ZkppIwrlquq9RLQFUTMMAH7RGQb0zUIF
+         mHlw==
+X-Gm-Message-State: APjAAAU5rOy1OXCvndVJB8xg0vsE0N76tmRXN3GgtQeQvLqDiEV27G7z
+        uhX8Ue8dy3E/uTlFaeN4XQBCwg==
+X-Google-Smtp-Source: APXvYqxqllal3eetCSSRngpIJj59zjpZSbbwaoTCO52UECzlz0mHSLjA0ealsaerNmAcnYfH9/PH3A==
+X-Received: by 2002:adf:ea51:: with SMTP id j17mr3797515wrn.159.1559143394433;
+        Wed, 29 May 2019 08:23:14 -0700 (PDT)
+Received: from localhost.localdomain ([212.91.227.56])
+        by smtp.gmail.com with ESMTPSA id x68sm7874865wmf.13.2019.05.29.08.23.13
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 May 2019 08:23:13 -0700 (PDT)
+From:   Christian Brauner <christian@brauner.io>
+To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, jannh@google.com
+Cc:     fweimer@redhat.com, oleg@redhat.com, arnd@arndb.de,
+        dhowells@redhat.com, Christian Brauner <christian@brauner.io>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Adrian Reber <adrian@lisas.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v1 2/2] arch: wire-up clone3() syscall on x86
+Date:   Wed, 29 May 2019 17:22:37 +0200
+Message-Id: <20190529152237.10719-2-christian@brauner.io>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190529152237.10719-1-christian@brauner.io>
+References: <20190529152237.10719-1-christian@brauner.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190529141500.193390-2-elver@google.com>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 29, 2019 at 04:14:59PM +0200, Marco Elver wrote:
-> This adds bitops tests to the test_kasan module. In a follow-up patch,
-> support for bitops instrumentation will be added.
-> 
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
-> Changes in v2:
-> * Use BITS_PER_LONG.
-> * Use heap allocated memory for test, as newer compilers (correctly)
->   warn on OOB stack access.
-> ---
->  lib/test_kasan.c | 75 ++++++++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 72 insertions(+), 3 deletions(-)
-> 
-> diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-> index 7de2702621dc..6562df0ca30d 100644
-> --- a/lib/test_kasan.c
-> +++ b/lib/test_kasan.c
-> @@ -11,16 +11,17 @@
->  
->  #define pr_fmt(fmt) "kasan test: %s " fmt, __func__
->  
-> +#include <linux/bitops.h>
->  #include <linux/delay.h>
-> +#include <linux/kasan.h>
->  #include <linux/kernel.h>
-> -#include <linux/mman.h>
->  #include <linux/mm.h>
-> +#include <linux/mman.h>
-> +#include <linux/module.h>
->  #include <linux/printk.h>
->  #include <linux/slab.h>
->  #include <linux/string.h>
->  #include <linux/uaccess.h>
-> -#include <linux/module.h>
-> -#include <linux/kasan.h>
->  
->  /*
->   * Note: test functions are marked noinline so that their names appear in
-> @@ -623,6 +624,73 @@ static noinline void __init kasan_strings(void)
->  	strnlen(ptr, 1);
->  }
->  
-> +static noinline void __init kasan_bitops(void)
-> +{
-> +	long *bits = kmalloc(sizeof(long), GFP_KERNEL | __GFP_ZERO);
+Wire up the clone3() call on x86.
 
-Trivial nit, but this can/should be:
+This patch only wires up clone3() on x86. Some of the arches look like they
+need special assembly massaging and it is probably smarter if the
+appropriate arch maintainers would do the actual wiring.
 
-	long *bits = kzalloc(sizeof(*bits), GFP_KERNEL);
+Signed-off-by: Christian Brauner <christian@brauner.io>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Adrian Reber <adrian@lisas.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: linux-api@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: x86@kernel.org
+---
+v1: unchanged
+---
+ arch/x86/entry/syscalls/syscall_32.tbl | 1 +
+ arch/x86/entry/syscalls/syscall_64.tbl | 1 +
+ include/uapi/asm-generic/unistd.h      | 4 +++-
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index ad968b7bac72..80e26211feff 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -438,3 +438,4 @@
+ 431	i386	fsconfig		sys_fsconfig			__ia32_sys_fsconfig
+ 432	i386	fsmount			sys_fsmount			__ia32_sys_fsmount
+ 433	i386	fspick			sys_fspick			__ia32_sys_fspick
++436	i386	clone3			sys_clone3			__ia32_sys_clone3
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index b4e6f9e6204a..7968f0b5b5e8 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -355,6 +355,7 @@
+ 431	common	fsconfig		__x64_sys_fsconfig
+ 432	common	fsmount			__x64_sys_fsmount
+ 433	common	fspick			__x64_sys_fspick
++436	common	clone3			__x64_sys_clone3/ptregs
+ 
+ #
+ # x32-specific system call numbers start at 512 to avoid cache impact
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index a87904daf103..45bc87687c47 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -844,9 +844,11 @@ __SYSCALL(__NR_fsconfig, sys_fsconfig)
+ __SYSCALL(__NR_fsmount, sys_fsmount)
+ #define __NR_fspick 433
+ __SYSCALL(__NR_fspick, sys_fspick)
++#define __NR_clone3 436
++__SYSCALL(__NR_clone3, sys_clone3)
+ 
+ #undef __NR_syscalls
+-#define __NR_syscalls 434
++#define __NR_syscalls 437
+ 
+ /*
+  * 32 bit systems traditionally used different
+-- 
+2.21.0
 
-... which is the usual style for sizeof() to keep the LHS and RHS types
-the same, and using kzalloc avoids the need to explicitly pass
-__GFP_ZERO.
-
-Otherwise, this looks good to me.
-
-> +	if (!bits)
-> +		return;
-> +
-> +	pr_info("within-bounds in set_bit");
-> +	set_bit(0, bits);
-> +
-> +	pr_info("within-bounds in set_bit");
-> +	set_bit(BITS_PER_LONG - 1, bits);
-> +
-> +	pr_info("out-of-bounds in set_bit\n");
-> +	set_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in __set_bit\n");
-> +	__set_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in clear_bit\n");
-> +	clear_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in __clear_bit\n");
-> +	__clear_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in clear_bit_unlock\n");
-> +	clear_bit_unlock(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in __clear_bit_unlock\n");
-> +	__clear_bit_unlock(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in change_bit\n");
-> +	change_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in __change_bit\n");
-> +	__change_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in test_and_set_bit\n");
-> +	test_and_set_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in __test_and_set_bit\n");
-> +	__test_and_set_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in test_and_set_bit_lock\n");
-> +	test_and_set_bit_lock(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in test_and_clear_bit\n");
-> +	test_and_clear_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in __test_and_clear_bit\n");
-> +	__test_and_clear_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in test_and_change_bit\n");
-> +	test_and_change_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in __test_and_change_bit\n");
-> +	__test_and_change_bit(BITS_PER_LONG, bits);
-> +
-> +	pr_info("out-of-bounds in test_bit\n");
-> +	(void)test_bit(BITS_PER_LONG, bits);
-> +
-> +#if defined(clear_bit_unlock_is_negative_byte)
-> +	pr_info("out-of-bounds in clear_bit_unlock_is_negative_byte\n");
-> +	clear_bit_unlock_is_negative_byte(BITS_PER_LONG, bits);
-> +#endif
-> +	kfree(bits);
-> +}
-> +
->  static int __init kmalloc_tests_init(void)
->  {
->  	/*
-> @@ -664,6 +732,7 @@ static int __init kmalloc_tests_init(void)
->  	kasan_memchr();
->  	kasan_memcmp();
->  	kasan_strings();
-> +	kasan_bitops();
->  
->  	kasan_restore_multi_shot(multishot);
->  
-> -- 
-> 2.22.0.rc1.257.g3120a18244-goog
-> 
