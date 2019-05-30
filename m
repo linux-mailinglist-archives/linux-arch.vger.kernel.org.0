@@ -2,128 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27FE4301D8
-	for <lists+linux-arch@lfdr.de>; Thu, 30 May 2019 20:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E43430268
+	for <lists+linux-arch@lfdr.de>; Thu, 30 May 2019 20:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726330AbfE3SWz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 May 2019 14:22:55 -0400
-Received: from smtprelay-out1.synopsys.com ([198.182.47.102]:50084 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726079AbfE3SWz (ORCPT
+        id S1726547AbfE3SzS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 May 2019 14:55:18 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36268 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726285AbfE3SzS (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 May 2019 14:22:55 -0400
-Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 97543C00B0;
-        Thu, 30 May 2019 18:23:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1559240584; bh=tXKhvVlPB83lnrd1soG4Udon/Z/gh72d6RoQk4zGMQY=;
-        h=From:Subject:To:CC:Date:From;
-        b=AWJDMB/lKPYORIWltA0gVIDA/bblb/OfrBvX4EsMpJtq5ysYbRaFFJNcKic+AmHEt
-         bFW6N58qK4VY5vpdBkf6rI3gew7gnjCfI9XQQsNoF3ZGHcX/Dsm7ZlXUQI6U7WBS4S
-         fVcTZcUQ0QX1ut8uC73HLqCcw+MZBH2C5W1RFaQgt836+zxTOmBNL5fF/mhlD5EP8N
-         x0yChiH+/zJ5prVF3ahLy3REMlahcxJZDAeFcN5vRAG0HhblkGDrTbGWyArSHw0RGU
-         lD6jt4lQhljX1J5jPd0J3PjVZMMXufV2+uY/2HFUTRkPjGPWpVuOWg0T3tEHWy6CtH
-         LGJjQckwzDhsg==
-Received: from US01WEHTC2.internal.synopsys.com (us01wehtc2.internal.synopsys.com [10.12.239.237])
-        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 19922A0095;
-        Thu, 30 May 2019 18:22:51 +0000 (UTC)
-Received: from IN01WEHTCB.internal.synopsys.com (10.144.199.106) by
- US01WEHTC2.internal.synopsys.com (10.12.239.237) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Thu, 30 May 2019 11:22:51 -0700
-Received: from IN01WEHTCA.internal.synopsys.com (10.144.199.103) by
- IN01WEHTCB.internal.synopsys.com (10.144.199.105) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Thu, 30 May 2019 23:52:50 +0530
-Received: from [10.10.161.35] (10.10.161.35) by
- IN01WEHTCA.internal.synopsys.com (10.144.199.243) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Thu, 30 May 2019 23:53:02 +0530
-X-Mozilla-News-Host: news://gmane.comp.lib.uclibc.buildroot:119
-From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=vgupta@synopsys.com; keydata=
- mQINBFEffBMBEADIXSn0fEQcM8GPYFZyvBrY8456hGplRnLLFimPi/BBGFA24IR+B/Vh/EFk
- B5LAyKuPEEbR3WSVB1x7TovwEErPWKmhHFbyugdCKDv7qWVj7pOB+vqycTG3i16eixB69row
- lDkZ2RQyy1i/wOtHt8Kr69V9aMOIVIlBNjx5vNOjxfOLux3C0SRl1veA8sdkoSACY3McOqJ8
- zR8q1mZDRHCfz+aNxgmVIVFN2JY29zBNOeCzNL1b6ndjU73whH/1hd9YMx2Sp149T8MBpkuQ
- cFYUPYm8Mn0dQ5PHAide+D3iKCHMupX0ux1Y6g7Ym9jhVtxq3OdUI5I5vsED7NgV9c8++baM
- 7j7ext5v0l8UeulHfj4LglTaJIvwbUrCGgtyS9haKlUHbmey/af1j0sTrGxZs1ky1cTX7yeF
- nSYs12GRiVZkh/Pf3nRLkjV+kH++ZtR1GZLqwamiYZhAHjo1Vzyl50JT9EuX07/XTyq/Bx6E
- dcJWr79ZphJ+mR2HrMdvZo3VSpXEgjROpYlD4GKUApFxW6RrZkvMzuR2bqi48FThXKhFXJBd
- JiTfiO8tpXaHg/yh/V9vNQqdu7KmZIuZ0EdeZHoXe+8lxoNyQPcPSj7LcmE6gONJR8ZqAzyk
- F5voeRIy005ZmJJ3VOH3Gw6Gz49LVy7Kz72yo1IPHZJNpSV5xwARAQABtCpWaW5lZXQgR3Vw
- dGEgKGFsaWFzKSA8dmd1cHRhQHN5bm9wc3lzLmNvbT6JAj4EEwECACgCGwMGCwkIBwMCBhUI
- AgkKCwQWAgMBAh4BAheABQJbBYpwBQkLx0HcAAoJEGnX8d3iisJeChAQAMR2UVbJyydOv3aV
- jmqP47gVFq4Qml1weP5z6czl1I8n37bIhdW0/lV2Zll+yU1YGpMgdDTHiDqnGWi4pJeu4+c5
- xsI/VqkH6WWXpfruhDsbJ3IJQ46//jb79ogjm6VVeGlOOYxx/G/RUUXZ12+CMPQo7Bv+Jb+t
- NJnYXYMND2Dlr2TiRahFeeQo8uFbeEdJGDsSIbkOV0jzrYUAPeBwdN8N0eOB19KUgPqPAC4W
- HCg2LJ/o6/BImN7bhEFDFu7gTT0nqFVZNXlOw4UcGGpM3dq/qu8ZgRE0turY9SsjKsJYKvg4
- djAaOh7H9NJK72JOjUhXY/sMBwW5vnNwFyXCB5t4ZcNxStoxrMtyf35synJVinFy6wCzH3eJ
- XYNfFsv4gjF3l9VYmGEJeI8JG/ljYQVjsQxcrU1lf8lfARuNkleUL8Y3rtxn6eZVtAlJE8q2
- hBgu/RUj79BKnWEPFmxfKsaj8of+5wubTkP0I5tXh0akKZlVwQ3lbDdHxznejcVCwyjXBSny
- d0+qKIXX1eMh0/5sDYM06/B34rQyq9HZVVPRHdvsfwCU0s3G+5Fai02mK68okr8TECOzqZtG
- cuQmkAeegdY70Bpzfbwxo45WWQq8dSRURA7KDeY5LutMphQPIP2syqgIaiEatHgwetyVCOt6
- tf3ClCidHNaGky9KcNSQ
-Subject: single copy atomicity for double load/stores on 32-bit systems
-To:     Peter Zijlstra <peterz@infradead.org>,
+        Thu, 30 May 2019 14:55:18 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4UIq8Fp032216
+        for <linux-arch@vger.kernel.org>; Thu, 30 May 2019 14:55:17 -0400
+Received: from e11.ny.us.ibm.com (e11.ny.us.ibm.com [129.33.205.201])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2stkat3h71-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Thu, 30 May 2019 14:55:17 -0400
+Received: from localhost
+        by e11.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <paulmck@linux.vnet.ibm.com>;
+        Thu, 30 May 2019 19:55:15 +0100
+Received: from b01cxnp22034.gho.pok.ibm.com (9.57.198.24)
+        by e11.ny.us.ibm.com (146.89.104.198) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 30 May 2019 19:55:12 +0100
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4UIrv4l35127356
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 May 2019 18:53:57 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F1F2DB2064;
+        Thu, 30 May 2019 18:53:56 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D50BCB205F;
+        Thu, 30 May 2019 18:53:56 +0000 (GMT)
+Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.216])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 30 May 2019 18:53:56 +0000 (GMT)
+Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
+        id D760016C2D27; Thu, 30 May 2019 11:53:58 -0700 (PDT)
+Date:   Thu, 30 May 2019 11:53:58 -0700
+From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
+To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <Will.Deacon@arm.com>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-CC:     arcml <linux-snps-arc@lists.infradead.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
         lkml <linux-kernel@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Message-ID: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
-Date:   Thu, 30 May 2019 11:22:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+Subject: Re: single copy atomicity for double load/stores on 32-bit systems
+Reply-To: paulmck@linux.ibm.com
+References: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.10.161.35]
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-TM-AS-GCONF: 00
+x-cbid: 19053018-2213-0000-0000-00000398092F
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011186; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01210864; UDB=6.00636205; IPR=6.00991898;
+ MB=3.00027122; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-30 18:55:14
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19053018-2214-0000-0000-00005EA377A9
+Message-Id: <20190530185358.GG28207@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-30_11:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905300132
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Peter,
+On Thu, May 30, 2019 at 11:22:42AM -0700, Vineet Gupta wrote:
+> Hi Peter,
+> 
+> Had an interesting lunch time discussion with our hardware architects pertinent to
+> "minimal guarantees expected of a CPU" section of memory-barriers.txt
+> 
+> 
+> |  (*) These guarantees apply only to properly aligned and sized scalar
+> |     variables.  "Properly sized" currently means variables that are
+> |     the same size as "char", "short", "int" and "long".  "Properly
+> |     aligned" means the natural alignment, thus no constraints for
+> |     "char", two-byte alignment for "short", four-byte alignment for
+> |     "int", and either four-byte or eight-byte alignment for "long",
+> |     on 32-bit and 64-bit systems, respectively.
+> 
+> 
+> I'm not sure how to interpret "natural alignment" for the case of double
+> load/stores on 32-bit systems where the hardware and ABI allow for 4 byte
+> alignment (ARCv2 LDD/STD, ARM LDRD/STRD ....)
+> 
+> I presume (and the question) that lkmm doesn't expect such 8 byte load/stores to
+> be atomic unless 8-byte aligned
 
-Had an interesting lunch time discussion with our hardware architects pertinent to
-"minimal guarantees expected of a CPU" section of memory-barriers.txt
+I would not expect 8-byte accesses to be atomic on 32-bit systems unless
+some special instruction was in use.  But that usually means special
+intrinsics or assembly code.
 
+> ARMv7 arch ref manual seems to confirm this. Quoting
+> 
+> | LDM, LDC, LDC2, LDRD, STM, STC, STC2, STRD, PUSH, POP, RFE, SRS, VLDM, VLDR,
+> | VSTM, and VSTR instructions are executed as a sequence of word-aligned word
+> | accesses. Each 32-bit word access is guaranteed to be single-copy atomic. A
+> | subsequence of two or more word accesses from the sequence might not exhibit
+> | single-copy atomicity
+> 
+> While it seems reasonable form hardware pov to not implement such atomicity by
+> default it seems there's an additional burden on application writers. They could
+> be happily using a lockless algorithm with just a shared flag between 2 threads
+> w/o need for any explicit synchronization. But upgrade to a new compiler which
+> aggressively "packs" struct rendering long long 32-bit aligned (vs. 64-bit before)
+> causing the code to suddenly stop working. Is the onus on them to declare such
+> memory as c11 atomic or some such.
 
-|  (*) These guarantees apply only to properly aligned and sized scalar
-|     variables.  "Properly sized" currently means variables that are
-|     the same size as "char", "short", "int" and "long".  "Properly
-|     aligned" means the natural alignment, thus no constraints for
-|     "char", two-byte alignment for "short", four-byte alignment for
-|     "int", and either four-byte or eight-byte alignment for "long",
-|     on 32-bit and 64-bit systems, respectively.
+There are also GCC extensions that allow specifying the alignment of
+structure fields.
 
+								Thanx, Paul
 
-I'm not sure how to interpret "natural alignment" for the case of double
-load/stores on 32-bit systems where the hardware and ABI allow for 4 byte
-alignment (ARCv2 LDD/STD, ARM LDRD/STRD ....)
-
-I presume (and the question) that lkmm doesn't expect such 8 byte load/stores to
-be atomic unless 8-byte aligned
-
-ARMv7 arch ref manual seems to confirm this. Quoting
-
-| LDM, LDC, LDC2, LDRD, STM, STC, STC2, STRD, PUSH, POP, RFE, SRS, VLDM, VLDR,
-| VSTM, and VSTR instructions are executed as a sequence of word-aligned word
-| accesses. Each 32-bit word access is guaranteed to be single-copy atomic. A
-| subsequence of two or more word accesses from the sequence might not exhibit
-| single-copy atomicity
-
-While it seems reasonable form hardware pov to not implement such atomicity by
-default it seems there's an additional burden on application writers. They could
-be happily using a lockless algorithm with just a shared flag between 2 threads
-w/o need for any explicit synchronization. But upgrade to a new compiler which
-aggressively "packs" struct rendering long long 32-bit aligned (vs. 64-bit before)
-causing the code to suddenly stop working. Is the onus on them to declare such
-memory as c11 atomic or some such.
-
-Thx,
--Vineet
