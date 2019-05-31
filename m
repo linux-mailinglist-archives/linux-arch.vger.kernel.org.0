@@ -2,77 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2598030BD2
-	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 11:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184AD30C33
+	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 11:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727016AbfEaJlV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 May 2019 05:41:21 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:35486 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726998AbfEaJlV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 31 May 2019 05:41:21 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-124-usbqQbBcPxeULja3PdvRQw-1; Fri, 31 May 2019 10:41:18 +0100
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
- (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri,
- 31 May 2019 10:41:17 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 31 May 2019 10:41:17 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Vineet Gupta' <Vineet.Gupta1@synopsys.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <Will.Deacon@arm.com>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-CC:     arcml <linux-snps-arc@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: single copy atomicity for double load/stores on 32-bit systems
-Thread-Topic: single copy atomicity for double load/stores on 32-bit systems
-Thread-Index: AQHVFxS3Hu02PtbnOkCuZb4nroftBaaE+VYw
-Date:   Fri, 31 May 2019 09:41:17 +0000
-Message-ID: <895ec12746c246579aed5dd98ace6e38@AcuMS.aculab.com>
-References: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
-In-Reply-To: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1726945AbfEaJ5s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 May 2019 05:57:48 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:38700 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726002AbfEaJ5s (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 05:57:48 -0400
+Received: by mail-oi1-f196.google.com with SMTP id 18so6482547oij.5
+        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 02:57:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t/dabiI1+zXohN0XPJPWZWWtcKfqB2v/nUShweQXWc0=;
+        b=e32JUU3PfkhWWkA3PguBCXaJsg7lPEFltaK4JUSnF6IbCO9/3/VgXrN9kHh3T04HLU
+         cc4gQFNRfzpdnn3Zlkl3O/QinrY8vWDnieuJJwrqkt0dvkzgU7PDufYQXYPqEMNesADO
+         JVaQC2W7ZHVecGYxyIF1y9IjnOSSWo9uVr8tnjnGR/TrX7YhkC2+GmF2tE5qi7m3/FYn
+         BfTdJ9JkODL+hIo8f7g/TB0zWHG/iD4uzthFPjhkMd1kviqjgSmtvoJPj1I2+Rb2A3IN
+         KPSBDVByMZKy33HHr8kFjSobFkI5QhXEmahv2OcciHPwIGZXWvZ6+fRFSfkNx/Xuce6j
+         T5LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t/dabiI1+zXohN0XPJPWZWWtcKfqB2v/nUShweQXWc0=;
+        b=ij4r/Cer4FfFZVdb1/9lT6FD2TxaG/XV1N4Aax7VEMVjl0Nduq1V+HnWlC9WhFYWPS
+         DHHvjvLZhEKXFr/aTiPJ3YxNllbiOWhPYi4call9dcL4QIeoY/cd4HMWGuOEryvhXwz/
+         reS7TDjLDPMioWqJ8P5VvhXD9kqBSOcqjDNem1mETDU742EoVyiTtFoX/ev9bLAhcgE4
+         4nbobLk3u+EOUtxv6VRAerfA9lvCGUc0nWMOuAfMSfrf4mDf7VogrCzk0wk/xoNpkACX
+         n8ManYtF7VzOxaJkJaD5g36Oyd29NIilp7udiLNtTQrZHTBDyW6RlQ2EcRRtZANIQ6Rp
+         MB6A==
+X-Gm-Message-State: APjAAAWZLa8gDPsfxKreNrvXzm+NaQC0ljB1Gf2/EsDAXpOZp6kLy8E6
+        9Ej6edsqznDVGmoyHHJdYxTBiwAyfy0WYyIPo4QwBQ==
+X-Google-Smtp-Source: APXvYqxTrzMK8mZublRee/EYe0PadumD22Hhgu5bTyuirvM1rEu/qvQvgb6zLiAISTocJYvBThR/Q2W5owRyw3GKgfY=
+X-Received: by 2002:aca:bfc6:: with SMTP id p189mr5781082oif.121.1559296667221;
+ Fri, 31 May 2019 02:57:47 -0700 (PDT)
 MIME-Version: 1.0
-X-MC-Unique: usbqQbBcPxeULja3PdvRQw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+References: <20190529141500.193390-1-elver@google.com> <20190529141500.193390-3-elver@google.com>
+ <EE911EC6-344B-4EB2-90A4-B11E8D96BEDC@zytor.com>
+In-Reply-To: <EE911EC6-344B-4EB2-90A4-B11E8D96BEDC@zytor.com>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 31 May 2019 11:57:36 +0200
+Message-ID: <CANpmjNOsPnVd50cTzUW8UYXPGqpSnRLcjj=JbZraTYVq1n18Fw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] x86: Move CPU feature test out of uaccess region
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogVmluZWV0IEd1cHRhDQo+IFNlbnQ6IDMwIE1heSAyMDE5IDE5OjIzDQouLi4NCj4gV2hp
-bGUgaXQgc2VlbXMgcmVhc29uYWJsZSBmb3JtIGhhcmR3YXJlIHBvdiB0byBub3QgaW1wbGVtZW50
-IHN1Y2ggYXRvbWljaXR5IGJ5DQo+IGRlZmF1bHQgaXQgc2VlbXMgdGhlcmUncyBhbiBhZGRpdGlv
-bmFsIGJ1cmRlbiBvbiBhcHBsaWNhdGlvbiB3cml0ZXJzLiBUaGV5IGNvdWxkDQo+IGJlIGhhcHBp
-bHkgdXNpbmcgYSBsb2NrbGVzcyBhbGdvcml0aG0gd2l0aCBqdXN0IGEgc2hhcmVkIGZsYWcgYmV0
-d2VlbiAyIHRocmVhZHMNCj4gdy9vIG5lZWQgZm9yIGFueSBleHBsaWNpdCBzeW5jaHJvbml6YXRp
-b24uIEJ1dCB1cGdyYWRlIHRvIGEgbmV3IGNvbXBpbGVyIHdoaWNoDQo+IGFnZ3Jlc3NpdmVseSAi
-cGFja3MiIHN0cnVjdCByZW5kZXJpbmcgbG9uZyBsb25nIDMyLWJpdCBhbGlnbmVkICh2cy4gNjQt
-Yml0IGJlZm9yZSkNCj4gY2F1c2luZyB0aGUgY29kZSB0byBzdWRkZW5seSBzdG9wIHdvcmtpbmcu
-IElzIHRoZSBvbnVzIG9uIHRoZW0gdG8gZGVjbGFyZSBzdWNoDQo+IG1lbW9yeSBhcyBjMTEgYXRv
-bWljIG9yIHNvbWUgc3VjaC4NCg0KQSAnbmV3JyBjb21waWxlciBjYW4ndCBzdWRkZW5seSBjaGFu
-Z2UgdGhlIGFsaWdubWVudCBydWxlcyBmb3Igc3RydWN0dXJlIGVsZW1lbnRzLg0KVGhlIGFsaWdu
-bWVudCBydWxlcyB3aWxsIGJlIHBhcnQgb2YgdGhlIEFCSS4NCg0KTW9yZSBsaWtlbHkgaXMgdGhh
-dCB0aGUgc3RydWN0dXJlIGl0c2VsZiBpcyB1bmV4cGVjdGVkbHkgYWxsb2NhdGVkIG9uDQphbiA4
-bis0IGJvdW5kYXJ5IGR1ZSB0byBjb2RlIGNoYW5nZXMgZWxzZXdoZXJlLg0KDQpJdCBpcyBhbHNv
-IHdvcnRoIG5vdGluZyB0aGF0IGZvciBjb21wbGV0ZSBwb3J0YWJpbGl0eSBvbmx5IHdyaXRlcyB0
-bw0KJ2Z1bGwgd29yZHMnIGNhbiBiZSBhc3N1bWVkIGF0b21pYy4NClNvbWUgb2xkIEFscGhhJ3Mg
-ZGlkIFJNVyBjeWNsZXMgZm9yIGJ5dGUgd3JpdGVzLg0KKEFsdGhvdWdoIEkgc3VzcGVjdCBMaW51
-eCBkb2Vzbid0IHN1cHBvcnQgdGhvc2UgYW55IG1vcmUuKQ0KDQpFdmVuIHg4NiBjYW4gY2F0Y2gg
-eW91IG91dC4NClRoZSBiaXQgb3BlcmF0aW9ucyB3aWxsIGRvIHdpZGVyIFJNVyBjeWNsZXMgdGhh
-biB5b3UgZXhwZWN0Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRl
-LCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpS
-ZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Wed, 29 May 2019 at 16:29, <hpa@zytor.com> wrote:
+>
+> On May 29, 2019 7:15:00 AM PDT, Marco Elver <elver@google.com> wrote:
+> >This patch is a pre-requisite for enabling KASAN bitops
+> >instrumentation:
+> >moves boot_cpu_has feature test out of the uaccess region, as
+> >boot_cpu_has uses test_bit. With instrumentation, the KASAN check would
+> >otherwise be flagged by objtool.
+> >
+> >This approach is preferred over adding the explicit kasan_check_*
+> >functions to the uaccess whitelist of objtool, as the case here appears
+> >to be the only one.
+> >
+> >Signed-off-by: Marco Elver <elver@google.com>
+> >---
+> >v1:
+> >* This patch replaces patch: 'tools/objtool: add kasan_check_* to
+> >  uaccess whitelist'
+> >---
+> > arch/x86/ia32/ia32_signal.c | 9 ++++++++-
+> > 1 file changed, 8 insertions(+), 1 deletion(-)
+> >
+> >diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
+> >index 629d1ee05599..12264e3c9c43 100644
+> >--- a/arch/x86/ia32/ia32_signal.c
+> >+++ b/arch/x86/ia32/ia32_signal.c
+> >@@ -333,6 +333,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal
+> >*ksig,
+> >       void __user *restorer;
+> >       int err = 0;
+> >       void __user *fpstate = NULL;
+> >+      bool has_xsave;
+> >
+> >       /* __copy_to_user optimizes that into a single 8 byte store */
+> >       static const struct {
+> >@@ -352,13 +353,19 @@ int ia32_setup_rt_frame(int sig, struct ksignal
+> >*ksig,
+> >       if (!access_ok(frame, sizeof(*frame)))
+> >               return -EFAULT;
+> >
+> >+      /*
+> >+       * Move non-uaccess accesses out of uaccess region if not strictly
+> >+       * required; this also helps avoid objtool flagging these accesses
+> >with
+> >+       * instrumentation enabled.
+> >+       */
+> >+      has_xsave = boot_cpu_has(X86_FEATURE_XSAVE);
+> >       put_user_try {
+> >               put_user_ex(sig, &frame->sig);
+> >               put_user_ex(ptr_to_compat(&frame->info), &frame->pinfo);
+> >               put_user_ex(ptr_to_compat(&frame->uc), &frame->puc);
+> >
+> >               /* Create the ucontext.  */
+> >-              if (boot_cpu_has(X86_FEATURE_XSAVE))
+> >+              if (has_xsave)
+> >                       put_user_ex(UC_FP_XSTATE, &frame->uc.uc_flags);
+> >               else
+> >                       put_user_ex(0, &frame->uc.uc_flags);
+>
+> This was meant to use static_cpu_has(). Why did that get dropped?
 
+I couldn't find any mailing list thread referring to why this doesn't
+use static_cpu_has, do you have any background?
+
+static_cpu_has also solves the UACCESS warning.
+
+If you confirm it is safe to change to static_cpu_has(), I will change
+this patch. Note that I should then also change
+arch/x86/kernel/signal.c to mirror the change for 32bit  (although
+KASAN is not supported for 32bit x86).
+
+Thanks,
+-- Marco
