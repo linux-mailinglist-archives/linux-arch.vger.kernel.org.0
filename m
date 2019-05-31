@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F346310F9
-	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 17:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22697310FB
+	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 17:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726909AbfEaPLn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 May 2019 11:11:43 -0400
-Received: from mail-vs1-f74.google.com ([209.85.217.74]:55266 "EHLO
-        mail-vs1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726897AbfEaPLm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 11:11:42 -0400
-Received: by mail-vs1-f74.google.com with SMTP id 184so1300780vsm.21
-        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 08:11:42 -0700 (PDT)
+        id S1726922AbfEaPLq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 May 2019 11:11:46 -0400
+Received: from mail-vk1-f201.google.com ([209.85.221.201]:53984 "EHLO
+        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726899AbfEaPLq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 11:11:46 -0400
+Received: by mail-vk1-f201.google.com with SMTP id b13so4094048vkf.20
+        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 08:11:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=LNEghw4B+GvmCMDyCJlZQOSF0gWgpI6UWg+d86gG2mc=;
-        b=ozkPZplAJd4r//3+vEEoJahNvXQO1X4ZigVyEubSdIpqctPhuNZLdlWXMYpzn67h0X
-         JreDTRTgDzX6i2a85Ia9Q+9zBKklei2FPPQbxVrT8uDoUQNOpsN/p8+BkJ1SU3yDiMNw
-         1KJBsS9Szx7t+Z3QsoD17P8MBZba3PqICFgjsntr0+BzPLbSbFLUzxrI2rNF4WXbIr6B
-         NjlRCy5ykAL5B1aiDgvaccG0XHNZwMHu3r2aBEaZOLLrreJ9CrY7Ieugpp59+Z5NF2U0
-         xuVrgPGdqr3vuv5BoBXZKO31zh2+kuZ3KqXUUmM1Uym7mHKx3LiZMdKIk+7MQPDnNV1p
-         ikKw==
+        bh=Zx2DDgtldzG1mx9/969MuYRWgy8Ne9+JiAfHrrBI1cs=;
+        b=ut411OXGpCc5RWCoEKyTdQ7hI7x3YvaMdt4zz9eyIw+TMT/IOBOIwDateFA16DM+FT
+         E/P24u3bz8v/1F58ycA/BaFBW0tIX6ERIrWQgQp8WdbHJpGJl7O7oqNvI45ejZqSKSVX
+         Lc9ZyWyx+rD1OedBMT9nnK8z99OABKeg304ZXQbAHWGAUFtZHqbXd5umEdRFDAaEcRL8
+         OKUy4dlHor0esuBo1iCmN7f7V8/1FZiEaKDRdn2PwBYRQ5QcV8rCtlWoT+im65zpp9Xe
+         9XGVxxu2O8zLy1Ule6BYsvHtXCVw2NKx+ntSurOFn2fxFc9/5g3YG+mIWmmGfnIGvZ8g
+         w0ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=LNEghw4B+GvmCMDyCJlZQOSF0gWgpI6UWg+d86gG2mc=;
-        b=Xl66BRiNKeG0BrglkuRT1WzCs4T3anLZAMpV1lv23x5WiPnzcUvtTL9hym+ufMwfGA
-         sdzD1cjZclOiQPrCRXXzxjVKOhh/2ANCNnq0eZLna07ug4RnQ0tcrGSFiNUnDIT/dVv0
-         ZNL0DY2NrDzsjtto8R2wl9C4kZb7hhAdWhESLpoTirNI2W18iNg2t2wlNEpal5kULVXC
-         YcGUKmohmhwyiqcuIAGkBOBfydovLv/6RqLOoD9XhcLxKMgCneYhwSQ3vPHQIlUPJYrc
-         C3FYUDUpPGVr/mam4FmOUcq7UhhV/yvkd9lAyeYXb4r9BMHKjzD2DLQwKms05pd48Kt/
-         jMFA==
-X-Gm-Message-State: APjAAAX56mrBeB58ohgIKbLeTvne07MG5T8tJWCSh8VI8UD9mMvmb34A
-        MkwEqGv1nMj3xi4UW9THhQWR56yynA==
-X-Google-Smtp-Source: APXvYqxMRxD/zc6HiE9yfl3teIOaD5ernl+4NfEmJo1Hwn7xZzxHUm1PC8Ix91D9Z/1irN8QwfsHq9covg==
-X-Received: by 2002:ac5:c215:: with SMTP id m21mr4221628vkk.84.1559315501278;
- Fri, 31 May 2019 08:11:41 -0700 (PDT)
-Date:   Fri, 31 May 2019 17:08:30 +0200
+        bh=Zx2DDgtldzG1mx9/969MuYRWgy8Ne9+JiAfHrrBI1cs=;
+        b=OhUnR7jPREXgw8bACjhgO+ciXDXMmNUgBf4qYlgXdyeCeAmHlvulplJsnJ4QZ24aff
+         wSEf2uZG0B65wt7QLkDcx17fC4YlTqZrOHq3xlhh5U2FqOpu0L6NCUHFtICFZQvOorO2
+         PQMqp4NJc7ESoo0xQY9pbJ1ZimxybqyvAt3dil63fMqN3s64cWZS5skI0+dUTI5IYDNH
+         b70oRE/DGhxsPDd0JSBi8puoPpVLWqij8dUxBfA1NRVWMfAKBsT1PRKj43IulJ2ITPKm
+         Gjz1BLpw0KtUaj5IsxQWlNI6f2TtBytTqWgjRKV+pUS3N6f4MUMBMOnluJ8eLbFCunYG
+         mQnA==
+X-Gm-Message-State: APjAAAXvA9WzcoSUIox10vs9FCH3UZOiJEBPUeU4Otp8Ph96rgz8XsQx
+        v3UEgH3dTJoWGsZgDXSKsbHMj6VK2w==
+X-Google-Smtp-Source: APXvYqzGTmKsfJtrGUh9jJEmrV+4goBh0cLH8eTdg8YbwQw3nXExVJi/haLzdL+AvWfAhL6tcIarGY/BoQ==
+X-Received: by 2002:a1f:c142:: with SMTP id r63mr4363047vkf.8.1559315504469;
+ Fri, 31 May 2019 08:11:44 -0700 (PDT)
+Date:   Fri, 31 May 2019 17:08:31 +0200
 In-Reply-To: <20190531150828.157832-1-elver@google.com>
-Message-Id: <20190531150828.157832-3-elver@google.com>
+Message-Id: <20190531150828.157832-4-elver@google.com>
 Mime-Version: 1.0
 References: <20190531150828.157832-1-elver@google.com>
 X-Mailer: git-send-email 2.22.0.rc1.257.g3120a18244-goog
-Subject: [PATCH v3 2/3] x86: Use static_cpu_has in uaccess region to avoid instrumentation
+Subject: [PATCH v3 3/3] asm-generic, x86: Add bitops instrumentation for KASAN
 From:   Marco Elver <elver@google.com>
 To:     peterz@infradead.org, aryabinin@virtuozzo.com, dvyukov@google.com,
         glider@google.com, andreyknvl@google.com, mark.rutland@arm.com,
@@ -62,56 +62,628 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch is a pre-requisite for enabling KASAN bitops instrumentation;
-using static_cpu_has instead of boot_cpu_has avoids instrumentation of
-test_bit inside the uaccess region. With instrumentation, the KASAN
-check would otherwise be flagged by objtool.
+This adds a new header to asm-generic to allow optionally instrumenting
+architecture-specific asm implementations of bitops.
 
-For consistency, kernel/signal.c was changed to mirror this change,
-however, is never instrumented with KASAN (currently unsupported under
-x86 32bit).
+This change includes the required change for x86 as reference and
+changes the kernel API doc to point to bitops-instrumented.h instead.
+Rationale: the functions in x86's bitops.h are no longer the kernel API
+functions, but instead the arch_ prefixed functions, which are then
+instrumented via bitops-instrumented.h.
 
+Other architectures can similarly add support for asm implementations of
+bitops.
+
+The documentation text was derived from x86 and existing bitops
+asm-generic versions: 1) references to x86 have been removed; 2) as a
+result, some of the text had to be reworded for clarity and consistency.
+
+Tested: using lib/test_kasan with bitops tests (pre-requisite patch).
+
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=198439
 Signed-off-by: Marco Elver <elver@google.com>
-Suggested-by: H. Peter Anvin <hpa@zytor.com>
 ---
 Changes in v3:
-* Use static_cpu_has instead of moving boot_cpu_has outside uaccess
-  region.
+* Remove references to 'x86' in API documentation; as a result, had to
+  reword doc text for clarify and consistency.
+* Remove #ifdef, since it is assumed that if asm-generic bitops
+  implementations are used, bitops-instrumented.h is not needed.
 
 Changes in v2:
-* Replaces patch: 'tools/objtool: add kasan_check_* to uaccess
-  whitelist'
+* Instrument word-sized accesses, as specified by the interface.
 ---
- arch/x86/ia32/ia32_signal.c | 2 +-
- arch/x86/kernel/signal.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Documentation/core-api/kernel-api.rst     |   2 +-
+ arch/x86/include/asm/bitops.h             | 189 ++++------------
+ include/asm-generic/bitops-instrumented.h | 263 ++++++++++++++++++++++
+ 3 files changed, 302 insertions(+), 152 deletions(-)
+ create mode 100644 include/asm-generic/bitops-instrumented.h
 
-diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
-index 629d1ee05599..1cee10091b9f 100644
---- a/arch/x86/ia32/ia32_signal.c
-+++ b/arch/x86/ia32/ia32_signal.c
-@@ -358,7 +358,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
- 		put_user_ex(ptr_to_compat(&frame->uc), &frame->puc);
+diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
+index a29c99d13331..65266fa1b706 100644
+--- a/Documentation/core-api/kernel-api.rst
++++ b/Documentation/core-api/kernel-api.rst
+@@ -51,7 +51,7 @@ The Linux kernel provides more basic utility functions.
+ Bit Operations
+ --------------
  
- 		/* Create the ucontext.  */
--		if (boot_cpu_has(X86_FEATURE_XSAVE))
-+		if (static_cpu_has(X86_FEATURE_XSAVE))
- 			put_user_ex(UC_FP_XSTATE, &frame->uc.uc_flags);
- 		else
- 			put_user_ex(0, &frame->uc.uc_flags);
-diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index 364813cea647..52eb1d551aed 100644
---- a/arch/x86/kernel/signal.c
-+++ b/arch/x86/kernel/signal.c
-@@ -391,7 +391,7 @@ static int __setup_rt_frame(int sig, struct ksignal *ksig,
- 		put_user_ex(&frame->uc, &frame->puc);
+-.. kernel-doc:: arch/x86/include/asm/bitops.h
++.. kernel-doc:: include/asm-generic/bitops-instrumented.h
+    :internal:
  
- 		/* Create the ucontext.  */
--		if (boot_cpu_has(X86_FEATURE_XSAVE))
-+		if (static_cpu_has(X86_FEATURE_XSAVE))
- 			put_user_ex(UC_FP_XSTATE, &frame->uc.uc_flags);
- 		else
- 			put_user_ex(0, &frame->uc.uc_flags);
+ Bitmap Operations
+diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+index 8e790ec219a5..ba15d53c1ca7 100644
+--- a/arch/x86/include/asm/bitops.h
++++ b/arch/x86/include/asm/bitops.h
+@@ -49,23 +49,8 @@
+ #define CONST_MASK_ADDR(nr, addr)	WBYTE_ADDR((void *)(addr) + ((nr)>>3))
+ #define CONST_MASK(nr)			(1 << ((nr) & 7))
+ 
+-/**
+- * set_bit - Atomically set a bit in memory
+- * @nr: the bit to set
+- * @addr: the address to start counting from
+- *
+- * This function is atomic and may not be reordered.  See __set_bit()
+- * if you do not require the atomic guarantees.
+- *
+- * Note: there are no guarantees that this function will not be reordered
+- * on non x86 architectures, so if you are writing portable code,
+- * make sure not to rely on its reordering guarantees.
+- *
+- * Note that @nr may be almost arbitrarily large; this function is not
+- * restricted to acting on a single-word quantity.
+- */
+ static __always_inline void
+-set_bit(long nr, volatile unsigned long *addr)
++arch_set_bit(long nr, volatile unsigned long *addr)
+ {
+ 	if (IS_IMMEDIATE(nr)) {
+ 		asm volatile(LOCK_PREFIX "orb %1,%0"
+@@ -78,32 +63,14 @@ set_bit(long nr, volatile unsigned long *addr)
+ 	}
+ }
+ 
+-/**
+- * __set_bit - Set a bit in memory
+- * @nr: the bit to set
+- * @addr: the address to start counting from
+- *
+- * Unlike set_bit(), this function is non-atomic and may be reordered.
+- * If it's called on the same region of memory simultaneously, the effect
+- * may be that only one operation succeeds.
+- */
+-static __always_inline void __set_bit(long nr, volatile unsigned long *addr)
++static __always_inline void
++arch___set_bit(long nr, volatile unsigned long *addr)
+ {
+ 	asm volatile(__ASM_SIZE(bts) " %1,%0" : : ADDR, "Ir" (nr) : "memory");
+ }
+ 
+-/**
+- * clear_bit - Clears a bit in memory
+- * @nr: Bit to clear
+- * @addr: Address to start counting from
+- *
+- * clear_bit() is atomic and may not be reordered.  However, it does
+- * not contain a memory barrier, so if it is used for locking purposes,
+- * you should call smp_mb__before_atomic() and/or smp_mb__after_atomic()
+- * in order to ensure changes are visible on other processors.
+- */
+ static __always_inline void
+-clear_bit(long nr, volatile unsigned long *addr)
++arch_clear_bit(long nr, volatile unsigned long *addr)
+ {
+ 	if (IS_IMMEDIATE(nr)) {
+ 		asm volatile(LOCK_PREFIX "andb %1,%0"
+@@ -115,26 +82,21 @@ clear_bit(long nr, volatile unsigned long *addr)
+ 	}
+ }
+ 
+-/*
+- * clear_bit_unlock - Clears a bit in memory
+- * @nr: Bit to clear
+- * @addr: Address to start counting from
+- *
+- * clear_bit() is atomic and implies release semantics before the memory
+- * operation. It can be used for an unlock.
+- */
+-static __always_inline void clear_bit_unlock(long nr, volatile unsigned long *addr)
++static __always_inline void
++arch_clear_bit_unlock(long nr, volatile unsigned long *addr)
+ {
+ 	barrier();
+-	clear_bit(nr, addr);
++	arch_clear_bit(nr, addr);
+ }
+ 
+-static __always_inline void __clear_bit(long nr, volatile unsigned long *addr)
++static __always_inline void
++arch___clear_bit(long nr, volatile unsigned long *addr)
+ {
+ 	asm volatile(__ASM_SIZE(btr) " %1,%0" : : ADDR, "Ir" (nr) : "memory");
+ }
+ 
+-static __always_inline bool clear_bit_unlock_is_negative_byte(long nr, volatile unsigned long *addr)
++static __always_inline bool
++arch_clear_bit_unlock_is_negative_byte(long nr, volatile unsigned long *addr)
+ {
+ 	bool negative;
+ 	asm volatile(LOCK_PREFIX "andb %2,%1"
+@@ -143,48 +105,23 @@ static __always_inline bool clear_bit_unlock_is_negative_byte(long nr, volatile
+ 		: "ir" ((char) ~(1 << nr)) : "memory");
+ 	return negative;
+ }
++#define arch_clear_bit_unlock_is_negative_byte                                 \
++	arch_clear_bit_unlock_is_negative_byte
+ 
+-// Let everybody know we have it
+-#define clear_bit_unlock_is_negative_byte clear_bit_unlock_is_negative_byte
+-
+-/*
+- * __clear_bit_unlock - Clears a bit in memory
+- * @nr: Bit to clear
+- * @addr: Address to start counting from
+- *
+- * __clear_bit() is non-atomic and implies release semantics before the memory
+- * operation. It can be used for an unlock if no other CPUs can concurrently
+- * modify other bits in the word.
+- */
+-static __always_inline void __clear_bit_unlock(long nr, volatile unsigned long *addr)
++static __always_inline void
++arch___clear_bit_unlock(long nr, volatile unsigned long *addr)
+ {
+-	__clear_bit(nr, addr);
++	arch___clear_bit(nr, addr);
+ }
+ 
+-/**
+- * __change_bit - Toggle a bit in memory
+- * @nr: the bit to change
+- * @addr: the address to start counting from
+- *
+- * Unlike change_bit(), this function is non-atomic and may be reordered.
+- * If it's called on the same region of memory simultaneously, the effect
+- * may be that only one operation succeeds.
+- */
+-static __always_inline void __change_bit(long nr, volatile unsigned long *addr)
++static __always_inline void
++arch___change_bit(long nr, volatile unsigned long *addr)
+ {
+ 	asm volatile(__ASM_SIZE(btc) " %1,%0" : : ADDR, "Ir" (nr) : "memory");
+ }
+ 
+-/**
+- * change_bit - Toggle a bit in memory
+- * @nr: Bit to change
+- * @addr: Address to start counting from
+- *
+- * change_bit() is atomic and may not be reordered.
+- * Note that @nr may be almost arbitrarily large; this function is not
+- * restricted to acting on a single-word quantity.
+- */
+-static __always_inline void change_bit(long nr, volatile unsigned long *addr)
++static __always_inline void
++arch_change_bit(long nr, volatile unsigned long *addr)
+ {
+ 	if (IS_IMMEDIATE(nr)) {
+ 		asm volatile(LOCK_PREFIX "xorb %1,%0"
+@@ -196,42 +133,20 @@ static __always_inline void change_bit(long nr, volatile unsigned long *addr)
+ 	}
+ }
+ 
+-/**
+- * test_and_set_bit - Set a bit and return its old value
+- * @nr: Bit to set
+- * @addr: Address to count from
+- *
+- * This operation is atomic and cannot be reordered.
+- * It also implies a memory barrier.
+- */
+-static __always_inline bool test_and_set_bit(long nr, volatile unsigned long *addr)
++static __always_inline bool
++arch_test_and_set_bit(long nr, volatile unsigned long *addr)
+ {
+ 	return GEN_BINARY_RMWcc(LOCK_PREFIX __ASM_SIZE(bts), *addr, c, "Ir", nr);
+ }
+ 
+-/**
+- * test_and_set_bit_lock - Set a bit and return its old value for lock
+- * @nr: Bit to set
+- * @addr: Address to count from
+- *
+- * This is the same as test_and_set_bit on x86.
+- */
+ static __always_inline bool
+-test_and_set_bit_lock(long nr, volatile unsigned long *addr)
++arch_test_and_set_bit_lock(long nr, volatile unsigned long *addr)
+ {
+-	return test_and_set_bit(nr, addr);
++	return arch_test_and_set_bit(nr, addr);
+ }
+ 
+-/**
+- * __test_and_set_bit - Set a bit and return its old value
+- * @nr: Bit to set
+- * @addr: Address to count from
+- *
+- * This operation is non-atomic and can be reordered.
+- * If two examples of this operation race, one can appear to succeed
+- * but actually fail.  You must protect multiple accesses with a lock.
+- */
+-static __always_inline bool __test_and_set_bit(long nr, volatile unsigned long *addr)
++static __always_inline bool
++arch___test_and_set_bit(long nr, volatile unsigned long *addr)
+ {
+ 	bool oldbit;
+ 
+@@ -242,28 +157,13 @@ static __always_inline bool __test_and_set_bit(long nr, volatile unsigned long *
+ 	return oldbit;
+ }
+ 
+-/**
+- * test_and_clear_bit - Clear a bit and return its old value
+- * @nr: Bit to clear
+- * @addr: Address to count from
+- *
+- * This operation is atomic and cannot be reordered.
+- * It also implies a memory barrier.
+- */
+-static __always_inline bool test_and_clear_bit(long nr, volatile unsigned long *addr)
++static __always_inline bool
++arch_test_and_clear_bit(long nr, volatile unsigned long *addr)
+ {
+ 	return GEN_BINARY_RMWcc(LOCK_PREFIX __ASM_SIZE(btr), *addr, c, "Ir", nr);
+ }
+ 
+-/**
+- * __test_and_clear_bit - Clear a bit and return its old value
+- * @nr: Bit to clear
+- * @addr: Address to count from
+- *
+- * This operation is non-atomic and can be reordered.
+- * If two examples of this operation race, one can appear to succeed
+- * but actually fail.  You must protect multiple accesses with a lock.
+- *
++/*
+  * Note: the operation is performed atomically with respect to
+  * the local CPU, but not other CPUs. Portable code should not
+  * rely on this behaviour.
+@@ -271,7 +171,8 @@ static __always_inline bool test_and_clear_bit(long nr, volatile unsigned long *
+  * accessed from a hypervisor on the same CPU if running in a VM: don't change
+  * this without also updating arch/x86/kernel/kvm.c
+  */
+-static __always_inline bool __test_and_clear_bit(long nr, volatile unsigned long *addr)
++static __always_inline bool
++arch___test_and_clear_bit(long nr, volatile unsigned long *addr)
+ {
+ 	bool oldbit;
+ 
+@@ -282,8 +183,8 @@ static __always_inline bool __test_and_clear_bit(long nr, volatile unsigned long
+ 	return oldbit;
+ }
+ 
+-/* WARNING: non atomic and it can be reordered! */
+-static __always_inline bool __test_and_change_bit(long nr, volatile unsigned long *addr)
++static __always_inline bool
++arch___test_and_change_bit(long nr, volatile unsigned long *addr)
+ {
+ 	bool oldbit;
+ 
+@@ -295,15 +196,8 @@ static __always_inline bool __test_and_change_bit(long nr, volatile unsigned lon
+ 	return oldbit;
+ }
+ 
+-/**
+- * test_and_change_bit - Change a bit and return its old value
+- * @nr: Bit to change
+- * @addr: Address to count from
+- *
+- * This operation is atomic and cannot be reordered.
+- * It also implies a memory barrier.
+- */
+-static __always_inline bool test_and_change_bit(long nr, volatile unsigned long *addr)
++static __always_inline bool
++arch_test_and_change_bit(long nr, volatile unsigned long *addr)
+ {
+ 	return GEN_BINARY_RMWcc(LOCK_PREFIX __ASM_SIZE(btc), *addr, c, "Ir", nr);
+ }
+@@ -326,16 +220,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
+ 	return oldbit;
+ }
+ 
+-#if 0 /* Fool kernel-doc since it doesn't do macros yet */
+-/**
+- * test_bit - Determine whether a bit is set
+- * @nr: bit number to test
+- * @addr: Address to start counting from
+- */
+-static bool test_bit(int nr, const volatile unsigned long *addr);
+-#endif
+-
+-#define test_bit(nr, addr)			\
++#define arch_test_bit(nr, addr)			\
+ 	(__builtin_constant_p((nr))		\
+ 	 ? constant_test_bit((nr), (addr))	\
+ 	 : variable_test_bit((nr), (addr)))
+@@ -504,6 +389,8 @@ static __always_inline int fls64(__u64 x)
+ 
+ #include <asm-generic/bitops/const_hweight.h>
+ 
++#include <asm-generic/bitops-instrumented.h>
++
+ #include <asm-generic/bitops/le.h>
+ 
+ #include <asm-generic/bitops/ext2-atomic-setbit.h>
+diff --git a/include/asm-generic/bitops-instrumented.h b/include/asm-generic/bitops-instrumented.h
+new file mode 100644
+index 000000000000..ddd1c6d9d8db
+--- /dev/null
++++ b/include/asm-generic/bitops-instrumented.h
+@@ -0,0 +1,263 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++/*
++ * This file provides wrappers with sanitizer instrumentation for bit
++ * operations.
++ *
++ * To use this functionality, an arch's bitops.h file needs to define each of
++ * the below bit operations with an arch_ prefix (e.g. arch_set_bit(),
++ * arch___set_bit(), etc.).
++ */
++#ifndef _ASM_GENERIC_BITOPS_INSTRUMENTED_H
++#define _ASM_GENERIC_BITOPS_INSTRUMENTED_H
++
++#include <linux/kasan-checks.h>
++
++/**
++ * set_bit - Atomically set a bit in memory
++ * @nr: the bit to set
++ * @addr: the address to start counting from
++ *
++ * This is a relaxed atomic operation (no implied memory barriers).
++ *
++ * Note that @nr may be almost arbitrarily large; this function is not
++ * restricted to acting on a single-word quantity.
++ */
++static inline void set_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	arch_set_bit(nr, addr);
++}
++
++/**
++ * __set_bit - Set a bit in memory
++ * @nr: the bit to set
++ * @addr: the address to start counting from
++ *
++ * Unlike set_bit(), this function is non-atomic. If it is called on the same
++ * region of memory concurrently, the effect may be that only one operation
++ * succeeds.
++ */
++static inline void __set_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	arch___set_bit(nr, addr);
++}
++
++/**
++ * clear_bit - Clears a bit in memory
++ * @nr: Bit to clear
++ * @addr: Address to start counting from
++ *
++ * This is a relaxed atomic operation (no implied memory barriers).
++ */
++static inline void clear_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	arch_clear_bit(nr, addr);
++}
++
++/**
++ * __clear_bit - Clears a bit in memory
++ * @nr: the bit to clear
++ * @addr: the address to start counting from
++ *
++ * Unlike clear_bit(), this function is non-atomic. If it is called on the same
++ * region of memory concurrently, the effect may be that only one operation
++ * succeeds.
++ */
++static inline void __clear_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	arch___clear_bit(nr, addr);
++}
++
++/**
++ * clear_bit_unlock - Clear a bit in memory, for unlock
++ * @nr: the bit to set
++ * @addr: the address to start counting from
++ *
++ * This operation is atomic and provides release barrier semantics.
++ */
++static inline void clear_bit_unlock(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	arch_clear_bit_unlock(nr, addr);
++}
++
++/**
++ * __clear_bit_unlock - Clears a bit in memory
++ * @nr: Bit to clear
++ * @addr: Address to start counting from
++ *
++ * This is a non-atomic operation but implies a release barrier before the
++ * memory operation. It can be used for an unlock if no other CPUs can
++ * concurrently modify other bits in the word.
++ */
++static inline void __clear_bit_unlock(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	arch___clear_bit_unlock(nr, addr);
++}
++
++/**
++ * change_bit - Toggle a bit in memory
++ * @nr: Bit to change
++ * @addr: Address to start counting from
++ *
++ * This is a relaxed atomic operation (no implied memory barriers).
++ *
++ * Note that @nr may be almost arbitrarily large; this function is not
++ * restricted to acting on a single-word quantity.
++ */
++static inline void change_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	arch_change_bit(nr, addr);
++}
++
++/**
++ * __change_bit - Toggle a bit in memory
++ * @nr: the bit to change
++ * @addr: the address to start counting from
++ *
++ * Unlike change_bit(), this function is non-atomic. If it is called on the same
++ * region of memory concurrently, the effect may be that only one operation
++ * succeeds.
++ */
++static inline void __change_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	arch___change_bit(nr, addr);
++}
++
++/**
++ * test_and_set_bit - Set a bit and return its old value
++ * @nr: Bit to set
++ * @addr: Address to count from
++ *
++ * This is an atomic fully-ordered operation (implied full memory barrier).
++ */
++static inline bool test_and_set_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	return arch_test_and_set_bit(nr, addr);
++}
++
++/**
++ * __test_and_set_bit - Set a bit and return its old value
++ * @nr: Bit to set
++ * @addr: Address to count from
++ *
++ * This operation is non-atomic. If two instances of this operation race, one
++ * can appear to succeed but actually fail.
++ */
++static inline bool __test_and_set_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	return arch___test_and_set_bit(nr, addr);
++}
++
++/**
++ * test_and_set_bit_lock - Set a bit and return its old value, for lock
++ * @nr: Bit to set
++ * @addr: Address to count from
++ *
++ * This operation is atomic and provides acquire barrier semantics if
++ * the returned value is 0.
++ * It can be used to implement bit locks.
++ */
++static inline bool test_and_set_bit_lock(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	return arch_test_and_set_bit_lock(nr, addr);
++}
++
++/**
++ * test_and_clear_bit - Clear a bit and return its old value
++ * @nr: Bit to clear
++ * @addr: Address to count from
++ *
++ * This is an atomic fully-ordered operation (implied full memory barrier).
++ */
++static inline bool test_and_clear_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	return arch_test_and_clear_bit(nr, addr);
++}
++
++/**
++ * __test_and_clear_bit - Clear a bit and return its old value
++ * @nr: Bit to clear
++ * @addr: Address to count from
++ *
++ * This operation is non-atomic. If two instances of this operation race, one
++ * can appear to succeed but actually fail.
++ */
++static inline bool __test_and_clear_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	return arch___test_and_clear_bit(nr, addr);
++}
++
++/**
++ * test_and_change_bit - Change a bit and return its old value
++ * @nr: Bit to change
++ * @addr: Address to count from
++ *
++ * This is an atomic fully-ordered operation (implied full memory barrier).
++ */
++static inline bool test_and_change_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	return arch_test_and_change_bit(nr, addr);
++}
++
++/**
++ * __test_and_change_bit - Change a bit and return its old value
++ * @nr: Bit to change
++ * @addr: Address to count from
++ *
++ * This operation is non-atomic. If two instances of this operation race, one
++ * can appear to succeed but actually fail.
++ */
++static inline bool __test_and_change_bit(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	return arch___test_and_change_bit(nr, addr);
++}
++
++/**
++ * test_bit - Determine whether a bit is set
++ * @nr: bit number to test
++ * @addr: Address to start counting from
++ */
++static inline bool test_bit(long nr, const volatile unsigned long *addr)
++{
++	kasan_check_read(addr + BIT_WORD(nr), sizeof(long));
++	return arch_test_bit(nr, addr);
++}
++
++#if defined(arch_clear_bit_unlock_is_negative_byte)
++/**
++ * clear_bit_unlock_is_negative_byte - Clear a bit in memory and test if bottom
++ *                                     byte is negative, for unlock.
++ * @nr: the bit to clear
++ * @addr: the address to start counting from
++ *
++ * This operation is atomic and provides release barrier semantics.
++ *
++ * This is a bit of a one-trick-pony for the filemap code, which clears
++ * PG_locked and tests PG_waiters,
++ */
++static inline bool
++clear_bit_unlock_is_negative_byte(long nr, volatile unsigned long *addr)
++{
++	kasan_check_write(addr + BIT_WORD(nr), sizeof(long));
++	return arch_clear_bit_unlock_is_negative_byte(nr, addr);
++}
++/* Let everybody know we have it. */
++#define clear_bit_unlock_is_negative_byte clear_bit_unlock_is_negative_byte
++#endif
++
++#endif /* _ASM_GENERIC_BITOPS_INSTRUMENTED_H */
 -- 
 2.22.0.rc1.257.g3120a18244-goog
 
