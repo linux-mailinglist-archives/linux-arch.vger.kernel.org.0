@@ -2,75 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 226F8315B4
-	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 21:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EEC3184A
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Jun 2019 01:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727436AbfEaT44 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 May 2019 15:56:56 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:37023 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727147AbfEaT44 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 15:56:56 -0400
-Received: by mail-qt1-f193.google.com with SMTP id y57so2408226qtk.4;
-        Fri, 31 May 2019 12:56:56 -0700 (PDT)
+        id S1726849AbfEaXgn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 May 2019 19:36:43 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:43912 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726723AbfEaXgn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 19:36:43 -0400
+Received: by mail-pf1-f194.google.com with SMTP id c6so7082564pfa.10
+        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 16:36:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y/rGGdWu5XycD5C8N2GrP1YfPaYIiEt1+UzdCzQQwTA=;
-        b=IRDgGMYuAvaE1GSIOI3o/tLy6QghUC/gn59W8EGZYnnrf9ygntjzbieiQ3dlEsllbU
-         ztyyIguVbB2eHpmI9PkEJ2BwAS9VlMhKzI+fhGp2Lgr6qdZSii2rAWmai/dO1jFO5bxB
-         cVXi/mZFGbSbMsIAvroXJO/nn9LYuVE7T9DyKs4KHkS08aDguFsrE07Ml8RNFFXZ+X5G
-         svudypRSxUBdUObaug++K1UclxUiicg5g+AnqXx5puXnX8UkMleopia6girdXGU8pZcl
-         pfT6fHEXuCzscjxIpLM04Vewl7J3jbV0wGGhX+nv5qLlnJHgkDn9NqEepMNlBbte9z++
-         nkvw==
-X-Gm-Message-State: APjAAAVtQFKrl/qfDJBgj/1KCyOFg3tHCbU4gYtI8oWsyc+lJhSUS3W9
-        1U8LurkPcqIvnSneESH1GxXBaWFmkXz/x/3ap9g=
-X-Google-Smtp-Source: APXvYqz07GsQb18PQEuYoOrVPB5qWAwO/Z2Je+evEIb3JjUC/80MFu0dsduMvyyuzYa7wz7Pj3pRLV9pSmAglB0lGPc=
-X-Received: by 2002:a0c:b78a:: with SMTP id l10mr10482109qve.62.1559332615542;
- Fri, 31 May 2019 12:56:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190531191204.4044-1-palmer@sifive.com> <20190531191204.4044-4-palmer@sifive.com>
-In-Reply-To: <20190531191204.4044-4-palmer@sifive.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 31 May 2019 21:56:39 +0200
-Message-ID: <CAK8P3a2=xko56LbwV4tyhyyyX+tw+EV-NGavYEYj0q61t=mnwg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] asm-generic: Register fchmodat4 as syscall 428
-To:     Palmer Dabbelt <palmer@sifive.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=ETJ6ykBl1LYGxegwTN6YGSCsMcqD6BFzZek270Zuebk=;
+        b=bdnDjgJYusJl0yNQ6NjG6aJmHIoDO62HU8Y5ydJodkfh+NJOI78HQzmiYIYTvzEHVM
+         OnZdRv/OX9dbHKVuRdT5S06IvpQxK2YKsBOrFPz99/ScAdjN9D/KlPUGWwl9WdNRZyKP
+         LO+8/bCkXGo1jpMF8tlcjfjcP7mppBtclbJLY6+nr7fNIpjQFdRLt6gVYFk/zEeUWFrz
+         HWiS7RP5UA29E7oe0zJh1bO1eeUEa31H6o1NrNdItVGXEhy/9xYHBdkFnoMdeyAIgAxv
+         brhH0lN9fQPBebIBkoU8SeITSHwsVBib5g4+QaE248S0/CkgoUaGfZnkUAp/RXMvPn5M
+         jXMA==
+X-Gm-Message-State: APjAAAXL/RhVza0OobvQIVPfqe5+Kl7gbjJy7rYffSDunB8djwZVP8iK
+        MoveN0tx4FlKfcRKQyCY3otLwA==
+X-Google-Smtp-Source: APXvYqwoLUrSF2L9O78QIaOKl9xWjaJYrvRMSYuFqnbqJmbAXL60kkJQDOuqKH/g+FbeaN2B66BGeQ==
+X-Received: by 2002:a17:90a:207:: with SMTP id c7mr12479237pjc.94.1559345802001;
+        Fri, 31 May 2019 16:36:42 -0700 (PDT)
+Received: from localhost ([12.206.222.5])
+        by smtp.gmail.com with ESMTPSA id t187sm7656787pfb.64.2019.05.31.16.36.41
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 31 May 2019 16:36:41 -0700 (PDT)
+Date:   Fri, 31 May 2019 16:36:41 -0700 (PDT)
+X-Google-Original-Date: Fri, 31 May 2019 16:23:50 PDT (-0700)
+Subject:     Re: [PATCH 2/5] Add fchmodat4(), a new syscall
+In-Reply-To: <CAK8P3a3HPeVq29k3Zk5rSk4bddiUQFrdEgDZUgdNnYZK+8QpGw@mail.gmail.com>
+CC:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, x86@kernel.org, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com
+From:   Palmer Dabbelt <palmer@sifive.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-234d2802-9483-43be-af69-5bd04721b932@palmer-si-x1e>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 31, 2019 at 9:23 PM Palmer Dabbelt <palmer@sifive.com> wrote:
+On Fri, 31 May 2019 12:51:00 PDT (-0700), Arnd Bergmann wrote:
+> On Fri, May 31, 2019 at 9:23 PM Palmer Dabbelt <palmer@sifive.com> wrote:
+>>
+>> man 3p says that fchmodat() takes a flags argument, but the Linux
+>> syscall does not.  There doesn't appear to be a good userspace
+>> workaround for this issue but the implementation in the kernel is pretty
+>> straight-forward.  The specific use case where the missing flags came up
+>> was WRT a fuse filesystem implemenation, but the functionality is pretty
+>> generic so I'm assuming there would be other use cases.
+>>
+>> Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
+>> ---
+>>  fs/open.c                | 21 +++++++++++++++++++--
+>>  include/linux/syscalls.h |  5 +++++
+>>  2 files changed, 24 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/open.c b/fs/open.c
+>> index a00350018a47..cfad7684e8d3 100644
+>> --- a/fs/open.c
+>> +++ b/fs/open.c
+>> @@ -568,11 +568,17 @@ SYSCALL_DEFINE2(fchmod, unsigned int, fd, umode_t, mode)
+>>         return ksys_fchmod(fd, mode);
+>>  }
+>>
+>> -int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
+>> +int do_fchmodat4(int dfd, const char __user *filename, umode_t mode, int flags)
+> ...
+>> +
+>> +int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
+>> +{
+>> +       return do_fchmodat4(dfd, filename, mode, 0);
+>> +}
+>> +
 >
-> Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
+> There is only one external caller of do_fchmodat(), so just change that
+> to pass the extra argument here, and keep a single do_fchmodat()
+> function used by the sys_fchmod(), sys_fchmod4(), sys_chmod()
+> and ksys_chmod().
 
-As usual, each patch needs a changelog text. I would prefer having a single
-patch here that changes /all/ system call tables at once, rather than doing one
-at a time like we used to.
-
-In linux-next, we are at number 434 now, and there are a couple of other
-new system calls being proposed right now (more than usual), so you may
-have to change the number a few times.
-
-Note: most architectures use .tbl files now, the exceptions are
-include/uapi/asm-generic/unistd.h and arch/arm64/include/asm/unistd32.h,
-and the latter also requires changing __NR_compat_syscalls in asm/unistd.h.
-
-Numbers should now be the same across architectures, except for alpha,
-which has a +110 offset. We have discussed ways to have a single
-file to modify for a new call on all architectures, but no patches yet.
-
-     Arnd
+OK, I'll roll that up into a v2.
