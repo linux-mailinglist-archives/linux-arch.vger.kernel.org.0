@@ -2,108 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EF03141B
-	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 19:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0ED2314C5
+	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 20:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbfEaRq5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 May 2019 13:46:57 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41921 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbfEaRq5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 13:46:57 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q17so6634522pfq.8
-        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 10:46:56 -0700 (PDT)
+        id S1727013AbfEaSbP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 May 2019 14:31:15 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:38814 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726983AbfEaSbP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 14:31:15 -0400
+Received: by mail-lj1-f193.google.com with SMTP id o13so10533207lji.5
+        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 11:31:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eventslistsusa-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:references:in-reply-to:subject:date:message-id:mime-version
-         :content-transfer-encoding:thread-index:content-language
-         :disposition-notification-to;
-        bh=f5E8JLd9OTZ7EMKZ/TJLys/xznOt3ZwyW1UntAKzgj4=;
-        b=POEtiYrfHOrbigi7D5YwmU7HuElDsa4Is91OzUaWmSi2t9CP6ToV/4e60XHiMK0i4S
-         xkvhUhKhmWFlCNAMkl8+YG8lafnMDMRoYQivZ5o8ebnBKcvF9nccMEAcR8Yeuu/Fe1Dz
-         IwN+ILTSZP/SnOC2lwpyjnxAo+EzmmRm0evyLKtEviAyqBueALAASWSuawxcWQSEJA/P
-         +TsV6dCoHk2zVV90dNCQ8QhzlDrvb2mWqpS+4TOCxO8HzUNRwKCF9QW5PHrsqcedQyZs
-         wMeDxEQTkux8ICq40Fx0Jpr3ig5a84uQUtAgh5ORM//v0U4TrZO8fYa4gZlanAGVPsJp
-         ilYQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OI/XkyWscYGF3A6q2jZ5I5FXRspFschNtLNhVlAhmaA=;
+        b=XIhW5QA8Xo4JHcGzA63mCXQV36Thq0SGB3HcmpD47Io+dSV1aXANbYc5EtOg1o2Na5
+         cP5NY7zZZbPkTEogRr8MiiyM9Ejv2cDEHDIstDA9/aCsb2qtbSu3Kdt3sDl/vlELdHbK
+         jAm3CuPDjICN+xqs//OTC5MWMsJRG2G18ibag=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language:disposition-notification-to;
-        bh=f5E8JLd9OTZ7EMKZ/TJLys/xznOt3ZwyW1UntAKzgj4=;
-        b=BL3ex3/JxokAmlQhuc54jK+cGjbSfi7WY8Ld5mdSkuedwWTzPONCuGIcleXcHp/uNb
-         EA5sg9uwSMHTqDiGFvzWDuoTjwZFQgFlUpK2b0y+7nWV3qikl18rgKt0cNxYpRi+YBxQ
-         YG+lOf6H3sN/KbwkdNwy15N+9+DZEpPuc5KwRTceEP2/32Swn5iJ2kOCEbpMW9iKWU+h
-         2Rt3hr2Ajul+EmUVFyH6hbzdDBkhzwyTZL2iT0w8xMcTQamGXf4sWkawDMQJoNblve8/
-         KVTSlIUiuZQ/FTHyCa6O8LJJkj7n2CRYySggpxK6voURUnTR4CSTzXgZBNWKiDXNX0HO
-         npuQ==
-X-Gm-Message-State: APjAAAUfdVKAdPnbbSU6NIMG1ZTHBCmvbuuCRCo7UceznAS0IwOe9ZoE
-        Zatw2xx6OQqyK2V7h3fRGZJS6rpmgTE=
-X-Google-Smtp-Source: APXvYqz5v2Jdn3Ndb2Nbt22Q80v9COjXAA/tSPQyHxClx+eTrMGWu7Jg9aRskV+jaiqKpjOeTGFJNQ==
-X-Received: by 2002:a17:90a:af8e:: with SMTP id w14mr11140820pjq.89.1559324816125;
-        Fri, 31 May 2019 10:46:56 -0700 (PDT)
-Received: from adminPC ([49.207.51.185])
-        by smtp.gmail.com with ESMTPSA id g9sm5377363pgs.78.2019.05.31.10.46.54
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OI/XkyWscYGF3A6q2jZ5I5FXRspFschNtLNhVlAhmaA=;
+        b=jkBjqD4SBroZkDQVmZQ8tv9VnDY2Cmta4UekOlv7uZsOvfH33uxYYmU2XJkkAyUhbx
+         tPQbIdT4MmgNz4uTNfqxHAf4FekD+1KPIJUja+iNeL62Y5KG3FMd7Mv1orE24Wk01NYq
+         hJj5wOyEvdeDEVSGKJPxHJwf0mmlghPJQY34chYoEi/+hPCKVFKERBjDmKW5YnJ9ZAER
+         UPG8tRAx5ui6ePS3NOqOH704siUrrMKErNfc0xxCgG+bzQViNeqiF/0cTmWzWH9hlXfx
+         tiprd+4JBlNtxZ7iK8sMcQCkxBVP5eu6xDMI6l5EgCnXcUW9InDop81ieQ40XFqCwcmy
+         qYzA==
+X-Gm-Message-State: APjAAAU8giPR1ro2/fNeU0IwP4aBYdrGzkhUf5xX2V41+TC7TqWBPKdk
+        Y4O+GJNI5fiAuabogADf+OGFAynZyhM=
+X-Google-Smtp-Source: APXvYqyt/DnRcbhOfSdguxt/yjFtUPO05+ZzPJ5FK0z+ewR0pX9H/nj7eE3Pi7X6mIdMj+nFHSeWZw==
+X-Received: by 2002:a2e:864e:: with SMTP id i14mr6742542ljj.141.1559327472963;
+        Fri, 31 May 2019 11:31:12 -0700 (PDT)
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
+        by smtp.gmail.com with ESMTPSA id y2sm1315542lfc.35.2019.05.31.11.31.11
         for <linux-arch@vger.kernel.org>
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 31 May 2019 10:46:55 -0700 (PDT)
-From:   jannet.rodriguez@eventslistsusa.com
-X-Google-Original-From: <Jannet.Rodriguez@eventslistsusa.com>
-To:     <linux-arch@vger.kernel.org>
-References: 
-In-Reply-To: 
-Subject: RE: Attendees Data Base of DAC 2019
-Date:   Fri, 31 May 2019 12:46:24 -0500
-Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAACrx6WBC74lMogpmQeYxQsbCgAAAEAAAADAYfYsJmctFlNmtLQB2SlUBAAAAAA==@eventslistsusa.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 31 May 2019 11:31:12 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id h19so10534271ljj.4
+        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 11:31:11 -0700 (PDT)
+X-Received: by 2002:a2e:914d:: with SMTP id q13mr6747997ljg.140.1559327471592;
+ Fri, 31 May 2019 11:31:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 14.0
-Thread-Index: AdUXCM8Zq6op6MI2TiShA8bnR+mBZAAAO/MgAAAAFKAAAAAEQAAAAASgAAAABAAAAAAEQAAAAASgAAAABAAAAAAEYAAAAATQAAAABTAAAAAEkAAAAATwAAAABGAAAAAEwAAAAAUgAAAABJAAAAAEIAAAAASAAAAABfAAM6DJAA==
-Content-Language: en-us
+References: <20190528120453.27374-1-npiggin@gmail.com>
+In-Reply-To: <20190528120453.27374-1-npiggin@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 31 May 2019 11:30:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whHWqVPWMeNRYuxAd8xnZscshoXUP8SFPmJivJfds5-HQ@mail.gmail.com>
+Message-ID: <CAHk-=whHWqVPWMeNRYuxAd8xnZscshoXUP8SFPmJivJfds5-HQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] mm/large system hash: use vmalloc for size >
+ MAX_ORDER when !hashdist
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Toshi Kani <toshi.kani@hp.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, May 28, 2019 at 5:08 AM Nicholas Piggin <npiggin@gmail.com> wrote:
+>
+> The kernel currently clamps large system hashes to MAX_ORDER when
+> hashdist is not set, which is rather arbitrary.
 
+I think the *really* arbitrary part here is "hashdist".
 
-Hello,
+If you enable NUMA support, hashdist is just set to 1 by default on
+64-bit, whether the machine actually has any numa characteristics or
+not. So you take that vmalloc() TLB overhead whether you need it or
+not.
 
-I'm writing to follow up on my email. I didn't hear back from you for my
-previous email.
+So I think your series looks sane, and should help the vmalloc case
+for big hash allocations, but I also think that this whole
+alloc_large_system_hash() function should be smarter in general.
 
-If you're still interested, I would highly appreciate if you would share
-your thoughts, so that we can assist you best solution along with affordable
-cost.
+Yes, it's called "alloc_large_system_hash()", but it's used on small
+and perfectly normal-sized systems too, and often for not all that big
+hashes.
 
-Awaiting Response,
-Jannet
+Yes, we tend to try to make some of those hashes large (dentry one in
+particular), but we also use this for small stuff.
 
+For example, on my machine I have several network hashes that have
+order 6-8 sizes, none of which really make any sense to use vmalloc
+space for (and which are smaller than a large page, so your patch
+series wouldn't help).
 
-_____________________________________________
-From: Jannet.Rodriguez@eventslistsusa.com
-[mailto:Jannet.Rodriguez@eventslistsusa.com] 
-Sent: Thursday, May 30, 2019 1:08 PM
-To: 'linux-arch@vger.kernel.org'
-Subject: Attendees Data Base of DAC 2019
+So on the whole I have no issues with this series, but I do think we
+should maybe fix that crazy "if (hashdist)" case. Hmm?
 
-
-Hi,
-I am following up to check if you are interested in acquiring Design
-Automation Conference & Exhibition 2019
-Let me know if you would like to acquire Attendees Data Base?
-
-Attendees List:  Designers, Researchers, Tool developers, Vendors And Many
-More...
-Each record in the data base contains: - Contact Name, Job Title,
-Company/Business Name, Email, Tel Number, Website/URL etc.	
-If you are interested, please let me know your thoughts, so that I can send
-you the no of contacts available and the pricing for it.
-Awaiting Your Reply
-Thanks & Regards,
-Jannet Rodriguez
-Marketing Executive
-
-
+                   Linus
