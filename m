@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C83A310F7
-	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 17:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F346310F9
+	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 17:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbfEaPLk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 May 2019 11:11:40 -0400
-Received: from mail-yb1-f201.google.com ([209.85.219.201]:46453 "EHLO
-        mail-yb1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726817AbfEaPLj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 11:11:39 -0400
-Received: by mail-yb1-f201.google.com with SMTP id v15so7678397ybe.13
-        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 08:11:39 -0700 (PDT)
+        id S1726909AbfEaPLn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 May 2019 11:11:43 -0400
+Received: from mail-vs1-f74.google.com ([209.85.217.74]:55266 "EHLO
+        mail-vs1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726897AbfEaPLm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 11:11:42 -0400
+Received: by mail-vs1-f74.google.com with SMTP id 184so1300780vsm.21
+        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 08:11:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=gLta7Etz+AT0uZJXEtTw/d9Eqbqeoj2w6clUtWu9Mu8=;
-        b=Rjf39fVreMPfvvAWdL8HT5/mVr9xbaBS39GnzTO7+6MCC0JLLliFuf45FzHxsuMf/s
-         L4GVVlmofl8BIzqyEmHmh+i5EKD/M8mhGsWFx1arfIivAjyT2hKxo5ShJzgfiGH//v39
-         WcH19jlZSZ93VxzQdGev9phccKTA8RhPeZW60okoDlAJs2WGZdfXrEgitKIl2e0Rnyua
-         jFEMeBpQI2iXQrNqGmW3m+rHvpmPKJCjR9Za5pHvFm60T3M/pDOV3DMOKv3hfEBchsgH
-         PJxZ7xs49yQsHBMa1Cw7DmgDFuGsAppiL6hkU4pznIdKVCT1z1TsgjSA0EQo93oPO+gj
-         AizA==
+        bh=LNEghw4B+GvmCMDyCJlZQOSF0gWgpI6UWg+d86gG2mc=;
+        b=ozkPZplAJd4r//3+vEEoJahNvXQO1X4ZigVyEubSdIpqctPhuNZLdlWXMYpzn67h0X
+         JreDTRTgDzX6i2a85Ia9Q+9zBKklei2FPPQbxVrT8uDoUQNOpsN/p8+BkJ1SU3yDiMNw
+         1KJBsS9Szx7t+Z3QsoD17P8MBZba3PqICFgjsntr0+BzPLbSbFLUzxrI2rNF4WXbIr6B
+         NjlRCy5ykAL5B1aiDgvaccG0XHNZwMHu3r2aBEaZOLLrreJ9CrY7Ieugpp59+Z5NF2U0
+         xuVrgPGdqr3vuv5BoBXZKO31zh2+kuZ3KqXUUmM1Uym7mHKx3LiZMdKIk+7MQPDnNV1p
+         ikKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=gLta7Etz+AT0uZJXEtTw/d9Eqbqeoj2w6clUtWu9Mu8=;
-        b=Ji+5yrg2OGCVBc2ekkgRPk3npCDJQUsmvvnKO4kQgnbHEqAfXudTM+L6YDmhcesCBj
-         sD7wP6iIaNsnw32RT8djFDa/ThBZ9n/GcIImhcT/Wo4WQNh9Y4Gglb1E9cWZfrQBJ7Q0
-         psmwdJDdtfIlr/+apBNBWwxLuN8WbCgXL/MsWzdyJjckmET8tM3kELKH0s1FJWz63mYl
-         j5omG/OEzsM9B1RQOMug7Zxg4u5onqV7+X9B4A1fBiyBNClDm9+7S90cwiNada3ozb6g
-         vmoBGIDCNG07l3u53FzHTBotJBNrvSkkhHL8kV/XvQZxLSCV9u+fzdCrAGtmRGiZDQYh
-         j8xw==
-X-Gm-Message-State: APjAAAVLhlq2twKQHpJBxgTkrAOiZzteG/YA1DDNcZ0x0Ga8R7oC9Wbs
-        pdmMMGEwNpe6jmqknMwONBo+RnFXlw==
-X-Google-Smtp-Source: APXvYqyD9dFfj0smZxXNxXzPioh7Dykim0ewD5FKJbw91RkUv2vU0UgdGRx1UmdnPlXwFR4hNKFTPT+iTQ==
-X-Received: by 2002:a81:980b:: with SMTP id p11mr5711332ywg.48.1559315498458;
- Fri, 31 May 2019 08:11:38 -0700 (PDT)
-Date:   Fri, 31 May 2019 17:08:29 +0200
+        bh=LNEghw4B+GvmCMDyCJlZQOSF0gWgpI6UWg+d86gG2mc=;
+        b=Xl66BRiNKeG0BrglkuRT1WzCs4T3anLZAMpV1lv23x5WiPnzcUvtTL9hym+ufMwfGA
+         sdzD1cjZclOiQPrCRXXzxjVKOhh/2ANCNnq0eZLna07ug4RnQ0tcrGSFiNUnDIT/dVv0
+         ZNL0DY2NrDzsjtto8R2wl9C4kZb7hhAdWhESLpoTirNI2W18iNg2t2wlNEpal5kULVXC
+         YcGUKmohmhwyiqcuIAGkBOBfydovLv/6RqLOoD9XhcLxKMgCneYhwSQ3vPHQIlUPJYrc
+         C3FYUDUpPGVr/mam4FmOUcq7UhhV/yvkd9lAyeYXb4r9BMHKjzD2DLQwKms05pd48Kt/
+         jMFA==
+X-Gm-Message-State: APjAAAX56mrBeB58ohgIKbLeTvne07MG5T8tJWCSh8VI8UD9mMvmb34A
+        MkwEqGv1nMj3xi4UW9THhQWR56yynA==
+X-Google-Smtp-Source: APXvYqxMRxD/zc6HiE9yfl3teIOaD5ernl+4NfEmJo1Hwn7xZzxHUm1PC8Ix91D9Z/1irN8QwfsHq9covg==
+X-Received: by 2002:ac5:c215:: with SMTP id m21mr4221628vkk.84.1559315501278;
+ Fri, 31 May 2019 08:11:41 -0700 (PDT)
+Date:   Fri, 31 May 2019 17:08:30 +0200
 In-Reply-To: <20190531150828.157832-1-elver@google.com>
-Message-Id: <20190531150828.157832-2-elver@google.com>
+Message-Id: <20190531150828.157832-3-elver@google.com>
 Mime-Version: 1.0
 References: <20190531150828.157832-1-elver@google.com>
 X-Mailer: git-send-email 2.22.0.rc1.257.g3120a18244-goog
-Subject: [PATCH v3 1/3] lib/test_kasan: Add bitops tests
+Subject: [PATCH v3 2/3] x86: Use static_cpu_has in uaccess region to avoid instrumentation
 From:   Marco Elver <elver@google.com>
 To:     peterz@infradead.org, aryabinin@virtuozzo.com, dvyukov@google.com,
         glider@google.com, andreyknvl@google.com, mark.rutland@arm.com,
@@ -62,130 +62,56 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This adds bitops tests to the test_kasan module. In a follow-up patch,
-support for bitops instrumentation will be added.
+This patch is a pre-requisite for enabling KASAN bitops instrumentation;
+using static_cpu_has instead of boot_cpu_has avoids instrumentation of
+test_bit inside the uaccess region. With instrumentation, the KASAN
+check would otherwise be flagged by objtool.
+
+For consistency, kernel/signal.c was changed to mirror this change,
+however, is never instrumented with KASAN (currently unsupported under
+x86 32bit).
 
 Signed-off-by: Marco Elver <elver@google.com>
+Suggested-by: H. Peter Anvin <hpa@zytor.com>
 ---
 Changes in v3:
-* Use kzalloc instead of kmalloc.
-* Use sizeof(*bits).
+* Use static_cpu_has instead of moving boot_cpu_has outside uaccess
+  region.
 
 Changes in v2:
-* Use BITS_PER_LONG.
-* Use heap allocated memory for test, as newer compilers (correctly)
-  warn on OOB stack access.
+* Replaces patch: 'tools/objtool: add kasan_check_* to uaccess
+  whitelist'
 ---
- lib/test_kasan.c | 75 ++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 72 insertions(+), 3 deletions(-)
+ arch/x86/ia32/ia32_signal.c | 2 +-
+ arch/x86/kernel/signal.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-index 7de2702621dc..1ef9702327d2 100644
---- a/lib/test_kasan.c
-+++ b/lib/test_kasan.c
-@@ -11,16 +11,17 @@
+diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
+index 629d1ee05599..1cee10091b9f 100644
+--- a/arch/x86/ia32/ia32_signal.c
++++ b/arch/x86/ia32/ia32_signal.c
+@@ -358,7 +358,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
+ 		put_user_ex(ptr_to_compat(&frame->uc), &frame->puc);
  
- #define pr_fmt(fmt) "kasan test: %s " fmt, __func__
+ 		/* Create the ucontext.  */
+-		if (boot_cpu_has(X86_FEATURE_XSAVE))
++		if (static_cpu_has(X86_FEATURE_XSAVE))
+ 			put_user_ex(UC_FP_XSTATE, &frame->uc.uc_flags);
+ 		else
+ 			put_user_ex(0, &frame->uc.uc_flags);
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index 364813cea647..52eb1d551aed 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -391,7 +391,7 @@ static int __setup_rt_frame(int sig, struct ksignal *ksig,
+ 		put_user_ex(&frame->uc, &frame->puc);
  
-+#include <linux/bitops.h>
- #include <linux/delay.h>
-+#include <linux/kasan.h>
- #include <linux/kernel.h>
--#include <linux/mman.h>
- #include <linux/mm.h>
-+#include <linux/mman.h>
-+#include <linux/module.h>
- #include <linux/printk.h>
- #include <linux/slab.h>
- #include <linux/string.h>
- #include <linux/uaccess.h>
--#include <linux/module.h>
--#include <linux/kasan.h>
- 
- /*
-  * Note: test functions are marked noinline so that their names appear in
-@@ -623,6 +624,73 @@ static noinline void __init kasan_strings(void)
- 	strnlen(ptr, 1);
- }
- 
-+static noinline void __init kasan_bitops(void)
-+{
-+	long *bits = kzalloc(sizeof(*bits), GFP_KERNEL);
-+	if (!bits)
-+		return;
-+
-+	pr_info("within-bounds in set_bit");
-+	set_bit(0, bits);
-+
-+	pr_info("within-bounds in set_bit");
-+	set_bit(BITS_PER_LONG - 1, bits);
-+
-+	pr_info("out-of-bounds in set_bit\n");
-+	set_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __set_bit\n");
-+	__set_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in clear_bit\n");
-+	clear_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __clear_bit\n");
-+	__clear_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in clear_bit_unlock\n");
-+	clear_bit_unlock(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __clear_bit_unlock\n");
-+	__clear_bit_unlock(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in change_bit\n");
-+	change_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __change_bit\n");
-+	__change_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in test_and_set_bit\n");
-+	test_and_set_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __test_and_set_bit\n");
-+	__test_and_set_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in test_and_set_bit_lock\n");
-+	test_and_set_bit_lock(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in test_and_clear_bit\n");
-+	test_and_clear_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __test_and_clear_bit\n");
-+	__test_and_clear_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in test_and_change_bit\n");
-+	test_and_change_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __test_and_change_bit\n");
-+	__test_and_change_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in test_bit\n");
-+	(void)test_bit(BITS_PER_LONG, bits);
-+
-+#if defined(clear_bit_unlock_is_negative_byte)
-+	pr_info("out-of-bounds in clear_bit_unlock_is_negative_byte\n");
-+	clear_bit_unlock_is_negative_byte(BITS_PER_LONG, bits);
-+#endif
-+	kfree(bits);
-+}
-+
- static int __init kmalloc_tests_init(void)
- {
- 	/*
-@@ -664,6 +732,7 @@ static int __init kmalloc_tests_init(void)
- 	kasan_memchr();
- 	kasan_memcmp();
- 	kasan_strings();
-+	kasan_bitops();
- 
- 	kasan_restore_multi_shot(multishot);
- 
+ 		/* Create the ucontext.  */
+-		if (boot_cpu_has(X86_FEATURE_XSAVE))
++		if (static_cpu_has(X86_FEATURE_XSAVE))
+ 			put_user_ex(UC_FP_XSTATE, &frame->uc.uc_flags);
+ 		else
+ 			put_user_ex(0, &frame->uc.uc_flags);
 -- 
 2.22.0.rc1.257.g3120a18244-goog
 
