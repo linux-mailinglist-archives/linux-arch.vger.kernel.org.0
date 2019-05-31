@@ -2,84 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F1530A3C
-	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 10:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C2030A54
+	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 10:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726331AbfEaIZh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 May 2019 04:25:37 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:58522 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726275AbfEaIZh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 04:25:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=LnyF2LiZJO/YFVndv0fY0DHSYQjvYUj7yzeqlwI/hZM=; b=SBouILP5p618snw6vbevL7rJP
-        C0snIepbF1Kj2DLmCjDkr6qZC7kcT34RTDx3ZZth1zEc8Hcf2phdU2qt7TC5qevd0jE7an8ZhiUoC
-        X3DoXlcbf5EDwSrJzgb1DH422y/m7Tv+tPseUPQ2DLHU4UnixqrsiWFEiftZKevWqdOsca6MIamTd
-        4ZHq+feZuztfhqd8ifQC6SjY4N3lDc0KgOWKX0GDcOhKyn7RLoFa31J/Ykgs0WI7i5EB+hWdUXWAu
-        5Pr7r5VrEfP2p2k2e8eO/IEHSIWU0jXfUa1syUqifJrLt34hE8+m/bCnk81VIigz3EVhoTMi/XlT6
-        Iqg7sK63g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hWcqw-0002TO-5U; Fri, 31 May 2019 08:25:30 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A75DD201B8CFE; Fri, 31 May 2019 10:25:28 +0200 (CEST)
-Date:   Fri, 31 May 2019 10:25:28 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@linux.ibm.com>
-Cc:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        Will Deacon <Will.Deacon@arm.com>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: single copy atomicity for double load/stores on 32-bit systems
-Message-ID: <20190531082528.GJ2623@hirez.programming.kicks-ass.net>
-References: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
- <20190530185358.GG28207@linux.ibm.com>
+        id S1726403AbfEaIck (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 May 2019 04:32:40 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:46086 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725963AbfEaIcj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 04:32:39 -0400
+Received: by mail-qt1-f195.google.com with SMTP id z19so10334793qtz.13;
+        Fri, 31 May 2019 01:32:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=igjuJGXMsnGZDhorJwfUv0+nOH3lmOMpPh5Fkg034nY=;
+        b=uQzHWqI/4n7WQG8Knyd+6VFA9p/5C2AoVmmzMD3u/8Bsbt1DRPul91CW4nlDvBUOOJ
+         D9NoAfnBj9XykWe7CYVyo/eyaqWW6tyKl9hYNKXSIiAS3KS1gSnW4+AnEuJ5RIA0ED1I
+         /Zu8YLd457x8YKugDUghld9yALZW3fZ9e6ygQBsU6wLuj76tqZCyldWIBIcR3zxVRo/r
+         j75DKKmtuQcHC9huDYCxJDaT4xC3zUvN9mFOOobFuFZ7ykz3OPJ7sECgZgEr2NV5GG/n
+         lYX6WAcJhzmnwYlBG/yFhIBXeui3m78mpObwmGqftm3a0bpI93787Fd0o6RlF2hy3xR6
+         8r5A==
+X-Gm-Message-State: APjAAAWHbibYO0xBA6Y8g2dRbg4BM0anSwitaigTcRspFY+MepoIRyKe
+        YmGeOpdh2IIS/kP0VbnjY3aLf00WyhoQmGr23rs=
+X-Google-Smtp-Source: APXvYqz9UY+8/pkIhfjqDnPdgHg65ZqG2L3gJyCnwOw2GV9Dc8VpZX9nAZNc7+rmbc0MPEHfPZRNJe3CE7OZS8hHUVo=
+X-Received: by 2002:a0c:9e0f:: with SMTP id p15mr7572827qve.176.1559291558659;
+ Fri, 31 May 2019 01:32:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190530185358.GG28207@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com> <20190530141531.43462-17-vincenzo.frascino@arm.com>
+In-Reply-To: <20190530141531.43462-17-vincenzo.frascino@arm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 31 May 2019 10:32:22 +0200
+Message-ID: <CAK8P3a0gKJX0fAdizNoO3r-UzAoN0Nf=gkMmw++wuryjHy3-8w@mail.gmail.com>
+Subject: Re: [PATCH v6 16/19] arm: Add support for generic vDSO
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 30, 2019 at 11:53:58AM -0700, Paul E. McKenney wrote:
-> On Thu, May 30, 2019 at 11:22:42AM -0700, Vineet Gupta wrote:
-> > Hi Peter,
-> > 
-> > Had an interesting lunch time discussion with our hardware architects pertinent to
-> > "minimal guarantees expected of a CPU" section of memory-barriers.txt
-> > 
-> > 
-> > |  (*) These guarantees apply only to properly aligned and sized scalar
-> > |     variables.  "Properly sized" currently means variables that are
-> > |     the same size as "char", "short", "int" and "long".  "Properly
-> > |     aligned" means the natural alignment, thus no constraints for
-> > |     "char", two-byte alignment for "short", four-byte alignment for
-> > |     "int", and either four-byte or eight-byte alignment for "long",
-> > |     on 32-bit and 64-bit systems, respectively.
-> > 
-> > 
-> > I'm not sure how to interpret "natural alignment" for the case of double
-> > load/stores on 32-bit systems where the hardware and ABI allow for 4 byte
-> > alignment (ARCv2 LDD/STD, ARM LDRD/STRD ....)
-> > 
-> > I presume (and the question) that lkmm doesn't expect such 8 byte load/stores to
-> > be atomic unless 8-byte aligned
-> 
-> I would not expect 8-byte accesses to be atomic on 32-bit systems unless
-> some special instruction was in use.  But that usually means special
-> intrinsics or assembly code.
+On Thu, May 30, 2019 at 4:16 PM Vincenzo Frascino
+<vincenzo.frascino@arm.com> wrote:
+> diff --git a/arch/arm/include/asm/vdso/gettimeofday.h b/arch/arm/include/asm/vdso/gettimeofday.h
+> new file mode 100644
+> index 000000000000..eeeb319840ba
+> --- /dev/null
+> +++ b/arch/arm/include/asm/vdso/gettimeofday.h
+> @@ -0,0 +1,96 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2018 ARM Limited
+> + */
+> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
+> +#define __ASM_VDSO_GETTIMEOFDAY_H
+> +
+> +#ifndef __ASSEMBLY__
+> +
+> +#include <asm/barrier.h>
+> +#include <asm/cp15.h>
+> +#include <asm/unistd.h>
+> +#include <uapi/linux/time.h>
+> +
+> +#ifndef CONFIG_AEABI
+> +#error This code depends on AEABI system call conventions
+> +#endif
 
-If the GCC of said platform defaults to the double-word instructions for
-long long, then I would very much expect natural alignment on it too.
+Instead of an #error here, I would use a Kconfig conditional and make it
 
-If the feature is only available through inline asm or intrinsics, then
-we can be a little more lenient perhaps.
+'select HAVE_GENERIC_VDSO if AEABI'
+
+> diff --git a/arch/arm/vdso/vdso.lds.S b/arch/arm/vdso/vdso.lds.S
+> index 89ca89f12d23..05581140fd12 100644
+> --- a/arch/arm/vdso/vdso.lds.S
+> +++ b/arch/arm/vdso/vdso.lds.S
+> @@ -82,6 +82,8 @@ VERSION
+>         global:
+>                 __vdso_clock_gettime;
+>                 __vdso_gettimeofday;
+> +               __vdso_clock_getres;
+> +               __vdso_clock_gettime64;
+>         local: *;
+>         };
+
+Why are you adding __vdso_clock_getres here? I would probably
+leave the addition of the new entry point(s) for a separate patch
+at the end, adding __vdso_clock_gettime64 to all 32-bit ABIs
+at once, since while that part is a trivial change, it's also user
+visible and deserves its own changelog text.
+
+     Arnd
