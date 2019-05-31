@@ -2,109 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48205302AA
-	for <lists+linux-arch@lfdr.de>; Thu, 30 May 2019 21:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AECFB30696
+	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 04:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726225AbfE3TQj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 May 2019 15:16:39 -0400
-Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:52112 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726031AbfE3TQj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 May 2019 15:16:39 -0400
-Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B83A3C00FC;
-        Thu, 30 May 2019 19:16:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1559243808; bh=1mbzGKOk5d05XHjdieSHAEOEoFv4IjB5bTqeWALND5c=;
-        h=From:To:CC:Subject:Date:References:From;
-        b=Aq/P2ZcLteluaESiZPUrLU6HEcuQoTe3TmnI3PjpngMso5jrE1NZDn6CU8ktbgzOX
-         3iGz3Xc9E3Vbv1D6WKYakpP9CO98vMiY6YtluE7zcgi6Iqfn7cwe0sv9XzIJ5ob6el
-         BWTGnsmxCXlck2RlIo8BpW59MLFKS/s6j3LvYeFjJ3zV9zD5OMFomRMZ82jJpnLFy4
-         qL14ud7ieu0PWUu8XvML45AH1wgjP0oOr0ks1Z8Yf+2YrUTj3GeiaCVLPyrxZwBIQL
-         Gw09T5AkfqWX/5jsBg2Mmn/DVUM9RRrV40XgbyCGv5CUZNDnr1WHEIO/29yqHUSJNW
-         hUo01xTgYflPg==
-Received: from US01WEHTC2.internal.synopsys.com (us01wehtc2.internal.synopsys.com [10.12.239.237])
-        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id EAB1AA005D;
-        Thu, 30 May 2019 19:16:37 +0000 (UTC)
-Received: from us01wembx1.internal.synopsys.com ([169.254.1.22]) by
- US01WEHTC2.internal.synopsys.com ([10.12.239.237]) with mapi id
- 14.03.0415.000; Thu, 30 May 2019 12:16:37 -0700
-From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
-To:     "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <Will.Deacon@arm.com>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: single copy atomicity for double load/stores on 32-bit systems
-Thread-Topic: single copy atomicity for double load/stores on 32-bit systems
-Thread-Index: AQHVFxS3L0CUD1w2LkO7mj7CwLHhlw==
-Date:   Thu, 30 May 2019 19:16:36 +0000
-Message-ID: <C2D7FE5348E1B147BCA15975FBA2307501A2520D9C@us01wembx1.internal.synopsys.com>
-References: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
- <20190530185358.GG28207@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.13.184.19]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726509AbfEaCYs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 May 2019 22:24:48 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38750 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726418AbfEaCYs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 May 2019 22:24:48 -0400
+Received: by mail-pf1-f194.google.com with SMTP id a186so4468317pfa.5
+        for <linux-arch@vger.kernel.org>; Thu, 30 May 2019 19:24:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:references:in-reply-to:mime-version:user-agent
+         :message-id:content-transfer-encoding;
+        bh=IT7tL4ec+mYJULv7CprD8eq307BhvxplP1hxReJnmGY=;
+        b=JXxqi0AwqnyanwvX2sm45PLy+OW7/6yCN9kfD6O/qyWOHVeSGoIKgnnRgjTApwQ78+
+         K6tw4gsGLKKKSCypzthPDlb9EtnFIGoGG35lMfef+u+kVV/qc0aVieqT6MBOJT7ghvir
+         Xyxmvmelc5hmV7p1+WCp4Ioln7MpeLiqber3GyIarsifm4RJ9e0S5TAtopaiIPNWn5zG
+         z1dbP2lQWii6QGP5b3nSkT/KyO0PiBACANBZkrBuRllSMAutzG+JdlYE8dbCCDNIUR9R
+         7NGRlkgl7y64bb3kKKGH0Jd1yIILdvJsN2U4Ul/D9ywtf3BH7YulxXPMaMs/5yfk5uO9
+         +q0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:references:in-reply-to
+         :mime-version:user-agent:message-id:content-transfer-encoding;
+        bh=IT7tL4ec+mYJULv7CprD8eq307BhvxplP1hxReJnmGY=;
+        b=SfzgE6v6rJZYL1dwRmAOASjKSCbfcMZzd3jf6XrzFgx+KTsYBlZ6XoQ22cnEJ8Zc/k
+         ejcKb5x06q1hzmX3BL9BQDH4ow9R2zgZEv1G1WXGJ9p0OZ8miyczyAxxBXxr4FH7J9UP
+         Gh8zwN0UOhN2A9v2qGee2Qo4mpZw6+Q4Wg9KK423EUfLgImByw68zsZrCnpi6ECELxn8
+         5Cg6iW8mUDn2sD6C78/kBxVD6+wqS4yGvep7xG80jcE+kHaDHKOC+Drga5fkityHmhSZ
+         YzgD5PdsCj/Dhtlw9drGiXPXeNAldt7OUjZHuIugbL+iw9kBhYTlwkN6u8b1vp4mna2K
+         wc7w==
+X-Gm-Message-State: APjAAAW5ksjgnJTiw/dQXxmv9utNnmokMLfS//mc3eDTn9rZio5a5m2l
+        /WYglIpTQk05yuFMXrtvmPJKyMlQrkg=
+X-Google-Smtp-Source: APXvYqylwF2vBW4G23aaB7l8Kfyn367nP02thZAoCMuzMFg+RuqO583xQ2eA6Z9hVgwEqmWGvf5aLw==
+X-Received: by 2002:a63:480f:: with SMTP id v15mr6452422pga.373.1559269488063;
+        Thu, 30 May 2019 19:24:48 -0700 (PDT)
+Received: from localhost (193-116-81-133.tpgi.com.au. [193.116.81.133])
+        by smtp.gmail.com with ESMTPSA id b35sm3723852pjc.15.2019.05.30.19.24.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 30 May 2019 19:24:45 -0700 (PDT)
+Date:   Fri, 31 May 2019 12:24:27 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [mmotm:master 124/234] mm/vmalloc.c:520:6: error: implicit
+ declaration of function 'p4d_large'; did you mean 'p4d_page'?
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, kbuild-all@01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-arch@vger.kernel.org
+References: <201905310708.EAdSCJKR%lkp@intel.com>
+In-Reply-To: <201905310708.EAdSCJKR%lkp@intel.com>
 MIME-Version: 1.0
+User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
+Message-Id: <1559269231.3e5ttes2dd.astroid@bobo.none>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/30/19 11:55 AM, Paul E. McKenney wrote:=0A=
->=0A=
->> I'm not sure how to interpret "natural alignment" for the case of double=
-=0A=
->> load/stores on 32-bit systems where the hardware and ABI allow for 4 byt=
-e=0A=
->> alignment (ARCv2 LDD/STD, ARM LDRD/STRD ....)=0A=
->>=0A=
->> I presume (and the question) that lkmm doesn't expect such 8 byte load/s=
-tores to=0A=
->> be atomic unless 8-byte aligned=0A=
-> I would not expect 8-byte accesses to be atomic on 32-bit systems unless=
-=0A=
-> some special instruction was in use.  But that usually means special=0A=
-> intrinsics or assembly code.=0A=
-=0A=
-Thx for confirming.=0A=
-=0A=
-In cases where we *do* expect the atomicity, it seems there's some existing=
- type=0A=
-checking but isn't water tight.=0A=
-e.g.=0A=
-=0A=
-#define __smp_load_acquire(p)                        \=0A=
-({                                    \=0A=
-    typeof(*p) ___p1 =3D READ_ONCE(*p);                \=0A=
-    compiletime_assert_atomic_type(*p);                \=0A=
-    __smp_mb();                            \=0A=
-    ___p1;                                \=0A=
-})=0A=
-=0A=
-#define compiletime_assert_atomic_type(t)                \=0A=
-    compiletime_assert(__native_word(t),                \=0A=
-        "Need native word sized stores/loads for atomicity.")=0A=
-=0A=
-#define __native_word(t) \=0A=
-    (sizeof(t) =3D=3D sizeof(char) || sizeof(t) =3D=3D sizeof(short) || \=
-=0A=
-     sizeof(t) =3D=3D sizeof(int) || sizeof(t) =3D=3D sizeof(long))=0A=
-=0A=
-=0A=
-So it won't catch the usage of 4 byte aligned long long which gcc targets t=
-o=0A=
-single double load instruction.=0A=
-=0A=
-Thx,=0A=
--Vineet=0A=
+kbuild test robot's on May 31, 2019 9:42 am:
+> tree:   git://git.cmpxchg.org/linux-mmotm.git master
+> head:   6f11685c34f638e200dd9e821491584ef5717d57
+> commit: 91c106f5d623b94305af3fd91113de1cba768d73 [124/234] mm/vmalloc: hu=
+gepage vmalloc mappings
+> config: arm64-allyesconfig (attached as .config)
+> compiler: aarch64-linux-gcc (GCC) 7.4.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git checkout 91c106f5d623b94305af3fd91113de1cba768d73
+>         # save the attached .config to linux build tree
+>         GCC_VERSION=3D7.4.0 make.cross ARCH=3Darm64=20
+>=20
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+>    mm/vmalloc.c: In function 'vmap_range':
+>    mm/vmalloc.c:325:19: error: 'start' undeclared (first use in this func=
+tion); did you mean 'stat'?
+>      flush_cache_vmap(start, end);
+>                       ^~~~~
+>                       stat
+>    mm/vmalloc.c:325:19: note: each undeclared identifier is reported only=
+ once for each function it appears in
+>    mm/vmalloc.c: In function 'vmalloc_to_page':
+>>> mm/vmalloc.c:520:6: error: implicit declaration of function 'p4d_large'=
+; did you mean 'p4d_page'? [-Werror=3Dimplicit-function-declaration]
+>      if (p4d_large(*p4d))
+>          ^~~~~~~~~
+>          p4d_page
+
+Hmm, okay p?d_large I guess is not quite the right thing to use here. It
+almost is, but it's tied to userspace/thp options.
+
+What would people prefer to do here? We could have architectures that
+define HAVE_ARCH_HUGE_VMAP to also provide p?d_huge_kernel() tests for
+their kernel page tables?
+
+Thanks,
+Nick
+
+=
