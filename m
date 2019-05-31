@@ -2,121 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BC130AAD
-	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 10:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2598030BD2
+	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 11:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726240AbfEaIx5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 May 2019 04:53:57 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:37964 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbfEaIx4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 04:53:56 -0400
-Received: by mail-qt1-f195.google.com with SMTP id l3so10448081qtj.5;
-        Fri, 31 May 2019 01:53:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PLETH2OB3IxfKN1eggOuRioC9EOnLLXN9MFUnFFew5s=;
-        b=sUN03/0C+hMfoQOP6ZAjoEeEQifClVYy2S6TWneDAJ5QdQyBkIgzcSZWQR0WSR8Iki
-         pp2QmTbaCo70vduP2EVL51XRLgZYCsZ+PoRC74vNatvcPLRw4D+i+5NDMLEZInyIi0kz
-         zkZXlATQiq5h0fd6GneSufHqHYEIAiTTDxhGHpir+y0iK2qnvvG42qRLwJjb2P4zqRbY
-         h1i6AxXl4nzwW9fuUBLLXLWYDYpS4CoX+4nZVHvlI/YoSVqpWsvFondqvpK9gJY64JQy
-         iPwnR+6BbrDjUbL4jLgzJ81sqCxf4M1fBq7XlQ707HY+9+58m0OyrEOGa6/yYbJ9l6vz
-         larw==
-X-Gm-Message-State: APjAAAV35WBhXvJTPyULaJb7pxdJkd5WKb/32zeL3Jfdss7hk2gZIrm6
-        5KE6cfLOZjpQX8b9hH5JkxKclT+ebRNtS7g7K/Y=
-X-Google-Smtp-Source: APXvYqzU7iWArqELb2azzCaYfon35mBi7acUgoO6bIp937zY6y9ykUj3bD/yvsjRGY3UDM715ORpT4Efor58s/vfKbs=
-X-Received: by 2002:a0c:9e0f:: with SMTP id p15mr7638581qve.176.1559292835687;
- Fri, 31 May 2019 01:53:55 -0700 (PDT)
+        id S1727016AbfEaJlV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 May 2019 05:41:21 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:35486 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726998AbfEaJlV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 31 May 2019 05:41:21 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-124-usbqQbBcPxeULja3PdvRQw-1; Fri, 31 May 2019 10:41:18 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
+ (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri,
+ 31 May 2019 10:41:17 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 31 May 2019 10:41:17 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Vineet Gupta' <Vineet.Gupta1@synopsys.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <Will.Deacon@arm.com>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+CC:     arcml <linux-snps-arc@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: single copy atomicity for double load/stores on 32-bit systems
+Thread-Topic: single copy atomicity for double load/stores on 32-bit systems
+Thread-Index: AQHVFxS3Hu02PtbnOkCuZb4nroftBaaE+VYw
+Date:   Fri, 31 May 2019 09:41:17 +0000
+Message-ID: <895ec12746c246579aed5dd98ace6e38@AcuMS.aculab.com>
+References: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
+In-Reply-To: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20190530141531.43462-1-vincenzo.frascino@arm.com> <20190530141531.43462-20-vincenzo.frascino@arm.com>
-In-Reply-To: <20190530141531.43462-20-vincenzo.frascino@arm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 31 May 2019 10:53:39 +0200
-Message-ID: <CAK8P3a3Z=wWQDu4aqV73J5PR2jNb3GzyWzYGT3dUp-F81H8mzQ@mail.gmail.com>
-Subject: Re: [PATCH v6 19/19] kselftest: Extend vDSO selftest
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MC-Unique: usbqQbBcPxeULja3PdvRQw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 30, 2019 at 4:16 PM Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
+RnJvbTogVmluZWV0IEd1cHRhDQo+IFNlbnQ6IDMwIE1heSAyMDE5IDE5OjIzDQouLi4NCj4gV2hp
+bGUgaXQgc2VlbXMgcmVhc29uYWJsZSBmb3JtIGhhcmR3YXJlIHBvdiB0byBub3QgaW1wbGVtZW50
+IHN1Y2ggYXRvbWljaXR5IGJ5DQo+IGRlZmF1bHQgaXQgc2VlbXMgdGhlcmUncyBhbiBhZGRpdGlv
+bmFsIGJ1cmRlbiBvbiBhcHBsaWNhdGlvbiB3cml0ZXJzLiBUaGV5IGNvdWxkDQo+IGJlIGhhcHBp
+bHkgdXNpbmcgYSBsb2NrbGVzcyBhbGdvcml0aG0gd2l0aCBqdXN0IGEgc2hhcmVkIGZsYWcgYmV0
+d2VlbiAyIHRocmVhZHMNCj4gdy9vIG5lZWQgZm9yIGFueSBleHBsaWNpdCBzeW5jaHJvbml6YXRp
+b24uIEJ1dCB1cGdyYWRlIHRvIGEgbmV3IGNvbXBpbGVyIHdoaWNoDQo+IGFnZ3Jlc3NpdmVseSAi
+cGFja3MiIHN0cnVjdCByZW5kZXJpbmcgbG9uZyBsb25nIDMyLWJpdCBhbGlnbmVkICh2cy4gNjQt
+Yml0IGJlZm9yZSkNCj4gY2F1c2luZyB0aGUgY29kZSB0byBzdWRkZW5seSBzdG9wIHdvcmtpbmcu
+IElzIHRoZSBvbnVzIG9uIHRoZW0gdG8gZGVjbGFyZSBzdWNoDQo+IG1lbW9yeSBhcyBjMTEgYXRv
+bWljIG9yIHNvbWUgc3VjaC4NCg0KQSAnbmV3JyBjb21waWxlciBjYW4ndCBzdWRkZW5seSBjaGFu
+Z2UgdGhlIGFsaWdubWVudCBydWxlcyBmb3Igc3RydWN0dXJlIGVsZW1lbnRzLg0KVGhlIGFsaWdu
+bWVudCBydWxlcyB3aWxsIGJlIHBhcnQgb2YgdGhlIEFCSS4NCg0KTW9yZSBsaWtlbHkgaXMgdGhh
+dCB0aGUgc3RydWN0dXJlIGl0c2VsZiBpcyB1bmV4cGVjdGVkbHkgYWxsb2NhdGVkIG9uDQphbiA4
+bis0IGJvdW5kYXJ5IGR1ZSB0byBjb2RlIGNoYW5nZXMgZWxzZXdoZXJlLg0KDQpJdCBpcyBhbHNv
+IHdvcnRoIG5vdGluZyB0aGF0IGZvciBjb21wbGV0ZSBwb3J0YWJpbGl0eSBvbmx5IHdyaXRlcyB0
+bw0KJ2Z1bGwgd29yZHMnIGNhbiBiZSBhc3N1bWVkIGF0b21pYy4NClNvbWUgb2xkIEFscGhhJ3Mg
+ZGlkIFJNVyBjeWNsZXMgZm9yIGJ5dGUgd3JpdGVzLg0KKEFsdGhvdWdoIEkgc3VzcGVjdCBMaW51
+eCBkb2Vzbid0IHN1cHBvcnQgdGhvc2UgYW55IG1vcmUuKQ0KDQpFdmVuIHg4NiBjYW4gY2F0Y2gg
+eW91IG91dC4NClRoZSBiaXQgb3BlcmF0aW9ucyB3aWxsIGRvIHdpZGVyIFJNVyBjeWNsZXMgdGhh
+biB5b3UgZXhwZWN0Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRl
+LCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpS
+ZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-> +/*
-> + * ARM64's vDSO exports its vDSO implementation with different names and
-> + * a different version from other architectures, so we need to handle it
-> + * as a special case.
-> + */
-> +#if defined(__aarch64__)
-> +const char *version = "LINUX_2.6.39";
-> +const char *name[4] = {
-> +       "__kernel_gettimeofday",
-> +       "__kernel_clock_gettime",
-> +       "__kernel_time",
-> +       "__kernel_clock_getres",
-> +};
-> +#else
-> +/* Tested on x86, arm, mips */
-> +const char *version = "LINUX_2.6";
-> +const char *name[4] = {
-> +       "__vdso_gettimeofday",
-> +       "__vdso_clock_gettime",
-> +       "__vdso_time",
-> +       "__vdso_clock_getres",
-> +};
-> +#endif
-
-I see the __kernel_* name used on arm64, powerpc and s390, whiel the __vdso_*
-name is used on arm, mips, nds32, riscv, sparc, and x86.
-
-Also the versions have more variants:
-
-$ git ls-files arch | grep vdso | xargs grep
-'\(LINUX_[2345]\|VDSO_VERSION_STRING\)'
-arch/arm/vdso/vdso.lds.S:    LINUX_2.6 {
-arch/arm64/kernel/vdso/vdso.lds.S:    LINUX_2.6.39 {
-arch/mips/vdso/vdso.lds.S:    LINUX_2.6 {
-arch/nds32/kernel/vdso/vdso.lds.S:    LINUX_4 {
-arch/powerpc/include/asm/vdso.h:#define VDSO_VERSION_STRING    LINUX_2.6.15
-arch/powerpc/kernel/vdso32/vdso32.lds.S:    VDSO_VERSION_STRING {
-arch/powerpc/kernel/vdso64/vdso64.lds.S:    VDSO_VERSION_STRING {
-arch/riscv/kernel/vdso/vdso.lds.S:    LINUX_4.15 {
-arch/s390/include/asm/vdso.h:#define VDSO_VERSION_STRING    LINUX_2.6.29
-arch/s390/kernel/vdso32/vdso32.lds.S:    VDSO_VERSION_STRING {
-arch/s390/kernel/vdso64/vdso64.lds.S:    VDSO_VERSION_STRING {
-arch/sparc/vdso/vdso.lds.S:    LINUX_2.6 {
-arch/sparc/vdso/vdso32/vdso32.lds.S:    LINUX_2.6 {
-arch/x86/entry/vdso/vdso.lds.S:    LINUX_2.6 {
-arch/x86/entry/vdso/vdso32/vdso32.lds.S:    LINUX_2.6 {
-arch/x86/entry/vdso/vdso32/vdso32.lds.S:    LINUX_2.5 {
-arch/x86/entry/vdso/vdsox32.lds.S:    LINUX_2.6 {
-arch/x86/um/vdso/vdso.lds.S:    LINUX_2.6 {
-
-Maybe change the test case to just try all combinations of the
-above (and __vdso_clock_gettime64 as well) and stop checking
-the architecture?
-
-       Arnd
