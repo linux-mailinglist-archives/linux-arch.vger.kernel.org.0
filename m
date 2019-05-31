@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB9131541
-	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 21:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FF931542
+	for <lists+linux-arch@lfdr.de>; Fri, 31 May 2019 21:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727334AbfEaTX4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 May 2019 15:23:56 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45947 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727321AbfEaTXz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 15:23:55 -0400
-Received: by mail-pf1-f194.google.com with SMTP id s11so6753474pfm.12
-        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 12:23:54 -0700 (PDT)
+        id S1727317AbfEaTYA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 May 2019 15:24:00 -0400
+Received: from mail-pf1-f169.google.com ([209.85.210.169]:43013 "EHLO
+        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727329AbfEaTX4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 May 2019 15:23:56 -0400
+Received: by mail-pf1-f169.google.com with SMTP id c6so6766478pfa.10
+        for <linux-arch@vger.kernel.org>; Fri, 31 May 2019 12:23:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=aiQIM6f9frALGlBHOVEXZviohTaEbE7nb+FTGwUVD4A=;
-        b=ZmEJxrvkGvzeb5KReftdgPQyDOakSpgU8Q8NYlUo9WoHh3SaUNFHtqotjcKmlyqVAy
-         zABI/ZEGiIgfg3sfp1Xkn78FsD3lZivqeD4G2Bg5Y+bWNuPq8Q2U9Z1dTL8rwaAzOFsU
-         IVAZWeHdZKA7nqEHxiBMiYPmO1f28VSBSF1g8jXr+n/axNsYRxOUzOWgtegwrWZOxE2M
-         e2C2qBvw4m8eGXfdZUDeJeB+r1wl+MQE7dWGiBJHnccrFPtTtLj0Tytjenr0yrQDLQ4N
-         IpBqqRxuQxoZWd5ODnPX3R9hAo7nD6zBfHtHA9cgsWqNNDC024P+5UyocKYE33dkY9F0
-         jAkA==
-X-Gm-Message-State: APjAAAUwA5Hq9Q3ZBBSYyItLNtz56BxV/K9s5CtnhSEbwF2fZQ00xsvU
-        0TkeGmh2wMdnYUYikXzD8zAQYfGtWfM=
-X-Google-Smtp-Source: APXvYqxnHH048gsRvFfx6yXHqqmSGXwu8SiZWTfESkHE4QP5Ki/bYzl/4Onunf3wDQIsChfj3cuqqg==
-X-Received: by 2002:a62:a511:: with SMTP id v17mr11832352pfm.129.1559330634068;
-        Fri, 31 May 2019 12:23:54 -0700 (PDT)
+        bh=iIsIHJ/E9sb9iivYOWYTrHBdX9wvV0BVSK9WYc+2hhY=;
+        b=fYVuIIpak3hgBI0otvRy9tf7pslmvsVpCQDhOPo5EIbSSZQfzJrY4Y0gty17Hkkhzu
+         Phr9t2EFHz/8V/ddzivDuoddDN/wd+A6yBLd0ezIsRggrW9L7nqpW/mcaYB0RcgDzDI/
+         L79qmTqd63/OgypmLX6jPPGaF79xZSmXfwkvr9qHK3kBKj9YvIeNqpeLjWuByiuRhup/
+         VSUGHXuLkTxp7yNO0I+ara9UFXj7jWnB+AC/n5Plp+QfTy60X632QIOG6YjrhVvR7QXI
+         nWgo614vEwrDJaE1lh8nsoJDs5lNgPDSj5ccdCgIXkWmZ2/b5uzbVLBS6eZoKmbAjQ3z
+         VrOQ==
+X-Gm-Message-State: APjAAAWVqz3+c9r1x0sRICYkwDqQXOQ29hsLQ7ZjXDcOS7AeXAa4L38p
+        5TNMn2Q5j4Bg4w7ymcPugLvXM0kxRV4=
+X-Google-Smtp-Source: APXvYqwqjBeSRHkNhprVnlAw/2N8AmL71UGiONuyr+S2FzywQVEi5ye6pcOigbDzCrp3j+bmycDwJw==
+X-Received: by 2002:a62:d410:: with SMTP id a16mr4454667pfh.167.1559330635344;
+        Fri, 31 May 2019 12:23:55 -0700 (PDT)
 Received: from localhost ([12.206.222.5])
-        by smtp.gmail.com with ESMTPSA id x16sm6569182pff.30.2019.05.31.12.23.53
+        by smtp.gmail.com with ESMTPSA id m1sm6059048pjv.22.2019.05.31.12.23.54
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 31 May 2019 12:23:53 -0700 (PDT)
-Subject: [PATCH 4/5] x86: Add fchmodat4 to syscall_64.tbl
-Date:   Fri, 31 May 2019 12:12:03 -0700
-Message-Id: <20190531191204.4044-5-palmer@sifive.com>
+        Fri, 31 May 2019 12:23:54 -0700 (PDT)
+Subject: [PATCH 5/5] x86: Add fchmod4 to syscall_32.tbl
+Date:   Fri, 31 May 2019 12:12:04 -0700
+Message-Id: <20190531191204.4044-6-palmer@sifive.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190531191204.4044-1-palmer@sifive.com>
 References: <20190531191204.4044-1-palmer@sifive.com>
@@ -55,21 +55,18 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
 ---
- arch/x86/entry/syscalls/syscall_64.tbl | 1 +
+ arch/x86/entry/syscalls/syscall_32.tbl | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index 92ee0b4378d4..998aa3eb09e2 100644
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -349,6 +349,7 @@
- 425	common	io_uring_setup		__x64_sys_io_uring_setup
- 426	common	io_uring_enter		__x64_sys_io_uring_enter
- 427	common	io_uring_register	__x64_sys_io_uring_register
-+428	common	fchmodat4		__x64_sys_fchmodat4
- 
- #
- # x32-specific system call numbers start at 512 to avoid cache impact
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index 1f9607ed087c..319c7a6d3f02 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -433,3 +433,4 @@
+ 425	i386	io_uring_setup		sys_io_uring_setup		__ia32_sys_io_uring_setup
+ 426	i386	io_uring_enter		sys_io_uring_enter		__ia32_sys_io_uring_enter
+ 427	i386	io_uring_register	sys_io_uring_register		__ia32_sys_io_uring_register
++428	i386	fchmodat4		sys_fchmodat4			__ia32_sys_fchmodat4
 -- 
 2.21.0
 
