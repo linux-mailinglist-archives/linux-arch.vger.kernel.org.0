@@ -2,174 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D08532B59
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jun 2019 11:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDED3327A
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jun 2019 16:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727203AbfFCJDn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Jun 2019 05:03:43 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:34150 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727123AbfFCJDn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jun 2019 05:03:43 -0400
-Received: by mail-ot1-f66.google.com with SMTP id l17so15383417otq.1
-        for <linux-arch@vger.kernel.org>; Mon, 03 Jun 2019 02:03:42 -0700 (PDT)
+        id S1729162AbfFCOoE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Jun 2019 10:44:04 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:37406 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729141AbfFCOoE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jun 2019 10:44:04 -0400
+Received: by mail-wm1-f68.google.com with SMTP id 22so3160242wmg.2
+        for <linux-arch@vger.kernel.org>; Mon, 03 Jun 2019 07:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/VCvRg4+mMJ/yKzCQebn8clHJnLDYyzYIHqLnBJ4zrI=;
-        b=H/dToC9rVgyO60IieVWtYVTFQ1+mQqRSqm7v+uDMC1JFRW6hoq3rdcMjJGt9aQAIaH
-         mvwyuRkWbUoNOyCBYn6MwVr6/BdJhcTk06MVITyowa6mOgyUH9nBiAvZtjtGzy2TTkda
-         EAF67zsrU7hR7HeHdu/j+sq2s3b8F9Icz0URNmQ1Rh17LYo05PTttkSfR1u2coSXZRtQ
-         tqZZJCE1G1U4VD7OF+rDL6FcRsoI1FklrQXZiMF2/4vOHdaaiTaGerKo7Cs+Inh712v9
-         uB61H8IfL5Wmv7x9BdPISh8Mu7FAQiQ8nbHfWItpIqQV08wnaeX6MA4FCit0UuEXiTwb
-         8j4g==
+        d=brauner.io; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=2n8KUWE3mEPh7r/u0P9GAsbcb3XzF8DN1nLPmw9SmYA=;
+        b=LBIypiuLvGlf3u5FnslCwaambPTGPqJStGZQ8uvhGsKj8SUoTcJtbrhHrStYJpTutl
+         VquqSWxjA1nLl2LROx2iNWN/8ddkwF8Qur2OLWm5F8gGC18F35VZIx4/qHmFNjwwPf5J
+         xr8vGiNAgc0xPiYl94/W/H3fwwPqzdR8j9R+vv5Yam3VXmIRrEIKO6uVuLieKzvpE/z4
+         EI4fkNgavHs+aMAG7KHiDMbdcDcoalu8gfqkjchsW/VTNBJ17hnOw2EZAeEyEcyZEnxW
+         O6CkStlPk2s2N3W5fXTsdQKyH5iyJvznQUzPScJGCsVpJvZeEMBGxLuTfnyddTdZBC5D
+         GFSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/VCvRg4+mMJ/yKzCQebn8clHJnLDYyzYIHqLnBJ4zrI=;
-        b=GiZn2ErLHXI50Oo+KsoCAupo6sCyBLGJVAROiyPRcht/Yc7nwaIR+gRiZeneHJ7I06
-         F+A0slwqRF00UgetVY9RS4Eknr18iJ6fgtFwgrWTy9wMyRz0jfMWckKeAeWw+h2jVeSd
-         L0OyFCoaIJd4AZEc/kVbG30W0P/Mw2yNWwG1xiZigdaI0W1dKI6CjIx7toY/xNC70r3i
-         hYcQDgIPoN7JdWJ++GeE1KsUhrO5Pruk5yEN5KqJZ6uMBc4sjbke0hXVe0WuR3pZti1c
-         Y6SjUWi120+LHA0xODLB9QwOAc61A/pQTsHi0c+p3rmvGBIjJUBLiFSg70Q60tZYKKxh
-         KomA==
-X-Gm-Message-State: APjAAAW4u9tPSRp+1LCMgQcO4HXmHSnO/RmgehLJw2Ky2rJQfV3ENTQB
-        8N40ap/BLVEbaURpID/DrlDZz/fMVBg5Hh7eL9pO/w==
-X-Google-Smtp-Source: APXvYqzgegu9IcBC8sASS/9V/OPbAvth7UyhRrha31CWInyM6XSL4/wuA+jy2xZziSKYavPoDOqnLF4KhOatOj4Biuw=
-X-Received: by 2002:a05:6830:1688:: with SMTP id k8mr378583otr.233.1559552622037;
- Mon, 03 Jun 2019 02:03:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2n8KUWE3mEPh7r/u0P9GAsbcb3XzF8DN1nLPmw9SmYA=;
+        b=ObhrVHRbfjEVv2bwQE4nM2z30gbCiHHAIREcFcah5YZ5kN7tYGZ9ekIFAePFNvGidQ
+         tsrc5epdoVJbt/VpEGi6f5NL/+GsUFUQ1zTy9nsepk3a+viQ8kpAVOHtGW83ALO5qltt
+         uIHkYOMz4xU2kHS9AlCLKjKdbqWaP/8Ub4vesKugxm3xucwNCeyoXgfQeahKa0Jfk1a9
+         jcnGRZDYiJVFfAf8kggfNTV1pjzOrGzqB3JoftRVd4ULQv+RsPvtnhzS77SlShxngpVy
+         tlOXTrSMKI1y1DpYTQQhMv4PDC9xooRu9LhQv19VrUN6zA7INl4P04fgiV1IWAQljGcW
+         fygg==
+X-Gm-Message-State: APjAAAW2GHJpzFk9kA13YWFODYryzv8J4gg3XsJ3C/Ll0WfZ3bbdjE2J
+        Q/9u2YtV3N3I8VZurJHGYO93/Q==
+X-Google-Smtp-Source: APXvYqwOq8JMLcKmAC25HfB3WU9PodW1dRPByveHWW7p+wN+k1tru28BLGgM7YcFm+xuYaHmqa5ldg==
+X-Received: by 2002:a1c:f910:: with SMTP id x16mr2501197wmh.132.1559573042055;
+        Mon, 03 Jun 2019 07:44:02 -0700 (PDT)
+Received: from localhost.localdomain ([212.91.227.56])
+        by smtp.gmail.com with ESMTPSA id 197sm14672583wma.36.2019.06.03.07.44.00
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 03 Jun 2019 07:44:01 -0700 (PDT)
+From:   Christian Brauner <christian@brauner.io>
+To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, jannh@google.com
+Cc:     keescook@chromium.org, fweimer@redhat.com, oleg@redhat.com,
+        arnd@arndb.de, dhowells@redhat.com,
+        Christian Brauner <christian@brauner.io>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Adrian Reber <adrian@lisas.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v2 2/2] arch: wire-up clone3() syscall on x86
+Date:   Mon,  3 Jun 2019 16:43:31 +0200
+Message-Id: <20190603144331.16760-2-christian@brauner.io>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190603144331.16760-1-christian@brauner.io>
+References: <20190603144331.16760-1-christian@brauner.io>
 MIME-Version: 1.0
-References: <20190529141500.193390-1-elver@google.com> <20190529141500.193390-3-elver@google.com>
- <EE911EC6-344B-4EB2-90A4-B11E8D96BEDC@zytor.com> <CANpmjNOsPnVd50cTzUW8UYXPGqpSnRLcjj=JbZraTYVq1n18Fw@mail.gmail.com>
- <3B49EF08-147F-451C-AA5B-FC4E1B8568EE@zytor.com>
-In-Reply-To: <3B49EF08-147F-451C-AA5B-FC4E1B8568EE@zytor.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 3 Jun 2019 11:03:30 +0200
-Message-ID: <CANpmjNMt8QK+j6yo8ut1UNe0wS3_B4iqG5N_eTmJcWj4TpZaDQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] x86: Move CPU feature test out of uaccess region
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Thanks for the clarification.
+Wire up the clone3() call on x86.
 
-I found that static_cpu_has was replaced by static_cpu_has_safe:
-https://lkml.org/lkml/2016/1/24/29 -- so is it fair to assume that
-both are equally safe at this point?
+This patch only wires up clone3() on x86. Some of the arches look like they
+need special assembly massaging and it is probably smarter if the
+appropriate arch maintainers would do the actual wiring.
 
-I have sent a follow-up patch which uses static_cpu_has:
-http://lkml.kernel.org/r/20190531150828.157832-3-elver@google.com
+Signed-off-by: Christian Brauner <christian@brauner.io>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Adrian Reber <adrian@lisas.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: linux-api@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: x86@kernel.org
+---
+v1: unchanged
+v2: unchanged
+---
+ arch/x86/entry/syscalls/syscall_32.tbl | 1 +
+ arch/x86/entry/syscalls/syscall_64.tbl | 1 +
+ include/uapi/asm-generic/unistd.h      | 4 +++-
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-Many thanks!
--- Marco
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index ad968b7bac72..80e26211feff 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -438,3 +438,4 @@
+ 431	i386	fsconfig		sys_fsconfig			__ia32_sys_fsconfig
+ 432	i386	fsmount			sys_fsmount			__ia32_sys_fsmount
+ 433	i386	fspick			sys_fspick			__ia32_sys_fspick
++436	i386	clone3			sys_clone3			__ia32_sys_clone3
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index b4e6f9e6204a..7968f0b5b5e8 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -355,6 +355,7 @@
+ 431	common	fsconfig		__x64_sys_fsconfig
+ 432	common	fsmount			__x64_sys_fsmount
+ 433	common	fspick			__x64_sys_fspick
++436	common	clone3			__x64_sys_clone3/ptregs
+ 
+ #
+ # x32-specific system call numbers start at 512 to avoid cache impact
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index a87904daf103..45bc87687c47 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -844,9 +844,11 @@ __SYSCALL(__NR_fsconfig, sys_fsconfig)
+ __SYSCALL(__NR_fsmount, sys_fsmount)
+ #define __NR_fspick 433
+ __SYSCALL(__NR_fspick, sys_fspick)
++#define __NR_clone3 436
++__SYSCALL(__NR_clone3, sys_clone3)
+ 
+ #undef __NR_syscalls
+-#define __NR_syscalls 434
++#define __NR_syscalls 437
+ 
+ /*
+  * 32 bit systems traditionally used different
+-- 
+2.21.0
 
-On Sat, 1 Jun 2019 at 03:13, <hpa@zytor.com> wrote:
->
-> On May 31, 2019 2:57:36 AM PDT, Marco Elver <elver@google.com> wrote:
-> >On Wed, 29 May 2019 at 16:29, <hpa@zytor.com> wrote:
-> >>
-> >> On May 29, 2019 7:15:00 AM PDT, Marco Elver <elver@google.com> wrote:
-> >> >This patch is a pre-requisite for enabling KASAN bitops
-> >> >instrumentation:
-> >> >moves boot_cpu_has feature test out of the uaccess region, as
-> >> >boot_cpu_has uses test_bit. With instrumentation, the KASAN check
-> >would
-> >> >otherwise be flagged by objtool.
-> >> >
-> >> >This approach is preferred over adding the explicit kasan_check_*
-> >> >functions to the uaccess whitelist of objtool, as the case here
-> >appears
-> >> >to be the only one.
-> >> >
-> >> >Signed-off-by: Marco Elver <elver@google.com>
-> >> >---
-> >> >v1:
-> >> >* This patch replaces patch: 'tools/objtool: add kasan_check_* to
-> >> >  uaccess whitelist'
-> >> >---
-> >> > arch/x86/ia32/ia32_signal.c | 9 ++++++++-
-> >> > 1 file changed, 8 insertions(+), 1 deletion(-)
-> >> >
-> >> >diff --git a/arch/x86/ia32/ia32_signal.c
-> >b/arch/x86/ia32/ia32_signal.c
-> >> >index 629d1ee05599..12264e3c9c43 100644
-> >> >--- a/arch/x86/ia32/ia32_signal.c
-> >> >+++ b/arch/x86/ia32/ia32_signal.c
-> >> >@@ -333,6 +333,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal
-> >> >*ksig,
-> >> >       void __user *restorer;
-> >> >       int err = 0;
-> >> >       void __user *fpstate = NULL;
-> >> >+      bool has_xsave;
-> >> >
-> >> >       /* __copy_to_user optimizes that into a single 8 byte store
-> >*/
-> >> >       static const struct {
-> >> >@@ -352,13 +353,19 @@ int ia32_setup_rt_frame(int sig, struct
-> >ksignal
-> >> >*ksig,
-> >> >       if (!access_ok(frame, sizeof(*frame)))
-> >> >               return -EFAULT;
-> >> >
-> >> >+      /*
-> >> >+       * Move non-uaccess accesses out of uaccess region if not
-> >strictly
-> >> >+       * required; this also helps avoid objtool flagging these
-> >accesses
-> >> >with
-> >> >+       * instrumentation enabled.
-> >> >+       */
-> >> >+      has_xsave = boot_cpu_has(X86_FEATURE_XSAVE);
-> >> >       put_user_try {
-> >> >               put_user_ex(sig, &frame->sig);
-> >> >               put_user_ex(ptr_to_compat(&frame->info),
-> >&frame->pinfo);
-> >> >               put_user_ex(ptr_to_compat(&frame->uc), &frame->puc);
-> >> >
-> >> >               /* Create the ucontext.  */
-> >> >-              if (boot_cpu_has(X86_FEATURE_XSAVE))
-> >> >+              if (has_xsave)
-> >> >                       put_user_ex(UC_FP_XSTATE,
-> >&frame->uc.uc_flags);
-> >> >               else
-> >> >                       put_user_ex(0, &frame->uc.uc_flags);
-> >>
-> >> This was meant to use static_cpu_has(). Why did that get dropped?
-> >
-> >I couldn't find any mailing list thread referring to why this doesn't
-> >use static_cpu_has, do you have any background?
-> >
-> >static_cpu_has also solves the UACCESS warning.
-> >
-> >If you confirm it is safe to change to static_cpu_has(), I will change
-> >this patch. Note that I should then also change
-> >arch/x86/kernel/signal.c to mirror the change for 32bit  (although
-> >KASAN is not supported for 32bit x86).
-> >
-> >Thanks,
-> >-- Marco
->
-> I believe at some point the intent was that boot_cpu_has() was safer and could be used everywhere.
-> --
-> Sent from my Android device with K-9 Mail. Please excuse my brevity.
