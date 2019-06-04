@@ -2,230 +2,202 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C8F34A38
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2019 16:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CC234CE8
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2019 18:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727777AbfFDOVL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jun 2019 10:21:11 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:45086 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727169AbfFDOVK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 4 Jun 2019 10:21:10 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DC53341;
-        Tue,  4 Jun 2019 07:21:10 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 02D163F690;
-        Tue,  4 Jun 2019 07:21:07 -0700 (PDT)
-Subject: Re: [PATCH v4 3/3] kselftest: Extend vDSO selftest to clock_getres
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20190523112116.19233-1-vincenzo.frascino@arm.com>
- <20190523112116.19233-4-vincenzo.frascino@arm.com>
- <87lfyrp0d2.fsf@concordia.ellerman.id.au>
- <afb7395f-43e9-c304-2db2-349e6727b687@arm.com>
- <5c99721a-ce6b-10a0-99f2-6c37c1da4542@c-s.fr>
- <b710d906-edac-f8a7-792b-e6822399187c@arm.com>
- <dd8bf915-f438-74f0-494e-427d10fc0505@c-s.fr>
- <eacdc960-c344-9f9f-7f1b-ad770cb4a725@arm.com>
- <2389b7f2-288b-215e-994a-3b24be08e125@c-s.fr>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <42cdb5cf-797a-2497-92a2-730250ad436a@arm.com>
-Date:   Tue, 4 Jun 2019 15:21:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727422AbfFDQKA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Jun 2019 12:10:00 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36706 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728259AbfFDQKA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jun 2019 12:10:00 -0400
+Received: by mail-wr1-f68.google.com with SMTP id n4so13415654wrs.3
+        for <linux-arch@vger.kernel.org>; Tue, 04 Jun 2019 09:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ygMGl15yL8Dl/CKxDv58CFgXErk1JZawsiPT7PZu59c=;
+        b=Ugq8j9ea6T6m2QJYNrHxhrwF0Gfbdtq8EVLSsuEpeXNBxuPCF1eyBO0rdgcAhxHjlU
+         a4SO8JY6dra7YmOYqhoAsKfOR7vbCsFCacO5FpAsmS0jFl4+Zhvlb4Dh4S0hdP7ZRL6S
+         Pp5sDM0b/05jQIonO7S6jG2u200oGGYlwVHW5JFYRj9S4y/UhHJBfoynyuzBCeKzEAqo
+         5MtXRUUfco1DLg/7OIsMowDvKTd8Xt548bUkDZthXP38d/cbyEKRls+Nx6TpBtsYjyPa
+         v+Z41qiuP582owphpatCNRAmB7NK7TzOht+2VeefvCYV9aX54HC/QTdjVr6DTTDHWkhZ
+         dHYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ygMGl15yL8Dl/CKxDv58CFgXErk1JZawsiPT7PZu59c=;
+        b=QxFJxFlLo7/GGO34+LqAUJTJjpwfpqfZ1T3/Atm6HcUq3/jjkxhgORcaySySopwXFR
+         eZlRSBORRSY6Sf4WJuYlyqZp7sjvS+QD1HOWlvZ+MpfxOkIPhdHmp0tVY8yPbG+9RsjY
+         nbPStnkZhfwd+hM/KY1k1luWZ+yExdieynVN/U3joBdHR7sxPzj6iHnm3NRVE/+DsjcH
+         D6t4ZO9jKQ2Lsk7UI2XlXdkUsv1YfSrCijbLeMGXf8L34DirfRaCLB+jzlyJ6F22sb2C
+         nBrNxvpCCKHYza0naXKaClvEJLf0jfvirUD37oT8W3ruysiVC6uslsOHr8KLhx/LGzIz
+         g03w==
+X-Gm-Message-State: APjAAAVncjcqNWEqtL7TopCc61TDxeBe+CYSINxCqe2Z3SClryuwRenu
+        KY8RaFjiKPJ4CWsjKELXsEdUVg==
+X-Google-Smtp-Source: APXvYqx9i1pt2SCjFhQVYdpuY6VDAIjUCZcF1txJy0/ITOaZoGzSMolb0o0Ld1KzyHQYmwpTjyKRAw==
+X-Received: by 2002:a5d:4b49:: with SMTP id w9mr7207099wrs.113.1559664598427;
+        Tue, 04 Jun 2019 09:09:58 -0700 (PDT)
+Received: from localhost.localdomain (p548C9938.dip0.t-ipconnect.de. [84.140.153.56])
+        by smtp.gmail.com with ESMTPSA id e6sm10578055wrw.83.2019.06.04.09.09.57
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 04 Jun 2019 09:09:57 -0700 (PDT)
+From:   Christian Brauner <christian@brauner.io>
+To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, jannh@google.com
+Cc:     keescook@chromium.org, fweimer@redhat.com, oleg@redhat.com,
+        arnd@arndb.de, dhowells@redhat.com,
+        Christian Brauner <christian@brauner.io>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Adrian Reber <adrian@lisas.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v3 2/2] arch: wire-up clone3() syscall
+Date:   Tue,  4 Jun 2019 18:09:44 +0200
+Message-Id: <20190604160944.4058-2-christian@brauner.io>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190604160944.4058-1-christian@brauner.io>
+References: <20190604160944.4058-1-christian@brauner.io>
 MIME-Version: 1.0
-In-Reply-To: <2389b7f2-288b-215e-994a-3b24be08e125@c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Wire up the clone3() call on all arches that don't require hand-rolled
+assembly.
 
-On 04/06/2019 14:52, Christophe Leroy wrote:
-> 
-> 
-> Le 04/06/2019 à 15:43, Vincenzo Frascino a écrit :
->> On 04/06/2019 14:39, Christophe Leroy wrote:
->>>
->>>
->>> Le 04/06/2019 à 15:32, Vincenzo Frascino a écrit :
->>>> Hi Christophe,
->>>>
->>>> On 04/06/2019 14:16, Christophe Leroy wrote:
->>>>> Hi Vincenzo
->>>>>
->>>>> Le 28/05/2019 à 13:57, Vincenzo Frascino a écrit :
->>>>>> Hi Michael,
->>>>>>
->>>>>> thank you for your reply.
->>>>>>
->>>>>> On 28/05/2019 07:19, Michael Ellerman wrote:
->>>>>>> Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
->>>>>>>
->>>>>>>> The current version of the multiarch vDSO selftest verifies only
->>>>>>>> gettimeofday.
->>>>>>>>
->>>>>>>> Extend the vDSO selftest to clock_getres, to verify that the
->>>>>>>> syscall and the vDSO library function return the same information.
->>>>>>>>
->>>>>>>> The extension has been used to verify the hrtimer_resoltion fix.
->>>>>>>
->>>>>>> This is passing for me even without patch 1 applied, shouldn't it fail
->>>>>>> without the fix? What am I missing?
->>>>>>>
->>>>>>
->>>>>> This is correct, because during the refactoring process I missed an "n" :)
->>>>>>
->>>>>> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_sec·!=·y.tv_sec))
->>>>>>
->>>>>> Should be:
->>>>>>
->>>>>> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_nsec·!=·y.tv_nsec))
->>>>>>
->>>>>> My mistake, I am going to fix the test and re-post v5 of this set.
->>>>>>
->>>>>> Without my patch if you pass "highres=off" to the kernel (as a command line
->>>>>> parameter) it leads to a broken implementation of clock_getres since the value
->>>>>> of CLOCK_REALTIME_RES does not change at runtime.
->>>>>>
->>>>>> Expected result (with highres=off):
->>>>>>
->>>>>> # uname -r
->>>>>> 5.2.0-rc2
->>>>>> # ./vdso_clock_getres
->>>>>> clock_id: CLOCK_REALTIME [FAIL]
->>>>>> clock_id: CLOCK_BOOTTIME [PASS]
->>>>>> clock_id: CLOCK_TAI [PASS]
->>>>>> clock_id: CLOCK_REALTIME_COARSE [PASS]
->>>>>> clock_id: CLOCK_MONOTONIC [FAIL]
->>>>>> clock_id: CLOCK_MONOTONIC_RAW [PASS]
->>>>>> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
->>>>>>
->>>>>> The reason of this behavior is that the only clocks supported by getres on
->>>>>> powerpc are CLOCK_REALTIME and CLOCK_MONOTONIC, the rest on the clocks use
->>>>>> always syscalls.
->>>>>
->>>>> vdso64 is supposed to implement CLOCK_{REALTIME/MONOTONIC}_COARSE, so I
->>>>> guess it should fail for them too ?
->>>>>
->>>>> Or is your test done on vdso32 ?
->>>>>
->>>>
->>>> Based on what I can see in kernel/vdso64 in 5.2-rc3:
->>>>
->>>> /*
->>>>    * Exact prototype of clock_getres()
->>>>    *
->>>>    * int __kernel_clock_getres(clockid_t clock_id, struct timespec *res);
->>>>    *
->>>>    */
->>>> V_FUNCTION_BEGIN(__kernel_clock_getres)
->>>>     .cfi_startproc
->>>> 	/* Check for supported clock IDs */
->>>> 	cmpwi	cr0,r3,CLOCK_REALTIME
->>>> 	cmpwi	cr1,r3,CLOCK_MONOTONIC
->>>> 	cror	cr0*4+eq,cr0*4+eq,cr1*4+eq
->>>> 	bne	cr0,99f
->>>>
->>>> 	li	r3,0
->>>> 	cmpldi	cr0,r4,0
->>>> 	crclr	cr0*4+so
->>>> 	beqlr
->>>> 	lis	r5,CLOCK_REALTIME_RES@h
->>>> 	ori	r5,r5,CLOCK_REALTIME_RES@l
->>>> 	std	r3,TSPC64_TV_SEC(r4)
->>>> 	std	r5,TSPC64_TV_NSEC(r4)
->>>> 	blr
->>>>
->>>> 	/*
->>>> 	 * syscall fallback
->>>> 	 */
->>>> 99:
->>>> 	li	r0,__NR_clock_getres
->>>> 	sc
->>>> 	blr
->>>>     .cfi_endproc
->>>> V_FUNCTION_END(__kernel_clock_getres)
->>>>
->>>> it does not seem so for what concerns vdso64. I did run again the test both on
->>>> ppc and ppc64 qemu instances and the result is the same to what I reported in
->>>> this thread.
->>>>
->>>> Am I missing something?
->>>
->>> I was thinking about
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5c929885f1bb
->>> but apparently clock_getres() was left aside. Should we do something
->>> about it ?
->>>
->>
->> Sure, but I would like this series to be merged first (since the topic is
->> different). I am happy, after that, to push a separate one on top that addresses
->> the problem.
->>
->> Please let me know if it works for you and Michael.
-> 
-> No problem for myself.
-> 
-> By the way, next time (or next spin ?) I recommend you to handle your 
-> patches independently and not as a series since they are all 
-> independant. It would have avoided confusion and the need for you to 
-> resend all 3 patches everytime you did a change in one of them.
->
+Some of the arches look like they need special assembly massaging and it is
+probably smarter if the appropriate arch maintainers would do the actual
+wiring. Arches that are wired-up are:
+- x86{_32,64}
+- arm{64}
+- xtensa
 
-Thanks for the advise, I will do next time.
+Signed-off-by: Christian Brauner <christian@brauner.io>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Adrian Reber <adrian@lisas.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: linux-api@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: x86@kernel.org
+---
+v1: unchanged
+v2: unchanged
+v3:
+- Christian Brauner <christian@brauner.io>:
+  - wire up clone3 on all arches that don't have hand-rolled entry points
+    for clone
+---
+ arch/arm/tools/syscall.tbl                  | 1 +
+ arch/arm64/include/asm/unistd.h             | 2 +-
+ arch/arm64/include/asm/unistd32.h           | 2 ++
+ arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      | 1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      | 1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
+ include/uapi/asm-generic/unistd.h           | 4 +++-
+ 8 files changed, 11 insertions(+), 2 deletions(-)
 
-> Christophe
-> 
->>
->>> Christophe
->>>
->>>>
->>>>> Christophe
->>>>>
->>>>>>
->>>>>>> # uname -r
->>>>>>> 5.2.0-rc2-gcc-8.2.0
->>>>>>>
->>>>>>> # ./vdso_clock_getres
->>>>>>> clock_id: CLOCK_REALTIME [PASS]
->>>>>>> clock_id: CLOCK_BOOTTIME [PASS]
->>>>>>> clock_id: CLOCK_TAI [PASS]
->>>>>>> clock_id: CLOCK_REALTIME_COARSE [PASS]
->>>>>>> clock_id: CLOCK_MONOTONIC [PASS]
->>>>>>> clock_id: CLOCK_MONOTONIC_RAW [PASS]
->>>>>>> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
->>>>>>>
->>>>>>> cheers
->>>>>>>
->>>>>>>> Cc: Shuah Khan <shuah@kernel.org>
->>>>>>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>>>>>> ---
->>>>>>>>
->>>>>>>> Note: This patch is independent from the others in this series, hence it
->>>>>>>> can be merged singularly by the kselftest maintainers.
->>>>>>>>
->>>>>>>>     tools/testing/selftests/vDSO/Makefile         |   2 +
->>>>>>>>     .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
->>>>>>>>     2 files changed, 126 insertions(+)
->>>>>>>>     create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
->>>>>>
->>>>
->>
-
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index aaf479a9e92d..e99a82bdb93a 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -447,3 +447,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++436	common	clone3				sys_clone3
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 70e6882853c0..24480c2d95da 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -44,7 +44,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		434
++#define __NR_compat_syscalls		437
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index c39e90600bb3..b144ea675d70 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -886,6 +886,8 @@ __SYSCALL(__NR_fsconfig, sys_fsconfig)
+ __SYSCALL(__NR_fsmount, sys_fsmount)
+ #define __NR_fspick 433
+ __SYSCALL(__NR_fspick, sys_fspick)
++#define __NR_clone3 436
++__SYSCALL(__NR_clone3, sys_clone3)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 26339e417695..3110440bcc31 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -439,3 +439,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++436	common	clone3				sys_clone3
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index ad968b7bac72..80e26211feff 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -438,3 +438,4 @@
+ 431	i386	fsconfig		sys_fsconfig			__ia32_sys_fsconfig
+ 432	i386	fsmount			sys_fsmount			__ia32_sys_fsmount
+ 433	i386	fspick			sys_fspick			__ia32_sys_fspick
++436	i386	clone3			sys_clone3			__ia32_sys_clone3
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index b4e6f9e6204a..7968f0b5b5e8 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -355,6 +355,7 @@
+ 431	common	fsconfig		__x64_sys_fsconfig
+ 432	common	fsmount			__x64_sys_fsmount
+ 433	common	fspick			__x64_sys_fspick
++436	common	clone3			__x64_sys_clone3/ptregs
+ 
+ #
+ # x32-specific system call numbers start at 512 to avoid cache impact
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 5fa0ee1c8e00..b2767c8c2b4e 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -404,3 +404,4 @@
+ 431	common	fsconfig			sys_fsconfig
+ 432	common	fsmount				sys_fsmount
+ 433	common	fspick				sys_fspick
++436	common	clone3				sys_clone3
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index a87904daf103..45bc87687c47 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -844,9 +844,11 @@ __SYSCALL(__NR_fsconfig, sys_fsconfig)
+ __SYSCALL(__NR_fsmount, sys_fsmount)
+ #define __NR_fspick 433
+ __SYSCALL(__NR_fspick, sys_fspick)
++#define __NR_clone3 436
++__SYSCALL(__NR_clone3, sys_clone3)
+ 
+ #undef __NR_syscalls
+-#define __NR_syscalls 434
++#define __NR_syscalls 437
+ 
+ /*
+  * 32 bit systems traditionally used different
 -- 
-Regards,
-Vincenzo
+2.21.0
+
