@@ -2,50 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC49C34652
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2019 14:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A347434657
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2019 14:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727476AbfFDMMe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jun 2019 08:12:34 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:42353 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726847AbfFDMMd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jun 2019 08:12:33 -0400
-Received: by mail-qt1-f195.google.com with SMTP id s15so13350417qtk.9;
-        Tue, 04 Jun 2019 05:12:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L+e5fjRWyUfLgL9OYMwlIZ20PAP5dcbx1HkuQ94d/d4=;
-        b=qvfwSLSFXqYIWDV00LYwR4/E5V+wKLRGbQJi02vCC00vE+IVsjHyJb2y/NFhMrFoeR
-         5z2RwbpdlTWVWxF+lXDUH+WFduqXygb8v3Q01lYW67dBj/04oVKcLA+6R8SD2thHTNL1
-         B1X5+cBPNFLqGBTCXj0OTTIvU2868dGWeKNA9AukUm+XyInKzPMTbOQMWKQevxQLbQI1
-         l69IcCKJ6nw8mMbXAt+Ixjd7zLqbX/FN6omex7Xn3e/ecLO6D9hqHFIXqULcOr5nV2wk
-         GxFvqBD8i7mY/tHE/dFI9FRx21mYPb1aStXlEMBJxJB9sIrRCbKEXe6gwjewWI+u8O8K
-         thdg==
-X-Gm-Message-State: APjAAAXaQJDA6FTNyTViTKYGiioRD2UZUpr1np/USUpIObkSFqBAIhAZ
-        aM04+uS4pe6mGdlXmOdiCaRBrHB7KVEZtsOBfkM=
-X-Google-Smtp-Source: APXvYqwSfz7cbuyCa6Bus+YKHBZiY4Bkrj2BkzX6U2Y1NapOb+JxqSpgu6ZjrsyPagQKMEJ9lTV9O3R1/mJPh6++Fnw=
-X-Received: by 2002:aed:2bc1:: with SMTP id e59mr7929200qtd.7.1559650352510;
- Tue, 04 Jun 2019 05:12:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
- <CAK8P3a11DE0sXteZoaP_N=mDhx3tXitGKddn1ogtFqJBYO-SCA@mail.gmail.com> <d96667d5-e43b-d33a-fbd0-5acfb4904316@arm.com>
-In-Reply-To: <d96667d5-e43b-d33a-fbd0-5acfb4904316@arm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 4 Jun 2019 14:12:16 +0200
-Message-ID: <CAK8P3a3nxd7F5zLyD1SVarKjjKC0qvMEN8wP6R7zHY9HKdoe0w@mail.gmail.com>
-Subject: Re: [PATCH v6 00/19] Unify vDSOs across more architectures
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S1727358AbfFDMNZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Jun 2019 08:13:25 -0400
+Received: from foss.arm.com ([217.140.101.70]:41718 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726847AbfFDMNY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 4 Jun 2019 08:13:24 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2DD5980D;
+        Tue,  4 Jun 2019 05:13:24 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1A9C3F690;
+        Tue,  4 Jun 2019 05:13:20 -0700 (PDT)
+Subject: Re: [PATCH v6 18/19] x86: Add support for generic vDSO
+To:     Michael Kelley <mikelley@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Russell King <linux@armlinux.org.uk>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
@@ -57,83 +39,225 @@ Cc:     linux-arch <linux-arch@vger.kernel.org>,
         Dmitry Safonov <0x7f454c46@gmail.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Huw Davies <huw@codeweavers.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-19-vincenzo.frascino@arm.com>
+ <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <97175325-1619-fd38-2a5c-c71b3b161808@arm.com>
+Date:   Tue, 4 Jun 2019 13:13:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 4, 2019 at 2:05 PM Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
-> On 31/05/2019 09:46, Arnd Bergmann wrote:
-> > On Thu, May 30, 2019 at 4:15 PM Vincenzo Frascino
-> > <vincenzo.frascino@arm.com> wrote:
-> > One open question I touched in my review is whether we want to
-> > have a vdso version of clock_getres() in all architectures or not.
-> > I'd prefer to leave it out because there is very little advantage to
-> > it over the system call (the results don't change at runtime and
-> > can easily be cached by libc if performance ever matters), and
-> > it takes up a small amount of memory for the implementation.
-> >
->
-> I thought about it and I ended up with what proposed in this patchset mainly for
-> symmetry across all the architectures since in the end they use the same common
-> code.
->
-> It seems also that there is some performance impact (i.e.):
->
-> clock-getres-monotonic:    libc(system call): 296 nsec/call
-> clock-getres-monotonic:    libc(vdso): 5 nsec/call
->
->
-> I agree with you though when you say that caching it in the libc is a
-> possibility to overcome the performance impact.
+Hi Michael,
 
-It's clear that the vdso version is much faster, my point was that
-I could not think of any use case that cared about it being fast.
+On 30/05/2019 16:41, Michael Kelley wrote:
+> From: Vincenzo Frascino <vincenzo.frascino@arm.com> On Thursday, May 30, 2019 7:16 AM
+>>
+>> The x86 vDSO library requires some adaptations to take advantage of the
+>> newly introduced generic vDSO library.
+>>
+>> Introduce the following changes:
+>>  - Modification of vdso.c to be compliant with the common vdso datapage
+>>  - Use of lib/vdso for gettimeofday
+>>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>>
+>>
+>> diff --git a/arch/x86/include/asm/mshyperv-tsc.h b/arch/x86/include/asm/mshyperv-tsc.h
+>> new file mode 100644
+>> index 000000000000..99c98ccea0bf
+>> --- /dev/null
+>> +++ b/arch/x86/include/asm/mshyperv-tsc.h
+>> @@ -0,0 +1,76 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef _ASM_X86_MSHYPER_TSCPAGE_H
+>> +#define _ASM_X86_MSHYPER_TSCPAGE_H
+>> +
+>> +#include <asm/hyperv-tlfs.h>
+>> +
+>> +#ifdef CONFIG_HYPERV_TSCPAGE
+>> +struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
+>> +static inline u64 hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
+>> +				       u64 *cur_tsc)
+>> +{
+>> +	u64 scale, offset;
+>> +	u32 sequence;
+>> +
+>> +	/*
+>> +	 * The protocol for reading Hyper-V TSC page is specified in Hypervisor
+>> +	 * Top-Level Functional Specification ver. 3.0 and above. To get the
+>> +	 * reference time we must do the following:
+>> +	 * - READ ReferenceTscSequence
+>> +	 *   A special '0' value indicates the time source is unreliable and we
+>> +	 *   need to use something else. The currently published specification
+>> +	 *   versions (up to 4.0b) contain a mistake and wrongly claim '-1'
+>> +	 *   instead of '0' as the special value, see commit c35b82ef0294.
+>> +	 * - ReferenceTime =
+>> +	 *        ((RDTSC() * ReferenceTscScale) >> 64) + ReferenceTscOffset
+>> +	 * - READ ReferenceTscSequence again. In case its value has changed
+>> +	 *   since our first reading we need to discard ReferenceTime and repeat
+>> +	 *   the whole sequence as the hypervisor was updating the page in
+>> +	 *   between.
+>> +	 */
+>> +	do {
+>> +		sequence = READ_ONCE(tsc_pg->tsc_sequence);
+>> +		if (!sequence)
+>> +			return U64_MAX;
+>> +		/*
+>> +		 * Make sure we read sequence before we read other values from
+>> +		 * TSC page.
+>> +		 */
+>> +		smp_rmb();
+>> +
+>> +		scale = READ_ONCE(tsc_pg->tsc_scale);
+>> +		offset = READ_ONCE(tsc_pg->tsc_offset);
+>> +		*cur_tsc = rdtsc_ordered();
+>> +
+>> +		/*
+>> +		 * Make sure we read sequence after we read all other values
+>> +		 * from TSC page.
+>> +		 */
+>> +		smp_rmb();
+>> +
+>> +	} while (READ_ONCE(tsc_pg->tsc_sequence) != sequence);
+>> +
+>> +	return mul_u64_u64_shr(*cur_tsc, scale, 64) + offset;
+>> +}
+>> +
+>> +static inline u64 hv_read_tsc_page(const struct ms_hyperv_tsc_page *tsc_pg)
+>> +{
+>> +	u64 cur_tsc;
+>> +
+>> +	return hv_read_tsc_page_tsc(tsc_pg, &cur_tsc);
+>> +}
+>> +
+>> +#else
+>> +static inline struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
+>> +{
+>> +	return NULL;
+>> +}
+>> +
+>> +static inline u64 hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
+>> +				       u64 *cur_tsc)
+>> +{
+>> +	BUG();
+>> +	return U64_MAX;
+>> +}
+>> +#endif
+>> +#endif
+>> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+>> index cc60e617931c..db095a992f3e 100644
+>> --- a/arch/x86/include/asm/mshyperv.h
+>> +++ b/arch/x86/include/asm/mshyperv.h
+>> @@ -7,6 +7,7 @@
+>>  #include <linux/nmi.h>
+>>  #include <asm/io.h>
+>>  #include <asm/hyperv-tlfs.h>
+>> +#include <asm/mshyperv-tsc.h>
+>>  #include <asm/nospec-branch.h>
+>>
+>>  #define VP_INVAL	U32_MAX
+>> @@ -387,73 +388,4 @@ static inline int hyperv_flush_guest_mapping_range(u64 as,
+>>  }
+>>  #endif /* CONFIG_HYPERV */
+>>
+>> -#ifdef CONFIG_HYPERV_TSCPAGE
+>> -struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
+>> -static inline u64 hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
+>> -				       u64 *cur_tsc)
+>> -{
+>> -	u64 scale, offset;
+>> -	u32 sequence;
+>> -
+>> -	/*
+>> -	 * The protocol for reading Hyper-V TSC page is specified in Hypervisor
+>> -	 * Top-Level Functional Specification ver. 3.0 and above. To get the
+>> -	 * reference time we must do the following:
+>> -	 * - READ ReferenceTscSequence
+>> -	 *   A special '0' value indicates the time source is unreliable and we
+>> -	 *   need to use something else. The currently published specification
+>> -	 *   versions (up to 4.0b) contain a mistake and wrongly claim '-1'
+>> -	 *   instead of '0' as the special value, see commit c35b82ef0294.
+>> -	 * - ReferenceTime =
+>> -	 *        ((RDTSC() * ReferenceTscScale) >> 64) + ReferenceTscOffset
+>> -	 * - READ ReferenceTscSequence again. In case its value has changed
+>> -	 *   since our first reading we need to discard ReferenceTime and repeat
+>> -	 *   the whole sequence as the hypervisor was updating the page in
+>> -	 *   between.
+>> -	 */
+>> -	do {
+>> -		sequence = READ_ONCE(tsc_pg->tsc_sequence);
+>> -		if (!sequence)
+>> -			return U64_MAX;
+>> -		/*
+>> -		 * Make sure we read sequence before we read other values from
+>> -		 * TSC page.
+>> -		 */
+>> -		smp_rmb();
+>> -
+>> -		scale = READ_ONCE(tsc_pg->tsc_scale);
+>> -		offset = READ_ONCE(tsc_pg->tsc_offset);
+>> -		*cur_tsc = rdtsc_ordered();
+>> -
+>> -		/*
+>> -		 * Make sure we read sequence after we read all other values
+>> -		 * from TSC page.
+>> -		 */
+>> -		smp_rmb();
+>> -
+>> -	} while (READ_ONCE(tsc_pg->tsc_sequence) != sequence);
+>> -
+>> -	return mul_u64_u64_shr(*cur_tsc, scale, 64) + offset;
+>> -}
+>> -
+>> -static inline u64 hv_read_tsc_page(const struct ms_hyperv_tsc_page *tsc_pg)
+>> -{
+>> -	u64 cur_tsc;
+>> -
+>> -	return hv_read_tsc_page_tsc(tsc_pg, &cur_tsc);
+>> -}
+>> -
+>> -#else
+>> -static inline struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
+>> -{
+>> -	return NULL;
+>> -}
+>> -
+>> -static inline u64 hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
+>> -				       u64 *cur_tsc)
+>> -{
+>> -	BUG();
+>> -	return U64_MAX;
+>> -}
+>> -#endif
+>>  #endif
+> 
+> Vincenzo -- these changes for Hyper-V are a subset of a larger patch set
+> I have that moves all of the Hyper-V clock/timer code into a separate
+> clocksource driver in drivers/clocksource, with an include file in
+> includes/clocksource.  That new include file should be able to work
+> instead of your new mshyperv-tsc.h.  It also has the benefit of being
+> ISA neutral, so it will work with my in-progress patch set to support
+> Linux on Hyper-V on ARM64.  See https://lkml.org/lkml/2019/5/27/231
+> for the new clocksource driver patch set.
+>
 
-If there is a good reason for it, I also don't mind adding a
-clock_getres_time64() vdso version everywhere.
+Thank you for pointing this out, I will rebase my changes on your patches.
 
-> > We shouldn't just need it for consistency because all callers
-> > would require implementing a fallback to the system call
-> > anyway, to deal with old kernels.
-> >
->
-> A way to address this issue would be to use versioning, which seems supported in
-> the vdso library (i.e. arch/x86/entry/vdso/vdso32/vdso32.lds.S).
->
-> For example for x86 (vdso32) we would have something like:
->
-> VERSION
-> {
->         LINUX_5.3 (being optimistic here :) ) {
->         global:
->                 __vdso_clock_getres;
->                 __vdso_clock_gettime64;
->         };
->         LINUX_2.6 {
->         global:
->                 __vdso_clock_gettime;
->                 __vdso_gettimeofday;
->                 __vdso_time;
->         };
->
->         LINUX_2.5 {
->         global:
->                 __kernel_vsyscall;
->                 __kernel_sigreturn;
->                 __kernel_rt_sigreturn;
->         local: *;
->         };
-> }
->
-> What do you think? Would this be a viable solution?
 
-I actually never understood the point of symbol versioning
-in the vdso. What does that gain us? Note that there are
-no conflicting symbol names between the versions, and
-that nothing enforces the kernel headers to match the
-symbol version used when linking.
+> Michael
+> 
 
-      Arnd
+-- 
+Regards,
+Vincenzo
