@@ -2,131 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAC635439
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2019 01:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32183355B2
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2019 06:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726933AbfFDXWl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jun 2019 19:22:41 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:57700 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726885AbfFDXWl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jun 2019 19:22:41 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x54NE9sa117761;
-        Tue, 4 Jun 2019 23:21:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2018-07-02; bh=YXvYIW/TW5gVwJgPNuplVdUZS0b4Nt48gIxbsBj1q/A=;
- b=RtHIB50u7sCZX9RPoLJf0ZHJkpch7IXBg43GqRPBZNwQNAKIZ1Fe1PhgpNlRK+DGJQo8
- lSVGhzJjuIVibp+vRd2n7xvFHcA0mUp+yl6zRpu/O1SdhEbRN8KVPNzg3MuJ665wOt8D
- OXBjmWQJtRpmguu4bIch0Rtht6EHlilGvOM6jgxv+O/87WyMCwGCZo6Xse+EXPa8teDX
- rjR995hOuZyKMICZD2fQse9ORiTlNsim1r28tHpjiESTwKW8UAdpG+JsMg+tDWtWmsBh
- 96TEzBexMUmmKxxluIaxbJWn0djN0qPyA3q+05GNXykuOBeveW8FJpcOUIDfWQCPvZxz Pg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2suj0qfuae-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Jun 2019 23:21:29 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x54NKbcE183651;
-        Tue, 4 Jun 2019 23:21:28 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2swnhbvdnw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Jun 2019 23:21:28 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x54NLFRu018591;
-        Tue, 4 Jun 2019 23:21:15 GMT
-Received: from [172.16.8.192] (/206.166.194.194)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 04 Jun 2019 16:21:15 -0700
-Content-Type: text/plain; charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 10.2 \(3259\))
-Subject: Re: [PATCH v2 3/5] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-From:   Alex Kogan <alex.kogan@oracle.com>
-In-Reply-To: <20190403160112.GK4038@hirez.programming.kicks-ass.net>
-Date:   Tue, 4 Jun 2019 19:21:13 -0400
-Cc:     linux@armlinux.org.uk, mingo@redhat.com, will.deacon@arm.com,
-        arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, bp@alien8.de,
-        hpa@zytor.com, x86@kernel.org,
-        Steven Sistare <steven.sistare@oracle.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        dave.dice@oracle.com, Rahul Yadav <rahul.x.yadav@oracle.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C0BC44A5-875C-4BED-A616-D380F6CF25D5@oracle.com>
-References: <20190329152006.110370-1-alex.kogan@oracle.com>
- <20190329152006.110370-4-alex.kogan@oracle.com>
- <60a3a2d8-d222-73aa-2df1-64c9d3fa3241@redhat.com>
- <20190402094320.GM11158@hirez.programming.kicks-ass.net>
- <6AEDE4F2-306A-4DF9-9307-9E3517C68A2B@oracle.com>
- <20190403160112.GK4038@hirez.programming.kicks-ass.net>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>
-X-Mailer: Apple Mail (2.3259)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9278 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=998
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906040147
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9278 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906040147
+        id S1726407AbfFEEGP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Jun 2019 00:06:15 -0400
+Received: from guitar.tcltek.co.il ([192.115.133.116]:60648 "EHLO
+        mx.tkos.co.il" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725783AbfFEEGP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 5 Jun 2019 00:06:15 -0400
+Received: from sapphire.tkos.co.il (unknown [192.168.100.188])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx.tkos.co.il (Postfix) with ESMTPS id 52E9A44030A;
+        Wed,  5 Jun 2019 07:06:12 +0300 (IDT)
+Date:   Wed, 5 Jun 2019 07:06:11 +0300
+From:   Baruch Siach <baruch@tkos.co.il>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, "Dmitry V . Levin" <ldv@altlinux.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] bpf: fix uapi bpf_prog_info fields alignment
+Message-ID: <20190605040611.dt5fiegte2ys7z7z@sapphire.tkos.co.il>
+References: <f42c7b44b3f694056c4216e9d9ba914b44e72ab9.1559648367.git.baruch@tkos.co.il>
+ <CAADnVQJ1vRvqNFsWjvwmzSc_-OY51HTsVa13XhgK1v9NbYY2_A@mail.gmail.com>
+ <CAMuHMdV-0s_ikRmCrEcMCfkAp57Fu8WTUnJsopGagbYa+GGpbA@mail.gmail.com>
+ <20190604153028.ysyzvmpxqaaln4v2@ast-mbp.dhcp.thefacebook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190604153028.ysyzvmpxqaaln4v2@ast-mbp.dhcp.thefacebook.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Peter, Longman,=20
+Hi Alexei,
 
-> On Apr 3, 2019, at 12:01 PM, Peter Zijlstra <peterz@infradead.org> =
-wrote:
->=20
-> On Wed, Apr 03, 2019 at 11:39:09AM -0400, Alex Kogan wrote:
->=20
->>>> The patch that I am looking for is to have a separate
->>>> numa_queued_spinlock_slowpath() that coexists with
->>>> native_queued_spinlock_slowpath() and
->>>> paravirt_queued_spinlock_slowpath(). At boot time, we select the =
-most
->>>> appropriate one for the system at hand.
->> Is this how this selection works today for paravirt?
->> I see a PARAVIRT_SPINLOCKS config option, but IIUC you are talking =
-about a different mechanism here.
->> Can you, please, elaborate or give me a link to a page that explains =
-that?
->=20
-> Oh man, you ask us to explain how paravirt patching works... that's
-> magic :-)
->=20
-> Basically, the compiler will emit a bunch of indirect calls to the
-> various pv_ops.*.* functions.
->=20
-> Then, at alternative_instructions() <- apply_paravirt() it will =
-rewrite
-> all these indirect calls to direct calls to the function pointers that
-> are in the pv_ops structure at that time (+- more magic).
-Trying to resume this work, I am looking for concrete steps required to =
-integrate CNA with the paravirt patching.
+(Adding Arnd and linux-arch to Cc)
 
-Looking at alternative_instructions(), I wonder if I need to add another =
-call, something like apply_numa() similar to apply_paravirt(), and do =
-the patch work there.
-Or perhaps I should =E2=80=9Cjust" initialize the pv_ops structure with =
-the corresponding numa_queued_spinlock_slowpath() in paravirt.c?
+On Tue, Jun 04, 2019 at 08:30:29AM -0700, Alexei Starovoitov wrote:
+> On Tue, Jun 04, 2019 at 05:23:46PM +0200, Geert Uytterhoeven wrote:
+> > On Tue, Jun 4, 2019 at 5:17 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > > On Tue, Jun 4, 2019 at 4:40 AM Baruch Siach <baruch@tkos.co.il> wrote:
+> > > > Merge commit 1c8c5a9d38f60 ("Merge
+> > > > git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next") undid the
+> > > > fix from commit 36f9814a494 ("bpf: fix uapi hole for 32 bit compat
+> > > > applications") by taking the gpl_compatible 1-bit field definition from
+> > > > commit b85fab0e67b162 ("bpf: Add gpl_compatible flag to struct
+> > > > bpf_prog_info") as is. That breaks architectures with 16-bit alignment
+> > > > like m68k. Widen gpl_compatible to 32-bit to restore alignment of the
+> > > > following fields.
+> > >
+> > > The commit log is misleading and incorrect.
+> > > Since compiler makes it into 16-bit field, it's a compiler bug.
+> > > u32 in C should stay as u32 regardless of architecture.
+> > 
+> > C99 says (Section 6.7.2.1, Structure and union specifiers, Semantics)
+> > 
+> >     10  An implementation may allocate any addressable storage unit
+> >         large enough to hold a bit-field.
+> > 
+> > $ cat hello.c
+> > #include <stdio.h>
+> > #include <stdint.h>
+> > #include <stdlib.h>
+> > 
+> > struct x {
+> >         unsigned int bit : 1;
+> >         unsigned char byte;
+> > };
+> > 
+> > int main(int argc, char *argv[])
+> > {
+> >         struct x x;
+> > 
+> >         printf("byte is at offset %zu\n", (uintptr_t)&x.byte - (uintptr_t)&x);
+> >         printf("sizeof(x) = %zu\n", sizeof(x));
+> >         exit(0);
+> > }
+> > $ gcc -Wall hello.c -o hello && ./hello
+> > byte is at offset 1
+> > sizeof(x) = 4
+> > $ uname -m
+> > x86_64
+> > 
+> > So the compiler allocates a single byte, even on a 64-bit platform!
+> > The gap is solely determined by the alignment rule for the
+> > successive field.
+> 
+> argh. then we need something like this:
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 7c6aef253173..a2ac0b961251 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -3174,6 +3174,7 @@ struct bpf_prog_info {
+>         char name[BPF_OBJ_NAME_LEN];
+>         __u32 ifindex;
+>         __u32 gpl_compatible:1;
+> +       __u32 :31;
+>         __u64 netns_dev;
+>         __u64 netns_ino;
+>         __u32 nr_jited_ksyms;
 
-Also, the paravirt code is under arch/x86, while CNA is generic (not =
-x86-specific).
-Do you still want to see CNA-related patching residing under arch/x86?
+Is that guaranteed to work across platforms/compilers? Maybe an anonymous 
+union would be safer? Something like:
 
-We still need a config option (something like NUMA_AWARE_SPINLOCKS) to =
-enable CNA patching under this config only, correct?
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 63e0cf66f01a..06c9fb314ea5 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3140,7 +3140,10 @@ struct bpf_prog_info {
+ 	__aligned_u64 map_ids;
+ 	char name[BPF_OBJ_NAME_LEN];
+ 	__u32 ifindex;
+-	__u32 gpl_compatible:1;
++	union {
++		__u32 gpl_compatible:1;
++		__u32 pad;
++	};
+ 	__u64 netns_dev;
+ 	__u64 netns_ino;
+ 	__u32 nr_jited_ksyms;
 
-Thanks in advance,
-=E2=80=94 Alex
+baruch
 
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
