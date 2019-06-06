@@ -2,19 +2,19 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FF937E8E
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7141037E73
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727081AbfFFUSi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jun 2019 16:18:38 -0400
-Received: from mga14.intel.com ([192.55.52.115]:51127 "EHLO mga14.intel.com"
+        id S1728558AbfFFURg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jun 2019 16:17:36 -0400
+Received: from mga14.intel.com ([192.55.52.115]:51133 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727765AbfFFURf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1727725AbfFFURf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Thu, 6 Jun 2019 16:17:35 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 13:17:32 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 13:17:33 -0700
 X-ExtLoop1: 1
 Received: from yyu32-desk1.sc.intel.com ([143.183.136.147])
   by fmsmga001.fm.intel.com with ESMTP; 06 Jun 2019 13:17:32 -0700
@@ -44,9 +44,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v7 12/14] x86/vsyscall/64: Fixup shadow stack and branch tracking for vsyscall
-Date:   Thu,  6 Jun 2019 13:09:24 -0700
-Message-Id: <20190606200926.4029-13-yu-cheng.yu@intel.com>
+Subject: [PATCH v7 13/14] x86/cet: Add PTRACE interface for CET
+Date:   Thu,  6 Jun 2019 13:09:25 -0700
+Message-Id: <20190606200926.4029-14-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190606200926.4029-1-yu-cheng.yu@intel.com>
 References: <20190606200926.4029-1-yu-cheng.yu@intel.com>
@@ -55,67 +55,145 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When emulating a RET, also unwind the task's shadow stack and cancel
-the current branch tracking status.
+Add REGSET_CET64/REGSET_CET32 to get/set CET MSRs:
+
+    IA32_U_CET (user-mode CET settings) and
+    IA32_PL3_SSP (user-mode shadow stack)
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/entry/vsyscall/vsyscall_64.c | 28 +++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ arch/x86/include/asm/fpu/regset.h |  7 +++---
+ arch/x86/kernel/fpu/regset.c      | 41 +++++++++++++++++++++++++++++++
+ arch/x86/kernel/ptrace.c          | 16 ++++++++++++
+ include/uapi/linux/elf.h          |  1 +
+ 4 files changed, 62 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
-index d9d81ad7a400..6869ef9d1e8b 100644
---- a/arch/x86/entry/vsyscall/vsyscall_64.c
-+++ b/arch/x86/entry/vsyscall/vsyscall_64.c
-@@ -38,6 +38,8 @@
- #include <asm/fixmap.h>
- #include <asm/traps.h>
- #include <asm/paravirt.h>
-+#include <asm/fpu/xstate.h>
-+#include <asm/fpu/types.h>
+diff --git a/arch/x86/include/asm/fpu/regset.h b/arch/x86/include/asm/fpu/regset.h
+index d5bdffb9d27f..edad0d889084 100644
+--- a/arch/x86/include/asm/fpu/regset.h
++++ b/arch/x86/include/asm/fpu/regset.h
+@@ -7,11 +7,12 @@
  
- #define CREATE_TRACE_POINTS
- #include "vsyscall_trace.h"
-@@ -92,6 +94,30 @@ static int addr_to_vsyscall_nr(unsigned long addr)
- 	return nr;
+ #include <linux/regset.h>
+ 
+-extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active;
++extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active,
++				cetregs_active;
+ extern user_regset_get_fn fpregs_get, xfpregs_get, fpregs_soft_get,
+-				xstateregs_get;
++				xstateregs_get, cetregs_get;
+ extern user_regset_set_fn fpregs_set, xfpregs_set, fpregs_soft_set,
+-				 xstateregs_set;
++				 xstateregs_set, cetregs_set;
+ 
+ /*
+  * xstateregs_active == regset_fpregs_active. Please refer to the comment
+diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+index d652b939ccfb..2937ec9d9215 100644
+--- a/arch/x86/kernel/fpu/regset.c
++++ b/arch/x86/kernel/fpu/regset.c
+@@ -156,6 +156,47 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+ 	return ret;
  }
  
-+void fixup_shstk(void)
++int cetregs_active(struct task_struct *target, const struct user_regset *regset)
 +{
-+#ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
-+	u64 r;
-+
-+	if (current->thread.cet.shstk_enabled) {
-+		rdmsrl(MSR_IA32_PL3_SSP, r);
-+		wrmsrl(MSR_IA32_PL3_SSP, r + 8);
-+	}
++#ifdef CONFIG_X86_INTEL_CET
++	if (target->thread.cet.shstk_enabled || target->thread.cet.ibt_enabled)
++		return regset->n;
 +#endif
++	return 0;
 +}
 +
-+void fixup_ibt(void)
++int cetregs_get(struct task_struct *target, const struct user_regset *regset,
++		unsigned int pos, unsigned int count,
++		void *kbuf, void __user *ubuf)
 +{
-+#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
-+	u64 r;
++	struct fpu *fpu = &target->thread.fpu;
++	struct cet_user_state *cetregs;
 +
-+	if (current->thread.cet.ibt_enabled) {
-+		rdmsrl(MSR_IA32_U_CET, r);
-+		wrmsrl(MSR_IA32_U_CET, r & ~MSR_IA32_CET_WAIT_ENDBR);
-+	}
-+#endif
++	if (!boot_cpu_has(X86_FEATURE_SHSTK))
++		return -ENODEV;
++
++	cetregs = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
++
++	fpu__prepare_read(fpu);
++	return user_regset_copyout(&pos, &count, &kbuf, &ubuf, cetregs, 0, -1);
 +}
 +
- static bool write_ok_or_segv(unsigned long ptr, size_t size)
- {
- 	/*
-@@ -265,6 +291,8 @@ bool emulate_vsyscall(struct pt_regs *regs, unsigned long address)
- 	/* Emulate a ret instruction. */
- 	regs->ip = caller;
- 	regs->sp += 8;
-+	fixup_shstk();
-+	fixup_ibt();
- 	return true;
++int cetregs_set(struct task_struct *target, const struct user_regset *regset,
++		  unsigned int pos, unsigned int count,
++		  const void *kbuf, const void __user *ubuf)
++{
++	struct fpu *fpu = &target->thread.fpu;
++	struct cet_user_state *cetregs;
++
++	if (!boot_cpu_has(X86_FEATURE_SHSTK))
++		return -ENODEV;
++
++	cetregs = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
++
++	fpu__prepare_write(fpu);
++	return user_regset_copyin(&pos, &count, &kbuf, &ubuf, cetregs, 0, -1);
++}
++
+ #if defined CONFIG_X86_32 || defined CONFIG_IA32_EMULATION
  
- sigsegv:
+ /*
+diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+index a166c960bc9e..db902ed9b353 100644
+--- a/arch/x86/kernel/ptrace.c
++++ b/arch/x86/kernel/ptrace.c
+@@ -51,7 +51,9 @@ enum x86_regset {
+ 	REGSET_IOPERM64 = REGSET_XFP,
+ 	REGSET_XSTATE,
+ 	REGSET_TLS,
++	REGSET_CET64 = REGSET_TLS,
+ 	REGSET_IOPERM32,
++	REGSET_CET32,
+ };
+ 
+ struct pt_regs_offset {
+@@ -1268,6 +1270,13 @@ static struct user_regset x86_64_regsets[] __ro_after_init = {
+ 		.size = sizeof(long), .align = sizeof(long),
+ 		.active = ioperm_active, .get = ioperm_get
+ 	},
++	[REGSET_CET64] = {
++		.core_note_type = NT_X86_CET,
++		.n = sizeof(struct cet_user_state) / sizeof(u64),
++		.size = sizeof(u64), .align = sizeof(u64),
++		.active = cetregs_active, .get = cetregs_get,
++		.set = cetregs_set
++	},
+ };
+ 
+ static const struct user_regset_view user_x86_64_view = {
+@@ -1323,6 +1332,13 @@ static struct user_regset x86_32_regsets[] __ro_after_init = {
+ 		.size = sizeof(u32), .align = sizeof(u32),
+ 		.active = ioperm_active, .get = ioperm_get
+ 	},
++	[REGSET_CET32] = {
++		.core_note_type = NT_X86_CET,
++		.n = sizeof(struct cet_user_state) / sizeof(u64),
++		.size = sizeof(u64), .align = sizeof(u64),
++		.active = cetregs_active, .get = cetregs_get,
++		.set = cetregs_set
++	},
+ };
+ 
+ static const struct user_regset_view user_x86_32_view = {
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index 316177ce9e76..4f320d96d538 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -401,6 +401,7 @@ typedef struct elf64_shdr {
+ #define NT_386_TLS	0x200		/* i386 TLS slots (struct user_desc) */
+ #define NT_386_IOPERM	0x201		/* x86 io permission bitmap (1=deny) */
+ #define NT_X86_XSTATE	0x202		/* x86 extended state using xsave */
++#define NT_X86_CET	0x203		/* x86 cet state */
+ #define NT_S390_HIGH_GPRS	0x300	/* s390 upper register halves */
+ #define NT_S390_TIMER	0x301		/* s390 timer register */
+ #define NT_S390_TODCMP	0x302		/* s390 TOD clock comparator register */
 -- 
 2.17.1
 
