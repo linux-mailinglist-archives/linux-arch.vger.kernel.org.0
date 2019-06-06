@@ -2,263 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 665BC365A3
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2019 22:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2798137083
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 11:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbfFEUk3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Jun 2019 16:40:29 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:55670 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfFEUk3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jun 2019 16:40:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Bdl+GToplZYKFl2/CZwK1ShFFbX2KkgoYa/IQrkAuz4=; b=rjQbWXan+6Rg3IlYBqU+ZkIeqs
-        1t9EtuwW9iZ++dFEqThm5G+AubmH6Sp2/HBdaWcip/N6nFIu4mRZGVfCJzVOmCRPb0un9kMjCWEvW
-        x8Wd21a9+eUqrO5wN0Nodpu9SAZVA3ViJvHJudrbvifdZyA9aWfKe80I40SxCKiHV+s7Awm/MdwIj
-        XbaxEr6DejPaDSoZ5hIamojbNR0fm/0pHtUXyGZgrlI2AiDBuqHRx6n8WWdtAXB4lvpa44tWVTHUF
-        L64dGlYH7wjSNLbcMwsL85JtoeTMIGtFFIBKYkKE07assZ8unvum/mVH22z9wpJB8rBmP0XCS2Fux
-        HccFHKTQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hYchZ-0001Du-8j; Wed, 05 Jun 2019 20:40:05 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DEB6720763536; Wed,  5 Jun 2019 22:40:03 +0200 (CEST)
-Date:   Wed, 5 Jun 2019 22:40:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alex Kogan <alex.kogan@oracle.com>
-Cc:     Waiman Long <longman@redhat.com>, linux@armlinux.org.uk,
-        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        Steven Sistare <steven.sistare@oracle.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        dave.dice@oracle.com, Rahul Yadav <rahul.x.yadav@oracle.com>
-Subject: Re: [PATCH v2 3/5] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-Message-ID: <20190605204003.GC3402@hirez.programming.kicks-ass.net>
-References: <20190329152006.110370-1-alex.kogan@oracle.com>
- <20190329152006.110370-4-alex.kogan@oracle.com>
- <60a3a2d8-d222-73aa-2df1-64c9d3fa3241@redhat.com>
- <20190402094320.GM11158@hirez.programming.kicks-ass.net>
- <6AEDE4F2-306A-4DF9-9307-9E3517C68A2B@oracle.com>
- <20190403160112.GK4038@hirez.programming.kicks-ass.net>
- <C0BC44A5-875C-4BED-A616-D380F6CF25D5@oracle.com>
+        id S1728222AbfFFJnt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jun 2019 05:43:49 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45858 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727539AbfFFJns (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jun 2019 05:43:48 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x569bUvT181080
+        for <linux-arch@vger.kernel.org>; Thu, 6 Jun 2019 05:43:46 -0400
+Received: from e14.ny.us.ibm.com (e14.ny.us.ibm.com [129.33.205.204])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sxyqvjbnu-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Thu, 06 Jun 2019 05:43:45 -0400
+Received: from localhost
+        by e14.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <paulmck@linux.vnet.ibm.com>;
+        Thu, 6 Jun 2019 10:43:44 +0100
+Received: from b01cxnp23034.gho.pok.ibm.com (9.57.198.29)
+        by e14.ny.us.ibm.com (146.89.104.201) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 6 Jun 2019 10:43:41 +0100
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x569heXG27787628
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Jun 2019 09:43:41 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7E76B2066;
+        Thu,  6 Jun 2019 09:43:40 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A7394B205F;
+        Thu,  6 Jun 2019 09:43:40 +0000 (GMT)
+Received: from paulmck-ThinkPad-W541 (unknown [9.85.136.182])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Jun 2019 09:43:40 +0000 (GMT)
+Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
+        id 25C7916C3A57; Thu,  6 Jun 2019 02:43:40 -0700 (PDT)
+Date:   Thu, 6 Jun 2019 02:43:40 -0700
+From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <Will.Deacon@arm.com>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: single copy atomicity for double load/stores on 32-bit systems
+Reply-To: paulmck@linux.ibm.com
+References: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
+ <20190531082112.GH2623@hirez.programming.kicks-ass.net>
+ <C2D7FE5348E1B147BCA15975FBA2307501A2522B5B@us01wembx1.internal.synopsys.com>
+ <20190603201324.GN28207@linux.ibm.com>
+ <CAMuHMdW-8Jt80mSyHTYmj6354-3f1=Vp_8dY-Nite1ERpUCFew@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <C0BC44A5-875C-4BED-A616-D380F6CF25D5@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAMuHMdW-8Jt80mSyHTYmj6354-3f1=Vp_8dY-Nite1ERpUCFew@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-TM-AS-GCONF: 00
+x-cbid: 19060609-0052-0000-0000-000003CC2620
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011223; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01213992; UDB=6.00638109; IPR=6.00995071;
+ MB=3.00027205; MTD=3.00000008; XFM=3.00000015; UTC=2019-06-06 09:43:44
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19060609-0053-0000-0000-00006134604B
+Message-Id: <20190606094340.GD28207@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-06_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906060070
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 04, 2019 at 07:21:13PM -0400, Alex Kogan wrote:
-
-> Trying to resume this work, I am looking for concrete steps required
-> to integrate CNA with the paravirt patching.
+On Tue, Jun 04, 2019 at 09:41:04AM +0200, Geert Uytterhoeven wrote:
+> Hi Paul,
 > 
-> Looking at alternative_instructions(), I wonder if I need to add
-> another call, something like apply_numa() similar to apply_paravirt(),
-> and do the patch work there.  Or perhaps I should “just" initialize
-> the pv_ops structure with the corresponding
-> numa_queued_spinlock_slowpath() in paravirt.c?
-
-Yeah, just initialize the pv_ops.lock.* thingies to contain the numa
-variant before apply_paravirt() happens.
-
-> Also, the paravirt code is under arch/x86, while CNA is generic (not
-> x86-specific).  Do you still want to see CNA-related patching residing
-> under arch/x86?
+> On Mon, Jun 3, 2019 at 10:14 PM Paul E. McKenney <paulmck@linux.ibm.com> wrote:
+> > On Mon, Jun 03, 2019 at 06:08:35PM +0000, Vineet Gupta wrote:
+> > > On 5/31/19 1:21 AM, Peter Zijlstra wrote:
+> > > >> I'm not sure how to interpret "natural alignment" for the case of double
+> > > >> load/stores on 32-bit systems where the hardware and ABI allow for 4 byte
+> > > >> alignment (ARCv2 LDD/STD, ARM LDRD/STRD ....)
+> > > > Natural alignment: !((uintptr_t)ptr % sizeof(*ptr))
+> > > >
+> > > > For any u64 type, that would give 8 byte alignment. the problem
+> > > > otherwise being that your data spans two lines/pages etc..
+> > >
+> > > Sure, but as Paul said, if the software doesn't expect them to be atomic by
+> > > default, they could span 2 hardware lines to keep the implementation simpler/sane.
+> >
+> > I could imagine 8-byte types being only four-byte aligned on 32-bit systems,
+> > but it would be quite a surprise on 64-bit systems.
 > 
-> We still need a config option (something like NUMA_AWARE_SPINLOCKS) to
-> enable CNA patching under this config only, correct?
+> Or two-byte aligned?
+> 
+> M68k started with a 16-bit data bus, and alignment rules were retained
+> when gaining a wider data bus.
+> 
+> BTW, do any platforms have issues with atomicity of 4-byte types on
+> 16-bit data buses? I believe some embedded ARM or PowerPC do have
+> such buses.
 
-There is the static_call() stuff that could be generic; I posted a new
-version of that today (x86 only for now, but IIRC there's arm64 patches
-for that around somewhere too).
+But m68k is !SMP-only, correct?  If so, the only issues would be
+interactions with interrupt handlers and the like, and doesn't current
+m68k hardware use exact interrupts?  Or is it still possible to interrupt
+an m68k in the middle of an instruction like it was in the bad old days?
 
-https://lkml.kernel.org/r/20190605130753.327195108@infradead.org
+							Thanx, Paul
 
-Which would allow something a little like this:
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
-
-diff --git a/arch/x86/include/asm/qspinlock.h b/arch/x86/include/asm/qspinlock.h
-index bd5ac6cc37db..01feaf912bd7 100644
---- a/arch/x86/include/asm/qspinlock.h
-+++ b/arch/x86/include/asm/qspinlock.h
-@@ -63,29 +63,7 @@ static inline bool vcpu_is_preempted(long cpu)
- #endif
- 
- #ifdef CONFIG_PARAVIRT
--DECLARE_STATIC_KEY_TRUE(virt_spin_lock_key);
--
- void native_pv_lock_init(void) __init;
--
--#define virt_spin_lock virt_spin_lock
--static inline bool virt_spin_lock(struct qspinlock *lock)
--{
--	if (!static_branch_likely(&virt_spin_lock_key))
--		return false;
--
--	/*
--	 * On hypervisors without PARAVIRT_SPINLOCKS support we fall
--	 * back to a Test-and-Set spinlock, because fair locks have
--	 * horrible lock 'holder' preemption issues.
--	 */
--
--	do {
--		while (atomic_read(&lock->val) != 0)
--			cpu_relax();
--	} while (atomic_cmpxchg(&lock->val, 0, _Q_LOCKED_VAL) != 0);
--
--	return true;
--}
- #else
- static inline void native_pv_lock_init(void)
- {
-diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-index 5169b8cc35bb..78be9e474e94 100644
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -531,7 +531,7 @@ static void __init kvm_smp_prepare_cpus(unsigned int max_cpus)
- {
- 	native_smp_prepare_cpus(max_cpus);
- 	if (kvm_para_has_hint(KVM_HINTS_REALTIME))
--		static_branch_disable(&virt_spin_lock_key);
-+		static_call_update(queued_spin_lock_slowpath, __queued_spin_lock_slowpath);
- }
- 
- static void __init kvm_smp_prepare_boot_cpu(void)
-diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
-index 98039d7fb998..ae6d15f84867 100644
---- a/arch/x86/kernel/paravirt.c
-+++ b/arch/x86/kernel/paravirt.c
-@@ -105,12 +105,10 @@ static unsigned paravirt_patch_jmp(void *insn_buff, const void *target,
- }
- #endif
- 
--DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
--
- void __init native_pv_lock_init(void)
- {
--	if (!boot_cpu_has(X86_FEATURE_HYPERVISOR))
--		static_branch_disable(&virt_spin_lock_key);
-+	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
-+		static_call_update(queued_spin_lock_slowpath, __tas_spin_lock_slowpath);
- }
- 
- unsigned paravirt_patch_default(u8 type, void *insn_buff,
-diff --git a/arch/x86/xen/spinlock.c b/arch/x86/xen/spinlock.c
-index 3776122c87cc..86808127b6e6 100644
---- a/arch/x86/xen/spinlock.c
-+++ b/arch/x86/xen/spinlock.c
-@@ -70,7 +70,7 @@ void xen_init_lock_cpu(int cpu)
- 
- 	if (!xen_pvspin) {
- 		if (cpu == 0)
--			static_branch_disable(&virt_spin_lock_key);
-+			static_call_update(queued_spin_lock_slowpath, __queued_spin_lock_slowpath);
- 		return;
- 	}
- 
-diff --git a/include/asm-generic/qspinlock.h b/include/asm-generic/qspinlock.h
-index fde943d180e0..8ca4dd9db931 100644
---- a/include/asm-generic/qspinlock.h
-+++ b/include/asm-generic/qspinlock.h
-@@ -65,7 +65,9 @@ static __always_inline int queued_spin_trylock(struct qspinlock *lock)
- 	return likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_VAL));
- }
- 
--extern void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
-+extern void __queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
-+
-+DECLARE_STATIC_CALL(queued_spin_lock_slowpath, __queued_spin_lock_slowpath);
- 
- /**
-  * queued_spin_lock - acquire a queued spinlock
-@@ -78,7 +80,7 @@ static __always_inline void queued_spin_lock(struct qspinlock *lock)
- 	if (likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_VAL)))
- 		return;
- 
--	queued_spin_lock_slowpath(lock, val);
-+	static_call(queued_spin_lock_slowpath, lock, val);
- }
- 
- #ifndef queued_spin_unlock
-@@ -95,13 +97,6 @@ static __always_inline void queued_spin_unlock(struct qspinlock *lock)
- }
- #endif
- 
--#ifndef virt_spin_lock
--static __always_inline bool virt_spin_lock(struct qspinlock *lock)
--{
--	return false;
--}
--#endif
--
- /*
-  * Remapping spinlock architecture specific functions to the corresponding
-  * queued spinlock functions.
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index 2473f10c6956..0e9e61637d56 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -290,6 +290,20 @@ static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
- 
- #endif /* _GEN_PV_LOCK_SLOWPATH */
- 
-+void __tas_spin_lock_slowpath(struct qspinlock *lock, u32 val)
-+{
-+	/*
-+	 * On hypervisors without PARAVIRT_SPINLOCKS support we fall
-+	 * back to a Test-and-Set spinlock, because fair locks have
-+	 * horrible lock 'holder' preemption issues.
-+	 */
-+
-+	do {
-+		while (atomic_read(&lock->val) != 0)
-+			cpu_relax();
-+	} while (atomic_cmpxchg(&lock->val, 0, _Q_LOCKED_VAL) != 0);
-+}
-+
- /**
-  * queued_spin_lock_slowpath - acquire the queued spinlock
-  * @lock: Pointer to queued spinlock structure
-@@ -311,7 +325,7 @@ static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
-  * contended             :    (*,x,y) +--> (*,0,0) ---> (*,0,1) -'  :
-  *   queue               :         ^--'                             :
-  */
--void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
-+void __queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- {
- 	struct mcs_spinlock *prev, *next, *node;
- 	u32 old, tail;
-@@ -322,9 +336,6 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	if (pv_enabled())
- 		goto pv_queue;
- 
--	if (virt_spin_lock(lock))
--		return;
--
- 	/*
- 	 * Wait for in-progress pending->locked hand-overs with a bounded
- 	 * number of spins so that we guarantee forward progress.
-@@ -558,7 +569,9 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	 */
- 	__this_cpu_dec(qnodes[0].mcs.count);
- }
--EXPORT_SYMBOL(queued_spin_lock_slowpath);
-+EXPORT_SYMBOL(__queued_spin_lock_slowpath);
-+
-+DEFINE_STATIC_CALL(queued_spin_lock_slowpath, __queued_spin_lock_slowpath);
- 
- /*
-  * Generate the paravirt code for queued_spin_unlock_slowpath().
