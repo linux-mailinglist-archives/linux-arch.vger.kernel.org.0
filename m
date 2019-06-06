@@ -2,43 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF48737EA8
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5032837EB4
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbfFFUZh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jun 2019 16:25:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58288 "EHLO mail.kernel.org"
+        id S1726793AbfFFU0s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jun 2019 16:26:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59080 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726245AbfFFUZg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 Jun 2019 16:25:36 -0400
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        id S1726238AbfFFU0r (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Jun 2019 16:26:47 -0400
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2CFE32133D
-        for <linux-arch@vger.kernel.org>; Thu,  6 Jun 2019 20:25:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D68BD214AF
+        for <linux-arch@vger.kernel.org>; Thu,  6 Jun 2019 20:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559852736;
-        bh=DKhd22QxqBDA4KYT2cEZlqhYj/PumKxUwK/zMkdDIFM=;
+        s=default; t=1559852807;
+        bh=KPzI+YwSmOs28yM0mu03w5J/5AGDUhBeJx6OEeWoVX4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=G0CVtpqeJtYYi6ZVaBFtvvXvsAJWteRf+Hozt3FdnG/AgCfB13Ad6uwZ0nLaLABj2
-         Ly/i51Lug8kHTeKHt0sOEyAEaFq4S0eb4MTCLoZsHoQIebL3w5+kFZd//YQMmGUiXU
-         4WkplG7Ari2A2w0tOQzaO/RkIK0JrHzIWXgmzQyU=
-Received: by mail-wr1-f41.google.com with SMTP id x17so3732168wrl.9
-        for <linux-arch@vger.kernel.org>; Thu, 06 Jun 2019 13:25:36 -0700 (PDT)
-X-Gm-Message-State: APjAAAXJmL+DlDm5VdO7TwTeOXFtW1OsGFoE0Paqa7JZDBMpmGBpl7Xm
-        mngMcMhYxY3hHrKPe2QBSuxSFgz+oL6X8LP2jth2aQ==
-X-Google-Smtp-Source: APXvYqyiVg/qughgzdZroKp3BApJXIniApUU+56AdTnkB3j3XqqcAGvsvRwbxtgUhLtiuuaGb5s/W6OHjaS71guGj14=
-X-Received: by 2002:adf:f2c8:: with SMTP id d8mr4513620wrp.221.1559852734693;
- Thu, 06 Jun 2019 13:25:34 -0700 (PDT)
+        b=sQw0Lu9CAjfPFLxj0f4izZgbct9wON3UkoluMWtqqvnVZi7LX6+PqbRKcUNtGFPRC
+         VwSx/IwIvxNRl/Eh2ce4stDlwhsMthuxOUrJ/gpf6YOh6guy7TBeQP/aoPkMh3L+/v
+         d2/JTlzLlzvCzvUELTMuYV1T3nAUPyJwHIqwc0MM=
+Received: by mail-wm1-f53.google.com with SMTP id 22so1230507wmg.2
+        for <linux-arch@vger.kernel.org>; Thu, 06 Jun 2019 13:26:46 -0700 (PDT)
+X-Gm-Message-State: APjAAAVik4GpkHjswJ3oC6M/J4OHQc+5P2WNNCqg/xmP7sL9HyH1u7IG
+        kT4sXyF3/04FtOYpJ1/qkJ579jKFHXxOjWGD9RfbkQ==
+X-Google-Smtp-Source: APXvYqwZv50PloUZATpBbGT4OO6zXzFDR47DeJkyJO1yLg4R1WCRiHzDw51jl+w40n+V1KyBop2vJW/Rtz8YXJjW/A4=
+X-Received: by 2002:a1c:6242:: with SMTP id w63mr1265538wmb.161.1559852805470;
+ Thu, 06 Jun 2019 13:26:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190606200926.4029-1-yu-cheng.yu@intel.com> <20190606200926.4029-11-yu-cheng.yu@intel.com>
-In-Reply-To: <20190606200926.4029-11-yu-cheng.yu@intel.com>
+References: <20190606200926.4029-1-yu-cheng.yu@intel.com> <20190606200926.4029-10-yu-cheng.yu@intel.com>
+In-Reply-To: <20190606200926.4029-10-yu-cheng.yu@intel.com>
 From:   Andy Lutomirski <luto@kernel.org>
-Date:   Thu, 6 Jun 2019 13:25:23 -0700
-X-Gmail-Original-Message-ID: <CALCETrUZ9vu8+9WrMcMdV6DvmB3nRQmLjd5_uDk8x1NMQUtPpg@mail.gmail.com>
-Message-ID: <CALCETrUZ9vu8+9WrMcMdV6DvmB3nRQmLjd5_uDk8x1NMQUtPpg@mail.gmail.com>
-Subject: Re: [PATCH v7 10/14] x86/vdso/32: Add ENDBR32 to __kernel_vsyscall
- entry point
+Date:   Thu, 6 Jun 2019 13:26:34 -0700
+X-Gmail-Original-Message-ID: <CALCETrVhw4U939E2RorUMorxx8VqLyg2Zm8qEMUSM5pX+cc2FQ@mail.gmail.com>
+Message-ID: <CALCETrVhw4U939E2RorUMorxx8VqLyg2Zm8qEMUSM5pX+cc2FQ@mail.gmail.com>
+Subject: Re: [PATCH v7 09/14] x86/vdso: Insert endbr32/endbr64 to vDSO
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -76,14 +75,14 @@ On Thu, Jun 6, 2019 at 1:17 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
 >
 > From: "H.J. Lu" <hjl.tools@gmail.com>
 >
-> Add ENDBR32 to __kernel_vsyscall entry point.
->
+> When Intel indirect branch tracking is enabled, functions in vDSO which
+> may be called indirectly must have endbr32 or endbr64 as the first
+> instruction.  Compiler must support -fcf-protection=branch so that it
+> can be used to compile vDSO.
 
 Acked-by: Andy Lutomirski <luto@kernel.org>
 
-However, you forgot your own Signed-off-by.
-
+>
 > Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
 
-
---Andy
+You're still missing your Signed-off-by.
