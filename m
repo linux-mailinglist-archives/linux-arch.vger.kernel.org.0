@@ -2,103 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6367370E7
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 11:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BD5377C4
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 17:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728016AbfFFJxc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jun 2019 05:53:32 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:32894 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727971AbfFFJxc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jun 2019 05:53:32 -0400
-Received: by mail-lj1-f194.google.com with SMTP id v29so1402179ljv.0;
-        Thu, 06 Jun 2019 02:53:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=28Sb/i9VMm7hznCq6aDZ/0pyysBt+iN3wVeGdQHf1CQ=;
-        b=gd7+l35kuNhveRQyGhkiC1CdQrNxx3/fVkXKET6kCgQKm2mGEl1f3NgdQ30f49AuUQ
-         9ILUwCrp15WYvzjhZ6IoVm8SUfCHnEWEpqO5+YTwz2ak0b2n7i9RWVOLXpQZULMGwCI5
-         SMWw9wfZfLwwZRDPr74Bd6QYePL+K/l+VCK5dsM0tYrEkJ99UKJM1KJHxx/jC4O9b2eD
-         XIHd9BeB4qjLSB4Q+Q/T9TiiTv1UZJiQe9JoBI8BgMT9NgqHb6D4sSOZDofagno/0f5K
-         anJOibKuD2SZql1FJ2EIw14Xqs7DKsh4d7flIya5TL6d8c7UQ2RDLqQQJq6txAllVrRI
-         19yQ==
-X-Gm-Message-State: APjAAAU/I4nxsN0qA7SwpoLGGvl54QTMsJsNObmZnf4YdPTKe+bVgxcP
-        Y+C1weH8hC1z/uOPSKV/+I0ZQ7pbAVFrd+N97Xq3qA==
-X-Google-Smtp-Source: APXvYqxnbWb2E/RCX5HRf59wP5AyiykvU9YaKFtC+GiQ5C0pv7SjQrvMd71agZfZ8TmfpiNkG3y+Cnfz1DEYSKctk6I=
-X-Received: by 2002:a2e:9a87:: with SMTP id p7mr116614lji.133.1559814810186;
- Thu, 06 Jun 2019 02:53:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
- <20190531082112.GH2623@hirez.programming.kicks-ass.net> <C2D7FE5348E1B147BCA15975FBA2307501A2522B5B@us01wembx1.internal.synopsys.com>
- <20190603201324.GN28207@linux.ibm.com> <CAMuHMdW-8Jt80mSyHTYmj6354-3f1=Vp_8dY-Nite1ERpUCFew@mail.gmail.com>
- <20190606094340.GD28207@linux.ibm.com>
-In-Reply-To: <20190606094340.GD28207@linux.ibm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 6 Jun 2019 11:53:18 +0200
-Message-ID: <CAMuHMdXvpFZjNjN4GyHXSRJ4=8AXVZArc_T+09HPErzZvUxXYg@mail.gmail.com>
-Subject: Re: single copy atomicity for double load/stores on 32-bit systems
-To:     "Paul E. McKenney" <paulmck@linux.ibm.com>
-Cc:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <Will.Deacon@arm.com>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728812AbfFFPXe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jun 2019 11:23:34 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:36368 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727309AbfFFPXe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jun 2019 11:23:34 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x56F8dwU141560;
+        Thu, 6 Jun 2019 15:22:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2018-07-02; bh=ketKTVwbtklQIJXqAbX+H6nxp1mYN2KsNnWPbZLX+qw=;
+ b=YU740Z7r5N9HPgb5jCMJGJJWLnq7dSsMg5QxEXG0zQCxJcR7gw8s1v6LJfzQbwYEbjXC
+ 2QL7hJTBixRhxTYbEXatWnvAlC5kz5Y6xlDf8NbEDayqlICWqzF8zPWRoXu2ZAEbdCN1
+ oKRHmUUruLaY3qONu64FgBq98cOi7l/RcCgBW0jmNfjOkGeUrHAji/AWDVhYNg9nM/I/
+ wvohiWVeAYfvCdQql/iinBNGVsDJmjZY3dxYQEL3g9esS/9Sj2PwkGi7oGO8UTV+Oihc
+ bWnqx4nhAdQDqTZpXXr4xCMzKR5zG/0q4a1bplhhUK4C2EtuKZ9lvX66MWobqI40ytRl 6Q== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2suj0qs2uc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Jun 2019 15:22:10 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x56FKgBb070053;
+        Thu, 6 Jun 2019 15:22:09 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2swnhcrbhx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Jun 2019 15:22:09 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x56FLnw4008838;
+        Thu, 6 Jun 2019 15:21:49 GMT
+Received: from [10.11.111.157] (/10.11.111.157)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 06 Jun 2019 08:21:48 -0700
+Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 10.2 \(3259\))
+Subject: Re: [PATCH v2 3/5] locking/qspinlock: Introduce CNA into the slow
+ path of qspinlock
+From:   Alex Kogan <alex.kogan@oracle.com>
+In-Reply-To: <20190605204003.GC3402@hirez.programming.kicks-ass.net>
+Date:   Thu, 6 Jun 2019 11:21:48 -0400
+Cc:     Waiman Long <longman@redhat.com>, linux@armlinux.org.uk,
+        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        Steven Sistare <steven.sistare@oracle.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        dave.dice@oracle.com, Rahul Yadav <rahul.x.yadav@oracle.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6426D627-77EE-471C-B02A-A85271B666E9@oracle.com>
+References: <20190329152006.110370-1-alex.kogan@oracle.com>
+ <20190329152006.110370-4-alex.kogan@oracle.com>
+ <60a3a2d8-d222-73aa-2df1-64c9d3fa3241@redhat.com>
+ <20190402094320.GM11158@hirez.programming.kicks-ass.net>
+ <6AEDE4F2-306A-4DF9-9307-9E3517C68A2B@oracle.com>
+ <20190403160112.GK4038@hirez.programming.kicks-ass.net>
+ <C0BC44A5-875C-4BED-A616-D380F6CF25D5@oracle.com>
+ <20190605204003.GC3402@hirez.programming.kicks-ass.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+X-Mailer: Apple Mail (2.3259)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9280 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906060104
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9280 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906060104
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Paul,
+>> Also, the paravirt code is under arch/x86, while CNA is generic (not
+>> x86-specific).  Do you still want to see CNA-related patching =
+residing
+>> under arch/x86?
+>>=20
+>> We still need a config option (something like NUMA_AWARE_SPINLOCKS) =
+to
+>> enable CNA patching under this config only, correct?
+>=20
+> There is the static_call() stuff that could be generic; I posted a new
+> version of that today (x86 only for now, but IIRC there's arm64 =
+patches
+> for that around somewhere too).
 
-On Thu, Jun 6, 2019 at 11:43 AM Paul E. McKenney <paulmck@linux.ibm.com> wrote:
-> On Tue, Jun 04, 2019 at 09:41:04AM +0200, Geert Uytterhoeven wrote:
-> > On Mon, Jun 3, 2019 at 10:14 PM Paul E. McKenney <paulmck@linux.ibm.com> wrote:
-> > > On Mon, Jun 03, 2019 at 06:08:35PM +0000, Vineet Gupta wrote:
-> > > > On 5/31/19 1:21 AM, Peter Zijlstra wrote:
-> > > > >> I'm not sure how to interpret "natural alignment" for the case of double
-> > > > >> load/stores on 32-bit systems where the hardware and ABI allow for 4 byte
-> > > > >> alignment (ARCv2 LDD/STD, ARM LDRD/STRD ....)
-> > > > > Natural alignment: !((uintptr_t)ptr % sizeof(*ptr))
-> > > > >
-> > > > > For any u64 type, that would give 8 byte alignment. the problem
-> > > > > otherwise being that your data spans two lines/pages etc..
-> > > >
-> > > > Sure, but as Paul said, if the software doesn't expect them to be atomic by
-> > > > default, they could span 2 hardware lines to keep the implementation simpler/sane.
-> > >
-> > > I could imagine 8-byte types being only four-byte aligned on 32-bit systems,
-> > > but it would be quite a surprise on 64-bit systems.
-> >
-> > Or two-byte aligned?
-> >
-> > M68k started with a 16-bit data bus, and alignment rules were retained
-> > when gaining a wider data bus.
-> >
-> > BTW, do any platforms have issues with atomicity of 4-byte types on
-> > 16-bit data buses? I believe some embedded ARM or PowerPC do have
-> > such buses.
->
-> But m68k is !SMP-only, correct?  If so, the only issues would be
+The static_call technique appears as the more desirable long-term =
+approach, but I think it would be prudent to keep the patches decoupled =
+for now so we can move forward with less entanglements.
+So unless anyone objects, we will work on plugging into the existing =
+patching for pv.
+And we will keep that code under arch/x86, but will be open for any =
+suggestion to move it elsewhere.
 
-M68k support in Linux is uniprocessor-only.
+Thanks!
+=E2=80=94 Alex
 
-> interactions with interrupt handlers and the like, and doesn't current
-> m68k hardware use exact interrupts?  Or is it still possible to interrupt
-> an m68k in the middle of an instruction like it was in the bad old days?
-
-TBH, I don't know.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
