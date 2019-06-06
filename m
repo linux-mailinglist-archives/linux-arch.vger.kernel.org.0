@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4747F37E36
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1110637E1F
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727968AbfFFUQK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jun 2019 16:16:10 -0400
+        id S1729446AbfFFUPi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jun 2019 16:15:38 -0400
 Received: from mga17.intel.com ([192.55.52.151]:47825 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729430AbfFFUPg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 Jun 2019 16:15:36 -0400
+        id S1729403AbfFFUPh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Jun 2019 16:15:37 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 13:15:36 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 13:15:37 -0700
 X-ExtLoop1: 1
 Received: from yyu32-desk1.sc.intel.com ([143.183.136.147])
-  by orsmga002.jf.intel.com with ESMTP; 06 Jun 2019 13:15:34 -0700
+  by orsmga002.jf.intel.com with ESMTP; 06 Jun 2019 13:15:36 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -44,9 +44,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v7 21/27] x86/cet/shstk: Handle signals for shadow stack
-Date:   Thu,  6 Jun 2019 13:06:40 -0700
-Message-Id: <20190606200646.3951-22-yu-cheng.yu@intel.com>
+Subject: [PATCH v7 22/27] binfmt_elf: Extract .note.gnu.property from an ELF file
+Date:   Thu,  6 Jun 2019 13:06:41 -0700
+Message-Id: <20190606200646.3951-23-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190606200646.3951-1-yu-cheng.yu@intel.com>
 References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
@@ -55,440 +55,497 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When setting up a signal, the kernel creates a shadow stack restore
-token at the current SHSTK address and then stores the token's
-address in the signal frame, right after the FPU state.  Before
-restoring a signal, the kernel verifies and then uses the restore
-token to set the SHSTK pointer.
+An ELF file's .note.gnu.property indicates features the executable file
+can support.  For example, the property GNU_PROPERTY_X86_FEATURE_1_AND
+indicates the file supports GNU_PROPERTY_X86_FEATURE_1_IBT and/or
+GNU_PROPERTY_X86_FEATURE_1_SHSTK.
 
+With this patch, if an arch needs to setup features from ELF properties,
+it needs CONFIG_ARCH_USE_GNU_PROPERTY to be set, and a specific
+arch_setup_property().
+
+For example, for X86_64:
+
+int arch_setup_property(void *ehdr, void *phdr, struct file *f, bool inter)
+{
+	int r;
+	uint32_t property;
+
+	r = get_gnu_property(ehdr, phdr, f, GNU_PROPERTY_X86_FEATURE_1_AND,
+			     &property);
+	...
+}
+
+Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/ia32/ia32_signal.c            |   8 ++
- arch/x86/include/asm/cet.h             |   7 ++
- arch/x86/include/asm/fpu/internal.h    |   2 +
- arch/x86/include/asm/fpu/signal.h      |   2 +
- arch/x86/include/uapi/asm/sigcontext.h |  15 +++
- arch/x86/kernel/cet.c                  | 141 +++++++++++++++++++++++++
- arch/x86/kernel/fpu/signal.c           |  67 ++++++++++++
- arch/x86/kernel/signal.c               |   8 ++
- 8 files changed, 250 insertions(+)
+ fs/Kconfig.binfmt        |   3 +
+ fs/Makefile              |   1 +
+ fs/binfmt_elf.c          |  13 ++
+ fs/gnu_property.c        | 351 +++++++++++++++++++++++++++++++++++++++
+ include/linux/elf.h      |  12 ++
+ include/uapi/linux/elf.h |  14 ++
+ 6 files changed, 394 insertions(+)
+ create mode 100644 fs/gnu_property.c
 
-diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
-index 629d1ee05599..5216ca782262 100644
---- a/arch/x86/ia32/ia32_signal.c
-+++ b/arch/x86/ia32/ia32_signal.c
-@@ -34,6 +34,7 @@
- #include <asm/sigframe.h>
- #include <asm/sighandling.h>
- #include <asm/smap.h>
-+#include <asm/cet.h>
+diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+index f87ddd1b6d72..397138ab305b 100644
+--- a/fs/Kconfig.binfmt
++++ b/fs/Kconfig.binfmt
+@@ -36,6 +36,9 @@ config COMPAT_BINFMT_ELF
+ config ARCH_BINFMT_ELF_STATE
+ 	bool
  
- /*
-  * Do a signal return; undo the signal stack.
-@@ -235,6 +236,7 @@ static void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
- 		 ksig->ka.sa.sa_restorer)
- 		sp = (unsigned long) ksig->ka.sa.sa_restorer;
++config ARCH_USE_GNU_PROPERTY
++	bool
++
+ config BINFMT_ELF_FDPIC
+ 	bool "Kernel support for FDPIC ELF binaries"
+ 	default y if !BINFMT_ELF
+diff --git a/fs/Makefile b/fs/Makefile
+index c9aea23aba56..b69f18c14e09 100644
+--- a/fs/Makefile
++++ b/fs/Makefile
+@@ -44,6 +44,7 @@ obj-$(CONFIG_BINFMT_ELF)	+= binfmt_elf.o
+ obj-$(CONFIG_COMPAT_BINFMT_ELF)	+= compat_binfmt_elf.o
+ obj-$(CONFIG_BINFMT_ELF_FDPIC)	+= binfmt_elf_fdpic.o
+ obj-$(CONFIG_BINFMT_FLAT)	+= binfmt_flat.o
++obj-$(CONFIG_ARCH_USE_GNU_PROPERTY) += gnu_property.o
  
-+	sp = fpu__alloc_sigcontext_ext(sp);
- 	sp = fpu__alloc_mathframe(sp, 1, &fx_aligned, &math_size);
- 	*fpstate = (struct _fpstate_32 __user *) sp;
- 	if (copy_fpstate_to_sigframe(*fpstate, (void __user *)fx_aligned,
-@@ -295,6 +297,9 @@ int ia32_setup_frame(int sig, struct ksignal *ksig,
- 			restorer = &frame->retcode;
+ obj-$(CONFIG_FS_MBCACHE)	+= mbcache.o
+ obj-$(CONFIG_FS_POSIX_ACL)	+= posix_acl.o
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 8264b468f283..c3ea73787e93 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -1080,6 +1080,19 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 		goto out_free_dentry;
  	}
  
-+	if (setup_fpu_system_states(1, (unsigned long)restorer, fpstate))
-+		return -EFAULT;
++	if (interpreter) {
++		retval = arch_setup_property(&loc->interp_elf_ex,
++					     interp_elf_phdata,
++					     interpreter, true);
++	} else {
++		retval = arch_setup_property(&loc->elf_ex,
++					     elf_phdata,
++					     bprm->file, false);
++	}
 +
- 	put_user_try {
- 		put_user_ex(ptr_to_compat(restorer), &frame->pretcode);
- 
-@@ -384,6 +389,9 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
- 				     regs, set->sig[0]);
- 	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
- 
-+	if (!err)
-+		err = setup_fpu_system_states(1, (unsigned long)restorer, fpstate);
++	if (retval < 0)
++		goto out_free_dentry;
 +
- 	if (err)
- 		return -EFAULT;
+ 	if (interpreter) {
+ 		unsigned long interp_map_addr = 0;
  
-diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-index c952a2ec65fe..422ccb8adbb7 100644
---- a/arch/x86/include/asm/cet.h
-+++ b/arch/x86/include/asm/cet.h
-@@ -6,6 +6,8 @@
- #include <linux/types.h>
- 
- struct task_struct;
-+struct sc_ext;
-+
- /*
-  * Per-thread CET status
-  */
-@@ -19,10 +21,15 @@ struct cet_status {
- int cet_setup_shstk(void);
- void cet_disable_shstk(void);
- void cet_disable_free_shstk(struct task_struct *p);
-+int cet_restore_signal(bool ia32, struct sc_ext *sc);
-+int cet_setup_signal(bool ia32, unsigned long rstor, struct sc_ext *sc);
- #else
- static inline int cet_setup_shstk(void) { return -EINVAL; }
- static inline void cet_disable_shstk(void) {}
- static inline void cet_disable_free_shstk(struct task_struct *p) {}
-+static inline int cet_restore_signal(bool ia32, struct sc_ext *sc) { return -EINVAL; }
-+static inline int cet_setup_signal(bool ia32, unsigned long rstor,
-+				   struct sc_ext *sc) { return -EINVAL; }
- #endif
- 
- #define cpu_x86_cet_enabled() \
-diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
-index 148a3d8c8c35..7db8c19c9072 100644
---- a/arch/x86/include/asm/fpu/internal.h
-+++ b/arch/x86/include/asm/fpu/internal.h
-@@ -472,6 +472,8 @@ static inline void copy_kernel_to_fpregs(union fpregs_state *fpstate)
- 	__copy_kernel_to_fpregs(fpstate, -1);
- }
- 
-+extern int setup_fpu_system_states(int is_ia32, unsigned long restorer,
-+				   void __user *fp);
- extern int copy_fpstate_to_sigframe(void __user *buf, void __user *fp, int size);
- 
- /*
-diff --git a/arch/x86/include/asm/fpu/signal.h b/arch/x86/include/asm/fpu/signal.h
-index 7fb516b6893a..630a658aeea3 100644
---- a/arch/x86/include/asm/fpu/signal.h
-+++ b/arch/x86/include/asm/fpu/signal.h
-@@ -25,6 +25,8 @@ extern void convert_from_fxsr(struct user_i387_ia32_struct *env,
- extern void convert_to_fxsr(struct fxregs_state *fxsave,
- 			    const struct user_i387_ia32_struct *env);
- 
-+unsigned long fpu__alloc_sigcontext_ext(unsigned long sp);
-+
- unsigned long
- fpu__alloc_mathframe(unsigned long sp, int ia32_frame,
- 		     unsigned long *buf_fx, unsigned long *size);
-diff --git a/arch/x86/include/uapi/asm/sigcontext.h b/arch/x86/include/uapi/asm/sigcontext.h
-index 844d60eb1882..e3b08d1c0d3b 100644
---- a/arch/x86/include/uapi/asm/sigcontext.h
-+++ b/arch/x86/include/uapi/asm/sigcontext.h
-@@ -196,6 +196,21 @@ struct _xstate {
- 	/* New processor state extensions go here: */
- };
- 
+diff --git a/fs/gnu_property.c b/fs/gnu_property.c
+new file mode 100644
+index 000000000000..9c4d1d5ebf00
+--- /dev/null
++++ b/fs/gnu_property.c
+@@ -0,0 +1,351 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
-+ * Sigcontext extension (struct sc_ext) is located after
-+ * sigcontext->fpstate.  Because currently only the shadow
-+ * stack pointer is saved there and the shadow stack depends
-+ * on XSAVES, we can find sc_ext from sigcontext->fpstate.
++ * Extract an ELF file's .note.gnu.property.
 + *
-+ * The 64-bit fpstate has a size of fpu_user_xstate_size, plus
-+ * FP_XSTATE_MAGIC2_SIZE when XSAVE* is used.  The struct sc_ext
-+ * is located at the end of sigcontext->fpstate, aligned to 8.
++ * The path from the ELF header to the note section is the following:
++ * elfhdr->elf_phdr->elf_note->property[].
 + */
-+struct sc_ext {
-+	unsigned long total_size;
-+	unsigned long ssp;
++
++#include <uapi/linux/elf-em.h>
++#include <linux/processor.h>
++#include <linux/binfmts.h>
++#include <linux/elf.h>
++#include <linux/slab.h>
++#include <linux/fs.h>
++#include <linux/uaccess.h>
++#include <linux/string.h>
++#include <linux/compat.h>
++
++/*
++ * The .note.gnu.property layout:
++ *
++ *	struct elf_note {
++ *		u32 n_namesz; --> sizeof(n_name[]); always (4)
++ *		u32 n_ndescsz;--> sizeof(property[])
++ *		u32 n_type;   --> always NT_GNU_PROPERTY_TYPE_0
++ *	};
++ *	char n_name[4]; --> always 'GNU\0'
++ *
++ *	struct {
++ *		struct gnu_property {
++ *			u32 pr_type;
++ *			u32 pr_datasz;
++ *		};
++ *		u8 pr_data[pr_datasz];
++ *	}[];
++ */
++
++#define BUF_SIZE (PAGE_SIZE / 4)
++
++typedef bool (test_item_fn)(void *buf, u32 *arg, u32 type);
++typedef void *(next_item_fn)(void *buf, u32 *arg, u32 type);
++
++static inline bool test_note_type(void *buf, u32 *align, u32 note_type)
++{
++	struct elf_note *n = buf;
++
++	return ((n->n_type == note_type) && (n->n_namesz == 4) &&
++		(memcmp(n + 1, "GNU", 4) == 0));
++}
++
++static inline void *next_note(void *buf, u32 *align, u32 note_type)
++{
++	struct elf_note *n = buf;
++	u64 size;
++
++	if (check_add_overflow((u64)sizeof(*n), (u64)n->n_namesz, &size))
++		return NULL;
++
++	size = round_up(size, *align);
++
++	if (check_add_overflow(size, (u64)n->n_descsz, &size))
++		return NULL;
++
++	size = round_up(size, *align);
++
++	if (buf + size < buf)
++		return NULL;
++	else
++		return (buf + size);
++}
++
++static inline bool test_property(void *buf, u32 *max_type, u32 pr_type)
++{
++	struct gnu_property *pr = buf;
++
++	/*
++	 * Property types must be in ascending order.
++	 * Keep track of the max when testing each.
++	 */
++	if (pr->pr_type > *max_type)
++		*max_type = pr->pr_type;
++
++	return (pr->pr_type == pr_type);
++}
++
++static inline void *next_property(void *buf, u32 *max_type, u32 pr_type)
++{
++	struct gnu_property *pr = buf;
++
++	if ((buf + sizeof(*pr) +  pr->pr_datasz < buf) ||
++	    (pr->pr_type > pr_type) ||
++	    (pr->pr_type > *max_type))
++		return NULL;
++	else
++		return (buf + sizeof(*pr) + pr->pr_datasz);
++}
++
++/*
++ * Scan 'buf' for a pattern; return true if found.
++ * *pos is the distance from the beginning of buf to where
++ * the searched item or the next item is located.
++ */
++static int scan(u8 *buf, u32 buf_size, int item_size, test_item_fn test_item,
++		next_item_fn next_item, u32 *arg, u32 type, u32 *pos)
++{
++	int found = 0;
++	u8 *p, *max;
++
++	max = buf + buf_size;
++	if (max < buf)
++		return 0;
++
++	p = buf;
++
++	while ((p + item_size < max) && (p + item_size > buf)) {
++		if (test_item(p, arg, type)) {
++			found = 1;
++			break;
++		}
++
++		p = next_item(p, arg, type);
++	}
++
++	*pos = (p + item_size <= buf) ? 0 : (u32)(p - buf);
++	return found;
++}
++
++/*
++ * Search an NT_GNU_PROPERTY_TYPE_0 for the property of 'pr_type'.
++ */
++static int find_property(struct file *file, unsigned long desc_size,
++			 loff_t file_offset, u8 *buf,
++			 u32 pr_type, u32 *property)
++{
++	u32 buf_pos;
++	unsigned long read_size;
++	unsigned long done;
++	int found = 0;
++	int ret = 0;
++	u32 last_pr = 0;
++
++	*property = 0;
++	buf_pos = 0;
++
++	for (done = 0; done < desc_size; done += buf_pos) {
++		read_size = desc_size - done;
++		if (read_size > BUF_SIZE)
++			read_size = BUF_SIZE;
++
++		ret = kernel_read(file, buf, read_size, &file_offset);
++
++		if (ret != read_size)
++			return (ret < 0) ? ret : -EIO;
++
++		ret = 0;
++		found = scan(buf, read_size, sizeof(struct gnu_property),
++			     test_property, next_property,
++			     &last_pr, pr_type, &buf_pos);
++
++		if ((!buf_pos) || found)
++			break;
++
++		file_offset += buf_pos - read_size;
++	}
++
++	if (found) {
++		struct gnu_property *pr =
++			(struct gnu_property *)(buf + buf_pos);
++
++		if (pr->pr_datasz == 4) {
++			u32 *max =  (u32 *)(buf + read_size);
++			u32 *data = (u32 *)((u8 *)pr + sizeof(*pr));
++
++			if (data + 1 <= max) {
++				*property = *data;
++			} else {
++				file_offset += buf_pos - read_size;
++				file_offset += sizeof(*pr);
++				ret = kernel_read(file, property, 4,
++						  &file_offset);
++			}
++		}
++	}
++
++	return ret;
++}
++
++/*
++ * Search a PT_NOTE segment for NT_GNU_PROPERTY_TYPE_0.
++ */
++static int find_note_type_0(struct file *file, loff_t file_offset,
++			    unsigned long note_size, u32 align,
++			    u32 pr_type, u32 *property)
++{
++	u8 *buf;
++	u32 buf_pos;
++	unsigned long read_size;
++	unsigned long done;
++	int found = 0;
++	int ret = 0;
++
++	buf = kmalloc(BUF_SIZE, GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
++
++	*property = 0;
++	buf_pos = 0;
++
++	for (done = 0; done < note_size; done += buf_pos) {
++		read_size = note_size - done;
++		if (read_size > BUF_SIZE)
++			read_size = BUF_SIZE;
++
++		ret = kernel_read(file, buf, read_size, &file_offset);
++
++		if (ret != read_size) {
++			ret = (ret < 0) ? ret : -EIO;
++			kfree(buf);
++			return ret;
++		}
++
++		/*
++		 * item_size = sizeof(struct elf_note) + elf_note.n_namesz.
++		 * n_namesz is 4 for the note type we look for.
++		 */
++		ret = scan(buf, read_size, sizeof(struct elf_note) + 4,
++			      test_note_type, next_note,
++			      &align, NT_GNU_PROPERTY_TYPE_0, &buf_pos);
++
++		file_offset += buf_pos - read_size;
++
++		if (ret && !found) {
++			struct elf_note *n =
++				(struct elf_note *)(buf + buf_pos);
++			u64 start = round_up(sizeof(*n) + n->n_namesz, align);
++			u64 total = 0;
++
++			if (check_add_overflow(start, (u64)n->n_descsz, &total)) {
++				ret = -EINVAL;
++				break;
++			}
++			total = round_up(total, align);
++
++			ret = find_property(file, n->n_descsz,
++					    file_offset + start,
++					    buf, pr_type, property);
++			found++;
++			file_offset += total;
++			buf_pos += total;
++		} else if (!buf_pos || ret) {
++			ret = 0;
++			*property = 0;
++			break;
++		}
++	}
++
++	kfree(buf);
++	return ret;
++}
++
++/*
++ * Look at an ELF file's PT_NOTE segments, then NT_GNU_PROPERTY_TYPE_0, then
++ * the property of pr_type.
++ *
++ * Input:
++ *	file: the file to search;
++ *	phdr: the file's elf header;
++ *	phnum: number of entries in phdr;
++ *	pr_type: the property type.
++ *
++ * Output:
++ *	The property found.
++ *
++ * Return:
++ *	Zero or error.
++ */
++static int scan_segments_64(struct file *file, struct elf64_phdr *phdr,
++			    int phnum, u32 pr_type, u32 *property)
++{
++	int i;
++	int err = 0;
++
++	for (i = 0; i < phnum; i++, phdr++) {
++		if ((phdr->p_type != PT_NOTE) || (phdr->p_align != 8))
++			continue;
++
++		/*
++		 * Search the PT_NOTE segment for NT_GNU_PROPERTY_TYPE_0.
++		 */
++		err = find_note_type_0(file, phdr->p_offset, phdr->p_filesz,
++				       phdr->p_align, pr_type, property);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++
++static int scan_segments_32(struct file *file, struct elf32_phdr *phdr,
++			    int phnum, u32 pr_type, u32 *property)
++{
++	int i;
++	int err = 0;
++
++	for (i = 0; i < phnum; i++, phdr++) {
++		if ((phdr->p_type != PT_NOTE) || (phdr->p_align != 4))
++			continue;
++
++		/*
++		 * Search the PT_NOTE segment for NT_GNU_PROPERTY_TYPE_0.
++		 */
++		err = find_note_type_0(file, phdr->p_offset, phdr->p_filesz,
++				       phdr->p_align, pr_type, property);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++
++int get_gnu_property(void *ehdr_p, void *phdr_p, struct file *f,
++		     u32 pr_type, u32 *property)
++{
++	struct elf64_hdr *ehdr64 = ehdr_p;
++	int err = 0;
++
++	*property = 0;
++
++	if (ehdr64->e_ident[EI_CLASS] == ELFCLASS64) {
++		struct elf64_phdr *phdr64 = phdr_p;
++
++		err = scan_segments_64(f, phdr64, ehdr64->e_phnum,
++				       pr_type, property);
++		if (err < 0)
++			goto out;
++	} else {
++		struct elf32_hdr *ehdr32 = ehdr_p;
++
++		if (ehdr32->e_ident[EI_CLASS] == ELFCLASS32) {
++			struct elf32_phdr *phdr32 = phdr_p;
++
++			err = scan_segments_32(f, phdr32, ehdr32->e_phnum,
++					       pr_type, property);
++			if (err < 0)
++				goto out;
++		}
++	}
++
++out:
++	return err;
++}
+diff --git a/include/linux/elf.h b/include/linux/elf.h
+index e3649b3e970e..c15febebe7f2 100644
+--- a/include/linux/elf.h
++++ b/include/linux/elf.h
+@@ -56,4 +56,16 @@ static inline int elf_coredump_extra_notes_write(struct coredump_params *cprm) {
+ extern int elf_coredump_extra_notes_size(void);
+ extern int elf_coredump_extra_notes_write(struct coredump_params *cprm);
+ #endif
++
++#ifdef CONFIG_ARCH_USE_GNU_PROPERTY
++extern int arch_setup_property(void *ehdr, void *phdr, struct file *f,
++			       bool interp);
++extern int get_gnu_property(void *ehdr_p, void *phdr_p, struct file *f,
++			    u32 pr_type, u32 *feature);
++#else
++static inline int arch_setup_property(void *ehdr, void *phdr, struct file *f,
++				      bool interp) { return 0; }
++static inline int get_gnu_property(void *ehdr_p, void *phdr_p, struct file *f,
++				   u32 pr_type, u32 *feature) { return 0; }
++#endif
+ #endif /* _LINUX_ELF_H */
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index 34c02e4290fe..316177ce9e76 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -372,6 +372,7 @@ typedef struct elf64_shdr {
+ #define NT_PRFPREG	2
+ #define NT_PRPSINFO	3
+ #define NT_TASKSTRUCT	4
++#define NT_GNU_PROPERTY_TYPE_0 5
+ #define NT_AUXV		6
+ /*
+  * Note to userspace developers: size of NT_SIGINFO note may increase
+@@ -443,4 +444,17 @@ typedef struct elf64_note {
+   Elf64_Word n_type;	/* Content type */
+ } Elf64_Nhdr;
+ 
++/* NT_GNU_PROPERTY_TYPE_0 header */
++struct gnu_property {
++  __u32 pr_type;
++  __u32 pr_datasz;
 +};
 +
- /*
-  * The 32-bit signal frame:
-  */
-diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
-index 2a48634aa6ce..b247cd15c1e2 100644
---- a/arch/x86/kernel/cet.c
-+++ b/arch/x86/kernel/cet.c
-@@ -19,6 +19,8 @@
- #include <asm/fpu/xstate.h>
- #include <asm/fpu/types.h>
- #include <asm/cet.h>
-+#include <asm/special_insns.h>
-+#include <uapi/asm/sigcontext.h>
- 
- static int set_shstk_ptr(unsigned long addr)
- {
-@@ -51,6 +53,80 @@ static unsigned long get_shstk_addr(void)
- 	return ptr;
- }
- 
-+#define TOKEN_MODE_MASK	3UL
-+#define TOKEN_MODE_64	1UL
-+#define IS_TOKEN_64(token) ((token & TOKEN_MODE_MASK) == TOKEN_MODE_64)
-+#define IS_TOKEN_32(token) ((token & TOKEN_MODE_MASK) == 0)
++/* .note.gnu.property types */
++#define GNU_PROPERTY_X86_FEATURE_1_AND		(0xc0000002)
 +
-+/*
-+ * Verify the restore token at the address of 'ssp' is
-+ * valid and then set shadow stack pointer according to the
-+ * token.
-+ */
-+static int verify_rstor_token(bool ia32, unsigned long ssp,
-+			      unsigned long *new_ssp)
-+{
-+	unsigned long token;
++/* Bits of GNU_PROPERTY_X86_FEATURE_1_AND */
++#define GNU_PROPERTY_X86_FEATURE_1_IBT		(0x00000001)
++#define GNU_PROPERTY_X86_FEATURE_1_SHSTK	(0x00000002)
 +
-+	*new_ssp = 0;
-+
-+	if (!IS_ALIGNED(ssp, 8))
-+		return -EINVAL;
-+
-+	if (get_user(token, (unsigned long __user *)ssp))
-+		return -EFAULT;
-+
-+	/* Is 64-bit mode flag correct? */
-+	if (!ia32 && !IS_TOKEN_64(token))
-+		return -EINVAL;
-+	else if (ia32 && !IS_TOKEN_32(token))
-+		return -EINVAL;
-+
-+	token &= ~TOKEN_MODE_MASK;
-+
-+	/*
-+	 * Restore address properly aligned?
-+	 */
-+	if ((!ia32 && !IS_ALIGNED(token, 8)) || !IS_ALIGNED(token, 4))
-+		return -EINVAL;
-+
-+	/*
-+	 * Token was placed properly?
-+	 */
-+	if ((ALIGN_DOWN(token, 8) - 8) != ssp)
-+		return -EINVAL;
-+
-+	*new_ssp = token;
-+	return 0;
-+}
-+
-+/*
-+ * Create a restore token on the shadow stack.
-+ * A token is always 8-byte and aligned to 8.
-+ */
-+static int create_rstor_token(bool ia32, unsigned long ssp,
-+			      unsigned long *new_ssp)
-+{
-+	unsigned long addr;
-+
-+	*new_ssp = 0;
-+
-+	if ((!ia32 && !IS_ALIGNED(ssp, 8)) || !IS_ALIGNED(ssp, 4))
-+		return -EINVAL;
-+
-+	addr = ALIGN_DOWN(ssp, 8) - 8;
-+
-+	/* Is the token for 64-bit? */
-+	if (!ia32)
-+		ssp |= TOKEN_MODE_64;
-+
-+	if (write_user_shstk_64(addr, ssp))
-+		return -EFAULT;
-+
-+	*new_ssp = addr;
-+	return 0;
-+}
-+
- int cet_setup_shstk(void)
- {
- 	unsigned long addr, size;
-@@ -114,3 +190,68 @@ void cet_disable_free_shstk(struct task_struct *tsk)
- 
- 	tsk->thread.cet.shstk_enabled = 0;
- }
-+
-+/*
-+ * Called from __fpu__restore_sig() under the protection
-+ * of fpregs_lock().
-+ */
-+int cet_restore_signal(bool ia32, struct sc_ext *sc_ext)
-+{
-+	unsigned long new_ssp = 0;
-+	u64 msr_ia32_u_cet = 0;
-+	int err;
-+
-+	if (current->thread.cet.shstk_enabled) {
-+		err = verify_rstor_token(ia32, sc_ext->ssp, &new_ssp);
-+		if (err)
-+			return err;
-+
-+		msr_ia32_u_cet |= MSR_IA32_CET_SHSTK_EN;
-+	}
-+
-+	wrmsrl(MSR_IA32_PL3_SSP, new_ssp);
-+	wrmsrl(MSR_IA32_U_CET, msr_ia32_u_cet);
-+	return 0;
-+}
-+
-+/*
-+ * Setup the shadow stack for the signal handler: first,
-+ * create a restore token to keep track of the current ssp,
-+ * and then the return address of the signal handler.
-+ */
-+int cet_setup_signal(bool ia32, unsigned long rstor_addr, struct sc_ext *sc_ext)
-+{
-+	unsigned long ssp = 0, new_ssp = 0;
-+	u64 msr_ia32_u_cet = 0;
-+	int err;
-+
-+	msr_ia32_u_cet = 0;
-+	ssp = 0;
-+
-+	if (current->thread.cet.shstk_enabled) {
-+		ssp = get_shstk_addr();
-+		err = create_rstor_token(ia32, ssp, &new_ssp);
-+		if (err)
-+			return err;
-+
-+		if (ia32) {
-+			ssp = new_ssp - sizeof(u32);
-+			err = write_user_shstk_32(ssp, (unsigned int)rstor_addr);
-+		} else {
-+			ssp = new_ssp - sizeof(u64);
-+			err = write_user_shstk_64(ssp, rstor_addr);
-+		}
-+
-+		if (err)
-+			return err;
-+
-+		msr_ia32_u_cet |= MSR_IA32_CET_SHSTK_EN;
-+		sc_ext->ssp = new_ssp;
-+	}
-+
-+	modify_fpu_regs_begin();
-+	wrmsrl(MSR_IA32_PL3_SSP, ssp);
-+	wrmsrl(MSR_IA32_U_CET, msr_ia32_u_cet);
-+	modify_fpu_regs_end();
-+	return 0;
-+}
-diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
-index e38b272793b1..0a67518c142f 100644
---- a/arch/x86/kernel/fpu/signal.c
-+++ b/arch/x86/kernel/fpu/signal.c
-@@ -51,6 +51,58 @@ static inline int check_for_xstate(struct fxregs_state __user *buf,
- 	return 0;
- }
- 
-+int setup_fpu_system_states(int is_ia32, unsigned long restorer,
-+				   void __user *fp)
-+{
-+	int err = 0;
-+
-+#ifdef CONFIG_X86_64
-+	if (cpu_x86_cet_enabled() && fp) {
-+		struct sc_ext ext = {0, 0};
-+
-+		err = cet_setup_signal(is_ia32, restorer, &ext);
-+		if (!err) {
-+			void __user *p;
-+
-+			ext.total_size = sizeof(ext);
-+
-+			p = fp + fpu_user_xstate_size + FP_XSTATE_MAGIC2_SIZE;
-+			p = (void __user *)ALIGN((unsigned long)p, 8);
-+
-+			if (copy_to_user(p, &ext, sizeof(ext)))
-+				return -EFAULT;
-+		}
-+	}
-+#endif
-+
-+	return err;
-+}
-+
-+static int restore_fpu_system_states(int is_ia32, void __user *fp)
-+{
-+	int err = 0;
-+
-+#ifdef CONFIG_X86_64
-+	if (cpu_x86_cet_enabled() && fp) {
-+		struct sc_ext ext = {0, 0};
-+		void __user *p;
-+
-+		p = fp + fpu_user_xstate_size + FP_XSTATE_MAGIC2_SIZE;
-+		p = (void __user *)ALIGN((unsigned long)p, 8);
-+
-+		if (copy_from_user(&ext, p, sizeof(ext)))
-+			return -EFAULT;
-+
-+		if (ext.total_size != sizeof(ext))
-+			return -EFAULT;
-+
-+		err = cet_restore_signal(is_ia32, &ext);
-+	}
-+#endif
-+
-+	return err;
-+}
-+
- /*
-  * Signal frame handlers.
-  */
-@@ -349,6 +401,10 @@ static int __fpu__restore_sig(void __user *buf, void __user *buf_fx, int size)
- 		pagefault_disable();
- 		ret = copy_user_to_fpregs_zeroing(buf_fx, xfeatures, fx_only);
- 		pagefault_enable();
-+
-+		if (!ret)
-+			ret = restore_fpu_system_states(0, buf);
-+
- 		if (!ret) {
- 			fpregs_mark_activate();
- 			fpregs_unlock();
-@@ -435,6 +491,17 @@ int fpu__restore_sig(void __user *buf, int ia32_frame)
- 	return __fpu__restore_sig(buf, buf_fx, size);
- }
- 
-+unsigned long fpu__alloc_sigcontext_ext(unsigned long sp)
-+{
-+	/*
-+	 * sigcontext_ext is at: fpu + fpu_user_xstate_size +
-+	 * FP_XSTATE_MAGIC2_SIZE, then aligned to 8.
-+	 */
-+	if (cpu_x86_cet_enabled())
-+		sp -= (sizeof(struct sc_ext) + 8);
-+	return sp;
-+}
-+
- unsigned long
- fpu__alloc_mathframe(unsigned long sp, int ia32_frame,
- 		     unsigned long *buf_fx, unsigned long *size)
-diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index 3b0dcec597ce..c81192bdc96c 100644
---- a/arch/x86/kernel/signal.c
-+++ b/arch/x86/kernel/signal.c
-@@ -46,6 +46,7 @@
- 
- #include <asm/sigframe.h>
- #include <asm/signal.h>
-+#include <asm/cet.h>
- 
- #define COPY(x)			do {			\
- 	get_user_ex(regs->x, &sc->x);			\
-@@ -264,6 +265,7 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
- 		sp = (unsigned long) ka->sa.sa_restorer;
- 	}
- 
-+	sp = fpu__alloc_sigcontext_ext(sp);
- 	sp = fpu__alloc_mathframe(sp, IS_ENABLED(CONFIG_X86_32),
- 				  &buf_fx, &math_size);
- 	*fpstate = (void __user *)sp;
-@@ -493,6 +495,9 @@ static int __setup_rt_frame(int sig, struct ksignal *ksig,
- 	err |= setup_sigcontext(&frame->uc.uc_mcontext, fp, regs, set->sig[0]);
- 	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
- 
-+	if (!err)
-+		err = setup_fpu_system_states(0, (unsigned long)ksig->ka.sa.sa_restorer, fp);
-+
- 	if (err)
- 		return -EFAULT;
- 
-@@ -579,6 +584,9 @@ static int x32_setup_rt_frame(struct ksignal *ksig,
- 				regs, set->sig[0]);
- 	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
- 
-+	if (!err)
-+		err = setup_fpu_system_states(0, (unsigned long)ksig->ka.sa.sa_restorer, fpstate);
-+
- 	if (err)
- 		return -EFAULT;
- 
+ #endif /* _UAPI_LINUX_ELF_H */
 -- 
 2.17.1
 
