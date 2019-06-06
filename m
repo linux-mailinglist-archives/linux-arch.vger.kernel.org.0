@@ -2,15 +2,15 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A531B37E90
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4E437E8C
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbfFFUSw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jun 2019 16:18:52 -0400
-Received: from mga14.intel.com ([192.55.52.115]:51127 "EHLO mga14.intel.com"
+        id S1727631AbfFFUSi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jun 2019 16:18:38 -0400
+Received: from mga14.intel.com ([192.55.52.115]:51136 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726906AbfFFURe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 Jun 2019 16:17:34 -0400
+        id S1727163AbfFFURf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Jun 2019 16:17:35 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
@@ -43,9 +43,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>
-Subject: [PATCH v7 10/14] x86/vdso/32: Add ENDBR32 to __kernel_vsyscall entry point
-Date:   Thu,  6 Jun 2019 13:09:22 -0700
-Message-Id: <20190606200926.4029-11-yu-cheng.yu@intel.com>
+Subject: [PATCH v7 11/14] x86/vsyscall/64: Add ENDBR64 to vsyscall entry points
+Date:   Thu,  6 Jun 2019 13:09:23 -0700
+Message-Id: <20190606200926.4029-12-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190606200926.4029-1-yu-cheng.yu@intel.com>
 References: <20190606200926.4029-1-yu-cheng.yu@intel.com>
@@ -56,27 +56,44 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: "H.J. Lu" <hjl.tools@gmail.com>
 
-Add ENDBR32 to __kernel_vsyscall entry point.
+Add ENDBR64 to vsyscall entry points.
 
 Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+Acked-by: Andy Lutomirski <luto@kernel.org>
 ---
- arch/x86/entry/vdso/vdso32/system_call.S | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/entry/vsyscall/vsyscall_emu_64.S | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/x86/entry/vdso/vdso32/system_call.S b/arch/x86/entry/vdso/vdso32/system_call.S
-index 263d7433dea8..2fc8141fff4e 100644
---- a/arch/x86/entry/vdso/vdso32/system_call.S
-+++ b/arch/x86/entry/vdso/vdso32/system_call.S
-@@ -14,6 +14,9 @@
- 	ALIGN
- __kernel_vsyscall:
- 	CFI_STARTPROC
+diff --git a/arch/x86/entry/vsyscall/vsyscall_emu_64.S b/arch/x86/entry/vsyscall/vsyscall_emu_64.S
+index 2e203f3a25a7..040696333457 100644
+--- a/arch/x86/entry/vsyscall/vsyscall_emu_64.S
++++ b/arch/x86/entry/vsyscall/vsyscall_emu_64.S
+@@ -17,16 +17,25 @@ __PAGE_ALIGNED_DATA
+ 	.type __vsyscall_page, @object
+ __vsyscall_page:
+ 
 +#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
-+	endbr32
++	endbr64
 +#endif
- 	/*
- 	 * Reshuffle regs so that all of any of the entry instructions
- 	 * will preserve enough state.
+ 	mov $__NR_gettimeofday, %rax
+ 	syscall
+ 	ret
+ 
+ 	.balign 1024, 0xcc
++#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
++	endbr64
++#endif
+ 	mov $__NR_time, %rax
+ 	syscall
+ 	ret
+ 
+ 	.balign 1024, 0xcc
++#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
++	endbr64
++#endif
+ 	mov $__NR_getcpu, %rax
+ 	syscall
+ 	ret
 -- 
 2.17.1
 
