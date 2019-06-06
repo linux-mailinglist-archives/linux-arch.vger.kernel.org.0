@@ -2,30 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C3537E7A
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF48737EA8
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbfFFUSb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jun 2019 16:18:31 -0400
-Received: from mga14.intel.com ([192.55.52.115]:51127 "EHLO mga14.intel.com"
+        id S1726406AbfFFUZh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jun 2019 16:25:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58288 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728093AbfFFURf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 Jun 2019 16:17:35 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 13:17:33 -0700
-X-ExtLoop1: 1
-Received: from yyu32-desk1.sc.intel.com ([143.183.136.147])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Jun 2019 13:17:33 -0700
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        id S1726245AbfFFUZg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Jun 2019 16:25:36 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2CFE32133D
+        for <linux-arch@vger.kernel.org>; Thu,  6 Jun 2019 20:25:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559852736;
+        bh=DKhd22QxqBDA4KYT2cEZlqhYj/PumKxUwK/zMkdDIFM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=G0CVtpqeJtYYi6ZVaBFtvvXvsAJWteRf+Hozt3FdnG/AgCfB13Ad6uwZ0nLaLABj2
+         Ly/i51Lug8kHTeKHt0sOEyAEaFq4S0eb4MTCLoZsHoQIebL3w5+kFZd//YQMmGUiXU
+         4WkplG7Ari2A2w0tOQzaO/RkIK0JrHzIWXgmzQyU=
+Received: by mail-wr1-f41.google.com with SMTP id x17so3732168wrl.9
+        for <linux-arch@vger.kernel.org>; Thu, 06 Jun 2019 13:25:36 -0700 (PDT)
+X-Gm-Message-State: APjAAAXJmL+DlDm5VdO7TwTeOXFtW1OsGFoE0Paqa7JZDBMpmGBpl7Xm
+        mngMcMhYxY3hHrKPe2QBSuxSFgz+oL6X8LP2jth2aQ==
+X-Google-Smtp-Source: APXvYqyiVg/qughgzdZroKp3BApJXIniApUU+56AdTnkB3j3XqqcAGvsvRwbxtgUhLtiuuaGb5s/W6OHjaS71guGj14=
+X-Received: by 2002:adf:f2c8:: with SMTP id d8mr4513620wrp.221.1559852734693;
+ Thu, 06 Jun 2019 13:25:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190606200926.4029-1-yu-cheng.yu@intel.com> <20190606200926.4029-11-yu-cheng.yu@intel.com>
+In-Reply-To: <20190606200926.4029-11-yu-cheng.yu@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Thu, 6 Jun 2019 13:25:23 -0700
+X-Gmail-Original-Message-ID: <CALCETrUZ9vu8+9WrMcMdV6DvmB3nRQmLjd5_uDk8x1NMQUtPpg@mail.gmail.com>
+Message-ID: <CALCETrUZ9vu8+9WrMcMdV6DvmB3nRQmLjd5_uDk8x1NMQUtPpg@mail.gmail.com>
+Subject: Re: [PATCH v7 10/14] x86/vdso/32: Add ENDBR32 to __kernel_vsyscall
+ entry point
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@amacapital.net>,
         Balbir Singh <bsingharora@gmail.com>,
         Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
@@ -43,85 +66,24 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>
-Subject: [PATCH v7 14/14] x86: Discard .note.gnu.property sections
-Date:   Thu,  6 Jun 2019 13:09:26 -0700
-Message-Id: <20190606200926.4029-15-yu-cheng.yu@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190606200926.4029-1-yu-cheng.yu@intel.com>
-References: <20190606200926.4029-1-yu-cheng.yu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "H.J. Lu" <hjl.tools@gmail.com>
+On Thu, Jun 6, 2019 at 1:17 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>
+> From: "H.J. Lu" <hjl.tools@gmail.com>
+>
+> Add ENDBR32 to __kernel_vsyscall entry point.
+>
 
-With the command-line option, -mx86-used-note=yes, the x86 assembler
-in binutils 2.32 and above generates a program property note in a note
-section, .note.gnu.property, to encode used x86 ISAs and features.
-To exclude .note.gnu.property sections from NOTE segment in x86 kernel
-linker script:
+Acked-by: Andy Lutomirski <luto@kernel.org>
 
-PHDRS {
- text PT_LOAD FLAGS(5);
- data PT_LOAD FLAGS(6);
- percpu PT_LOAD FLAGS(6);
- init PT_LOAD FLAGS(7);
- note PT_NOTE FLAGS(0);
-}
-SECTIONS
-{
-...
- .notes : AT(ADDR(.notes) - 0xffffffff80000000) { __start_notes = .; KEEP(*(.not
-e.*)) __stop_notes = .; } :text :note
-...
-}
+However, you forgot your own Signed-off-by.
 
-this patch discards .note.gnu.property sections in kernel linker script
-by adding
+> Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
 
- /DISCARD/ : {
-  *(.note.gnu.property)
- }
 
-before .notes sections.  Since .exit.text and .exit.data sections are
-discarded at runtime, it undefines EXIT_TEXT and EXIT_DATA to exclude
-.exit.text and .exit.data sections from default discarded sections.
-
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
----
- arch/x86/kernel/vmlinux.lds.S | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 0850b5149345..d2594b482c09 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -146,6 +146,10 @@ SECTIONS
- 	/* End of text section */
- 	_etext = .;
- 
-+	/* .note.gnu.property sections should be discarded */
-+	/DISCARD/ : {
-+		*(.note.gnu.property)
-+	}
- 	NOTES :text :note
- 
- 	EXCEPTION_TABLE(16) :text = 0x9090
-@@ -382,7 +386,12 @@ SECTIONS
- 	STABS_DEBUG
- 	DWARF_DEBUG
- 
--	/* Sections to be discarded */
-+	/* Sections to be discarded.  EXIT_TEXT and EXIT_DATA discard at runtime.
-+	 * not link time.  */
-+#undef EXIT_TEXT
-+#define EXIT_TEXT
-+#undef EXIT_DATA
-+#define EXIT_DATA
- 	DISCARDS
- 	/DISCARD/ : {
- 		*(.eh_frame)
--- 
-2.17.1
-
+--Andy
