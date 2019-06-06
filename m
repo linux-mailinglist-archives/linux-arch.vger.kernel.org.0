@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFD437E29
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A2F37E5A
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729542AbfFFUPp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jun 2019 16:15:45 -0400
-Received: from mga17.intel.com ([192.55.52.151]:47862 "EHLO mga17.intel.com"
+        id S1729613AbfFFURj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jun 2019 16:17:39 -0400
+Received: from mga07.intel.com ([134.134.136.100]:42894 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729531AbfFFUPo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 Jun 2019 16:15:44 -0400
+        id S1729512AbfFFURj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Jun 2019 16:17:39 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 13:15:43 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 13:17:30 -0700
 X-ExtLoop1: 1
 Received: from yyu32-desk1.sc.intel.com ([143.183.136.147])
-  by orsmga002.jf.intel.com with ESMTP; 06 Jun 2019 13:15:42 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 06 Jun 2019 13:17:29 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -44,189 +44,74 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v7 27/27] x86/cet/shstk: Add Shadow Stack instructions to opcode map
-Date:   Thu,  6 Jun 2019 13:06:46 -0700
-Message-Id: <20190606200646.3951-28-yu-cheng.yu@intel.com>
+Subject: [PATCH v7 00/14] Control-flow Enforcement: Branch Tracking, PTRACE
+Date:   Thu,  6 Jun 2019 13:09:12 -0700
+Message-Id: <20190606200926.4029-1-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190606200646.3951-1-yu-cheng.yu@intel.com>
-References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add the following shadow stack management instructions.
+The previous version of CET Branch Tracking/PTRACE patches is here:
 
-INCSSP:
-    Increment shadow stack pointer by the steps specified.
+  https://lkml.org/lkml/2018/11/20/203
 
-RDSSP:
-    Read SSP register into a GPR.
+Summary of changes from v6:
 
-SAVEPREVSSP:
-    Use "prev ssp" token at top of current shadow stack to
-    create a "restore token" on previous shadow stack.
+  Rebase to v5.2-rc3.
 
-RSTORSSP:
-    Restore from a "restore token" pointed by a GPR to SSP.
+  Add Branch Tracking in the signal handling routines.
 
-WRSS:
-    Write to kernel-mode shadow stack (kernel-mode instruction).
+  Fix Branch Tracking (and Shadow Stack) for vsyscall (patch #12):
+    This patch can be dropped if we expect CET blocking vsyscall.
 
-WRUSS:
-    Write to user-mode shadow stack (kernel-mode instruction).
+  Include H.J. Lu's patch to discard .note.gnu.property in the kernel.
 
-SETSSBSY:
-    Verify the "supervisor token" pointed by IA32_PL0_SSP MSR,
-    if valid, set the token to busy, and set SSP to the value
-    of IA32_PL0_SSP MSR.
+H.J. Lu (4):
+  x86/vdso: Insert endbr32/endbr64 to vDSO
+  x86/vdso/32: Add ENDBR32 to __kernel_vsyscall entry point
+  x86/vsyscall/64: Add ENDBR64 to vsyscall entry points
+  x86: Discard .note.gnu.property sections
 
-CLRSSBSY:
-    Verify the "supervisor token" pointed by a GPR, if valid,
-    clear the busy bit from the token.
+Yu-cheng Yu (10):
+  x86/cet/ibt: Add Kconfig option for user-mode Indirect Branch Tracking
+  x86/cet/ibt: User-mode indirect branch tracking support
+  x86/cet/ibt: Add IBT legacy code bitmap setup function
+  x86/cet/ibt: Handle signals for IBT
+  mm/mmap: Add IBT bitmap size to address space limit check
+  x86/cet/ibt: ELF header parsing for IBT
+  x86/cet/ibt: Add arch_prctl functions for IBT
+  x86/cet/ibt: Add ENDBR to op-code-map
+  x86/vsyscall/64: Fixup shadow stack and branch tracking for vsyscall
+  x86/cet: Add PTRACE interface for CET
 
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
----
- arch/x86/lib/x86-opcode-map.txt               | 26 +++++++++++++------
- tools/objtool/arch/x86/lib/x86-opcode-map.txt | 26 +++++++++++++------
- 2 files changed, 36 insertions(+), 16 deletions(-)
+ arch/x86/Kconfig                              | 16 ++++
+ arch/x86/Makefile                             |  7 ++
+ arch/x86/entry/vdso/Makefile                  | 12 ++-
+ arch/x86/entry/vdso/vdso-layout.lds.S         |  1 +
+ arch/x86/entry/vdso/vdso32/system_call.S      |  3 +
+ arch/x86/entry/vsyscall/vsyscall_64.c         | 28 +++++++
+ arch/x86/entry/vsyscall/vsyscall_emu_64.S     |  9 +++
+ arch/x86/include/asm/cet.h                    |  8 ++
+ arch/x86/include/asm/disabled-features.h      |  8 +-
+ arch/x86/include/asm/fpu/regset.h             |  7 +-
+ arch/x86/include/asm/mmu_context.h            | 10 +++
+ arch/x86/include/uapi/asm/prctl.h             |  2 +
+ arch/x86/kernel/cet.c                         | 80 +++++++++++++++++++
+ arch/x86/kernel/cet_prctl.c                   | 21 +++++
+ arch/x86/kernel/cpu/common.c                  | 17 ++++
+ arch/x86/kernel/fpu/regset.c                  | 41 ++++++++++
+ arch/x86/kernel/process_64.c                  |  6 ++
+ arch/x86/kernel/ptrace.c                      | 16 ++++
+ arch/x86/kernel/vmlinux.lds.S                 | 11 ++-
+ arch/x86/lib/x86-opcode-map.txt               | 13 ++-
+ include/uapi/linux/elf.h                      |  1 +
+ mm/mmap.c                                     | 19 ++++-
+ .../arch/x86/include/asm/disabled-features.h  |  8 +-
+ tools/objtool/arch/x86/lib/x86-opcode-map.txt | 13 ++-
+ 24 files changed, 345 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
-index e0b85930dd77..c5e825d44766 100644
---- a/arch/x86/lib/x86-opcode-map.txt
-+++ b/arch/x86/lib/x86-opcode-map.txt
-@@ -366,7 +366,7 @@ AVXcode: 1
- 1b: BNDCN Gv,Ev (F2) | BNDMOV Ev,Gv (66) | BNDMK Gv,Ev (F3) | BNDSTX Ev,Gv
- 1c:
- 1d:
--1e:
-+1e: RDSSP Rd (F3),REX.W
- 1f: NOP Ev
- # 0x0f 0x20-0x2f
- 20: MOV Rd,Cd
-@@ -610,7 +610,17 @@ fe: paddd Pq,Qq | vpaddd Vx,Hx,Wx (66),(v1)
- ff: UD0
- EndTable
- 
--Table: 3-byte opcode 1 (0x0f 0x38)
-+Table: 3-byte opcode 1 (0x0f 0x01)
-+Referrer:
-+AVXcode:
-+# Skip 0x00-0xe7
-+e8: SETSSBSY (f3)
-+e9:
-+ea: SAVEPREVSSP (f3)
-+# Skip 0xeb-0xff
-+EndTable
-+
-+Table: 3-byte opcode 2 (0x0f 0x38)
- Referrer: 3-byte escape 1
- AVXcode: 2
- # 0x0f 0x38 0x00-0x0f
-@@ -789,12 +799,12 @@ f0: MOVBE Gy,My | MOVBE Gw,Mw (66) | CRC32 Gd,Eb (F2) | CRC32 Gd,Eb (66&F2)
- f1: MOVBE My,Gy | MOVBE Mw,Gw (66) | CRC32 Gd,Ey (F2) | CRC32 Gd,Ew (66&F2)
- f2: ANDN Gy,By,Ey (v)
- f3: Grp17 (1A)
--f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v)
--f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v)
-+f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v) | WRUSS Pq,Qq (66),REX.W
-+f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v) | WRSS Pq,Qq (66),REX.W
- f7: BEXTR Gy,Ey,By (v) | SHLX Gy,Ey,By (66),(v) | SARX Gy,Ey,By (F3),(v) | SHRX Gy,Ey,By (F2),(v)
- EndTable
- 
--Table: 3-byte opcode 2 (0x0f 0x3a)
-+Table: 3-byte opcode 3 (0x0f 0x3a)
- Referrer: 3-byte escape 2
- AVXcode: 3
- # 0x0f 0x3a 0x00-0xff
-@@ -948,7 +958,7 @@ GrpTable: Grp7
- 2: LGDT Ms | XGETBV (000),(11B) | XSETBV (001),(11B) | VMFUNC (100),(11B) | XEND (101)(11B) | XTEST (110)(11B)
- 3: LIDT Ms
- 4: SMSW Mw/Rv
--5: rdpkru (110),(11B) | wrpkru (111),(11B)
-+5: rdpkru (110),(11B) | wrpkru (111),(11B) | RSTORSSP Mq (F3)
- 6: LMSW Ew
- 7: INVLPG Mb | SWAPGS (o64),(000),(11B) | RDTSCP (001),(11B)
- EndTable
-@@ -1019,8 +1029,8 @@ GrpTable: Grp15
- 2: vldmxcsr Md (v1) | WRFSBASE Ry (F3),(11B)
- 3: vstmxcsr Md (v1) | WRGSBASE Ry (F3),(11B)
- 4: XSAVE | ptwrite Ey (F3),(11B)
--5: XRSTOR | lfence (11B)
--6: XSAVEOPT | clwb (66) | mfence (11B)
-+5: XRSTOR | lfence (11B) | INCSSP Rd (F3),REX.W
-+6: XSAVEOPT | clwb (66) | mfence (11B) | CLRSSBSY Mq (F3)
- 7: clflush | clflushopt (66) | sfence (11B)
- EndTable
- 
-diff --git a/tools/objtool/arch/x86/lib/x86-opcode-map.txt b/tools/objtool/arch/x86/lib/x86-opcode-map.txt
-index e0b85930dd77..c5e825d44766 100644
---- a/tools/objtool/arch/x86/lib/x86-opcode-map.txt
-+++ b/tools/objtool/arch/x86/lib/x86-opcode-map.txt
-@@ -366,7 +366,7 @@ AVXcode: 1
- 1b: BNDCN Gv,Ev (F2) | BNDMOV Ev,Gv (66) | BNDMK Gv,Ev (F3) | BNDSTX Ev,Gv
- 1c:
- 1d:
--1e:
-+1e: RDSSP Rd (F3),REX.W
- 1f: NOP Ev
- # 0x0f 0x20-0x2f
- 20: MOV Rd,Cd
-@@ -610,7 +610,17 @@ fe: paddd Pq,Qq | vpaddd Vx,Hx,Wx (66),(v1)
- ff: UD0
- EndTable
- 
--Table: 3-byte opcode 1 (0x0f 0x38)
-+Table: 3-byte opcode 1 (0x0f 0x01)
-+Referrer:
-+AVXcode:
-+# Skip 0x00-0xe7
-+e8: SETSSBSY (f3)
-+e9:
-+ea: SAVEPREVSSP (f3)
-+# Skip 0xeb-0xff
-+EndTable
-+
-+Table: 3-byte opcode 2 (0x0f 0x38)
- Referrer: 3-byte escape 1
- AVXcode: 2
- # 0x0f 0x38 0x00-0x0f
-@@ -789,12 +799,12 @@ f0: MOVBE Gy,My | MOVBE Gw,Mw (66) | CRC32 Gd,Eb (F2) | CRC32 Gd,Eb (66&F2)
- f1: MOVBE My,Gy | MOVBE Mw,Gw (66) | CRC32 Gd,Ey (F2) | CRC32 Gd,Ew (66&F2)
- f2: ANDN Gy,By,Ey (v)
- f3: Grp17 (1A)
--f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v)
--f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v)
-+f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v) | WRUSS Pq,Qq (66),REX.W
-+f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v) | WRSS Pq,Qq (66),REX.W
- f7: BEXTR Gy,Ey,By (v) | SHLX Gy,Ey,By (66),(v) | SARX Gy,Ey,By (F3),(v) | SHRX Gy,Ey,By (F2),(v)
- EndTable
- 
--Table: 3-byte opcode 2 (0x0f 0x3a)
-+Table: 3-byte opcode 3 (0x0f 0x3a)
- Referrer: 3-byte escape 2
- AVXcode: 3
- # 0x0f 0x3a 0x00-0xff
-@@ -948,7 +958,7 @@ GrpTable: Grp7
- 2: LGDT Ms | XGETBV (000),(11B) | XSETBV (001),(11B) | VMFUNC (100),(11B) | XEND (101)(11B) | XTEST (110)(11B)
- 3: LIDT Ms
- 4: SMSW Mw/Rv
--5: rdpkru (110),(11B) | wrpkru (111),(11B)
-+5: rdpkru (110),(11B) | wrpkru (111),(11B) | RSTORSSP Mq (F3)
- 6: LMSW Ew
- 7: INVLPG Mb | SWAPGS (o64),(000),(11B) | RDTSCP (001),(11B)
- EndTable
-@@ -1019,8 +1029,8 @@ GrpTable: Grp15
- 2: vldmxcsr Md (v1) | WRFSBASE Ry (F3),(11B)
- 3: vstmxcsr Md (v1) | WRGSBASE Ry (F3),(11B)
- 4: XSAVE | ptwrite Ey (F3),(11B)
--5: XRSTOR | lfence (11B)
--6: XSAVEOPT | clwb (66) | mfence (11B)
-+5: XRSTOR | lfence (11B) | INCSSP Rd (F3),REX.W
-+6: XSAVEOPT | clwb (66) | mfence (11B) | CLRSSBSY Mq (F3)
- 7: clflush | clflushopt (66) | sfence (11B)
- EndTable
- 
 -- 
 2.17.1
 
