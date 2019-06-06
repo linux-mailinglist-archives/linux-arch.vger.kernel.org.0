@@ -2,43 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9618E37EB6
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DD137EC5
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jun 2019 22:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726855AbfFFU15 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jun 2019 16:27:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59838 "EHLO mail.kernel.org"
+        id S1727112AbfFFU2o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jun 2019 16:28:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60614 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726736AbfFFU15 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 Jun 2019 16:27:57 -0400
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+        id S1726954AbfFFU2n (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Jun 2019 16:28:43 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E634208E4
-        for <linux-arch@vger.kernel.org>; Thu,  6 Jun 2019 20:27:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 27975212F5
+        for <linux-arch@vger.kernel.org>; Thu,  6 Jun 2019 20:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559852876;
-        bh=V7Uq2AYQOlpquEHSKTkBWDviou8MRCFEnqb/lAamoAk=;
+        s=default; t=1559852922;
+        bh=7dtJJy+tpf1euG0sliaeXpcZWtPy4t0cTCPj40HG3Gc=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ci44e+1HjYkBXHk1NXaSKaCK1CuA9I7JHv13wyv1lEnO/sidJI4tB6xS6yrL8RyS4
-         u1c38WXLlfjZOrTvgSqTEJ1fe0gBzGjB9GSQBqk9RYWMj7SGnOV8OTBZSJy9XfJr6z
-         mc+nJ+Htrap+uCUHep75lsy4tzge8nmCXsv3MFek=
-Received: by mail-wm1-f51.google.com with SMTP id a15so1189111wmj.5
-        for <linux-arch@vger.kernel.org>; Thu, 06 Jun 2019 13:27:56 -0700 (PDT)
-X-Gm-Message-State: APjAAAUHGix8oRbweZ1ZlQ1h0MaXwZlgfr9NeH8CbxAriQJHIjm81JRI
-        Sc3FVwQFsMpfhv156vvX+S8S+SlK0ER/pSz45boZlg==
-X-Google-Smtp-Source: APXvYqw4QxWNcnpeIW5dyukxUpCDU5vd9HJGUulP8KUyfEWWyRle1lYXjWBak+DMiNxJGFv5DZOd/i/pJ6NTOXQuXA4=
-X-Received: by 2002:a7b:cd84:: with SMTP id y4mr1192848wmj.79.1559852874993;
- Thu, 06 Jun 2019 13:27:54 -0700 (PDT)
+        b=t2yJVjGScNVAceTq64NgeNXeja0FCFjw2J41UevfqpsJ6YUmmYc3K+axFdZgrqoNG
+         C2AFooBLHsfBQPFkZFLDhZOpkV8pWCqBrBk+Gm5E0fJSf8nVZ02y7HDywrc4PNgA0e
+         TOjlgx5CqdRDt/Fp31naUp8cvXov8xmEnxZSVXlM=
+Received: by mail-wr1-f50.google.com with SMTP id x4so3747716wrt.6
+        for <linux-arch@vger.kernel.org>; Thu, 06 Jun 2019 13:28:42 -0700 (PDT)
+X-Gm-Message-State: APjAAAW/XUN4nosNo+idXdTK+4jy+nWPGULh/4WjyDQM210KZ8h0fQ8v
+        vxOaGozBAbmNQtjT8mIdtNICNMzqton5YuudWbnP3Q==
+X-Google-Smtp-Source: APXvYqx3f5u5Y/rrwHdW2awhxgUt4xQ4wEw0oHwPvy7YsU0l9vHaF//oE/ev6LAssDbkzIcjGWy/PjsLduMkPyZyoyU=
+X-Received: by 2002:adf:f2c8:: with SMTP id d8mr4520549wrp.221.1559852920790;
+ Thu, 06 Jun 2019 13:28:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190606200926.4029-1-yu-cheng.yu@intel.com> <20190606200926.4029-13-yu-cheng.yu@intel.com>
-In-Reply-To: <20190606200926.4029-13-yu-cheng.yu@intel.com>
+References: <20190606200926.4029-1-yu-cheng.yu@intel.com> <20190606200926.4029-12-yu-cheng.yu@intel.com>
+In-Reply-To: <20190606200926.4029-12-yu-cheng.yu@intel.com>
 From:   Andy Lutomirski <luto@kernel.org>
-Date:   Thu, 6 Jun 2019 13:27:43 -0700
-X-Gmail-Original-Message-ID: <CALCETrXfBCFKB2SwhEngABPCkAfgmb+YkRL3Xx3-=haN9H+V_g@mail.gmail.com>
-Message-ID: <CALCETrXfBCFKB2SwhEngABPCkAfgmb+YkRL3Xx3-=haN9H+V_g@mail.gmail.com>
-Subject: Re: [PATCH v7 12/14] x86/vsyscall/64: Fixup shadow stack and branch
- tracking for vsyscall
+Date:   Thu, 6 Jun 2019 13:28:29 -0700
+X-Gmail-Original-Message-ID: <CALCETrXWehe=s4i+VkjxJBLh2AVWRioybpY0nbEWXZjvY_rFeQ@mail.gmail.com>
+Message-ID: <CALCETrXWehe=s4i+VkjxJBLh2AVWRioybpY0nbEWXZjvY_rFeQ@mail.gmail.com>
+Subject: Re: [PATCH v7 11/14] x86/vsyscall/64: Add ENDBR64 to vsyscall entry points
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -74,58 +73,11 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Thu, Jun 6, 2019 at 1:17 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
 >
-> When emulating a RET, also unwind the task's shadow stack and cancel
-> the current branch tracking status.
+> From: "H.J. Lu" <hjl.tools@gmail.com>
 >
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> ---
->  arch/x86/entry/vsyscall/vsyscall_64.c | 28 +++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->
-> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
-> index d9d81ad7a400..6869ef9d1e8b 100644
-> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
-> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
-> @@ -38,6 +38,8 @@
->  #include <asm/fixmap.h>
->  #include <asm/traps.h>
->  #include <asm/paravirt.h>
-> +#include <asm/fpu/xstate.h>
-> +#include <asm/fpu/types.h>
->
->  #define CREATE_TRACE_POINTS
->  #include "vsyscall_trace.h"
-> @@ -92,6 +94,30 @@ static int addr_to_vsyscall_nr(unsigned long addr)
->         return nr;
->  }
->
-> +void fixup_shstk(void)
-> +{
-> +#ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
-> +       u64 r;
-> +
-> +       if (current->thread.cet.shstk_enabled) {
-> +               rdmsrl(MSR_IA32_PL3_SSP, r);
-> +               wrmsrl(MSR_IA32_PL3_SSP, r + 8);
-> +       }
-> +#endif
-> +}
-> +
-> +void fixup_ibt(void)
-> +{
-> +#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
-> +       u64 r;
-> +
-> +       if (current->thread.cet.ibt_enabled) {
-> +               rdmsrl(MSR_IA32_U_CET, r);
-> +               wrmsrl(MSR_IA32_U_CET, r & ~MSR_IA32_CET_WAIT_ENDBR);
-> +       }
-> +#endif
-> +}
+> Add ENDBR64 to vsyscall entry points.
 
-These should be static.
-
-But please just inline them directly in their one call site.  The code
-will be a lot easier to understand.
+I'm still okay with this patch, but this is rather silly.  If anyone
+actually executes this code, they're doing it wrong.
 
 --Andy
