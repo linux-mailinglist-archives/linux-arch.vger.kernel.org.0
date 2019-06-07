@@ -2,90 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3C339860
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2019 00:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0727398A1
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2019 00:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730701AbfFGWPe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Jun 2019 18:15:34 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:38888 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730177AbfFGWPe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jun 2019 18:15:34 -0400
-Received: by mail-lf1-f66.google.com with SMTP id b11so2711438lfa.5
-        for <linux-arch@vger.kernel.org>; Fri, 07 Jun 2019 15:15:33 -0700 (PDT)
+        id S1731401AbfFGW1U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Jun 2019 18:27:20 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36451 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729867AbfFGW1U (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jun 2019 18:27:20 -0400
+Received: by mail-pf1-f195.google.com with SMTP id u22so1941660pfm.3
+        for <linux-arch@vger.kernel.org>; Fri, 07 Jun 2019 15:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7jg1F7lO7uVdQ9tdkXQLyc2uUklR2L0U9AiiLwg+uvg=;
-        b=aoO38c3t9rsjPFOteILVcuGQgCSWmQvFmxqe1O+LyeoYe2aN68r4/UJ6/k8U6kDF+9
-         k5nu15rfkguUHB69Ug3k1zaCjiMfZbLwrN5OOkDfDyFaGoeL8MWvfl6J09wlT65fi1IT
-         7aToDUMiC1CDBV3U4Q7S4ZrpIP6miijco5Te8=
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=hraLxNELwM1NZ3lrrobGX779u9y1WVgm2X9KZ6MnzVU=;
+        b=fAQwIxWx36GcX9oIEt7f+jVMHginM+LONwFdfMNqwIhko+8c0QHYbEF8bNlyIqbI9j
+         NQNEvOKC/rk/tH80WaLOxYfIeLrNuLs39w+NLcIj3q54Q271veY67rrkNFKpfdqfZfj7
+         zJroDKjRWmVDQ90XGnNScGmFaTzL9du1I7zDspqbrM6NsrWdM1i+JbmO4PVz/elLIgeu
+         6BrmpgiXUF9dz/S6HaFuV5ThOeSRhvAkGNBoMZMOPzaVaIgbNw2niqpkC+G9ce07EdDH
+         qP3J8OITji6PPDgyiEOb7pbi42mIE/z0MQOvU/LZER5Na/CvkkoUFll6uwuMASm3splg
+         LFTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7jg1F7lO7uVdQ9tdkXQLyc2uUklR2L0U9AiiLwg+uvg=;
-        b=V0j/3Z0hCX8DL3K8olxhXCsey3a5mAgxaaWcEBK4A8EdqZzojD1Z5Q1tE8pUQ/+d5l
-         WGTTF87CTNXUlJMGjWdd5wNDGSImJF6YqdUbg9a09AzqusSa+rC7h/asoxzNQsEvPdtd
-         dP7yr9NCu+ZA/noECZi+2lM/ao8zcr2tVOU/oS2axHE2mADsAyPCbQUrQAWsma0/XO+s
-         tQSTHekG7Sf2DCqmhBXEsAX9nNAcAXShOyazupnVgZvDBhd4XwzVJSRfLEdUo4IWTD5z
-         I5Fhr4i2njfF+I3JWgUU1R11R4INDeZ26HZTtGZdhDCp0ySGvoqi0YqJfjhFIV5DExNw
-         bc1A==
-X-Gm-Message-State: APjAAAVqTsWAiOVeN+W48gNiIRIaEMMMJI/BtbdbI33FOnFxjArEkRBj
-        XH+YCsVPvxaNZiR3Tvuqq+9ULPdhB1lang==
-X-Google-Smtp-Source: APXvYqyRTLczizOyLXWf5Igx6IEvnFUpuXjxPyh1UAe3gZjH7RWyQh1qAlVf+DT77nOByjh5sQbAnw==
-X-Received: by 2002:ac2:54a6:: with SMTP id w6mr27031276lfk.108.1559945732173;
-        Fri, 07 Jun 2019 15:15:32 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id r3sm565410ljr.76.2019.06.07.15.15.31
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 07 Jun 2019 15:15:31 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id i21so3026660ljj.3
-        for <linux-arch@vger.kernel.org>; Fri, 07 Jun 2019 15:15:31 -0700 (PDT)
-X-Received: by 2002:a2e:4246:: with SMTP id p67mr29323271lja.44.1559945263826;
- Fri, 07 Jun 2019 15:07:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190522032144.10995-1-deepa.kernel@gmail.com>
- <20190529161157.GA27659@redhat.com> <20190604134117.GA29963@redhat.com>
- <20190606140814.GA13440@redhat.com> <87k1dxaxcl.fsf_-_@xmission.com> <87ef45axa4.fsf_-_@xmission.com>
-In-Reply-To: <87ef45axa4.fsf_-_@xmission.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 7 Jun 2019 15:07:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjjVnEKSv3pV_dvgmqGDZDcw+N+Bgcorq7uqS86f1gwXA@mail.gmail.com>
-Message-ID: <CAHk-=wjjVnEKSv3pV_dvgmqGDZDcw+N+Bgcorq7uqS86f1gwXA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Davidlohr Bueso <dbueso@suse.de>, Jens Axboe <axboe@kernel.dk>,
-        Davidlohr Bueso <dave@stgolabs.net>, Eric Wong <e@80x24.org>,
-        Jason Baron <jbaron@akamai.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-aio@kvack.org, omar.kilani@gmail.com,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=hraLxNELwM1NZ3lrrobGX779u9y1WVgm2X9KZ6MnzVU=;
+        b=hWGKAF5wrMBNq4/4KjhcvRsdYYu7Pi3ZIoZKlPrhZ5aLK5neb7OLf8t4RUyysuAhfd
+         ZlakuYqNXFwe3CJSs6SV3+EkVOaoTzCI2NUAAHBVmBC6j2H0Dm/iEYdZr/B2a1Rc9fkF
+         paHCjx2/0/RF1eCByGAcgli5M8M/Ih1gAa5aMs1sAJpJaQrsSY7Npp9CsxUdk4wHspar
+         xsPpB/DMthBnwwadR1beTn19/jMLsLUqypXvJGikhPvmHfkBGxghbCl7fjnh8+trTlkT
+         hj9keFn0o3ADJgtWhPBj4MVxhMgb0arUh98ndmGvEKnhhVmnGUAXnq7EU9nSWSdpVccq
+         lYHw==
+X-Gm-Message-State: APjAAAUofWDMQlnAjQW05zTR8mYEpLS89RfWYbwmNcuOkHY2DIMbRx6J
+        uTbDZa37Q0DLjJz1a69K14PZ4w==
+X-Google-Smtp-Source: APXvYqwFO3Q0DLnvBTYrA6mi0dVS8BZ1iVqUNQ4tJLNaZqwnxT+p/ehoHtcdu1qHh/Y6c+cHQmyQLA==
+X-Received: by 2002:a62:3287:: with SMTP id y129mr55579697pfy.101.1559946439420;
+        Fri, 07 Jun 2019 15:27:19 -0700 (PDT)
+Received: from ?IPv6:2600:1012:b018:c314:403f:c95d:60d3:b732? ([2600:1012:b018:c314:403f:c95d:60d3:b732])
+        by smtp.gmail.com with ESMTPSA id 2sm3147331pfo.41.2019.06.07.15.27.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 07 Jun 2019 15:27:18 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v7 03/14] x86/cet/ibt: Add IBT legacy code bitmap setup function
+From:   Andy Lutomirski <luto@amacapital.net>
+X-Mailer: iPhone Mail (16F203)
+In-Reply-To: <f6de9073-9939-a20d-2196-25fa223cf3fc@intel.com>
+Date:   Fri, 7 Jun 2019 15:27:16 -0700
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        David Laight <David.Laight@aculab.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <4F7D0C3C-F239-4B67-BB05-31350F809293@amacapital.net>
+References: <20190606200926.4029-1-yu-cheng.yu@intel.com> <20190606200926.4029-4-yu-cheng.yu@intel.com> <20190607080832.GT3419@hirez.programming.kicks-ass.net> <aa8a92ef231d512b5c9855ef416db050b5ab59a6.camel@intel.com> <20190607174336.GM3436@hirez.programming.kicks-ass.net> <b3de4110-5366-fdc7-a960-71dea543a42f@intel.com> <34E0D316-552A-401C-ABAA-5584B5BC98C5@amacapital.net> <7e0b97bf1fbe6ff20653a8e4e147c6285cc5552d.camel@intel.com> <4b448cde-ee4e-1c95-0f7f-4fe694be7db6@intel.com> <0e505563f7dae3849b57fb327f578f41b760b6f7.camel@intel.com> <f6de9073-9939-a20d-2196-25fa223cf3fc@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 7, 2019 at 2:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> The sigsuspend system call overrides the signal mask just
-> like all of the other users of set_user_sigmask, so convert
-> it to use the same helpers.
 
-Me likey.
+> On Jun 7, 2019, at 2:09 PM, Dave Hansen <dave.hansen@intel.com> wrote:
+>=20
+> On 6/7/19 1:06 PM, Yu-cheng Yu wrote:
+>>> Huh, how does glibc know about all possible past and future legacy code
+>>> in the application?
+>> When dlopen() gets a legacy binary and the policy allows that, it will ma=
+nage
+>> the bitmap:
+>>=20
+>>  If a bitmap has not been created, create one.
+>>  Set bits for the legacy code being loaded.
+>=20
+> I was thinking about code that doesn't go through GLIBC like JITs.
 
-Whole series looks good to me, but that's just from looking at the
-patches. Maybe testing shows problems..
-
-              Linus
+CRIU is another consideration: it would be rather annoying if CET programs c=
+an=E2=80=99t migrate between LA57 and normal machines.=
