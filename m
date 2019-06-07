@@ -2,58 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 189FE39708
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Jun 2019 22:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FE839751
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Jun 2019 23:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730351AbfFGUqy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Jun 2019 16:46:54 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45777 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730242AbfFGUqy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jun 2019 16:46:54 -0400
-Received: by mail-pf1-f196.google.com with SMTP id s11so1810390pfm.12
-        for <linux-arch@vger.kernel.org>; Fri, 07 Jun 2019 13:46:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=XukHmQruicw8IlfF6jJ6jVCYF0PSAeCd61ALsjzTSpY=;
-        b=VWI7VCl5285LdP7wOr87pA6+IQYIq/ZxhBxJbF1/nckLiWb00yMLQlkMSFh4MCmFIq
-         /dqJBvYXqKj4YcUgfT3KURvRXmso7VPKa0tgm8V0RDBhXkf0XYt6MYFS8iutMKKpfXs1
-         J2m1rqQfTl0vttXXt7TvR91asPuMao/Avd04hxQKWY3DGbO6e9kqdOSNRzrBeSbR421E
-         Rf9Al37d+zkA1bJ2NtyUgJkERotLKfbY8cpTiNFxW3h5PvRE0rml/0f46+ey+IgUyxqM
-         XOCqZ7ORzhd+wlc9aCrEgSryqbXOT4+W665Z56TP/EMr2yUjbSDUZKj9n9UphV69nzc1
-         Elxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=XukHmQruicw8IlfF6jJ6jVCYF0PSAeCd61ALsjzTSpY=;
-        b=YnT5XTfx84IWc4I1cY0/z26usI2LpjeGV8Zufov0DcXIWpXBHqcghBScq+mtdSb9YZ
-         SUS8daxP7dA9q7SXA2t7n1X7B7kduYbHOmLyedbTqvniWUV8vJJf2gPcnKJAue/WKatC
-         doPn8Vk5/Rcmui7yDzAezwpgBQds8GZJM2gMAfFBZUYUj+1qKgMYwGWkV8aitvoQ1e4n
-         vQQm4XSqAUMlX7+iLasno4sY715uSaaKskGKQjF9FBDYJ4/fF7PcKwRiouNQF8Yk/fGc
-         aGK2bXXO66/8EHYiX5eTHSuCFeRHMpLeRT9iE+nV4Ecbgyc5KDb/Jihui8csZzJO7Q/+
-         u+/w==
-X-Gm-Message-State: APjAAAVkQX3A4/qMv8quEWy+GFOep1vNwS98KRfjhyZdnzC4MjibpIqI
-        Sk+088986WgYAVdy/joOqtivkw==
-X-Google-Smtp-Source: APXvYqxhFk60QtRVzTldpmH+7yv8QONLVQH+CovTP9/QHWOvUlZZE4M5xtzQoodB8aOtHfr02eU7Pw==
-X-Received: by 2002:aa7:808d:: with SMTP id v13mr60783415pff.198.1559940413359;
-        Fri, 07 Jun 2019 13:46:53 -0700 (PDT)
-Received: from ?IPv6:2600:1012:b018:c314:403f:c95d:60d3:b732? ([2600:1012:b018:c314:403f:c95d:60d3:b732])
-        by smtp.gmail.com with ESMTPSA id 14sm3068901pgp.37.2019.06.07.13.46.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 07 Jun 2019 13:46:52 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v7 03/14] x86/cet/ibt: Add IBT legacy code bitmap setup function
-Date:   Fri, 7 Jun 2019 13:43:15 -0700
-Message-Id: <25281DB3-FCE4-40C2-BADB-B3B05C5F8DD3@amacapital.net>
-References: <20190606200926.4029-1-yu-cheng.yu@intel.com> <20190606200926.4029-4-yu-cheng.yu@intel.com> <20190607080832.GT3419@hirez.programming.kicks-ass.net> <aa8a92ef231d512b5c9855ef416db050b5ab59a6.camel@intel.com> <20190607174336.GM3436@hirez.programming.kicks-ass.net> <b3de4110-5366-fdc7-a960-71dea543a42f@intel.com> <34E0D316-552A-401C-ABAA-5584B5BC98C5@amacapital.net> <7e0b97bf1fbe6ff20653a8e4e147c6285cc5552d.camel@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        id S1730409AbfFGVFq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Jun 2019 17:05:46 -0400
+Received: from mga01.intel.com ([192.55.52.88]:12484 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730342AbfFGVFq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 7 Jun 2019 17:05:46 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jun 2019 14:05:45 -0700
+X-ExtLoop1: 1
+Received: from ray.jf.intel.com (HELO [10.7.198.156]) ([10.7.198.156])
+  by orsmga006.jf.intel.com with ESMTP; 07 Jun 2019 14:05:44 -0700
+Subject: Re: [PATCH v7 03/14] x86/cet/ibt: Add IBT legacy code bitmap setup
+ function
+To:     Andy Lutomirski <luto@amacapital.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -76,85 +45,102 @@ Cc:     Dave Hansen <dave.hansen@intel.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>
-In-Reply-To: <7e0b97bf1fbe6ff20653a8e4e147c6285cc5552d.camel@intel.com>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-X-Mailer: iPhone Mail (16F203)
+References: <20190606200926.4029-1-yu-cheng.yu@intel.com>
+ <20190606200926.4029-4-yu-cheng.yu@intel.com>
+ <20190607080832.GT3419@hirez.programming.kicks-ass.net>
+ <aa8a92ef231d512b5c9855ef416db050b5ab59a6.camel@intel.com>
+ <20190607174336.GM3436@hirez.programming.kicks-ass.net>
+ <b3de4110-5366-fdc7-a960-71dea543a42f@intel.com>
+ <34E0D316-552A-401C-ABAA-5584B5BC98C5@amacapital.net>
+ <352e6172-938d-f8e4-c195-9fd1b881bdee@intel.com>
+ <D10B5B59-1BE7-44DC-8E91-C8E4292DC6FB@amacapital.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <74620397-a839-cb8c-8c8b-fe72b921803c@intel.com>
+Date:   Fri, 7 Jun 2019 14:05:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <D10B5B59-1BE7-44DC-8E91-C8E4292DC6FB@amacapital.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 6/7/19 1:40 PM, Andy Lutomirski wrote:
+>>> Hmm.  Can we be creative and skip populating it with zeros?  The
+>>> CPU
+>> should only ever touch a page if we miss an ENDBR on it, so, in
+>> normal operation, we don’t need anything to be there.  We could try
+>> to prevent anyone from *reading* it outside of ENDBR tracking if we
+>> want to avoid people accidentally wasting lots of memory by forcing
+>> it to be fully populated when the read it.
+>> 
+>> Won't reads on a big, contiguous private mapping get the huge zero
+>> page anyway?
+> 
+> The zero pages may be free, but the page tables could be decently
+large.  Does the core mm code use huge, immense, etc huge zero pages?
+Or can it synthesize them by reusing page table pages that map zeros?
 
+IIRC, we only ever fill single PMDs, even though we could gang a pmd
+page up and do it for 1GB areas too.
 
-> On Jun 7, 2019, at 12:49 PM, Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
->=20
-> On Fri, 2019-06-07 at 11:29 -0700, Andy Lutomirski wrote:
->>> On Jun 7, 2019, at 10:59 AM, Dave Hansen <dave.hansen@intel.com> wrote:
->>>=20
->>>> On 6/7/19 10:43 AM, Peter Zijlstra wrote:
->>>> I've no idea what the kernel should do; since you failed to answer the
->>>> question what happens when you point this to garbage.
->>>>=20
->>>> Does it then fault or what?
->>>=20
->>> Yeah, I think you'll fault with a rather mysterious CR2 value since
->>> you'll go look at the instruction that faulted and not see any
->>> references to the CR2 value.
->>>=20
->>> I think this new MSR probably needs to get included in oops output when
->>> CET is enabled.
->>=20
->> This shouldn=E2=80=99t be able to OOPS because it only happens at CPL 3, r=
-ight?  We
->> should put it into core dumps, though.
->>=20
->>>=20
->>> Why don't we require that a VMA be in place for the entire bitmap?
->>> Don't we need a "get" prctl function too in case something like a JIT is=
+I guess the page table consumption could really suck if we had code all
+over the 57-bit address space and that code moved around and the process
+ran for a long long time.  Pathologically, we need a ulong/pmd_t for
+each 2MB of address space which is 8*2^56-30=512GB per process.  Yikes.
+ Right now, we'd at least detect the memory consumption and OOM-kill the
+process(es) eventually.  But, that's not really _this_ patch's problem.
+ It's a general problem, and doesn't even require the zero page to be
+mapped all over.
 
->>> running and needs to find the location of this bitmap to set bits itself=
-?
->>>=20
->>> Or, do we just go whole-hog and have the kernel manage the bitmap
->>> itself. Our interface here could be:
->>>=20
->>>   prctl(PR_MARK_CODE_AS_LEGACY, start, size);
->>>=20
->>> and then have the kernel allocate and set the bitmap for those code
->>> locations.
->>=20
->> Given that the format depends on the VA size, this might be a good idea. =
- I
->> bet we can reuse the special mapping infrastructure for this =E2=80=94 th=
-e VMA could
->> be a MAP_PRIVATE special mapping named [cet_legacy_bitmap] or similar, an=
-d we
->> can even make special rules to core dump it intelligently if needed.  And=
- we
->> can make mremap() on it work correctly if anyone (CRIU?) cares.
->>=20
->> Hmm.  Can we be creative and skip populating it with zeros?  The CPU shou=
-ld
->> only ever touch a page if we miss an ENDBR on it, so, in normal operation=
-, we
->> don=E2=80=99t need anything to be there.  We could try to prevent anyone f=
-rom
->> *reading* it outside of ENDBR tracking if we want to avoid people acciden=
-tally
->> wasting lots of memory by forcing it to be fully populated when the read i=
-t.
->>=20
->> The one downside is this forces it to be per-mm, but that seems like a
->> generally reasonable model anyway.
->>=20
->> This also gives us an excellent opportunity to make it read-only as seen f=
-rom
->> userspace to prevent exploits from just poking it full of ones before
->> redirecting execution.
->=20
-> GLIBC sets bits only for legacy code, and then makes the bitmap read-only.=
-  That
-> avoids most issues:
-
-How does glibc know the linear address space size?  We don=E2=80=99t want LA=
-64 to break old binaries because the address calculation changed.
+Longer-term, I'd much rather see us add some page table reclaim
+mechanism that new how to go after things like excessive page tables  in
+MAP_NORESERVE areas.
