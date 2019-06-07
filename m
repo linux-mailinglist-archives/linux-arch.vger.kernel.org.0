@@ -2,92 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1323138550
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Jun 2019 09:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99E1384B9
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Jun 2019 09:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727875AbfFGHof (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Jun 2019 03:44:35 -0400
-Received: from smtp4.iitb.ac.in ([103.21.127.18]:48814 "EHLO smtp1.iitb.ac.in"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725497AbfFGHof (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 7 Jun 2019 03:44:35 -0400
-X-Greylist: delayed 2886 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jun 2019 03:44:34 EDT
-Received: from ldns2.iitb.ac.in (ldns2.iitb.ac.in [10.200.12.2])
-        by smtp1.iitb.ac.in (Postfix) with SMTP id C58621050DD0
-        for <linux-arch@vger.kernel.org>; Fri,  7 Jun 2019 12:01:53 +0530 (IST)
-Received: (qmail 29995 invoked by uid 510); 7 Jun 2019 12:01:34 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns2 (envelope-from <rws@aero.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/25472} 
- Clear:RC:1(10.200.1.25):SA:0(1.5/7.0):. Processed in 3.224183 secs; 07 Jun 2019 12:01:34 +0530
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on ldns2.iitb.ac.in
-X-Spam-Level: *
-X-Spam-Status: No, score=1.5 required=7.0 tests=BAYES_50,IITB_ORIG,
-        MISSING_HEADERS,PROPER_IITB_MSGID autolearn=disabled version=3.4.1
-X-Spam-Pyzor: Reported 1 times.
-X-Envelope-From: rws@aero.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns2.iitb.ac.in) (10.200.1.25)
-  by ldns2.iitb.ac.in with SMTP; 7 Jun 2019 12:01:31 +0530
-Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
-        by ldns2.iitb.ac.in (Postfix) with ESMTP id CB958341965;
-        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 9509A8902E52F;
-        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
-Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
-        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 3VnK-_U7b-vs; Fri,  7 Jun 2019 12:01:17 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 5DAB88902E54D;
-        Fri,  7 Jun 2019 12:01:14 +0530 (IST)
-X-Virus-Scanned: amavisd-new at aero.iitb.ac.in
-Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
-        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TgJiwoMo_EHZ; Fri,  7 Jun 2019 12:01:14 +0530 (IST)
-Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 0EEE684310111;
-        Fri,  7 Jun 2019 12:01:10 +0530 (IST)
-Date:   Fri, 7 Jun 2019 12:01:09 +0530 (IST)
-From:   Martins Henry <rws@aero.iitb.ac.in>
-Message-ID: <412557711.60336.1559889069980.JavaMail.zimbra@aero.iitb.ac.in>
-Subject: Thanks and I wait for your answer
+        id S1726881AbfFGHHz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Jun 2019 03:07:55 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44026 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726711AbfFGHHz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jun 2019 03:07:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=3xG2gB2u3ltC4ECXHzkfqk/Rf8Lzs9XYnPxSdw9Djq4=; b=gBrTD1ywQqnghTyPb+u8oUuO1
+        n92Hi8a/rdgmVIhQ/moKpSzpN7IRYERjWycGLMqob6ui4vuJ0Lrag517vzAbE44qxJdkCSgxPKLT1
+        TPDM9DMcOeTrROrwysz2WUqaSu0h22M6pU9hi1I9cmfvloI+w1dJxzU3J6rnF+OWy4rCb0aDGY2of
+        b8kFhR/J3YJz62PeRqL2pk7arp5DAGDnFJX9NMH/Cj3Y2VoHWyDyUjEx/zl3iOjcEreXchO/Uxps0
+        vF2ga+x78jDgquKaiphXwBrUEmKnjdaG5QpFvxY68BuCmEZlEwI1DNDpMN8q58R1DKQ6b2F5Av84v
+        oC93ptfaw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hZ8yG-00069g-2e; Fri, 07 Jun 2019 07:07:28 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7C8E4202CD6B2; Fri,  7 Jun 2019 09:07:25 +0200 (CEST)
+Date:   Fri, 7 Jun 2019 09:07:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v7 05/27] x86/fpu/xstate: Add XSAVES system states for
+ shadow stack
+Message-ID: <20190607070725.GN3419@hirez.programming.kicks-ass.net>
+References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
+ <20190606200646.3951-6-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.101.1.5]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF11 (Win)/8.8.12_GA_3794)
-Thread-Index: SsslhYkcLNFU69da/wYft5cO9/ZYnA==
-Thread-Topic: Thanks and I wait for your answer
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190606200646.3951-6-yu-cheng.yu@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
+On Thu, Jun 06, 2019 at 01:06:24PM -0700, Yu-cheng Yu wrote:
+> Intel Control-flow Enforcement Technology (CET) introduces the
+> following MSRs.
+> 
+>     MSR_IA32_U_CET (user-mode CET settings),
+>     MSR_IA32_PL3_SSP (user-mode shadow stack),
+>     MSR_IA32_PL0_SSP (kernel-mode shadow stack),
+>     MSR_IA32_PL1_SSP (Privilege Level 1 shadow stack),
+>     MSR_IA32_PL2_SSP (Privilege Level 2 shadow stack).
+> 
+> Introduce them into XSAVES system states.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> ---
+>  arch/x86/include/asm/fpu/types.h            | 22 +++++++++++++++++++++
+>  arch/x86/include/asm/fpu/xstate.h           |  4 +++-
+>  arch/x86/include/uapi/asm/processor-flags.h |  2 ++
+>  arch/x86/kernel/fpu/xstate.c                | 10 ++++++++++
+>  4 files changed, 37 insertions(+), 1 deletion(-)
 
-I am Martin Henry, An American Citizen; I am the personal secretary to
-Mr. Donald Railton, the controller of a Lottery Company. Please I am
-having big problem now, I have a 6yrs old daughter who has leukemia, a
-disease of the blood, and she needs a bone marrow transplant or she
-will die.
-
-Please I am only asking for your help and you will benefit from it
-also. As an insider with Lottery Firm, working as the personal
-secretary to the controller, I want you to send me your name to play,
-I have some numbers that are going to win, stored in his secret data
-system in the office. The Lottery is an online entry with credit card
-anywhere with a name and address. All I want you to do is to send your
-name to play it and I will send confirmation to you.
-
-I will play with my card on your name and the Prize will be shared
-equally between us. Immediately the results are released they will
-contact you for payment as the oversea winner. The lotto can be played
-with 9.00 dollars, or 50 dollars but the prize will be Millions.
-Remember that I am playing on your name with my card; I just want to
-front you for this, because I need this money to save the life of my
-little daughter.
-
-Thanks and I wait for your answer
-Martin Henry.
+And yet, no changes to msr-index.h !?
