@@ -2,88 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9D33B91E
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2019 18:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5363B94D
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2019 18:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389811AbfFJQNV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jun 2019 12:13:21 -0400
-Received: from mga09.intel.com ([134.134.136.24]:55102 "EHLO mga09.intel.com"
+        id S2389555AbfFJQXK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jun 2019 12:23:10 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:38434 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388850AbfFJQNV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 10 Jun 2019 12:13:21 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jun 2019 09:13:20 -0700
-X-ExtLoop1: 1
-Received: from yyu32-desk1.sc.intel.com ([143.183.136.147])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Jun 2019 09:13:19 -0700
-Message-ID: <5dc357f5858f8036cad5847cfe214401bb9138bf.camel@intel.com>
-Subject: Re: [PATCH v7 03/14] x86/cet/ibt: Add IBT legacy code bitmap setup
- function
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Andy Lutomirski <luto@amacapital.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>
-Date:   Mon, 10 Jun 2019 09:05:13 -0700
-In-Reply-To: <f6de9073-9939-a20d-2196-25fa223cf3fc@intel.com>
-References: <20190606200926.4029-1-yu-cheng.yu@intel.com>
-         <20190606200926.4029-4-yu-cheng.yu@intel.com>
-         <20190607080832.GT3419@hirez.programming.kicks-ass.net>
-         <aa8a92ef231d512b5c9855ef416db050b5ab59a6.camel@intel.com>
-         <20190607174336.GM3436@hirez.programming.kicks-ass.net>
-         <b3de4110-5366-fdc7-a960-71dea543a42f@intel.com>
-         <34E0D316-552A-401C-ABAA-5584B5BC98C5@amacapital.net>
-         <7e0b97bf1fbe6ff20653a8e4e147c6285cc5552d.camel@intel.com>
-         <4b448cde-ee4e-1c95-0f7f-4fe694be7db6@intel.com>
-         <0e505563f7dae3849b57fb327f578f41b760b6f7.camel@intel.com>
-         <f6de9073-9939-a20d-2196-25fa223cf3fc@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.1-2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S2389293AbfFJQXK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 10 Jun 2019 12:23:10 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id C117C31628ED;
+        Mon, 10 Jun 2019 16:22:54 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.43.17.159])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 34B64600C7;
+        Mon, 10 Jun 2019 16:22:48 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon, 10 Jun 2019 18:22:52 +0200 (CEST)
+Date:   Mon, 10 Jun 2019 18:22:45 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        linux-kernel@vger.kernel.org, arnd@arndb.de, dbueso@suse.de,
+        axboe@kernel.dk, dave@stgolabs.net, e@80x24.org, jbaron@akamai.com,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        omar.kilani@gmail.com, tglx@linutronix.de,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
+Message-ID: <20190610162244.GB8127@redhat.com>
+References: <20190522032144.10995-1-deepa.kernel@gmail.com>
+ <20190529161157.GA27659@redhat.com>
+ <20190604134117.GA29963@redhat.com>
+ <20190606140814.GA13440@redhat.com>
+ <87k1dxaxcl.fsf_-_@xmission.com>
+ <87ef45axa4.fsf_-_@xmission.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ef45axa4.fsf_-_@xmission.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Mon, 10 Jun 2019 16:23:10 +0000 (UTC)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 2019-06-07 at 14:09 -0700, Dave Hansen wrote:
-> On 6/7/19 1:06 PM, Yu-cheng Yu wrote:
-> > > Huh, how does glibc know about all possible past and future legacy code
-> > > in the application?
-> > 
-> > When dlopen() gets a legacy binary and the policy allows that, it will
-> > manage
-> > the bitmap:
-> > 
-> >   If a bitmap has not been created, create one.
-> >   Set bits for the legacy code being loaded.
-> 
-> I was thinking about code that doesn't go through GLIBC like JITs.
+On 06/07, Eric W. Biederman wrote:
+>
+> +static int set_sigmask(sigset_t *kmask)
+> +{
+> +	set_restore_sigmask();
+> +	current->saved_sigmask = current->blocked;
+> +	set_current_blocked(kmask);
+> +
+> +	return 0;
+> +}
 
-If JIT manages the bitmap, it knows where it is.
-It can always read the bitmap again, right?
+I was going to do the same change except my version returns void ;)
 
-Yu-cheng
+So ACK.
+
+
+As for 2-5, sorry I can't read them today, will do tomorrow.
+
+But at first glance... yes, we can remove TIF_RESTORE_SIGMASK.
+
+As for "remove saved_sigmask" I have some concerns... At least this
+means a user-visible change iiuc. Say, pselect unblocks a fatal signal.
+Say, SIGINT without a handler. Suppose SIGINT comes after set_sigmask().
+
+Before this change the process will be killed.
+
+After this change it will be killed or not. It won't be killed if
+do_select() finds an already ready fd without blocking, or it finds a
+ready fd right after SIGINT interrupts poll_schedule_timeout().
+
+And _to me_ the new behaviour makes more sense. But when it comes to
+user-visible changes you can never know if it breaks something or not.
+
+Oleg.
+
