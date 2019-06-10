@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 650663BB7B
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2019 19:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B127E3BB8E
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2019 20:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388174AbfFJR7u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jun 2019 13:59:50 -0400
-Received: from mga06.intel.com ([134.134.136.31]:39623 "EHLO mga06.intel.com"
+        id S2388702AbfFJSCr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jun 2019 14:02:47 -0400
+Received: from mga09.intel.com ([134.134.136.24]:64286 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388108AbfFJR7u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 10 Jun 2019 13:59:50 -0400
+        id S2388491AbfFJSCq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 10 Jun 2019 14:02:46 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jun 2019 10:59:49 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jun 2019 11:02:45 -0700
 X-ExtLoop1: 1
 Received: from ray.jf.intel.com (HELO [10.7.198.156]) ([10.7.198.156])
-  by orsmga002.jf.intel.com with ESMTP; 10 Jun 2019 10:59:48 -0700
+  by orsmga002.jf.intel.com with ESMTP; 10 Jun 2019 11:02:45 -0700
 Subject: Re: [PATCH v7 03/14] x86/cet/ibt: Add IBT legacy code bitmap setup
  function
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
@@ -53,10 +53,8 @@ References: <20190606200926.4029-1-yu-cheng.yu@intel.com>
  <b3de4110-5366-fdc7-a960-71dea543a42f@intel.com>
  <34E0D316-552A-401C-ABAA-5584B5BC98C5@amacapital.net>
  <7e0b97bf1fbe6ff20653a8e4e147c6285cc5552d.camel@intel.com>
- <4b448cde-ee4e-1c95-0f7f-4fe694be7db6@intel.com>
- <0e505563f7dae3849b57fb327f578f41b760b6f7.camel@intel.com>
- <f6de9073-9939-a20d-2196-25fa223cf3fc@intel.com>
- <5dc357f5858f8036cad5847cfe214401bb9138bf.camel@intel.com>
+ <25281DB3-FCE4-40C2-BADB-B3B05C5F8DD3@amacapital.net>
+ <e26f7d09376740a5f7e8360fac4805488b2c0a4f.camel@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -102,12 +100,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-Message-ID: <0e07f346-89c7-ccf1-9d38-854a8e7d25a1@intel.com>
-Date:   Mon, 10 Jun 2019 10:59:48 -0700
+Message-ID: <3f19582d-78b1-5849-ffd0-53e8ca747c0d@intel.com>
+Date:   Mon, 10 Jun 2019 11:02:45 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <5dc357f5858f8036cad5847cfe214401bb9138bf.camel@intel.com>
+In-Reply-To: <e26f7d09376740a5f7e8360fac4805488b2c0a4f.camel@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -116,34 +114,14 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/10/19 9:05 AM, Yu-cheng Yu wrote:
-> On Fri, 2019-06-07 at 14:09 -0700, Dave Hansen wrote:
->> On 6/7/19 1:06 PM, Yu-cheng Yu wrote:
->>>> Huh, how does glibc know about all possible past and future legacy code
->>>> in the application?
->>> When dlopen() gets a legacy binary and the policy allows that, it will
->>> manage
->>> the bitmap:
->>>
->>>   If a bitmap has not been created, create one.
->>>   Set bits for the legacy code being loaded.
->> I was thinking about code that doesn't go through GLIBC like JITs.
-> If JIT manages the bitmap, it knows where it is.
-> It can always read the bitmap again, right?
+On 6/10/19 8:22 AM, Yu-cheng Yu wrote:
+>> How does glibc know the linear address space size?  We don’t want LA64 to
+>> break old binaries because the address calculation changed.
+> When an application starts, its highest stack address is determined.
+> It uses that as the maximum the bitmap needs to cover.
 
-Let's just be clear:
+Huh, I didn't think we ran code from the stack. ;)
 
-The design proposed here is that all code mappers (anybody wanting to
-get legacy non-CET code into the address space):
-
-1. Know about CET
-2. Know where the bitmap is, and identify the part that needs to be
-   changed
-3. Be able to mprotect() the bitmap to be writable (undoing glibc's
-   PROT_READ)
-4. Set the bits in the bitmap for the legacy code
-5. mprotect() the bitmap back to PROT_READ
-
-Do the non-glibc code mappers have glibc interfaces for this?
-Otherwise, how could a bunch of JITs in a big multi-threaded application
-possibly coordinate the mprotect()s?  Won't they race with each other?
+Especially given the way that we implemented the new 5-level-paging
+address space, I don't think that expecting code to be below the stack
+is a good universal expectation.
