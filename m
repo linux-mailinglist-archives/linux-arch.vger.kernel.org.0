@@ -2,25 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3AD3BA25
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2019 18:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48243BAE6
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2019 19:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728250AbfFJQ5i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jun 2019 12:57:38 -0400
-Received: from foss.arm.com ([217.140.110.172]:46232 "EHLO foss.arm.com"
+        id S1728488AbfFJRZS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jun 2019 13:25:18 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:35490 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727648AbfFJQ5i (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 10 Jun 2019 12:57:38 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 027D7337;
-        Mon, 10 Jun 2019 09:57:37 -0700 (PDT)
-Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B75A3F246;
-        Mon, 10 Jun 2019 09:57:33 -0700 (PDT)
-Date:   Mon, 10 Jun 2019 17:57:31 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
+        id S1727977AbfFJRZR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 10 Jun 2019 13:25:17 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 31DE23EDBF;
+        Mon, 10 Jun 2019 17:25:01 +0000 (UTC)
+Received: from oldenburg2.str.redhat.com (ovpn-117-27.ams2.redhat.com [10.36.117.27])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7AE095B681;
+        Mon, 10 Jun 2019 17:24:45 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+Cc:     Dave Martin <Dave.Martin@arm.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -32,7 +34,6 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
         "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
@@ -43,69 +44,46 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>
-Subject: Re: [PATCH v7 22/27] binfmt_elf: Extract .note.gnu.property from an
- ELF file
-Message-ID: <20190610165730.GM28398@e103592.cambridge.arm.com>
+Subject: Re: [PATCH v7 22/27] binfmt_elf: Extract .note.gnu.property from an ELF file
 References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
- <20190606200646.3951-23-yu-cheng.yu@intel.com>
- <20190607180115.GJ28398@e103592.cambridge.arm.com>
- <94b9c55b3b874825fda485af40ab2a6bc3dad171.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        <20190606200646.3951-23-yu-cheng.yu@intel.com>
+        <20190607180115.GJ28398@e103592.cambridge.arm.com>
+        <94b9c55b3b874825fda485af40ab2a6bc3dad171.camel@intel.com>
+Date:   Mon, 10 Jun 2019 19:24:43 +0200
 In-Reply-To: <94b9c55b3b874825fda485af40ab2a6bc3dad171.camel@intel.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        (Yu-cheng Yu's message of "Mon, 10 Jun 2019 09:29:04 -0700")
+Message-ID: <87lfy9cq04.fsf@oldenburg2.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Mon, 10 Jun 2019 17:25:17 +0000 (UTC)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 10, 2019 at 09:29:04AM -0700, Yu-cheng Yu wrote:
-> On Fri, 2019-06-07 at 19:01 +0100, Dave Martin wrote:
-> > On Thu, Jun 06, 2019 at 01:06:41PM -0700, Yu-cheng Yu wrote:
-> > > An ELF file's .note.gnu.property indicates features the executable file
-> > > can support.  For example, the property GNU_PROPERTY_X86_FEATURE_1_AND
-> > > indicates the file supports GNU_PROPERTY_X86_FEATURE_1_IBT and/or
-> > > GNU_PROPERTY_X86_FEATURE_1_SHSTK.
-> > > 
-> > > With this patch, if an arch needs to setup features from ELF properties,
-> > > it needs CONFIG_ARCH_USE_GNU_PROPERTY to be set, and a specific
-> > > arch_setup_property().
-> > > 
-> > > For example, for X86_64:
-> > > 
-> > > int arch_setup_property(void *ehdr, void *phdr, struct file *f, bool inter)
-> > > {
-> > > 	int r;
-> > > 	uint32_t property;
-> > > 
-> > > 	r = get_gnu_property(ehdr, phdr, f, GNU_PROPERTY_X86_FEATURE_1_AND,
-> > > 			     &property);
-> > > 	...
-> > > }
-> > 
-> > Although this code works for the simple case, I have some concerns about
-> > some aspects of the implementation here.  There appear to be some bounds
-> > checking / buffer overrun issues, and the code seems quite complex.
-> > 
-> > Maybe this patch tries too hard to be compatible with toolchains that do
-> > silly things such as embedding huge notes in an executable, or mixing
-> > NT_GNU_PROPERTY_TYPE_0 in a single PT_NOTE with a load of junk not
-> > relevant to the loader.  I wonder whether Linux can dictate what
-> > interpretation(s) of the ELF specs it is prepared to support, rather than
-> > trying to support absolutely anything.
-> 
+* Yu-cheng Yu:
+
 > To me, looking at PT_GNU_PROPERTY and not trying to support anything is a
 > logical choice.  And it breaks only a limited set of toolchains.
-> 
+>
 > I will simplify the parser and leave this patch as-is for anyone who wants to
 > back-port.  Are there any objections or concerns?
 
-No objection from me ;)  But I'm biased.
+Red Hat Enterprise Linux 8 does not use PT_GNU_PROPERTY and is probably
+the largest collection of CET-enabled binaries that exists today.
 
-Hopefully this change should allow substantial simplification.  For one
-thing, PT_GNU_PROPERTY tells its file offset and size directly in its
-phdrs entry.  That should save us a lot of effort on the kernel side.
+My hope was that we would backport the upstream kernel patches for CET,
+port the glibc dynamic loader to the new kernel interface, and be ready
+to run with CET enabled in principle (except that porting userspace
+libraries such as OpenSSL has not really started upstream, so many
+processes where CET is particularly desirable will still run without
+it).
 
-Cheers
----Dave
+I'm not sure if it is a good idea to port the legacy support if it's not
+part of the mainline kernel because it comes awfully close to creating
+our own private ABI.
+
+Thanks,
+Florian
