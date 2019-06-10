@@ -2,154 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD6A3BE6A
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2019 23:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE893BF14
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 00:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390323AbfFJVVA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jun 2019 17:21:00 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:38333 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390317AbfFJVVA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jun 2019 17:21:00 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1haRiq-0001JP-E1; Mon, 10 Jun 2019 15:20:56 -0600
-Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1haRip-0005zq-I5; Mon, 10 Jun 2019 15:20:56 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        linux-kernel@vger.kernel.org, arnd@arndb.de, dbueso@suse.de,
-        axboe@kernel.dk, dave@stgolabs.net, e@80x24.org, jbaron@akamai.com,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        omar.kilani@gmail.com, tglx@linutronix.de,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        linux-arch@vger.kernel.org
-References: <20190522032144.10995-1-deepa.kernel@gmail.com>
-        <20190529161157.GA27659@redhat.com>
-        <20190604134117.GA29963@redhat.com>
-        <20190606140814.GA13440@redhat.com> <87k1dxaxcl.fsf_-_@xmission.com>
-        <87ef45axa4.fsf_-_@xmission.com> <20190610162244.GB8127@redhat.com>
-Date:   Mon, 10 Jun 2019 16:20:33 -0500
-In-Reply-To: <20190610162244.GB8127@redhat.com> (Oleg Nesterov's message of
-        "Mon, 10 Jun 2019 18:22:45 +0200")
-Message-ID: <87lfy96sta.fsf@xmission.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
+        id S1728786AbfFJWCs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jun 2019 18:02:48 -0400
+Received: from mga11.intel.com ([192.55.52.93]:63430 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728651AbfFJWCs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 10 Jun 2019 18:02:48 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jun 2019 15:02:48 -0700
+X-ExtLoop1: 1
+Received: from jkboswor-mobl1.amr.corp.intel.com (HELO [10.252.141.223]) ([10.252.141.223])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Jun 2019 15:02:46 -0700
+Subject: Re: [PATCH v7 03/14] x86/cet/ibt: Add IBT legacy code bitmap setup
+ function
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Andy Lutomirski <luto@amacapital.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+References: <20190606200926.4029-1-yu-cheng.yu@intel.com>
+ <20190606200926.4029-4-yu-cheng.yu@intel.com>
+ <20190607080832.GT3419@hirez.programming.kicks-ass.net>
+ <aa8a92ef231d512b5c9855ef416db050b5ab59a6.camel@intel.com>
+ <20190607174336.GM3436@hirez.programming.kicks-ass.net>
+ <b3de4110-5366-fdc7-a960-71dea543a42f@intel.com>
+ <34E0D316-552A-401C-ABAA-5584B5BC98C5@amacapital.net>
+ <7e0b97bf1fbe6ff20653a8e4e147c6285cc5552d.camel@intel.com>
+ <25281DB3-FCE4-40C2-BADB-B3B05C5F8DD3@amacapital.net>
+ <e26f7d09376740a5f7e8360fac4805488b2c0a4f.camel@intel.com>
+ <3f19582d-78b1-5849-ffd0-53e8ca747c0d@intel.com>
+ <5aa98999b1343f34828414b74261201886ec4591.camel@intel.com>
+ <0665416d-9999-b394-df17-f2a5e1408130@intel.com>
+ <5c8727dde9653402eea97bfdd030c479d1e8dd99.camel@intel.com>
+ <ac9a20a6-170a-694e-beeb-605a17195034@intel.com>
+ <328275c9b43c06809c9937c83d25126a6e3efcbd.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <92e56b28-0cd4-e3f4-867b-639d9b98b86c@intel.com>
+Date:   Mon, 10 Jun 2019 15:02:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1haRip-0005zq-I5;;;mid=<87lfy96sta.fsf@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19JMwWsnvGkbEiV8+1643ZDVFGDCR8cZgc=
-X-SA-Exim-Connect-IP: 72.206.97.68
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
-        XMSubLong autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 413 ms - load_scoreonly_sql: 0.09 (0.0%),
-        signal_user_changed: 3.6 (0.9%), b_tie_ro: 2.2 (0.5%), parse: 1.01
-        (0.2%), extract_message_metadata: 3.8 (0.9%), get_uri_detail_list:
-        1.62 (0.4%), tests_pri_-1000: 4.6 (1.1%), tests_pri_-950: 1.39 (0.3%),
-        tests_pri_-900: 1.20 (0.3%), tests_pri_-90: 27 (6.5%), check_bayes: 25
-        (6.0%), b_tokenize: 8 (1.9%), b_tok_get_all: 8 (2.0%), b_comp_prob:
-        2.8 (0.7%), b_tok_touch_all: 3.0 (0.7%), b_finish: 0.71 (0.2%),
-        tests_pri_0: 350 (84.8%), check_dkim_signature: 0.65 (0.2%),
-        check_dkim_adsp: 2.5 (0.6%), poll_dns_idle: 0.66 (0.2%), tests_pri_10:
-        2.4 (0.6%), tests_pri_500: 10 (2.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+In-Reply-To: <328275c9b43c06809c9937c83d25126a6e3efcbd.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+On 6/10/19 1:58 PM, Yu-cheng Yu wrote:
+>>> On each memory request, the kernel then must consider a percentage of
+>>> allocated space in its calculation, and on systems with less memory
+>>> this quickly becomes a problem.
+>> I'm not sure what you're referring to here?  Are you referring to our
+>> overcommit limits?
+> Yes.
 
-> On 06/07, Eric W. Biederman wrote:
->>
->> +static int set_sigmask(sigset_t *kmask)
->> +{
->> +	set_restore_sigmask();
->> +	current->saved_sigmask = current->blocked;
->> +	set_current_blocked(kmask);
->> +
->> +	return 0;
->> +}
->
-> I was going to do the same change except my version returns void ;)
->
-> So ACK.
->
->
-> As for 2-5, sorry I can't read them today, will do tomorrow.
->
-> But at first glance... yes, we can remove TIF_RESTORE_SIGMASK.
->
-> As for "remove saved_sigmask" I have some concerns... At least this
-> means a user-visible change iiuc. Say, pselect unblocks a fatal signal.
-> Say, SIGINT without a handler. Suppose SIGINT comes after set_sigmask().
->
-> Before this change the process will be killed.
->
-> After this change it will be killed or not. It won't be killed if
-> do_select() finds an already ready fd without blocking, or it finds a
-> ready fd right after SIGINT interrupts poll_schedule_timeout().
+My assumption has always been that these large, potentially sparse
+hardware tables *must* be mmap()'d with MAP_NORESERVE specified.  That
+should keep them from being problematic with respect to overcommit.
 
-Yes.  Because having the signal set in real_blocked disables the
-immediate kill optimization, and the signal has to be delivered before
-we decide to kill the process.  Which matters because as you say if
-nothing checks signal_pending() when the signals are unblocked we might
-not attempt to deliver the signal.
-
-So it is a matter of timing.
-
-If we have both a signal and a file descriptor become ready
-at the same time I would call that a race.  Either could
-wake up the process and depending on the exact time we could
-return either one.
-
-So it is possible that today if the signal came just after the file
-descriptor ,the code might have made it to restore_saved_sigmask_unless,
-before __send_signal runs.
-
-I see the concern.  I think in a matter like this we try it.  Make
-the patches clean so people can bisect the problem.  Then if someone
-runs into this problem we revert the offending patches.
-
-If it looks like bisection won't cleanly reveal the potential problem
-please let me know.
-
-Personally I don't think anyone sane would intentionally depend on this
-and I don't think there is a sufficiently reliable way to depend on this
-by accident that people would actually be depending on it.
-
-> And _to me_ the new behaviour makes more sense. But when it comes to
-> user-visible changes you can never know if it breaks something or not.
-
-True.
-
-The set of applications is larger than any developer can reasonably test.
-
-Eric
