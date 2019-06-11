@@ -2,28 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EED1D3D6D8
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 21:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BB03D702
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 21:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405519AbfFKTa6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jun 2019 15:30:58 -0400
-Received: from mga14.intel.com ([192.55.52.115]:2866 "EHLO mga14.intel.com"
+        id S2407385AbfFKTjo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jun 2019 15:39:44 -0400
+Received: from mga14.intel.com ([192.55.52.115]:3339 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404808AbfFKTa6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 11 Jun 2019 15:30:58 -0400
+        id S2407028AbfFKTjo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 11 Jun 2019 15:39:44 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jun 2019 12:30:57 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jun 2019 12:39:43 -0700
 X-ExtLoop1: 1
 Received: from yyu32-desk1.sc.intel.com ([143.183.136.147])
-  by orsmga007.jf.intel.com with ESMTP; 11 Jun 2019 12:30:56 -0700
-Message-ID: <d3d027a903524729454efa235155e5db75216e66.camel@intel.com>
-Subject: Re: [PATCH v7 25/27] mm/mmap: Add Shadow stack pages to memory
- accounting
+  by orsmga007.jf.intel.com with ESMTP; 11 Jun 2019 12:39:42 -0700
+Message-ID: <031bc55d8dcdcf4f031e6ff27c33fd52c61d33a5.camel@intel.com>
+Subject: Re: [PATCH v7 22/27] binfmt_elf: Extract .note.gnu.property from an
+ ELF file
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
+To:     Dave Martin <Dave.Martin@arm.com>,
+        Florian Weimer <fweimer@redhat.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -35,7 +36,6 @@ To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
         "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
@@ -45,13 +45,15 @@ To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>
-Date:   Tue, 11 Jun 2019 12:22:48 -0700
-In-Reply-To: <1cfc7396-ca90-1933-34ad-b3d43ae52e08@intel.com>
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>
+Date:   Tue, 11 Jun 2019 12:31:34 -0700
+In-Reply-To: <20190611114109.GN28398@e103592.cambridge.arm.com>
 References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
-         <20190606200646.3951-26-yu-cheng.yu@intel.com>
-         <1cfc7396-ca90-1933-34ad-b3d43ae52e08@intel.com>
+         <20190606200646.3951-23-yu-cheng.yu@intel.com>
+         <20190607180115.GJ28398@e103592.cambridge.arm.com>
+         <94b9c55b3b874825fda485af40ab2a6bc3dad171.camel@intel.com>
+         <87lfy9cq04.fsf@oldenburg2.str.redhat.com>
+         <20190611114109.GN28398@e103592.cambridge.arm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.1-2 
 Mime-Version: 1.0
@@ -61,34 +63,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2019-06-11 at 10:55 -0700, Dave Hansen wrote:
-> On 6/6/19 1:06 PM, Yu-cheng Yu wrote:
-> > --- a/mm/mmap.c
-> > +++ b/mm/mmap.c
-> > @@ -1703,6 +1703,9 @@ static inline int accountable_mapping(struct file
-> > *file, vm_flags_t vm_flags)
-> >  	if (file && is_file_hugepages(file))
-> >  		return 0;
-> >  
-> > +	if (arch_copy_pte_mapping(vm_flags))
-> > +		return 1;
-> > +
-> >  	return (vm_flags & (VM_NORESERVE | VM_SHARED | VM_WRITE)) ==
-> > VM_WRITE;
-> >  }
-> >  
-> > @@ -3319,6 +3322,8 @@ void vm_stat_account(struct mm_struct *mm, vm_flags_t
-> > flags, long npages)
-> >  		mm->stack_vm += npages;
-> >  	else if (is_data_mapping(flags))
-> >  		mm->data_vm += npages;
-> > +	else if (arch_copy_pte_mapping(flags))
-> > +		mm->data_vm += npages;
-> >  }
+On Tue, 2019-06-11 at 12:41 +0100, Dave Martin wrote:
+> On Mon, Jun 10, 2019 at 07:24:43PM +0200, Florian Weimer wrote:
+> > * Yu-cheng Yu:
+> > 
+> > > To me, looking at PT_GNU_PROPERTY and not trying to support anything is a
+> > > logical choice.  And it breaks only a limited set of toolchains.
+> > > 
+> > > I will simplify the parser and leave this patch as-is for anyone who wants
+> > > to
+> > > back-port.  Are there any objections or concerns?
+> > 
+> > Red Hat Enterprise Linux 8 does not use PT_GNU_PROPERTY and is probably
+> > the largest collection of CET-enabled binaries that exists today.
 > 
-> This classifies shadow stack as data instead of stack.  That seems a wee
-> bit counterintuitive.  Why did you make this choice?
+> For clarity, RHEL is actively parsing these properties today?
+> 
+> > My hope was that we would backport the upstream kernel patches for CET,
+> > port the glibc dynamic loader to the new kernel interface, and be ready
+> > to run with CET enabled in principle (except that porting userspace
+> > libraries such as OpenSSL has not really started upstream, so many
+> > processes where CET is particularly desirable will still run without
+> > it).
+> > 
+> > I'm not sure if it is a good idea to port the legacy support if it's not
+> > part of the mainline kernel because it comes awfully close to creating
+> > our own private ABI.
+> 
+> I guess we can aim to factor things so that PT_NOTE scanning is
+> available as a fallback on arches for which the absence of
+> PT_GNU_PROPERTY is not authoritative.
 
-I don't recall the reason; I will change it to stack and test it out.
+We can probably check PT_GNU_PROPERTY first, and fallback (based on ld-linux
+version?) to PT_NOTE scanning?
 
 Yu-cheng
