@@ -2,119 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AB43C0BF
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 02:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477B23C20B
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 06:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390238AbfFKA6u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jun 2019 20:58:50 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41472 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390229AbfFKA6u (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jun 2019 20:58:50 -0400
-Received: by mail-pl1-f193.google.com with SMTP id s24so4315725plr.8
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2019 17:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=Qm0kPO1uAJ3z1V1j+us2fMRdl6WcfjHPQXtYwKhWHOw=;
-        b=BVKkouMqizWMIp86sUnwYUIJSyRkM2G6Pe8zlryowrNTb9LFpBf1If0yNMMHqWfp0F
-         aqvarMEwPlbihNns5+AGPXDpt1we54kMWHty1e5OgyiGDIetI6BtOAAyQFCAS3LvpXtt
-         uzvSXO7fOA1xexLVdCqI1QOPZpKtT4lZVG077v5++zFnzHYcC3ZBSAwwFeHo9MexBqAQ
-         2Hhjnsrz/HjTu2HPnoa50Wg160y84xDJPkQyFDks7AOcPsvsPIeb4DvMn/Muc/w88IXq
-         lpM8C4dM7VF7To/MMIkC6rQztkpMZWTvQCV7twCTJ1I4ecG5LMDnzxqJ26KNPiGwgDTp
-         +SDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=Qm0kPO1uAJ3z1V1j+us2fMRdl6WcfjHPQXtYwKhWHOw=;
-        b=MvVinHEmpm/PpjSLgOS/+LdSqJbLFYrIAup8gFGJWzQY6pz0kWTuDbKzTRo91zmRn/
-         zxAQQyA7oeNgJaP6TB+VxpjTE6J5YWZ6Q8s/gbVF19u+MyH4+3OvisT+dvi+2Crr4EcE
-         I1bRybU/zpjMLy51LQ5CtfjpbeL7FDI+6SbXjWptV/DAAeUbbnvGN1Wu5xg7sB+uG751
-         EQSFpy9DoqCTGnIVp+QxTFuamJM/erGFdmNdvnrrJ2tgUCwlISA67eoBJ0asD6Fy2UvR
-         2OgJI56LLwPP/FrKi99qqhleUzhYJGhajB9Yafu2+UDtl0elucZwXLiXHucegWRo2Ckw
-         Y5xA==
-X-Gm-Message-State: APjAAAUwt+lmWDO59HwDJ5o4r97k3AuKHv+v5fd9UDaKbDFbZFgojPUk
-        UU+p/J51yJJ2YBjnZk7842YX+A==
-X-Google-Smtp-Source: APXvYqxSKP4PBZdAqAyV8bIxzJS6jMTPwYPb+xhoAjdP1xT8Us29SP9WDn8Ct0Ow9eVbUjBD+yr4Ew==
-X-Received: by 2002:a17:902:42e2:: with SMTP id h89mr70909928pld.271.1560214729538;
-        Mon, 10 Jun 2019 17:58:49 -0700 (PDT)
-Received: from [10.228.61.2] (151.sub-97-41-129.myvzw.com. [97.41.129.151])
-        by smtp.gmail.com with ESMTPSA id h19sm11894263pfn.79.2019.06.10.17.58.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 10 Jun 2019 17:58:46 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v7 03/14] x86/cet/ibt: Add IBT legacy code bitmap setup function
-Date:   Mon, 10 Jun 2019 17:36:03 -0700
-Message-Id: <7E931FED-B39D-4C05-8B78-D8CF2F0EF9FC@amacapital.net>
-References: <20190606200926.4029-1-yu-cheng.yu@intel.com> <aa8a92ef231d512b5c9855ef416db050b5ab59a6.camel@intel.com>
- <20190607174336.GM3436@hirez.programming.kicks-ass.net> <b3de4110-5366-fdc7-a960-71dea543a42f@intel.com>
- <34E0D316-552A-401C-ABAA-5584B5BC98C5@amacapital.net> <7e0b97bf1fbe6ff20653a8e4e147c6285cc5552d.camel@intel.com>
- <25281DB3-FCE4-40C2-BADB-B3B05C5F8DD3@amacapital.net> <e26f7d09376740a5f7e8360fac4805488b2c0a4f.camel@intel.com>
- <3f19582d-78b1-5849-ffd0-53e8ca747c0d@intel.com> <5aa98999b1343f34828414b74261201886ec4591.camel@intel.com>
- <0665416d-9999-b394-df17-f2a5e1408130@intel.com> <5c8727dde9653402eea97bfdd030c479d1e8dd99.camel@intel.com>
- <ac9a20a6-170a-694e-beeb-605a17195034@intel.com> <328275c9b43c06809c9937c83d25126a6e3efcbd.camel@intel.com>
- <92e56b28-0cd4-e3f4-867b-639d9b98b86c@intel.com> <1b961c71d30e31ecb22da2c5401b1a81cb802d86.camel@intel.com>
- <ea5e333f-8cd6-8396-635f-a9dc580d5364@intel.com> <BBBF82D3-EE21-49E1-92A4-713C7729E6AD@amacapital.net>
- <a329c4fa-adb0-09a4-7a8c-465f82e0e6c7@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>
-In-Reply-To: <a329c4fa-adb0-09a4-7a8c-465f82e0e6c7@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-X-Mailer: iPhone Mail (16F203)
+        id S1726146AbfFKEW3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jun 2019 00:22:29 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:6934 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726022AbfFKEW3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 11 Jun 2019 00:22:29 -0400
+Received: from DGGEMM406-HUB.china.huawei.com (unknown [172.30.72.54])
+        by Forcepoint Email with ESMTP id 2B09EFC6017021BD9648;
+        Tue, 11 Jun 2019 12:22:26 +0800 (CST)
+Received: from dggeme754-chm.china.huawei.com (10.3.19.100) by
+ DGGEMM406-HUB.china.huawei.com (10.3.20.214) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Tue, 11 Jun 2019 12:22:25 +0800
+Received: from [127.0.0.1] (10.184.212.80) by dggeme754-chm.china.huawei.com
+ (10.3.19.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1591.10; Tue, 11
+ Jun 2019 12:22:24 +0800
+Subject: Re: [PATCH v2 3/5] locking/qspinlock: Introduce CNA into the slow
+ path of qspinlock
+To:     Alex Kogan <alex.kogan@oracle.com>, <linux@armlinux.org.uk>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <will.deacon@arm.com>,
+        <arnd@arndb.de>, <longman@redhat.com>,
+        <linux-arch@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
+        <bp@alien8.de>, <hpa@zytor.com>, <x86@kernel.org>
+CC:     <dave.dice@oracle.com>, <rahul.x.yadav@oracle.com>,
+        <steven.sistare@oracle.com>, <daniel.m.jordan@oracle.com>
+References: <20190329152006.110370-1-alex.kogan@oracle.com>
+ <20190329152006.110370-4-alex.kogan@oracle.com>
+From:   "liwei (GF)" <liwei391@huawei.com>
+Message-ID: <cc3eee8c-5212-7af5-c932-897ab8f3f8bf@huawei.com>
+Date:   Tue, 11 Jun 2019 12:22:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
+MIME-Version: 1.0
+In-Reply-To: <20190329152006.110370-4-alex.kogan@oracle.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.184.212.80]
+X-ClientProxiedBy: dggeme714-chm.china.huawei.com (10.1.199.110) To
+ dggeme754-chm.china.huawei.com (10.3.19.100)
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Alex,
+
+On 2019/3/29 23:20, Alex Kogan wrote:
+> In CNA, spinning threads are organized in two queues, a main queue for
+> threads running on the same node as the current lock holder, and a
+> secondary queue for threads running on other nodes. At the unlock time,
+> the lock holder scans the main queue looking for a thread running on
+> the same node. If found (call it thread T), all threads in the main queue
+> between the current lock holder and T are moved to the end of the
+> secondary queue, and the lock is passed to T. If such T is not found, the
+> lock is passed to the first node in the secondary queue. Finally, if the
+> secondary queue is empty, the lock is passed to the next thread in the
+> main queue. For more details, see https://arxiv.org/abs/1810.05600.
+> 
+> Note that this variant of CNA may introduce starvation by continuously
+> passing the lock to threads running on the same node. This issue
+> will be addressed later in the series.
+> 
+> Enabling CNA is controlled via a new configuration option
+> (NUMA_AWARE_SPINLOCKS), which is enabled by default if NUMA is enabled.
+> 
+> Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
+> Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
+> ---
+>  arch/x86/Kconfig                      |  14 +++
+>  include/asm-generic/qspinlock_types.h |  13 +++
+>  kernel/locking/mcs_spinlock.h         |  10 ++
+>  kernel/locking/qspinlock.c            |  29 +++++-
+>  kernel/locking/qspinlock_cna.h        | 173 ++++++++++++++++++++++++++++++++++
+>  5 files changed, 236 insertions(+), 3 deletions(-)
+>  create mode 100644 kernel/locking/qspinlock_cna.h
+> 
+(SNIP)
+> +
+> +static __always_inline int get_node_index(struct mcs_spinlock *node)
+> +{
+> +	return decode_count(node->node_and_count++);
+When nesting level is > 4, it won't return a index >= 4 here and the numa node number
+is changed by mistake. It will go into a wrong way instead of the following branch.
 
 
-> On Jun 10, 2019, at 5:08 PM, Dave Hansen <dave.hansen@intel.com> wrote:
->=20
->> On 6/10/19 4:54 PM, Andy Lutomirski wrote:
->> Another benefit of kernel management: we could plausibly auto-clear
->> the bits corresponding to munmapped regions. Is this worth it?
->=20
-> I did it for MPX.  I think I even went to the trouble of zapping the
-> whole pages that got unused.
->=20
-> But, MPX tables took 80% of the address space, worst-case.  This takes
-> 0.003% :)  The only case it would really matter would be a task was
-> long-running, used legacy executables/JITs, and was mapping/unmapping
-> text all over the address space.  That seems rather unlikely.
+	/*
+	 * 4 nodes are allocated based on the assumption that there will
+	 * not be nested NMIs taking spinlocks. That may not be true in
+	 * some architectures even though the chance of needing more than
+	 * 4 nodes will still be extremely unlikely. When that happens,
+	 * we fall back to spinning on the lock directly without using
+	 * any MCS node. This is not the most elegant solution, but is
+	 * simple enough.
+	 */
+	if (unlikely(idx >= MAX_NODES)) {
+		while (!queued_spin_trylock(lock))
+			cpu_relax();
+		goto release;
+	}
 
-Every wasted page still costs 4K plus page table overhead.  The worst case i=
-s a JIT that doesn=E2=80=99t clean up and leaks legacy bitmap memory all ove=
-r. We can blame the JIT, but the actual attribution could be complicated.
+> +}
+> +
+> +static __always_inline void release_mcs_node(struct mcs_spinlock *node)
+> +{
+> +	__this_cpu_dec(node->node_and_count);
+> +}
+> +
+> +static __always_inline void cna_init_node(struct mcs_spinlock *node, int cpuid,
+> +					  u32 tail)
+> +{
 
-It also matters when you unmap one thing, map something else, and are sad wh=
-en the legacy bits are still set.
+Thanks,
+Wei
 
-Admittedly, it=E2=80=99s a bit hard to imagine the exploit that takes advant=
-age of this.=
