@@ -2,157 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED103C7A5
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 11:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6721E3C908
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 12:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404613AbfFKJwa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 11 Jun 2019 05:52:30 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:33472 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405093AbfFKJwa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 11 Jun 2019 05:52:30 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-196-OKKF5U8lNxCJ1snZU1YqkA-1; Tue, 11 Jun 2019 10:52:27 +0100
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
- (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue,
- 11 Jun 2019 10:52:25 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 11 Jun 2019 10:52:25 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Eric W. Biederman'" <ebiederm@xmission.com>,
-        Oleg Nesterov <oleg@redhat.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>, "dbueso@suse.de" <dbueso@suse.de>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "e@80x24.org" <e@80x24.org>,
-        "jbaron@akamai.com" <jbaron@akamai.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "omar.kilani@gmail.com" <omar.kilani@gmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
-Thread-Topic: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
-Thread-Index: AQHVH9JWknGdQ9+D0UeylJNmvFzQKKaWJ31Q
-Date:   Tue, 11 Jun 2019 09:52:25 +0000
-Message-ID: <9199239a450d4ea397783ccf98742220@AcuMS.aculab.com>
-References: <20190522032144.10995-1-deepa.kernel@gmail.com>
-        <20190529161157.GA27659@redhat.com>     <20190604134117.GA29963@redhat.com>
-        <20190606140814.GA13440@redhat.com> <87k1dxaxcl.fsf_-_@xmission.com>
-        <87ef45axa4.fsf_-_@xmission.com> <20190610162244.GB8127@redhat.com>
- <87lfy96sta.fsf@xmission.com>
-In-Reply-To: <87lfy96sta.fsf@xmission.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1728159AbfFKKdT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jun 2019 06:33:19 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:33330 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbfFKKdT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jun 2019 06:33:19 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 21FC68023C; Tue, 11 Jun 2019 12:33:06 +0200 (CEST)
+Date:   Tue, 11 Jun 2019 12:33:16 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v7 03/14] x86/cet/ibt: Add IBT legacy code bitmap setup
+ function
+Message-ID: <20190611103316.GA20775@amd>
+References: <20190606200926.4029-1-yu-cheng.yu@intel.com>
+ <20190606200926.4029-4-yu-cheng.yu@intel.com>
+ <20190607080832.GT3419@hirez.programming.kicks-ass.net>
+ <aa8a92ef231d512b5c9855ef416db050b5ab59a6.camel@intel.com>
+ <20190607174336.GM3436@hirez.programming.kicks-ass.net>
+ <b3de4110-5366-fdc7-a960-71dea543a42f@intel.com>
+ <20190608205218.GA2359@xo-6d-61-c0.localdomain>
+ <e1543e7beb0eb55d6febcd847ccab9b219e60338.camel@intel.com>
 MIME-Version: 1.0
-X-MC-Unique: OKKF5U8lNxCJ1snZU1YqkA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="AhhlLboLdkugWU4S"
+Content-Disposition: inline
+In-Reply-To: <e1543e7beb0eb55d6febcd847ccab9b219e60338.camel@intel.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Eric W. Biederman
-> Sent: 10 June 2019 22:21
-...
-> >
-> > As for "remove saved_sigmask" I have some concerns... At least this
-> > means a user-visible change iiuc. Say, pselect unblocks a fatal signal.
-> > Say, SIGINT without a handler. Suppose SIGINT comes after set_sigmask().
-> >
-> > Before this change the process will be killed.
-> >
-> > After this change it will be killed or not. It won't be killed if
-> > do_select() finds an already ready fd without blocking, or it finds a
-> > ready fd right after SIGINT interrupts poll_schedule_timeout().
-> 
-> Yes.  Because having the signal set in real_blocked disables the
-> immediate kill optimization, and the signal has to be delivered before
-> we decide to kill the process.  Which matters because as you say if
-> nothing checks signal_pending() when the signals are unblocked we might
-> not attempt to deliver the signal.
-> 
-> So it is a matter of timing.
-> 
-> If we have both a signal and a file descriptor become ready
-> at the same time I would call that a race.  Either could
-> wake up the process and depending on the exact time we could
-> return either one.
-> 
-> So it is possible that today if the signal came just after the file
-> descriptor ,the code might have made it to restore_saved_sigmask_unless,
-> before __send_signal runs.
-> 
-> I see the concern.  I think in a matter like this we try it.  Make
-> the patches clean so people can bisect the problem.  Then if someone
-> runs into this problem we revert the offending patches.
 
-If I have an application that has a loop with a pselect call that
-enables SIGINT (without a handler) and, for whatever reason,
-one of the fd is always 'ready' then I'd expect a SIGINT
-(from ^C) to terminate the program.
+--AhhlLboLdkugWU4S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-A quick test program:
+On Mon 2019-06-10 08:47:45, Yu-cheng Yu wrote:
+> On Sat, 2019-06-08 at 22:52 +0200, Pavel Machek wrote:
+> > Hi!
+> >=20
+> > > > I've no idea what the kernel should do; since you failed to answer =
+the
+> > > > question what happens when you point this to garbage.
+> > > >=20
+> > > > Does it then fault or what?
+> > >=20
+> > > Yeah, I think you'll fault with a rather mysterious CR2 value since
+> > > you'll go look at the instruction that faulted and not see any
+> > > references to the CR2 value.
+> > >=20
+> > > I think this new MSR probably needs to get included in oops output wh=
+en
+> > > CET is enabled.
+> > >=20
+> > > Why don't we require that a VMA be in place for the entire bitmap?
+> > > Don't we need a "get" prctl function too in case something like a JIT=
+ is
+> > > running and needs to find the location of this bitmap to set bits its=
+elf?
+> > >=20
+> > > Or, do we just go whole-hog and have the kernel manage the bitmap
+> > > itself. Our interface here could be:
+> > >=20
+> > > 	prctl(PR_MARK_CODE_AS_LEGACY, start, size);
+> > >=20
+> > > and then have the kernel allocate and set the bitmap for those code
+> > > locations.
+> >=20
+> > For the record, that sounds like a better interface than userspace know=
+ing
+> > about the bitmap formats...
+> > 									Pavel
+>=20
+> Initially we implemented the bitmap that way.  To manage the bitmap, ever=
+y time
+> the application issues a syscall for a .so it loads, and the kernel does
+> copy_from_user() & copy_to_user() (or similar things).  If a system has a=
+ few
+> legacy .so files and every application does the same, it can take a long =
+time to
+> boot up.
 
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
+Loading .so is already many syscalls, I'd not expect measurable
+performance there. Are you sure?
+								Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
 
-#include <sys/select.h>
-#include <signal.h>
+--AhhlLboLdkugWU4S
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-int main(int argc, char **argv)
-{
-        fd_set readfds;
-        sigset_t sig_int;
-        struct timespec delay = {1, 0};
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-        sigfillset(&sig_int);
-        sigdelset(&sig_int, SIGINT);
+iEYEARECAAYFAlz/g2wACgkQMOfwapXb+vIj7QCfRkp2CAAYHfFjIjZpoiuF3QSp
+XOcAn2kbcxPiUdvqncAD5H23uN2WhHP1
+=j3lF
+-----END PGP SIGNATURE-----
 
-        sighold(SIGINT);
-
-        for (;;) {
-                FD_ZERO(&readfds);
-                FD_SET(0, &readfds);
-                pselect(1, &readfds, NULL, NULL, &delay, &sig_int);
-
-                poll(0,0,1000);
-        }
-}
-
-Run under strace to see what is happening and send SIGINT from a different terminal.
-The program sleeps for a second in each of the pselect() and poll() calls.
-Send a SIGINT and in terminates after pselect() returns ERESTARTNOHAND.
-
-Run again, this time press enter - making fd 0 readable.
-pselect() returns 1, but the program still exits.
-(Tested on a 5.1.0-rc5 kernel.)
-
-If a signal handler were defined it should be called instead.
-
-FWIW is ERESTARTNOHAND actually sane here?
-If I've used setitimer() to get SIGALARM generated every second I'd
-expect select() to return EINTR every second even if I don't
-have a SIGALARM handler?
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+--AhhlLboLdkugWU4S--
