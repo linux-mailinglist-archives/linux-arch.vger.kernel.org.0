@@ -2,137 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C033CDE1
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 16:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15ABE3D141
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 17:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387814AbfFKODk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jun 2019 10:03:40 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:34143 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387447AbfFKODj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jun 2019 10:03:39 -0400
-Received: by mail-qt1-f196.google.com with SMTP id m29so14644724qtu.1;
-        Tue, 11 Jun 2019 07:03:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EVkZ5Meb5CDL0oIFVhucUTp7l9QflUQMSduTMl4zDVk=;
-        b=PIq0Ev/PChofz6Afe9aOtPMXN7Bx9cGVLA8Ikx2ZGlPd9J8sQ6vee9LEcLQ/vIdB1f
-         XMa+3B6mOI7krWfkeEKicAeKgatqFqBsIzXt7xV1Hk/If+s9sH1VKWjK4R1RFsWJoFd0
-         8lLwNEmR/tFc8LAKVlYsmC3OVnqpbsp8eEGET0zw+CRIofYHxYc5CikkdDGZfRtCakki
-         zm+t+XftNFZT1073weiGc9hyduEGIR4l54dSCh0KSOycyYDsm1SokRdzQVJPU6NnqAcm
-         djp1v18U3jxTtZg3M1SUq0Dar9jMU3S1Q97M0RdTMaWGAKbRNXqyfkyk5BPE0vZ5/w10
-         9DCQ==
-X-Gm-Message-State: APjAAAVEpTa+L0DuTJQOqaYqR2DQ/jI6LZG6ioEzjKoAxgdE0l4/ubIe
-        px9Ka12VVcT23fmG6Yk3h4n/SMB2OQ1t5U0vY00=
-X-Google-Smtp-Source: APXvYqwjRh4MxYTD/r3wX3IAWhp6mUcPGbFHcJyg3Nm9R7I9MA09/x/Km+iN6StJdIVm6ZB0iSPXXM4rpG388gm2sig=
-X-Received: by 2002:a0c:8b49:: with SMTP id d9mr60281688qvc.63.1560261818703;
- Tue, 11 Jun 2019 07:03:38 -0700 (PDT)
+        id S2405360AbfFKPqQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 11 Jun 2019 11:46:16 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:29734 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405359AbfFKPqP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 11 Jun 2019 11:46:15 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-136-uZnrwUCgOQuJY1Gr7kFh-Q-1; Tue, 11 Jun 2019 16:46:13 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
+ (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue,
+ 11 Jun 2019 16:46:11 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Tue, 11 Jun 2019 16:46:11 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Eric W. Biederman'" <ebiederm@xmission.com>,
+        'Oleg Nesterov' <oleg@redhat.com>
+CC:     'Andrew Morton' <akpm@linux-foundation.org>,
+        'Deepa Dinamani' <deepa.kernel@gmail.com>,
+        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+        "'arnd@arndb.de'" <arnd@arndb.de>,
+        "'dbueso@suse.de'" <dbueso@suse.de>,
+        "'axboe@kernel.dk'" <axboe@kernel.dk>,
+        "'dave@stgolabs.net'" <dave@stgolabs.net>,
+        "'e@80x24.org'" <e@80x24.org>,
+        "'jbaron@akamai.com'" <jbaron@akamai.com>,
+        "'linux-fsdevel@vger.kernel.org'" <linux-fsdevel@vger.kernel.org>,
+        "'linux-aio@kvack.org'" <linux-aio@kvack.org>,
+        "'omar.kilani@gmail.com'" <omar.kilani@gmail.com>,
+        "'tglx@linutronix.de'" <tglx@linutronix.de>,
+        'Al Viro' <viro@ZenIV.linux.org.uk>,
+        'Linus Torvalds' <torvalds@linux-foundation.org>,
+        "'linux-arch@vger.kernel.org'" <linux-arch@vger.kernel.org>
+Subject: RE: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
+Thread-Topic: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
+Thread-Index: AQHVH9JWknGdQ9+D0UeylJNmvFzQKKaWJ31QgABvBOA=
+Date:   Tue, 11 Jun 2019 15:46:11 +0000
+Message-ID: <05ffd0f434c64262aa767db81ad75ac1@AcuMS.aculab.com>
+References: <20190522032144.10995-1-deepa.kernel@gmail.com>
+        <20190529161157.GA27659@redhat.com>     <20190604134117.GA29963@redhat.com>
+        <20190606140814.GA13440@redhat.com> <87k1dxaxcl.fsf_-_@xmission.com>
+        <87ef45axa4.fsf_-_@xmission.com> <20190610162244.GB8127@redhat.com>
+ <87lfy96sta.fsf@xmission.com>
+ <9199239a450d4ea397783ccf98742220@AcuMS.aculab.com>
+In-Reply-To: <9199239a450d4ea397783ccf98742220@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <156025961444.27052.12727156666287330749.stgit@warthog.procyon.org.uk>
-In-Reply-To: <156025961444.27052.12727156666287330749.stgit@warthog.procyon.org.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 11 Jun 2019 16:03:21 +0200
-Message-ID: <CAK8P3a34Ba+VAzY_-CsVN+tRjk2nCbCiHo=oQq0am6QKKw93Rw@mail.gmail.com>
-Subject: Re: [RFC PATCH] Add script to add/remove/rename/renumber syscalls and
- resolve conflicts
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Firoz Khan <firoz.khan@linaro.org>,
-        Nitesh Kataria <nitesh.kataria@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MC-Unique: uZnrwUCgOQuJY1Gr7kFh-Q-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 3:27 PM David Howells <dhowells@redhat.com> wrote:
->
-> Add a script that simplifies the process of altering system call tables in
-> the kernel sources.  It has five functions available:
+From: David Laight
+> Sent: 11 June 2019 10:52
+...
+> FWIW is ERESTARTNOHAND actually sane here?
+> If I've used setitimer() to get SIGALARM generated every second I'd
+> expect select() to return EINTR every second even if I don't
+> have a SIGALARM handler?
 
-Ah, fun. You had already threatened to add that script in the past.
-The implementation of course looks fine, I was just hoping we could
-instead eliminate the need for it first.
+Actually no - after sigset(SIGALRM, SIG_IGN) I'd expect absolutely
+nothing to happen when kill(pid, SIGALRM) is called.
 
-> +    { file     => "arch/mips/kernel/syscalls/syscall_n32.tbl",
-> +      pattern  => "%NUM n32 %NAME sys_%NAME",
-> +      compat   => 0 },
-> +    { file     => "arch/mips/kernel/syscalls/syscall_n32.tbl",
-> +      pattern  => "%NUM n32 %NAME compat_sys_%NAME",
-> +      compat   => 1 },
-> +    { file     => "arch/mips/kernel/syscalls/syscall_n64.tbl",
-> +      pattern  => "%NUM n64 %NAME sys_%NAME" },
-> +    { file     => "arch/mips/kernel/syscalls/syscall_o32.tbl",
+However if I run:
 
-My preferred way forward for mips n32/n64 would be to merge the
-two files and put the n32 stuff into the compat side, with the
-middle 100 or so syscalls using '32' and '64' as the ABI since
-their numbers diverged at some point.
+	struct itimerval itimerval = {{1, 0}, {1, 0}};
+	setitimer(ITIMER_REAL, &itimerval, NULL);
+	sigset(SIGALRM, SIG_IGN);
 
-> +      pattern  => "%NUM o32 %NAME sys_%NAME",
-> +      compat   => 0 },
-> +    { file     => "arch/mips/kernel/syscalls/syscall_o32.tbl",
-> +      pattern  => "%NUM o32 %NAME sys_%NAME compat_sys_%NAME",
-> +      compat   => 1 },
+	poll(0, 0, big_timeout);
 
-For o32, I guess we can just use 'common' in the whole file'.
+I see (with strace) poll() repeatedly returning ERESTART_RESTARTBLOCK
+and being restarted.
+Replacing poll() with pselect() returns ERESTARTNOHAND.
+(In both cases the timeout must be updated since the application
+does see the timeout.)
 
-> +    { file     => "arch/x86/entry/syscalls/syscall_32.tbl",
-> +      pattern  => "%NUM i386 %NAME sys_%NAME __ia32_sys_%NAME",
-> +      widths   => [ 8, 8, 24, 32, 32],
-> +      compat   => 0 },
-> +    { file     => "arch/x86/entry/syscalls/syscall_32.tbl",
-> +      pattern  => "%NUM i386 %NAME sys_%NAME __ia32_compat_sys_%NAME",
-> +      widths   => [ 8, 8, 24, 32, 32],
-> +      compat   => 1 },
-> +    { file     => "arch/x86/entry/syscalls/syscall_64.tbl",
-> +      pattern  => "%NUM common %NAME __x64_sys_%NAME",
-> +      widths   => [ 8, 8, 24, 32, 32] },
+I'm sure other unix kernels completely ignore signals set to SIG_IGN.
+So this restart dance just isn't needed.
 
-In case of x86, there are three differences from the normal format,
-and both are unnecessary now:
+	David
 
-- the __ia32 and __x64 prefixes can easily be added from the
-  __SYSCALL_I386 and __SYSCALL_64 macros, for x32
-  something similar can be done with a little bit of rework,
-  or we skip that since it was decided that there won't be any
-  additional x32 syscalls
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-- The "/ptregs" flag in some calls was added to enable an
-  optimization, but that optimization is already removed again,
-  so this no longer servers any purpose.
-
-- The whitespace difference can be trivially changed to the common
-  version.
-
-> +    # Find the __NR_syscalls value.
-> +    for ($i = 0; $i <= $#{$lines}; $i++) {
-> +       my $l = $lines->[$i];
-> +       if ($l =~ /^#define\s+__NR_syscalls\s+([0-9]+)/) {
-> +           die "$f:$i: Redefinition of __NR_syscalls\n" if ($i_nr != -1);
-> +           $nr = $1;
-> +           $i_nr = $i;
->       }
->   }
-
-Firoz and Nitesh have worked on a syscall.tbl file to replace
-the asm-generic/unistd.h file. Firoz had an earlier version before the
-time64 syscall changes that made it more complicated, so this
-still needs a rebase that I thought Nitesh wanted to post but
-hasn't done yet.
-
-The same series should also contain the corresponding conversion
-of arch/arm64/include/asm/unistd32.h.
-
-My plan was to eventually use the combination of two syscall.tbl
-files as input for the scripts: one architecture specific file for
-numbers below 403 (plus the x32 specific ones), and another
-generic file for all new numbers. I have not actually implemented
-any of that though.
-
-       Arnd
