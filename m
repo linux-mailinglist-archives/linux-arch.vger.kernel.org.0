@@ -2,99 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BB03D702
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2019 21:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE0741A4C
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2019 04:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407385AbfFKTjo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jun 2019 15:39:44 -0400
-Received: from mga14.intel.com ([192.55.52.115]:3339 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407028AbfFKTjo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 11 Jun 2019 15:39:44 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jun 2019 12:39:43 -0700
-X-ExtLoop1: 1
-Received: from yyu32-desk1.sc.intel.com ([143.183.136.147])
-  by orsmga007.jf.intel.com with ESMTP; 11 Jun 2019 12:39:42 -0700
-Message-ID: <031bc55d8dcdcf4f031e6ff27c33fd52c61d33a5.camel@intel.com>
-Subject: Re: [PATCH v7 22/27] binfmt_elf: Extract .note.gnu.property from an
- ELF file
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Dave Martin <Dave.Martin@arm.com>,
-        Florian Weimer <fweimer@redhat.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>
-Date:   Tue, 11 Jun 2019 12:31:34 -0700
-In-Reply-To: <20190611114109.GN28398@e103592.cambridge.arm.com>
-References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
-         <20190606200646.3951-23-yu-cheng.yu@intel.com>
-         <20190607180115.GJ28398@e103592.cambridge.arm.com>
-         <94b9c55b3b874825fda485af40ab2a6bc3dad171.camel@intel.com>
-         <87lfy9cq04.fsf@oldenburg2.str.redhat.com>
-         <20190611114109.GN28398@e103592.cambridge.arm.com>
+        id S2436496AbfFLCS3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jun 2019 22:18:29 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:36435 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408385AbfFLCS2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jun 2019 22:18:28 -0400
+Received: by mail-lf1-f66.google.com with SMTP id q26so10806980lfc.3
+        for <linux-arch@vger.kernel.org>; Tue, 11 Jun 2019 19:18:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LQ6UZZSMFwXSziql0q4Iq7xcEoj6RMO4R+oEBZibVKs=;
+        b=ZkjB2SoYz4qRYdkSnfCZtZukuCJA92FA1EX5eS3hQG3BjIweRCWV3Ub7+a8w6JYlL6
+         eCwSKtL75JuS4EjDkdwu5ZyRTBSeu0W7upyx7WgPm4QcLL4VuXvFrhpEAN0G9jDF7ScK
+         buYMGMugpVr42AxnvK6GO4t+hUwkB3oVIf11s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LQ6UZZSMFwXSziql0q4Iq7xcEoj6RMO4R+oEBZibVKs=;
+        b=E9O1n73KdhaEcO32RJPchlVHNSGzLmaDY6AW6QSDbmMQkdV3X3QtxUB/FIfKSQHnz+
+         6gx0PRw5kPczE+CiJjst9oLsZjboSLlQvOaPbuGvEJJ+d2NR/GviKYsAKuIrzm1hA9C2
+         C2mvk+dqiFwwvHUoL6z9qHT/oypfrkCHb7FS5OM10dhDOJk2khvl9WdfUeQIn28kXKHe
+         TiHHCFbzOG2moOb/SV1cma/FhNHW+hTBfyEZpWwLCvY1BxKL89hjdsTOd8j2malxwp29
+         PvyNWEv4h3eh0z4T0uIoihsHR3BaLuNh1PL5Lc1ajUW9QCo5j469LPnwx3D8nNPi/y/E
+         zG2Q==
+X-Gm-Message-State: APjAAAX3hZS0bS6qc1ZCTDa//0ZeJqgfIAUnFz6sVMWl3hmgyXGTTqUY
+        7JHlISov0Og0zS8SQi6maZhrf4gIbzg=
+X-Google-Smtp-Source: APXvYqwmR4mMW4NysJ6BdgxlOrBSLGA4APDp4j9sN7JZ2+jRUuXKxpW0UFDNRmC/oiB8mGFSo4AW+g==
+X-Received: by 2002:ac2:43cf:: with SMTP id u15mr38640598lfl.188.1560305905598;
+        Tue, 11 Jun 2019 19:18:25 -0700 (PDT)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id 2sm1969797lju.52.2019.06.11.19.18.24
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Jun 2019 19:18:24 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id a21so13621852ljh.7
+        for <linux-arch@vger.kernel.org>; Tue, 11 Jun 2019 19:18:24 -0700 (PDT)
+X-Received: by 2002:a2e:9cd4:: with SMTP id g20mr747270ljj.205.1560305904002;
+ Tue, 11 Jun 2019 19:18:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <156025961444.27052.12727156666287330749.stgit@warthog.procyon.org.uk>
+In-Reply-To: <156025961444.27052.12727156666287330749.stgit@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 11 Jun 2019 16:18:07 -1000
+X-Gmail-Original-Message-ID: <CAHk-=wih2Ko+9CBRrdp36G7DPy4EDZKxZQ6q0CNyXRWsy5ujyA@mail.gmail.com>
+Message-ID: <CAHk-=wih2Ko+9CBRrdp36G7DPy4EDZKxZQ6q0CNyXRWsy5ujyA@mail.gmail.com>
+Subject: Re: [RFC PATCH] Add script to add/remove/rename/renumber syscalls and
+ resolve conflicts
+To:     David Howells <dhowells@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.1-2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2019-06-11 at 12:41 +0100, Dave Martin wrote:
-> On Mon, Jun 10, 2019 at 07:24:43PM +0200, Florian Weimer wrote:
-> > * Yu-cheng Yu:
-> > 
-> > > To me, looking at PT_GNU_PROPERTY and not trying to support anything is a
-> > > logical choice.  And it breaks only a limited set of toolchains.
-> > > 
-> > > I will simplify the parser and leave this patch as-is for anyone who wants
-> > > to
-> > > back-port.  Are there any objections or concerns?
-> > 
-> > Red Hat Enterprise Linux 8 does not use PT_GNU_PROPERTY and is probably
-> > the largest collection of CET-enabled binaries that exists today.
-> 
-> For clarity, RHEL is actively parsing these properties today?
-> 
-> > My hope was that we would backport the upstream kernel patches for CET,
-> > port the glibc dynamic loader to the new kernel interface, and be ready
-> > to run with CET enabled in principle (except that porting userspace
-> > libraries such as OpenSSL has not really started upstream, so many
-> > processes where CET is particularly desirable will still run without
-> > it).
-> > 
-> > I'm not sure if it is a good idea to port the legacy support if it's not
-> > part of the mainline kernel because it comes awfully close to creating
-> > our own private ABI.
-> 
-> I guess we can aim to factor things so that PT_NOTE scanning is
-> available as a fallback on arches for which the absence of
-> PT_GNU_PROPERTY is not authoritative.
+On Tue, Jun 11, 2019 at 3:27 AM David Howells <dhowells@redhat.com> wrote:
+>
+> Add a script that simplifies the process of altering system call tables in
+> the kernel sources.  It has five functions available:
 
-We can probably check PT_GNU_PROPERTY first, and fallback (based on ld-linux
-version?) to PT_NOTE scanning?
+Ugh, I hate it.
 
-Yu-cheng
+I'm sure the script is all kinds of clever and useful, but I really
+think the solution is not this kind of helper script, but simply that
+we should work at not having each architecture add new system calls
+individually in the first place.
+
+IOW, we should look at having just one unified table for new system
+call numbers, and aim for the per-architecture ones to be for "legacy
+numbering".
+
+Maybe that won't happen, but in the _hope_ that it happens, I really
+would prefer that people not work at making scripts for the current
+nasty situation.
+
+                 Linus
