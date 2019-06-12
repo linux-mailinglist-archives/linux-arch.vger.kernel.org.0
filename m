@@ -2,131 +2,169 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6849742A40
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2019 17:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C098942A6D
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2019 17:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439913AbfFLPF0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Jun 2019 11:05:26 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39996 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437202AbfFLPF0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 12 Jun 2019 11:05:26 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 49BFFC1EB1F5;
-        Wed, 12 Jun 2019 15:05:22 +0000 (UTC)
-Received: from llong.remote.csb (dhcp-17-85.bos.redhat.com [10.18.17.85])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8E70E377B;
-        Wed, 12 Jun 2019 15:05:17 +0000 (UTC)
-Subject: Re: [PATCH v2 3/5] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-To:     Alex Kogan <alex.kogan@oracle.com>,
-        "liwei (GF)" <liwei391@huawei.com>
-Cc:     linux@armlinux.org.uk, Peter Zijlstra <peterz@infradead.org>,
-        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        bp@alien8.de, hpa@zytor.com, x86@kernel.org, dave.dice@oracle.com,
-        Rahul Yadav <rahul.x.yadav@oracle.com>,
-        Steven Sistare <steven.sistare@oracle.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>
-References: <20190329152006.110370-1-alex.kogan@oracle.com>
- <20190329152006.110370-4-alex.kogan@oracle.com>
- <cc3eee8c-5212-7af5-c932-897ab8f3f8bf@huawei.com>
- <54241445-458C-4AE2-840B-6DFCCD410399@oracle.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <a52a5e25-2b71-b6d9-3fa1-fb43bae1cbc1@redhat.com>
-Date:   Wed, 12 Jun 2019 11:05:17 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2405266AbfFLPLt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Jun 2019 11:11:49 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:58798 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405378AbfFLPLt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jun 2019 11:11:49 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hb4uh-00030e-1P; Wed, 12 Jun 2019 09:11:47 -0600
+Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hb4ug-0007r0-5p; Wed, 12 Jun 2019 09:11:46 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Oleg Nesterov' <oleg@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "arnd\@arndb.de" <arnd@arndb.de>,
+        "dbueso\@suse.de" <dbueso@suse.de>,
+        "axboe\@kernel.dk" <axboe@kernel.dk>,
+        "dave\@stgolabs.net" <dave@stgolabs.net>,
+        "e\@80x24.org" <e@80x24.org>,
+        "jbaron\@akamai.com" <jbaron@akamai.com>,
+        "linux-fsdevel\@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio\@kvack.org" <linux-aio@kvack.org>,
+        "omar.kilani\@gmail.com" <omar.kilani@gmail.com>,
+        "tglx\@linutronix.de" <tglx@linutronix.de>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20190522032144.10995-1-deepa.kernel@gmail.com>
+        <20190529161157.GA27659@redhat.com>
+        <20190604134117.GA29963@redhat.com>
+        <20190606140814.GA13440@redhat.com> <87k1dxaxcl.fsf_-_@xmission.com>
+        <87ef45axa4.fsf_-_@xmission.com> <20190610162244.GB8127@redhat.com>
+        <87lfy96sta.fsf@xmission.com>
+        <9199239a450d4ea397783ccf98742220@AcuMS.aculab.com>
+        <20190612134558.GB3276@redhat.com>
+        <6f748b26bef748208e2a74174c0c0bfc@AcuMS.aculab.com>
+Date:   Wed, 12 Jun 2019 10:11:28 -0500
+In-Reply-To: <6f748b26bef748208e2a74174c0c0bfc@AcuMS.aculab.com> (David
+        Laight's message of "Wed, 12 Jun 2019 14:18:28 +0000")
+Message-ID: <87v9xayh27.fsf@xmission.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <54241445-458C-4AE2-840B-6DFCCD410399@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Wed, 12 Jun 2019 15:05:26 +0000 (UTC)
+Content-Type: text/plain
+X-XM-SPF: eid=1hb4ug-0007r0-5p;;;mid=<87v9xayh27.fsf@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19kiBhawfAF+2ElSohjNKI8rMsbiXCtMS0=
+X-SA-Exim-Connect-IP: 72.206.97.68
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa08.xmission.com
+X-Spam-Level: ***
+X-Spam-Status: No, score=3.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
+        T_XMDrugObfuBody_12,T_XMDrugObfuBody_14,XMNoVowels,XMSubLong
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 XMSubLong Long Subject
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa08 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  1.0 T_XMDrugObfuBody_12 obfuscated drug references
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  0.2 T_XMDrugObfuBody_14 obfuscated drug references
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;David Laight <David.Laight@ACULAB.COM>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 439 ms - load_scoreonly_sql: 0.07 (0.0%),
+        signal_user_changed: 5 (1.2%), b_tie_ro: 3.7 (0.8%), parse: 1.62
+        (0.4%), extract_message_metadata: 16 (3.6%), get_uri_detail_list: 2.3
+        (0.5%), tests_pri_-1000: 7 (1.5%), tests_pri_-950: 1.44 (0.3%),
+        tests_pri_-900: 1.30 (0.3%), tests_pri_-90: 36 (8.2%), check_bayes: 34
+        (7.7%), b_tokenize: 9 (2.1%), b_tok_get_all: 12 (2.6%), b_comp_prob:
+        4.2 (1.0%), b_tok_touch_all: 4.7 (1.1%), b_finish: 1.01 (0.2%),
+        tests_pri_0: 356 (81.1%), check_dkim_signature: 0.86 (0.2%),
+        check_dkim_adsp: 9 (2.1%), poll_dns_idle: 0.56 (0.1%), tests_pri_10:
+        2.5 (0.6%), tests_pri_500: 8 (1.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/12/19 12:38 AM, Alex Kogan wrote:
-> Hi, Wei.
+David Laight <David.Laight@ACULAB.COM> writes:
+
+> From: Oleg Nesterov
+>> Sent: 12 June 2019 14:46
+>> On 06/11, David Laight wrote:
+>> >
+>> > If I have an application that has a loop with a pselect call that
+>> > enables SIGINT (without a handler) and, for whatever reason,
+>> > one of the fd is always 'ready' then I'd expect a SIGINT
+>> > (from ^C) to terminate the program.
+
+I think this gets into a quality of implementation.
+
+I suspect that set_user_sigmask should do:
+if (signal_pending())
+	return -ERESTARNOSIGHAND; /* -EINTR that restarts if nothing was pending */
+
+Which should be safe as nothing has blocked yet to consume any of the
+timeouts, and it should ensure that none of the routines miss a signal.
+
+>> This was never true.
+>> 
+>> Before Eric's patches SIGINT can kill a process or not, depending on timing.
+>> In particular, if SIGINT was already pending before pselect() and it finds
+>> an already ready fd, the program won't terminate.
 >
->> On Jun 11, 2019, at 12:22 AM, liwei (GF) <liwei391@huawei.com> wrote:
->>
->> Hi Alex,
->>
->> On 2019/3/29 23:20, Alex Kogan wrote:
->>> In CNA, spinning threads are organized in two queues, a main queue for
->>> threads running on the same node as the current lock holder, and a
->>> secondary queue for threads running on other nodes. At the unlock time,
->>> the lock holder scans the main queue looking for a thread running on
->>> the same node. If found (call it thread T), all threads in the main queue
->>> between the current lock holder and T are moved to the end of the
->>> secondary queue, and the lock is passed to T. If such T is not found, the
->>> lock is passed to the first node in the secondary queue. Finally, if the
->>> secondary queue is empty, the lock is passed to the next thread in the
->>> main queue. For more details, see https://urldefense.proofpoint.com/v2/url?u=https-3A__arxiv.org_abs_1810.05600&d=DwICbg&c=RoP1YumCXCgaWHvlZYR8PZh8Bv7qIrMUB65eapI_JnE&r=Hvhk3F4omdCk-GE1PTOm3Kn0A7ApWOZ2aZLTuVxFK4k&m=U7mfTbYj1r2Te2BBUUNbVrRPuTa_ujlpR4GZfUsrGTM&s=Dw4O1EniF-nde4fp6RA9ISlSMOjWuqeR9OS1G0iauj0&e=.
->>>
->>> Note that this variant of CNA may introduce starvation by continuously
->>> passing the lock to threads running on the same node. This issue
->>> will be addressed later in the series.
->>>
->>> Enabling CNA is controlled via a new configuration option
->>> (NUMA_AWARE_SPINLOCKS), which is enabled by default if NUMA is enabled.
->>>
->>> Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
->>> Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
->>> ---
->>> arch/x86/Kconfig                      |  14 +++
->>> include/asm-generic/qspinlock_types.h |  13 +++
->>> kernel/locking/mcs_spinlock.h         |  10 ++
->>> kernel/locking/qspinlock.c            |  29 +++++-
->>> kernel/locking/qspinlock_cna.h        | 173 ++++++++++++++++++++++++++++++++++
->>> 5 files changed, 236 insertions(+), 3 deletions(-)
->>> create mode 100644 kernel/locking/qspinlock_cna.h
->>>
->> (SNIP)
->>> +
->>> +static __always_inline int get_node_index(struct mcs_spinlock *node)
->>> +{
->>> +	return decode_count(node->node_and_count++);
->> When nesting level is > 4, it won't return a index >= 4 here and the numa node number
->> is changed by mistake. It will go into a wrong way instead of the following branch.
->>
->>
->> 	/*
->> 	 * 4 nodes are allocated based on the assumption that there will
->> 	 * not be nested NMIs taking spinlocks. That may not be true in
->> 	 * some architectures even though the chance of needing more than
->> 	 * 4 nodes will still be extremely unlikely. When that happens,
->> 	 * we fall back to spinning on the lock directly without using
->> 	 * any MCS node. This is not the most elegant solution, but is
->> 	 * simple enough.
->> 	 */
->> 	if (unlikely(idx >= MAX_NODES)) {
->> 		while (!queued_spin_trylock(lock))
->> 			cpu_relax();
->> 		goto release;
->> 	}
-> Good point.
-> This patch does not handle count overflows gracefully.
-> It can be easily fixed by allocating more bits for the count — we don’t really need 30 bits for #NUMA nodes.
+> Which matches what I see on a very old Linux system.
+>
+>> After the Eric's patches SIGINT will only kill the program if pselect() does
+>> not find a ready fd.
+>> 
+>> And this is much more consistent. Now we can simply say that the signal will
+>> be delivered only if pselect() fails and returns -EINTR. If it doesn't have
+>> a handler the process will be killed, otherwise the handler will be called.
+>
+> But is it what the standards mandate?
+> Can anyone check how Solaris and any of the BSDs behave?
+> I don't have access to any solaris systems (I doubt I'll get the disk to
+> spin on the one in my garage).
+> I can check NetBSD when I get home.
+>
+> The ToG page for pselect() http://pubs.opengroup.org/onlinepubs/9699919799/functions/pselect.html says:
+>     "If sigmask is not a null pointer, then the pselect() function shall replace
+>     the signal mask of the caller by the set of signals pointed to by sigmask
+>     before examining the descriptors, and shall restore the signal mask of the
+>     calling thread before returning."
+> Note that it says 'before examining the descriptors' not 'before blocking'.
+> Under the general description about signals it also says that the signal handler
+> will be called (or other action happen) when a pending signal is unblocked.
+> So unblocking SIGINT (set to SIG_DFL) prior to examining the descriptors
+> should be enough to cause the process to exit.
+> The fact that signal handlers are not called until 'return to user'
+> is really an implementation choice - but (IMHO) it should appear as if they
+> were called at the time they became unmasked.
+>
+> If nothing else the man pages need a note about the standards and portability.
 
-Actually, the default setting uses 2 bits for 4-level nesting and 14
-bits for cpu numbers. That means it can support up to 16k-1 cpus. It is
-a limit that is likely to be exceeded in the foreseeable future.
-qspinlock also supports an additional mode with 21 bits used for cpu
-numbers. That can support up to 2M-1 cpus. However, this mode will be a
-little bit slower. That is why we don't want to use more than 2 bits for
-nesting as I have never see more than 2 level of nesting used in my
-testing. So it is highly unlikely we will ever hit more than 4 levels. I
-am not saying that it is impossible, though.
+I think the entire point is so that signals can be added to an event
+loop in a race free way.  *cough* signalfd *cough*.  I think if you are
+setting SIGINT to SIG_DFL you would leave SIGINT unblocked so it can
+happen anywhere.
 
-Cheers,
-Longman
+I can see more utility in having a SIGINT handler and you block SIGINT
+except in your polling loop so you can do something deterministic when
+SIGINT comes in.
 
+Which makes it independent of my patches, but still worth fixing.
+
+Eric
