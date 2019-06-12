@@ -2,169 +2,207 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C098942A6D
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2019 17:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62AC42B01
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2019 17:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405266AbfFLPLt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Jun 2019 11:11:49 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:58798 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405378AbfFLPLt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jun 2019 11:11:49 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1hb4uh-00030e-1P; Wed, 12 Jun 2019 09:11:47 -0600
-Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1hb4ug-0007r0-5p; Wed, 12 Jun 2019 09:11:46 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Oleg Nesterov' <oleg@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "arnd\@arndb.de" <arnd@arndb.de>,
-        "dbueso\@suse.de" <dbueso@suse.de>,
-        "axboe\@kernel.dk" <axboe@kernel.dk>,
-        "dave\@stgolabs.net" <dave@stgolabs.net>,
-        "e\@80x24.org" <e@80x24.org>,
-        "jbaron\@akamai.com" <jbaron@akamai.com>,
-        "linux-fsdevel\@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio\@kvack.org" <linux-aio@kvack.org>,
-        "omar.kilani\@gmail.com" <omar.kilani@gmail.com>,
-        "tglx\@linutronix.de" <tglx@linutronix.de>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20190522032144.10995-1-deepa.kernel@gmail.com>
-        <20190529161157.GA27659@redhat.com>
-        <20190604134117.GA29963@redhat.com>
-        <20190606140814.GA13440@redhat.com> <87k1dxaxcl.fsf_-_@xmission.com>
-        <87ef45axa4.fsf_-_@xmission.com> <20190610162244.GB8127@redhat.com>
-        <87lfy96sta.fsf@xmission.com>
-        <9199239a450d4ea397783ccf98742220@AcuMS.aculab.com>
-        <20190612134558.GB3276@redhat.com>
-        <6f748b26bef748208e2a74174c0c0bfc@AcuMS.aculab.com>
-Date:   Wed, 12 Jun 2019 10:11:28 -0500
-In-Reply-To: <6f748b26bef748208e2a74174c0c0bfc@AcuMS.aculab.com> (David
-        Laight's message of "Wed, 12 Jun 2019 14:18:28 +0000")
-Message-ID: <87v9xayh27.fsf@xmission.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
+        id S2408778AbfFLPfv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Jun 2019 11:35:51 -0400
+Received: from foss.arm.com ([217.140.110.172]:55884 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2408737AbfFLPfu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 12 Jun 2019 11:35:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DFFE7337;
+        Wed, 12 Jun 2019 08:35:49 -0700 (PDT)
+Received: from C02TF0J2HF1T.local (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C44B63F73C;
+        Wed, 12 Jun 2019 08:35:46 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 16:35:39 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will.deacon@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>
+Subject: Re: [PATCH v4 1/2] arm64: Define
+ Documentation/arm64/tagged-address-abi.txt
+Message-ID: <20190612153538.GL28951@C02TF0J2HF1T.local>
+References: <cover.1560339705.git.andreyknvl@google.com>
+ <20190612142111.28161-1-vincenzo.frascino@arm.com>
+ <20190612142111.28161-2-vincenzo.frascino@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1hb4ug-0007r0-5p;;;mid=<87v9xayh27.fsf@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19kiBhawfAF+2ElSohjNKI8rMsbiXCtMS0=
-X-SA-Exim-Connect-IP: 72.206.97.68
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa08.xmission.com
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
-        T_XMDrugObfuBody_12,T_XMDrugObfuBody_14,XMNoVowels,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 XMSubLong Long Subject
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa08 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  1.0 T_XMDrugObfuBody_12 obfuscated drug references
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.2 T_XMDrugObfuBody_14 obfuscated drug references
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;David Laight <David.Laight@ACULAB.COM>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 439 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 5 (1.2%), b_tie_ro: 3.7 (0.8%), parse: 1.62
-        (0.4%), extract_message_metadata: 16 (3.6%), get_uri_detail_list: 2.3
-        (0.5%), tests_pri_-1000: 7 (1.5%), tests_pri_-950: 1.44 (0.3%),
-        tests_pri_-900: 1.30 (0.3%), tests_pri_-90: 36 (8.2%), check_bayes: 34
-        (7.7%), b_tokenize: 9 (2.1%), b_tok_get_all: 12 (2.6%), b_comp_prob:
-        4.2 (1.0%), b_tok_touch_all: 4.7 (1.1%), b_finish: 1.01 (0.2%),
-        tests_pri_0: 356 (81.1%), check_dkim_signature: 0.86 (0.2%),
-        check_dkim_adsp: 9 (2.1%), poll_dns_idle: 0.56 (0.1%), tests_pri_10:
-        2.5 (0.6%), tests_pri_500: 8 (1.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190612142111.28161-2-vincenzo.frascino@arm.com>
+User-Agent: Mutt/1.11.2 (2019-01-07)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-David Laight <David.Laight@ACULAB.COM> writes:
+Hi Vincenzo,
 
-> From: Oleg Nesterov
->> Sent: 12 June 2019 14:46
->> On 06/11, David Laight wrote:
->> >
->> > If I have an application that has a loop with a pselect call that
->> > enables SIGINT (without a handler) and, for whatever reason,
->> > one of the fd is always 'ready' then I'd expect a SIGINT
->> > (from ^C) to terminate the program.
+Some minor comments below but it looks fine to me overall. Cc'ing
+Szabolcs as well since I'd like a view from the libc people.
 
-I think this gets into a quality of implementation.
+On Wed, Jun 12, 2019 at 03:21:10PM +0100, Vincenzo Frascino wrote:
+> diff --git a/Documentation/arm64/tagged-address-abi.txt b/Documentation/arm64/tagged-address-abi.txt
+> new file mode 100644
+> index 000000000000..96e149e2c55c
+> --- /dev/null
+> +++ b/Documentation/arm64/tagged-address-abi.txt
+> @@ -0,0 +1,111 @@
+> +ARM64 TAGGED ADDRESS ABI
+> +========================
+> +
+> +This document describes the usage and semantics of the Tagged Address
+> +ABI on arm64.
+> +
+> +1. Introduction
+> +---------------
+> +
+> +On arm64 the TCR_EL1.TBI0 bit has been always enabled on the arm64 kernel,
+> +hence the userspace (EL0) is allowed to set a non-zero value in the top
 
-I suspect that set_user_sigmask should do:
-if (signal_pending())
-	return -ERESTARNOSIGHAND; /* -EINTR that restarts if nothing was pending */
+I'd be clearer here: "userspace (EL0) is allowed to perform a user
+memory access through a 64-bit pointer with a non-zero top byte" (or
+something along the lines). Otherwise setting a non-zero top byte is
+allowed on any architecture, dereferencing it is a problem.
 
-Which should be safe as nothing has blocked yet to consume any of the
-timeouts, and it should ensure that none of the routines miss a signal.
+> +byte but the resulting pointers are not allowed at the user-kernel syscall
+> +ABI boundary.
+> +
+> +This document describes a relaxation of the ABI with which it is possible
 
->> This was never true.
->> 
->> Before Eric's patches SIGINT can kill a process or not, depending on timing.
->> In particular, if SIGINT was already pending before pselect() and it finds
->> an already ready fd, the program won't terminate.
->
-> Which matches what I see on a very old Linux system.
->
->> After the Eric's patches SIGINT will only kill the program if pselect() does
->> not find a ready fd.
->> 
->> And this is much more consistent. Now we can simply say that the signal will
->> be delivered only if pselect() fails and returns -EINTR. If it doesn't have
->> a handler the process will be killed, otherwise the handler will be called.
->
-> But is it what the standards mandate?
-> Can anyone check how Solaris and any of the BSDs behave?
-> I don't have access to any solaris systems (I doubt I'll get the disk to
-> spin on the one in my garage).
-> I can check NetBSD when I get home.
->
-> The ToG page for pselect() http://pubs.opengroup.org/onlinepubs/9699919799/functions/pselect.html says:
->     "If sigmask is not a null pointer, then the pselect() function shall replace
->     the signal mask of the caller by the set of signals pointed to by sigmask
->     before examining the descriptors, and shall restore the signal mask of the
->     calling thread before returning."
-> Note that it says 'before examining the descriptors' not 'before blocking'.
-> Under the general description about signals it also says that the signal handler
-> will be called (or other action happen) when a pending signal is unblocked.
-> So unblocking SIGINT (set to SIG_DFL) prior to examining the descriptors
-> should be enough to cause the process to exit.
-> The fact that signal handlers are not called until 'return to user'
-> is really an implementation choice - but (IMHO) it should appear as if they
-> were called at the time they became unmasked.
->
-> If nothing else the man pages need a note about the standards and portability.
+"relaxation of the ABI that makes it possible to..."
 
-I think the entire point is so that signals can be added to an event
-loop in a race free way.  *cough* signalfd *cough*.  I think if you are
-setting SIGINT to SIG_DFL you would leave SIGINT unblocked so it can
-happen anywhere.
+> +to pass tagged tagged pointers to the syscalls, when these pointers are in
+> +memory ranges obtained as described in paragraph 2.
 
-I can see more utility in having a SIGINT handler and you block SIGINT
-except in your polling loop so you can do something deterministic when
-SIGINT comes in.
+"section 2" is better. There are a lot more paragraphs.
 
-Which makes it independent of my patches, but still worth fixing.
+> +
+> +Since it is not desirable to relax the ABI to allow tagged user addresses
+> +into the kernel indiscriminately, arm64 provides a new sysctl interface
+> +(/proc/sys/abi/tagged_addr) that is used to prevent the applications from
+> +enabling the relaxed ABI and a new prctl() interface that can be used to
+> +enable or disable the relaxed ABI.
+> +
+> +The sysctl is meant also for testing purposes in order to provide a simple
+> +way for the userspace to verify the return error checking of the prctl()
+> +command without having to reconfigure the kernel.
+> +
+> +The ABI properties are inherited by threads of the same application and
+> +fork()'ed children but cleared when a new process is spawn (execve()).
 
-Eric
+"spawned".
+
+I guess you could drop these three paragraphs here and mention the
+inheritance properties when introducing the prctl() below. You can also
+mention the global sysctl switch after the prctl() was introduced.
+
+> +
+> +2. ARM64 Tagged Address ABI
+> +---------------------------
+> +
+> +From the kernel syscall interface prospective, we define, for the purposes
+> +of this document, a "valid tagged pointer" as a pointer that either it has
+
+"either has" (no 'it') sounds slightly better but I'm not a native
+English speaker either.
+
+> +a zero value set in the top byte or it has a non-zero value, it is in memory
+> +ranges privately owned by a userspace process and it is obtained in one of
+> +the following ways:
+> +  - mmap() done by the process itself, where either:
+> +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
+> +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
+> +      file or "/dev/zero"
+> +  - a mapping below sbrk(0) done by the process itself
+> +  - any memory mapped by the kernel in the process's address space during
+> +    creation and following the restrictions presented above (i.e. data, bss,
+> +    stack).
+> +
+> +The ARM64 Tagged Address ABI is an opt-in feature, and an application can
+> +control it using the following prctl()s:
+> +  - PR_SET_TAGGED_ADDR_CTRL: can be used to enable the Tagged Address ABI.
+
+enable or disable (not sure we need the latter but it doesn't heart).
+
+I'd add the arg2 description here as well.
+
+> +  - PR_GET_TAGGED_ADDR_CTRL: can be used to check the status of the Tagged
+> +                             Address ABI.
+> +
+> +As a consequence of invoking PR_SET_TAGGED_ADDR_CTRL prctl() by an applications,
+> +the ABI guarantees the following behaviours:
+> +
+> +  - Every current or newly introduced syscall can accept any valid tagged
+> +    pointers.
+> +
+> +  - If a non valid tagged pointer is passed to a syscall then the behaviour
+> +    is undefined.
+> +
+> +  - Every valid tagged pointer is expected to work as an untagged one.
+> +
+> +  - The kernel preserves any valid tagged pointers and returns them to the
+> +    userspace unchanged in all the cases except the ones documented in the
+> +    "Preserving tags" paragraph of tagged-pointers.txt.
+
+I'd think we need to qualify the context here in which the kernel
+preserves the tagged pointers. Did you mean on the syscall return?
+
+> +
+> +A definition of the meaning of tagged pointers on arm64 can be found in:
+> +Documentation/arm64/tagged-pointers.txt.
+> +
+> +3. ARM64 Tagged Address ABI Exceptions
+> +--------------------------------------
+> +
+> +The behaviours described in paragraph 2, with particular reference to the
+
+"section 2"
+
+> +acceptance by the syscalls of any valid tagged pointer are not applicable
+> +to the following cases:
+> +  - mmap() addr parameter.
+> +  - mremap() new_address parameter.
+> +  - prctl_set_mm() struct prctl_map fields.
+> +  - prctl_set_mm_map() struct prctl_map fields.
+> +
+> +4. Example of correct usage
+> +---------------------------
+> +
+> +void main(void)
+> +{
+> +	static int tbi_enabled = 0;
+> +	unsigned long tag = 0;
+> +
+> +	char *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
+> +			 MAP_ANONYMOUS, -1, 0);
+> +
+> +	if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE,
+> +		  0, 0, 0) == 0)
+> +		tbi_enabled = 1;
+> +
+> +	if (!ptr)
+> +		return -1;
+> +
+> +	if (tbi_enabled)
+> +		tag = rand() & 0xff;
+> +
+> +	ptr = (char *)((unsigned long)ptr | (tag << TAG_SHIFT));
+> +
+> +	*ptr = 'a';
+> +
+> +	...
+> +}
+> +
+> -- 
+> 2.21.0
+
+-- 
+Catalin
