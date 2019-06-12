@@ -2,97 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 773FD41F6C
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2019 10:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709D8420E4
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2019 11:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731299AbfFLIj6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 12 Jun 2019 04:39:58 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:32891 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726000AbfFLIj6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 12 Jun 2019 04:39:58 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-77-sKXNtwkfNyeBMA4oS27QZg-1; Wed, 12 Jun 2019 09:39:54 +0100
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
- (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed,
- 12 Jun 2019 09:39:53 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 12 Jun 2019 09:39:53 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Oleg Nesterov' <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>, "dbueso@suse.de" <dbueso@suse.de>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "e@80x24.org" <e@80x24.org>,
-        "jbaron@akamai.com" <jbaron@akamai.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "omar.kilani@gmail.com" <omar.kilani@gmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
-Thread-Topic: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
-Thread-Index: AQHVIIdIknGdQ9+D0UeylJNmvFzQKKaXsr4w
-Date:   Wed, 12 Jun 2019 08:39:53 +0000
-Message-ID: <fd2aab3d26754becbb0efe4ae65c32ac@AcuMS.aculab.com>
-References: <20190522032144.10995-1-deepa.kernel@gmail.com>
- <20190529161157.GA27659@redhat.com> <20190604134117.GA29963@redhat.com>
- <20190606140814.GA13440@redhat.com> <87k1dxaxcl.fsf_-_@xmission.com>
- <87ef45axa4.fsf_-_@xmission.com> <20190610162244.GB8127@redhat.com>
- <87lfy96sta.fsf@xmission.com> <20190611185548.GA31214@redhat.com>
-In-Reply-To: <20190611185548.GA31214@redhat.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S2408756AbfFLJcp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Jun 2019 05:32:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:48554 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2408577AbfFLJcp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 12 Jun 2019 05:32:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 871CE337;
+        Wed, 12 Jun 2019 02:32:44 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EEAC83F246;
+        Wed, 12 Jun 2019 02:32:40 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 10:32:38 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     Florian Weimer <fweimer@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>
+Subject: Re: [PATCH v7 22/27] binfmt_elf: Extract .note.gnu.property from an
+ ELF file
+Message-ID: <20190612093238.GQ28398@e103592.cambridge.arm.com>
+References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
+ <20190606200646.3951-23-yu-cheng.yu@intel.com>
+ <20190607180115.GJ28398@e103592.cambridge.arm.com>
+ <94b9c55b3b874825fda485af40ab2a6bc3dad171.camel@intel.com>
+ <87lfy9cq04.fsf@oldenburg2.str.redhat.com>
+ <20190611114109.GN28398@e103592.cambridge.arm.com>
+ <031bc55d8dcdcf4f031e6ff27c33fd52c61d33a5.camel@intel.com>
 MIME-Version: 1.0
-X-MC-Unique: sKXNtwkfNyeBMA4oS27QZg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <031bc55d8dcdcf4f031e6ff27c33fd52c61d33a5.camel@intel.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Oleg Nesterov [mailto:oleg@redhat.com]
-> Sent: 11 June 2019 19:56
-> On 06/10, Eric W. Biederman wrote:
-> >
-> > Personally I don't think anyone sane would intentionally depend on this
-> > and I don't think there is a sufficiently reliable way to depend on this
-> > by accident that people would actually be depending on it.
+On Tue, Jun 11, 2019 at 12:31:34PM -0700, Yu-cheng Yu wrote:
+> On Tue, 2019-06-11 at 12:41 +0100, Dave Martin wrote:
+> > On Mon, Jun 10, 2019 at 07:24:43PM +0200, Florian Weimer wrote:
+> > > * Yu-cheng Yu:
+> > > 
+> > > > To me, looking at PT_GNU_PROPERTY and not trying to support anything is a
+> > > > logical choice.  And it breaks only a limited set of toolchains.
+> > > > 
+> > > > I will simplify the parser and leave this patch as-is for anyone who wants
+> > > > to
+> > > > back-port.  Are there any objections or concerns?
+> > > 
+> > > Red Hat Enterprise Linux 8 does not use PT_GNU_PROPERTY and is probably
+> > > the largest collection of CET-enabled binaries that exists today.
+> > 
+> > For clarity, RHEL is actively parsing these properties today?
+> > 
+> > > My hope was that we would backport the upstream kernel patches for CET,
+> > > port the glibc dynamic loader to the new kernel interface, and be ready
+> > > to run with CET enabled in principle (except that porting userspace
+> > > libraries such as OpenSSL has not really started upstream, so many
+> > > processes where CET is particularly desirable will still run without
+> > > it).
+> > > 
+> > > I'm not sure if it is a good idea to port the legacy support if it's not
+> > > part of the mainline kernel because it comes awfully close to creating
+> > > our own private ABI.
+> > 
+> > I guess we can aim to factor things so that PT_NOTE scanning is
+> > available as a fallback on arches for which the absence of
+> > PT_GNU_PROPERTY is not authoritative.
 > 
-> Agreed.
-> 
-> As I said I like these changes and I see nothing wrong. To me they fix the
-> current behaviour, or at least make it more consistent.
-> 
-> But perhaps this should be documented in the changelog? To make it clear
-> that this change was intentional.
+> We can probably check PT_GNU_PROPERTY first, and fallback (based on ld-linux
+> version?) to PT_NOTE scanning?
 
-What happens if you run the test program I posted yesterday after the changes?
+For arm64, we can check for PT_GNU_PROPERTY and then give up
+unconditionally.
 
-It looks like pselect() and epoll_pwait() operated completely differently.
-pselect() would always calls the signal handlers.
-epoll_pwait() only calls them when EINTR is returned.
-So changing epoll_pwait() and pselect() to work the same way
-is bound to break some applications.
+For x86, we would fall back to PT_NOTE scanning, but this will add a bit
+of cost to binaries that don't have NT_GNU_PROPERTY_TYPE_0.  The ld.so
+version doesn't tell you what ELF ABI a given executable conforms to.
 
-	David
+Since this sounds like it's largely a distro-specific issue, maybe there
+could be a Kconfig option to turn the fallback PT_NOTE scanning on?
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Cheers
+---Dave
