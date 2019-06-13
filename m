@@ -2,118 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD4342FA4
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2019 21:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E67943FE2
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2019 18:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbfFLTMD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Jun 2019 15:12:03 -0400
-Received: from mga07.intel.com ([134.134.136.100]:25328 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727120AbfFLTMD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 12 Jun 2019 15:12:03 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jun 2019 12:12:02 -0700
-X-ExtLoop1: 1
-Received: from yyu32-desk1.sc.intel.com ([10.144.153.205])
-  by orsmga005.jf.intel.com with ESMTP; 12 Jun 2019 12:12:00 -0700
-Message-ID: <b8fb6626a6ae415fac4d5daa86225e4c68d56673.camel@intel.com>
-Subject: Re: [PATCH v7 22/27] binfmt_elf: Extract .note.gnu.property from an
- ELF file
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     Florian Weimer <fweimer@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>
-Date:   Wed, 12 Jun 2019 12:04:01 -0700
-In-Reply-To: <20190612093238.GQ28398@e103592.cambridge.arm.com>
-References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
-         <20190606200646.3951-23-yu-cheng.yu@intel.com>
-         <20190607180115.GJ28398@e103592.cambridge.arm.com>
-         <94b9c55b3b874825fda485af40ab2a6bc3dad171.camel@intel.com>
-         <87lfy9cq04.fsf@oldenburg2.str.redhat.com>
-         <20190611114109.GN28398@e103592.cambridge.arm.com>
-         <031bc55d8dcdcf4f031e6ff27c33fd52c61d33a5.camel@intel.com>
-         <20190612093238.GQ28398@e103592.cambridge.arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.1-2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1732949AbfFMQBB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 13 Jun 2019 12:01:01 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:60782 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731449AbfFMIsr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 13 Jun 2019 04:48:47 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-77-sMo5MtksNjyrgFaEIWzQmA-1; Thu, 13 Jun 2019 09:48:42 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
+ (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu,
+ 13 Jun 2019 09:48:41 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 13 Jun 2019 09:48:41 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Oleg Nesterov' <oleg@redhat.com>
+CC:     "'Eric W. Biederman'" <ebiederm@xmission.com>,
+        'Andrew Morton' <akpm@linux-foundation.org>,
+        'Deepa Dinamani' <deepa.kernel@gmail.com>,
+        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+        "'arnd@arndb.de'" <arnd@arndb.de>,
+        "'dbueso@suse.de'" <dbueso@suse.de>,
+        "'axboe@kernel.dk'" <axboe@kernel.dk>,
+        "'dave@stgolabs.net'" <dave@stgolabs.net>,
+        "'e@80x24.org'" <e@80x24.org>,
+        "'jbaron@akamai.com'" <jbaron@akamai.com>,
+        "'linux-fsdevel@vger.kernel.org'" <linux-fsdevel@vger.kernel.org>,
+        "'linux-aio@kvack.org'" <linux-aio@kvack.org>,
+        "'omar.kilani@gmail.com'" <omar.kilani@gmail.com>,
+        "'tglx@linutronix.de'" <tglx@linutronix.de>,
+        'Al Viro' <viro@ZenIV.linux.org.uk>,
+        'Linus Torvalds' <torvalds@linux-foundation.org>,
+        "'linux-arch@vger.kernel.org'" <linux-arch@vger.kernel.org>
+Subject: RE: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
+Thread-Topic: [RFC PATCH 1/5] signal: Teach sigsuspend to use set_user_sigmask
+Thread-Index: AQHVH9JWknGdQ9+D0UeylJNmvFzQKKaWJ31QgAHScICAABPkMIABOuaw
+Date:   Thu, 13 Jun 2019 08:48:41 +0000
+Message-ID: <6e9b964b08d84c99980b1707e5fe3d1d@AcuMS.aculab.com>
+References: <20190522032144.10995-1-deepa.kernel@gmail.com>
+ <20190529161157.GA27659@redhat.com> <20190604134117.GA29963@redhat.com>
+ <20190606140814.GA13440@redhat.com> <87k1dxaxcl.fsf_-_@xmission.com>
+ <87ef45axa4.fsf_-_@xmission.com> <20190610162244.GB8127@redhat.com>
+ <87lfy96sta.fsf@xmission.com>
+ <9199239a450d4ea397783ccf98742220@AcuMS.aculab.com>
+ <20190612134558.GB3276@redhat.com>
+ <6f748b26bef748208e2a74174c0c0bfc@AcuMS.aculab.com>
+In-Reply-To: <6f748b26bef748208e2a74174c0c0bfc@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-MC-Unique: sMo5MtksNjyrgFaEIWzQmA-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2019-06-12 at 10:32 +0100, Dave Martin wrote:
-> On Tue, Jun 11, 2019 at 12:31:34PM -0700, Yu-cheng Yu wrote:
-> > On Tue, 2019-06-11 at 12:41 +0100, Dave Martin wrote:
-> > > On Mon, Jun 10, 2019 at 07:24:43PM +0200, Florian Weimer wrote:
-> > > > * Yu-cheng Yu:
-> > > > 
-> > > > > To me, looking at PT_GNU_PROPERTY and not trying to support anything
-> > > > > is a
-> > > > > logical choice.  And it breaks only a limited set of toolchains.
-> > > > > 
-> > > > > I will simplify the parser and leave this patch as-is for anyone who
-> > > > > wants
-> > > > > to
-> > > > > back-port.  Are there any objections or concerns?
-> > > > 
-> > > > Red Hat Enterprise Linux 8 does not use PT_GNU_PROPERTY and is probably
-> > > > the largest collection of CET-enabled binaries that exists today.
-> > > 
-> > > For clarity, RHEL is actively parsing these properties today?
-> > > 
-> > > > My hope was that we would backport the upstream kernel patches for CET,
-> > > > port the glibc dynamic loader to the new kernel interface, and be ready
-> > > > to run with CET enabled in principle (except that porting userspace
-> > > > libraries such as OpenSSL has not really started upstream, so many
-> > > > processes where CET is particularly desirable will still run without
-> > > > it).
-> > > > 
-> > > > I'm not sure if it is a good idea to port the legacy support if it's not
-> > > > part of the mainline kernel because it comes awfully close to creating
-> > > > our own private ABI.
-> > > 
-> > > I guess we can aim to factor things so that PT_NOTE scanning is
-> > > available as a fallback on arches for which the absence of
-> > > PT_GNU_PROPERTY is not authoritative.
-> > 
-> > We can probably check PT_GNU_PROPERTY first, and fallback (based on ld-linux
-> > version?) to PT_NOTE scanning?
+From: David Laight
+> Sent: 12 June 2019 15:18
+> From: Oleg Nesterov
+> > Sent: 12 June 2019 14:46
+> > On 06/11, David Laight wrote:
+> > >
+> > > If I have an application that has a loop with a pselect call that
+> > > enables SIGINT (without a handler) and, for whatever reason,
+> > > one of the fd is always 'ready' then I'd expect a SIGINT
+> > > (from ^C) to terminate the program.
+> >
+> > This was never true.
+> >
+> > Before Eric's patches SIGINT can kill a process or not, depending on timing.
+> > In particular, if SIGINT was already pending before pselect() and it finds
+> > an already ready fd, the program won't terminate.
 > 
-> For arm64, we can check for PT_GNU_PROPERTY and then give up
-> unconditionally.
+> Which matches what I see on a very old Linux system.
 > 
-> For x86, we would fall back to PT_NOTE scanning, but this will add a bit
-> of cost to binaries that don't have NT_GNU_PROPERTY_TYPE_0.  The ld.so
-> version doesn't tell you what ELF ABI a given executable conforms to.
+> > After the Eric's patches SIGINT will only kill the program if pselect() does
+> > not find a ready fd.
+> >
+> > And this is much more consistent. Now we can simply say that the signal will
+> > be delivered only if pselect() fails and returns -EINTR. If it doesn't have
+> > a handler the process will be killed, otherwise the handler will be called.
 > 
-> Since this sounds like it's largely a distro-specific issue, maybe there
-> could be a Kconfig option to turn the fallback PT_NOTE scanning on?
+> But is it what the standards mandate?
+> Can anyone check how Solaris and any of the BSDs behave?
+> I don't have access to any solaris systems (I doubt I'll get the disk to
+> spin on the one in my garage).
+> I can check NetBSD when I get home.
 
-Yes, I will make it a Kconfig option.
+I tested NetBSD last night.
+pselect() always calls the signal handlers even when an fd is ready.
+I'm beginning to suspect that this is the 'standards conforming' behaviour.
+I don't remember when pselect() was added to the ToG specs, it didn't
+go through XNET while I  was going to the meetings.
 
-Yu-cheng
+	David
+
+> 
+> The ToG page for pselect() http://pubs.opengroup.org/onlinepubs/9699919799/functions/pselect.html
+> says:
+>     "If sigmask is not a null pointer, then the pselect() function shall replace
+>     the signal mask of the caller by the set of signals pointed to by sigmask
+>     before examining the descriptors, and shall restore the signal mask of the
+>     calling thread before returning."
+> Note that it says 'before examining the descriptors' not 'before blocking'.
+> Under the general description about signals it also says that the signal handler
+> will be called (or other action happen) when a pending signal is unblocked.
+> So unblocking SIGINT (set to SIG_DFL) prior to examining the descriptors
+> should be enough to cause the process to exit.
+> The fact that signal handlers are not called until 'return to user'
+> is really an implementation choice - but (IMHO) it should appear as if they
+> were called at the time they became unmasked.
+> 
+> If nothing else the man pages need a note about the standards and portability.
+> 
+> 	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
