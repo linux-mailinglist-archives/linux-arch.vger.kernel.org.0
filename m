@@ -2,139 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E792843C63
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2019 17:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4BC43D13
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2019 17:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729877AbfFMPfk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Jun 2019 11:35:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:42986 "EHLO foss.arm.com"
+        id S1732052AbfFMPjY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Jun 2019 11:39:24 -0400
+Received: from foss.arm.com ([217.140.110.172]:43218 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727564AbfFMPfj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 13 Jun 2019 11:35:39 -0400
+        id S1731932AbfFMPjX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:39:23 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42C42A78;
-        Thu, 13 Jun 2019 08:35:38 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 458113F718;
-        Thu, 13 Jun 2019 08:35:36 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBCF43EF;
+        Thu, 13 Jun 2019 08:39:22 -0700 (PDT)
+Received: from C02TF0J2HF1T.local (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDD3E3F718;
+        Thu, 13 Jun 2019 08:39:16 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 16:39:07 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Will Deacon <will.deacon@arm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kselftest@vger.kernel.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH v4 1/2] arm64: Define
  Documentation/arm64/tagged-address-abi.txt
-To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Catalin Marinas <Catalin.Marinas@arm.com>
-Cc:     nd <nd@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Will Deacon <Will.Deacon@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
+Message-ID: <20190613153906.GV28951@C02TF0J2HF1T.local>
 References: <cover.1560339705.git.andreyknvl@google.com>
  <20190612142111.28161-1-vincenzo.frascino@arm.com>
  <20190612142111.28161-2-vincenzo.frascino@arm.com>
- <a90da586-8ff6-4bed-d940-9306d517a18c@arm.com>
- <20190613092054.GO28951@C02TF0J2HF1T.local>
- <dee7f192-d0f0-558e-3007-eba805c6f2da@arm.com>
- <6ebbda37-5dd9-d0d5-d9cb-286c7a5b7f8e@arm.com>
- <8e3c9537-de10-0d0d-f5bb-c33bde92443f@arm.com>
- <5963d144-be9b-78d8-9130-ef92bc66b1fd@arm.com>
- <ba822b33-a822-02ef-9b85-725f4353596a@arm.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <a05a2dfb-3398-455d-8586-b79dfb7a772f@arm.com>
-Date:   Thu, 13 Jun 2019 16:35:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+ <20190612153538.GL28951@C02TF0J2HF1T.local>
+ <141c740a-94c2-2243-b6d1-b44ffee43791@arm.com>
+ <20190613113731.GY28398@e103592.cambridge.arm.com>
+ <20190613122821.GS28951@C02TF0J2HF1T.local>
+ <20190613132342.GZ28398@e103592.cambridge.arm.com>
 MIME-Version: 1.0
-In-Reply-To: <ba822b33-a822-02ef-9b85-725f4353596a@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190613132342.GZ28398@e103592.cambridge.arm.com>
+User-Agent: Mutt/1.11.2 (2019-01-07)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Jun 13, 2019 at 02:23:43PM +0100, Dave P Martin wrote:
+> On Thu, Jun 13, 2019 at 01:28:21PM +0100, Catalin Marinas wrote:
+> > On Thu, Jun 13, 2019 at 12:37:32PM +0100, Dave P Martin wrote:
+> > > On Thu, Jun 13, 2019 at 11:15:34AM +0100, Vincenzo Frascino wrote:
+> > > > On 12/06/2019 16:35, Catalin Marinas wrote:
+> > > > > On Wed, Jun 12, 2019 at 03:21:10PM +0100, Vincenzo Frascino wrote:
+> > > > >> +  - PR_GET_TAGGED_ADDR_CTRL: can be used to check the status of the Tagged
+> > > > >> +                             Address ABI.
+> > [...]
+> > > Is there a canonical way to detect whether this whole API/ABI is
+> > > available?  (i.e., try to call this prctl / check for an HWCAP bit,
+> > > etc.)
+> > 
+> > The canonical way is a prctl() call. HWCAP doesn't make sense since it's
+> > not a hardware feature. If you really want a different way of detecting
+> > this (which I don't think it's worth), we can reinstate the AT_FLAGS
+> > bit.
+> 
+> Sure, I think this probably makes sense -- I'm still getting my around
+> which parts of the design are directly related to MTE and which aren't.
+> 
+> I was a bit concerned about the interaction between
+> PR_SET_TAGGED_ADDR_CTRL and the sysctl: the caller might conclude that
+> this API is unavailable when actually tagged addresses are stuck on.
+> 
+> I'm not sure whether this matters, but it's a bit weird.
+> 
+> One option would be to change the semantics, so that the sysctl just
+> forbids turning tagging from off to on.  Alternatively, we could return
+> a different error code to distinguish this case.
 
-On 13/06/2019 16:32, Szabolcs Nagy wrote:
-> On 13/06/2019 15:03, Vincenzo Frascino wrote:
->> On 13/06/2019 13:28, Szabolcs Nagy wrote:
->>> On 13/06/2019 12:16, Vincenzo Frascino wrote:
->>>> On 13/06/2019 11:14, Szabolcs Nagy wrote:
->>>>> On 13/06/2019 10:20, Catalin Marinas wrote:
->>>>>> On Wed, Jun 12, 2019 at 05:30:34PM +0100, Szabolcs Nagy wrote:
->>>>>>> On 12/06/2019 15:21, Vincenzo Frascino wrote:
->>>>>>>> +  - a mapping below sbrk(0) done by the process itself
->>>>>>>
->>>>>>> doesn't the mmap rule cover this?
->>>>>>
->>>>>> IIUC it doesn't cover it as that's memory mapped by the kernel
->>>>>> automatically on access vs a pointer returned by mmap(). The statement
->>>>>> above talks about how the address is obtained by the user.
->>>>>
->>>>> ok i read 'mapping below sbrk' as an mmap (possibly MAP_FIXED)
->>>>> that happens to be below the heap area.
->>>>>
->>>>> i think "below sbrk(0)" is not the best term to use: there
->>>>> may be address range below the heap area that can be mmapped
->>>>> and thus below sbrk(0) and sbrk is a posix api not a linux
->>>>> syscall, the libc can implement it with mmap or whatever.
->>>>>
->>>>> i'm not sure what the right term for 'heap area' is
->>>>> (the address range between syscall(__NR_brk,0) at
->>>>> program startup and its current value?)
->>>>>
->>>>
->>>> I used sbrk(0) with the meaning of "end of the process's data segment" not
->>>> implying that this is a syscall, but just as a useful way to identify the mapping.
->>>> I agree that it is a posix function implemented by libc but when it is used with
->>>> 0 finds the current location of the program break, which can be changed by brk()
->>>> and depending on the new address passed to this syscall can have the effect of
->>>> allocating or deallocating memory.
->>>>
->>>> Will changing sbrk(0) with "end of the process's data segment" make it more clear?
->>>
->>> i don't understand what's the relevance of the *end*
->>> of the data segment.
->>>
->>> i'd expect the text to say something about the address
->>> range of the data segment.
->>>
->>> i can do
->>>
->>> mmap((void*)65536, 65536, PROT_READ|PROT_WRITE, MAP_FIXED|MAP_SHARED|MAP_ANON, -1, 0);
->>>
->>> and it will be below the end of the data segment.
->>>
->>
->> As far as I understand the data segment "lives" below the program break, hence
->> it is a way of describing the range from which the user can obtain a valid
->> tagged pointer.>
->> Said that, I am not really sure on how do you want me to document this (my aim
->> is for this to be clear to the userspace developers). Could you please propose
->> something?
-> 
-> [...], it is in the memory ranges privately owned by a
-> userspace process and it is obtained in one of the
-> following ways:
-> 
-> - mmap done by the process itself, [...]
-> 
-> - brk syscall done by the process itself.
->   (i.e. the heap area between the initial location
->   of the program break at process creation and its
->   current location.)
-> 
-> - any memory mapped by the kernel [...]
-> 
-> the data segment that's part of the process image is
-> already covered by the last point.
-> 
-
-Thanks Szabolcs, I will update the document accordingly.
+This is the intention, just to forbid turning tagging on. We could
+return -EPERM instead, though my original intent was to simply pretend
+that the prctl does not exist like in an older kernel version.
 
 -- 
-Regards,
-Vincenzo
+Catalin
