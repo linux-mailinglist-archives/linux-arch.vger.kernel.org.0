@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6582743A40
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2019 17:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78C843A3C
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2019 17:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732122AbfFMPTw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Jun 2019 11:19:52 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:51168 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732127AbfFMNAK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Jun 2019 09:00:10 -0400
-Received: by mail-qk1-f202.google.com with SMTP id n77so16488127qke.17
-        for <linux-arch@vger.kernel.org>; Thu, 13 Jun 2019 06:00:09 -0700 (PDT)
+        id S1732128AbfFMPTm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Jun 2019 11:19:42 -0400
+Received: from mail-vk1-f202.google.com ([209.85.221.202]:44746 "EHLO
+        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732131AbfFMNAN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Jun 2019 09:00:13 -0400
+Received: by mail-vk1-f202.google.com with SMTP id b85so6321022vka.11
+        for <linux-arch@vger.kernel.org>; Thu, 13 Jun 2019 06:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Ybi8SfjCPz2J5Q8w+1yX5IhzPr2ih+s0DDGtyk1eE0Q=;
-        b=ts1iVh+MGoXxSHAOlM6VYEYvHolnCXBAmkapqrFpT7xVCQzd3Fa2JkT1/HyG97LFTI
-         mO4qoHbIWJzYknXJB9Qo9GJzrP+bFZryH68kiERkcgtbTpQ85NTHFaHjFVKszYIV7DQp
-         Q1jw3cRylgS8rtUqWuipeckBmtvdIGjD+0qBR+2w2BdtT1j0mAt/Nr9W5IwLPgurFckj
-         rlVC/BIiHSswUysRXsjRYgl0Tv+gCDCfg1Lv5xNY6uPfkfi8PZi75+tSjqfaHLZAyzC0
-         k7CTsMMm4jVSITG9r6yCHkrahbWECdormGn+3rkzx0NsMpxx2Pi9d4Cw/SkV3QLvo9jW
-         SzFQ==
+        bh=qVLSMyZ68L0nEVi2BC3Nmk92s+29uFb8AJSu612sAz8=;
+        b=dGsiipATNwnIhD09a+ywJNlX3kBy1BoKT7QWeOJevth/ZUI14cAzOgTEiSkcc3R/Nl
+         Drd86Fo+aCob34AQ8IH4uRaXQm2UoTNyga1ijOW77hPSr0dcOURGrH9TCJ1kgyoeWL4J
+         ZLzEO2AM/eFNuZlbbmZCmt4El6Iis/EKF52EsbeWlsmyQgs/bnuOWFqd5mDvTgFOkof1
+         Kj1PMVruAz2bcZYTVmpImnfDwa3lSrtjiWlHuZ9+mGV0CEB/kd0ZzLsY/IMRsFbd29zw
+         3RiWuyVwae3KlTxcOKNUoF0rJhpy7X3PrabbmlukMUCXkR24heBWe7GJNMo2FiFU5h2N
+         mrVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Ybi8SfjCPz2J5Q8w+1yX5IhzPr2ih+s0DDGtyk1eE0Q=;
-        b=pc8GtXX/nHssADX405xpCp8EDILfeSk4AK87VJjQTk2muC06Scnf5V+Du9mBTpRuZG
-         c+HQnFHbyewZBuuQJuahX6b+BLvKfjAX2Yt+9yStg6z91JnHOkn74i6RLAzN3YnSRI4Y
-         wHpjqMdci9sUFZqYMPvrD/ZWSMwBvmNwkwJJiYXa1KQWRA9sguE+huTSmo+g58CPZ0/t
-         JZjTFtQmm1pHCqs4MSxIyhklBP9OzEsPbmAumtivYJm+31TjPR8dWl8MskvlmHmhBfDW
-         zypx+S6ee/+USJ7NXf2JOSrUEQxcNbh7Rw/zxty3/574BDKB9ckWqtUR44Rc4fkJXWCv
-         asMA==
-X-Gm-Message-State: APjAAAUh2l+pH77DHiExWl3kB67+VklBt9EOvRBtcO6kiMPPUg6E7AVW
-        +5KYO4XH7wtlBcWe9sGM3xjTZNKdQw==
-X-Google-Smtp-Source: APXvYqwtOyF/NipHfM0B1wS4zD7lYMrDN1HIEKEOmJ/DyO1Fbp7VEq6WgJWIEL0g0Ore5QNIIZb+c7v12w==
-X-Received: by 2002:a37:47d1:: with SMTP id u200mr37053086qka.21.1560430808803;
- Thu, 13 Jun 2019 06:00:08 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 14:59:48 +0200
+        bh=qVLSMyZ68L0nEVi2BC3Nmk92s+29uFb8AJSu612sAz8=;
+        b=YxBIhK1n+MMygTIf8UNZW9VFwz6fxnkyzhjtuvTDupVPZ2VoSjgGLWA0DEXhHn0IUW
+         3RUpzVHFE71Cd9nAuYzpZQscaTw1rhgy8oUG52bUlKfJpw0TC+AhP0/dqY/jq2w0HhzT
+         Ziv8t0dFWO642712KxYahczCH+tbxLwmJfNVAavBrWzoNgmpEY3M7FJQl3xJagn7XWAp
+         NbFSy6OmrEFMC52CZqzmuaOk41F8P14MbPgyQs1sRLL1SLQKG5kp3FD94V2pZvA8aK8P
+         N/O7jekq5yQWQUhT8b8gckDfERW2XOIRKMO2NPNNltT7fndMWAqkkvdR6wtHKbCqXCJ9
+         9gdg==
+X-Gm-Message-State: APjAAAUHplkUk8fkL56rCeh8GOodAoIo7bzFq9DAhSdqgSMZspgVgnnh
+        +ic+61TaPSi9KZ5961fnXjDywSTHMA==
+X-Google-Smtp-Source: APXvYqwIkh5ybwW5U+fhYXS+Mg+H4Dpu74Esg4xJJN0/7fjc8NfndIfgq1BqUiUvvatAz90Z2v/hm+wCyQ==
+X-Received: by 2002:a1f:16c9:: with SMTP id 192mr19622676vkw.54.1560430811770;
+ Thu, 13 Jun 2019 06:00:11 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 14:59:49 +0200
 In-Reply-To: <20190613125950.197667-1-elver@google.com>
-Message-Id: <20190613125950.197667-2-elver@google.com>
+Message-Id: <20190613125950.197667-3-elver@google.com>
 Mime-Version: 1.0
 References: <20190613125950.197667-1-elver@google.com>
 X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
-Subject: [PATCH v5 1/3] lib/test_kasan: Add bitops tests
+Subject: [PATCH v5 2/3] x86: Use static_cpu_has in uaccess region to avoid instrumentation
 From:   Marco Elver <elver@google.com>
 To:     peterz@infradead.org, aryabinin@virtuozzo.com, dvyukov@google.com,
         glider@google.com, andreyknvl@google.com, mark.rutland@arm.com,
@@ -62,148 +62,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This adds bitops tests to the test_kasan module. In a follow-up patch,
-support for bitops instrumentation will be added.
+This patch is a pre-requisite for enabling KASAN bitops instrumentation;
+using static_cpu_has instead of boot_cpu_has avoids instrumentation of
+test_bit inside the uaccess region. With instrumentation, the KASAN
+check would otherwise be flagged by objtool.
+
+For consistency, kernel/signal.c was changed to mirror this change,
+however, is never instrumented with KASAN (currently unsupported under
+x86 32bit).
 
 Signed-off-by: Marco Elver <elver@google.com>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Suggested-by: H. Peter Anvin <hpa@zytor.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Andrey Ryabinin <aryabinin@virtuozzo.com>
 ---
-Changes in v5:
-* Remove incorrect comment.
-
-Changes in v4:
-* Remove "within-bounds" tests.
-* Allocate sizeof(*bite) + 1, to not actually corrupt other memory in
-  case instrumentation isn't working.
-* Clarify that accesses operate on whole longs, which causes OOB
-  regardless of the bit accessed beyond the first long in the test.
-
 Changes in v3:
-* Use kzalloc instead of kmalloc.
-* Use sizeof(*bits).
+* Use static_cpu_has instead of moving boot_cpu_has outside uaccess
+  region.
 
 Changes in v2:
-* Use BITS_PER_LONG.
-* Use heap allocated memory for test, as newer compilers (correctly)
-  warn on OOB stack access.
+* Replaces patch: 'tools/objtool: add kasan_check_* to uaccess
+  whitelist'
 ---
- lib/test_kasan.c | 81 ++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 78 insertions(+), 3 deletions(-)
+ arch/x86/ia32/ia32_signal.c | 2 +-
+ arch/x86/kernel/signal.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-index 7de2702621dc..267f31a61870 100644
---- a/lib/test_kasan.c
-+++ b/lib/test_kasan.c
-@@ -11,16 +11,17 @@
+diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
+index 629d1ee05599..1cee10091b9f 100644
+--- a/arch/x86/ia32/ia32_signal.c
++++ b/arch/x86/ia32/ia32_signal.c
+@@ -358,7 +358,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
+ 		put_user_ex(ptr_to_compat(&frame->uc), &frame->puc);
  
- #define pr_fmt(fmt) "kasan test: %s " fmt, __func__
+ 		/* Create the ucontext.  */
+-		if (boot_cpu_has(X86_FEATURE_XSAVE))
++		if (static_cpu_has(X86_FEATURE_XSAVE))
+ 			put_user_ex(UC_FP_XSTATE, &frame->uc.uc_flags);
+ 		else
+ 			put_user_ex(0, &frame->uc.uc_flags);
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index 364813cea647..52eb1d551aed 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -391,7 +391,7 @@ static int __setup_rt_frame(int sig, struct ksignal *ksig,
+ 		put_user_ex(&frame->uc, &frame->puc);
  
-+#include <linux/bitops.h>
- #include <linux/delay.h>
-+#include <linux/kasan.h>
- #include <linux/kernel.h>
--#include <linux/mman.h>
- #include <linux/mm.h>
-+#include <linux/mman.h>
-+#include <linux/module.h>
- #include <linux/printk.h>
- #include <linux/slab.h>
- #include <linux/string.h>
- #include <linux/uaccess.h>
--#include <linux/module.h>
--#include <linux/kasan.h>
- 
- /*
-  * Note: test functions are marked noinline so that their names appear in
-@@ -623,6 +624,79 @@ static noinline void __init kasan_strings(void)
- 	strnlen(ptr, 1);
- }
- 
-+static noinline void __init kasan_bitops(void)
-+{
-+	/*
-+	 * Allocate 1 more byte, which causes kzalloc to round up to 16-bytes;
-+	 * this way we do not actually corrupt other memory.
-+	 */
-+	long *bits = kzalloc(sizeof(*bits) + 1, GFP_KERNEL);
-+	if (!bits)
-+		return;
-+
-+	/*
-+	 * Below calls try to access bit within allocated memory; however, the
-+	 * below accesses are still out-of-bounds, since bitops are defined to
-+	 * operate on the whole long the bit is in.
-+	 */
-+	pr_info("out-of-bounds in set_bit\n");
-+	set_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __set_bit\n");
-+	__set_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in clear_bit\n");
-+	clear_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __clear_bit\n");
-+	__clear_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in clear_bit_unlock\n");
-+	clear_bit_unlock(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __clear_bit_unlock\n");
-+	__clear_bit_unlock(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in change_bit\n");
-+	change_bit(BITS_PER_LONG, bits);
-+
-+	pr_info("out-of-bounds in __change_bit\n");
-+	__change_bit(BITS_PER_LONG, bits);
-+
-+	/*
-+	 * Below calls try to access bit beyond allocated memory.
-+	 */
-+	pr_info("out-of-bounds in test_and_set_bit\n");
-+	test_and_set_bit(BITS_PER_LONG + BITS_PER_BYTE, bits);
-+
-+	pr_info("out-of-bounds in __test_and_set_bit\n");
-+	__test_and_set_bit(BITS_PER_LONG + BITS_PER_BYTE, bits);
-+
-+	pr_info("out-of-bounds in test_and_set_bit_lock\n");
-+	test_and_set_bit_lock(BITS_PER_LONG + BITS_PER_BYTE, bits);
-+
-+	pr_info("out-of-bounds in test_and_clear_bit\n");
-+	test_and_clear_bit(BITS_PER_LONG + BITS_PER_BYTE, bits);
-+
-+	pr_info("out-of-bounds in __test_and_clear_bit\n");
-+	__test_and_clear_bit(BITS_PER_LONG + BITS_PER_BYTE, bits);
-+
-+	pr_info("out-of-bounds in test_and_change_bit\n");
-+	test_and_change_bit(BITS_PER_LONG + BITS_PER_BYTE, bits);
-+
-+	pr_info("out-of-bounds in __test_and_change_bit\n");
-+	__test_and_change_bit(BITS_PER_LONG + BITS_PER_BYTE, bits);
-+
-+	pr_info("out-of-bounds in test_bit\n");
-+	(void)test_bit(BITS_PER_LONG + BITS_PER_BYTE, bits);
-+
-+#if defined(clear_bit_unlock_is_negative_byte)
-+	pr_info("out-of-bounds in clear_bit_unlock_is_negative_byte\n");
-+	clear_bit_unlock_is_negative_byte(BITS_PER_LONG + BITS_PER_BYTE, bits);
-+#endif
-+	kfree(bits);
-+}
-+
- static int __init kmalloc_tests_init(void)
- {
- 	/*
-@@ -664,6 +738,7 @@ static int __init kmalloc_tests_init(void)
- 	kasan_memchr();
- 	kasan_memcmp();
- 	kasan_strings();
-+	kasan_bitops();
- 
- 	kasan_restore_multi_shot(multishot);
- 
+ 		/* Create the ucontext.  */
+-		if (boot_cpu_has(X86_FEATURE_XSAVE))
++		if (static_cpu_has(X86_FEATURE_XSAVE))
+ 			put_user_ex(UC_FP_XSTATE, &frame->uc.uc_flags);
+ 		else
+ 			put_user_ex(0, &frame->uc.uc_flags);
 -- 
 2.22.0.rc2.383.gf4fbbf30c2-goog
 
