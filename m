@@ -2,152 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB7F43E3B
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2019 17:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7466743E2E
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2019 17:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727167AbfFMPsX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Jun 2019 11:48:23 -0400
-Received: from foss.arm.com ([217.140.110.172]:36862 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731740AbfFMJVH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 13 Jun 2019 05:21:07 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E080367;
-        Thu, 13 Jun 2019 02:21:06 -0700 (PDT)
-Received: from C02TF0J2HF1T.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 999743F694;
-        Thu, 13 Jun 2019 02:21:02 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 10:20:59 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc:     Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        nd <nd@arm.com>, Will Deacon <Will.Deacon@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v4 1/2] arm64: Define
- Documentation/arm64/tagged-address-abi.txt
-Message-ID: <20190613092054.GO28951@C02TF0J2HF1T.local>
-References: <cover.1560339705.git.andreyknvl@google.com>
- <20190612142111.28161-1-vincenzo.frascino@arm.com>
- <20190612142111.28161-2-vincenzo.frascino@arm.com>
- <a90da586-8ff6-4bed-d940-9306d517a18c@arm.com>
+        id S2389259AbfFMPsC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Jun 2019 11:48:02 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:50160 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726541AbfFMJVh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Jun 2019 05:21:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=KNxPWlWuxnDwYXMMhXWadjBNeF5Uv67xMzgxslH4spI=; b=RvVfgl22PpGBJDNLkXFMiMjLs
+        u8EyR5xVLEFRoaxMXVmWkgS3oWG0cFcTq94IwDR7upEolKf/rdjFDkLH8uYoayUuNpIviET6kY9/8
+        tbb/DBMzpHXF5XxnKNtjV46uRJS0UaH/2h+CpUg5R5DWhCY6Q++wILsSOi+cl7IF0vBSJ90GTuunC
+        bCj7nyddUBt0KfPVT3aZpEv8LRFzH7VdqyrF41olQSipswiMd3oI+WWxkn21LhC+JiiYWDkDaKY/j
+        GfjiqyLLH4ow9K7AOYgLJrGwE8KfWhs1zsCVQlmoIR2Jbf7d9y07Ie9yPKBC1GIea5Nu6gR4dOV/y
+        zHArEAOGg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hbLvA-0000K1-OV; Thu, 13 Jun 2019 09:21:24 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 33A9D209C844F; Thu, 13 Jun 2019 11:21:23 +0200 (CEST)
+Date:   Thu, 13 Jun 2019 11:21:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     aryabinin@virtuozzo.com, dvyukov@google.com, glider@google.com,
+        andreyknvl@google.com, mark.rutland@arm.com, hpa@zytor.com,
+        corbet@lwn.net, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        x86@kernel.org, arnd@arndb.de, jpoimboe@redhat.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v3 2/3] x86: Use static_cpu_has in uaccess region to
+ avoid instrumentation
+Message-ID: <20190613092123.GO3402@hirez.programming.kicks-ass.net>
+References: <20190531150828.157832-1-elver@google.com>
+ <20190531150828.157832-3-elver@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a90da586-8ff6-4bed-d940-9306d517a18c@arm.com>
-User-Agent: Mutt/1.11.2 (2019-01-07)
+In-Reply-To: <20190531150828.157832-3-elver@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Szabolcs,
-
-On Wed, Jun 12, 2019 at 05:30:34PM +0100, Szabolcs Nagy wrote:
-> On 12/06/2019 15:21, Vincenzo Frascino wrote:
-> > +2. ARM64 Tagged Address ABI
-> > +---------------------------
-> > +
-> > +From the kernel syscall interface prospective, we define, for the purposes
->                                      ^^^^^^^^^^^
-> perspective
+On Fri, May 31, 2019 at 05:08:30PM +0200, Marco Elver wrote:
+> This patch is a pre-requisite for enabling KASAN bitops instrumentation;
+> using static_cpu_has instead of boot_cpu_has avoids instrumentation of
+> test_bit inside the uaccess region. With instrumentation, the KASAN
+> check would otherwise be flagged by objtool.
 > 
-> > +of this document, a "valid tagged pointer" as a pointer that either it has
-> > +a zero value set in the top byte or it has a non-zero value, it is in memory
-> > +ranges privately owned by a userspace process and it is obtained in one of
-> > +the following ways:
-> > +  - mmap() done by the process itself, where either:
-> > +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
-> > +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
-> > +      file or "/dev/zero"
+> For consistency, kernel/signal.c was changed to mirror this change,
+> however, is never instrumented with KASAN (currently unsupported under
+> x86 32bit).
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+Thanks!
+
 > 
-> this does not make it clear if MAP_FIXED or other flags are valid
-> (there are many map flags i don't know, but at least fixed should work
-> and stack/growsdown. i'd expect anything that's not incompatible with
-> private|anon to work).
-
-Just to clarify, this document tries to define the memory ranges from
-where tagged addresses can be passed into the kernel in the context
-of TBI only (not MTE); that is for hwasan support. FIXED or GROWSDOWN
-should not affect this.
-
-> > +  - a mapping below sbrk(0) done by the process itself
+> Signed-off-by: Marco Elver <elver@google.com>
+> Suggested-by: H. Peter Anvin <hpa@zytor.com>
+> ---
+> Changes in v3:
+> * Use static_cpu_has instead of moving boot_cpu_has outside uaccess
+>   region.
 > 
-> doesn't the mmap rule cover this?
-
-IIUC it doesn't cover it as that's memory mapped by the kernel
-automatically on access vs a pointer returned by mmap(). The statement
-above talks about how the address is obtained by the user.
-
-> > +  - any memory mapped by the kernel in the process's address space during
-> > +    creation and following the restrictions presented above (i.e. data, bss,
-> > +    stack).
+> Changes in v2:
+> * Replaces patch: 'tools/objtool: add kasan_check_* to uaccess
+>   whitelist'
+> ---
+>  arch/x86/ia32/ia32_signal.c | 2 +-
+>  arch/x86/kernel/signal.c    | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> OK.
+> diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
+> index 629d1ee05599..1cee10091b9f 100644
+> --- a/arch/x86/ia32/ia32_signal.c
+> +++ b/arch/x86/ia32/ia32_signal.c
+> @@ -358,7 +358,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
+>  		put_user_ex(ptr_to_compat(&frame->uc), &frame->puc);
+>  
+>  		/* Create the ucontext.  */
+> -		if (boot_cpu_has(X86_FEATURE_XSAVE))
+> +		if (static_cpu_has(X86_FEATURE_XSAVE))
+>  			put_user_ex(UC_FP_XSTATE, &frame->uc.uc_flags);
+>  		else
+>  			put_user_ex(0, &frame->uc.uc_flags);
+> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+> index 364813cea647..52eb1d551aed 100644
+> --- a/arch/x86/kernel/signal.c
+> +++ b/arch/x86/kernel/signal.c
+> @@ -391,7 +391,7 @@ static int __setup_rt_frame(int sig, struct ksignal *ksig,
+>  		put_user_ex(&frame->uc, &frame->puc);
+>  
+>  		/* Create the ucontext.  */
+> -		if (boot_cpu_has(X86_FEATURE_XSAVE))
+> +		if (static_cpu_has(X86_FEATURE_XSAVE))
+>  			put_user_ex(UC_FP_XSTATE, &frame->uc.uc_flags);
+>  		else
+>  			put_user_ex(0, &frame->uc.uc_flags);
+> -- 
+> 2.22.0.rc1.257.g3120a18244-goog
 > 
-> Can a null pointer have a tag?
-> (in case NULL is valid to pass to a syscall)
-
-Good point. I don't think it can. We may change this for MTE where we
-give a hint tag but no hint address, however, this document only covers
-TBI for now.
-
-> > +The ARM64 Tagged Address ABI is an opt-in feature, and an application can
-> > +control it using the following prctl()s:
-> > +  - PR_SET_TAGGED_ADDR_CTRL: can be used to enable the Tagged Address ABI.
-> > +  - PR_GET_TAGGED_ADDR_CTRL: can be used to check the status of the Tagged
-> > +                             Address ABI.
-> > +
-> > +As a consequence of invoking PR_SET_TAGGED_ADDR_CTRL prctl() by an applications,
-> > +the ABI guarantees the following behaviours:
-> > +
-> > +  - Every current or newly introduced syscall can accept any valid tagged
-> > +    pointers.
-> > +
-> > +  - If a non valid tagged pointer is passed to a syscall then the behaviour
-> > +    is undefined.
-> > +
-> > +  - Every valid tagged pointer is expected to work as an untagged one.
-> > +
-> > +  - The kernel preserves any valid tagged pointers and returns them to the
-> > +    userspace unchanged in all the cases except the ones documented in the
-> > +    "Preserving tags" paragraph of tagged-pointers.txt.
-> 
-> OK.
-> 
-> i guess pointers of another process are not "valid tagged pointers"
-> for the current one, so e.g. in ptrace the ptracer has to clear the
-> tags before PEEK etc.
-
-Another good point. Are there any pros/cons here or use-cases? When we
-add MTE support, should we handle this differently?
-
-> > +A definition of the meaning of tagged pointers on arm64 can be found in:
-> > +Documentation/arm64/tagged-pointers.txt.
-> > +
-> > +3. ARM64 Tagged Address ABI Exceptions
-> > +--------------------------------------
-> > +
-> > +The behaviours described in paragraph 2, with particular reference to the
-> > +acceptance by the syscalls of any valid tagged pointer are not applicable
-> > +to the following cases:
-> > +  - mmap() addr parameter.
-> > +  - mremap() new_address parameter.
-> > +  - prctl_set_mm() struct prctl_map fields.
-> > +  - prctl_set_mm_map() struct prctl_map fields.
-> 
-> i don't understand the exception: does it mean that passing a tagged
-> address to these syscalls is undefined?
-
-I'd say it's as undefined as it is right now without these patches. We
-may be able to explain this better in the document.
-
--- 
-Catalin
