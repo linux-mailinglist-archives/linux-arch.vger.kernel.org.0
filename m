@@ -2,92 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E55249AF8
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Jun 2019 09:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F092B49CC0
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Jun 2019 11:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbfFRHon convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 18 Jun 2019 03:44:43 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:52730 "EHLO mx1.redhat.com"
+        id S1728965AbfFRJM5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Jun 2019 05:12:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:58496 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725913AbfFRHon (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 Jun 2019 03:44:43 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id C3D193092663;
-        Tue, 18 Jun 2019 07:44:42 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-116-148.ams2.redhat.com [10.36.116.148])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2BCA636FA;
-        Tue, 18 Jun 2019 07:44:39 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Joseph Myers <joseph@codesourcery.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Paul Burton <pburton@wavecomp.com>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] uapi: avoid namespace conflict in linux/posix_types.h
-References: <20190319165123.3967889-1-arnd@arndb.de>
-        <alpine.DEB.2.21.1905072249570.19308@digraph.polyomino.org.uk>
-        <87tvd2j9ye.fsf@oldenburg2.str.redhat.com>
-        <CAHk-=wio1e4=WUUwmo-Ph55BEgH_X3oXzBpvPyLQg2TxzfGYuw@mail.gmail.com>
-        <871s05fd8o.fsf@oldenburg2.str.redhat.com>
-        <CAHk-=wg4ijSoPq-w7ct_VuZvgHx+tUv_QX-We-62dEwK+AOf2w@mail.gmail.com>
-        <87sgs8igfj.fsf@oldenburg2.str.redhat.com>
-        <CAHk-=wjCwnk0nfgCcMYqqX6o9bBrutDtut_fzZ-2VwiZR1y4kw@mail.gmail.com>
-        <87k1dkdr9c.fsf@oldenburg2.str.redhat.com>
-        <CAHk-=wgiZNERDN7p-bsCzzYGRjeqTQw7kJxJnXAHVjqqO8PGrg@mail.gmail.com>
-        <87a7egdqgr.fsf@oldenburg2.str.redhat.com>
-        <CAHk-=wjF6ek4v04w2O3CuOaauDERfdyduW+h=u9uN5ja1ObLzQ@mail.gmail.com>
-Date:   Tue, 18 Jun 2019 09:44:38 +0200
-In-Reply-To: <CAHk-=wjF6ek4v04w2O3CuOaauDERfdyduW+h=u9uN5ja1ObLzQ@mail.gmail.com>
-        (Linus Torvalds's message of "Mon, 17 Jun 2019 11:48:47 -0700")
-Message-ID: <87lfxzbamx.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+        id S1728385AbfFRJM4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 Jun 2019 05:12:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D7DD344;
+        Tue, 18 Jun 2019 02:12:56 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F3EB3F246;
+        Tue, 18 Jun 2019 02:12:52 -0700 (PDT)
+Date:   Tue, 18 Jun 2019 10:12:50 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Florian Weimer <fweimer@redhat.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>
+Subject: Re: [PATCH v7 22/27] binfmt_elf: Extract .note.gnu.property from an
+ ELF file
+Message-ID: <20190618091248.GB2790@e103592.cambridge.arm.com>
+References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
+ <20190606200646.3951-23-yu-cheng.yu@intel.com>
+ <20190607180115.GJ28398@e103592.cambridge.arm.com>
+ <94b9c55b3b874825fda485af40ab2a6bc3dad171.camel@intel.com>
+ <87lfy9cq04.fsf@oldenburg2.str.redhat.com>
+ <20190611114109.GN28398@e103592.cambridge.arm.com>
+ <031bc55d8dcdcf4f031e6ff27c33fd52c61d33a5.camel@intel.com>
+ <20190612093238.GQ28398@e103592.cambridge.arm.com>
+ <87imt4jwpt.fsf@oldenburg2.str.redhat.com>
+ <alpine.DEB.2.21.1906171418220.1854@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Tue, 18 Jun 2019 07:44:42 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.1906171418220.1854@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Linus Torvalds:
+On Mon, Jun 17, 2019 at 02:20:40PM +0200, Thomas Gleixner wrote:
+> On Mon, 17 Jun 2019, Florian Weimer wrote:
+> > * Dave Martin:
+> > > On Tue, Jun 11, 2019 at 12:31:34PM -0700, Yu-cheng Yu wrote:
+> > >> We can probably check PT_GNU_PROPERTY first, and fallback (based on ld-linux
+> > >> version?) to PT_NOTE scanning?
+> > >
+> > > For arm64, we can check for PT_GNU_PROPERTY and then give up
+> > > unconditionally.
+> > >
+> > > For x86, we would fall back to PT_NOTE scanning, but this will add a bit
+> > > of cost to binaries that don't have NT_GNU_PROPERTY_TYPE_0.  The ld.so
+> > > version doesn't tell you what ELF ABI a given executable conforms to.
+> > >
+> > > Since this sounds like it's largely a distro-specific issue, maybe there
+> > > could be a Kconfig option to turn the fallback PT_NOTE scanning on?
+> > 
+> > I'm worried that this causes interop issues similarly to what we see
+> > with VSYSCALL today.  If we need both and a way to disable it, it should
+> > be something like a personality flag which can be configured for each
+> > process tree separately.  Ideally, we'd settle on one correct approach
+> > (i.e., either always process both, or only process PT_GNU_PROPERTY) and
+> > enforce that.
+> 
+> Chose one and only the one which makes technically sense and is not some
+> horrible vehicle.
+> 
+> Everytime we did those 'oh we need to make x fly workarounds' we regretted
+> it sooner than later.
 
-> On Mon, Jun 17, 2019 at 11:19 AM Florian Weimer <fweimer@redhat.com> wrote:
->> >
->> > Unlike the "val[]" thing, I don't think anybody is supposed to access
->> > those fields directly.
->>
->> Well, glibc already calls it __val …
->
-> Hmm. If user space already doesn't see the "val[]" array anyway, I
-> guess we could just do that in the kernel too.
->
-> Looking at the glibc headers I have for fds_bits, glibc seems to do
-> *both* fds_bits[] and __fds_bits[] depending on __USE_XOPEN or not.
->
-> Anyway, that all implies to me that we might as well just go the truly
-> mindless way, and just do the double underscores and not bother with
-> renaming any files.
->
-> I thought people actually might care about the "val[]" name because I
-> find that in documentation, but since apparently it's already not
-> visible to user space anyway, that can't be true.
->
-> I guess that makes the original patch acceptable, and we should just
-> do the same thing to fds_bits..
+So I guess that points to keeping PT_NOTE scanning always available as a
+fallback on x86.  This sucks a bit, but if there are binaries already in
+the wild that rely on this, I don't think we have much choice...
 
-Hah.
+I'd still favour a Kconfig option to allow this support to be suppressed
+by arches that don't have a similar legacy to be compatible with.
 
-I think Arnd's original patch already had both.  So it's ready to go in
-after all?
-
-Thanks,
-Florian
+Cheers
+---Dave
