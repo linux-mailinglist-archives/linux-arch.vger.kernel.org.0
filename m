@@ -2,66 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F21F64DC67
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2019 23:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABCD4DC92
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2019 23:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725958AbfFTVXE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 Jun 2019 17:23:04 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:48588 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfFTVXE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Jun 2019 17:23:04 -0400
+        id S1726155AbfFTVbD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 Jun 2019 17:31:03 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:34324 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfFTVbD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Jun 2019 17:31:03 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=lE+8ibHHDChXz68mwHUNlW1qTS9lEBvs+jAu/8RbEdA=; b=XQ/tXsRrj+CE+J2xvQNmTA8w1
-        vCadQnJlkqIXhuRqw2dmSvimF/BdiwqY8rb4Wu1OM3EHzQeHDtlsqYMCOrITqAk50fWwzdNqB9kye
-        s/j1ee7cBA/gVdMeQKFZTCrbSvNnbwGrsgkFecfVX7QeHKUPLNR89qIN/c91hIUHoR0SraxVUqwc2
-        CyZuwpeanVIFIz+ly+XnS9c9vOXWvX3IvCYTcLAsNL/F1XCdA3W+Pxh9ufDqaI9zR/TAzNzzTOgBQ
-        5RI3n3pf+zfyd7WDb1RAoA8NwR5t8v3CCnK3EJ8mbF1jqekU+xrWVI5lqeWNgXQGTk5kCDl1oVNTU
-        CKy03++Xg==;
+         bh=enjs7CHak9fTSsrtrkc6AsjIa820JWzWgsah7wbOA1Y=; b=Yaq67oiPAUNb6kpFKiMcxMNSy
+        1sLwhxmWqDoRJyxjUTMtjT+tgwEMyPQ7OWvj0YfFsdbO96kUZn/ZBK92ypjpaU0Y14XwzerZidJ5Z
+        SSvz3jycgMDfYkK85HcblRrkUsIb3x56ebJ3WO/aipaP0V2x/Qg10m2k6iLndl/6x5BFkR+STNfEn
+        8AAhHI7ViErnWYtrKnVCFt14Df4Ke9+LnoC1bnKVphgIAQwfPAKJVENgxztxSt6hW7U5pbahOWkTg
+        WSwc/nv9yW0L6FQaxSlXBwbspYOy+K9bglgMNdvEiJzWkIQ022GXEFYotyNySuPSA2zm/OaXipTHw
+        nsTM/tvVw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1he4WH-0002qf-S0; Thu, 20 Jun 2019 21:22:58 +0000
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1he4e2-0000U4-Uc; Thu, 20 Jun 2019 21:30:59 +0000
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A08542021E585; Thu, 20 Jun 2019 23:22:56 +0200 (CEST)
-Date:   Thu, 20 Jun 2019 23:22:56 +0200
+        id 5B1F82021E585; Thu, 20 Jun 2019 23:30:57 +0200 (CEST)
+Date:   Thu, 20 Jun 2019 23:30:57 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+To:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+Cc:     "Vineet.Gupta1@synopsys.com" <Vineet.Gupta1@synopsys.com>,
+        "jbaron@akamai.com" <jbaron@akamai.com>,
         "linux-snps-arc@lists.infradead.org" 
         <linux-snps-arc@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "ard.biesheuvel@linaro.org" <ard.biesheuvel@linaro.org>
 Subject: Re: [PATCH] ARC: ARCv2: jump label: implement jump label patching
-Message-ID: <20190620212256.GC3436@hirez.programming.kicks-ass.net>
+Message-ID: <20190620213057.GD3436@hirez.programming.kicks-ass.net>
 References: <20190614164049.31626-1-Eugeniy.Paltsev@synopsys.com>
  <C2D7FE5348E1B147BCA15975FBA2307501A252CCC3@us01wembx1.internal.synopsys.com>
  <20190619081227.GL3419@hirez.programming.kicks-ass.net>
  <C2D7FE5348E1B147BCA15975FBA2307501A252E40B@us01wembx1.internal.synopsys.com>
  <20190620070120.GU3402@hirez.programming.kicks-ass.net>
- <a0a1aa81-d46e-71db-ff7b-207bc468068d@synopsys.com>
+ <a945de7d3b6f2da03c62c9e1043e125b4c4211aa.camel@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a0a1aa81-d46e-71db-ff7b-207bc468068d@synopsys.com>
+In-Reply-To: <a945de7d3b6f2da03c62c9e1043e125b4c4211aa.camel@synopsys.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 11:48:17AM -0700, Vineet Gupta wrote:
-> On 6/20/19 12:01 AM, Peter Zijlstra wrote:
-> 
-> > 
+On Thu, Jun 20, 2019 at 06:34:55PM +0000, Eugeniy Paltsev wrote:
+> On Thu, 2019-06-20 at 09:01 +0200, Peter Zijlstra wrote:
+
 > > In particular we do not need the alignment.
 > > 
 > > So what the x86 code does is:
@@ -95,35 +94,40 @@ On Thu, Jun 20, 2019 at 11:48:17AM -0700, Vineet Gupta wrote:
 > > instruction fetch window size and don't need the 'funny' alignment
 > > stuff.
 > > 
-> > Now, I've no idea if something like this is feasible on ARC; for it to
-> > work you need that 2 byte trap instruction -- since all instructions are
-> > 2 byte aligned, you can always poke that without issue.
 > 
-> We do have a 2 byte TRAP_S u6 which is used for all/any trap'ing: syscalls,
-> software breakpoint, kprobes etc. But using it like x86 seems a bit excessive for
-> ARC. Given that x86 doesn't implement flush_icache_range() it must have I$
-> snooping D$ and also this machine wide IPI sync I$ must be totally under the hood
-> all hardware affair - unlike ARC which needs on_each_cpu( I$ line range).
+> Thanks for explanation. Now I understand how this x86 magic works.
+> 
+> However it looks like even more complex than ARM implementation.
+> As I understand on ARM they do something like that:
+> ---------------------------->8-------------------------
+> on_each_cpu {
+> 	write_instruction
+> 	flush_data_cache_region
+> 	invalidate_instruction_cache_region
+> }
+> ---------------------------->8-------------------------
+> 
+> https://elixir.bootlin.com/linux/v5.1/source/arch/arm/kernel/patch.c#L121
+> 
+> Yep, there is some overhead - as we don't need to do white and D$ flush on each cpu
+> but that makes code simple and avoids additional checks.
+> 
+> And I don't understand in which cases x86 approach with trap is better.
+> In this ARM implementation we do one machine wide IPI instead of three in x86 trap approach.
+> 
+> Probably there is some x86 specifics I don't get?
 
-I always forget the exact details, but we do have to execute what is
-called a serializing instruction to flush CPU state and force it to
-re-read the actual instructions -- see sync_core().
+It's about variable instruction length; ARM (RISC in general) doesn't
+have that, ARC does.
 
-> Using TRAP_S would actually requires 2 passes (and 2 rounds of IPI) for code
-> patching - the last one to undo the TRAP_S itself.
+Your current proposal works by keeping the instruction inside of the
+i-fetch window, but that then results in instruction padding (extra
+NOPs). And that is fine, it really should work.
 
-Correct -- we do 3, like detailed in the other email. But we figured the
-actual poking of text is the slow path anyway.
+The x86 approach however allows you to get rid of that padding and
+should work for unaligned variable length instructions (we have 1-15
+byte instructions).
 
-> I do worry about the occasional alignment induced extra NOP_S instruction (2 byte)
-> but there doesn't seem to be an easy solution. Heck if we could use the NOP_S /
-> B_S in first place. While not a clean solution by any standards, could anything be
-> done to reduce the code path of DO_ONCE() so that unlikely code is not too far off.
-
-if one could somehow get the arch_static_branch*() things to
-conditionally emit either the 2 or 4 byte jump, depending on the offset
-(which is known there, since we stick it in the __jump_table), then we
-can have arch_jump_label_transform() use that same condition to switch
-between 2 and 4 bytes too.
-
-I just don't know if it's possible :-/
+I just wanted to make sure you were aware of the possiblities such that
+you made an informed decision, I'm not trying to force complexity on you
+:-)
