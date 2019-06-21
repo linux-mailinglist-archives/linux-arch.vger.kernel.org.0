@@ -2,139 +2,176 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7717E4EC06
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2019 17:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349114EC44
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2019 17:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726246AbfFUPaT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jun 2019 11:30:19 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:33440 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbfFUPaS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jun 2019 11:30:18 -0400
-Received: by mail-wr1-f68.google.com with SMTP id n9so7060801wru.0
-        for <linux-arch@vger.kernel.org>; Fri, 21 Jun 2019 08:30:17 -0700 (PDT)
+        id S1726445AbfFUPjc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Jun 2019 11:39:32 -0400
+Received: from smtprelay-out1.synopsys.com ([198.182.61.142]:40226 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726196AbfFUPjb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 21 Jun 2019 11:39:31 -0400
+Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AF172C0D9C;
+        Fri, 21 Jun 2019 15:39:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1561131571; bh=6079FvYrnSuIcm6KjAAvflaWDCqsqM0Yq9xGQZzLwWQ=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=O+q7znAOzBk/+h2uPxLq7f1cdPH5exgEndPAn6kmrW4tvwo6e/anGnpLZyJZ0rNH8
+         ABlwMnqdnSxB9Wea78xBX//9Ecio+JN7Be+wijHOm/GVcr7+iE78c63SUXV56TPOTh
+         8KiQvdhKEEaQFreibsXvAY8ub4bHprV2Vx1QYajKfmByG6m81tvoCoXXxl8yiCQayy
+         3CvXxVwv7eC9XvY66IPos8zgTwX0QZ9PVhGNT+g5NtSwY0ZsU9SI625zjaIRHwA9dG
+         pnpDlpmLfsSLYHE3forkgseok1Ae5z61ydo/tfq+9kxtKMT84nQzVPNEOgOmiPtnw6
+         /Vc6AnewBBTPg==
+Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 4E3B2A0067;
+        Fri, 21 Jun 2019 15:39:29 +0000 (UTC)
+Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
+ US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Fri, 21 Jun 2019 08:39:29 -0700
+Received: from NAM03-BY2-obe.outbound.protection.outlook.com (10.13.134.195)
+ by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Fri, 21 Jun 2019 08:39:28 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5YZiI+zyweO0ekg0qLNHMbAW8w56yWaJIWuJNWGZdrg=;
-        b=dbXgRwNiGWpZ5dPzPLSjqSh7tCw83/f69jreXjaWR8B2wtYOw9YPmU3lsN9j2es8Ei
-         gRWkwcDnXMd82gOZr6ISqY820b65NQMRy8mIDEmdm+knU1sVfW/YrUbgxv5CXyM0koGm
-         hyGmh+vnwAqc4WIK9HTB5GsGjbEmuhVn41ACwvK6XXpzidzcacXcM/u4Jl2IsLVo8JS+
-         JH7Xao84vGP3gdM1BvNWl6r1D06nMa4/X9x1Kgn8LqcJzn4sSLj+qPMOwG20Sgbjn3bO
-         DsSuII112vDKrvffk7Vwpv2Ty/QVRWYlMpN7vmsWKazy160tWAdFaQkwUhg7nSpNIb6V
-         1hDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5YZiI+zyweO0ekg0qLNHMbAW8w56yWaJIWuJNWGZdrg=;
-        b=KrVceRTUNdcPFZFS5nC/l94BENEU07QAmF9MYgz1RK2liTQUNioMpWktD1/WNBgNYG
-         vFRX9KNHAHQx3n6NiuWXg4xr/1ZBYGKhAusDbIqFi5GPyKL/hUG42dS2LgcGVtUQJW8a
-         N0m+SLezDEEq9lPGY4W7+LSO4NUTvUnbj5xuuIvZntii0Hy3l1RrINZfh3L36Zr2WJjy
-         y1D/ZdMH6kzoYJnr5eHVy3Sv7x1kNCDfW4oWvB5BX2ZuPvqW6nX2VhAP5+s5/nNYcO/I
-         Xg7nT+uHG2rYWuWnu4US4mtd4mxJ9uPedje1B7aCnWyAScE5YS+7HAppFqyeh8V6Ba8R
-         Ir4w==
-X-Gm-Message-State: APjAAAWWNwSwIduQvSnXe62FO9BzMrrVrJ7H4N6x3djAwg6urXh9Sw7S
-        GOf3CSdGTjwVt2ESjGQqGPnvIA==
-X-Google-Smtp-Source: APXvYqxFKVSRfk08uzwdvWV3KQkOr6uYr6J60bP5szgzwI1jwV+mfyZuPSfD5iQmdEUNbgr/7nQ+KQ==
-X-Received: by 2002:a05:6000:124a:: with SMTP id j10mr3737859wrx.191.1561131016526;
-        Fri, 21 Jun 2019 08:30:16 -0700 (PDT)
-Received: from brauner.io ([212.91.227.56])
-        by smtp.gmail.com with ESMTPSA id w23sm3178921wmi.45.2019.06.21.08.30.14
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 21 Jun 2019 08:30:15 -0700 (PDT)
-Date:   Fri, 21 Jun 2019 17:30:13 +0200
-From:   Christian Brauner <christian@brauner.io>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Adrian Reber <adrian@lisas.de>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Ley Foon Tan <lftan@altera.com>,
-        "moderated list:NIOS2 ARCHITECTURE" 
-        <nios2-dev@lists.rocketboards.org>
-Subject: Re: [PATCH v3 2/2] arch: wire-up clone3() syscall
-Message-ID: <20190621153012.fxwhx25mzmzueqh7@brauner.io>
-References: <20190604160944.4058-1-christian@brauner.io>
- <20190604160944.4058-2-christian@brauner.io>
- <20190620184451.GA28543@roeck-us.net>
- <20190620221003.ciuov5fzqxrcaykp@brauner.io>
- <CAK8P3a2iV7=HkHBVL_puvCQN0DmdKEnVs2aG9MQV_8Q58JSfTA@mail.gmail.com>
- <20190621111839.v5yqlws6iw7mx4aa@brauner.io>
- <CAK8P3a0T1=eg5ONbMFhHi=vmk1K5uogZ+5=wpsXvjVDzn6vS=Q@mail.gmail.com>
+ d=synopsys.onmicrosoft.com; s=selector1-synopsys-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fK77iwFW/p1wq0uLyo2wr+jo704PfAHVr6SzTpkXxGs=;
+ b=TwpHuqBw5ZJMLSIlSNUynwR0MwpZXtqNWSVw7AgyAsmGlblcaDRFruV18VIvioXL1hXEl+80rSKaypgHsycL77r1Oe13BQe0edkdilCIQuNxKNxW5oXYEfa4bsyK0S3lXADd4O1DdnHP28T7MsTw1av/ZScUVYjlvLd5icIMTWM=
+Received: from CY4PR1201MB0120.namprd12.prod.outlook.com (10.172.78.14) by
+ CY4PR1201MB0184.namprd12.prod.outlook.com (10.172.78.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1987.15; Fri, 21 Jun 2019 15:39:27 +0000
+Received: from CY4PR1201MB0120.namprd12.prod.outlook.com
+ ([fe80::d536:9377:4e1c:75ad]) by CY4PR1201MB0120.namprd12.prod.outlook.com
+ ([fe80::d536:9377:4e1c:75ad%4]) with mapi id 15.20.1987.014; Fri, 21 Jun 2019
+ 15:39:27 +0000
+From:   Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+Subject: RE: [PATCH] ARC: ARCv2: jump label: implement jump label patching
+Thread-Topic: [PATCH] ARC: ARCv2: jump label: implement jump label patching
+Thread-Index: AQHVItAEofkbV+NXXEuPQB3Di+rJQKakNJEAgADZNACAATpIEA==
+Date:   Fri, 21 Jun 2019 15:39:27 +0000
+Message-ID: <CY4PR1201MB0120D86E5774F93769320B59A1E70@CY4PR1201MB0120.namprd12.prod.outlook.com>
+References: <20190614164049.31626-1-Eugeniy.Paltsev@synopsys.com>
+ <C2D7FE5348E1B147BCA15975FBA2307501A252CCC3@us01wembx1.internal.synopsys.com>
+ <20190619081227.GL3419@hirez.programming.kicks-ass.net>
+ <C2D7FE5348E1B147BCA15975FBA2307501A252E40B@us01wembx1.internal.synopsys.com>
+ <20190620075224.GT3419@hirez.programming.kicks-ass.net>
+ <9192bd26-5f34-dcbf-8552-2f474866a31e@synopsys.com>
+In-Reply-To: <9192bd26-5f34-dcbf-8552-2f474866a31e@synopsys.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=abrodkin@synopsys.com; 
+x-originating-ip: [188.243.7.154]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d51d80cd-b358-4c8c-7259-08d6f65ea506
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CY4PR1201MB0184;
+x-ms-traffictypediagnostic: CY4PR1201MB0184:
+x-microsoft-antispam-prvs: <CY4PR1201MB01841C05DCDAE94EA848DC39A1E70@CY4PR1201MB0184.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1443;
+x-forefront-prvs: 0075CB064E
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(366004)(39850400004)(396003)(376002)(346002)(189003)(13464003)(199004)(54906003)(6636002)(3846002)(6116002)(8676002)(66066001)(26005)(186003)(99286004)(81166006)(446003)(6436002)(11346002)(53546011)(476003)(102836004)(7736002)(9686003)(68736007)(8936002)(76176011)(71200400001)(81156014)(7696005)(6506007)(486006)(229853002)(73956011)(55016002)(256004)(6862004)(14454004)(316002)(66476007)(74316002)(25786009)(33656002)(71190400001)(2906002)(305945005)(5660300002)(66446008)(53936002)(66946007)(66556008)(6246003)(64756008)(76116006)(4326008)(52536014)(478600001)(107886003)(86362001);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR1201MB0184;H:CY4PR1201MB0120.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: synopsys.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: YRzWRAhD8HI6vlD80FWP/P9AVgehMaKOJC4a4Z2B+sXae6mufMVCvcE58LzAs1EnRQdAjquzN79VPYa4nTrkLOjjpQ+g1fNKFpiOW38P9oXd4TawI6t0Ulo2dTDVG9fYmHIg56TLqsLUHi+RlHvAeei9NGzfzOWFyaLq4Imlm9g5GmMgFY1133y/rwtHPmywQX51erlcbERjrxZR/3nUbA7rN8JaBvA0pRLMvOW0JfZPi/CBoaBLfJb5Z7N+AnbjnMhF+YZahIdBzK722V9+rAE8/apRSVlN3NtxO2aY/YPIB9hedDdAunMAmnIY9j+QbA0F1Bq33oPA1WK/A+to0Pm51z1XgKmSfk4hV5jlJyHI6VgeW1jQWYyhFKqaUM7+/Zk+jnUAMckSbdX0+DLVcNGtkCPw6GN6FQfE5jLFWY8=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0T1=eg5ONbMFhHi=vmk1K5uogZ+5=wpsXvjVDzn6vS=Q@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+X-MS-Exchange-CrossTenant-Network-Message-Id: d51d80cd-b358-4c8c-7259-08d6f65ea506
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2019 15:39:27.4584
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: abrodkin@synopsys.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0184
+X-OriginatorOrg: synopsys.com
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 04:20:15PM +0200, Arnd Bergmann wrote:
-> On Fri, Jun 21, 2019 at 1:18 PM Christian Brauner <christian@brauner.io> wrote:
-> > On Fri, Jun 21, 2019 at 11:37:50AM +0200, Arnd Bergmann wrote:
-> > >
-> > > I never really liked having __ARCH_WANT_SYS_CLONE here
-> > > because it was the only one that a new architecture needed to
-> > > set: all the other __ARCH_WANT_* are for system calls that
-> > > are already superseded by newer ones, so a new architecture
-> > > would start out with an empty list.
-> > >
-> > > Since __ARCH_WANT_SYS_CLONE3 replaces
-> > > __ARCH_WANT_SYS_CLONE for new architectures, how about
-> > > leaving __ARCH_WANT_SYS_CLONE untouched but instead
-> >
-> > __ARCH_WANT_SYS_CLONE is left untouched. :)
-> >
-> > > coming up with the reverse for clone3 and mark the architectures
-> > > that specifically don't want it (if any)?
-> >
-> > Afaict, your suggestion is more or less the same thing what is done
-> > here. So I'm not sure it buys us anything apart from future
-> > architectures not needing to set __ARCH_WANT_SYS_CLONE3.
-> >
-> > I expect the macro above to be only here temporarily until all arches
-> > have caught up and we're sure that they don't require assembly stubs
-> > (cf. [1]). A decision I'd leave to the maintainers (since even for
-> > nios2 we were kind of on the fence what exactly the sys_clone stub was
-> > supposed to do).
-> >
-> > But I'm happy to take a patch from you if it's equally or more simple
-> > than this one right here.
-> >
-> > In any case, linux-next should be fine on all arches with this fixup
-> > now.
-> 
-> I've looked at bit more closely at the nios2 implementation, and I
-> believe this is purely an artifact of this file being copied over
-> from m68k, which also has an odd definition. The glibc side
-> of nios2 clone() is also odd in other ways, but that appears
-> to be unrelated to the kernel ABI.
-> 
-> I think the best option here would be to not have any special
-> cases and just hook up clone3() the same way on all
-> architectures, with no #ifdef at all. If it turns out to not work
-> on a particular architecture later, they can still disable the
-> syscall then.
+Hi Vineet,
 
-Hm, if you believe that this is fine and want to "vouch" for it by
-whipping up a patch that replaces the wiring up done in [1] I'm happy to
-take it. :) Otherwise I'd feel more comfortable not adding all arches at
-once.
+> -----Original Message-----
+> From: linux-snps-arc <linux-snps-arc-bounces@lists.infradead.org> On Beha=
+lf Of Vineet Gupta
+> Sent: Thursday, June 20, 2019 11:50 PM
+> To: Peter Zijlstra <peterz@infradead.org>
+> Cc: linux-arch@vger.kernel.org; Ard Biesheuvel <ard.biesheuvel@linaro.org=
+>; Alexey Brodkin
+> <abrodkin@synopsys.com>; linux-kernel@vger.kernel.org; Jason Baron <jbaro=
+n@akamai.com>; Paolo Bonzini
+> <pbonzini@redhat.com>; linux-snps-arc@lists.infradead.org; Eugeniy Paltse=
+v
+> <Eugeniy.Paltsev@synopsys.com>
+> Subject: Re: [PATCH] ARC: ARCv2: jump label: implement jump label patchin=
+g
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=clone
+[snip]
 
-Christian
+> Insn encoding is always middl eendina - irrespective of endianness.
+
+Apparently only in little-endian mode instructions are encoded as middle-en=
+dian,
+see:
+-------------->8-------------
+# cat endian.S
+
+.global myfunc
+myfunc:
+        mov r0, r1
+-------------->8-------------
+
+Little-endian:
+-------------->8-------------
+# arc-linux-gcc -c -mcpu=3Darchs endian.S -EL
+# arc-linux-objdump -d endian.o
+
+endian.o:     file format elf32-littlearc
+
+Disassembly of section .text:
+00000000 <myfunc>:
+   0:   200a 0040               mov     r0,r1
+
+# arc-linux-readelf -x .text endian.o
+Hex dump of section '.text':
+  0x00000000 0a204000                            . @.
+-------------->8-------------
+
+Big-endian:
+-------------->8-------------
+# arc-linux-gcc -c -mcpu=3Darchs endian.S -EB
+# arc-linux-objdump -d endian.o
+
+endian.o:     file format elf32-bigarc
+
+Disassembly of section .text:
+00000000 <myfunc>:
+   0:   200a 0040               mov     r0,r1
+
+# arc-linux-readelf -x .text endian.o
+
+Hex dump of section '.text':
+  0x00000000 200a0040                             ..@
+-------------->8-------------
+
+-Alexey
