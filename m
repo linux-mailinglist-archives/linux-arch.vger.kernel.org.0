@@ -2,119 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CB04E7D7
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2019 14:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0BA4EA75
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2019 16:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfFUMNH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jun 2019 08:13:07 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:58854 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbfFUMNH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jun 2019 08:13:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=MSebylk6wL/Ah+aEpsz4r0kz2woEUYnwoq1toi6sVBU=; b=AOAPr7/xrNCZSo94DKYDdYG0H
-        62l4KH80zr+LodtUNiEfMLC2/dpJdiHnAcN2WWKWFwp0I9m09YU2LjM1dUHhX4xIsoQasVaTriUzf
-        sJI0MpC2gaohwvUm+FRhrP9KNofEDwXGPS7quz+2XxLRrhXMVrvovxTz2aBqoWdjZvOG+9PKRT3N1
-        Tnvw+Y4gN4vcpX6o5IWNY3gwBF2rkCreDfK5yrfkKHhTQMdV2a9FCra3/ID/04oHGA/90QdoLaLLs
-        kEi8Cc/TS6KVoEaTSXwNccW+jALV83Xf04SfgtLSWGHLHPCw/yO4jGEGZdR4sIhKu4vYbkgWaATC4
-        BUeaAbuEw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1heIPd-0005so-88; Fri, 21 Jun 2019 12:13:01 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ACD962021E58E; Fri, 21 Jun 2019 14:12:59 +0200 (CEST)
-Date:   Fri, 21 Jun 2019 14:12:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        namit@vmware.com
-Subject: Re: [PATCH] ARC: ARCv2: jump label: implement jump label patching
-Message-ID: <20190621121259.GU3463@hirez.programming.kicks-ass.net>
-References: <20190614164049.31626-1-Eugeniy.Paltsev@synopsys.com>
- <C2D7FE5348E1B147BCA15975FBA2307501A252CCC3@us01wembx1.internal.synopsys.com>
- <20190619081227.GL3419@hirez.programming.kicks-ass.net>
- <C2D7FE5348E1B147BCA15975FBA2307501A252E40B@us01wembx1.internal.synopsys.com>
- <20190620070120.GU3402@hirez.programming.kicks-ass.net>
- <a0a1aa81-d46e-71db-ff7b-207bc468068d@synopsys.com>
- <20190620212256.GC3436@hirez.programming.kicks-ass.net>
- <20190621120923.GT3463@hirez.programming.kicks-ass.net>
+        id S1726010AbfFUOUd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Jun 2019 10:20:33 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:39489 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725975AbfFUOUd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jun 2019 10:20:33 -0400
+Received: by mail-qk1-f195.google.com with SMTP id i125so4518548qkd.6;
+        Fri, 21 Jun 2019 07:20:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=86Rms5nqRiV6IeH+qjixPzoUGmZuw2YR9fMahci1Mdk=;
+        b=fwRELvTAs+c9ke3nijUMNSb4DP0u4Q30iUGCJ29fIsR7AnlS2BW2c8CfupzpIASiiw
+         uwJafIYWY4gR6TncEfarpi9yOQctri1t42X/J8h6amggUngUfoV8urf8AkxQU7rfXI0H
+         9SudSNYP/30bHxQ7vaIVwrUeRSy7ZmTcK084caACF/bblcoJXieVN2bxTJjVRhe/c6KM
+         LHVmHx/vjRqwLWQ73HToSe0dOmEElChDSDVHw2CnUKTrzAVNActYsi+R02fnUZCnTSNI
+         so29wIrhIjG432AF+cdGpQvme6DbIgNB5CXWkpGvak+N//A9RWebayEL8ls4Q+UNY36G
+         ZzlA==
+X-Gm-Message-State: APjAAAVI2Sd7r2KzIAV8krHnSjFQ+WTox1qZDMFqMF0iuQhbqjWsFet0
+        s1r7qq5Xyw4gQx041zM6sxFrvgvK1jjDqszwK+o=
+X-Google-Smtp-Source: APXvYqyqwjrhMseoqPbT7Hw4nVdhmcH/NXpQC9gPuVbWnpECa7+VTtvjMcLYD5bkOoIfs0VngajGRxZZxXjZdcnFkQg=
+X-Received: by 2002:a37:ad12:: with SMTP id f18mr68806622qkm.3.1561126832500;
+ Fri, 21 Jun 2019 07:20:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190621120923.GT3463@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190604160944.4058-1-christian@brauner.io> <20190604160944.4058-2-christian@brauner.io>
+ <20190620184451.GA28543@roeck-us.net> <20190620221003.ciuov5fzqxrcaykp@brauner.io>
+ <CAK8P3a2iV7=HkHBVL_puvCQN0DmdKEnVs2aG9MQV_8Q58JSfTA@mail.gmail.com> <20190621111839.v5yqlws6iw7mx4aa@brauner.io>
+In-Reply-To: <20190621111839.v5yqlws6iw7mx4aa@brauner.io>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 21 Jun 2019 16:20:15 +0200
+Message-ID: <CAK8P3a0T1=eg5ONbMFhHi=vmk1K5uogZ+5=wpsXvjVDzn6vS=Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] arch: wire-up clone3() syscall
+To:     Christian Brauner <christian@brauner.io>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Adrian Reber <adrian@lisas.de>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        "moderated list:NIOS2 ARCHITECTURE" 
+        <nios2-dev@lists.rocketboards.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 02:09:23PM +0200, Peter Zijlstra wrote:
+On Fri, Jun 21, 2019 at 1:18 PM Christian Brauner <christian@brauner.io> wrote:
+> On Fri, Jun 21, 2019 at 11:37:50AM +0200, Arnd Bergmann wrote:
+> >
+> > I never really liked having __ARCH_WANT_SYS_CLONE here
+> > because it was the only one that a new architecture needed to
+> > set: all the other __ARCH_WANT_* are for system calls that
+> > are already superseded by newer ones, so a new architecture
+> > would start out with an empty list.
+> >
+> > Since __ARCH_WANT_SYS_CLONE3 replaces
+> > __ARCH_WANT_SYS_CLONE for new architectures, how about
+> > leaving __ARCH_WANT_SYS_CLONE untouched but instead
+>
+> __ARCH_WANT_SYS_CLONE is left untouched. :)
+>
+> > coming up with the reverse for clone3 and mark the architectures
+> > that specifically don't want it (if any)?
+>
+> Afaict, your suggestion is more or less the same thing what is done
+> here. So I'm not sure it buys us anything apart from future
+> architectures not needing to set __ARCH_WANT_SYS_CLONE3.
+>
+> I expect the macro above to be only here temporarily until all arches
+> have caught up and we're sure that they don't require assembly stubs
+> (cf. [1]). A decision I'd leave to the maintainers (since even for
+> nios2 we were kind of on the fence what exactly the sys_clone stub was
+> supposed to do).
+>
+> But I'm happy to take a patch from you if it's equally or more simple
+> than this one right here.
+>
+> In any case, linux-next should be fine on all arches with this fixup
+> now.
 
-> --- /dev/null
-> +++ b/arch/x86/include/asm/jump_label_asm.h
-> @@ -0,0 +1,44 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_JUMP_LABEL_ASM_H
-> +#define _ASM_X86_JUMP_LABEL_ASM_H
-> +
-> +#include <asm/asm.h>
-> +#include <asm/nops.h>
-> +
-> +#ifdef __ASSEMBLY__
-> +
-> +.macro STATIC_BRANCH_ENTRY l_target:req l_yes:req key:req branch:req
-> +	.pushsection __jump_table, "aw"
-> +	.long		\l_target - ., \l_yes - .
-> +#ifdef __X86_64__
-> +	.quad		(\key - .) + \branch
-> +#else
-> +	.long		(\key - .) + \branch
-> +#endif
-> +	.popsection
-> +.endm
-> +
-> +.macro STATIC_BRANCH_NOP l_yes:req key:req branch:req
-> +.Lstatic_branch_nop_\@:
-> +.iflt 127 - .
+I've looked at bit more closely at the nios2 implementation, and I
+believe this is purely an artifact of this file being copied over
+from m68k, which also has an odd definition. The glibc side
+of nios2 clone() is also odd in other ways, but that appears
+to be unrelated to the kernel ABI.
 
-That should've been:
+I think the best option here would be to not have any special
+cases and just hook up clone3() the same way on all
+architectures, with no #ifdef at all. If it turns out to not work
+on a particular architecture later, they can still disable the
+syscall then.
 
-.if \l_yes - . < 127
-
-too, I had been playing with various forms to see when it compiles.
-But as soon as a label (either \l_yes or '.' gets used) it barfs.
-
-> +	.byte 0x66, 0x90
-> +.else
-> +	.byte STATIC_KEY_INIT_NOP
-> +.endif
-> +	STATIC_BRANCH_ENTRY l_target=.Lstatic_branch_nop_\@, l_yes=\l_yes, key=\key, branch=\branch
-> +.endm
-> +
-> +.macro STATIC_BRANCH_JMP l_yes:req key:req branch:req
-> +.Lstatic_branch_jmp_\@:
-> +.if \l_yes - . < 127
-> +	.byte 0xeb
-> +	.byte \l_yes - (. + 1)
-> +.else
-> +	.byte 0xe9
-> +	.long \l_yes - (. + 4)
-> +.endif
-> +	STATIC_BRANCH_ENTRY l_target=.Lstatic_branch_jmp_\@, l_yes=\l_yes, key=\key, branch=\branch
-> +.endm
-> +
-> +#endif /* __ASSEMBLY__ */
-> +#endif /* _ASM_X86_JUMP_LABEL_ASM_H */
+      Arnd
