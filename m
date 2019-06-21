@@ -2,148 +2,226 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A86AC4E704
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2019 13:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9397A4E7CE
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2019 14:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbfFULSq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jun 2019 07:18:46 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37490 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726596AbfFULSq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jun 2019 07:18:46 -0400
-Received: by mail-wm1-f67.google.com with SMTP id f17so6195986wme.2
-        for <linux-arch@vger.kernel.org>; Fri, 21 Jun 2019 04:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NabQZDyF6ofZk8run8ReROPDDNPPhXEMVOy6Fc5LD2A=;
-        b=A0sR4TbA5sn9q6BPXeU1kL9L2rZYmfUq90m2Sf0mR6201SQWimJDCuq975mx4xdPMX
-         NIoPXdOUBPw4EZ7mzDrd3p6sFLm6s9pSSW0e9mgtMc6rXQQeYIR2dgyZkoRof3qM35LP
-         5eRLvNwhvTbC4pcagAYYGBlOnLcU2RDd7TiNKmhSHyHAkTsmrA1crtabpPFcBBqxhzvV
-         X/tnH8Qcgl8EZ6/5uaWL4eJKnqQ5xekFKeIMDSPucn3iqtUXmJC8cwg5FfZultGJuxFJ
-         3svqrNjQJA7RZodeSacxMWBKE99m5lY+xX5GPKzuGK4aii45lI+GSO4URvxn0IXqiwZm
-         mw5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NabQZDyF6ofZk8run8ReROPDDNPPhXEMVOy6Fc5LD2A=;
-        b=ugdcXE6FrDdsWvxbKWAbKQZ4EIEdGogs3+f+lD5/BX4uJZT97lLRHUDcl3/uJeIa8c
-         ISp9TV76PMWToM0TDdMFSlHFhAMcAsBdE8P1VjtYZ08NFTR+OkLOr6WKfp2j+VBxh6sn
-         C5wYT3kPVIqxRhu1V9xeeNQkUiYHpeCEiFASwNA69cYcV8KTiqj3AqS3AAJO7V6pgv3Q
-         4r7MSI/hthjJSqKxySeDn1KlmtwXXr/JgJXHw7WzjnD3wLR2wy6UpkWUpdydcGeOAE+Y
-         77H7l6LqfNSACQFiiwtTmnDuRqMcsdSfPKlHlaO1jcJzlUTrMic3PECMzv6c+NXk2j8O
-         pctg==
-X-Gm-Message-State: APjAAAVM/Ll5zOP9+pfgkfykHM0GczY9ksB2J4CxWo0U0pB9MLJwiZpq
-        nPisHHXJ1BQ6cm09Z3wTpZI8Dw==
-X-Google-Smtp-Source: APXvYqzLoKsLczgYAoe7ayG3xoBLZkEIoT8eLSCvDDxUbIs9XKe0M+GRht7p9R+HZi2Sd7kHDL7H8w==
-X-Received: by 2002:a1c:a7ca:: with SMTP id q193mr4122227wme.150.1561115923826;
-        Fri, 21 Jun 2019 04:18:43 -0700 (PDT)
-Received: from brauner.io ([212.91.227.56])
-        by smtp.gmail.com with ESMTPSA id a84sm2327897wmf.29.2019.06.21.04.18.42
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 21 Jun 2019 04:18:43 -0700 (PDT)
-Date:   Fri, 21 Jun 2019 13:18:41 +0200
-From:   Christian Brauner <christian@brauner.io>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Adrian Reber <adrian@lisas.de>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH v3 2/2] arch: wire-up clone3() syscall
-Message-ID: <20190621111839.v5yqlws6iw7mx4aa@brauner.io>
-References: <20190604160944.4058-1-christian@brauner.io>
- <20190604160944.4058-2-christian@brauner.io>
- <20190620184451.GA28543@roeck-us.net>
- <20190620221003.ciuov5fzqxrcaykp@brauner.io>
- <CAK8P3a2iV7=HkHBVL_puvCQN0DmdKEnVs2aG9MQV_8Q58JSfTA@mail.gmail.com>
+        id S1726663AbfFUMJa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Jun 2019 08:09:30 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:58686 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726431AbfFUMJa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Jun 2019 08:09:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=TLk+4THjY639lP4H3Ig0SGJVbynvk/vuhBXQ5z+cMtc=; b=hSnRTQPSKxpEbpf8hVcB69sR4
+        B1SGehk3ShdniUYDS+6JkdDpGy+UMF5cv15XPf0lJ03734Jdex15xwd1CHpeEhjD5t5k2OfQKNAiP
+        iERKz4RaUbK0xWCgAl15kqqG9WTK16lW6uAvBzLOr/IDOfrbfNGmLvLpW9hBZ+tcq3240y99J5Bpl
+        x0BvHTpuSfBARdJH9QvgSni7VFrxlr71uY0xmTdBGiZYP2z9kw2m9gRuLmk3cI1g63CJ9VC4UxEEI
+        J/wnStdlskwyE/+z90FKCzAZGpFyOi7aVpZmhD5Jij7TCcXjPwVPjeZzpL8//NDLh10/4vVc1cF4F
+        Jy8vtiB4g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1heIM9-0004Za-CW; Fri, 21 Jun 2019 12:09:25 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 437442021E58E; Fri, 21 Jun 2019 14:09:23 +0200 (CEST)
+Date:   Fri, 21 Jun 2019 14:09:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        namit@vmware.com
+Subject: Re: [PATCH] ARC: ARCv2: jump label: implement jump label patching
+Message-ID: <20190621120923.GT3463@hirez.programming.kicks-ass.net>
+References: <20190614164049.31626-1-Eugeniy.Paltsev@synopsys.com>
+ <C2D7FE5348E1B147BCA15975FBA2307501A252CCC3@us01wembx1.internal.synopsys.com>
+ <20190619081227.GL3419@hirez.programming.kicks-ass.net>
+ <C2D7FE5348E1B147BCA15975FBA2307501A252E40B@us01wembx1.internal.synopsys.com>
+ <20190620070120.GU3402@hirez.programming.kicks-ass.net>
+ <a0a1aa81-d46e-71db-ff7b-207bc468068d@synopsys.com>
+ <20190620212256.GC3436@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a2iV7=HkHBVL_puvCQN0DmdKEnVs2aG9MQV_8Q58JSfTA@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190620212256.GC3436@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 11:37:50AM +0200, Arnd Bergmann wrote:
-> On Fri, Jun 21, 2019 at 12:10 AM Christian Brauner <christian@brauner.io> wrote:
-> > On Thu, Jun 20, 2019 at 11:44:51AM -0700, Guenter Roeck wrote:
-> > > On Tue, Jun 04, 2019 at 06:09:44PM +0200, Christian Brauner wrote:
-> >
-> > clone3() was placed under __ARCH_WANT_SYS_CLONE. Most architectures
-> > simply define __ARCH_WANT_SYS_CLONE and are done with it.
-> > Some however, such as nios2 and h8300 don't define it but instead
-> > provide a sys_clone stub of their own because of architectural
-> > requirements (or tweaks) and they are mostly written in assembly. (That
-> > should be left to arch maintainers for sys_clone3.)
-> >
-> > The build failures were on my radar already. I hadn't yet replied
-> > since I haven't pushed the fixup below.
-> > The solution is to define __ARCH_WANT_SYS_CLONE3 and add a
-> > cond_syscall(clone3) so we catch all architectures that do not yet
-> > provide clone3 with a ENOSYS until maintainers have added it.
-> >
-> > diff --git a/arch/arm/include/asm/unistd.h b/arch/arm/include/asm/unistd.h
-> > index 7a39e77984ef..aa35aa5d68dc 100644
-> > --- a/arch/arm/include/asm/unistd.h
-> > +++ b/arch/arm/include/asm/unistd.h
-> > @@ -40,6 +40,7 @@
-> >  #define __ARCH_WANT_SYS_FORK
-> >  #define __ARCH_WANT_SYS_VFORK
-> >  #define __ARCH_WANT_SYS_CLONE
-> > +#define __ARCH_WANT_SYS_CLONE3
+On Thu, Jun 20, 2019 at 11:22:56PM +0200, Peter Zijlstra wrote:
+> On Thu, Jun 20, 2019 at 11:48:17AM -0700, Vineet Gupta wrote:
+
+> > I do worry about the occasional alignment induced extra NOP_S instruction (2 byte)
+> > but there doesn't seem to be an easy solution. Heck if we could use the NOP_S /
+> > B_S in first place. While not a clean solution by any standards, could anything be
+> > done to reduce the code path of DO_ONCE() so that unlikely code is not too far off.
 > 
-> I never really liked having __ARCH_WANT_SYS_CLONE here
-> because it was the only one that a new architecture needed to
-> set: all the other __ARCH_WANT_* are for system calls that
-> are already superseded by newer ones, so a new architecture
-> would start out with an empty list.
+> if one could somehow get the arch_static_branch*() things to
+> conditionally emit either the 2 or 4 byte jump, depending on the offset
+> (which is known there, since we stick it in the __jump_table), then we
+> can have arch_jump_label_transform() use that same condition to switch
+> between 2 and 4 bytes too.
 > 
-> Since __ARCH_WANT_SYS_CLONE3 replaces
-> __ARCH_WANT_SYS_CLONE for new architectures, how about
-> leaving __ARCH_WANT_SYS_CLONE untouched but instead
+> I just don't know if it's possible :-/
 
-__ARCH_WANT_SYS_CLONE is left untouched. :)
+So I had to try; but GAS macro .if directives don't like labels as
+arguments, not constant enough for them.
 
-> coming up with the reverse for clone3 and mark the architectures
-> that specifically don't want it (if any)?
+../arch/x86/include/asm/jump_label.h:26: Error: non-constant expression in ".if" statement
 
-Afaict, your suggestion is more or less the same thing what is done
-here. So I'm not sure it buys us anything apart from future
-architectures not needing to set __ARCH_WANT_SYS_CLONE3.
+Damn!
 
-I expect the macro above to be only here temporarily until all arches
-have caught up and we're sure that they don't require assembly stubs
-(cf. [1]). A decision I'd leave to the maintainers (since even for
-nios2 we were kind of on the fence what exactly the sys_clone stub was
-supposed to do).
-
-But I'm happy to take a patch from you if it's equally or more simple
-than this one right here.
-
-In any case, linux-next should be fine on all arches with this fixup
-now.
-
-Christian
-
-
-[1]: Architectures such as nios2 or h8300 simply take the asm-generic
-     syscall definitions and generate their syscall table from it. But
-     since they don't define __ARCH_WANT_SYS_CLONE the build would fail
-     complaining about sys_clone3 missing. The reason this doesn't
-     happen for legacy clone is that nios2 and h8300 provide assembly
-     stubs for sys_clone but they don't for sys_clone3.
-
+---
+--- a/arch/x86/include/asm/jump_label.h
++++ b/arch/x86/include/asm/jump_label.h
+@@ -12,24 +12,19 @@
+ # define STATIC_KEY_INIT_NOP GENERIC_NOP5_ATOMIC
+ #endif
+ 
+-#include <asm/asm.h>
+-#include <asm/nops.h>
++asm(".include \"asm/jump_label_asm.h\"");
+ 
+ #ifndef __ASSEMBLY__
+ 
+ #include <linux/stringify.h>
+ #include <linux/types.h>
++#include <asm/asm.h>
++#include <asm/nops.h>
+ 
+ static __always_inline bool arch_static_branch(struct static_key *key, bool branch)
+ {
+-	asm_volatile_goto("1:"
+-		".byte " __stringify(STATIC_KEY_INIT_NOP) "\n\t"
+-		".pushsection __jump_table,  \"aw\" \n\t"
+-		_ASM_ALIGN "\n\t"
+-		".long 1b - ., %l[l_yes] - . \n\t"
+-		_ASM_PTR "%c0 + %c1 - .\n\t"
+-		".popsection \n\t"
+-		: :  "i" (key), "i" (branch) : : l_yes);
++	asm_volatile_goto("STATIC_BRANCH_NOP l_yes=\"%l[l_yes]\", key=\"%c0\", branch=\"%c1\""
++			  : : "i" (key), "i" (branch) : : l_yes);
+ 
+ 	return false;
+ l_yes:
+@@ -38,57 +33,13 @@ static __always_inline bool arch_static_
+ 
+ static __always_inline bool arch_static_branch_jump(struct static_key *key, bool branch)
+ {
+-	asm_volatile_goto("1:"
+-		".byte 0xe9\n\t .long %l[l_yes] - 2f\n\t"
+-		"2:\n\t"
+-		".pushsection __jump_table,  \"aw\" \n\t"
+-		_ASM_ALIGN "\n\t"
+-		".long 1b - ., %l[l_yes] - . \n\t"
+-		_ASM_PTR "%c0 + %c1 - .\n\t"
+-		".popsection \n\t"
+-		: :  "i" (key), "i" (branch) : : l_yes);
++	asm_volatile_goto("STATIC_BRANCH_JMP l_yes=\"%l[l_yes]\", key=\"%c0\", branch=\"%c1\""
++			  : : "i" (key), "i" (branch) : : l_yes);
+ 
+ 	return false;
+ l_yes:
+ 	return true;
+ }
+ 
+-#else	/* __ASSEMBLY__ */
+-
+-.macro STATIC_JUMP_IF_TRUE target, key, def
+-.Lstatic_jump_\@:
+-	.if \def
+-	/* Equivalent to "jmp.d32 \target" */
+-	.byte		0xe9
+-	.long		\target - .Lstatic_jump_after_\@
+-.Lstatic_jump_after_\@:
+-	.else
+-	.byte		STATIC_KEY_INIT_NOP
+-	.endif
+-	.pushsection __jump_table, "aw"
+-	_ASM_ALIGN
+-	.long		.Lstatic_jump_\@ - ., \target - .
+-	_ASM_PTR	\key - .
+-	.popsection
+-.endm
+-
+-.macro STATIC_JUMP_IF_FALSE target, key, def
+-.Lstatic_jump_\@:
+-	.if \def
+-	.byte		STATIC_KEY_INIT_NOP
+-	.else
+-	/* Equivalent to "jmp.d32 \target" */
+-	.byte		0xe9
+-	.long		\target - .Lstatic_jump_after_\@
+-.Lstatic_jump_after_\@:
+-	.endif
+-	.pushsection __jump_table, "aw"
+-	_ASM_ALIGN
+-	.long		.Lstatic_jump_\@ - ., \target - .
+-	_ASM_PTR	\key + 1 - .
+-	.popsection
+-.endm
+-
+-#endif	/* __ASSEMBLY__ */
+-
+-#endif
++#endif /* __ASSEMBLY__ */
++#endif /* _ASM_X86_JUMP_LABEL_H */
+--- /dev/null
++++ b/arch/x86/include/asm/jump_label_asm.h
+@@ -0,0 +1,44 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_JUMP_LABEL_ASM_H
++#define _ASM_X86_JUMP_LABEL_ASM_H
++
++#include <asm/asm.h>
++#include <asm/nops.h>
++
++#ifdef __ASSEMBLY__
++
++.macro STATIC_BRANCH_ENTRY l_target:req l_yes:req key:req branch:req
++	.pushsection __jump_table, "aw"
++	.long		\l_target - ., \l_yes - .
++#ifdef __X86_64__
++	.quad		(\key - .) + \branch
++#else
++	.long		(\key - .) + \branch
++#endif
++	.popsection
++.endm
++
++.macro STATIC_BRANCH_NOP l_yes:req key:req branch:req
++.Lstatic_branch_nop_\@:
++.iflt 127 - .
++	.byte 0x66, 0x90
++.else
++	.byte STATIC_KEY_INIT_NOP
++.endif
++	STATIC_BRANCH_ENTRY l_target=.Lstatic_branch_nop_\@, l_yes=\l_yes, key=\key, branch=\branch
++.endm
++
++.macro STATIC_BRANCH_JMP l_yes:req key:req branch:req
++.Lstatic_branch_jmp_\@:
++.if \l_yes - . < 127
++	.byte 0xeb
++	.byte \l_yes - (. + 1)
++.else
++	.byte 0xe9
++	.long \l_yes - (. + 4)
++.endif
++	STATIC_BRANCH_ENTRY l_target=.Lstatic_branch_jmp_\@, l_yes=\l_yes, key=\key, branch=\branch
++.endm
++
++#endif /* __ASSEMBLY__ */
++#endif /* _ASM_X86_JUMP_LABEL_ASM_H */
