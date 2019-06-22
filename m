@@ -2,134 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D904F64B
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Jun 2019 16:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF85A4F6DA
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Jun 2019 18:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfFVOqy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 22 Jun 2019 10:46:54 -0400
-Received: from Galois.linutronix.de ([146.0.238.70]:57888 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbfFVOqy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 22 Jun 2019 10:46:54 -0400
-Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hehHh-00084j-Nz; Sat, 22 Jun 2019 16:46:30 +0200
-Date:   Sat, 22 Jun 2019 16:46:28 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Sasha Levin <sashal@kernel.org>
-cc:     Michael Kelley <mikelley@microsoft.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>, linux-hyperv@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v6 18/19] x86: Add support for generic vDSO
-In-Reply-To: <20190614211710.GQ1513@sasha-vm>
-Message-ID: <alpine.DEB.2.21.1906221542270.5503@nanos.tec.linutronix.de>
-References: <20190530141531.43462-1-vincenzo.frascino@arm.com> <20190530141531.43462-19-vincenzo.frascino@arm.com> <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com> <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
- <20190614211710.GQ1513@sasha-vm>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1726422AbfFVQ2u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 22 Jun 2019 12:28:50 -0400
+Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:40172 "EHLO
+        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726396AbfFVQ2u (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 22 Jun 2019 12:28:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220929; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=FwrBLUl7u665XwQeVPTq5hUQ4Ptv5qPcwgE0MfCyAxPjQW66W+sBKlTITy95Xiak8M/9mL3k87XvuhuNYmdzjOXFqAsXXJ7ZeR0tr0xQhaR4qpp9+I79zHB4JVXDeOtUnrv/ni1DEn3m49tSMIml9+1SbDvUcui/xLYzcB7mOtvlwJJC6bBkcbOwJW8drH7WnSKYQVlUvO9PRg8+IWYABo4m/HoTrmg3JSd7+tfq1bmdsTjreC9G6uwJClVG1p8XyGEOijmNqXv9Ivunj8UzUvxVldTIg/taTAKdSlSG3i+xbnz28LKLpxSK2+M63p52Vf+hNJ0OycyVj1TkO+H8OQ==
+X-YMail-OSG: BClZlNgVM1mJa1pSUAMlnjmDwJQUKDn0osVKNVIeZ6AC0JZQ8NzrV_.P2vPToBw
+ lk4l1yMYy0P1wu9iKWHPF1vwWtED.NCcY6jE.jXdELnZdUngnDzcX.f1Ik7TcPjN._6dUftCNvSG
+ 0ilPDIIh6JKut3rld3EDzfXqVTEprJFL10dLfXEmdNXy8_9HzWnLN9Uxxh6FWr8nj4DbExyF48M8
+ b8CzHn8AtWzh0fDjJqMRXb5UR1L1fHF.mq4wk_41bl8VHLLREhO8D9AiMB_Iou.TvP.xektI4Uzf
+ lBotEg54S8nbe5a5a2eamKaLSiD6XaCIzSQkrGwkgk9qzk7J4361PG1C2lAWhSULJjGYH.uKi9SH
+ 8omXh8MvwuZmVU7umqXbA4eIFWV8ruRR3qRFWtA.2B0Eer.D49EbNovsAu.wRPm8yYyL6YMdaoys
+ 3vYAkjype1yPgR0gHAH3zObnNPMrtMzQfsTzcaha59dNYsVWPRo5EvcFgAIKXVIUqnKnooWuODru
+ O4SgrdrM8PGEZGs5dJS.h.dJB3gwQ.0I1wf1Q_CLgJhbPMrumaMiWl3ifhN9G_CCxrGhRPRltqdB
+ RyAvAXGENXKEJswzM.sYWHkLQyblOWaGX5TLKzeDGaJCZVu7CtZvQ0aNcyWtqrf4SAtE7MK9SqUH
+ 7phABBxeBrGdyDkvdUQOX_EPh25.Hb3SncDKllMEIHjvEdwbQcMGmqMEDVCI8Jh0nfgpjh259ODl
+ q.bGW_sz63_QvjPWXygjUQ4RzfXiei1bHIkvbkPAHc04dS.Qr8LP1Jyxp2QD0wtNtJgo5RScK99X
+ P5NPqcNAR8eez8YgXpk3cKLQCR9JSylhL6QyUVACODhQSLMO_l73eEDpWzNQUeEQLrEwA53TFUO9
+ BXx4lR26gADp4OeWMANR3pTNDn8J7Oc5G1l.tF8AqVFtdsoB5vgCdw0tzoX9_22cJzNNteihaN9H
+ ktOSXaCeUY26x9DWNkYi7HTOCc9F4vHnioRwelB9Lv.KGDeGPUJBBPmfcn0xXC8MB2YTlUFeVHzN
+ FJsHhvFz9eJx.VwEAdhJs3DHW6xmbj9a_RSOf.BoLPiAvMAdoBe_1sVY8nFOqhuBwpkbj17TOzIW
+ ts0JEWafkyantIFw8kEnIr0AHDEAK4aB1fgOVS8TQpbEaj2tB4pKHPa4OOjXszQAPBozr7PYVj2f
+ 6AcwHFYhcmsrFfliX20p43dgFMRY8GMXgvUWeegBAeAuOTxCoUC9WvAdL
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:28:49 +0000
+Date:   Sat, 22 Jun 2019 16:28:46 +0000 (UTC)
+From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
+Reply-To: miss.fmayusuf11@gmail.com
+Message-ID: <270302503.296556.1561220926635@mail.yahoo.com>
+Subject: From:Miss: Fatima Yusuf.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 14 Jun 2019, Sasha Levin wrote:
-> On Fri, Jun 14, 2019 at 01:15:23PM +0200, Thomas Gleixner wrote:
-> > On Thu, 30 May 2019, Michael Kelley wrote:
-> > > Vincenzo -- these changes for Hyper-V are a subset of a larger patch set
-> > > I have that moves all of the Hyper-V clock/timer code into a separate
-> > > clocksource driver in drivers/clocksource, with an include file in
-> > > includes/clocksource.  That new include file should be able to work
-> > > instead of your new mshyperv-tsc.h.  It also has the benefit of being
-> > > ISA neutral, so it will work with my in-progress patch set to support
-> > > Linux on Hyper-V on ARM64.  See https://lkml.org/lkml/2019/5/27/231
-> > > for the new clocksource driver patch set.
-> > 
-> > Grrr. That's queued in hyperv-next for whatever reasons.
-> 
-> I queue up our future pull requests there to give them some soaking in
-> -next.
 
-What? You queue completely unreviewed stuff which touches two other
-subsystems to let it soak in next?
 
-> > Sasha, can you please provide me the branch to pull from so I can have a
-> > common base for all the various changes floating around?
-> 
-> I'll send you a unified pull request for these changes.
+From:Miss: Fatima Yusuf.
 
-Which has not materialized yet.
+For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
 
-TBH, I'm pretty grumpy about those clocksource changes. Here is the
-diffstat:
+I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
 
- MAINTAINERS                          |    2 
- arch/x86/entry/vdso/vclock_gettime.c |    1 
- arch/x86/entry/vdso/vma.c            |    2 
- arch/x86/hyperv/hv_init.c            |   91 ---------
- arch/x86/include/asm/hyperv-tlfs.h   |    6 
- arch/x86/include/asm/mshyperv.h      |   81 +-------
- arch/x86/kernel/cpu/mshyperv.c       |    2 
- arch/x86/kvm/x86.c                   |    1 
- drivers/clocksource/Makefile         |    1 
- drivers/clocksource/hyperv_timer.c   |  322 +++++++++++++++++++++++++++++++++++
- drivers/hv/Kconfig                   |    3 
- drivers/hv/hv.c                      |  156 ----------------
- drivers/hv/hv_util.c                 |    1 
- drivers/hv/hyperv_vmbus.h            |    3 
- drivers/hv/vmbus_drv.c               |   42 ++--
- include/clocksource/hyperv_timer.h   |  105 +++++++++++
+Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
 
-While the world and some more people have been CC'ed on those patches,
-neither the clocksource nor the x86 maintainer have been.
+I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
 
-When I gave Vincenzo the advise to base his code on that hyper-v branch, I
-expected that I find the related patches in my mail backlog. No, they have
-not been there because I was not on CC.
+I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
 
-Folks, please stop chosing Cc lists as you like. We have well established
-rules for that. And please stop queueing random unreviewed patches in
-next. Next is not a playground for not ready and unreviewed stuff. No, the
-hyper-v inbreed Reviewed-by is not sufficient for anything x86 and
-clocksource related.
+My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
 
-After chasing and looking at those patches, which have horrible subject
-lines and changelogs btw, I was not able to judge quickly whether that
-stuff is self contained or not. So no, I fixed up the fallout and rebased
-Vincenzos VDSO stuff on mainline w/o those hyperv changes simply because if
-they are not self contained they will break bisection badly.
-
-I'm going to push out the VDSO series later today. That will nicely break
-in combination with the hyper-next branch. Stephen, please drop that and do
-not try to handle the fallout. That stuff needs to go through the proper
-channels or at least be acked/reviewed by the relevant maintainers. So the
-hyper-v folks can rebase themself and post it proper.
-
-Yours grumpy,
-
-	tglx
+I am waiting to hear from you.
+Yours Sincerely,
+Miss.Fatima Yusuf.
