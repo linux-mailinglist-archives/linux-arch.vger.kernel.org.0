@@ -2,112 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D564EED0
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2019 20:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D904F64B
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Jun 2019 16:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726180AbfFUShz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Jun 2019 14:37:55 -0400
-Received: from mail-eopbgr780054.outbound.protection.outlook.com ([40.107.78.54]:35840
-        "EHLO NAM03-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726034AbfFUShz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 Jun 2019 14:37:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PgWjE1rz16RhETQba2fgJ9jKhgKMAqa1youUV/hZvC8=;
- b=hdfVD4y3/G198i0+Y2v7yqzuScuarb3Q6nbjsMu0+kFtK2PeKuGz97o53L5eu+17JgoX0xtw0BAvyhqJ++dJTkoyYkPXXm1e12lvs0tVHdQ6QuE6mX3UvRzu4RurfglJQWETMjEvS8PaJWKrNbQnvlXp0r+O0rBXM9xzAOJ4+GU=
-Received: from BYAPR05MB4776.namprd05.prod.outlook.com (52.135.233.146) by
- BYAPR05MB5637.namprd05.prod.outlook.com (20.177.186.206) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.13; Fri, 21 Jun 2019 18:37:52 +0000
-Received: from BYAPR05MB4776.namprd05.prod.outlook.com
- ([fe80::f493:3bba:aabf:dd58]) by BYAPR05MB4776.namprd05.prod.outlook.com
- ([fe80::f493:3bba:aabf:dd58%7]) with mapi id 15.20.2008.007; Fri, 21 Jun 2019
- 18:37:52 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
+        id S1726299AbfFVOqy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 22 Jun 2019 10:46:54 -0400
+Received: from Galois.linutronix.de ([146.0.238.70]:57888 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbfFVOqy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 22 Jun 2019 10:46:54 -0400
+Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hehHh-00084j-Nz; Sat, 22 Jun 2019 16:46:30 +0200
+Date:   Sat, 22 Jun 2019 16:46:28 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Sasha Levin <sashal@kernel.org>
+cc:     Michael Kelley <mikelley@microsoft.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] ARC: ARCv2: jump label: implement jump label patching
-Thread-Topic: [PATCH] ARC: ARCv2: jump label: implement jump label patching
-Thread-Index: AQHVKCowqQ8fumhXhUmhiclA75S5v6amBQCAgABriIA=
-Date:   Fri, 21 Jun 2019 18:37:52 +0000
-Message-ID: <D25EC873-572E-457C-AEB1-DC0C1FAF8E85@vmware.com>
-References: <20190614164049.31626-1-Eugeniy.Paltsev@synopsys.com>
- <C2D7FE5348E1B147BCA15975FBA2307501A252CCC3@us01wembx1.internal.synopsys.com>
- <20190619081227.GL3419@hirez.programming.kicks-ass.net>
- <C2D7FE5348E1B147BCA15975FBA2307501A252E40B@us01wembx1.internal.synopsys.com>
- <20190620070120.GU3402@hirez.programming.kicks-ass.net>
- <a0a1aa81-d46e-71db-ff7b-207bc468068d@synopsys.com>
- <20190620212256.GC3436@hirez.programming.kicks-ass.net>
- <20190621120923.GT3463@hirez.programming.kicks-ass.net>
- <20190621121259.GU3463@hirez.programming.kicks-ass.net>
-In-Reply-To: <20190621121259.GU3463@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=namit@vmware.com; 
-x-originating-ip: [66.170.99.1]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7474e0fa-ef8a-48fa-ee33-08d6f67791c7
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR05MB5637;
-x-ms-traffictypediagnostic: BYAPR05MB5637:
-x-microsoft-antispam-prvs: <BYAPR05MB56371A34F5DE21F95C0404F6D0E70@BYAPR05MB5637.namprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-forefront-prvs: 0075CB064E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(366004)(346002)(136003)(39860400002)(396003)(189003)(199004)(66556008)(186003)(476003)(25786009)(446003)(71190400001)(66446008)(11346002)(486006)(26005)(6506007)(53546011)(2616005)(64756008)(14454004)(4326008)(66476007)(54906003)(36756003)(86362001)(66066001)(478600001)(256004)(316002)(71200400001)(66946007)(8936002)(8676002)(81166006)(5660300002)(7416002)(76116006)(6436002)(53936002)(33656002)(99286004)(76176011)(305945005)(229853002)(7736002)(6116002)(102836004)(6512007)(3846002)(73956011)(2906002)(68736007)(81156014)(6486002)(6246003)(6916009);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR05MB5637;H:BYAPR05MB4776.namprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: vmware.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: jmqN/qlY+Oms0RA/6Gg7g6Njx8u4U3gHcgHG6s2n85yzEU6t8uFKkZyKYxFbKX1XMuUJgX5xm/w5tcbV5TE2V36dixlIp7d0C07wXF8Yl2RXZvFUEMiOIttq3ofrIq9YDOPyjN5ZJdUXkmzS74g4jjd2RtsHm1s299Mvyawav20rYV/34YWbCu8MLnQuxkf9wZyZYnsiM8LTR82d8JqehW+cBL+RkmnzmhrQlLt/5JN0klBZh92J5+xC2iPjCaJ7V1fyBqHrEckX2xwGQk0MURnOWcL/497yi0wKzCvoAItiUTsiKX+86tm079EKENGrOuGjhuTb0a28JFV7ljqW2l/jQserJRbAOCiQHz3w9UUJl83AmjGv7IR2SbTNagjn66f+JtRXiCpKKW5tAFp3Ephj/W4gWU9ITCerSxTzwcw=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <081FCB91BD58C248919E7BE5CBB9E2A6@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>, linux-hyperv@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v6 18/19] x86: Add support for generic vDSO
+In-Reply-To: <20190614211710.GQ1513@sasha-vm>
+Message-ID: <alpine.DEB.2.21.1906221542270.5503@nanos.tec.linutronix.de>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com> <20190530141531.43462-19-vincenzo.frascino@arm.com> <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com> <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
+ <20190614211710.GQ1513@sasha-vm>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7474e0fa-ef8a-48fa-ee33-08d6f67791c7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2019 18:37:52.5124
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: namit@vmware.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR05MB5637
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-PiBPbiBKdW4gMjEsIDIwMTksIGF0IDU6MTIgQU0sIFBldGVyIFppamxzdHJhIDxwZXRlcnpAaW5m
-cmFkZWFkLm9yZz4gd3JvdGU6DQo+IA0KPiBPbiBGcmksIEp1biAyMSwgMjAxOSBhdCAwMjowOToy
-M1BNICswMjAwLCBQZXRlciBaaWpsc3RyYSB3cm90ZToNCj4gDQo+PiAtLS0gL2Rldi9udWxsDQo+
-PiArKysgYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9qdW1wX2xhYmVsX2FzbS5oDQo+PiBAQCAtMCww
-ICsxLDQ0IEBADQo+PiArLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAgKi8NCj4+
-ICsjaWZuZGVmIF9BU01fWDg2X0pVTVBfTEFCRUxfQVNNX0gNCj4+ICsjZGVmaW5lIF9BU01fWDg2
-X0pVTVBfTEFCRUxfQVNNX0gNCj4+ICsNCj4+ICsjaW5jbHVkZSA8YXNtL2FzbS5oPg0KPj4gKyNp
-bmNsdWRlIDxhc20vbm9wcy5oPg0KPj4gKw0KPj4gKyNpZmRlZiBfX0FTU0VNQkxZX18NCj4+ICsN
-Cj4+ICsubWFjcm8gU1RBVElDX0JSQU5DSF9FTlRSWSBsX3RhcmdldDpyZXEgbF95ZXM6cmVxIGtl
-eTpyZXEgYnJhbmNoOnJlcQ0KPj4gKwkucHVzaHNlY3Rpb24gX19qdW1wX3RhYmxlLCAiYXciDQo+
-PiArCS5sb25nCQlcbF90YXJnZXQgLSAuLCBcbF95ZXMgLSAuDQo+PiArI2lmZGVmIF9fWDg2XzY0
-X18NCj4+ICsJLnF1YWQJCShca2V5IC0gLikgKyBcYnJhbmNoDQo+PiArI2Vsc2UNCj4+ICsJLmxv
-bmcJCShca2V5IC0gLikgKyBcYnJhbmNoDQo+PiArI2VuZGlmDQo+PiArCS5wb3BzZWN0aW9uDQo+
-PiArLmVuZG0NCj4+ICsNCj4+ICsubWFjcm8gU1RBVElDX0JSQU5DSF9OT1AgbF95ZXM6cmVxIGtl
-eTpyZXEgYnJhbmNoOnJlcQ0KPj4gKy5Mc3RhdGljX2JyYW5jaF9ub3BfXEA6DQo+PiArLmlmbHQg
-MTI3IC0gLg0KPiANCj4gVGhhdCBzaG91bGQndmUgYmVlbjoNCj4gDQo+IC5pZiBcbF95ZXMgLSAu
-IDwgMTI3DQo+IA0KPiB0b28sIEkgaGFkIGJlZW4gcGxheWluZyB3aXRoIHZhcmlvdXMgZm9ybXMg
-dG8gc2VlIHdoZW4gaXQgY29tcGlsZXMuDQo+IEJ1dCBhcyBzb29uIGFzIGEgbGFiZWwgKGVpdGhl
-ciBcbF95ZXMgb3IgJy4nIGdldHMgdXNlZCkgaXQgYmFyZnMuDQoNCkkgdGhpbmsgdGhlIGVycm9y
-IG1ha2VzIHNlbnNlIGFzIGl0IGNyZWF0ZXMgYSDigJxjaXJjdWxhciBkZXBlbmRlbmN54oCdOg0K
-YXNzZW1ibHkgb2YgdGhlIGNvZGUgbWlnaHQgYWZmZWN0IHRoZSBsYWJlbCBhZGRyZXNzLCBhbmQg
-dGhpcyBhZGRyZXNzIGFmZmVjdA0KdGhlIGFzc2VtYmx5Lg0KDQo=
+On Fri, 14 Jun 2019, Sasha Levin wrote:
+> On Fri, Jun 14, 2019 at 01:15:23PM +0200, Thomas Gleixner wrote:
+> > On Thu, 30 May 2019, Michael Kelley wrote:
+> > > Vincenzo -- these changes for Hyper-V are a subset of a larger patch set
+> > > I have that moves all of the Hyper-V clock/timer code into a separate
+> > > clocksource driver in drivers/clocksource, with an include file in
+> > > includes/clocksource.  That new include file should be able to work
+> > > instead of your new mshyperv-tsc.h.  It also has the benefit of being
+> > > ISA neutral, so it will work with my in-progress patch set to support
+> > > Linux on Hyper-V on ARM64.  See https://lkml.org/lkml/2019/5/27/231
+> > > for the new clocksource driver patch set.
+> > 
+> > Grrr. That's queued in hyperv-next for whatever reasons.
+> 
+> I queue up our future pull requests there to give them some soaking in
+> -next.
+
+What? You queue completely unreviewed stuff which touches two other
+subsystems to let it soak in next?
+
+> > Sasha, can you please provide me the branch to pull from so I can have a
+> > common base for all the various changes floating around?
+> 
+> I'll send you a unified pull request for these changes.
+
+Which has not materialized yet.
+
+TBH, I'm pretty grumpy about those clocksource changes. Here is the
+diffstat:
+
+ MAINTAINERS                          |    2 
+ arch/x86/entry/vdso/vclock_gettime.c |    1 
+ arch/x86/entry/vdso/vma.c            |    2 
+ arch/x86/hyperv/hv_init.c            |   91 ---------
+ arch/x86/include/asm/hyperv-tlfs.h   |    6 
+ arch/x86/include/asm/mshyperv.h      |   81 +-------
+ arch/x86/kernel/cpu/mshyperv.c       |    2 
+ arch/x86/kvm/x86.c                   |    1 
+ drivers/clocksource/Makefile         |    1 
+ drivers/clocksource/hyperv_timer.c   |  322 +++++++++++++++++++++++++++++++++++
+ drivers/hv/Kconfig                   |    3 
+ drivers/hv/hv.c                      |  156 ----------------
+ drivers/hv/hv_util.c                 |    1 
+ drivers/hv/hyperv_vmbus.h            |    3 
+ drivers/hv/vmbus_drv.c               |   42 ++--
+ include/clocksource/hyperv_timer.h   |  105 +++++++++++
+
+While the world and some more people have been CC'ed on those patches,
+neither the clocksource nor the x86 maintainer have been.
+
+When I gave Vincenzo the advise to base his code on that hyper-v branch, I
+expected that I find the related patches in my mail backlog. No, they have
+not been there because I was not on CC.
+
+Folks, please stop chosing Cc lists as you like. We have well established
+rules for that. And please stop queueing random unreviewed patches in
+next. Next is not a playground for not ready and unreviewed stuff. No, the
+hyper-v inbreed Reviewed-by is not sufficient for anything x86 and
+clocksource related.
+
+After chasing and looking at those patches, which have horrible subject
+lines and changelogs btw, I was not able to judge quickly whether that
+stuff is self contained or not. So no, I fixed up the fallout and rebased
+Vincenzos VDSO stuff on mainline w/o those hyperv changes simply because if
+they are not self contained they will break bisection badly.
+
+I'm going to push out the VDSO series later today. That will nicely break
+in combination with the hyper-next branch. Stephen, please drop that and do
+not try to handle the fallout. That stuff needs to go through the proper
+channels or at least be acked/reviewed by the relevant maintainers. So the
+hyper-v folks can rebase themself and post it proper.
+
+Yours grumpy,
+
+	tglx
