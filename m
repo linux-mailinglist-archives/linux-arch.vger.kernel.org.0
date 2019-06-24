@@ -2,79 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF291503D3
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Jun 2019 09:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5735095F
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Jun 2019 13:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbfFXHm1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Jun 2019 03:42:27 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:35147 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726795AbfFXHm1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Jun 2019 03:42:27 -0400
-Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hfJcL-0001F8-3S; Mon, 24 Jun 2019 09:42:21 +0200
-Date:   Mon, 24 Jun 2019 09:42:19 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Andy Lutomirski <luto@kernel.org>
-cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Dmitry Safonov <dima@arista.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH v7 00/25] Unify vDSOs across more architectures
-In-Reply-To: <CALCETrV-suRS5=JqDjbouXciN_OPsguERjux7fQVFOKGmdrspA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.1906240935430.32342@nanos.tec.linutronix.de>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906240142000.32342@nanos.tec.linutronix.de> <CALCETrV-suRS5=JqDjbouXciN_OPsguERjux7fQVFOKGmdrspA@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1728633AbfFXLCH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Jun 2019 07:02:07 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:60750 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727732AbfFXLCH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Jun 2019 07:02:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=PFY9YDguHF6FMnJNZWqDPWf/bS92KNk3W1oVKgmmLeQ=; b=mHhQ2OuaDFL9ZDRIK7Zn++Uqp
+        FM1NThIDBSKiU3AoeejFsePBlOxbkE9BY26+Ynm9DyDbFvKKsSacc27JrDujO+2T/Hk4zCHpSNnJw
+        UEHhVDF+ac+z+vle5GZzSVor66xI5pSVtLu01dArKl9vJFo4l+9noV0oIx54mVk7tcbKHOqIhmrGZ
+        /xsVaOjNEnCIGFFVkvwfz8Pw4O4YBPifSauzoMhQ9EQhY4DIX9v7o1imrE5nGhCm4wR2c+uCBuGXe
+        9zs9dliK9LKZFTL/6vXahJ9hETH6Q6HuflDrDh04k/Te/J+/2G1+aBUOoWFgOX8lFAKrPQ6kbNXbB
+        x4Gtww9vw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hfMje-0003JZ-MV; Mon, 24 Jun 2019 11:02:06 +0000
+Date:   Mon, 24 Jun 2019 04:02:06 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: Archs using generic PCI controller drivers vs. resource policy
+Message-ID: <20190624110206.GA6541@infradead.org>
+References: <5f3dcc3a8dafad188e3adb8ee9cf347bebdee7f6.camel@kernel.crashing.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f3dcc3a8dafad188e3adb8ee9cf347bebdee7f6.camel@kernel.crashing.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, 23 Jun 2019, Andy Lutomirski wrote:
+On Sun, Jun 23, 2019 at 10:30:42AM +1000, Benjamin Herrenschmidt wrote:
+> This is wrong. I want to move it to the architecture (initially,
+> eventually it should be platform driven, but the default will start
+> with architecture specific to avoid changing the existing behaviours
+> while consolidating the code).
 
-> On Sun, Jun 23, 2019 at 5:34 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> > +GENERIC VDSO LIBRARY:
-> > +M:     Andy Lutomirksy <luto@kernel.org>
+Doing this per arch sounds fundamentally wrong.  At best per firmware
+type, but hopefully firmware messing with PCIe setup is slowly going
+away, at least outside of x86.
+
+> To do that right, I want to understand which archs can potentially use
+> the code in drivers/pci/controller today so I can change those archs to
+> explicitely set the default to "reassign everything" (and take the
+> policy out of the drivers themselves).
 > 
-> Lutomirski, perhaps?
+> So far I've counted arm, arm64 (DT, not ACPI) and nios2. Any other ?
 
-Ooops. Where did I copy that from?
-
-> Although I do appreciate the opportunity to say "not me!" :)
-
-You just gave me the perfect exit plan. I'll change my surname to Gleyxner
-and head off to the goat farm :)
-
-Thanks,
-
-	tglx
+riscv at least and probably anything that can be synthesized to common
+FPGAs with PCIe support.
