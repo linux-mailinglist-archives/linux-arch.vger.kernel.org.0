@@ -2,83 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7695572D
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 20:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BDC55868
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 22:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731516AbfFYS1U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Jun 2019 14:27:20 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:44234 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727138AbfFYS1U (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jun 2019 14:27:20 -0400
-Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hfq9y-0005oZ-Q8; Tue, 25 Jun 2019 20:27:14 +0200
-Date:   Tue, 25 Jun 2019 20:27:13 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-cc:     linux-arch@vger.kernel.org,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, catalin.marinas@arm.com,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux@armlinux.org.uk,
-        Ralf Baechle <ralf@linux-mips.org>, paul.burton@mips.com,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        salyzyn@android.com, pcc@google.com, shuah@kernel.org,
-        0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
-        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com,
+        id S1726397AbfFYUIK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Jun 2019 16:08:10 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44963 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726576AbfFYUIJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jun 2019 16:08:09 -0400
+Received: by mail-pg1-f196.google.com with SMTP id n2so9470413pgp.11
+        for <linux-arch@vger.kernel.org>; Tue, 25 Jun 2019 13:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QTBYIsHI8zTMLEyvwtX6vz4jgxzEbNHxNVg1zzv+uWs=;
+        b=GFD4YL7rkGte7dY9QecMGQVpBAuunM7M4kNB4I4J4HToFkTT6kzO4mzdswjpF7r040
+         S9GAX102W+LhmXZ4yS3Q53lWrLv0qMrY09Rn9OEGQf3DWq6oOD93s6yEIZi9ZSY/8mOE
+         tHZM21Pp0ucGbM3ZzgASmEvwhutvcH3mQAzmk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QTBYIsHI8zTMLEyvwtX6vz4jgxzEbNHxNVg1zzv+uWs=;
+        b=JdIhM7D9SzTTGWUyPEOFQluPZ9aog4Ysb7tfwVSNqVMyObgQkQiGpFd1DKtCLKwq5R
+         NGznk3ySUp8IbSaBUXa3fb9PPQOBIolcDG8vbQc5TVHxE6yyAMYHBZWgX7WDWe6lIO35
+         WDR8zSG6C36IJHVvn0pjkFC7MqWsW0EmrimYxWtcsfj4nmt4vTa4cOzsZCtfhn4/oF9l
+         mXlMIg7Qr6ilOk0l3DlffXBBFngffnyCqU6GbBvECE6tZYvL8A9sbUPhBI7OpJL6HTeX
+         5jLT+KIIjwxAn4QcdqIeeLBlOD2zeWT8BX2wNk5z0n7Zb+YfdbrmwAebEAtRH2ASk/RG
+         kLMw==
+X-Gm-Message-State: APjAAAUNYEsOtryBkS4nVMYGPVfLuEEyMAW+JxhGg9dMc3jd+yp5DaDr
+        HrCmSQN58ujwRfZgOYpSOSAnXg==
+X-Google-Smtp-Source: APXvYqz4wFwSx2u/z3fzZResgKJfp4GOCsNFxJX8Qh/tN021DReuR4LVm+X37zl/gnxfdS1yHAMYkA==
+X-Received: by 2002:a65:62cb:: with SMTP id m11mr25236218pgv.27.1561493289120;
+        Tue, 25 Jun 2019 13:08:09 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j24sm4271354pgg.86.2019.06.25.13.08.08
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 25 Jun 2019 13:08:08 -0700 (PDT)
+Date:   Tue, 25 Jun 2019 13:08:07 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-api@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        linux-x86_64@vger.kernel.org, linux-arch@vger.kernel.org,
         Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
-In-Reply-To: <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
-Message-ID: <alpine.DEB.2.21.1906252024350.32342@nanos.tec.linutronix.de>
-References: <20190624133607.GI29497@fuggles.cambridge.arm.com> <20190625161804.38713-1-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Carlos O'Donell <carlos@redhat.com>
+Subject: Re: Detecting the availability of VSYSCALL
+Message-ID: <201906251131.419D8ACB@keescook>
+References: <87v9wty9v4.fsf@oldenburg2.str.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v9wty9v4.fsf@oldenburg2.str.redhat.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 25 Jun 2019, Thomas Gleixner wrote:
+On Tue, Jun 25, 2019 at 05:15:27PM +0200, Florian Weimer wrote:
+> Should we try mapping something at the magic address (without MAP_FIXED)
+> and see if we get back a different address?  Something in the auxiliary
+> vector would work for us, too, but nothing seems to exists there
+> unfortunately.
 
-> On Tue, 25 Jun 2019, Vincenzo Frascino wrote:
-> 
-> CC+ Andy
-> 
-> > do_hres() in the vDSO generic library masks the hw counter value
-> > immediately after reading it.
-> > 
-> > Postpone the mask application after checking if the syscall fallback is
-> > enabled, in order to be able to detect a possible fallback for the
-> > architectures that have masks smaller than ULLONG_MAX.
-> 
-> Right. This only worked on x86 because the mask is there ULLONG_MAX for all
-> VDSO capable clocksources, i.e. that ever worked just by chance.
-> 
-> As we talked about that already yesterday, I tested this on a couple of
-> machines and as expected the outcome is uarch dependent. Minimal deviations
-> to both sides and some machines do not show any change at all. I doubt it's
-> possible to come up with a solution which makes all uarchs go faster
-> magically.
-> 
-> Though, thinking about it, we could remove the mask operation completely on
-> X86. /me runs tests
+It seems like mmap() won't even work because it's in the high memory
+area. I can't map something a page under the vsyscall page either, so I
+can't distinguish it with mmap, mprotect, madvise, or msync. :(
 
-Unsurprisingly the results vary. Two uarchs do not care, but they did not
-care about moving the mask either. The other two gain performance and the
-last one falls back to the state before moving the mask. So in general it
-looks like a worthwhile optimization.
-
-Thanks,
-
-	tglx
-
-
+-- 
+Kees Cook
