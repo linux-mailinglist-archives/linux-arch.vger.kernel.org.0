@@ -2,73 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B15B055620
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 19:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7695572D
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 20:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729594AbfFYRn3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Jun 2019 13:43:29 -0400
-Received: from foss.arm.com ([217.140.110.172]:46316 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729521AbfFYRn3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 Jun 2019 13:43:29 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE6E1360;
-        Tue, 25 Jun 2019 10:43:28 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B2233F718;
-        Tue, 25 Jun 2019 10:43:26 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will.deacon@arm.com, arnd@arndb.de,
-        linux@armlinux.org.uk, ralf@linux-mips.org, paul.burton@mips.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, salyzyn@android.com,
-        pcc@google.com, shuah@kernel.org, 0x7f454c46@gmail.com,
-        linux@rasmusvillemoes.dk, huw@codeweavers.com,
-        sthotton@marvell.com, andre.przywara@arm.com, luto@kernel.org,
-        Qian Cai <cai@lca.pw>
-Subject: [PATCH] arm64: vdso: Fix compilation with clang < 8
-Date:   Tue, 25 Jun 2019 18:43:16 +0100
-Message-Id: <20190625174316.21946-1-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190621095252.32307-5-vincenzo.frascino@arm.com>
-References: <20190621095252.32307-5-vincenzo.frascino@arm.com>
+        id S1731516AbfFYS1U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Jun 2019 14:27:20 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:44234 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727138AbfFYS1U (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jun 2019 14:27:20 -0400
+Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hfq9y-0005oZ-Q8; Tue, 25 Jun 2019 20:27:14 +0200
+Date:   Tue, 25 Jun 2019 20:27:13 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+cc:     linux-arch@vger.kernel.org,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, catalin.marinas@arm.com,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux@armlinux.org.uk,
+        Ralf Baechle <ralf@linux-mips.org>, paul.burton@mips.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        salyzyn@android.com, pcc@google.com, shuah@kernel.org,
+        0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
+        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
+In-Reply-To: <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
+Message-ID: <alpine.DEB.2.21.1906252024350.32342@nanos.tec.linutronix.de>
+References: <20190624133607.GI29497@fuggles.cambridge.arm.com> <20190625161804.38713-1-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-clang versions previous to 8 do not support -mcmodel=tiny.
+On Tue, 25 Jun 2019, Thomas Gleixner wrote:
 
-Add a check to the vDSO Makefile for arm64 to remove the flag when these
-versions of the compiler are detected.
+> On Tue, 25 Jun 2019, Vincenzo Frascino wrote:
+> 
+> CC+ Andy
+> 
+> > do_hres() in the vDSO generic library masks the hw counter value
+> > immediately after reading it.
+> > 
+> > Postpone the mask application after checking if the syscall fallback is
+> > enabled, in order to be able to detect a possible fallback for the
+> > architectures that have masks smaller than ULLONG_MAX.
+> 
+> Right. This only worked on x86 because the mask is there ULLONG_MAX for all
+> VDSO capable clocksources, i.e. that ever worked just by chance.
+> 
+> As we talked about that already yesterday, I tested this on a couple of
+> machines and as expected the outcome is uarch dependent. Minimal deviations
+> to both sides and some machines do not show any change at all. I doubt it's
+> possible to come up with a solution which makes all uarchs go faster
+> magically.
+> 
+> Though, thinking about it, we could remove the mask operation completely on
+> X86. /me runs tests
 
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Reported-by: Qian Cai <cai@lca.pw>
-Tested-by: Qian Cai <cai@lca.pw>
----
- arch/arm64/kernel/vdso/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+Unsurprisingly the results vary. Two uarchs do not care, but they did not
+care about moving the mask either. The other two gain performance and the
+last one falls back to the state before moving the mask. So in general it
+looks like a worthwhile optimization.
 
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index ec81d28aeb5d..5154f50aff2d 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -38,6 +38,11 @@ else
- CFLAGS_vgettimeofday.o = -O2 -mcmodel=tiny -include $(c-gettimeofday-y)
- endif
- 
-+# Clang versions less than 8 do not support -mcmodel=tiny
-+ifeq ($(shell test $(CONFIG_CLANG_VERSION) -lt 80000; echo $$?),0)
-+CFLAGS_REMOVE_vgettimeofday.o += -mcmodel=tiny
-+endif
-+
- # Disable gcov profiling for VDSO code
- GCOV_PROFILE := n
- 
--- 
-2.22.0
+Thanks,
+
+	tglx
+
 
