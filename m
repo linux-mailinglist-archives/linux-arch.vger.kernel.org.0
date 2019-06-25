@@ -2,164 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 486A355896
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 22:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0090355956
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 22:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbfFYUQM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Jun 2019 16:16:12 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:40912 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727033AbfFYUQM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jun 2019 16:16:12 -0400
-Received: by mail-qk1-f196.google.com with SMTP id c70so13714042qkg.7
-        for <linux-arch@vger.kernel.org>; Tue, 25 Jun 2019 13:16:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=EHMefmzmm9Mbm1HdA6t6Th6pkkLYZ7z1lPsMohb4ueM=;
-        b=jQEW/T2ioqSIqEH27/wZQTyrqpiEYcNggCDHviY4u9btaR8yZoYlXSWPrKMFn7apE8
-         PBuyIreqmpc+Lf7NumD1HggoEi0F4hYdinjaGIhvBfDTYmQotHCEvoXkcceFfz8/7zBL
-         u2A9hF+PYo+U+dtqOFkj4I5dvF2XBnfu6RGHfyXFysDfJ1nObukECX6GkskYYU8B+Fqz
-         3Oq6PkIiN3SS2mapgeNeub+SvBZUFBRR7y7EnlDj3japM2CUxAl9ARftjB0jnv4iGmjW
-         2Au7woSG5+Zu9ax6vjJTmKSryKe8dwOYoQTBV5kumsqeg6//0DKTG3FDwt3iQaxGmEqR
-         w5VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=EHMefmzmm9Mbm1HdA6t6Th6pkkLYZ7z1lPsMohb4ueM=;
-        b=rlI498W+sl5XHaW2j/9tiHru0uGnKcelZyEyxunvu7lFJEXtpFQmxgB3NDAjS938UI
-         hrbo4PIIt8cwWWmeNUVxeIVPMG0/AXmZoNWY0PZspxXGYencLKE1x13CrGRGF0JkApQF
-         m5l64ti7fmZ5vTRpLjAI87ogMohreqAM+VTc/eXBlJI1YI7SPG9ymrLCx3QsjF4usnVP
-         Jo1ZPLyP7Li204YAuWXmbaZgvNNmzSjV69aNU/ZxQnMmhn7axoJuPiwvQp/mZtYRWdJ+
-         s9g0aWiF4u+W8uFttLGGqbiaKLLT8VVM1eG/361mxNWrgVlL3fu7O6hMZJj/7zG/ou3t
-         DwUw==
-X-Gm-Message-State: APjAAAXgCMXPSlUd/EnPegHogMAZOlMTpYV4Evp+d4x7QA2qoamALo88
-        EwbD7wjFibMvMnNbGNmpjbUgeCNjVYc=
-X-Google-Smtp-Source: APXvYqx3MPsUMRt5L9qn0ZkLk78knyCrOQppj49qrRRC6+2rbLzmvuLW9r6dOWuSjAah5DvgrMzlrg==
-X-Received: by 2002:a37:ac0a:: with SMTP id e10mr558920qkm.168.1561493771373;
-        Tue, 25 Jun 2019 13:16:11 -0700 (PDT)
-Received: from qcai.nay.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id u1sm9600931qth.21.2019.06.25.13.16.09
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 13:16:10 -0700 (PDT)
-From:   Qian Cai <cai@lca.pw>
-To:     arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Qian Cai <cai@lca.pw>
-Subject: [PATCH] asm-generic: fix a compilation warning
-Date:   Tue, 25 Jun 2019 16:15:53 -0400
-Message-Id: <1561493753-3860-1-git-send-email-cai@lca.pw>
-X-Mailer: git-send-email 1.8.3.1
+        id S1726422AbfFYUrY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Jun 2019 16:47:24 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:49732 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726053AbfFYUrY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 Jun 2019 16:47:24 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 926EB37EEB;
+        Tue, 25 Jun 2019 20:47:23 +0000 (UTC)
+Received: from oldenburg2.str.redhat.com (ovpn-116-125.ams2.redhat.com [10.36.116.125])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CA7C36085B;
+        Tue, 25 Jun 2019 20:47:16 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Linux API <linux-api@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-x86_64@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Carlos O'Donell" <carlos@redhat.com>, X86 ML <x86@kernel.org>
+Subject: Re: Detecting the availability of VSYSCALL
+References: <87v9wty9v4.fsf@oldenburg2.str.redhat.com>
+        <alpine.DEB.2.21.1906251824500.32342@nanos.tec.linutronix.de>
+        <87lfxpy614.fsf@oldenburg2.str.redhat.com>
+        <CALCETrVh1f5wJNMbMoVqY=bq-7G=uQ84BUkepf5RksA3vUopNQ@mail.gmail.com>
+Date:   Tue, 25 Jun 2019 22:47:14 +0200
+In-Reply-To: <CALCETrVh1f5wJNMbMoVqY=bq-7G=uQ84BUkepf5RksA3vUopNQ@mail.gmail.com>
+        (Andy Lutomirski's message of "Tue, 25 Jun 2019 13:11:25 -0700")
+Message-ID: <87a7e5v1d9.fsf@oldenburg2.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Tue, 25 Jun 2019 20:47:23 +0000 (UTC)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Fix this compilation warning on x86 by making flush_cache_vmap() inline.
+* Andy Lutomirski:
 
-lib/ioremap.c: In function 'ioremap_page_range':
-lib/ioremap.c:214:16: warning: variable 'start' set but not used
-[-Wunused-but-set-variable]
-  unsigned long start;
-                ^~~~~
+>> We want binaries that run fast on VSYSCALL kernels, but can fall back to
+>> full system calls on kernels that do not have them (instead of
+>> crashing).
+>
+> Define "VSYSCALL kernels."  On any remotely recent kernel (*all* new
+> kernels and all kernels for the last several years that haven't
+> specifically requested vsyscall=native), using vsyscalls is much, much
+> slower than just doing syscalls.  I know a way you can tell whether
+> vsyscalls are fast, but it's unreliable, and I'm disinclined to
+> suggest it.  There are also at least two pending patch series that
+> will interfere.
 
-While at it, convert all other similar functions to inline for
-consistency.
+The fast path is for the benefit of the 2.6.32-based kernel in Red Hat
+Enterprise Linux 6.  It doesn't have the vsyscall emulation code yet, I
+think.
 
-Signed-off-by: Qian Cai <cai@lca.pw>
----
- include/asm-generic/cacheflush.h | 74 ++++++++++++++++++++++++++++++++--------
- 1 file changed, 60 insertions(+), 14 deletions(-)
+My hope is to produce (statically linked) binaries that run as fast on
+that kernel as they run today, but can gracefully fall back to something
+else on kernels without vsyscall support.
 
-diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
-index 0dd47a6db2cf..a950a22c4890 100644
---- a/include/asm-generic/cacheflush.h
-+++ b/include/asm-generic/cacheflush.h
-@@ -5,24 +5,70 @@
- /* Keep includes the same across arches.  */
- #include <linux/mm.h>
- 
-+#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-+
- /*
-  * The cache doesn't need to be flushed when TLB entries change when
-  * the cache is mapped to physical memory, not virtual memory
-  */
--#define flush_cache_all()			do { } while (0)
--#define flush_cache_mm(mm)			do { } while (0)
--#define flush_cache_dup_mm(mm)			do { } while (0)
--#define flush_cache_range(vma, start, end)	do { } while (0)
--#define flush_cache_page(vma, vmaddr, pfn)	do { } while (0)
--#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
--#define flush_dcache_page(page)			do { } while (0)
--#define flush_dcache_mmap_lock(mapping)		do { } while (0)
--#define flush_dcache_mmap_unlock(mapping)	do { } while (0)
--#define flush_icache_range(start, end)		do { } while (0)
--#define flush_icache_page(vma,pg)		do { } while (0)
--#define flush_icache_user_range(vma,pg,adr,len)	do { } while (0)
--#define flush_cache_vmap(start, end)		do { } while (0)
--#define flush_cache_vunmap(start, end)		do { } while (0)
-+static inline void flush_cache_all(void)
-+{
-+}
-+
-+static inline void flush_cache_mm(struct mm_struct *mm)
-+{
-+}
-+
-+static inline void flush_cache_dup_mm(struct mm_struct *mm)
-+{
-+}
-+
-+static inline void flush_cache_range(struct vm_area_struct *vma,
-+				     unsigned long start,
-+				     unsigned long end)
-+{
-+}
-+
-+static inline void flush_cache_page(struct vm_area_struct *vma,
-+				    unsigned long vmaddr,
-+				    unsigned long pfn)
-+{
-+}
-+
-+static inline void flush_dcache_page(struct page *page)
-+{
-+}
-+
-+static inline void flush_dcache_mmap_lock(struct address_space *mapping)
-+{
-+}
-+
-+static inline void flush_dcache_mmap_unlock(struct address_space *mapping)
-+{
-+}
-+
-+static inline void flush_icache_range(unsigned long start, unsigned long end)
-+{
-+}
-+
-+static inline void flush_icache_page(struct vm_area_struct *vma,
-+				     struct page *page)
-+{
-+}
-+
-+static inline void flush_icache_user_range(struct vm_area_struct *vma,
-+					   struct page *page,
-+					   unsigned long addr, int len)
-+{
-+}
-+
-+static inline void flush_cache_vmap(unsigned long start, unsigned long end)
-+{
-+}
-+
-+static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
-+{
-+}
- 
- #define copy_to_user_page(vma, page, vaddr, dst, src, len) \
- 	do { \
--- 
-1.8.3.1
+>> We could parse the vDSO and prefer the functions found there, but this
+>> is for the statically linked case.  We currently do not have a (minimal)
+>> dynamic loader there in that version of the code base, so that doesn't
+>> really work for us.
+>
+> Is anything preventing you from adding a vDSO parser?  I wrote one
+> just for this type of use:
+>
+> $ wc -l tools/testing/selftests/vDSO/parse_vdso.c
+> 269 tools/testing/selftests/vDSO/parse_vdso.c
+>
+> (289 lines includes quite a bit of comment.)
 
+I'm worried that if I use a custom parser and the binaries start
+crashing again because something changed in the kernel (within the scope
+permitted by the ELF specification), the kernel won't be fixed.
+
+That is, we'd be in exactly the same situation as today.
+
+Thanks,
+Florian
