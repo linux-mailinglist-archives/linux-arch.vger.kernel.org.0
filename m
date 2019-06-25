@@ -2,86 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B17554B3
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 18:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185A25555E
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 19:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbfFYQjB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Jun 2019 12:39:01 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:11238 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726722AbfFYQjB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 Jun 2019 12:39:01 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 3F41D309265B;
-        Tue, 25 Jun 2019 16:39:01 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-116-87.ams2.redhat.com [10.36.116.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6D6055C25D;
-        Tue, 25 Jun 2019 16:38:37 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-api@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        linux-x86_64@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Carlos O'Donell <carlos@redhat.com>, x86@kernel.org
-Subject: Re: Detecting the availability of VSYSCALL
-References: <87v9wty9v4.fsf@oldenburg2.str.redhat.com>
-        <alpine.DEB.2.21.1906251824500.32342@nanos.tec.linutronix.de>
-Date:   Tue, 25 Jun 2019 18:38:15 +0200
-In-Reply-To: <alpine.DEB.2.21.1906251824500.32342@nanos.tec.linutronix.de>
-        (Thomas Gleixner's message of "Tue, 25 Jun 2019 18:30:29 +0200
-        (CEST)")
-Message-ID: <87lfxpy614.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+        id S1728639AbfFYRCV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Jun 2019 13:02:21 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:44024 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727540AbfFYRCV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jun 2019 13:02:21 -0400
+Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hfopi-0004Hb-GJ; Tue, 25 Jun 2019 19:02:14 +0200
+Date:   Tue, 25 Jun 2019 19:02:13 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+cc:     linux-arch@vger.kernel.org,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, catalin.marinas@arm.com,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux@armlinux.org.uk,
+        Ralf Baechle <ralf@linux-mips.org>, paul.burton@mips.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        salyzyn@android.com, pcc@google.com, shuah@kernel.org,
+        0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
+        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com,
+        Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
+In-Reply-To: <20190625161804.38713-1-vincenzo.frascino@arm.com>
+Message-ID: <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
+References: <20190624133607.GI29497@fuggles.cambridge.arm.com> <20190625161804.38713-1-vincenzo.frascino@arm.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Tue, 25 Jun 2019 16:39:01 +0000 (UTC)
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Thomas Gleixner:
+On Tue, 25 Jun 2019, Vincenzo Frascino wrote:
 
-> On Tue, 25 Jun 2019, Florian Weimer wrote:
->> We're trying to create portable binaries which use VSYSCALL on older
->> kernels (to avoid performance regressions), but gracefully degrade to
->> full system calls on kernels which do not have VSYSCALL support compiled
->> in (or disabled at boot).
->>
->> For technical reasons, we cannot use vDSO fallback.  Trying vDSO first
->> and only then use VSYSCALL is the way this has been tackled in the past,
->> which is why this userspace ABI breakage goes generally unnoticed.  But
->> we don't have a dynamic linker in our scenario.
->
-> I'm not following. On newer kernels which usually have vsyscall disabled
-> you need to use real syscalls anyway, so why are you so worried about
-> performance on older kernels. That doesn't make sense.
+CC+ Andy
 
-We want binaries that run fast on VSYSCALL kernels, but can fall back to
-full system calls on kernels that do not have them (instead of
-crashing).
+> do_hres() in the vDSO generic library masks the hw counter value
+> immediately after reading it.
+> 
+> Postpone the mask application after checking if the syscall fallback is
+> enabled, in order to be able to detect a possible fallback for the
+> architectures that have masks smaller than ULLONG_MAX.
 
-We could parse the vDSO and prefer the functions found there, but this
-is for the statically linked case.  We currently do not have a (minimal)
-dynamic loader there in that version of the code base, so that doesn't
-really work for us.
+Right. This only worked on x86 because the mask is there ULLONG_MAX for all
+VDSO capable clocksources, i.e. that ever worked just by chance.
 
->> Is there any reliable way to detect that VSYSCALL is unavailable,
->> without resorting to parsing /proc/self/maps or opening file
->> descriptors?
->
-> Not that I'm aware of except
->
->     sigaction(SIG_SEGV,....)
->
-> /me hides
+As we talked about that already yesterday, I tested this on a couple of
+machines and as expected the outcome is uarch dependent. Minimal deviations
+to both sides and some machines do not show any change at all. I doubt it's
+possible to come up with a solution which makes all uarchs go faster
+magically.
 
-I know people do this for SIGILL to probe for CPU features, but yeah,
-let's just not go there. 8-p
+Though, thinking about it, we could remove the mask operation completely on
+X86. /me runs tests
 
 Thanks,
-Florian
+
+	tglx
+
+
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>  lib/vdso/gettimeofday.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+> index ef28cc5d7bff..ee1221ba1d32 100644
+> --- a/lib/vdso/gettimeofday.c
+> +++ b/lib/vdso/gettimeofday.c
+> @@ -35,12 +35,12 @@ static int do_hres(const struct vdso_data *vd, clockid_t clk,
+>  
+>  	do {
+>  		seq = vdso_read_begin(vd);
+> -		cycles = __arch_get_hw_counter(vd->clock_mode) &
+> -			vd->mask;
+> +		cycles = __arch_get_hw_counter(vd->clock_mode);
+>  		ns = vdso_ts->nsec;
+>  		last = vd->cycle_last;
+>  		if (unlikely((s64)cycles < 0))
+>  			return clock_gettime_fallback(clk, ts);
+> +		cycles &= vd->mask;
+>  		if (cycles > last)
+>  			ns += (cycles - last) * vd->mult;
+>  		ns >>= vd->shift;
+> -- 
+> 2.22.0
+> 
+> 
