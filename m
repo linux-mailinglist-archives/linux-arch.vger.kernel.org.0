@@ -2,102 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBB35544D
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 18:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD67955481
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 18:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728366AbfFYQSl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Jun 2019 12:18:41 -0400
-Received: from foss.arm.com ([217.140.110.172]:44832 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726420AbfFYQSk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 Jun 2019 12:18:40 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D8ACED1;
-        Tue, 25 Jun 2019 09:18:40 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 96EB73F718;
-        Tue, 25 Jun 2019 09:18:37 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will.deacon@arm.com, arnd@arndb.de,
-        linux@armlinux.org.uk, ralf@linux-mips.org, paul.burton@mips.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, salyzyn@android.com,
-        pcc@google.com, shuah@kernel.org, 0x7f454c46@gmail.com,
-        linux@rasmusvillemoes.dk, huw@codeweavers.com,
-        sthotton@marvell.com, andre.przywara@arm.com
-Subject: [PATCH 3/3] arm64: compat: Fix __arch_get_hw_counter() implementation
-Date:   Tue, 25 Jun 2019 17:18:04 +0100
-Message-Id: <20190625161804.38713-3-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190625161804.38713-1-vincenzo.frascino@arm.com>
-References: <20190624133607.GI29497@fuggles.cambridge.arm.com>
- <20190625161804.38713-1-vincenzo.frascino@arm.com>
+        id S1727781AbfFYQac (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Jun 2019 12:30:32 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:43931 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726740AbfFYQac (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jun 2019 12:30:32 -0400
+Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hfoKz-0003li-VM; Tue, 25 Jun 2019 18:30:30 +0200
+Date:   Tue, 25 Jun 2019 18:30:29 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Florian Weimer <fweimer@redhat.com>
+cc:     linux-api@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        linux-x86_64@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Carlos O'Donell <carlos@redhat.com>, x86@kernel.org
+Subject: Re: Detecting the availability of VSYSCALL
+In-Reply-To: <87v9wty9v4.fsf@oldenburg2.str.redhat.com>
+Message-ID: <alpine.DEB.2.21.1906251824500.32342@nanos.tec.linutronix.de>
+References: <87v9wty9v4.fsf@oldenburg2.str.redhat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Provide the following fixes for the __arch_get_hw_counter()
-implementation on arm64:
-- Fallback on syscall when an unstable counter is detected.
-- Introduce isb()s before and after the counter read to avoid
-speculation of the counter value and of the seq lock
-respectively.
-The second isb() is a temporary solution that will be revisited
-in 5.3-rc1.
+On Tue, 25 Jun 2019, Florian Weimer wrote:
+> We're trying to create portable binaries which use VSYSCALL on older
+> kernels (to avoid performance regressions), but gracefully degrade to
+> full system calls on kernels which do not have VSYSCALL support compiled
+> in (or disabled at boot).
+>
+> For technical reasons, we cannot use vDSO fallback.  Trying vDSO first
+> and only then use VSYSCALL is the way this has been tackled in the past,
+> which is why this userspace ABI breakage goes generally unnoticed.  But
+> we don't have a dynamic linker in our scenario.
 
-These fixes restore the semantics that __arch_counter_get_cntvct()
-had on arm64.
+I'm not following. On newer kernels which usually have vsyscall disabled
+you need to use real syscalls anyway, so why are you so worried about
+performance on older kernels. That doesn't make sense.
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will.deacon@arm.com>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
- .../include/asm/vdso/compat_gettimeofday.h     | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+> Is there any reliable way to detect that VSYSCALL is unavailable,
+> without resorting to parsing /proc/self/maps or opening file
+> descriptors?
 
-diff --git a/arch/arm64/include/asm/vdso/compat_gettimeofday.h b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-index 93dbd935b66d..f4812777f5c5 100644
---- a/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-+++ b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-@@ -12,6 +12,8 @@
- 
- #include <asm/vdso/compat_barrier.h>
- 
-+#define __VDSO_USE_SYSCALL		ULLONG_MAX
-+
- #define VDSO_HAS_CLOCK_GETRES		1
- 
- static __always_inline
-@@ -74,8 +76,24 @@ static __always_inline u64 __arch_get_hw_counter(s32 clock_mode)
- {
- 	u64 res;
- 
-+	/*
-+	 * clock_mode == 0 implies that vDSO are enabled otherwise
-+	 * fallback on syscall.
-+	 */
-+	if (clock_mode)
-+		return __VDSO_USE_SYSCALL;
-+
-+	/*
-+	 * This isb() is required to prevent that the counter value
-+	 * is speculated.
-+	 */
- 	isb();
- 	asm volatile("mrrc p15, 1, %Q0, %R0, c14" : "=r" (res));
-+	/*
-+	 * This isb() is required to prevent that the seq lock is
-+	 * speculated.
-+	 */
-+	isb();
- 
- 	return res;
- }
--- 
-2.22.0
+Not that I'm aware of except
 
+    sigaction(SIG_SEGV,....)
+
+/me hides
+ 
+> Should we try mapping something at the magic address (without MAP_FIXED)
+> and see if we get back a different address?  Something in the auxiliary
+> vector would work for us, too, but nothing seems to exists there
+> unfortunately.
+
+Would, but there is no such thing.
+
+Thanks,
+
+	tglx
