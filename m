@@ -2,143 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D93B255388
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 17:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48587553B7
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2019 17:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731255AbfFYPgc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Jun 2019 11:36:32 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:46954 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730385AbfFYPgc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jun 2019 11:36:32 -0400
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id E9C3972CC6C;
-        Tue, 25 Jun 2019 18:36:29 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-        id C5DAF7CCE32; Tue, 25 Jun 2019 18:36:29 +0300 (MSK)
-Date:   Tue, 25 Jun 2019 18:36:29 +0300
-From:   "Dmitry V. Levin" <ldv@altlinux.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Baruch Siach <baruch@tkos.co.il>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2] bpf: fix uapi bpf_prog_info fields alignment
-Message-ID: <20190625153629.GB24947@altlinux.org>
-References: <a5fb2545a0cf151bc443efa10c16c5a4de6f2670.1561460681.git.baruch@tkos.co.il>
- <CAADnVQJ3MPVCL-0x2gDYbUQsrmu8WipnisqXoU8ja4vZ-5nTmA@mail.gmail.com>
- <20190625150835.GA24947@altlinux.org>
- <CAADnVQJNLk7tAHRHr7V7ugvCX9iCjaH4_vS9YuNWcMpwnA6ZyA@mail.gmail.com>
+        id S1732476AbfFYPs1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Jun 2019 11:48:27 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:44752 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726443AbfFYPs1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Jun 2019 11:48:27 -0400
+Received: by mail-qt1-f194.google.com with SMTP id x47so18886795qtk.11;
+        Tue, 25 Jun 2019 08:48:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UM0dIusS/gwdu4c8O9SbMLiBQ6AfaMuOD/f2wf1DSM0=;
+        b=RfVP/YSHIeq6OEIFwBiAi3EiWtLzh9Q9AUz7CnT13RbOYKxIDrn5+A5hsG0/3bx2Z+
+         u5lw0fc7jf4GnUGz5vRuuyiT4iqcKkc8MJMyZuzFLPEF5bTgEfYkmvpbibXMYYB/Ut5D
+         2qfEHOAeH+kyx03C+vOwBM2J83NxNL2P1uRV/WtEtF5ILcEPYNTUxPGe5H/oubIaHA+G
+         q2LSJEdxsd5XAdc1npGXjboFoVmsb+7nup3Gk9CTKWL0KBOR2dMVgUtj5PHdwp8QHfwM
+         eSTvVz4xttnNx/d3Dasj7rP7vLgQ0ZtY1usPCd+k0xTJ6prXHYBZOQW0eDxFVKjcXXYq
+         WkfA==
+X-Gm-Message-State: APjAAAXnowdIA7qKtMgsJbv7q+AoVFoKX2PdZE9sd5OrOamRHYtndDT/
+        qYm+DcnBYGOO9NxjsGuI0ny5hziib4v6Fuh+15A5p+Rs
+X-Google-Smtp-Source: APXvYqyVchxTXULX5RiBGFf7pkDLgru/QLMdrSx0lNX8fcNNL8F7yHW1If4rQ0zSKCfUNzX8+NHSiNHEywkw8pWsVxw=
+X-Received: by 2002:a0c:9595:: with SMTP id s21mr32470026qvs.63.1561477705897;
+ Tue, 25 Jun 2019 08:48:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="RASg3xLB4tUQ4RcS"
-Content-Disposition: inline
-In-Reply-To: <CAADnVQJNLk7tAHRHr7V7ugvCX9iCjaH4_vS9YuNWcMpwnA6ZyA@mail.gmail.com>
+References: <20190625085616.GA32399@lst.de> <ccfa78f3-35c2-1d26-98b5-b21a76b90e1e@physik.fu-berlin.de>
+ <20190625112146.GA9580@angband.pl> <401b12c0-d175-2720-d26c-b96ce3b28c71@physik.fu-berlin.de>
+ <CAK8P3a3irwwwCQ_kPh5BTg-jGGbJOj=3fhVrTDBUZgH1V7bpFQ@mail.gmail.com> <20190625142832.GD1506@brightrain.aerifal.cx>
+In-Reply-To: <20190625142832.GD1506@brightrain.aerifal.cx>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 25 Jun 2019 17:48:09 +0200
+Message-ID: <CAK8P3a0j_9fzZxhxqCMHfoJ5DdZpHFvANEPqs1pbP23TCei6ng@mail.gmail.com>
+Subject: Re: [RFC] remove arch/sh?
+To:     Rich Felker <dalias@libc.org>
+Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Jun 25, 2019 at 4:28 PM Rich Felker <dalias@libc.org> wrote:
+> On Tue, Jun 25, 2019 at 02:50:01PM +0200, Arnd Bergmann wrote:
+> > don't build, or are incomplete and not worked on for a long
+> > time, compared to the bits that are known to work and that someone
+> > is still using or at least playing with.
+> > I guess a lot of the SoCs that have no board support other than
+> > the Hitachi/Renesas reference platform can go away too, as any products
+> > based on those boards have long stopped updating their kernels.
+>
+> My intent here was always, after getting device tree theoretically
+> working for some reasonable subset of socs/boards, drop the rest and
+> add them back as dts files (possibly plus some small drivers) only if
+> there's demand/complaint about regression.
 
---RASg3xLB4tUQ4RcS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Do you still think that this is a likely scenario for the future though?
 
-On Tue, Jun 25, 2019 at 08:19:35AM -0700, Alexei Starovoitov wrote:
-> On Tue, Jun 25, 2019 at 8:08 AM Dmitry V. Levin <ldv@altlinux.org> wrote:
-> > On Tue, Jun 25, 2019 at 07:16:55AM -0700, Alexei Starovoitov wrote:
-> > > On Tue, Jun 25, 2019 at 4:07 AM Baruch Siach <baruch@tkos.co.il> wrot=
-e:
-> > > >
-> > > > Merge commit 1c8c5a9d38f60 ("Merge
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next") undi=
-d the
-> > > > fix from commit 36f9814a494 ("bpf: fix uapi hole for 32 bit compat
-> > > > applications") by taking the gpl_compatible 1-bit field definition =
-=66rom
-> > > > commit b85fab0e67b162 ("bpf: Add gpl_compatible flag to struct
-> > > > bpf_prog_info") as is. That breaks architectures with 16-bit alignm=
-ent
-> > > > like m68k. Embed gpl_compatible into an anonymous union with 32-bit=
- pad
-> > > > member to restore alignment of following fields.
-> > > >
-> > > > Thanks to Dmitry V. Levin his analysis of this bug history.
-> > > >
-> > > > Cc: Jiri Olsa <jolsa@kernel.org>
-> > > > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > > > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > > > Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> > > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > > > ---
-> > > > v2:
-> > > > Use anonymous union with pad to make it less likely to break again =
-in
-> > > > the future.
-> > > > ---
-> > > >  include/uapi/linux/bpf.h       | 5 ++++-
-> > > >  tools/include/uapi/linux/bpf.h | 5 ++++-
-> > > >  2 files changed, 8 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > > index a8b823c30b43..766eae02d7ae 100644
-> > > > --- a/include/uapi/linux/bpf.h
-> > > > +++ b/include/uapi/linux/bpf.h
-> > > > @@ -3142,7 +3142,10 @@ struct bpf_prog_info {
-> > > >         __aligned_u64 map_ids;
-> > > >         char name[BPF_OBJ_NAME_LEN];
-> > > >         __u32 ifindex;
-> > > > -       __u32 gpl_compatible:1;
-> > > > +       union {
-> > > > +               __u32 gpl_compatible:1;
-> > > > +               __u32 pad;
-> > > > +       };
-> > >
-> > > Nack for the reasons explained in the previous thread
-> > > on the same subject.
-> > > Why cannot you go with earlier suggestion of _u32 :31; ?
-> >
-> > By the way, why not use aligned types as suggested by Geert?
-> > They are already used for other members of struct bpf_prog_info anyway.
-> >
-> > FWIW, we use aligned types for bpf in strace and that approach
-> > proved to be more robust than manual padding.
->=20
-> because __aligned_u64 is used for pointers.
+If nobody's actively working on the DT support for the old chips and
+this is unlikely to change soon, removing the known-broken bits earlier
+should at least make it easier to keep maintaining the working bits
+afterwards.
 
-Does the fact that __aligned_u64 is used for pointers mean that
-__aligned_u64 should not be used for anything but pointers?
+FWIW, I went through the SH2, SH2A and SH3 based boards that
+are supported in the kernel and found almost all of them to
+be just reference platforms, with no actual product ever merged.
+IIRC the idea back then was that users would supply their
+own board files as an add-on patch, but I would consider all the
+ones that did to be obsolete now.
 
+HP Jornada 6xx is the main machine that was once supported, but
+given that according to the defconfig file it only comes with 4MB
+of RAM, it is unlikely to still boot any 5.x kernel, let alone user
+space (wikipedia claims there were models with 16MB of RAM,
+but that is still not a lot these days).
 
---=20
-ldv
+"Magicpanel" was another product that is supported in theory, but
+the google search showed the 2007 patch for the required
+flash storage driver that was never merged.
 
---RASg3xLB4tUQ4RcS
-Content-Type: application/pgp-signature; name="signature.asc"
+Maybe everything but J2 and SH4(a) can just get retired?
 
------BEGIN PGP SIGNATURE-----
-
-iQIcBAEBCAAGBQJdEj99AAoJEAVFT+BVnCUIWaMQAMugE0lSCzosjpHwkfbr+FpO
-ugG0z+9qdFGMvSWEQp6J7GI+1T/9053u/LoXnmZa3Ax9dOuoiPL/LUnfdlkaZUTb
-CRiMMZrxS815klWYdjCsoUxI4uIkMGIeAV55zmL38GnNkQkqUBWNZ2DreXMKqJbL
-R6thXTIX0NWZX8gTp9u3Cl7kGzn/rbyM8h3QhfHplIIyZtN0H+Xxrf45GtRWYIiJ
-EA13Cha2jnzv+U0ibPp73x424JPSgXwDEXs9TCSzmBN3F/Wa8HB2ZkG5mZeXKTpO
-qdCSlmDQeAh/X9swdoXnMdi955V004q7i9p662G1hyOdYCA+uVXbvm5UpqVB9gTG
-aO0K7fXyKgXAvebHTbacvVVyw9QyY0uQ/LFUGmJHOtp9z9qGrRy22kG99sWxbno3
-L6HzmIS8Uj47yUqGp4Lnad8djAr7K0hQB0dONaBoSY15DwL+iyXvs+BCATajcwz8
-yVMEk/MnoBpC5d06AH0AOlxNimCcxxKJC3c/70xQo/XzlddHlzcZunlOHMoMeRZc
-U3PkP04kXzsL3sVlWW6uGz21PtEe1BRI26Q118VMf6UMRH0x7Hiq5FQLqpueVJ4Y
-JxFtJu1gEzbeL0I4+2LAJ/Cobgx/C369Haq9ey3/xtVpEMAv4GUomL94v7W06F4h
-7d5nX5YZ/O5OpF8f+nz7
-=nTPx
------END PGP SIGNATURE-----
-
---RASg3xLB4tUQ4RcS--
+     Arnd
