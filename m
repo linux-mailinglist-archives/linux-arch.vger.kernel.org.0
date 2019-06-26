@@ -2,120 +2,278 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D42CF56858
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2019 14:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33AE56A6A
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2019 15:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbfFZMMd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 26 Jun 2019 08:12:33 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:37276 "EHLO mx1.redhat.com"
+        id S1727221AbfFZN2F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Jun 2019 09:28:05 -0400
+Received: from foss.arm.com ([217.140.110.172]:32928 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726131AbfFZMMd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Jun 2019 08:12:33 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 57F6B2F8BC9;
-        Wed, 26 Jun 2019 12:12:28 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (dhcp-192-180.str.redhat.com [10.33.192.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 53332608CA;
-        Wed, 26 Jun 2019 12:12:23 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Linux API <linux-api@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-x86_64@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Carlos O'Donell" <carlos@redhat.com>, X86 ML <x86@kernel.org>
-Subject: Re: Detecting the availability of VSYSCALL
-References: <87v9wty9v4.fsf@oldenburg2.str.redhat.com>
-        <alpine.DEB.2.21.1906251824500.32342@nanos.tec.linutronix.de>
-        <87lfxpy614.fsf@oldenburg2.str.redhat.com>
-        <CALCETrVh1f5wJNMbMoVqY=bq-7G=uQ84BUkepf5RksA3vUopNQ@mail.gmail.com>
-        <87a7e5v1d9.fsf@oldenburg2.str.redhat.com>
-        <CALCETrUDt4v3=FqD+vseGTKTuG=qY+1LwRPrOrU8C7vCVbo=uA@mail.gmail.com>
-Date:   Wed, 26 Jun 2019 14:12:22 +0200
-In-Reply-To: <CALCETrUDt4v3=FqD+vseGTKTuG=qY+1LwRPrOrU8C7vCVbo=uA@mail.gmail.com>
-        (Andy Lutomirski's message of "Tue, 25 Jun 2019 14:49:27 -0700")
-Message-ID: <87o92kmtp5.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+        id S1726104AbfFZN2E (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 Jun 2019 09:28:04 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A6DE360;
+        Wed, 26 Jun 2019 06:28:03 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D00BA3F71E;
+        Wed, 26 Jun 2019 06:28:00 -0700 (PDT)
+Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
+ implementation
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huw Davies <huw@codeweavers.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Peter Collingbourne <pcc@google.com>
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <20190621095252.32307-5-vincenzo.frascino@arm.com>
+ <20190625153336.GZ2790@e103592.cambridge.arm.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <f5ac379a-731d-0662-2f5b-bd046e3bd1c5@arm.com>
+Date:   Wed, 26 Jun 2019 14:27:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <20190625153336.GZ2790@e103592.cambridge.arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Wed, 26 Jun 2019 12:12:33 +0000 (UTC)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Andy Lutomirski:
+Hi Dave,
 
-> On Tue, Jun 25, 2019 at 1:47 PM Florian Weimer <fweimer@redhat.com> wrote:
+On 25/06/2019 16:33, Dave Martin wrote:
+> On Fri, Jun 21, 2019 at 10:52:31AM +0100, Vincenzo Frascino wrote:
+>> To take advantage of the commonly defined vdso interface for
+>> gettimeofday the architectural code requires an adaptation.
 >>
->> * Andy Lutomirski:
+>> Re-implement the gettimeofday vdso in C in order to use lib/vdso.
 >>
->> >> We want binaries that run fast on VSYSCALL kernels, but can fall back to
->> >> full system calls on kernels that do not have them (instead of
->> >> crashing).
->> >
->> > Define "VSYSCALL kernels."  On any remotely recent kernel (*all* new
->> > kernels and all kernels for the last several years that haven't
->> > specifically requested vsyscall=native), using vsyscalls is much, much
->> > slower than just doing syscalls.  I know a way you can tell whether
->> > vsyscalls are fast, but it's unreliable, and I'm disinclined to
->> > suggest it.  There are also at least two pending patch series that
->> > will interfere.
+>> With the new implementation arm64 gains support for CLOCK_BOOTTIME
+>> and CLOCK_TAI.
 >>
->> The fast path is for the benefit of the 2.6.32-based kernel in Red Hat
->> Enterprise Linux 6.  It doesn't have the vsyscall emulation code yet, I
->> think.
->>
->> My hope is to produce (statically linked) binaries that run as fast on
->> that kernel as they run today, but can gracefully fall back to something
->> else on kernels without vsyscall support.
->>
->> >> We could parse the vDSO and prefer the functions found there, but this
->> >> is for the statically linked case.  We currently do not have a (minimal)
->> >> dynamic loader there in that version of the code base, so that doesn't
->> >> really work for us.
->> >
->> > Is anything preventing you from adding a vDSO parser?  I wrote one
->> > just for this type of use:
->> >
->> > $ wc -l tools/testing/selftests/vDSO/parse_vdso.c
->> > 269 tools/testing/selftests/vDSO/parse_vdso.c
->> >
->> > (289 lines includes quite a bit of comment.)
->>
->> I'm worried that if I use a custom parser and the binaries start
->> crashing again because something changed in the kernel (within the scope
->> permitted by the ELF specification), the kernel won't be fixed.
->>
->> That is, we'd be in exactly the same situation as today.
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will.deacon@arm.com>
+>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>> Tested-by: Shijith Thotton <sthotton@marvell.com>
+>> Tested-by: Andre Przywara <andre.przywara@arm.com>
+> 
+> [...]
+> 
+>> diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
+>> new file mode 100644
+>> index 000000000000..bc3cb6738051
+>> --- /dev/null
+>> +++ b/arch/arm64/include/asm/vdso/gettimeofday.h
+>> @@ -0,0 +1,86 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2018 ARM Limited
+>> + */
+>> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
+>> +#define __ASM_VDSO_GETTIMEOFDAY_H
+>> +
+>> +#ifndef __ASSEMBLY__
+>> +
+>> +#include <asm/unistd.h>
+>> +#include <uapi/linux/time.h>
+>> +
+>> +#define VDSO_HAS_CLOCK_GETRES		1
+>> +
+>> +static __always_inline int gettimeofday_fallback(
+>> +					struct __kernel_old_timeval *_tv,
+>> +					struct timezone *_tz)
+> 
+> Out of interest, does this need to be __always_inline?
+> 
+
+It is a design choice. Philosophically, I prefer to control and reduce the scope
+of the decisions the compiler has to make in order to not have surprises.
+
+>> +{
+>> +	register struct timezone *tz asm("x1") = _tz;
+>> +	register struct __kernel_old_timeval *tv asm("x0") = _tv;
+>> +	register long ret asm ("x0");
+>> +	register long nr asm("x8") = __NR_gettimeofday;
+>> +
+>> +	asm volatile(
+>> +	"       svc #0\n"
+> 
+> Can inlining of this function result in non-trivial expressions being
+> substituted for _tz or _tv?
+> 
+> A function call can clobber register asm vars that are assigned to the
+> caller-save registers or that the PCS uses for function arguments, and
+> the situations where this can happen are poorly defined AFAICT.  There's
+> also no reliable way to detect at build time whether the compiler has
+> done this, and no robust way to stop if happening.
+> 
+> (IMHO the compiler is wrong to do this, but it's been that way for ever,
+> and I think I saw GCC 9 show this behaviour recently when I was
+> investigating something related.)
+> 
+> 
+> To be safe, it's better to put this out of line, or remove the reg asm()
+> specifiers, mark x0-x18 and lr as clobbered here (so that the compiler
+> doesn't map arguments to them), and put movs in the asm to move things
+> into the right registers.  The syscall number can be passed with an "i"
+> constraint.  (And yes, this sucks.)
+> 
+> If the code this is inlined in is simple enough though, we can be fairly
+> confident of getting away with it.
 >
-> With my maintainer hat on, the kernel won't do that.  Obviously a
-> review of my parser would be appreciated, but I consider it to be
-> fully supported, just like glibc and musl's parsers are fully
-> supported.  Sadly, I *also* consider the version Go forked for a while
-> (now fixed) to be supported.  Sigh.
 
-We've been burnt once, otherwise we wouldn't be having this
-conversation.  It's not just what the kernel does by default; if it's
-configurable, it will be disabled by some, and if it's label as
-“security hardening”, the userspace ABI promise is suddenly forgotten
-and it's all userspace's fault for not supporting the new way.
+I took very seriously what you are mentioning here because I think that
+robustness of the code comes before than everything especially in the kernel and
+I carried on some experiments to try to verify if in this case is safe to assume
+that the compiler is doing the right thing.
 
-It looks like parsing the vDSO is the only way forward, and we have to
-move in that direction if we move at all.
+Based on my investigation and on previous observations of the generation of the
+vDSO library, I can conclude that the approach seems safe due to the fact that
+the usage of this code is very limited, the code itself is simple enough and
+that gcc would inline this code anyway based on the current compilation options.
 
-It's tempting to read the machine code on the vsyscall page and analyze
-that, but vsyscall=none behavior changed at one point, and you no longer
-any mapping there at all.  So that doesn't work, either.
+The experiment that I did was to define some self-contained code that tries to
+mimic what you are describing and compile it with 3 different versions of gcc
+(6.4, 8.1 and 8.3) and in all the tree cases the behavior seems correct.
 
-I do hope the next userspace ABI break will have an option to undo it on
-a per-container basis.  Or at least a flag to detect it.
+Code:
+=====
 
-Thanks,
-Florian
+typedef int ssize_t;
+typedef int size_t;
+
+static int my_strlen(const char *s)
+{
+	int i = 0;
+
+	while (s[i] == '\0')
+		i++;
+
+	return i;
+}
+
+static inline ssize_t my_syscall(int fd, const void *buf, size_t count)
+{
+	register ssize_t arg1 asm ("x0") = fd;
+	register const void *arg2 asm ("x1") = buf;
+	register size_t arg3 asm ("x2") = count;
+
+	__asm__ volatile (
+		"mov x8, #64\n"
+		"svc #0\n"
+		: "=&r" (arg1)
+		: "r" (arg2), "r" (arg3)
+		: "x8"
+        );
+
+        return arg1;
+}
+
+void sys_caller(const char *s)
+{
+	my_syscall(1, s, my_strlen(s));
+}
+
+
+GCC 8.3.0:
+==========
+
+main.8.3.0.o:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000000000000 <sys_caller>:
+   0:	39400001 	ldrb	w1, [x0]
+   4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
+   8:	d2800023 	mov	x3, #0x1                   	// #1
+   c:	d1000404 	sub	x4, x0, #0x1
+  10:	2a0303e2 	mov	w2, w3
+  14:	91000463 	add	x3, x3, #0x1
+  18:	38636881 	ldrb	w1, [x4, x3]
+  1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
+  20:	aa0003e1 	mov	x1, x0
+  24:	d2800808 	mov	x8, #0x40                  	// #64
+  28:	d4000001 	svc	#0x0
+  2c:	d65f03c0 	ret
+  30:	52800002 	mov	w2, #0x0                   	// #0
+  34:	17fffffb 	b	20 <sys_caller+0x20>
+
+
+GCC 8.1.0:
+==========
+
+main.8.1.0.o:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000000000000 <sys_caller>:
+   0:	39400001 	ldrb	w1, [x0]
+   4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
+   8:	d2800023 	mov	x3, #0x1                   	// #1
+   c:	d1000404 	sub	x4, x0, #0x1
+  10:	2a0303e2 	mov	w2, w3
+  14:	91000463 	add	x3, x3, #0x1
+  18:	38636881 	ldrb	w1, [x4, x3]
+  1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
+  20:	aa0003e1 	mov	x1, x0
+  24:	d2800808 	mov	x8, #0x40                  	// #64
+  28:	d4000001 	svc	#0x0
+  2c:	d65f03c0 	ret
+  30:	52800002 	mov	w2, #0x0                   	// #0
+  34:	17fffffb 	b	20 <sys_caller+0x20>
+
+
+
+GCC 6.4.0:
+==========
+
+main.6.4.0.o:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000000000000 <sys_caller>:
+   0:	39400001 	ldrb	w1, [x0]
+   4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
+   8:	d2800023 	mov	x3, #0x1                   	// #1
+   c:	d1000404 	sub	x4, x0, #0x1
+  10:	2a0303e2 	mov	w2, w3
+  14:	91000463 	add	x3, x3, #0x1
+  18:	38636881 	ldrb	w1, [x4, x3]
+  1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
+  20:	aa0003e1 	mov	x1, x0
+  24:	d2800808 	mov	x8, #0x40                  	// #64
+  28:	d4000001 	svc	#0x0
+  2c:	d65f03c0 	ret
+  30:	52800002 	mov	w2, #0x0                   	// #0
+  34:	17fffffb 	b	20 <sys_caller+0x20>
+
+
+> [...]
+> 
+> Cheers
+> ---Dave
+> 
+
+-- 
+Regards,
+Vincenzo
