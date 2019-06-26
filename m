@@ -2,94 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B8956DC7
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2019 17:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A358F56DE1
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2019 17:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbfFZPgK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 26 Jun 2019 11:36:10 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:56230 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726104AbfFZPgJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Jun 2019 11:36:09 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 9AE0D300412D;
-        Wed, 26 Jun 2019 15:36:09 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (dhcp-192-180.str.redhat.com [10.33.192.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2768A60BE5;
-        Wed, 26 Jun 2019 15:36:05 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux API <linux-api@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-x86_64@vger.kernel.org,
+        id S1727641AbfFZPip (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Jun 2019 11:38:45 -0400
+Received: from 216-12-86-13.cv.mvl.ntelos.net ([216.12.86.13]:38774 "EHLO
+        brightrain.aerifal.cx" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbfFZPip (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Jun 2019 11:38:45 -0400
+Received: from dalias by brightrain.aerifal.cx with local (Exim 3.15 #2)
+        id 1hgA05-0005dv-00; Wed, 26 Jun 2019 15:38:21 +0000
+Date:   Wed, 26 Jun 2019 11:38:21 -0400
+From:   Rich Felker <dalias@libc.org>
+To:     Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Carlos O'Donell <carlos@redhat.com>, X86 ML <x86@kernel.org>
-Subject: Re: Detecting the availability of VSYSCALL
-References: <87v9wty9v4.fsf@oldenburg2.str.redhat.com>
-        <alpine.DEB.2.21.1906251824500.32342@nanos.tec.linutronix.de>
-        <87lfxpy614.fsf@oldenburg2.str.redhat.com>
-        <CALCETrVh1f5wJNMbMoVqY=bq-7G=uQ84BUkepf5RksA3vUopNQ@mail.gmail.com>
-        <87a7e5v1d9.fsf@oldenburg2.str.redhat.com>
-        <CALCETrUDt4v3=FqD+vseGTKTuG=qY+1LwRPrOrU8C7vCVbo=uA@mail.gmail.com>
-        <87o92kmtp5.fsf@oldenburg2.str.redhat.com>
-        <CA96B819-30A9-43D3-9FE3-2D551D35369E@amacapital.net>
-        <87r27gjss3.fsf@oldenburg2.str.redhat.com>
-        <534B9F63-E949-4CF5-ACAC-71381190846F@amacapital.net>
-Date:   Wed, 26 Jun 2019 17:36:03 +0200
-In-Reply-To: <534B9F63-E949-4CF5-ACAC-71381190846F@amacapital.net> (Andy
-        Lutomirski's message of "Wed, 26 Jun 2019 08:21:05 -0700")
-Message-ID: <87a7e4jr4s.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC] remove arch/sh?
+Message-ID: <20190626153820.GP1506@brightrain.aerifal.cx>
+References: <20190625085616.GA32399@lst.de>
+ <ccfa78f3-35c2-1d26-98b5-b21a76b90e1e@physik.fu-berlin.de>
+ <20190625112146.GA9580@angband.pl>
+ <401b12c0-d175-2720-d26c-b96ce3b28c71@physik.fu-berlin.de>
+ <CAK8P3a3irwwwCQ_kPh5BTg-jGGbJOj=3fhVrTDBUZgH1V7bpFQ@mail.gmail.com>
+ <20190625142832.GD1506@brightrain.aerifal.cx>
+ <CAK8P3a0j_9fzZxhxqCMHfoJ5DdZpHFvANEPqs1pbP23TCei6ng@mail.gmail.com>
+ <87tvccr3kv.wl-ysato@users.sourceforge.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Wed, 26 Jun 2019 15:36:09 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87tvccr3kv.wl-ysato@users.sourceforge.jp>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Andy Lutomirski:
+On Wed, Jun 26, 2019 at 08:25:20PM +0900, Yoshinori Sato wrote:
+> On Wed, 26 Jun 2019 00:48:09 +0900,
+> Arnd Bergmann wrote:
+> > 
+> > On Tue, Jun 25, 2019 at 4:28 PM Rich Felker <dalias@libc.org> wrote:
+> > > On Tue, Jun 25, 2019 at 02:50:01PM +0200, Arnd Bergmann wrote:
+> > > > don't build, or are incomplete and not worked on for a long
+> > > > time, compared to the bits that are known to work and that someone
+> > > > is still using or at least playing with.
+> > > > I guess a lot of the SoCs that have no board support other than
+> > > > the Hitachi/Renesas reference platform can go away too, as any products
+> > > > based on those boards have long stopped updating their kernels.
+> > >
+> > > My intent here was always, after getting device tree theoretically
+> > > working for some reasonable subset of socs/boards, drop the rest and
+> > > add them back as dts files (possibly plus some small drivers) only if
+> > > there's demand/complaint about regression.
+> > 
+> > Do you still think that this is a likely scenario for the future though?
+> > 
+> > If nobody's actively working on the DT support for the old chips and
+> > this is unlikely to change soon, removing the known-broken bits earlier
+> > should at least make it easier to keep maintaining the working bits
+> > afterwards.
+> > 
+> > FWIW, I went through the SH2, SH2A and SH3 based boards that
+> > are supported in the kernel and found almost all of them to
+> > be just reference platforms, with no actual product ever merged.
+> > IIRC the idea back then was that users would supply their
+> > own board files as an add-on patch, but I would consider all the
+> > ones that did to be obsolete now.
+> > 
+> > HP Jornada 6xx is the main machine that was once supported, but
+> > given that according to the defconfig file it only comes with 4MB
+> > of RAM, it is unlikely to still boot any 5.x kernel, let alone user
+> > space (wikipedia claims there were models with 16MB of RAM,
+> > but that is still not a lot these days).
+> > 
+> > "Magicpanel" was another product that is supported in theory, but
+> > the google search showed the 2007 patch for the required
+> > flash storage driver that was never merged.
+> > 
+> > Maybe everything but J2 and SH4(a) can just get retired?
+> > 
+> >      Arnd
+> 
+> I also have some boards, so it's possible to rewrite more.
+> I can not rewrite the target I do not have, so I think that
+> there is nothing but to retire.
 
-> I’m wondering if we can still do it: add a note or other ELF indicator
-> that says “I don’t need vsyscalls.”  Then we can change the default
-> mode to “no vsyscalls if the flag is there, else execute-only
-> vsyscalls”.
->
-> Would glibc go along with this?
+To clarify, are you agreeing with Arnd's suggestion to retire/remove
+everything but jcore and sh4[a]?
 
-I think we can make it happen, at least for relatively recent glibc
-linked with current binutils.  It's not trivial because it requires
-coordination among multiple projects.  We have three or four widely used
-link editors now, but we could make it happen.  (Although getting to
-PT_GNU_PROPERTY wasn't exactly easy.)
-
-> Would enterprise distros consider backporting such a thing?
-
-Enterprise distros aren't the problem here because they can't remove
-vsyscall support for quite a while due to existing customer binaries.
-For them, it would just be an additional (and welcome) hardening
-opportunity.
-
-The challenge here are container hosting platforms which have already
-disabled vsyscall, presumably to protect the container host itself.
-They would need to rebuild the container host userspace with the markup
-to keep it protected, and then they could switch to a kernel which has
-vsyscall-unless-opt-out logic.  That seems to be a bit of a stretch
-because from their perspective, there's no problem today.
-
-My guess is that it would be easier to have a personality flag.  Then
-they could keep the host largely as-is, and would “only” need a
-mechanism to pass through the flag from the image metadata to the actual
-container creation.  It's still a change to the container host (and the
-kernel change is required as well), but it would not require relinking
-every statically linked binary.
-
-Thanks,
-Florian
+Rich
