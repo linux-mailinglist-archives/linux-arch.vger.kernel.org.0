@@ -2,64 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4C556231
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2019 08:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA8956271
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2019 08:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725930AbfFZGPG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Jun 2019 02:15:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50572 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725379AbfFZGPF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Jun 2019 02:15:05 -0400
-Received: from localhost.localdomain (unknown [223.93.147.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C8482085A;
-        Wed, 26 Jun 2019 06:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561529704;
-        bh=Qb7S7VmlTrT6/A7/IDJyeqlcu5dCbxmCOwSP5d27DvI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=k6tN/2D42TQF3XWlBDNaoyAISLiYPFNyHa+vPlFEQ3ypXFYM23S9+0I1dUsOxbOJL
-         u0TdxWJpGo9+/r1BHAPb0l4VCbtx3lgBD4uMtzTBcC11dL0u+MpEGwocwAbyIcCS/2
-         LrS4CFfbJ5TgZRBClUAmt1khuq0TE7m/vXC9J5+8=
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky fixup gcc unwind for v5.2
-Date:   Wed, 26 Jun 2019 14:14:23 +0800
-Message-Id: <1561529663-29852-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1726462AbfFZGi5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Jun 2019 02:38:57 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:45176 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbfFZGi5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Jun 2019 02:38:57 -0400
+Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hg1Zx-0005Tw-AG; Wed, 26 Jun 2019 08:38:49 +0200
+Date:   Wed, 26 Jun 2019 08:38:48 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+cc:     linux-arch@vger.kernel.org,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, catalin.marinas@arm.com,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux@armlinux.org.uk,
+        Ralf Baechle <ralf@linux-mips.org>, paul.burton@mips.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        salyzyn@android.com, pcc@google.com, shuah@kernel.org,
+        0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
+        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com,
+        Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
+In-Reply-To: <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
+Message-ID: <alpine.DEB.2.21.1906260832470.32342@nanos.tec.linutronix.de>
+References: <20190624133607.GI29497@fuggles.cambridge.arm.com> <20190625161804.38713-1-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+On Tue, 25 Jun 2019, Thomas Gleixner wrote:
+> On Tue, 25 Jun 2019, Vincenzo Frascino wrote:
+> > do_hres() in the vDSO generic library masks the hw counter value
+> > immediately after reading it.
+> > 
+> > Postpone the mask application after checking if the syscall fallback is
+> > enabled, in order to be able to detect a possible fallback for the
+> > architectures that have masks smaller than ULLONG_MAX.
+> 
+> Right. This only worked on x86 because the mask is there ULLONG_MAX for all
+> VDSO capable clocksources, i.e. that ever worked just by chance.
 
-Only one bugfix for v5.2, please pull.
+But it's actually worse than that:
 
-The following changes since commit 9e0babf2c06c73cda2c0cd37a1653d823adb40ec:
+> > +		cycles &= vd->mask;
+> >  		if (cycles > last)
+> >  			ns += (cycles - last) * vd->mult;
+> >  		ns >>= vd->shift;
 
-  Linux 5.2-rc5 (2019-06-16 08:49:45 -1000)
+This is broken for any clocksource which can legitimately wrap around. The
+core timekeeping does the right thing:
 
-are available in the git repository at:
+     		 (cycles - last) & mask
 
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.2-fixup-gcc-unwind
+That makes sure that a wraparound is correctly handled. With the above the
+wrap around would be ignored due to
 
-for you to fetch changes up to 19e5e2ae9c883f5651eaaeab2f258e2c4b78fda3:
+     	    if (cycles > last)
 
-  csky: Fixup libgcc unwind error (2019-06-26 13:45:48 +0800)
+Stupid me. I should have added big fat comments to the x86 vdso why this
+all works correctly and only correctly for the x86 crud. That was part of
+squeezing the last cycles out of the vdso.
 
-----------------------------------------------------------------
-arch/csky fixup for 5.2
+Sorry for not noticing earlier. Working on a fix.
 
-Only 1 fixup patch for rt_sigframe in signal.c
+Thanks,
 
-----------------------------------------------------------------
-Guo Ren (1):
-      csky: Fixup libgcc unwind error
+	tglx
 
- arch/csky/kernel/signal.c | 5 +++++
- 1 file changed, 5 insertions(+)
+
