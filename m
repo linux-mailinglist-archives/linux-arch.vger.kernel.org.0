@@ -2,410 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D4C5712E
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2019 21:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F068157F50
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2019 11:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbfFZTBM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Jun 2019 15:01:12 -0400
-Received: from foss.arm.com ([217.140.110.172]:39258 "EHLO foss.arm.com"
+        id S1726401AbfF0J1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Jun 2019 05:27:24 -0400
+Received: from foss.arm.com ([217.140.110.172]:49994 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726104AbfFZTBM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Jun 2019 15:01:12 -0400
+        id S1726293AbfF0J1Y (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 27 Jun 2019 05:27:24 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D1C0360;
-        Wed, 26 Jun 2019 12:01:10 -0700 (PDT)
-Received: from [192.168.1.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B7403F718;
-        Wed, 26 Jun 2019 12:01:07 -0700 (PDT)
-Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
- implementation
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-arch@vger.kernel.org, Shijith Thotton <sthotton@marvell.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huw Davies <huw@codeweavers.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Will Deacon <will.deacon@arm.com>,
-        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        linux-mips@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Shuah Khan <shuah@kernel.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EA992B;
+        Thu, 27 Jun 2019 02:27:23 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BA343F718;
+        Thu, 27 Jun 2019 02:27:19 -0700 (PDT)
+Date:   Thu, 27 Jun 2019 10:27:17 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-5-vincenzo.frascino@arm.com>
- <20190625153336.GZ2790@e103592.cambridge.arm.com>
- <f5ac379a-731d-0662-2f5b-bd046e3bd1c5@arm.com>
- <20190626161413.GA2790@e103592.cambridge.arm.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <19ebd45a-b666-d7de-fd9e-2b72e18892d9@arm.com>
-Date:   Wed, 26 Jun 2019 20:01:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        libc-alpha <libc-alpha@sourceware.org>
+Subject: Re: [PATCH] binfmt_elf: Extract .note.gnu.property from an ELF file
+Message-ID: <20190627092715.GB2790@e103592.cambridge.arm.com>
+References: <20190501211217.5039-1-yu-cheng.yu@intel.com>
+ <20190502111003.GO3567@e103592.cambridge.arm.com>
+ <CALCETrVZCzh+KFCF6ijuf4QEPn=R2gJ8FHLpyFd=n+pNOMMMjA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190626161413.GA2790@e103592.cambridge.arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrVZCzh+KFCF6ijuf4QEPn=R2gJ8FHLpyFd=n+pNOMMMjA@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Dave,
+On Wed, Jun 26, 2019 at 10:14:07AM -0700, Andy Lutomirski wrote:
+> On Thu, May 2, 2019 at 4:10 AM Dave Martin <Dave.Martin@arm.com> wrote:
 
-thank you for the quick turn around.
+[...]
 
-On 6/26/19 5:14 PM, Dave Martin wrote:
-> On Wed, Jun 26, 2019 at 02:27:59PM +0100, Vincenzo Frascino wrote:
->> Hi Dave,
->>
->> On 25/06/2019 16:33, Dave Martin wrote:
->>> On Fri, Jun 21, 2019 at 10:52:31AM +0100, Vincenzo Frascino wrote:
->>>> To take advantage of the commonly defined vdso interface for
->>>> gettimeofday the architectural code requires an adaptation.
->>>>
->>>> Re-implement the gettimeofday vdso in C in order to use lib/vdso.
->>>>
->>>> With the new implementation arm64 gains support for CLOCK_BOOTTIME
->>>> and CLOCK_TAI.
->>>>
->>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
->>>> Cc: Will Deacon <will.deacon@arm.com>
->>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>> Tested-by: Shijith Thotton <sthotton@marvell.com>
->>>> Tested-by: Andre Przywara <andre.przywara@arm.com>
->>>
->>> [...]
->>>
->>>> diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
->>>> new file mode 100644
->>>> index 000000000000..bc3cb6738051
->>>> --- /dev/null
->>>> +++ b/arch/arm64/include/asm/vdso/gettimeofday.h
->>>> @@ -0,0 +1,86 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>> +/*
->>>> + * Copyright (C) 2018 ARM Limited
->>>> + */
->>>> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
->>>> +#define __ASM_VDSO_GETTIMEOFDAY_H
->>>> +
->>>> +#ifndef __ASSEMBLY__
->>>> +
->>>> +#include <asm/unistd.h>
->>>> +#include <uapi/linux/time.h>
->>>> +
->>>> +#define VDSO_HAS_CLOCK_GETRES		1
->>>> +
->>>> +static __always_inline int gettimeofday_fallback(
->>>> +					struct __kernel_old_timeval *_tv,
->>>> +					struct timezone *_tz)
->>>
->>> Out of interest, does this need to be __always_inline?
->>>
->>
->> It is a design choice. Philosophically, I prefer to control and reduce the scope
->> of the decisions the compiler has to make in order to not have surprises.
->>
->>>> +{
->>>> +	register struct timezone *tz asm("x1") = _tz;
->>>> +	register struct __kernel_old_timeval *tv asm("x0") = _tv;
->>>> +	register long ret asm ("x0");
->>>> +	register long nr asm("x8") = __NR_gettimeofday;
->>>> +
->>>> +	asm volatile(
->>>> +	"       svc #0\n"
->>>
->>> Can inlining of this function result in non-trivial expressions being
->>> substituted for _tz or _tv?
->>>
->>> A function call can clobber register asm vars that are assigned to the
->>> caller-save registers or that the PCS uses for function arguments, and
->>> the situations where this can happen are poorly defined AFAICT.  There's
->>> also no reliable way to detect at build time whether the compiler has
->>> done this, and no robust way to stop if happening.
->>>
->>> (IMHO the compiler is wrong to do this, but it's been that way for ever,
->>> and I think I saw GCC 9 show this behaviour recently when I was
->>> investigating something related.)
->>>
->>>
->>> To be safe, it's better to put this out of line, or remove the reg asm()
->>> specifiers, mark x0-x18 and lr as clobbered here (so that the compiler
->>> doesn't map arguments to them), and put movs in the asm to move things
->>> into the right registers.  The syscall number can be passed with an "i"
->>> constraint.  (And yes, this sucks.)
->>>
->>> If the code this is inlined in is simple enough though, we can be fairly
->>> confident of getting away with it.
->>>
->>
->> I took very seriously what you are mentioning here because I think
->> that robustness of the code comes before than everything especially
->> in the kernel and I carried on some experiments to try to verify if
->> in this case is safe to assume that the compiler is doing the right
->> thing.
->>
->> Based on my investigation and on previous observations of the
->> generation of the vDSO library, I can conclude that the approach
->> seems safe due to the fact that the usage of this code is very
->> limited, the code itself is simple enough and that gcc would inline
->> this code anyway based on the current compilation options.
+> > A couple of questions before I look in more detail:
+> >
+> > 1) Can we rely on PT_GNU_PROPERTY being present in the phdrs to describe
+> > the NT_GNU_PROPERTY_TYPE_0 note?  If so, we can avoid trying to parse
+> > irrelevant PT_NOTE segments.
+> >
+> >
+> > 2) Are there standard types for things like the program property header?
+> > If not, can we add something in elf.h?  We should try to coordinate with
+> > libc on that.  Something like
+> >
 > 
-> I'd caution about "seems safe".  A lot of subtly wrong code not only
-> seems safe, but _is_ safe in its original context, in practice.  Add
-> some code to the vdso over time though, or tweak the compilation options
-> at some point in the future, or use a different compiler, and things
-> could still go wrong.
-> 
-> (Further comments below.)
-> 
+> Where did PT_GNU_PROPERTY come from?  Are there actual docs for it?
+> Can someone here tell us what the actual semantics of this new ELF
+> thingy are?  From some searching, it seems like it's kind of an ELF
+> note but kind of not.  An actual description would be fantastic.
 
-Allow me to provide a clarification on "seems safe" vs "is safe": my approach
-"seems safe" because I am providing empirical evidence to support my thesis, but
-I guess we both know that there is no simple way to prove in one way or another
-that the problem has a complete solution.
-The proposed problem involves suppositions on potential future code additions
-and changes of behavior of the compiler that I can't either control or prevent.
-In other words, I can comment and propose solutions only based on the current
-status of the things, and it is what my analysis targets, not on what will
-happen in future.
+https://github.com/hjl-tools/linux-abi/wiki/linux-abi-draft.pdf
 
-I will reply point by point below.
+I don't know _when_ it was added, and the description is minimal, but
+it's there.
 
->> The experiment that I did was to define some self-contained code that
->> tries to mimic what you are describing and compile it with 3
->> different versions of gcc (6.4, 8.1 and 8.3) and in all the tree
->> cases the behavior seems correct.
->>
->> Code:
->> =====
->>
->> typedef int ssize_t;
->> typedef int size_t;
->>
->> static int my_strlen(const char *s)
->> {
->> 	int i = 0;
->>
->> 	while (s[i] == '\0')
->> 		i++;
->>
->> 	return i;
->> }
->>
->> static inline ssize_t my_syscall(int fd, const void *buf, size_t count)
->> {
->> 	register ssize_t arg1 asm ("x0") = fd;
->> 	register const void *arg2 asm ("x1") = buf;
->> 	register size_t arg3 asm ("x2") = count;
->>
->> 	__asm__ volatile (
->> 		"mov x8, #64\n"
->> 		"svc #0\n"
->> 		: "=&r" (arg1)
->> 		: "r" (arg2), "r" (arg3)
->> 		: "x8"
->>         );
->>
->>         return arg1;
->> }
->>
->> void sys_caller(const char *s)
->> {
->> 	my_syscall(1, s, my_strlen(s));
->> }
->>
->>
->> GCC 8.3.0:
->> ==========
->>
->> main.8.3.0.o:     file format elf64-littleaarch64
->>
->>
->> Disassembly of section .text:
->>
->> 0000000000000000 <sys_caller>:
->>    0:	39400001 	ldrb	w1, [x0]
->>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
->>    8:	d2800023 	mov	x3, #0x1                   	// #1
->>    c:	d1000404 	sub	x4, x0, #0x1
->>   10:	2a0303e2 	mov	w2, w3
->>   14:	91000463 	add	x3, x3, #0x1
->>   18:	38636881 	ldrb	w1, [x4, x3]
->>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
->>   20:	aa0003e1 	mov	x1, x0
->>   24:	d2800808 	mov	x8, #0x40                  	// #64
->>   28:	d4000001 	svc	#0x0
->>   2c:	d65f03c0 	ret
->>   30:	52800002 	mov	w2, #0x0                   	// #0
->>   34:	17fffffb 	b	20 <sys_caller+0x20>
->>
->>
->> GCC 8.1.0:
->> ==========
->>
->> main.8.1.0.o:     file format elf64-littleaarch64
->>
->>
->> Disassembly of section .text:
->>
->> 0000000000000000 <sys_caller>:
->>    0:	39400001 	ldrb	w1, [x0]
->>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
->>    8:	d2800023 	mov	x3, #0x1                   	// #1
->>    c:	d1000404 	sub	x4, x0, #0x1
->>   10:	2a0303e2 	mov	w2, w3
->>   14:	91000463 	add	x3, x3, #0x1
->>   18:	38636881 	ldrb	w1, [x4, x3]
->>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
->>   20:	aa0003e1 	mov	x1, x0
->>   24:	d2800808 	mov	x8, #0x40                  	// #64
->>   28:	d4000001 	svc	#0x0
->>   2c:	d65f03c0 	ret
->>   30:	52800002 	mov	w2, #0x0                   	// #0
->>   34:	17fffffb 	b	20 <sys_caller+0x20>
->>
->>
->>
->> GCC 6.4.0:
->> ==========
->>
->> main.6.4.0.o:     file format elf64-littleaarch64
->>
->>
->> Disassembly of section .text:
->>
->> 0000000000000000 <sys_caller>:
->>    0:	39400001 	ldrb	w1, [x0]
->>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
->>    8:	d2800023 	mov	x3, #0x1                   	// #1
->>    c:	d1000404 	sub	x4, x0, #0x1
->>   10:	2a0303e2 	mov	w2, w3
->>   14:	91000463 	add	x3, x3, #0x1
->>   18:	38636881 	ldrb	w1, [x4, x3]
->>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
->>   20:	aa0003e1 	mov	x1, x0
->>   24:	d2800808 	mov	x8, #0x40                  	// #64
->>   28:	d4000001 	svc	#0x0
->>   2c:	d65f03c0 	ret
->>   30:	52800002 	mov	w2, #0x0                   	// #0
->>   34:	17fffffb 	b	20 <sys_caller+0x20>
-> 
-> Thanks for having a go at this.  If the compiler can show the
-> problematic behaviour, it looks like your could could probably trigger
-> it, and as you observe, it doesn't trigger.
-> 
-> I am sure I have seen it in the past, but today I am struggling
-> to tickle the compiler in the right way.  My original reproducer may
-> have involved LTO, but either way I don't still have it :(
->
+(I'd say it's fairly obvious how it should be used, but it could do with
+some clarification...)
 
-vDSO library is a shared object not compiled with LTO as far as I can see, hence
-if this involved LTO should not applicable in this case.
+> Also, I don't think there's any actual requirement that the upstream
+> kernel recognize existing CET-enabled RHEL 8 binaries as being
+> CET-enabled.  I tend to think that RHEL 8 jumped the gun here.  While
+> the upstream kernel should make some reasonble effort to make sure
+> that RHEL 8 binaries will continue to run, I don't see why we need to
+> go out of our way to keep the full set of mitigations available for
+> binaries that were developed against a non-upstream kernel.
 
+If that's an accpetable approach, it should certainly make our life
+easier.
 
-> 
-> The classic example of this (triggered directly and not due to inlining)
-> would be something like:
-> 
-> int bar(int, int);
-> 
-> void foo(int x, int y)
-> {
-> 	register int x_ asm("r0") = x;
-> 	register int y_ asm("r1") = bar(x, y);
-> 
-> 	asm volatile (
-> 		"svc	#0"
-> 		:: "r" (x_), "r" (y_)
-> 		: "memory"
-> 	);
-> }
-> 
-> ->
-> 
-> 0000000000000000 <foo>:
->    0:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
->    4:   910003fd        mov     x29, sp
->    8:   94000000        bl      0 <bar>
->    c:   2a0003e1        mov     w1, w0
->   10:   d4000001        svc     #0x0
->   14:   a8c17bfd        ldp     x29, x30, [sp], #16
->   18:   d65f03c0        ret
->
+> In fact, if we handle the legacy bitmap differently from RHEL 8, we
+> may *have* to make sure that we don't recognize existing RHEL 8
+> binaries as CET-enabled.
 
-Contextualized to what my vdso fallback functions do, this should not be a
-concern because in no case a function result is directly set to a variable
-declared as register.
+Can't comment on that.  If the existing RHEL 8 binaries strictly don't
+have the PT_GNU_PROPERTY phdr, then this might serve a dual purpose ...
+otherwise, x86 might need some additional annotation for new binaries.
 
-Since the vdso fallback functions serve a very specific and limited purpose, I
-do not expect that that code is going to change much in future.
+I'll leave it for others to comment.
 
-The only thing that can happen is something similar to what I wrote in my
-example, which as I empirically proved does not trigger the problematic behavior.
-
-> 
-> The gcc documentation is vague and ambiguous about precisely whan this
-> can happen and about how to avoid it.
-> 
-
-On this I agree, it is not very clear, but this seems more something to raise
-with the gcc folks in order to have a more "explicit" description that leaves no
-room to the interpretation.
-
-...
-
-> 
-> However, the workaround is cheap, and to avoid the chance of subtle
-> intermittent code gen bugs it may be worth it:
-> 
-> void foo(int x, int y)
-> {
-> 	asm volatile (
-> 		"mov	x0, %0\n\t"
-> 		"mov	x1, %1\n\t"
-> 		"svc	#0"
-> 		:: "r" (x), "r" (bar(x, y))
-> 		: "r0", "r1", "memory"
-> 	);
-> }
-> 
-> ->
-> 
-> 0000000000000000 <foo>:
->    0:   a9be7bfd        stp     x29, x30, [sp, #-32]!
->    4:   910003fd        mov     x29, sp
->    8:   f9000bf3        str     x19, [sp, #16]
->    c:   2a0003f3        mov     w19, w0
->   10:   94000000        bl      0 <bar>
->   14:   2a0003e2        mov     w2, w0
->   18:   aa1303e0        mov     x0, x19
->   1c:   aa0203e1        mov     x1, x2
->   20:   d4000001        svc     #0x0
->   24:   f9400bf3        ldr     x19, [sp, #16]
->   28:   a8c27bfd        ldp     x29, x30, [sp], #32
->   2c:   d65f03c0        ret
-> 
-> 
-> What do you think?
->
-
-The solution seems ok, thanks for providing it, but IMHO I think we should find
-a workaround for something that is broken, which, unless I am missing something
-major, this seems not the case.
-
-> Cheers
-> ---Dave
-> 
-
--- 
-Regards,
-Vincenzo
+Cheers
+---Dave
