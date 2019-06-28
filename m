@@ -2,54 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AF458F1F
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Jun 2019 02:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5766959255
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Jun 2019 06:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbfF1ApG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Jun 2019 20:45:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33356 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726579AbfF1ApF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 27 Jun 2019 20:45:05 -0400
-Subject: Re: [GIT PULL] csky fixup gcc unwind for v5.2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561682704;
-        bh=mkQ8RibRw6gwWJhsHFhTnCmSfeTNicYA7fdSh0sooUk=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=sPFr68fkzqA2AQpQx4iZ50Gki2u/52yaOy05BXg/Cvv3tJuJo9kOfCMdIf2/gayx7
-         DnoKnAz2CRtOvtuQvoJMMEnnjYjFJOyG+Kp4sIFaQbYSCTG8xzt6KfIDbZkqwma2tY
-         KVslwiY6pLi5GRC0DEO+KmNYwOCyvZhJTPDiINo4=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1561529663-29852-1-git-send-email-guoren@kernel.org>
-References: <1561529663-29852-1-git-send-email-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1561529663-29852-1-git-send-email-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git
- tags/csky-for-linus-5.2-fixup-gcc-unwind
-X-PR-Tracked-Commit-Id: 19e5e2ae9c883f5651eaaeab2f258e2c4b78fda3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 139ca258055057e64d59ec92b6fd1ad3ca3a9fbc
-Message-Id: <156168270492.1895.4552295813118856621.pr-tracker-bot@kernel.org>
-Date:   Fri, 28 Jun 2019 00:45:04 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org
+        id S1727075AbfF1EL0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Jun 2019 00:11:26 -0400
+Received: from guitar.tcltek.co.il ([192.115.133.116]:34164 "EHLO
+        mx.tkos.co.il" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725792AbfF1EL0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Jun 2019 00:11:26 -0400
+Received: from tarshish.tkos.co.il (unknown [10.0.8.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx.tkos.co.il (Postfix) with ESMTPS id 7DD9F44030A;
+        Fri, 28 Jun 2019 07:11:23 +0300 (IDT)
+From:   Baruch Siach <baruch@tkos.co.il>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, "Dmitry V . Levin" <ldv@altlinux.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        Baruch Siach <baruch@tkos.co.il>, Jiri Olsa <jolsa@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v3] bpf: fix uapi bpf_prog_info fields alignment
+Date:   Fri, 28 Jun 2019 07:08:45 +0300
+Message-Id: <02938ce219d535a8c7c29ce796b3d6ea59c3ed15.1561694925.git.baruch@tkos.co.il>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The pull request you sent on Wed, 26 Jun 2019 14:14:23 +0800:
+Merge commit 1c8c5a9d38f60 ("Merge
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next") undid the
+fix from commit 36f9814a494 ("bpf: fix uapi hole for 32 bit compat
+applications") by taking the gpl_compatible 1-bit field definition from
+commit b85fab0e67b162 ("bpf: Add gpl_compatible flag to struct
+bpf_prog_info") as is. That breaks architectures with 16-bit alignment
+like m68k. Add 31-bit pad after gpl_compatible to restore alignment of
+following fields.
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.2-fixup-gcc-unwind
+Thanks to Dmitry V. Levin his analysis of this bug history.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/139ca258055057e64d59ec92b6fd1ad3ca3a9fbc
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v3:
+Use alignment pad as Alexei Starovoitov suggested
 
-Thank you!
+v2:
+Use anonymous union with pad to make it less likely to break again in
+the future.
+---
+ include/uapi/linux/bpf.h       | 1 +
+ tools/include/uapi/linux/bpf.h | 1 +
+ 2 files changed, 2 insertions(+)
 
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index a8b823c30b43..29a5bc3d5c66 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3143,6 +3143,7 @@ struct bpf_prog_info {
+ 	char name[BPF_OBJ_NAME_LEN];
+ 	__u32 ifindex;
+ 	__u32 gpl_compatible:1;
++	__u32 :31; /* alignment pad */
+ 	__u64 netns_dev;
+ 	__u64 netns_ino;
+ 	__u32 nr_jited_ksyms;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index a8b823c30b43..29a5bc3d5c66 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3143,6 +3143,7 @@ struct bpf_prog_info {
+ 	char name[BPF_OBJ_NAME_LEN];
+ 	__u32 ifindex;
+ 	__u32 gpl_compatible:1;
++	__u32 :31; /* alignment pad */
+ 	__u64 netns_dev;
+ 	__u64 netns_ino;
+ 	__u32 nr_jited_ksyms;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.20.1
+
