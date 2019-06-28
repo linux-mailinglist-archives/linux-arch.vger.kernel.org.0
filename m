@@ -2,142 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 872925A45A
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Jun 2019 20:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5CD5A564
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Jun 2019 21:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbfF1Slj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Jun 2019 14:41:39 -0400
-Received: from mail-eopbgr680096.outbound.protection.outlook.com ([40.107.68.96]:59556
-        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726497AbfF1Sli (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 28 Jun 2019 14:41:38 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fExCDPy2DRiTZAkM2VeUX6WX+vcLVkzEFrt6yAnj5bEkbLV/D1nwbyiOnNTM3htUHvVJvWmX/BObemY2qH3QEyyWJ+KDZUdBwZ9Ii+lR5bWFvvszfnxVephhe/wWT/jf97ElIBFXZK+rU4/nkLNVJqIszEYrW6tY/JlDcLUabrWhWEZOl5DQgj+8qKtzlRccym5uhaWBXj8OiFLuFjscN4IWqOIKbPULudow53u8+rMgT9jQTfsZsLUXPLpuMVek/frHdntTMJQvJksHSo8NM+FzZe4BwMYYYfUH7NVzaBBqXu+eT7cbTaKRDGFQJmoPt0jm4/fo57tQdPQ11psKVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mLwjYMi/BBolilHTYkIuishxYaJTpZbSDu6cNT6co3s=;
- b=bE45Itfz0p6WciEKE9dKPByIEds8lxtkHtBt9K0HzCUVlwlJV6JJlW74EC5Hj/9XOXqd8O02OvVhdnaDyBTFKplKPsl8D32VxGBieNbWS8Kfr8rj+ROazYfQOm3+383/ZSxJOZoD2zdK6oucVqONMoyg1FF6KECZ4dQk38jlTdWhiIpurYCZWeVxW/HuE6t9Zi7aPKzeE2mVl4leWB/anRtOPzC7aYRFxakuxbPF3BJpLs8FyqXJsQxs/rPnYfGFvpj0m9FxAuweMN/4C3pHZC2t4+3G/f73FeTzw5whMTTAA11dpwiN1FlelJCkmJtrGud1fRtqbt9kuWdJEdKnHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=microsoft.com;dmarc=pass action=none
- header.from=microsoft.com;dkim=pass header.d=microsoft.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mLwjYMi/BBolilHTYkIuishxYaJTpZbSDu6cNT6co3s=;
- b=Lb3lcQCJ12mg4HhBY+MWgt8+bXn6kYN3YYTjyBNCTiAgbP2JdUaHJMJoGcnMOKYU9uKqAIbElR3y439rl8mx1iOxlkXkrdBkedGSpOc0zzx7ztm6bhmE8RSoCmftKCUBaoGanmho9T6Q/o/zAincWfCG6a6KMn2afrurIySzyOA=
-Received: from BL0PR2101MB1348.namprd21.prod.outlook.com (20.177.244.150) by
- BL0PR2101MB0979.namprd21.prod.outlook.com (52.132.20.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.4; Fri, 28 Jun 2019 18:40:56 +0000
-Received: from BL0PR2101MB1348.namprd21.prod.outlook.com
- ([fe80::4814:2790:9342:9582]) by BL0PR2101MB1348.namprd21.prod.outlook.com
- ([fe80::4814:2790:9342:9582%2]) with mapi id 15.20.2052.005; Fri, 28 Jun 2019
- 18:40:56 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     Sasha Levin <sashal@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
+        id S1727086AbfF1Tu2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Jun 2019 15:50:28 -0400
+Received: from mga05.intel.com ([192.55.52.43]:42462 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726819AbfF1Tu1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Jun 2019 15:50:27 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Jun 2019 12:50:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,428,1557212400"; 
+   d="scan'208";a="164756004"
+Received: from yyu32-desk1.sc.intel.com ([10.144.153.205])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Jun 2019 12:50:26 -0700
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: RE: [PATCH v6 18/19] x86: Add support for generic vDSO
-Thread-Topic: [PATCH v6 18/19] x86: Add support for generic vDSO
-Thread-Index: AQHVFvJX/FWqgsMYXUWDuWvrdwhvDKaDyyHwgBdL5YCAAKgjAIAMJX0AgAHb0oCAADMqgIAAGq6AgAAKXgCAB3oPIA==
-Date:   Fri, 28 Jun 2019 18:40:56 +0000
-Message-ID: <BL0PR2101MB1348C26A569D83E9D7BB03CDD7FC0@BL0PR2101MB1348.namprd21.prod.outlook.com>
-References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
- <20190530141531.43462-19-vincenzo.frascino@arm.com>
- <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com>
- <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
- <20190614211710.GQ1513@sasha-vm>
- <alpine.DEB.2.21.1906221542270.5503@nanos.tec.linutronix.de>
- <20190623190929.GL2226@sasha-vm>
- <alpine.DEB.2.21.1906240006090.32342@nanos.tec.linutronix.de>
- <BYAPR21MB135202F46C4B023B51EBBFD0D7E00@BYAPR21MB1352.namprd21.prod.outlook.com>
- <alpine.DEB.2.21.1906240221550.32342@nanos.tec.linutronix.de>
-In-Reply-To: <alpine.DEB.2.21.1906240221550.32342@nanos.tec.linutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=mikelley@ntdev.microsoft.com;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2019-06-28T18:40:54.3514619Z;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=12c4760d-43f5-416f-b56a-135069a968d4;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=mikelley@microsoft.com; 
-x-originating-ip: [24.22.167.197]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 70d38258-35d1-4317-571d-08d6fbf82869
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BL0PR2101MB0979;
-x-ms-traffictypediagnostic: BL0PR2101MB0979:
-x-microsoft-antispam-prvs: <BL0PR2101MB09791FE051D90F996EBA6326D7FC0@BL0PR2101MB0979.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 00826B6158
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(346002)(136003)(39860400002)(396003)(366004)(189003)(199004)(4744005)(76116006)(4326008)(73956011)(446003)(10290500003)(478600001)(11346002)(5660300002)(68736007)(6246003)(71190400001)(71200400001)(33656002)(486006)(6436002)(25786009)(66066001)(99286004)(8990500004)(66476007)(14444005)(102836004)(256004)(66946007)(186003)(6916009)(7696005)(26005)(76176011)(54906003)(229853002)(6506007)(64756008)(66446008)(476003)(10090500001)(66556008)(86362001)(7736002)(305945005)(14454004)(74316002)(53936002)(52536014)(7416002)(316002)(2906002)(22452003)(9686003)(8676002)(8936002)(3846002)(6116002)(81156014)(81166006)(55016002)(41533002);DIR:OUT;SFP:1102;SCL:1;SRVR:BL0PR2101MB0979;H:BL0PR2101MB1348.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: microsoft.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: bHsin/NqNsXiytgX5zQnA258TkoJJuSoswu0uRaEiI76OTPz/cktBkMt7i6upscG7j3ppy/2eAT5Q4SUBudM8NoQFkxXW+8bpPN7vrDm01FgjR/2wNj7Gh/kJAlrHEF+vn7NnWOQeTFcBuOroI9fqO8yMd4FW3kDb4puD51K+E/GsmootqPGrRzbI5tF7gG69jxEhZVmiOvm4RlHmLMvCwkZ+52sTWzduP0VbuR1jw25SKAXuJTTz1jFJd4t61F4nsghE6+/GJgLvojhD/+CjxqWKma/UUiwhyCUDcShceWLSiOzyXL+7GqWf0t/94cTJ/XBN/dozmr/3Nd3uk0nECBwmtRdam7x19rimz56hLkfw6dd6WsRjhVlmyuGoLCS5bXyXJw6os/nG9CddCDuF8bJb7sQE6BhFRsDNgs91Lk=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70d38258-35d1-4317-571d-08d6fbf82869
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2019 18:40:56.6446
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mikelley@ntdev.microsoft.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR2101MB0979
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [RFC PATCH 1/3] mm: Introduce VM_IBT for CET legacy code bitmap
+Date:   Fri, 28 Jun 2019 12:41:56 -0700
+Message-Id: <20190628194158.2431-1-yu-cheng.yu@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de> Sent: Sunday, June 23, 2019 5:25=
- PM
->=20
-> I don't care whether this goes into 5.3 or later. If you can provide me
-> rebased self contained patches on top of
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/vdso
->=20
-> I'm happy to pull them in on top.
->=20
+The previous discussion of the IBT legacy code bitmap is here:
 
-I've sent out "v4" of the patch set to create a Hyper-V clocksource, based
-on the above tree.  It is contained to Hyper-V code, plus updating a #inclu=
-de
-statement in two of the VDSO files and in one KVM file.  If the KVM file
-update is problematic, the patch set can just wait until 5.3-rc1.
+    https://lkml.org/lkml/2019/6/6/1032
 
-Michael
+When CET Indirect Branch Tracking (IBT) is enabled, the processor expects
+every branch target is an ENDBR instruction, or the target's address is
+marked as legacy in the legacy code bitmap.  The bitmap covers the whole
+user-mode address space (TASK_SIZE_MAX for 64-bit, TASK_SIZE for IA32),
+and each bit represents one page of linear address range.
+
+This patch introduces VM_IBT for the bitmap.
+
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+---
+ fs/proc/task_mmu.c | 3 +++
+ include/linux/mm.h | 8 ++++++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 66725e262a77..d707390285d3 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -663,6 +663,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+ #endif /* CONFIG_ARCH_HAS_PKEYS */
+ #ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
+ 		[ilog2(VM_SHSTK)]	= "ss",
++#endif
++#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
++		[ilog2(VM_IBT)]		= "bt",
+ #endif
+ 	};
+ 	size_t i;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 921bae5fa7ab..a8da5bdfd7c9 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -299,12 +299,14 @@ extern unsigned int kobjsize(const void *objp);
+ #define VM_HIGH_ARCH_BIT_3	35	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_4	36	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_5	37	/* bit only usable on 64-bit architectures */
++#define VM_HIGH_ARCH_BIT_6	38	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_0	BIT(VM_HIGH_ARCH_BIT_0)
+ #define VM_HIGH_ARCH_1	BIT(VM_HIGH_ARCH_BIT_1)
+ #define VM_HIGH_ARCH_2	BIT(VM_HIGH_ARCH_BIT_2)
+ #define VM_HIGH_ARCH_3	BIT(VM_HIGH_ARCH_BIT_3)
+ #define VM_HIGH_ARCH_4	BIT(VM_HIGH_ARCH_BIT_4)
+ #define VM_HIGH_ARCH_5	BIT(VM_HIGH_ARCH_BIT_5)
++#define VM_HIGH_ARCH_6	BIT(VM_HIGH_ARCH_BIT_6)
+ #endif /* CONFIG_ARCH_USES_HIGH_VMA_FLAGS */
+ 
+ #ifdef CONFIG_ARCH_HAS_PKEYS
+@@ -348,6 +350,12 @@ extern unsigned int kobjsize(const void *objp);
+ # define VM_SHSTK	VM_NONE
+ #endif
+ 
++#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
++# define VM_IBT		VM_HIGH_ARCH_6
++#else
++# define VM_IBT		VM_NONE
++#endif
++
+ #ifndef VM_GROWSUP
+ # define VM_GROWSUP	VM_NONE
+ #endif
+-- 
+2.17.1
+
