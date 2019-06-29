@@ -2,159 +2,182 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB885A956
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Jun 2019 08:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2258E5AD75
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Jun 2019 23:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbfF2G5f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Jun 2019 02:57:35 -0400
-Received: from foss.arm.com ([217.140.110.172]:60628 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726156AbfF2G5f (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 29 Jun 2019 02:57:35 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D3C928;
-        Fri, 28 Jun 2019 23:57:34 -0700 (PDT)
-Received: from [192.168.1.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2026F3F246;
-        Fri, 28 Jun 2019 23:59:20 -0700 (PDT)
-Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
- implementation
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huw Davies <huw@codeweavers.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S1726962AbfF2VLF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Jun 2019 17:11:05 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:35954 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726913AbfF2VLF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Jun 2019 17:11:05 -0400
+Received: by mail-wm1-f65.google.com with SMTP id u8so12106727wmm.1
+        for <linux-arch@vger.kernel.org>; Sat, 29 Jun 2019 14:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=RnN8+araUIrTEOZsBFjA6OS/4XJR8mt8ImjbzPCHMmk=;
+        b=cBJYEcqwp4nEnjU9R3h0ZoBvLcdkF+X9VSuvAk68akW9zWj6vJCCrUirrNw3/UJXpZ
+         SSi6UaenWa0Nz3yg/67TqBZopY1REBJcPM9iGsKp74eLmIeevpViiAWYaLSc8dHNG0pF
+         KZf2GmGdFY+J7AvjAc7L709OZoTbDnzkr544g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=RnN8+araUIrTEOZsBFjA6OS/4XJR8mt8ImjbzPCHMmk=;
+        b=XVXRvVk7wGMzJHWMlnL8etu9ml6KitQVNAU5dPD5Yzn2cNJF1OCBrHvbuEpEWVHn4h
+         7taqS/20XeSVh/7+lVI13y1a+/e3QyaDp24BCMfaIhD1XJ42sOLkRmAUnCjdtYSxa/FT
+         AGbceEnfoUOcjWz783dy/hhL/z9ce33MIQsi0lNHZrgvMC4jQtbIKHqpgAyiaA2DCBmI
+         0NfUi2b/VqYhWLCuQO6n6IVc8+nSZdGJCQoFuJjc3rCkwp4SP6L6preQys62P3a1178f
+         vUQWBZNtP2NzMcP6bImNgO4rMsaZ1tjABgmc7/v0dAJHd4jDn/h4teCKHJ2dD+vedZDR
+         KueA==
+X-Gm-Message-State: APjAAAVrq8WoQQ7nu/zsd1BfAWpWx0PBHk29W0R0IrsFMrQ52wGeuoR9
+        H55c9k4xqG27LnnQYkJZiHz8KCp1koM=
+X-Google-Smtp-Source: APXvYqxWmfR5B1+1TqkLISrF7bzXpZeR5DVgcFemebukmqjixJbC8msEscsyZ7BAus7i/llmtJ0hug==
+X-Received: by 2002:a7b:c8d4:: with SMTP id f20mr12136114wml.90.1561842662451;
+        Sat, 29 Jun 2019 14:11:02 -0700 (PDT)
+Received: from localhost.localdomain (ip-94-112-62-100.net.upcbroadband.cz. [94.112.62.100])
+        by smtp.gmail.com with ESMTPSA id x20sm5402150wmc.1.2019.06.29.14.11.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sat, 29 Jun 2019 14:11:01 -0700 (PDT)
+From:   Andrea Parri <andrea.parri@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Peter Collingbourne <pcc@google.com>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-5-vincenzo.frascino@arm.com>
- <CGME20190628130921eucas1p239935b0771032c331911eacc1a69dd2e@eucas1p2.samsung.com>
- <1fd47b0d-f77f-8d07-c039-6ac9072834fc@samsung.com>
- <27386d82-2906-b541-f71d-3c61f5099bdf@arm.com>
- <530cd07e-0da7-1d83-be4e-b14813029424@samsung.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <06c264a8-8778-18b1-1094-4281a4a2abc9@arm.com>
-Date:   Sat, 29 Jun 2019 07:58:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-MIME-Version: 1.0
-In-Reply-To: <530cd07e-0da7-1d83-be4e-b14813029424@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>
+Subject: [PATCH] tools/memory-model: Update the informal documentation
+Date:   Sat, 29 Jun 2019 23:10:44 +0200
+Message-Id: <1561842644-5354-1-git-send-email-andrea.parri@amarulasolutions.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Sylwester,
+The formal memory consistency model has added support for plain accesses
+(and data races).  While updating the informal documentation to describe
+this addition to the model is highly desirable and important future work,
+update the informal documentation to at least acknowledge such addition.
 
-thank you for the quick turn around to my email.
+Signed-off-by: Andrea Parri <andrea.parri@amarulasolutions.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Will Deacon <will.deacon@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+Cc: Luc Maranget <luc.maranget@inria.fr>
+Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
+Cc: Akira Yokosawa <akiyks@gmail.com>
+Cc: Daniel Lustig <dlustig@nvidia.com>
+---
+ tools/memory-model/Documentation/explanation.txt | 47 +++++++++++-------------
+ tools/memory-model/README                        | 18 ++++-----
+ 2 files changed, 30 insertions(+), 35 deletions(-)
 
-On 6/28/19 5:50 PM, Sylwester Nawrocki wrote:
-> Hi Vincenzo,
-> 
-> On 6/28/19 16:32, Vincenzo Frascino wrote:
->> On 6/28/19 2:09 PM, Marek Szyprowski wrote:
->>> On 2019-06-21 11:52, Vincenzo Frascino wrote:
->>>> To take advantage of the commonly defined vdso interface for
->>>> gettimeofday the architectural code requires an adaptation.
->>>>
->>>> Re-implement the gettimeofday vdso in C in order to use lib/vdso.
->>>>
->>>> With the new implementation arm64 gains support for CLOCK_BOOTTIME
->>>> and CLOCK_TAI.
->>>>
->>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
->>>> Cc: Will Deacon <will.deacon@arm.com>
->>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>> Tested-by: Shijith Thotton <sthotton@marvell.com>
->>>> Tested-by: Andre Przywara <andre.przywara@arm.com>
->>>> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
->>>
->>> This patch causes serious regression on Samsung Exynos5433 SoC based 
->>> TM2(e) boards. The time in userspace is always set to begin of the epoch:
->>>
->>> # date 062813152019
->>> Fri Jun 28 13:15:00 UTC 2019
->>> # date
->>> Thu Jan  1 00:00:00 UTC 1970
->>> # date
->>> Thu Jan  1 00:00:00 UTC 1970
->>>
->>> I've noticed that since the patch landed in Linux next-20190625 and 
->>> bisect indeed pointed to this patch.
->>>
->> Thank you for reporting this, seems that the next that you posted is missing
->> some fixes for arm64.
->>
->> Could you please try the tree below?
->>
->> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/vdso
->>
->> Let us know if the functionality is restored. Otherwise the issue will require
->> further investigation.
->  
-> Marek is already out for holidays, I gave your tree a try but kernel from 
-> that branch was failing to boot on TM2(e).  
-> 
-> Then I have cherry-picked 5 patches from the branch that seemed to 
-> be missing in next-20190628:
-> 
-> 28028f3174cf1 (HEAD) MAINTAINERS: Fix Andy's surname and the directory entries of VDSO
-> ec8f8e4bf2206 arm64: vdso: Fix compilation with clang older than 8
-> 721882ebb5729 arm64: compat: Fix __arch_get_hw_counter() implementation
-> 7027fea977a3d arm64: Fix __arch_get_hw_counter() implementation
-> 10b305853fe22 lib/vdso: Make delta calculation work correctly
-> 48568d8c7f479 (tag: next-20190628, linux-next/master) Add linux-next specific files for 20190628
-> 
-> With those 5 additional patches on top of next-20190628 the problem
-> is not observed any more. date, ping, etc. seems to be working well.
-> 
-> # date
-> Fri Jun 28 16:39:22 UTC 2019
-> #
-> # systemctl stop systemd-timesyncd
-> #  
-> # date 062818392019
-> Fri Jun 28 18:39:00 UTC 2019
-> # date
-> Fri Jun 28 18:39:01 UTC 2019
-> # 
-> # date 062818432019; date
-> Fri Jun 28 18:43:00 UTC 2019
-> Fri Jun 28 18:43:00 UTC 2019
-> # date
-> Fri Jun 28 18:43:04 UTC 2019
->
-
-This seems ok, thanks for spending some time to test our patches against your board.
-
-If I may, I would like to ask to you one favor, could you please keep an eye on
-next and once those patches are merged repeat the test?
-
-I want just to make sure that the regression does not reappear.
-
-Have a nice weekend.
-
-> --
-> Regards,
-> Sylwester
-> 
-
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index 68caa9a976d0c..b42f7cd718242 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -42,7 +42,8 @@ linux-kernel.bell and linux-kernel.cat files that make up the formal
+ version of the model; they are extremely terse and their meanings are
+ far from clear.
+ 
+-This document describes the ideas underlying the LKMM.  It is meant
++This document describes the ideas underlying the LKMM, but excluding
++the modeling of bare C (or plain) shared memory accesses.  It is meant
+ for people who want to understand how the model was designed.  It does
+ not go into the details of the code in the .bell and .cat files;
+ rather, it explains in English what the code expresses symbolically.
+@@ -354,31 +355,25 @@ be extremely complex.
+ Optimizing compilers have great freedom in the way they translate
+ source code to object code.  They are allowed to apply transformations
+ that add memory accesses, eliminate accesses, combine them, split them
+-into pieces, or move them around.  Faced with all these possibilities,
+-the LKMM basically gives up.  It insists that the code it analyzes
+-must contain no ordinary accesses to shared memory; all accesses must
+-be performed using READ_ONCE(), WRITE_ONCE(), or one of the other
+-atomic or synchronization primitives.  These primitives prevent a
+-large number of compiler optimizations.  In particular, it is
+-guaranteed that the compiler will not remove such accesses from the
+-generated code (unless it can prove the accesses will never be
+-executed), it will not change the order in which they occur in the
+-code (within limits imposed by the C standard), and it will not
+-introduce extraneous accesses.
+-
+-This explains why the MP and SB examples above used READ_ONCE() and
+-WRITE_ONCE() rather than ordinary memory accesses.  Thanks to this
+-usage, we can be certain that in the MP example, P0's write event to
+-buf really is po-before its write event to flag, and similarly for the
+-other shared memory accesses in the examples.
+-
+-Private variables are not subject to this restriction.  Since they are
+-not shared between CPUs, they can be accessed normally without
+-READ_ONCE() or WRITE_ONCE(), and there will be no ill effects.  In
+-fact, they need not even be stored in normal memory at all -- in
+-principle a private variable could be stored in a CPU register (hence
+-the convention that these variables have names starting with the
+-letter 'r').
++into pieces, or move them around.  The use of READ_ONCE(), WRITE_ONCE(),
++or one of the other atomic or synchronization primitives prevents a
++large number of compiler optimizations.  In particular, it is guaranteed
++that the compiler will not remove such accesses from the generated code
++(unless it can prove the accesses will never be executed), it will not
++change the order in which they occur in the code (within limits imposed
++by the C standard), and it will not introduce extraneous accesses.
++
++The MP and SB examples above used READ_ONCE() and WRITE_ONCE() rather
++than ordinary memory accesses.  Thanks to this usage, we can be certain
++that in the MP example, the compiler won't reorder P0's write event to
++buf and P0's write event to flag, and similarly for the other shared
++memory accesses in the examples.
++
++Since private variables are not shared between CPUs, they can be
++accessed normally without READ_ONCE() or WRITE_ONCE().  In fact, they
++need not even be stored in normal memory at all -- in principle a
++private variable could be stored in a CPU register (hence the convention
++that these variables have names starting with the letter 'r').
+ 
+ 
+ A WARNING
+diff --git a/tools/memory-model/README b/tools/memory-model/README
+index 2b87f3971548c..fc07b52f20286 100644
+--- a/tools/memory-model/README
++++ b/tools/memory-model/README
+@@ -167,15 +167,15 @@ scripts	Various scripts, see scripts/README.
+ LIMITATIONS
+ ===========
+ 
+-The Linux-kernel memory model has the following limitations:
+-
+-1.	Compiler optimizations are not modeled.  Of course, the use
+-	of READ_ONCE() and WRITE_ONCE() limits the compiler's ability
+-	to optimize, but there is Linux-kernel code that uses bare C
+-	memory accesses.  Handling this code is on the to-do list.
+-	For more information, see Documentation/explanation.txt (in
+-	particular, the "THE PROGRAM ORDER RELATION: po AND po-loc"
+-	and "A WARNING" sections).
++The Linux-kernel memory model (LKMM) has the following limitations:
++
++1.	Compiler optimizations are not accurately modeled.  Of course,
++	the use of READ_ONCE() and WRITE_ONCE() limits the compiler's
++	ability to optimize, but under some circumstances it is possible
++	for the compiler to undermine the memory model.  For more
++	information, see Documentation/explanation.txt (in particular,
++	the "THE PROGRAM ORDER RELATION: po AND po-loc" and "A WARNING"
++	sections).
+ 
+ 	Note that this limitation in turn limits LKMM's ability to
+ 	accurately model address, control, and data dependencies.
 -- 
-Regards,
-Vincenzo
+2.7.4
+
