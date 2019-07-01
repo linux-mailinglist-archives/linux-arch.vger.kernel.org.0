@@ -2,211 +2,188 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B96F5B33A
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2019 06:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382D05B393
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2019 06:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727318AbfGAEEg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Jul 2019 00:04:36 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54884 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727359AbfGAEEg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Jul 2019 00:04:36 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6141V8L056277
-        for <linux-arch@vger.kernel.org>; Mon, 1 Jul 2019 00:04:35 -0400
-Received: from e12.ny.us.ibm.com (e12.ny.us.ibm.com [129.33.205.202])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tf9k9agpj-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Mon, 01 Jul 2019 00:04:35 -0400
-Received: from localhost
-        by e12.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-arch@vger.kernel.org> from <paulmck@linux.vnet.ibm.com>;
-        Mon, 1 Jul 2019 05:04:34 +0100
-Received: from b01cxnp22035.gho.pok.ibm.com (9.57.198.25)
-        by e12.ny.us.ibm.com (146.89.104.199) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 1 Jul 2019 05:04:29 +0100
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6144Slg51315040
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 1 Jul 2019 04:04:28 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1EEA7B205F;
-        Mon,  1 Jul 2019 04:04:28 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DD1CFB2064;
-        Mon,  1 Jul 2019 04:04:27 +0000 (GMT)
-Received: from paulmck-ThinkPad-W541 (unknown [9.85.128.230])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  1 Jul 2019 04:04:27 +0000 (GMT)
-Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
-        id D286C16C2E92; Sun, 30 Jun 2019 21:04:30 -0700 (PDT)
-Date:   Sun, 30 Jun 2019 21:04:30 -0700
-From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
-To:     Andrea Parri <andrea.parri@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Will Deacon <will.deacon@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>
-Subject: Re: [PATCH] tools/memory-model: Update the informal documentation
-Reply-To: paulmck@linux.ibm.com
-References: <1561842644-5354-1-git-send-email-andrea.parri@amarulasolutions.com>
+        id S1727407AbfGAE1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Jul 2019 00:27:24 -0400
+Received: from mail-eopbgr710128.outbound.protection.outlook.com ([40.107.71.128]:20608
+        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726402AbfGAE1X (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 1 Jul 2019 00:27:23 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O+5ztHcB5/MWlAS3mC7dDWDzvuAkKVtBntRETHtGvR615+JetjEe0160wL3WxU7lKQd7mkQDMF8R4lHR2Xf8AbkAKeLzHeR8nZbrJLyiTECsgJmdM85ypvpgoKoRc/lo+GsWjeWDD5BcdYcZVZ1TgR4cYrXtKqc8Zdxbdg2r/8X8B3GjJ0B/dkwv8rYSX6PepqVopRFxsI/Hpff8YWzOBX3Nd+V+0GP+RNPJjSQ6kj8zMyjy3sJc8kuxmDd9YdQRea7OUxf8TMsNe8isU6oygyCrynuqVW6+vOIM/Z6SB8FaZMYlKxa7PWguFJyeL2ZslFHZYp3n5euCz/ClKn1OgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iUx8dYZJZoQZhtqoA5Q0kVb1rYbNVyU6TcS8PN0kZDY=;
+ b=nvHekDrRmTL+n3q7KQMjd/qoye1pBXcrK8XncKydwHu5Q5GSyWhNavWlSLDEve13HiaSbNU7ahewpfsZyOnxk4QvyR3102sssw/VGqivwhDDQRXStA0M2ARaLFX8Xw3kHI/Iff+6jN2N2weMduJ3I3TVGZ4GuAzCOHEiJmER5PCg9RxXjee6EtrbSnWguE0yIZDBH56WN+l09A3Ri0wVD/v/Q73HacqUzs/Xm5q5tX4oHByuR8O5iq2lpl250SaZPYtFM4MpmMRm4yiROFjhUKku4OSB+DYpLXwznwt5z95rscfKmexQebRgz5f/I4U8RnTrwi2hkjjL+Li22RUMhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=microsoft.com;dmarc=pass action=none
+ header.from=microsoft.com;dkim=pass header.d=microsoft.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iUx8dYZJZoQZhtqoA5Q0kVb1rYbNVyU6TcS8PN0kZDY=;
+ b=HhLOhuhXdJ8aM6VVJ4aJMFaZNgULHgw+IRxQml9gQpa1AHSEGwLGDXnMbpR5NokN6NBeIP7pgdccqTAmD7SrVmq6rh4d+ON89s+mH5fFBEM7wQcNRexHoKa42p7ZBcF3Gu4vjEkr7yBK2C4o8qnM6bAwjUtDaHOcBvTYBYTVwps=
+Received: from BYAPR21MB1335.namprd21.prod.outlook.com (20.179.60.209) by
+ BYAPR21MB1159.namprd21.prod.outlook.com (20.179.56.77) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2073.1; Mon, 1 Jul 2019 04:25:41 +0000
+Received: from BYAPR21MB1335.namprd21.prod.outlook.com
+ ([fe80::71df:6122:56a2:2a4f]) by BYAPR21MB1335.namprd21.prod.outlook.com
+ ([fe80::71df:6122:56a2:2a4f%2]) with mapi id 15.20.2032.019; Mon, 1 Jul 2019
+ 04:25:41 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>
+CC:     Michael Kelley <mikelley@microsoft.com>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "olaf@aepfle.de" <olaf@aepfle.de>,
+        "apw@canonical.com" <apw@canonical.com>,
+        vkuznets <vkuznets@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        "vincenzo.frascino@arm.com" <vincenzo.frascino@arm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "ralf@linux-mips.org" <ralf@linux-mips.org>,
+        "paul.burton@mips.com" <paul.burton@mips.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "salyzyn@android.com" <salyzyn@android.com>,
+        "pcc@google.com" <pcc@google.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "huw@codeweavers.com" <huw@codeweavers.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "rkrcmar@redhat.com" <rkrcmar@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: [PATCH v5 0/2] clocksource/drivers: Create new Hyper-V clocksource
+ driver
+Thread-Topic: [PATCH v5 0/2] clocksource/drivers: Create new Hyper-V
+ clocksource driver
+Thread-Index: AQHVL8UKgEXPGJ6KoU20QYR9G1GCKQ==
+Date:   Mon, 1 Jul 2019 04:25:41 +0000
+Message-ID: <1561955054-1838-1-git-send-email-mikelley@microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: CY4PR01CA0015.prod.exchangelabs.com (2603:10b6:903:1f::25)
+ To BYAPR21MB1335.namprd21.prod.outlook.com (2603:10b6:a03:115::17)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=mikelley@microsoft.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 1.8.3.1
+x-originating-ip: [167.220.2.8]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 10c65511-f8aa-49bd-e704-08d6fddc2cea
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR21MB1159;
+x-ms-traffictypediagnostic: BYAPR21MB1159:|BYAPR21MB1159:
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-microsoft-antispam-prvs: <BYAPR21MB115912E3CA85AAFB1E06DA34D7F90@BYAPR21MB1159.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2399;
+x-forefront-prvs: 00851CA28B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(366004)(39860400002)(136003)(396003)(376002)(189003)(199004)(6436002)(54906003)(4326008)(316002)(110136005)(8676002)(10090500001)(6486002)(86362001)(81166006)(2616005)(476003)(486006)(81156014)(256004)(186003)(7736002)(2501003)(6116002)(3846002)(6512007)(36756003)(14444005)(66946007)(305945005)(73956011)(66446008)(66476007)(66556008)(64756008)(8936002)(22452003)(53936002)(4720700003)(25786009)(68736007)(26005)(99286004)(2906002)(5660300002)(50226002)(71200400001)(386003)(71190400001)(6506007)(10290500003)(102836004)(478600001)(14454004)(52116002)(2201001)(66066001)(7416002)(7406005);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR21MB1159;H:BYAPR21MB1335.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: microsoft.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: w2CeG83ZpwAQKnT3VJDdZ04wc8aIMQpQQPe9X7ul5S7jDQ9HcOwzfvWKkriE+sAAp8YvxMHZVS2QH8Ei8U4Yk07zQXw91r1mvunmpd7Rna4U0laXEMXO6BSdtwgnrgqQKVzXwyXCpDkSs2rCsZObWKxqIjFcuNVABjGCxMo7cofoRfHQHd+KL0ZmyVqGNaRbggRqXgYnEtX6t1zIGBKZzq6kkIkQaUdBr2s9JRy7CV/yfO/N/jPFL5QESa/w1Ag6hQs7X2KfHduTJdpegEdFkwxlsdhTxRdQu1JleJU4ow5qskQ4iF+wRB6Q/2I/eI09QBY/c/nK/whLG4HzDzHoVcx7njOmMMbBKjwio29xD4O2mTbK12t+7okF2MbZHNjcMTI82ssQMcj+Kg0GfmaYeSkfmfeMcUz2R49TqOCIGFI=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1561842644-5354-1-git-send-email-andrea.parri@amarulasolutions.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-TM-AS-GCONF: 00
-x-cbid: 19070104-0060-0000-0000-000003576B51
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011358; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01225723; UDB=6.00645233; IPR=6.01006934;
- MB=3.00027534; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-01 04:04:32
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070104-0061-0000-0000-000049F80EF4
-Message-Id: <20190701040430.GY26519@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-01_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907010049
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10c65511-f8aa-49bd-e704-08d6fddc2cea
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2019 04:25:41.1110
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lkmlmhk@microsoft.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR21MB1159
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 29, 2019 at 11:10:44PM +0200, Andrea Parri wrote:
-> The formal memory consistency model has added support for plain accesses
-> (and data races).  While updating the informal documentation to describe
-> this addition to the model is highly desirable and important future work,
-> update the informal documentation to at least acknowledge such addition.
-> 
-> Signed-off-by: Andrea Parri <andrea.parri@amarulasolutions.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Will Deacon <will.deacon@arm.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Jade Alglave <j.alglave@ucl.ac.uk>
-> Cc: Luc Maranget <luc.maranget@inria.fr>
-> Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
-> Cc: Akira Yokosawa <akiyks@gmail.com>
-> Cc: Daniel Lustig <dlustig@nvidia.com>
-
-Queued for review, thank you, Andrea!
-
-							Thanx, Paul
-
-> ---
->  tools/memory-model/Documentation/explanation.txt | 47 +++++++++++-------------
->  tools/memory-model/README                        | 18 ++++-----
->  2 files changed, 30 insertions(+), 35 deletions(-)
-> 
-> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> index 68caa9a976d0c..b42f7cd718242 100644
-> --- a/tools/memory-model/Documentation/explanation.txt
-> +++ b/tools/memory-model/Documentation/explanation.txt
-> @@ -42,7 +42,8 @@ linux-kernel.bell and linux-kernel.cat files that make up the formal
->  version of the model; they are extremely terse and their meanings are
->  far from clear.
->  
-> -This document describes the ideas underlying the LKMM.  It is meant
-> +This document describes the ideas underlying the LKMM, but excluding
-> +the modeling of bare C (or plain) shared memory accesses.  It is meant
->  for people who want to understand how the model was designed.  It does
->  not go into the details of the code in the .bell and .cat files;
->  rather, it explains in English what the code expresses symbolically.
-> @@ -354,31 +355,25 @@ be extremely complex.
->  Optimizing compilers have great freedom in the way they translate
->  source code to object code.  They are allowed to apply transformations
->  that add memory accesses, eliminate accesses, combine them, split them
-> -into pieces, or move them around.  Faced with all these possibilities,
-> -the LKMM basically gives up.  It insists that the code it analyzes
-> -must contain no ordinary accesses to shared memory; all accesses must
-> -be performed using READ_ONCE(), WRITE_ONCE(), or one of the other
-> -atomic or synchronization primitives.  These primitives prevent a
-> -large number of compiler optimizations.  In particular, it is
-> -guaranteed that the compiler will not remove such accesses from the
-> -generated code (unless it can prove the accesses will never be
-> -executed), it will not change the order in which they occur in the
-> -code (within limits imposed by the C standard), and it will not
-> -introduce extraneous accesses.
-> -
-> -This explains why the MP and SB examples above used READ_ONCE() and
-> -WRITE_ONCE() rather than ordinary memory accesses.  Thanks to this
-> -usage, we can be certain that in the MP example, P0's write event to
-> -buf really is po-before its write event to flag, and similarly for the
-> -other shared memory accesses in the examples.
-> -
-> -Private variables are not subject to this restriction.  Since they are
-> -not shared between CPUs, they can be accessed normally without
-> -READ_ONCE() or WRITE_ONCE(), and there will be no ill effects.  In
-> -fact, they need not even be stored in normal memory at all -- in
-> -principle a private variable could be stored in a CPU register (hence
-> -the convention that these variables have names starting with the
-> -letter 'r').
-> +into pieces, or move them around.  The use of READ_ONCE(), WRITE_ONCE(),
-> +or one of the other atomic or synchronization primitives prevents a
-> +large number of compiler optimizations.  In particular, it is guaranteed
-> +that the compiler will not remove such accesses from the generated code
-> +(unless it can prove the accesses will never be executed), it will not
-> +change the order in which they occur in the code (within limits imposed
-> +by the C standard), and it will not introduce extraneous accesses.
-> +
-> +The MP and SB examples above used READ_ONCE() and WRITE_ONCE() rather
-> +than ordinary memory accesses.  Thanks to this usage, we can be certain
-> +that in the MP example, the compiler won't reorder P0's write event to
-> +buf and P0's write event to flag, and similarly for the other shared
-> +memory accesses in the examples.
-> +
-> +Since private variables are not shared between CPUs, they can be
-> +accessed normally without READ_ONCE() or WRITE_ONCE().  In fact, they
-> +need not even be stored in normal memory at all -- in principle a
-> +private variable could be stored in a CPU register (hence the convention
-> +that these variables have names starting with the letter 'r').
->  
->  
->  A WARNING
-> diff --git a/tools/memory-model/README b/tools/memory-model/README
-> index 2b87f3971548c..fc07b52f20286 100644
-> --- a/tools/memory-model/README
-> +++ b/tools/memory-model/README
-> @@ -167,15 +167,15 @@ scripts	Various scripts, see scripts/README.
->  LIMITATIONS
->  ===========
->  
-> -The Linux-kernel memory model has the following limitations:
-> -
-> -1.	Compiler optimizations are not modeled.  Of course, the use
-> -	of READ_ONCE() and WRITE_ONCE() limits the compiler's ability
-> -	to optimize, but there is Linux-kernel code that uses bare C
-> -	memory accesses.  Handling this code is on the to-do list.
-> -	For more information, see Documentation/explanation.txt (in
-> -	particular, the "THE PROGRAM ORDER RELATION: po AND po-loc"
-> -	and "A WARNING" sections).
-> +The Linux-kernel memory model (LKMM) has the following limitations:
-> +
-> +1.	Compiler optimizations are not accurately modeled.  Of course,
-> +	the use of READ_ONCE() and WRITE_ONCE() limits the compiler's
-> +	ability to optimize, but under some circumstances it is possible
-> +	for the compiler to undermine the memory model.  For more
-> +	information, see Documentation/explanation.txt (in particular,
-> +	the "THE PROGRAM ORDER RELATION: po AND po-loc" and "A WARNING"
-> +	sections).
->  
->  	Note that this limitation in turn limits LKMM's ability to
->  	accurately model address, control, and data dependencies.
-> -- 
-> 2.7.4
-> 
-
+VGhpcyBwYXRjaCBzZXJpZXMgbW92ZXMgSHlwZXItViBjbG9jay90aW1lciBjb2RlIHRvIGEgc2Vw
+YXJhdGUgSHlwZXItVg0KY2xvY2tzb3VyY2UgZHJpdmVyLiBQcmV2aW91c2x5LCBIeXBlci1WIGNs
+b2NrL3RpbWVyIGNvZGUgYW5kIGRhdGENCnN0cnVjdHVyZXMgd2VyZSBtaXhlZCBpbiB3aXRoIG90
+aGVyIEh5cGVyLVYgY29kZSBpbiB0aGUgSVNBIGluZGVwZW5kZW50DQpkcml2ZXJzL2h2IGNvZGUg
+YXMgd2VsbCBhcyBpbiBJU0EgZGVwZW5kZW50IGNvZGUuIFRoZSBuZXcgSHlwZXItVg0KY2xvY2tz
+b3VyY2UgZHJpdmVyIGlzIElTQSBhZ25vc3RpYywgd2l0aCBhIGp1c3QgZmV3IGRlcGVuZGVuY2ll
+cyBvbg0KSVNBIHNwZWNpZmljIGZ1bmN0aW9ucy4gVGhlIHBhdGNoIHNlcmllcyBkb2VzIG5vdCBj
+aGFuZ2UgYW55IGJlaGF2aW9yDQpvciBmdW5jdGlvbmFsaXR5IC0tIGl0IG9ubHkgcmVvcmdhbml6
+ZXMgdGhlIGV4aXN0aW5nIGNvZGUgYW5kIGZpeGVzIHVwDQp0aGUgbGlua2FnZXMuIEEgZmV3IHBs
+YWNlcyBvdXRzaWRlIG9mIEh5cGVyLVYgY29kZSBhcmUgZml4ZWQgdXAgdG8gdXNlDQp0aGUgbmV3
+ICNpbmNsdWRlIGZpbGUgc3RydWN0dXJlLg0KDQpUaGlzIHJlc3RydWN0dXJpbmcgaXMgaW4gcmVz
+cG9uc2UgdG8gTWFyYyBaeW5naWVyJ3MgcmV2aWV3IGNvbW1lbnRzDQpvbiBzdXBwb3J0aW5nIEh5
+cGVyLVYgcnVubmluZyBvbiBBUk02NCwgYW5kIGlzIGEgZ29vZCBpZGVhIGluIGdlbmVyYWwuDQpJ
+dCBpbmNyZWFzZXMgdGhlIGFtb3VudCBvZiBjb2RlIHNoYXJlZCBiZXR3ZWVuIHRoZSB4ODYgYW5k
+IEFSTTY0DQphcmNoaXRlY3R1cmVzLCBhbmQgcmVkdWNlcyB0aGUgc2l6ZSBvZiB0aGUgbmV3IGNv
+ZGUgZm9yIHN1cHBvcnRpbmcNCkh5cGVyLVYgb24gQVJNNjQuIEEgbmV3IHZlcnNpb24gb2YgdGhl
+IEh5cGVyLVYgb24gQVJNNjQgcGF0Y2hlcyB3aWxsDQpmb2xsb3cgb25jZSB0aGlzIGNsb2Nrc291
+cmNlIHJlc3RydWN0dXJpbmcgaXMgYWNjZXB0ZWQuDQoNClRoZSBjb2RlIGlzIGRpZmYnZWQgYWdh
+aW5zdCB0aGUgdXBzdHJlYW0gdGlwIHRyZWU6DQpnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2Nt
+L2xpbnV4L2tlcm5lbC9naXQvdGlwL3RpcC5naXQgdGltZXJzL3Zkc28NCg0KQ2hhbmdlcyBpbiB2
+NToNCiogUmV2aXNlZCBjb21taXQgc3VtbWFyaWVzIFtUaG9tYXMgR2xlaXhuZXJdDQoqIFJlbW92
+ZWQgY2FsbCB0byBjbG9ja2V2ZW50c191bmJpbmRfZGV2aWNlKCkgW1Rob21hcyBHbGVpeG5lcl0N
+CiogUmVzdHJ1Y3R1cmVkIGh2X2luaXRfY2xvY2tzb3VyY2UoKSBbVGhvbWFzIEdsZWl4bmVyXQ0K
+KiBWYXJpb3VzIG90aGVyIHNtYWxsIGNvZGUgY2xlYW51cHMgW1Rob21hcyBHbGVpeG5lcl0NCg0K
+Q2hhbmdlcyBpbiB2NDoNCiogUmV2aXNlZCBjb21taXQgbWVzc2FnZXMNCiogUmViYXNlZCB0byB1
+cHN0cmVhbSB0aXAgdHJlZQ0KDQpDaGFuZ2VzIGluIHYzOg0KKiBSZW1vdmVkIGJvb2xlYW4gYXJn
+dW1lbnQgdG8gaHZfaW5pdF9jbG9ja3NvdXJjZSgpLiBBbHdheXMgY2FsbA0Kc2NoZWRfY2xvY2tf
+cmVnaXN0ZXIsIHdoaWNoIGlzIG5lZWRlZCBvbiBBUk02NCBidXQgYSBuby1vcCBvbiB4ODYuDQoq
+IFJlbW92ZWQgc2VwYXJhdGUgY3B1aHAgc2V0dXAgaW4gaHZfc3RpbWVyX2FsbG9jKCkgYW5kIGlu
+c3RlYWQNCmRpcmVjdGx5IGNhbGwgaHZfc3RpbWVyX2luaXQoKSBhbmQgaHZfc3RpbWVyX2NsZWFu
+dXAoKSBmcm9tDQpjb3JyZXNwb25kaW5nIFZNYnVzIGZ1bmN0aW9ucy4gIFRoaXMgbW9yZSBjbG9z
+ZWx5IG1hdGNoZXMgb3JpZ2luYWwNCmNvZGUgYW5kIGF2b2lkcyBjbG9ja3NvdXJjZSBzdG9wL3Jl
+c3RhcnQgcHJvYmxlbXMgb24gQVJNNjQgd2hlbg0KVk1idXMgY29kZSBkZW5pZXMgQ1BVIG9mZmxp
+bmluZyByZXF1ZXN0Lg0KDQpDaGFuZ2VzIGluIHYyOg0KKiBSZXZpc2VkIGNvbW1pdCBzaG9ydCBk
+ZXNjcmlwdGlvbnMgc28gdGhlIGRpc3RpbmN0aW9uIGJldHdlZW4NCnRoZSBmaXJzdCBhbmQgc2Vj
+b25kIHBhdGNoZXMgaXMgY2xlYXJlciBbR3JlZ0tIXQ0KKiBSZW5hbWVkIG5ldyBjbG9ja3NvdXJj
+ZSBkcml2ZXIgZmlsZXMgYW5kIGZ1bmN0aW9ucyB0byB1c2UNCmV4aXN0aW5nICJ0aW1lciIgYW5k
+ICJzdGltZXIiIG5hbWVzIGluc3RlYWQgb2YgaW50cm9kdWNpbmcNCiJzeW50aW1lciIuIFtWaXRh
+bHkgS3V6bmV0c292XQ0KKiBJbnRyb2R1Y2VkIENPTkZJR19IWVBFUl9USU1FUiB0byBmaXggYnVp
+bGQgcHJvYmxlbSB3aGVuDQpDT05GSUdfSFlQRVJWPW0gW1ZpdGFseSBLdXpuZXRzb3ZdDQoqIEFk
+ZGVkICJTdWdnZXN0ZWQtYnk6IE1hcmMgWnluZ2llciINCg0KTWljaGFlbCBLZWxsZXkgKDIpOg0K
+ICBjbG9ja3NvdXJjZS9kcml2ZXJzOiBNYWtlIEh5cGVyLVYgY2xvY2tzb3VyY2UgSVNBIGFnbm9z
+dGljDQogIGNsb2Nrc291cmNlL2RyaXZlcnM6IENvbnRpbnVlIG1ha2luZyBIeXBlci1WIGNsb2Nr
+c291cmNlIElTQSBhZ25vc3RpYw0KDQogTUFJTlRBSU5FUlMgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB8ICAgMiArDQogYXJjaC94ODYvZW50cnkvdmRzby92bWEuYyAgICAgICAgICAgICAg
+ICB8ICAgMiArLQ0KIGFyY2gveDg2L2h5cGVydi9odl9pbml0LmMgICAgICAgICAgICAgICAgfCAg
+OTEgKy0tLS0tLS0tDQogYXJjaC94ODYvaW5jbHVkZS9hc20vaHlwZXJ2LXRsZnMuaCAgICAgICB8
+ICAgNiArDQogYXJjaC94ODYvaW5jbHVkZS9hc20vbXNoeXBlcnYuaCAgICAgICAgICB8ICA4MSAr
+LS0tLS0tLQ0KIGFyY2gveDg2L2luY2x1ZGUvYXNtL3Zkc28vZ2V0dGltZW9mZGF5LmggfCAgIDIg
+Ky0NCiBhcmNoL3g4Ni9rZXJuZWwvY3B1L21zaHlwZXJ2LmMgICAgICAgICAgIHwgICA0ICstDQog
+YXJjaC94ODYva3ZtL3g4Ni5jICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSArDQogZHJpdmVy
+cy9jbG9ja3NvdXJjZS9NYWtlZmlsZSAgICAgICAgICAgICB8ICAgMSArDQogZHJpdmVycy9jbG9j
+a3NvdXJjZS9oeXBlcnZfdGltZXIuYyAgICAgICB8IDMzOSArKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrDQogZHJpdmVycy9odi9LY29uZmlnICAgICAgICAgICAgICAgICAgICAgICB8ICAg
+MyArDQogZHJpdmVycy9odi9odi5jICAgICAgICAgICAgICAgICAgICAgICAgICB8IDE1NiArLS0t
+LS0tLS0tLS0tLQ0KIGRyaXZlcnMvaHYvaHZfdXRpbC5jICAgICAgICAgICAgICAgICAgICAgfCAg
+IDEgKw0KIGRyaXZlcnMvaHYvaHlwZXJ2X3ZtYnVzLmggICAgICAgICAgICAgICAgfCAgIDMgLQ0K
+IGRyaXZlcnMvaHYvdm1idXNfZHJ2LmMgICAgICAgICAgICAgICAgICAgfCAgNDIgKystLQ0KIGlu
+Y2x1ZGUvY2xvY2tzb3VyY2UvaHlwZXJ2X3RpbWVyLmggICAgICAgfCAxMDUgKysrKysrKysrKw0K
+IDE2IGZpbGVzIGNoYW5nZWQsIDUwMyBpbnNlcnRpb25zKCspLCAzMzYgZGVsZXRpb25zKC0pDQog
+Y3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xvY2tzb3VyY2UvaHlwZXJ2X3RpbWVyLmMNCiBj
+cmVhdGUgbW9kZSAxMDA2NDQgaW5jbHVkZS9jbG9ja3NvdXJjZS9oeXBlcnZfdGltZXIuaA0KDQot
+LSANCjEuOC4zLjENCg0K
