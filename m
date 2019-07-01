@@ -2,80 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6395C097
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2019 17:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D705C408
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2019 21:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727925AbfGAPq1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Jul 2019 11:46:27 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:46688 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727373AbfGAPq1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Jul 2019 11:46:27 -0400
-Received: by mail-qt1-f196.google.com with SMTP id h21so15098885qtn.13;
-        Mon, 01 Jul 2019 08:46:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IE22YG1kj16IknP7QlS/hcyZEqytvttQhTXFYfXjkWQ=;
-        b=JZv1F4YqJtPhAD7h1ykGuxlrCeOge9AiDu+iifDTSfkTBPL9kwDIlLEOaExrExZwrE
-         JSJs7s8+5EgzIoiK7UyTazIW9rW6WTBdlDRZnm3PE1p9km7iuK73hiR15701RUATuIEB
-         KLtiG7rtw/x5UzvWSDKdtIb0ewbmE9kLZnB5sECj6FK6WEwEvzChCIryBB4isI7npzOB
-         Zs/wNt83u6acDh3kESPeEsrcTRpaopbJmYIL/9QI9HwzPfGjNXrFLgp4F3fwiuiwRwJr
-         xqP+AcLYwRI+Gy7GYgUmqoBiiCtTmQQnBaTCoSATMY6XiXco0EzACgfIfgQb3aNIXOlE
-         MtYQ==
-X-Gm-Message-State: APjAAAXjPrtR7lylTVSlV0b2BJU3ezushxf5jFtDMigAO05eaWo9zkxp
-        3jBo074Q6J/gkR+gyU7RM6+ZFBatK1hbvRSufY8=
-X-Google-Smtp-Source: APXvYqzhz6wel8eAmEo0Rl5DHwP4U2CGItmP91pzq58M0NTwxUCzkZGOsPaq9nefB0EZ4xIpLiX+rlXeAW8kLRBehXg=
-X-Received: by 2002:ac8:5311:: with SMTP id t17mr20545556qtn.304.1561995986128;
- Mon, 01 Jul 2019 08:46:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <1561786601-19512-1-git-send-email-guoren@kernel.org>
- <CAK8P3a0F5-wtJHbLvEwUXE8EnALMpQb5KeX4FK3S90Ce81oN-Q@mail.gmail.com> <CAJF2gTR7ooY=gxKW2zWK9MnuJ9YDm_1r6QTdJ=A=WqRDTuecRQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTR7ooY=gxKW2zWK9MnuJ9YDm_1r6QTdJ=A=WqRDTuecRQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 1 Jul 2019 17:46:09 +0200
-Message-ID: <CAK8P3a1j+4u_xdP45rEX7H+m+ttd9AEjeL0ittRZjtKN5fApDw@mail.gmail.com>
-Subject: Re: [PATCH] csky: Improve abiv1 mem ops performance with glibc codes
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1726780AbfGAT5Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Jul 2019 15:57:16 -0400
+Received: from mga09.intel.com ([134.134.136.24]:12848 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726686AbfGAT5Q (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 1 Jul 2019 15:57:16 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Jul 2019 12:57:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,440,1557212400"; 
+   d="scan'208";a="361947326"
+Received: from yyu32-desk1.sc.intel.com ([10.144.153.205])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Jul 2019 12:57:15 -0700
+Message-ID: <c99aa450d6cc9a0d23d24734a165e5ffbd9ecc7a.camel@intel.com>
+Subject: Re: [RFC PATCH 3/3] Prevent user from writing to IBT bitmap.
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <ren_guo@c-sky.com>
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+Date:   Mon, 01 Jul 2019 12:48:56 -0700
+In-Reply-To: <CALCETrXsXXJWTSJxUO8YxHUo=QJKmHyJa7iz+jOBjWMRhno4rA@mail.gmail.com>
+References: <20190628194158.2431-1-yu-cheng.yu@intel.com>
+         <20190628194158.2431-3-yu-cheng.yu@intel.com>
+         <CALCETrXsXXJWTSJxUO8YxHUo=QJKmHyJa7iz+jOBjWMRhno4rA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.1-2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 1, 2019 at 5:26 PM Guo Ren <guoren@kernel.org> wrote:
-> On Mon, Jul 1, 2019 at 10:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Sat, Jun 29, 2019 at 7:36 AM <guoren@kernel.org> wrote:
-> > >
-> > > From: Guo Ren <ren_guo@c-sky.com>
-> > >
-> > > These codes are copied from glibc/string directory, they are the generic
-> > > implementation for string operations. We may further optimize them with
-> > > assembly code in the future.
-> > >
-> > > In fact these code isn't tested enough for kernel, but we've tested them
-> > > on glibc and it seems good. We just trust them :)
-> >
-> > Are these files from the architecture independent portion of glibc or
-> > are they csky specific? If they are architecture independent, we might
-> > want to see if they make sense for other architectures as well, and
-> > add them to lib/ rather than arch/csky/lib/
-> They are just copied from glibc-2.28/string/*.c and they are generic.
-> OK, I'll try to add them to lib/.
+On Sat, 2019-06-29 at 16:44 -0700, Andy Lutomirski wrote:
+> On Fri, Jun 28, 2019 at 12:50 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+> > 
+> > The IBT bitmap is visiable from user-mode, but not writable.
+> > 
+> > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> > 
+> > ---
+> >  arch/x86/mm/fault.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> > index 59f4f66e4f2e..231196abb62e 100644
+> > --- a/arch/x86/mm/fault.c
+> > +++ b/arch/x86/mm/fault.c
+> > @@ -1454,6 +1454,13 @@ void do_user_addr_fault(struct pt_regs *regs,
+> >          * we can handle it..
+> >          */
+> >  good_area:
+> > +#define USER_MODE_WRITE (FAULT_FLAG_WRITE | FAULT_FLAG_USER)
+> > +       if (((flags & USER_MODE_WRITE)  == USER_MODE_WRITE) &&
+> > +           (vma->vm_flags & VM_IBT)) {
+> > +               bad_area_access_error(regs, hw_error_code, address, vma);
+> > +               return;
+> > +       }
+> > +
+> 
+> Just make the VMA have VM_WRITE and VM_MAYWRITE clear.  No new code
+> like this should be required.
 
-Ok. Note that lib/string.c contains very basic versions of these already,
-so please see which of the functions you have actually make a
-difference in practice over those (if you haven't done that already).
+Ok, I will work on that.
 
-Otherwise you can probably follow the example of the libgcc functions
-in lib/ashldi3.c etc: add a Kconfig symbol like CONFIG_GENERIC_LIB_ASHLDI3
-for each function you had, put the glibc version into a new file, and allow
-architectures to select them individually, which in turn should
-replace the version from lib/string.c.
-
-       Arnd
+Thanks,
+Yu-cheng
