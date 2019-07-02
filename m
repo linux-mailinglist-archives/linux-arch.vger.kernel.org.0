@@ -2,120 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB76E5CDD0
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Jul 2019 12:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A125D08A
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Jul 2019 15:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbfGBKqK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Jul 2019 06:46:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59184 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726291AbfGBKqK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 2 Jul 2019 06:46:10 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A49912089C;
-        Tue,  2 Jul 2019 10:46:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562064369;
-        bh=dOb4MTdKAgRzGQ+yE9sL+9KKQb2/t5teCLbYFvKOmYg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lmOIvgqYnhG6gcE4s/cT6vnAWChkKch0CdTkyDJV0+BS7qniUrgc23Phe5RJbw6LA
-         WhbJFIEyA/+cY8ckrjvDHQ2okIpABjtyaPYorAnbvD8RfKiWkEWOHxbebbCC1LUVS4
-         SgcDDwf0jt386rr72W5xAUO/Cy5BS4FWTKNGlAYY=
-Date:   Tue, 2 Jul 2019 11:46:04 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <Will.Deacon@arm.com>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: single copy atomicity for double load/stores on 32-bit systems
-Message-ID: <20190702104603.g3qssgfhfhvryhnu@willie-the-truck>
-References: <2fd3a455-6267-5d21-c530-41964a4f6ce9@synopsys.com>
- <20190531082112.GH2623@hirez.programming.kicks-ass.net>
- <73510bc7-8386-746c-ed1e-422fb5adaec5@synopsys.com>
+        id S1726930AbfGBNYa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Jul 2019 09:24:30 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44245 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726628AbfGBNYa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Jul 2019 09:24:30 -0400
+Received: by mail-pf1-f194.google.com with SMTP id t16so8237126pfe.11;
+        Tue, 02 Jul 2019 06:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zIzMshIE1gAPy52cCdTxKa4XjsXUQnv0LX7WGYv0Rtc=;
+        b=SHDt+sNMGv5FFZLWhLgqNvYkSG/Bi9VSnP+fABBnYeVuY2MUaXGJhEeOfMwv6Wt/8S
+         FYTvzbzNxuCzi7IH2veGNYiXIJHzcdK8WlrBiqexUIUjAOrQsx6f/lj0bS56UjkmjlDZ
+         aIH1rsqyS2EsGRWqyNU5TO3lpHfqc8PPyKpWYEq5BiuIW/qdcA6YSHvWDwffFFu1vQQw
+         ntiIylzvlMGla6Hpq0hKUfPp6FME0Y7UURKXHH3cUWwc6UJHmo8XVgsYagC2EkFgufNY
+         cY4U3vHkXjv1rR95P/iyjbdpzexdmzmgKTy0r+28ofAdrk7Ir4A4Tcr2gf4BA4xaC4Yw
+         oQ8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zIzMshIE1gAPy52cCdTxKa4XjsXUQnv0LX7WGYv0Rtc=;
+        b=RwdbWCIr8iei84RPus7urQPZbBqoClKveMEfMd4ZDMXOfyM40EQ7yjilPVFSmwI9GW
+         O+CkLPmZ6cIZV6XykkUIBzzqAlrHal9RnlQc6pCkFOKBYGpIRoz/P/MpWqdlxF3x++Vf
+         LhvUHZiPAWS5/DwJpwV2E2pVt3YQaCbVKfUuf7v+sGxWIhYN7OfcifNeeNE1Y1x++jhm
+         htMS2yoil3G4kSqDzyRj3b4VA+adURVbVWpujtKwFn59WfHjFVv3ZhqeZnjc4II1q2nY
+         InuneqSZ+XH49QPiqq6vENvd3FdaicrfBGvIUKG2sWQ0m4b/aZ5GoPDf7A4SvVu2RszB
+         7gnw==
+X-Gm-Message-State: APjAAAVDXoI8LLEmVX4sKBBwgG2ArCghfI+atxcMCf0wUUC0Br24giaQ
+        +Vrl+W7g686OoOjgtSWHabf+Fv8A
+X-Google-Smtp-Source: APXvYqxwSTNSkpYfR/YcP5lqFi14QfBrf45GvlU8nQ9eECN24EeBhpsFgURltkFD73foirQTcIQUBQ==
+X-Received: by 2002:a17:90b:f12:: with SMTP id br18mr5368966pjb.127.1562073869198;
+        Tue, 02 Jul 2019 06:24:29 -0700 (PDT)
+Received: from [10.44.0.192] ([103.48.210.53])
+        by smtp.gmail.com with ESMTPSA id v185sm22709105pfb.14.2019.07.02.06.24.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 02 Jul 2019 06:24:28 -0700 (PDT)
+From:   Greg Ungerer <gregungerer00@gmail.com>
+X-Google-Original-From: Greg Ungerer <gerg@linux-m68k.org>
+Subject: Re: Archs using generic PCI controller drivers vs. resource policy
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
+References: <5f3dcc3a8dafad188e3adb8ee9cf347bebdee7f6.camel@kernel.crashing.org>
+Message-ID: <bafcb3eb-2bf0-2ea7-00e4-50e729406978@linux-m68k.org>
+Date:   Tue, 2 Jul 2019 23:24:24 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <73510bc7-8386-746c-ed1e-422fb5adaec5@synopsys.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <5f3dcc3a8dafad188e3adb8ee9cf347bebdee7f6.camel@kernel.crashing.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 01, 2019 at 08:05:51PM +0000, Vineet Gupta wrote:
-> On 5/31/19 1:21 AM, Peter Zijlstra wrote:
-> > On Thu, May 30, 2019 at 11:22:42AM -0700, Vineet Gupta wrote:
-> >> Had an interesting lunch time discussion with our hardware architects pertinent to
-> >> "minimal guarantees expected of a CPU" section of memory-barriers.txt
-> >>
-> >>
-> >> |  (*) These guarantees apply only to properly aligned and sized scalar
-> >> |     variables.  "Properly sized" currently means variables that are
-> >> |     the same size as "char", "short", "int" and "long".  "Properly
-> >> |     aligned" means the natural alignment, thus no constraints for
-> >> |     "char", two-byte alignment for "short", four-byte alignment for
-> >> |     "int", and either four-byte or eight-byte alignment for "long",
-> >> |     on 32-bit and 64-bit systems, respectively.
-> >>
-> >>
-> >> I'm not sure how to interpret "natural alignment" for the case of double
-> >> load/stores on 32-bit systems where the hardware and ABI allow for 4 byte
-> >> alignment (ARCv2 LDD/STD, ARM LDRD/STRD ....)
-> > 
-> > Natural alignment: !((uintptr_t)ptr % sizeof(*ptr))
-> > 
-> > For any u64 type, that would give 8 byte alignment. the problem
-> > otherwise being that your data spans two lines/pages etc..
-> > 
-> >> I presume (and the question) that lkmm doesn't expect such 8 byte load/stores to
-> >> be atomic unless 8-byte aligned
-> >>
-> >> ARMv7 arch ref manual seems to confirm this. Quoting
-> >>
-> >> | LDM, LDC, LDC2, LDRD, STM, STC, STC2, STRD, PUSH, POP, RFE, SRS, VLDM, VLDR,
-> >> | VSTM, and VSTR instructions are executed as a sequence of word-aligned word
-> >> | accesses. Each 32-bit word access is guaranteed to be single-copy atomic. A
-> >> | subsequence of two or more word accesses from the sequence might not exhibit
-> >> | single-copy atomicity
-> >>
-> >> While it seems reasonable form hardware pov to not implement such atomicity by
-> >> default it seems there's an additional burden on application writers. They could
-> >> be happily using a lockless algorithm with just a shared flag between 2 threads
-> >> w/o need for any explicit synchronization.
-> > 
-> > If you're that careless with lockless code, you deserve all the pain you
-> > get.
-> > 
-> >> But upgrade to a new compiler which
-> >> aggressively "packs" struct rendering long long 32-bit aligned (vs. 64-bit before)
-> >> causing the code to suddenly stop working. Is the onus on them to declare such
-> >> memory as c11 atomic or some such.
-> > 
-> > When a programmer wants guarantees they already need to know wth they're
-> > doing.
-> > 
-> > And I'll stand by my earlier conviction that any architecture that has a
-> > native u64 (be it a 64bit arch or a 32bit with double-width
-> > instructions) but has an ABI that allows u32 alignment on them is daft.
-> 
-> So I agree with Paul's assertion that it is strange for 8-byte type being 4-byte
-> aligned on a 64-bit system, but is it totally broken even if the ISA of the said
-> 64-bit arch allows LD/ST to be augmented with acq/rel respectively.
-> 
-> Say the ISA guarantees single-copy atomicity for aligned cases (i.e. for 8-byte
-> data only if it is naturally aligned) and in lack thereof programmer needs to use
-> the proper acq/release
+Hi Ben,
 
-Apologies if I'm missing some context here, but it's not clear to me why the
-use of acquire/release instructions has anything to do with single-copy
-atomicity of unaligned accesses. The ordering they provide doesn't
-necessarily prevent tearing, although a CPU architecture could obviously
-provide that guarantee if it wanted to. Generally though, I wouldn't expect
-the two to go hand-in-hand like you're suggesting.
+On 23/6/19 10:30 am, Benjamin Herrenschmidt wrote:
+> As part of my cleanup and consolidation of the PCI resource assignment
+> policies, I need to clarify something.
+> 
+> At the moment, unless PCI_PROBE_ONLY is set, a number of
+> platforms/archs expect Linux to reassign everything rather than honor
+> what has setup, then (re)assign what's left or broken. This is mostly
+> the case of embedded platforms. Things like x86 and desktop/server
+> powerpc will generally honor the firmware setup.
+> 
+> One problem is that this policy decision tend to be sprinkled in some
+> of the controller drivers themselves in drivers/pci/controller (or the
+> pci_host_probe helper).
+> 
+> This is wrong. I want to move it to the architecture (initially,
+> eventually it should be platform driven, but the default will start
+> with architecture specific to avoid changing the existing behaviours
+> while consolidating the code).
+> 
+> To do that right, I want to understand which archs can potentially use
+> the code in drivers/pci/controller today so I can change those archs to
+> explicitely set the default to "reassign everything" (and take the
+> policy out of the drivers themselves).
+> 
+> So far I've counted arm, arm64 (DT, not ACPI) and nios2. Any other ?
 
-Will
+For the m68k platforms which support PCI (which is only some of
+the more modern ColdFire variants) they expect PCI resources to
+be assigned by Linux. There is no boot firmware that will do that
+before kernel startup.
+
+The PCI root driver complex is already in the arch area though
+(arch/m68k/coldfire/pci.c) so that is essentially what you
+want to achieve right?
+
+Regards
+Greg
+
+
+> The remaining archs fall into two categories:
+> 
+>   - Those who have their own existing PCI management code and don't
+> use the generic controller drivers. I'm handling these already.
+> 
+>   - Those who don't seem to have anything to do with PCI (yet ?) or that
+> I've missed. Those will default to the x86 model (honor FW setup unless
+> it has conflicts or is broken, and (re)assign what's left) unless
+> explicitly changed.
+> 
+> Cheers,
+> Ben.
+> 
+> 
+> 
