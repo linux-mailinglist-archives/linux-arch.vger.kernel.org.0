@@ -2,684 +2,236 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1355E090
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Jul 2019 11:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722105E354
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Jul 2019 13:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727121AbfGCJJj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Jul 2019 05:09:39 -0400
-Received: from terminus.zytor.com ([198.137.202.136]:40193 "EHLO
-        terminus.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727124AbfGCJJj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Jul 2019 05:09:39 -0400
-Received: from terminus.zytor.com (localhost [127.0.0.1])
-        by terminus.zytor.com (8.15.2/8.15.2) with ESMTPS id x6398F3d3219381
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Wed, 3 Jul 2019 02:08:16 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 terminus.zytor.com x6398F3d3219381
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2019061801; t=1562144897;
-        bh=DbGFRZVLaS9xFvO9dPl78BeGvQ6d15VnI8gJOJ15Jbw=;
-        h=Date:From:Cc:Reply-To:In-Reply-To:References:To:Subject:From;
-        b=AV8z1A+Qm/NJ0iy4viCy9kFDUYa2xknI3Lnz6mrafQjQmyBhspERL4o7V96/9Rb3j
-         xfj54+z5sYeBGJxdIlHrx8CiNtAy9vGgRTLky/IwM0goPW3yNsqEYYPq5joyq5WhWb
-         iCk0NkSp7g3V/CCik2+JWv0i8O2ytQh3TIgHJcY7DOrH8Xb5up+sWhoji/YDjKAvEn
-         OFdBwaKs6KYgfsT3x4hz6vWPc8eMWJVgmk3RlWUwVmfvxV/TPahb1abvp7D+jGnhwI
-         OWI/L3Qvq6CgBYKhCV2uTD9GtI4BIRnej8UAcEXAoMonwEaRneoBBDqWGKCjA2nKNc
-         TGc9wzsJcLZ2g==
-Received: (from tipbot@localhost)
-        by terminus.zytor.com (8.15.2/8.15.2/Submit) id x6398EGZ3219374;
-        Wed, 3 Jul 2019 02:08:14 -0700
-Date:   Wed, 3 Jul 2019 02:08:14 -0700
-X-Authentication-Warning: terminus.zytor.com: tipbot set sender to tipbot@zytor.com using -f
-From:   tip-bot for Michael Kelley <tipbot@zytor.com>
-Message-ID: <tip-dd2cb348613b44f9d948b068775e159aad298599@git.kernel.org>
-Cc:     sunilmut@microsoft.com, pcc@google.com, huw@codeweavers.com,
-        vincenzo.frascino@arm.com, salyzyn@android.com, apw@canonical.com,
-        vkuznets@redhat.com, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, hpa@zytor.com, gregkh@linuxfoundation.org,
-        pbonzini@redhat.com, olaf@aepfle.de, marcelo.cerri@canonical.com,
-        will.deacon@arm.com, linux-kernel@vger.kernel.org,
-        rkrcmar@redhat.com, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, ralf@linux-mips.org,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        kys@microsoft.com, shuah@kernel.org, mark.rutland@arm.com,
-        paul.burton@mips.com, marc.zyngier@arm.com, mingo@kernel.org,
-        bp@alien8.de, linux@rasmusvillemoes.dk, sashal@kernel.org,
-        sfr@canb.auug.org.au, mikelley@microsoft.com,
-        catalin.marinas@arm.com, 0x7f454c46@gmail.com,
-        daniel.lezcano@linaro.org, linux-hyperv@vger.kernel.org,
-        jasowang@redhat.com, linux-arch@vger.kernel.org, arnd@arndb.de
-Reply-To: shuah@kernel.org, kys@microsoft.com, linux@armlinux.org.uk,
-          rkrcmar@redhat.com, linux-kernel@vger.kernel.org,
-          marcelo.cerri@canonical.com, will.deacon@arm.com, olaf@aepfle.de,
-          pbonzini@redhat.com, ralf@linux-mips.org,
-          linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-          linux-mips@vger.kernel.org, vkuznets@redhat.com,
-          gregkh@linuxfoundation.org, hpa@zytor.com,
-          linux-kselftest@vger.kernel.org, tglx@linutronix.de,
-          vincenzo.frascino@arm.com, huw@codeweavers.com,
-          salyzyn@android.com, apw@canonical.com, pcc@google.com,
-          sunilmut@microsoft.com, jasowang@redhat.com,
-          linux-hyperv@vger.kernel.org, daniel.lezcano@linaro.org,
-          linux-arch@vger.kernel.org, arnd@arndb.de,
-          linux@rasmusvillemoes.dk, 0x7f454c46@gmail.com,
-          catalin.marinas@arm.com, sfr@canb.auug.org.au,
-          mikelley@microsoft.com, sashal@kernel.org, bp@alien8.de,
-          mingo@kernel.org, mark.rutland@arm.com, marc.zyngier@arm.com,
-          paul.burton@mips.com
-In-Reply-To: <1561955054-1838-3-git-send-email-mikelley@microsoft.com>
-References: <1561955054-1838-3-git-send-email-mikelley@microsoft.com>
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip:timers/core] clocksource/drivers: Continue making Hyper-V
- clocksource ISA agnostic
-Git-Commit-ID: dd2cb348613b44f9d948b068775e159aad298599
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot.git.kernel.org>
-Robot-Unsubscribe: Contact <mailto:hpa@kernel.org> to get blacklisted from
- these emails
+        id S1726628AbfGCL6Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Jul 2019 07:58:25 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:61372 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726486AbfGCL6Y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Jul 2019 07:58:24 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x63Bt09a026724;
+        Wed, 3 Jul 2019 04:58:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfpt0818;
+ bh=7Fv0VG5SSm+s3bd+HZk4c05+u0Iyu4jTk/vjl0mx7mM=;
+ b=bM+AKOe5U2EYvh6JtLsWBD556s3qCXGMk7LFkLCGzsa/hGTxEoarY8jZ+gzJJifJRMjU
+ BC9oEja7c00LW4JKXEHmLY8ffBNHeD/sxKCjm1dzRmUCRty1Ruyg2ARomVR4Zd5m+nwx
+ p/AZ7ASKN/rFXknF1LazdoLhovUKcVeI4Tl7rFmi/KaFLukNv8u5dRJYQ7QLa9kuXsIB
+ 7bI4YbbyIpYPf2nHqSj43/Wt8R1URWVaacsopyOSG+iVSiAf/BWfEWAcqOMTOxn24AAZ
+ mYbn580TAK8aMnth7N93D8XUxnrrkDBgUlw3CZUCF7QA01njy0mbRtyB593Z0V1jVQH9 WQ== 
+Received: from sc-exch03.marvell.com ([199.233.58.183])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2tgrv18qj0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 03 Jul 2019 04:58:22 -0700
+Received: from SC-EXCH02.marvell.com (10.93.176.82) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Wed, 3 Jul
+ 2019 04:58:21 -0700
+Received: from NAM01-BY2-obe.outbound.protection.outlook.com (104.47.34.53) by
+ SC-EXCH02.marvell.com (10.93.176.82) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Wed, 3 Jul 2019 04:58:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7Fv0VG5SSm+s3bd+HZk4c05+u0Iyu4jTk/vjl0mx7mM=;
+ b=GDd54pFkLV9tjN0pIACvii+iLc2sMIdPAOEFEe/xqX2oOMWQ5G7eKbooIuCEHhfUc3m3CSbOkkBmLXViV5LZItOUOqwSRrxyeDiu7tB2RfB1R33u3c7Fr8MgwipGteJWahSVSIPtSm7hnXl5ZZpGGYPjL26T6ZcfpxcEqRBoyy0=
+Received: from BL0PR18MB2339.namprd18.prod.outlook.com (52.132.30.139) by
+ BL0PR18MB2258.namprd18.prod.outlook.com (52.132.30.14) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2032.18; Wed, 3 Jul 2019 11:58:11 +0000
+Received: from BL0PR18MB2339.namprd18.prod.outlook.com
+ ([fe80::430:a80b:100e:f333]) by BL0PR18MB2339.namprd18.prod.outlook.com
+ ([fe80::430:a80b:100e:f333%3]) with mapi id 15.20.2032.019; Wed, 3 Jul 2019
+ 11:58:11 +0000
+From:   Jan Glauber <jglauber@marvell.com>
+To:     Alex Kogan <alex.kogan@oracle.com>
+CC:     "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "longman@redhat.com" <longman@redhat.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
+        "steven.sistare@oracle.com" <steven.sistare@oracle.com>,
+        "daniel.m.jordan@oracle.com" <daniel.m.jordan@oracle.com>,
+        "dave.dice@oracle.com" <dave.dice@oracle.com>,
+        "rahul.x.yadav@oracle.com" <rahul.x.yadav@oracle.com>
+Subject: Re: [PATCH v2 0/5] Add NUMA-awareness to qspinlock
+Thread-Topic: [PATCH v2 0/5] Add NUMA-awareness to qspinlock
+Thread-Index: AQHVMZV8Ybm4k+/XekihBdJkMbnADw==
+Date:   Wed, 3 Jul 2019 11:58:11 +0000
+Message-ID: <CAEiAFz238Ywgn6iDAz9gM_3PgPhs-YuAVDptehUBv7MRRPx8Cw@mail.gmail.com>
+References: <20190329152006.110370-1-alex.kogan@oracle.com>
+In-Reply-To: <20190329152006.110370-1-alex.kogan@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: HE1PR0901CA0050.eurprd09.prod.outlook.com
+ (2603:10a6:3:45::18) To BL0PR18MB2339.namprd18.prod.outlook.com
+ (2603:10b6:207:44::11)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-gm-message-state: APjAAAX6ZqUOATr2jyA3JrXRCmRtuaj5UYjsy+lTOXVpFQT3BccyeNQA
+        ue+ygWBdeXifaSfioQ9eE8K5UT4TbAhjwzh6G2A=
+x-google-smtp-source: APXvYqyuwkmwHuWs/zk31Xg3Lr0aqtta+9e2gekCu7t9V2nQEduDWodzih6Lza+B9cu85LLSsIR5XwAVjLA2VYgrUQs=
+x-received: by 2002:ac2:5212:: with SMTP id a18mr17620705lfl.50.1562154631397;
+ Wed, 03 Jul 2019 04:50:31 -0700 (PDT)
+x-gmail-original-message-id: <CAEiAFz238Ywgn6iDAz9gM_3PgPhs-YuAVDptehUBv7MRRPx8Cw@mail.gmail.com>
+x-originating-ip: [209.85.167.50]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dd5f3996-0480-4dc4-bac7-08d6ffadb879
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BL0PR18MB2258;
+x-ms-traffictypediagnostic: BL0PR18MB2258:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <BL0PR18MB22582FB782F80189A8CC2EFFD8FB0@BL0PR18MB2258.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2582;
+x-forefront-prvs: 00872B689F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(366004)(396003)(136003)(39860400002)(199004)(189003)(14454004)(305945005)(61266001)(6486002)(446003)(3846002)(26005)(476003)(66066001)(6116002)(81156014)(81166006)(68736007)(6306002)(316002)(61726006)(52116002)(229853002)(498394004)(54906003)(6436002)(102836004)(386003)(6506007)(53936002)(99286004)(9686003)(6512007)(11346002)(95326003)(966005)(86362001)(76176011)(6246003)(7736002)(486006)(2906002)(8676002)(14444005)(5660300002)(478600001)(256004)(66574012)(66476007)(107886003)(73956011)(450100002)(25786009)(66446008)(64756008)(66556008)(4326008)(6862004)(66946007)(71190400001)(71200400001)(186003)(8936002)(55446002);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR18MB2258;H:BL0PR18MB2339.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: marvell.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 7SPSwTlHH2tIgBnX+GZcjzCI3k1BAXHXurZ2iNnhXuRcy9tICMm1arJuUSoCcvWOM1zQxyeXeaCnKdSIiwBu9tE6yCbsXSvxZtjgPXKnWd1MFb9+eU9rcrsiqxkM7pMTIHBJ4E7VC2R3ocr45AMJCzkE21Ml081GcxLuGQrCpC16ery1V932/AqA89nI/BoNBPjB2IFxpl546OWsk1hPhoNovLG44krwHf/A3o0pnhm+QSNIgAmkhOsH3Bky1wGRojuy4p1iORXLOYaY9TYVK1DwhgxeLHdb6Ba/vP2YVOe3vtrA0QmrxepLhZ2qCJLZKTIBdyCPyntg5w/d1blxubZMo0uYclt+188TZ5HSlz/U9iSKvl0/0r0Ni5PQaPJEy9yckEI0M2T2QVDft31neHVdhAhT/RvQd/yKJNkE8C8=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8618D8E8C9EDB64B8668D41F2E521ECB@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
-X-Spam-Status: No, score=2.3 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        DATE_IN_FUTURE_03_06,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT
-        autolearn=no autolearn_force=no version=3.4.2
-X-Spam-Level: **
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on terminus.zytor.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd5f3996-0480-4dc4-bac7-08d6ffadb879
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2019 11:58:11.1333
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jglauber@marvell.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR18MB2258
+X-OriginatorOrg: marvell.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-03_03:,,
+ signatures=0
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Commit-ID:  dd2cb348613b44f9d948b068775e159aad298599
-Gitweb:     https://git.kernel.org/tip/dd2cb348613b44f9d948b068775e159aad298599
-Author:     Michael Kelley <mikelley@microsoft.com>
-AuthorDate: Mon, 1 Jul 2019 04:26:06 +0000
-Committer:  Thomas Gleixner <tglx@linutronix.de>
-CommitDate: Wed, 3 Jul 2019 11:00:59 +0200
-
-clocksource/drivers: Continue making Hyper-V clocksource ISA agnostic
-
-Continue consolidating Hyper-V clock and timer code into an ISA
-independent Hyper-V clocksource driver.
-
-Move the existing clocksource code under drivers/hv and arch/x86 to the new
-clocksource driver while separating out the ISA dependencies. Update
-Hyper-V initialization to call initialization and cleanup routines since
-the Hyper-V synthetic clock is not independently enumerated in ACPI.
-
-Update Hyper-V clocksource users in KVM and VDSO to get definitions from
-the new include file.
-
-No behavior is changed and no new functionality is added.
-
-Suggested-by: Marc Zyngier <marc.zyngier@arm.com>
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc: "bp@alien8.de" <bp@alien8.de>
-Cc: "will.deacon@arm.com" <will.deacon@arm.com>
-Cc: "catalin.marinas@arm.com" <catalin.marinas@arm.com>
-Cc: "mark.rutland@arm.com" <mark.rutland@arm.com>
-Cc: "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc: "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Cc: "olaf@aepfle.de" <olaf@aepfle.de>
-Cc: "apw@canonical.com" <apw@canonical.com>
-Cc: "jasowang@redhat.com" <jasowang@redhat.com>
-Cc: "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>
-Cc: Sunil Muthuswamy <sunilmut@microsoft.com>
-Cc: KY Srinivasan <kys@microsoft.com>
-Cc: "sashal@kernel.org" <sashal@kernel.org>
-Cc: "vincenzo.frascino@arm.com" <vincenzo.frascino@arm.com>
-Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Cc: "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Cc: "arnd@arndb.de" <arnd@arndb.de>
-Cc: "linux@armlinux.org.uk" <linux@armlinux.org.uk>
-Cc: "ralf@linux-mips.org" <ralf@linux-mips.org>
-Cc: "paul.burton@mips.com" <paul.burton@mips.com>
-Cc: "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Cc: "salyzyn@android.com" <salyzyn@android.com>
-Cc: "pcc@google.com" <pcc@google.com>
-Cc: "shuah@kernel.org" <shuah@kernel.org>
-Cc: "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>
-Cc: "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>
-Cc: "huw@codeweavers.com" <huw@codeweavers.com>
-Cc: "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>
-Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>
-Cc: "rkrcmar@redhat.com" <rkrcmar@redhat.com>
-Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Link: https://lkml.kernel.org/r/1561955054-1838-3-git-send-email-mikelley@microsoft.com
-
----
- arch/x86/entry/vdso/vma.c                |   2 +-
- arch/x86/hyperv/hv_init.c                |  91 +-------------------
- arch/x86/include/asm/mshyperv.h          |  81 +++---------------
- arch/x86/include/asm/vdso/gettimeofday.h |   2 +-
- arch/x86/kvm/x86.c                       |   1 +
- drivers/clocksource/hyperv_timer.c       | 139 +++++++++++++++++++++++++++++++
- drivers/hv/hv_util.c                     |   1 +
- include/clocksource/hyperv_timer.h       |  80 ++++++++++++++++++
- 8 files changed, 237 insertions(+), 160 deletions(-)
-
-diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
-index 8db1f594e8b1..349a61d8bf34 100644
---- a/arch/x86/entry/vdso/vma.c
-+++ b/arch/x86/entry/vdso/vma.c
-@@ -22,7 +22,7 @@
- #include <asm/page.h>
- #include <asm/desc.h>
- #include <asm/cpufeature.h>
--#include <asm/mshyperv.h>
-+#include <clocksource/hyperv_timer.h>
- 
- #if defined(CONFIG_X86_64)
- unsigned int __read_mostly vdso64_enabled = 1;
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 1608050e9df9..0e033ef11a9f 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -17,64 +17,13 @@
- #include <linux/version.h>
- #include <linux/vmalloc.h>
- #include <linux/mm.h>
--#include <linux/clockchips.h>
- #include <linux/hyperv.h>
- #include <linux/slab.h>
- #include <linux/cpuhotplug.h>
--
--#ifdef CONFIG_HYPERV_TSCPAGE
--
--static struct ms_hyperv_tsc_page *tsc_pg;
--
--struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
--{
--	return tsc_pg;
--}
--EXPORT_SYMBOL_GPL(hv_get_tsc_page);
--
--static u64 read_hv_clock_tsc(struct clocksource *arg)
--{
--	u64 current_tick = hv_read_tsc_page(tsc_pg);
--
--	if (current_tick == U64_MAX)
--		rdmsrl(HV_X64_MSR_TIME_REF_COUNT, current_tick);
--
--	return current_tick;
--}
--
--static struct clocksource hyperv_cs_tsc = {
--		.name		= "hyperv_clocksource_tsc_page",
--		.rating		= 400,
--		.read		= read_hv_clock_tsc,
--		.mask		= CLOCKSOURCE_MASK(64),
--		.flags		= CLOCK_SOURCE_IS_CONTINUOUS,
--};
--#endif
--
--static u64 read_hv_clock_msr(struct clocksource *arg)
--{
--	u64 current_tick;
--	/*
--	 * Read the partition counter to get the current tick count. This count
--	 * is set to 0 when the partition is created and is incremented in
--	 * 100 nanosecond units.
--	 */
--	rdmsrl(HV_X64_MSR_TIME_REF_COUNT, current_tick);
--	return current_tick;
--}
--
--static struct clocksource hyperv_cs_msr = {
--	.name		= "hyperv_clocksource_msr",
--	.rating		= 400,
--	.read		= read_hv_clock_msr,
--	.mask		= CLOCKSOURCE_MASK(64),
--	.flags		= CLOCK_SOURCE_IS_CONTINUOUS,
--};
-+#include <clocksource/hyperv_timer.h>
- 
- void *hv_hypercall_pg;
- EXPORT_SYMBOL_GPL(hv_hypercall_pg);
--struct clocksource *hyperv_cs;
--EXPORT_SYMBOL_GPL(hyperv_cs);
- 
- u32 *hv_vp_index;
- EXPORT_SYMBOL_GPL(hv_vp_index);
-@@ -343,42 +292,8 @@ void __init hyperv_init(void)
- 
- 	x86_init.pci.arch_init = hv_pci_init;
- 
--	/*
--	 * Register Hyper-V specific clocksource.
--	 */
--#ifdef CONFIG_HYPERV_TSCPAGE
--	if (ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE) {
--		union hv_x64_msr_hypercall_contents tsc_msr;
--
--		tsc_pg = __vmalloc(PAGE_SIZE, GFP_KERNEL, PAGE_KERNEL);
--		if (!tsc_pg)
--			goto register_msr_cs;
--
--		hyperv_cs = &hyperv_cs_tsc;
--
--		rdmsrl(HV_X64_MSR_REFERENCE_TSC, tsc_msr.as_uint64);
--
--		tsc_msr.enable = 1;
--		tsc_msr.guest_physical_address = vmalloc_to_pfn(tsc_pg);
--
--		wrmsrl(HV_X64_MSR_REFERENCE_TSC, tsc_msr.as_uint64);
--
--		hyperv_cs_tsc.archdata.vclock_mode = VCLOCK_HVCLOCK;
--
--		clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
--		return;
--	}
--register_msr_cs:
--#endif
--	/*
--	 * For 32 bit guests just use the MSR based mechanism for reading
--	 * the partition counter.
--	 */
--
--	hyperv_cs = &hyperv_cs_msr;
--	if (ms_hyperv.features & HV_MSR_TIME_REF_COUNT_AVAILABLE)
--		clocksource_register_hz(&hyperv_cs_msr, NSEC_PER_SEC/100);
--
-+	/* Register Hyper-V specific clocksource */
-+	hv_init_clocksource();
- 	return;
- 
- remove_cpuhp_state:
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index cc60e617931c..f4fa8a9d5d0b 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -105,6 +105,17 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
- #define hv_get_crash_ctl(val) \
- 	rdmsrl(HV_X64_MSR_CRASH_CTL, val)
- 
-+#define hv_get_time_ref_count(val) \
-+	rdmsrl(HV_X64_MSR_TIME_REF_COUNT, val)
-+
-+#define hv_get_reference_tsc(val) \
-+	rdmsrl(HV_X64_MSR_REFERENCE_TSC, val)
-+#define hv_set_reference_tsc(val) \
-+	wrmsrl(HV_X64_MSR_REFERENCE_TSC, val)
-+#define hv_set_clocksource_vdso(val) \
-+	((val).archdata.vclock_mode = VCLOCK_HVCLOCK)
-+#define hv_get_raw_timer() rdtsc_ordered()
-+
- void hyperv_callback_vector(void);
- void hyperv_reenlightenment_vector(void);
- #ifdef CONFIG_TRACING
-@@ -133,7 +144,6 @@ static inline void hv_disable_stimer0_percpu_irq(int irq) {}
- 
- 
- #if IS_ENABLED(CONFIG_HYPERV)
--extern struct clocksource *hyperv_cs;
- extern void *hv_hypercall_pg;
- extern void  __percpu  **hyperv_pcpu_input_arg;
- 
-@@ -387,73 +397,4 @@ static inline int hyperv_flush_guest_mapping_range(u64 as,
- }
- #endif /* CONFIG_HYPERV */
- 
--#ifdef CONFIG_HYPERV_TSCPAGE
--struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
--static inline u64 hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
--				       u64 *cur_tsc)
--{
--	u64 scale, offset;
--	u32 sequence;
--
--	/*
--	 * The protocol for reading Hyper-V TSC page is specified in Hypervisor
--	 * Top-Level Functional Specification ver. 3.0 and above. To get the
--	 * reference time we must do the following:
--	 * - READ ReferenceTscSequence
--	 *   A special '0' value indicates the time source is unreliable and we
--	 *   need to use something else. The currently published specification
--	 *   versions (up to 4.0b) contain a mistake and wrongly claim '-1'
--	 *   instead of '0' as the special value, see commit c35b82ef0294.
--	 * - ReferenceTime =
--	 *        ((RDTSC() * ReferenceTscScale) >> 64) + ReferenceTscOffset
--	 * - READ ReferenceTscSequence again. In case its value has changed
--	 *   since our first reading we need to discard ReferenceTime and repeat
--	 *   the whole sequence as the hypervisor was updating the page in
--	 *   between.
--	 */
--	do {
--		sequence = READ_ONCE(tsc_pg->tsc_sequence);
--		if (!sequence)
--			return U64_MAX;
--		/*
--		 * Make sure we read sequence before we read other values from
--		 * TSC page.
--		 */
--		smp_rmb();
--
--		scale = READ_ONCE(tsc_pg->tsc_scale);
--		offset = READ_ONCE(tsc_pg->tsc_offset);
--		*cur_tsc = rdtsc_ordered();
--
--		/*
--		 * Make sure we read sequence after we read all other values
--		 * from TSC page.
--		 */
--		smp_rmb();
--
--	} while (READ_ONCE(tsc_pg->tsc_sequence) != sequence);
--
--	return mul_u64_u64_shr(*cur_tsc, scale, 64) + offset;
--}
--
--static inline u64 hv_read_tsc_page(const struct ms_hyperv_tsc_page *tsc_pg)
--{
--	u64 cur_tsc;
--
--	return hv_read_tsc_page_tsc(tsc_pg, &cur_tsc);
--}
--
--#else
--static inline struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
--{
--	return NULL;
--}
--
--static inline u64 hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
--				       u64 *cur_tsc)
--{
--	BUG();
--	return U64_MAX;
--}
--#endif
- #endif
-diff --git a/arch/x86/include/asm/vdso/gettimeofday.h b/arch/x86/include/asm/vdso/gettimeofday.h
-index a14039a59abd..ae91429129a6 100644
---- a/arch/x86/include/asm/vdso/gettimeofday.h
-+++ b/arch/x86/include/asm/vdso/gettimeofday.h
-@@ -18,7 +18,7 @@
- #include <asm/unistd.h>
- #include <asm/msr.h>
- #include <asm/pvclock.h>
--#include <asm/mshyperv.h>
-+#include <clocksource/hyperv_timer.h>
- 
- #define __vdso_data (VVAR(_vdso_data))
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 8ec676029365..5e1db26b5e15 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -67,6 +67,7 @@
- #include <asm/mshyperv.h>
- #include <asm/hypervisor.h>
- #include <asm/intel_pt.h>
-+#include <clocksource/hyperv_timer.h>
- 
- #define CREATE_TRACE_POINTS
- #include "trace.h"
-diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-index 68a28af31561..ba2c79e6a0ee 100644
---- a/drivers/clocksource/hyperv_timer.c
-+++ b/drivers/clocksource/hyperv_timer.c
-@@ -14,6 +14,8 @@
- #include <linux/percpu.h>
- #include <linux/cpumask.h>
- #include <linux/clockchips.h>
-+#include <linux/clocksource.h>
-+#include <linux/sched_clock.h>
- #include <linux/mm.h>
- #include <clocksource/hyperv_timer.h>
- #include <asm/hyperv-tlfs.h>
-@@ -198,3 +200,140 @@ void hv_stimer_global_cleanup(void)
- 	hv_stimer_free();
- }
- EXPORT_SYMBOL_GPL(hv_stimer_global_cleanup);
-+
-+/*
-+ * Code and definitions for the Hyper-V clocksources.  Two
-+ * clocksources are defined: one that reads the Hyper-V defined MSR, and
-+ * the other that uses the TSC reference page feature as defined in the
-+ * TLFS.  The MSR version is for compatibility with old versions of
-+ * Hyper-V and 32-bit x86.  The TSC reference page version is preferred.
-+ */
-+
-+struct clocksource *hyperv_cs;
-+EXPORT_SYMBOL_GPL(hyperv_cs);
-+
-+#ifdef CONFIG_HYPERV_TSCPAGE
-+
-+static struct ms_hyperv_tsc_page *tsc_pg;
-+
-+struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
-+{
-+	return tsc_pg;
-+}
-+EXPORT_SYMBOL_GPL(hv_get_tsc_page);
-+
-+static u64 notrace read_hv_sched_clock_tsc(void)
-+{
-+	u64 current_tick = hv_read_tsc_page(tsc_pg);
-+
-+	if (current_tick == U64_MAX)
-+		hv_get_time_ref_count(current_tick);
-+
-+	return current_tick;
-+}
-+
-+static u64 read_hv_clock_tsc(struct clocksource *arg)
-+{
-+	return read_hv_sched_clock_tsc();
-+}
-+
-+static struct clocksource hyperv_cs_tsc = {
-+	.name	= "hyperv_clocksource_tsc_page",
-+	.rating	= 400,
-+	.read	= read_hv_clock_tsc,
-+	.mask	= CLOCKSOURCE_MASK(64),
-+	.flags	= CLOCK_SOURCE_IS_CONTINUOUS,
-+};
-+#endif
-+
-+static u64 notrace read_hv_sched_clock_msr(void)
-+{
-+	u64 current_tick;
-+	/*
-+	 * Read the partition counter to get the current tick count. This count
-+	 * is set to 0 when the partition is created and is incremented in
-+	 * 100 nanosecond units.
-+	 */
-+	hv_get_time_ref_count(current_tick);
-+	return current_tick;
-+}
-+
-+static u64 read_hv_clock_msr(struct clocksource *arg)
-+{
-+	return read_hv_sched_clock_msr();
-+}
-+
-+static struct clocksource hyperv_cs_msr = {
-+	.name	= "hyperv_clocksource_msr",
-+	.rating	= 400,
-+	.read	= read_hv_clock_msr,
-+	.mask	= CLOCKSOURCE_MASK(64),
-+	.flags	= CLOCK_SOURCE_IS_CONTINUOUS,
-+};
-+
-+#ifdef CONFIG_HYPERV_TSCPAGE
-+static bool __init hv_init_tsc_clocksource(void)
-+{
-+	u64		tsc_msr;
-+	phys_addr_t	phys_addr;
-+
-+	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
-+		return false;
-+
-+	tsc_pg = vmalloc(PAGE_SIZE);
-+	if (!tsc_pg)
-+		return false;
-+
-+	hyperv_cs = &hyperv_cs_tsc;
-+	phys_addr = page_to_phys(vmalloc_to_page(tsc_pg));
-+
-+	/*
-+	 * The Hyper-V TLFS specifies to preserve the value of reserved
-+	 * bits in registers. So read the existing value, preserve the
-+	 * low order 12 bits, and add in the guest physical address
-+	 * (which already has at least the low 12 bits set to zero since
-+	 * it is page aligned). Also set the "enable" bit, which is bit 0.
-+	 */
-+	hv_get_reference_tsc(tsc_msr);
-+	tsc_msr &= GENMASK_ULL(11, 0);
-+	tsc_msr = tsc_msr | 0x1 | (u64)phys_addr;
-+	hv_set_reference_tsc(tsc_msr);
-+
-+	hv_set_clocksource_vdso(hyperv_cs_tsc);
-+	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
-+
-+	/* sched_clock_register is needed on ARM64 but is a no-op on x86 */
-+	sched_clock_register(read_hv_sched_clock_tsc, 64, HV_CLOCK_HZ);
-+	return true;
-+}
-+#else
-+static bool __init hv_init_tsc_clocksource(void)
-+{
-+	return false;
-+}
-+#endif
-+
-+
-+void __init hv_init_clocksource(void)
-+{
-+	/*
-+	 * Try to set up the TSC page clocksource. If it succeeds, we're
-+	 * done. Otherwise, set up the MSR clocksoruce.  At least one of
-+	 * these will always be available except on very old versions of
-+	 * Hyper-V on x86.  In that case we won't have a Hyper-V
-+	 * clocksource, but Linux will still run with a clocksource based
-+	 * on the emulated PIT or LAPIC timer.
-+	 */
-+	if (hv_init_tsc_clocksource())
-+		return;
-+
-+	if (!(ms_hyperv.features & HV_MSR_TIME_REF_COUNT_AVAILABLE))
-+		return;
-+
-+	hyperv_cs = &hyperv_cs_msr;
-+	clocksource_register_hz(&hyperv_cs_msr, NSEC_PER_SEC/100);
-+
-+	/* sched_clock_register is needed on ARM64 but is a no-op on x86 */
-+	sched_clock_register(read_hv_sched_clock_msr, 64, HV_CLOCK_HZ);
-+}
-+EXPORT_SYMBOL_GPL(hv_init_clocksource);
-diff --git a/drivers/hv/hv_util.c b/drivers/hv/hv_util.c
-index 7d3d31f099ea..e32681ee7b9f 100644
---- a/drivers/hv/hv_util.c
-+++ b/drivers/hv/hv_util.c
-@@ -17,6 +17,7 @@
- #include <linux/hyperv.h>
- #include <linux/clockchips.h>
- #include <linux/ptp_clock_kernel.h>
-+#include <clocksource/hyperv_timer.h>
- #include <asm/mshyperv.h>
- 
- #include "hyperv_vmbus.h"
-diff --git a/include/clocksource/hyperv_timer.h b/include/clocksource/hyperv_timer.h
-index 0cd73f7bc992..a821deb8ecb2 100644
---- a/include/clocksource/hyperv_timer.h
-+++ b/include/clocksource/hyperv_timer.h
-@@ -13,6 +13,10 @@
- #ifndef __CLKSOURCE_HYPERV_TIMER_H
- #define __CLKSOURCE_HYPERV_TIMER_H
- 
-+#include <linux/clocksource.h>
-+#include <linux/math64.h>
-+#include <asm/mshyperv.h>
-+
- #define HV_MAX_MAX_DELTA_TICKS 0xffffffff
- #define HV_MIN_DELTA_TICKS 1
- 
-@@ -24,4 +28,80 @@ extern void hv_stimer_cleanup(unsigned int cpu);
- extern void hv_stimer_global_cleanup(void);
- extern void hv_stimer0_isr(void);
- 
-+#if IS_ENABLED(CONFIG_HYPERV)
-+extern struct clocksource *hyperv_cs;
-+extern void hv_init_clocksource(void);
-+#endif /* CONFIG_HYPERV */
-+
-+#ifdef CONFIG_HYPERV_TSCPAGE
-+extern struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
-+
-+static inline notrace u64
-+hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc)
-+{
-+	u64 scale, offset;
-+	u32 sequence;
-+
-+	/*
-+	 * The protocol for reading Hyper-V TSC page is specified in Hypervisor
-+	 * Top-Level Functional Specification ver. 3.0 and above. To get the
-+	 * reference time we must do the following:
-+	 * - READ ReferenceTscSequence
-+	 *   A special '0' value indicates the time source is unreliable and we
-+	 *   need to use something else. The currently published specification
-+	 *   versions (up to 4.0b) contain a mistake and wrongly claim '-1'
-+	 *   instead of '0' as the special value, see commit c35b82ef0294.
-+	 * - ReferenceTime =
-+	 *        ((RDTSC() * ReferenceTscScale) >> 64) + ReferenceTscOffset
-+	 * - READ ReferenceTscSequence again. In case its value has changed
-+	 *   since our first reading we need to discard ReferenceTime and repeat
-+	 *   the whole sequence as the hypervisor was updating the page in
-+	 *   between.
-+	 */
-+	do {
-+		sequence = READ_ONCE(tsc_pg->tsc_sequence);
-+		if (!sequence)
-+			return U64_MAX;
-+		/*
-+		 * Make sure we read sequence before we read other values from
-+		 * TSC page.
-+		 */
-+		smp_rmb();
-+
-+		scale = READ_ONCE(tsc_pg->tsc_scale);
-+		offset = READ_ONCE(tsc_pg->tsc_offset);
-+		*cur_tsc = hv_get_raw_timer();
-+
-+		/*
-+		 * Make sure we read sequence after we read all other values
-+		 * from TSC page.
-+		 */
-+		smp_rmb();
-+
-+	} while (READ_ONCE(tsc_pg->tsc_sequence) != sequence);
-+
-+	return mul_u64_u64_shr(*cur_tsc, scale, 64) + offset;
-+}
-+
-+static inline notrace u64
-+hv_read_tsc_page(const struct ms_hyperv_tsc_page *tsc_pg)
-+{
-+	u64 cur_tsc;
-+
-+	return hv_read_tsc_page_tsc(tsc_pg, &cur_tsc);
-+}
-+
-+#else /* CONFIG_HYPERV_TSC_PAGE */
-+static inline struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
-+{
-+	return NULL;
-+}
-+
-+static inline u64 hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
-+				       u64 *cur_tsc)
-+{
-+	return U64_MAX;
-+}
-+#endif /* CONFIG_HYPERV_TSCPAGE */
-+
- #endif
+SGkgQWxleCwNCkkndmUgdHJpZWQgdGhpcyBzZXJpZXMgb24gYXJtNjQgKFRodW5kZXJYMiB3aXRo
+IHVwIHRvIFNNVD00ICBhbmQgMjI0IENQVXMpDQp3aXRoIHRoZSBib3JkZXJsaW5lIHRlc3RjYXNl
+IG9mIGFjY2Vzc2luZyBhIHNpbmdsZSBmaWxlIGZyb20gYWxsDQp0aHJlYWRzLiBXaXRoIHRoYXQN
+CnRlc3RjYXNlIHRoZSBxc3BpbmxvY2sgc2xvd3BhdGggaXMgdGhlIHRvcCBzcG90IGluIHRoZSBr
+ZXJuZWwuDQoNClRoZSByZXN1bHRzIGxvb2sgcmVhbGx5IHByb21pc2luZzoNCg0KQ1BVcyAgICBu
+b3JtYWwgICAgbnVtYS1xc3BpbmxvY2tzDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0NCjU2ICAgICAgICAxNDkuNDEgICAgICAgICAgNzMuOTANCjIyNCAgICAg
+IDU3Ni45NSAgICAgICAgICAyOTAuMzENCg0KQWxzbyBmcm9udGVuZC1zdGFsbHMgYXJlIHJlZHVj
+ZWQgdG8gNTAlIGFuZCBpbnRlcmNvbm5lY3QgdHJhZmZpYyBpcw0KZ3JlYXRseSByZWR1Y2VkLg0K
+VGVzdGVkLWJ5OiBKYW4gR2xhdWJlciA8amdsYXViZXJAbWFydmVsbC5jb20+DQoNCi0tSmFuDQoN
+CkFtIEZyLiwgMjkuIE3DpHJ6IDIwMTkgdW0gMTY6MjMgVWhyIHNjaHJpZWIgQWxleCBLb2dhbiA8
+YWxleC5rb2dhbkBvcmFjbGUuY29tPjoNCj4NCj4gVGhpcyB2ZXJzaW9uIGFkZHJlc3NlcyBmZWVk
+YmFjayBmcm9tIFBldGVyIGFuZCBXYWltYW4uIEluIHBhcnRpY3VsYXIsDQo+IHRoZSBDTkEgZnVu
+Y3Rpb25hbGl0eSBoYXMgYmVlbiBtb3ZlZCB0byBhIHNlcGFyYXRlIGZpbGUsIGFuZCBpcyBjb250
+cm9sbGVkDQo+IGJ5IGEgY29uZmlnIG9wdGlvbiAoZW5hYmxlZCBieSBkZWZhdWx0IGlmIE5VTUEg
+aXMgZW5hYmxlZCkuDQo+IEFuIG9wdGltaXphdGlvbiBoYXMgYmVlbiBpbnRyb2R1Y2VkIHRvIHJl
+ZHVjZSB0aGUgb3ZlcmhlYWQgb2Ygc2h1ZmZsaW5nDQo+IHRocmVhZHMgYmV0d2VlbiB3YWl0aW5n
+IHF1ZXVlcyB3aGVuIHRoZSBsb2NrIGlzIG9ubHkgbGlnaHRseSBjb250ZW5kZWQuDQo+DQo+IFN1
+bW1hcnkNCj4gLS0tLS0tLQ0KPg0KPiBMb2NrIHRocm91Z2hwdXQgY2FuIGJlIGluY3JlYXNlZCBi
+eSBoYW5kaW5nIGEgbG9jayB0byBhIHdhaXRlciBvbiB0aGUNCj4gc2FtZSBOVU1BIG5vZGUgYXMg
+dGhlIGxvY2sgaG9sZGVyLCBwcm92aWRlZCBjYXJlIGlzIHRha2VuIHRvIGF2b2lkDQo+IHN0YXJ2
+YXRpb24gb2Ygd2FpdGVycyBvbiBvdGhlciBOVU1BIG5vZGVzLiBUaGlzIHBhdGNoIGludHJvZHVj
+ZXMgQ05BDQo+IChjb21wYWN0IE5VTUEtYXdhcmUgbG9jaykgYXMgdGhlIHNsb3cgcGF0aCBmb3Ig
+cXNwaW5sb2NrLiBJdCBjYW4gYmUNCj4gZW5hYmxlZCB0aHJvdWdoIGEgY29uZmlndXJhdGlvbiBv
+cHRpb24gKE5VTUFfQVdBUkVfU1BJTkxPQ0tTKS4NCj4NCj4gQ05BIGlzIGEgTlVNQS1hd2FyZSB2
+ZXJzaW9uIG9mIHRoZSBNQ1Mgc3Bpbi1sb2NrLiBTcGlubmluZyB0aHJlYWRzIGFyZQ0KPiBvcmdh
+bml6ZWQgaW4gdHdvIHF1ZXVlcywgYSBtYWluIHF1ZXVlIGZvciB0aHJlYWRzIHJ1bm5pbmcgb24g
+dGhlIHNhbWUNCj4gbm9kZSBhcyB0aGUgY3VycmVudCBsb2NrIGhvbGRlciwgYW5kIGEgc2Vjb25k
+YXJ5IHF1ZXVlIGZvciB0aHJlYWRzDQo+IHJ1bm5pbmcgb24gb3RoZXIgbm9kZXMuIFRocmVhZHMg
+c3RvcmUgdGhlIElEIG9mIHRoZSBub2RlIG9uIHdoaWNoDQo+IHRoZXkgYXJlIHJ1bm5pbmcgaW4g
+dGhlaXIgcXVldWUgbm9kZXMuIEF0IHRoZSB1bmxvY2sgdGltZSwgdGhlIGxvY2sNCj4gaG9sZGVy
+IHNjYW5zIHRoZSBtYWluIHF1ZXVlIGxvb2tpbmcgZm9yIGEgdGhyZWFkIHJ1bm5pbmcgb24gdGhl
+IHNhbWUNCj4gbm9kZS4gSWYgZm91bmQgKGNhbGwgaXQgdGhyZWFkIFQpLCBhbGwgdGhyZWFkcyBp
+biB0aGUgbWFpbiBxdWV1ZQ0KPiBiZXR3ZWVuIHRoZSBjdXJyZW50IGxvY2sgaG9sZGVyIGFuZCBU
+IGFyZSBtb3ZlZCB0byB0aGUgZW5kIG9mIHRoZQ0KPiBzZWNvbmRhcnkgcXVldWUsIGFuZCB0aGUg
+bG9jayBpcyBwYXNzZWQgdG8gVC4gSWYgc3VjaCBUIGlzIG5vdCBmb3VuZCwgdGhlDQo+IGxvY2sg
+aXMgcGFzc2VkIHRvIHRoZSBmaXJzdCBub2RlIGluIHRoZSBzZWNvbmRhcnkgcXVldWUuIEZpbmFs
+bHksIGlmIHRoZQ0KPiBzZWNvbmRhcnkgcXVldWUgaXMgZW1wdHksIHRoZSBsb2NrIGlzIHBhc3Nl
+ZCB0byB0aGUgbmV4dCB0aHJlYWQgaW4gdGhlDQo+IG1haW4gcXVldWUuIFRvIGF2b2lkIHN0YXJ2
+YXRpb24gb2YgdGhyZWFkcyBpbiB0aGUgc2Vjb25kYXJ5IHF1ZXVlLA0KPiB0aG9zZSB0aHJlYWRz
+IGFyZSBtb3ZlZCBiYWNrIHRvIHRoZSBoZWFkIG9mIHRoZSBtYWluIHF1ZXVlDQo+IGFmdGVyIGEg
+Y2VydGFpbiBleHBlY3RlZCBudW1iZXIgb2YgaW50cmEtbm9kZSBsb2NrIGhhbmQtb2Zmcy4NCj4N
+Cj4gTW9yZSBkZXRhaWxzIGFyZSBhdmFpbGFibGUgYXQgaHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzE4
+MTAuMDU2MDAuDQo+DQo+IFdlIGhhdmUgZG9uZSBzb21lIHBlcmZvcm1hbmNlIGV2YWx1YXRpb24g
+d2l0aCB0aGUgbG9ja3RvcnR1cmUgbW9kdWxlDQo+IGFzIHdlbGwgYXMgd2l0aCBzZXZlcmFsIGJl
+bmNobWFya3MgZnJvbSB0aGUgd2lsbC1pdC1zY2FsZSByZXBvLg0KPiBUaGUgZm9sbG93aW5nIGxv
+Y2t0b3J0dXJlIHJlc3VsdHMgYXJlIGZyb20gYW4gT3JhY2xlIFg1LTQgc2VydmVyDQo+IChmb3Vy
+IEludGVsIFhlb24gRTctODg5NSB2MyBAIDIuNjBHSHogc29ja2V0cyB3aXRoIDE4IGh5cGVydGhy
+ZWFkZWQNCj4gY29yZXMgZWFjaCkuIEVhY2ggbnVtYmVyIHJlcHJlc2VudHMgYW4gYXZlcmFnZSAo
+b3ZlciAyNSBydW5zKSBvZiB0aGUNCj4gdG90YWwgbnVtYmVyIG9mIG9wcyAoeDEwXjcpIHJlcG9y
+dGVkIGF0IHRoZSBlbmQgb2YgZWFjaCBydW4uIFRoZQ0KPiBzdGFuZGFyZCBkZXZpYXRpb24gaXMg
+YWxzbyByZXBvcnRlZCBpbiAoKSwgYW5kIGluIGdlbmVyYWwsIHdpdGggYSBmZXcNCj4gZXhjZXB0
+aW9ucywgaXMgYWJvdXQgMyUuIFRoZSAnc3RvY2snIGtlcm5lbCBpcyB2NS4wLXJjOCwNCj4gY29t
+bWl0IDI4ZDQ5ZTI4MjY2NSAoImxvY2tpbmcvbG9ja2RlcDogU2hyaW5rIHN0cnVjdCBsb2NrX2Ns
+YXNzX2tleSIpLA0KPiBjb21waWxlZCBpbiB0aGUgZGVmYXVsdCBjb25maWd1cmF0aW9uLiAncGF0
+Y2gnIGlzIHRoZSBtb2RpZmllZA0KPiBrZXJuZWwgY29tcGlsZWQgd2l0aCBOVU1BX0FXQVJFX1NQ
+SU5MT0NLUyBub3Qgc2V0OyBpdCBpcyBpbmNsdWRlZCB0byBzaG93DQo+IHRoYXQgYW55IHBlcmZv
+cm1hbmNlIGNoYW5nZXMgdG8gdGhlIGV4aXN0aW5nIHFzcGlubG9jayBpbXBsZW1lbnRhdGlvbiBh
+cmUNCj4gZXNzZW50aWFsbHkgbm9pc2UuICdwYXRjaC1DTkEnIGlzIHRoZSBtb2RpZmllZCBrZXJu
+ZWwgd2l0aA0KPiBOVU1BX0FXQVJFX1NQSU5MT0NLUyBzZXQ7IHRoZSBzcGVlZHVwIGlzIGNhbGN1
+bGF0ZWQgZGl2aWRpbmcNCj4gJ3BhdGNoLUNOQScgYnkgJ3N0b2NrJy4NCj4NCj4gI3RociAgICAg
+c3RvY2sgICAgICAgICAgcGF0Y2ggICAgICAgIHBhdGNoLUNOQSAgIHNwZWVkdXAgKHBhdGNoLUNO
+QS9zdG9jaykNCj4gICAxICAyLjczMSAoMC4xMDIpICAyLjczMiAoMC4wOTMpICAgMi43MTYgKDAu
+MDgyKSAgMC45OTUNCj4gICAyICAzLjA3MSAoMC4xMjQpICAzLjA4NCAoMC4xMDkpICAgMy4wNzkg
+KDAuMTEzKSAgMS4wMDMNCj4gICA0ICA0LjIyMSAoMC4xMzgpICA0LjIyOSAoMC4wODcpICAgNC40
+MDggKDAuMTAzKSAgMS4wNDQNCj4gICA4ICA1LjM2NiAoMC4xNTQpICA1LjI3NCAoMC4wOTQpICAg
+Ni45NTggKDAuMjMzKSAgMS4yOTcNCj4gIDE2ICA2LjY3MyAoMC4xNjQpICA2LjY4OSAoMC4wOTUp
+ICAgOC41NDcgKDAuMTQ1KSAgMS4yODENCj4gIDMyICA3LjM2NSAoMC4xNzcpICA3LjM1MyAoMC4x
+ODMpICAgOS4zMDUgKDAuMjAyKSAgMS4yNjMNCj4gIDM2ICA3LjQ3MyAoMC4xOTgpICA3LjQyMiAo
+MC4xODEpICAgOS40NDEgKDAuMTk2KSAgMS4yNjMNCj4gIDcyICA2LjgwNSAoMC4xODIpICA2LjY5
+OSAoMC4xNzApICAxMC4wMjAgKDAuMjE4KSAgMS40NzINCj4gMTA4ICA2LjUwOSAoMC4wODIpICA2
+LjQ4MCAoMC4xMTUpICAxMC4wMjcgKDAuMTk0KSAgMS41NDANCj4gMTQyICA2LjIyMyAoMC4xMDkp
+ICA2LjI5NCAoMC4xMDApICAgOS44NzQgKDAuMTgzKSAgMS41ODcNCj4NCj4gVGhlIGZvbGxvd2lu
+ZyB0YWJsZXMgY29udGFpbiB0aHJvdWdocHV0IHJlc3VsdHMgKG9wcy91cykgZnJvbSB0aGUgc2Ft
+ZQ0KPiBzZXR1cCBmb3Igd2lsbC1pdC1zY2FsZS9vcGVuMV90aHJlYWRzOg0KPg0KPiAjdGhyICAg
+ICBzdG9jayAgICAgICAgICBwYXRjaCAgICAgICAgcGF0Y2gtQ05BICAgc3BlZWR1cCAocGF0Y2gt
+Q05BL3N0b2NrKQ0KPiAgIDEgIDAuNTY1ICgwLjAwNCkgIDAuNTY3ICgwLjAwMSkgIDAuNTY1ICgw
+LjAwMykgIDAuOTk5DQo+ICAgMiAgMC44OTIgKDAuMDIxKSAgMC44OTkgKDAuMDIyKSAgMC45MDAg
+KDAuMDE4KSAgMS4wMDkNCj4gICA0ICAxLjUwMyAoMC4wMzEpICAxLjUyNyAoMC4wMzgpICAxLjQ4
+MSAoMC4wMjUpICAwLjk4NQ0KPiAgIDggIDEuNzU1ICgwLjEwNSkgIDEuNzE0ICgwLjA3OSkgIDEu
+NjgzICgwLjEwNikgIDAuOTU5DQo+ICAxNiAgMS43NDAgKDAuMDk1KSAgMS43NTIgKDAuMDg3KSAg
+MS42OTMgKDAuMDk4KSAgMC45NzMNCj4gIDMyICAwLjg4NCAoMC4wODApICAwLjkwOCAoMC4wOTAp
+ICAxLjY4NiAoMC4wOTIpICAxLjkwNg0KPiAgMzYgIDAuOTA3ICgwLjA5NSkgIDAuODk0ICgwLjA4
+OCkgIDEuNzA5ICgwLjA4MSkgIDEuODg1DQo+ICA3MiAgMC44NTYgKDAuMDQxKSAgMC44NTggKDAu
+MDQzKSAgMS43MDcgKDAuMDgyKSAgMS45OTQNCj4gMTA4ICAwLjg1OCAoMC4wMzkpICAwLjg2OSAo
+MC4wMzcpICAxLjczMiAoMC4wNzYpICAyLjAyMA0KPiAxNDIgIDAuODA5ICgwLjA0NCkgIDAuODU0
+ICgwLjA0NCkgIDEuNzI4ICgwLjA4MykgIDIuMTM1DQo+DQo+IGFuZCB3aWxsLWl0LXNjYWxlL2xv
+Y2syX3RocmVhZHM6DQo+DQo+ICN0aHIgICAgIHN0b2NrICAgICAgICAgIHBhdGNoICAgICAgICBw
+YXRjaC1DTkEgICBzcGVlZHVwIChwYXRjaC1DTkEvc3RvY2spDQo+ICAgMSAgMS43MTMgKDAuMDA0
+KSAgMS43MTUgKDAuMDA0KSAgMS43MTEgKDAuMDA0KSAgMC45OTkNCj4gICAyICAyLjg4OSAoMC4w
+NTcpICAyLjg2NCAoMC4wNzgpICAyLjg3NiAoMC4wNjYpICAwLjk5NQ0KPiAgIDQgIDQuNTgyICgx
+LjAzMikgIDUuMDY2ICgwLjc4NykgIDQuNzI1ICgwLjk1OSkgIDEuMDMxDQo+ICAgOCAgNC4yMjcg
+KDAuMTk2KSAgNC4xMDQgKDAuMjc0KSAgNC4wOTIgKDAuMzY1KSAgMC45NjgNCj4gIDE2ICA0LjEw
+OCAoMC4xNDEpICA0LjA1NyAoMC4xMzgpICA0LjAxMCAoMC4xNjgpICAwLjk3Ng0KPiAgMzIgIDIu
+Njc0ICgwLjEyNSkgIDIuNjI1ICgwLjE3MSkgIDMuOTU4ICgwLjE1NikgIDEuNDgwDQo+ICAzNiAg
+Mi42MjIgKDAuMTA3KSAgMi41NTMgKDAuMTUwKSAgMy45NzggKDAuMTE2KSAgMS41MTcNCj4gIDcy
+ICAyLjAwOSAoMC4wOTApICAxLjk5OCAoMC4wOTIpICAzLjkzMiAoMC4xMTQpICAxLjk1Nw0KPiAx
+MDggIDIuMTU0ICgwLjA2OSkgIDIuMDg5ICgwLjA5MCkgIDMuODcwICgwLjA4MSkgIDEuNzk3DQo+
+IDE0MiAgMS45NTMgKDAuMTA2KSAgMS45NDMgKDAuMTExKSAgMy44NTMgKDAuMTAwKSAgMS45NzMN
+Cj4NCj4gRnVydGhlciBjb21tZW50cyBhcmUgd2VsY29tZSBhbmQgYXBwcmVjaWF0ZWQuDQo+DQo+
+IEFsZXggS29nYW4gKDUpOg0KPiAgIGxvY2tpbmcvcXNwaW5sb2NrOiBNYWtlIGFyY2hfbWNzX3Nw
+aW5fdW5sb2NrX2NvbnRlbmRlZCBtb3JlIGdlbmVyaWMNCj4gICBsb2NraW5nL3FzcGlubG9jazog
+UmVmYWN0b3IgdGhlIHFzcGlubG9jayBzbG93IHBhdGgNCj4gICBsb2NraW5nL3FzcGlubG9jazog
+SW50cm9kdWNlIENOQSBpbnRvIHRoZSBzbG93IHBhdGggb2YgcXNwaW5sb2NrDQo+ICAgbG9ja2lu
+Zy9xc3BpbmxvY2s6IEludHJvZHVjZSBzdGFydmF0aW9uIGF2b2lkYW5jZSBpbnRvIENOQQ0KPiAg
+IGxvY2tpbmcvcXNwaW5sb2NrOiBJbnRyb2R1Y2UgdGhlIHNodWZmbGUgcmVkdWN0aW9uIG9wdGlt
+aXphdGlvbiBpbnRvDQo+ICAgICBDTkENCj4NCj4gIGFyY2gvYXJtL2luY2x1ZGUvYXNtL21jc19z
+cGlubG9jay5oICAgfCAgIDQgKy0NCj4gIGFyY2gveDg2L0tjb25maWcgICAgICAgICAgICAgICAg
+ICAgICAgfCAgMTQgKysNCj4gIGluY2x1ZGUvYXNtLWdlbmVyaWMvcXNwaW5sb2NrX3R5cGVzLmgg
+fCAgMTMgKysNCj4gIGtlcm5lbC9sb2NraW5nL21jc19zcGlubG9jay5oICAgICAgICAgfCAgMTYg
+KystDQo+ICBrZXJuZWwvbG9ja2luZy9xc3BpbmxvY2suYyAgICAgICAgICAgIHwgIDc3ICsrKysr
+KysrKy0tDQo+ICBrZXJuZWwvbG9ja2luZy9xc3BpbmxvY2tfY25hLmggICAgICAgIHwgMjQ1ICsr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gIDYgZmlsZXMgY2hhbmdlZCwgMzU0
+IGluc2VydGlvbnMoKyksIDE1IGRlbGV0aW9ucygtKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGtl
+cm5lbC9sb2NraW5nL3FzcGlubG9ja19jbmEuaA0KPg0KPiAtLQ0KPiAyLjExLjAgKEFwcGxlIEdp
+dC04MSkNCj4NCg==
