@@ -2,69 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E3161B53
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2019 09:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F090618B8
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2019 03:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725840AbfGHHoT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Jul 2019 03:44:19 -0400
-Received: from [197.254.217.239] ([197.254.217.239]:44482 "EHLO mail.cert.sd"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725815AbfGHHoT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 8 Jul 2019 03:44:19 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.cert.sd (Postfix) with ESMTP id 561133D133C;
-        Mon,  8 Jul 2019 03:22:17 +0200 (CAT)
-Received: from mail.cert.sd ([127.0.0.1])
-        by localhost (mail.cert.sd [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id U-CRq9ycpL4J; Mon,  8 Jul 2019 03:22:17 +0200 (CAT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.cert.sd (Postfix) with ESMTP id 8EA4F46821A;
-        Mon,  8 Jul 2019 01:05:23 +0200 (CAT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.cert.sd 8EA4F46821A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cert.sd;
-        s=3B54D788-828F-11E8-945F-63B06BDA8568; t=1562540723;
-        bh=i6jGklZsYhvyS6O+r4vHl3fsu2UV4hnEJS7rdZ4svBg=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=f4ACQN9dXLReGaN1xxvA0P6PIzRRs4GhUv+S6SXwi7xcW+WOzNxTHDz6jyZJssPea
-         LqUf55pEkA+hUiDun7NV60uvUCev1PJMzcZS7KTDbTIyM8vCZond80eLd7p4P2kEJK
-         1LU4YtRdhrhZjeCEiAAAbFYg8Jpz7tulDo6wLSdjaIDMUc7wLY9xKDHwsNq++o65nh
-         tCs1YVe5T6vZSm8BuINdvC5M663/N66q2rs/MyS4sShoyv7H/GVdtg/b0wKnTXlIKw
-         iWH+qKMLWUov6SQEwDOFvZBjt+sldqekUgYbIlPgE3T8hsbe8Cwdd1kqP4q087Rrhb
-         EE2jZvaD+AHAg==
-X-Virus-Scanned: amavisd-new at mail.cert.sd
-Received: from mail.cert.sd ([127.0.0.1])
-        by localhost (mail.cert.sd [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5ciYYepohvnn; Mon,  8 Jul 2019 01:05:23 +0200 (CAT)
-Received: from [192.168.0.103] (unknown [105.112.51.76])
-        by mail.cert.sd (Postfix) with ESMTPSA id 67F4B38D4A3;
-        Sun,  7 Jul 2019 21:41:48 +0200 (CAT)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727963AbfGHBPn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 7 Jul 2019 21:15:43 -0400
+Received: from ozlabs.org ([203.11.71.1]:46577 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727949AbfGHBPn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 7 Jul 2019 21:15:43 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 45hnZJ0R8Jz9sN4;
+        Mon,  8 Jul 2019 11:15:35 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Aleksa Sarai <cyphar@cyphar.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v9 10/10] selftests: add openat2(2) selftests
+In-Reply-To: <20190706145737.5299-11-cyphar@cyphar.com>
+References: <20190706145737.5299-1-cyphar@cyphar.com> <20190706145737.5299-11-cyphar@cyphar.com>
+Date:   Mon, 08 Jul 2019 11:15:35 +1000
+Message-ID: <878st9iax4.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: CASH GRANT / SPENDEN !!!
-To:     Recipients <moamar@cert.sd>
-From:   "LISA ROBINSON" <moamar@cert.sd>
-Date:   Sun, 07 Jul 2019 20:32:21 +0100
-Reply-To: charitylisajohnrobinson900@usa.com
-X-Antivirus: Avast (VPS 190707-4, 07/07/2019), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20190707194148.67F4B38D4A3@mail.cert.sd>
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Sehr geehrter Empf=E4nger, Sie wurden ausgew=E4hlt, um von Frau Lisa Robins=
-on (1.200.000,00 USD) als wohlt=E4tige Spende / Stipendium zu erhalten. Dah=
-er m=FCssen Sie sie f=FCr weitere Informationen per E-Mail kontaktieren.
+Hi Aleksa,
 
+A few minor comments below.
 
-Dear Beneficiary, You have been selected to receive ($1,200,000.00 USD) as =
-charity donation/grant from Mrs. Lisa Robinson.Therefore, you are required =
-to contact her through email for more details. 
+Aleksa Sarai <cyphar@cyphar.com> writes:
+> diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
+> new file mode 100644
+> index 000000000000..8235a49928f6
+> --- /dev/null
+> +++ b/tools/testing/selftests/openat2/Makefile
+> @@ -0,0 +1,12 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +CFLAGS += -Wall -O2 -g
+> +TEST_GEN_PROGS := linkmode_test resolve_test rename_attack_test
+> +
+> +include ../lib.mk
+> +
+> +$(OUTPUT)/linkmode_test: linkmode_test.c helpers.o
+> +$(OUTPUT)/rename_attack_test: rename_attack_test.c helpers.o
+> +$(OUTPUT)/resolve_test: resolve_test.c helpers.o
 
----
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+You don't need to tell make that foo depends on foo.c.
 
+Also if you make the dependency be on helpers.c then you won't get an
+intermediate helpers.o, and then you don't need to clean it.
+
+So the above three lines could just be:
+
+$(TEST_GEN_PROGS): helpers.c
+
+> +EXTRA_CLEAN = helpers.o $(wildcard /tmp/ksft-openat2-*)
+
+If you follow my advice above you don't need helpers.o in there.
+
+Deleting things from /tmp is also a bit fishy on shared machines, ie. it
+will error if those files happen to be owned by another user.
+
+cheers
