@@ -2,135 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DDC61A70
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2019 07:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E179C61F16
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2019 14:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728672AbfGHFsG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Jul 2019 01:48:06 -0400
-Received: from mx1.mailbox.org ([80.241.60.212]:41686 "EHLO mx1.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728654AbfGHFsG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 8 Jul 2019 01:48:06 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx1.mailbox.org (Postfix) with ESMTPS id D5ED350844;
-        Mon,  8 Jul 2019 07:47:59 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
-        with ESMTP id 6HYUzmgqQjbZ; Mon,  8 Jul 2019 07:47:45 +0200 (CEST)
-Date:   Mon, 8 Jul 2019 15:47:35 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
+        id S1731112AbfGHM5T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Jul 2019 08:57:19 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:50347 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731098AbfGHM5T (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Jul 2019 08:57:19 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190708125716euoutp0221220be68333346b7729d7d1979eeb9b~vb_fGgwrk1882318823euoutp02a
+        for <linux-arch@vger.kernel.org>; Mon,  8 Jul 2019 12:57:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190708125716euoutp0221220be68333346b7729d7d1979eeb9b~vb_fGgwrk1882318823euoutp02a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1562590637;
+        bh=moH9FyJACg7taxt6hPEp6Gwj8L3RJFkHFSIW10SGh/8=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=l4dpUgn+xlSJfnhPtOE0y2zqA0uxPILyb+BAmfDWwP5P7IculB9vc1dJWYMNOduP1
+         nAPUvD64tY1y0AzBt/dmFCWl2PWqhUkh+VayYV3XcglnJXDHUkiCCvG+1m8p6IV51r
+         OR4ZaEpTeHblAaIZDvEhDMWuRqkHPG1tf1cpNAZc=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190708125715eucas1p18070570968e5ad20755ba1e3578535aa~vb_d64wFK1523415234eucas1p1W;
+        Mon,  8 Jul 2019 12:57:15 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 00.A7.04377.BAD332D5; Mon,  8
+        Jul 2019 13:57:15 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190708125714eucas1p1f71616c08694fb91f20a664e59c339d0~vb_dNNfuL1523415234eucas1p1V;
+        Mon,  8 Jul 2019 12:57:14 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190708125714eusmtrp1ef454f56758f1cc56e77b9357db5ea29~vb_c_6sdD1747017470eusmtrp11;
+        Mon,  8 Jul 2019 12:57:14 +0000 (GMT)
+X-AuditID: cbfec7f4-113ff70000001119-41-5d233dabb673
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9A.1A.04140.AAD332D5; Mon,  8
+        Jul 2019 13:57:14 +0100 (BST)
+Received: from [106.120.51.75] (unknown [106.120.51.75]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190708125713eusmtip29fd40a6e2195085cb1853b84d3ad8143~vb_bebL6c2121721217eusmtip2-;
+        Mon,  8 Jul 2019 12:57:13 +0000 (GMT)
+Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
+ implementation
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v9 10/10] selftests: add openat2(2) selftests
-Message-ID: <20190708054735.3fepxxtolqaqwmrp@yavin>
-References: <20190706145737.5299-1-cyphar@cyphar.com>
- <20190706145737.5299-11-cyphar@cyphar.com>
- <878st9iax4.fsf@concordia.ellerman.id.au>
+        Huw Davies <huw@codeweavers.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Peter Collingbourne <pcc@google.com>
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <ed758c10-7260-bec3-caf1-08cae7e0968d@samsung.com>
+Date:   Mon, 8 Jul 2019 14:57:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fv76k6im74ofqhz7"
-Content-Disposition: inline
-In-Reply-To: <878st9iax4.fsf@concordia.ellerman.id.au>
+In-Reply-To: <06c264a8-8778-18b1-1094-4281a4a2abc9@arm.com>
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0wUVxjtt3N3ZiAuGRYNn4uVZIpNSqKIMfG2WKoNTSemPxpSG1NDy1An
+        QISF7ABVa1Jaq+LKy0UFt3RdU1QYsZoBt7hImi4IKgbf6wsfBNJAEW0DWqmvsjs05d853znn
+        fo9cnrEeY218rr1IcdjlPJGNJL7uyQsLj7z7RsbiI1ocrd47TGijZxLoC1c3Rx8dKgfqGX+d
+        7mt8QGiZ/zGh+mDQTK/461la2/+IpTv0E0ADezqADro9LD3adYejlaPdDK3qv87Sy6cS6KQ+
+        AHT3yM8c9TbdIrRF38PQjpeThI78dYasiJV87T6z1OxpBulK8BIjPfvHBdLEtW9N0kn3HU7y
+        6sWSru1gpf7gKVZ62NfHSaebjpqkloZvpJoDU/7RrgEiXXSulypbNfg4+rPI5euUvNwSxZGU
+        mhmZs7u52Vx4nNnQ/rQfSqHP5ASeR2EpBs9+5IRI3io0Au593MIaZAKw4dcKMMg44J9dzikl
+        Ipy463QRQzgM+NzbyRlkDFB7UmcOuWKET7D1+x9JCM8WkvHk6Lbwu4zQwaJre2nYxE4JFacr
+        IYQtQiq2De4P14mQgNeGBpkQniOswXNdHmJ4ovHsvqEwjhBS8F7NwXCWEWLxu4kms4Hj8Zex
+        eibUDIUHPP4+3Goy5k5D35YKMHAM/tHTyhl4HvbWlBMjsAWwvP02Z5BqwHs93ulECnb2XDKH
+        bsYIb+Exf5JRXok7q6qmTxmFN8aijSGi0OWrZYyyBcu2WQ13Aj7TaqfHseHOoVekGkT3jNXc
+        M9Zxz1jH/X9fLxANYpViNT9bUZfYla8WqXK+WmzPXvRlQb4OU9+492XPRBv4n2cFQOBBnGXh
+        54sZVrNcom7MDwDyjDjbIqfHZ1gt6+SNmxRHwReO4jxFDUAcT8RYy9ev3V9rFbLlImW9ohQq
+        jv9UEx9hK4Vqy+U4/8X9vfd7tbmr3fH2RJr+w6efj0PMiQVtupiTtnLrO1vffFi4OXU8e9Ou
+        5fOfnuHqkvXR7qwo8dXcsrr0YOnbNvigRn7v6uYbUUUBoSRXqk/LuEkSz4+UpxTczqI2LXg4
+        qYNdtes3saFs8bK/1VWdHw5omZnvu39aezNpuEEkao6cnMg4VPlfv8cM1MIDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0gTYRzHebzb7SbNzmX4ZPTHS4yiVue/PZZaEeERvoiKCNuqKy8NnZPd
+        JhVhFhZ5lNrUrGFLIUVtC7vMNBXSzJJgpdmMsD8ywcyclEZZGW2OwHcf+H4+L37wIzFVpyyM
+        PJ5t4o3ZXBZNBOLP/z59v74hcZVu46QUiUqufsJRnW0GoFlLjxxN1l4CyDa1DF2v+4Kjiw+/
+        40hyu2To1cNKAlUMTRKoULoPUFd5B0Buq41Aju53clQ03oOh4qFBAvW3R6AZaRigsrE7clRV
+        /xZH96RyDHX8ncHR2Ndn+NZQtrmtWcbabXbAvnL1YezvXxbATr8+G8C2Wt/J2SrJzEoNhQQ7
+        5GonWI/TKWef1DsC2Hu3zrCl1V5/vHsYZ1+KmWxRUwPYFZyqTjAazCZ+ZYZBMCXSBxgUpWbi
+        kToqJl7NRGt0m6Ji6Q1JCWl81vFc3rgh6bA6o8xul+U0Yifafg6BfOAMEIGChFQMfC9acBEE
+        kiqqBsDejxUyEZDeIQzeLKD9ziL4xyUSfmccQE/1J9w3LKL2wqaCG3McQjGwdfzCnIRRnQR8
+        0CLK/UUpBkunLst9FuG1Lj8pAj5WUkmwxX1T5mOcioCvR9yYjxdT+6HF1Yr7nWDYe31kjhXU
+        ZvihtGauxajV8I+tH/NzKDw3XS/z8wr4YKISKwEq67zcOi+xzkus85IqgDeAEN4s6NP1QpRa
+        4PSCOTtdfdSgl4D3fZp7ZppagOjZ0wUoEtALlORyWqeScbnCSX0XgCRGhyi53St0KmUad/IU
+        bzQcMpqzeKELxHqPu4KFLT5q8D5jtukQE8toUDyjidZExyE6VHmR6tSqqHTOxGfyfA5v/N8F
+        kIqwfJCaEFTbui6CeaQ1Bu3drl04uOWxM3zpNzL54DDJjZIOrfNFZ9zw5I6B5CXaNRFv3Hnn
+        b3sq23TF9q9L74qPcw8WTvz8rQ685jmSto+OYRPT+zpMiqlIx+iFnSndec2NY5bZ04k/ajRl
+        5Zb2VRXPHAOR4dsU0rGKH+Lqz3l3HPtSaFzI4Ji1mFHg/gEST985VAMAAA==
+X-CMS-MailID: 20190708125714eucas1p1f71616c08694fb91f20a664e59c339d0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190628130921eucas1p239935b0771032c331911eacc1a69dd2e
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190628130921eucas1p239935b0771032c331911eacc1a69dd2e
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+        <20190621095252.32307-5-vincenzo.frascino@arm.com>
+        <CGME20190628130921eucas1p239935b0771032c331911eacc1a69dd2e@eucas1p2.samsung.com>
+        <1fd47b0d-f77f-8d07-c039-6ac9072834fc@samsung.com>
+        <27386d82-2906-b541-f71d-3c61f5099bdf@arm.com>
+        <530cd07e-0da7-1d83-be4e-b14813029424@samsung.com>
+        <06c264a8-8778-18b1-1094-4281a4a2abc9@arm.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Vincenzo, 
 
---fv76k6im74ofqhz7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 6/29/19 08:58, Vincenzo Frascino wrote:
+> If I may, I would like to ask to you one favor, could you please keep an eye on
+> next and once those patches are merged repeat the test?
+> 
+> I want just to make sure that the regression does not reappear.
 
-On 2019-07-08, Michael Ellerman <mpe@ellerman.id.au> wrote:
-> Aleksa Sarai <cyphar@cyphar.com> writes:
-> > diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/s=
-elftests/openat2/Makefile
-> > new file mode 100644
-> > index 000000000000..8235a49928f6
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/openat2/Makefile
-> > @@ -0,0 +1,12 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +CFLAGS +=3D -Wall -O2 -g
-> > +TEST_GEN_PROGS :=3D linkmode_test resolve_test rename_attack_test
-> > +
-> > +include ../lib.mk
-> > +
-> > +$(OUTPUT)/linkmode_test: linkmode_test.c helpers.o
-> > +$(OUTPUT)/rename_attack_test: rename_attack_test.c helpers.o
-> > +$(OUTPUT)/resolve_test: resolve_test.c helpers.o
->=20
-> You don't need to tell make that foo depends on foo.c.
->=20
-> Also if you make the dependency be on helpers.c then you won't get an
-> intermediate helpers.o, and then you don't need to clean it.
->=20
-> So the above three lines could just be:
->=20
-> $(TEST_GEN_PROGS): helpers.c
+My apologies, I forgot about this for a moment. I repeated the test with 
+next-20190705 tag and couldn't see any regressions.
 
-I had some trouble getting this to work (hence why I went with the
-version in the patch), but it looks like this works. I'll include it in
-the next set.
-
-> > +EXTRA_CLEAN =3D helpers.o $(wildcard /tmp/ksft-openat2-*)
->=20
-> If you follow my advice above you don't need helpers.o in there.
->=20
-> Deleting things from /tmp is also a bit fishy on shared machines, ie. it
-> will error if those files happen to be owned by another user.
-
-Good point. I'll drop that hunk in the next set.
-
-Thanks!
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---fv76k6im74ofqhz7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXSLY8wAKCRCdlLljIbnQ
-Enn2AQC9g0o7YHWuxFtQCLt+aHIE39RQMQDzB5QWrvZA8DdIUQEA69BwekXhnh8X
-m2czJJrJISBz5Nz1y3qJzwUUGBvxEgY=
-=RdsA
------END PGP SIGNATURE-----
-
---fv76k6im74ofqhz7--
+-- 
+Regards,
+Sylwester
