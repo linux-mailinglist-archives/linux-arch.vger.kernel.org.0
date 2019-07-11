@@ -2,24 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D57657A2
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2019 15:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F42B65E47
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2019 19:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbfGKNIa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 Jul 2019 09:08:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:45926 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728655AbfGKNI3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 11 Jul 2019 09:08:29 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B73762B;
-        Thu, 11 Jul 2019 06:08:28 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4435C3F59C;
-        Thu, 11 Jul 2019 06:08:26 -0700 (PDT)
+        id S1728836AbfGKROX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 Jul 2019 13:14:23 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:43705 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728595AbfGKROX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 Jul 2019 13:14:23 -0400
+Received: by mail-pl1-f194.google.com with SMTP id cl9so3343449plb.10
+        for <linux-arch@vger.kernel.org>; Thu, 11 Jul 2019 10:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ucw9rSRviGvxmtHa1eJcbGqoOfZIZgp2Nd0u5B3lWZA=;
+        b=Da22eipDrFV3sVjp5lhMK1Ag4ov7GIbghnsCPMLPbWr4HTpMO+0Xb4J2rn8DRx6qHT
+         raOPgwKUlI6vG5+eZKye7qCGQQETow7AmhpRoh5cHUdPCXlRT2cKL12Jq3MiFeBw679W
+         wk1YpqERzczakZBDQQ8pko2DW4C1f70wJ9S/ns+5k4w9umeU1hYehewCAr5tVqqhs2DW
+         GqdMBotLNyKw4ICag2o2Axnjtx62CvFcXWSjSNMUtdvoLBIYxzy7ujuT7vx9Sj96r9wA
+         vjLfAdfQxMO9pCXH+JWhO4dfi00ckikjgNwJov9+WJZ2h2rnzwxooDe//g0ahmSlempo
+         WnFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ucw9rSRviGvxmtHa1eJcbGqoOfZIZgp2Nd0u5B3lWZA=;
+        b=HGxzO9iNdmAq0yGgEm9B5CvBGK86MfaZdv/C5P7Cn85BOO2O5alah4iF2DIGckggv/
+         yLuGHBorx1as3d5XSDTakXZ080SWvGNK95xxAI923bSJVkR8oeP5SZU7zTyKhoqWkHnK
+         MhWN/ZdhEiGx4OF9HmEkGBlPhOOWs9dI03/69Pk3gqk4r88l67swBnWEvtFT92Wx7EfQ
+         4Oq1AfG8iVTqVTOS48ffuNcvnAaNpg6rnZiBLeead2s8kuxo/GzQYfQ//QapcIN2pNd6
+         IUYHbZCvWwSkR7OEic1MRbhxCaMqnNAeTDn40npcU+PPYok25d+d23ATtAydTpVZ74XI
+         4SSQ==
+X-Gm-Message-State: APjAAAUnJ8rfFe+m/q8U6VTRCGsaLgnlQ0FK396JkNgMOIV1TNangNmk
+        hPxJTchmQyTuu5eiosc0RI4CffXC0tWxbC9u+aiPyg==
+X-Google-Smtp-Source: APXvYqyCiqSqHnYjKAeXDLQuC0c8sZpZJD60JXgP1quXPWouPH4pF7fZdEdLqQyRgFNNeHBCL0hiMDCMtYcdYDM2b4s=
+X-Received: by 2002:a17:902:9f93:: with SMTP id g19mr5777071plq.223.1562865261987;
+ Thu, 11 Jul 2019 10:14:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190710130206.1670830-1-arnd@arndb.de> <33511b0e-6d7b-c156-c415-7a609b049567@arm.com>
+ <CAK8P3a1EBaWdbAEzirFDSgHVJMtWjuNt2HGG8z+vpXeNHwETFQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a1EBaWdbAEzirFDSgHVJMtWjuNt2HGG8z+vpXeNHwETFQ@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 11 Jul 2019 10:14:10 -0700
+Message-ID: <CAKwvOdkubvsRCnJKCaesB=PF=DgXfsBzwzR8kyE9NzWPU8Gehg@mail.gmail.com>
 Subject: Re: [PATCH] vsyscall: use __iter_div_u64_rem()
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Andy Lutomirski <luto@kernel.org>,
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
@@ -40,133 +71,22 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Huw Davies <huw@codeweavers.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         clang-built-linux <clang-built-linux@googlegroups.com>
-References: <20190710130206.1670830-1-arnd@arndb.de>
- <33511b0e-6d7b-c156-c415-7a609b049567@arm.com>
- <CAK8P3a1EBaWdbAEzirFDSgHVJMtWjuNt2HGG8z+vpXeNHwETFQ@mail.gmail.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <049c3a69-e2da-4169-da4a-8e46cbcd323c@arm.com>
-Date:   Thu, 11 Jul 2019 14:08:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <CAK8P3a1EBaWdbAEzirFDSgHVJMtWjuNt2HGG8z+vpXeNHwETFQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd,
-
-On 11/07/2019 13:28, Arnd Bergmann wrote:
-> On Thu, Jul 11, 2019 at 2:14 PM Vincenzo Frascino
-> <vincenzo.frascino@arm.com> wrote:
->>
->>
->> Could you please tell me which version of the compiler did you use?
->>
->> My building command is:
->>
->> # make mrproper && make CC=clang HOSTCC=clang i386_defconfig && make ARCH=i386
->> CC=clang HOSTCC=clang -j56
->>
-> 
-> See below for the patch I am using locally to work around this.
-> That patch is probably wrong, so I have not submitted it yet, but it
-> gives you a clean build ;-)
-> 
->      Arnd
-> 
-
-Thank you, I will give it a go :-)
-
-> 8<---
-> Subject: [PATCH] x86: percpu: fix clang 32-bit build
-> 
+On Thu, Jul 11, 2019 at 5:28 AM Arnd Bergmann <arnd@arndb.de> wrote:
 > clang does not like an inline assembly with a "=q" contraint for
 > a 64-bit output:
-> 
-> arch/x86/events/perf_event.h:824:21: error: invalid output size for
-> constraint '=q'
->         u64 disable_mask = __this_cpu_read(cpu_hw_events.perf_ctr_virt_mask);
->                            ^
-> include/linux/percpu-defs.h:447:2: note: expanded from macro '__this_cpu_read'
->         raw_cpu_read(pcp);                                              \
->         ^
-> include/linux/percpu-defs.h:421:28: note: expanded from macro 'raw_cpu_read'
->  #define raw_cpu_read(pcp)
-> __pcpu_size_call_return(raw_cpu_read_, pcp)
->                                         ^
-> include/linux/percpu-defs.h:322:23: note: expanded from macro
-> '__pcpu_size_call_return'
->         case 1: pscr_ret__ = stem##1(variable); break;                  \
->                              ^
-> <scratch space>:357:1: note: expanded from here
-> raw_cpu_read_1
-> ^
-> arch/x86/include/asm/percpu.h:394:30: note: expanded from macro 'raw_cpu_read_1'
->  #define raw_cpu_read_1(pcp)             percpu_from_op(, "mov", pcp)
->                                         ^
-> arch/x86/include/asm/percpu.h:189:15: note: expanded from macro 'percpu_from_op'
->                     : "=q" (pfo_ret__)                  \
->                             ^
-> 
-> According to the commit that introduced the "q" constraint, this was
-> needed to fix miscompilation, but it gives no further detail.
-> 
-> Using the normal "=r" constraint seems to work so far.
-> 
-> Fixes: 3c598766a2ba ("x86: fix percpu_{to,from}_op()")
-> Cc: Jan Beulich <jbeulich@suse.com>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-> index 2278797c769d..e791fbf4018f 100644
-> --- a/arch/x86/include/asm/percpu.h
-> +++ b/arch/x86/include/asm/percpu.h
-> @@ -99,7 +99,7 @@ do {                                                  \
->         case 1:                                         \
->                 asm qual (op "b %1,"__percpu_arg(0)     \
->                     : "+m" (var)                        \
-> -                   : "qi" ((pto_T__)(val)));           \
-> +                   : "ri" ((pto_T__)(val)));           \
->                 break;                                  \
->         case 2:                                         \
->                 asm qual (op "w %1,"__percpu_arg(0)     \
-> @@ -144,7 +144,7 @@ do {
->                          \
->                 else                                                    \
->                         asm qual ("addb %1, "__percpu_arg(0)            \
->                             : "+m" (var)                                \
-> -                           : "qi" ((pao_T__)(val)));                   \
-> +                           : "ri" ((pao_T__)(val)));                   \
->                 break;                                                  \
->         case 2:                                                         \
->                 if (pao_ID__ == 1)                                      \
-> @@ -186,7 +186,7 @@ do {
->                          \
->         switch (sizeof(var)) {                          \
->         case 1:                                         \
->                 asm qual (op "b "__percpu_arg(1)",%0"   \
-> -                   : "=q" (pfo_ret__)                  \
-> +                   : "=r" (pfo_ret__)                  \
->                     : "m" (var));                       \
->                 break;                                  \
->         case 2:                                         \
-> @@ -215,7 +215,7 @@ do {
->                          \
->         switch (sizeof(var)) {                          \
->         case 1:                                         \
->                 asm(op "b "__percpu_arg(P1)",%0"        \
-> -                   : "=q" (pfo_ret__)                  \
-> +                   : "=r" (pfo_ret__)                  \
->                     : "p" (&(var)));                    \
->                 break;                                  \
->         case 2:                                         \
-> 
+
+Seems like starting in GCC 7, GCC may not like it either:
+https://godbolt.org/z/UyBUfh
+it simply warns then proceeds with code gen.  Another difference may
+come from when GCC vs Clang perform dead code elimination (DCE) vs
+semantic analysis.
 
 -- 
-Regards,
-Vincenzo
+Thanks,
+~Nick Desaulniers
