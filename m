@@ -2,152 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 611FA66B31
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2019 12:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E5A66C08
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2019 14:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbfGLK6N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 Jul 2019 06:58:13 -0400
-Received: from mx1.mailbox.org ([80.241.60.212]:42972 "EHLO mx1.mailbox.org"
+        id S1726318AbfGLMGf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 12 Jul 2019 08:06:35 -0400
+Received: from foss.arm.com ([217.140.110.172]:56428 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726050AbfGLK6N (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 12 Jul 2019 06:58:13 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx1.mailbox.org (Postfix) with ESMTPS id 648AF5427E;
-        Fri, 12 Jul 2019 12:58:07 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
-        with ESMTP id la_RnxBryad0; Fri, 12 Jul 2019 12:57:56 +0200 (CEST)
-Date:   Fri, 12 Jul 2019 20:57:45 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        David Drysdale <drysdale@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v9 05/10] namei: O_BENEATH-style path resolution flags
-Message-ID: <20190712105745.nruaftgeat6irhzr@yavin>
-References: <20190706145737.5299-1-cyphar@cyphar.com>
- <20190706145737.5299-6-cyphar@cyphar.com>
- <20190712043341.GI17978@ZenIV.linux.org.uk>
+        id S1726155AbfGLMGf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 12 Jul 2019 08:06:35 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9B4DD28;
+        Fri, 12 Jul 2019 05:06:34 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DEBC3F71F;
+        Fri, 12 Jul 2019 05:06:31 -0700 (PDT)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will.deacon@arm.com, arnd@arndb.de,
+        linux@armlinux.org.uk, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, salyzyn@android.com, pcc@google.com,
+        0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
+        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com,
+        luto@kernel.org, john.stultz@linaro.org, naohiro.aota@wdc.com,
+        yamada.masahiro@socionext.com, Will Deacon <will@kernel.org>
+Subject: [PATCH] arm64: compat: Fix flip/flop vdso building bug
+Date:   Fri, 12 Jul 2019 13:06:18 +0100
+Message-Id: <20190712120618.6207-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190712101556.17833-2-naohiro.aota@wdc.com>
+References: <20190712101556.17833-2-naohiro.aota@wdc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="f3oogwkmh2sysq6o"
-Content-Disposition: inline
-In-Reply-To: <20190712043341.GI17978@ZenIV.linux.org.uk>
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Running "make" on an already compiled kernel tree will rebuild the
+vdso32 library even if this has not been modified.
 
---f3oogwkmh2sysq6o
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+$ make
+  GEN     Makefile
+  Using linux as source for kernel
+  CALL    linux/scripts/atomic/check-atomics.sh
+  CALL    linux/scripts/checksyscalls.sh
+  VDSOCHK arch/arm64/kernel/vdso32/vdso.so.raw
+  VDSOSYM include/generated/vdso32-offsets.h
+  CHK     include/generated/compile.h
+  CC      arch/arm64/kernel/signal.o
+  CC      arch/arm64/kernel/vdso.o
+  CC      arch/arm64/kernel/signal32.o
+  VDSOL   arch/arm64/kernel/vdso32/vdso.so.raw
+  MUNGE   arch/arm64/kernel/vdso32/vdso.so.dbg
+  OBJCOPY arch/arm64/kernel/vdso32/vdso.so
+  AS      arch/arm64/kernel/vdso32/vdso.o
+  AR      arch/arm64/kernel/vdso32/built-in.a
+  AR      arch/arm64/kernel/built-in.a
+  GEN     .version
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  AR      init/built-in.a
+  LD      vmlinux.o
+  MODPOST vmlinux.o
 
-On 2019-07-12, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> On Sun, Jul 07, 2019 at 12:57:32AM +1000, Aleksa Sarai wrote:
-> > @@ -1442,8 +1464,11 @@ static int follow_dotdot_rcu(struct nameidata *n=
-d)
-> >  	struct inode *inode =3D nd->inode;
-> > =20
-> >  	while (1) {
-> > -		if (path_equal(&nd->path, &nd->root))
-> > +		if (path_equal(&nd->path, &nd->root)) {
-> > +			if (unlikely(nd->flags & LOOKUP_BENEATH))
-> > +				return -EXDEV;
->=20
-> > @@ -1468,6 +1493,8 @@ static int follow_dotdot_rcu(struct nameidata *nd)
-> >  				return -ECHILD;
-> >  			if (&mparent->mnt =3D=3D nd->path.mnt)
-> >  				break;
-> > +			if (unlikely(nd->flags & LOOKUP_XDEV))
-> > +				return -EXDEV;
-> >  			/* we know that mountpoint was pinned */
-> >  			nd->path.dentry =3D mountpoint;
-> >  			nd->path.mnt =3D &mparent->mnt;
-> > @@ -1482,6 +1509,8 @@ static int follow_dotdot_rcu(struct nameidata *nd)
-> >  			return -ECHILD;
-> >  		if (!mounted)
-> >  			break;
-> > +		if (unlikely(nd->flags & LOOKUP_XDEV))
-> > +			return -EXDEV;
->=20
-> Are you sure these failure exits in follow_dotdot_rcu() won't give
-> suprious hard errors?
+The issue is generated by the fact that "if_changed" is called twice
+in a single target.
 
-I could switch to -ECHILD for the *_rcu() checks if you'd prefer that.
-Though, I'd have (probably naively) thought that you'd have already
-gotten -ECHILD from the seqlock checks if there was a race during ".."
-handling.
+Fix the build bug merging the two commands into a single function.
 
-> > +	if (unlikely(nd->flags & LOOKUP_BENEATH)) {
-> > +		error =3D dirfd_path_init(nd);
-> > +		if (unlikely(error))
-> > +			return ERR_PTR(error);
-> > +		nd->root =3D nd->path;
-> > +		if (!(nd->flags & LOOKUP_RCU))
-> > +			path_get(&nd->root);
-> > +	}
-> >  	if (*s =3D=3D '/') {
-> >  		if (likely(!nd->root.mnt))
-> >  			set_root(nd);
-> > @@ -2350,9 +2400,11 @@ static const char *path_init(struct nameidata *n=
-d, unsigned flags)
-> >  			s =3D ERR_PTR(error);
-> >  		return s;
-> >  	}
-> > -	error =3D dirfd_path_init(nd);
-> > -	if (unlikely(error))
-> > -		return ERR_PTR(error);
-> > +	if (likely(!nd->path.mnt)) {
->=20
-> Is that a weird way of saying "if we hadn't already called dirfd_path_ini=
-t()"?
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Fixes: a7f71a2c8903 ("arm64: compat: Add vDSO")
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+---
+ arch/arm64/kernel/vdso32/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Yes. I did it to be more consistent with the other "have we got the
-root" checks elsewhere. Is there another way you'd prefer I do it?
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index 288c14d30b45..fb572b6f1bf5 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -144,8 +144,7 @@ $(obj)/vdso.so.dbg: $(obj)/vdso.so.raw $(obj)/$(munge) FORCE
+ 
+ # Link rule for the .so file, .lds has to be first
+ $(obj)/vdso.so.raw: $(src)/vdso.lds $(obj-vdso) FORCE
+-	$(call if_changed,vdsold)
+-	$(call if_changed,vdso_check)
++	$(call if_changed,vdsold_and_vdso_check)
+ 
+ # Compilation rules for the vDSO sources
+ $(c-obj-vdso): %.o: %.c FORCE
+@@ -156,6 +155,9 @@ $(asm-obj-vdso): %.o: %.S FORCE
+ 	$(call if_changed_dep,vdsoas)
+ 
+ # Actual build commands
++quiet_cmd_vdsold_and_vdso_check = LD   $@
++      cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check)
++
+ quiet_cmd_vdsold = VDSOL   $@
+       cmd_vdsold = $(COMPATCC) -Wp,-MD,$(depfile) $(VDSO_LDFLAGS) \
+                    -Wl,-T $(filter %.lds,$^) $(filter %.o,$^) -o $@
+-- 
+2.22.0
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---f3oogwkmh2sysq6o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXShnpgAKCRCdlLljIbnQ
-EgLTAP4nuVmi0292tyCAkB4Di0UUtazb2EsZPgKq9s2vRoyuFAD/UKONDBSK3VN9
-06Id1xrmV0JIYJSqOIdF2oJIncJ8ZwI=
-=5hbR
------END PGP SIGNATURE-----
-
---f3oogwkmh2sysq6o--
