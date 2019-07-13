@@ -2,87 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A430E677AB
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Jul 2019 04:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F7967885
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Jul 2019 07:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727451AbfGMCmV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 Jul 2019 22:42:21 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:48010 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727338AbfGMCmU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 Jul 2019 22:42:20 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hm7yz-0001A3-CY; Sat, 13 Jul 2019 02:41:53 +0000
-Date:   Sat, 13 Jul 2019 03:41:53 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        David Drysdale <drysdale@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v9 05/10] namei: O_BENEATH-style path resolution flags
-Message-ID: <20190713024153.GA3817@ZenIV.linux.org.uk>
-References: <20190706145737.5299-1-cyphar@cyphar.com>
- <20190706145737.5299-6-cyphar@cyphar.com>
- <20190712043341.GI17978@ZenIV.linux.org.uk>
- <20190712105745.nruaftgeat6irhzr@yavin>
- <20190712123924.GK17978@ZenIV.linux.org.uk>
- <20190712125552.GL17978@ZenIV.linux.org.uk>
- <20190712132553.GN17978@ZenIV.linux.org.uk>
- <20190712150026.GO17978@ZenIV.linux.org.uk>
+        id S1726334AbfGMFDk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 13 Jul 2019 01:03:40 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:48170 "EHLO deadmen.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726301AbfGMFDj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 13 Jul 2019 01:03:39 -0400
+Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
+        by deadmen.hmeau.com with esmtps (Exim 4.89 #2 (Debian))
+        id 1hmAC0-0006BY-Hm; Sat, 13 Jul 2019 13:03:28 +0800
+Received: from herbert by gondobar with local (Exim 4.89)
+        (envelope-from <herbert@gondor.apana.org.au>)
+        id 1hmABt-0000yf-KY; Sat, 13 Jul 2019 13:03:21 +0800
+Date:   Sat, 13 Jul 2019 13:03:21 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        andrea.parri@amarulasolutions.com, boqun.feng@gmail.com,
+        paulmck@linux.ibm.com, peterz@infradead.org,
+        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] padata: use smp_mb in padata_reorder to avoid orphaned
+ padata jobs
+Message-ID: <20190713050321.c5wq7a7jrb6q2pxn@gondor.apana.org.au>
+References: <20190711221205.29889-1-daniel.m.jordan@oracle.com>
+ <20190712100636.mqdr567p7ozanlyl@gondor.apana.org.au>
+ <20190712101012.GW14601@gauss3.secunet.de>
+ <20190712160737.iniaaxlsnhs6azg5@ca-dmjordan1.us.oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190712150026.GO17978@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190712160737.iniaaxlsnhs6azg5@ca-dmjordan1.us.oracle.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 12, 2019 at 04:00:26PM +0100, Al Viro wrote:
-> On Fri, Jul 12, 2019 at 02:25:53PM +0100, Al Viro wrote:
-> 
-> > 	if (flags & LOOKUP_BENEATH) {
-> > 		nd->root = nd->path;
-> > 		if (!(flags & LOOKUP_RCU))
-> > 			path_get(&nd->root);
-> > 		else
-> > 			nd->root_seq = nd->seq;
-> 
-> BTW, this assignment is needed for LOOKUP_RCU case.  Without it
-> you are pretty much guaranteed that lazy pathwalk will fail,
-> when it comes to complete_walk().
-> 
-> Speaking of which, what would happen if LOOKUP_ROOT/LOOKUP_BENEATH
-> combination would someday get passed?
+On Fri, Jul 12, 2019 at 12:07:37PM -0400, Daniel Jordan wrote:
+>
+> modprobe (CPU2)               kworker/21:1-293 (CPU21)                              kworker/5:2-276 (CPU5)
+> --------------------------    ------------------------                              ----------------------
+> <submit job, seq_nr=16581>
+> ...
+>   padata_do_parallel
+>     queue_work_on(21, ...)
+> <sleeps>
+>                               padata_parallel_worker
+>                                 pcrypt_aead_dec
+>                                   padata_do_serial
+>                                     padata_reorder
 
-I don't understand what's going on with ->r_seq in there - your
-call of path_is_under() is after having (re-)sampled rename_lock,
-but if that was the only .. in there, who's going to recheck
-the value?  For that matter, what's to guarantee that the thing
-won't get moved just as you are returning from handle_dots()?
+This can't happen because if the job started on CPU2 then it must
+go back to CPU2 for completion.  IOW padata_do_serial should be
+punting this to a work queue for CPU2 rather than calling
+padata_reorder on CPU21.
 
-IOW, what does LOOKUP_IN_ROOT guarantee for caller (openat2())?
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
