@@ -2,72 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 777BE67755
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Jul 2019 02:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A430E677AB
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Jul 2019 04:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727544AbfGMAum (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 Jul 2019 20:50:42 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:35388 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727236AbfGMAum (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 Jul 2019 20:50:42 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 67C7214E32590;
-        Fri, 12 Jul 2019 17:50:41 -0700 (PDT)
-Date:   Fri, 12 Jul 2019 17:50:38 -0700 (PDT)
-Message-Id: <20190712.175038.755685144649934618.davem@davemloft.net>
-To:     cai@lca.pw
-Cc:     sathya.perla@broadcom.com, ajit.khaparde@broadcom.com,
-        sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
-        arnd@arndb.de, dhowells@redhat.com, hpa@zytor.com,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] be2net: fix adapter->big_page_size miscaculation
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <EFD25845-097A-46B1-9C1A-02458883E4DA@lca.pw>
-References: <1562959401-19815-1-git-send-email-cai@lca.pw>
-        <20190712.154606.493382088615011132.davem@davemloft.net>
-        <EFD25845-097A-46B1-9C1A-02458883E4DA@lca.pw>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 12 Jul 2019 17:50:41 -0700 (PDT)
+        id S1727451AbfGMCmV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 12 Jul 2019 22:42:21 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:48010 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727338AbfGMCmU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 Jul 2019 22:42:20 -0400
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hm7yz-0001A3-CY; Sat, 13 Jul 2019 02:41:53 +0000
+Date:   Sat, 13 Jul 2019 03:41:53 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        David Drysdale <drysdale@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v9 05/10] namei: O_BENEATH-style path resolution flags
+Message-ID: <20190713024153.GA3817@ZenIV.linux.org.uk>
+References: <20190706145737.5299-1-cyphar@cyphar.com>
+ <20190706145737.5299-6-cyphar@cyphar.com>
+ <20190712043341.GI17978@ZenIV.linux.org.uk>
+ <20190712105745.nruaftgeat6irhzr@yavin>
+ <20190712123924.GK17978@ZenIV.linux.org.uk>
+ <20190712125552.GL17978@ZenIV.linux.org.uk>
+ <20190712132553.GN17978@ZenIV.linux.org.uk>
+ <20190712150026.GO17978@ZenIV.linux.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190712150026.GO17978@ZenIV.linux.org.uk>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Qian Cai <cai@lca.pw>
-Date: Fri, 12 Jul 2019 20:27:09 -0400
+On Fri, Jul 12, 2019 at 04:00:26PM +0100, Al Viro wrote:
+> On Fri, Jul 12, 2019 at 02:25:53PM +0100, Al Viro wrote:
+> 
+> > 	if (flags & LOOKUP_BENEATH) {
+> > 		nd->root = nd->path;
+> > 		if (!(flags & LOOKUP_RCU))
+> > 			path_get(&nd->root);
+> > 		else
+> > 			nd->root_seq = nd->seq;
+> 
+> BTW, this assignment is needed for LOOKUP_RCU case.  Without it
+> you are pretty much guaranteed that lazy pathwalk will fail,
+> when it comes to complete_walk().
+> 
+> Speaking of which, what would happen if LOOKUP_ROOT/LOOKUP_BENEATH
+> combination would someday get passed?
 
-> Actually, GCC would consider it a const with -O2 optimized level because it found that it was never modified and it does not understand it is a module parameter. Considering the following code.
-> 
-> # cat const.c 
-> #include <stdio.h>
-> 
-> static int a = 1;
-> 
-> int main(void)
-> {
-> 	if (__builtin_constant_p(a))
-> 		printf("a is a const.\n");
-> 
-> 	return 0;
-> }
-> 
-> # gcc -O2 const.c -o const
+I don't understand what's going on with ->r_seq in there - your
+call of path_is_under() is after having (re-)sampled rename_lock,
+but if that was the only .. in there, who's going to recheck
+the value?  For that matter, what's to guarantee that the thing
+won't get moved just as you are returning from handle_dots()?
 
-That's not a complete test case, and with a proper test case that
-shows the externalization of the address of &a done by the module
-parameter macros, gcc should not make this optimization or we should
-define the module parameter macros in a way that makes this properly
-clear to the compiler.
-
-It makes no sense to hack around this locally in drivers and other
-modules.
-
-Thank you.
+IOW, what does LOOKUP_IN_ROOT guarantee for caller (openat2())?
