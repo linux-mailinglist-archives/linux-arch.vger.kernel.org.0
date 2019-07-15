@@ -2,66 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F07687B1
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2019 13:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5686888A
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2019 14:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729833AbfGOLDi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Jul 2019 07:03:38 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:40237 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729885AbfGOLDh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Jul 2019 07:03:37 -0400
-Received: by mail-pg1-f196.google.com with SMTP id w10so7540116pgj.7
-        for <linux-arch@vger.kernel.org>; Mon, 15 Jul 2019 04:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
-        b=QRb1GBodFoBhFvJPBdxPE4VAqCl+I+T1SKUDc8YhKIcP8qXLNKmtBmeLwjLs/FO9lZ
-         75gCGAxY+YSs9c6HnUneWVQ5Kuc7cIu7HA1ZwTW36nCFWmVeEdZxTARPq/JJ6pFyLQCC
-         i5F57UJ0HSPfhhGiuIoSnyQ2CEuZZYzSvF/92SwjNSSKKvpKVbRgR8KxSyIf95yOdirX
-         vUpU9SAkZRrnMLlykrQni0TuHswl2ZAFQk4VFvbGPWK0ElKuMbgEj9smyMqgESRQW96Z
-         0AILN2JphlyIDpV3m3PpFXakYu3MGnxotH6bOcGMyGpkv5udFQwKTslRRPJv+1YEgJFw
-         GLhA==
+        id S1729875AbfGOMG3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Jul 2019 08:06:29 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:41690 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729827AbfGOMG3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Jul 2019 08:06:29 -0400
+Received: by mail-qk1-f195.google.com with SMTP id v22so11333503qkj.8;
+        Mon, 15 Jul 2019 05:06:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
-        b=AuWlVxnxOq57F/N0P6nh2XWauibNheUggR1r5nG71jbNaVeMgVXIBwEaqRfMhP17M1
-         CnJ+AbvdQJCZDKQI3ZCRnwxeYgXORmniWJHe+Qr9VfDDvzoUvfWfX1iZ8ZTJLiHQAwFe
-         tZHsmT+KRCegvZC2lHrEnXrhr0Crfjt6Qb9Lt6Jd0AE0P9fhABfVveRqwYQEDrlfDyvC
-         bLBwL0kO6e/+GjmdmVZuPdbmozojRbwmrn9cBHhw2I0zppP5kbxDNaFf7VpEXNZsN/h1
-         8nzRqvZ2JQ9yq1h4AfBGgBZAzih3zdEr2hcxRIc+z0K+qDgQMxthqOHyudr/v6GaKmgd
-         R9Xw==
-X-Gm-Message-State: APjAAAX2KS4fS3graUXQTES6wedQVy8G3nHNsNenJyb2TW1WlmGcOx7m
-        a+uD8d9aCdB+/S+Cn4Axqe90vRUH2l3QG9Q4JqI=
-X-Google-Smtp-Source: APXvYqzZtOEA+O4p1z4qZpCetbNMVF7GlYWpoUrGzFqj2Xbxoz/rNpVURYzRILo4We5FvCDz7WNaWyJleYBMiLbsRiY=
-X-Received: by 2002:a17:90a:9903:: with SMTP id b3mr28453816pjp.80.1563188616818;
- Mon, 15 Jul 2019 04:03:36 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cl8fDId4/8QdGjR+ayI3FcLePor06MbJHULp8GCJKtk=;
+        b=DeVNT+G+l2StUlKmVzi7UErSRUQYnDZcJ07Rf/j5h3QcvhayKMDntTHE0coV2LkXQf
+         VJ4Z5n0tvSyzr4AyKwlNl7gjpKJJeFuFaiuXg838H0GMKS2ZGVK90P9+NM32FWqlDVnD
+         nNos57HDPumJGVoF6Vpvg/RFDVX23wGXYJDkqfoiXS7Dsp2pUJlko8WhJaTKIe6p2a71
+         /b67FCxGrA2j1m1ImrVKp2WiTBbGGuU2LdsReI3Dn4x0Gi/cXARh0HIJy5S8rMM0B0Jo
+         HgwO2929GaJBu6NZJoCwi2SMlXX8bswspSmHk8l0mWFOP+zDAxASYri/SqFO6OeB0wX0
+         DyaQ==
+X-Gm-Message-State: APjAAAXkEmRZbJXJmCcrGT/jcz0636uh7fkg5JrhzUN+4adepczs29r7
+        VhERosjdxHP1ZNdbF4xgnJ4WtKxjshxJ2nYDGDA=
+X-Google-Smtp-Source: APXvYqzOzy1BQovNrI4wf0QckC9Y14s/TsOOmOEX3kolRkeedjgmgv2klwhlPpnIy2ydnxHhQsXkexEhcoFLdIZO7Ik=
+X-Received: by 2002:a37:4ac3:: with SMTP id x186mr15732795qka.138.1563192388030;
+ Mon, 15 Jul 2019 05:06:28 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:90a:b78d:0:0:0:0 with HTTP; Mon, 15 Jul 2019 04:03:36
- -0700 (PDT)
-From:   Donald Douglas <ddouglasng@gmail.com>
-Date:   Mon, 15 Jul 2019 04:03:36 -0700
-Message-ID: <CALVR28EtFZG5M72gg5535c6GQgjUkrOmnToQem=_bwo5pu8tgQ@mail.gmail.com>
-Subject: Kindly Respond
-To:     undisclosed-recipients:;
+References: <7b963f9a-21b1-4c6d-3ece-556d018508b4@virtuozzo.com> <3d9eef14-4059-0f8a-e76f-a8a09d730913@virtuozzo.com>
+In-Reply-To: <3d9eef14-4059-0f8a-e76f-a8a09d730913@virtuozzo.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 15 Jul 2019 14:06:10 +0200
+Message-ID: <CAK8P3a1sT6y+oWKm4ou1=Y+1n5=1_S6UhJN9kkZ6iMxw18O5yw@mail.gmail.com>
+Subject: Re: [PATCH] generic arch_futex_atomic_op_inuser() cleanup
+To:     Vasily Averin <vvs@virtuozzo.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
-I am Barr Fredrick Mbogo a business consultant i have a lucrative
-business to discuss with you from the Eastern part of Africa Uganda to
-be precise aimed at agreed percentage upon your acceptance of my hand
-in business and friendship. Kindly respond to me if you are interested
-to partner with me for an update. Very important.
+On Mon, Jul 15, 2019 at 12:29 PM Vasily Averin <vvs@virtuozzo.com> wrote:
+>
+> Looks like this code is dead and therefore looks strange.
+> I've found it during manual code review and decided to send patch
+> to pay your attention to this problem.
+> Probably it's better to remove this code at all?
+>
+> On 7/15/19 1:27 PM, Vasily Averin wrote:
+> > Access to 'op' variable does not require pagefault_disable(),
+> > 'ret' variable should be initialized before using,
+> > 'oldval' variable can be replaced by constant.
+> >
+> > Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
 
-Yours Sincerely,
-Donald Douglas,
-For,
-Barr Frederick Mbogo
-Legal Consultant.
-Reply to: barrfredmbogo@consultant.com
+I'm not following the reasoning for any of the changes here. Why do you
+think we don't need the pagefault_disable() around get_user()/put_user(),
+and which part of the funtion is dead code?
+
+       Arnd
