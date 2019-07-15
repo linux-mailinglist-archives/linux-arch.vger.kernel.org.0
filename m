@@ -2,79 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 522236870E
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2019 12:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F07687B1
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2019 13:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729586AbfGOKaA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Jul 2019 06:30:00 -0400
-Received: from relay.sw.ru ([185.231.240.75]:56018 "EHLO relay.sw.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729428AbfGOKaA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 15 Jul 2019 06:30:00 -0400
-Received: from [172.16.24.21]
-        by relay.sw.ru with esmtp (Exim 4.92)
-        (envelope-from <vvs@virtuozzo.com>)
-        id 1hmyF1-0000zw-A2; Mon, 15 Jul 2019 13:29:55 +0300
-Subject: Re: [PATCH] generic arch_futex_atomic_op_inuser() cleanup
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-References: <7b963f9a-21b1-4c6d-3ece-556d018508b4@virtuozzo.com>
-From:   Vasily Averin <vvs@virtuozzo.com>
-Message-ID: <3d9eef14-4059-0f8a-e76f-a8a09d730913@virtuozzo.com>
-Date:   Mon, 15 Jul 2019 13:29:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1729833AbfGOLDi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Jul 2019 07:03:38 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40237 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729885AbfGOLDh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Jul 2019 07:03:37 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w10so7540116pgj.7
+        for <linux-arch@vger.kernel.org>; Mon, 15 Jul 2019 04:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
+        b=QRb1GBodFoBhFvJPBdxPE4VAqCl+I+T1SKUDc8YhKIcP8qXLNKmtBmeLwjLs/FO9lZ
+         75gCGAxY+YSs9c6HnUneWVQ5Kuc7cIu7HA1ZwTW36nCFWmVeEdZxTARPq/JJ6pFyLQCC
+         i5F57UJ0HSPfhhGiuIoSnyQ2CEuZZYzSvF/92SwjNSSKKvpKVbRgR8KxSyIf95yOdirX
+         vUpU9SAkZRrnMLlykrQni0TuHswl2ZAFQk4VFvbGPWK0ElKuMbgEj9smyMqgESRQW96Z
+         0AILN2JphlyIDpV3m3PpFXakYu3MGnxotH6bOcGMyGpkv5udFQwKTslRRPJv+1YEgJFw
+         GLhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
+        b=AuWlVxnxOq57F/N0P6nh2XWauibNheUggR1r5nG71jbNaVeMgVXIBwEaqRfMhP17M1
+         CnJ+AbvdQJCZDKQI3ZCRnwxeYgXORmniWJHe+Qr9VfDDvzoUvfWfX1iZ8ZTJLiHQAwFe
+         tZHsmT+KRCegvZC2lHrEnXrhr0Crfjt6Qb9Lt6Jd0AE0P9fhABfVveRqwYQEDrlfDyvC
+         bLBwL0kO6e/+GjmdmVZuPdbmozojRbwmrn9cBHhw2I0zppP5kbxDNaFf7VpEXNZsN/h1
+         8nzRqvZ2JQ9yq1h4AfBGgBZAzih3zdEr2hcxRIc+z0K+qDgQMxthqOHyudr/v6GaKmgd
+         R9Xw==
+X-Gm-Message-State: APjAAAX2KS4fS3graUXQTES6wedQVy8G3nHNsNenJyb2TW1WlmGcOx7m
+        a+uD8d9aCdB+/S+Cn4Axqe90vRUH2l3QG9Q4JqI=
+X-Google-Smtp-Source: APXvYqzZtOEA+O4p1z4qZpCetbNMVF7GlYWpoUrGzFqj2Xbxoz/rNpVURYzRILo4We5FvCDz7WNaWyJleYBMiLbsRiY=
+X-Received: by 2002:a17:90a:9903:: with SMTP id b3mr28453816pjp.80.1563188616818;
+ Mon, 15 Jul 2019 04:03:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <7b963f9a-21b1-4c6d-3ece-556d018508b4@virtuozzo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a17:90a:b78d:0:0:0:0 with HTTP; Mon, 15 Jul 2019 04:03:36
+ -0700 (PDT)
+From:   Donald Douglas <ddouglasng@gmail.com>
+Date:   Mon, 15 Jul 2019 04:03:36 -0700
+Message-ID: <CALVR28EtFZG5M72gg5535c6GQgjUkrOmnToQem=_bwo5pu8tgQ@mail.gmail.com>
+Subject: Kindly Respond
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Looks like this code is dead and therefore looks strange.
-I've found it during manual code review and decided to send patch
-to pay your attention to this problem.
-Probably it's better to remove this code at all?
+Hello,
+I am Barr Fredrick Mbogo a business consultant i have a lucrative
+business to discuss with you from the Eastern part of Africa Uganda to
+be precise aimed at agreed percentage upon your acceptance of my hand
+in business and friendship. Kindly respond to me if you are interested
+to partner with me for an update. Very important.
 
-On 7/15/19 1:27 PM, Vasily Averin wrote:
-> Access to 'op' variable does not require pagefault_disable(),
-> 'ret' variable should be initialized before using,
-> 'oldval' variable can be replaced by constant.
-> 
-> Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
-> ---
->  include/asm-generic/futex.h | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/asm-generic/futex.h b/include/asm-generic/futex.h
-> index 8666fe7f35d7..e9a9655d786d 100644
-> --- a/include/asm-generic/futex.h
-> +++ b/include/asm-generic/futex.h
-> @@ -118,9 +118,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
->  static inline int
->  arch_futex_atomic_op_inuser(int op, u32 oparg, int *oval, u32 __user *uaddr)
->  {
-> -	int oldval = 0, ret;
-> -
-> -	pagefault_disable();
-> +	int ret = 0;
->  
->  	switch (op) {
->  	case FUTEX_OP_SET:
-> @@ -132,10 +130,8 @@ arch_futex_atomic_op_inuser(int op, u32 oparg, int *oval, u32 __user *uaddr)
->  		ret = -ENOSYS;
->  	}
->  
-> -	pagefault_enable();
-> -
->  	if (!ret)
-> -		*oval = oldval;
-> +		*oval = 0;
->  
->  	return ret;
->  }
-> 
+Yours Sincerely,
+Donald Douglas,
+For,
+Barr Frederick Mbogo
+Legal Consultant.
+Reply to: barrfredmbogo@consultant.com
