@@ -2,208 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E2B69630
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2019 17:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CE3698E3
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2019 18:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388264AbfGOOJo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Jul 2019 10:09:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33496 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388142AbfGOOJj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:09:39 -0400
-Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 65D61206B8;
-        Mon, 15 Jul 2019 14:09:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199779;
-        bh=VhYJrHBQbvV0RkIhfelei557Bfvt9imaOYcQUrzBJ8E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pze+m5BmWApqszCvPWgTszDNqUQQmQb8II2G60GwewsGUgVFEFfcBlbG2wTKWqweE
-         iDDW5YyE6G4JRrqjjNWqspbegaia9/TqvrnLfvhAsqEp8/UJ5hNy050MU0ijMdPa1x
-         OI/uPnpOG6N2RtvEuZSoiFfuNUIbpuuM4RoJi9pQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 103/219] x86/atomic: Fix smp_mb__{before,after}_atomic()
-Date:   Mon, 15 Jul 2019 10:01:44 -0400
-Message-Id: <20190715140341.6443-103-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
-References: <20190715140341.6443-1-sashal@kernel.org>
+        id S1729757AbfGOQLX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Jul 2019 12:11:23 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:50876 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729533AbfGOQLX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Jul 2019 12:11:23 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6FG9K7g046431;
+        Mon, 15 Jul 2019 16:11:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2018-07-02;
+ bh=FHNs/VLuaqZ6nZAgJqcIiUHrYF7VNMT5n+FgGHZ8rBc=;
+ b=R4wRB/lVnB1ltWkn/GMHIPbIECr3MzMvRuYL91sqD33inkHwuq+Szs0wGXTlwCC6z0j5
+ 7apQxbjsKIBBBrhCePlKJcEWM6pS48zSoAnF49EBkuf40UAZotacRDXx1lEkqzkf0r/6
+ u0BSecvo6MhRdZJMcNj3r53xdgxQtSgx2MSBYw1g+k7PMClmOrkqXs4lVVDa1+93zOyB
+ G5uIKr+d2OHcUtdqjTIyJV11TQRRN7EqlCDesVWZbrPM5LGjz10FHUqyyCPOglHuK22s
+ BJQOEIw5w1zxHzmvXj5tEJPINnAHUZEV/0iiPAXUINZTEuwvRp3HKhgLi7EHqcfHFtbi aQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2tq6qtfjbp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Jul 2019 16:11:00 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6FG7xVU011256;
+        Mon, 15 Jul 2019 16:10:59 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2tq6mmc445-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Jul 2019 16:10:59 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6FGApLd006898;
+        Mon, 15 Jul 2019 16:10:56 GMT
+Received: from ca-dmjordan1.us.oracle.com (/10.211.9.48)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 15 Jul 2019 09:10:51 -0700
+Date:   Mon, 15 Jul 2019 12:10:46 -0400
+From:   Daniel Jordan <daniel.m.jordan@oracle.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        andrea.parri@amarulasolutions.com, boqun.feng@gmail.com,
+        paulmck@linux.ibm.com, peterz@infradead.org,
+        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] padata: use smp_mb in padata_reorder to avoid orphaned
+ padata jobs
+Message-ID: <20190715161045.zqwgsp62uqjnvx3l@ca-dmjordan1.us.oracle.com>
+References: <20190711221205.29889-1-daniel.m.jordan@oracle.com>
+ <20190712100636.mqdr567p7ozanlyl@gondor.apana.org.au>
+ <20190712101012.GW14601@gauss3.secunet.de>
+ <20190712160737.iniaaxlsnhs6azg5@ca-dmjordan1.us.oracle.com>
+ <20190713050321.c5wq7a7jrb6q2pxn@gondor.apana.org.au>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190713050321.c5wq7a7jrb6q2pxn@gondor.apana.org.au>
+User-Agent: NeoMutt/20180323-268-5a959c
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9319 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=876
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1907150188
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9319 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=921 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907150188
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+On Sat, Jul 13, 2019 at 01:03:21PM +0800, Herbert Xu wrote:
+> On Fri, Jul 12, 2019 at 12:07:37PM -0400, Daniel Jordan wrote:
+> >
+> > modprobe (CPU2)               kworker/21:1-293 (CPU21)                              kworker/5:2-276 (CPU5)
+> > --------------------------    ------------------------                              ----------------------
+> > <submit job, seq_nr=16581>
+> > ...
+> >   padata_do_parallel
+> >     queue_work_on(21, ...)
+> > <sleeps>
+> >                               padata_parallel_worker
+> >                                 pcrypt_aead_dec
+> >                                   padata_do_serial
+> >                                     padata_reorder
+> 
+> This can't happen because if the job started on CPU2 then it must
+> go back to CPU2 for completion.  IOW padata_do_serial should be
+> punting this to a work queue for CPU2 rather than calling
+> padata_reorder on CPU21.
 
-[ Upstream commit 69d927bba39517d0980462efc051875b7f4db185 ]
+I've been wrong before plenty of times, and there's nothing preventing this
+from being one of those times :) , but in this case I believe what I'm showing
+is correct.
 
-Recent probing at the Linux Kernel Memory Model uncovered a
-'surprise'. Strongly ordered architectures where the atomic RmW
-primitive implies full memory ordering and
-smp_mb__{before,after}_atomic() are a simple barrier() (such as x86)
-fail for:
+The padata_do_serial call for a given job ensures padata_reorder runs on the
+CPU that the job hashed to in padata_do_parallel, which is not necessarily the
+same CPU as the one that padata_do_parallel itself ran on.
 
-	*x = 1;
-	atomic_inc(u);
-	smp_mb__after_atomic();
-	r0 = *y;
+In this case, the padata job in question started via padata_do_parallel, where
+it hashed to CPU 21:
 
-Because, while the atomic_inc() implies memory order, it
-(surprisingly) does not provide a compiler barrier. This then allows
-the compiler to re-order like so:
+  padata_do_parallel                    // ran on CPU 2
+    ...
+    target_cpu = padata_cpu_hash(pd);   // target_cpu == 21
+    padata->cpu = target_cpu;
+    ...
+    queue_work_on(21, ...)
 
-	atomic_inc(u);
-	*x = 1;
-	smp_mb__after_atomic();
-	r0 = *y;
+The corresponding kworker then started:
 
-Which the CPU is then allowed to re-order (under TSO rules) like:
+  padata_parallel_worker                // bound to CPU 21
+    pcrypt_aead_dec
+      padata_do_serial
+        padata_reorder
 
-	atomic_inc(u);
-	r0 = *y;
-	*x = 1;
-
-And this very much was not intended. Therefore strengthen the atomic
-RmW ops to include a compiler barrier.
-
-NOTE: atomic_{or,and,xor} and the bitops already had the compiler
-barrier.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- Documentation/atomic_t.txt         | 3 +++
- arch/x86/include/asm/atomic.h      | 8 ++++----
- arch/x86/include/asm/atomic64_64.h | 8 ++++----
- arch/x86/include/asm/barrier.h     | 4 ++--
- 4 files changed, 13 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
-index 913396ac5824..ed0d814df7e0 100644
---- a/Documentation/atomic_t.txt
-+++ b/Documentation/atomic_t.txt
-@@ -177,6 +177,9 @@ These helper barriers exist because architectures have varying implicit
- ordering on their SMP atomic primitives. For example our TSO architectures
- provide full ordered atomics and these barriers are no-ops.
- 
-+NOTE: when the atomic RmW ops are fully ordered, they should also imply a
-+compiler barrier.
-+
- Thus:
- 
-   atomic_fetch_add();
-diff --git a/arch/x86/include/asm/atomic.h b/arch/x86/include/asm/atomic.h
-index ea3d95275b43..115127c7ad28 100644
---- a/arch/x86/include/asm/atomic.h
-+++ b/arch/x86/include/asm/atomic.h
-@@ -54,7 +54,7 @@ static __always_inline void arch_atomic_add(int i, atomic_t *v)
- {
- 	asm volatile(LOCK_PREFIX "addl %1,%0"
- 		     : "+m" (v->counter)
--		     : "ir" (i));
-+		     : "ir" (i) : "memory");
- }
- 
- /**
-@@ -68,7 +68,7 @@ static __always_inline void arch_atomic_sub(int i, atomic_t *v)
- {
- 	asm volatile(LOCK_PREFIX "subl %1,%0"
- 		     : "+m" (v->counter)
--		     : "ir" (i));
-+		     : "ir" (i) : "memory");
- }
- 
- /**
-@@ -95,7 +95,7 @@ static __always_inline bool arch_atomic_sub_and_test(int i, atomic_t *v)
- static __always_inline void arch_atomic_inc(atomic_t *v)
- {
- 	asm volatile(LOCK_PREFIX "incl %0"
--		     : "+m" (v->counter));
-+		     : "+m" (v->counter) :: "memory");
- }
- #define arch_atomic_inc arch_atomic_inc
- 
-@@ -108,7 +108,7 @@ static __always_inline void arch_atomic_inc(atomic_t *v)
- static __always_inline void arch_atomic_dec(atomic_t *v)
- {
- 	asm volatile(LOCK_PREFIX "decl %0"
--		     : "+m" (v->counter));
-+		     : "+m" (v->counter) :: "memory");
- }
- #define arch_atomic_dec arch_atomic_dec
- 
-diff --git a/arch/x86/include/asm/atomic64_64.h b/arch/x86/include/asm/atomic64_64.h
-index dadc20adba21..5e86c0d68ac1 100644
---- a/arch/x86/include/asm/atomic64_64.h
-+++ b/arch/x86/include/asm/atomic64_64.h
-@@ -45,7 +45,7 @@ static __always_inline void arch_atomic64_add(long i, atomic64_t *v)
- {
- 	asm volatile(LOCK_PREFIX "addq %1,%0"
- 		     : "=m" (v->counter)
--		     : "er" (i), "m" (v->counter));
-+		     : "er" (i), "m" (v->counter) : "memory");
- }
- 
- /**
-@@ -59,7 +59,7 @@ static inline void arch_atomic64_sub(long i, atomic64_t *v)
- {
- 	asm volatile(LOCK_PREFIX "subq %1,%0"
- 		     : "=m" (v->counter)
--		     : "er" (i), "m" (v->counter));
-+		     : "er" (i), "m" (v->counter) : "memory");
- }
- 
- /**
-@@ -87,7 +87,7 @@ static __always_inline void arch_atomic64_inc(atomic64_t *v)
- {
- 	asm volatile(LOCK_PREFIX "incq %0"
- 		     : "=m" (v->counter)
--		     : "m" (v->counter));
-+		     : "m" (v->counter) : "memory");
- }
- #define arch_atomic64_inc arch_atomic64_inc
- 
-@@ -101,7 +101,7 @@ static __always_inline void arch_atomic64_dec(atomic64_t *v)
- {
- 	asm volatile(LOCK_PREFIX "decq %0"
- 		     : "=m" (v->counter)
--		     : "m" (v->counter));
-+		     : "m" (v->counter) : "memory");
- }
- #define arch_atomic64_dec arch_atomic64_dec
- 
-diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
-index 14de0432d288..84f848c2541a 100644
---- a/arch/x86/include/asm/barrier.h
-+++ b/arch/x86/include/asm/barrier.h
-@@ -80,8 +80,8 @@ do {									\
- })
- 
- /* Atomic operations are already serializing on x86 */
--#define __smp_mb__before_atomic()	barrier()
--#define __smp_mb__after_atomic()	barrier()
-+#define __smp_mb__before_atomic()	do { } while (0)
-+#define __smp_mb__after_atomic()	do { } while (0)
- 
- #include <asm-generic/barrier.h>
- 
--- 
-2.20.1
-
+Daniel
