@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC95269477
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2019 16:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E2B69630
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2019 17:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391522AbfGOObx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Jul 2019 10:31:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46310 "EHLO mail.kernel.org"
+        id S2388264AbfGOOJo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Jul 2019 10:09:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33496 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391211AbfGOObw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:31:52 -0400
+        id S2388142AbfGOOJj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:09:39 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8061F212F5;
-        Mon, 15 Jul 2019 14:31:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 65D61206B8;
+        Mon, 15 Jul 2019 14:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563201111;
-        bh=a8gAMXbfCvS9ioZvi12BOqT1FDrW5gktrdUiyO4Ehe8=;
+        s=default; t=1563199779;
+        bh=VhYJrHBQbvV0RkIhfelei557Bfvt9imaOYcQUrzBJ8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K2pM5kwDOf2s2sUF2peLt6rTtqEB+1HBgTYRAfl80mbzWOrcQkX0eDrbwdgjnKJYK
-         4OXHf/75rhVwkrQEc/fstYG6ZCOYMsRemPyvNn7clUHsu/3OUMKMot42DvAuePINd3
-         ZhKwKF3MABzjlZu4KOUxWeKAdZGq9YPJnby4WNdI=
+        b=pze+m5BmWApqszCvPWgTszDNqUQQmQb8II2G60GwewsGUgVFEFfcBlbG2wTKWqweE
+         iDDW5YyE6G4JRrqjjNWqspbegaia9/TqvrnLfvhAsqEp8/UJ5hNy050MU0ijMdPa1x
+         OI/uPnpOG6N2RtvEuZSoiFfuNUIbpuuM4RoJi9pQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -31,12 +31,12 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 054/105] x86/atomic: Fix smp_mb__{before,after}_atomic()
-Date:   Mon, 15 Jul 2019 10:27:48 -0400
-Message-Id: <20190715142839.9896-54-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 103/219] x86/atomic: Fix smp_mb__{before,after}_atomic()
+Date:   Mon, 15 Jul 2019 10:01:44 -0400
+Message-Id: <20190715140341.6443-103-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715142839.9896-1-sashal@kernel.org>
-References: <20190715142839.9896-1-sashal@kernel.org>
+In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
+References: <20190715140341.6443-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -110,10 +110,10 @@ index 913396ac5824..ed0d814df7e0 100644
  
    atomic_fetch_add();
 diff --git a/arch/x86/include/asm/atomic.h b/arch/x86/include/asm/atomic.h
-index 72759f131cc5..d09dd91dd0b6 100644
+index ea3d95275b43..115127c7ad28 100644
 --- a/arch/x86/include/asm/atomic.h
 +++ b/arch/x86/include/asm/atomic.h
-@@ -50,7 +50,7 @@ static __always_inline void atomic_add(int i, atomic_t *v)
+@@ -54,7 +54,7 @@ static __always_inline void arch_atomic_add(int i, atomic_t *v)
  {
  	asm volatile(LOCK_PREFIX "addl %1,%0"
  		     : "+m" (v->counter)
@@ -122,7 +122,7 @@ index 72759f131cc5..d09dd91dd0b6 100644
  }
  
  /**
-@@ -64,7 +64,7 @@ static __always_inline void atomic_sub(int i, atomic_t *v)
+@@ -68,7 +68,7 @@ static __always_inline void arch_atomic_sub(int i, atomic_t *v)
  {
  	asm volatile(LOCK_PREFIX "subl %1,%0"
  		     : "+m" (v->counter)
@@ -131,29 +131,29 @@ index 72759f131cc5..d09dd91dd0b6 100644
  }
  
  /**
-@@ -90,7 +90,7 @@ static __always_inline bool atomic_sub_and_test(int i, atomic_t *v)
- static __always_inline void atomic_inc(atomic_t *v)
+@@ -95,7 +95,7 @@ static __always_inline bool arch_atomic_sub_and_test(int i, atomic_t *v)
+ static __always_inline void arch_atomic_inc(atomic_t *v)
  {
  	asm volatile(LOCK_PREFIX "incl %0"
 -		     : "+m" (v->counter));
 +		     : "+m" (v->counter) :: "memory");
  }
+ #define arch_atomic_inc arch_atomic_inc
  
- /**
-@@ -102,7 +102,7 @@ static __always_inline void atomic_inc(atomic_t *v)
- static __always_inline void atomic_dec(atomic_t *v)
+@@ -108,7 +108,7 @@ static __always_inline void arch_atomic_inc(atomic_t *v)
+ static __always_inline void arch_atomic_dec(atomic_t *v)
  {
  	asm volatile(LOCK_PREFIX "decl %0"
 -		     : "+m" (v->counter));
 +		     : "+m" (v->counter) :: "memory");
  }
+ #define arch_atomic_dec arch_atomic_dec
  
- /**
 diff --git a/arch/x86/include/asm/atomic64_64.h b/arch/x86/include/asm/atomic64_64.h
-index 738495caf05f..e6fad6bbb2ee 100644
+index dadc20adba21..5e86c0d68ac1 100644
 --- a/arch/x86/include/asm/atomic64_64.h
 +++ b/arch/x86/include/asm/atomic64_64.h
-@@ -45,7 +45,7 @@ static __always_inline void atomic64_add(long i, atomic64_t *v)
+@@ -45,7 +45,7 @@ static __always_inline void arch_atomic64_add(long i, atomic64_t *v)
  {
  	asm volatile(LOCK_PREFIX "addq %1,%0"
  		     : "=m" (v->counter)
@@ -162,7 +162,7 @@ index 738495caf05f..e6fad6bbb2ee 100644
  }
  
  /**
-@@ -59,7 +59,7 @@ static inline void atomic64_sub(long i, atomic64_t *v)
+@@ -59,7 +59,7 @@ static inline void arch_atomic64_sub(long i, atomic64_t *v)
  {
  	asm volatile(LOCK_PREFIX "subq %1,%0"
  		     : "=m" (v->counter)
@@ -171,30 +171,30 @@ index 738495caf05f..e6fad6bbb2ee 100644
  }
  
  /**
-@@ -86,7 +86,7 @@ static __always_inline void atomic64_inc(atomic64_t *v)
+@@ -87,7 +87,7 @@ static __always_inline void arch_atomic64_inc(atomic64_t *v)
  {
  	asm volatile(LOCK_PREFIX "incq %0"
  		     : "=m" (v->counter)
 -		     : "m" (v->counter));
 +		     : "m" (v->counter) : "memory");
  }
+ #define arch_atomic64_inc arch_atomic64_inc
  
- /**
-@@ -99,7 +99,7 @@ static __always_inline void atomic64_dec(atomic64_t *v)
+@@ -101,7 +101,7 @@ static __always_inline void arch_atomic64_dec(atomic64_t *v)
  {
  	asm volatile(LOCK_PREFIX "decq %0"
  		     : "=m" (v->counter)
 -		     : "m" (v->counter));
 +		     : "m" (v->counter) : "memory");
  }
+ #define arch_atomic64_dec arch_atomic64_dec
  
- /**
 diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
-index a04f0c242a28..bc88797cfa61 100644
+index 14de0432d288..84f848c2541a 100644
 --- a/arch/x86/include/asm/barrier.h
 +++ b/arch/x86/include/asm/barrier.h
-@@ -106,8 +106,8 @@ do {									\
- #endif
+@@ -80,8 +80,8 @@ do {									\
+ })
  
  /* Atomic operations are already serializing on x86 */
 -#define __smp_mb__before_atomic()	barrier()
