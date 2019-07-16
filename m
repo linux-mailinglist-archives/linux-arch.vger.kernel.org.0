@@ -2,84 +2,231 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D79736A7A6
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2019 13:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEA56A857
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2019 14:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733269AbfGPLrf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Jul 2019 07:47:35 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:46483 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728437AbfGPLre (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 07:47:34 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c73so8984772pfb.13;
-        Tue, 16 Jul 2019 04:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :user-agent:message-id:content-transfer-encoding;
-        bh=qPnqoEfs2c2FJiT2itcjWmfJK1RsKaw7z2dBi7iQTJ8=;
-        b=GWz4yv38B5GHtENqY4vKofVQ91e0o/Wf3To5Ps1dYZG0HD5Ek2EHO2Dc7Ow7eTInF8
-         6V2Ylge8TO9m/bByMpQYgvAJMrZvdG3hSLoe3le3WrAf4DJkafN2xpBGM8XjRxts22Wl
-         fwEiPyHbfrkm6UMLSuHMn/gd7z8YK8aSErG8WB+A5roIC5O0ZPZ/6GMpagTh5qiyB+K7
-         yG6MrQ7ON432Xy90IZVQ3KnMcyWz9iH91bIQQjqhHjYLmAxiZwGFc9kDORakmYFFow9m
-         dvKHxsEKn/ChfEWmG3TrgmHbJEuO1ziKFvpkOF6Z/rwgSAH09LcgUIkZ09KBkugy6xrh
-         5rJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:user-agent:message-id:content-transfer-encoding;
-        bh=qPnqoEfs2c2FJiT2itcjWmfJK1RsKaw7z2dBi7iQTJ8=;
-        b=FYjnDJAGC0Fe1sK3mfdTuwoQu6n+wYawoYMDkkDkDTyW4gQfMOMQEPb/r+njILVWZf
-         vGHsIc+W/T8ju1c7ZcR9J7K0smEOQKXfBuHpsa64R7TZFOph9Et6JefZkKH+HUUP0LlY
-         QrwghaDQBKBr+DYW30XnnEYwu+d8h2JxezEDv+lp/+HYIeNs5XMDpyqqPGwaf4HvDia/
-         1BH0jhBseU8mkVoJnxPPR3Bv4hHwpNIkbLXfPUxWQInmUGy1AHOseM9G2rPFBRXAH0Iz
-         4SssO3aB3jLXNRnBSsZA4X5D7QS47U9JebNeR4eZ98KfBuqvEXnH9QshjZEIudgnMegc
-         QRQg==
-X-Gm-Message-State: APjAAAVNVv9FWeTUauqAoZB4Y2UZRN9xXgeoIvtDnUMk0VsYES4wePr/
-        e+643g7tgAg1qVO8NFOUXIQ=
-X-Google-Smtp-Source: APXvYqzHZwrzaDAsguaX2IsIyUiWc2RXpFglPckISYDzHT896XmmxWdI422IRFIGhq+LtZkupLz2ig==
-X-Received: by 2002:a63:60a:: with SMTP id 10mr2299610pgg.381.1563277654138;
-        Tue, 16 Jul 2019 04:47:34 -0700 (PDT)
-Received: from localhost ([203.220.8.141])
-        by smtp.gmail.com with ESMTPSA id t10sm19804313pjr.13.2019.07.16.04.47.32
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 16 Jul 2019 04:47:33 -0700 (PDT)
-Date:   Tue, 16 Jul 2019 21:47:27 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v3 0/5] Add NUMA-awareness to qspinlock
-To:     Alex Kogan <alex.kogan@oracle.com>, arnd@arndb.de, bp@alien8.de,
-        guohanjun@huawei.com, hpa@zytor.com, jglauber@marvell.com,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux@armlinux.org.uk, linux-kernel@vger.kernel.org,
-        longman@redhat.com, mingo@redhat.com, peterz@infradead.org,
-        tglx@linutronix.de, will.deacon@arm.com, x86@kernel.org
-Cc:     daniel.m.jordan@oracle.com, dave.dice@oracle.com,
-        rahul.x.yadav@oracle.com, steven.sistare@oracle.com
-References: <20190715192536.104548-1-alex.kogan@oracle.com>
-In-Reply-To: <20190715192536.104548-1-alex.kogan@oracle.com>
+        id S1732752AbfGPMLA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Jul 2019 08:11:00 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:39064 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732581AbfGPMLA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 08:11:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=cmrXWeKZex18XPtqOqXe6bsYV64AO68iLYgMsiWQPIg=; b=QAAw/LhYE17kHpcrRzOCn1piW
+        wDQhBm1yl/KZ+dj8rCQhgNieg+hhttiHCd56p5QhHz5ASeESwhg4e5NnaVU0xFvaS1lhK+pI34VAH
+        U07mMZP9tRQ4deiPKcIy4WDiR29u2hCPogiZhF9Lz2jHXns+8RDa0pzAsZAsHJhW3j3YMjCZIm/+P
+        LGpxBBG2lEGO3KMHIzygFcSKKg0GHttc1pRY0pbQBDBk7P+UYDrt1y6b2Q/bZPeVAySSZNi95nOXL
+        A9MLC1Mv0VfRw8xgU7fIrVDbMile7MGuQFtM0dQbNTrXk9FcF/xI3aZ/c1Bhe5nAJD6JiU0T0som+
+        3cGvhJxcQ==;
+Received: from [189.27.46.152] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hnMIL-0004hz-Al; Tue, 16 Jul 2019 12:10:57 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hnMII-0000QW-KI; Tue, 16 Jul 2019 09:10:54 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-scsi@vger.kernel.org, esc.storagedev@microsemi.com,
+        linuxppc-dev@lists.ozlabs.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, kvm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, rcu@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org, x86@kernel.org,
+        dri-devel@lists.freedesktop.org, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: [PATCH 00/14] pending doc patches for 5.3-rc
+Date:   Tue, 16 Jul 2019 09:10:39 -0300
+Message-Id: <cover.1563277838.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1563277166.m9swqogbqb.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Alex Kogan's on July 16, 2019 5:25 am:
-> Our evaluation shows that CNA also improves performance of user=20
-> applications that have hot pthread mutexes. Those mutexes are=20
-> blocking, and waiting threads park and unpark via the futex=20
-> mechanism in the kernel. Given that kernel futex chains, which
-> are hashed by the mutex address, are each protected by a=20
-> chain-specific spin lock, the contention on a user-mode mutex=20
-> translates into contention on a kernel level spinlock.=20
+Those are the pending documentation patches after my pull request
+for this branch:
 
-What applications are those, what performance numbers? Arguably that's
-much more interesting than microbenchmarks (which are mainly useful to
-help ensure the fast paths are not impacted IMO).
+    git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media.git tags/docs/v5.3-1
 
-Thanks,
-Nick
-=
+Patches 1 to 13 were already submitted, but got rebased. Patch 14
+is a new fixup one.
+
+Patches 1 and 2 weren't submitted before due to merge conflicts
+that are now solved upstream;
+
+Patch 3 fixes a series of random Documentation/* references that
+are pointing to the wrong places.
+
+Patch 4 fix a longstanding issue: every time a new book is added,
+conf.py need changes, in order to allow generating a PDF file.
+After the patch, conf.py will automatically recognize new books,
+saving the trouble of keeping adding documents to it.
+
+Patches 5 to 11 are due to fonts support when building translations.pdf.
+The main focus is to add xeCJK support. While doing it, I discovered
+some bugs at sphinx-pre-install script after running it with 7 different
+distributions.
+
+Patch 12 improves support for partial doc building. Currently, each
+subdir needs to have its own conf.py, in order to support partial
+doc build. After it, any Documentation subdir can be used to 
+roduce html/pdf docs with:
+
+	make SPHINXDIRS="foo bar" htmldocs
+	(or pdfdocs, latexdocs, epubdocs, ...)
+
+Patch 13 is a cleanup patch: it simply get rid of all those extra
+conf.py files that  aren't needed anymore. The only extra config
+file after it is this one:
+
+	Documentation/media/conf_nitpick.py
+
+With enables some extra optional Sphinx features.
+
+Patch 14 adds Documentation/virtual to the main index.rst file
+and add a new *.rst file that was orphaned there.
+
+-
+
+After this series, there's just one more patch meant to be applied
+for 5.3, with is still waiting for some patches to be merged from
+linux-next:
+
+    https://git.linuxtv.org/mchehab/experimental.git/commit/?id=b1b5dc7d7bbfbbfdace2a248c6458301c6e34100
+
+
+Mauro Carvalho Chehab (14):
+  docs: powerpc: convert docs to ReST and rename to *.rst
+  docs: power: add it to to the main documentation index
+  docs: fix broken doc references due to renames
+  docs: pdf: add all Documentation/*/index.rst to PDF output
+  docs: conf.py: add CJK package needed by translations
+  docs: conf.py: only use CJK if the font is available
+  scripts/sphinx-pre-install: fix script for RHEL/CentOS
+  scripts/sphinx-pre-install: don't use LaTeX with CentOS 7
+  scripts/sphinx-pre-install: fix latexmk dependencies
+  scripts/sphinx-pre-install: cleanup Gentoo checks
+  scripts/sphinx-pre-install: seek for Noto CJK fonts for pdf output
+  docs: load_config.py: avoid needing a conf.py just due to LaTeX docs
+  docs: remove extra conf.py files
+  docs: virtual: add it to the documentation body
+
+ Documentation/PCI/pci-error-recovery.rst      |   5 +-
+ Documentation/RCU/rculist_nulls.txt           |   2 +-
+ Documentation/admin-guide/conf.py             |  10 --
+ Documentation/conf.py                         |  30 +++-
+ Documentation/core-api/conf.py                |  10 --
+ Documentation/crypto/conf.py                  |  10 --
+ Documentation/dev-tools/conf.py               |  10 --
+ .../devicetree/bindings/arm/idle-states.txt   |   2 +-
+ Documentation/doc-guide/conf.py               |  10 --
+ Documentation/driver-api/80211/conf.py        |  10 --
+ Documentation/driver-api/conf.py              |  10 --
+ Documentation/driver-api/pm/conf.py           |  10 --
+ Documentation/filesystems/conf.py             |  10 --
+ Documentation/gpu/conf.py                     |  10 --
+ Documentation/index.rst                       |   3 +
+ Documentation/input/conf.py                   |  10 --
+ Documentation/kernel-hacking/conf.py          |  10 --
+ Documentation/locking/spinlocks.rst           |   4 +-
+ Documentation/maintainer/conf.py              |  10 --
+ Documentation/media/conf.py                   |  12 --
+ Documentation/memory-barriers.txt             |   2 +-
+ Documentation/networking/conf.py              |  10 --
+ Documentation/power/index.rst                 |   2 +-
+ .../{bootwrapper.txt => bootwrapper.rst}      |  28 +++-
+ .../{cpu_families.txt => cpu_families.rst}    |  23 +--
+ .../{cpu_features.txt => cpu_features.rst}    |   6 +-
+ Documentation/powerpc/{cxl.txt => cxl.rst}    |  46 ++++--
+ .../powerpc/{cxlflash.txt => cxlflash.rst}    |  10 +-
+ .../{DAWR-POWER9.txt => dawr-power9.rst}      |  15 +-
+ Documentation/powerpc/{dscr.txt => dscr.rst}  |  18 +-
+ ...ecovery.txt => eeh-pci-error-recovery.rst} | 108 ++++++------
+ ...ed-dump.txt => firmware-assisted-dump.rst} | 117 +++++++------
+ Documentation/powerpc/{hvcs.txt => hvcs.rst}  | 108 ++++++------
+ Documentation/powerpc/index.rst               |  34 ++++
+ Documentation/powerpc/isa-versions.rst        |  15 +-
+ .../powerpc/{mpc52xx.txt => mpc52xx.rst}      |  12 +-
+ ...nv.txt => pci_iov_resource_on_powernv.rst} |  15 +-
+ .../powerpc/{pmu-ebb.txt => pmu-ebb.rst}      |   1 +
+ Documentation/powerpc/ptrace.rst              | 156 ++++++++++++++++++
+ Documentation/powerpc/ptrace.txt              | 151 -----------------
+ .../{qe_firmware.txt => qe_firmware.rst}      |  37 +++--
+ .../{syscall64-abi.txt => syscall64-abi.rst}  |  29 ++--
+ ...al_memory.txt => transactional_memory.rst} |  45 ++---
+ Documentation/process/conf.py                 |  10 --
+ Documentation/sh/conf.py                      |  10 --
+ Documentation/sound/conf.py                   |  10 --
+ Documentation/sphinx/load_config.py           |  27 ++-
+ .../translations/ko_KR/memory-barriers.txt    |   2 +-
+ Documentation/userspace-api/conf.py           |  10 --
+ Documentation/virtual/kvm/index.rst           |   1 +
+ Documentation/vm/conf.py                      |  10 --
+ Documentation/watchdog/hpwdt.rst              |   2 +-
+ Documentation/x86/conf.py                     |  10 --
+ MAINTAINERS                                   |  14 +-
+ arch/powerpc/kernel/exceptions-64s.S          |   2 +-
+ drivers/gpu/drm/drm_modes.c                   |   2 +-
+ drivers/i2c/busses/i2c-nvidia-gpu.c           |   2 +-
+ drivers/scsi/hpsa.c                           |   4 +-
+ drivers/soc/fsl/qe/qe.c                       |   2 +-
+ drivers/tty/hvc/hvcs.c                        |   2 +-
+ include/soc/fsl/qe/qe.h                       |   2 +-
+ scripts/sphinx-pre-install                    | 118 ++++++++++---
+ 62 files changed, 738 insertions(+), 678 deletions(-)
+ delete mode 100644 Documentation/admin-guide/conf.py
+ delete mode 100644 Documentation/core-api/conf.py
+ delete mode 100644 Documentation/crypto/conf.py
+ delete mode 100644 Documentation/dev-tools/conf.py
+ delete mode 100644 Documentation/doc-guide/conf.py
+ delete mode 100644 Documentation/driver-api/80211/conf.py
+ delete mode 100644 Documentation/driver-api/conf.py
+ delete mode 100644 Documentation/driver-api/pm/conf.py
+ delete mode 100644 Documentation/filesystems/conf.py
+ delete mode 100644 Documentation/gpu/conf.py
+ delete mode 100644 Documentation/input/conf.py
+ delete mode 100644 Documentation/kernel-hacking/conf.py
+ delete mode 100644 Documentation/maintainer/conf.py
+ delete mode 100644 Documentation/media/conf.py
+ delete mode 100644 Documentation/networking/conf.py
+ rename Documentation/powerpc/{bootwrapper.txt => bootwrapper.rst} (93%)
+ rename Documentation/powerpc/{cpu_families.txt => cpu_families.rst} (95%)
+ rename Documentation/powerpc/{cpu_features.txt => cpu_features.rst} (97%)
+ rename Documentation/powerpc/{cxl.txt => cxl.rst} (95%)
+ rename Documentation/powerpc/{cxlflash.txt => cxlflash.rst} (98%)
+ rename Documentation/powerpc/{DAWR-POWER9.txt => dawr-power9.rst} (95%)
+ rename Documentation/powerpc/{dscr.txt => dscr.rst} (91%)
+ rename Documentation/powerpc/{eeh-pci-error-recovery.txt => eeh-pci-error-recovery.rst} (82%)
+ rename Documentation/powerpc/{firmware-assisted-dump.txt => firmware-assisted-dump.rst} (80%)
+ rename Documentation/powerpc/{hvcs.txt => hvcs.rst} (91%)
+ create mode 100644 Documentation/powerpc/index.rst
+ rename Documentation/powerpc/{mpc52xx.txt => mpc52xx.rst} (91%)
+ rename Documentation/powerpc/{pci_iov_resource_on_powernv.txt => pci_iov_resource_on_powernv.rst} (97%)
+ rename Documentation/powerpc/{pmu-ebb.txt => pmu-ebb.rst} (99%)
+ create mode 100644 Documentation/powerpc/ptrace.rst
+ delete mode 100644 Documentation/powerpc/ptrace.txt
+ rename Documentation/powerpc/{qe_firmware.txt => qe_firmware.rst} (95%)
+ rename Documentation/powerpc/{syscall64-abi.txt => syscall64-abi.rst} (82%)
+ rename Documentation/powerpc/{transactional_memory.txt => transactional_memory.rst} (93%)
+ delete mode 100644 Documentation/process/conf.py
+ delete mode 100644 Documentation/sh/conf.py
+ delete mode 100644 Documentation/sound/conf.py
+ delete mode 100644 Documentation/userspace-api/conf.py
+ delete mode 100644 Documentation/vm/conf.py
+ delete mode 100644 Documentation/x86/conf.py
+
+-- 
+2.21.0
+
+
