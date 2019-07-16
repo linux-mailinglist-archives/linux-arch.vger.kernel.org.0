@@ -2,51 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEA56A857
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2019 14:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E1E6A870
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2019 14:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732752AbfGPMLA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Jul 2019 08:11:00 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:39064 "EHLO
+        id S1732027AbfGPMLw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Jul 2019 08:11:52 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:42268 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732581AbfGPMLA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 08:11:00 -0400
+        with ESMTP id S1728387AbfGPMLw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 08:11:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=cmrXWeKZex18XPtqOqXe6bsYV64AO68iLYgMsiWQPIg=; b=QAAw/LhYE17kHpcrRzOCn1piW
-        wDQhBm1yl/KZ+dj8rCQhgNieg+hhttiHCd56p5QhHz5ASeESwhg4e5NnaVU0xFvaS1lhK+pI34VAH
-        U07mMZP9tRQ4deiPKcIy4WDiR29u2hCPogiZhF9Lz2jHXns+8RDa0pzAsZAsHJhW3j3YMjCZIm/+P
-        LGpxBBG2lEGO3KMHIzygFcSKKg0GHttc1pRY0pbQBDBk7P+UYDrt1y6b2Q/bZPeVAySSZNi95nOXL
-        A9MLC1Mv0VfRw8xgU7fIrVDbMile7MGuQFtM0dQbNTrXk9FcF/xI3aZ/c1Bhe5nAJD6JiU0T0som+
-        3cGvhJxcQ==;
+        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
+        To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=iZYeg9Nbps8f84ceOabjIWQOvWBOi7Zf+58kDSKfKw4=; b=SYnfqTRIRg+lXMoK+qjBAcWjJA
+        ukjt6ndWG1X2HGVA05EOW3eBW5FIo9Cz470o5K/fa+Bet69ocanRP1jSFnJDD0Q+CF5jJ/7Ewa9bz
+        cY5H3AR2T9VL+AoIk2h0uh1a436/Ipe5A9mwZYsb5CklukzZMl11r79DSv0pKbPc7g5p/CXLWVCO1
+        dHYPVggmNYesmyEKxBcLJc0Cojr0KKRtvlRmkH4ACHZ2VPsqXDEb7uvhgil1lJ965UtnBkZn9xYvk
+        aQxImhre7/hmN5ANVcgEiOzt4T4JbwjOPrMk9ALiinZ0MJ+BhU2LJIjdZGtWja7AC1+ZZz/RhmF3O
+        LCdCnauQ==;
 Received: from [189.27.46.152] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hnMIL-0004hz-Al; Tue, 16 Jul 2019 12:10:57 +0000
+        id 1hnMIL-0004i2-BI; Tue, 16 Jul 2019 12:10:57 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hnMII-0000QW-KI; Tue, 16 Jul 2019 09:10:54 -0300
+        id 1hnMII-0000Qj-NF; Tue, 16 Jul 2019 09:10:54 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        linux-scsi@vger.kernel.org, esc.storagedev@microsemi.com,
-        linuxppc-dev@lists.ozlabs.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, kvm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, rcu@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
+        Don Brace <don.brace@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        rcu@vger.kernel.org, linux-doc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, x86@kernel.org,
-        dri-devel@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: [PATCH 00/14] pending doc patches for 5.3-rc
-Date:   Tue, 16 Jul 2019 09:10:39 -0300
-Message-Id: <cover.1563277838.git.mchehab+samsung@kernel.org>
+        linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-i2c@vger.kernel.org, esc.storagedev@microsemi.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 03/14] docs: fix broken doc references due to renames
+Date:   Tue, 16 Jul 2019 09:10:42 -0300
+Message-Id: <aa415583bf6b812b0249093a601aa31412f3a1cf.1563277838.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1563277838.git.mchehab+samsung@kernel.org>
+References: <cover.1563277838.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-arch-owner@vger.kernel.org
@@ -54,179 +81,195 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Those are the pending documentation patches after my pull request
-for this branch:
+Some files got renamed but probably due to some merge conflicts,
+a few references still point to the old locations.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media.git tags/docs/v5.3-1
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ Documentation/RCU/rculist_nulls.txt                   | 2 +-
+ Documentation/devicetree/bindings/arm/idle-states.txt | 2 +-
+ Documentation/locking/spinlocks.rst                   | 4 ++--
+ Documentation/memory-barriers.txt                     | 2 +-
+ Documentation/translations/ko_KR/memory-barriers.txt  | 2 +-
+ Documentation/watchdog/hpwdt.rst                      | 2 +-
+ MAINTAINERS                                           | 8 ++++----
+ drivers/gpu/drm/drm_modes.c                           | 2 +-
+ drivers/i2c/busses/i2c-nvidia-gpu.c                   | 2 +-
+ drivers/scsi/hpsa.c                                   | 4 ++--
+ 10 files changed, 15 insertions(+), 15 deletions(-)
 
-Patches 1 to 13 were already submitted, but got rebased. Patch 14
-is a new fixup one.
-
-Patches 1 and 2 weren't submitted before due to merge conflicts
-that are now solved upstream;
-
-Patch 3 fixes a series of random Documentation/* references that
-are pointing to the wrong places.
-
-Patch 4 fix a longstanding issue: every time a new book is added,
-conf.py need changes, in order to allow generating a PDF file.
-After the patch, conf.py will automatically recognize new books,
-saving the trouble of keeping adding documents to it.
-
-Patches 5 to 11 are due to fonts support when building translations.pdf.
-The main focus is to add xeCJK support. While doing it, I discovered
-some bugs at sphinx-pre-install script after running it with 7 different
-distributions.
-
-Patch 12 improves support for partial doc building. Currently, each
-subdir needs to have its own conf.py, in order to support partial
-doc build. After it, any Documentation subdir can be used to 
-roduce html/pdf docs with:
-
-	make SPHINXDIRS="foo bar" htmldocs
-	(or pdfdocs, latexdocs, epubdocs, ...)
-
-Patch 13 is a cleanup patch: it simply get rid of all those extra
-conf.py files that  aren't needed anymore. The only extra config
-file after it is this one:
-
-	Documentation/media/conf_nitpick.py
-
-With enables some extra optional Sphinx features.
-
-Patch 14 adds Documentation/virtual to the main index.rst file
-and add a new *.rst file that was orphaned there.
-
--
-
-After this series, there's just one more patch meant to be applied
-for 5.3, with is still waiting for some patches to be merged from
-linux-next:
-
-    https://git.linuxtv.org/mchehab/experimental.git/commit/?id=b1b5dc7d7bbfbbfdace2a248c6458301c6e34100
-
-
-Mauro Carvalho Chehab (14):
-  docs: powerpc: convert docs to ReST and rename to *.rst
-  docs: power: add it to to the main documentation index
-  docs: fix broken doc references due to renames
-  docs: pdf: add all Documentation/*/index.rst to PDF output
-  docs: conf.py: add CJK package needed by translations
-  docs: conf.py: only use CJK if the font is available
-  scripts/sphinx-pre-install: fix script for RHEL/CentOS
-  scripts/sphinx-pre-install: don't use LaTeX with CentOS 7
-  scripts/sphinx-pre-install: fix latexmk dependencies
-  scripts/sphinx-pre-install: cleanup Gentoo checks
-  scripts/sphinx-pre-install: seek for Noto CJK fonts for pdf output
-  docs: load_config.py: avoid needing a conf.py just due to LaTeX docs
-  docs: remove extra conf.py files
-  docs: virtual: add it to the documentation body
-
- Documentation/PCI/pci-error-recovery.rst      |   5 +-
- Documentation/RCU/rculist_nulls.txt           |   2 +-
- Documentation/admin-guide/conf.py             |  10 --
- Documentation/conf.py                         |  30 +++-
- Documentation/core-api/conf.py                |  10 --
- Documentation/crypto/conf.py                  |  10 --
- Documentation/dev-tools/conf.py               |  10 --
- .../devicetree/bindings/arm/idle-states.txt   |   2 +-
- Documentation/doc-guide/conf.py               |  10 --
- Documentation/driver-api/80211/conf.py        |  10 --
- Documentation/driver-api/conf.py              |  10 --
- Documentation/driver-api/pm/conf.py           |  10 --
- Documentation/filesystems/conf.py             |  10 --
- Documentation/gpu/conf.py                     |  10 --
- Documentation/index.rst                       |   3 +
- Documentation/input/conf.py                   |  10 --
- Documentation/kernel-hacking/conf.py          |  10 --
- Documentation/locking/spinlocks.rst           |   4 +-
- Documentation/maintainer/conf.py              |  10 --
- Documentation/media/conf.py                   |  12 --
- Documentation/memory-barriers.txt             |   2 +-
- Documentation/networking/conf.py              |  10 --
- Documentation/power/index.rst                 |   2 +-
- .../{bootwrapper.txt => bootwrapper.rst}      |  28 +++-
- .../{cpu_families.txt => cpu_families.rst}    |  23 +--
- .../{cpu_features.txt => cpu_features.rst}    |   6 +-
- Documentation/powerpc/{cxl.txt => cxl.rst}    |  46 ++++--
- .../powerpc/{cxlflash.txt => cxlflash.rst}    |  10 +-
- .../{DAWR-POWER9.txt => dawr-power9.rst}      |  15 +-
- Documentation/powerpc/{dscr.txt => dscr.rst}  |  18 +-
- ...ecovery.txt => eeh-pci-error-recovery.rst} | 108 ++++++------
- ...ed-dump.txt => firmware-assisted-dump.rst} | 117 +++++++------
- Documentation/powerpc/{hvcs.txt => hvcs.rst}  | 108 ++++++------
- Documentation/powerpc/index.rst               |  34 ++++
- Documentation/powerpc/isa-versions.rst        |  15 +-
- .../powerpc/{mpc52xx.txt => mpc52xx.rst}      |  12 +-
- ...nv.txt => pci_iov_resource_on_powernv.rst} |  15 +-
- .../powerpc/{pmu-ebb.txt => pmu-ebb.rst}      |   1 +
- Documentation/powerpc/ptrace.rst              | 156 ++++++++++++++++++
- Documentation/powerpc/ptrace.txt              | 151 -----------------
- .../{qe_firmware.txt => qe_firmware.rst}      |  37 +++--
- .../{syscall64-abi.txt => syscall64-abi.rst}  |  29 ++--
- ...al_memory.txt => transactional_memory.rst} |  45 ++---
- Documentation/process/conf.py                 |  10 --
- Documentation/sh/conf.py                      |  10 --
- Documentation/sound/conf.py                   |  10 --
- Documentation/sphinx/load_config.py           |  27 ++-
- .../translations/ko_KR/memory-barriers.txt    |   2 +-
- Documentation/userspace-api/conf.py           |  10 --
- Documentation/virtual/kvm/index.rst           |   1 +
- Documentation/vm/conf.py                      |  10 --
- Documentation/watchdog/hpwdt.rst              |   2 +-
- Documentation/x86/conf.py                     |  10 --
- MAINTAINERS                                   |  14 +-
- arch/powerpc/kernel/exceptions-64s.S          |   2 +-
- drivers/gpu/drm/drm_modes.c                   |   2 +-
- drivers/i2c/busses/i2c-nvidia-gpu.c           |   2 +-
- drivers/scsi/hpsa.c                           |   4 +-
- drivers/soc/fsl/qe/qe.c                       |   2 +-
- drivers/tty/hvc/hvcs.c                        |   2 +-
- include/soc/fsl/qe/qe.h                       |   2 +-
- scripts/sphinx-pre-install                    | 118 ++++++++++---
- 62 files changed, 738 insertions(+), 678 deletions(-)
- delete mode 100644 Documentation/admin-guide/conf.py
- delete mode 100644 Documentation/core-api/conf.py
- delete mode 100644 Documentation/crypto/conf.py
- delete mode 100644 Documentation/dev-tools/conf.py
- delete mode 100644 Documentation/doc-guide/conf.py
- delete mode 100644 Documentation/driver-api/80211/conf.py
- delete mode 100644 Documentation/driver-api/conf.py
- delete mode 100644 Documentation/driver-api/pm/conf.py
- delete mode 100644 Documentation/filesystems/conf.py
- delete mode 100644 Documentation/gpu/conf.py
- delete mode 100644 Documentation/input/conf.py
- delete mode 100644 Documentation/kernel-hacking/conf.py
- delete mode 100644 Documentation/maintainer/conf.py
- delete mode 100644 Documentation/media/conf.py
- delete mode 100644 Documentation/networking/conf.py
- rename Documentation/powerpc/{bootwrapper.txt => bootwrapper.rst} (93%)
- rename Documentation/powerpc/{cpu_families.txt => cpu_families.rst} (95%)
- rename Documentation/powerpc/{cpu_features.txt => cpu_features.rst} (97%)
- rename Documentation/powerpc/{cxl.txt => cxl.rst} (95%)
- rename Documentation/powerpc/{cxlflash.txt => cxlflash.rst} (98%)
- rename Documentation/powerpc/{DAWR-POWER9.txt => dawr-power9.rst} (95%)
- rename Documentation/powerpc/{dscr.txt => dscr.rst} (91%)
- rename Documentation/powerpc/{eeh-pci-error-recovery.txt => eeh-pci-error-recovery.rst} (82%)
- rename Documentation/powerpc/{firmware-assisted-dump.txt => firmware-assisted-dump.rst} (80%)
- rename Documentation/powerpc/{hvcs.txt => hvcs.rst} (91%)
- create mode 100644 Documentation/powerpc/index.rst
- rename Documentation/powerpc/{mpc52xx.txt => mpc52xx.rst} (91%)
- rename Documentation/powerpc/{pci_iov_resource_on_powernv.txt => pci_iov_resource_on_powernv.rst} (97%)
- rename Documentation/powerpc/{pmu-ebb.txt => pmu-ebb.rst} (99%)
- create mode 100644 Documentation/powerpc/ptrace.rst
- delete mode 100644 Documentation/powerpc/ptrace.txt
- rename Documentation/powerpc/{qe_firmware.txt => qe_firmware.rst} (95%)
- rename Documentation/powerpc/{syscall64-abi.txt => syscall64-abi.rst} (82%)
- rename Documentation/powerpc/{transactional_memory.txt => transactional_memory.rst} (93%)
- delete mode 100644 Documentation/process/conf.py
- delete mode 100644 Documentation/sh/conf.py
- delete mode 100644 Documentation/sound/conf.py
- delete mode 100644 Documentation/userspace-api/conf.py
- delete mode 100644 Documentation/vm/conf.py
- delete mode 100644 Documentation/x86/conf.py
-
+diff --git a/Documentation/RCU/rculist_nulls.txt b/Documentation/RCU/rculist_nulls.txt
+index 8151f0195f76..23f115dc87cf 100644
+--- a/Documentation/RCU/rculist_nulls.txt
++++ b/Documentation/RCU/rculist_nulls.txt
+@@ -1,7 +1,7 @@
+ Using hlist_nulls to protect read-mostly linked lists and
+ objects using SLAB_TYPESAFE_BY_RCU allocations.
+ 
+-Please read the basics in Documentation/RCU/listRCU.txt
++Please read the basics in Documentation/RCU/listRCU.rst
+ 
+ Using special makers (called 'nulls') is a convenient way
+ to solve following problem :
+diff --git a/Documentation/devicetree/bindings/arm/idle-states.txt b/Documentation/devicetree/bindings/arm/idle-states.txt
+index 326f29b270ad..2d325bed37e5 100644
+--- a/Documentation/devicetree/bindings/arm/idle-states.txt
++++ b/Documentation/devicetree/bindings/arm/idle-states.txt
+@@ -703,4 +703,4 @@ cpus {
+     https://www.devicetree.org/specifications/
+ 
+ [6] ARM Linux Kernel documentation - Booting AArch64 Linux
+-    Documentation/arm64/booting.txt
++    Documentation/arm64/booting.rst
+diff --git a/Documentation/locking/spinlocks.rst b/Documentation/locking/spinlocks.rst
+index 098107fb7d86..e93ec6645238 100644
+--- a/Documentation/locking/spinlocks.rst
++++ b/Documentation/locking/spinlocks.rst
+@@ -82,7 +82,7 @@ itself.  The read lock allows many concurrent readers.  Anything that
+ **changes** the list will have to get the write lock.
+ 
+    NOTE! RCU is better for list traversal, but requires careful
+-   attention to design detail (see Documentation/RCU/listRCU.txt).
++   attention to design detail (see Documentation/RCU/listRCU.rst).
+ 
+ Also, you cannot "upgrade" a read-lock to a write-lock, so if you at _any_
+ time need to do any changes (even if you don't do it every time), you have
+@@ -90,7 +90,7 @@ to get the write-lock at the very beginning.
+ 
+    NOTE! We are working hard to remove reader-writer spinlocks in most
+    cases, so please don't add a new one without consensus.  (Instead, see
+-   Documentation/RCU/rcu.txt for complete information.)
++   Documentation/RCU/rcu.rst for complete information.)
+ 
+ ----
+ 
+diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+index 045bb8148fe9..1adbb8a371c7 100644
+--- a/Documentation/memory-barriers.txt
++++ b/Documentation/memory-barriers.txt
+@@ -548,7 +548,7 @@ There are certain things that the Linux kernel memory barriers do not guarantee:
+ 
+ 	[*] For information on bus mastering DMA and coherency please read:
+ 
+-	    Documentation/PCI/pci.rst
++	    Documentation/driver-api/pci/pci.rst
+ 	    Documentation/DMA-API-HOWTO.txt
+ 	    Documentation/DMA-API.txt
+ 
+diff --git a/Documentation/translations/ko_KR/memory-barriers.txt b/Documentation/translations/ko_KR/memory-barriers.txt
+index a33c2a536542..2774624ee843 100644
+--- a/Documentation/translations/ko_KR/memory-barriers.txt
++++ b/Documentation/translations/ko_KR/memory-barriers.txt
+@@ -569,7 +569,7 @@ ACQUIRE 는 해당 오퍼레이션의 로드 부분에만 적용되고 RELEASE 
+ 
+ 	[*] 버스 마스터링 DMA 와 일관성에 대해서는 다음을 참고하시기 바랍니다:
+ 
+-	    Documentation/PCI/pci.rst
++	    Documentation/driver-api/pci/pci.rst
+ 	    Documentation/DMA-API-HOWTO.txt
+ 	    Documentation/DMA-API.txt
+ 
+diff --git a/Documentation/watchdog/hpwdt.rst b/Documentation/watchdog/hpwdt.rst
+index 94a96371113e..49c647dba8aa 100644
+--- a/Documentation/watchdog/hpwdt.rst
++++ b/Documentation/watchdog/hpwdt.rst
+@@ -59,7 +59,7 @@ Last reviewed: 08/20/2018
+  and loop forever.  This is generally not what a watchdog user wants.
+ 
+  For those wishing to learn more please see:
+-	Documentation/kdump/kdump.rst
++	Documentation/admin-guide/kdump/kdump.rst
+ 	Documentation/admin-guide/kernel-parameters.txt (panic=)
+ 	Your Linux Distribution specific documentation.
+ 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b3a5c72f3298..b0acc138e9e9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -899,7 +899,7 @@ L:	linux-iio@vger.kernel.org
+ W:	http://ez.analog.com/community/linux-device-drivers
+ S:	Supported
+ F:	drivers/iio/adc/ad7124.c
+-F:	Documentation/devicetree/bindings/iio/adc/adi,ad7124.txt
++F:	Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml
+ 
+ ANALOG DEVICES INC AD7606 DRIVER
+ M:	Stefan Popa <stefan.popa@analog.com>
+@@ -4189,7 +4189,7 @@ M:	Jens Axboe <axboe@kernel.dk>
+ L:	cgroups@vger.kernel.org
+ L:	linux-block@vger.kernel.org
+ T:	git git://git.kernel.dk/linux-block
+-F:	Documentation/cgroup-v1/blkio-controller.rst
++F:	Documentation/admin-guide/cgroup-v1/blkio-controller.rst
+ F:	block/blk-cgroup.c
+ F:	include/linux/blk-cgroup.h
+ F:	block/blk-throttle.c
+@@ -6848,7 +6848,7 @@ R:	Sagi Shahar <sagis@google.com>
+ R:	Jon Olson <jonolson@google.com>
+ L:	netdev@vger.kernel.org
+ S:	Supported
+-F:	Documentation/networking/device_drivers/google/gve.txt
++F:	Documentation/networking/device_drivers/google/gve.rst
+ F:	drivers/net/ethernet/google
+ 
+ GPD POCKET FAN DRIVER
+@@ -12096,7 +12096,7 @@ M:	Juergen Gross <jgross@suse.com>
+ M:	Alok Kataria <akataria@vmware.com>
+ L:	virtualization@lists.linux-foundation.org
+ S:	Supported
+-F:	Documentation/virtual/paravirt_ops.txt
++F:	Documentation/virtual/paravirt_ops.rst
+ F:	arch/*/kernel/paravirt*
+ F:	arch/*/include/asm/paravirt*.h
+ F:	include/linux/hypervisor.h
+diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
+index 57e6408288c8..4645af681ef8 100644
+--- a/drivers/gpu/drm/drm_modes.c
++++ b/drivers/gpu/drm/drm_modes.c
+@@ -1680,7 +1680,7 @@ static int drm_mode_parse_cmdline_options(char *str, size_t len,
+  *
+  * Additionals options can be provided following the mode, using a comma to
+  * separate each option. Valid options can be found in
+- * Documentation/fb/modedb.txt.
++ * Documentation/fb/modedb.rst.
+  *
+  * The intermediate drm_cmdline_mode structure is required to store additional
+  * options from the command line modline like the force-enable/disable flag.
+diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
+index cfc76b5de726..5a1235fd86bb 100644
+--- a/drivers/i2c/busses/i2c-nvidia-gpu.c
++++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
+@@ -364,7 +364,7 @@ static void gpu_i2c_remove(struct pci_dev *pdev)
+ /*
+  * We need gpu_i2c_suspend() even if it is stub, for runtime pm to work
+  * correctly. Without it, lspci shows runtime pm status as "D0" for the card.
+- * Documentation/power/pci.txt also insists for driver to provide this.
++ * Documentation/power/pci.rst also insists for driver to provide this.
+  */
+ static __maybe_unused int gpu_i2c_suspend(struct device *dev)
+ {
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index 43a6b5350775..eaf6177ac9ee 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -7798,7 +7798,7 @@ static void hpsa_free_pci_init(struct ctlr_info *h)
+ 	hpsa_disable_interrupt_mode(h);		/* pci_init 2 */
+ 	/*
+ 	 * call pci_disable_device before pci_release_regions per
+-	 * Documentation/PCI/pci.rst
++	 * Documentation/driver-api/pci/pci.rst
+ 	 */
+ 	pci_disable_device(h->pdev);		/* pci_init 1 */
+ 	pci_release_regions(h->pdev);		/* pci_init 2 */
+@@ -7881,7 +7881,7 @@ static int hpsa_pci_init(struct ctlr_info *h)
+ clean1:
+ 	/*
+ 	 * call pci_disable_device before pci_release_regions per
+-	 * Documentation/PCI/pci.rst
++	 * Documentation/driver-api/pci/pci.rst
+ 	 */
+ 	pci_disable_device(h->pdev);
+ 	pci_release_regions(h->pdev);
 -- 
 2.21.0
-
 
