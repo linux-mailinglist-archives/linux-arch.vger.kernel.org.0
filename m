@@ -2,72 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D83EA6A61A
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2019 12:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8689B6A664
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2019 12:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728004AbfGPKFG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Jul 2019 06:05:06 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:49860 "EHLO deadmen.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728015AbfGPKFG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Jul 2019 06:05:06 -0400
-Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
-        by deadmen.hmeau.com with esmtps (Exim 4.89 #2 (Debian))
-        id 1hnKKN-0002OT-MR; Tue, 16 Jul 2019 18:04:55 +0800
-Received: from herbert by gondobar with local (Exim 4.89)
-        (envelope-from <herbert@gondor.apana.org.au>)
-        id 1hnKKF-0003tz-SN; Tue, 16 Jul 2019 18:04:47 +0800
-Date:   Tue, 16 Jul 2019 18:04:47 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        andrea.parri@amarulasolutions.com, boqun.feng@gmail.com,
-        paulmck@linux.ibm.com, peterz@infradead.org,
-        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] padata: use smp_mb in padata_reorder to avoid orphaned
- padata jobs
-Message-ID: <20190716100447.pdongriwwfxsuajf@gondor.apana.org.au>
-References: <20190711221205.29889-1-daniel.m.jordan@oracle.com>
- <20190712100636.mqdr567p7ozanlyl@gondor.apana.org.au>
- <20190712101012.GW14601@gauss3.secunet.de>
- <20190712160737.iniaaxlsnhs6azg5@ca-dmjordan1.us.oracle.com>
- <20190713050321.c5wq7a7jrb6q2pxn@gondor.apana.org.au>
- <20190715161045.zqwgsp62uqjnvx3l@ca-dmjordan1.us.oracle.com>
+        id S1732318AbfGPKVX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Jul 2019 06:21:23 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:56740 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731401AbfGPKVX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 06:21:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=+jPmiLFoLFkErQnsFP18srbHMWPmmDSQUv0S0HNnLWo=; b=1FCCrHiw6wHWzTKNNLJJ628q3
+        sfZxcu4lXp8UOSjklMM84EEttE7cH/rxMVbAXKhQFu/3gZ+10G+GnD+QOGbggR+a4ntTcNNLYXw6j
+        HQwYBI7Ip3s3jo0xYu5aAhxsO3PdiOkRFEk7AC6tY7L756h2yeZid6XR7FOoEIDs4wrGIKWBypx6+
+        29+ITIL/Aw/WCMapng0MkEzqtfJq2WfLPttOSGcTayXz12kmjfnqKQ1/O4cinbNjMouqSZ1YNkODG
+        xCHWvcC8YQP8U9hwBoJRuKV0DN2nezJlsVl3CsaH//S3ws6GsMrkZoCA9+TfD1jPwDtslYWwL3NIq
+        t5kPYIzrg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hnKZX-0005uN-La; Tue, 16 Jul 2019 10:20:36 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 58FB52021C301; Tue, 16 Jul 2019 12:20:34 +0200 (CEST)
+Date:   Tue, 16 Jul 2019 12:20:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alex Kogan <alex.kogan@oracle.com>
+Cc:     linux@armlinux.org.uk, mingo@redhat.com, will.deacon@arm.com,
+        arnd@arndb.de, longman@redhat.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        guohanjun@huawei.com, jglauber@marvell.com,
+        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        dave.dice@oracle.com, rahul.x.yadav@oracle.com
+Subject: Re: [PATCH v3 2/5] locking/qspinlock: Refactor the qspinlock slow
+ path
+Message-ID: <20190716102034.GN3419@hirez.programming.kicks-ass.net>
+References: <20190715192536.104548-1-alex.kogan@oracle.com>
+ <20190715192536.104548-3-alex.kogan@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190715161045.zqwgsp62uqjnvx3l@ca-dmjordan1.us.oracle.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190715192536.104548-3-alex.kogan@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 15, 2019 at 12:10:46PM -0400, Daniel Jordan wrote:
->
-> I've been wrong before plenty of times, and there's nothing preventing this
-> from being one of those times :) , but in this case I believe what I'm showing
-> is correct.
-> 
-> The padata_do_serial call for a given job ensures padata_reorder runs on the
-> CPU that the job hashed to in padata_do_parallel, which is not necessarily the
-> same CPU as the one that padata_do_parallel itself ran on.
+On Mon, Jul 15, 2019 at 03:25:33PM -0400, Alex Kogan wrote:
 
-You're right.  I was taking the comment in the code at face value,
-never trust comments :)
+> +/*
+> + * set_locked_empty_mcs - Try to set the spinlock value to _Q_LOCKED_VAL,
+> + * and by doing that unlock the MCS lock when its waiting queue is empty
+> + * @lock: Pointer to queued spinlock structure
+> + * @val: Current value of the lock
+> + * @node: Pointer to the MCS node of the lock holder
+> + *
+> + * *,*,* -> 0,0,1
+> + */
+> +static __always_inline bool __set_locked_empty_mcs(struct qspinlock *lock,
+> +						   u32 val,
+> +						   struct mcs_spinlock *node)
+> +{
+> +	return atomic_try_cmpxchg_relaxed(&lock->val, &val, _Q_LOCKED_VAL);
+> +}
 
-While looking at the code in question, I think it is seriously
-broken.  For instance, padata_replace does not deal with async
-crypto at all.  It would fail miserably if the underlying async
-crypto held onto references to the old pd.
+That name is nonsense. It should be something like:
 
-So we may have to restrict pcrypt to sync crypto only, which
-would obviously mean that it can no longer use aesni.  Or we
-will have to spend a lot of time to fix this up properly.
+static __always_inline bool __try_clear_tail(...)
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+
+> +/*
+> + * pass_mcs_lock - pass the MCS lock to the next waiter
+> + * @node: Pointer to the MCS node of the lock holder
+> + * @next: Pointer to the MCS node of the first waiter in the MCS queue
+> + */
+> +static __always_inline void __pass_mcs_lock(struct mcs_spinlock *node,
+> +					    struct mcs_spinlock *next)
+> +{
+> +	arch_mcs_spin_unlock_contended(&next->locked, 1);
+> +}
+
+I'm not entirely happy with that name either; but it's not horrible like
+the other one. Why not mcs_spin_unlock_contended() ?
