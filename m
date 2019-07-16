@@ -2,114 +2,175 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07ED06A8FC
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2019 14:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910AA6A92B
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2019 15:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbfGPM51 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Jul 2019 08:57:27 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:58104 "EHLO deadmen.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbfGPM50 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Jul 2019 08:57:26 -0400
-Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
-        by deadmen.hmeau.com with esmtps (Exim 4.89 #2 (Debian))
-        id 1hnN11-0005G9-5N; Tue, 16 Jul 2019 20:57:07 +0800
-Received: from herbert by gondobar with local (Exim 4.89)
-        (envelope-from <herbert@gondor.apana.org.au>)
-        id 1hnN0y-0001sk-IB; Tue, 16 Jul 2019 20:57:04 +0800
-Date:   Tue, 16 Jul 2019 20:57:04 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     Daniel Jordan <daniel.m.jordan@oracle.com>,
-        andrea.parri@amarulasolutions.com, boqun.feng@gmail.com,
-        paulmck@linux.ibm.com, peterz@infradead.org,
-        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] padata: Use RCU when fetching pd from do_serial
-Message-ID: <20190716125704.l2jolyyd3bue6hhn@gondor.apana.org.au>
-References: <20190711221205.29889-1-daniel.m.jordan@oracle.com>
- <20190712100636.mqdr567p7ozanlyl@gondor.apana.org.au>
- <20190712101012.GW14601@gauss3.secunet.de>
- <20190712160737.iniaaxlsnhs6azg5@ca-dmjordan1.us.oracle.com>
- <20190713050321.c5wq7a7jrb6q2pxn@gondor.apana.org.au>
- <20190715161045.zqwgsp62uqjnvx3l@ca-dmjordan1.us.oracle.com>
- <20190716100447.pdongriwwfxsuajf@gondor.apana.org.au>
- <20190716111410.GN17989@gauss3.secunet.de>
+        id S1733137AbfGPNGq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Jul 2019 09:06:46 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33771 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732472AbfGPNGq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 09:06:46 -0400
+Received: by mail-pf1-f196.google.com with SMTP id g2so9107573pfq.0
+        for <linux-arch@vger.kernel.org>; Tue, 16 Jul 2019 06:06:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HndzIrwk0eloZ/VKZJ3ivaH1s8315qlKpsro16xZw70=;
+        b=b8dhUBZSz3RGMnHXa2eQUBcpb0Fr1c6vhDDwn4sy14RwoF3LeMqo4GwVei/eUCKLfN
+         2ysAKK0S6zo65plaT8Lmyu1cdKbX5vv5C3GPTJPIInad+mBHinkOAREnbCNuxmpL9VDG
+         fvZUIwNFnzQNqEmzHkL0RRQ1MQkDpVZLaNNcaAVC/zAYUxremZf5+M3FMQbomiyN3wH4
+         zc2zC/xff3jM5dpplZUlTKdEFImIprhxsju27ez6MU1i0OsgFNq72UzfzJW9Togr4CqO
+         YkkRxSa2wlAwsL/E0oFuYOap/7lvKcKnsDSBvmk5MITFO2BYwQSiCBv4/QcWtaXdxpFP
+         2++g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HndzIrwk0eloZ/VKZJ3ivaH1s8315qlKpsro16xZw70=;
+        b=XXZH8MGe4qpOKEvLLVOOFh34gpg68PNvaLh7oTNFlfx7fpLKeelewkmUZT/swrkDvI
+         oDRsu4S2Y9B3Kg/TRLT9hAkZZNY71z/YXc/QzqczVxJjiuL/slep9dU774Xi3QcBPFGn
+         vqJYO7Hl6ZZX4eTdh6sqbuf83PxbzGqUdTiZPMY1OPA6Jm7ADbZ8tFd4gS4bEKiglfKU
+         i3u1rvbmpV6zrcFEMeLjA1fIHg7vWAnLnnMjItWJxWayBQ2d9BnyO60kDw83yjzhtLAT
+         DpC4PmT3hSTFf4L9AU6Wlf6cBvtHQsUsilsd9EmXVDLlUZ8KgC9aRqSmUAzRHL8Sv8Jr
+         dshg==
+X-Gm-Message-State: APjAAAXSUMD7nBHT92vR2LDrwaCjo4u8zQ5apd35mCnMNJ+kyLPxDGG9
+        uUbDREr84EPxFSHz4UCKIhE=
+X-Google-Smtp-Source: APXvYqxc7HGOD0D5gu8WnhNrsT1I3LmFfpI6lWg9smWBUfjHYlbiTNFFnqhLddSt9tTLEeru8OLm5Q==
+X-Received: by 2002:a63:b1d:: with SMTP id 29mr33615344pgl.103.1563282405436;
+        Tue, 16 Jul 2019 06:06:45 -0700 (PDT)
+Received: from brauner.io ([172.58.30.188])
+        by smtp.gmail.com with ESMTPSA id a12sm42618252pje.3.2019.07.16.06.06.37
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 16 Jul 2019 06:06:44 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 15:06:33 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>, mpe@ellerman.id.au
+Subject: Re: [PATCH 1/2] arch: mark syscall number 435 reserved for clone3
+Message-ID: <20190716130631.tohj4ub54md25dys@brauner.io>
+References: <20190714192205.27190-1-christian@brauner.io>
+ <20190714192205.27190-2-christian@brauner.io>
+ <e14eb2f9-43cb-0b9d-dec4-b7e7dcd62091@de.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190716111410.GN17989@gauss3.secunet.de>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <e14eb2f9-43cb-0b9d-dec4-b7e7dcd62091@de.ibm.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 01:14:10PM +0200, Steffen Klassert wrote:
->
-> Maybe we can fix it if we call padata_free_pd() from
-> padata_serial_worker() when it sent out the last object.
+On Mon, Jul 15, 2019 at 03:56:04PM +0200, Christian Borntraeger wrote:
+> I think Vasily already has a clone3 patch for s390x with 435. 
 
-How about using RCU?
+A quick follow-up on this. Helge and Michael have asked whether there
+are any tests for clone3. Yes, there will be and I try to have them
+ready by the end of the this or next week for review. In the meantime I
+hope the following minimalistic test program that just verifies very
+very basic functionality (It's not pretty.) will help you test:
 
-We still need to fix up the refcnt if it's supposed to limit the
-overall number of outstanding requests.
+#define _GNU_SOURCE
+#include <err.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <linux/sched.h>
+#include <linux/types.h>
+#include <sched.h>
+#include <signal.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/mount.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/syscall.h>
+#include <sys/sysmacros.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
----8<---
-The function padata_do_serial uses parallel_data without obeying
-the RCU rules around its life-cycle.  This means that a concurrent
-padata_replace call can result in a crash.
+#ifndef CLONE_PIDFD
+#define CLONE_PIDFD 0x00001000
+#endif
 
-This patch fixes it by using RCU just as we do in padata_do_parallel.
+#ifndef __NR_clone3
+#define __NR_clone3 -1
+#endif
 
-Fixes: 16295bec6398 ("padata: Generic parallelization/...")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+static pid_t sys_clone3(struct clone_args *args)
+{
+	return syscall(__NR_clone3, args, sizeof(struct clone_args));
+}
 
-diff --git a/include/linux/padata.h b/include/linux/padata.h
-index 5d13d25da2c8..952f6514dd72 100644
---- a/include/linux/padata.h
-+++ b/include/linux/padata.h
-@@ -35,7 +35,7 @@
-  * struct padata_priv -  Embedded to the users data structure.
-  *
-  * @list: List entry, to attach to the padata lists.
-- * @pd: Pointer to the internal control structure.
-+ * @inst: Pointer to the overall control structure.
-  * @cb_cpu: Callback cpu for serializatioon.
-  * @cpu: Cpu for parallelization.
-  * @seq_nr: Sequence number of the parallelized data object.
-@@ -45,7 +45,7 @@
-  */
- struct padata_priv {
- 	struct list_head	list;
--	struct parallel_data	*pd;
-+	struct padata_instance	*inst;
- 	int			cb_cpu;
- 	int			cpu;
- 	int			info;
-diff --git a/kernel/padata.c b/kernel/padata.c
-index 2d2fddbb7a4c..fb5dd1210d2b 100644
---- a/kernel/padata.c
-+++ b/kernel/padata.c
-@@ -128,7 +128,7 @@ int padata_do_parallel(struct padata_instance *pinst,
- 
- 	err = 0;
- 	atomic_inc(&pd->refcnt);
--	padata->pd = pd;
-+	padata->inst = pinst;
- 	padata->cb_cpu = cb_cpu;
- 
- 	target_cpu = padata_cpu_hash(pd);
-@@ -367,7 +368,7 @@ void padata_do_serial(struct padata_priv *padata)
- 	struct parallel_data *pd;
- 	int reorder_via_wq = 0;
- 
--	pd = padata->pd;
-+	pd = rcu_dereference_bh(padata->inst->pd);
- 
- 	cpu = get_cpu();
- 
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+static int wait_for_pid(pid_t pid)
+{
+	int status, ret;
+
+again:
+	ret = waitpid(pid, &status, 0);
+	if (ret == -1) {
+		if (errno == EINTR)
+			goto again;
+
+		return -1;
+	}
+
+	if (ret != pid)
+		goto again;
+
+	if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
+		return -1;
+
+	return 0;
+}
+
+#define ptr_to_u64(ptr) ((__u64)((uintptr_t)(ptr)))
+
+int main(int argc, char *argv[])
+{
+	int pidfd = -1;
+	pid_t parent_tid = -1, pid = -1;
+	struct clone_args args = {0};
+
+	args.parent_tid = ptr_to_u64(&parent_tid); /* CLONE_PARENT_SETTID */
+	args.pidfd = ptr_to_u64(&pidfd); /* CLONE_PIDFD */
+	args.flags = CLONE_PIDFD | CLONE_PARENT_SETTID;
+	args.exit_signal = SIGCHLD;
+
+	pid = sys_clone3(&args);
+	if (pid < 0) {
+		fprintf(stderr, "%s - Failed to create new process\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+
+	if (pid == 0) {
+		printf("Child process with pid %d\n", getpid());
+		exit(EXIT_SUCCESS);
+	}
+
+	printf("Parent process received child's pid %d as return value\n", pid);
+	printf("Parent process received child's pidfd %d\n", *(int *)args.pidfd);
+	printf("Parent process received child's pid %d as return argument\n",
+	       *(pid_t *)args.parent_tid);
+
+	if (wait_for_pid(pid))
+		exit(EXIT_FAILURE);
+
+	if (pid != *(pid_t *)args.parent_tid)
+		exit(EXIT_FAILURE);
+
+	close(pidfd);
+
+	return 0;
+}
