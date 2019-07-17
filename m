@@ -2,110 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1756B232
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2019 01:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B4F6B333
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2019 03:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728601AbfGPXHT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Jul 2019 19:07:19 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:44814 "EHLO
+        id S1726371AbfGQB3O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Jul 2019 21:29:14 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43929 "EHLO
         mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728235AbfGPXHS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 19:07:18 -0400
-Received: by mail-pg1-f195.google.com with SMTP id i18so10159901pgl.11;
-        Tue, 16 Jul 2019 16:07:18 -0700 (PDT)
+        with ESMTP id S1726258AbfGQB3O (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 21:29:14 -0400
+Received: by mail-pg1-f195.google.com with SMTP id f25so10292774pgv.10
+        for <linux-arch@vger.kernel.org>; Tue, 16 Jul 2019 18:29:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :user-agent:message-id:content-transfer-encoding;
-        bh=YF5uWvW0lLwROvyPf53Wapwm3mzwcjBd4TlGJz7uSQc=;
-        b=Rgtqp4IDVXbKUFwCa8iBTAmLZ3icHtHxZ0xxcPrO34ppbQnUbbi4wGbJ8Y3Hs1LJaj
-         IrXL2sIU6q0QMst9f5/CtKr1eXCd2I5pUylvKHhErt5+buRBS/8nxqklBlIbKIqQzKXp
-         KZUbwdumcqMBoO47sqDNZ+7zfDRq4/0in70LDstQEsC8lof1FeQ6BHqXDzCRAjcdl/re
-         ups9T2L11lLTRQfrQj7Iglktz7n41R5ywDI3qu3fRS80qVNjJhV5Dam8hKUk46lU5OIt
-         h7rFnLUcqNhbjl8uAJwzmaeEJjBPl71yU8h1Ualjnp+D/5tWP6WS7v0Qh0wqDV0h+Ryi
-         8SXw==
+        d=sifive.com; s=google;
+        h=subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=/JCMTovNsMOTb4V8NbJUn4gtZFBomdigf57eMm4vvwA=;
+        b=lx7DMwJwb44W7Tsx+wtQGpeBhtEGmLrTQeHhVfpNHKCPvBD3EZccrC+x1nOiZ399Ox
+         Ce7qyy+Rjzuxnpqy8yeYrgqjTmrF1e4jLl6TgE3ixOT/U87rKHP/GwhBwHUCMYYMBtSX
+         XTxaPmwymA5BLTwz52iRqFqvtSq/Vds0zwWqSBqBhCoTjEmDNRyJXxv1Z31bPto7petN
+         4K4DlHQcEWAQRcfUEdZhqZdNL8Hu1gE5jSIKmzD34yWc3h67AlA1Bsy7Mb4SoM0dQh/o
+         8yYfnpbjmU1EbMOju/emLtWoEWPcrjXBQNL7vtCS5P7kJATFe6R2UYNx/eNwEOEaDppF
+         HG5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:user-agent:message-id:content-transfer-encoding;
-        bh=YF5uWvW0lLwROvyPf53Wapwm3mzwcjBd4TlGJz7uSQc=;
-        b=DR47nMHqwoF9ZXKTD4ta30+cax5vnk0giKBPsJ4EbyURYcTYVHxPCKy4uJhDoRuV4O
-         ohtQqq7ZEnQ3DJrREs9KCzsrbVivbiFD1RekOafCR3kWtEpdlDIIW77Mp3yWnICBvrde
-         1LbFsv8zuxyDcuXONrJzq9y9rNTVHMtLCi1Hje7ppNAJUq9vHyMuhLG3eLn0GM1BWqJe
-         cOnHGiKSDkKXiX4XLsSf2cgZ3auCNXtaOOFLqHJOGTq3jzTWU1hS19uWq6FDEh7JE55Y
-         8ZgySFiWEB+4Mug6a3V/sUcMxeiE12q5QyzHHnT8h4tzpXrixjcNq5ClLCVuGPsAIFju
-         +XUw==
-X-Gm-Message-State: APjAAAWZZMZcGSeZSKsfeoBzW9StZoj+VoBq8lquKQX8NWrqLACLWqtD
-        fTRzB8y4ri0BQl1G++4Bbnk=
-X-Google-Smtp-Source: APXvYqxbSot0tXbWZTT8zOiFvyxu3Z1k54Da4RuRhE16yCPnDE+TL5XF8kjTOt8H3YqXHJTMsqtj+g==
-X-Received: by 2002:a17:90a:3086:: with SMTP id h6mr40520027pjb.14.1563318437747;
-        Tue, 16 Jul 2019 16:07:17 -0700 (PDT)
-Received: from localhost ([203.220.8.141])
-        by smtp.gmail.com with ESMTPSA id s12sm19683707pgr.79.2019.07.16.16.07.15
+        h=x-gm-message-state:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding:cc:from:to;
+        bh=/JCMTovNsMOTb4V8NbJUn4gtZFBomdigf57eMm4vvwA=;
+        b=XaLYgog8hdx0VmjZJ66i0vSIWmy132MaNzCqtT2XWowmAkcWBISdpvP9ynO5Jbw1NZ
+         fso6YteVqGl4JIkV1JZtUw8Zk5K+wk8H3GpSt53iVTH5u5EuCbLV3eeEU7SQrLhzptQR
+         jQ57lmWR0GOdB70JRHlEe/Z6fueWWLxTMAvMN1HU6zAwV9CanIUJ0GF5uUytVY6as3mo
+         Hn8H4H31JDUeJ4SVIwg4eIyhusF1jrf/z6V+rfcawe5T/puhMQV7z077iEMBBi98BS1i
+         DdYNXeMZAu09hZhmMwOFEb7X9WegTojeyUIekVyZKuuvOY92RAcxcUwJbA368Dg4cwRG
+         FXDA==
+X-Gm-Message-State: APjAAAWKZL6B86f/+Cgw7Lfc36yqRhl85TOh8/ipv7K2L+FuoS5ZFJfH
+        T7NKgcKimzT+p5m1k3fsO/YJtA==
+X-Google-Smtp-Source: APXvYqyg4YmraVYF5BPtOY0Mh+Db31ThY69mi6xzsSYevYAi9Xz9ds0qvpgX9gVnM7rPKcCcJUwZJg==
+X-Received: by 2002:a17:90a:fa07:: with SMTP id cm7mr5653774pjb.115.1563326953172;
+        Tue, 16 Jul 2019 18:29:13 -0700 (PDT)
+Received: from localhost ([12.206.222.5])
+        by smtp.gmail.com with ESMTPSA id x67sm24955724pfb.21.2019.07.16.18.29.11
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 16 Jul 2019 16:07:16 -0700 (PDT)
-Date:   Wed, 17 Jul 2019 09:07:09 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v3 0/5] Add NUMA-awareness to qspinlock
-To:     Alex Kogan <alex.kogan@oracle.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, bp@alien8.de,
-        daniel.m.jordan@oracle.com, dave.dice@oracle.com,
-        guohanjun@huawei.com, hpa@zytor.com, jglauber@marvell.com,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux@armlinux.org.uk, linux-kernel@vger.kernel.org,
-        longman@redhat.com, mingo@redhat.com, peterz@infradead.org,
-        rahul.x.yadav@oracle.com, steven.sistare@oracle.com,
-        tglx@linutronix.de, will.deacon@arm.com, x86@kernel.org
-References: <20190715192536.104548-1-alex.kogan@oracle.com>
-        <1563277166.m9swqogbqb.astroid@bobo.none>
-        <7D29555E-8F72-4EDD-8A87-B1A59C3945A6@oracle.com>
-In-Reply-To: <7D29555E-8F72-4EDD-8A87-B1A59C3945A6@oracle.com>
+        Tue, 16 Jul 2019 18:29:12 -0700 (PDT)
+Subject: [PATCH v2 1/4] Non-functional cleanup of a "__user * filename"
+Date:   Tue, 16 Jul 2019 18:27:16 -0700
+Message-Id: <20190717012719.5524-2-palmer@sifive.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190717012719.5524-1-palmer@sifive.com>
+References: <20190717012719.5524-1-palmer@sifive.com>
 MIME-Version: 1.0
-User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1563317552.qsi08y8lyr.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        tony.luck@intel.com, fenghua.yu@intel.com, geert@linux-m68k.org,
+        monstr@monstr.eu, ralf@linux-mips.org, paul.burton@mips.com,
+        jhogan@kernel.org, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, benh@kernel.crashing.org, paulus@samba.org,
+        mpe@ellerman.id.au, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
+        dalias@libc.org, davem@davemloft.net, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        peterz@infradead.org, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, Palmer Dabbelt <palmer@sifive.com>,
+        dhowells@redhat.com, firoz.khan@linaro.org, stefan@agner.ch,
+        schwidefsky@de.ibm.com, axboe@kernel.dk, christian@brauner.io,
+        hare@suse.com, deepa.kernel@gmail.com, tycho@tycho.ws,
+        kim.phillips@arm.com, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@sifive.com>
+To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Alex Kogan's on July 17, 2019 12:45 am:
->=20
->> On Jul 16, 2019, at 7:47 AM, Nicholas Piggin <npiggin@gmail.com> wrote:
->>=20
->> Alex Kogan's on July 16, 2019 5:25 am:
->>> Our evaluation shows that CNA also improves performance of user=20
->>> applications that have hot pthread mutexes. Those mutexes are=20
->>> blocking, and waiting threads park and unpark via the futex=20
->>> mechanism in the kernel. Given that kernel futex chains, which
->>> are hashed by the mutex address, are each protected by a=20
->>> chain-specific spin lock, the contention on a user-mode mutex=20
->>> translates into contention on a kernel level spinlock.=20
->>=20
->> What applications are those, what performance numbers? Arguably that's
->> much more interesting than microbenchmarks (which are mainly useful to
->> help ensure the fast paths are not impacted IMO).
->=20
-> Those are applications that use locks in which waiting threads can park (=
-block),
-> e.g., pthread mutexes. Under (user-level) contention, the park-unpark mec=
-hanism
-> in the kernel creates contention on (kernel) spin locks protecting futex =
-chains.
-> As an example, we experimented with LevelDB (key-value store), and includ=
-ed
-> performance numbers in the patch. Or you are looking for something else?
+The next patch defines a very similar interface, which I copied from
+this definition.  Since I'm touching it anyway I don't see any reason
+not to just go fix this one up.
 
-Oh, no that's good. I confused myself thinking that was another will it
-scale benchmark. The speedup becomes significant on readrandom, I wonder
-if of it might be that you're gating which threads get to complete the=20
-futex operation and so the effect is amplified beyond just the critical
-section of the spin lock?
+Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
+---
+ include/linux/syscalls.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Am I reading the table correctly, this test gets about 2.1x speedup when
-scaling from 1 to 142 threads in the patch-CNA case?
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 2bcef4c70183..e1c20f1d0525 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -431,7 +431,7 @@ asmlinkage long sys_chdir(const char __user *filename);
+ asmlinkage long sys_fchdir(unsigned int fd);
+ asmlinkage long sys_chroot(const char __user *filename);
+ asmlinkage long sys_fchmod(unsigned int fd, umode_t mode);
+-asmlinkage long sys_fchmodat(int dfd, const char __user * filename,
++asmlinkage long sys_fchmodat(int dfd, const char __user *filename,
+ 			     umode_t mode);
+ asmlinkage long sys_fchownat(int dfd, const char __user *filename, uid_t user,
+ 			     gid_t group, int flag);
+-- 
+2.21.0
 
-Thanks,
-Nick
-=
