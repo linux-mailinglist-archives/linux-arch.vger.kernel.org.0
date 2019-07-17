@@ -2,21 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2436B385
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2019 03:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0306B465
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2019 04:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725876AbfGQBsZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Jul 2019 21:48:25 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:51824 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725856AbfGQBsZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 21:48:25 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hnZ34-00075C-8b; Wed, 17 Jul 2019 01:48:02 +0000
-Date:   Wed, 17 Jul 2019 02:48:02 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Palmer Dabbelt <palmer@sifive.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        id S1727525AbfGQCMi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Jul 2019 22:12:38 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:32930 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726069AbfGQCMd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jul 2019 22:12:33 -0400
+Received: by mail-pl1-f193.google.com with SMTP id c14so11068742plo.0
+        for <linux-arch@vger.kernel.org>; Tue, 16 Jul 2019 19:12:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=XJLjYj+DtIYQb0AMLYtaQvMihTCm0rsvCGKlwMRh3LE=;
+        b=AU1Abc8q1kGovNti1t18ew8C8mz1rkyc/4clBuEG4Uc/ncZu/4iXmRHAbI51xC7hqZ
+         hAiVWaf/yBAkIjvz6joG9TGmyENool+zhyz2KEReTUd5Sqyf1JfG8bo3LXTzp5luE7SO
+         6+uNDqVtESa36Hl+MhWE9qCcDBNoQFQYokC0gZD1qXmvZiPC5l6uw8q/UsfbnitdHCcd
+         +bjUwpLPm0wEvI66hEyAUa1xiaQDpoErfE92lFJezqr0lFutIQBuh3cuuFiz7hdFSVIX
+         938wUvGoV81yKg5rd6S3S7QMfe2yAcScFUv+ESWvtpHolMMqVDq5OhPN8yhR1hfb/srH
+         xTaw==
+X-Gm-Message-State: APjAAAWeL+w/mppxPak+WLrzyV7puLMdejyHFU9a2YnEoL7W3tp3E9yD
+        xHIr6QHHYpa/p6JbNUGfcnU=
+X-Google-Smtp-Source: APXvYqw1pQN2mCJqE4LloipsyU+ky9ZyfrHyYjD9dGtOKrfKeU8jFTsCJcFJac6EgQIwz1mt6T4pwQ==
+X-Received: by 2002:a17:902:8546:: with SMTP id d6mr38738719plo.207.1563329552353;
+        Tue, 16 Jul 2019 19:12:32 -0700 (PDT)
+Received: from localhost ([12.206.222.5])
+        by smtp.gmail.com with ESMTPSA id 196sm24393369pfy.167.2019.07.16.19.12.31
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 16 Jul 2019 19:12:31 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 19:12:31 -0700 (PDT)
+X-Google-Original-Date: Tue, 16 Jul 2019 19:12:29 PDT (-0700)
+Subject:     Re: [PATCH v2 2/4] Add fchmodat4(), a new syscall
+In-Reply-To: <20190717014802.GS17978@ZenIV.linux.org.uk>
+CC:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
@@ -39,35 +60,126 @@ Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] Add fchmodat4(), a new syscall
-Message-ID: <20190717014802.GS17978@ZenIV.linux.org.uk>
-References: <20190717012719.5524-1-palmer@sifive.com>
- <20190717012719.5524-3-palmer@sifive.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190717012719.5524-3-palmer@sifive.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+From:   Palmer Dabbelt <palmer@sifive.com>
+To:     viro@zeniv.linux.org.uk
+Message-ID: <mhng-07134298-232b-4472-ac6f-cf33862883c5@palmer-si-x1e>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 06:27:17PM -0700, Palmer Dabbelt wrote:
+On Tue, 16 Jul 2019 18:48:02 PDT (-0700), viro@zeniv.linux.org.uk wrote:
+> On Tue, Jul 16, 2019 at 06:27:17PM -0700, Palmer Dabbelt wrote:
+>
+>> -int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
+>> +int do_fchmodat4(int dfd, const char __user *filename, umode_t mode, int flags)
+>>  {
+>>  	struct path path;
+>>  	int error;
+>> -	unsigned int lookup_flags = LOOKUP_FOLLOW;
+>> +	unsigned int lookup_flags;
+>> +
+>> +	if (unlikely(flags & ~AT_SYMLINK_NOFOLLOW))
+>> +		return -EINVAL;
+>> +
+>> +	lookup_flags = flags & AT_SYMLINK_NOFOLLOW ? 0 : LOOKUP_FOLLOW;
+>> +
+>
+> 	Why not do that in sys_fchmodat4() itself, passing lookup_flags to
+> do_fchmodat() and updating old callers to pass it 0 as extra argument?
 
-> -int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
-> +int do_fchmodat4(int dfd, const char __user *filename, umode_t mode, int flags)
->  {
->  	struct path path;
->  	int error;
-> -	unsigned int lookup_flags = LOOKUP_FOLLOW;
-> +	unsigned int lookup_flags;
-> +
-> +	if (unlikely(flags & ~AT_SYMLINK_NOFOLLOW))
-> +		return -EINVAL;
-> +
-> +	lookup_flags = flags & AT_SYMLINK_NOFOLLOW ? 0 : LOOKUP_FOLLOW;
-> +
+Ya, that seems better -- passing LOOKUP_FOLLOW instead of 0, to keep the
+behavior the same.  That way I could avoid the overhead of these checks for the
+old syscalls, as we know they're not necessary.
 
-	Why not do that in sys_fchmodat4() itself, passing lookup_flags to
-do_fchmodat() and updating old callers to pass it 0 as extra argument?
+I'll replace this patch with the following for a v3
+
+    diff --git a/fs/open.c b/fs/open.c
+    index b5b80469b93d..a5f99408af11 100644
+    --- a/fs/open.c
+    +++ b/fs/open.c
+    @@ -569,11 +569,12 @@ SYSCALL_DEFINE2(fchmod, unsigned int, fd, umode_t, mode)
+            return ksys_fchmod(fd, mode);
+     }
+    
+    -int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
+    +int do_fchmodat4(int dfd, const char __user *filename, umode_t mode,
+    +                int lookup_flags)
+     {
+            struct path path;
+            int error;
+    -       unsigned int lookup_flags = LOOKUP_FOLLOW;
+    +
+     retry:
+            error = user_path_at(dfd, filename, lookup_flags, &path);
+            if (!error) {
+    @@ -587,15 +588,28 @@ int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
+            return error;
+     }
+    
+    +SYSCALL_DEFINE4(fchmodat4, int, dfd, const char __user *, filename,
+    +               umode_t, mode, int, flags)
+    +{
+    +       unsigned int lookup_flags;
+    +
+    +       if (unlikely(flags & ~AT_SYMLINK_NOFOLLOW))
+    +               return -EINVAL;
+    +
+    +       lookup_flags = flags & AT_SYMLINK_NOFOLLOW ? 0 : LOOKUP_FOLLOW;
+    +
+    +       return do_fchmodat4(dfd, filename, mode, lookup_flags);
+    +}
+    +
+     SYSCALL_DEFINE3(fchmodat, int, dfd, const char __user *, filename,
+                    umode_t, mode)
+     {
+    -       return do_fchmodat(dfd, filename, mode);
+    +       return do_fchmodat4(dfd, filename, mode, LOOKUP_FOLLOW);
+     }
+    
+     SYSCALL_DEFINE2(chmod, const char __user *, filename, umode_t, mode)
+     {
+    -       return do_fchmodat(AT_FDCWD, filename, mode);
+    +       return do_fchmodat4(AT_FDCWD, filename, mode, LOOKUP_FOLLOW);
+     }
+    
+     static int chown_common(const struct path *path, uid_t user, gid_t group)
+    diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+    index e1c20f1d0525..6676b1cc5485 100644
+    --- a/include/linux/syscalls.h
+    +++ b/include/linux/syscalls.h
+    @@ -81,6 +81,7 @@ struct io_uring_params;
+     #include <linux/quota.h>
+     #include <linux/key.h>
+     #include <linux/personality.h>
+    +#include <linux/namei.h>
+     #include <trace/syscall.h>
+    
+     #ifdef CONFIG_ARCH_HAS_SYSCALL_WRAPPER
+    @@ -433,6 +434,8 @@ asmlinkage long sys_chroot(const char __user *filename);
+     asmlinkage long sys_fchmod(unsigned int fd, umode_t mode);
+     asmlinkage long sys_fchmodat(int dfd, const char __user *filename,
+                                 umode_t mode);
+    +asmlinkage long sys_fchmodat4(int dfd, const char __user *filename,
+    +                            umode_t mode, int flags);
+     asmlinkage long sys_fchownat(int dfd, const char __user *filename, uid_t user,
+                                 gid_t group, int flag);
+     asmlinkage long sys_fchown(unsigned int fd, uid_t user, gid_t group);
+    @@ -1320,11 +1323,12 @@ static inline long ksys_link(const char __user *oldname,
+            return do_linkat(AT_FDCWD, oldname, AT_FDCWD, newname, 0);
+     }
+    
+    -extern int do_fchmodat(int dfd, const char __user *filename, umode_t mode);
+    +extern int do_fchmodat4(int dfd, const char __user *filename, umode_t mode,
+    +                       int flags);
+    
+     static inline int ksys_chmod(const char __user *filename, umode_t mode)
+     {
+    -       return do_fchmodat(AT_FDCWD, filename, mode);
+    +       return do_fchmodat4(AT_FDCWD, filename, mode, LOOKUP_FOLLOW);
+     }
+    
+     extern long do_faccessat(int dfd, const char __user *filename, int mode);
