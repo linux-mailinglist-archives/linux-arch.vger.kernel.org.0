@@ -2,93 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E29596B773
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2019 09:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13696B7BF
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2019 09:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbfGQHpG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Jul 2019 03:45:06 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:34856 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbfGQHpF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Jul 2019 03:45:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=a+w5j6eHYvJzioLr+1nRU4VPj/HkjhXiSU4Y9J8b7R8=; b=YbNCb/0gjQZL0XpBqEiPAwf+A9
-        3CgD9+vHlITW3ap2VMwt3sgVkwTzhRuRP/kgyZkGXM4XSu0z6A6ofUZh7f//Sux0TTeqwycROgOyW
-        mLxn1uh9uXpCSJnqhfhbJdGj+v0bNg1lHzvz/yqDdsRlq+uKC9Ugrjw8MjS6FdMQsWpzu6XKr18uv
-        WaT+N+4woH/KJYWFG573iBJIz5dq7RZjKNF11vp/WY7jPjvztxxaroPXOZPOogzOFYZazsr/lMDfq
-        Cr6oTbCR8umH6TQpwxREIHsW/uUlzeCDHYQiMnCyPBHR0Af3bvNHEZk/DterF+Yju8ZMnXLDyTUoc
-        J3NLOz9A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hnec8-0008Nx-I5; Wed, 17 Jul 2019 07:44:36 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 148B02059DEA3; Wed, 17 Jul 2019 09:44:35 +0200 (CEST)
-Date:   Wed, 17 Jul 2019 09:44:35 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
-        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
-        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
-        jglauber@marvell.com, steven.sistare@oracle.com,
-        daniel.m.jordan@oracle.com, dave.dice@oracle.com,
-        rahul.x.yadav@oracle.com
-Subject: Re: [PATCH v3 3/5] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-Message-ID: <20190717074435.GU3419@hirez.programming.kicks-ass.net>
-References: <20190715192536.104548-1-alex.kogan@oracle.com>
- <20190715192536.104548-4-alex.kogan@oracle.com>
- <9fa54e98-0b9b-0931-db32-c6bd6ccfe75b@redhat.com>
+        id S1725932AbfGQH5J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Jul 2019 03:57:09 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:52312 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbfGQH5J (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Jul 2019 03:57:09 -0400
+Received: from pd9ef1cb8.dip0.t-ipconnect.de ([217.239.28.184] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hneoB-0007hY-7j; Wed, 17 Jul 2019 09:57:03 +0200
+Date:   Wed, 17 Jul 2019 09:57:01 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        X86 ML <x86@kernel.org>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Mike Lothian <mike@fireburn.co.uk>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2] kbuild: Fail if gold linker is detected
+In-Reply-To: <CAK7LNASBiaMX8ihnmhLGmYfHX=ZHZmVN91nxmFZe-OCaw6Px2w@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.1907170955250.1767@nanos.tec.linutronix.de>
+References: <alpine.DEB.2.21.1907161434260.1767@nanos.tec.linutronix.de> <20190716170606.GA38406@archlinux-threadripper> <alpine.DEB.2.21.1907162059200.1767@nanos.tec.linutronix.de> <alpine.DEB.2.21.1907162135590.1767@nanos.tec.linutronix.de>
+ <CAK7LNASBiaMX8ihnmhLGmYfHX=ZHZmVN91nxmFZe-OCaw6Px2w@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9fa54e98-0b9b-0931-db32-c6bd6ccfe75b@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 10:16:29PM -0400, Waiman Long wrote:
->  A simple graphic to illustrate those queues will help too, for example
+On Wed, 17 Jul 2019, Masahiro Yamada wrote:
+> On Wed, Jul 17, 2019 at 4:47 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > So instead of dealing with attempts to duct tape gold support without
+> > understanding the root cause and without support from the gold folks, fail
+> > the build when gold is detected.
+> >
+> 
+> The code looks OK in the build system point of view.
+> 
+> Please let me confirm this, just in case:
+> For now, we give up all architectures, not only x86, right?
 
-Very much yes!
+Well, that's the logical consequence of a statement which says: don't use
+gold for the kernel.
 
-> /*
->  * MCS lock holder
->  * ===============
->  *    mcs_node
->  *   +--------+      +----+         +----+
->  *   | next   | ---> |next| -> ...  |next| -> NULL  [Main queue]
->  *   | locked | -+   +----+         +----+
->  *   +--------+  |
->  *               |   +----+         +----+
->  *               +-> |next| -> ...  |next| -> X     [Secondary queue]
->  *    cna_node       +----+         +----+
->  *   +--------*                       ^
->  *   | tail   | ----------------------+
->  *   +--------*   
+> I have not not heard much from other arch maintainers.
 
-Almost; IIUC that cna_node is the same as the one from locked, so you
-end up with something like:
+Cc'ed linux-arch for that matter.
 
->  *    mcs_node
->  *   +--------+      +----+         +----+
->  *   | next   | ---> |next| -> ...  |next| -> NULL  [Main queue]
->  *   | locked | -+   +----+         +----+
->  *   +--------+  |
->  *               |   +---------+         +----+
->  *               +-> |mcs::next| -> ...  |next| -> NULL     [Secondary queue]
->  *                   |cna::tail| -+      +----+
->  *                   +---------+  |        ^
->  *                                +--------+
->  *
->  * N.B. locked = 1 if secondary queue is absent.
->  */
+Thanks,
+
+	tglx
