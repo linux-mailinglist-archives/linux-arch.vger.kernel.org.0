@@ -2,155 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 560156D0B5
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2019 17:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E8A6D0EA
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2019 17:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727767AbfGRPKk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Jul 2019 11:10:40 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:40739 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727623AbfGRPKk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Jul 2019 11:10:40 -0400
-Received: by mail-qk1-f195.google.com with SMTP id s145so20722123qke.7;
-        Thu, 18 Jul 2019 08:10:38 -0700 (PDT)
+        id S1727685AbfGRPTW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Jul 2019 11:19:22 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:44229 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727623AbfGRPTW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Jul 2019 11:19:22 -0400
+Received: by mail-io1-f67.google.com with SMTP id s7so51924657iob.11
+        for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2019 08:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:message-id:user-agent:mime-version;
+        bh=Tbdphi8CrHqxWHaUURv6oHYNP9deEDGvOFqbwoY/Y0A=;
+        b=Whrg4ctJ0WfkjGBYTaCrG+D6OUBE6Tnw2Q7NONAXv+ZDC7WaJk7O/zUK8LXgq2k3Ug
+         +qTt5c8636LeXcgwlJEcjTHzHptqGk1UqFvxsyI6zIN+THsqZBsdSVj8LzsXyKyCIHRL
+         0USaC0X5nlwytiSP2kYkwdGcBwd73zv3lfOCjv12guAZ3v/OBTP3oDgvutNdUS5L4K6J
+         0qkHT1cN+JskUi2h+eLROZtGK4Cr4BxwokYvj2FD2q1566I6cyMJmiPLHO6BgLyvxFox
+         IJkRT/G6wFPPC7XKT9TUQzPO6gRdtKQSeOVhIRwjy+FLmyG5B0MzDr31eEE9A+s15B+r
+         v5fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1XVWuLALNboPCBpMHvtA7g3CoUrKrF0vBnrtFanWPT4=;
-        b=uNMGyKFpiV5/NdDwnLap3nQ/K1Tm9DD+6GyGcMY2Qe78+LIG0HJg8gvmpe7KNtScX+
-         ocmxdsLFnmQHavB02uUnWdITNtvdgZUVV6gjGYtzUgUyL101bx2COA+P5GJEB8nUL/si
-         xX9VNpjurF/YIH8K4pRbOmNUfp2t9ascXvvzAmN8JqbF3LGUnbcVvWG+r/eY7BW6dDbE
-         knTCE31c6j90B4zJPTKfVo0AfaPijfILaJmhBbuGf3nOxfSRW+FIerwKGcN9G9c7h1J9
-         QljEyAaRfwsTvFKIQO0h8Zsw7fzxHGQhpcH2zj+Ff7MPOAMzDxkNBXC9D6swUqj3HG9E
-         SpRA==
-X-Gm-Message-State: APjAAAV7gMkfUYn5o8N51yJkmd6XGejNnOOrLcYFBcHIhSrSlqqUt1Gw
-        lGoO9EV8UtrmkKPQlogNaMSLihSIjegnFCVtbl4=
-X-Google-Smtp-Source: APXvYqz91qO2K9L71FiuX0Gt08O/27FhYjsXqzcDsg9SyRt3LsdEPpT+LHh0f5YfOz5Tbuae6UqhheF6pLTx7yCHlYU=
-X-Received: by 2002:a37:ad12:: with SMTP id f18mr30435448qkm.3.1563462638194;
- Thu, 18 Jul 2019 08:10:38 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
+         :mime-version;
+        bh=Tbdphi8CrHqxWHaUURv6oHYNP9deEDGvOFqbwoY/Y0A=;
+        b=i08yWfRa/SuFQ+mK8353/hF4Icfs8u9LkE3n1DXWfkV/S3bgaG4rV4HIsPiUGUWdzX
+         /GMadHOCBOLRyT8wsrmkPEK8kYH9gK09tcyKroZroBj+Zub9ma9QOP/YR2Ev6mLGJtQH
+         LAg9R6G5HVfZyvg8KPczwwSjlhgCjYArTCXQ1nLG2ZEF5UF1LD6uxjCmmYYHSIbrKs8T
+         q5P+DQZ3Q33tPX02ggYHQasYF+zKmbx6S3VJz+JiHS+kalAJLPU1zy/rLu8V6kxiM3cv
+         pPW2jGwaPvg+IOZke1vnMGSS33gNskrV6z4ncviEGoim0z9oIlDTEiD56iUqxQeFZgfA
+         seGA==
+X-Gm-Message-State: APjAAAX2H8b27u5xlZoJ9EicLF0aZtA3/HH07rlsPer+RnKiDIVsReMJ
+        agBZ5C3EvVlzaanO2EkrInd6ViWj6i4=
+X-Google-Smtp-Source: APXvYqzvbLr4vBoZPuts04IwgqzTfGI1ll4gN2+jq8yvFshv6/nee/WwlsDHKhSf/3Vy1rhbpwZ+ug==
+X-Received: by 2002:a5d:8e08:: with SMTP id e8mr46043389iod.139.1563463161307;
+        Thu, 18 Jul 2019 08:19:21 -0700 (PDT)
+Received: from localhost (67-0-62-24.albq.qwest.net. [67.0.62.24])
+        by smtp.gmail.com with ESMTPSA id n7sm20848114ioo.79.2019.07.18.08.19.20
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 18 Jul 2019 08:19:20 -0700 (PDT)
+Date:   Thu, 18 Jul 2019 08:19:19 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     cai@lca.pw, arnd@arndb.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org
+cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH] riscv: fix build break after macro-to-function conversion
+ in generic cacheflush.h
+Message-ID: <alpine.DEB.2.21.9999.1907180800440.18568@viisi.sifive.com>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-References: <20190706145737.5299-1-cyphar@cyphar.com> <20190706145737.5299-9-cyphar@cyphar.com>
-In-Reply-To: <20190706145737.5299-9-cyphar@cyphar.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 18 Jul 2019 17:10:21 +0200
-Message-ID: <CAK8P3a33rGhPDFfRBAQyLTMG_WoEgX_toDgWR2O7rSwxKsZG+w@mail.gmail.com>
-Subject: Re: [PATCH v9 08/10] open: openat2(2) syscall
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org,
-        sparclinux <sparclinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jul 6, 2019 at 5:00 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
 
-> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-> index 9e7704e44f6d..1703d048c141 100644
-> --- a/arch/alpha/kernel/syscalls/syscall.tbl
-> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
-> @@ -461,6 +461,7 @@
->  530    common  getegid                         sys_getegid
->  531    common  geteuid                         sys_geteuid
->  532    common  getppid                         sys_getppid
-> +533    common  openat2                         sys_openat2
->  # all other architectures have common numbers for new syscall, alpha
->  # is the exception.
->  534    common  pidfd_send_signal               sys_pidfd_send_signal
+Commit c296d4dc13ae ("asm-generic: fix a compilation warning")
+converted the various flush_*cache_* macros in
+asm-generic/cacheflush.h to static inline functions.  This breaks
+RISC-V builds, since RISC-V's cacheflush.h includes the generic
+cacheflush.h and then undefines the macros to be overridden.
 
-My plan here was to add new syscalls in the same order as everwhere else,
-just with the number 110 higher. In the long run, I hope we can automate
-this.
+Fix by copying the subset of the no-op functions that are reused from
+the generic cacheflush.h into the RISC-V cacheflush.h, and dropping
+the include of the generic cacheflush.h.
 
-> diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-> index aaf479a9e92d..4ad262698396 100644
-> --- a/arch/arm/tools/syscall.tbl
-> +++ b/arch/arm/tools/syscall.tbl
-> @@ -447,3 +447,4 @@
->  431    common  fsconfig                        sys_fsconfig
->  432    common  fsmount                         sys_fsmount
->  433    common  fspick                          sys_fspick
-> +434    common  openat2                         sys_openat2
+Fixes: c296d4dc13ae ("asm-generic: fix a compilation warning")
+Signed-off-by: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Qian Cai <cai@lca.pw>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+---
+Queued with the other arch/riscv patches for the 5.3 merge window.
 
-434 is already used in linux-next, I suggest you use 437 (Palmer
-just submitted fchmodat4, which could become 436).
+ arch/riscv/include/asm/cacheflush.h | 63 +++++++++++++++++++++++++++--
+ 1 file changed, 59 insertions(+), 4 deletions(-)
 
-> +/**
-> + * Arguments for how openat2(2) should open the target path. If @extra is zero,
-> + * then openat2(2) is identical to openat(2).
-> + *
-> + * @flags: O_* flags (unknown flags ignored).
-> + * @mode: O_CREAT file mode (ignored otherwise).
-> + * @upgrade_mask: restrict how the O_PATH may be re-opened (ignored otherwise).
-> + * @resolve: RESOLVE_* flags (-EINVAL on unknown flags).
-> + * @reserved: reserved for future extensions, must be zeroed.
-> + */
-> +struct open_how {
-> +       __u32 flags;
-> +       union {
-> +               __u16 mode;
-> +               __u16 upgrade_mask;
-> +       };
-> +       __u16 resolve;
-> +       __u64 reserved[7]; /* must be zeroed */
-> +};
+diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+index ad8678f1b54a..555b20b11dc3 100644
+--- a/arch/riscv/include/asm/cacheflush.h
++++ b/arch/riscv/include/asm/cacheflush.h
+@@ -6,11 +6,66 @@
+ #ifndef _ASM_RISCV_CACHEFLUSH_H
+ #define _ASM_RISCV_CACHEFLUSH_H
+ 
+-#include <asm-generic/cacheflush.h>
++#include <linux/mm.h>
+ 
+-#undef flush_icache_range
+-#undef flush_icache_user_range
+-#undef flush_dcache_page
++#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
++
++/*
++ * The cache doesn't need to be flushed when TLB entries change when
++ * the cache is mapped to physical memory, not virtual memory
++ */
++static inline void flush_cache_all(void)
++{
++}
++
++static inline void flush_cache_mm(struct mm_struct *mm)
++{
++}
++
++static inline void flush_cache_dup_mm(struct mm_struct *mm)
++{
++}
++
++static inline void flush_cache_range(struct vm_area_struct *vma,
++				     unsigned long start,
++				     unsigned long end)
++{
++}
++
++static inline void flush_cache_page(struct vm_area_struct *vma,
++				    unsigned long vmaddr,
++				    unsigned long pfn)
++{
++}
++
++static inline void flush_dcache_mmap_lock(struct address_space *mapping)
++{
++}
++
++static inline void flush_dcache_mmap_unlock(struct address_space *mapping)
++{
++}
++
++static inline void flush_icache_page(struct vm_area_struct *vma,
++				     struct page *page)
++{
++}
++
++static inline void flush_cache_vmap(unsigned long start, unsigned long end)
++{
++}
++
++static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
++{
++}
++
++#define copy_to_user_page(vma, page, vaddr, dst, src, len) \
++	do { \
++		memcpy(dst, src, len); \
++		flush_icache_user_range(vma, page, vaddr, len); \
++	} while (0)
++#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
++	memcpy(dst, src, len)
+ 
+ static inline void local_flush_icache_all(void)
+ {
+-- 
+2.22.0
 
-We can have system calls with up to six arguments on all architectures, so
-this could still be done more conventionally without the indirection: like
-
-long openat2(int dfd, const char __user * filename, int flags, mode_t
-mode_mask, __u16 resolve);
-
-In fact, that seems similar enough to the existing openat() that I think
-you could also just add the fifth argument to the existing call when
-a newly defined flag is set, similarly to how we only use the 'mode'
-argument when O_CREAT or O_TMPFILE are set.
-
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-
-This file seems to lack a declaration for the system call, which means it
-will cause a build failure on some architectures, e.g. arch/arc/kernel/sys.c:
-
-#define __SYSCALL(nr, call) [nr] = (call),
-void *sys_call_table[NR_syscalls] = {
-        [0 ... NR_syscalls-1] = sys_ni_syscall,
-#include <asm/unistd.h>
-};
-
-        Arnd
