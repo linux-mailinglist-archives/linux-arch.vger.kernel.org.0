@@ -2,163 +2,174 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E8A6D0EA
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2019 17:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8DE6D0F6
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2019 17:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727685AbfGRPTW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Jul 2019 11:19:22 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:44229 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727623AbfGRPTW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Jul 2019 11:19:22 -0400
-Received: by mail-io1-f67.google.com with SMTP id s7so51924657iob.11
-        for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2019 08:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:message-id:user-agent:mime-version;
-        bh=Tbdphi8CrHqxWHaUURv6oHYNP9deEDGvOFqbwoY/Y0A=;
-        b=Whrg4ctJ0WfkjGBYTaCrG+D6OUBE6Tnw2Q7NONAXv+ZDC7WaJk7O/zUK8LXgq2k3Ug
-         +qTt5c8636LeXcgwlJEcjTHzHptqGk1UqFvxsyI6zIN+THsqZBsdSVj8LzsXyKyCIHRL
-         0USaC0X5nlwytiSP2kYkwdGcBwd73zv3lfOCjv12guAZ3v/OBTP3oDgvutNdUS5L4K6J
-         0qkHT1cN+JskUi2h+eLROZtGK4Cr4BxwokYvj2FD2q1566I6cyMJmiPLHO6BgLyvxFox
-         IJkRT/G6wFPPC7XKT9TUQzPO6gRdtKQSeOVhIRwjy+FLmyG5B0MzDr31eEE9A+s15B+r
-         v5fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
-         :mime-version;
-        bh=Tbdphi8CrHqxWHaUURv6oHYNP9deEDGvOFqbwoY/Y0A=;
-        b=i08yWfRa/SuFQ+mK8353/hF4Icfs8u9LkE3n1DXWfkV/S3bgaG4rV4HIsPiUGUWdzX
-         /GMadHOCBOLRyT8wsrmkPEK8kYH9gK09tcyKroZroBj+Zub9ma9QOP/YR2Ev6mLGJtQH
-         LAg9R6G5HVfZyvg8KPczwwSjlhgCjYArTCXQ1nLG2ZEF5UF1LD6uxjCmmYYHSIbrKs8T
-         q5P+DQZ3Q33tPX02ggYHQasYF+zKmbx6S3VJz+JiHS+kalAJLPU1zy/rLu8V6kxiM3cv
-         pPW2jGwaPvg+IOZke1vnMGSS33gNskrV6z4ncviEGoim0z9oIlDTEiD56iUqxQeFZgfA
-         seGA==
-X-Gm-Message-State: APjAAAX2H8b27u5xlZoJ9EicLF0aZtA3/HH07rlsPer+RnKiDIVsReMJ
-        agBZ5C3EvVlzaanO2EkrInd6ViWj6i4=
-X-Google-Smtp-Source: APXvYqzvbLr4vBoZPuts04IwgqzTfGI1ll4gN2+jq8yvFshv6/nee/WwlsDHKhSf/3Vy1rhbpwZ+ug==
-X-Received: by 2002:a5d:8e08:: with SMTP id e8mr46043389iod.139.1563463161307;
-        Thu, 18 Jul 2019 08:19:21 -0700 (PDT)
-Received: from localhost (67-0-62-24.albq.qwest.net. [67.0.62.24])
-        by smtp.gmail.com with ESMTPSA id n7sm20848114ioo.79.2019.07.18.08.19.20
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 18 Jul 2019 08:19:20 -0700 (PDT)
-Date:   Thu, 18 Jul 2019 08:19:19 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     cai@lca.pw, arnd@arndb.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org
-cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH] riscv: fix build break after macro-to-function conversion
- in generic cacheflush.h
-Message-ID: <alpine.DEB.2.21.9999.1907180800440.18568@viisi.sifive.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        id S1727780AbfGRPWV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Jul 2019 11:22:21 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:9384 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726040AbfGRPWV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 18 Jul 2019 11:22:21 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id A31DB4DF37;
+        Thu, 18 Jul 2019 17:22:15 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id xmIYYji9PWVu; Thu, 18 Jul 2019 17:22:09 +0200 (CEST)
+Date:   Fri, 19 Jul 2019 01:21:23 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v9 08/10] open: openat2(2) syscall
+Message-ID: <20190718152123.m33t44dapy6y4nwy@yavin>
+References: <20190706145737.5299-1-cyphar@cyphar.com>
+ <20190706145737.5299-9-cyphar@cyphar.com>
+ <845e4364-685f-343b-46fb-c418766dce3e@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="x55cx7xfpotu25go"
+Content-Disposition: inline
+In-Reply-To: <845e4364-685f-343b-46fb-c418766dce3e@rasmusvillemoes.dk>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-Commit c296d4dc13ae ("asm-generic: fix a compilation warning")
-converted the various flush_*cache_* macros in
-asm-generic/cacheflush.h to static inline functions.  This breaks
-RISC-V builds, since RISC-V's cacheflush.h includes the generic
-cacheflush.h and then undefines the macros to be overridden.
+--x55cx7xfpotu25go
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fix by copying the subset of the no-op functions that are reused from
-the generic cacheflush.h into the RISC-V cacheflush.h, and dropping
-the include of the generic cacheflush.h.
+On 2019-07-18, Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+> On 06/07/2019 16.57, Aleksa Sarai wrote:
+> > --- a/fs/open.c
+> > +++ b/fs/open.c
+> > @@ -928,24 +928,32 @@ struct file *open_with_fake_path(const struct pat=
+h *path, int flags,
+> >  }
+> >  EXPORT_SYMBOL(open_with_fake_path);
+> > =20
+> > -static inline int build_open_flags(int flags, umode_t mode, struct ope=
+n_flags *op)
+> > +static inline int build_open_flags(struct open_how how, struct open_fl=
+ags *op)
+> >  {
+>=20
+> How does passing such a huge struct by value affect code generation?
+> Does gcc actually inline the function (and does it even inline the old
+> one given that it's already non-trivial and has more than one caller).
 
-Fixes: c296d4dc13ae ("asm-generic: fix a compilation warning")
-Signed-off-by: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Qian Cai <cai@lca.pw>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
----
-Queued with the other arch/riscv patches for the 5.3 merge window.
+I'm not sure, but I'll just do what you suggested with passing a const
+reference and just copying the few fields that actually are touched by
+this function.
 
- arch/riscv/include/asm/cacheflush.h | 63 +++++++++++++++++++++++++++--
- 1 file changed, 59 insertions(+), 4 deletions(-)
+> > =20
+> > diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+> > index 2868ae6c8fc1..e59917292213 100644
+> > --- a/include/linux/fcntl.h
+> > +++ b/include/linux/fcntl.h
+> > @@ -4,13 +4,26 @@
+> > =20
+> >  #include <uapi/linux/fcntl.h>
+> > =20
+> > -/* list of all valid flags for the open/openat flags argument: */
+> > +/* Should open_how.mode be set for older syscalls wrappers? */
+> > +#define OPENHOW_MODE(flags, mode) \
+> > +	(((flags) | (O_CREAT | __O_TMPFILE)) ? (mode) : 0)
+> > +
+>=20
+> Typo: (((flags) & (O_CREAT | __O_TMPFILE)) ? (mode) : 0)
 
-diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-index ad8678f1b54a..555b20b11dc3 100644
---- a/arch/riscv/include/asm/cacheflush.h
-+++ b/arch/riscv/include/asm/cacheflush.h
-@@ -6,11 +6,66 @@
- #ifndef _ASM_RISCV_CACHEFLUSH_H
- #define _ASM_RISCV_CACHEFLUSH_H
- 
--#include <asm-generic/cacheflush.h>
-+#include <linux/mm.h>
- 
--#undef flush_icache_range
--#undef flush_icache_user_range
--#undef flush_dcache_page
-+#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-+
-+/*
-+ * The cache doesn't need to be flushed when TLB entries change when
-+ * the cache is mapped to physical memory, not virtual memory
-+ */
-+static inline void flush_cache_all(void)
-+{
-+}
-+
-+static inline void flush_cache_mm(struct mm_struct *mm)
-+{
-+}
-+
-+static inline void flush_cache_dup_mm(struct mm_struct *mm)
-+{
-+}
-+
-+static inline void flush_cache_range(struct vm_area_struct *vma,
-+				     unsigned long start,
-+				     unsigned long end)
-+{
-+}
-+
-+static inline void flush_cache_page(struct vm_area_struct *vma,
-+				    unsigned long vmaddr,
-+				    unsigned long pfn)
-+{
-+}
-+
-+static inline void flush_dcache_mmap_lock(struct address_space *mapping)
-+{
-+}
-+
-+static inline void flush_dcache_mmap_unlock(struct address_space *mapping)
-+{
-+}
-+
-+static inline void flush_icache_page(struct vm_area_struct *vma,
-+				     struct page *page)
-+{
-+}
-+
-+static inline void flush_cache_vmap(unsigned long start, unsigned long end)
-+{
-+}
-+
-+static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
-+{
-+}
-+
-+#define copy_to_user_page(vma, page, vaddr, dst, src, len) \
-+	do { \
-+		memcpy(dst, src, len); \
-+		flush_icache_user_range(vma, page, vaddr, len); \
-+	} while (0)
-+#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
-+	memcpy(dst, src, len)
- 
- static inline void local_flush_icache_all(void)
- {
--- 
-2.22.0
+Yup, thanks. I'm not sure why my tests passed on v9 with this bug (they
+didn't pass in my v10-draft until I fixed this bug earlier today).
 
+>=20
+> > +/**
+> > + * Arguments for how openat2(2) should open the target path. If @extra=
+ is zero,
+> > + * then openat2(2) is identical to openat(2).
+> > + *
+> > + * @flags: O_* flags (unknown flags ignored).
+> > + * @mode: O_CREAT file mode (ignored otherwise).
+>=20
+> should probably say "O_CREAT/O_TMPFILE file mode".
+
+:+1:
+
+> > + * @upgrade_mask: restrict how the O_PATH may be re-opened (ignored ot=
+herwise).
+> > + * @resolve: RESOLVE_* flags (-EINVAL on unknown flags).
+> > + * @reserved: reserved for future extensions, must be zeroed.
+> > + */
+> > +struct open_how {
+> > +	__u32 flags;
+> > +	union {
+> > +		__u16 mode;
+> > +		__u16 upgrade_mask;
+> > +	};
+> > +	__u16 resolve;
+>=20
+> So mode and upgrade_mask are naturally u16 aka mode_t. And yes, they
+> probably never need to be used together, so the union works. That then
+> makes the next member 2-byte aligned, so using a u16 for the resolve
+> flags brings us to an 8-byte boundary, and 11 unused flag bits should be
+> enough for a while. But it seems a bit artificial to cram all this
+> together and then add 56 bytes of reserved space.
+
+I will happily admit that padding to 64 bytes is probably _very_ extreme
+(I picked it purely because it's the size of a cache-line so anything
+bigger makes even less sense). I was hoping someone would suggest a
+better size once I posted the patchset, since I couldn't think of a good
+answer myself.
+
+Do you have any suggestions for a better layout or padding size?
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--x55cx7xfpotu25go
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXTCOcAAKCRCdlLljIbnQ
+EllZAP4qSUDEVdU4aP8+s9uysbQoCi6l463vJM+jdHxpJ66OfQEAxlI5lXwcL6G0
+jPCtI0Vs5LI5kpJuE2k98ol8BVMyZAg=
+=2lKS
+-----END PGP SIGNATURE-----
+
+--x55cx7xfpotu25go--
