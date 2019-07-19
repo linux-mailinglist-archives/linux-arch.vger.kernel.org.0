@@ -2,146 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E688E6E58D
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Jul 2019 14:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C25B6E73D
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jul 2019 16:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728341AbfGSMVK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Jul 2019 08:21:10 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42320 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728331AbfGSMVJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Jul 2019 08:21:09 -0400
-Received: by mail-wr1-f65.google.com with SMTP id x1so17076631wrr.9
-        for <linux-arch@vger.kernel.org>; Fri, 19 Jul 2019 05:21:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZSNxINB1eoSUuwzdj5DoTcqLmEl60Bp0Y1Hgn40sFfw=;
-        b=YA6EggnrFQ6Rx4knXWvUwz2U9x+1SCXFlO09KhemP39oSM5WYZgQ2m/kFVHmUdPaiL
-         Bm1Ggw6zh2v63WBxSukl1wDC7kjbGrKz1ZXMbEgZLoli/r4F13x+dHAZ6rE4Pz2qeley
-         9tPCOG2cMyDnw62NpBr9grkI92uWPyMgpht0Uw2SLvd9Dz2mAO6avNTIp3+tem/noeAR
-         V4om6zfHYpQNS87JMPrVvHsV4E1J0XeN9bBskUB2432vKBEvTC8+7q2OQdTGZ93iZIvI
-         ohhk/qhXg1mByYO2x65TDsZB/H0HOt+SpMEznQE/4/KLLVO6NYvQR0/hZMhvkRJlJ94I
-         XwzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZSNxINB1eoSUuwzdj5DoTcqLmEl60Bp0Y1Hgn40sFfw=;
-        b=kRxL6o2Jnv1aDzgzs/JZwvY0UA790QitHIdpkfBtrTocS7cr3i19n09yKH7k1KT0pY
-         kIkv41rYW8tQqGYYv53BICCg3lVEa3ELeOLM5+x3lv+X8hJjA5YHyTuDTXFlgZQLPSRW
-         E8Ue26Ry+JlmCME2H1CSJGy4zD6mxwMiNhL2LhryF/2cHvQDtG8sDfMGh2Rjt4kJwPDF
-         t7hi94jQUT/pIFiRNOjoDno/VbBoLSYsjKzJbsCWQP190r2GZTC+XZCpEiS9vFBZ1u2M
-         cylgb0PmIEKn18uksGOFTZSGnusnZXtgUSDwtlDJwnOZEfykcqPy2c6teSut6oYebOAk
-         wXQw==
-X-Gm-Message-State: APjAAAWK95ofIwB3y96mIzuiOK7kyGfTk2PieEObEEyT5nYso5pkiJaf
-        9t1TW9FKb0XT2E8uh811vgk=
-X-Google-Smtp-Source: APXvYqx9gGrYkCwplFu6XW/mRH357ZdxOoELb3Z3UiLqCzSiDwFdDoevEVdtgUgUKpbiqm5tozaFNg==
-X-Received: by 2002:adf:f851:: with SMTP id d17mr56545224wrq.77.1563538868448;
-        Fri, 19 Jul 2019 05:21:08 -0700 (PDT)
-Received: from brauner.io (p5097b50e.dip0.t-ipconnect.de. [80.151.181.14])
-        by smtp.gmail.com with ESMTPSA id r12sm38324623wrt.95.2019.07.19.05.21.05
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 19 Jul 2019 05:21:07 -0700 (PDT)
-Date:   Fri, 19 Jul 2019 14:20:59 +0200
-From:   Christian Brauner <christian@brauner.io>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>
-Subject: Re: [PATCH 1/2] arch: mark syscall number 435 reserved for clone3
-Message-ID: <20190719122058.njbtwy2fbd6xrp2d@brauner.io>
-References: <20190714192205.27190-1-christian@brauner.io>
- <20190714192205.27190-2-christian@brauner.io>
- <e14eb2f9-43cb-0b9d-dec4-b7e7dcd62091@de.ibm.com>
- <20190716130631.tohj4ub54md25dys@brauner.io>
- <874l3i8h0l.fsf@concordia.ellerman.id.au>
- <20190719102503.tm3ahvkh4rwykmws@brauner.io>
- <871rym8egj.fsf@concordia.ellerman.id.au>
+        id S1729262AbfGSOVu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Jul 2019 10:21:50 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:58292 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728431AbfGSOVu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Jul 2019 10:21:50 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6JEJOt6064327;
+        Fri, 19 Jul 2019 14:21:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2018-07-02;
+ bh=JoKUOQKxcg3kwqP1OpLXnoOqq0N//AEKX/KNLj2ooPI=;
+ b=UnG+i2Qz8isDHZL9wS6kKik10qEXR1tR903rtD9h18XIXGS7M3NkY+XpJGnJGSDy4GAg
+ ezUuKV91EHBPlm41089NDyCxRwIU41VtA3tJAywXojy4I1eXgEpwjbFMij0VXycGCEtx
+ Eryn3HwG4JI8WDJITPXBmDtpi3T98ZIdAFwRrcycC3dnjTQ6B6r3zxFIEarABOA7DgXA
+ 8XeBFXbE+jU/5tdMJnHhrKZ12ja9LtmuykEmdwHuaxoHkwfseYE12a05WkZcpY0eAjzq
+ GmzmK8xlFD4H+PZ1vd/TEdb7qFL5ekXhM7JbbS+KrbQ3o79HU4qCVJV9X+1zSYIPGmmE hQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 2tq78q70bw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Jul 2019 14:21:24 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6JEHcO7066582;
+        Fri, 19 Jul 2019 14:21:23 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 2tsmcdme6j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Jul 2019 14:21:23 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6JELIri020806;
+        Fri, 19 Jul 2019 14:21:20 GMT
+Received: from ca-dmjordan1.us.oracle.com (/10.211.9.48)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 19 Jul 2019 14:21:17 +0000
+Date:   Fri, 19 Jul 2019 10:21:13 -0400
+From:   Daniel Jordan <daniel.m.jordan@oracle.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mathias Krause <minipli@googlemail.com>
+Subject: Re: [PATCH] padata: Replace delayed timer with immediate workqueue
+ in padata_reorder
+Message-ID: <20190719142113.ixalfoikevwnhvaq@ca-dmjordan1.us.oracle.com>
+References: <c1bbbe94-dbdc-da14-e0c3-850c965d8b5d@oracle.com>
+ <20190716163253.24377-1-daniel.m.jordan@oracle.com>
+ <20190717111147.t776zlyhdqyl5dhc@gondor.apana.org.au>
+ <20190717232136.pboms73sqf6fdzic@ca-dmjordan1.us.oracle.com>
+ <20190718033008.wle67s7esg27mrtz@gondor.apana.org.au>
+ <20190718142515.teinr4da3gps5r7a@ca-dmjordan1.us.oracle.com>
+ <20190718144950.yc6sambgdsz7vrvq@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <871rym8egj.fsf@concordia.ellerman.id.au>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190718144950.yc6sambgdsz7vrvq@gondor.apana.org.au>
+User-Agent: NeoMutt/20180323-268-5a959c
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9322 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=526
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1907190160
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9322 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=578 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907190160
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 19, 2019 at 09:13:16PM +1000, Michael Ellerman wrote:
-> Christian Brauner <christian@brauner.io> writes:
-> > On Fri, Jul 19, 2019 at 08:18:02PM +1000, Michael Ellerman wrote:
-> >> Christian Brauner <christian@brauner.io> writes:
-> >> > On Mon, Jul 15, 2019 at 03:56:04PM +0200, Christian Borntraeger wrote:
-> >> >> I think Vasily already has a clone3 patch for s390x with 435. 
-> >> >
-> >> > A quick follow-up on this. Helge and Michael have asked whether there
-> >> > are any tests for clone3. Yes, there will be and I try to have them
-> >> > ready by the end of the this or next week for review. In the meantime I
-> >> > hope the following minimalistic test program that just verifies very
-> >> > very basic functionality (It's not pretty.) will help you test:
-> >> 
-> >> Hi Christian,
-> >> 
-> >> Thanks for the test.
-> >> 
-> >> This actually oopses on powerpc, it hits the BUG_ON in CHECK_FULL_REGS
-> >> in process.c around line 1633:
-> >> 
-> >> 	} else {
-> >> 		/* user thread */
-> >> 		struct pt_regs *regs = current_pt_regs();
-> >> 		CHECK_FULL_REGS(regs);
-> >> 		*childregs = *regs;
-> >> 		if (usp)
-> >> 
-> >> 
-> >> So I'll have to dig into how we fix that before we wire up clone3.
-> >> 
-> >> Turns out testing is good! :)
+On Thu, Jul 18, 2019 at 10:49:50PM +0800, Herbert Xu wrote:
+> On Thu, Jul 18, 2019 at 10:25:15AM -0400, Daniel Jordan wrote:
 > >
-> > Indeed. I have a test-suite for clone3 in mind and I hope to have it
-> > ready by the end of next week. It's just always the finding the time
-> > part that is annoying. :)
+> > Which memory barrier do you mean?  I think you're referring to the one that
+> > atomic_inc might provide?  If so, the memory model maintainers can correct me
+> > here, but my understanding is that RMW atomic ops that don't return values are
+> > unordered, so switching the lines has no effect.
+> > 
+> > Besides, the smp_mb__after_atomic is what orders the list insertion with the
+> > trylock of pd->lock.
 > 
-> I know the feeling!
+> The primitive smp_mb__after_atomic only provides a barrier when
+> used in conjunction with atomic_inc (and similar atomic ops).
 > 
-> > Thanks for digging into this, Michael!
-> 
-> No worries, happy to help where I can.
-> 
-> In the intervening five minutes I remembered how we handle this, we just
-> need a little wrapper to save the non-volatile regs:
-> 
-> _GLOBAL(ppc_clone3)
-> 	bl	save_nvgprs
-> 	bl	sys_clone3
-> 	b	.Lsyscall_exit
+> The actual barrier may either be in smp_mb__after_atomic or the
+> atomic op itself (which is the case on x86).  Since we need the
+> barrier to occur after the list insertion we must move both of
+> these after the list_add_tail.
 
-Sounds good.
-
-> 
-> 
-> A while back I meant to make it generate those automatically based on a
-> flag in the syscall.tbl but of course haven't got around to it :)
-> 
-> So with the above it seems all good:
-> 
-> $ ./clone3 ; echo $?
-> Parent process received child's pid 4204 as return value
-> Parent process received child's pidfd 3
-> Parent process received child's pid 4204 as return argument
-> Child process with pid 4204
-> 0
-> 
-> I'll send a patch to wire it up on Monday.
-
-Excellent! Thank you!
-Christian
+Yes, my mistake!  Thanks for clarifying that.
