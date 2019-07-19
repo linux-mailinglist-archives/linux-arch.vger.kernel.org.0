@@ -2,113 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E49A66D8F5
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Jul 2019 04:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2B16DD04
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jul 2019 06:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbfGSCTy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Jul 2019 22:19:54 -0400
-Received: from mx1.mailbox.org ([80.241.60.212]:20468 "EHLO mx1.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726067AbfGSCTx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 18 Jul 2019 22:19:53 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx1.mailbox.org (Postfix) with ESMTPS id A6C4F507D6;
-        Fri, 19 Jul 2019 04:19:47 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
-        with ESMTP id rthfEAqSrQty; Fri, 19 Jul 2019 04:19:37 +0200 (CEST)
-Date:   Fri, 19 Jul 2019 12:19:31 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     "Dmitry V. Levin" <ldv@altlinux.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v9 08/10] open: openat2(2) syscall
-Message-ID: <20190719021931.ypwvcvp3imbgjjx6@yavin>
-References: <20190706145737.5299-1-cyphar@cyphar.com>
- <20190706145737.5299-9-cyphar@cyphar.com>
- <20190719015933.GA18022@altlinux.org>
+        id S1733001AbfGSEUK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Jul 2019 00:20:10 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:40909 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388840AbfGSEUD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Jul 2019 00:20:03 -0400
+Received: by mail-io1-f68.google.com with SMTP id h6so55661645iom.7
+        for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2019 21:20:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:message-id:user-agent:mime-version;
+        bh=y7QcXz6snFzqEHX9oNiwROmLSfrbhKnVywQpaDFxKjU=;
+        b=XBMc40+zE5hV9zvUK7QKYf84WeaZeVOkHEc+Ym7qahSCly2JPuO+wQ8TMLmOlquVIx
+         ZOh7vrznORPoqN9Tk5Vy4ScOe7tXXzyVDkJmHmgSqcKTiL1JAUpA3JP47Z74JkvyMKoG
+         Vru5wrI101h3kL1Fmmr22gglG4E6Gg7M9VEp7u6I4WoKhlt+iT9Hefknr+x05v9NdXh3
+         Ol6fNQLRfAYllDwOtTVJulMat9PzO4gQsnKKY1BKcAINbgC1gOsqYc6NzQ5+wfbg8jar
+         054ZQEV4ZYt2ryIpvydkJL2E2i9kvSUaTHhVznB3dTk8d0jWQU/WsRsAfLEAHW/cGuzf
+         sZfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
+         :mime-version;
+        bh=y7QcXz6snFzqEHX9oNiwROmLSfrbhKnVywQpaDFxKjU=;
+        b=bRUrvSsz77Ycy4cytCnXe3IMkW27tK8GKoz6Tk0UbpKKWKhlSuV5FOPs7uCgeoAHvD
+         d8v6VJRBhuE9Svcml2+I6buEcQ1egInOliDG2TbQeFiH7LTrbU0KDDuESVDG+orSf4rI
+         GieABcWa6ZS51LkeJ+ZrjNbDNuRtRkN6lqOtOieUzxl6dAo1/W4uXmZqXzX3GtK4ZCRw
+         FI6cS9mWjQPW5d9PShSdLExA/Lcal0LleUCuGG4uOAhOXVdJZVy/m13pr5KBCKHQe3Br
+         LQLGY/Pc43gutDLmN/9SXy8KBh87yXB98+Hc2pEd9LMS+P8eoNKcYkowiMSxhojZTuJY
+         Pc1Q==
+X-Gm-Message-State: APjAAAW48pWLAuye6/gEvR+GLFMgrpbGShwRFQf4jzCCLWsb8AxmxJBV
+        tYlGMoTgJIu9gXE9Ud3qXvoWwQ==
+X-Google-Smtp-Source: APXvYqzGiWfVK10x/o/hAhjT31ymV7flaSQ4nE5/whEi7UQaYFpREf+rTapypi5WrJkv8Azrv/2p7w==
+X-Received: by 2002:a5d:9749:: with SMTP id c9mr48787103ioo.258.1563510003006;
+        Thu, 18 Jul 2019 21:20:03 -0700 (PDT)
+Received: from localhost (67-0-62-24.albq.qwest.net. [67.0.62.24])
+        by smtp.gmail.com with ESMTPSA id u4sm31205266iol.59.2019.07.18.21.20.02
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 18 Jul 2019 21:20:02 -0700 (PDT)
+Date:   Thu, 18 Jul 2019 21:20:01 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     linux-riscv@lists.infradead.org
+cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        christian@brauner.io
+Subject: [PATCH] riscv: enable sys_clone3 syscall for rv64
+Message-ID: <alpine.DEB.2.21.9999.1907182118500.7083@viisi.sifive.com>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="g4nevyq6aunc32xc"
-Content-Disposition: inline
-In-Reply-To: <20190719015933.GA18022@altlinux.org>
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---g4nevyq6aunc32xc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Enable the sys_clone3 syscall for RV64.  We simply include the generic
+version.
 
-On 2019-07-19, Dmitry V. Levin <ldv@altlinux.org> wrote:
-> On Sun, Jul 07, 2019 at 12:57:35AM +1000, Aleksa Sarai wrote:
-> [...]
-> > +/**
-> > + * Arguments for how openat2(2) should open the target path. If @extra=
- is zero,
-> > + * then openat2(2) is identical to openat(2).
-> > + *
-> > + * @flags: O_* flags (unknown flags ignored).
->=20
-> What was the rationale for implementing this semantics?
-> Ignoring unknown flags makes potential extension of this new interface
-> problematic.  This has bitten us many times already, so ...
+Tested by running the program from
 
-I am mirroring the semantics of open(2) and openat(2).
+   https://lore.kernel.org/lkml/20190716130631.tohj4ub54md25dys@brauner.io/
 
-To be clear, I am in favour of doing it -- and it would definitely be
-possible to implement it with -EINVAL (you would just mask off
-~VALID_OPEN_FLAGS for the older syscalls). But Linus' response to my
-point about (the lack of) -EINVAL for unknown open(2) flags gave me the
-impression he would be against this idea (though I might be
-misunderstanding the point he was making).
+and verifying that it completes successfully.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+Signed-off-by: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Christian Brauner <christian@brauner.io>
+---
+ arch/riscv/include/uapi/asm/unistd.h | 1 +
+ 1 file changed, 1 insertion(+)
 
---g4nevyq6aunc32xc
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/arch/riscv/include/uapi/asm/unistd.h b/arch/riscv/include/uapi/asm/unistd.h
+index 0e2eeeb1fd27..13ce76cc5aff 100644
+--- a/arch/riscv/include/uapi/asm/unistd.h
++++ b/arch/riscv/include/uapi/asm/unistd.h
+@@ -18,6 +18,7 @@
+ #ifdef __LP64__
+ #define __ARCH_WANT_NEW_STAT
+ #define __ARCH_WANT_SET_GET_RLIMIT
++#define __ARCH_WANT_SYS_CLONE3
+ #endif /* __LP64__ */
+ 
+ #include <asm-generic/unistd.h>
+-- 
+2.22.0
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXTEorwAKCRCdlLljIbnQ
-Eop3AQDsS+JxsKMay74AdwHvqjPK3crvN47y0krPsv6vGBsWhQD/f+ChPlnwx226
-SbxKk/nCjHvnDSJga0WPUznn7tBxUQQ=
-=7H8a
------END PGP SIGNATURE-----
-
---g4nevyq6aunc32xc--
