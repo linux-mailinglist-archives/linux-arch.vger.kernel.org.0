@@ -2,73 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3D46E235
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Jul 2019 10:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256756E302
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jul 2019 10:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726222AbfGSIEo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Jul 2019 04:04:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48982 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726076AbfGSIEo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 19 Jul 2019 04:04:44 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 92CAD20665;
-        Fri, 19 Jul 2019 08:04:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563523483;
-        bh=R9hD24Tj+KSZAJ28RSPSUwPQVIMBYE4b6HdUPoO5ENo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m8MOrcHmD7GUTE+3OqkFDbOKMNS9fnRrLxrB7nLIQkjljVojmxNAdqsPbJ5fOThya
-         mPOeyalN6YXDdpXe7XSJL5yRtQx9zsxHlRo+8r62FsFHDCIkp4aqDtw/7yKEWCTs6c
-         YBeOG8iYEDoFccPxedp3h0UP/Fk3hxTZWN2j6Yu8=
-Date:   Fri, 19 Jul 2019 09:04:36 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
-        will.deacon@arm.com, arnd@arndb.de, linux@armlinux.org.uk,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, salyzyn@android.com,
-        pcc@google.com, 0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
-        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com,
-        luto@kernel.org, john.stultz@linaro.org, naohiro.aota@wdc.com,
-        yamada.masahiro@socionext.com
-Subject: Re: [PATCH] arm64: vdso: Cleanup Makefiles.
-Message-ID: <20190719080435.f3nlecyu3ysnsnpv@willie-the-truck>
-References: <20190712153746.5dwwptgrle3z25m7@willie-the-truck>
- <20190718114121.33024-1-vincenzo.frascino@arm.com>
+        id S1727070AbfGSI7t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Jul 2019 04:59:49 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:40223 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727045AbfGSI7t (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Jul 2019 04:59:49 -0400
+Received: by mail-wm1-f67.google.com with SMTP id v19so28259592wmj.5
+        for <linux-arch@vger.kernel.org>; Fri, 19 Jul 2019 01:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=r+mZG8DpAsPgWT5sar/21/BjX4up+4WpKJWqDr5y+XE=;
+        b=UovNcYRJpNCwUpWYyK80hMB+LmsasMk/b+zRnOMrEiqyWDbVXt28ZRGBCmPPcZUN0Q
+         /7jz/DscGGQ7KK1NVhsYrrZmsyJ1wT1ynx4YUOcbWknTuTYIitiIhSJYSjfxO7NDoc6A
+         cYTtdySKxzcVDcyjoGRWTNZh5axkeqLWNaFU3JH3CGLkOMa8TXXFqu/1bhPnrwEP690/
+         j7DnqohaO9uqFP/XnDXVak9aGhsnxhZrKERoM4ZBlXxPF8LvDVS/mfZ+LZ+SnCvaDFOj
+         OBJIhRPnkIjaY5vjk8XEn2AqEibXwCokadCTrFNtJLDod4kk6C3EMdkFR9PqkEePJCcG
+         HoOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=r+mZG8DpAsPgWT5sar/21/BjX4up+4WpKJWqDr5y+XE=;
+        b=CgDRgqoHB6kIaRlGMfNSvSND2TvfGqthh8GGBnoLVqLMEOwPytxMJwMrpnkHH3wVEi
+         k1AIMe94iidO8qoC2QM45pcaaXp62p5gHK6CM+na7/2tLcdvJoY8OPqif8Nqq89DFLd9
+         6/vCbgD8yBTml7pLTPr2cBa+vdxg80HhiUHTlQPYXCi5LWF/NMWVAbvTPh/Lczm4gbpj
+         GJPjj3aLPrAooyBYUu/fTI8dz+6X40RNeL0K/+0aduaJV00nUr6qvpdonouZRCB6W+gJ
+         XMhH4vCl/pD/zb+WMfQH7GXfTZm8JGWnfIXklOIOV/h25Smgr5vb28MMhm2bOz0H0jUc
+         7MgA==
+X-Gm-Message-State: APjAAAXY+b0Anm38u9iCJH8ErFmvQYh0KVyhT7ks0GsJ1S9sDRzV3rIq
+        NO8O68rvgI21j5R++bRVA9sDNqtquaY=
+X-Google-Smtp-Source: APXvYqwNeo4Lm2KsUkZw2PBIJv7c22XTMebEqmZ6IGLFDVHBMaZWzxlIxEOLZBcK+t8KjqIA8Sw8Mg==
+X-Received: by 2002:a1c:6555:: with SMTP id z82mr48409335wmb.129.1563526787404;
+        Fri, 19 Jul 2019 01:59:47 -0700 (PDT)
+Received: from brauner.io ([81.92.17.140])
+        by smtp.gmail.com with ESMTPSA id j17sm39177701wrb.35.2019.07.19.01.59.46
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 19 Jul 2019 01:59:46 -0700 (PDT)
+Date:   Fri, 19 Jul 2019 10:59:45 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH] riscv: enable sys_clone3 syscall for rv64
+Message-ID: <20190719085944.n4ypavxdlf6go4tl@brauner.io>
+References: <alpine.DEB.2.21.9999.1907182118500.7083@viisi.sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190718114121.33024-1-vincenzo.frascino@arm.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <alpine.DEB.2.21.9999.1907182118500.7083@viisi.sifive.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 18, 2019 at 12:41:21PM +0100, Vincenzo Frascino wrote:
-> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-> index 21009ed5a755..6c4e496309c4 100644
-> --- a/arch/arm64/kernel/vdso32/Makefile
-> +++ b/arch/arm64/kernel/vdso32/Makefile
-> @@ -155,17 +155,17 @@ $(asm-obj-vdso): %.o: %.S FORCE
->  	$(call if_changed_dep,vdsoas)
+On Thu, Jul 18, 2019 at 09:20:01PM -0700, Paul Walmsley wrote:
+> 
+> Enable the sys_clone3 syscall for RV64.  We simply include the generic
+> version.
+> 
+> Tested by running the program from
+> 
+>    https://lore.kernel.org/lkml/20190716130631.tohj4ub54md25dys@brauner.io/
+> 
+> and verifying that it completes successfully.
+> 
+> Signed-off-by: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Christian Brauner <christian@brauner.io>
+
+Thank you!
+
+Acked-by: Christian Brauner <christian@brauner.io>
+
+> ---
+>  arch/riscv/include/uapi/asm/unistd.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/riscv/include/uapi/asm/unistd.h b/arch/riscv/include/uapi/asm/unistd.h
+> index 0e2eeeb1fd27..13ce76cc5aff 100644
+> --- a/arch/riscv/include/uapi/asm/unistd.h
+> +++ b/arch/riscv/include/uapi/asm/unistd.h
+> @@ -18,6 +18,7 @@
+>  #ifdef __LP64__
+>  #define __ARCH_WANT_NEW_STAT
+>  #define __ARCH_WANT_SET_GET_RLIMIT
+> +#define __ARCH_WANT_SYS_CLONE3
+>  #endif /* __LP64__ */
 >  
->  # Actual build commands
-> -quiet_cmd_vdsold_and_vdso_check = LD      $@
-> +quiet_cmd_vdsold_and_vdso_check = VDSOLIB $@
->        cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check)
->  
-> -quiet_cmd_vdsold = VDSOL   $@
-> +quiet_cmd_vdsold = VDSOLD  $@
-
-I think we should be more consistent about whether or not we prefix things
-with VDSO, so either go with "VDSOLD, VDSOCC and VDSOAS" or stick to "LD,
-CC and AS" rather than mixing between them.
-
-I think my suggestion would be something along the lines of CC, LD, AS for
-the native vdso and CC32, LD32, AS32 for the compat vdso.
-
-Will
+>  #include <asm-generic/unistd.h>
+> -- 
+> 2.22.0
+> 
