@@ -2,71 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A106FC60
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2019 11:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357C26FED2
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2019 13:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728311AbfGVJls (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Jul 2019 05:41:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56002 "EHLO mail.kernel.org"
+        id S1728952AbfGVLix (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Jul 2019 07:38:53 -0400
+Received: from sauhun.de ([88.99.104.3]:39256 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728265AbfGVJls (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 22 Jul 2019 05:41:48 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 557A1218EA;
-        Mon, 22 Jul 2019 09:41:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563788507;
-        bh=jauXQmrxA9a72OrrDn+WjHiK7lIIU0c1xKoYSvyMSrM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i9S0FprbkqfyWctXsZA1Cd2EZn1UqTyHuNPYd3xevoBzGz2iC/9Q8PkX3qUESdT6E
-         akdBvvhER/yP1ZuvfuQyoQuZmvqG0ZjLipX41kySe+h0cGT3Yz6YONppDnqmfjyJuo
-         IpL3qZTrZTilrO9HikY/dNScwqWR7VfIhsD9emg4=
-Date:   Mon, 22 Jul 2019 10:41:41 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
-        will.deacon@arm.com, arnd@arndb.de, linux@armlinux.org.uk,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, salyzyn@android.com,
-        pcc@google.com, 0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
-        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com,
-        luto@kernel.org, john.stultz@linaro.org, naohiro.aota@wdc.com,
-        yamada.masahiro@socionext.com
-Subject: Re: [PATCH v2] arm64: vdso: Cleanup Makefiles
-Message-ID: <20190722094140.giv5vivoqm4bzl5t@willie-the-truck>
-References: <20190712153746.5dwwptgrle3z25m7@willie-the-truck>
- <20190719101018.1984-1-vincenzo.frascino@arm.com>
+        id S1726895AbfGVLiw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 22 Jul 2019 07:38:52 -0400
+Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
+        by pokefinder.org (Postfix) with ESMTPSA id 2529E2C28E9;
+        Mon, 22 Jul 2019 13:38:49 +0200 (CEST)
+Date:   Mon, 22 Jul 2019 13:38:46 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
+        Don Brace <don.brace@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        rcu@vger.kernel.org, linux-doc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-i2c@vger.kernel.org, esc.storagedev@microsemi.com,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 03/14] docs: fix broken doc references due to renames
+Message-ID: <20190722113845.GA1115@ninjato>
+References: <cover.1563277838.git.mchehab+samsung@kernel.org>
+ <aa415583bf6b812b0249093a601aa31412f3a1cf.1563277838.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CE+1k2dSO48ffgeK"
 Content-Disposition: inline
-In-Reply-To: <20190719101018.1984-1-vincenzo.frascino@arm.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <aa415583bf6b812b0249093a601aa31412f3a1cf.1563277838.git.mchehab+samsung@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 19, 2019 at 11:10:18AM +0100, Vincenzo Frascino wrote:
-> The recent changes to the vdso library for arm64 and the introduction of
-> the compat vdso library have generated some misalignment in the
-> Makefiles.
-> 
-> Cleanup the Makefiles for vdso and vdso32 libraries:
->   * Removing unused rules.
->   * Unifying the displayed compilation messages.
->   * Simplifying the generic library inclusion path for
->     arm64 vdso.
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
->  arch/arm64/kernel/vdso/Makefile   |  9 +++------
->  arch/arm64/kernel/vdso32/Makefile | 10 +++++-----
->  2 files changed, 8 insertions(+), 11 deletions(-)
 
-Thanks, I'll queue this for -rc2.
+--CE+1k2dSO48ffgeK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Will
+On Tue, Jul 16, 2019 at 09:10:42AM -0300, Mauro Carvalho Chehab wrote:
+> Some files got renamed but probably due to some merge conflicts,
+> a few references still point to the old locations.
+>=20
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+
+Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C part
+
+
+--CE+1k2dSO48ffgeK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl01oEEACgkQFA3kzBSg
+KbYvLhAAiBCzjlLaOX8TozT9yXWwqRye46Tkkjqei2Gh2ruk6HulzAm4JLL1ghij
+bD5UKIqsqMqs8SThEWtBr7lpGKPY5dTOO7Lvp3Gg6Ykw4DSJHjwRbY9Gz3eKpjm6
+XCeKu+qe7IWU4PyqjfTmT2tYQBjZTg8+e5ycnPtgLxvLZGpqoOwplZvwady9klS0
+6KfODAi0M8Bv05man76ECm1z4PeUjQMjuSgO4lxWDm9QPN6pL1tZ1DN4TWoQpmY8
+gnS6iqRtIVwRqjxnx3BNP6q0iF0oMBIJbufn+udz5FVAvXkWtx6gaJ+HZO02CPnd
+DfLhbW0h0SzzRnLA8rtuTQl/wJwHcfRtlYBNitXwbXIewlBTqlhzhvuW7JZnXJTe
+QXk4bXJuRofQsmWiK/i6bP0ifWyWmH/mLQkZhXEAZXsiiSHYuLC0RGLYTk2OSbRS
+d4kM+3WQfr0F8KTgmhKZv0g6yKqxziFVCBFMkKvpYqOfk3MuRf9JREpFnAmtHaox
+310crjxth9IwT/SMq813fSz5+SueTeiTp7DZyOANc23QCyJTpTTnIsdpzYzna4+i
+t8H5nyy2JKWKP7rvIfn2O4BKHOt14Klmbno/pUak4lxLadz7Av7mC65akEwLWSiI
+0qO7h0/ZSuPlu8OPAyR3I7cvx8/RriyeQJUceA6/KjTSKtWhw/E=
+=7t6S
+-----END PGP SIGNATURE-----
+
+--CE+1k2dSO48ffgeK--
