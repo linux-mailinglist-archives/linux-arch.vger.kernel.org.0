@@ -2,139 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC526F96F
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2019 08:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A106FC60
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2019 11:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727267AbfGVGUt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Jul 2019 02:20:49 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:34776 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726120AbfGVGUt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 22 Jul 2019 02:20:49 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2D5E28EE105;
-        Sun, 21 Jul 2019 23:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1563776449;
-        bh=ahMuxoX/qvj/gfm0bQ5fQvzg5E5oU/xYIVqpIcBDCbg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=R4wzPPxbwVDdAKgJuk+xSOQOJYBS35ViR5TiZjoGokzR1qWFh740jvzZEPFOvR1Q8
-         NqvCoahnv3hVPR4YIdIRRkZHjE66ASzKYmKOA6Xm4W40Bob/1KSrBzG/3EmRCQbLYc
-         7WOlk8LNxALetFppsp5vlafFIQRcGlLI/0qgVYEc=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fEakGxXLJvLk; Sun, 21 Jul 2019 23:20:49 -0700 (PDT)
-Received: from [192.168.222.208] (skyclub2.st.wakwak.ne.jp [61.115.125.222])
+        id S1728311AbfGVJls (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Jul 2019 05:41:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56002 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728265AbfGVJls (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 22 Jul 2019 05:41:48 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id F17BE8EE104;
-        Sun, 21 Jul 2019 23:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1563776448;
-        bh=ahMuxoX/qvj/gfm0bQ5fQvzg5E5oU/xYIVqpIcBDCbg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=WIsdSVMickE44AbsE0SlZWgi9YJxpmlVd7GFGR/sDSpSUnOvqr0eZEDK8OD+lbazO
-         GSwddgIHat0j10QXufKHpqH5DVecVqvYGDx7i8ZwZzjp9mY6pLMdRVoWGyfjTNYcBt
-         ZspD3PYlqATUvVSH5w23TGJGz+LpEYK6JkraDgd0=
-Message-ID: <1563776443.3223.8.camel@HansenPartnership.com>
-Subject: Re: [PATCH] unaligned: delete 1-byte accessors
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, axboe@kernel.dk, kvalo@codeaurora.org,
-        john.johansen@canonical.com, linux-arch@vger.kernel.org
-Date:   Mon, 22 Jul 2019 15:20:43 +0900
-In-Reply-To: <20190722060744.GA24253@avx2>
-References: <20190721215253.GA18177@avx2>
-         <1563750513.2898.4.camel@HansenPartnership.com>
-         <20190722052244.GA4235@avx2>
-         <1563774526.3223.2.camel@HansenPartnership.com>
-         <20190722060744.GA24253@avx2>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        by mail.kernel.org (Postfix) with ESMTPSA id 557A1218EA;
+        Mon, 22 Jul 2019 09:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563788507;
+        bh=jauXQmrxA9a72OrrDn+WjHiK7lIIU0c1xKoYSvyMSrM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i9S0FprbkqfyWctXsZA1Cd2EZn1UqTyHuNPYd3xevoBzGz2iC/9Q8PkX3qUESdT6E
+         akdBvvhER/yP1ZuvfuQyoQuZmvqG0ZjLipX41kySe+h0cGT3Yz6YONppDnqmfjyJuo
+         IpL3qZTrZTilrO9HikY/dNScwqWR7VfIhsD9emg4=
+Date:   Mon, 22 Jul 2019 10:41:41 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        will.deacon@arm.com, arnd@arndb.de, linux@armlinux.org.uk,
+        daniel.lezcano@linaro.org, tglx@linutronix.de, salyzyn@android.com,
+        pcc@google.com, 0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
+        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com,
+        luto@kernel.org, john.stultz@linaro.org, naohiro.aota@wdc.com,
+        yamada.masahiro@socionext.com
+Subject: Re: [PATCH v2] arm64: vdso: Cleanup Makefiles
+Message-ID: <20190722094140.giv5vivoqm4bzl5t@willie-the-truck>
+References: <20190712153746.5dwwptgrle3z25m7@willie-the-truck>
+ <20190719101018.1984-1-vincenzo.frascino@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190719101018.1984-1-vincenzo.frascino@arm.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 2019-07-22 at 09:07 +0300, Alexey Dobriyan wrote:
-> On Mon, Jul 22, 2019 at 02:48:46PM +0900, James Bottomley wrote:
-> > On Mon, 2019-07-22 at 08:22 +0300, Alexey Dobriyan wrote:
-> > > On Mon, Jul 22, 2019 at 08:08:33AM +0900, James Bottomley wrote:
-> > > > On Mon, 2019-07-22 at 00:52 +0300, Alexey Dobriyan wrote:
-> > > > > Each and every 1-byte access is aligned!
-> > > > 
-> > > > The design idea of this is for parsing descriptors.  We simply
-> > > > chunk up the describing structure using get_unaligned for
-> > > > everything.  The reason is because a lot of these structures
-> > > > come
-> > > > with reserved areas which we may make use of later.  If we're
-> > > > using
-> > > > get_unaligned for everything we can simply change a u8 to a u16
-> > > > in
-> > > > the structure absorbing the reserved padding.  With your change
-> > > > now
-> > > > I'd have to chase down every byte access and replace it with
-> > > > get_unaligned instead of simply changing the structure.
-> > > > 
-> > > > What's the significant advantage of this change that
-> > > > compensates
-> > > > for the problems the above causes?
-> > > 
-> > > HW descriptors have fixed endianness, you're supposed to use
-> > > get_unaligned_be32() and friends.
-> > 
-> > Not if this is an internal descriptor format, which is what this is
-> > mostly used for.
+On Fri, Jul 19, 2019 at 11:10:18AM +0100, Vincenzo Frascino wrote:
+> The recent changes to the vdso library for arm64 and the introduction of
+> the compat vdso library have generated some misalignment in the
+> Makefiles.
 > 
-> Maybe, but developer is supposed to look at all struct member usages
-> while changing types, right?
+> Cleanup the Makefiles for vdso and vdso32 libraries:
+>   * Removing unused rules.
+>   * Unifying the displayed compilation messages.
+>   * Simplifying the generic library inclusion path for
+>     arm64 vdso.
 > 
-> > > For that matter, drivers/scsi/ has exactly 2 get_unaligned()
-> > > calls
-> > > one of which can be changed to get_unaligned_be32().
-> > 
-> > You haven't answered the "what is the benefit of this change"
-> > question.
-> >  I mean sure we can do it, but it won't make anything more
-> > efficient
-> > and it does help with the descriptor format to treat every
-> > structure
-> > field the same.
-> 
-> The benefit is less code, come on.
-> 
-> Another benefit is that typoing
-> 
-> 	get_unaligned((u16*)p)
-> 
-> for
-> 	get_unaligned((u8*)p)
-> 
-> will get detected.
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>  arch/arm64/kernel/vdso/Makefile   |  9 +++------
+>  arch/arm64/kernel/vdso32/Makefile | 10 +++++-----
+>  2 files changed, 8 insertions(+), 11 deletions(-)
 
-Well, that's not the way it's supposed to be used.  It's supposed to be
-used as
+Thanks, I'll queue this for -rc2.
 
-struct desc {
-u8 something;
-u8 pad 1;
-u16 another;
-} __packed;
-
-something = get_unaligned[_le/be](&struct.something);
-
-So that the sizes are encoded in the descriptor structure.  If you
-think it's badly documented, then please update that, I just don't see
-a benefit to a coding change that removes the u8 version of this
-because it makes our descriptor structure handling inconsistent.
-
-Even if we allow people are hard coding the typedef, then making u8 not
-work just looks inconsistent ... you could easily have typoed u32 for
-u16 in the example above and there would be no detection.
-
-James
-
+Will
