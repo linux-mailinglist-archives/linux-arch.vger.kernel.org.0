@@ -2,69 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 556AD713BC
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2019 10:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D649972119
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2019 22:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730790AbfGWIRh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Jul 2019 04:17:37 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:39643 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727903AbfGWIRh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Jul 2019 04:17:37 -0400
-Received: from pd9ef1cb8.dip0.t-ipconnect.de ([217.239.28.184] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hppzH-0007kO-06; Tue, 23 Jul 2019 10:17:31 +0200
-Date:   Tue, 23 Jul 2019 10:17:29 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-cc:     Mike Lothian <mike@fireburn.co.uk>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        X86 ML <x86@kernel.org>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2] kbuild: Fail if gold linker is detected
-In-Reply-To: <alpine.DEB.2.21.1907230837400.1659@nanos.tec.linutronix.de>
-Message-ID: <alpine.DEB.2.21.1907231013340.1659@nanos.tec.linutronix.de>
-References: <alpine.DEB.2.21.1907161434260.1767@nanos.tec.linutronix.de> <20190716170606.GA38406@archlinux-threadripper> <alpine.DEB.2.21.1907162059200.1767@nanos.tec.linutronix.de> <alpine.DEB.2.21.1907162135590.1767@nanos.tec.linutronix.de>
- <CAK7LNASBiaMX8ihnmhLGmYfHX=ZHZmVN91nxmFZe-OCaw6Px2w@mail.gmail.com> <alpine.DEB.2.21.1907170955250.1767@nanos.tec.linutronix.de> <CAHbf0-GyQzWcRg_BP2B5pVzEJoxSE_hX5xFypS--7Q5LSHxzWw@mail.gmail.com> <CAK7LNATJGbSYyuxV7npC_bQiXQShb=7J7dcQcOaupnL5-GhADg@mail.gmail.com>
- <alpine.DEB.2.21.1907230837400.1659@nanos.tec.linutronix.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+        id S1732939AbfGWUuX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Jul 2019 16:50:23 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:42136 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730760AbfGWUuW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Jul 2019 16:50:22 -0400
+Received: by mail-qk1-f195.google.com with SMTP id 201so32120248qkm.9
+        for <linux-arch@vger.kernel.org>; Tue, 23 Jul 2019 13:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=CmnfNtgiMAfp2Il+YyakJvBaajWojL1MC+DBGGpZ1g4=;
+        b=DVedO5PJpKlFqbEBexij3Upmidl5volPSXQLTD9vV5mbxSTvz/BRl7lHvCFJ8+E8z1
+         C9fxnNKFiuZwFWeOEiczxjJtuHGyulMOwUbUcgL3iQBY/C6IL4C6/jHTaTl6xflT4VSH
+         NzKbWmlvVp4qn5Znx8rDhF8H3niaNCuFeIYNyDYJmi2m/N0vp23/SuL0cmht7/C/oqaX
+         wFcG4ADt0Q/ZgVCoDGHY4yE1RHh/jUSKCYx1aM/VeHF5uK6TsT0n1hNRVHL40HGhbkXV
+         I8+IRY9fKorWggN2FebwoNCsrBdlGM6KhvDY7kDuxClBGqT9qmTknRAEOxT2O8v0+Ftc
+         KT2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=CmnfNtgiMAfp2Il+YyakJvBaajWojL1MC+DBGGpZ1g4=;
+        b=KxYU1o+Uue8BZMmC1DYnlZ2nJZuRIdOKBZpgUNpt9+kixArVna3kQYqzIRpzNMTOnI
+         Ptpe1AcsLZ+YPzupP9qv7GV15fSKsbe43iN1hjj9P+5BFRtIH43gvyWmmxc3Rb4tS1OI
+         zFnJ0Y75tcP0Dqv6NoEEkV8tW5CnXWW9oMctjAHXMjDCPgkmVRlHPgVzsICJ8RrvpXM6
+         /io2qo9hkrpF8+sNhL/h2aOLiCqRl+xjPr8pWiyadIX0jhZy8fzr6nuE8uC5teLQUnXN
+         8CINr9WBayY6WGEQhTrKNtpvdpJEAXvVffcSQ3CyurvibzG2amj+T6ZOOm/yDIQxVTDd
+         MJlQ==
+X-Gm-Message-State: APjAAAWyBbLULvcYxaNvZHskE3szFQKWpOVdvKXHDuwXcm/MBupTzP+G
+        Fo5isFkPzG/425eR8FHJkeU9wyFHMctJIg==
+X-Google-Smtp-Source: APXvYqwTX1VldzlCMOHNg9PynG6cKPHKOvzIfOE8DTljIeC32sLsWx125SW6cUSaV4Qfvk/8wFYlew==
+X-Received: by 2002:a37:4714:: with SMTP id u20mr51193790qka.162.1563915021913;
+        Tue, 23 Jul 2019 13:50:21 -0700 (PDT)
+Received: from qcai.nay.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id m10sm19335819qka.43.2019.07.23.13.50.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jul 2019 13:50:21 -0700 (PDT)
+From:   Qian Cai <cai@lca.pw>
+To:     akpm@linux-foundation.org
+Cc:     davem@davemloft.net, arnd@arndb.de, dhowells@redhat.com,
+        jakub@redhat.com, ndesaulniers@google.com, morbo@google.com,
+        jyknight@google.com, natechancellor@gmail.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Qian Cai <cai@lca.pw>
+Subject: [PATCH] asm-generic: fix -Wtype-limits compiler warnings
+Date:   Tue, 23 Jul 2019 16:49:46 -0400
+Message-Id: <1563914986-26502-1-git-send-email-cai@lca.pw>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 23 Jul 2019, Thomas Gleixner wrote:
-> On Tue, 23 Jul 2019, Masahiro Yamada wrote:
-> > Right.
-> > I was able to build with ld.gold
-> > 
-> > So, we can use gold, depending on the kernel configuration.
-> 
-> That's exactly the problem. It breaks with random kernel configurations
-> which is not acceptable except for people who know what they are doing.
-> 
-> I'm tired of dealing with half baken fixes and 'regression' reports. Either
-> there is an effort to fix the issues with gold like the clang people fix
-> their issues or it needs to be disabled. We have a clear statement that
-> gold developers have other priorities.
+The commit d66acc39c7ce ("bitops: Optimise get_order()") introduced a
+compilation warning because "rx_frag_size" is an "ushort" while
+PAGE_SHIFT here is 16. The commit changed the get_order() to be a
+multi-line macro where compilers insist to check all statements in the
+macro even when __builtin_constant_p(rx_frag_size) will return false as
+"rx_frag_size" is a module parameter.
 
-That said, I'm perfectly happy to move this to x86 and leave it alone for
-other architectures, but it does not make sense to me.
+In file included from ./arch/powerpc/include/asm/page_64.h:107,
+                 from ./arch/powerpc/include/asm/page.h:242,
+                 from ./arch/powerpc/include/asm/mmu.h:132,
+                 from ./arch/powerpc/include/asm/lppaca.h:47,
+                 from ./arch/powerpc/include/asm/paca.h:17,
+                 from ./arch/powerpc/include/asm/current.h:13,
+                 from ./include/linux/thread_info.h:21,
+                 from ./arch/powerpc/include/asm/processor.h:39,
+                 from ./include/linux/prefetch.h:15,
+                 from drivers/net/ethernet/emulex/benet/be_main.c:14:
+drivers/net/ethernet/emulex/benet/be_main.c: In function
+'be_rx_cqs_create':
+./include/asm-generic/getorder.h:54:9: warning: comparison is always
+true due to limited range of data type [-Wtype-limits]
+   (((n) < (1UL << PAGE_SHIFT)) ? 0 :  \
+         ^
+drivers/net/ethernet/emulex/benet/be_main.c:3138:33: note: in expansion
+of macro 'get_order'
+  adapter->big_page_size = (1 << get_order(rx_frag_size)) * PAGE_SIZE;
+                                 ^~~~~~~~~
 
-If the gold fans care enough, then we can add something like
-CONFIG_I_WANT_TO_USE_GOLD_AND_DEAL_WITH_THE_FALLOUT_MYSELF.
+Fix it by moving almost all of this multi-line macro into a proper
+function __get_order(), and leave get_order() as a single-line macro in
+order to avoid compilation errors.
 
-Thanks,
+Fixes: d66acc39c7ce ("bitops: Optimise get_order()")
+Signed-off-by: Qian Cai <cai@lca.pw>
+---
+ include/asm-generic/getorder.h | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-	tglx
+diff --git a/include/asm-generic/getorder.h b/include/asm-generic/getorder.h
+index c64bea7a52be..c6a6d3cd7007 100644
+--- a/include/asm-generic/getorder.h
++++ b/include/asm-generic/getorder.h
+@@ -15,6 +15,16 @@ int __get_order(unsigned long size)
+ {
+ 	int order;
+ 
++	if (__builtin_constant_p(size)) {
++		if (!size)
++			return BITS_PER_LONG - PAGE_SHIFT;
++
++		if (size < (1UL << PAGE_SHIFT))
++			return 0;
++
++		return ilog2((size) - 1) - PAGE_SHIFT + 1;
++	}
++
+ 	size--;
+ 	size >>= PAGE_SHIFT;
+ #if BITS_PER_LONG == 32
+@@ -49,11 +59,6 @@ int __get_order(unsigned long size)
+  */
+ #define get_order(n)						\
+ (								\
+-	__builtin_constant_p(n) ? (				\
+-		((n) == 0UL) ? BITS_PER_LONG - PAGE_SHIFT :	\
+-		(((n) < (1UL << PAGE_SHIFT)) ? 0 :		\
+-		 ilog2((n) - 1) - PAGE_SHIFT + 1)		\
+-	) :							\
+ 	__get_order(n)						\
+ )
+ 
+-- 
+1.8.3.1
+
