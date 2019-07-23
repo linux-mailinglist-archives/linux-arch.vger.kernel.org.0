@@ -2,124 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1A870EB2
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2019 03:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B43D70F8E
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2019 05:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728669AbfGWBbg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Jul 2019 21:31:36 -0400
-Received: from conssluserg-04.nifty.com ([210.131.2.83]:22454 "EHLO
-        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728108AbfGWBbf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Jul 2019 21:31:35 -0400
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id x6N1VGIT023670;
-        Tue, 23 Jul 2019 10:31:16 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com x6N1VGIT023670
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1563845477;
-        bh=4FI5v7yChWDKy40TghmAxFQlb9RspR/YzR92MYe74dA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=firBOTyJ0pdoQGtFGnzZ6q4adxXd87IsePKVeEFn8ghWsWvxlrraAyE+U/2RTvo3F
-         D+HW8iJwj3RNY/UNdo88jhZ3HAvp9Y6Evsvr2fDBcqMSvcEf9kVq/aMAx3rIfMa1JT
-         grXHpOEFtx7LRjfEnNeP9cmaMux6A3Qdao8LAzt3oNuOxJJtNGKdlzqETe276gPEbA
-         AQcVdpU3wlhNdpZaEeOrgvPd+hOEFF+eKImq6kmDQpxxqN+EWIVTws9gRSRNEjDgR8
-         PBtR8RrxiLO9EQhbZp1XDR4KY83bWcSg0h4b+oOFXmS+SJWeSkN7FqKGbGVeWAJKrr
-         Duz71cJFbRrBA==
-X-Nifty-SrcIP: [209.85.217.49]
-Received: by mail-vs1-f49.google.com with SMTP id h28so27713083vsl.12;
-        Mon, 22 Jul 2019 18:31:16 -0700 (PDT)
-X-Gm-Message-State: APjAAAWoSpgoZzRc6+KSGirlpg8/hhDmDsIAPOmO/nvMUCkl49pVxV6Q
-        DhGETZqAB7sC2H25KEC/T4rE1gLUzpvP24dCYD4=
-X-Google-Smtp-Source: APXvYqz7MjjaBBE2iAX4oDJ6Ko66XfysBBN8YWUa9IqFK09d14YsOVeWpMdByphk9B/+3vRqmd9GfoRG1icX7+vEmKY=
-X-Received: by 2002:a67:fc45:: with SMTP id p5mr45866193vsq.179.1563845475801;
- Mon, 22 Jul 2019 18:31:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <alpine.DEB.2.21.1907161434260.1767@nanos.tec.linutronix.de>
- <20190716170606.GA38406@archlinux-threadripper> <alpine.DEB.2.21.1907162059200.1767@nanos.tec.linutronix.de>
- <alpine.DEB.2.21.1907162135590.1767@nanos.tec.linutronix.de>
- <CAK7LNASBiaMX8ihnmhLGmYfHX=ZHZmVN91nxmFZe-OCaw6Px2w@mail.gmail.com>
- <alpine.DEB.2.21.1907170955250.1767@nanos.tec.linutronix.de> <CAHbf0-GyQzWcRg_BP2B5pVzEJoxSE_hX5xFypS--7Q5LSHxzWw@mail.gmail.com>
-In-Reply-To: <CAHbf0-GyQzWcRg_BP2B5pVzEJoxSE_hX5xFypS--7Q5LSHxzWw@mail.gmail.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Tue, 23 Jul 2019 10:30:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATJGbSYyuxV7npC_bQiXQShb=7J7dcQcOaupnL5-GhADg@mail.gmail.com>
-Message-ID: <CAK7LNATJGbSYyuxV7npC_bQiXQShb=7J7dcQcOaupnL5-GhADg@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Fail if gold linker is detected
-To:     Mike Lothian <mike@fireburn.co.uk>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        X86 ML <x86@kernel.org>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S2387906AbfGWDIp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Jul 2019 23:08:45 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:37290 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387904AbfGWDIp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Jul 2019 23:08:45 -0400
+Received: by mail-qk1-f194.google.com with SMTP id d15so30070389qkl.4
+        for <linux-arch@vger.kernel.org>; Mon, 22 Jul 2019 20:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=O2LzIiKDY4d/HsG0eNgmi387YcnYg6wKjUrMRiQ2aBI=;
+        b=cQVGQ4Lo+reBiq8dbjN5yriOzZVvY96vvAv9q8SsuYXMB9Uau30z5v7ourRopELAFV
+         HrSuYt9L9h2jrveEkYTf5QYuw4n3uzgINqxIf9oaP4qrM3vxOSfbI/eyebdNEedw9sF9
+         fnyXYmfKAQzMfGVsedovuQq8f4im3Cjf+KHSjHeyXl9m3EHsftdM5tHH+4KSxI9JW1Lm
+         GX63sOgrwRVMD9cuOq0weGCDiiNaTCz17G7XnDt4HMCr7J7pvWTufHH7/U0V/19leICN
+         5WI55ujo/WvPH3ihrWHlYoNRj8G0G/etpXi9XaiBLtfuQoiIQ3IH4houeVK4ZQbWq6us
+         h5mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=O2LzIiKDY4d/HsG0eNgmi387YcnYg6wKjUrMRiQ2aBI=;
+        b=U1KXMvEClCIKYGi/7wql6DkNin7ZR1lexjfgTPHF0nyg7s2Sn+rcURaY7SHuw2A8Ek
+         gSz02OjTdgmRvaj9hBgM4LhVvzyIA/W/HaPDiWKmmkQ7kuFpTooHzVW87kRilFOVc+mY
+         Km4j9G7zBtwGFeNpGwpuPFZAPbY/YtM00adUlLptAGF73Bky/OAOR+d9MAcw7+dgHnb1
+         l0lyNdQpr0iBBA9XcE5liFEOLXBtsNw+3lUS3LZ9CSBDvp8Xn/81t5XSlKtyjN0410ah
+         bd+KC7g/e4mazKzDX+Mczg7+rcfmyt4EdMe1e6qqPggFfmqm7RBeijV1zmpbDxArNGw4
+         n71Q==
+X-Gm-Message-State: APjAAAXc/8B73Tadqh9FT6h4iTvatL6mJ1/ZfNfOxeEnllIkucnky/KS
+        hbmhYPiR7Nm51QnfymDXTrrIgg==
+X-Google-Smtp-Source: APXvYqyEMbHHfJqTE4TPKv38rNlMBE0t64ORiqa8pvqXPFdfxygujZ+CnHtEvxlGD+SsVbzsY099gA==
+X-Received: by 2002:a37:a7d6:: with SMTP id q205mr46498779qke.44.1563851324361;
+        Mon, 22 Jul 2019 20:08:44 -0700 (PDT)
+Received: from [192.168.1.153] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id x46sm26242144qtx.96.2019.07.22.20.08.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Jul 2019 20:08:43 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH] be2net: fix adapter->big_page_size miscaculation
+From:   Qian Cai <cai@lca.pw>
+In-Reply-To: <CAA2zVHqXDuMzBC6dD5AbepZc63nPdJ3WLYmjinjq01erqH+HXA@mail.gmail.com>
+Date:   Mon, 22 Jul 2019 23:08:41 -0400
+Cc:     David Miller <davem@davemloft.net>,
+        Bill Wendling <morbo@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        sathya.perla@broadcom.com, ajit.khaparde@broadcom.com,
+        sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, netdev@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        natechancellor@gmail.com, Jakub Jelinek <jakub@redhat.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <BE0991D9-65E7-43CA-A4B4-D3547D96291A@lca.pw>
+References: <CAKwvOdkCfqfpJYYX+iu2nLCUUkeDorDdVP3e7koB9NYsRwgCNw@mail.gmail.com>
+ <CAGG=3QUvdwJs1wW1w+5Mord-qFLa=_WkjTsiZuwGfcjkoEJGNQ@mail.gmail.com>
+ <75B428FC-734C-4B15-B1A7-A3FC5F9F2FE5@lca.pw>
+ <20190718.162928.124906203979938369.davem@davemloft.net>
+ <1563572871.11067.2.camel@lca.pw> <1563829996.11067.4.camel@lca.pw>
+ <CAA2zVHqXDuMzBC6dD5AbepZc63nPdJ3WLYmjinjq01erqH+HXA@mail.gmail.com>
+To:     James Y Knight <jyknight@google.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jul 20, 2019 at 6:12 PM Mike Lothian <mike@fireburn.co.uk> wrote:
->
-> On Wed, 17 Jul 2019 at 08:57, Thomas Gleixner <tglx@linutronix.de> wrote:
-> >
-> > On Wed, 17 Jul 2019, Masahiro Yamada wrote:
-> > > On Wed, Jul 17, 2019 at 4:47 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> > > > So instead of dealing with attempts to duct tape gold support without
-> > > > understanding the root cause and without support from the gold folks, fail
-> > > > the build when gold is detected.
-> > > >
-> > >
-> > > The code looks OK in the build system point of view.
-> > >
-> > > Please let me confirm this, just in case:
-> > > For now, we give up all architectures, not only x86, right?
-> >
-> > Well, that's the logical consequence of a statement which says: don't use
-> > gold for the kernel.
-> >
-> > > I have not not heard much from other arch maintainers.
-> >
-> > Cc'ed linux-arch for that matter.
-> >
-> > Thanks,
-> >
-> >         tglx
->
-> Hi
->
-> I've done a bit more digging, I had a second machine that was building
-> Linus's tree just fine with ld.gold
->
-> I tried forcing ld.bfd on the problem machine and got this:
->
-> ld.bfd: arch/x86/boot/compressed/head_64.o: warning: relocation in
-> read-only section `.head.text'
-> ld.bfd: warning: creating a DT_TEXTREL in object
->
-> I had a look at the differences in the kernel configs and noticed this:
->
-> CONFIG_RANDOMIZE_BASE=y
-> CONFIG_X86_NEED_RELOCS=y
-> CONFIG_PHYSICAL_ALIGN=0x1000000
-> CONFIG_DYNAMIC_MEMORY_LAYOUT=y
-> CONFIG_RANDOMIZE_MEMORY=y
-> CONFIG_RANDOMIZE_MEMORY_PHYSICAL_PADDING=0x0
->
-> Unsetting CONFIG_RANDOMIZE_BASE=y gets things working for me with ld.gold again
+The original issue,
+
+=
+https://lore.kernel.org/netdev/1562959401-19815-1-git-send-email-cai@lca.p=
+w/
+
+The debugging so far seems point to that the compilers get confused by =
+the
+module sections. During module_param(), it stores =
+=E2=80=9C__param_rx_frag_size"
+as a =E2=80=9Cstruct kernel_param=E2=80=9D into the __param section. =
+Later, load_module()
+obtains all =E2=80=9Ckernel_param=E2=80=9D from the __param section and =
+compare against the
+user-input module parameters from the command-line.  If there is a =
+match, it
+calls params[i].ops->set(&params[I]) to replace the value.  If compilers =
+can=E2=80=99t
+see that params[i].ops->set(&params[I]) could potentially change the =
+value
+of rx_frag_size, it will wrongly optimize it as a constant.
 
 
-Right.
-I was able to build with ld.gold
+For example (it is not
+compilable yet as I have not able to extract variable from the __param =
+section
+like find_module_sections()),
 
-So, we can use gold, depending on the kernel configuration.
+#include <stdio.h>
+#include <string.h>
 
+#define __module_param_call(name, ops, arg) \
+        static struct kernel_param __param_##name \
+         __attribute__ ((unused,__section__ =
+("__param"),aligned(sizeof(void *)))) =3D { \
+                #name, ops, { arg } }
 
-> In light of this - can we drop this patch?
+struct kernel_param {
+        const char *name;
+        const struct kernel_param_ops *ops;
+        union {
+                int *arg;
+        };
+};
 
+struct kernel_param_ops {
+        int (*set)(const struct kernel_param *kp);
+};
 
+#define STANDARD_PARAM_DEF(name) \
+        int param_set_##name(const struct kernel_param *kp) \
+        { \
+                *kp->arg =3D 2; \
+        } \
+        const struct kernel_param_ops param_ops_##name =3D { \
+                .set =3D param_set_##name, \
+        };
 
--- 
-Best Regards
-Masahiro Yamada
+STANDARD_PARAM_DEF(ushort);
+static int rx =3D 1;
+__module_param_call(rx_frag_siz, &param_ops_ushort, &rx_frag_size);
+
+int main(int argc, char *argv[])
+{
+        const struct kernel_param *params =3D <<< Get all kernel_param =
+from the __param section >>>;
+        int i;
+
+        if (__builtin_constant_p(rx_frag_size))
+                printf("rx_frag_size is a const.\n");
+
+        for (i =3D 0; i < num_param; i++) {
+                if (!strcmp(params[I].name, argv[1])) {
+                        params[i].ops->set(&params[i]);
+                        break;
+                }
+        }
+
+        printf("rx_frag_size =3D %d\n", rx_frag_size);
+
+        return 0;
+}
+
