@@ -2,161 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B43D70F8E
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2019 05:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC17571206
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2019 08:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387906AbfGWDIp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Jul 2019 23:08:45 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:37290 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387904AbfGWDIp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Jul 2019 23:08:45 -0400
-Received: by mail-qk1-f194.google.com with SMTP id d15so30070389qkl.4
-        for <linux-arch@vger.kernel.org>; Mon, 22 Jul 2019 20:08:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=O2LzIiKDY4d/HsG0eNgmi387YcnYg6wKjUrMRiQ2aBI=;
-        b=cQVGQ4Lo+reBiq8dbjN5yriOzZVvY96vvAv9q8SsuYXMB9Uau30z5v7ourRopELAFV
-         HrSuYt9L9h2jrveEkYTf5QYuw4n3uzgINqxIf9oaP4qrM3vxOSfbI/eyebdNEedw9sF9
-         fnyXYmfKAQzMfGVsedovuQq8f4im3Cjf+KHSjHeyXl9m3EHsftdM5tHH+4KSxI9JW1Lm
-         GX63sOgrwRVMD9cuOq0weGCDiiNaTCz17G7XnDt4HMCr7J7pvWTufHH7/U0V/19leICN
-         5WI55ujo/WvPH3ihrWHlYoNRj8G0G/etpXi9XaiBLtfuQoiIQ3IH4houeVK4ZQbWq6us
-         h5mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=O2LzIiKDY4d/HsG0eNgmi387YcnYg6wKjUrMRiQ2aBI=;
-        b=U1KXMvEClCIKYGi/7wql6DkNin7ZR1lexjfgTPHF0nyg7s2Sn+rcURaY7SHuw2A8Ek
-         gSz02OjTdgmRvaj9hBgM4LhVvzyIA/W/HaPDiWKmmkQ7kuFpTooHzVW87kRilFOVc+mY
-         Km4j9G7zBtwGFeNpGwpuPFZAPbY/YtM00adUlLptAGF73Bky/OAOR+d9MAcw7+dgHnb1
-         l0lyNdQpr0iBBA9XcE5liFEOLXBtsNw+3lUS3LZ9CSBDvp8Xn/81t5XSlKtyjN0410ah
-         bd+KC7g/e4mazKzDX+Mczg7+rcfmyt4EdMe1e6qqPggFfmqm7RBeijV1zmpbDxArNGw4
-         n71Q==
-X-Gm-Message-State: APjAAAXc/8B73Tadqh9FT6h4iTvatL6mJ1/ZfNfOxeEnllIkucnky/KS
-        hbmhYPiR7Nm51QnfymDXTrrIgg==
-X-Google-Smtp-Source: APXvYqyEMbHHfJqTE4TPKv38rNlMBE0t64ORiqa8pvqXPFdfxygujZ+CnHtEvxlGD+SsVbzsY099gA==
-X-Received: by 2002:a37:a7d6:: with SMTP id q205mr46498779qke.44.1563851324361;
-        Mon, 22 Jul 2019 20:08:44 -0700 (PDT)
-Received: from [192.168.1.153] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id x46sm26242144qtx.96.2019.07.22.20.08.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Jul 2019 20:08:43 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH] be2net: fix adapter->big_page_size miscaculation
-From:   Qian Cai <cai@lca.pw>
-In-Reply-To: <CAA2zVHqXDuMzBC6dD5AbepZc63nPdJ3WLYmjinjq01erqH+HXA@mail.gmail.com>
-Date:   Mon, 22 Jul 2019 23:08:41 -0400
-Cc:     David Miller <davem@davemloft.net>,
-        Bill Wendling <morbo@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        sathya.perla@broadcom.com, ajit.khaparde@broadcom.com,
-        sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, netdev@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        natechancellor@gmail.com, Jakub Jelinek <jakub@redhat.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <BE0991D9-65E7-43CA-A4B4-D3547D96291A@lca.pw>
-References: <CAKwvOdkCfqfpJYYX+iu2nLCUUkeDorDdVP3e7koB9NYsRwgCNw@mail.gmail.com>
- <CAGG=3QUvdwJs1wW1w+5Mord-qFLa=_WkjTsiZuwGfcjkoEJGNQ@mail.gmail.com>
- <75B428FC-734C-4B15-B1A7-A3FC5F9F2FE5@lca.pw>
- <20190718.162928.124906203979938369.davem@davemloft.net>
- <1563572871.11067.2.camel@lca.pw> <1563829996.11067.4.camel@lca.pw>
- <CAA2zVHqXDuMzBC6dD5AbepZc63nPdJ3WLYmjinjq01erqH+HXA@mail.gmail.com>
-To:     James Y Knight <jyknight@google.com>
-X-Mailer: Apple Mail (2.3445.104.11)
+        id S1730545AbfGWGle (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Jul 2019 02:41:34 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:39301 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727845AbfGWGld (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Jul 2019 02:41:33 -0400
+Received: from pd9ef1cb8.dip0.t-ipconnect.de ([217.239.28.184] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hpoUH-0005X3-Oa; Tue, 23 Jul 2019 08:41:25 +0200
+Date:   Tue, 23 Jul 2019 08:41:24 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+cc:     Mike Lothian <mike@fireburn.co.uk>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        X86 ML <x86@kernel.org>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v2] kbuild: Fail if gold linker is detected
+In-Reply-To: <CAK7LNATJGbSYyuxV7npC_bQiXQShb=7J7dcQcOaupnL5-GhADg@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.1907230837400.1659@nanos.tec.linutronix.de>
+References: <alpine.DEB.2.21.1907161434260.1767@nanos.tec.linutronix.de> <20190716170606.GA38406@archlinux-threadripper> <alpine.DEB.2.21.1907162059200.1767@nanos.tec.linutronix.de> <alpine.DEB.2.21.1907162135590.1767@nanos.tec.linutronix.de>
+ <CAK7LNASBiaMX8ihnmhLGmYfHX=ZHZmVN91nxmFZe-OCaw6Px2w@mail.gmail.com> <alpine.DEB.2.21.1907170955250.1767@nanos.tec.linutronix.de> <CAHbf0-GyQzWcRg_BP2B5pVzEJoxSE_hX5xFypS--7Q5LSHxzWw@mail.gmail.com>
+ <CAK7LNATJGbSYyuxV7npC_bQiXQShb=7J7dcQcOaupnL5-GhADg@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The original issue,
+On Tue, 23 Jul 2019, Masahiro Yamada wrote:
+> Right.
+> I was able to build with ld.gold
+> 
+> So, we can use gold, depending on the kernel configuration.
 
-=
-https://lore.kernel.org/netdev/1562959401-19815-1-git-send-email-cai@lca.p=
-w/
+That's exactly the problem. It breaks with random kernel configurations
+which is not acceptable except for people who know what they are doing.
 
-The debugging so far seems point to that the compilers get confused by =
-the
-module sections. During module_param(), it stores =
-=E2=80=9C__param_rx_frag_size"
-as a =E2=80=9Cstruct kernel_param=E2=80=9D into the __param section. =
-Later, load_module()
-obtains all =E2=80=9Ckernel_param=E2=80=9D from the __param section and =
-compare against the
-user-input module parameters from the command-line.  If there is a =
-match, it
-calls params[i].ops->set(&params[I]) to replace the value.  If compilers =
-can=E2=80=99t
-see that params[i].ops->set(&params[I]) could potentially change the =
-value
-of rx_frag_size, it will wrongly optimize it as a constant.
+I'm tired of dealing with half baken fixes and 'regression' reports. Either
+there is an effort to fix the issues with gold like the clang people fix
+their issues or it needs to be disabled. We have a clear statement that
+gold developers have other priorities.
 
+Thanks,
 
-For example (it is not
-compilable yet as I have not able to extract variable from the __param =
-section
-like find_module_sections()),
-
-#include <stdio.h>
-#include <string.h>
-
-#define __module_param_call(name, ops, arg) \
-        static struct kernel_param __param_##name \
-         __attribute__ ((unused,__section__ =
-("__param"),aligned(sizeof(void *)))) =3D { \
-                #name, ops, { arg } }
-
-struct kernel_param {
-        const char *name;
-        const struct kernel_param_ops *ops;
-        union {
-                int *arg;
-        };
-};
-
-struct kernel_param_ops {
-        int (*set)(const struct kernel_param *kp);
-};
-
-#define STANDARD_PARAM_DEF(name) \
-        int param_set_##name(const struct kernel_param *kp) \
-        { \
-                *kp->arg =3D 2; \
-        } \
-        const struct kernel_param_ops param_ops_##name =3D { \
-                .set =3D param_set_##name, \
-        };
-
-STANDARD_PARAM_DEF(ushort);
-static int rx =3D 1;
-__module_param_call(rx_frag_siz, &param_ops_ushort, &rx_frag_size);
-
-int main(int argc, char *argv[])
-{
-        const struct kernel_param *params =3D <<< Get all kernel_param =
-from the __param section >>>;
-        int i;
-
-        if (__builtin_constant_p(rx_frag_size))
-                printf("rx_frag_size is a const.\n");
-
-        for (i =3D 0; i < num_param; i++) {
-                if (!strcmp(params[I].name, argv[1])) {
-                        params[i].ops->set(&params[i]);
-                        break;
-                }
-        }
-
-        printf("rx_frag_size =3D %d\n", rx_frag_size);
-
-        return 0;
-}
-
+	tglx
