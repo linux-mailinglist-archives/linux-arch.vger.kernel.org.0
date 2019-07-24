@@ -2,116 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2566736D9
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jul 2019 20:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC06D73CAD
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jul 2019 22:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726950AbfGXSpz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jul 2019 14:45:55 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:39602 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726712AbfGXSpz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jul 2019 14:45:55 -0400
-Received: by mail-qt1-f193.google.com with SMTP id l9so46498526qtu.6
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jul 2019 11:45:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DJ+4O/aME8mxWsBOK/hkAuIS+vdRAGZALWdoZ5g0Ta4=;
-        b=Rm6YHvoNZRDQjxxSjBVeakB3SzWeohrifsuK1TBQmXrYgP2URwhmgfoCdyR0LlgTY5
-         dFxTYLxyuvWx9w2MB94VYd1TjtD1nUSAS1kKBt/ihZMFNRPIaXEJKlv61dTZZyHBmKoE
-         +EFHkVmM7NknERHlp5Dy3LSndHMfI+0+qiF+7GZwtlj+7/3KMJpAxs6a7B6/Xaq1MJKo
-         OevFK5AxPhev4kgZNni4QltSJj03gq4KVjBtKiGbqQceqjTrL8CyIyMgJ569rYYyhucs
-         IXzN1FaOO8BLi+Avg+koyqkj6BRR47b2+K29yfVIg2zgz2+fM15lIXLORgCk7Ow+OZBs
-         F0qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DJ+4O/aME8mxWsBOK/hkAuIS+vdRAGZALWdoZ5g0Ta4=;
-        b=c1JThmQVgYVnkli6mCmHm8gGRaO27b23eO7DzYsDJ9BFd1kbuXedVVj6YVIbCy2fod
-         cxR/T4vNDC4g7bSRP/v88bLv9y5COtHqBXivZhHCVZHrTNXquS1oBhkoFHJbamMPNJxp
-         qagsWI+yQ9GsVFrgjw8VAw8Cdg1WqUp9jYZOrfmNf/0pdXQ146upRyt+TKMhHVKg84cx
-         foj0sTGCctIMJKsEsfzQDIKhkySzWvwfzeqsMWGdCCPh7xfi4gfWsVN7sQYdmKxg52gL
-         sNWGTHUkglJ88n/eOPfpuZynDG+FBE7qd4QV+VCuz/3qQ8/gNCecgwaGaRxc0+vX0fDS
-         4HNA==
-X-Gm-Message-State: APjAAAWA2AKaPCYQGLKpwVlquMkq2/GnLQU1NGhwjVd5LvDaX3Wige9x
-        rG6HGMc39V3wkQ+1V70537fWfQ==
-X-Google-Smtp-Source: APXvYqw7TtMYWD5qzkFU/pK7j6Pol2Ofw8wMHbLq51U3ZQ9VZA3tj6I+JTPr2xFAMFuHq36H42pRHg==
-X-Received: by 2002:a0c:d91b:: with SMTP id p27mr59380012qvj.236.1563993954400;
-        Wed, 24 Jul 2019 11:45:54 -0700 (PDT)
-Received: from dhcp-41-57.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id f68sm21117654qtb.83.2019.07.24.11.45.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Jul 2019 11:45:53 -0700 (PDT)
-Message-ID: <1563993952.11067.15.camel@lca.pw>
-Subject: Re: [PATCH] asm-generic: fix -Wtype-limits compiler warnings
-From:   Qian Cai <cai@lca.pw>
-To:     David Howells <dhowells@redhat.com>
-Cc:     akpm@linux-foundation.org, davem@davemloft.net, arnd@arndb.de,
-        jakub@redhat.com, ndesaulniers@google.com, morbo@google.com,
-        jyknight@google.com, natechancellor@gmail.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 24 Jul 2019 14:45:52 -0400
-In-Reply-To: <31573.1563954571@warthog.procyon.org.uk>
-References: <1563914986-26502-1-git-send-email-cai@lca.pw>
-         <31573.1563954571@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6 (3.22.6-10.el7) 
-Mime-Version: 1.0
+        id S2392188AbfGXT6N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jul 2019 15:58:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44500 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392179AbfGXT6N (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Jul 2019 15:58:13 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 63ED7206BA;
+        Wed, 24 Jul 2019 19:58:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563998292;
+        bh=l2GgUcWotZtTGa/g0fbn9MHmnXq6w1je5UVn5OXKTA4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=H1bCBFOqhXbVyyZE+nPDC8AyWnRsgGgpsKa9mgf8GVmPZwY3IzgIMKFew6FI7IyjC
+         qeRS5YkdIJSWCpypQVuGn/tZkJE8zuAVSGjsRvNgqttCl1BpBbhBqchxJt/gy6ytbk
+         zLye3kJqxtd1HZYzvR1oa7FWUDLz+V1xbh6JAX+w=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: [PATCH 5.1 315/371] padata: use smp_mb in padata_reorder to avoid orphaned padata jobs
+Date:   Wed, 24 Jul 2019 21:21:07 +0200
+Message-Id: <20190724191747.745523249@linuxfoundation.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190724191724.382593077@linuxfoundation.org>
+References: <20190724191724.382593077@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2019-07-24 at 08:49 +0100, David Howells wrote:
-> Qian Cai <cai@lca.pw> wrote:
-> 
-> > Fix it by moving almost all of this multi-line macro into a proper
-> > function __get_order(), and leave get_order() as a single-line macro in
-> > order to avoid compilation errors.
-> 
-> The idea was that you could compile-time initialise a global variable with
-> get_order():
-> 
-> 	int a = get_order(SOME_MACRO);
-> 
-> This is the same reason that ilog2() is a macro:
-> 
-> 	int a = ilog2(SOME_MACRO);
-> 
-> See the banner comment on get_order():
-> 
->  * This function may be used to initialise variables with compile time
->  * evaluations of constants.
-> 
-> If you're moving the constant branch into __get_order(), an inline function,
-> then we'll no longer be able to do this and you need to modify the comment
-> too.  In fact, would there still be a point in having the get_order() macro?
-> 
-> Also, IIRC, older versions of gcc see __builtin_constant_p(n) == 0 inside an
-> function, inline or otherwise, even if the passed-in argument *is* constant.
+From: Daniel Jordan <daniel.m.jordan@oracle.com>
 
-I have GCC 8.2.1 which works fine.
+commit cf144f81a99d1a3928f90b0936accfd3f45c9a0a upstream.
 
-# cat const.c 
-#include <stdio.h>
+Testing padata with the tcrypt module on a 5.2 kernel...
 
-static int i = 0;
+    # modprobe tcrypt alg="pcrypt(rfc4106(gcm(aes)))" type=3
+    # modprobe tcrypt mode=211 sec=1
 
-static inline void check()
-{
-	if (__builtin_constant_p(i))
-		printf("i is a const.\n");
-}
+...produces this splat:
 
-void main()
-{
-	check();
-}
+    INFO: task modprobe:10075 blocked for more than 120 seconds.
+          Not tainted 5.2.0-base+ #16
+    modprobe        D    0 10075  10064 0x80004080
+    Call Trace:
+     ? __schedule+0x4dd/0x610
+     ? ring_buffer_unlock_commit+0x23/0x100
+     schedule+0x6c/0x90
+     schedule_timeout+0x3b/0x320
+     ? trace_buffer_unlock_commit_regs+0x4f/0x1f0
+     wait_for_common+0x160/0x1a0
+     ? wake_up_q+0x80/0x80
+     { crypto_wait_req }             # entries in braces added by hand
+     { do_one_aead_op }
+     { test_aead_jiffies }
+     test_aead_speed.constprop.17+0x681/0xf30 [tcrypt]
+     do_test+0x4053/0x6a2b [tcrypt]
+     ? 0xffffffffa00f4000
+     tcrypt_mod_init+0x50/0x1000 [tcrypt]
+     ...
 
-# gcc -O2 const.c -o const
+The second modprobe command never finishes because in padata_reorder,
+CPU0's load of reorder_objects is executed before the unlocking store in
+spin_unlock_bh(pd->lock), causing CPU0 to miss CPU1's increment:
 
-# ./const 
-i is a const.
+CPU0                                 CPU1
+
+padata_reorder                       padata_do_serial
+  LOAD reorder_objects  // 0
+                                       INC reorder_objects  // 1
+                                       padata_reorder
+                                         TRYLOCK pd->lock   // failed
+  UNLOCK pd->lock
+
+CPU0 deletes the timer before returning from padata_reorder and since no
+other job is submitted to padata, modprobe waits indefinitely.
+
+Add a pair of full barriers to guarantee proper ordering:
+
+CPU0                                 CPU1
+
+padata_reorder                       padata_do_serial
+  UNLOCK pd->lock
+  smp_mb()
+  LOAD reorder_objects
+                                       INC reorder_objects
+                                       smp_mb__after_atomic()
+                                       padata_reorder
+                                         TRYLOCK pd->lock
+
+smp_mb__after_atomic is needed so the read part of the trylock operation
+comes after the INC, as Andrea points out.   Thanks also to Andrea for
+help with writing a litmus test.
+
+Fixes: 16295bec6398 ("padata: Generic parallelization/serialization interface")
+Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: <stable@vger.kernel.org>
+Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Paul E. McKenney <paulmck@linux.ibm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ kernel/padata.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+--- a/kernel/padata.c
++++ b/kernel/padata.c
+@@ -267,7 +267,12 @@ static void padata_reorder(struct parall
+ 	 * The next object that needs serialization might have arrived to
+ 	 * the reorder queues in the meantime, we will be called again
+ 	 * from the timer function if no one else cares for it.
++	 *
++	 * Ensure reorder_objects is read after pd->lock is dropped so we see
++	 * an increment from another task in padata_do_serial.  Pairs with
++	 * smp_mb__after_atomic in padata_do_serial.
+ 	 */
++	smp_mb();
+ 	if (atomic_read(&pd->reorder_objects)
+ 			&& !(pinst->flags & PADATA_RESET))
+ 		mod_timer(&pd->timer, jiffies + HZ);
+@@ -387,6 +392,13 @@ void padata_do_serial(struct padata_priv
+ 	list_add_tail(&padata->list, &pqueue->reorder.list);
+ 	spin_unlock(&pqueue->reorder.lock);
+ 
++	/*
++	 * Ensure the atomic_inc of reorder_objects above is ordered correctly
++	 * with the trylock of pd->lock in padata_reorder.  Pairs with smp_mb
++	 * in padata_reorder.
++	 */
++	smp_mb__after_atomic();
++
+ 	put_cpu();
+ 
+ 	/* If we're running on the wrong CPU, call padata_reorder() via a
+
+
