@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC06D73CAD
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jul 2019 22:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581A473E5A
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jul 2019 22:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392188AbfGXT6N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jul 2019 15:58:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44500 "EHLO mail.kernel.org"
+        id S2389610AbfGXTlh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jul 2019 15:41:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43020 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392179AbfGXT6N (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Jul 2019 15:58:13 -0400
+        id S2390215AbfGXTlg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Jul 2019 15:41:36 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 63ED7206BA;
-        Wed, 24 Jul 2019 19:58:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F24E9229F3;
+        Wed, 24 Jul 2019 19:41:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563998292;
+        s=default; t=1563997295;
         bh=l2GgUcWotZtTGa/g0fbn9MHmnXq6w1je5UVn5OXKTA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H1bCBFOqhXbVyyZE+nPDC8AyWnRsgGgpsKa9mgf8GVmPZwY3IzgIMKFew6FI7IyjC
-         qeRS5YkdIJSWCpypQVuGn/tZkJE8zuAVSGjsRvNgqttCl1BpBbhBqchxJt/gy6ytbk
-         zLye3kJqxtd1HZYzvR1oa7FWUDLz+V1xbh6JAX+w=
+        b=QTO+rMXA+vvgTeHAx8Px5jOvIRJ+YpuX9ogv9T81Fcj8U8dZZcVOhDG4L6ng+iT+N
+         MDQpppayv4e12C4uatDB5kO/TD0hV91sRMne8vfJClix1MqE8yMzRhVjRzT75ktghC
+         aoGtYh6EzxKj0CsrSKV4tfuQcln81TmU0mk9zK6I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,12 +34,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Steffen Klassert <steffen.klassert@secunet.com>,
         linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: [PATCH 5.1 315/371] padata: use smp_mb in padata_reorder to avoid orphaned padata jobs
-Date:   Wed, 24 Jul 2019 21:21:07 +0200
-Message-Id: <20190724191747.745523249@linuxfoundation.org>
+Subject: [PATCH 5.2 346/413] padata: use smp_mb in padata_reorder to avoid orphaned padata jobs
+Date:   Wed, 24 Jul 2019 21:20:37 +0200
+Message-Id: <20190724191800.593614871@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190724191724.382593077@linuxfoundation.org>
-References: <20190724191724.382593077@linuxfoundation.org>
+In-Reply-To: <20190724191735.096702571@linuxfoundation.org>
+References: <20190724191735.096702571@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
