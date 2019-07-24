@@ -2,74 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A40CB7293D
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jul 2019 09:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D1472C96
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jul 2019 12:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725883AbfGXHte (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jul 2019 03:49:34 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:49420 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725776AbfGXHte (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Jul 2019 03:49:34 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 3266F83F51;
-        Wed, 24 Jul 2019 07:49:34 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-49.rdu2.redhat.com [10.10.120.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D378919C58;
-        Wed, 24 Jul 2019 07:49:31 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <1563914986-26502-1-git-send-email-cai@lca.pw>
-References: <1563914986-26502-1-git-send-email-cai@lca.pw>
-To:     Qian Cai <cai@lca.pw>
-Cc:     dhowells@redhat.com, akpm@linux-foundation.org,
-        davem@davemloft.net, arnd@arndb.de, jakub@redhat.com,
-        ndesaulniers@google.com, morbo@google.com, jyknight@google.com,
-        natechancellor@gmail.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] asm-generic: fix -Wtype-limits compiler warnings
+        id S1726276AbfGXKva (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jul 2019 06:51:30 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:38428 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726087AbfGXKv3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jul 2019 06:51:29 -0400
+Received: by mail-vs1-f67.google.com with SMTP id k9so31015845vso.5;
+        Wed, 24 Jul 2019 03:51:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Bu26HmT5VmoCYCpR6iplFNSjeK1kwtiFeo7LAU3Mayw=;
+        b=MFbkcLVudKrK8MwQA8fjNBn1lWw4QcFG8T9RFOftrdWt4zO6yMFlK2RmGLIMCUl1cJ
+         JINHHcp1NNVqXhqMZ809GRmgmYLHJRBkzHl1qurCLkk99HUcXaUOZGHuBhiXLP+zSnWK
+         aUfWCYh6Q7JI1MXd8KjbzXA2vBHEmSeIsD07oFfGF4ACzM1e0I25WX4krgpwCI7S9brj
+         +zKJ/zebAg0XG9gP+dg7FUVaTjQ5Mm4TgfaDBGvQkngDAJvWEjh6fhyajePaAlM9WDvz
+         9s+/rr290F+KGX1nPQ4kyw4VhABzeSf7wSIEWsGQ8Ky/AdXf6RLXy98dIMMs+XQc9bNz
+         cr9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Bu26HmT5VmoCYCpR6iplFNSjeK1kwtiFeo7LAU3Mayw=;
+        b=mLqJZG5GkMKrrIcQ+2Lf3onSC+2Sa6MFoJn22OQ0vKU44TUgRNHKY/Kg0Cn+CINZ4z
+         zbamn+hnBBIG2NvTlmZQcIjwkOULxP913XIN3f80O/9Isih3DtJUOMg2W+W47SBgnpRX
+         FrUeeFSC7pGqOdyAznwBGkJTjlJjHHoPBe8WXKRpbwDv7FVdkhsPZovE6mno1O6f/QMN
+         fNnw4CVJzGVz9XAxIB2Ncmo00AHiPRYZZjV1o17rzT7eQqLGJgbdHoTEmmtBdDjowqHm
+         rdmvW1UNPawaBFfq72QSLgZBmFpaNEDxBMoTA0tr5BmrVT8FhJGbKfDv1C3RpmYeT34Z
+         AJ2g==
+X-Gm-Message-State: APjAAAUAThmWmDRBR5jO4ZSFKzbF4Ln8LZ1PmftxBGdTSLsXICqnahcM
+        iXNYBR2bt7JUJ7MOLiKEH/8YFd3rKuyg0pVFMvyfCnM=
+X-Google-Smtp-Source: APXvYqyqekrxcJ/rVOiJBXglvFRza9GYrX7G4hCqq7tpnrJVcqTLJJLeCkD91x+c52mCFOnIriGvbc1xBsd70sVEWNk=
+X-Received: by 2002:a67:d46:: with SMTP id 67mr52122041vsn.181.1563965488469;
+ Wed, 24 Jul 2019 03:51:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <31572.1563954571.1@warthog.procyon.org.uk>
-Date:   Wed, 24 Jul 2019 08:49:31 +0100
-Message-ID: <31573.1563954571@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.27]); Wed, 24 Jul 2019 07:49:34 +0000 (UTC)
+From:   Rui Salvaterra <rsalvaterra@gmail.com>
+Date:   Wed, 24 Jul 2019 11:51:17 +0100
+Message-ID: <CALjTZvbrS3dGrTrMMkGRkk=hRL38rrGiYTZ4REX9rJ0T+wcGoQ@mail.gmail.com>
+Subject: [BUG] Linux 5.3-rc1: timer problem on x86-64 (Pentium D)
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Qian Cai <cai@lca.pw> wrote:
+Hi, everyone,
 
-> Fix it by moving almost all of this multi-line macro into a proper
-> function __get_order(), and leave get_order() as a single-line macro in
-> order to avoid compilation errors.
+I don't know if this has been reported before, but from a cursory
+search it doesn't seem to be the case.
+I have a x86-64 Pentium (4) D machine which always worked perfectly
+with Linux 5.2 using the TSC as the clock source. With Linux 5.3-rc1 I
+can't, for the life of me, boot it with anything other than
+clocksource=jiffies, it completely hangs without even a backtrace.
+At the moment I'm at work and, for obvious reasons, I'm not able to
+bisect this remotely. In any case, if anyone has any idea about the
+cause, I'll be glad to help debugging and testing any patches.
 
-The idea was that you could compile-time initialise a global variable with
-get_order():
-
-	int a = get_order(SOME_MACRO);
-
-This is the same reason that ilog2() is a macro:
-
-	int a = ilog2(SOME_MACRO);
-
-See the banner comment on get_order():
-
- * This function may be used to initialise variables with compile time
- * evaluations of constants.
-
-If you're moving the constant branch into __get_order(), an inline function,
-then we'll no longer be able to do this and you need to modify the comment
-too.  In fact, would there still be a point in having the get_order() macro?
-
-Also, IIRC, older versions of gcc see __builtin_constant_p(n) == 0 inside an
-function, inline or otherwise, even if the passed-in argument *is* constant.
-
-David
+Thanks in advance,
+Rui
