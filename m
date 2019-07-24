@@ -2,49 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE9A72179
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2019 23:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5031724AA
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jul 2019 04:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731251AbfGWV1u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Jul 2019 17:27:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49712 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731025AbfGWV1u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 23 Jul 2019 17:27:50 -0400
-Received: from akpm3.svl.corp.google.com (unknown [104.133.8.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61A0C218D4;
-        Tue, 23 Jul 2019 21:27:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563917268;
-        bh=4NFI9TiqwpBApw1YifG8x0kCYiixU8JIJEyFKOdPLcQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cuq1pcdwr9pbVEUEBoIRwZ38v4IisgkBLnREJQcN38TdMiXEFBo00LcICXxvFlbe3
-         Dt7zDQaWjfXMhOamjTjl6XYgbYloo2bqfT9O0l50ukL7dUEz4a7acvxfp6ojjCKPLo
-         yXRJTiTAx/cTgE8a5quXEwNhewx9TXWXsWvbLUak=
-Date:   Tue, 23 Jul 2019 14:27:47 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
+        id S2387570AbfGXC3m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Jul 2019 22:29:42 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46579 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387566AbfGXC3l (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Jul 2019 22:29:41 -0400
+Received: by mail-wr1-f65.google.com with SMTP id z1so45108799wru.13;
+        Tue, 23 Jul 2019 19:29:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TLtx0N0iTDt+TcQGK6XUkJYJ0+fHixleXGl8p31XVfo=;
+        b=eDOr7PQIbMwNaNWyIQeyHtYiT3PKoptD3mkASWB4ZLU3CFxrEdigBWsSZ0DDJkrsfn
+         kSH+HmOYLdxHBx+MjSB4cyqGVjt8s5oaKjQKMxro/szqtGiwEM5YkEwirejbFsHZGhGW
+         NiBGOOS3m8KKvMJYEIbBg6j8nHeWg86FR60Ecds00gikp9ANCQgbhxnWyGh1nT4MW+YO
+         RyLe30sjKXyhLRvgrbYnKnRWbjI650SmFes+psMidJUMmCTAoYOFvK0v8/ovEJ4CThy/
+         JrXGHCzFy8ZlqLcEmdsukJNJMxahDxImt8cl/YaUsxsVb2GyAcTDInd5xjU3y3D4qcbn
+         cJkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TLtx0N0iTDt+TcQGK6XUkJYJ0+fHixleXGl8p31XVfo=;
+        b=P3pO5AwfWQgdFou+tUo9vszZ5kiB/BxsF4s/293YaDr5wE380bZpTlvPiF1zB0xQlG
+         Up6/dCciv57YAqVhgdtjUu5ViZrbDbJ/r2amNyzPZ5GlCSqJm87yzOwcEuJcy6jaOqe/
+         EhEIPyg34DbDq0uO/kWbKJ3IUMsagCM2N94xtgI+YD2LfHZb73O75zHehmPPcnt75beJ
+         4P2BwGOkdz5V+Y6OSZxwlitoDNOJu35+wh4uDw+6uQ51GY+F/6UoNCk8TipPI+yIHNAO
+         BZr91JyVtUXm3vMDK62GpzkaM3PO8YZZa+MNm9V/4oVTXuleR8UuYd7qBqd+aexPm5Q7
+         5hzg==
+X-Gm-Message-State: APjAAAX4IciYyk77EKWxOakL1vX8rHtSGyd7z6P9SCerAPClu9EYGbGY
+        SU5vICrvtRZ4v4dsDdsgtYI=
+X-Google-Smtp-Source: APXvYqxP82OlR+xwzksHk3Bqw3NSV0ilSAxJ/JRHknHnb7OTFiah0RTA+6+ucX6uPJv/uDNiZAdhZg==
+X-Received: by 2002:adf:f348:: with SMTP id e8mr87051410wrp.76.1563935379043;
+        Tue, 23 Jul 2019 19:29:39 -0700 (PDT)
+Received: from archlinux-threadripper ([2a01:4f8:222:2f1b::2])
+        by smtp.gmail.com with ESMTPSA id w14sm34548442wrk.44.2019.07.23.19.29.38
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 23 Jul 2019 19:29:38 -0700 (PDT)
+Date:   Tue, 23 Jul 2019 19:29:36 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
 To:     Qian Cai <cai@lca.pw>
-Cc:     davem@davemloft.net, arnd@arndb.de, dhowells@redhat.com,
-        jakub@redhat.com, ndesaulniers@google.com, morbo@google.com,
-        jyknight@google.com, natechancellor@gmail.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     akpm@linux-foundation.org, davem@davemloft.net, arnd@arndb.de,
+        dhowells@redhat.com, jakub@redhat.com, ndesaulniers@google.com,
+        morbo@google.com, jyknight@google.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] asm-generic: fix -Wtype-limits compiler warnings
-Message-Id: <20190723142747.8efd9ab06518470ec8067306@linux-foundation.org>
-In-Reply-To: <1563914986-26502-1-git-send-email-cai@lca.pw>
+Message-ID: <20190724022936.GA73305@archlinux-threadripper>
 References: <1563914986-26502-1-git-send-email-cai@lca.pw>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1563914986-26502-1-git-send-email-cai@lca.pw>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 23 Jul 2019 16:49:46 -0400 Qian Cai <cai@lca.pw> wrote:
-
+On Tue, Jul 23, 2019 at 04:49:46PM -0400, Qian Cai wrote:
 > The commit d66acc39c7ce ("bitops: Optimise get_order()") introduced a
 > compilation warning because "rx_frag_size" is an "ushort" while
 > PAGE_SHIFT here is 16. The commit changed the get_order() to be a
@@ -76,111 +96,12 @@ On Tue, 23 Jul 2019 16:49:46 -0400 Qian Cai <cai@lca.pw> wrote:
 > Fix it by moving almost all of this multi-line macro into a proper
 > function __get_order(), and leave get_order() as a single-line macro in
 > order to avoid compilation errors.
-> 
-> ...
->
-> --- a/include/asm-generic/getorder.h
-> +++ b/include/asm-generic/getorder.h
-> @@ -15,6 +15,16 @@ int __get_order(unsigned long size)
->  {
->  	int order;
->  
-> +	if (__builtin_constant_p(size)) {
-> +		if (!size)
-> +			return BITS_PER_LONG - PAGE_SHIFT;
-> +
-> +		if (size < (1UL << PAGE_SHIFT))
-> +			return 0;
-> +
-> +		return ilog2((size) - 1) - PAGE_SHIFT + 1;
-> +	}
-> +
->  	size--;
->  	size >>= PAGE_SHIFT;
->  #if BITS_PER_LONG == 32
-> @@ -49,11 +59,6 @@ int __get_order(unsigned long size)
->   */
->  #define get_order(n)						\
->  (								\
-> -	__builtin_constant_p(n) ? (				\
-> -		((n) == 0UL) ? BITS_PER_LONG - PAGE_SHIFT :	\
-> -		(((n) < (1UL << PAGE_SHIFT)) ? 0 :		\
-> -		 ilog2((n) - 1) - PAGE_SHIFT + 1)		\
-> -	) :							\
->  	__get_order(n)						\
->  )
 
-So we can remove __get_order() altogether now?
+Wouldn't it just be better to rename __get_order to get_order?
 
---- a/include/asm-generic/getorder.h~asm-generic-fix-wtype-limits-compiler-warnings-fix
-+++ a/include/asm-generic/getorder.h
-@@ -7,11 +7,29 @@
- #include <linux/compiler.h>
- #include <linux/log2.h>
- 
--/*
-- * Runtime evaluation of get_order()
-+/**
-+ * get_order - Determine the allocation order of a memory size
-+ * @size: The size for which to get the order
-+ *
-+ * Determine the allocation order of a particular sized block of memory.  This
-+ * is on a logarithmic scale, where:
-+ *
-+ *	0 -> 2^0 * PAGE_SIZE and below
-+ *	1 -> 2^1 * PAGE_SIZE to 2^0 * PAGE_SIZE + 1
-+ *	2 -> 2^2 * PAGE_SIZE to 2^1 * PAGE_SIZE + 1
-+ *	3 -> 2^3 * PAGE_SIZE to 2^2 * PAGE_SIZE + 1
-+ *	4 -> 2^4 * PAGE_SIZE to 2^3 * PAGE_SIZE + 1
-+ *	...
-+ *
-+ * The order returned is used to find the smallest allocation granule required
-+ * to hold an object of the specified size.
-+ *
-+ * The result is undefined if the size is 0.
-+ *
-+ * This function may be used to initialise variables with compile time
-+ * evaluations of constants.
-  */
--static inline __attribute_const__
--int __get_order(unsigned long size)
-+static inline __attribute_const__ int get_order(unsigned long size)
- {
- 	int order;
- 
-@@ -35,33 +53,6 @@ int __get_order(unsigned long size)
- 	return order;
- }
- 
--/**
-- * get_order - Determine the allocation order of a memory size
-- * @size: The size for which to get the order
-- *
-- * Determine the allocation order of a particular sized block of memory.  This
-- * is on a logarithmic scale, where:
-- *
-- *	0 -> 2^0 * PAGE_SIZE and below
-- *	1 -> 2^1 * PAGE_SIZE to 2^0 * PAGE_SIZE + 1
-- *	2 -> 2^2 * PAGE_SIZE to 2^1 * PAGE_SIZE + 1
-- *	3 -> 2^3 * PAGE_SIZE to 2^2 * PAGE_SIZE + 1
-- *	4 -> 2^4 * PAGE_SIZE to 2^3 * PAGE_SIZE + 1
-- *	...
-- *
-- * The order returned is used to find the smallest allocation granule required
-- * to hold an object of the specified size.
-- *
-- * The result is undefined if the size is 0.
-- *
-- * This function may be used to initialise variables with compile time
-- * evaluations of constants.
-- */
--#define get_order(n)						\
--(								\
--	__get_order(n)						\
--)
--
- #endif	/* __ASSEMBLY__ */
- 
- #endif	/* __ASM_GENERIC_GETORDER_H */
-_
+> Fixes: d66acc39c7ce ("bitops: Optimise get_order()")
+> Signed-off-by: Qian Cai <cai@lca.pw>
 
+Other than that, LGTM.
+
+Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
