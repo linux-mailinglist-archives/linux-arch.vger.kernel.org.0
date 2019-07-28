@@ -2,163 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E8977A50
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2019 17:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B8B77C73
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Jul 2019 02:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387692AbfG0PiG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Jul 2019 11:38:06 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:55478 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387673AbfG0PiF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Jul 2019 11:38:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=9zYuzthuf2nX5/BCPAhm8DHdx0y9b8nhU7td1YRW+rk=; b=jvEjp6+SbQcqxLBeXB+QX8M3q
-        OAnOqE3wbt2wO3EDiwTJvi2g4vV/NRii7ORAgqekYEOJQMwSRnpYUvZmZFcrz8lVXso/1isN6QoWn
-        X+mKh/RhFZvZqT/IRK78jhL5o1SBQgXnmLAHuxCoseUwQVkEt7BdRsA8MxZkZhx+2WvbtbjvZn49Z
-        8AtlArRC08OL4ALTrRYp9os+zGt6rRV4eU5mAF8KKWpVMcSuvuMPQTxN3Jp4gnAERoRkKPO70xnK8
-        X8ua/nRxS8/d2mGPQDDr3xfvSvmftU3i4t977I/EVFUtFnBNPjVeWneZwDJA+SXM4zNFsTWONpvMK
-        EjVMkPAsQ==;
-Received: from 177.41.114.203.dynamic.adsl.gvt.net.br ([177.41.114.203] helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hrOlm-0001aR-0x; Sat, 27 Jul 2019 15:38:02 +0000
-Date:   Sat, 27 Jul 2019 12:37:54 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        id S1727951AbfG1AAs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Jul 2019 20:00:48 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34062 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727356AbfG1AAr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Jul 2019 20:00:47 -0400
+Received: by mail-pg1-f195.google.com with SMTP id n9so20220019pgc.1
+        for <linux-arch@vger.kernel.org>; Sat, 27 Jul 2019 17:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5J+lD5ch8vXzDJuyJtECfbLzKiPriUkT07c6KSz94ZM=;
+        b=T2o1krj4j0LVp1ELAOPb3Xh8vljPGm838t4cE023O8kfUYUlIWvOPMl9I+iKUwIbsO
+         6hgWJDFBQ/5H0J/B+LwPJlcz+TAqoTzkiF4gdMAXBmxZohnCwJQi6BsgiPLQE5bz3+BJ
+         S55Dn8azPOsOJ1FUVJUyKX1r++VF8Gtjo2FC8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5J+lD5ch8vXzDJuyJtECfbLzKiPriUkT07c6KSz94ZM=;
+        b=jkbZ/oBR3Voblg/Qvpe93Ohujd5v3KCxCgDnMpdOLFHp6YmChbxabECYpw3j6CPi45
+         zTuEhlbtjDLTWhg2443Wv252Neckn+xiklTbZccnap77VbqKHyXbEGn1IGiN/AXCgHcQ
+         uJsH3OnvOeryGM4wzfwl/tIVBak+622uNrEqL4/xf9+YcdznIiSm50ePpZEoFA+hpdjg
+         fCREy2VpGtk+pYy9Urx6E5qKcLQH27kEX5sjfUysy3/EpK01rOmivajTjNjgn9XcpQ1F
+         lBKkrtLjniv14bwXqw+DuCk3z6PjT0ZQ+POHwWedNaLiwEmadWLNlccf4umZCEuKd6aC
+         GRyw==
+X-Gm-Message-State: APjAAAXQhUBUtq3orp8oRyOJVpnCkyBkH1Oe60+bzBS3QxG6UC/29nWr
+        j1vgeKTwTCRz6zpsy8bkLZI=
+X-Google-Smtp-Source: APXvYqyLroMYlxBAPXzFUeS4Uxboe0o24sx8eEri37appOnHQW6cQU17GM/J/N8v2d6kGkxHRdeCSw==
+X-Received: by 2002:a63:df06:: with SMTP id u6mr43778549pgg.96.1564272046916;
+        Sat, 27 Jul 2019 17:00:46 -0700 (PDT)
+Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id b36sm88051384pjc.16.2019.07.27.17.00.43
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sat, 27 Jul 2019 17:00:46 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
         Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Akira Yokosawa <akiyks@gmail.com>,
         Daniel Lustig <dlustig@nvidia.com>,
-        Ingo Molnar <mingo@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        SeongJae Park <sj38.park@gmail.com>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] tools: memory-model: add it to the Documentation body
-Message-ID: <20190727123754.5d91d4a4@coco.lan>
-In-Reply-To: <20190727141013.dpvjlcp3juja4see@penguin>
-References: <20190726180201.GE146401@google.com>
-        <5826090bf29ec831df620b79d7fe60ef7a705795.1564167643.git.mchehab+samsung@kernel.org>
-        <20190727141013.dpvjlcp3juja4see@penguin>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>, linux-arch@vger.kernel.org,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH] docs/lkmm: Correct ->prop example with additional rfe link
+Date:   Sat, 27 Jul 2019 20:00:31 -0400
+Message-Id: <20190728000031.112364-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Em Sat, 27 Jul 2019 14:14:53 +0000
-Joel Fernandes <joel@joelfernandes.org> escreveu:
+This lkmm example should describe an additional rfe link between P1's
+store to y and P2's load of y, which should be critical to establishing
+the ordering resulting in the ->prop ordering on P0. IOW, there are 2 rfe
+links, not one.
 
-> On Fri, Jul 26, 2019 at 04:01:37PM -0300, Mauro Carvalho Chehab wrote:
-> > The books at tools/memory-model/Documentation are very well
-> > formatted. Congrats to the ones that wrote them!
-> > 
-> > The manual conversion to ReST is really trivial:
-> > 
-> > 	- Add document titles;
-> > 	- change the bullets on some lists;
-> > 	- mark code blocks.  
-> 
-> Thanks so much, some feedback:
-> > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>  
-> 
-> (1)
-> I could not find the table of contents appear in the HTML output for this.
-> Basically this list in the beginning doesn't render:
->   1. INTRODUCTION
->   2. BACKGROUND
->   3. A SIMPLE EXAMPLE
->   4. A SELECTION OF MEMORY MODELS
->   5. ORDERING AND CYCLES
+Correct these in the docs to make the ->prop ordering in P0 more clear.
 
-Yes. It is written as a comment, like:
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ tools/memory-model/Documentation/explanation.txt | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-	.. foo  This is a comment block
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index 68caa9a976d0..6c0dfaac7f04 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -1302,8 +1302,8 @@ followed by an arbitrary number of cumul-fence links, ending with an
+ rfe link.  You can concoct more exotic examples, containing more than
+ one fence, although this quickly leads to diminishing returns in terms
+ of complexity.  For instance, here's an example containing a coe link
+-followed by two fences and an rfe link, utilizing the fact that
+-release fences are A-cumulative:
++followed by a fence, an rfe link, another fence and and a final rfe link,
++utilizing the fact that release fences are A-cumulative:
+ 
+ 	int x, y, z;
+ 
+@@ -1334,11 +1334,13 @@ If x = 2, r0 = 1, and r2 = 1 after this code runs then there is a prop
+ link from P0's store to its load.  This is because P0's store gets
+ overwritten by P1's store since x = 2 at the end (a coe link), the
+ smp_wmb() ensures that P1's store to x propagates to P2 before the
+-store to y does (the first fence), the store to y propagates to P2
+-before P2's load and store execute, P2's smp_store_release()
+-guarantees that the stores to x and y both propagate to P0 before the
+-store to z does (the second fence), and P0's load executes after the
+-store to z has propagated to P0 (an rfe link).
++store to y does (the first fence), P2's store to y happens before P2's
++load of y (rfe link), P2's smp_store_release() ensures that P2's load
++of y executes before P2's store of z (second fence), which also would
++imply that stores to x and y happen before the smp_store_release(), which
++means that P2's smp_store_release() will propagate stores to x and y to all
++CPUs before the store to z does (A-cumulative property of this fence).
++Finally P0's load executes after store to z has propagated to P0 (rfe link).
+ 
+ In summary, the fact that the hb relation links memory access events
+ in the order they execute means that it must not have cycles.  This
+-- 
+2.22.0.709.g102302147b-goog
 
-	   Everything on this block
-
-	   won't be parsed.
-
-So it won't be parsed, but having a TOC like this isn't need, as
-Sphinx generates it automatically via "toctree" markup. 
-
-> Could we add a proper TOC with sections? My motivation for ReST here would be
-> to make the sections jumpable since it is a large document.
-
-Just change the toctree depth at index.rst to 2 and you'll see an index
-produced by Sphinx with both levels 1 (doc name) and level 2 (chapters):
-
-	.. toctree::
-	   :maxdepth: 2
-
-> Also could we make the different sections appear as a tree in the left
-> sidebar?
-
-The sidebar follows the maxdepth too.
-
-> 
-> (2) Arguably several function names in the document HTML output should appear
-> in monospace fonting and/or referring to the documentation for real function
-> names, but these can be fixed as we go, I guess.
-
-If you want monospaced fonts, just use: ``monospaced_symbol_foo`` within
-any paragraph, or place the monospaced data inside a code-block:
-
-	::
-
-		This will be monospaced.
-
-> 
-> (3) Things like smp_load_acquire() and spin_lock() should probably refer to
-> the documentation for those elsewhere..
-
-Jon added an automarkup extension on Kernel 5.2. So, all functions that
-are defined elsewhere will automatically generate an hyperlink. For that to
-happen, you need to add the kernel-doc markup at the *.h or *.c file where
-the function is declared and use the kernel-doc markup somewhere within the
-Kernel Documentation/.
-
-> 
-> (4) I would argue that every occurence of
-> A ->(some dependency) B should be replaced with fixed size font in the HTML
-> results.
-
-Just place those with ``A -> (some dependency)``. This will make them use
-a fixed size font.
-
-> Arguably it is better IMO if the whole document is fixed size font in the
-> HTML output because so many things need to be fixed size, but that my just be
-> my opinion.
-
-Just my 2 cents here, but having the entire document using a fixed size
-font makes it more boring to read. Having just the symbols with a fixed size
-is a common convention used on technical books, and helps to make easier
-to identify the symbols while reading the docs.
-
-That's said, Sphinx doesn't have any tag to switch the font for the entire
-document. All it can be done is to define a CSS and apply it for the
-doc - or to place everything within a code-block, with will suppress all
-markup tags, including cross-references for functions.
-
-The problem with CSS is that you need to write both an html CSS file
-and add LaTeX macros associated to this "CSS style" (technically, LaTeX
-doesn't have a CSS concept, but Sphinx emulates it).
-
-Thanks,
-Mauro
