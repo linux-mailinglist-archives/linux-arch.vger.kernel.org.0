@@ -2,107 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EEE790FB
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2019 18:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DB9798EF
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2019 22:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729151AbfG2Qe1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jul 2019 12:34:27 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:41081 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729149AbfG2Qe0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jul 2019 12:34:26 -0400
-Received: by mail-lj1-f194.google.com with SMTP id d24so59213134ljg.8
-        for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2019 09:34:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UG3D/SqCJj11xnk2S6pE/fAYr6pWtAvwmUTxug894eQ=;
-        b=H7HnhUSVZGnyX/bVSSVdIPy2+iDxVSJ4e8dlo0bijwhktHTLPBxk09q3fnro9i4jws
-         CppBIGzdSZBmMRHzt2N7kPQlDulHGrQA7y/t+f9WmoBCn1D9OC0rfJqEHKTsPV+6k+Fb
-         F5ZhDAP8w/aGd9HqgkSktBvei5ipu/zKnu3u7Vy/kVMC6A1NPnladQjD1TMlB0vdjkbu
-         cK505ALF1gpY7nunM42GdUAzII8oYlw2RyLLhvjbCdTWEhv9b1J4RKbWan5ki9YNmlEv
-         J/43JD7D/48FLIcBn+4W8T2FW6VOBihBUFZc+iFaPvWhSpOAPayMnbMohqwV9tpxtEFk
-         cdQQ==
-X-Gm-Message-State: APjAAAWgforSHWjrXLVZkDpmNihg55fXI7lGC00DcejbsfPzaLz4grn+
-        xa3FejO9iClwd8qQl75zKhjnGyF5Ct0twHndEAQN5A==
-X-Google-Smtp-Source: APXvYqwaWzM1hn/JYuWG8xIWCCoQc0juPndzV2AWEI2sZ0zbeHQbhgIVf3GM5tGdjfmKdC05eoQItiSu7YXZ4SX7s6Q=
-X-Received: by 2002:a2e:2b01:: with SMTP id q1mr57284489lje.27.1564418064609;
- Mon, 29 Jul 2019 09:34:24 -0700 (PDT)
+        id S1729670AbfG2TdJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jul 2019 15:33:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47060 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729812AbfG2TdI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Jul 2019 15:33:08 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D226F21773;
+        Mon, 29 Jul 2019 19:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564428787;
+        bh=nS+P0xEdNX2Rityxe+sq+lJ71ZCbNvBhaBhuLMPIssY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=h7ZKI7BfrfRh16KfBRNpVDgoPCTJv81EAoiocddUC33F5JR1nLNkxFP7X7jFeZ49t
+         bp7iCVR7/qt7oT7opP9XNpIJGBpkR6QV48IiEx+7acJ/PgCQ7BUHi2CxLQx2Z/vvvR
+         zcgwwFMxKIPrdz72uM3mVScLC4txoWvgNRjKB1CU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: [PATCH 4.14 147/293] padata: use smp_mb in padata_reorder to avoid orphaned padata jobs
+Date:   Mon, 29 Jul 2019 21:20:38 +0200
+Message-Id: <20190729190835.818681103@linuxfoundation.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190729190820.321094988@linuxfoundation.org>
+References: <20190729190820.321094988@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-References: <CAGnkfhyT=2kPsiUy-V=aCA_s-C4BXgD++hAZ9ii1h0p94mMVQA@mail.gmail.com>
- <20190729125421.32482-1-vincenzo.frascino@arm.com>
-In-Reply-To: <20190729125421.32482-1-vincenzo.frascino@arm.com>
-From:   Matteo Croce <mcroce@redhat.com>
-Date:   Mon, 29 Jul 2019 18:33:48 +0200
-Message-ID: <CAGnkfhw+=+50P=uaWsjZrtt_BuwJjXKZ_DSTjuJ8mzW4_kbu-w@mail.gmail.com>
-Subject: Re: [PATCH] arm64: vdso: Fix Makefile regression
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>, salyzyn@android.com,
-        pcc@google.com, 0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
-        sthotton@marvell.com, andre.przywara@arm.com,
-        Andy Lutomirski <luto@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 2:54 PM Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
->
-> Using an old .config in combination with "make oldconfig" can cause
-> an incorrect detection of the compat compiler:
->
-> $ grep CROSS_COMPILE_COMPAT .config
-> CONFIG_CROSS_COMPILE_COMPAT_VDSO=""
->
-> $ make oldconfig && make
-> arch/arm64/Makefile:58: gcc not found, check CROSS_COMPILE_COMPAT.
-> Stop.
->
-> Accordingly to the section 7.2 of the GNU Make manual "Syntax of
-> Conditionals", "When the value results from complex expansions of
-> variables and functions, expansions you would consider empty may
-> actually contain whitespace characters and thus are not seen as
-> empty. However, you can use the strip function to avoid interpreting
-> whitespace as a non-empty value."
->
-> Fix the issue adding strip to the CROSS_COMPILE_COMPAT string
-> evaluation.
->
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Reported-by: Matteo Croce <mcroce@redhat.com>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
->  arch/arm64/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-> index bb1f1dbb34e8..61de992bbea3 100644
-> --- a/arch/arm64/Makefile
-> +++ b/arch/arm64/Makefile
-> @@ -52,7 +52,7 @@ ifeq ($(CONFIG_GENERIC_COMPAT_VDSO), y)
->
->    ifeq ($(CONFIG_CC_IS_CLANG), y)
->      $(warning CROSS_COMPILE_COMPAT is clang, the compat vDSO will not be built)
-> -  else ifeq ($(CROSS_COMPILE_COMPAT),)
-> +  else ifeq ($(strip $(CROSS_COMPILE_COMPAT)),)
->      $(warning CROSS_COMPILE_COMPAT not defined or empty, the compat vDSO will not be built)
->    else ifeq ($(shell which $(CROSS_COMPILE_COMPAT)gcc 2> /dev/null),)
->      $(error $(CROSS_COMPILE_COMPAT)gcc not found, check CROSS_COMPILE_COMPAT)
-> --
-> 2.22.0
->
+From: Daniel Jordan <daniel.m.jordan@oracle.com>
 
-Tested-by: Matteo Croce <mcroce@redhat.com>
+commit cf144f81a99d1a3928f90b0936accfd3f45c9a0a upstream.
 
--- 
-Matteo Croce
-per aspera ad upstream
+Testing padata with the tcrypt module on a 5.2 kernel...
+
+    # modprobe tcrypt alg="pcrypt(rfc4106(gcm(aes)))" type=3
+    # modprobe tcrypt mode=211 sec=1
+
+...produces this splat:
+
+    INFO: task modprobe:10075 blocked for more than 120 seconds.
+          Not tainted 5.2.0-base+ #16
+    modprobe        D    0 10075  10064 0x80004080
+    Call Trace:
+     ? __schedule+0x4dd/0x610
+     ? ring_buffer_unlock_commit+0x23/0x100
+     schedule+0x6c/0x90
+     schedule_timeout+0x3b/0x320
+     ? trace_buffer_unlock_commit_regs+0x4f/0x1f0
+     wait_for_common+0x160/0x1a0
+     ? wake_up_q+0x80/0x80
+     { crypto_wait_req }             # entries in braces added by hand
+     { do_one_aead_op }
+     { test_aead_jiffies }
+     test_aead_speed.constprop.17+0x681/0xf30 [tcrypt]
+     do_test+0x4053/0x6a2b [tcrypt]
+     ? 0xffffffffa00f4000
+     tcrypt_mod_init+0x50/0x1000 [tcrypt]
+     ...
+
+The second modprobe command never finishes because in padata_reorder,
+CPU0's load of reorder_objects is executed before the unlocking store in
+spin_unlock_bh(pd->lock), causing CPU0 to miss CPU1's increment:
+
+CPU0                                 CPU1
+
+padata_reorder                       padata_do_serial
+  LOAD reorder_objects  // 0
+                                       INC reorder_objects  // 1
+                                       padata_reorder
+                                         TRYLOCK pd->lock   // failed
+  UNLOCK pd->lock
+
+CPU0 deletes the timer before returning from padata_reorder and since no
+other job is submitted to padata, modprobe waits indefinitely.
+
+Add a pair of full barriers to guarantee proper ordering:
+
+CPU0                                 CPU1
+
+padata_reorder                       padata_do_serial
+  UNLOCK pd->lock
+  smp_mb()
+  LOAD reorder_objects
+                                       INC reorder_objects
+                                       smp_mb__after_atomic()
+                                       padata_reorder
+                                         TRYLOCK pd->lock
+
+smp_mb__after_atomic is needed so the read part of the trylock operation
+comes after the INC, as Andrea points out.   Thanks also to Andrea for
+help with writing a litmus test.
+
+Fixes: 16295bec6398 ("padata: Generic parallelization/serialization interface")
+Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: <stable@vger.kernel.org>
+Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Paul E. McKenney <paulmck@linux.ibm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ kernel/padata.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+--- a/kernel/padata.c
++++ b/kernel/padata.c
+@@ -265,7 +265,12 @@ static void padata_reorder(struct parall
+ 	 * The next object that needs serialization might have arrived to
+ 	 * the reorder queues in the meantime, we will be called again
+ 	 * from the timer function if no one else cares for it.
++	 *
++	 * Ensure reorder_objects is read after pd->lock is dropped so we see
++	 * an increment from another task in padata_do_serial.  Pairs with
++	 * smp_mb__after_atomic in padata_do_serial.
+ 	 */
++	smp_mb();
+ 	if (atomic_read(&pd->reorder_objects)
+ 			&& !(pinst->flags & PADATA_RESET))
+ 		mod_timer(&pd->timer, jiffies + HZ);
+@@ -334,6 +339,13 @@ void padata_do_serial(struct padata_priv
+ 	list_add_tail(&padata->list, &pqueue->reorder.list);
+ 	spin_unlock(&pqueue->reorder.lock);
+ 
++	/*
++	 * Ensure the atomic_inc of reorder_objects above is ordered correctly
++	 * with the trylock of pd->lock in padata_reorder.  Pairs with smp_mb
++	 * in padata_reorder.
++	 */
++	smp_mb__after_atomic();
++
+ 	put_cpu();
+ 
+ 	padata_reorder(pd);
+
+
