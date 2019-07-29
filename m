@@ -2,164 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DB9798EF
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2019 22:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101E179A22
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2019 22:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729670AbfG2TdJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jul 2019 15:33:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47060 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729812AbfG2TdI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 29 Jul 2019 15:33:08 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D226F21773;
-        Mon, 29 Jul 2019 19:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564428787;
-        bh=nS+P0xEdNX2Rityxe+sq+lJ71ZCbNvBhaBhuLMPIssY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h7ZKI7BfrfRh16KfBRNpVDgoPCTJv81EAoiocddUC33F5JR1nLNkxFP7X7jFeZ49t
-         bp7iCVR7/qt7oT7opP9XNpIJGBpkR6QV48IiEx+7acJ/PgCQ7BUHi2CxLQx2Z/vvvR
-         zcgwwFMxKIPrdz72uM3mVScLC4txoWvgNRjKB1CU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Jordan <daniel.m.jordan@oracle.com>,
+        id S1729126AbfG2Ulf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jul 2019 16:41:35 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:44737 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729056AbfG2Ulf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jul 2019 16:41:35 -0400
+Received: (qmail 2507 invoked by uid 500); 29 Jul 2019 16:41:34 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 29 Jul 2019 16:41:34 -0400
+Date:   Mon, 29 Jul 2019 16:41:34 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+cc:     linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
         Andrea Parri <andrea.parri@amarulasolutions.com>,
         Boqun Feng <boqun.feng@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        <linux-arch@vger.kernel.org>, Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
         "Paul E. McKenney" <paulmck@linux.ibm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: [PATCH 4.14 147/293] padata: use smp_mb in padata_reorder to avoid orphaned padata jobs
-Date:   Mon, 29 Jul 2019 21:20:38 +0200
-Message-Id: <20190729190835.818681103@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190729190820.321094988@linuxfoundation.org>
-References: <20190729190820.321094988@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] Use term cumul-fence instead of fence in ->prop ordering
+ example
+In-Reply-To: <20190729123605.150423-1-joel@joelfernandes.org>
+Message-ID: <Pine.LNX.4.44L0.1907291641220.760-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Daniel Jordan <daniel.m.jordan@oracle.com>
+On Mon, 29 Jul 2019, Joel Fernandes (Google) wrote:
 
-commit cf144f81a99d1a3928f90b0936accfd3f45c9a0a upstream.
+> To reduce ambiguity in the more exotic ->prop ordering example, let us
+> use the term cumul-fence instead fence for the 2 fences, so that the
+> implict ->rfe on loads/stores to Y are covered by the description.
+> 
+> Link: https://lore.kernel.org/lkml/20190729121745.GA140682@google.com
+> 
+> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  tools/memory-model/Documentation/explanation.txt | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> index 68caa9a976d0..634dc6db26c4 100644
+> --- a/tools/memory-model/Documentation/explanation.txt
+> +++ b/tools/memory-model/Documentation/explanation.txt
+> @@ -1302,7 +1302,7 @@ followed by an arbitrary number of cumul-fence links, ending with an
+>  rfe link.  You can concoct more exotic examples, containing more than
+>  one fence, although this quickly leads to diminishing returns in terms
+>  of complexity.  For instance, here's an example containing a coe link
+> -followed by two fences and an rfe link, utilizing the fact that
+> +followed by two cumul-fences and an rfe link, utilizing the fact that
+>  release fences are A-cumulative:
+>  
+>  	int x, y, z;
+> @@ -1334,10 +1334,10 @@ If x = 2, r0 = 1, and r2 = 1 after this code runs then there is a prop
+>  link from P0's store to its load.  This is because P0's store gets
+>  overwritten by P1's store since x = 2 at the end (a coe link), the
+>  smp_wmb() ensures that P1's store to x propagates to P2 before the
+> -store to y does (the first fence), the store to y propagates to P2
+> +store to y does (the first cumul-fence), the store to y propagates to P2
+>  before P2's load and store execute, P2's smp_store_release()
+>  guarantees that the stores to x and y both propagate to P0 before the
+> -store to z does (the second fence), and P0's load executes after the
+> +store to z does (the second cumul-fence), and P0's load executes after the
+>  store to z has propagated to P0 (an rfe link).
+>  
+>  In summary, the fact that the hb relation links memory access events
 
-Testing padata with the tcrypt module on a 5.2 kernel...
-
-    # modprobe tcrypt alg="pcrypt(rfc4106(gcm(aes)))" type=3
-    # modprobe tcrypt mode=211 sec=1
-
-...produces this splat:
-
-    INFO: task modprobe:10075 blocked for more than 120 seconds.
-          Not tainted 5.2.0-base+ #16
-    modprobe        D    0 10075  10064 0x80004080
-    Call Trace:
-     ? __schedule+0x4dd/0x610
-     ? ring_buffer_unlock_commit+0x23/0x100
-     schedule+0x6c/0x90
-     schedule_timeout+0x3b/0x320
-     ? trace_buffer_unlock_commit_regs+0x4f/0x1f0
-     wait_for_common+0x160/0x1a0
-     ? wake_up_q+0x80/0x80
-     { crypto_wait_req }             # entries in braces added by hand
-     { do_one_aead_op }
-     { test_aead_jiffies }
-     test_aead_speed.constprop.17+0x681/0xf30 [tcrypt]
-     do_test+0x4053/0x6a2b [tcrypt]
-     ? 0xffffffffa00f4000
-     tcrypt_mod_init+0x50/0x1000 [tcrypt]
-     ...
-
-The second modprobe command never finishes because in padata_reorder,
-CPU0's load of reorder_objects is executed before the unlocking store in
-spin_unlock_bh(pd->lock), causing CPU0 to miss CPU1's increment:
-
-CPU0                                 CPU1
-
-padata_reorder                       padata_do_serial
-  LOAD reorder_objects  // 0
-                                       INC reorder_objects  // 1
-                                       padata_reorder
-                                         TRYLOCK pd->lock   // failed
-  UNLOCK pd->lock
-
-CPU0 deletes the timer before returning from padata_reorder and since no
-other job is submitted to padata, modprobe waits indefinitely.
-
-Add a pair of full barriers to guarantee proper ordering:
-
-CPU0                                 CPU1
-
-padata_reorder                       padata_do_serial
-  UNLOCK pd->lock
-  smp_mb()
-  LOAD reorder_objects
-                                       INC reorder_objects
-                                       smp_mb__after_atomic()
-                                       padata_reorder
-                                         TRYLOCK pd->lock
-
-smp_mb__after_atomic is needed so the read part of the trylock operation
-comes after the INC, as Andrea points out.   Thanks also to Andrea for
-help with writing a litmus test.
-
-Fixes: 16295bec6398 ("padata: Generic parallelization/serialization interface")
-Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc: <stable@vger.kernel.org>
-Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Paul E. McKenney <paulmck@linux.ibm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Steffen Klassert <steffen.klassert@secunet.com>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- kernel/padata.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
---- a/kernel/padata.c
-+++ b/kernel/padata.c
-@@ -265,7 +265,12 @@ static void padata_reorder(struct parall
- 	 * The next object that needs serialization might have arrived to
- 	 * the reorder queues in the meantime, we will be called again
- 	 * from the timer function if no one else cares for it.
-+	 *
-+	 * Ensure reorder_objects is read after pd->lock is dropped so we see
-+	 * an increment from another task in padata_do_serial.  Pairs with
-+	 * smp_mb__after_atomic in padata_do_serial.
- 	 */
-+	smp_mb();
- 	if (atomic_read(&pd->reorder_objects)
- 			&& !(pinst->flags & PADATA_RESET))
- 		mod_timer(&pd->timer, jiffies + HZ);
-@@ -334,6 +339,13 @@ void padata_do_serial(struct padata_priv
- 	list_add_tail(&padata->list, &pqueue->reorder.list);
- 	spin_unlock(&pqueue->reorder.lock);
- 
-+	/*
-+	 * Ensure the atomic_inc of reorder_objects above is ordered correctly
-+	 * with the trylock of pd->lock in padata_reorder.  Pairs with smp_mb
-+	 * in padata_reorder.
-+	 */
-+	smp_mb__after_atomic();
-+
- 	put_cpu();
- 
- 	padata_reorder(pd);
-
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
