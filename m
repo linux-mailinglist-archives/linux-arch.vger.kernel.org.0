@@ -2,158 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 621A078B9F
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2019 14:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74D978BDE
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2019 14:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbfG2MTV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jul 2019 08:19:21 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:41463 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726818AbfG2MTV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jul 2019 08:19:21 -0400
-Received: by mail-qt1-f194.google.com with SMTP id d17so59284661qtj.8;
-        Mon, 29 Jul 2019 05:19:20 -0700 (PDT)
+        id S1727625AbfG2MgP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jul 2019 08:36:15 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:44444 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727129AbfG2MgP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jul 2019 08:36:15 -0400
+Received: by mail-pf1-f193.google.com with SMTP id t16so27945919pfe.11
+        for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2019 05:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TSzV7RC0yVMqLiuA9qX0NlSf34xDJD+fWOSh5tvbLJM=;
+        b=KzkI7bYi9uaBjj+hagxShH/J9WGeYAAicHOHaZx2+ybUxAfQbLY4B1F49h66Fj9eiy
+         5wTxkGxKfBGj2AdJWYTtZc5Z3qBbVFc3wTTrsSufQ6y4KX5LmvnDMis3oatVIishAYpo
+         w5WBR2nE9S8W6m771/uw4SRnXlG3pZ4qeTSqM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9r3aA+VaP9kq74504aLthQ04EU5sZHZvPto/jvI8ekQ=;
-        b=S9rfrKy/5cS/omruAjpzDtXzCf241ehZM1OFHAIii3sj/yZmiiPK+CGl6+1a6vJBiy
-         J7ccQeBsnSpItm2fQGbRpN2DI3QrfeI2IA5Mq5RqctmD5c29kk+2x9o6uiw5ox0x/T6t
-         /PTzcRZiWNRoWLx+DLO/k7gAoheyUIKf6oLV8jYBwdJhwEt6bK7TFqhyubWxmjDpLaTT
-         +QqgnkDK36jxt6qVR/+bYf3LKauOuazIWALxtGZ7I6fjJEdsIAjhQwFFOLWKSE7IEK/9
-         hCyVhSiBgxpkmzezyO7UcVxcOw0l2o1G6qdGgbNKZCZMB2UAb/07vMPFsJJcqTs8+/Pn
-         Zx/g==
-X-Gm-Message-State: APjAAAX4PP0uhVG1zttHm0sHDix8jeZbWhupOGIIMUzwwVTaV8o6f+kt
-        seJe2K7tZEG/FyPCdCWxZa+cOQMYlIcue4OKoB8=
-X-Google-Smtp-Source: APXvYqxqMiasUmrTKUxTkbxHmu+BMI0vql1C86/J0y7f37QSRQHzhzvNm/LtZ0yuO/TrWEKOlPnvDMxKL72IjDIV1bY=
-X-Received: by 2002:aed:3e7c:: with SMTP id m57mr77659385qtf.204.1564402760248;
- Mon, 29 Jul 2019 05:19:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TSzV7RC0yVMqLiuA9qX0NlSf34xDJD+fWOSh5tvbLJM=;
+        b=H0xdPMZSEwePHoYu1d3ttwJUDvxGHlNzw1IEflL/Zu7m827q4cIdK0PeC6dKUB7Ajg
+         GZDIcSb7ee6RsW+LZgA3/c+MlDEVyTSqU2iE5uPQG1l2k5NZYvHttBk6488u3toAshu0
+         6+BRhk5XfPAFcLoMvD14xu3OXLA5euPaZU2Nl5CZ2NVuFP8qvocE1JcLoDV7Ob07Y2wL
+         A/WXS/NwJw7H+wqKYvrcG209x3uJSV65d2rxED7iYQZG0jqqsc9sY00JOgEsM3XgrLY8
+         /VcQMkYjC1WPwzGlMWHFkRnw1s76TQLmJTMRuVzXI3Hd0RQAF8/9nN3RZQeF970YOYr5
+         N9Jg==
+X-Gm-Message-State: APjAAAXW1YLRUEICQOq2OFDEx4FYjjP9+OiW+5ahIoSs42QBsPE2ZNgp
+        Bk0Z71J9vukl0UWzfAPOGks=
+X-Google-Smtp-Source: APXvYqwrluq6n6ipVhMOqpsRgfnzyV9l1pZ68HYGe0lLVMzOGWl8WDb5T8Z0DRVYOYGYVh2pNcUe0w==
+X-Received: by 2002:a63:66c5:: with SMTP id a188mr103667702pgc.127.1564403774374;
+        Mon, 29 Jul 2019 05:36:14 -0700 (PDT)
+Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id q8sm121732096pjq.20.2019.07.29.05.36.12
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 29 Jul 2019 05:36:13 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jade Alglave <j.alglave@ucl.ac.uk>, linux-arch@vger.kernel.org,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH] Use term cumul-fence instead of fence in ->prop ordering example
+Date:   Mon, 29 Jul 2019 08:36:05 -0400
+Message-Id: <20190729123605.150423-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
 MIME-Version: 1.0
-References: <20190729095521.1916-1-ard.biesheuvel@linaro.org>
- <CAK8P3a1=6nW0d+LOp__tMepYwGCc5f+e6qb1D3wUtp6_79Yd-A@mail.gmail.com> <CAKv+Gu_8nNd-td5F9u0dgH7x1kF+r8sCL432MvzmxqNZqqW-gA@mail.gmail.com>
-In-Reply-To: <CAKv+Gu_8nNd-td5F9u0dgH7x1kF+r8sCL432MvzmxqNZqqW-gA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 29 Jul 2019 14:19:04 +0200
-Message-ID: <CAK8P3a2sa4DZyArsRNh-MMqL2dLv32-pgZhH+VdE8X2UKFjZTg@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic: make simd.h a mandatory include/asm header
-To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc:     "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 12:45 PM Ard Biesheuvel
-<ard.biesheuvel@linaro.org> wrote:
-> On Mon, 29 Jul 2019 at 13:32, Arnd Bergmann <arnd@arndb.de> wrote:
-> > It looks like there are a number of these that could be handled the
-> > same way. Should we do that for the asm-generic tree afterwards?
-> >
->
-> I guess it depends whether any dependencies on those headers exist in
-> code that is truly generic. If they are only needed by some common
-> infrastructure that cannot be enabled for a certain architecture
-> anyway, I don't think making it a mandatory header is appropriate.
->
-> So I think the question is whether the first column and the number of
-> per-arch instances of that header add up to 25 (disregarding the
-> exception for arch/um for now)
+To reduce ambiguity in the more exotic ->prop ordering example, let us
+use the term cumul-fence instead fence for the 2 fences, so that the
+implict ->rfe on loads/stores to Y are covered by the description.
 
-Here is a list of how many architectures besides arch/um do not have a
-given file
-with either generic-y or as a private copy:
+Link: https://lore.kernel.org/lkml/20190729121745.GA140682@google.com
 
-$ git grep -h generic-y arch/*/include/asm/Kbuild  | sort | uniq -c  |
-sort -nr  | cut -f 2 -d= | while read file ; do for arch in
-arch/*/include/asm ; do if [ ! -e ${arch}/${file} ] && ! grep -q
-${file} ${arch}/Kbuild  ; then echo ${arch}/${file} ; fi ; done | grep
--v arch/um/ | echo `wc -l` $file ; done | sort -n
-0 atomic.h
-0 barrier.h
-0 bitops.h
-0 bug.h
-0 bugs.h
-0 cacheflush.h
-0 checksum.h
-0 compat.h
-0 current.h
-0 delay.h
-0 device.h
-0 div64.h
-0 dma.h
-0 dma-mapping.h
-0 emergency-restart.h
-0 exec.h
-0 fb.h
-0 ftrace.h
-0 futex.h
-0 hardirq.h
-0 hw_irq.h
-0 io.h
-0 irq.h
-0 irq_regs.h
-0 irq_work.h
-0 kdebug.h
-0 kmap_types.h
-0 kprobes.h
-0 linkage.h
-0 local.h
-0 mm-arch-hooks.h
-0 mmiowb.h
-0 mmu_context.h
-0 mmu.h
-0 module.h
-0 pci.h
-0 percpu.h
-0 pgalloc.h
-0 preempt.h
-0 sections.h
-0 serial.h
-0 shmparam.h
-0 switch_to.h
-0 timex.h
-0 tlbflush.h
-0 topology.h
-0 trace_clock.h
-0 uaccess.h
-0 unaligned.h
-0 vga.h
-0 word-at-a-time.h
-0 xor.h
-1 asm-offsets.h
-1 cmpxchg.h
-1 spinlock.h
-1 user.h
-2 kvm_para.h
-3 mcs_spinlock.h
-4 extable.h
-4 local64.h
-9 parport.h
-12 syscalls.h
-13 param.h
-14 seccomp.h
-15 export.h
-16 dma-contiguous.h
-16 flat.h
-16 msi.h
-17 qrwlock.h
-18 gpio.h
-18 qspinlock.h
-20 early_ioremap.h
-20 set_memory.h
-20 simd.h
-20 vmlinux.lds.h
-21 vtime.h
-22 iomap.h
-23 qrwlock_types.h
-23 qspinlock_types.h
-24 bpf_perf_event.h
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ tools/memory-model/Documentation/explanation.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-      Arnd
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index 68caa9a976d0..634dc6db26c4 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -1302,7 +1302,7 @@ followed by an arbitrary number of cumul-fence links, ending with an
+ rfe link.  You can concoct more exotic examples, containing more than
+ one fence, although this quickly leads to diminishing returns in terms
+ of complexity.  For instance, here's an example containing a coe link
+-followed by two fences and an rfe link, utilizing the fact that
++followed by two cumul-fences and an rfe link, utilizing the fact that
+ release fences are A-cumulative:
+ 
+ 	int x, y, z;
+@@ -1334,10 +1334,10 @@ If x = 2, r0 = 1, and r2 = 1 after this code runs then there is a prop
+ link from P0's store to its load.  This is because P0's store gets
+ overwritten by P1's store since x = 2 at the end (a coe link), the
+ smp_wmb() ensures that P1's store to x propagates to P2 before the
+-store to y does (the first fence), the store to y propagates to P2
++store to y does (the first cumul-fence), the store to y propagates to P2
+ before P2's load and store execute, P2's smp_store_release()
+ guarantees that the stores to x and y both propagate to P0 before the
+-store to z does (the second fence), and P0's load executes after the
++store to z does (the second cumul-fence), and P0's load executes after the
+ store to z has propagated to P0 (an rfe link).
+ 
+ In summary, the fact that the hb relation links memory access events
+-- 
+2.22.0.709.g102302147b-goog
+
