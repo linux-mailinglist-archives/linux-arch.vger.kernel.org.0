@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A87037A7F0
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2019 14:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1BA7A7F6
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2019 14:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729199AbfG3MP5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 Jul 2019 08:15:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52260 "EHLO mail.kernel.org"
+        id S1726557AbfG3MQA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 Jul 2019 08:16:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52310 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726557AbfG3MP4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 30 Jul 2019 08:15:56 -0400
+        id S1729374AbfG3MP7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 30 Jul 2019 08:15:59 -0400
 Received: from guoren-Inspiron-7460.lan (unknown [60.186.223.164])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5A3BD2089E;
-        Tue, 30 Jul 2019 12:15:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EC8A3216C8;
+        Tue, 30 Jul 2019 12:15:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564488955;
-        bh=Ta+qcqXYrfmQVUKt+GopQhzcxMXFUS+fR+6xQo/DEkw=;
+        s=default; t=1564488958;
+        bh=NKGhiwnRCc3377gzaEWKpoj3fCR+8PfpK7w5Fo30zO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g94PfmySoa4YsUmBlXJqvUTYUctrNLJ/ZUhbpt7vkfiAkIcvZbA26hzNJdPyxowTn
-         /Bkj79DKq/zb6gL1DV2/3Mv8pbLhCjgcmp4OyZtI0aBN5kTkKLgPHVPQ/DAVfnO14L
-         Hg7R+xCNFGccy6BhjW2gKF6ThcAWYZ0pPXunoOHk=
+        b=YJ8rCMe2Th9eGOA6/T0a06iQnYC6mFzDItadwwx2Ccw26+hDOmxs8iroxHZI6I30E
+         1Nd4o1uasRaiCH92nCWMYQA/qWN7tSqay8rQj1ar1gTGknX9VQQCb54HJG8eLPtOi7
+         vCJoBp7q7awxfRxjx8TpxcjicesETGc3SNCqaujE=
 From:   guoren@kernel.org
 To:     arnd@arndb.de
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-csky@vger.kernel.org, feng_shizhu@dahuatech.com,
         zhang_jian5@dahuatech.com, zheng_xingjian@dahuatech.com,
         zhu_peng@dahuatech.com, Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH 2/4] csky: Fixup dma_alloc_coherent with PAGE_SO attribute
-Date:   Tue, 30 Jul 2019 20:15:43 +0800
-Message-Id: <1564488945-20149-2-git-send-email-guoren@kernel.org>
+Subject: [PATCH 3/4] csky/dma: Fixup cache_op failed when cross memory ZONEs
+Date:   Tue, 30 Jul 2019 20:15:44 +0800
+Message-Id: <1564488945-20149-3-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1564488945-20149-1-git-send-email-guoren@kernel.org>
 References: <1564488945-20149-1-git-send-email-guoren@kernel.org>
@@ -42,67 +42,119 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-This bug is from commit: 2b070ccdf8c0 (fixup abiv2 mmap(... O_SYNC)
-failed). In that patch we remove the _PAGE_SO for memory noncache
-mapping and this will cause problem when drivers use dma descriptors
-to control the transcations without dma_w/rmb().
+If the paddr and size are cross between NORMAL_ZONE and HIGHMEM_ZONE
+memory range, cache_op will panic in do_page_fault with bad_area.
 
-After referencing other archs' implementation, pgprot_writecombine is
-introduced for mmap(... O_SYNC).
+Optimize the code to support the range which cross memory ZONEs.
 
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 ---
- arch/csky/include/asm/pgtable.h | 10 ++++++++++
- arch/csky/mm/ioremap.c          |  6 ++----
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ arch/csky/mm/dma-mapping.c | 73 +++++++++++++++++-----------------------------
+ 1 file changed, 27 insertions(+), 46 deletions(-)
 
-diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-index c429a6f..fc19ba4 100644
---- a/arch/csky/include/asm/pgtable.h
-+++ b/arch/csky/include/asm/pgtable.h
-@@ -258,6 +258,16 @@ static inline pgprot_t pgprot_noncached(pgprot_t _prot)
+diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+index 80783bb..3f1ff9d 100644
+--- a/arch/csky/mm/dma-mapping.c
++++ b/arch/csky/mm/dma-mapping.c
+@@ -18,71 +18,52 @@ static int __init atomic_pool_init(void)
  {
- 	unsigned long prot = pgprot_val(_prot);
+ 	return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERNEL));
+ }
+-postcore_initcall(atomic_pool_init);
+-
+-void arch_dma_prep_coherent(struct page *page, size_t size)
+-{
+-	if (PageHighMem(page)) {
+-		unsigned int count = PAGE_ALIGN(size) >> PAGE_SHIFT;
+-
+-		do {
+-			void *ptr = kmap_atomic(page);
+-			size_t _size = (size < PAGE_SIZE) ? size : PAGE_SIZE;
+-
+-			memset(ptr, 0, _size);
+-			dma_wbinv_range((unsigned long)ptr,
+-					(unsigned long)ptr + _size);
+-
+-			kunmap_atomic(ptr);
+-
+-			page++;
+-			size -= PAGE_SIZE;
+-			count--;
+-		} while (count);
+-	} else {
+-		void *ptr = page_address(page);
+-
+-		memset(ptr, 0, size);
+-		dma_wbinv_range((unsigned long)ptr, (unsigned long)ptr + size);
+-	}
+-}
++arch_initcall(atomic_pool_init);
  
-+	prot = (prot & ~_CACHE_MASK) | _CACHE_UNCACHED | _PAGE_SO;
+ static inline void cache_op(phys_addr_t paddr, size_t size,
+ 			    void (*fn)(unsigned long start, unsigned long end))
+ {
+-	struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
+-	unsigned int offset = paddr & ~PAGE_MASK;
+-	size_t left = size;
+-	unsigned long start;
++	struct page *page    = phys_to_page(paddr);
++	void *start          = __va(page_to_phys(page));
++	unsigned long offset = offset_in_page(paddr);
++	size_t left          = size;
+ 
+ 	do {
+ 		size_t len = left;
+ 
++		if (offset + len > PAGE_SIZE)
++			len = PAGE_SIZE - offset;
 +
-+	return __pgprot(prot);
+ 		if (PageHighMem(page)) {
+-			void *addr;
++			start = kmap_atomic(page);
+ 
+-			if (offset + len > PAGE_SIZE) {
+-				if (offset >= PAGE_SIZE) {
+-					page += offset >> PAGE_SHIFT;
+-					offset &= ~PAGE_MASK;
+-				}
+-				len = PAGE_SIZE - offset;
+-			}
++			fn((unsigned long)start + offset,
++					(unsigned long)start + offset + len);
+ 
+-			addr = kmap_atomic(page);
+-			start = (unsigned long)(addr + offset);
+-			fn(start, start + len);
+-			kunmap_atomic(addr);
++			kunmap_atomic(start);
+ 		} else {
+-			start = (unsigned long)phys_to_virt(paddr);
+-			fn(start, start + size);
++			fn((unsigned long)start + offset,
++					(unsigned long)start + offset + len);
+ 		}
+ 		offset = 0;
++
+ 		page++;
++		start += PAGE_SIZE;
+ 		left -= len;
+ 	} while (left);
+ }
+ 
++static void dma_wbinv_set_zero_range(unsigned long start, unsigned long end)
++{
++	memset((void *)start, 0, end - start);
++	dma_wbinv_range(start, end);
 +}
 +
-+#define pgprot_writecombine pgprot_writecombine
-+static inline pgprot_t pgprot_writecombine(pgprot_t _prot)
++void arch_dma_prep_coherent(struct page *page, size_t size)
 +{
-+	unsigned long prot = pgprot_val(_prot);
++	cache_op(page_to_phys(page), size, dma_wbinv_set_zero_range);
++}
 +
- 	prot = (prot & ~_CACHE_MASK) | _CACHE_UNCACHED;
- 
- 	return __pgprot(prot);
-diff --git a/arch/csky/mm/ioremap.c b/arch/csky/mm/ioremap.c
-index 8473b6b..4853111 100644
---- a/arch/csky/mm/ioremap.c
-+++ b/arch/csky/mm/ioremap.c
-@@ -29,8 +29,7 @@ void __iomem *ioremap(phys_addr_t addr, size_t size)
- 
- 	vaddr = (unsigned long)area->addr;
- 
--	prot = __pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE |
--			_PAGE_GLOBAL | _CACHE_UNCACHED | _PAGE_SO);
-+	prot = pgprot_noncached(PAGE_KERNEL);
- 
- 	if (ioremap_page_range(vaddr, vaddr + size, addr, prot)) {
- 		free_vm_area(area);
-@@ -51,10 +50,9 @@ pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
- 			      unsigned long size, pgprot_t vma_prot)
+ void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
+ 			      size_t size, enum dma_data_direction dir)
  {
- 	if (!pfn_valid(pfn)) {
--		vma_prot.pgprot |= _PAGE_SO;
- 		return pgprot_noncached(vma_prot);
- 	} else if (file->f_flags & O_SYNC) {
--		return pgprot_noncached(vma_prot);
-+		return pgprot_writecombine(vma_prot);
- 	}
- 
- 	return vma_prot;
 -- 
 2.7.4
 
