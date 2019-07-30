@@ -2,317 +2,258 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 370C179CB4
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2019 01:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A187A613
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2019 12:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729385AbfG2XTA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jul 2019 19:19:00 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55088 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725818AbfG2XS7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 29 Jul 2019 19:18:59 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6TNH3BO063522;
-        Mon, 29 Jul 2019 19:17:24 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2u27cxx1xv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Jul 2019 19:17:24 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x6TNGwSv062662;
-        Mon, 29 Jul 2019 19:17:23 -0400
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2u27cxx1x9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Jul 2019 19:17:23 -0400
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x6TNEpdI020884;
-        Mon, 29 Jul 2019 23:17:22 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02wdc.us.ibm.com with ESMTP id 2u0e85sx2r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Jul 2019 23:17:22 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6TNHLfd35127572
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Jul 2019 23:17:21 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 70E4EB2066;
-        Mon, 29 Jul 2019 23:17:21 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27D13B2067;
-        Mon, 29 Jul 2019 23:17:21 +0000 (GMT)
-Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 29 Jul 2019 23:17:21 +0000 (GMT)
-Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
-        id D719B16C1EAE; Mon, 29 Jul 2019 16:17:24 -0700 (PDT)
-Date:   Mon, 29 Jul 2019 16:17:24 -0700
-From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
-        Don Brace <don.brace@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        rcu@vger.kernel.org, linux-doc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-i2c@vger.kernel.org, esc.storagedev@microsemi.com,
-        linux-scsi@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH 1/7] docs: fix broken doc references due to renames
-Message-ID: <20190729231724.GH14271@linux.ibm.com>
-Reply-To: paulmck@linux.ibm.com
-References: <cover.1564140865.git.mchehab+samsung@kernel.org>
- <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
+        id S1729432AbfG3KcR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 Jul 2019 06:32:17 -0400
+Received: from foss.arm.com ([217.140.110.172]:59042 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726964AbfG3KcR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 30 Jul 2019 06:32:17 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA340344;
+        Tue, 30 Jul 2019 03:32:16 -0700 (PDT)
+Received: from [10.1.194.48] (e123572-lin.cambridge.arm.com [10.1.194.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3ADB13F575;
+        Tue, 30 Jul 2019 03:32:15 -0700 (PDT)
+Subject: Re: [PATCH v6 1/2] arm64: Define
+ Documentation/arm64/tagged-address-abi.rst
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+References: <cover.1563904656.git.andreyknvl@google.com>
+ <20190725135044.24381-1-vincenzo.frascino@arm.com>
+ <20190725135044.24381-2-vincenzo.frascino@arm.com>
+From:   Kevin Brodsky <kevin.brodsky@arm.com>
+Message-ID: <52fa2cfc-f7a6-af6f-0dc2-f9ea0e41ac3c@arm.com>
+Date:   Tue, 30 Jul 2019 11:32:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-29_11:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907290255
+In-Reply-To: <20190725135044.24381-2-vincenzo.frascino@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 08:47:21AM -0300, Mauro Carvalho Chehab wrote:
-> Some files got renamed but probably due to some merge conflicts,
-> a few references still point to the old locations.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C part
-> Reviewed-by: Jerry Hoemann <jerry.hoemann@hpe.com> # hpwdt.rst
+Some more comments. Mostly minor wording issues, except the prctl() exclusion at the end.
 
-Acked-by: Paul E. McKenney <paulmck@linux.ibm.com>
-
+On 25/07/2019 14:50, Vincenzo Frascino wrote:
+> On arm64 the TCR_EL1.TBI0 bit has been always enabled hence
+> the userspace (EL0) is allowed to set a non-zero value in the
+> top byte but the resulting pointers are not allowed at the
+> user-kernel syscall ABI boundary.
+>
+> With the relaxed ABI proposed through this document, it is now possible
+> to pass tagged pointers to the syscalls, when these pointers are in
+> memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap().
+>
+> This change in the ABI requires a mechanism to requires the userspace
+> to opt-in to such an option.
+>
+> Specify and document the way in which sysctl and prctl() can be used
+> in combination to allow the userspace to opt-in this feature.
+>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will.deacon@arm.com>
+> CC: Andrey Konovalov <andreyknvl@google.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Acked-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
 > ---
->  Documentation/RCU/rculist_nulls.txt                   |  2 +-
->  Documentation/devicetree/bindings/arm/idle-states.txt |  2 +-
->  Documentation/locking/spinlocks.rst                   |  4 ++--
->  Documentation/memory-barriers.txt                     |  2 +-
->  Documentation/translations/ko_KR/memory-barriers.txt  |  2 +-
->  Documentation/watchdog/hpwdt.rst                      |  2 +-
->  MAINTAINERS                                           | 10 +++++-----
->  drivers/gpu/drm/drm_modes.c                           |  2 +-
->  drivers/i2c/busses/i2c-nvidia-gpu.c                   |  2 +-
->  drivers/scsi/hpsa.c                                   |  4 ++--
->  10 files changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/Documentation/RCU/rculist_nulls.txt b/Documentation/RCU/rculist_nulls.txt
-> index 8151f0195f76..23f115dc87cf 100644
-> --- a/Documentation/RCU/rculist_nulls.txt
-> +++ b/Documentation/RCU/rculist_nulls.txt
-> @@ -1,7 +1,7 @@
->  Using hlist_nulls to protect read-mostly linked lists and
->  objects using SLAB_TYPESAFE_BY_RCU allocations.
->  
-> -Please read the basics in Documentation/RCU/listRCU.txt
-> +Please read the basics in Documentation/RCU/listRCU.rst
->  
->  Using special makers (called 'nulls') is a convenient way
->  to solve following problem :
-> diff --git a/Documentation/devicetree/bindings/arm/idle-states.txt b/Documentation/devicetree/bindings/arm/idle-states.txt
-> index 326f29b270ad..2d325bed37e5 100644
-> --- a/Documentation/devicetree/bindings/arm/idle-states.txt
-> +++ b/Documentation/devicetree/bindings/arm/idle-states.txt
-> @@ -703,4 +703,4 @@ cpus {
->      https://www.devicetree.org/specifications/
->  
->  [6] ARM Linux Kernel documentation - Booting AArch64 Linux
-> -    Documentation/arm64/booting.txt
-> +    Documentation/arm64/booting.rst
-> diff --git a/Documentation/locking/spinlocks.rst b/Documentation/locking/spinlocks.rst
-> index 098107fb7d86..e93ec6645238 100644
-> --- a/Documentation/locking/spinlocks.rst
-> +++ b/Documentation/locking/spinlocks.rst
-> @@ -82,7 +82,7 @@ itself.  The read lock allows many concurrent readers.  Anything that
->  **changes** the list will have to get the write lock.
->  
->     NOTE! RCU is better for list traversal, but requires careful
-> -   attention to design detail (see Documentation/RCU/listRCU.txt).
-> +   attention to design detail (see Documentation/RCU/listRCU.rst).
->  
->  Also, you cannot "upgrade" a read-lock to a write-lock, so if you at _any_
->  time need to do any changes (even if you don't do it every time), you have
-> @@ -90,7 +90,7 @@ to get the write-lock at the very beginning.
->  
->     NOTE! We are working hard to remove reader-writer spinlocks in most
->     cases, so please don't add a new one without consensus.  (Instead, see
-> -   Documentation/RCU/rcu.txt for complete information.)
-> +   Documentation/RCU/rcu.rst for complete information.)
->  
->  ----
->  
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index 045bb8148fe9..1adbb8a371c7 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -548,7 +548,7 @@ There are certain things that the Linux kernel memory barriers do not guarantee:
->  
->  	[*] For information on bus mastering DMA and coherency please read:
->  
-> -	    Documentation/PCI/pci.rst
-> +	    Documentation/driver-api/pci/pci.rst
->  	    Documentation/DMA-API-HOWTO.txt
->  	    Documentation/DMA-API.txt
->  
-> diff --git a/Documentation/translations/ko_KR/memory-barriers.txt b/Documentation/translations/ko_KR/memory-barriers.txt
-> index a33c2a536542..2774624ee843 100644
-> --- a/Documentation/translations/ko_KR/memory-barriers.txt
-> +++ b/Documentation/translations/ko_KR/memory-barriers.txt
-> @@ -569,7 +569,7 @@ ACQUIRE 는 해당 오퍼레이션의 로드 부분에만 적용되고 RELEASE 
->  
->  	[*] 버스 마스터링 DMA 와 일관성에 대해서는 다음을 참고하시기 바랍니다:
->  
-> -	    Documentation/PCI/pci.rst
-> +	    Documentation/driver-api/pci/pci.rst
->  	    Documentation/DMA-API-HOWTO.txt
->  	    Documentation/DMA-API.txt
->  
-> diff --git a/Documentation/watchdog/hpwdt.rst b/Documentation/watchdog/hpwdt.rst
-> index c165d92cfd12..c824cd7f6e32 100644
-> --- a/Documentation/watchdog/hpwdt.rst
-> +++ b/Documentation/watchdog/hpwdt.rst
-> @@ -63,7 +63,7 @@ Last reviewed: 08/20/2018
->   and loop forever.  This is generally not what a watchdog user wants.
->  
->   For those wishing to learn more please see:
-> -	Documentation/kdump/kdump.rst
-> +	Documentation/admin-guide/kdump/kdump.rst
->  	Documentation/admin-guide/kernel-parameters.txt (panic=)
->  	Your Linux Distribution specific documentation.
->  
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4e2a525e22c0..51bdbd230174 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -899,7 +899,7 @@ L:	linux-iio@vger.kernel.org
->  W:	http://ez.analog.com/community/linux-device-drivers
->  S:	Supported
->  F:	drivers/iio/adc/ad7124.c
-> -F:	Documentation/devicetree/bindings/iio/adc/adi,ad7124.txt
-> +F:	Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml
->  
->  ANALOG DEVICES INC AD7606 DRIVER
->  M:	Stefan Popa <stefan.popa@analog.com>
-> @@ -4190,7 +4190,7 @@ M:	Jens Axboe <axboe@kernel.dk>
->  L:	cgroups@vger.kernel.org
->  L:	linux-block@vger.kernel.org
->  T:	git git://git.kernel.dk/linux-block
-> -F:	Documentation/cgroup-v1/blkio-controller.rst
-> +F:	Documentation/admin-guide/cgroup-v1/blkio-controller.rst
->  F:	block/blk-cgroup.c
->  F:	include/linux/blk-cgroup.h
->  F:	block/blk-throttle.c
-> @@ -6317,7 +6317,7 @@ FLEXTIMER FTM-QUADDEC DRIVER
->  M:	Patrick Havelange <patrick.havelange@essensium.com>
->  L:	linux-iio@vger.kernel.org
->  S:	Maintained
-> -F:	Documentation/ABI/testing/sysfs-bus-counter-ftm-quadddec
-> +F:	Documentation/ABI/testing/sysfs-bus-counter-ftm-quaddec
->  F:	Documentation/devicetree/bindings/counter/ftm-quaddec.txt
->  F:	drivers/counter/ftm-quaddec.c
->  
-> @@ -6856,7 +6856,7 @@ R:	Sagi Shahar <sagis@google.com>
->  R:	Jon Olson <jonolson@google.com>
->  L:	netdev@vger.kernel.org
->  S:	Supported
-> -F:	Documentation/networking/device_drivers/google/gve.txt
-> +F:	Documentation/networking/device_drivers/google/gve.rst
->  F:	drivers/net/ethernet/google
->  
->  GPD POCKET FAN DRIVER
-> @@ -12137,7 +12137,7 @@ M:	Thomas Hellstrom <thellstrom@vmware.com>
->  M:	"VMware, Inc." <pv-drivers@vmware.com>
->  L:	virtualization@lists.linux-foundation.org
->  S:	Supported
-> -F:	Documentation/virt/paravirt_ops.txt
-> +F:	Documentation/virt/paravirt_ops.rst
->  F:	arch/*/kernel/paravirt*
->  F:	arch/*/include/asm/paravirt*.h
->  F:	include/linux/hypervisor.h
-> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
-> index 74a5739df506..80fcd5dc1558 100644
-> --- a/drivers/gpu/drm/drm_modes.c
-> +++ b/drivers/gpu/drm/drm_modes.c
-> @@ -1686,7 +1686,7 @@ static int drm_mode_parse_cmdline_options(char *str, size_t len,
->   *
->   * Additionals options can be provided following the mode, using a comma to
->   * separate each option. Valid options can be found in
-> - * Documentation/fb/modedb.txt.
-> + * Documentation/fb/modedb.rst.
->   *
->   * The intermediate drm_cmdline_mode structure is required to store additional
->   * options from the command line modline like the force-enable/disable flag.
-> diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> index cfc76b5de726..5a1235fd86bb 100644
-> --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-> +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> @@ -364,7 +364,7 @@ static void gpu_i2c_remove(struct pci_dev *pdev)
->  /*
->   * We need gpu_i2c_suspend() even if it is stub, for runtime pm to work
->   * correctly. Without it, lspci shows runtime pm status as "D0" for the card.
-> - * Documentation/power/pci.txt also insists for driver to provide this.
-> + * Documentation/power/pci.rst also insists for driver to provide this.
->   */
->  static __maybe_unused int gpu_i2c_suspend(struct device *dev)
->  {
-> diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-> index 43a6b5350775..eaf6177ac9ee 100644
-> --- a/drivers/scsi/hpsa.c
-> +++ b/drivers/scsi/hpsa.c
-> @@ -7798,7 +7798,7 @@ static void hpsa_free_pci_init(struct ctlr_info *h)
->  	hpsa_disable_interrupt_mode(h);		/* pci_init 2 */
->  	/*
->  	 * call pci_disable_device before pci_release_regions per
-> -	 * Documentation/PCI/pci.rst
-> +	 * Documentation/driver-api/pci/pci.rst
->  	 */
->  	pci_disable_device(h->pdev);		/* pci_init 1 */
->  	pci_release_regions(h->pdev);		/* pci_init 2 */
-> @@ -7881,7 +7881,7 @@ static int hpsa_pci_init(struct ctlr_info *h)
->  clean1:
->  	/*
->  	 * call pci_disable_device before pci_release_regions per
-> -	 * Documentation/PCI/pci.rst
-> +	 * Documentation/driver-api/pci/pci.rst
->  	 */
->  	pci_disable_device(h->pdev);
->  	pci_release_regions(h->pdev);
-> -- 
-> 2.21.0
-> 
+>   Documentation/arm64/tagged-address-abi.rst | 148 +++++++++++++++++++++
+>   1 file changed, 148 insertions(+)
+>   create mode 100644 Documentation/arm64/tagged-address-abi.rst
+>
+> diff --git a/Documentation/arm64/tagged-address-abi.rst b/Documentation/arm64/tagged-address-abi.rst
+> new file mode 100644
+> index 000000000000..a8ecb991de82
+> --- /dev/null
+> +++ b/Documentation/arm64/tagged-address-abi.rst
+> @@ -0,0 +1,148 @@
+> +========================
+> +ARM64 TAGGED ADDRESS ABI
+> +========================
+> +
+> +Author: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> +
+> +Date: 25 July 2019
+> +
+> +This document describes the usage and semantics of the Tagged Address
+> +ABI on arm64.
+> +
+> +1. Introduction
+> +---------------
+> +
+> +On arm64 the TCR_EL1.TBI0 bit has always been enabled on the kernel, hence
+> +the userspace (EL0) is entitled to perform a user memory access through a
+> +64-bit pointer with a non-zero top byte but the resulting pointers are not
+> +allowed at the user-kernel syscall ABI boundary.
+> +
+> +This document describes a relaxation of the ABI that makes it possible to
+> +to pass tagged pointers to the syscalls, when these pointers are in memory
+
+One too many "to" (at the end the previous line).
+
+> +ranges obtained as described in section 2.
+> +
+> +Since it is not desirable to relax the ABI to allow tagged user addresses
+> +into the kernel indiscriminately, arm64 provides a new sysctl interface
+> +(/proc/sys/abi/tagged_addr) that is used to prevent the applications from
+> +enabling the relaxed ABI and a new prctl() interface that can be used to
+> +enable or disable the relaxed ABI.
+> +A detailed description of the newly introduced mechanisms will be provided
+> +in section 2.
+> +
+> +2. ARM64 Tagged Address ABI
+> +---------------------------
+> +
+> +From the kernel syscall interface perspective, we define, for the purposes
+> +of this document, a "valid tagged pointer" as a pointer that either has a
+> +zero value set in the top byte or has a non-zero value, is in memory ranges
+> +privately owned by a userspace process and is obtained in one of the
+> +following ways:
+> +- mmap() done by the process itself, where either:
+> +
+> +  - flags have **MAP_PRIVATE** and **MAP_ANONYMOUS**
+> +  - flags have **MAP_PRIVATE** and the file descriptor refers to a regular
+> +    file or **/dev/zero**
+> +
+> +- brk() system call done by the process itself (i.e. the heap area between
+> +  the initial location of the program break at process creation and its
+> +  current location).
+> +- any memory mapped by the kernel in the process's address space during
+> +  creation and with the same restrictions as for mmap() (e.g. data, bss,
+> +  stack).
+> +
+> +The ARM64 Tagged Address ABI is an opt-in feature, and an application can
+> +control it using the following:
+> +
+> +- **/proc/sys/abi/tagged_addr**: a new sysctl interface that can be used to
+> +  prevent the applications from enabling the access to the relaxed ABI.
+> +  The sysctl supports the following configuration options:
+> +
+> +  - **0**: Disable the access to the ARM64 Tagged Address ABI for all
+> +    the applications.
+> +  - **1** (Default): Enable the access to the ARM64 Tagged Address ABI for
+> +    all the applications.
+> +
+> +   If the access to the ARM64 Tagged Address ABI is disabled at a certain
+> +   point in time, all the applications that were using tagging before this
+> +   event occurs, will continue to use tagging.
+
+"tagging" may be misinterpreted here. I would be more explicit by saying that the 
+tagged address ABI remains enabled in processes that opted in before the access got 
+disabled.
+
+> +- **prctl()s**:
+> +
+> +  - **PR_SET_TAGGED_ADDR_CTRL**: Invoked by a process, can be used to enable or
+> +    disable its access to the ARM64 Tagged Address ABI.
+
+I still find the wording confusing, because "access to the ABI" is not used 
+consistently. The "tagged_addr" sysctl enables *access to the ABI*, that's fine. 
+However, PR_SET_TAGGED_ADDR_CTRL enables *the ABI itself* (which is only possible if 
+access to the ABI is enabled).
+
+> +
+> +    The (unsigned int) arg2 argument is a bit mask describing the control mode
+> +    used:
+> +
+> +    - **PR_TAGGED_ADDR_ENABLE**: Enable ARM64 Tagged Address ABI.
+> +
+> +    The prctl(PR_SET_TAGGED_ADDR_CTRL, ...) will return -EINVAL if the ARM64
+> +    Tagged Address ABI is not available.
+
+For clarity, it would be good to mention that one possible reason for the ABI not to 
+be available is tagged_addr == 0.
+
+> +
+> +    The arguments arg3, arg4, and arg5 are ignored.
+> +  - **PR_GET_TAGGED_ADDR_CTRL**: can be used to check the status of the Tagged
+> +    Address ABI.
+> +
+> +    The arguments arg2, arg3, arg4, and arg5 are ignored.
+> +
+> +The ABI properties set by the mechanisms described above are inherited by threads
+> +of the same application and fork()'ed children but cleared by execve().
+> +
+> +When a process has successfully opted into the new ABI by invoking
+> +PR_SET_TAGGED_ADDR_CTRL prctl(), this guarantees the following behaviours:
+> +
+> + - Every currently available syscall, except the cases mentioned in section 3, can
+> +   accept any valid tagged pointer. The same rule is applicable to any syscall
+> +   introduced in the future.
+
+I thought Catalin wanted to drop this guarantee?
+
+> + - If a non valid tagged pointer is passed to a syscall then the behaviour
+> +   is undefined.
+> + - Every valid tagged pointer is expected to work as an untagged one.
+> + - The kernel preserves any valid tagged pointer and returns it to the
+> +   userspace unchanged (i.e. on syscall return) in all the cases except the
+> +   ones documented in the "Preserving tags" section of tagged-pointers.txt.
+> +
+> +A definition of the meaning of tagged pointers on arm64 can be found in:
+> +Documentation/arm64/tagged-pointers.txt.
+> +
+> +3. ARM64 Tagged Address ABI Exceptions
+> +--------------------------------------
+> +
+> +The behaviours described in section 2, with particular reference to the
+> +acceptance by the syscalls of any valid tagged pointer are not applicable
+> +to the following cases:
+> +
+> + - mmap() addr parameter.
+> + - mremap() new_address parameter.
+> + - prctl(PR_SET_MM, PR_SET_MM_MAP, ...) struct prctl_mm_map fields.
+> + - prctl(PR_SET_MM, PR_SET_MM_MAP_SIZE, ...) struct prctl_mm_map fields.
+
+All the PR_SET_MM options that specify pointers (PR_SET_MM_START_CODE, 
+PR_SET_MM_END_CODE, ...) should be excluded as well. AFAICT (but don't take my word 
+for it), that's all of them except PR_SET_MM_EXE_FILE. Conversely, PR_SET_MM_MAP_SIZE 
+should not be excluded (it does not pass a prctl_mm_map struct, and the pointer to 
+unsigned int can be tagged).
+
+Kevin
+
+> +
+> +Any attempt to use non-zero tagged pointers will lead to undefined behaviour.
+> +
+> +4. Example of correct usage
+> +---------------------------
+> +.. code-block:: c
+> +
+> +   void main(void)
+> +   {
+> +           static int tbi_enabled = 0;
+> +           unsigned long tag = 0;
+> +
+> +           char *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
+> +                            MAP_ANONYMOUS, -1, 0);
+> +
+> +           if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE,
+> +                     0, 0, 0) == 0)
+> +                   tbi_enabled = 1;
+> +
+> +           if (ptr == (void *)-1) /* MAP_FAILED */
+> +                   return -1;
+> +
+> +           if (tbi_enabled)
+> +                   tag = rand() & 0xff;
+> +
+> +           ptr = (char *)((unsigned long)ptr | (tag << TAG_SHIFT));
+> +
+> +           *ptr = 'a';
+> +
+> +           ...
+> +   }
+> +
