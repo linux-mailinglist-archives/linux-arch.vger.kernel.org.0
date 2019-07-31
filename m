@@ -2,123 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EED247CC15
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2019 20:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3901C7CE3A
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2019 22:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbfGaSht (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Jul 2019 14:37:49 -0400
-Received: from mail-eopbgr750099.outbound.protection.outlook.com ([40.107.75.99]:26831
-        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726944AbfGaSht (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 31 Jul 2019 14:37:49 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VeY/NBVCZPYFQRjW8SIEZuOK499Pn6Tn10L324BhlOZDgmPpAvP7k1l6zYPVBmqyRQ2zA3Fp3EAQ6soF3kYUmGixqeOvvr+vJOeGHxKNipt35UFTe8lrVZX6NBwoS52J2IR8cw+AhONNISqUK/mpNlhUZQ+vBQU2RGKBSW5DfoZN/CBziYFMV7LgfZ2ybZpvk9NkepH4+oDOquh0tZsYavtYSsNRAWkpn+ZqT3rqJGOdUKXNkA8L+douy9QVyHgTmne5J8LZynj9SJg2dKRkev1qhfSQBDTNVJ4ZWil78suPb4L7BEP3S772xr3I9cLF+4A2FukawkW9B0UY9gJwow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TSvIk88Nk5x2PlZt83UkZwDGUxm5wUayb5vMrWgJxO4=;
- b=HlyBhSooApp/fO5RDMj3Y1E0Llc6Ax4Wzj/jIJvzaac2D8Fpjnw943aPkiTNHq+KSFqd+qn2pq2l0NjNKjz0zeU1W0KmBAJdYbEqfyI2/WVCheOiXmuK/Y3nx05eWMd6TnCzSeVswQ/MiIXtBMJcV/XqCxj53pM/Qr1NVNlwPbfeIOB39AkynSM2NF3ltcsuxBDyPnt7waT+foW4qyjFS8Ugjg851FIDmThzn8gVRCCoxUrms65Kb2tnZjOaN43t/6MqsNOqln9AXJ5XmZkXnAabVk5RoVHkSOoypYaGUwJSxq8xivqbiU+MAZB3c43DACWqHQzo50pZoujnZT1Hkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wavecomp.com;dmarc=pass action=none
- header.from=mips.com;dkim=pass header.d=mips.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TSvIk88Nk5x2PlZt83UkZwDGUxm5wUayb5vMrWgJxO4=;
- b=cVrNnf7VinHDbsz9oksg3xAbr/amsZzKVX+KZJRi2ma+aFip3tfzqlIOlFPvxI0rP+3hBMzf5q9vHbYPLuImgIaYqIu5UrD05emFcdxSBBnT1O4z6IHRUCjy19p+ZMarm5Jc/mhD8puIFoV2SPlp9/DuDajtMYEMllzcy4BxxfA=
-Received: from CY4PR2201MB1272.namprd22.prod.outlook.com (10.171.214.23) by
- CY4PR2201MB1750.namprd22.prod.outlook.com (10.165.89.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2115.15; Wed, 31 Jul 2019 18:37:46 +0000
-Received: from CY4PR2201MB1272.namprd22.prod.outlook.com
- ([fe80::c99b:131e:aaf3:bd81]) by CY4PR2201MB1272.namprd22.prod.outlook.com
- ([fe80::c99b:131e:aaf3:bd81%4]) with mapi id 15.20.2115.005; Wed, 31 Jul 2019
- 18:37:46 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Firoz Khan <firoz.khan@linaro.org>
-CC:     Paul Burton <pburton@wavecomp.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        "y2038@lists.linaro.org" <y2038@lists.linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "deepa.kernel@gmail.com" <deepa.kernel@gmail.com>,
-        "marcin.juszkiewicz@linaro.org" <marcin.juszkiewicz@linaro.org>,
-        "firoz.khan@linaro.org" <firoz.khan@linaro.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 1/2] mips: remove nargs from __SYSCALL
-Thread-Topic: [PATCH 1/2] mips: remove nargs from __SYSCALL
-Thread-Index: AQHUoqtkUF31nts6yU+Wl0WAgPekgKbmWL4A
-Date:   Wed, 31 Jul 2019 18:37:45 +0000
-Message-ID: <CY4PR2201MB12725431D0D757F50CBDC1EBC1DF0@CY4PR2201MB1272.namprd22.prod.outlook.com>
-References: <1546440978-19569-2-git-send-email-firoz.khan@linaro.org>
-In-Reply-To: <1546440978-19569-2-git-send-email-firoz.khan@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR21CA0003.namprd21.prod.outlook.com
- (2603:10b6:a03:114::13) To CY4PR2201MB1272.namprd22.prod.outlook.com
- (2603:10b6:910:6e::23)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 912ebe37-2159-4a69-e113-08d715e62e12
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CY4PR2201MB1750;
-x-ms-traffictypediagnostic: CY4PR2201MB1750:
-x-microsoft-antispam-prvs: <CY4PR2201MB17501F68E92EA3300E273357C1DF0@CY4PR2201MB1750.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 011579F31F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(396003)(366004)(136003)(39850400004)(189003)(199004)(66066001)(4326008)(486006)(229853002)(446003)(476003)(44832011)(305945005)(11346002)(71200400001)(7416002)(71190400001)(102836004)(99286004)(52536014)(25786009)(6436002)(7736002)(6506007)(52116002)(7696005)(33656002)(76176011)(186003)(74316002)(2906002)(8676002)(26005)(386003)(6916009)(68736007)(42882007)(66446008)(66556008)(6246003)(64756008)(66476007)(66946007)(53936002)(9686003)(6116002)(4744005)(3846002)(14454004)(55016002)(54906003)(478600001)(256004)(316002)(5660300002)(81166006)(81156014)(8936002);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR2201MB1750;H:CY4PR2201MB1272.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: sjOpyFHOrcsxrIw/Epq7zOOpW/PFiHbwGPNelwUg1aQixXoUWexRboQDCs4hLYOiZYRR3wTro3WqU8woBGtizV8X31B7c6ZYJFJZ4Ibt525rXQvhr15UHN+g5YA1Qx9YblaqiyJXegSLXRbYbYb6inVpKhKFS9SxQqg9AKMkuK2Zia4lLecXUEWZxHKxZYrk8D/3LCfI+mEsKwHS9hOYRtpNCjXTJQbFejvkOxk8yC7Gr/gPFzqQNJZU1dluYSJVCNGfM32m7H3L3XnEmYDSD9xHuv7V39eYaaB3xjIVDeO0Ylk8N7ugU2rWzf7oNSgoA1FWtOBg3J6oVU87rbwuu38UyABJeO8F8Je3QOhozvUwHvH+BLUcQRl3Y2TYr0nuYD/kWnWOFFDuJ9GgMhPqP6XarBAKF2G6JPDixvfwX5A=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1730357AbfGaUZX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Jul 2019 16:25:23 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:13446 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730341AbfGaUZX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 31 Jul 2019 16:25:23 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6VKNn3n029449
+        for <linux-arch@vger.kernel.org>; Wed, 31 Jul 2019 16:25:22 -0400
+Received: from e14.ny.us.ibm.com (e14.ny.us.ibm.com [129.33.205.204])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2u3hybr4qs-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Wed, 31 Jul 2019 16:25:22 -0400
+Received: from localhost
+        by e14.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <paulmck@linux.vnet.ibm.com>;
+        Wed, 31 Jul 2019 21:25:21 +0100
+Received: from b01cxnp23032.gho.pok.ibm.com (9.57.198.27)
+        by e14.ny.us.ibm.com (146.89.104.201) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 31 Jul 2019 21:25:16 +0100
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6VKPFVW52756816
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 Jul 2019 20:25:15 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2BFA1B2064;
+        Wed, 31 Jul 2019 20:25:15 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CEB2B205F;
+        Wed, 31 Jul 2019 20:25:14 +0000 (GMT)
+Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 31 Jul 2019 20:25:14 +0000 (GMT)
+Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
+        id 9874316C99FD; Wed, 31 Jul 2019 13:25:17 -0700 (PDT)
+Date:   Wed, 31 Jul 2019 13:25:17 -0700
+From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Ingo Molnar <mingo@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        SeongJae Park <sj38.park@gmail.com>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] tools: memory-model: add it to the Documentation body
+Reply-To: paulmck@linux.ibm.com
+References: <Pine.LNX.4.44L0.1907310947340.1497-100000@iolanthe.rowland.org>
+ <cb9785b7-ed43-b91a-7392-e50216bd5771@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 912ebe37-2159-4a69-e113-08d715e62e12
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jul 2019 18:37:45.8034
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR2201MB1750
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cb9785b7-ed43-b91a-7392-e50216bd5771@gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-TM-AS-GCONF: 00
+x-cbid: 19073120-0052-0000-0000-000003E70E3E
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011530; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000287; SDB=6.01240217; UDB=6.00653980; IPR=6.01021637;
+ MB=3.00027984; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-31 20:25:20
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19073120-0053-0000-0000-000061EAB294
+Message-Id: <20190731202517.GF5913@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-31_10:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907310203
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
+On Thu, Aug 01, 2019 at 12:19:25AM +0900, Akira Yokosawa wrote:
+> On Wed, 31 Jul 2019 09:52:05 -0400, Alan Stern wrote:
+> > On Tue, 30 Jul 2019, Mauro Carvalho Chehab wrote:
+> > 
+> >> Em Tue, 30 Jul 2019 18:17:01 -0400
+> >> Joel Fernandes <joel@joelfernandes.org> escreveu:
+> > 
+> >>>>> (4) I would argue that every occurence of
+> >>>>> A ->(some dependency) B should be replaced with fixed size font in the HTML
+> >>>>> results.  
+> >>>>
+> >>>> Just place those with ``A -> (some dependency)``. This will make them use
+> >>>> a fixed size font.  
+> >>>
+> >>> Ok, understood all these. I guess my point was all of these will need to be
+> >>> done to make this document useful from a ReST conversion standpoint. Until
+> >>> then it is probably just better off being plain text - since there are so
+> >>> many of those ``A -> (dep) B`` things.
+> > 
+> >> On a very quick look, it seems that, if we replace:
+> >>
+> >> 	(\S+\s->\S*\s\w+)
+> >>
+> >> by:
+> >> 	``\1``
+> >>
+> >>
+> >> On an editor that would allow to manually replace the regex (like kate),
+> >> most of those can be get.
+> >>
+> >> See patch enclosed.
+> > 
+> > Some time ago I considered the problem of converting this file to ReST 
+> > format.  But I gave up on the idea, because the necessary changes were 
+> > so widespread and the resulting text file would not be easily readable.
+> > 
+> > Replacing things of the form "A ->dep B" just scratches the surface.  
+> > That document teems with variable names, formulas, code extracts, and
+> > other things which would all need to be rendered in a different font
+> > style.  The density of the markup required to do this would be
+> > phenomenally high.
+> > 
+> > In my opinion it simply was not worthwhile.
+> 
+> +1 on keeping this and the other .txt files of LKMM intact.
 
-Firoz Khan wrote:
-> The __SYSCALL macro's arguments are system call number,
-> system call entry name and number of arguments for the
-> system call.
->=20
-> Argument- nargs in __SYSCALL(nr, entry, nargs) is neither
-> calculated nor used anywhere. So it would be better to
-> keep the implementaion as  __SYSCALL(nr, entry). This will
-> unifies the implementation with some other architetures
-> too.
->=20
-> Signed-off-by: Firoz Khan <firoz.khan@linaro.org>
+Looks like a pretty clear consensus thus far.  Any objections to keeping
+these .txt for the time being?
 
-Applied to mips-next.
+							Thanx, Paul
 
-Thanks,
-    Paul
-
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
