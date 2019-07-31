@@ -2,132 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADA67C632
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2019 17:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F100C7C884
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2019 18:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729523AbfGaPTg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Jul 2019 11:19:36 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41902 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729559AbfGaPTg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Jul 2019 11:19:36 -0400
-Received: by mail-pl1-f193.google.com with SMTP id m9so30515867pls.8;
-        Wed, 31 Jul 2019 08:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=W/U4EJuJSGtAQh18cTCHJ6wb0QAX2d/3mMx3nnicC/Q=;
-        b=UXEn/5Jx1+r0zOczfz5iaXt/veIp+L1moBxgVDpP9pIF+LUG8PqVSIJY4bAMnanVF+
-         oyEhkuYHzvHYqO2vGtHfekZWuv7qWEw5pswUPwHliQIFVAEV7vppPkNEhEaVbL5O1kWn
-         e9ugWQOkNMaOi4/AgVO6K8P01zOqFcG5ylXyj0jp/awOvZeeMmKxNt/LxfWxG+wuErPM
-         GPecH94fzG5v+b6mmP+eBPJ28ZcKztPBkn018lqIKFAHqBkfeOGl14TIKBUzjm688fju
-         /bN6d/aNLPLeEW1c50Av01Gc1Ke+u+Y5fFmMjSsHlIowL0fuor+HyPiun49Rj8ei26LE
-         ysfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=W/U4EJuJSGtAQh18cTCHJ6wb0QAX2d/3mMx3nnicC/Q=;
-        b=Mj40N0boq5eDM33X91h2Ikb03FDSagaGj7ylc6CxIdIR6xkCPNcbAXd9poWqoAONrg
-         RXAV78nRIQoR5GDK7S0w/iKiwp0XxxKjnbh0Ypd9m96adIo9nMdx0c5iVqKfpdfvdjYU
-         vp6FtV5qwCgzelWPcT7dnc5olnEoctTC3aoKebkcIqj925qCk7CF6voaN/dXb6zOGp0V
-         ubTq0mTZz9i8VD+ZZFI6pisRjJRloZavDjnmchusD4nMCIjHmFzSxMc0nJwK7dzkc9IN
-         HNe38GymOJOP2G/goYQ7Z7hEPMiQqCSgvTAXabxMQh4JaRZC3fGLjEkgpxk6X8SAT0S7
-         p+vg==
-X-Gm-Message-State: APjAAAUUoCxxgRdT+yWA4OCzfNO/99FONZEHMlZkfD5lFj47cfIUdUqC
-        fMie7HpkN3a/D8ciiahIGx8+MOLp
-X-Google-Smtp-Source: APXvYqzmDgfyB8QmV/vQxBch9AbAOB/lAUUL209PSPSOWOse7jwfuYVSmgKg0FDDp5VAtOIdTBf3Dw==
-X-Received: by 2002:a17:902:b713:: with SMTP id d19mr122222858pls.267.1564586375246;
-        Wed, 31 Jul 2019 08:19:35 -0700 (PDT)
-Received: from [192.168.11.2] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id o129sm44714617pfg.1.2019.07.31.08.19.29
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 31 Jul 2019 08:19:34 -0700 (PDT)
-Subject: Re: [PATCH] tools: memory-model: add it to the Documentation body
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Ingo Molnar <mingo@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        SeongJae Park <sj38.park@gmail.com>, linux-arch@vger.kernel.org
-References: <Pine.LNX.4.44L0.1907310947340.1497-100000@iolanthe.rowland.org>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <cb9785b7-ed43-b91a-7392-e50216bd5771@gmail.com>
-Date:   Thu, 1 Aug 2019 00:19:25 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726622AbfGaQXQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Jul 2019 12:23:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58658 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725209AbfGaQXQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 31 Jul 2019 12:23:16 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B1F3206B8;
+        Wed, 31 Jul 2019 16:23:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564590195;
+        bh=fONs4BmZttEHPUKNIEeG8afpWoHG1Ramxy67XPpPajA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D44JUbuyGA42vB4ZF39we2YnbDD4WU6p1kIXD+46Hx0pzXbYxSOckTA97vCFO1ipg
+         wH1v9tT8ZPQLGiCC7rdTep1hDWwnO6XsJHzqY0qm1rnxrL61jnMF/LD9s5t+iOS6Bs
+         ArsM59Htt9AJU3/IxBzAsab4hjUew2T1H5FCi+Mk=
+Date:   Wed, 31 Jul 2019 17:23:10 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        arnd@arndb.de, tglx@linutronix.de, salyzyn@android.com,
+        pcc@google.com, 0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
+        sthotton@marvell.com, andre.przywara@arm.com, luto@kernel.org,
+        Matteo Croce <mcroce@redhat.com>
+Subject: Re: [PATCH] arm64: vdso: Fix Makefile regression
+Message-ID: <20190731162309.6sqeylyoauv7seeb@willie-the-truck>
+References: <CAGnkfhyT=2kPsiUy-V=aCA_s-C4BXgD++hAZ9ii1h0p94mMVQA@mail.gmail.com>
+ <20190729125421.32482-1-vincenzo.frascino@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.1907310947340.1497-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190729125421.32482-1-vincenzo.frascino@arm.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 31 Jul 2019 09:52:05 -0400, Alan Stern wrote:
-> On Tue, 30 Jul 2019, Mauro Carvalho Chehab wrote:
+On Mon, Jul 29, 2019 at 01:54:21PM +0100, Vincenzo Frascino wrote:
+> Using an old .config in combination with "make oldconfig" can cause
+> an incorrect detection of the compat compiler:
 > 
->> Em Tue, 30 Jul 2019 18:17:01 -0400
->> Joel Fernandes <joel@joelfernandes.org> escreveu:
+> $ grep CROSS_COMPILE_COMPAT .config
+> CONFIG_CROSS_COMPILE_COMPAT_VDSO=""
 > 
->>>>> (4) I would argue that every occurence of
->>>>> A ->(some dependency) B should be replaced with fixed size font in the HTML
->>>>> results.  
->>>>
->>>> Just place those with ``A -> (some dependency)``. This will make them use
->>>> a fixed size font.  
->>>
->>> Ok, understood all these. I guess my point was all of these will need to be
->>> done to make this document useful from a ReST conversion standpoint. Until
->>> then it is probably just better off being plain text - since there are so
->>> many of those ``A -> (dep) B`` things.
+> $ make oldconfig && make
+> arch/arm64/Makefile:58: gcc not found, check CROSS_COMPILE_COMPAT.
+> Stop.
 > 
->> On a very quick look, it seems that, if we replace:
->>
->> 	(\S+\s->\S*\s\w+)
->>
->> by:
->> 	``\1``
->>
->>
->> On an editor that would allow to manually replace the regex (like kate),
->> most of those can be get.
->>
->> See patch enclosed.
+> Accordingly to the section 7.2 of the GNU Make manual "Syntax of
+> Conditionals", "When the value results from complex expansions of
+> variables and functions, expansions you would consider empty may
+> actually contain whitespace characters and thus are not seen as
+> empty. However, you can use the strip function to avoid interpreting
+> whitespace as a non-empty value."
 > 
-> Some time ago I considered the problem of converting this file to ReST 
-> format.  But I gave up on the idea, because the necessary changes were 
-> so widespread and the resulting text file would not be easily readable.
+> Fix the issue adding strip to the CROSS_COMPILE_COMPAT string
+> evaluation.
 > 
-> Replacing things of the form "A ->dep B" just scratches the surface.  
-> That document teems with variable names, formulas, code extracts, and
-> other things which would all need to be rendered in a different font
-> style.  The density of the markup required to do this would be
-> phenomenally high.
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Reported-by: Matteo Croce <mcroce@redhat.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>  arch/arm64/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> In my opinion it simply was not worthwhile.
+> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+> index bb1f1dbb34e8..61de992bbea3 100644
+> --- a/arch/arm64/Makefile
+> +++ b/arch/arm64/Makefile
+> @@ -52,7 +52,7 @@ ifeq ($(CONFIG_GENERIC_COMPAT_VDSO), y)
+>  
+>    ifeq ($(CONFIG_CC_IS_CLANG), y)
+>      $(warning CROSS_COMPILE_COMPAT is clang, the compat vDSO will not be built)
+> -  else ifeq ($(CROSS_COMPILE_COMPAT),)
+> +  else ifeq ($(strip $(CROSS_COMPILE_COMPAT)),)
+>      $(warning CROSS_COMPILE_COMPAT not defined or empty, the compat vDSO will not be built)
+>    else ifeq ($(shell which $(CROSS_COMPILE_COMPAT)gcc 2> /dev/null),)
+>      $(error $(CROSS_COMPILE_COMPAT)gcc not found, check CROSS_COMPILE_COMPAT)
+> -- 
+> 2.22.0
 
-+1 on keeping this and the other .txt files of LKMM intact.
+Acked-by: Will Deacon <will@kernel.org>
 
-        Thanks, Akira
-
-> 
-> Alan Stern
-> 
-
+Will
