@@ -2,164 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1722B7F211
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2019 11:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150047F4BB
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2019 12:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405267AbfHBJop (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Aug 2019 05:44:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48166 "EHLO mail.kernel.org"
+        id S2389789AbfHBKIk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Aug 2019 06:08:40 -0400
+Received: from foss.arm.com ([217.140.110.172]:48772 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405275AbfHBJon (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 2 Aug 2019 05:44:43 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 804EE2086A;
-        Fri,  2 Aug 2019 09:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564739083;
-        bh=g8KWgr1ZQlCWTUNqQfSrcz81PoGrK0zQ8XSSLreRjlg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vBoRgyaMGMgwWP7l5QEC9CAqAriXR11AaTjGCi+2rwljQ6f1LK/bS0VykNYKmceIo
-         AP94fMgj9ycZe7Qt+M6tfIWOBASD34VECeJYaka1E1WQI+KgbCeqyLCcZ4DKfVT2wk
-         ICmqy5kBq3j22qPY8jNG0NOn4J8PmQIngv1zk3fw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: [PATCH 4.9 098/223] padata: use smp_mb in padata_reorder to avoid orphaned padata jobs
-Date:   Fri,  2 Aug 2019 11:35:23 +0200
-Message-Id: <20190802092245.526242418@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190802092238.692035242@linuxfoundation.org>
-References: <20190802092238.692035242@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1728855AbfHBKIj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 2 Aug 2019 06:08:39 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C9EB344;
+        Fri,  2 Aug 2019 03:08:39 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B1D323F71F;
+        Fri,  2 Aug 2019 03:08:37 -0700 (PDT)
+Date:   Fri, 2 Aug 2019 11:08:35 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will.deacon@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>
+Subject: Re: [PATCH v6 1/2] arm64: Define
+ Documentation/arm64/tagged-address-abi.rst
+Message-ID: <20190802100835.GA4175@arrakis.emea.arm.com>
+References: <cover.1563904656.git.andreyknvl@google.com>
+ <20190725135044.24381-1-vincenzo.frascino@arm.com>
+ <20190725135044.24381-2-vincenzo.frascino@arm.com>
+ <b74e7ce7-d58a-68a0-2f28-6648ec6302c0@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b74e7ce7-d58a-68a0-2f28-6648ec6302c0@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Daniel Jordan <daniel.m.jordan@oracle.com>
+Hi Dave,
 
-commit cf144f81a99d1a3928f90b0936accfd3f45c9a0a upstream.
+On Wed, Jul 31, 2019 at 09:43:46AM -0700, Dave Hansen wrote:
+> On 7/25/19 6:50 AM, Vincenzo Frascino wrote:
+> > With the relaxed ABI proposed through this document, it is now possible
+> > to pass tagged pointers to the syscalls, when these pointers are in
+> > memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap().
+> 
+> I don't see a lot of description of why this restriction is necessary.
+> What's the problem with supporting MAP_SHARED?
 
-Testing padata with the tcrypt module on a 5.2 kernel...
+We could support MAP_SHARED | MAP_ANONYMOUS (and based on some internal
+discussions, this would be fine with the hardware memory tagging as
+well). What we don't want in the ABI is to support file mmap() for
+top-byte-ignore (or MTE). If you see a use-case, please let us know.
 
-    # modprobe tcrypt alg="pcrypt(rfc4106(gcm(aes)))" type=3
-    # modprobe tcrypt mode=211 sec=1
-
-...produces this splat:
-
-    INFO: task modprobe:10075 blocked for more than 120 seconds.
-          Not tainted 5.2.0-base+ #16
-    modprobe        D    0 10075  10064 0x80004080
-    Call Trace:
-     ? __schedule+0x4dd/0x610
-     ? ring_buffer_unlock_commit+0x23/0x100
-     schedule+0x6c/0x90
-     schedule_timeout+0x3b/0x320
-     ? trace_buffer_unlock_commit_regs+0x4f/0x1f0
-     wait_for_common+0x160/0x1a0
-     ? wake_up_q+0x80/0x80
-     { crypto_wait_req }             # entries in braces added by hand
-     { do_one_aead_op }
-     { test_aead_jiffies }
-     test_aead_speed.constprop.17+0x681/0xf30 [tcrypt]
-     do_test+0x4053/0x6a2b [tcrypt]
-     ? 0xffffffffa00f4000
-     tcrypt_mod_init+0x50/0x1000 [tcrypt]
-     ...
-
-The second modprobe command never finishes because in padata_reorder,
-CPU0's load of reorder_objects is executed before the unlocking store in
-spin_unlock_bh(pd->lock), causing CPU0 to miss CPU1's increment:
-
-CPU0                                 CPU1
-
-padata_reorder                       padata_do_serial
-  LOAD reorder_objects  // 0
-                                       INC reorder_objects  // 1
-                                       padata_reorder
-                                         TRYLOCK pd->lock   // failed
-  UNLOCK pd->lock
-
-CPU0 deletes the timer before returning from padata_reorder and since no
-other job is submitted to padata, modprobe waits indefinitely.
-
-Add a pair of full barriers to guarantee proper ordering:
-
-CPU0                                 CPU1
-
-padata_reorder                       padata_do_serial
-  UNLOCK pd->lock
-  smp_mb()
-  LOAD reorder_objects
-                                       INC reorder_objects
-                                       smp_mb__after_atomic()
-                                       padata_reorder
-                                         TRYLOCK pd->lock
-
-smp_mb__after_atomic is needed so the read part of the trylock operation
-comes after the INC, as Andrea points out.   Thanks also to Andrea for
-help with writing a litmus test.
-
-Fixes: 16295bec6398 ("padata: Generic parallelization/serialization interface")
-Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc: <stable@vger.kernel.org>
-Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Paul E. McKenney <paulmck@linux.ibm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Steffen Klassert <steffen.klassert@secunet.com>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- kernel/padata.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
---- a/kernel/padata.c
-+++ b/kernel/padata.c
-@@ -274,7 +274,12 @@ static void padata_reorder(struct parall
- 	 * The next object that needs serialization might have arrived to
- 	 * the reorder queues in the meantime, we will be called again
- 	 * from the timer function if no one else cares for it.
-+	 *
-+	 * Ensure reorder_objects is read after pd->lock is dropped so we see
-+	 * an increment from another task in padata_do_serial.  Pairs with
-+	 * smp_mb__after_atomic in padata_do_serial.
- 	 */
-+	smp_mb();
- 	if (atomic_read(&pd->reorder_objects)
- 			&& !(pinst->flags & PADATA_RESET))
- 		mod_timer(&pd->timer, jiffies + HZ);
-@@ -343,6 +348,13 @@ void padata_do_serial(struct padata_priv
- 	list_add_tail(&padata->list, &pqueue->reorder.list);
- 	spin_unlock(&pqueue->reorder.lock);
- 
-+	/*
-+	 * Ensure the atomic_inc of reorder_objects above is ordered correctly
-+	 * with the trylock of pd->lock in padata_reorder.  Pairs with smp_mb
-+	 * in padata_reorder.
-+	 */
-+	smp_mb__after_atomic();
-+
- 	put_cpu();
- 
- 	padata_reorder(pd);
-
-
+-- 
+Catalin
