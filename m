@@ -2,200 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 044E07E585
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2019 00:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA54E7F0E0
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2019 11:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729669AbfHAWWx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Aug 2019 18:22:53 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25212 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389468AbfHAWVH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Aug 2019 18:21:07 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x71MGv4a081164
-        for <linux-arch@vger.kernel.org>; Thu, 1 Aug 2019 18:21:06 -0400
-Received: from e11.ny.us.ibm.com (e11.ny.us.ibm.com [129.33.205.201])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2u475rubhy-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Thu, 01 Aug 2019 18:21:06 -0400
-Received: from localhost
-        by e11.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-arch@vger.kernel.org> from <paulmck@linux.vnet.ibm.com>;
-        Thu, 1 Aug 2019 23:21:05 +0100
-Received: from b01cxnp22034.gho.pok.ibm.com (9.57.198.24)
-        by e11.ny.us.ibm.com (146.89.104.198) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 1 Aug 2019 23:20:59 +0100
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x71MKwes49545538
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Aug 2019 22:20:58 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 49865B2076;
-        Thu,  1 Aug 2019 22:20:58 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24F4BB207E;
-        Thu,  1 Aug 2019 22:20:58 +0000 (GMT)
-Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Aug 2019 22:20:58 +0000 (GMT)
-Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
-        id 2834016C9A64; Thu,  1 Aug 2019 15:20:59 -0700 (PDT)
-From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        mingo@kernel.org
-Cc:     stern@rowland.harvard.edu, andrea.parri@amarulasolutions.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com,
-        Will Deacon <will.deacon@arm.com>,
+        id S2390633AbfHBJdh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Aug 2019 05:33:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33030 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733262AbfHBJdg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 2 Aug 2019 05:33:36 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D827221842;
+        Fri,  2 Aug 2019 09:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564738415;
+        bh=lGLaNYRdP0eiFGTeLWXnmLByn/7p1vnP/YPhYWVSy8o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=N7hhwaA+8/12mE/t0NS9jAL7iGg7RXReXWsquzunnyRGHIcnCY3U18GMcAZsw9/Gq
+         vlBs5BZHHKv42NLetP1IBFMOJ/j4/4epFCLk/vHyiN8sf3jaMbMDlx2HUF1GYhb97B
+         k3eo8vKk7OEf23HFghi4g6gM1URxNGhH+0Y1ka8w=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Daniel Lustig <dlustig@nvidia.com>
-Subject: [PATCH RFC memory-model 31/31] tools/memory-model: Update the informal documentation
-Date:   Thu,  1 Aug 2019 15:20:56 -0700
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190801222026.GA11315@linux.ibm.com>
-References: <20190801222026.GA11315@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19080122-2213-0000-0000-000003B871F8
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011535; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000287; SDB=6.01240728; UDB=6.00654291; IPR=6.01022153;
- MB=3.00028000; MTD=3.00000008; XFM=3.00000015; UTC=2019-08-01 22:21:03
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19080122-2214-0000-0000-00005F7B87D1
-Message-Id: <20190801222056.12144-31-paulmck@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-01_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=1 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908010234
+        Peter Zijlstra <peterz@infradead.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: [PATCH 4.4 068/158] padata: use smp_mb in padata_reorder to avoid orphaned padata jobs
+Date:   Fri,  2 Aug 2019 11:28:09 +0200
+Message-Id: <20190802092217.814889890@linuxfoundation.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190802092203.671944552@linuxfoundation.org>
+References: <20190802092203.671944552@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Andrea Parri <andrea.parri@amarulasolutions.com>
+From: Daniel Jordan <daniel.m.jordan@oracle.com>
 
-The formal memory consistency model has added support for plain accesses
-(and data races).  While updating the informal documentation to describe
-this addition to the model is highly desirable and important future work,
-update the informal documentation to at least acknowledge such addition.
+commit cf144f81a99d1a3928f90b0936accfd3f45c9a0a upstream.
 
-Signed-off-by: Andrea Parri <andrea.parri@amarulasolutions.com>
-Cc: Will Deacon <will.deacon@arm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
+Testing padata with the tcrypt module on a 5.2 kernel...
+
+    # modprobe tcrypt alg="pcrypt(rfc4106(gcm(aes)))" type=3
+    # modprobe tcrypt mode=211 sec=1
+
+...produces this splat:
+
+    INFO: task modprobe:10075 blocked for more than 120 seconds.
+          Not tainted 5.2.0-base+ #16
+    modprobe        D    0 10075  10064 0x80004080
+    Call Trace:
+     ? __schedule+0x4dd/0x610
+     ? ring_buffer_unlock_commit+0x23/0x100
+     schedule+0x6c/0x90
+     schedule_timeout+0x3b/0x320
+     ? trace_buffer_unlock_commit_regs+0x4f/0x1f0
+     wait_for_common+0x160/0x1a0
+     ? wake_up_q+0x80/0x80
+     { crypto_wait_req }             # entries in braces added by hand
+     { do_one_aead_op }
+     { test_aead_jiffies }
+     test_aead_speed.constprop.17+0x681/0xf30 [tcrypt]
+     do_test+0x4053/0x6a2b [tcrypt]
+     ? 0xffffffffa00f4000
+     tcrypt_mod_init+0x50/0x1000 [tcrypt]
+     ...
+
+The second modprobe command never finishes because in padata_reorder,
+CPU0's load of reorder_objects is executed before the unlocking store in
+spin_unlock_bh(pd->lock), causing CPU0 to miss CPU1's increment:
+
+CPU0                                 CPU1
+
+padata_reorder                       padata_do_serial
+  LOAD reorder_objects  // 0
+                                       INC reorder_objects  // 1
+                                       padata_reorder
+                                         TRYLOCK pd->lock   // failed
+  UNLOCK pd->lock
+
+CPU0 deletes the timer before returning from padata_reorder and since no
+other job is submitted to padata, modprobe waits indefinitely.
+
+Add a pair of full barriers to guarantee proper ordering:
+
+CPU0                                 CPU1
+
+padata_reorder                       padata_do_serial
+  UNLOCK pd->lock
+  smp_mb()
+  LOAD reorder_objects
+                                       INC reorder_objects
+                                       smp_mb__after_atomic()
+                                       padata_reorder
+                                         TRYLOCK pd->lock
+
+smp_mb__after_atomic is needed so the read part of the trylock operation
+comes after the INC, as Andrea points out.   Thanks also to Andrea for
+help with writing a litmus test.
+
+Fixes: 16295bec6398 ("padata: Generic parallelization/serialization interface")
+Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: <stable@vger.kernel.org>
+Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
 Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Jade Alglave <j.alglave@ucl.ac.uk>
-Cc: Luc Maranget <luc.maranget@inria.fr>
-Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
-Cc: Akira Yokosawa <akiyks@gmail.com>
-Cc: Daniel Lustig <dlustig@nvidia.com>
-Signed-off-by: Paul E. McKenney <paulmck@linux.ibm.com>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
----
- .../Documentation/explanation.txt             | 47 +++++++++----------
- tools/memory-model/README                     | 18 +++----
- 2 files changed, 30 insertions(+), 35 deletions(-)
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Paul E. McKenney <paulmck@linux.ibm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-index 634dc6db26c4..488f11f6c588 100644
---- a/tools/memory-model/Documentation/explanation.txt
-+++ b/tools/memory-model/Documentation/explanation.txt
-@@ -42,7 +42,8 @@ linux-kernel.bell and linux-kernel.cat files that make up the formal
- version of the model; they are extremely terse and their meanings are
- far from clear.
+---
+ kernel/padata.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+--- a/kernel/padata.c
++++ b/kernel/padata.c
+@@ -273,7 +273,12 @@ static void padata_reorder(struct parall
+ 	 * The next object that needs serialization might have arrived to
+ 	 * the reorder queues in the meantime, we will be called again
+ 	 * from the timer function if no one else cares for it.
++	 *
++	 * Ensure reorder_objects is read after pd->lock is dropped so we see
++	 * an increment from another task in padata_do_serial.  Pairs with
++	 * smp_mb__after_atomic in padata_do_serial.
+ 	 */
++	smp_mb();
+ 	if (atomic_read(&pd->reorder_objects)
+ 			&& !(pinst->flags & PADATA_RESET))
+ 		mod_timer(&pd->timer, jiffies + HZ);
+@@ -342,6 +347,13 @@ void padata_do_serial(struct padata_priv
+ 	list_add_tail(&padata->list, &pqueue->reorder.list);
+ 	spin_unlock(&pqueue->reorder.lock);
  
--This document describes the ideas underlying the LKMM.  It is meant
-+This document describes the ideas underlying the LKMM, but excluding
-+the modeling of bare C (or plain) shared memory accesses.  It is meant
- for people who want to understand how the model was designed.  It does
- not go into the details of the code in the .bell and .cat files;
- rather, it explains in English what the code expresses symbolically.
-@@ -354,31 +355,25 @@ be extremely complex.
- Optimizing compilers have great freedom in the way they translate
- source code to object code.  They are allowed to apply transformations
- that add memory accesses, eliminate accesses, combine them, split them
--into pieces, or move them around.  Faced with all these possibilities,
--the LKMM basically gives up.  It insists that the code it analyzes
--must contain no ordinary accesses to shared memory; all accesses must
--be performed using READ_ONCE(), WRITE_ONCE(), or one of the other
--atomic or synchronization primitives.  These primitives prevent a
--large number of compiler optimizations.  In particular, it is
--guaranteed that the compiler will not remove such accesses from the
--generated code (unless it can prove the accesses will never be
--executed), it will not change the order in which they occur in the
--code (within limits imposed by the C standard), and it will not
--introduce extraneous accesses.
--
--This explains why the MP and SB examples above used READ_ONCE() and
--WRITE_ONCE() rather than ordinary memory accesses.  Thanks to this
--usage, we can be certain that in the MP example, P0's write event to
--buf really is po-before its write event to flag, and similarly for the
--other shared memory accesses in the examples.
--
--Private variables are not subject to this restriction.  Since they are
--not shared between CPUs, they can be accessed normally without
--READ_ONCE() or WRITE_ONCE(), and there will be no ill effects.  In
--fact, they need not even be stored in normal memory at all -- in
--principle a private variable could be stored in a CPU register (hence
--the convention that these variables have names starting with the
--letter 'r').
-+into pieces, or move them around.  The use of READ_ONCE(), WRITE_ONCE(),
-+or one of the other atomic or synchronization primitives prevents a
-+large number of compiler optimizations.  In particular, it is guaranteed
-+that the compiler will not remove such accesses from the generated code
-+(unless it can prove the accesses will never be executed), it will not
-+change the order in which they occur in the code (within limits imposed
-+by the C standard), and it will not introduce extraneous accesses.
++	/*
++	 * Ensure the atomic_inc of reorder_objects above is ordered correctly
++	 * with the trylock of pd->lock in padata_reorder.  Pairs with smp_mb
++	 * in padata_reorder.
++	 */
++	smp_mb__after_atomic();
 +
-+The MP and SB examples above used READ_ONCE() and WRITE_ONCE() rather
-+than ordinary memory accesses.  Thanks to this usage, we can be certain
-+that in the MP example, the compiler won't reorder P0's write event to
-+buf and P0's write event to flag, and similarly for the other shared
-+memory accesses in the examples.
-+
-+Since private variables are not shared between CPUs, they can be
-+accessed normally without READ_ONCE() or WRITE_ONCE().  In fact, they
-+need not even be stored in normal memory at all -- in principle a
-+private variable could be stored in a CPU register (hence the convention
-+that these variables have names starting with the letter 'r').
+ 	put_cpu();
  
- 
- A WARNING
-diff --git a/tools/memory-model/README b/tools/memory-model/README
-index 2b87f3971548..fc07b52f2028 100644
---- a/tools/memory-model/README
-+++ b/tools/memory-model/README
-@@ -167,15 +167,15 @@ scripts	Various scripts, see scripts/README.
- LIMITATIONS
- ===========
- 
--The Linux-kernel memory model has the following limitations:
--
--1.	Compiler optimizations are not modeled.  Of course, the use
--	of READ_ONCE() and WRITE_ONCE() limits the compiler's ability
--	to optimize, but there is Linux-kernel code that uses bare C
--	memory accesses.  Handling this code is on the to-do list.
--	For more information, see Documentation/explanation.txt (in
--	particular, the "THE PROGRAM ORDER RELATION: po AND po-loc"
--	and "A WARNING" sections).
-+The Linux-kernel memory model (LKMM) has the following limitations:
-+
-+1.	Compiler optimizations are not accurately modeled.  Of course,
-+	the use of READ_ONCE() and WRITE_ONCE() limits the compiler's
-+	ability to optimize, but under some circumstances it is possible
-+	for the compiler to undermine the memory model.  For more
-+	information, see Documentation/explanation.txt (in particular,
-+	the "THE PROGRAM ORDER RELATION: po AND po-loc" and "A WARNING"
-+	sections).
- 
- 	Note that this limitation in turn limits LKMM's ability to
- 	accurately model address, control, and data dependencies.
--- 
-2.17.1
+ 	padata_reorder(pd);
+
 
