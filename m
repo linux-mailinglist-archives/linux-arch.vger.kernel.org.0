@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA54E7F0E0
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2019 11:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1722B7F211
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2019 11:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390633AbfHBJdh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Aug 2019 05:33:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33030 "EHLO mail.kernel.org"
+        id S2405267AbfHBJop (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Aug 2019 05:44:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48166 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733262AbfHBJdg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 2 Aug 2019 05:33:36 -0400
+        id S2405275AbfHBJon (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 2 Aug 2019 05:44:43 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D827221842;
-        Fri,  2 Aug 2019 09:33:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 804EE2086A;
+        Fri,  2 Aug 2019 09:44:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564738415;
-        bh=lGLaNYRdP0eiFGTeLWXnmLByn/7p1vnP/YPhYWVSy8o=;
+        s=default; t=1564739083;
+        bh=g8KWgr1ZQlCWTUNqQfSrcz81PoGrK0zQ8XSSLreRjlg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N7hhwaA+8/12mE/t0NS9jAL7iGg7RXReXWsquzunnyRGHIcnCY3U18GMcAZsw9/Gq
-         vlBs5BZHHKv42NLetP1IBFMOJ/j4/4epFCLk/vHyiN8sf3jaMbMDlx2HUF1GYhb97B
-         k3eo8vKk7OEf23HFghi4g6gM1URxNGhH+0Y1ka8w=
+        b=vBoRgyaMGMgwWP7l5QEC9CAqAriXR11AaTjGCi+2rwljQ6f1LK/bS0VykNYKmceIo
+         AP94fMgj9ycZe7Qt+M6tfIWOBASD34VECeJYaka1E1WQI+KgbCeqyLCcZ4DKfVT2wk
+         ICmqy5kBq3j22qPY8jNG0NOn4J8PmQIngv1zk3fw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,12 +34,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Steffen Klassert <steffen.klassert@secunet.com>,
         linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: [PATCH 4.4 068/158] padata: use smp_mb in padata_reorder to avoid orphaned padata jobs
-Date:   Fri,  2 Aug 2019 11:28:09 +0200
-Message-Id: <20190802092217.814889890@linuxfoundation.org>
+Subject: [PATCH 4.9 098/223] padata: use smp_mb in padata_reorder to avoid orphaned padata jobs
+Date:   Fri,  2 Aug 2019 11:35:23 +0200
+Message-Id: <20190802092245.526242418@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190802092203.671944552@linuxfoundation.org>
-References: <20190802092203.671944552@linuxfoundation.org>
+In-Reply-To: <20190802092238.692035242@linuxfoundation.org>
+References: <20190802092238.692035242@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -134,7 +134,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/kernel/padata.c
 +++ b/kernel/padata.c
-@@ -273,7 +273,12 @@ static void padata_reorder(struct parall
+@@ -274,7 +274,12 @@ static void padata_reorder(struct parall
  	 * The next object that needs serialization might have arrived to
  	 * the reorder queues in the meantime, we will be called again
  	 * from the timer function if no one else cares for it.
@@ -147,7 +147,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	if (atomic_read(&pd->reorder_objects)
  			&& !(pinst->flags & PADATA_RESET))
  		mod_timer(&pd->timer, jiffies + HZ);
-@@ -342,6 +347,13 @@ void padata_do_serial(struct padata_priv
+@@ -343,6 +348,13 @@ void padata_do_serial(struct padata_priv
  	list_add_tail(&padata->list, &pqueue->reorder.list);
  	spin_unlock(&pqueue->reorder.lock);
  
