@@ -2,53 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2448218E
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2019 18:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E79E82427
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2019 19:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728838AbfHEQVK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Aug 2019 12:21:10 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:40558 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728842AbfHEQVK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Aug 2019 12:21:10 -0400
-Received: by mail-wm1-f66.google.com with SMTP id v19so73624097wmj.5;
-        Mon, 05 Aug 2019 09:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TN/L4zHfsTTS5T9aYyjvYkrI5ioXyxeBkpV2BWKvaS0=;
-        b=aCOesO8xB/7z2UhU/c85p8TZAMZawKQTbZFe1DIAuiK6FXB2q91l24t1qs6Yk3lbrK
-         MpCVMje9CyBDBWQ81YL9Hd/a1V9puj/GMzLePtSh+OSVPUzdjvk4sMSBq6h4gJlEXaR6
-         9r/uR6FHLD1VcoIISWg8pplwqbNkDgjsRNmj8Ugoex33PK4J+r7zwP589krwrJv51rTH
-         NGRKBsF8Rx5sryS/ErdazYIUbeaJG5YjnyCsYacmMwNN/fA76VYyuduoI8HlzEyXR4BT
-         AGMphvt8jX+0BHADBF6oAOV0cW4npebs1QmnAgTy4F8NRUWoIpPOyMsZIil3g1YgXxrI
-         +YDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TN/L4zHfsTTS5T9aYyjvYkrI5ioXyxeBkpV2BWKvaS0=;
-        b=CetuokqOIwXyQXf6Hdjf5eEwBRdrLo1UqI1NyEXOkgj+/HSPSbN5nM9tunEc8H57II
-         B3uYU/ZmwSxUYigrnUqgOsN6C4EZjPgWFQY1WUCyYRsxBbNns/w+OGFRYUQflCr9UiYY
-         HbwQFJdHUERrGrAabv+pdWBNAomiQw1nm5RB3tUijSkQyn940J8Ljtg9YytCddIS3y3U
-         CcrHUqXurE7Mj6lLG3qBPvaWf/iYfsSWh4rHJucWkRBqlU8FAbBAiP6QQsriux+JtfcW
-         xg+W/3UIcY+nWFeqoVhlAP9kU/vciBuKXgdTWHzHLwGYiJ7lfQ9eBUFrremCv2z8Wwx0
-         iwGQ==
-X-Gm-Message-State: APjAAAVYL0w1GyrU/kj5eusWjKybQHlJs+kqnQvN0US6in/fykn04rkN
-        rcxE5nmQT1cPHnZgnkMbLrg=
-X-Google-Smtp-Source: APXvYqxX4W2FlNBX/QB3dsoh1PhFjBYG5J6cWfzh0exoe8SWrWK7woW6sWKb+lDwWpCSJgFNty0VJg==
-X-Received: by 2002:a1c:1f4e:: with SMTP id f75mr18846272wmf.137.1565022067638;
-        Mon, 05 Aug 2019 09:21:07 -0700 (PDT)
-Received: from aparri ([167.220.197.45])
-        by smtp.gmail.com with ESMTPSA id c78sm118033247wmd.16.2019.08.05.09.21.06
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 05 Aug 2019 09:21:06 -0700 (PDT)
-Date:   Mon, 5 Aug 2019 18:21:00 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
+        id S1728824AbfHERoA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Aug 2019 13:44:00 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44402 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728800AbfHERoA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Aug 2019 13:44:00 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x75HgVZP089223
+        for <linux-arch@vger.kernel.org>; Mon, 5 Aug 2019 13:43:58 -0400
+Received: from e16.ny.us.ibm.com (e16.ny.us.ibm.com [129.33.205.206])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2u6pek84d4-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Mon, 05 Aug 2019 13:43:58 -0400
+Received: from localhost
+        by e16.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <paulmck@linux.vnet.ibm.com>;
+        Mon, 5 Aug 2019 18:43:58 +0100
+Received: from b01cxnp22036.gho.pok.ibm.com (9.57.198.26)
+        by e16.ny.us.ibm.com (146.89.104.203) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 5 Aug 2019 18:43:53 +0100
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x75Hhqik13500934
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 5 Aug 2019 17:43:52 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2AD80B2064;
+        Mon,  5 Aug 2019 17:43:52 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CB3EB205F;
+        Mon,  5 Aug 2019 17:43:52 +0000 (GMT)
+Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  5 Aug 2019 17:43:51 +0000 (GMT)
+Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
+        id 552DA16C9A4C; Mon,  5 Aug 2019 10:43:55 -0700 (PDT)
+Date:   Mon, 5 Aug 2019 10:43:55 -0700
+From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
         Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Boqun Feng <boqun.feng@gmail.com>,
@@ -56,10 +55,9 @@ Cc:     Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org,
         David Howells <dhowells@redhat.com>,
         Jade Alglave <j.alglave@ucl.ac.uk>,
         Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
         Daniel Lustig <dlustig@nvidia.com>
 Subject: Re: [PATCH] MAINTAINERS: Update e-mail address for Andrea Parri
-Message-ID: <20190805162100.GA2368@aparri>
+Reply-To: paulmck@linux.ibm.com
 References: <20190805121517.4734-1-parri.andrea@gmail.com>
  <76010b66-a662-5b07-a21d-ed074d7d2194@gmail.com>
  <20190805151545.GA1615@aparri>
@@ -68,7 +66,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <1565018618.3341.6.camel@HansenPartnership.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-TM-AS-GCONF: 00
+x-cbid: 19080517-0072-0000-0000-000004508466
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011555; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000287; SDB=6.01242523; UDB=6.00655387; IPR=6.01023980;
+ MB=3.00028053; MTD=3.00000008; XFM=3.00000015; UTC=2019-08-05 17:43:56
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19080517-0073-0000-0000-00004CC188B2
+Message-Id: <20190805174355.GJ28441@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-05_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908050187
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -90,7 +104,9 @@ On Mon, Aug 05, 2019 at 08:23:38AM -0700, James Bottomley wrote:
 > happens is that people have the name that appears in the From field
 > with and without initials.
 
-Thanks for the remarks, James.  Given this, I'm okay with the submitted
-version (i.e., no change to .mailmap).
+New one on me, thank you!  So I should have a line in .mailmap like this?
 
-  Andrea
+Paul E. McKenney <paulmck@linux.vnet.ibm.com> <paul.mckenney@linaro.org> <paulmck@linux.ibm.com>
+
+							Thanx, Paul
+
