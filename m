@@ -2,159 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 247EC82F40
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 12:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2246A82FEB
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 12:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732608AbfHFKB2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Aug 2019 06:01:28 -0400
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:39672 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732610AbfHFKBX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Aug 2019 06:01:23 -0400
-Received: by mail-yb1-f195.google.com with SMTP id s142so445486ybc.6
-        for <linux-arch@vger.kernel.org>; Tue, 06 Aug 2019 03:01:22 -0700 (PDT)
+        id S1726877AbfHFKpT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Aug 2019 06:45:19 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:45908 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730068AbfHFKpT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Aug 2019 06:45:19 -0400
+Received: by mail-ed1-f68.google.com with SMTP id x19so75941568eda.12
+        for <linux-arch@vger.kernel.org>; Tue, 06 Aug 2019 03:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=SpJEkhv16jwVLO2sSfJ7SapVMbBMCm5PIZfy4pO40/c=;
-        b=NcmXSNcyQXDjk3UYlgYN76nvMxC7M92+xGOU6qJ+B27Ib4OnaFsQUE4R4i6AgQ5Z27
-         CrVPGUgZwTFsH/qOmNAZIQ9t8+tJQYLJRYwOgyGPNBTtVtV2+jhG318/V8R4JQ79LBji
-         IXJFOhESxve1HFswgRG5nTJ/blfxFcD16f8zz9LuhnDFQEGvMLmUBnqt1xPDTPxTR3F2
-         UHxlkCaew7fGYGA1NWH+bEsjzPS8fNmBKA8ge4sydhn43kds0Br7aJqOw8nsgys43bqq
-         +XxhHjPci5pdYEoWKUtlQUEsK7RtCbrhP00EmAXuXadm7JEFV+so2h2c2OMhdTF7sOr/
-         uDpQ==
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mLxh1xnnQMfeNrHf0aYqKYeviGu5yN55vYMo0/wqLZk=;
+        b=dCNqxHY8plIDmYXpsy08QCX+iLvxPKZniVm+ncSZ3Buz54doFAW+0MiXkxSfa6aZ8N
+         jTXJVTUqheLEyn7aW+R/fuDvBVdUs6Xh1fwu7j26vjbyzEwKEDlhCUidQu4KmRqzZOVa
+         oDhQ+hqdK6ua5BH0xjQgzzSY2YytIfxpQZbUbhHRfBt+5myVtlvcOTS0tg2Us6YrayDX
+         spYFcJQpsTWAHLAWlWQ4c+a7j4DzTav2yKnrSBmM6urDLun3EPrbW9LTSp94TCS/Nqy6
+         yUFovGgvKMukOtEtX/dZWO89MRVjVrn4dfNeI+KJg31PeTSFYAKqz3WMNOK0C1qeIyJD
+         lgzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=SpJEkhv16jwVLO2sSfJ7SapVMbBMCm5PIZfy4pO40/c=;
-        b=te8j/vwPTUszj1/bMHx+FrewWMufGC+1sO21ogZo5b2BEKqm8DgqU4BqEW/5KLPr8u
-         WEPr6s9fn4dXztvJ3AbF4lPawKOjnVN/8v4WvUFHHDUI+pxMuEuzN+t9SPBLyTEShtdn
-         ui5x+Ah40jJ4MFpzMxVl0PW35FBNY8UmDkgTOOgJ2ni6hDLwMT2oCOiH6pML1MAxOCqo
-         Ja+MEy7hsO8nYoodq/r1xW3sBSA24l61ya+hpNvACBmSrr5Em1JJruZG9gh8W0v2QN3x
-         Zv461uq/jgmrOEU4BeqgIdCrXuTKGeBKaTHVOdK2cxuisucrnbtfy/A7/zLuBFnIJ/I7
-         qhbg==
-X-Gm-Message-State: APjAAAWtk9NOj2CLFfQdhA3JQvxSFCwH446e00GSA2lZmYAuS2U7zaLS
-        GTAqXRSecdvDT7B6o9xEolebtFYJSMdFxw==
-X-Google-Smtp-Source: APXvYqwTAorLnL1JJGzrv713O0sksEZzjbqxPPlxmNn5n95Bw8aIX/crRrWGGgZ7Emh+mOBZG+hc4w==
-X-Received: by 2002:a25:1a82:: with SMTP id a124mr1799776yba.160.1565085681984;
-        Tue, 06 Aug 2019 03:01:21 -0700 (PDT)
-Received: from localhost.localdomain (li1322-146.members.linode.com. [45.79.223.146])
-        by smtp.gmail.com with ESMTPSA id h12sm18316685ywm.91.2019.08.06.03.01.12
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 06 Aug 2019 03:01:21 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Russell King <linux@armlinux.org.uk>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 3/3] arm: Add support for function error injection
-Date:   Tue,  6 Aug 2019 18:00:15 +0800
-Message-Id: <20190806100015.11256-4-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190806100015.11256-1-leo.yan@linaro.org>
-References: <20190806100015.11256-1-leo.yan@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mLxh1xnnQMfeNrHf0aYqKYeviGu5yN55vYMo0/wqLZk=;
+        b=rTR91j5sB7Qtv4oGNcd0Q6VettRO6v8QjS+6RcN+QQopJQYgBJnOoenmyIHotKsT1g
+         H615eKv8OHZkn27189QbWG42ofbKlud7T2x3weMNGNGWuVeWU6Hl1jhqnP71+VOMF3aK
+         W5EoH4B0w9klhtaKYNanNbsMxUj2FkWwbvvyMZTtKdCJoxOx2xWnl8U5VOu+H8CmywZS
+         WORfSp2wD3h1o1igh9n7D3tyOfhu8QdJ4gJaX5tPrMwMdSM+XmomTs2KIfd9Zz9bvdgJ
+         Nv/8evFItaF/K1/abJQYXj2ECxPMFf5BF0ydA9RwWDx1dtnCVDZ7Btgbk9F2ZYmyDuL+
+         dVpw==
+X-Gm-Message-State: APjAAAWaELYbxqnC1O6w6N/HUI7NrC8pPVlxat0pt6X4+cw43NikuxRY
+        k1nQZ382X6iCQZGA+tGh82iQVPchgIo=
+X-Google-Smtp-Source: APXvYqz/KhBA+ZSNGOJbjZoeKD/ak+4bM/swWsBeb0rTxPioOaajmtlsxRIAU93xegZHr6XtYLs1kQ==
+X-Received: by 2002:a17:906:340e:: with SMTP id c14mr2544571ejb.170.1565088317410;
+        Tue, 06 Aug 2019 03:45:17 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id e43sm20620511ede.62.2019.08.06.03.45.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Aug 2019 03:45:16 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 3AED71003C7; Tue,  6 Aug 2019 13:45:16 +0300 (+03)
+Date:   Tue, 6 Aug 2019 13:45:16 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Qian Cai <cai@lca.pw>
+Cc:     akpm@linux-foundation.org, arnd@arndb.de,
+        kirill.shutemov@linux.intel.com, mhocko@suse.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] asm-generic: fix variable 'p4d' set but not used
+Message-ID: <20190806104516.yvioe2t4w2vwvs64@box>
+References: <1564774882-22926-1-git-send-email-cai@lca.pw>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1564774882-22926-1-git-send-email-cai@lca.pw>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch implements arm specific functions regs_set_return_value() and
-override_function_with_return() to support function error injection.
+On Fri, Aug 02, 2019 at 03:41:22PM -0400, Qian Cai wrote:
+> GCC throws a warning on an arm64 system since the commit 9849a5697d3d
+> ("arch, mm: convert all architectures to use 5level-fixup.h"),
+> 
+> mm/kasan/init.c: In function 'kasan_free_p4d':
+> mm/kasan/init.c:344:9: warning: variable 'p4d' set but not used
+> [-Wunused-but-set-variable]
+>   p4d_t *p4d;
+>          ^~~
+> 
+> because p4d_none() in "5level-fixup.h" is compiled away while it is a
+> static inline function in "pgtable-nopud.h". However, if converted
+> p4d_none() to a static inline there, powerpc would be unhappy as it
+> reads those in assembler language in
+> "arch/powerpc/include/asm/book3s/64/pgtable.h",
+> 
+> ./include/asm-generic/5level-fixup.h: Assembler messages:
+> ./include/asm-generic/5level-fixup.h:20: Error: unrecognized opcode:
+> `static'
+> ./include/asm-generic/5level-fixup.h:21: Error: junk at end of line,
+> first unrecognized character is `{'
+> ./include/asm-generic/5level-fixup.h:22: Error: unrecognized opcode:
+> `return'
+> ./include/asm-generic/5level-fixup.h:23: Error: junk at end of line,
+> first unrecognized character is `}'
+> ./include/asm-generic/5level-fixup.h:25: Error: unrecognized opcode:
+> `static'
+> ./include/asm-generic/5level-fixup.h:26: Error: junk at end of line,
+> first unrecognized character is `{'
+> ./include/asm-generic/5level-fixup.h:27: Error: unrecognized opcode:
+> `return'
+> ./include/asm-generic/5level-fixup.h:28: Error: junk at end of line,
+> first unrecognized character is `}'
+> ./include/asm-generic/5level-fixup.h:30: Error: unrecognized opcode:
+> `static'
+> ./include/asm-generic/5level-fixup.h:31: Error: junk at end of line,
+> first unrecognized character is `{'
+> ./include/asm-generic/5level-fixup.h:32: Error: unrecognized opcode:
+> `return'
+> ./include/asm-generic/5level-fixup.h:33: Error: junk at end of line,
+> first unrecognized character is `}'
+> make[2]: *** [scripts/Makefile.build:375:
+> arch/powerpc/kvm/book3s_hv_rmhandlers.o] Error 1
+> 
+> Fix it by reference the variable in the macro instead.
+> 
+> Signed-off-by: Qian Cai <cai@lca.pw>
 
-In the exception flow, it updates pt_regs::ARM_pc with pt_regs::ARM_lr
-so can override the probed function return.
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- arch/arm/Kconfig              |  1 +
- arch/arm/include/asm/ptrace.h |  5 +++++
- arch/arm/lib/Makefile         |  2 ++
- arch/arm/lib/error-inject.c   | 19 +++++++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 arch/arm/lib/error-inject.c
-
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 33b00579beff..2d3d44a037f6 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -77,6 +77,7 @@ config ARM
- 	select HAVE_EXIT_THREAD
- 	select HAVE_FAST_GUP if ARM_LPAE
- 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
-+	select HAVE_FUNCTION_ERROR_INJECTION if !THUMB2_KERNEL
- 	select HAVE_FUNCTION_GRAPH_TRACER if !THUMB2_KERNEL && !CC_IS_CLANG
- 	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
- 	select HAVE_GCC_PLUGINS
-diff --git a/arch/arm/include/asm/ptrace.h b/arch/arm/include/asm/ptrace.h
-index 91d6b7856be4..3b41f37b361a 100644
---- a/arch/arm/include/asm/ptrace.h
-+++ b/arch/arm/include/asm/ptrace.h
-@@ -89,6 +89,11 @@ static inline long regs_return_value(struct pt_regs *regs)
- 	return regs->ARM_r0;
- }
- 
-+static inline void regs_set_return_value(struct pt_regs *regs, unsigned long rc)
-+{
-+	regs->ARM_r0 = rc;
-+}
-+
- #define instruction_pointer(regs)	(regs)->ARM_pc
- 
- #ifdef CONFIG_THUMB2_KERNEL
-diff --git a/arch/arm/lib/Makefile b/arch/arm/lib/Makefile
-index b25c54585048..8f56484a7156 100644
---- a/arch/arm/lib/Makefile
-+++ b/arch/arm/lib/Makefile
-@@ -42,3 +42,5 @@ ifeq ($(CONFIG_KERNEL_MODE_NEON),y)
-   CFLAGS_xor-neon.o		+= $(NEON_FLAGS)
-   obj-$(CONFIG_XOR_BLOCKS)	+= xor-neon.o
- endif
-+
-+obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
-diff --git a/arch/arm/lib/error-inject.c b/arch/arm/lib/error-inject.c
-new file mode 100644
-index 000000000000..2d696dc94893
---- /dev/null
-+++ b/arch/arm/lib/error-inject.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/error-injection.h>
-+#include <linux/kprobes.h>
-+
-+void override_function_with_return(struct pt_regs *regs)
-+{
-+	/*
-+	 * 'regs' represents the state on entry of a predefined function in
-+	 * the kernel/module and which is captured on a kprobe.
-+	 *
-+	 * 'regs->ARM_lr' contains the the link register for the probed
-+	 * function, when kprobe returns back from exception it will override
-+	 * the end of probed function and directly return to the predefined
-+	 * function's caller.
-+	 */
-+	instruction_pointer_set(regs, regs->ARM_lr);
-+}
-+NOKPROBE_SYMBOL(override_function_with_return);
 -- 
-2.17.1
-
+ Kirill A. Shutemov
