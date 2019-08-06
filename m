@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B64E083BEC
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 23:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A5E83BD9
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 23:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726747AbfHFVjK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Aug 2019 17:39:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55532 "EHLO mail.kernel.org"
+        id S1729676AbfHFViQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Aug 2019 17:38:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729495AbfHFVhs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Aug 2019 17:37:48 -0400
+        id S1727570AbfHFViP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Aug 2019 17:38:15 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3CCE721874;
-        Tue,  6 Aug 2019 21:37:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 26D66218A4;
+        Tue,  6 Aug 2019 21:38:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565127467;
+        s=default; t=1565127494;
         bh=hBlharvEjR1CAE4XGytQM/ZaRZ/yd+YI11AyHBJCrIU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JNLQIRAy+5RiV2cwd0KLuLF8qAZp2mOyPIei4aBfjG8nYzNxVh7OSAGlaaO5U0yS0
-         QR4DCz8YMwnHB7BGz/yhk4jlqs/ORpa1UNglcMKhFWBx7j7bdO94DL0Lnv2nngz1dV
-         plcoL1MtcchjvgM0hVR4ePM6ewvRxUhbyxker/Js=
+        b=kxslMfuBLQ64elUWfimm33RGRI1PTyY37FD/tshxC0gBNm5WzdK2xlvXoAa53SBub
+         Z1/O/55sG0ixi219MPpukYlAP3nH7+wcxqdVz1PkKV0XXbOnFW/Uu2rhyi3mQMABJB
+         95NACmQvtosVETSXbw4dftU6pQg9/CpMn5my6eQg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Qian Cai <cai@lca.pw>,
@@ -37,12 +37,12 @@ Cc:     Qian Cai <cai@lca.pw>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 17/17] asm-generic: fix -Wtype-limits compiler warnings
-Date:   Tue,  6 Aug 2019 17:37:14 -0400
-Message-Id: <20190806213715.20487-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 14/14] asm-generic: fix -Wtype-limits compiler warnings
+Date:   Tue,  6 Aug 2019 17:37:48 -0400
+Message-Id: <20190806213749.20689-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190806213715.20487-1-sashal@kernel.org>
-References: <20190806213715.20487-1-sashal@kernel.org>
+In-Reply-To: <20190806213749.20689-1-sashal@kernel.org>
+References: <20190806213749.20689-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
