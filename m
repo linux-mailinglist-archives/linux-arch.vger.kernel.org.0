@@ -2,65 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2246A82FEB
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 12:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8809A83415
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 16:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbfHFKpT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Aug 2019 06:45:19 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:45908 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730068AbfHFKpT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Aug 2019 06:45:19 -0400
-Received: by mail-ed1-f68.google.com with SMTP id x19so75941568eda.12
-        for <linux-arch@vger.kernel.org>; Tue, 06 Aug 2019 03:45:18 -0700 (PDT)
+        id S1732893AbfHFOjG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Aug 2019 10:39:06 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:37596 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731166AbfHFOjG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Aug 2019 10:39:06 -0400
+Received: by mail-qt1-f194.google.com with SMTP id y26so84763700qto.4
+        for <linux-arch@vger.kernel.org>; Tue, 06 Aug 2019 07:39:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=mLxh1xnnQMfeNrHf0aYqKYeviGu5yN55vYMo0/wqLZk=;
-        b=dCNqxHY8plIDmYXpsy08QCX+iLvxPKZniVm+ncSZ3Buz54doFAW+0MiXkxSfa6aZ8N
-         jTXJVTUqheLEyn7aW+R/fuDvBVdUs6Xh1fwu7j26vjbyzEwKEDlhCUidQu4KmRqzZOVa
-         oDhQ+hqdK6ua5BH0xjQgzzSY2YytIfxpQZbUbhHRfBt+5myVtlvcOTS0tg2Us6YrayDX
-         spYFcJQpsTWAHLAWlWQ4c+a7j4DzTav2yKnrSBmM6urDLun3EPrbW9LTSp94TCS/Nqy6
-         yUFovGgvKMukOtEtX/dZWO89MRVjVrn4dfNeI+KJg31PeTSFYAKqz3WMNOK0C1qeIyJD
-         lgzQ==
+        bh=R5CPIS4mmyxALTwu292eKFtIXYTqe3SCg3BcaBK423k=;
+        b=XTjnnHi8z+SYvy9zIZcrSsQ/4Y2tZDIGwuTiAd3On/3Qyk2jJKpY9TJZwKkhDIEj3+
+         MGHtt3rEv401lGpVq5xL0CKheYAiDCONwdtltzljbu1GSNGjaTUSRBGuj6fMXfPd7xx9
+         AvWLguAEFAriYfUuE/os0GFuvFNJgqJH9P1XG2mJ+YwX0AZhkzMufVj8RERsoxhYeF6L
+         xRIbWAbvwo4On/nNeR5bWsE7X6QGURzO6ky4zV3wi1UlvTjZErwMLSfQ7U9cov+5JWeV
+         kG6leE1orrap1pWD6YdXGVpsb3smabaJfOBSV25ApiXrIfZ6NUpp239eLF46tRKUjS0M
+         cRZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mLxh1xnnQMfeNrHf0aYqKYeviGu5yN55vYMo0/wqLZk=;
-        b=rTR91j5sB7Qtv4oGNcd0Q6VettRO6v8QjS+6RcN+QQopJQYgBJnOoenmyIHotKsT1g
-         H615eKv8OHZkn27189QbWG42ofbKlud7T2x3weMNGNGWuVeWU6Hl1jhqnP71+VOMF3aK
-         W5EoH4B0w9klhtaKYNanNbsMxUj2FkWwbvvyMZTtKdCJoxOx2xWnl8U5VOu+H8CmywZS
-         WORfSp2wD3h1o1igh9n7D3tyOfhu8QdJ4gJaX5tPrMwMdSM+XmomTs2KIfd9Zz9bvdgJ
-         Nv/8evFItaF/K1/abJQYXj2ECxPMFf5BF0ydA9RwWDx1dtnCVDZ7Btgbk9F2ZYmyDuL+
-         dVpw==
-X-Gm-Message-State: APjAAAWaELYbxqnC1O6w6N/HUI7NrC8pPVlxat0pt6X4+cw43NikuxRY
-        k1nQZ382X6iCQZGA+tGh82iQVPchgIo=
-X-Google-Smtp-Source: APXvYqz/KhBA+ZSNGOJbjZoeKD/ak+4bM/swWsBeb0rTxPioOaajmtlsxRIAU93xegZHr6XtYLs1kQ==
-X-Received: by 2002:a17:906:340e:: with SMTP id c14mr2544571ejb.170.1565088317410;
-        Tue, 06 Aug 2019 03:45:17 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id e43sm20620511ede.62.2019.08.06.03.45.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Aug 2019 03:45:16 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 3AED71003C7; Tue,  6 Aug 2019 13:45:16 +0300 (+03)
-Date:   Tue, 6 Aug 2019 13:45:16 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+        bh=R5CPIS4mmyxALTwu292eKFtIXYTqe3SCg3BcaBK423k=;
+        b=UmKF2EhN5mpY3TVujPwt05I4LEgrh5V2+zLMXqDQq9/ArT2EYJaoW8gCjyEHo1VorM
+         zGX9jjuAq5kbKPz5aZkpZS+8GPzA9JljC567gXVrj9dtNjI/7Lxz++3ZIOOj7QhugRAc
+         ifvxx+3iDa6+PFCBXNyNEKmow63ngCyv4Vb3EMcFgjTBrN8iKFQ9/FqfAf3HLFZdnBQ/
+         eeNx+E71ScgoGbdlL4eNpiFceOeDl9TtqiHABBjAedbMJQmHIjJg70lPy078OI+3DrFI
+         9FD5qe3yqqmGysSbiRufUR8QTKrzj5ouIDbpk0Yn9ztS6HXt6URBbjhv5kPlLPivTXrX
+         WYng==
+X-Gm-Message-State: APjAAAXiqL8fbqVFbRWNKCQqWaMKgOBKJ9KWqZPvdCHTlcQFQZz0sVGa
+        KBp4lkkrqjEwFyijQUGnzm00U5jNwuo=
+X-Google-Smtp-Source: APXvYqxb9K01d3+TG7ks63JaVg+hAktf2Hz+U/53HsIRu0RYyLZKlOzhu0DzA2UWt4gOEDGxB6xX5A==
+X-Received: by 2002:a0c:e001:: with SMTP id j1mr3394954qvk.110.1565102345637;
+        Tue, 06 Aug 2019 07:39:05 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-55-100.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.55.100])
+        by smtp.gmail.com with ESMTPSA id d71sm500507qkg.70.2019.08.06.07.39.05
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 06 Aug 2019 07:39:05 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1hv0cC-0005jc-Oe; Tue, 06 Aug 2019 11:39:04 -0300
+Date:   Tue, 6 Aug 2019 11:39:04 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
 To:     Qian Cai <cai@lca.pw>
 Cc:     akpm@linux-foundation.org, arnd@arndb.de,
         kirill.shutemov@linux.intel.com, mhocko@suse.com,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] asm-generic: fix variable 'p4d' set but not used
-Message-ID: <20190806104516.yvioe2t4w2vwvs64@box>
+Message-ID: <20190806143904.GE11627@ziepe.ca>
 References: <1564774882-22926-1-git-send-email-cai@lca.pw>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <1564774882-22926-1-git-send-email-cai@lca.pw>
-User-Agent: NeoMutt/20180716
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -113,8 +114,19 @@ On Fri, Aug 02, 2019 at 03:41:22PM -0400, Qian Cai wrote:
 > Fix it by reference the variable in the macro instead.
 > 
 > Signed-off-by: Qian Cai <cai@lca.pw>
+>  include/asm-generic/5level-fixup.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/asm-generic/5level-fixup.h b/include/asm-generic/5level-fixup.h
+> index bb6cb347018c..2c3e14c924b6 100644
+> +++ b/include/asm-generic/5level-fixup.h
+> @@ -19,7 +19,7 @@
+>  
+>  #define p4d_alloc(mm, pgd, address)	(pgd)
+>  #define p4d_offset(pgd, start)		(pgd)
+> -#define p4d_none(p4d)			0
+> +#define p4d_none(p4d)			((void)p4d, 0)
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Yuk, how about a static inline instead?
 
--- 
- Kirill A. Shutemov
+Jason
