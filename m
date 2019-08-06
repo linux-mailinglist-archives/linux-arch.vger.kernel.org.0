@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C7B83C18
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 23:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64E083BEC
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 23:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729275AbfHFVhP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Aug 2019 17:37:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55010 "EHLO mail.kernel.org"
+        id S1726747AbfHFVjK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Aug 2019 17:39:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729265AbfHFVhO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Aug 2019 17:37:14 -0400
+        id S1729495AbfHFVhs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Aug 2019 17:37:48 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C18F218A2;
-        Tue,  6 Aug 2019 21:37:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3CCE721874;
+        Tue,  6 Aug 2019 21:37:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565127433;
-        bh=OH/rAetBAQwRVBiv9x4rHjv5FcgOgcVHMsUgQT8RD6g=;
+        s=default; t=1565127467;
+        bh=hBlharvEjR1CAE4XGytQM/ZaRZ/yd+YI11AyHBJCrIU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lsJN/3qFxZnrp2VilpN8/Ett3j3iTdg9w/GMtGjAn+sbA3i1+NkV/wW82uGjczzTS
-         EoNA4PZodTIE9EqzrX0sM9uhf4GhSENWw7sPpd83K5G3ZzPUK77Ugh1YobUftSW9p1
-         GMlJOQ5hacG7CFmqvrgx0GFFwAOtZ7RhSgCK6lGI=
+        b=JNLQIRAy+5RiV2cwd0KLuLF8qAZp2mOyPIei4aBfjG8nYzNxVh7OSAGlaaO5U0yS0
+         QR4DCz8YMwnHB7BGz/yhk4jlqs/ORpa1UNglcMKhFWBx7j7bdO94DL0Lnv2nngz1dV
+         plcoL1MtcchjvgM0hVR4ePM6ewvRxUhbyxker/Js=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Qian Cai <cai@lca.pw>,
@@ -37,12 +37,12 @@ Cc:     Qian Cai <cai@lca.pw>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 25/25] asm-generic: fix -Wtype-limits compiler warnings
-Date:   Tue,  6 Aug 2019 17:36:22 -0400
-Message-Id: <20190806213624.20194-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 17/17] asm-generic: fix -Wtype-limits compiler warnings
+Date:   Tue,  6 Aug 2019 17:37:14 -0400
+Message-Id: <20190806213715.20487-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190806213624.20194-1-sashal@kernel.org>
-References: <20190806213624.20194-1-sashal@kernel.org>
+In-Reply-To: <20190806213715.20487-1-sashal@kernel.org>
+References: <20190806213715.20487-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -110,10 +110,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 20 insertions(+), 30 deletions(-)
 
 diff --git a/include/asm-generic/getorder.h b/include/asm-generic/getorder.h
-index c64bea7a52beb..e9f20b813a699 100644
+index 65e4468ac53da..52fbf236a90ea 100644
 --- a/include/asm-generic/getorder.h
 +++ b/include/asm-generic/getorder.h
-@@ -7,24 +7,6 @@
+@@ -6,24 +6,6 @@
  #include <linux/compiler.h>
  #include <linux/log2.h>
  
@@ -138,7 +138,7 @@ index c64bea7a52beb..e9f20b813a699 100644
  /**
   * get_order - Determine the allocation order of a memory size
   * @size: The size for which to get the order
-@@ -43,19 +25,27 @@ int __get_order(unsigned long size)
+@@ -42,19 +24,27 @@ int __get_order(unsigned long size)
   * to hold an object of the specified size.
   *
   * The result is undefined if the size is 0.
