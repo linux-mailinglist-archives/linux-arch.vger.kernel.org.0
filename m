@@ -2,66 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20AC882C0D
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 08:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 136D282C5C
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 09:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731872AbfHFGvQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Aug 2019 02:51:16 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:44840 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731576AbfHFGvQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Aug 2019 02:51:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=0j0/beEZjkNfD9SuCpCi48IxfaTOmOKL1H6G8UPho5A=; b=nIJaSL6FaLS6lzGxjJd1ih+ix
-        alhWogFNEZl3NMVpC4OUoiKOLavS5bjEKVDJkbWYnZLFugTsd1sy2Q1LODZ0iqwf9zy+0XtQH79x0
-        nJAq30l2Iu3yszeOjrrrWMUfa3ySr0hTjtgNsAVzXl8SwSIWBcsN6d6pMfFN4zg/kcGIfvnsdZ7ew
-        vLahltpO8eh3CbsBiKll1HcYdSp0IlIE7pW+t8SRphdzFUnm3QJaruxY7v/dph2mDtiNk8XNCSeG/
-        AffIT1ety4CegVe0FPR5R/9Bc/AFuHtTVeD5d4xrGumK1adQ5XQTHXQLpDqV1Kplh8yFFiiymM3ZZ
-        3NxUb4dLw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hutJT-0003IO-4f; Tue, 06 Aug 2019 06:51:15 +0000
-Date:   Mon, 5 Aug 2019 23:51:15 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guo Ren <guoren@kernel.org>,
+        id S1731994AbfHFHL2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Aug 2019 03:11:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37170 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731576AbfHFHL2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Aug 2019 03:11:28 -0400
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 10163216F4;
+        Tue,  6 Aug 2019 07:11:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565075487;
+        bh=J4N5lnXWpDXT9JqaahBuM8YWglXlyfMSplL895YamMk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gWdwarr/4ZOEaXlXOoVNLfcon5HZrxtHVoWJYjSuYymEIpNxWL2YzeaGQzOUbAsP0
+         Rsp+PDlJqUzmi4ceSJ/Esdyz4risX3PqrfV+DzYznsB1h4APax4H41nKefPZMXTCU8
+         q9R5xFdubDJ0vw4FWL/OhAqgjxtGjGJxcEAs7TiY=
+Received: by mail-wr1-f54.google.com with SMTP id x4so33567567wrt.6;
+        Tue, 06 Aug 2019 00:11:26 -0700 (PDT)
+X-Gm-Message-State: APjAAAWtV6mwiHdu5pxKauB6wAht07qE5yTPQlMe+be+8Mc8OkciKFhm
+        +9m1bvgt/InasqPKgRjiqp0b4b9vHD0If1ZOC5Y=
+X-Google-Smtp-Source: APXvYqwWdFrBgnlrPvQM+PFNKRmvVdIqQwvU9zvSBwF4qHNlCpk8f5KcSnWsmpuAORokS4MOJFLQhAc4k0uQgRWy98Y=
+X-Received: by 2002:adf:f3d1:: with SMTP id g17mr2715775wrp.38.1565075485547;
+ Tue, 06 Aug 2019 00:11:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <1564488945-20149-1-git-send-email-guoren@kernel.org>
+ <1564488945-20149-3-git-send-email-guoren@kernel.org> <20190806064933.GA2508@infradead.org>
+In-Reply-To: <20190806064933.GA2508@infradead.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 6 Aug 2019 15:11:13 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR1vCz504X20rBnQkAXGhJ-QbL4pORxnJTRVJqXx2t4uQ@mail.gmail.com>
+Message-ID: <CAJF2gTR1vCz504X20rBnQkAXGhJ-QbL4pORxnJTRVJqXx2t4uQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] csky/dma: Fixup cache_op failed when cross memory ZONEs
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-csky@vger.kernel.org, feng_shizhu@dahuatech.com,
         zhang_jian5@dahuatech.com, zheng_xingjian@dahuatech.com,
         zhu_peng@dahuatech.com, Guo Ren <ren_guo@c-sky.com>
-Subject: Re: [PATCH 4/4] csky: Add dma_inv_range for DMA_FROM_DEVICE
-Message-ID: <20190806065115.GB2508@infradead.org>
-References: <1564488945-20149-1-git-send-email-guoren@kernel.org>
- <1564488945-20149-4-git-send-email-guoren@kernel.org>
- <CAK8P3a0v3oVS5cCkORxA7na+VE7ofTQRxiv5o5xNf5v=esnN9A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0v3oVS5cCkORxA7na+VE7ofTQRxiv5o5xNf5v=esnN9A@mail.gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 30, 2019 at 03:43:20PM +0200, Arnd Bergmann wrote:
-> When syncing 'for_cpu', you should not need to write back, because
-> there won't be any dirty cache lines.
-> 
-> If you have a CPU core that does not do speculative loads, you also don't
-> need to invalidate here, because you have already done that in the
-> _for_device() case, the only reason to invalidate the CPU cache
-> again is if a speculative load created a stale cache line that now
-> shadows the data received from the device.
+On Tue, Aug 6, 2019 at 2:49 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Tue, Jul 30, 2019 at 08:15:44PM +0800, guoren@kernel.org wrote:
+> > diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+> > index 80783bb..3f1ff9d 100644
+> > --- a/arch/csky/mm/dma-mapping.c
+> > +++ b/arch/csky/mm/dma-mapping.c
+> > @@ -18,71 +18,52 @@ static int __init atomic_pool_init(void)
+> >  {
+> >       return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERNEL));
+> >  }
+> > -postcore_initcall(atomic_pool_init);
+>
+> Please keep the postcore_initcall next to the function it calls.
+Ok. Change arch_initcall back to postcore_initcall. :)
 
-Yes.  And that is one reason why I want to lift a set of common helpers
-for both the speculating and non-speculating case to the common code
-that just calls arch specific writeback/invalidate/writeback+invalidate
-helpers.  It hasn't been a priotity so far, but maybe it becomes one
-now.  Especially if I could draft someone else to help with it :)
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
