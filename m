@@ -2,112 +2,182 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DF683AAD
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 22:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD8683C80
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2019 23:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726058AbfHFUvv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Aug 2019 16:51:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43144 "EHLO mail.kernel.org"
+        id S1726052AbfHFVmj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Aug 2019 17:42:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53110 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726009AbfHFUvv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Aug 2019 16:51:51 -0400
-Received: from localhost.localdomain (c-73-223-200-170.hsd1.ca.comcast.net [73.223.200.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728312AbfHFVfR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Aug 2019 17:35:17 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C26D2173B;
-        Tue,  6 Aug 2019 20:51:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B104E21871;
+        Tue,  6 Aug 2019 21:35:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565124709;
-        bh=gmv2NhynOlvsJo/XaSmVGbWDHCIS29JRNjVFyDL59Zo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bsXbu4Dx0vPRFZVn7Kylt0tqlWkV0eU7YaCb+zd7CGaaVwGbccAS8ljEFwgTMUBBA
-         tkAC3iX3lvn0b6EK+PbvZtP8lpesaTAPP0jzqrw9KJIPXQc8G2mc0cmsC9mqj1bsHw
-         Yqts5gAZNKCpKtQWQDT/pjUojR2gM2gDwG6IiW0E=
-Date:   Tue, 6 Aug 2019 13:51:48 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Qian Cai <cai@lca.pw>, arnd@arndb.de,
-        kirill.shutemov@linux.intel.com, mhocko@suse.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] asm-generic: fix variable 'p4d' set but not used
-Message-Id: <20190806135148.867b32afce5a64e4ed651ccd@linux-foundation.org>
-In-Reply-To: <20190806143904.GE11627@ziepe.ca>
-References: <1564774882-22926-1-git-send-email-cai@lca.pw>
-        <20190806143904.GE11627@ziepe.ca>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        s=default; t=1565127317;
+        bh=OH/rAetBAQwRVBiv9x4rHjv5FcgOgcVHMsUgQT8RD6g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NI7yR+R6GTKoWKp+9PhteE1Lku4VylhSSs/WjdiOvbGA9AQI30Y0nuOjr4Y0AXH07
+         RdmGUfPiLpcY8eH6Zm0qa/o3rmmB57ohTP7dTEHDodhEl8DSfVirC5RdgGiSE2lHx9
+         WdHpLWU4U4/QOfwe4LsKN0qbGDEWRkh3KrC4PNSg=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Qian Cai <cai@lca.pw>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        James Y Knight <jyknight@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 58/59] asm-generic: fix -Wtype-limits compiler warnings
+Date:   Tue,  6 Aug 2019 17:33:18 -0400
+Message-Id: <20190806213319.19203-58-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190806213319.19203-1-sashal@kernel.org>
+References: <20190806213319.19203-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 6 Aug 2019 11:39:04 -0300 Jason Gunthorpe <jgg@ziepe.ca> wrote:
+From: Qian Cai <cai@lca.pw>
 
-> On Fri, Aug 02, 2019 at 03:41:22PM -0400, Qian Cai wrote:
-> > GCC throws a warning on an arm64 system since the commit 9849a5697d3d
-> > ("arch, mm: convert all architectures to use 5level-fixup.h"),
-> > 
-> > mm/kasan/init.c: In function 'kasan_free_p4d':
-> > mm/kasan/init.c:344:9: warning: variable 'p4d' set but not used
-> > [-Wunused-but-set-variable]
-> >   p4d_t *p4d;
-> >          ^~~
-> > 
-> > because p4d_none() in "5level-fixup.h" is compiled away while it is a
-> > static inline function in "pgtable-nopud.h". However, if converted
-> > p4d_none() to a static inline there, powerpc would be unhappy as it
-> > reads those in assembler language in
-> > "arch/powerpc/include/asm/book3s/64/pgtable.h",
-> > 
-> > ./include/asm-generic/5level-fixup.h: Assembler messages:
-> > ./include/asm-generic/5level-fixup.h:20: Error: unrecognized opcode:
-> > `static'
-> > ./include/asm-generic/5level-fixup.h:21: Error: junk at end of line,
-> > first unrecognized character is `{'
-> > ./include/asm-generic/5level-fixup.h:22: Error: unrecognized opcode:
-> > `return'
-> > ./include/asm-generic/5level-fixup.h:23: Error: junk at end of line,
-> > first unrecognized character is `}'
-> > ./include/asm-generic/5level-fixup.h:25: Error: unrecognized opcode:
-> > `static'
-> > ./include/asm-generic/5level-fixup.h:26: Error: junk at end of line,
-> > first unrecognized character is `{'
-> > ./include/asm-generic/5level-fixup.h:27: Error: unrecognized opcode:
-> > `return'
-> > ./include/asm-generic/5level-fixup.h:28: Error: junk at end of line,
-> > first unrecognized character is `}'
-> > ./include/asm-generic/5level-fixup.h:30: Error: unrecognized opcode:
-> > `static'
-> > ./include/asm-generic/5level-fixup.h:31: Error: junk at end of line,
-> > first unrecognized character is `{'
-> > ./include/asm-generic/5level-fixup.h:32: Error: unrecognized opcode:
-> > `return'
-> > ./include/asm-generic/5level-fixup.h:33: Error: junk at end of line,
-> > first unrecognized character is `}'
-> > make[2]: *** [scripts/Makefile.build:375:
-> > arch/powerpc/kvm/book3s_hv_rmhandlers.o] Error 1
-> > 
-> > Fix it by reference the variable in the macro instead.
-> > 
-> > Signed-off-by: Qian Cai <cai@lca.pw>
-> >  include/asm-generic/5level-fixup.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/include/asm-generic/5level-fixup.h b/include/asm-generic/5level-fixup.h
-> > index bb6cb347018c..2c3e14c924b6 100644
-> > +++ b/include/asm-generic/5level-fixup.h
-> > @@ -19,7 +19,7 @@
-> >  
-> >  #define p4d_alloc(mm, pgd, address)	(pgd)
-> >  #define p4d_offset(pgd, start)		(pgd)
-> > -#define p4d_none(p4d)			0
-> > +#define p4d_none(p4d)			((void)p4d, 0)
-> 
-> Yuk, how about a static inline instead?
+[ Upstream commit cbedfe11347fe418621bd188d58a206beb676218 ]
 
-Yes.  With the appropriate `#ifndef __ASSEMBLY__' to avoid powerpc
-build errors?
+Commit d66acc39c7ce ("bitops: Optimise get_order()") introduced a
+compilation warning because "rx_frag_size" is an "ushort" while
+PAGE_SHIFT here is 16.
+
+The commit changed the get_order() to be a multi-line macro where
+compilers insist to check all statements in the macro even when
+__builtin_constant_p(rx_frag_size) will return false as "rx_frag_size"
+is a module parameter.
+
+In file included from ./arch/powerpc/include/asm/page_64.h:107,
+                 from ./arch/powerpc/include/asm/page.h:242,
+                 from ./arch/powerpc/include/asm/mmu.h:132,
+                 from ./arch/powerpc/include/asm/lppaca.h:47,
+                 from ./arch/powerpc/include/asm/paca.h:17,
+                 from ./arch/powerpc/include/asm/current.h:13,
+                 from ./include/linux/thread_info.h:21,
+                 from ./arch/powerpc/include/asm/processor.h:39,
+                 from ./include/linux/prefetch.h:15,
+                 from drivers/net/ethernet/emulex/benet/be_main.c:14:
+drivers/net/ethernet/emulex/benet/be_main.c: In function 'be_rx_cqs_create':
+./include/asm-generic/getorder.h:54:9: warning: comparison is always
+true due to limited range of data type [-Wtype-limits]
+   (((n) < (1UL << PAGE_SHIFT)) ? 0 :  \
+         ^
+drivers/net/ethernet/emulex/benet/be_main.c:3138:33: note: in expansion
+of macro 'get_order'
+  adapter->big_page_size = (1 << get_order(rx_frag_size)) * PAGE_SIZE;
+                                 ^~~~~~~~~
+
+Fix it by moving all of this multi-line macro into a proper function,
+and killing __get_order() off.
+
+[akpm@linux-foundation.org: remove __get_order() altogether]
+[cai@lca.pw: v2]
+  Link: http://lkml.kernel.org/r/1564000166-31428-1-git-send-email-cai@lca.pw
+Link: http://lkml.kernel.org/r/1563914986-26502-1-git-send-email-cai@lca.pw
+Fixes: d66acc39c7ce ("bitops: Optimise get_order()")
+Signed-off-by: Qian Cai <cai@lca.pw>
+Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jakub Jelinek <jakub@redhat.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Bill Wendling <morbo@google.com>
+Cc: James Y Knight <jyknight@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/asm-generic/getorder.h | 50 ++++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 30 deletions(-)
+
+diff --git a/include/asm-generic/getorder.h b/include/asm-generic/getorder.h
+index c64bea7a52beb..e9f20b813a699 100644
+--- a/include/asm-generic/getorder.h
++++ b/include/asm-generic/getorder.h
+@@ -7,24 +7,6 @@
+ #include <linux/compiler.h>
+ #include <linux/log2.h>
+ 
+-/*
+- * Runtime evaluation of get_order()
+- */
+-static inline __attribute_const__
+-int __get_order(unsigned long size)
+-{
+-	int order;
+-
+-	size--;
+-	size >>= PAGE_SHIFT;
+-#if BITS_PER_LONG == 32
+-	order = fls(size);
+-#else
+-	order = fls64(size);
+-#endif
+-	return order;
+-}
+-
+ /**
+  * get_order - Determine the allocation order of a memory size
+  * @size: The size for which to get the order
+@@ -43,19 +25,27 @@ int __get_order(unsigned long size)
+  * to hold an object of the specified size.
+  *
+  * The result is undefined if the size is 0.
+- *
+- * This function may be used to initialise variables with compile time
+- * evaluations of constants.
+  */
+-#define get_order(n)						\
+-(								\
+-	__builtin_constant_p(n) ? (				\
+-		((n) == 0UL) ? BITS_PER_LONG - PAGE_SHIFT :	\
+-		(((n) < (1UL << PAGE_SHIFT)) ? 0 :		\
+-		 ilog2((n) - 1) - PAGE_SHIFT + 1)		\
+-	) :							\
+-	__get_order(n)						\
+-)
++static inline __attribute_const__ int get_order(unsigned long size)
++{
++	if (__builtin_constant_p(size)) {
++		if (!size)
++			return BITS_PER_LONG - PAGE_SHIFT;
++
++		if (size < (1UL << PAGE_SHIFT))
++			return 0;
++
++		return ilog2((size) - 1) - PAGE_SHIFT + 1;
++	}
++
++	size--;
++	size >>= PAGE_SHIFT;
++#if BITS_PER_LONG == 32
++	return fls(size);
++#else
++	return fls64(size);
++#endif
++}
+ 
+ #endif	/* __ASSEMBLY__ */
+ 
+-- 
+2.20.1
 
