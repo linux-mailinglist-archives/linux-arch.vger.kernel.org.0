@@ -2,123 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 789FF83DCF
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Aug 2019 01:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C353B83E1F
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Aug 2019 02:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726238AbfHFX3d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Aug 2019 19:29:33 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:46063 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726133AbfHFX3d (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Aug 2019 19:29:33 -0400
-Received: by mail-qt1-f196.google.com with SMTP id x22so13062552qtp.12
-        for <linux-arch@vger.kernel.org>; Tue, 06 Aug 2019 16:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vaN7rKwbfKjoIgnB/iuhSOxVfS16dMa4sqOfbzb5FXs=;
-        b=rY7AczG1FCwGJsA+DlEFYA6NqwEvVQrAZ1R2msA3DPc+6J0zkUJCdfAGdmzfpvgpYx
-         3K0WQn8pzzLbfVba0bwpFoyacvzCz8SIJrJL6qvatJBN92kmfjTg8hFDeiNh3cT9AwFj
-         5DMhh8RQafKaePDtQqOwRZcCS52tMeCFOlPqu+s4+cS78mZLbcsq/upAwi7jLzzpDMjY
-         ZVmlBV8tQanVRg3+YJd/LnbSKwtByr3UedZShGBzkfXL8W6Vcgc5ZIgFb0hRxy+TpBVW
-         WbwJ8C+YRQMP/AJU7oI9137oxa9HBO8Ug1gDuPNlLNxCSfIJ3g6USFsjbNRqI6ldTlZP
-         qXVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vaN7rKwbfKjoIgnB/iuhSOxVfS16dMa4sqOfbzb5FXs=;
-        b=B58Fwt0agxHQtl6j7ZiC87oUj3MVNvUv0fr6TzEruPkaB4vCJgYnqRZu6VxVE723w1
-         FngiNRHJ8h6wm8WCe/luOHCIRB0LrDbtBueZgAbCEZBEPxne/4Xv62LVwQFySIKUL2UW
-         85+i/Bo72DC3ekkesBQI14cRLWRsjqkFZF3cnAAKggNo5u1AJ+kaSl9c/v6vAFZBGyu/
-         sNxN/b6DA2BQCcekPULdtUHizU9nH/oLByFjSBFdNwo5y5SUwCCeVtZPD5QOZX4IAHBz
-         7BsJ+6L4p+dfGfjMfIiHQc6WciWzQfCDgQjNXsGYlhRvvzw5tLXO1Ybl+rlJ5iU9CmM6
-         x6Pg==
-X-Gm-Message-State: APjAAAVM8/7fgxx3Gaxu9oXU3Io68Z4UH3oF9PHgZ2spE91uRXXRGXDI
-        DxUY3eMQ/IMGpOZwUL2C1gYcASj3tgRsrg==
-X-Google-Smtp-Source: APXvYqzHOhtFD51Ozqo9rIyIvLLP2B00cgCyhC/zh6NbzIA1hqylvEi7fHYtd61G6LqbU8Y0DsBhfQ==
-X-Received: by 2002:ac8:25c2:: with SMTP id f2mr5575755qtf.164.1565134172515;
-        Tue, 06 Aug 2019 16:29:32 -0700 (PDT)
-Received: from ovpn-120-159.rdu2.redhat.com (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id r17sm40257691qtf.26.2019.08.06.16.29.31
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 06 Aug 2019 16:29:31 -0700 (PDT)
-From:   Qian Cai <cai@lca.pw>
-To:     akpm@linux-foundation.org
-Cc:     arnd@arndb.de, kirill.shutemov@linux.intel.com, mhocko@suse.com,
-        jgg@ziepe.ca, linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qian Cai <cai@lca.pw>
-Subject: [PATCH v2] asm-generic: fix variable 'p4d' set but not used
-Date:   Tue,  6 Aug 2019 19:29:17 -0400
-Message-Id: <20190806232917.881-1-cai@lca.pw>
-X-Mailer: git-send-email 2.20.1 (Apple Git-117)
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726747AbfHGAIU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Aug 2019 20:08:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60338 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726085AbfHGAIU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Aug 2019 20:08:20 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ED7FA2089E;
+        Wed,  7 Aug 2019 00:08:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565136499;
+        bh=FhChKXsPPb1L8MSYtmcGqA0kOKtJaeO7DrzVbRT1MXs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TAeG++7BBNLdzsT8EeUACw88fONFc1pQcT8EUvAlKq8EqeLzcGZIz0ceLh4nYgX84
+         xTRDE/BvbyzWZvQYIvI12bG0fb2Hr+ia9Vz72+zfUolIsY7N4a0uoRfA30sNdV3zwc
+         LDnEWEZxfNuA7Zo/uTF7X1Z/DVFpbZNzGS5Nb8/c=
+Date:   Wed, 7 Aug 2019 09:08:11 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH v2 0/3] arm/arm64: Add support for function error
+ injection
+Message-Id: <20190807090811.1e50eb3e1d5a7b85743748e7@kernel.org>
+In-Reply-To: <20190806100015.11256-1-leo.yan@linaro.org>
+References: <20190806100015.11256-1-leo.yan@linaro.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-A compiler throws a warning on an arm64 system since the
-commit 9849a5697d3d ("arch, mm: convert all architectures to use
-5level-fixup.h"),
+On Tue,  6 Aug 2019 18:00:12 +0800
+Leo Yan <leo.yan@linaro.org> wrote:
 
-mm/kasan/init.c: In function 'kasan_free_p4d':
-mm/kasan/init.c:344:9: warning: variable 'p4d' set but not used
-[-Wunused-but-set-variable]
- p4d_t *p4d;
-        ^~~
+> This small patch set is to add support for function error injection;
+> this can be used to eanble more advanced debugging feature, e.g.
+> CONFIG_BPF_KPROBE_OVERRIDE.
+> 
+> The patch 01/03 is to consolidate the function definition which can be
+> suared cross architectures, patches 02,03/03 are used for enabling
+> function error injection on arm64 and arm architecture respectively.
+> 
+> I tested on arm64 platform Juno-r2 and one of my laptop with x86
+> architecture with below steps; I don't test for Arm architecture so
+> only pass compilation.
+> 
+> - Enable kernel configuration:
+>   CONFIG_BPF_KPROBE_OVERRIDE
+>   CONFIG_BTRFS_FS
+>   CONFIG_BPF_EVENTS=y
+>   CONFIG_KPROBES=y
+>   CONFIG_KPROBE_EVENTS=y
+>   CONFIG_BPF_KPROBE_OVERRIDE=y
+> 
+> - Build samples/bpf on with Debian rootFS:
+>   # cd $kernel
+>   # make headers_install
+>   # make samples/bpf/ LLC=llc-7 CLANG=clang-7
+> 
+> - Run the sample tracex7:
+>   # dd if=/dev/zero of=testfile.img bs=1M seek=1000 count=1
+>   # DEVICE=$(losetup --show -f testfile.img)
+>   # mkfs.btrfs -f $DEVICE
+>   # ./tracex7 testfile.img
+>   [ 1975.211781] BTRFS error (device (efault)): open_ctree failed
+>   mount: /mnt/linux-kernel/linux-cs-dev/samples/bpf/tmpmnt: mount(2) system call failed: Cannot allocate memory.
+> 
+> Changes from v1:
+> * Consolidated the function definition into asm-generic header (Will);
+> * Used APIs to access pt_regs elements (Will);
+> * Fixed typos in the comments (Will).
 
-because p4d_none() in "5level-fixup.h" is compiled away while it is a
-static inline function in "pgtable-nopud.h". However, if converted
-p4d_none() to a static inline there, powerpc would be unhappy as it
-reads those in assembler language in
-"arch/powerpc/include/asm/book3s/64/pgtable.h", so it needs to skip
-assembly include for the static inline C function. While at it,
-converted a few similar functions to be consistent with the ones in
-"pgtable-nopud.h".
+This looks good to me.
 
-Signed-off-by: Qian Cai <cai@lca.pw>
----
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-v2: Convert them to static inline functions.
+Thank you!
 
- include/asm-generic/5level-fixup.h | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+> 
+> 
+> Leo Yan (3):
+>   error-injection: Consolidate override function definition
+>   arm64: Add support for function error injection
+>   arm: Add support for function error injection
+> 
+>  arch/arm/Kconfig                           |  1 +
+>  arch/arm/include/asm/ptrace.h              |  5 +++++
+>  arch/arm/lib/Makefile                      |  2 ++
+>  arch/arm/lib/error-inject.c                | 19 +++++++++++++++++++
+>  arch/arm64/Kconfig                         |  1 +
+>  arch/arm64/include/asm/ptrace.h            |  5 +++++
+>  arch/arm64/lib/Makefile                    |  2 ++
+>  arch/arm64/lib/error-inject.c              | 18 ++++++++++++++++++
+>  arch/powerpc/include/asm/error-injection.h | 13 -------------
+>  arch/x86/include/asm/error-injection.h     | 13 -------------
+>  include/asm-generic/error-injection.h      |  6 ++++++
+>  include/linux/error-injection.h            |  6 +++---
+>  12 files changed, 62 insertions(+), 29 deletions(-)
+>  create mode 100644 arch/arm/lib/error-inject.c
+>  create mode 100644 arch/arm64/lib/error-inject.c
+>  delete mode 100644 arch/powerpc/include/asm/error-injection.h
+>  delete mode 100644 arch/x86/include/asm/error-injection.h
+> 
+> -- 
+> 2.17.1
+> 
 
-diff --git a/include/asm-generic/5level-fixup.h b/include/asm-generic/5level-fixup.h
-index bb6cb347018c..f6947da70d71 100644
---- a/include/asm-generic/5level-fixup.h
-+++ b/include/asm-generic/5level-fixup.h
-@@ -19,9 +19,24 @@
- 
- #define p4d_alloc(mm, pgd, address)	(pgd)
- #define p4d_offset(pgd, start)		(pgd)
--#define p4d_none(p4d)			0
--#define p4d_bad(p4d)			0
--#define p4d_present(p4d)		1
-+
-+#ifndef __ASSEMBLY__
-+static inline int p4d_none(p4d_t p4d)
-+{
-+	return 0;
-+}
-+
-+static inline int p4d_bad(p4d_t p4d)
-+{
-+	return 0;
-+}
-+
-+static inline int p4d_present(p4d_t p4d)
-+{
-+	return 1;
-+}
-+#endif
-+
- #define p4d_ERROR(p4d)			do { } while (0)
- #define p4d_clear(p4d)			pgd_clear(p4d)
- #define p4d_val(p4d)			pgd_val(p4d)
+
 -- 
-2.20.1 (Apple Git-117)
-
+Masami Hiramatsu <mhiramat@kernel.org>
