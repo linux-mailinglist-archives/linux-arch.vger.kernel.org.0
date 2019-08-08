@@ -2,246 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4674C85486
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Aug 2019 22:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A79185C18
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Aug 2019 09:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388961AbfHGUiS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Aug 2019 16:38:18 -0400
-Received: from mga05.intel.com ([192.55.52.43]:58433 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387957AbfHGUiS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 7 Aug 2019 16:38:18 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 13:38:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,358,1559545200"; 
-   d="scan'208";a="165464108"
-Received: from ray.jf.intel.com (HELO [10.7.201.140]) ([10.7.201.140])
-  by orsmga007.jf.intel.com with ESMTP; 07 Aug 2019 13:38:16 -0700
-Subject: Re: [PATCH v7 1/2] arm64: Define
- Documentation/arm64/tagged-address-abi.rst
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20190807155321.9648-1-catalin.marinas@arm.com>
- <20190807155321.9648-2-catalin.marinas@arm.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-Message-ID: <826a9ace-feac-c019-843e-07e23c9fd46c@intel.com>
-Date:   Wed, 7 Aug 2019 13:38:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190807155321.9648-2-catalin.marinas@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1731712AbfHHHwh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Aug 2019 03:52:37 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7100 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731592AbfHHHwb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Aug 2019 03:52:31 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x787qREJ073729
+        for <linux-arch@vger.kernel.org>; Thu, 8 Aug 2019 03:52:30 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2u8efh32ue-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Thu, 08 Aug 2019 03:52:30 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <rppt@linux.ibm.com>;
+        Thu, 8 Aug 2019 08:52:16 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 8 Aug 2019 08:52:12 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x787qBCv41943078
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Aug 2019 07:52:11 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 636E842045;
+        Thu,  8 Aug 2019 07:52:11 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B04B142047;
+        Thu,  8 Aug 2019 07:52:09 +0000 (GMT)
+Received: from rapoport-lnx (unknown [9.148.8.168])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  8 Aug 2019 07:52:09 +0000 (GMT)
+Received: by rapoport-lnx (sSMTP sendmail emulation); Thu, 08 Aug 2019 10:52:09 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCH 0/3] mm: remove quicklist page table caches
+Date:   Thu,  8 Aug 2019 10:52:05 +0300
+X-Mailer: git-send-email 2.7.4
+X-TM-AS-GCONF: 00
+x-cbid: 19080807-0020-0000-0000-0000035D2ABA
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19080807-0021-0000-0000-000021B22C72
+Message-Id: <1565250728-21721-1-git-send-email-rppt@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-08_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908080090
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/7/19 8:53 AM, Catalin Marinas wrote:
-> +- mmap() done by the process itself (or its parent), where either:
-> +
-> +  - flags have the **MAP_ANONYMOUS** bit set
-> +  - the file descriptor refers to a regular file (including those returned
-> +    by memfd_create()) or **/dev/zero**
+Hi,
 
-What's a "regular file"? ;)
+I while ago Nicholas proposed to remove quicklist page table caches [1].
 
-> +- brk() system call done by the process itself (i.e. the heap area between
-> +  the initial location of the program break at process creation and its
-> +  current location).
-> +
-> +- any memory mapped by the kernel in the address space of the process
-> +  during creation and with the same restrictions as for mmap() above (e.g.
-> +  data, bss, stack).
-> +
-> +The AArch64 Tagged Address ABI is an opt-in feature and an application can
-> +control it via **prctl()** as follows:
-> +
-> +- **PR_SET_TAGGED_ADDR_CTRL**: enable or disable the AArch64 Tagged Address
-> +  ABI for the calling process.
-> +
-> +  The (unsigned int) arg2 argument is a bit mask describing the control mode
-> +  used:
-> +
-> +  - **PR_TAGGED_ADDR_ENABLE**: enable AArch64 Tagged Address ABI. Default
-> +    status is disabled.
-> +
-> +  The arguments arg3, arg4, and arg5 are ignored.
+I've rebased his patch on the curren upstream and switched ia64 and sh to
+use generic versions of PTE allocation.
 
-For previous prctl()'s, we've found that it's best to require that the
-unused arguments be 0.  Without that, apps are free to put garbage
-there, which makes extending the prctl to use other arguments impossible
-in the future.
+[1] https://lore.kernel.org/linux-mm/20190711030339.20892-1-npiggin@gmail.com
 
-Also, shouldn't this be converted over to an arch_prctl()?
+Mike Rapoport (2):
+  ia64: switch to generic version of pte allocation
+  sh: switch to generic version of pte allocation
 
-> +The prctl(PR_SET_TAGGED_ADDR_CTRL, ...) will return -EINVAL if the
-> +AArch64 Tagged Address ABI is not available
-> +(CONFIG_ARM64_TAGGED_ADDR_ABI disabled or sysctl abi.tagged_addr=0).
-> +
-> +The ABI properties set by the mechanism described above are inherited by
-> +threads of the same application and fork()'ed children but cleared by
-> +execve().
+Nicholas Piggin (1):
+  mm: remove quicklist page table caches
 
-What is the scope of these prctl()'s?  Are they thread-scoped or
-process-scoped?  Can two threads in the same process run with different
-tagging ABI modes?
+ arch/alpha/include/asm/pgalloc.h      |   2 -
+ arch/arc/include/asm/pgalloc.h        |   1 -
+ arch/arm/include/asm/pgalloc.h        |   2 -
+ arch/arm64/include/asm/pgalloc.h      |   2 -
+ arch/csky/include/asm/pgalloc.h       |   2 -
+ arch/hexagon/include/asm/pgalloc.h    |   2 -
+ arch/ia64/Kconfig                     |   4 --
+ arch/ia64/include/asm/pgalloc.h       |  52 +++--------------
+ arch/m68k/include/asm/pgtable_mm.h    |   2 -
+ arch/m68k/include/asm/pgtable_no.h    |   2 -
+ arch/microblaze/include/asm/pgalloc.h |  89 +++--------------------------
+ arch/microblaze/mm/pgtable.c          |   4 --
+ arch/mips/include/asm/pgalloc.h       |   2 -
+ arch/nds32/include/asm/pgalloc.h      |   2 -
+ arch/nios2/include/asm/pgalloc.h      |   2 -
+ arch/openrisc/include/asm/pgalloc.h   |   2 -
+ arch/parisc/include/asm/pgalloc.h     |   2 -
+ arch/powerpc/include/asm/pgalloc.h    |   2 -
+ arch/riscv/include/asm/pgalloc.h      |   4 --
+ arch/s390/include/asm/pgtable.h       |   1 -
+ arch/sh/include/asm/pgalloc.h         |  44 +--------------
+ arch/sh/mm/Kconfig                    |   3 -
+ arch/sparc/include/asm/pgalloc_32.h   |   2 -
+ arch/sparc/include/asm/pgalloc_64.h   |   2 -
+ arch/sparc/mm/init_32.c               |   1 -
+ arch/um/include/asm/pgalloc.h         |   2 -
+ arch/unicore32/include/asm/pgalloc.h  |   2 -
+ arch/x86/include/asm/pgtable_32.h     |   1 -
+ arch/x86/include/asm/pgtable_64.h     |   1 -
+ arch/xtensa/include/asm/tlbflush.h    |   3 -
+ fs/proc/meminfo.c                     |   4 --
+ include/asm-generic/pgalloc.h         |   5 --
+ include/linux/quicklist.h             |  94 -------------------------------
+ kernel/sched/idle.c                   |   1 -
+ lib/show_mem.c                        |   5 --
+ mm/Kconfig                            |   5 --
+ mm/Makefile                           |   1 -
+ mm/mmu_gather.c                       |   2 -
+ mm/quicklist.c                        | 103 ----------------------------------
+ 39 files changed, 16 insertions(+), 446 deletions(-)
+ delete mode 100644 include/linux/quicklist.h
+ delete mode 100644 mm/quicklist.c
 
-> +Opting in (the prctl() option described above only) to or out of the
-> +AArch64 Tagged Address ABI can be disabled globally at runtime using the
-> +sysctl interface:
-> +
-> +- **abi.tagged_addr**: a new sysctl interface that can be used to prevent
-> +  applications from enabling or disabling the relaxed ABI. The sysctl
-> +  supports the following configuration options:
-> +
-> +  - **0**: disable the prctl(PR_SET_TAGGED_ADDR_CTRL) option to
-> +    enable/disable the AArch64 Tagged Address ABI globally
-> +
-> +  - **1** (Default): enable the prctl(PR_SET_TAGGED_ADDR_CTRL) option to
-> +    enable/disable the AArch64 Tagged Address ABI globally
-> +
-> +  Note that this sysctl does not affect the status of the AArch64 Tagged
-> +  Address ABI of the running processes.
-
-Shouldn't the name be "abi.tagged_addr_control" or something?  It
-actually has *zero* direct effect on tagged addresses in the ABI.
-
-What's the reason for allowing it to be toggled at runtime like this?
-Wouldn't it make more sense to just have it be a boot option so you
-*know* what the state of individual processes is?
-
-> +When a process has successfully enabled the new ABI by invoking
-> +prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE), the following
-> +behaviours are guaranteed:
-> +
-> +- Every currently available syscall, except the cases mentioned in section
-> +  3, can accept any valid tagged pointer. The same rule is applicable to
-> +  any syscall introduced in the future.
-> +
-> +- The syscall behaviour is undefined for non valid tagged pointers.
-
-Do you really mean "undefined"?  I mean, a bad pointer is a bad pointer.
- Why should it matter if it's a tagged bad pointer or an untagged bad
-pointer?
-
-...
-> +A definition of the meaning of tagged pointers on AArch64 can be found in:
-> +Documentation/arm64/tagged-pointers.txt.
-> +
-> +3. AArch64 Tagged Address ABI Exceptions
-> +-----------------------------------------
-> +
-> +The behaviour described in section 2, with particular reference to the
-> +acceptance by the syscalls of any valid tagged pointer, is not applicable
-> +to the following cases:
-
-This is saying things in a pretty roundabout manner.  Can't it just say:
- "The following cases do not accept tagged pointers:"
-
-> +- mmap() addr parameter.
-> +
-> +- mremap() new_address parameter.
-
-Is munmap() missing?  Or was there a reason for leaving it out?
-
-> +- prctl(PR_SET_MM, ``*``, ...) other than arg2 PR_SET_MM_MAP and
-> +  PR_SET_MM_MAP_SIZE.
-> +
-> +- prctl(PR_SET_MM, PR_SET_MM_MAP{,_SIZE}, ...) struct prctl_mm_map fields.
-> +
-> +Any attempt to use non-zero tagged pointers will lead to undefined
-> +behaviour.
-
-I wonder if you want to generalize this a bit.  I think you're saying
-that parts of the ABI that modify the *layout* of the address space
-never accept tagged pointers.
-
-> +4. Example of correct usage
-> +---------------------------
-> +.. code-block:: c
-> +
-> +   void main(void)
-> +   {
-> +           static int tbi_enabled = 0;
-> +           unsigned long tag = 0;
-> +
-> +           char *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
-> +                            MAP_ANONYMOUS, -1, 0);
-> +
-> +           if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE,
-> +                     0, 0, 0) == 0)
-> +                   tbi_enabled = 1;
-> +
-> +           if (ptr == (void *)-1) /* MAP_FAILED */
-> +                   return -1;
-> +
-> +           if (tbi_enabled)
-> +                   tag = rand() & 0xff;
-> +
-> +           ptr = (char *)((unsigned long)ptr | (tag << TAG_SHIFT));
-> +
-> +           *ptr = 'a';
-> +
-> +           ...
-> +   }
-
-It looks like the TAG_SHIFT and tag size are pretty baked into the
-aarch64 architecture.  But, are you confident that no future
-implementations will want different positions or sizes?  (obviously
-controlled by other TCR_EL1 bits)
+-- 
+2.7.4
 
