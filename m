@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8F08602D
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Aug 2019 12:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5BC86006
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Aug 2019 12:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390044AbfHHKkL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Aug 2019 06:40:11 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47594 "EHLO mx1.suse.de"
+        id S2403852AbfHHKjJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Aug 2019 06:39:09 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47612 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2403838AbfHHKjI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S2403842AbfHHKjI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Thu, 8 Aug 2019 06:39:08 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id ABC4EAF10;
-        Thu,  8 Aug 2019 10:39:06 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 3CEBEB066;
+        Thu,  8 Aug 2019 10:39:07 +0000 (UTC)
 From:   Jiri Slaby <jslaby@suse.cz>
 To:     bp@alien8.de
 Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
         x86@kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH v8 15/28] x86/asm/purgatory: start using annotations
-Date:   Thu,  8 Aug 2019 12:38:41 +0200
-Message-Id: <20190808103854.6192-16-jslaby@suse.cz>
+Subject: [PATCH v8 16/28] x86/asm: do not annotate functions by GLOBAL
+Date:   Thu,  8 Aug 2019 12:38:42 +0200
+Message-Id: <20190808103854.6192-17-jslaby@suse.cz>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190808103854.6192-1-jslaby@suse.cz>
 References: <20190808103854.6192-1-jslaby@suse.cz>
@@ -33,154 +33,140 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-purgatory used no annotations at all. So include linux/linkage.h and
-annotate everything:
-* code by SYM_CODE_*
-* data by SYM_DATA_*
+GLOBAL is an x86's custom macro and is going to die very soon. It was
+meant for global symbols, but here, it was used for functions. Instead,
+use the new macros SYM_FUNC_START* and SYM_CODE_START* (depending on the
+type of a function) which are dedicated for global functions. And since
+they both require a closing by SYM_*_END, we do this here too.
+
+startup_64, which does not use GLOBAL, but uses .globl explicitly, is
+converted too.
+
+in_pm32 should not be global at all as it is used only locally, so
+switch to SYM_FUNC_START_LOCAL_NOALIGN.
+
+"No alignments" are preserved.
 
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Ingo Molnar <mingo@redhat.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: x86@kernel.org
+Cc: <x86@kernel.org>
 ---
- arch/x86/purgatory/entry64.S      | 21 ++++++++++++---------
- arch/x86/purgatory/setup-x86_64.S | 14 ++++++++------
- arch/x86/purgatory/stack.S        |  7 ++++---
- 3 files changed, 24 insertions(+), 18 deletions(-)
+ arch/x86/boot/copy.S      | 16 ++++++++--------
+ arch/x86/boot/pmjump.S    |  8 ++++----
+ arch/x86/kernel/head_64.S |  5 +++--
+ 3 files changed, 15 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/purgatory/entry64.S b/arch/x86/purgatory/entry64.S
-index 275a646d1048..9d73d3648aa6 100644
---- a/arch/x86/purgatory/entry64.S
-+++ b/arch/x86/purgatory/entry64.S
-@@ -8,13 +8,13 @@
-  * This code has been taken from kexec-tools.
-  */
- 
-+#include <linux/linkage.h>
-+
+diff --git a/arch/x86/boot/copy.S b/arch/x86/boot/copy.S
+index 4c5f4f4ad035..6afd05e819d2 100644
+--- a/arch/x86/boot/copy.S
++++ b/arch/x86/boot/copy.S
+@@ -15,7 +15,7 @@
+ 	.code16
  	.text
- 	.balign 16
- 	.code64
--	.globl entry64, entry64_regs
--
  
--entry64:
-+SYM_CODE_START(entry64)
- 	/* Setup a gdt that should be preserved */
- 	lgdt gdt(%rip)
+-GLOBAL(memcpy)
++SYM_FUNC_START_NOALIGN(memcpy)
+ 	pushw	%si
+ 	pushw	%di
+ 	movw	%ax, %di
+@@ -29,9 +29,9 @@ GLOBAL(memcpy)
+ 	popw	%di
+ 	popw	%si
+ 	retl
+-ENDPROC(memcpy)
++SYM_FUNC_END(memcpy)
  
-@@ -54,10 +54,11 @@ new_cs_exit:
+-GLOBAL(memset)
++SYM_FUNC_START_NOALIGN(memset)
+ 	pushw	%di
+ 	movw	%ax, %di
+ 	movzbl	%dl, %eax
+@@ -44,22 +44,22 @@ GLOBAL(memset)
+ 	rep; stosb
+ 	popw	%di
+ 	retl
+-ENDPROC(memset)
++SYM_FUNC_END(memset)
  
- 	/* Jump to the new code... */
- 	jmpq	*rip(%rip)
-+SYM_CODE_END(entry64)
+-GLOBAL(copy_from_fs)
++SYM_FUNC_START_NOALIGN(copy_from_fs)
+ 	pushw	%ds
+ 	pushw	%fs
+ 	popw	%ds
+ 	calll	memcpy
+ 	popw	%ds
+ 	retl
+-ENDPROC(copy_from_fs)
++SYM_FUNC_END(copy_from_fs)
  
- 	.section ".rodata"
- 	.balign 4
--entry64_regs:
-+SYM_DATA_START(entry64_regs)
- rax:	.quad 0x0
- rcx:	.quad 0x0
- rdx:	.quad 0x0
-@@ -75,12 +76,12 @@ r13:	.quad 0x0
- r14:	.quad 0x0
- r15:	.quad 0x0
- rip:	.quad 0x0
--	.size entry64_regs, . - entry64_regs
-+SYM_DATA_END(entry64_regs)
- 
- 	/* GDT */
- 	.section ".rodata"
- 	.balign 16
--gdt:
-+SYM_DATA_START_LOCAL(gdt)
- 	/* 0x00 unusable segment
- 	 * 0x08 unused
- 	 * so use them as gdt ptr
-@@ -94,6 +95,8 @@ gdt:
- 
- 	/* 0x18 4GB flat data segment */
- 	.word 0xFFFF, 0x0000, 0x9200, 0x00CF
--gdt_end:
--stack:	.quad   0, 0
--stack_init:
-+SYM_DATA_END_LABEL(gdt, SYM_L_LOCAL, gdt_end)
-+
-+SYM_DATA_START_LOCAL(stack)
-+	.quad   0, 0
-+SYM_DATA_END_LABEL(stack, SYM_L_LOCAL, stack_init)
-diff --git a/arch/x86/purgatory/setup-x86_64.S b/arch/x86/purgatory/setup-x86_64.S
-index 321146be741d..89d9e9e53fcd 100644
---- a/arch/x86/purgatory/setup-x86_64.S
-+++ b/arch/x86/purgatory/setup-x86_64.S
-@@ -7,14 +7,14 @@
-  *
-  * This code has been taken from kexec-tools.
+-GLOBAL(copy_to_fs)
++SYM_FUNC_START_NOALIGN(copy_to_fs)
+ 	pushw	%es
+ 	pushw	%fs
+ 	popw	%es
+ 	calll	memcpy
+ 	popw	%es
+ 	retl
+-ENDPROC(copy_to_fs)
++SYM_FUNC_END(copy_to_fs)
+diff --git a/arch/x86/boot/pmjump.S b/arch/x86/boot/pmjump.S
+index c22f9a7d1aeb..52f37b66b5ba 100644
+--- a/arch/x86/boot/pmjump.S
++++ b/arch/x86/boot/pmjump.S
+@@ -21,7 +21,7 @@
+ /*
+  * void protected_mode_jump(u32 entrypoint, u32 bootparams);
   */
-+#include <linux/linkage.h>
- #include <asm/purgatory.h>
+-GLOBAL(protected_mode_jump)
++SYM_FUNC_START_NOALIGN(protected_mode_jump)
+ 	movl	%edx, %esi		# Pointer to boot_params table
  
+ 	xorl	%ebx, %ebx
+@@ -42,11 +42,11 @@ GLOBAL(protected_mode_jump)
+ 	.byte	0x66, 0xea		# ljmpl opcode
+ 2:	.long	in_pm32			# offset
+ 	.word	__BOOT_CS		# segment
+-ENDPROC(protected_mode_jump)
++SYM_FUNC_END(protected_mode_jump)
+ 
+ 	.code32
+ 	.section ".text32","ax"
+-GLOBAL(in_pm32)
++SYM_FUNC_START_LOCAL_NOALIGN(in_pm32)
+ 	# Set up data segments for flat 32-bit mode
+ 	movl	%ecx, %ds
+ 	movl	%ecx, %es
+@@ -72,4 +72,4 @@ GLOBAL(in_pm32)
+ 	lldt	%cx
+ 
+ 	jmpl	*%eax			# Jump to the 32-bit entrypoint
+-ENDPROC(in_pm32)
++SYM_FUNC_END(in_pm32)
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index 6661c76a2049..94d747307c6a 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -49,8 +49,7 @@ L3_START_KERNEL = pud_index(__START_KERNEL_map)
  	.text
--	.globl purgatory_start
- 	.balign 16
--purgatory_start:
+ 	__HEAD
  	.code64
- 
-+SYM_CODE_START(purgatory_start)
- 	/* Load a gdt so I know what the segment registers are */
- 	lgdt	gdt(%rip)
- 
-@@ -32,10 +32,12 @@ purgatory_start:
- 	/* Call the C code */
- 	call purgatory
- 	jmp	entry64
-+SYM_CODE_END(purgatory_start)
- 
- 	.section ".rodata"
- 	.balign 16
--gdt:	/* 0x00 unusable segment
-+SYM_DATA_START_LOCAL(gdt)
-+	/* 0x00 unusable segment
- 	 * 0x08 unused
- 	 * so use them as the gdt ptr
- 	 */
-@@ -48,10 +50,10 @@ gdt:	/* 0x00 unusable segment
- 
- 	/* 0x18 4GB flat data segment */
- 	.word	0xFFFF, 0x0000, 0x9200, 0x00CF
--gdt_end:
-+SYM_DATA_END_LABEL(gdt, SYM_L_LOCAL, gdt_end)
- 
- 	.bss
- 	.balign 4096
--lstack:
-+SYM_DATA_START_LOCAL(lstack)
- 	.skip 4096
--lstack_end:
-+SYM_DATA_END_LABEL(lstack, SYM_L_LOCAL, lstack_end)
-diff --git a/arch/x86/purgatory/stack.S b/arch/x86/purgatory/stack.S
-index 8b1427422dfc..1ef507ca50a5 100644
---- a/arch/x86/purgatory/stack.S
-+++ b/arch/x86/purgatory/stack.S
-@@ -5,13 +5,14 @@
-  * Copyright (C) 2014 Red Hat Inc.
-  */
- 
-+#include <linux/linkage.h>
+-	.globl startup_64
+-startup_64:
++SYM_CODE_START_NOALIGN(startup_64)
+ 	UNWIND_HINT_EMPTY
+ 	/*
+ 	 * At this point the CPU runs in 64bit mode CS.L = 1 CS.D = 0,
+@@ -90,6 +89,8 @@ startup_64:
+ 	/* Form the CR3 value being sure to include the CR3 modifier */
+ 	addq	$(early_top_pgt - __START_KERNEL_map), %rax
+ 	jmp 1f
++SYM_CODE_END(startup_64)
 +
- 	/* A stack for the loaded kernel.
- 	 * Separate and in the data section so it can be prepopulated.
- 	 */
- 	.data
- 	.balign 4096
--	.globl stack, stack_end
- 
--stack:
-+SYM_DATA_START(stack)
- 	.skip 4096
--stack_end:
-+SYM_DATA_END_LABEL(stack, SYM_L_GLOBAL, stack_end)
+ ENTRY(secondary_startup_64)
+ 	UNWIND_HINT_EMPTY
+ 	/*
 -- 
 2.22.0
 
