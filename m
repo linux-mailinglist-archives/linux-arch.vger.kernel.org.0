@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB49589057
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Aug 2019 10:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67DA89055
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Aug 2019 10:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726516AbfHKIF5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 11 Aug 2019 04:05:57 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:33332 "EHLO
+        id S1726549AbfHKIF6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 11 Aug 2019 04:05:58 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:33470 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726500AbfHKIFz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Aug 2019 04:05:55 -0400
+        with ESMTP id S1725810AbfHKIF5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Aug 2019 04:05:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
         :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=dftcSzfDdyc02vTQypmmr4nqPV2SE1bB1GMbvWD2Jek=; b=UMEvzoLEwpMDTenvIB+0BTS26+
-        KD8/KOYJDOvaupvERmLkq2+cOudPdXx/9YAoxoLHBIhbWE6ItR8RS/0q2pcFARGnStycuXfOJSELl
-        L98cN/SUFZ/K1WBVF4aO8stRWvkRk/IP8d51FdkPvK7ZqKMWjCX/iU7n4w78ZUKQTKnGDENcpiQbL
-        /hBoz5+7c3ZWPb2Avw9aNlL9bAkJ2ZEHRQ7/cZ4AqSjaLwefBbjEoCu93NOsgtOECpicixiH3M3eS
-        vciuwhd+C2zn6tR2Fkb9RXE3YmkWCxeZuh1VGjS9wgNNuD08nkWVa1+3Wy2sU5Px8aHs3e6W6zj7J
-        R+uzwONg==;
+        bh=3t34NdMYaxK3b7q79OweXtc3LDVxX2AkiLPLkSCTGmc=; b=Wd/MLYXcWw0RcxlthtcL1M20zy
+        3bKATolABUJyp/PAgkQ4isIzv+9iROyEB1CcZ4Ml1Wi3ZnAy4EOi3+/rg1Xny12A0iq9qRSOMEqZa
+        Nbk/hVRbubwVuY2/kv++6zEIq1+31DKl3O+lUg8hlojvJVESHBqyreHowXtg8HUx/MxToZvM3TyIi
+        /mGely6wTaaqz/q+rfs1GIvjoeWuxn/W3PSj/6hwcgD19UG1ZFWNPDAo2LSio+dvq8ZhXo2EgfB6v
+        gm+4ZM2IgnbwIXhK3NKrv9vstUDV5KKfTSSSxGKaLE5dTMpuLRcbZLstlxanB4X3rU4Ie6P0oSDV1
+        xs8Di//Q==;
 Received: from [2001:4bb8:180:1ec3:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hwir3-0001um-Fz; Sun, 11 Aug 2019 08:05:30 +0000
+        id 1hwir6-0001ut-IN; Sun, 11 Aug 2019 08:05:33 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Maxime Chevallier <maxime.chevallier@bootlin.com>
@@ -47,9 +47,9 @@ Cc:     Gavin Li <git@thegavinli.com>,
         linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/6] usb: don't create dma pools for HCDs with a localmem_pool
-Date:   Sun, 11 Aug 2019 10:05:15 +0200
-Message-Id: <20190811080520.21712-2-hch@lst.de>
+Subject: [PATCH 2/6] usb: add a hcd_uses_dma helper
+Date:   Sun, 11 Aug 2019 10:05:16 +0200
+Message-Id: <20190811080520.21712-3-hch@lst.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190811080520.21712-1-hch@lst.de>
 References: <20190811080520.21712-1-hch@lst.de>
@@ -61,32 +61,119 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-If the HCD provides a localmem pool we will never use the DMA pools, so
-don't create them.
+The USB buffer allocation code is the only place in the usb core (and in
+fact the whole kernel) that uses is_device_dma_capable, while the URB
+mapping code uses the uses_dma flag in struct usb_bus.  Switch the buffer
+allocation to use the uses_dma flag used by the rest of the USB code,
+and create a helper in hcd.h that checks this flag as well as the
+CONFIG_HAS_DMA to simplify the caller a bit.
 
-Fixes: b0310c2f09bb ("USB: use genalloc for USB HCs with local memory")
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/usb/core/buffer.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/core/buffer.c | 10 +++-------
+ drivers/usb/core/hcd.c    |  4 ++--
+ drivers/usb/dwc2/hcd.c    |  2 +-
+ include/linux/usb.h       |  2 +-
+ include/linux/usb/hcd.h   |  3 +++
+ 5 files changed, 10 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/usb/core/buffer.c b/drivers/usb/core/buffer.c
-index 1359b78a624e..1a5b3dcae930 100644
+index 1a5b3dcae930..6cf22c27f2d2 100644
 --- a/drivers/usb/core/buffer.c
 +++ b/drivers/usb/core/buffer.c
-@@ -66,9 +66,9 @@ int hcd_buffer_create(struct usb_hcd *hcd)
+@@ -66,9 +66,7 @@ int hcd_buffer_create(struct usb_hcd *hcd)
  	char		name[16];
  	int		i, size;
  
--	if (!IS_ENABLED(CONFIG_HAS_DMA) ||
--	    (!is_device_dma_capable(hcd->self.sysdev) &&
--	     !hcd->localmem_pool))
-+	if (hcd->localmem_pool ||
-+	    !IS_ENABLED(CONFIG_HAS_DMA) ||
-+	    !is_device_dma_capable(hcd->self.sysdev))
+-	if (hcd->localmem_pool ||
+-	    !IS_ENABLED(CONFIG_HAS_DMA) ||
+-	    !is_device_dma_capable(hcd->self.sysdev))
++	if (hcd->localmem_pool || !hcd_uses_dma(hcd))
  		return 0;
  
  	for (i = 0; i < HCD_BUFFER_POOLS; i++) {
+@@ -129,8 +127,7 @@ void *hcd_buffer_alloc(
+ 		return gen_pool_dma_alloc(hcd->localmem_pool, size, dma);
+ 
+ 	/* some USB hosts just use PIO */
+-	if (!IS_ENABLED(CONFIG_HAS_DMA) ||
+-	    !is_device_dma_capable(bus->sysdev)) {
++	if (!hcd_uses_dma(hcd)) {
+ 		*dma = ~(dma_addr_t) 0;
+ 		return kmalloc(size, mem_flags);
+ 	}
+@@ -160,8 +157,7 @@ void hcd_buffer_free(
+ 		return;
+ 	}
+ 
+-	if (!IS_ENABLED(CONFIG_HAS_DMA) ||
+-	    !is_device_dma_capable(bus->sysdev)) {
++	if (!hcd_uses_dma(hcd)) {
+ 		kfree(addr);
+ 		return;
+ 	}
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 2ccbc2f83570..8592c0344fe8 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1412,7 +1412,7 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+ 	if (usb_endpoint_xfer_control(&urb->ep->desc)) {
+ 		if (hcd->self.uses_pio_for_control)
+ 			return ret;
+-		if (IS_ENABLED(CONFIG_HAS_DMA) && hcd->self.uses_dma) {
++		if (hcd_uses_dma(hcd)) {
+ 			if (is_vmalloc_addr(urb->setup_packet)) {
+ 				WARN_ONCE(1, "setup packet is not dma capable\n");
+ 				return -EAGAIN;
+@@ -1446,7 +1446,7 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+ 	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+ 	if (urb->transfer_buffer_length != 0
+ 	    && !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP)) {
+-		if (IS_ENABLED(CONFIG_HAS_DMA) && hcd->self.uses_dma) {
++		if (hcd_uses_dma(hcd)) {
+ 			if (urb->num_sgs) {
+ 				int n;
+ 
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index ee144ff8af5b..111787a137ee 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -4608,7 +4608,7 @@ static int _dwc2_hcd_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
+ 
+ 	buf = urb->transfer_buffer;
+ 
+-	if (hcd->self.uses_dma) {
++	if (hcd_uses_dma(hcd)) {
+ 		if (!buf && (urb->transfer_dma & 3)) {
+ 			dev_err(hsotg->dev,
+ 				"%s: unaligned transfer with no transfer_buffer",
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 83d35d993e8c..e87826e23d59 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1457,7 +1457,7 @@ typedef void (*usb_complete_t)(struct urb *);
+  * field rather than determining a dma address themselves.
+  *
+  * Note that transfer_buffer must still be set if the controller
+- * does not support DMA (as indicated by bus.uses_dma) and when talking
++ * does not support DMA (as indicated by hcd_uses_dma()) and when talking
+  * to root hub. If you have to trasfer between highmem zone and the device
+  * on such controller, create a bounce buffer or bail out with an error.
+  * If transfer_buffer cannot be set (is in highmem) and the controller is DMA
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index bab27ccc8ff5..a20e7815d814 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -422,6 +422,9 @@ static inline bool hcd_periodic_completion_in_progress(struct usb_hcd *hcd,
+ 	return hcd->high_prio_bh.completing_ep == ep;
+ }
+ 
++#define hcd_uses_dma(hcd) \
++	(IS_ENABLED(CONFIG_HAS_DMA) && (hcd)->self.uses_dma)
++
+ extern int usb_hcd_link_urb_to_ep(struct usb_hcd *hcd, struct urb *urb);
+ extern int usb_hcd_check_unlink_urb(struct usb_hcd *hcd, struct urb *urb,
+ 		int status);
 -- 
 2.20.1
 
