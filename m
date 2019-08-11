@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CF08905F
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Aug 2019 10:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48ACE89050
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Aug 2019 10:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726608AbfHKIGO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 11 Aug 2019 04:06:14 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:33330 "EHLO
+        id S1726584AbfHKIF7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 11 Aug 2019 04:05:59 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:33586 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726488AbfHKIFz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Aug 2019 04:05:55 -0400
+        with ESMTP id S1726566AbfHKIF6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Aug 2019 04:05:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
         :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/qPzNIpevvN/qwi+1IcOX2emVd7L7tcHzjYkoXjMmbs=; b=rx2STIcad83YqjkOlc8pS3EKFK
-        tm5EQbOmD/zVesaB2Yrka4WpJlP1wkoqY2lwbZhzszanIlrNAV4QTyV8TCOF9F3eI3zuLrIJd1Zkz
-        /6Qz6H0Uu+YmAp0zzbW9uv0aN73hwVJ4eagsQzRMNy+wzoMs2+vf0kHt/V80B+ZW/AG3/htUUV1KM
-        3LsUroqS4mhIvTAjCxTfIBA/5IwbT+2Jq4jOGvfRcgkAsYpujmAHbQNcQxfqKUure4D6FDtoCq9+k
-        thu7CtXONgfv8pgEAme12GQ8RHhMiE8QEIZeEdrfspL7BjvQUUI7VGUabnM6ngSB7IYK8iw/PwVYb
-        0AgEyMFg==;
+        bh=aUU+hlkhrpiLGkqb9yLX5LvOZKeD+UrNctlDkcRT8c0=; b=Ax6p9oKF7TWgXYyF2WtzSWjagk
+        BNniHtPluUBTFd5mJ4BNzxO+5vwnyPP+WI4FttbLmW95pNEwCTg9EEg4TxYK/KQN/+SW9a7GWZdNo
+        mi6f6w23oeCxIkPeacRf+yLhLZaeSzP9myORxWiiyuLCoQAf5yVL8xQooQRb9nlhBcaOnDnPrjHCa
+        kApazYa2o6vGOugcHVss6tyBINKprccgFsl3UnouAW7RRuyvy1YWboeKHZWWl5DrrTtm1fMx7kzna
+        sYOJ6cTc19mjBErMnjoZ8B/LFS5VxAbkBEm3fO8V9dhRNhnLtBS5c2C7dFe2rF1UMEO/1/iJkAxex
+        t+4T26aQ==;
 Received: from [2001:4bb8:180:1ec3:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hwirF-0001yq-Iw; Sun, 11 Aug 2019 08:05:42 +0000
+        id 1hwirJ-00021E-C9; Sun, 11 Aug 2019 08:05:46 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Maxime Chevallier <maxime.chevallier@bootlin.com>
@@ -47,9 +47,9 @@ Cc:     Gavin Li <git@thegavinli.com>,
         linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5/6] dma-mapping: remove is_device_dma_capable
-Date:   Sun, 11 Aug 2019 10:05:19 +0200
-Message-Id: <20190811080520.21712-6-hch@lst.de>
+Subject: [PATCH 6/6] driver core: initialize a default DMA mask for platform device
+Date:   Sun, 11 Aug 2019 10:05:20 +0200
+Message-Id: <20190811080520.21712-7-hch@lst.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190811080520.21712-1-hch@lst.de>
 References: <20190811080520.21712-1-hch@lst.de>
@@ -61,29 +61,76 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-No users left.
+We still treat devices without a DMA mask as defaulting to 32-bits for
+both mask, but a few releases ago we've started warning about such
+cases, as they require special cases to work around this sloppyness.
+Add a dma_mask field to struct platform_object so that we can initialize
+the dma_mask pointer in struct device and initialize both masks to
+32-bits by default.  Architectures can still override this in
+arch_setup_pdev_archdata if needed.
+
+Note that the code looks a little odd with the various conditionals
+because we have to support platform_device structures that are
+statically allocated.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- include/linux/dma-mapping.h | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/base/platform.c         | 15 +++++++++++++--
+ include/linux/platform_device.h |  1 +
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
-index f7d1eea32c78..14702e2d6fa8 100644
---- a/include/linux/dma-mapping.h
-+++ b/include/linux/dma-mapping.h
-@@ -149,11 +149,6 @@ static inline int valid_dma_direction(int dma_direction)
- 		(dma_direction == DMA_FROM_DEVICE));
- }
+diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+index ec974ba9c0c4..b216fcb0a8af 100644
+--- a/drivers/base/platform.c
++++ b/drivers/base/platform.c
+@@ -264,6 +264,17 @@ struct platform_object {
+ 	char name[];
+ };
  
--static inline int is_device_dma_capable(struct device *dev)
--{
--	return dev->dma_mask != NULL && *dev->dma_mask != DMA_MASK_NONE;
--}
--
- #ifdef CONFIG_DMA_DECLARE_COHERENT
- /*
-  * These three functions are only for dma allocator.
++static void setup_pdev_archdata(struct platform_device *pdev)
++{
++	if (!pdev->dev.coherent_dma_mask)
++		pdev->dev.coherent_dma_mask = DMA_BIT_MASK(32);
++	if (!pdev->dma_mask)
++		pdev->dma_mask = DMA_BIT_MASK(32);
++	if (!pdev->dev.dma_mask)
++		pdev->dev.dma_mask = &pdev->dma_mask;
++	arch_setup_pdev_archdata(pdev);
++};
++
+ /**
+  * platform_device_put - destroy a platform device
+  * @pdev: platform device to free
+@@ -310,7 +321,7 @@ struct platform_device *platform_device_alloc(const char *name, int id)
+ 		pa->pdev.id = id;
+ 		device_initialize(&pa->pdev.dev);
+ 		pa->pdev.dev.release = platform_device_release;
+-		arch_setup_pdev_archdata(&pa->pdev);
++		setup_pdev_archdata(&pa->pdev);
+ 	}
+ 
+ 	return pa ? &pa->pdev : NULL;
+@@ -512,7 +523,7 @@ EXPORT_SYMBOL_GPL(platform_device_del);
+ int platform_device_register(struct platform_device *pdev)
+ {
+ 	device_initialize(&pdev->dev);
+-	arch_setup_pdev_archdata(pdev);
++	setup_pdev_archdata(pdev);
+ 	return platform_device_add(pdev);
+ }
+ EXPORT_SYMBOL_GPL(platform_device_register);
+diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
+index 9bc36b589827..a2abde2aef25 100644
+--- a/include/linux/platform_device.h
++++ b/include/linux/platform_device.h
+@@ -24,6 +24,7 @@ struct platform_device {
+ 	int		id;
+ 	bool		id_auto;
+ 	struct device	dev;
++	u64		dma_mask;
+ 	u32		num_resources;
+ 	struct resource	*resource;
+ 
 -- 
 2.20.1
 
