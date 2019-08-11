@@ -2,46 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D358CDFC
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2019 10:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B3B8CF8D
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2019 11:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727671AbfHNIM6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 14 Aug 2019 04:12:58 -0400
-Received: from slot0.abamarket.ga ([178.156.202.135]:36692 "EHLO
-        slot0.abamarket.ga" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726347AbfHNIM6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Aug 2019 04:12:58 -0400
-X-Greylist: delayed 696 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Aug 2019 04:12:57 EDT
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726619AbfHNJaO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Aug 2019 05:30:14 -0400
+Received: from [157.230.164.221] ([157.230.164.221]:43082 "EHLO
+        9389689244-jhnabhfbn.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726126AbfHNJaO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 14 Aug 2019 05:30:14 -0400
+Received: from localhost (9389689244-jhnabhfbn [127.0.0.1])
+        by 9389689244-jhnabhfbn.localdomain (Postfix) with SMTP id 52ADA9DA175;
+        Sun, 11 Aug 2019 12:32:42 +0000 (UTC)
+Received: from [115.203.101.149] by localhost with ESMTP id <013943-09978> for <links@gizmos-uk.com>; Sun, 11 Aug 2019 19:25:49 +0600
+Message-ID: <h90-vd20q$l9@i2u0c7>
+From:   "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
+Reply-To: "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
+To:     links@gizmos-uk.com
+Subject: RECEIVE AND KEEP THIS MONEY FOR ME IN YOUR BANK ACCOUNT,REPLY TO fta447447@gmail.com FOR DETAILS
+Date:   Sun, 11 Aug 19 19:25:49 GMT
+X-Mailer: AOL 7.0 for Windows US sub 118
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: PLEASE CONFIRM PURCHASE ORDER
-To:     Recipients <mscarolynsmtih@gmail.com>
-From:   "Mr NARESH KUMAR" <mscarolynsmtih@gmail.com>
-Date:   Wed, 14 Aug 2019 15:51:30 +0800
-Reply-To: saiapex09@outlook.com
-Message-ID: <0.0.3.43E.1D55274CDCDA166.0@slot0.abamarket.ga>
+Content-Type: multipart/alternative;
+        boundary="032_58DB_B1..39E1"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Could you please confirm if your recieved our purchase order last week.
 
-If no please confirm let me resend it to you.
+--032_58DB_B1..39E1--
 
-
-
-
-NARESH KUMAR
-
-Executive Purchase Saiapextrading Ltd
-
-Dubai, KSA.
-
-(T/F): +96-2667-264 777 / 778
-
-(Mo): +96 94284 02803
-
-Website - http://www.saiapexgeneraltrading.com
