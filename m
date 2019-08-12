@@ -2,135 +2,321 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48ACE89050
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Aug 2019 10:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3AB89BD3
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2019 12:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726584AbfHKIF7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 11 Aug 2019 04:05:59 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:33586 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726566AbfHKIF6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Aug 2019 04:05:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
-        :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aUU+hlkhrpiLGkqb9yLX5LvOZKeD+UrNctlDkcRT8c0=; b=Ax6p9oKF7TWgXYyF2WtzSWjagk
-        BNniHtPluUBTFd5mJ4BNzxO+5vwnyPP+WI4FttbLmW95pNEwCTg9EEg4TxYK/KQN/+SW9a7GWZdNo
-        mi6f6w23oeCxIkPeacRf+yLhLZaeSzP9myORxWiiyuLCoQAf5yVL8xQooQRb9nlhBcaOnDnPrjHCa
-        kApazYa2o6vGOugcHVss6tyBINKprccgFsl3UnouAW7RRuyvy1YWboeKHZWWl5DrrTtm1fMx7kzna
-        sYOJ6cTc19mjBErMnjoZ8B/LFS5VxAbkBEm3fO8V9dhRNhnLtBS5c2C7dFe2rF1UMEO/1/iJkAxex
-        t+4T26aQ==;
-Received: from [2001:4bb8:180:1ec3:c70:4a89:bc61:2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hwirJ-00021E-C9; Sun, 11 Aug 2019 08:05:46 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Gavin Li <git@thegavinli.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Geoff Levand <geoff@infradead.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Olav Kongas <ok@artecdesign.ee>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Bin Liu <b-liu@ti.com>, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] driver core: initialize a default DMA mask for platform device
-Date:   Sun, 11 Aug 2019 10:05:20 +0200
-Message-Id: <20190811080520.21712-7-hch@lst.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190811080520.21712-1-hch@lst.de>
-References: <20190811080520.21712-1-hch@lst.de>
+        id S1728012AbfHLKqK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Aug 2019 06:46:10 -0400
+Received: from foss.arm.com ([217.140.110.172]:48134 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727691AbfHLKqJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 12 Aug 2019 06:46:09 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B486515AB;
+        Mon, 12 Aug 2019 03:46:08 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.20])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 321463F706;
+        Mon, 12 Aug 2019 03:46:08 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 11:46:06 +0100
+From:   Andrew Murray <andrew.murray@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 1/2] arm64: Define
+ Documentation/arm64/tagged-address-abi.rst
+Message-ID: <20190812104606.GY56241@e119886-lin.cambridge.arm.com>
+References: <20190807155321.9648-1-catalin.marinas@arm.com>
+ <20190807155321.9648-2-catalin.marinas@arm.com>
+ <20190808170424.6td34cpdngkcxxpu@willie-the-truck>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190808170424.6td34cpdngkcxxpu@willie-the-truck>
+User-Agent: Mutt/1.10.1+81 (426a6c1) (2018-08-26)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We still treat devices without a DMA mask as defaulting to 32-bits for
-both mask, but a few releases ago we've started warning about such
-cases, as they require special cases to work around this sloppyness.
-Add a dma_mask field to struct platform_object so that we can initialize
-the dma_mask pointer in struct device and initialize both masks to
-32-bits by default.  Architectures can still override this in
-arch_setup_pdev_archdata if needed.
+On Thu, Aug 08, 2019 at 06:04:24PM +0100, Will Deacon wrote:
+> On Wed, Aug 07, 2019 at 04:53:20PM +0100, Catalin Marinas wrote:
+> > From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > 
+> > On arm64 the TCR_EL1.TBI0 bit has been always enabled hence
+> > the userspace (EL0) is allowed to set a non-zero value in the
+> > top byte but the resulting pointers are not allowed at the
+> > user-kernel syscall ABI boundary.
+> > 
+> > With the relaxed ABI proposed through this document, it is now possible
+> > to pass tagged pointers to the syscalls, when these pointers are in
+> > memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap().
+> > 
+> > This change in the ABI requires a mechanism to requires the userspace
+> > to opt-in to such an option.
+> > 
+> > Specify and document the way in which sysctl and prctl() can be used
+> > in combination to allow the userspace to opt-in this feature.
+> > 
+> > Cc: Will Deacon <will.deacon@arm.com>
+> > Cc: Andrey Konovalov <andreyknvl@google.com>
+> > Cc: Szabolcs Nagy <szabolcs.nagy@arm.com>
+> > Cc: Kevin Brodsky <kevin.brodsky@arm.com>
+> > Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > [catalin.marinas@arm.com: some rewording, dropped MAP_PRIVATE]
+> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> > ---
+> >  Documentation/arm64/tagged-address-abi.rst | 151 +++++++++++++++++++++
+> >  1 file changed, 151 insertions(+)
+> >  create mode 100644 Documentation/arm64/tagged-address-abi.rst
+> > 
+> > diff --git a/Documentation/arm64/tagged-address-abi.rst b/Documentation/arm64/tagged-address-abi.rst
+> > new file mode 100644
+> > index 000000000000..f91a5d2ac865
+> > --- /dev/null
+> > +++ b/Documentation/arm64/tagged-address-abi.rst
+> > @@ -0,0 +1,151 @@
+> > +==========================
+> > +AArch64 TAGGED ADDRESS ABI
+> > +==========================
+> > +
+> > +Author: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > +
+> > +Date: 25 July 2019
+> > +
+> > +This document describes the usage and semantics of the Tagged Address
+> > +ABI on AArch64 Linux.
+> > +
+> > +1. Introduction
+> > +---------------
+> > +
+> > +On AArch64 the TCR_EL1.TBI0 bit has always been enabled, allowing userspace
+> > +(EL0) to perform memory accesses through 64-bit pointers with a non-zero
+> > +top byte. Such tagged pointers, however, were not allowed at the
+> > +user-kernel syscall ABI boundary.
+> 
+> I think we should drop the temporal language, so:
+> 
+>   "has always been enabled" => "is set by the kernel"
+>   "were not allowed" => "are not allowed by default"
+> 
+> > +
+> > +This document describes the relaxation of the syscall ABI that allows
+> > +userspace to pass certain tagged pointers to kernel syscalls, as described
+> > +in section 2.
+> > +
+> > +2. AArch64 Tagged Address ABI
+> > +-----------------------------
+> > +
+> > +From the kernel syscall interface perspective and for the purposes of this
+> > +document, a "valid tagged pointer" is a pointer with a potentially non-zero
+> > +top-byte that references an address in the user process address space
+> > +obtained in one of the following ways:
+> > +
+> > +- mmap() done by the process itself (or its parent), where either:
+> > +
+> > +  - flags have the **MAP_ANONYMOUS** bit set
+> > +  - the file descriptor refers to a regular file (including those returned
+> > +    by memfd_create()) or **/dev/zero**
+> > +
+> > +- brk() system call done by the process itself (i.e. the heap area between
+> > +  the initial location of the program break at process creation and its
+> > +  current location).
+> > +
+> > +- any memory mapped by the kernel in the address space of the process
+> > +  during creation and with the same restrictions as for mmap() above (e.g.
+> > +  data, bss, stack).
+> > +
+> > +The AArch64 Tagged Address ABI is an opt-in feature and an application can
+> > +control it via **prctl()** as follows:
+> > +
+> > +- **PR_SET_TAGGED_ADDR_CTRL**: enable or disable the AArch64 Tagged Address
+> > +  ABI for the calling process.
+> > +
+> > +  The (unsigned int) arg2 argument is a bit mask describing the control mode
+> > +  used:
+> > +
+> > +  - **PR_TAGGED_ADDR_ENABLE**: enable AArch64 Tagged Address ABI. Default
+> > +    status is disabled.
+> > +
+> > +  The arguments arg3, arg4, and arg5 are ignored.
+> > +
+> > +- **PR_GET_TAGGED_ADDR_CTRL**: get the status of the AArch64 Tagged Address
+> > +  ABI for the calling process.
+> > +
+> > +  The arguments arg2, arg3, arg4, and arg5 are ignored.
+> 
+> I agree with Dave (H) that we should require these to be zero. We may be
+> able to use arg2 to namespace things for PR_SET_TAGGED_ADDR_CTRL, but for
+> PR_GET_TAGGED_ADDR_CTRL we'd have to add a new prctl if we wanted to extend
+> it otherwise.
+> 
+> > +The prctl(PR_SET_TAGGED_ADDR_CTRL, ...) will return -EINVAL if the
+> 
+> *The* prctl? Maybe "Calling prctl(..." is better?
+> 
+> > +AArch64 Tagged Address ABI is not available
+> > +(CONFIG_ARM64_TAGGED_ADDR_ABI disabled or sysctl abi.tagged_addr=0).
+> 
+> drop the brackets and say "because CONFIG_... is disabled or ..".
+> 
+> > +
+> > +The ABI properties set by the mechanism described above are inherited by
+> > +threads of the same application and fork()'ed children but cleared by
+> > +execve().
+> 
+> Maybe just exec() here, since there are other flavours we shouldn't need to
+> enumerate.
+> 
+> > +Opting in (the prctl() option described above only) to or out of the
+> > +AArch64 Tagged Address ABI can be disabled globally at runtime using the
+> > +sysctl interface:
+> 
+> This sentence reads really badly thanks to the random bracketed part.
+> 
+> > +
+> > +- **abi.tagged_addr**: a new sysctl interface that can be used to prevent
+> > +  applications from enabling or disabling the relaxed ABI. The sysctl
+> > +  supports the following configuration options:
+> > +
+> > +  - **0**: disable the prctl(PR_SET_TAGGED_ADDR_CTRL) option to
+> > +    enable/disable the AArch64 Tagged Address ABI globally
+> 
+> This is clunky because it sounds like we're enabling the ABI for everybody,
+> where in actual fact we're enabling the controls for the ABI instead. It
+> also applies equally to PR_GET_TAGGED_ADDR_CTRL (but see below). Given that
+> we've already defined the prctl() above, I think we can just say:
+> 
+>   **0**: AArch64 Tagged Address ABI prctl() calls will return -EINVAL
+>   **1**: AArch64 Tagged Address ABI prctl() calls will behave as documented above.
+> 
+> > +  - **1** (Default): enable the prctl(PR_SET_TAGGED_ADDR_CTRL) option to
+> > +    enable/disable the AArch64 Tagged Address ABI globally
+> > +
+> > +  Note that this sysctl does not affect the status of the AArch64 Tagged
+> > +  Address ABI of the running processes.
+> 
+> Hmm, but it does mean that you can no longer ask if a previously running
+> process is using tags. Is that intentional?
+> 
+> > +When a process has successfully enabled the new ABI by invoking
+> > +prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE), the following
+> > +behaviours are guaranteed:
+> 
+> nit: this also applies to processes that have inherited the new ABI
+> bevaiour via fork() and haven't invoked the prctl() themselves.
+> 
+> > +- Every currently available syscall, except the cases mentioned in section
+> 
+> "currently available" is meaningless and should be removed
+> 
+> > +  3, can accept any valid tagged pointer. The same rule is applicable to
+> > +  any syscall introduced in the future.
+> 
+> Delete this last sentence.
+> 
+> > +- The syscall behaviour is undefined for non valid tagged pointers.
+> 
+> non valid => invalid
+> 
+> although this needs to be better defined, I think.
+> 
+> > +
+> > +- Every valid tagged pointer is expected to work as an untagged one.
+> 
+> What does that mean? Expected by who? What does "work" mean?
+> 
+> > +A definition of the meaning of tagged pointers on AArch64 can be found in:
+> > +Documentation/arm64/tagged-pointers.txt.
+> 
+> .txt => .rst
+> 
+> > +
+> > +3. AArch64 Tagged Address ABI Exceptions
+> > +-----------------------------------------
+> > +
+> > +The behaviour described in section 2, with particular reference to the
+> > +acceptance by the syscalls of any valid tagged pointer, is not applicable
+> > +to the following cases:
+> 
+> Jeez louise...
+> 
+> How about: "The following system call parameters must be untagged, regardless
+> of the ABI relaxation:"
+> 
+> > +
+> > +- mmap() addr parameter.
+> > +
+> > +- mremap() new_address parameter.
+> > +
+> > +- prctl(PR_SET_MM, ``*``, ...) other than arg2 PR_SET_MM_MAP and
+> > +  PR_SET_MM_MAP_SIZE.
+> > +
+> > +- prctl(PR_SET_MM, PR_SET_MM_MAP{,_SIZE}, ...) struct prctl_mm_map fields.
+> 
+> How did you generate this list and who will keep it up to date? How do you
+> know you haven't missed anything?
 
-Note that the code looks a little odd with the various conditionals
-because we have to support platform_device structures that are
-statically allocated.
+What about shared memory system calls: shmat, shmdt? The latest "arm64: untag
+user pointers passed to the kernel" series doesn't untag these, thus we should
+indicate here that these too are no supported.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/base/platform.c         | 15 +++++++++++++--
- include/linux/platform_device.h |  1 +
- 2 files changed, 14 insertions(+), 2 deletions(-)
+Thanks,
 
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index ec974ba9c0c4..b216fcb0a8af 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -264,6 +264,17 @@ struct platform_object {
- 	char name[];
- };
- 
-+static void setup_pdev_archdata(struct platform_device *pdev)
-+{
-+	if (!pdev->dev.coherent_dma_mask)
-+		pdev->dev.coherent_dma_mask = DMA_BIT_MASK(32);
-+	if (!pdev->dma_mask)
-+		pdev->dma_mask = DMA_BIT_MASK(32);
-+	if (!pdev->dev.dma_mask)
-+		pdev->dev.dma_mask = &pdev->dma_mask;
-+	arch_setup_pdev_archdata(pdev);
-+};
-+
- /**
-  * platform_device_put - destroy a platform device
-  * @pdev: platform device to free
-@@ -310,7 +321,7 @@ struct platform_device *platform_device_alloc(const char *name, int id)
- 		pa->pdev.id = id;
- 		device_initialize(&pa->pdev.dev);
- 		pa->pdev.dev.release = platform_device_release;
--		arch_setup_pdev_archdata(&pa->pdev);
-+		setup_pdev_archdata(&pa->pdev);
- 	}
- 
- 	return pa ? &pa->pdev : NULL;
-@@ -512,7 +523,7 @@ EXPORT_SYMBOL_GPL(platform_device_del);
- int platform_device_register(struct platform_device *pdev)
- {
- 	device_initialize(&pdev->dev);
--	arch_setup_pdev_archdata(pdev);
-+	setup_pdev_archdata(pdev);
- 	return platform_device_add(pdev);
- }
- EXPORT_SYMBOL_GPL(platform_device_register);
-diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-index 9bc36b589827..a2abde2aef25 100644
---- a/include/linux/platform_device.h
-+++ b/include/linux/platform_device.h
-@@ -24,6 +24,7 @@ struct platform_device {
- 	int		id;
- 	bool		id_auto;
- 	struct device	dev;
-+	u64		dma_mask;
- 	u32		num_resources;
- 	struct resource	*resource;
- 
--- 
-2.20.1
+Andrew Murray
 
+> 
+> > +Any attempt to use non-zero tagged pointers will lead to undefined
+> > +behaviour.
+> 
+> In the tagged pointer document we're slightly more specific and say that
+> using non-zero address tags "may result in an error code being returned, a
+> (fatal) signal being rasied, or other modes of failure". Maybe reuse that?
+> 
+> > +4. Example of correct usage
+> > +---------------------------
+> > +.. code-block:: c
+> > +
+> > +   void main(void)
+> > +   {
+> > +           static int tbi_enabled = 0;
+> > +           unsigned long tag = 0;
+> > +
+> 
+> Some comments won't go amiss here.
+> 
+> > +           char *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
+> > +                            MAP_ANONYMOUS, -1, 0);
+> > +
+> > +           if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE,
+> > +                     0, 0, 0) == 0)
+> > +                   tbi_enabled = 1;
+> > +
+> > +           if (ptr == (void *)-1) /* MAP_FAILED */
+> > +                   return -1;
+> > +
+> > +           if (tbi_enabled)
+> > +                   tag = rand() & 0xff;
+> > +
+> > +           ptr = (char *)((unsigned long)ptr | (tag << TAG_SHIFT));
+> > +
+> > +           *ptr = 'a';
+> > +
+> > +           ...
+> > +   }
+> 
+> Hmm, doesn't this snippet work today? You're not actually passing the
+> tagged pointer back to the kernel...
+> 
+> Will
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
