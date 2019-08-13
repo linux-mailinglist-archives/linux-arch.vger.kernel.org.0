@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4838C322
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2019 23:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0961C8C319
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2019 23:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbfHMVFy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Aug 2019 17:05:54 -0400
-Received: from mga06.intel.com ([134.134.136.31]:16057 "EHLO mga06.intel.com"
+        id S1726750AbfHMVCo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Aug 2019 17:02:44 -0400
+Received: from mga06.intel.com ([134.134.136.31]:16071 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726560AbfHMVCm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 13 Aug 2019 17:02:42 -0400
+        id S1726734AbfHMVCo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 13 Aug 2019 17:02:44 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Aug 2019 14:02:41 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Aug 2019 14:02:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,382,1559545200"; 
-   d="scan'208";a="187901353"
+   d="scan'208";a="187901366"
 Received: from yyu32-desk1.sc.intel.com ([10.144.153.205])
-  by orsmga002.jf.intel.com with ESMTP; 13 Aug 2019 14:02:40 -0700
+  by orsmga002.jf.intel.com with ESMTP; 13 Aug 2019 14:02:41 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -46,9 +46,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v8 07/27] x86/cet/shstk: Add Kconfig option for user-mode shadow stack
-Date:   Tue, 13 Aug 2019 13:52:05 -0700
-Message-Id: <20190813205225.12032-8-yu-cheng.yu@intel.com>
+Subject: [PATCH v8 08/27] mm: Introduce VM_SHSTK for shadow stack memory
+Date:   Tue, 13 Aug 2019 13:52:06 -0700
+Message-Id: <20190813205225.12032-9-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190813205225.12032-1-yu-cheng.yu@intel.com>
 References: <20190813205225.12032-1-yu-cheng.yu@intel.com>
@@ -57,86 +57,60 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce Kconfig option X86_INTEL_SHADOW_STACK_USER.
-
-An application has shadow stack protection when all the following are
-true:
-
-  (1) The kernel has X86_INTEL_SHADOW_STACK_USER enabled,
-  (2) The running processor supports the shadow stack,
-  (3) The application is built with shadow stack enabled tools & libs
-      and, and at runtime, all dependent shared libs can support
-      shadow stack.
-
-If this kernel config option is enabled, but (2) or (3) above is not
-true, the application runs without the shadow stack protection.
-Existing legacy applications will continue to work without the shadow
-stack protection.
-
-The user-mode shadow stack protection is only implemented for the
-64-bit kernel.  Thirty-two bit applications are supported under the
-compatibility mode.
+VM_SHSTK indicates a shadow stack memory area.
+The shadow stack is implemented only for the 64-bit kernel.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/Kconfig  | 25 +++++++++++++++++++++++++
- arch/x86/Makefile |  7 +++++++
- 2 files changed, 32 insertions(+)
+ fs/proc/task_mmu.c | 3 +++
+ include/linux/mm.h | 8 ++++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 222855cc0158..eaf86ef13348 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1934,6 +1934,31 @@ config X86_INTEL_MEMORY_PROTECTION_KEYS
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 731642e0f5a0..09521579cc8e 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -684,6 +684,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+ 		[ilog2(VM_PKEY_BIT4)]	= "",
+ #endif
+ #endif /* CONFIG_ARCH_HAS_PKEYS */
++#ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
++		[ilog2(VM_SHSTK)]	= "ss",
++#endif
+ 	};
+ 	size_t i;
  
- 	  If unsure, say y.
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 0334ca97c584..bc58585014c9 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -298,11 +298,13 @@ extern unsigned int kobjsize(const void *objp);
+ #define VM_HIGH_ARCH_BIT_2	34	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_3	35	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_4	36	/* bit only usable on 64-bit architectures */
++#define VM_HIGH_ARCH_BIT_5	37	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_0	BIT(VM_HIGH_ARCH_BIT_0)
+ #define VM_HIGH_ARCH_1	BIT(VM_HIGH_ARCH_BIT_1)
+ #define VM_HIGH_ARCH_2	BIT(VM_HIGH_ARCH_BIT_2)
+ #define VM_HIGH_ARCH_3	BIT(VM_HIGH_ARCH_BIT_3)
+ #define VM_HIGH_ARCH_4	BIT(VM_HIGH_ARCH_BIT_4)
++#define VM_HIGH_ARCH_5	BIT(VM_HIGH_ARCH_BIT_5)
+ #endif /* CONFIG_ARCH_USES_HIGH_VMA_FLAGS */
  
-+config X86_INTEL_CET
-+	def_bool n
-+
-+config ARCH_HAS_SHSTK
-+	def_bool n
-+
-+config X86_INTEL_SHADOW_STACK_USER
-+	prompt "Intel Shadow Stack for user-mode"
-+	def_bool n
-+	depends on CPU_SUP_INTEL && X86_64
-+	select ARCH_USES_HIGH_VMA_FLAGS
-+	select X86_INTEL_CET
-+	select ARCH_HAS_SHSTK
-+	---help---
-+	  Shadow stack provides hardware protection against program stack
-+	  corruption.  Only when all the following are true will an application
-+	  have the shadow stack protection: the kernel supports it (i.e. this
-+	  feature is enabled), the application is compiled and linked with
-+	  shadow stack enabled, and the processor supports this feature.
-+	  When the kernel has this configuration enabled, existing non shadow
-+	  stack applications will continue to work, but without shadow stack
-+	  protection.
-+
-+	  If unsure, say y.
-+
- config EFI
- 	bool "EFI runtime service support"
- 	depends on ACPI
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 56e748a7679f..0b2e9df48907 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -148,6 +148,13 @@ ifdef CONFIG_X86_X32
- endif
- export CONFIG_X86_X32_ABI
+ #ifdef CONFIG_ARCH_HAS_PKEYS
+@@ -340,6 +342,12 @@ extern unsigned int kobjsize(const void *objp);
+ # define VM_MPX		VM_NONE
+ #endif
  
-+# Check assembler shadow stack suppot
-+ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
-+  ifeq ($(call as-instr, saveprevssp, y),)
-+      $(error CONFIG_X86_INTEL_SHADOW_STACK_USER not supported by the assembler)
-+  endif
-+endif
++#ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
++# define VM_SHSTK	VM_HIGH_ARCH_5
++#else
++# define VM_SHSTK	VM_NONE
++#endif
 +
- #
- # If the function graph tracer is used with mcount instead of fentry,
- # '-maccumulate-outgoing-args' is needed to prevent a GCC bug
+ #ifndef VM_GROWSUP
+ # define VM_GROWSUP	VM_NONE
+ #endif
 -- 
 2.17.1
 
