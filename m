@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7338C2FA
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2019 23:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E39B8C2FD
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2019 23:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbfHMVCz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1726876AbfHMVCz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Tue, 13 Aug 2019 17:02:55 -0400
 Received: from mga06.intel.com ([134.134.136.31]:16076 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726819AbfHMVCy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 13 Aug 2019 17:02:54 -0400
+        id S1726130AbfHMVCz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 13 Aug 2019 17:02:55 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Aug 2019 14:02:53 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Aug 2019 14:02:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,382,1559545200"; 
-   d="scan'208";a="187901428"
+   d="scan'208";a="187901433"
 Received: from yyu32-desk1.sc.intel.com ([10.144.153.205])
-  by orsmga002.jf.intel.com with ESMTP; 13 Aug 2019 14:02:52 -0700
+  by orsmga002.jf.intel.com with ESMTP; 13 Aug 2019 14:02:53 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -46,9 +46,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v8 15/27] mm: Handle shadow stack page fault
-Date:   Tue, 13 Aug 2019 13:52:13 -0700
-Message-Id: <20190813205225.12032-16-yu-cheng.yu@intel.com>
+Subject: [PATCH v8 16/27] mm: Handle THP/HugeTLB shadow stack page fault
+Date:   Tue, 13 Aug 2019 13:52:14 -0700
+Message-Id: <20190813205225.12032-17-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190813205225.12032-1-yu-cheng.yu@intel.com>
 References: <20190813205225.12032-1-yu-cheng.yu@intel.com>
@@ -57,115 +57,98 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When a task does fork(), its shadow stack (SHSTK) must be duplicated
-for the child.  This patch implements a flow similar to copy-on-write
-of an anonymous page, but for SHSTK.
+This patch implements THP shadow stack (SHSTK) copying in the same
+way as in the previous patch for regular PTE.
 
-A SHSTK PTE must be RO and dirty.  This dirty bit requirement is used
-to effect the copying.  In copy_one_pte(), clear the dirty bit from a
-SHSTK PTE to cause a page fault upon the next SHSTK access.  At that
-time, fix the PTE and copy/re-use the page.
+In copy_huge_pmd(), clear the dirty bit from the PMD to cause a page
+fault upon the next SHSTK access to the PMD.  At that time, fix the
+PMD and copy/re-use the page.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/mm/pgtable.c         | 15 +++++++++++++++
- include/asm-generic/pgtable.h | 15 +++++++++++++++
- mm/memory.c                   |  7 ++++++-
- 3 files changed, 36 insertions(+), 1 deletion(-)
+ arch/x86/mm/pgtable.c         | 8 ++++++++
+ include/asm-generic/pgtable.h | 6 ++++++
+ mm/huge_memory.c              | 4 ++++
+ 3 files changed, 18 insertions(+)
 
 diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index 44816ff6411f..0c10d0c5e329 100644
+index 0c10d0c5e329..6f3959ca2a08 100644
 --- a/arch/x86/mm/pgtable.c
 +++ b/arch/x86/mm/pgtable.c
-@@ -876,3 +876,18 @@ int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
+@@ -886,6 +886,14 @@ inline pte_t pte_set_vma_features(pte_t pte, struct vm_area_struct *vma)
+ 		return pte;
+ }
  
- #endif /* CONFIG_X86_64 */
- #endif	/* CONFIG_HAVE_ARCH_HUGE_VMAP */
-+
-+#ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
-+inline pte_t pte_set_vma_features(pte_t pte, struct vm_area_struct *vma)
++inline pmd_t pmd_set_vma_features(pmd_t pmd, struct vm_area_struct *vma)
 +{
 +	if (vma->vm_flags & VM_SHSTK)
-+		return pte_mkdirty_shstk(pte);
++		return pmd_mkdirty_shstk(pmd);
 +	else
-+		return pte;
++		return pmd;
 +}
 +
-+inline bool arch_copy_pte_mapping(vm_flags_t vm_flags)
-+{
-+	return (vm_flags & VM_SHSTK);
-+}
-+#endif /* CONFIG_X86_INTEL_SHADOW_STACK_USER */
+ inline bool arch_copy_pte_mapping(vm_flags_t vm_flags)
+ {
+ 	return (vm_flags & VM_SHSTK);
 diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
-index 75d9d68a6de7..89b0fa132f1f 100644
+index 89b0fa132f1f..438ce73b57ea 100644
 --- a/include/asm-generic/pgtable.h
 +++ b/include/asm-generic/pgtable.h
-@@ -1188,4 +1188,19 @@ static inline bool arch_has_pfn_modify_check(void)
- #define mm_pmd_folded(mm)	__is_defined(__PAGETABLE_PMD_FOLDED)
+@@ -1194,12 +1194,18 @@ static inline pte_t pte_set_vma_features(pte_t pte, struct vm_area_struct *vma)
+ 	return pte;
+ }
+ 
++static inline pmd_t pmd_set_vma_features(pmd_t pmd, struct vm_area_struct *vma)
++{
++	return pmd;
++}
++
+ static inline bool arch_copy_pte_mapping(vm_flags_t vm_flags)
+ {
+ 	return false;
+ }
+ #else
+ pte_t pte_set_vma_features(pte_t pte, struct vm_area_struct *vma);
++pmd_t pmd_set_vma_features(pmd_t pmd, struct vm_area_struct *vma);
+ bool arch_copy_pte_mapping(vm_flags_t vm_flags);
  #endif
  
-+#ifndef CONFIG_ARCH_HAS_SHSTK
-+static inline pte_t pte_set_vma_features(pte_t pte, struct vm_area_struct *vma)
-+{
-+	return pte;
-+}
-+
-+static inline bool arch_copy_pte_mapping(vm_flags_t vm_flags)
-+{
-+	return false;
-+}
-+#else
-+pte_t pte_set_vma_features(pte_t pte, struct vm_area_struct *vma);
-+bool arch_copy_pte_mapping(vm_flags_t vm_flags);
-+#endif
-+
- #endif /* _ASM_GENERIC_PGTABLE_H */
-diff --git a/mm/memory.c b/mm/memory.c
-index e2bb51b6242e..be93a73b5152 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -754,7 +754,8 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
- 	 * If it's a COW mapping, write protect it both
- 	 * in the parent and the child
- 	 */
--	if (is_cow_mapping(vm_flags) && pte_write(pte)) {
-+	if ((is_cow_mapping(vm_flags) && pte_write(pte)) ||
-+	    arch_copy_pte_mapping(vm_flags)) {
- 		ptep_set_wrprotect(src_mm, addr, src_pte);
- 		pte = pte_wrprotect(pte);
- 	}
-@@ -2273,6 +2274,7 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
- 	flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
- 	entry = pte_mkyoung(vmf->orig_pte);
- 	entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-+	entry = pte_set_vma_features(entry, vma);
- 	if (ptep_set_access_flags(vma, vmf->address, vmf->pte, entry, 1))
- 		update_mmu_cache(vma, vmf->address, vmf->pte);
- 	pte_unmap_unlock(vmf->pte, vmf->ptl);
-@@ -2348,6 +2350,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
- 		entry = mk_pte(new_page, vma->vm_page_prot);
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1334ede667a8..39d66c628121 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -611,6 +611,7 @@ static vm_fault_t __do_huge_pmd_anonymous_page(struct vm_fault *vmf,
+ 
+ 		entry = mk_huge_pmd(page, vma->vm_page_prot);
+ 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
++		entry = pmd_set_vma_features(entry, vma);
+ 		page_add_new_anon_rmap(page, vma, haddr, true);
+ 		mem_cgroup_commit_charge(page, memcg, false, true);
+ 		lru_cache_add_active_or_unevictable(page, vma);
+@@ -1253,6 +1254,7 @@ static vm_fault_t do_huge_pmd_wp_page_fallback(struct vm_fault *vmf,
+ 		pte_t entry;
+ 		entry = mk_pte(pages[i], vma->vm_page_prot);
  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
 +		entry = pte_set_vma_features(entry, vma);
- 		/*
- 		 * Clear the pte entry and flush it first, before updating the
- 		 * pte with the new entry. This will avoid a race condition
-@@ -2866,6 +2869,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	pte = mk_pte(page, vma->vm_page_prot);
- 	if ((vmf->flags & FAULT_FLAG_WRITE) && reuse_swap_page(page, NULL)) {
- 		pte = maybe_mkwrite(pte_mkdirty(pte), vma);
-+		pte = pte_set_vma_features(pte, vma);
- 		vmf->flags &= ~FAULT_FLAG_WRITE;
+ 		memcg = (void *)page_private(pages[i]);
+ 		set_page_private(pages[i], 0);
+ 		page_add_new_anon_rmap(pages[i], vmf->vma, haddr, false);
+@@ -1335,6 +1337,7 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf, pmd_t orig_pmd)
+ 		pmd_t entry;
+ 		entry = pmd_mkyoung(orig_pmd);
+ 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
++		entry = pmd_set_vma_features(entry, vma);
+ 		if (pmdp_set_access_flags(vma, haddr, vmf->pmd, entry,  1))
+ 			update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
  		ret |= VM_FAULT_WRITE;
- 		exclusive = RMAP_EXCLUSIVE;
-@@ -3008,6 +3012,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	entry = mk_pte(page, vma->vm_page_prot);
- 	if (vma->vm_flags & VM_WRITE)
- 		entry = pte_mkwrite(pte_mkdirty(entry));
-+	entry = pte_set_vma_features(entry, vma);
- 
- 	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
- 			&vmf->ptl);
+@@ -1407,6 +1410,7 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf, pmd_t orig_pmd)
+ 		pmd_t entry;
+ 		entry = mk_huge_pmd(new_page, vma->vm_page_prot);
+ 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
++		entry = pmd_set_vma_features(entry, vma);
+ 		pmdp_huge_clear_flush_notify(vma, haddr, vmf->pmd);
+ 		page_add_new_anon_rmap(new_page, vma, haddr, true);
+ 		mem_cgroup_commit_charge(new_page, memcg, false, true);
 -- 
 2.17.1
 
