@@ -2,145 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C92F8DBF7
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2019 19:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC518E133
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Aug 2019 01:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728128AbfHNRfX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Aug 2019 13:35:23 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:37211 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727875AbfHNRfW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Aug 2019 13:35:22 -0400
-Received: by mail-ot1-f68.google.com with SMTP id f17so48937762otq.4
-        for <linux-arch@vger.kernel.org>; Wed, 14 Aug 2019 10:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fOFmALBZr12NwAFqPH4bz0Snzh0MYv/4Oy/ALTRaZDA=;
-        b=J/RX89SfeoHR3tNRvGakoeZptZJRFt1aGCoCGLanpgjt6kzr4VpQHXuOeq/XIub7h3
-         dtaz/Elri9LmCCrz1cJasmWNTs/t3B2DIMrEzFtcDd5S3T5Z7qW0x6VQtzyPUT8xX0Dr
-         tpBoGVGOFhjt5t/gsPYut79dUKJV/zOUYBE0KuVDsrJAB63xmL9rkN5sW1B/mX17RfT8
-         s7uhch2pStQ0Q6kOmXjpTKpW17nIDOPnBvNsIuNp6/qFxNyKoezYoApT9paR+P+AAJP+
-         1YlKwUJfVlXI0OJvPm/r92hOejmHZfRewJNJIhMYRbj46Pt2aVShyKZOOJ23qQt+gnU7
-         ycMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fOFmALBZr12NwAFqPH4bz0Snzh0MYv/4Oy/ALTRaZDA=;
-        b=ePEpIUIH3B3IJXaoo/a1LTSSLJz8tV28GGpIPIVgMxaLVgPOY0EnbN4NqNI4qWkrcl
-         MK+uh2BenRcz0AeeA+xQLVvjHIFHSzMZf3AjQIg74aqMUchKuG3yQaih8Shk32MIWK8A
-         H66LSrkXUM9S9EcAXIb/4SO8WUWMfMiS4xJah/qLki4a2Tp7IWT423VHortR1uxC71tD
-         TqV/5CkqqqEC7T7ICJhewWVZ7xT1OGnGebytRYxWZlLXVlELeEKrXnPnNFNzi+2wm32G
-         7l6JroyZ0S2cbNH750VVl4ke/vuETfQVj8SGMGTV5xlnxBjbMd/BJ0SfWZmmhtJuuPCG
-         0b8A==
-X-Gm-Message-State: APjAAAX/1GeZjAz+4q5nH2qD7MoqULYZRgti0QY1mTZK5gpvUQ5tmC8e
-        YOufWkN6IfSUravyOq7n25UZxLJFflBo4gqcGPQa+2GjKnKaQQ==
-X-Google-Smtp-Source: APXvYqyjolYUGNDko/RtbeKAldUB4mXc2vz0kBg/ilppWohKo/GY5H6usCosoBEpZ0JF43wMzvRMaDIYk6L2L/batEg=
-X-Received: by 2002:a05:6830:1e0f:: with SMTP id s15mr177324otr.231.1565804120275;
- Wed, 14 Aug 2019 10:35:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20180716122125.175792-1-maco@android.com> <20190813121733.52480-1-maennich@google.com>
- <20190813121733.52480-6-maennich@google.com> <CAGETcx_LQDdnaU+3JVGw+6=DJ8tRoQ00+3rD2gOiHHkWomt8jg@mail.gmail.com>
- <20190814125427.GA72826@google.com>
-In-Reply-To: <20190814125427.GA72826@google.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 14 Aug 2019 10:34:43 -0700
-Message-ID: <CAGETcx99Xx7aRPS-2Pw8h7O5D_+3T+1hbqja=p-gLN2wXApaEQ@mail.gmail.com>
-Subject: Re: [PATCH v2 05/10] module: add config option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-To:     Matthias Maennich <maennich@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, maco@android.com,
-        Android Kernel Team <kernel-team@android.com>, arnd@arndb.de,
-        geert@linux-m68k.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, hpa@zytor.com,
-        jeyu@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        lucas.de.marchi@gmail.com, Martijn Coenen <maco@google.com>,
-        michal.lkml@markovi.net, mingo@redhat.com, oneukum@suse.com,
-        Philippe Ombredanne <pombredanne@nexb.com>, sam@ravnborg.org,
-        Sandeep Patil <sspatil@google.com>, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        id S1728416AbfHNXYT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Aug 2019 19:24:19 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52154 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728388AbfHNXYT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 14 Aug 2019 19:24:19 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7ENNWjs008948;
+        Wed, 14 Aug 2019 19:24:06 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ucscbmpbe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Aug 2019 19:24:05 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x7ENNb1Q009522;
+        Wed, 14 Aug 2019 19:24:05 -0400
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ucscbmpax-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Aug 2019 19:24:04 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7ENJx9n020765;
+        Wed, 14 Aug 2019 23:24:03 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03dal.us.ibm.com with ESMTP id 2u9nj78phs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Aug 2019 23:24:03 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7ENO2TB53084446
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Aug 2019 23:24:02 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 96D3AB2065;
+        Wed, 14 Aug 2019 23:24:02 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 782DBB205F;
+        Wed, 14 Aug 2019 23:24:02 +0000 (GMT)
+Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 14 Aug 2019 23:24:02 +0000 (GMT)
+Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
+        id 98C3816C1049; Wed, 14 Aug 2019 16:24:04 -0700 (PDT)
+Date:   Wed, 14 Aug 2019 16:24:04 -0700
+From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
         David Howells <dhowells@redhat.com>,
-        Patrick Bellasi <patrick.bellasi@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Adrian Reber <adrian@lisas.de>,
-        Richard Guy Briggs <rgb@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Daniel Lustig <dlustig@nvidia.com>
+Subject: Re: [PATCH 0/2] tools/memory-model: Update comment of jugdelitmus.sh
+Message-ID: <20190814232404.GC28441@linux.ibm.com>
+Reply-To: paulmck@linux.ibm.com
+References: <20190801222026.GA11315@linux.ibm.com>
+ <20190801222056.12144-27-paulmck@linux.ibm.com>
+ <beb07965-eb83-9cd1-2b49-cfc24928dce5@gmail.com>
+ <20190812180649.GM28441@linux.ibm.com>
+ <277937a7-0f50-ec1c-09ec-95ffbf85541e@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <277937a7-0f50-ec1c-09ec-95ffbf85541e@gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-14_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908140212
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 5:54 AM 'Matthias Maennich' via kernel-team
-<kernel-team@android.com> wrote:
->
-> On Tue, Aug 13, 2019 at 01:15:44PM -0700, Saravana Kannan wrote:
-> >On Tue, Aug 13, 2019 at 5:19 AM 'Matthias Maennich' via kernel-team
-> ><kernel-team@android.com> wrote:
-> >>
-> >> If MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is enabled (default=n), the
-> >> requirement for modules to import all namespaces that are used by
-> >> the module is relaxed.
-> >>
-> >> Enabling this option effectively allows (invalid) modules to be loaded
-> >> while only a warning is emitted.
-> >>
-> >> Disabling this option keeps the enforcement at module loading time and
-> >> loading is denied if the module's imports are not satisfactory.
-> >>
-> >> Reviewed-by: Martijn Coenen <maco@android.com>
-> >> Signed-off-by: Matthias Maennich <maennich@google.com>
-> >> ---
-> >>  init/Kconfig    | 14 ++++++++++++++
-> >>  kernel/module.c | 11 +++++++++--
-> >>  2 files changed, 23 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/init/Kconfig b/init/Kconfig
-> >> index bd7d650d4a99..b3373334cdf1 100644
-> >> --- a/init/Kconfig
-> >> +++ b/init/Kconfig
-> >> @@ -2119,6 +2119,20 @@ config MODULE_COMPRESS_XZ
-> >>
-> >>  endchoice
-> >>
-> >> +config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-> >> +       bool "Allow loading of modules with missing namespace imports"
-> >> +       default n
-> >> +       help
-> >> +         Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
-> >> +         a namespace. A module that makes use of a symbol exported with such a
-> >> +         namespace is required to import the namespace via MODULE_IMPORT_NS().
-> >> +         This option relaxes this requirement when loading a module.
-> >
-> >> While
-> >> +         technically there is no reason to enforce correct namespace imports,
-> >> +         it creates consistency between symbols defining namespaces and users
-> >> +         importing namespaces they make use of.
-> >
-> >I'm confused by this sentence. It sounds like it's the opposite of
-> >what the config is doing? Can you please reword it for clarify?
->
-> How about:
->
->   Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
->   a namespace. A module that makes use of a symbol exported with such a
->   namespace is required to import the namespace via MODULE_IMPORT_NS().
->   There is no technical reason to enforce correct namespace imports,
->   but it creates consistency between symbols defining namespaces and
->   users importing namespaces they make use of. This option relaxes this
->   requirement and lifts the enforcement when loading a module.
+On Thu, Aug 15, 2019 at 12:11:36AM +0900, Akira Yokosawa wrote:
+> Hi Paul,
+> 
+> I see some inconsistency between the header comment of judgelitmus.sh
+> and the updated script.
+> 
+> This patch set updates the header. It is relative to current lkmm-dev
+> of -rcu.
+> 
+> Patch 1/2 corresponds to ("tools/memory-model: Move from
+> .AArch64.litmus.out to .litmus.AArch.out").
+> 
+> Patch 2/2 corresponds to ("tools/memory-model: Add data-race
+> capabilities to judgelitmus.sh").
+> 
+> You should be able to use each patch as a fix-up commit respectively.
+> I'm OK either with them applied at the head of the branch or
+> with them merged into your commits.
 
-That's a lot better. Especially moving the "This option relaxes..." to
-the bottom. Thanks.
+Good catches, thank you for looking these commits over!  I will squash
+your changes into the original commits with attribution.
 
--Saravana
+							Thanx, Paul
+
+>         Thanks, Akira
+> --
+> Akira Yokosawa (2):
+>   tools/memory-model: Reflect updated file name convention in
+>     judgelitmus.sh
+>   tools/memory-model: Mention data-race capability in jugdelitmus.sh's
+>     header
+> 
+>  tools/memory-model/scripts/judgelitmus.sh | 20 +++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
+> 
+> -- 
+> 2.17.1
+> 
+> 
