@@ -2,113 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 793348C4E3
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2019 01:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4AF8CBF4
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2019 08:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726498AbfHMXtc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Aug 2019 19:49:32 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:42690 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726231AbfHMXtc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Aug 2019 19:49:32 -0400
-Received: by mail-pl1-f193.google.com with SMTP id ay6so49979445plb.9
-        for <linux-arch@vger.kernel.org>; Tue, 13 Aug 2019 16:49:31 -0700 (PDT)
+        id S1727261AbfHNGga (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Aug 2019 02:36:30 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33540 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726940AbfHNGga (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Aug 2019 02:36:30 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n190so11760227pgn.0;
+        Tue, 13 Aug 2019 23:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=yL2GiSxONyR1+wf+cPEJ785qgYB8kzY/mss0H7pGC9M=;
-        b=Wt6ztQ2X+fWJO0FTPgcX9A+51Mq8+dTZ9Ad+A3iCM8ClCkHgqKWJ2Drcvb3RRKr7tY
-         erf0TC5YpqS2Portj7ZVBheih5czwyWoynvvG+OcmmO4kYKcTGfe2f3XrwTEAsq4mi21
-         F50sQEzYTRfQKIDH+vxbJVarJg8gOG8ti6o2Fc+g1ZQKwAv93sQYllOrj4oWJ0zUPD+X
-         OhZHWL3rBvb7RYeJg5DrjtfulYBGFzk0abwLsjlwIA2YbLnzPETAHKm0OIYnmu8wnuCN
-         S6zZGySHxEitvDXRzvENqoZpHDohSYEySTt2GO05uL68b4/lXRsTldj/46PsM5r7KGQH
-         nhyg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=V2ZJmMM7eBUrb1Y12nRIIaugrWodscFeaE9AP4JG/Zg=;
+        b=Gr/yUIA7h/3eBDYc9/YH3PmK0TnssS6CO/9hFNunLAWWczG3OiVHN4WIIgL3E9ZCpt
+         lxw0s7tI4ERoXSIwh3JMsdgc8zNzPjnA6BXgqeWAmqEyh+LbCMXm65+O4nT6k1c31e4G
+         72a+RzjyGS+EkSW5x52rptXOtidXTsKAuxWhyJ3b6xCpOT6ucihhvpEg52ywhW82gF/O
+         HmWN/pIGHF5t5B5reCnO/nsCfzeJAwUmX5rfj3UfluGG3M6/UTPt0Rx+R75a3hwPVGGS
+         CEB7dg3ncNyljnIstqsOyQ3HSCSlywswvj4u3icgmk4pUqxyXQc3S7rYfldNhw5/Vge5
+         lm7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=yL2GiSxONyR1+wf+cPEJ785qgYB8kzY/mss0H7pGC9M=;
-        b=ZDW8OIgXXxixo/x0gy3dDWUFJwoCybnX6970IqOrjU8roGuysa/gMXVIMp0mIcFAid
-         /3XRhF9+qG+W/2fASC+eBBXl14KNRpbE1JVlEdLJIUCINf2XcrMdoj9AasX2FxoQJYql
-         MinEJXY5gGRx7Z4Z0/WRhZ1HHRF0V+E3chtHL5lE5Z2N20XBRjMrCBcPtqfPYxidahs5
-         5epQketDcfPBLvDgRK9VvscetPJQBbce1JO1AzbkG8MnrvxYB48aA+kUfFkBiJnTTWAa
-         O06JMe813evi1MKMQo04DGwkpbvQsB9s7QUzyOY5RG6pHJpsoY/Xzg60Suc94L/zcRSs
-         7w+g==
-X-Gm-Message-State: APjAAAWXiKEG9TqJnBq3AnAYezCQ+93L/s9q+FQ2kqa1tBjisUcsoXYY
-        9T6ywidyhXsCRGbPzbLUjS7eHQ==
-X-Google-Smtp-Source: APXvYqziYoxNMLaC/s1uQ9IVzw788DhInlAx7eBm4/seDB4Szhev8YYMyLyUEb33esQFu71+edIwvw==
-X-Received: by 2002:a17:902:2ac7:: with SMTP id j65mr40372077plb.242.1565740171253;
-        Tue, 13 Aug 2019 16:49:31 -0700 (PDT)
-Received: from ?IPv6:2601:646:c200:1ef2:6cf1:fbba:cb42:db60? ([2601:646:c200:1ef2:6cf1:fbba:cb42:db60])
-        by smtp.gmail.com with ESMTPSA id bt18sm3110564pjb.1.2019.08.13.16.49.30
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Aug 2019 16:49:30 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v8 11/27] x86/mm: Introduce _PAGE_DIRTY_SW
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16G77)
-In-Reply-To: <dac2d62b-9045-4767-87dd-eac12e7abafd@intel.com>
-Date:   Tue, 13 Aug 2019 16:49:29 -0700
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <08A983E6-7B9C-4BDF-887A-F57734FADC9E@amacapital.net>
-References: <20190813205225.12032-1-yu-cheng.yu@intel.com> <20190813205225.12032-12-yu-cheng.yu@intel.com> <dac2d62b-9045-4767-87dd-eac12e7abafd@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=V2ZJmMM7eBUrb1Y12nRIIaugrWodscFeaE9AP4JG/Zg=;
+        b=VfatWZi2jk7Da/3tWd0auYKCJzuJ73Eomf0Rg677KQTiokULd0hOD1t1WPIULL7+Ur
+         lDUCIJBzyKz0R1pex0yauixfhb42Bawzo8Iw98YK2Uu+TcAWn5/kr+7/oHTEZ1vixfHC
+         CzMQf0d4r0xBuuCKc5bAsgNiEr9sYqC9Fj5xKyTO8oNyII2y0fgD8PAzO5Y18BR6rQej
+         otuuqy5J2anmqabhuhamJqThvBZIFjZSHu95nLHmNqK8P+MCbpTNC5GNfvrN03dqPOle
+         nuLxSSz+22KYDAi9rvwNqe7sEOmzv59aBjnBSUH5fbisihdM7FIaOUfSGzmzvdxsbacF
+         yVKA==
+X-Gm-Message-State: APjAAAWC77hMiweIYiz8Dz6e1XlrzLJTIFlC62+4O6kJMAFj5mHIW1VO
+        TZ/MeaJIAlK7ag24t4NnmqA=
+X-Google-Smtp-Source: APXvYqw/2y0dZHWefWOjTwta+m4FUhziJYRwexQISdGldO7ge/xr1KdLXo0S4VRw57w8u++ZXvSuxA==
+X-Received: by 2002:a63:89c2:: with SMTP id v185mr37393202pgd.241.1565764588977;
+        Tue, 13 Aug 2019 23:36:28 -0700 (PDT)
+Received: from himanshu-Vostro-3559 ([103.77.43.147])
+        by smtp.gmail.com with ESMTPSA id j15sm109471223pfr.146.2019.08.13.23.36.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 13 Aug 2019 23:36:27 -0700 (PDT)
+Date:   Wed, 14 Aug 2019 12:06:11 +0530
+From:   Himanshu Jha <himanshujha199640@gmail.com>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, maco@android.com,
+        kstewart@linuxfoundation.org, linux-m68k@vger.kernel.org,
+        oneukum@suse.com,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        usb-storage@lists.one-eyed-alien.net, hpa@zytor.com,
+        joel@joelfernandes.org, sam@ravnborg.org, cocci@systeme.lip6.fr,
+        linux-arch@vger.kernel.org, linux-scsi@vger.kernel.org,
+        x86@kernel.org, lucas.de.marchi@gmail.com, mingo@redhat.com,
+        geert@linux-m68k.org, stern@rowland.harvard.edu,
+        kernel-team@android.com, sspatil@google.com, arnd@arndb.de,
+        linux-kbuild@vger.kernel.org,
+        Nicolas Palix <nicolas.palix@imag.fr>, jeyu@kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        tglx@linutronix.de, michal.lkml@markovi.net,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        sboyd@codeaurora.org, Nicolas Ferre <nicolas.ferre@microchip.com>,
+        maco@google.com, pombredanne@nexb.com,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-modules@vger.kernel.org
+Subject: Re: [Cocci] [PATCH v2 08/10] scripts: Coccinelle script for
+ namespace dependencies.
+Message-ID: <20190814063611.GA22387@himanshu-Vostro-3559>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190813121733.52480-1-maennich@google.com>
+ <20190813121733.52480-9-maennich@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190813121733.52480-9-maennich@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Aug 13, 2019 at 01:17:05PM +0100, Matthias Maennich wrote:
+> A script that uses the '<module>.ns_deps' file generated by modpost to
+> automatically add the required symbol namespace dependencies to each
+> module.
+> 
+> Usage:
+> 1) Move some symbols to a namespace with EXPORT_SYMBOL_NS() or define
+>    DEFAULT_SYMBOL_NAMESPACE
+> 2) Run 'make' (or 'make modules') and get warnings about modules not
+>    importing that namespace.
+> 3) Run 'make nsdeps' to automatically add required import statements
+>    to said modules.
+> 
+> This makes it easer for subsystem maintainers to introduce and maintain
+> symbol namespaces into their codebase.
+> 
+> Co-developed-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Matthias Maennich <maennich@google.com>
+> ---
 
-On Aug 13, 2019, at 4:02 PM, Dave Hansen <dave.hansen@intel.com> wrote:
+[]
 
->>=20
->> static inline pte_t pte_mkwrite(pte_t pte)
->> {
->> +    pte =3D pte_move_flags(pte, _PAGE_DIRTY_SW, _PAGE_DIRTY_HW);
->>    return pte_set_flags(pte, _PAGE_RW);
->> }
->=20
-> It also isn't clear to me why this *must* move bits here.  Its doubly
-> unclear why you would need to do this on systems when shadow stacks are
-> compiled in but disabled.
+>  MAINTAINERS                                 |  5 ++
+>  Makefile                                    | 12 +++++
+>  scripts/Makefile.modpost                    |  4 +-
+>  scripts/coccinelle/misc/add_namespace.cocci | 23 +++++++++
+>  scripts/nsdeps                              | 54 +++++++++++++++++++++
+>  5 files changed, 97 insertions(+), 1 deletion(-)
+>  create mode 100644 scripts/coccinelle/misc/add_namespace.cocci
+>  create mode 100644 scripts/nsdeps
 
-Why is it conditional at all?  ISTM, in x86, RO+dirty has been effectively r=
-epurposed. To avoid having extra things that can conditionally break, I thin=
-k this code should be unconditional.=20
+[]
 
-That being said, I=E2=80=99m not at all sure that pte_mkwrite on a shadow st=
-ack page makes any sense.
+> +if [ "$SPATCH_VERSION_NUM" -lt "$SPATCH_REQ_VERSION_NUM" ] ; then
+> +    echo 'spatch needs to be version 1.06 or higher'
 
-> <snip>
->=20
-> Same comments for pmds and puds.
+Nitpick: 1.0.6
 
-Wasn=E2=80=99t Kirill working on a rework if the whole page table system to j=
-ust have integer page table levels?=
+> +    exit 1
+> +fi
+
+
+-- 
+Himanshu Jha
+Undergraduate Student
+Department of Electronics & Communication
+Guru Tegh Bahadur Institute of Technology
