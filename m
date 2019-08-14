@@ -2,147 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AC98D2A5
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2019 14:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA6D8D323
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2019 14:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725888AbfHNMC0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Aug 2019 08:02:26 -0400
-Received: from mout.web.de ([212.227.15.14]:51161 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725800AbfHNMCZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 14 Aug 2019 08:02:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1565784037;
-        bh=t8u6NOCL16q9HtKndJQAxJduq4EJsS4RNVT1zyvjHSM=;
-        h=X-UI-Sender-Class:To:Cc:References:Subject:From:Date:In-Reply-To;
-        b=YCqaWZzAw0SUEZtvbhQsMvYA6mJNQtr5zIIHJTHy97KzsDJmdBIZ9JI4QBqEN0BuI
-         MtvWwMIXWs2bcn+VR8PcTpufbbJO0ZQhhhdcdlZ5uUGRIVK6slu3FlvG/3aTX9EaA9
-         f0p8dHGm1wTBPtgY8aq1OcI02VMOc6GR4U2NvwzU=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.243.124.172]) by smtp.web.de (mrweb004
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0LlJzS-1iXTM31mS6-00b6JK; Wed, 14
- Aug 2019 14:00:37 +0200
-To:     Matthias Maennich <maennich@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Julia Lawall <Julia.Lawall@lip6.fr>,
-        Martijn Coenen <maco@android.com>,
-        Himanshu Jha <himanshujha199640@gmail.com>,
-        cocci@systeme.lip6.fr, kernel-janitors@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        ",linux-kernel"@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, kernel-team@android.com,
-        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Gilles Muller <Gilles.Muller@lip6.fr>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Martijn Coenen <maco@google.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Oliver Neukum <oneukum@suse.com>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sandeep Patil <sspatil@google.com>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20190813121733.52480-9-maennich@google.com>
-Subject: Re: [v2 08/10] scripts: Coccinelle script for namespace dependencies
-From:   Markus Elfring <Markus.Elfring@web.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
- +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
- mpVJgXGKkNJ1ey+QOXouzlErVvE2fRh+KXXN1Q7fSmTJlAW9XJYHS3BDHb0uRpymRSX3O+E2
- lA87C7R8qAigPDZi6Z7UmwIA83ZMKXQ5stA0lhPyYgQcM7fh7V4ZYhnR0I5/qkUoxKpqaYLp
- YHBczVP+Zx/zHOM0KQphOMbU7X3c1pmMruoe6ti9uZzqZSLsF+NKXFEPBS665tQr66HJvZvY
- GMDlntZFAZ6xQvCC1r3MGoxEC1tuEa24vPCC9RZ9wk2sY5Csbva0WwYv3WKRZZBv8eIhGMxs
- rcpeGShRFyZ/0BYO53wZAPV1pEhGLLxd8eLN/nEWjJE0ejakPC1H/mt5F+yQBJAzz9JzbToU
- 5jKLu0SugNI18MspJut8AiA1M44CIWrNHXvWsQ+nnBKHDHHYZu7MoXlOmB32ndsfPthR3GSv
- jN7YD4Ad724H8fhRijmC1+RpuSce7w2JLj5cYj4MlccmNb8YUxsE8brY2WkXQYS8Ivse39MX
- BE66MQN0r5DQ6oqgoJ4gHIVBUv/ZwgcmUNS5gQkNCFA0dWXznQARAQABtCZNYXJrdXMgRWxm
- cmluZyA8TWFya3VzLkVsZnJpbmdAd2ViLmRlPokCVAQTAQgAPhYhBHDP0hzibeXjwQ/ITuU9
- Figxg9azBQJYNvsQAhsjBQkJZgGABQsJCAcCBhUICQoLAgQWAgMBAh4BAheAAAoJEOU9Figx
- g9azcyMP/iVihZkZ4VyH3/wlV3nRiXvSreqg+pGPI3c8J6DjP9zvz7QHN35zWM++1yNek7Ar
- OVXwuKBo18ASlYzZPTFJZwQQdkZSV+atwIzG3US50ZZ4p7VyUuDuQQVVqFlaf6qZOkwHSnk+
- CeGxlDz1POSHY17VbJG2CzPuqMfgBtqIU1dODFLpFq4oIAwEOG6fxRa59qbsTLXxyw+PzRaR
- LIjVOit28raM83Efk07JKow8URb4u1n7k9RGAcnsM5/WMLRbDYjWTx0lJ2WO9zYwPgRykhn2
- sOyJVXk9xVESGTwEPbTtfHM+4x0n0gC6GzfTMvwvZ9G6xoM0S4/+lgbaaa9t5tT/PrsvJiob
- kfqDrPbmSwr2G5mHnSM9M7B+w8odjmQFOwAjfcxoVIHxC4Cl/GAAKsX3KNKTspCHR0Yag78w
- i8duH/eEd4tB8twcqCi3aCgWoIrhjNS0myusmuA89kAWFFW5z26qNCOefovCx8drdMXQfMYv
- g5lRk821ZCNBosfRUvcMXoY6lTwHLIDrEfkJQtjxfdTlWQdwr0mM5ye7vd83AManSQwutgpI
- q+wE8CNY2VN9xAlE7OhcmWXlnAw3MJLW863SXdGlnkA3N+U4BoKQSIToGuXARQ14IMNvfeKX
- NphLPpUUnUNdfxAHu/S3tPTc/E/oePbHo794dnEm57LuuQINBFg2+xABEADZg/T+4o5qj4cw
- nd0G5pFy7ACxk28mSrLuva9tyzqPgRZ2bdPiwNXJUvBg1es2u81urekeUvGvnERB/TKekp25
- 4wU3I2lEhIXj5NVdLc6eU5czZQs4YEZbu1U5iqhhZmKhlLrhLlZv2whLOXRlLwi4jAzXIZAu
- 76mT813jbczl2dwxFxcT8XRzk9+dwzNTdOg75683uinMgskiiul+dzd6sumdOhRZR7YBT+xC
- wzfykOgBKnzfFscMwKR0iuHNB+VdEnZw80XGZi4N1ku81DHxmo2HG3icg7CwO1ih2jx8ik0r
- riIyMhJrTXgR1hF6kQnX7p2mXe6K0s8tQFK0ZZmYpZuGYYsV05OvU8yqrRVL/GYvy4Xgplm3
- DuMuC7/A9/BfmxZVEPAS1gW6QQ8vSO4zf60zREKoSNYeiv+tURM2KOEj8tCMZN3k3sNASfoG
- fMvTvOjT0yzMbJsI1jwLwy5uA2JVdSLoWzBD8awZ2X/eCU9YDZeGuWmxzIHvkuMj8FfX8cK/
- 2m437UA877eqmcgiEy/3B7XeHUipOL83gjfq4ETzVmxVswkVvZvR6j2blQVr+MhCZPq83Ota
- xNB7QptPxJuNRZ49gtT6uQkyGI+2daXqkj/Mot5tKxNKtM1Vbr/3b+AEMA7qLz7QjhgGJcie
- qp4b0gELjY1Oe9dBAXMiDwARAQABiQI8BBgBCAAmFiEEcM/SHOJt5ePBD8hO5T0WKDGD1rMF
- Alg2+xACGwwFCQlmAYAACgkQ5T0WKDGD1rOYSw/+P6fYSZjTJDAl9XNfXRjRRyJSfaw6N1pA
- Ahuu0MIa3djFRuFCrAHUaaFZf5V2iW5xhGnrhDwE1Ksf7tlstSne/G0a+Ef7vhUyeTn6U/0m
- +/BrsCsBUXhqeNuraGUtaleatQijXfuemUwgB+mE3B0SobE601XLo6MYIhPh8MG32MKO5kOY
- hB5jzyor7WoN3ETVNQoGgMzPVWIRElwpcXr+yGoTLAOpG7nkAUBBj9n9TPpSdt/npfok9ZfL
- /Q+ranrxb2Cy4tvOPxeVfR58XveX85ICrW9VHPVq9sJf/a24bMm6+qEg1V/G7u/AM3fM8U2m
- tdrTqOrfxklZ7beppGKzC1/WLrcr072vrdiN0icyOHQlfWmaPv0pUnW3AwtiMYngT96BevfA
- qlwaymjPTvH+cTXScnbydfOQW8220JQwykUe+sHRZfAF5TS2YCkQvsyf7vIpSqo/ttDk4+xc
- Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
- x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
- pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <d3c852b2-0e41-1a7e-2f98-d8fd23cb8c1a@web.de>
-Date:   Wed, 14 Aug 2019 14:00:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190813121733.52480-9-maennich@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-X-Provags-ID: V03:K1:PV3q8JAG3J44L4VLLpcjx+LJA+d2Q/O26Z4wCk/v79pZUEG7nh9
- m1L6YVDyqKxcYsDEo1kdMI3MgbeX/V+P0Gqzee44AZfe4AL3apOsTv/Vg7xoV69ns+9oPNS
- 6nHNXYFSiW5jKwhQ+nlm5MSEFqWf6EALhLHVb8jUJ3nb2NbBpTqWiPRQyg4NQfk+sG9HksF
- PoUwjrb1WNlfH62NRqiKw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Afb82YE9Cjs=:aTmyYmgfN5b6+tl28ALxB2
- g/LjPRzs4TRfheufbLqQj/rntkKK77N+SvXrZJCE3QCV+/AH9UfldUS/5DhNK0RPccZOFywvU
- 3KhfUbCRjF4wGdWjCPJ9JIarEbeSQ+U0p73paUXJIovLf4FGNxVG/fu7UASFa3W3RuFOdLnJI
- 1DdDGr23zDK6XPsxyWhVWZwLx98xYlghohVnvOyhprghXD6IA9ZUJDvTR5s819OmT0zGY6HHJ
- Uj8BxBvBdvD72KcH0iru6y/nNWQZ8xBGkNvzemIwpp7mYD+nUgAYgsmILqOfpWiD2ZKaVlhAe
- yJ7JN+Gicmz0kVNrQlHMBKWo65W9beXwMzBFcPFLOg2oPrkIIXh6dcpAkLq3hz8EVVgTuN1dH
- GfpLpK+v+HwzD2SJAnhN8JecjcEQ/C9QuBRrByh+4f6lE3C0I256aZLdShAbhxIma6B5Yhxq6
- ZrMC2GmtBdDju5fnNoOJOdMNcXph7D/43eK7IOs8anLq4nE2LS/MJoEzDhcOoksQOt1CfMKDL
- KR5x0Y8vjWK+bZB9FzORrUc4r5bZ5Q1Y4njOPJC9OdLWcXLTt+vv1LsvhQhGArn1grSinl0xi
- wDUaOJDSO2mJjd5NXX0N/zRKYFyqNJd1EKEod/mOrAWGMpORjK3iN64taFoKE2JcBaIL76ev7
- GRQ/Pu8NfAtOBtPoMKKDcYIy/5H8CkvV4OVwZURmW/25BJns71iy17MNFCWm6UvF2L1FdxQZ5
- 1qsv2xxkgeWkMLWaBTlHdydOKHhL/H3CDwmQRKrF9Pxk/VxF6Lcc0ndjczIdZCgckvYgNHHax
- +jVNosPn9BioqwX5gtXfJJM6/V1FEVyIor9GnzxJwWBfk2NL4B2JSjun3gZnS9MKowG3B4I/K
- MgEtx4MxByRnJE8krxp8Xhfps00TdMelOsMidCmmrll1t6igulsyw981wkVBBx+lElpuz+DZo
- 4e2Ou5SILwFHnFVCu1nZZ8+CQaB+xV6tPgzKF3nW5GBCPjCfMyq/721rDCiicv+8mtgxtBqNW
- 4lJlGWmwaqRTQYJ0OyoddYMFIQsYJtAVF5leDof9DZkZuh8o/VabyEw4ZzPKZLpi+0ecrhdKI
- qiNnz2H6znKE/SU42ll39Ie9PDt5iaUxuGPiUXVwNwpE6yhvtcnwIHk3HfmILqDXtoU7jOP9h
- eJrQ8=
+        id S1727157AbfHNMc1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Aug 2019 08:32:27 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:46484 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725800AbfHNMc1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Aug 2019 08:32:27 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q139so5209224pfc.13;
+        Wed, 14 Aug 2019 05:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=bScrLOPkx8T8jsTd/oJ+R9nDwyouzFa8tBbrlwj/4dE=;
+        b=KcKp2BwrqlITo3B45rK0EztJWn8t2lkFizTIryV/calhu7C+7V211m1XNHDPi3FHaN
+         4CJhTDfmACnwl5HKgYn4hGo1bXaVfm3YnanH0FNTj0qaaEaVybgJzupCD/nWL6Hz5Mla
+         fmo8agQX8CWXurnZQD+QTn9A5+BH6fn+I4O9TGflkncgxh6vSfpuq5kjFIP0yvHeIULC
+         X1Ly8RSnU1CU43vtjhbaMbDTSERE+gL7b9S2W17PaKBjpDwPvLEavJo0bn8Cuz2yeMOT
+         y281WZvWx3NbPe+4o3ME7lpdEB/3h3Gpmel2cQEwZF4wthkiplwMfL0zD6ttWOf7gRvd
+         NQuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=bScrLOPkx8T8jsTd/oJ+R9nDwyouzFa8tBbrlwj/4dE=;
+        b=iiTh16BfxJmavxsnlx36DymbpXYi/gf2mCX8WvjRyaDBZ5lI1hnfZJOMN9JlJXdxJC
+         a36AVyZ97w2Hxo4Ra3TFrptsQsakJDpswzD/AiIZbCI2cNaG1s5nK4iXHUNsZmw3rC7Z
+         FlAo7cZvXDF8ZfE/TzTeDeuz+F6bKom0bni0goX8zi+ZiWB/XRm4HhDFKqI0SurKNOOd
+         7vf5NQQ1OD04ihag4esNNL3ncnX5pJfyz8XVtnywUBoO/slSp2zosqDzbHEn5uyhmN6k
+         zuQt23jw3LcQ5/um7b+4ZubbPYSl6Rnmju4Y3qEGzxxRlj6ndkmJA3sPE8ePy4dsZ0Ix
+         7L1A==
+X-Gm-Message-State: APjAAAUDvt+eAWPJpkVz9BQRz3fzb9KLUuROO2dTuFLVXX7qDgEBLT8/
+        MpX5+lgbcC2XsBfd84vbAu8=
+X-Google-Smtp-Source: APXvYqwTmcoXZ5l9Arr9V/DkJppKlUROq/tLcfCMNd0DVzrcZdSdL1+wFXjcBQF8Yquymvsmr2FyCQ==
+X-Received: by 2002:a63:dd17:: with SMTP id t23mr38049981pgg.295.1565785946131;
+        Wed, 14 Aug 2019 05:32:26 -0700 (PDT)
+Received: from localhost.corp.microsoft.com ([167.220.255.52])
+        by smtp.googlemail.com with ESMTPSA id u69sm135276430pgu.77.2019.08.14.05.32.21
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 14 Aug 2019 05:32:25 -0700 (PDT)
+From:   lantianyu1986@gmail.com
+X-Google-Original-From: Tianyu.Lan@microsoft.com
+To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, x86@kernel.org, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, sashal@kernel.org,
+        daniel.lezcano@linaro.org, arnd@arndb.de,
+        michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 0/2] clocksource/Hyper-V: Add Hyper-V specific sched clock
+Date:   Wed, 14 Aug 2019 20:32:14 +0800
+Message-Id: <20190814123216.32245-1-Tianyu.Lan@microsoft.com>
+X-Mailer: git-send-email 2.14.5
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+# This script requires at least spatch
-+# version 1.0.4.
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-How do you think about to avoid the duplicate specification of this identification?
+Hyper-V guests use the default native_sched_clock() in pv_ops.time.sched_clock
+on x86. But native_sched_clock() directly uses the raw TSC value, which
+can be discontinuous in a Hyper-V VM.   Add the generic hv_setup_sched_clock()
+to set the sched clock function appropriately.  On x86, this sets
+pv_ops.time.sched_clock to read the Hyper-V reference TSC value that is
+scaled and adjusted to be continuous.
 
-Regards,
-Markus
+Also move the Hyper-V reference TSC initialization much earlier in the boot
+process so no discontinuity is observed when pv_ops.time.sched_clock
+calculates its offset.  This earlier initialization requires that the Hyper-V TSC
+page be allocated statically instead of with vmalloc(), so fixup the references
+to the TSC page and the method of getting its physical address.
+
+Change since v1:
+	- Update patch 1 commit log
+	- Remove and operation of tsc page's va with PAGE_MASK
+	in the read_hv_sched_clock_tsc().
+
+Tianyu Lan (2):
+  clocksource/Hyper-v: Allocate Hyper-V tsc page statically
+  clocksource/Hyper-V:  Add Hyper-V specific sched clock function
+
+ arch/x86/entry/vdso/vma.c          |  2 +-
+ arch/x86/hyperv/hv_init.c          |  2 --
+ arch/x86/kernel/cpu/mshyperv.c     |  8 ++++++++
+ drivers/clocksource/hyperv_timer.c | 34 ++++++++++++++++------------------
+ include/asm-generic/mshyperv.h     |  1 +
+ 5 files changed, 26 insertions(+), 21 deletions(-)
+
+-- 
+2.14.5
+
