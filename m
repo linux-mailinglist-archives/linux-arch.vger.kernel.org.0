@@ -2,162 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 337968EA3D
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Aug 2019 13:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED09E8EBC3
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Aug 2019 14:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730261AbfHOL3K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Aug 2019 07:29:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53068 "EHLO mail.kernel.org"
+        id S1731108AbfHOMmo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Aug 2019 08:42:44 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:45440 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728128AbfHOL3K (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 15 Aug 2019 07:29:10 -0400
-Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1725977AbfHOMmn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 15 Aug 2019 08:42:43 -0400
+Received: from zn.tnic (p200300EC2F0B52007D93C58FB2CAB236.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:5200:7d93:c58f:b2ca:b236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 041FA2064A;
-        Thu, 15 Aug 2019 11:29:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565868549;
-        bh=iiPFjQ6IpGaSo+ZfHDmX+dVXiSF+Y0k80QYxQEedsKc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=djZMVfT7jDb6PTyLETIQfabTlehNjYjkeLD+QO2DV69Gk9CsnFKc+KsCD+xFoPgcD
-         Yzte242KQRZnpQi03iO4rK8p9lNxk1Gb1gGqMEYRhzPFEZAtN1OxLEDIik2eLeZlrM
-         rbmc1VTP8VapiKx9nn8kxGLHavBm1BuJ5k5iQMco=
-From:   guoren@kernel.org
-To:     arnd@arndb.de
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, zhang_jian5@dahuatech.com,
-        Guo Ren <ren_guo@c-sky.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH] csky: Fixup ioremap function losing
-Date:   Thu, 15 Aug 2019 19:28:57 +0800
-Message-Id: <1565868537-17753-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A11E31EC0959;
+        Thu, 15 Aug 2019 14:42:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1565872962;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=nh3pf51gCZmQw2YfQM+MgPsZnvg6T7RDaOXPp08q8gE=;
+        b=gHATmie+7+tCBI8m6VDMKU7fIzpG6Gr6CPMbvoCpY4Sx/6dNSKkaakRabgFwpXnYcUMDmo
+        IVIPjnTBkD9mOTeMUULICeC+sF25MCrVSpnq/Gjr+S7YBaj3cLwseX9+xPd5Qug0V6sEUj
+        71VETtXK6yLjo8ZjMz65r/bk4DIXbCU=
+Date:   Thu, 15 Aug 2019 14:43:28 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 04/28] x86/asm/entry: annotate THUNKs
+Message-ID: <20190815124328.GG15313@zn.tnic>
+References: <20190808103854.6192-1-jslaby@suse.cz>
+ <20190808103854.6192-5-jslaby@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190808103854.6192-5-jslaby@suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <ren_guo@c-sky.com>
+On Thu, Aug 08, 2019 at 12:38:30PM +0200, Jiri Slaby wrote:
+> Place SYM_*_START_NOALIGN and SYM_*_END around the THUNK macro body.
+> Preserve @function by FUNC (64bit) and CODE (32bit). Given it was not
+> marked as aligned, use NOALIGN.
+> 
+> The common tail .L_restore is put inside SYM_CODE_START_LOCAL_NOALIGN
+> and SYM_CODE_END too.
 
-Implement the following apis to meet usage in different scenarios.
+What is that needed for? It is a local label...
 
- - ioremap          (NonCache + StrongOrder)
- - ioremap_nocache  (NonCache + StrongOrder)
- - ioremap_wc       (NonCache + WeakOrder  )
- - ioremap_cache    (   Cache + WeakOrder  )
+> The result:
+>  Value  Size Type    Bind   Vis      Ndx Name
+>   0000    28 FUNC    GLOBAL DEFAULT    1 trace_hardirqs_on_thunk
+>   001c    28 FUNC    GLOBAL DEFAULT    1 trace_hardirqs_off_thunk
+>   0038    24 FUNC    GLOBAL DEFAULT    1 lockdep_sys_exit_thunk
+>   0050    24 FUNC    GLOBAL DEFAULT    1 ___preempt_schedule
+>   0068    24 FUNC    GLOBAL DEFAULT    1 ___preempt_schedule_notra
 
-Also change flag VM_ALLOC to VM_IOREMAP in get_vm_area_caller.
+No difference except alignment:
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Christoph Hellwig <hch@infradead.org>
----
- arch/csky/include/asm/io.h | 23 ++++++++++++-----------
- arch/csky/mm/ioremap.c     | 23 +++++++++++++++++------
- 2 files changed, 29 insertions(+), 17 deletions(-)
+before:
+ 70545: ffffffff81001c20    28 FUNC    GLOBAL DEFAULT    1 trace_hardirqs_off_thunk
+ 78965: ffffffff81001c00    28 FUNC    GLOBAL DEFAULT    1 trace_hardirqs_on_thunk
+ 82545: ffffffff81001c80    24 FUNC    GLOBAL DEFAULT    1 ___preempt_schedule_notra
+ 86963: ffffffff81001c40    24 FUNC    GLOBAL DEFAULT    1 lockdep_sys_exit_thunk
+ 88045: ffffffff81001c60    24 FUNC    GLOBAL DEFAULT    1 ___preempt_schedule
 
-diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
-index c1dfa9c..80d071e 100644
---- a/arch/csky/include/asm/io.h
-+++ b/arch/csky/include/asm/io.h
-@@ -4,17 +4,10 @@
- #ifndef __ASM_CSKY_IO_H
- #define __ASM_CSKY_IO_H
- 
--#include <abi/pgtable-bits.h>
-+#include <asm/pgtable.h>
- #include <linux/types.h>
- #include <linux/version.h>
- 
--extern void __iomem *ioremap(phys_addr_t offset, size_t size);
--
--extern void iounmap(void *addr);
--
--extern int remap_area_pages(unsigned long address, phys_addr_t phys_addr,
--		size_t size, unsigned long flags);
--
- /*
-  * I/O memory access primitives. Reads are ordered relative to any
-  * following Normal memory access. Writes are ordered relative to any prior
-@@ -40,9 +33,17 @@ extern int remap_area_pages(unsigned long address, phys_addr_t phys_addr,
- #define writel(v,c)		({ wmb(); writel_relaxed((v),(c)); mb(); })
- #endif
- 
--#define ioremap_nocache(phy, sz)	ioremap(phy, sz)
--#define ioremap_wc ioremap_nocache
--#define ioremap_wt ioremap_nocache
-+/*
-+ * I/O memory mapping functions.
-+ */
-+extern void __iomem *ioremap_cache(phys_addr_t addr, size_t size);
-+extern void __iomem *__ioremap(phys_addr_t addr, size_t size, pgprot_t prot);
-+extern void iounmap(void *addr);
-+
-+#define ioremap(addr, size)		__ioremap((addr), (size), pgprot_noncached(PAGE_KERNEL))
-+#define ioremap_wc(addr, size)		__ioremap((addr), (size), pgprot_writecombine(PAGE_KERNEL))
-+#define ioremap_nocache(addr, size)	ioremap((addr), (size))
-+#define ioremap_cache			ioremap_cache
- 
- #include <asm-generic/io.h>
- 
-diff --git a/arch/csky/mm/ioremap.c b/arch/csky/mm/ioremap.c
-index 4853111..e13cd34 100644
---- a/arch/csky/mm/ioremap.c
-+++ b/arch/csky/mm/ioremap.c
-@@ -8,12 +8,12 @@
- 
- #include <asm/pgtable.h>
- 
--void __iomem *ioremap(phys_addr_t addr, size_t size)
-+static void __iomem *__ioremap_caller(phys_addr_t addr, size_t size,
-+				      pgprot_t prot, void *caller)
- {
- 	phys_addr_t last_addr;
- 	unsigned long offset, vaddr;
- 	struct vm_struct *area;
--	pgprot_t prot;
- 
- 	last_addr = addr + size - 1;
- 	if (!size || last_addr < addr)
-@@ -23,14 +23,12 @@ void __iomem *ioremap(phys_addr_t addr, size_t size)
- 	addr &= PAGE_MASK;
- 	size = PAGE_ALIGN(size + offset);
- 
--	area = get_vm_area_caller(size, VM_ALLOC, __builtin_return_address(0));
-+	area = get_vm_area_caller(size, VM_IOREMAP, caller);
- 	if (!area)
- 		return NULL;
- 
- 	vaddr = (unsigned long)area->addr;
- 
--	prot = pgprot_noncached(PAGE_KERNEL);
--
- 	if (ioremap_page_range(vaddr, vaddr + size, addr, prot)) {
- 		free_vm_area(area);
- 		return NULL;
-@@ -38,7 +36,20 @@ void __iomem *ioremap(phys_addr_t addr, size_t size)
- 
- 	return (void __iomem *)(vaddr + offset);
- }
--EXPORT_SYMBOL(ioremap);
-+
-+void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot)
-+{
-+	return __ioremap_caller(phys_addr, size, prot,
-+				__builtin_return_address(0));
-+}
-+EXPORT_SYMBOL(__ioremap);
-+
-+void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size)
-+{
-+	return __ioremap_caller(phys_addr, size, PAGE_KERNEL,
-+				__builtin_return_address(0));
-+}
-+EXPORT_SYMBOL(ioremap_cache);
- 
- void iounmap(void __iomem *addr)
- {
+after:
+ 70545: ffffffff81001c10    28 FUNC    GLOBAL DEFAULT    1 trace_hardirqs_off_thunk
+ 78965: ffffffff81001bf4    28 FUNC    GLOBAL DEFAULT    1 trace_hardirqs_on_thunk
+ 82545: ffffffff81001c5c    24 FUNC    GLOBAL DEFAULT    1 ___preempt_schedule_notra
+ 86963: ffffffff81001c2c    24 FUNC    GLOBAL DEFAULT    1 lockdep_sys_exit_thunk
+ 88045: ffffffff81001c44    24 FUNC    GLOBAL DEFAULT    1 ___preempt_schedule
+
 -- 
-2.7.4
+Regards/Gruss,
+    Boris.
 
+Good mailing practices for 400: avoid top-posting and trim the reply.
