@@ -2,31 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AC08ECAB
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Aug 2019 15:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4418ECBA
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Aug 2019 15:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731822AbfHONXV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Aug 2019 09:23:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56330 "EHLO mail.kernel.org"
+        id S1732067AbfHONZh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Aug 2019 09:25:37 -0400
+Received: from verein.lst.de ([213.95.11.211]:46679 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731660AbfHONXV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 15 Aug 2019 09:23:21 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B11572084D;
-        Thu, 15 Aug 2019 13:23:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565875400;
-        bh=v8T3qwF6qiZM++7vAT7AL0JPe0r/NT0kv4QeyOYP/rE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PIdKCMQ/Lb50XgkTlSzI4dcJJpEBGXjfxY4vMHFbCuhE6F7PCaSzRKr5kWXihgsd6
-         CYq+SBnCJXFALaYcaG3aif6qNMb45WH5wI6jKS8CZyb2VbP+PYmponIEA+124IIRAp
-         rJJ2vhvhUrSSeOp1mohuc3t3W+bL3ZyLQHR5jtR4=
-Date:   Thu, 15 Aug 2019 15:23:18 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        id S1730497AbfHONZh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 15 Aug 2019 09:25:37 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 5010F68AFE; Thu, 15 Aug 2019 15:25:31 +0200 (CEST)
+Date:   Thu, 15 Aug 2019 15:25:31 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
         Gavin Li <git@thegavinli.com>,
         Laurentiu Tudor <laurentiu.tudor@nxp.com>,
         Minas Harutyunyan <hminas@synopsys.com>,
@@ -47,40 +38,22 @@ Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
         linux-kernel@vger.kernel.org
 Subject: Re: next take at setting up a dma mask by default for platform
  devices
-Message-ID: <20190815132318.GA27208@kroah.com>
-References: <20190811080520.21712-1-hch@lst.de>
+Message-ID: <20190815132531.GA12036@lst.de>
+References: <20190811080520.21712-1-hch@lst.de> <20190815132318.GA27208@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190811080520.21712-1-hch@lst.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20190815132318.GA27208@kroah.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Aug 11, 2019 at 10:05:14AM +0200, Christoph Hellwig wrote:
-> Hi all,
-> 
-> this is another attempt to make sure the dma_mask pointer is always
-> initialized for platform devices.  Not doing so lead to lots of
-> boilerplate code, and makes platform devices different from all our
-> major busses like PCI where we always set up a dma_mask.  In the long
-> run this should also help to eventually make dma_mask a scalar value
-> instead of a pointer and remove even more cruft.
-> 
-> The bigger blocker for this last time was the fact that the usb
-> subsystem uses the presence or lack of a dma_mask to check if the core
-> should do dma mapping for the driver, which is highly unusual.  So we
-> fix this first.  Note that this has some overlap with the pending
-> desire to use the proper dma_mmap_coherent helper for mapping usb
-> buffers.  The first two patches from this series should probably
-> go into 5.3 and then uses as the basis for the decision to use
-> dma_mmap_coherent.
+On Thu, Aug 15, 2019 at 03:23:18PM +0200, Greg Kroah-Hartman wrote:
+> I've taken the first 2 patches for 5.3-final.  Given that patch 3 needs
+> to be fixed, I'll wait for a respin of these before considering them.
 
-I've taken the first 2 patches for 5.3-final.  Given that patch 3 needs
-to be fixed, I'll wait for a respin of these before considering them.
-
-thanks,
-
-greg k-h
+I have a respun version ready, but I'd really like to hear some
+comments from usb developers about the approach before spamming
+everyone again..
