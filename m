@@ -2,493 +2,221 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FFC9037C
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2019 15:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5BB9044C
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2019 17:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727247AbfHPNza (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Aug 2019 09:55:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:57350 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726032AbfHPNza (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 16 Aug 2019 09:55:30 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 92EBB344;
-        Fri, 16 Aug 2019 06:55:28 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 062AD3F694;
-        Fri, 16 Aug 2019 06:55:24 -0700 (PDT)
-Date:   Fri, 16 Aug 2019 14:55:22 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>
-Subject: Re: [PATCH v8 22/27] binfmt_elf: Extract .note.gnu.property from an
- ELF file
-Message-ID: <20190816135520.GN10425@arm.com>
-References: <20190813205225.12032-1-yu-cheng.yu@intel.com>
- <20190813205225.12032-23-yu-cheng.yu@intel.com>
+        id S1727217AbfHPPAa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Aug 2019 11:00:30 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:55730 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727324AbfHPPA1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Aug 2019 11:00:27 -0400
+Received: by mail-wm1-f68.google.com with SMTP id f72so4291105wmf.5
+        for <linux-arch@vger.kernel.org>; Fri, 16 Aug 2019 08:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=eEktMynsAcH66TtPZndp2mGx6pMeqCeqO+5iafrtukI=;
+        b=RfKZ6skhAB1ZgZ6x27FSohEQSQS9goYWUB+/+tsJACDJHruX0U88Pk9tF/TIV5pjdb
+         UWESEOqzC46IYRLHA9LYVj7YzgO4W9sf4SGYxol6GxrVMK6I4u9QOIlvmgS0JTPPWbqm
+         WEU1Oa2z/dl+K9xwnGuKoit7j3davtBi+q5RTzpOne5jKcCXRdOoKQvnrSbHKuYT1Cnc
+         audeblUb7qROlVl8rH4+7IH5h5mg2jmWHM8cUcTP3kuLeS4XPwv+wPGZ3KaohtCVfpzY
+         EpirUD1e9NDADqOMmiGa9eP1JV44IZaJ+qF7SU1mpx7XJLSANPchhDLqUBktCOtH4Naf
+         KtcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=eEktMynsAcH66TtPZndp2mGx6pMeqCeqO+5iafrtukI=;
+        b=sUgH/8qtElNgLx+ID1BBgtk0bY81sZZ1OfQ2txUr+AuAnELoLv9Lq5erXft0K9GdcH
+         7Lp1dftbsd9hkvLLU0BOgbHaIQlbcDBc3EIXIv/sSMAJmRJHuQXVBCXUgePIbK8mnWzL
+         Prz1gQ5HJffjCrGdZq4rWGKxlayUJLiryNAqy/y3zp9rTD3Krank7vAZKv0/BfJkp7dK
+         o+2KElrpq8lwnpxF9c8hk4lJ/luD8Bm813UmAVUUbFJjDG7PIDOmG2Z/nWNvBIqjf8ap
+         2K7PWUc51HJk5CT4ExkWU9chI0uQJo5rNss1gmpttsT4v4O1rWKdKpL0uiIfVEAgZoxd
+         Wz/w==
+X-Gm-Message-State: APjAAAVxSWizKdpvnvkxSgmkgfNgIo6uQcVsGzKd4pq0kAJh454lUiIh
+        BrI0G2EaH6CNnDoaIbjkzo7YJ2AaR/U=
+X-Google-Smtp-Source: APXvYqw9JAzsdIazEnafgTHIxtSU/hEPo+MT5eK5Fu0cwHUxHNxWMumIdjl1WXANg+kI5NVRNzqbQA==
+X-Received: by 2002:a1c:238e:: with SMTP id j136mr7792008wmj.144.1565967624558;
+        Fri, 16 Aug 2019 08:00:24 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d4e8:1742:2f00:abef? ([2a01:e34:ed2f:f020:d4e8:1742:2f00:abef])
+        by smtp.googlemail.com with ESMTPSA id r16sm12475740wrc.81.2019.08.16.08.00.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 16 Aug 2019 08:00:23 -0700 (PDT)
+Subject: Re: [PATCH V2 1/2] clocksource/Hyper-v: Allocate Hyper-V tsc page
+ statically
+To:     lantianyu1986@gmail.com, luto@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        sashal@kernel.org, arnd@arndb.de, michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20190814123216.32245-1-Tianyu.Lan@microsoft.com>
+ <20190814123216.32245-2-Tianyu.Lan@microsoft.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <78625f69-550d-212c-d3a0-89356ba98d2a@linaro.org>
+Date:   Fri, 16 Aug 2019 17:00:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190813205225.12032-23-yu-cheng.yu@intel.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190814123216.32245-2-Tianyu.Lan@microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 01:52:20PM -0700, Yu-cheng Yu wrote:
-> An ELF file's .note.gnu.property indicates features the executable file
-> can support.  For example, the property GNU_PROPERTY_X86_FEATURE_1_AND
-> indicates the file supports GNU_PROPERTY_X86_FEATURE_1_IBT and/or
-> GNU_PROPERTY_X86_FEATURE_1_SHSTK.
+On 14/08/2019 14:32, lantianyu1986@gmail.com wrote:
+> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 > 
-> With this patch, if an arch needs to setup features from ELF properties,
-> it needs CONFIG_ARCH_USE_GNU_PROPERTY to be set, and specific
-> arch_parse_property() and arch_setup_property().
+> Prepare to add Hyper-V sched clock callback and move Hyper-V
+> Reference TSC initialization much earlier in the boot process.  Earlier
+> initialization is needed so that it happens while the timestamp value
+> is still 0 and no discontinuity in the timestamp will occur when
+> pv_ops.time.sched_clock calculates its offset.  The earlier
+> initialization requires that the Hyper-V TSC page be allocated
+> statically instead of with vmalloc(), so fixup the references
+> to the TSC page and the method of getting its physical address.
 > 
-> For example, for X86_64:
-> 
-> int arch_setup_property(void *ehdr, void *phdr, struct file *f, bool inter)
-> {
-> 	int r;
-> 	uint32_t property;
-> 
-> 	r = get_gnu_property(ehdr, phdr, f, GNU_PROPERTY_X86_FEATURE_1_AND,
-> 			     &property);
-> 	...
-> }
-> 
-> This patch is derived from code provided by H.J. Lu <hjl.tools@gmail.com>.
+> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-This is a nice simplification over the previous version, but I'm still
-wondering whether it would be better to follow others folks' suggestions
-and simply iterate over all the properties found, calling an arch
-function for each note that the core doesn't care about.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Something like the following pseudocode:
-
-include/x86/elf.h:
-	int arch_elf_property(p)
-	{
-		if (p->pr_type == GNU_PROPERTY_X86_FEATURE_1_AND)
-			return elf_property_x86_feature_1_and(p);
-		else
-			return 0;
-	}
-
-binfmt_elf.c:
-	while (p = find next property)
-		arch_elf_property(p);
-
-
-This would also be more efficient when more than one property needs to
-be extracted, since it ensures the file is only read once.
-
-Anyway, comments below...
-
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > ---
->  fs/Kconfig.binfmt        |   3 +
->  fs/Makefile              |   1 +
->  fs/binfmt_elf.c          |  20 +++++
->  fs/gnu_property.c        | 178 +++++++++++++++++++++++++++++++++++++++
->  include/linux/elf.h      |  11 +++
->  include/uapi/linux/elf.h |  14 +++
->  6 files changed, 227 insertions(+)
->  create mode 100644 fs/gnu_property.c
+>     Change since v1:
+>            - Update commit log
+>            - Remove and operation of tsc page's va with PAGE_MASK
 > 
-> diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
-> index 62dc4f577ba1..d2cfe0729a73 100644
-> --- a/fs/Kconfig.binfmt
-> +++ b/fs/Kconfig.binfmt
-> @@ -36,6 +36,9 @@ config COMPAT_BINFMT_ELF
->  config ARCH_BINFMT_ELF_STATE
->  	bool
+>  arch/x86/entry/vdso/vma.c          |  2 +-
+>  drivers/clocksource/hyperv_timer.c | 12 ++++--------
+>  2 files changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
+> index 349a61d8bf34..f5937742b290 100644
+> --- a/arch/x86/entry/vdso/vma.c
+> +++ b/arch/x86/entry/vdso/vma.c
+> @@ -122,7 +122,7 @@ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
 >  
-> +config ARCH_USE_GNU_PROPERTY
-> +	bool
-> +
->  config BINFMT_ELF_FDPIC
->  	bool "Kernel support for FDPIC ELF binaries"
->  	default y if !BINFMT_ELF
-> diff --git a/fs/Makefile b/fs/Makefile
-> index d60089fd689b..939b1eb7e8cc 100644
-> --- a/fs/Makefile
-> +++ b/fs/Makefile
-> @@ -44,6 +44,7 @@ obj-$(CONFIG_BINFMT_ELF)	+= binfmt_elf.o
->  obj-$(CONFIG_COMPAT_BINFMT_ELF)	+= compat_binfmt_elf.o
->  obj-$(CONFIG_BINFMT_ELF_FDPIC)	+= binfmt_elf_fdpic.o
->  obj-$(CONFIG_BINFMT_FLAT)	+= binfmt_flat.o
-> +obj-$(CONFIG_ARCH_USE_GNU_PROPERTY) += gnu_property.o
->  
->  obj-$(CONFIG_FS_MBCACHE)	+= mbcache.o
->  obj-$(CONFIG_FS_POSIX_ACL)	+= posix_acl.o
-> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-> index d4e11b2e04f6..a4e87fcb10a8 100644
-> --- a/fs/binfmt_elf.c
-> +++ b/fs/binfmt_elf.c
-> @@ -852,6 +852,21 @@ static int load_elf_binary(struct linux_binprm *bprm)
->  			}
+>  		if (tsc_pg && vclock_was_used(VCLOCK_HVCLOCK))
+>  			return vmf_insert_pfn(vma, vmf->address,
+> -					vmalloc_to_pfn(tsc_pg));
+> +					virt_to_phys(tsc_pg) >> PAGE_SHIFT);
 >  	}
 >  
-> +	if (interpreter) {
-> +		retval = arch_parse_property(&loc->interp_elf_ex,
-> +					     interp_elf_phdata,
-> +					     interpreter, true,
-> +					     &arch_state);
-> +	} else {
-> +		retval = arch_parse_property(&loc->elf_ex,
-> +					     elf_phdata,
-> +					     bprm->file, false,
-> +					     &arch_state);
-> +	}
-> +
-> +	if (retval)
-> +		goto out_free_dentry;
-> +
+>  	return VM_FAULT_SIGBUS;
+> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+> index ba2c79e6a0ee..432aa331df04 100644
+> --- a/drivers/clocksource/hyperv_timer.c
+> +++ b/drivers/clocksource/hyperv_timer.c
+> @@ -214,17 +214,17 @@ EXPORT_SYMBOL_GPL(hyperv_cs);
+>  
+>  #ifdef CONFIG_HYPERV_TSCPAGE
+>  
+> -static struct ms_hyperv_tsc_page *tsc_pg;
+> +static struct ms_hyperv_tsc_page tsc_pg __aligned(PAGE_SIZE);
+>  
+>  struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
+>  {
+> -	return tsc_pg;
+> +	return &tsc_pg;
+>  }
+>  EXPORT_SYMBOL_GPL(hv_get_tsc_page);
+>  
+>  static u64 notrace read_hv_sched_clock_tsc(void)
+>  {
+> -	u64 current_tick = hv_read_tsc_page(tsc_pg);
+> +	u64 current_tick = hv_read_tsc_page(&tsc_pg);
+>  
+>  	if (current_tick == U64_MAX)
+>  		hv_get_time_ref_count(current_tick);
+> @@ -280,12 +280,8 @@ static bool __init hv_init_tsc_clocksource(void)
+>  	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+>  		return false;
+>  
+> -	tsc_pg = vmalloc(PAGE_SIZE);
+> -	if (!tsc_pg)
+> -		return false;
+> -
+>  	hyperv_cs = &hyperv_cs_tsc;
+> -	phys_addr = page_to_phys(vmalloc_to_page(tsc_pg));
+> +	phys_addr = virt_to_phys(&tsc_pg);
+>  
 >  	/*
->  	 * Allow arch code to reject the ELF at this point, whilst it's
->  	 * still possible to return an error to the code that invoked
-> @@ -1080,6 +1095,11 @@ static int load_elf_binary(struct linux_binprm *bprm)
->  		goto out_free_dentry;
->  	}
->  
-> +	retval = arch_setup_property(&arch_state);
-> +
-> +	if (retval < 0)
-> +		goto out_free_dentry;
-> +
->  	if (interpreter) {
->  		unsigned long interp_map_addr = 0;
->  
-> diff --git a/fs/gnu_property.c b/fs/gnu_property.c
-> new file mode 100644
-> index 000000000000..b22b43f4d6a0
-> --- /dev/null
-> +++ b/fs/gnu_property.c
-> @@ -0,0 +1,178 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Extract an ELF file's .note.gnu.property.
-> + *
-> + * The path from the ELF header to .note.gnu.property is:
-> + *	elfhdr->elf_phdr->elf_note.
-> + *
-> + * .note.gnu.property layout:
-> + *
-> + *	struct elf_note {
-> + *		u32 n_namesz; --> sizeof(n_name[]); always (4)
-> + *		u32 n_ndescsz;--> sizeof(property[])
-> + *		u32 n_type;   --> always NT_GNU_PROPERTY_TYPE_0 (5)
-> + *	};
-> + *	char n_name[4]; --> always 'GNU\0'
-> + *
-> + *	struct {
-> + *		struct gnu_property {
-> + *			u32 pr_type;
-> + *			u32 pr_datasz;
-> + *		};
-> + *		u8 pr_data[pr_datasz];
-> + *	}[];
-> + */
+>  	 * The Hyper-V TLFS specifies to preserve the value of reserved
+> 
 
-Do we need all this comment?  We already have Elf{32,64}_Nhdr and
-struct gnu_property in <uapi/elf.h>.
 
-> +
-> +#include <linux/elf.h>
-> +#include <linux/slab.h>
-> +#include <linux/fs.h>
-> +#include <linux/string.h>
-> +#include <linux/compat.h>
-> +
-> +/*
-> + * Search a note's payload for 'pr_type'.
-> + */
-> +static int check_note_payload(void *buf, unsigned long len, u32 pr_type,
-> +			      u32 *property)
-> +{
-> +	u32 pr_type_max = 0;
-> +
-> +	*property = 0;
-> +
-> +	while (len > 0) {
-> +		struct gnu_property *pr = buf;
-> +		unsigned long pr_len;
-> +
-> +		if (sizeof(*pr) > len)
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-checkpatch? (space required between sizeof and "(")
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-> +			return 0;
-
-Shouldn't this be an error?
-I'd have thought we should return 0 only if the property is found.
-
-> +
-> +		pr_len = sizeof(*pr) + pr->pr_datasz;
-
-Overflow?
-
-> +
-> +		if (pr_len > len)
-> +			return -ENOEXEC;
-
-These seem to be the same class of error, i.e., trailing garbage in the
-note, so why don't we return the same thing in both cases?
-
-Maybe
-
-	if (sizeof (*pr) > len ||
-	    pr->pr_datasz > len - sizeof (*pr))
-		return -ENOEXEC;
-
-	pr_len = sizeof (*pr) + pr->pr_datasz;
-
-> +		/* property types are in ascending order */
-> +		if ((pr_type_max != 0) && (pr->pr_type > pr_type_max))
-> +			return 0;
-
-Redundant ().  The first part of the condition may be redundant too.
-We also don't check for pr->pr_type == pr_type_max (which is presume
-is also not supposed to happen).
-
-Do we really need to check this anyway?  I presume this rule is only in
-the spec to facilitate binary search (which the spec then defeats by
-having a variable property size).
-
-If we consider the ELF file invalid when this check fails, shouldn't
-this be -ENOEXEC?
-
-> +		if (pr->pr_type > pr_type)
-> +			return 0;
-> +
-> +		if ((pr->pr_type == pr_type) &&
-> +		    (pr->pr_datasz >= sizeof(u32))) {
-> +			*property = *(u32 *)(buf + sizeof(*pr));
-> +			return 0;
-> +		}
-
-Shouldn't pr->pr_datasz be exactly == sizeof (u32)?
-
-> +
-> +		if (pr->pr_type > pr_type_max)
-> +			pr_type_max = pr->pr_type;
-
-All these checks have my head spinning... if we ignore the ordering
-requirement, can't we reduce it all to
-
-	if (pr->pr_type == pr_type) {
-		if (pr->pr_datasz != sizeof (u32))
-			return -ENOEXEC;
-
-		*property = *(u32 *)(buf + sizeof (*pr));
-		return 0;
-	}
-
-> +
-
-Do we need to up to the appropriate alignment after each property?
-
-> +		buf += pr_len;
-> +		len -= pr_len;
-> +	}
-> +
-> +	return 0;
-
--ENOENT?
-
-> +}
-> +
-> +/*
-> + * Look at an ELF file's NT_GNU_PROPERTY for the property of pr_type.
-> + *
-> + * Input:
-> + *	buf: the buffer containing the whole note.
-> + *	len: size of buf.
-> + *	align: alignment of the note's payload.
-> + *	pr_type: the property type.
-> + *
-> + * Output:
-> + *	The property found.
-> + *
-> + * Return:
-> + *	Zero or error.
-> + */
-> +static int check_note(void *buf, unsigned long len, int align,
-> +			  u32 pr_type, u32 *property)
-
-check_note_payload() and check_note() are somewhat misleadingly named,
-since they don't just check.
-
-Maybe call them gnu_property_type_0_extract_property(),
-note_extract_property()?
-
-Admittedly the first of those names would be super-verbose :/
-
-> +{
-> +	struct elf_note *n = buf;
-> +	char *note_name = buf + sizeof(*n);
-> +	unsigned long payload_offset;
-> +	unsigned long payload_len;
-> +
-> +	if (len < sizeof(*n) + 4)
-> +		return -ENOEXEC;
-> +
-> +	if ((n->n_namesz != 4) || strncmp("GNU", note_name, 3))
-> +		return -ENOEXEC;
-
-Should that be , n->n_namesz? (or , sizeof ("GNU"))?
-
-Also, no check on n->n_type?
-
-Alternatively, we could just not bother to check the note header:
-this was found via PT_GNU_PROPERTY, so if it's not a properly
-formatted NT_GNU_PROPERTY_TYPE_0 then the file is garbage anyway
-and it doesn't matter exactly what we do.
-
-Personally I would check it though.
-
-> +
-> +	payload_offset = round_up(sizeof(*n) + n->n_namesz, align);
-> +	payload_len = n->n_descsz;
-> +
-> +	if (payload_offset + payload_len > len)
-
-May this overflow on 32-bit?
-
-What about:
-
-	if (payload_offset > len ||
-	    payload_len > len - payload_offset)
-
-> +		return -ENOEXEC;
-> +
-> +	buf += payload_offset;
-> +	len -= payload_offset;
-> +
-> +	return check_note_payload(buf, len, pr_type, property);
-> +}
-> +
-> +#define find_note(phdr, nr_phdrs, align, pos, len) { \
-> +	int cnt; \
-> +	\
-> +	for (cnt = 0; cnt < nr_phdrs; cnt++) { \
-
-Just to avoid future surprises:
-
-(nr_phdrs)
-
-> +		if ((phdr)[cnt].p_align != align) \
-
-Similarly:
-
-(align)
-
-> +			continue; \
-> +		if ((phdr)[cnt].p_type == PT_GNU_PROPERTY) { \
-> +			pos = (phdr)[cnt].p_offset; \
-> +			len = (phdr)[cnt].p_filesz; \
-> +		} \
-> +	} \
-> +}
-> +
-> +int get_gnu_property(void *ehdr, void *phdr, struct file *file,
-> +		     u32 pr_type, u32 *property)
-> +{
-> +	Elf64_Ehdr *ehdr64 = ehdr;
-> +	Elf32_Ehdr *ehdr32 = ehdr;
-> +	void *buf;
-> +	int align;
-> +	loff_t pos = 0;
-> +	unsigned long len = 0;
-> +	int err = 0;
-> +
-> +	/*
-> +	 * Find PT_GNU_PROPERTY from ELF program headers.
-> +	 */
-> +	if (ehdr64->e_ident[EI_CLASS] == ELFCLASS64) {
-
-Can we trust e_ident[EI_CLASS] to tell us how big the header is?
-
-We don't check that anywhere AFAICT.  For the ELF interpreter in
-particular, we kmalloc() the appropriate header size determined by
-e_machine, so a malicious binary could have e_machine = EM_I386 with
-e_ident[ELFCLASS] == ELFCLASSS64, causing a buffer overrun here.
-
-For the main elf header, we get away with it because the bprm->buf[] is
-statically allocated as BINPRM_BUF_SIZE and zero-padded in the case of a
-short read.
-
-We could pass in the header size explicitly here, or otherwise
-validate that e_ident[ELFCLASS] is sane before calling in.
-
-> +		align = 8;
-> +		find_note((Elf64_Phdr *)phdr, ehdr64->e_phnum, align, pos, len);
-> +	} else if (ehdr32->e_ident[EI_CLASS] == ELFCLASS32) {
-> +		align = 4;
-> +		find_note((Elf32_Phdr *)phdr, ehdr32->e_phnum, align, pos, len);
-> +	}
-
-Maybe make the name of find_note upper case, or pass pos and len by
-reference.  Otherwise, this looks a bit like a function call -- in
-which case pos and len couldn't be modified.
-
-> +
-> +	/*
-> +	 * Read in the whole note.  PT_GNU_PROPERTY
-> +	 * is not expected to be larger than a page.
-> +	 */
-> +	if (len == 0)
-> +		return 0;
-> +
-> +	if (len > PAGE_SIZE)
-> +		return -ENOEXEC;
-
-Add a comment explaining the rationale?
-
-> +
-> +	buf = kmalloc(len, GFP_KERNEL);
-> +	if (!buf)
-> +		return -ENOMEM;
-> +
-> +	err = kernel_read(file, buf, len, &pos);
-> +	if (err < len) {
-> +		if (err >= 0)
-> +			err = -EIO;
-> +		goto out;
-> +	}
-> +
-> +	err = check_note(buf, len, align, pr_type, property);
-> +out:
-> +	kfree(buf);
-> +	return err;
-> +}
-
-[...]
-
-Cheers
----Dave
