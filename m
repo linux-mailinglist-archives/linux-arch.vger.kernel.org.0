@@ -2,102 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E07E6911D3
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Aug 2019 18:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98019912E2
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Aug 2019 22:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbfHQQBI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 17 Aug 2019 12:01:08 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:36288 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725784AbfHQQBI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Aug 2019 12:01:08 -0400
-Received: by mail-lf1-f68.google.com with SMTP id j17so6105167lfp.3
-        for <linux-arch@vger.kernel.org>; Sat, 17 Aug 2019 09:01:07 -0700 (PDT)
+        id S1726265AbfHQU6Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 17 Aug 2019 16:58:24 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:40366 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726240AbfHQU6T (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Aug 2019 16:58:19 -0400
+Received: by mail-io1-f65.google.com with SMTP id t6so13200931ios.7
+        for <linux-arch@vger.kernel.org>; Sat, 17 Aug 2019 13:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1+7TiPxmJ3iAAUyU8+nGKfNJ+qg4H69wdJGgYgGKXe4=;
-        b=renwLVE4t6MRcP5ZcmILI4AbPfXwqYVjMBTfKIElNDtgfcIFYeU8tIrB/gUAytl6lf
-         GUpFHkf80zb+V0K3tM4r1Ot/9rCYkg84zdkCVJdaGdaWLOpozsDhzbvufdrpihHrN3tR
-         TMxRzxhlJOIgtqRCrMKBJjP0q/GTzQu3Y+xuowVJpW1Icfg6Gn+WBtpfMuxFGsqNj8oB
-         RlW1kLKfSyibvLnhWNBdW0PJ1JnQ35HN0rADSVoKpu7sfG7Xl0X/7sr2FWTSDPYnsGg8
-         aLYzSLDdBf8VJM9zqhQZCDbdbFM9CTE+LknLwNOfmvJpyWjg0Gz9hP3js+7ih/iHtfFi
-         vrkw==
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=NuXJCtDYAF42ezbdDjEFYfu2iBTjQndKb/Edf61OrOk=;
+        b=PCXESTLeUcBNUWogs1gHv/iSg/bRj7rmybc37GwKrHxDe7CTeYQGPE82FFro2CLT61
+         8Q4IgUqoS7Jmsm9wuhAF9CCdJ8jA631YD8dGqkPPvzXyvuP2itYPnDRcHbp+2vkqaUSt
+         u4rxsZS9lGz/LPzZ8kGOEVrnbFqSW3syoXedbPJGimP78UP/Tg6J92XflG29pM3lwatF
+         OjAvDNX5+3tv2rh85pO4hmLeTRsEGL0KJ9d8KAbhP2qYNSdGVQpqF+mf38a8oxmStDJ9
+         9nvCgcj7mRwE6p6VKc6zn+f1lPTm2K1/WP8Olg56A4X8/QbiEq8e7laZGSLETkAb5Egu
+         FN1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1+7TiPxmJ3iAAUyU8+nGKfNJ+qg4H69wdJGgYgGKXe4=;
-        b=UgEfwTajvph05fg46GsnpVYlyKvnZVkVZofX7PlY2bz9+uGuT0aemyF9vTCbRVwS0N
-         4GRVReLtrLWJ4buoao0yQ5NUmuffS0F3iV3VzK5bhz0udI5b9b0Pgk55oMqSKU80Gzan
-         IBHOOpLDQRIdEAQAX8I3Venyj9YA18iErhXuWxJH/8SCbaTkDC8cSE6UB+1PZnaNGRiP
-         iJ5NFO75OZLY2MyaHQtfDWvnBG4MsCgL3xdAjTBu+VkLPAQMJg1FG50iGkA5iIcY2yth
-         06JeYr/uM7PC+78GdP5QeFuooq3n1SPi63G9YezZfSquoOWkOeljLO5PI52GbQGne46a
-         EcYw==
-X-Gm-Message-State: APjAAAXGZ25KuTY/lqB0d3aRlWKTr2eUf6P1h5IIQFkvIBMu7hEv+GoV
-        MCR25DcVIUZU8iiwsTaH+UB4qQ==
-X-Google-Smtp-Source: APXvYqzgHOkrd316w+DBxyDOOMOwfJvlMQJHfKxSm3Tpn7OUxlUzLbfoBMdqodlTlf7xRwkY3y0i2g==
-X-Received: by 2002:ac2:456d:: with SMTP id k13mr7785781lfm.77.1566057666460;
-        Sat, 17 Aug 2019 09:01:06 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:4817:8b14:6cce:9848:7977:d7d5? ([2a00:1fa0:4817:8b14:6cce:9848:7977:d7d5])
-        by smtp.gmail.com with ESMTPSA id b10sm1517289ljk.79.2019.08.17.09.01.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 17 Aug 2019 09:01:05 -0700 (PDT)
-Subject: Re: [PATCH 06/26] ia64: rename ioremap_nocache to ioremap_uc
-To:     Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=NuXJCtDYAF42ezbdDjEFYfu2iBTjQndKb/Edf61OrOk=;
+        b=UJ2/4sZbQTYa/E3olNKMKUerMUwL8ZzrQkj6upivISWLO2QrBPn874BNMBOMMfVcHG
+         4/aCy2c3qb0K/G6qEzcQOcFY/LL0qu3OsgPMcz6uTxCIcvzjhTNqRsPJzQ8Yi/TYE39b
+         mdTohqK+/2MMp9V0N6cisMoHKj83OW4vTHQ8/IniGOXsz6bad5TJbWN7b1txb9gu4yFi
+         oIs/XXSg/hR+2CnwgNQOehhL5HbtQt6mcIcQCWMSUiM6Y2iNp1vQyRPV8JeJ7Q+piAQk
+         YmiFOg3Fw8X7I+FdzZRr43TgeSKD+K5/9wMGbte3bSLE2Hw1bBQvcCBHMzzCvsOUIu/Q
+         Aw2g==
+X-Gm-Message-State: APjAAAWGqEhKRimuT6U4iOUyrDts9z8OtECayq2vzAwXFlXAVjCrqKCK
+        rIolOlzK0RV/7JTcuLt2rvrskw==
+X-Google-Smtp-Source: APXvYqyKpLbmhNe3o5mV41HWvHYU+SiPLQTRVuTNOtg0cL831wKHUivDHHya6XYWHKa9ZnFnQ2CM9Q==
+X-Received: by 2002:a6b:8f0d:: with SMTP id r13mr15237433iod.121.1566075498344;
+        Sat, 17 Aug 2019 13:58:18 -0700 (PDT)
+Received: from localhost (c-73-95-159-87.hsd1.co.comcast.net. [73.95.159.87])
+        by smtp.gmail.com with ESMTPSA id 6sm9905577iog.40.2019.08.17.13.58.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Aug 2019 13:58:17 -0700 (PDT)
+Date:   Sat, 17 Aug 2019 13:58:16 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Christoph Hellwig <hch@lst.de>
+cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
         Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org
-Cc:     linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        nios2-dev@lists.rocketboards.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190817073253.27819-1-hch@lst.de>
- <20190817073253.27819-7-hch@lst.de>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <b19607c1-07aa-e361-3c26-8bcb063ed8c1@cogentembedded.com>
-Date:   Sat, 17 Aug 2019 19:00:48 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        openrisc@lists.librecores.org, linux-mtd@lists.infradead.org,
+        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
+        nios2-dev@lists.rocketboards.org, linux-riscv@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 14/26] asm-generic: don't provide __ioremap
+In-Reply-To: <20190817073253.27819-15-hch@lst.de>
+Message-ID: <alpine.DEB.2.21.9999.1908171357180.4130@viisi.sifive.com>
+References: <20190817073253.27819-1-hch@lst.de> <20190817073253.27819-15-hch@lst.de>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-In-Reply-To: <20190817073253.27819-7-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello!
+On Sat, 17 Aug 2019, Christoph Hellwig wrote:
 
-On 17.08.2019 10:32, Christoph Hellwig wrote:
-
-> On ia64 ioremap_nocache fails if attributs don't match.  Not other
-
-    Attributes. :-)
-
-> architectures does this, and we plan to get rid of ioremap_nocache.
-> So get rid of the special semantics and define ioremap_nocache in
-> terms of ioremap as no portable driver could rely on the behavior
-> anyway.
-> 
-> However x86 implements ioremap_uc with a in a similar way as the ia64
-
-    "With a" not really needed?
-
-> version of ioremap_nocache, so implement that instead.
+> __ioremap is not a kernel API, but used for helpers with differing
+> semantics in arch code.  We should not provide it in as-generic.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
-[...]
 
-MBR, Sergei
+Reviewed-by: Paul Walmsley <paul.walmsley@sifive.com>
+Tested-by: Paul Walmsley <paul.walmsley@sifive.com> # rv32, rv64 boot
+Acked-by: Paul Walmsley <paul.walmsley@sifive.com> # arch/riscv
+
+
+- Paul
