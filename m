@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D150390E2D
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Aug 2019 09:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F1790E39
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Aug 2019 09:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbfHQHsa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 17 Aug 2019 03:48:30 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:34566 "EHLO
+        id S1726089AbfHQHsi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 17 Aug 2019 03:48:38 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:35156 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725864AbfHQHsa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Aug 2019 03:48:30 -0400
+        with ESMTP id S1726023AbfHQHsh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Aug 2019 03:48:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
         :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=juqTaRJLAUN8sACpA/ifAvJQqQFz7PwWUU79IVC7rTQ=; b=tE4HzSwuGmt2yt2L5TvlruIjuj
-        t0P27yzYCepN/bZo5j5YE+jN4n4reTCWEHjt3fZIGDM/kcK2w4Z02+rNlH4gJQJCeoXVmnDIWcQcm
-        NzYNgxNqTdiZAN/dc3AnRFo23b19A8TNkgYMp3ZeydNHcKieL1YYOVghVgZTFH4LUAKE+7Qy+vOMs
-        TSieZ/dvv6XzmazukAeD0f34Pl3tZYVlzYuZDc4AHIDWxQBOwcO4rt3zGq9EnYmBrme0eo4WTS4iV
-        Qp/C1+7eZwiDbZhaSHj/3CgSZUD3G5AEJWC1E7d2VdIfO4AloobrqCvQLAw0w8hQfYZylj+9cZNR5
-        CCRg+ACA==;
-Received: from 089144199030.atnat0008.highway.a1.net ([89.144.199.30] helo=localhost)
+        bh=GHc6Yik7xiJpzATFcCLZXqdQpVpnWVpKrNGwCVr+Ge4=; b=aa2Iw1G8i13A7RQ/0VjWsJY9Ex
+        DDOL+gOggGuQha4jkIUkidzliYAUfhxFoWCbyj7nf8xw6nLBJjlhJQq4tzQybIRpcKLbjxllHvLLk
+        9/h3ZC3odZhlX0L3FP2BQNpdRWSDMJVf0sFxvJxgzHgcaj/PhY5t8YF92zCeEoiS0DUaHet1QKtF8
+        Qe90WBkroOt49+SZtE5VnkquqwL3vfQjjEMR3SQc80lPN0DEn0zIn7o9+dpEQCPYUao6yUWa6/acr
+        PfVa3PHG7GPLC41ot8QX9nh1teAIUt1pLZTUDLyKt6uAommRf027gectMEWJ9J+AljE0pIpuHcwNZ
+        cpwdqsvA==;
+Received: from [2001:4bb8:18c:28b5:44f9:d544:957f:32cb] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hytRp-0004mg-GT; Sat, 17 Aug 2019 07:48:25 +0000
+        id 1hytRw-0004oo-JJ; Sat, 17 Aug 2019 07:48:33 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         Michal Simek <monstr@monstr.eu>,
@@ -42,9 +42,9 @@ Cc:     linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 06/26] ia64: rename ioremap_nocache to ioremap_uc
-Date:   Sat, 17 Aug 2019 09:32:33 +0200
-Message-Id: <20190817073253.27819-7-hch@lst.de>
+Subject: [PATCH 08/26] m68k: simplify ioremap_nocache
+Date:   Sat, 17 Aug 2019 09:32:35 +0200
+Message-Id: <20190817073253.27819-9-hch@lst.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190817073253.27819-1-hch@lst.de>
 References: <20190817073253.27819-1-hch@lst.de>
@@ -56,66 +56,36 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On ia64 ioremap_nocache fails if attributs don't match.  Not other
-architectures does this, and we plan to get rid of ioremap_nocache.
-So get rid of the special semantics and define ioremap_nocache in
-terms of ioremap as no portable driver could rely on the behavior
-anyway.
-
-However x86 implements ioremap_uc with a in a similar way as the ia64
-version of ioremap_nocache, so implement that instead.
+Just define ioremap_nocache to ioremap instead of duplicating the
+inline.  Also defined ioremap_uc in terms of ioremap instead of
+the using a double indirection.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- arch/ia64/include/asm/io.h | 6 +++---
- arch/ia64/mm/ioremap.c     | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ arch/m68k/include/asm/kmap.h | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/arch/ia64/include/asm/io.h b/arch/ia64/include/asm/io.h
-index a511d62d447a..febd2c6ea0b4 100644
---- a/arch/ia64/include/asm/io.h
-+++ b/arch/ia64/include/asm/io.h
-@@ -412,16 +412,16 @@ __writeq (unsigned long val, volatile void __iomem *addr)
- # ifdef __KERNEL__
- 
- extern void __iomem * ioremap(unsigned long offset, unsigned long size);
--extern void __iomem * ioremap_nocache (unsigned long offset, unsigned long size);
-+extern void __iomem * ioremap_uc(unsigned long offset, unsigned long size);
- extern void iounmap (volatile void __iomem *addr);
- static inline void __iomem * ioremap_cache (unsigned long phys_addr, unsigned long size)
- {
- 	return ioremap(phys_addr, size);
+diff --git a/arch/m68k/include/asm/kmap.h b/arch/m68k/include/asm/kmap.h
+index 03d904fe6087..421b6c9c769d 100644
+--- a/arch/m68k/include/asm/kmap.h
++++ b/arch/m68k/include/asm/kmap.h
+@@ -28,14 +28,8 @@ static inline void __iomem *ioremap(unsigned long physaddr, unsigned long size)
+ 	return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
  }
- #define ioremap ioremap
+ 
 -#define ioremap_nocache ioremap_nocache
-+#define ioremap_nocache ioremap
- #define ioremap_cache ioremap_cache
+-static inline void __iomem *ioremap_nocache(unsigned long physaddr,
+-					    unsigned long size)
+-{
+-	return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
+-}
+-
 -#define ioremap_uc ioremap_nocache
-+#define ioremap_uc ioremap_uc
- #define iounmap iounmap
- 
- /*
-diff --git a/arch/ia64/mm/ioremap.c b/arch/ia64/mm/ioremap.c
-index 0c0de2c4ec69..a09cfa064536 100644
---- a/arch/ia64/mm/ioremap.c
-+++ b/arch/ia64/mm/ioremap.c
-@@ -99,14 +99,14 @@ ioremap (unsigned long phys_addr, unsigned long size)
- EXPORT_SYMBOL(ioremap);
- 
- void __iomem *
--ioremap_nocache (unsigned long phys_addr, unsigned long size)
-+ioremap_uc(unsigned long phys_addr, unsigned long size)
- {
- 	if (kern_mem_attribute(phys_addr, size) & EFI_MEMORY_WB)
- 		return NULL;
- 
- 	return __ioremap_uc(phys_addr);
- }
--EXPORT_SYMBOL(ioremap_nocache);
-+EXPORT_SYMBOL(ioremap_uc);
- 
- void
- early_iounmap (volatile void __iomem *addr, unsigned long size)
++#define ioremap_nocache ioremap
++#define ioremap_uc ioremap
+ #define ioremap_wt ioremap_wt
+ static inline void __iomem *ioremap_wt(unsigned long physaddr,
+ 				       unsigned long size)
 -- 
 2.20.1
 
