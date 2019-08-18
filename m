@@ -2,85 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 804839133B
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Aug 2019 23:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFE99141D
+	for <lists+linux-arch@lfdr.de>; Sun, 18 Aug 2019 04:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726372AbfHQV1F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 17 Aug 2019 17:27:05 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:39321 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbfHQV1E (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Aug 2019 17:27:04 -0400
-Received: by mail-io1-f67.google.com with SMTP id l7so13259886ioj.6
-        for <linux-arch@vger.kernel.org>; Sat, 17 Aug 2019 14:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=RWNnky4tg4pNafhn5H03aH8PwpXjgmBSavfJgIeX0Ak=;
-        b=hov3AcxQ6M0mcpBwyir6wMfwuFoM/2pj4MlCmv+T09knj2Mmqt8UJz4bLEelDU0dEY
-         q35RSput0GqdXzjDl39iW6e96fi6ZvYG7hVSedcruoQ/r2si3vSEQf+S3NbKo/JWKMFz
-         l1Pncvs1WA7x9utXPIZU7hNH8C4hBPXAZA2OymhT4WgZagRVCnEht474gNpFzrJa6Xjg
-         FvMhl4KIMbZ3FFtCmeGSVrAzUl96LhDRs8lD2zGj/KFGyr4hodIlFUOwRQsA6Da7S+zZ
-         ouRU8O2CZBVhaSm1B4pGrx6QOwfw1b8VOQgHVh5JaC0Jm1cxHTFnZdggwnO1D5Ig+YJ1
-         Lkvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=RWNnky4tg4pNafhn5H03aH8PwpXjgmBSavfJgIeX0Ak=;
-        b=EWLZhRFWk9ppu5NaCjfK85idVpLzjX6M6xPGweCOM6MDf2WHMwygYpV2Qr79VbrtLP
-         aDITrN9Z6zFKDVnUf+vz/5PEHVaC1TJ6Ep0uh6Hb8XqEKSDfeG8Ok1y7LrCNXTp77mIY
-         8cY/ie7db6Rby2RfCyd4VlClg7ZDTZzGgY8hofHqWypVb7xpVEDg3diYeZeOT+5kRT/1
-         H+wpCJCERatbFkNckgpL+RPcImgnWPa9UgNDuuN7MZ2tLGfViLuZAhIGFD875zSIdyvB
-         7aT7Z9GUz539KqBI+aO4YqrexkU0PjUxTNy4H6YTB4ffLwkDpbZJgJX9Sy9we6CXdquv
-         CJ2A==
-X-Gm-Message-State: APjAAAUr7XKjg5/MK63AFTarR5cVPeNJr1hZpcBZScggUFSsp74nf9q6
-        FzYuQvzfQaOgnsUZvGsuRfJZ7Q==
-X-Google-Smtp-Source: APXvYqwKE/3SM/rVpl4teujkfN9+UilDZaKhxrZT/14FwdMPovoCNf3aYcPot40i7G8y5JQK54ukCg==
-X-Received: by 2002:a6b:b9c2:: with SMTP id j185mr15509819iof.148.1566077223658;
-        Sat, 17 Aug 2019 14:27:03 -0700 (PDT)
-Received: from localhost (c-73-95-159-87.hsd1.co.comcast.net. [73.95.159.87])
-        by smtp.gmail.com with ESMTPSA id v23sm11488293ioh.58.2019.08.17.14.27.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Aug 2019 14:27:03 -0700 (PDT)
-Date:   Sat, 17 Aug 2019 14:27:02 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Christoph Hellwig <hch@lst.de>
-cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        openrisc@lists.librecores.org, linux-mtd@lists.infradead.org,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        nios2-dev@lists.rocketboards.org, linux-riscv@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 14/26] asm-generic: don't provide __ioremap
-In-Reply-To: <alpine.DEB.2.21.9999.1908171357180.4130@viisi.sifive.com>
-Message-ID: <alpine.DEB.2.21.9999.1908171426390.4130@viisi.sifive.com>
-References: <20190817073253.27819-1-hch@lst.de> <20190817073253.27819-15-hch@lst.de> <alpine.DEB.2.21.9999.1908171357180.4130@viisi.sifive.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        id S1726229AbfHRCUd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 17 Aug 2019 22:20:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37864 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726208AbfHRCUd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 17 Aug 2019 22:20:33 -0400
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4E158217F4;
+        Sun, 18 Aug 2019 02:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566094832;
+        bh=OPY3V0VybgTAW/TfTy5ht1ElPNtB7wmhajw4Ua8nsM4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B8gICytMWtf9sSp2gWth8rJlo7ccG8GmZGksHlQpQZ2aQ2V8qKhezlSer8nu0kLsw
+         IEgo5T4rtcStB86cO09141TYic+/RSvTqgkBH8LFADvO4nfXnVH+lllvshW+iwmFe8
+         3khqevP1orkrp6CPHHDbbrjLKfcmdrkxyX/9Pjfg=
+Received: by mail-wm1-f46.google.com with SMTP id o4so134739wmh.2;
+        Sat, 17 Aug 2019 19:20:32 -0700 (PDT)
+X-Gm-Message-State: APjAAAXneIX53JObRcmTJJKKw3D2DWw5JS3/zs9MEJLrx0/HMiYYnzDo
+        j5YBamMSRi9j2Uj3FwRSqkwVL5/ppiG1muzPEjI=
+X-Google-Smtp-Source: APXvYqzI7WQkVURNqZ2bMcrBH43jaDIpUzhzxYNWBXKHEb1Z1mqumimCqpgOybei9ECXbxr+D02Ru3e1mc41ffC8syc=
+X-Received: by 2002:a1c:1f4e:: with SMTP id f75mr12874929wmf.137.1566094830733;
+ Sat, 17 Aug 2019 19:20:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <1565868537-17753-1-git-send-email-guoren@kernel.org> <20190816070348.GA13766@infradead.org>
+In-Reply-To: <20190816070348.GA13766@infradead.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 18 Aug 2019 10:20:18 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTBc3+SnKMbVU4A+tekyjkd_7XUmDCUfNCcA-CZf=JUyg@mail.gmail.com>
+Message-ID: <CAJF2gTTBc3+SnKMbVU4A+tekyjkd_7XUmDCUfNCcA-CZf=JUyg@mail.gmail.com>
+Subject: Re: [PATCH] csky: Fixup ioremap function losing
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-csky@vger.kernel.org, zhang_jian5@dahuatech.com,
+        Guo Ren <ren_guo@c-sky.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 17 Aug 2019, Paul Walmsley wrote:
+Thx Christoph,
 
-> Acked-by: Paul Walmsley <paul.walmsley@sifive.com> # arch/riscv
+On Fri, Aug 16, 2019 at 3:03 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Thu, Aug 15, 2019 at 07:28:57PM +0800, guoren@kernel.org wrote:
+> > From: Guo Ren <ren_guo@c-sky.com>
+> >
+> > Implement the following apis to meet usage in different scenarios.
+> >
+> >  - ioremap          (NonCache + StrongOrder)
+> >  - ioremap_nocache  (NonCache + StrongOrder)
+> >  - ioremap_wc       (NonCache + WeakOrder  )
+> >  - ioremap_cache    (   Cache + WeakOrder  )
+> >
+> > Also change flag VM_ALLOC to VM_IOREMAP in get_vm_area_caller.
+>
+> Looks generally fine, but two comments:
+>
+>  - do you have a need for ioremap_cache?  We are generally try to
+>    phase it out in favour of memremap, and it is generally only used
+>    by arch specific code.
+Yes, some drivers of our customers use ioremap_cache to map phy_addr
+which isn't belong to system memory.
 
-This ack is superfluous since the patch doesn't touch arch/riscv; feel 
-free to drop it
+>  - I have a big series pending to clean up the mess with our
+>    ioremap_* functions, including adding a generic implementation
+>    that csky should be able to use.  Unless this patch is urgent it
+>    might make sense to rebase it on top.  Here is my current tree, I
+>    plan to post it soon:
+>
+>         http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/generic-ioremap
+I agree to use GENERIC_IOREMAP, but I want to add csky support
+GENERIC_IOREMAP patch by myself.
+You could remove "csky: use generic ioremap" in your patchset first
+and I'll add support GENERIC_IORMAP patch later.
+Then we won't get confilct :)
 
+--
+Best Regards
+ Guo Ren
 
-- Paul
+ML: https://lore.kernel.org/linux-csky/
