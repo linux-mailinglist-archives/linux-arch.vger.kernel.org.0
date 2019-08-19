@@ -2,79 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EB79492D
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2019 17:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452AB949CA
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2019 18:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727353AbfHSPvK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Aug 2019 11:51:10 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33811 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725536AbfHSPvK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Aug 2019 11:51:10 -0400
-Received: by mail-pg1-f194.google.com with SMTP id n9so1457846pgc.1
-        for <linux-arch@vger.kernel.org>; Mon, 19 Aug 2019 08:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3aT4hIoGoOxTITnPRxvZVZEP0ZMplvO3FsPS6VTLrIE=;
-        b=PFK+Euq4eAv4stee6fofZ6gDmqlftrBH/YMhCED0VWVhe5SooEqYb0YDDhkOtZtnZ7
-         JLrxQc5VrC3cql3m2lqkw7PtsRM2xPQp4TDduiB6uTA1yixI9WRHt6pwiUM/J/L7dSBG
-         XIft5dFKclnG+cguBASUE2SfAWFUgRIkjbPSBUjIVPozrNnTE3KiaYqmdk66vRsW/Dgz
-         3mAKmVjZIcwcVZcprRTiqT7aoarPwN2ROPgQOoaj8KtoebC6zUruPAjuaz/oqJvH9xng
-         ndiSeIKWtl73t5T8Vy0zFIQneF3vpVaibiO23HLMJKsr40xCM00mBJNYOW1WVePtCpoU
-         eLBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3aT4hIoGoOxTITnPRxvZVZEP0ZMplvO3FsPS6VTLrIE=;
-        b=q88hk7FVCjTTqr0vbMYTF+ffIusOmBuUqWsv5hR/4BIrXYIze+Nv/Q+VGcH5g7w1Jq
-         b9DKdixoPUc6sR9u8ABC2BL6F+Eo/LSL/y4ruIEWhUPBcKlVD8f9HNdBaRaU/CyuOwte
-         cmscfd1TzPcGq22P+NGXz56trwcjBsCr5Qpi8sS+w/2fNkBUFF5ccHeoO66JiOXHI9l9
-         ifB3KSIcQwY152nLB7ZzJNV2UnJ0LTalX+dvjjSbIJ2cdCZ5DZ6gr11tINFJLlKhKTmR
-         oPS2oN9E2ezF7PCJHWXQdW7qghp3O6LRliTgYgYT6fRXpiDjYrWkrW0jLPa9UWhMH3Ql
-         l5Zg==
-X-Gm-Message-State: APjAAAUK0Zw0IeuMwJQWcNiUJlCG2NdlnL9u+BRtUPr66rHQL4c7ay7l
-        36y7HgWfT27GqvtxSMFTGPnJsjspJDArGpXQXTpALQ==
-X-Google-Smtp-Source: APXvYqzpbwkdUPa164NFyhgPqd+w4X5msjPIvE7rxGK6/5zEmTXY5YFlDgIHgUQ8fIpsWQbEJbgIB1DEIMJXUsWPBDA=
-X-Received: by 2002:aa7:9e9a:: with SMTP id p26mr25307646pfq.25.1566229868631;
- Mon, 19 Aug 2019 08:51:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190815154403.16473-1-catalin.marinas@arm.com> <20190815154403.16473-5-catalin.marinas@arm.com>
-In-Reply-To: <20190815154403.16473-5-catalin.marinas@arm.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 19 Aug 2019 17:50:57 +0200
-Message-ID: <CAAeHK+xpfCxeMya5aiwaUw1hKTd5C32naqrREpz-3GSXM73ELw@mail.gmail.com>
-Subject: Re: [PATCH v8 4/5] arm64: Define Documentation/arm64/tagged-address-abi.rst
+        id S1727877AbfHSQZ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Aug 2019 12:25:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40818 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727857AbfHSQZz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 19 Aug 2019 12:25:55 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4E2E322CEA;
+        Mon, 19 Aug 2019 16:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566231954;
+        bh=dreJjOF/L6ef6NrZc3iuTz3726uHjZ7gkP0YJGdGHG0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gqn+tAYqBxyeyvPgLjWRmc6kokYMr8nSG21/SIX3emygHhXCZPb5up2OdCUnMqyJj
+         lA6HJZa6khq/ZWrH+cXiwTve9D4s9FTAsov1BewhiVi5qi0Stubtbki018gVCGxfPg
+         q9T4xgtaAZO0aBq+CmaHiJ746uzptEAa1tXpGOlo=
+Date:   Mon, 19 Aug 2019 17:25:49 +0100
+From:   Will Deacon <will@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
+Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Dave P Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v8 4/5] arm64: Define
+ Documentation/arm64/tagged-address-abi.rst
+Message-ID: <20190819162548.c7udab6g6i662qaa@willie-the-truck>
+References: <20190815154403.16473-1-catalin.marinas@arm.com>
+ <20190815154403.16473-5-catalin.marinas@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190815154403.16473-5-catalin.marinas@arm.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 5:44 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
+On Thu, Aug 15, 2019 at 04:44:02PM +0100, Catalin Marinas wrote:
 > From: Vincenzo Frascino <vincenzo.frascino@arm.com>
->
+> 
 > On AArch64 the TCR_EL1.TBI0 bit is set by default, allowing userspace
 > (EL0) to perform memory accesses through 64-bit pointers with a non-zero
 > top byte. Introduce the document describing the relaxation of the
 > syscall ABI that allows userspace to pass certain tagged pointers to
 > kernel syscalls.
->
+> 
 > Cc: Will Deacon <will.deacon@arm.com>
 > Cc: Andrey Konovalov <andreyknvl@google.com>
 > Cc: Szabolcs Nagy <szabolcs.nagy@arm.com>
@@ -82,14 +67,11 @@ On Thu, Aug 15, 2019 at 5:44 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
 > Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 > Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
 > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-
-Acked-by: Andrey Konovalov <andreyknvl@google.com>
-
 > ---
 >  Documentation/arm64/tagged-address-abi.rst | 155 +++++++++++++++++++++
 >  1 file changed, 155 insertions(+)
 >  create mode 100644 Documentation/arm64/tagged-address-abi.rst
->
+> 
 > diff --git a/Documentation/arm64/tagged-address-abi.rst b/Documentation/arm64/tagged-address-abi.rst
 > new file mode 100644
 > index 000000000000..8808337775d6
@@ -129,7 +111,11 @@ Acked-by: Andrey Konovalov <andreyknvl@google.com>
 > +  - flags have the **MAP_ANONYMOUS** bit set
 > +  - the file descriptor refers to a regular file (including those
 > +    returned by memfd_create()) or **/dev/zero**
-> +
+
+nit: but the markup is pretty inconsistent throughout. Why is /dev/zero
+bold, but not memfd_create()? I think they would both be better off in
+typewriter font, if that's a thing in rst.
+
 > +- brk() system call done by the process itself (i.e. the heap area
 > +  between the initial location of the program break at process creation
 > +  and its current location).
@@ -185,6 +171,15 @@ Acked-by: Andrey Konovalov <andreyknvl@google.com>
 > +
 > +- A valid tagged pointer has the same semantics as the corresponding
 > +  untagged pointer.
+
+nit, but I'd reword this last bullet slightly to say:
+
+  - The syscall behaviour for a valid tagged pointer is the same as for
+    the corresponding untagged pointer.
+
+Since that flows better wrt the previous bullet and is explicit about
+syscall behaviour, rather than overall semantics.
+
 > +
 > +A definition of the meaning of tagged pointers on AArch64 can be found
 > +in Documentation/arm64/tagged-pointers.rst.
@@ -200,54 +195,12 @@ Acked-by: Andrey Konovalov <andreyknvl@google.com>
 > +
 > +- ioctl() other than arguments pointing to user structures to be
 > +  accessed by the kernel.
-> +
-> +- shmat() and shmdt().
-> +
-> +Any attempt to use non-zero tagged pointers may result in an error code
-> +being returned, a (fatal) signal being raised, or other modes of
-> +failure.
-> +
-> +4. Example of correct usage
-> +---------------------------
-> +.. code-block:: c
-> +
-> +   #include <stdlib.h>
-> +   #include <string.h>
-> +   #include <unistd.h>
-> +   #include <sys/mman.h>
-> +   #include <sys/prctl.h>
-> +
-> +   #define PR_SET_TAGGED_ADDR_CTRL     55
-> +   #define PR_TAGGED_ADDR_ENABLE       (1UL << 0)
-> +
-> +   #define TAG_SHIFT           56
-> +
-> +   int main(void)
-> +   {
-> +       int tbi_enabled = 0;
-> +       unsigned long tag = 0;
-> +       char *ptr;
-> +
-> +       /* check/enable the tagged address ABI */
-> +       if (!prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0))
-> +               tbi_enabled = 1;
-> +
-> +       /* memory allocation */
-> +       ptr = mmap(NULL, sysconf(_SC_PAGE_SIZE), PROT_READ | PROT_WRITE,
-> +                  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +       if (ptr == MAP_FAILED)
-> +               return 1;
-> +
-> +       /* set a non-zero tag if the ABI is available */
-> +       if (tbi_enabled)
-> +               tag = rand() & 0xff;
-> +       ptr = (char *)((unsigned long)ptr | (tag << TAG_SHIFT));
-> +
-> +       /* memory access to a tagged address */
-> +       strcpy(ptr, "tagged pointer\n");
-> +
-> +       /* syscall with a tagged pointer */
-> +       write(1, ptr, strlen(ptr));
-> +
-> +       return 0;
-> +   }
+
+I agree with Kevin that we should tighten this up. How about:
+
+  - ... other than pointers to user data either passed directly or
+    indirectly as arguments to be accessed by the kernel.
+
+?
+
+Will
