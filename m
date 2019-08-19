@@ -2,202 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CAE92290
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2019 13:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6667E9274B
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2019 16:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727283AbfHSLh3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Aug 2019 07:37:29 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:37881 "EHLO pegase1.c-s.fr"
+        id S1727564AbfHSOoI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Aug 2019 10:44:08 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:60500 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726594AbfHSLh3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 19 Aug 2019 07:37:29 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 46BsNL3FQnz9txwK;
-        Mon, 19 Aug 2019 13:37:22 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=IHsOl9a7; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id oFKXEToytF74; Mon, 19 Aug 2019 13:37:22 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 46BsNL28mZz9txwM;
-        Mon, 19 Aug 2019 13:37:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1566214642; bh=DGGXu4mqnMWHUmNbB5+ROy/HiaG54r+RC+Wcdt0Sf00=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=IHsOl9a7CLa7RJmKZxXfhR0/DCYj2G73xIPYDA6WCxKuP54N2JAhOGPed5LoWBaTr
-         xAGb92GOotvNXFzQSfGDwudvtj5Y3U/knm/8qpTZDycL0cX/rB8DbMAYW9xfoAPIEv
-         zTjXzmGw+t910F9DYOhcG4BB3avOkYfcesFTWTsI=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9E5778B7B3;
-        Mon, 19 Aug 2019 13:37:27 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id equtsE-UlxDy; Mon, 19 Aug 2019 13:37:27 +0200 (CEST)
-Received: from [172.25.230.101] (po15451.idsi0.si.c-s.fr [172.25.230.101])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 585EE8B7B1;
-        Mon, 19 Aug 2019 13:37:27 +0200 (CEST)
-Subject: Re: [PATCH 2/2] powerpc: support KASAN instrumentation of bitops
-To:     Daniel Axtens <dja@axtens.net>, linux-s390@vger.kernel.org,
-        linux-arch@vger.kernel.org, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     kasan-dev@googlegroups.com, Nicholas Piggin <npiggin@gmail.com>
-References: <20190819062814.5315-1-dja@axtens.net>
- <20190819062814.5315-2-dja@axtens.net>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <a1932e9e-3697-b8a0-c936-098b390b817f@c-s.fr>
-Date:   Mon, 19 Aug 2019 13:37:11 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726211AbfHSOoI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 19 Aug 2019 10:44:08 -0400
+Received: from zn.tnic (p200300EC2F04B7003923E3AC7BEA9973.dip0.t-ipconnect.de [IPv6:2003:ec:2f04:b700:3923:e3ac:7bea:9973])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BD7211EC04CD;
+        Mon, 19 Aug 2019 16:44:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1566225846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=aiF2Pwcn1Ttln+Ose3qbWIgsrTCu8+BwU+USO7+83k4=;
+        b=FTYNv20re79J8PzD/9y7V6Jh9kBr3W4s+dgAcNySz3ANhDbomTrLPb82d+7hIwSs3GPyEY
+        fAoaUTPk1T7DsegZOlYkhQOH3FUs7/Jo/bXSuEJ9IMlqrmkel86WxQffz0W9k36RwsN6Vx
+        f2RCgQC0Y7z0ata06gxWU6ZlYCrum3U=
+Date:   Mon, 19 Aug 2019 16:44:01 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 07/28] x86/boot/compressed: annotate local functions
+Message-ID: <20190819144401.GA4522@zn.tnic>
+References: <20190808103854.6192-1-jslaby@suse.cz>
+ <20190808103854.6192-8-jslaby@suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <20190819062814.5315-2-dja@axtens.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190808103854.6192-8-jslaby@suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 19/08/2019 à 08:28, Daniel Axtens a écrit :
-> In KASAN development I noticed that the powerpc-specific bitops
-> were not being picked up by the KASAN test suite.
-
-I'm not sure anybody cares about who noticed the problem. This sentence 
-could be rephrased as:
-
-The powerpc-specific bitops are not being picked up by the KASAN test suite.
-
+On Thu, Aug 08, 2019 at 12:38:33PM +0200, Jiri Slaby wrote:
+> relocated, paging_enabled, and no_longmode are self-standing local
+> functions, annotate them as such. paging_enabled is annotated as
+> NOALIGN, since the trampoline code has to be compact.
 > 
-> Instrumentation is done via the bitops/instrumented-{atomic,lock}.h
-> headers. They require that arch-specific versions of bitop functions
-> are renamed to arch_*. Do this renaming.
-> 
-> For clear_bit_unlock_is_negative_byte, the current implementation
-> uses the PG_waiters constant. This works because it's a preprocessor
-> macro - so it's only actually evaluated in contexts where PG_waiters
-> is defined. With instrumentation however, it becomes a static inline
-> function, and all of a sudden we need the actual value of PG_waiters.
-> Because of the order of header includes, it's not available and we
-> fail to compile. Instead, manually specify that we care about bit 7.
-> This is still correct: bit 7 is the bit that would mark a negative
-> byte.
-> 
-> Cc: Nicholas Piggin <npiggin@gmail.com> # clear_bit_unlock_negative_byte
-> Signed-off-by: Daniel Axtens <dja@axtens.net>
-
-Reviewed-by: Christophe Leroy <christophe.leroy@c-s.fr>
-
-Note that this patch might be an opportunity to replace all the 
-'__inline__' by the standard 'inline' keyword.
-
-Some () alignment to be fixes as well, see checkpatch warnings/checks at 
-https://openpower.xyz/job/snowpatch/job/snowpatch-linux-checkpatch/8601//artifact/linux/checkpatch.log
-
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: x86@kernel.org
 > ---
->   arch/powerpc/include/asm/bitops.h | 31 +++++++++++++++++++------------
->   1 file changed, 19 insertions(+), 12 deletions(-)
+>  arch/x86/boot/compressed/head_32.S | 3 ++-
+>  arch/x86/boot/compressed/head_64.S | 9 ++++++---
+>  2 files changed, 8 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/powerpc/include/asm/bitops.h b/arch/powerpc/include/asm/bitops.h
-> index 603aed229af7..8615b2bc35fe 100644
-> --- a/arch/powerpc/include/asm/bitops.h
-> +++ b/arch/powerpc/include/asm/bitops.h
-> @@ -86,22 +86,22 @@ DEFINE_BITOP(clear_bits, andc, "")
->   DEFINE_BITOP(clear_bits_unlock, andc, PPC_RELEASE_BARRIER)
->   DEFINE_BITOP(change_bits, xor, "")
->   
-> -static __inline__ void set_bit(int nr, volatile unsigned long *addr)
-> +static __inline__ void arch_set_bit(int nr, volatile unsigned long *addr)
->   {
->   	set_bits(BIT_MASK(nr), addr + BIT_WORD(nr));
->   }
->   
-> -static __inline__ void clear_bit(int nr, volatile unsigned long *addr)
-> +static __inline__ void arch_clear_bit(int nr, volatile unsigned long *addr)
->   {
->   	clear_bits(BIT_MASK(nr), addr + BIT_WORD(nr));
->   }
->   
-> -static __inline__ void clear_bit_unlock(int nr, volatile unsigned long *addr)
-> +static __inline__ void arch_clear_bit_unlock(int nr, volatile unsigned long *addr)
->   {
->   	clear_bits_unlock(BIT_MASK(nr), addr + BIT_WORD(nr));
->   }
->   
-> -static __inline__ void change_bit(int nr, volatile unsigned long *addr)
-> +static __inline__ void arch_change_bit(int nr, volatile unsigned long *addr)
->   {
->   	change_bits(BIT_MASK(nr), addr + BIT_WORD(nr));
->   }
-> @@ -138,26 +138,26 @@ DEFINE_TESTOP(test_and_clear_bits, andc, PPC_ATOMIC_ENTRY_BARRIER,
->   DEFINE_TESTOP(test_and_change_bits, xor, PPC_ATOMIC_ENTRY_BARRIER,
->   	      PPC_ATOMIC_EXIT_BARRIER, 0)
->   
-> -static __inline__ int test_and_set_bit(unsigned long nr,
-> +static __inline__ int arch_test_and_set_bit(unsigned long nr,
->   				       volatile unsigned long *addr)
->   {
->   	return test_and_set_bits(BIT_MASK(nr), addr + BIT_WORD(nr)) != 0;
->   }
->   
-> -static __inline__ int test_and_set_bit_lock(unsigned long nr,
-> +static __inline__ int arch_test_and_set_bit_lock(unsigned long nr,
->   				       volatile unsigned long *addr)
->   {
->   	return test_and_set_bits_lock(BIT_MASK(nr),
->   				addr + BIT_WORD(nr)) != 0;
->   }
->   
-> -static __inline__ int test_and_clear_bit(unsigned long nr,
-> +static __inline__ int arch_test_and_clear_bit(unsigned long nr,
->   					 volatile unsigned long *addr)
->   {
->   	return test_and_clear_bits(BIT_MASK(nr), addr + BIT_WORD(nr)) != 0;
->   }
->   
-> -static __inline__ int test_and_change_bit(unsigned long nr,
-> +static __inline__ int arch_test_and_change_bit(unsigned long nr,
->   					  volatile unsigned long *addr)
->   {
->   	return test_and_change_bits(BIT_MASK(nr), addr + BIT_WORD(nr)) != 0;
-> @@ -185,15 +185,18 @@ static __inline__ unsigned long clear_bit_unlock_return_word(int nr,
->   	return old;
->   }
->   
-> -/* This is a special function for mm/filemap.c */
-> -#define clear_bit_unlock_is_negative_byte(nr, addr)			\
-> -	(clear_bit_unlock_return_word(nr, addr) & BIT_MASK(PG_waiters))
-> +/*
-> + * This is a special function for mm/filemap.c
-> + * Bit 7 corresponds to PG_waiters.
-> + */
-> +#define arch_clear_bit_unlock_is_negative_byte(nr, addr)		\
-> +	(clear_bit_unlock_return_word(nr, addr) & BIT_MASK(7))
->   
->   #endif /* CONFIG_PPC64 */
->   
->   #include <asm-generic/bitops/non-atomic.h>
->   
-> -static __inline__ void __clear_bit_unlock(int nr, volatile unsigned long *addr)
-> +static __inline__ void arch___clear_bit_unlock(int nr, volatile unsigned long *addr)
->   {
->   	__asm__ __volatile__(PPC_RELEASE_BARRIER "" ::: "memory");
->   	__clear_bit(nr, addr);
-> @@ -239,6 +242,10 @@ unsigned long __arch_hweight64(__u64 w);
->   
->   #include <asm-generic/bitops/find.h>
->   
-> +/* wrappers that deal with KASAN instrumentation */
-> +#include <asm-generic/bitops/instrumented-atomic.h>
-> +#include <asm-generic/bitops/instrumented-lock.h>
-> +
->   /* Little-endian versions */
->   #include <asm-generic/bitops/le.h>
->   
-> 
+> diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
+> index 37380c0d5999..7e8ab0bb6968 100644
+> --- a/arch/x86/boot/compressed/head_32.S
+> +++ b/arch/x86/boot/compressed/head_32.S
+> @@ -209,7 +209,7 @@ ENDPROC(efi32_stub_entry)
+>  #endif
+>  
+>  	.text
+> -relocated:
+> +SYM_FUNC_START_LOCAL(relocated)
+>  
+>  /*
+>   * Clear BSS (stack is currently empty)
+> @@ -260,6 +260,7 @@ relocated:
+>   */
+>  	xorl	%ebx, %ebx
+>  	jmp	*%eax
+> +SYM_FUNC_END(relocated)
+>  
+>  #ifdef CONFIG_EFI_STUB
+>  	.data
+> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+> index 6233ae35d0d9..c8ce6ffc9fe5 100644
+> --- a/arch/x86/boot/compressed/head_64.S
+> +++ b/arch/x86/boot/compressed/head_64.S
+> @@ -511,7 +511,7 @@ ENDPROC(efi64_stub_entry)
+>  #endif
+>  
+>  	.text
+> -relocated:
+> +SYM_FUNC_START_LOCAL(relocated)
+>  
+>  /*
+>   * Clear BSS (stack is currently empty)
+> @@ -540,6 +540,7 @@ relocated:
+>   * Jump to the decompressed kernel.
+>   */
+>  	jmp	*%rax
+> +SYM_FUNC_END(relocated)
+>  
+>  /*
+>   * Adjust the global offset table
+> @@ -635,9 +636,10 @@ ENTRY(trampoline_32bit_src)
+>  	lret
+>  
+>  	.code64
+> -paging_enabled:
+> +SYM_FUNC_START_LOCAL_NOALIGN(paging_enabled)
+>  	/* Return from the trampoline */
+>  	jmp	*%rdi
+> +SYM_FUNC_END(paging_enabled)
+>  
+>  	/*
+>           * The trampoline code has a size limit.
+> @@ -647,11 +649,12 @@ paging_enabled:
+>  	.org	trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_SIZE
+>  
+>  	.code32
+> -no_longmode:
+> +SYM_FUNC_START_LOCAL(no_longmode)
+>  	/* This isn't an x86-64 CPU, so hang intentionally, we cannot continue */
+>  1:
+>  	hlt
+>  	jmp     1b
+> +SYM_FUNC_END(no_longmode)
+>  
+>  #include "../../kernel/verify_cpu.S"
+>  
+> -- 
+
+All can be local labels prepended with .L
+
+-- 
+Regards/Gruss,
+    Boris.
+
+Good mailing practices for 400: avoid top-posting and trim the reply.
