@@ -2,213 +2,257 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B38D3954A1
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 04:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBCB95542
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 05:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbfHTCvQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Aug 2019 22:51:16 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40866 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728669AbfHTCvQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Aug 2019 22:51:16 -0400
-Received: by mail-pf1-f193.google.com with SMTP id w16so2397389pfn.7
-        for <linux-arch@vger.kernel.org>; Mon, 19 Aug 2019 19:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=axtens.net; s=google;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=4MweJtv161U2CMaz91jtsrp2c+G77sFGRYDZ+W7nfdg=;
-        b=fgruBeYmDYjHvLQHebmeva7fwnQHs0+/Z6wsXd5E3ryQtiaOB3/v1Iz3OfDQ8SOwoe
-         d3JauzEDi3UztFk78Q4dniYiUurft7FSaOek7t8io4cuYwPejYYTnXeRvtpEJyfWTCeq
-         +rH7S2J4LIelNMoN8PcIk3h6dYtqDDXtWpmIs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=4MweJtv161U2CMaz91jtsrp2c+G77sFGRYDZ+W7nfdg=;
-        b=cxNPFar5htYT7LXynjy3YqD8i+5PORyyW+Hwk9y1cvtdUnHxkgPQBSRB5iFeQNy9Uw
-         CNbL+UIGoyTLCOuRMjkCnZs9Onw5tz+Evn05503AuF+XiwE2EJe0+XZUc207JN6vbiaC
-         zGGIDGVUzj1sqUVMT6r9wh5wAJRINh+H8G5InXaOPEy5rxSGSrBu8f8KYtJLlwNSWZP7
-         DZtPRGdC3uK58xlnAJzrUL+REzhmAd8c7NBVioKAh2m7ONwwI1bkKe1VLmuNDKJh0x6L
-         Qiu1UfshERBnzXPB7rdc6InWDluRHwhsYdi0WoyhMy3fjXyhbDosA9d0HKXllXyRee6U
-         0HBw==
-X-Gm-Message-State: APjAAAX+SKbDl1LQUveRRS6nPntk9/hxePu+ZHzCSckVpKgroxFUFUG+
-        bL+KBIXfjGTeKelJTTKGcJO2vg==
-X-Google-Smtp-Source: APXvYqxp2okAga8LhM46tOHeHFi51HcWAGlkDncJQeQqDjxa9iWdWKTGxCFmJEhCsVYUPYWdc37O/Q==
-X-Received: by 2002:a63:f342:: with SMTP id t2mr21527124pgj.2.1566269475088;
-        Mon, 19 Aug 2019 19:51:15 -0700 (PDT)
-Received: from localhost (ppp167-251-205.static.internode.on.net. [59.167.251.205])
-        by smtp.gmail.com with ESMTPSA id 203sm23555877pfz.107.2019.08.19.19.51.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2019 19:51:14 -0700 (PDT)
-From:   Daniel Axtens <dja@axtens.net>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     kasan-dev@googlegroups.com, Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 2/2] powerpc: support KASAN instrumentation of bitops
-In-Reply-To: <a1932e9e-3697-b8a0-c936-098b390b817f@c-s.fr>
-References: <20190819062814.5315-1-dja@axtens.net> <20190819062814.5315-2-dja@axtens.net> <a1932e9e-3697-b8a0-c936-098b390b817f@c-s.fr>
-Date:   Tue, 20 Aug 2019 12:51:10 +1000
-Message-ID: <87d0h0tuqp.fsf@dja-thinkpad.axtens.net>
+        id S1729028AbfHTDev (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Aug 2019 23:34:51 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:60726 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728647AbfHTDev (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 19 Aug 2019 23:34:51 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 48140A1638;
+        Tue, 20 Aug 2019 05:34:43 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
+        with ESMTP id N1m8x2icF4On; Tue, 20 Aug 2019 05:34:31 +0200 (CEST)
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jann Horn <jannh@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        David Drysdale <drysdale@google.com>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: [PATCH RESEND v11 0/8] openat2(2)
+Date:   Tue, 20 Aug 2019 13:33:58 +1000
+Message-Id: <20190820033406.29796-1-cyphar@cyphar.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@c-s.fr> writes:
+This patchset is being developed here:
+    <https://github.com/cyphar/linux/tree/resolveat/master>
 
-> Le 19/08/2019 =C3=A0 08:28, Daniel Axtens a =C3=A9crit=C2=A0:
->> In KASAN development I noticed that the powerpc-specific bitops
->> were not being picked up by the KASAN test suite.
->
-> I'm not sure anybody cares about who noticed the problem. This sentence=20
-> could be rephrased as:
->
-> The powerpc-specific bitops are not being picked up by the KASAN test sui=
-te.
->
->>=20
->> Instrumentation is done via the bitops/instrumented-{atomic,lock}.h
->> headers. They require that arch-specific versions of bitop functions
->> are renamed to arch_*. Do this renaming.
->>=20
->> For clear_bit_unlock_is_negative_byte, the current implementation
->> uses the PG_waiters constant. This works because it's a preprocessor
->> macro - so it's only actually evaluated in contexts where PG_waiters
->> is defined. With instrumentation however, it becomes a static inline
->> function, and all of a sudden we need the actual value of PG_waiters.
->> Because of the order of header includes, it's not available and we
->> fail to compile. Instead, manually specify that we care about bit 7.
->> This is still correct: bit 7 is the bit that would mark a negative
->> byte.
->>=20
->> Cc: Nicholas Piggin <npiggin@gmail.com> # clear_bit_unlock_negative_byte
->> Signed-off-by: Daniel Axtens <dja@axtens.net>
->
-> Reviewed-by: Christophe Leroy <christophe.leroy@c-s.fr>
->
-> Note that this patch might be an opportunity to replace all the=20
-> '__inline__' by the standard 'inline' keyword.
+Patch changelog:
+ v11: [RESEND: <https://lore.kernel.org/lkml/20190728010207.9781-1-cyphar@cyphar.com/>]
+    * Fix checkpatch.pl errors and warnings where reasonable.
+    * Minor cleanup to pr_warn logging for may_open_magiclink().
+    * Drop kselftests patch to handle %m formatting correctly, and send
+      it through the kselftests tree directly. [Shuah Khan]
+ v10: <https://lore.kernel.org/lkml/20190719164225.27083-1-cyphar@cyphar.com/>
+ v09: <https://lore.kernel.org/lkml/20190706145737.5299-1-cyphar@cyphar.com/>
+ v08: <https://lore.kernel.org/lkml/20190520133305.11925-1-cyphar@cyphar.com/>
+ v07: <https://lore.kernel.org/lkml/20190507164317.13562-1-cyphar@cyphar.com/>
+ v06: <https://lore.kernel.org/lkml/20190506165439.9155-1-cyphar@cyphar.com/>
+ v05: <https://lore.kernel.org/lkml/20190320143717.2523-1-cyphar@cyphar.com/>
+ v04: <https://lore.kernel.org/lkml/20181112142654.341-1-cyphar@cyphar.com/>
+ v03: <https://lore.kernel.org/lkml/20181009070230.12884-1-cyphar@cyphar.com/>
+ v02: <https://lore.kernel.org/lkml/20181009065300.11053-1-cyphar@cyphar.com/>
+ v01: <https://lore.kernel.org/lkml/20180929103453.12025-1-cyphar@cyphar.com/>
 
-New patches sent with these things fixed, thanks.=20
->
-> Some () alignment to be fixes as well, see checkpatch warnings/checks at=
-=20
-> https://openpower.xyz/job/snowpatch/job/snowpatch-linux-checkpatch/8601//=
-artifact/linux/checkpatch.log
->
->> ---
->>   arch/powerpc/include/asm/bitops.h | 31 +++++++++++++++++++------------
->>   1 file changed, 19 insertions(+), 12 deletions(-)
->>=20
->> diff --git a/arch/powerpc/include/asm/bitops.h b/arch/powerpc/include/as=
-m/bitops.h
->> index 603aed229af7..8615b2bc35fe 100644
->> --- a/arch/powerpc/include/asm/bitops.h
->> +++ b/arch/powerpc/include/asm/bitops.h
->> @@ -86,22 +86,22 @@ DEFINE_BITOP(clear_bits, andc, "")
->>   DEFINE_BITOP(clear_bits_unlock, andc, PPC_RELEASE_BARRIER)
->>   DEFINE_BITOP(change_bits, xor, "")
->>=20=20=20
->> -static __inline__ void set_bit(int nr, volatile unsigned long *addr)
->> +static __inline__ void arch_set_bit(int nr, volatile unsigned long *add=
-r)
->>   {
->>   	set_bits(BIT_MASK(nr), addr + BIT_WORD(nr));
->>   }
->>=20=20=20
->> -static __inline__ void clear_bit(int nr, volatile unsigned long *addr)
->> +static __inline__ void arch_clear_bit(int nr, volatile unsigned long *a=
-ddr)
->>   {
->>   	clear_bits(BIT_MASK(nr), addr + BIT_WORD(nr));
->>   }
->>=20=20=20
->> -static __inline__ void clear_bit_unlock(int nr, volatile unsigned long =
-*addr)
->> +static __inline__ void arch_clear_bit_unlock(int nr, volatile unsigned =
-long *addr)
->>   {
->>   	clear_bits_unlock(BIT_MASK(nr), addr + BIT_WORD(nr));
->>   }
->>=20=20=20
->> -static __inline__ void change_bit(int nr, volatile unsigned long *addr)
->> +static __inline__ void arch_change_bit(int nr, volatile unsigned long *=
-addr)
->>   {
->>   	change_bits(BIT_MASK(nr), addr + BIT_WORD(nr));
->>   }
->> @@ -138,26 +138,26 @@ DEFINE_TESTOP(test_and_clear_bits, andc, PPC_ATOMI=
-C_ENTRY_BARRIER,
->>   DEFINE_TESTOP(test_and_change_bits, xor, PPC_ATOMIC_ENTRY_BARRIER,
->>   	      PPC_ATOMIC_EXIT_BARRIER, 0)
->>=20=20=20
->> -static __inline__ int test_and_set_bit(unsigned long nr,
->> +static __inline__ int arch_test_and_set_bit(unsigned long nr,
->>   				       volatile unsigned long *addr)
->>   {
->>   	return test_and_set_bits(BIT_MASK(nr), addr + BIT_WORD(nr)) !=3D 0;
->>   }
->>=20=20=20
->> -static __inline__ int test_and_set_bit_lock(unsigned long nr,
->> +static __inline__ int arch_test_and_set_bit_lock(unsigned long nr,
->>   				       volatile unsigned long *addr)
->>   {
->>   	return test_and_set_bits_lock(BIT_MASK(nr),
->>   				addr + BIT_WORD(nr)) !=3D 0;
->>   }
->>=20=20=20
->> -static __inline__ int test_and_clear_bit(unsigned long nr,
->> +static __inline__ int arch_test_and_clear_bit(unsigned long nr,
->>   					 volatile unsigned long *addr)
->>   {
->>   	return test_and_clear_bits(BIT_MASK(nr), addr + BIT_WORD(nr)) !=3D 0;
->>   }
->>=20=20=20
->> -static __inline__ int test_and_change_bit(unsigned long nr,
->> +static __inline__ int arch_test_and_change_bit(unsigned long nr,
->>   					  volatile unsigned long *addr)
->>   {
->>   	return test_and_change_bits(BIT_MASK(nr), addr + BIT_WORD(nr)) !=3D 0;
->> @@ -185,15 +185,18 @@ static __inline__ unsigned long clear_bit_unlock_r=
-eturn_word(int nr,
->>   	return old;
->>   }
->>=20=20=20
->> -/* This is a special function for mm/filemap.c */
->> -#define clear_bit_unlock_is_negative_byte(nr, addr)			\
->> -	(clear_bit_unlock_return_word(nr, addr) & BIT_MASK(PG_waiters))
->> +/*
->> + * This is a special function for mm/filemap.c
->> + * Bit 7 corresponds to PG_waiters.
->> + */
->> +#define arch_clear_bit_unlock_is_negative_byte(nr, addr)		\
->> +	(clear_bit_unlock_return_word(nr, addr) & BIT_MASK(7))
->>=20=20=20
->>   #endif /* CONFIG_PPC64 */
->>=20=20=20
->>   #include <asm-generic/bitops/non-atomic.h>
->>=20=20=20
->> -static __inline__ void __clear_bit_unlock(int nr, volatile unsigned lon=
-g *addr)
->> +static __inline__ void arch___clear_bit_unlock(int nr, volatile unsigne=
-d long *addr)
->>   {
->>   	__asm__ __volatile__(PPC_RELEASE_BARRIER "" ::: "memory");
->>   	__clear_bit(nr, addr);
->> @@ -239,6 +242,10 @@ unsigned long __arch_hweight64(__u64 w);
->>=20=20=20
->>   #include <asm-generic/bitops/find.h>
->>=20=20=20
->> +/* wrappers that deal with KASAN instrumentation */
->> +#include <asm-generic/bitops/instrumented-atomic.h>
->> +#include <asm-generic/bitops/instrumented-lock.h>
->> +
->>   /* Little-endian versions */
->>   #include <asm-generic/bitops/le.h>
->>=20=20=20
->>=20
+The need for some sort of control over VFS's path resolution (to avoid
+malicious paths resulting in inadvertent breakouts) has been a very
+long-standing desire of many userspace applications. This patchset is a
+revival of Al Viro's old AT_NO_JUMPS[1,2] patchset (which was a variant
+of David Drysdale's O_BENEATH patchset[3] which was a spin-off of the
+Capsicum project[4]) with a few additions and changes made based on the
+previous discussion within [5] as well as others I felt were useful.
+
+In line with the conclusions of the original discussion of AT_NO_JUMPS,
+the flag has been split up into separate flags. However, instead of
+being an openat(2) flag it is provided through a new syscall openat2(2)
+which provides several other improvements to the openat(2) interface (see the
+patch description for more details). The following new LOOKUP_* flags are
+added:
+
+  * LOOKUP_NO_XDEV blocks all mountpoint crossings (upwards, downwards,
+    or through absolute links). Absolute pathnames alone in openat(2) do
+    not trigger this.
+
+  * LOOKUP_NO_MAGICLINKS blocks resolution through /proc/$pid/fd-style
+    links. This is done by blocking the usage of nd_jump_link() during
+    resolution in a filesystem. The term "magic-links" is used to match
+    with the only reference to these links in Documentation/, but I'm
+    happy to change the name.
+
+    It should be noted that this is different to the scope of
+    ~LOOKUP_FOLLOW in that it applies to all path components. However,
+    you can do openat2(NO_FOLLOW|NO_MAGICLINKS) on a magic-link and it
+    will *not* fail (assuming that no parent component was a
+    magic-link), and you will have an fd for the magic-link.
+
+  * LOOKUP_BENEATH disallows escapes to outside the starting dirfd's
+    tree, using techniques such as ".." or absolute links. Absolute
+    paths in openat(2) are also disallowed. Conceptually this flag is to
+    ensure you "stay below" a certain point in the filesystem tree --
+    but this requires some additional to protect against various races
+    that would allow escape using "..".
+
+    Currently LOOKUP_BENEATH implies LOOKUP_NO_MAGICLINKS, because it
+    can trivially beam you around the filesystem (breaking the
+    protection). In future, there might be similar safety checks done as
+    in LOOKUP_IN_ROOT, but that requires more discussion.
+
+In addition, two new flags are added that expand on the above ideas:
+
+  * LOOKUP_NO_SYMLINKS does what it says on the tin. No symlink
+    resolution is allowed at all, including magic-links. Just as with
+    LOOKUP_NO_MAGICLINKS this can still be used with NOFOLLOW to open an
+    fd for the symlink as long as no parent path had a symlink
+    component.
+
+  * LOOKUP_IN_ROOT is an extension of LOOKUP_BENEATH that, rather than
+    blocking attempts to move past the root, forces all such movements
+    to be scoped to the starting point. This provides chroot(2)-like
+    protection but without the cost of a chroot(2) for each filesystem
+    operation, as well as being safe against race attacks that chroot(2)
+    is not.
+
+    If a race is detected (as with LOOKUP_BENEATH) then an error is
+    generated, and similar to LOOKUP_BENEATH it is not permitted to cross
+    magic-links with LOOKUP_IN_ROOT.
+
+    The primary need for this is from container runtimes, which
+    currently need to do symlink scoping in userspace[6] when opening
+    paths in a potentially malicious container. There is a long list of
+    CVEs that could have bene mitigated by having RESOLVE_THIS_ROOT
+    (such as CVE-2017-1002101, CVE-2017-1002102, CVE-2018-15664, and
+    CVE-2019-5736, just to name a few).
+
+And further, several semantics of file descriptor "re-opening" are now
+changed to prevent attacks like CVE-2019-5736 by restricting how
+magic-links can be resolved (based on their mode). This required some
+other changes to the semantics of the modes of O_PATH file descriptor's
+associated /proc/self/fd magic-links. openat2(2) has the ability to
+further restrict re-opening of its own O_PATH fds, so that users can
+make even better use of this feature.
+
+Finally, O_EMPTYPATH was added so that users can do /proc/self/fd-style
+re-opening without depending on procfs. The new restricted semantics for
+magic-links are applied here too.
+
+In order to make all of the above more usable, I'm working on
+libpathrs[7] which is a C-friendly library for safe path resolution. It
+features a userspace-emulated backend if the kernel doesn't support
+openat2(2). Hopefully we can get userspace to switch to using it, and
+thus get openat2(2) support for free once it's ready.
+
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Christian Brauner <christian@brauner.io>
+Cc: David Drysdale <drysdale@google.com>
+Cc: Tycho Andersen <tycho@tycho.ws>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: <containers@lists.linux-foundation.org>
+Cc: <linux-fsdevel@vger.kernel.org>
+Cc: <linux-api@vger.kernel.org>
+
+[1]: https://lwn.net/Articles/721443/
+[2]: https://lore.kernel.org/patchwork/patch/784221/
+[3]: https://lwn.net/Articles/619151/
+[4]: https://lwn.net/Articles/603929/
+[5]: https://lwn.net/Articles/723057/
+[6]: https://github.com/cyphar/filepath-securejoin
+[7]: https://github.com/openSUSE/libpathrs
+
+Aleksa Sarai (8):
+  namei: obey trailing magic-link DAC permissions
+  procfs: switch magic-link modes to be more sane
+  open: O_EMPTYPATH: procfs-less file descriptor re-opening
+  namei: O_BENEATH-style path resolution flags
+  namei: LOOKUP_IN_ROOT: chroot-like path resolution
+  namei: aggressively check for nd->root escape on ".." resolution
+  open: openat2(2) syscall
+  selftests: add openat2(2) selftests
+
+ Documentation/filesystems/path-lookup.rst     |  12 +-
+ arch/alpha/include/uapi/asm/fcntl.h           |   1 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/include/uapi/asm/fcntl.h          |  39 +-
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/include/uapi/asm/fcntl.h           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/fcntl.c                                    |   2 +-
+ fs/internal.h                                 |   1 +
+ fs/namei.c                                    | 270 ++++++++++--
+ fs/open.c                                     | 112 ++++-
+ fs/proc/base.c                                |  20 +-
+ fs/proc/fd.c                                  |  23 +-
+ fs/proc/namespaces.c                          |   2 +-
+ include/linux/fcntl.h                         |  17 +-
+ include/linux/fs.h                            |   8 +-
+ include/linux/namei.h                         |   9 +
+ include/linux/syscalls.h                      |  17 +-
+ include/uapi/asm-generic/fcntl.h              |   4 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/fcntl.h                    |  42 ++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/memfd/memfd_test.c    |   7 +-
+ tools/testing/selftests/openat2/.gitignore    |   1 +
+ tools/testing/selftests/openat2/Makefile      |   8 +
+ tools/testing/selftests/openat2/helpers.c     | 162 +++++++
+ tools/testing/selftests/openat2/helpers.h     | 116 +++++
+ .../testing/selftests/openat2/linkmode_test.c | 333 +++++++++++++++
+ .../selftests/openat2/rename_attack_test.c    | 127 ++++++
+ .../testing/selftests/openat2/resolve_test.c  | 402 ++++++++++++++++++
+ 45 files changed, 1655 insertions(+), 107 deletions(-)
+ create mode 100644 tools/testing/selftests/openat2/.gitignore
+ create mode 100644 tools/testing/selftests/openat2/Makefile
+ create mode 100644 tools/testing/selftests/openat2/helpers.c
+ create mode 100644 tools/testing/selftests/openat2/helpers.h
+ create mode 100644 tools/testing/selftests/openat2/linkmode_test.c
+ create mode 100644 tools/testing/selftests/openat2/rename_attack_test.c
+ create mode 100644 tools/testing/selftests/openat2/resolve_test.c
+
+-- 
+2.22.0
+
