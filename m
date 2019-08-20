@@ -2,129 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 169DE96352
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 16:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2821796617
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 18:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730501AbfHTO6r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Aug 2019 10:58:47 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60066 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730470AbfHTO6r (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 20 Aug 2019 10:58:47 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B9042AFE1;
-        Tue, 20 Aug 2019 14:58:44 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     catalin.marinas@arm.com, hch@lst.de, wahrenst@gmx.net,
-        marc.zyngier@arm.com, robh+dt@kernel.org,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arch@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     phill@raspberryi.org, f.fainelli@gmail.com, will@kernel.org,
-        nsaenzjulienne@suse.de, linux-kernel@vger.kernel.org,
-        eric@anholt.net, mbrugger@suse.com,
-        linux-rpi-kernel@lists.infradead.org, akpm@linux-foundation.org,
-        frowand.list@gmail.com, m.szyprowski@samsung.com
-Subject: [PATCH v2 11/11] mm: refresh ZONE_DMA and ZONE_DMA32 comments in 'enum zone_type'
-Date:   Tue, 20 Aug 2019 16:58:19 +0200
-Message-Id: <20190820145821.27214-12-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190820145821.27214-1-nsaenzjulienne@suse.de>
-References: <20190820145821.27214-1-nsaenzjulienne@suse.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1729672AbfHTQRm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Aug 2019 12:17:42 -0400
+Received: from mga07.intel.com ([134.134.136.100]:58739 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725971AbfHTQRm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 20 Aug 2019 12:17:42 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Aug 2019 09:17:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,408,1559545200"; 
+   d="scan'208";a="169130943"
+Received: from yyu32-desk1.sc.intel.com ([10.144.153.205])
+  by orsmga007.jf.intel.com with ESMTP; 20 Aug 2019 09:17:39 -0700
+Message-ID: <fb058c3d56bb070706aa5f8502b4d8f0da265b74.camel@intel.com>
+Subject: Re: [PATCH v8 18/27] mm: Introduce do_mmap_locked()
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+Date:   Tue, 20 Aug 2019 09:08:34 -0700
+In-Reply-To: <20190820010200.GI1916@linux.intel.com>
+References: <20190813205225.12032-1-yu-cheng.yu@intel.com>
+         <20190813205225.12032-19-yu-cheng.yu@intel.com>
+         <20190820010200.GI1916@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.1-2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-These zones usage has evolved with time and the comments were outdated.
-This joins both ZONE_DMA and ZONE_DMA32 explanation and gives up to date
-examples on how they are used on different architectures.
+On Mon, 2019-08-19 at 18:02 -0700, Sean Christopherson wrote:
+> On Tue, Aug 13, 2019 at 01:52:16PM -0700, Yu-cheng Yu wrote:
+> > There are a few places that need do_mmap() with mm->mmap_sem held.
+> > Create an in-line function for that.
+> > 
+> > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> > ---
+> >  include/linux/mm.h | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> > 
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index bc58585014c9..275c385f53c6 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -2394,6 +2394,24 @@ static inline void mm_populate(unsigned long addr,
+> > unsigned long len)
+> >  static inline void mm_populate(unsigned long addr, unsigned long len) {}
+> >  #endif
+> >  
+> > +static inline unsigned long do_mmap_locked(struct file *file,
+> > +	unsigned long addr, unsigned long len, unsigned long prot,
+> > +	unsigned long flags, vm_flags_t vm_flags, struct list_head *uf)
+> > +{
+> > +	struct mm_struct *mm = current->mm;
+> > +	unsigned long populate;
+> > +
+> > +	down_write(&mm->mmap_sem);
+> > +	addr = do_mmap(file, addr, len, prot, flags, vm_flags, 0,
+> > +		       &populate, uf);
+> > +	up_write(&mm->mmap_sem);
+> > +
+> > +	if (populate)
+> > +		mm_populate(addr, populate);
+> > +
+> > +	return addr;
+> > +}
+> 
+> Any reason not to put this in cet.c, as suggested by PeterZ?  All of the
+> calls from CET have identical params except for @len, e.g. you can add
+> 'static unsigned long cet_mmap(unsigned long len)' and bury most of the
+> copy-paste code in there.
+> 
+> https://lkml.kernel.org/r/20190607074707.GD3463@hirez.programming.kicks-ass.ne
+> t
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Yes, I will do that.  I thought this would be useful in other places, but
+currently only in mpx.c.
 
----
-
-Changes in v2:
-- Try another approach merging both zones explanations into one
-- Address Christoph's comments
-- If this approach doesn't get much traction I'll just drop the patch
-  from the series as it's not really essential
-
- include/linux/mmzone.h | 46 +++++++++++++++++++++++++-----------------
- 1 file changed, 27 insertions(+), 19 deletions(-)
-
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index d77d717c620c..9c150223d41f 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -356,33 +356,41 @@ struct per_cpu_nodestat {
- #endif /* !__GENERATING_BOUNDS.H */
- 
- enum zone_type {
--#ifdef CONFIG_ZONE_DMA
- 	/*
--	 * ZONE_DMA is used when there are devices that are not able
--	 * to do DMA to all of addressable memory (ZONE_NORMAL). Then we
--	 * carve out the portion of memory that is needed for these devices.
--	 * The range is arch specific.
-+	 * ZONE_DMA and ZONE_DMA32 are used when there are peripherals not able
-+	 * to DMA to all of the addressable memory (ZONE_NORMAL).
-+	 * On architectures where this area covers the whole 32 bit address
-+	 * space ZONE_DMA32 is used. ZONE_DMA is left for the ones with smaller
-+	 * DMA addressing constraints. This distinction is important as a 32bit
-+	 * DMA mask is assumed when ZONE_DMA32 is defined. Some 64-bit
-+	 * platforms may need both zones as they support peripherals with
-+	 * different DMA addressing limitations.
-+	 *
-+	 * Some examples:
-+	 *
-+	 *  - i386 and x86_64 have a fixed 16M ZONE_DMA and ZONE_DMA32 for the
-+	 *    rest of the lower 4G.
-+	 *
-+	 *  - arm only uses ZONE_DMA, the size, up to 4G, may vary depending on
-+	 *    the specific device.
-+	 *
-+	 *  - powerpc only uses ZONE_DMA, the size, up to 2G, may vary
-+	 *    depending on the specific device.
- 	 *
--	 * Some examples
-+	 *  - s390 uses ZONE_DMA fixed to the lower 2G.
- 	 *
--	 * Architecture		Limit
--	 * ---------------------------
--	 * parisc, ia64, sparc	<4G
--	 * s390, powerpc	<2G
--	 * arm			Various
--	 * alpha		Unlimited or 0-16MB.
-+	 *  - arm64 uses ZONE_DMA to mark the area addresable by all
-+	 *    peripherals on the device, and ZONE_DMA32 for the rest of the
-+	 *    lower 4G. ZONE_DMA32 might be left empty.
- 	 *
--	 * i386, x86_64 and multiple other arches
--	 * 			<16M.
-+	 *  - ia64 and riscv only use ZONE_DMA32.
-+	 *
-+	 *  - parisc uses neither.
- 	 */
-+#ifdef CONFIG_ZONE_DMA
- 	ZONE_DMA,
- #endif
- #ifdef CONFIG_ZONE_DMA32
--	/*
--	 * x86_64 needs two ZONE_DMAs because it supports devices that are
--	 * only able to do DMA to the lower 16M but also 32 bit devices that
--	 * can only do DMA areas below 4G.
--	 */
- 	ZONE_DMA32,
- #endif
- 	/*
--- 
-2.22.0
-
+Yu-cheng
