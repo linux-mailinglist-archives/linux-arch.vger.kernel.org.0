@@ -2,86 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D5395BBE
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 11:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB8A95BC5
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 11:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729497AbfHTJ4J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Aug 2019 05:56:09 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:47008 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728545AbfHTJ4J (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Aug 2019 05:56:09 -0400
-Received: by mail-oi1-f194.google.com with SMTP id t24so3607389oij.13
-        for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2019 02:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ERy6C+OfX7AwXRit4NjtghifEuheVTJjPNjjGxnVXl4=;
-        b=esBS8tvWjvw1oPPxWdzyE63jd94MRLnrUUg4cyouQEMyiYTKxPG+Md74XSdR0Hn9qm
-         u/yhAcDom21n1PFzSKCGDVRlC8bwdtOPV5Ga016Y3MfIx+qPtgAqq/l3ZdPMYmiQU647
-         6FOJ9xi1gsNq3LaPCHCLn+mUPV3cg7lHqbwFZk1uSrWhaPoT1t9n6MR3QtZbKyLxDSxS
-         yOOtBByzrdAPB/lhM3CHw0IMUBqHOuId43QVT2RwUl/2EzvVgf27h3OlZL30SdLIkmOF
-         KUilJjflda9G5h40sZPfyzC1FSzsAn8yoWXinP1SG4qMRUqYupzKNJdNoA/N8PfONPNJ
-         u4wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ERy6C+OfX7AwXRit4NjtghifEuheVTJjPNjjGxnVXl4=;
-        b=iPa47K9uhDcG3hJ6gWV+/tTWWOPTpewshERCjxGyLWN55uBcwcqYJ8R+NBIoFyzJ18
-         KGEOi47xvZu3oHAqqfqUS1v5/3Gx7srDgcNaHtobYrc8Ra4uksZv1myJwrrxaNCMiBtJ
-         mHleG2r/J1P/EB1LoxJ1kDrIqQPOOlb219vNplNptklcgaCcV3sQHjcnYiS+/Yvj92b7
-         rl+1DfUuGo6Xl7yIJKsZezR7lDwVk5h1YJ3M6+ucKdjAc8+ifQXIam12IdUSri2RTUOf
-         ydf2BAT/SYN/3BQr0mM7RmihLgJMm/PrfP5sBsomJdJoiJkoScP7Maqfnl6R+2MdWB0W
-         zI1Q==
-X-Gm-Message-State: APjAAAUw6OQ8NMfvsFv32Y8bcNvBWCp5RWf0Uez2hZHc52m+B+ZanlLq
-        hZ/7jeHpLzeN615UQe9WJEesKlLhl6ZpabCuyrL+Mw==
-X-Google-Smtp-Source: APXvYqyQ6eoEoVcpR/xbV96cbSTy0dNPpLdj0gQt1oJ++FGqgDPc8X6DViRqQ8kizDCDO6cg+XdDCeC8PkqVTf9p8Pg=
-X-Received: by 2002:aca:c396:: with SMTP id t144mr11367178oif.172.1566294967836;
- Tue, 20 Aug 2019 02:56:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190820024941.12640-1-dja@axtens.net>
-In-Reply-To: <20190820024941.12640-1-dja@axtens.net>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 20 Aug 2019 11:55:56 +0200
-Message-ID: <CANpmjNMpBAjX4G2GYmM6-z8TfXdbzLCuAMQ-fmGRwEDFMci4Ow@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kasan: support instrumented bitops combined with
- generic bitops
-To:     Daniel Axtens <dja@axtens.net>
-Cc:     christophe.leroy@c-s.fr, linux-s390@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728426AbfHTJ5u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Aug 2019 05:57:50 -0400
+Received: from foss.arm.com ([217.140.110.172]:37834 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728414AbfHTJ5u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 20 Aug 2019 05:57:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71B20344;
+        Tue, 20 Aug 2019 02:57:49 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 36F563F706;
+        Tue, 20 Aug 2019 02:57:48 -0700 (PDT)
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [RFC PATCH 0/2] ELF: Alternate program property parser
+Date:   Tue, 20 Aug 2019 10:57:41 +0100
+Message-Id: <1566295063-7387-1-git-send-email-Dave.Martin@arm.com>
+X-Mailer: git-send-email 2.1.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 20 Aug 2019 at 04:50, Daniel Axtens <dja@axtens.net> wrote:
->
-> Currently bitops-instrumented.h assumes that the architecture provides
-> atomic, non-atomic and locking bitops (e.g. both set_bit and __set_bit).
-> This is true on x86 and s390, but is not always true: there is a
-> generic bitops/non-atomic.h header that provides generic non-atomic
-> operations, and also a generic bitops/lock.h for locking operations.
->
-> powerpc uses the generic non-atomic version, so it does not have it's
-> own e.g. __set_bit that could be renamed arch___set_bit.
->
-> Split up bitops-instrumented.h to mirror the atomic/non-atomic/lock
-> split. This allows arches to only include the headers where they
-> have arch-specific versions to rename. Update x86 and s390.
->
-> (The generic operations are automatically instrumented because they're
-> written in C, not asm.)
->
-> Suggested-by: Christophe Leroy <christophe.leroy@c-s.fr>
-> Reviewed-by: Christophe Leroy <christophe.leroy@c-s.fr>
-> Signed-off-by: Daniel Axtens <dja@axtens.net>
+This series is an experimental reimplementation of ELF property parsing
+(see NT_GNU_PROPERTY_TYPE_0, [1]) for the ELF loader.
 
-Acked-by: Marco Elver <elver@google.com>
+This is intended for comparison / merging with [2] (or could replace it,
+if people think this approach is better).
 
-Thanks!
+Either way, I'd like to get something in place so that we can build
+AArch64 BTI support on top of it.
+
+Any thoughts?
+
+
+Key differences from [2]:
+
+ * Scanning for the PT_PROGRAM_PROPERTY program header is intergrated
+   into the existing scan loops, rather than being done separately.
+
+ * In keeping with the rest of the ELF loader code, error checks are
+   kept to a minimum.  Except to avoid buffer overruns, the ELF file is
+   not checked for well-formedness.
+
+   As a sanity check, the code still checks for a correct
+   NT_GNU_PROPERTY_TYPE_0 note header at the start of the
+   PT_PROGRAM_PROPERTY segment, but perhaps this isn't needed either.
+
+ * 1K is statically allocated on the stack for the properties, and if
+   the ELF properties are larger than that, the ELF file is rejected
+   with ENOEXEC.
+
+   There is no limit defined in [1] for the total size of the
+   properties, but common sense seems suggests that 1K is likely to be
+   ample space.
+
+ * The properties are found, read and parsed exactly once.  [2] does
+   this once _per property_ requested by the arch code: that's not a
+   problem today, but it will become inefficient with there are multiple
+   properties in the file that the kernel needs to look at.
+
+   Instead, the arch arch_parse_elf_property() hook is called once per
+   property found.  To minimise overhead, the arch code can implement
+   this hook inline.
+
+   This approach assumes that the number of properties in a given ELF is
+   say, no more than 20 or so.  The code could be redesigned in the
+   future if/when this iteration becomes an overhead (i.e., probably
+   never).
+
+
+[1] Linux Extensions to gABI
+https://github.com/hjl-tools/linux-abi/wiki/Linux-Extensions-to-gABI
+
+[2] [PATCH v8 22/27] binfmt_elf: Extract .note.gnu.property from an ELF file
+https://lore.kernel.org/lkml/20190813205225.12032-23-yu-cheng.yu@intel.com/
+
+
+Dave Martin (2):
+  ELF: UAPI and Kconfig additions for ELF program properties
+  ELF: Add ELF program property parsing support
+
+ fs/Kconfig.binfmt        |   3 ++
+ fs/binfmt_elf.c          | 109 +++++++++++++++++++++++++++++++++++++++++++++++
+ fs/compat_binfmt_elf.c   |   4 ++
+ include/linux/elf.h      |  21 +++++++++
+ include/uapi/linux/elf.h |  11 +++++
+ 5 files changed, 148 insertions(+)
+
+-- 
+2.1.4
+
