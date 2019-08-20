@@ -2,274 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D27899663C
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 18:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9266C96673
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 18:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730189AbfHTQYq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Aug 2019 12:24:46 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:39076 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725971AbfHTQYp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 20 Aug 2019 12:24:45 -0400
-Received: from zn.tnic (p200300EC2F0AD10054FA108E4D195499.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:d100:54fa:108e:4d19:5499])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8094B1EC02FE;
-        Tue, 20 Aug 2019 18:24:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1566318283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=NGnVqa16rPX0cXr/XJ6lkjkQU4KzhAJENarQRTbs9mo=;
-        b=catOGVLhpO3GzYy5nV3vQXJJtlo1h3YS4Pi/mMV/4hPlTH9XXWCAWaHJeL2rxEjNazFTGl
-        l26WRJgqQpieEb8P7tfh60zJlv5dHPzlIZQqqVGxlVqxFwdIrGKYDGTZEwC5lBlsif+JSC
-        wBn1sa13tCKeoKhUWYIVCM49FOFReRc=
-Date:   Tue, 20 Aug 2019 18:24:35 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
+        id S1728682AbfHTQd1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Aug 2019 12:33:27 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40750 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727744AbfHTQd1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Aug 2019 12:33:27 -0400
+Received: by mail-pl1-f196.google.com with SMTP id h3so3018292pls.7
+        for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2019 09:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=sA90vJz/rbgCroFZTlA5Yw1nyMDsyVq6b6DiHDXrFY0=;
+        b=cYzXk3DwZRgs8EAm1g3fVOu+Z4tn7HOv+jpf9QjbsWzX4NXP/Z29Kf/EIhyFPgdmft
+         Si0gk/LKQoYihhNVviMseqNHT7bZIno7OfUiaUQT8FNXEofq/Hb8qW2iYXeJRTGao4nM
+         GzveFF2KwG+Ju5sJ4Qx1kUpEovl+vjfCLefZk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=sA90vJz/rbgCroFZTlA5Yw1nyMDsyVq6b6DiHDXrFY0=;
+        b=BzgSYFzL9cYo/ep9Kn6hKlyGnmuwqQo/xs75h64ovDYX9fCXRHBVXteJqii6K5AqhP
+         9pWwvhYff32sp647Ep6xr7A5Prc+OfJJ9LwFcqbxmeYKW4TnYvVkRbHRIeQ79D02E5km
+         pj1PBdQr8E7MrghxZBi2GRpTW0FNYGlBb9x7fcy37v8JoDsZE/L2sbhqXdCXh0PvO1AK
+         kheXjkDPFfi/9iNJ+Rvn6B4CDoPsWYPKnJuOYHFgoljls77tjuV6oNnUZpxWUW/nnbcx
+         t9PUe2xkO0VXNuGQ86TSROeKARaFHi07Advfj7wvNtIv3MCiF1o5rcvVUNpWTihHm55H
+         xDVw==
+X-Gm-Message-State: APjAAAWNUCSIy5HkCBG4jndpG8D4RJZ5oFlvdXdzUbKTcXWwjLVTvC/3
+        iG+7UmCobsJ9HXDQn/3zQlVLiw==
+X-Google-Smtp-Source: APXvYqx4X45g/9btjXSwOQ8+vS4u4nyT4b+SMjnqVb14XmUKxYG0eultJtMyH7UZAgK2dx58sZ7n0A==
+X-Received: by 2002:a17:902:8d95:: with SMTP id v21mr29689291plo.267.1566318807022;
+        Tue, 20 Aug 2019 09:33:27 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 33sm17723932pgy.22.2019.08.20.09.33.25
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 20 Aug 2019 09:33:26 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 09:33:24 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Drew Davenport <ddavenport@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Feng Tang <feng.tang@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 11/28] x86/asm/head: annotate data appropriatelly
-Message-ID: <20190820162435.GH31607@zn.tnic>
-References: <20190808103854.6192-1-jslaby@suse.cz>
- <20190808103854.6192-12-jslaby@suse.cz>
+Subject: Re: [PATCH 7/7] bug: Move WARN_ON() "cut here" into exception handler
+Message-ID: <201908200908.6437DF5@keescook>
+References: <20190819234111.9019-1-keescook@chromium.org>
+ <20190819234111.9019-8-keescook@chromium.org>
+ <20190820100638.GK2332@hirez.programming.kicks-ass.net>
+ <06ba33fd-27cc-3816-1cdf-70616b1782dd@c-s.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190808103854.6192-12-jslaby@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <06ba33fd-27cc-3816-1cdf-70616b1782dd@c-s.fr>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> Subject: Re: [PATCH v8 11/28] x86/asm/head: annotate data appropriatelly
+On Tue, Aug 20, 2019 at 12:58:49PM +0200, Christophe Leroy wrote:
+> Le 20/08/2019 à 12:06, Peter Zijlstra a écrit :
+> > On Mon, Aug 19, 2019 at 04:41:11PM -0700, Kees Cook wrote:
+> > 
+> > > diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
+> > > index 588dd59a5b72..da471fcc5487 100644
+> > > --- a/include/asm-generic/bug.h
+> > > +++ b/include/asm-generic/bug.h
+> > > @@ -10,6 +10,7 @@
+> > >   #define BUGFLAG_WARNING		(1 << 0)
+> > >   #define BUGFLAG_ONCE		(1 << 1)
+> > >   #define BUGFLAG_DONE		(1 << 2)
+> > > +#define BUGFLAG_PRINTK		(1 << 3)
+> > >   #define BUGFLAG_TAINT(taint)	((taint) << 8)
+> > >   #define BUG_GET_TAINT(bug)	((bug)->flags >> 8)
+> > >   #endif
+> > 
+> > > diff --git a/lib/bug.c b/lib/bug.c
+> > > index 1077366f496b..6c22e8a6f9de 100644
+> > > --- a/lib/bug.c
+> > > +++ b/lib/bug.c
+> > > @@ -181,6 +181,15 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+> > >   		}
+> > >   	}
+> > > +	/*
+> > > +	 * BUG() and WARN_ON() families don't print a custom debug message
+> > > +	 * before triggering the exception handler, so we must add the
+> > > +	 * "cut here" line now. WARN() issues its own "cut here" before the
+> > > +	 * extra debugging message it writes before triggering the handler.
+> > > +	 */
+> > > +	if ((bug->flags & BUGFLAG_PRINTK) == 0)
+> > > +		printk(KERN_DEFAULT CUT_HERE);
+> > 
+> > I'm not loving that BUGFLAG_PRINTK name, BUGFLAG_CUT_HERE makes more
+> > sense to me.
 
-appropriately
+That's fine -- easy rename. :)
 
-On Thu, Aug 08, 2019 at 12:38:37PM +0200, Jiri Slaby wrote:
-> Use the new SYM_DATA, SYM_DATA_START, and SYM_DATA_END in both 32 and 64
-> bit heads.  In the 64-bit version, define also
-> SYM_DATA_START_PAGE_ALIGNED locally using the new SYM_START. It is used
-> in the code instead of NEXT_PAGE() which was defined in this file and
-> has been using the obsolete macro GLOBAL().
-> 
-> Now, the data in the 64-bit object file look sane:
-> Value   Size Type    Bind   Vis      Ndx Name
->   0000  4096 OBJECT  GLOBAL DEFAULT   15 init_level4_pgt
->   1000  4096 OBJECT  GLOBAL DEFAULT   15 level3_kernel_pgt
->   2000  2048 OBJECT  GLOBAL DEFAULT   15 level2_kernel_pgt
->   3000  4096 OBJECT  GLOBAL DEFAULT   15 level2_fixmap_pgt
->   4000  4096 OBJECT  GLOBAL DEFAULT   15 level1_fixmap_pgt
->   5000     2 OBJECT  GLOBAL DEFAULT   15 early_gdt_descr
->   5002     8 OBJECT  LOCAL  DEFAULT   15 early_gdt_descr_base
->   500a     8 OBJECT  GLOBAL DEFAULT   15 phys_base
->   0000     8 OBJECT  GLOBAL DEFAULT   17 initial_code
->   0008     8 OBJECT  GLOBAL DEFAULT   17 initial_gs
->   0010     8 OBJECT  GLOBAL DEFAULT   17 initial_stack
->   0000     4 OBJECT  GLOBAL DEFAULT   19 early_recursion_flag
->   1000  4096 OBJECT  GLOBAL DEFAULT   19 early_level4_pgt
->   2000 0x40000 OBJECT  GLOBAL DEFAULT   19 early_dynamic_pgts
->   0000  4096 OBJECT  GLOBAL DEFAULT   22 empty_zero_page
-> 
-> All have correct size and type.
+> Actually it would be BUGFLAG_NO_CUT_HERE then, otherwise all arches not
+> using the generic macros will have to add the flag to get the "cut here"
+> line.
 
-Nice.
+I am testing for the lack of the flag (so that only the
+CONFIG_GENERIC_BUG with __WARN_FLAGS case needs to set it). I was
+thinking of the flag to mean "this reporting flow has already issued
+cut-here". It sounds like it would be more logical to have it named
+BUGFLAG_NO_CUT_HERE to mean "do not issue a cut-here; it has already
+happened"? I will update the patch.
 
-> 
-> Note, that we can now see that it might be worth pushing
-> early_recursion_flag after early_dynamic_pgts -- we are wasting almost
-> 4K of .init.data.
-
-Yes, please do in a separate patch which can even go separately. I get
-here:
-
----
-Disassembly of section .init.data:
-
-ffffffff82684000 <early_recursion_flag>:
-        ...
-
-ffffffff82685000 <early_top_pgt>:
-        ...
-
-ffffffff82686000 <early_dynamic_pgts>:
-        ...
-
-ffffffff826c6000 <next_early_pgt>:
-        ...
-
-ffffffff826c6020 <initcall_level_names>:
----
-
-
-vs
-
-
----
-Disassembly of section .init.data:
-
-ffffffff82684000 <early_top_pgt>:
-        ...
-
-ffffffff82685000 <early_dynamic_pgts>:
-        ...
-
-ffffffff826c5000 <early_recursion_flag>:
-ffffffff826c5000:       00 00                   add    %al,(%rax)
-        ...
-
-ffffffff826c5004 <next_early_pgt>:
-        ...
-
-ffffffff826c5020 <initcall_level_names>:
----
-
-That's exactly 4K saved.
-
-
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: x86@kernel.org
-> ---
->  arch/x86/kernel/head_32.S | 29 ++++++++-------
->  arch/x86/kernel/head_64.S | 78 +++++++++++++++++++++------------------
->  2 files changed, 58 insertions(+), 49 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/head_32.S b/arch/x86/kernel/head_32.S
-> index 0bae769b7b59..2d5390d84467 100644
-> --- a/arch/x86/kernel/head_32.S
-> +++ b/arch/x86/kernel/head_32.S
-> @@ -502,8 +502,7 @@ ENDPROC(early_ignore_irq)
->  
->  __INITDATA
->  	.align 4
-> -GLOBAL(early_recursion_flag)
-> -	.long 0
-> +SYM_DATA(early_recursion_flag, .long 0)
->  
->  __REFDATA
->  	.align 4
-> @@ -551,7 +550,7 @@ EXPORT_SYMBOL(empty_zero_page)
->  __PAGE_ALIGNED_DATA
->  	/* Page-aligned for the benefit of paravirt? */
->  	.align PGD_ALIGN
-> -ENTRY(initial_page_table)
-> +SYM_DATA_START(initial_page_table)
->  	.long	pa(initial_pg_pmd+PGD_IDENT_ATTR),0	/* low identity map */
->  # if KPMDS == 3
->  	.long	pa(initial_pg_pmd+PGD_IDENT_ATTR),0
-> @@ -569,17 +568,18 @@ ENTRY(initial_page_table)
->  #  error "Kernel PMDs should be 1, 2 or 3"
->  # endif
->  	.align PAGE_SIZE		/* needs to be page-sized too */
-> +SYM_DATA_END(initial_page_table)
->  #endif
->  
->  .data
->  .balign 4
-> -ENTRY(initial_stack)
-> -	/*
-> -	 * The SIZEOF_PTREGS gap is a convention which helps the in-kernel
-> -	 * unwinder reliably detect the end of the stack.
-> -	 */
-> -	.long init_thread_union + THREAD_SIZE - SIZEOF_PTREGS - \
-> -	      TOP_OF_KERNEL_STACK_PADDING;
-> +/*
-> + * The SIZEOF_PTREGS gap is a convention which helps the in-kernel unwinder
-> + * reliably detect the end of the stack.
-> + */
-> +SYM_DATA(initial_stack,
-> +		.long init_thread_union + THREAD_SIZE -
-> +		SIZEOF_PTREGS - TOP_OF_KERNEL_STACK_PADDING)
->  
->  __INITRODATA
->  int_msg:
-> @@ -600,22 +600,25 @@ int_msg:
->  	ALIGN
->  # early boot GDT descriptor (must use 1:1 address mapping)
->  	.word 0				# 32 bit align gdt_desc.address
-> -boot_gdt_descr:
-> +SYM_DATA_START(boot_gdt_descr)
->  	.word __BOOT_DS+7
->  	.long boot_gdt - __PAGE_OFFSET
-> +SYM_DATA_END(boot_gdt_descr)
-
-So there's one "globl boot_gdt_descr" above already and this turns into:
-
- .data
-.globl boot_gdt_descr
-^^^^^^^^^^^^^^^^^^^^^
-
- .align 4,0x90
- # early boot GDT descriptor (must use 1:1 address mapping)
- .word 0 # 32 bit align gdt_desc.address
-.globl boot_gdt_descr ; ; boot_gdt_descr:
-^^^^^^^^^^^^^^^^^^^^^
-
-I guess you can remove the above one.
-
-Also, this can be made a local symbol too.
-
->  # boot GDT descriptor (later on used by CPU#0):
->  	.word 0				# 32 bit align gdt_desc.address
-> -ENTRY(early_gdt_descr)
-> +SYM_DATA_START(early_gdt_descr)
->  	.word GDT_ENTRIES*8-1
->  	.long gdt_page			/* Overwritten for secondary CPUs */
-> +SYM_DATA_END(early_gdt_descr)
->  
->  /*
->   * The boot_gdt must mirror the equivalent in setup.S and is
->   * used only for booting.
->   */
->  	.align L1_CACHE_BYTES
-> -ENTRY(boot_gdt)
-> +SYM_DATA_START(boot_gdt)
->  	.fill GDT_ENTRY_BOOT_CS,8,0
->  	.quad 0x00cf9a000000ffff	/* kernel 4GB code at 0x00000000 */
->  	.quad 0x00cf92000000ffff	/* kernel 4GB data at 0x00000000 */
-> +SYM_DATA_END(boot_gdt)
-> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-> index 6fedcda37634..6661c76a2049 100644
-> --- a/arch/x86/kernel/head_64.S
-> +++ b/arch/x86/kernel/head_64.S
-> @@ -260,16 +260,14 @@ END(start_cpu0)
->  	/* Both SMP bootup and ACPI suspend change these variables */
->  	__REFDATA
->  	.balign	8
-> -	GLOBAL(initial_code)
-> -	.quad	x86_64_start_kernel
-> -	GLOBAL(initial_gs)
-> -	.quad	INIT_PER_CPU_VAR(fixed_percpu_data)
-> -	GLOBAL(initial_stack)
-> -	/*
-> -	 * The SIZEOF_PTREGS gap is a convention which helps the in-kernel
-> -	 * unwinder reliably detect the end of the stack.
-> -	 */
-> -	.quad  init_thread_union + THREAD_SIZE - SIZEOF_PTREGS
-> +SYM_DATA(initial_code,	.quad x86_64_start_kernel)
-> +SYM_DATA(initial_gs,	.quad INIT_PER_CPU_VAR(fixed_percpu_data))
-
-<---- newline here.
-
-> +/*
-> + * The SIZEOF_PTREGS gap is a convention which helps the in-kernel unwinder
-> + * reliably detect the end of the stack.
-> + */
-> +SYM_DATA(initial_stack,
-> +		.quad init_thread_union + THREAD_SIZE - SIZEOF_PTREGS)
-
-No need to break that line.
-
-...
+Thanks!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+Kees Cook
