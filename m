@@ -2,170 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB4397917
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 14:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0609798C
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 14:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727251AbfHUMTJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Aug 2019 08:19:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59210 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726785AbfHUMTJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Aug 2019 08:19:09 -0400
-Received: from localhost.localdomain (unknown [115.192.185.12])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 364E22064A;
-        Wed, 21 Aug 2019 12:18:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566389948;
-        bh=2vTVijIKerGwLwYL3OK2HwY2DFPeS1bOXJsN7S4xNGw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WCuKrc9o7kI2KV1JIfxjPbljZffvLhDuJTYAZwdcQQM125nzwWgEHMbJvde4lWE8w
-         cLVM0ljVYRY2ZJZQ1lxTm7rc1kkzLg9uau4LEbBIYuEnf5SIt2S5fiCYcbaFYoTA42
-         /4il9T6iT/48YLJ1yDhsoDD79Bf4ZZtdSI9twTPE=
-From:   guoren@kernel.org
-To:     arnd@arndb.de, hch@infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, douzhk@nationalchip.com,
-        Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH] csky: Fixup 610 vipt cache flush mechanism
-Date:   Wed, 21 Aug 2019 20:18:16 +0800
-Message-Id: <1566389896-6972-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1728413AbfHUMfg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Aug 2019 08:35:36 -0400
+Received: from komisite2.ru ([213.159.214.104]:57098 "EHLO komisite2.ru"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726227AbfHUMfg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Aug 2019 08:35:36 -0400
+X-Greylist: delayed 31585 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Aug 2019 08:35:35 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=vorkuta-cbs.ru; s=dkim;
+        h=Message-ID:Content-Type:Content-Transfer-Encoding:From:Date:To:Subject; bh=6+26l+LakJDdDcSJxh3bNodyTR/xbc0H7x7fOfW5TaA=;
+        b=D1k3ccvp5ckZIp3C4RlykBQn9Pc7K3vflghiWr32rG3YZ3SpwprGhoVftzIrgFPsNN3C9DkepT8Qf1P2Ho0BNKsXa8C4eMOFHHdjHLQrFD6XYoigkYQ21qsRqqicfLjNWqEmreVR/49LlHgAt36fiVgK/Fdh+rom+4PzvVQRfIQ=;
+Received: from [191.53.253.67] (helo=[127.0.0.1])
+        by komisite2.ru with esmtpsa (TLS1.0:ECDHE_RSA_AES_256_CBC_SHA1:256)
+        (Exim 4.84_2)
+        (envelope-from <web@vorkuta-cbs.ru>)
+        id 1i07VC-0004j4-Va
+        for linux-arch@vger.kernel.org; Tue, 20 Aug 2019 20:00:59 +0300
+Subject: Your account is being used by another person!
+To:     linux-arch@vger.kernel.org
+Date:   Tue, 20 Aug 2019 20:01:00 +0300
+From:   <web@vorkuta-cbs.ru>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Message-ID: <EUcmbJBmPiFpmUs-kFvBmXrfccoFBtTsmBj-xjaYwXpirBUSmmgPdnjkm-eBfxNcdVtELnHakzPDgSQR@vorkuta-cbs.ru>
+Form-Sub: v=7; ip=191.53.253.67
+Accept-Language: en-US
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <ren_guo@c-sky.com>
+Hello!
 
-610 has vipt aliasing issue, so we need to finish the cache flush
-apis mentioned in cachetlb.rst to avoid data corruption.
+I am a hacker who has access to your operating system.
+I also have full access to your account.
 
-Here is the list of modified apis in the patch:
+I've been watching you for a few months now.
+The fact is that you were infected with malware through an adult site =
+that you visited.
 
- - flush_kernel_dcache_page      (new add)
- - flush_dcache_mmap_lock        (new add)
- - flush_dcache_mmap_unlock      (new add)
- - flush_kernel_vmap_range       (new add)
- - invalidate_kernel_vmap_range  (new add)
- - flush_anon_page               (new add)
- - flush_cache_range             (new add)
- - flush_cache_vmap              (flush all)
- - flush_cache_vunmap            (flush all)
- - flush_cache_mm                (only dcache flush)
- - flush_icache_page             (just nop)
- - copy_from_user_page           (remove no need flush)
- - copy_to_user_page             (remove no need flush)
+If you are not familiar with this, I will explain.
+Trojan Virus gives me full access and control over a computer or other=
+ device.
+This means that I can see everything on your screen, turn on the camer=
+a and microphone, but you do not know about it.
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Christoph Hellwig <hch@infradead.org>
----
- arch/csky/abiv1/cacheflush.c         | 20 ++++++++++++++++++
- arch/csky/abiv1/inc/abi/cacheflush.h | 39 ++++++++++++++++++++++++++----------
- 2 files changed, 48 insertions(+), 11 deletions(-)
+I also have access to all your contacts and all your correspondence.
 
-diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
-index fee99fc..9f1fe80 100644
---- a/arch/csky/abiv1/cacheflush.c
-+++ b/arch/csky/abiv1/cacheflush.c
-@@ -54,3 +54,23 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
- 			icache_inv_all();
- 	}
- }
-+
-+void flush_kernel_dcache_page(struct page *page)
-+{
-+	struct address_space *mapping;
-+
-+	mapping = page_mapping_file(page);
-+
-+	if (!mapping || mapping_mapped(mapping))
-+		dcache_wbinv_all();
-+}
-+EXPORT_SYMBOL(flush_kernel_dcache_page);
-+
-+void flush_cache_range(struct vm_area_struct *vma, unsigned long start,
-+	unsigned long end)
-+{
-+	dcache_wbinv_all();
-+
-+	if (vma->vm_flags & VM_EXEC)
-+		icache_inv_all();
-+}
-diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/abi/cacheflush.h
-index fce5604..17eeebe 100644
---- a/arch/csky/abiv1/inc/abi/cacheflush.h
-+++ b/arch/csky/abiv1/inc/abi/cacheflush.h
-@@ -11,19 +11,42 @@
- #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
- extern void flush_dcache_page(struct page *);
- 
--#define flush_cache_mm(mm)			cache_wbinv_all()
-+#define flush_cache_mm(mm)			dcache_wbinv_all()
- #define flush_cache_page(vma, page, pfn)	cache_wbinv_all()
- #define flush_cache_dup_mm(mm)			cache_wbinv_all()
- 
-+#define ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
-+extern void flush_kernel_dcache_page(struct page *);
-+
-+#define flush_dcache_mmap_lock(mapping)   spin_lock_irq(&(mapping)->tree_lock)
-+#define flush_dcache_mmap_unlock(mapping) spin_unlock_irq(&(mapping)->tree_lock)
-+
-+static inline void flush_kernel_vmap_range(void *addr, int size)
-+{
-+	dcache_wbinv_all();
-+}
-+static inline void invalidate_kernel_vmap_range(void *addr, int size)
-+{
-+	dcache_wbinv_all();
-+}
-+
-+#define ARCH_HAS_FLUSH_ANON_PAGE
-+static inline void flush_anon_page(struct vm_area_struct *vma,
-+			 struct page *page, unsigned long vmaddr)
-+{
-+	if (PageAnon(page))
-+		cache_wbinv_all();
-+}
-+
- /*
-  * if (current_mm != vma->mm) cache_wbinv_range(start, end) will be broken.
-  * Use cache_wbinv_all() here and need to be improved in future.
-  */
--#define flush_cache_range(vma, start, end)	cache_wbinv_all()
--#define flush_cache_vmap(start, end)		cache_wbinv_range(start, end)
--#define flush_cache_vunmap(start, end)		cache_wbinv_range(start, end)
-+extern void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end);
-+#define flush_cache_vmap(start, end)		cache_wbinv_all()
-+#define flush_cache_vunmap(start, end)		cache_wbinv_all()
- 
--#define flush_icache_page(vma, page)		cache_wbinv_all()
-+#define flush_icache_page(vma, page)		do {} while (0);
- #define flush_icache_range(start, end)		cache_wbinv_range(start, end)
- 
- #define flush_icache_user_range(vma,page,addr,len) \
-@@ -31,19 +54,13 @@ extern void flush_dcache_page(struct page *);
- 
- #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
- do { \
--	cache_wbinv_all(); \
- 	memcpy(dst, src, len); \
--	cache_wbinv_all(); \
- } while (0)
- 
- #define copy_to_user_page(vma, page, vaddr, dst, src, len) \
- do { \
--	cache_wbinv_all(); \
- 	memcpy(dst, src, len); \
- 	cache_wbinv_all(); \
- } while (0)
- 
--#define flush_dcache_mmap_lock(mapping)		do {} while (0)
--#define flush_dcache_mmap_unlock(mapping)	do {} while (0)
--
- #endif /* __ABI_CSKY_CACHEFLUSH_H */
--- 
-2.7.4
+Why your antivirus did not detect malware?
+Answer: My malware uses the driver, I update its signatures every 4 ho=
+urs so that your antivirus is silent.
 
+I made a video showing how you satisfy yourself in the left half of th=
+e screen, and in the right half you see the video that you watched.
+With one click of the mouse, I can send this video to all your emails =
+and contacts on social networks.
+I can also post access to all your e-mail correspondence and messenger=
+s that you use.
+
+If you want to prevent this,
+transfer the amount of $500 to my bitcoin address (if you do not know =
+how to do this, write to Google: "Buy Bitcoin").
+
+My bitcoin address (BTC Wallet) is:  3BJ9eeiButqSB85ASfdvYp4gFptzcK6qL=
+e
+
+After receiving the payment, I will delete the video and you will neve=
+r hear me again.
+I give you 50 hours (more than 2 days) to pay.
+I have a notice reading this letter, and the timer will work when you =
+see this letter.
+
+Filing a complaint somewhere does not make sense because this email ca=
+nnot be tracked like my bitcoin address.
+I do not make any mistakes.
+
+If I find that you have shared this message with someone else, the vid=
+eo will be immediately distributed.
+
+Best regards!
