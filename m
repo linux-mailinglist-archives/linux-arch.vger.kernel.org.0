@@ -2,161 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B6A966B9
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 18:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3E396731
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2019 19:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbfHTQr7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Aug 2019 12:47:59 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:36488 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbfHTQr6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Aug 2019 12:47:58 -0400
-Received: by mail-pl1-f194.google.com with SMTP id f19so2625874plr.3
-        for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2019 09:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:reply-to:mime-version
-         :content-disposition;
-        bh=94eu4gQpkuQ9j1HnR7KOvdKvZHNUgZsHuQosVNjqQpQ=;
-        b=IwJV8bd1Y3w4IHpyHjizWFaH+TvxAq+hbOjq0s/Vb89iivzKVZHZEy3a0UBamaSD8R
-         OM0UVCJiEscA7OeAxBuKHbCHK7qZz5dCmP5vfzwpdR4732LfLxchZUXv0Vv1lBF3QN1M
-         OnAj9iE5xxyys1hZ9ELdj6YEVG5yU0oioC5dI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mime-version:content-disposition;
-        bh=94eu4gQpkuQ9j1HnR7KOvdKvZHNUgZsHuQosVNjqQpQ=;
-        b=aJIE7XzukCEkgN4DV4cnlabPUfEBEaKWgCFqfBdWm/gi2hci8UzJtkv4nOT8PefnXO
-         Vnv1Co40/tmkIndwm9FRujkQ5KR7NImvmryXyf5Y5O28W6vz2tnHRJI2Ua5sqRgE53Dt
-         mjDe7djRjCYS9VZHhSiTfZhRrVRP1741ccHcy1+rqol92keiJqLECSiL9kt+T2TYn30p
-         UqMcd77/mUWlOXGINH4LGscc7SwK/fnzSoIhbS/tEN7g1879LWDSeX3OwP068yNDpK9C
-         HXwnhvB2AOEzW8qVaPNQuTctW0z2tyicUa5OlDPnIpAfdHYgYklSwKB/sAadEhLC+se5
-         adlQ==
-X-Gm-Message-State: APjAAAXsh2UC8yBmGrqh+OIdTT2R7B+rCmovNr28YIdn832S+MdwjRn/
-        a1BJk8CES+LVaqSW7AK1dpNueQ==
-X-Google-Smtp-Source: APXvYqwpueort6fkRqZzV2MzImcaL+fg8ja4cFzE38QELQbf+3smfZuohR6eRwl2V1DH/lCxSs0qDA==
-X-Received: by 2002:a17:902:8302:: with SMTP id bd2mr29596587plb.9.1566319678301;
-        Tue, 20 Aug 2019 09:47:58 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g2sm18007770pfm.32.2019.08.20.09.47.56
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 20 Aug 2019 09:47:57 -0700 (PDT)
-Date:   Tue, 20 Aug 2019 09:47:55 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Drew Davenport <ddavenport@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception handler
-Message-ID: <201908200943.601DD59DCE@keescook>
-Reply-To: 20190819234111.9019-8-keescook@chromium.org
+        id S1729639AbfHTROa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Aug 2019 13:14:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44736 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728277AbfHTROa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 20 Aug 2019 13:14:30 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 571D5233A0;
+        Tue, 20 Aug 2019 17:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566321269;
+        bh=WGX3Gxv4dvM3DO7D4Aw57VijAg2RzIOgDn+ZtwXtLuA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=1yXHm0Cw2txK8FKtm1lYL+ceKrY7DkUGFh280BlxT1m8fd1yJvGoIVx0XuwOhxQFl
+         3vnSgFW8lKZ5tU+8Sczz4E2yLgkfj7rC+uZiW9anhIz5JhqNZ2QuOhbB3Db0e6C+Ey
+         r3/UkDEl7xBODkwZSZVqMzmvS/NH9009SEaBt8yY=
+Received: by mail-qt1-f170.google.com with SMTP id e8so6870132qtp.7;
+        Tue, 20 Aug 2019 10:14:29 -0700 (PDT)
+X-Gm-Message-State: APjAAAUfp0l50+MstqZXIlWLS4T8CsWC5G/7uPi93UdxV3WCpKXSOVHc
+        9FhXM7pzNLqSrdW8Da/pu3QLniQVP2VaWhgM9Q==
+X-Google-Smtp-Source: APXvYqyY9ZsBecGQ3Xs5y7LG3j9BHwHgJiDVJDcbMsgosFCxqVWpdQe5Z5wA8XSvdYEItWSHAFvEDYIGvIF5NjfBNsQ=
+X-Received: by 2002:ac8:44c4:: with SMTP id b4mr26942067qto.224.1566321268306;
+ Tue, 20 Aug 2019 10:14:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20190820145821.27214-1-nsaenzjulienne@suse.de> <20190820145821.27214-5-nsaenzjulienne@suse.de>
+In-Reply-To: <20190820145821.27214-5-nsaenzjulienne@suse.de>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 20 Aug 2019 12:14:16 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+Nr88Nvd_ZA8eJGm4xLwssv7CnDJLsnZyFqiM=EQWYxg@mail.gmail.com>
+Message-ID: <CAL_Jsq+Nr88Nvd_ZA8eJGm4xLwssv7CnDJLsnZyFqiM=EQWYxg@mail.gmail.com>
+Subject: Re: [PATCH v2 04/11] of/fdt: add early_init_dt_get_dma_zone_size()
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        Frank Rowand <frowand.list@gmail.com>, phill@raspberryi.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eric Anholt <eric@anholt.net>,
+        Matthias Brugger <mbrugger@suse.com>,
+        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The original clean up of "cut here" missed the WARN_ON() case (that
-does not have a printk message), which was fixed recently by adding
-an explicit printk of "cut here". This had the downside of adding a
-printk() to every WARN_ON() caller, which reduces the utility of using
-an instruction exception to streamline the resulting code. By making
-this a new BUGFLAG, all of these can be removed and "cut here" can be
-handled by the exception handler.
+On Tue, Aug 20, 2019 at 9:58 AM Nicolas Saenz Julienne
+<nsaenzjulienne@suse.de> wrote:
+>
+> Some devices might have weird DMA addressing limitations that only apply
+> to a subset of the available peripherals. For example the Raspberry Pi 4
+> has two interconnects, one able to address the whole lower 4G memory
+> area and another one limited to the lower 1G.
+>
+> Being an uncommon situation we simply hardcode the device wide DMA
+> addressable memory size conditionally to the machine compatible name and
+> set 'dma_zone_size' accordingly.
+>
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+>
+> ---
+>
+> Changes in v2:
+> - New approach to getting dma_zone_size, instead of parsing the dts we
+>   hardcode it conditionally to the machine compatible name.
+>
+>  drivers/of/fdt.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index 06ffbd39d9af..f756e8c05a77 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -27,6 +27,7 @@
+>
+>  #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
+>  #include <asm/page.h>
+> +#include <asm/dma.h>   /* for dma_zone_size */
+>
+>  #include "of_private.h"
+>
+> @@ -1195,6 +1196,12 @@ void __init early_init_dt_scan_nodes(void)
+>         of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+>  }
+>
+> +void __init early_init_dt_get_dma_zone_size(void)
 
-This was very pronounced on PowerPC, but the effect can be seen on
-x86 as well. The resulting text size of a defconfig build shows some
-small savings from this patch:
+static
 
-   text    data     bss     dec     hex filename
-19691167        5134320 1646664 26472151        193eed7 vmlinux.before
-19676362        5134260 1663048 26473670        193f4c6 vmlinux.after
+With that,
 
-This change also opens the door for creating something like BUG_MSG(),
-where a custom printk() before issuing BUG(), without confusing the "cut
-here" line.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
-Fixes: Fixes: 6b15f678fb7d ("include/asm-generic/bug.h: fix "cut here" for WARN_ON for __WARN_TAINT architectures")
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v2:
- - rename BUGFLAG_PRINTK to BUGFLAG_NO_CUT_HERE (peterz, christophe)
----
- include/asm-generic/bug.h |  8 +++-----
- lib/bug.c                 | 11 +++++++++--
- 2 files changed, 12 insertions(+), 7 deletions(-)
-
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index 588dd59a5b72..a21e83f8a274 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -10,6 +10,7 @@
- #define BUGFLAG_WARNING		(1 << 0)
- #define BUGFLAG_ONCE		(1 << 1)
- #define BUGFLAG_DONE		(1 << 2)
-+#define BUGFLAG_NO_CUT_HERE	(1 << 3)	/* CUT_HERE already sent */
- #define BUGFLAG_TAINT(taint)	((taint) << 8)
- #define BUG_GET_TAINT(bug)	((bug)->flags >> 8)
- #endif
-@@ -86,13 +87,10 @@ void warn_slowpath_fmt(const char *file, const int line, unsigned taint,
- 	warn_slowpath_fmt(__FILE__, __LINE__, taint, arg)
- #else
- extern __printf(1, 2) void __warn_printk(const char *fmt, ...);
--#define __WARN() do {							\
--		printk(KERN_WARNING CUT_HERE);				\
--		__WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN));		\
--	} while (0)
-+#define __WARN()		__WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
- #define __WARN_printf(taint, arg...) do {				\
- 		__warn_printk(arg);					\
--		__WARN_FLAGS(BUGFLAG_TAINT(taint));			\
-+		__WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
- 	} while (0)
- #define WARN_ON_ONCE(condition) ({				\
- 	int __ret_warn_on = !!(condition);			\
-diff --git a/lib/bug.c b/lib/bug.c
-index 1077366f496b..8c98af0bf585 100644
---- a/lib/bug.c
-+++ b/lib/bug.c
-@@ -181,6 +181,15 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
- 		}
- 	}
- 
-+	/*
-+	 * BUG() and WARN_ON() families don't print a custom debug message
-+	 * before triggering the exception handler, so we must add the
-+	 * "cut here" line now. WARN() issues its own "cut here" before the
-+	 * extra debugging message it writes before triggering the handler.
-+	 */
-+	if ((bug->flags & BUGFLAG_NO_CUT_HERE) == 0)
-+		printk(KERN_DEFAULT CUT_HERE);
-+
- 	if (warning) {
- 		/* this is a WARN_ON rather than BUG/BUG_ON */
- 		__warn(file, line, (void *)bugaddr, BUG_GET_TAINT(bug), regs,
-@@ -188,8 +197,6 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
- 		return BUG_TRAP_TYPE_WARN;
- 	}
- 
--	printk(KERN_DEFAULT CUT_HERE);
--
- 	if (file)
- 		pr_crit("kernel BUG at %s:%u!\n", file, line);
- 	else
--- 
-2.17.1
-
-
--- 
-Kees Cook
+> +{
+> +       if (of_fdt_machine_is_compatible("brcm,bcm2711"))
+> +               dma_zone_size = 0x3c000000;
+> +}
+> +
+>  bool __init early_init_dt_scan(void *params)
+>  {
+>         bool status;
+> @@ -1204,6 +1211,7 @@ bool __init early_init_dt_scan(void *params)
+>                 return false;
+>
+>         early_init_dt_scan_nodes();
+> +       early_init_dt_get_dma_zone_size();
+>         return true;
+>  }
+>
+> --
+> 2.22.0
+>
