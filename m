@@ -2,90 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A391997D2D
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 16:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F9A97D72
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 16:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729132AbfHUOhG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Aug 2019 10:37:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37004 "EHLO mail.kernel.org"
+        id S1729171AbfHUOpp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Aug 2019 10:45:45 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:59090 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728724AbfHUOhG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Aug 2019 10:37:06 -0400
-Received: from linux-8ccs (ip5f5ade6e.dynamic.kabel-deutschland.de [95.90.222.110])
+        id S1728608AbfHUOpp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Aug 2019 10:45:45 -0400
+Received: from zn.tnic (p200300EC2F0A6300AD34BF75F4F01B21.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:6300:ad34:bf75:f4f0:1b21])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6C2C206BA;
-        Wed, 21 Aug 2019 14:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566398225;
-        bh=LLHM3HLNnSTk9CIZqdIrW76ESIQASTQvj9y7JVMhEwU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tX0ldqZERDP4xQ8nTag6pfFnc82CxILalGtaetxbHG8xXXzAIW0JIHVE3CJGb/4E/
-         EMjrjUGonCrYNoOy6eDoS609WwM0Ddr/MJYcXij1vlsZAS6fj2xJ0YB3fwrJmrZor9
-         QEX8ufh6sVHXovTET4evmeAPBDKEozvv0a7cSA5A=
-Date:   Wed, 21 Aug 2019 16:36:55 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Matthias Maennich <maennich@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, hpa@zytor.com,
-        joel@joelfernandes.org, kstewart@linuxfoundation.org,
-        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        lucas.de.marchi@gmail.com, maco@android.com, maco@google.com,
-        michal.lkml@markovi.net, mingo@redhat.com, oneukum@suse.com,
-        pombredanne@nexb.com, sam@ravnborg.org, sspatil@google.com,
-        stern@rowland.harvard.edu, tglx@linutronix.de,
-        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
-        yamada.masahiro@socionext.com
-Subject: Re: [PATCH v3 10/11] RFC: usb-storage: export symbols in USB_STORAGE
- namespace
-Message-ID: <20190821143655.GA13637@linux-8ccs>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-11-maennich@google.com>
- <20190821123827.GB4059@kroah.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 640051EC02FE;
+        Wed, 21 Aug 2019 16:45:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1566398743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lTbUTRWT7/yDYikPZXnxrPfidgHBKAk129d3QMAlBN8=;
+        b=UkT303Q6PQdQLRjF8bKFTVDYvf4/veO5tJOiyCziZe8EFQW68CVP7lBVMYQ6nGizmgFJKg
+        FXELQvYm+ouBqgeO8bgrwK4zZB6waqhJ19Svr+ncvTHiXIWFyPkdLQkYqVzmPMYB1QhKcy
+        UQ+ZL3nw4KcOvt+o5NmnqkpKAJ1PVOU=
+Date:   Wed, 21 Aug 2019 16:45:37 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v8 03/27] x86/fpu/xstate: Change names to separate XSAVES
+ system and user states
+Message-ID: <20190821144537.GE6752@zn.tnic>
+References: <20190813205225.12032-1-yu-cheng.yu@intel.com>
+ <20190813205225.12032-4-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190821123827.GB4059@kroah.com>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.28-default x86_64
+In-Reply-To: <20190813205225.12032-4-yu-cheng.yu@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+++ Greg KH [21/08/19 05:38 -0700]:
->On Wed, Aug 21, 2019 at 12:49:25PM +0100, Matthias Maennich wrote:
->> Modules using these symbols are required to explicitly import the
->> namespace. This patch was generated with the following steps and serves
->> as a reference to use the symbol namespace feature:
->>
->>  1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
->>  2) make  (see warnings during modpost about missing imports)
->>  3) make nsdeps
->>
->> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
->> variants can be used to explicitly specify the namespace. The advantage
->> of the method used here is that newly added symbols are automatically
->> exported and existing ones are exported without touching their
->> respective EXPORT_SYMBOL macro expansion.
->>
->> Signed-off-by: Matthias Maennich <maennich@google.com>
->
->This looks good to me.  This can be included with the rest of this
->series when/if it goes through the kbuild or module tree:
->
->Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->
->Actually, which tree will this be going through?
+On Tue, Aug 13, 2019 at 01:52:01PM -0700, Yu-cheng Yu wrote:
+> Control-flow Enforcement (CET) MSR contents are XSAVES system states.
+> To support CET, introduce XSAVES system states first.
+> 
+> XSAVES is a "supervisor" instruction and, comparing to XSAVE, saves
+> additional "supervisor" states that can be modified only from CPL 0.
+> However, these states are per-task and not kernel's own.  Rename
+> "supervisor" states to "system" states to clearly separate them from
+> "user" states.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> ---
+>  arch/x86/include/asm/fpu/internal.h |  4 +-
+>  arch/x86/include/asm/fpu/xstate.h   | 20 +++----
+>  arch/x86/kernel/fpu/init.c          |  2 +-
+>  arch/x86/kernel/fpu/signal.c        | 10 ++--
+>  arch/x86/kernel/fpu/xstate.c        | 86 ++++++++++++++---------------
+>  5 files changed, 60 insertions(+), 62 deletions(-)
 
-I would be happy to take the patchset through the modules tree once it
-collects the appropriate ack/reviewed-by's and once I get a chance to
-sit down and review/test it next week :)
+...
 
-Thanks!
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index e5cb67d67c03..d560e8861a3c 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -54,13 +54,16 @@ static short xsave_cpuid_features[] __initdata = {
+>  };
+>  
+>  /*
+> - * Mask of xstate features supported by the CPU and the kernel:
+> + * XSAVES system states can only be modified from CPL 0 and saved by
+> + * XSAVES.  The rest are user states.  The following is a mask of
+> + * supported user state features derived from boot_cpu_has() and
 
-Jessica
+...derived from detected CPUID feature flags and
+SUPPORTED_XFEATURES_MASK.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+Good mailing practices for 400: avoid top-posting and trim the reply.
