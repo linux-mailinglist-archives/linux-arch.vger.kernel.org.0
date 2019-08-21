@@ -2,85 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0609798C
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 14:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF65597994
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 14:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728413AbfHUMfg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Aug 2019 08:35:36 -0400
-Received: from komisite2.ru ([213.159.214.104]:57098 "EHLO komisite2.ru"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726227AbfHUMfg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Aug 2019 08:35:36 -0400
-X-Greylist: delayed 31585 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Aug 2019 08:35:35 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=vorkuta-cbs.ru; s=dkim;
-        h=Message-ID:Content-Type:Content-Transfer-Encoding:From:Date:To:Subject; bh=6+26l+LakJDdDcSJxh3bNodyTR/xbc0H7x7fOfW5TaA=;
-        b=D1k3ccvp5ckZIp3C4RlykBQn9Pc7K3vflghiWr32rG3YZ3SpwprGhoVftzIrgFPsNN3C9DkepT8Qf1P2Ho0BNKsXa8C4eMOFHHdjHLQrFD6XYoigkYQ21qsRqqicfLjNWqEmreVR/49LlHgAt36fiVgK/Fdh+rom+4PzvVQRfIQ=;
-Received: from [191.53.253.67] (helo=[127.0.0.1])
-        by komisite2.ru with esmtpsa (TLS1.0:ECDHE_RSA_AES_256_CBC_SHA1:256)
-        (Exim 4.84_2)
-        (envelope-from <web@vorkuta-cbs.ru>)
-        id 1i07VC-0004j4-Va
-        for linux-arch@vger.kernel.org; Tue, 20 Aug 2019 20:00:59 +0300
-Subject: Your account is being used by another person!
-To:     linux-arch@vger.kernel.org
-Date:   Tue, 20 Aug 2019 20:01:00 +0300
-From:   <web@vorkuta-cbs.ru>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Message-ID: <EUcmbJBmPiFpmUs-kFvBmXrfccoFBtTsmBj-xjaYwXpirBUSmmgPdnjkm-eBfxNcdVtELnHakzPDgSQR@vorkuta-cbs.ru>
-Form-Sub: v=7; ip=191.53.253.67
-Accept-Language: en-US
+        id S1728419AbfHUMhW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Aug 2019 08:37:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36818 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726227AbfHUMhW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Aug 2019 08:37:22 -0400
+Received: from localhost (unknown [12.166.174.13])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2A3C22089E;
+        Wed, 21 Aug 2019 12:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566391041;
+        bh=sQtc99n9rRVj8D9SFfy24t3qFQlV+7rKUNuVbRXs2Po=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1zvQJ/1pwLq4AnhKEGIvvGaPF0Li5LSZSjzUGFx0viyRSwCik522s2wjgIHXBXKcr
+         hHqFRhr8K+C5+X9suJ4rd2Ea62nBiQCc861xei+lorhE/g8U8TlxVfBCBYd9MDkQXh
+         tWaU7R/YY8+3fEgL5goOhw2WcLaeTXsglmjMb2Lk=
+Date:   Wed, 21 Aug 2019 05:37:20 -0700
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        arnd@arndb.de, geert@linux-m68k.org, hpa@zytor.com,
+        jeyu@kernel.org, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@android.com, maco@google.com, michal.lkml@markovi.net,
+        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
+        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
+        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
+        x86@kernel.org, yamada.masahiro@socionext.com
+Subject: Re: [PATCH v3 09/11] usb-storage: remove single-use define for
+ debugging
+Message-ID: <20190821123720.GA4059@kroah.com>
+References: <20190813121733.52480-1-maennich@google.com>
+ <20190821114955.12788-1-maennich@google.com>
+ <20190821114955.12788-10-maennich@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190821114955.12788-10-maennich@google.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello!
+On Wed, Aug 21, 2019 at 12:49:24PM +0100, Matthias Maennich wrote:
+> USB_STORAGE was defined as "usb-storage: " and used in a single location
+> as argument to printk. In order to be able to use the name
+> 'USB_STORAGE', drop the definition and use the string directly for the
+> printk call.
+> 
+> Signed-off-by: Matthias Maennich <maennich@google.com>
 
-I am a hacker who has access to your operating system.
-I also have full access to your account.
+As you know, this patch is already in the usb-next tree, and will be in
+the 5.4-rc1 merge.
 
-I've been watching you for a few months now.
-The fact is that you were infected with malware through an adult site =
-that you visited.
+But, as this series will end up going through a different tree than the
+usb tree, here's my reviewed-by so that it can be included with the rest
+of these patches:
 
-If you are not familiar with this, I will explain.
-Trojan Virus gives me full access and control over a computer or other=
- device.
-This means that I can see everything on your screen, turn on the camer=
-a and microphone, but you do not know about it.
-
-I also have access to all your contacts and all your correspondence.
-
-Why your antivirus did not detect malware?
-Answer: My malware uses the driver, I update its signatures every 4 ho=
-urs so that your antivirus is silent.
-
-I made a video showing how you satisfy yourself in the left half of th=
-e screen, and in the right half you see the video that you watched.
-With one click of the mouse, I can send this video to all your emails =
-and contacts on social networks.
-I can also post access to all your e-mail correspondence and messenger=
-s that you use.
-
-If you want to prevent this,
-transfer the amount of $500 to my bitcoin address (if you do not know =
-how to do this, write to Google: "Buy Bitcoin").
-
-My bitcoin address (BTC Wallet) is:  3BJ9eeiButqSB85ASfdvYp4gFptzcK6qL=
-e
-
-After receiving the payment, I will delete the video and you will neve=
-r hear me again.
-I give you 50 hours (more than 2 days) to pay.
-I have a notice reading this letter, and the timer will work when you =
-see this letter.
-
-Filing a complaint somewhere does not make sense because this email ca=
-nnot be tracked like my bitcoin address.
-I do not make any mistakes.
-
-If I find that you have shared this message with someone else, the vid=
-eo will be immediately distributed.
-
-Best regards!
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
