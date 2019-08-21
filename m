@@ -2,139 +2,208 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BF89756C
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 10:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210D9975ED
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 11:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726463AbfHUIyd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Aug 2019 04:54:33 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:33270 "EHLO mx1.redhat.com"
+        id S1727078AbfHUJUO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Aug 2019 05:20:14 -0400
+Received: from foss.arm.com ([217.140.110.172]:54986 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726519AbfHUIyc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Aug 2019 04:54:32 -0400
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 31AE32F30D9
-        for <linux-arch@vger.kernel.org>; Wed, 21 Aug 2019 08:54:32 +0000 (UTC)
-Received: by mail-wr1-f72.google.com with SMTP id k8so905186wrx.19
-        for <linux-arch@vger.kernel.org>; Wed, 21 Aug 2019 01:54:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=+w6S/d4xE8RPcCnUmNNhlmM38FUwU6Cbxaxoa0JXU/s=;
-        b=bCoPNTxT2ezFwu7csejuQtfX1d5BnDx8PR75MQI0PxmQlmlmy4ktO9GvuBoc6B8PBx
-         Ruwl7LoUTGp15NpBr2UefgLa2YigGKL7T7O4aMrWjmD7skr2ycj7oPXYPUS65NK5G/Ns
-         JXVBF+cXFSIkGP+sjQ0Z7GVuKU37quFTd1VBp173QsAmE/ezrcqMVOyCZ13Fjd4MshcV
-         dWXZVfkKQ9qsLFvQgHosMVBleeSkBvIkAoHquIdHsyZ1vbZv/dar2VZ8ftfO5rOct2Fz
-         55ssL989NqZUsnnpl/YyGj2Yyp1e3xFEdoLsEdKx6XFWepvvGgszm5HZqVr04X4wgVpz
-         FX4Q==
-X-Gm-Message-State: APjAAAUoQPN6geq27KkHYiJlRAjs6JoqRMYg0FKzv7XFcER96J7+tYRI
-        S3Nki6yi3FStAs420X5Y/C/3Sz51Q+8H8Gtmq6zlBP19TfiAb8wRyJdysPPYevfZlGNKTpVtv4F
-        /3Apq7HBRGAWRvCeoVCXKBQ==
-X-Received: by 2002:a1c:9d8c:: with SMTP id g134mr4872143wme.174.1566377670688;
-        Wed, 21 Aug 2019 01:54:30 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwJvqD1cl28+sp4QHLw+FNqBWCQTObXkxuvx4NlL/0iLvU5iNtqQtOMuGgDZJYc9msHKi9j9A==
-X-Received: by 2002:a1c:9d8c:: with SMTP id g134mr4872098wme.174.1566377670394;
-        Wed, 21 Aug 2019 01:54:30 -0700 (PDT)
-Received: from vitty.brq.redhat.com (ip-89-176-161-20.net.upcbroadband.cz. [89.176.161.20])
-        by smtp.gmail.com with ESMTPSA id m23sm3103680wml.41.2019.08.21.01.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 01:54:29 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Michael Kelley <mikelley@microsoft.com>,
-        Tianyu Lan <lantianyu1986@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv\@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel\@vger kernel org" <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
+        id S1725283AbfHUJUN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Aug 2019 05:20:13 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9566C28;
+        Wed, 21 Aug 2019 02:20:12 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A67B3F706;
+        Wed, 21 Aug 2019 02:20:11 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 10:20:09 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: RE: [PATCH 0/2] clocksource/Hyper-V: Add Hyper-V specific sched clock function
-In-Reply-To: <87o90jq99w.fsf@vitty.brq.redhat.com>
-References: <20190729075243.22745-1-Tianyu.Lan@microsoft.com> <87zhkxksxd.fsf@vitty.brq.redhat.com> <20190729110927.GC31398@hirez.programming.kicks-ass.net> <87wog1kpib.fsf@vitty.brq.redhat.com> <CAOLK0py6ngy9kAnZcRMBK8U45s2L5Wo4X0NP_qPM0zv7WjeVQQ@mail.gmail.com> <DM5PR21MB0137E03AAD8C2EA61EC81ED7D7D30@DM5PR21MB0137.namprd21.prod.outlook.com> <87sgq5a2hq.fsf@vitty.brq.redhat.com> <DM5PR21MB013730EB79A17AF02C170BD7D7AB0@DM5PR21MB0137.namprd21.prod.outlook.com> <87o90jq99w.fsf@vitty.brq.redhat.com>
-Date:   Wed, 21 Aug 2019 10:54:28 +0200
-Message-ID: <87imqqrj97.fsf@vitty.brq.redhat.com>
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC PATCH 2/2] ELF: Add ELF program property parsing support
+Message-ID: <20190821092007.GC27757@arm.com>
+References: <1566295063-7387-1-git-send-email-Dave.Martin@arm.com>
+ <1566295063-7387-3-git-send-email-Dave.Martin@arm.com>
+ <bd4caadd8a9110bbbcfb4e8748d0bb416161d8e3.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bd4caadd8a9110bbbcfb4e8748d0bb416161d8e3.camel@intel.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+On Tue, Aug 20, 2019 at 10:40:54PM +0100, Yu-cheng Yu wrote:
+> On Tue, 2019-08-20 at 10:57 +0100, Dave Martin wrote:
+> > ELF program properties will needed for detecting whether to enable
+> > optional architecture or ABI features for a new ELF process.
+> > 
+> > For now, there are no generic properties that we care about, so do
+> > nothing unless CONFIG_ARCH_USE_GNU_PROPERTY=y.
+> > 
+> > Otherwise, the presence of properties using the PT_PROGRAM_PROPERTY
+> > phdrs entry (if any), and notify each property to the arch code.
+> > 
+> > For now, the added code is not used.
+> > 
+> > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> > ---
+> >  fs/binfmt_elf.c          | 109
+> > +++++++++++++++++++++++++++++++++++++++++++++++
+> >  fs/compat_binfmt_elf.c   |   4 ++
+> >  include/linux/elf.h      |  21 +++++++++
+> >  include/uapi/linux/elf.h |   4 ++
+> >  4 files changed, 138 insertions(+)
+> > 
+> > diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> > index d4e11b2..52f4b96 100644
+> > --- a/fs/binfmt_elf.c
+> > +++ b/fs/binfmt_elf.c
+> > @@ -39,12 +39,18 @@
+> >  #include <linux/sched/coredump.h>
+> >  #include <linux/sched/task_stack.h>
+> >  #include <linux/sched/cputime.h>
+> > +#include <linux/sizes.h>
+> > +#include <linux/types.h>
+> >  #include <linux/cred.h>
+> >  #include <linux/dax.h>
+> >  #include <linux/uaccess.h>
+> >  #include <asm/param.h>
+> >  #include <asm/page.h>
+> >  
+> > +#ifndef ELF_COMPAT
+> > +#define ELF_COMPAT 0
+> > +#endif
+> > +
+> >  #ifndef user_long_t
+> >  #define user_long_t long
+> >  #endif
+> > @@ -690,6 +696,93 @@ static unsigned long randomize_stack_top(unsigned long
+> > stack_top)
+> >  #endif
+> >  }
+> >  
+> > +static int parse_elf_property(const void **prop, size_t *notesz,
+> > +			      struct arch_elf_state *arch)
+> > +{
+> > +	const struct gnu_property *pr = *prop;
+> > +	size_t sz = *notesz;
+> > +	int ret;
+> > +	size_t step;
+> > +
+> > +	BUG_ON(sz < sizeof(*pr));
+> > +
+> > +	if (sizeof(*pr) > sz)
+> > +		return -EIO;
+> > +
+> > +	if (pr->pr_datasz > sz - sizeof(*pr))
+> > +		return -EIO;
+> > +
+> > +	step = round_up(sizeof(*pr) + pr->pr_datasz, elf_gnu_property_align);
+> > +	if (step > sz)
+> > +		return -EIO;
+> > +
+> > +	ret = arch_parse_elf_property(pr->pr_type, *prop + sizeof(*pr),
+> > +				      pr->pr_datasz, ELF_COMPAT, arch);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	*prop += step;
+> > +	*notesz -= step;
+> > +	return 0;
+> > +}
+> > +
+> > +#define NOTE_DATA_SZ SZ_1K
+> > +#define GNU_PROPERTY_TYPE_0_NAME "GNU"
+> > +#define NOTE_NAME_SZ (sizeof(GNU_PROPERTY_TYPE_0_NAME))
+> > +
+> > +static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
+> > +				struct arch_elf_state *arch)
+> > +{
+> > +	ssize_t n;
+> > +	loff_t pos = phdr->p_offset;
+> > +	union {
+> > +		struct elf_note nhdr;
+> > +		char data[NOTE_DATA_SZ];
+> > +	} note;
+> > +	size_t off, notesz;
+> > +	const void *prop;
+> > +	int ret;
+> > +
+> > +	if (!IS_ENABLED(ARCH_USE_GNU_PROPERTY))
+> > +		return 0;
+> > +
+> > +	BUG_ON(phdr->p_type != PT_GNU_PROPERTY);
+> > +
+> > +	/* If the properties are crazy large, that's too bad (for now): */
+> > +	if (phdr->p_filesz > sizeof(note))
+> > +		return -ENOEXEC;
+> > +	n = kernel_read(f, &note, phdr->p_filesz, &pos);
+> > +
+> > +	BUILD_BUG_ON(sizeof(note) < sizeof(note.nhdr) + NOTE_NAME_SZ);
+> > +	if (n < 0 || n < sizeof(note.nhdr) + NOTE_NAME_SZ)
+> > +		return -EIO;
+> > +
+> > +	if (note.nhdr.n_type != NT_GNU_PROPERTY_TYPE_0 ||
+> > +	    note.nhdr.n_namesz != NOTE_NAME_SZ ||
+> > +	    strncmp(note.data + sizeof(note.nhdr),
+> > +		    GNU_PROPERTY_TYPE_0_NAME, n - sizeof(note.nhdr)))
+> > +		return -EIO;
+> > +
+> > +	off = round_up(sizeof(note.nhdr) + NOTE_NAME_SZ,
+> > +		       elf_gnu_property_align);
+> > +	if (off > n)
+> > +		return -EIO;
+> > +
+> > +	prop = (const struct gnu_property *)(note.data + off);
+> > +	notesz = n - off;
+> > +	if (note.nhdr.n_descsz > notesz)
+> > +		return -EIO;
+> > +
+> > +	while (notesz) {
+> > +		BUG_ON(((char *)prop - note.data) % elf_gnu_property_align);
+> > +		ret = parse_elf_property(&prop, &notesz, arch);
+> 
+> Properties need to be in ascending order.  Can we keep track of it from here.
 
-> Michael Kelley <mikelley@microsoft.com> writes:
->
->> I talked to KY Srinivasan for any history about TSC page on 32-bit.  He said
->> there was no technical reason not to implement it, but our focus was always
->> 64-bit Linux, so the 32-bit was much less important.  Also, on 32-bit Linux,
->> the required 64x64 multiply and shift is more complex and takes more
->> more cycles (compare 32-bit implementation of mul_u64_u64_shr vs.
->> the 64-bit implementation), so the win over a MSR read is less.  I
->> don't know of any actual measurements being made to compare vs.
->> MSR read.
->
-> VMExit is 1000 CPU cycles or so, I would guess that TSC page
-> calculations are better. Let me try to build 32bit kernel and do some
-> quick measurements.
+We could, but do we need to?  If this order is violated, the ELF file is
+invalid and it doesn't matter what we do, providing that the kernel
+doesn't go wrong.
 
-So I tried and the difference is HUGE.
+In general, the ELF loader already doesn't try to detect invalid ELF
+files: for example EM_386 with ELFCLASS64 would just be executed as a
+32-bit binary.  Of course, if the file is really structured as a 64-bit
+ELF we'll probably fail to parse the file before we get as far as
+executing it.
 
-For in-kernel clocksource reads (like sched_clock()), the testing code
-was:
+Here, we just care that a particular property is there.  If the
+properties are shuffled, we will find the same set of properties
+regardless.
 
-        before = rdtsc_ordered();
-        for (i = 0; i < 1000; i++)
-             (void)read_hv_sched_clock_msr();
-        after = rdtsc_ordered();
-        printk("MSR based clocksource: %d cycles\n", ((u32)(after - before))/1000);
+The kernel isn't really responsible for debugging broken linkers...
 
-        before = rdtsc_ordered();
-        for (i = 0; i < 1000; i++)
-            (void)read_hv_sched_clock_tsc();
-        after = rdtsc_ordered();
-        printk("TSC page clocksource: %d cycles\n", ((u32)(after - before))/1000);
+OTOH the check would be trivial and I don't have a strong objection to
+adding it.
 
-The result (WS2016) is:
-[    1.101910] MSR based clocksource: 3361 cycles
-[    1.105224] TSC page clocksource: 49 cycles
+> Also, can we replace BUG_ON with returning an error.
 
-For userspace reads the absolute difference is even bigger as TSC page
-gives us functional vDSO:
+Sure, those BUG_ON() are for development purposes only.  I'd intended to
+remove them, but I forgot to comment on it.
 
-Testing code:
-	before = rdtsc();
-	for (i = 0; i < COUNT; i++)
-		clock_gettime(CLOCK_REALTIME, &tp);
-	after = rdtsc();
-	printf("%d\n", (after - before)/COUNT);
+This BUG_ON() should be ensured by the round_up() logic in
+parse_elf_property().
 
-Result:
+Thanks for taking a look!
 
-TSC page:
-# ./gettime_cycles 
-131
-
-MSR:
-# ./gettime_cycles 
-5664
-
-With all that I see no reason for us to not enable TSC page on 32bit,
-even if the number of users is negligible, this will allow us to get rid
-of ugly #ifdef CONFIG_HYPERV_TSCPAGE in the code.
-
-I'll send a patch for discussion.
-
--- 
-Vitaly
+Cheers
+---Dave
