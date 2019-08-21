@@ -2,32 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F9A97D72
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 16:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679DB97DBD
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 16:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729171AbfHUOpp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Aug 2019 10:45:45 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:59090 "EHLO mail.skyhub.de"
+        id S1727554AbfHUOzk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Aug 2019 10:55:40 -0400
+Received: from mga07.intel.com ([134.134.136.100]:41312 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728608AbfHUOpp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Aug 2019 10:45:45 -0400
-Received: from zn.tnic (p200300EC2F0A6300AD34BF75F4F01B21.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:6300:ad34:bf75:f4f0:1b21])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 640051EC02FE;
-        Wed, 21 Aug 2019 16:45:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1566398743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=lTbUTRWT7/yDYikPZXnxrPfidgHBKAk129d3QMAlBN8=;
-        b=UkT303Q6PQdQLRjF8bKFTVDYvf4/veO5tJOiyCziZe8EFQW68CVP7lBVMYQ6nGizmgFJKg
-        FXELQvYm+ouBqgeO8bgrwK4zZB6waqhJ19Svr+ncvTHiXIWFyPkdLQkYqVzmPMYB1QhKcy
-        UQ+ZL3nw4KcOvt+o5NmnqkpKAJ1PVOU=
-Date:   Wed, 21 Aug 2019 16:45:37 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        id S1727286AbfHUOzk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Aug 2019 10:55:40 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Aug 2019 07:55:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,412,1559545200"; 
+   d="scan'208";a="186252384"
+Received: from yyu32-desk1.sc.intel.com ([10.144.153.205])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Aug 2019 07:55:38 -0700
+Message-ID: <8d2e5bc4496075032393ff9ae81a26f7fbc711e6.camel@intel.com>
+Subject: Re: [PATCH v8 02/27] x86/cpufeatures: Add CET CPU feature flags for
+ Control-flow Enforcement Technology (CET)
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -51,60 +48,41 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH v8 03/27] x86/fpu/xstate: Change names to separate XSAVES
- system and user states
-Message-ID: <20190821144537.GE6752@zn.tnic>
+Date:   Wed, 21 Aug 2019 07:46:32 -0700
+In-Reply-To: <20190821102052.GD6752@zn.tnic>
 References: <20190813205225.12032-1-yu-cheng.yu@intel.com>
- <20190813205225.12032-4-yu-cheng.yu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190813205225.12032-4-yu-cheng.yu@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+         <20190813205225.12032-3-yu-cheng.yu@intel.com>
+         <20190821102052.GD6752@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.1-2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 01:52:01PM -0700, Yu-cheng Yu wrote:
-> Control-flow Enforcement (CET) MSR contents are XSAVES system states.
-> To support CET, introduce XSAVES system states first.
+On Wed, 2019-08-21 at 12:20 +0200, Borislav Petkov wrote:
+> On Tue, Aug 13, 2019 at 01:52:00PM -0700, Yu-cheng Yu wrote:
+> > Add CPU feature flags for Control-flow Enforcement Technology (CET).
+> > 
+> > [...]
+> > diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-
+> > deps.c
+> > index b5353244749b..9bf35f081080 100644
+> > --- a/arch/x86/kernel/cpu/cpuid-deps.c
+> > +++ b/arch/x86/kernel/cpu/cpuid-deps.c
+> > @@ -68,6 +68,8 @@ static const struct cpuid_dep cpuid_deps[] = {
+> >  	{ X86_FEATURE_CQM_MBM_TOTAL,	X86_FEATURE_CQM_LLC   },
+> >  	{ X86_FEATURE_CQM_MBM_LOCAL,	X86_FEATURE_CQM_LLC   },
+> >  	{ X86_FEATURE_AVX512_BF16,	X86_FEATURE_AVX512VL  },
+> > +	{ X86_FEATURE_SHSTK,		X86_FEATURE_XSAVES    },
+> > +	{ X86_FEATURE_IBT,		X86_FEATURE_XSAVES    },
 > 
-> XSAVES is a "supervisor" instruction and, comparing to XSAVE, saves
-> additional "supervisor" states that can be modified only from CPL 0.
-> However, these states are per-task and not kernel's own.  Rename
-> "supervisor" states to "system" states to clearly separate them from
-> "user" states.
+> This hunk needs re-tabbing after:
 > 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> ---
->  arch/x86/include/asm/fpu/internal.h |  4 +-
->  arch/x86/include/asm/fpu/xstate.h   | 20 +++----
->  arch/x86/kernel/fpu/init.c          |  2 +-
->  arch/x86/kernel/fpu/signal.c        | 10 ++--
->  arch/x86/kernel/fpu/xstate.c        | 86 ++++++++++++++---------------
->  5 files changed, 60 insertions(+), 62 deletions(-)
+> 1e0c08e3034d ("cpu/cpuid-deps: Add a tab to cpuid dependent features")
 
-...
+Thanks, I will fix it.
 
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index e5cb67d67c03..d560e8861a3c 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -54,13 +54,16 @@ static short xsave_cpuid_features[] __initdata = {
->  };
->  
->  /*
-> - * Mask of xstate features supported by the CPU and the kernel:
-> + * XSAVES system states can only be modified from CPL 0 and saved by
-> + * XSAVES.  The rest are user states.  The following is a mask of
-> + * supported user state features derived from boot_cpu_has() and
-
-...derived from detected CPUID feature flags and
-SUPPORTED_XFEATURES_MASK.
-
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+Yu-cheng
