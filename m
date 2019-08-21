@@ -2,79 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F130D96EB7
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 03:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2C296F4F
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2019 04:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726372AbfHUBOh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Aug 2019 21:14:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726202AbfHUBOg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 20 Aug 2019 21:14:36 -0400
-Received: from oasis.local.home (wsip-184-188-36-2.sd.sd.cox.net [184.188.36.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 93C5222DA7;
-        Wed, 21 Aug 2019 01:14:35 +0000 (UTC)
-Date:   Tue, 20 Aug 2019 21:14:29 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Drew Davenport <ddavenport@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Feng Tang <feng.tang@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] bug: Move WARN_ON() "cut here" into exception
- handler
-Message-ID: <20190820211429.7030b6f6@oasis.local.home>
-In-Reply-To: <06ba33fd-27cc-3816-1cdf-70616b1782dd@c-s.fr>
-References: <20190819234111.9019-1-keescook@chromium.org>
-        <20190819234111.9019-8-keescook@chromium.org>
-        <20190820100638.GK2332@hirez.programming.kicks-ass.net>
-        <06ba33fd-27cc-3816-1cdf-70616b1782dd@c-s.fr>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726673AbfHUCQz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Aug 2019 22:16:55 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:53776 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726512AbfHUCQy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Aug 2019 22:16:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=6fhtHzg47p/BjEhxXWfY/uri7DF3nACrkqX4IVZvknc=; b=eNFBx0uTZTv3kpObtFFodLkhr
+        ZoScbNT4CexDJX8LcyfWQdhMWO/D73I5R7mWungXcjWhlZaK/ANKYmFqL2R5+Md3n2dns6tgiHPIm
+        zo411HHOOcZnoPm8UHr3w3gW5CPkM4X9LstsPsQrPC0+vZoH+aZpUY2vsfffjwvXHLluqRzane8aX
+        0pcnUiGErQ/lgmwVkmsMD5u2YOyimIEPai+HOwIO22NLDXYqKyHnNCeEUHexFCqhybvrX4Y5pSfZx
+        fN+/UjW4lMMWbLcgwTWV2m96FK9oLeP91jXIz6cwZOGcfPKyg5X3QM7l4DRlOG8N6PO5gQ9eDyg3e
+        u/5kXRUYQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1i0GB8-0003b1-BP; Wed, 21 Aug 2019 02:16:50 +0000
+Date:   Tue, 20 Aug 2019 19:16:50 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+        douzhk@nationalchip.com, Guo Ren <ren_guo@c-sky.com>
+Subject: Re: [PATCH 1/3] csky: Fixup arch_get_unmapped_area() implementation
+Message-ID: <20190821021650.GA32710@infradead.org>
+References: <1566304469-5601-1-git-send-email-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1566304469-5601-1-git-send-email-guoren@kernel.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 20 Aug 2019 12:58:49 +0200
-Christophe Leroy <christophe.leroy@c-s.fr> wrote:
+> +/*
+> + * We need to ensure that shared mappings are correctly aligned to
+> + * avoid aliasing issues with VIPT caches.  We need to ensure that
+> + * a specific page of an object is always mapped at a multiple of
+> + * SHMLBA bytes.
+> + *
+> + * We unconditionally provide this function for all cases.
+> + */
 
-> >> index 1077366f496b..6c22e8a6f9de 100644
-> >> --- a/lib/bug.c
-> >> +++ b/lib/bug.c
-> >> @@ -181,6 +181,15 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
-> >>   		}
-> >>   	}
-> >>   
-> >> +	/*
-> >> +	 * BUG() and WARN_ON() families don't print a custom debug message
-> >> +	 * before triggering the exception handler, so we must add the
-> >> +	 * "cut here" line now. WARN() issues its own "cut here" before the
-> >> +	 * extra debugging message it writes before triggering the handler.
-> >> +	 */
-> >> +	if ((bug->flags & BUGFLAG_PRINTK) == 0)
-> >> +		printk(KERN_DEFAULT CUT_HERE);  
-> > 
-> > I'm not loving that BUGFLAG_PRINTK name, BUGFLAG_CUT_HERE makes more
-> > sense to me.
-> >   
-> 
-> Actually it would be BUGFLAG_NO_CUT_HERE then, otherwise all arches not 
-> using the generic macros will have to add the flag to get the "cut here" 
-> line.
->
-
-Perhaps they all should be audited to see if they don't have the same
-problem?
-
--- Steve
+On something unrelated: If csky has virtually indexed caches you also
+need to implement the flush_kernel_vmap_range and
+invalidate_kernel_vmap_range functions to avoid data corruption when
+doing I/O on vmalloc/vmap ranges.
