@@ -2,51 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 576CA9A346
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2019 00:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9319A9A354
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2019 00:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394191AbfHVWtp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 22 Aug 2019 18:49:45 -0400
-Received: from mail.physics.pub.ro ([141.85.216.3]:58164 "EHLO
-        physics1.physics.pub.ro" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394190AbfHVWtp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Aug 2019 18:49:45 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by physics1.physics.pub.ro (Postfix) with ESMTP id BD667E3C8D6;
-        Thu, 22 Aug 2019 13:51:58 +0300 (EEST)
-X-Virus-Scanned: amavisd-new at physics.pub.ro
-Received: from physics1.physics.pub.ro ([127.0.0.1])
-        by localhost (physics1.physics.pub.ro [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VOE97EPxYvzF; Thu, 22 Aug 2019 13:51:58 +0300 (EEST)
-Received: from [10.51.176.174] (unknown [105.4.6.61])
-        by physics1.physics.pub.ro (Postfix) with ESMTPSA id 9C462E3C892;
-        Thu, 22 Aug 2019 13:51:49 +0300 (EEST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
-To:     Recipients <niculae-tiberiu.puscas@physics.pub.ro>
-From:   ''Tayeb Souami'' <niculae-tiberiu.puscas@physics.pub.ro>
-Date:   Thu, 22 Aug 2019 12:51:45 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20190822105149.9C462E3C892@physics1.physics.pub.ro>
+        id S2394112AbfHVW4N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Aug 2019 18:56:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36540 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390930AbfHVW4N (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Aug 2019 18:56:13 -0400
+Received: from akpm3.svl.corp.google.com (unknown [104.133.8.65])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1273921848;
+        Thu, 22 Aug 2019 22:56:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566514572;
+        bh=CENPwtb2FY1x/UJEAS1RnlydKDfarsP46dEap4EfKK8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uXnOkuDBPN0Vpc9K0gTry3P7952XuXMFABVO0/8pqvs6iaSTt7mTjlxNTZuRDw2Nj
+         LbKY5hJtrADuRv5FnmwmFbtf2hQg+9kGYONiHe/ZN3eX6llljPu9zs+PyDpf40xLHq
+         4bOQRinE0EOA7OammwpLPInlQ+PqQCBetTfk6bjM=
+Date:   Thu, 22 Aug 2019 15:56:11 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     20190819234111.9019-8-keescook@chromium.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Drew Davenport <ddavenport@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Feng Tang <feng.tang@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception
+ handler
+Message-Id: <20190822155611.a1a6e26db99ba0876ba9c8bd@linux-foundation.org>
+In-Reply-To: <201908200943.601DD59DCE@keescook>
+References: <201908200943.601DD59DCE@keescook>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Lieber Freund,
+On Tue, 20 Aug 2019 09:47:55 -0700 Kees Cook <keescook@chromium.org> wrote:
 
-Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
+> Reply-To: 20190819234111.9019-8-keescook@chromium.org
 
-UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+Really?
 
-Das ist dein Spendencode: [TS530342018]
+> Subject: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception handler
 
-Antworten Sie mit dem SPENDE-CODE an diese E-Mail:Tayebsouam.spende@gmail.com
+It's strange to receive a standalone [7/7] patch.
 
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+> Date:   Tue, 20 Aug 2019 09:47:55 -0700
+> Sender: linux-kernel-owner@vger.kernel.org
+> 
+> The original clean up of "cut here" missed the WARN_ON() case (that
+> does not have a printk message), which was fixed recently by adding
+> an explicit printk of "cut here". This had the downside of adding a
+> printk() to every WARN_ON() caller, which reduces the utility of using
+> an instruction exception to streamline the resulting code. By making
+> this a new BUGFLAG, all of these can be removed and "cut here" can be
+> handled by the exception handler.
+> 
+> This was very pronounced on PowerPC, but the effect can be seen on
+> x86 as well. The resulting text size of a defconfig build shows some
+> small savings from this patch:
+> 
+>    text    data     bss     dec     hex filename
+> 19691167        5134320 1646664 26472151        193eed7 vmlinux.before
+> 19676362        5134260 1663048 26473670        193f4c6 vmlinux.after
+> 
+> This change also opens the door for creating something like BUG_MSG(),
+> where a custom printk() before issuing BUG(), without confusing the "cut
+> here" line.
 
-Grüße
-Herr Tayeb Souami
+I can't get this to apply to anything, so I guess that [1/7]-[6/7]
+mattered ;)
+
+> Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
+> Fixes: Fixes: 6b15f678fb7d ("include/asm-generic/bug.h: fix "cut here" for WARN_ON for __WARN_TAINT architectures")
+
+I'm seeing double.
+
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
