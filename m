@@ -2,155 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BB898BDA
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2019 08:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB4A98DC0
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2019 10:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731195AbfHVG6I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Aug 2019 02:58:08 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:39366 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731180AbfHVG6H (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Aug 2019 02:58:07 -0400
-Received: by mail-wm1-f66.google.com with SMTP id i63so4558217wmg.4;
-        Wed, 21 Aug 2019 23:58:04 -0700 (PDT)
+        id S1727484AbfHVIcc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Aug 2019 04:32:32 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38437 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731123AbfHVIcb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Aug 2019 04:32:31 -0400
+Received: by mail-wr1-f66.google.com with SMTP id g17so4556456wrr.5
+        for <linux-arch@vger.kernel.org>; Thu, 22 Aug 2019 01:32:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=UJ4ndSsA+KlZA68sHmztUkQhSgbwuP+daP+r2iy3R+s=;
-        b=pByGk2q+MG5FW6nVQKR+qe001OsoEpiE8351tEsN5n5vhzG87uX2naEiS724FQsYOz
-         iFL0qPyNEqFmWLzVAgajKk5nDtdFngTAmw6N8fCCzJjyyObJgf/pgG5i2bkm6srgV+XE
-         peddH9hmaBB/1inqGbNZjYtKPdfEjx8D/I0nuB7mCbOtuilQenWeu/KeL/rKUFZAqeax
-         DCFeD2GjUrHbQDKM6Wkz5/N3/JdfLG6G5BaEYCJlCbH/eELiUhUNE3hUiyDHgHALuShP
-         TSBL97HD87Te8LoI2/A30FVdK1m5y/TEOKVBBRjjHb4DI/a2dKkne9kCuxjk86w+v6GO
-         D8MA==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4b70yh01yux8LseDePSC/DiDISC+4IVFYV73p/rz2+o=;
+        b=E8c1BVe7EBu6yhtFK7db335Fb1S6eHZXaT/G0r9s6o7yCfITCEzNdfIuD0wirYp7vb
+         MjBwnsVUgiHDSiSTUkyjG1wIB9iwROJpD58qta21td0tKHQDUmwhpZdduxFB2zp6sebi
+         jvUrA8A2D58nA2kFTgHoHam8Ya25z0Z5isgC5uLEVljRxOWdTmXYFCNu7V4jDwDYcxXO
+         Tn/AhSkcu56p/oJC8gZNa9b0VNYEfc0WGmMiTJsmx6lTnUJ/u4ugOnZ+1Lqv9VyOuAkr
+         NNngborlwcNM9CtXvqO9XoNQpVYvf7o4NuBeerxAGsY42aYL3eOxwqRmbKc320uBtg6u
+         wCNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=UJ4ndSsA+KlZA68sHmztUkQhSgbwuP+daP+r2iy3R+s=;
-        b=GJ/mdLa7sHXcq2bxN9WoyuFv9ORAKSLXb0Ggwbhu0oVcYvIxp28r3mJ6y2m+k06T5p
-         eUUioVWuKF1U+X1LI4s1psRG1ls2B12F9kd2LNHHzN4caGhJ5wkHB+KvMtRsLVXLllpp
-         EgKzfS/TdOTXirPaBOdRKjZfoS0zpq9AD1QS3sgSiVjs0Tw8x9UV6G8k+uA/n+O+Icux
-         mtdu4z93trbfVkB03gNVZq906Zly9ziCrdHy4Jx0H1t1SeR2IzSsAhzlIYFH178r+xVK
-         +usTJnOjx/EWXFlQTgVr2joQ4heTRPKKuw2gaWHm7oe2H3zAqYMT1C/2PAX3ge0VbMnv
-         8hrQ==
-X-Gm-Message-State: APjAAAWkf0Njl6OlDYPljL6IvUlmeJO6TEa+2cihwMuSQKnalAMJvXXY
-        kS8muCGpPyYPGmHbmPfFSMw=
-X-Google-Smtp-Source: APXvYqzupd9YcGew+aYy624JEYO24Qz27ePGljeVffqKjx18vl4v7RPF48u41M7JoXWxNvfSmBdrHw==
-X-Received: by 2002:a1c:c5c2:: with SMTP id v185mr4553483wmf.161.1566457083649;
-        Wed, 21 Aug 2019 23:58:03 -0700 (PDT)
-Received: from [192.168.1.20] (host109-153-59-46.range109-153.btcentralplus.com. [109.153.59.46])
-        by smtp.googlemail.com with ESMTPSA id j20sm56299931wre.65.2019.08.21.23.58.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Aug 2019 23:58:02 -0700 (PDT)
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     vincenzo.frascino@arm.com, tglx@linutronix.de,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        catalin.marinas@arm.com, will.deacon@arm.com, arnd@arndb.de,
-        linux@armlinux.org.uk, ralf@linux-mips.org, paul.burton@mips.com,
-        daniel.lezcano@linaro.org, salyzyn@android.com, pcc@google.com,
-        shuah@kernel.org, 0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
-        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com
-From:   Chris Clayton <chris2553@googlemail.com>
-Subject: Regression in 5.3-rc1 and later
-Message-ID: <faaa3843-09a6-1a21-3448-072eeed1ea00@googlemail.com>
-Date:   Thu, 22 Aug 2019 07:57:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4b70yh01yux8LseDePSC/DiDISC+4IVFYV73p/rz2+o=;
+        b=eKI/jvjahDvEPZV8VzAgVcT+TA+rEPadFir/9fJhPMf2m1eXvYuWzW45jhS994cyLb
+         d/JAEEP5kxW9UB2rnTeZ6ATfc68Hse3pREbV5nj9uG27G6Wa2ZgLiyDjIKMJX1eSR+p1
+         dlgdjvicl2k5YI9l06RbqIQmaR5PWP0fWvuQgWvkK2EsUD1JDrWmPrLVWZNiZ/yn93U5
+         r0CdFHf+cCeMOnIaspDHRfwliy7kxV0NcRoMrqCpwDArKuQ7GTxQ7BbAczrrX4usd6vZ
+         a/9CKFc4G7tH9k46lBXCQozMRbhjwTLaDbfDRLawXY+zroXDLutzD6L2cbHJtt2VvRKi
+         +G6A==
+X-Gm-Message-State: APjAAAV78r2+4CZB6hWJwGgH9cjQSABcsyX6g/cpnd2G/GdMxjVA/kj8
+        coTHHtikvPw4NVr9zRZx9yZ5Dg==
+X-Google-Smtp-Source: APXvYqzhncQ2sLyFAXkyHMIdbyY5WIElP1PH9XUf0yABxgLd2l6QYEsJKT4aB0mYksaQ3+iKPSinPA==
+X-Received: by 2002:a5d:4ec6:: with SMTP id s6mr7356600wrv.327.1566462748883;
+        Thu, 22 Aug 2019 01:32:28 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
+        by smtp.gmail.com with ESMTPSA id p4sm22917436wrs.6.2019.08.22.01.32.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2019 01:32:27 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 09:32:23 +0100
+From:   Matthias Maennich <maennich@google.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
+        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@android.com, maco@google.com, michal.lkml@markovi.net,
+        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
+        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
+        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
+        x86@kernel.org, yamada.masahiro@socionext.com
+Subject: Re: [PATCH v3 10/11] RFC: usb-storage: export symbols in USB_STORAGE
+ namespace
+Message-ID: <20190822083223.GA15709@google.com>
+References: <20190813121733.52480-1-maennich@google.com>
+ <20190821114955.12788-1-maennich@google.com>
+ <20190821114955.12788-11-maennich@google.com>
+ <20190821231329.GA369@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20190821231329.GA369@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi everyone,
+On Wed, Aug 21, 2019 at 04:13:29PM -0700, Christoph Hellwig wrote:
+>On Wed, Aug 21, 2019 at 12:49:25PM +0100, Matthias Maennich wrote:
+>> Modules using these symbols are required to explicitly import the
+>> namespace. This patch was generated with the following steps and serves
+>> as a reference to use the symbol namespace feature:
+>>
+>>  1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
+>>  2) make  (see warnings during modpost about missing imports)
+>>  3) make nsdeps
+>>
+>> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
+>> variants can be used to explicitly specify the namespace. The advantage
+>> of the method used here is that newly added symbols are automatically
+>> exported and existing ones are exported without touching their
+>> respective EXPORT_SYMBOL macro expansion.
+>
+>So what is USB_STORAGE here?  It isn't a C string, so where does it
+>come from?  To me using a C string would seem like the nicer interface
+>vs a random cpp symbol that gets injected somewhere.
 
-Firstly, apologies to anyone on the long cc list that turns out not to be particularly interested in the following, but
-you were all marked as cc'd in the commit message below.
+To be honest, I would also prefer an interface that uses C strings or
+literals for the new EXPORT_SYMBOLS* macros:
 
-I've found a problem that isn't present in 5.2 series or 4.19 series kernels, and seems to have arrived in 5.3-rc1. The
-problem is that if I suspend (to ram) my laptop, on resume 14 minutes or more after suspending, I have no networking
-functionality. If I resume the laptop after 13 minutes or less, networking works fine. I haven't tried to get finer
-grained timings between 13 and 14 minutes, but can do if it would help.
+  EXPORT_SYMBOL_NS(mysym, "USB_STORAGE");
 
-ifconfig shows that wlan0 is still up and still has its assigned ip address but, for instance, a ping of any other
-device on my network, fails as does pinging, say, kernel.org. I've tried "downing" the network with (/sbin/ifdown) and
-unloading the iwlmvm module and then reloading the module and "upping" (/sbin/ifup) the network, but my network is still
-unusable. I should add that the problem also manifests if I hibernate the laptop, although my testing of this has been
-minimal. I can do more if required.
+  or
 
-As I say, the problem first appears in 5.3-rc1, so I've bisected between 5.2.0 and 5.3-rc1 and that concluded with:
+  const char USB_STORAGE_NS[] = "USB_STORAGE";
+  EXPORT_SYMBOL_NS(mysym, USB_STORAGE_NS);
 
-[chris:~/kernel/linux]$ git bisect good
-7ac8707479886c75f353bfb6a8273f423cfccb23 is the first bad commit
-commit 7ac8707479886c75f353bfb6a8273f423cfccb23
-Author: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Date:   Fri Jun 21 10:52:49 2019 +0100
+The DEFAULT_SYMBOL_NAMESPACE define within Makefiles would get a bit
+more verbose in that case to express the literal:
+  ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE="\"USB_STORAGE\""
 
-    x86/vdso: Switch to generic vDSO implementation
 
-    The x86 vDSO library requires some adaptations to take advantage of the
-    newly introduced generic vDSO library.
+The main reason against that, is, that in the expansion of
+EXPORT_SYMBOL_NS, we define the ksymtab entry, which name is
+constructed partly by the name of the namespace:
 
-    Introduce the following changes:
-     - Modification of vdso.c to be compliant with the common vdso datapage
-     - Use of lib/vdso for gettimeofday
+   static const struct kernel_symbol __ksymtab_##sym##__##ns  ...
+                                                        ^^^^
 
-    [ tglx: Massaged changelog and cleaned up the function signature formatting ]
+For that we depend on a cpp symbol to construct the name. I am not sure
+there is a reasonable way of getting rid of that without ending up
+constructing the ksymtab entries completely in asm as it is already done
+in case of PREL32_RELOCATIONS. But I am happy to be corrected.
 
-    Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-    Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-    Cc: linux-arch@vger.kernel.org
-    Cc: linux-arm-kernel@lists.infradead.org
-    Cc: linux-mips@vger.kernel.org
-    Cc: linux-kselftest@vger.kernel.org
-    Cc: Catalin Marinas <catalin.marinas@arm.com>
-    Cc: Will Deacon <will.deacon@arm.com>
-    Cc: Arnd Bergmann <arnd@arndb.de>
-    Cc: Russell King <linux@armlinux.org.uk>
-    Cc: Ralf Baechle <ralf@linux-mips.org>
-    Cc: Paul Burton <paul.burton@mips.com>
-    Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-    Cc: Mark Salyzyn <salyzyn@android.com>
-    Cc: Peter Collingbourne <pcc@google.com>
-    Cc: Shuah Khan <shuah@kernel.org>
-    Cc: Dmitry Safonov <0x7f454c46@gmail.com>
-    Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-    Cc: Huw Davies <huw@codeweavers.com>
-    Cc: Shijith Thotton <sthotton@marvell.com>
-    Cc: Andre Przywara <andre.przywara@arm.com>
-    Link: https://lkml.kernel.org/r/20190621095252.32307-23-vincenzo.frascino@arm.com
+For reference that is done in patch 03/11 of this series:
+https://lore.kernel.org/lkml/20190821114955.12788-4-maennich@google.com/
 
- arch/x86/Kconfig                         |   3 +
- arch/x86/entry/vdso/Makefile             |   9 ++
- arch/x86/entry/vdso/vclock_gettime.c     | 245 ++++---------------------------
- arch/x86/entry/vdso/vdsox32.lds.S        |   1 +
- arch/x86/entry/vsyscall/Makefile         |   2 -
- arch/x86/entry/vsyscall/vsyscall_gtod.c  |  83 -----------
- arch/x86/include/asm/pvclock.h           |   2 +-
- arch/x86/include/asm/vdso/gettimeofday.h | 191 ++++++++++++++++++++++++
- arch/x86/include/asm/vdso/vsyscall.h     |  44 ++++++
- arch/x86/include/asm/vgtod.h             |  75 +---------
- arch/x86/include/asm/vvar.h              |   7 +-
- arch/x86/kernel/pvclock.c                |   1 +
- 12 files changed, 284 insertions(+), 379 deletions(-)
- delete mode 100644 arch/x86/entry/vsyscall/vsyscall_gtod.c
- create mode 100644 arch/x86/include/asm/vdso/gettimeofday.h
- create mode 100644 arch/x86/include/asm/vdso/vsyscall.h
-
-To confirm my bisection was correct, I did a git checkout of 7ac8707479886c75f353bfb6a8273f423cfccb2. As expected, the
-kernel exhibited the problem I've described. However, a kernel built at the immediately preceding (parent?) commit
-(bfe801ebe84f42b4666d3f0adde90f504d56e35b) has a working network after a (>= 14minute) suspend/resume cycle.
-
-As the module name implies, I'm using wireless networking. The hardware is detected as "Intel(R) Wireless-AC 9260
-160MHz, REV=0x324" by iwlwifi.
-
-I'm more than happy to provide additional diagnostics (but may need a little hand-holding) and to apply diagnostic or
-fix patches, but please cc me on any reply as I'm not subscribed to any of the kernel-related mailing lists.
-
-Chris
+Cheers,
+Matthias
