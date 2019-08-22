@@ -2,47 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9319A9A354
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2019 00:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325C49A401
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2019 01:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394112AbfHVW4N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Aug 2019 18:56:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36540 "EHLO mail.kernel.org"
+        id S1726928AbfHVXl3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Aug 2019 19:41:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44638 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390930AbfHVW4N (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Aug 2019 18:56:13 -0400
+        id S1726591AbfHVXl1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Aug 2019 19:41:27 -0400
 Received: from akpm3.svl.corp.google.com (unknown [104.133.8.65])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1273921848;
-        Thu, 22 Aug 2019 22:56:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 684C121848;
+        Thu, 22 Aug 2019 23:41:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566514572;
-        bh=CENPwtb2FY1x/UJEAS1RnlydKDfarsP46dEap4EfKK8=;
+        s=default; t=1566517286;
+        bh=YtRCAC6fgsRgJnEx63ur5nyjptr+AEUs6gIrAbXRiQI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uXnOkuDBPN0Vpc9K0gTry3P7952XuXMFABVO0/8pqvs6iaSTt7mTjlxNTZuRDw2Nj
-         LbKY5hJtrADuRv5FnmwmFbtf2hQg+9kGYONiHe/ZN3eX6llljPu9zs+PyDpf40xLHq
-         4bOQRinE0EOA7OammwpLPInlQ+PqQCBetTfk6bjM=
-Date:   Thu, 22 Aug 2019 15:56:11 -0700
+        b=o8UdmRX97TswzWBvjk2gFJF6KO7BY2x+E967bHezsjBUP95XqFclydiiZxQDIWGNS
+         /HK3TqMe1pG0vXyWjTqyWMiN6WOHRQ1slbrz8a4c6qtJJ6NDsk6SdUwK5hdhg43NJH
+         om2HivuzvF1RXZajtMlOuiaXDG6/WAAxgrYZQZQg=
+Date:   Thu, 22 Aug 2019 16:41:25 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     20190819234111.9019-8-keescook@chromium.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Drew Davenport <ddavenport@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception
- handler
-Message-Id: <20190822155611.a1a6e26db99ba0876ba9c8bd@linux-foundation.org>
-In-Reply-To: <201908200943.601DD59DCE@keescook>
-References: <201908200943.601DD59DCE@keescook>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Dave P Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v8 1/5] mm: untag user pointers in
+ mmap/munmap/mremap/brk
+Message-Id: <20190822164125.acfb97de912996b2b9127c61@linux-foundation.org>
+In-Reply-To: <20190819162851.tncj4wpwf625ofg6@willie-the-truck>
+References: <20190815154403.16473-1-catalin.marinas@arm.com>
+        <20190815154403.16473-2-catalin.marinas@arm.com>
+        <20190819162851.tncj4wpwf625ofg6@willie-the-truck>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -52,46 +52,28 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 20 Aug 2019 09:47:55 -0700 Kees Cook <keescook@chromium.org> wrote:
+On Mon, 19 Aug 2019 17:28:51 +0100 Will Deacon <will@kernel.org> wrote:
 
-> Reply-To: 20190819234111.9019-8-keescook@chromium.org
-
-Really?
-
-> Subject: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception handler
-
-It's strange to receive a standalone [7/7] patch.
-
-> Date:   Tue, 20 Aug 2019 09:47:55 -0700
-> Sender: linux-kernel-owner@vger.kernel.org
+> On Thu, Aug 15, 2019 at 04:43:59PM +0100, Catalin Marinas wrote:
+> > There isn't a good reason to differentiate between the user address
+> > space layout modification syscalls and the other memory
+> > permission/attributes ones (e.g. mprotect, madvise) w.r.t. the tagged
+> > address ABI. Untag the user addresses on entry to these functions.
+> > 
+> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> > ---
+> >  mm/mmap.c   | 5 +++++
+> >  mm/mremap.c | 6 +-----
+> >  2 files changed, 6 insertions(+), 5 deletions(-)
 > 
-> The original clean up of "cut here" missed the WARN_ON() case (that
-> does not have a printk message), which was fixed recently by adding
-> an explicit printk of "cut here". This had the downside of adding a
-> printk() to every WARN_ON() caller, which reduces the utility of using
-> an instruction exception to streamline the resulting code. By making
-> this a new BUGFLAG, all of these can be removed and "cut here" can be
-> handled by the exception handler.
+> Acked-by: Will Deacon <will@kernel.org>
 > 
-> This was very pronounced on PowerPC, but the effect can be seen on
-> x86 as well. The resulting text size of a defconfig build shows some
-> small savings from this patch:
+> Andrew -- please can you pick this patch up? I'll take the rest of the
+> series via arm64 once we've finished discussing the wording details.
 > 
->    text    data     bss     dec     hex filename
-> 19691167        5134320 1646664 26472151        193eed7 vmlinux.before
-> 19676362        5134260 1663048 26473670        193f4c6 vmlinux.after
-> 
-> This change also opens the door for creating something like BUG_MSG(),
-> where a custom printk() before issuing BUG(), without confusing the "cut
-> here" line.
 
-I can't get this to apply to anything, so I guess that [1/7]-[6/7]
-mattered ;)
+Sure, I grabbed the patch from the v9 series.
 
-> Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
-> Fixes: Fixes: 6b15f678fb7d ("include/asm-generic/bug.h: fix "cut here" for WARN_ON for __WARN_TAINT architectures")
-
-I'm seeing double.
-
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+But please feel free to include this in the arm64 tree - I'll autodrop
+my copy if this turns up in linux-next.
 
