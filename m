@@ -2,91 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B339938E
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2019 14:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BCB9989C
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2019 17:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732874AbfHVMa2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Aug 2019 08:30:28 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:37075 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732808AbfHVMa2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Aug 2019 08:30:28 -0400
-Received: by mail-lj1-f195.google.com with SMTP id t14so5387902lji.4
-        for <linux-arch@vger.kernel.org>; Thu, 22 Aug 2019 05:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=Aup3/HeRe1A8c3M11ogk2frrKgdfcyl1LF7VIRKHU4wdfedW4K7Cb0x2GRdcAz52Rp
-         mjFST2KsmCK3tzzyd0EAiXoHM3SJHaG3uzQqhJ7wDoigDFx0FU8hAR/24cV8aMBXLRqJ
-         tqwpiyYj//P7ylZvua8LLwk/NmQ2++IK2BmFzlqTVP1OBkL1JbLTiQdfDfwi6jwnVZ3E
-         JGrHdzFdGTeLSCSk9eF0t1MpdpyQGjgt3sep8ioCKbaKkUlzE/uioaamClMoV6MkXTf9
-         OmAO3bmIQnaToEMTAt2IKoEM7Qeqt1zkkoKO/whqH+IgKgd0tg83efND+kaQtlumBUBs
-         xVTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=FEK7oNRmLEa914iVsDymj/vVhtREB1tiu1dbwt1auj6CacielH/iPYaHGBSyuS9q5B
-         RwAuTHNL29LxnxPft+aHv2ynR7at6Gu0FcQc4nhLgj5XzLhSk6Dt1zyl2QSCG8FrDYBf
-         6aWmdi1a0T/ZEycJcKgP8ciZGGQdyphHQVGnR/Ks6OF6xR3WprF2/ioR9iUDTt3tw6Jy
-         gb17NfBTVBCC6YcTTvsp9iZ+aQNbvSFx689ql8F/xWjQQMbmiJKd9dWy9oUQKD9cXVbW
-         z9UJyeHsKR4Bdh+NGJ8ICRZMLz3f17YP8aaeEv7DOFR94NW3tBuMwMSVM5tOlNJm3ipq
-         9hxQ==
-X-Gm-Message-State: APjAAAWV7ZHN27G9PYaajHTtmp3gWpFTp+Dmvc1qIvqeIT2VZEby9zBW
-        4U9jMYuoaXLAPEw0DbRhrTq7ENAJ+4DjRudcYAk=
-X-Google-Smtp-Source: APXvYqyRITC2fvUqBp19t/1VS+ZVtoTKEYkfX9eEUp7/OtNDhWjL9xEtti8YoC5/b0Na3pg5TPvI89gtgLtnKq7OszU=
-X-Received: by 2002:a05:651c:95:: with SMTP id 21mr22171089ljq.128.1566477026397;
- Thu, 22 Aug 2019 05:30:26 -0700 (PDT)
+        id S1732040AbfHVPzh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Aug 2019 11:55:37 -0400
+Received: from foss.arm.com ([217.140.110.172]:48388 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725934AbfHVPzh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Aug 2019 11:55:37 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC227337;
+        Thu, 22 Aug 2019 08:55:36 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1721B3F718;
+        Thu, 22 Aug 2019 08:55:34 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 16:55:32 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Dave Hansen <dave.hansen@intel.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        linux-doc@vger.kernel.org, Will Deacon <will.deacon@arm.com>,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v9 3/3] arm64: Relax
+ Documentation/arm64/tagged-pointers.rst
+Message-ID: <20190822155531.GB55798@arrakis.emea.arm.com>
+References: <20190821164730.47450-1-catalin.marinas@arm.com>
+ <20190821164730.47450-4-catalin.marinas@arm.com>
+ <20190821173352.yqfgaozi7nfhcofg@willie-the-truck>
+ <20190821184649.GD27757@arm.com>
 MIME-Version: 1.0
-Received: by 2002:a19:dc4f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:30:25
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <elenabaltach66@gmail.com>
-Date:   Thu, 22 Aug 2019 12:30:25 +0000
-Message-ID: <CAOGpsp7CyMvDU7hRJw4n5yauXZ41ij7yEj5aAqmTnoB1+HZ-MQ@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190821184649.GD27757@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
+On Wed, Aug 21, 2019 at 07:46:51PM +0100, Dave P Martin wrote:
+> On Wed, Aug 21, 2019 at 06:33:53PM +0100, Will Deacon wrote:
+> > On Wed, Aug 21, 2019 at 05:47:30PM +0100, Catalin Marinas wrote:
+> > > @@ -59,6 +63,11 @@ be preserved.
+> > >  The architecture prevents the use of a tagged PC, so the upper byte will
+> > >  be set to a sign-extension of bit 55 on exception return.
+> > >  
+> > > +This behaviour is maintained when the AArch64 Tagged Address ABI is
+> > > +enabled. In addition, with the exceptions above, the kernel will
+> > > +preserve any non-zero tags passed by the user via syscalls and stored in
+> > > +kernel data structures (e.g. ``set_robust_list()``, ``sigaltstack()``).
+> 
+> sigaltstack() is interesting, since we don't support tagged stacks.
 
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+We should support tagged SP with the new ABI as they'll be required for
+MTE. sigaltstack() and clone() are the two syscalls that come to mind
+here.
+
+> Do we keep the ss_sp tag in the kernel, but squash it when delivering
+> a signal to the alternate stack?
+
+We don't seem to be doing any untagging, so we just just use whatever
+the caller asked for. We may need a small test to confirm.
+
+That said, on_sig_stack() probably needs some untagging as it does user
+pointer arithmetics with potentially different tags.
+
+> > Hmm. I can see the need to provide this guarantee for things like
+> > set_robust_list(), but the problem is that the statement above is too broad
+> > and isn't strictly true: for example, mmap() doesn't propagate the tag of
+> > its address parameter into the VMA.
+> > 
+> > So I think we need to nail this down a bit more, but I'm having a really
+> > hard time coming up with some wording :(
+> 
+> Time for some creative vagueness?
+> 
+> We can write a statement of our overall intent, along with examples of
+> a few cases where the tag should and should not be expected to emerge
+> intact.
+> 
+> There is no foolproof rule, unless we can rewrite history...
+
+I would expect the norm to be the preservation of tags with a few
+exceptions. The only ones I think where we won't preserve the tags are
+mmap, mremap, brk (apart from the signal stuff already mentioned in the
+current tagged-pointers.rst doc).
+
+So I can remove this paragraph altogether and add a note in part 3 of
+the tagged-address-abi.rst document that mmap/mremap/brk do not preserve
+the tag information.
+
+-- 
+Catalin
