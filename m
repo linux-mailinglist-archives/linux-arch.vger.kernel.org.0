@@ -2,76 +2,181 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 802DC987B0
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2019 01:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68852989B3
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2019 05:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729915AbfHUXNg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Aug 2019 19:13:36 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:54474 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729763AbfHUXNf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Aug 2019 19:13:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=WM7SZ88kyqemBkIYTm2NML5mscgb3zmbfZeZ+GXNIXY=; b=LGr1j52GyKOw/HBHTEYaEj8Hb
-        uA7xSFH9W6skRCtnvb26k+BfEDOTMOQLZ5pwCWM8HwOXugtz2pCIoK6rLI6lixhEVzv4Z8m5yNnJz
-        Qx8xlXi5+HXyevRlwQE5FIV8mAWh+oXFTCQc8E8E9WmokfjsL7VKctjLPqGdsHTxW8ITHyfc3YTe8
-        b7Ai//7E3J9wDTuVpUe6vP3AQdrCPGkrkWfEIMECAmG0AVR4ecNuJUlt8XcUiFs9LkTVxX3TcFJ+I
-        p6RKEpo3+dmRQwHaD5q0tvwK50Ysnd7WrYD3oAvjPpTw9FoeKaVXP9N4ol7y0xXLVVwIDzISdxKDJ
-        wcG1XLSsg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1i0ZnF-00059G-IV; Wed, 21 Aug 2019 23:13:29 +0000
-Date:   Wed, 21 Aug 2019 16:13:29 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com
-Subject: Re: [PATCH v3 10/11] RFC: usb-storage: export symbols in USB_STORAGE
- namespace
-Message-ID: <20190821231329.GA369@infradead.org>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-11-maennich@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190821114955.12788-11-maennich@google.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+        id S1728275AbfHVDFd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Aug 2019 23:05:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42092 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727874AbfHVDFd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Aug 2019 23:05:33 -0400
+Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 83C3222CE3;
+        Thu, 22 Aug 2019 03:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566443132;
+        bh=a5Ew7eb6cqPDgQY6v0geKQo8QWx+WuyGsAB/zRhoQ/I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tYBAQLcV/cTzE/J5aOHvHvqKFIqo281kZFw8rcPOL8i1MxxEiWdu4eVTq8egPr3yQ
+         TNrbyVfFoaIrA2x5m64yrKGiz9ZnNLnH6tmcA2QDwfrMW+cIs1OX8wWPrXx1cUx+B7
+         vGiDH5ug0Cr15AOa8U+T510unNGyGxeELVlky+tA=
+From:   guoren@kernel.org
+To:     arnd@arndb.de, hch@infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, douzhk@nationalchip.com,
+        Guo Ren <ren_guo@c-sky.com>
+Subject: [PATCH V2] csky: Fixup 610 vipt cache flush mechanism
+Date:   Thu, 22 Aug 2019 11:05:22 +0800
+Message-Id: <1566443122-17540-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 12:49:25PM +0100, Matthias Maennich wrote:
-> Modules using these symbols are required to explicitly import the
-> namespace. This patch was generated with the following steps and serves
-> as a reference to use the symbol namespace feature:
-> 
->  1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
->  2) make  (see warnings during modpost about missing imports)
->  3) make nsdeps
-> 
-> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
-> variants can be used to explicitly specify the namespace. The advantage
-> of the method used here is that newly added symbols are automatically
-> exported and existing ones are exported without touching their
-> respective EXPORT_SYMBOL macro expansion.
+From: Guo Ren <ren_guo@c-sky.com>
 
-So what is USB_STORAGE here?  It isn't a C string, so where does it
-come from?  To me using a C string would seem like the nicer interface
-vs a random cpp symbol that gets injected somewhere.
+610 has vipt aliasing issue, so we need to finish the cache flush
+apis mentioned in cachetlb.rst to avoid data corruption.
+
+Here is the list of modified apis in the patch:
+
+ - flush_kernel_dcache_page      (new add)
+ - flush_dcache_mmap_lock        (new add)
+ - flush_dcache_mmap_unlock      (new add)
+ - flush_kernel_vmap_range       (new add)
+ - invalidate_kernel_vmap_range  (new add)
+ - flush_anon_page               (new add)
+ - flush_cache_range             (new add)
+ - flush_cache_vmap              (flush all)
+ - flush_cache_vunmap            (flush all)
+ - flush_cache_mm                (only dcache flush)
+ - flush_icache_page             (just nop)
+ - copy_from_user_page           (remove no need flush)
+ - copy_to_user_page             (remove no need flush)
+
+Change to V2:
+ - Fixup compile error with xa_lock*(&mapping->i_pages)
+
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Christoph Hellwig <hch@infradead.org>
+---
+ arch/csky/abiv1/cacheflush.c         | 20 ++++++++++++++++++
+ arch/csky/abiv1/inc/abi/cacheflush.h | 41 +++++++++++++++++++++++++-----------
+ 2 files changed, 49 insertions(+), 12 deletions(-)
+
+diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
+index fee99fc..9f1fe80 100644
+--- a/arch/csky/abiv1/cacheflush.c
++++ b/arch/csky/abiv1/cacheflush.c
+@@ -54,3 +54,23 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
+ 			icache_inv_all();
+ 	}
+ }
++
++void flush_kernel_dcache_page(struct page *page)
++{
++	struct address_space *mapping;
++
++	mapping = page_mapping_file(page);
++
++	if (!mapping || mapping_mapped(mapping))
++		dcache_wbinv_all();
++}
++EXPORT_SYMBOL(flush_kernel_dcache_page);
++
++void flush_cache_range(struct vm_area_struct *vma, unsigned long start,
++	unsigned long end)
++{
++	dcache_wbinv_all();
++
++	if (vma->vm_flags & VM_EXEC)
++		icache_inv_all();
++}
+diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/abi/cacheflush.h
+index fce5604..79ef9e8 100644
+--- a/arch/csky/abiv1/inc/abi/cacheflush.h
++++ b/arch/csky/abiv1/inc/abi/cacheflush.h
+@@ -4,26 +4,49 @@
+ #ifndef __ABI_CSKY_CACHEFLUSH_H
+ #define __ABI_CSKY_CACHEFLUSH_H
+ 
+-#include <linux/compiler.h>
++#include <linux/mm.h>
+ #include <asm/string.h>
+ #include <asm/cache.h>
+ 
+ #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+ extern void flush_dcache_page(struct page *);
+ 
+-#define flush_cache_mm(mm)			cache_wbinv_all()
++#define flush_cache_mm(mm)			dcache_wbinv_all()
+ #define flush_cache_page(vma, page, pfn)	cache_wbinv_all()
+ #define flush_cache_dup_mm(mm)			cache_wbinv_all()
+ 
++#define ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
++extern void flush_kernel_dcache_page(struct page *);
++
++#define flush_dcache_mmap_lock(mapping)		xa_lock_irq(&mapping->i_pages)
++#define flush_dcache_mmap_unlock(mapping)	xa_unlock_irq(&mapping->i_pages)
++
++static inline void flush_kernel_vmap_range(void *addr, int size)
++{
++	dcache_wbinv_all();
++}
++static inline void invalidate_kernel_vmap_range(void *addr, int size)
++{
++	dcache_wbinv_all();
++}
++
++#define ARCH_HAS_FLUSH_ANON_PAGE
++static inline void flush_anon_page(struct vm_area_struct *vma,
++			 struct page *page, unsigned long vmaddr)
++{
++	if (PageAnon(page))
++		cache_wbinv_all();
++}
++
+ /*
+  * if (current_mm != vma->mm) cache_wbinv_range(start, end) will be broken.
+  * Use cache_wbinv_all() here and need to be improved in future.
+  */
+-#define flush_cache_range(vma, start, end)	cache_wbinv_all()
+-#define flush_cache_vmap(start, end)		cache_wbinv_range(start, end)
+-#define flush_cache_vunmap(start, end)		cache_wbinv_range(start, end)
++extern void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end);
++#define flush_cache_vmap(start, end)		cache_wbinv_all()
++#define flush_cache_vunmap(start, end)		cache_wbinv_all()
+ 
+-#define flush_icache_page(vma, page)		cache_wbinv_all()
++#define flush_icache_page(vma, page)		do {} while (0);
+ #define flush_icache_range(start, end)		cache_wbinv_range(start, end)
+ 
+ #define flush_icache_user_range(vma,page,addr,len) \
+@@ -31,19 +54,13 @@ extern void flush_dcache_page(struct page *);
+ 
+ #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
+ do { \
+-	cache_wbinv_all(); \
+ 	memcpy(dst, src, len); \
+-	cache_wbinv_all(); \
+ } while (0)
+ 
+ #define copy_to_user_page(vma, page, vaddr, dst, src, len) \
+ do { \
+-	cache_wbinv_all(); \
+ 	memcpy(dst, src, len); \
+ 	cache_wbinv_all(); \
+ } while (0)
+ 
+-#define flush_dcache_mmap_lock(mapping)		do {} while (0)
+-#define flush_dcache_mmap_unlock(mapping)	do {} while (0)
+-
+ #endif /* __ABI_CSKY_CACHEFLUSH_H */
+-- 
+2.7.4
+
