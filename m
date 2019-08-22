@@ -2,137 +2,240 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2B298F1E
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2019 11:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4C298FD6
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2019 11:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733158AbfHVJTF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Aug 2019 05:19:05 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]:43543 "EHLO
-        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733155AbfHVJTF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Aug 2019 05:19:05 -0400
-Received: by mail-wr1-f48.google.com with SMTP id y8so4668009wrn.10
-        for <linux-arch@vger.kernel.org>; Thu, 22 Aug 2019 02:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=8fMTG6N2j/TMUB2P1ujx2DtHjddT/TmmdRfnCuZ9XY0=;
-        b=T2pMI6y+G8IKrsK8J/v9Hw6Ze7VNU1QAegTQBtAa7YoAqIMV7jl4rsOxqLr2uKv+7E
-         qU8OpzWDLx9aa2GeALCMNY10DH8xUmpEvSQpL0ayo6EJseiHy6wUP019c/nCCacrOqhB
-         QB+3d2H2f0vEl7LtOw9XPlAwhFizRTqjD3JcaH9+n+VKUvYDS9r4fRpDwq0+iXaszL13
-         J3sknRZdTSR9IJXI8txUWEFdl9+uB5tH3eqzTb0H6t3MUJTXPo1J+pZxj4+FMYBI1PHv
-         B9TvUD/P3C3CaL5RpMtkMMjLBIWW2hdg5F7iwFp/hNbtITgX9r32GojgJ+PW0XbAEkM3
-         Pdcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=8fMTG6N2j/TMUB2P1ujx2DtHjddT/TmmdRfnCuZ9XY0=;
-        b=et+RkX03OkP5Tv8hhgjSFCpatYruifhaFWYkek8EXMfC6GNhwh4D10T6vQhB0CbWw7
-         DqnKR3u8tlCHirr+vbUSB1tzoM0bAzuGZj5itvYpwA27y68pwBc79jakPRwPpRKY++Ce
-         MuZXMJ6z38c2g+nr9QSHTUD8h4T6oGCcPQGUIS2rJdQBq5zScUEhogdaUtRON7ILx54h
-         Uu/omiflqoQQPmbcp8lLwj3jnDmy6X73dxJIVxBVfQfGiKhh+J9YVHRAm/T5ny5JJSE1
-         CKCKwMvSo3pUJWvAfv1/sxqkmrHa6UOC4pXL761qkSjDVggkTFyXz+PN9Ylt4qPLYlq6
-         Rguw==
-X-Gm-Message-State: APjAAAVsgDnbbP/nn18BsoXRK5xnz/KVf86isy70iopM73QMGtR0XyVa
-        i0fXIZlWCHWsq98IWG1pgQXzwA==
-X-Google-Smtp-Source: APXvYqzPaTB9as2RdUevNC/gvIlaqvXJBR28ZGeYWGl/cnFEEuvQi+58LrWHZHhwnpFu/CiJ7AkAEg==
-X-Received: by 2002:a5d:4101:: with SMTP id l1mr4986587wrp.202.1566465543440;
-        Thu, 22 Aug 2019 02:19:03 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id 4sm46118162wro.78.2019.08.22.02.19.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 02:19:02 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 10:18:58 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Julia Lawall <Julia.Lawall@lip6.fr>,
-        Martijn Coenen <maco@android.com>, cocci@systeme.lip6.fr,
-        kernel-janitors@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        kernel-team@android.com, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Gilles Muller <Gilles.Muller@lip6.fr>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Martijn Coenen <maco@google.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Oliver Neukum <oneukum@suse.com>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sandeep Patil <sspatil@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [v2 08/10] scripts: Coccinelle script for namespace dependencies
-Message-ID: <20190822091858.GA60652@google.com>
-References: <20190813121733.52480-9-maennich@google.com>
- <1c4420f4-361c-7358-49d9-87d8a51f7920@web.de>
+        id S1731001AbfHVJim (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Aug 2019 05:38:42 -0400
+Received: from foss.arm.com ([217.140.110.172]:42528 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730897AbfHVJim (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Aug 2019 05:38:42 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6B42A1596;
+        Thu, 22 Aug 2019 02:38:41 -0700 (PDT)
+Received: from [10.1.194.48] (e123572-lin.cambridge.arm.com [10.1.194.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CBCE93F246;
+        Thu, 22 Aug 2019 02:38:39 -0700 (PDT)
+Subject: Re: [PATCH v9 2/3] arm64: Define
+ Documentation/arm64/tagged-address-abi.rst
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Will Deacon <will.deacon@arm.com>
+References: <20190821164730.47450-1-catalin.marinas@arm.com>
+ <20190821164730.47450-3-catalin.marinas@arm.com>
+ <CAAeHK+wHDx5bqNd+OQuJWoiA=LzsjCWkQ2UY_JVipr852Gv4JA@mail.gmail.com>
+From:   Kevin Brodsky <kevin.brodsky@arm.com>
+Message-ID: <b6ea0be1-398c-f2ee-c586-7bf0142a6793@arm.com>
+Date:   Thu, 22 Aug 2019 10:38:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <CAAeHK+wHDx5bqNd+OQuJWoiA=LzsjCWkQ2UY_JVipr852Gv4JA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1c4420f4-361c-7358-49d9-87d8a51f7920@web.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 03:50:38PM +0200, Markus Elfring wrote:
->> +generate_deps_for_ns() {
->> +    $SPATCH --very-quiet --in-place --sp-file \
->> +	    $srctree/scripts/coccinelle/misc/add_namespace.cocci -D ns=$1 $2
->> +}
->
->* Where will the variable “srctree” be set for the file “scripts/nsdeps”?
->
+On 21/08/2019 17:57, Andrey Konovalov wrote:
+> On Wed, Aug 21, 2019 at 6:47 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>> From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>>
+>> On AArch64 the TCR_EL1.TBI0 bit is set by default, allowing userspace
+>> (EL0) to perform memory accesses through 64-bit pointers with a non-zero
+>> top byte. Introduce the document describing the relaxation of the
+>> syscall ABI that allows userspace to pass certain tagged pointers to
+>> kernel syscalls.
+>>
+>> Cc: Will Deacon <will.deacon@arm.com>
+>> Cc: Andrey Konovalov <andreyknvl@google.com>
+>> Cc: Szabolcs Nagy <szabolcs.nagy@arm.com>
+>> Cc: Kevin Brodsky <kevin.brodsky@arm.com>
+>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>> Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
+>> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Acked-by: Andrey Konovalov <andreyknvl@google.com>
 
-$srctree is defined by kbuild in the toplevel Makefile.
+Acked-by: Kevin Brodsky <kevin.brodsky@arm.com>
 
->* Would you like to support a separate build directory for desired adjustments?
->
+>> ---
+>>   Documentation/arm64/tagged-address-abi.rst | 156 +++++++++++++++++++++
+>>   1 file changed, 156 insertions(+)
+>>   create mode 100644 Documentation/arm64/tagged-address-abi.rst
+>>
+>> diff --git a/Documentation/arm64/tagged-address-abi.rst b/Documentation/arm64/tagged-address-abi.rst
+>> new file mode 100644
+>> index 000000000000..d4a85d535bf9
+>> --- /dev/null
+>> +++ b/Documentation/arm64/tagged-address-abi.rst
+>> @@ -0,0 +1,156 @@
+>> +==========================
+>> +AArch64 TAGGED ADDRESS ABI
+>> +==========================
+>> +
+>> +Authors: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>> +         Catalin Marinas <catalin.marinas@arm.com>
+>> +
+>> +Date: 21 August 2019
+>> +
+>> +This document describes the usage and semantics of the Tagged Address
+>> +ABI on AArch64 Linux.
+>> +
+>> +1. Introduction
+>> +---------------
+>> +
+>> +On AArch64 the ``TCR_EL1.TBI0`` bit is set by default, allowing
+>> +userspace (EL0) to perform memory accesses through 64-bit pointers with
+>> +a non-zero top byte. This document describes the relaxation of the
+>> +syscall ABI that allows userspace to pass certain tagged pointers to
+>> +kernel syscalls.
+>> +
+>> +2. AArch64 Tagged Address ABI
+>> +-----------------------------
+>> +
+>> +From the kernel syscall interface perspective and for the purposes of
+>> +this document, a "valid tagged pointer" is a pointer with a potentially
+>> +non-zero top-byte that references an address in the user process address
+>> +space obtained in one of the following ways:
+>> +
+>> +- ``mmap()`` syscall where either:
+>> +
+>> +  - flags have the ``MAP_ANONYMOUS`` bit set or
+>> +  - the file descriptor refers to a regular file (including those
+>> +    returned by ``memfd_create()``) or ``/dev/zero``
+>> +
+>> +- ``brk()`` syscall (i.e. the heap area between the initial location of
+>> +  the program break at process creation and its current location).
+>> +
+>> +- any memory mapped by the kernel in the address space of the process
+>> +  during creation and with the same restrictions as for ``mmap()`` above
+>> +  (e.g. data, bss, stack).
+>> +
+>> +The AArch64 Tagged Address ABI has two stages of relaxation depending
+>> +how the user addresses are used by the kernel:
+>> +
+>> +1. User addresses not accessed by the kernel but used for address space
+>> +   management (e.g. ``mmap()``, ``mprotect()``, ``madvise()``). The use
+>> +   of valid tagged pointers in this context is always allowed.
+>> +
+>> +2. User addresses accessed by the kernel (e.g. ``write()``). This ABI
+>> +   relaxation is disabled by default and the application thread needs to
+>> +   explicitly enable it via ``prctl()`` as follows:
+>> +
+>> +   - ``PR_SET_TAGGED_ADDR_CTRL``: enable or disable the AArch64 Tagged
+>> +     Address ABI for the calling thread.
+>> +
+>> +     The ``(unsigned int) arg2`` argument is a bit mask describing the
+>> +     control mode used:
+>> +
+>> +     - ``PR_TAGGED_ADDR_ENABLE``: enable AArch64 Tagged Address ABI.
+>> +       Default status is disabled.
+>> +
+>> +     Arguments ``arg3``, ``arg4``, and ``arg5`` must be 0.
+>> +
+>> +   - ``PR_GET_TAGGED_ADDR_CTRL``: get the status of the AArch64 Tagged
+>> +     Address ABI for the calling thread.
+>> +
+>> +     Arguments ``arg2``, ``arg3``, ``arg4``, and ``arg5`` must be 0.
+>> +
+>> +   The ABI properties described above are thread-scoped, inherited on
+>> +   clone() and fork() and cleared on exec().
+>> +
+>> +   Calling ``prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0)``
+>> +   returns ``-EINVAL`` if the AArch64 Tagged Address ABI is globally
+>> +   disabled by ``sysctl abi.tagged_addr_disabled=1``. The default
+>> +   ``sysctl abi.tagged_addr_disabled`` configuration is 0.
+>> +
+>> +When the AArch64 Tagged Address ABI is enabled for a thread, the
+>> +following behaviours are guaranteed:
+>> +
+>> +- All syscalls except the cases mentioned in section 3 can accept any
+>> +  valid tagged pointer.
+>> +
+>> +- The syscall behaviour is undefined for invalid tagged pointers: it may
+>> +  result in an error code being returned, a (fatal) signal being raised,
+>> +  or other modes of failure.
+>> +
+>> +- The syscall behaviour for a valid tagged pointer is the same as for
+>> +  the corresponding untagged pointer.
+>> +
+>> +
+>> +A definition of the meaning of tagged pointers on AArch64 can be found
+>> +in Documentation/arm64/tagged-pointers.rst.
+>> +
+>> +3. AArch64 Tagged Address ABI Exceptions
+>> +-----------------------------------------
+>> +
+>> +The following system call parameters must be untagged regardless of the
+>> +ABI relaxation:
+>> +
+>> +- ``prctl()`` other than pointers to user data either passed directly or
+>> +  indirectly as arguments to be accessed by the kernel.
+>> +
+>> +- ``ioctl()`` other than pointers to user data either passed directly or
+>> +  indirectly as arguments to be accessed by the kernel.
+>> +
+>> +- ``shmat()`` and ``shmdt()``.
+>> +
+>> +Any attempt to use non-zero tagged pointers may result in an error code
+>> +being returned, a (fatal) signal being raised, or other modes of
+>> +failure.
+>> +
+>> +4. Example of correct usage
+>> +---------------------------
+>> +.. code-block:: c
+>> +
+>> +   #include <stdlib.h>
+>> +   #include <string.h>
+>> +   #include <unistd.h>
+>> +   #include <sys/mman.h>
+>> +   #include <sys/prctl.h>
+>> +
+>> +   #define PR_SET_TAGGED_ADDR_CTRL     55
+>> +   #define PR_TAGGED_ADDR_ENABLE       (1UL << 0)
+>> +
+>> +   #define TAG_SHIFT           56
+>> +
+>> +   int main(void)
+>> +   {
+>> +       int tbi_enabled = 0;
+>> +       unsigned long tag = 0;
+>> +       char *ptr;
+>> +
+>> +       /* check/enable the tagged address ABI */
+>> +       if (!prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0))
+>> +               tbi_enabled = 1;
+>> +
+>> +       /* memory allocation */
+>> +       ptr = mmap(NULL, sysconf(_SC_PAGE_SIZE), PROT_READ | PROT_WRITE,
+>> +                  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>> +       if (ptr == MAP_FAILED)
+>> +               return 1;
+>> +
+>> +       /* set a non-zero tag if the ABI is available */
+>> +       if (tbi_enabled)
+>> +               tag = rand() & 0xff;
+>> +       ptr = (char *)((unsigned long)ptr | (tag << TAG_SHIFT));
+>> +
+>> +       /* memory access to a tagged address */
+>> +       strcpy(ptr, "tagged pointer\n");
+>> +
+>> +       /* syscall with a tagged pointer */
+>> +       write(1, ptr, strlen(ptr));
+>> +
+>> +       return 0;
+>> +   }
 
-No, as the purpose of this script is to directly patch the kernel
-sources where applicable.
-
->* How do you think about to check error handling around such commands?
->
->
-
-spatch emits a descriptive message on error. I will add a 'set
--e' to the script so that it aborts on errors.
-
->> +generate_deps() {
->…
->> +        for source_file in $mod_source_files; do
->> +            sed '/MODULE_IMPORT_NS/Q' $source_file > ${source_file}.tmp
->…
->
->I suggest to assign the name for the temporary file to a variable
->which should be used by subsequent commands.
-
-I somehow don't agree that this is an improvement to the code as the
-variable would likely be something like ${source_file_tmp}. Sticking to
-${source_file}.tmp does express the intent of a temporary file next to
-the original source file and the reader of the code does not need to
-reason about the value of ${source_file_tmp}.
-
-Cheers,
-Matthias
