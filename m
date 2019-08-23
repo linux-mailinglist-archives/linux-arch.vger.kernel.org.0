@@ -2,132 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7157E9AAE0
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2019 10:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206C89AD66
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2019 12:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731252AbfHWI4m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Aug 2019 04:56:42 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:44225 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731191AbfHWI4l (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Aug 2019 04:56:41 -0400
-Received: by mail-qt1-f193.google.com with SMTP id 44so10468890qtg.11;
-        Fri, 23 Aug 2019 01:56:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BTnwn95++Op3SfWaQCpErhny3AGKGOkNMopDRr3KEu0=;
-        b=XGM9hG+O9FrtwGIUWPwCuNTLzgN5bUJNVOdp91Dv6P29Tf98HvbRWmcKJgXEV2Sltk
-         a/FGMeI+jQm6Cnbljsb4PP7+Rps+vijt9Tl+Ok3H7Nx9hPDNqdeBNSNT9uGApXuKB77p
-         znW6hCrBJaBUzMIyr7X5xCXO8zJPz7mf9NAsllLvQQJyWI8SLKyx8qo2EOi4S2KjifRA
-         YNijyfUgRbsPX6iKiJtYYHGxQJ2WSTJgruCSddFw2ven0W06L34HaA6/YHUKDbjT3elK
-         rtdipgAhPX6uK1bSEXs0Y8/KAFRGawESHEzu8GmwFTS39BbHuwHJ1xRa5G1CdI2CxYji
-         vytA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BTnwn95++Op3SfWaQCpErhny3AGKGOkNMopDRr3KEu0=;
-        b=BbZnykNjILalLM/ZoBKG9r+duO/lRSZ1kT1UXahAT8rHYBj+jFjymyYY5FqpWmJ9Mt
-         BPNerFHPmlss5gOprNg8KbN+acAtTyZt2fUnCEpkwHBtRPYSxlZKY5LzSOoFQ8cSKEpo
-         w4F0SkEz9OH7v4rJzsDH+UP6vQQiWlon2AvU57XwjLeV6Dul4dKg56mi0FcNzc2CbUMm
-         uiw4z2jBO5wTge9+w/+PGWsA9IbDFNURIxd1M3Gh6VyMj3W5NemcUX8Wk6bqRUVjdl3A
-         1/X/zQcj0Zz/DiEoiTEaE5bUZl69VSTVpSMikdcmNvPY28lWviMjxaDDKU2ZyEYUJkAo
-         11iA==
-X-Gm-Message-State: APjAAAWgjnMH2jrxJO2ebolVZwd0Ol4czvp3++qgkGH+jcScl0zm9I+x
-        iY29h5OoO05L9D0kOIOQEIYtiB+DL1GEmpdQlGQ=
-X-Google-Smtp-Source: APXvYqyL3NooS+2ggd9zdNLJemCTsHJDuV1xwpwNqzfrpaDL4nGuZMIk0c7+MO0U4L91B22FYl5jAdI4ch3Cf5er3Uk=
-X-Received: by 2002:ac8:2d2c:: with SMTP id n41mr3667775qta.28.1566550600739;
- Fri, 23 Aug 2019 01:56:40 -0700 (PDT)
+        id S1731606AbfHWKhG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Aug 2019 06:37:06 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:58082 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728903AbfHWKhG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Aug 2019 06:37:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=B9eC/SwMJI5wiLehGZuNUOPWsE6j+AyjN0GvMo8gtyU=; b=T1iJyU/i9x2rnee8Nc30yXEbn
+        b4M1dmKyjCguakhSrpU6MivpFpuJOVelgMwGVtVrc0kQk+Hujc/VPcjZXH6p6H4qK2UstUU/s5Ojl
+        KG1E3U5ZmdRmtaKye78/jJ4qBiRNQDLbBEx8DjhZPZH1agfp9dS+ELhAKPkv2JRaMAs23qkMfDue2
+        3oCcXrTBDHVlWrG03tpnxvSj6M0V5Y+Eejd6ESfr4xcfTqq4BFLnzOUQ+2zTshQjY8jsVJFTwEfFv
+        JRvrFRvWPmpDWIxaZJ9scQddSdG65ZJXIUZXlj9/saC4dQaWXcDib7fX+7jWsuvq6PWLJF+E+x4Na
+        gjBirzRPw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60050)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1i16wF-00045J-L4; Fri, 23 Aug 2019 11:36:59 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1i16wA-00009v-LB; Fri, 23 Aug 2019 11:36:54 +0100
+Date:   Fri, 23 Aug 2019 11:36:54 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Chris Clayton <chris2553@googlemail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
+        shuah@kernel.org, sthotton@marvell.com, andre.przywara@arm.com,
+        arnd@arndb.de, salyzyn@android.com, huw@codeweavers.com,
+        catalin.marinas@arm.com, daniel.lezcano@linaro.org,
+        will.deacon@arm.com, linux-mips@vger.kernel.org,
+        ralf@linux-mips.org, 0x7f454c46@gmail.com, paul.burton@mips.com,
+        linux-kselftest@vger.kernel.org, linux@rasmusvillemoes.dk,
+        tglx@linutronix.de, vincenzo.frascino@arm.com, pcc@google.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: Regression in 5.3-rc1 and later
+Message-ID: <20190823103654.GX13294@shell.armlinux.org.uk>
+References: <faaa3843-09a6-1a21-3448-072eeed1ea00@googlemail.com>
 MIME-Version: 1.0
-References: <cover.1566540652.git.han_mao@c-sky.com> <820d80272fc5627b8d00e684663a614470217606.1566540652.git.han_mao@c-sky.com>
-In-Reply-To: <820d80272fc5627b8d00e684663a614470217606.1566540652.git.han_mao@c-sky.com>
-From:   Greentime Hu <green.hu@gmail.com>
-Date:   Fri, 23 Aug 2019 16:56:04 +0800
-Message-ID: <CAEbi=3fbe9zbsLyfA=s9gHtAFJrp5Ox0jWoAqcZudQ_xODicgA@mail.gmail.com>
-Subject: Re: [PATCH V5 1/3] riscv: Add perf callchain support
-To:     Mao Han <han_mao@c-sky.com>
-Cc:     linux-riscv@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <faaa3843-09a6-1a21-3448-072eeed1ea00@googlemail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Mao,
+Hi,
 
-Mao Han <han_mao@c-sky.com> =E6=96=BC 2019=E5=B9=B48=E6=9C=8823=E6=97=A5 =
-=E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=882:16=E5=AF=AB=E9=81=93=EF=BC=9A
+To everyone on the long Cc list...
 
->
-> This patch add support for perf callchain sampling on riscv platform.
-> The return address of leaf function is retrieved from pt_regs as
-> it is not saved in the outmost frame.
->
-> Signed-off-by: Mao Han <han_mao@c-sky.com>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Greentime Hu <green.hu@gmail.com>
-> Cc: Palmer Dabbelt <palmer@sifive.com>
-> Cc: linux-riscv <linux-riscv@lists.infradead.org>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Guo Ren <guoren@kernel.org>
-> ---
->  arch/riscv/Makefile                |   3 +
->  arch/riscv/kernel/Makefile         |   3 +-
->  arch/riscv/kernel/perf_callchain.c | 115 +++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 120 insertions(+), 1 deletion(-)
->  create mode 100644 arch/riscv/kernel/perf_callchain.c
+What's happening with this?  I was about to merge the patches for 32-bit
+ARM, which I don't want to do if doing so will cause this regression on
+32-bit ARM as well.
 
-I just tested "./perf record -e cpu-clock --call-graph fp ls" on
-Unleashed board and I got this failure.
-I take a look at it. It seem failed in here. Do you have any idea?
-It seems fine in Qemu.
+Thanks.
 
-1 *frame =3D *((struct stackframe *)frame->fp - 1);
-ffffffe0001a198c: 00863a83 ld s5,8(a2)
-ffffffe0001a1990: ff093903 ld s2,-16(s2)
+On Thu, Aug 22, 2019 at 07:57:59AM +0100, Chris Clayton wrote:
+> Hi everyone,
+> 
+> Firstly, apologies to anyone on the long cc list that turns out not to be particularly interested in the following, but
+> you were all marked as cc'd in the commit message below.
+> 
+> I've found a problem that isn't present in 5.2 series or 4.19 series kernels, and seems to have arrived in 5.3-rc1. The
+> problem is that if I suspend (to ram) my laptop, on resume 14 minutes or more after suspending, I have no networking
+> functionality. If I resume the laptop after 13 minutes or less, networking works fine. I haven't tried to get finer
+> grained timings between 13 and 14 minutes, but can do if it would help.
+> 
+> ifconfig shows that wlan0 is still up and still has its assigned ip address but, for instance, a ping of any other
+> device on my network, fails as does pinging, say, kernel.org. I've tried "downing" the network with (/sbin/ifdown) and
+> unloading the iwlmvm module and then reloading the module and "upping" (/sbin/ifup) the network, but my network is still
+> unusable. I should add that the problem also manifests if I hibernate the laptop, although my testing of this has been
+> minimal. I can do more if required.
+> 
+> As I say, the problem first appears in 5.3-rc1, so I've bisected between 5.2.0 and 5.3-rc1 and that concluded with:
+> 
+> [chris:~/kernel/linux]$ git bisect good
+> 7ac8707479886c75f353bfb6a8273f423cfccb23 is the first bad commit
+> commit 7ac8707479886c75f353bfb6a8273f423cfccb23
+> Author: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Date:   Fri Jun 21 10:52:49 2019 +0100
+> 
+>     x86/vdso: Switch to generic vDSO implementation
+> 
+>     The x86 vDSO library requires some adaptations to take advantage of the
+>     newly introduced generic vDSO library.
+> 
+>     Introduce the following changes:
+>      - Modification of vdso.c to be compliant with the common vdso datapage
+>      - Use of lib/vdso for gettimeofday
+> 
+>     [ tglx: Massaged changelog and cleaned up the function signature formatting ]
+> 
+>     Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>     Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+>     Cc: linux-arch@vger.kernel.org
+>     Cc: linux-arm-kernel@lists.infradead.org
+>     Cc: linux-mips@vger.kernel.org
+>     Cc: linux-kselftest@vger.kernel.org
+>     Cc: Catalin Marinas <catalin.marinas@arm.com>
+>     Cc: Will Deacon <will.deacon@arm.com>
+>     Cc: Arnd Bergmann <arnd@arndb.de>
+>     Cc: Russell King <linux@armlinux.org.uk>
+>     Cc: Ralf Baechle <ralf@linux-mips.org>
+>     Cc: Paul Burton <paul.burton@mips.com>
+>     Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+>     Cc: Mark Salyzyn <salyzyn@android.com>
+>     Cc: Peter Collingbourne <pcc@google.com>
+>     Cc: Shuah Khan <shuah@kernel.org>
+>     Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+>     Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>     Cc: Huw Davies <huw@codeweavers.com>
+>     Cc: Shijith Thotton <sthotton@marvell.com>
+>     Cc: Andre Przywara <andre.przywara@arm.com>
+>     Link: https://lkml.kernel.org/r/20190621095252.32307-23-vincenzo.frascino@arm.com
+> 
+>  arch/x86/Kconfig                         |   3 +
+>  arch/x86/entry/vdso/Makefile             |   9 ++
+>  arch/x86/entry/vdso/vclock_gettime.c     | 245 ++++---------------------------
+>  arch/x86/entry/vdso/vdsox32.lds.S        |   1 +
+>  arch/x86/entry/vsyscall/Makefile         |   2 -
+>  arch/x86/entry/vsyscall/vsyscall_gtod.c  |  83 -----------
+>  arch/x86/include/asm/pvclock.h           |   2 +-
+>  arch/x86/include/asm/vdso/gettimeofday.h | 191 ++++++++++++++++++++++++
+>  arch/x86/include/asm/vdso/vsyscall.h     |  44 ++++++
+>  arch/x86/include/asm/vgtod.h             |  75 +---------
+>  arch/x86/include/asm/vvar.h              |   7 +-
+>  arch/x86/kernel/pvclock.c                |   1 +
+>  12 files changed, 284 insertions(+), 379 deletions(-)
+>  delete mode 100644 arch/x86/entry/vsyscall/vsyscall_gtod.c
+>  create mode 100644 arch/x86/include/asm/vdso/gettimeofday.h
+>  create mode 100644 arch/x86/include/asm/vdso/vsyscall.h
+> 
+> To confirm my bisection was correct, I did a git checkout of 7ac8707479886c75f353bfb6a8273f423cfccb2. As expected, the
+> kernel exhibited the problem I've described. However, a kernel built at the immediately preceding (parent?) commit
+> (bfe801ebe84f42b4666d3f0adde90f504d56e35b) has a working network after a (>= 14minute) suspend/resume cycle.
+> 
+> As the module name implies, I'm using wireless networking. The hardware is detected as "Intel(R) Wireless-AC 9260
+> 160MHz, REV=0x324" by iwlwifi.
+> 
+> I'm more than happy to provide additional diagnostics (but may need a little hand-holding) and to apply diagnostic or
+> fix patches, but please cc me on any reply as I'm not subscribed to any of the kernel-related mailing lists.
+> 
+> Chris
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
 
-./perf record -e cpu-clock --call-graph fp ls
-[ 9619.423884] hrtimer: interrupt took 733000 ns
-[ 9619.977017] Unable to handle kernel paging request at virtual
-address ffffffffffffff94
-[ 9620.214736] Oops [#1]
-[ 9620.289893] Modules linked in:
-[ 9620.391378] CPU: 0 PID: 264 Comm: ls Not tainted
-5.3.0-rc5-00003-gb008f6bcd67c #4
-[ 9620.640176] sepc: ffffffe0001a198c ra : ffffffe0001a199a sp :
-ffffffe000093720
-[ 9620.880366] gp : ffffffe00097dad8 tp : ffffffe000082e40 t0 : 00000000000=
-46000
-[ 9621.120564] t1 : 0000000000000002 t2 : 0000000000000007 s0 : ffffffe0000=
-93760
-[ 9621.360768] s1 : ffffffe000093788 a0 : 0000000000000003 a1 : 00000000000=
-00000
-[ 9621.600991] a2 : ffffffffffffff8c a3 : 0000000000001fa0 a4 : 00000000000=
-00010
-[ 9621.841181] a5 : 0000000000000002 a6 : 0000000000000001 a7 : ffffffe079b=
-34e10
-[ 9622.081400] s2 : ffffffffffffff9c s3 : ffffffe000000000 s4 : 00000000000=
-01ff8
-[ 9622.321618] s5 : ffffffe000093da0 s6 : ffffffe00097d540 s7 : ffffffe07a1=
-517a0
-[ 9622.561811] s8 : 000008bf01c7ff60 s9 : ffffffe000235b2a s10: 00000002000=
-00120
-[ 9622.802015] s11: 0000000000000001 t3 : ffffffe079b34e00 t4 : 00000000000=
-00001
-[ 9623.042194] t5 : 0000000000000008 t6 : ffffffe0009208d0
-[ 9623.218785] sstatus: 0000000200000100 sbadaddr: ffffffffffffff94
-scause: 000000000000000d
-[ 9623.490850] ---[ end trace 49043f28e856d84d ]---
-[ 9623.644217] Kernel panic - not syncing: Fatal exception in interrupt
-[ 9623.855470] SMP: stopping secondary CPUs
-[ 9623.985955] ---[ end Kernel panic - not syncing: Fatal exception in
-interrupt ]---
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
