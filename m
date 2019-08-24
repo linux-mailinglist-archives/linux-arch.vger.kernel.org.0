@@ -2,90 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3492A07BA
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2019 18:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77212A08B8
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2019 19:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726839AbfH1Qod (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Aug 2019 12:44:33 -0400
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:29386 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726428AbfH1Qod (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Aug 2019 12:44:33 -0400
-X-Greylist: delayed 122884 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Aug 2019 12:44:32 EDT
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id x7SGiTPF015371;
-        Thu, 29 Aug 2019 01:44:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com x7SGiTPF015371
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1567010670;
-        bh=e1hH8CBw3pTYY3HHzh3H8POLx73d67OzfAZZG2jnVkA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fphZv3IiMtuovqUjlnhdmushuHpkmH7AEwh4QA9h3lPHf8yP6K5/NEEjoUtOMQGiQ
-         sNE8g4gkK9OCYIeVTzhXv/aMzEeYk6165vAC6Q3N8gR/R8uZMxUpgW1ksJFU9HXZmn
-         0jyylpTJS32QbeaWhdLWOp2NS9F3OcvG694tqCz7c4SB9sRIXkU74Fc5FVyHs3gzps
-         siZVhZ9GBGzBgK9mKO7HGwdKK4q8qNcM3XB31kFB3E6WNrv0NTIFL+74t3X3TM5l+8
-         bL6cjLvCi3eLBuC2N8xYVvkUN+YlTaf68qUW0J96HIgLlSc1T8re+Q3q5WL0akQha2
-         Ox7pACGvE3tRg==
-X-Nifty-SrcIP: [209.85.217.41]
-Received: by mail-vs1-f41.google.com with SMTP id q16so435542vsm.2;
-        Wed, 28 Aug 2019 09:44:30 -0700 (PDT)
-X-Gm-Message-State: APjAAAXguinGtI0Af7bAHhy211VSFEGRFCHFJ2DbcqF6Htmgg/G2c2sh
-        pmmVXkKl+P4TAGoT6bRvRtTlvb2PujmPBOzFEaI=
-X-Google-Smtp-Source: APXvYqzSBjxbOQ79LtktP5SLi0bZ7ZwT63m8MldDi3aE51M3q/PPrjo1Is6aX8D4g8xsNBY3kQ2m291dBDxhQtwOHBw=
-X-Received: by 2002:a67:8a83:: with SMTP id m125mr2945317vsd.181.1567010668683;
- Wed, 28 Aug 2019 09:44:28 -0700 (PDT)
+        id S1727320AbfH1RhF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Aug 2019 13:37:05 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:37524 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727096AbfH1Rge (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Aug 2019 13:36:34 -0400
+Received: by mail-pg1-f195.google.com with SMTP id d1so109135pgp.4
+        for <linux-arch@vger.kernel.org>; Wed, 28 Aug 2019 10:36:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H81+yOfZIX+C0OkVOiTOPB8MS8Z/VXRjW2hNsAZ0BmE=;
+        b=oIGNA7zeFP/zFnPe/cIum5wdjPrHvoMLsfeTliBiOVxQYlyCXaPqnO3SHVa89WISFB
+         80JplJgciW454D9Z5TpezYCuRwcCCHqoHVN2S8lFPm9/skVtCQGYrHlFREHLOshNCxWz
+         iyelp2X12cknm0AIsjcusjnLaLUZp55DKAKHE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H81+yOfZIX+C0OkVOiTOPB8MS8Z/VXRjW2hNsAZ0BmE=;
+        b=WGqacGrNp4cdHcAsjvZ/r2JdlNC5pVQAzraQTKU9X9Jr0HO4K5bxMwg72mdqhftiOG
+         z1ao9h/n+H49ZU3+3srzhIo6FNF6NnOfHPpTGDb8ksP/1xozMNS5pfJBq2qND+xbSsqL
+         jXN9eyqlHvGTRE9ZT1lghIVQxge8LPNB/3tV6aYAfiGYmkEM23lmGhIfZXPlAYFoaB05
+         xngEJP7oVjSZ/ny2+NS4ei8a/ExtYPKVQ44dwxyN/r+7YBMXDOoH7EnVkmDaN4a+uf1y
+         uBrif34iDa1wAL03EEQ++RzPpuLA8mNSVqT0jZxDJRenuZxOhVZG0sj7920MDUsHkJke
+         90BA==
+X-Gm-Message-State: APjAAAXd/LsPf4l5Pz63vEqzMqFf2V1rCodvF8u2vxQ8zInAjOfXqcE+
+        CquvCl9Ksy6Z5LEl3Qr31bPTWA==
+X-Google-Smtp-Source: APXvYqwfqL1fQunyEe0XwF9IhDZjen+nYUd1RNXPbNXfQoln/hNXyPNFYH0ug0RuWImFxCqV0CT8eA==
+X-Received: by 2002:a63:7e1d:: with SMTP id z29mr4479374pgc.346.1567013794108;
+        Wed, 28 Aug 2019 10:36:34 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k25sm3212318pgt.53.2019.08.28.10.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Aug 2019 10:36:29 -0700 (PDT)
+Date:   Sat, 24 Aug 2019 10:17:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Drew Davenport <ddavenport@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Feng Tang <feng.tang@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] bug: Move WARN_ON() "cut here" into exception handler
+Message-ID: <201908241016.9DCD43AF1@keescook>
+References: <20190819234111.9019-1-keescook@chromium.org>
+ <20190819234111.9019-8-keescook@chromium.org>
+ <20190820100638.GK2332@hirez.programming.kicks-ass.net>
+ <06ba33fd-27cc-3816-1cdf-70616b1782dd@c-s.fr>
+ <20190820211429.7030b6f6@oasis.local.home>
 MIME-Version: 1.0
-References: <20190819055421.13482-1-yamada.masahiro@socionext.com> <CAMuHMdVpn01Tcjm1Z3Jp--kiNYf4R5=AyH-huc26RwP19w9OZQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdVpn01Tcjm1Z3Jp--kiNYf4R5=AyH-huc26RwP19w9OZQ@mail.gmail.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Thu, 29 Aug 2019 01:43:52 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARB_LO=DWKQ-vcKSNkTih_3XhjqD-f8-VmSKmGZD=iHRQ@mail.gmail.com>
-Message-ID: <CAK7LNARB_LO=DWKQ-vcKSNkTih_3XhjqD-f8-VmSKmGZD=iHRQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: add CONFIG_ASM_MODVERSIONS
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190820211429.7030b6f6@oasis.local.home>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 6:13 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> On Mon, Aug 19, 2019 at 7:55 AM Masahiro Yamada
-> <yamada.masahiro@socionext.com> wrote:
-> > Add CONFIG_ASM_MODVERSIONS to remove one if-conditional nesting
-> > from Makefile.build
+On Tue, Aug 20, 2019 at 09:14:29PM -0400, Steven Rostedt wrote:
+> On Tue, 20 Aug 2019 12:58:49 +0200
+> Christophe Leroy <christophe.leroy@c-s.fr> wrote:
+> 
+> > >> index 1077366f496b..6c22e8a6f9de 100644
+> > >> --- a/lib/bug.c
+> > >> +++ b/lib/bug.c
+> > >> @@ -181,6 +181,15 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+> > >>   		}
+> > >>   	}
+> > >>   
+> > >> +	/*
+> > >> +	 * BUG() and WARN_ON() families don't print a custom debug message
+> > >> +	 * before triggering the exception handler, so we must add the
+> > >> +	 * "cut here" line now. WARN() issues its own "cut here" before the
+> > >> +	 * extra debugging message it writes before triggering the handler.
+> > >> +	 */
+> > >> +	if ((bug->flags & BUGFLAG_PRINTK) == 0)
+> > >> +		printk(KERN_DEFAULT CUT_HERE);  
+> > > 
+> > > I'm not loving that BUGFLAG_PRINTK name, BUGFLAG_CUT_HERE makes more
+> > > sense to me.
+> > >   
+> > 
+> > Actually it would be BUGFLAG_NO_CUT_HERE then, otherwise all arches not 
+> > using the generic macros will have to add the flag to get the "cut here" 
+> > line.
 > >
-> > This also avoid $(wildcard ...) evaluation for every descending,
-> > but I did not see measurable performance improvement.
-> >
-> > Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
->
->
-> >  arch/m68k/Kconfig      | 1 +
->
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
+> 
+> Perhaps they all should be audited to see if they don't have the same
+> problem?
 
-Applied to linux-kbuild.
-
-
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
-
+As far as I could tell, all the other combinations end up either using
+the slow path bug helpers or the common exception handler.
+warn-with-a-fmt-string is the only case that does the "early cut here".
 
 -- 
-Best Regards
-Masahiro Yamada
+Kees Cook
