@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC0F9C3C9
-	for <lists+linux-arch@lfdr.de>; Sun, 25 Aug 2019 15:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 975E29C3D4
+	for <lists+linux-arch@lfdr.de>; Sun, 25 Aug 2019 15:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728664AbfHYNZA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 25 Aug 2019 09:25:00 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37602 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbfHYNZA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Aug 2019 09:25:00 -0400
-Received: by mail-pg1-f194.google.com with SMTP id d1so8750298pgp.4;
-        Sun, 25 Aug 2019 06:24:59 -0700 (PDT)
+        id S1727186AbfHYNZH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 25 Aug 2019 09:25:07 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:33442 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbfHYNZH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Aug 2019 09:25:07 -0400
+Received: by mail-pg1-f193.google.com with SMTP id n190so8764662pgn.0;
+        Sun, 25 Aug 2019 06:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JqpgoR8V6SjsIuqoJ+8NqdaMmEPfAbLAaPv+Hcgdg84=;
-        b=cOVJF79WqvqKRT3ZXzzxuLNI4rbZt4lfbP6az49c1byhyK2QahOrqbSI2dB2fZhWCC
-         xJCbft2VLYrbwdzXF9jIiXUwPyokyE/gLjMn6UbplIiyUIshSRGBh09bXozM15K1nsuc
-         hVqsLwo8519kPAFe9mVCqIiwt6iUC7u7wKwV7QZ33C4FGl/cd3m96WtMvKbt7c4jcDwj
-         QB3okZeBtzimdK2gKfpcMlyKmkszszsFr79e3wOM8/ErGZfWwWpwQlwOhcLgo9WKQzwE
-         CO6qHnCy0oV9Gt51zgP/CeciV8d7/eTmq3bR5PhIONNKkekvCWxA77q6JHkEqqoviw1X
-         t/Aw==
+        bh=NnHjdka8q9MM1nbcRBaxfkCGVCCjsDG70zM+YYdNV3E=;
+        b=g03zkfsq+c6M14xC3btV7g6IPmWaG8X+9s5nY7dD43zw7K8+Dl6zmdV/meLJmfcsMD
+         /XzawISKOMxF9+tzCwu74cViPpHxmr/GarsoBsTn/ENQVJNySASP3aLxbeDN7HAHeP7x
+         5AqjpbMw/SWUexnfZkPSUIB379U8mtrc4sNHcxkuWU4mRUZg6at+EX63IeNV5JvMSKsP
+         dwxVFHi7nznxJzkCv1jujm1jXMieR9Eb+5viooHTscZhT58A5U5DAPY7JJfRziAsgBjm
+         JRivX+QMRW56PFrMRP81NpX/zHCaOTF8BBRZ+789DiMV5Tbs37PC1YPOlEkouAyarn5N
+         J2Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JqpgoR8V6SjsIuqoJ+8NqdaMmEPfAbLAaPv+Hcgdg84=;
-        b=mOFXtfrojZMFj5GRx6aa/j0HTaIxCmvwElBjvtSDulFunj5iJOOxz7dkLlRv8EHmRr
-         aa1Tc5ii+JEBm2wWFT5Sa0HLITvbi7OAvgjlzEBcpanowd5vRo45LzNYH9/3VMpyKsr4
-         QwNkHoDGNAb5boKHsefXht0Cuso3JulpCyreeEajwHYvEQktEnX1mjqBRvZe7WmA/iBc
-         aR+KfSdGQUI6+kQHQ2/UoYqntLH5BNOU63TBOZ47yuVVG2tp0v08IqRXycWB6dTVXJiq
-         KPGgFcRZ+ZAZnWMuTiPQqgPyOBagBAnMA/lWGjCXbTzXB3u6wLrAcTotiwcTN+wZBzVZ
-         pESA==
-X-Gm-Message-State: APjAAAVwazIonjV+0hL9+BLBss6rFw8gtn5MA4EagCRk/LkBI0yqUd2a
-        DzB5mB9m1JGnhoJRPUtFg+0=
-X-Google-Smtp-Source: APXvYqwQzM/nOUwplTcnKi74XFc9NcY/wLN6wqU0HucyOEq0vc6nrliugvK9Jha3kK8nxmI1irB8+w==
-X-Received: by 2002:a63:fb14:: with SMTP id o20mr11958817pgh.136.1566739498486;
-        Sun, 25 Aug 2019 06:24:58 -0700 (PDT)
+        bh=NnHjdka8q9MM1nbcRBaxfkCGVCCjsDG70zM+YYdNV3E=;
+        b=b+WQuzbLUyNNHmy8Nk63Q5sXxZkk//HwJsNXmZUHfdE0cW6Du3EqeBttdXiMc7lji4
+         yvNt5il60tpcQ2MGTF2wGE2Z7B+nBpnqIpSbSPxlEZJXBFZ4rMnE/CquzdQSaUqDceoL
+         WTVoP8xt2O1e9tMoVNELhjliIrKDz8FZucgnCH6DODwH0dnpYmVC6MOFIMZAo5YSHNAg
+         +M4pYLbG/UHAR5VR8jkbr4Wd2m7Rkt14fU6OfVso0qOMG3W5neOwIgEkPPi1Ux9kYxco
+         Eoa3/olWVw7cgOogx5ogNDSyPVJh8oAQFAozdkT+UpxiYIVltP0EpL35XcmgetbR8TQ3
+         vIGQ==
+X-Gm-Message-State: APjAAAUhTL5PiowEWjTzv/Keb481HF9T+0mdfE1EVTJbGPVE24dervDC
+        oKhn28KNx6RsVVIiyuGvveQ=
+X-Google-Smtp-Source: APXvYqyz1vAktHcdxrCebWGWWISA04KQUpd77awztbV1MU/g3rutrKQ4McqGMrzQW2zfpUUXANHC4Q==
+X-Received: by 2002:aa7:97aa:: with SMTP id d10mr15293204pfq.176.1566739506119;
+        Sun, 25 Aug 2019 06:25:06 -0700 (PDT)
 Received: from localhost.localdomain ([149.28.153.17])
-        by smtp.gmail.com with ESMTPSA id y23sm11076562pfr.86.2019.08.25.06.24.51
+        by smtp.gmail.com with ESMTPSA id y23sm11076562pfr.86.2019.08.25.06.24.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Aug 2019 06:24:58 -0700 (PDT)
+        Sun, 25 Aug 2019 06:25:05 -0700 (PDT)
 From:   Changbin Du <changbin.du@gmail.com>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>
@@ -56,9 +56,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Jessica Yu <jeyu@kernel.org>,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
         Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH 09/11] x86_64: add function prototype recording support
-Date:   Sun, 25 Aug 2019 21:23:28 +0800
-Message-Id: <20190825132330.5015-10-changbin.du@gmail.com>
+Subject: [PATCH 10/11] ftrace: add doc for new option record-funcproto
+Date:   Sun, 25 Aug 2019 21:23:29 +0800
+Message-Id: <20190825132330.5015-11-changbin.du@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190825132330.5015-1-changbin.du@gmail.com>
 References: <20190825132330.5015-1-changbin.du@gmail.com>
@@ -69,173 +69,37 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch implements the arch_fgraph_record_params() function for x86_64
-platform and deliver the return value of function to ftrace core part.
+Just add the doc for our new feature.
 
 Signed-off-by: Changbin Du <changbin.du@gmail.com>
 ---
- arch/x86/Kconfig            |  1 +
- arch/x86/kernel/ftrace.c    | 84 +++++++++++++++++++++++++++++++++++--
- arch/x86/kernel/ftrace_64.S |  4 +-
- 3 files changed, 85 insertions(+), 4 deletions(-)
+ Documentation/trace/ftrace.rst | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 222855cc0158..34e583bfdab8 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -31,6 +31,7 @@ config X86_64
- 	select NEED_DMA_MAP_STATE
- 	select SWIOTLB
- 	select ARCH_HAS_SYSCALL_WRAPPER
-+	select HAVE_FTRACE_FUNC_PROTOTYPE
+diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+index f60079259669..c68fbbedb8bd 100644
+--- a/Documentation/trace/ftrace.rst
++++ b/Documentation/trace/ftrace.rst
+@@ -988,6 +988,7 @@ To see what is available, simply cat the file::
+ 	nolatency-format
+ 	record-cmd
+ 	norecord-tgid
++	norecord-funcproto
+ 	overwrite
+ 	nodisable_on_free
+ 	irq-info
+@@ -1131,6 +1132,11 @@ Here are the available options:
+ 	mapped Thread Group IDs (TGID) mapping to pids. See
+ 	"saved_tgids".
  
- config FORCE_DYNAMIC_FTRACE
- 	def_bool y
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index a044734167af..fc0a062ce762 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -31,6 +31,7 @@
- #include <asm/ftrace.h>
- #include <asm/nops.h>
- #include <asm/text-patching.h>
-+#include <asm-generic/dwarf.h>
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
- 
-@@ -918,7 +919,8 @@ static void *addr_from_call(void *ptr)
- }
- 
- void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
--			   unsigned long frame_pointer);
-+			   unsigned long frame_pointer,
-+			   struct pt_regs *pt_regs);
- 
- /*
-  * If the ops->trampoline was not allocated, then it probably
-@@ -973,6 +975,82 @@ void arch_ftrace_trampoline_free(struct ftrace_ops *ops)
- 	ops->trampoline = 0;
- }
- 
-+#ifdef CONFIG_FTRACE_FUNC_PROTOTYPE
-+void arch_fgraph_record_params(struct ftrace_graph_ent *trace,
-+			       struct func_prototype *proto,
-+			       struct pt_regs *pt_regs)
-+{
-+	int i;
++  record-funcproto
++	Record function parameters and return value. This option
++	is only supported by function_graph tracer on x86_64
++	platform by now.
 +
-+	trace->nr_param = min(proto->nr_param, (uint8_t)FTRACE_MAX_FUNC_PARAMS);
-+
-+	for (i = 0; i < trace->nr_param; i++) {
-+		struct func_param *param = &proto->params[i];
-+		unsigned int sz = FTRACE_PROTOTYPE_SIZE(param->type);
-+		long off = (char)param->loc[1];
-+		unsigned long value = 0;
-+		bool good = true;
-+
-+		if (sz > sizeof(value)) {
-+			/* Don't record value of complex type. */
-+			trace->param_types[i] = param->type;
-+			trace->param_values[i] = 0;
-+			continue;
-+		}
-+
-+		switch (param->loc[0]) {
-+		case DW_OP_reg1:
-+			value = pt_regs->dx;
-+			break;
-+		case DW_OP_reg2:
-+			value = pt_regs->cx;
-+			break;
-+		case DW_OP_reg3:
-+			value = pt_regs->bx;
-+			break;
-+		case DW_OP_reg4:
-+			value = pt_regs->si;
-+			break;
-+		case DW_OP_reg5:
-+			value = pt_regs->di;
-+			break;
-+		case DW_OP_reg6:
-+			value = pt_regs->bp;
-+			break;
-+		case DW_OP_reg8:
-+			value = pt_regs->r8;
-+			break;
-+		case DW_OP_reg9:
-+			value = pt_regs->r9;
-+			break;
-+		case DW_OP_fbreg:
-+			if (probe_kernel_read(&value,
-+					(void *)pt_regs->bp + off,
-+					sz))
-+				good = false;
-+			break;
-+		case DW_OP_breg7:
-+			if (probe_kernel_read(&value,
-+					(void *)pt_regs->sp + off,
-+					sz))
-+				good = false;
-+			break;
-+		default:
-+			/* unexpected loc expression */
-+			good = false;
-+		}
-+
-+		trace->param_names[i] = param->name;
-+		if (good) {
-+			trace->param_types[i] = param->type;
-+			trace->param_values[i] = value;
-+		} else {
-+			/* set the type to 0 so we skip it when printing. */
-+			trace->param_types[i] = 0;
-+		}
-+	}
-+}
-+#endif /* CONFIG_FTRACE_FUNC_PROTOTYPE */
- #endif /* CONFIG_X86_64 */
- #endif /* CONFIG_DYNAMIC_FTRACE */
- 
-@@ -1017,7 +1095,7 @@ int ftrace_disable_ftrace_graph_caller(void)
-  * in current thread info.
-  */
- void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
--			   unsigned long frame_pointer)
-+			   unsigned long frame_pointer, struct pt_regs *pt_regs)
- {
- 	unsigned long old;
- 	int faulted;
-@@ -1072,7 +1150,7 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
- 		return;
- 	}
- 
--	if (function_graph_enter(old, self_addr, frame_pointer, parent, NULL))
-+	if (function_graph_enter(old, self_addr, frame_pointer, parent, pt_regs))
- 		*parent = old;
- }
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index 809d54397dba..e01d6358e859 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -289,7 +289,8 @@ ENTRY(ftrace_graph_caller)
- 
- 	leaq MCOUNT_REG_SIZE+8(%rsp), %rsi
- 	movq $0, %rdx	/* No framepointers needed */
--	call	prepare_ftrace_return
-+	movq %rsp, %rcx /* the fourth parameter */
-+	call prepare_ftrace_return
- 
- 	restore_mcount_regs
- 
-@@ -304,6 +305,7 @@ ENTRY(return_to_handler)
- 	movq %rax, (%rsp)
- 	movq %rdx, 8(%rsp)
- 	movq %rbp, %rdi
-+	movq %rax, %rsi
- 
- 	call ftrace_return_to_handler
- 
+   overwrite
+ 	This controls what happens when the trace buffer is
+ 	full. If "1" (default), the oldest events are
 -- 
 2.20.1
 
