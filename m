@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 975E29C3D4
-	for <lists+linux-arch@lfdr.de>; Sun, 25 Aug 2019 15:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E409C3DE
+	for <lists+linux-arch@lfdr.de>; Sun, 25 Aug 2019 15:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727186AbfHYNZH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 25 Aug 2019 09:25:07 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:33442 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbfHYNZH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Aug 2019 09:25:07 -0400
-Received: by mail-pg1-f193.google.com with SMTP id n190so8764662pgn.0;
-        Sun, 25 Aug 2019 06:25:06 -0700 (PDT)
+        id S1727132AbfHYNZO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 25 Aug 2019 09:25:14 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33450 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbfHYNZO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Aug 2019 09:25:14 -0400
+Received: by mail-pg1-f195.google.com with SMTP id n190so8764783pgn.0;
+        Sun, 25 Aug 2019 06:25:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NnHjdka8q9MM1nbcRBaxfkCGVCCjsDG70zM+YYdNV3E=;
-        b=g03zkfsq+c6M14xC3btV7g6IPmWaG8X+9s5nY7dD43zw7K8+Dl6zmdV/meLJmfcsMD
-         /XzawISKOMxF9+tzCwu74cViPpHxmr/GarsoBsTn/ENQVJNySASP3aLxbeDN7HAHeP7x
-         5AqjpbMw/SWUexnfZkPSUIB379U8mtrc4sNHcxkuWU4mRUZg6at+EX63IeNV5JvMSKsP
-         dwxVFHi7nznxJzkCv1jujm1jXMieR9Eb+5viooHTscZhT58A5U5DAPY7JJfRziAsgBjm
-         JRivX+QMRW56PFrMRP81NpX/zHCaOTF8BBRZ+789DiMV5Tbs37PC1YPOlEkouAyarn5N
-         J2Fw==
+        bh=0QzXKgHJNJjac27m2EIm1Lz0/kAofQ72J+526iejRFQ=;
+        b=GO/PVWf3Aip/lj76SnUDb0sMdXD+1tVF4Pr4MtQbEEKh9xmXb2UDDeimXy+D9tSRoG
+         ONfI3x+1GnVxlk4972mu5UBRbB3v9cDn0s0GXIfDvUkoxvFpZB7qpM3Wm7svq08IqXES
+         3/9H/nvW/APPaP6DXd/ZlsqTaXXFgfY5nbRum3oET7EhpHDQM6O7aQgrLYUCx31vh/tp
+         Pj3jnXMeh/9xoFgvF62TEqWkl9dtlG9kZEQ23LqbLsRsqn9qkIxzDaA35xnLfCdk7Yvg
+         kdWiDXZHWBnkOUGF5K8KzJ635D2qzEbl/F8Ge9MZplop+b+vPJfi/jVV3tdF7l5wEKUI
+         HPiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NnHjdka8q9MM1nbcRBaxfkCGVCCjsDG70zM+YYdNV3E=;
-        b=b+WQuzbLUyNNHmy8Nk63Q5sXxZkk//HwJsNXmZUHfdE0cW6Du3EqeBttdXiMc7lji4
-         yvNt5il60tpcQ2MGTF2wGE2Z7B+nBpnqIpSbSPxlEZJXBFZ4rMnE/CquzdQSaUqDceoL
-         WTVoP8xt2O1e9tMoVNELhjliIrKDz8FZucgnCH6DODwH0dnpYmVC6MOFIMZAo5YSHNAg
-         +M4pYLbG/UHAR5VR8jkbr4Wd2m7Rkt14fU6OfVso0qOMG3W5neOwIgEkPPi1Ux9kYxco
-         Eoa3/olWVw7cgOogx5ogNDSyPVJh8oAQFAozdkT+UpxiYIVltP0EpL35XcmgetbR8TQ3
-         vIGQ==
-X-Gm-Message-State: APjAAAUhTL5PiowEWjTzv/Keb481HF9T+0mdfE1EVTJbGPVE24dervDC
-        oKhn28KNx6RsVVIiyuGvveQ=
-X-Google-Smtp-Source: APXvYqyz1vAktHcdxrCebWGWWISA04KQUpd77awztbV1MU/g3rutrKQ4McqGMrzQW2zfpUUXANHC4Q==
-X-Received: by 2002:aa7:97aa:: with SMTP id d10mr15293204pfq.176.1566739506119;
-        Sun, 25 Aug 2019 06:25:06 -0700 (PDT)
+        bh=0QzXKgHJNJjac27m2EIm1Lz0/kAofQ72J+526iejRFQ=;
+        b=Jvvca8TFYhzYsqQ/ZFPDiSNutCaBpej+5YxzhZvvjJSLbcab7uIEPRV4tJHG5HKAJl
+         suuVlly85JWk8GgrzrdO2B0jEvxIm00qLeTDHwk1Cy50T7dGhJiQgTdapAUv4Q/dmFqK
+         ktEHfIU49Eus3RvJ8DDf1p2zeAyBBOT8k0bs7/l1uiYiYfawHQOYTCNW2LXahdcxRees
+         TPbf8FdMQbJvUvdbXBF1OIGIWMrTGrKiBZyed30PdtcPXZQPs0V12fjqtUhi2n+9P8o+
+         tWmTdbVjPxFuQEYrn4nAsfwk73qYxlDYCak06TUX4mXFYkBhhJ3e17kD8XBjdyt02W+2
+         452A==
+X-Gm-Message-State: APjAAAWBPEmoJISmEYJN+ZGWdinrVEqqb+pPMSFlF05v0L2Uug8TFZch
+        Q5tzo4+eWCFxJS4ZJeLe6Vk=
+X-Google-Smtp-Source: APXvYqxZ3PAtXLqHmn+Zgv1+tnSLgb0uWh1NyJ7+nIhirLt8hpEvkUAsM2RAxT5IIyrqsmvFKAmyHw==
+X-Received: by 2002:a17:90a:3465:: with SMTP id o92mr14610155pjb.20.1566739513587;
+        Sun, 25 Aug 2019 06:25:13 -0700 (PDT)
 Received: from localhost.localdomain ([149.28.153.17])
-        by smtp.gmail.com with ESMTPSA id y23sm11076562pfr.86.2019.08.25.06.24.58
+        by smtp.gmail.com with ESMTPSA id y23sm11076562pfr.86.2019.08.25.06.25.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Aug 2019 06:25:05 -0700 (PDT)
+        Sun, 25 Aug 2019 06:25:13 -0700 (PDT)
 From:   Changbin Du <changbin.du@gmail.com>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>
@@ -56,9 +56,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Jessica Yu <jeyu@kernel.org>,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
         Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH 10/11] ftrace: add doc for new option record-funcproto
-Date:   Sun, 25 Aug 2019 21:23:29 +0800
-Message-Id: <20190825132330.5015-11-changbin.du@gmail.com>
+Subject: [PATCH 11/11] MAINTAINERS: make scripts/ftrace/ maintained
+Date:   Sun, 25 Aug 2019 21:23:30 +0800
+Message-Id: <20190825132330.5015-12-changbin.du@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190825132330.5015-1-changbin.du@gmail.com>
 References: <20190825132330.5015-1-changbin.du@gmail.com>
@@ -69,37 +69,34 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Just add the doc for our new feature.
+Make scripts/ftrace/ maintained and I would like to help with reviewing
+related patches.
 
 Signed-off-by: Changbin Du <changbin.du@gmail.com>
 ---
- Documentation/trace/ftrace.rst | 6 ++++++
- 1 file changed, 6 insertions(+)
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
-index f60079259669..c68fbbedb8bd 100644
---- a/Documentation/trace/ftrace.rst
-+++ b/Documentation/trace/ftrace.rst
-@@ -988,6 +988,7 @@ To see what is available, simply cat the file::
- 	nolatency-format
- 	record-cmd
- 	norecord-tgid
-+	norecord-funcproto
- 	overwrite
- 	nodisable_on_free
- 	irq-info
-@@ -1131,6 +1132,11 @@ Here are the available options:
- 	mapped Thread Group IDs (TGID) mapping to pids. See
- 	"saved_tgids".
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9cbcf167bdd0..ca012ea260d7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16293,6 +16293,7 @@ F:	drivers/char/tpm/
+ TRACING
+ M:	Steven Rostedt <rostedt@goodmis.org>
+ M:	Ingo Molnar <mingo@redhat.com>
++R:	Changbin Du <changbin.du@gmail.com>
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
+ S:	Maintained
+ F:	Documentation/trace/ftrace.rst
+@@ -16303,6 +16304,7 @@ F:	include/linux/trace*.h
+ F:	include/trace/
+ F:	kernel/trace/
+ F:	tools/testing/selftests/ftrace/
++F:	scripts/ftrace/
  
-+  record-funcproto
-+	Record function parameters and return value. This option
-+	is only supported by function_graph tracer on x86_64
-+	platform by now.
-+
-   overwrite
- 	This controls what happens when the trace buffer is
- 	full. If "1" (default), the oldest events are
+ TRACING MMIO ACCESSES (MMIOTRACE)
+ M:	Steven Rostedt <rostedt@goodmis.org>
 -- 
 2.20.1
 
