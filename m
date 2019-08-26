@@ -2,55 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBF39C9E2
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 09:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3369CACF
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 09:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729769AbfHZHJo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Aug 2019 03:09:44 -0400
-Received: from verein.lst.de ([213.95.11.211]:46394 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729625AbfHZHJo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Aug 2019 03:09:44 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B04E568B02; Mon, 26 Aug 2019 09:09:39 +0200 (CEST)
-Date:   Mon, 26 Aug 2019 09:09:39 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     catalin.marinas@arm.com, hch@lst.de, wahrenst@gmx.net,
-        marc.zyngier@arm.com, robh+dt@kernel.org,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arch@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, phill@raspberryi.org,
-        f.fainelli@gmail.com, will@kernel.org,
-        linux-kernel@vger.kernel.org, eric@anholt.net, mbrugger@suse.com,
-        linux-rpi-kernel@lists.infradead.org, akpm@linux-foundation.org,
-        frowand.list@gmail.com, m.szyprowski@samsung.com
-Subject: Re: [PATCH v2 01/11] asm-generic: add dma_zone_size
-Message-ID: <20190826070939.GD11331@lst.de>
-References: <20190820145821.27214-1-nsaenzjulienne@suse.de> <20190820145821.27214-2-nsaenzjulienne@suse.de>
+        id S1730246AbfHZHmt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Aug 2019 03:42:49 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55080 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728198AbfHZHms (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Aug 2019 03:42:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=lIut4B8w/K6qaNO5//JKDXgxZBzz15ddgNf2zVVfQ1E=; b=f6XJLfxeBVv9Hyb0B1vtj9oxL
+        i8iw5LMMkKhG+T6Xu47kb2+iCLpMrKBQjXS1NBw74AP7B3pgxUBsbndSWQGizhRtNCAgW99j5+OeI
+        c+T+1uJAk4oCoRSmOm0NE/wm6iL8VH+qSfESDzvXkGeSKy+GyCJWsD5r3LnItvz8EK4g8tAXBgRgi
+        JMSMaRtxN+OddwD4UaHD/oWS7Za8/f15E/5LTf3nBtMiL8X2OQpSYRhvIozCuZOKt/2bBeTu5XD5k
+        MSr7q1wHFvaw9hwCCzoDKZY0xDJWDWNsCSapSfqxfwjWoZuh5bxf2qBIOtw+RF3Jx2EN1us7T239k
+        nCed49xqA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i29dr-0004v1-6h; Mon, 26 Aug 2019 07:42:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3BB083075FE;
+        Mon, 26 Aug 2019 09:41:42 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9740120B33552; Mon, 26 Aug 2019 09:42:15 +0200 (CEST)
+Date:   Mon, 26 Aug 2019 09:42:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, Jessica Yu <jeyu@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH 03/11] asm-generic: add generic dwarf definition
+Message-ID: <20190826074215.GL2369@hirez.programming.kicks-ass.net>
+References: <20190825132330.5015-1-changbin.du@gmail.com>
+ <20190825132330.5015-4-changbin.du@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190820145821.27214-2-nsaenzjulienne@suse.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20190825132330.5015-4-changbin.du@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 20, 2019 at 04:58:09PM +0200, Nicolas Saenz Julienne wrote:
-> Some architectures have platform specific DMA addressing limitations.
-> This will allow for hardware description code to provide the constraints
-> in a generic manner, so as for arch code to properly setup it's memory
-> zones and DMA mask.
+On Sun, Aug 25, 2019 at 09:23:22PM +0800, Changbin Du wrote:
+> Add generic DWARF constant definitions. We will use it later.
+> 
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> ---
+>  include/asm-generic/dwarf.h | 199 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 199 insertions(+)
+>  create mode 100644 include/asm-generic/dwarf.h
+> 
+> diff --git a/include/asm-generic/dwarf.h b/include/asm-generic/dwarf.h
+> new file mode 100644
+> index 000000000000..c705633c2a8f
+> --- /dev/null
+> +++ b/include/asm-generic/dwarf.h
+> @@ -0,0 +1,199 @@
+> +/* SPDX-License-Identifier: GPL-2.0
+> + *
+> + * Architecture independent definitions of DWARF.
+> + *
+> + * Copyright (C) 2019 Changbin Du <changbin.du@gmail.com>
 
-I know this just spreads the arm code, but I still kinda hate it.
+You're claiming copyright on dwarf definitions? ;-)
 
-MAX_DMA_ADDRESS is such an oddly defined concepts.  We have the mm
-code that uses it to start allocating after the dma zones, but
-I think that would better be done using a function returning
-1 << max(zone_dma_bits, 32) or so.  Then we have about a handful
-of drivers using it that all seem rather bogus, and one of which
-I think are usable on arm64.
+I'm thinking only Oracle was daft enough to think stuff like that was
+copyrightable.
+
+Also; I think it would be very good to not use/depend on DWARF for this.
+
+You really don't need all of DWARF; I'm thikning you only need a few
+types; for location we already have regs_get_kernel_argument() which
+has all the logic to find the n-th argument.
+
