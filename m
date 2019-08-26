@@ -2,111 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 243E59D0F7
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 15:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2668D9D2D3
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 17:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728597AbfHZNq7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Aug 2019 09:46:59 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44324 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728550AbfHZNq7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Aug 2019 09:46:59 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 4C2D6B038;
-        Mon, 26 Aug 2019 13:46:57 +0000 (UTC)
-Message-ID: <027272c27398b950f207101a2c5dbc07a30a36bc.camel@suse.de>
-Subject: Re: [PATCH v2 01/11] asm-generic: add dma_zone_size
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     catalin.marinas@arm.com, eric@anholt.net,
-        linux-riscv@lists.infradead.org, frowand.list@gmail.com,
-        m.szyprowski@samsung.com, linux-arch@vger.kernel.org,
-        f.fainelli@gmail.com, will@kernel.org, devicetree@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, marc.zyngier@arm.com,
-        robh+dt@kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, phill@raspberryi.org,
-        mbrugger@suse.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        wahrenst@gmx.net, akpm@linux-foundation.org,
-        Robin Murphy <robin.murphy@arm.com>
-Date:   Mon, 26 Aug 2019 15:46:52 +0200
-In-Reply-To: <20190826070939.GD11331@lst.de>
-References: <20190820145821.27214-1-nsaenzjulienne@suse.de>
-         <20190820145821.27214-2-nsaenzjulienne@suse.de>
-         <20190826070939.GD11331@lst.de>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-rvg1En4pB30QD7Cei8XS"
-User-Agent: Evolution 3.32.4 
+        id S1729441AbfHZPck (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Aug 2019 11:32:40 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55304 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728350AbfHZPck (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Aug 2019 11:32:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=BArM4GoPxHZk+c8mtmgknU72vcsySDFgQe3HMfzQChA=; b=YjZYTjmPkkBrsF6aKyM6r/8Xc
+        XsjaySbRItts5lT467fparlmye0XBJrz8S05M5OYrtl4wuJLMEyxjbhGVaQ6Xp/5NVugGvJ2cNizs
+        xn6zBHCmLDv1cnjxuxTOBlH9247oewU3fwdFLvOj0VW5cG0wxAC9MgJnSw7vMpkiRhbhfNCQVrzMu
+        EBNv5TYbBfowCjZgTKeyDf1GVUddr8c4wOBXF9KKkKKjBTFhf9gZviNivh7gyNicsKjS5hKS5Jja8
+        NyTGq9o7S8sBkLeLHQnxai3u0ZUgJkFZpP60GOMVzVc2tWOyvIf2Xi8Ytw4FuOw4gRv8EOykQJ2N0
+        AeWAXKFyg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1i2Gyy-0008VN-LN; Mon, 26 Aug 2019 15:32:36 +0000
+Date:   Mon, 26 Aug 2019 08:32:36 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        mark.rutland@arm.com, peterz@infradead.org,
+        catalin.marinas@arm.com, takahiro.akashi@linaro.org,
+        james.morse@arm.com, hidehiro.kawai.ez@hitachi.com,
+        tglx@linutronix.de, will@kernel.org, dave.martin@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH 5/7] arm64: smp: use generic SMP stop common code
+Message-ID: <20190826153236.GA9591@infradead.org>
+References: <20190823115720.605-1-cristian.marussi@arm.com>
+ <20190823115720.605-6-cristian.marussi@arm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190823115720.605-6-cristian.marussi@arm.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+> +config ARCH_USE_COMMON_SMP_STOP
+> +	def_bool y if SMP
 
---=-rvg1En4pB30QD7Cei8XS
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, 2019-08-26 at 09:09 +0200, Christoph Hellwig wrote:
-> On Tue, Aug 20, 2019 at 04:58:09PM +0200, Nicolas Saenz Julienne wrote:
-> > Some architectures have platform specific DMA addressing limitations.
-> > This will allow for hardware description code to provide the constraint=
-s
-> > in a generic manner, so as for arch code to properly setup it's memory
-> > zones and DMA mask.
->=20
-> I know this just spreads the arm code, but I still kinda hate it.
-
-Rob's main concern was finding a way to pass the constraint from HW definit=
-ion
-to arch without widening fdt's architecture specific function surface. I'd =
-say
-it's fair to argue that having a generic mechanism makes sense as it'll now
-traverse multiple archs and subsystems.
-
-I get adding globals like this is not very appealing, yet I went with it as=
- it
-was the easier to integrate with arm's code. Any alternative suggestions?
-
-> MAX_DMA_ADDRESS is such an oddly defined concepts.  We have the mm
-> code that uses it to start allocating after the dma zones, but
-> I think that would better be done using a function returning
-> 1 << max(zone_dma_bits, 32) or so.  Then we have about a handful
-> of drivers using it that all seem rather bogus, and one of which
-> I think are usable on arm64.
-
-Is it safe to assume DMA limitations will always be a power of 2? I ask as =
-RPi4
-kinda isn't: ZONE_DMA is 0x3c000000 bytes big, I'm approximating the zone m=
-ask
-to 30 as [0x3c000000 0x3fffffff] isn't defined as memory so it's unlikely t=
-hat
-we=C2=B4ll encounter buffers there. But I don't know how it could affect mm
-initialization code.
-
-This also rules out 'zone_dma_bits' as a mechanism to pass ZONE_DMA's size =
-from
-HW definition code to arch's.
-
-
---=-rvg1En4pB30QD7Cei8XS
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl1j4swACgkQlfZmHno8
-x/7+5Qf/RG+HHfwkIbvgTeNBR6PGQMv7ZNDSxgeVo0caYiQnN2w01vHWnEXBnsNK
-sj6p2ip+d5CQbSOMO2oVO7qS4+BoOjcdnFTNSLH0uN5coZj6sr8u5N/FFdeb2cI+
-6B9opO7apUCnnuwaBeV5Ocepk1gr4rNoRnrOWmFwnqoc9dBRBuKV4ejcEB43ySw6
-wxwOswOu17wPR3o6969vTlP29cTItzXnrjmlTn+lKyQpR6pOzC0IpU1tmO0KkfHM
-+U0Kypzbtb5Z9uCWvbS42mvT9oV3/El8iqrw1mPxbwRDgwDsBf2awc+fNmnQTsRK
-4pDSxPGJ5wST3O0WUjysQ9u+RJC+Cg==
-=y9Dx
------END PGP SIGNATURE-----
-
---=-rvg1En4pB30QD7Cei8XS--
-
+The option belongs into common code and the arch code shoud only
+select it.
