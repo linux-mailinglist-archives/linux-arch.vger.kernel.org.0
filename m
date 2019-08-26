@@ -2,84 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 147CD9D70E
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 21:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F204A9D75A
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 22:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733226AbfHZT6H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Aug 2019 15:58:07 -0400
-Received: from foss.arm.com ([217.140.110.172]:34736 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733174AbfHZT6G (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Aug 2019 15:58:06 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A042337;
-        Mon, 26 Aug 2019 12:58:05 -0700 (PDT)
-Received: from [10.37.9.91] (unknown [10.37.9.91])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 38E2D3F246;
-        Mon, 26 Aug 2019 12:58:03 -0700 (PDT)
-Subject: Re: [RFC PATCH 5/7] arm64: smp: use generic SMP stop common code
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        mark.rutland@arm.com, peterz@infradead.org,
-        catalin.marinas@arm.com, takahiro.akashi@linaro.org,
-        james.morse@arm.com, hidehiro.kawai.ez@hitachi.com,
-        tglx@linutronix.de, will@kernel.org, dave.martin@arm.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20190823115720.605-1-cristian.marussi@arm.com>
- <20190823115720.605-6-cristian.marussi@arm.com>
- <20190826153236.GA9591@infradead.org>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <c6a86709-6faf-bf84-08aa-c41dab61c58f@arm.com>
-Date:   Mon, 26 Aug 2019 20:58:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190826153236.GA9591@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1732918AbfHZUPG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Aug 2019 16:15:06 -0400
+Received: from 195-159-176-226.customer.powertech.no ([195.159.176.226]:51910
+        "EHLO blaine.gmane.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732670AbfHZUPG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Aug 2019 16:15:06 -0400
+Received: from list by blaine.gmane.org with local (Exim 4.89)
+        (envelope-from <glka-linux-arch@m.gmane.org>)
+        id 1i2LOI-000iIB-Hy
+        for linux-arch@vger.kernel.org; Mon, 26 Aug 2019 22:15:02 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To:     linux-arch@vger.kernel.org
+From:   sbaugh@catern.com
+Subject: Re: [PATCH RESEND v11 7/8] open: openat2(2) syscall
+Date:   Mon, 26 Aug 2019 19:50:50 +0000
+Message-ID: <854l2366zp.fsf@catern.com>
+References: <20190820033406.29796-1-cyphar@cyphar.com>
+        <20190820033406.29796-8-cyphar@cyphar.com>
+Mime-Version: 1.0
+Content-Type: text/plain
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Cancel-Lock: sha1:ym8TD2+JE56rxevrCvTf9T8Ptcg=
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi
+Aleksa Sarai <cyphar@cyphar.com> writes:
+> To this end, we introduce the openat2(2) syscall. It provides all of the
+> features of openat(2) through the @how->flags argument, but also
+> also provides a new @how->resolve argument which exposes RESOLVE_* flags
+> that map to our new LOOKUP_* flags. It also eliminates the long-standing
+> ugliness of variadic-open(2) by embedding it in a struct.
 
-On 8/26/19 4:32 PM, Christoph Hellwig wrote:
->> +config ARCH_USE_COMMON_SMP_STOP
->> +	def_bool y if SMP
-> 
-> The option belongs into common code and the arch code shoud only
-> select it.
->
+I don't like this usage of a structure in memory to pass arguments that
+would fit in registers. This would be quite inconvenient for me as a
+userspace developer.
 
-In fact that was my first approach, but then I noticed that in kernel/ topdir
-there was no generic Kconfig but only subsystem specific ones:
+Others have brought up issues with this: the issue of seccomp, and the
+issue of mismatch between the userspace interface and the kernel
+interface, are the most important for me. I want to add another,
+admittedly somewhat niche, concern.
 
-Kconfig.freezer  Kconfig.hz       Kconfig.locks    Kconfig.preempt
+This interfaces requires a program to allocate memory (even on the
+stack) just to pass arguments to the kernel which could be passed
+without allocating that memory. That makes it more difficult and less
+efficient to use this syscall in any case where memory is not so easily
+allocatable: such as early program startup or assembly, where the stack
+may be limited in size or not even available yet, or when injecting a
+syscall while ptracing.
 
-while instead looking into archs top level Kconfig, beside the usual arch/Kconfig selects,
-I could find this similar sort of "reversed" approach in which the arch defined and
-selected a CONFIG which was indeed then used only in common code like in:
+A struct-passing interface was needed for clone, since we ran out of
+registers; but we have not run out of registers yet for openat, so it
+would be nice to avoid this if we can. We can always expand later...
 
-20:37 $ egrep -R ARCH_HAS_CACHE_LINE_SIZE .
-./arch/arc/Kconfig:config ARCH_HAS_CACHE_LINE_SIZE
-./arch/x86/Kconfig:config ARCH_HAS_CACHE_LINE_SIZE
-./arch/arm64/Kconfig:config ARCH_HAS_CACHE_LINE_SIZE
-./include/linux/cache.h:#ifndef CONFIG_ARCH_HAS_CACHE_LINE_SIZE
-
-20:39 $ egrep -R ARCH_HAS_KEXEC_PURGATORY .
-./arch/powerpc/Kconfig:config ARCH_HAS_KEXEC_PURGATORY
-./arch/x86/Kconfig:config ARCH_HAS_KEXEC_PURGATORY
-./arch/s390/Kconfig:config ARCH_HAS_KEXEC_PURGATORY
-./arch/s390/purgatory/Makefile:obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += kexec-purgatory.o
-./arch/s390/Kbuild:obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += purgatory/
-./kernel/kexec_file.c:	if (!IS_ENABLED(CONFIG_ARCH_HAS_KEXEC_PURGATORY))
-
-so I thought it was an acceptable option and I went for it, not to introduce a new kernel/Kconfig.smp
-just for this new config option; but in fact I could have missed the real reason underlying these two
-different choices.
-
-Thanks
-
-Cristian
