@@ -2,93 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4116E9CDBD
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 13:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FA39CE30
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 13:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731060AbfHZLI5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Aug 2019 07:08:57 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58332 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730553AbfHZLI5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Aug 2019 07:08:57 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E9BAEAF23;
-        Mon, 26 Aug 2019 11:08:55 +0000 (UTC)
-Message-ID: <4d8d18af22d6dcd122bc9b4d9c2bd49e8443c746.camel@suse.de>
-Subject: Re: [PATCH v2 10/11] arm64: edit zone_dma_bits to fine tune
- dma-direct min mask
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     catalin.marinas@arm.com, wahrenst@gmx.net, marc.zyngier@arm.com,
-        robh+dt@kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        id S1730093AbfHZLd6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Aug 2019 07:33:58 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:47655 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726389AbfHZLd6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 26 Aug 2019 07:33:58 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46H8z50xybz9sBF;
+        Mon, 26 Aug 2019 21:33:53 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        catalin.marinas@arm.com, hch@lst.de, wahrenst@gmx.net,
+        marc.zyngier@arm.com, robh+dt@kernel.org,
+        Robin Murphy <robin.murphy@arm.com>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-arch@vger.kernel.org, iommu@lists.linux-foundation.org,
         linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, phill@raspberryi.org,
-        f.fainelli@gmail.com, will@kernel.org, eric@anholt.net,
-        mbrugger@suse.com, linux-rpi-kernel@lists.infradead.org,
-        akpm@linux-foundation.org, frowand.list@gmail.com,
-        m.szyprowski@samsung.com
-Date:   Mon, 26 Aug 2019 13:08:50 +0200
-In-Reply-To: <20190826070633.GB11331@lst.de>
-References: <20190820145821.27214-1-nsaenzjulienne@suse.de>
-         <20190820145821.27214-11-nsaenzjulienne@suse.de>
-         <20190826070633.GB11331@lst.de>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-RvTUUUche1DA67AZeVhb"
-User-Agent: Evolution 3.32.4 
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     f.fainelli@gmail.com, will@kernel.org, nsaenzjulienne@suse.de,
+        linux-kernel@vger.kernel.org, eric@anholt.net, mbrugger@suse.com,
+        linux-rpi-kernel@lists.infradead.org, akpm@linux-foundation.org,
+        frowand.list@gmail.com,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v2 09/11] dma-direct: turn ARCH_ZONE_DMA_BITS into a variable
+In-Reply-To: <20190820145821.27214-10-nsaenzjulienne@suse.de>
+References: <20190820145821.27214-1-nsaenzjulienne@suse.de> <20190820145821.27214-10-nsaenzjulienne@suse.de>
+Date:   Mon, 26 Aug 2019 21:33:51 +1000
+Message-ID: <87ef1840v4.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Nicolas Saenz Julienne <nsaenzjulienne@suse.de> writes:
+> diff --git a/arch/powerpc/include/asm/page.h b/arch/powerpc/include/asm/page.h
+> index 0d52f57fca04..73668a21ae78 100644
+> --- a/arch/powerpc/include/asm/page.h
+> +++ b/arch/powerpc/include/asm/page.h
+> @@ -319,13 +319,4 @@ struct vm_area_struct;
+>  #endif /* __ASSEMBLY__ */
+>  #include <asm/slice.h>
+>  
+> -/*
+> - * Allow 30-bit DMA for very limited Broadcom wifi chips on many powerbooks.
 
---=-RvTUUUche1DA67AZeVhb
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+This comment got lost.
 
-On Mon, 2019-08-26 at 09:06 +0200, Christoph Hellwig wrote:
-> On Tue, Aug 20, 2019 at 04:58:18PM +0200, Nicolas Saenz Julienne wrote:
-> > -	if (IS_ENABLED(CONFIG_ZONE_DMA))
-> > +	if (IS_ENABLED(CONFIG_ZONE_DMA)) {
-> >  		arm64_dma_phys_limit =3D max_zone_dma_phys();
-> > +		zone_dma_bits =3D ilog2((arm64_dma_phys_limit - 1) &
-> > GENMASK_ULL(31, 0)) + 1;
->
-Hi Christoph,
-thanks for the rewiews.
+> diff --git a/arch/powerpc/mm/mem.c b/arch/powerpc/mm/mem.c
+> index 9191a66b3bc5..2a69f87585df 100644
+> --- a/arch/powerpc/mm/mem.c
+> +++ b/arch/powerpc/mm/mem.c
+> @@ -237,9 +238,14 @@ void __init paging_init(void)
+>  	printk(KERN_DEBUG "Memory hole size: %ldMB\n",
+>  	       (long int)((top_of_ram - total_ram) >> 20));
+>  
+> +	if (IS_ENABLED(CONFIG_PPC32))
 
-> This adds a way too long line.
+Can you please propagate it here?
 
-I know, I couldn't find a way to split the operation without making it even
-harder to read. I'll find a solution.
+> +		zone_dma_bits = 30;
+> +	else
+> +		zone_dma_bits = 31;
+> +
 
-> I also find the use of GENMASK_ULL
-> horribly obsfucating, but I know that opinion is't shared by everyone.
-
-Don't have any preference so I'll happily change it. Any suggestions? Using=
- the
-explicit 0xffffffffULL seems hard to read, how about SZ_4GB - 1?
-
-
---=-RvTUUUche1DA67AZeVhb
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl1jvcIACgkQlfZmHno8
-x/6y/wf/XTe7dlASMoYApyVt+lL6chBcap2r7MVKOVhCbC1oJQb7UdRyW7MVDO6k
-gwdo2WmXqD3wUwhY5djX0adczLOJye1iGEdrrQfheRqm1rh07um3quT3TzgCSPat
-OuX+vHuNsUE+3GyI+0OoOF0tu/TzOKJjgs4H645cnbuCaXbQFbL94yBctsDTF5hc
-m4Bx+nksz99ddodUnw9CF4Ss5DPwkX23I3h7okwMMjvVuegIPUa9edppw3Za0Kby
-k8b9QGCiMsGcwyq3+uSXTCq4iIU8reLTfvpZmVZ9QugMn8TkjjIQFyWS0HrXt2pz
-r9iNomMe9w20W9Y9jS5Aj8bxByoK+Q==
-=nQ/V
------END PGP SIGNATURE-----
-
---=-RvTUUUche1DA67AZeVhb--
-
+cheers
