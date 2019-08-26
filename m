@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C03FA9D6D1
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 21:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147CD9D70E
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2019 21:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732035AbfHZTd2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Aug 2019 15:33:28 -0400
-Received: from foss.arm.com ([217.140.110.172]:34418 "EHLO foss.arm.com"
+        id S1733226AbfHZT6H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Aug 2019 15:58:07 -0400
+Received: from foss.arm.com ([217.140.110.172]:34736 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729780AbfHZTd2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Aug 2019 15:33:28 -0400
+        id S1733174AbfHZT6G (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 26 Aug 2019 15:58:06 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6AA0C337;
-        Mon, 26 Aug 2019 12:33:27 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A042337;
+        Mon, 26 Aug 2019 12:58:05 -0700 (PDT)
 Received: from [10.37.9.91] (unknown [10.37.9.91])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3822F3F246;
-        Mon, 26 Aug 2019 12:33:25 -0700 (PDT)
-Subject: Re: [RFC PATCH 0/7] Unify SMP stop generic logic to common code
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 38E2D3F246;
+        Mon, 26 Aug 2019 12:58:03 -0700 (PDT)
+Subject: Re: [RFC PATCH 5/7] arm64: smp: use generic SMP stop common code
 To:     Christoph Hellwig <hch@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         mark.rutland@arm.com, peterz@infradead.org,
@@ -26,14 +26,15 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         tglx@linutronix.de, will@kernel.org, dave.martin@arm.com,
         linux-arm-kernel@lists.infradead.org
 References: <20190823115720.605-1-cristian.marussi@arm.com>
- <20190826153401.GB9591@infradead.org>
+ <20190823115720.605-6-cristian.marussi@arm.com>
+ <20190826153236.GA9591@infradead.org>
 From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <2b4a744c-ea20-00e6-828f-7be125326792@arm.com>
-Date:   Mon, 26 Aug 2019 20:33:23 +0100
+Message-ID: <c6a86709-6faf-bf84-08aa-c41dab61c58f@arm.com>
+Date:   Mon, 26 Aug 2019 20:58:01 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190826153401.GB9591@infradead.org>
+In-Reply-To: <20190826153236.GA9591@infradead.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -42,25 +43,42 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Christoph
+Hi
 
-thanks for the review.
-
-On 8/26/19 4:34 PM, Christoph Hellwig wrote:
-> On Fri, Aug 23, 2019 at 12:57:13PM +0100, Cristian Marussi wrote:
->> An architecture willing to rely on this SMP common logic has to define its
->> own helpers and set CONFIG_ARCH_USE_COMMON_SMP_STOP=y.
->> The series wire this up for arm64.
->>
->> Behaviour is not changed for architectures not adopting this new common
->> logic.
+On 8/26/19 4:32 PM, Christoph Hellwig wrote:
+>> +config ARCH_USE_COMMON_SMP_STOP
+>> +	def_bool y if SMP
 > 
-> Seens like this common code only covers arm64.  I think we should
-> generally have at least two users for common code.
-> 
+> The option belongs into common code and the arch code shoud only
+> select it.
+>
 
-Yes absolutely, but this RFC was an attempt at first to explore if this
-approach was deemed sensible upstream or not, so I wired up only arm64 for now.
+In fact that was my first approach, but then I noticed that in kernel/ topdir
+there was no generic Kconfig but only subsystem specific ones:
+
+Kconfig.freezer  Kconfig.hz       Kconfig.locks    Kconfig.preempt
+
+while instead looking into archs top level Kconfig, beside the usual arch/Kconfig selects,
+I could find this similar sort of "reversed" approach in which the arch defined and
+selected a CONFIG which was indeed then used only in common code like in:
+
+20:37 $ egrep -R ARCH_HAS_CACHE_LINE_SIZE .
+./arch/arc/Kconfig:config ARCH_HAS_CACHE_LINE_SIZE
+./arch/x86/Kconfig:config ARCH_HAS_CACHE_LINE_SIZE
+./arch/arm64/Kconfig:config ARCH_HAS_CACHE_LINE_SIZE
+./include/linux/cache.h:#ifndef CONFIG_ARCH_HAS_CACHE_LINE_SIZE
+
+20:39 $ egrep -R ARCH_HAS_KEXEC_PURGATORY .
+./arch/powerpc/Kconfig:config ARCH_HAS_KEXEC_PURGATORY
+./arch/x86/Kconfig:config ARCH_HAS_KEXEC_PURGATORY
+./arch/s390/Kconfig:config ARCH_HAS_KEXEC_PURGATORY
+./arch/s390/purgatory/Makefile:obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += kexec-purgatory.o
+./arch/s390/Kbuild:obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += purgatory/
+./kernel/kexec_file.c:	if (!IS_ENABLED(CONFIG_ARCH_HAS_KEXEC_PURGATORY))
+
+so I thought it was an acceptable option and I went for it, not to introduce a new kernel/Kconfig.smp
+just for this new config option; but in fact I could have missed the real reason underlying these two
+different choices.
 
 Thanks
 
