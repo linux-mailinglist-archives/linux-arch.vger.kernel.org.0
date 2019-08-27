@@ -2,95 +2,186 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5759DE5A
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2019 09:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F129E8F6
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2019 15:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbfH0HDr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Aug 2019 03:03:47 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35694 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725811AbfH0HDr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Aug 2019 03:03:47 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id F3D93B0DA;
-        Tue, 27 Aug 2019 07:03:45 +0000 (UTC)
-Date:   Tue, 27 Aug 2019 09:03:41 +0200
-From:   Petr Tesarik <ptesarik@suse.cz>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        f.fainelli@gmail.com, will@kernel.org, eric@anholt.net,
-        marc.zyngier@arm.com, catalin.marinas@arm.com,
-        frowand.list@gmail.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        robh+dt@kernel.org, wahrenst@gmx.net, mbrugger@suse.com,
-        linux-riscv@lists.infradead.org, m.szyprowski@samsung.com,
-        Robin Murphy <robin.murphy@arm.com>, akpm@linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, phill@raspberryi.org
-Subject: Re: [PATCH v2 10/11] arm64: edit zone_dma_bits to fine tune
- dma-direct min mask
-Message-ID: <20190827090341.2bf6b336@ezekiel.suse.cz>
-In-Reply-To: <4d8d18af22d6dcd122bc9b4d9c2bd49e8443c746.camel@suse.de>
-References: <20190820145821.27214-1-nsaenzjulienne@suse.de>
-        <20190820145821.27214-11-nsaenzjulienne@suse.de>
-        <20190826070633.GB11331@lst.de>
-        <4d8d18af22d6dcd122bc9b4d9c2bd49e8443c746.camel@suse.de>
-Organization: SUSE Linux, s.r.o.
-X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/vmjhQR+jY/bQH=VqrrKvOyt"; protocol="application/pgp-signature"
+        id S1730055AbfH0NSi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Aug 2019 09:18:38 -0400
+Received: from foss.arm.com ([217.140.110.172]:44396 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729903AbfH0NSh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Aug 2019 09:18:37 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F84028;
+        Tue, 27 Aug 2019 06:18:36 -0700 (PDT)
+Received: from fuggles.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0BFC73F246;
+        Tue, 27 Aug 2019 06:18:34 -0700 (PDT)
+From:   Will Deacon <will@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH 0/6] Fix TLB invalidation on arm64
+Date:   Tue, 27 Aug 2019 14:18:12 +0100
+Message-Id: <20190827131818.14724-1-will@kernel.org>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---Sig_/vmjhQR+jY/bQH=VqrrKvOyt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi all,
 
-On Mon, 26 Aug 2019 13:08:50 +0200
-Nicolas Saenz Julienne <nsaenzjulienne@suse.de> wrote:
+[+linux-arch since the end of this may be applicable to other architectures]
 
-> On Mon, 2019-08-26 at 09:06 +0200, Christoph Hellwig wrote:
-> > On Tue, Aug 20, 2019 at 04:58:18PM +0200, Nicolas Saenz Julienne wrote:=
- =20
-> > > -	if (IS_ENABLED(CONFIG_ZONE_DMA))
-> > > +	if (IS_ENABLED(CONFIG_ZONE_DMA)) {
-> > >  		arm64_dma_phys_limit =3D max_zone_dma_phys();
-> > > +		zone_dma_bits =3D ilog2((arm64_dma_phys_limit - 1) &
-> > > GENMASK_ULL(31, 0)) + 1; =20
-> > =20
-> Hi Christoph,
-> thanks for the rewiews.
->=20
-> > This adds a way too long line. =20
->=20
-> I know, I couldn't find a way to split the operation without making it ev=
-en
-> harder to read. I'll find a solution.
+Commit 24fe1b0efad4fcdd ("arm64: Remove unnecessary ISBs from
+set_{pte,pmd,pud") removed ISB instructions immediately following updates to
+the page table, on the grounds that they are not required by the
+architecture and a DSB alone is sufficient to ensure that subsequent data
+accesses use the new translation:
 
-If all else fails, move the code to an inline function and call it e.g.
-phys_limit_to_dma_bits().
+  DDI0487E_a, B2-128:
 
-Just my two cents,
-Petr T
+  | ... no instruction that appears in program order after the DSB instruction
+  | can alter any state of the system or perform any part of its functionality
+  | until the DSB completes other than:
+  |
+  | * Being fetched from memory and decoded
+  | * Reading the general-purpose, SIMD and floating-point, Special-purpose, or
+  |   System registers that are directly or indirectly read without causing
+  |   side-effects.
 
---Sig_/vmjhQR+jY/bQH=VqrrKvOyt
-Content-Type: application/pgp-signature
-Content-Description: Digitální podpis OpenPGP
+However, the same document also states the following:
 
------BEGIN PGP SIGNATURE-----
+  DDI0487E_a, B2-125:
 
-iQEzBAEBCAAdFiEEHl2YIZkIo5VO2MxYqlA7ya4PR6cFAl1k1c0ACgkQqlA7ya4P
-R6ffZggAphWovRbYbJElIMDB+201+43NCpSH8dbZwe3UrJ+1DHzEn4OEldBRpcAv
-CuA2/u6GyA8wgnGpCAKj9HNHWSx9VeFoCmf6kPVHFtoC0hnJyJtCCWS1O9B1nqXR
-3h1Dw+6F/4wh14vqUucVvfseO/T1VV1QtfsczxBy2xEvcTZGhBjo7LEKeABa2yRm
-CoPLGyNtTtNkAhXeSeVJUcuquOjdqrcU+RlCH5EIZZagAvXuNLryEsjjUfD4Lx35
-RBeRcO+KmGJvAYuelWr/lqtO5ZUnD4OXoFE6fV7AvvJCD6RIHngLS4EXDIkGAaqd
-kWlLtSieXZDEl0mMBdQBfSVcByyzKA==
-=RDo8
------END PGP SIGNATURE-----
+  | DMB and DSB instructions affect reads and writes to the memory system
+  | generated by Load/Store instructions and data or unified cache maintenance
+  | instructions being executed by the PE. Instruction fetches or accesses
+  | caused by a hardware translation table access are not explicit accesses.
 
---Sig_/vmjhQR+jY/bQH=VqrrKvOyt--
+which appears to claim that the DSB alone is insufficient. Unfortunately,
+some CPU designers have followed the second clause above, whereas in Linux
+we've been relying on the first. This means that our mapping sequence:
+
+	MOV	X0, <valid pte>
+	STR	X0, [Xptep]	// Store new PTE to page table
+	DSB	ISHST
+	LDR	X1, [X2]	// Translates using the new PTE
+
+can actually raise a translation fault on the load instruction because the
+translation can be performed speculatively before the page table update and
+then marked as "faulting" by the CPU. For user PTEs, this is ok because we
+can handle the spurious fault, but for kernel PTEs and intermediate table
+entries this results in a panic().
+
+We can fix this by reverting 24fe1b0efad4fcdd, but the fun doesn't stop
+there. If we consider the unmap case, then a similar constraint applies to
+ordering subsequent memory accesses after the completion of the TLB
+invalidation, so we also need to add an ISB instruction to
+__flush_tlb_kernel_pgtable(). For user addresses, the exception return
+provides the necessary context synchronisation.
+
+This then raises an interesting question: if an ISB is required after a TLBI
+instruction to prevent speculative translation of subsequent instructions,
+how is this speculation prevented on concurrent CPUs that receive the
+broadcast TLB invalidation message? Sending and completing a broadcast TLB
+invalidation message does not imply execution of an ISB on the remote CPU,
+however it /does/ require that the remote CPU will no longer make use of any
+old translations because otherwise we wouldn't be able to guarantee that an
+unmapped page could no longer be modified. In this regard, receiving a TLB
+invalidation is in some ways stronger than sending one (where you need the
+ISB).
+
+So far, so good, but the final piece of the puzzle isn't quite so rosy.
+
+*** Other architecture maintainers -- start here! ***
+
+In the case that one CPU maps a page and then sets a flag to tell another
+CPU:
+
+	CPU 0
+	-----
+
+	MOV	X0, <valid pte>
+	STR	X0, [Xptep]	// Store new PTE to page table
+	DSB	ISHST
+	ISB
+	MOV	X1, #1
+	STR	X1, [Xflag]	// Set the flag
+
+	CPU 1
+	-----
+
+loop:	LDAR	X0, [Xflag]	// Poll flag with Acquire semantics
+	CBZ	X0, loop
+	LDR	X1, [X2]	// Translates using the new PTE
+
+then the final load on CPU 1 can raise a translation fault for the same
+reasons as mentioned at the start of this description. In reality, code
+such as:
+
+	CPU 0				CPU 1
+	-----				-----
+	spin_lock(&lock);		spin_lock(&lock);
+	*ptr = vmalloc(size);		if (*ptr)
+	spin_unlock(&lock);			foo = **ptr;
+					spin_unlock(&lock);
+
+will not trigger the fault because there is an address dependency on
+CPU1 which prevents the speculative translation. However, more exotic
+code where the virtual address is known ahead of time, such as:
+
+	CPU 0				CPU 1
+	-----				-----
+	spin_lock(&lock);		spin_lock(&lock);
+	set_fixmap(0, paddr, prot);	if (mapped)
+	mapped = true;				foo = *fix_to_virt(0);
+	spin_unlock(&lock);		spin_unlock(&lock);
+
+could fault. This can be avoided by any of:
+
+	* Introducing broadcast TLB maintenance on the map path
+	* Adding a DSB;ISB sequence after checking a flag which indicates
+	  that a virtual address is now mapped
+	* Handling the spurious fault
+
+Given that we have never observed a problem in the concurrent case under
+Linux and future revisions of the architecture are being tightened so that
+translation table walks are effectively ordered in the same way as explicit
+memory accesses, we no longer treat spurious kernel faults as fatal if the
+page table indicates that the access was valid.
+
+Anyway, this patch series attempts to implement some of this and I plan
+to queue it for 5.4.
+
+Will
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+
+--->8
+
+Will Deacon (6):
+  Revert "arm64: Remove unnecessary ISBs from set_{pte,pmd,pud}"
+  arm64: tlb: Ensure we execute an ISB following walk cache invalidation
+  arm64: mm: Add ISB instruction to set_pgd()
+  arm64: sysreg: Add some field definitions for PAR_EL1
+  arm64: mm: Ignore spurious translation faults taken from the kernel
+  arm64: kvm: Replace hardcoded '1' with SYS_PAR_EL1_F
+
+ arch/arm64/include/asm/pgtable.h  | 13 ++++++++++---
+ arch/arm64/include/asm/sysreg.h   |  3 +++
+ arch/arm64/include/asm/tlbflush.h |  1 +
+ arch/arm64/kvm/hyp/switch.c       |  2 +-
+ arch/arm64/mm/fault.c             | 33 +++++++++++++++++++++++++++++++++
+ 5 files changed, 48 insertions(+), 4 deletions(-)
+
+-- 
+2.11.0
+
