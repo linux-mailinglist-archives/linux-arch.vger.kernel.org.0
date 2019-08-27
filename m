@@ -2,413 +2,201 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2579EFA4
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2019 18:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0995D9EFF7
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2019 18:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730285AbfH0QEV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Aug 2019 12:04:21 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:37851 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730249AbfH0QET (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Aug 2019 12:04:19 -0400
-Received: by mail-wr1-f67.google.com with SMTP id z11so19395521wrt.4
-        for <linux-arch@vger.kernel.org>; Tue, 27 Aug 2019 09:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Ljo8vajhU+W+Ukm/1s/QogI8ChcEKwBtMF+HxQ/PSw4=;
-        b=pT3W2hD1RvsxoHm+zEZ/U6mTjDjviLu6X1btSRz1uz2E9GHokFjUxdkKJCkelWSu1u
-         bpsj+wb5B6JYz//IC3AJ6ouZyEZgJdlwwF6WDqsHH3ahgA8vcdWT4W/9xu7zdEG9s8qw
-         6YYPisKqXJMWOxmAPFSpZbqj3Mqo6VgzJLMoNoUPgAsdZy50h91qvJUGl+EWU6seNtoE
-         7XxfupdQWUnuD+7YbCsN8fUevv8I+NVGUpKV1eowgsWqw/lXmQJFsTn2+I7V+UXJ8PvZ
-         bC5kOIFz6/b3Rl9M6hYx1ow323QKUjSZBAJCIxSLL+RwJ2YznMMzYF/epQHhNd/rqDV1
-         yA3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Ljo8vajhU+W+Ukm/1s/QogI8ChcEKwBtMF+HxQ/PSw4=;
-        b=aXNJxE9X1fmUiygu1i/CEdZ1lqzlQ5/Ivu71NjNHqwoJvc6LkEP3/2LVUn5D8jG2Za
-         XrD/BJkG7FDGMkKtXAp26o0vk1KbbNYHibXh4sL+q/+Sa/QQQHdGzCNxhFQocQLGIzuJ
-         r7AaMp7BIRjoCc4RDly6RJSP/cNrz+x3rEXdZdZzKButxKMYot9+cRjVUP2g1b23E9Gk
-         pDVZprY0WUSFELIeNWZdoMrEIjw1NSRQXl/ScjbnezVG5TmrrIv83gXKwKy7YlmInFva
-         CHudBqAWIqYqirJKm864zvwzWCrkEFMzGOSK7hmyzfMkMKOp3BpXJFM5lKoLDObz9jMa
-         sSfg==
-X-Gm-Message-State: APjAAAXpWJNbiRVt6IAsT15kas/QwFLjSBM0GI+Ap2EfQWTl61koHnrG
-        vImYv+TS5uhBEla90e7uJkRpOg==
-X-Google-Smtp-Source: APXvYqyCAay58gtSIUr78MGmhxH+wCfTtE99gWMRLBFHY3CeeAgj7Z5U0wI2K44F8jvEfOo444iNTA==
-X-Received: by 2002:a5d:50cb:: with SMTP id f11mr30096307wrt.277.1566921857187;
-        Tue, 27 Aug 2019 09:04:17 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id i93sm32304192wri.57.2019.08.27.09.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 09:04:16 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 17:04:13 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        hpa@zytor.com, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Subject: Re: [PATCH v3 03/11] module: add support for symbol namespaces.
-Message-ID: <20190827160413.GA148206@google.com>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-4-maennich@google.com>
- <20190827153717.GA20822@linux-8ccs.fritz.box>
+        id S1726871AbfH0QTa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Aug 2019 12:19:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:47398 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726735AbfH0QTa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Aug 2019 12:19:30 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C641337;
+        Tue, 27 Aug 2019 09:19:29 -0700 (PDT)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 338043F59C;
+        Tue, 27 Aug 2019 09:19:28 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 17:19:26 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 0/6] Fix TLB invalidation on arm64
+Message-ID: <20190827161925.GE43183@lakrids.cambridge.arm.com>
+References: <20190827131818.14724-1-will@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190827153717.GA20822@linux-8ccs.fritz.box>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190827131818.14724-1-will@kernel.org>
+User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 05:37:18PM +0200, Jessica Yu wrote:
->+++ Matthias Maennich [21/08/19 12:49 +0100]:
->>The EXPORT_SYMBOL_NS() and EXPORT_SYMBOL_NS_GPL() macros can be used to
->>export a symbol to a specific namespace.  There are no _GPL_FUTURE and
->>_UNUSED variants because these are currently unused, and I'm not sure
->>they are necessary.
->>
->>I didn't add EXPORT_SYMBOL_NS() for ASM exports; this patch sets the
->>namespace of ASM exports to NULL by default. In case of relative
->>references, it will be relocatable to NULL. If there's a need, this
->>should be pretty easy to add.
->>
->>A module that wants to use a symbol exported to a namespace must add a
->>MODULE_IMPORT_NS() statement to their module code; otherwise, modpost
->>will complain when building the module, and the kernel module loader
->>will emit an error and fail when loading the module.
->>
->>MODULE_IMPORT_NS() adds a modinfo tag 'import_ns' to the module. That
->>tag can be observed by the modinfo command, modpost and kernel/module.c
->>at the time of loading the module.
->>
->>The ELF symbols are renamed to include the namespace with an asm label;
->>for example, symbol 'usb_stor_suspend' in namespace USB_STORAGE becomes
->>'usb_stor_suspend.USB_STORAGE'.  This allows modpost to do namespace
->>checking, without having to go through all the effort of parsing ELF and
->>relocation records just to get to the struct kernel_symbols.
->>
->>On x86_64 I saw no difference in binary size (compression), but at
->>runtime this will require a word of memory per export to hold the
->>namespace. An alternative could be to store namespaced symbols in their
->>own section and use a separate 'struct namespaced_kernel_symbol' for
->>that section, at the cost of making the module loader more complex.
->>
->>Co-developed-by: Martijn Coenen <maco@android.com>
->>Signed-off-by: Martijn Coenen <maco@android.com>
->>Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>Signed-off-by: Matthias Maennich <maennich@google.com>
->>---
->>include/asm-generic/export.h |  6 +--
->>include/linux/export.h       | 85 ++++++++++++++++++++++++++++++------
->>include/linux/module.h       |  2 +
->>kernel/module.c              | 43 ++++++++++++++++++
->>4 files changed, 120 insertions(+), 16 deletions(-)
->>
->>diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
->>index 63f54907317b..e2b5d0f569d3 100644
->>--- a/include/asm-generic/export.h
->>+++ b/include/asm-generic/export.h
->>@@ -17,11 +17,11 @@
->>
->>.macro __put, val, name
->>#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
->>-	.long	\val - ., \name - .
->>+	.long	\val - ., \name - ., 0 - .
->>#elif defined(CONFIG_64BIT)
->>-	.quad	\val, \name
->>+	.quad	\val, \name, 0
->>#else
->>-	.long	\val, \name
->>+	.long	\val, \name, 0
->>#endif
->>.endm
->>
->>diff --git a/include/linux/export.h b/include/linux/export.h
->>index 28a4d2150689..8e12e05444d1 100644
->>--- a/include/linux/export.h
->>+++ b/include/linux/export.h
->>@@ -20,6 +20,8 @@ extern struct module __this_module;
->>
->>#ifdef CONFIG_MODULES
->>
->>+#define NS_SEPARATOR "."
->>+
->>#if defined(__KERNEL__) && !defined(__GENKSYMS__)
->>#ifdef CONFIG_MODVERSIONS
->>/* Mark the CRC weak since genksyms apparently decides not to
->>@@ -49,6 +51,16 @@ extern struct module __this_module;
->> * absolute relocations that require runtime processing on relocatable
->> * kernels.
->> */
->>+#define __KSYMTAB_ENTRY_NS(sym, sec, ns)				\
->>+	__ADDRESSABLE(sym)						\
->>+	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
->>+	    "	.balign	4					\n"	\
->>+	    "__ksymtab_" #sym NS_SEPARATOR #ns ":		\n"	\
->>+	    "	.long	" #sym "- .				\n"	\
->>+	    "	.long	__kstrtab_" #sym "- .			\n"	\
->>+	    "	.long	__kstrtab_ns_" #sym "- .		\n"	\
->>+	    "	.previous					\n")
->>+
->>#define __KSYMTAB_ENTRY(sym, sec)					\
->>	__ADDRESSABLE(sym)						\
->>	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
->>@@ -56,32 +68,53 @@ extern struct module __this_module;
->>	    "__ksymtab_" #sym ":				\n"	\
->>	    "	.long	" #sym "- .				\n"	\
->>	    "	.long	__kstrtab_" #sym "- .			\n"	\
->>+	    "	.long	0 - .					\n"	\
->>	    "	.previous					\n")
->>
->>struct kernel_symbol {
->>	int value_offset;
->>	int name_offset;
->>+	int namespace_offset;
->>};
->>#else
->>+#define __KSYMTAB_ENTRY_NS(sym, sec, ns)				\
->>+	static const struct kernel_symbol __ksymtab_##sym##__##ns	\
->>+	asm("__ksymtab_" #sym NS_SEPARATOR #ns)				\
->>+	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
->>+	__aligned(sizeof(void *))					\
->>+	= { (unsigned long)&sym, __kstrtab_##sym, __kstrtab_ns_##sym}
->
->Style nit: missing space after __kstrtab_ns_##sym.
->
->>+
->>#define __KSYMTAB_ENTRY(sym, sec)					\
->>	static const struct kernel_symbol __ksymtab_##sym		\
->>+	asm("__ksymtab_" #sym)						\
->>	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
->>	__aligned(sizeof(void *))					\
->>-	= { (unsigned long)&sym, __kstrtab_##sym }
->>+	= { (unsigned long)&sym, __kstrtab_##sym, NULL }
->>
->>struct kernel_symbol {
->>	unsigned long value;
->>	const char *name;
->>+	const char *namespace;
->>};
->>#endif
->>
->>-/* For every exported symbol, place a struct in the __ksymtab section */
->>-#define ___EXPORT_SYMBOL(sym, sec)					\
->>+#define ___export_symbol_common(sym, sec)				\
->>	extern typeof(sym) sym;						\
->>	__CRC_SYMBOL(sym, sec)						\
->>	static const char __kstrtab_##sym[]				\
->>	__attribute__((section("__ksymtab_strings"), used, aligned(1)))	\
->>-	= #sym;								\
->>+	= #sym								\
->
->Any particular reason for this change? Not that it's important, just
->noticing the inconsistent inclusion of the semicolon in some of the
->macros (e.g. __CRC_SYMBOL includes it but __export_symbol_common doesn't).
->
+On Tue, Aug 27, 2019 at 02:18:12PM +0100, Will Deacon wrote:
+> Hi all,
 
-I tried to be consistent to let the macro "call site" provide the final
-semicolon. And you are right, I could have adjusted __CRC_SYMBOL as
-well. I will adjust this for the next version.
+Hi Will,
 
->>+
->>+/* For every exported symbol, place a struct in the __ksymtab section */
->>+#define ___EXPORT_SYMBOL_NS(sym, sec, ns)				\
->>+	___export_symbol_common(sym, sec);			\
->>+	static const char __kstrtab_ns_##sym[]				\
->>+	__attribute__((section("__ksymtab_strings"), used, aligned(1)))	\
->>+	= #ns;								\
->>+	__KSYMTAB_ENTRY_NS(sym, sec, ns)
->>+
->>+#define ___EXPORT_SYMBOL(sym, sec)					\
->>+	___export_symbol_common(sym, sec);				\
->>	__KSYMTAB_ENTRY(sym, sec)
->>
->>#if defined(__DISABLE_EXPORTS)
->>@@ -91,6 +124,7 @@ struct kernel_symbol {
->> * be reused in other execution contexts such as the UEFI stub or the
->> * decompressor.
->> */
->>+#define __EXPORT_SYMBOL_NS(sym, sec, ns)
->>#define __EXPORT_SYMBOL(sym, sec)
->>
->>#elif defined(CONFIG_TRIM_UNUSED_KSYMS)
->>@@ -117,18 +151,26 @@ struct kernel_symbol {
->>#define __cond_export_sym_1(sym, sec) ___EXPORT_SYMBOL(sym, sec)
->>#define __cond_export_sym_0(sym, sec) /* nothing */
->>
->>+#define __EXPORT_SYMBOL_NS(sym, sec, ns)				\
->>+	__ksym_marker(sym);						\
->>+	__cond_export_ns_sym(sym, sec, ns, __is_defined(__KSYM_##sym))
->>+#define __cond_export_ns_sym(sym, sec, ns, conf)			\
->>+	___cond_export_ns_sym(sym, sec, ns, conf)
->>+#define ___cond_export_ns_sym(sym, sec, ns, enabled)			\
->>+	__cond_export_ns_sym_##enabled(sym, sec, ns)
->>+#define __cond_export_ns_sym_1(sym, sec, ns) ___EXPORT_SYMBOL_NS(sym, sec, ns)
->>+#define __cond_export_ns_sym_0(sym, sec, ns) /* nothing */
->>+
->>#else
->>+#define __EXPORT_SYMBOL_NS ___EXPORT_SYMBOL_NS
->>#define __EXPORT_SYMBOL ___EXPORT_SYMBOL
->>#endif
->>
->>-#define EXPORT_SYMBOL(sym)					\
->>-	__EXPORT_SYMBOL(sym, "")
->>-
->>-#define EXPORT_SYMBOL_GPL(sym)					\
->>-	__EXPORT_SYMBOL(sym, "_gpl")
->>-
->>-#define EXPORT_SYMBOL_GPL_FUTURE(sym)				\
->>-	__EXPORT_SYMBOL(sym, "_gpl_future")
->>+#define EXPORT_SYMBOL(sym) __EXPORT_SYMBOL(sym, "")
->>+#define EXPORT_SYMBOL_GPL(sym) __EXPORT_SYMBOL(sym, "_gpl")
->>+#define EXPORT_SYMBOL_GPL_FUTURE(sym) __EXPORT_SYMBOL(sym, "_gpl_future")
->>+#define EXPORT_SYMBOL_NS(sym, ns) __EXPORT_SYMBOL_NS(sym, "", ns)
->>+#define EXPORT_SYMBOL_NS_GPL(sym, ns) __EXPORT_SYMBOL_NS(sym, "_gpl", ns)
->>
->>#ifdef CONFIG_UNUSED_SYMBOLS
->>#define EXPORT_UNUSED_SYMBOL(sym) __EXPORT_SYMBOL(sym, "_unused")
->>@@ -138,11 +180,28 @@ struct kernel_symbol {
->>#define EXPORT_UNUSED_SYMBOL_GPL(sym)
->>#endif
->>
->>-#endif	/* __GENKSYMS__ */
->>+#endif	/* __KERNEL__ && !__GENKSYMS__ */
->>+
->>+#if defined(__GENKSYMS__)
->>+/*
->>+ * When we're running genksyms, ignore the namespace and make the _NS
->>+ * variants look like the normal ones. There are two reasons for this:
->>+ * 1) In the normal definition of EXPORT_SYMBOL_NS, the 'ns' macro
->>+ *    argument is itself not expanded because it's always tokenized or
->>+ *    concatenated; but when running genksyms, a blank definition of the
->>+ *    macro does allow the argument to be expanded; if a namespace
->>+ *    happens to collide with a #define, this can cause issues.
->>+ * 2) There's no need to modify genksyms to deal with the _NS variants
->>+ */
->>+#define EXPORT_SYMBOL_NS(sym, ns) EXPORT_SYMBOL(sym)
->>+#define EXPORT_SYMBOL_NS_GPL(sym, ns) EXPORT_SYMBOL_GPL(sym)
->>+#endif
->>
->>#else /* !CONFIG_MODULES... */
->>
->>#define EXPORT_SYMBOL(sym)
->>+#define EXPORT_SYMBOL_NS(sym, ns)
->>+#define EXPORT_SYMBOL_NS_GPL(sym, ns)
->>#define EXPORT_SYMBOL_GPL(sym)
->>#define EXPORT_SYMBOL_GPL_FUTURE(sym)
->>#define EXPORT_UNUSED_SYMBOL(sym)
->>diff --git a/include/linux/module.h b/include/linux/module.h
->>index 1455812dd325..b3611e749f72 100644
->>--- a/include/linux/module.h
->>+++ b/include/linux/module.h
->>@@ -280,6 +280,8 @@ struct notifier_block;
->>
->>#ifdef CONFIG_MODULES
->>
->>+#define MODULE_IMPORT_NS(ns) MODULE_INFO(import_ns, #ns)
->>+
->>extern int modules_disabled; /* for sysctl */
->>/* Get/put a kernel symbol (calls must be symmetric) */
->>void *__symbol_get(const char *symbol);
->>diff --git a/kernel/module.c b/kernel/module.c
->>index a23067907169..57e8253f2251 100644
->>--- a/kernel/module.c
->>+++ b/kernel/module.c
->>@@ -544,6 +544,15 @@ static const char *kernel_symbol_name(const struct kernel_symbol *sym)
->>#endif
->>}
->>
->>+static const char *kernel_symbol_namespace(const struct kernel_symbol *sym)
->>+{
->>+#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
->>+	return offset_to_ptr(&sym->namespace_offset);
->>+#else
->>+	return sym->namespace;
->>+#endif
->>+}
->>+
->>static int cmp_name(const void *va, const void *vb)
->>{
->>	const char *a;
->>@@ -1379,6 +1388,34 @@ static inline int same_magic(const char *amagic, const char *bmagic,
->>}
->>#endif /* CONFIG_MODVERSIONS */
->>
->>+static char *get_modinfo(const struct load_info *info, const char *tag);
->>+static char *get_next_modinfo(const struct load_info *info, const char *tag,
->>+			      char *prev);
->>+
->>+static int verify_namespace_is_imported(const struct load_info *info,
->>+					const struct kernel_symbol *sym,
->>+					struct module *mod)
->>+{
->>+	const char *namespace;
->>+	char *imported_namespace;
->>+
->>+	namespace = kernel_symbol_namespace(sym);
->>+	if (namespace) {
->>+		imported_namespace = get_modinfo(info, "import_ns");
->>+		while (imported_namespace) {
->>+			if (strcmp(namespace, imported_namespace) == 0)
->>+				return 0;
->>+			imported_namespace = get_next_modinfo(
->>+				info, "import_ns", imported_namespace);
->>+		}
->>+		pr_err("%s: module uses symbol (%s) from namespace %s, but does not import it.\n",
->>+		       mod->name, kernel_symbol_name(sym), namespace);
->>+		return -EINVAL;
->>+	}
->>+	return 0;
->>+}
->>+
->>+
->>/* Resolve a symbol for this module.  I.e. if we find one, record usage. */
->>static const struct kernel_symbol *resolve_symbol(struct module *mod,
->>						  const struct load_info *info,
->>@@ -1413,6 +1450,12 @@ static const struct kernel_symbol *resolve_symbol(struct module *mod,
->>		goto getname;
->>	}
->>
->>+	err = verify_namespace_is_imported(info, sym, mod);
->>+	if (err) {
->>+		sym = ERR_PTR(err);
->>+		goto getname;
->>+	}
->
->I think we should verify the namespace before taking a reference to
->the owner module (just swap the verify_namespace_is_imported() and
->ref_module() calls here).
->
->Other than that, this patch looks good. Thanks!
->
+For the series:
 
-Thanks! I will address the points above.
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 
-Cheers,
-Matthias
+Thanks,
+Mark.
 
->>+
->>getname:
->>	/* We must make copy under the lock if we failed to get ref. */
->>	strncpy(ownername, module_name(owner), MODULE_NAME_LEN);
->>-- 
->>2.23.0.rc1.153.gdeed80330f-goog
->>
+> 
+> [+linux-arch since the end of this may be applicable to other architectures]
+> 
+> Commit 24fe1b0efad4fcdd ("arm64: Remove unnecessary ISBs from
+> set_{pte,pmd,pud") removed ISB instructions immediately following updates to
+> the page table, on the grounds that they are not required by the
+> architecture and a DSB alone is sufficient to ensure that subsequent data
+> accesses use the new translation:
+> 
+>   DDI0487E_a, B2-128:
+> 
+>   | ... no instruction that appears in program order after the DSB instruction
+>   | can alter any state of the system or perform any part of its functionality
+>   | until the DSB completes other than:
+>   |
+>   | * Being fetched from memory and decoded
+>   | * Reading the general-purpose, SIMD and floating-point, Special-purpose, or
+>   |   System registers that are directly or indirectly read without causing
+>   |   side-effects.
+> 
+> However, the same document also states the following:
+> 
+>   DDI0487E_a, B2-125:
+> 
+>   | DMB and DSB instructions affect reads and writes to the memory system
+>   | generated by Load/Store instructions and data or unified cache maintenance
+>   | instructions being executed by the PE. Instruction fetches or accesses
+>   | caused by a hardware translation table access are not explicit accesses.
+> 
+> which appears to claim that the DSB alone is insufficient. Unfortunately,
+> some CPU designers have followed the second clause above, whereas in Linux
+> we've been relying on the first. This means that our mapping sequence:
+> 
+> 	MOV	X0, <valid pte>
+> 	STR	X0, [Xptep]	// Store new PTE to page table
+> 	DSB	ISHST
+> 	LDR	X1, [X2]	// Translates using the new PTE
+> 
+> can actually raise a translation fault on the load instruction because the
+> translation can be performed speculatively before the page table update and
+> then marked as "faulting" by the CPU. For user PTEs, this is ok because we
+> can handle the spurious fault, but for kernel PTEs and intermediate table
+> entries this results in a panic().
+> 
+> We can fix this by reverting 24fe1b0efad4fcdd, but the fun doesn't stop
+> there. If we consider the unmap case, then a similar constraint applies to
+> ordering subsequent memory accesses after the completion of the TLB
+> invalidation, so we also need to add an ISB instruction to
+> __flush_tlb_kernel_pgtable(). For user addresses, the exception return
+> provides the necessary context synchronisation.
+> 
+> This then raises an interesting question: if an ISB is required after a TLBI
+> instruction to prevent speculative translation of subsequent instructions,
+> how is this speculation prevented on concurrent CPUs that receive the
+> broadcast TLB invalidation message? Sending and completing a broadcast TLB
+> invalidation message does not imply execution of an ISB on the remote CPU,
+> however it /does/ require that the remote CPU will no longer make use of any
+> old translations because otherwise we wouldn't be able to guarantee that an
+> unmapped page could no longer be modified. In this regard, receiving a TLB
+> invalidation is in some ways stronger than sending one (where you need the
+> ISB).
+> 
+> So far, so good, but the final piece of the puzzle isn't quite so rosy.
+> 
+> *** Other architecture maintainers -- start here! ***
+> 
+> In the case that one CPU maps a page and then sets a flag to tell another
+> CPU:
+> 
+> 	CPU 0
+> 	-----
+> 
+> 	MOV	X0, <valid pte>
+> 	STR	X0, [Xptep]	// Store new PTE to page table
+> 	DSB	ISHST
+> 	ISB
+> 	MOV	X1, #1
+> 	STR	X1, [Xflag]	// Set the flag
+> 
+> 	CPU 1
+> 	-----
+> 
+> loop:	LDAR	X0, [Xflag]	// Poll flag with Acquire semantics
+> 	CBZ	X0, loop
+> 	LDR	X1, [X2]	// Translates using the new PTE
+> 
+> then the final load on CPU 1 can raise a translation fault for the same
+> reasons as mentioned at the start of this description. In reality, code
+> such as:
+> 
+> 	CPU 0				CPU 1
+> 	-----				-----
+> 	spin_lock(&lock);		spin_lock(&lock);
+> 	*ptr = vmalloc(size);		if (*ptr)
+> 	spin_unlock(&lock);			foo = **ptr;
+> 					spin_unlock(&lock);
+> 
+> will not trigger the fault because there is an address dependency on
+> CPU1 which prevents the speculative translation. However, more exotic
+> code where the virtual address is known ahead of time, such as:
+> 
+> 	CPU 0				CPU 1
+> 	-----				-----
+> 	spin_lock(&lock);		spin_lock(&lock);
+> 	set_fixmap(0, paddr, prot);	if (mapped)
+> 	mapped = true;				foo = *fix_to_virt(0);
+> 	spin_unlock(&lock);		spin_unlock(&lock);
+> 
+> could fault. This can be avoided by any of:
+> 
+> 	* Introducing broadcast TLB maintenance on the map path
+> 	* Adding a DSB;ISB sequence after checking a flag which indicates
+> 	  that a virtual address is now mapped
+> 	* Handling the spurious fault
+> 
+> Given that we have never observed a problem in the concurrent case under
+> Linux and future revisions of the architecture are being tightened so that
+> translation table walks are effectively ordered in the same way as explicit
+> memory accesses, we no longer treat spurious kernel faults as fatal if the
+> page table indicates that the access was valid.
+> 
+> Anyway, this patch series attempts to implement some of this and I plan
+> to queue it for 5.4.
+> 
+> Will
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> 
+> --->8
+> 
+> Will Deacon (6):
+>   Revert "arm64: Remove unnecessary ISBs from set_{pte,pmd,pud}"
+>   arm64: tlb: Ensure we execute an ISB following walk cache invalidation
+>   arm64: mm: Add ISB instruction to set_pgd()
+>   arm64: sysreg: Add some field definitions for PAR_EL1
+>   arm64: mm: Ignore spurious translation faults taken from the kernel
+>   arm64: kvm: Replace hardcoded '1' with SYS_PAR_EL1_F
+> 
+>  arch/arm64/include/asm/pgtable.h  | 13 ++++++++++---
+>  arch/arm64/include/asm/sysreg.h   |  3 +++
+>  arch/arm64/include/asm/tlbflush.h |  1 +
+>  arch/arm64/kvm/hyp/switch.c       |  2 +-
+>  arch/arm64/mm/fault.c             | 33 +++++++++++++++++++++++++++++++++
+>  5 files changed, 48 insertions(+), 4 deletions(-)
+> 
+> -- 
+> 2.11.0
+> 
