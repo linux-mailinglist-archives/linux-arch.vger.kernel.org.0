@@ -2,74 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E183A018D
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2019 14:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0CFA05AB
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2019 17:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726272AbfH1MYY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Aug 2019 08:24:24 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:43672 "EHLO mail.skyhub.de"
+        id S1726623AbfH1PHC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Aug 2019 11:07:02 -0400
+Received: from mga02.intel.com ([134.134.136.20]:6091 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726259AbfH1MYX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 28 Aug 2019 08:24:23 -0400
-Received: from zn.tnic (p200300EC2F0A5300B1A6357224C8EB83.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:5300:b1a6:3572:24c8:eb83])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E9ED31EC06E5;
-        Wed, 28 Aug 2019 14:24:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1566995058;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=kboUowfYWa+pTbnRkXQv/3rDdRX8gtuWZNvDaHTigoY=;
-        b=m8Od59iGU/uu/tVlO+ylm+OL48LfTbu5CkVfET1frnc0UxUwmW2EHdCZOilZNADXiGnzi2
-        R9cWiQBOaygTP/WsTs6Q5ROvdtz2K1CqH++hJnvBqQ1h3Z1iVn+/a4IPOGqU95QDnDkTJT
-        zuCmDAb9pf46FGWK+nIB+BJcj7J8HGc=
-Date:   Wed, 28 Aug 2019 14:24:17 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Asm & local labels for functions [was: [PATCH v8 05/28] x86/asm:
- annotate local pseudo-functions]
-Message-ID: <20190828122417.GH4920@zn.tnic>
-References: <20190808103854.6192-1-jslaby@suse.cz>
- <20190808103854.6192-6-jslaby@suse.cz>
- <20190815160719.GI15313@zn.tnic>
- <c5e0f683-796c-f552-0c3b-8a1105446200@suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c5e0f683-796c-f552-0c3b-8a1105446200@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726440AbfH1PHB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Aug 2019 11:07:01 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Aug 2019 08:07:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,441,1559545200"; 
+   d="scan'208";a="380429742"
+Received: from yyu32-desk1.sc.intel.com ([10.144.153.205])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Aug 2019 08:06:59 -0700
+Message-ID: <29e6afa9cd7a7b0069ec6b999a2830cbbbe50a56.camel@intel.com>
+Subject: Re: [PATCH v8 11/27] x86/mm: Introduce _PAGE_DIRTY_SW
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+Date:   Wed, 28 Aug 2019 07:57:41 -0700
+In-Reply-To: <20190828070308.GJ2332@hirez.programming.kicks-ass.net>
+References: <20190813205225.12032-1-yu-cheng.yu@intel.com>
+         <20190813205225.12032-12-yu-cheng.yu@intel.com>
+         <20190823140233.GC2332@hirez.programming.kicks-ass.net>
+         <6c3dc33e16c8bbb6d45c0a6ec7c684de197fa065.camel@intel.com>
+         <20190828070308.GJ2332@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.1-2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 01:47:23PM +0200, Jiri Slaby wrote:
-> Let's start with this one: do you really want me to get rid of (local)
-> symbols like this? It would make backtraces completely misleading as the
-> unwinder would put a name of the previous function (or some garbage,
-> depending on unwinder) into the backtrace...
+On Wed, 2019-08-28 at 09:03 +0200, Peter Zijlstra wrote:
+> On Tue, Aug 27, 2019 at 03:37:12PM -0700, Yu-cheng Yu wrote:
+> > On Fri, 2019-08-23 at 16:02 +0200, Peter Zijlstra wrote:
+> > > On Tue, Aug 13, 2019 at 01:52:09PM -0700, Yu-cheng Yu wrote:
+> > > 
+> > > > +static inline pte_t pte_move_flags(pte_t pte, pteval_t from, pteval_t
+> > > > to)
+> > > > +{
+> > > > +	if (pte_flags(pte) & from)
+> > > > +		pte = pte_set_flags(pte_clear_flags(pte, from), to);
+> > > > +	return pte;
+> > > > +}
+> > > 
+> > > Aside of the whole conditional thing (I agree it would be better to have
+> > > this unconditionally); the function doesn't really do as advertised.
+> > > 
+> > > That is, if @from is clear, it doesn't endeavour to make sure @to is
+> > > also clear.
+> > > 
+> > > Now it might be sufficient, but in that case it really needs a comment
+> > > and or different name.
+> > > 
+> > > An implementation that actually moves the bit is something like:
+> > > 
+> > > 	pteval_t a,b;
+> > > 
+> > > 	a = native_pte_value(pte);
+> > > 	b = (a >> from_bit) & 1;
+> > > 	a &= ~((1ULL << from_bit) | (1ULL << to_bit));
+> > > 	a |= b << to_bit;
+> > > 	return make_native_pte(a);
+> > 
+> > There can be places calling pte_wrprotect() on a PTE that is already RO +
+> > DIRTY_SW.  Then in pte_move_flags(pte, _PAGE_DIRTY_HW, _PAGE_DIRTY_SW) we do
+> > not
+> >  want to clear _PAGE_DIRTY_SW.  But, I will look into this and make it more
+> > obvious.
+> 
+> Well, then the name 'move' is just wrong, because that is not the
+> semantics you're looking for.
+> 
+> So the thing is; if you provide a generic function that 'munges' two
+> bits, then it's name had better be accurate. But AFAICT you only ever
+> used this for the DIRTY bits, so it might be better to have a function
+> specifically for that and with a comment that spells out the exact
+> semantics and reasons for them.
 
-Yes, while looking at your patches, I was thinking about what
-would be a good rule to use with which to make symbols local. I
-guess those which are small and not really important for stack
-traces like "bad_gs" in entry_64., for example. Or "relocated" in
-arch/x86/boot/compressed/head_64.S, as another example. That last one
-you probably are never going to see in stack traces due to it being too
-early anyway.
+Yes, I will work on that.
 
-Or, if we think that those symbols are important for stack traces, then
-they should be called something more prominent, with a naming prefix or
-so, so that they can be assigned to the respective source easier.
-
-Am I making some sense?
-
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+Yu-cheng
