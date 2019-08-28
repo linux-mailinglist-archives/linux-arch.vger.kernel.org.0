@@ -2,115 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 315B2A08B1
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2019 19:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE22A0B4C
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2019 22:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726592AbfH1RgY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Aug 2019 13:36:24 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:46746 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726618AbfH1RgX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Aug 2019 13:36:23 -0400
-Received: by mail-pg1-f195.google.com with SMTP id m3so82752pgv.13
-        for <linux-arch@vger.kernel.org>; Wed, 28 Aug 2019 10:36:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=EUMK8UKoJN8MBf0J3kYsSiXaGWd4l00MuXQSkXHjEkU=;
-        b=nml2rPgziIqKJ0ypA3HhZGv7pV0jpaWRM0sCJ9s6ye1Vt7mkf6Rl2xmGkJQg4ZnVF3
-         VhtIb7wJRRuVF8zrEpVU5NqQHImBtaOcva3nG2A6W77s4ijYRhKOQwwp4zqoxpw+Wcz2
-         C4mgd5vb4RlcMoNyuTQJNVLrpyoJm11W/LMtg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=EUMK8UKoJN8MBf0J3kYsSiXaGWd4l00MuXQSkXHjEkU=;
-        b=X2T5QndWQ1k4ag7wBe+r1+aTErweTjZYOyljzlhaFQtRQYhjw0n6LGude2dNW8CR/G
-         3E4z9p7x/MtnxaTtcJ+Nc4cfJzd1Dd96M+gnObhTgoDUVDM7ktW4sya24904GlF7+Zbm
-         uIwEyF8IquL4vyYiVmMNhRDtJMeMjgjh5g7dHdpgFVnLUOTmIB2DEEmkuytzilOfwKtW
-         iFoVpbxOEkZk+I62rZZAEP0cgxetYtdCOeXgEfVQTfz6eNp4pjTWKIPFI4pXEu4mob5y
-         FqIEJbxETl2j41kw7KMiSIe13tyVr0xik//3sSHZjGc7M4NzQC5H1eMVbSKOY1jGGvKU
-         XvIw==
-X-Gm-Message-State: APjAAAWcdba9ERBtZRSiIaz2S+DrHCBiQoV/dwj2WAu7cfgCcuhFXBET
-        yxidCFU7UQJSKBPxddIpBCiNqA==
-X-Google-Smtp-Source: APXvYqzElEqg+zkKsqa/GUFMyi2GafNnjd+E8JvecYKCOt+Q9UFz6HH9rmld8KOXaKUdBxtTP1/AiQ==
-X-Received: by 2002:a17:90a:17c4:: with SMTP id q62mr5279289pja.135.1567013783037;
-        Wed, 28 Aug 2019 10:36:23 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j11sm3480331pfa.113.2019.08.28.10.36.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 10:36:20 -0700 (PDT)
-Date:   Sat, 24 Aug 2019 12:08:00 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        20190819234111.9019-8-keescook@chromium.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Drew Davenport <ddavenport@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception
- handler
-Message-ID: <201908241206.D223659@keescook>
-References: <201908200943.601DD59DCE@keescook>
- <20190822155611.a1a6e26db99ba0876ba9c8bd@linux-foundation.org>
- <86003539-18ec-f2ff-a46f-764edb820dcd@c-s.fr>
+        id S1726897AbfH1UYE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Aug 2019 16:24:04 -0400
+Received: from venus.catern.com ([68.183.49.163]:44628 "EHLO venus.catern.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726725AbfH1UYE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Aug 2019 16:24:04 -0400
+X-Greylist: delayed 408 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Aug 2019 16:24:03 EDT
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.206.19.101; helo=localhost; envelope-from=sbaugh@catern.com; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=catern.com; s=mail;
+        t=1567023434; bh=0ywMFKjMwE/uBXqaIPb34y8Q/aLLCmGU3C97TLkQvwo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date;
+        b=REuwdRN9P9zoh6DHSLiK1nqu3i2wNZqBJCILEt+4b0yiKxgb0XYUJwKX2wRNDyDWc
+         JukKo1pvC54OaIX4CqMGz3OuGJLGPRfZ0csrkVnGcnxMd6oby8HYrRP9EeNU+sPgW7
+         McVdUazYCiNEMo/74xDeTcyWeiOv6iN9cpLaK4n8=
+Received: from localhost (ec2-34-206-19-101.compute-1.amazonaws.com [34.206.19.101])
+        by venus.catern.com (Postfix) with ESMTPSA id 0564E2C2971;
+        Wed, 28 Aug 2019 20:17:13 +0000 (UTC)
+From:   Spencer Baugh <sbaugh@catern.com>
+To:     Jeff Layton <jlayton@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH RESEND v11 7/8] open: openat2(2) syscall
+In-Reply-To: <4da231cd52880991d8a038adb8fbb2ef3d724db9.camel@kernel.org>
+References: <20190820033406.29796-1-cyphar@cyphar.com> <20190820033406.29796-8-cyphar@cyphar.com> <854l2366zp.fsf@catern.com> <4da231cd52880991d8a038adb8fbb2ef3d724db9.camel@kernel.org>
+Date:   Wed, 28 Aug 2019 20:17:07 +0000
+Message-ID: <85y2zd3v0c.fsf@catern.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <86003539-18ec-f2ff-a46f-764edb820dcd@c-s.fr>
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 04:26:59PM +0200, Christophe Leroy wrote:
-> 
-> 
-> Le 23/08/2019 à 00:56, Andrew Morton a écrit :
-> > On Tue, 20 Aug 2019 09:47:55 -0700 Kees Cook <keescook@chromium.org> wrote:
-> > 
-> > > Reply-To: 20190819234111.9019-8-keescook@chromium.org
-> > 
-> > Really?
-> 
-> That seems correct, that's the "[PATCH 7/7] bug: Move WARN_ON() "cut here"
-> into exception handler" from the series at
-> https://lkml.org/lkml/2019/8/19/1155
-> 
-> 
-> > 
-> > > Subject: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception handler
-> > 
-> > It's strange to receive a standalone [7/7] patch.
-> 
-> Iaw the Reply_To, I understand it as an update of the 7th patch of the
-> series.
+Jeff Layton <jlayton@kernel.org> writes:
+> On Mon, 2019-08-26 at 19:50 +0000, sbaugh@catern.com wrote:
+>> Aleksa Sarai <cyphar@cyphar.com> writes:
+>> > To this end, we introduce the openat2(2) syscall. It provides all of the
+>> > features of openat(2) through the @how->flags argument, but also
+>> > also provides a new @how->resolve argument which exposes RESOLVE_* flags
+>> > that map to our new LOOKUP_* flags. It also eliminates the long-standing
+>> > ugliness of variadic-open(2) by embedding it in a struct.
+>> 
+>> I don't like this usage of a structure in memory to pass arguments that
+>> would fit in registers. This would be quite inconvenient for me as a
+>> userspace developer.
+>> 
+>> Others have brought up issues with this: the issue of seccomp, and the
+>> issue of mismatch between the userspace interface and the kernel
+>> interface, are the most important for me. I want to add another,
+>> admittedly somewhat niche, concern.
+>> 
+>> This interfaces requires a program to allocate memory (even on the
+>> stack) just to pass arguments to the kernel which could be passed
+>> without allocating that memory. That makes it more difficult and less
+>> efficient to use this syscall in any case where memory is not so easily
+>> allocatable: such as early program startup or assembly, where the stack
+>> may be limited in size or not even available yet, or when injecting a
+>> syscall while ptracing.
+>> 
+>> A struct-passing interface was needed for clone, since we ran out of
+>> registers; but we have not run out of registers yet for openat, so it
+>> would be nice to avoid this if we can. We can always expand later...
+>> 
+>
+> We can't really expand later like you suggest.
+>
+> Suppose in a couple of years that we need to add some new argument to
+> openat2 that isn't just a new flag. If all these values are passed by
+> individual arguments, you can't add one later without adding yet another
+> syscall.
 
-Was trying to avoid the churn of resending the identical 1-6 patches
-(which are all just refactoring to make 7/7 not a mess).
+Sure we can. This new syscall doesn't need to use all 6 available
+arguments. It can enforce that the unused ones are 0. Then if we
+eventually run out of flags and need to switch to pass arguments via
+struct, we can just use one of the unused arguments for that purpose.
 
-I can resend the whole series, if that's preferred.
-
-> > > Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
-> > > Fixes: Fixes: 6b15f678fb7d ("include/asm-generic/bug.h: fix "cut here" for WARN_ON for __WARN_TAINT architectures")
-> > 
-> > I'm seeing double.
-
-Tracking down all these combinations has been tricky, which is why I did
-the patch 1-6 refactoring: it makes the call hierarchy much easier to
-examine (IMO).
-
--Kees
-
--- 
-Kees Cook
+Even if we used all 6 arguments, in the worst-case scenario, the last
+flag we add could change the interpretation of some other argument so it
+can be used to pass a pointer to a struct.
