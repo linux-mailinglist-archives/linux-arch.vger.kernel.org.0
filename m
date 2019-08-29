@@ -2,134 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA46A109C
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2019 06:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A41A1225
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2019 08:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725881AbfH2E4C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Aug 2019 00:56:02 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:11823 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725821AbfH2E4C (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 29 Aug 2019 00:56:02 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 46Jr0b5DHPz9v045;
-        Thu, 29 Aug 2019 06:55:59 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=Crh6iKQg; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 9z55-teS7QNT; Thu, 29 Aug 2019 06:55:59 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 46Jr0b47h8z9v044;
-        Thu, 29 Aug 2019 06:55:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1567054559; bh=C7KnBPSsTOCMKq6tZmmUIqyxDQCGRpUvQfY8hSe07iY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Crh6iKQgHzv0eO4Zt5E/aY5c04/+zsg8gPvFX0T3nRKRRU84j5EOOfjB6tpEcJeOK
-         H6Xo/zcD5it730VdmybY59Uju+tQjAMjpN54UwPR9lXBav8DZ6aEZCYkd3lxHfTwyj
-         rR7aR7Z6R1QPFOIsqIKXtCNlm/GF62ovxRTIBQEY=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6339C8B79B;
-        Thu, 29 Aug 2019 06:56:00 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id XOufC6BwEjVn; Thu, 29 Aug 2019 06:56:00 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BF89B8B761;
-        Thu, 29 Aug 2019 06:55:59 +0200 (CEST)
-Subject: Re: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception
- handler
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Drew Davenport <ddavenport@chromium.org>,
+        id S1727097AbfH2G6i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Aug 2019 02:58:38 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:40420 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726330AbfH2G6i (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Aug 2019 02:58:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=gD1AMkI8FpRbArgAWS2NSX6iE7kz1rPPHG4idT8fdBw=; b=xZX4jG1YMmq087sHk0zLDOE4A
+        2vh6QhH5yMkwjsM9Kp11ycPtWMPsStMqPB1gsYmPeQdU38/CrelMbY3AY5qXGh7tbpAdjCZ5KHE9/
+        NmqwyVPivxGrlgR4xRYn/lBEzt1XreknQwkBCd86UmMXaL8QSc1ODlJX4myltGfVg4M2B5CVqY38z
+        pc/rLqCT7mUNevoTr9erFmiC8W79S+0INBApxqn5Zk0xTuH2xN+DZo1BXELzkj+YUQa9XvNKFtlIO
+        kQUMZ2cg1Rvls+xM+2ms7dtOLb7ist29TMzT3KiqClUBUwKBE+MQhKWB/UVb/SCAkH+k2lga92QD6
+        K+kDl6+Jw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39344)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1i3ENH-0007HG-J3; Thu, 29 Aug 2019 07:57:39 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1i3EN7-0007UX-9P; Thu, 29 Aug 2019 07:57:29 +0100
+Date:   Thu, 29 Aug 2019 07:57:29 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <201908200943.601DD59DCE@keescook>
- <20190822155611.a1a6e26db99ba0876ba9c8bd@linux-foundation.org>
- <86003539-18ec-f2ff-a46f-764edb820dcd@c-s.fr> <201908241206.D223659@keescook>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <4c1ed94a-4dd0-e5cb-0b87-397b512d465e@c-s.fr>
-Date:   Thu, 29 Aug 2019 06:55:59 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v2 3/3] arm: Add support for function error injection
+Message-ID: <20190829065729.GU13294@shell.armlinux.org.uk>
+References: <20190806100015.11256-1-leo.yan@linaro.org>
+ <20190806100015.11256-4-leo.yan@linaro.org>
+ <20190819091808.GB5599@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-In-Reply-To: <201908241206.D223659@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190819091808.GB5599@leoy-ThinkPad-X240s>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+I'm sorry, I can't apply this, it produces loads of:
 
-Le 24/08/2019 à 21:08, Kees Cook a écrit :
+include/linux/error-injection.h:7:10: fatal error: asm/error-injection.h: No such file or directory
 
-Euh ... only received this mail yesterday. Same for the other answer.
+Since your patch 1 has been merged by the ARM64 people, I can't take
+it until next cycle.
 
-
-> On Fri, Aug 23, 2019 at 04:26:59PM +0200, Christophe Leroy wrote:
->>
->>
->> Le 23/08/2019 à 00:56, Andrew Morton a écrit :
->>> On Tue, 20 Aug 2019 09:47:55 -0700 Kees Cook <keescook@chromium.org> wrote:
->>>
->>>> Reply-To: 20190819234111.9019-8-keescook@chromium.org
->>>
->>> Really?
->>
->> That seems correct, that's the "[PATCH 7/7] bug: Move WARN_ON() "cut here"
->> into exception handler" from the series at
->> https://lkml.org/lkml/2019/8/19/1155
->>
->>
->>>
->>>> Subject: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception handler
->>>
->>> It's strange to receive a standalone [7/7] patch.
->>
->> Iaw the Reply_To, I understand it as an update of the 7th patch of the
->> series.
+On Mon, Aug 19, 2019 at 05:18:08PM +0800, Leo Yan wrote:
+> Hi Russell,
 > 
-> Was trying to avoid the churn of resending the identical 1-6 patches
-> (which are all just refactoring to make 7/7 not a mess).
-
-Yes but Reply-To: means the address we have to use to answer to this email.
-
-I think you wanted to use In-reply-to:
-
+> On Tue, Aug 06, 2019 at 06:00:15PM +0800, Leo Yan wrote:
+> > This patch implements arm specific functions regs_set_return_value() and
+> > override_function_with_return() to support function error injection.
+> > 
+> > In the exception flow, it updates pt_regs::ARM_pc with pt_regs::ARM_lr
+> > so can override the probed function return.
 > 
-> I can resend the whole series, if that's preferred.
-
-I guess not.
-
+> Gentle ping ...  Could you review this patch?
 > 
->>>> Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
->>>> Fixes: Fixes: 6b15f678fb7d ("include/asm-generic/bug.h: fix "cut here" for WARN_ON for __WARN_TAINT architectures")
->>>
->>> I'm seeing double.
+> Thanks,
+> Leo.
 > 
-> Tracking down all these combinations has been tricky, which is why I did
-> the patch 1-6 refactoring: it makes the call hierarchy much easier to
-> examine (IMO).
-
-But still, Andrew is seing double ... And me as well :)
-
-Fixes: Fixes:
-
-Christophe
-
+> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> > ---
+> >  arch/arm/Kconfig              |  1 +
+> >  arch/arm/include/asm/ptrace.h |  5 +++++
+> >  arch/arm/lib/Makefile         |  2 ++
+> >  arch/arm/lib/error-inject.c   | 19 +++++++++++++++++++
+> >  4 files changed, 27 insertions(+)
+> >  create mode 100644 arch/arm/lib/error-inject.c
+> > 
+> > diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> > index 33b00579beff..2d3d44a037f6 100644
+> > --- a/arch/arm/Kconfig
+> > +++ b/arch/arm/Kconfig
+> > @@ -77,6 +77,7 @@ config ARM
+> >  	select HAVE_EXIT_THREAD
+> >  	select HAVE_FAST_GUP if ARM_LPAE
+> >  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+> > +	select HAVE_FUNCTION_ERROR_INJECTION if !THUMB2_KERNEL
+> >  	select HAVE_FUNCTION_GRAPH_TRACER if !THUMB2_KERNEL && !CC_IS_CLANG
+> >  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
+> >  	select HAVE_GCC_PLUGINS
+> > diff --git a/arch/arm/include/asm/ptrace.h b/arch/arm/include/asm/ptrace.h
+> > index 91d6b7856be4..3b41f37b361a 100644
+> > --- a/arch/arm/include/asm/ptrace.h
+> > +++ b/arch/arm/include/asm/ptrace.h
+> > @@ -89,6 +89,11 @@ static inline long regs_return_value(struct pt_regs *regs)
+> >  	return regs->ARM_r0;
+> >  }
+> >  
+> > +static inline void regs_set_return_value(struct pt_regs *regs, unsigned long rc)
+> > +{
+> > +	regs->ARM_r0 = rc;
+> > +}
+> > +
+> >  #define instruction_pointer(regs)	(regs)->ARM_pc
+> >  
+> >  #ifdef CONFIG_THUMB2_KERNEL
+> > diff --git a/arch/arm/lib/Makefile b/arch/arm/lib/Makefile
+> > index b25c54585048..8f56484a7156 100644
+> > --- a/arch/arm/lib/Makefile
+> > +++ b/arch/arm/lib/Makefile
+> > @@ -42,3 +42,5 @@ ifeq ($(CONFIG_KERNEL_MODE_NEON),y)
+> >    CFLAGS_xor-neon.o		+= $(NEON_FLAGS)
+> >    obj-$(CONFIG_XOR_BLOCKS)	+= xor-neon.o
+> >  endif
+> > +
+> > +obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
+> > diff --git a/arch/arm/lib/error-inject.c b/arch/arm/lib/error-inject.c
+> > new file mode 100644
+> > index 000000000000..2d696dc94893
+> > --- /dev/null
+> > +++ b/arch/arm/lib/error-inject.c
+> > @@ -0,0 +1,19 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +#include <linux/error-injection.h>
+> > +#include <linux/kprobes.h>
+> > +
+> > +void override_function_with_return(struct pt_regs *regs)
+> > +{
+> > +	/*
+> > +	 * 'regs' represents the state on entry of a predefined function in
+> > +	 * the kernel/module and which is captured on a kprobe.
+> > +	 *
+> > +	 * 'regs->ARM_lr' contains the the link register for the probed
+> > +	 * function, when kprobe returns back from exception it will override
+> > +	 * the end of probed function and directly return to the predefined
+> > +	 * function's caller.
+> > +	 */
+> > +	instruction_pointer_set(regs, regs->ARM_lr);
+> > +}
+> > +NOKPROBE_SYMBOL(override_function_with_return);
+> > -- 
+> > 2.17.1
+> > 
 > 
-> -Kees
-> 
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
