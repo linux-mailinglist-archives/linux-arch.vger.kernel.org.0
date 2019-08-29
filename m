@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7ABA182F
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2019 13:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D8CA1835
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2019 13:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727691AbfH2LTt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Aug 2019 07:19:49 -0400
-Received: from foss.arm.com ([217.140.110.172]:42860 "EHLO foss.arm.com"
+        id S1728068AbfH2LTN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Aug 2019 07:19:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:42772 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728194AbfH2LTU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 29 Aug 2019 07:19:20 -0400
+        id S1726232AbfH2LTM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 29 Aug 2019 07:19:12 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F23F71570;
-        Thu, 29 Aug 2019 04:19:19 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C3E31570;
+        Thu, 29 Aug 2019 04:19:11 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 801123F59C;
-        Thu, 29 Aug 2019 04:19:18 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0E733F59C;
+        Thu, 29 Aug 2019 04:19:09 -0700 (PDT)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
 Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
         tglx@linutronix.de, salyzyn@android.com, 0x7f454c46@gmail.com,
         luto@kernel.org
-Subject: [PATCH 7/7] x86: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
-Date:   Thu, 29 Aug 2019 12:18:43 +0100
-Message-Id: <20190829111843.41003-8-vincenzo.frascino@arm.com>
+Subject: [PATCH 2/7] lib: vdso: Build 32 bit specific functions in the right context
+Date:   Thu, 29 Aug 2019 12:18:38 +0100
+Message-Id: <20190829111843.41003-3-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190829111843.41003-1-vincenzo.frascino@arm.com>
 References: <20190829111843.41003-1-vincenzo.frascino@arm.com>
@@ -36,32 +36,52 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-As a consequence of Commit 623fa33f7bd6 ("lib:vdso: Remove
-VDSO_HAS_32BIT_FALLBACK") VDSO_HAS_32BIT_FALLBACK define is not
-required anymore hence can be removed.
+clock_gettime32 and clock_getres_time32 should be compiled only with a
+32 bit vdso library.
 
-Remove unused VDSO_HAS_32BIT_FALLBACK from x86 vdso.
+Exclude these symbols when BUILD_VDSO32 is not defined.
 
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Andy Lutomirski <luto@kernel.org>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- arch/x86/include/asm/vdso/gettimeofday.h | 2 --
- 1 file changed, 2 deletions(-)
+ lib/vdso/gettimeofday.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/include/asm/vdso/gettimeofday.h b/arch/x86/include/asm/vdso/gettimeofday.h
-index e9ee139cf29e..52c3bcd672cf 100644
---- a/arch/x86/include/asm/vdso/gettimeofday.h
-+++ b/arch/x86/include/asm/vdso/gettimeofday.h
-@@ -96,8 +96,6 @@ long clock_getres_fallback(clockid_t _clkid, struct __kernel_timespec *_ts)
+diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+index e630e7ff57f1..a86e89e6dedc 100644
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -117,6 +117,7 @@ __cvdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
+ 	return 0;
+ }
  
- #else
- 
--#define VDSO_HAS_32BIT_FALLBACK	1
--
- static __always_inline
- long clock_gettime_fallback(clockid_t _clkid, struct __kernel_timespec *_ts)
++#ifdef BUILD_VDSO32
+ static __maybe_unused int
+ __cvdso_clock_gettime32(clockid_t clock, struct old_timespec32 *res)
  {
+@@ -139,6 +140,7 @@ __cvdso_clock_gettime32(clockid_t clock, struct old_timespec32 *res)
+ 	}
+ 	return ret;
+ }
++#endif /* BUILD_VDSO32 */
+ 
+ static __maybe_unused int
+ __cvdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
+@@ -229,6 +231,7 @@ int __cvdso_clock_getres(clockid_t clock, struct __kernel_timespec *res)
+ 	return 0;
+ }
+ 
++#ifdef BUILD_VDSO32
+ static __maybe_unused int
+ __cvdso_clock_getres_time32(clockid_t clock, struct old_timespec32 *res)
+ {
+@@ -251,4 +254,5 @@ __cvdso_clock_getres_time32(clockid_t clock, struct old_timespec32 *res)
+ 	}
+ 	return ret;
+ }
++#endif /* BUILD_VDSO32 */
+ #endif /* VDSO_HAS_CLOCK_GETRES */
 -- 
 2.23.0
 
