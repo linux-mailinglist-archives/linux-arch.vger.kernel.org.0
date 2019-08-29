@@ -2,68 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9744EA1FA4
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2019 17:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF44FA1FCC
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2019 17:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727207AbfH2Ps7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Aug 2019 11:48:59 -0400
-Received: from foss.arm.com ([217.140.110.172]:47270 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727022AbfH2Ps7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 29 Aug 2019 11:48:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78C1815AB;
-        Thu, 29 Aug 2019 08:48:58 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2495F3F738;
-        Thu, 29 Aug 2019 08:48:57 -0700 (PDT)
-Subject: Re: [PATCH 2/7] lib: vdso: Build 32 bit specific functions in the
- right context
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>
-References: <20190829111843.41003-1-vincenzo.frascino@arm.com>
- <20190829111843.41003-3-vincenzo.frascino@arm.com>
- <CALCETrWNbMhYwpsKtutCTW4M7rMmOF0YUy-k1QgGEpY-Gd1xQw@mail.gmail.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <91cf55b4-63a1-9548-c7e0-c4dfa350b687@arm.com>
-Date:   Thu, 29 Aug 2019 16:48:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728158AbfH2PvC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Aug 2019 11:51:02 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27320 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727650AbfH2PvB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 29 Aug 2019 11:51:01 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7TFlqeG141085;
+        Thu, 29 Aug 2019 11:50:50 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2uphbyrypv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Aug 2019 11:50:50 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7TFjPq3021679;
+        Thu, 29 Aug 2019 15:50:49 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma01wdc.us.ibm.com with ESMTP id 2ujvv6n8vn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Aug 2019 15:50:48 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7TFonKu54395238
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 15:50:49 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E7A98AE062;
+        Thu, 29 Aug 2019 15:50:48 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F1CA7AE064;
+        Thu, 29 Aug 2019 15:50:45 +0000 (GMT)
+Received: from maxibm.ibmuc.com (unknown [9.85.151.248])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Aug 2019 15:50:45 +0000 (GMT)
+From:   "Maxiwell S. Garcia" <maxiwell@linux.ibm.com>
+To:     linuxppc-dev@ozlabs.org
+Cc:     kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, paulus@ozlabs.org, mpe@ellerman.id.au,
+        andmike@linux.ibm.com, linuxram@us.ibm.com, bauerman@linux.ibm.com,
+        cclaudio@linux.ibm.com,
+        "Maxiwell S. Garcia" <maxiwell@linux.ibm.com>
+Subject: [PATCH v2 0/2] powerpc: Add PowerPC Capabilities ELF note
+Date:   Thu, 29 Aug 2019 12:50:19 -0300
+Message-Id: <20190829155021.2915-1-maxiwell@linux.ibm.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <CALCETrWNbMhYwpsKtutCTW4M7rMmOF0YUy-k1QgGEpY-Gd1xQw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-29_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=837 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908290168
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 29/08/2019 16:23, Andy Lutomirski wrote:
-> On Thu, Aug 29, 2019 at 4:19 AM Vincenzo Frascino
-> <vincenzo.frascino@arm.com> wrote:
->>
->> clock_gettime32 and clock_getres_time32 should be compiled only with a
->> 32 bit vdso library.
->>
->> Exclude these symbols when BUILD_VDSO32 is not defined.
-> 
-> Reviewed-by: Andy Lutomirski <luto@kernel.org>
-> 
-> BTW, this is a great patch: it's either correct or it won't build.  I
-> like patches like that.
-> 
+The first patch adds the PowerPC name and the PPC_ELFNOTE_CAPABILITIES
+type in the kernel binary ELF note. This type is a bitmap that can be
+used to advertise kernel capabilities to userland.
 
-Thanks :)
+The second patch adds a new documentation file to detail the
+ELF Note PowerPC namespace and the PPC_ELFNOTE_CAPABILITIES type.
+
+V2:
+* Create the header arch/powerpc/include/asm/elfnote.h with the
+  new type PPC_ELFNOTE_CAPABILITIES
+* Add documentation file in powerpc dir
+
+Claudio Carvalho (1):
+  powerpc: Add PowerPC Capabilities ELF note
+
+Maxiwell S. Garcia (1):
+  docs: powerpc: Add ELF note documentation
+
+ Documentation/powerpc/elfnote.rst  | 42 ++++++++++++++++++++++++++++++
+ arch/powerpc/include/asm/elfnote.h | 24 +++++++++++++++++
+ arch/powerpc/kernel/Makefile       |  2 +-
+ arch/powerpc/kernel/note.S         | 40 ++++++++++++++++++++++++++++
+ 4 files changed, 107 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/powerpc/elfnote.rst
+ create mode 100644 arch/powerpc/include/asm/elfnote.h
+ create mode 100644 arch/powerpc/kernel/note.S
 
 -- 
-Regards,
-Vincenzo
+2.20.1
+
