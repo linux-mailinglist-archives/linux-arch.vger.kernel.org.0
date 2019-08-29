@@ -2,197 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E60A1287
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2019 09:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B20A1692
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2019 12:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727830AbfH2HX7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Aug 2019 03:23:59 -0400
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:42208 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbfH2HX6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Aug 2019 03:23:58 -0400
-Received: by mail-yb1-f195.google.com with SMTP id z2so863623ybp.9
-        for <linux-arch@vger.kernel.org>; Thu, 29 Aug 2019 00:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=R8EgEva/nN+dxw6+a+tbX87JZIlVuBuzMvhuJDwRRR4=;
-        b=NXuypbmTaSrUawn6dK0eZNoFKLnVaJ7BIWZVqgFlG76S+ATA+MCe8+XdoZm8vDLJll
-         /m3vEwRSe+Kw1sjV9VP135ZrO6XKTdN0l6/Ms6+4BYLRrB2sx1KUJxFe6rlLSCIGtqcZ
-         IwJd7XYNmKPOK1HhNsnVYN6AZ+qv+S74/q2q9wy1NjlXR2CYn5g6TxtO05dnCP5BETa+
-         1vOMw+KOdRogsxcBS/7sQrwFhQZrTKwVPiaVgp2r1n4+eY02INrAGYUNv+5BF3G/XmqL
-         AnmdCj3TZWtviGy97p0vejfvFXY+jqzuRVKNwO0TDskQHHrxTEUTVxPpbqrB6PI/oeX9
-         2u9Q==
+        id S1727072AbfH2Ksa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Aug 2019 06:48:30 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:34728 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726416AbfH2Ksa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Aug 2019 06:48:30 -0400
+Received: by mail-wr1-f67.google.com with SMTP id s18so2952747wrn.1;
+        Thu, 29 Aug 2019 03:48:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=R8EgEva/nN+dxw6+a+tbX87JZIlVuBuzMvhuJDwRRR4=;
-        b=YOGKnx/eGw6yfej/BnpDHoue7AH09CqHWA5ZtrxUHwfXNR2N216sZrBlZlqvcz5ML1
-         Sn/RfYm+xYSxkml8EWf5W2/OOjae4px7l6DkPM1VNcHu7p5Gp7Xs87lAm84hP6rzHF8p
-         4X0e/Oq/nNGEvd3vW9Iq+IlOXugjgl5aY/6wZ8P7/hBkfxsCoBBdBZlCoKWW16KxM6np
-         UJZPfvWhHjH4YCdxrIUvzpYaIo2lQgTR7eIbP24IoB7vf/BfTRPCzLWv/meiXUR/h02a
-         0BItB42ZyfAr1POM7TK6I7pmWm6IPzvuZkjOXXACjnTCpZe2rdt5v5I4mWx3fuEeZpaT
-         /REA==
-X-Gm-Message-State: APjAAAVDTnPcLmB0F3b5UCzs346UTTP0H3tcM8HA+VJZDBOY1NCAPe4/
-        9Fl+gGzdtC+q2nN3NRv8h+1gHg==
-X-Google-Smtp-Source: APXvYqzl8gabGH4zPMEJYFXPgGvZMdADKlGX5Q1XpXlgRWqc5yCW4GiS1Az0+E7aIXUyCD1kagvFBQ==
-X-Received: by 2002:a25:e70b:: with SMTP id e11mr5618813ybh.127.1567063437479;
-        Thu, 29 Aug 2019 00:23:57 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (li1320-244.members.linode.com. [45.79.221.244])
-        by smtp.gmail.com with ESMTPSA id e3sm320863ywc.91.2019.08.29.00.23.48
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 29 Aug 2019 00:23:56 -0700 (PDT)
-Date:   Thu, 29 Aug 2019 15:23:43 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 3/3] arm: Add support for function error injection
-Message-ID: <20190829072343.GD10583@leoy-ThinkPad-X240s>
-References: <20190806100015.11256-1-leo.yan@linaro.org>
- <20190806100015.11256-4-leo.yan@linaro.org>
- <20190819091808.GB5599@leoy-ThinkPad-X240s>
- <20190829065729.GU13294@shell.armlinux.org.uk>
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=PsJQhq+Lb1i2V9/rJZmF77p+KpHip5cMLUFV9G3NyZI=;
+        b=joKpSF2U00dZDSDU2vPQdoUcaItKikz/KBQvVn/ERxo6Fle4D7KQqTzMQiwxwQxMPi
+         +Fzkfljag0qtAQSK/iHzI3vxVGBTAFntrU9hn7io9JHGes9BGMUGuJf66cNwfxYoCL0Z
+         tNa+dYcD3datXPvIKfAVdUemIa5+WWjuTrANEc8jk35qaRE+OQj5aJtletZG4NTNnM98
+         9uKPvY4aIPPfW/LFR/dL37gieZT+9bcyxuRyvSXu9vnNL2pQA1aePoexorqDMsdLOHkO
+         xnwQHHabj01yxi8uq6/YFZVRX0GlijDn3Z2yo0hvdaq8jGolZE68kZengzCjNjTBUXIn
+         rfMQ==
+X-Gm-Message-State: APjAAAUJm7igjVFEOQuUnArUtU/ooeZ7NDEHxbFWH6FO5/fnO8RlHoAt
+        FwAnNmn810O/2pve7jjiAiQ=
+X-Google-Smtp-Source: APXvYqz+mwNaosQtXx5CNE3MaHs77+QiSjijuafkqP8enEgtLarYorxtVZZrKCffia9rcNSYWy0hbA==
+X-Received: by 2002:a5d:4649:: with SMTP id j9mr6404113wrs.193.1567075708216;
+        Thu, 29 Aug 2019 03:48:28 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id a18sm2603027wrt.18.2019.08.29.03.48.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Aug 2019 03:48:26 -0700 (PDT)
+Subject: Re: [PATCH v8 01/28] linkage: new macros for assembler symbols
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Ingo Molnar <mingo@kernel.org>, jpoimboe@redhat.com,
+        Juergen Gross <jgross@suse.com>,
+        Len Brown <len.brown@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        xen-devel@lists.xenproject.org
+References: <20190808103854.6192-1-jslaby@suse.cz>
+ <20190808103854.6192-2-jslaby@suse.cz> <20190812170652.GJ23772@zn.tnic>
+From:   Jiri Slaby <jslaby@suse.cz>
+Openpgp: preference=signencrypt
+Autocrypt: addr=jslaby@suse.cz; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <f077becf-8ea7-cb4b-d704-5e59a8d69c56@suse.cz>
+Date:   Thu, 29 Aug 2019 12:48:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190829065729.GU13294@shell.armlinux.org.uk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190812170652.GJ23772@zn.tnic>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Russell,
-
-On Thu, Aug 29, 2019 at 07:57:29AM +0100, Russell King - ARM Linux admin wrote:
-> I'm sorry, I can't apply this, it produces loads of:
+On 12. 08. 19, 19:06, Borislav Petkov wrote:
+>> +  Again, every ``SYM_CODE_START*`` **shall** be coupled by ``SYM_CODE_END``.
 > 
-> include/linux/error-injection.h:7:10: fatal error: asm/error-injection.h: No such file or directory
+> Btw, this coupling: I haven't gone through the whole patchset but do we
+> have automatic checking which makes sure a starting macro is coupled
+> with the correct ending macro?
+
+I do, but it's not part of this series. It's a pinch of link-time magic,
+but it works reliably (see e.g. 1cbec37b3f9c). I will post it if/after
+this gets merged. There were other approaches proposed in the past too
+-- using objtool for that (not implemented).
+
+>> +Overriding Macros
+>> +~~~~~~~~~~~~~~~~~
+>> +Architecture can also override any of the macros in their own
 > 
-> Since your patch 1 has been merged by the ARM64 people, I can't take
-> it until next cycle.
+> "Other architectures... "
 
-For this case, do you want me to resend this patch in next merge
-window?  Or you have picked up this patch but will send PR in next
-cycle?
+Not only "other", x86 can override the types if need be too.
 
-Thanks,
-Leo Yan
+>> +``asm/linkage.h``, including macros specifying the type of a symbol
+>> +(``SYM_T_FUNC``, ``SYM_T_OBJECT``, and ``SYM_T_NONE``).  As every macro
+>> +described in this file is surrounded by ``#ifdef`` + ``#endif``, it is enough
+>> +to define the macros differently in the aforementioned architecture-dependent
+>> +header.
 
-> On Mon, Aug 19, 2019 at 05:18:08PM +0800, Leo Yan wrote:
-> > Hi Russell,
-> > 
-> > On Tue, Aug 06, 2019 at 06:00:15PM +0800, Leo Yan wrote:
-> > > This patch implements arm specific functions regs_set_return_value() and
-> > > override_function_with_return() to support function error injection.
-> > > 
-> > > In the exception flow, it updates pt_regs::ARM_pc with pt_regs::ARM_lr
-> > > so can override the probed function return.
-> > 
-> > Gentle ping ...  Could you review this patch?
-> > 
-> > Thanks,
-> > Leo.
-> > 
-> > > Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> > > ---
-> > >  arch/arm/Kconfig              |  1 +
-> > >  arch/arm/include/asm/ptrace.h |  5 +++++
-> > >  arch/arm/lib/Makefile         |  2 ++
-> > >  arch/arm/lib/error-inject.c   | 19 +++++++++++++++++++
-> > >  4 files changed, 27 insertions(+)
-> > >  create mode 100644 arch/arm/lib/error-inject.c
-> > > 
-> > > diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> > > index 33b00579beff..2d3d44a037f6 100644
-> > > --- a/arch/arm/Kconfig
-> > > +++ b/arch/arm/Kconfig
-> > > @@ -77,6 +77,7 @@ config ARM
-> > >  	select HAVE_EXIT_THREAD
-> > >  	select HAVE_FAST_GUP if ARM_LPAE
-> > >  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
-> > > +	select HAVE_FUNCTION_ERROR_INJECTION if !THUMB2_KERNEL
-> > >  	select HAVE_FUNCTION_GRAPH_TRACER if !THUMB2_KERNEL && !CC_IS_CLANG
-> > >  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
-> > >  	select HAVE_GCC_PLUGINS
-> > > diff --git a/arch/arm/include/asm/ptrace.h b/arch/arm/include/asm/ptrace.h
-> > > index 91d6b7856be4..3b41f37b361a 100644
-> > > --- a/arch/arm/include/asm/ptrace.h
-> > > +++ b/arch/arm/include/asm/ptrace.h
-> > > @@ -89,6 +89,11 @@ static inline long regs_return_value(struct pt_regs *regs)
-> > >  	return regs->ARM_r0;
-> > >  }
-> > >  
-> > > +static inline void regs_set_return_value(struct pt_regs *regs, unsigned long rc)
-> > > +{
-> > > +	regs->ARM_r0 = rc;
-> > > +}
-> > > +
-> > >  #define instruction_pointer(regs)	(regs)->ARM_pc
-> > >  
-> > >  #ifdef CONFIG_THUMB2_KERNEL
-> > > diff --git a/arch/arm/lib/Makefile b/arch/arm/lib/Makefile
-> > > index b25c54585048..8f56484a7156 100644
-> > > --- a/arch/arm/lib/Makefile
-> > > +++ b/arch/arm/lib/Makefile
-> > > @@ -42,3 +42,5 @@ ifeq ($(CONFIG_KERNEL_MODE_NEON),y)
-> > >    CFLAGS_xor-neon.o		+= $(NEON_FLAGS)
-> > >    obj-$(CONFIG_XOR_BLOCKS)	+= xor-neon.o
-> > >  endif
-> > > +
-> > > +obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
-> > > diff --git a/arch/arm/lib/error-inject.c b/arch/arm/lib/error-inject.c
-> > > new file mode 100644
-> > > index 000000000000..2d696dc94893
-> > > --- /dev/null
-> > > +++ b/arch/arm/lib/error-inject.c
-> > > @@ -0,0 +1,19 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +#include <linux/error-injection.h>
-> > > +#include <linux/kprobes.h>
-> > > +
-> > > +void override_function_with_return(struct pt_regs *regs)
-> > > +{
-> > > +	/*
-> > > +	 * 'regs' represents the state on entry of a predefined function in
-> > > +	 * the kernel/module and which is captured on a kprobe.
-> > > +	 *
-> > > +	 * 'regs->ARM_lr' contains the the link register for the probed
-> > > +	 * function, when kprobe returns back from exception it will override
-> > > +	 * the end of probed function and directly return to the predefined
-> > > +	 * function's caller.
-> > > +	 */
-> > > +	instruction_pointer_set(regs, regs->ARM_lr);
-> > > +}
-> > > +NOKPROBE_SYMBOL(override_function_with_return);
-> > > -- 
-> > > 2.17.1
-> > > 
-> > 
-> 
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-> According to speedtest.net: 11.9Mbps down 500kbps up
+thanks,
+-- 
+js
+suse labs
