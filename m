@@ -2,70 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A68A36EA
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2019 14:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259E8A3887
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2019 16:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727820AbfH3MkM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Aug 2019 08:40:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42614 "EHLO mail.kernel.org"
+        id S1727756AbfH3N7P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Aug 2019 09:59:15 -0400
+Received: from foss.arm.com ([217.140.110.172]:60762 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727754AbfH3MkM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Aug 2019 08:40:12 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB08C21721;
-        Fri, 30 Aug 2019 12:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567168812;
-        bh=lLptPwKn0tTJaFJErmpbfjiivzsXJmC7RMXED4vz13Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nagIpY953/BMv+Q4pPCwalOrZwg2N0AQz1dWVippIw+R6rAQ2eDXJXYq4V049z/HZ
-         jTGBofj789Sr56WgH2FP0VG5ViBN2dF52aabX3N/QGIMc6aQkuPWnRck2V9F6kJJeI
-         IzerRXSCcK8thqGz3M6ltuOef57hyxM8wGgeV1dU=
-Date:   Fri, 30 Aug 2019 13:40:07 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 0/6] Fix TLB invalidation on arm64
-Message-ID: <20190830124007.z6f2qjujzluntrwb@willie-the-truck>
-References: <20190827131818.14724-1-will@kernel.org>
- <1566947104.2uma6s0pl1.astroid@bobo.none>
- <20190828161256.uevoohval4sko24m@willie-the-truck>
- <1567085427.12jzc6eq6j.astroid@bobo.none>
+        id S1727751AbfH3N7P (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Aug 2019 09:59:15 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7773A344;
+        Fri, 30 Aug 2019 06:59:14 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E04803F703;
+        Fri, 30 Aug 2019 06:59:12 -0700 (PDT)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
+        tglx@linutronix.de, salyzyn@android.com, 0x7f454c46@gmail.com,
+        luto@kernel.org
+Subject: [PATCH v2 0/8] vdso: Complete the conversion to 32bit syscalls
+Date:   Fri, 30 Aug 2019 14:58:54 +0100
+Message-Id: <20190830135902.20861-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1567085427.12jzc6eq6j.astroid@bobo.none>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 30, 2019 at 12:08:52AM +1000, Nicholas Piggin wrote:
-> Will Deacon's on August 29, 2019 2:12 am:
-> > On Wed, Aug 28, 2019 at 10:35:24AM +1000, Nicholas Piggin wrote:
-> >> From the other side of the fabric you have no such problem. The table
-> >> walker is cache coherent apart from the local stores, so we don't need a 
-> >> special barrier on the other side. That's why ptesync doesn't broadcast.
-> > 
-> > Curious: but do you need to do anything extra to take into account
-> > instruction fetch on remote CPUs if you're mapping an executable page?
-> > We added an IPI to flush_icache_range() in 3b8c9f1cdfc5 to handle this,
-> > because our broadcast I-cache maintenance doesn't force a pipeline flush
-> > for remote CPUs (and may even execute as a NOP on recent cores).
-> 
-> Ah, I think the tlbie does not force re-fetch indeed. We may need
-> something like that as well.
-> 
-> What do you do on the user side? Require threads to ISB themselves?
+This patch series is a follow up to "lib/vdso, x86/vdso: Fix fallout
+from generic VDSO conversion" [1].
 
-I think they'd probably have to use sys_membarrier() with
-MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE, yes.
+The main purpose is to complete the 32bit vDSOs conversion to use the
+legacy 32bit syscalls as a fallback. With the conversion of all the
+architectures present in -next complete, this patch series removes as
+well the conditional choice in between 32 and 64 bit for 32bit vDSOs.
 
-Will
+This series has been rebased on linux-next/master.
+
+[1] https://lkml.org/lkml/2019/7/28/86
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Paul Burton <paul.burton@mips.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+
+Vincenzo Frascino (8):
+  arm64: compat: vdso: Expose BUILD_VDSO32
+  lib: vdso: Build 32 bit specific functions in the right context
+  mips: compat: vdso: Use legacy syscalls as fallback
+  lib: vdso: Remove VDSO_HAS_32BIT_FALLBACK
+  lib: vdso: Remove checks on return value for 32 bit vDSO
+  arm64: compat: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
+  mips: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
+  x86: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
+
+ .../include/asm/vdso/compat_gettimeofday.h    |  2 +-
+ arch/mips/include/asm/vdso/gettimeofday.h     | 43 +++++++++++++++++++
+ arch/mips/vdso/config-n32-o32-env.c           |  1 +
+ arch/x86/include/asm/vdso/gettimeofday.h      |  2 -
+ lib/vdso/gettimeofday.c                       | 30 ++++++-------
+ 5 files changed, 57 insertions(+), 21 deletions(-)
+
+-- 
+2.23.0
+
