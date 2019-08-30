@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 061F2A3B3F
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2019 18:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1D6A3B49
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2019 18:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728176AbfH3QE7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Aug 2019 12:04:59 -0400
-Received: from verein.lst.de ([213.95.11.211]:56833 "EHLO verein.lst.de"
+        id S1728122AbfH3QFV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Aug 2019 12:05:21 -0400
+Received: from verein.lst.de ([213.95.11.211]:56847 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728117AbfH3QE6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Aug 2019 12:04:58 -0400
+        id S1727820AbfH3QFV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Aug 2019 12:05:21 -0400
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 95CE5227A8A; Fri, 30 Aug 2019 18:04:54 +0200 (CEST)
-Date:   Fri, 30 Aug 2019 18:04:54 +0200
+        id 7296E227A8A; Fri, 30 Aug 2019 18:05:16 +0200 (CEST)
+Date:   Fri, 30 Aug 2019 18:05:15 +0200
 From:   Christoph Hellwig <hch@lst.de>
-To:     Ingo Molnar <mingo@kernel.org>
+To:     Will Deacon <will@kernel.org>
 Cc:     Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
         Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
         Greentime Hu <green.hu@gmail.com>,
@@ -31,35 +31,31 @@ Cc:     Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/26] x86: clean up ioremap
-Message-ID: <20190830160454.GB26887@lst.de>
-References: <20190817073253.27819-1-hch@lst.de> <20190817073253.27819-13-hch@lst.de> <20190817103402.GA7602@gmail.com>
+Subject: Re: [PATCH 19/26] arm64: remove __iounmap
+Message-ID: <20190830160515.GC26887@lst.de>
+References: <20190817073253.27819-1-hch@lst.de> <20190817073253.27819-20-hch@lst.de> <20190819073601.4yxjvmyjtpi7tk56@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190817103402.GA7602@gmail.com>
+In-Reply-To: <20190819073601.4yxjvmyjtpi7tk56@willie-the-truck>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Aug 17, 2019 at 12:34:02PM +0200, Ingo Molnar wrote:
-> 
-> * Christoph Hellwig <hch@lst.de> wrote:
-> 
-> > Use ioremap as the main implemented function, and defined
-> > ioremap_nocache to it as a deprecated alias.
+On Mon, Aug 19, 2019 at 08:36:02AM +0100, Will Deacon wrote:
+> On Sat, Aug 17, 2019 at 09:32:46AM +0200, Christoph Hellwig wrote:
+> > No need to indirect iounmap for arm64.
 > > 
 > > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > > ---
-> >  arch/x86/include/asm/io.h | 8 ++------
-> >  arch/x86/mm/ioremap.c     | 8 ++++----
-> >  arch/x86/mm/pageattr.c    | 4 ++--
-> >  3 files changed, 8 insertions(+), 12 deletions(-)
+> >  arch/arm64/include/asm/io.h | 3 +--
+> >  arch/arm64/mm/ioremap.c     | 4 ++--
+> >  2 files changed, 3 insertions(+), 4 deletions(-)
 > 
-> Acked-by: Ingo Molnar <mingo@kernel.org>
+> Not sure why we did it like this...
+> 
+> Acked-by: Will Deacon <will@kernel.org>
 
-Can you pick it up through tip for 5.4?  That way we can get most
-bits in through their maintainer trees, and then I'll resubmit the
-rest for the next merge window.
+Can you just pick this one up through the arm64 tree for 5.4?
