@@ -2,90 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E975AA2068
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2019 18:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79D4A2D82
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2019 05:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726973AbfH2QMO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Aug 2019 12:12:14 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:46560 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727161AbfH2QMN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Aug 2019 12:12:13 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q139so2353757pfc.13
-        for <linux-arch@vger.kernel.org>; Thu, 29 Aug 2019 09:12:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PTQEC1Y4Yke23JK/LTgM0w8mgR2qZy0PBRnUbbY2XIo=;
-        b=jEkJhc78PLM/JgFtQZWk7kdLuecagNe2WAYo89y8WuOW4zoGzT+kbSB8NIBe0zcalQ
-         8PuF7Tdx7O8kY3LHOmHoCLfdJE91HQsCRyH1tciyLHfk3TBVMVq54nZfsIqsE4hgd3fB
-         +OG0j04f8N9mNquyfOwl+bczuWP6l61lZjAEI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PTQEC1Y4Yke23JK/LTgM0w8mgR2qZy0PBRnUbbY2XIo=;
-        b=RbzM9AkYxWP4qGacx13UOeeJU7pUbGwgSDV2pdzlQBzoD97ZWtgbiH6/Vw97j+FHmY
-         Ntf+4Ut13F6lvDoFX176+CqESvSYHXUddudQMhZkkjUpDZlhn4HtjcC7zhhbBaNwRy85
-         h+7GzMuzZw8ccx3+W875rH23TmKHNs4OUj7EZqBoGYBimFqpZwti7+dF+RxmHpTt7b66
-         1AN4cbRpHXyRAUf8nV4YfFVVT7CZviJquT+xK7JB7Yjs0kcLP9bTr/n3MBy63TmhmrAt
-         8JXpCv8oxBnAG6d0RTxqHGVHhwtxPS3eS5cuaCcC4oGeekHRhLoFoqocV08x2M1yGK9m
-         FOPQ==
-X-Gm-Message-State: APjAAAXBzkSpwdD9dIu9RJg8c8CnfXLt0RcbBrL1QK0odPArdthAeGQm
-        P00PTdlI5GtqLQlT9AUj1nmaYg==
-X-Google-Smtp-Source: APXvYqy1FKWow3z/gmrxsTdklap8cVSHO9/ZQ8Lf2Lm5FnOpYJcBns/BeEGMcIZIyZEJa9XDM04jcg==
-X-Received: by 2002:a63:ff66:: with SMTP id s38mr9209438pgk.363.1567095133110;
-        Thu, 29 Aug 2019 09:12:13 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 1sm3891410pfx.56.2019.08.29.09.12.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 09:12:11 -0700 (PDT)
-Date:   Thu, 29 Aug 2019 09:12:10 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Drew Davenport <ddavenport@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
+        id S1727348AbfH3DoM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Aug 2019 23:44:12 -0400
+Received: from conuserg-11.nifty.com ([210.131.2.78]:45744 "EHLO
+        conuserg-11.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727213AbfH3DoM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Aug 2019 23:44:12 -0400
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id x7U3hATq026091;
+        Fri, 30 Aug 2019 12:43:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com x7U3hATq026091
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1567136590;
+        bh=n/FaYt9S0oYy3OrU7uUSdznL2hSFziWcD6C9H/gFJSY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uf7EcFZazsGLGvFsS19t8IFTDuhERUXvBjI3JrKxn3IC1YmROZFTmWfAdaSZhGwYU
+         dIXgxjLkRU4ztzVqfzWxYmhqhqoypqqcwqotFg8pWNo5fUbXwr+E+p43Low8y8WZvD
+         nS6ez0U5nPVXKIBmTUHlI84Y9ELgdEg5iGrKZns6Ae4vYKXKyU3gY0IUPJdOffg2I6
+         Pyuv0OQ4Awc0ARp0K3y8QcPSSzKZ9KDXoVGNNdkg+3nrh+7RZEnKg6b65CQSu9T7iq
+         CDzgWBcyeQTIkuTT0pyNylGLlTCYCUrME8ZwicpZSzws+5LCMjxO8IpkzJ1g3KVMk5
+         vFmFF+KTSulcw==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception
- handler
-Message-ID: <201908290910.BA3ED6BDEF@keescook>
-References: <201908200943.601DD59DCE@keescook>
- <20190822155611.a1a6e26db99ba0876ba9c8bd@linux-foundation.org>
- <86003539-18ec-f2ff-a46f-764edb820dcd@c-s.fr>
- <201908241206.D223659@keescook>
- <4c1ed94a-4dd0-e5cb-0b87-397b512d465e@c-s.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c1ed94a-4dd0-e5cb-0b87-397b512d465e@c-s.fr>
+Subject: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
+Date:   Fri, 30 Aug 2019 12:43:04 +0900
+Message-Id: <20190830034304.24259-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 06:55:59AM +0200, Christophe Leroy wrote:
-> Euh ... only received this mail yesterday. Same for the other answer.
+Commit 9012d011660e ("compiler: allow all arches to enable
+CONFIG_OPTIMIZE_INLINING") allowed all architectures to enable
+this option. A couple of build errors were reported by randconfig,
+but all of them have been ironed out.
 
-Yeah, my outbound mail was busted. :(
+Towards the goal of removing CONFIG_OPTIMIZE_INLINING entirely
+(and it will simplify the 'inline' macro in compiler_types.h),
+this commit changes it to always-on option. Going forward, the
+compiler will always be allowed to not inline functions marked
+'inline'.
 
-> I think you wanted to use In-reply-to:
-> [...]
-> But still, Andrew is seing double ... And me as well :)
-> 
-> Fixes: Fixes:
+This is not a problem for x86 since it has been long used by
+arch/x86/configs/{x86_64,i386}_defconfig.
 
-I had a lot of failures in that email. :)
+I am keeping the config option just in case any problem crops up for
+other architectures.
 
-Thank you Andrew for cleaning this up.
+The code clean-up will be done after confirming this is solid.
 
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
+
+ lib/Kconfig.debug | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 5960e2980a8a..e25493811df8 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -327,7 +327,7 @@ config HEADERS_CHECK
+ 	  relevant for userspace, say 'Y'.
+ 
+ config OPTIMIZE_INLINING
+-	bool "Allow compiler to uninline functions marked 'inline'"
++	def_bool y
+ 	help
+ 	  This option determines if the kernel forces gcc to inline the functions
+ 	  developers have marked 'inline'. Doing so takes away freedom from gcc to
+@@ -338,8 +338,6 @@ config OPTIMIZE_INLINING
+ 	  decision will become the default in the future. Until then this option
+ 	  is there to test gcc for this.
+ 
+-	  If unsure, say N.
+-
+ config DEBUG_SECTION_MISMATCH
+ 	bool "Enable full Section mismatch analysis"
+ 	help
 -- 
-Kees Cook
+2.17.1
+
