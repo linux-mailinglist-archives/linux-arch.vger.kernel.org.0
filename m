@@ -2,50 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7864DA3FCF
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2019 23:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19993A4555
+	for <lists+linux-arch@lfdr.de>; Sat, 31 Aug 2019 18:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728166AbfH3VpQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Aug 2019 17:45:16 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41888 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728143AbfH3VpQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Aug 2019 17:45:16 -0400
-Received: by mail-pl1-f195.google.com with SMTP id m9so3930569pls.8;
-        Fri, 30 Aug 2019 14:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CyAnPYKlnqoE6HYrk4XrrLs/lfWC1furlwMXZwIbdJM=;
-        b=Ey9XQvoj8H/Rnwv8NzD/KreDQNAtk/Y1mAfNtWWSPWRvpRHkSG3qzrkTUiyqzLyy8y
-         FhYeM7nvgl239YS8plycKvLT74pvzlcX8njCo82d73vUDrqGOQIz8oARAkP7UKilrwM5
-         NDqVYaJdxQw5YtmBNy2VGaqetGKnvddyuLZTFzzrXm1WRH2hh5P7VzQIaPjNRzRh/cM8
-         +iOgz2nm0iGcnxDUVyloWrKJlS93KDGv8twzcGSeFsCL8uqXFf9uQEZtHNVy3yjgG/aD
-         DEMAEjrPTZxgLBaKb3rpS25bBzOjAWuXx/Z+kiRAvu2tepHCjzQrK3HOb0q7by4MMmYW
-         wmeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CyAnPYKlnqoE6HYrk4XrrLs/lfWC1furlwMXZwIbdJM=;
-        b=EIOO/dpI+2pUY4aPFL8ZvpQPyrNVpIj6HE8Cdu5W0ZRr3evJH+4Wcp4LtYcT1T/V8D
-         wMyHsWm1eSyvdxDmeYzjFZPLEv1+J29G5ldl+mx8F6xKG6etI1QKO2KxM0oVE41nRNeP
-         QobTKQ+ZNZRregfPzseXgLrriY+wK+IMfefZr8EcdZy2gPAX6iYLci/PCwFyLofl2Hqf
-         0kJs/VvNA38d3qR3b3YQz09KsPvspGGedvbJm5CShNdmiT1Y4YBzq3oA5tFVUWKBxmN6
-         HF6WzibRQRHI5DUWOtgCfbiakI9RFSYAq3YtohDMnkquqOPQxgJMSkQvOBQE166LwScl
-         b0HA==
-X-Gm-Message-State: APjAAAUI1QI8ePr7mY+ERjQxKNIzcol2ok3K8624tlRNypLxNJobmsiy
-        JDaxLfrJn4w8oTC31xZvHHoLCd8cqRQ=
-X-Google-Smtp-Source: APXvYqzQSc6jNbxZKUcovD9FZLciwfGuo7Kt2wn5aZSHSDm6zSKrBIeIlpBZCEWXRcfFUHXs7Afe6Q==
-X-Received: by 2002:a17:902:9b8f:: with SMTP id y15mr18714988plp.194.1567201515169;
-        Fri, 30 Aug 2019 14:45:15 -0700 (PDT)
-Received: from localhost (g75.222-224-160.ppp.wakwak.ne.jp. [222.224.160.75])
-        by smtp.gmail.com with ESMTPSA id q69sm5777108pjb.0.2019.08.30.14.45.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2019 14:45:14 -0700 (PDT)
-Date:   Sat, 31 Aug 2019 06:45:12 +0900
-From:   Stafford Horne <shorne@gmail.com>
+        id S1727905AbfHaQ3r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 31 Aug 2019 12:29:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51240 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728244AbfHaQ3q (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 31 Aug 2019 12:29:46 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2253522D37;
+        Sat, 31 Aug 2019 16:29:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567268985;
+        bh=oCFqDXfnxrqpiBFRCwyD8nHXvoMvSjbxCsJhrxHTYqM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vX6b95IdsVrDjTXh55KZNhoPNMKUITWlit4Ldb9kHZhxWpNoqZwiOB5EF5DJcLfuZ
+         wmt8nfF1pggofVEAUJWY4K2cI3w83kg0ds8vBO0zGI/+b8iJT5NQEI4dH3G3L57NyD
+         AwNlHxXQFvARoZXdkRSB9gHwMtmjWPnHQrjl8Gx4=
+Date:   Sat, 31 Aug 2019 17:29:38 +0100
+From:   Will Deacon <will@kernel.org>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         Michal Simek <monstr@monstr.eu>,
@@ -62,41 +41,45 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/26] openrisc: map as uncached in ioremap
-Message-ID: <20190830214512.GX24874@lianli.shorne-pla.net>
+Subject: Re: [PATCH 19/26] arm64: remove __iounmap
+Message-ID: <20190831162937.5ybulvaa4eq7mybs@willie-the-truck>
 References: <20190817073253.27819-1-hch@lst.de>
- <20190817073253.27819-6-hch@lst.de>
- <20190823135539.GC24874@lianli.shorne-pla.net>
- <20190830160705.GF26887@lst.de>
+ <20190817073253.27819-20-hch@lst.de>
+ <20190819073601.4yxjvmyjtpi7tk56@willie-the-truck>
+ <20190830160515.GC26887@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190830160705.GF26887@lst.de>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190830160515.GC26887@lst.de>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 30, 2019 at 06:07:05PM +0200, Christoph Hellwig wrote:
-> On Fri, Aug 23, 2019 at 10:55:39PM +0900, Stafford Horne wrote:
-> > On Sat, Aug 17, 2019 at 09:32:32AM +0200, Christoph Hellwig wrote:
-> > > Openrisc is the only architecture not mapping ioremap as uncached,
-> > > which has been the default since the Linux 2.6.x days.  Switch it
-> > > over to implement uncached semantics by default.
+Hi Christoph,
+
+On Fri, Aug 30, 2019 at 06:05:15PM +0200, Christoph Hellwig wrote:
+> On Mon, Aug 19, 2019 at 08:36:02AM +0100, Will Deacon wrote:
+> > On Sat, Aug 17, 2019 at 09:32:46AM +0200, Christoph Hellwig wrote:
+> > > No need to indirect iounmap for arm64.
 > > > 
 > > > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > > > ---
-> > >  arch/openrisc/include/asm/io.h      | 20 +++-----------------
-> > >  arch/openrisc/include/asm/pgtable.h |  2 +-
-> > >  arch/openrisc/mm/ioremap.c          |  8 ++++----
-> > >  3 files changed, 8 insertions(+), 22 deletions(-)
+> > >  arch/arm64/include/asm/io.h | 3 +--
+> > >  arch/arm64/mm/ioremap.c     | 4 ++--
+> > >  2 files changed, 3 insertions(+), 4 deletions(-)
 > > 
-> > Acked-by: Stafford Horne <shorne@gmail.com>
+> > Not sure why we did it like this...
+> > 
+> > Acked-by: Will Deacon <will@kernel.org>
 > 
-> Can you send this one to Linus for 5.4?  That would help with the
-> possibility to remove ioremap_nocache after that.
+> Can you just pick this one up through the arm64 tree for 5.4?
 
-Sure, I will pick this up.
+Unfortunately, it doesn't apply because the tree you've based it on has
+removed ioremap_wt(). If you send a version based on mainline, I can
+queue it.
 
--Stafford
+Cheers,
+
+Will
