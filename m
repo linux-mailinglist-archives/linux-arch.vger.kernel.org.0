@@ -2,130 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEA8A75D7
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2019 23:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D09A771F
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2019 00:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbfICVBB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Sep 2019 17:01:01 -0400
-Received: from mail-eopbgr800104.outbound.protection.outlook.com ([40.107.80.104]:7800
-        "EHLO NAM03-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725953AbfICVBA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 3 Sep 2019 17:01:00 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MSFlb6L76FOTBkw9d6tZAq1mBDr9HFVAykGZL/beLoWPflucXzLRmh98Bcbifd89Rq0zen2N7vG4mOQVar54Q2cIccB04hLAKpM4JVo83Wf8R4tYvDanxtljPru5LlYEJw6SB8Vf11KGqD/8gJfe6Eq42U71q75qpM2/4DbboTjgJHSeja4BAu+sX0DMqBiGCsjY7WJawVkgPbSAN4x9mpxb3SZUay02jma1UuCxP9al9xUhMbpRtdN8ezgi66pdGQFARhb6pyYA7Bc/7Om/9b6Jr7cfjDIf5cDpW2ysWas/4n+t7OPLtMWXhCNI5crYhPCG/kQax7emR0XhOJb2Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cHe+nRs17sEsXXBKjE7Wm2h+HNWZwys85dH9KzCIaeg=;
- b=ZyP3V5fQY8R88Xz3MjEZh1/Zri1phSJJMs/II1Hf7Cem98/DTCUUN8LfT1p1vZkAff1DuQYosaoz7cpd9bV/nKyNOii8yIE9LX3KtFwIuRLitvlcrkOsr0+GdGQaIpbB3YypjVaGucQkeDzGPQ/ABRRDuwMn+Ve/HdmQ0Y5YZgTezc+KgT5s7MnOkdZxL1qLZFFOawGCsPOoRHhCEDQy51Pq9RXoQ9bfphF7OaJJimSlAA/KREZSnSf+ikkb3T9plwtEmtdW/e9gX+FLkg1Ulc59itZN5Rj6VBGksDrd/nSDkvjM9PRSSVTY6iLo0jywkYfkQ+fir6zzJk3CROdPOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cHe+nRs17sEsXXBKjE7Wm2h+HNWZwys85dH9KzCIaeg=;
- b=WUVpWvQYd/b8YHlZ30o06xC6aGkigy7yGaOccKHGj8bkXL4Zr4q2EPO+X8+sHD7nGFPxzyHZPHuYAV4MOv1ZXuMJiyPfggUa3DlBzLAL7MgqScsDXCabNCqmMgRrG22PVupe1utSHJozh1gyQ9CCZPFPtUQvOJdSCbXca0tCsh8=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1551.namprd22.prod.outlook.com (10.174.170.164) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.20; Tue, 3 Sep 2019 21:00:57 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::f9e8:5e8c:7194:fad3]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::f9e8:5e8c:7194:fad3%11]) with mapi id 15.20.2220.021; Tue, 3 Sep 2019
- 21:00:57 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+        id S1727056AbfICWil (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Sep 2019 18:38:41 -0400
+Received: from mga04.intel.com ([192.55.52.120]:26578 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725882AbfICWil (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 3 Sep 2019 18:38:41 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Sep 2019 15:38:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,464,1559545200"; 
+   d="scan'208";a="189969649"
+Received: from yyu32-desk1.sc.intel.com ([10.144.153.205])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Sep 2019 15:38:40 -0700
+Message-ID: <59052137a61bab9e8d312d51644aade3953ba339.camel@intel.com>
+Subject: Re: [RFC PATCH v2 2/2] ELF: Add ELF program property parsing support
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Kees Cook <keescook@chromium.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "salyzyn@android.com" <salyzyn@android.com>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v2 3/8] mips: compat: vdso: Use legacy syscalls as
- fallback
-Thread-Topic: [PATCH v2 3/8] mips: compat: vdso: Use legacy syscalls as
- fallback
-Thread-Index: AQHVYpquVTUocwY3d0uz1j8PNA3NAg==
-Date:   Tue, 3 Sep 2019 21:00:57 +0000
-Message-ID: <MWHPR2201MB1277ED2AD21C031201F749EAC1B90@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190830135902.20861-4-vincenzo.frascino@arm.com>
-In-Reply-To: <20190830135902.20861-4-vincenzo.frascino@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: LO2P265CA0480.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:a2::36) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [94.196.167.206]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ff988808-de10-4ae0-5a8f-08d730b1d103
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1551;
-x-ms-traffictypediagnostic: MWHPR2201MB1551:
-x-ms-exchange-purlcount: 1
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB15518335CDAC1F1178B5C2DBC1B90@MWHPR2201MB1551.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 01494FA7F7
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(396003)(346002)(136003)(39850400004)(376002)(199004)(189003)(55236004)(316002)(42882007)(7736002)(305945005)(4326008)(8936002)(6916009)(74316002)(386003)(6506007)(256004)(7696005)(81166006)(76176011)(102836004)(54906003)(186003)(25786009)(8676002)(81156014)(71200400001)(71190400001)(26005)(229853002)(478600001)(966005)(99286004)(5660300002)(52536014)(3846002)(6116002)(2906002)(52116002)(33656002)(14454004)(486006)(53936002)(6246003)(64756008)(66476007)(66556008)(66946007)(446003)(44832011)(66446008)(9686003)(11346002)(7416002)(4744005)(476003)(6436002)(6306002)(55016002)(66066001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1551;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: Lo0x0Jh2oXuLX5JZhpQmBBuMCZ2IPJFHMZClsa04RSG3Z92aOAe+YdCS3uEyrWFlmyVdZdwwhFWq+CTTQK33S56C7wxAXE2keHyhUDXp/EbHEViNgnsdQ82KpsmlCUmFGDRq6seiug3JSkpTCW7fp6AsttfNsfP/NX3UuzcGjCwRxv9iaieV4IC/J8TE6Kho/gJdbvDtm953vZLuaa29ChN4IOaq2gesawcKrVdGFEoLyNuqPhxT0yMuxk5XMHHStlI7JFScGK95JUbvoNFo7o3ain73ae25TF6crmmee96djOsa5PINRVFfeG4b9eh8YoUbzl1H93ZuwUzDpqvAg52zC4e6p2D84mlsR3OzdFY6XCnIzwySaiLEusFNODKg+HrCNwMyUo1MxIoN8akRnDqlbpcubbyGwBHIyFH3uJ8=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff988808-de10-4ae0-5a8f-08d730b1d103
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2019 21:00:57.1566
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FsCJgR/o5cPJLaGQBxzwofEvEivm+RyDYhetHFlca0WvlvLtRW12y77S8Y9XM46+oWy7g7q9MongdJBtbWKUzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1551
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Date:   Tue, 03 Sep 2019 15:29:10 -0700
+In-Reply-To: <20190902092816.GK27757@arm.com>
+References: <1566581020-9953-1-git-send-email-Dave.Martin@arm.com>
+         <1566581020-9953-3-git-send-email-Dave.Martin@arm.com>
+         <201908292224.007EB4D5@keescook> <20190830083415.GI27757@arm.com>
+         <5ddd0306f42c2b53ffbd8ee8c9b948c1d529cf98.camel@intel.com>
+         <20190902092816.GK27757@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.1-2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
+On Mon, 2019-09-02 at 10:28 +0100, Dave Martin wrote:
+> On Fri, Aug 30, 2019 at 06:03:27PM +0100, Yu-cheng Yu wrote:
+> > On Fri, 2019-08-30 at 09:34 +0100, Dave Martin wrote:
+> > > On Fri, Aug 30, 2019 at 06:37:45AM +0100, Kees Cook wrote:
+> > > > On Fri, Aug 23, 2019 at 06:23:40PM +0100, Dave Martin wrote:
+> > > > > ELF program properties will needed for detecting whether to enable
+> > > > > optional architecture or ABI features for a new ELF process.
+> > > > > 
+> > > > > For now, there are no generic properties that we care about, so do
+> > > > > nothing unless CONFIG_ARCH_USE_GNU_PROPERTY=y.
+> > > > > 
+> > > > > Otherwise, the presence of properties using the PT_PROGRAM_PROPERTY
+> > > > > phdrs entry (if any), and notify each property to the arch code.
+> > > > > 
+> > > > > For now, the added code is not used.
+> > > > > 
+> > > > > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> > > > 
+> > > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > > 
+> > > Thanks for the review.
+> > > 
+> > > Do you have any thoughts on Yu-Cheng Yu's comments?  It would be nice to
+> > > early-terminate the scan if we can, but my feeling so far was that the
+> > > scan is cheap, the number of properties is unlikely to be more than a
+> > > smallish integer, and the code separation benefits of just calling the
+> > > arch code for every property probably likely outweigh the costs of
+> > > having to iterate over every property.  We could always optimise it
+> > > later if necessary.
+> > > 
+> > > I need to double-check that there's no way we can get stuck in an
+> > > infinite loop with the current code, though I've not seen it in my
+> > > testing.  I should throw some malformed notes at it though.
+> > 
+> > Here is my arch_parse_elf_property() and objdump of the property.
+> > The parser works fine.
+> 
+> [...]
+> 
+> > int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
+> >           
+> >                    bool compat, struct arch_elf_state *state)
+> > {
+> >         if (type
+> > != GNU_PROPERTY_X86_FEATURE_1_AND)
+> >                 return -ENOENT;
+> 
+> For error returns, I was following this convention:
+> 
+> 	EIO: invalid ELF file
+> 
+> 	ENOEXEC: valid ELF file, but we can't (or won't) support it
+> 
+> 	0: OK, or don't care
 
-Vincenzo Frascino wrote:
-> The generic VDSO implementation uses the Y2038 safe clock_gettime64() and
-> clock_getres_time64() syscalls as fallback for 32bit VDSO. This breaks
-> seccomp setups because these syscalls might be not (yet) allowed.
->=20
-> Implement the 32bit variants which use the legacy syscalls and select the
-> variant in the core library.
->=20
-> The 64bit time variants are not removed because they are required for the
-> time64 based vdso accessors.
+From errno-base.h, EIO is for I/O error; ENOEXEC is for Exec format error.
+Is this closer to what is happening?
 
-Applied to mips-next.
+> 
+> This function gets called for every property, including properties that
+> the arch code may not be interested in, so for properties you don't care
+> about here you should return 0.
 
-> commit 932bb934ed4d
-> https://git.kernel.org/mips/c/932bb934ed4d
->=20
-> Fixes: 00b26474c2f1 ("lib/vdso: Provide generic VDSO implementation")
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
+Yes.
+
+> 
+> > 
+> >         if (datasz < sizeof(unsigned int))
+> >                 return -ENOEXEC;
+> 
+> Should this be != ?
+> 
+> According to the draft x86-64 psABI spec [1],
+> X86_PROPERTY_FEATURE_1_AND (and all properties based on
+> GNU_PROPERTY_X86_UINT32_AND_LO) has data consisting of a single 4-byte
+> unsigned integer.
+> 
+> >         state->gnu_property = *(unsigned int *)data;
+> >         return 0;
+> > }
+
+Yes, I will change it.
 
 Thanks,
-    Paul
-
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
+Yu-cheng
