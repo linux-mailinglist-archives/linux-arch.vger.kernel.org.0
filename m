@@ -2,132 +2,207 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75332A6475
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2019 10:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A537A6A72
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2019 15:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbfICI5H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Sep 2019 04:57:07 -0400
-Received: from mail-eopbgr750127.outbound.protection.outlook.com ([40.107.75.127]:6020
-        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
+        id S1729353AbfICNwZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Sep 2019 09:52:25 -0400
+Received: from mail-eopbgr760102.outbound.protection.outlook.com ([40.107.76.102]:62180
+        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725888AbfICI5H (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 3 Sep 2019 04:57:07 -0400
+        id S1728854AbfICNwZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 3 Sep 2019 09:52:25 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ffEmgDXQ32ktnYik+eVGVMhdy8ERJFJeO9bVlL8V0Mxg4D6rOgPOUmRR7Fyc3r5aBchk3kD/SxYNJ6jDqMm+AlskxxR5D6gxXz4Ap3C9770rvYs5nLEsf8mirPxU147GUK5AgKTMUtISMWNOtFlGwWzrwULp+0VStdI2wTEgEgT9m9CiXwweHgnAEA6bmg/le9JCAHcolXW4kVPKP+4i/tjNhpMPCtb+PiJR4S+hcx3BtV38qnjTaW2sukEWyMAFLneojynBG7YRQMRvUfkTpCTzG2o8YIi3y8H3g6xYI5TS5hmsnaBUCgqXB3ZFMQw1YJyeLXmZ+RH55DXVzybgeg==
+ b=K4s8vLBw4QMslGZScDC9NbOHMBBRKjz4WEuj8vKAWuGCH46TyMBIcGFPCAgp7aw/7EvG3wXUincJQQYuZcU1vbGUGdF/duaEw46qVarpdyPyL07ugAsXs6NpiZ7e30jloT7H5SajwEMG/5DfJi1Rjg7/xNXsYsjB+xRjcylFe977+awwcX0kpbXqyk+V45OEofaq67mzysNJyeajwTetK+lVTyyN3/WJbFDrv2CSteg12rv2GQDABnRF+sStE7iknRV3oOfzGQMey+BNaZqDArtJFm0QLgEYItgyCSkoxY/lCniEfnDo1jTRMVXB/3yLB8E6Deqk91M56acVA++Czw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pKGjwp1Uo8LfIHoyH7+b//d/bD44+fJfePgvviW7l8g=;
- b=mG1tWN7uUdyshf80A5MUT9b4f6P+Wl3TJJjI2GQ8ZUx0AFflfdICBbq8iw3/Yhzq8BPbGw5wEEcJcYFHMoY9CTTLu5rjbdoYrQRooJHt40TGSSs8CRwl3yHAmgH3BcdBm212x/sNaI/JHePgkCL5RI5ImrHCW4Va/8xjqT8RxvnislgjsJYAH74bugV/eCnLe84HjYXFBqSKMRX7dUb10TLokdEPKjB2Pk6ZuJOwUa60shooMhVChq5OtJZYqPC3c7Lh8TPywmKg3ZnAePzVm64g0iURm4a0MshUvC9WoYxNmVvtGmHAyRBCFSAQ2px4keNF4rch/Xz1xwu89RP0iw==
+ bh=eOaSNsAjqJZ7pDfuJuIYgxDqqsE1OPM6+taj+dBiaB0=;
+ b=hthI+mDkEU+ACYQBnOs1s4YTmwO/94PyZujqfzFOSKFd5XMejuuPt2fPs70VmjfFUPHTonrQRrqqon5eeQAyXl5c//hepmAv/bhQrKVZyh58hf+ut9Q2pJLj29IxsRQrFnZye3DLrBz3GN4lWGHID2oA9dwFlhS/2Pp80KVLai6Lh0rEkTnd8V3m6CD0g6kKamsk+P7G/3pD80MvPufX5LpZ9myXk2tssgwZ7AtsxduGn/Z1tw6eXSnOeimRbjLE6MeU4n0jazkpaq9LcJcmOn7t1kTs08LTmkg9DTHLG8JP+WjdKNsiyESAk20XNqeKauNuPh7OJepKe+fS/ROIJg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pKGjwp1Uo8LfIHoyH7+b//d/bD44+fJfePgvviW7l8g=;
- b=VCoxzS8WWTGfTcQYd0/WZ+jzrF0fosMbreNkfKpbvjQ4IW659Bg+NPwvuAf4EQKOuVRKFsAOj0pCb8p+7Dill9cY5mxZ4QAPW5CJCiLvD1LY+jZ1udVFo87TRkJbmYam+XgewallJsGzm3jjrChp1wMbXFymbbSiyHLv9/Ei034=
+ bh=eOaSNsAjqJZ7pDfuJuIYgxDqqsE1OPM6+taj+dBiaB0=;
+ b=TNwz2Xt2o5B3xaep7E1HEL7v+Emq0FVqz9XViVYKnDVmpGB0pfgxOZvjs1uGhs6pMT1Ebps2G21H8HNw3ehCytT0cBCyD1Upd7eP3oDQsWsemOaEysLpYRiv+Wil+5ny6VbZQhxcyvPy99CeOsuaNxxTQB59KmiXFSGD07y+VXI=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1422.namprd22.prod.outlook.com (10.172.59.146) with Microsoft SMTP
+ MWHPR2201MB1232.namprd22.prod.outlook.com (10.174.160.7) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.18; Tue, 3 Sep 2019 08:57:01 +0000
+ 15.20.2220.21; Tue, 3 Sep 2019 13:52:19 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::f9e8:5e8c:7194:fad3]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::f9e8:5e8c:7194:fad3%11]) with mapi id 15.20.2220.021; Tue, 3 Sep 2019
- 08:57:01 +0000
+ 13:52:19 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     Christoph Hellwig <hch@lst.de>
-CC:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "nios2-dev@lists.rocketboards.org" <nios2-dev@lists.rocketboards.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 04/26] mips: remove ioremap_cachable
-Thread-Topic: [PATCH 04/26] mips: remove ioremap_cachable
-Thread-Index: AQHVYjWM7xZdW0g9rk2mdDHsFCA7Ig==
-Date:   Tue, 3 Sep 2019 08:57:00 +0000
-Message-ID: <MWHPR2201MB1277E4E8214F6E50E5EC9BFCC1B90@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190817073253.27819-5-hch@lst.de>
-In-Reply-To: <20190817073253.27819-5-hch@lst.de>
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "salyzyn@android.com" <salyzyn@android.com>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "luto@kernel.org" <luto@kernel.org>
+Subject: Re: [PATCH v2 3/8] mips: compat: vdso: Use legacy syscalls as
+ fallback
+Thread-Topic: [PATCH v2 3/8] mips: compat: vdso: Use legacy syscalls as
+ fallback
+Thread-Index: AQHVYl7NprE2FODnDUK5Ts14pqNdYA==
+Date:   Tue, 3 Sep 2019 13:52:19 +0000
+Message-ID: <20190903134335.uxxf5kvp3afe7rfr@pburton-laptop>
+References: <20190830135902.20861-1-vincenzo.frascino@arm.com>
+ <20190830135902.20861-4-vincenzo.frascino@arm.com>
+In-Reply-To: <20190830135902.20861-4-vincenzo.frascino@arm.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: LO2P265CA0041.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:61::29) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: LO2P123CA0021.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:a6::33) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
+user-agent: NeoMutt/20180716
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [94.196.173.241]
+x-originating-ip: [94.196.167.206]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bc4e3957-ec12-4171-af7d-08d7304cae89
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1422;
-x-ms-traffictypediagnostic: MWHPR2201MB1422:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <MWHPR2201MB14223E109C3EC6DA480974C1C1B90@MWHPR2201MB1422.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1728;
+x-ms-office365-filtering-correlation-id: cf3c4a5e-2f6c-4cb6-cd04-08d73075f02c
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1232;
+x-ms-traffictypediagnostic: MWHPR2201MB1232:
+x-microsoft-antispam-prvs: <MWHPR2201MB1232EA41CC0C6C4CB764F514C1B90@MWHPR2201MB1232.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
 x-forefront-prvs: 01494FA7F7
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(136003)(366004)(376002)(346002)(39840400004)(199004)(189003)(7736002)(71190400001)(6116002)(4744005)(3846002)(71200400001)(256004)(7416002)(99286004)(966005)(8936002)(66446008)(64756008)(66556008)(66946007)(66476007)(14454004)(8676002)(478600001)(386003)(6506007)(55236004)(53936002)(102836004)(2906002)(6246003)(74316002)(6436002)(42882007)(316002)(44832011)(446003)(476003)(11346002)(26005)(486006)(9686003)(6306002)(186003)(54906003)(55016002)(66066001)(81166006)(81156014)(25786009)(52116002)(7696005)(305945005)(52536014)(6916009)(229853002)(5660300002)(4326008)(76176011)(33656002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1422;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(366004)(39840400004)(396003)(376002)(136003)(346002)(189003)(199004)(66556008)(7416002)(1076003)(25786009)(66946007)(4326008)(6506007)(305945005)(229853002)(6486002)(33716001)(5660300002)(6916009)(42882007)(55236004)(52116002)(7736002)(53936002)(386003)(102836004)(54906003)(58126008)(99286004)(26005)(186003)(478600001)(476003)(486006)(11346002)(316002)(76176011)(44832011)(8936002)(6512007)(6116002)(71190400001)(71200400001)(8676002)(2906002)(9686003)(14454004)(64756008)(66066001)(66476007)(6246003)(66446008)(81166006)(3846002)(446003)(6436002)(81156014)(256004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1232;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: AMsW0LyaOM/yHrXI9m5Kie1YaQxjkfvMhyNX9ES2CGzwwwtpZntVqBckfi52aNkMc1Cdw2HlQMfo43GMtbo5mFVnqmdWekTCV8WgfEaqK2CjzX3+jfIMYgUYhhBN4zWgT9CB6mowfVObZSeeIEMtj7+DNC2MxefkmdolMdDmNiKZeyM/3alS0wsSmeCRCsmzACIx3yo9Czz0fYxxpPvPbHTf+KaRtsqNbIV5fuR38UuaxwgSY7khdFw8Ar3ThZt6HWelwgU4vmFePNfnQ/2+RAPxMWvPKk8KwT0tM6kvsaKJZ5DXKM+M8iKqCcMBcLD53stvyeVLaj4Syqkv0mqrETEw4t6/7LI69R/6BoyyTS/WN9nNKWlcsqFhE/rl8Anat/j9v2p6UBqUVH6JJkwAm+0PTbtyAY3KukhvYKL2BNg=
+x-microsoft-antispam-message-info: IwcDt83UpZhML3wyHgvhHXTzVhD1PnHhkbQZOH/KFFFwaHGtDZtLP7M8jH/z92PG8gXbS4BwJ9gNw9K6Ca7RNmwLxn6mIZ5mcD2aNyG/JnQlLTc3M6CHAX6v9lOKPtyDMIa73K0y0QEBMqyIjQv3VJo7vQZBo3L0PGltzb5R1BvHmJHPYr/VgE1q3bo5agttMSlshAMorENeClGRlMLQcS4/YXcz5q4gKyAVvWJuXI60qJVOKSP2Kin6+px0A/cwW+KF94mdhSuNF5OKMJWs+3xVTA3vJJWMXMhIWU+XYl9Sx5FAs7+VH3L0qXFM3U1Jzi8M9HNlY5AgeYhZxCubXBZvZfwH0BeUW9YGDaw6vwkgXiDVePM+eV8pf2vCBztJqNB2MaIdOlIfx6R3hubaID6T1ImVyuYaqL4Yk9IU3cY=
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3823FA0127B0C948AAF60B176567B40D@namprd22.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc4e3957-ec12-4171-af7d-08d7304cae89
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2019 08:57:00.4929
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf3c4a5e-2f6c-4cb6-cd04-08d73075f02c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2019 13:52:19.6498
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CsvUw2VRN18dDCQo8ThReG3qLd2pbxbAWkvlwIUDlGTbHTsWbcHQ6WJEwrmmhkC2GbNjKIBlixwAJHAstD6HBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1422
+X-MS-Exchange-CrossTenant-userprincipalname: M4/IykoGagHyxGv2VUVnxWxZ5rQmAUdZtgi0EnCy/4RtFEzhcTUg8AFDUB/Mtzf525pHdUutGW+OVqdKOMXnDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1232
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
+Hi Vincenzo,
 
-Christoph Hellwig wrote:
-> Just define ioremap_cache directly.
-
-Applied to mips-next.
-
-> commit 60af0d94cc37
-> https://git.kernel.org/mips/c/60af0d94cc37
+On Fri, Aug 30, 2019 at 02:58:57PM +0100, Vincenzo Frascino wrote:
+> The generic VDSO implementation uses the Y2038 safe clock_gettime64() and
+> clock_getres_time64() syscalls as fallback for 32bit VDSO. This breaks
+> seccomp setups because these syscalls might be not (yet) allowed.
 >=20
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
+> Implement the 32bit variants which use the legacy syscalls and select the
+> variant in the core library.
+>=20
+> The 64bit time variants are not removed because they are required for the
+> time64 based vdso accessors.
+>=20
+> Cc: Paul Burton <paul.burton@mips.com>
+> Fixes: 00b26474c2f1 ("lib/vdso: Provide generic VDSO implementation")
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+
+How would you like this to be applied? I'd be happy to apply this one to
+mips-next, where commit 24640f233b46 ("mips: Add support for generic
+vDSO") added the file being modified here. Otherwise:
+
+    Acked-by: Paul Burton <paul.burton@mips.com>
 
 Thanks,
     Paul
 
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
+> ---
+>  arch/mips/include/asm/vdso/gettimeofday.h | 45 +++++++++++++++++++++++
+>  arch/mips/vdso/config-n32-o32-env.c       |  1 +
+>  2 files changed, 46 insertions(+)
+>=20
+> diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/includ=
+e/asm/vdso/gettimeofday.h
+> index c59fe08b0347..e78462e8ca2e 100644
+> --- a/arch/mips/include/asm/vdso/gettimeofday.h
+> +++ b/arch/mips/include/asm/vdso/gettimeofday.h
+> @@ -105,6 +105,51 @@ static __always_inline int clock_getres_fallback(
+>  	return error ? -ret : ret;
+>  }
+> =20
+> +#if _MIPS_SIM !=3D _MIPS_SIM_ABI64
+> +
+> +#define VDSO_HAS_32BIT_FALLBACK	1
+> +
+> +static __always_inline long clock_gettime32_fallback(
+> +					clockid_t _clkid,
+> +					struct old_timespec32 *_ts)
+> +{
+> +	register struct old_timespec32 *ts asm("a1") =3D _ts;
+> +	register clockid_t clkid asm("a0") =3D _clkid;
+> +	register long ret asm("v0");
+> +	register long nr asm("v0") =3D __NR_clock_gettime;
+> +	register long error asm("a3");
+> +
+> +	asm volatile(
+> +	"       syscall\n"
+> +	: "=3Dr" (ret), "=3Dr" (error)
+> +	: "r" (clkid), "r" (ts), "r" (nr)
+> +	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+> +	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+> +
+> +	return error ? -ret : ret;
+> +}
+> +
+> +static __always_inline int clock_getres32_fallback(
+> +					clockid_t _clkid,
+> +					struct old_timespec32 *_ts)
+> +{
+> +	register struct old_timespec32 *ts asm("a1") =3D _ts;
+> +	register clockid_t clkid asm("a0") =3D _clkid;
+> +	register long ret asm("v0");
+> +	register long nr asm("v0") =3D __NR_clock_getres;
+> +	register long error asm("a3");
+> +
+> +	asm volatile(
+> +	"       syscall\n"
+> +	: "=3Dr" (ret), "=3Dr" (error)
+> +	: "r" (clkid), "r" (ts), "r" (nr)
+> +	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+> +	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+> +
+> +	return error ? -ret : ret;
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_CSRC_R4K
+> =20
+>  static __always_inline u64 read_r4k_count(void)
+> diff --git a/arch/mips/vdso/config-n32-o32-env.c b/arch/mips/vdso/config-=
+n32-o32-env.c
+> index 7f8d957abd4a..0011a632aef2 100644
+> --- a/arch/mips/vdso/config-n32-o32-env.c
+> +++ b/arch/mips/vdso/config-n32-o32-env.c
+> @@ -10,6 +10,7 @@
+>   */
+>  #undef CONFIG_64BIT
+> =20
+> +#define BUILD_VDSO32
+>  #define CONFIG_32BIT 1
+>  #define CONFIG_GENERIC_ATOMIC64 1
+>  #define BUILD_VDSO32_64
+> --=20
+> 2.23.0
+>=20
