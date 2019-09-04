@@ -2,162 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED642A80CF
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2019 13:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E7EA8D5F
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2019 21:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729269AbfIDLFU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Sep 2019 07:05:20 -0400
-Received: from foss.arm.com ([217.140.110.172]:51984 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729220AbfIDLFU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 4 Sep 2019 07:05:20 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5E84337;
-        Wed,  4 Sep 2019 04:05:19 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F8973F246;
-        Wed,  4 Sep 2019 04:05:18 -0700 (PDT)
-Date:   Wed, 4 Sep 2019 12:05:16 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Kees Cook <keescook@chromium.org>
+        id S1731719AbfIDQuJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Sep 2019 12:50:09 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40426 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729471AbfIDQuI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Sep 2019 12:50:08 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x127so916286pfb.7
+        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2019 09:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wMapkRhSgN1SGL2l9oMWf44cELAHaLmXe43jUFl8ge4=;
+        b=QbfmzLpBBM1tiB62I45Rx0ioISKADbOrKugzWvi1lErH0hXEbE9ZS6kJgkezaWKNVj
+         lTl3usJiczDBZsEGMnQ/Iw+6QF1tSNnmZXu6xX56afwUgzjXrlzuFU6b1Z3SfpxaJQqm
+         jlf7EXX6hFJzjdaMWPtSy2VmMZTZE7iikopsA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wMapkRhSgN1SGL2l9oMWf44cELAHaLmXe43jUFl8ge4=;
+        b=ZHg21I8a8Q/WCLebPxNntuk0+KUklCULT1IYa+2AK+Y2CmqHQ0prjbarbtSmFI2jfY
+         0wvs+ZbUBwzm6vdjObhY6//ABzfyXYIZ21uUfRC+nkPP3TBuLWeANCLf6js9VQw3afWY
+         Wp1Qgi95VWcOQjndaiUnWsqM3cTQwLtCrsdatRF0rY8GWyVseFmerQClVqHaugU9cg5m
+         oR71W3G76bFjb5Sfgx3w8u8cDjcMrXUpdhaMBvugxsMAV64GQg/mxSDUAaM3QP5W2o6g
+         ALEgrTc3hF992WByQjNSoTbBKiindAcNQ5VSye6u0MrNDZha/R+tdNEZ4ZVhJ3hVFRYS
+         u33Q==
+X-Gm-Message-State: APjAAAV2k48mvY8oO2R8BpMXPgqA+JZqJ0oyYsUyM14BiJfO0r5xduRz
+        udG38PxxPwwmgnB9svSgOHogDg==
+X-Google-Smtp-Source: APXvYqx7Efgt6IKBu7pQKwH/Ba598K0d/IYdrQkM02/A9jX3xglkigZo/az7B7A1FSYMbGjy/P7/ug==
+X-Received: by 2002:a17:90a:9409:: with SMTP id r9mr6017500pjo.10.1567615808064;
+        Wed, 04 Sep 2019 09:50:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h4sm12456231pfg.159.2019.09.04.09.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Sep 2019 09:50:07 -0700 (PDT)
+Date:   Wed, 4 Sep 2019 09:50:06 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Dave Martin <Dave.Martin@arm.com>
 Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
         Peter Zijlstra <peterz@infradead.org>
 Subject: Re: [RFC PATCH v2 2/2] ELF: Add ELF program property parsing support
-Message-ID: <20190904110515.GP27757@arm.com>
+Message-ID: <201909040942.7BC809C5E@keescook>
 References: <1566581020-9953-1-git-send-email-Dave.Martin@arm.com>
  <1566581020-9953-3-git-send-email-Dave.Martin@arm.com>
  <201908292224.007EB4D5@keescook>
  <20190830083415.GI27757@arm.com>
- <5ddd0306f42c2b53ffbd8ee8c9b948c1d529cf98.camel@intel.com>
- <20190902092816.GK27757@arm.com>
- <59052137a61bab9e8d312d51644aade3953ba339.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <59052137a61bab9e8d312d51644aade3953ba339.camel@intel.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190830083415.GI27757@arm.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-[Kees, you have any thoughts on the error code issue?  See below.]
+On Fri, Aug 30, 2019 at 09:34:18AM +0100, Dave Martin wrote:
+> Do you have any thoughts on Yu-Cheng Yu's comments?  It would be nice to
+> early-terminate the scan if we can, but my feeling so far was that the
+> scan is cheap, the number of properties is unlikely to be more than a
+> smallish integer, and the code separation benefits of just calling the
+> arch code for every property probably likely outweigh the costs of
+> having to iterate over every property.  We could always optimise it
+> later if necessary.
 
-On Tue, Sep 03, 2019 at 11:29:10PM +0100, Yu-cheng Yu wrote:
-> On Mon, 2019-09-02 at 10:28 +0100, Dave Martin wrote:
-> > On Fri, Aug 30, 2019 at 06:03:27PM +0100, Yu-cheng Yu wrote:
-> > > On Fri, 2019-08-30 at 09:34 +0100, Dave Martin wrote:
-> > > > On Fri, Aug 30, 2019 at 06:37:45AM +0100, Kees Cook wrote:
-> > > > > On Fri, Aug 23, 2019 at 06:23:40PM +0100, Dave Martin wrote:
-> > > > > > ELF program properties will needed for detecting whether to enable
-> > > > > > optional architecture or ABI features for a new ELF process.
-> > > > > > 
-> > > > > > For now, there are no generic properties that we care about, so do
-> > > > > > nothing unless CONFIG_ARCH_USE_GNU_PROPERTY=y.
-> > > > > > 
-> > > > > > Otherwise, the presence of properties using the PT_PROGRAM_PROPERTY
-> > > > > > phdrs entry (if any), and notify each property to the arch code.
-> > > > > > 
-> > > > > > For now, the added code is not used.
-> > > > > > 
-> > > > > > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-> > > > > 
-> > > > > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > > > 
-> > > > Thanks for the review.
-> > > > 
-> > > > Do you have any thoughts on Yu-Cheng Yu's comments?  It would be nice to
-> > > > early-terminate the scan if we can, but my feeling so far was that the
-> > > > scan is cheap, the number of properties is unlikely to be more than a
-> > > > smallish integer, and the code separation benefits of just calling the
-> > > > arch code for every property probably likely outweigh the costs of
-> > > > having to iterate over every property.  We could always optimise it
-> > > > later if necessary.
-> > > > 
-> > > > I need to double-check that there's no way we can get stuck in an
-> > > > infinite loop with the current code, though I've not seen it in my
-> > > > testing.  I should throw some malformed notes at it though.
-> > > 
-> > > Here is my arch_parse_elf_property() and objdump of the property.
-> > > The parser works fine.
-> > 
-> > [...]
-> > 
-> > > int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
-> > >           
-> > >                    bool compat, struct arch_elf_state *state)
-> > > {
-> > >         if (type
-> > > != GNU_PROPERTY_X86_FEATURE_1_AND)
-> > >                 return -ENOENT;
-> > 
-> > For error returns, I was following this convention:
-> > 
-> > 	EIO: invalid ELF file
-> > 
-> > 	ENOEXEC: valid ELF file, but we can't (or won't) support it
-> > 
-> > 	0: OK, or don't care
-> 
-> From errno-base.h, EIO is for I/O error; ENOEXEC is for Exec format error.
-> Is this closer to what is happening?
+I feel like there are already a lot of ways to burn CPU time with
+mangled ELF files, so this potential inefficiently doesn't seem bad to
+me. If we want to add limits here, perhaps cap the property scan depth
+(right now, IIRC, the count is u32, which is big...)
 
-The common case of ENOEXEC is that the file is valid but can't be
-executed (i.e., wrong architecture, unsupported binary format etc.).
+> I need to double-check that there's no way we can get stuck in an
+> infinite loop with the current code, though I've not seen it in my
+> testing.  I should throw some malformed notes at it though.
 
-There's precent for reporting a truncated file (seen as a kernel_read()
-that reads less data than requested) being reported as -EIO.  There is
-no actual I/O error here, this is just a file with a noncompliant format.
-This happens on short read when trying to read the interpreter filename
-from the main ELF file for example.
+I think the cursor only performs forward movement, yes? I didn't see a
+loop, but maybe there's something with the program headers that I
+missed.
 
-Based on this, I used EIO to report malformed files.
+> Do you have any objection to merging patch 1 with this one?  For
+> upstreaming purposes, it seems overkill for that to be a separate patch.
 
-This doesn't always happen though even in the existing code: for
-example, the same error occurring in load_elf_phdrs() yields ENOEXEC
-from execve(), not EIO.  It's not clear which (if either) is the
-correct error code.
+I don't _object_ to it, but I did like having it separate for review.
 
-The behaviour isn't totally consistent though, so maybe this is not
-intentional.
+> Do you have any opinion on the WARN_ON()s?  They should be un-hittable,
+> so they're documenting assumptions rather than protecting against
+> anything real.  Maybe I should replace them with comments.
 
-The distinction seemed useful, but I agree this can be seen as an abuse
-of EIO.
+I think they're fine as self-documentation. My rule of thumb has been:
 
-I'm happy to change this if people don't like it, but I'm not sure what
-to change it to...
+- don't use BUG*() unless you can defend it to Linus who wants 0 BUG()s.
+- don't use WARN*() if userspace can reach it (and if you're not sure,
+  use the WARN*ONCE() version)
+- use pr_*_ratelimited() if unprivileged userspace can reach it.
 
-> > This function gets called for every property, including properties that
-> > the arch code may not be interested in, so for properties you don't care
-> > about here you should return 0.
-> 
-> Yes.
-> 
-> > 
-> > > 
-> > >         if (datasz < sizeof(unsigned int))
-> > >                 return -ENOEXEC;
-> > 
-> > Should this be != ?
-> > 
-> > According to the draft x86-64 psABI spec [1],
-> > X86_PROPERTY_FEATURE_1_AND (and all properties based on
-> > GNU_PROPERTY_X86_UINT32_AND_LO) has data consisting of a single 4-byte
-> > unsigned integer.
-> > 
-> > >         state->gnu_property = *(unsigned int *)data;
-> > >         return 0;
-> > > }
-> 
-> Yes, I will change it.
-
-OK
-
-Cheers
----Dave
+-- 
+Kees Cook
