@@ -2,61 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BA6A9564
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2019 23:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F69EA9584
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2019 23:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbfIDVnv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Sep 2019 17:43:51 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:42255 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729740AbfIDVnv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Sep 2019 17:43:51 -0400
-Received: by mail-lj1-f193.google.com with SMTP id y23so215823lje.9
-        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2019 14:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uwuNMQc72pWyQK8TRg0HstY3l1Ai6DJhnuFaRewpYp4=;
-        b=UP6KagylPWKv8Byd7UP6AZwOW79kEJrWCRQxdYQs3r+rkYYHaRtzINkvSv7M05KzA6
-         ZrkfCbIxdXLJg806nwevShkWeJseq5zYukSmtR6H1DU8VX49HoqAiZNvCj+iW0/x6oAZ
-         eynsh3dcmA1ab+qwfUmxb81iuiDdfGEMPS8+s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uwuNMQc72pWyQK8TRg0HstY3l1Ai6DJhnuFaRewpYp4=;
-        b=JKCzy+LF0gydNCnWz+BLoOHLuhCaDbha6Qfyv8lAooRxJVqrVoLaEItm51YoJjHCQl
-         +qjOe2fQs6ez7d7ug8z8TRG4/08dOIUn2Ab7P6YrsdRwiT2wVHScPpqeEkdwdwlWDGwB
-         JEVblNjyDxjxUK0ZBfhbgxfhpf5TjhUSMa7x3CuLgCHbqFLc42/FSXivc7wTfYBAtgEA
-         Rh1soZwYqX1uDLkP8McZFkRlNps035i5D25GO8GRTDF47CcPLjNP0Yk8JK5Ua/DJvh9A
-         pGwaZ0J4+61GCtpEExjRkhLgKS+Wcg7ssSMK5lVYghoqZS97ngrzu3xXraiEu89Ub1ft
-         EZiA==
-X-Gm-Message-State: APjAAAVSwR62FWg3DhryVWpEt42f8L6MgrDoxEXSqgxoFniQNJsqumDt
-        egQjGC9T65tUErJFa7BSiNZk7SYEZsw=
-X-Google-Smtp-Source: APXvYqzV4wiVUgGzGfLVuGyYFIZq+btdak+ynIPLReHl6S7z0k0Fz91N4aC8QnfSUvRIwhkxQ5DY2w==
-X-Received: by 2002:a05:651c:1135:: with SMTP id e21mr15136907ljo.83.1567633429296;
-        Wed, 04 Sep 2019 14:43:49 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id u25sm16265lfm.64.2019.09.04.14.43.48
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2019 14:43:49 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id e17so191336ljf.13
-        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2019 14:43:48 -0700 (PDT)
-X-Received: by 2002:a2e:3c14:: with SMTP id j20mr10927110lja.84.1567632938615;
- Wed, 04 Sep 2019 14:35:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-11-cyphar@cyphar.com>
- <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com>
-In-Reply-To: <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 4 Sep 2019 14:35:22 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiHRW3Z9xPRiExi9jLjB0cdGhM=3vaW+b80mjuRcbORyw@mail.gmail.com>
-Message-ID: <CAHk-=wiHRW3Z9xPRiExi9jLjB0cdGhM=3vaW+b80mjuRcbORyw@mail.gmail.com>
-Subject: Re: [PATCH v12 10/12] namei: aggressively check for nd->root escape
- on ".." resolution
-To:     Aleksa Sarai <cyphar@cyphar.com>
+        id S1728717AbfIDVtc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Sep 2019 17:49:32 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:36862 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726495AbfIDVtb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 4 Sep 2019 17:49:31 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id D7E89A19C8;
+        Wed,  4 Sep 2019 23:49:24 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
+        with ESMTP id VdSCaItxf1Ze; Wed,  4 Sep 2019 23:49:19 +0200 (CEST)
+Date:   Thu, 5 Sep 2019 07:48:56 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Jeff Layton <jlayton@kernel.org>,
         "J. Bruce Fields" <bfields@fieldses.org>,
@@ -98,44 +64,112 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         linux-s390 <linux-s390@vger.kernel.org>,
         Linux-sh list <linux-sh@vger.kernel.org>,
         linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v12 10/12] namei: aggressively check for nd->root escape
+ on ".." resolution
+Message-ID: <20190904214856.vnvom7h5xontvngq@yavin.dot.cyphar.com>
+References: <20190904201933.10736-1-cyphar@cyphar.com>
+ <20190904201933.10736-11-cyphar@cyphar.com>
+ <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="i46h7izteerqaavi"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 4, 2019 at 2:09 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
+
+--i46h7izteerqaavi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 2019-09-04, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Wed, Sep 4, 2019 at 1:23 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> > This patch allows for LOOKUP_BENEATH and LOOKUP_IN_ROOT to safely permit
+> > ".." resolution (in the case of LOOKUP_BENEATH the resolution will still
+> > fail if ".." resolution would resolve a path outside of the root --
+> > while LOOKUP_IN_ROOT will chroot(2)-style scope it). Magic-link jumps
+> > are still disallowed entirely because now they could result in
+> > inconsistent behaviour if resolution encounters a subsequent ".."[*].
+>=20
+> This is the only patch in the series that makes me go "umm".
+>=20
+> Why is it ok to re-initialize m_seq, which is used by other things
+> too? I think it's because we're out of RCU lookup, but there's no
+> comment about it, and it looks iffy to me. I'd rather have a separate
+> sequence count that doesn't have two users with different lifetime
+> rules.
+
+Yeah, the reasoning was that it's because we're out of RCU lookup and if
+we didn't re-grab ->m_seq we'd hit path_is_under() on every subsequent
+".." (even though we've checked that it's safe). But yes, I should've
+used a different field to avoid confusion (and stop it looking
+unnecessarily dodgy). I will fix that.
+
+> But even apart from that, I think from a "patch continuity" standpoint
+> it would be better to introduce the sequence counts as just an error
+> condition first - iow, not have the "path_is_under()" check, but just
+> return -EXDEV if the sequence number doesn't match.
+
+Ack, will do.
+
 > So you'd have three stages:
->
+>=20
 >  1) ".." always returns -EXDEV
->
+>=20
 >  2) ".." returns -EXDEV if there was a concurrent rename/mount
->
+>=20
 >  3) ".." returns -EXDEV if there was a concurrent rename/mount and we
 > reset the sequence numbers and check if you escaped.
+>=20
+> becasue the sequence number reset really does make me go "hmm", plus I
+> get this nagging little feeling in the back of my head that you can
+> cause nasty O(n^2) lookup cost behavior with deep paths, lots of "..",
+> and repeated path_is_under() calls.
 
-In fact, I wonder if this should return -EAGAIN instead - to say that
-"retrying may work".
+The reason for doing the concurrent-{rename,mount} checks was to try to
+avoid the O(n^2) in most cases, but you're right that if you have an
+attacker that is spamming renames (or you're on a box with a lot of
+renames and/or mounts going on *anywhere*) you will hit an O(n^2) here
+(more pedantically, O(m*n) but who's counting?).
 
-Because then:
+Unfortunately, I'm not sure what the best solution would be for this
+one. If -EAGAIN retries are on the table, we could limit how many times
+we're willing to do path_is_under() and then just return -EAGAIN.
 
+> So (1) sounds safe. (2) sounds simple. And (3) is where I think subtle
+> things start happening.
+>=20
 > Also, I'm not 100% convinced that (3) is needed at all. I think the
 > retry could be done in user space instead, which needs to have a
 > fallback anyway. Yes? No?
 
-Any user mode fallback would want to know whether it's a final error
-or whether simply re-trying might make it work again.
+Hinting to userspace to do a retry (with -EAGAIN as you mention in your
+other mail) wouldn't be a bad thing at all, though you'd almost
+certainly get quite a few spurious -EAGAINs -- &{mount,rename}_lock are
+global for the entire machine, after all.
 
-I think that re-try case is valid for any of the possible "races
-happened, we can't guarantee that it's safe", and retrying inside the
-kernel (or doing that re-validation) could have latency issues.
+But if the only significant roadblock is that (3) seems a bit too hairy,
+I would be quite happy with landing (2) as a first step (with -EAGAIN).
 
-Maybe ".." is the only such case. I can't think of any other ones in
-your series, but at least conceptually they could happen. For example,
-we've had people who wanted pathname lookup without any IO happening,
-because if you have to wait for IO you could want to use another
-thread etc if you're doing some server in user space..
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
-                     Linus
+--i46h7izteerqaavi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXXAxQwAKCRCdlLljIbnQ
+Er4vAQDiHBfZXElf8shcA4ixj+Uqqylcy09QYhCXLxI7/JHdiQD9GI/Ehs0C3HPA
+8HQsyqVEjkx8dq5gApLNG5Rp8gVgywQ=
+=Il7T
+-----END PGP SIGNATURE-----
+
+--i46h7izteerqaavi--
