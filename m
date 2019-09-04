@@ -2,33 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC573A9454
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2019 23:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7ECA94D1
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2019 23:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730720AbfIDVAZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Sep 2019 17:00:25 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:35390 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbfIDVAY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Sep 2019 17:00:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=1C4yzaFGm2dwE00FHfKi5dL3sc9qq3Dq1frkLdiVUqw=; b=smx+9n2brd7Qen+GYWPQQhIKw
-        LsHXOmj6SJXN6ngq2DhawrUsC2Js4WfXdX4ZCTTqAZpLgAXuwwv2iT7jrmJ5neLvsb4eJAcXkjrNL
-        AjcV2dvIxzryFJAMSCU0CqPtwgVNzjJzkFqk8pl+N02nYRjfbk78ICCZGJxX+THHzwwK2RqinrIdD
-        9yxD1/vsztHWf3zNok/bRboi810c1iXKTUCmtyphRgggRgYvXeuRTiAcxecMn7/DvwvvWuYJeSpQm
-        cVgxdDB+FARin5F4v3LjFiWqWLAFNLSXU9BsExHoAQR6AFxACk2w46ZMfB7yt+5oa4qMhcZIdJav2
-        nmnU8O9PQ==;
-Received: from [2601:1c0:6200:6e8::e2a8]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i5cO6-0002LK-Qx; Wed, 04 Sep 2019 21:00:23 +0000
-Subject: Re: [PATCH v12 11/12] open: openat2(2) syscall
-To:     Aleksa Sarai <cyphar@cyphar.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        id S1727544AbfIDVR4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Sep 2019 17:17:56 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:45644 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727387AbfIDVR4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Sep 2019 17:17:56 -0400
+Received: by mail-lf1-f66.google.com with SMTP id r134so140770lff.12
+        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2019 14:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hgF2nRVhP2Z9Hk/CZOFcXhAAs++h0MvE3fMY8xcOeYw=;
+        b=V0fXrvG/y6fw7T3tD/KUlmTDsOhByRFRgMw+QxPA9hiU5TDgpngn7HfopRM+i/LJMb
+         k2AA+nRMkFxYb/ldSeHBR5el3bmmhNNCMxw9ToB+OOlkWRR6wchZHlLiKsQK9TmfmvjP
+         dVvrUijYkfU5Fh9X3uECYhU3OGmtsUJMmdGfk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hgF2nRVhP2Z9Hk/CZOFcXhAAs++h0MvE3fMY8xcOeYw=;
+        b=b3YsoS7FSmfMO0hjLyM3ruxsOl003xvp2oXbdr0vaHOvoCmdixQE0/c7EWJMkJF8z6
+         5STnc/su36z4ZUWHwe87vOJIYKXq54Uc4nFvZ7etZdK+PUzPFa/a0JkAROs43f9qe2ZX
+         Y+HSJXsgUPKgwWx7+X+wqS2fhqH4q3QopJr1I5epE5ARHo5fZXBKXr61PxF+hUbksRKs
+         8rasMF/C8pFmTWXtA5Onsv5hX8LcxukyNyvcP4MWCI1o3XukSZDr1X5yHdXFdl8cFgjD
+         8hXNQTBYbpl5cN1YsjqbmWFrLjmIr47jbJXwPaosDap5grltJ35vhJStXxB/teqsc1aL
+         wZTQ==
+X-Gm-Message-State: APjAAAXN55wHMt3ZQXsvTTcf0o94QW53NOCpBxd+epTG7zNmQEW3Z5xa
+        sWTnl5ba9icHVDg5gXLawUR7qe/kXAY=
+X-Google-Smtp-Source: APXvYqxd2heJ7ktIokT81Iyf1F7bN8+nK4ZE67b/y4mWAStd0x7q4CBlO5vrrRITTpfwbOMlSd65gQ==
+X-Received: by 2002:ac2:5a07:: with SMTP id q7mr89046lfn.177.1567631874036;
+        Wed, 04 Sep 2019 14:17:54 -0700 (PDT)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
+        by smtp.gmail.com with ESMTPSA id i65sm168059lji.16.2019.09.04.14.17.53
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Sep 2019 14:17:53 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id u14so147079ljj.11
+        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2019 14:17:53 -0700 (PDT)
+X-Received: by 2002:a2e:8507:: with SMTP id j7mr10579330lji.156.1567631404184;
+ Wed, 04 Sep 2019 14:10:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-11-cyphar@cyphar.com>
+In-Reply-To: <20190904201933.10736-11-cyphar@cyphar.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 4 Sep 2019 14:09:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com>
+Message-ID: <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com>
+Subject: Re: [PATCH v12 10/12] namei: aggressively check for nd->root escape
+ on ".." resolution
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Jeff Layton <jlayton@kernel.org>,
         "J. Bruce Fields" <bfields@fieldses.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -37,13 +65,14 @@ To:     Aleksa Sarai <cyphar@cyphar.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Christian Brauner <christian@brauner.io>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biederman <ebiederm@xmission.com>,
         Andy Lutomirski <luto@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        Tycho Andersen <tycho@tycho.ws>,
         David Drysdale <drysdale@google.com>,
         Chanho Min <chanho.min@lge.com>,
         Oleg Nesterov <oleg@redhat.com>,
@@ -52,72 +81,69 @@ Cc:     Eric Biederman <ebiederm@xmission.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
         linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-12-cyphar@cyphar.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <5e31b450-75b8-f037-dca7-b1bd547cf339@infradead.org>
-Date:   Wed, 4 Sep 2019 14:00:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190904201933.10736-12-cyphar@cyphar.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-just noisy nits here:
+On Wed, Sep 4, 2019 at 1:23 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+>
+> This patch allows for LOOKUP_BENEATH and LOOKUP_IN_ROOT to safely permit
+> ".." resolution (in the case of LOOKUP_BENEATH the resolution will still
+> fail if ".." resolution would resolve a path outside of the root --
+> while LOOKUP_IN_ROOT will chroot(2)-style scope it). Magic-link jumps
+> are still disallowed entirely because now they could result in
+> inconsistent behaviour if resolution encounters a subsequent ".."[*].
 
-On 9/4/19 1:19 PM, Aleksa Sarai wrote:
+This is the only patch in the series that makes me go "umm".
 
-> diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
-> index 1d338357df8a..479baf2da10e 100644
-> --- a/include/uapi/linux/fcntl.h
-> +++ b/include/uapi/linux/fcntl.h
-> @@ -93,5 +93,47 @@
->  
->  #define AT_RECURSIVE		0x8000	/* Apply to the entire subtree */
->  
-> +/**
+Why is it ok to re-initialize m_seq, which is used by other things
+too? I think it's because we're out of RCU lookup, but there's no
+comment about it, and it looks iffy to me. I'd rather have a separate
+sequence count that doesn't have two users with different lifetime
+rules.
 
-/** means "the following is kernel-doc", but it's not, so please either make
-it kernel-doc format or just use /* to begin the comment.
+But even apart from that, I think from a "patch continuity" standpoint
+it would be better to introduce the sequence counts as just an error
+condition first - iow, not have the "path_is_under()" check, but just
+return -EXDEV if the sequence number doesn't match.
 
-> + * Arguments for how openat2(2) should open the target path. If @resolve is
-> + * zero, then openat2(2) operates identically to openat(2).
-> + *
-> + * However, unlike openat(2), unknown bits in @flags result in -EINVAL rather
-> + * than being silently ignored. In addition, @mode (or @upgrade_mask) must be
-> + * zero unless one of {O_CREAT, O_TMPFILE, O_PATH} are set.
-> + *
-> + * @flags: O_* flags.
-> + * @mode: O_CREAT/O_TMPFILE file mode.
-> + * @upgrade_mask: UPGRADE_* flags (to restrict O_PATH re-opening).
-> + * @resolve: RESOLVE_* flags.
-> + */
-> +struct open_how {
-> +	__u32 flags;
-> +	union {
-> +		__u16 mode;
-> +		__u16 upgrade_mask;
-> +	};
-> +	__u16 resolve;
-> +};
+So you'd have three stages:
 
+ 1) ".." always returns -EXDEV
 
--- 
-~Randy
+ 2) ".." returns -EXDEV if there was a concurrent rename/mount
+
+ 3) ".." returns -EXDEV if there was a concurrent rename/mount and we
+reset the sequence numbers and check if you escaped.
+
+becasue the sequence number reset really does make me go "hmm", plus I
+get this nagging little feeling in the back of my head that you can
+cause nasty O(n^2) lookup cost behavior with deep paths, lots of "..",
+and repeated path_is_under() calls.
+
+So (1) sounds safe. (2) sounds simple. And (3) is where I think subtle
+things start happening.
+
+Also, I'm not 100% convinced that (3) is needed at all. I think the
+retry could be done in user space instead, which needs to have a
+fallback anyway. Yes? No?
+
+                 Linus
