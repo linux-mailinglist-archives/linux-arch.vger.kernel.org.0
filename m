@@ -2,58 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 001DBA9542
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2019 23:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BA6A9564
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2019 23:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727900AbfIDVhN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Sep 2019 17:37:13 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:42782 "EHLO
+        id S1725965AbfIDVnv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Sep 2019 17:43:51 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42255 "EHLO
         mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727125AbfIDVhN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Sep 2019 17:37:13 -0400
-Received: by mail-lj1-f193.google.com with SMTP id y23so202370lje.9
-        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2019 14:37:11 -0700 (PDT)
+        with ESMTP id S1729740AbfIDVnv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Sep 2019 17:43:51 -0400
+Received: by mail-lj1-f193.google.com with SMTP id y23so215823lje.9
+        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2019 14:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=afyKDAGEEGBbAV94gj2UOZt2XiwokGAAZY9fEg48q/g=;
-        b=NaaXzsE03/A0aggT0JGsMPgqMPOgw689sbkH2wUyL6Wp3qKaZ1pKjDt9q3nSCqMPah
-         2e4dX/SHASPLfri+fuLDS7WlObVzMB0uCQ613gb+lr0h/VEtc5FGRP26lR62YK8De+Ct
-         /QjcaW9K7a4FCLT2Siyb/L/tVCZoNkYi2RP38=
+        bh=uwuNMQc72pWyQK8TRg0HstY3l1Ai6DJhnuFaRewpYp4=;
+        b=UP6KagylPWKv8Byd7UP6AZwOW79kEJrWCRQxdYQs3r+rkYYHaRtzINkvSv7M05KzA6
+         ZrkfCbIxdXLJg806nwevShkWeJseq5zYukSmtR6H1DU8VX49HoqAiZNvCj+iW0/x6oAZ
+         eynsh3dcmA1ab+qwfUmxb81iuiDdfGEMPS8+s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=afyKDAGEEGBbAV94gj2UOZt2XiwokGAAZY9fEg48q/g=;
-        b=YAdoYB88qGb8+IwD3Blj8s3Y9QViqUHcZiPy+3y6J0KAQtRY4mAJNC2kNkeBBNqXO6
-         UY2kAhqWtHHlPbFTFamp8OQ4C2dvlzRzNv0ue3Wm6hsh0JCP/48L9VqaVBPsT+Qm4Uxa
-         2E/DjL1AhsNCzvnyc0V7LMGRBj06PPsnX/JXtOiwCWp+ygHKBmThw5JMKEgrWrw06krX
-         o7naig+VO6iaJX03Pivsk7Rg9EHaIlLIud60J8JDIgmKGjioRKHyZcH/mGnmHfGfaR8d
-         v7/upRtCMZffqhEmvfLEumcQzJsYF1Pg3JmPlBLgUtMQiWSHKEQUVjfaaLgX2A2fqD/+
-         LO9w==
-X-Gm-Message-State: APjAAAWaMqiNDnSS85Ah97P762BKj2AB7+WFMRRkDs/vQmfImgh640gt
-        J/SEwDeEmaoIACmEDwIU6Nvwnf0tyww=
-X-Google-Smtp-Source: APXvYqzmzoer3H+eiv0ivVfw7sP5t2L+1KoRnPmvmvsR5HIugzIE+ZXeBn9P3rbH4JO74ml39XbT8w==
-X-Received: by 2002:a2e:83d6:: with SMTP id s22mr17868369ljh.104.1567633030706;
-        Wed, 04 Sep 2019 14:37:10 -0700 (PDT)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com. [2a00:1450:4864:20::136])
-        by smtp.gmail.com with ESMTPSA id u11sm12113lfu.47.2019.09.04.14.37.10
+        bh=uwuNMQc72pWyQK8TRg0HstY3l1Ai6DJhnuFaRewpYp4=;
+        b=JKCzy+LF0gydNCnWz+BLoOHLuhCaDbha6Qfyv8lAooRxJVqrVoLaEItm51YoJjHCQl
+         +qjOe2fQs6ez7d7ug8z8TRG4/08dOIUn2Ab7P6YrsdRwiT2wVHScPpqeEkdwdwlWDGwB
+         JEVblNjyDxjxUK0ZBfhbgxfhpf5TjhUSMa7x3CuLgCHbqFLc42/FSXivc7wTfYBAtgEA
+         Rh1soZwYqX1uDLkP8McZFkRlNps035i5D25GO8GRTDF47CcPLjNP0Yk8JK5Ua/DJvh9A
+         pGwaZ0J4+61GCtpEExjRkhLgKS+Wcg7ssSMK5lVYghoqZS97ngrzu3xXraiEu89Ub1ft
+         EZiA==
+X-Gm-Message-State: APjAAAVSwR62FWg3DhryVWpEt42f8L6MgrDoxEXSqgxoFniQNJsqumDt
+        egQjGC9T65tUErJFa7BSiNZk7SYEZsw=
+X-Google-Smtp-Source: APXvYqzV4wiVUgGzGfLVuGyYFIZq+btdak+ynIPLReHl6S7z0k0Fz91N4aC8QnfSUvRIwhkxQ5DY2w==
+X-Received: by 2002:a05:651c:1135:: with SMTP id e21mr15136907ljo.83.1567633429296;
+        Wed, 04 Sep 2019 14:43:49 -0700 (PDT)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id u25sm16265lfm.64.2019.09.04.14.43.48
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2019 14:37:10 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id q27so188029lfo.10
-        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2019 14:37:10 -0700 (PDT)
-X-Received: by 2002:a05:6512:512:: with SMTP id o18mr154625lfb.170.1567633024273;
- Wed, 04 Sep 2019 14:37:04 -0700 (PDT)
+        Wed, 04 Sep 2019 14:43:49 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id e17so191336ljf.13
+        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2019 14:43:48 -0700 (PDT)
+X-Received: by 2002:a2e:3c14:: with SMTP id j20mr10927110lja.84.1567632938615;
+ Wed, 04 Sep 2019 14:35:38 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-11-cyphar@cyphar.com>
- <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com> <CAHk-=wiHRW3Z9xPRiExi9jLjB0cdGhM=3vaW+b80mjuRcbORyw@mail.gmail.com>
-In-Reply-To: <CAHk-=wiHRW3Z9xPRiExi9jLjB0cdGhM=3vaW+b80mjuRcbORyw@mail.gmail.com>
+ <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com>
+In-Reply-To: <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 4 Sep 2019 14:36:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiExfaVhUTvKj7hR6DG4C2+oy6usz0Sa6QbPr5EgDH28w@mail.gmail.com>
-Message-ID: <CAHk-=wiExfaVhUTvKj7hR6DG4C2+oy6usz0Sa6QbPr5EgDH28w@mail.gmail.com>
+Date:   Wed, 4 Sep 2019 14:35:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiHRW3Z9xPRiExi9jLjB0cdGhM=3vaW+b80mjuRcbORyw@mail.gmail.com>
+Message-ID: <CAHk-=wiHRW3Z9xPRiExi9jLjB0cdGhM=3vaW+b80mjuRcbORyw@mail.gmail.com>
 Subject: Re: [PATCH v12 10/12] namei: aggressively check for nd->root escape
  on ".." resolution
 To:     Aleksa Sarai <cyphar@cyphar.com>
@@ -104,28 +104,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 4, 2019 at 2:35 PM Linus Torvalds
+On Wed, Sep 4, 2019 at 2:09 PM Linus Torvalds
 <torvalds@linux-foundation.org> wrote:
 >
-> On Wed, Sep 4, 2019 at 2:09 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > So you'd have three stages:
-> >
-> >  1) ".." always returns -EXDEV
-> >
-> >  2) ".." returns -EXDEV if there was a concurrent rename/mount
-> >
-> >  3) ".." returns -EXDEV if there was a concurrent rename/mount and we
-> > reset the sequence numbers and check if you escaped.
+> So you'd have three stages:
 >
-> In fact, I wonder if this should return -EAGAIN instead - to say that
-> "retrying may work".
+>  1) ".." always returns -EXDEV
+>
+>  2) ".." returns -EXDEV if there was a concurrent rename/mount
+>
+>  3) ".." returns -EXDEV if there was a concurrent rename/mount and we
+> reset the sequence numbers and check if you escaped.
 
-And here "this" was meant to be "case 2" - I was moving the quoted
-text around and didn't fix my wording, so now it is ambiguous or
-implies #3, which would be crazy.
+In fact, I wonder if this should return -EAGAIN instead - to say that
+"retrying may work".
 
-Sorry for the confusion,
+Because then:
 
-            Linus
+> Also, I'm not 100% convinced that (3) is needed at all. I think the
+> retry could be done in user space instead, which needs to have a
+> fallback anyway. Yes? No?
+
+Any user mode fallback would want to know whether it's a final error
+or whether simply re-trying might make it work again.
+
+I think that re-try case is valid for any of the possible "races
+happened, we can't guarantee that it's safe", and retrying inside the
+kernel (or doing that re-validation) could have latency issues.
+
+Maybe ".." is the only such case. I can't think of any other ones in
+your series, but at least conceptually they could happen. For example,
+we've had people who wanted pathname lookup without any IO happening,
+because if you have to wait for IO you could want to use another
+thread etc if you're doing some server in user space..
+
+                     Linus
