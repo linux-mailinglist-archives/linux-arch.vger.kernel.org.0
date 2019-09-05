@@ -2,138 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2063DAA4C3
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2019 15:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9078AA72C
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2019 17:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730440AbfIENkv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Sep 2019 09:40:51 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:42942 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725975AbfIENkv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 5 Sep 2019 09:40:51 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id 641B2A2002;
-        Thu,  5 Sep 2019 15:40:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id fp988BBgv0Z0; Thu,  5 Sep 2019 15:40:41 +0200 (CEST)
-Date:   Thu, 5 Sep 2019 23:40:17 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
+        id S1731969AbfIEPXo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Sep 2019 11:23:44 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:44019 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731609AbfIEPXo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Sep 2019 11:23:44 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1M7ehh-1i4XD309vh-0084hW; Thu, 05 Sep 2019 17:22:24 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, y2038@lists.linaro.org,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
- helpers
-Message-ID: <20190905134017.rstiqa6v6roslzlu@yavin.dot.cyphar.com>
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-2-cyphar@cyphar.com>
- <20190905110544.d6c5t7rx25kvywmi@wittgenstein>
+        Vincent Chen <deanbo422@gmail.com>, stable@vger.kernel.org,
+        Greentime Hu <green.hu@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        Stafford Horne <shorne@gmail.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Ley Foon Tan <lftan@altera.com>,
+        Richard Kuo <rkuo@codeaurora.org>,
+        Mark Salter <msalter@redhat.com>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        Christian Brauner <christian@brauner.io>
+Subject: [PATCH 1/2] ipc: fix semtimedop for generic 32-bit architectures
+Date:   Thu,  5 Sep 2019 17:21:24 +0200
+Message-Id: <20190905152155.1392871-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lfmn5rszd42a2efo"
-Content-Disposition: inline
-In-Reply-To: <20190905110544.d6c5t7rx25kvywmi@wittgenstein>
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:XxUJwrw3CMdgDWeLKiHcQFwqG5kArJ+fThzxITIBUQnV8GTJRWt
+ 5s/+x2+IS6LxshP4ageYlrALYSVCMMbn4PLCj6JVtmn07dladMa73O7CfYJKZfYPGAzhpaE
+ Pg5AORkHt/hlQHTDkRhl39XOdHBkuqe1JAub8P59iFIHmEoaBgT/xQhHoIlyBmADQH9/9rg
+ aSIYL4xMi85ktbTYty2bw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BqtXUM4orE8=:z5RarZPHyTyTUSIZCnz00G
+ BafFSMNtWu5vOpkk7WY2l+3hQiUGyMuMcQiP4S3Mq7sfX3GIG+wzlTy+40cDK6a+U96qePVSI
+ dZBfwCA4/hoIVwenR+mHi0Na31lTyJzpRkcXpwiGI4CdKYz2biMZCsQMTrj/EfFt0q/k2nrqe
+ AnzO7KWgvVlA1GFvDAN2ufVxcA4bmiSh0uAcIRvU8Uo65fOih3pvc4syPcXuzgUrIRaaMb7zo
+ y0ViwslBnFMIDYwCSOBZkLrq+2xyh1tYBNuwjUNjrjSs+ibojKIfXdqg3rPvZSQ+wqvqucKig
+ 32juvrsEVHPzMVuwzNgP/oF4pVjZvC7UdHWFosZh+5YM969U8OT6Qd+JoN2lfq09JYm8CluZl
+ 6fjxAdwNfdWUQ0HsQhtXuYcCIq760Cbb1aq293gV3H9Fp81WIUuC3RdL+AA7GZs0AGFz0lyfT
+ bmnOLsfnWJThKRD/iFyoZklx2qHHjT/n+f+2Nr9XZMCTrSRIBy7Q1OECrqqey0m9KG8MH8Wlg
+ zKjA2K74yZqlPQwMrVYaxDvn00bUo1Y4Lnn9HD5CHTOMR47ME3MZuZiXzh6QvWgRmtFyPsYg0
+ +tqba4W0T196wcnCz+EC8FAP4cObPa8KWCrM6xjtnVTPEbmmamuNne73GDf+dLQhFzZWOxv0P
+ G1AiXW23hUDg4deXhFfV1Vb2+9Hi+679hl+lRQEK4FDRl35UHAqTuzrRaGNwSWhiwqr2Apjih
+ W/lUMDExLP1uhmqmeuMoU4rWD0x5wgkL3jBHgczvJQX2TwotmtJUOPxqgb1ccMRWEwxtr65oM
+ qW98ig3lwLo7Q2dIZtrFLGt1Mz3xkqvyw7GX5hDY/opDRGiM0s=
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+As Vincent noticed, the y2038 conversion of semtimedop in linux-5.1
+broke when commit 00bf25d693e7 ("y2038: use time32 syscall names on
+32-bit") changed all system calls on all architectures that take
+a 32-bit time_t to point to the _time32 implementation, but left out
+semtimedop in the asm-generic header.
 
---lfmn5rszd42a2efo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This affects all 32-bit architectures using asm-generic/unistd.h:
+h8300, unicore32, openrisc, nios2, hexagon, c6x, arc, nds32 and csky.
 
-On 2019-09-05, Christian Brauner <christian.brauner@ubuntu.com> wrote:
-> On Thu, Sep 05, 2019 at 06:19:22AM +1000, Aleksa Sarai wrote:
-> > A common pattern for syscall extensions is increasing the size of a
-> > struct passed from userspace, such that the zero-value of the new fields
-> > result in the old kernel behaviour (allowing for a mix of userspace and
-> > kernel vintages to operate on one another in most cases). This is done
-> > in both directions -- hence two helpers -- though it's more common to
-> > have to copy user space structs into kernel space.
-> >=20
-> > Previously there was no common lib/ function that implemented
-> > the necessary extension-checking semantics (and different syscalls
-> > implemented them slightly differently or incompletely[1]). A future
-> > patch replaces all of the common uses of this pattern to use the new
-> > copy_struct_{to,from}_user() helpers.
-> >=20
-> > [1]: For instance {sched_setattr,perf_event_open,clone3}(2) all do do
-> >      similar checks to copy_struct_from_user() while rt_sigprocmask(2)
-> >      always rejects differently-sized struct arguments.
-> >=20
-> > Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> > Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+The notable exception is riscv32, which has dropped support for the
+time32 system calls entirely.
 
-[...]
+Reported-by: Vincent Chen <deanbo422@gmail.com>
+Cc: stable@vger.kernel.org
+Cc: Vincent Chen <deanbo422@gmail.com>
+Cc: Greentime Hu <green.hu@gmail.com>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Guan Xuetao <gxt@pku.edu.cn>
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Cc: Ley Foon Tan <lftan@altera.com>
+Cc: Richard Kuo <rkuo@codeaurora.org>
+Cc: Mark Salter <msalter@redhat.com>
+Cc: Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
+Cc: Guo Ren <guoren@kernel.org>
+Fixes: 00bf25d693e7 ("y2038: use time32 syscall names on 32-bit")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+Hi Vincent,
 
-> > +	if (unlikely(!access_ok(src, usize)))
-> > +		return -EFAULT;
-> > +
-> > +	/* Deal with trailing bytes. */
-> > +	if (usize < ksize)
-> > +		memset(dst + size, 0, rest);
-[...]
-> That's a change in behavior for clone3() and sched at least, no? Unless
-> - which I guess you might have done - you have moved the "error out when
-> the struct is too small" part before the call to copy_struct_from_user()
-> for them.
+Sorry for the delay since your report. Does this address your
+problem?
 
-Yes, I've put the minimum size check to the callers in all of the
-cases (in the case of clone3() I've #define'd a CLONE_ARGS_SIZE_VER0 to
-match the others -- see patch 2 of the series).
+Anyone else, please note that this patch is required since
+5.1 to make sysvipc work on the listed architectures.
+---
+ include/uapi/asm-generic/unistd.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 1be0e798e362..1fc8faa6e973 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -569,7 +569,7 @@ __SYSCALL(__NR_semget, sys_semget)
+ __SC_COMP(__NR_semctl, sys_semctl, compat_sys_semctl)
+ #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG != 32
+ #define __NR_semtimedop 192
+-__SC_COMP(__NR_semtimedop, sys_semtimedop, sys_semtimedop_time32)
++__SC_3264(__NR_semtimedop, sys_semtimedop_time32, sys_semtimedop)
+ #endif
+ #define __NR_semop 193
+ __SYSCALL(__NR_semop, sys_semop)
+-- 
+2.20.0
 
---lfmn5rszd42a2efo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXXEQPQAKCRCdlLljIbnQ
-EmI0AQDWLDq3CfEAPKhr2gyUgsbcgKNMnsXSA4qFj1Jjd61fzQEAqPhisgSoisGO
-mIYO56C9d94ktWhTGVP9Bs10TG3V/Ac=
-=1PLZ
------END PGP SIGNATURE-----
-
---lfmn5rszd42a2efo--
