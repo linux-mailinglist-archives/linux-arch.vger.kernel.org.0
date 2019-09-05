@@ -2,139 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6ADAA98A
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2019 19:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCE6AA9E5
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2019 19:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390907AbfIERBk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Sep 2019 13:01:40 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:61604 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733299AbfIERBk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 5 Sep 2019 13:01:40 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id A0FCBA01CE;
-        Thu,  5 Sep 2019 19:01:34 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
-        with ESMTP id l96lis2EinZ8; Thu,  5 Sep 2019 19:01:30 +0200 (CEST)
-Date:   Fri, 6 Sep 2019 03:01:06 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Christian Brauner <christian@brauner.io>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
- helpers
-Message-ID: <20190905170106.7j4nmgwnvkcwn6md@yavin.dot.cyphar.com>
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-2-cyphar@cyphar.com>
- <20190905073205.GY2332@hirez.programming.kicks-ass.net>
- <20190905092622.tlb6nn3uisssdfbu@yavin.dot.cyphar.com>
- <20190905094305.GJ2349@hirez.programming.kicks-ass.net>
+        id S2388196AbfIERWu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Sep 2019 13:22:50 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:37904 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387700AbfIERWu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Sep 2019 13:22:50 -0400
+Received: by mail-io1-f66.google.com with SMTP id p12so6572282iog.5;
+        Thu, 05 Sep 2019 10:22:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h6XoJHJRp5DArbWmdsadcBh6z83BVCBg1lEJgWUn+MU=;
+        b=qtt0GUuuzbT+VVZKgagf+GRHgGI0fW1B4GMj/VCLED/LaUQtC3Doa6lDQZmwnyIvkV
+         9psItuNC8ixEYfpe0kkcXATOMiVrDlbNR3wVgMnjNbZ56FIzek+nJpUq0PkvjVd2Piuk
+         3p9T409z7ubUuFeyV52eRAj4mu0pAcHM7GJ7KwHH6ZmBk7yTAHIlZt0zdaqhiml2jHTg
+         zd89V+AFtTv5neOc3WUAJIJ/sKDy7Evom/9L+XLF66QJdSrTWr5S8ZbEGuIfbY7X6HEv
+         m57Q/8YcJE2ZRvsH6OYv6HCXOHjRsVnVkwyWjDDp5+1kii6M9kxBNSirWw0CjEsJLlN0
+         VOvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h6XoJHJRp5DArbWmdsadcBh6z83BVCBg1lEJgWUn+MU=;
+        b=Z53e4uNx0Ju+YgQ/ROJ3wNB8EiujsUVWaOGwKzNkDUcFUUQHJDyhONyWegWkKNS/0L
+         bfPuoRCuBz7OORuneanxaUAJ9DoFXgngE9A1WyCwoGoz1Ep8+wsiEEhJbrDn36IoVqEE
+         c/+lz4SrK97nClkM0+PSkF8Vb/xDoSmV6bNEUYRo2IjRbJCwMMEYLbkrwAQIzop4qm7t
+         czYxSzETwTFfNiGAsUpzZaOdjIeMUBxL6sDyPVnMGuHwcqn2LoZRgqstsyeJJkQyfrX9
+         LAgNpTNylkdYJcs/x3Z87oAUi3LXQk1U9D7G9/wxCLEm38fGND9CRW8T3q+nuIaNbYu2
+         P+LQ==
+X-Gm-Message-State: APjAAAVt54JaVM2UrhYudXImmcDiWSKFR5Tpr957jtD/trq5sRYMAI81
+        x1gZLz7qrCIdwWwjG2w2Ar5LxOUvG8YlsAVF7RU=
+X-Google-Smtp-Source: APXvYqwR6nUdIEnweUzSLPMmz8Y4JAgL2rhI2t+NPwcMEOMxKH7cQoHHYETKZPPYFXTwePI2PBrbWLvEK7QmYjbydaQ=
+X-Received: by 2002:a6b:cac2:: with SMTP id a185mr5529429iog.142.1567704168865;
+ Thu, 05 Sep 2019 10:22:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kmvm5dxbzyhfjvqj"
-Content-Disposition: inline
-In-Reply-To: <20190905094305.GJ2349@hirez.programming.kicks-ass.net>
+References: <20190905152155.1392871-1-arnd@arndb.de> <20190905152155.1392871-2-arnd@arndb.de>
+In-Reply-To: <20190905152155.1392871-2-arnd@arndb.de>
+From:   Matt Turner <mattst88@gmail.com>
+Date:   Thu, 5 Sep 2019 10:22:36 -0700
+Message-ID: <CAEdQ38G24-s0x+xKzUfg1GH8JAPtcAq5e5L37SnOZ3gQth1STQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ipc: fix sparc64 ipc() wrapper
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        y2038 Mailman List <y2038@lists.linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, sparclinux@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Sep 5, 2019 at 8:23 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> Matt bisected a sparc64 specific issue with semctl, shmctl and msgctl
+> to a commit from my y2038 series in linux-5.1, as I missed the custom
+> sys_ipc() wrapper that sparc64 uses in place of the generic version that
+> I patched.
+>
+> The problem is that the sys_{sem,shm,msg}ctl() functions in the kernel
+> now do not allow being called with the IPC_64 flag any more, resulting
+> in a -EINVAL error when they don't recognize the command.
+>
+> Instead, the correct way to do this now is to call the internal
+> ksys_old_{sem,shm,msg}ctl() functions to select the API version.
+>
+> As we generally move towards these functions anyway, change all of
+> sparc_ipc() to consistently use those in place of the sys_*() versions,
+> and move the required ksys_*() declarations into linux/syscalls.h
+>
+> Reported-by: Matt Turner <mattst88@gmail.com>
+> Fixes: 275f22148e87 ("ipc: rename old-style shmctl/semctl/msgctl syscalls")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> Hi Matt,
+>
+> Can you check that this solves your problem?
 
---kmvm5dxbzyhfjvqj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Works great. Thank you Arnd!
 
-On 2019-09-05, Peter Zijlstra <peterz@infradead.org> wrote:
-> On Thu, Sep 05, 2019 at 07:26:22PM +1000, Aleksa Sarai wrote:
-> > On 2019-09-05, Peter Zijlstra <peterz@infradead.org> wrote:
-> > > On Thu, Sep 05, 2019 at 06:19:22AM +1000, Aleksa Sarai wrote:
-> > > > +
-> > > > +		while (rest > 0) {
-> > > > +			size_t bufsize =3D min(rest, sizeof(buffer));
-> > > > +
-> > > > +			if (__copy_from_user(buffer, addr, bufsize))
-> > > > +				return -EFAULT;
-> > > > +			if (memchr_inv(buffer, 0, bufsize))
-> > > > +				return -E2BIG;
-> > > > +
-> > > > +			addr +=3D bufsize;
-> > > > +			rest -=3D bufsize;
-> > > > +		}
-> > >=20
-> > > The perf implementation uses get_user(); but if that is too slow, sur=
-ely
-> > > we can do something with uaccess_try() here?
-> >=20
-> > Is there a non-x86-specific way to do that (unless I'm mistaken only x86
-> > has uaccess_try() or the other *_try() wrappers)? The main "performance
-> > improvement" (if you can even call it that) is that we use memchr_inv()
-> > which finds non-matching characters more efficiently than just doing a
-> > loop.
->=20
-> Oh, you're right, that's x86 only :/
-
-Though, I just had an idea -- am I wrong to think that the following
-would work just as well (without the need for an intermediate buffer)?
-
-   if (memchr_inv((const char __force *) src + size, 0, rest))
-     return -E2BIG;
-
-Or is this type of thing very much frowned upon? What if it was a
-separate memchr_inv_user() instead -- I feel as though there's not a
-strong argument for needing to use a buffer when we're single-passing
-the __user buffer and doing a basic boolean check.
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---kmvm5dxbzyhfjvqj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXXE/TgAKCRCdlLljIbnQ
-Eo4lAP4vz7qxi6aZbZTeed0ZbnEtPkuMnCkFo0v18rHfgnM6xgD/bV/SICkzrufH
-DwNHgRAu5z8daivqeybakfQqvQMhpA4=
-=SteT
------END PGP SIGNATURE-----
-
---kmvm5dxbzyhfjvqj--
+Tested-by: Matt Turner <mattst88@gmail.com>
