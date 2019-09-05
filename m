@@ -2,143 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC936AAE8C
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2019 00:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2CAAAEA8
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2019 00:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388696AbfIEWc3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Sep 2019 18:32:29 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:43054 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732639AbfIEWc2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Sep 2019 18:32:28 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.1 #3 (Red Hat Linux))
-        id 1i60I9-0001pN-0U; Thu, 05 Sep 2019 22:31:49 +0000
-Date:   Thu, 5 Sep 2019 23:31:48 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
- helpers
-Message-ID: <20190905223148.GS1131@ZenIV.linux.org.uk>
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-2-cyphar@cyphar.com>
- <20190905180750.GQ1131@ZenIV.linux.org.uk>
- <20190905182303.7f6bxpa2enbgcegv@wittgenstein>
- <20190905182801.GR1131@ZenIV.linux.org.uk>
- <20190905195618.pwzgvuzadkfpznfz@yavin.dot.cyphar.com>
+        id S2387662AbfIEWrJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Sep 2019 18:47:09 -0400
+Received: from mail-eopbgr720133.outbound.protection.outlook.com ([40.107.72.133]:29120
+        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726073AbfIEWrI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 5 Sep 2019 18:47:08 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FjFUTx/oo0QyHMcEuM9dREjJ4rr3fJpRn8i+6A5MEqxPDaLWfOXFmuQU2tJw2JpOQpG0W+w/7kukjdWtqiMfB7mM8HllAJb/XMJqt79rdxCFmGiwNYZr58LZyqxXAakrGTpwkKA/h1emqE7XC6j9Qi/qD/oRyt5Vvz1tTTg/FwSSTDYB/FkopvCRQCCeRca4HXvh/YslapAsoQNDBSfcHnYN2/o40a5f8fcoob275Q878b1K0gOJ3iaUdC7QLVpRo8/zDGmyvbbmYoyIRAqPpc+5Ktcz9M/EW7ZbP26ID886fZ496iSp1pACoE8lKfAFnahZ30G5XbystiiI5clmQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WamlG1JEr0ZoR83E8/3dBW9zjNcaFF2VYbF4Hl3/EMc=;
+ b=gpxr8LMw1aYnKvCjjyOrsAN0BhnDhqP6l5ZemoJRvor7IsEX7mugciyySv5nl3/uOAydT9b6ERQctgW12mJAeAMk9HMTJOR4pwALX6C4KlPod/muQFbImmqD4GOxGKPqtXHK5akgfAAYuf0FeFfXC4irDQx+ImNSJBwvLi5AFTPsN1dye4LkuXI6HKX9epsEByyeBZ3jBo7VIyzz5WJHbJvMu9o+f6iiRsBSRBIaSXcEe/4pQqY4jzptj0dLtDoOBQ5MePdUDU7viVlfbUFqgnFfVgwiGYLqCPJ+D/YIdZJQkYd/dnf78CBljPmHpFOVJzdxUc4kYBYGOc0DVYrdwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WamlG1JEr0ZoR83E8/3dBW9zjNcaFF2VYbF4Hl3/EMc=;
+ b=kJ53qBFcu+2dtI5C2DimPIkUliTUEJn4qsZkTiaAd7QDCEDlTasaOZjeNG+w+GT+WrnRLvdgOU9rdt3lfzP4n6SFLcqZQs5YrUneknqi1BGhqoIhQm5SyehjaHowtDSIrHSwBC8X49MOCWDHh16Z7c8quoIbyxlOKKnMdid3lqI=
+Received: from SN6PR2101MB0942.namprd21.prod.outlook.com (52.132.114.19) by
+ SN6PR2101MB1101.namprd21.prod.outlook.com (52.132.115.26) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2241.7; Thu, 5 Sep 2019 22:47:05 +0000
+Received: from SN6PR2101MB0942.namprd21.prod.outlook.com
+ ([fe80::dd56:aa4f:204f:86a4]) by SN6PR2101MB0942.namprd21.prod.outlook.com
+ ([fe80::dd56:aa4f:204f:86a4%3]) with mapi id 15.20.2263.005; Thu, 5 Sep 2019
+ 22:47:04 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Sasha Levin <Alexander.Levin@microsoft.com>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Dexuan Cui <decui@microsoft.com>
+Subject: [PATCH v5 0/3] Enhance Hyper-V for hibernation
+Thread-Topic: [PATCH v5 0/3] Enhance Hyper-V for hibernation
+Thread-Index: AQHVZDvWiJN7KE4mZkeEB0PYga91Ow==
+Date:   Thu, 5 Sep 2019 22:47:03 +0000
+Message-ID: <1567723581-29088-1-git-send-email-decui@microsoft.com>
+Reply-To: Dexuan Cui <decui@microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR19CA0019.namprd19.prod.outlook.com
+ (2603:10b6:300:d4::29) To SN6PR2101MB0942.namprd21.prod.outlook.com
+ (2603:10b6:805:4::19)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=decui@microsoft.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 1.8.3.1
+x-originating-ip: [13.77.154.182]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ad674e58-72cb-4523-7400-08d73252f85f
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR2101MB1101;
+x-ms-traffictypediagnostic: SN6PR2101MB1101:|SN6PR2101MB1101:
+x-ms-exchange-transport-forked: True
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <SN6PR2101MB1101361C4FA9D3915CEA4DAEBFBB0@SN6PR2101MB1101.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 015114592F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(189003)(199004)(4326008)(36756003)(6512007)(25786009)(99286004)(6436002)(4744005)(7416002)(6306002)(81156014)(81166006)(8676002)(53936002)(386003)(6506007)(107886003)(6636002)(4720700003)(316002)(54906003)(110136005)(50226002)(22452003)(8936002)(52116002)(3450700001)(66066001)(2906002)(2501003)(43066004)(1511001)(10090500001)(66476007)(86362001)(66556008)(64756008)(26005)(66946007)(66446008)(966005)(3846002)(6116002)(2201001)(305945005)(2616005)(71200400001)(476003)(102836004)(14444005)(256004)(71190400001)(5660300002)(478600001)(10290500003)(6486002)(7736002)(14454004)(486006)(186003)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR2101MB1101;H:SN6PR2101MB0942.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: microsoft.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 2r1vk+t36mkVYdm1fZB4LblYUG8a6xPd+OamFvPjopusZzpBJI+/MzjqIFxV9adlhfx7Ip2W4HHuiYjmsL77jPMvDOFamstPWLwmX8VVNDiSCD8OFY5aOYwuFCvwiFZsn+BqsxIv6GQXiMdmKbEALAFsHuvhlZbP5+Xv9VRAfutgk8KEjjrP23a1bONCC8cWx/IcBy8Lqhl9rNFrD5iQ7N3rM9xH3YF+R1qnqTPx5cwPzZ8vPiallLCspWAiS81uuswlAnAjx1lVErpJGNlni2KosUWRAwGFzHmLEv6W/4Dt2Ba9Ml+9UrVkP2FTzL5+/l4njRu48sDZ16dW0HS2fiaWyyrKNyq+ReNUUbljTEpwKuqT81AE9yBNZRi9dl852qrrw/VDbA9Qdh/p8CmZZkWeVhs3lCoIdyOJx7wwbRo=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190905195618.pwzgvuzadkfpznfz@yavin.dot.cyphar.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad674e58-72cb-4523-7400-08d73252f85f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2019 22:47:04.4409
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jYbyvubFjne8htuDvdIGdXVhXlI8xq5Og1l33vTHFvbZIH5puCUQBqFvXWmX0gpJNii7ompYt0EB3UKA2mR2CA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR2101MB1101
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 06, 2019 at 05:56:18AM +1000, Aleksa Sarai wrote:
-> On 2019-09-05, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > On Thu, Sep 05, 2019 at 08:23:03PM +0200, Christian Brauner wrote:
-> > 
-> > > Because every caller of that function right now has that limit set
-> > > anyway iirc. So we can either remove it from here and place it back for
-> > > the individual callers or leave it in the helper.
-> > > Also, I'm really asking, why not? Is it unreasonable to have an upper
-> > > bound on the size (for a long time probably) or are you disagreeing with
-> > > PAGE_SIZE being used? PAGE_SIZE limit is currently used by sched, perf,
-> > > bpf, and clone3 and in a few other places.
-> > 
-> > For a primitive that can be safely used with any size (OK, any within
-> > the usual 2Gb limit)?  Why push the random policy into the place where
-> > it doesn't belong?
-> > 
-> > Seriously, what's the point?  If they want to have a large chunk of
-> > userland memory zeroed or checked for non-zeroes - why would that
-> > be a problem?
-> 
-> Thinking about it some more, there isn't really any r/w amplification --
-> so there isn't much to gain by passing giant structs. Though, if we are
-> going to permit 2GB buffers, isn't that also an argument to use
-> memchr_inv()? :P
+This patchset (consisting of 3 patches) was part of the v4 patchset (consis=
+ting
+of 12 patches):
+    https://lkml.org/lkml/2019/9/2/894
 
-I'm not sure I understand the last bit.  If you look at what copy_from_user()
-does on misaligned source/destination, especially on architectures that
-really, really do not like unaligned access...
+I realized these 3 patches must go through the tip.git tree, because I have
+to rebase 2 of the 3 patches due to recent changes from others in the tip
+tree.
 
-Case in point: alpha (and it's not unusual in that respect).  What it boils
-down to is
-	copy bytes until the destination is aligned
-	if source and destination are both aligned
-		copy word by word
-	else
-		read word by word, storing the mix of two adjacent words
-	copy the rest byte by byte
+All the 3 patches are now rebased to the tip tree's timers/core branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=3Dtimers=
+/core
+, and all the 3 patches have Michael Kelley's Signed-off-by's.
 
-The unpleasant case (to and from having different remainders modulo 8) is
-basically
+Please review.
 
-	if (count >= 8) {
-		u64 *aligned = (u64 *)(from & ~7);
-		u64 *dest = (u64 *)to;
-		int bitshift = (from & 7) * 8;
-		u64 prev, next;
+Thanks!
+Dexuan
 
-		prev = aligned[0];
-		do {   
-			next = aligned[1];
-			prev <<= bitshift;
-			prev |= next >> (64 - bitshift);
-			*dest++ = prev;
-			aligned++;  
-			prev = next;
-			from += 8;
-			to += 8;
-			count -= 8;
-		} while (count >= 8);
-	}
+Dexuan Cui (3):
+  x86/hyper-v: Suspend/resume the hypercall page for hibernation
+  x86/hyper-v: Implement hv_is_hibernation_supported()
+  clocksource/drivers: Suspend/resume Hyper-V clocksource for
+    hibernation
 
-Now, mix that with "... and do memchr_inv() on the copy to find if we'd
-copied any non-zeroes, nevermind where" and it starts looking really
-ridiculous.
+ arch/x86/hyperv/hv_init.c          | 40 ++++++++++++++++++++++++++++++++++=
+++++
+ drivers/clocksource/hyperv_timer.c | 25 ++++++++++++++++++++++++
+ include/asm-generic/mshyperv.h     |  2 ++
+ 3 files changed, 67 insertions(+)
 
-We should just read the fscking source, aligned down to word boundary
-and check each word being read.  The first and the last ones - masked.
-All there is to it.  On almost all architectures that'll work well
-enough; s390 might want something more elaborate (there even word-by-word
-copies are costly, but I'd suggest talking to them for details).
+--=20
+1.8.3.1
 
-Something like bool all_zeroes_user(const void __user *p, size_t count)
-would probably be a sane API...
