@@ -2,55 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72334AC128
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2019 22:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D571AAC2EC
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Sep 2019 01:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391224AbfIFUBR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Sep 2019 16:01:17 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:46174 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390981AbfIFUBR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Sep 2019 16:01:17 -0400
-Received: by mail-qt1-f194.google.com with SMTP id v11so8468580qto.13
-        for <linux-arch@vger.kernel.org>; Fri, 06 Sep 2019 13:01:16 -0700 (PDT)
+        id S2392792AbfIFXSI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Sep 2019 19:18:08 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:41046 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729017AbfIFXSH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Sep 2019 19:18:07 -0400
+Received: by mail-qt1-f195.google.com with SMTP id j10so9129721qtp.8
+        for <linux-arch@vger.kernel.org>; Fri, 06 Sep 2019 16:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=lca.pw; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=XZg1AAkAQ3fXHA3yMI/fVv8b1scLlUoErbv2jydnHF0=;
-        b=KarCypdbxHFg4D7ey/gZUnTb0EZNg7So6Lb194+ZAqwHgNt/6am9DAusFJNYw/oIUV
-         W4IuvyMlguvZ0sDmlwLVK7x2UQX4pPrWLY2OjLKuRmBwom48z4Mn6JF/EwBZmWb88+lR
-         qG3+xUdqDS7gF3pAXooFiVIca42lQ1ZBoeW3VS+8ba6h/nQetemyjqc0URio69HcU9ks
-         +S52SEfh77jeI8RnMGit0O+YIzn9bQw1+KhIcK+T55fTJgM7yYucxjdk8NqnBripdy/3
-         KEK45jw4NqzlO0/QX/Sy5t2NREzBKqvHNpL50kflus8wliNOXpbVvb1hXC6y+tdTvJrg
-         O5HQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xEHvhDCiSNySF2s6HQz4q9U2jEp8Cpol0sbtQ3rHoEc=;
+        b=SyDw8rI4aN90GaPzgaFpy7QlVzoQ/N11Bsk92xEvYdSj0f1M8LB3p8GDLi/NHmjK5s
+         FCZcnEbNfy9qlbtL64QjYXjtm3ImVvB0V1EtJZOxm31i5ZSq4rNHn6X20S3pjSP6PVmS
+         5iMRGR+lgdHP8/p1kEgfQmy/yHUkcjodhpcnryBzHZM9Q62mm8DK9n/lQGAg3fy4yknf
+         vz0Wa3IvDMWKB+8OKkN9wG3NiJp1/oZrQtHZHIAyu4aumFHgfBwWfXiRTwTGbjgBtG/v
+         LKrpW5pN3LEZz7rfg3iezOlPvgM6EsZn4FcJPD1w2nIrLrjJjd3dbq7FW8Uxmho00HZj
+         qpSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=XZg1AAkAQ3fXHA3yMI/fVv8b1scLlUoErbv2jydnHF0=;
-        b=t8spD2BbYvog8q/qz88WYmzbqJt9UMk1TggxzXVv3SKanMPE2Rr8ngv0uYGSAb+uPl
-         HrnILX/CfnVIXEUAmbNmJ/cZOtxhSLuiK1ywocGLNUaq1AOuKXJBcs65l6Aaui649EOX
-         H4Tiy2E5OUxY897SiDmkmBQ92/NkKbMStZtwqdcZOUZx8mcKPhP8RvTF/PNVkAzirREp
-         /OKXvb6P/jtSs6cJnRvkv5PlMX+UYeY5Pvq4CJoSN9Qv1Tj7lV4iuIlctWOiwAM7Z2G6
-         LbUMLK0bg5ZOwtJx8mVTVowyVR3Zr6nqkXdViAbzGLJMhaPUqCmZXJj6uv7fj/w85rN1
-         Krjg==
-X-Gm-Message-State: APjAAAXqFPGf6uQe/H+tgYiduMNeiMqgklNqFo6qCjheyXJJsGC8+rkO
-        F4Y/l+f5cnKuhx5igw/0P+KLCA==
-X-Google-Smtp-Source: APXvYqyAiyjvLcIHi9T1V0CgWAtxTzIeILZ4tYXpY7syCNFoM/o6mdeCaLs9QYnSdlVOPXj2yMsDPg==
-X-Received: by 2002:ac8:7558:: with SMTP id b24mr11010769qtr.260.1567800075930;
-        Fri, 06 Sep 2019 13:01:15 -0700 (PDT)
-Received: from qcai.nay.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id x2sm2740340qkf.83.2019.09.06.13.01.14
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Sep 2019 13:01:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xEHvhDCiSNySF2s6HQz4q9U2jEp8Cpol0sbtQ3rHoEc=;
+        b=ZXe1P8rHudCS7jJqkGzU6U7JeYBvDEdfP5z5jqHb9mb4VusiCWe79jDFlvUEvfVOR8
+         9D8sXBTd8LR55gCUVWL2eSov1/vnHIEpoYe6XhE/CFG963vYbyOcYjWevBaUFEaHbOuS
+         pZAwACqF97hH6lpG26Yj5Oic1kHX6csyJ81EmIhEyRAX8XGVVG+visbndOvWz0uLSzeP
+         tOnlPVccpph1b9hKdnx4xpqxUVieuhekcSH5zTl6oY8Qxa4vSc30bHTR0YKVIarosdvS
+         QOlnyYG1QeCODqWMssRHAmMAZpMu0HfRi+EDFzt0uuHMukf4/UDlkxgBUliEpVFktmBy
+         5wdQ==
+X-Gm-Message-State: APjAAAXOUf6aPOUEprgNSMKc/DcYBhfqEpfTH1YxCmAOFzH2gmbdlWTp
+        Es/3AVqR6+0QL/rH5lDxxC2Dhw==
+X-Google-Smtp-Source: APXvYqzJAgVBT0XCTnjsN+YHyEu+mU7vz4KirkwxE6DaxZZIsM/TO4gy05d4hmXLUpbFd0Oy3D7VrQ==
+X-Received: by 2002:ac8:4796:: with SMTP id k22mr11361795qtq.333.1567811886260;
+        Fri, 06 Sep 2019 16:18:06 -0700 (PDT)
+Received: from Qians-MBP.fios-router (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id o26sm3147034qkm.0.2019.09.06.16.18.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 06 Sep 2019 16:18:05 -0700 (PDT)
 From:   Qian Cai <cai@lca.pw>
-To:     peterz@infradead.org, mingo@kernel.org, mpe@ellerman.id.au
-Cc:     bvanassche@acm.org, arnd@arndb.de, kvm-ppc@vger.kernel.org,
+To:     mpe@ellerman.id.au
+Cc:     peterz@infradead.org, mingo@kernel.org, bvanassche@acm.org,
+        arnd@arndb.de, kvm-ppc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, Qian Cai <cai@lca.pw>
-Subject: [PATCH] powerpc/lockdep: fix a false positive warning
-Date:   Fri,  6 Sep 2019 16:00:55 -0400
-Message-Id: <1567800055-30309-1-git-send-email-cai@lca.pw>
-X-Mailer: git-send-email 1.8.3.1
+Subject: [PATCH v2] powerpc/lockdep: fix a false positive warning
+Date:   Fri,  6 Sep 2019 19:17:54 -0400
+Message-Id: <20190906231754.830-1-cai@lca.pw>
+X-Mailer: git-send-email 2.20.1 (Apple Git-117)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -103,17 +108,20 @@ Call Trace:
 Fixes: 108c14858b9e ("locking/lockdep: Add support for dynamic keys")
 Signed-off-by: Qian Cai <cai@lca.pw>
 ---
- arch/powerpc/include/asm/sections.h | 10 ++++++++++
+
+v2: No need to actually define arch_is_bss_hole() powerpc64 only.
+
+ arch/powerpc/include/asm/sections.h | 11 +++++++++++
  arch/powerpc/kernel/kvm.c           |  5 +++++
  include/asm-generic/sections.h      |  7 +++++++
  kernel/locking/lockdep.c            |  3 +++
- 4 files changed, 25 insertions(+)
+ 4 files changed, 26 insertions(+)
 
 diff --git a/arch/powerpc/include/asm/sections.h b/arch/powerpc/include/asm/sections.h
-index 4a1664a8658d..abd08b3cb3f3 100644
+index 4a1664a8658d..4f5d69c42017 100644
 --- a/arch/powerpc/include/asm/sections.h
 +++ b/arch/powerpc/include/asm/sections.h
-@@ -5,8 +5,12 @@
+@@ -5,8 +5,19 @@
  
  #include <linux/elf.h>
  #include <linux/uaccess.h>
@@ -123,22 +131,16 @@ index 4a1664a8658d..abd08b3cb3f3 100644
  #include <asm-generic/sections.h>
  
 +extern void *bss_hole_start, *bss_hole_end;
- extern char __head_end[];
- 
- #ifdef __powerpc64__
-@@ -24,6 +28,12 @@
- extern char end_virt_trampolines[];
- #endif
- 
++
 +static inline int arch_is_bss_hole(unsigned long addr)
 +{
 +	return addr >= (unsigned long)bss_hole_start &&
 +	       addr < (unsigned long)bss_hole_end;
 +}
 +
- static inline int in_kernel_text(unsigned long addr)
- {
- 	if (addr >= (unsigned long)_stext && addr < (unsigned long)__init_end)
+ extern char __head_end[];
+ 
+ #ifdef __powerpc64__
 diff --git a/arch/powerpc/kernel/kvm.c b/arch/powerpc/kernel/kvm.c
 index b7b3a5e4e224..89e0e522e125 100644
 --- a/arch/powerpc/kernel/kvm.c
@@ -195,5 +197,5 @@ index 4861cf8e274b..cd75b51f15ce 100644
  	 * static variable?
  	 */
 -- 
-1.8.3.1
+2.20.1 (Apple Git-117)
 
