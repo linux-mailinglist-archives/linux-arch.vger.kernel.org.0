@@ -2,21 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8310AAFC1
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2019 02:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D39FAB2C7
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2019 09:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391451AbfIFAPA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Sep 2019 20:15:00 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:44722 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391444AbfIFAPA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Sep 2019 20:15:00 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.1 #3 (Red Hat Linux))
-        id 1i61tX-00047s-6A; Fri, 06 Sep 2019 00:14:31 +0000
-Date:   Fri, 6 Sep 2019 01:14:31 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
+        id S2404074AbfIFHBd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Sep 2019 03:01:33 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57022 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391691AbfIFHBc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Sep 2019 03:01:32 -0400
+Received: from [213.220.153.21] (helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1i68El-00072o-Nh; Fri, 06 Sep 2019 07:00:51 +0000
+Date:   Fri, 6 Sep 2019 09:00:49 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
         "J. Bruce Fields" <bfields@fieldses.org>,
         Arnd Bergmann <arnd@arndb.de>,
         David Howells <dhowells@redhat.com>,
@@ -51,119 +55,59 @@ Cc:     Jeff Layton <jlayton@kernel.org>,
         linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
 Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
  helpers
-Message-ID: <20190906001431.GU1131@ZenIV.linux.org.uk>
+Message-ID: <20190906070048.tmhuemasmsn55spq@wittgenstein>
 References: <20190904201933.10736-1-cyphar@cyphar.com>
  <20190904201933.10736-2-cyphar@cyphar.com>
  <20190905180750.GQ1131@ZenIV.linux.org.uk>
- <20190905230003.bek7vqdvruzi4ybx@yavin.dot.cyphar.com>
- <20190905234944.GT1131@ZenIV.linux.org.uk>
+ <20190905182303.7f6bxpa2enbgcegv@wittgenstein>
+ <20190905182801.GR1131@ZenIV.linux.org.uk>
+ <20190905195618.pwzgvuzadkfpznfz@yavin.dot.cyphar.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190905234944.GT1131@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <20190905195618.pwzgvuzadkfpznfz@yavin.dot.cyphar.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 06, 2019 at 12:49:44AM +0100, Al Viro wrote:
-> On Fri, Sep 06, 2019 at 09:00:03AM +1000, Aleksa Sarai wrote:
-> > > > +			return -EFAULT;
-> > > > +	}
-> > > > +	/* Copy the interoperable parts of the struct. */
-> > > > +	if (__copy_to_user(dst, src, size))
-> > > > +		return -EFAULT;
-> > > 
-> > > Why not simply clear_user() and copy_to_user()?
+On Fri, Sep 06, 2019 at 05:56:18AM +1000, Aleksa Sarai wrote:
+> On 2019-09-05, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > On Thu, Sep 05, 2019 at 08:23:03PM +0200, Christian Brauner wrote:
 > > 
-> > I'm not sure I understand what you mean -- are you asking why we need to
-> > do memchr_inv(src + size, 0, rest) earlier?
-> 
-> I'm asking why bother with __ and separate access_ok().
-> 
-> > > 	if ((unsigned long)addr & 1) {
-> > > 		u8 v;
-> > > 		if (get_user(v, (__u8 __user *)addr))
-> > > 			return -EFAULT;
-> > > 		if (v)
-> > > 			return -E2BIG;
-> > > 		addr++;
-> > > 	}
-> > > 	if ((unsigned long)addr & 2) {
-> > > 		u16 v;
-> > > 		if (get_user(v, (__u16 __user *)addr))
-> > > 			return -EFAULT;
-> > > 		if (v)
-> > > 			return -E2BIG;
-> > > 		addr +=2;
-> > > 	}
-> > > 	if ((unsigned long)addr & 4) {
-> > > 		u32 v;
-> > > 		if (get_user(v, (__u32 __user *)addr))
-> > > 			return -EFAULT;
-> > > 		if (v)
-> > > 			return -E2BIG;
-> > > 	}
-> > > 	<read the rest like you currently do>
-> 
-> Actually, this is a dumb way to do it - page size on anything
-> is going to be a multiple of 8, so you could just as well
-> read 8 bytes from an address aligned down.  Then mask the
-> bytes you don't want to check out and see if there's anything
-> left.
-> 
-> You can have readability boundaries inside a page - it's either
-> the entire page (let alone a single word) being readable, or
-> it's EFAULT for all parts.
-> 
-> > > would be saner, and things like x86 could trivially add an
-> > > asm variant - it's not hard.  Incidentally, memchr_inv() is
-> > > an overkill in this case...
+> > > Because every caller of that function right now has that limit set
+> > > anyway iirc. So we can either remove it from here and place it back for
+> > > the individual callers or leave it in the helper.
+> > > Also, I'm really asking, why not? Is it unreasonable to have an upper
+> > > bound on the size (for a long time probably) or are you disagreeing with
+> > > PAGE_SIZE being used? PAGE_SIZE limit is currently used by sched, perf,
+> > > bpf, and clone3 and in a few other places.
 > > 
-> > Why is memchr_inv() overkill?
+> > For a primitive that can be safely used with any size (OK, any within
+> > the usual 2Gb limit)?  Why push the random policy into the place where
+> > it doesn't belong?
+> > 
+> > Seriously, what's the point?  If they want to have a large chunk of
+> > userland memory zeroed or checked for non-zeroes - why would that
+> > be a problem?
 > 
-> Look at its implementation; you only care if there are
-> non-zeroes, you don't give a damn where in the buffer
-> the first one would be.  All you need is the same logics
-> as in "from userland" case
-> 	if (!count)
-> 		return true;
-> 	offset = (unsigned long)from & 7
-> 	p = (u64 *)(from - offset);
-> 	v = *p++;
-> 	if (offset) {	// unaligned
-> 		count += offset;
-> 		v &= ~aligned_byte_mask(offset); // see strnlen_user.c
-> 	}
-> 	while (count > 8) {
-> 		if (v)
-> 			return false;
-> 		v = *p++;
-> 		count -= 8;
-> 	}
-> 	if (count != 8)
-> 		v &= aligned_byte_mask(count);
-> 	return v == 0;
-> 
-> All there is to it...
+> Thinking about it some more, there isn't really any r/w amplification --
+> so there isn't much to gain by passing giant structs. Though, if we are
+> going to permit 2GB buffers, isn't that also an argument to use
+> memchr_inv()? :P
 
-... and __user case would be pretty much this with
-	if (user_access_begin(from, count)) {
-		....
-		user_access_end();
-	}
-wrapped around the damn thing - again, see strnlen_user.c, with
-	unsafe_get_user(v, p++, efault);
-instead of those
-	v = *p++;
+I think we should just do a really dumb, easy to understand minimal
+thing for now. It could even just be what every caller is doing right
+now anyway with the get_user() loop.
+The only way to settle memchr_inv() vs all the other clever ways
+suggested here is to benchmark it and see if it matters *for the current
+users* of this helper. If it does, great we can do it. If it doesn't why
+bother having that argument right now?
+Once we somehow end up in a possible world where we apparently have
+decided it's a great idea to copy 2GB argument structures for a syscall
+into or from the kernel we can start optimizing the hell out of this.
+Before that and especially with current callers I honestly doubt it
+matters whether we use memchr_inv() or while() {get_user()} loops.
 
-Calling conventions might need some thinking - it might be
-	* all read, all zeroes
-	* non-zero found
-	* read failed
-so we probably want to map the "all zeroes" case to 0,
-"read failed" to -EFAULT and "non-zero found" to something
-else.  Might be positive, might be some other -E.... - not
-sure if E2BIG (or EFBIG) makes much sense here.  Need to
-look at the users...
+Christian
