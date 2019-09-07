@@ -2,149 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 144ABAC8B5
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Sep 2019 20:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BA3AC912
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Sep 2019 21:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728741AbfIGSPR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 7 Sep 2019 14:15:17 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:34619 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732205AbfIGSPM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 7 Sep 2019 14:15:12 -0400
-Received: by mail-pg1-f195.google.com with SMTP id n9so5371982pgc.1
-        for <linux-arch@vger.kernel.org>; Sat, 07 Sep 2019 11:15:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=yCXO2IUW/xP5rGitFpbGKrkQxCFizP24AMzmcKYJo+k=;
-        b=gPB2S/s21fOdrhZkZvzaMRRbkTHlbc79vLkQ8L7Cpmmu8hvbAG6eoC0Dm32QXRGYMY
-         +1LPES8i+LJBkfY/p1yzpRzMMv2odDchTO0YHOkxwFiie7OsEOHDwtOH8zJJ6F9AZyk5
-         MkZFVhvuxPxeMIKfq+G9obcmbfsQBob0Nc70jrYQVbX0W8tNU0vMgyrejbOLHj/PJBII
-         8jO1EQn6kWKOgkBib76U4yxHBzWI3KaSO/lLhJIPi5x1WrjQ3kHOZysmKhg2Dv2MsCh4
-         N/OxZH40a7P6xhJ/lAgfa+dSsRZSJmy+02UKql6Xb3VKWtRKJq/2ht+J5tBxXcxSYFTB
-         1GhQ==
+        id S2391629AbfIGTuL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 7 Sep 2019 15:50:11 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:42642 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727012AbfIGTuL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 7 Sep 2019 15:50:11 -0400
+Received: by mail-qt1-f195.google.com with SMTP id c9so11229705qth.9;
+        Sat, 07 Sep 2019 12:50:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=yCXO2IUW/xP5rGitFpbGKrkQxCFizP24AMzmcKYJo+k=;
-        b=O9ZoopS6x32OdPDeDWEs4qP/6M63I3XMkdM0xprxd1TgdSJ0T9ud8gFC0AdZCbt9VL
-         J4HHfz//XQwVpA3y0g0ilhVifYDGUfccx0vDnY9B4/4Mmh8WqLpR/LhbEcqBLwxEtA8U
-         9bx8y1fQavDjR/FBwL/AZDD2mfX+afOhBKF0ImcCDjD3f6xu/IokybT+hF1u6jhNwLjh
-         SprBp7ANqmVtMq7R48Cf8Uf+lC5dEdpscJTBFHv3cqLuj/ul2C/d780CTYZqkDVEiBB7
-         sP6XYGoi1axYBUmY/5VoVIBk2bey/VycBxOl2bWzD6ph7BQAtpXeOgPnZb6JUfwDHOFH
-         fivw==
-X-Gm-Message-State: APjAAAVyOriAlxeRdQTIfjbMtSpyXfwvzlvhbY4j7qhj/h8IhuArganl
-        2XcrYLibSqekMbIRLihPwASWlg==
-X-Google-Smtp-Source: APXvYqwtLHTxDBZPI4nj5nW8UmB/sRAqU0rGQe5gnm9Rg561yB9Atb14l/OoZSzCcZVB4Qk4BIIw8Q==
-X-Received: by 2002:aa7:8b09:: with SMTP id f9mr13154710pfd.23.1567880111917;
-        Sat, 07 Sep 2019 11:15:11 -0700 (PDT)
-Received: from ?IPv6:2600:100f:b121:da37:bc66:d4de:83c7:e0cd? ([2600:100f:b121:da37:bc66:d4de:83c7:e0cd])
-        by smtp.gmail.com with ESMTPSA id x5sm10495873pfn.149.2019.09.07.11.15.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 07 Sep 2019 11:15:11 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v12 11/12] open: openat2(2) syscall
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16G102)
-In-Reply-To: <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
-Date:   Sat, 7 Sep 2019 11:15:09 -0700
-Cc:     Jeff Layton <jlayton@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=br9UBkhsYmfKwHbwURIhiwHEx2D7U37IxyJBS+CBOqM=;
+        b=pnwv4tuNZ+rEoKqdMq2my6Lgk3lrXCDFBGRsI6LurPfHJ4PX5UCB5eCwCyy7drhdHT
+         +jdBo55/BV69ZL7tEJUHbos+aX4Kd+oobPzlu5lLflTJ+0v1vXdup9qcKA6RmnoKFtHc
+         UQG+I/EOi/gnIdkAFRfTZTp6rnb4zGbOxUTVVAL4RvQWVSI/Gshd8q9myh9zG7wnl+kM
+         j7dk59crHqSqLAR35EIbfYGDzGQClYfVlqeDCv7Nv0ED4d9rs8DKjEaRQoLWuorcbNbq
+         HpQX+D+MzKUIVy1avW5+sduNyrTIKsMiE0lL9Xc4MuX55C2rskapH5rCNS75/d+J7Dry
+         Xzgw==
+X-Gm-Message-State: APjAAAVBum+N26AnvuxgHDiUpD20YN/AWWFkENGnDsPflk63+F/6sFoF
+        3+5A8bz9r4Sh5hzZcVLoj727K5Rq3OO4fMRmYEMfLkmoOlY=
+X-Google-Smtp-Source: APXvYqyl+z2FYOtULkvTxobEJ/eyXJNphR9eq/S4BLy0tFekKn44sikIPCRSd1Di8uSwbGOfr/NMwGERySpoQo3jO4I=
+X-Received: by 2002:ac8:342a:: with SMTP id u39mr15931998qtb.7.1567885809360;
+ Sat, 07 Sep 2019 12:50:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190905152155.1392871-1-arnd@arndb.de> <20190905152155.1392871-2-arnd@arndb.de>
+In-Reply-To: <20190905152155.1392871-2-arnd@arndb.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 7 Sep 2019 21:49:53 +0200
+Message-ID: <CAK8P3a3KkH3MeU4H0SJmrs-jQ9ZA5HksG2uGDfe-=NTXh1UeHQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ipc: fix sparc64 ipc() wrapper
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        y2038 Mailman List <y2038@lists.linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Matt Turner <mattst88@gmail.com>,
+        "# 3.4.x" <stable@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EE7399FD-7587-407B-B628-1D92CFD6B120@amacapital.net>
-References: <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-12-cyphar@cyphar.com> <7236f382d72130f2afbbe8940e72cc67e5c6dce0.camel@kernel.org> <CAHk-=whZx97Nm-gUK0ppofj2RA2LLz2vmaDUTKSSV-+yYB9q_Q@mail.gmail.com> <C81D6D29-F6BF-48E6-A15E-3ABCB2C992E5@amacapital.net> <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        Anatolij Gustschin <agust@denx.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Sep 5, 2019 at 5:24 PM Arnd Bergmann <arnd@arndb.de> wrote:
 
-> On Sep 7, 2019, at 10:45 AM, Linus Torvalds <torvalds@linux-foundation.org=
-> wrote:
->=20
->> On Sat, Sep 7, 2019 at 10:42 AM Andy Lutomirski <luto@amacapital.net> wro=
-te:
->>=20
->> Linus, you rejected resolveat() because you wanted a *nice* API
->=20
-> No. I rejected resoveat() because it was a completely broken garbage
-> API that couldn't do even basic stuff right (like O_CREAT).
->=20
-> We have a ton of flag space in the new openat2() model, we might as
-> well leave the old flags alone that people are (a) used to and (b) we
-> have code to support _anyway_.
->=20
-> Making up a new flag namespace is only going to cause us - and users -
-> more work, and more confusion. For no actual advantage. It's not going
-> to be "cleaner". It's just going to be worse.
->=20
->=20
+> diff --git a/arch/sparc/kernel/sys_sparc_64.c b/arch/sparc/kernel/sys_sparc_64.c
+> index ccc88926bc00..5ad0494df367 100644
+> --- a/arch/sparc/kernel/sys_sparc_64.c
+> +++ b/arch/sparc/kernel/sys_sparc_64.c
+> @@ -340,21 +340,21 @@ SYSCALL_DEFINE6(sparc_ipc, unsigned int, call, int, first, unsigned long, second
+>         if (call <= SEMTIMEDOP) {
+>                 switch (call) {
+>                 case SEMOP:
+> -                       err = sys_semtimedop(first, ptr,
+> -                                            (unsigned int)second, NULL);
+> +                       err = ksys_semtimedop(first, ptr,
+> +                                             (unsigned int)second, NULL);
+>                         goto out;
 
-If we keep all the flag bits in the same mask with the same values, then we=E2=
-=80=99re stuck with O_RDONLY=3D0 and everything that implies.  We=E2=80=99ll=
- have UPGRADE_READ that works differently from the missing plain-old-READ bi=
-t, and we can=E2=80=99t express execute-only-no-read-or-write. This sucks.
+The zero-day bot found a link error in sparc64 allnoconfig:
 
-Can we at least split the permission bits into their own mask and make bits 0=
- and 1 illegal in the main set of flags in openat2?
+   arch/sparc/kernel/sys_sparc_64.o: In function `__se_sys_sparc_ipc':
+>> sys_sparc_64.c:(.text+0x724): undefined reference to `ksys_semtimedop'
+>> sys_sparc_64.c:(.text+0x76c): undefined reference to `ksys_old_msgctl'
+>> sys_sparc_64.c:(.text+0x7a8): undefined reference to `ksys_semget'
+>> sys_sparc_64.c:(.text+0x7c8): undefined reference to `ksys_old_semctl'
+>> sys_sparc_64.c:(.text+0x7e4): undefined reference to `ksys_msgsnd'
+>> sys_sparc_64.c:(.text+0x7fc): undefined reference to `ksys_shmget'
+>> sys_sparc_64.c:(.text+0x808): undefined reference to `ksys_shmdt'
+   sys_sparc_64.c:(.text+0x828): undefined reference to `ksys_semtimedop'
+>> sys_sparc_64.c:(.text+0x844): undefined reference to `ksys_old_shmctl'
+>> sys_sparc_64.c:(.text+0x858): undefined reference to `ksys_msgget'
+>> sys_sparc_64.c:(.text+0x86c): undefined reference to `ksys_msgrcv'
 
-There=E2=80=99s another thread going on right now about adding a bit along t=
-he lines of =E2=80=9CMAYEXEC=E2=80=9D, and one of the conclusions was that i=
-t should wait for openat2 so that it can have same semantics. If we=E2=80=99=
-re stuck with O_RDONLY and friends, then MAYEXEC is doomed to being at least=
- a bit nonsensical.
+I've added this hunk to my patch and plan to send both fixes to Linus
+in the next few days, after I get a positive report from the bot as well:
 
-As an analogy, AMD64 introduced bigger PTEs but kept the same nonsense encod=
-ing of read and write permission. And then we got NX, and now we=E2=80=99re g=
-etting little holes in the encoding stolen by CET to mean new silly things. =
- I don=E2=80=99t know if you=E2=80=99ve been following the various rounds of=
- patches, but it is truly horrible. The mapping from meaning to the actual b=
-its is *shit*, and AMD64 should have made a clean break instead.
+--- a/arch/sparc/kernel/sys_sparc_64.c
++++ b/arch/sparc/kernel/sys_sparc_64.c
+@@ -336,6 +336,9 @@ SYSCALL_DEFINE6(sparc_ipc, unsigned int, call,
+int, first, unsigned long, second
+ {
+        long err;
 
-open()=E2=80=99s permission bits are basically the same situation. And the k=
-ernel *already* has a non-type-safe translation layer. Please, please let op=
-enat2() at least get rid of the turd in open()=E2=80=99s bits 0 and 1.
++       if (!IS_ENABLED(CONFIG_SYSVIPC))
++               return -ENOSYS;
++
+        /* No need for backward compatibility. We can start fresh... */
 
+        if (call <= SEMTIMEDOP) {
+                switch (call) {
