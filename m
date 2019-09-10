@@ -2,110 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AC2AE677
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2019 11:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E64AE74B
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2019 11:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728955AbfIJJQY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Sep 2019 05:16:24 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34529 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726836AbfIJJQY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Sep 2019 05:16:24 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r12so11207653pfh.1;
-        Tue, 10 Sep 2019 02:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wfhBlXbTlTMX4E76VadOfA+hOSSFiVKlUr5WhybwN6Y=;
-        b=Ix5XIq52ojuczz2WFlndYuPyvegA1xBDLqKlQinxNi/ddwwT7aSp4BE52bdpTtvBZU
-         VGccYwG2QB+jUEvkPdfe009RtiB9HEycmrhIrWHM2Wz5mmZhS9Z/AETPcWfTFmwV3RVr
-         LmnHyXpoIlqloJ3oDoCuKVs3wIKH02w1f1IqNKPq+VKN2iVFQ8lY97MeHbb7nlrdDQjZ
-         a1vYuEugpJMWHAut3i/uQueEv43jrugOrhortyg2TB6eWDbzer1PjupJpjCNdPR/GRIV
-         TFhVK+cu/PfSgVeGkWYqYzXVF/xBJikC6YUBWbu1BJHOGROPTjsqrh8eNAkwfDzk1T8t
-         KXbw==
+        id S1727535AbfIJJtR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Sep 2019 05:49:17 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:41827 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727265AbfIJJtR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Sep 2019 05:49:17 -0400
+Received: by mail-qt1-f193.google.com with SMTP id j10so19892965qtp.8;
+        Tue, 10 Sep 2019 02:49:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wfhBlXbTlTMX4E76VadOfA+hOSSFiVKlUr5WhybwN6Y=;
-        b=qVutd7aMe3kzHOynRAvUyp4RXnsCk2k13NO3v7MXVegLU8M6bx0N3nR9VoHjhYUK9e
-         AOGSi3eLE2vAzf63NM+x/sbZOW3eAlgdN7kog1wlih/hUh4UE2y1g84jyym+Ijfvw1wQ
-         fGyYk4Mw6Einaj4JDuSVT1WR/6puoUWSaMktOqSY8kMl+/Oj5UJBP6Q2xGDCrI57rfSL
-         u432VeCwExz8H/6mz13zoAm85xn7oOcsT+xDAohmFkd/BpbqUUG3TsM4FH6oXCNzG9u2
-         E09j/PBgRRl78/selUIcSG9j64Q2p4RvcDCdRhE9KzkHcYben3gP6Pe6VAKuThCNX9V7
-         SN6g==
-X-Gm-Message-State: APjAAAWK5rtNKzRmOxqg2YZskMw+NokgPEd65l+V1hmNMgU0bGrfVhQ/
-        z5ylOapIXRh/4Ux6+PExiMzf3DwF
-X-Google-Smtp-Source: APXvYqzHxaQmBpWgS74sUCr55Qt//D6scXpE7mF2noH5yrUuPhN0dejzlnIbbX8R57D9IIvydGR9/g==
-X-Received: by 2002:a65:5cca:: with SMTP id b10mr27422854pgt.365.1568106983856;
-        Tue, 10 Sep 2019 02:16:23 -0700 (PDT)
-Received: from localhost ([39.7.19.227])
-        by smtp.gmail.com with ESMTPSA id l26sm20389698pgb.90.2019.09.10.02.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2019 02:16:23 -0700 (PDT)
-Date:   Tue, 10 Sep 2019 18:16:19 +0900
-From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Drew Davenport <ddavenport@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception
- handler
-Message-ID: <20190910091619.GA207290@jagdpanzerIV>
-References: <201908200943.601DD59DCE@keescook>
- <20190909160539.GA989@tigerII.localdomain>
- <201909100157.CEE99802C@keescook>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=JSfsPm8OOMeroYM52zzFmiDbu7+5YUx10p0JkzA7dx8=;
+        b=JopmYea3fE/w7QNA+xqWMpc03gAJFWEUUKvn1DjtHmErGCeCsyTXzPgui+vnKE2WM5
+         KSGfybAPB5lgPMtCXRDMKbK5/yda9nSWcFDKqnMKUbbMnk7H7RGzKTiYVTKxiq18UWse
+         8stNwCMEKtLzoR7m9iNfKgS4/+oXKFM5v+SMEWoWMBvjpl4+b8ivgprvvXEw/iy/Plxb
+         iCTMKhYdyLIUCo6jFoAVvYoYN7DewMtWzvaT81D6eirmpc7pREPUFals3Ks7xSuXewhD
+         YUByY5lheeCREozeWVg4KsehMPub3eNkV4Ij+kilW1K96O7IUX6QJs+ipfw8VV6u1IXL
+         v1Ag==
+X-Gm-Message-State: APjAAAXtazMCTXTfNg7u2xW/ScG1V92C8uOlkonS9DmXvKM4xyyNWZgW
+        6cOp89pML1yjOz5XLcNK30Ir0CsH6yo5VqC/9uY=
+X-Google-Smtp-Source: APXvYqwbr3u1y02e76/2W3wSR+GwWdg6PJL3TQGf0P0/L96UbtcPJGij9lMatNR5TFbo8oM/JpY3M7Bf7OBjM81fXAY=
+X-Received: by 2002:ac8:5306:: with SMTP id t6mr27972543qtn.204.1568108956064;
+ Tue, 10 Sep 2019 02:49:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201909100157.CEE99802C@keescook>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 10 Sep 2019 11:49:00 +0200
+Message-ID: <CAK8P3a1Q0ec50n2ueWDKHirpem+SQvsv3sYXzw9EFRqXiUqxUg@mail.gmail.com>
+Subject: [GIT PULL] ipc: fix regressions from y2038 patches
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        y2038 Mailman List <y2038@lists.linaro.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Anatoly Pugachev <matorola@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Stafford Horne <shorne@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Waiman Long <longman@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On (09/10/19 01:59), Kees Cook wrote:
-> On Tue, Sep 10, 2019 at 01:05:39AM +0900, Sergey Senozhatsky wrote:
-> > On (08/20/19 09:47), Kees Cook wrote:
-> > [..]
-> > > +	/*
-> > > +	 * BUG() and WARN_ON() families don't print a custom debug message
-> > > +	 * before triggering the exception handler, so we must add the
-> > > +	 * "cut here" line now. WARN() issues its own "cut here" before the
-> > > +	 * extra debugging message it writes before triggering the handler.
-> > > +	 */
-> > > +	if ((bug->flags & BUGFLAG_NO_CUT_HERE) == 0)
-> > > +		printk(KERN_DEFAULT CUT_HERE);
-> > 
-> > Shouldn't this be pr_warn() or pr_crit()?
-> 
-> The pr_* helpers here would (potentially) add unwanted prefixes, so
-> those aren't used. KERN_DEFAULT is used here because that's how it's
-> always been printed. I didn't want to change that for this refactoring
-> work. I'm not opposed to it, generally speaking, though. :)
+The following changes since commit 089cf7f6ecb266b6a4164919a2e69bd2f938374a:
 
-I just glanced through CUT_HERE users
+  Linux 5.3-rc7 (2019-09-02 09:57:40 -0700)
 
-warn_slowpath_fmt()    pr_warn(CUT_HERE)
-__warn_printk()        pr_warn(CUT_HERE)
-rdma_restrack_clean()  pr_err("restrack: %s", CUT_HERE)
-rdma_restrack_clean()  pr_err("restrack: %s", CUT_HERE)
+are available in the Git repository at:
 
-+ oops/panic end markers are of pr_warn() or pr_crit() log levels.
-So I thought that maybe we can make it more or less similar.
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+tags/ipc-fixes
 
-But if it has always been this way (KERN_DEFAULT) then OK.
+for you to fetch changes up to fb377eb80c80339b580831a3c0fcce34a4c9d1ad:
 
-	-ss
+  ipc: fix sparc64 ipc() wrapper (2019-09-07 21:42:25 +0200)
+
+----------------------------------------------------------------
+ipc: fix regressions from y2038 patches
+
+These are two regression fixes for bugs that got introduced
+during the system call rework that went into linux-5.1
+but only bisected and fixed now:
+
+- One patch affects semtimedop() on many of the less
+  common 32-bit architectures, this just needs a single-line
+  bugfix.
+
+- The other affects only sparc64 and has a slightly more
+  invasive workaround to apply the same change to sparc64
+  that was done to the generic code used everywhere else.
+
+----------------------------------------------------------------
+Arnd Bergmann (2):
+      ipc: fix semtimedop for generic 32-bit architectures
+      ipc: fix sparc64 ipc() wrapper
+
+ arch/sparc/kernel/sys_sparc_64.c  | 33 ++++++++++++++++++---------------
+ include/linux/syscalls.h          | 19 +++++++++++++++++++
+ include/uapi/asm-generic/unistd.h |  2 +-
+ ipc/util.h                        | 25 ++-----------------------
+ 4 files changed, 40 insertions(+), 39 deletions(-)
