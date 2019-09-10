@@ -2,134 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BABE1AE3D3
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2019 08:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB5BAE627
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2019 10:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393490AbfIJGfm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Sep 2019 02:35:42 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34009 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729627AbfIJGfl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Sep 2019 02:35:41 -0400
-Received: by mail-wr1-f66.google.com with SMTP id a11so7851369wrx.1;
-        Mon, 09 Sep 2019 23:35:36 -0700 (PDT)
+        id S1726263AbfIJI7d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Sep 2019 04:59:33 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:42428 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725818AbfIJI7d (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Sep 2019 04:59:33 -0400
+Received: by mail-pf1-f194.google.com with SMTP id w22so11146455pfi.9
+        for <linux-arch@vger.kernel.org>; Tue, 10 Sep 2019 01:59:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9uC8BSyBqqvpBHr+UBJrMjpTjeLS9eaSkiimfXBOGmI=;
-        b=RT2CZzYflWq0hJIviZ1qNiz7T8GR4+WUrisMZXe3m9cauTkqIyyVGGFPULrde7A02W
-         tj7FplDkEllE02owPbUYDzEtapP1C48use/4kFc7fZZmFt/DdDZTI55D8qvOaO2r24Ne
-         q4FNPrvlkjfx+lYW3lSYcZ69k2e463dcG9Y4rn+PPa/Glpr++eDfgJ8gFO5kdGQ+ZZAk
-         nXhnUxrt/DhKZTkCCWYef7FPywkEzNn0z8LUShNXRMIkZZwOG/G3kJoXGIwG7zGeC0aS
-         TI+DZ2QVgsA7VVK9EZCvbN7bPdpk9PkNXAPdUVWeWNcFfO4yiY8K5tj2pJUrGvJYeUSW
-         9/rw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BVZkeB8kcfbAhGWCwFmsi+Af79YcNd2rTDIYMad/gaM=;
+        b=GMqgtLrwt3KM8f3wheWQ7WpLBzaMDWSTCw5oTy8E406J0B6emHLl1jKtsM+6vYT72P
+         VweUtZAmpCf6H/wVVMayc3KsdLLcGrydwRc+pZKkjJZPadftpD6K7raTMiVSPhaLV+dr
+         PdGEZMyKA66nEZoTsUqvbTm1f6HMlCuf8pNeA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9uC8BSyBqqvpBHr+UBJrMjpTjeLS9eaSkiimfXBOGmI=;
-        b=OGIIu7kQiC9NfKryZfiQuYrZPpsBPFxbvEH8fwEKiZuuqtgtF7jXfIN29NnGbc7fId
-         rvFMXp1KemiGvI8uDGKpmB7TKTpH09ZSH+pP6wff/kjUKi7y/gzYWD37MGi08QJKXSU5
-         qIzIK/9psV/Dmfg+9g4+w5obNvUboDNYacCXAulcDEnDDCAlCvNGVCW+/KRRgW+yYKgs
-         bJbBptmLeUkrnIBvsbU7dGCeqeZV5c2GnIcnxDregkX0MA47Sf4/LsthdFQLCntmSSpS
-         lDqB3Sg9s1mVKXpH8rGLDUn39r1sa8uWlauqHahO9JXETkbxQ2gJO9wOvf2hvpR7bsNy
-         0bJQ==
-X-Gm-Message-State: APjAAAVO1jrEEqNqZtkwzYjI7tJkcM927HxyjlUx7zJFLbv3jtpt93vv
-        vOFlChZAgfWDE3vxlNeRRCw=
-X-Google-Smtp-Source: APXvYqw8XHm4leFwnC6sWR8BjhyMsv0e/YjeclMhzrktUUdT/wG1WxzN3IHekSLZEGkf3MnHklk0qA==
-X-Received: by 2002:a5d:6b0f:: with SMTP id v15mr22340960wrw.19.1568097336267;
-        Mon, 09 Sep 2019 23:35:36 -0700 (PDT)
-Received: from gmail.com (2E8B0CD5.catv.pool.telekom.hu. [46.139.12.213])
-        by smtp.gmail.com with ESMTPSA id u22sm32329249wru.72.2019.09.09.23.35.33
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BVZkeB8kcfbAhGWCwFmsi+Af79YcNd2rTDIYMad/gaM=;
+        b=NQ10FdBoCHlme1gNlZCIv6aQu7hvDrfDaj/qC27ZwB55lxSfGBP+oLD+eO8+GcEUc3
+         rwhvReDgaA7tRuDE2dgndnDbDVC/RpfQUNhT1ZK+z/8O3B3xZASA4wHxayQqdLRi87E5
+         oYdqn/DWhjXAqSJ4/M7vJEccLHvewVOpf4yGFmtdDhGQC/hMK/e/AWcDTWJ7d8hkj7aW
+         rlvF0gHdRO3xzj2fCRBlODKpORAF87pxg9Uc3V1E/Lf230YJlNbF1yp99QlEMELBAFiD
+         w8PEVlVMIBn4ta9LcMbvvQRviebhlF/WQoRYBP7WNbf5MMqHf+hyMHE3wnUYFdz1bdKm
+         wSXw==
+X-Gm-Message-State: APjAAAUi3vCwyESk8GKiBxIFIrmfJbk56gSg8lNGlIOJ0kzF21i9FLWt
+        kLEQvSD2VpEuW2BKNnk2EYDTZA==
+X-Google-Smtp-Source: APXvYqzK0Ttf4/Xi57wL2oeea0djC4HNgeahFaJrMzpGlfeG86fQuDKcRSHD3yi1HIq4tDv9kNpaSA==
+X-Received: by 2002:a63:6888:: with SMTP id d130mr25498575pgc.197.1568105972826;
+        Tue, 10 Sep 2019 01:59:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 127sm34965672pfw.6.2019.09.10.01.59.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2019 23:35:35 -0700 (PDT)
-Date:   Tue, 10 Sep 2019 08:35:32 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Jeff Layton <jlayton@kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        Tue, 10 Sep 2019 01:59:31 -0700 (PDT)
+Date:   Tue, 10 Sep 2019 01:59:30 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Cc:     20190819234111.9019-8-keescook@chromium.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 11/12] open: openat2(2) syscall
-Message-ID: <20190910063532.GB1579@gmail.com>
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-12-cyphar@cyphar.com>
- <7236f382d72130f2afbbe8940e72cc67e5c6dce0.camel@kernel.org>
- <CAHk-=whZx97Nm-gUK0ppofj2RA2LLz2vmaDUTKSSV-+yYB9q_Q@mail.gmail.com>
- <C81D6D29-F6BF-48E6-A15E-3ABCB2C992E5@amacapital.net>
- <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Drew Davenport <ddavenport@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Feng Tang <feng.tang@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        YueHaibing <yuehaibing@huawei.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 7/7] bug: Move WARN_ON() "cut here" into exception
+ handler
+Message-ID: <201909100157.CEE99802C@keescook>
+References: <201908200943.601DD59DCE@keescook>
+ <20190909160539.GA989@tigerII.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190909160539.GA989@tigerII.localdomain>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-* Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> On Sat, Sep 7, 2019 at 10:42 AM Andy Lutomirski <luto@amacapital.net> wrote:
-> >
-> > Linus, you rejected resolveat() because you wanted a *nice* API
+On Tue, Sep 10, 2019 at 01:05:39AM +0900, Sergey Senozhatsky wrote:
+> On (08/20/19 09:47), Kees Cook wrote:
+> [..]
+> > @@ -181,6 +181,15 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+> >  		}
+> >  	}
+> >  
+> > +	/*
+> > +	 * BUG() and WARN_ON() families don't print a custom debug message
+> > +	 * before triggering the exception handler, so we must add the
+> > +	 * "cut here" line now. WARN() issues its own "cut here" before the
+> > +	 * extra debugging message it writes before triggering the handler.
+> > +	 */
+> > +	if ((bug->flags & BUGFLAG_NO_CUT_HERE) == 0)
+> > +		printk(KERN_DEFAULT CUT_HERE);
 > 
-> No. I rejected resoveat() because it was a completely broken garbage
-> API that couldn't do even basic stuff right (like O_CREAT).
-> 
-> We have a ton of flag space in the new openat2() model, we might as
-> well leave the old flags alone that people are (a) used to and (b) we
-> have code to support _anyway_.
-> 
-> Making up a new flag namespace is only going to cause us - and users -
-> more work, and more confusion. For no actual advantage. It's not going
-> to be "cleaner". It's just going to be worse.
+> Shouldn't this be pr_warn() or pr_crit()?
 
-I suspect there is a "add a clean new flags namespace" analogy to the 
-classic "add a clean new standard" XKCD:
+The pr_* helpers here would (potentially) add unwanted prefixes, so
+those aren't used. KERN_DEFAULT is used here because that's how it's
+always been printed. I didn't want to change that for this refactoring
+work. I'm not opposed to it, generally speaking, though. :)
 
-	https://xkcd.com/927/
-
-Thanks,
-
-	Ingo
+-- 
+Kees Cook
