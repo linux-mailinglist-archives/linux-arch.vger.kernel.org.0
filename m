@@ -2,61 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC30B0ED2
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2019 14:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C58B0F30
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2019 14:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731490AbfILMY4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Sep 2019 08:24:56 -0400
-Received: from do158-222.mailgun.net ([192.237.158.222]:45819 "EHLO
-        do158-222.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731486AbfILMYz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Sep 2019 08:24:55 -0400
-X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Sep 2019 08:24:54 EDT
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=westpost.net; q=dns/txt;
- s=krs; t=1568291095; h=Reply-To: Date: From: To: Subject:
- Content-Description: Content-Transfer-Encoding: MIME-Version:
- Content-Type: Message-Id: Sender;
- bh=iFp+PKgtb42D569E1GVyMGrZVYgpD4fReNb/r3/khME=; b=Rpo06ZdrLFEsATKHuFqBWDEocP4GL1t89o1Td6swZBdLLclZSFthtMeT37j9rAbVlT3jW2N9
- xdjgi1GXouZ+LvQSjRlHxec3D/11p7MYtnYM2B35azGITBcZF1pSy7CfmYUrZIDrATBeexfO
- zpKkVbzwlgNPTQmTNB22ajAV+y8=
-X-Mailgun-Sending-Ip: 192.237.158.222
-X-Mailgun-Sid: WyI3NTE1NSIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJhOTBjODQiXQ==
-Message-Id: <20190912121952.1.062BD61D57EDDCE7@westpost.net>
-Received: from mx.westpost.net (ec2-18-214-28-238.compute-1.amazonaws.com [18.214.28.238])
- by mxa.mailgun.org with ESMTP id 5d7a37e8.7f5790f58d50-smtp-out-n01;
- Thu, 12 Sep 2019 12:19:52 -0000 (UTC)
-Received: from [149.56.71.53] (ip53.ip-149-56-71.net [149.56.71.53])
-        by mx.westpost.net (Postfix) with ESMTP id 9EA3E180C73
-        for <linux-arch@vger.kernel.org>; Thu, 12 Sep 2019 12:19:52 +0000 (UTC)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1731789AbfILMzL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Sep 2019 08:55:11 -0400
+Received: from smtpcmd04131.aruba.it ([62.149.158.131]:34943 "EHLO
+        smtpcmd04131.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731788AbfILMzK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Sep 2019 08:55:10 -0400
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Sep 2019 08:55:09 EDT
+Received: from [192.168.1.40] ([93.146.66.165])
+        by smtpcmd04.ad.aruba.it with bizsmtp
+        id 0cnz2100o3Zw7e501cnz8L; Thu, 12 Sep 2019 14:48:02 +0200
+Subject: Re: [PATCH 1/2] tty: add bits to manage multidrop mode
+To:     Richard Genoud <richard.genoud@gmail.com>,
+        linux-arch@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Arnd Bergmann <arnd@arndb.de>,
+        Rodolfo Giometti <giometti@linux.it>,
+        Joshua Henderson <joshua.henderson@microchip.com>
+References: <20190912084032.16927-1-giometti@enneenne.com>
+ <20190912084032.16927-2-giometti@enneenne.com>
+ <c9860c7f-bd06-86aa-c3c0-74e2e1617cae@gmail.com>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+Message-ID: <c7a63468-4e29-2bbd-912d-4583098507af@enneenne.com>
+Date:   Thu, 12 Sep 2019 14:47:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re: Investment Proposal...
-To:     linux-arch@vger.kernel.org
-From:   "Propel Consult" <jamie.groom@westpost.net>
-Date:   Thu, 12 Sep 2019 05:19:50 -0700
-Reply-To: jamiegroom973@gmail.com
+In-Reply-To: <c9860c7f-bd06-86aa-c3c0-74e2e1617cae@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aruba.it; s=a1;
+        t=1568292482; bh=EXIo6Z5UzI/hSnGjLeCefDqyUwGVTCF6WoSWPaw6sWM=;
+        h=Subject:To:From:Date:MIME-Version:Content-Type;
+        b=IDCob7ZMmur0MV55am0g2xaOK/ECM/cD9drrvwPbmN4esfSMe/TdnQznWBBUuRzZv
+         pKgZRdlv6DHfAuBbzEoYhr2mjThYiIkmsAyVNeL5SFja9QACVhdPa150FY5A2TzTa6
+         EokBWsOHITUANGGqQRQTp0D0RRbi5O7lzmotr4gBfCK7dS9galBhQ/A0Qtrp/TurYH
+         Fvgsi6LOlpEligHfPWa+yyOGFtaagHxN22yCZKa/bX3lq0yJ6xyPZPRLYMGHJE/AI7
+         RME/32AualZ9npFMQO8mCOskfMh5i67kv7R3whYlashV+fnQDRJ9Up5hi41GhQVuxr
+         sxT+pwlQnBgzA==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Greetings,
+On 12/09/2019 13:01, Richard Genoud wrote:
+> Hi Rodolfo,
+> 
+> You could also add these mailing lists:
+> - linux-serial@vger.kernel.org
+> - linux-arm-kernel@lists.infradead.org
+> - linux-kernel@vger.kernel.org
 
-We are consultancy firm situated in Bahrain currently looking to finance ne=
-w or existing projects in any industry.
+OK. No problem!
 
-Currently we are sourcing for opportunities for our review and consideratio=
-n and would be delighted to discuss further.
+> For reference, I've dug the conversation we had 2 years ago:
+> 0/2 : https://marc.info/?t=149192176100002&r=1&w=2
+> 1/2 : https://marc.info/?t=149192176300001&r=1&w=2
+> 2/2 : https://marc.info/?t=149192176700001&r=1&w=2
 
-Please feel free to contact us.
+Thanks.
 
-Regards,
+> And, like I said at that time, one problem I see with this
+> implementation (setting a SENDA bit that automatically unsets itself)
+> will break the way tcgetattr() is working:
+> https://marc.info/?l=linux-serial&m=149209522108027&w=2
 
-Jamie Groom
-Consultant
-Propel Consult
-6th Floor, Building 880
-Road 3618, Seef 436 Manama
-Kingdom of Bahrain
+I see... however the problem here is that this attribute is not sticky and it is
+reset by the controller after the first byte as been sent. Here is how
+Atmel/Microchip multidrop works (from the SAMA5D3's datasheet):
+
+44.7.3.9 Multidrop Mode
+If the value 0x6 or 0x07 is written to the PAR field in the US_MR, the USART
+runs in Multidrop Mode. This mode differentiates the data characters and the
+address characters. Data is transmitted with the parity bit to 0 and addresses
+are transmitted with the parity bit to 1.
+...
+The transmitter sends an address byte (parity bit set) when SENDA is written to
+in the US_CR. In this case, the next byte written to the US_THR is transmitted
+as an address. Any character written in the US_THR without having written the
+command SENDA is transmitted normally with the parity to 0.
+
+So, if we have a 4 bytes message where the first one is the address byte we can
+use multidrop by setting the SENDA bit at the beginning and then by just
+invoking a write() with the four bytes message. The controller automatically
+will set the 9th bit to 1 for the first byte and then to 0 for the following
+three bytes.
+
+To do so we need a syscall to tell to the controller when the address bit
+(SENDA) must be set, each time, before sending the message.
+
+In this implementation I used the syscall within tcsetattr() function but if
+this is not right, then I have to use another one... maybe a custom ioctl? Or
+can you please suggest a suitable solution? :-)
+
+Thanks for your help,
+
+Rodolfo Giometti
+
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
