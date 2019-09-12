@@ -2,106 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B03B0A96
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2019 10:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDB0B0A9A
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2019 10:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730268AbfILIsC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Sep 2019 04:48:02 -0400
-Received: from smtpcmd0871.aruba.it ([62.149.156.71]:46879 "EHLO
-        smtpcmd0871.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726159AbfILIsB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Sep 2019 04:48:01 -0400
-X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Sep 2019 04:47:50 EDT
-Received: from localhost.localdomain ([93.146.66.165])
-        by smtpcmd08.ad.aruba.it with bizsmtp
-        id 0Ygg210103Zw7e501YgtKT; Thu, 12 Sep 2019 10:40:54 +0200
-From:   Rodolfo Giometti <giometti@enneenne.com>
-To:     linux-arch@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Arnd Bergmann <arnd@arndb.de>,
+        id S1730368AbfILIs5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Sep 2019 04:48:57 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:43809 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726159AbfILIs5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Sep 2019 04:48:57 -0400
+Received: by mail-qt1-f196.google.com with SMTP id l22so28631586qtp.10
+        for <linux-arch@vger.kernel.org>; Thu, 12 Sep 2019 01:48:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EVNdXez6jYG+Fnm+w39nvWQsj9S5xRMOWGOY74uff0k=;
+        b=hhSiu1lIGfqshtTz9vjBaFyurVUTq/DyfdITcyasVBTzuSOcz5I8hAEkQbsjE4npF2
+         tbs71q320+3WMoPZlppSRguStHu4qem4XJ0mL5WNLMDcgwxt8N3jO6ilyK7nqvbb9k26
+         hw49MuWAXH82WbzS1Gpcf0Vpc6RN0/N0Unrmpvs/HW7AAH4lKzmr4eY7xEcUrt5bxRZt
+         2rE8D/meaca3rqYMeR3UWvv14LhO7hJLBbT6cl+Zug2BjgHCA8NmL9nPh5ZUq5zFk6Ny
+         tmxJu4I5fe/qe9DIxDLgYs4IOhENEjhVTyW0nKA5JlbYcFPwauj3CRloeLDEZEVgk+1r
+         BZIQ==
+X-Gm-Message-State: APjAAAWXN3h1l1upXDhhvJv1zz0GSNoHk/biZTKmIPVRl4Myl4zERM2a
+        mwxO0lGxlfHVGqPjx/jo8WB5Im5iofP2BRd0T/8=
+X-Google-Smtp-Source: APXvYqyOzNeuJ9mIJeNrD+606pc5nIadSqJCEzR8uPoGiUnGgQ1OkhuianKdkf/OYZWFgyUxc2jBo/8aeRt9/gkpWF0=
+X-Received: by 2002:ac8:6b1a:: with SMTP id w26mr39249838qts.304.1568278136410;
+ Thu, 12 Sep 2019 01:48:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190912084032.16927-1-giometti@enneenne.com> <20190912084032.16927-2-giometti@enneenne.com>
+In-Reply-To: <20190912084032.16927-2-giometti@enneenne.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 12 Sep 2019 10:48:40 +0200
+Message-ID: <CAK8P3a2=3OYezzrkdgcfoef7S0ZFh=cZuNMhFrWgd1vQTE56Sw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] tty: add bits to manage multidrop mode
+To:     Rodolfo Giometti <giometti@enneenne.com>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
         Richard Genoud <richard.genoud@gmail.com>,
         Rodolfo Giometti <giometti@linux.it>,
         Joshua Henderson <joshua.henderson@microchip.com>
-Subject: [PATCH 2/2] tty serial: add multidrop support for atmel serial controllers
-Date:   Thu, 12 Sep 2019 10:40:32 +0200
-Message-Id: <20190912084032.16927-3-giometti@enneenne.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190912084032.16927-1-giometti@enneenne.com>
-References: <20190912084032.16927-1-giometti@enneenne.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aruba.it; s=a1;
-        t=1568277654; bh=Tz6N7UQ/jiyprB8wtIJMMqZZNYywq2lDuVoMt+dmEOA=;
-        h=From:To:Subject:Date;
-        b=NpvJCfJd6g/fYEdTXT3t/zMvDD1Zk+nRTmuyI01kmf8UaEIMvBogOljCuxCRA5/yp
-         ZQ/WiaBCcWYjNZaHL9s10XploaspyqSA7qjlzoiRGwVEWrRbGkm5P0Nn4NVZC3d/C1
-         e/AWANaBc5MPUlDLU6HaZky06o4/0xnxl8gdAzirhR89fXOFmd4kstVn4PQC1pdsMr
-         s5jIPtGgQ8HmgUHpSDgw0444gFq3j0Z3YWfl9OehCAbiuVVuGvOVxHhtaGl8075YGj
-         SfwNJQ/6pccl4nTA42x+gyfK/quTDet3Di3Z7RHk6cfWZD6weLJ5WyWw4C8sjWOqSn
-         hCTIGxXiyID2w==
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Rodolfo Giometti <giometti@linux.it>
+On Thu, Sep 12, 2019 at 10:40 AM Rodolfo Giometti <giometti@enneenne.com> wrote:
 
-This patch adds multidrop support for atmel serial controllers and it
-has been tested by using a SAMA5D3 CPU.
+> diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
+> index 2fbaf9ae89dd..ead5eaebdd3b 100644
+> --- a/include/uapi/asm-generic/termbits.h
+> +++ b/include/uapi/asm-generic/termbits.h
+> @@ -141,6 +141,8 @@ struct ktermios {
+>  #define HUPCL  0002000
+>  #define CLOCAL 0004000
+>  #define CBAUDEX 0010000
+> +#define PARMD   040000000
+> +#define SENDA   0100000000
+>  #define    BOTHER 0010000
+>  #define    B57600 0010001
+>  #define   B115200 0010002
 
-Signed-off-by: Rodolfo Giometti <giometti@linux.it>
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
----
- drivers/tty/serial/atmel_serial.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 0b4f36905321..b30b4a336907 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -2178,7 +2178,7 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- {
- 	struct atmel_uart_port *atmel_port = to_atmel_uart_port(port);
- 	unsigned long flags;
--	unsigned int old_mode, mode, imr, quot, baud, div, cd, fp = 0;
-+	unsigned int old_mode, mode, mdrop, imr, quot, baud, div, cd, fp = 0;
- 
- 	/* save the current mode register */
- 	mode = old_mode = atmel_uart_readl(port, ATMEL_US_MR);
-@@ -2211,9 +2211,11 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- 
- 	/* parity */
- 	if (termios->c_cflag & PARENB) {
--		/* Mark or Space parity */
-+		/* Mark, Space or Multidrop parity */
- 		if (termios->c_cflag & CMSPAR) {
--			if (termios->c_cflag & PARODD)
-+			if (termios->c_cflag & PARMD)
-+				mode |= ATMEL_US_PAR_MULTI_DROP;
-+			else if (termios->c_cflag & PARODD)
- 				mode |= ATMEL_US_PAR_MARK;
- 			else
- 				mode |= ATMEL_US_PAR_SPACE;
-@@ -2221,8 +2223,11 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- 			mode |= ATMEL_US_PAR_ODD;
- 		else
- 			mode |= ATMEL_US_PAR_EVEN;
-+
- 	} else
- 		mode |= ATMEL_US_PAR_NONE;
-+	mdrop = termios->c_cflag & SENDA ? ATMEL_US_SENDA : 0;
-+	termios->c_cflag &= ~SENDA; /* SENDA bit must be cleared once used */
- 
- 	spin_lock_irqsave(&port->lock, flags);
- 
-@@ -2363,7 +2368,8 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- 	if (!(port->iso7816.flags & SER_ISO7816_ENABLED))
- 		atmel_uart_writel(port, ATMEL_US_BRGR, quot);
- 	atmel_uart_writel(port, ATMEL_US_CR, ATMEL_US_RSTSTA | ATMEL_US_RSTRX);
--	atmel_uart_writel(port, ATMEL_US_CR, ATMEL_US_TXEN | ATMEL_US_RXEN);
-+	atmel_uart_writel(port, ATMEL_US_CR,
-+			  mdrop | ATMEL_US_TXEN | ATMEL_US_RXEN);
- 	atmel_port->tx_stopped = false;
- 
- 	/* restore interrupts */
--- 
-2.17.1
+If you add these to the asm-generic version of this file, please also
+add them to
+the architecture specific ones that don't use asm-generic/termbits.h:
+alpha, ia64, mips, parisc, powerpc, sparc, and xtensa.
 
+Please pick values that are the same everywhere and do not clash with
+any of the existing bits of any of the above (this is probably the case, but
+I have not checked)
+
+      Arnd
