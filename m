@@ -2,151 +2,191 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF40FB2259
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2019 16:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3F4B24FC
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2019 20:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730579AbfIMOhO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Sep 2019 10:37:14 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35379 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728529AbfIMOgK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Sep 2019 10:36:10 -0400
-Received: by mail-wr1-f65.google.com with SMTP id g7so32422551wrx.2
-        for <linux-arch@vger.kernel.org>; Fri, 13 Sep 2019 07:36:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fi7MGMz30BGFBES8k6hGqqMwOoWqphog01tFwnQ6SdE=;
-        b=oXmx3Bcm4EJnSsdjPS720KqWa6XRtQrUOC1KqnJ8tSvcCWW3xKTRL84zQpAElnw1mD
-         rDmtkL8kDG0fNpkEfM8EO2TpeUQSfW67AxrDC6gQeYr6dL/Ch578ne7wHGBTW4LrUnCZ
-         5znRlsQYdweRlajAmhIaTZt4HI5/ouHxZP6wWg6RcdsURD/SO0Y4S/ebC64Aq6uQysXJ
-         8w+MGMl6ru9Bmi2yreEnN7mK71IQ5l0jM6c85kj/n90ypbqqPqozPmqwQuLPPMZhmEWq
-         pOdJXSsdGuP+xBhmsd0OgXy5HL4JoQ55AJeelF0PwNfrzCdscB4Z4nDfxFfKtyR898Uz
-         uzUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fi7MGMz30BGFBES8k6hGqqMwOoWqphog01tFwnQ6SdE=;
-        b=gLFBLdjNfOp7znMTgsBPduE04JQ96Y4/zcExB2BZi3DquUy9r719IKi1dLKEs0lFgM
-         yVkm0jxP1LHWrmb8oQXK6sYmDEclGZkGV/z/A7iXV5qx4l2M+NbvevgR9oEkLBFNGQ82
-         xRPjNs0hHmOE1oQzaTGkj4asuzIjtjcgM2K3p61E6PwWbU7tl9aWE0GYAiLzS3e86BLg
-         9IzNekQOm/9S/88Pzvqw0Bj7ljxP8a/MpSlcaNTOvjEXqt31dzIH6GB8VmNcjZfA/XVE
-         0S/uzNkYOnT/LM+ph0OewxZk1zZqyItux5sCdN/qV9orOsEh6Mg9zooe19YUs5YAB2hS
-         UfyA==
-X-Gm-Message-State: APjAAAWRXL72RuKevHgLCRCB4P+P6Os5jcUINJIedFGjq67lz8Rx17oD
-        br5J2j4zA7bnGFSppEV3VmM=
-X-Google-Smtp-Source: APXvYqw/BTeDn76GkqfI4d650bMkBQUbcN+HqR33ZgBBE46QWNNuHfdWkT0ngJU1HAbwa22ejceRFA==
-X-Received: by 2002:a5d:4481:: with SMTP id j1mr5709864wrq.336.1568385368058;
-        Fri, 13 Sep 2019 07:36:08 -0700 (PDT)
-Received: from [192.168.2.41] ([46.227.18.67])
-        by smtp.gmail.com with ESMTPSA id z142sm5389326wmc.24.2019.09.13.07.36.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 13 Sep 2019 07:36:07 -0700 (PDT)
-Subject: Re: [PATCH 1/2] tty: add bits to manage multidrop mode
-To:     Rodolfo Giometti <giometti@enneenne.com>,
-        linux-arch@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        Rodolfo Giometti <giometti@linux.it>,
-        Joshua Henderson <joshua.henderson@microchip.com>
-References: <20190912084032.16927-1-giometti@enneenne.com>
- <20190912084032.16927-2-giometti@enneenne.com>
- <c9860c7f-bd06-86aa-c3c0-74e2e1617cae@gmail.com>
- <c7a63468-4e29-2bbd-912d-4583098507af@enneenne.com>
-From:   Richard Genoud <richard.genoud@gmail.com>
-Message-ID: <f0071444-7885-db74-ba50-17f3e7fae1f7@gmail.com>
-Date:   Fri, 13 Sep 2019 16:36:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <c7a63468-4e29-2bbd-912d-4583098507af@enneenne.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S2389581AbfIMSUq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Sep 2019 14:20:46 -0400
+Received: from foss.arm.com ([217.140.110.172]:47808 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389336AbfIMSUq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 13 Sep 2019 14:20:46 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 217FE28;
+        Fri, 13 Sep 2019 11:20:45 -0700 (PDT)
+Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A48663F71F;
+        Fri, 13 Sep 2019 11:20:42 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, mark.rutland@arm.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        takahiro.akashi@linaro.org, james.morse@arm.com,
+        hidehiro.kawai.ez@hitachi.com, tglx@linutronix.de, will@kernel.org,
+        dave.martin@arm.com, linux-arm-kernel@lists.infradead.org,
+        mingo@redhat.com, x86@kernel.org, dzickus@redhat.com,
+        ehabkost@redhat.com, linux@armlinux.org.uk, davem@davemloft.net,
+        sparclinux@vger.kernel.org, hch@infradead.org
+Subject: [RFC PATCH v2 00/12] Unify SMP stop generic logic to common code
+Date:   Fri, 13 Sep 2019 19:19:41 +0100
+Message-Id: <20190913181953.45748-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Le 12/09/2019 à 14:47, Rodolfo Giometti a écrit :
-> On 12/09/2019 13:01, Richard Genoud wrote:
->> Hi Rodolfo,
->>
->> You could also add these mailing lists:
->> - linux-serial@vger.kernel.org
->> - linux-arm-kernel@lists.infradead.org
->> - linux-kernel@vger.kernel.org
-> 
-> OK. No problem!
-> 
->> For reference, I've dug the conversation we had 2 years ago:
->> 0/2 : https://marc.info/?t=149192176100002&r=1&w=2
->> 1/2 : https://marc.info/?t=149192176300001&r=1&w=2
->> 2/2 : https://marc.info/?t=149192176700001&r=1&w=2
-> 
-> Thanks.
-> 
->> And, like I said at that time, one problem I see with this
->> implementation (setting a SENDA bit that automatically unsets itself)
->> will break the way tcgetattr() is working:
->> https://marc.info/?l=linux-serial&m=149209522108027&w=2
-> 
-> I see... however the problem here is that this attribute is not sticky and it is
-> reset by the controller after the first byte as been sent. Here is how
-> Atmel/Microchip multidrop works (from the SAMA5D3's datasheet):
-> 
-> 44.7.3.9 Multidrop Mode
-> If the value 0x6 or 0x07 is written to the PAR field in the US_MR, the USART
-> runs in Multidrop Mode. This mode differentiates the data characters and the
-> address characters. Data is transmitted with the parity bit to 0 and addresses
-> are transmitted with the parity bit to 1.
-> ...
-> The transmitter sends an address byte (parity bit set) when SENDA is written to
-> in the US_CR. In this case, the next byte written to the US_THR is transmitted
-> as an address. Any character written in the US_THR without having written the
-> command SENDA is transmitted normally with the parity to 0.
-> 
-> So, if we have a 4 bytes message where the first one is the address byte we can
-> use multidrop by setting the SENDA bit at the beginning and then by just
-> invoking a write() with the four bytes message. The controller automatically
-> will set the 9th bit to 1 for the first byte and then to 0 for the following
-> three bytes.
-> 
-> To do so we need a syscall to tell to the controller when the address bit
-> (SENDA) must be set, each time, before sending the message.
-> 
-> In this implementation I used the syscall within tcsetattr() function but if
-> this is not right, then I have to use another one... maybe a custom ioctl? Or
-> can you please suggest a suitable solution? :-)
-What's bothering me with this implementation, is that it's too close to
-the hardware. Some other micro-controllers may not have the SENDA bit.
-For instance, i.MX6ULL:
---->8----
-To transmit 9-bit RS-485 frames, user need to enable parity (PREN=1) to
-enable
-trasmitting the ninth data bit, set 8-bit data word size (WS=1), and
-write TXB8
-(UMCR[2]) as the 9 th bit (bit [8]) to be transmitted (write '0' to TXB8
-to transmit a data
-frame, write '1' to transmit a address frame). The other data bit [7:0]
-is written to TxFIFO
-by writing to the UTXD same as normal RS-232 operation.
----8<----
-And the TXB8 bit doesn't seem to clear itself automatically.
+Hi all,
 
-I maybe wrong, but I think that writing a line discipline for multidrop
-mode would be more versatile.
+the logic underlying SMP stop and kexec crash procedures, beside containing
+some arch-specific bits, is mostly generic and common across all archs:
+despite this fact, such logic is now scattered across all architectures and
+on some of them is flawed, in such a way that, under some specific
+conditions, you can end up with a CPU left still running after a panic and
+possibly lost across a subsequent kexec crash reboot. [1]
+
+Beside the flaws on some archs, there is anyway lots of code duplication,
+so this patch series attempts to move into common code all the generic SMP
+stop and crash logic, fixing observed issues, and leaving only the arch
+specific bits inside properly provided arch-specific helpers.
+
+An architecture willing to rely on this SMP common logic has to define its
+own helpers and set CONFIG_ARCH_USE_COMMON_SMP_STOP=y.
+
+This series wire this up for arm64, x86, arm, sparc64.
+
+Behaviour is not changed for architectures not adopting this new common
+logic.
+
+In v2 the SMP common stop/crash code is generalized a bit more to address
+the needs of the newly ported architectures (x86, arm, sparc64).
+
+Tested as follows:
+
+- arm64:
+ 1. boot/reboot/emergency reboot
+ 2. panic on a starting CPU within a 2 CPUs system (freezing properly)
+ 3. kexec reboot after a panic like 2. (not losing any CPU on reboot)
+ 4. kexec reboot after a panic like 2. and a simultaneous reboot
+    (instrumenting code to delay the stop messages transmission
+     to have time to inject a reboot -f)
+
+- x86:
+ 1. boot/reboot/emergency reboot/emergency reboot with VMX enabled
+ 2. panic on a starting CPU within a 2 CPUs system
+ 2. panic sysrq 4-CPus
+ 3. kexec reboot after a panic
+
+- arm:
+1. boot
+
+- sparc64:
+1. build
+
+A couple more of still to be done potential enhancements have been noted
+on specific commits, and a lot more of testing remains surely to be done
+as of now, but, in the context of this RFC, any thoughts on this approach
+in general ?
+
+Thanks,
+
+Cristian
 
 
-Regards,
-Richard
+Changes:
+--------
 
-> 
-> Thanks for your help,
-> 
-> Rodolfo Giometti
-> 
+v1-->v2:
+- rebased on v5.3-rc8
+- moved common Kconfig bits to arch/Kconfig
+- extended SMP common stop/crash generic code to address new architectures
+  needs: custom wait/timeouts, max_retries, attempt numbers.
+- ported x86 to SMP common stop/crash code
+- ported arm to SMP common stop/crash code
+- ported sparc64 to SMP common stop code
+
+
+[1]
+
+[root@arch ~]# echo 1 > /sys/devices/system/cpu/cpu1/online
+[root@arch ~]# [  152.583368] ------------[ cut here ]------------
+[  152.583872] kernel BUG at arch/arm64/kernel/cpufeature.c:852!
+[  152.584693] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[  152.585228] Modules linked in:
+[  152.586040] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.3.0-rc5-00001-gcabd12118c4a-dirty #2
+[  152.586218] Hardware name: Foundation-v8A (DT)
+[  152.586478] pstate: 000001c5 (nzcv dAIF -PAN -UAO)
+[  152.587260] pc : has_cpuid_feature+0x35c/0x360
+[  152.587398] lr : verify_local_elf_hwcaps+0x6c/0xf0
+[  152.587520] sp : ffff0000118bbf60
+[  152.587605] x29: ffff0000118bbf60 x28: 0000000000000000
+[  152.587784] x27: 0000000000000000 x26: 0000000000000000
+[  152.587882] x25: ffff00001167a010 x24: ffff0000112f59f8
+[  152.587992] x23: 0000000000000000 x22: 0000000000000000
+[  152.588085] x21: ffff0000112ea018 x20: ffff000010fe5518
+[  152.588180] x19: ffff000010ba3f30 x18: 0000000000000036
+[  152.588285] x17: 0000000000000000 x16: 0000000000000000
+[  152.588380] x15: 0000000000000000 x14: ffff80087a821210
+[  152.588481] x13: 0000000000000000 x12: 0000000000000000
+[  152.588599] x11: 0000000000000080 x10: 00400032b5503510
+[  152.588709] x9 : 0000000000000000 x8 : ffff000010b93204
+[  152.588810] x7 : 00000000800001d8 x6 : 0000000000000005
+[  152.588910] x5 : 0000000000000000 x4 : 0000000000000000
+[  152.589021] x3 : 0000000000000000 x2 : 0000000000008000
+[  152.589121] x1 : 0000000000180480 x0 : 0000000000180480
+[  152.589379] Call trace:
+[  152.589646]  has_cpuid_feature+0x35c/0x360
+[  152.589763]  verify_local_elf_hwcaps+0x6c/0xf0
+[  152.589858]  check_local_cpu_capabilities+0x88/0x118
+[  152.589968]  secondary_start_kernel+0xc4/0x168
+[  152.590530] Code: d53801e0 17ffff58 d5380600 17ffff56 (d4210000)
+[  152.592215] ---[ end trace 80ea98416149c87e ]---
+[  152.592734] Kernel panic - not syncing: Attempted to kill the idle task!
+[  152.593173] Kernel Offset: disabled
+[  152.593501] CPU features: 0x0004,20c02008
+[  152.593678] Memory Limit: none
+[  152.594208] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
+[root@arch ~]# bash: echo: write error: Input/output error
+[root@arch ~]#
+[root@arch ~]#
+[root@arch ~]# echo HELO
+HELO
+
+
+Cristian Marussi (12):
+  smp: add generic SMP-stop support to common code
+  smp: unify crash_ and smp_send_stop() logic
+  smp: coordinate concurrent crash/smp stop calls
+  smp: address races of starting CPUs while stopping
+  arm64: smp: use generic SMP stop common code
+  arm64: smp: use SMP crash-stop common code
+  arm64: smp: add arch specific cpu parking helper
+  x86: smp: use generic SMP stop common code
+  x86: smp: use SMP crash-stop common code
+  arm: smp: use generic SMP stop common code
+  arm: smp: use SMP crash-stop common code
+  sparc64: smp: use generic SMP stop common code
+
+ arch/Kconfig                    |   7 ++
+ arch/arm/Kconfig                |   1 +
+ arch/arm/kernel/machine_kexec.c |  27 ++---
+ arch/arm/kernel/smp.c           |  18 +---
+ arch/arm64/Kconfig              |   1 +
+ arch/arm64/include/asm/smp.h    |   2 -
+ arch/arm64/kernel/smp.c         | 127 +++++++-----------------
+ arch/sparc/Kconfig              |   1 +
+ arch/sparc/kernel/smp_64.c      |  15 +--
+ arch/x86/Kconfig                |   1 +
+ arch/x86/include/asm/reboot.h   |   2 +
+ arch/x86/include/asm/smp.h      |   6 --
+ arch/x86/kernel/crash.c         |  27 +----
+ arch/x86/kernel/reboot.c        |  50 ++++++----
+ arch/x86/kernel/smp.c           |  98 ++++++++----------
+ include/linux/smp.h             | 109 ++++++++++++++++++++
+ kernel/panic.c                  |  26 -----
+ kernel/smp.c                    | 170 ++++++++++++++++++++++++++++++++
+ 18 files changed, 418 insertions(+), 270 deletions(-)
+
+-- 
+2.17.1
 
