@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D05B250D
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2019 20:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCA0B2511
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2019 20:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390710AbfIMSU7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Sep 2019 14:20:59 -0400
-Received: from foss.arm.com ([217.140.110.172]:47930 "EHLO foss.arm.com"
+        id S2390813AbfIMSVD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Sep 2019 14:21:03 -0400
+Received: from foss.arm.com ([217.140.110.172]:47950 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389336AbfIMSU7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 13 Sep 2019 14:20:59 -0400
+        id S2390802AbfIMSVB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 13 Sep 2019 14:21:01 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90EF61570;
-        Fri, 13 Sep 2019 11:20:58 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4111B15A2;
+        Fri, 13 Sep 2019 11:21:01 -0700 (PDT)
 Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 237793F71F;
-        Fri, 13 Sep 2019 11:20:56 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C6E753F71F;
+        Fri, 13 Sep 2019 11:20:58 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arch@vger.kernel.org, mark.rutland@arm.com,
@@ -27,9 +27,9 @@ Cc:     linux-arch@vger.kernel.org, mark.rutland@arm.com,
         mingo@redhat.com, x86@kernel.org, dzickus@redhat.com,
         ehabkost@redhat.com, linux@armlinux.org.uk, davem@davemloft.net,
         sparclinux@vger.kernel.org, hch@infradead.org
-Subject: [RFC PATCH v2 05/12] arm64: smp: use generic SMP stop common code
-Date:   Fri, 13 Sep 2019 19:19:46 +0100
-Message-Id: <20190913181953.45748-6-cristian.marussi@arm.com>
+Subject: [RFC PATCH v2 06/12] arm64: smp: use SMP crash-stop common code
+Date:   Fri, 13 Sep 2019 19:19:47 +0100
+Message-Id: <20190913181953.45748-7-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190913181953.45748-1-cristian.marussi@arm.com>
 References: <20190913181953.45748-1-cristian.marussi@arm.com>
@@ -38,129 +38,187 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Make arm64 use the generic SMP-stop logic provided by common code
-unified smp_send_stop() function.
+Make arm64 use the SMP common implementation of crash_smp_send_stop() and
+its generic logic, by removing the arm64 crash_smp_send_stop() definition
+and providing the needed arch specific helpers.
 
-arm64 smp_send_stop() logic had a bug in it: it failed to consider the
-online status of the calling CPU when evaluating if any stop message
-needed to be sent to other CPus at all: this resulted, on a 2-CPUs
-system, in the failure to stop all cpus if one paniced while starting
-up, leaving such system in an unexpected lively state.
+Additionally, simplify the arch-specific stop and crash dump ISRs backends
+(which are in charge of effectively receiving and interpreting the
+stop/crash messages) and unify them as much as possible.
 
-[root@arch ~]# echo 1 > /sys/devices/system/cpu/cpu1/online
-[root@arch ~]# [  152.583368] ------------[ cut here ]------------
-[  152.583872] kernel BUG at arch/arm64/kernel/cpufeature.c:852!
-[  152.584693] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-[  152.585228] Modules linked in:
-[  152.586040] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.3.0-rc5-00001-gcabd12118c4a-dirty #2
-[  152.586218] Hardware name: Foundation-v8A (DT)
-[  152.586478] pstate: 000001c5 (nzcv dAIF -PAN -UAO)
-[  152.587260] pc : has_cpuid_feature+0x35c/0x360
-[  152.587398] lr : verify_local_elf_hwcaps+0x6c/0xf0
-[  152.587520] sp : ffff0000118bbf60
-[  152.587605] x29: ffff0000118bbf60 x28: 0000000000000000
-[  152.587784] x27: 0000000000000000 x26: 0000000000000000
-[  152.587882] x25: ffff00001167a010 x24: ffff0000112f59f8
-[  152.587992] x23: 0000000000000000 x22: 0000000000000000
-[  152.588085] x21: ffff0000112ea018 x20: ffff000010fe5518
-[  152.588180] x19: ffff000010ba3f30 x18: 0000000000000036
-[  152.588285] x17: 0000000000000000 x16: 0000000000000000
-[  152.588380] x15: 0000000000000000 x14: ffff80087a821210
-[  152.588481] x13: 0000000000000000 x12: 0000000000000000
-[  152.588599] x11: 0000000000000080 x10: 00400032b5503510
-[  152.588709] x9 : 0000000000000000 x8 : ffff000010b93204
-[  152.588810] x7 : 00000000800001d8 x6 : 0000000000000005
-[  152.588910] x5 : 0000000000000000 x4 : 0000000000000000
-[  152.589021] x3 : 0000000000000000 x2 : 0000000000008000
-[  152.589121] x1 : 0000000000180480 x0 : 0000000000180480
-[  152.589379] Call trace:
-[  152.589646]  has_cpuid_feature+0x35c/0x360
-[  152.589763]  verify_local_elf_hwcaps+0x6c/0xf0
-[  152.589858]  check_local_cpu_capabilities+0x88/0x118
-[  152.589968]  secondary_start_kernel+0xc4/0x168
-[  152.590530] Code: d53801e0 17ffff58 d5380600 17ffff56 (d4210000)
-[  152.592215] ---[ end trace 80ea98416149c87e ]---
-[  152.592734] Kernel panic - not syncing: Attempted to kill the idle task!
-[  152.593173] Kernel Offset: disabled
-[  152.593501] CPU features: 0x0004,20c02008
-[  152.593678] Memory Limit: none
-[  152.594208] ---[ end Kernel panic - not syncing: Attempted to kill the idle
-task! ]---
-[root@arch ~]# bash: echo: write error: Input/output error
-[root@arch ~]#
-[root@arch ~]#
-[root@arch ~]# echo HELO
-HELO
+Using the SMP common code, it is no more needed to make use of an atomic_t
+counter to make sure that each CPU had time to perform its crash dump
+related shutdown-ops before the world ends: simply take care to synchronize
+on cpu_online_mask, and add proper explicit memory barriers where needed.
 
-Get rid of such bug, switching arm64 to use the common SMP stop code.
+Moreover, remove arm64 specific smp_crash_stop_failed() helper as a whole
+and rely on the common code provided homonym function to lookup the state
+of an ongoing crash_stop operation.
 
-Reported-by: Dave Martin <Dave.Martin@arm.com>
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
 v1 --> v2
-- now selecting arch/Kconfig ARCH_USE_COMMON_SMP_STOP
-- added attempt_num arch_smp_stop_call() helper
+- added attempt_num param to arch_smp_crash_call()
 ---
- arch/arm64/Kconfig      |  1 +
- arch/arm64/kernel/smp.c | 29 ++++++-----------------------
- 2 files changed, 7 insertions(+), 23 deletions(-)
+ arch/arm64/include/asm/smp.h |   2 -
+ arch/arm64/kernel/smp.c      | 100 +++++++++--------------------------
+ 2 files changed, 26 insertions(+), 76 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 3adcec05b1f6..33f88381702b 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -67,6 +67,7 @@ config ARM64
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-+	select ARCH_USE_COMMON_SMP_STOP
- 	select ARCH_SUPPORTS_MEMORY_FAILURE
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_INT128 if GCC_VERSION >= 50000 || CC_IS_CLANG
+diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
+index a0c8a0b65259..d98c409f9225 100644
+--- a/arch/arm64/include/asm/smp.h
++++ b/arch/arm64/include/asm/smp.h
+@@ -150,8 +150,6 @@ static inline void cpu_panic_kernel(void)
+  */
+ bool cpus_are_stuck_in_kernel(void);
+ 
+-extern void crash_smp_send_stop(void);
+-extern bool smp_crash_stop_failed(void);
+ 
+ #endif /* ifndef __ASSEMBLY__ */
+ 
 diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index 018a33e01b0e..3e87fdbb9f74 100644
+index 3e87fdbb9f74..f0cc2bf84aaa 100644
 --- a/arch/arm64/kernel/smp.c
 +++ b/arch/arm64/kernel/smp.c
-@@ -953,33 +953,16 @@ void tick_broadcast(const struct cpumask *mask)
+@@ -825,12 +825,30 @@ void arch_irq_work_raise(void)
  }
  #endif
  
--void smp_send_stop(void)
-+void arch_smp_cpus_stop_complete(void)
+-static void local_cpu_stop(void)
++static void local_cpu_crash_or_stop(struct pt_regs *crash_regs)
  {
+-	set_cpu_online(smp_processor_id(), false);
++	unsigned int cpu = smp_processor_id();
+ 
+-	local_daif_mask();
++	if (IS_ENABLED(CONFIG_KEXEC_CORE) && crash_regs) {
++#ifdef CONFIG_KEXEC_CORE
++		/* crash stop requested: save regs before going offline */
++		crash_save_cpu(crash_regs, cpu);
++#endif
++		local_irq_disable();
++	} else {
++		local_daif_mask();
++	}
+ 	sdei_mask_local_cpu();
++	/* ensure dumped regs are visible once cpu is seen offline */
++	smp_wmb();
++	set_cpu_online(cpu, false);
++	/* ensure all writes are globally visible before cpu parks */
++	wmb();
++#if defined(CONFIG_KEXEC_CORE) && defined(CONFIG_HOTPLUG_CPU)
++	if (cpu_ops[cpu]->cpu_die)
++		cpu_ops[cpu]->cpu_die(cpu);
++#endif
++	/* just in case */
+ 	cpu_park_loop();
+ }
+ 
+@@ -841,31 +859,7 @@ static void local_cpu_stop(void)
+  */
+ void panic_smp_self_stop(void)
+ {
+-	local_cpu_stop();
+-}
+-
+-#ifdef CONFIG_KEXEC_CORE
+-static atomic_t waiting_for_crash_ipi = ATOMIC_INIT(0);
+-#endif
+-
+-static void ipi_cpu_crash_stop(unsigned int cpu, struct pt_regs *regs)
+-{
+-#ifdef CONFIG_KEXEC_CORE
+-	crash_save_cpu(regs, cpu);
+-
+-	atomic_dec(&waiting_for_crash_ipi);
+-
+-	local_irq_disable();
+-	sdei_mask_local_cpu();
+-
+-#ifdef CONFIG_HOTPLUG_CPU
+-	if (cpu_ops[cpu]->cpu_die)
+-		cpu_ops[cpu]->cpu_die(cpu);
+-#endif
+-
+-	/* just in case */
+-	cpu_park_loop();
+-#endif
++	local_cpu_crash_or_stop(NULL);
+ }
+ 
+ /*
+@@ -894,14 +888,14 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
+ 
+ 	case IPI_CPU_STOP:
+ 		irq_enter();
+-		local_cpu_stop();
++		local_cpu_crash_or_stop(NULL);
+ 		irq_exit();
+ 		break;
+ 
+ 	case IPI_CPU_CRASH_STOP:
+ 		if (IS_ENABLED(CONFIG_KEXEC_CORE)) {
+ 			irq_enter();
+-			ipi_cpu_crash_stop(cpu, regs);
++			local_cpu_crash_or_stop(regs);
+ 
+ 			unreachable();
+ 		}
+@@ -963,52 +957,10 @@ void arch_smp_stop_call(cpumask_t *cpus, unsigned int __unused)
+ 	smp_cross_call(cpus, IPI_CPU_STOP);
+ }
+ 
+-#ifdef CONFIG_KEXEC_CORE
+-void crash_smp_send_stop(void)
++void arch_smp_crash_call(cpumask_t *cpus, unsigned int __unused)
+ {
+-	static int cpus_stopped;
+-	cpumask_t mask;
 -	unsigned long timeout;
 -
--	if (num_online_cpus() > 1) {
--		cpumask_t mask;
+-	/*
+-	 * This function can be called twice in panic path, but obviously
+-	 * we execute this only once.
+-	 */
+-	if (cpus_stopped)
+-		return;
 -
--		cpumask_copy(&mask, cpu_online_mask);
--		cpumask_clear_cpu(smp_processor_id(), &mask);
+-	cpus_stopped = 1;
 -
--		if (system_state <= SYSTEM_RUNNING)
--			pr_crit("SMP: stopping secondary CPUs\n");
--		smp_cross_call(&mask, IPI_CPU_STOP);
+-	if (num_online_cpus() == 1) {
+-		sdei_mask_local_cpu();
+-		return;
 -	}
+-
+-	cpumask_copy(&mask, cpu_online_mask);
+-	cpumask_clear_cpu(smp_processor_id(), &mask);
+-
+-	atomic_set(&waiting_for_crash_ipi, num_online_cpus() - 1);
+-
+-	pr_crit("SMP: stopping secondary CPUs\n");
+-	smp_cross_call(&mask, IPI_CPU_CRASH_STOP);
 -
 -	/* Wait up to one second for other CPUs to stop */
 -	timeout = USEC_PER_SEC;
--	while (num_online_cpus() > 1 && timeout--)
+-	while ((atomic_read(&waiting_for_crash_ipi) > 0) && timeout--)
 -		udelay(1);
 -
--	if (num_online_cpus() > 1)
+-	if (atomic_read(&waiting_for_crash_ipi) > 0)
 -		pr_warning("SMP: failed to stop secondary CPUs %*pbl\n",
--			   cpumask_pr_args(cpu_online_mask));
+-			   cpumask_pr_args(&mask));
 -
- 	sdei_mask_local_cpu();
+-	sdei_mask_local_cpu();
+-}
+-
+-bool smp_crash_stop_failed(void)
+-{
+-	return (atomic_read(&waiting_for_crash_ipi) > 0);
++	smp_cross_call(cpus, IPI_CPU_CRASH_STOP);
  }
+-#endif
  
-+void arch_smp_stop_call(cpumask_t *cpus, unsigned int __unused)
-+{
-+	smp_cross_call(cpus, IPI_CPU_STOP);
-+}
-+
- #ifdef CONFIG_KEXEC_CORE
- void crash_smp_send_stop(void)
- {
+ /*
+  * not supported here
 -- 
 2.17.1
 
