@@ -2,126 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE00CB3BE3
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Sep 2019 15:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1693CB40F0
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Sep 2019 21:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728005AbfIPNzu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Sep 2019 09:55:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41950 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727989AbfIPNzt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 16 Sep 2019 09:55:49 -0400
-Received: from rapoport-lnx (nesher1.haifa.il.ibm.com [195.110.40.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E5F82214AF;
-        Mon, 16 Sep 2019 13:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568642149;
-        bh=Qw6DlJe9h17KJF1+v+dT72oQWDOddUyjHUhlMCEhp8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XPTufvuH1UTy/pOvMGZQdOF7SQV3VB01raZ4EKG+o4EXiEY3D2hLRYUlRw3OYTudk
-         7ifs3vTA3J/UlC1HeoIc5365txH9KKqQGWl5ssh7Ckkc1fx6SAp9yZrtpcJUD2NkJz
-         eu1aaMNnpR6YsHUTCAo2eol6j0CPHLbbhM6NdbPg=
-Date:   Mon, 16 Sep 2019 16:55:43 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Laura Abbott <labbott@redhat.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Mike Rapoport <rppt@linux.ibm.com>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] arm64: use generic free_initrd_mem()
-Message-ID: <20190916135542.GC5196@rapoport-lnx>
-References: <1568618488-19055-1-git-send-email-rppt@kernel.org>
- <0ba20aa4-d2dd-2263-6b5f-16a5c8a39f67@redhat.com>
+        id S1727826AbfIPTPV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 16 Sep 2019 15:15:21 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:32811 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbfIPTPV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Sep 2019 15:15:21 -0400
+Received: by mail-qk1-f194.google.com with SMTP id x134so1196414qkb.0;
+        Mon, 16 Sep 2019 12:15:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=wUc3QBRhsqMMHvwIEi6V0XE3vX9eu/T89TukX6CeZiI=;
+        b=c+oJoM/WOFrA8iLVqvSbHE7msUsl9Sx6OwQY8JRYcO1GpNbwc4GWGRCw58TrEoWA50
+         hLccV0Hn/dIpqwE8lgmSY8ANuUfgOisTHJaE6y18UgAJEBE6Qwgq9AsJg76Y3qA59fb9
+         5hx95/siNpQt5v330pZf3nzs2/ashPwRHbHcZn16fRlSRUPUSHv8RQmnGhcH7Y0TaT3S
+         Aw7nuuYSp1VnlN1g98vjFT+0RHtwaGUOjzWTNdEdlXaXxRbhq2IWA8D7knoGIFcMMtQl
+         0shTAYfNMNGTvFpTA62g7qEqK2gMTE+tqWw1PNvFAj+zZ7TNtglCQ2ils4dlkMUwpKBw
+         pjuA==
+X-Gm-Message-State: APjAAAV9xE0V0pGcqDq9FpGU03s4QhHN5m7a9K7SyeRIkumCjNkc78QP
+        jjTBCJzQAqBiQpZxe1+CHvdKlfEDhiHSn+ujbU4=
+X-Google-Smtp-Source: APXvYqxbsy8a23okkYT9gLlSl1NfjJbzTB0IQVPck0cj7cyO0Cirse11Pyi1DQJ25JIBlJAH6rN51oL5RVa0mXU2N5Q=
+X-Received: by 2002:a37:a858:: with SMTP id r85mr1635451qke.394.1568661319809;
+ Mon, 16 Sep 2019 12:15:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0ba20aa4-d2dd-2263-6b5f-16a5c8a39f67@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 16 Sep 2019 21:15:04 +0200
+Message-ID: <CAK8P3a0N9+-fmmg=oPVsKmoNb0vAYsASOneXUYBVAp8nyJEwdQ@mail.gmail.com>
+Subject: [GIT PULL] asm-generic changes for v5.4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Denis Efremov <efremov@linux.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-(added linux-arch)
+The following changes since commit a55aa89aab90fae7c815b0551b07be37db359d76:
 
-On Mon, Sep 16, 2019 at 08:23:29AM -0400, Laura Abbott wrote:
-> On 9/16/19 8:21 AM, Mike Rapoport wrote:
-> >From: Mike Rapoport <rppt@linux.ibm.com>
-> >
-> >arm64 calls memblock_free() for the initrd area in its implementation of
-> >free_initrd_mem(), but this call has no actual effect that late in the boot
-> >process. By the time initrd is freed, all the reserved memory is managed by
-> >the page allocator and the memblock.reserved is unused, so there is no
-> >point to update it.
-> >
-> 
-> People like to use memblock for keeping track of memory even if it has no
-> actual effect. We made this change explicitly (see 05c58752f9dc ("arm64: To remove
-> initrd reserved area entry from memblock") That said, moving to the generic
-> APIs would be nice. Maybe we can find another place to update the accounting?
+  Linux 5.3-rc6 (2019-08-25 12:01:23 -0700)
 
-Any other place in arch/arm64 would make it messy because it would have to
-duplicate keepinitrd logic.
+are available in the Git repository at:
 
-We could put the memblock_free() in the generic free_initrd_mem() with
-something like:
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+tags/asm-generic-5.4
 
-diff --git a/init/initramfs.c b/init/initramfs.c
-index c47dad0..403c6a0 100644
---- a/init/initramfs.c
-+++ b/init/initramfs.c
-@@ -531,6 +531,10 @@ void __weak free_initrd_mem(unsigned long start,
-unsigned long end)
- {
-        free_reserved_area((void *)start, (void *)end, POISON_FREE_INITMEM,
-                        "initrd");
-+
-+#ifdef CONFIG_ARCH_KEEP_MEMBLOCK
-+       memblock_free(__virt_to_phys(start), end - start);
-+#endif
- }
- 
- #ifdef CONFIG_KEXEC_CORE
+for you to fetch changes up to 9b87647c665dbf93173ca2f43986902b59dfbbba:
 
+  asm-generic: add unlikely to default BUG_ON(x) (2019-09-01 23:53:39 +0200)
 
-Then powerpc and s390 folks will also be able to track the initrd memory :)
+----------------------------------------------------------------
+asm-generic changes for v5.4
 
-> >Without the memblock_free() call the only difference between arm64 and the
-> >generic versions of free_initrd_mem() is the memory poisoning. Switching
-> >arm64 to the generic version will enable the poisoning.
-> >
-> >Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> >---
-> >
-> >I've boot tested it on qemu and I've checked that kexec works.
-> >
-> >  arch/arm64/mm/init.c | 8 --------
-> >  1 file changed, 8 deletions(-)
-> >
-> >diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> >index f3c7952..8ad2934 100644
-> >--- a/arch/arm64/mm/init.c
-> >+++ b/arch/arm64/mm/init.c
-> >@@ -567,14 +567,6 @@ void free_initmem(void)
-> >  	unmap_kernel_range((u64)__init_begin, (u64)(__init_end - __init_begin));
-> >  }
-> >-#ifdef CONFIG_BLK_DEV_INITRD
-> >-void __init free_initrd_mem(unsigned long start, unsigned long end)
-> >-{
-> >-	free_reserved_area((void *)start, (void *)end, 0, "initrd");
-> >-	memblock_free(__virt_to_phys(start), end - start);
-> >-}
-> >-#endif
-> >-
-> >  /*
-> >   * Dump out memory limit information on panic.
-> >   */
-> >
-> 
+Here are three small cleanup patches for the include/asm-generic
+directory. Christoph removes the __ioremap as part of a cleanup,
+Nico improves the constant do_div() optimization, and Denis
+changes BUG_ON() to be consistent with other implementations.
 
--- 
-Sincerely yours,
-Mike.
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Christoph Hellwig (1):
+      asm-generic: don't provide __ioremap
+
+Denis Efremov (1):
+      asm-generic: add unlikely to default BUG_ON(x)
+
+Nicolas Pitre (1):
+      __div64_const32(): improve the generic C version
+
+ include/asm-generic/bug.h   |  2 +-
+ include/asm-generic/div64.h | 16 ++++++++++------
+ include/asm-generic/io.h    |  9 ---------
+ 3 files changed, 11 insertions(+), 16 deletions(-)
