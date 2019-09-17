@@ -2,108 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC9BB477D
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2019 08:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DE3B4B20
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2019 11:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbfIQGZ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Sep 2019 02:25:57 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2231 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727801AbfIQGZ5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 17 Sep 2019 02:25:57 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 8630A4953779977C334E;
-        Tue, 17 Sep 2019 14:25:55 +0800 (CST)
-Received: from [127.0.0.1] (10.177.223.23) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Tue, 17 Sep 2019
- 14:25:51 +0800
-Subject: Re: [PATCH v4 1/5] locking/qspinlock: Rename
- arch_mcs_spin_unlock_contended to arch_mcs_pass_lock and make it more generic
-To:     Alex Kogan <alex.kogan@oracle.com>, <linux@armlinux.org.uk>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <will.deacon@arm.com>,
-        <arnd@arndb.de>, <longman@redhat.com>,
-        <linux-arch@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
-        <bp@alien8.de>, <hpa@zytor.com>, <x86@kernel.org>,
-        <jglauber@marvell.com>
-CC:     <steven.sistare@oracle.com>, <daniel.m.jordan@oracle.com>,
-        <dave.dice@oracle.com>, <rahul.x.yadav@oracle.com>
-References: <20190906142541.34061-1-alex.kogan@oracle.com>
- <20190906142541.34061-2-alex.kogan@oracle.com>
-From:   Hanjun Guo <guohanjun@huawei.com>
-Message-ID: <22a45ca4-fcae-c805-596e-67f1809eb1dd@huawei.com>
-Date:   Tue, 17 Sep 2019 14:25:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.5.0
-MIME-Version: 1.0
-In-Reply-To: <20190906142541.34061-2-alex.kogan@oracle.com>
+        id S1729444AbfIQJnu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 17 Sep 2019 05:43:50 -0400
+Received: from mail.11d03.mspz7.gob.ec ([190.214.23.250]:39504 "EHLO
+        mail.11d03.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729419AbfIQJnu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Sep 2019 05:43:50 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id DB9AC40588F2F;
+        Mon, 16 Sep 2019 23:44:14 -0500 (-05)
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ofkRP76LDxsV; Mon, 16 Sep 2019 23:44:14 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id 95E7840588F24;
+        Mon, 16 Sep 2019 23:44:09 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 11d03.mspz7.gob.ec
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id dncjKJNc0bgn; Mon, 16 Sep 2019 23:44:09 -0500 (-05)
+Received: from [10.33.79.142] (unknown [105.4.0.133])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTPSA id 784E440588F36;
+        Mon, 16 Sep 2019 23:43:55 -0500 (-05)
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.177.223.23]
-X-CFilter-Loop: Reflected
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
+To:     Recipients <vicenta.sinche@11d03.mspz7.gob.ec>
+From:   ''Tayeb souami'' <vicenta.sinche@11d03.mspz7.gob.ec>
+Date:   Tue, 17 Sep 2019 06:43:45 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20190917044355.784E440588F36@mail.11d03.mspz7.gob.ec>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Alex,
+Lieber Freund,
 
-On 2019/9/6 22:25, Alex Kogan wrote:
-> The new macro should accept the value to be stored into the lock argument
-> as another argument. This allows using the same macro in cases where the
-> value to be stored when passing the lock is different from 1.
-> 
-> Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
-> Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
-> ---
->  arch/arm/include/asm/mcs_spinlock.h | 4 ++--
->  kernel/locking/mcs_spinlock.h       | 6 +++---
->  kernel/locking/qspinlock.c          | 2 +-
->  3 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm/include/asm/mcs_spinlock.h b/arch/arm/include/asm/mcs_spinlock.h
-> index 529d2cf4d06f..f3f9efdcd2ca 100644
-> --- a/arch/arm/include/asm/mcs_spinlock.h
-> +++ b/arch/arm/include/asm/mcs_spinlock.h
-> @@ -14,9 +14,9 @@ do {									\
->  		wfe();							\
->  } while (0)								\
->  
-> -#define arch_mcs_spin_unlock_contended(lock)				\
-> +#define arch_mcs_pass_lock(lock, val)					\
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
 
-arch_mcs_spin_unlock_contended() has a matching function arch_mcs_spin_lock_contended(),
-please see include/asm-generic/mcs_spinlock.h, so if we update this function name,
-should we update the matching one as well? and update the relevant comments as well?
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
->  do {									\
-> -	smp_store_release(lock, 1);					\
-> +	smp_store_release((lock), (val));				\
->  	dsb_sev();							\
->  } while (0)
->  
-> diff --git a/kernel/locking/mcs_spinlock.h b/kernel/locking/mcs_spinlock.h
-> index 5e10153b4d3c..84327ca21650 100644
-> --- a/kernel/locking/mcs_spinlock.h
-> +++ b/kernel/locking/mcs_spinlock.h
-> @@ -41,8 +41,8 @@ do {									\
->   * operations in the critical section has been completed before
->   * unlocking.
->   */
-> -#define arch_mcs_spin_unlock_contended(l)				\
+Das ist dein Spendencode: [TS530342018]
 
-Before this line of the code, there is:
+Antworten Sie mit dem SPENDE-CODE an diese 
 
-#ifndef arch_mcs_spin_lock_contended
+E-Mail:Tayebsouam.spende@gmail.com
 
-...
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
 
-#define arch_mcs_spin_lock_contended(l)                 \
-
-So #ifndef should be updated too.
-
-Thanks
-Hanjun
-
+Grüße
+Herr Tayeb Souami
