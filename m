@@ -2,83 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1693CB40F0
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Sep 2019 21:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC9BB477D
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2019 08:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727826AbfIPTPV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Sep 2019 15:15:21 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:32811 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbfIPTPV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Sep 2019 15:15:21 -0400
-Received: by mail-qk1-f194.google.com with SMTP id x134so1196414qkb.0;
-        Mon, 16 Sep 2019 12:15:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=wUc3QBRhsqMMHvwIEi6V0XE3vX9eu/T89TukX6CeZiI=;
-        b=c+oJoM/WOFrA8iLVqvSbHE7msUsl9Sx6OwQY8JRYcO1GpNbwc4GWGRCw58TrEoWA50
-         hLccV0Hn/dIpqwE8lgmSY8ANuUfgOisTHJaE6y18UgAJEBE6Qwgq9AsJg76Y3qA59fb9
-         5hx95/siNpQt5v330pZf3nzs2/ashPwRHbHcZn16fRlSRUPUSHv8RQmnGhcH7Y0TaT3S
-         Aw7nuuYSp1VnlN1g98vjFT+0RHtwaGUOjzWTNdEdlXaXxRbhq2IWA8D7knoGIFcMMtQl
-         0shTAYfNMNGTvFpTA62g7qEqK2gMTE+tqWw1PNvFAj+zZ7TNtglCQ2ils4dlkMUwpKBw
-         pjuA==
-X-Gm-Message-State: APjAAAV9xE0V0pGcqDq9FpGU03s4QhHN5m7a9K7SyeRIkumCjNkc78QP
-        jjTBCJzQAqBiQpZxe1+CHvdKlfEDhiHSn+ujbU4=
-X-Google-Smtp-Source: APXvYqxbsy8a23okkYT9gLlSl1NfjJbzTB0IQVPck0cj7cyO0Cirse11Pyi1DQJ25JIBlJAH6rN51oL5RVa0mXU2N5Q=
-X-Received: by 2002:a37:a858:: with SMTP id r85mr1635451qke.394.1568661319809;
- Mon, 16 Sep 2019 12:15:19 -0700 (PDT)
+        id S1727851AbfIQGZ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Sep 2019 02:25:57 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:2231 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727801AbfIQGZ5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 17 Sep 2019 02:25:57 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 8630A4953779977C334E;
+        Tue, 17 Sep 2019 14:25:55 +0800 (CST)
+Received: from [127.0.0.1] (10.177.223.23) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Tue, 17 Sep 2019
+ 14:25:51 +0800
+Subject: Re: [PATCH v4 1/5] locking/qspinlock: Rename
+ arch_mcs_spin_unlock_contended to arch_mcs_pass_lock and make it more generic
+To:     Alex Kogan <alex.kogan@oracle.com>, <linux@armlinux.org.uk>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <will.deacon@arm.com>,
+        <arnd@arndb.de>, <longman@redhat.com>,
+        <linux-arch@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
+        <bp@alien8.de>, <hpa@zytor.com>, <x86@kernel.org>,
+        <jglauber@marvell.com>
+CC:     <steven.sistare@oracle.com>, <daniel.m.jordan@oracle.com>,
+        <dave.dice@oracle.com>, <rahul.x.yadav@oracle.com>
+References: <20190906142541.34061-1-alex.kogan@oracle.com>
+ <20190906142541.34061-2-alex.kogan@oracle.com>
+From:   Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <22a45ca4-fcae-c805-596e-67f1809eb1dd@huawei.com>
+Date:   Tue, 17 Sep 2019 14:25:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.0
 MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 16 Sep 2019 21:15:04 +0200
-Message-ID: <CAK8P3a0N9+-fmmg=oPVsKmoNb0vAYsASOneXUYBVAp8nyJEwdQ@mail.gmail.com>
-Subject: [GIT PULL] asm-generic changes for v5.4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Denis Efremov <efremov@linux.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190906142541.34061-2-alex.kogan@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.177.223.23]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit a55aa89aab90fae7c815b0551b07be37db359d76:
+Hi Alex,
 
-  Linux 5.3-rc6 (2019-08-25 12:01:23 -0700)
+On 2019/9/6 22:25, Alex Kogan wrote:
+> The new macro should accept the value to be stored into the lock argument
+> as another argument. This allows using the same macro in cases where the
+> value to be stored when passing the lock is different from 1.
+> 
+> Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
+> Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
+> ---
+>  arch/arm/include/asm/mcs_spinlock.h | 4 ++--
+>  kernel/locking/mcs_spinlock.h       | 6 +++---
+>  kernel/locking/qspinlock.c          | 2 +-
+>  3 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm/include/asm/mcs_spinlock.h b/arch/arm/include/asm/mcs_spinlock.h
+> index 529d2cf4d06f..f3f9efdcd2ca 100644
+> --- a/arch/arm/include/asm/mcs_spinlock.h
+> +++ b/arch/arm/include/asm/mcs_spinlock.h
+> @@ -14,9 +14,9 @@ do {									\
+>  		wfe();							\
+>  } while (0)								\
+>  
+> -#define arch_mcs_spin_unlock_contended(lock)				\
+> +#define arch_mcs_pass_lock(lock, val)					\
 
-are available in the Git repository at:
+arch_mcs_spin_unlock_contended() has a matching function arch_mcs_spin_lock_contended(),
+please see include/asm-generic/mcs_spinlock.h, so if we update this function name,
+should we update the matching one as well? and update the relevant comments as well?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-tags/asm-generic-5.4
+>  do {									\
+> -	smp_store_release(lock, 1);					\
+> +	smp_store_release((lock), (val));				\
+>  	dsb_sev();							\
+>  } while (0)
+>  
+> diff --git a/kernel/locking/mcs_spinlock.h b/kernel/locking/mcs_spinlock.h
+> index 5e10153b4d3c..84327ca21650 100644
+> --- a/kernel/locking/mcs_spinlock.h
+> +++ b/kernel/locking/mcs_spinlock.h
+> @@ -41,8 +41,8 @@ do {									\
+>   * operations in the critical section has been completed before
+>   * unlocking.
+>   */
+> -#define arch_mcs_spin_unlock_contended(l)				\
 
-for you to fetch changes up to 9b87647c665dbf93173ca2f43986902b59dfbbba:
+Before this line of the code, there is:
 
-  asm-generic: add unlikely to default BUG_ON(x) (2019-09-01 23:53:39 +0200)
+#ifndef arch_mcs_spin_lock_contended
 
-----------------------------------------------------------------
-asm-generic changes for v5.4
+...
 
-Here are three small cleanup patches for the include/asm-generic
-directory. Christoph removes the __ioremap as part of a cleanup,
-Nico improves the constant do_div() optimization, and Denis
-changes BUG_ON() to be consistent with other implementations.
+#define arch_mcs_spin_lock_contended(l)                 \
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+So #ifndef should be updated too.
 
-----------------------------------------------------------------
-Christoph Hellwig (1):
-      asm-generic: don't provide __ioremap
+Thanks
+Hanjun
 
-Denis Efremov (1):
-      asm-generic: add unlikely to default BUG_ON(x)
-
-Nicolas Pitre (1):
-      __div64_const32(): improve the generic C version
-
- include/asm-generic/bug.h   |  2 +-
- include/asm-generic/div64.h | 16 ++++++++++------
- include/asm-generic/io.h    |  9 ---------
- 3 files changed, 11 insertions(+), 16 deletions(-)
