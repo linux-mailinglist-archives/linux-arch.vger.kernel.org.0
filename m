@@ -2,142 +2,195 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D76B7E6E
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Sep 2019 17:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F01BB7EA1
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Sep 2019 17:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391380AbfISPmb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Sep 2019 11:42:31 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:31272 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389646AbfISPma (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 19 Sep 2019 11:42:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1568907749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:openpgp:openpgp;
-        bh=jtOOTxtBSH0XScdrTXtYNsOa16spVRV1/m7O55QYuzg=;
-        b=IcXStEpMdiQ7LtTF3y43ldGKSi9PVKlJkwojgu7jq1Ey17kl0EwJym67jOEGyzRm9ol3xe
-        kUkW7jbbCT/+VU7OXdCsIsQxtgkMuFQsOf9mgRs5ThXAiIQ1FIIq0XMNTxlMLCBIgqY6Qz
-        pbk9LJILPy6PQQGRZlJpouUd60mjsUg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-91-a8uy-n9oN3qXq4wH1ZFgRw-1; Thu, 19 Sep 2019 11:40:57 -0400
-Received: by mail-wm1-f70.google.com with SMTP id g82so1988871wmg.9
-        for <linux-arch@vger.kernel.org>; Thu, 19 Sep 2019 08:40:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bAINjjRSlbUTjobcIGuJ8vNAwyPobHG3I1/jgsCdgXw=;
-        b=iuspiW79K3BUxeKSsaaroNaa99PqrtjHbe2yh0Uro7eGG9wXBCIC28MKht35MkqqOh
-         SY6Vd5eTud/GScKhIEfjh9kmkMeK5CnVZB4ginw+Wbg2zgXAyC59qbE05BTQ3mf0E+PK
-         sfhN3ZFxswiRcA4zDVe0FH4wC7w8JTs5KhB1eXyNCk8QzaArJZu+ibc0DTRPhI+BT3O6
-         pF9o17pPo3cyaqQ0AUp/Xi/AetwmO7iLyN2WXbYbZLI9LJruR8WJIymqBM3s2mXZLAXc
-         h2G3qprc5+AlR403AvxEk46WADiS0EXSFfUQO3Y08UQzIYRgF4J45zI6Om+zbQ7A4e2I
-         w+ww==
-X-Gm-Message-State: APjAAAVdX4v+vv+1x/JM2rW+ea227X6DnZF+kF7xuecAN6CId3qjUlPG
-        ohkwAn3OSHgbw0jfKrYhoc7RhiJTfnoBSWXG8sOlHneLjXOkhBhRyBBAcyRr8UhG82Uk3s5Y+VA
-        UiznmaErNigBd3GwMzKzHXw==
-X-Received: by 2002:adf:e488:: with SMTP id i8mr7375474wrm.20.1568907653242;
-        Thu, 19 Sep 2019 08:40:53 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwR9KVma4Xblc47G5SpP/XvO6PKkeiTk0NhW+haXvKEfP9pKSHtsHzJm0BanCJIZYw+ZParUA==
-X-Received: by 2002:adf:e488:: with SMTP id i8mr7375450wrm.20.1568907652977;
-        Thu, 19 Sep 2019 08:40:52 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c46c:2acb:d8d2:21d8? ([2001:b07:6468:f312:c46c:2acb:d8d2:21d8])
-        by smtp.gmail.com with ESMTPSA id t6sm9820328wmf.8.2019.09.19.08.40.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Sep 2019 08:40:52 -0700 (PDT)
-Subject: Re: [RFC patch 15/15] x86/kvm: Use GENERIC_EXIT_WORKPENDING
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>, kvm@vger.kernel.org,
-        linux-arch@vger.kernel.org
-References: <20190919150314.054351477@linutronix.de>
- <20190919150809.964620570@linutronix.de>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Openpgp: preference=signencrypt
-Message-ID: <ef1145d8-01af-57d2-1065-cf12db16e422@redhat.com>
-Date:   Thu, 19 Sep 2019 17:40:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190919150809.964620570@linutronix.de>
-Content-Language: en-US
-X-MC-Unique: a8uy-n9oN3qXq4wH1ZFgRw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
+        id S2391499AbfISP4m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Sep 2019 11:56:42 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:55194 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391497AbfISP4m (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Sep 2019 11:56:42 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8JFsSrQ133684;
+        Thu, 19 Sep 2019 15:55:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2019-08-05; bh=sriX7NN5BqHD0GlF4Xbuu366jfCsxHPqzJ2QnT7Ovus=;
+ b=S6pbH9hTSxhfomU3TV/MckQLOUPdlCJwvNRI6Fu6RgTl7g09tUKygAhAaFdzzISp/bHd
+ Z7+lAivQO8/FFGqtqpSYiJA6Pf740MYUvPY/EesxutP/gf0zWlbfjjbsjhYTTxckMKLA
+ ZW+G6ZXPnLI9RBKlBF0Jvl4keSGN9RyFX1VjQsBR3q8p2oshbIfooj58706ydhuuEVkm
+ QEQnDzimw+QAHbno70KOmXkMbTTGJPBTnZA4Zyjvv1p9qhwGSNGw2NQvEaDumfCUSAXj
+ 7VHRdev+w9in4qmvzblANfgNF8tOJs8uAde4zc8O3o+6L+o9liPcNOoqGfbJHg8H2vyI VQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 2v3vb4n06e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Sep 2019 15:55:31 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8JFsCYG126243;
+        Thu, 19 Sep 2019 15:55:30 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2v3vbaqfqu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Sep 2019 15:55:30 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x8JFtL16021238;
+        Thu, 19 Sep 2019 15:55:21 GMT
+Received: from [10.11.111.157] (/10.11.111.157)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 19 Sep 2019 08:55:20 -0700
+Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 10.2 \(3259\))
+Subject: Re: [PATCH v4 3/5] locking/qspinlock: Introduce CNA into the slow
+ path of qspinlock
+From:   Alex Kogan <alex.kogan@oracle.com>
+In-Reply-To: <3ae2b6a2-ffe6-2ca1-e5bf-2292db50e26f@redhat.com>
+Date:   Thu, 19 Sep 2019 11:55:21 -0400
+Cc:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
+        will.deacon@arm.com, arnd@arndb.de, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        guohanjun@huawei.com, jglauber@marvell.com,
+        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        dave.dice@oracle.com, rahul.x.yadav@oracle.com
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <87B87982-670F-4F12-9EE0-DC89A059FAEC@oracle.com>
+References: <20190906142541.34061-1-alex.kogan@oracle.com>
+ <20190906142541.34061-4-alex.kogan@oracle.com>
+ <3ae2b6a2-ffe6-2ca1-e5bf-2292db50e26f@redhat.com>
+To:     Waiman Long <longman@redhat.com>
+X-Mailer: Apple Mail (2.3259)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9385 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1909190145
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9385 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1909190145
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 19/09/19 17:03, Thomas Gleixner wrote:
-> Use the generic infrastructure to check for and handle pending work befor=
-e
-> entering into guest mode.
+>> +/*
+>> + * cna_try_find_next - scan the main waiting queue looking for the =
+first
+>> + * thread running on the same NUMA node as the lock holder. If found =
+(call it
+>> + * thread T), move all threads in the main queue between the lock =
+holder and
+>> + * T to the end of the secondary queue and return T; otherwise, =
+return NULL.
+>> + *
+>> + * Schematically, this may look like the following (nn stands for =
+numa_node and
+>> + * et stands for encoded_tail).
+>> + *
+>> + *     when cna_try_find_next() is called (the secondary queue is =
+empty):
+>> + *
+>> + *  A+------------+   B+--------+   C+--------+   T+--------+
+>> + *   |mcs:next    | -> |mcs:next| -> |mcs:next| -> |mcs:next| -> =
+NULL
+>> + *   |mcs:locked=3D1|    |cna:nn=3D0|    |cna:nn=3D2|    |cna:nn=3D1|
+>> + *   |cna:nn=3D1    |    +--------+    +--------+    +--------+
+>> + *   +----------- +
+>> + *
+>> + *     when cna_try_find_next() returns (the secondary queue =
+contains B and C):
+>> + *
+>> + *  A+----------------+    T+--------+
+>> + *   |mcs:next        | ->  |mcs:next| -> NULL
+>> + *   |mcs:locked=3DB.et | -+  |cna:nn=3D1|
+>> + *   |cna:nn=3D1        |  |  +--------+
+>> + *   +--------------- +  |
+>> + *                       |
+>> + *                       +->  B+--------+   C+--------+
+>> + *                             |mcs:next| -> |mcs:next|
+>> + *                             |cna:nn=3D0|    |cna:nn=3D2|
+>> + *                             |cna:tail| -> +--------+
+>> + *                             +--------+
+>> + *
+>> + * The worst case complexity of the scan is O(n), where n is the =
+number
+>> + * of current waiters. However, the fast path, which is expected to =
+be the
+>> + * common case, is O(1).
+>> + */
+>> +static struct mcs_spinlock *cna_try_find_next(struct mcs_spinlock =
+*node,
+>> +					      struct mcs_spinlock *next)
+>> +{
+>> +	struct cna_node *cn =3D (struct cna_node *)node;
+>> +	struct cna_node *cni =3D (struct cna_node *)next;
+>> +	struct cna_node *first, *last =3D NULL;
+>> +	int my_numa_node =3D cn->numa_node;
+>> +
+>> +	/* fast path: immediate successor is on the same NUMA node */
+>> +	if (cni->numa_node =3D=3D my_numa_node)
+>> +		return next;
+>> +
+>> +	/* find any next waiter on 'our' NUMA node */
+>> +	for (first =3D cni;
+>> +	     cni && cni->numa_node !=3D my_numa_node;
+>> +	     last =3D cni, cni =3D (struct cna_node =
+*)READ_ONCE(cni->mcs.next))
+>> +		;
+>> +
+>> +	/* if found, splice any skipped waiters onto the secondary queue =
+*/
+>> +	if (cni && last)
+>> +		cna_splice_tail(cn, first, last);
+>> +
+>> +	return (struct mcs_spinlock *)cni;
+>> +}
 >=20
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> At the Linux Plumbers Conference last week, Will has raised the =
+concern
+> about the latency of the O(1) cna_try_find_next() operation that will
+> add to the lock hold time.
+While the worst case complexity of the scan is O(n), I _think it can be =
+proven
+that the amortized complexity is O(1). For intuition, consider a =
+two-node=20
+system with N threads total. In the worst case scenario, the scan will =
+go=20
+over N/2 threads running on a different node. If the scan ultimately =
+=E2=80=9Cfails=E2=80=9D
+(no thread from the lock holder=E2=80=99s node is found), the lock will =
+be passed
+to the first thread from a different node and then between all those N/2 =
+threads,
+with a scan of just one node for the next N/2 - 1 passes. Otherwise, =
+those=20
+N/2 threads will be moved to the secondary queue. On the next lock =
+handover,=20
+we pass the lock either to the next thread in the main queue (as it has =
+to be=20
+from our node) or to the first node in the secondary queue. In both =
+cases, we=20
+scan just one node, and in the latter case, we have again N/2 - 1 passes =
+with=20
+a scan of just one node each.
 
-Subject should be "x86/kvm: use exit_to_guestmode".
+> One way to hide some of the latency is to do
+> a pre-scan before acquiring the lock. The CNA code could override the
+> pv_wait_head_or_lock() function to call cna_try_find_next() as a
+> pre-scan and return 0. What do you think?
+This is certainly possible, but I do not think it would completely =
+eliminate=20
+the worst case scenario. It will probably make it even less likely, but =
+at=20
+the same time, we will reduce the chance of actually finding a thread =
+from the
+same node (that may enter the main queue while we wait for the owner & =
+pending=20
+to go away).
 
-Paolo
-
-> ---
->  arch/x86/kvm/x86.c |   17 +++++------------
->  1 file changed, 5 insertions(+), 12 deletions(-)
->=20
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -52,6 +52,7 @@
->  #include <linux/irqbypass.h>
->  #include <linux/sched/stat.h>
->  #include <linux/sched/isolation.h>
-> +#include <linux/entry-common.h>
->  #include <linux/mem_encrypt.h>
-> =20
->  #include <trace/events/kvm.h>
-> @@ -7984,8 +7985,8 @@ static int vcpu_enter_guest(struct kvm_v
->  =09if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
->  =09=09kvm_x86_ops->sync_pir_to_irr(vcpu);
-> =20
-> -=09if (vcpu->mode =3D=3D EXITING_GUEST_MODE || kvm_request_pending(vcpu)
-> -=09    || need_resched() || signal_pending(current)) {
-> +=09if (vcpu->mode =3D=3D EXITING_GUEST_MODE || kvm_request_pending(vcpu)=
- ||
-> +=09    exit_to_guestmode_work_pending()) {
->  =09=09vcpu->mode =3D OUTSIDE_GUEST_MODE;
->  =09=09smp_wmb();
->  =09=09local_irq_enable();
-> @@ -8178,17 +8179,9 @@ static int vcpu_run(struct kvm_vcpu *vcp
-> =20
->  =09=09kvm_check_async_pf_completion(vcpu);
-> =20
-> -=09=09if (signal_pending(current)) {
-> -=09=09=09r =3D -EINTR;
-> -=09=09=09vcpu->run->exit_reason =3D KVM_EXIT_INTR;
-> -=09=09=09++vcpu->stat.signal_exits;
-> +=09=09r =3D exit_to_guestmode(kvm, vcpu);
-> +=09=09if (r)
->  =09=09=09break;
-> -=09=09}
-> -=09=09if (need_resched()) {
-> -=09=09=09srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
-> -=09=09=09cond_resched();
-> -=09=09=09vcpu->srcu_idx =3D srcu_read_lock(&kvm->srcu);
-> -=09=09}
->  =09}
-> =20
->  =09srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
->=20
->=20
-
+Regards,
+=E2=80=94 Alex=
