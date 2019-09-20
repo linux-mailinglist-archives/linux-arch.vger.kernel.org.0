@@ -2,157 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C11EDB82F5
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Sep 2019 22:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E1FB8A23
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Sep 2019 06:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732334AbfISUy2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Sep 2019 16:54:28 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:5781 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730064AbfISUy1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 19 Sep 2019 16:54:27 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 02CA97F75E;
-        Thu, 19 Sep 2019 20:54:27 +0000 (UTC)
-Received: from llong.remote.csb (dhcp-17-160.bos.redhat.com [10.18.17.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 66B4519D70;
-        Thu, 19 Sep 2019 20:54:14 +0000 (UTC)
-Subject: Re: [PATCH v4 3/5] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-To:     Alex Kogan <alex.kogan@oracle.com>
-Cc:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
-        will.deacon@arm.com, arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com, rahul.x.yadav@oracle.com
-References: <20190906142541.34061-1-alex.kogan@oracle.com>
- <20190906142541.34061-4-alex.kogan@oracle.com>
- <3ae2b6a2-ffe6-2ca1-e5bf-2292db50e26f@redhat.com>
- <87B87982-670F-4F12-9EE0-DC89A059FAEC@oracle.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <6c08767a-f60c-077d-4e94-66ea189db6f1@redhat.com>
-Date:   Thu, 19 Sep 2019 16:54:13 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2390002AbfITEZ1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Sep 2019 00:25:27 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:36946 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389114AbfITEZ1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Sep 2019 00:25:27 -0400
+Received: by mail-ed1-f66.google.com with SMTP id r4so5118849edy.4;
+        Thu, 19 Sep 2019 21:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=c5bLQ44DHFFsF9a/l+fvIthJAUI4IpWyFZ6HUIWlQ5g=;
+        b=PE6/GJMxGendc9vmFm2rfrsD1RIU1p4ZoNxCgjg1+1T2bds+bx+vnQeV2BV8bB1Ezj
+         sS6yqD6MhOkuRGs9TDgbrddAf4b3al3NSj/cEL2PyepIUPXfU2b8rZWTIOc3I6UxG9k3
+         sfD1NsHwjuMO87J1TnlP9dcEOSiE/yFZULAJh2FulfylSaBCBIqKJediE7SLng72ppBR
+         CgMFKUmaXFG0CHp5WO0YxYk+xp5RKbuW/gO4GnVQc70zKkheyQLR9b+ChZQGjYdzNtOO
+         949dxMk+a+BRPrezoJOCm0oIXUJSHsGzLrt167Bnd6sphlSkhJPBDkTiojgaujym+fD3
+         slWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=c5bLQ44DHFFsF9a/l+fvIthJAUI4IpWyFZ6HUIWlQ5g=;
+        b=Z3NRrbPO7ragRuEM2Iie795mIhVLnBMyFdeonB44/vivWDBZ/CswjH8ChSsduB2Jw0
+         /mUx5RvcnJyg7Mtt/oSJ47Ok2w+ZC4H15hcFGhdMTPRXiDunLdkIHxwGs1/15AndR/L0
+         Q9b/CSiSSl0XS1RYKyXRtY3ioJPQGIz9B1ruNrpjBzwtQjyZC4du9bTmfSYXVdmbfjJy
+         iOS2DC2WMB4myn+cg6wJ4AIb87eHZqsWk5AT+6muj9GV4VMpP7kD6suQR0W6muR3vESD
+         UroJ+OxOwKtQ14JIUp1gQ1drdnaTQYWmkQDGvG9MbjOuT4iqPKlXFmWHNf029rWJpLAc
+         n4SQ==
+X-Gm-Message-State: APjAAAUhoZSS3J1n+61vL9Ag7D8XY1WvRZxa3aG5bhPDMtlYdV+29kZP
+        /6Lgudv3YtQQ/Nqoz7VanQ==
+X-Google-Smtp-Source: APXvYqyDgdtkl74lEOF8tJe9DMwo1fx58ulo7VOciTOb+B6z43KJN8vrWu6lIVkGCqCBGzLCSCGWEw==
+X-Received: by 2002:a17:907:20c4:: with SMTP id qq4mr17587171ejb.161.1568953525081;
+        Thu, 19 Sep 2019 21:25:25 -0700 (PDT)
+Received: from localhost (tor2.anonymizer.ccc.de. [217.115.10.132])
+        by smtp.gmail.com with ESMTPSA id qx25sm92713ejb.61.2019.09.19.21.25.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2019 21:25:24 -0700 (PDT)
+Date:   Fri, 20 Sep 2019 14:25:01 +1000
+From:   Jookia <166291@gmail.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Xogium <contact@xogium.me>, linux-arch@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, mingo@redhat.com, bp@alien8.de,
+        tglx@linutronix.de, linux-arm-kernel@lists.infradead.org
+Subject: Re: [breakage] panic() does not halt arm64 systems under certain
+ conditions
+Message-ID: <20190920042501.GA5516@novena-choice-citizen-recovery.gateway>
+References: <BX1W47JXPMR8.58IYW53H6M5N@dragonstone>
+ <20190917104518.ovg6ivadyst7h76o@willie-the-truck>
 MIME-Version: 1.0
-In-Reply-To: <87B87982-670F-4F12-9EE0-DC89A059FAEC@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.71]); Thu, 19 Sep 2019 20:54:27 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190917104518.ovg6ivadyst7h76o@willie-the-truck>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/19/19 11:55 AM, Alex Kogan wrote:
->>> +/*
->>> + * cna_try_find_next - scan the main waiting queue looking for the first
->>> + * thread running on the same NUMA node as the lock holder. If found (call it
->>> + * thread T), move all threads in the main queue between the lock holder and
->>> + * T to the end of the secondary queue and return T; otherwise, return NULL.
->>> + *
->>> + * Schematically, this may look like the following (nn stands for numa_node and
->>> + * et stands for encoded_tail).
->>> + *
->>> + *     when cna_try_find_next() is called (the secondary queue is empty):
->>> + *
->>> + *  A+------------+   B+--------+   C+--------+   T+--------+
->>> + *   |mcs:next    | -> |mcs:next| -> |mcs:next| -> |mcs:next| -> NULL
->>> + *   |mcs:locked=1|    |cna:nn=0|    |cna:nn=2|    |cna:nn=1|
->>> + *   |cna:nn=1    |    +--------+    +--------+    +--------+
->>> + *   +----------- +
->>> + *
->>> + *     when cna_try_find_next() returns (the secondary queue contains B and C):
->>> + *
->>> + *  A+----------------+    T+--------+
->>> + *   |mcs:next        | ->  |mcs:next| -> NULL
->>> + *   |mcs:locked=B.et | -+  |cna:nn=1|
->>> + *   |cna:nn=1        |  |  +--------+
->>> + *   +--------------- +  |
->>> + *                       |
->>> + *                       +->  B+--------+   C+--------+
->>> + *                             |mcs:next| -> |mcs:next|
->>> + *                             |cna:nn=0|    |cna:nn=2|
->>> + *                             |cna:tail| -> +--------+
->>> + *                             +--------+
->>> + *
->>> + * The worst case complexity of the scan is O(n), where n is the number
->>> + * of current waiters. However, the fast path, which is expected to be the
->>> + * common case, is O(1).
->>> + */
->>> +static struct mcs_spinlock *cna_try_find_next(struct mcs_spinlock *node,
->>> +					      struct mcs_spinlock *next)
->>> +{
->>> +	struct cna_node *cn = (struct cna_node *)node;
->>> +	struct cna_node *cni = (struct cna_node *)next;
->>> +	struct cna_node *first, *last = NULL;
->>> +	int my_numa_node = cn->numa_node;
->>> +
->>> +	/* fast path: immediate successor is on the same NUMA node */
->>> +	if (cni->numa_node == my_numa_node)
->>> +		return next;
->>> +
->>> +	/* find any next waiter on 'our' NUMA node */
->>> +	for (first = cni;
->>> +	     cni && cni->numa_node != my_numa_node;
->>> +	     last = cni, cni = (struct cna_node *)READ_ONCE(cni->mcs.next))
->>> +		;
->>> +
->>> +	/* if found, splice any skipped waiters onto the secondary queue */
->>> +	if (cni && last)
->>> +		cna_splice_tail(cn, first, last);
->>> +
->>> +	return (struct mcs_spinlock *)cni;
->>> +}
->> At the Linux Plumbers Conference last week, Will has raised the concern
->> about the latency of the O(1) cna_try_find_next() operation that will
->> add to the lock hold time.
-> While the worst case complexity of the scan is O(n), I _think it can be proven
-> that the amortized complexity is O(1). For intuition, consider a two-node 
-> system with N threads total. In the worst case scenario, the scan will go 
-> over N/2 threads running on a different node. If the scan ultimately “fails”
-> (no thread from the lock holder’s node is found), the lock will be passed
-> to the first thread from a different node and then between all those N/2 threads,
-> with a scan of just one node for the next N/2 - 1 passes. Otherwise, those 
-> N/2 threads will be moved to the secondary queue. On the next lock handover, 
-> we pass the lock either to the next thread in the main queue (as it has to be 
-> from our node) or to the first node in the secondary queue. In both cases, we 
-> scan just one node, and in the latter case, we have again N/2 - 1 passes with 
-> a scan of just one node each.
-I agree that it should not be a problem for a 2-socket. For larger SMP
-systems with 8, 16 or even 32 sockets, it can be an issue as those
-systems are also more likely to have more lock contention and hence
-longer wait queues.
->> One way to hide some of the latency is to do
->> a pre-scan before acquiring the lock. The CNA code could override the
->> pv_wait_head_or_lock() function to call cna_try_find_next() as a
->> pre-scan and return 0. What do you think?
-> This is certainly possible, but I do not think it would completely eliminate 
-> the worst case scenario. It will probably make it even less likely, but at 
-> the same time, we will reduce the chance of actually finding a thread from the
-> same node (that may enter the main queue while we wait for the owner & pending 
-> to go away).
+On Tue, Sep 17, 2019 at 11:45:19AM +0100, Will Deacon wrote:
+> Hi,
+> 
+> [Expanding CC list; original message is here:
+>  https://lore.kernel.org/linux-arm-kernel/BX1W47JXPMR8.58IYW53H6M5N@dragonstone/]
+> 
+> On Mon, Sep 16, 2019 at 09:35:36PM -0400, Xogium wrote:
+> > On arm64 in some situations userspace will continue running even after a
+> > panic. This means any userspace watchdog daemon will continue pinging,
+> > that service managers will keep running and displaying messages in certain
+> > cases, and that it is possible to enter via ssh in the now unstable system
+> > and to do almost anything except reboot/power off and etc. If
+> > CONFIG_PREEMPT=n is set in the kernel's configuration, the issue is fixed.
+> > I have reproduced the very same behavior with linux 4.19, 5.2 and 5.3. On
+> > x86/x86_64 the issue does not seem to be present at all.
+> 
+> I've managed to reproduce this under both 32-bit and 64-bit ARM kernels.
+> The issue is that the infinite loop at the end of panic() can run with
+> preemption enabled (particularly when invoking by echoing 'c' to
+> /proc/sysrq-trigger), so we end up rescheduling user tasks. On x86, this
+> doesn't happen because smp_send_stop() disables the local APIC in
+> native_stop_other_cpus() and so interrupts are effectively masked while
+> spinning.
+> 
+> A straightforward fix is to disable preemption explicitly on the panic()
+> path (diff below), but I've expanded the cc list to see both what others
+> think, but also in case smp_send_stop() is supposed to have the side-effect
+> of disabling interrupt delivery for the local CPU.
+> 
+> Will
+> 
+> --->8
+> 
+> diff --git a/kernel/panic.c b/kernel/panic.c
+> index 057540b6eee9..02d0de31c42d 100644
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -179,6 +179,7 @@ void panic(const char *fmt, ...)
+> 	 * after setting panic_cpu) from invoking panic() again.
+> 	 */
+> 	local_irq_disable();
+> +	preempt_disable_notrace();
+>  
+> 	/*
+> 	 * It's possible to come here directly from a panic-assertion and
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
-When I said prescan, I mean to move the front queue entries that are
-from non-local nodes to the secondary queue before acquiring the lock.
-After acquiring the lock, you can repeat the scan in case the prescan
-didn't find any local node queue entry. Yes, we will need to do the
-similar operation twice.
+When you run with panic=... it will send you to a loop earlier in the
+panic code before local_irq_disable() is hit, working around the bug.
+A patch like this would make the behaviour the same:
 
-Yes, it does not eliminate the worst case scenario, but it should help
-in reducing the average lock hold time.
+diff --git a/kernel/panic.c b/kernel/panic.c
+index 4d9f55bf7d38..92abbb5f8d38 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -331,7 +331,6 @@ void panic(const char *fmt, ...)
 
-Of course, the probabilistic (or deterministic) check to go to the next
-local node entry or to the secondary queue should be done before
-pre-scan so that we won't waste the effort.
-
-Cheers,
-Longman
-
+        /* Do not scroll important messages printed above */
+        suppress_printk = 1;
+-       local_irq_enable();
+        for (i = 0; ; i += PANIC_TIMER_STEP) {
+                touch_softlockup_watchdog();
+                if (i >= i_next) {
