@@ -2,323 +2,258 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E50BB362
-	for <lists+linux-arch@lfdr.de>; Mon, 23 Sep 2019 14:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDFABB688
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Sep 2019 16:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392204AbfIWMKK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 23 Sep 2019 08:10:10 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:41642 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387524AbfIWMKK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Sep 2019 08:10:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=L4tEhimko8J+iZHa8gZGRUaGzlJawq1HCtEyJj3yIJ0=; b=Pr/sDrttJStI+l6HZ3wniDRjR
-        zHdj6VlhiyWsNITxYwv4EBg89pl6D0XTNhPtVgZ/wH50Ju9E+NusEzObbKzc2NbzHnXT0GueSgU6+
-        lK3FP6Jn+6qkUqC0/MjV0/8RVJRR1XwWSw8xYKXbfplKdLNa7R/0zx8AATwpZGBd2u5mrnrOhg3Iw
-        86IBztMyOlJ8YlOFTXotpuahPEotkxT4wBLm9j+CLnMEu5k/FRN+3t/gxHm0JXjN2pEa+NPiwdFfm
-        QJJsyn7Cs/E6nyaJDN4ebqHUlTAdkZ6GAnjQsaauwy816kR2cBg/vPbiiA6i32nFthlmeOEpibela
-        /7Q3zq1wA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iCNAJ-0002wp-5P; Mon, 23 Sep 2019 12:10:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 77B13301A7A;
-        Mon, 23 Sep 2019 14:09:16 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7645020D80D79; Mon, 23 Sep 2019 14:10:01 +0200 (CEST)
-Date:   Mon, 23 Sep 2019 14:10:01 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-arch@vger.kernel.org, jgross@suse.com
-Subject: Re: [RFC patch 10/15] x86/entry: Move irq tracing to C code
-Message-ID: <20190923121001.GG2332@hirez.programming.kicks-ass.net>
-References: <20190919150314.054351477@linutronix.de>
- <20190919150809.446771597@linutronix.de>
- <20190923084718.GG2349@hirez.programming.kicks-ass.net>
- <alpine.DEB.2.21.1909231227050.2003@nanos.tec.linutronix.de>
- <20190923114920.GF2332@hirez.programming.kicks-ass.net>
- <20190923115551.GZ2386@hirez.programming.kicks-ass.net>
+        id S2407510AbfIWOUS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 23 Sep 2019 10:20:18 -0400
+Received: from foss.arm.com ([217.140.110.172]:43176 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2407008AbfIWOUR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 23 Sep 2019 10:20:17 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9C161000;
+        Mon, 23 Sep 2019 07:20:16 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8091C3F59C;
+        Mon, 23 Sep 2019 07:20:14 -0700 (PDT)
+Subject: Re: [RFC PATCH v2 01/12] smp: add generic SMP-stop support to common
+ code
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, mark.rutland@arm.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        takahiro.akashi@linaro.org, james.morse@arm.com,
+        hidehiro.kawai.ez@hitachi.com, tglx@linutronix.de, will@kernel.org,
+        dave.martin@arm.com, linux-arm-kernel@lists.infradead.org,
+        mingo@redhat.com, x86@kernel.org, dzickus@redhat.com,
+        ehabkost@redhat.com, linux@armlinux.org.uk, davem@davemloft.net,
+        sparclinux@vger.kernel.org, hch@infradead.org
+References: <20190913181953.45748-1-cristian.marussi@arm.com>
+ <20190913181953.45748-2-cristian.marussi@arm.com>
+Message-ID: <1d7e90b7-71d8-3c12-9c1b-7049a1d7e32f@arm.com>
+Date:   Mon, 23 Sep 2019 15:20:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190923115551.GZ2386@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190913181953.45748-2-cristian.marussi@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 01:55:51PM +0200, Peter Zijlstra wrote:
-> On Mon, Sep 23, 2019 at 01:49:20PM +0200, Peter Zijlstra wrote:
-> > While walking the kids to school I wondered WTH we need to call
-> > TRACE_IRQS_OFF in the first place. If this is the return from exception
-> > path, interrupts had better be disabled already (in exception enter).
-> > 
-> > For entry_64.S we have:
-> > 
-> >   - idtentry_part; which does TRACE_IRQS_OFF at the start and error_exit
-> >     at the end.
-> > 
-> >   - xen_do_hypervisor_callback, xen_failsafe_callback -- which are
-> >     confusing.
-> > 
-> > So in the normal case, it appears we can simply do:
-> > 
-> > diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> > index b7c3ea4cb19d..e9cf59ac554e 100644
-> > --- a/arch/x86/entry/entry_64.S
-> > +++ b/arch/x86/entry/entry_64.S
-> > @@ -1368,8 +1368,6 @@ END(error_entry)
-> >  
-> >  ENTRY(error_exit)
-> >  	UNWIND_HINT_REGS
-> > -	DISABLE_INTERRUPTS(CLBR_ANY)
-> > -	TRACE_IRQS_OFF
-> >  	testb	$3, CS(%rsp)
-> >  	jz	retint_kernel
-> >  	jmp	retint_user
-> > 
-> > and all should be well. This leaves Xen...
-> > 
-> > For entry_32.S it looks like nothing uses 'resume_userspace' so that
-> > ENTRY can go away. Which then leaves:
-> > 
-> >  * ret_from_intr:
-> >   - common_spurious: TRACE_IRQS_OFF
-> >   - common_interrupt: TRACE_IRQS_OFF
-> >   - BUILD_INTERRUPT3: TRACE_IRQS_OFF
-> >   - xen_do_upcall: ...
-> > 
-> >  * ret_from_exception:
-> >   - xen_failsafe_callback: ...
-> >   - common_exception_read_cr2: TRACE_IRQS_OFF
-> >   - common_exception: TRACE_IRQS_OFF
-> >   - int3: TRACE_IRQS_OFF
-> > 
-> > Which again suggests:
-> > 
-> > diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-> > index f83ca5aa8b77..7a19e7413a8e 100644
-> > --- a/arch/x86/entry/entry_32.S
-> > +++ b/arch/x86/entry/entry_32.S
-> > @@ -825,9 +825,6 @@ END(ret_from_fork)
-> >  	cmpl	$USER_RPL, %eax
-> >  	jb	restore_all_kernel		# not returning to v8086 or userspace
-> >  
-> > -ENTRY(resume_userspace)
-> > -	DISABLE_INTERRUPTS(CLBR_ANY)
-> > -	TRACE_IRQS_OFF
-> >  	movl	%esp, %eax
-> >  	call	prepare_exit_to_usermode
-> >  	jmp	restore_all
-> > 
-> > with the notable exception (oh teh pun!) being Xen... _again_.
-> > 
-> > With these patchlets on, we'd want prepare_exit_to_usermode() to
-> > validate the IRQ state, but AFAICT it _should_ all just 'work' (famous
-> > last words).
-> > 
-> > Cc Juergen because Xen
+On 13/09/2019 19:19, Cristian Marussi wrote:
+> There was a lot of code duplication across architectures regarding the
+> SMP stop procedures' logic; moreover some of this duplicated code logic
+> happened to be similarly faulty across a few architectures: while fixing
+> such logic, move such generic logic as much as possible inside common
+> code.
 > 
-> Arrgh.. faults!! they do local_irq_enable() but never disable them
-> again. Arguably those functions should be symmetric and restore IF when
-> they muck with it instead of relying on the exit path fixing things up.
+> Collect all the common logic related to SMP stop operations into the
+> common SMP code; any architecture willing to use such centralized logic
+> can select CONFIG_ARCH_USE_COMMON_STOP=y and provide the related
+> arch-specific helpers: in such a scenario, those architectures will
+> transparently start using the common code provided by smp_send_stop()
+> common function.
+> 
+> On the other side, Architectures not willing to use common code SMP stop
+> logic will simply leave CONFIG_ARCH_USE_COMMON_STOP undefined and carry
+> on executing their local arch-specific smp_send_stop() as before.
+> 
+> Suggested-by: Dave Martin <Dave.Martin@arm.com>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> v1 --> v2
+> - moved related Kconfig to common code inside arch/Kconfig
+> - introduced additional CONFIG_USE_COMMON_STOP selected by
+>   CONFIG_ARCH_USE_COMMON_STOP
+> - introduced helpers to let architectures optionally alter
+>   the default common code behaviour while waiting for CPUs:
+>   change timeout or wait for ever. (will be needed by x86)
+> ---
+>  arch/Kconfig        |  7 +++++
+>  include/linux/smp.h | 55 +++++++++++++++++++++++++++++++++++++
+>  kernel/smp.c        | 67 +++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 129 insertions(+)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index a7b57dd42c26..89766e6c0ac8 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -166,6 +166,13 @@ config ARCH_USE_BUILTIN_BSWAP
+>  	 instructions should set this. And it shouldn't hurt to set it
+>  	 on architectures that don't have such instructions.
+>  
+> +config ARCH_USE_COMMON_SMP_STOP
+> +       def_bool n
+> +
+> +config USE_COMMON_SMP_STOP
+> +       depends on SMP && ARCH_USE_COMMON_SMP_STOP
+> +       def_bool y
+> +
+>  config KRETPROBES
+>  	def_bool y
+>  	depends on KPROBES && HAVE_KRETPROBES
+> diff --git a/include/linux/smp.h b/include/linux/smp.h
+> index 6fc856c9eda5..381a14bfcd96 100644
+> --- a/include/linux/smp.h
+> +++ b/include/linux/smp.h
+> @@ -77,6 +77,61 @@ int smp_call_function_single_async(int cpu, call_single_data_t *csd);
+>   */
+>  extern void smp_send_stop(void);
+>  
+> +#ifdef CONFIG_USE_COMMON_SMP_STOP
+> +static atomic_t wait_forever;
+> +static atomic_t wait_timeout = ATOMIC_INIT(USEC_PER_SEC);
+> +
+> +/*
+> + * An Architecture can optionally decide to use this helper to change the
+> + * waiting behaviour of common STOP logic, forcing to wait forever for
+> + * all CPUs to be stopped.
+> + */
+> +static inline void smp_stop_set_wait_forever(int wait)
+> +{
+> +	atomic_set(&wait_forever, wait);
+> +	/* ensure wait atomic-op is visible */
+> +	smp_mb__after_atomic();
+> +}
+> +
 
----
-diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-index f83ca5aa8b77..7a19e7413a8e 100644
---- a/arch/x86/entry/entry_32.S
-+++ b/arch/x86/entry/entry_32.S
-@@ -825,9 +825,6 @@ END(ret_from_fork)
- 	cmpl	$USER_RPL, %eax
- 	jb	restore_all_kernel		# not returning to v8086 or userspace
- 
--ENTRY(resume_userspace)
--	DISABLE_INTERRUPTS(CLBR_ANY)
--	TRACE_IRQS_OFF
- 	movl	%esp, %eax
- 	call	prepare_exit_to_usermode
- 	jmp	restore_all
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index b7c3ea4cb19d..e9cf59ac554e 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -1368,8 +1368,6 @@ END(error_entry)
- 
- ENTRY(error_exit)
- 	UNWIND_HINT_REGS
--	DISABLE_INTERRUPTS(CLBR_ANY)
--	TRACE_IRQS_OFF
- 	testb	$3, CS(%rsp)
- 	jz	retint_kernel
- 	jmp	retint_user
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 4bb0f8447112..663d44c68f67 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -276,6 +276,7 @@ static void do_error_trap(struct pt_regs *regs, long error_code, char *str,
- 			NOTIFY_STOP) {
- 		cond_local_irq_enable(regs);
- 		do_trap(trapnr, signr, str, regs, error_code, sicode, addr);
-+		cond_local_irq_disable(regs);
- 	}
- }
- 
-@@ -501,6 +502,7 @@ dotraplinkage void do_bounds(struct pt_regs *regs, long error_code)
- 		die("bounds", regs, error_code);
- 	}
- 
-+	cond_local_irq_disable(regs);
- 	return;
- 
- exit_trap:
-@@ -512,6 +514,7 @@ dotraplinkage void do_bounds(struct pt_regs *regs, long error_code)
- 	 * time..
- 	 */
- 	do_trap(X86_TRAP_BR, SIGSEGV, "bounds", regs, error_code, 0, NULL);
-+	cond_local_irq_disable(regs);
- }
- 
- dotraplinkage void
-@@ -525,19 +528,19 @@ do_general_protection(struct pt_regs *regs, long error_code)
- 
- 	if (static_cpu_has(X86_FEATURE_UMIP)) {
- 		if (user_mode(regs) && fixup_umip_exception(regs))
--			return;
-+			goto exit_trap;
- 	}
- 
- 	if (v8086_mode(regs)) {
- 		local_irq_enable();
- 		handle_vm86_fault((struct kernel_vm86_regs *) regs, error_code);
--		return;
-+		goto exit_trap;
- 	}
- 
- 	tsk = current;
- 	if (!user_mode(regs)) {
- 		if (fixup_exception(regs, X86_TRAP_GP, error_code, 0))
--			return;
-+			goto exit_trap;
- 
- 		tsk->thread.error_code = error_code;
- 		tsk->thread.trap_nr = X86_TRAP_GP;
-@@ -549,12 +552,12 @@ do_general_protection(struct pt_regs *regs, long error_code)
- 		 */
- 		if (!preemptible() && kprobe_running() &&
- 		    kprobe_fault_handler(regs, X86_TRAP_GP))
--			return;
-+			goto exit_trap;
- 
- 		if (notify_die(DIE_GPF, desc, regs, error_code,
- 			       X86_TRAP_GP, SIGSEGV) != NOTIFY_STOP)
- 			die(desc, regs, error_code);
--		return;
-+		goto exit_trap;
- 	}
- 
- 	tsk->thread.error_code = error_code;
-@@ -563,6 +566,8 @@ do_general_protection(struct pt_regs *regs, long error_code)
- 	show_signal(tsk, SIGSEGV, "", desc, regs, error_code);
- 
- 	force_sig(SIGSEGV);
-+exit_trap:
-+	cond_local_irq_disable(regs);
- }
- NOKPROBE_SYMBOL(do_general_protection);
- 
-@@ -783,9 +788,7 @@ dotraplinkage void do_debug(struct pt_regs *regs, long error_code)
- 	if (v8086_mode(regs)) {
- 		handle_vm86_trap((struct kernel_vm86_regs *) regs, error_code,
- 					X86_TRAP_DB);
--		cond_local_irq_disable(regs);
--		debug_stack_usage_dec();
--		goto exit;
-+		goto exit_irq;
- 	}
- 
- 	if (WARN_ON_ONCE((dr6 & DR_STEP) && !user_mode(regs))) {
-@@ -802,6 +805,8 @@ dotraplinkage void do_debug(struct pt_regs *regs, long error_code)
- 	si_code = get_si_code(tsk->thread.debugreg6);
- 	if (tsk->thread.debugreg6 & (DR_STEP | DR_TRAP_BITS) || user_icebp)
- 		send_sigtrap(regs, error_code, si_code);
-+
-+exit_irq:
- 	cond_local_irq_disable(regs);
- 	debug_stack_usage_dec();
- 
-@@ -827,7 +832,7 @@ static void math_error(struct pt_regs *regs, int error_code, int trapnr)
- 
- 	if (!user_mode(regs)) {
- 		if (fixup_exception(regs, trapnr, error_code, 0))
--			return;
-+			goto exit_trap;
- 
- 		task->thread.error_code = error_code;
- 		task->thread.trap_nr = trapnr;
-@@ -835,7 +840,7 @@ static void math_error(struct pt_regs *regs, int error_code, int trapnr)
- 		if (notify_die(DIE_TRAP, str, regs, error_code,
- 					trapnr, SIGFPE) != NOTIFY_STOP)
- 			die(str, regs, error_code);
--		return;
-+		goto exit_trap;
- 	}
- 
- 	/*
-@@ -849,10 +854,12 @@ static void math_error(struct pt_regs *regs, int error_code, int trapnr)
- 	si_code = fpu__exception_code(fpu, trapnr);
- 	/* Retry when we get spurious exceptions: */
- 	if (!si_code)
--		return;
-+		goto exit_trap;
- 
- 	force_sig_fault(SIGFPE, si_code,
- 			(void __user *)uprobe_get_trap_addr(regs));
-+exit_trap:
-+	cond_local_irq_disable(regs);
- }
- 
- dotraplinkage void do_coprocessor_error(struct pt_regs *regs, long error_code)
-@@ -889,6 +896,8 @@ do_device_not_available(struct pt_regs *regs, long error_code)
- 
- 		info.regs = regs;
- 		math_emulate(&info);
-+
-+		cond_local_irq_disable(regs);
- 		return;
- 	}
- #endif
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index 9ceacd1156db..501cc36a3d6a 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1500,10 +1500,13 @@ __do_page_fault(struct pt_regs *regs, unsigned long hw_error_code,
- 		return;
- 
- 	/* Was the fault on kernel-controlled part of the address space? */
--	if (unlikely(fault_in_kernel_space(address)))
-+	if (unlikely(fault_in_kernel_space(address))) {
- 		do_kern_addr_fault(regs, hw_error_code, address);
--	else
-+	} else {
- 		do_user_addr_fault(regs, hw_error_code, address);
-+		if (regs->flags & X86_EFLAGS_IF)
-+			local_irq_disable();
-+	}
- }
- NOKPROBE_SYMBOL(__do_page_fault);
- 
+These new helpers I added in V2 to let x86 configure wait/timeout SMP common stop behavior
+are in fact deadly broken as of now since based on underlying static header-globals.
+I'll fix in V3.
+
+Cheers
+
+Cristian
+
+
+> +/*
+> + * An Architecture can optionally decide to use this helper to change the
+> + * waiting timeout of common STOP logic. A ZERO timeout means no timeout
+> + * at all as long as wait_forever was not previously set.
+> + *
+> + * Note that wait_forever and timeout must remain individually selectable:
+> + * so you can temporarily request wait_forever while keeping the same timeout
+> + * settings.
+> + */
+> +static inline void smp_stop_set_wait_timeout_us(unsigned long timeout)
+> +{
+> +	atomic_set(&wait_timeout, timeout);
+> +	/* ensure timeout atomic-op is visible */
+> +	smp_mb__after_atomic();
+> +}
+> +
+> +/* Retrieve the current wait settings. */
+> +static inline bool smp_stop_get_wait_timeout_us(unsigned long *timeout)
+> +{
+> +	if (timeout)
+> +		*timeout = atomic_read(&wait_timeout);
+> +	return atomic_read(&wait_forever);
+> +}
+> +
+> +/*
+> + * Any Architecture willing to use STOP common logic implementation
+> + * MUST at least provide the arch_smp_stop_call() helper which is in
+> + * charge of its own arch-specific CPU-stop mechanism.
+> + */
+> +extern void arch_smp_stop_call(cpumask_t *cpus);
+> +
+> +/*
+> + * An Architecture CAN also provide the arch_smp_cpus_stop_complete()
+> + * dedicated helper, to perform any final arch-specific operation on
+> + * the local CPU once the other CPUs have been successfully stopped.
+> + */
+> +void arch_smp_cpus_stop_complete(void);
+> +#endif
+> +
+>  /*
+>   * sends a 'reschedule' event to another CPU:
+>   */
+> diff --git a/kernel/smp.c b/kernel/smp.c
+> index 7dbcb402c2fc..72f99bf13fd0 100644
+> --- a/kernel/smp.c
+> +++ b/kernel/smp.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/sched.h>
+>  #include <linux/sched/idle.h>
+>  #include <linux/hypervisor.h>
+> +#include <linux/delay.h>
+>  
+>  #include "smpboot.h"
+>  
+> @@ -817,3 +818,69 @@ int smp_call_on_cpu(unsigned int cpu, int (*func)(void *), void *par, bool phys)
+>  	return sscs.ret;
+>  }
+>  EXPORT_SYMBOL_GPL(smp_call_on_cpu);
+> +
+> +#ifdef CONFIG_USE_COMMON_SMP_STOP
+> +void __weak arch_smp_cpus_stop_complete(void) { }
+> +
+> +static inline bool any_other_cpus_online(cpumask_t *mask,
+> +					 unsigned int this_cpu_id)
+> +{
+> +	cpumask_copy(mask, cpu_online_mask);
+> +	cpumask_clear_cpu(this_cpu_id, mask);
+> +
+> +	return !cpumask_empty(mask);
+> +}
+> +
+> +/*
+> + * This centralizes the common logic to:
+> + *
+> + *  - evaluate which CPUs are online and needs to be notified for stop,
+> + *    while considering properly the status of the calling CPU
+> + *
+> + *  - call the arch-specific helpers to request the effective stop
+> + *
+> + *  - wait for the stop operation to be completed across all involved CPUs
+> + *    monitoring the cpu_online_mask
+> + */
+> +void smp_send_stop(void)
+> +{
+> +	unsigned int this_cpu_id;
+> +	cpumask_t mask;
+> +
+> +	this_cpu_id = smp_processor_id();
+> +	if (any_other_cpus_online(&mask, this_cpu_id)) {
+> +		bool wait;
+> +		unsigned long timeout;
+> +		unsigned int this_cpu_online = cpu_online(this_cpu_id);
+> +
+> +		if (system_state <= SYSTEM_RUNNING)
+> +			pr_crit("stopping secondary CPUs\n");
+> +		arch_smp_stop_call(&mask);
+> +
+> +		/*
+> +		 * Defaults to wait up to one second for other CPUs to stop;
+> +		 * architectures can modify the default timeout or request
+> +		 * to wait forever.
+> +		 *
+> +		 * Here we rely simply on cpu_online_mask to sync with
+> +		 * arch-specific stop code without bloating the code with an
+> +		 * additional atomic_t ad-hoc counter.
+> +		 *
+> +		 * As a consequence we'll need proper explicit memory barriers
+> +		 * in case the other CPUs running the arch-specific stop-code
+> +		 * would need to commit to memory some data (like saved_regs).
+> +		 */
+> +		wait = smp_stop_get_wait_timeout_us(&timeout);
+> +		while (num_online_cpus() > this_cpu_online &&
+> +		       (wait || timeout--))
+> +			udelay(1);
+> +		/* ensure any stopping-CPUs memory access is made visible */
+> +		smp_rmb();
+> +		if (num_online_cpus() > this_cpu_online)
+> +			pr_warn("failed to stop secondary CPUs %*pbl\n",
+> +				cpumask_pr_args(cpu_online_mask));
+> +	}
+> +	/* Perform final (possibly arch-specific) work on this CPU */
+> +	arch_smp_cpus_stop_complete();
+> +}
+> +#endif
+> 
+
