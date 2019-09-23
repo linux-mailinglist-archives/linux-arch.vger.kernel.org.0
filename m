@@ -2,48 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CD7BBA61
-	for <lists+linux-arch@lfdr.de>; Mon, 23 Sep 2019 19:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5FDBBB1C
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Sep 2019 20:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440153AbfIWRYU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 23 Sep 2019 13:24:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37188 "EHLO mail.kernel.org"
+        id S2437962AbfIWSSE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 23 Sep 2019 14:18:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54808 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393117AbfIWRYQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 23 Sep 2019 13:24:16 -0400
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+        id S2438133AbfIWSSE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 23 Sep 2019 14:18:04 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B375A2168B
-        for <linux-arch@vger.kernel.org>; Mon, 23 Sep 2019 17:24:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C2BD3217D7
+        for <linux-arch@vger.kernel.org>; Mon, 23 Sep 2019 18:18:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569259455;
-        bh=DzycgKHCi19mMx4cgC/hY8TzO4MUiU13rQpq2YThoZE=;
+        s=default; t=1569262683;
+        bh=KQ8YtMSUvBH+IEHZPN4F+9fUdawjUfYBpTtUWbWv5xA=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AgJtVR2zD2ID/COVmKJzNcv7L5FFBker86qUiq8xMUdR/grog+vdfoPdz1kl1i+2L
-         3n8nUR6vNH6n2v3jWM0ceUb6UNpa3UdN0CZnhldbm2yHmP8a/ZloneXsUX2qePAseX
-         7i/HLWr7tZbO8sx5lZGhoke2RMA9qDKtn6GgR5I4=
-Received: by mail-wr1-f51.google.com with SMTP id i18so14846469wru.11
-        for <linux-arch@vger.kernel.org>; Mon, 23 Sep 2019 10:24:14 -0700 (PDT)
-X-Gm-Message-State: APjAAAXcVVJLXfk0KYHSx1oIJAWQivMHXVtLvhDqFIjdu6PZ14379is2
-        fHoDKMwhI485U4Y/QpyZkjXY2o820UTbMHQYdf4NIg==
-X-Google-Smtp-Source: APXvYqzcNw/Fw315XYUmtYdbQHBHfab17/P4MaPRH38Ob6gFaeYiPSmAfE5s06olKUIUuopNukGDlqBjM+ujZLSvy+8=
-X-Received: by 2002:adf:cc0a:: with SMTP id x10mr362155wrh.195.1569259453239;
- Mon, 23 Sep 2019 10:24:13 -0700 (PDT)
+        b=EcTmLIqMPZQJAyFQKFNsUCMcomj2YImlbE7UswNurg5uOjUS7B+ZrDdmYbbiZXoSj
+         7hMyu8oOOf7xnjv5MJ0jhjA717vnLvJOhZys2yHl4jCElJn2dFfYMbs+Ky4tAeStgw
+         U3XBQmOfYiB7wqP6GXpDomgUvdOh8hhcEPuP3gEE=
+Received: by mail-wr1-f41.google.com with SMTP id n14so15057648wrw.9
+        for <linux-arch@vger.kernel.org>; Mon, 23 Sep 2019 11:18:02 -0700 (PDT)
+X-Gm-Message-State: APjAAAVrKiIdrfGQ07nayB7t9Iy9pv5ExZghabuW2uauKEPZChZOlPN0
+        f8X7hjU86WTN3t3FITCelWjbTL5qH9dLFMnu0vtmbA==
+X-Google-Smtp-Source: APXvYqw9QoPpUoxk4JNixTG3ZMLD68/a+CDLIBqUsLls0MSYtDH5cRZnjxNzbm5yL+MNYc9za6vT6Uwp++RwwMYwHhA=
+X-Received: by 2002:a5d:4647:: with SMTP id j7mr578006wrs.106.1569262681278;
+ Mon, 23 Sep 2019 11:18:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190919150314.054351477@linutronix.de> <20190919150809.446771597@linutronix.de>
- <20190923084718.GG2349@hirez.programming.kicks-ass.net> <alpine.DEB.2.21.1909231227050.2003@nanos.tec.linutronix.de>
- <20190923114920.GF2332@hirez.programming.kicks-ass.net> <20190923115551.GZ2386@hirez.programming.kicks-ass.net>
- <20190923121001.GG2332@hirez.programming.kicks-ass.net>
-In-Reply-To: <20190923121001.GG2332@hirez.programming.kicks-ass.net>
+References: <20190919150314.054351477@linutronix.de> <20190919150809.860645841@linutronix.de>
+In-Reply-To: <20190919150809.860645841@linutronix.de>
 From:   Andy Lutomirski <luto@kernel.org>
-Date:   Mon, 23 Sep 2019 10:24:01 -0700
-X-Gmail-Original-Message-ID: <CALCETrW7T5KPCFO6vWUkExCYKdXVkv6mkfA53A542uxukP+eew@mail.gmail.com>
-Message-ID: <CALCETrW7T5KPCFO6vWUkExCYKdXVkv6mkfA53A542uxukP+eew@mail.gmail.com>
-Subject: Re: [RFC patch 10/15] x86/entry: Move irq tracing to C code
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+Date:   Mon, 23 Sep 2019 11:17:50 -0700
+X-Gmail-Original-Message-ID: <CALCETrWjDtcued8nYv=FtcjREz8C4Kj6OaCCirUkbZQForSo+A@mail.gmail.com>
+Message-ID: <CALCETrWjDtcued8nYv=FtcjREz8C4Kj6OaCCirUkbZQForSo+A@mail.gmail.com>
+Subject: Re: [RFC patch 14/15] workpending: Provide infrastructure for work
+ before entering a guest
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -51,102 +49,74 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         kvm list <kvm@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Juergen Gross <jgross@suse.com>
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 5:10 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, Sep 19, 2019 at 8:09 AM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> On Mon, Sep 23, 2019 at 01:55:51PM +0200, Peter Zijlstra wrote:
-> > On Mon, Sep 23, 2019 at 01:49:20PM +0200, Peter Zijlstra wrote:
-> > > While walking the kids to school I wondered WTH we need to call
-> > > TRACE_IRQS_OFF in the first place. If this is the return from exception
-> > > path, interrupts had better be disabled already (in exception enter).
-> > >
-> > > For entry_64.S we have:
-> > >
-> > >   - idtentry_part; which does TRACE_IRQS_OFF at the start and error_exit
-> > >     at the end.
-> > >
-> > >   - xen_do_hypervisor_callback, xen_failsafe_callback -- which are
-> > >     confusing.
-> > >
-> > > So in the normal case, it appears we can simply do:
-> > >
-> > > diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> > > index b7c3ea4cb19d..e9cf59ac554e 100644
-> > > --- a/arch/x86/entry/entry_64.S
-> > > +++ b/arch/x86/entry/entry_64.S
-> > > @@ -1368,8 +1368,6 @@ END(error_entry)
-> > >
-> > >  ENTRY(error_exit)
-> > >     UNWIND_HINT_REGS
-> > > -   DISABLE_INTERRUPTS(CLBR_ANY)
-> > > -   TRACE_IRQS_OFF
-> > >     testb   $3, CS(%rsp)
-> > >     jz      retint_kernel
-> > >     jmp     retint_user
-> > >
-> > > and all should be well. This leaves Xen...
-> > >
-> > > For entry_32.S it looks like nothing uses 'resume_userspace' so that
-> > > ENTRY can go away. Which then leaves:
-> > >
-> > >  * ret_from_intr:
-> > >   - common_spurious: TRACE_IRQS_OFF
-> > >   - common_interrupt: TRACE_IRQS_OFF
-> > >   - BUILD_INTERRUPT3: TRACE_IRQS_OFF
-> > >   - xen_do_upcall: ...
-> > >
-> > >  * ret_from_exception:
-> > >   - xen_failsafe_callback: ...
-> > >   - common_exception_read_cr2: TRACE_IRQS_OFF
-> > >   - common_exception: TRACE_IRQS_OFF
-> > >   - int3: TRACE_IRQS_OFF
-> > >
-> > > Which again suggests:
-> > >
-> > > diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-> > > index f83ca5aa8b77..7a19e7413a8e 100644
-> > > --- a/arch/x86/entry/entry_32.S
-> > > +++ b/arch/x86/entry/entry_32.S
-> > > @@ -825,9 +825,6 @@ END(ret_from_fork)
-> > >     cmpl    $USER_RPL, %eax
-> > >     jb      restore_all_kernel              # not returning to v8086 or userspace
-> > >
-> > > -ENTRY(resume_userspace)
-> > > -   DISABLE_INTERRUPTS(CLBR_ANY)
-> > > -   TRACE_IRQS_OFF
-> > >     movl    %esp, %eax
-> > >     call    prepare_exit_to_usermode
-> > >     jmp     restore_all
-> > >
-> > > with the notable exception (oh teh pun!) being Xen... _again_.
-> > >
-> > > With these patchlets on, we'd want prepare_exit_to_usermode() to
-> > > validate the IRQ state, but AFAICT it _should_ all just 'work' (famous
-> > > last words).
-> > >
-> > > Cc Juergen because Xen
-> >
-> > Arrgh.. faults!! they do local_irq_enable() but never disable them
-> > again. Arguably those functions should be symmetric and restore IF when
-> > they muck with it instead of relying on the exit path fixing things up.
+> Entering a guest is similar to exiting to user space. Pending work like
+> handling signals, rescheduling, task work etc. needs to be handled before
+> that.
 >
+> Provide generic infrastructure to avoid duplication of the same handling code
+> all over the place.
+>
+> Update ARM64 struct kvm_vcpu_stat with a signal_exit member so the generic
+> code compiles.
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
-> diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-> index f83ca5aa8b77..7a19e7413a8e 100644
-> --- a/arch/x86/entry/entry_32.S
-> +++ b/arch/x86/entry/entry_32.S
-> @@ -825,9 +825,6 @@ END(ret_from_fork)
->         cmpl    $USER_RPL, %eax
->         jb      restore_all_kernel              # not returning to v8086 or userspace
+>  arch/arm64/include/asm/kvm_host.h |    1
+>  include/linux/entry-common.h      |   66 ++++++++++++++++++++++++++++++++++++++
+>  kernel/entry/common.c             |   44 +++++++++++++++++++++++++
+>  3 files changed, 111 insertions(+)
+>
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -409,6 +409,7 @@ struct kvm_vcpu_stat {
+>         u64 wfi_exit_stat;
+>         u64 mmio_exit_user;
+>         u64 mmio_exit_kernel;
+> +       u64 signal_exits;
+>         u64 exits;
+>  };
+>
+> --- a/include/linux/entry-common.h
+> +++ b/include/linux/entry-common.h
+> @@ -255,4 +255,70 @@ static inline void arch_syscall_exit_tra
+>  /* Common syscall exit function */
+>  void syscall_exit_to_usermode(struct pt_regs *regs, long syscall, long retval);
+>
+> +#if IS_ENABLED(CONFIG_KVM)
+> +
+> +#include <linux/kvm_host.h>
+> +
+> +#ifndef ARCH_EXIT_TO_GUESTMODE_WORK
+> +# define ARCH_EXIT_TO_GUESTMODE_WORK   (0)
+> +#endif
+> +
+> +#define EXIT_TO_GUESTMODE_WORK                                         \
+> +       (_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_NOTIFY_RESUME |     \
+> +        ARCH_EXIT_TO_GUESTMODE_WORK)
+> +
+> +int core_exit_to_guestmode_work(struct kvm *kvm, struct kvm_vcpu *vcpu,
+> +                               unsigned long ti_work);
+> +
+> +/**
+> + * arch_exit_to_guestmode - Architecture specific exit to guest mode function
+> + * @kvm:       Pointer to the guest instance
+> + * @vcpu:      Pointer to current's VCPU data
+> + * @ti_work:   Cached TIF flags gathered in exit_to_guestmode()
+> + *
+> + * Invoked from core_exit_to_guestmode_work(). Can be replaced by
+> + * architecture specific code.
+> + */
+> +static inline int arch_exit_to_guestmode(struct kvm *kvm, struct kvm_vcpu *vcpu,
+> +                                        unsigned long ti_work);
 
-...
-
-Yes, please, but can you add an assertion under CONFIG_DEBUG_ENTRY
-that IRQs are actually off?
+Can you add a comment about whether IRQs are supposed to be off (I
+assume they are) and perhaps a lockdep assertion to verify it?
