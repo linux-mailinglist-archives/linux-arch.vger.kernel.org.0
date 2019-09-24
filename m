@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DABA0BD448
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Sep 2019 23:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A10CDBD433
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Sep 2019 23:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437290AbfIXVZ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Sep 2019 17:25:57 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46190 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2410730AbfIXVZ4 (ORCPT
+        id S2410960AbfIXVZf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Sep 2019 17:25:35 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46332 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2410953AbfIXVZf (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 24 Sep 2019 17:25:56 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8OLMOU4051360;
-        Tue, 24 Sep 2019 17:25:04 -0400
+        Tue, 24 Sep 2019 17:25:35 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8OLMN5J011434;
+        Tue, 24 Sep 2019 17:25:08 -0400
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2v7r436f9v-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2v7r8veb8f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Sep 2019 17:25:04 -0400
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x8OLNmFp054078;
-        Tue, 24 Sep 2019 17:25:03 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2v7r436f88-1
+        Tue, 24 Sep 2019 17:25:08 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x8OLMR1S011655;
+        Tue, 24 Sep 2019 17:25:07 -0400
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2v7r8veb7f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Sep 2019 17:25:03 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x8OLJrSB003225;
-        Tue, 24 Sep 2019 21:25:01 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04dal.us.ibm.com with ESMTP id 2v5bg7fy7s-1
+        Tue, 24 Sep 2019 17:25:07 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x8OLJsY7020037;
+        Tue, 24 Sep 2019 21:25:06 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma05wdc.us.ibm.com with ESMTP id 2v5bg782bw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Sep 2019 21:25:01 +0000
+        Tue, 24 Sep 2019 21:25:06 +0000
 Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8OLOxER52036024
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8OLP4Td58261866
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Sep 2019 21:24:59 GMT
+        Tue, 24 Sep 2019 21:25:04 GMT
 Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 95450C6062;
-        Tue, 24 Sep 2019 21:24:59 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 98FDEC605A;
+        Tue, 24 Sep 2019 21:25:04 +0000 (GMT)
 Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07CB0C605A;
-        Tue, 24 Sep 2019 21:24:55 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 01EC4C6057;
+        Tue, 24 Sep 2019 21:25:00 +0000 (GMT)
 Received: from LeoBras.aus.stglabs.ibm.com (unknown [9.18.235.184])
         by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 24 Sep 2019 21:24:54 +0000 (GMT)
+        Tue, 24 Sep 2019 21:24:59 +0000 (GMT)
 From:   Leonardo Bras <leonardo@linux.ibm.com>
 To:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         kvm-ppc@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -71,9 +71,9 @@ Cc:     Leonardo Bras <leonardo@linux.ibm.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         John Hubbard <jhubbard@nvidia.com>,
         Keith Busch <keith.busch@intel.com>
-Subject: [PATCH v3 03/11] mm/gup: Applies counting method to monitor gup_pgd_range
-Date:   Tue, 24 Sep 2019 18:24:20 -0300
-Message-Id: <20190924212427.7734-4-leonardo@linux.ibm.com>
+Subject: [PATCH v3 04/11] powerpc/mce_power: Applies counting method to monitor lockless pgtbl walks
+Date:   Tue, 24 Sep 2019 18:24:21 -0300
+Message-Id: <20190924212427.7734-5-leonardo@linux.ibm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190924212427.7734-1-leonardo@linux.ibm.com>
 References: <20190924212427.7734-1-leonardo@linux.ibm.com>
@@ -85,71 +85,58 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=760 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=738 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1908290000 definitions=main-1909240173
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-As decribed, gup_pgd_range is a lockless pagetable walk. So, in order to
-monitor against THP split/collapse with the couting method, it's necessary
-to bound it with {start,end}_lockless_pgtbl_walk.
-
-There are dummy functions, so it is not going to add any overhead on archs
-that don't use this method.
+Applies the counting-based method for monitoring lockless pgtable walks on
+addr_to_pfn().
 
 Signed-off-by: Leonardo Bras <leonardo@linux.ibm.com>
 ---
- mm/gup.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/powerpc/kernel/mce_power.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 98f13ab37bac..eabd6fd15cf8 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -2325,6 +2325,7 @@ static bool gup_fast_permitted(unsigned long start, unsigned long end)
- int __get_user_pages_fast(unsigned long start, int nr_pages, int write,
- 			  struct page **pages)
+diff --git a/arch/powerpc/kernel/mce_power.c b/arch/powerpc/kernel/mce_power.c
+index a814d2dfb5b0..0f2f87da4cd1 100644
+--- a/arch/powerpc/kernel/mce_power.c
++++ b/arch/powerpc/kernel/mce_power.c
+@@ -27,6 +27,7 @@ unsigned long addr_to_pfn(struct pt_regs *regs, unsigned long addr)
  {
-+	struct mm_struct mm;
- 	unsigned long len, end;
+ 	pte_t *ptep;
  	unsigned long flags;
- 	int nr = 0;
-@@ -2352,9 +2353,12 @@ int __get_user_pages_fast(unsigned long start, int nr_pages, int write,
++	unsigned long pfn;
+ 	struct mm_struct *mm;
  
- 	if (IS_ENABLED(CONFIG_HAVE_FAST_GUP) &&
- 	    gup_fast_permitted(start, end)) {
-+		mm = current->mm;
-+		start_lockless_pgtbl_walk(mm);
- 		local_irq_save(flags);
- 		gup_pgd_range(start, end, write ? FOLL_WRITE : 0, pages, &nr);
- 		local_irq_restore(flags);
-+		end_lockless_pgtbl_walk(mm);
- 	}
+ 	if (user_mode(regs))
+@@ -34,15 +35,21 @@ unsigned long addr_to_pfn(struct pt_regs *regs, unsigned long addr)
+ 	else
+ 		mm = &init_mm;
  
- 	return nr;
-@@ -2404,6 +2408,7 @@ int get_user_pages_fast(unsigned long start, int nr_pages,
- 			unsigned int gup_flags, struct page **pages)
- {
- 	unsigned long addr, len, end;
-+	struct mm_struct *mm;
- 	int nr = 0, ret = 0;
++	start_lockless_pgtbl_walk(mm);
+ 	local_irq_save(flags);
+ 	if (mm == current->mm)
+ 		ptep = find_current_mm_pte(mm->pgd, addr, NULL, NULL);
+ 	else
+ 		ptep = find_init_mm_pte(addr, NULL);
+-	local_irq_restore(flags);
++
+ 	if (!ptep || pte_special(*ptep))
+-		return ULONG_MAX;
+-	return pte_pfn(*ptep);
++		pfn = ULONG_MAX;
++	else
++		pfn = pte_pfn(*ptep);
++
++	local_irq_restore(flags);
++	end_lockless_pgtbl_walk(mm);
++	return pfn;
+ }
  
- 	if (WARN_ON_ONCE(gup_flags & ~(FOLL_WRITE | FOLL_LONGTERM)))
-@@ -2421,9 +2426,12 @@ int get_user_pages_fast(unsigned long start, int nr_pages,
- 
- 	if (IS_ENABLED(CONFIG_HAVE_FAST_GUP) &&
- 	    gup_fast_permitted(start, end)) {
-+		mm = current->mm;
-+		start_lockless_pgtbl_walk(mm);
- 		local_irq_disable();
- 		gup_pgd_range(addr, end, gup_flags, pages, &nr);
- 		local_irq_enable();
-+		end_lockless_pgtbl_walk(mm);
- 		ret = nr;
- 	}
- 
+ /* flush SLBs and reload */
 -- 
 2.20.1
 
