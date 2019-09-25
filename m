@@ -2,54 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD09BE8DC
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2019 01:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D58BE8FC
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2019 01:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbfIYXVO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Sep 2019 19:21:14 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:40863 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727913AbfIYXVO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Sep 2019 19:21:14 -0400
-Received: by mail-pf1-f195.google.com with SMTP id x127so476394pfb.7
-        for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2019 16:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YT7tDn+xx6T7cN5VNv8l2EaVVo+fdzIO6anhfSbpivo=;
-        b=ZqvMzAxHz5fdPAQAYua74PeoVIFvBkR124I3FMnOxRhPUn059jSalG4VKT/IpItmPG
-         b51iboZh5gzQUpH5ntb1mB4Qe2cbBY5fgnX1qOEH9gIADvH0KWeeaxe44VQ08LmtCz8c
-         3s4RWWaS4wETcVp+1aGXWRK/reRUgF3DPItm9D+EAaB8YIhigjlhDKAyphdAImp26MYL
-         bTQ2ahhnLLj/C1dFglVhqTuPzd4t8+jo5fBOeRJcyxrGqoSXB2bA8IeDHikO1FRnvFIv
-         qD53RgMLiLF/Ej0uhayAJt/SLyfwmJ0r18X441/enJvkbRB9mXh+C5X9XRACzTsh33ER
-         Njcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=YT7tDn+xx6T7cN5VNv8l2EaVVo+fdzIO6anhfSbpivo=;
-        b=LgyWpD0zjKGJkvElN8DCfAmIJe1YNE2xYp6b7qX2oD81szbFLUbeHK2EZcCBZPUHlI
-         xG7hxOR6Kk7vOom+wY0Tyx8xEMyILd7NgNL7oM7s2dbm0IYK2iJ+TkT0o6isP+rsBiA5
-         XYwQw4rr+m0Ywhfp7LJPLDb4RnaUzl3AeiIbJ3gH2K7vLb3AiW07yiUOz6/jghwyjCiF
-         rv69y0V/GJiuWkEoeF6WFgF2nasvVWyh37CuONHboMD0ptAB/QgDMqjyrCrDXDPBps4E
-         s9ytlS9DsJzqx/LHtPUqefdiwkOTUu7QmZ6LbndUinPzkKnhfKiFfLwr9SNXwFBUAHDV
-         kZDQ==
-X-Gm-Message-State: APjAAAWhhWYxEpvarule+tJdSMt7nHgqC5xIX5rR/+zy8+1546uXwF8c
-        K8UMUN4b+k7ZnN9TW4BFc7lzPialmcM7DO42
-X-Google-Smtp-Source: APXvYqzN6/FR3mrnCzd85Mk+Rcc96lFZci8p0FV9tHuDYC78H67Ds8UyLqWlRQ+5Zfw0sXZCwcAcSQ==
-X-Received: by 2002:aa7:8f03:: with SMTP id x3mr224989pfr.91.1569453671428;
-        Wed, 25 Sep 2019 16:21:11 -0700 (PDT)
-Received: from [172.20.32.102] ([12.206.46.62])
-        by smtp.googlemail.com with ESMTPSA id i16sm94771pfa.184.2019.09.25.16.21.09
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 Sep 2019 16:21:10 -0700 (PDT)
-Subject: Re: [PATCH v5 3/3] clocksource/drivers: Suspend/resume Hyper-V
- clocksource for hibernation
-To:     Dexuan Cui <decui@microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
-        "bp@alien8.de" <bp@alien8.de>,
+        id S1731874AbfIYXf3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Sep 2019 19:35:29 -0400
+Received: from mail-eopbgr1310101.outbound.protection.outlook.com ([40.107.131.101]:37171
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728876AbfIYXf3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 25 Sep 2019 19:35:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ITqXaQc2qgNI7cZlkGn4VO77yr2ZjQO4jdmydvLRZ8Psgh+NlBLCxHWM+EFA2u26wASbLJNh4mEiUpcg2sOnPYBXX3vpAuPgB06N16ZjixOFDx1t/XRfE/fP5CMCS7wyzJHH67o25t6Wky+0WPMwzj/joCTyyN5Q5KEpRZ9J+d4c5m9cfpQe8q9ZVelAfB+BdDRqEIP4J6hiHFjjWcjlKZRRQktiYJOUmuUfQZtNSXD7j7fWErGyFKGhOgtylIwjtM5gAjsUNjVKfVhgNkv+PaQXfNwiLBztzrxr9guU64hgKxB9uk7aFw/c0YhoG7lZEahlMcXZ+bVRvOuWV/2JAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i4piu0DfMGs4Dz6ShCcCahkWEkVUcxK8oVExZ5c/5oc=;
+ b=XJQO612TX+eHwqMA+N7x583ATHOqAj1ZXwG+ZBSxTaRLLzsYpq94Lo3imdkMjoixMo6GebAJhhelV/c85U+Ig6oSahFvdU49kBmVCblnzgg6xD3GdTGC0BgHmik0CEFlaGUherzAMGWCYagfCzaNTHAAf02fim4KWNtlujaWtM69v0wibmVuzeeJ41rltTAHjvdWZtl5YqcAOiiwT1ievinXrODgJBZxS/5JS0FqqmA5iYcZhtIqBGGF6+BjjFGtqJMiorkA5uMujWVVQIcRlh+/RG273Oj21pkjJW3+xTO46TvpwyNS8RQykC9KbzFiZmxk60NWAxMxpHZbloasnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i4piu0DfMGs4Dz6ShCcCahkWEkVUcxK8oVExZ5c/5oc=;
+ b=PJGjXs82KI3FfT1X7o0bbaK7EsbbrOwYubwXE00+31pJma//i/+P8HZEOJtJ+uka5Qrg+hFolgPXaxwpSbDJ+asdYKXsdCTltKARGTUOl/5GXEfuxWqTmNdVZsylEPiN/xTKvtrT7GvjslVIHXXaZbuGkmvEUugJzY2rTRBDjyA=
+Received: from PU1P153MB0169.APCP153.PROD.OUTLOOK.COM (10.170.189.13) by
+ PU1P153MB0139.APCP153.PROD.OUTLOOK.COM (10.170.188.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2327.5; Wed, 25 Sep 2019 23:35:18 +0000
+Received: from PU1P153MB0169.APCP153.PROD.OUTLOOK.COM
+ ([fe80::fc44:a784:73e6:c1c2]) by PU1P153MB0169.APCP153.PROD.OUTLOOK.COM
+ ([fe80::fc44:a784:73e6:c1c2%7]) with mapi id 15.20.2327.004; Wed, 25 Sep 2019
+ 23:35:18 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
@@ -57,150 +46,89 @@ To:     Dexuan Cui <decui@microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
         "mingo@redhat.com" <mingo@redhat.com>,
         "sashal@kernel.org" <sashal@kernel.org>,
         Stephen Hemminger <sthemmin@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
         "x86@kernel.org" <x86@kernel.org>,
         Michael Kelley <mikelley@microsoft.com>,
         Sasha Levin <Alexander.Levin@microsoft.com>
-Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: [PATCH v5 3/3] clocksource/drivers: Suspend/resume Hyper-V
+ clocksource for hibernation
+Thread-Topic: [PATCH v5 3/3] clocksource/drivers: Suspend/resume Hyper-V
+ clocksource for hibernation
+Thread-Index: AQHVc/fwSon8M7RoH0Cu+okwDUbU56c9CFiQ
+Date:   Wed, 25 Sep 2019 23:35:18 +0000
+Message-ID: <PU1P153MB0169A28B05A7CDE04A57AA58BF870@PU1P153MB0169.APCP153.PROD.OUTLOOK.COM>
 References: <1567723581-29088-1-git-send-email-decui@microsoft.com>
  <1567723581-29088-4-git-send-email-decui@microsoft.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <8ba5e2fd-6a9f-b61b-685e-23a69cabe3a2@linaro.org>
-Date:   Thu, 26 Sep 2019 01:21:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <1567723581-29088-4-git-send-email-decui@microsoft.com>
-Content-Type: text/plain; charset=utf-8
+ <8ba5e2fd-6a9f-b61b-685e-23a69cabe3a2@linaro.org>
+In-Reply-To: <8ba5e2fd-6a9f-b61b-685e-23a69cabe3a2@linaro.org>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=decui@microsoft.com;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2019-09-25T23:35:15.9030009Z;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=47e669de-0e0b-4a54-8f04-fada6bf4e618;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=decui@microsoft.com; 
+x-originating-ip: [2001:4898:80e8:2:35f9:636:b84a:df21]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 10b12606-6f9f-415f-f5c8-08d74211066e
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: PU1P153MB0139:|PU1P153MB0139:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <PU1P153MB013917B8D55F0EE875F4C1A6BF870@PU1P153MB0139.APCP153.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 01713B2841
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(39860400002)(366004)(376002)(396003)(136003)(199004)(189003)(10290500003)(52536014)(1511001)(5660300002)(110136005)(478600001)(81166006)(6636002)(2501003)(7416002)(8990500004)(74316002)(7736002)(6246003)(4326008)(316002)(81156014)(8676002)(6116002)(446003)(11346002)(486006)(305945005)(8936002)(2906002)(2201001)(33656002)(476003)(14454004)(55016002)(229853002)(6436002)(86362001)(186003)(99286004)(14444005)(256004)(15650500001)(10090500001)(66946007)(9686003)(66476007)(76116006)(66446008)(64756008)(66556008)(7696005)(102836004)(76176011)(71190400001)(25786009)(71200400001)(53546011)(6506007)(46003)(22452003)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:PU1P153MB0139;H:PU1P153MB0169.APCP153.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microsoft.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mUS4uwy2zkmGX23NBnf+TCH+Sfr7yfx0nZtgktVAiVtefr/Ov1sCg72gTIAG13P4cVprtuO68S2cnxYUZeJbBMp/3/4VKp7C9w5gZkyjZ+uAJENJcHcyMYYMMXirN+6cSLJs+BI/mu9ztaxRChDSNlqLlIqc2MRhv8dIrhBoPnJnzYolrEvGf2CAe+dUEVWz5VsUDoid11irdCpe3YgcGMm9e1UyObg50LrWZSWXEKjRqm5aQBG0gbyQwvffZ+FpWtiZ83B94rD4Tvl5V5Tc16kdJhR3uJN+fZtFQOld+/jtSOKpLXA9cJDUfPzZtr09Y39lv7wUg+Oke7lc/kJ/P2PB8NTTxQCPB+hlSZ+/Qhez4sc6wdNyBn0EJ1IGNz1mP2EFTX8zg51e7OVA9ezq+g5YTP1uAXEmWDVTFbKkyTE=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10b12606-6f9f-415f-f5c8-08d74211066e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Sep 2019 23:35:18.1629
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: afAzjQ6falO30Mfnrf9zinqS33RwzxnMVSApmwl3cNfvJjDt/BXSLX80X0cTlkxAavAxMi9dUIba8qsAqIXAxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU1P153MB0139
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06/09/2019 00:47, Dexuan Cui wrote:
-> This is needed for hibernation, e.g. when we resume the old kernel, we need
-> to disable the "current" kernel's TSC page and then resume the old kernel's.
-> 
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-
-I can take this patch if needed.
-
-> ---
->  drivers/clocksource/hyperv_timer.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-> index 726a65e..07f4747 100644
-> --- a/drivers/clocksource/hyperv_timer.c
-> +++ b/drivers/clocksource/hyperv_timer.c
-> @@ -237,12 +237,37 @@ static u64 read_hv_sched_clock_tsc(void)
->  	return read_hv_clock_tsc(NULL) - hv_sched_clock_offset;
->  }
->  
-> +static void suspend_hv_clock_tsc(struct clocksource *arg)
-> +{
-> +	u64 tsc_msr;
-> +
-> +	/* Disable the TSC page */
-> +	hv_get_reference_tsc(tsc_msr);
-> +	tsc_msr &= ~BIT_ULL(0);
-> +	hv_set_reference_tsc(tsc_msr);
-> +}
-> +
-> +
-> +static void resume_hv_clock_tsc(struct clocksource *arg)
-> +{
-> +	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
-> +	u64 tsc_msr;
-> +
-> +	/* Re-enable the TSC page */
-> +	hv_get_reference_tsc(tsc_msr);
-> +	tsc_msr &= GENMASK_ULL(11, 0);
-> +	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
-> +	hv_set_reference_tsc(tsc_msr);
-> +}
-> +
->  static struct clocksource hyperv_cs_tsc = {
->  	.name	= "hyperv_clocksource_tsc_page",
->  	.rating	= 400,
->  	.read	= read_hv_clock_tsc,
->  	.mask	= CLOCKSOURCE_MASK(64),
->  	.flags	= CLOCK_SOURCE_IS_CONTINUOUS,
-> +	.suspend= suspend_hv_clock_tsc,
-> +	.resume	= resume_hv_clock_ts,>  };
->  
->  static u64 notrace read_hv_clock_msr(struct clocksource *arg)
-> 
-
-
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+PiBGcm9tOiBEYW5pZWwgTGV6Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz4NCj4gU2Vu
+dDogV2VkbmVzZGF5LCBTZXB0ZW1iZXIgMjUsIDIwMTkgNDoyMSBQTQ0KPiBUbzogRGV4dWFuIEN1
+aSA8ZGVjdWlAbWljcm9zb2Z0LmNvbT47IGFybmRAYXJuZGIuZGU7IGJwQGFsaWVuOC5kZTsNCj4g
+SGFpeWFuZyBaaGFuZyA8aGFpeWFuZ3pAbWljcm9zb2Z0LmNvbT47IGhwYUB6eXRvci5jb207IEtZ
+IFNyaW5pdmFzYW4NCj4gPGt5c0BtaWNyb3NvZnQuY29tPjsgbGludXgtaHlwZXJ2QHZnZXIua2Vy
+bmVsLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbWluZ29AcmVkaGF0LmNv
+bTsgc2FzaGFsQGtlcm5lbC5vcmc7IFN0ZXBoZW4NCj4gSGVtbWluZ2VyIDxzdGhlbW1pbkBtaWNy
+b3NvZnQuY29tPjsgdGdseEBsaW51dHJvbml4LmRlOyB4ODZAa2VybmVsLm9yZzsNCj4gTWljaGFl
+bCBLZWxsZXkgPG1pa2VsbGV5QG1pY3Jvc29mdC5jb20+OyBTYXNoYSBMZXZpbg0KPiA8QWxleGFu
+ZGVyLkxldmluQG1pY3Jvc29mdC5jb20+DQo+IENjOiBsaW51eC1hcmNoQHZnZXIua2VybmVsLm9y
+Zw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHY1IDMvM10gY2xvY2tzb3VyY2UvZHJpdmVyczogU3Vz
+cGVuZC9yZXN1bWUgSHlwZXItVg0KPiBjbG9ja3NvdXJjZSBmb3IgaGliZXJuYXRpb24NCj4gDQo+
+IE9uIDA2LzA5LzIwMTkgMDA6NDcsIERleHVhbiBDdWkgd3JvdGU6DQo+ID4gVGhpcyBpcyBuZWVk
+ZWQgZm9yIGhpYmVybmF0aW9uLCBlLmcuIHdoZW4gd2UgcmVzdW1lIHRoZSBvbGQga2VybmVsLCB3
+ZSBuZWVkDQo+ID4gdG8gZGlzYWJsZSB0aGUgImN1cnJlbnQiIGtlcm5lbCdzIFRTQyBwYWdlIGFu
+ZCB0aGVuIHJlc3VtZSB0aGUgb2xkIGtlcm5lbCdzLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTog
+RGV4dWFuIEN1aSA8ZGVjdWlAbWljcm9zb2Z0LmNvbT4NCj4gPiBSZXZpZXdlZC1ieTogTWljaGFl
+bCBLZWxsZXkgPG1pa2VsbGV5QG1pY3Jvc29mdC5jb20+DQo+IA0KPiBJIGNhbiB0YWtlIHRoaXMg
+cGF0Y2ggaWYgbmVlZGVkLg0KDQpUaGFua3MsIERhbmllbCEgVXN1YWxseSB0Z2x4IHRha2VzIGNh
+cmUgb2YgdGhlIHBhdGNoZXMsIGJ1dCBpdCBsb29rcyByZWNlbnRseSBoZQ0KbWF5IGJlIHRvbyBi
+dXN5IHRvIGhhbmRsZSB0aGUgMyBwYXRjaGVzLiANCg0KSSBndWVzcyB5b3UgY2FuIHRha2UgdGhl
+IHBhdGNoLCBpZiB0Z2x4IGhhcyBubyBvYmplY3Rpb24uIDotKQ0KSWYgeW91IHRha2UgdGhlIHBh
+dGNoLCBwbGVhc2UgdGFrZSBhbGwgdGhlIDMgcGF0Y2hlcy4NCg0KVGhhbmtzLA0KLS0gRGV4dWFu
+DQo=
