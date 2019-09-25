@@ -2,43 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E88EBE874
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2019 00:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD09BE8DC
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2019 01:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729733AbfIYWtk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Sep 2019 18:49:40 -0400
-Received: from mail-eopbgr1320130.outbound.protection.outlook.com ([40.107.132.130]:22541
-        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729604AbfIYWtk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 25 Sep 2019 18:49:40 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HEdk/oQONk6bv73qNqg/Bh/TJB3Vtyt+nFdFo5t3tPq9tqxCX8iqxNG6YB92OijW3q0Z2UhxRDdcJiueA2NIZF2Qls5TyUcY9UZGcaNEuuwpclk1ne4s/VK0tpwTDYFDObXVX6+3m9Uph6Tav9YMXCOeaSs+MFaoHxvb0I2B5OLYQU5tRlMsAOeFGFlHkQKEIHIjJk6Xu588RlH5CsTvaJlY+H+3xvqGLslowerVO4sI2n0HkVzTQEA/ZT7wPD23XsOriuwm5UbOy8UVCJxmtv+7xgQhQz0XkKUC83aGkOAbr+zukrsGu/d/YgodLZFoSdGOn9mB0cZZEvls4ke3TQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e/5Hot15RqpbN++rLgjrxKMVjJYK8CfoIl0+eZL8bG0=;
- b=ACzSc1rTLkCYRc+ZcOD3fomT0bqfss/ez2VHxGeW7ItgSPmx8uUw7t0N28hmNPmIYY9Sz06TztnAA7y1AunA1+i1aHYka5WjqF+sBC8bZNHCaBIS64bjWwXFhwpf2vD6Lg/RZzJXhAe+pUkvs9IkHr8WySdPTS+yYSO0pi6aXxJr928Sk+Z8sYoa+ra1mUh+fnxwPK1yW4tKFc0HKzuVPsKr+xyLZj9EJAZ5hSA9ZLTeHrEkC4Xnh7I55Z+AEPKj3TBwWD9jFr4LtdQvhfehQZFJXEG7qqcCiX11Dm1pauCG6WQZQ2noHgSG8fPPfRZ1FyfJVESHOCYiNFFJXNBC6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e/5Hot15RqpbN++rLgjrxKMVjJYK8CfoIl0+eZL8bG0=;
- b=egd20KHORIAxvH/34gZ05dJ553g4Jr8dqgCh40uV0wOwHwOjI+IluOe6DgxtQqoyEepQ8tCrxHNtD7WlWxCq8PaDB3jkZmtXWOniCx1Gd8J55mgVWjAjvjNl8+L2OzNwBjqvvms1SHQNZ7vMW5EzT9VoN5oRIoPDS1xsIAbQhik=
-Received: from PU1P153MB0169.APCP153.PROD.OUTLOOK.COM (10.170.189.13) by
- PU1P153MB0137.APCP153.PROD.OUTLOOK.COM (10.170.188.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2327.3; Wed, 25 Sep 2019 22:49:35 +0000
-Received: from PU1P153MB0169.APCP153.PROD.OUTLOOK.COM
- ([fe80::fc44:a784:73e6:c1c2]) by PU1P153MB0169.APCP153.PROD.OUTLOOK.COM
- ([fe80::fc44:a784:73e6:c1c2%7]) with mapi id 15.20.2327.004; Wed, 25 Sep 2019
- 22:49:35 +0000
-From:   Dexuan Cui <decui@microsoft.com>
+        id S1727867AbfIYXVO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Sep 2019 19:21:14 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40863 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727913AbfIYXVO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Sep 2019 19:21:14 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x127so476394pfb.7
+        for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2019 16:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YT7tDn+xx6T7cN5VNv8l2EaVVo+fdzIO6anhfSbpivo=;
+        b=ZqvMzAxHz5fdPAQAYua74PeoVIFvBkR124I3FMnOxRhPUn059jSalG4VKT/IpItmPG
+         b51iboZh5gzQUpH5ntb1mB4Qe2cbBY5fgnX1qOEH9gIADvH0KWeeaxe44VQ08LmtCz8c
+         3s4RWWaS4wETcVp+1aGXWRK/reRUgF3DPItm9D+EAaB8YIhigjlhDKAyphdAImp26MYL
+         bTQ2ahhnLLj/C1dFglVhqTuPzd4t8+jo5fBOeRJcyxrGqoSXB2bA8IeDHikO1FRnvFIv
+         qD53RgMLiLF/Ej0uhayAJt/SLyfwmJ0r18X441/enJvkbRB9mXh+C5X9XRACzTsh33ER
+         Njcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=YT7tDn+xx6T7cN5VNv8l2EaVVo+fdzIO6anhfSbpivo=;
+        b=LgyWpD0zjKGJkvElN8DCfAmIJe1YNE2xYp6b7qX2oD81szbFLUbeHK2EZcCBZPUHlI
+         xG7hxOR6Kk7vOom+wY0Tyx8xEMyILd7NgNL7oM7s2dbm0IYK2iJ+TkT0o6isP+rsBiA5
+         XYwQw4rr+m0Ywhfp7LJPLDb4RnaUzl3AeiIbJ3gH2K7vLb3AiW07yiUOz6/jghwyjCiF
+         rv69y0V/GJiuWkEoeF6WFgF2nasvVWyh37CuONHboMD0ptAB/QgDMqjyrCrDXDPBps4E
+         s9ytlS9DsJzqx/LHtPUqefdiwkOTUu7QmZ6LbndUinPzkKnhfKiFfLwr9SNXwFBUAHDV
+         kZDQ==
+X-Gm-Message-State: APjAAAWhhWYxEpvarule+tJdSMt7nHgqC5xIX5rR/+zy8+1546uXwF8c
+        K8UMUN4b+k7ZnN9TW4BFc7lzPialmcM7DO42
+X-Google-Smtp-Source: APXvYqzN6/FR3mrnCzd85Mk+Rcc96lFZci8p0FV9tHuDYC78H67Ds8UyLqWlRQ+5Zfw0sXZCwcAcSQ==
+X-Received: by 2002:aa7:8f03:: with SMTP id x3mr224989pfr.91.1569453671428;
+        Wed, 25 Sep 2019 16:21:11 -0700 (PDT)
+Received: from [172.20.32.102] ([12.206.46.62])
+        by smtp.googlemail.com with ESMTPSA id i16sm94771pfa.184.2019.09.25.16.21.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 25 Sep 2019 16:21:10 -0700 (PDT)
+Subject: Re: [PATCH v5 3/3] clocksource/drivers: Suspend/resume Hyper-V
+ clocksource for hibernation
 To:     Dexuan Cui <decui@microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
         "bp@alien8.de" <bp@alien8.de>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
@@ -46,108 +57,150 @@ To:     Dexuan Cui <decui@microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
         "mingo@redhat.com" <mingo@redhat.com>,
         "sashal@kernel.org" <sashal@kernel.org>,
         Stephen Hemminger <sthemmin@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
         "x86@kernel.org" <x86@kernel.org>,
         Michael Kelley <mikelley@microsoft.com>,
         Sasha Levin <Alexander.Levin@microsoft.com>
-CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [PATCH v5 0/3] Enhance Hyper-V for hibernation
-Thread-Topic: [PATCH v5 0/3] Enhance Hyper-V for hibernation
-Thread-Index: AQHVZDvWiJN7KE4mZkeEB0PYga91O6c9Gb9w
-Date:   Wed, 25 Sep 2019 22:49:35 +0000
-Message-ID: <PU1P153MB01692C8EC435F7F108564BAEBF870@PU1P153MB0169.APCP153.PROD.OUTLOOK.COM>
+Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
 References: <1567723581-29088-1-git-send-email-decui@microsoft.com>
-In-Reply-To: <1567723581-29088-1-git-send-email-decui@microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=decui@microsoft.com;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2019-09-25T22:49:32.7769187Z;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=5220183a-209f-4c76-a7f5-88915c722ca3;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=decui@microsoft.com; 
-x-originating-ip: [2001:4898:80e8:2:35f9:636:b84a:df21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 792fe893-6aed-498f-4344-08d7420aa373
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: PU1P153MB0137:|PU1P153MB0137:
-x-ms-exchange-transport-forked: True
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <PU1P153MB013792FCBD8C2EBBD4B251CEBF870@PU1P153MB0137.APCP153.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 01713B2841
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(396003)(136003)(346002)(39860400002)(366004)(189003)(199004)(1511001)(10290500003)(110136005)(478600001)(6636002)(66476007)(66556008)(64756008)(66446008)(66946007)(76116006)(2501003)(55016002)(99286004)(22452003)(10090500001)(316002)(256004)(6306002)(86362001)(14444005)(9686003)(8990500004)(2201001)(71200400001)(71190400001)(33656002)(5660300002)(52536014)(6246003)(2906002)(966005)(6116002)(4326008)(14454004)(102836004)(6436002)(186003)(305945005)(6506007)(46003)(7416002)(7736002)(229853002)(476003)(7696005)(76176011)(486006)(25786009)(81156014)(8676002)(11346002)(8936002)(81166006)(74316002)(446003)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:PU1P153MB0137;H:PU1P153MB0169.APCP153.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: microsoft.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MbljAvkGnmlJYBADJuNlLmBQ4V4ZaTCx+lRcZlJpDtxBWaDYCk/nsV4o0lc3MbanfKtXtgnbhneI3VwQyUe9003sJLjKohxLRzoWSKM6Gq/WmcerCHGTTDQaJAOF87CzxJeAcqoIVcQ27n/cz+uvTxex0bXM1/PpHvklOX5Aq5J2OWaOEOENHPIYXVLAJSZ7s2lj610iihr5OhLDbOWi9Ohr77ZkrgWboB1HsQX0be2kPrmhYxHuFCVPHVdAjzKEg/C2900ARUd5pEJ2WDrsKbs/nwe6sMrdHoP07fYkGXq1H1ebKS28/bCCmcYrHAy7ARGpDY8KLfXSdJ1N+Eb7ia4/KJF0WBmsys2jB7ILg9SxpwZ7Ytcv+0p80a75zz5RMvCDM0gmuCbnmuMxnTN6oCmi3ZbaA9+d/ssorV1glzo+R4q/VQ2OnmC4QdLs7TSMN2SqjJ3Upvwl2wH3FepUsQ==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <1567723581-29088-4-git-send-email-decui@microsoft.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ mQINBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
+ sXvtg3ehTOoyD0oFjKkHaia1Zpa1m/gnNdT/WvTveLfGA1gH+yGes2Sr53Ht8hWYZFYMZc8V
+ 2pbSKh8wepq4g8r5YI1XUy9YbcTdj5mVrTklyGWA49NOeJz2QbfytMT3DJmk40LqwK6CCSU0
+ 9Ed8n0a+vevmQoRZJEd3Y1qXn2XHys0F6OHCC+VLENqNNZXdZE9E+b3FFW0lk49oLTzLRNIq
+ 0wHeR1H54RffhLQAor2+4kSSu8mW5qB0n5Eb/zXJZZ/bRiXmT8kNg85UdYhvf03ZAsp3qxcr
+ xMfMsC7m3+ADOtW90rNNLZnRvjhsYNrGIKH8Ub0UKXFXibHbafSuq7RqyRQzt01Ud8CAtq+w
+ P9EftUysLtovGpLSpGDO5zQ++4ZGVygdYFr318aGDqCljKAKZ9hYgRimPBToDedho1S1uE6F
+ 6YiBFnI3ry9+/KUnEP6L8Sfezwy7fp2JUNkUr41QF76nz43tl7oersrLxHzj2dYfWUAZWXva
+ wW4IKF5sOPFMMgxoOJovSWqwh1b7hqI+nDlD3mmVMd20VyE9W7AgTIsvDxWUnMPvww5iExlY
+ eIC0Wj9K4UqSYBOHcUPrVOKTcsBVPQA6SAMJlt82/v5l4J0pSQARAQABtCpEYW5pZWwgTGV6
+ Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz6JAlcEEwEIAEECGwEFCwkIBwIGFQoJ
+ CAsCBBYCAwECHgECF4ACGQEWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXAkeagUJDRnjhwAK
+ CRCP9LjScWdVJ+vYEACStDg7is2JdE7xz1PFu7jnrlOzoITfw05BurgJMqlvoiFYt9tEeUMl
+ zdU2+r0cevsmepqSUVuUvXztN8HA/Ep2vccmWnCXzlE56X1AK7PRRdaQd1SK/eVsJVaKbQTr
+ ii0wjbs6AU1uo0LdLINLjwwItnQ83/ttbf1LheyN8yknlch7jn6H6J2A/ORZECTfJbG4ecVr
+ 7AEm4A/G5nyPO4BG7dMKtjQ+crl/pSSuxV+JTDuoEWUO+YOClg6azjv8Onm0cQ46x9JRtahw
+ YmXdIXD6NsJHmMG9bKmVI0I7o5Q4XL52X6QxkeMi8+VhvqXXIkIZeizZe5XLTYUvFHLdexzX
+ Xze0LwLpmMObFLifjziJQsLP2lWwOfg6ZiH8z8eQJFB8bYTSMqmfTulB61YO0mhd676q17Y7
+ Z7u3md3CLH7rh61wU1g7FcLm9p5tXXWWaAud9Aa2kne2O3sirO0+JhsKbItz3d9yXuWgv6w3
+ heOIF0b91JyrY6tjz42hvyjxtHywRr4cdAEQa2S7HeQkw48BQOG6PqQ9d3FYU34pt3WFJ19V
+ A5qqAiEjqc4N0uPkC79W32yLGdyg0EEe8v0Uhs3CxM9euGg37kr5fujMm+akMtR1ENITo+UI
+ fgsxdwjBD5lNb/UGodU4QvPipB/xx4zz7pS5+2jGimfLeoe7mgGJxrkBDQRb/8z6AQgAvSkg
+ 5w7dVCSbpP6nXc+i8OBz59aq8kuL3YpxT9RXE/y45IFUVuSc2kuUj683rEEgyD7XCf4QKzOw
+ +XgnJcKFQiACpYAowhF/XNkMPQFspPNM1ChnIL5KWJdTp0DhW+WBeCnyCQ2pzeCzQlS/qfs3
+ dMLzzm9qCDrrDh/aEegMMZFO+reIgPZnInAcbHj3xUhz8p2dkExRMTnLry8XXkiMu9WpchHy
+ XXWYxXbMnHkSRuT00lUfZAkYpMP7La2UudC/Uw9WqGuAQzTqhvE1kSQe0e11Uc+PqceLRHA2
+ bq/wz0cGriUrcCrnkzRmzYLoGXQHqRuZazMZn2/pSIMZdDxLbwARAQABiQI2BBgBCAAgFiEE
+ JNYm8lO+nofmzlv0j/S40nFnVScFAlv/zPoCGwwACgkQj/S40nFnVSf4OhAAhWJPjgUu6VfS
+ mV53AUGIyqpOynPvSaMoGJzhNsDeNUDfV5dEZN8K4qjuz2CTNvGIyt4DE/IJbtasvi5dW4wW
+ Fl85bF6xeLM0qpCaZtXAsU5gzp3uT7ut++nTPYW+CpfYIlIpyOIzVAmw7rZbfgsId2Lj7g1w
+ QCjvGHw19mq85/wiEiZZNHeJQ3GuAr/uMoiaRBnf6wVcdpUTFMXlkE8/tYHPWbW0YKcKFwJ3
+ uIsNxZUe6coNzYnL0d9GK2fkDoqKfKbFjNhW9TygfeL2Qhk949jMGQudFS3zlwvN9wwVaC0i
+ KC/D303DiTnB0WFPT8CltMAZSbQ1WEWfwqxhY26di3k9pj+X3BfOmDL9GBlnRTSgwjqjqzpG
+ VZsWouuTfXd9ZPPzvYdUBrlTKgojk1C8v4fhSqb+ard+bZcwNp8Tzl/EI9ygw6lYEATGCUYI
+ Wco+fjehCgG1FWvWavMU+jLNs8/8uwj1u+BtRpWFj4ug/VaDDIuiApKPwl1Ge+zoC7TLMtyb
+ c00W5/8EckjmNgLDIINEsOsidMH61ZOlwDKCxo2lbV+Ij078KHBIY76zuHlwonEQaHLCAdqm
+ WiI95pYZNruAJEqZCpvXDdClmBVMZRDRePzSljCvoHxn7ArEt3F14mabn2RRq/hqB8IhC6ny
+ xAEPQIZaxxginIFYEziOjR65AQ0EW//NCAEIALcJqSmQdkt04vIBD12dryF6WcVWYvVwhspt
+ RlZbZ/NZ6nzarzEYPFcXaYOZCOCv+Xtm6hB8fh5XHd7Y8CWuZNDVp3ozuqwTkzQuux/aVdNb
+ Fe4VNeKGN2FK1aNlguAXJNCDNRCpWgRHuU3rWwGUMgentJogARvxfex2/RV/5mzYG/N1DJKt
+ F7g1zEcQD3JtK6WOwZXd+NDyke3tdG7vsNRFjMDkV4046bOOh1BKbWYu8nL3UtWBxhWKx3Pu
+ 1VOBUVwL2MJKW6umk+WqUNgYc2bjelgcTSdz4A6ZhJxstUO4IUfjvYRjoqle+dQcx1u+mmCn
+ 8EdKJlbAoR4NUFZy7WUAEQEAAYkDbAQYAQgAIBYhBCTWJvJTvp6H5s5b9I/0uNJxZ1UnBQJb
+ /80IAhsCAUAJEI/0uNJxZ1UnwHQgBBkBCAAdFiEEGn3N4YVz0WNVyHskqDIjiipP6E8FAlv/
+ zQgACgkQqDIjiipP6E+FuggAl6lkO7BhTkrRbFhrcjCm0bEoYWnCkQtX9YFvElQeA7MhxznO
+ BY/r1q2Uf6Ifr3YGEkLnME/tQQzUwznydM94CtRJ8KDSa1CxOseEsKq6B38xJtjgYSxNdgQb
+ EIfCzUHIGfk94AFKPdV6pqqSU5VpPUagF+JxiAkoEPOdFiQCULFNRLMsOtG7yp8uSyJRp6Tz
+ cQ+0+1QyX1krcHBUlNlvfdmL9DM+umPtbS9F6oRph15mvKVYiPObI1z8ymHoc68ReWjhUuHc
+ IDQs4w9rJVAyLypQ0p+ySDcTc+AmPP6PGUayIHYX63Q0KhJFgpr1wH0pHKpC78DPtX1a7HGM
+ 7MqzQ4NbD/4oLKKwByrIp12wLpSe3gDQPxLpfGgsJs6BBuAGVdkrdfIx2e6ENnwDoF0Veeji
+ BGrVmjVgLUWV9nUP92zpyByzd8HkRSPNZNlisU4gnz1tKhQl+j6G/l2lDYsqKeRG55TXbu9M
+ LqJYccPJ85B0PXcy63fL9U5DTysmxKQ5RgaxcxIZCM528ULFQs3dfEx5euWTWnnh7pN30RLg
+ a+0AjSGd886Bh0kT1Dznrite0dzYlTHlacbITZG84yRk/gS7DkYQdjL8zgFr/pxH5CbYJDk0
+ tYUhisTESeesbvWSPO5uNqqy1dAFw+dqRcF5gXIh3NKX0gqiAA87NM7nL5ym/CNpJ7z7nRC8
+ qePOXubgouxumi5RQs1+crBmCDa/AyJHKdG2mqCt9fx5EPbDpw6Zzx7hgURh4ikHoS7/tLjK
+ iqWjuat8/HWc01yEd8rtkGuUcMqbCi1XhcAmkaOnX8FYscMRoyyMrWClRZEQRokqZIj79+PR
+ adkDXtr4MeL8BaB7Ij2oyRVjXUwhFQNKi5Z5Rve0a3zvGkkqw8Mz20BOksjSWjAF6g9byukl
+ CUVjC03PdMSufNLK06x5hPc/c4tFR4J9cLrV+XxdCX7r0zGos9SzTPGNuIk1LK++S3EJhLFj
+ 4eoWtNhMWc1uiTf9ENza0ntqH9XBWEQ6IA1gubCniGG+Xg==
+Message-ID: <8ba5e2fd-6a9f-b61b-685e-23a69cabe3a2@linaro.org>
+Date:   Thu, 26 Sep 2019 01:21:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 792fe893-6aed-498f-4344-08d7420aa373
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Sep 2019 22:49:35.1173
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Z1Tw3C8+9yPTLOFw5rF6AUrDFfYZvoWoEc+RQcb6GkSXF1xm6+9z9iUDAt3vSHYf6bBLPLZy752h/2PQjJ8kCg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU1P153MB0137
+In-Reply-To: <1567723581-29088-4-git-send-email-decui@microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> From: Dexuan Cui <decui@microsoft.com>
-> Sent: Thursday, September 5, 2019 3:47 PM
->=20
-> This patchset (consisting of 3 patches) was part of the v4 patchset (cons=
-isting
-> of 12 patches): https://lkml.org/lkml/2019/9/2/894
->=20
-> I realized these 3 patches must go through the tip.git tree, because I ha=
-ve
-> to rebase 2 of the 3 patches due to recent changes from others in the tip
-> tree.
->=20
-> All the 3 patches are now rebased to the tip tree's timers/core branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=3Dtime=
-rs/core
-> , and all the 3 patches have Michael Kelley's Signed-off-by's.
->=20
-> Please review.
->=20
-> Thanks!
-> Dexuan
->=20
-> Dexuan Cui (3):
->   x86/hyper-v: Suspend/resume the hypercall page for hibernation
->   x86/hyper-v: Implement hv_is_hibernation_supported()
->   clocksource/drivers: Suspend/resume Hyper-V clocksource for
->     hibernation
->=20
->  arch/x86/hyperv/hv_init.c          | 40
-> ++++++++++++++++++++++++++++++++++++++
->  drivers/clocksource/hyperv_timer.c | 25 ++++++++++++++++++++++++
->  include/asm-generic/mshyperv.h     |  2 ++
->  3 files changed, 67 insertions(+)
+On 06/09/2019 00:47, Dexuan Cui wrote:
+> This is needed for hibernation, e.g. when we resume the old kernel, we need
+> to disable the "current" kernel's TSC page and then resume the old kernel's.
+> 
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
-Hi tglx and all,
-Can you please take a look at this patchset (3 patches in total)?
+I can take this patch if needed.
 
-IMO it's better for the 3 patches to go through the tip.git tree, but if yo=
-u
-(the x86 maintainers) have no objection, the patches can also go through
-Saha Levin's Hyper-V tree, because the dependent patches have landed
-in Linus's tree now.
+> ---
+>  drivers/clocksource/hyperv_timer.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+> index 726a65e..07f4747 100644
+> --- a/drivers/clocksource/hyperv_timer.c
+> +++ b/drivers/clocksource/hyperv_timer.c
+> @@ -237,12 +237,37 @@ static u64 read_hv_sched_clock_tsc(void)
+>  	return read_hv_clock_tsc(NULL) - hv_sched_clock_offset;
+>  }
+>  
+> +static void suspend_hv_clock_tsc(struct clocksource *arg)
+> +{
+> +	u64 tsc_msr;
+> +
+> +	/* Disable the TSC page */
+> +	hv_get_reference_tsc(tsc_msr);
+> +	tsc_msr &= ~BIT_ULL(0);
+> +	hv_set_reference_tsc(tsc_msr);
+> +}
+> +
+> +
+> +static void resume_hv_clock_tsc(struct clocksource *arg)
+> +{
+> +	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
+> +	u64 tsc_msr;
+> +
+> +	/* Re-enable the TSC page */
+> +	hv_get_reference_tsc(tsc_msr);
+> +	tsc_msr &= GENMASK_ULL(11, 0);
+> +	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
+> +	hv_set_reference_tsc(tsc_msr);
+> +}
+> +
+>  static struct clocksource hyperv_cs_tsc = {
+>  	.name	= "hyperv_clocksource_tsc_page",
+>  	.rating	= 400,
+>  	.read	= read_hv_clock_tsc,
+>  	.mask	= CLOCKSOURCE_MASK(64),
+>  	.flags	= CLOCK_SOURCE_IS_CONTINUOUS,
+> +	.suspend= suspend_hv_clock_tsc,
+> +	.resume	= resume_hv_clock_ts,>  };
+>  
+>  static u64 notrace read_hv_clock_msr(struct clocksource *arg)
+> 
 
-Thanks,
--- Dexuan
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
