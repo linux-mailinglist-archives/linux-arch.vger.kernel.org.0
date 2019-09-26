@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F4CBF846
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2019 19:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88413BF81C
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2019 19:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728150AbfIZR5A (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Sep 2019 13:57:00 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34130 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728149AbfIZR4b (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Sep 2019 13:56:31 -0400
-Received: by mail-pf1-f196.google.com with SMTP id b128so2280610pfa.1
-        for <linux-arch@vger.kernel.org>; Thu, 26 Sep 2019 10:56:31 -0700 (PDT)
+        id S1728216AbfIZR4g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Sep 2019 13:56:36 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:46484 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728219AbfIZR4g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Sep 2019 13:56:36 -0400
+Received: by mail-pg1-f195.google.com with SMTP id a3so1925366pgm.13
+        for <linux-arch@vger.kernel.org>; Thu, 26 Sep 2019 10:56:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=lY3gLtq1yv4TCNLsCOhid7qXT7bvA83WxioIIIqFVXA=;
-        b=Ki0F6+sLs6VORroy0ffqnJseBA7QSYUqd1wFP0NbS4cak1Wh3YkGMRzQvtEEccudzG
-         edctuQ/eEwwU5sHQJ5XfK3VeDlq6muLK9g3jC02FBRdOySPAoLy0gCS9CBjGysbAQtpV
-         XAVWcStOY/x6BsVgnubCCJ1P6LNHIFc/5/2+c=
+        bh=0o22aj+Q2fPal3OzyLNHtFtEJCV1jKXrih1rnY9ZOvQ=;
+        b=h2p8CR6CTCVG0EcWBzFZk9M7pS5/grZV7SzSB6Fp/b72sOhC+rJHHanRbr647L3D5O
+         3PK+ZsRgr4yUne37ilhSCOXRu+oA9brL1Q3zUBwCc+GNAanTNZBOlRbFkU/6xiHKWXKz
+         z9Lk6mr7quDbn6Iv5uFqVP/gtakRm/cG9s24k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=lY3gLtq1yv4TCNLsCOhid7qXT7bvA83WxioIIIqFVXA=;
-        b=Adumr85ktfhVHXk9rTV0v3EQFgHyKYeFTylKB1caqPBSQRcZNyfxv8FvSLIVdrCrvd
-         rngrgzygYrU6BBxnaa/gOdH6ZQsnp1VmrH2+cPWD6TZxKffQ53kq0a0/BKURwtS2xxI1
-         0ahqWRixpQnunMIIPu+iV4L2Cc6yK37Yugh/E8pCGT2rb0PHAynYp4SEYhc3Ng2TqqQq
-         3YAtA9hW9sTozffatv/M/Ve7tCMLfp21hXnN4S0OPnTjqUsb4DrSSmFDNSqUoNuAlqra
-         CVx1KB6RYJZsKzx9fsi2YyaGoLS+lwwhw/+5lJ8N+2v0Ly88RYBUTn18j4T9/gOJE7v1
-         8APA==
-X-Gm-Message-State: APjAAAXCTAupXpFJihOip/c5TF1PzILHF2mJlfDbSmUviJc+G3Js6JQ8
-        lcnzWi5gbpdvhRGy6neUxKyezEHj67k=
-X-Google-Smtp-Source: APXvYqzUFG+7+GBGC0jBD0+mR//mqQSm/qKVQf8bQR8gVQHifb6ysRylAOP5049ta8XmpDzMuRucBg==
-X-Received: by 2002:a65:500d:: with SMTP id f13mr4684873pgo.359.1569520591224;
-        Thu, 26 Sep 2019 10:56:31 -0700 (PDT)
+        bh=0o22aj+Q2fPal3OzyLNHtFtEJCV1jKXrih1rnY9ZOvQ=;
+        b=BTnLTpfI3P+fmkiUww/yXjv8nC1EUqvcb85bSJ3vMd3VZGFF++RuU1zguXxTsqO6UW
+         Jp5q+jfpLx2aFkGjl/wDAD2uplVaCnWxZ74kiuw18nu3H9oedvf/I+zOWz0X26nWKsbZ
+         pYjR4BC8UrIsL3CPfeQsKuahQ37tGbPjo68S42MnDKy0aH3rovPunUgUU1sSF9o7YVIn
+         ps7pJwWEAZRz1efZI6jySaMk6MJskgTbbu5+3lR34brGxYvIrpZCJ25/1qR9O8Oztx5n
+         c9jncS7EONLIeKIdZwTsC94rBect02M5+bILWdHT/w9YX/grYdTUJSjm+aTlB79VfU9U
+         gIRg==
+X-Gm-Message-State: APjAAAXort5WqE1iqTAsBG/aZOh2payQlYwpCjQE902AkAP138TRB3Ce
+        pPjwIdh/4hrYQCJsDBt4GlbQBg==
+X-Google-Smtp-Source: APXvYqy6S7VpAjQkHoN68ZupzJjzmnjjpPcZsaZVMPIKEdbkFn7g1SNyoioq3hB1BxaJQAQsFZhPUg==
+X-Received: by 2002:a62:7a88:: with SMTP id v130mr5261721pfc.184.1569520595802;
+        Thu, 26 Sep 2019 10:56:35 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 8sm2842378pgd.87.2019.09.26.10.56.26
+        by smtp.gmail.com with ESMTPSA id t68sm6742712pgt.61.2019.09.26.10.56.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Sep 2019 10:56:28 -0700 (PDT)
+        Thu, 26 Sep 2019 10:56:30 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -56,9 +56,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Michal Simek <monstr@monstr.eu>, linux-parisc@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 25/29] xtensa: Move EXCEPTION_TABLE to RO_DATA segment
-Date:   Thu, 26 Sep 2019 10:55:58 -0700
-Message-Id: <20190926175602.33098-26-keescook@chromium.org>
+Subject: [PATCH 26/29] x86/mm: Remove redundant &s on addresses
+Date:   Thu, 26 Sep 2019 10:55:59 -0700
+Message-Id: <20190926175602.33098-27-keescook@chromium.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190926175602.33098-1-keescook@chromium.org>
 References: <20190926175602.33098-1-keescook@chromium.org>
@@ -67,34 +67,31 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The EXCEPTION_TABLE is read-only, so collapse it into RO_DATA.
+The &s on addresses are redundant and are better removed to match all
+the other similar functions.
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/xtensa/kernel/vmlinux.lds.S | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/mm/init_64.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/xtensa/kernel/vmlinux.lds.S b/arch/xtensa/kernel/vmlinux.lds.S
-index bdbd7c4056c1..7341964722ae 100644
---- a/arch/xtensa/kernel/vmlinux.lds.S
-+++ b/arch/xtensa/kernel/vmlinux.lds.S
-@@ -14,6 +14,8 @@
-  * Joe Taylor <joe@tensilica.com, joetylr@yahoo.com>
-  */
+diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+index 26299e9ce6da..e67ddca8b7a8 100644
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -1300,9 +1300,9 @@ void mark_rodata_ro(void)
+ {
+ 	unsigned long start = PFN_ALIGN(_text);
+ 	unsigned long rodata_start = PFN_ALIGN(__start_rodata);
+-	unsigned long end = (unsigned long) &__end_rodata_hpage_align;
+-	unsigned long text_end = PFN_ALIGN(&_etext);
+-	unsigned long rodata_end = PFN_ALIGN(&__end_rodata);
++	unsigned long end = (unsigned long)__end_rodata_hpage_align;
++	unsigned long text_end = PFN_ALIGN(_etext);
++	unsigned long rodata_end = PFN_ALIGN(__end_rodata);
+ 	unsigned long all_end;
  
-+#define RO_DATA_EXCEPTION_TABLE_ALIGN	16
-+
- #include <asm-generic/vmlinux.lds.h>
- #include <asm/page.h>
- #include <asm/thread_info.h>
-@@ -130,7 +132,6 @@ SECTIONS
- 
-   .fixup   : { *(.fixup) }
- 
--  EXCEPTION_TABLE(16)
-   /* Data section */
- 
-   _sdata = .;
+ 	printk(KERN_INFO "Write protecting the kernel read-only data: %luk\n",
 -- 
 2.17.1
 
