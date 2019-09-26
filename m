@@ -2,207 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9A7BEE3C
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2019 11:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990C1BEE6A
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2019 11:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728129AbfIZJQs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Sep 2019 05:16:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54668 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726151AbfIZJQr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 26 Sep 2019 05:16:47 -0400
-Received: from localhost.localdomain (unknown [115.205.68.231])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E2173207FF;
-        Thu, 26 Sep 2019 09:16:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569489406;
-        bh=ilA+y4O1M/gMXREu86nRwRqJO5tcBAaEoE6amVY68e0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lskIgPGL21kyfsq0qY+dWq1rcIGHT4tm8IAu60K+kEN79HUZoTrWPeC/9tng9++7S
-         iSbMZTouFEypmzLk/VnibTNHGDfprwbw62mjcHL0kImXX1+QQmfY6/r4h77WAZ83sr
-         ygeWp0Zjxi0mPaf6/l1K5622nlAve3SkRWMz3lKk=
-From:   guoren@kernel.org
-To:     arnd@arndb.de
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH] csky: Bugfix add zero_fp fixup perf backtrace panic
-Date:   Thu, 26 Sep 2019 17:16:39 +0800
-Message-Id: <1569489399-7026-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1725810AbfIZJ06 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Sep 2019 05:26:58 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:42137 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725554AbfIZJ06 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Sep 2019 05:26:58 -0400
+Received: by mail-oi1-f194.google.com with SMTP id i185so1462846oif.9;
+        Thu, 26 Sep 2019 02:26:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=igPjA35ZmLEPbqljRL7Ddj7a9tyDEasITq8WKXbH8wc=;
+        b=sKbFvtjcmh02XM4JWty8zTFcdBXal/tQMJaN4DXaeVUEZXlA+JNWi8IzanA4fDHUMk
+         7mSWb7KvCaXKxc9jJI2OLLqL41YU5xT8vmI0Szozrj5TW9Yo21e6OYS/LuPCXcwhYwuk
+         ZG8KbM+B0SNdh0iv/2Sonw9HrqELVNYjEGX+kXmLY0D+JOOquLPfLjLdDVSj7okFZ3RK
+         r0U3MaHgYnWNdvUvp/Hk+FtwDxY7GrvsBwTlu0OCZ2OWv7j9xEAmzFXxxd6Iw/Mg25Ih
+         CpbI4XEkRPTJ7WY9WYBHscBRdmrv8dYL4DD51NyG6AoI+YhfhNkAM2RQfybhfkyQ4POB
+         5MbQ==
+X-Gm-Message-State: APjAAAXSoul7qYgSLEm1SRcqRHy89CefU0TBRMnVBw+ckokB1Jp5bAmU
+        /Sp8e87RPoiAHKwb50C8Jh+L/IKHwidC50NwphU=
+X-Google-Smtp-Source: APXvYqy8+cqYzKeBWGjpfU1XHjPCrv7DgWaC7Y7xU3SbVDO5QZ1sc73XgPRB0sbTaZ38h856Kh8vet9ANcuwtcDizQY=
+X-Received: by 2002:aca:dad4:: with SMTP id r203mr1908355oig.102.1569490017367;
+ Thu, 26 Sep 2019 02:26:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190830034304.24259-1-yamada.masahiro@socionext.com>
+ <CAMuHMdXHqQ4O-guETbi85XiJGQ+4EkPdPZf=o540N4rGJkoK4w@mail.gmail.com> <CAK7LNAR1eHPhf0eBNDd8bNVAUhfKrob0EvxHvAQHa8mqPnMbzw@mail.gmail.com>
+In-Reply-To: <CAK7LNAR1eHPhf0eBNDd8bNVAUhfKrob0EvxHvAQHa8mqPnMbzw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 26 Sep 2019 11:26:46 +0200
+Message-ID: <CAMuHMdV3VWCP35dOMWaSePz5mhzJp_Y5OViVUqTn7Ocdhn81Og@mail.gmail.com>
+Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <ren_guo@c-sky.com>
+Hi Yamada-san,
 
-We need set fp zero to let backtrace know the end. The patch fixup perf
-callchain panic problem, because backtrace didn't know what is the end
-of fp.
+On Thu, Sep 26, 2019 at 11:03 AM Masahiro Yamada
+<yamada.masahiro@socionext.com> wrote:
+> On Thu, Sep 26, 2019 at 5:54 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Fri, Aug 30, 2019 at 5:44 AM Masahiro Yamada
+> > <yamada.masahiro@socionext.com> wrote:
+> > > Commit 9012d011660e ("compiler: allow all arches to enable
+> > > CONFIG_OPTIMIZE_INLINING") allowed all architectures to enable
+> > > this option. A couple of build errors were reported by randconfig,
+> > > but all of them have been ironed out.
+> > >
+> > > Towards the goal of removing CONFIG_OPTIMIZE_INLINING entirely
+> > > (and it will simplify the 'inline' macro in compiler_types.h),
+> > > this commit changes it to always-on option. Going forward, the
+> > > compiler will always be allowed to not inline functions marked
+> > > 'inline'.
+> > >
+> > > This is not a problem for x86 since it has been long used by
+> > > arch/x86/configs/{x86_64,i386}_defconfig.
+> > >
+> > > I am keeping the config option just in case any problem crops up for
+> > > other architectures.
+> > >
+> > > The code clean-up will be done after confirming this is solid.
+> > >
+> > > Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> >
+> > This breaks compiling drivers/video/fbdev/c2p*, as the functions in
+> > drivers/video/fbdev/c2p_core.h are no longer inlined, leading to calls
+> > to the non-existent function c2p_unsupported(), as reported by KISSKB:
+> >
+> > On Thu, Sep 26, 2019 at 5:02 AM <noreply@ellerman.id.au> wrote:
+> > > FAILED linux-next/m68k-defconfig/m68k Thu Sep 26, 12:58
+> > >
+> > > http://kisskb.ellerman.id.au/kisskb/buildresult/13973194/
+> > >
+> > > Commit:   Add linux-next specific files for 20190925
+> > >           d47175169c28eedd2cc2ab8c01f38764cb0269cc
+> > > Compiler: m68k-linux-gcc (GCC) 4.6.3 / GNU ld (GNU Binutils) 2.22
+> > >
+> > > Possible errors
+> > > ---------------
+> > >
+> > > c2p_planar.c:(.text+0xd6): undefined reference to `c2p_unsupported'
+> > > c2p_planar.c:(.text+0x1dc): undefined reference to `c2p_unsupported'
+> > > c2p_iplan2.c:(.text+0xc4): undefined reference to `c2p_unsupported'
+> > > c2p_iplan2.c:(.text+0x150): undefined reference to `c2p_unsupported'
+> > > make[1]: *** [Makefile:1074: vmlinux] Error 1
+> > > make: *** [Makefile:179: sub-make] Error 2
+> >
+> > I managed to reproduce this with gcc version 8.3.0 (Ubuntu
+> > 8.3.0-6ubuntu1~18.04.1) , and bisected the failure to commit
+> > 025f072e5823947c ("compiler: enable CONFIG_OPTIMIZE_INLINING forcibly") .
+> >
+> > Marking the functions __always_inline instead of inline fixes that.
+> > Shall I send a patch to do that?
+>
+>
+> Yes, please.
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Reported-by: Mao Han <han_mao@c-sky.com>
----
- arch/csky/kernel/entry.S   | 50 +++++++++++++++++++++++++++-------------------
- arch/csky/kernel/process.c |  2 +-
- 2 files changed, 31 insertions(+), 21 deletions(-)
+OK, will do.
 
-diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
-index a7e84cc..564dab2 100644
---- a/arch/csky/kernel/entry.S
-+++ b/arch/csky/kernel/entry.S
-@@ -17,6 +17,12 @@
- #define PTE_INDX_SHIFT  10
- #define _PGDIR_SHIFT    22
- 
-+.macro	zero_fp
-+#ifdef CONFIG_STACKTRACE
-+	movi	r8, 0
-+#endif
-+.endm
-+
- .macro tlbop_begin name, val0, val1, val2
- ENTRY(csky_\name)
- 	mtcr    a3, ss2
-@@ -96,6 +102,7 @@ ENTRY(csky_\name)
- 	SAVE_ALL 0
- .endm
- .macro tlbop_end is_write
-+	zero_fp
- 	RD_MEH	a2
- 	psrset  ee, ie
- 	mov     a0, sp
-@@ -120,6 +127,7 @@ tlbop_end 1
- 
- ENTRY(csky_systemcall)
- 	SAVE_ALL TRAP0_SIZE
-+	zero_fp
- 
- 	psrset  ee, ie
- 
-@@ -136,9 +144,9 @@ ENTRY(csky_systemcall)
- 	mov     r9, sp
- 	bmaski  r10, THREAD_SHIFT
- 	andn    r9, r10
--	ldw     r8, (r9, TINFO_FLAGS)
--	ANDI_R3	r8, (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
--	cmpnei	r8, 0
-+	ldw     r12, (r9, TINFO_FLAGS)
-+	ANDI_R3	r12, (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
-+	cmpnei	r12, 0
- 	bt      csky_syscall_trace
- #if defined(__CSKYABIV2__)
- 	subi    sp, 8
-@@ -180,7 +188,7 @@ csky_syscall_trace:
- 
- ENTRY(ret_from_kernel_thread)
- 	jbsr	schedule_tail
--	mov	a0, r8
-+	mov	a0, r10
- 	jsr	r9
- 	jbsr	ret_from_exception
- 
-@@ -189,9 +197,9 @@ ENTRY(ret_from_fork)
- 	mov	r9, sp
- 	bmaski	r10, THREAD_SHIFT
- 	andn	r9, r10
--	ldw	r8, (r9, TINFO_FLAGS)
--	ANDI_R3	r8, (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
--	cmpnei	r8, 0
-+	ldw	r12, (r9, TINFO_FLAGS)
-+	ANDI_R3	r12, (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
-+	cmpnei	r12, 0
- 	bf	ret_from_exception
- 	mov	a0, sp			/* sp = pt_regs pointer */
- 	jbsr	syscall_trace_exit
-@@ -209,9 +217,9 @@ ret_from_exception:
- 	bmaski	r10, THREAD_SHIFT
- 	andn	r9, r10
- 
--	ldw	r8, (r9, TINFO_FLAGS)
--	andi	r8, (_TIF_SIGPENDING | _TIF_NOTIFY_RESUME | _TIF_NEED_RESCHED)
--	cmpnei	r8, 0
-+	ldw	r12, (r9, TINFO_FLAGS)
-+	andi	r12, (_TIF_SIGPENDING | _TIF_NOTIFY_RESUME | _TIF_NEED_RESCHED)
-+	cmpnei	r12, 0
- 	bt	exit_work
- 1:
- 	RESTORE_ALL
-@@ -220,11 +228,11 @@ exit_work:
- 	lrw	syscallid, ret_from_exception
- 	mov	lr, syscallid
- 
--	btsti	r8, TIF_NEED_RESCHED
-+	btsti	r12, TIF_NEED_RESCHED
- 	bt	work_resched
- 
- 	mov	a0, sp
--	mov	a1, r8
-+	mov	a1, r12
- 	jmpi	do_notify_resume
- 
- work_resched:
-@@ -232,6 +240,7 @@ work_resched:
- 
- ENTRY(csky_trap)
- 	SAVE_ALL 0
-+	zero_fp
- 	psrset	ee
- 	mov	a0, sp                 /* Push Stack pointer arg */
- 	jbsr	trap_c                 /* Call C-level trap handler */
-@@ -265,6 +274,7 @@ ENTRY(csky_get_tls)
- 
- ENTRY(csky_irq)
- 	SAVE_ALL 0
-+	zero_fp
- 	psrset	ee
- 
- #ifdef CONFIG_PREEMPT
-@@ -276,21 +286,21 @@ ENTRY(csky_irq)
- 	 * Get task_struct->stack.preempt_count for current,
- 	 * and increase 1.
- 	 */
--	ldw	r8, (r9, TINFO_PREEMPT)
--	addi	r8, 1
--	stw	r8, (r9, TINFO_PREEMPT)
-+	ldw	r12, (r9, TINFO_PREEMPT)
-+	addi	r12, 1
-+	stw	r12, (r9, TINFO_PREEMPT)
- #endif
- 
- 	mov	a0, sp
- 	jbsr	csky_do_IRQ
- 
- #ifdef CONFIG_PREEMPT
--	subi	r8, 1
--	stw	r8, (r9, TINFO_PREEMPT)
--	cmpnei	r8, 0
-+	subi	r12, 1
-+	stw	r12, (r9, TINFO_PREEMPT)
-+	cmpnei	r12, 0
- 	bt	2f
--	ldw	r8, (r9, TINFO_FLAGS)
--	btsti	r8, TIF_NEED_RESCHED
-+	ldw	r12, (r9, TINFO_FLAGS)
-+	btsti	r12, TIF_NEED_RESCHED
- 	bf	2f
- 1:
- 	jbsr	preempt_schedule_irq	/* irq en/disable is done inside */
-diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-index e555740..f320d92 100644
---- a/arch/csky/kernel/process.c
-+++ b/arch/csky/kernel/process.c
-@@ -55,7 +55,7 @@ int copy_thread(unsigned long clone_flags,
- 	if (unlikely(p->flags & PF_KTHREAD)) {
- 		memset(childregs, 0, sizeof(struct pt_regs));
- 		childstack->r15 = (unsigned long) ret_from_kernel_thread;
--		childstack->r8 = kthread_arg;
-+		childstack->r10 = kthread_arg;
- 		childstack->r9 = usp;
- 		childregs->sr = mfcr("psr");
- 	} else {
+> But you do not need to touch _transp() or comp().
+> Only functions that call c2p_unsupported().
+
+However, the inlining of these functions is very performance-sensitive too.
+So perhaps I should mark all of them __always_inline?
+
+> BTW, c2p_unsupported() can be replaced with BUILD_BUG().
+> This will break the build earlier in case
+> it cannot be optimized out.
+
+Right. Will do, too.
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.7.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
