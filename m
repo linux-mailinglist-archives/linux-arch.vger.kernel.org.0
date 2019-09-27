@@ -2,189 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 389D3C07E2
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Sep 2019 16:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4DAC0DD0
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Sep 2019 00:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727784AbfI0OrS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Sep 2019 10:47:18 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18808 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727079AbfI0OrS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 27 Sep 2019 10:47:18 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8REiKbe009586;
-        Fri, 27 Sep 2019 10:46:37 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2v8y3b53xk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Sep 2019 10:46:36 -0400
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x8REiTGK009898;
-        Fri, 27 Sep 2019 10:46:29 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2v8y3b53s7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Sep 2019 10:46:29 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x8REhmPi026728;
-        Fri, 27 Sep 2019 14:46:19 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma04dal.us.ibm.com with ESMTP id 2v5bg8f0un-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Sep 2019 14:46:19 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8REkHHj40042836
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 Sep 2019 14:46:18 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF156C6059;
-        Fri, 27 Sep 2019 14:46:17 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 23C33C605F;
-        Fri, 27 Sep 2019 14:46:09 +0000 (GMT)
-Received: from leobras.br.ibm.com (unknown [9.18.235.58])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 27 Sep 2019 14:46:09 +0000 (GMT)
-Message-ID: <8fe1ee1abf52719e75902dc7d5cd1e91751eaba7.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 00/11] Introduces new count-based method for
- monitoring lockless pagetable walks
-From:   Leonardo Bras <leonardo@linux.ibm.com>
-To:     jhubbard@nvidia.com, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Cc:     benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
-        arnd@arndb.de, aneesh.kumar@linux.ibm.com, christophe.leroy@c-s.fr,
-        akpm@linux-foundation.org, dan.j.williams@intel.com,
-        npiggin@gmail.com, mahesh@linux.vnet.ibm.com,
-        gregkh@linuxfoundation.org, tglx@linutronix.de,
-        ganeshgr@linux.ibm.com, allison@lohutok.net, rppt@linux.ibm.com,
-        yuehaibing@huawei.com, ira.weiny@intel.com, jgg@ziepe.ca,
-        keith.busch@intel.com
-Date:   Fri, 27 Sep 2019 11:46:04 -0300
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-0SqJjAld2WmMrSAcbuQn"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        id S1726036AbfI0WId (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Sep 2019 18:08:33 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:41364 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbfI0WId (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Sep 2019 18:08:33 -0400
+Received: by mail-pl1-f193.google.com with SMTP id t10so1583578plr.8
+        for <linux-arch@vger.kernel.org>; Fri, 27 Sep 2019 15:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QclGIxEt9wIwf/D5SYN1US1c97mZDr9iuEHzA7hulOc=;
+        b=Nb7R0Uo8kJGk6pIv8mrz1TSF1TwnUnKp1wVJGg+UdXj3D4RCiF7u0hawk91MqImsVQ
+         aXOsqOPLeYFnReqiyQ5aiodoOy1ByH7GoAqSIQnAWjd3vltsjZpGQrhwiHnvTf3t5ydY
+         ByIW8N6lJG+/BIIgWqYkHWAaGNaqGuOqzItiKEA0W/3HjdpA7vWsWT/JrXzybFhBg9Md
+         6SOQPxkTfGcqG3XTYKHzXLd5jP7fE1b7SNTfv1OHz42/1WJTIN175zJJXKcW6NREOiwh
+         BDKoz5wf5mDQTuX9vJ8VdBQgWyjJzPyy7sHiwnV3VC0tN3MzbNCPWeGagWeCNBK/eE7w
+         mFpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QclGIxEt9wIwf/D5SYN1US1c97mZDr9iuEHzA7hulOc=;
+        b=DBo5t2qOOKgS7CczgRVdwFExu6vRSE8dh32Y0hHngUFdlex2G7gDukHx6pKqIiv3id
+         +BJ1b2APWrMA7DNJCSx9I6GyIZ867JTif0SbABC+KsPPxNwu6LdCwHDkgI9V1hc9mJGF
+         ZikNRPOKfTHkou8DWDkEzRYvspP21GUL51idilMwQNOHQA53z3hwFJgIeTl64MbmGCzr
+         IxWV6o7oaoRwz23PK5JIFA7Q5b1gLPbaXQbOJglkvzmftYE4SfcKWUaX1wQ7/4N9pZ0s
+         cvi7UXh4GUx8slXK/pIemsTK15Sx8pLBuCr8XPEzlGWZdPaVCRC7XZQNLPmqXmDpku8t
+         wwgg==
+X-Gm-Message-State: APjAAAXaTZFI/7HMACuq6ejEYFKK1O4/8yRkg1D2UvGxaWYjGf9g9RUq
+        Zp36pWch++jvy9tnBm4163qCO6NkgjqlQJcA0xT+6A==
+X-Google-Smtp-Source: APXvYqz92+mVA5I3LKt61mIUPkDYBwp18EWEu6GPdh84rUZXFmpV9Q2ceBhRV8PBVhENBXLuxesaMZzgzmtIzdlR5c0=
+X-Received: by 2002:a17:902:d891:: with SMTP id b17mr6858867plz.119.1569622112129;
+ Fri, 27 Sep 2019 15:08:32 -0700 (PDT)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-27_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1909270138
+References: <20190830034304.24259-1-yamada.masahiro@socionext.com> <f5c221f5749e5768c9f0d909175a14910d349456.camel@suse.de>
+In-Reply-To: <f5c221f5749e5768c9f0d909175a14910d349456.camel@suse.de>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 27 Sep 2019 15:08:20 -0700
+Message-ID: <CAKwvOdk=tr5nqq1CdZnUvRskaVqsUCP0SEciSGonzY5ayXsMXw@mail.gmail.com>
+Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        rmk+kernel@arm.linux.org.uk, Will Deacon <will@kernel.org>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Kees Cook <keescook@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
---=-0SqJjAld2WmMrSAcbuQn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-John Hubbard <jhubbard@nvidia.com> writes:
-
-> Hi Leonardo,
+On Fri, Sep 27, 2019 at 3:43 AM Nicolas Saenz Julienne
+<nsaenzjulienne@suse.de> wrote:
 >
-> Thanks for adding linux-mm to CC for this next round of reviews. For the =
-benefit
-> of any new reviewers, I'd like to add that there are some issues that wer=
-e discovered
-> while reviewing the v2 patchset, that are not (yet) addressed in this v3 =
-series.
-
-> Since those issues are not listed in the cover letter above, I'll list th=
-em here
-
-Thanks for bringing that.
-The cover letter is a great place to put this info, I will keep that in
-mind for future patchsets.
-
+> On Fri, 2019-08-30 at 12:43 +0900, Masahiro Yamada wrote:
+> > Commit 9012d011660e ("compiler: allow all arches to enable
+> > CONFIG_OPTIMIZE_INLINING") allowed all architectures to enable
+> > this option. A couple of build errors were reported by randconfig,
+> > but all of them have been ironed out.
+> >
+> > Towards the goal of removing CONFIG_OPTIMIZE_INLINING entirely
+> > (and it will simplify the 'inline' macro in compiler_types.h),
+> > this commit changes it to always-on option. Going forward, the
+> > compiler will always be allowed to not inline functions marked
+> > 'inline'.
+> >
+> > This is not a problem for x86 since it has been long used by
+> > arch/x86/configs/{x86_64,i386}_defconfig.
+> >
+> > I am keeping the config option just in case any problem crops up for
+> > other architectures.
+> >
+> > The code clean-up will be done after confirming this is solid.
+> >
+> > Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 >
-> 1. The locking model requires a combination of disabling interrupts and
-> atomic counting and memory barriers, but
+> [ Adding some ARM people as they might be able to help ]
 >
-> 	a) some memory barriers are missing
-> 	(start/end_lockless_pgtbl_walk), and
-
-It seems that it works fine today because of the amount of intructions
-executed between the irq_disable / start_lockless_pgtbl_walk and where
-the THP collapse/split can happen. (It's very unlikely that it reorders
-that much).
-
-But I don't think it would be so bad to put a memory barrier after
-irq_disable just in case.
-
-> 	b) some cases (patch #8) fail to disable interrupts
-
-I have done some looking into that, and it seems that some uses of
-{start,end}_lockless_pgtbl_walk are unneeded, because they operate in
-(nested) guest pgd and I was told it's safe against THP split/collapse.
-
-In other uses, there is no interrupt disable because the function is
-called in real mode, with MSR_EE=3D0, and there we have instructions
-disabled, so there is no need to disable them again.
-
+> This was found to cause a regression on a Raspberry Pi 2 B built with
+> bcm2835_defconfig which among other things has no SMP support.
 >
-> ...so the synchronization appears to be inadequate. (And if it *is* adequ=
-ate, then
-> definitely we need the next item, to explain it.)
-
-
+> The relevant logs (edited to remove the noise) are:
 >
-> 2. Documentation of the synchronization/locking model needs to exist, onc=
-e we
-> figure out the exact details of (1).
-
-I will add the missing doc in the code, so it may be easier to
-understand in the future.
-
+> [    5.827333] Run /init as init process
+> Loading, please wait...
+> Failed to set SO_PASSCRED: Bad address
+> Failed to bind netlink socket: Bad address
+> Failed to create manager: Bad address
+> Failed to set SO_PASSCRED: Bad address
+> [    9.021623] systemd[1]: SO_PASSCRED failed: Bad address
+> [!!!!!!] Failed to start up manager.
+> [    9.079148] systemd[1]: Freezing execution.
 >
-> 3. Related to (1), I've asked to change things so that interrupt controls=
- and=20
-> atomic inc/dec are in the same start/end calls--assuming, of course, that=
- the
-> caller can tolerate that.=20
-
-I am not sure if it would be ok to use irq_{save,restore} in real mode,
-I will do some more reading of the docs before addressing this.=20
+> I looked into it, it turns out that the call to get_user() in sock_setsockopt()
+> is returning -EFAULT. Down the assembly rabbit hole that get_user() is I
+> found-out that it's the macro 'check_uaccess' who's triggering the error.
 >
-> 4. Please see the v2 series for any other details I've missed.
->
-> thanks,
-> --=20
-> John Hubbard
-> NVIDIA
->
+> I'm clueless at this point, so I hope you can give me some hints on what's
+> going bad here.
 
-Thank you for helping, John!
-
-Best regards,
-Leonardo Bras
-
---=-0SqJjAld2WmMrSAcbuQn
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl2OIKwACgkQlQYWtz9S
-ttRybRAArvljWum/p1QDUJofop8oyMMy8mFrtADkUcj7l033ze/c1UL4xVoFGvwQ
-JjAv7Cz+5anu8KJ3OQy0RUpdKihQh603Mt5fp7Okt8/D3AnBcMgp3hnGvwBDs8l4
-OqU3pEjzAFhQRpi0vFzuDLzY6yZBlHhb7keU8FpY9AOVk1M7nVxAYgY5pWiPUTJB
-6bxcElXieVV811efuDvuP2i4HG8tjs0uO4i8l4Z7EhoLRSYo030UJ2lRuO83/eYG
-1GXxjhkYulE4V5uHJ3PaWmtzre5wvSMHFniZK7XF777UZ5gDDgbo/FjtmYZQmQPx
-vbOAxfZq3yVakztdgQxYi2YN9Lh2rWJzfeISnWhpLzGS+dvFnDqurLCUieyKk4A8
-whBV3OCBpfksUToZuStK6cv2FK/TyArYGBTgPTmLRHn8n4AKgh1DzN2M9YxQ28jd
-rsAsmal05v6GTWJu8w9fHhwtHUO0HWaygdJGVm483FqVHSCigIShnhqT6QfoZY9q
-t4DvkFU6htn7vTEVIsLZaOYdyMFsWIZqoItq3kE+FZdcdCBMuLDjP47IK4g0IFtg
-Yo04gfVicc35HAvJpHCluEwIkEH45KWfRwlcN9rArUYDSMHMYeKIu53d4Q5+eit5
-AtqqUn9C4uk9TWoz3ksrfi5waujwmUtAvDaiaMH78SaiQ9IhncY=
-=tj28
------END PGP SIGNATURE-----
-
---=-0SqJjAld2WmMrSAcbuQn--
-
+So get_user() was passed a bad value/pointer from userspace? Do you
+know which of the tree calls to get_user() from sock_setsockopt() is
+failing?  (It's not immediately clear to me how this patch is at
+fault, vs there just being a bug in the source somewhere).
+-- 
+Thanks,
+~Nick Desaulniers
