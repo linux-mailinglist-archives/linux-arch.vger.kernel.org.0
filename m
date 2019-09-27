@@ -2,118 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC52C0E1B
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Sep 2019 00:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E28C0E4E
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Sep 2019 01:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725815AbfI0WpK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Sep 2019 18:45:10 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45009 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728206AbfI0WpJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Sep 2019 18:45:09 -0400
-Received: by mail-lj1-f196.google.com with SMTP id m13so3947922ljj.11
-        for <linux-arch@vger.kernel.org>; Fri, 27 Sep 2019 15:45:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0iijkTNAwazlkcEPbWHD7/Pt6NR9/VHJLHxMEdKPkjs=;
-        b=W4T7eFxOsxAOhy+qoHNVBHbvWBZnkWvEbzx+5PVLryQsWZlsSjLj6GrpIRs9Pvsc4P
-         uXgrUwtt+UFdta+Ixw2KIGOKyd88GrPA6t6bfUV6/KTqYQLQXhrgwSIapfQh+TP/7tF3
-         cAblA/InJlUZ+QeP1vKRt+lABmPCLOH+4cP0w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0iijkTNAwazlkcEPbWHD7/Pt6NR9/VHJLHxMEdKPkjs=;
-        b=PM0X6Z/RwmXXlo/XCS2qOXB7N0PFp+KjJEjpX3YMtiPs3ZGTBBIXp6vhfGiDZdjVjh
-         HJErB95xtXCN2Km7fspOmuHY77i4ECj9ELBxHOsElxrzJcmKeF6MB+vH9XkUYVuQAA96
-         5yDstR7mlf9wZxFB482uJ6MnYE7rUGNPvGb9BMdawU6fcsHd5MB92qfEoi5DGgaa1xTl
-         hAgnjAmdtE+NXhhl2Go2gDk5RoYa4V4HNIWTpjmvXiYwUA1TjBdIb4J6GOmaF5CsNCol
-         qkDLsyOd1xqJ5QKpObq7R0HbSdOiinXDuDP8wOUm4dKXTIO0B78cLWWzy2DdQOGNnOA7
-         KOxg==
-X-Gm-Message-State: APjAAAU7FzYYFjylEUv8OXLFRP0NPGxkwjh/IKNM9Z2N/GNtbzXWa8s9
-        cJHYqpBesSqvo462Wp+JYqwLTSpg1tA=
-X-Google-Smtp-Source: APXvYqzqnfAoSHs08xweO6CQAmHzw8/6AKJQ53mhT05QehGKAMFVoj0QzZGeUVzVJHcnYGdwmbe9iQ==
-X-Received: by 2002:a2e:1246:: with SMTP id t67mr4573442lje.174.1569624307927;
-        Fri, 27 Sep 2019 15:45:07 -0700 (PDT)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id l7sm719595lji.46.2019.09.27.15.45.07
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Sep 2019 15:45:07 -0700 (PDT)
-Received: by mail-lj1-f181.google.com with SMTP id m7so3994448lji.2
-        for <linux-arch@vger.kernel.org>; Fri, 27 Sep 2019 15:45:07 -0700 (PDT)
-X-Received: by 2002:a2e:5b9a:: with SMTP id m26mr4417255lje.90.1569623940537;
- Fri, 27 Sep 2019 15:39:00 -0700 (PDT)
+        id S1725815AbfI0X0c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Sep 2019 19:26:32 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37718 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725306AbfI0X0b (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 27 Sep 2019 19:26:31 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8RNMM8a117362;
+        Fri, 27 Sep 2019 19:25:24 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2v8w27efrq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Sep 2019 19:25:24 -0400
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x8RNN1oe118011;
+        Fri, 27 Sep 2019 19:25:23 -0400
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2v8w27efrk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Sep 2019 19:25:23 -0400
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x8RNOwfV014224;
+        Fri, 27 Sep 2019 23:25:23 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma02wdc.us.ibm.com with ESMTP id 2v5bg7v3r6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Sep 2019 23:25:23 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8RNPMFX53871064
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 Sep 2019 23:25:22 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6FDDDAE062;
+        Fri, 27 Sep 2019 23:25:22 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAB83AE05C;
+        Fri, 27 Sep 2019 23:25:18 +0000 (GMT)
+Received: from leobras.br.ibm.com (unknown [9.18.235.58])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 27 Sep 2019 23:25:18 +0000 (GMT)
+Message-ID: <ed1a954a67de3b1fa66e921883153622f3446813.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 00/11] Introduces new count-based method for
+ monitoring lockless pagetable walks
+From:   Leonardo Bras <leonardo@linux.ibm.com>
+To:     jhubbard@nvidia.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Cc:     benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        arnd@arndb.de, aneesh.kumar@linux.ibm.com, christophe.leroy@c-s.fr,
+        akpm@linux-foundation.org, dan.j.williams@intel.com,
+        npiggin@gmail.com, mahesh@linux.vnet.ibm.com,
+        gregkh@linuxfoundation.org, tglx@linutronix.de,
+        ganeshgr@linux.ibm.com, allison@lohutok.net, rppt@linux.ibm.com,
+        yuehaibing@huawei.com, ira.weiny@intel.com, jgg@ziepe.ca,
+        keith.busch@intel.com
+Date:   Fri, 27 Sep 2019 20:25:15 -0300
+In-Reply-To: <8fe1ee1abf52719e75902dc7d5cd1e91751eaba7.camel@linux.ibm.com>
+References: <8fe1ee1abf52719e75902dc7d5cd1e91751eaba7.camel@linux.ibm.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-MbHwrL3A6S40tAt0oPvi"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-References: <20190830034304.24259-1-yamada.masahiro@socionext.com>
- <f5c221f5749e5768c9f0d909175a14910d349456.camel@suse.de> <CAKwvOdk=tr5nqq1CdZnUvRskaVqsUCP0SEciSGonzY5ayXsMXw@mail.gmail.com>
-In-Reply-To: <CAKwvOdk=tr5nqq1CdZnUvRskaVqsUCP0SEciSGonzY5ayXsMXw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 27 Sep 2019 15:38:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiTy7hrA=LkmApBE9PQtri8qYsSOrf2zbms_crfjgR=Hw@mail.gmail.com>
-Message-ID: <CAHk-=wiTy7hrA=LkmApBE9PQtri8qYsSOrf2zbms_crfjgR=Hw@mail.gmail.com>
-Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Kees Cook <keescook@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-27_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1909270202
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 27, 2019 at 3:08 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> So get_user() was passed a bad value/pointer from userspace? Do you
-> know which of the tree calls to get_user() from sock_setsockopt() is
-> failing?  (It's not immediately clear to me how this patch is at
-> fault, vs there just being a bug in the source somewhere).
 
-Based on the error messages, the SO_PASSCRED ones are almost certainly
-from the get_user() in net/core/sock.c: sock_setsockopt(), which just
-does
+--=-MbHwrL3A6S40tAt0oPvi
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-        if (optlen < sizeof(int))
-                return -EINVAL;
+On Fri, 2019-09-27 at 11:46 -0300, Leonardo Bras wrote:
+> I am not sure if it would be ok to use irq_{save,restore} in real mode,
+> I will do some more reading of the docs before addressing this.=20
 
-        if (get_user(val, (int __user *)optval))
-                return -EFAULT;
+It looks like it's unsafe to merge irq_{save,restore} in
+{start,end}_lockless_pgtbl_walk(), due to a possible access of code
+that is not accessible in real mode.
 
-        valbool = val ? 1 : 0;
+I am sending a v4 for the changes so far.
+I will look forward for your feedback.
 
-but it's the other messages imply that a lot of other cases are
-failing too (ie the "Failed to bind netlink socket" is, according to
-google, a bind() that fails with the same EFAULT error).
+--=-MbHwrL3A6S40tAt0oPvi
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-There are probably even more failures that happen elsewhere and just
-don't even syslog the fact. I'd guess that all get_user() calls just
-fail, and those are the ones that happen to get printed out.
+-----BEGIN PGP SIGNATURE-----
 
-Now, _why_ it would fail, I have ni idea. There are several inlines in
-the arm uaccess.h file, and it depends on other headers like
-<asm/domain.h> with more inlines still - eg get/set_domain() etc.
+iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl2OmlsACgkQlQYWtz9S
+ttQSdxAAxb2vcaIJh6GyRJa4P3h6d85JpvByKZBBiNvOp5Lol0AgvQ0skrphW2hM
+0COavBu2j4C8+n6NhwOH1gbCZpup8sGrXc7bpMg7+WZ5uE4NyyeIlvUVgerTxrAI
+MmHKILew1y5IqmcIGzea+AynytNb20c98joR2EbZ/7S3lruP93C5WLTgb586eHGi
+oAtukVuDfOeeM4QzQh8OuT7pJLASLfUE+wBh4ZF25jlIx22TBKiP2k7yAIxOHCSM
+bCUxHPinYhxA7IMKgJM98MWd4RsXRH8sQ5j0fajUwrWXqY3DzDu12OYd6KbgiBjG
+J+L/UztjLHU0qrlvVwYYzz+y5e8ZbLro1hNlnbT9wsAhKmty0VkOlY1Ml6VH909g
+2MTmldoUju1SAE61pMtCBnhGBhdXAU6H4M+H8Ry4Tj5C6TwtJlZ/WgVklxRqrdnN
+6B4VsI3DumYzbwsX/Nra6rKLWPpFhK2QJ2KUMi303M9AfPEwjH2mu5fNxBauAOry
+Frt17kk6bGWBZcehbkpx9jNxrxBisohc13LHz7o75zd8U5wvoYXLeRmTFXGPCY7M
+fxo4s8pNXyEYyfFZ8i7HPXRML6RVQ6I8QqZjV/hhRxoVkipnVScFxgCuEUGdhTei
+YnKQbPBBOI/lHVy16zst1+eW/fDo5CkAV003jZc4sIuAzvHjR24=
+=RxjC
+-----END PGP SIGNATURE-----
 
-Soem of that code is pretty subtle. They have fixed register usage
-(but the asm macros actually check them). And the inline asms clobber
-the link register, but they do seem to clearly _state_ that they
-clobber it, so who knows.
+--=-MbHwrL3A6S40tAt0oPvi--
 
-Just based on the EFAULT, I'd _guess_ that it's some interaction with
-the domain access control register (so that get/set_domain() thing).
-But I'm not even sure that code is enabled for the Rpi2, so who
-knows..
-
-               Linus
