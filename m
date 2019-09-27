@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 955D1C03A1
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Sep 2019 12:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348F5C03C2
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Sep 2019 12:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727252AbfI0Knl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Sep 2019 06:43:41 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39508 "EHLO mx1.suse.de"
+        id S1726483AbfI0K6o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Sep 2019 06:58:44 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46012 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726179AbfI0Knk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 27 Sep 2019 06:43:40 -0400
+        id S1726339AbfI0K6o (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 27 Sep 2019 06:58:44 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 50BF2AF43;
-        Fri, 27 Sep 2019 10:43:37 +0000 (UTC)
-Message-ID: <f5c221f5749e5768c9f0d909175a14910d349456.camel@suse.de>
+        by mx1.suse.de (Postfix) with ESMTP id A0676ABBD;
+        Fri, 27 Sep 2019 10:58:41 +0000 (UTC)
+Message-ID: <dc80461e8b9d2e715976ed0b02f41b84922d06f1.camel@suse.de>
 Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
 From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 To:     Masahiro Yamada <yamada.masahiro@socionext.com>,
@@ -29,11 +29,11 @@ Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
         rmk+kernel@arm.linux.org.uk, Will Deacon <will@kernel.org>,
         Stefan Wahren <wahrenst@gmx.net>
-Date:   Fri, 27 Sep 2019 12:43:33 +0200
+Date:   Fri, 27 Sep 2019 12:58:39 +0200
 In-Reply-To: <20190830034304.24259-1-yamada.masahiro@socionext.com>
 References: <20190830034304.24259-1-yamada.masahiro@socionext.com>
 Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-TTn77CsG6HpjG9UNDv8f"
+        protocol="application/pgp-signature"; boundary="=-JZ6pLibdn1iko2ZTM9LG"
 User-Agent: Evolution 3.32.4 
 MIME-Version: 1.0
 Sender: linux-arch-owner@vger.kernel.org
@@ -42,7 +42,7 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---=-TTn77CsG6HpjG9UNDv8f
+--=-JZ6pLibdn1iko2ZTM9LG
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -67,6 +67,9 @@ On Fri, 2019-08-30 at 12:43 +0900, Masahiro Yamada wrote:
 > The code clean-up will be done after confirming this is solid.
 >=20
 > Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+
+[ Resending as the mail delivery system failed to resolve some the hosts,
+namely Masahiro's ]
 
 [ Adding some ARM people as they might be able to help ]
 
@@ -97,22 +100,23 @@ Regards,
 Nicolas
 
 
---=-TTn77CsG6HpjG9UNDv8f
+
+--=-JZ6pLibdn1iko2ZTM9LG
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl2N59UACgkQlfZmHno8
-x/4Z6Af/YYUR7sSrY9UKKrQHLe/gNtaid1RF/GLam6IO+PNRXjDCXklGqHNArz0u
-DiHhodmi3k93pPeSduHZCvR6IqLWr6zkWsZdRmFb/IvdJedaO3R3xls8ciJDcqDX
-PqASlawX+MV78w4Oa8WTW4Ny+BBpzuuvsLZlLa3A1KaSkGk9TCiDlGp/FdUbbYAP
-XeKFVV229oiagfQraVRydyq+9iDGlWanMADV2QuzkusZFtz29/kmEP0aiKEme8Q2
-cBpx/PVWnl1S+pLXUVk0VYUDXN2NevrCZgvbonXAUP/ctmZlYQvgthi6jMT9Z4jC
-JeInmX+aSPbCZ7SIjMGeJmsJl3KFkQ==
-=E3mP
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl2N618ACgkQlfZmHno8
+x/6+HggAhZEzBiG9BUNoaWjD8le/0hiblE7XfJOVHfaBiti3ehz5R3wnt0UQMSAe
+fwCdZdPkL96AsL23XDqrr3enTTe5nCKB5nM7qG2dJtDAiWsYVH/1Dcvn4pFQNT7m
+jKHagHOkcs3By4FkWQ2doBtKcbTkMlddljmbWAxbg3hXTAdNdlMvFzGWO88LWGoX
+R9zaedt2oDgF8BX+ctJ2ExNyueAqhJUiyBAQIaMgaHjtXVDL7czb+Qu90Tedp1Mn
+mVYwg+o9rda9frK7ZI8TRfYTMJPuUMVlOWIhHb23jQ4VCJJ0oP3Yl2AYuYMqhDSn
+Cte1dV9SuV0sE0F87cVbsc9COKvvHQ==
+=cwjV
 -----END PGP SIGNATURE-----
 
---=-TTn77CsG6HpjG9UNDv8f--
+--=-JZ6pLibdn1iko2ZTM9LG--
 
