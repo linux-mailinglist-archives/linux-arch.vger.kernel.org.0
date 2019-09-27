@@ -2,131 +2,189 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE350C03C7
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Sep 2019 13:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389D3C07E2
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Sep 2019 16:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbfI0LA0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Sep 2019 07:00:26 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:51144 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725882AbfI0LAZ (ORCPT
+        id S1727784AbfI0OrS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Sep 2019 10:47:18 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18808 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727079AbfI0OrS (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 27 Sep 2019 07:00:25 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8RAxKHL024144;
-        Fri, 27 Sep 2019 05:59:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=t4yOQo0VlJX6JufnHlZIny/cmaBng/L1TfNmP/2VMGU=;
- b=lTrXqdfpDsdRtLbwZQcpO+qpqMdi93ncS5Dz9Cdnlcb5zl2eNC5iNv7R9BUqkcfzVQV7
- F44mcqofdU1HXuSEj0cRS9Hb6VCrOzUBz9YE/KqSkiiGoGgcWJr6jW3VZNmuCoYM1Gey
- NdNiCa8RXQwaKJMSugeU6oWrQOhe7IDUCoCY0k/Sljhe+EQ8PuuGpUS6h1FGrfYJoYE/
- Bl7XRlHGXS3AVvVWG9L6xgB2ynH4oWkRnLyNBGgA/4L6Zk8S4k5wI2Gyn2ovq8eI7ybo
- w6OMLdaVUlVjO73j3vxGEOeFMXidTgG40wJnGgpjfGz2Tja26L5V90ba2AJALfgvYA4c Mg== 
-Authentication-Results: ppops.net;
-        spf=fail smtp.mailfrom=ckeepax@opensource.cirrus.com
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2v5h92ckbg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 27 Sep 2019 05:59:44 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Fri, 27 Sep
- 2019 11:59:42 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Fri, 27 Sep 2019 11:59:42 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0B7692C3;
-        Fri, 27 Sep 2019 10:59:42 +0000 (UTC)
-Date:   Fri, 27 Sep 2019 10:59:42 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-CC:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        <rmk+kernel@arm.linux.org.uk>, Will Deacon <will@kernel.org>,
-        Stefan Wahren <wahrenst@gmx.net>
-Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
-Message-ID: <20190927105942.GS10204@ediswmail.ad.cirrus.com>
-References: <20190830034304.24259-1-yamada.masahiro@socionext.com>
- <f5c221f5749e5768c9f0d909175a14910d349456.camel@suse.de>
+        Fri, 27 Sep 2019 10:47:18 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8REiKbe009586;
+        Fri, 27 Sep 2019 10:46:37 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2v8y3b53xk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Sep 2019 10:46:36 -0400
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x8REiTGK009898;
+        Fri, 27 Sep 2019 10:46:29 -0400
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2v8y3b53s7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Sep 2019 10:46:29 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x8REhmPi026728;
+        Fri, 27 Sep 2019 14:46:19 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma04dal.us.ibm.com with ESMTP id 2v5bg8f0un-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Sep 2019 14:46:19 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8REkHHj40042836
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 Sep 2019 14:46:18 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF156C6059;
+        Fri, 27 Sep 2019 14:46:17 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 23C33C605F;
+        Fri, 27 Sep 2019 14:46:09 +0000 (GMT)
+Received: from leobras.br.ibm.com (unknown [9.18.235.58])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 27 Sep 2019 14:46:09 +0000 (GMT)
+Message-ID: <8fe1ee1abf52719e75902dc7d5cd1e91751eaba7.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 00/11] Introduces new count-based method for
+ monitoring lockless pagetable walks
+From:   Leonardo Bras <leonardo@linux.ibm.com>
+To:     jhubbard@nvidia.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Cc:     benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        arnd@arndb.de, aneesh.kumar@linux.ibm.com, christophe.leroy@c-s.fr,
+        akpm@linux-foundation.org, dan.j.williams@intel.com,
+        npiggin@gmail.com, mahesh@linux.vnet.ibm.com,
+        gregkh@linuxfoundation.org, tglx@linutronix.de,
+        ganeshgr@linux.ibm.com, allison@lohutok.net, rppt@linux.ibm.com,
+        yuehaibing@huawei.com, ira.weiny@intel.com, jgg@ziepe.ca,
+        keith.busch@intel.com
+Date:   Fri, 27 Sep 2019 11:46:04 -0300
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-0SqJjAld2WmMrSAcbuQn"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <f5c221f5749e5768c9f0d909175a14910d349456.camel@suse.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-SPF-Result: fail
-X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
- -all
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 priorityscore=1501
- adultscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 clxscore=1011
- impostorscore=0 spamscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1908290000
- definitions=main-1909270103
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-27_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1909270138
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 27, 2019 at 12:43:33PM +0200, Nicolas Saenz Julienne wrote:
-> On Fri, 2019-08-30 at 12:43 +0900, Masahiro Yamada wrote:
-> > Commit 9012d011660e ("compiler: allow all arches to enable
-> > CONFIG_OPTIMIZE_INLINING") allowed all architectures to enable
-> > this option. A couple of build errors were reported by randconfig,
-> > but all of them have been ironed out.
-> > 
-> > Towards the goal of removing CONFIG_OPTIMIZE_INLINING entirely
-> > (and it will simplify the 'inline' macro in compiler_types.h),
-> > this commit changes it to always-on option. Going forward, the
-> > compiler will always be allowed to not inline functions marked
-> > 'inline'.
-> > 
-> > This is not a problem for x86 since it has been long used by
-> > arch/x86/configs/{x86_64,i386}_defconfig.
-> > 
-> > I am keeping the config option just in case any problem crops up for
-> > other architectures.
-> > 
-> > The code clean-up will be done after confirming this is solid.
-> > 
-> > Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-> 
-> [ Adding some ARM people as they might be able to help ]
-> 
-> This was found to cause a regression on a Raspberry Pi 2 B built with
-> bcm2835_defconfig which among other things has no SMP support.
-> 
-> The relevant logs (edited to remove the noise) are:
-> 
-> [    5.827333] Run /init as init process
-> Loading, please wait...
-> Failed to set SO_PASSCRED: Bad address
-> Failed to bind netlink socket: Bad address
-> Failed to create manager: Bad address
-> Failed to set SO_PASSCRED: Bad address
-> [    9.021623] systemd[1]: SO_PASSCRED failed: Bad address
-> [!!!!!!] Failed to start up manager.
-> [    9.079148] systemd[1]: Freezing execution.
-> 
-> I looked into it, it turns out that the call to get_user() in sock_setsockopt()
-> is returning -EFAULT. Down the assembly rabbit hole that get_user() is I
-> found-out that it's the macro 'check_uaccess' who's triggering the error.
-> 
-> I'm clueless at this point, so I hope you can give me some hints on what's
-> going bad here.
-> 
 
-Not sure I can add much in terms of a solution, but I can at
-least confirm I am seeing exactly the same issue, on my Zynq
-based ARM system.
+--=-0SqJjAld2WmMrSAcbuQn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Charles
+John Hubbard <jhubbard@nvidia.com> writes:
+
+> Hi Leonardo,
+>
+> Thanks for adding linux-mm to CC for this next round of reviews. For the =
+benefit
+> of any new reviewers, I'd like to add that there are some issues that wer=
+e discovered
+> while reviewing the v2 patchset, that are not (yet) addressed in this v3 =
+series.
+
+> Since those issues are not listed in the cover letter above, I'll list th=
+em here
+
+Thanks for bringing that.
+The cover letter is a great place to put this info, I will keep that in
+mind for future patchsets.
+
+>
+> 1. The locking model requires a combination of disabling interrupts and
+> atomic counting and memory barriers, but
+>
+> 	a) some memory barriers are missing
+> 	(start/end_lockless_pgtbl_walk), and
+
+It seems that it works fine today because of the amount of intructions
+executed between the irq_disable / start_lockless_pgtbl_walk and where
+the THP collapse/split can happen. (It's very unlikely that it reorders
+that much).
+
+But I don't think it would be so bad to put a memory barrier after
+irq_disable just in case.
+
+> 	b) some cases (patch #8) fail to disable interrupts
+
+I have done some looking into that, and it seems that some uses of
+{start,end}_lockless_pgtbl_walk are unneeded, because they operate in
+(nested) guest pgd and I was told it's safe against THP split/collapse.
+
+In other uses, there is no interrupt disable because the function is
+called in real mode, with MSR_EE=3D0, and there we have instructions
+disabled, so there is no need to disable them again.
+
+>
+> ...so the synchronization appears to be inadequate. (And if it *is* adequ=
+ate, then
+> definitely we need the next item, to explain it.)
+
+
+>
+> 2. Documentation of the synchronization/locking model needs to exist, onc=
+e we
+> figure out the exact details of (1).
+
+I will add the missing doc in the code, so it may be easier to
+understand in the future.
+
+>
+> 3. Related to (1), I've asked to change things so that interrupt controls=
+ and=20
+> atomic inc/dec are in the same start/end calls--assuming, of course, that=
+ the
+> caller can tolerate that.=20
+
+I am not sure if it would be ok to use irq_{save,restore} in real mode,
+I will do some more reading of the docs before addressing this.=20
+>
+> 4. Please see the v2 series for any other details I've missed.
+>
+> thanks,
+> --=20
+> John Hubbard
+> NVIDIA
+>
+
+Thank you for helping, John!
+
+Best regards,
+Leonardo Bras
+
+--=-0SqJjAld2WmMrSAcbuQn
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl2OIKwACgkQlQYWtz9S
+ttRybRAArvljWum/p1QDUJofop8oyMMy8mFrtADkUcj7l033ze/c1UL4xVoFGvwQ
+JjAv7Cz+5anu8KJ3OQy0RUpdKihQh603Mt5fp7Okt8/D3AnBcMgp3hnGvwBDs8l4
+OqU3pEjzAFhQRpi0vFzuDLzY6yZBlHhb7keU8FpY9AOVk1M7nVxAYgY5pWiPUTJB
+6bxcElXieVV811efuDvuP2i4HG8tjs0uO4i8l4Z7EhoLRSYo030UJ2lRuO83/eYG
+1GXxjhkYulE4V5uHJ3PaWmtzre5wvSMHFniZK7XF777UZ5gDDgbo/FjtmYZQmQPx
+vbOAxfZq3yVakztdgQxYi2YN9Lh2rWJzfeISnWhpLzGS+dvFnDqurLCUieyKk4A8
+whBV3OCBpfksUToZuStK6cv2FK/TyArYGBTgPTmLRHn8n4AKgh1DzN2M9YxQ28jd
+rsAsmal05v6GTWJu8w9fHhwtHUO0HWaygdJGVm483FqVHSCigIShnhqT6QfoZY9q
+t4DvkFU6htn7vTEVIsLZaOYdyMFsWIZqoItq3kE+FZdcdCBMuLDjP47IK4g0IFtg
+Yo04gfVicc35HAvJpHCluEwIkEH45KWfRwlcN9rArUYDSMHMYeKIu53d4Q5+eit5
+AtqqUn9C4uk9TWoz3ksrfi5waujwmUtAvDaiaMH78SaiQ9IhncY=
+=tj28
+-----END PGP SIGNATURE-----
+
+--=-0SqJjAld2WmMrSAcbuQn--
+
