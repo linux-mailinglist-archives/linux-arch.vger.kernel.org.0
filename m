@@ -2,128 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34645C1B3E
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2019 08:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5A0C1EE9
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2019 12:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726314AbfI3GFD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Sep 2019 02:05:03 -0400
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:20323 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbfI3GFD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Sep 2019 02:05:03 -0400
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id x8U64s0r025410;
-        Mon, 30 Sep 2019 15:04:55 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x8U64s0r025410
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1569823495;
-        bh=Fjk0klSYABTqCF5sFdsjgvAIAla/kChqyCj9TYKize0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CDj6+GMGJU7z0RPnmHqPyb2W0xC+NoGJV0Kc7Ab9MlTiXSh7G+8jA2Mii4/1ycNmQ
-         SphMTG9JN9U01uhTzXUi8Yl7oti06VwfDY8B1bl/cavsg9QtCMIWHhgEG/NqkRCyD2
-         fHRireT2HxVJbYmmBlI1nh9JsO0YEUFaDmySyvRvAyaJszhlnlU4R6aVetkaKkgslN
-         qc7XKaAvjFHMmO1O1ck2Z5G4DPB5cfKzSrgkn5ee1ymZ4krwszbN8CIM+i7piPVhm1
-         vhQ2IYaD4tQvgEwObe8ZxsqUg8K4Z86UHIVqixOvkQCWvUspUrD8sjQ3/CzXGsr4O/
-         ungeXpgT+EJyQ==
-X-Nifty-SrcIP: [209.85.217.44]
-Received: by mail-vs1-f44.google.com with SMTP id d204so5929068vsc.12;
-        Sun, 29 Sep 2019 23:04:55 -0700 (PDT)
-X-Gm-Message-State: APjAAAVPnXG0c/L/d7ObNsVJ48SAFQwgGG+6H/k2dtZ929XAIPAkofFa
-        kGCrX6sG9IPxasJBwWp7YWS1S/bosGuOfiWvPYM=
-X-Google-Smtp-Source: APXvYqymKmuO4ng8N+mhggUSySwt156EtWO+iX3nKf6yriMcUXg7WOAGXnA/uK5MP0z3KxCP+1mSSeyeG54AH0dSSYQ=
-X-Received: by 2002:a67:1e87:: with SMTP id e129mr9153690vse.179.1569823494293;
- Sun, 29 Sep 2019 23:04:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190830034304.24259-1-yamada.masahiro@socionext.com> <dc80461e8b9d2e715976ed0b02f41b84922d06f1.camel@suse.de>
-In-Reply-To: <dc80461e8b9d2e715976ed0b02f41b84922d06f1.camel@suse.de>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Mon, 30 Sep 2019 15:04:18 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASsmRVDHeCyFTnWhQ1isTrWZ5LRpdf463yaqj6ycZiGQw@mail.gmail.com>
-Message-ID: <CAK7LNASsmRVDHeCyFTnWhQ1isTrWZ5LRpdf463yaqj6ycZiGQw@mail.gmail.com>
-Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Will Deacon <will@kernel.org>, Stefan Wahren <wahrenst@gmx.net>
-Content-Type: text/plain; charset="UTF-8"
+        id S1730588AbfI3Kbf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Sep 2019 06:31:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37150 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729415AbfI3Kbf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 30 Sep 2019 06:31:35 -0400
+Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F2C9216F4;
+        Mon, 30 Sep 2019 10:31:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569839493;
+        bh=0HeOPYXdrIrODY+4Ljv3JDbm2MSyawGhlpS79Ws8AAI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dpJ3mz6FATbQOKH3zBlIwGqbdSid4M2BOw1F9yGM16iiplhNYGQUTY4044OWw2GU8
+         /1lYxQBW373+RanCN6q3P3bX6Le+CUZvoiavND/LRwp3ROFzjFJ8cImq7YaFjX9yAU
+         dVOd4MIlNpyj3ws3Zfe0+DV6wyQudVBuZtsQWJCQ=
+From:   guoren@kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [GIT PULL] csky changes for v5.3-rc1
+Date:   Mon, 30 Sep 2019 18:31:24 +0800
+Message-Id: <1569839484-28170-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi.
+Hi Linus,
 
-On Fri, Sep 27, 2019 at 7:58 PM Nicolas Saenz Julienne
-<nsaenzjulienne@suse.de> wrote:
->
-> On Fri, 2019-08-30 at 12:43 +0900, Masahiro Yamada wrote:
-> > Commit 9012d011660e ("compiler: allow all arches to enable
-> > CONFIG_OPTIMIZE_INLINING") allowed all architectures to enable
-> > this option. A couple of build errors were reported by randconfig,
-> > but all of them have been ironed out.
-> >
-> > Towards the goal of removing CONFIG_OPTIMIZE_INLINING entirely
-> > (and it will simplify the 'inline' macro in compiler_types.h),
-> > this commit changes it to always-on option. Going forward, the
-> > compiler will always be allowed to not inline functions marked
-> > 'inline'.
-> >
-> > This is not a problem for x86 since it has been long used by
-> > arch/x86/configs/{x86_64,i386}_defconfig.
-> >
-> > I am keeping the config option just in case any problem crops up for
-> > other architectures.
-> >
-> > The code clean-up will be done after confirming this is solid.
-> >
-> > Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
->
-> [ Resending as the mail delivery system failed to resolve some the hosts,
-> namely Masahiro's ]
->
-> [ Adding some ARM people as they might be able to help ]
->
-> This was found to cause a regression on a Raspberry Pi 2 B built with
-> bcm2835_defconfig which among other things has no SMP support.
->
-> The relevant logs (edited to remove the noise) are:
->
-> [    5.827333] Run /init as init process
-> Loading, please wait...
-> Failed to set SO_PASSCRED: Bad address
-> Failed to bind netlink socket: Bad address
-> Failed to create manager: Bad address
-> Failed to set SO_PASSCRED: Bad address
-> [    9.021623] systemd[1]: SO_PASSCRED failed: Bad address
-> [!!!!!!] Failed to start up manager.
-> [    9.079148] systemd[1]: Freezing execution.
->
-> I looked into it, it turns out that the call to get_user() in sock_setsockopt()
-> is returning -EFAULT. Down the assembly rabbit hole that get_user() is I
-> found-out that it's the macro 'check_uaccess' who's triggering the error.
->
-> I'm clueless at this point, so I hope you can give me some hints on what's
-> going bad here.
->
-> Regards,
-> Nicolas
->
->
+The following changes since commit 609488bc979f99f805f34e9a32c1e3b71179d10b:
 
-I posted a fix:
-https://lore.kernel.org/patchwork/patch/1132459/
+  Linux 5.3-rc2 (2019-07-28 12:47:02 -0700)
 
-Thanks.
+are available in the git repository at:
 
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.4-rc1
 
+for you to fetch changes up to 9af032a30172e119a5935f802b066631f8ded2d6:
 
--- 
-Best Regards
-Masahiro Yamada
+  csky: Move static keyword to the front of declaration (2019-09-30 11:50:49 +0800)
+
+----------------------------------------------------------------
+csky-for-linus-5.4-rc1: arch/csky patches for 5.4-rc1
+
+This round of csky subsystem just some fixups.
+
+Fixup:
+ - Fixup mb() synchronization problem
+ - Fixup dma_alloc_coherent with PAGE_SO attribute
+ - Fixup cache_op failed when cross memory ZONEs
+ - Optimize arch_sync_dma_for_cpu/device with dma_inv_range
+ - Fixup ioremap function losing
+ - Fixup arch_get_unmapped_area() implementation
+ - Fixup defer cache flush for 610
+ - Support kernel non-aligned access
+ - Fixup 610 vipt cache flush mechanism
+ - Fixup add zero_fp fixup perf backtrace panic
+ - Move static keyword to the front of declaration
+ - Fixup csky_pmu.max_period assignment
+ - Use generic free_initrd_mem()
+ - entry: Remove unneeded need_resched() loop
+
+CI-Tested: https://gitlab.com/c-sky/buildroot/pipelines/77689888
+
+----------------------------------------------------------------
+Guo Ren (10):
+      csky: Fixup mb() synchronization problem
+      csky: Fixup dma_alloc_coherent with PAGE_SO attribute
+      csky/dma: Fixup cache_op failed when cross memory ZONEs
+      csky: Optimize arch_sync_dma_for_cpu/device with dma_inv_range
+      csky: Fixup ioremap function losing
+      csky: Fixup arch_get_unmapped_area() implementation
+      csky: Fixup defer cache flush for 610
+      csky: Support kernel non-aligned access
+      csky: Fixup 610 vipt cache flush mechanism
+      csky: Fixup add zero_fp fixup perf backtrace panic
+
+Krzysztof Wilczynski (1):
+      csky: Move static keyword to the front of declaration
+
+Mao Han (1):
+      csky: Fixup csky_pmu.max_period assignment
+
+Mike Rapoport (1):
+      csky: Use generic free_initrd_mem()
+
+Valentin Schneider (1):
+      csky: entry: Remove unneeded need_resched() loop
+
+ arch/csky/abiv1/alignment.c          | 62 +++++++++++++++++++++--------
+ arch/csky/abiv1/cacheflush.c         | 70 ++++++++++++++++++++++-----------
+ arch/csky/abiv1/inc/abi/cacheflush.h | 45 ++++++++++++++-------
+ arch/csky/abiv1/inc/abi/page.h       |  5 ++-
+ arch/csky/abiv1/mmap.c               | 75 ++++++++++++++++++-----------------
+ arch/csky/include/asm/barrier.h      | 15 ++++---
+ arch/csky/include/asm/cache.h        |  1 +
+ arch/csky/include/asm/io.h           | 23 +++++------
+ arch/csky/include/asm/pgtable.h      | 10 +++++
+ arch/csky/kernel/entry.S             | 54 +++++++++++++------------
+ arch/csky/kernel/perf_event.c        |  4 +-
+ arch/csky/kernel/process.c           |  2 +-
+ arch/csky/mm/cachev1.c               |  7 +++-
+ arch/csky/mm/cachev2.c               | 11 +++++-
+ arch/csky/mm/dma-mapping.c           | 76 +++++++++++++-----------------------
+ arch/csky/mm/init.c                  | 16 --------
+ arch/csky/mm/ioremap.c               | 27 ++++++++-----
+ 17 files changed, 291 insertions(+), 212 deletions(-)
