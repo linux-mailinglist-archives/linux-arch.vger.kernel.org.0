@@ -2,125 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 013FEC207C
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2019 14:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA68C227A
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2019 15:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbfI3MSL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Sep 2019 08:18:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57272 "EHLO mail.kernel.org"
+        id S1730876AbfI3NxM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Sep 2019 09:53:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41306 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729649AbfI3MSL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 30 Sep 2019 08:18:11 -0400
+        id S1730378AbfI3NxM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 30 Sep 2019 09:53:12 -0400
 Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 762D62054F;
-        Mon, 30 Sep 2019 12:18:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1FD282086A;
+        Mon, 30 Sep 2019 13:53:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569845889;
-        bh=c2OUYeKYbDh5+GWE2NV/OFHkpMhJmyVCeS5+QVpDpqw=;
+        s=default; t=1569851591;
+        bh=Nhh2vGJB8S4qKF2pVJfJQWMF1IqgVIe1hzK5L13M6BI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pa580s/woPLR4Dgg5jdNQ+yBigWHsZgIUlbw6ahDCv3DyWkNlG37VVXX9e1Iif3NU
-         Xlrfa/addvc1VsJY6kzFvJY+U6eXAM/MFIIU3wimHEDZF34bVMz3qrZ5kGlZGeVL22
-         wrx0r1+WH1cdYgaa7BdvYoqzhbo849gnBS1Gqzmo=
-Date:   Mon, 30 Sep 2019 13:18:04 +0100
+        b=ayDenw/bCTAHtwhYp4fyI3E0oMsrHlnzfT9mfM6hSRzUHrL4BkakOVzMHBV97Knxc
+         Zlaik0HKfae0TMciZIuhvL7AyGAZ7up6EAMKJ80pazwZceHlMJGjpsVBEOH5cNgU6f
+         dC0uBOswbPP26FOOqAhJkQTYyOU5ppiTWyh0ZRX8=
+Date:   Mon, 30 Sep 2019 14:53:07 +0100
 From:   Will Deacon <will@kernel.org>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Kees Cook <keescook@google.com>
-Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
-Message-ID: <20190930121803.n34i63scet2ec7ll@willie-the-truck>
-References: <20190830034304.24259-1-yamada.masahiro@socionext.com>
- <f5c221f5749e5768c9f0d909175a14910d349456.camel@suse.de>
- <CAKwvOdk=tr5nqq1CdZnUvRskaVqsUCP0SEciSGonzY5ayXsMXw@mail.gmail.com>
- <CAHk-=wiTy7hrA=LkmApBE9PQtri8qYsSOrf2zbms_crfjgR=Hw@mail.gmail.com>
- <20190930112636.vx2qxo4hdysvxibl@willie-the-truck>
- <CAK7LNASQZ82KSOrQW7+Wq1vFDCg2__maBEAPMLqUDqZMLuj1rA@mail.gmail.com>
+To:     Jookia <166291@gmail.com>
+Cc:     Xogium <contact@xogium.me>, linux-arch@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, mingo@redhat.com, bp@alien8.de,
+        tglx@linutronix.de, linux-arm-kernel@lists.infradead.org
+Subject: Re: [breakage] panic() does not halt arm64 systems under certain
+ conditions
+Message-ID: <20190930135306.p5r4sy2bbmq5zxgm@willie-the-truck>
+References: <BX1W47JXPMR8.58IYW53H6M5N@dragonstone>
+ <20190917104518.ovg6ivadyst7h76o@willie-the-truck>
+ <20190920042501.GA5516@novena-choice-citizen-recovery.gateway>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNASQZ82KSOrQW7+Wq1vFDCg2__maBEAPMLqUDqZMLuj1rA@mail.gmail.com>
+In-Reply-To: <20190920042501.GA5516@novena-choice-citizen-recovery.gateway>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 30, 2019 at 09:05:11PM +0900, Masahiro Yamada wrote:
-> On Mon, Sep 30, 2019 at 8:26 PM Will Deacon <will@kernel.org> wrote:
-> > On Fri, Sep 27, 2019 at 03:38:44PM -0700, Linus Torvalds wrote:
-> > > Soem of that code is pretty subtle. They have fixed register usage
-> > > (but the asm macros actually check them). And the inline asms clobber
-> > > the link register, but they do seem to clearly _state_ that they
-> > > clobber it, so who knows.
-> > >
-> > > Just based on the EFAULT, I'd _guess_ that it's some interaction with
-> > > the domain access control register (so that get/set_domain() thing).
-> > > But I'm not even sure that code is enabled for the Rpi2, so who
-> > > knows..
-> >
-> > FWIW, we've run into issues with CONFIG_OPTIMIZE_INLINING and local
-> > variables marked as 'register' where GCC would do crazy things and end
-> > up corrupting data, so I suspect the use of fixed registers in the arm
-> > uaccess functions is hitting something similar:
-> >
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91111
+On Fri, Sep 20, 2019 at 02:25:01PM +1000, Jookia wrote:
+> On Tue, Sep 17, 2019 at 11:45:19AM +0100, Will Deacon wrote:
+> > A straightforward fix is to disable preemption explicitly on the panic()
+> > path (diff below), but I've expanded the cc list to see both what others
+> > think, but also in case smp_send_stop() is supposed to have the side-effect
+> > of disabling interrupt delivery for the local CPU.
+> > 
+> > diff --git a/kernel/panic.c b/kernel/panic.c
+> > index 057540b6eee9..02d0de31c42d 100644
+> > --- a/kernel/panic.c
+> > +++ b/kernel/panic.c
+> > @@ -179,6 +179,7 @@ void panic(const char *fmt, ...)
+> > 	 * after setting panic_cpu) from invoking panic() again.
+> > 	 */
+> > 	local_irq_disable();
+> > +	preempt_disable_notrace();
+> >  
+> > 	/*
+> > 	 * It's possible to come here directly from a panic-assertion and
+> > 
+> When you run with panic=... it will send you to a loop earlier in the
+> panic code before local_irq_disable() is hit, working around the bug.
+> A patch like this would make the behaviour the same:
 > 
-> No. Not similar at all.
-
-They're similar in that enabling CONFIG_OPTIMIZE_INLINING causes register
-variables to go wrong. I agree that the ARM code looks dodgy with
-that call to uaccess_save_and_enable(), but there are __asmeq macros
-in there to try to catch that, so it's still very fishy.
-
-> I fixed it already. See
-> https://lore.kernel.org/patchwork/patch/1132459/
-
-You fixed the specific case above for 32-bit ARM, but the arm64 case
-is due to a compiler bug. As it happens, we've reworked our atomics
-in 5.4 so that particular issue no longer triggers, but the fact remains
-that GCC has been shown to screw up explicit register allocation for
-perfectly legitimate code when giving the flexibility to move code out
-of line.
-
-> The problems are fixable by writing correct code.
-
-Right, in the compiler ;)
-
-> I think we discussed this already.
-
-We did?
-
-> - There is nothing arch-specific in CONFIG_OPTIMIZE_INLINING
-
-Apart from the bugs... and even then, that's just based on reports.
-
-> - 'inline' is just a hint. It does not guarantee function inlining.
->   This is standard.
+> diff --git a/kernel/panic.c b/kernel/panic.c
+> index 4d9f55bf7d38..92abbb5f8d38 100644
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -331,7 +331,6 @@ void panic(const char *fmt, ...)
 > 
-> - The kernel macrofies 'inline' to add __attribute__((__always_inline__))
->   This terrible hack must end.
+>         /* Do not scroll important messages printed above */
+>         suppress_printk = 1;
+> -       local_irq_enable();
+>         for (i = 0; ; i += PANIC_TIMER_STEP) {
+>                 touch_softlockup_watchdog();
+>                 if (i >= i_next) {
 
-I'm all for getting rid of hacks, but not at the cost of correctness.
+The reason I kept irqs enabled is because I figured they might be useful
+for magic sysrq keyboard interrupts (e.g. if you wanted to reboot the box).
 
-> -  __attribute__((__always_inline__)) takes aways compiler's freedom,
->    and prevents it from optimizing the code for -O2, -Os, or whatever.
-
-s/whatever/miscompiling the code/
-
-If it helps, here is more information about the arm64 failure which
-triggered the GCC bugzilla:
-
-https://www.spinics.net/lists/arm-kernel/msg730329.html
+With 'panic=', the reboot happens automatically, so there's no issue there
+afaict.
 
 Will
