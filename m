@@ -2,111 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FE1C29A5
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2019 00:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB52EC29C7
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2019 00:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbfI3Wey (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Sep 2019 18:34:54 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35183 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726425AbfI3Wey (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Sep 2019 18:34:54 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 205so6429795pfw.2
-        for <linux-arch@vger.kernel.org>; Mon, 30 Sep 2019 15:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7SR5SJpCZzCR2HUyKgols4Ma/MTXm0Tu30NRGBJBmLQ=;
-        b=MOWTHPUwU1iS50Z3VFZA5DFevN71k70iB6IqofUavf/x1Nw+kv1n0f0Sq5oAZEzLvL
-         xLQFdHuY2ewoREYA3vaIqrKdhMxDxcKTmjl9JS5mLDb//GKRO4pR9pr0tGSdFwURX/Hm
-         q+rCUWqufGVzOq/ajZ4+ysaFaZF39LNfK6RxkybZ7Ld/DFxDtmSlJNzHEIv/BZhE+44m
-         WV6trAVqy1zOmVuGaejXWaRtNbSI1LWY2Y1QUafxdmQifE14+Vo/0IWblPjFVpw8zYyZ
-         UUfsJZRE54IiOF4YqjuO/qBjMN2RhDYUOixGN1CN8FS834d1pmqTq7UWdEHpavKTXIiq
-         oSyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7SR5SJpCZzCR2HUyKgols4Ma/MTXm0Tu30NRGBJBmLQ=;
-        b=WZyAFxVPFRLmCe1e9g1xQ81ezblnlJT/RUMNkZfX3k3DS0q4tUpNa2KtGAPub7hmqZ
-         OtB+UQdTFOIqX+LRcU7N4XUnUmg3WlX0lyp06Guj/wvKiE7D5VVyy/TTIU6wgjCfiqty
-         ALBBDuBBuvWRhBW9Uc+IJHsgh3ihhllWecUUosZwIZgQh8FYmiYYC4iR57QNsqZKZXpZ
-         JPtOwiPy28SmsQewNsD8TZQRB7CTeuQK2fhYouhTqfc+HD6XkvtExI/HIdKZ9KL85pmP
-         vS+hCkSGRjOsivItwuRsiJwD6bBOFXil4mfVlg5ydH3rj89mxhgNu5TQA8E5oRn3ZspT
-         BIWQ==
-X-Gm-Message-State: APjAAAW+hNRdy0VrMypjuzP3q+OJVDhNNV25FtRV/Ejn3WlUhy+YYBqm
-        R5FkFSYN55G9QAIHn71DAdVuq7k8a0avdbgnjd7Wvg==
-X-Google-Smtp-Source: APXvYqyOU2bwSPdSL51Jh7RdzyoNXLxhELPpgkbg72EzzJZ/2dNcZv/B/p8mtSppYe8kSal5ZVqB7ESgT0GvDuiU08g=
-X-Received: by 2002:a17:90a:178d:: with SMTP id q13mr1777052pja.134.1569882893154;
- Mon, 30 Sep 2019 15:34:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190830034304.24259-1-yamada.masahiro@socionext.com>
- <f5c221f5749e5768c9f0d909175a14910d349456.camel@suse.de> <CAKwvOdk=tr5nqq1CdZnUvRskaVqsUCP0SEciSGonzY5ayXsMXw@mail.gmail.com>
- <CAHk-=wiTy7hrA=LkmApBE9PQtri8qYsSOrf2zbms_crfjgR=Hw@mail.gmail.com>
- <20190930112636.vx2qxo4hdysvxibl@willie-the-truck> <CAK7LNASQZ82KSOrQW7+Wq1vFDCg2__maBEAPMLqUDqZMLuj1rA@mail.gmail.com>
- <20190930121803.n34i63scet2ec7ll@willie-the-truck> <CAKwvOdnqn=0LndrX+mUrtSAQqoT1JWRMOJCA5t3e=S=T7zkcCQ@mail.gmail.com>
- <CANiq72kbZVB4vdyQonMQzuRHdh=BnD6F=sv5NQsFey5_xAB-Zg@mail.gmail.com>
-In-Reply-To: <CANiq72kbZVB4vdyQonMQzuRHdh=BnD6F=sv5NQsFey5_xAB-Zg@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 30 Sep 2019 15:34:41 -0700
-Message-ID: <CAKwvOdm_GoUeDjAYXTqCTuvdL+9vwvfeofhv06MLMYVA75CnEg@mail.gmail.com>
-Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        id S1726303AbfI3Wmj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Sep 2019 18:42:39 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:20990 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726425AbfI3Wmj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 30 Sep 2019 18:42:39 -0400
+Received: from smtp2.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 83B48A1A1C;
+        Tue,  1 Oct 2019 00:42:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.240])
+        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
+        with ESMTP id i0Vf_5Qcnyhu; Tue,  1 Oct 2019 00:42:25 +0200 (CEST)
+Date:   Tue, 1 Oct 2019 08:41:59 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@01.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-ia64@vger.kernel.org, linux-sh@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        sparclinux@vger.kernel.org, Jiri Olsa <jolsa@redhat.com>,
+        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
+        Tycho Andersen <tycho@tycho.ws>, Aleksa Sarai <asarai@suse.de>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linuxppc-dev@lists.ozlabs.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        David Drysdale <drysdale@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        libc-alpha@sourceware.org, linux-parisc@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-api@vger.kernel.org,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-alpha@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Kees Cook <keescook@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org
+Subject: Re: [PATCH v13 7/9] open: openat2(2) syscall
+Message-ID: <20190930224159.gp2hqm57qxlm2eat@yavin.dot.cyphar.com>
+References: <20190930183316.10190-8-cyphar@cyphar.com>
+ <201910010404.WLqR1mUW%lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="t4elbyhlilsmpd4b"
+Content-Disposition: inline
+In-Reply-To: <201910010404.WLqR1mUW%lkp@intel.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 30, 2019 at 3:08 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Mon, Sep 30, 2019 at 11:50 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > So __attribute__((always_inline)) doesn't guarantee that code will be
-> > inlined.  [...] inline and __attribute__((always_inline))
-> > are a heuristic laden mess and should not be relied upon.
->
-> Small note: in GCC, __attribute__((always_inline)) is documented as
-> actually guaranteeing to either inline or error otherwise (although
-> see the remark for indirect calls):
->
->     "Failure to inline such a function is diagnosed as an error. Note
 
-Not an error, but a warning at least: https://godbolt.org/z/_V5im1.
+--t4elbyhlilsmpd4b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-That's interesting, so it has multiple semantics, because it's also
-documented to inline even when no optimizations are specified.  So
-when someone uses __attribute__((always_inline)) without a comment,
-it's not clear whether they mean for there to be a warning when this
-is not inlined, or for it to be inlined at -O0 (guess not for the
-kernel), or both.  If the kernel wants to enforce the former, why not
-set `-Werror=attributes`?  Maybe that warning is too broad?  Seems
-like a recipe for subtly broken code found at runtime, when we'd
-rather have stronger compile time guarantees.
+On 2019-10-01, kbuild test robot <lkp@intel.com> wrote:
+> Hi Aleksa,
+>=20
+> Thank you for the patch! Yet something to improve:
+>=20
+> [auto build test ERROR on linus/master]
+> [cannot apply to v5.4-rc1 next-20190930]
+> [if your patch is applied to the wrong git tree, please drop us a note to=
+ help
+> improve the system. BTW, we also suggest to use '--base' option to specif=
+y the
+> base tree in git format-patch, please see https://stackoverflow.com/a/374=
+06982]
 
-> that if such a function is called indirectly the compiler may or may
-> not inline it depending on optimization level and a failure to inline
-> an indirect call may or may not be diagnosed."
->
-> As for LLVM/Clang, no idea, since it does not say anything about it in
-> the docs -- but from what you say, it is a weaker guarantee.
+I forgot to include --base to signify this series depends on the
+copy_struct_from_user() one. I'll include it in the next version.
 
-Filed https://bugs.llvm.org/show_bug.cgi?id=43517
--- 
-Thanks,
-~Nick Desaulniers
+> url:    https://github.com/0day-ci/linux/commits/Aleksa-Sarai/namei-opena=
+t2-2-path-resolution-restrictions/20191001-025628
+> config: i386-defconfig (attached as .config)
+> compiler: gcc-7 (Debian 7.4.0-13) 7.4.0
+> reproduce:
+>         # save the attached .config to linux build tree
+>         make ARCH=3Di386=20
+>=20
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+>    fs/open.c: In function '__do_sys_openat2':
+> >> fs/open.c:1173:8: error: implicit declaration of function 'copy_struct=
+_from_user'; did you mean 'copy_siginfo_from_user'? [-Werror=3Dimplicit-fun=
+ction-declaration]
+>      err =3D copy_struct_from_user(&tmp, sizeof(tmp), how, usize);
+>            ^~~~~~~~~~~~~~~~~~~~~
+>            copy_siginfo_from_user
+>    cc1: some warnings being treated as errors
+>=20
+> vim +1173 fs/open.c
+>=20
+>   1163=09
+>   1164	SYSCALL_DEFINE4(openat2, int, dfd, const char __user *, filename,
+>   1165			const struct open_how __user *, how, size_t, usize)
+>   1166	{
+>   1167		int err;
+>   1168		struct open_how tmp;
+>   1169=09
+>   1170		if (unlikely(usize < OPEN_HOW_SIZE_VER0))
+>   1171			return -EINVAL;
+>   1172=09
+> > 1173		err =3D copy_struct_from_user(&tmp, sizeof(tmp), how, usize);
+>   1174		if (err)
+>   1175			return err;
+>   1176=09
+>   1177		if (force_o_largefile())
+>   1178			tmp.flags |=3D O_LARGEFILE;
+>   1179=09
+>   1180		return do_sys_open(dfd, filename, &tmp);
+>   1181	}
+>   1182=09
+>=20
+> ---
+> 0-DAY kernel test infrastructure                Open Source Technology Ce=
+nter
+> https://lists.01.org/pipermail/kbuild-all                   Intel Corpora=
+tion
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--t4elbyhlilsmpd4b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXZKEtAAKCRCdlLljIbnQ
+EmxJAQDTSUj176CMMvs56b+zPL9VCZGAIFkQ+0fXCW8y6GyasAD/d8NBlZ2zmc9b
+DdtZcltEmeWc0Rd4LR1wAUrHajuvTAU=
+=sSPC
+-----END PGP SIGNATURE-----
+
+--t4elbyhlilsmpd4b--
