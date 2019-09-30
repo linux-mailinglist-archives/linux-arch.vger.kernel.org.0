@@ -2,171 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFDBC2687
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2019 22:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD95C2702
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2019 22:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729109AbfI3Ugq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Sep 2019 16:36:46 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29744 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727885AbfI3Ugp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 30 Sep 2019 16:36:45 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8UId4Tb128798;
-        Mon, 30 Sep 2019 14:42:54 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2vbnbpvx6j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Sep 2019 14:42:54 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x8UIdGG7129741;
-        Mon, 30 Sep 2019 14:42:53 -0400
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2vbnbpvx5w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Sep 2019 14:42:53 -0400
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x8UIextj010451;
-        Mon, 30 Sep 2019 18:42:52 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02wdc.us.ibm.com with ESMTP id 2v9y57w08c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Sep 2019 18:42:52 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8UIgpxs59310430
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Sep 2019 18:42:51 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 54C7EBE056;
-        Mon, 30 Sep 2019 18:42:51 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D281EBE04F;
-        Mon, 30 Sep 2019 18:42:46 +0000 (GMT)
-Received: from leobras.br.ibm.com (unknown [9.18.235.58])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 30 Sep 2019 18:42:46 +0000 (GMT)
-Message-ID: <673bcb94b7752e086cc4133fb6cceb24394c02c0.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 01/11] powerpc/mm: Adds counting method to monitor
- lockless pgtable walks
-From:   Leonardo Bras <leonardo@linux.ibm.com>
-To:     John Hubbard <jhubbard@nvidia.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Paul Mackerras <paulus@samba.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Allison Randal <allison@lohutok.net>,
-        Mahesh Salgaonkar <mahesh@linux.vnet.ibm.com>,
-        Ganesh Goudar <ganeshgr@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 30 Sep 2019 15:42:42 -0300
-In-Reply-To: <48bf32ca-5d3e-5d69-4cd1-6720364a0d81@nvidia.com>
-References: <20190927234008.11513-1-leonardo@linux.ibm.com>
-         <20190927234008.11513-2-leonardo@linux.ibm.com>
-         <4ff1e8e8-929b-9cfc-9bf8-ee88e34de888@nvidia.com>
-         <2533a13f226a6e1fab387669b6cced2aa8d2e129.camel@linux.ibm.com>
-         <48bf32ca-5d3e-5d69-4cd1-6720364a0d81@nvidia.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-9k3sG6ksgKhuBdahGQJu"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        id S1731302AbfI3UoR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Sep 2019 16:44:17 -0400
+Received: from mail-eopbgr1300137.outbound.protection.outlook.com ([40.107.130.137]:5032
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729158AbfI3UoQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 30 Sep 2019 16:44:16 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h/CtkMee/6Rj3Hcony3w6FFUBfiTPWnfkrRwRte+LzqBLXwiCdfIter663Je1a/OgUMoADR/m7rzJpKeZ4gU+FTtZgzjK0Rw7bAn57MvD+jYtdKv5kZYDJS3mPu0FByBG6mz4rFvMVDCGY1wiF+GJFHtpe47l/tkVZ32uq17E4ZdYUFCMPMPnjB3HctB9IOuXF7e0XggyirAeX8Ak6IrZFyB6753/WwQxUxJ/iPxJ7s25bZLpB/pWBXp5/Jsvwiw99sDGRMx4gxrbnaxmOChmtB40lYoFSEkHYPvpkR5BicfVBbt0nJkgKJvA3ax2Qc6rReFEDuR9bMlW1E6wYe+HA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y7TT+kyzC8pC5j2sJkhcpA9ZFEYCfHh0UaNuv91qNf4=;
+ b=JLzCdqORpfLt21o1/zvptkgbxABHSCbtKW4kb2ag7Nx9CTRANbk6qd0umvYbylXAqMm2rSsyv7ay6AN1hG4SENhCiqzBBd12d/k0lGAUDZ9AWP/ZcXNPu7kWNKYOa690Gxmz/E8wdcrhWyQgxolZNErOEhqvANIYf1Dj30gs3pELBM8FceQvFBjdriI0c10tQFs6WObHOfMEY4inWdud9huGyuhGwhQtQRUZVWRSSK2TOYAMbXf8Mgya4zxDXl1tojpFv7ExZ5M+joX1r+ErRES/zYyqjimBJVFxP1CA5y4Bym22ssCMQuUdwBloIAYnFyRGXPIwqOs+CdsHLcdpVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y7TT+kyzC8pC5j2sJkhcpA9ZFEYCfHh0UaNuv91qNf4=;
+ b=SfDxHizdWUflTqzyYVg6yoVqEFsZMo43YFbP5konigU5RWQVN6UxIXDgzizguKEJ+krZMmt/9rj0SVPMJKNa5FBTeFm2pHysaYkIBtSvOokv/5xqiZmJXOFwdS6R0i47aZgRSZXf59K/6+2JWA96VtWLW15LYdzQdRpHb70Nk4I=
+Received: from PU1P153MB0169.APCP153.PROD.OUTLOOK.COM (10.170.189.13) by
+ PU1P153MB0187.APCP153.PROD.OUTLOOK.COM (10.170.188.151) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2327.3; Mon, 30 Sep 2019 18:49:33 +0000
+Received: from PU1P153MB0169.APCP153.PROD.OUTLOOK.COM
+ ([fe80::fc44:a784:73e6:c1c2]) by PU1P153MB0169.APCP153.PROD.OUTLOOK.COM
+ ([fe80::fc44:a784:73e6:c1c2%7]) with mapi id 15.20.2327.009; Mon, 30 Sep 2019
+ 18:49:33 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     vkuznets <vkuznets@redhat.com>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Sasha Levin <Alexander.Levin@microsoft.com>
+Subject: RE: [PATCH v5 1/3] x86/hyper-v: Suspend/resume the hypercall page for
+ hibernation
+Thread-Topic: [PATCH v5 1/3] x86/hyper-v: Suspend/resume the hypercall page
+ for hibernation
+Thread-Index: AQHVdFddc0vkIIkGmEOkqRoIHJJIFqc/CHEAgAA0RQCABVkvEA==
+Date:   Mon, 30 Sep 2019 18:49:33 +0000
+Message-ID: <PU1P153MB0169804D32B95E0A145CD0B9BF820@PU1P153MB0169.APCP153.PROD.OUTLOOK.COM>
+References: <1567723581-29088-1-git-send-email-decui@microsoft.com>
+ <1567723581-29088-2-git-send-email-decui@microsoft.com>
+ <87ef0372wv.fsf@vitty.brq.redhat.com>
+ <PU1P153MB01695A159E9843B4E1EC13AEBF810@PU1P153MB0169.APCP153.PROD.OUTLOOK.COM>
+ <877e5u6re3.fsf@vitty.brq.redhat.com>
+In-Reply-To: <877e5u6re3.fsf@vitty.brq.redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=decui@microsoft.com;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2019-09-30T18:49:30.9074667Z;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=d3e7ddcd-9ddb-4e60-9369-b0af671a3cae;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=decui@microsoft.com; 
+x-originating-ip: [2001:4898:80e8:2:d492:e91a:5e0:dd92]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 178f43f5-62cb-430c-c11f-08d745d6ef61
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: PU1P153MB0187:|PU1P153MB0187:|PU1P153MB0187:
+x-ms-exchange-transport-forked: True
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-microsoft-antispam-prvs: <PU1P153MB0187C0D3EE6EC3B4AB2932DDBF820@PU1P153MB0187.APCP153.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 01762B0D64
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(396003)(136003)(346002)(39860400002)(366004)(189003)(199004)(316002)(102836004)(476003)(486006)(46003)(7696005)(186003)(6436002)(9686003)(10290500003)(14454004)(76176011)(55016002)(53546011)(6116002)(99286004)(8990500004)(10090500001)(5660300002)(52536014)(22452003)(8936002)(6506007)(6916009)(7416002)(8676002)(71190400001)(81156014)(81166006)(71200400001)(446003)(11346002)(54906003)(86362001)(2906002)(4744005)(256004)(66476007)(66556008)(64756008)(478600001)(33656002)(14444005)(229853002)(107886003)(25786009)(76116006)(66946007)(6246003)(74316002)(305945005)(7736002)(66446008)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:PU1P153MB0187;H:PU1P153MB0169.APCP153.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: microsoft.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: P1cTnrr60EXWZdug3y36Nrug6T/QeGlYVDK/09Tyj1Pz6dQs+2kk9VjpW5MhnnbjLZGrLRtuuHwlSilC6f5/3XxomitwKJ9MLUfROwXjZeOMSZxZw0M74DoaUe1t1f0/0BydJ0kn7PcAGOBiIO3y+lOc8mAsS9HqQh9NW2XIQawP5vQwFkg6RupOSNgXS28Axr+jjJsofmNiYnV8I1Z9CgMGsM5F1ZtKCEYiklBs7+VycGm9fXMSEFv1/K9IKvs+4C8cmb+eGFEtZjtHX3Mzq0jYWjJvktg7nLZxhAuvHOEvZwQT0D6dfmL6MHrm02AuxjVL5KEaJCycULYdhlWXVT60YP16dwm02NGcaQ8F1c8PlGHLue3siUJ5Nf6Oy0QTCB0piR/mQIVMzjMaxFHb18VcHhucpOPoiNxxY3RBkbE=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-30_11:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1909300166
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 178f43f5-62cb-430c-c11f-08d745d6ef61
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 18:49:33.3935
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +J46sI8EARYq6eRD+9qksQ7dIPIoEibkNwyiB9dhCePxY39U+nKuWIbPuBJWDp7cuwvDehHE9lwoDcy1OockZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU1P153MB0187
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
---=-9k3sG6ksgKhuBdahGQJu
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, 2019-09-30 at 10:57 -0700, John Hubbard wrote:
-> > As I told before, there are cases where this function is called from
-> > 'real mode' in powerpc, which doesn't disable irqs and may have a
-> > tricky behavior if we do. So, encapsulate the irq disable in this
-> > function can be a bad choice.
+> From: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Sent: Friday, September 27, 2019 2:05 AM
+> To: Dexuan Cui <decui@microsoft.com>
 >=20
-> You still haven't explained how this works in that case. So far, the
-> synchronization we've discussed has depended upon interrupt disabling
-> as part of the solution, in order to hold off page splitting and page
-> table freeing.
-
-The irqs are already disabled by another mechanism (hw): MSR_EE=3D0.
-So, serialize will work as expected.
-
-> Simply skipping that means that an additional mechanism is required...whi=
-ch
-> btw might involve a new, ppc-specific routine, so maybe this is going to =
-end
-> up pretty close to what I pasted in after all...
-> > Of course, if we really need that, we can add a bool parameter to the
-> > function to choose about disabling/enabling irqs.
-> > > * This is really a core mm function, so don't hide it away in arch la=
-yers.
-> > >     (If you're changing mm/ files, that's a big hint.)
-> >=20
-> > My idea here is to let the arch decide on how this 'register' is going
-> > to work, as archs may have different needs (in powerpc for example, we
-> > can't always disable irqs, since we may be in realmode).
-> >=20
-> > Maybe we can create a generic function instead of a dummy, and let it
-> > be replaced in case the arch needs to do so.
+> Dexuan Cui <decui@microsoft.com> writes:
+> ...
+> > So, I'm pretty sure no IPI can happen between hv_suspend() and
+> hv_resume().
+> > self-IPI is not supposed to happen either, since interrupts are disable=
+d.
+> >
+> > IMO TLB flush should not be an issue either, unless the kernel changes =
+page
+> > tables between hv_suspend() and hv_resume(), which is not the case as I
+> > checked the related code, but it looks in theory that might happen, say=
+, in
+> > the future, so if you insist we should save the variable "hv_hypercall_=
+pg"
+> > to a temporary variable and set the "hv_hypercall_pg" to NULL before we
+> > disable the hypercall page
 >=20
-> Yes, that might be what we need, if it turns out that ppc can't use this
-> approach (although let's see about that).
->=20
+> Let's do it as a future proof so we can keep relying on !hv_hypercall_pg
+> everywhere we need. No need to change this patch IMO, a follow-up would
+> do.
+> Vitaly
 
-I initially used the dummy approach because I did not see anything like
-serialize in other archs.=20
+Now I think it would be better to do it in this patch. :-)
+I'll post a v6 to follow your suggestion.
 
-I mean, even if I put some generic function here, if there is no
-function to use the 'lockless_pgtbl_walk_count', it becomes only a
-overhead.
-
->=20
-> thanks,
-
-Thank you!
-
---=-9k3sG6ksgKhuBdahGQJu
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl2STKIACgkQlQYWtz9S
-ttSxFg//Uqx1dqwNpWXo7xp/0GswLDO2WKQanbx0Qg4JKCL09MHD8khl2E9vx4IF
-Icd6eXFRwYdzgdFfGKCCUpE9dEBMkT9zPeDS7tk8jhbZ57yJtXC3X3Pcx7j82bEO
-n1x5ZL2jrTEqoWL4oYegJmVi7zzdHiGJi0O31QDIp9YGFdxUn2lPUCNMaypuLs/u
-vejkf6DcmVUXCigXaxmT5NN85fDDUJxbph79+UXyEm6jy9Zuk+PSi3AgfmkCKftk
-RdyU8pmX875qMJQGvoOAIaX/GBavIFVvujG9x7HBeL26G0pdttO0b/1nt5A3thWi
-nx2y4jlfzoDvLhAfw4wsZ+zHQjzIIZlpdM1SaDseb5mNyR1+fpTPoqhsAtqcex6N
-+LdR2q+osgMfKpklWyAhSgJVIqvvtViBEqmA5Itg4JOzQD0xJwg27DJjTd0mBv1E
-za5iWYaUxBs4qw8W98gwSbw2lKgIRfKieKynDUwdSmq8GwjCSj7H9Iuvr/aQwGnm
-E8o41KiK7frirDuS6jxdBYPvA3mtUqqVCN3pXZKktEc3CrZSd9C/J7AR5b+UZJOi
-Umdeci9BnKsx2kFvCsrdcl6DEkmKELiVjJ+aDtZBbunKnwKtupCRE2UC4X2UE02y
-Z9Mdw6OCS6VH+s+ArHVohA6MNm8+5OzhJdZV4oHv/EO5esStUTM=
-=VegT
------END PGP SIGNATURE-----
-
---=-9k3sG6ksgKhuBdahGQJu--
-
+Thanks,
+-- Dexuan
