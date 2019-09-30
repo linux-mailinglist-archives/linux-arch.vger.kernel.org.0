@@ -2,91 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA68C227A
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2019 15:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4CBC2341
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2019 16:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730876AbfI3NxM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Sep 2019 09:53:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41306 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730378AbfI3NxM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 30 Sep 2019 09:53:12 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1FD282086A;
-        Mon, 30 Sep 2019 13:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569851591;
-        bh=Nhh2vGJB8S4qKF2pVJfJQWMF1IqgVIe1hzK5L13M6BI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ayDenw/bCTAHtwhYp4fyI3E0oMsrHlnzfT9mfM6hSRzUHrL4BkakOVzMHBV97Knxc
-         Zlaik0HKfae0TMciZIuhvL7AyGAZ7up6EAMKJ80pazwZceHlMJGjpsVBEOH5cNgU6f
-         dC0uBOswbPP26FOOqAhJkQTYyOU5ppiTWyh0ZRX8=
-Date:   Mon, 30 Sep 2019 14:53:07 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Jookia <166291@gmail.com>
-Cc:     Xogium <contact@xogium.me>, linux-arch@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, mingo@redhat.com, bp@alien8.de,
-        tglx@linutronix.de, linux-arm-kernel@lists.infradead.org
-Subject: Re: [breakage] panic() does not halt arm64 systems under certain
- conditions
-Message-ID: <20190930135306.p5r4sy2bbmq5zxgm@willie-the-truck>
-References: <BX1W47JXPMR8.58IYW53H6M5N@dragonstone>
- <20190917104518.ovg6ivadyst7h76o@willie-the-truck>
- <20190920042501.GA5516@novena-choice-citizen-recovery.gateway>
+        id S1729738AbfI3O3P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Sep 2019 10:29:15 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45396 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731686AbfI3O3P (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 30 Sep 2019 10:29:15 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8UES0XW067295;
+        Mon, 30 Sep 2019 10:28:06 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vbjvysrus-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Sep 2019 10:28:04 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x8UENktC053801;
+        Mon, 30 Sep 2019 10:27:18 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vbjvysru8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Sep 2019 10:27:18 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x8UEOthJ009512;
+        Mon, 30 Sep 2019 14:27:17 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04wdc.us.ibm.com with ESMTP id 2v9y57kc4k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Sep 2019 14:27:17 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8UERGfb60031398
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 Sep 2019 14:27:16 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 684CCC6055;
+        Mon, 30 Sep 2019 14:27:16 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CBE02C605A;
+        Mon, 30 Sep 2019 14:27:11 +0000 (GMT)
+Received: from leobras.br.ibm.com (unknown [9.18.235.58])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 30 Sep 2019 14:27:11 +0000 (GMT)
+Message-ID: <5d3ad682f5ef3a7f16fdda9bcd30fbf53194b393.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 03/11] mm/gup: Applies counting method to monitor
+ gup_pgd_range
+From:   Leonardo Bras <leonardo@linux.ibm.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Mahesh Salgaonkar <mahesh@linux.vnet.ibm.com>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ganesh Goudar <ganeshgr@linux.ibm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Keith Busch <keith.busch@intel.com>
+Date:   Mon, 30 Sep 2019 11:27:10 -0300
+In-Reply-To: <20190930110927.nanq2wynvfmq7dhc@box>
+References: <20190927234008.11513-1-leonardo@linux.ibm.com>
+         <20190927234008.11513-4-leonardo@linux.ibm.com>
+         <20190930110927.nanq2wynvfmq7dhc@box>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-5QWWSZPLD+oFKjYyk88w"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190920042501.GA5516@novena-choice-citizen-recovery.gateway>
-User-Agent: NeoMutt/20170113 (1.7.2)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-30_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1909300151
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 20, 2019 at 02:25:01PM +1000, Jookia wrote:
-> On Tue, Sep 17, 2019 at 11:45:19AM +0100, Will Deacon wrote:
-> > A straightforward fix is to disable preemption explicitly on the panic()
-> > path (diff below), but I've expanded the cc list to see both what others
-> > think, but also in case smp_send_stop() is supposed to have the side-effect
-> > of disabling interrupt delivery for the local CPU.
-> > 
-> > diff --git a/kernel/panic.c b/kernel/panic.c
-> > index 057540b6eee9..02d0de31c42d 100644
-> > --- a/kernel/panic.c
-> > +++ b/kernel/panic.c
-> > @@ -179,6 +179,7 @@ void panic(const char *fmt, ...)
-> > 	 * after setting panic_cpu) from invoking panic() again.
-> > 	 */
-> > 	local_irq_disable();
-> > +	preempt_disable_notrace();
-> >  
-> > 	/*
-> > 	 * It's possible to come here directly from a panic-assertion and
-> > 
-> When you run with panic=... it will send you to a loop earlier in the
-> panic code before local_irq_disable() is hit, working around the bug.
-> A patch like this would make the behaviour the same:
-> 
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index 4d9f55bf7d38..92abbb5f8d38 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -331,7 +331,6 @@ void panic(const char *fmt, ...)
-> 
->         /* Do not scroll important messages printed above */
->         suppress_printk = 1;
-> -       local_irq_enable();
->         for (i = 0; ; i += PANIC_TIMER_STEP) {
->                 touch_softlockup_watchdog();
->                 if (i >= i_next) {
 
-The reason I kept irqs enabled is because I figured they might be useful
-for magic sysrq keyboard interrupts (e.g. if you wanted to reboot the box).
+--=-5QWWSZPLD+oFKjYyk88w
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With 'panic=', the reboot happens automatically, so there's no issue there
-afaict.
+On Mon, 2019-09-30 at 14:09 +0300, Kirill A. Shutemov wrote:
+> On Fri, Sep 27, 2019 at 08:40:00PM -0300, Leonardo Bras wrote:
+> > As decribed, gup_pgd_range is a lockless pagetable walk. So, in order t=
+o
+>      ^ typo
+>=20
+Fixed, thanks!
 
-Will
+--=-5QWWSZPLD+oFKjYyk88w
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl2SEL4ACgkQlQYWtz9S
+ttRgkRAAlYimCAeVA9cvc5HGNEVbfibfjFEgDVu7fY/HjI44ZGaauFSEvLDnnTcz
+M4WLEbD8cZ/LBPDP06Q8FuNtSZi1Ov1xVCXB404DodiPDkJG/TyVfO5/E5MsT7tf
+1qvSg8n53RfUxpN2WHNKg2eXLStcVwKmoS0otMxkIOPxTRGFk9PchNJ3F3QEQLYE
+3JwfwBa8q1d79DY19qiJ2VyqQm5nAAojm1i5JcHEUdMcA/INJgamhRpa5R6vx6Ge
+LZHOthO7x+H28Ip32KAmw5ISf8Q0AKEb0rLmIwkCUD0ecO0bp5D7F9KM/J5oBjKO
+pkVyqy61ZSdeArRc1M5HoOdI+evIGKSNtDJglyKckC3/KiUfkALvrjNe/USc9j3s
+DxvgKE2FNP+I6n2z0C2weHITU9EjKdqPSpVRzRBowUE8rw2o1d+oCurRiGI+Tgm8
+z3NEGoIdJFEkmNIvmbDPrRsz6E9viESfOGju8U9Um2Cxr14FJ6xGjGCeGylfgDED
+/L7nMZ12gv4DZoJp9UaLlau8hItsneS9ZVgvIEivPDWW+MmB3nN0SNhWjeP7VlMU
+jfa8kXlgp+gtsUn+jdwqgSrWDmAN4K4QSrtl0QmWN5GjNSQMEWkm5Jdb3Dk2etmx
+JgYiX4UH8m9pdwN6ILWOPT7RnqL1IuV39OvC5Uay30/nlL5roTM=
+=65+f
+-----END PGP SIGNATURE-----
+
+--=-5QWWSZPLD+oFKjYyk88w--
+
