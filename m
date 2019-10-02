@@ -2,29 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A1BC440E
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2019 00:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A4FC4516
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2019 02:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbfJAWyV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Oct 2019 18:54:21 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:35958 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726050AbfJAWyV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Oct 2019 18:54:21 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1iFR24-00043h-FL; Tue, 01 Oct 2019 16:54:12 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1iFR1y-00061d-Ku; Tue, 01 Oct 2019 16:54:12 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org,
+        id S1726840AbfJBAkd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Oct 2019 20:40:33 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46935 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfJBAkd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Oct 2019 20:40:33 -0400
+Received: by mail-oi1-f196.google.com with SMTP id k25so16125089oiw.13
+        for <linux-arch@vger.kernel.org>; Tue, 01 Oct 2019 17:40:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VtOW9l/Mzm4WWzQNjfCTvJ0AhTUTSkblWJhPZb6hfmM=;
+        b=FRo5cLPvmdDcGKerDWzBLxevEUMFsOs95oNwqAA5YnVlRPDuDp82XzZtRMnRIivrt1
+         6jMYweeiVNv6d+8LctOdqgQuOz1j1je5crIDohHrUnbqv/Mtkc8FaWXIXpATZ8vJf3lA
+         iB+PnAPg+5q6B6eBGFXz9fP8JohTkfisaSniWzc+b/88aUSvWHV4uKN4i0ugcSgyjO8Q
+         kMvBoQa/7mrL24FTI1ZKDlR7MJw0qMXTGSunSEgcc6GXqPvr3EmUVpn2Su1DH3vrki8Q
+         GmJuhOz5UYgv4e0CH87W50Na3TCqeeb1Aiy3K9iV38fqo9wtSYcBbwjEfQThm+mZwWQl
+         iWWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VtOW9l/Mzm4WWzQNjfCTvJ0AhTUTSkblWJhPZb6hfmM=;
+        b=cT+O+FeVyzFfrZ8E1Jb6UbW2C0xhDN5r1NIAWPRJrzyfa/2SABkRtTWHQNHk52ZOZl
+         tRQ+bHXdKaAaHVDQXyYO+WDnezbzLQm/2UdM90kXSW2h5rCCVdLXkgySeie5TpN4Bu1x
+         w5UkPUYvG9WSJSfH278yCj9aS1JTKpBpi5W8Pwqiu216CRxwUDt048I/zUIJnExpORAq
+         JcMR7X8VsJBU0gPXxzCDbBoHYFuFcPiAPgcRxZvJA7yh3/P8G5ipHEoxtJ3d+Z3qXpao
+         bCO2oV80QoQHdlPhEHqxXr129ukcxvAUQkQCCi5bNuq3ZtOwFx+Dyli4IEs1awF0M281
+         NsMQ==
+X-Gm-Message-State: APjAAAVh6SyjJMyXcXa9yEa79GZTiEkAA8lj2LpLT7V0W7Lqc3dZ+Iie
+        h6nTblQNDzN+r7d5buHxOL9jebDjVgwCkVjNdg1Wjw==
+X-Google-Smtp-Source: APXvYqyGe4WuOmb3K3A3SDH+9X5RvSUVYSCqMCe8CuZtstj4i29DoW2hybgRQVs1AxubpQXZMw7a6bLv/6k3OKdDiW4=
+X-Received: by 2002:aca:4406:: with SMTP id r6mr615626oia.175.1569976832302;
+ Tue, 01 Oct 2019 17:40:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <8736gcjosv.fsf@x220.int.ebiederm.org> <201910011140.EA0181F13@keescook>
+ <87imp8hyc8.fsf@x220.int.ebiederm.org>
+In-Reply-To: <87imp8hyc8.fsf@x220.int.ebiederm.org>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 2 Oct 2019 02:40:04 +0200
+Message-ID: <CAG48ez1Ly26fP3_3DaGGkHgpyG3zmOmeC95jUmpVUwvjnLG8SQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH] sysctl: Remove the sysctl system call
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kostya Serebryany <kcc@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Andi Kleen <andi@firstfloor.org>,
         Andi Kleen <ak@linux.intel.com>,
@@ -51,84 +80,69 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Ralf Baechle <ralf@linux-mips.org>,
         Roland Stigge <stigge@antcom.de>,
         Vineet Gupta <vgupta@synopsys.com>
-References: <8736gcjosv.fsf@x220.int.ebiederm.org>
-        <201910011140.EA0181F13@keescook>
-Date:   Tue, 01 Oct 2019 17:53:27 -0500
-In-Reply-To: <201910011140.EA0181F13@keescook> (Kees Cook's message of "Tue, 1
-        Oct 2019 11:46:45 -0700")
-Message-ID: <87imp8hyc8.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1iFR1y-00061d-Ku;;;mid=<87imp8hyc8.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1890sJnTfB2radGtM5zpN9fbLEpYr3LK/s=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa01.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4785]
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 341 ms - load_scoreonly_sql: 0.10 (0.0%),
-        signal_user_changed: 3.4 (1.0%), b_tie_ro: 2.8 (0.8%), parse: 0.72
-        (0.2%), extract_message_metadata: 9 (2.5%), get_uri_detail_list: 0.91
-        (0.3%), tests_pri_-1000: 11 (3.3%), tests_pri_-950: 1.02 (0.3%),
-        tests_pri_-900: 0.96 (0.3%), tests_pri_-90: 23 (6.7%), check_bayes: 22
-        (6.4%), b_tokenize: 7 (2.1%), b_tok_get_all: 7 (2.2%), b_comp_prob:
-        1.78 (0.5%), b_tok_touch_all: 3.8 (1.1%), b_finish: 0.54 (0.2%),
-        tests_pri_0: 283 (83.0%), check_dkim_signature: 0.52 (0.2%),
-        check_dkim_adsp: 2.6 (0.8%), poll_dns_idle: 0.19 (0.1%), tests_pri_10:
-        1.78 (0.5%), tests_pri_500: 4.8 (1.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC][PATCH] sysctl: Remove the sysctl system call
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
++Kostya (code owner for LLVM sanitizer_common) as FYI
 
-> On Tue, Oct 01, 2019 at 01:36:32PM -0500, Eric W. Biederman wrote:
->> 
->> This system call has been deprecated almost since it was introduced, and
->> in a survey of the linux distributions I can no longer find any of them
->> that enable CONFIG_SYSCTL_SYSCALL.  The only indication that I can find
->> that anyone might care is that a few of the defconfigs in the kernel
->> enable CONFIG_SYSCTL_SYSCALL.  However this appears in only 31 of 414
->> defconfigs in the kernel, so I suspect this symbols presence is simply
->> because it is harmless to include rather than because it is necessary.
->> 
->> As there appear to be no users of the sysctl system call, remove the
->> code.  As this removes one of the few uses of the internal kernel mount
->> of proc I hope this allows for even more simplifications of the proc
->> filesystem.
->
-> I'm for it. :) I tripped over this being deprecated over a decade ago. :P
->
-> I think you can actually take this further and remove (or at least
-> empty) the uapi/linux/sysctl.h file too.
+On Wed, Oct 2, 2019 at 12:54 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Kees Cook <keescook@chromium.org> writes:
+> > On Tue, Oct 01, 2019 at 01:36:32PM -0500, Eric W. Biederman wrote:
+[...]
+> > I think you can actually take this further and remove (or at least
+> > empty) the uapi/linux/sysctl.h file too.
+[...]
+> I would make it a followup that removes uapi/linux/sysctl.h.  I don't
+> see anything in it that isn't about the sysctl system call.  I will keep
+> it a separate patch as I can imagine something silly that needs the
+> header file to compile.  A separate patch would make a revert easier
+> if we find something like that.
 
-I copied everyone who had put this into a defconfig and I will wait a
-little more to see if anyone screams.  I think it is a safe guess that
-several of the affected configurations are dead (or at least
-unmaintained) as I received 17 bounces when copying everyone.
+Unfortunately, I think that header (or at least parts of it) has to
+stay around for now:
 
-I would make it a followup that removes uapi/linux/sysctl.h.  I don't
-see anything in it that isn't about the sysctl system call.  I will keep
-it a separate patch as I can imagine something silly that needs the
-header file to compile.  A separate patch would make a revert easier
-if we find something like that.
+Looking through the search results for linux/sysctl.h (ignoring
+glibc's sys/sysctl.h, which pulls in linux/sysctl.h, because almost
+all of those hits are conditional includes for BSD systems) on
+codesearch.debian.net, I noticed that e.g. the ASAN code that GCC and
+LLVM use pulls in linux/sysctl.h and uses things from it:
 
-Eric
+https://github.com/llvm-mirror/compiler-rt/blob/124fd5d9aff57cf47bf077df81ad939b289acc6e/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp#L1063
+
+And indeed, after replacing /usr/include/linux/sysctl.h with an empty
+file, a build of LLVM's runtime library component (compiler-rt) (git
+HEAD version) falls over with error spew about __sysctl_args:
+
+====================
+$ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release
+-DLLVM_ENABLE_PROJECTS='clang;compiler-rt' -DCMAKE_C_COMPILER=clang-7
+-DCMAKE_CXX_COMPILER=clang++-7 -DLLVM_TARGETS_TO_BUILD="X86"
+-DLLVM_USE_LINKER=lld-7 -DBUILD_SHARED_LIBS=Off ../llvm
+[...]
+$ ninja -j64
+FAILED: projects/compiler-rt/lib/sanitizer_common/CMakeFiles/RTSanitizerCommonNoTermination.i386.dir/sanitizer_platform_limits_posix.cpp.o
+[...]
+[...]/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp:1063:17:
+error: use of undeclared identifier '__sysctl_args'
+CHECK_TYPE_SIZE(__sysctl_args);
+                ^
+[...]/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp:1064:23:
+error: use of undeclared identifier '__sysctl_args'
+CHECK_SIZE_AND_OFFSET(__sysctl_args, name);
+                      ^
+[...]/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp:1064:1:
+error: expected expression
+CHECK_SIZE_AND_OFFSET(__sysctl_args, name);
+^
+[...]/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.h:1438:34:
+note: expanded from macro 'CHECK_SIZE_AND_OFFSET'
+                 sizeof(((CLASS *)NULL)->MEMBER));                \
+                                 ^
+[...]/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp:1064:23:
+error: unknown type name '__sysctl_args'
+CHECK_SIZE_AND_OFFSET(__sysctl_args, name);
+                      ^
+====================
