@@ -2,121 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6386FC8BD5
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2019 16:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72452C911E
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2019 20:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727961AbfJBOua (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Oct 2019 10:50:30 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:54494 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726411AbfJBOua (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Oct 2019 10:50:30 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1iFfxU-0001ee-Bs; Wed, 02 Oct 2019 08:50:28 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1iFfxT-0001fT-MJ; Wed, 02 Oct 2019 08:50:28 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
+        id S1728486AbfJBSvl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Oct 2019 14:51:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59688 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726708AbfJBSvl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Oct 2019 14:51:41 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1F2ED21A4C;
+        Wed,  2 Oct 2019 18:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570042300;
+        bh=CRQhS30YGps7394nDLglJ442PO7GILfwsW96COK8hZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2jKtiPHBM4opCi8aDykOrFKWS3TvFjuWgksMPKcN/llJii5FgB1youQL+qF2c77I2
+         Py+wnMifC2SjORaWtWQzOqj1TNZQbAjIQj/DOrLGEZszPwa1f0Tk7RpUQf1h/5BTAK
+         RX4szP/nOWesKrzE1/RKdgpHwveT8zH76rrKkQWw=
+Date:   Wed, 2 Oct 2019 19:51:33 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <andi@firstfloor.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Apelete Seketeli <apelete@seketeli.net>,
-        Chee Nouk Phoon <cnphoon@altera.com>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Ruppert <christian.ruppert@abilis.com>,
-        Greg Ungerer <gerg@uclinux.org>, Helge Deller <deller@gmx.de>,
-        Hongliang Tao <taohl@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
-        Josh Boyer <jwboyer@gmail.com>, Jun Nie <jun.nie@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ley Foon Tan <lftan@altera.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Olof Johansson <olof@lixom.net>,
-        Paul Burton <paul.burton@mips.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Pierrick Hascoet <pierrick.hascoet@abilis.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Roland Stigge <stigge@antcom.de>,
-        Vineet Gupta <vgupta@synopsys.com>
-References: <8736gcjosv.fsf@x220.int.ebiederm.org>
-        <201910011140.EA0181F13@keescook>
-        <87imp8hyc8.fsf@x220.int.ebiederm.org>
-        <CAK8P3a1zLATC7rzYxSpAK-z=NJ1rw7-3ZgHqCOJUUf6b9HwK1A@mail.gmail.com>
-Date:   Wed, 02 Oct 2019 09:49:48 -0500
-In-Reply-To: <CAK8P3a1zLATC7rzYxSpAK-z=NJ1rw7-3ZgHqCOJUUf6b9HwK1A@mail.gmail.com>
-        (Arnd Bergmann's message of "Wed, 2 Oct 2019 09:31:01 +0200")
-Message-ID: <87v9t7gq2b.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Kees Cook <keescook@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
+Message-ID: <20191002185133.n6pldb4exyjfesfh@willie-the-truck>
+References: <CAKwvOdnqn=0LndrX+mUrtSAQqoT1JWRMOJCA5t3e=S=T7zkcCQ@mail.gmail.com>
+ <20191001092823.z4zhlbwvtwnlotwc@willie-the-truck>
+ <CAKwvOdk0h2A6=fb7Yepf+oKbZfq_tqwpGq8EBmHVu1j4mo-a-A@mail.gmail.com>
+ <20191001170142.x66orounxuln7zs3@willie-the-truck>
+ <CAKwvOdnFJqipp+G5xLDRBcOrQRcvMQmn+n8fufWyzyt2QL_QkA@mail.gmail.com>
+ <20191001175512.GK25745@shell.armlinux.org.uk>
+ <CAKwvOdmw_xmTGZLeK8-+Q4nUpjs-UypJjHWks-3jHA670Dxa1A@mail.gmail.com>
+ <20191001181438.GL25745@shell.armlinux.org.uk>
+ <CAKwvOdmBnBVU7F-a6DqPU6QM-BRc8LNn6YRmhTsuGLauCWKUOg@mail.gmail.com>
+ <CAMuHMdWPhE1nNkmL1nj3vpQhB7fP3uDs2i_ZVi0Gf9qij4W2CA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1iFfxT-0001fT-MJ;;;mid=<87v9t7gq2b.fsf@x220.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/UEBXD5WP39qJHI4Xhd6CvSgTp9fMBYRU=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_XMDrugObfuBody_08 autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4995]
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  1.0 T_XMDrugObfuBody_08 obfuscated drug references
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Arnd Bergmann <arnd@arndb.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 269 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 3.1 (1.1%), b_tie_ro: 2.1 (0.8%), parse: 1.13
-        (0.4%), extract_message_metadata: 16 (6.0%), get_uri_detail_list: 1.01
-        (0.4%), tests_pri_-1000: 24 (9.0%), tests_pri_-950: 1.27 (0.5%),
-        tests_pri_-900: 1.10 (0.4%), tests_pri_-90: 35 (13.0%), check_bayes:
-        33 (12.3%), b_tokenize: 11 (4.1%), b_tok_get_all: 8 (3.1%),
-        b_comp_prob: 2.5 (0.9%), b_tok_touch_all: 7 (2.6%), b_finish: 0.73
-        (0.3%), tests_pri_0: 173 (64.3%), check_dkim_signature: 0.55 (0.2%),
-        check_dkim_adsp: 2.3 (0.9%), poll_dns_idle: 0.64 (0.2%), tests_pri_10:
-        3.2 (1.2%), tests_pri_500: 8 (3.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC][PATCH] sysctl: Remove the sysctl system call
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWPhE1nNkmL1nj3vpQhB7fP3uDs2i_ZVi0Gf9qij4W2CA@mail.gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Arnd Bergmann <arnd@arndb.de> writes:
+On Wed, Oct 02, 2019 at 02:55:50PM +0200, Geert Uytterhoeven wrote:
+> On Wed, Oct 2, 2019 at 6:33 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > On Tue, Oct 1, 2019 at 11:14 AM Russell King - ARM Linux admin
+> > <linux@armlinux.org.uk> wrote:
+> > > On Tue, Oct 01, 2019 at 11:00:11AM -0700, Nick Desaulniers wrote:
+> > > > On Tue, Oct 1, 2019 at 10:55 AM Russell King - ARM Linux admin
+> > > > <linux@armlinux.org.uk> wrote:
+> > > > > On Tue, Oct 01, 2019 at 10:44:43AM -0700, Nick Desaulniers wrote:
+> > > > > > I apologize; I don't mean to be difficult.  I would just like to avoid
+> > > > > > surprises when code written with the assumption that it will be
+> > > > > > inlined is not.  It sounds like we found one issue in arm32 and one in
+> > > > > > arm64 related to outlining.  If we fix those two cases, I think we're
+> > > > > > close to proceeding with Masahiro's cleanup, which I view as a good
+> > > > > > thing for the health of the Linux kernel codebase.
+> > > > >
+> > > > > Except, using the C preprocessor for this turns the arm32 code into
+> > > > > yuck:
+> > > > >
+> > > > > 1. We'd need to turn get_domain() and set_domain() into multi-line
+> > > > >    preprocessor macro definitions, using the GCC ({ }) extension
+> > > > >    so that get_domain() can return a value.
+> > > > >
+> > > > > 2. uaccess_save_and_enable() and uaccess_restore() also need to
+> > > > >    become preprocessor macro definitions too.
+> > > > >
+> > > > > So, we end up with multiple levels of nested preprocessor macros.
+> > > > > When something goes wrong, the compiler warning/error message is
+> > > > > going to be utterly _horrid_.
+> > > >
+> > > > That's why I preferred V1 of Masahiro's patch, that fixed the inline
+> > > > asm not to make use of caller saved registers before calling a
+> > > > function that might not be inlined.
+> > >
+> > > ... which I objected to based on the fact that this uaccess stuff is
+> > > supposed to add protection against the kernel being fooled into
+> > > accessing userspace when it shouldn't.  The whole intention there is
+> > > that [sg]et_domain(), and uaccess_*() are _always_ inlined as close
+> > > as possible to the call site of the accessor touching userspace.
+> >
+> > Then use the C preprocessor to force the inlining.  I'm sorry it's not
+> > as pretty as static inline functions.
+> 
+> Which makes us lose the baby^H^H^H^Htype checking performed
+> on function parameters, requiring to add more ugly checks.
 
-> On Wed, Oct 2, 2019 at 12:54 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+Indeed, and the resulting mess is (at least in my opinion) considerably
+worse than where we were in 5.3 and earlier kernels with 'inline' defined
+as '__always_inline'.
 
->> arch/arm/configs/lpc32xx_defconfig:CONFIG_SYSCTL_SYSCALL=y
->> arch/arm/configs/moxart_defconfig:CONFIG_SYSCTL_SYSCALL=y
->
-> Ancient hardware, but still in active use. These tend to have very little
-> RAM, but they both enable CONFIG_PROC_FS.
-
-You actually have to enable CONFIG_PROC_FS to enable
-CONFIG_SYSCTL_SYSCALL at this point.  CONFIG_SYSCTL_SYSCALL is just an
-emulation of the old interface built on top of /proc.
-
-Thank you for the feedback.
-
-Eric
-
+Will
