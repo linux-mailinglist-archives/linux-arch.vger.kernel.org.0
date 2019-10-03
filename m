@@ -2,122 +2,232 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E62E9CB00B
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2019 22:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE1DCB040
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2019 22:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388416AbfJCUVY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Oct 2019 16:21:24 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:35442 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732848AbfJCUVY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Oct 2019 16:21:24 -0400
-Received: by mail-lf1-f67.google.com with SMTP id w6so2834277lfl.2;
-        Thu, 03 Oct 2019 13:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jDZRfMkXuS+gCx9+RspTMOpPYXHsN1Tk1N0L1DUZ7HM=;
-        b=mF4FYXDKIuGkHD4EoUdMIdXsBYgzvi2LuBwfqYqMCEBS8q9qeEukZ0LiJd751oxxUH
-         HTmLWqSXP2j3DeCXIv0ZS0XYhO30p9xd1DYm3jlV1dl/RYbs4TI88eFtycOHMnyXHnG6
-         kevCuCh9EplsKm4v8y9I+MyQncF7mzXrUqvhjbohSHLi0n66QMb38MS+UPLnpK8nmZoj
-         bRm0A4UNPdl5uOh2HvjST/7KnIAea15FnLsEz1bKL82OvSlXXBkmcZjcidxvtrjZ3aoq
-         cQIMppO8edkchgIj7SREuHwHCk4lSXEvWxRaBwHNxKEuRXSgZS7c26zKK1AyD38jIqgB
-         F1tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jDZRfMkXuS+gCx9+RspTMOpPYXHsN1Tk1N0L1DUZ7HM=;
-        b=tWi4xcqaE16qCix2eViA9H72MyNw7+TtYDga0N9pnSRLB9aUmAD4m+yYmxiSU2bXw1
-         vIyv0hfWjLdx5G2i1hO2yWLKE2fbUTJYeiVTZAagp2p8UAV5AhED9zP7ajuwyPezbfL6
-         ffnvCex0T/ibePhBFtOV2qwjXNhffsS4ni/Skcq/bhhYIm/cPLVbyRyy82MWonHP7CdV
-         +2R3vE4vlrXlwxNsrIlHfx3X4Ois1vPo+Rz9bD6iUeGLw4SOfqk0XjPtnNED3pSYbm8E
-         p+X3ePDepMg6nPwOPdhZfeN/V4ssdP3MowcXEHV6KzdH1sHIm4RMYCY5mvZ8L6oht7+S
-         912g==
-X-Gm-Message-State: APjAAAVSz1EbeWPU8P0faH0mtUf86IiINMqmTVVHOeSxjvzZNR12MXdM
-        nYTkEZFeEcCrKyrjJIh6DqQx1cKCwcr3HMo5qok=
-X-Google-Smtp-Source: APXvYqyNegkv+HSmVHfz0BwhU4UXNB52/xSWUkcsYNrJeoznMED8UbPpBvVjyJ3HmrK+Tu+rmVeziGXFuojVagVqKo0=
-X-Received: by 2002:a19:3805:: with SMTP id f5mr3768257lfa.173.1570134082446;
- Thu, 03 Oct 2019 13:21:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190930112636.vx2qxo4hdysvxibl@willie-the-truck>
- <CAK7LNASQZ82KSOrQW7+Wq1vFDCg2__maBEAPMLqUDqZMLuj1rA@mail.gmail.com>
- <20190930121803.n34i63scet2ec7ll@willie-the-truck> <CAKwvOdnqn=0LndrX+mUrtSAQqoT1JWRMOJCA5t3e=S=T7zkcCQ@mail.gmail.com>
- <20191001092823.z4zhlbwvtwnlotwc@willie-the-truck> <CAKwvOdk0h2A6=fb7Yepf+oKbZfq_tqwpGq8EBmHVu1j4mo-a-A@mail.gmail.com>
- <20191001170142.x66orounxuln7zs3@willie-the-truck> <CAKwvOdnFJqipp+G5xLDRBcOrQRcvMQmn+n8fufWyzyt2QL_QkA@mail.gmail.com>
- <20191001175512.GK25745@shell.armlinux.org.uk> <CAKwvOdmw_xmTGZLeK8-+Q4nUpjs-UypJjHWks-3jHA670Dxa1A@mail.gmail.com>
- <20191001181438.GL25745@shell.armlinux.org.uk> <CAKwvOdmBnBVU7F-a6DqPU6QM-BRc8LNn6YRmhTsuGLauCWKUOg@mail.gmail.com>
- <CAMuHMdWPhE1nNkmL1nj3vpQhB7fP3uDs2i_ZVi0Gf9qij4W2CA@mail.gmail.com>
- <CAHk-=wgFODvdFBHzgVf3JjoBz0z6LZhOm8xvMntsvOr66ASmZQ@mail.gmail.com>
- <CAK7LNARM2jVSdgCDJWDbvVxYLiUR_CFgTPg0nxzbCszSKcx+pg@mail.gmail.com>
- <CAHk-=wiMm3rN15WmiAqMHjC-pakL_b8qgWsPPri0+YLFORT-ZA@mail.gmail.com>
- <CAK7LNATSoOD0g=Aarui6Y26E_YB035NsaPpHxqtBNyw0K0UXVw@mail.gmail.com> <CAHk-=wj9Dbom1x7qDfrXgNbjdFa_84bAUMdGigs4sELQQW28wg@mail.gmail.com>
-In-Reply-To: <CAHk-=wj9Dbom1x7qDfrXgNbjdFa_84bAUMdGigs4sELQQW28wg@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 3 Oct 2019 22:21:11 +0200
-Message-ID: <CANiq72k39jKJVDkQVk=OP8zdYEAiLMadnSxDYLFY1gwpKmuo_Q@mail.gmail.com>
-Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        id S2389113AbfJCUiK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Oct 2019 16:38:10 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26974 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732659AbfJCUiJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Oct 2019 16:38:09 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x93KW46d033719;
+        Thu, 3 Oct 2019 16:36:45 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2vdqct1kun-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Oct 2019 16:36:45 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x93KXmk8042901;
+        Thu, 3 Oct 2019 16:36:44 -0400
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2vdqct1ku6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Oct 2019 16:36:44 -0400
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x93KYoi6005598;
+        Thu, 3 Oct 2019 20:36:43 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03wdc.us.ibm.com with ESMTP id 2v9y57f714-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Oct 2019 20:36:43 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x93KagKt35783092
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Oct 2019 20:36:42 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 807D3AC05E;
+        Thu,  3 Oct 2019 20:36:42 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0073AC059;
+        Thu,  3 Oct 2019 20:36:35 +0000 (GMT)
+Received: from leobras.br.ibm.com (unknown [9.18.235.190])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Oct 2019 20:36:35 +0000 (GMT)
+Message-ID: <c46d6c7301314a2d998cffc47d69b404f2c26ad3.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 00/11] Introduces new count-based method for tracking
+ lockless pagetable walks
+From:   Leonardo Bras <leonardo@linux.ibm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Song Liu <songliubraving@fb.com>, Michal Hocko <mhocko@suse.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        Keith Busch <keith.busch@intel.com>, linux-mm@kvack.org,
+        Paul Mackerras <paulus@samba.org>,
+        Christoph Lameter <cl@linux.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        linux-arch@vger.kernel.org, Santosh Sivaraj <santosh@fossix.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mahesh Salgaonkar <mahesh@linux.vnet.ibm.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        =?ISO-8859-1?Q?J=E9r=F4me?= Glisse <jglisse@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        kvm-ppc@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Reza Arbab <arbab@linux.ibm.com>,
+        Allison Randal <allison@lohutok.net>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Kees Cook <keescook@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        linuxppc-dev@lists.ozlabs.org, Roman Gushchin <guro@fb.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Date:   Thu, 03 Oct 2019 17:36:31 -0300
+In-Reply-To: <20191003072952.GN4536@hirez.programming.kicks-ass.net>
+References: <20191003013325.2614-1-leonardo@linux.ibm.com>
+         <20191003072952.GN4536@hirez.programming.kicks-ass.net>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-MwGy14uV6sOBKPSXi/z8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-03_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910030166
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 3, 2019 at 7:29 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Oct 3, 2019 at 10:24 AM Masahiro Yamada
-> <yamada.masahiro@socionext.com> wrote:
-> >
-> > I just want to annotate __always_inline for the case
-> > "2. code that if not inlined is somehow not correct."
->
-> Oh, I support that entirely - if only for documentation.
->
-> But I do *not* support the dismissal of the architecture maintainers
-> concerns about "does it work?" and apparently known compiler bugs.
->
-> > Again, not saying "use a macro".
->
-> Other people did, though.
->
-> And there seemed to be little balancing of the pain vs the gain. The
-> gain really isn't that obvious. If the code shrinks by a couple of kB,
-> is that good or bad? Maybe it is smaller, but is it _better_?
 
-I think both positions that people have shown are important to take
-into account.
+--=-MwGy14uV6sOBKPSXi/z8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-We should minimize our usage of macros wherever possible and certainly
-not write new ones when another solution is available. But we should
-*also* minimize our dependence on code that "must-be-inlined" to work
-as much as possible.
+Hello Peter, thanks for the feedback!
 
-In particular, I think we should allow to use __always_inline only if
-it doesn't work otherwise, as an alternative before trying the next
-worst solution (macros). And avoid using only "inline" when we
-actually require inlining, of course.
+On Thu, 2019-10-03 at 09:29 +0200, Peter Zijlstra wrote:
+> On Wed, Oct 02, 2019 at 10:33:14PM -0300, Leonardo Bras wrote:
+> > If a process (qemu) with a lot of CPUs (128) try to munmap() a large
+> > chunk of memory (496GB) mapped with THP, it takes an average of 275
+> > seconds, which can cause a lot of problems to the load (in qemu case,
+> > the guest will lock for this time).
+> >=20
+> > Trying to find the source of this bug, I found out most of this time is
+> > spent on serialize_against_pte_lookup(). This function will take a lot
+> > of time in smp_call_function_many() if there is more than a couple CPUs
+> > running the user process. Since it has to happen to all THP mapped, it
+> > will take a very long time for large amounts of memory.
+> >=20
+> > By the docs, serialize_against_pte_lookup() is needed in order to avoid
+> > pmd_t to pte_t casting inside find_current_mm_pte(), or any lockless
+> > pagetable walk, to happen concurrently with THP splitting/collapsing.
+> >=20
+> > It does so by calling a do_nothing() on each CPU in mm->cpu_bitmap[],
+> > after interrupts are re-enabled.
+> > Since, interrupts are (usually) disabled during lockless pagetable
+> > walk, and serialize_against_pte_lookup will only return after
+> > interrupts are enabled, it is protected.
+>=20
+> This is something entirely specific to Power, you shouldn't be touching
+> generic code at all.
 
-And the reasoning for each usage of __always_inline should have a
-comment (be it "bad codegen", "performance tanks without it",
-"compiler X <= 4.2 refuses to compile"...). Which is also useful for
-compiler folks to grep for cases to improve/fix in their compiler!
+Up to v4, I was declaring dummy functions so it would not mess up with
+other archs: http://patchwork.ozlabs.org/patch/1168779/
 
-Cheers,
-Miguel
+But I was recommended to create a generic function that could guide the
+way to archs: http://patchwork.ozlabs.org/patch/1168775/
+
+The idea was to concentrate all routines of beginning/ending lockless
+pagetable walks on these functions, and call them instead of
+irq_disable/irq_enable.
+Then it was easy to place the refcount-based tracking in these
+functions. It should only be enabled in case the config chooses to do
+so.=20
+
+>=20
+> Also, I'm not sure I understand things properly.
+>=20
+> So serialize_against_pte_lookup() wants to wait for all currently
+> out-standing __find_linux_pte() instances (which are very similar to
+> gup_fast).
+>=20
+> It seems to want to do this before flushing the THP TLB for some reason;
+> why? Should not THP observe the normal page table freeing rules which
+> includes a RCU-like grace period like this already.
+>=20
+> Why is THP special here? This doesn't seem adequately explained.
+
+"It's necessary to monitor lockless pagetable walks, in order to avoid
+doing THP splitting/collapsing during them."
+
+If a there is a THP split/collapse during the lockless pagetable walk,
+the returned ptep can be a pointing to an invalid pte.=20
+
+To avoid that, the pmd is updated, then serialize_against_pte_lookup is
+ran. Serialize runs a do_nothing in all cpu in cpu_mask.=20
+
+So, after all cpus finish running do_nothing(), there is a guarantee
+that if there is any 'lockless pagetable walk' it is running on top of
+a updated version of this pmd, and so, collapsing/splitting THP is
+safe.
+
+>=20
+> Also, specifically to munmap(), this seems entirely superfluous,
+> munmap() uses the normal page-table freeing code and should be entirely
+> fine without additional waiting.
+
+To be honest, I remember it being needed in munmap case, but I really
+don't remember the details. I will take a deeper look and come back
+with this answer.=20
+
+> Furthermore, Power never accurately tracks mm_cpumask(), so using that
+> makes the whole thing more expensive than it needs to be. Also, I
+> suppose that is buggered vs file backed THP.
+
+That accuracy of mm_cpumask is above my knowledge right now. =3D)
+
+I agree that it's to expensive to do that. That's why I suggested this
+method, that can check if there is any 'lockless pagetable walk'
+running before trying to serialize. It reduced the waiting time a lot
+for large amounts of memory. (more details on cover letter)
+
+Best regards,
+
+Leonardo Br=C3=A1s
+
+--=-MwGy14uV6sOBKPSXi/z8
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl2WW88ACgkQlQYWtz9S
+ttR2SA/8CaspKJYeFlhYLpBdeWuazYm5DTWTEEOUml0igLgqAtk4ehAw/DJN2Yqg
+uIcYMOoIaKVQaE20fFeapyXSj7aNe1VIDIkehEGCTKCr7PZ0qEpWecCgJJaus012
+FDvFYmJQgtBQpf6dDEaDnINRq72SF4Bek5kuLRdePO3bla4FY7HlA0ZwvtTq4ji7
+cEDkJiGZpyDTz35DGcwfEXvJAWJRyVEdIs1DV1vNkgO7+TQNlj1ErQf9OcdS5DN2
+zJyfx5Rb+3ijNcjB/l/duXXAKfdWxBSY7jWvNT02Z82qc7PoZZ88OazB07PcaJF3
+2z8E7Xm0apy9xbv0W/6vzeJpyBMUKNwven7s9oLlg4TITPJLHLsD5iIL0banmzzT
+J3PNGuz5DJXal+WE08ZAvURcLSw1yAkN2XRx7aSuwvxSiwzUd/yI3hRakOYGO1Ii
+oaXujHvDycEG8L1xRWr+f0/OKnukanV7XLJWyPslgIu5RaKMGLwruXC/BsbX+4Tm
+naenYMazQHF3LrwBcY05M+708wFO/4HYtGmnuRzFHi6Eh4YQe3XYMhwuBVfUcyYX
+pQDsFaunwzQLlKolRolDL7sx+bcdIKxpuzoYPGoxrbvPmZVUqEmIKzx+KiYUr7vY
+QNAP2bHeVI2RrZvSWsYGmsyNALWVixCM+hxbfBQS4EI3AtQa40E=
+=f84a
+-----END PGP SIGNATURE-----
+
+--=-MwGy14uV6sOBKPSXi/z8--
+
