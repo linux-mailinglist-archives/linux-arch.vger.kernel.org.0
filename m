@@ -2,46 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E5AC98B6
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2019 08:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D13CA299
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2019 18:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727647AbfJCG4X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Oct 2019 02:56:23 -0400
-Received: from albireo.enyo.de ([37.24.231.21]:55484 "EHLO albireo.enyo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725879AbfJCG4W (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 3 Oct 2019 02:56:22 -0400
-Received: from [172.17.203.2] (helo=deneb.enyo.de)
-        by albireo.enyo.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1iFv2B-0004Rw-8R; Thu, 03 Oct 2019 06:56:19 +0000
-Received: from fw by deneb.enyo.de with local (Exim 4.92)
-        (envelope-from <fw@deneb.enyo.de>)
-        id 1iFv2B-0003Et-45; Thu, 03 Oct 2019 08:56:19 +0200
-From:   Florian Weimer <fw@deneb.enyo.de>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>
-Subject: Re: [RFC][PATCH] sysctl: Remove the sysctl system call
-References: <8736gcjosv.fsf@x220.int.ebiederm.org>
-        <201910011140.EA0181F13@keescook>
-Date:   Thu, 03 Oct 2019 08:56:19 +0200
-In-Reply-To: <201910011140.EA0181F13@keescook> (Kees Cook's message of "Tue, 1
-        Oct 2019 11:46:45 -0700")
-Message-ID: <87y2y271ws.fsf@mid.deneb.enyo.de>
+        id S1731890AbfJCQHB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 3 Oct 2019 12:07:01 -0400
+Received: from mail.17d12.saludzona2.gob.ec ([181.211.35.246]:35522 "EHLO
+        mail.17d12.mspz2.gob.ec" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1731487AbfJCQHA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Oct 2019 12:07:00 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.17d12.mspz2.gob.ec (Postfix) with ESMTP id 5B3E8206183FC;
+        Thu,  3 Oct 2019 08:56:04 -0500 (-05)
+Received: from mail.17d12.mspz2.gob.ec ([127.0.0.1])
+        by localhost (mail.17d12.mspz2.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id XDTkn8mjpe7R; Thu,  3 Oct 2019 08:55:59 -0500 (-05)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.17d12.mspz2.gob.ec (Postfix) with ESMTP id 15DBE20A45994;
+        Thu,  3 Oct 2019 07:23:09 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 17d12.mspz2.gob.ec
+Received: from mail.17d12.mspz2.gob.ec ([127.0.0.1])
+        by localhost (mail.17d12.mspz2.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id X7lCm2wo2ybv; Thu,  3 Oct 2019 07:23:08 -0500 (-05)
+Received: from [192.168.1.184] (unknown [41.13.212.66])
+        by mail.17d12.mspz2.gob.ec (Postfix) with ESMTPSA id 2D08520A45D56;
+        Thu,  3 Oct 2019 05:24:24 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Meine Spende an dich.
+To:     Recipients <victoria.caiza@17d12.mspz2.gob.ec>
+From:   "Herr Manuel Franco" <victoria.caiza@17d12.mspz2.gob.ec>
+Date:   Thu, 03 Oct 2019 03:24:17 -0700
+Reply-To: Manuelfrancco@hotmail.com
+X-Antivirus: Avast (VPS 191003-0, 10/02/2019), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20191003102425.2D08520A45D56@mail.17d12.mspz2.gob.ec>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Is anyone else getting a very incomplete set of messages in this
-thread?
+Hallo lieber, mein Name ist Manuel Franco, Gewinner des Power Ball Jackpots im April 2019 in Höhe von 786 Millionen US-Dollar. Siehe: Ich spende 4.600.000,00 € für wohltätige Zwecke, um Ihnen und den Armen in Ihrer Gemeinde zu helfen. Senden Sie mir eine E-Mail an: manuelfrancco@hotmail.com, um weitere Informationen zum Erhalt meiner Spende zu erhalten 
 
-These changes likely matter to glibc, and I've yet to see the actual
-patch.  Would someone please forward it to me?
+---
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
 
-The original message didn't make it into the lore.kernel.org archives
-(the cross-post to linux-kernel should have taken care of that).
