@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 797DBCAA3F
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2019 19:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD5BCAA8F
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2019 19:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388643AbfJCRCQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Oct 2019 13:02:16 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46242 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391919AbfJCRCP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Oct 2019 13:02:15 -0400
-Received: by mail-lj1-f193.google.com with SMTP id d1so3556504ljl.13
-        for <linux-arch@vger.kernel.org>; Thu, 03 Oct 2019 10:02:14 -0700 (PDT)
+        id S2393439AbfJCRId (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Oct 2019 13:08:33 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:38979 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393432AbfJCRIa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Oct 2019 13:08:30 -0400
+Received: by mail-lf1-f67.google.com with SMTP id 72so2425264lfh.6
+        for <linux-arch@vger.kernel.org>; Thu, 03 Oct 2019 10:08:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=P5wXaF5ZltCgXSM34TOegFWPjTBpFPmOgUeBNVihY4w=;
-        b=JKo8Sv2iFH9OWcLRj6EJ0lrBcfCtSlXqHG89kD5Ub09Y0owCLMwh7kGpo40D50FLmA
-         8m3gZBLSebpsDzFqxjkVhUIsZ/avu9EVjhD2P/PgJ2J9Q889cf+ojytn85UfifR0QFdJ
-         pJM51Bd87EjuNB8rn2bC+8WGyPlYd0s1aUgKU=
+        bh=xGPNBFqVYtxez447o7VfzpEEdWGUXuNgcxnMZZtHxhw=;
+        b=JQlxhcyH0jHwarYabbpi6wNpJW+TQGKZ3Q/o2mSONQp+edqEcUDbfc+bZRMV+49X8b
+         6iqsJ6W2xVarc2Qbqm9lYLbIQOaubfS2b2d2RR4HW+NziK3KAuGvVuwqS5GOwXs3hULK
+         jTZNUAkzsyFNJMvYZMy8abMpYXNOFhEkahnBA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=P5wXaF5ZltCgXSM34TOegFWPjTBpFPmOgUeBNVihY4w=;
-        b=sMQvjxf6ukGwEFV4ug1QUEUOUeIKe5jvi3fHdvAPniyg1rPLWiJ3rg5u8YpqERMpjZ
-         mSYP7YsHFqELvhAM3TvGId4mEMUUyKkv7H0WkPEPlu8FzVjvvV1z2NwVni6u/YXY000G
-         9jek+V3/RRLjiCcr1WTXS3XZt9FMTd36+kOxfj5t3Z7oy+SV106wocCMW5MUBdtols/l
-         6PuABVeVmpkSrQkjgvqKxvWWBRaVsVSTartEWoetJvpJCy+dW/PIky0qWImX31WgheJE
-         S8qUZE0vgUsRXiZ8XpiFfFwG7MaKAhkigf2FKtq5/3mtxSIR49NPm8YvpXcCbc5Bfzex
-         KXIg==
-X-Gm-Message-State: APjAAAXVJEEGbeA/SByy2S5X+V7Dl5rmS6GCH6eyn/TBYXeOO5OsUqRD
-        SzZzm7xoq9Np1pMriSZMWdTiBVMG8uc=
-X-Google-Smtp-Source: APXvYqwEQhsoL8fNrttFAv8UDOUFql2YnNMm8al8u/M3zdpVvbs1eXT7BFspowa1ppqImagCyGZgqw==
-X-Received: by 2002:a2e:3a06:: with SMTP id h6mr7006466lja.128.1570122133315;
-        Thu, 03 Oct 2019 10:02:13 -0700 (PDT)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id w30sm552002lfn.82.2019.10.03.10.02.10
+        bh=xGPNBFqVYtxez447o7VfzpEEdWGUXuNgcxnMZZtHxhw=;
+        b=CS7M0cVoCMR8m0rEJq2wIno/MYmaVIk/21aUBad7L0KBqbiRfbax6f4CP8BQdPOqee
+         tOVHQUZrOc4oNbqeUzD+7N+hFMmI22gd4nPGw7XYpU0WfnsJbxM1GmWUjXJXgecvFKGr
+         KgMitDuzS6FX1aodMzMVSokJvgMGpVpIGUXZ6Jnblw1sWgNC4ewr6Gc6wm3ihJPYvKfb
+         /jUAXoH+PUQ7vnYCTKT5jjyKPpx2oGnq2Vm42PdJSF+O2STamkfhHuj0EwphZXVqsrq3
+         yepdRPDRC7ynQ+8zMob6BzEJFIZ1Z4aVdXmgH9rkfDi6GRFs2r+Wo4NcyKrICIQAoh5N
+         nIPw==
+X-Gm-Message-State: APjAAAVpsZZFiqn2+o6I6qqTz/CrSiydBbVMamUsZw583wgshL37w5iQ
+        nNhhLPDFSQaaM4Hbic1mirZ0jjvsSKw=
+X-Google-Smtp-Source: APXvYqwt01sp9zZ8I79k4tDH/Z0xKp7H5663lqnaNNaN3ZL5cKQ816Y1lDSD+Z1mmfenTiHXLYv0eg==
+X-Received: by 2002:a19:2c1:: with SMTP id 184mr2716172lfc.100.1570122508554;
+        Thu, 03 Oct 2019 10:08:28 -0700 (PDT)
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
+        by smtp.gmail.com with ESMTPSA id t10sm665197ljt.68.2019.10.03.10.08.26
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Oct 2019 10:02:10 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id q11so2390646lfc.11
-        for <linux-arch@vger.kernel.org>; Thu, 03 Oct 2019 10:02:10 -0700 (PDT)
-X-Received: by 2002:a19:2489:: with SMTP id k131mr6216154lfk.52.1570122129934;
- Thu, 03 Oct 2019 10:02:09 -0700 (PDT)
+        Thu, 03 Oct 2019 10:08:26 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id f5so3597048ljg.8
+        for <linux-arch@vger.kernel.org>; Thu, 03 Oct 2019 10:08:26 -0700 (PDT)
+X-Received: by 2002:a2e:86d5:: with SMTP id n21mr6759265ljj.1.1570122505822;
+ Thu, 03 Oct 2019 10:08:25 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190930112636.vx2qxo4hdysvxibl@willie-the-truck>
  <CAK7LNASQZ82KSOrQW7+Wq1vFDCg2__maBEAPMLqUDqZMLuj1rA@mail.gmail.com>
@@ -55,12 +55,13 @@ References: <20190930112636.vx2qxo4hdysvxibl@willie-the-truck>
  <20191001175512.GK25745@shell.armlinux.org.uk> <CAKwvOdmw_xmTGZLeK8-+Q4nUpjs-UypJjHWks-3jHA670Dxa1A@mail.gmail.com>
  <20191001181438.GL25745@shell.armlinux.org.uk> <CAKwvOdmBnBVU7F-a6DqPU6QM-BRc8LNn6YRmhTsuGLauCWKUOg@mail.gmail.com>
  <CAMuHMdWPhE1nNkmL1nj3vpQhB7fP3uDs2i_ZVi0Gf9qij4W2CA@mail.gmail.com>
- <CAHk-=wgFODvdFBHzgVf3JjoBz0z6LZhOm8xvMntsvOr66ASmZQ@mail.gmail.com> <CAK7LNARM2jVSdgCDJWDbvVxYLiUR_CFgTPg0nxzbCszSKcx+pg@mail.gmail.com>
-In-Reply-To: <CAK7LNARM2jVSdgCDJWDbvVxYLiUR_CFgTPg0nxzbCszSKcx+pg@mail.gmail.com>
+ <CAHk-=wgFODvdFBHzgVf3JjoBz0z6LZhOm8xvMntsvOr66ASmZQ@mail.gmail.com>
+ <CAK7LNARM2jVSdgCDJWDbvVxYLiUR_CFgTPg0nxzbCszSKcx+pg@mail.gmail.com> <CAHk-=wiMm3rN15WmiAqMHjC-pakL_b8qgWsPPri0+YLFORT-ZA@mail.gmail.com>
+In-Reply-To: <CAHk-=wiMm3rN15WmiAqMHjC-pakL_b8qgWsPPri0+YLFORT-ZA@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 3 Oct 2019 10:01:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiMm3rN15WmiAqMHjC-pakL_b8qgWsPPri0+YLFORT-ZA@mail.gmail.com>
-Message-ID: <CAHk-=wiMm3rN15WmiAqMHjC-pakL_b8qgWsPPri0+YLFORT-ZA@mail.gmail.com>
+Date:   Thu, 3 Oct 2019 10:08:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whkB+g0R0JqLB+Y4piUZf9A8P1ugi5T92LjFLNY+epBeg@mail.gmail.com>
+Message-ID: <CAHk-=whkB+g0R0JqLB+Y4piUZf9A8P1ugi5T92LjFLNY+epBeg@mail.gmail.com>
 Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
 To:     Masahiro Yamada <yamada.masahiro@socionext.com>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -83,37 +84,30 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 2, 2019 at 7:11 PM Masahiro Yamada
-<yamada.masahiro@socionext.com> wrote:
+On Thu, Oct 3, 2019 at 10:01 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Macrofying the 'inline' is a horrid mistake that makes incorrect code work.
-> It would eternally prevent people from writing portable, correct code.
-> Please do not encourage to hide problems.
+> If this is purely about the fact that x86 is different from other
+> architectures, then let's remove the "compiler can do stupid things"
+> option on x86 too. It was never clear that it was a huge advantage.
 
-Honestly, if the alternative to hiding problems is "use a macro", then
-I'd rather hide the problems and just make "inline" means "inline".
+Side note: what might be an actual advantage would be to have a mode
+where you see when the compiler would choose to not inline things.
 
-If "inline" means "it's just a hint, use macros", then inline is useless.
+Maybe we have things that are marked "inline" that simply shouldn't
+be. We do tend to have this history of adding small helper functions
+to header files, and then they grow and grow and grow. And now they
+shouldn't be in a header file any more, but they still are.
 
-If "inline" means "using this means that there are known compiler
-bugs, but we don't know where they trigger", then inline is _worse_
-than useless.
+So having a "compiler doesn't want to inline this" flag might be
+useful for finding those, but it might also be useful for people
+looking for what triggers bugs.
 
-I do not see the big advantage of letting the compiler say "yeah, I'm
-not going to do that, Dave".
+But honestly, the last time I saw somebody argue for "I don't want
+inlining", it was the broken "I want to compiler the kernel with no
+optimizations so that it's easier to look at the resulting code". That
+was just a _bad_ bad patch. And if it is concerns like that that are
+driving this "compiler doesn't have to inline", then we should stop it
+immediately.
 
-And I see a *huge* disadvantage when people are ignoring compiler
-bugs, and are saying "use a macro". Seriously.
-
-Right now we see the obvious compiler bugs that cause build breakages.
-How many non-obvious compiler bugs do we have? And how sure are you
-that our code is "correct" after fixing a couple of obvious cases?
-
-As to "portable", nobody cares. We're a kernel. We aren't portable,
-and never were.
-
-If this is purely about the fact that x86 is different from other
-architectures, then let's remove the "compiler can do stupid things"
-option on x86 too. It was never clear that it was a huge advantage.
-
-               Linus
+             Linus
