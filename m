@@ -2,136 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C86E7CB51D
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2019 09:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72DD0CB91B
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2019 13:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730644AbfJDHiM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Oct 2019 03:38:12 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:42955 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727326AbfJDHiL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Oct 2019 03:38:11 -0400
-Received: by mail-oi1-f194.google.com with SMTP id i185so4946289oif.9;
-        Fri, 04 Oct 2019 00:38:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wuBYLzr0+BbgtiiM2Gze6MIPys+898SIQq1AttIPKCY=;
-        b=MRd+mGq6ewOTqas5XkvNr1BCOYEjisAhar1cYKA4se1ReDOqYlEWlyH0ChuPqHM+hq
-         GhHPMNBEJS7YdFWf1lgmT1s5X9enwNsS3QpSy1qDRPukBh9JVmZE9hpRL0pFT94mVxka
-         6OKSuobmi8k87mS/Whe8Q/vTNgB0NTIsofT6C13QCR1rJjoonm4rYQkmDQ8EefSrWixk
-         btu7mFcS0xgpi7m940vaGkXkh/7389Bjp/1UlH/SZ7jjsAHHDTGdSyXw0A/5/m2akaAr
-         cMIH9mpGoNdzOgZJWU25/YWNtSyN5fH8PH9Lb4tMBw/zTobIQ5ADk/VjrwXWlSDzJPPn
-         UMtw==
-X-Gm-Message-State: APjAAAWm4d5f0g7lQubuCckHy3uiyAxvRq/R6hZp2iDtC4LYkALmlXzb
-        iiYbgVOWsAb31oSmitGLr7OeW2l7JyRF63m/Ju8=
-X-Google-Smtp-Source: APXvYqybMp0FEaj/6VXjwoYCvpMKCiGU8vlst863nqQsjUgRkUUJ447YScwV2QQfyq+eaouIIcUkpzJdvKbTdXF75Wg=
-X-Received: by 2002:aca:b654:: with SMTP id g81mr5758145oif.153.1570174690802;
- Fri, 04 Oct 2019 00:38:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190930112636.vx2qxo4hdysvxibl@willie-the-truck>
- <CAK7LNASQZ82KSOrQW7+Wq1vFDCg2__maBEAPMLqUDqZMLuj1rA@mail.gmail.com>
- <20190930121803.n34i63scet2ec7ll@willie-the-truck> <CAKwvOdnqn=0LndrX+mUrtSAQqoT1JWRMOJCA5t3e=S=T7zkcCQ@mail.gmail.com>
- <20191001092823.z4zhlbwvtwnlotwc@willie-the-truck> <CAKwvOdk0h2A6=fb7Yepf+oKbZfq_tqwpGq8EBmHVu1j4mo-a-A@mail.gmail.com>
- <20191001170142.x66orounxuln7zs3@willie-the-truck> <CAKwvOdnFJqipp+G5xLDRBcOrQRcvMQmn+n8fufWyzyt2QL_QkA@mail.gmail.com>
- <20191001175512.GK25745@shell.armlinux.org.uk> <CAKwvOdmw_xmTGZLeK8-+Q4nUpjs-UypJjHWks-3jHA670Dxa1A@mail.gmail.com>
- <20191001181438.GL25745@shell.armlinux.org.uk> <CAKwvOdmBnBVU7F-a6DqPU6QM-BRc8LNn6YRmhTsuGLauCWKUOg@mail.gmail.com>
- <CAMuHMdWPhE1nNkmL1nj3vpQhB7fP3uDs2i_ZVi0Gf9qij4W2CA@mail.gmail.com>
- <CAHk-=wgFODvdFBHzgVf3JjoBz0z6LZhOm8xvMntsvOr66ASmZQ@mail.gmail.com>
- <CAK7LNARM2jVSdgCDJWDbvVxYLiUR_CFgTPg0nxzbCszSKcx+pg@mail.gmail.com>
- <CAHk-=wiMm3rN15WmiAqMHjC-pakL_b8qgWsPPri0+YLFORT-ZA@mail.gmail.com>
- <CAK7LNATSoOD0g=Aarui6Y26E_YB035NsaPpHxqtBNyw0K0UXVw@mail.gmail.com>
- <CAHk-=wj9Dbom1x7qDfrXgNbjdFa_84bAUMdGigs4sELQQW28wg@mail.gmail.com> <CANiq72k39jKJVDkQVk=OP8zdYEAiLMadnSxDYLFY1gwpKmuo_Q@mail.gmail.com>
-In-Reply-To: <CANiq72k39jKJVDkQVk=OP8zdYEAiLMadnSxDYLFY1gwpKmuo_Q@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 4 Oct 2019 09:37:59 +0200
-Message-ID: <CAMuHMdWbv34O6=kR_3UOxvZ4WBmzaPmbGpux+gZCaQo+XLs58A@mail.gmail.com>
-Subject: Re: [PATCH] compiler: enable CONFIG_OPTIMIZE_INLINING forcibly
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        id S1728360AbfJDLaA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Oct 2019 07:30:00 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:36116 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727254AbfJDLaA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Oct 2019 07:30:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jWelrCDVOAXy8hN8VjR1adB6IyXBOt3/QtmJ/voDmTs=; b=nwkEEfEL12BnVaYLSfPhd2e2Ln
+        hB4i1gugq22rSMg1LCnlbu6Qno1BBRHFOYKFvZyD3L4tBd0085H+yAZ4MYaDWZ+eP9oY3o3MNjJjq
+        BEhzcevGCSW20rEaS/5saCafPoGFWaV5v3eJouN5tEsfE5BvsGSyxBqt1fERyo/REimJh4LSRmyaD
+        agnFLXltPj3p7qKpQ+/CtvR16C+KLJoJbaK2jrMk+LNGNWsTUGeC9qRmcCVlFJEUgAYK8Ay+xtxiS
+        yUMpUi4BK+2/uOCdWIDdObYgY4555aqt6UZIbyTTrJBxLdCN8KfntKpA4qSjahlZ1BSiE8ZrmsiCl
+        lZ0ESvGw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iGLlP-0005rP-Ht; Fri, 04 Oct 2019 11:28:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DE8643013A4;
+        Fri,  4 Oct 2019 13:27:54 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7BFF0203E50D2; Fri,  4 Oct 2019 13:28:44 +0200 (CEST)
+Date:   Fri, 4 Oct 2019 13:28:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Leonardo Bras <leonardo@linux.ibm.com>
+Cc:     Song Liu <songliubraving@fb.com>, Michal Hocko <mhocko@suse.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        Keith Busch <keith.busch@intel.com>, linux-mm@kvack.org,
+        Paul Mackerras <paulus@samba.org>,
+        Christoph Lameter <cl@linux.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        linux-arch@vger.kernel.org, Santosh Sivaraj <santosh@fossix.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mahesh Salgaonkar <mahesh@linux.vnet.ibm.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        kvm-ppc@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Reza Arbab <arbab@linux.ibm.com>,
+        Allison Randal <allison@lohutok.net>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Kees Cook <keescook@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        linuxppc-dev@lists.ozlabs.org, Roman Gushchin <guro@fb.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v5 01/11] asm-generic/pgtable: Adds generic functions to
+ monitor lockless pgtable walks
+Message-ID: <20191004112844.GC19463@hirez.programming.kicks-ass.net>
+References: <20191003013325.2614-1-leonardo@linux.ibm.com>
+ <20191003013325.2614-2-leonardo@linux.ibm.com>
+ <20191003071145.GM4536@hirez.programming.kicks-ass.net>
+ <20191003115141.GJ4581@hirez.programming.kicks-ass.net>
+ <c46ba8cec981ad28383bb7b23161fb83ccda4a60.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <c46ba8cec981ad28383bb7b23161fb83ccda4a60.camel@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Miguel,
+On Thu, Oct 03, 2019 at 06:24:07PM -0300, Leonardo Bras wrote:
+> Hello Peter, thanks for the feedback!
+>=20
+> On Thu, 2019-10-03 at 13:51 +0200, Peter Zijlstra wrote:
+> > On Thu, Oct 03, 2019 at 09:11:45AM +0200, Peter Zijlstra wrote:
+> > > On Wed, Oct 02, 2019 at 10:33:15PM -0300, Leonardo Bras wrote:
+> > > > diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pg=
+table.h
+> > > > index 818691846c90..3043ea9812d5 100644
+> > > > --- a/include/asm-generic/pgtable.h
+> > > > +++ b/include/asm-generic/pgtable.h
+> > > > @@ -1171,6 +1171,64 @@ static inline bool arch_has_pfn_modify_check=
+(void)
+> > > >  #endif
+> > > >  #endif
+> > > > =20
+> > > > +#ifndef __HAVE_ARCH_LOCKLESS_PGTBL_WALK_CONTROL
+> > > > +static inline unsigned long begin_lockless_pgtbl_walk(struct mm_st=
+ruct *mm)
+> > > > +{
+> > > > +	unsigned long irq_mask;
+> > > > +
+> > > > +	if (IS_ENABLED(CONFIG_LOCKLESS_PAGE_TABLE_WALK_TRACKING))
+> > > > +		atomic_inc(&mm->lockless_pgtbl_walkers);
+> > >=20
+> > > This will not work for file backed THP. Also, this is a fairly serious
+> > > contention point all on its own.
+> >=20
+> > Kiryl says we have tmpfs-thp, this would be broken vs that, as would
+> > your (PowerPC) use of mm_cpumask() for that IPI.
+>=20
+> Could you please explain it?
+> I mean, why this breaks tmpfs-thp?
+> Also, why mm_cpumask() is also broken?
 
-On Thu, Oct 3, 2019 at 10:21 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
-> On Thu, Oct 3, 2019 at 7:29 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> > On Thu, Oct 3, 2019 at 10:24 AM Masahiro Yamada
-> > <yamada.masahiro@socionext.com> wrote:
-> > >
-> > > I just want to annotate __always_inline for the case
-> > > "2. code that if not inlined is somehow not correct."
-> >
-> > Oh, I support that entirely - if only for documentation.
-> >
-> > But I do *not* support the dismissal of the architecture maintainers
-> > concerns about "does it work?" and apparently known compiler bugs.
-> >
-> > > Again, not saying "use a macro".
-> >
-> > Other people did, though.
-> >
-> > And there seemed to be little balancing of the pain vs the gain. The
-> > gain really isn't that obvious. If the code shrinks by a couple of kB,
-> > is that good or bad? Maybe it is smaller, but is it _better_?
->
-> I think both positions that people have shown are important to take
-> into account.
->
-> We should minimize our usage of macros wherever possible and certainly
-> not write new ones when another solution is available. But we should
-> *also* minimize our dependence on code that "must-be-inlined" to work
-> as much as possible.
->
-> In particular, I think we should allow to use __always_inline only if
-> it doesn't work otherwise, as an alternative before trying the next
-> worst solution (macros). And avoid using only "inline" when we
-> actually require inlining, of course.
->
-> And the reasoning for each usage of __always_inline should have a
-> comment (be it "bad codegen", "performance tanks without it",
-> "compiler X <= 4.2 refuses to compile"...). Which is also useful for
-> compiler folks to grep for cases to improve/fix in their compiler!
+Because shared pages are not bound by a mm; or does it not share the thp
+state between mappings?
 
-First, we had "inline" and normal functions, where "inline" was used to
-make sure a function was inlined (e.g. because it contained code paths
-that were intended to be optimized away[*]).
-Then, the compiler started not honoring the "inline" keyword, so we got
-"always_inline", "inline", and normal functions.  With a hack to #define
-"inline" to "always_inline" for some compiler versions.
+> > And I still think all that wrong, you really shouldn't need to wait on
+> > munmap().
+>=20
+> That is something I need to better understand. I mean, before coming
+> with this patch, I thought exactly this: not serialize when on munmap.=20
+>=20
+> But on the way I was convinced it would not work on munmap. I need to
+> recall why, and if it was false to assume this, re-think the whole
+> solution.
 
-What's next? There should be a way for the programmer to indicate a
-function must be inlined.
-
-[*] Some unused  code paths may contain references to symbols that may
-    not exist for the current configuration, or not exist at all.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+And once you (re)figure it out, please write it down. It is a crucial
+bit of the puzzle and needs to be part of the Changelogs.
