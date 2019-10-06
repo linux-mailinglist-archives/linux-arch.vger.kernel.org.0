@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48637CD28E
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Oct 2019 17:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30802CD290
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Oct 2019 17:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbfJFPLv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Oct 2019 11:11:51 -0400
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:39759 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726826AbfJFPLv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Oct 2019 11:11:51 -0400
-Received: by mail-yw1-f65.google.com with SMTP id n11so4173585ywn.6;
-        Sun, 06 Oct 2019 08:11:50 -0700 (PDT)
+        id S1726866AbfJFPLw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Oct 2019 11:11:52 -0400
+Received: from mail-yw1-f67.google.com ([209.85.161.67]:41908 "EHLO
+        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726852AbfJFPLw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Oct 2019 11:11:52 -0400
+Received: by mail-yw1-f67.google.com with SMTP id 129so4167408ywb.8;
+        Sun, 06 Oct 2019 08:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=W+SY6yjQG6ah82xj2QYbshpM9aG1FiA4CAoNvKBotSg=;
-        b=n/Wb2z5ac4SZMTalEqwdc7QDCe8+Ouu08UZL+YXF3fcBU4QhQnOMhYZBFIzxQG4hr+
-         7C/35KQoh+qGUCchTX2qESlNO6SVio+Kv04lyzZGh1FMtQffTTC3dxC8hVsWx2WgyTS0
-         ukDGrl3CBCtNLegJ9flr0vpfmEvXTNq8RIwNfTbZ2Eh94osR07ZfF0O+MadLHMDzkp9u
-         uNF3t4OunvnaFox2C78G4FKI+1i5Vtk+bbUQMoSR14BiwFhy1wRmsvd78QuW5mlGIX2G
-         EGuf6JVI63VPyySprvZeTPr/Pty862/HPJ/ONMnztf4HVBAna45wfvpe0GYfdVAec3ZM
-         RXaA==
+        bh=OQMsvrMqAN5cYMrSu91Pu66B0Sg+HB0aWPXdvZz2KcA=;
+        b=HdegEL2fpTV5hm7hUSkkzZ4H15/08rNMz0M2X1pafGXHTQhJLsKPHNgwbtw6c6lfg1
+         SMO5McnqQP8Ykh3+jU8j9FjTNMKFttnbpN+/DgyhxRLu8di7tag1tcKKHnjrauFAZ1/a
+         RgF5TX87i7ZmA8M2LsMwM6qDAp541QBZSnpjTi+o4XszUJDLj5+nMjvMGLtqEqfebny8
+         3myOdCVECCqS6vzRlbl/QMtqj0gaooDXwjQOUhZhtP5+8nxHlWw5JrwZgIsHTCwTqm4s
+         sMDxDPdORADs9WMTq9N8pDqXpwvAZ8vSUCTDWrQQBMoI1v3HYoMWj5ACxbSPCGOnDOjq
+         EBWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=W+SY6yjQG6ah82xj2QYbshpM9aG1FiA4CAoNvKBotSg=;
-        b=eKOLADZfrWZWGABQEx7+0C8c6SJ2FBajc4aMVW54YDqO0oPEmueFaAgn5EtJQZiXVV
-         EijQhvtMVqRvjMzVBWKRQ7IS6+20k8tWG3jnYePAOKUuEIYi0HbSRVOVOgj1GZEf0dY4
-         3TN525tNa+yVk3N+Lp5Os5vTIPT/k9aP1WJmV3rNxL0bDgSoxCP3nf+gjUQgmQmNRYFG
-         h7V52ALIA9EVnD3v+C/43HirIwMp2hm+oMtReUWw27fqVo3V4w0A0I/72j5nOk5qLbDc
-         aaJMYXifiotGtQC8S1lWg6j3byCMqBwaWtg/NCXL8z9bfn4q6HlPYUpM4Wi54NJj8UxH
-         q4uA==
-X-Gm-Message-State: APjAAAVb5v59b8XLudV0RX3Fo0UoUWkYiEa2VA4U19f4kZk9gg8EkHAm
-        Jtenvj+2E4Aohrf2IRzaSDs=
-X-Google-Smtp-Source: APXvYqxxXXJnm8HJzt/VyDIzw3iepOO/WG++Zq0TXsTwYRrBCos7MQOYzUhEmVHDR38fp+Ki9kRL9Q==
-X-Received: by 2002:a81:7743:: with SMTP id s64mr17250968ywc.183.1570374709825;
-        Sun, 06 Oct 2019 08:11:49 -0700 (PDT)
+        bh=OQMsvrMqAN5cYMrSu91Pu66B0Sg+HB0aWPXdvZz2KcA=;
+        b=Ff4kUs3y1pcxtio3/ALKK6rWvyhPd9AZ/aeXeJsPtf735QftsjVV6KCOUt2gjy6ZPw
+         9cghqg5Btja/TRl3XSq+m9dfeB/Ai8sEe+XyfZMEXtP75HzWY7iULLNYyhhZR1pki1rh
+         jxZAWSZPcW5ywCR37UIrmCyqJGefTra6Ytjl7xvXLNMfHFA17cBonvltgd3UXkglyH66
+         5z+BhhylBnO+xTaRyrROMnHCf+8xXSf+mZmZCSwCfVx2T1OSYcpJD+xNofrHDc8NBaiu
+         +Zbwhrz13AwwQ2saaT2GOvKvKDd0D66zRunTg5HXGQsqrNVHh+nS/rnW3A3g+7h/jIQd
+         qUDg==
+X-Gm-Message-State: APjAAAXjZRi5+BNaGW72nfJy2HJ4YifdY+DfwH0Wz98bRQGT/iy+tw6G
+        KdNvTCIO9KLhKfl+F7S7xFY=
+X-Google-Smtp-Source: APXvYqxfMNyInhJxsFvLfYNQNh5jJ/+1V+3JSPgN+LhsqCDG6NcJucB+B2+9PrG0NdChfsJ9jp4jIA==
+X-Received: by 2002:a0d:df83:: with SMTP id i125mr15974641ywe.260.1570374711014;
+        Sun, 06 Oct 2019 08:11:51 -0700 (PDT)
 Received: from localhost.localdomain (072-189-084-142.res.spectrum.com. [72.189.84.142])
-        by smtp.gmail.com with ESMTPSA id e82sm2662434ywc.43.2019.10.06.08.11.48
+        by smtp.gmail.com with ESMTPSA id e82sm2662434ywc.43.2019.10.06.08.11.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Oct 2019 08:11:49 -0700 (PDT)
+        Sun, 06 Oct 2019 08:11:50 -0700 (PDT)
 From:   William Breathitt Gray <vilhelm.gray@gmail.com>
 To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com
 Cc:     akpm@linux-foundation.org, linux-gpio@vger.kernel.org,
@@ -53,10 +53,11 @@ Cc:     akpm@linux-foundation.org, linux-gpio@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         geert@linux-m68k.org, preid@electromag.com.au, lukas@wunner.de,
         sean.nyekjaer@prevas.dk, morten.tiljeset@prevas.dk,
-        William Breathitt Gray <vilhelm.gray@gmail.com>
-Subject: [PATCH v16 12/14] gpio: pisosr: Utilize the for_each_set_clump8 macro
-Date:   Sun,  6 Oct 2019 11:11:09 -0400
-Message-Id: <19e98b4a648026055d0642d238dbf5ed5a4b4117.1570374078.git.vilhelm.gray@gmail.com>
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mathias Duckeck <m.duckeck@kunbus.de>
+Subject: [PATCH v16 13/14] gpio: max3191x: Utilize the for_each_set_clump8 macro
+Date:   Sun,  6 Oct 2019 11:11:10 -0400
+Message-Id: <821e44729c9e561899b9c746b29bcdf56201aca9.1570374078.git.vilhelm.gray@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1570374078.git.vilhelm.gray@gmail.com>
 References: <cover.1570374078.git.vilhelm.gray@gmail.com>
@@ -70,40 +71,64 @@ X-Mailing-List: linux-arch@vger.kernel.org
 Replace verbose implementation in get_multiple callback with
 for_each_set_clump8 macro to simplify code and improve clarity.
 
-Cc: Morten Hein Tiljeset <morten.tiljeset@prevas.dk>
-Cc: Sean Nyekjaer <sean.nyekjaer@prevas.dk>
+Cc: Mathias Duckeck <m.duckeck@kunbus.de>
+Cc: Lukas Wunner <lukas@wunner.de>
 Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 ---
- drivers/gpio/gpio-pisosr.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/gpio/gpio-max3191x.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpio/gpio-pisosr.c b/drivers/gpio/gpio-pisosr.c
-index f809a5a8e9eb..9ab2c044ef52 100644
---- a/drivers/gpio/gpio-pisosr.c
-+++ b/drivers/gpio/gpio-pisosr.c
-@@ -96,16 +96,16 @@ static int pisosr_gpio_get_multiple(struct gpio_chip *chip,
- 				    unsigned long *mask, unsigned long *bits)
+diff --git a/drivers/gpio/gpio-max3191x.c b/drivers/gpio/gpio-max3191x.c
+index 4b4b2ceb82fc..0242c6187bf5 100644
+--- a/drivers/gpio/gpio-max3191x.c
++++ b/drivers/gpio/gpio-max3191x.c
+@@ -31,6 +31,7 @@
+  */
+ 
+ #include <linux/bitmap.h>
++#include <linux/bitops.h>
+ #include <linux/crc8.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/gpio/driver.h>
+@@ -232,16 +233,20 @@ static int max3191x_get_multiple(struct gpio_chip *gpio, unsigned long *mask,
+ 				 unsigned long *bits)
  {
- 	struct pisosr_gpio *gpio = gpiochip_get_data(chip);
--	unsigned int nbytes = DIV_ROUND_UP(chip->ngpio, 8);
--	unsigned int i, j;
-+	unsigned long offset;
+ 	struct max3191x_chip *max3191x = gpiochip_get_data(gpio);
+-	int ret, bit = 0, wordlen = max3191x_wordlen(max3191x);
++	const unsigned int wordlen = max3191x_wordlen(max3191x);
++	int ret;
++	unsigned long bit;
 +	unsigned long gpio_mask;
-+	unsigned long buffer_state;
++	unsigned long in;
  
- 	pisosr_gpio_refresh(gpio);
+ 	mutex_lock(&max3191x->lock);
+ 	ret = max3191x_readout_locked(max3191x);
+ 	if (ret)
+ 		goto out_unlock;
  
- 	bitmap_zero(bits, chip->ngpio);
--	for (i = 0; i < nbytes; i++) {
--		j = i / sizeof(unsigned long);
--		bits[j] |= ((unsigned long) gpio->buffer[i])
--			   << (8 * (i % sizeof(unsigned long)));
-+	for_each_set_clump8(offset, gpio_mask, mask, chip->ngpio) {
-+		buffer_state = gpio->buffer[offset / 8] & gpio_mask;
-+		bitmap_set_value8(bits, buffer_state, offset);
+-	while ((bit = find_next_bit(mask, gpio->ngpio, bit)) != gpio->ngpio) {
++	bitmap_zero(bits, gpio->ngpio);
++	for_each_set_clump8(bit, gpio_mask, mask, gpio->ngpio) {
+ 		unsigned int chipnum = bit / MAX3191X_NGPIO;
+-		unsigned long in, shift, index;
+ 
+ 		if (max3191x_chip_is_faulting(max3191x, chipnum)) {
+ 			ret = -EIO;
+@@ -249,12 +254,8 @@ static int max3191x_get_multiple(struct gpio_chip *gpio, unsigned long *mask,
+ 		}
+ 
+ 		in = ((u8 *)max3191x->xfer.rx_buf)[chipnum * wordlen];
+-		shift = round_down(bit % BITS_PER_LONG, MAX3191X_NGPIO);
+-		index = bit / BITS_PER_LONG;
+-		bits[index] &= ~(mask[index] & (0xff << shift));
+-		bits[index] |= mask[index] & (in << shift); /* copy bits */
+-
+-		bit = (chipnum + 1) * MAX3191X_NGPIO; /* go to next chip */
++		in &= gpio_mask;
++		bitmap_set_value8(bits, in, bit);
  	}
  
- 	return 0;
+ out_unlock:
 -- 
 2.23.0
 
