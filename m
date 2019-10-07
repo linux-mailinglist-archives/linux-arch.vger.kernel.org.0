@@ -2,95 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9111623C0F5
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Aug 2020 22:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5C723C24C
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 01:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728199AbgHDUsI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Aug 2020 16:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
+        id S1727070AbgHDXw3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Aug 2020 19:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728177AbgHDUsD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Aug 2020 16:48:03 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AF1C061756
-        for <linux-arch@vger.kernel.org>; Tue,  4 Aug 2020 13:48:02 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id t6so29644335pgv.5
-        for <linux-arch@vger.kernel.org>; Tue, 04 Aug 2020 13:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=e9HT6AS5pNuhm0IIEReS4jZdj/HAbOxw73GUYA4oHss=;
-        b=WKeGul3KEmcWpYGkwOPuVNB4KHstNGi/6UCVOenRedf0cDpH6p3N89em9zoCkJX65A
-         YwY93C9vP5AeXLg6dD+Df8uE9y2uyVPzYuwA+jYo6+NU0T72fcbt0V/T0asicft1AvSa
-         99WMuzMxTO67XWoZMW2zQAp8oWB5obGAFel9NIZ1qWvVsujj/eVRbXW05xPYoMBZdRVJ
-         cKBW1gC6e9Zl09JEkGwle03eAHNJksK27r3Zb1TfSbk9bwX3QL2530KKioWMzCnfhrjh
-         6hNPdTCQEp+UpMnqlccneAqNP9ehdDxEQeDqaV0cQGF5OWhztg1MongG3VrIlfKmdoGk
-         yNlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=e9HT6AS5pNuhm0IIEReS4jZdj/HAbOxw73GUYA4oHss=;
-        b=jGyIsnOjS+xNQtZo+ErcTqLurljqIZtGOV/EdP7v1FjFdL+rzSmYB8EdTM+ORwn0iX
-         wxq6fAveh/dtejfaCB4zBEyafstmdtEzcIHJOueeJeXtD7ABfuUIlLeEQk5LDidd45qH
-         3KemoXKkuaHriMWPvfLUFTs1idLvPMgmTQ76Yo41jdqyLOVX9otEODZuZ/AzUK0Dy/ke
-         78/mHlIfkdasEELxsAgMSNRhO/UwYw16LBabAF54FOir3jfw+0zFtdG+rWqhvG2yAkae
-         oxuRYK77+g3a9K5MvFhZ3X6BW1ZETb/OoWPOfjfewoOIZ7jECq2HvRmC59+dkfy/V9Ne
-         qaZw==
-X-Gm-Message-State: AOAM532JP97iy1yZZtzM+k/Zgq1Y8LwDzMj8/b9k0C3qYhePM/6jnsyv
-        1SSmiK2yZAVAK21QlLwazR0WWcv3fgp5Ws+DKHqq+Q==
-X-Google-Smtp-Source: ABdhPJwvVPf58Z+s5F3/exJw2LvrTU9deyzhRpg78+XvTlgNql9h3A7N5TCVgZfFd9nf9/1cES1eS4gEGASc8UKOHawR4Q==
-X-Received: by 2002:a17:902:9682:: with SMTP id n2mr87047plp.11.1596574081620;
- Tue, 04 Aug 2020 13:48:01 -0700 (PDT)
-Date:   Tue,  4 Aug 2020 13:47:45 -0700
-In-Reply-To: <20200804204745.987648-1-brendanhiggins@google.com>
-Message-Id: <20200804204745.987648-6-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20200804204745.987648-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.28.0.163.g6104cc2f0b6-goog
-Subject: [PATCH v6 5/5] Documentation: kunit: add a brief blurb about kunit_test_suite
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        frowand.list@gmail.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S1726011AbgHDXw2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Aug 2020 19:52:28 -0400
+X-Greylist: delayed 86248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Aug 2020 16:52:27 PDT
+Received: from dockerbox (unknown [IPv6:2001:4800:7817:101:be76:4eff:fe04:a215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC72FC061756;
+        Tue,  4 Aug 2020 16:52:27 -0700 (PDT)
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by dockerbox (Postfix) with SMTP id 6F4DA5EC5A;
+        Mon,  7 Oct 2019 19:30:12 -0500 (CDT)
+Received: from [32.188.209.113] by 127.0.0.1 with SMTP; Mon, 07 Oct 2019 18:22:17 -0600
+Message-ID: <80v-q$4-o4pqyq0@6eeih174.p55>
+From:   "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+Reply-To: "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+To:     linkos@binet.lv
+Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
+Date:   Mon, 07 Oct 19 18:22:17 GMT
+X-Mailer: Microsoft Outlook Express 5.00.2615.200
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+        boundary="_.A4476ECDD73A3"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add a brief blurb saying how and when the kunit_test_suite() macro
-works to the usage documentation.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- Documentation/dev-tools/kunit/usage.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+--_.A4476ECDD73A3
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 3c3fe8b5feccf..961d3ea3ca19a 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -211,6 +211,11 @@ KUnit test framework.
- .. note::
-    A test case will only be run if it is associated with a test suite.
- 
-+``kunit_test_suite(...)`` is a macro which tells the linker to put the specified
-+test suite in a special linker section so that it can be run by KUnit either
-+after late_init, or when the test module is loaded (depending on whether the
-+test was built in or not).
-+
- For more information on these types of things see the :doc:`api/test`.
- 
- Isolating Behavior
--- 
-2.28.0.163.g6104cc2f0b6-goog
+Greetings
+
+My name is Barrister Hans Erich.
+
+I have a client who is interested to invest in your country, she is a well=
+ known politician in her country and deserve a lucrative investment partne=
+rship with you outside her country without any delay   Please can you mana=
+ge such investment please Kindly reply for further details.
+
+Your full names --------
+
+
+Your urgent response will be appreciated
+
+Thank you and God bless you.
+
+Barrister Hans Erich
+
+Yours sincerely,
+Barrister Hans Erich
+CONTACT: hanserich9helmut@gmail.com
+
+--_.A4476ECDD73A3--
 
