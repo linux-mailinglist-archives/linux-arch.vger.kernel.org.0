@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23532D1535
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2019 19:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C3DD151B
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2019 19:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731936AbfJIRP0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Oct 2019 13:15:26 -0400
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:33639 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731930AbfJIRPZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Oct 2019 13:15:25 -0400
-Received: by mail-yw1-f68.google.com with SMTP id w140so1101136ywd.0;
-        Wed, 09 Oct 2019 10:15:25 -0700 (PDT)
+        id S1731952AbfJIRP3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Oct 2019 13:15:29 -0400
+Received: from mail-yb1-f194.google.com ([209.85.219.194]:41349 "EHLO
+        mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731946AbfJIRP2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Oct 2019 13:15:28 -0400
+Received: by mail-yb1-f194.google.com with SMTP id 206so980028ybc.8;
+        Wed, 09 Oct 2019 10:15:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=K+mqc0t3Nlu8bab/TVJ1eaLU6XWlAP9g+g7Mhy2/IA0=;
-        b=D2pZaE1VGzB5l9VgSzPx9STZVU1McDSCwlcpRgp3qm5FW+WOH4P1z174i4RD63xQqT
-         Nrp0nyVThjd4ngFNUwQeHfMOid1qcTNLb0SCdYrM30mNHdACuIFhBOx1X+AI1k6iqyN9
-         /o6OuwQdsUEAe8TSlXxXPW7S7R8E8wyRxnGyPFaKnwD6A3ZfMY9Pff99hOL5sgAfVrXK
-         4XBHDMg/x1gqUL81Uh6DYHyz/u1YXKuOK4zKVe1oakRl9vzfwmpww9i7PGtHiU/uEdtH
-         UkNPGwT4/O51l+XsJJH+i5mbjC5xFyrahCFC7MyKHHUC+oEP1Nt6ereO234H6095W8pc
-         d6ag==
+        bh=sDpmcrsOD06XGrRt1a/jJQziXNR25OqwVQScSY5C/BU=;
+        b=WL30k9ixHGGt8In7/erRM4QBReuvVT1dbjM4Z0OyJzYaLZ+yVohVHy/wwyVdiVrTzd
+         GYBbyy6Reb0J1J9uAB2F2Zz5kopZsJyCPzW9R0TH4I0XEjXjmBOI4Uj4DhBhYmf9tRoU
+         zOd9Rd1OS68jPLJkd+CnTEyokvNBvhOk1y1hFmbQc8gRO2gIJGuFBb6ExmD+gLfofmAw
+         y0Rb1W/AYTay2Qkrc2rMknbwAWhg/IO6bw5zW6mrmdCy6cyfqlr3utyBexyGA3kNsMAA
+         o3OiFFAL+6YXoBquyj7iomzrK7T0tH9mgamUAxHb0fvisZcWwfqh8bmI+lgXPFyVmzZS
+         h+lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=K+mqc0t3Nlu8bab/TVJ1eaLU6XWlAP9g+g7Mhy2/IA0=;
-        b=YjfsIW46kPbU9wpaOZ9Fi6qhyGWx1Z3Dlh0F3SVUDAmqbOSm+8biNuQZ5LLoTv14HF
-         OPyvu06NAI3ooJDdDtGBlV05Vvl9+4IDfKk9b5PhoKfvlRz8vKgOyFo/NlifqJmTOfFT
-         nV+2cGwDssI+sahRcj8A/UaXAA+ykv7AIQTzQELH8+9xmE8uLmzMqOsTy6ZL+vlFbKPv
-         ADtNdvaXTtURQOSAcgfrOB8i/EcTf07glXq4/s+eRob4lUmu8TcecCB1ebji/ksi7UmI
-         ShVBHLpoICYaNtn11UYcLuw2tagAGhreqzjbFPN+O6+b+pzwL/KAHlOyfKgvy5QT79tA
-         VlFA==
-X-Gm-Message-State: APjAAAU8DXufqHsD99DU/9XduS6JtH7mO8FnVnmkAQ2sTILb0UWwAehm
-        i5dzoQk/HcdKZtKxTJAmKOYXywX6
-X-Google-Smtp-Source: APXvYqz/X0PGKeHU2nq7gViF+sE/NM3LPolGKfluPJxzI0Xk2+5//+Ew8S70OC9anjKIk7we3QGR8g==
-X-Received: by 2002:a81:6302:: with SMTP id x2mr3726622ywb.123.1570641324622;
-        Wed, 09 Oct 2019 10:15:24 -0700 (PDT)
+        bh=sDpmcrsOD06XGrRt1a/jJQziXNR25OqwVQScSY5C/BU=;
+        b=Z2dJUh50zMkhO4hufBbRto8yIYVjoKbZsDiTjI4wkTYg2Xm2MPViLTRrh+z51dCUKj
+         Uf9lT89FQi3yyLJeWjIaGrZpLYYCL7nTYhs8LpW7nichfEhrfxBSfIqq5/4loeD7ytZy
+         2AEptqyuKCJZfaSgHvvO2LHmKNvCLj7Zmk8huL/Vj1shDK5iABk+aEOkEIXToDJsoArU
+         xek4JqAcoxc6MtDiFzUdBkrCdcK7Ib7iT8p3q8bDjSU3vMcFImzGq1OyNNq2RenefUFQ
+         IoU4xjchb6SHA316SxoNpjWxVsqm0yY5KkBVZJEYzr5G1CYyBlZ7qveurqDjI8Sk+GUC
+         EbXA==
+X-Gm-Message-State: APjAAAVijyDs/otYDb3fcDkWNy/J0AXu96YXb98P87AZnuMktC+cQDq6
+        wmfi3SDkU1RwApineRHfk9M=
+X-Google-Smtp-Source: APXvYqxaUc72YqJJOgvCdh9BAysNa4HSdJyOk3js9wuxG2zail3AaYZG6cmfZj4x10MtXUR1wfm9OQ==
+X-Received: by 2002:a25:30d5:: with SMTP id w204mr2813662ybw.382.1570641326245;
+        Wed, 09 Oct 2019 10:15:26 -0700 (PDT)
 Received: from localhost.localdomain (072-189-084-142.res.spectrum.com. [72.189.84.142])
-        by smtp.gmail.com with ESMTPSA id r63sm743292ywg.36.2019.10.09.10.15.23
+        by smtp.gmail.com with ESMTPSA id r63sm743292ywg.36.2019.10.09.10.15.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2019 10:15:24 -0700 (PDT)
+        Wed, 09 Oct 2019 10:15:25 -0700 (PDT)
 From:   William Breathitt Gray <vilhelm.gray@gmail.com>
 To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
         akpm@linux-foundation.org
@@ -53,9 +53,9 @@ Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         geert@linux-m68k.org, preid@electromag.com.au, lukas@wunner.de,
         William Breathitt Gray <vilhelm.gray@gmail.com>
-Subject: [PATCH v18 08/14] gpio: pcie-idio-24: Utilize for_each_set_clump8 macro
-Date:   Wed,  9 Oct 2019 13:14:44 -0400
-Message-Id: <d5d22fa9809dcf8330f4381dbe7e7ca37990e79f.1570641097.git.vilhelm.gray@gmail.com>
+Subject: [PATCH v18 09/14] gpio: uniphier: Utilize for_each_set_clump8 macro
+Date:   Wed,  9 Oct 2019 13:14:45 -0400
+Message-Id: <5b24887e97f3093e4832d7c50a1093f537e91ab4.1570641097.git.vilhelm.gray@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1570641097.git.vilhelm.gray@gmail.com>
 References: <cover.1570641097.git.vilhelm.gray@gmail.com>
@@ -66,172 +66,50 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Replace verbose implementation in get_multiple/set_multiple callbacks
-with for_each_set_clump8 macro to simplify code and improve clarity.
+Replace verbose implementation in set_multiple callback with
+for_each_set_clump8 macro to simplify code and improve clarity. An
+improvement in this case is that banks that are not masked will now be
+skipped.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
 Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 ---
- drivers/gpio/gpio-pcie-idio-24.c | 109 ++++++++++++-------------------
- 1 file changed, 40 insertions(+), 69 deletions(-)
+ drivers/gpio/gpio-uniphier.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpio/gpio-pcie-idio-24.c b/drivers/gpio/gpio-pcie-idio-24.c
-index 52f1647a46fd..924ec916b358 100644
---- a/drivers/gpio/gpio-pcie-idio-24.c
-+++ b/drivers/gpio/gpio-pcie-idio-24.c
-@@ -198,52 +198,34 @@ static int idio_24_gpio_get_multiple(struct gpio_chip *chip,
- 	unsigned long *mask, unsigned long *bits)
+diff --git a/drivers/gpio/gpio-uniphier.c b/drivers/gpio/gpio-uniphier.c
+index 93cdcc41e9fb..3db9c41b7954 100644
+--- a/drivers/gpio/gpio-uniphier.c
++++ b/drivers/gpio/gpio-uniphier.c
+@@ -15,9 +15,6 @@
+ #include <linux/spinlock.h>
+ #include <dt-bindings/gpio/uniphier-gpio.h>
+ 
+-#define UNIPHIER_GPIO_BANK_MASK		\
+-				GENMASK((UNIPHIER_GPIO_LINES_PER_BANK) - 1, 0)
+-
+ #define UNIPHIER_GPIO_IRQ_MAX_NUM	24
+ 
+ #define UNIPHIER_GPIO_PORT_DATA		0x0	/* data */
+@@ -147,15 +144,11 @@ static void uniphier_gpio_set(struct gpio_chip *chip,
+ static void uniphier_gpio_set_multiple(struct gpio_chip *chip,
+ 				       unsigned long *mask, unsigned long *bits)
  {
- 	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
--	size_t i;
--	const unsigned int gpio_reg_size = 8;
--	unsigned int bits_offset;
--	size_t word_index;
--	unsigned int word_offset;
--	unsigned long word_mask;
--	const unsigned long port_mask = GENMASK(gpio_reg_size - 1, 0);
--	unsigned long port_state;
-+	unsigned long offset;
-+	unsigned long gpio_mask;
- 	void __iomem *ports[] = {
- 		&idio24gpio->reg->out0_7, &idio24gpio->reg->out8_15,
- 		&idio24gpio->reg->out16_23, &idio24gpio->reg->in0_7,
- 		&idio24gpio->reg->in8_15, &idio24gpio->reg->in16_23,
- 	};
-+	size_t index;
-+	unsigned long port_state;
- 	const unsigned long out_mode_mask = BIT(1);
+-	unsigned int bank, shift, bank_mask, bank_bits;
+-	int i;
++	unsigned long i, bank, bank_mask, bank_bits;
  
- 	/* clear bits array to a clean slate */
- 	bitmap_zero(bits, chip->ngpio);
+-	for (i = 0; i < chip->ngpio; i += UNIPHIER_GPIO_LINES_PER_BANK) {
++	for_each_set_clump8(i, bank_mask, mask, chip->ngpio) {
+ 		bank = i / UNIPHIER_GPIO_LINES_PER_BANK;
+-		shift = i % BITS_PER_LONG;
+-		bank_mask = (mask[BIT_WORD(i)] >> shift) &
+-						UNIPHIER_GPIO_BANK_MASK;
+-		bank_bits = bits[BIT_WORD(i)] >> shift;
++		bank_bits = bitmap_get_value8(bits, i);
  
--	/* get bits are evaluated a gpio port register at a time */
--	for (i = 0; i < ARRAY_SIZE(ports) + 1; i++) {
--		/* gpio offset in bits array */
--		bits_offset = i * gpio_reg_size;
--
--		/* word index for bits array */
--		word_index = BIT_WORD(bits_offset);
--
--		/* gpio offset within current word of bits array */
--		word_offset = bits_offset % BITS_PER_LONG;
--
--		/* mask of get bits for current gpio within current word */
--		word_mask = mask[word_index] & (port_mask << word_offset);
--		if (!word_mask) {
--			/* no get bits in this port so skip to next one */
--			continue;
--		}
-+	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
-+		index = offset / 8;
- 
- 		/* read bits from current gpio port (port 6 is TTL GPIO) */
--		if (i < 6)
--			port_state = ioread8(ports[i]);
-+		if (index < 6)
-+			port_state = ioread8(ports[index]);
- 		else if (ioread8(&idio24gpio->reg->ctl) & out_mode_mask)
- 			port_state = ioread8(&idio24gpio->reg->ttl_out0_7);
- 		else
- 			port_state = ioread8(&idio24gpio->reg->ttl_in0_7);
- 
--		/* store acquired bits at respective bits array offset */
--		bits[word_index] |= (port_state << word_offset) & word_mask;
-+		port_state &= gpio_mask;
-+
-+		bitmap_set_value8(bits, port_state, offset);
- 	}
- 
- 	return 0;
-@@ -294,59 +276,48 @@ static void idio_24_gpio_set_multiple(struct gpio_chip *chip,
- 	unsigned long *mask, unsigned long *bits)
- {
- 	struct idio_24_gpio *const idio24gpio = gpiochip_get_data(chip);
--	size_t i;
--	unsigned long bits_offset;
-+	unsigned long offset;
- 	unsigned long gpio_mask;
--	const unsigned int gpio_reg_size = 8;
--	const unsigned long port_mask = GENMASK(gpio_reg_size, 0);
--	unsigned long flags;
--	unsigned int out_state;
- 	void __iomem *ports[] = {
- 		&idio24gpio->reg->out0_7, &idio24gpio->reg->out8_15,
- 		&idio24gpio->reg->out16_23
- 	};
-+	size_t index;
-+	unsigned long bitmask;
-+	unsigned long flags;
-+	unsigned long out_state;
- 	const unsigned long out_mode_mask = BIT(1);
--	const unsigned int ttl_offset = 48;
--	const size_t ttl_i = BIT_WORD(ttl_offset);
--	const unsigned int word_offset = ttl_offset % BITS_PER_LONG;
--	const unsigned long ttl_mask = (mask[ttl_i] >> word_offset) & port_mask;
--	const unsigned long ttl_bits = (bits[ttl_i] >> word_offset) & ttl_mask;
--
--	/* set bits are processed a gpio port register at a time */
--	for (i = 0; i < ARRAY_SIZE(ports); i++) {
--		/* gpio offset in bits array */
--		bits_offset = i * gpio_reg_size;
--
--		/* check if any set bits for current port */
--		gpio_mask = (*mask >> bits_offset) & port_mask;
--		if (!gpio_mask) {
--			/* no set bits for this port so move on to next port */
--			continue;
--		}
- 
--		raw_spin_lock_irqsave(&idio24gpio->lock, flags);
-+	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
-+		index = offset / 8;
- 
--		/* process output lines */
--		out_state = ioread8(ports[i]) & ~gpio_mask;
--		out_state |= (*bits >> bits_offset) & gpio_mask;
--		iowrite8(out_state, ports[i]);
-+		bitmask = bitmap_get_value8(bits, offset) & gpio_mask;
- 
--		raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
--	}
-+		raw_spin_lock_irqsave(&idio24gpio->lock, flags);
- 
--	/* check if setting TTL lines and if they are in output mode */
--	if (!ttl_mask || !(ioread8(&idio24gpio->reg->ctl) & out_mode_mask))
--		return;
-+		/* read bits from current gpio port (port 6 is TTL GPIO) */
-+		if (index < 6) {
-+			out_state = ioread8(ports[index]);
-+		} else if (ioread8(&idio24gpio->reg->ctl) & out_mode_mask) {
-+			out_state = ioread8(&idio24gpio->reg->ttl_out0_7);
-+		} else {
-+			/* skip TTL GPIO if set for input */
-+			raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
-+			continue;
-+		}
- 
--	/* handle TTL output */
--	raw_spin_lock_irqsave(&idio24gpio->lock, flags);
-+		/* set requested bit states */
-+		out_state &= ~gpio_mask;
-+		out_state |= bitmask;
- 
--	/* process output lines */
--	out_state = ioread8(&idio24gpio->reg->ttl_out0_7) & ~ttl_mask;
--	out_state |= ttl_bits;
--	iowrite8(out_state, &idio24gpio->reg->ttl_out0_7);
-+		/* write bits for current gpio port (port 6 is TTL GPIO) */
-+		if (index < 6)
-+			iowrite8(out_state, ports[index]);
-+		else
-+			iowrite8(out_state, &idio24gpio->reg->ttl_out0_7);
- 
--	raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
-+		raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
-+	}
- }
- 
- static void idio_24_irq_ack(struct irq_data *data)
+ 		uniphier_gpio_bank_write(chip, bank, UNIPHIER_GPIO_PORT_DATA,
+ 					 bank_mask, bank_bits);
 -- 
 2.23.0
 
