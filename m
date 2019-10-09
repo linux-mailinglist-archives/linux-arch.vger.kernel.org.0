@@ -2,97 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B41DD0B13
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2019 11:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8406ED0F50
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2019 14:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730535AbfJIJ0O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Oct 2019 05:26:14 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:36506 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730363AbfJIJ0N (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Oct 2019 05:26:13 -0400
-Received: by mail-lf1-f67.google.com with SMTP id x80so1107961lff.3
-        for <linux-arch@vger.kernel.org>; Wed, 09 Oct 2019 02:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SD+HI02CKBBsUnBjBS8AONRJ3UqoWuFlv1/fGBB0L+4=;
-        b=Yp/ezDTokXabk02kHZS4Q9Zcrip4udpQ7qThrEB8fA+oF5/YBaD2Q+THIO35uJ3kfM
-         ijAdu971Sc0u1iXVcq8FmBzJx92WFKIL13rYfNLHAFEcAcABM/XNEWuxdcFUR630+oKt
-         EhOBtNE8brRBt6vUfGQkuPeYH0wO5CD9zsgK8XTxtLlluYKde8xrN7DJnQGKvtMGqrQb
-         301v9yPx51H2ueQoUMiDBqmPbWS6qbm39fIrpFjEigHHHzEF4FAtjiFlUyKtyHYy4pFZ
-         eyTC9foJ37+QThE5FPa4048amnHh8m0WuErFx7J6r28IzNf5kcGpC7qLDNVSqenrhhXu
-         UeXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SD+HI02CKBBsUnBjBS8AONRJ3UqoWuFlv1/fGBB0L+4=;
-        b=W5UwqASZG/Bnpj9Pj9HWK6UTo1GZkFRkJoh1X5h/zXtu59wvBGY852V6L/xr0IrKVA
-         gVJk0qRYK+lFMOtVVKEUy4TJYKgSM+FAipWyJnhK3cbsIuwpfQKUxW9B+b4Um9Emt/BO
-         gPyiyyWsKoVFWE1vpr910prqwNi9MPDXlwUusZGhggfOkbft42zG7CQ0myJOwsENnVJg
-         sh0JWZeZVM7LwJP1/VEDcvKdGnW2Ulk+k3umbaE0Tr894niCLr3SdSIufXnKqFxWmdM8
-         lFlT/Z4oE/2iw8lyZg2i4ziPyTYFKwp0Ut9f3IPqKk2CmRG5Ad0TSZcOt2xaZJGu7K1a
-         2bAQ==
-X-Gm-Message-State: APjAAAV0tThry/L61Z4qI4Y4+csWh27gDjw8RfputOz/FzW+DyxHtTi1
-        CA0hCsDV6XAMkgpnfqCFnoXEVwA6M9ZgKHqlJ3PWKg==
-X-Google-Smtp-Source: APXvYqzFG7lDdH9uA0MTciR+6xdQMm6jmgxkQ3KIBmF6lJi9ASjDpky3Ev/tMd6UZRmclpoRgOMzubjoi2Xc5yZYX5w=
-X-Received: by 2002:a19:c505:: with SMTP id w5mr1439629lfe.115.1570613170790;
- Wed, 09 Oct 2019 02:26:10 -0700 (PDT)
+        id S1731049AbfJIM7S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Oct 2019 08:59:18 -0400
+Received: from foss.arm.com ([217.140.110.172]:33838 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730490AbfJIM7S (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Oct 2019 08:59:18 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E014142F;
+        Wed,  9 Oct 2019 05:59:17 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CC7F3F703;
+        Wed,  9 Oct 2019 05:59:15 -0700 (PDT)
+Date:   Wed, 9 Oct 2019 13:59:13 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Brown <mark.brown@arm.com>
+Subject: Re: [RFC PATCH v2 2/2] ELF: Add ELF program property parsing support
+Message-ID: <20191009125913.GE27757@arm.com>
+References: <1566581020-9953-1-git-send-email-Dave.Martin@arm.com>
+ <1566581020-9953-3-git-send-email-Dave.Martin@arm.com>
+ <201908292224.007EB4D5@keescook>
+ <20190830083415.GI27757@arm.com>
 MIME-Version: 1.0
-References: <cover.1570299719.git.vilhelm.gray@gmail.com> <be63fa49f036b9168f223152648307a63056f4ee.1570299719.git.vilhelm.gray@gmail.com>
-In-Reply-To: <be63fa49f036b9168f223152648307a63056f4ee.1570299719.git.vilhelm.gray@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 9 Oct 2019 11:25:59 +0200
-Message-ID: <CACRpkdbEszHr3zzVBTinVFQXU+sjOu9YbWC-554+7PYgupYJBA@mail.gmail.com>
-Subject: Re: [PATCH v15 01/14] bitops: Introduce the for_each_set_clump8 macro
-To:     William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Phil Reid <preid@electromag.com.au>,
-        Lukas Wunner <lukas@wunner.de>,
-        Sean Nyekjaer <sean.nyekjaer@prevas.dk>,
-        morten.tiljeset@prevas.dk,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190830083415.GI27757@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Oct 5, 2019 at 8:37 PM William Breathitt Gray
-<vilhelm.gray@gmail.com> wrote:
+On Fri, Aug 30, 2019 at 09:34:17AM +0100, Dave Martin wrote:
+> On Fri, Aug 30, 2019 at 06:37:45AM +0100, Kees Cook wrote:
+> > On Fri, Aug 23, 2019 at 06:23:40PM +0100, Dave Martin wrote:
+> > > ELF program properties will needed for detecting whether to enable
+> > > optional architecture or ABI features for a new ELF process.
+> > > 
+> > > For now, there are no generic properties that we care about, so do
+> > > nothing unless CONFIG_ARCH_USE_GNU_PROPERTY=y.
+> > > 
+> > > Otherwise, the presence of properties using the PT_PROGRAM_PROPERTY
+> > > phdrs entry (if any), and notify each property to the arch code.
+> > > 
+> > > For now, the added code is not used.
+> > > 
+> > > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> > 
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> 
+> Thanks for the review.
+> 
+> Do you have any thoughts on Yu-Cheng Yu's comments?  It would be nice to
+> early-terminate the scan if we can, but my feeling so far was that the
+> scan is cheap, the number of properties is unlikely to be more than a
+> smallish integer, and the code separation benefits of just calling the
+> arch code for every property probably likely outweigh the costs of
+> having to iterate over every property.  We could always optimise it
+> later if necessary.
+> 
+> I need to double-check that there's no way we can get stuck in an
+> infinite loop with the current code, though I've not seen it in my
+> testing.  I should throw some malformed notes at it though.
+> 
+> > Note below...
+> > 
+> > > [...]
+> > > +static int parse_elf_property(const char *data, size_t *off, size_t datasz,
+> > > +			      struct arch_elf_state *arch,
+> > > +			      bool have_prev_type, u32 *prev_type)
+> > > +{
+> > > +	size_t size, step;
+> > > +	const struct gnu_property *pr;
+> > > +	int ret;
+> > > +
+> > > +	if (*off == datasz)
+> > > +		return -ENOENT;
+> > > +
+> > > +	if (WARN_ON(*off > datasz || *off % elf_gnu_property_align))
+> > > +		return -EIO;
+> > > +
+> > > +	size = datasz - *off;
+> > > +	if (size < sizeof(*pr))
+> > > +		return -EIO;
+> > > +
+> > > +	pr = (const struct gnu_property *)(data + *off);
+> > > +	if (pr->pr_datasz > size - sizeof(*pr))
+> > > +		return -EIO;
+> > > +
+> > > +	step = round_up(sizeof(*pr) + pr->pr_datasz, elf_gnu_property_align);
+> > > +	if (step > size)
+> > > +		return -EIO;
+> > > +
+> > > +	/* Properties are supposed to be unique and sorted on pr_type: */
+> > > +	if (have_prev_type && pr->pr_type <= *prev_type)
+> > > +		return -EIO;
+> > > +	*prev_type = pr->pr_type;
+> > > +
+> > > +	ret = arch_parse_elf_property(pr->pr_type,
+> > > +				      data + *off + sizeof(*pr),
+> > > +				      pr->pr_datasz, ELF_COMPAT, arch);
+> > 
+> > I find it slightly hard to read the "cursor" motion in this parse. It
+> > feels strange, for example, to refer twice to "data + *off" with the
+> > second including consumed *pr size. Everything is fine AFAICT in the math,
+> > though, and I haven't been able to construct a convincingly "cleaner"
+> > version. Maybe:
+> > 
+> > 	data += *off;
+> > 	pr = (const struct gnu_property *)data;
+> > 	data += sizeof(*pr);
+> > 	...
+> > 	ret = arch_parse_elf_property(pr->pr_type, data,
+> > 				      pr->pr_datasz, ELF_COMPAT, arch);
+> 
+> Fair point.  The cursor is really *off, which I suppose I could update
+> as we go through this function, or cache in a local variable and assign
+> on the way out.
+> 
+> > But that feels disjoint from the "step" calculation, so... I think what
+> > you have is fine. :)
+> 
+> It's good to be as clear as possible about exactly how far we have
+> parsed, so I'll see if I can improve this when I repost.
+> 
+> 
+> Do you have any objection to merging patch 1 with this one?  For
+> upstreaming purposes, it seems overkill for that to be a separate patch.
+> 
+> I may also convert elf_gnu_property_align to upper case, since unlike
+> the other related definitions this one isn't trying to look like a
+> struct tag.
+> 
+> Do you have any opinion on the WARN_ON()s?  They should be un-hittable,
+> so they're documenting assumptions rather than protecting against
+> anything real.  Maybe I should replace them with comments.
 
-> This macro iterates for each 8-bit group of bits (clump) with set bits,
-> within a bitmap memory region. For each iteration, "start" is set to the
-> bit offset of the found clump, while the respective clump value is
-> stored to the location pointed by "clump". Additionally, the
-> bitmap_get_value8 and bitmap_set_value8 functions are introduced to
-> respectively get and set an 8-bit value in a bitmap memory region.
->
-> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
+FYI, I'm going to be inactive for a while, so I'm not going to be able
+to push this patch further.
 
-As usual I am happy to merge all this but I would need
-Andrew Morton's ACK, as I don't feel like a maintainer for
-the bitops.
+Mark Brown will be picking up the arm64 BTI series, so it will probably
+make sense if he pulls it into that series.
 
-Yours,
-Linus Walleij
+Any thoughts?
+
+Cheers
+---Dave
