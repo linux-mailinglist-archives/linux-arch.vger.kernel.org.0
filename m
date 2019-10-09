@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54598D1279
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2019 17:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED527D12BF
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2019 17:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731416AbfJIP1g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Oct 2019 11:27:36 -0400
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:34387 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731328AbfJIP1g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Oct 2019 11:27:36 -0400
-Received: by mail-yw1-f65.google.com with SMTP id d192so967329ywa.1;
-        Wed, 09 Oct 2019 08:27:35 -0700 (PDT)
+        id S1731505AbfJIP1i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Oct 2019 11:27:38 -0400
+Received: from mail-yb1-f193.google.com ([209.85.219.193]:42695 "EHLO
+        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731710AbfJIP1i (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Oct 2019 11:27:38 -0400
+Received: by mail-yb1-f193.google.com with SMTP id 4so855928ybq.9;
+        Wed, 09 Oct 2019 08:27:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BimiSAhIyu/wlnbGZzM5zv98VeK3KGxYKaa4VCWD3vc=;
-        b=XhKVN2b3nsHyExn5g3F5i4nQkLizp/ml0iJ6nyIDo8RaY41ylVOc0vRug0oE+UZAge
-         i7aiVMFgkmpOpjS+c3EgFzlyN1cpWIrthK7jSW3uToSXKlX6Jhrxju0R21SjsGZRuyKp
-         Ga2EQkW+onKg8Z5LYWuREGeksADsfpjrH1z7JxA9BcGLXN0APRwI6mj/NaV9cMwQ5/s7
-         vLz1sfqnQZKxpvaGz8S5aITVxusnXfh4S1dYizvCFDbrftaqF0O+58Ig46PBWrt4xcrC
-         9uobcnenyu1GareDW34LUr2PUsF4xO+ILnWyjuSck5fNf8YWAoNZs6EPQI4kSCK72LVQ
-         1Gmg==
+        bh=OcaclkK5KBG5URnwd16/HyXejmEo8G/SfzG2Ua/RFEQ=;
+        b=L4dyAhjr5J44xTzE61Jg7CEpLwRrvLe6em/Nt4Dg5RXr55J4aNEO0dlShKxygs6CoR
+         K/w0kMpVL4sm+XViuA03XeMbmagiwiey/PGt5TtKPAqBZZNfOSu1C7cUcBgo+O0fWYla
+         5KLayKinMazkMLSgxRH9HxqLPU7UgVBdrKQVXA+Q7rBjA9/Ow9U5stJ9B90Ki7UYDS9z
+         VpM3Ak6OiDVZoo/Wj6XuznX0ElRlae1vGvb+bZwhNZ+oF/f6RCsz9iIkQVJE8VVvI2LT
+         +jTliIeplWpdaDSwRzB6vT1DZXswqAbiAv+mjFkY1ZFmS/3uGSXpF2cuOrN2aIBV28s7
+         ZDBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BimiSAhIyu/wlnbGZzM5zv98VeK3KGxYKaa4VCWD3vc=;
-        b=IcsVKC1gDfXwBrSk+wcQnLC5qdrAl2jPn2KkAZB1txZOGGxYGjjscvgrAilA+U9Tto
-         Ne08m6OqxkfwnmUDVZbRum/FgyJW5LnDUxeNZLDzqUVMB/wBx9xveVRNZo6nZfTSJshE
-         57KLSg/jMzv2ydeTbOGoNVrTO2e5ymX9OpSVK3azmBHS3nROub1EpFkb15JrFEWlOSPm
-         V3IgxkOmXUblAMfGqvOrIaL7elqxBKDU6ZlEFtoCipR6D7JZgapJh2TG5pHYAl1Cgy+A
-         oOsQtFWqpGnZxwP9Sb0VmvXpMTPtAZHv5VMIe9IS0n52EQ+hvKeYM4PGyQVQQ4gXxBhH
-         UVdg==
-X-Gm-Message-State: APjAAAUhNuRTnM4AptJ+9hsjeEl2tr604oZLmAOozHDLyZZpqU2VEdAP
-        UqsK6mDRKvpFtxIz0G9N9GQ=
-X-Google-Smtp-Source: APXvYqwFyDfey8Cksi+zaDC4bwYRec4uXM/PDJXCjftXpBCynaS44f28FBJDexcQJTmMprUYCuEbow==
-X-Received: by 2002:a81:a303:: with SMTP id a3mr3065880ywh.133.1570634854880;
-        Wed, 09 Oct 2019 08:27:34 -0700 (PDT)
+        bh=OcaclkK5KBG5URnwd16/HyXejmEo8G/SfzG2Ua/RFEQ=;
+        b=BKGcHa0YHtqcaiqGgv5ujPKlIOhoa5bvKIm2h6yZxwycy8+ShnH2PMDVF1t1HjncKO
+         Zy1S8u1/u7o2oeBIqSibp1kJsQOgbRZXRZn3QboC2d7b29gnrbDUFvBTgvzh1F1W0DDP
+         /pyiZEJQU+nLlevn/7Xj8vyinMXSVqtxrLnd3jq77jnvDjHBARYB0l+LbHFQnU4FiDbq
+         6+EgTJ025hICYVnp5ggh2f2ydKjeE4hd1bO8oewp7QFm9xzxs27pAG/MO3CiqLfrJ4nA
+         PsbALjLS4ueltS4CPy4RJ9w+7uI5B//SwlcO/KYK0QZ2EpXHsekIj02ZLLTD3LjeslEV
+         qQCA==
+X-Gm-Message-State: APjAAAVmiEAugk0g24C2Ud8hafykDBmJSR5wtWnE/c1DGxTjj2c6XKLB
+        87dfhsi0yhAN12oZ/yo8bZI=
+X-Google-Smtp-Source: APXvYqxiiNpd2nq2DBMNzw6ihhfaE5sSU7wC0xFZNzZ5k62IZwGUu4s/boVGakB0Ybs/Kjf25XVDlg==
+X-Received: by 2002:a25:84ce:: with SMTP id x14mr2429994ybm.441.1570634856812;
+        Wed, 09 Oct 2019 08:27:36 -0700 (PDT)
 Received: from localhost.localdomain (072-189-084-142.res.spectrum.com. [72.189.84.142])
-        by smtp.gmail.com with ESMTPSA id g40sm611863ywk.14.2019.10.09.08.27.32
+        by smtp.gmail.com with ESMTPSA id g40sm611863ywk.14.2019.10.09.08.27.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2019 08:27:33 -0700 (PDT)
+        Wed, 09 Oct 2019 08:27:36 -0700 (PDT)
 From:   William Breathitt Gray <vilhelm.gray@gmail.com>
 To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
         akpm@linux-foundation.org
@@ -53,11 +53,10 @@ Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         geert@linux-m68k.org, preid@electromag.com.au, lukas@wunner.de,
         sean.nyekjaer@prevas.dk, morten.tiljeset@prevas.dk,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v17 02/14] lib/test_bitmap.c: Add for_each_set_clump8 test cases
-Date:   Wed,  9 Oct 2019 11:27:00 -0400
-Message-Id: <febc0fb8151e3e3fdd61c34da9193d1c4d7e6c12.1570633189.git.vilhelm.gray@gmail.com>
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+Subject: [PATCH v17 03/14] gpio: 104-dio-48e: Utilize for_each_set_clump8 macro
+Date:   Wed,  9 Oct 2019 11:27:01 -0400
+Message-Id: <08b9c9a3e75ef1ab0d172223d10a1661f2b43fe2.1570633189.git.vilhelm.gray@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1570633189.git.vilhelm.gray@gmail.com>
 References: <cover.1570633189.git.vilhelm.gray@gmail.com>
@@ -68,117 +67,125 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The introduction of the for_each_set_clump8 macro warrants test cases to
-verify the implementation. This patch adds test case checks for whether
-an out-of-bounds clump index is returned, a zero clump is returned, or
-the returned clump value differs from the expected clump value.
+Replace verbose implementation in get_multiple/set_multiple callbacks
+with for_each_set_clump8 macro to simplify code and improve clarity.
 
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Acked-by: Andrew Morton <akpm@linux-foundation.org>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 ---
- lib/test_bitmap.c | 65 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ drivers/gpio/gpio-104-dio-48e.c | 73 ++++++++++-----------------------
+ 1 file changed, 21 insertions(+), 52 deletions(-)
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index 51a98f7ee79e..dc167c13eb39 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -92,6 +92,36 @@ __check_eq_u32_array(const char *srcfile, unsigned int line,
- 	return true;
+diff --git a/drivers/gpio/gpio-104-dio-48e.c b/drivers/gpio/gpio-104-dio-48e.c
+index a44fa8af5b0d..977f0f6eb1ba 100644
+--- a/drivers/gpio/gpio-104-dio-48e.c
++++ b/drivers/gpio/gpio-104-dio-48e.c
+@@ -175,46 +175,25 @@ static int dio48e_gpio_get(struct gpio_chip *chip, unsigned offset)
+ 	return !!(port_state & mask);
  }
  
-+static bool __init __check_eq_clump8(const char *srcfile, unsigned int line,
-+				    const unsigned int offset,
-+				    const unsigned int size,
-+				    const unsigned char *const clump_exp,
-+				    const unsigned long *const clump)
-+{
-+	unsigned long exp;
++static const size_t ports[] = { 0, 1, 2, 4, 5, 6 };
 +
-+	if (offset >= size) {
-+		pr_warn("[%s:%u] bit offset for clump out-of-bounds: expected less than %u, got %u\n",
-+			srcfile, line, size, offset);
-+		return false;
-+	}
-+
-+	exp = clump_exp[offset / 8];
-+	if (!exp) {
-+		pr_warn("[%s:%u] bit offset for zero clump: expected nonzero clump, got bit offset %u with clump value 0",
-+			srcfile, line, offset);
-+		return false;
-+	}
-+
-+	if (*clump != exp) {
-+		pr_warn("[%s:%u] expected clump value of 0x%lX, got clump value of 0x%lX",
-+			srcfile, line, exp, *clump);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
- #define __expect_eq(suffix, ...)					\
- 	({								\
- 		int result = 0;						\
-@@ -108,6 +138,7 @@ __check_eq_u32_array(const char *srcfile, unsigned int line,
- #define expect_eq_bitmap(...)		__expect_eq(bitmap, ##__VA_ARGS__)
- #define expect_eq_pbl(...)		__expect_eq(pbl, ##__VA_ARGS__)
- #define expect_eq_u32_array(...)	__expect_eq(u32_array, ##__VA_ARGS__)
-+#define expect_eq_clump8(...)		__expect_eq(clump8, ##__VA_ARGS__)
- 
- static void __init test_zero_clear(void)
+ static int dio48e_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
+ 	unsigned long *bits)
  {
-@@ -404,6 +435,39 @@ static void noinline __init test_mem_optimisations(void)
+ 	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
+-	size_t i;
+-	static const size_t ports[] = { 0, 1, 2, 4, 5, 6 };
+-	const unsigned int gpio_reg_size = 8;
+-	unsigned int bits_offset;
+-	size_t word_index;
+-	unsigned int word_offset;
+-	unsigned long word_mask;
+-	const unsigned long port_mask = GENMASK(gpio_reg_size - 1, 0);
++	unsigned long offset;
++	unsigned long gpio_mask;
++	unsigned int port_addr;
+ 	unsigned long port_state;
+ 
+ 	/* clear bits array to a clean slate */
+ 	bitmap_zero(bits, chip->ngpio);
+ 
+-	/* get bits are evaluated a gpio port register at a time */
+-	for (i = 0; i < ARRAY_SIZE(ports); i++) {
+-		/* gpio offset in bits array */
+-		bits_offset = i * gpio_reg_size;
+-
+-		/* word index for bits array */
+-		word_index = BIT_WORD(bits_offset);
+-
+-		/* gpio offset within current word of bits array */
+-		word_offset = bits_offset % BITS_PER_LONG;
+-
+-		/* mask of get bits for current gpio within current word */
+-		word_mask = mask[word_index] & (port_mask << word_offset);
+-		if (!word_mask) {
+-			/* no get bits in this port so skip to next one */
+-			continue;
+-		}
+-
+-		/* read bits from current gpio port */
+-		port_state = inb(dio48egpio->base + ports[i]);
++	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
++		port_addr = dio48egpio->base + ports[offset / 8];
++		port_state = inb(port_addr) & gpio_mask;
+ 
+-		/* store acquired bits at respective bits array offset */
+-		bits[word_index] |= (port_state << word_offset) & word_mask;
++		bitmap_set_value8(bits, port_state, offset);
+ 	}
+ 
+ 	return 0;
+@@ -244,37 +223,27 @@ static void dio48e_gpio_set_multiple(struct gpio_chip *chip,
+ 	unsigned long *mask, unsigned long *bits)
+ {
+ 	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
+-	unsigned int i;
+-	const unsigned int gpio_reg_size = 8;
+-	unsigned int port;
+-	unsigned int out_port;
+-	unsigned int bitmask;
++	unsigned long offset;
++	unsigned long gpio_mask;
++	size_t index;
++	unsigned int port_addr;
++	unsigned long bitmask;
+ 	unsigned long flags;
+ 
+-	/* set bits are evaluated a gpio register size at a time */
+-	for (i = 0; i < chip->ngpio; i += gpio_reg_size) {
+-		/* no more set bits in this mask word; skip to the next word */
+-		if (!mask[BIT_WORD(i)]) {
+-			i = (BIT_WORD(i) + 1) * BITS_PER_LONG - gpio_reg_size;
+-			continue;
+-		}
++	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
++		index = offset / 8;
++		port_addr = dio48egpio->base + ports[index];
+ 
+-		port = i / gpio_reg_size;
+-		out_port = (port > 2) ? port + 1 : port;
+-		bitmask = mask[BIT_WORD(i)] & bits[BIT_WORD(i)];
++		bitmask = bitmap_get_value8(bits, offset) & gpio_mask;
+ 
+ 		raw_spin_lock_irqsave(&dio48egpio->lock, flags);
+ 
+ 		/* update output state data and set device gpio register */
+-		dio48egpio->out_state[port] &= ~mask[BIT_WORD(i)];
+-		dio48egpio->out_state[port] |= bitmask;
+-		outb(dio48egpio->out_state[port], dio48egpio->base + out_port);
++		dio48egpio->out_state[index] &= ~gpio_mask;
++		dio48egpio->out_state[index] |= bitmask;
++		outb(dio48egpio->out_state[index], port_addr);
+ 
+ 		raw_spin_unlock_irqrestore(&dio48egpio->lock, flags);
+-
+-		/* prepare for next gpio register set */
+-		mask[BIT_WORD(i)] >>= gpio_reg_size;
+-		bits[BIT_WORD(i)] >>= gpio_reg_size;
  	}
  }
  
-+static const unsigned char clump_exp[] __initconst = {
-+	0x01,	/* 1 bit set */
-+	0x02,	/* non-edge 1 bit set */
-+	0x00,	/* zero bits set */
-+	0x38,	/* 3 bits set across 4-bit boundary */
-+	0x38,	/* Repeated clump */
-+	0x0F,	/* 4 bits set */
-+	0xFF,	/* all bits set */
-+	0x05,	/* non-adjacent 2 bits set */
-+};
-+
-+static void __init test_for_each_set_clump8(void)
-+{
-+#define CLUMP_EXP_NUMBITS 64
-+	DECLARE_BITMAP(bits, CLUMP_EXP_NUMBITS);
-+	unsigned int start;
-+	unsigned long clump;
-+
-+	/* set bitmap to test case */
-+	bitmap_zero(bits, CLUMP_EXP_NUMBITS);
-+	bitmap_set(bits, 0, 1);		/* 0x01 */
-+	bitmap_set(bits, 9, 1);		/* 0x02 */
-+	bitmap_set(bits, 27, 3);	/* 0x28 */
-+	bitmap_set(bits, 35, 3);	/* 0x28 */
-+	bitmap_set(bits, 40, 4);	/* 0x0F */
-+	bitmap_set(bits, 48, 8);	/* 0xFF */
-+	bitmap_set(bits, 56, 1);	/* 0x05 - part 1 */
-+	bitmap_set(bits, 58, 1);	/* 0x05 - part 2 */
-+
-+	for_each_set_clump8(start, clump, bits, CLUMP_EXP_NUMBITS)
-+		expect_eq_clump8(start, CLUMP_EXP_NUMBITS, clump_exp, &clump);
-+}
-+
- static void __init selftest(void)
- {
- 	test_zero_clear();
-@@ -413,6 +477,7 @@ static void __init selftest(void)
- 	test_bitmap_parselist();
- 	test_bitmap_parselist_user();
- 	test_mem_optimisations();
-+	test_for_each_set_clump8();
- }
- 
- KSTM_MODULE_LOADERS(test_bitmap);
 -- 
 2.23.0
 
