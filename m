@@ -2,32 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C12DD2DA7
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2019 17:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23442D2EC8
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2019 18:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726320AbfJJPZ0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Oct 2019 11:25:26 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:33680 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725909AbfJJPZZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Oct 2019 11:25:25 -0400
-Received: from zn.tnic (p200300EC2F0A630005874FFE54801724.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:6300:587:4ffe:5480:1724])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DD39A1EC0987;
-        Thu, 10 Oct 2019 17:25:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1570721124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=oFtLtIT92PEjPANVccNt8bv5ZEw6stfT1hPzmyy05AU=;
-        b=XvDnIWbOWnxP5VFZO9ko7ahJhTcRm/Xsrm8HgemYJGsHSBOE6Uta44f3AIYcSZ6OfEGl/a
-        AEH1A9BDC9JA4n3PgugNym5/q4Nt+C+NeHY9F4IhvYggxoRn7C5NPgZWNAKd44J4GzphzU
-        Yg/gusTeVLuPtqp+cJTKXO0tNksVAHs=
-Date:   Thu, 10 Oct 2019 17:25:16 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kees Cook <keescook@chromium.org>
+        id S1726276AbfJJQqj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Oct 2019 12:46:39 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34936 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbfJJQqj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Oct 2019 12:46:39 -0400
+Received: by mail-pf1-f194.google.com with SMTP id 205so4279694pfw.2
+        for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2019 09:46:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ucc2HcE1KFej2LH6JBkm0K2H0dlib4/rpE4E9DkdWnQ=;
+        b=jCH7hVEz9DolIZ1tWTZ2WBzCCWqtC/N1Zw7aqh/YsT1JbgkR+jdLg1c8HFybVnrnDt
+         zDT8Pac3++Knf0BDJnT4AHK6EvCPW0ovTGp9VFWoRwYqDitcprYMafhTNkb/D4GuI+mu
+         p5DqysPLL8vgpaaxV3VItm4rQa6UKBD0JpAMw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ucc2HcE1KFej2LH6JBkm0K2H0dlib4/rpE4E9DkdWnQ=;
+        b=svWDIhnEOZfdvR6qcAVcXJ9e9PlGlyVS/irfqyKjA749ubEa0u4KQbdeClSYt/IbKZ
+         yF1eJP1lOg3BbtQ0vaIDcFkhODKoMElzGKbafbB15d+gOUtGZh87svdOVky04WVxhkyc
+         tdAn8aumFoakxzrhpZi9bHyINAFzKt0w2rkBc1JLbnIQgmxUsYPS3e+cMnyANraZzEuv
+         x5yIaZFWgE6VZtYMaPGSWyYD9EzDTiUAhIOygKo+yka4UXg4QhxSYbIt90HH4ax0fdpv
+         e5AcUwe6szZ+jYr4/piSmOuDAd8aUeaPlDXRJESfGhLpPo3jNvkiMl55EzX8OP+DkgnZ
+         VilQ==
+X-Gm-Message-State: APjAAAX7klQo6j6NB239Y81JOakVHQYhbIZpfL3O1a6fZkZE/ifJI6CB
+        fmqSiU7IviYEJPwfyXd+tPIRiw==
+X-Google-Smtp-Source: APXvYqz81XDUB+KawYO30nxn2eoCx5FdYR8TngYKUPz81EWriv3MgYEwn6iW+aXgb9GpyhSssUlr1A==
+X-Received: by 2002:a63:e1f:: with SMTP id d31mr11802284pgl.379.1570725998193;
+        Thu, 10 Oct 2019 09:46:38 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k5sm4896915pgo.45.2019.10.10.09.46.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2019 09:46:37 -0700 (PDT)
+Date:   Thu, 10 Oct 2019 09:46:36 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Ingo Molnar <mingo@redhat.com>,
@@ -42,74 +58,60 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Michal Simek <monstr@monstr.eu>, linux-parisc@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/29] vmlinux.lds.h: Allow EXCEPTION_TABLE to live in
- RO_DATA
-Message-ID: <20191010152516.GG7658@zn.tnic>
+Subject: Re: [PATCH 07/29] x86: Restore "text" Program Header with dummy
+ section
+Message-ID: <201910100944.92CFB97157@keescook>
 References: <20190926175602.33098-1-keescook@chromium.org>
- <20190926175602.33098-15-keescook@chromium.org>
+ <20190926175602.33098-8-keescook@chromium.org>
+ <20191010103305.GD7658@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190926175602.33098-15-keescook@chromium.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191010103305.GD7658@zn.tnic>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 26, 2019 at 10:55:47AM -0700, Kees Cook wrote:
-> Many architectures have an EXCEPTION_TABLE that needs only to be
-> read-only. As such, it should live in RO_DATA. This creates a macro to
-> identify this case for the architectures that can move EXCEPTION_TABLE
-> into RO_DATA.
+On Thu, Oct 10, 2019 at 12:33:05PM +0200, Borislav Petkov wrote:
+> On Thu, Sep 26, 2019 at 10:55:40AM -0700, Kees Cook wrote:
+> > Instead of depending on markings in the section following NOTES to
+> > restore the associated Program Header, use a dummy section, as done
+> > in other architectures.
 > 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/asm-generic/vmlinux.lds.h | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+> This is very laconic and after some staring at ld.info, I think you mean
+> this:
 > 
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index d57a28786bb8..35a6cba39d9f 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -69,6 +69,17 @@
->  #define NOTES_HEADERS_RESTORE
->  #endif
->  
-> +/*
-> + * Some architectures have non-executable read-only exception tables.
-> + * They can be added to the RO_DATA segment by specifying their desired
-> + * alignment.
-> + */
-> +#ifdef RO_DATA_EXCEPTION_TABLE_ALIGN
-> +#define RO_DATA_EXCEPTION_TABLE	EXCEPTION_TABLE(RO_DATA_EXCEPTION_TABLE_ALIGN)
-> +#else
-> +#define RO_DATA_EXCEPTION_TABLE
-> +#endif
-> +
->  /* Align . to a 8 byte boundary equals to maximum function alignment. */
->  #define ALIGN_FUNCTION()  . = ALIGN(8)
->  
-> @@ -508,6 +519,7 @@
->  		__stop___modver = .;					\
->  	}								\
->  									\
-> +	RO_DATA_EXCEPTION_TABLE						\
->  	NOTES								\
->  									\
->  	. = ALIGN((align));						\
-> -- 
+> "   If you place a section in one or more segments using ':PHDR', then
+> the linker will place all subsequent allocatable sections which do not
+> specify ':PHDR' in the same segments."
+> 
+> but I could be way off. Yes, no?
+> 
+> IOW, please write in the commit messages first what the problem is
+> you're addressing.
 
-I think you can drop the "DATA" from the names as it is kinda clear
-where the exception table lands:
+Yeah, that's much improved. I really struggled to describe this, given
+how weird the linker script logic is here.
 
-RO_EXCEPTION_TABLE_ALIGN
-RO_EXCEPTION_TABLE
+> > --- a/arch/x86/kernel/vmlinux.lds.S
+> > +++ b/arch/x86/kernel/vmlinux.lds.S
+> > @@ -147,8 +147,9 @@ SECTIONS
+> >  	} :text = 0x9090
+> >  
+> >  	NOTES :text :note
+> > +	.dummy : { *(.dummy) } :text
+> >  
+> > -	EXCEPTION_TABLE(16) :text = 0x9090
+> > +	EXCEPTION_TABLE(16)
+> 
+> This is killing the filler byte but I have a suspicion that'll change
+> eventually to INT3... :)
 
-The "read-only" part is the important one.
+Yes, though since the exception table isn't executable, filling with
+0x90 has no meaning, and I think when I looked at the alignment there
+were actually no fill bytes from here on. But it doesn't matter; it all
+goes away in the end.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Kees Cook
