@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C574D30C3
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2019 20:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792BAD30C6
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2019 20:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727253AbfJJSpy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Oct 2019 14:45:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:38488 "EHLO foss.arm.com"
+        id S1727265AbfJJSp5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Oct 2019 14:45:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:38512 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727247AbfJJSpy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Oct 2019 14:45:54 -0400
+        id S1727261AbfJJSp4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 10 Oct 2019 14:45:56 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CDD71000;
-        Thu, 10 Oct 2019 11:45:53 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14B051570;
+        Thu, 10 Oct 2019 11:45:56 -0700 (PDT)
 Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7D5CB3F703;
-        Thu, 10 Oct 2019 11:45:50 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 654383F703;
+        Thu, 10 Oct 2019 11:45:53 -0700 (PDT)
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Jones <drjones@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
@@ -38,9 +38,9 @@ Cc:     Andrew Jones <drjones@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
         Amit Kachhap <amit.kachhap@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 08/12] arm64: BTI: Decode BYTPE bits when printing PSTATE
-Date:   Thu, 10 Oct 2019 19:44:36 +0100
-Message-Id: <1570733080-21015-9-git-send-email-Dave.Martin@arm.com>
+Subject: [PATCH v2 09/12] arm64: traps: Fix inconsistent faulting instruction skipping
+Date:   Thu, 10 Oct 2019 19:44:37 +0100
+Message-Id: <1570733080-21015-10-git-send-email-Dave.Martin@arm.com>
 X-Mailer: git-send-email 2.1.4
 In-Reply-To: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
 References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
@@ -49,115 +49,97 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The current code to print PSTATE symbolically when generating
-backtraces etc., does not include the BYTPE field used by Branch
-Target Identification.
+Correct skipping of an instruction on AArch32 works a bit
+differently from AArch64, mainly due to the different CPSR/PSTATE
+semantics.
 
-So, decode BYTPE and print it too.
+There have been various attempts to get this right.  Currenty
+arm64_skip_faulting_instruction() mostly does the right thing, but
+does not advance the IT state machine for the AArch32 case.
 
-In the interests of human-readability, print the classes of BTI
-matched.  The symbolic notation, BYTPE (PSTATE[11:10]) and
-permitted classes of subsequent instruction are:
+arm64_compat_skip_faulting_instruction() handles the IT state
+machine but is local to traps.c, and porting other code to use it
+will make a mess since there are some call sites that apply for
+both the compat and native cases.
 
-    -- (BTYPE=0b00): any insn
-    jc (BTYPE=0b01): BTI jc, BTI j, BTI c, PACIxSP
-    -c (BYTPE=0b10): BTI jc, BTI c, PACIxSP
-    j- (BTYPE=0b11): BTI jc, BTI j
+Since manual instruction skipping implies a trap, it's a relatively
+slow path.
 
+So, make arm64_skip_faulting_instruction() handle both compat and
+native, and get rid of the arm64_compat_skip_faulting_instruction()
+special case.
+
+Fixes: 32a3e635fb0e ("arm64: compat: Add CNTFRQ trap handler")
+Fixes: 1f1c014035a8 ("arm64: compat: Add condition code checks and IT advance")
+Fixes: 6436beeee572 ("arm64: Fix single stepping in kernel traps")
+Fixes: bd35a4adc413 ("arm64: Port SWP/SWPB emulation support from arm")
 Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-
 ---
+ arch/arm64/kernel/traps.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-Changes since v1:
-
- * Add convenience definitions for all the BTYPE codes, even if we
-   don't directly use them all yet.
-
- * For consistency, align PSR_BTYPE_foo names with the above print
-   format:
-
-      PSR_BTYPE_NONE -> -- (BTYPE=0b00)
-      PSR_BTYPE_JC -> jc (BTYPE=0b01)
-      etc.
----
- arch/arm64/include/asm/ptrace.h |  7 ++++++-
- arch/arm64/kernel/process.c     | 17 +++++++++++++++--
- arch/arm64/kernel/signal.c      |  2 +-
- 3 files changed, 22 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/include/asm/ptrace.h b/arch/arm64/include/asm/ptrace.h
-index 7d4cd59..212bba1 100644
---- a/arch/arm64/include/asm/ptrace.h
-+++ b/arch/arm64/include/asm/ptrace.h
-@@ -38,7 +38,12 @@
- #define PSR_BTYPE_SHIFT		10
- 
- #define PSR_IL_BIT		(1 << 20)
--#define PSR_BTYPE_CALL		(2 << PSR_BTYPE_SHIFT)
-+
-+/* Convenience names for the values of PSTATE.BTYPE */
-+#define PSR_BTYPE_NONE		(0b00 << PSR_BTYPE_SHIFT)
-+#define PSR_BTYPE_JC		(0b01 << PSR_BTYPE_SHIFT)
-+#define PSR_BTYPE_C		(0b10 << PSR_BTYPE_SHIFT)
-+#define PSR_BTYPE_J		(0b11 << PSR_BTYPE_SHIFT)
- 
- /* AArch32-specific ptrace requests */
- #define COMPAT_PTRACE_GETREGS		12
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 4c78937..a2b555a 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -209,6 +209,15 @@ void machine_restart(char *cmd)
- 	while (1);
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index 15e3c4f..44c91d4 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -268,6 +268,8 @@ void arm64_notify_die(const char *str, struct pt_regs *regs,
+ 	}
  }
  
-+#define bstr(suffix, str) [PSR_BTYPE_ ## suffix >> PSR_BTYPE_SHIFT] = str
-+static const char *const btypes[] = {
-+	bstr(NONE, "--"),
-+	bstr(  JC, "jc"),
-+	bstr(   C, "-c"),
-+	bstr(  J , "j-")
-+};
-+#undef bstr
++static void advance_itstate(struct pt_regs *regs);
 +
- static void print_pstate(struct pt_regs *regs)
+ void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
  {
- 	u64 pstate = regs->pstate;
-@@ -227,7 +236,10 @@ static void print_pstate(struct pt_regs *regs)
- 			pstate & PSR_AA32_I_BIT ? 'I' : 'i',
- 			pstate & PSR_AA32_F_BIT ? 'F' : 'f');
- 	} else {
--		printk("pstate: %08llx (%c%c%c%c %c%c%c%c %cPAN %cUAO)\n",
-+		const char *btype_str = btypes[(pstate & PSR_BTYPE_MASK) >>
-+					       PSR_BTYPE_SHIFT];
+ 	regs->pc += size;
+@@ -278,6 +280,9 @@ void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
+ 	 */
+ 	if (user_mode(regs))
+ 		user_fastforward_single_step(current);
 +
-+		printk("pstate: %08llx (%c%c%c%c %c%c%c%c %cPAN %cUAO BTYPE=%s)\n",
- 			pstate,
- 			pstate & PSR_N_BIT ? 'N' : 'n',
- 			pstate & PSR_Z_BIT ? 'Z' : 'z',
-@@ -238,7 +250,8 @@ static void print_pstate(struct pt_regs *regs)
- 			pstate & PSR_I_BIT ? 'I' : 'i',
- 			pstate & PSR_F_BIT ? 'F' : 'f',
- 			pstate & PSR_PAN_BIT ? '+' : '-',
--			pstate & PSR_UAO_BIT ? '+' : '-');
-+			pstate & PSR_UAO_BIT ? '+' : '-',
-+			btype_str);
- 	}
++	if (regs->pstate & PSR_MODE32_BIT)
++		advance_itstate(regs);
  }
  
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index 4a3bd32..452ac5b 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -732,7 +732,7 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+ static LIST_HEAD(undef_hook);
+@@ -629,19 +634,12 @@ static void advance_itstate(struct pt_regs *regs)
+ 	compat_set_it_state(regs, it);
+ }
  
- 	if (system_supports_bti()) {
- 		regs->pstate &= ~PSR_BTYPE_MASK;
--		regs->pstate |= PSR_BTYPE_CALL;
-+		regs->pstate |= PSR_BTYPE_C;
+-static void arm64_compat_skip_faulting_instruction(struct pt_regs *regs,
+-						   unsigned int sz)
+-{
+-	advance_itstate(regs);
+-	arm64_skip_faulting_instruction(regs, sz);
+-}
+-
+ static void compat_cntfrq_read_handler(unsigned int esr, struct pt_regs *regs)
+ {
+ 	int reg = (esr & ESR_ELx_CP15_32_ISS_RT_MASK) >> ESR_ELx_CP15_32_ISS_RT_SHIFT;
+ 
+ 	pt_regs_write_reg(regs, reg, arch_timer_get_rate());
+-	arm64_compat_skip_faulting_instruction(regs, 4);
++	arm64_skip_faulting_instruction(regs, 4);
+ }
+ 
+ static const struct sys64_hook cp15_32_hooks[] = {
+@@ -661,7 +659,7 @@ static void compat_cntvct_read_handler(unsigned int esr, struct pt_regs *regs)
+ 
+ 	pt_regs_write_reg(regs, rt, lower_32_bits(val));
+ 	pt_regs_write_reg(regs, rt2, upper_32_bits(val));
+-	arm64_compat_skip_faulting_instruction(regs, 4);
++	arm64_skip_faulting_instruction(regs, 4);
+ }
+ 
+ static const struct sys64_hook cp15_64_hooks[] = {
+@@ -682,7 +680,7 @@ asmlinkage void __exception do_cp15instr(unsigned int esr, struct pt_regs *regs)
+ 		 * There is no T16 variant of a CP access, so we
+ 		 * always advance PC by 4 bytes.
+ 		 */
+-		arm64_compat_skip_faulting_instruction(regs, 4);
++		arm64_skip_faulting_instruction(regs, 4);
+ 		return;
  	}
  
- 	if (ka->sa.sa_flags & SA_RESTORER)
 -- 
 2.1.4
 
