@@ -2,121 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CABAD1BB3
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2019 00:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91DDD1E73
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2019 04:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732232AbfJIW1I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Oct 2019 18:27:08 -0400
-Received: from smtprelay-out1.synopsys.com ([198.182.61.142]:55048 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731916AbfJIW1I (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Oct 2019 18:27:08 -0400
-Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 32D33C03EA;
-        Wed,  9 Oct 2019 22:27:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1570660027; bh=VhQHSn2scrt/qLb1cp8mUcqKwCHy/B+Kzh4ZumuFBfE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GgP6kaNk3OUsXe+9Z6UeDQpLd4pr7C/0F+HHRYYvvgbB5T0xlOdbnFyJCbSVRQBH6
-         tY0qa8Or/HpDF2v0Vyt0djRcdRkjPKoWYRcV8Yq58z9jgIJjeBmcmHYSQR56aaOmuV
-         0yDM4ohgjmBXm86vMIVuQ3M8OPao9yPvvOyefPnWg8PsqdsAH1Ncav3x3a5mPfLwVU
-         M7LbqxQq7WTtjw/BAbf58djskxwaJDMalSv2pXnY7/WTrvAPYXNygzhZRaB3UoC5YN
-         Zcpp0Gw23/hIBUudH7a5CSvjNOxJoezUSr1ZS/9iVXtIT/T3yyBS4LwG6NB+OoA6lH
-         LjGChWQGNroPQ==
-Received: from vineetg-Latitude-E7450.internal.synopsys.com (vineetg-latitude-e7450.internal.synopsys.com [10.10.161.61])
-        by mailhost.synopsys.com (Postfix) with ESMTP id AA9C8A0072;
-        Wed,  9 Oct 2019 22:27:06 +0000 (UTC)
-From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
-To:     linux-mm@kvack.org
-Cc:     linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Subject: [PATCH 3/3] asm-generic/mm: stub out p{4,d}d_clear_bad() if __PAGETABLE_P{4,u}D_FOLDED
-Date:   Wed,  9 Oct 2019 15:26:58 -0700
-Message-Id: <20191009222658.961-4-vgupta@synopsys.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191009222658.961-1-vgupta@synopsys.com>
-References: <20191009222658.961-1-vgupta@synopsys.com>
+        id S1726675AbfJJC3g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Oct 2019 22:29:36 -0400
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:47106 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726501AbfJJC3g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Oct 2019 22:29:36 -0400
+X-Greylist: delayed 35730 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Oct 2019 22:29:34 EDT
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id x9A2TQrh010258;
+        Thu, 10 Oct 2019 11:29:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com x9A2TQrh010258
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1570674567;
+        bh=Q7utFN6RzuE8eM4XqhBr6De112exitRV2SZcLvRw+/Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lfR7F1noQwk6SX0ADbu5hKqkv67oZZhkBR8M6ERsWbkWf/LBefvJB7MvjzmMX3W0Q
+         7L83VrJkxM1N+VrTTE4fgeC7YZcwg+yEC6YHciTFMF7TegJxQpPGoMoz8PmTaVxIyr
+         +M8Zy5Fu94jMJYGO9Xv//G91R47IMsjmMAXaGmxZnLQq64JxF9yZfADZo5HMTn1OJp
+         7V5g5Gy99M56A5Z0VFjxSkNCpDWYaB86VII91VcMNjRcvyhn9NikZboIxHeEYyL/q1
+         XSK4qnIPuNqb61MSha+vSHUboZB28OxPNNruQmr1ebGCD2Zat3JKE5DWtAFja4OVoa
+         WHnGEk3JR445Q==
+X-Nifty-SrcIP: [209.85.222.53]
+Received: by mail-ua1-f53.google.com with SMTP id w7so1446634uag.4;
+        Wed, 09 Oct 2019 19:29:27 -0700 (PDT)
+X-Gm-Message-State: APjAAAX1QGhuxHrQAYuy+NsIKjkrzCraAou8bec8dD4x0BNrBUl69egu
+        t1bH4nOZSdR/HWbV/lT8XKrusc9cdFYkTHWU5Jg=
+X-Google-Smtp-Source: APXvYqxJHdHRSk8iJK5J8OgjOjbFblWwYJs3YgddSOljJ0wgWwB7NP2b6e2SsoVqJmZZ8fJTYDM1o8iI6Lmnx9UQtLs=
+X-Received: by 2002:a9f:31c5:: with SMTP id w5mr3361388uad.40.1570674566294;
+ Wed, 09 Oct 2019 19:29:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1570633189.git.vilhelm.gray@gmail.com> <893c3b4f03266c9496137cc98ac2b1bd27f92c73.1570633189.git.vilhelm.gray@gmail.com>
+ <CAK7LNATgW7bXUmqV=3QAaJ0Qu73Kox-TgDCQJb=s0=mwewSCUg@mail.gmail.com>
+ <20191009170917.GG32742@smile.fi.intel.com> <CAMuHMdXyyrL4ibKvjMV6r8TuxpmK73=JxsWNEfcRk1NjwsnOjA@mail.gmail.com>
+In-Reply-To: <CAMuHMdXyyrL4ibKvjMV6r8TuxpmK73=JxsWNEfcRk1NjwsnOjA@mail.gmail.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Thu, 10 Oct 2019 11:28:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASVdqU_6+_iinWStb9ALqLw494pnZKr46fLW+WJ9nUo6A@mail.gmail.com>
+Message-ID: <CAK7LNASVdqU_6+_iinWStb9ALqLw494pnZKr46fLW+WJ9nUo6A@mail.gmail.com>
+Subject: Re: [PATCH v17 01/14] bitops: Introduce the for_each_set_clump8 macro
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Phil Reid <preid@electromag.com.au>,
+        Lukas Wunner <lukas@wunner.de>, sean.nyekjaer@prevas.dk,
+        morten.tiljeset@prevas.dk, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This removes the code for 2 level paging as seen on ARC
+On Thu, Oct 10, 2019 at 3:54 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Andy,
+>
+> On Wed, Oct 9, 2019 at 7:09 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Thu, Oct 10, 2019 at 01:28:08AM +0900, Masahiro Yamada wrote:
+> > > On Thu, Oct 10, 2019 at 12:27 AM William Breathitt Gray
+> > > <vilhelm.gray@gmail.com> wrote:
+> > > >
+> > > > This macro iterates for each 8-bit group of bits (clump) with set bits,
+> > > > within a bitmap memory region. For each iteration, "start" is set to the
+> > > > bit offset of the found clump, while the respective clump value is
+> > > > stored to the location pointed by "clump". Additionally, the
+> > > > bitmap_get_value8 and bitmap_set_value8 functions are introduced to
+> > > > respectively get and set an 8-bit value in a bitmap memory region.
+> >
+> > > Why is the return type "unsigned long" where you know
+> > > it return the 8-bit value ?
+> >
+> > Because bitmap API operates on unsigned long type. This is not only
+> > consistency, but for sake of flexibility in case we would like to introduce
+> > more calls like clump16 or so.
+>
+> TBH, that doesn't convince me: those functions explicitly take/return an
+> 8-bit value, and have "8" in their name.  The 8-bit value is never
+> really related to, retrieved from, or stored in a full "unsigned long"
+> element of a bitmap, only to/from/in a part (byte) of it.
+>
+> Following your rationale, all of iowrite{8,16,32,64}*() should take an
+> "unsigned long" value, too.
+>
 
-| bloat-o-meter2 vmlinux-D-elide-p4d_free_tlb vmlinux-E-elide-p?d_clear_bad
-| add/remove: 0/2 grow/shrink: 0/0 up/down: 0/-22 (-22)
-| function                                     old     new   delta
-| pud_clear_bad                                 20       -     -20
-| p4d_clear_bad                                 20       -     -20
-| Total: Before=4137104, After=4137082, chg -1.000000%
++1
 
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
----
- include/asm-generic/pgtable.h | 11 +++++++++++
- mm/pgtable-generic.c          |  4 ++++
- 2 files changed, 15 insertions(+)
+Using u8/u16/u32/u64 looks more consistent with other bitmap helpers.
 
-diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
-index 818691846c90..9cdcbc7c0b7b 100644
---- a/include/asm-generic/pgtable.h
-+++ b/include/asm-generic/pgtable.h
-@@ -558,8 +558,19 @@ static inline pgprot_t pgprot_modify(pgprot_t oldprot, pgprot_t newprot)
-  * Do the tests inline, but report and clear the bad entry in mm/memory.c.
-  */
- void pgd_clear_bad(pgd_t *);
-+
-+#ifndef __PAGETABLE_P4D_FOLDED
- void p4d_clear_bad(p4d_t *);
-+#else
-+#define p4d_clear_bad(p4d)        do { } while (0)
-+#endif
-+
-+#ifndef __PAGETABLE_PUD_FOLDED
- void pud_clear_bad(pud_t *);
-+#else
-+#define pud_clear_bad(p4d)        do { } while (0)
-+#endif
-+
- void pmd_clear_bad(pmd_t *);
- 
- static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-index 532c29276fce..856dc3bb77e6 100644
---- a/mm/pgtable-generic.c
-+++ b/mm/pgtable-generic.c
-@@ -24,17 +24,21 @@ void pgd_clear_bad(pgd_t *pgd)
- 	pgd_clear(pgd);
- }
- 
-+#ifndef __PAGETABLE_P4D_FOLDED
- void p4d_clear_bad(p4d_t *p4d)
- {
- 	p4d_ERROR(*p4d);
- 	p4d_clear(p4d);
- }
-+#endif
- 
-+#ifndef __PAGETABLE_PUD_FOLDED
- void pud_clear_bad(pud_t *pud)
- {
- 	pud_ERROR(*pud);
- 	pud_clear(pud);
- }
-+#endif
- 
- void pmd_clear_bad(pmd_t *pmd)
- {
+void bitmap_from_arr32(unsigned long *bitmap, const u32 *buf, unsigned
+int nbits);
+void bitmap_to_arr32(u32 *buf, const unsigned long *bitmap, unsigned int nbits);
+static inline void bitmap_from_u64(unsigned long *dst, u64 mask);
+
+
+
+If you want to see more examples from other parts,
+
+
+int of_property_read_u8(const struct device_node *np,
+                        const char *propname,
+                        u8 *out_value)
+
+
+int of_property_read_u16(const struct device_node *np,
+                         const char *propname,
+                         u16 *out_value)
+
+
 -- 
-2.20.1
-
+Best Regards
+Masahiro Yamada
