@@ -2,48 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B10D3456
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 01:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4D1D34B1
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 01:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727164AbfJJXY0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Oct 2019 19:24:26 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39112 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726912AbfJJXYA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Oct 2019 19:24:00 -0400
-Received: by mail-pl1-f194.google.com with SMTP id s17so3540954plp.6
-        for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2019 16:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=yMqmNRh9/WRVuOhxmgeAss8KGdVZEWgP1gvN19lsOqw=;
-        b=X2Pgj+AXTV2Ft841aCpOcTDGSCdqRW7jKxi/A0JNfzkCvRnBRTlgiBPSQlnSB+smXf
-         KM/0N/YQd1W8z5kju+9JLAHVI1pfeWN/BEzNRrEERIuWwD3BkBcqvXop0Shui4yPMLqZ
-         D7f/vZRRKSScbxm9PdqjdsYfiYl9R3gEC2Gak=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=yMqmNRh9/WRVuOhxmgeAss8KGdVZEWgP1gvN19lsOqw=;
-        b=SQ9OvE8sYGJ1jRrhvN0tYnt9Sys7x5+vAn1dsZjfkCw/6EeDX7rvFZ+HBNtxSvUn8/
-         BsWC/9TTGRSlt87PWfCPhsjlVt7JZs5F1UEoyn4Z4NteJtehCMrh7pubE2onrIIfZ9rY
-         47thOMAjW0wT4wSEu7HObrGGVVkEssQdepuOzt4Ij05TIWHRTFVOlrHXAdrcFV15FA7O
-         ZzTknRQBxS+4HJRPM4a5CEtzOA0Fkvm1HjlfsyGiA+XZUuE96UjxydtTcwzDIfSorZyS
-         b2J+zfuyd3tEasNBh7cNgN+yo4wMnCYLJa5RM8pA4G8eDMwg9b2B988sw1bQvBEfYWC1
-         t9JQ==
-X-Gm-Message-State: APjAAAWlGpQqPRkYA2/n4c88r/IQY7bKyJnw3HLrXxS9xgtS6QoO+KhZ
-        cLxYXthM1brPuEHo2DyAz3WLvQ==
-X-Google-Smtp-Source: APXvYqzr5TEKsgP0lOS7AdzCh27u/YbVsT+Ij4ZMEVcIou1HxRIVeL6D9p3wjllIloBGYMby8gU1TQ==
-X-Received: by 2002:a17:902:7b96:: with SMTP id w22mr12067901pll.40.1570749839357;
-        Thu, 10 Oct 2019 16:23:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m2sm6645331pff.154.2019.10.10.16.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 16:23:58 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>,
+        id S1726533AbfJJX4k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Oct 2019 19:56:40 -0400
+Received: from smtprelay0058.hostedemail.com ([216.40.44.58]:36546 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725951AbfJJX4k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 10 Oct 2019 19:56:40 -0400
+X-Greylist: delayed 368 seconds by postgrey-1.27 at vger.kernel.org; Thu, 10 Oct 2019 19:56:39 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id E09A118041742;
+        Thu, 10 Oct 2019 23:50:31 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 4DA0E181D3377;
+        Thu, 10 Oct 2019 23:50:30 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 30,2,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::,RULES_HIT:41:355:379:599:800:960:968:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2693:2828:2898:3138:3139:3140:3141:3142:3353:3622:3653:3865:3866:3868:3871:4321:4605:5007:6117:7576:7875:9391:10004:10400:11026:11232:11233:11473:11658:11914:12043:12296:12297:12438:12555:12740:12760:12895:13439:14096:14097:14181:14659:14721:21080:21451:21505:21627:21740:21972:30054:30064:30070:30091,0,RBL:47.151.152.152:@perches.com:.lbl8.mailshell.net-62.8.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:27,LUA_SUMMARY:none
+X-HE-Tag: dock63_3e5b57d448e10
+X-Filterd-Recvd-Size: 3509
+Received: from XPS-9350.home (unknown [47.151.152.152])
+        (Authenticated sender: joe@perches.com)
+        by omf09.hostedemail.com (Postfix) with ESMTPA;
+        Thu, 10 Oct 2019 23:50:28 +0000 (UTC)
+Message-ID: <2231d5f0a82f880e6706e2d0f070328a029c9b21.camel@perches.com>
+Subject: Re: [PATCH v2 3/4] treewide: Use sizeof_member() macro
+From:   Joe Perches <joe@perches.com>
+To:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Cc:     Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>,
         Alexey Dobriyan <adobriyan@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -51,70 +39,95 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         netdev@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-fsdevel@vger.kernel.org
-Subject: [PATCH v2 4/4] include: Remove FIELD_SIZEOF() and sizeof_field() macros
-Date:   Thu, 10 Oct 2019 16:23:45 -0700
-Message-Id: <20191010232345.26594-5-keescook@chromium.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191010232345.26594-1-keescook@chromium.org>
+Date:   Thu, 10 Oct 2019 16:50:27 -0700
+In-Reply-To: <20191010232345.26594-4-keescook@chromium.org>
 References: <20191010232345.26594-1-keescook@chromium.org>
+         <20191010232345.26594-4-keescook@chromium.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.32.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
+On Thu, 2019-10-10 at 16:23 -0700, Kees Cook wrote:
+> From: Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
+> 
+> Replace all the occurrences of FIELD_SIZEOF() and sizeof_field() with
+> sizeof_member() except at places where these are defined. Later patches
+> will remove the unused definitions.
+> 
+> This patch is generated using following script:
+> 
+> EXCLUDE_FILES="include/linux/stddef.h|include/linux/kernel.h"
+> 
+> git grep -l -e "\bFIELD_SIZEOF\b" -e "\bsizeof_field\b" | while read file;
+> do
+> 
+> 	if [[ "$file" =~ $EXCLUDE_FILES ]]; then
+> 		continue
+> 	fi
+> 	sed -i  -e 's/\bFIELD_SIZEOF\b/sizeof_member/g' \
+> 		-e 's/\bsizeof_field\b/sizeof_member/g' \
+> 		$file;
+> done
 
-The common function used to find struct member size is sizeof_member().
-Remove the now unused FIELD_SIZEOF() and sizeof_field() macros.
+While the sed works, a cocci script would perhaps
+be better as multi line argument realignment would
+also occur.
 
-Signed-off-by: Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
-Link: https://lore.kernel.org/r/20190924105839.110713-5-pankaj.laxminarayan.bharadiya@intel.com
-Co-developed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/kernel.h | 9 ---------
- include/linux/stddef.h | 8 --------
- 2 files changed, 17 deletions(-)
+$ cat sizeof_member.cocci
+@@
+@@
 
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index d83d403dac2e..d67020250d75 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -79,15 +79,6 @@
-  */
- #define round_down(x, y) ((x) & ~__round_mask(x, y))
+-	FIELD_SIZEOF
++	sizeof_member
+
+@@
+@@
+
+-	sizeof_field
++	sizeof_member
+$
+
+For instance, this sed produces:
+
+diff --git a/crypto/adiantum.c b/crypto/adiantum.c
+@@ -435,10 +435,10 @@ static int adiantum_init_tfm(struct crypto_skcipher *tfm)
  
--/**
-- * FIELD_SIZEOF - get the size of a struct's field
-- * @t: the target struct
-- * @f: the target struct's field
-- * Return: the size of @f in the struct definition without having a
-- * declared instance of @t.
-- */
--#define FIELD_SIZEOF(t, f) (sizeof(((t*)0)->f))
--
- #define typeof_member(T, m)	typeof(((T*)0)->m)
+ 	BUILD_BUG_ON(offsetofend(struct adiantum_request_ctx, u) !=
+ 		     sizeof(struct adiantum_request_ctx));
+-	subreq_size = max(FIELD_SIZEOF(struct adiantum_request_ctx,
++	subreq_size = max(sizeof_member(struct adiantum_request_ctx,
+ 				       u.hash_desc) +
+ 			  crypto_shash_descsize(hash),
+-			  FIELD_SIZEOF(struct adiantum_request_ctx,
++			  sizeof_member(struct adiantum_request_ctx,
+ 				       u.streamcipher_req) +
+ 			  crypto_skcipher_reqsize(streamcipher));
  
- #define DIV_ROUND_UP __KERNEL_DIV_ROUND_UP
-diff --git a/include/linux/stddef.h b/include/linux/stddef.h
-index ecadb736c853..74b5e644d50a 100644
---- a/include/linux/stddef.h
-+++ b/include/linux/stddef.h
-@@ -19,14 +19,6 @@ enum {
- #define offsetof(TYPE, MEMBER)	((size_t)&((TYPE *)0)->MEMBER)
- #endif
+
+where the cocci script produces:
+
+--- crypto/adiantum.c
++++ /tmp/cocci-output-22881-d8186c-adiantum.c
+@@ -435,11 +435,11 @@ static int adiantum_init_tfm(struct cryp
  
--/**
-- * sizeof_field(TYPE, MEMBER)
-- *
-- * @TYPE: The structure containing the field of interest
-- * @MEMBER: The field to return the size of
-- */
--#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
--
- /**
-  * sizeof_member(TYPE, MEMBER) - get the size of a struct's member
-  *
--- 
-2.17.1
+ 	BUILD_BUG_ON(offsetofend(struct adiantum_request_ctx, u) !=
+ 		     sizeof(struct adiantum_request_ctx));
+-	subreq_size = max(FIELD_SIZEOF(struct adiantum_request_ctx,
+-				       u.hash_desc) +
++	subreq_size = max(sizeof_member(struct adiantum_request_ctx,
++					u.hash_desc) +
+ 			  crypto_shash_descsize(hash),
+-			  FIELD_SIZEOF(struct adiantum_request_ctx,
+-				       u.streamcipher_req) +
++			  sizeof_member(struct adiantum_request_ctx,
++					u.streamcipher_req) +
+ 			  crypto_skcipher_reqsize(streamcipher));
+ 
+ 	crypto_skcipher_set_reqsize(tfm,
+
 
