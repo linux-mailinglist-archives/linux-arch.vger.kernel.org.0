@@ -2,132 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4D1D34B1
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 01:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF96D34B8
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 01:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726533AbfJJX4k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Oct 2019 19:56:40 -0400
-Received: from smtprelay0058.hostedemail.com ([216.40.44.58]:36546 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725951AbfJJX4k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Oct 2019 19:56:40 -0400
-X-Greylist: delayed 368 seconds by postgrey-1.27 at vger.kernel.org; Thu, 10 Oct 2019 19:56:39 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id E09A118041742;
-        Thu, 10 Oct 2019 23:50:31 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 4DA0E181D3377;
-        Thu, 10 Oct 2019 23:50:30 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 30,2,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::,RULES_HIT:41:355:379:599:800:960:968:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2693:2828:2898:3138:3139:3140:3141:3142:3353:3622:3653:3865:3866:3868:3871:4321:4605:5007:6117:7576:7875:9391:10004:10400:11026:11232:11233:11473:11658:11914:12043:12296:12297:12438:12555:12740:12760:12895:13439:14096:14097:14181:14659:14721:21080:21451:21505:21627:21740:21972:30054:30064:30070:30091,0,RBL:47.151.152.152:@perches.com:.lbl8.mailshell.net-62.8.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:27,LUA_SUMMARY:none
-X-HE-Tag: dock63_3e5b57d448e10
-X-Filterd-Recvd-Size: 3509
-Received: from XPS-9350.home (unknown [47.151.152.152])
-        (Authenticated sender: joe@perches.com)
-        by omf09.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 10 Oct 2019 23:50:28 +0000 (UTC)
-Message-ID: <2231d5f0a82f880e6706e2d0f070328a029c9b21.camel@perches.com>
-Subject: Re: [PATCH v2 3/4] treewide: Use sizeof_member() macro
-From:   Joe Perches <joe@perches.com>
-To:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Cc:     Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Date:   Thu, 10 Oct 2019 16:50:27 -0700
-In-Reply-To: <20191010232345.26594-4-keescook@chromium.org>
-References: <20191010232345.26594-1-keescook@chromium.org>
-         <20191010232345.26594-4-keescook@chromium.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.32.1-2 
+        id S1726875AbfJJX5k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Oct 2019 19:57:40 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:40239 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726474AbfJJX5k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Oct 2019 19:57:40 -0400
+Received: by mail-pg1-f193.google.com with SMTP id d26so4678655pgl.7
+        for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2019 16:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JDPAnamTFIBp8EbgTewpJ7Tw/YLIi8XdRk99n5ihTZ0=;
+        b=Db/oz2S5lstBws+DqElygyxc81UBHBsr+H3aP9d7X1Exv8x5nrqyE8LlbCfAHNDI33
+         C0Lez0UyqONC9IaOea8gT8nPL1/x5uCEuR2jRaabo/Im85fb5YQ8dXKHBhHzlSwEU26t
+         LMRAjaDuj9AVfrjyE4E00p9tS9qPnDSjC8rv8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JDPAnamTFIBp8EbgTewpJ7Tw/YLIi8XdRk99n5ihTZ0=;
+        b=fQKe8eubL7Aah4Ru+fXZrLQtCYIq1+5C3ibkSrlDA1mi/lJRrehDtfLlOO0+uZqZVr
+         pc6hNO9vOSE3ZEAEHy57XA5dDsgtN4ZK1Z6uHRuya+qZtDJP3sQneEebAfxSl2+x49Oz
+         8QsJbd09efsV+uT7CXwaNSHMddUME7Fy7RMluV6TBb2CYpV+00Cf/IEN8spHUxydvWia
+         NJsUDYAHfHCu8ZWeQEL0vqIPdtJ8NnYL+8hZB5w4WkF0jVCMK5s8xreCOUqoxwtVOtY+
+         VaRFn4r6Wd4Dik6QRC7/daX0Hw3mG39TT//StTVf3M+ZVNOlQI6L6XUJ50TX6wgtrhD6
+         FzrA==
+X-Gm-Message-State: APjAAAXZJDsESxsB3J+rr2xKrlQpoLFquB5Lz74575Z5lFh1i2eW2AWt
+        4JYFjjHVVsD7IfBnPqRFrIWZNw==
+X-Google-Smtp-Source: APXvYqxc417dQnyKwr23xDZjX8PoZldCbCNE524Aqa25++NjX1n3K1nM+hIHdvRdzpYCGpdnTHOJmw==
+X-Received: by 2002:a17:90a:cc12:: with SMTP id b18mr13644961pju.141.1570751858072;
+        Thu, 10 Oct 2019 16:57:38 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b4sm5035339pju.16.2019.10.10.16.57.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2019 16:57:37 -0700 (PDT)
+Date:   Thu, 10 Oct 2019 16:57:36 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-c6x-dev@linux-c6x.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>, linux-parisc@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/29] vmlinux.lds.h: Refactor EXCEPTION_TABLE and NOTES
+Message-ID: <201910101657.234CB71E53@keescook>
+References: <20190926175602.33098-1-keescook@chromium.org>
+ <20191010180331.GI7658@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191010180331.GI7658@zn.tnic>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 2019-10-10 at 16:23 -0700, Kees Cook wrote:
-> From: Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
+On Thu, Oct 10, 2019 at 08:03:31PM +0200, Borislav Petkov wrote:
+> On Thu, Sep 26, 2019 at 10:55:33AM -0700, Kees Cook wrote:
+> > This series works to move the linker sections for NOTES and
+> > EXCEPTION_TABLE into the RO_DATA area, where they belong on most
+> > (all?) architectures. The problem being addressed was the discovery
+> > by Rick Edgecombe that the exception table was accidentally marked
+> > executable while he was developing his execute-only-memory series. When
+> > permissions were flipped from readable-and-executable to only-executable,
+> > the exception table became unreadable, causing things to explode rather
+> > badly. :)
+> > 
+> > Roughly speaking, the steps are:
+> > 
+> > - regularize the linker names for PT_NOTE and PT_LOAD program headers
+> >   (to "note" and "text" respectively)
+> > - regularize restoration of linker section to program header assignment
+> >   (when PT_NOTE exists)
+> > - move NOTES into RO_DATA
+> > - finish macro naming conversions for RO_DATA and RW_DATA
+> > - move EXCEPTION_TABLE into RO_DATA on architectures where this is clear
+> > - clean up some x86-specific reporting of kernel memory resources
+> > - switch x86 linker fill byte from x90 (NOP) to 0xcc (INT3), just because
+> >   I finally realized what that trailing ": 0x9090" meant -- and we should
+> >   trap, not slide, if execution lands in section padding
 > 
-> Replace all the occurrences of FIELD_SIZEOF() and sizeof_field() with
-> sizeof_member() except at places where these are defined. Later patches
-> will remove the unused definitions.
+> Yap, nice patchset overall.
+
+Thanks!
+
+> > Since these changes are treewide, I'd love to get architecture-maintainer
+> > Acks and either have this live in x86 -tip or in my own tree, however
+> > people think it should go.
 > 
-> This patch is generated using following script:
-> 
-> EXCLUDE_FILES="include/linux/stddef.h|include/linux/kernel.h"
-> 
-> git grep -l -e "\bFIELD_SIZEOF\b" -e "\bsizeof_field\b" | while read file;
-> do
-> 
-> 	if [[ "$file" =~ $EXCLUDE_FILES ]]; then
-> 		continue
-> 	fi
-> 	sed -i  -e 's/\bFIELD_SIZEOF\b/sizeof_member/g' \
-> 		-e 's/\bsizeof_field\b/sizeof_member/g' \
-> 		$file;
-> done
+> Sure, I don't mind taking v2 through tip once I get ACKs from the
+> respective arch maintainers.
 
-While the sed works, a cocci script would perhaps
-be better as multi line argument realignment would
-also occur.
+Okay, excellent. I've only had acks from arm64, but I'll call it out
+again in v2. Thanks for the review!
 
-$ cat sizeof_member.cocci
-@@
-@@
-
--	FIELD_SIZEOF
-+	sizeof_member
-
-@@
-@@
-
--	sizeof_field
-+	sizeof_member
-$
-
-For instance, this sed produces:
-
-diff --git a/crypto/adiantum.c b/crypto/adiantum.c
-@@ -435,10 +435,10 @@ static int adiantum_init_tfm(struct crypto_skcipher *tfm)
- 
- 	BUILD_BUG_ON(offsetofend(struct adiantum_request_ctx, u) !=
- 		     sizeof(struct adiantum_request_ctx));
--	subreq_size = max(FIELD_SIZEOF(struct adiantum_request_ctx,
-+	subreq_size = max(sizeof_member(struct adiantum_request_ctx,
- 				       u.hash_desc) +
- 			  crypto_shash_descsize(hash),
--			  FIELD_SIZEOF(struct adiantum_request_ctx,
-+			  sizeof_member(struct adiantum_request_ctx,
- 				       u.streamcipher_req) +
- 			  crypto_skcipher_reqsize(streamcipher));
- 
-
-where the cocci script produces:
-
---- crypto/adiantum.c
-+++ /tmp/cocci-output-22881-d8186c-adiantum.c
-@@ -435,11 +435,11 @@ static int adiantum_init_tfm(struct cryp
- 
- 	BUILD_BUG_ON(offsetofend(struct adiantum_request_ctx, u) !=
- 		     sizeof(struct adiantum_request_ctx));
--	subreq_size = max(FIELD_SIZEOF(struct adiantum_request_ctx,
--				       u.hash_desc) +
-+	subreq_size = max(sizeof_member(struct adiantum_request_ctx,
-+					u.hash_desc) +
- 			  crypto_shash_descsize(hash),
--			  FIELD_SIZEOF(struct adiantum_request_ctx,
--				       u.streamcipher_req) +
-+			  sizeof_member(struct adiantum_request_ctx,
-+					u.streamcipher_req) +
- 			  crypto_skcipher_reqsize(streamcipher));
- 
- 	crypto_skcipher_set_reqsize(tfm,
-
-
+-- 
+Kees Cook
