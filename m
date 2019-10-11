@@ -2,55 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F01FED50C7
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Oct 2019 18:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7DFD54E8
+	for <lists+linux-arch@lfdr.de>; Sun, 13 Oct 2019 09:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728636AbfJLQBa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Oct 2019 12:01:30 -0400
-Received: from nms02.ip-net.mgrs.ru ([178.237.242.9]:45450 "EHLO
-        nms02.ip-net.mgrs.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727115AbfJLP7a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Oct 2019 11:59:30 -0400
-Received: from User (localhost.localdomain [127.0.0.1])
-        by nms02.ip-net.mgrs.ru (Postfix) with SMTP id 562F84E11B6;
-        Sat, 12 Oct 2019 08:16:18 +0300 (MSK)
-Reply-To: <kepe19655@aol.com>
-From:   "Mr. Henk Boelens" <info@wholeearth.com>
-To:     henkboelens2016@contractor.net
-Subject: GOOD DAY?
-Date:   Fri, 11 Oct 2019 22:17:04 -0700
+        id S1728546AbfJMHgB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 13 Oct 2019 03:36:01 -0400
+Received: from [206.81.8.171] ([206.81.8.171]:56546 "EHLO varon.localdomain"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728198AbfJMHgB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 13 Oct 2019 03:36:01 -0400
+Received: from 127.0.0.1 (varon [127.0.0.1])
+        by varon.localdomain (Postfix) with SMTP id 290C355D635;
+        Fri, 11 Oct 2019 10:21:17 +0000 (UTC)
+Received: from (HELO 1iqb) [176.71.184.19] by 127.0.0.1 for <linhao63@jlonline.com>; Fri, 11 Oct 2019 03:19:21 -0700
+Message-ID: <4-806$5o5$$r$as6q109r731c@hkg.so2qo8>
+From:   "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+Reply-To: "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+To:     linhao63@jlonline.com
+Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA ??
+Date:   Fri, 11 Oct 19 03:19:21 GMT
+X-Mailer: Microsoft Outlook IMO, Build 9.0.2416 (9.0.2910.0)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/alternative;
+        boundary="C.F387.BA..3D"
 X-Priority: 3
 X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20191012051619.562F84E11B6@nms02.ip-net.mgrs.ru>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Western Associate Bank
-Bank Address:Tower Building 83 Hull Road
-Oxwich Brussels Belgium
 
-Dear Friend
+--C.F387.BA..3D
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-Please accept my apologies if this request does not meet your personal ethics as it is not intended to cause you any embarrassment in what ever form. I got your
-contact email address from the internet directory and decided to contact you for this transaction that is based on trust and your outstanding. I have an interesting business proposal for you that will be of immense benefit to both of us. Although this may be hard for you to believe because i know that there is absolutely going to be a great doubt and distrust in your heart in respect of this email as this might sound strange to you and coupled with the fact that, so many individuals have taken possession of the Internet to facilitate their nefarious deeds, thereby making it extremely difficult for genuine and legitimate persons to get attention and recognition. Please grant me the benefit of doubt and hear me out.
+Greetings
 
-My name is Henk Boelens . I work with Western Associate Bank here in Belgium as a branch bank manager. I discovered an abandoned sum of GBP 19,850,000.00 (Nineteen Million Eight Hundred And Fifty Thousand British Pounds) in an account that belongs to one of our foreign customers Late Dr. Erin Jacobson, an American citizen who unfortunately lost his life and his entire family in Montana plane crash on March 23, 2009, on their way to a group ski vacation. The choice of contacting you is aroused from the geographical nature of where you live, particularly due to the sensitivity of this transaction and the confidentiality herein. Now our bank has been waiting for any of the relatives to come up for the claim but nobody has done that. I personally tried to locate any member of his family but have been unsuccessful in locating the relatives for 7 years now, i have also checked the deposit documents and discovered that he did not declare any next of kin on the deposit.
+My name is Barrister Hans Erich.
 
-Now the Management of our bank as instructed me to look for the next of kin or they will convert the funds into the Government Treasury Account as unclaimed funds and the funds will be wasted. Therefore, I cannot claim these funds without presenting a foreigner to stand as next of kin. This is reason why I contacted you to seek your consent to present you as an next of kin so that the funds will be release to you, then we share it 55% for me and 45% for you because am not a
-greedy person and is deal between me and you.
+I have a client who is interested to invest in your country, she is a well=
+ known politician in her country and deserve a lucrative investment partne=
+rship with you outside her country without any delay   Please can you mana=
+ge such investment please Kindly reply for further details.
 
-I have employed the service of an Attorney who will secure all necessary legal documents that could be used to back up this claim. All the attorney need to do is to fill in your names to the documents and legalize it in the Court here to prove you as the legitimate next of kin to the late depositor Dr. Erin Jacobson then the bank will release the funds to you as the rightful beneficiary.
+Your full nameS -----------
 
-This is a fair deal without any risk attached either on your part or on my part as long as we comply with the laws governing the claiming of funds in our establishment. All I require is your honest co-operation to enable us see this deal through, and with my position in the bank as a bank manager, I will do every thing possible to protect your interest and to make sure everything workout successfully.
 
-If you are interested in this deal, kindly send me your complete information, your full names and address, Your Private telephone and Fax numbers, and Cell phone so that the attorney will start processing the necessary paperwork that would facilitate the release of the funds to you.
+Your urgent response will be appreciated
 
-Mr. Henk Boelens
+Thank you and God bless you.
+
+Barrister Hans Erich
+
+Yours sincerely,
+Barrister Hans Erich
+
+--C.F387.BA..3D--
+
