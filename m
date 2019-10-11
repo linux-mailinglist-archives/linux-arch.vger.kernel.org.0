@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3472D434C
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 16:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE79D4356
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 16:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726714AbfJKOo5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Oct 2019 10:44:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:34594 "EHLO foss.arm.com"
+        id S1726328AbfJKOrt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Oct 2019 10:47:49 -0400
+Received: from foss.arm.com ([217.140.110.172]:34710 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726671AbfJKOo5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 11 Oct 2019 10:44:57 -0400
+        id S1726174AbfJKOrt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 11 Oct 2019 10:47:49 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C9716142F;
-        Fri, 11 Oct 2019 07:44:56 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD83D142F;
+        Fri, 11 Oct 2019 07:47:48 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E268F3F68E;
-        Fri, 11 Oct 2019 07:44:53 -0700 (PDT)
-Date:   Fri, 11 Oct 2019 15:44:51 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C799A3F68E;
+        Fri, 11 Oct 2019 07:47:45 -0700 (PDT)
+Date:   Fri, 11 Oct 2019 15:47:43 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     Mark Rutland <mark.rutland@arm.com>
 Cc:     Paul Elliott <paul.elliott@arm.com>,
@@ -39,24 +39,24 @@ Cc:     Paul Elliott <paul.elliott@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         Florian Weimer <fweimer@redhat.com>,
         linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>
-Subject: Re: [PATCH v2 12/12] KVM: arm64: BTI: Reset BTYPE when skipping
- emulated instructions
-Message-ID: <20191011144451.GI27757@arm.com>
+Subject: Re: [PATCH v2 11/12] arm64: BTI: Reset BTYPE when skipping emulated
+ instructions
+Message-ID: <20191011144743.GJ27757@arm.com>
 References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
- <1570733080-21015-13-git-send-email-Dave.Martin@arm.com>
- <20191011142454.GD33537@lakrids.cambridge.arm.com>
+ <1570733080-21015-12-git-send-email-Dave.Martin@arm.com>
+ <20191011142157.GC33537@lakrids.cambridge.arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191011142454.GD33537@lakrids.cambridge.arm.com>
+In-Reply-To: <20191011142157.GC33537@lakrids.cambridge.arm.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 03:24:55PM +0100, Mark Rutland wrote:
-> On Thu, Oct 10, 2019 at 07:44:40PM +0100, Dave Martin wrote:
+On Fri, Oct 11, 2019 at 03:21:58PM +0100, Mark Rutland wrote:
+> On Thu, Oct 10, 2019 at 07:44:39PM +0100, Dave Martin wrote:
 > > Since normal execution of any non-branch instruction resets the
 > > PSTATE BTYPE field to 0, so do the same thing when emulating a
 > > trapped instruction.
@@ -66,39 +66,52 @@ On Fri, Oct 11, 2019 at 03:24:55PM +0100, Mark Rutland wrote:
 > > 
 > > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
 > > ---
-> >  arch/arm64/include/asm/kvm_emulate.h | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >  arch/arm64/kernel/traps.c | 2 ++
+> >  1 file changed, 2 insertions(+)
 > > 
-> > diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
-> > index d69c1ef..33957a12 100644
-> > --- a/arch/arm64/include/asm/kvm_emulate.h
-> > +++ b/arch/arm64/include/asm/kvm_emulate.h
-> > @@ -452,8 +452,10 @@ static inline void kvm_skip_instr(struct kvm_vcpu *vcpu, bool is_wide_instr)
-> >  {
-> >  	if (vcpu_mode_is_32bit(vcpu))
-> >  		kvm_skip_instr32(vcpu, is_wide_instr);
-> > -	else
-> > +	else {
-> >  		*vcpu_pc(vcpu) += 4;
-> > +		*vcpu_cpsr(vcpu) &= ~(u64)PSR_BTYPE_MASK;
-> > +	}
+> > diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> > index 3af2768..4d8ce50 100644
+> > --- a/arch/arm64/kernel/traps.c
+> > +++ b/arch/arm64/kernel/traps.c
+> > @@ -331,6 +331,8 @@ void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
+> >  
+> >  	if (regs->pstate & PSR_MODE32_BIT)
+> >  		advance_itstate(regs);
+> > +	else
+> > +		regs->pstate &= ~(u64)PSR_BTYPE_MASK;
 > 
-> Style nit: both sides of an if-else should match brace-wise. i.e. please
-> add braces to the other side.
-
-Will fix.  Strange, checkpatch didn't catch that, maybe because only one
-arm of the if was patched.
-
-> As with the prior patch, the u64 cast can also go.
+> This looks good to me, with one nit below.
 > 
-> Otherwise, this looks right to me.
+> We don't (currently) need the u64 cast here, and it's inconsistent with
+> what we do elsewhere. If the upper 32-bit of pstate get allocated, we'll
+> need to fix up all the other masking we do:
 
-For some reason I thought there was a different prevailing style in the
-KVM code, but now I see no evidence of that.
+Huh, looks like I missed that.  Dang.  Will fix.
 
-Will fix.
+> [mark@lakrids:~/src/linux]% git grep 'pstate &= ~'
+> arch/arm64/kernel/armv8_deprecated.c:           regs->pstate &= ~PSR_AA32_E_BIT;
+> arch/arm64/kernel/cpufeature.c:         regs->pstate &= ~PSR_SSBS_BIT;
+> arch/arm64/kernel/debug-monitors.c:     regs->pstate &= ~DBG_SPSR_SS;
+> arch/arm64/kernel/insn.c:       pstate &= ~(pstate >> 1);       /* PSR_C_BIT &= ~PSR_Z_BIT */
+> arch/arm64/kernel/insn.c:       pstate &= ~(pstate >> 1);       /* PSR_C_BIT &= ~PSR_Z_BIT */
+> arch/arm64/kernel/probes/kprobes.c:     regs->pstate &= ~PSR_D_BIT;
+> arch/arm64/kernel/probes/kprobes.c:     regs->pstate &= ~DAIF_MASK;
+> arch/arm64/kernel/ptrace.c:     regs->pstate &= ~SPSR_EL1_AARCH32_RES0_BITS;
+> arch/arm64/kernel/ptrace.c:                     regs->pstate &= ~PSR_AA32_E_BIT;
+> arch/arm64/kernel/ptrace.c:     regs->pstate &= ~SPSR_EL1_AARCH64_RES0_BITS;
+> arch/arm64/kernel/ptrace.c:             regs->pstate &= ~DBG_SPSR_SS;
+> arch/arm64/kernel/ssbd.c:       task_pt_regs(task)->pstate &= ~val;
+> arch/arm64/kernel/traps.c:      regs->pstate &= ~PSR_AA32_IT_MASK;
+> 
+> ... and at that point I'd suggest we should just ensure the bit
+> definitions are all defined as unsigned long in the first place since
+> adding casts to each use is error-prone.
 
-Thanks for the review.
+Are we concerned about changing the types of UAPI #defines?  That can
+cause subtle and unexpected breakage, especially when the signedness
+of a #define changes.
+
+Ideally, we'd just change all these to 1UL << n.
 
 Cheers
 ---Dave
