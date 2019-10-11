@@ -2,30 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F466D3F02
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 13:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6240ED3F05
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 13:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727907AbfJKLvP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Oct 2019 07:51:15 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33182 "EHLO mx1.suse.de"
+        id S1728386AbfJKLxB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Oct 2019 07:53:01 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33304 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727226AbfJKLvP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 11 Oct 2019 07:51:15 -0400
+        id S1727896AbfJKLvR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 11 Oct 2019 07:51:17 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5B108B43E;
-        Fri, 11 Oct 2019 11:51:13 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 937AAB47B;
+        Fri, 11 Oct 2019 11:51:14 +0000 (UTC)
 From:   Jiri Slaby <jslaby@suse.cz>
 To:     bp@alien8.de
 Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
         x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v9 02/28] x86/asm/suspend: Use SYM_DATA for data
-Date:   Fri, 11 Oct 2019 13:50:42 +0200
-Message-Id: <20191011115108.12392-3-jslaby@suse.cz>
+        linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH v9 03/28] x86/asm: Annotate relocate_kernel_{32,64}.c
+Date:   Fri, 11 Oct 2019 13:50:43 +0200
+Message-Id: <20191011115108.12392-4-jslaby@suse.cz>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191011115108.12392-1-jslaby@suse.cz>
 References: <20191011115108.12392-1-jslaby@suse.cz>
@@ -36,55 +33,146 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Some global data in the suspend code were marked as `ENTRY'. ENTRY was
-intended for functions and shall be paired with ENDPROC. ENTRY also
-aligns symbols to 16 bytes which creates unnecessary holes here between
-data. Note that:
-* saved_magic (long) in wakeup_32 is still prepended by section's ALIGN
-* saved_magic (quad) in wakeup_64 follows a bunch of quads which are
-  aligned (but need not be aligned to 16)
+There are functions in relocate_kernel_{32,64}.c which are not
+annotated. This makes automatic works on them rather hard. So annotate
+all the functions now.
 
-Since historical markings are being dropped, make proper use of newly
-added SYM_DATA in this code.
+Note that these are not C-like functions, so FUNC is not used. Instead
+CODE markers are used. Also the functions are not aligned, so the
+NOALIGN versions are used:
+- SYM_CODE_START_NOALIGN
+- SYM_CODE_START_LOCAL_NOALIGN
+- SYM_CODE_END
+
+In return, we get:
+  0000   108 NOTYPE  GLOBAL DEFAULT    1 relocate_kernel
+  006c   165 NOTYPE  LOCAL  DEFAULT    1 identity_mapped
+  0146   127 NOTYPE  LOCAL  DEFAULT    1 swap_pages
+  0111    53 NOTYPE  LOCAL  DEFAULT    1 virtual_mapped
 
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Cc: Len Brown <len.brown@intel.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Borislav Petkov <bp@alien8.de>
 Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: x86@kernel.org
-Cc: linux-pm@vger.kernel.org
 ---
- arch/x86/kernel/acpi/wakeup_32.S | 2 +-
- arch/x86/kernel/acpi/wakeup_64.S | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/relocate_kernel_32.S | 13 ++++++++-----
+ arch/x86/kernel/relocate_kernel_64.S | 13 ++++++++-----
+ 2 files changed, 16 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/kernel/acpi/wakeup_32.S b/arch/x86/kernel/acpi/wakeup_32.S
-index e95e95960156..427249292aef 100644
---- a/arch/x86/kernel/acpi/wakeup_32.S
-+++ b/arch/x86/kernel/acpi/wakeup_32.S
-@@ -90,7 +90,7 @@ ret_point:
+diff --git a/arch/x86/kernel/relocate_kernel_32.S b/arch/x86/kernel/relocate_kernel_32.S
+index ee26df08002e..94b33885f8d2 100644
+--- a/arch/x86/kernel/relocate_kernel_32.S
++++ b/arch/x86/kernel/relocate_kernel_32.S
+@@ -35,8 +35,7 @@
+ #define CP_PA_BACKUP_PAGES_MAP	DATA(0x1c)
  
- .data
- ALIGN
--ENTRY(saved_magic)	.long	0
-+SYM_DATA(saved_magic,	.long 0)
- saved_eip:		.long 0
+ 	.text
+-	.globl relocate_kernel
+-relocate_kernel:
++SYM_CODE_START_NOALIGN(relocate_kernel)
+ 	/* Save the CPU context, used for jumping back */
  
- # saved registers
-diff --git a/arch/x86/kernel/acpi/wakeup_64.S b/arch/x86/kernel/acpi/wakeup_64.S
-index 7f9ade13bbcf..462a20f386e0 100644
---- a/arch/x86/kernel/acpi/wakeup_64.S
-+++ b/arch/x86/kernel/acpi/wakeup_64.S
-@@ -136,4 +136,4 @@ saved_rbx:		.quad	0
- saved_rip:		.quad	0
- saved_rsp:		.quad	0
+ 	pushl	%ebx
+@@ -93,8 +92,9 @@ relocate_kernel:
+ 	addl    $(identity_mapped - relocate_kernel), %eax
+ 	pushl   %eax
+ 	ret
++SYM_CODE_END(relocate_kernel)
  
--ENTRY(saved_magic)	.quad	0
-+SYM_DATA(saved_magic,	.quad	0)
+-identity_mapped:
++SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
+ 	/* set return address to 0 if not preserving context */
+ 	pushl	$0
+ 	/* store the start address on the stack */
+@@ -191,8 +191,9 @@ identity_mapped:
+ 	addl	$(virtual_mapped - relocate_kernel), %eax
+ 	pushl	%eax
+ 	ret
++SYM_CODE_END(identity_mapped)
+ 
+-virtual_mapped:
++SYM_CODE_START_LOCAL_NOALIGN(virtual_mapped)
+ 	movl	CR4(%edi), %eax
+ 	movl	%eax, %cr4
+ 	movl	CR3(%edi), %eax
+@@ -208,9 +209,10 @@ virtual_mapped:
+ 	popl	%esi
+ 	popl	%ebx
+ 	ret
++SYM_CODE_END(virtual_mapped)
+ 
+ 	/* Do the copies */
+-swap_pages:
++SYM_CODE_START_LOCAL_NOALIGN(swap_pages)
+ 	movl	8(%esp), %edx
+ 	movl	4(%esp), %ecx
+ 	pushl	%ebp
+@@ -270,6 +272,7 @@ swap_pages:
+ 	popl	%ebx
+ 	popl	%ebp
+ 	ret
++SYM_CODE_END(swap_pages)
+ 
+ 	.globl kexec_control_code_size
+ .set kexec_control_code_size, . - relocate_kernel
+diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
+index c51ccff5cd01..ef3ba99068d3 100644
+--- a/arch/x86/kernel/relocate_kernel_64.S
++++ b/arch/x86/kernel/relocate_kernel_64.S
+@@ -38,8 +38,7 @@
+ 	.text
+ 	.align PAGE_SIZE
+ 	.code64
+-	.globl relocate_kernel
+-relocate_kernel:
++SYM_CODE_START_NOALIGN(relocate_kernel)
+ 	/*
+ 	 * %rdi indirection_page
+ 	 * %rsi page_list
+@@ -103,8 +102,9 @@ relocate_kernel:
+ 	addq	$(identity_mapped - relocate_kernel), %r8
+ 	pushq	%r8
+ 	ret
++SYM_CODE_END(relocate_kernel)
+ 
+-identity_mapped:
++SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
+ 	/* set return address to 0 if not preserving context */
+ 	pushq	$0
+ 	/* store the start address on the stack */
+@@ -209,8 +209,9 @@ identity_mapped:
+ 	movq	$virtual_mapped, %rax
+ 	pushq	%rax
+ 	ret
++SYM_CODE_END(identity_mapped)
+ 
+-virtual_mapped:
++SYM_CODE_START_LOCAL_NOALIGN(virtual_mapped)
+ 	movq	RSP(%r8), %rsp
+ 	movq	CR4(%r8), %rax
+ 	movq	%rax, %cr4
+@@ -228,9 +229,10 @@ virtual_mapped:
+ 	popq	%rbp
+ 	popq	%rbx
+ 	ret
++SYM_CODE_END(virtual_mapped)
+ 
+ 	/* Do the copies */
+-swap_pages:
++SYM_CODE_START_LOCAL_NOALIGN(swap_pages)
+ 	movq	%rdi, %rcx 	/* Put the page_list in %rcx */
+ 	xorl	%edi, %edi
+ 	xorl	%esi, %esi
+@@ -283,6 +285,7 @@ swap_pages:
+ 	jmp	0b
+ 3:
+ 	ret
++SYM_CODE_END(swap_pages)
+ 
+ 	.globl kexec_control_code_size
+ .set kexec_control_code_size, . - relocate_kernel
 -- 
 2.23.0
 
