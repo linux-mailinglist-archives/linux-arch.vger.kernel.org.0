@@ -2,135 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7345D3F56
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 14:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC27D40F5
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 15:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727198AbfJKMTy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Oct 2019 08:19:54 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:42354 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727243AbfJKMTy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Oct 2019 08:19:54 -0400
-Received: by mail-lj1-f193.google.com with SMTP id y23so9582838lje.9
-        for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2019 05:19:53 -0700 (PDT)
+        id S1728252AbfJKNTx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Oct 2019 09:19:53 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:40186 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727950AbfJKNTx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Oct 2019 09:19:53 -0400
+Received: by mail-wm1-f65.google.com with SMTP id b24so10197274wmj.5
+        for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2019 06:19:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=n9TW/HRe8d6mz4MQKhjPNO1PuLOYHluTJjNubX7sfzE=;
-        b=dcXZ61tRqDpeGyGapLhTvELR9pMmEjlU53H4BbUz/JaJ3WO3hx84ErbKazu7xtKoKW
-         gvfMB/6EjJI8i+G890KgefdzxLr6S1o9w430ETPzkjAgdOP3l6l7ixOEThpqumgeBE79
-         yFf5+SbM3GAjhnHfb/2lFglO+G1/u+qEVoh+6kFuwnvZMHgvU9mHqq45wrT4hVF2CZ/V
-         nOEak8d7761PnYr0dhcs16wc/cnH3Dsw+uB2anDBfGq2iKT2kjiQ3OI2EAOBkr7y0GrI
-         Zjo4zkuTZyH8+5GZzq4yNm64xgg5q+9qrdsHcivByH0oX+mhqy2KnAzFo6Brv2OiVRvb
-         8aWQ==
+        d=linaro.org; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=3WqnFBtN99txOjHW8qFZ7VvrrzF2BjnHQs3onyzMvPs=;
+        b=bH5CG0AW9kXASvJA2EuMJnKaKD7Fbs1GwNRinWUWTNTapEP8RrIptCMP1an49xbekJ
+         H/3qiouCwCwQmtjegXgBKGYHApR1xTo11NC5DYgYsPTOeQGRoDPvtPnRqKg84HcAlqvO
+         XRvXTQoaIKeYYrxABxAnEh0Qvzhqn4By2pZusdHwszJXbIb/NFeogtxxx6vNknOUUPy5
+         RfDnt/1a4BbZriu5/MsIqONZBAi1MKpClV3PE8YTfrl7OOtrUxEVgeQSqiDMBL92j54u
+         u4ZwCTTwFqwMacJBhOAq3ppU8n5FD0zr7DkSg35RtBGQhA8ISMcqUAddCt9zb4UvoSUc
+         H1aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=n9TW/HRe8d6mz4MQKhjPNO1PuLOYHluTJjNubX7sfzE=;
-        b=uh8wBomPjr1MKzF5W2b1EZa6AuUvhGNOMm5iWmIFeruz4OvMbewbAtSw2cXtLt8kbR
-         eBR5qYS9O4/8qOxSUhnHM8Tu0g7/5eu+V0EC2cdzBhpkDQJ5/KZ7aeUygmWcjhYLznyr
-         17879mUe4NtYw5IWB/Er4/OuiOOmSh4a/AeiVUgwHljIQ3DUqikXtk8rPjtyY7szrRZr
-         wjXDmLHhvtS9CH9liiDkCTmUqGzRiVfxmhLr9Y7wVhH+5E1UmcBh7NLCsz9iEMqJ3Wqb
-         o5FSuzhU3rt2PQx04fBN+YXHJQ2+KS9+pgXGpD0bv5etdv+i2qh9DaUUJJFy0UPPhzVa
-         bobg==
-X-Gm-Message-State: APjAAAW7pLhYOTR7trzq2NEcEpWRtztD9tbrKvUD2YWpbxq6xzGe1ycT
-        v86j79lsMKWJZGFiM7hwILlxLQ==
-X-Google-Smtp-Source: APXvYqwZoc4fM1naaPJ7w+PtjiadfJ4JzznLHAw4a73DhoKiP8rjYFSUvqrrjtzyxw6vnYfFdWEnyA==
-X-Received: by 2002:a2e:9913:: with SMTP id v19mr8829129lji.234.1570796392539;
-        Fri, 11 Oct 2019 05:19:52 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id v22sm1868024ljh.56.2019.10.11.05.19.51
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version:content-transfer-encoding;
+        bh=3WqnFBtN99txOjHW8qFZ7VvrrzF2BjnHQs3onyzMvPs=;
+        b=p98WcLUZemvTrFDbt2OiqH5pIJd3m7zltTOpG2n5Wa0XdEPLv0xRw39CM/NMDi+5CW
+         EboffOg7eBWJsxT3QcK+bY4w32w8ZjFhfuEHkDWdfFG/VGf8dUeGHnDA1WB7iHF9BCCS
+         NlZ0l3RaWLSROFsef30+3F6FeTTcJTKZhoaKCwY0bbUCI1f2WhZnnoWlsChj6Bg4dfGp
+         omzCmWrUTbKd2wqUU/oodP+QD3sTq/PorEysF4LenDhn2t2g34JuZUz3E3DJsIKShUO7
+         qd6Vhgx4Pgn2Tk8Rei7/ugy5ZkIrxp+LKt+DKHlqnpXlBplvDBuK+CesQEwW2oE0zkRz
+         RYTQ==
+X-Gm-Message-State: APjAAAVjpWJMLoPHToLrRx3V9BTxTl4cAqjM5m8Z4AEN/bI9PnLFHL++
+        MfebM7IM3oEVe+qfe9T6RrkuxA==
+X-Google-Smtp-Source: APXvYqynWfJQdfki/cjqANCLobcJdHZS0I5wCNhJ1JZtTd6660Unv8vERen1T4YJoCu1nFkIJXw1vg==
+X-Received: by 2002:a7b:ca54:: with SMTP id m20mr3360919wml.142.1570799990277;
+        Fri, 11 Oct 2019 06:19:50 -0700 (PDT)
+Received: from zen.linaroharston ([51.148.130.216])
+        by smtp.gmail.com with ESMTPSA id f143sm12497795wme.40.2019.10.11.06.19.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2019 05:19:51 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 93D6C102DC1; Fri, 11 Oct 2019 15:19:51 +0300 (+03)
-Date:   Fri, 11 Oct 2019 15:19:51 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Vineet Gupta <vineetg76@gmail.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Fri, 11 Oct 2019 06:19:49 -0700 (PDT)
+Received: from zen (localhost [127.0.0.1])
+        by zen.linaroharston (Postfix) with ESMTP id E1BD11FF87;
+        Fri, 11 Oct 2019 14:19:48 +0100 (BST)
+References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
+ <1570733080-21015-5-git-send-email-Dave.Martin@arm.com>
+User-agent: mu4e 1.3.5; emacs 27.0.50
+From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Andrew Jones <drjones@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Elliott <paul.elliott@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, Nick Piggin <npiggin@gmail.com>,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-snps-arc@lists.infradead.org, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 0/3] eldie generated code for folded p4d/pud
-Message-ID: <20191011121951.nxna6hruuskvdxod@box>
-References: <20191009222658.961-1-vgupta@synopsys.com>
- <20191010085609.xgwkrbzea253wmfg@black.fi.intel.com>
- <8ba067a6-8b6a-2414-0f04-b251cd6bb47c@gmail.com>
+        Richard Henderson <richard.henderson@linaro.org>,
+        Sudakshina Das <sudi.das@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will.deacon@arm.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 04/12] arm64: docs: cpu-feature-registers: Document
+ ID_AA64PFR1_EL1
+In-reply-to: <1570733080-21015-5-git-send-email-Dave.Martin@arm.com>
+Date:   Fri, 11 Oct 2019 14:19:48 +0100
+Message-ID: <87zhi7l8qz.fsf@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8ba067a6-8b6a-2414-0f04-b251cd6bb47c@gmail.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 01:05:56PM -0700, Vineet Gupta wrote:
-> 
-> Hi Kirill,
-> 
-> On 10/10/19 1:56 AM, Kirill A. Shutemov wrote:
-> > On Wed, Oct 09, 2019 at 10:26:55PM +0000, Vineet Gupta wrote:
-> >>
-> >> This series elides extraneous generate code for folded p4d/pud.
-> >> This came up when trying to remove __ARCH_USE_5LEVEL_HACK from ARC port.
-> >> The code saving are not a while lot, but still worthwhile IMHO.
-> > 
-> > Agreed.
-> 
-> Thx.
-> 
-> So given we are folding pmd too, it seemed we could do the following as well.
-> 
-> +#ifndef __PAGETABLE_PMD_FOLDED
->  void pmd_clear_bad(pmd_t *);
-> +#else
-> +#define pmd_clear_bad(pmd)        do { } while (0)
-> +#endif
-> 
-> +#ifndef __PAGETABLE_PMD_FOLDED
->  void pmd_clear_bad(pmd_t *pmd)
->  {
->         pmd_ERROR(*pmd);
->         pmd_clear(pmd);
->  }
-> +#endif
-> 
-> I stared at generated code and it seems a bit wrong.
-> free_pgd_range() -> pgd_none_or_clear_bad() is no longer checking for unmapped pgd
-> entries as pgd_none/pgd_bad are all stubs returning 0.
-> 
-> This whole pmd folding is a bit confusing considering I only revisit it every few
-> years :-) Abstraction wise, __PAGETABLE_PMD_FOLDED only has pgd, pte but even in
-> this regime bunch of pmd macros are still valid
-> 
->     pmd_set(pmdp, ptep) {
->         *pmdp.pud.p4d.pgd = (unsigned long)ptep
->     }
-> 
-> Is there a better way to make a mental model of this code folding.
 
-I don't have any. PMD folding predates me and have never looked at it
-closely. Quick look brings more confusion than clarity. :P
+Dave Martin <Dave.Martin@arm.com> writes:
 
-> In an ideal world pmd folded would have meant pmd_* routines just vanish - poof.
-> So in that sense I like your implementation under #[45]LEVEL_HACK where the level
-> simply vanishes by code like #define p4d_t pgd_t. Perhaps there is lot of historic
-> baggage, proliferated into arch code so hard to untangle.
+> Commit d71be2b6c0e1 ("arm64: cpufeature: Detect SSBS and advertise
+> to userspace") exposes ID_AA64PFR1_EL1 to userspace, but didn't
+> update the documentation to match.
+>
+> Add it.
+>
+> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+>
+> ---
+>
+> Note to maintainers:
+>
+>  * This patch has been racing with various other attempts to fix
+>    the same documentation in the meantime.
+>
+>    Since this patch only fixes the documenting for pre-existing
+>    features, it can safely be dropped if appropriate.
+>
+>    The _new_ documentation relating to BTI feature reporting
+>    is in a subsequent patch, and needs to be retained.
+> ---
+>  Documentation/arm64/cpu-feature-registers.rst | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/arm64/cpu-feature-registers.rst b/Documentatio=
+n/arm64/cpu-feature-registers.rst
+> index 2955287..b86828f 100644
+> --- a/Documentation/arm64/cpu-feature-registers.rst
+> +++ b/Documentation/arm64/cpu-feature-registers.rst
+> @@ -168,8 +168,15 @@ infrastructure:
+>       +------------------------------+---------+---------+
+>
+>
+> -  3) MIDR_EL1 - Main ID Register
+> +  3) ID_AA64PFR1_EL1 - Processor Feature Register 1
+> +     +------------------------------+---------+---------+
+> +     | Name                         |  bits   | visible |
+> +     +------------------------------+---------+---------+
+> +     | SSBS                         | [7-4]   |    y    |
+> +     +------------------------------+---------+---------+
+> +
+>
+> +  4) MIDR_EL1 - Main ID Register
+>       +------------------------------+---------+---------+
+>       | Name                         |  bits   | visible |
+>       +------------------------------+---------+---------+
+> @@ -188,7 +195,7 @@ infrastructure:
+>     as available on the CPU where it is fetched and is not a system
+>     wide safe value.
+>
+> -  4) ID_AA64ISAR1_EL1 - Instruction set attribute register 1
+> +  5) ID_AA64ISAR1_EL1 - Instruction set attribute register 1
 
-In ideal world all these pgd/p4d/pud/pmd/pte should die and we have
-something more flexible to begin with.
+If I'm not mistaken .rst has support for auto-enumeration if the #
+character is used. That might reduce the pain of re-numbering in future.
 
-I played with this before:
+>
+>       +------------------------------+---------+---------+
+>       | Name                         |  bits   | visible |
+> @@ -210,7 +217,7 @@ infrastructure:
+>       | DPB                          | [3-0]   |    y    |
+>       +------------------------------+---------+---------+
+>
+> -  5) ID_AA64MMFR2_EL1 - Memory model feature register 2
+> +  6) ID_AA64MMFR2_EL1 - Memory model feature register 2
+>
+>       +------------------------------+---------+---------+
+>       | Name                         |  bits   | visible |
+> @@ -218,7 +225,7 @@ infrastructure:
+>       | AT                           | [35-32] |    y    |
+>       +------------------------------+---------+---------+
+>
+> -  6) ID_AA64ZFR0_EL1 - SVE feature ID register 0
+> +  7) ID_AA64ZFR0_EL1 - SVE feature ID register 0
+>
+>       +------------------------------+---------+---------+
+>       | Name                         |  bits   | visible |
 
-https://lore.kernel.org/lkml/20180424154355.mfjgkf47kdp2by4e@black.fi.intel.com/
 
--- 
- Kirill A. Shutemov
+--
+Alex Benn=C3=A9e
