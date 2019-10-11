@@ -2,55 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF96D34B8
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 01:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A958D352F
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 02:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbfJJX5k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Oct 2019 19:57:40 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40239 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726474AbfJJX5k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Oct 2019 19:57:40 -0400
-Received: by mail-pg1-f193.google.com with SMTP id d26so4678655pgl.7
-        for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2019 16:57:38 -0700 (PDT)
+        id S1726268AbfJKAGW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Oct 2019 20:06:22 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:41940 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726310AbfJKAGW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Oct 2019 20:06:22 -0400
+Received: by mail-pg1-f194.google.com with SMTP id t3so4685780pga.8
+        for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2019 17:06:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JDPAnamTFIBp8EbgTewpJ7Tw/YLIi8XdRk99n5ihTZ0=;
-        b=Db/oz2S5lstBws+DqElygyxc81UBHBsr+H3aP9d7X1Exv8x5nrqyE8LlbCfAHNDI33
-         C0Lez0UyqONC9IaOea8gT8nPL1/x5uCEuR2jRaabo/Im85fb5YQ8dXKHBhHzlSwEU26t
-         LMRAjaDuj9AVfrjyE4E00p9tS9qPnDSjC8rv8=
+        h=from:to:cc:subject:date:message-id;
+        bh=9StLK2MlJr7BNY6TFoL2FLdWEIH7MyJyYVIq4dGaZdM=;
+        b=nSazSiolb/UE6P+d6rHzH+plQd9BvPZ3YU+Man7WIT3R8sZhs7kVHXwU9QaLRP510Y
+         dorUYmhg3KsIFCy/xwIiMTBtYQUTSPbAS/cxZFArOFUrePZF8eMYBvFWZOPX367uO7AQ
+         tOtSHwKalmk9pRcI3vDDcxSyHH7wzEBksWqjA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JDPAnamTFIBp8EbgTewpJ7Tw/YLIi8XdRk99n5ihTZ0=;
-        b=fQKe8eubL7Aah4Ru+fXZrLQtCYIq1+5C3ibkSrlDA1mi/lJRrehDtfLlOO0+uZqZVr
-         pc6hNO9vOSE3ZEAEHy57XA5dDsgtN4ZK1Z6uHRuya+qZtDJP3sQneEebAfxSl2+x49Oz
-         8QsJbd09efsV+uT7CXwaNSHMddUME7Fy7RMluV6TBb2CYpV+00Cf/IEN8spHUxydvWia
-         NJsUDYAHfHCu8ZWeQEL0vqIPdtJ8NnYL+8hZB5w4WkF0jVCMK5s8xreCOUqoxwtVOtY+
-         VaRFn4r6Wd4Dik6QRC7/daX0Hw3mG39TT//StTVf3M+ZVNOlQI6L6XUJ50TX6wgtrhD6
-         FzrA==
-X-Gm-Message-State: APjAAAXZJDsESxsB3J+rr2xKrlQpoLFquB5Lz74575Z5lFh1i2eW2AWt
-        4JYFjjHVVsD7IfBnPqRFrIWZNw==
-X-Google-Smtp-Source: APXvYqxc417dQnyKwr23xDZjX8PoZldCbCNE524Aqa25++NjX1n3K1nM+hIHdvRdzpYCGpdnTHOJmw==
-X-Received: by 2002:a17:90a:cc12:: with SMTP id b18mr13644961pju.141.1570751858072;
-        Thu, 10 Oct 2019 16:57:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=9StLK2MlJr7BNY6TFoL2FLdWEIH7MyJyYVIq4dGaZdM=;
+        b=YpjlJAP3tXnV8PW/MdWV02A8xoQBIsXq5rDjDpQOBYlMfiGyZGCQmadr3sc4mZA3ll
+         Mrbpn+2wWL4M5cHaJueE7OVxmqhgoY360skhDRC8c021S6kLfccz8SpUBZJ9CxmzxgxF
+         lUCrXMV6wVi7FvOqdUzZeSU1R4oi+/zpXNH52KenFAAE2KGbr7oB0/rZzZ5UnNq8pk+L
+         AQ04Rk9AZB+L6s8a4m4o29xZiSk9i+AuVf0NOv82MFEHlcMxiq/wtfceZ2tBfiAbzjdI
+         AZ54zOUae6a7ogPNai7Au5gN155d9JGVkKvvQHLFyLDGKtL0xQMactH9J051t0rlZPhh
+         xSSg==
+X-Gm-Message-State: APjAAAUaFwHAy5bXmMI8L7U4Fx9RbDvhGGOXxS4j9bMPiE+2+ECEDaOa
+        pqWuzmGblLQQaMPXiCoaN4ZTlQ==
+X-Google-Smtp-Source: APXvYqy+BFNMKOyCmMISgn+NdoeMQkp/Wa9i8qIO2BPfpxRyHkLNqvDw/R+5rHogT97/j7uz2d63Lg==
+X-Received: by 2002:a17:90a:20cb:: with SMTP id f69mr13865338pjg.110.1570752380991;
+        Thu, 10 Oct 2019 17:06:20 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b4sm5035339pju.16.2019.10.10.16.57.36
+        by smtp.gmail.com with ESMTPSA id y2sm6740817pfe.126.2019.10.10.17.06.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 16:57:37 -0700 (PDT)
-Date:   Thu, 10 Oct 2019 16:57:36 -0700
+        Thu, 10 Oct 2019 17:06:20 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+Cc:     Kees Cook <keescook@chromium.org>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
         linux-ia64@vger.kernel.org, linux-s390@vger.kernel.org,
         linux-c6x-dev@linux-c6x.org,
@@ -58,57 +57,190 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Michal Simek <monstr@monstr.eu>, linux-parisc@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/29] vmlinux.lds.h: Refactor EXCEPTION_TABLE and NOTES
-Message-ID: <201910101657.234CB71E53@keescook>
-References: <20190926175602.33098-1-keescook@chromium.org>
- <20191010180331.GI7658@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191010180331.GI7658@zn.tnic>
+Subject: [PATCH v2 00/29] vmlinux.lds.h: Refactor EXCEPTION_TABLE and NOTES
+Date:   Thu, 10 Oct 2019 17:05:40 -0700
+Message-Id: <20191011000609.29728-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 08:03:31PM +0200, Borislav Petkov wrote:
-> On Thu, Sep 26, 2019 at 10:55:33AM -0700, Kees Cook wrote:
-> > This series works to move the linker sections for NOTES and
-> > EXCEPTION_TABLE into the RO_DATA area, where they belong on most
-> > (all?) architectures. The problem being addressed was the discovery
-> > by Rick Edgecombe that the exception table was accidentally marked
-> > executable while he was developing his execute-only-memory series. When
-> > permissions were flipped from readable-and-executable to only-executable,
-> > the exception table became unreadable, causing things to explode rather
-> > badly. :)
-> > 
-> > Roughly speaking, the steps are:
-> > 
-> > - regularize the linker names for PT_NOTE and PT_LOAD program headers
-> >   (to "note" and "text" respectively)
-> > - regularize restoration of linker section to program header assignment
-> >   (when PT_NOTE exists)
-> > - move NOTES into RO_DATA
-> > - finish macro naming conversions for RO_DATA and RW_DATA
-> > - move EXCEPTION_TABLE into RO_DATA on architectures where this is clear
-> > - clean up some x86-specific reporting of kernel memory resources
-> > - switch x86 linker fill byte from x90 (NOP) to 0xcc (INT3), just because
-> >   I finally realized what that trailing ": 0x9090" meant -- and we should
-> >   trap, not slide, if execution lands in section padding
-> 
-> Yap, nice patchset overall.
+Arch maintainers: please send Acks (if you haven't already) for your
+respective linker script changes; the intention is for this series to
+land via -tip.
+
+v1: https://lore.kernel.org/lkml/20190926175602.33098-1-keescook@chromium.org
+v2: clean up commit messages, rename RO_EXCEPTION_TABLE (bp)
+
+
+This series works to move the linker sections for NOTES and
+EXCEPTION_TABLE into the RO_DATA area, where they belong on most
+(all?) architectures. The problem being addressed was the discovery
+by Rick Edgecombe that the exception table was accidentally marked
+executable while he was developing his execute-only-memory series. When
+permissions were flipped from readable-and-executable to only-executable,
+the exception table became unreadable, causing things to explode rather
+badly. :)
+
+Roughly speaking, the steps are:
+
+- regularize the linker names for PT_NOTE and PT_LOAD program headers
+  (to "note" and "text" respectively)
+- regularize restoration of linker section to program header assignment
+  (when PT_NOTE exists)
+- move NOTES into RO_DATA
+- finish macro naming conversions for RO_DATA and RW_DATA
+- move EXCEPTION_TABLE into RO_DATA on architectures where this is clear
+- clean up some x86-specific reporting of kernel memory resources
+- switch x86 linker fill byte from x90 (NOP) to 0xcc (INT3), just because
+  I finally realized what that trailing ": 0x9090" meant -- and we should
+  trap, not slide, if execution lands in section padding
 
 Thanks!
 
-> > Since these changes are treewide, I'd love to get architecture-maintainer
-> > Acks and either have this live in x86 -tip or in my own tree, however
-> > people think it should go.
-> 
-> Sure, I don't mind taking v2 through tip once I get ACKs from the
-> respective arch maintainers.
+-Kees
 
-Okay, excellent. I've only had acks from arm64, but I'll call it out
-again in v2. Thanks for the review!
+Kees Cook (29):
+  powerpc: Rename "notes" PT_NOTE to "note"
+  powerpc: Remove PT_NOTE workaround
+  powerpc: Rename PT_LOAD identifier "kernel" to "text"
+  alpha: Rename PT_LOAD identifier "kernel" to "text"
+  ia64: Rename PT_LOAD identifier "code" to "text"
+  s390: Move RO_DATA into "text" PT_LOAD Program Header
+  x86: Restore "text" Program Header with dummy section
+  vmlinux.lds.h: Provide EMIT_PT_NOTE to indicate export of .notes
+  vmlinux.lds.h: Move Program Header restoration into NOTES macro
+  vmlinux.lds.h: Move NOTES into RO_DATA
+  vmlinux.lds.h: Replace RODATA with RO_DATA
+  vmlinux.lds.h: Replace RO_DATA_SECTION with RO_DATA
+  vmlinux.lds.h: Replace RW_DATA_SECTION with RW_DATA
+  vmlinux.lds.h: Allow EXCEPTION_TABLE to live in RO_DATA
+  x86: Actually use _etext for end of text segment
+  x86: Move EXCEPTION_TABLE to RO_DATA segment
+  alpha: Move EXCEPTION_TABLE to RO_DATA segment
+  arm64: Move EXCEPTION_TABLE to RO_DATA segment
+  c6x: Move EXCEPTION_TABLE to RO_DATA segment
+  h8300: Move EXCEPTION_TABLE to RO_DATA segment
+  ia64: Move EXCEPTION_TABLE to RO_DATA segment
+  microblaze: Move EXCEPTION_TABLE to RO_DATA segment
+  parisc: Move EXCEPTION_TABLE to RO_DATA segment
+  powerpc: Move EXCEPTION_TABLE to RO_DATA segment
+  xtensa: Move EXCEPTION_TABLE to RO_DATA segment
+  x86/mm: Remove redundant &s on addresses
+  x86/mm: Report which part of kernel image is freed
+  x86/mm: Report actual image regions in /proc/iomem
+  x86: Use INT3 instead of NOP for linker fill bytes
+
+ arch/alpha/kernel/vmlinux.lds.S      | 18 +++++-----
+ arch/arc/kernel/vmlinux.lds.S        |  6 ++--
+ arch/arm/kernel/vmlinux-xip.lds.S    |  4 +--
+ arch/arm/kernel/vmlinux.lds.S        |  4 +--
+ arch/arm64/kernel/vmlinux.lds.S      |  9 ++---
+ arch/c6x/kernel/vmlinux.lds.S        |  8 ++---
+ arch/csky/kernel/vmlinux.lds.S       |  5 ++-
+ arch/h8300/kernel/vmlinux.lds.S      |  9 ++---
+ arch/hexagon/kernel/vmlinux.lds.S    |  5 ++-
+ arch/ia64/kernel/vmlinux.lds.S       | 20 +++++------
+ arch/m68k/kernel/vmlinux-nommu.lds   |  4 +--
+ arch/m68k/kernel/vmlinux-std.lds     |  2 +-
+ arch/m68k/kernel/vmlinux-sun3.lds    |  2 +-
+ arch/microblaze/kernel/vmlinux.lds.S |  8 ++---
+ arch/mips/kernel/vmlinux.lds.S       | 15 ++++----
+ arch/nds32/kernel/vmlinux.lds.S      |  5 ++-
+ arch/nios2/kernel/vmlinux.lds.S      |  5 ++-
+ arch/openrisc/kernel/vmlinux.lds.S   |  7 ++--
+ arch/parisc/kernel/vmlinux.lds.S     | 11 +++---
+ arch/powerpc/kernel/vmlinux.lds.S    | 37 ++++---------------
+ arch/riscv/kernel/vmlinux.lds.S      |  5 ++-
+ arch/s390/kernel/vmlinux.lds.S       | 12 +++----
+ arch/sh/kernel/vmlinux.lds.S         |  3 +-
+ arch/sparc/kernel/vmlinux.lds.S      |  3 +-
+ arch/um/include/asm/common.lds.S     |  3 +-
+ arch/unicore32/kernel/vmlinux.lds.S  |  5 ++-
+ arch/x86/include/asm/processor.h     |  2 +-
+ arch/x86/include/asm/sections.h      |  1 -
+ arch/x86/kernel/setup.c              | 12 ++++++-
+ arch/x86/kernel/vmlinux.lds.S        | 16 ++++-----
+ arch/x86/mm/init.c                   |  8 ++---
+ arch/x86/mm/init_64.c                | 16 +++++----
+ arch/x86/mm/pti.c                    |  2 +-
+ arch/xtensa/kernel/vmlinux.lds.S     |  8 ++---
+ include/asm-generic/vmlinux.lds.h    | 53 ++++++++++++++++++++--------
+ 35 files changed, 159 insertions(+), 174 deletions(-)
 
 -- 
-Kees Cook
+2.17.1
+
+
+Kees Cook (29):
+  powerpc: Rename "notes" PT_NOTE to "note"
+  powerpc: Remove PT_NOTE workaround
+  powerpc: Rename PT_LOAD identifier "kernel" to "text"
+  alpha: Rename PT_LOAD identifier "kernel" to "text"
+  ia64: Rename PT_LOAD identifier "code" to "text"
+  s390: Move RO_DATA into "text" PT_LOAD Program Header
+  x86: Restore "text" Program Header with dummy section
+  vmlinux.lds.h: Provide EMIT_PT_NOTE to indicate export of .notes
+  vmlinux.lds.h: Move Program Header restoration into NOTES macro
+  vmlinux.lds.h: Move NOTES into RO_DATA
+  vmlinux.lds.h: Replace RODATA with RO_DATA
+  vmlinux.lds.h: Replace RO_DATA_SECTION with RO_DATA
+  vmlinux.lds.h: Replace RW_DATA_SECTION with RW_DATA
+  vmlinux.lds.h: Allow EXCEPTION_TABLE to live in RO_DATA
+  x86: Actually use _etext for end of text segment
+  x86: Move EXCEPTION_TABLE to RO_DATA segment
+  alpha: Move EXCEPTION_TABLE to RO_DATA segment
+  arm64: Move EXCEPTION_TABLE to RO_DATA segment
+  c6x: Move EXCEPTION_TABLE to RO_DATA segment
+  h8300: Move EXCEPTION_TABLE to RO_DATA segment
+  ia64: Move EXCEPTION_TABLE to RO_DATA segment
+  microblaze: Move EXCEPTION_TABLE to RO_DATA segment
+  parisc: Move EXCEPTION_TABLE to RO_DATA segment
+  powerpc: Move EXCEPTION_TABLE to RO_DATA segment
+  xtensa: Move EXCEPTION_TABLE to RO_DATA segment
+  x86/mm: Remove redundant &s on addresses
+  x86/mm: Report which part of kernel image is freed
+  x86/mm: Report actual image regions in /proc/iomem
+  x86: Use INT3 instead of NOP for linker fill bytes
+
+ arch/alpha/kernel/vmlinux.lds.S      | 18 +++++-----
+ arch/arc/kernel/vmlinux.lds.S        |  6 ++--
+ arch/arm/kernel/vmlinux-xip.lds.S    |  4 +--
+ arch/arm/kernel/vmlinux.lds.S        |  4 +--
+ arch/arm64/kernel/vmlinux.lds.S      | 10 +++---
+ arch/c6x/kernel/vmlinux.lds.S        |  8 ++---
+ arch/csky/kernel/vmlinux.lds.S       |  5 ++-
+ arch/h8300/kernel/vmlinux.lds.S      |  9 ++---
+ arch/hexagon/kernel/vmlinux.lds.S    |  5 ++-
+ arch/ia64/kernel/vmlinux.lds.S       | 20 +++++------
+ arch/m68k/kernel/vmlinux-nommu.lds   |  4 +--
+ arch/m68k/kernel/vmlinux-std.lds     |  2 +-
+ arch/m68k/kernel/vmlinux-sun3.lds    |  2 +-
+ arch/microblaze/kernel/vmlinux.lds.S |  8 ++---
+ arch/mips/kernel/vmlinux.lds.S       | 15 ++++----
+ arch/nds32/kernel/vmlinux.lds.S      |  5 ++-
+ arch/nios2/kernel/vmlinux.lds.S      |  5 ++-
+ arch/openrisc/kernel/vmlinux.lds.S   |  7 ++--
+ arch/parisc/kernel/vmlinux.lds.S     | 11 +++---
+ arch/powerpc/kernel/vmlinux.lds.S    | 37 ++++---------------
+ arch/riscv/kernel/vmlinux.lds.S      |  5 ++-
+ arch/s390/kernel/vmlinux.lds.S       | 12 +++----
+ arch/sh/kernel/vmlinux.lds.S         |  3 +-
+ arch/sparc/kernel/vmlinux.lds.S      |  3 +-
+ arch/um/include/asm/common.lds.S     |  3 +-
+ arch/unicore32/kernel/vmlinux.lds.S  |  5 ++-
+ arch/x86/include/asm/processor.h     |  2 +-
+ arch/x86/include/asm/sections.h      |  1 -
+ arch/x86/kernel/setup.c              | 12 ++++++-
+ arch/x86/kernel/vmlinux.lds.S        | 16 ++++-----
+ arch/x86/mm/init.c                   |  8 ++---
+ arch/x86/mm/init_64.c                | 16 +++++----
+ arch/x86/mm/pti.c                    |  2 +-
+ arch/xtensa/kernel/vmlinux.lds.S     |  8 ++---
+ include/asm-generic/vmlinux.lds.h    | 53 ++++++++++++++++++++--------
+ 35 files changed, 159 insertions(+), 175 deletions(-)
+
+-- 
+2.17.1
+
