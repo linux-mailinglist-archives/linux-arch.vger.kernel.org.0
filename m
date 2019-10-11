@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65860D34E6
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 02:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70E5D34E0
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 02:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727662AbfJKAGk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Oct 2019 20:06:40 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45453 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727663AbfJKAGh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Oct 2019 20:06:37 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y72so4923999pfb.12
-        for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2019 17:06:37 -0700 (PDT)
+        id S1727671AbfJKAGj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Oct 2019 20:06:39 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:45452 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727484AbfJKAGi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Oct 2019 20:06:38 -0400
+Received: by mail-pf1-f193.google.com with SMTP id y72so4924013pfb.12
+        for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2019 17:06:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=zkQRciK9mkrlSR6uxFsvjRswhc34+65nZ5EFVAGwQNE=;
-        b=YSecILoAsuaYNC3glukrCd31elBfhWrMe0PzbA6TDXYdPOVhmOhkQLy8xjOVCWTle3
-         sWZgpOp1PTW2fO+D3A347Fw7oous07bPkmNpp/aoq4rj0PLZ+w9ksZu6jr+caikG/bpH
-         XU/ce13E03H0+EglsamH4gM2AQvQFCYts7cLo=
+        bh=ZBHIZP91az7zFwublbVFIxiUPIvhqcpifj2fGv96nM4=;
+        b=V5SSXiOU/2LqW+YWMWv2g8oE+O+8OqaVciMsltfBT6XAT+UmV5TNibrJhEtO410tXb
+         /OnY7p2PJHhLZDVx/eoiV5CS19ovJ8wYT+GUzFT433OArvUWowNhqhNxhPEcl3xsRkLc
+         lb2h6DldDdTdhb4T8VOEQWN9DqKeDub1PenXs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=zkQRciK9mkrlSR6uxFsvjRswhc34+65nZ5EFVAGwQNE=;
-        b=e/J67aVcW9Z7BCZAvKg/WARgZSGmqOyLOpNbuqz7lLLTZsmwuCIVnXosTLUqKB9n7e
-         uRnZVq2bF3/qBoPZLy+P9Q1ltTv8zpOP9i9TRy10etF4Fg+OSFbOcFJaRPqH1Cf7ZIaX
-         ezBLJAWe8UDSb3SI1ErKPQWTYK5ATFuzqAmPt5JKXqJj5brpEJOh8MAvKAd/iJY/HVsH
-         sIFYnIyCzdQpP43/iyyfdLJSFuOX0QQfxh7gP0ibue8VynCy8viCuPfHnP7C3YUw/lch
-         KcVG5ZP0Bu7QCBTXfWft0RB+A/hBaoJc/ZC8q0VeWklNs4NmiG6WgKEL8go5YcqmP4pF
-         tFDw==
-X-Gm-Message-State: APjAAAU8PLfgh1NYaUC7ObvpJlk3T8WbRAzYJxnVnAr1VmmOEePuabrE
-        u0+UW3gppKc9KDaDhTXqhVvPjw==
-X-Google-Smtp-Source: APXvYqynxI+SrUE/IFh3H47ImD9d3o8Z2E9DLcjnFNC1TbOkJf20nhWWRMuV9Tda9+s+1NYxkhzhYQ==
-X-Received: by 2002:a63:2c7:: with SMTP id 190mr11717225pgc.18.1570752396275;
-        Thu, 10 Oct 2019 17:06:36 -0700 (PDT)
+        bh=ZBHIZP91az7zFwublbVFIxiUPIvhqcpifj2fGv96nM4=;
+        b=o15lOXqMbm8NGOCnp4YDztcQHTnCgUAYPaGlFKydUwjRe4YN+PwuCmLwFK6dfA58Uf
+         25lRvlDqt/saqgd18cQMuTtl3Cod6YvMLqlzqW6F4bJvprCqAmuAdTRNDQAU37PKb3vH
+         BfpdCaUJdWFyDIfkB8E4pzKVBqL/k1mRCkpdZKvWo/gMamok52zw16ZD+TQ+UQplagek
+         Oh8JNaiDlg/2ihz1dSlSNqTgnCaOdfT8HcyfgG6FdLf5XPJlkix91bQpkNuhyQf0w5KN
+         R5sV1phhQLE4q9SWXoOZOJSbe5ZCHKSSrWhumm8bIdCTSvt4JrfZ4WO8hqeqYaU4kIFK
+         j/wg==
+X-Gm-Message-State: APjAAAV9Cvv0iWu/nsU4IFb5W81x9GnsXPhXiPZ9l4YKZes6PX4dEa6r
+        mlVn4bYiSyVwhN1cHFdns/xuiw==
+X-Google-Smtp-Source: APXvYqxIURRErEoWhZaXwUViGgbdz47KTCDz+s6x66JTdawkgAKVzwgCcLp2sAcohHOnlA3CSEfhcA==
+X-Received: by 2002:aa7:9157:: with SMTP id 23mr13458255pfi.73.1570752397032;
+        Thu, 10 Oct 2019 17:06:37 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s141sm8901750pfs.13.2019.10.10.17.06.28
+        by smtp.gmail.com with ESMTPSA id n15sm5864975pjt.13.2019.10.10.17.06.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 17:06:33 -0700 (PDT)
+        Thu, 10 Oct 2019 17:06:35 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Borislav Petkov <bp@alien8.de>
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -58,9 +58,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Michal Simek <monstr@monstr.eu>, linux-parisc@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 20/29] h8300: Move EXCEPTION_TABLE to RO_DATA segment
-Date:   Thu, 10 Oct 2019 17:06:00 -0700
-Message-Id: <20191011000609.29728-21-keescook@chromium.org>
+Subject: [PATCH v2 28/29] x86/mm: Report actual image regions in /proc/iomem
+Date:   Thu, 10 Oct 2019 17:06:08 -0700
+Message-Id: <20191011000609.29728-29-keescook@chromium.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191011000609.29728-1-keescook@chromium.org>
 References: <20191011000609.29728-1-keescook@chromium.org>
@@ -69,33 +69,68 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since the EXCEPTION_TABLE is read-only, collapse it into RO_DATA.
+The resource reservations in /proc/iomem made for the kernel image did
+not reflect the gaps between text, rodata, and data. Add the "rodata"
+resource and update the start/end calculations to match the respective
+calls to free_kernel_image_pages().
+
+Before (booted with "nokaslr" for easier comparison):
+
+00100000-bffd9fff : System RAM
+  01000000-01e011d0 : Kernel code
+  01e011d1-025619bf : Kernel data
+  02a95000-035fffff : Kernel bss
+
+After:
+
+00100000-bffd9fff : System RAM
+  01000000-01e011d0 : Kernel code
+  02000000-023d4fff : Kernel rodata
+  02400000-025619ff : Kernel data
+  02a95000-035fffff : Kernel bss
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/h8300/kernel/vmlinux.lds.S | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/kernel/setup.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/arch/h8300/kernel/vmlinux.lds.S b/arch/h8300/kernel/vmlinux.lds.S
-index 2ac7bdcd2fe0..6b1afc2f9b68 100644
---- a/arch/h8300/kernel/vmlinux.lds.S
-+++ b/arch/h8300/kernel/vmlinux.lds.S
-@@ -1,4 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 77ea96b794bd..591e885a852e 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -143,6 +143,13 @@ struct boot_params boot_params;
+ /*
+  * Machine setup..
+  */
++static struct resource rodata_resource = {
++	.name	= "Kernel rodata",
++	.start	= 0,
++	.end	= 0,
++	.flags	= IORESOURCE_BUSY | IORESOURCE_SYSTEM_RAM
++};
 +
-+#define RO_EXCEPTION_TABLE_ALIGN	16
-+
- #include <asm-generic/vmlinux.lds.h>
- #include <asm/page.h>
- #include <asm/thread_info.h>
-@@ -37,7 +40,6 @@ SECTIONS
- #endif
- 	_etext = . ;
- 	}
--	EXCEPTION_TABLE(16)
- 	RO_DATA(4)
- 	ROMEND = .;
- #if defined(CONFIG_ROMKERNEL)
+ static struct resource data_resource = {
+ 	.name	= "Kernel data",
+ 	.start	= 0,
+@@ -951,7 +958,9 @@ void __init setup_arch(char **cmdline_p)
+ 
+ 	code_resource.start = __pa_symbol(_text);
+ 	code_resource.end = __pa_symbol(_etext)-1;
+-	data_resource.start = __pa_symbol(_etext);
++	rodata_resource.start = __pa_symbol(__start_rodata);
++	rodata_resource.end = __pa_symbol(__end_rodata)-1;
++	data_resource.start = __pa_symbol(_sdata);
+ 	data_resource.end = __pa_symbol(_edata)-1;
+ 	bss_resource.start = __pa_symbol(__bss_start);
+ 	bss_resource.end = __pa_symbol(__bss_stop)-1;
+@@ -1040,6 +1049,7 @@ void __init setup_arch(char **cmdline_p)
+ 
+ 	/* after parse_early_param, so could debug it */
+ 	insert_resource(&iomem_resource, &code_resource);
++	insert_resource(&iomem_resource, &rodata_resource);
+ 	insert_resource(&iomem_resource, &data_resource);
+ 	insert_resource(&iomem_resource, &bss_resource);
+ 
 -- 
 2.17.1
 
