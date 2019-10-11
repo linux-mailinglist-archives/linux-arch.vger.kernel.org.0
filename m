@@ -2,87 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D20B7D3A4C
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 09:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C355D3B08
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 10:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727163AbfJKHuB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Oct 2019 03:50:01 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:36760 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726829AbfJKHuA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Oct 2019 03:50:00 -0400
-Received: by mail-ot1-f68.google.com with SMTP id 67so7199318oto.3;
-        Fri, 11 Oct 2019 00:49:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9x3/cDB6PwQR0s+Phj11ZK3bUY2nRE9yOnXorXSrffA=;
-        b=Ll2lCJMdFu/joamcvFefwNkKU0iuaDD/PWg2CSIXA9BieBZC9RAmuBjl/xFcVVCBPV
-         m73Ik23xKj/NFcQtwlTfmaLF4rpmsmXwkXkR3eHay5BoXSvSA6A9n8m8DU5O7O/4k3yJ
-         fJmAz4H33ZjW/dxtjC+vZXXv9XwEZo1unNX+MnGcqhdNquhQBOWFQf+CJnbRFuLZu2h3
-         UnJ0fsoAaq5cvem1g+Hod6xy3lkfce6r6CrV7fWvOE5BDhx1csvIT5rua0U9rKZdyaiD
-         mNAih3eYqwvTp5ze58QXZy3Me+cgDi8VS9SNGsA6B8H2zM44/Xv1lzOo48+hTpYzulH/
-         pkbA==
-X-Gm-Message-State: APjAAAXpMmjKRDzcTb8xL3bLGxoIYUdyRvvw4YYVevm3dED93S02CPNq
-        ELcLqss5xP3ewI8am4zfpQKYBk269uNxmKsp07Q=
-X-Google-Smtp-Source: APXvYqzJCUSr68IdNnXRm+PcuWp7xfU4DRvosjpGQ70mELArtPXAo+zUfEKqQC0cweLEsachiHT5ajqOtTTMdIKhbv4=
-X-Received: by 2002:a05:6830:1685:: with SMTP id k5mr11303222otr.250.1570780198260;
- Fri, 11 Oct 2019 00:49:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191011000609.29728-1-keescook@chromium.org> <20191011000609.29728-13-keescook@chromium.org>
-In-Reply-To: <20191011000609.29728-13-keescook@chromium.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 11 Oct 2019 09:49:47 +0200
-Message-ID: <CAMuHMdW24azYFyoYwsYZKG685KS+a1H6L3v96BVcG2uBJoqnLw@mail.gmail.com>
-Subject: Re: [PATCH v2 12/29] vmlinux.lds.h: Replace RO_DATA_SECTION with RO_DATA
+        id S1726458AbfJKI0b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Oct 2019 04:26:31 -0400
+Received: from gate.crashing.org ([63.228.1.57]:43040 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726290AbfJKI0a (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 11 Oct 2019 04:26:30 -0400
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x9B8PNOs001341;
+        Fri, 11 Oct 2019 03:25:24 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id x9B8PJiY001329;
+        Fri, 11 Oct 2019 03:25:19 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Fri, 11 Oct 2019 03:25:19 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
 To:     Kees Cook <keescook@chromium.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+Cc:     Borislav Petkov <bp@alien8.de>, linux-arch@vger.kernel.org,
+        linux-s390@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        x86@kernel.org, linux-ia64@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-xtensa@linux-xtensa.org,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-c6x-dev@linux-c6x.org,
+        linuxppc-dev@lists.ozlabs.org,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-parisc@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org
+Subject: Re: [PATCH v2 01/29] powerpc: Rename "notes" PT_NOTE to "note"
+Message-ID: <20191011082519.GI9749@gate.crashing.org>
+References: <20191011000609.29728-1-keescook@chromium.org> <20191011000609.29728-2-keescook@chromium.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191011000609.29728-2-keescook@chromium.org>
+User-Agent: Mutt/1.4.2.3i
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 2:07 AM Kees Cook <keescook@chromium.org> wrote:
-> Finish renaming RO_DATA_SECTION to RO_DATA. (Calling this a "section"
-> is a lie, since it's multiple sections and section flags cannot be
-> applied to the macro.)
->
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On Thu, Oct 10, 2019 at 05:05:41PM -0700, Kees Cook wrote:
+> The Program Header identifiers are internal to the linker scripts. In
+> preparation for moving the NOTES segment declaration into RO_DATA,
+> standardize the identifier for the PT_NOTE entry to "note" as used by
+> all other architectures that emit PT_NOTE.
 
->  arch/m68k/kernel/vmlinux-nommu.lds  | 2 +-
+All other archs are wrong, and "notes" is a much better name.  This
+segment does not contain a single "note", but multiple "notes".
 
-For m68k:
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Segher
