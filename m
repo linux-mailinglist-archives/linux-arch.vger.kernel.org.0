@@ -2,29 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53ABED3EEF
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 13:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4A1D3EEC
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 13:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728053AbfJKLvW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Oct 2019 07:51:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33364 "EHLO mx1.suse.de"
+        id S1728080AbfJKLvX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Oct 2019 07:51:23 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33440 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728032AbfJKLvW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 11 Oct 2019 07:51:22 -0400
+        id S1728037AbfJKLvX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 11 Oct 2019 07:51:23 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id CD177B487;
-        Fri, 11 Oct 2019 11:51:20 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 46609B489;
+        Fri, 11 Oct 2019 11:51:21 +0000 (UTC)
 From:   Jiri Slaby <jslaby@suse.cz>
 To:     bp@alien8.de
 Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
         x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org
-Subject: [PATCH v9 14/28] xen/pvh: Annotate data appropriately
-Date:   Fri, 11 Oct 2019 13:50:54 +0200
-Message-Id: <20191011115108.12392-15-jslaby@suse.cz>
+        linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH v9 15/28] x86/asm/purgatory: Start using annotations
+Date:   Fri, 11 Oct 2019 13:50:55 +0200
+Message-Id: <20191011115108.12392-16-jslaby@suse.cz>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191011115108.12392-1-jslaby@suse.cz>
 References: <20191011115108.12392-1-jslaby@suse.cz>
@@ -35,66 +33,155 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Use the new SYM_DATA_START_LOCAL, and SYM_DATA_END* macros to have:
-  0000     8 OBJECT  LOCAL  DEFAULT    6 gdt
-  0008    32 OBJECT  LOCAL  DEFAULT    6 gdt_start
-  0028     0 OBJECT  LOCAL  DEFAULT    6 gdt_end
-  0028   256 OBJECT  LOCAL  DEFAULT    6 early_stack
-  0128     0 OBJECT  LOCAL  DEFAULT    6 early_stack
+Purgatory used no annotations at all. So include linux/linkage.h and
+annotate everything:
+* code by SYM_CODE_*
+* data by SYM_DATA_*
 
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc: Juergen Gross <jgross@suse.com>
 Cc: Borislav Petkov <bp@alien8.de>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: x86@kernel.org
-Cc: xen-devel@lists.xenproject.org
 ---
- arch/x86/platform/pvh/head.S | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ arch/x86/purgatory/entry64.S      | 21 ++++++++++++---------
+ arch/x86/purgatory/setup-x86_64.S | 14 ++++++++------
+ arch/x86/purgatory/stack.S        |  7 ++++---
+ 3 files changed, 24 insertions(+), 18 deletions(-)
 
-diff --git a/arch/x86/platform/pvh/head.S b/arch/x86/platform/pvh/head.S
-index 1f8825bbaffb..4e63480bb223 100644
---- a/arch/x86/platform/pvh/head.S
-+++ b/arch/x86/platform/pvh/head.S
-@@ -150,11 +150,12 @@ END(pvh_start_xen)
+diff --git a/arch/x86/purgatory/entry64.S b/arch/x86/purgatory/entry64.S
+index 275a646d1048..9d73d3648aa6 100644
+--- a/arch/x86/purgatory/entry64.S
++++ b/arch/x86/purgatory/entry64.S
+@@ -8,13 +8,13 @@
+  * This code has been taken from kexec-tools.
+  */
  
- 	.section ".init.data","aw"
- 	.balign 8
++#include <linux/linkage.h>
++
+ 	.text
+ 	.balign 16
+ 	.code64
+-	.globl entry64, entry64_regs
+-
+ 
+-entry64:
++SYM_CODE_START(entry64)
+ 	/* Setup a gdt that should be preserved */
+ 	lgdt gdt(%rip)
+ 
+@@ -54,10 +54,11 @@ new_cs_exit:
+ 
+ 	/* Jump to the new code... */
+ 	jmpq	*rip(%rip)
++SYM_CODE_END(entry64)
+ 
+ 	.section ".rodata"
+ 	.balign 4
+-entry64_regs:
++SYM_DATA_START(entry64_regs)
+ rax:	.quad 0x0
+ rcx:	.quad 0x0
+ rdx:	.quad 0x0
+@@ -75,12 +76,12 @@ r13:	.quad 0x0
+ r14:	.quad 0x0
+ r15:	.quad 0x0
+ rip:	.quad 0x0
+-	.size entry64_regs, . - entry64_regs
++SYM_DATA_END(entry64_regs)
+ 
+ 	/* GDT */
+ 	.section ".rodata"
+ 	.balign 16
 -gdt:
 +SYM_DATA_START_LOCAL(gdt)
- 	.word gdt_end - gdt_start
- 	.long _pa(gdt_start)
- 	.word 0
--gdt_start:
-+SYM_DATA_END(gdt)
-+SYM_DATA_START_LOCAL(gdt_start)
- 	.quad 0x0000000000000000            /* NULL descriptor */
- #ifdef CONFIG_X86_64
- 	.quad GDT_ENTRY(0xa09a, 0, 0xfffff) /* PVH_CS_SEL */
-@@ -163,15 +164,14 @@ gdt_start:
- #endif
- 	.quad GDT_ENTRY(0xc092, 0, 0xfffff) /* PVH_DS_SEL */
- 	.quad GDT_ENTRY(0x4090, 0, 0x18)    /* PVH_CANARY_SEL */
+ 	/* 0x00 unusable segment
+ 	 * 0x08 unused
+ 	 * so use them as gdt ptr
+@@ -94,6 +95,8 @@ gdt:
+ 
+ 	/* 0x18 4GB flat data segment */
+ 	.word 0xFFFF, 0x0000, 0x9200, 0x00CF
 -gdt_end:
-+SYM_DATA_END_LABEL(gdt_start, SYM_L_LOCAL, gdt_end)
+-stack:	.quad   0, 0
+-stack_init:
++SYM_DATA_END_LABEL(gdt, SYM_L_LOCAL, gdt_end)
++
++SYM_DATA_START_LOCAL(stack)
++	.quad   0, 0
++SYM_DATA_END_LABEL(stack, SYM_L_LOCAL, stack_init)
+diff --git a/arch/x86/purgatory/setup-x86_64.S b/arch/x86/purgatory/setup-x86_64.S
+index 321146be741d..89d9e9e53fcd 100644
+--- a/arch/x86/purgatory/setup-x86_64.S
++++ b/arch/x86/purgatory/setup-x86_64.S
+@@ -7,14 +7,14 @@
+  *
+  * This code has been taken from kexec-tools.
+  */
++#include <linux/linkage.h>
+ #include <asm/purgatory.h>
  
+ 	.text
+-	.globl purgatory_start
  	.balign 16
--canary:
--	.fill 48, 1, 0
-+SYM_DATA_LOCAL(canary, .fill 48, 1, 0)
+-purgatory_start:
+ 	.code64
  
--early_stack:
-+SYM_DATA_START_LOCAL(early_stack)
- 	.fill BOOT_STACK_SIZE, 1, 0
--early_stack_end:
-+SYM_DATA_END_LABEL(early_stack, SYM_L_LOCAL, early_stack_end)
++SYM_CODE_START(purgatory_start)
+ 	/* Load a gdt so I know what the segment registers are */
+ 	lgdt	gdt(%rip)
  
- 	ELFNOTE(Xen, XEN_ELFNOTE_PHYS32_ENTRY,
- 	             _ASM_PTR (pvh_start_xen - __START_KERNEL_map))
+@@ -32,10 +32,12 @@ purgatory_start:
+ 	/* Call the C code */
+ 	call purgatory
+ 	jmp	entry64
++SYM_CODE_END(purgatory_start)
+ 
+ 	.section ".rodata"
+ 	.balign 16
+-gdt:	/* 0x00 unusable segment
++SYM_DATA_START_LOCAL(gdt)
++	/* 0x00 unusable segment
+ 	 * 0x08 unused
+ 	 * so use them as the gdt ptr
+ 	 */
+@@ -48,10 +50,10 @@ gdt:	/* 0x00 unusable segment
+ 
+ 	/* 0x18 4GB flat data segment */
+ 	.word	0xFFFF, 0x0000, 0x9200, 0x00CF
+-gdt_end:
++SYM_DATA_END_LABEL(gdt, SYM_L_LOCAL, gdt_end)
+ 
+ 	.bss
+ 	.balign 4096
+-lstack:
++SYM_DATA_START_LOCAL(lstack)
+ 	.skip 4096
+-lstack_end:
++SYM_DATA_END_LABEL(lstack, SYM_L_LOCAL, lstack_end)
+diff --git a/arch/x86/purgatory/stack.S b/arch/x86/purgatory/stack.S
+index 8b1427422dfc..1ef507ca50a5 100644
+--- a/arch/x86/purgatory/stack.S
++++ b/arch/x86/purgatory/stack.S
+@@ -5,13 +5,14 @@
+  * Copyright (C) 2014 Red Hat Inc.
+  */
+ 
++#include <linux/linkage.h>
++
+ 	/* A stack for the loaded kernel.
+ 	 * Separate and in the data section so it can be prepopulated.
+ 	 */
+ 	.data
+ 	.balign 4096
+-	.globl stack, stack_end
+ 
+-stack:
++SYM_DATA_START(stack)
+ 	.skip 4096
+-stack_end:
++SYM_DATA_END_LABEL(stack, SYM_L_GLOBAL, stack_end)
 -- 
 2.23.0
 
