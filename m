@@ -2,222 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 898F3D4679
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 19:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD93D4A74
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Oct 2019 00:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728449AbfJKRUV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Oct 2019 13:20:21 -0400
-Received: from foss.arm.com ([217.140.110.172]:38258 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728086AbfJKRUV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 11 Oct 2019 13:20:21 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADD8628;
-        Fri, 11 Oct 2019 10:20:20 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C68FE3F703;
-        Fri, 11 Oct 2019 10:20:17 -0700 (PDT)
-Date:   Fri, 11 Oct 2019 18:20:15 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Paul Elliott <paul.elliott@arm.com>,
+        id S1726757AbfJKWrL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Oct 2019 18:47:11 -0400
+Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:37182 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726642AbfJKWrL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 11 Oct 2019 18:47:11 -0400
+X-Greylist: delayed 522 seconds by postgrey-1.27 at vger.kernel.org; Fri, 11 Oct 2019 18:47:10 EDT
+Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 80CEFC04A7;
+        Fri, 11 Oct 2019 22:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1570833508; bh=E0P1RFAQD2Jf3g/rlBhYfNzwHdOeyXPqBOG/QZTvieM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=A6IYKky8AdyUQ2QMjcIa2Uj+0XJjLeGbu6SH7JKVYKXMO6VLVywzRybptkCdTakG0
+         RDHIGz82Gfiajkpm4OCoDCz9X4UjVucNxnWyUWfz+tlwwNcSs1lfGeqyUqmRKJ3LFS
+         tBwLL8Ru9EXyP/LBxMEtY6xAHed0FQeC59VOQqR9UUlgMl+BFNEPVVNI9SqOd5WLg0
+         jRQ+NyVOSXkfzBGVDgUyBMjNBT83MBQiNVhn3m6ENnXJdTZM9bDCep+rLXiai1UQkv
+         UIYZzv9FSGgroLSDe0WPaDu0yK3CsCcEcUiNmvP+v0zljLl4HIl6q2weZjeDtxqIVu
+         zIeuNs1TDq8ZA==
+Received: from vineetg-Latitude-E7450.internal.synopsys.com (vineetg-latitude-e7450.internal.synopsys.com [10.10.161.61])
+        by mailhost.synopsys.com (Postfix) with ESMTP id AC1E4A006B;
+        Fri, 11 Oct 2019 22:38:21 +0000 (UTC)
+From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
+To:     linux-mm@kvack.org
+Cc:     linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch@vger.kernel.org, Eugene Syromiatnikov <esyr@redhat.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Andrew Jones <drjones@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Florian Weimer <fweimer@redhat.com>,
-        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>
-Subject: Re: [PATCH v2 05/12] arm64: Basic Branch Target Identification
- support
-Message-ID: <20191011172013.GQ27757@arm.com>
-References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
- <1570733080-21015-6-git-send-email-Dave.Martin@arm.com>
- <20191011151028.GE33537@lakrids.cambridge.arm.com>
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Subject: [RFC] asm-generic/tlb: stub out pmd_free_tlb() if __PAGETABLE_PMD_FOLDED
+Date:   Fri, 11 Oct 2019 15:38:18 -0700
+Message-Id: <20191011223818.7238-1-vgupta@synopsys.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191011121951.nxna6hruuskvdxod@box>
+References: <20191011121951.nxna6hruuskvdxod@box>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191011151028.GE33537@lakrids.cambridge.arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 04:10:29PM +0100, Mark Rutland wrote:
-> On Thu, Oct 10, 2019 at 07:44:33PM +0100, Dave Martin wrote:
-> > This patch adds the bare minimum required to expose the ARMv8.5
-> > Branch Target Identification feature to userspace.
-> > 
-> > By itself, this does _not_ automatically enable BTI for any initial
-> > executable pages mapped by execve().  This will come later, but for
-> > now it should be possible to enable BTI manually on those pages by
-> > using mprotect() from within the target process.
-> > 
-> > Other arches already using the generic mman.h are already using
-> > 0x10 for arch-specific prot flags, so we use that for PROT_BTI
-> > here.
-> > 
-> > For consistency, signal handler entry points in BTI guarded pages
-> > are required to be annotated as such, just like any other function.
-> > This blocks a relatively minor attack vector, but comforming
-> > userspace will have the annotations anyway, so we may as well
-> > enforce them.
-> > 
-> > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-> > 
-> > ---
-> > 
-> > Changes since v1:
-> > 
-> >  * Configure SCTLR_EL1.BTx to disallow BR onto a PACIxSP instruction
-> >    (except via X16/X17):
-> > 
-> >    The AArch64 procedure call standard requires binaries marked with
-> >    GNU_PROPERTY_AARCH64_FEATURE_1_BTI to use X16/X17 in trampolines
-> >    and tail calls, so it makes no sense to be permissive.
-> > 
-> >  * Rename PROT_BTI_GUARDED to PROT_BTI.
-> > 
-> >  * Rename VM_ARM64_GP to VM_ARM64_BTI:
-> > 
-> >    Although the architectural name for the BTI page table bit is "GP",
-> >    BTI is nonetheless the feature it controls.  So avoid introducing
-> >    the "GP" naming just for this -- it's just an unecessary extra
-> >    source of confusion.
-> > 
-> >  * Tidy up masking with ~PSR_BTYPE_MASK.
-> > 
-> >  * Drop masking out of BTYPE on SVC, with a comment outlining why.
-> > 
-> >  * Split PSR_BTYPE_SHIFT definition into this patch.  It's not
-> >    useful yet, but it makes sense to define PSR_BTYPE_* using this
-> >    from the outset.
-> > 
-> >  * Migrate to ct_user_exit_irqoff in entry.S:el0_bti.
-> 
-> [...]
-> 
-> > diff --git a/arch/arm64/include/asm/mman.h b/arch/arm64/include/asm/mman.h
-> > new file mode 100644
-> > index 0000000..cbfe3238
-> > --- /dev/null
-> > +++ b/arch/arm64/include/asm/mman.h
-> > @@ -0,0 +1,33 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef __ASM_MMAN_H__
-> > +#define __ASM_MMAN_H__
-> > +
-> > +#include <uapi/asm/mman.h>
-> > +
-> > +#define arch_calc_vm_prot_bits(prot, pkey) arm64_calc_vm_prot_bits(prot)
-> > +static inline unsigned long arm64_calc_vm_prot_bits(unsigned long prot)
-> > +{
-> > +	if (system_supports_bti() && (prot & PROT_BTI))
-> > +		return VM_ARM64_BTI;
-> > +
-> > +	return 0;
-> > +}
-> 
-> Can we call this arch_calc_vm_prot_bits() directly, with all the
-> arguments:
-> 
-> static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
-> 						   unsigned long pkey)
-> {
-> 	...
-> }
-> #define arch_calc_vm_prot_bits arch_calc_vm_prot_bits
-> 
-> ... as that makes it a bit easier to match definition with use, and just
-> definign the name makes it a bit clearer that that's probably for the
-> benefit of some ifdeffery.
-> 
-> Likewise for the other functions here.
-> 
-> > +#define arch_vm_get_page_prot(vm_flags) arm64_vm_get_page_prot(vm_flags)
-> > +static inline pgprot_t arm64_vm_get_page_prot(unsigned long vm_flags)
-> > +{
-> > +	return (vm_flags & VM_ARM64_BTI) ? __pgprot(PTE_GP) : __pgprot(0);
-> > +}
-> > +
-> > +#define arch_validate_prot(prot, addr) arm64_validate_prot(prot, addr)
-> > +static inline int arm64_validate_prot(unsigned long prot, unsigned long addr)
+This is inine with similar patches for nopud [1] and nop4d [2] cases.
 
-Can do, though it looks like a used sparc as a template, and that has a
-sparc_ prefix.
+  However I'm not really sure I understand clearly how the nopmd code is
+  supposed to work (for a 2 tier paging system) - hence the RFC.
+  Consider free_pmd_range() simplified/annotated below
 
-powerpc uses the generic name, as does x86 ... in its UAPI headers.
-Odd.
+  free_pmd_range
+  ...
+	pmd = pmd_offset(pud, addr);
+	do {
+		next = pmd_addr_end(addr, end);
+		if (pmd_none_or_clear_bad(pmd)) => *pmd_bad()/pmd_clear_bad() [a]*
+			continue;
+		free_pte_range(tlb, pmd, addr);
+	} while (pmd++, addr = next, addr != end);
+   ...
+	*pmd_free_tlb(tlb, pmd, start); => [b]*
 
-I can change the names here, though I'm not sure it adds a lot of value.
+   For ARC/nopmd case [a] is actually checking pgd and consequently
+   pmd_clear_bad() can't be stubbed out for PMD_FOLDED case. However it seems
+   case [b] can be stubbed out (hence this patch) along same lines as [1] and [2]
 
-If you feel strongly I can do it.
+| bloat-o-meter2 vmlinux-E-elide-p?d_clear_bad vmlinux-F-elide-pmd_free_tlb
+| add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-112 (-112)
+| function                                     old     new   delta
+| free_pgd_range                               422     310    -112
+| Total: Before=4137002, After=4136890, chg -1.000000%
 
-> > +{
-> > +	unsigned long supported = PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM;
-> > +
-> > +	if (system_supports_bti())
-> > +		supported |= PROT_BTI;
-> > +
-> > +	return (prot & ~supported) == 0;
-> > +}
-> 
-> If we have this check, can we ever get into arm64_calc_vm_prot_bits()
-> with PROT_BIT but !system_supports_bti()?
-> 
-> ... or can that become:
-> 
-> 	return (prot & PROT_BTI) ? VM_ARM64_BTI : 0;
+[1] http://lists.infradead.org/pipermail/linux-snps-arc/2019-October/006266.html
+[2] http://lists.infradead.org/pipermail/linux-snps-arc/2019-October/006265.html
 
-We can reach this via mmap() and friends IIUC.
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+---
+ include/asm-generic/tlb.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Since this function only gets called once-ish per vma I have a weak
-preference for keeping the check here to avoid code fragility.
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index f3dad87f4ecc..a1edad7d4170 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -574,6 +574,7 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
+ 	} while (0)
+ #endif
+ 
++#ifndef __PAGETABLE_PMD_FOLDED
+ #ifndef pmd_free_tlb
+ #define pmd_free_tlb(tlb, pmdp, address)			\
+ 	do {							\
+@@ -583,6 +584,9 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
+ 		__pmd_free_tlb(tlb, pmdp, address);		\
+ 	} while (0)
+ #endif
++#else
++#define pmd_free_tlb(tlb, pmdp, address)        do { } while (0)
++#endif
+ 
+ #ifndef __PAGETABLE_PUD_FOLDED
+ #ifndef pud_free_tlb
+-- 
+2.20.1
 
-
-It does feel like arch_validate_prot() is supposed to be a generic gate
-for prot flags coming into the kernel via any route though, but only the
-mprotect() path actually uses it.
-
-This function originally landed in v2.6.27 as part of the powerpc strong
-access ordering support (PROT_SAO):
-
-b845f313d78e ("mm: Allow architectures to define additional protection bits")
-ef3d3246a0d0 ("powerpc/mm: Add Strong Access Ordering support")
-
-where the mmap() path uses arch_calc_vm_prot_bits() without
-arch_validate_prot(), just as in the current code.  powerpc's original
-arch_calc_vm_prot_bits() does no obvious policing.
-
-
-This might be a bug.  I can draft a patch to add it for the mmap() path
-for people to comment on ... I can't figure out yet whether or not the
-difference is intentional or there's some subtlety that I'm missed.
-
-mmap( ... prot = -1 ... ) succeeds with effective rwx permissions and no
-apparent ill effects on my random x86 box, but mprotect(..., -1) fails
-with -EINVAL.
-
-This is at least strange.
-
-Theoretically, tightening this would be an ABI break, though I'd say
-this behaviour is not intentional.
-
-Thoughts?
-
-[...]
-
-Cheers
----Dave
