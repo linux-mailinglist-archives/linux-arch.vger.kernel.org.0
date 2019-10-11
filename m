@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE79D4356
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 16:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB17D436B
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2019 16:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726328AbfJKOrt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Oct 2019 10:47:49 -0400
-Received: from foss.arm.com ([217.140.110.172]:34710 "EHLO foss.arm.com"
+        id S1727036AbfJKOvz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Oct 2019 10:51:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:34842 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726174AbfJKOrt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 11 Oct 2019 10:47:49 -0400
+        id S1726174AbfJKOvz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 11 Oct 2019 10:51:55 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD83D142F;
-        Fri, 11 Oct 2019 07:47:48 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 614DB142F;
+        Fri, 11 Oct 2019 07:51:54 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C799A3F68E;
-        Fri, 11 Oct 2019 07:47:45 -0700 (PDT)
-Date:   Fri, 11 Oct 2019 15:47:43 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 607CF3F68E;
+        Fri, 11 Oct 2019 07:51:51 -0700 (PDT)
+Date:   Fri, 11 Oct 2019 15:51:49 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
-To:     Mark Rutland <mark.rutland@arm.com>
+To:     Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>
 Cc:     Paul Elliott <paul.elliott@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -38,80 +38,93 @@ Cc:     Paul Elliott <paul.elliott@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-arm-kernel@lists.infradead.org,
         Florian Weimer <fweimer@redhat.com>,
-        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>
-Subject: Re: [PATCH v2 11/12] arm64: BTI: Reset BTYPE when skipping emulated
- instructions
-Message-ID: <20191011144743.GJ27757@arm.com>
+        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>,
+        Suzuki Poulose <suzuki.poulose@arm.com>
+Subject: Re: [PATCH v2 04/12] arm64: docs: cpu-feature-registers: Document
+ ID_AA64PFR1_EL1
+Message-ID: <20191011145148.GK27757@arm.com>
 References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
- <1570733080-21015-12-git-send-email-Dave.Martin@arm.com>
- <20191011142157.GC33537@lakrids.cambridge.arm.com>
+ <1570733080-21015-5-git-send-email-Dave.Martin@arm.com>
+ <87zhi7l8qz.fsf@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20191011142157.GC33537@lakrids.cambridge.arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87zhi7l8qz.fsf@linaro.org>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 03:21:58PM +0100, Mark Rutland wrote:
-> On Thu, Oct 10, 2019 at 07:44:39PM +0100, Dave Martin wrote:
-> > Since normal execution of any non-branch instruction resets the
-> > PSTATE BTYPE field to 0, so do the same thing when emulating a
-> > trapped instruction.
-> > 
-> > Branches don't trap directly, so we should never need to assign a
-> > non-zero value to BTYPE here.
-> > 
+On Fri, Oct 11, 2019 at 02:19:48PM +0100, Alex Bennée wrote:
+> 
+> Dave Martin <Dave.Martin@arm.com> writes:
+> 
+> > Commit d71be2b6c0e1 ("arm64: cpufeature: Detect SSBS and advertise
+> > to userspace") exposes ID_AA64PFR1_EL1 to userspace, but didn't
+> > update the documentation to match.
+> >
+> > Add it.
+> >
 > > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> >
 > > ---
-> >  arch/arm64/kernel/traps.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-> > index 3af2768..4d8ce50 100644
-> > --- a/arch/arm64/kernel/traps.c
-> > +++ b/arch/arm64/kernel/traps.c
-> > @@ -331,6 +331,8 @@ void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
-> >  
-> >  	if (regs->pstate & PSR_MODE32_BIT)
-> >  		advance_itstate(regs);
-> > +	else
-> > +		regs->pstate &= ~(u64)PSR_BTYPE_MASK;
+> >
+> > Note to maintainers:
+> >
+> >  * This patch has been racing with various other attempts to fix
+> >    the same documentation in the meantime.
+> >
+> >    Since this patch only fixes the documenting for pre-existing
+> >    features, it can safely be dropped if appropriate.
+> >
+> >    The _new_ documentation relating to BTI feature reporting
+> >    is in a subsequent patch, and needs to be retained.
+> > ---
+> >  Documentation/arm64/cpu-feature-registers.rst | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/Documentation/arm64/cpu-feature-registers.rst b/Documentation/arm64/cpu-feature-registers.rst
+> > index 2955287..b86828f 100644
+> > --- a/Documentation/arm64/cpu-feature-registers.rst
+> > +++ b/Documentation/arm64/cpu-feature-registers.rst
+> > @@ -168,8 +168,15 @@ infrastructure:
+> >       +------------------------------+---------+---------+
+> >
+> >
+> > -  3) MIDR_EL1 - Main ID Register
+> > +  3) ID_AA64PFR1_EL1 - Processor Feature Register 1
+> > +     +------------------------------+---------+---------+
+> > +     | Name                         |  bits   | visible |
+> > +     +------------------------------+---------+---------+
+> > +     | SSBS                         | [7-4]   |    y    |
+> > +     +------------------------------+---------+---------+
+> > +
+> >
+> > +  4) MIDR_EL1 - Main ID Register
+> >       +------------------------------+---------+---------+
+> >       | Name                         |  bits   | visible |
+> >       +------------------------------+---------+---------+
+> > @@ -188,7 +195,7 @@ infrastructure:
+> >     as available on the CPU where it is fetched and is not a system
+> >     wide safe value.
+> >
+> > -  4) ID_AA64ISAR1_EL1 - Instruction set attribute register 1
+> > +  5) ID_AA64ISAR1_EL1 - Instruction set attribute register 1
 > 
-> This looks good to me, with one nit below.
-> 
-> We don't (currently) need the u64 cast here, and it's inconsistent with
-> what we do elsewhere. If the upper 32-bit of pstate get allocated, we'll
-> need to fix up all the other masking we do:
+> If I'm not mistaken .rst has support for auto-enumeration if the #
+> character is used. That might reduce the pain of re-numbering in future.
 
-Huh, looks like I missed that.  Dang.  Will fix.
+Ack, though it would be good to go one better and generate this document
+from the cpufeature.c tables (or from some common source).  The numbers
+are relatively easy to maintain -- remembering to update the document
+at all seems the bigger maintenance headache right now.
 
-> [mark@lakrids:~/src/linux]% git grep 'pstate &= ~'
-> arch/arm64/kernel/armv8_deprecated.c:           regs->pstate &= ~PSR_AA32_E_BIT;
-> arch/arm64/kernel/cpufeature.c:         regs->pstate &= ~PSR_SSBS_BIT;
-> arch/arm64/kernel/debug-monitors.c:     regs->pstate &= ~DBG_SPSR_SS;
-> arch/arm64/kernel/insn.c:       pstate &= ~(pstate >> 1);       /* PSR_C_BIT &= ~PSR_Z_BIT */
-> arch/arm64/kernel/insn.c:       pstate &= ~(pstate >> 1);       /* PSR_C_BIT &= ~PSR_Z_BIT */
-> arch/arm64/kernel/probes/kprobes.c:     regs->pstate &= ~PSR_D_BIT;
-> arch/arm64/kernel/probes/kprobes.c:     regs->pstate &= ~DAIF_MASK;
-> arch/arm64/kernel/ptrace.c:     regs->pstate &= ~SPSR_EL1_AARCH32_RES0_BITS;
-> arch/arm64/kernel/ptrace.c:                     regs->pstate &= ~PSR_AA32_E_BIT;
-> arch/arm64/kernel/ptrace.c:     regs->pstate &= ~SPSR_EL1_AARCH64_RES0_BITS;
-> arch/arm64/kernel/ptrace.c:             regs->pstate &= ~DBG_SPSR_SS;
-> arch/arm64/kernel/ssbd.c:       task_pt_regs(task)->pstate &= ~val;
-> arch/arm64/kernel/traps.c:      regs->pstate &= ~PSR_AA32_IT_MASK;
-> 
-> ... and at that point I'd suggest we should just ensure the bit
-> definitions are all defined as unsigned long in the first place since
-> adding casts to each use is error-prone.
+I think this particular patch is superseded by similar fixes from other
+people, just not in torvalds/master yet.
 
-Are we concerned about changing the types of UAPI #defines?  That can
-cause subtle and unexpected breakage, especially when the signedness
-of a #define changes.
-
-Ideally, we'd just change all these to 1UL << n.
+[...]
 
 Cheers
 ---Dave
