@@ -2,117 +2,195 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD93D4A74
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Oct 2019 00:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F17ADD4C94
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Oct 2019 06:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbfJKWrL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Oct 2019 18:47:11 -0400
-Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:37182 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726642AbfJKWrL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 11 Oct 2019 18:47:11 -0400
-X-Greylist: delayed 522 seconds by postgrey-1.27 at vger.kernel.org; Fri, 11 Oct 2019 18:47:10 EDT
-Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        id S1725308AbfJLEIz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Oct 2019 00:08:55 -0400
+Received: from mx2a.mailbox.org ([80.241.60.219]:42745 "EHLO mx2a.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727440AbfJLEIy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 12 Oct 2019 00:08:54 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 80CEFC04A7;
-        Fri, 11 Oct 2019 22:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1570833508; bh=E0P1RFAQD2Jf3g/rlBhYfNzwHdOeyXPqBOG/QZTvieM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A6IYKky8AdyUQ2QMjcIa2Uj+0XJjLeGbu6SH7JKVYKXMO6VLVywzRybptkCdTakG0
-         RDHIGz82Gfiajkpm4OCoDCz9X4UjVucNxnWyUWfz+tlwwNcSs1lfGeqyUqmRKJ3LFS
-         tBwLL8Ru9EXyP/LBxMEtY6xAHed0FQeC59VOQqR9UUlgMl+BFNEPVVNI9SqOd5WLg0
-         jRQ+NyVOSXkfzBGVDgUyBMjNBT83MBQiNVhn3m6ENnXJdTZM9bDCep+rLXiai1UQkv
-         UIYZzv9FSGgroLSDe0WPaDu0yK3CsCcEcUiNmvP+v0zljLl4HIl6q2weZjeDtxqIVu
-         zIeuNs1TDq8ZA==
-Received: from vineetg-Latitude-E7450.internal.synopsys.com (vineetg-latitude-e7450.internal.synopsys.com [10.10.161.61])
-        by mailhost.synopsys.com (Postfix) with ESMTP id AC1E4A006B;
-        Fri, 11 Oct 2019 22:38:21 +0000 (UTC)
-From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
-To:     linux-mm@kvack.org
-Cc:     linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
+        by mx2a.mailbox.org (Postfix) with ESMTPS id 0485AA1104;
+        Sat, 12 Oct 2019 06:08:47 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id WQcjjXFgeVVi; Sat, 12 Oct 2019 06:08:40 +0200 (CEST)
+Date:   Sat, 12 Oct 2019 15:08:15 +1100
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Subject: [RFC] asm-generic/tlb: stub out pmd_free_tlb() if __PAGETABLE_PMD_FOLDED
-Date:   Fri, 11 Oct 2019 15:38:18 -0700
-Message-Id: <20191011223818.7238-1-vgupta@synopsys.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191011121951.nxna6hruuskvdxod@box>
-References: <20191011121951.nxna6hruuskvdxod@box>
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v14 2/6] namei: LOOKUP_IN_ROOT: chroot-like path
+ resolution
+Message-ID: <20191012040815.gnc43cfmo5mnv67u@yavin.dot.cyphar.com>
+References: <20191010054140.8483-1-cyphar@cyphar.com>
+ <20191010054140.8483-3-cyphar@cyphar.com>
+ <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="t2fxesclfr677pzw"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is inine with similar patches for nopud [1] and nop4d [2] cases.
 
-  However I'm not really sure I understand clearly how the nopmd code is
-  supposed to work (for a 2 tier paging system) - hence the RFC.
-  Consider free_pmd_range() simplified/annotated below
+--t2fxesclfr677pzw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  free_pmd_range
-  ...
-	pmd = pmd_offset(pud, addr);
-	do {
-		next = pmd_addr_end(addr, end);
-		if (pmd_none_or_clear_bad(pmd)) => *pmd_bad()/pmd_clear_bad() [a]*
-			continue;
-		free_pte_range(tlb, pmd, addr);
-	} while (pmd++, addr = next, addr != end);
-   ...
-	*pmd_free_tlb(tlb, pmd, start); => [b]*
+On 2019-10-10, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Wed, Oct 9, 2019 at 10:42 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> >
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -2277,6 +2277,11 @@ static const char *path_init(struct nameidata *n=
+d, unsigned flags)
+> >
+> >         nd->m_seq =3D read_seqbegin(&mount_lock);
+> >
+> > +       /* LOOKUP_IN_ROOT treats absolute paths as being relative-to-di=
+rfd. */
+> > +       if (flags & LOOKUP_IN_ROOT)
+> > +               while (*s =3D=3D '/')
+> > +                       s++;
+> > +
+> >         /* Figure out the starting path and root (if needed). */
+> >         if (*s =3D=3D '/') {
+> >                 error =3D nd_jump_root(nd);
+>=20
+> Hmm. Wouldn't this make more sense all inside the if (*s =3D- '/') test?
+> That way if would be where we check for "should we start at the root",
+> which seems to make more sense conceptually.
 
-   For ARC/nopmd case [a] is actually checking pgd and consequently
-   pmd_clear_bad() can't be stubbed out for PMD_FOLDED case. However it seems
-   case [b] can be stubbed out (hence this patch) along same lines as [1] and [2]
+I don't really agree (though I do think that both options are pretty
+ugly). Doing it before the block makes it clear that absolute paths are
+just treated relative-to-dirfd -- doing it inside the block makes it
+look more like "/" is a special-case for nd_jump_root(). And while that
+is somewhat true, this is just a side-effect of making the code more
+clean -- my earlier versions reworked the dirfd handling to always grab
+nd->root first if LOOKUP_IS_SCOPED. I switched to this method based on
+Al's review.
 
-| bloat-o-meter2 vmlinux-E-elide-p?d_clear_bad vmlinux-F-elide-pmd_free_tlb
-| add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-112 (-112)
-| function                                     old     new   delta
-| free_pgd_range                               422     310    -112
-| Total: Before=4137002, After=4136890, chg -1.000000%
+In fairness, I do agree that the lonely while loop looks ugly.
 
-[1] http://lists.infradead.org/pipermail/linux-snps-arc/2019-October/006266.html
-[2] http://lists.infradead.org/pipermail/linux-snps-arc/2019-October/006265.html
+> That test for '/' currently has a "} else if (..)", but that's
+> pointless since it ends with a "return" anyway. So the "else" logic is
+> just noise.
 
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
----
- include/asm-generic/tlb.h | 4 ++++
- 1 file changed, 4 insertions(+)
+This depends on the fact that LOOKUP_BENEATH always triggers -EXDEV for
+nd_jump_root() -- if we ever add another "scoped lookup" flag then the
+logic will have to be further reworked.
 
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index f3dad87f4ecc..a1edad7d4170 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -574,6 +574,7 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
- 	} while (0)
- #endif
- 
-+#ifndef __PAGETABLE_PMD_FOLDED
- #ifndef pmd_free_tlb
- #define pmd_free_tlb(tlb, pmdp, address)			\
- 	do {							\
-@@ -583,6 +584,9 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
- 		__pmd_free_tlb(tlb, pmdp, address);		\
- 	} while (0)
- #endif
-+#else
-+#define pmd_free_tlb(tlb, pmdp, address)        do { } while (0)
-+#endif
- 
- #ifndef __PAGETABLE_PUD_FOLDED
- #ifndef pud_free_tlb
--- 
-2.20.1
+(It should be noted that the new version doesn't always end with a
+"return", but you could change it to act that way given the above
+assumption.)
 
+> And if you get rid of the unnecessary else, moving the LOOKUP_IN_ROOT
+> inside the if-statement works fine.
+>=20
+> So this could be something like
+>=20
+>     --- a/fs/namei.c
+>     +++ b/fs/namei.c
+>     @@ -2194,11 +2196,19 @@ static const char *path_init(struct
+> nameidata *nd, unsigned flags)
+>=20
+>         nd->m_seq =3D read_seqbegin(&mount_lock);
+>         if (*s =3D=3D '/') {
+>     -           set_root(nd);
+>     -           if (likely(!nd_jump_root(nd)))
+>     -                   return s;
+>     -           return ERR_PTR(-ECHILD);
+>     -   } else if (nd->dfd =3D=3D AT_FDCWD) {
+>     +           /* LOOKUP_IN_ROOT treats absolute paths as being
+> relative-to-dirfd. */
+>     +           if (!(flags & LOOKUP_IN_ROOT)) {
+>     +                   set_root(nd);
+>     +                   if (likely(!nd_jump_root(nd)))
+>     +                           return s;
+>     +                   return ERR_PTR(-ECHILD);
+>     +           }
+>     +
+>     +           /* Skip initial '/' for LOOKUP_IN_ROOT */
+>     +           do { s++; } while (*s =3D=3D '/');
+>     +   }
+>     +
+>     +   if (nd->dfd =3D=3D AT_FDCWD) {
+>                 if (flags & LOOKUP_RCU) {
+>                         struct fs_struct *fs =3D current->fs;
+>                         unsigned seq;
+>=20
+> instead. The patch ends up slightly bigger (due to the re-indentation)
+> but now it handles all the "start at root" in the same place. Doesn't
+> that make sense?
+
+It is correct (though I'd need to clean it up a bit to handle
+nd_jump_root() correctly), and if you really would like me to change it
+I will -- but I just don't agree that it's cleaner.
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--t2fxesclfr677pzw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXaFRqQAKCRCdlLljIbnQ
+El00AQDKyu1GNvL91tAxvDZP/2rrqVrUf7Ad1T8uobD+aKQbgwEAvz9eeuLveRVq
+aqnd3Ifu8HO4SYcqYn+hDFgDz5D5Kwo=
+=XXCi
+-----END PGP SIGNATURE-----
+
+--t2fxesclfr677pzw--
