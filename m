@@ -2,127 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE64DD7FE2
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 21:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20E9D8074
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 21:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389593AbfJOTTi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Oct 2019 15:19:38 -0400
-Received: from smtprelay-out1.synopsys.com ([198.182.47.102]:39702 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389570AbfJOTTb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 15 Oct 2019 15:19:31 -0400
-Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id ED46AC0C42;
-        Tue, 15 Oct 2019 19:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1571167170; bh=HXvS8rDRQphESG7ffnx96mHp9U7LHEpSGqJLrluE2qs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZCwJap5yYG7J/fX2/MtXF9Lr8CqjfSDU0gQFHRsYSxx2FEWJi/iuZokzl3Uf30gzg
-         SuPpnut/Hlh2Ch2hC3n+P5PJm3A2/zjEQfiX8bTSa8wmOU9PBcPMevWWfwpqKoFzf2
-         T8/tJZ0J6978lmKMd9VzQQ6JM3DJeuVkbene5eXKbP4VlpiDzaU50l01SsCeFcLvdK
-         uH+nugVtEdJl9nJZd+ADQ1w4DXyIPY516+Nre5nCJS9f77LFY8tTeMC+JX7spZC6+a
-         zzgv3/AFp9jYvvdqu55ATtDwmqvP/Ejt2i1bblheBZ9CHGqeYLnBJmR432v9efuxx6
-         s9uOiNKbDoBXQ==
-Received: from vineetg-Latitude-E7450.internal.synopsys.com (vineetg-latitude-e7450.internal.synopsys.com [10.10.161.61])
-        by mailhost.synopsys.com (Postfix) with ESMTP id 6329BA007E;
-        Tue, 15 Oct 2019 19:19:29 +0000 (UTC)
-From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
+        id S1732370AbfJOTkQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Oct 2019 15:40:16 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:39076 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727856AbfJOTkQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Oct 2019 15:40:16 -0400
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iKSg0-0002Pi-T2; Tue, 15 Oct 2019 19:40:12 +0000
+Date:   Tue, 15 Oct 2019 20:40:12 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Subject: [PATCH v2 5/5] asm-generic/mm: stub out p{4,d}d_clear_bad() if __PAGETABLE_P{4,u}D_FOLDED
-Date:   Tue, 15 Oct 2019 12:19:26 -0700
-Message-Id: <20191015191926.9281-6-vgupta@synopsys.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191015191926.9281-1-vgupta@synopsys.com>
-References: <20191015191926.9281-1-vgupta@synopsys.com>
+        Darren Hart <dvhart@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] Convert filldir[64]() from __put_user() to
+ unsafe_put_user()
+Message-ID: <20191015194012.GO26530@ZenIV.linux.org.uk>
+References: <CAHk-=wgWRQo0m7TUCK4T_J-3Vqte+p-FWzvT3CB1jJHgX-KctA@mail.gmail.com>
+ <20191011001104.GJ26530@ZenIV.linux.org.uk>
+ <CAHk-=wgg3jzkk-jObm1FLVYGS8JCTiKppEnA00_QX7Wsm5ieLQ@mail.gmail.com>
+ <20191013181333.GK26530@ZenIV.linux.org.uk>
+ <CAHk-=wgrWGyACBM8N8KP7Pu_2VopuzM4A12yQz6Eo=X2Jpwzcw@mail.gmail.com>
+ <20191013191050.GL26530@ZenIV.linux.org.uk>
+ <CAHk-=wjJNE9hOKuatqh6SFf4nd65LG4ZR3gQSgg+rjSpVxe89w@mail.gmail.com>
+ <20191013195949.GM26530@ZenIV.linux.org.uk>
+ <20191015180846.GA31707@ZenIV.linux.org.uk>
+ <CAHk-=wjyiiYhAbzVDUW1F3j9CAcu8+ugSvGYwUivdBfKoeU6yA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjyiiYhAbzVDUW1F3j9CAcu8+ugSvGYwUivdBfKoeU6yA@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This removes the code for 2 level paging as seen on ARC
+On Tue, Oct 15, 2019 at 12:00:34PM -0700, Linus Torvalds wrote:
+> On Tue, Oct 15, 2019 at 11:08 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > Another question: right now we have
+> >         if (!access_ok(uaddr, sizeof(u32)))
+> >                 return -EFAULT;
+> >
+> >         ret = arch_futex_atomic_op_inuser(op, oparg, &oldval, uaddr);
+> >         if (ret)
+> >                 return ret;
+> > in kernel/futex.c.  Would there be any objections to moving access_ok()
+> > inside the instances and moving pagefault_disable()/pagefault_enable() outside?
+> 
+> I think we should remove all the "atomic" versions, and just make the
+> rule be that if you want atomic, you surround it with
+> pagefault_disable()/pagefault_enable().
 
-| bloat-o-meter2 vmlinux-D-elide-p4d_free_tlb vmlinux-E-elide-p?d_clear_bad
-| add/remove: 0/2 grow/shrink: 0/0 up/down: 0/-40 (-40)
-| function                                     old     new   delta
-| pud_clear_bad                                 20       -     -20
-| p4d_clear_bad                                 20       -     -20
-| Total: Before=4136930, After=4136890, chg -1.000000%
+Umm...  I thought about that, but ended up with "it documents the intent" -
+pagefault_disable() might be implicit (e.g. done by kmap_atomic()) or
+several levels up the call chain.  Not sure.
 
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
----
- include/asm-generic/pgtable.h | 11 +++++++++++
- mm/pgtable-generic.c          |  8 ++++++++
- 2 files changed, 19 insertions(+)
+> That covers not just the futex ops (where "atomic" is actually
+> somewhat ambiguous - the ops themselves are atomic too, so the naming
+> might stay, although arguably the "futex" part makes that pointless
+> too), but also copy_to_user_inatomic() and the powerpc version of
+> __get_user_inatomic().
 
-diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
-index 818691846c90..9cdcbc7c0b7b 100644
---- a/include/asm-generic/pgtable.h
-+++ b/include/asm-generic/pgtable.h
-@@ -558,8 +558,19 @@ static inline pgprot_t pgprot_modify(pgprot_t oldprot, pgprot_t newprot)
-  * Do the tests inline, but report and clear the bad entry in mm/memory.c.
-  */
- void pgd_clear_bad(pgd_t *);
-+
-+#ifndef __PAGETABLE_P4D_FOLDED
- void p4d_clear_bad(p4d_t *);
-+#else
-+#define p4d_clear_bad(p4d)        do { } while (0)
-+#endif
-+
-+#ifndef __PAGETABLE_PUD_FOLDED
- void pud_clear_bad(pud_t *);
-+#else
-+#define pud_clear_bad(p4d)        do { } while (0)
-+#endif
-+
- void pmd_clear_bad(pmd_t *);
- 
- static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-index 532c29276fce..a5edddc3846a 100644
---- a/mm/pgtable-generic.c
-+++ b/mm/pgtable-generic.c
-@@ -24,18 +24,26 @@ void pgd_clear_bad(pgd_t *pgd)
- 	pgd_clear(pgd);
- }
- 
-+#ifndef __PAGETABLE_P4D_FOLDED
- void p4d_clear_bad(p4d_t *p4d)
- {
- 	p4d_ERROR(*p4d);
- 	p4d_clear(p4d);
- }
-+#endif
- 
-+#ifndef __PAGETABLE_PUD_FOLDED
- void pud_clear_bad(pud_t *pud)
- {
- 	pud_ERROR(*pud);
- 	pud_clear(pud);
- }
-+#endif
- 
-+/*
-+ * Note that below can't be stubed out for nopmd case:
-+ * pmd folding is special and typically pmd_* macros refet to upper level
-+ */
- void pmd_clear_bad(pmd_t *pmd)
- {
- 	pmd_ERROR(*pmd);
--- 
-2.20.1
+Eh?  copy_to_user_inatomic() doesn't exist; __copy_to_user_inatomic()
+does, but...
 
+arch/mips/kernel/unaligned.c:1307:                      res = __copy_to_user_inatomic(addr, fpr, sizeof(*fpr));
+drivers/gpu/drm/i915/i915_gem.c:313:    unwritten = __copy_to_user_inatomic(user_data,
+lib/test_kasan.c:510:   unused = __copy_to_user_inatomic(usermem, kmem, size + 1);
+mm/maccess.c:98:        ret = __copy_to_user_inatomic((__force void __user *)dst, src, size);
+
+these are all callers it has left anywhere and I'm certainly going to kill it.
+Now, __copy_from_user_inatomic() has a lot more callers left...  Frankly,
+the messier part of API is the nocache side of things.  Consider e.g. this:
+/* platform specific: cacheless copy */
+static void cacheless_memcpy(void *dst, void *src, size_t n)
+{
+        /* 
+         * Use the only available X64 cacheless copy.  Add a __user cast
+         * to quiet sparse.  The src agument is already in the kernel so
+         * there are no security issues.  The extra fault recovery machinery
+         * is not invoked.
+         */
+        __copy_user_nocache(dst, (void __user *)src, n, 0);
+}
+or this
+static void ntb_memcpy_tx(struct ntb_queue_entry *entry, void __iomem *offset)
+{
+#ifdef ARCH_HAS_NOCACHE_UACCESS
+        /*
+         * Using non-temporal mov to improve performance on non-cached
+         * writes, even though we aren't actually copying from user space.
+         */
+        __copy_from_user_inatomic_nocache(offset, entry->buf, entry->len);
+#else   
+        memcpy_toio(offset, entry->buf, entry->len);
+#endif
+
+        /* Ensure that the data is fully copied out before setting the flags */
+        wmb();
+
+        ntb_tx_copy_callback(entry, NULL);
+}
+"user" part is bollocks in both cases; moreover, I really wonder about that
+ifdef in ntb one - ARCH_HAS_NOCACHE_UACCESS is x86-only *at* *the* *moment*
+and it just so happens that ..._toio() doesn't require anything special on
+x86.  Have e.g. arm grow nocache stuff and the things will suddenly break,
+won't they?
