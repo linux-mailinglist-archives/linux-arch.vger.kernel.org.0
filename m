@@ -2,115 +2,192 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F21D5D6F44
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 07:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BACD79A6
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 17:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725815AbfJOFnI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Oct 2019 01:43:08 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:54418 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbfJOFnH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Oct 2019 01:43:07 -0400
-Received: by mail-wm1-f66.google.com with SMTP id p7so19328601wmp.4;
-        Mon, 14 Oct 2019 22:43:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=h6+FbFERAiDwYRmtKkhZlybAkdQXDS/yFTNI2czScgY=;
-        b=cPCoqTnKmgRjjXN2Z89RtekM+OjBFtCtlxufRH0nFEIu8PnzX/mKY14+kfO06aiT3J
-         l1OgjxkeXCBmZ6IMoeu2C0+VnKdTtYI5Xn/Vfl1IzBk1hqf/uWUcE4l/1gYaK2/6k+2W
-         8YAvaLccbp2UmHBeorISeykbMRirX+enMjz/J9sGWIOMxUKICw0JQwcwm/5mOu1OxG+M
-         34idq8Rf83a68qsdfxIrivNc7S0tbze5cHTFGjzM4JnRLB7/qn8u27wO8qlxjKHJeTe8
-         0vnhnL8gYY3tBYafBoLd0GaBDlNR/HzH6LT7t77msDpK75PbnR/yP6IYr7xptqbFsxhd
-         BWzA==
-X-Gm-Message-State: APjAAAXnNkzDTMbuo/+sE99nHkM/o+1FkRrH+8dIKANYCSK8KUaCHKPe
-        MhgFpguGXtoM4IRyJ5ba3feBgIEHx9I=
-X-Google-Smtp-Source: APXvYqzO3gGhjF5GMy01r+Jy7XJ3/eq4XMmVGBdKIHAN968fB4ht+pJj2SD6QGWmdxd+bzT8Lp5v4g==
-X-Received: by 2002:a05:600c:20ca:: with SMTP id y10mr17428245wmm.82.1571118184329;
-        Mon, 14 Oct 2019 22:43:04 -0700 (PDT)
-Received: from ?IPv6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id o18sm50791755wrw.90.2019.10.14.22.43.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Oct 2019 22:43:03 -0700 (PDT)
-Subject: Re: [PATCH v9 07/28] x86/boot: Annotate local functions
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191011115108.12392-1-jslaby@suse.cz>
- <20191011115108.12392-8-jslaby@suse.cz> <20191014142742.GD4715@zn.tnic>
-From:   Jiri Slaby <jslaby@suse.cz>
-Autocrypt: addr=jslaby@suse.cz; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <0ece05d0-1942-4b9e-f6be-7a726961a471@suse.cz>
-Date:   Tue, 15 Oct 2019 07:43:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        id S1732815AbfJOPVP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Oct 2019 11:21:15 -0400
+Received: from foss.arm.com ([217.140.110.172]:40870 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726523AbfJOPVO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 15 Oct 2019 11:21:14 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AEF528;
+        Tue, 15 Oct 2019 08:21:14 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53A473F718;
+        Tue, 15 Oct 2019 08:21:11 -0700 (PDT)
+Date:   Tue, 15 Oct 2019 16:21:09 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Florian Weimer <fweimer@redhat.com>,
+        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>
+Subject: Re: [PATCH v2 09/12] arm64: traps: Fix inconsistent faulting
+ instruction skipping
+Message-ID: <20191015152108.GX27757@arm.com>
+References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
+ <1570733080-21015-10-git-send-email-Dave.Martin@arm.com>
+ <20191011152453.GF33537@lakrids.cambridge.arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20191014142742.GD4715@zn.tnic>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191011152453.GF33537@lakrids.cambridge.arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 14. 10. 19, 16:27, Borislav Petkov wrote:
-> On Fri, Oct 11, 2019 at 01:50:47PM +0200, Jiri Slaby wrote:
->> .Lrelocated, .Lpaging_enabled, .Lno_longmode, and .Lin_pm32 are
->> self-standing local functions, annotate them as such and preserve "no
->> alignment".
->>
->> The annotations do not generate anything yet.
+On Fri, Oct 11, 2019 at 04:24:53PM +0100, Mark Rutland wrote:
+> On Thu, Oct 10, 2019 at 07:44:37PM +0100, Dave Martin wrote:
+> > Correct skipping of an instruction on AArch32 works a bit
+> > differently from AArch64, mainly due to the different CPSR/PSTATE
+> > semantics.
+> > 
+> > There have been various attempts to get this right.  Currenty
+> > arm64_skip_faulting_instruction() mostly does the right thing, but
+> > does not advance the IT state machine for the AArch32 case.
+> > 
+> > arm64_compat_skip_faulting_instruction() handles the IT state
+> > machine but is local to traps.c, and porting other code to use it
+> > will make a mess since there are some call sites that apply for
+> > both the compat and native cases.
+> > 
+> > Since manual instruction skipping implies a trap, it's a relatively
+> > slow path.
+> > 
+> > So, make arm64_skip_faulting_instruction() handle both compat and
+> > native, and get rid of the arm64_compat_skip_faulting_instruction()
+> > special case.
+> > 
+> > Fixes: 32a3e635fb0e ("arm64: compat: Add CNTFRQ trap handler")
+> > Fixes: 1f1c014035a8 ("arm64: compat: Add condition code checks and IT advance")
+> > Fixes: 6436beeee572 ("arm64: Fix single stepping in kernel traps")
+> > Fixes: bd35a4adc413 ("arm64: Port SWP/SWPB emulation support from arm")
+> > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> > ---
+> >  arch/arm64/kernel/traps.c | 18 ++++++++----------
+> >  1 file changed, 8 insertions(+), 10 deletions(-)
 > 
-> So the annotation is only documentational, right?
+> This looks good to me; it's certainly easier to reason about.
+> 
+> I couldn't spot a place where we do the wrong thing today, given AFAICT
+> all the instances in arch/arm64/kernel/armv8_deprecated.c would be
+> UNPREDICTABLE within an IT block.
+> 
+> It might be worth calling out an example in the commit message to
+> justify the fixes tags.
 
-Right.
+IIRC I found no bug here; rather we have pointlessly fragmented code,
+so I followed the "if fixing the same bug in multiple places, merge
+those places so you need only fix it in one place next time" rule.
 
-thanks,
--- 
-js
-suse labs
+Since arm64_skip_faulting_instruction() is most of the way to being
+generically usable anyway, this series merges all the special-case
+handling into it.
+
+I could add something like
+
+--8<--
+
+This allows this fiddly operation to be maintained in a single
+place rather than trying to maintain fragmented versions spread
+around arch/arm64.
+
+-->8--
+
+Any good?
+
+Cheers
+---Dave
+
+[...]
+
+> > 
+> > diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> > index 15e3c4f..44c91d4 100644
+> > --- a/arch/arm64/kernel/traps.c
+> > +++ b/arch/arm64/kernel/traps.c
+> > @@ -268,6 +268,8 @@ void arm64_notify_die(const char *str, struct pt_regs *regs,
+> >  	}
+> >  }
+> >  
+> > +static void advance_itstate(struct pt_regs *regs);
+> > +
+> >  void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
+> >  {
+> >  	regs->pc += size;
+> > @@ -278,6 +280,9 @@ void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
+> >  	 */
+> >  	if (user_mode(regs))
+> >  		user_fastforward_single_step(current);
+> > +
+> > +	if (regs->pstate & PSR_MODE32_BIT)
+> > +		advance_itstate(regs);
+> >  }
+> >  
+> >  static LIST_HEAD(undef_hook);
+> > @@ -629,19 +634,12 @@ static void advance_itstate(struct pt_regs *regs)
+> >  	compat_set_it_state(regs, it);
+> >  }
+> >  
+> > -static void arm64_compat_skip_faulting_instruction(struct pt_regs *regs,
+> > -						   unsigned int sz)
+> > -{
+> > -	advance_itstate(regs);
+> > -	arm64_skip_faulting_instruction(regs, sz);
+> > -}
+> > -
+> >  static void compat_cntfrq_read_handler(unsigned int esr, struct pt_regs *regs)
+> >  {
+> >  	int reg = (esr & ESR_ELx_CP15_32_ISS_RT_MASK) >> ESR_ELx_CP15_32_ISS_RT_SHIFT;
+> >  
+> >  	pt_regs_write_reg(regs, reg, arch_timer_get_rate());
+> > -	arm64_compat_skip_faulting_instruction(regs, 4);
+> > +	arm64_skip_faulting_instruction(regs, 4);
+> >  }
+> >  
+> >  static const struct sys64_hook cp15_32_hooks[] = {
+> > @@ -661,7 +659,7 @@ static void compat_cntvct_read_handler(unsigned int esr, struct pt_regs *regs)
+> >  
+> >  	pt_regs_write_reg(regs, rt, lower_32_bits(val));
+> >  	pt_regs_write_reg(regs, rt2, upper_32_bits(val));
+> > -	arm64_compat_skip_faulting_instruction(regs, 4);
+> > +	arm64_skip_faulting_instruction(regs, 4);
+> >  }
+> >  
+> >  static const struct sys64_hook cp15_64_hooks[] = {
+> > @@ -682,7 +680,7 @@ asmlinkage void __exception do_cp15instr(unsigned int esr, struct pt_regs *regs)
+> >  		 * There is no T16 variant of a CP access, so we
+> >  		 * always advance PC by 4 bytes.
+> >  		 */
+> > -		arm64_compat_skip_faulting_instruction(regs, 4);
+> > +		arm64_skip_faulting_instruction(regs, 4);
+> >  		return;
+> >  	}
+> >  
+> > -- 
+> > 2.1.4
+> > 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
