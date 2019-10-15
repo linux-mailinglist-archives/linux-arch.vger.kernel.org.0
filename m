@@ -2,130 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1158ED7F7B
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 21:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76859D7FEC
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 21:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727868AbfJOTA4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Oct 2019 15:00:56 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:46060 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729128AbfJOTAz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Oct 2019 15:00:55 -0400
-Received: by mail-lj1-f195.google.com with SMTP id q64so21363114ljb.12
-        for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2019 12:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MMAvaim9+S74+cLKGfKpPV0jt0ePKq4pl+dUnol7U2k=;
-        b=DhI3jZcx/uyOLfu8ny5Lt1siVQgFVsCm5kmsY6i2FCqBbzb8QH9PPyTN8DCmdhDr5S
-         A4G11LYL3O44P/4Ql7Jt/VeZd1nO1dKf4kVncZj73MdbJR4Dzd9pa/QE5Xu42b6DB/NB
-         KjEixpuat22YXDmNzVBhKNDv8Olnc7lfHEeOk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MMAvaim9+S74+cLKGfKpPV0jt0ePKq4pl+dUnol7U2k=;
-        b=K0rPjvAfiCMgnULggh+Pk3frD0srGfIRTKUZjTeSpyC7Xz284BtMROEvcvionojKvI
-         JtbSOx+VDTN5ahcMHKfkfcHx9/LVuU0XhgXZqygJwEtChx+bAjdEikPcAJ+rPUp0zYYw
-         Yk9i1jZ9Xh4Rh5D9+DUNvfo+KJJOLRAs3OqqyVmSuMMCQp+rFud+dGBO4Dj5RO1FQVSC
-         xZEQ1HwzcsP8//o+a7NYvjaLtLs3sKkAzfUGbQmJ/HTCx8F2yCtlhSYdPJftVNPJAwTd
-         9yDWaakdopV0aT/eTL9lAZ7OqMKNkAZDm0cHOmD2+CGdJgpW0koh9WK5IYjaHa2RCzmn
-         /lZA==
-X-Gm-Message-State: APjAAAWl2PxRRztLaD0NjRfgedYhC5deMt2QzOL9LDWGd0oFLLR6N/mG
-        a5k1+6uVS8FXKlxsyfWD7CoijpI72i4=
-X-Google-Smtp-Source: APXvYqw2oU0BMC+NzIz03O5nIMB4kPt16WzORAoCsw5waSXTxELSuX3FhakL+EVcbhGRFKChH5ds0w==
-X-Received: by 2002:a2e:8908:: with SMTP id d8mr23070068lji.197.1571166052983;
-        Tue, 15 Oct 2019 12:00:52 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id j26sm5029638lja.25.2019.10.15.12.00.51
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Oct 2019 12:00:51 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id n14so21354106ljj.10
-        for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2019 12:00:51 -0700 (PDT)
-X-Received: by 2002:a2e:545:: with SMTP id 66mr1159643ljf.133.1571166050946;
- Tue, 15 Oct 2019 12:00:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHk-=wgOWxqwqCFuP_Bw=Hxxf9njeHJs0OLNGNc63peNd=kRqw@mail.gmail.com>
- <20191010195504.GI26530@ZenIV.linux.org.uk> <CAHk-=wgWRQo0m7TUCK4T_J-3Vqte+p-FWzvT3CB1jJHgX-KctA@mail.gmail.com>
- <20191011001104.GJ26530@ZenIV.linux.org.uk> <CAHk-=wgg3jzkk-jObm1FLVYGS8JCTiKppEnA00_QX7Wsm5ieLQ@mail.gmail.com>
- <20191013181333.GK26530@ZenIV.linux.org.uk> <CAHk-=wgrWGyACBM8N8KP7Pu_2VopuzM4A12yQz6Eo=X2Jpwzcw@mail.gmail.com>
- <20191013191050.GL26530@ZenIV.linux.org.uk> <CAHk-=wjJNE9hOKuatqh6SFf4nd65LG4ZR3gQSgg+rjSpVxe89w@mail.gmail.com>
- <20191013195949.GM26530@ZenIV.linux.org.uk> <20191015180846.GA31707@ZenIV.linux.org.uk>
-In-Reply-To: <20191015180846.GA31707@ZenIV.linux.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 15 Oct 2019 12:00:34 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjyiiYhAbzVDUW1F3j9CAcu8+ugSvGYwUivdBfKoeU6yA@mail.gmail.com>
-Message-ID: <CAHk-=wjyiiYhAbzVDUW1F3j9CAcu8+ugSvGYwUivdBfKoeU6yA@mail.gmail.com>
-Subject: Re: [PATCH] Convert filldir[64]() from __put_user() to unsafe_put_user()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
+        id S1726750AbfJOTT4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Oct 2019 15:19:56 -0400
+Received: from smtprelay-out1.synopsys.com ([198.182.47.102]:39686 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389569AbfJOTTb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 15 Oct 2019 15:19:31 -0400
+Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 0A961C0CD8;
+        Tue, 15 Oct 2019 19:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1571167170; bh=QoRWNXgQmTXSWkCzboQjwBzdj5f3LiiL+Z3W4U/gMbE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X3D1iJXD/KJExvy7ioaMSbK04DGqFIP/0KpMKxCSUxlEQQpvB0iFGxqNN7F9t+5/Q
+         Ym2808nWEoG5SozZ+GeXU3EHuWRbSbQxuMgp5B/jEKGcfkWJadE0Zj7+VuMP61SkIG
+         witktVhnTUOL3QzgI/TjfgLnfkbxDdcXwsY8lDQnmzjkIMFUfQDvqxZXbhBNOyWJv4
+         ZBnmAir2yWCEHCYZmIam8cEiPgC4ZkN/1cjh3VUXIJJtCKucwbKB8RHkvjVxtSTKO5
+         9VrdsWbPqOxhwI1pz34A4PwFT5AIZFWsPdPWkYZ/qdjiOi/LAHDFAYYETPVTKgwRkY
+         +iG9r3wILX/UQ==
+Received: from vineetg-Latitude-E7450.internal.synopsys.com (vineetg-latitude-e7450.internal.synopsys.com [10.10.161.61])
+        by mailhost.synopsys.com (Postfix) with ESMTP id 4B745A006B;
+        Tue, 15 Oct 2019 19:19:26 +0000 (UTC)
+From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Subject: [PATCH v2 0/5] eldie generated code for folded p4d/pud
+Date:   Tue, 15 Oct 2019 12:19:21 -0700
+Message-Id: <20191015191926.9281-1-vgupta@synopsys.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 11:08 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> Another question: right now we have
->         if (!access_ok(uaddr, sizeof(u32)))
->                 return -EFAULT;
->
->         ret = arch_futex_atomic_op_inuser(op, oparg, &oldval, uaddr);
->         if (ret)
->                 return ret;
-> in kernel/futex.c.  Would there be any objections to moving access_ok()
-> inside the instances and moving pagefault_disable()/pagefault_enable() outside?
+Hi,
 
-I think we should remove all the "atomic" versions, and just make the
-rule be that if you want atomic, you surround it with
-pagefault_disable()/pagefault_enable().
+This series came out of seemingly naive exceursion into understanding/removing
+__ARCH_USE_5LEVEL_HACK from ARC port. With removal of 5LEVEL_HACK some
+extraneous code was bein generated
 
-That covers not just the futex ops (where "atomic" is actually
-somewhat ambiguous - the ops themselves are atomic too, so the naming
-might stay, although arguably the "futex" part makes that pointless
-too), but also copy_to_user_inatomic() and the powerpc version of
-__get_user_inatomic().
+| bloat-o-meter2 vmlinux-[AB]*
+| add/remove: 0/0 grow/shrink: 3/0 up/down: 130/0 (130)
+| function                                     old     new   delta
+| free_pgd_range                               548     660    +112
+| p4d_clear_bad                                  2      20     +18
 
-So we'd aim to get rid of all the "inatomic" ones entirely.
+Which the patches here elides (for folded p4d/pud/pmd)
 
-Same ultimately probably goes for the NMI versions. We should just
-make it be a rule that we can use all of the user access functions
-with pagefault_{dis,en}able() around them, and they'll be "safe" to
-use in atomic context.
+| bloat-o-meter2 vmlinux-[BF]*
+| add/remove: 0/2 grow/shrink: 0/1 up/down: 0/-386 (-386)
+| function                                     old     new   delta
+| pud_clear_bad                                 20       -     -20
+| p4d_clear_bad                                 20       -     -20
+| free_pgd_range                               660     314    -346
 
-One issue with the NMI versions is that they actually want to avoid
-the current value of set_fs().  So copy_from_user_nmi() (at least on
-x86) is special in that it does
+The code savings are not a whole lot, but still worthwhile IMHO.
 
-        if (__range_not_ok(from, n, TASK_SIZE))
-                return n;
+Please review, test and apply. It seems to survive my usual battery of
+multibench, hakcbench etc.
 
-instead of access_ok() because of that issue.
+Thx,
+-Vineet
 
-NMI also has some other issues (nmi_uaccess_okay() on x86, at least),
-but those *probably* could be handled at page fault time instead.
+---
+Changes since v1 [1]
+ - Per Linus Sugestion remvoed the extra ifdey'ery (hence not
+   accumulating Kirill's ACks)
+ - Added the RFC patch for pmd_free_tlb() after discussions [2]
+ - Also throwing in the ARC patch which started this all (so we get the
+   full context of patchset) - I'm ok if this goes via mm tree, should
+   be non contentious and can drop this too if Andrew thinks otherwise
 
-Anyway, NMI is so special that I'd suggest leaving it for later, but
-the non-NMI atomic accesses I would suggest you clean up at the same
-time.
+[1] http://lists.infradead.org/pipermail/linux-snps-arc/2019-October/006263.html
+[2] http://lists.infradead.org/pipermail/linux-snps-arc/2019-October/006277.html
 
-I think the *only* reason we have the "inatomic()" versions is that
-the regular ones do that "might_fault()" testing unconditionally, and
-might_fault() _used_ to be just a might_sleep() - so it's not about
-functionality per se, it's about "we have this sanity check that we
-need to undo".
+---
 
-We've already made "might_fault()" look at pagefault_disabled(), so I
-think a lot of the reasons for inatomic are entirely historical.
+Vineet Gupta (5):
+  ARC: mm: remove __ARCH_USE_5LEVEL_HACK
+  asm-generic/tlb: stub out pud_free_tlb() if nopud ...
+  asm-generic/tlb: stub out p4d_free_tlb() if nop4d ...
+  asm-generic/tlb: stub out pmd_free_tlb() if nopmd
+  asm-generic/mm: stub out p{4,d}d_clear_bad() if
+    __PAGETABLE_P{4,u}D_FOLDED
 
-                Linus
+ arch/arc/include/asm/pgtable.h      |  1 -
+ arch/arc/mm/fault.c                 | 10 ++++++++--
+ arch/arc/mm/highmem.c               |  4 +++-
+ include/asm-generic/4level-fixup.h  |  1 -
+ include/asm-generic/5level-fixup.h  |  1 -
+ include/asm-generic/pgtable-nop4d.h |  2 +-
+ include/asm-generic/pgtable-nopmd.h |  2 +-
+ include/asm-generic/pgtable-nopud.h |  2 +-
+ include/asm-generic/pgtable.h       | 11 +++++++++++
+ include/asm-generic/tlb.h           |  4 ----
+ mm/pgtable-generic.c                |  8 ++++++++
+ 11 files changed, 33 insertions(+), 13 deletions(-)
+
+-- 
+2.20.1
+
