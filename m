@@ -2,58 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 226DED8264
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 23:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12AA7D82AC
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 23:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730498AbfJOVrZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Oct 2019 17:47:25 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41969 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730502AbfJOVrY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Oct 2019 17:47:24 -0400
-Received: by mail-lf1-f65.google.com with SMTP id r2so15645633lfn.8
-        for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2019 14:47:23 -0700 (PDT)
+        id S1728735AbfJOVtE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Oct 2019 17:49:04 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42597 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727447AbfJOVtE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Oct 2019 17:49:04 -0400
+Received: by mail-lj1-f193.google.com with SMTP id y23so21793009lje.9
+        for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2019 14:49:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iKBAZQ4xjT2H3VBhqEDygDjsoO3OrXWHV1qvzKsg6h8=;
-        b=eRTA7Y2CR106ubYgppU9AiKB36JGkMp2b525X7AN3j/XcF7eLbUaKXlFv/rViWY6ix
-         ZyQP1ASnR5/wN6NVGyHLurSLBElwdONMtqPjyJIbyjjzlfJcbS2XG9xoqv9aty4Tx4RT
-         C2KiiZ6vvkn0YO995uPMfi4p9S9yGM/cCoFHI=
+        bh=wItDXbX3LEWoTo1/kp4dk8aeAZ/2xJzKQP/tyONQ97k=;
+        b=hzBYiXjPBdQglMHyHwZdH7Hfwgp8qRgeHE6/0plo981vFS0npABggAoHWs92Y0M4j4
+         6yInWWbjRDRm/aBcc9LUQovQyVPjXs9u2abaLNMMyRfQw3SRznL+/RbI8WTdojuOz1np
+         +b80D6JSR28AZDW+EGzyd7AudQJVj7qyOksd4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iKBAZQ4xjT2H3VBhqEDygDjsoO3OrXWHV1qvzKsg6h8=;
-        b=KV9mqkuVc8kbEij6yh2okCTBcm6Pcs7uqIXciQ83KTnXnsW2aTwm15Yu+6VzrBvwE4
-         0C2YXAYWBzuwfpBTPyd3c6X5xX/NikIRL07rz1l0UgQvml1EGDajJc0+rhSPDucSLTjd
-         9ib6qlSNDWu9j1qNtXZpeiVY26BY6x+ZV94ctnXTM9QhKS2W11bm09uLzquZTBuLyZG8
-         blETwh2pHax4zciR1t3GSySbas2gYQQPlXTny5XvQvdMOKetqQID/7G4pE3ZeEMxApN1
-         ttp7Bn/dCV6ZMZUbFK0OO6bih6d7HffbfaiUI/wyNtr8nfZfg9bHCTL32tSodOPWmh4c
-         5U8g==
-X-Gm-Message-State: APjAAAWFjIsVFTyeBYoKko8uGOiIikctTQCnyaB9ZOw0oZm+G4CnJ2rq
-        HVIdmwmjP3NjVLeasCeisI6MSdHfO30=
-X-Google-Smtp-Source: APXvYqyXRfYjBzExatE13vghULwm1O2cZ9UJveodPKKqWz8DvpJizs7od94ndwnv/5ZlNqoRQurAww==
-X-Received: by 2002:a19:6917:: with SMTP id e23mr702833lfc.4.1571176042012;
-        Tue, 15 Oct 2019 14:47:22 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id m15sm5231067ljh.50.2019.10.15.14.47.18
+        bh=wItDXbX3LEWoTo1/kp4dk8aeAZ/2xJzKQP/tyONQ97k=;
+        b=RTFXyUlu7lVJtveK0cEcABRWBs9YyofKkIOkxqq3LIzWcuFio38NQqVHF0SavQkrAe
+         M7mM8pR7YUdIao/ZDbQ7k8Bwt083Gqqx9eomHvyNHSXQpZQ5YbOBZsbDEpkXSWyBb+rA
+         DfQf0HabyFUqxGpFOOaN/KrmiT9QT1MfSgzFat8WwvYlsugcceVRDn85eI8NbDUPBhtW
+         gZZmI3lDE4Au6+5g6r0JHJ0sOdlZqxXWvtck42VBDM7rfuLbbS5c88GqrGPvNo3+JmkZ
+         lsiEWN8rA8qWAUzcS45yxfzAf4RMCd0i0cLYfzBvUhZzKlHV5LOuULzt3cl1BTNTu6xI
+         Bk6Q==
+X-Gm-Message-State: APjAAAXh9k8EN5JfEFJSndEvyyOrYyXnX1dvWrP06NJEGP3SBf8cFzIy
+        NBJ7YiTnJx9Y/jT6QCSPipvd/D3UvGA=
+X-Google-Smtp-Source: APXvYqxjHdvt2eoWtufThjJ8/RgrM0iqrGZh7MD3m33qihyPA0VB/OKPuis6QUUUkq3Qt01WMcZW3g==
+X-Received: by 2002:a2e:8204:: with SMTP id w4mr23819585ljg.3.1571176141201;
+        Tue, 15 Oct 2019 14:49:01 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id j84sm5643371ljb.91.2019.10.15.14.48.59
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Oct 2019 14:47:19 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id v24so21822758ljj.3
-        for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2019 14:47:18 -0700 (PDT)
-X-Received: by 2002:a2e:8310:: with SMTP id a16mr18060112ljh.48.1571176038634;
- Tue, 15 Oct 2019 14:47:18 -0700 (PDT)
+        Tue, 15 Oct 2019 14:48:59 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id c195so15669600lfg.9
+        for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2019 14:48:59 -0700 (PDT)
+X-Received: by 2002:a19:5504:: with SMTP id n4mr4137650lfe.106.1571176138790;
+ Tue, 15 Oct 2019 14:48:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191015191926.9281-1-vgupta@synopsys.com> <20191015191926.9281-4-vgupta@synopsys.com>
-In-Reply-To: <20191015191926.9281-4-vgupta@synopsys.com>
+References: <20191015191926.9281-1-vgupta@synopsys.com> <20191015191926.9281-2-vgupta@synopsys.com>
+In-Reply-To: <20191015191926.9281-2-vgupta@synopsys.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 15 Oct 2019 14:47:02 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg470=r9YPMLyJdgr-aLvHSnDOFwFx=Y=_HPAW-aqyFRg@mail.gmail.com>
-Message-ID: <CAHk-=wg470=r9YPMLyJdgr-aLvHSnDOFwFx=Y=_HPAW-aqyFRg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] asm-generic/tlb: stub out p4d_free_tlb() if nop4d ...
+Date:   Tue, 15 Oct 2019 14:48:42 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi3QC7tj3rmTPg5RmK_ugVKYs-jKqX=TaASWfd73Owaig@mail.gmail.com>
+Message-ID: <CAHk-=wi3QC7tj3rmTPg5RmK_ugVKYs-jKqX=TaASWfd73Owaig@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] ARC: mm: remove __ARCH_USE_5LEVEL_HACK
 To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
         "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
@@ -74,9 +74,10 @@ X-Mailing-List: linux-arch@vger.kernel.org
 On Tue, Oct 15, 2019 at 12:19 PM Vineet Gupta
 <Vineet.Gupta1@synopsys.com> wrote:
 >
-> This came up when removing __ARCH_HAS_5LEVEL_HACK for ARC as code bloat
-> from this routine not required in a 2-level paging setup
+> This is a non-functional change anyways since ARC has software page walker
+> with 2 lookup levels (pgd -> pte)
 
-Similarly acked,
+Could we encourage other architectures to do the same, and get rid of
+all uses of __ARCH_USE_5LEVEL_HACK?
 
-          Linus
+            Linus
