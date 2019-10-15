@@ -2,92 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B8CD7DF0
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 19:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B7CD7E75
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 20:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388344AbfJORg1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Oct 2019 13:36:27 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:46362 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388831AbfJORg0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Oct 2019 13:36:26 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q5so12899103pfg.13
-        for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2019 10:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=m+oSkq2BGDVnMXCTCZOGBY+AVAcaQgizlBaC3TfYgbk=;
-        b=JV+TKEsIejeoGguft/smdhcOhD8TznOS3FDgaThCNzjFd/zO9Gf+USti5K/cmcvGGL
-         VL+DN5u7ePo4IWynJI4kZyUxYCOiGUo31kRO4IGsw0RDA7MEE9P0Lx+Gh5T4vmOLDPmO
-         nAWj+aCJO3XdoGRVZfY2JbnQgqczJYP20lPBE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m+oSkq2BGDVnMXCTCZOGBY+AVAcaQgizlBaC3TfYgbk=;
-        b=SpD2jyD8OFSFgYkXx+D+MWohv1syB6XOSJFhxD68At0Lg6JvEQ4jiuger4jryyfcm2
-         ZHfva7Vy/g4iWa00GSx95fJqSvqlhzs/3dcqcARqwRO827yS7JkMVlwEMupHbrbEinh/
-         Uvvz4yLzHqYKXUEtVrKCBxpFzZILeVh3ghUY0qUB4VSuHgvWFJTri8oOq2a2CnbItDOw
-         WZlc+lB5hzUTpaY4lvGNqNlgHkHfVreWij0zUybZAt0nfVQqFdIWoF8N+MqoVEx4BnAr
-         uietv1KAkZkT4c20mpkT0Roym1/SzBeqTylc6K1ZorMj5lARMYhkSjA0m1fhOkJn2u5I
-         jqXA==
-X-Gm-Message-State: APjAAAUPkBaj/6Yk756muiWtAGnfdUhQSQxsFknZAWL+G6Fp6UknJQGH
-        SZlOIgS9977lA4m8Avih5VCs1A==
-X-Google-Smtp-Source: APXvYqyiR4aQoe1gYk78ERJu5vF+BWIQdBY7ufngAKMkxwambAKLD5Wy/+2CK6+2hmVn878fjUO5OQ==
-X-Received: by 2002:a62:b504:: with SMTP id y4mr39162264pfe.124.1571160984162;
-        Tue, 15 Oct 2019 10:36:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f74sm25484564pfa.34.2019.10.15.10.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 10:36:23 -0700 (PDT)
-Date:   Tue, 15 Oct 2019 10:36:21 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>, x86@kernel.org,
-        linux-ia64@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-xtensa@linux-xtensa.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-parisc@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org
-Subject: Re: [PATCH v2 01/29] powerpc: Rename "notes" PT_NOTE to "note"
-Message-ID: <201910151034.A21FDCA32@keescook>
-References: <20191011000609.29728-1-keescook@chromium.org>
- <20191011000609.29728-2-keescook@chromium.org>
- <20191011082519.GI9749@gate.crashing.org>
- <201910110910.48270FC97@keescook>
- <20191011162552.GK9749@gate.crashing.org>
- <20191015165412.GD596@zn.tnic>
+        id S1729689AbfJOSIw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Oct 2019 14:08:52 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:37876 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725820AbfJOSIw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Oct 2019 14:08:52 -0400
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iKRFW-0000B2-Nm; Tue, 15 Oct 2019 18:08:46 +0000
+Date:   Tue, 15 Oct 2019 19:08:46 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] Convert filldir[64]() from __put_user() to
+ unsafe_put_user()
+Message-ID: <20191015180846.GA31707@ZenIV.linux.org.uk>
+References: <CAHk-=wgOWxqwqCFuP_Bw=Hxxf9njeHJs0OLNGNc63peNd=kRqw@mail.gmail.com>
+ <20191010195504.GI26530@ZenIV.linux.org.uk>
+ <CAHk-=wgWRQo0m7TUCK4T_J-3Vqte+p-FWzvT3CB1jJHgX-KctA@mail.gmail.com>
+ <20191011001104.GJ26530@ZenIV.linux.org.uk>
+ <CAHk-=wgg3jzkk-jObm1FLVYGS8JCTiKppEnA00_QX7Wsm5ieLQ@mail.gmail.com>
+ <20191013181333.GK26530@ZenIV.linux.org.uk>
+ <CAHk-=wgrWGyACBM8N8KP7Pu_2VopuzM4A12yQz6Eo=X2Jpwzcw@mail.gmail.com>
+ <20191013191050.GL26530@ZenIV.linux.org.uk>
+ <CAHk-=wjJNE9hOKuatqh6SFf4nd65LG4ZR3gQSgg+rjSpVxe89w@mail.gmail.com>
+ <20191013195949.GM26530@ZenIV.linux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191015165412.GD596@zn.tnic>
+In-Reply-To: <20191013195949.GM26530@ZenIV.linux.org.uk>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 06:54:13PM +0200, Borislav Petkov wrote:
-> On Fri, Oct 11, 2019 at 11:25:52AM -0500, Segher Boessenkool wrote:
-> > Names *matter*, internal names doubly so.  So why replace a good name with
-> > a worse name?  Because it is slightly less work for you?
+[futex folks and linux-arch Cc'd]
+
+On Sun, Oct 13, 2019 at 08:59:49PM +0100, Al Viro wrote:
+
+> Re plotting: how strongly would you object against passing the range to
+> user_access_end()?  Powerpc folks have a very close analogue of stac/clac,
+> currently buried inside their __get_user()/__put_user()/etc. - the same
+> places where x86 does, including futex.h and friends.
 > 
-> So if we agree on the name "notes" and we decide to rename the other
-> arches, this should all be done in a separate patchset anyway, and ontop
-> of this one. And I believe Kees wouldn't mind doing it ontop since he's
-> gotten his hands dirty already. :-P
+> And there it's even costlier than on x86.  It would obviously be nice
+> to lift it at least out of unsafe_get_user()/unsafe_put_user() and
+> move into user_access_begin()/user_access_end(); unfortunately, in
+> one subarchitecture they really want it the range on the user_access_end()
+> side as well.  That's obviously not fatal (they can bloody well save those
+> into thread_info at user_access_begin()), but right now we have relatively
+> few user_access_end() callers, so the interface changes are still possible.
+> 
+> Other architectures with similar stuff are riscv (no arguments, same
+> as for stac/clac), arm (uaccess_save_and_enable() on the way in,
+> return value passed to uaccess_restore() on the way out) and s390
+> (similar to arm, but there it's needed only to deal with nesting,
+> and I'm not sure it actually can happen).
+> 
+> It would be nice to settle the API while there are not too many users
+> outside of arch/x86; changing it later will be a PITA and we definitely
+> have architectures that do potentially costly things around the userland
+> memory access; user_access_begin()/user_access_end() is in the right
+> place to try and see if they fit there...
 
-Yeah, I'm fine with that. I would prefer to do it as a separate step,
-just to minimize the logical steps each patch takes. Shall I spin a v3
-with the Acks added and a final rename for this?
+Another question: right now we have
+        if (!access_ok(uaddr, sizeof(u32)))
+                return -EFAULT;
 
--- 
-Kees Cook
+        ret = arch_futex_atomic_op_inuser(op, oparg, &oldval, uaddr);
+        if (ret)
+                return ret;
+in kernel/futex.c.  Would there be any objections to moving access_ok()
+inside the instances and moving pagefault_disable()/pagefault_enable() outside?
+
+Reasons:
+	* on x86 that would allow folding access_ok() with STAC into
+user_access_begin().  The same would be doable on other usual suspects
+(arm, arm64, ppc, riscv, s390), bringing access_ok() next to their
+STAC counterparts.
+	* pagefault_disable()/pagefault_enable() pair is universal on
+all architectures, really meant to by the nature of the beast and
+lifting it into kernel/futex.c would get the same situation as with
+futex_atomic_cmpxchg_inatomic().  Which also does access_ok() inside
+the primitive (also foldable into user_access_begin(), at that).
+	* access_ok() would be closer to actual memory access (and
+out of the generic code).
+
+Comments?
