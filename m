@@ -2,71 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E890D6B5D
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2019 23:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21D5D6F44
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2019 07:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730620AbfJNVsH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Oct 2019 17:48:07 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:48190 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730586AbfJNVsG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Oct 2019 17:48:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=r8+y9y2pf6LTBiDmD8ROJU1496EBIFF0Ze6tIupxL2U=; b=K9uVe0jEoGlpWh2+YYpxbI82j
-        94gnr5sqHxIwpTw7qYu9rgfRaZl4hH99mdv01m0cP3vrveXCqWMbu3ZOxIuicu0opBhchEnfJ754+
-        tqq82Ow5YhOUV3NxjE1w6it9c9Krox4SATn0EGSDqWlB070ssRUW72rEoyS5vPMhkhK6bO9r39fUQ
-        FyJOYdNh26zruSPPtzvxp98VsxBG+n53UoAE2i2rLN7R9BE4HdAvOOwK5krbXZwIc2olcX2J0hg/F
-        UzZcIMDRc+R+PXNRxkRmwOsdkhXd35e8h+NXhKfbEA3rXf4TKvIAuoMdw4ANTP2TMXgFDJdI4WTJq
-        YnL7y66EQ==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iK8CA-0001s1-5B; Mon, 14 Oct 2019 21:48:02 +0000
-Date:   Mon, 14 Oct 2019 14:48:02 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Vineet Gupta <vineetg76@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Piggin <npiggin@gmail.com>, Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-snps-arc@lists.infradead.org, Will Deacon <will@kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [RFC] asm-generic/tlb: stub out pmd_free_tlb() if
- __PAGETABLE_PMD_FOLDED
-Message-ID: <20191014214802.GA32665@bombadil.infradead.org>
-References: <20191011121951.nxna6hruuskvdxod@box>
- <20191011223818.7238-1-vgupta@synopsys.com>
- <CAHk-=whLs=TrRzmB9KRLxcPERq0QXPUUkbD8vzKzaDszBcUspg@mail.gmail.com>
- <c0979d98-7236-b7c8-bd40-173ee2e87385@gmail.com>
- <CAHk-=wi3WXpKJkcpgHkUMgLiX9UdXnXhSFzBd8vTWkKgFpz0+Q@mail.gmail.com>
- <8bfd023b-5c00-8355-fd0f-3b4377951e6c@gmail.com>
- <CAHk-=wgUxgA-s4ZvxpcKDFfyoEmvcDr9Ydgo5W4s2hvrLHhP+g@mail.gmail.com>
+        id S1725815AbfJOFnI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Oct 2019 01:43:08 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:54418 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725810AbfJOFnH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Oct 2019 01:43:07 -0400
+Received: by mail-wm1-f66.google.com with SMTP id p7so19328601wmp.4;
+        Mon, 14 Oct 2019 22:43:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=h6+FbFERAiDwYRmtKkhZlybAkdQXDS/yFTNI2czScgY=;
+        b=cPCoqTnKmgRjjXN2Z89RtekM+OjBFtCtlxufRH0nFEIu8PnzX/mKY14+kfO06aiT3J
+         l1OgjxkeXCBmZ6IMoeu2C0+VnKdTtYI5Xn/Vfl1IzBk1hqf/uWUcE4l/1gYaK2/6k+2W
+         8YAvaLccbp2UmHBeorISeykbMRirX+enMjz/J9sGWIOMxUKICw0JQwcwm/5mOu1OxG+M
+         34idq8Rf83a68qsdfxIrivNc7S0tbze5cHTFGjzM4JnRLB7/qn8u27wO8qlxjKHJeTe8
+         0vnhnL8gYY3tBYafBoLd0GaBDlNR/HzH6LT7t77msDpK75PbnR/yP6IYr7xptqbFsxhd
+         BWzA==
+X-Gm-Message-State: APjAAAXnNkzDTMbuo/+sE99nHkM/o+1FkRrH+8dIKANYCSK8KUaCHKPe
+        MhgFpguGXtoM4IRyJ5ba3feBgIEHx9I=
+X-Google-Smtp-Source: APXvYqzO3gGhjF5GMy01r+Jy7XJ3/eq4XMmVGBdKIHAN968fB4ht+pJj2SD6QGWmdxd+bzT8Lp5v4g==
+X-Received: by 2002:a05:600c:20ca:: with SMTP id y10mr17428245wmm.82.1571118184329;
+        Mon, 14 Oct 2019 22:43:04 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id o18sm50791755wrw.90.2019.10.14.22.43.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Oct 2019 22:43:03 -0700 (PDT)
+Subject: Re: [PATCH v9 07/28] x86/boot: Annotate local functions
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191011115108.12392-1-jslaby@suse.cz>
+ <20191011115108.12392-8-jslaby@suse.cz> <20191014142742.GD4715@zn.tnic>
+From:   Jiri Slaby <jslaby@suse.cz>
+Autocrypt: addr=jslaby@suse.cz; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <0ece05d0-1942-4b9e-f6be-7a726961a471@suse.cz>
+Date:   Tue, 15 Oct 2019 07:43:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgUxgA-s4ZvxpcKDFfyoEmvcDr9Ydgo5W4s2hvrLHhP+g@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191014142742.GD4715@zn.tnic>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 01:38:34PM -0700, Linus Torvalds wrote:
-> And now I've said pgd/pud/p4d/pmd so many times that I've confused
-> myself and think I'm wrong again, and I think that historically -
-> originally - we always had a pgd, and then the pmd didn't exist
-> because it was folded into it. That makes sense from a x86 naming
-> standpoint. Then x86 _did_ get a pmd, and then we added more levels in
-> between, and other architectures did things differently.
+On 14. 10. 19, 16:27, Borislav Petkov wrote:
+> On Fri, Oct 11, 2019 at 01:50:47PM +0200, Jiri Slaby wrote:
+>> .Lrelocated, .Lpaging_enabled, .Lno_longmode, and .Lin_pm32 are
+>> self-standing local functions, annotate them as such and preserve "no
+>> alignment".
+>>
+>> The annotations do not generate anything yet.
+> 
+> So the annotation is only documentational, right?
 
-Oh my goodness.  Thank you for writing all this out and finally getting
-to this point.  I was reading the whole thing thinking "This is different
-from what I remember" and then you got here.  This explains so much about
-how our MM does/doesn't work, and it's not just me that's confused ;-)
+Right.
+
+thanks,
+-- 
+js
+suse labs
