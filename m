@@ -2,67 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3023FDA1A2
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2019 00:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800E0DA1FB
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2019 01:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391929AbfJPWk0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Oct 2019 18:40:26 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43514 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726743AbfJPWk0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Oct 2019 18:40:26 -0400
-Received: by mail-lj1-f194.google.com with SMTP id n14so382743ljj.10
-        for <linux-arch@vger.kernel.org>; Wed, 16 Oct 2019 15:40:23 -0700 (PDT)
+        id S1729379AbfJPXLV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Oct 2019 19:11:21 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:40283 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727663AbfJPXLV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Oct 2019 19:11:21 -0400
+Received: by mail-lf1-f65.google.com with SMTP id f23so269480lfk.7
+        for <linux-arch@vger.kernel.org>; Wed, 16 Oct 2019 16:11:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=04dJb9Nazr1VJFQ3H66lxKHMdWvTkJpJ9XeZFuHXJpY=;
-        b=Y6FXKxmvNk+SLSy8K1d8iyVTicj84WbDRknyfjwv/0dEjng3n+gui83MkLy/POww6I
-         IMiehB/IGPDe1KtWH9SiVdUWEkMntj3gNmyrct47Rf3lWJ0XoTln8pEYhIce5pbKMgAP
-         cQwkdbd4zrNR84FnQGKl1y+P6KVdwD+HPFdns=
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=eGKtZ/zw77SVmwWAmi2W2qbaG2CuisyYfyjtCue+A+4=;
+        b=J+x43ZuuP6oW4LgSz5GgRglUir/a9W55AO5TScArhufGqXsk5DSUW4YQVGd9WWaAbf
+         8YsfrLhxL4LKnbZbP2hAUFQqgixvndPoglPW3Tv3yJ6FyVg39EKhskSE0ZDlPZMgot2f
+         b3oPE2GyepAnrz8h0ibhFpnkS3t9VCOSghlaFfChToxS21Z/sEpqm6/fF45jqgB/UrTC
+         kQwI3Dgm2CHfO9MpivkTFkuXXeu0DpSjm8GpLDozi7AdT9EJK8omewSJxqO7b6Bt1cUa
+         E8eQzcsDRdXKm2iqmR7ythG63YgnjErg5pjMe968m8LHncu2vlsmj0LDDcAECBK7UZYI
+         y1KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=04dJb9Nazr1VJFQ3H66lxKHMdWvTkJpJ9XeZFuHXJpY=;
-        b=BIR8y+tRw5l1+1UFuEIvOaDP0qEZG/ktkDEvC27Ej59OqLY67/ax65IOTVLAyCmkPX
-         V0EBMiOuJPrE395s6Q/Ia26qf6yWNEnPIAcP7i98ZwC3g5w4r+pf9wkSOYFc92X2wfjo
-         fv0Oug2Boey3k9fWiV8Rl/MoU7dNtmo/9bGhYScaD845b4kU761EVIYhiXTvLK70nKJR
-         UomPjI5bKp7rNMxC2R5Q2i8LEMVM6vb2jzk9nrLTq6K2N12YfVVdbMDOPykTDHJVEBc8
-         F91DJ4WOVkcXgHD/UFTko/L8SX3X/MiN3yKjHbjhbwHQ8OGCnjT1aO8IIPsl+t2gkiGH
-         nfNw==
-X-Gm-Message-State: APjAAAVhKgFg1EfJhwTOrdExgjEUOOIbMyKN3WaS5AlzZxvnX+61kNdI
-        WY2/by8+IyYfS9MmToUa3Jf8rQ0Y96Y=
-X-Google-Smtp-Source: APXvYqym4dF+d9sgS+FkXJUEqb3xuwXi1kH1r3z57dUPpdJo321dmgoXT8HqbGQJo4QLy/bppY5pWA==
-X-Received: by 2002:a2e:2407:: with SMTP id k7mr296813ljk.73.1571265622964;
-        Wed, 16 Oct 2019 15:40:22 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id z26sm99365lji.79.2019.10.16.15.40.20
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Oct 2019 15:40:20 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id a22so434536ljd.0
-        for <linux-arch@vger.kernel.org>; Wed, 16 Oct 2019 15:40:20 -0700 (PDT)
-X-Received: by 2002:a2e:2b91:: with SMTP id r17mr311891ljr.1.1571265619954;
- Wed, 16 Oct 2019 15:40:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <57fd50dd./gNBvRBYvu+kYV+l%akpm@linux-foundation.org>
- <CA+55aFxr2uZADh--vtLYXjcLjNGO5t4jmTWEVZWbRuaJwiocug@mail.gmail.com>
- <CA+55aFxQRf+U0z6mrAd5QQLWgB2A_mRjY7g9vpZHCSuyjrdhxQ@mail.gmail.com> <CAHk-=wgr12JkKmRd21qh-se-_Gs69kbPgR9x4C+Es-yJV2GLkA@mail.gmail.com>
-In-Reply-To: <CAHk-=wgr12JkKmRd21qh-se-_Gs69kbPgR9x4C+Es-yJV2GLkA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 16 Oct 2019 15:40:03 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whaSMp_MOKgAa=AwLDAY0Rtjdrw-AFKuLXbFsTJSevosA@mail.gmail.com>
-Message-ID: <CAHk-=whaSMp_MOKgAa=AwLDAY0Rtjdrw-AFKuLXbFsTJSevosA@mail.gmail.com>
-Subject: Re: [patch 014/102] llist: introduce llist_entry_safe()
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eGKtZ/zw77SVmwWAmi2W2qbaG2CuisyYfyjtCue+A+4=;
+        b=JEp78fc7515FSIdwU4HRFg/MBDFzP5l5eiWufT6oIYNsVAuCUod1FUFvWdgpidNldS
+         LF75/c8Ncb44D2hkYt69vSty8gfFgO/7cmG3vFHvaY5tF+Jn9v4rMRRnY6MSedHC1BVE
+         zhePYnj3wxGD6qyMsNcyupzavjvzXD8mXc9/G74NZ5c/TGEsFd977WZ0Gm3uKTvDG/R3
+         Tu2gZrsJM07Z4DmYz7ip4DqEZhMyP18t6BEa57OBlWre4sJZNcVfXbjVNvXWGdNbyFMM
+         UdDKRAAEQc+yyIxJy2QmG9M3GMcTggjSCeplSkGvQim1SHflm8doOH9eYMsxUcG6Wv6y
+         cufQ==
+X-Gm-Message-State: APjAAAUQhBbwQx/oWC+Beo681gy2whxqBBiSCovZ/qdrnhFImhnz4AG9
+        +xNrix6wtWTvOGA9A+OrXcmxEA==
+X-Google-Smtp-Source: APXvYqy0UgONmpSaR+4m5izxGJwNl4tg+Z38plmGJ5jsQ0CIAYGKw48uJzmou8ImGmI6Lr3+UjT6gw==
+X-Received: by 2002:a19:655b:: with SMTP id c27mr148514lfj.122.1571267479442;
+        Wed, 16 Oct 2019 16:11:19 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id r5sm83652lfc.85.2019.10.16.16.11.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2019 16:11:18 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 97333101175; Thu, 17 Oct 2019 02:11:16 +0300 (+03)
+Date:   Thu, 17 Oct 2019 02:11:16 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Sasha Levin <sasha.levin@oracle.com>,
         Andrew Pinski <apinski@cavium.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Michal Marek <michal.lkml@markovi.net>
-Cc:     mm-commits@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        mm-commits@vger.kernel.org,
         Alexander Potapenko <glider@google.com>,
         Dmitry Vyukov <dvyukov@google.com>,
         Eric Dumazet <edumazet@google.com>,
@@ -70,19 +63,42 @@ Cc:     mm-commits@vger.kernel.org,
         Ingo Molnar <mingo@elte.hu>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [patch 014/102] llist: introduce llist_entry_safe()
+Message-ID: <20191016231116.inv5stimz6fg7gof@box.shutemov.name>
+References: <57fd50dd./gNBvRBYvu+kYV+l%akpm@linux-foundation.org>
+ <CA+55aFxr2uZADh--vtLYXjcLjNGO5t4jmTWEVZWbRuaJwiocug@mail.gmail.com>
+ <CA+55aFxQRf+U0z6mrAd5QQLWgB2A_mRjY7g9vpZHCSuyjrdhxQ@mail.gmail.com>
+ <CAHk-=wgr12JkKmRd21qh-se-_Gs69kbPgR9x4C+Es-yJV2GLkA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgr12JkKmRd21qh-se-_Gs69kbPgR9x4C+Es-yJV2GLkA@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 3:23 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I only tested gnu99 - which is sufficient for the above - and didn't
-> see if gnu11 ends up causing more issues..
+On Wed, Oct 16, 2019 at 03:23:42PM -0700, Linus Torvalds wrote:
+> [ Coming back to this, because it was annoying me ]
+> 
+> On Tue, Oct 11, 2016 at 4:06 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > HOWEVER - and this is really annoying - we'd need to use "-std=gnu99/gnu11"
+> 
+> Hmm.
+> 
+> I just tried it again after a long time, and "-std=gnu99" seems to
+> work fine for me on the kernel these days. The old "compound literal"
+> issues we had at some point seem gone.
+> 
+> Maybe we've cleaned everything up that used to cause problems. Or
+> maybe I just mis-remembered and we should have done this long ago?
 
-I see at least no obvious issues with gnu11, so if this works for
-other architectures too, we should just switch over.
+Looks like it was fixed soon after the complain:
 
-              Linus
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63567
+
+-- 
+ Kirill A. Shutemov
