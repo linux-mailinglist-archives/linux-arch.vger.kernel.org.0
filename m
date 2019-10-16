@@ -2,199 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 176B3D8D49
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2019 12:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BCBD8E08
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2019 12:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388156AbfJPKHE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Oct 2019 06:07:04 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:35025 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389948AbfJPKHE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Oct 2019 06:07:04 -0400
-Received: by mail-oi1-f193.google.com with SMTP id x3so19542850oig.2
-        for <linux-arch@vger.kernel.org>; Wed, 16 Oct 2019 03:07:03 -0700 (PDT)
+        id S1728851AbfJPKfn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Oct 2019 06:35:43 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:35776 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729559AbfJPKfk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Oct 2019 06:35:40 -0400
+Received: by mail-lf1-f68.google.com with SMTP id w6so17035434lfl.2
+        for <linux-arch@vger.kernel.org>; Wed, 16 Oct 2019 03:35:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qMLDRlP6KAQbJ6EBR+tTwOR/BZha8QBB781yjh9f+vI=;
-        b=IzhRqtVYSIrQOWk8qCQYn4/rTOnHC2BhU7+kR7WbjbeLrfwEgkriTH0i/iiLXUxE6w
-         9TY1zEHAxm9LWqj9U9FKFNFpJPksG+o5jpTnwf0AH9L9qx4EjTfEmYZspBAwyoYTq58y
-         2XoJim6PnzA8V5rkbEZ+1gHJd/d8E1TT3mVou1qLNPGV59Oh4Lp8AGHQC6TqedqA1I80
-         mFPnDoRcUI6zhCDUTpoHxhcuDdKJAMAQgwv1O9N/6gP1uqvOtZZc24tKklN7heCOtCLw
-         AGLWDPjGICR0HouGNZzMf7ZxOX6YjI/TIY2ddPvOeO7bcqUGL2vcWzGzn9/wEQ98UyfN
-         oZxQ==
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TPx7rPA0Br+et5o6KmRStGO/myFB8ZhOgy82/e79ydg=;
+        b=jw4mP6UxdbKOn1Ax/5Lz6J3Yf5tVdATs7EvlFAJS+GhYi7/834ey8w/GvLQpLeZVc7
+         7Mb3IXhbnQSlm+QXZ3MZ+nckKcixkU87Dmfefg2Z9rz8pDIfZBDL+OES3N1PpeYo6xU8
+         PNyU5vrMcL2T8PAlZ7u7qD0H1U6OF5fCcn7y7a3kIALA9Bqh1plMD2Y9HS6Mm00vbv7v
+         xjKALcfBL8p4Z6xSJDAwiS4oeDHxeJA6eDNAP8saYrTaPW6uq2jHilKFYwB8ptI5KkAz
+         zT8lgn8Vk55SVZ90xAYBKzEcFI76nh/U52ixpe6wlEk/hmGMD2fliIAFd31J/AcanEeZ
+         Jw6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qMLDRlP6KAQbJ6EBR+tTwOR/BZha8QBB781yjh9f+vI=;
-        b=KY2OQhHNxafsW7T7gEeB+f9eO8cV26DmzPxmgeB7g/5jO9epbfn4Ibwctl2a9grNNi
-         zFkEYPg2z7oFxDeZumhhZx1zCqq2InqGx2NbY9cg4ZJuM6v6qhlQxp0l05nvc54KT5P1
-         dXdnbDQz1KURcuaOAwCdrzqYqDu2ieqlGdUFpgfL3Ue7fbmXJ1A7JobvOR1YzrM5vJm8
-         RT/ZIkOlDCYdoT5QrGOI3Oe/lBQMTHbYYMrXe2DlCh7IP1hzgWqDEfVlgxwrK97OYwlw
-         Aeyz9NPLxkIxG3ngAq/HIXPYMYndHit657X/0kFho4x917DNlIdPS5rySM4pWrgge1/P
-         trkA==
-X-Gm-Message-State: APjAAAUXt93FF611OsvHKrmCiqERlim/GjonfyjV7XL0eqhNf2Rp2jK/
-        DvMSf5Hf8r8sXdkXWwBykBiu8tv8qAdGMjztYt99QA==
-X-Google-Smtp-Source: APXvYqxWEIV0fVIrxNzDqgv+Do5nMi6aRtYEMsJW2Y12BL+F4CpGAX7l1gYylp2IQRBYF8VTmXy4feTlqfHWT/7/2sQ=
-X-Received: by 2002:aca:f492:: with SMTP id s140mr2789533oih.83.1571220422532;
- Wed, 16 Oct 2019 03:07:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191016083959.186860-1-elver@google.com> <20191016083959.186860-2-elver@google.com>
- <20191016094234.GB2701514@tardis>
-In-Reply-To: <20191016094234.GB2701514@tardis>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 16 Oct 2019 12:06:51 +0200
-Message-ID: <CANpmjNOxmQDKin=9Cyi+ERVQ-ehH79AaPjRvJNfFfmgOjJAogA@mail.gmail.com>
-Subject: Re: [PATCH 1/8] kcsan: Add Kernel Concurrency Sanitizer infrastructure
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Alexander Potapenko <glider@google.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>, ard.biesheuvel@linaro.org,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Daniel Axtens <dja@axtens.net>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        dave.hansen@linux.intel.com, dhowells@redhat.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TPx7rPA0Br+et5o6KmRStGO/myFB8ZhOgy82/e79ydg=;
+        b=bQmlYaGh9J9keaAx6WYqgOcghUvr6MWKJcyhEHEyLcJEIIcWqrdpGKgoYT5QtCjeUr
+         oDSmA4STDLTDa2/TpDHdo3NPIJQP1vRTgRJJuokLdHGflTayWJkTBcSGyObWVfsXNMFD
+         V+V2eJgYMmMDYdEFcPTpz9qmzv//Pn0WQx2O0VvGen6yQgQsfxtbaBNuJNEPwyoAxLtf
+         eWplEeHWVHZMc6IX18WkN51CCEX9/uhB6MPzh5HEfn265vH7T5ckSNelflaeAaxMf5Be
+         KEflkXhuu4LOyyoiY/S825jVLvKvTR7ceRvW57yN2gmIGfqSXq98DQksu9ZqCDteF4Ek
+         LBvA==
+X-Gm-Message-State: APjAAAUV/em27xVy/d8xsuVgZ6CfjZAFvTO8xV1Cchucsxda6nMQgg6i
+        9IX3oh1OS2dMm5c4fo/8qnQBQw==
+X-Google-Smtp-Source: APXvYqwEBdxAChMVVBFlmc6eUXtVvNheuH3e0SluP3ca6bXyqt8wHnILm5brTVtYux5zecvFFwwvVw==
+X-Received: by 2002:ac2:5dc2:: with SMTP id x2mr24763989lfq.38.1571222137941;
+        Wed, 16 Oct 2019 03:35:37 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id k7sm5791404lja.19.2019.10.16.03.35.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2019 03:35:37 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id E4B6C101F90; Wed, 16 Oct 2019 13:35:37 +0300 (+03)
+Date:   Wed, 16 Oct 2019 13:35:37 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-efi@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] asm-generic/mm: stub out p{4,d}d_clear_bad() if
+ __PAGETABLE_P{4,u}D_FOLDED
+Message-ID: <20191016103537.oeanj7nh7u7yhk7l@box>
+References: <20191015191926.9281-1-vgupta@synopsys.com>
+ <20191015191926.9281-6-vgupta@synopsys.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191015191926.9281-6-vgupta@synopsys.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 16 Oct 2019 at 11:42, Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> Hi Marco,
->
-> On Wed, Oct 16, 2019 at 10:39:52AM +0200, Marco Elver wrote:
-> [...]
-> > --- /dev/null
-> > +++ b/kernel/kcsan/kcsan.c
-> > @@ -0,0 +1,81 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +/*
-> > + * The Kernel Concurrency Sanitizer (KCSAN) infrastructure. For more info please
-> > + * see Documentation/dev-tools/kcsan.rst.
-> > + */
-> > +
-> > +#include <linux/export.h>
-> > +
-> > +#include "kcsan.h"
-> > +
-> > +/*
-> > + * Concurrency Sanitizer uses the same instrumentation as Thread Sanitizer.
->
-> Is there any documentation on the instrumentation? Like a complete list
-> for all instrumentation functions plus a description of where the
-> compiler will use those functions. Yes, the names of the below functions
-> are straightforward, but an accurate doc on the instrumentation will
-> cerntainly help people review KCSAN.
+There is couple of typos in the subject of the patch. It has to be
 
-As far as I'm aware neither GCC nor Clang have documentation on the
-emitted instrumentation that we could reference (other than look into
-the compiler passes).
+	[PATCH v2 5/5] asm-generic/mm: stub out p{4,u}d_clear_bad() if __PAGETABLE_P{4,U}D_FOLDED
 
-However it is as straightforward as it seems: the compiler emits
-instrumentation calls for all loads and stores that the compiler
-generates; inline asm is not instrumented. I will add a comment to
-that effect for v2.
+Otherwise the patchset looks good to me. You can use my ACK for all
+patches.
 
-Thanks,
--- Marco
-
-> Regards,
-> Boqun
->
-> > + */
-> > +
-> > +#define DEFINE_TSAN_READ_WRITE(size)                                           \
-> > +     void __tsan_read##size(void *ptr)                                      \
-> > +     {                                                                      \
-> > +             __kcsan_check_access(ptr, size, false);                        \
-> > +     }                                                                      \
-> > +     EXPORT_SYMBOL(__tsan_read##size);                                      \
-> > +     void __tsan_write##size(void *ptr)                                     \
-> > +     {                                                                      \
-> > +             __kcsan_check_access(ptr, size, true);                         \
-> > +     }                                                                      \
-> > +     EXPORT_SYMBOL(__tsan_write##size)
-> > +
-> > +DEFINE_TSAN_READ_WRITE(1);
-> > +DEFINE_TSAN_READ_WRITE(2);
-> > +DEFINE_TSAN_READ_WRITE(4);
-> > +DEFINE_TSAN_READ_WRITE(8);
-> > +DEFINE_TSAN_READ_WRITE(16);
-> > +
-> > +/*
-> > + * Not all supported compiler versions distinguish aligned/unaligned accesses,
-> > + * but e.g. recent versions of Clang do.
-> > + */
-> > +#define DEFINE_TSAN_UNALIGNED_READ_WRITE(size)                                 \
-> > +     void __tsan_unaligned_read##size(void *ptr)                            \
-> > +     {                                                                      \
-> > +             __kcsan_check_access(ptr, size, false);                        \
-> > +     }                                                                      \
-> > +     EXPORT_SYMBOL(__tsan_unaligned_read##size);                            \
-> > +     void __tsan_unaligned_write##size(void *ptr)                           \
-> > +     {                                                                      \
-> > +             __kcsan_check_access(ptr, size, true);                         \
-> > +     }                                                                      \
-> > +     EXPORT_SYMBOL(__tsan_unaligned_write##size)
-> > +
-> > +DEFINE_TSAN_UNALIGNED_READ_WRITE(2);
-> > +DEFINE_TSAN_UNALIGNED_READ_WRITE(4);
-> > +DEFINE_TSAN_UNALIGNED_READ_WRITE(8);
-> > +DEFINE_TSAN_UNALIGNED_READ_WRITE(16);
-> > +
-> > +void __tsan_read_range(void *ptr, size_t size)
-> > +{
-> > +     __kcsan_check_access(ptr, size, false);
-> > +}
-> > +EXPORT_SYMBOL(__tsan_read_range);
-> > +
-> > +void __tsan_write_range(void *ptr, size_t size)
-> > +{
-> > +     __kcsan_check_access(ptr, size, true);
-> > +}
-> > +EXPORT_SYMBOL(__tsan_write_range);
-> > +
-> > +/*
-> > + * The below are not required KCSAN, but can still be emitted by the compiler.
-> > + */
-> > +void __tsan_func_entry(void *call_pc)
-> > +{
-> > +}
-> > +EXPORT_SYMBOL(__tsan_func_entry);
-> > +void __tsan_func_exit(void)
-> > +{
-> > +}
-> > +EXPORT_SYMBOL(__tsan_func_exit);
-> > +void __tsan_init(void)
-> > +{
-> > +}
-> > +EXPORT_SYMBOL(__tsan_init);
-> [...]
+-- 
+ Kirill A. Shutemov
