@@ -2,264 +2,220 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 410A9D8B68
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2019 10:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52448D8CCD
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2019 11:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404105AbfJPIlk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Oct 2019 04:41:40 -0400
-Received: from mail-wm1-f74.google.com ([209.85.128.74]:52392 "EHLO
-        mail-wm1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391760AbfJPIlj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Oct 2019 04:41:39 -0400
-Received: by mail-wm1-f74.google.com with SMTP id m6so670641wmf.2
-        for <linux-arch@vger.kernel.org>; Wed, 16 Oct 2019 01:41:35 -0700 (PDT)
+        id S1733117AbfJPJmr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Oct 2019 05:42:47 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:42024 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726689AbfJPJmr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Oct 2019 05:42:47 -0400
+Received: by mail-qt1-f194.google.com with SMTP id w14so35102214qto.9;
+        Wed, 16 Oct 2019 02:42:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=7ROjjIT0dSiqK7weicBG4sWceIh3b0q1ZAIHDJ8V6Dk=;
-        b=NSrpYdVj6fvXpFrnYfMPpaxzWB8tZgAHeQar0WnBSBStaLWhUFgVJk9C/oS/EQde3j
-         MN4Pu2PiFyorxV2NAx67TfVsuapiiUeipddfWo7q/H/WBwZUnkM+6M8rF64LWI1zqnod
-         u5c2hdeezFE94Xt0CqiWPN9JZ+XWZGa2LmHJ17RvhMuYF8jJYNzHYmLp4bSOyQhnLb5n
-         wcTS/OQn6cmqiOthUHvG8diywSJRIpleWQFeeW+APiJo3NuWVCMKVB3OAzacpbRddg+g
-         eGRi/qTPu5x/ubxado+lIc7l9pv4VKTx9GmOiVRvCsEI/RgIn0MQsYWgNaf1gyqvzMor
-         8Gxw==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Tc+bjrFvCm99dkdh8oHRuyC3BtBT5HBjTdr0g9Rtqkg=;
+        b=PsAp2aMFrpQeUVfKKIw12to7ciwCj3LHoHmyOPdzFWsswiJ6kXsv1mb0q77oUZ9qPz
+         XYR4aS+6mT+8SNy7FCY6OdbupRF8wfSSaVCbkWxwjWhhlcZaNVqvGdsFylj7YJCw2dY3
+         ymIFlzkAstc6TGOb5oMPfuAvPNv5aC1kpoODjB98NfomTm0NunbjQ2mn637lIiUuFV87
+         0YVQwMmXz1vdwww4bv6fxNRXlCjQeYmGfKTL0Wc3Wl1L5Rxb3o5co9y8fUtDdTFvjdNB
+         2lvS7WBkm+s09jacoMVDx0W4liDwPgyf33qVFu7t5K9Ujvzmn8WquTVidiB2gtWe2qwc
+         W7Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=7ROjjIT0dSiqK7weicBG4sWceIh3b0q1ZAIHDJ8V6Dk=;
-        b=rEBKVi8+8JIvhhrjCKzJZcw1DaVTohwT5MGNGeAHaAXifzO75F64XbUP0DLmPPO1Hw
-         TaIdGq5QFOK8103jEDjmzsB69LiQUTqfU9nK4UTXPhx/d+kSFzwXAzItt5nK5cqviRTs
-         7YVKiShlzQjwRNi4wVB2FU9X6tVLxu9ioAENC2RyMQ/+v+utwCInSCfvUi9FOw3IxCpG
-         /FrO6K0L3y6rkSrYEjkwxBtODH8eqHcHc0sP5g8Cg0GulmdLMqY69JH28H64q+0Xafjy
-         8/BaLy/rzhUrcDOd92qQhC3rFL+MldN2PJGChb8oxbPF3QO8NFM6L9CiwkLBsrp9TzF7
-         iq6g==
-X-Gm-Message-State: APjAAAXI4T+SSYeI+oxn8TwVp8NjxqEb8c+wU4jMj3oXJz0B5PYhIzpS
-        NyCnSUv723VRL76cdllLSh7L+J9xyg==
-X-Google-Smtp-Source: APXvYqyPTbF4tMvD/+6fq80mlU+ztvS58zl/Ed2jENLqLLVlUfZnkS670w03BnK/IEZ6vSaVSsQZVxJcuQ==
-X-Received: by 2002:adf:e983:: with SMTP id h3mr1520622wrm.95.1571215294184;
- Wed, 16 Oct 2019 01:41:34 -0700 (PDT)
-Date:   Wed, 16 Oct 2019 10:39:59 +0200
-In-Reply-To: <20191016083959.186860-1-elver@google.com>
-Message-Id: <20191016083959.186860-9-elver@google.com>
-Mime-Version: 1.0
-References: <20191016083959.186860-1-elver@google.com>
-X-Mailer: git-send-email 2.23.0.700.g56cf767bdb-goog
-Subject: [PATCH 8/8] x86, kcsan: Enable KCSAN for x86
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Tc+bjrFvCm99dkdh8oHRuyC3BtBT5HBjTdr0g9Rtqkg=;
+        b=j4HfzMUrM39YWhCUlfJHrpPsvFuKi93S0jSmQEBkYnIoegFdLj3rAuDElwcwMxGB/v
+         ulg3pRfbD6prICC5UP5weFKq6GwYrRb6e94BBHrbL6kjhh3LnHnz0LFHkT7PIwvdEDwS
+         apNfUWsTvdBsEOHcGQ0B+2VPYl8EiEVTxZoPZDb9jCHw3I4LEWsarZaJSKQZql4lR9D9
+         LsKONEFFr8tVTrpKHpeK1+6lPc9zAoel1HkEopRjhJsvlLjpHnI7b7tmjgd3hTPl1KcZ
+         RVTMYvmPtZZ+oVi8LhukbOAJflAbD9Vpjw0q2GVbSTQJ6OdcIfz0ZcAclPGo4wbzXb2O
+         qZng==
+X-Gm-Message-State: APjAAAUEMB8yyWkTXaI4tzhZYGO+ihmRuwNhFuxkphoryadxgyZ3hQ8C
+        aO+VyizMNCgiYNu0lzHLjgU=
+X-Google-Smtp-Source: APXvYqwv4OPCbvJ/75Lox4Ir6P4EncPUZZJZylf1we/5Vtb4xrvd19GTx1XCLu0AyB4tvOx1k1Pa+g==
+X-Received: by 2002:ac8:7084:: with SMTP id y4mr44279072qto.146.1571218965731;
+        Wed, 16 Oct 2019 02:42:45 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id p53sm12956733qtk.23.2019.10.16.02.42.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 16 Oct 2019 02:42:44 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 5433120931;
+        Wed, 16 Oct 2019 05:42:43 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 16 Oct 2019 05:42:43 -0400
+X-ME-Sender: <xms:EOamXau1beLCvey8giMNfWrS5u-M98SOlPG_UcrFJ_Y4lqdSeQSxrg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrjeehgddulecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujggfsehgtderredtredvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecukfhppedutd
+    durdekiedrgedurddvuddvnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhm
+    vghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekhe
+    ehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghm
+    vgenucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:EOamXXISM7AZAGOysAqNwFrwskFK4GyvXEMAUK76sMQhyalLITrueQ>
+    <xmx:EOamXX9WFyjbGgP8fN1v2SsFAsuaS2nvq57_d3YoSZKkDj0uzpSfrQ>
+    <xmx:EOamXT5zY7H9WLM1B_lOpw2bBnMmL1VKQXk25rKbr0sGwMbHc8WAiw>
+    <xmx:E-amXT59VT5qlyQTUsleQCVd7IBHXi8qe1VOu-Vf8i4ehTQfx0geLQQ1pB0>
+Received: from localhost (unknown [101.86.41.212])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 78764D60062;
+        Wed, 16 Oct 2019 05:42:38 -0400 (EDT)
+Date:   Wed, 16 Oct 2019 17:42:34 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Marco Elver <elver@google.com>
 Cc:     akiyks@gmail.com, stern@rowland.harvard.edu, glider@google.com,
         parri.andrea@gmail.com, andreyknvl@google.com, luto@kernel.org,
-        ard.biesheuvel@linaro.org, arnd@arndb.de, boqun.feng@gmail.com,
-        bp@alien8.de, dja@axtens.net, dlustig@nvidia.com,
-        dave.hansen@linux.intel.com, dhowells@redhat.com,
-        dvyukov@google.com, hpa@zytor.com, mingo@redhat.com,
-        j.alglave@ucl.ac.uk, joel@joelfernandes.org, corbet@lwn.net,
-        jpoimboe@redhat.com, luc.maranget@inria.fr, mark.rutland@arm.com,
-        npiggin@gmail.com, paulmck@linux.ibm.com, peterz@infradead.org,
-        tglx@linutronix.de, will@kernel.org, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        ard.biesheuvel@linaro.org, arnd@arndb.de, bp@alien8.de,
+        dja@axtens.net, dlustig@nvidia.com, dave.hansen@linux.intel.com,
+        dhowells@redhat.com, dvyukov@google.com, hpa@zytor.com,
+        mingo@redhat.com, j.alglave@ucl.ac.uk, joel@joelfernandes.org,
+        corbet@lwn.net, jpoimboe@redhat.com, luc.maranget@inria.fr,
+        mark.rutland@arm.com, npiggin@gmail.com, paulmck@linux.ibm.com,
+        peterz@infradead.org, tglx@linutronix.de, will@kernel.org,
+        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH 1/8] kcsan: Add Kernel Concurrency Sanitizer
+ infrastructure
+Message-ID: <20191016094234.GB2701514@tardis>
+References: <20191016083959.186860-1-elver@google.com>
+ <20191016083959.186860-2-elver@google.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
+Content-Disposition: inline
+In-Reply-To: <20191016083959.186860-2-elver@google.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch enables KCSAN for x86, with updates to build rules to not use
-KCSAN for several incompatible compilation units.
 
-Signed-off-by: Marco Elver <elver@google.com>
----
- arch/x86/Kconfig                      | 1 +
- arch/x86/boot/Makefile                | 1 +
- arch/x86/boot/compressed/Makefile     | 1 +
- arch/x86/entry/vdso/Makefile          | 1 +
- arch/x86/include/asm/bitops.h         | 2 +-
- arch/x86/kernel/Makefile              | 6 ++++++
- arch/x86/kernel/cpu/Makefile          | 3 +++
- arch/x86/lib/Makefile                 | 2 ++
- arch/x86/mm/Makefile                  | 3 +++
- arch/x86/purgatory/Makefile           | 1 +
- arch/x86/realmode/Makefile            | 1 +
- arch/x86/realmode/rm/Makefile         | 1 +
- drivers/firmware/efi/libstub/Makefile | 1 +
- 13 files changed, 23 insertions(+), 1 deletion(-)
+--yrj/dFKFPuw6o+aM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index d6e1faa28c58..81859be4a005 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -226,6 +226,7 @@ config X86
- 	select VIRT_TO_BUS
- 	select X86_FEATURE_NAMES		if PROC_FS
- 	select PROC_PID_ARCH_STATUS		if PROC_FS
-+	select HAVE_ARCH_KCSAN if X86_64
- 
- config INSTRUCTION_DECODER
- 	def_bool y
-diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
-index e2839b5c246c..2f9e928acae6 100644
---- a/arch/x86/boot/Makefile
-+++ b/arch/x86/boot/Makefile
-@@ -10,6 +10,7 @@
- #
- 
- KASAN_SANITIZE			:= n
-+KCSAN_SANITIZE			:= n
- OBJECT_FILES_NON_STANDARD	:= y
- 
- # Kernel does not boot with kcov instrumentation here.
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 6b84afdd7538..0921689f7c70 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -18,6 +18,7 @@
- #	compressed vmlinux.bin.all + u32 size of vmlinux.bin.all
- 
- KASAN_SANITIZE			:= n
-+KCSAN_SANITIZE			:= n
- OBJECT_FILES_NON_STANDARD	:= y
- 
- # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 0f2154106d01..d2cd34d2ac4e 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -12,6 +12,7 @@ include $(srctree)/lib/vdso/Makefile
- KBUILD_CFLAGS += $(DISABLE_LTO)
- KASAN_SANITIZE			:= n
- UBSAN_SANITIZE			:= n
-+KCSAN_SANITIZE			:= n
- OBJECT_FILES_NON_STANDARD	:= y
- 
- # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index 7d1f6a49bfae..a36d900960e4 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -201,7 +201,7 @@ arch_test_and_change_bit(long nr, volatile unsigned long *addr)
- 	return GEN_BINARY_RMWcc(LOCK_PREFIX __ASM_SIZE(btc), *addr, c, "Ir", nr);
- }
- 
--static __always_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
-+static __no_kcsan_or_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
- {
- 	return ((1UL << (nr & (BITS_PER_LONG-1))) &
- 		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 3578ad248bc9..adccbbfa47e4 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -28,6 +28,12 @@ KASAN_SANITIZE_dumpstack_$(BITS).o			:= n
- KASAN_SANITIZE_stacktrace.o				:= n
- KASAN_SANITIZE_paravirt.o				:= n
- 
-+KCSAN_SANITIZE_head$(BITS).o				:= n
-+KCSAN_SANITIZE_dumpstack.o				:= n
-+KCSAN_SANITIZE_dumpstack_$(BITS).o			:= n
-+KCSAN_SANITIZE_stacktrace.o				:= n
-+KCSAN_SANITIZE_paravirt.o				:= n
-+
- OBJECT_FILES_NON_STANDARD_relocate_kernel_$(BITS).o	:= y
- OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
- OBJECT_FILES_NON_STANDARD_paravirt_patch.o		:= y
-diff --git a/arch/x86/kernel/cpu/Makefile b/arch/x86/kernel/cpu/Makefile
-index d7a1e5a9331c..7651c4f37e5e 100644
---- a/arch/x86/kernel/cpu/Makefile
-+++ b/arch/x86/kernel/cpu/Makefile
-@@ -3,6 +3,9 @@
- # Makefile for x86-compatible CPU details, features and quirks
- #
- 
-+KCSAN_SANITIZE_common.o = n
-+KCSAN_SANITIZE_perf_event.o = n
-+
- # Don't trace early stages of a secondary CPU boot
- ifdef CONFIG_FUNCTION_TRACER
- CFLAGS_REMOVE_common.o = -pg
-diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
-index 5246db42de45..4e4b74f525f2 100644
---- a/arch/x86/lib/Makefile
-+++ b/arch/x86/lib/Makefile
-@@ -5,11 +5,13 @@
- 
- # Produces uninteresting flaky coverage.
- KCOV_INSTRUMENT_delay.o	:= n
-+KCSAN_SANITIZE_delay.o := n
- 
- # Early boot use of cmdline; don't instrument it
- ifdef CONFIG_AMD_MEM_ENCRYPT
- KCOV_INSTRUMENT_cmdline.o := n
- KASAN_SANITIZE_cmdline.o  := n
-+KCSAN_SANITIZE_cmdline.o  := n
- 
- ifdef CONFIG_FUNCTION_TRACER
- CFLAGS_REMOVE_cmdline.o = -pg
-diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
-index 84373dc9b341..ee871602f96a 100644
---- a/arch/x86/mm/Makefile
-+++ b/arch/x86/mm/Makefile
-@@ -7,6 +7,9 @@ KCOV_INSTRUMENT_mem_encrypt_identity.o	:= n
- KASAN_SANITIZE_mem_encrypt.o		:= n
- KASAN_SANITIZE_mem_encrypt_identity.o	:= n
- 
-+KCSAN_SANITIZE_mem_encrypt.o		:= n
-+KCSAN_SANITIZE_mem_encrypt_identity.o	:= n
-+
- ifdef CONFIG_FUNCTION_TRACER
- CFLAGS_REMOVE_mem_encrypt.o		= -pg
- CFLAGS_REMOVE_mem_encrypt_identity.o	= -pg
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index fb4ee5444379..72060744f34f 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -18,6 +18,7 @@ LDFLAGS_purgatory.ro := -e purgatory_start -r --no-undefined -nostdlib -z nodefa
- targets += purgatory.ro
- 
- KASAN_SANITIZE	:= n
-+KCSAN_SANITIZE	:= n
- KCOV_INSTRUMENT := n
- 
- # These are adjustments to the compiler flags used for objects that
-diff --git a/arch/x86/realmode/Makefile b/arch/x86/realmode/Makefile
-index 682c895753d9..4fc7ce2534dd 100644
---- a/arch/x86/realmode/Makefile
-+++ b/arch/x86/realmode/Makefile
-@@ -7,6 +7,7 @@
- #
- #
- KASAN_SANITIZE			:= n
-+KCSAN_SANITIZE			:= n
- OBJECT_FILES_NON_STANDARD	:= y
- 
- subdir- := rm
-diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefile
-index f60501a384f9..6f7fbe9dfda6 100644
---- a/arch/x86/realmode/rm/Makefile
-+++ b/arch/x86/realmode/rm/Makefile
-@@ -7,6 +7,7 @@
- #
- #
- KASAN_SANITIZE			:= n
-+KCSAN_SANITIZE			:= n
- OBJECT_FILES_NON_STANDARD	:= y
- 
- # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index 0460c7581220..a56981286623 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -32,6 +32,7 @@ KBUILD_CFLAGS			:= $(cflags-y) -DDISABLE_BRANCH_PROFILING \
- 
- GCOV_PROFILE			:= n
- KASAN_SANITIZE			:= n
-+KCSAN_SANITIZE			:= n
- UBSAN_SANITIZE			:= n
- OBJECT_FILES_NON_STANDARD	:= y
- 
--- 
-2.23.0.700.g56cf767bdb-goog
+Hi Marco,
 
+On Wed, Oct 16, 2019 at 10:39:52AM +0200, Marco Elver wrote:
+[...]
+> --- /dev/null
+> +++ b/kernel/kcsan/kcsan.c
+> @@ -0,0 +1,81 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * The Kernel Concurrency Sanitizer (KCSAN) infrastructure. For more info please
+> + * see Documentation/dev-tools/kcsan.rst.
+> + */
+> +
+> +#include <linux/export.h>
+> +
+> +#include "kcsan.h"
+> +
+> +/*
+> + * Concurrency Sanitizer uses the same instrumentation as Thread Sanitizer.
+
+Is there any documentation on the instrumentation? Like a complete list
+for all instrumentation functions plus a description of where the
+compiler will use those functions. Yes, the names of the below functions
+are straightforward, but an accurate doc on the instrumentation will
+cerntainly help people review KCSAN.
+
+Regards,
+Boqun
+
+> + */
+> +
+> +#define DEFINE_TSAN_READ_WRITE(size)                                           \
+> +	void __tsan_read##size(void *ptr)                                      \
+> +	{                                                                      \
+> +		__kcsan_check_access(ptr, size, false);                        \
+> +	}                                                                      \
+> +	EXPORT_SYMBOL(__tsan_read##size);                                      \
+> +	void __tsan_write##size(void *ptr)                                     \
+> +	{                                                                      \
+> +		__kcsan_check_access(ptr, size, true);                         \
+> +	}                                                                      \
+> +	EXPORT_SYMBOL(__tsan_write##size)
+> +
+> +DEFINE_TSAN_READ_WRITE(1);
+> +DEFINE_TSAN_READ_WRITE(2);
+> +DEFINE_TSAN_READ_WRITE(4);
+> +DEFINE_TSAN_READ_WRITE(8);
+> +DEFINE_TSAN_READ_WRITE(16);
+> +
+> +/*
+> + * Not all supported compiler versions distinguish aligned/unaligned accesses,
+> + * but e.g. recent versions of Clang do.
+> + */
+> +#define DEFINE_TSAN_UNALIGNED_READ_WRITE(size)                                 \
+> +	void __tsan_unaligned_read##size(void *ptr)                            \
+> +	{                                                                      \
+> +		__kcsan_check_access(ptr, size, false);                        \
+> +	}                                                                      \
+> +	EXPORT_SYMBOL(__tsan_unaligned_read##size);                            \
+> +	void __tsan_unaligned_write##size(void *ptr)                           \
+> +	{                                                                      \
+> +		__kcsan_check_access(ptr, size, true);                         \
+> +	}                                                                      \
+> +	EXPORT_SYMBOL(__tsan_unaligned_write##size)
+> +
+> +DEFINE_TSAN_UNALIGNED_READ_WRITE(2);
+> +DEFINE_TSAN_UNALIGNED_READ_WRITE(4);
+> +DEFINE_TSAN_UNALIGNED_READ_WRITE(8);
+> +DEFINE_TSAN_UNALIGNED_READ_WRITE(16);
+> +
+> +void __tsan_read_range(void *ptr, size_t size)
+> +{
+> +	__kcsan_check_access(ptr, size, false);
+> +}
+> +EXPORT_SYMBOL(__tsan_read_range);
+> +
+> +void __tsan_write_range(void *ptr, size_t size)
+> +{
+> +	__kcsan_check_access(ptr, size, true);
+> +}
+> +EXPORT_SYMBOL(__tsan_write_range);
+> +
+> +/*
+> + * The below are not required KCSAN, but can still be emitted by the compiler.
+> + */
+> +void __tsan_func_entry(void *call_pc)
+> +{
+> +}
+> +EXPORT_SYMBOL(__tsan_func_entry);
+> +void __tsan_func_exit(void)
+> +{
+> +}
+> +EXPORT_SYMBOL(__tsan_func_exit);
+> +void __tsan_init(void)
+> +{
+> +}
+> +EXPORT_SYMBOL(__tsan_init);
+[...]
+
+--yrj/dFKFPuw6o+aM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEj5IosQTPz8XU1wRHSXnow7UH+rgFAl2m5gMACgkQSXnow7UH
++rjJegf/Rrq3dKwfP4Vyd25nX8MIlEeiMrDXyxhCS2tQFw7EfcgilRD8INFnob38
+H/FZ9xR3ndkcpXmoq64gGCN+dEULY78jI7Zg1fpnvUcoVI+q7Hc43PWERvU3otLo
+c65FZXO36WKdEg0PJ//SWfSgwQBDfUdjmJ+17YBUd/78SleSsDk9PQNm+A6yb+u5
+5jsmrV1uo7vDA+B7/n8Pn06Zu8Uwi0qZn9aWQzoGwmAFrwaF7KRbvWX86p2SMr6k
+Tqi7Rpp0uoJDTBFyZg3Dmnizqh81BsHEEQtI3Yjh6bKUpGdre0tyMNUVRYHpQaYX
+oVHK6bV3bKlerxpvUT/SE2yOUOBGtw==
+=zQTb
+-----END PGP SIGNATURE-----
+
+--yrj/dFKFPuw6o+aM--
