@@ -2,40 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51ADFDA6A9
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2019 09:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8674CDA6BE
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2019 09:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388682AbfJQHr6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Oct 2019 03:47:58 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:52268 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387930AbfJQHr6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Oct 2019 03:47:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=CB9qLsgKsb2C8+4Pa5xdxWx+A9UkvlFXKVU3Kno+WKQ=; b=ROM9pgBtdot+ZohnyfyN8rdcZ
-        OnZ56n50MaSVgCFWyn/mfioM0Z/iPxkd+ok0AGd9nDuhgSiNNa8MyhbNtGWojGKV8O1AZPltF1rJh
-        CZ74niaLUFK+aGgq15s4Ghuto3JTCVqhumynY8qZl88AdgJds45NcyFxwCeAJX92mZkCO1jFju0wv
-        DskF/8TNBHofVES1ofHgClvFvy+aCvWTgQ/dtXeGROi6+719bFGOLxlJdwsbuW6Vwo5p4EojIDtlR
-        Nq7w3d0cuSzC0vSjbfIFXPzynwwk9ig1TpN8gDSovFeOESzxG8ucveivrVVnw3Inxvn3bvlTiYPn5
-        JaT7idCPQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iL0VR-0008Vj-Jw; Thu, 17 Oct 2019 07:47:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CFD2530018A;
-        Thu, 17 Oct 2019 09:46:34 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1CA14203BFA9E; Thu, 17 Oct 2019 09:47:30 +0200 (CEST)
-Date:   Thu, 17 Oct 2019 09:47:30 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
+        id S2438702AbfJQHtl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Oct 2019 03:49:41 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:36205 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728409AbfJQHtk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Oct 2019 03:49:40 -0400
+Received: by mail-oi1-f193.google.com with SMTP id k20so1360064oih.3
+        for <linux-arch@vger.kernel.org>; Thu, 17 Oct 2019 00:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cUHCv9N4xmS+l1KgWpk7F+i9WTYTBzhVIUBy6Hulrwk=;
+        b=dt61IqtloaZiwqdtmjmdhi8e3I0pzOWxPhzFhs+0FutgvUJ++FJOjdWO4BjIZxdya4
+         caOrhbydK56exS2QuA7Fd/bGjBtmOLqdRwkisDlBpmKuprQVBzPi+VbRWrE1Qg6x33eB
+         L75C7W/XAakRnGcEUuRBZ2z0un1gUplzXJroKi8gc4pISSeGK+cslFlF67xNbSnSkcrH
+         LFchrXP3xHyls9CwuwZQyeVw5GAWJqlGniCs+QihxmqhsqJFUxxUdUPgx8sH/6i8mrEB
+         sJzIy+1BqIQwiJztBJmzppL/ZLh/4Dco+FslmOq/Cu10P2FffFtoC2Vy5Qpl06EYeyt4
+         9GPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cUHCv9N4xmS+l1KgWpk7F+i9WTYTBzhVIUBy6Hulrwk=;
+        b=nv3TX+y8YinKFHdt35Tj3WW5TsUHEz67NDZ43OL/2WOLt+rUT+Kc84JGbvqMmfrS3U
+         ps8hzkviSNyu5jhPQ2r3S7yyQnc12KFIxKgRT8qfLjtk6AMaZ13nt5wuP8b3YZxpJupv
+         xedgOKR7PngZwz6O1pOM/uyTNnEOX6b+4RLwqCxAgY4zduk++ySmSk5Ibc/Gxpxd+iPz
+         /6T0umM5rZi4hjcpzgbhql0jmmYRNcRMVFhgVADxfaUMjXYZv8tgeUzcsyjbRoTpHf1B
+         N88A4OIzgWMXKlTjilm4YMfpH7AiF4fBBe8GZv1nGEBBVCd0sjTlInElnF3Ef4Gv2BMV
+         7q/A==
+X-Gm-Message-State: APjAAAVOxG7Uuk0MH+Mnr0ck7fbFw6oUi9wwL/FplEI3FTlKVNHsGm1V
+        ekYohOgSJqyyYTrpuAtzTUm94rFwvapQNC9cldL78w==
+X-Google-Smtp-Source: APXvYqw1eEq8EzjwYbx0MRbK18Xsa8AnqD+7ouVLKZUwR1kvjQzxQA3cqofqYXLP73Ei/x91O0n2XeJ8s6UCZGf1FOg=
+X-Received: by 2002:aca:55cb:: with SMTP id j194mr1913152oib.155.1571298579393;
+ Thu, 17 Oct 2019 00:49:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191016083959.186860-1-elver@google.com> <20191016083959.186860-2-elver@google.com>
+ <20191016184346.GT2328@hirez.programming.kicks-ass.net> <CANpmjNP4b9Eo3ZKE6maBs4ANS7K7sLiVB2CbebQnCH09TB+hZQ@mail.gmail.com>
+ <20191017074730.GW2328@hirez.programming.kicks-ass.net>
+In-Reply-To: <20191017074730.GW2328@hirez.programming.kicks-ass.net>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 17 Oct 2019 09:49:27 +0200
+Message-ID: <CANpmjNPKbCrL+XzmMrnjqw+EYOa2H94cgE5sPJeuVONbCSqBHg@mail.gmail.com>
+Subject: Re: [PATCH 1/8] kcsan: Add Kernel Concurrency Sanitizer infrastructure
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         Alexander Potapenko <glider@google.com>,
@@ -67,39 +81,38 @@ Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux Memory Management List <linux-mm@kvack.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH 1/8] kcsan: Add Kernel Concurrency Sanitizer
- infrastructure
-Message-ID: <20191017074730.GW2328@hirez.programming.kicks-ass.net>
-References: <20191016083959.186860-1-elver@google.com>
- <20191016083959.186860-2-elver@google.com>
- <20191016184346.GT2328@hirez.programming.kicks-ass.net>
- <CANpmjNP4b9Eo3ZKE6maBs4ANS7K7sLiVB2CbebQnCH09TB+hZQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNP4b9Eo3ZKE6maBs4ANS7K7sLiVB2CbebQnCH09TB+hZQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 09:34:05PM +0200, Marco Elver wrote:
-> On Wed, 16 Oct 2019 at 20:44, Peter Zijlstra <peterz@infradead.org> wrote:
-> > > +     /*
-> > > +      * Disable interrupts & preemptions, to ignore races due to accesses in
-> > > +      * threads running on the same CPU.
-> > > +      */
-> > > +     local_irq_save(irq_flags);
-> > > +     preempt_disable();
+On Thu, 17 Oct 2019 at 09:47, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, Oct 16, 2019 at 09:34:05PM +0200, Marco Elver wrote:
+> > On Wed, 16 Oct 2019 at 20:44, Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > +     /*
+> > > > +      * Disable interrupts & preemptions, to ignore races due to accesses in
+> > > > +      * threads running on the same CPU.
+> > > > +      */
+> > > > +     local_irq_save(irq_flags);
+> > > > +     preempt_disable();
+> > >
+> > > Is there a point to that preempt_disable() here?
 > >
-> > Is there a point to that preempt_disable() here?
-> 
-> We want to avoid being preempted while the watchpoint is set up;
-> otherwise, we would report data-races for CPU-local data, which is
-> incorrect.
+> > We want to avoid being preempted while the watchpoint is set up;
+> > otherwise, we would report data-races for CPU-local data, which is
+> > incorrect.
+>
+> Disabling IRQs already very much disables preemption. There is
+> absolutely no point in doing preempt_disable() when the whole section
+> already runs with IRQs disabled.
 
-Disabling IRQs already very much disables preemption. There is
-absolutely no point in doing preempt_disable() when the whole section
-already runs with IRQs disabled.
+Ah thanks for the clarification, in that case I assume it's safe to
+remove preempt_disable() for v2.
+
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20191017074730.GW2328%40hirez.programming.kicks-ass.net.
