@@ -2,69 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A3EDB10D
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2019 17:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71662DB137
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2019 17:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437848AbfJQPZf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Oct 2019 11:25:35 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:35879 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437754AbfJQPZf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Oct 2019 11:25:35 -0400
-Received: by mail-lj1-f193.google.com with SMTP id v24so3036193ljj.3
-        for <linux-arch@vger.kernel.org>; Thu, 17 Oct 2019 08:25:33 -0700 (PDT)
+        id S2392992AbfJQPiA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Oct 2019 11:38:00 -0400
+Received: from mail-lf1-f45.google.com ([209.85.167.45]:37338 "EHLO
+        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390135AbfJQPiA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Oct 2019 11:38:00 -0400
+Received: by mail-lf1-f45.google.com with SMTP id g21so1146096lfh.4
+        for <linux-arch@vger.kernel.org>; Thu, 17 Oct 2019 08:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UqAZqXYydjkJ2Ybde7iVzFGdB8wnMfjwdh5C0M8C72E=;
-        b=C3G/lKw4L8XWRmC575DNqxT0r8VqSreCB9sld5uxxlbR8lreT5HEIAFzucG7CZww7A
-         y0ObcOG/yFqIwj5I56/XgN52Nf9rfeDsJj6sY8p5YG86ubp23hFST4+9BVKesfUuIvRq
-         yptCi6sXsUnRq0+rnc70WFBTnzut4K090AIIg=
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=L6Sd6tzaUEpmEHUxMlmEO1DNlTBEBF+HM7o/OKtIiso=;
+        b=uVwXqEiLyeoPV6uZHpQcXNn35K6yFgFBR/7C6tWg5e4KMSuw8l5pAr6+/UU2u8t2Sc
+         cRTTvPHVvjveTCcda94TMP3TeMaFxXvJtHSRI9zUzLUSVqSDR7c+s24IO2+BEzRvH2oL
+         y1+g98YhgLhrjh3mSthD1nci67iQ2bXxyhGv/Phy3orGPluINaPMUSn8Nt5nyuspHatc
+         g7kMpb5JhhVDjBc1DbtpBBUw4F2yLgskUgCQOAa/7CejqYQ/e1cQYfhe75P1YTIkDsXu
+         SnnqktnhT8Kr1gNSHB1dwZN4TZHUPsrp58Swj9Hi2PgaefU5NQz/0mV/kpYIvW9Cw3DT
+         pszw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UqAZqXYydjkJ2Ybde7iVzFGdB8wnMfjwdh5C0M8C72E=;
-        b=cquH/uC+C8n62Y5FQb5cXWJLtu0Y8TLtZUipQZoJf2+LZhiTVtjebesPd3t//GjHOM
-         zyqhg6eK3JqXtQ/llxWFBD/cpve+JfhVUNQo0ikEpgUSiboh22NTSOaCRdTXWBWrmPV/
-         oHAoGYqK9yZAs3czXpeBn3inBcbUTLdWa/L7OP4HUgQ/w0OsgG4dtX6e/I5Sp4rfVgGr
-         H4qnoLmnCA6DhMdcKkIsvCSP6V1tZKKDK549hFa3EkAtJfpYO40M2FKpSW9Ob38QNyuW
-         R3z6pmmCQB211LIih042AMNJokkHiJ4DCe4ol72nfgzdyRqvImL2uzCoEw3xKeUdDU8R
-         R21g==
-X-Gm-Message-State: APjAAAV45BwjqaxH2we4lsDYtKmJBkjLuxKoZmUvA7W14lhu2eT1RfBh
-        ubsytMKuhivVxTeBFKVEURe5V8mwMRU=
-X-Google-Smtp-Source: APXvYqxcpZm+yHFx0kRR5a5aAS+N3/JwbhYeSCCuBZx/6VeM9ZDrTBIZrFsnbBZxkEyTVPwK1riiPw==
-X-Received: by 2002:a2e:9890:: with SMTP id b16mr2924921ljj.181.1571325932907;
-        Thu, 17 Oct 2019 08:25:32 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id t24sm1069973lfq.13.2019.10.17.08.25.32
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Oct 2019 08:25:32 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id n14so2996838ljj.10
-        for <linux-arch@vger.kernel.org>; Thu, 17 Oct 2019 08:25:32 -0700 (PDT)
-X-Received: by 2002:a2e:9848:: with SMTP id e8mr2944245ljj.148.1571325457066;
- Thu, 17 Oct 2019 08:17:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <57fd50dd./gNBvRBYvu+kYV+l%akpm@linux-foundation.org>
- <CA+55aFxr2uZADh--vtLYXjcLjNGO5t4jmTWEVZWbRuaJwiocug@mail.gmail.com>
- <CA+55aFxQRf+U0z6mrAd5QQLWgB2A_mRjY7g9vpZHCSuyjrdhxQ@mail.gmail.com>
- <CAHk-=wgr12JkKmRd21qh-se-_Gs69kbPgR9x4C+Es-yJV2GLkA@mail.gmail.com>
- <20191016231116.inv5stimz6fg7gof@box.shutemov.name> <CAHk-=wh9Jjb6iiU5dNhGTei_jTEoe7eFjxnyQ2DezbtgzdoskQ@mail.gmail.com>
- <20191017001613.watsu7vhqujufjxv@box.shutemov.name> <CAK7LNAT8968tYxePbS_RD0n52dLfs1vx+tdKc_64PwCzwGOgAw@mail.gmail.com>
-In-Reply-To: <CAK7LNAT8968tYxePbS_RD0n52dLfs1vx+tdKc_64PwCzwGOgAw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 17 Oct 2019 08:17:20 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjj_FB-PvBVqAo4h+bKgnaHiFKPw_+84X8P7uBo+qYukw@mail.gmail.com>
-Message-ID: <CAHk-=wjj_FB-PvBVqAo4h+bKgnaHiFKPw_+84X8P7uBo+qYukw@mail.gmail.com>
-Subject: Re: [patch 014/102] llist: introduce llist_entry_safe()
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Arnd Bergmann <arnd@arndb.de>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=L6Sd6tzaUEpmEHUxMlmEO1DNlTBEBF+HM7o/OKtIiso=;
+        b=hiLRbMEb5jrXmXGsOYB0Qj2h1P7Zezrf3Ch2wJ3sXS6ZkobPzqSICnZwW7AgOW089T
+         kNEQcpbNhFWfYOU9N0qMmoa5i1AvEqhuxNdTS0X13WZuxNPH3r9AFXA71pXoJDoXnOgK
+         t/463cIKDbk9PoL04b17kJ3gIqyPz/Eh/727xVS7cJTH8z4oiBRYeCGzQZiil4NBgbpk
+         0ZDXplFAQUwe8K7XHFQfEcrBE1En2yy9lahczU3wUkMrwF5AyHpgYIi8xHNUXjYHlE4V
+         EMT3M/RShqKZ4T9VGqTDAT5E6V0YcU2T2AjcIzU/yShSrIkQ9ziqErW+kXrTokDn4lv7
+         MmVQ==
+X-Gm-Message-State: APjAAAVAsA/CylbKMQipTfcgO3EaEmHCjZRPR2o7Q/leUOyFl9Xzs9X9
+        dcziWJ7IlBCZ2pbglAoKUo7MmQ==
+X-Google-Smtp-Source: APXvYqwpbVv+R9kUPWBLcIli63s3aZ3d2a1In8muHbV7ALrRrRLfdtQA7Glo82i1wUWpTV0o1Am34A==
+X-Received: by 2002:a19:6917:: with SMTP id e23mr2849739lfc.4.1571326678391;
+        Thu, 17 Oct 2019 08:37:58 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id b19sm1262933lji.41.2019.10.17.08.37.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2019 08:37:57 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id D06BA1001A9; Thu, 17 Oct 2019 18:37:55 +0300 (+03)
+Date:   Thu, 17 Oct 2019 18:37:55 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sasha.levin@oracle.com>,
         Andrew Pinski <apinski@cavium.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
         Michal Marek <michal.lkml@markovi.net>,
         mm-commits@vger.kernel.org,
         Alexander Potapenko <glider@google.com>,
@@ -74,42 +63,43 @@ Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
         Ingo Molnar <mingo@elte.hu>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] [RFC, EXPERIMENTAL] allow building with --std=gnu99
+Message-ID: <20191017153755.jh6iherf2ywmwbss@box>
+References: <CAK8P3a3uiTSaruN7x5iMaDowYziqMFxKWjDyS1c8pYFJgPJ5Dg@mail.gmail.com>
+ <20191017125637.1041949-1-arnd@arndb.de>
+ <CAHk-=wiH7Ej9x3RqJkUEW4hDCisgWdi6wai6E0tvo4omF_FbeQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiH7Ej9x3RqJkUEW4hDCisgWdi6wai6E0tvo4omF_FbeQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 10:21 PM Masahiro Yamada
-<yamada.masahiro@socionext.com> wrote:
->
-> I tested -std=gnu99 for ARM with pre-built Linaro toolchains.
->
-> GCC 4.9.4 was NG,
-> GCC 5.3.1 was OK.
+On Thu, Oct 17, 2019 at 08:05:28AM -0700, Linus Torvalds wrote:
+> What distros are still stuck on gcc-4?
 
-Ok, so the gcc-5.1 cut-off from my gcc git tree conversion looks to be
-the right one. I wasn't sure how official/complete the git conversion
-was.
+According to Distowatch:
 
-> If we increase the minimal GCC version, we might end up with dropping
-> more architecture.
+- Debian 8.0 Jessie has 4.9.2, EOL 2020-05
 
-That I wouldn't worry about. If some architecture can't get a gcc
-version from the last five years, I think we _should_ drop it.
+- Ubuntu 14.04 LTS Trusty has 4.8.2, EOL 2019-04;
 
-Historically, the problem has more been distro gcc versions. An
-unmaintained architecture that has a compiler that is ancient I don't
-much care about, but if we lose testers that use ancient distros, that
-loses real coverage.
+- Fedora 21 has 4.9.2, EOL 2015-12;
 
-That's true even if it's just one or two actual users that upgrade
-kernels - we found a real bug not that long ago because rmk used some
-ancient Debian install with a new kernel. That's the kind of odd use
-we want to encourage, and that matters. Hexagon? Not so much.
+- OpenSUSE 42.3 has 4.8.5, EOL 2019-06;
 
-Although I think rmk actually had a new compiler and cross-built the
-new kernel, so that likely wasn't the issue in _that_ particular case,
-but in other cases it might have been.
+- RHEL 7.7 has 4.8.5, EOL 2024-06;
 
-              Linus
+- RHEL 6.9 has 4.4.7, EOL 2020-11;
+
+- SUSE 12-SP4 has 4.8.6, EOL ?;
+
+- Oracle 7.6 has 4.8.5, EOL ?;
+
+Missed somebody?
+
+-- 
+ Kirill A. Shutemov
