@@ -2,144 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46809DA512
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2019 07:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51ADFDA6A9
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2019 09:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390655AbfJQFV3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Oct 2019 01:21:29 -0400
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:52048 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728999AbfJQFV3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Oct 2019 01:21:29 -0400
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id x9H5LC01008669;
-        Thu, 17 Oct 2019 14:21:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x9H5LC01008669
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1571289673;
-        bh=FUz6mYMNfzQH4LKbt7ZIWdeQDoZUH5tR4M+NFCb3m7M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WB5263HZAkX/Dxgg+hP83hNOdFi3O0jU2yNKCIS8gUY3ZUc47nLPjXQpAQlqxH1dH
-         0bXEIxzRJZ6x4ZLMT7fzZsIhpALI12f2DW1zdLaln00kdU6ryPEXC2pAlNGMqAeIN5
-         ORhmIYdH3O73foJXfhI0mqGAixQfo6+FSliBqv50CyginS5N6ZlXoksC/X+mWhRTSv
-         G97r00dW1gvGlw5E76mw9GAyYlBqs0Q0G2hXeB9bUmOyk+AZaTOfSZkeD1yiduukd5
-         q15bc3qC0OKGpJrhY1LXwQn0HlJ8on3v7Bsy8HknrzLv8cANPh3VMQP+/HFAQqs0md
-         i5j+xKGwtHLKQ==
-X-Nifty-SrcIP: [209.85.217.46]
-Received: by mail-vs1-f46.google.com with SMTP id v10so745601vsc.7;
-        Wed, 16 Oct 2019 22:21:13 -0700 (PDT)
-X-Gm-Message-State: APjAAAXx4IH9G7rojwmOvY9aiXeNbDAX8ONjjXlVzX5WuuNqbZItmYU7
-        s8Gqql1uunFWontRDk8/bTi34pBMvHIfBtxYywQ=
-X-Google-Smtp-Source: APXvYqwss2/d9qZjuKbsfK108HUzp7lt5H+TbSdJkQ0bH/77sXYJJlIhXDQLLVepyYaZQ2ARnobj/mYwAfCKxxumbYQ=
-X-Received: by 2002:a05:6102:97:: with SMTP id t23mr881042vsp.179.1571289672006;
- Wed, 16 Oct 2019 22:21:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <57fd50dd./gNBvRBYvu+kYV+l%akpm@linux-foundation.org>
- <CA+55aFxr2uZADh--vtLYXjcLjNGO5t4jmTWEVZWbRuaJwiocug@mail.gmail.com>
- <CA+55aFxQRf+U0z6mrAd5QQLWgB2A_mRjY7g9vpZHCSuyjrdhxQ@mail.gmail.com>
- <CAHk-=wgr12JkKmRd21qh-se-_Gs69kbPgR9x4C+Es-yJV2GLkA@mail.gmail.com>
- <20191016231116.inv5stimz6fg7gof@box.shutemov.name> <CAHk-=wh9Jjb6iiU5dNhGTei_jTEoe7eFjxnyQ2DezbtgzdoskQ@mail.gmail.com>
- <20191017001613.watsu7vhqujufjxv@box.shutemov.name>
-In-Reply-To: <20191017001613.watsu7vhqujufjxv@box.shutemov.name>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Thu, 17 Oct 2019 14:20:35 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT8968tYxePbS_RD0n52dLfs1vx+tdKc_64PwCzwGOgAw@mail.gmail.com>
-Message-ID: <CAK7LNAT8968tYxePbS_RD0n52dLfs1vx+tdKc_64PwCzwGOgAw@mail.gmail.com>
-Subject: Re: [patch 014/102] llist: introduce llist_entry_safe()
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Sasha Levin <sasha.levin@oracle.com>,
-        Andrew Pinski <apinski@cavium.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        mm-commits@vger.kernel.org,
+        id S2388682AbfJQHr6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Oct 2019 03:47:58 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52268 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387930AbfJQHr6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Oct 2019 03:47:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=CB9qLsgKsb2C8+4Pa5xdxWx+A9UkvlFXKVU3Kno+WKQ=; b=ROM9pgBtdot+ZohnyfyN8rdcZ
+        OnZ56n50MaSVgCFWyn/mfioM0Z/iPxkd+ok0AGd9nDuhgSiNNa8MyhbNtGWojGKV8O1AZPltF1rJh
+        CZ74niaLUFK+aGgq15s4Ghuto3JTCVqhumynY8qZl88AdgJds45NcyFxwCeAJX92mZkCO1jFju0wv
+        DskF/8TNBHofVES1ofHgClvFvy+aCvWTgQ/dtXeGROi6+719bFGOLxlJdwsbuW6Vwo5p4EojIDtlR
+        Nq7w3d0cuSzC0vSjbfIFXPzynwwk9ig1TpN8gDSovFeOESzxG8ucveivrVVnw3Inxvn3bvlTiYPn5
+        JaT7idCPQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iL0VR-0008Vj-Jw; Thu, 17 Oct 2019 07:47:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CFD2530018A;
+        Thu, 17 Oct 2019 09:46:34 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1CA14203BFA9E; Thu, 17 Oct 2019 09:47:30 +0200 (CEST)
+Date:   Thu, 17 Oct 2019 09:47:30 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Alexander Potapenko <glider@google.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Daniel Axtens <dja@axtens.net>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        dave.hansen@linux.intel.com, David Howells <dhowells@redhat.com>,
         Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-efi@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [PATCH 1/8] kcsan: Add Kernel Concurrency Sanitizer
+ infrastructure
+Message-ID: <20191017074730.GW2328@hirez.programming.kicks-ass.net>
+References: <20191016083959.186860-1-elver@google.com>
+ <20191016083959.186860-2-elver@google.com>
+ <20191016184346.GT2328@hirez.programming.kicks-ass.net>
+ <CANpmjNP4b9Eo3ZKE6maBs4ANS7K7sLiVB2CbebQnCH09TB+hZQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNP4b9Eo3ZKE6maBs4ANS7K7sLiVB2CbebQnCH09TB+hZQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 9:16 AM Kirill A. Shutemov <kirill@shutemov.name> wrote:
->
-> On Wed, Oct 16, 2019 at 04:29:54PM -0700, Linus Torvalds wrote:
-> > On Wed, Oct 16, 2019 at 4:11 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
-> > >
-> > > Looks like it was fixed soon after the complain:
-> > >
-> > > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63567
+On Wed, Oct 16, 2019 at 09:34:05PM +0200, Marco Elver wrote:
+> On Wed, 16 Oct 2019 at 20:44, Peter Zijlstra <peterz@infradead.org> wrote:
+> > > +     /*
+> > > +      * Disable interrupts & preemptions, to ignore races due to accesses in
+> > > +      * threads running on the same CPU.
+> > > +      */
+> > > +     local_irq_save(irq_flags);
+> > > +     preempt_disable();
 > >
-> > Ahh, so there are gcc versions which essentially do this wrong, and
-> > I'm not seeing it because it was fixed.
-> >
-> > Ho humm. Considering that this was fixed in gcc five years ago, and we
-> > already require gc-4.6, and did that two years ago, maybe we can just
-> > raise the requirement a bit further.
-> >
-> > BUT.
-> >
-> > It's not clear which versions are ok with this. In your next email you said:
-> >
-> > > It would mean bumping GCC version requirements to 4.7.
-> >
-> > which I think would be reasonable, but is it actually ok in 4.7?
->
-> I think, not. I don't have 4.7 around, but 4.9.3 has the issue if
-> -std=gnu99 is used.
->
-> > The bugzilla entry says "Target Milestone: 5.0", and I'm not sure how
-> > to check what that "revision=216440" ends up actually meaning.
-> >
-> > I have a git tree of gcc, and in that one 216440 is commit
-> > d303aeafa9b, but that seems to imply it only made it into 5.1:
-> >
-> >   [torvalds@i7 gcc]$ git name-rev --tags
-> > d303aeafa9b46e06cd853696acb6345dff51a6b9
-> >   d303aeafa9b46e06cd853696acb6345dff51a6b9 tags/gcc-5_1_0-release~3943
-> >
-> > so we'd have to jump forward a _lot_.
-> >
-> > That's a bit sad and annoying. I'd be ok with jumping to 4.7, but I'm
-> > not sure we can jump to 5.1.
-> >
-> > Although maybe we should be a _lot_ more aggressive about gcc
-> > versions, I'm on gcc-9.2.1 right now, and gcc-5.1 is from April 22,
-> > 2015.
->
-> 5.4.1 builds kernel fine for me with allmodconfig (minus retpoline which
-> requires compiler support). Both -std=gnu99 and -std=gnu11.
->
-> Note that GCC has changed their version scheme. 5.4.1 is bug-fix release
-> of GCC-5.
+> > Is there a point to that preempt_disable() here?
+> 
+> We want to avoid being preempted while the watchpoint is set up;
+> otherwise, we would report data-races for CPU-local data, which is
+> incorrect.
 
-
-I tested -std=gnu99 for ARM
-with pre-built Linaro toolchains.
-
-
-GCC 4.9.4 was NG,
-GCC 5.3.1 was OK.
-
-
-
-If we increase the minimal GCC version,
-we might end up with dropping more architecture.
-
-I can no longer get the toolchains for hexagon, unicore32.
-
-
-https://mirrors.edge.kernel.org/pub/tools/crosstool/
-provides hexagon compilers, but only for GCC 4.6.1
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Disabling IRQs already very much disables preemption. There is
+absolutely no point in doing preempt_disable() when the whole section
+already runs with IRQs disabled.
