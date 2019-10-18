@@ -2,26 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA3EDC656
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 15:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B82DC7B9
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 16:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408605AbfJRNkv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 09:40:51 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:39666 "EHLO foss.arm.com"
+        id S2410471AbfJROth (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 10:49:37 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:41518 "EHLO foss.arm.com"
         rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1728150AbfJRNkv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Oct 2019 09:40:51 -0400
+        id S1729257AbfJROth (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 18 Oct 2019 10:49:37 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6CC1EC0;
-        Fri, 18 Oct 2019 06:40:30 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14ED1B57;
+        Fri, 18 Oct 2019 07:49:16 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C9A73F6C4;
-        Fri, 18 Oct 2019 06:40:27 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 14:40:25 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E1803F718;
+        Fri, 18 Oct 2019 07:49:13 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 15:49:11 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Dave Kleikamp <shaggy@linux.vnet.ibm.com>,
-        Paul Elliott <paul.elliott@arm.com>,
+Cc:     Paul Elliott <paul.elliott@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
@@ -30,7 +29,6 @@ Cc:     Dave Kleikamp <shaggy@linux.vnet.ibm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arch@vger.kernel.org, Eugene Syromiatnikov <esyr@redhat.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         "H.J. Lu" <hjl.tools@gmail.com>,
         Yu-cheng Yu <yu-cheng.yu@intel.com>,
         Kees Cook <keescook@chromium.org>,
@@ -41,95 +39,100 @@ Cc:     Dave Kleikamp <shaggy@linux.vnet.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-arm-kernel@lists.infradead.org,
         Florian Weimer <fweimer@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sudakshina Das <sudi.das@arm.com>
-Subject: Re: [PATCH v2 05/12] arm64: Basic Branch Target Identification
- support
-Message-ID: <20191018134024.GE27757@arm.com>
+        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>
+Subject: Re: [PATCH v2 11/12] arm64: BTI: Reset BTYPE when skipping emulated
+ instructions
+Message-ID: <20191018144910.GF27757@arm.com>
 References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
- <1570733080-21015-6-git-send-email-Dave.Martin@arm.com>
- <20191011151028.GE33537@lakrids.cambridge.arm.com>
- <20191011172013.GQ27757@arm.com>
- <20191018111603.GD27759@lakrids.cambridge.arm.com>
+ <1570733080-21015-12-git-send-email-Dave.Martin@arm.com>
+ <20191011142157.GC33537@lakrids.cambridge.arm.com>
+ <20191011144743.GJ27757@arm.com>
+ <20191018110428.GA27759@lakrids.cambridge.arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191018111603.GD27759@lakrids.cambridge.arm.com>
+In-Reply-To: <20191018110428.GA27759@lakrids.cambridge.arm.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 12:16:03PM +0100, Mark Rutland wrote:
-> [adding mm folk]
-> 
-> On Fri, Oct 11, 2019 at 06:20:15PM +0100, Dave Martin wrote:
-> > On Fri, Oct 11, 2019 at 04:10:29PM +0100, Mark Rutland wrote:
-> > > On Thu, Oct 10, 2019 at 07:44:33PM +0100, Dave Martin wrote:
-> > > > +#define arch_validate_prot(prot, addr) arm64_validate_prot(prot, addr)
-> > > > +static inline int arm64_validate_prot(unsigned long prot, unsigned long addr)
-> > > > +{
-> > > > +	unsigned long supported = PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM;
-> > > > +
-> > > > +	if (system_supports_bti())
-> > > > +		supported |= PROT_BTI;
-> > > > +
-> > > > +	return (prot & ~supported) == 0;
-> > > > +}
+On Fri, Oct 18, 2019 at 12:04:29PM +0100, Mark Rutland wrote:
+> On Fri, Oct 11, 2019 at 03:47:43PM +0100, Dave Martin wrote:
+> > On Fri, Oct 11, 2019 at 03:21:58PM +0100, Mark Rutland wrote:
+> > > On Thu, Oct 10, 2019 at 07:44:39PM +0100, Dave Martin wrote:
+> > > > Since normal execution of any non-branch instruction resets the
+> > > > PSTATE BTYPE field to 0, so do the same thing when emulating a
+> > > > trapped instruction.
+> > > > 
+> > > > Branches don't trap directly, so we should never need to assign a
+> > > > non-zero value to BTYPE here.
+> > > > 
+> > > > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> > > > ---
+> > > >  arch/arm64/kernel/traps.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> > > > index 3af2768..4d8ce50 100644
+> > > > --- a/arch/arm64/kernel/traps.c
+> > > > +++ b/arch/arm64/kernel/traps.c
+> > > > @@ -331,6 +331,8 @@ void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
+> > > >  
+> > > >  	if (regs->pstate & PSR_MODE32_BIT)
+> > > >  		advance_itstate(regs);
+> > > > +	else
+> > > > +		regs->pstate &= ~(u64)PSR_BTYPE_MASK;
 > > > 
-> > > If we have this check, can we ever get into arm64_calc_vm_prot_bits()
-> > > with PROT_BIT but !system_supports_bti()?
+> > > This looks good to me, with one nit below.
 > > > 
-> > > ... or can that become:
+> > > We don't (currently) need the u64 cast here, and it's inconsistent with
+> > > what we do elsewhere. If the upper 32-bit of pstate get allocated, we'll
+> > > need to fix up all the other masking we do:
+> > 
+> > Huh, looks like I missed that.  Dang.  Will fix.
+> > 
+> > > [mark@lakrids:~/src/linux]% git grep 'pstate &= ~'
+> > > arch/arm64/kernel/armv8_deprecated.c:           regs->pstate &= ~PSR_AA32_E_BIT;
+> > > arch/arm64/kernel/cpufeature.c:         regs->pstate &= ~PSR_SSBS_BIT;
+> > > arch/arm64/kernel/debug-monitors.c:     regs->pstate &= ~DBG_SPSR_SS;
+> > > arch/arm64/kernel/insn.c:       pstate &= ~(pstate >> 1);       /* PSR_C_BIT &= ~PSR_Z_BIT */
+> > > arch/arm64/kernel/insn.c:       pstate &= ~(pstate >> 1);       /* PSR_C_BIT &= ~PSR_Z_BIT */
+> > > arch/arm64/kernel/probes/kprobes.c:     regs->pstate &= ~PSR_D_BIT;
+> > > arch/arm64/kernel/probes/kprobes.c:     regs->pstate &= ~DAIF_MASK;
+> > > arch/arm64/kernel/ptrace.c:     regs->pstate &= ~SPSR_EL1_AARCH32_RES0_BITS;
+> > > arch/arm64/kernel/ptrace.c:                     regs->pstate &= ~PSR_AA32_E_BIT;
+> > > arch/arm64/kernel/ptrace.c:     regs->pstate &= ~SPSR_EL1_AARCH64_RES0_BITS;
+> > > arch/arm64/kernel/ptrace.c:             regs->pstate &= ~DBG_SPSR_SS;
+> > > arch/arm64/kernel/ssbd.c:       task_pt_regs(task)->pstate &= ~val;
+> > > arch/arm64/kernel/traps.c:      regs->pstate &= ~PSR_AA32_IT_MASK;
 > > > 
-> > > 	return (prot & PROT_BTI) ? VM_ARM64_BTI : 0;
+> > > ... and at that point I'd suggest we should just ensure the bit
+> > > definitions are all defined as unsigned long in the first place since
+> > > adding casts to each use is error-prone.
 > > 
-> > We can reach this via mmap() and friends IIUC.
+> > Are we concerned about changing the types of UAPI #defines?  That can
+> > cause subtle and unexpected breakage, especially when the signedness
+> > of a #define changes.
 > > 
-> > Since this function only gets called once-ish per vma I have a weak
-> > preference for keeping the check here to avoid code fragility.
-> > 
-> > 
-> > It does feel like arch_validate_prot() is supposed to be a generic gate
-> > for prot flags coming into the kernel via any route though, but only the
-> > mprotect() path actually uses it.
-> > 
-> > This function originally landed in v2.6.27 as part of the powerpc strong
-> > access ordering support (PROT_SAO):
-> > 
-> > b845f313d78e ("mm: Allow architectures to define additional protection bits")
-> > ef3d3246a0d0 ("powerpc/mm: Add Strong Access Ordering support")
-> > 
-> > where the mmap() path uses arch_calc_vm_prot_bits() without
-> > arch_validate_prot(), just as in the current code.  powerpc's original
-> > arch_calc_vm_prot_bits() does no obvious policing.
-> > 
-> > This might be a bug.  I can draft a patch to add it for the mmap() path
-> > for people to comment on ... I can't figure out yet whether or not the
-> > difference is intentional or there's some subtlety that I'm missed.
+> > Ideally, we'd just change all these to 1UL << n.
 > 
-> From reading those two commit messages, it looks like this was an
-> oversight. I'd expect that we should apply this check for any
-> user-provided prot (i.e. it should apply to both mprotect and mmap).
-> 
-> Ben, Andrew, does that make sense to you?
-> 
-> ... or was there some reason to only do this for mprotect?
-> 
-> Thanks,
-> Mark.
+> I agree that's the ideal -- I don't know how concerned we are w.r.t. the
+> UAPI headers, I'm afraid.
 
-For now, I'll drop a comment under the tearoff noting this outstanding
-question.
+OK, I'll following the existing convention for now, keep the #define as
+(implicitly) signed, and drop the u64 casts.
 
-The resulting behaviour is slightly odd, but doesn't seem unsafe, and
-we can of course tidy it up later.  I think the risk of userspace
-becoming dependent on randomly passing PROT_BTI to mprotect() even
-when unsupported is low.
+At some point in the future we may want to refactor the headers so that
+the kernel uses shadow register bit definitions that are always u64.
+The new HWCAP definitions provide a reasonable template for doing that
+kind of thing.
 
-[...]
+It's probably best not to do anything to alter the types of the UAPI
+definitions.
+
+I will shamelessly duck this for now :|
 
 Cheers
 ---Dave
