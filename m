@@ -2,68 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C79DC518
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 14:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2E0DC63A
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 15:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728800AbfJRMgQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 08:36:16 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38173 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbfJRMgQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Oct 2019 08:36:16 -0400
-Received: by mail-pf1-f196.google.com with SMTP id h195so3815198pfe.5
-        for <linux-arch@vger.kernel.org>; Fri, 18 Oct 2019 05:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aK1wkGXrzfqvkpiMdXPR4qx2yDodLeGQvxmTRYZ0EE8=;
-        b=OO4VR1DkllKNeKyYxnxCZiZl/ipEwd52weW+3qWEeOx0txpnXZq6NZsZJO/dyLFf+n
-         jaO3qU0TZktEblbk5F5TA+J8hp3yreGIzJCDjrGX3sKzQ/3elMdEvztwOQV+JCl9jKIk
-         ET2YE1+i9xW4NDJ+hxtpt9iItVeKCW/x+tRatAd6nIH5t9WrXxHXdYPSGgU3fnYJc5EW
-         7UTOR67kQ1eFGayh8+z2SERiP0BemtYzRokNGKNfmBbH2I7o1+SAkM/XcoYh0j7yJgqt
-         NVYX24X2W8WUFHVBxhmHa1T30YT8pDgixNcbYf+gKyLA1UasOV+xJ3AFLgS2/sVaQ3Mx
-         RAYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=aK1wkGXrzfqvkpiMdXPR4qx2yDodLeGQvxmTRYZ0EE8=;
-        b=hSB6/WawTb0+vvEtVavRNTAfrNGsUmYWbE9MCA8GX5l4+vP369A/wpGMAeiU8lAh2M
-         4AfUXgylkGzJxlRYQ5JIN6XoQCP6uVusQh1Ep8NwVw7WQwP1UFrZmQpPrInB5RJHgODs
-         1p8b5QgMW0XKHIFg+rwh8nVRkPUlhOOqX9URrVIZVMGyTqLOufWqtTjvDoNsVDpKbmzF
-         ehHSd9gQy914eDY3KZxe8000CZ7xHuQewD7UP4JE7JrhTveh+ygijvnDygSrTesHiYTV
-         5GzOIDMVmTd4d7XOwJHb5rJ+yG5edL7vyLzoAKB51A+UmWSp4FV3CN8+3azt4iM24nys
-         ksow==
-X-Gm-Message-State: APjAAAUrgWG4an96d5p/E5DnUAm6y1ZjrfSsFUblUkcN6SPIcii1mtYN
-        ZuBVgbxhODMyWRKmMOuF23JF8vdsreXXazkTy2w=
-X-Google-Smtp-Source: APXvYqwboRHYjG8+EaEUhuCsnYJwUvVxB7FpuBh596f0NW6J3CGCfgGwp8QCN3Y+hJnQCzUTJtAMiNThBMPnvdAPnpA=
-X-Received: by 2002:a62:b504:: with SMTP id y4mr6598107pfe.40.1571402172383;
- Fri, 18 Oct 2019 05:36:12 -0700 (PDT)
+        id S2410368AbfJRNhD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 09:37:03 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:39522 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1728150AbfJRNhC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 18 Oct 2019 09:37:02 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A62E03BB;
+        Fri, 18 Oct 2019 06:36:39 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BBC903F6C4;
+        Fri, 18 Oct 2019 06:36:36 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 14:36:34 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Florian Weimer <fweimer@redhat.com>,
+        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>
+Subject: Re: [PATCH v2 05/12] arm64: Basic Branch Target Identification
+ support
+Message-ID: <20191018133628.GC27757@arm.com>
+References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
+ <1570733080-21015-6-git-send-email-Dave.Martin@arm.com>
+ <20191011151028.GE33537@lakrids.cambridge.arm.com>
+ <4e09ca54-f353-9448-64ed-4ba1e38c6ebc@linaro.org>
+ <20191011153225.GL27757@arm.com>
+ <20191011154043.GG33537@lakrids.cambridge.arm.com>
+ <20191011154444.GN27757@arm.com>
+ <20191011160113.GO27757@arm.com>
+ <20191011164159.GP27757@arm.com>
+ <20191018110551.GB27759@lakrids.cambridge.arm.com>
 MIME-Version: 1.0
-Received: by 2002:a17:90a:14f:0:0:0:0 with HTTP; Fri, 18 Oct 2019 05:36:11
- -0700 (PDT)
-From:   Miss Aysha Al-Qaddafi <2007aisha2007@gmail.com>
-Date:   Fri, 18 Oct 2019 05:36:11 -0700
-X-Google-Sender-Auth: jMhKtsTwosSfytQaVrftinlzvC8
-Message-ID: <CABgxiAD+0jfm2Ku6JYwQjktR6jZQ5b-6eestyUSpeLSG7NOo6A@mail.gmail.com>
-Subject: ASSALAMU ALAIKUM,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191018110551.GB27759@lakrids.cambridge.arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-QVNTQUxBTVUgQUxBSUtVTSwNCg0KSSBoYXZlIGEgYnVzaW5lc3MgUHJvcG9zYWwgZm9yIHlvdSBh
-bmQgSSBuZWVkIG11dHVhbCByZXNwZWN0LCB0cnVzdCwNCmhvbmVzdHksIHRyYW5zcGFyZW5jeSwg
-YWRlcXVhdGUgc3VwcG9ydCBhbmQgYXNzaXN0YW5jZSwgSG9wZSB0byBoZWFyDQpmcm9tIHlvdSBm
-b3IgbW9yZSBkZXRhaWxzLg0KDQpXYXJtZXN0IHJlZ2FyZHMNCk1ycyBBaXNoYSBHYWRkYWZpDQoN
-Ctin2YTYs9mE2KfZhSDYudmE2YrZg9mF2IwNCg0K2YTYr9mKINin2YLYqtix2KfYrSDYudmF2YQg
-2YTZgyDZiNij2K3Yqtin2Kwg2KXZhNmJINin2YTYp9it2KrYsdin2YUg2KfZhNmF2KrYqNin2K/Z
-hCDZiNin2YTYq9mC2Kkg2IwNCtin2YTYtdiv2YIg2YjYp9mE2LTZgdin2YHZitipINmI2KfZhNiv
-2LnZhSDYp9mE2YPYp9mB2Yog2YjYp9mE2YXYs9in2LnYr9ipINiMINmI2YbYo9mF2YQg2KPZhiDZ
-htiz2YXYuQ0K2YXZhtmDINmE2YXYstmK2K8g2YXZhiDYp9mE2KrZgdin2LXZitmELg0KDQrYo9it
-2LEg2KfZhNiq2K3Zitin2KoNCtin2YTYs9mK2K/YqSDYudin2KbYtNipINin2YTZgtiw2KfZgdmK
-DQo=
+On Fri, Oct 18, 2019 at 12:05:52PM +0100, Mark Rutland wrote:
+> On Fri, Oct 11, 2019 at 05:42:00PM +0100, Dave Martin wrote:
+> > On Fri, Oct 11, 2019 at 05:01:13PM +0100, Dave Martin wrote:
+> > > On Fri, Oct 11, 2019 at 04:44:45PM +0100, Dave Martin wrote:
+> > > > On Fri, Oct 11, 2019 at 04:40:43PM +0100, Mark Rutland wrote:
+> > > > > On Fri, Oct 11, 2019 at 04:32:26PM +0100, Dave Martin wrote:
+
+[...]
+
+> > > > > > Either way, I feel we should do this: any function in a PROT_BTI page
+> > > > > > should have a suitable landing pad.  There's no reason I can see why
+> > > > > > a protection given to any other callback function should be omitted
+> > > > > > for a signal handler.
+> > > > > > 
+> > > > > > Note, if the signal handler isn't in a PROT_BTI page then overriding
+> > > > > > BTYPE here will not trigger a Branch Target exception.
+> > > > > > 
+> > > > > > I'm happy to drop a brief comment into the code also, once we're
+> > > > > > agreed on what the code should be doing.
+> > > > > 
+> > > > > So long as there's a comment as to why, I have no strong feelings here.
+> > > > > :)
+> > > > 
+> > > > OK, I think it's worth a brief comment in the code either way, so I'll
+> > > > add something.
+> > > 
+> > > Hmm, come to think of it we do need special logic for a particular case
+> > > here:
+> > > 
+> > > If we are delivering a SIGILL here and the SIGILL handler was registered
+> > > with SA_NODEFER then we will get into a spin, repeatedly delivering
+> > > the BTI-triggered SIGILL to the same (bad) entry point.
+> > > 
+> > > Without SA_NODEFER, the SIGILL becomes fatal, which is the desired
+> > > behaviour, but we'll need to catch this recursion explicitly.
+> > > 
+> > > 
+> > > It's similar to the special force_sigsegv() case in
+> > > linux/kernel/signal.c...
+> > > 
+> > > Thoughts?
+> > 
+> > On second thought, maybe we don't need to do anything special.
+> > 
+> > A SIGSEGV handler registered with (SA_NODEFER & ~SA_RESETHAND) and that
+> > dereferences a duff address would spin similarly.
+> > 
+> > This SIGILL case doesn't really seem different.  Either way it's a
+> > livelock of the user task that doesn't compromise the kernel.  There
+> > are plenty of ways for such a livelock to happen.
+> 
+> That sounds reasonable to me.
+
+OK, I guess we can park this discussion for now.
+
+Cheers
+---Dave
