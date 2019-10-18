@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D11DC3AB
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 13:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53460DC3C2
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 13:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408393AbfJRLKe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 07:10:34 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:35376 "EHLO foss.arm.com"
+        id S2404781AbfJRLQc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 07:16:32 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:35572 "EHLO foss.arm.com"
         rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2406077AbfJRLKd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Oct 2019 07:10:33 -0400
+        id S2404572AbfJRLQc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 18 Oct 2019 07:16:32 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2DAFB42;
-        Fri, 18 Oct 2019 04:10:08 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 18428B56;
+        Fri, 18 Oct 2019 04:16:09 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE7F03F6C4;
-        Fri, 18 Oct 2019 04:10:05 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 12:10:03 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4D4D3F6C4;
+        Fri, 18 Oct 2019 04:16:05 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 12:16:03 +0100
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     Dave Martin <Dave.Martin@arm.com>
 Cc:     Paul Elliott <paul.elliott@arm.com>,
@@ -38,10 +38,13 @@ Cc:     Paul Elliott <paul.elliott@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-arm-kernel@lists.infradead.org,
         Florian Weimer <fweimer@redhat.com>,
-        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>
+        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>,
+        Dave Kleikamp <shaggy@linux.vnet.ibm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Andrew Morton <akpm@linux-foundation.org>
 Subject: Re: [PATCH v2 05/12] arm64: Basic Branch Target Identification
  support
-Message-ID: <20191018111003.GC27759@lakrids.cambridge.arm.com>
+Message-ID: <20191018111603.GD27759@lakrids.cambridge.arm.com>
 References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
  <1570733080-21015-6-git-send-email-Dave.Martin@arm.com>
  <20191011151028.GE33537@lakrids.cambridge.arm.com>
@@ -56,57 +59,76 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+[adding mm folk]
+
 On Fri, Oct 11, 2019 at 06:20:15PM +0100, Dave Martin wrote:
 > On Fri, Oct 11, 2019 at 04:10:29PM +0100, Mark Rutland wrote:
 > > On Thu, Oct 10, 2019 at 07:44:33PM +0100, Dave Martin wrote:
-> > > +#define arch_calc_vm_prot_bits(prot, pkey) arm64_calc_vm_prot_bits(prot)
-> > > +static inline unsigned long arm64_calc_vm_prot_bits(unsigned long prot)
-> > > +{
-> > > +	if (system_supports_bti() && (prot & PROT_BTI))
-> > > +		return VM_ARM64_BTI;
-> > > +
-> > > +	return 0;
-> > > +}
-> > 
-> > Can we call this arch_calc_vm_prot_bits() directly, with all the
-> > arguments:
-> > 
-> > static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
-> > 						   unsigned long pkey)
-> > {
-> > 	...
-> > }
-> > #define arch_calc_vm_prot_bits arch_calc_vm_prot_bits
-> > 
-> > ... as that makes it a bit easier to match definition with use, and just
-> > definign the name makes it a bit clearer that that's probably for the
-> > benefit of some ifdeffery.
-> > 
-> > Likewise for the other functions here.
-> > 
-> > > +#define arch_vm_get_page_prot(vm_flags) arm64_vm_get_page_prot(vm_flags)
-> > > +static inline pgprot_t arm64_vm_get_page_prot(unsigned long vm_flags)
-> > > +{
-> > > +	return (vm_flags & VM_ARM64_BTI) ? __pgprot(PTE_GP) : __pgprot(0);
-> > > +}
-> > > +
 > > > +#define arch_validate_prot(prot, addr) arm64_validate_prot(prot, addr)
 > > > +static inline int arm64_validate_prot(unsigned long prot, unsigned long addr)
+> > > +{
+> > > +	unsigned long supported = PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM;
+> > > +
+> > > +	if (system_supports_bti())
+> > > +		supported |= PROT_BTI;
+> > > +
+> > > +	return (prot & ~supported) == 0;
+> > > +}
+> > 
+> > If we have this check, can we ever get into arm64_calc_vm_prot_bits()
+> > with PROT_BIT but !system_supports_bti()?
+> > 
+> > ... or can that become:
+> > 
+> > 	return (prot & PROT_BTI) ? VM_ARM64_BTI : 0;
 > 
-> Can do, though it looks like a used sparc as a template, and that has a
-> sparc_ prefix.
+> We can reach this via mmap() and friends IIUC.
 > 
-> powerpc uses the generic name, as does x86 ... in its UAPI headers.
-> Odd.
+> Since this function only gets called once-ish per vma I have a weak
+> preference for keeping the check here to avoid code fragility.
 > 
-> I can change the names here, though I'm not sure it adds a lot of value.
 > 
-> If you feel strongly I can do it.
+> It does feel like arch_validate_prot() is supposed to be a generic gate
+> for prot flags coming into the kernel via any route though, but only the
+> mprotect() path actually uses it.
+> 
+> This function originally landed in v2.6.27 as part of the powerpc strong
+> access ordering support (PROT_SAO):
+> 
+> b845f313d78e ("mm: Allow architectures to define additional protection bits")
+> ef3d3246a0d0 ("powerpc/mm: Add Strong Access Ordering support")
+> 
+> where the mmap() path uses arch_calc_vm_prot_bits() without
+> arch_validate_prot(), just as in the current code.  powerpc's original
+> arch_calc_vm_prot_bits() does no obvious policing.
+> 
+> This might be a bug.  I can draft a patch to add it for the mmap() path
+> for people to comment on ... I can't figure out yet whether or not the
+> difference is intentional or there's some subtlety that I'm missed.
 
-I'd really prefer it because it minimizes surprises, and makes it much
-easier to hop around the codebase and find the thing you're looking for.
+From reading those two commit messages, it looks like this was an
+oversight. I'd expect that we should apply this check for any
+user-provided prot (i.e. it should apply to both mprotect and mmap).
 
-I'll reply on the other issue in a separate reply.
+Ben, Andrew, does that make sense to you?
+
+... or was there some reason to only do this for mprotect?
 
 Thanks,
 Mark.
+
+> mmap( ... prot = -1 ... ) succeeds with effective rwx permissions and no
+> apparent ill effects on my random x86 box, but mprotect(..., -1) fails
+> with -EINVAL.
+> 
+> This is at least strange.
+> 
+> Theoretically, tightening this would be an ABI break, though I'd say
+> this behaviour is not intentional.
+> 
+> Thoughts?
+> 
+> [...]
+> 
+> Cheers
+> ---Dave
