@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6F3DCC9B
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 19:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC937DCC9E
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 19:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405968AbfJRR0U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 13:26:20 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:46894 "EHLO foss.arm.com"
+        id S2409286AbfJRR1C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 13:27:02 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:46942 "EHLO foss.arm.com"
         rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1729210AbfJRR0T (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Oct 2019 13:26:19 -0400
+        id S1729210AbfJRR1C (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 18 Oct 2019 13:27:02 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B161E1063;
-        Fri, 18 Oct 2019 10:25:54 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B59C2113E;
+        Fri, 18 Oct 2019 10:26:37 -0700 (PDT)
 Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E56E63F718;
-        Fri, 18 Oct 2019 10:25:51 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EA4613F718;
+        Fri, 18 Oct 2019 10:26:34 -0700 (PDT)
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Jones <drjones@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
@@ -38,129 +38,79 @@ Cc:     Andrew Jones <drjones@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
         Amit Kachhap <amit.kachhap@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 00/12] arm64: ARMv8.5-A: Branch Target Identification support
-Date:   Fri, 18 Oct 2019 18:25:33 +0100
-Message-Id: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
+Subject: [PATCH v3 01/12] ELF: UAPI and Kconfig additions for ELF program properties
+Date:   Fri, 18 Oct 2019 18:25:34 +0100
+Message-Id: <1571419545-20401-2-git-send-email-Dave.Martin@arm.com>
 X-Mailer: git-send-email 2.1.4
+In-Reply-To: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
+References: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch implements support for ARMv8.5-A Branch Target Identification
-(BTI), which is a control flow integrity protection feature introduced
-as part of the ARMv8.5-A extensions.
+Pull the basic ELF definitions relating to the
+NT_GNU_PROPERTY_TYPE_0 note from Yu-Cheng Yu's earlier x86 shstk
+series.
 
-The series is based on v5.4-rc2.
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+---
+ fs/Kconfig.binfmt        | 3 +++
+ include/linux/elf.h      | 8 ++++++++
+ include/uapi/linux/elf.h | 1 +
+ 3 files changed, 12 insertions(+)
 
-A branch for this series is available in Git [3].
-
-This series supersedes the previous v2 posting [1], and also
-incorporates my proposed ELF GNU property parsing implementation.  (See
-[2] for the ABI spec describing NT_GNU_PROPERTY_TYPE_0).
-
-Changes:
-
- * Minor cleanups / nitpick fixes only.
-
-   Since this is an interim update so that Mark Brown can take over
-   development of the series, I haven't fully retested.  The series
-   builds with defconfig.
-
-   There are some outstanding discussion points: see notes in the
-   invidual patches, particularly on patch 5.
-
-
-Notes:
-
- * No documentation yet.  We could do with some being written before
-   this series gets merged.
-
- * GCC 9 can compile backwards-compatible BTI-enabled code with
-   -mbranch-protection=bti or -mbranch-protection=standard.
-
- * Binutils trunk supports the new ELF note, but this wasn't in a release
-   the last time I posted this series.  (The situation _might_ have changed
-   in the meantime...)
-
-   Creation of a BTI-enabled binary requires _everything_ linked in to
-   be BTI-enabled.  For now ld --force-bti can be used to override this,
-   but some things may break until the required C library support is in
-   place.
-
-   There is no straightforward way to mark a .s file as BTI-enabled:
-   scraping the output from gcc -S works as a quick hack for now.
-
-   readelf -n can be used to examing the program properties in an ELF
-   file.
-
- * Runtime mmap() and mprotect() can be used to enable BTI on a
-   page-by-page basis using the new PROT_BTI, but the code in the
-   affected pages still needs to be written or compiled to contain the
-   appopriate BTI landing pads.
-
-
-[1] [PATCH v2 00/12] arm64: ARMv8.5-A: Branch Target Identification support
-https://lore.kernel.org/lkml/1570733080-21015-1-git-send-email-Dave.Martin@arm.com/
-
-[2] Linux Extensions to gABI
-https://github.com/hjl-tools/linux-abi/wiki/Linux-Extensions-to-gABI
-
-[3] Git branch:
-git://linux-arm.org/linux-dm.git arm64/bti/v3/head
-http://linux-arm.org/git?p=linux-dm.git;a=shortlog;h=refs/heads/arm64/bti/v3/head
-
-
-Dave Martin (12):
-  ELF: UAPI and Kconfig additions for ELF program properties
-  ELF: Add ELF program property parsing support
-  mm: Reserve asm-generic prot flag 0x10 for arch use
-  arm64: docs: cpu-feature-registers: Document ID_AA64PFR1_EL1
-  arm64: Basic Branch Target Identification support
-  elf: Allow arch to tweak initial mmap prot flags
-  arm64: elf: Enable BTI at exec based on ELF program properties
-  arm64: BTI: Decode BYTPE bits when printing PSTATE
-  arm64: traps: Fix inconsistent faulting instruction skipping
-  arm64: traps: Shuffle code to eliminate forward declarations
-  arm64: BTI: Reset BTYPE when skipping emulated instructions
-  KVM: arm64: BTI: Reset BTYPE when skipping emulated instructions
-
- Documentation/arm64/cpu-feature-registers.rst |  17 ++-
- Documentation/arm64/elf_hwcaps.rst            |   4 +
- arch/arm64/Kconfig                            |  31 ++++++
- arch/arm64/include/asm/cpucaps.h              |   3 +-
- arch/arm64/include/asm/cpufeature.h           |   6 ++
- arch/arm64/include/asm/elf.h                  |  50 +++++++++
- arch/arm64/include/asm/esr.h                  |   2 +-
- arch/arm64/include/asm/hwcap.h                |   1 +
- arch/arm64/include/asm/kvm_emulate.h          |   6 +-
- arch/arm64/include/asm/mman.h                 |  37 +++++++
- arch/arm64/include/asm/pgtable-hwdef.h        |   1 +
- arch/arm64/include/asm/pgtable.h              |   2 +-
- arch/arm64/include/asm/ptrace.h               |   8 ++
- arch/arm64/include/asm/sysreg.h               |   4 +
- arch/arm64/include/uapi/asm/hwcap.h           |   1 +
- arch/arm64/include/uapi/asm/mman.h            |   9 ++
- arch/arm64/include/uapi/asm/ptrace.h          |   1 +
- arch/arm64/kernel/cpufeature.c                |  33 ++++++
- arch/arm64/kernel/cpuinfo.c                   |   1 +
- arch/arm64/kernel/entry.S                     |  11 ++
- arch/arm64/kernel/process.c                   |  36 ++++++-
- arch/arm64/kernel/ptrace.c                    |   2 +-
- arch/arm64/kernel/signal.c                    |  16 +++
- arch/arm64/kernel/syscall.c                   |  18 ++++
- arch/arm64/kernel/traps.c                     | 126 +++++++++++-----------
- fs/Kconfig.binfmt                             |   6 ++
- fs/binfmt_elf.c                               | 145 ++++++++++++++++++++++++--
- fs/compat_binfmt_elf.c                        |   4 +
- include/linux/elf.h                           |  43 ++++++++
- include/linux/mm.h                            |   3 +
- include/uapi/asm-generic/mman-common.h        |   1 +
- include/uapi/linux/elf.h                      |  11 ++
- 32 files changed, 560 insertions(+), 79 deletions(-)
- create mode 100644 arch/arm64/include/asm/mman.h
- create mode 100644 arch/arm64/include/uapi/asm/mman.h
-
+diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+index 62dc4f5..d2cfe07 100644
+--- a/fs/Kconfig.binfmt
++++ b/fs/Kconfig.binfmt
+@@ -36,6 +36,9 @@ config COMPAT_BINFMT_ELF
+ config ARCH_BINFMT_ELF_STATE
+ 	bool
+ 
++config ARCH_USE_GNU_PROPERTY
++	bool
++
+ config BINFMT_ELF_FDPIC
+ 	bool "Kernel support for FDPIC ELF binaries"
+ 	default y if !BINFMT_ELF
+diff --git a/include/linux/elf.h b/include/linux/elf.h
+index e3649b3..459cddc 100644
+--- a/include/linux/elf.h
++++ b/include/linux/elf.h
+@@ -2,6 +2,7 @@
+ #ifndef _LINUX_ELF_H
+ #define _LINUX_ELF_H
+ 
++#include <linux/types.h>
+ #include <asm/elf.h>
+ #include <uapi/linux/elf.h>
+ 
+@@ -56,4 +57,11 @@ static inline int elf_coredump_extra_notes_write(struct coredump_params *cprm) {
+ extern int elf_coredump_extra_notes_size(void);
+ extern int elf_coredump_extra_notes_write(struct coredump_params *cprm);
+ #endif
++
++/* NT_GNU_PROPERTY_TYPE_0 header */
++struct gnu_property {
++	u32 pr_type;
++	u32 pr_datasz;
++};
++
+ #endif /* _LINUX_ELF_H */
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index 34c02e4..c377314 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -36,6 +36,7 @@ typedef __s64	Elf64_Sxword;
+ #define PT_LOPROC  0x70000000
+ #define PT_HIPROC  0x7fffffff
+ #define PT_GNU_EH_FRAME		0x6474e550
++#define PT_GNU_PROPERTY		0x6474e553
+ 
+ #define PT_GNU_STACK	(PT_LOOS + 0x474e551)
+ 
 -- 
 2.1.4
 
