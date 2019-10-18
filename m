@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC009DCCB5
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 19:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608D7DCCC9
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 19:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505434AbfJRR1Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 13:27:25 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:47180 "EHLO foss.arm.com"
+        id S2505548AbfJRR2B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 13:28:01 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:47138 "EHLO foss.arm.com"
         rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2502098AbfJRR1Z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S2502095AbfJRR1Z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Fri, 18 Oct 2019 13:27:25 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 712401476;
-        Fri, 18 Oct 2019 10:27:02 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69BAB1435;
+        Fri, 18 Oct 2019 10:26:56 -0700 (PDT)
 Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A5F203F718;
-        Fri, 18 Oct 2019 10:26:59 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 81BAD3F718;
+        Fri, 18 Oct 2019 10:26:53 -0700 (PDT)
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Jones <drjones@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
@@ -38,9 +38,9 @@ Cc:     Andrew Jones <drjones@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
         Amit Kachhap <amit.kachhap@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 09/12] arm64: traps: Fix inconsistent faulting instruction skipping
-Date:   Fri, 18 Oct 2019 18:25:42 +0100
-Message-Id: <1571419545-20401-10-git-send-email-Dave.Martin@arm.com>
+Subject: [PATCH v3 07/12] arm64: elf: Enable BTI at exec based on ELF program properties
+Date:   Fri, 18 Oct 2019 18:25:40 +0100
+Message-Id: <1571419545-20401-8-git-send-email-Dave.Martin@arm.com>
 X-Mailer: git-send-email 2.1.4
 In-Reply-To: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
 References: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
@@ -49,118 +49,197 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Correct skipping of an instruction on AArch32 works a bit
-differently from AArch64, mainly due to the different CPSR/PSTATE
-semantics.
+For BTI protection to be as comprehensive as possible, it is
+desirable to have BTI enabled from process startup.  If this is not
+done, the process must use mprotect() to enable BTI for each of its
+executable mappings, but this is painful to do in the libc startup
+code.  It's simpler and more sound to have the kernel do it
+instead.
 
-There have been various attempts to get this right.  Currenty
-arm64_skip_faulting_instruction() mostly does the right thing, but
-does not advance the IT state machine for the AArch32 case.
+To this end, detect BTI support in the executable (or ELF
+interpreter, as appropriate), via the
+NT_GNU_PROGRAM_PROPERTY_TYPE_0 note, and tweak the initial prot
+flags for the process' executable pages to include PROT_BTI as
+appropriate.
 
-arm64_compat_skip_faulting_instruction() handles the IT state
-machine but is local to traps.c, and porting other code to use it
-will make a mess since there are some call sites that apply for
-both the compat and native cases.
-
-Since manual instruction skipping implies a trap, it's a relatively
-slow path.
-
-So, make arm64_skip_faulting_instruction() handle both compat and
-native, and get rid of the arm64_compat_skip_faulting_instruction()
-special case.
-
-Fixes: 32a3e635fb0e ("arm64: compat: Add CNTFRQ trap handler")
-Fixes: 1f1c014035a8 ("arm64: compat: Add condition code checks and IT advance")
-Fixes: 6436beeee572 ("arm64: Fix single stepping in kernel traps")
-Fixes: bd35a4adc413 ("arm64: Port SWP/SWPB emulation support from arm")
 Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-
 ---
+ arch/arm64/Kconfig           |  3 +++
+ arch/arm64/include/asm/elf.h | 50 ++++++++++++++++++++++++++++++++++++++++++++
+ arch/arm64/kernel/process.c  | 19 +++++++++++++++++
+ include/linux/elf.h          |  6 +++++-
+ include/uapi/linux/elf.h     |  6 ++++++
+ 5 files changed, 83 insertions(+), 1 deletion(-)
 
-**NOTE**
-
-Despite discussions on the v2 series to the effect that the prior
-behaviour is not broken, I'm now not so sure:
-
-Taking another look, I now can't track down for example where SWP in an
-IT block is specified to be UNPREDICTABLE.  I only see e.g., ARM DDI
-0487E.a Section 1.8.2 ("F1.8.2 Partial deprecation of IT"), which only
-deprecates the affected instructions.
-
-The legacy AArch32 SWP{B} insn is obsoleted by ARMv8, but the whole
-point of the armv8_deprecated stuff is to provide some backwards
-compatiblity with v7.
-
-So, this looks like it needs a closer look.
-
-I'll leave the Fixes tags for now, so that the archaeology doesn't need
-to be repeated if we conclude that this patch really is a fix.
----
- arch/arm64/kernel/traps.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
-
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 15e3c4f..44c91d4 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -268,6 +268,8 @@ void arm64_notify_die(const char *str, struct pt_regs *regs,
- 	}
- }
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index bb3189e..a64d91d 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -9,6 +9,7 @@ config ARM64
+ 	select ACPI_MCFG if (ACPI && PCI)
+ 	select ACPI_SPCR_TABLE if ACPI
+ 	select ACPI_PPTT if ACPI
++	select ARCH_BINFMT_ELF_STATE
+ 	select ARCH_CLOCKSOURCE_DATA
+ 	select ARCH_HAS_DEBUG_VIRTUAL
+ 	select ARCH_HAS_DEVMEM_IS_ALLOWED
+@@ -34,6 +35,7 @@ config ARM64
+ 	select ARCH_HAS_SYSCALL_WRAPPER
+ 	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
++	select ARCH_HAVE_ELF_PROT
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+ 	select ARCH_INLINE_READ_LOCK if !PREEMPT
+ 	select ARCH_INLINE_READ_LOCK_BH if !PREEMPT
+@@ -63,6 +65,7 @@ config ARM64
+ 	select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPT
+ 	select ARCH_KEEP_MEMBLOCK
+ 	select ARCH_USE_CMPXCHG_LOCKREF
++	select ARCH_USE_GNU_PROPERTY if BINFMT_ELF
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_USE_QUEUED_SPINLOCKS
+ 	select ARCH_SUPPORTS_MEMORY_FAILURE
+diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
+index b618017..8bc154c 100644
+--- a/arch/arm64/include/asm/elf.h
++++ b/arch/arm64/include/asm/elf.h
+@@ -114,7 +114,11 @@
  
-+static void advance_itstate(struct pt_regs *regs);
+ #ifndef __ASSEMBLY__
+ 
++#include <uapi/linux/elf.h>
+ #include <linux/bug.h>
++#include <linux/errno.h>
++#include <linux/fs.h>
++#include <linux/types.h>
+ #include <asm/processor.h> /* for signal_minsigstksz, used by ARCH_DLINFO */
+ 
+ typedef unsigned long elf_greg_t;
+@@ -224,6 +228,52 @@ extern int aarch32_setup_additional_pages(struct linux_binprm *bprm,
+ 
+ #endif /* CONFIG_COMPAT */
+ 
++struct arch_elf_state {
++	int flags;
++};
 +
- void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
- {
- 	regs->pc += size;
-@@ -278,6 +280,9 @@ void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
- 	 */
- 	if (user_mode(regs))
- 		user_fastforward_single_step(current);
++#define ARM64_ELF_BTI		(1 << 0)
 +
-+	if (regs->pstate & PSR_MODE32_BIT)
-+		advance_itstate(regs);
- }
++#define INIT_ARCH_ELF_STATE {			\
++	.flags = 0,				\
++}
++
++static inline int arch_parse_elf_property(u32 type, const void *data,
++					  size_t datasz, bool compat,
++					  struct arch_elf_state *arch)
++{
++	/* No known properties for AArch32 yet */
++	if (IS_ENABLED(CONFIG_COMPAT) && compat)
++		return 0;
++
++	if (type == GNU_PROPERTY_AARCH64_FEATURE_1_AND) {
++		const u32 *p = data;
++
++		if (datasz != sizeof(*p))
++			return -EIO;
++
++		if (IS_ENABLED(CONFIG_ARM64_BTI) &&
++		    (*p & GNU_PROPERTY_AARCH64_FEATURE_1_BTI))
++			arch->flags |= ARM64_ELF_BTI;
++	}
++
++	return 0;
++}
++
++static inline int arch_elf_pt_proc(void *ehdr, void *phdr,
++				   struct file *f, bool is_interp,
++				   struct arch_elf_state *state)
++{
++	return 0;
++}
++
++static inline int arch_check_elf(void *ehdr, bool has_interp,
++				 void *interp_ehdr,
++				 struct arch_elf_state *state)
++{
++	return 0;
++}
++
+ #endif /* !__ASSEMBLY__ */
  
- static LIST_HEAD(undef_hook);
-@@ -629,19 +634,12 @@ static void advance_itstate(struct pt_regs *regs)
- 	compat_set_it_state(regs, it);
- }
+ #endif
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index a47462d..4c78937 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -11,12 +11,14 @@
  
--static void arm64_compat_skip_faulting_instruction(struct pt_regs *regs,
--						   unsigned int sz)
--{
--	advance_itstate(regs);
--	arm64_skip_faulting_instruction(regs, sz);
--}
--
- static void compat_cntfrq_read_handler(unsigned int esr, struct pt_regs *regs)
- {
- 	int reg = (esr & ESR_ELx_CP15_32_ISS_RT_MASK) >> ESR_ELx_CP15_32_ISS_RT_SHIFT;
+ #include <linux/compat.h>
+ #include <linux/efi.h>
++#include <linux/elf.h>
+ #include <linux/export.h>
+ #include <linux/sched.h>
+ #include <linux/sched/debug.h>
+ #include <linux/sched/task.h>
+ #include <linux/sched/task_stack.h>
+ #include <linux/kernel.h>
++#include <linux/mman.h>
+ #include <linux/mm.h>
+ #include <linux/stddef.h>
+ #include <linux/sysctl.h>
+@@ -633,3 +635,20 @@ static int __init tagged_addr_init(void)
  
- 	pt_regs_write_reg(regs, reg, arch_timer_get_rate());
--	arm64_compat_skip_faulting_instruction(regs, 4);
-+	arm64_skip_faulting_instruction(regs, 4);
- }
+ core_initcall(tagged_addr_init);
+ #endif	/* CONFIG_ARM64_TAGGED_ADDR_ABI */
++
++#ifdef CONFIG_BINFMT_ELF
++int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
++			 bool has_interp, bool is_interp)
++{
++	if (is_interp != has_interp)
++		return prot;
++
++	if (!(state->flags & ARM64_ELF_BTI))
++		return prot;
++
++	if (prot & PROT_EXEC)
++		prot |= PROT_BTI;
++
++	return prot;
++}
++#endif
+diff --git a/include/linux/elf.h b/include/linux/elf.h
+index 1b6e895..5d5b032 100644
+--- a/include/linux/elf.h
++++ b/include/linux/elf.h
+@@ -63,7 +63,11 @@ extern int elf_coredump_extra_notes_size(void);
+ extern int elf_coredump_extra_notes_write(struct coredump_params *cprm);
+ #endif
  
- static const struct sys64_hook cp15_32_hooks[] = {
-@@ -661,7 +659,7 @@ static void compat_cntvct_read_handler(unsigned int esr, struct pt_regs *regs)
+-/* NT_GNU_PROPERTY_TYPE_0 header */
++/*
++ * NT_GNU_PROPERTY_TYPE_0 header:
++ * Keep this internal until/unless there is an agreed UAPI definition.
++ * pr_type values (GNU_PROPERTY_*) are public and defined in the UAPI header.
++ */
+ struct gnu_property {
+ 	u32 pr_type;
+ 	u32 pr_datasz;
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index 20900f4..c6dd021 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -448,4 +448,10 @@ typedef struct elf64_note {
+   Elf64_Word n_type;	/* Content type */
+ } Elf64_Nhdr;
  
- 	pt_regs_write_reg(regs, rt, lower_32_bits(val));
- 	pt_regs_write_reg(regs, rt2, upper_32_bits(val));
--	arm64_compat_skip_faulting_instruction(regs, 4);
-+	arm64_skip_faulting_instruction(regs, 4);
- }
- 
- static const struct sys64_hook cp15_64_hooks[] = {
-@@ -682,7 +680,7 @@ asmlinkage void __exception do_cp15instr(unsigned int esr, struct pt_regs *regs)
- 		 * There is no T16 variant of a CP access, so we
- 		 * always advance PC by 4 bytes.
- 		 */
--		arm64_compat_skip_faulting_instruction(regs, 4);
-+		arm64_skip_faulting_instruction(regs, 4);
- 		return;
- 	}
- 
++/* .note.gnu.property types for EM_AARCH64: */
++#define GNU_PROPERTY_AARCH64_FEATURE_1_AND	0xc0000000
++
++/* Bits for GNU_PROPERTY_AARCH64_FEATURE_1_BTI */
++#define GNU_PROPERTY_AARCH64_FEATURE_1_BTI	(1U << 0)
++
+ #endif /* _UAPI_LINUX_ELF_H */
 -- 
 2.1.4
 
