@@ -2,133 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53460DC3C2
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 13:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C79DC518
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 14:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404781AbfJRLQc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 07:16:32 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:35572 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2404572AbfJRLQc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Oct 2019 07:16:32 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 18428B56;
-        Fri, 18 Oct 2019 04:16:09 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4D4D3F6C4;
-        Fri, 18 Oct 2019 04:16:05 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 12:16:03 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     Paul Elliott <paul.elliott@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch@vger.kernel.org, Eugene Syromiatnikov <esyr@redhat.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Andrew Jones <drjones@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Florian Weimer <fweimer@redhat.com>,
-        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>,
-        Dave Kleikamp <shaggy@linux.vnet.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 05/12] arm64: Basic Branch Target Identification
- support
-Message-ID: <20191018111603.GD27759@lakrids.cambridge.arm.com>
-References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
- <1570733080-21015-6-git-send-email-Dave.Martin@arm.com>
- <20191011151028.GE33537@lakrids.cambridge.arm.com>
- <20191011172013.GQ27757@arm.com>
+        id S1728800AbfJRMgQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 08:36:16 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:38173 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726208AbfJRMgQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Oct 2019 08:36:16 -0400
+Received: by mail-pf1-f196.google.com with SMTP id h195so3815198pfe.5
+        for <linux-arch@vger.kernel.org>; Fri, 18 Oct 2019 05:36:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aK1wkGXrzfqvkpiMdXPR4qx2yDodLeGQvxmTRYZ0EE8=;
+        b=OO4VR1DkllKNeKyYxnxCZiZl/ipEwd52weW+3qWEeOx0txpnXZq6NZsZJO/dyLFf+n
+         jaO3qU0TZktEblbk5F5TA+J8hp3yreGIzJCDjrGX3sKzQ/3elMdEvztwOQV+JCl9jKIk
+         ET2YE1+i9xW4NDJ+hxtpt9iItVeKCW/x+tRatAd6nIH5t9WrXxHXdYPSGgU3fnYJc5EW
+         7UTOR67kQ1eFGayh8+z2SERiP0BemtYzRokNGKNfmBbH2I7o1+SAkM/XcoYh0j7yJgqt
+         NVYX24X2W8WUFHVBxhmHa1T30YT8pDgixNcbYf+gKyLA1UasOV+xJ3AFLgS2/sVaQ3Mx
+         RAYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=aK1wkGXrzfqvkpiMdXPR4qx2yDodLeGQvxmTRYZ0EE8=;
+        b=hSB6/WawTb0+vvEtVavRNTAfrNGsUmYWbE9MCA8GX5l4+vP369A/wpGMAeiU8lAh2M
+         4AfUXgylkGzJxlRYQ5JIN6XoQCP6uVusQh1Ep8NwVw7WQwP1UFrZmQpPrInB5RJHgODs
+         1p8b5QgMW0XKHIFg+rwh8nVRkPUlhOOqX9URrVIZVMGyTqLOufWqtTjvDoNsVDpKbmzF
+         ehHSd9gQy914eDY3KZxe8000CZ7xHuQewD7UP4JE7JrhTveh+ygijvnDygSrTesHiYTV
+         5GzOIDMVmTd4d7XOwJHb5rJ+yG5edL7vyLzoAKB51A+UmWSp4FV3CN8+3azt4iM24nys
+         ksow==
+X-Gm-Message-State: APjAAAUrgWG4an96d5p/E5DnUAm6y1ZjrfSsFUblUkcN6SPIcii1mtYN
+        ZuBVgbxhODMyWRKmMOuF23JF8vdsreXXazkTy2w=
+X-Google-Smtp-Source: APXvYqwboRHYjG8+EaEUhuCsnYJwUvVxB7FpuBh596f0NW6J3CGCfgGwp8QCN3Y+hJnQCzUTJtAMiNThBMPnvdAPnpA=
+X-Received: by 2002:a62:b504:: with SMTP id y4mr6598107pfe.40.1571402172383;
+ Fri, 18 Oct 2019 05:36:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191011172013.GQ27757@arm.com>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+Received: by 2002:a17:90a:14f:0:0:0:0 with HTTP; Fri, 18 Oct 2019 05:36:11
+ -0700 (PDT)
+From:   Miss Aysha Al-Qaddafi <2007aisha2007@gmail.com>
+Date:   Fri, 18 Oct 2019 05:36:11 -0700
+X-Google-Sender-Auth: jMhKtsTwosSfytQaVrftinlzvC8
+Message-ID: <CABgxiAD+0jfm2Ku6JYwQjktR6jZQ5b-6eestyUSpeLSG7NOo6A@mail.gmail.com>
+Subject: ASSALAMU ALAIKUM,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-[adding mm folk]
-
-On Fri, Oct 11, 2019 at 06:20:15PM +0100, Dave Martin wrote:
-> On Fri, Oct 11, 2019 at 04:10:29PM +0100, Mark Rutland wrote:
-> > On Thu, Oct 10, 2019 at 07:44:33PM +0100, Dave Martin wrote:
-> > > +#define arch_validate_prot(prot, addr) arm64_validate_prot(prot, addr)
-> > > +static inline int arm64_validate_prot(unsigned long prot, unsigned long addr)
-> > > +{
-> > > +	unsigned long supported = PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM;
-> > > +
-> > > +	if (system_supports_bti())
-> > > +		supported |= PROT_BTI;
-> > > +
-> > > +	return (prot & ~supported) == 0;
-> > > +}
-> > 
-> > If we have this check, can we ever get into arm64_calc_vm_prot_bits()
-> > with PROT_BIT but !system_supports_bti()?
-> > 
-> > ... or can that become:
-> > 
-> > 	return (prot & PROT_BTI) ? VM_ARM64_BTI : 0;
-> 
-> We can reach this via mmap() and friends IIUC.
-> 
-> Since this function only gets called once-ish per vma I have a weak
-> preference for keeping the check here to avoid code fragility.
-> 
-> 
-> It does feel like arch_validate_prot() is supposed to be a generic gate
-> for prot flags coming into the kernel via any route though, but only the
-> mprotect() path actually uses it.
-> 
-> This function originally landed in v2.6.27 as part of the powerpc strong
-> access ordering support (PROT_SAO):
-> 
-> b845f313d78e ("mm: Allow architectures to define additional protection bits")
-> ef3d3246a0d0 ("powerpc/mm: Add Strong Access Ordering support")
-> 
-> where the mmap() path uses arch_calc_vm_prot_bits() without
-> arch_validate_prot(), just as in the current code.  powerpc's original
-> arch_calc_vm_prot_bits() does no obvious policing.
-> 
-> This might be a bug.  I can draft a patch to add it for the mmap() path
-> for people to comment on ... I can't figure out yet whether or not the
-> difference is intentional or there's some subtlety that I'm missed.
-
-From reading those two commit messages, it looks like this was an
-oversight. I'd expect that we should apply this check for any
-user-provided prot (i.e. it should apply to both mprotect and mmap).
-
-Ben, Andrew, does that make sense to you?
-
-... or was there some reason to only do this for mprotect?
-
-Thanks,
-Mark.
-
-> mmap( ... prot = -1 ... ) succeeds with effective rwx permissions and no
-> apparent ill effects on my random x86 box, but mprotect(..., -1) fails
-> with -EINVAL.
-> 
-> This is at least strange.
-> 
-> Theoretically, tightening this would be an ABI break, though I'd say
-> this behaviour is not intentional.
-> 
-> Thoughts?
-> 
-> [...]
-> 
-> Cheers
-> ---Dave
+QVNTQUxBTVUgQUxBSUtVTSwNCg0KSSBoYXZlIGEgYnVzaW5lc3MgUHJvcG9zYWwgZm9yIHlvdSBh
+bmQgSSBuZWVkIG11dHVhbCByZXNwZWN0LCB0cnVzdCwNCmhvbmVzdHksIHRyYW5zcGFyZW5jeSwg
+YWRlcXVhdGUgc3VwcG9ydCBhbmQgYXNzaXN0YW5jZSwgSG9wZSB0byBoZWFyDQpmcm9tIHlvdSBm
+b3IgbW9yZSBkZXRhaWxzLg0KDQpXYXJtZXN0IHJlZ2FyZHMNCk1ycyBBaXNoYSBHYWRkYWZpDQoN
+Ctin2YTYs9mE2KfZhSDYudmE2YrZg9mF2IwNCg0K2YTYr9mKINin2YLYqtix2KfYrSDYudmF2YQg
+2YTZgyDZiNij2K3Yqtin2Kwg2KXZhNmJINin2YTYp9it2KrYsdin2YUg2KfZhNmF2KrYqNin2K/Z
+hCDZiNin2YTYq9mC2Kkg2IwNCtin2YTYtdiv2YIg2YjYp9mE2LTZgdin2YHZitipINmI2KfZhNiv
+2LnZhSDYp9mE2YPYp9mB2Yog2YjYp9mE2YXYs9in2LnYr9ipINiMINmI2YbYo9mF2YQg2KPZhiDZ
+htiz2YXYuQ0K2YXZhtmDINmE2YXYstmK2K8g2YXZhiDYp9mE2KrZgdin2LXZitmELg0KDQrYo9it
+2LEg2KfZhNiq2K3Zitin2KoNCtin2YTYs9mK2K/YqSDYudin2KbYtNipINin2YTZgtiw2KfZgdmK
+DQo=
