@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A39DDCCB9
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 19:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3613ADCCC5
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 19:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505514AbfJRR1d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 13:27:33 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:47188 "EHLO foss.arm.com"
+        id S2502295AbfJRR1u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 13:27:50 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:47222 "EHLO foss.arm.com"
         rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2505494AbfJRR1c (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Oct 2019 13:27:32 -0400
+        id S1727068AbfJRR1p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 18 Oct 2019 13:27:45 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 929FB143D;
-        Fri, 18 Oct 2019 10:27:08 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C4A414BF;
+        Fri, 18 Oct 2019 10:27:11 -0700 (PDT)
 Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id ACA573F718;
-        Fri, 18 Oct 2019 10:27:05 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CB2D03F718;
+        Fri, 18 Oct 2019 10:27:08 -0700 (PDT)
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Jones <drjones@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
@@ -38,9 +38,9 @@ Cc:     Andrew Jones <drjones@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
         Amit Kachhap <amit.kachhap@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 11/12] arm64: BTI: Reset BTYPE when skipping emulated instructions
-Date:   Fri, 18 Oct 2019 18:25:44 +0100
-Message-Id: <1571419545-20401-12-git-send-email-Dave.Martin@arm.com>
+Subject: [PATCH v3 12/12] KVM: arm64: BTI: Reset BTYPE when skipping emulated instructions
+Date:   Fri, 18 Oct 2019 18:25:45 +0100
+Message-Id: <1571419545-20401-13-git-send-email-Dave.Martin@arm.com>
 X-Mailer: git-send-email 2.1.4
 In-Reply-To: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
 References: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
@@ -66,24 +66,33 @@ Changes since v2:
    arm64_skip_faulting_instruction().
 
    PSTATE may grow, but we should address this more generally rather
-   than with point hacks in this series.
----
- arch/arm64/kernel/traps.c | 2 ++
- 1 file changed, 2 insertions(+)
+   than with point hacks.
 
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 3af2768..5c46a7b 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -331,6 +331,8 @@ void arm64_skip_faulting_instruction(struct pt_regs *regs, unsigned long size)
+ * Add { } around if () clause that was unbalanced by the previous
+   patch.
+---
+ arch/arm64/include/asm/kvm_emulate.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
+index d69c1ef..f41bfdee 100644
+--- a/arch/arm64/include/asm/kvm_emulate.h
++++ b/arch/arm64/include/asm/kvm_emulate.h
+@@ -450,10 +450,12 @@ static inline unsigned long vcpu_data_host_to_guest(struct kvm_vcpu *vcpu,
  
- 	if (regs->pstate & PSR_MODE32_BIT)
- 		advance_itstate(regs);
-+	else
-+		regs->pstate &= ~PSR_BTYPE_MASK;
- }
+ static inline void kvm_skip_instr(struct kvm_vcpu *vcpu, bool is_wide_instr)
+ {
+-	if (vcpu_mode_is_32bit(vcpu))
++	if (vcpu_mode_is_32bit(vcpu)) {
+ 		kvm_skip_instr32(vcpu, is_wide_instr);
+-	else
++	} else {
+ 		*vcpu_pc(vcpu) += 4;
++		*vcpu_cpsr(vcpu) &= ~PSR_BTYPE_MASK;
++	}
  
- static LIST_HEAD(undef_hook);
+ 	/* advance the singlestep state machine */
+ 	*vcpu_cpsr(vcpu) &= ~DBG_SPSR_SS;
 -- 
 2.1.4
 
