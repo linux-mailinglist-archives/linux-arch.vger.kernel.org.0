@@ -2,31 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81825DBC26
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 06:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B40DBC5D
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 07:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395184AbfJRE4l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 00:56:41 -0400
-Received: from condef-04.nifty.com ([202.248.20.69]:50603 "EHLO
-        condef-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389158AbfJRE4k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Oct 2019 00:56:40 -0400
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-04.nifty.com with ESMTP id x9I4WAKv004997;
+        id S1726139AbfJRFDN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 01:03:13 -0400
+Received: from condef-05.nifty.com ([202.248.20.70]:41036 "EHLO
+        condef-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391456AbfJRFDM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Oct 2019 01:03:12 -0400
+X-Greylist: delayed 313 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Oct 2019 01:03:11 EDT
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-05.nifty.com with ESMTP id x9I4WACR013408;
         Fri, 18 Oct 2019 13:32:11 +0900
 Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id x9I4Vnxp019790;
-        Fri, 18 Oct 2019 13:31:50 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x9I4Vnxp019790
+        by conuserg-10.nifty.com with ESMTP id x9I4Vnxo019790;
+        Fri, 18 Oct 2019 13:31:49 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x9I4Vnxo019790
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1571373111;
-        bh=Yyl1cS1eYVt+sVWWGmNXm8/lysOK1IQALljWjASqSwg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mvf2/0meUo3qXcLS0yRxbLFLzQ+erxo70YfKJZmlA25fJDuP2VseTcvr9gJKHMupY
-         QqSYjcZb2Fyu8qj6leuy+QIphDCaA5hnLxTZzZJ3/DshvKu2ahgdDY/Zkl123ZgE/K
-         5AUFrRD51GbkMkU+poOBcA4Qm4BfzNctOY0AbDj6H8syd2hF2zP0Ah/Q7wKS0CyXrW
-         NVsez3NL1L8tWcK5/FgfHqgEMsMVS9/LuI8lg0vtgKQAHW0WGswp7H5+gza4Xy0w6v
-         DOMl4b1Og+CeoxULFShX2rsVw1pAoTBYLrZXYawP9qrhMYwLI+kqMeNd5jFVoL+wd9
-         wMd1OJtAp+xww==
+        s=dec2015msa; t=1571373110;
+        bh=ZaAH2x9mWYqIOpONit+tZI2RI9D6E0HqE7mG3rRzXzI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CUhjpJ5ddQUXB2baNZoqOnqabHsSVW6nlQbA9B5ptLnw9/9+ad/ikRHUQkcfEh2NJ
+         PRoIvFwOqTVcsl+Cq8hjOaTYyZjXJhbrIkfS45DGqGMhaTYTbZEFPHRdel4Mc89OS1
+         fWKH9sABQqrXAriGh4HQIMSWQckqbytg5tIXyBzWdyXwZgP5j6z/GCRGnfXFCYj5Wp
+         mw8nDFGNCJTIaTlLOtxXkPc8Ia5BSImKHoGaY5Odz+Dts9os7OFs2z2oAgMWMWurcQ
+         vAwYzVcqjQmiyMYIA7lOuuWMKe9FIOtqZIBhH+s9xmlVrUzwIXVmxJzSIMX3U/MITc
+         sh2WSkLYYJFjQ==
 X-Nifty-SrcIP: [153.142.97.92]
 From:   Masahiro Yamada <yamada.masahiro@socionext.com>
 To:     linux-kernel@vger.kernel.org, Jessica Yu <jeyu@kernel.org>
@@ -34,21 +35,24 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
-Subject: [PATCH 2/2] asm-generic/export.h: remove unneeded __kcrctab_* symbols
-Date:   Fri, 18 Oct 2019 13:31:48 +0900
-Message-Id: <20191018043148.6285-2-yamada.masahiro@socionext.com>
+Subject: [PATCH 1/2] asm-generic/export.h: make __ksymtab_* local symbols
+Date:   Fri, 18 Oct 2019 13:31:47 +0900
+Message-Id: <20191018043148.6285-1-yamada.masahiro@socionext.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191018043148.6285-1-yamada.masahiro@socionext.com>
-References: <20191018043148.6285-1-yamada.masahiro@socionext.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-EXPORT_SYMBOL from assembly code produces an unused symbol __kcrctab_*.
+For EXPORT_SYMBOL from C files, <linux/export.h> defines __ksymtab_*
+as local symbols.
 
-kcrctab is used as a section name (prefixed with three underscores),
-but never used as a symbol.
+For EXPORT_SYMBOL from assembly, in contrast, <asm-generic/export.h>
+produces globally-visible __ksymtab_* symbols due to this .globl
+directive.
+
+I do not understand why this must be global.  It still works without
+this .globl directive.
 
 Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
@@ -57,17 +61,17 @@ Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
  1 file changed, 1 deletion(-)
 
 diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
-index 80ef2dc0c8be..a3983e2ce0fd 100644
+index fa577978fbbd..80ef2dc0c8be 100644
 --- a/include/asm-generic/export.h
 +++ b/include/asm-generic/export.h
-@@ -43,7 +43,6 @@ __kstrtab_\name:
- #ifdef CONFIG_MODVERSIONS
- 	.section ___kcrctab\sec+\name,"a"
- 	.balign KCRC_ALIGN
--__kcrctab_\name:
- #if defined(CONFIG_MODULE_REL_CRCS)
- 	.long __crc_\name - .
- #else
+@@ -31,7 +31,6 @@
+  */
+ .macro ___EXPORT_SYMBOL name,val,sec
+ #ifdef CONFIG_MODULES
+-	.globl __ksymtab_\name
+ 	.section ___ksymtab\sec+\name,"a"
+ 	.balign KSYM_ALIGN
+ __ksymtab_\name:
 -- 
 2.17.1
 
