@@ -2,97 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3613ADCCC5
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 19:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06D9DCCEE
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 19:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502295AbfJRR1u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 13:27:50 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:47222 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1727068AbfJRR1p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Oct 2019 13:27:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C4A414BF;
-        Fri, 18 Oct 2019 10:27:11 -0700 (PDT)
-Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CB2D03F718;
-        Fri, 18 Oct 2019 10:27:08 -0700 (PDT)
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Jones <drjones@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        =?UTF-8?q?Kristina=20Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Paul Elliott <paul.elliott@arm.com>,
+        id S2410564AbfJRRhj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 13:37:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33058 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405459AbfJRRhj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 18 Oct 2019 13:37:39 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22E01222BD;
+        Fri, 18 Oct 2019 17:37:37 +0000 (UTC)
+Date:   Fri, 18 Oct 2019 13:37:35 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Borislav Petkov <bp@suse.de>
+Cc:     tip-bot2 for Jiri Slaby <tip-bot2@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>, "H. Peter Anvin" <hpa@zytor.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-arch@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Sudakshina Das <sudi.das@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 12/12] KVM: arm64: BTI: Reset BTYPE when skipping emulated instructions
-Date:   Fri, 18 Oct 2019 18:25:45 +0100
-Message-Id: <1571419545-20401-13-git-send-email-Dave.Martin@arm.com>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
-References: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
+        Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>
+Subject: Re: [tip: x86/asm] x86/asm/ftrace: Mark function_hook as function
+Message-ID: <20191018133735.77e90e36@gandalf.local.home>
+In-Reply-To: <20191018171354.GB20368@zn.tnic>
+References: <20191011115108.12392-22-jslaby@suse.cz>
+        <157141622788.29376.4016565749507481510.tip-bot2@tip-bot2>
+        <20191018124800.0a7006bb@gandalf.local.home>
+        <20191018124956.764ac42e@gandalf.local.home>
+        <20191018171354.GB20368@zn.tnic>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since normal execution of any non-branch instruction resets the
-PSTATE BTYPE field to 0, so do the same thing when emulating a
-trapped instruction.
+On Fri, 18 Oct 2019 19:13:54 +0200
+Borislav Petkov <bp@suse.de> wrote:
 
-Branches don't trap directly, so we should never need to assign a
-non-zero value to BTYPE here.
+> On Fri, Oct 18, 2019 at 12:49:56PM -0400, Steven Rostedt wrote:
+> > On Fri, 18 Oct 2019 12:48:00 -0400
+> > Steven Rostedt <rostedt@goodmis.org> wrote:
+> >   
+> > > > Relabel function_hook to be marked really as a function. It is called
+> > > > from C and has the same expectations towards the stack etc.    
+> > >   
+> > 
+> > And to go even further, it *does not* have the same expectations
+> > towards the stack.
+> > 
+> > I think this patch should not be applied.  
+> 
+> There are a couple more markings like that now:
+> 
+> $ git grep function_hook
+> Documentation/asm-annotations.rst:120:    SYM_FUNC_START(function_hook)
+> Documentation/asm-annotations.rst:122:    SYM_FUNC_END(function_hook)
+> arch/x86/kernel/ftrace_32.S:15:# define function_hook   __fentry__
+> arch/x86/kernel/ftrace_32.S:24:SYM_FUNC_START(function_hook)
+> arch/x86/kernel/ftrace_32.S:26:SYM_FUNC_END(function_hook)
+> arch/x86/kernel/ftrace_64.S:17:# define function_hook   __fentry__
+> arch/x86/kernel/ftrace_64.S:135:SYM_FUNC_START(function_hook)
+> arch/x86/kernel/ftrace_64.S:137:SYM_FUNC_END(function_hook)
+> arch/x86/kernel/ftrace_64.S:251:SYM_FUNC_START(function_hook)
+> arch/x86/kernel/ftrace_64.S:282:SYM_FUNC_END(function_hook)
+> 
+> Frankly, I wouldn't mark this function at all as it is special and I see
+> a little sense to have it in stack traces but maybe Jiri has another
+> angle here. I'll let him comment.
 
-Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+It just needs to be visible by modules and what not, otherwise linking
+will fail.
 
----
+> 
+> I guess with the new nomenclature that can be SYM_CODE_* now...
+> 
+> Then, this magic "function" or a global symbol with an address or
+> whatever that is (oh, there's #define trickery too) definitely deserves
+> a comment above it to explain what it is. I even have to build the .s
+> file to see what it turns into:
 
-Changes since v2:
+The #define was because we use to support mcount or __fentry__, now we
+just support __fentry__, and function_hook describes it better ;-)
 
- * Drop (u64) case when masking out PSR_BTYPE_MASK in
-   arm64_skip_faulting_instruction().
+> 
+> .globl __fentry__ ; .p2align 4, 0x90 ; __fentry__:
+>  retq
+> .type __fentry__, @function ; .size __fentry__, .-__fentry__
+> 
+> Yeah, it is called on every function entry:
+> 
+> callq  ffffffff81a01760 <__fentry__>
+> 
+> but can we please explain with a comment above it what it is?
 
-   PSTATE may grow, but we should address this more generally rather
-   than with point hacks.
+Heh, I guess we could, which would probably be quite a long comment as
+it's the key behind ftrace itself.
 
- * Add { } around if () clause that was unbalanced by the previous
-   patch.
----
- arch/arm64/include/asm/kvm_emulate.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
-index d69c1ef..f41bfdee 100644
---- a/arch/arm64/include/asm/kvm_emulate.h
-+++ b/arch/arm64/include/asm/kvm_emulate.h
-@@ -450,10 +450,12 @@ static inline unsigned long vcpu_data_host_to_guest(struct kvm_vcpu *vcpu,
- 
- static inline void kvm_skip_instr(struct kvm_vcpu *vcpu, bool is_wide_instr)
- {
--	if (vcpu_mode_is_32bit(vcpu))
-+	if (vcpu_mode_is_32bit(vcpu)) {
- 		kvm_skip_instr32(vcpu, is_wide_instr);
--	else
-+	} else {
- 		*vcpu_pc(vcpu) += 4;
-+		*vcpu_cpsr(vcpu) &= ~PSR_BTYPE_MASK;
-+	}
- 
- 	/* advance the singlestep state machine */
- 	*vcpu_cpsr(vcpu) &= ~DBG_SPSR_SS;
--- 
-2.1.4
+-- Steve
 
