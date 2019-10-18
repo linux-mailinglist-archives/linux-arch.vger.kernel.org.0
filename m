@@ -2,207 +2,456 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA154DCAD3
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 18:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9E7DCB53
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 18:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729774AbfJRQTy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 12:19:54 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:48746 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727429AbfJRQTy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Oct 2019 12:19:54 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id AA51610C0943;
-        Fri, 18 Oct 2019 16:19:53 +0000 (UTC)
-Received: from llong.remote.csb (dhcp-17-59.bos.redhat.com [10.18.17.59])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BFA125D9CA;
-        Fri, 18 Oct 2019 16:19:51 +0000 (UTC)
-Subject: Re: [PATCH v5 0/5] Add NUMA-awareness to qspinlock
-To:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
-        peterz@infradead.org, mingo@redhat.com, will.deacon@arm.com,
-        arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com
-Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com, rahul.x.yadav@oracle.com
-References: <20191016042903.61081-1-alex.kogan@oracle.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <312ebdff-b1fe-489d-384a-bb3f268500f1@redhat.com>
-Date:   Fri, 18 Oct 2019 12:19:51 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2408866AbfJRQcW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 12:32:22 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:57812 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2440098AbfJRQbF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Oct 2019 12:31:05 -0400
+Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tip-bot2@linutronix.de>)
+        id 1iLV90-0002j6-M1; Fri, 18 Oct 2019 18:30:26 +0200
+Received: from [127.0.1.1] (localhost [IPv6:::1])
+        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id 17A031C0450;
+        Fri, 18 Oct 2019 18:30:26 +0200 (CEST)
+Date:   Fri, 18 Oct 2019 16:30:25 -0000
+From:   "tip-bot2 for Jiri Slaby" <tip-bot2@linutronix.de>
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/asm] x86/asm/32: Change all ENTRY+END to SYM_CODE_*
+Cc:     Jiri Slaby <jslaby@suse.cz>, Borislav Petkov <bp@suse.de>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-arch@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "x86-ml" <x86@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
+In-Reply-To: <20191011115108.12392-27-jslaby@suse.cz>
+References: <20191011115108.12392-27-jslaby@suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <20191016042903.61081-1-alex.kogan@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Fri, 18 Oct 2019 16:19:53 +0000 (UTC)
+Message-ID: <157141622591.29376.13050811765616393654.tip-bot2@tip-bot2>
+X-Mailer: tip-git-log-daemon
+Robot-ID: <tip-bot2.linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/16/19 12:28 AM, Alex Kogan wrote:
-> Changes from v4:
-> ----------------
->
-> - Switch to a deterministic bound on the number of intra-node handoffs,
-> as suggested by Longman.
->
-> - Scan the main queue after acquiring the MCS lock and before acquiring 
-> the spinlock (pre-scan), as suggested by Longman. If no thread is found 
-> in pre-scan, try again after acquiring the spinlock, resuming from the
-> same place where pre-scan stopped.
->
-> - Convert the secondary queue to a cyclic list such that the tail’s @next
-> points to the head of the queue. Store the pointer to the secondary queue
-> tail (rather than head) in @locked. This eliminates the need for the @tail
-> field in CNA nodes, making space for fields required by the two changes
-> above.
->
-> - Change arch_mcs_spin_lock_contended() to arch_mcs_spin_lock(), and
-> fix misuse of old macro names, as suggested by Hanjun.
->
->
-> Summary
-> -------
->
-> Lock throughput can be increased by handing a lock to a waiter on the
-> same NUMA node as the lock holder, provided care is taken to avoid
-> starvation of waiters on other NUMA nodes. This patch introduces CNA
-> (compact NUMA-aware lock) as the slow path for qspinlock. It is
-> enabled through a configuration option (NUMA_AWARE_SPINLOCKS).
->
-> CNA is a NUMA-aware version of the MCS lock. Spinning threads are
-> organized in two queues, a main queue for threads running on the same
-> node as the current lock holder, and a secondary queue for threads
-> running on other nodes. Threads store the ID of the node on which
-> they are running in their queue nodes. After acquiring the MCS lock and
-> before acquiring the spinlock, the lock holder scans the main queue
-> looking for a thread running on the same node (pre-scan). If found (call
-> it thread T), all threads in the main queue between the current lock
-> holder and T are moved to the end of the secondary queue.  If such T
-> is not found, we make another scan of the main queue after acquiring 
-> the spinlock when unlocking the MCS lock (post-scan), starting at the
-> node where pre-scan stopped. If both scans fail to find such T, the
-> MCS lock is passed to the first thread in the secondary queue. If the
-> secondary queue is empty, the MCS lock is passed to the next thread in the
-> main queue. To avoid starvation of threads in the secondary queue, those
-> threads are moved back to the head of the main queue after a certain
-> number of intra-node lock hand-offs.
->
-> More details are available at https://arxiv.org/abs/1810.05600.
->
-> We have done some performance evaluation with the locktorture module
-> as well as with several benchmarks from the will-it-scale repo.
-> The following locktorture results are from an Oracle X5-4 server
-> (four Intel Xeon E7-8895 v3 @ 2.60GHz sockets with 18 hyperthreaded
-> cores each). Each number represents an average (over 25 runs) of the
-> total number of ops (x10^7) reported at the end of each run. The 
-> standard deviation is also reported in (), and in general is about 3%
-> from the average. The 'stock' kernel is v5.4.0-rc1,
-> commit d90f2df63c5c, compiled in the default configuration. 
-> 'patch-CNA' is the modified kernel with NUMA_AWARE_SPINLOCKS set; 
-> the speedup is calculated dividing 'patch-CNA' by 'stock'.
->
-> #thr  	 stock        patch-CNA   speedup (patch-CNA/stock)
->   1  2.674 (0.118)  2.736 (0.119)  1.023
->   2  2.588 (0.141)  2.603 (0.108)  1.006
->   4  4.230 (0.120)  4.220 (0.127)  0.998
->   8  5.362 (0.181)  6.679 (0.182)  1.246
->  16  6.639 (0.133)  8.050 (0.200)  1.213
->  32  7.359 (0.149)  8.792 (0.168)  1.195
->  36  7.443 (0.142)  8.873 (0.230)  1.192
->  72  6.554 (0.147)  9.317 (0.158)  1.421
-> 108  6.156 (0.093)  9.404 (0.191)  1.528
-> 142  5.659 (0.093)  9.361 (0.184)  1.654
->
-> The following tables contain throughput results (ops/us) from the same
-> setup for will-it-scale/open1_threads: 
->
-> #thr  	 stock        patch-CNA   speedup (patch-CNA/stock)
->   1  0.532 (0.002)  0.532 (0.003)  1.000
->   2  0.785 (0.024)  0.779 (0.025)  0.992
->   4  1.426 (0.018)  1.409 (0.021)  0.988
->   8  1.779 (0.101)  1.711 (0.127)  0.962
->  16  1.761 (0.093)  1.671 (0.104)  0.949
->  32  0.935 (0.063)  1.619 (0.093)  1.731
->  36  0.936 (0.082)  1.591 (0.086)  1.699
->  72  0.839 (0.043)  1.667 (0.097)  1.988
-> 108  0.842 (0.035)  1.701 (0.091)  2.021
-> 142  0.830 (0.037)  1.714 (0.098)  2.066
->
-> and will-it-scale/lock2_threads:
->
-> #thr  	 stock        patch-CNA   speedup (patch-CNA/stock)
->   1  1.555 (0.009)  1.577 (0.002)  1.014
->   2  2.644 (0.060)  2.682 (0.062)  1.014
->   4  5.159 (0.205)  5.197 (0.231)  1.007
->   8  4.302 (0.221)  4.279 (0.318)  0.995
->  16  4.259 (0.111)  4.087 (0.163)  0.960
->  32  2.583 (0.112)  4.077 (0.120)  1.578
->  36  2.499 (0.106)  4.076 (0.106)  1.631
->  72  1.979 (0.085)  4.077 (0.123)  2.061
-> 108  2.096 (0.090)  4.043 (0.130)  1.929
-> 142  1.913 (0.109)  3.984 (0.108)  2.082
->
-> Our evaluation shows that CNA also improves performance of user 
-> applications that have hot pthread mutexes. Those mutexes are 
-> blocking, and waiting threads park and unpark via the futex 
-> mechanism in the kernel. Given that kernel futex chains, which
-> are hashed by the mutex address, are each protected by a 
-> chain-specific spin lock, the contention on a user-mode mutex 
-> translates into contention on a kernel level spinlock. 
->
-> Here are the results for the leveldb ‘readrandom’ benchmark:
->
-> #thr  	 stock        patch-CNA   speedup (patch-CNA/stock)
->   1  0.532 (0.007)  0.535 (0.015)  1.006
->   2  0.665 (0.030)  0.673 (0.034)  1.011
->   4  0.715 (0.023)  0.716 (0.026)  1.002
->   8  0.686 (0.023)  0.686 (0.024)  1.001
->  16  0.719 (0.030)  0.737 (0.025)  1.025
->  32  0.740 (0.034)  0.959 (0.105)  1.296
->  36  0.730 (0.024)  1.079 (0.112)  1.478
->  72  0.652 (0.018)  1.160 (0.024)  1.778
-> 108  0.622 (0.016)  1.157 (0.028)  1.860
-> 142  0.600 (0.015)  1.145 (0.035)  1.908
->
-> Additional performance numbers are available in previous revisions
-> of the series.
->
-> Further comments are welcome and appreciated.
->
-> Alex Kogan (5):
->   locking/qspinlock: Rename mcs lock/unlock macros and make them more
->     generic
->   locking/qspinlock: Refactor the qspinlock slow path
->   locking/qspinlock: Introduce CNA into the slow path of qspinlock
->   locking/qspinlock: Introduce starvation avoidance into CNA
->   locking/qspinlock: Introduce the shuffle reduction optimization into
->     CNA
->
->  arch/arm/include/asm/mcs_spinlock.h |   6 +-
->  arch/x86/Kconfig                    |  19 +++
->  arch/x86/include/asm/qspinlock.h    |   4 +
->  arch/x86/kernel/alternative.c       |  41 +++++
->  include/asm-generic/mcs_spinlock.h  |   4 +-
->  kernel/locking/mcs_spinlock.h       |  20 +--
->  kernel/locking/qspinlock.c          |  77 ++++++++-
->  kernel/locking/qspinlock_cna.h      | 312 ++++++++++++++++++++++++++++++++++++
->  kernel/locking/qspinlock_paravirt.h |   2 +-
->  9 files changed, 462 insertions(+), 23 deletions(-)
->  create mode 100644 kernel/locking/qspinlock_cna.h
->
-I have reviewed this patchset. Asides from a few issues I had raised in
-earlier emails, I don't see other problems in the code. Thanks for your
-hard work. I think we are almost there.
+The following commit has been merged into the x86/asm branch of tip:
 
-Cheers,
-Longman
+Commit-ID:     5e63306f1629527799e34a9814dd8035df6ca854
+Gitweb:        https://git.kernel.org/tip/5e63306f1629527799e34a9814dd8035df6ca854
+Author:        Jiri Slaby <jslaby@suse.cz>
+AuthorDate:    Fri, 11 Oct 2019 13:51:06 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Fri, 18 Oct 2019 12:00:43 +02:00
 
+x86/asm/32: Change all ENTRY+END to SYM_CODE_*
+
+Change all assembly code which is marked using END (and not ENDPROC) to
+appropriate new markings SYM_CODE_START and SYM_CODE_END.
+
+And since the last user of END on X86 is gone now, make sure that END is
+not defined there.
+
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Andrey Ryabinin <aryabinin@virtuozzo.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: linux-arch@vger.kernel.org
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: x86-ml <x86@kernel.org>
+Link: https://lkml.kernel.org/r/20191011115108.12392-27-jslaby@suse.cz
+---
+ arch/x86/entry/entry_32.S   | 104 +++++++++++++++++------------------
+ arch/x86/kernel/ftrace_32.S |   8 +--
+ include/linux/linkage.h     |   2 +-
+ 3 files changed, 58 insertions(+), 56 deletions(-)
+
+diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
+index 64fe7aa..0ecc12f 100644
+--- a/arch/x86/entry/entry_32.S
++++ b/arch/x86/entry/entry_32.S
+@@ -709,7 +709,7 @@
+  * %eax: prev task
+  * %edx: next task
+  */
+-ENTRY(__switch_to_asm)
++SYM_CODE_START(__switch_to_asm)
+ 	/*
+ 	 * Save callee-saved registers
+ 	 * This must match the order in struct inactive_task_frame
+@@ -748,7 +748,7 @@ ENTRY(__switch_to_asm)
+ 	popl	%ebp
+ 
+ 	jmp	__switch_to
+-END(__switch_to_asm)
++SYM_CODE_END(__switch_to_asm)
+ 
+ /*
+  * The unwinder expects the last frame on the stack to always be at the same
+@@ -774,7 +774,7 @@ ENDPROC(schedule_tail_wrapper)
+  * ebx: kernel thread func (NULL for user thread)
+  * edi: kernel thread arg
+  */
+-ENTRY(ret_from_fork)
++SYM_CODE_START(ret_from_fork)
+ 	call	schedule_tail_wrapper
+ 
+ 	testl	%ebx, %ebx
+@@ -797,7 +797,7 @@ ENTRY(ret_from_fork)
+ 	 */
+ 	movl	$0, PT_EAX(%esp)
+ 	jmp	2b
+-END(ret_from_fork)
++SYM_CODE_END(ret_from_fork)
+ 
+ /*
+  * Return to user mode is not as complex as all this looks,
+@@ -1161,7 +1161,7 @@ ENDPROC(entry_INT80_32)
+  * We pack 1 stub into every 8-byte block.
+  */
+ 	.align 8
+-ENTRY(irq_entries_start)
++SYM_CODE_START(irq_entries_start)
+     vector=FIRST_EXTERNAL_VECTOR
+     .rept (FIRST_SYSTEM_VECTOR - FIRST_EXTERNAL_VECTOR)
+ 	pushl	$(~vector+0x80)			/* Note: always in signed byte range */
+@@ -1169,11 +1169,11 @@ ENTRY(irq_entries_start)
+ 	jmp	common_interrupt
+ 	.align	8
+     .endr
+-END(irq_entries_start)
++SYM_CODE_END(irq_entries_start)
+ 
+ #ifdef CONFIG_X86_LOCAL_APIC
+ 	.align 8
+-ENTRY(spurious_entries_start)
++SYM_CODE_START(spurious_entries_start)
+     vector=FIRST_SYSTEM_VECTOR
+     .rept (NR_VECTORS - FIRST_SYSTEM_VECTOR)
+ 	pushl	$(~vector+0x80)			/* Note: always in signed byte range */
+@@ -1181,7 +1181,7 @@ ENTRY(spurious_entries_start)
+ 	jmp	common_spurious
+ 	.align	8
+     .endr
+-END(spurious_entries_start)
++SYM_CODE_END(spurious_entries_start)
+ 
+ SYM_CODE_START_LOCAL(common_spurious)
+ 	ASM_CLAC
+@@ -1230,14 +1230,14 @@ ENDPROC(name)
+ /* The include is where all of the SMP etc. interrupts come from */
+ #include <asm/entry_arch.h>
+ 
+-ENTRY(coprocessor_error)
++SYM_CODE_START(coprocessor_error)
+ 	ASM_CLAC
+ 	pushl	$0
+ 	pushl	$do_coprocessor_error
+ 	jmp	common_exception
+-END(coprocessor_error)
++SYM_CODE_END(coprocessor_error)
+ 
+-ENTRY(simd_coprocessor_error)
++SYM_CODE_START(simd_coprocessor_error)
+ 	ASM_CLAC
+ 	pushl	$0
+ #ifdef CONFIG_X86_INVD_BUG
+@@ -1249,96 +1249,96 @@ ENTRY(simd_coprocessor_error)
+ 	pushl	$do_simd_coprocessor_error
+ #endif
+ 	jmp	common_exception
+-END(simd_coprocessor_error)
++SYM_CODE_END(simd_coprocessor_error)
+ 
+-ENTRY(device_not_available)
++SYM_CODE_START(device_not_available)
+ 	ASM_CLAC
+ 	pushl	$-1				# mark this as an int
+ 	pushl	$do_device_not_available
+ 	jmp	common_exception
+-END(device_not_available)
++SYM_CODE_END(device_not_available)
+ 
+ #ifdef CONFIG_PARAVIRT
+-ENTRY(native_iret)
++SYM_CODE_START(native_iret)
+ 	iret
+ 	_ASM_EXTABLE(native_iret, iret_exc)
+-END(native_iret)
++SYM_CODE_END(native_iret)
+ #endif
+ 
+-ENTRY(overflow)
++SYM_CODE_START(overflow)
+ 	ASM_CLAC
+ 	pushl	$0
+ 	pushl	$do_overflow
+ 	jmp	common_exception
+-END(overflow)
++SYM_CODE_END(overflow)
+ 
+-ENTRY(bounds)
++SYM_CODE_START(bounds)
+ 	ASM_CLAC
+ 	pushl	$0
+ 	pushl	$do_bounds
+ 	jmp	common_exception
+-END(bounds)
++SYM_CODE_END(bounds)
+ 
+-ENTRY(invalid_op)
++SYM_CODE_START(invalid_op)
+ 	ASM_CLAC
+ 	pushl	$0
+ 	pushl	$do_invalid_op
+ 	jmp	common_exception
+-END(invalid_op)
++SYM_CODE_END(invalid_op)
+ 
+-ENTRY(coprocessor_segment_overrun)
++SYM_CODE_START(coprocessor_segment_overrun)
+ 	ASM_CLAC
+ 	pushl	$0
+ 	pushl	$do_coprocessor_segment_overrun
+ 	jmp	common_exception
+-END(coprocessor_segment_overrun)
++SYM_CODE_END(coprocessor_segment_overrun)
+ 
+-ENTRY(invalid_TSS)
++SYM_CODE_START(invalid_TSS)
+ 	ASM_CLAC
+ 	pushl	$do_invalid_TSS
+ 	jmp	common_exception
+-END(invalid_TSS)
++SYM_CODE_END(invalid_TSS)
+ 
+-ENTRY(segment_not_present)
++SYM_CODE_START(segment_not_present)
+ 	ASM_CLAC
+ 	pushl	$do_segment_not_present
+ 	jmp	common_exception
+-END(segment_not_present)
++SYM_CODE_END(segment_not_present)
+ 
+-ENTRY(stack_segment)
++SYM_CODE_START(stack_segment)
+ 	ASM_CLAC
+ 	pushl	$do_stack_segment
+ 	jmp	common_exception
+-END(stack_segment)
++SYM_CODE_END(stack_segment)
+ 
+-ENTRY(alignment_check)
++SYM_CODE_START(alignment_check)
+ 	ASM_CLAC
+ 	pushl	$do_alignment_check
+ 	jmp	common_exception
+-END(alignment_check)
++SYM_CODE_END(alignment_check)
+ 
+-ENTRY(divide_error)
++SYM_CODE_START(divide_error)
+ 	ASM_CLAC
+ 	pushl	$0				# no error code
+ 	pushl	$do_divide_error
+ 	jmp	common_exception
+-END(divide_error)
++SYM_CODE_END(divide_error)
+ 
+ #ifdef CONFIG_X86_MCE
+-ENTRY(machine_check)
++SYM_CODE_START(machine_check)
+ 	ASM_CLAC
+ 	pushl	$0
+ 	pushl	machine_check_vector
+ 	jmp	common_exception
+-END(machine_check)
++SYM_CODE_END(machine_check)
+ #endif
+ 
+-ENTRY(spurious_interrupt_bug)
++SYM_CODE_START(spurious_interrupt_bug)
+ 	ASM_CLAC
+ 	pushl	$0
+ 	pushl	$do_spurious_interrupt_bug
+ 	jmp	common_exception
+-END(spurious_interrupt_bug)
++SYM_CODE_END(spurious_interrupt_bug)
+ 
+ #ifdef CONFIG_XEN_PV
+ ENTRY(xen_hypervisor_callback)
+@@ -1442,11 +1442,11 @@ BUILD_INTERRUPT3(hv_stimer0_callback_vector, HYPERV_STIMER0_VECTOR,
+ 
+ #endif /* CONFIG_HYPERV */
+ 
+-ENTRY(page_fault)
++SYM_CODE_START(page_fault)
+ 	ASM_CLAC
+ 	pushl	$do_page_fault
+ 	jmp	common_exception_read_cr2
+-END(page_fault)
++SYM_CODE_END(page_fault)
+ 
+ SYM_CODE_START_LOCAL_NOALIGN(common_exception_read_cr2)
+ 	/* the function address is in %gs's slot on the stack */
+@@ -1495,7 +1495,7 @@ SYM_CODE_START_LOCAL_NOALIGN(common_exception)
+ 	jmp	ret_from_exception
+ SYM_CODE_END(common_exception)
+ 
+-ENTRY(debug)
++SYM_CODE_START(debug)
+ 	/*
+ 	 * Entry from sysenter is now handled in common_exception
+ 	 */
+@@ -1503,7 +1503,7 @@ ENTRY(debug)
+ 	pushl	$-1				# mark this as an int
+ 	pushl	$do_debug
+ 	jmp	common_exception
+-END(debug)
++SYM_CODE_END(debug)
+ 
+ /*
+  * NMI is doubly nasty.  It can happen on the first instruction of
+@@ -1512,7 +1512,7 @@ END(debug)
+  * switched stacks.  We handle both conditions by simply checking whether we
+  * interrupted kernel code running on the SYSENTER stack.
+  */
+-ENTRY(nmi)
++SYM_CODE_START(nmi)
+ 	ASM_CLAC
+ 
+ #ifdef CONFIG_X86_ESPFIX32
+@@ -1577,9 +1577,9 @@ ENTRY(nmi)
+ 	lss	12+4(%esp), %esp		# back to espfix stack
+ 	jmp	.Lirq_return
+ #endif
+-END(nmi)
++SYM_CODE_END(nmi)
+ 
+-ENTRY(int3)
++SYM_CODE_START(int3)
+ 	ASM_CLAC
+ 	pushl	$-1				# mark this as an int
+ 
+@@ -1590,22 +1590,22 @@ ENTRY(int3)
+ 	movl	%esp, %eax			# pt_regs pointer
+ 	call	do_int3
+ 	jmp	ret_from_exception
+-END(int3)
++SYM_CODE_END(int3)
+ 
+-ENTRY(general_protection)
++SYM_CODE_START(general_protection)
+ 	pushl	$do_general_protection
+ 	jmp	common_exception
+-END(general_protection)
++SYM_CODE_END(general_protection)
+ 
+ #ifdef CONFIG_KVM_GUEST
+-ENTRY(async_page_fault)
++SYM_CODE_START(async_page_fault)
+ 	ASM_CLAC
+ 	pushl	$do_async_page_fault
+ 	jmp	common_exception_read_cr2
+-END(async_page_fault)
++SYM_CODE_END(async_page_fault)
+ #endif
+ 
+-ENTRY(rewind_stack_do_exit)
++SYM_CODE_START(rewind_stack_do_exit)
+ 	/* Prevent any naive code from trying to unwind to our caller. */
+ 	xorl	%ebp, %ebp
+ 
+@@ -1614,4 +1614,4 @@ ENTRY(rewind_stack_do_exit)
+ 
+ 	call	do_exit
+ 1:	jmp 1b
+-END(rewind_stack_do_exit)
++SYM_CODE_END(rewind_stack_do_exit)
+diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
+index a43ed4c..b4f495b 100644
+--- a/arch/x86/kernel/ftrace_32.S
++++ b/arch/x86/kernel/ftrace_32.S
+@@ -25,7 +25,7 @@ SYM_FUNC_START(function_hook)
+ 	ret
+ SYM_FUNC_END(function_hook)
+ 
+-ENTRY(ftrace_caller)
++SYM_CODE_START(ftrace_caller)
+ 
+ #ifdef CONFIG_FRAME_POINTER
+ 	/*
+@@ -87,7 +87,7 @@ ftrace_graph_call:
+ /* This is weak to keep gas from relaxing the jumps */
+ WEAK(ftrace_stub)
+ 	ret
+-END(ftrace_caller)
++SYM_CODE_END(ftrace_caller)
+ 
+ SYM_CODE_START(ftrace_regs_caller)
+ 	/*
+@@ -166,7 +166,7 @@ SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
+ SYM_CODE_END(ftrace_regs_caller)
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+-ENTRY(ftrace_graph_caller)
++SYM_CODE_START(ftrace_graph_caller)
+ 	pushl	%eax
+ 	pushl	%ecx
+ 	pushl	%edx
+@@ -180,7 +180,7 @@ ENTRY(ftrace_graph_caller)
+ 	popl	%ecx
+ 	popl	%eax
+ 	ret
+-END(ftrace_graph_caller)
++SYM_CODE_END(ftrace_graph_caller)
+ 
+ .globl return_to_handler
+ return_to_handler:
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index 19f3d79..5ffcf72 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -129,11 +129,13 @@
+ 	SYM_FUNC_START_WEAK(name)
+ #endif
+ 
++#ifndef CONFIG_X86
+ #ifndef END
+ /* deprecated, use SYM_FUNC_END, SYM_DATA_END, or SYM_END */
+ #define END(name) \
+ 	.size name, .-name
+ #endif
++#endif /* CONFIG_X86 */
+ 
+ #ifndef CONFIG_X86_64
+ /* If symbol 'name' is treated as a subroutine (gets called, and returns)
