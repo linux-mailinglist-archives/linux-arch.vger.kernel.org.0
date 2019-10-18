@@ -2,114 +2,182 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A86E9DCB1B
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 18:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694C3DCBB7
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 18:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439885AbfJRQat (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Oct 2019 12:30:49 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:57691 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439817AbfJRQas (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Oct 2019 12:30:48 -0400
-Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tip-bot2@linutronix.de>)
-        id 1iLV9F-00033f-4e; Fri, 18 Oct 2019 18:30:41 +0200
-Received: from [127.0.1.1] (localhost [IPv6:::1])
-        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id 6C5091C04D6;
-        Fri, 18 Oct 2019 18:30:34 +0200 (CEST)
-Date:   Fri, 18 Oct 2019 16:30:34 -0000
-From:   "tip-bot2 for Jiri Slaby" <tip-bot2@linutronix.de>
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/asm] x86/asm/suspend: Use SYM_DATA for data
-Cc:     Jiri Slaby <jslaby@suse.cz>, Borislav Petkov <bp@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Len Brown <len.brown@intel.com>, linux-arch@vger.kernel.org,
-        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "x86-ml" <x86@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
-In-Reply-To: <20191011115108.12392-3-jslaby@suse.cz>
-References: <20191011115108.12392-3-jslaby@suse.cz>
+        id S2403904AbfJRQlP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 12:41:15 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:45618 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1728368AbfJRQlP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 18 Oct 2019 12:41:15 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFA99FD9;
+        Fri, 18 Oct 2019 09:40:43 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E85553F718;
+        Fri, 18 Oct 2019 09:40:40 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 17:40:38 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Florian Weimer <fweimer@redhat.com>,
+        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>
+Subject: Re: [PATCH v2 09/12] arm64: traps: Fix inconsistent faulting
+ instruction skipping
+Message-ID: <20191018164037.GG27757@arm.com>
+References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
+ <1570733080-21015-10-git-send-email-Dave.Martin@arm.com>
+ <20191011152453.GF33537@lakrids.cambridge.arm.com>
+ <20191015152108.GX27757@arm.com>
+ <20191015164204.GC24604@lakrids.cambridge.arm.com>
+ <20191015164904.GY27757@arm.com>
 MIME-Version: 1.0
-Message-ID: <157141623420.29376.9224656338909570146.tip-bot2@tip-bot2>
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191015164904.GY27757@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following commit has been merged into the x86/asm branch of tip:
+On Tue, Oct 15, 2019 at 05:49:05PM +0100, Dave Martin wrote:
+> On Tue, Oct 15, 2019 at 05:42:04PM +0100, Mark Rutland wrote:
+> > On Tue, Oct 15, 2019 at 04:21:09PM +0100, Dave Martin wrote:
+> > > On Fri, Oct 11, 2019 at 04:24:53PM +0100, Mark Rutland wrote:
+> > > > On Thu, Oct 10, 2019 at 07:44:37PM +0100, Dave Martin wrote:
+> > > > > Correct skipping of an instruction on AArch32 works a bit
+> > > > > differently from AArch64, mainly due to the different CPSR/PSTATE
+> > > > > semantics.
+> > > > > 
+> > > > > There have been various attempts to get this right.  Currenty
+> > > > > arm64_skip_faulting_instruction() mostly does the right thing, but
+> > > > > does not advance the IT state machine for the AArch32 case.
+> > > > > 
+> > > > > arm64_compat_skip_faulting_instruction() handles the IT state
+> > > > > machine but is local to traps.c, and porting other code to use it
+> > > > > will make a mess since there are some call sites that apply for
+> > > > > both the compat and native cases.
+> > > > > 
+> > > > > Since manual instruction skipping implies a trap, it's a relatively
+> > > > > slow path.
+> > > > > 
+> > > > > So, make arm64_skip_faulting_instruction() handle both compat and
+> > > > > native, and get rid of the arm64_compat_skip_faulting_instruction()
+> > > > > special case.
+> > > > > 
+> > > > > Fixes: 32a3e635fb0e ("arm64: compat: Add CNTFRQ trap handler")
+> > > > > Fixes: 1f1c014035a8 ("arm64: compat: Add condition code checks and IT advance")
+> > > > > Fixes: 6436beeee572 ("arm64: Fix single stepping in kernel traps")
+> > > > > Fixes: bd35a4adc413 ("arm64: Port SWP/SWPB emulation support from arm")
+> > > > > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> > > > > ---
+> > > > >  arch/arm64/kernel/traps.c | 18 ++++++++----------
+> > > > >  1 file changed, 8 insertions(+), 10 deletions(-)
+> > > > 
+> > > > This looks good to me; it's certainly easier to reason about.
+> > > > 
+> > > > I couldn't spot a place where we do the wrong thing today, given AFAICT
+> > > > all the instances in arch/arm64/kernel/armv8_deprecated.c would be
+> > > > UNPREDICTABLE within an IT block.
+> > > > 
+> > > > It might be worth calling out an example in the commit message to
+> > > > justify the fixes tags.
+> > > 
+> > > IIRC I found no bug here; rather we have pointlessly fragmented code,
+> > > so I followed the "if fixing the same bug in multiple places, merge
+> > > those places so you need only fix it in one place next time" rule.
+> > 
+> > Sure thing, that makes sense to me.
+> > 
+> > > Since arm64_skip_faulting_instruction() is most of the way to being
+> > > generically usable anyway, this series merges all the special-case
+> > > handling into it.
+> > > 
+> > > I could add something like
+> > > 
+> > > --8<--
+> > > 
+> > > This allows this fiddly operation to be maintained in a single
+> > > place rather than trying to maintain fragmented versions spread
+> > > around arch/arm64.
+> > > 
+> > > -->8--
+> > > 
+> > > Any good?
+> > 
+> > My big concern is that the commit message reads as a fix, implying that
+> > there's an existing correctness bug. I think that simplifying it to make
+> > it clearer that it's a cleanup/improvement would be preferable.
+> > 
+> > How about:
+> > 
+> > | arm64: unify native/compat instruction skipping
+> > |
+> > | Skipping of an instruction on AArch32 works a bit differently from
+> > | AArch64, mainly due to the different CPSR/PSTATE semantics.
+> > |
+> > | Currently arm64_skip_faulting_instruction() is only suitable for
+> > | AArch64, and arm64_compat_skip_faulting_instruction() handles the IT
+> > | state machine but is local to traps.c.
+> > | 
+> > | Since manual instruction skipping implies a trap, it's a relatively
+> > | slow path.
+> > | 
+> > | So, make arm64_skip_faulting_instruction() handle both compat and
+> > | native, and get rid of the arm64_compat_skip_faulting_instruction()
+> > | special case.
+> > |
+> > | Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> 
+> And drop the Fixes tags.  Yes, I think that's reasonable.
+> 
+> I think I was probably glossing over the fact that we don't need to get
+> the ITSTATE machine advance correct for the compat insn emulation; as
+> you say, I can't see what else this patch "fixes".
+> 
+> > With that, feel free to add:
+> >
+> > Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> 
+> Thanks!
+> 
+> > We could even point out that the armv8_deprecated cases are
+> > UNPREDICTABLE in an IT block, and correctly emulated either way.
+> 
+> Yes, I'll add something along those lines.
 
-Commit-ID:     37503f734e9de314c4e9a1eba33e9e7d8ec80839
-Gitweb:        https://git.kernel.org/tip/37503f734e9de314c4e9a1eba33e9e7d8ec80839
-Author:        Jiri Slaby <jslaby@suse.cz>
-AuthorDate:    Fri, 11 Oct 2019 13:50:42 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 18 Oct 2019 09:50:25 +02:00
+Taking another look, I now can't track down where e.g., SWP in an IT
+block is specified to be UNPREDICTABLE.  I only see e.g.,
+ARM DDI 0487E.a Section 1.8.2 ("F1.8.2 Partial deprecation of IT"),
+which only deprecates the affected instructions.
 
-x86/asm/suspend: Use SYM_DATA for data
+The legacy AArch32 SWP{B} insn is obsoleted by ARMv8, but the whole
+point of the armv8_deprecated stuff is to provide some backwards
+compatiblity with v7.
 
-Some global data in the suspend code were marked as `ENTRY'. ENTRY was
-intended for functions and shall be paired with ENDPROC. ENTRY also
-aligns symbols to 16 bytes which creates unnecessary holes.
 
-Note that:
+So, this needs a closer look.
 
-* saved_magic (long) in wakeup_32 is still prepended by section's ALIGN
-* saved_magic (quad) in wakeup_64 follows a bunch of quads which are
-  aligned (but need not be aligned to 16)
+I'll leave the Fixes tags for now, so that the archaeology doesn't need
+to redone if we decide that this patch does fix incorrect behaviour.
 
-Since historical markings are being dropped, make proper use of newly
-added SYM_DATA in this code.
-
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: x86-ml <x86@kernel.org>
-Link: https://lkml.kernel.org/r/20191011115108.12392-3-jslaby@suse.cz
----
- arch/x86/kernel/acpi/wakeup_32.S | 2 +-
- arch/x86/kernel/acpi/wakeup_64.S | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/acpi/wakeup_32.S b/arch/x86/kernel/acpi/wakeup_32.S
-index e95e959..4272492 100644
---- a/arch/x86/kernel/acpi/wakeup_32.S
-+++ b/arch/x86/kernel/acpi/wakeup_32.S
-@@ -90,7 +90,7 @@ ret_point:
- 
- .data
- ALIGN
--ENTRY(saved_magic)	.long	0
-+SYM_DATA(saved_magic,	.long 0)
- saved_eip:		.long 0
- 
- # saved registers
-diff --git a/arch/x86/kernel/acpi/wakeup_64.S b/arch/x86/kernel/acpi/wakeup_64.S
-index 7f9ade1..462a20f 100644
---- a/arch/x86/kernel/acpi/wakeup_64.S
-+++ b/arch/x86/kernel/acpi/wakeup_64.S
-@@ -136,4 +136,4 @@ saved_rbx:		.quad	0
- saved_rip:		.quad	0
- saved_rsp:		.quad	0
- 
--ENTRY(saved_magic)	.quad	0
-+SYM_DATA(saved_magic,	.quad	0)
+Cheers
+---Dave
