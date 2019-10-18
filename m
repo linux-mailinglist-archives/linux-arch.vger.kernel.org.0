@@ -2,72 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A65FDB933
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2019 23:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81825DBC26
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2019 06:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441569AbfJQVmm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Oct 2019 17:42:42 -0400
-Received: from mail.sf-mail.de ([116.202.16.50]:44293 "EHLO mail.sf-mail.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2441514AbfJQVmm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 17 Oct 2019 17:42:42 -0400
-Received: (qmail 27079 invoked from network); 17 Oct 2019 21:31:57 -0000
-Received: from dslb-088-070-126-123.088.070.pools.vodafone-ip.de ([::ffff:88.70.126.123]:55060 HELO daneel.sf-tec.de) (auth=eike@sf-mail.de)
-        by mail.sf-mail.de (Qsmtpd 0.36dev) with (DHE-RSA-AES256-GCM-SHA384 encrypted) ESMTPSA
-        for <hch@lst.de>; Thu, 17 Oct 2019 23:31:57 +0200
-From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        nios2-dev@lists.rocketboards.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/21] parisc: remove __ioremap
-Date:   Thu, 17 Oct 2019 23:35:42 +0200
-Message-ID: <1650819.dOKmve5HLd@daneel.sf-tec.de>
-In-Reply-To: <20191017174554.29840-8-hch@lst.de>
-References: <20191017174554.29840-1-hch@lst.de> <20191017174554.29840-8-hch@lst.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart3002460.JnYtLPdinj"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+        id S2395184AbfJRE4l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Oct 2019 00:56:41 -0400
+Received: from condef-04.nifty.com ([202.248.20.69]:50603 "EHLO
+        condef-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389158AbfJRE4k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Oct 2019 00:56:40 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-04.nifty.com with ESMTP id x9I4WAKv004997;
+        Fri, 18 Oct 2019 13:32:11 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id x9I4Vnxp019790;
+        Fri, 18 Oct 2019 13:31:50 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x9I4Vnxp019790
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1571373111;
+        bh=Yyl1cS1eYVt+sVWWGmNXm8/lysOK1IQALljWjASqSwg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Mvf2/0meUo3qXcLS0yRxbLFLzQ+erxo70YfKJZmlA25fJDuP2VseTcvr9gJKHMupY
+         QqSYjcZb2Fyu8qj6leuy+QIphDCaA5hnLxTZzZJ3/DshvKu2ahgdDY/Zkl123ZgE/K
+         5AUFrRD51GbkMkU+poOBcA4Qm4BfzNctOY0AbDj6H8syd2hF2zP0Ah/Q7wKS0CyXrW
+         NVsez3NL1L8tWcK5/FgfHqgEMsMVS9/LuI8lg0vtgKQAHW0WGswp7H5+gza4Xy0w6v
+         DOMl4b1Og+CeoxULFShX2rsVw1pAoTBYLrZXYawP9qrhMYwLI+kqMeNd5jFVoL+wd9
+         wMd1OJtAp+xww==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kernel@vger.kernel.org, Jessica Yu <jeyu@kernel.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
+Subject: [PATCH 2/2] asm-generic/export.h: remove unneeded __kcrctab_* symbols
+Date:   Fri, 18 Oct 2019 13:31:48 +0900
+Message-Id: <20191018043148.6285-2-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191018043148.6285-1-yamada.masahiro@socionext.com>
+References: <20191018043148.6285-1-yamada.masahiro@socionext.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---nextPart3002460.JnYtLPdinj
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+EXPORT_SYMBOL from assembly code produces an unused symbol __kcrctab_*.
 
-Christoph Hellwig wrote:
-> __ioremap is always called with the _PAGE_NO_CACHE, so fold the whole
-> thing and rename it to ioremap.  This allows allows to remove the
-                                        ^^^^^^^^^^^^^
-> special EISA quirk to force _PAGE_NO_CACHE.
+kcrctab is used as a section name (prefixed with three underscores),
+but never used as a symbol.
 
-Eike
---nextPart3002460.JnYtLPdinj
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
 
------BEGIN PGP SIGNATURE-----
+ include/asm-generic/export.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCXajergAKCRBcpIk+abn8
-TkOlAJ46117xxLoFzZCiYYebEyVSrw/31gCeMRBoULeYp+iYijM534mn8tCGYHM=
-=d3J8
------END PGP SIGNATURE-----
-
---nextPart3002460.JnYtLPdinj--
-
-
+diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
+index 80ef2dc0c8be..a3983e2ce0fd 100644
+--- a/include/asm-generic/export.h
++++ b/include/asm-generic/export.h
+@@ -43,7 +43,6 @@ __kstrtab_\name:
+ #ifdef CONFIG_MODVERSIONS
+ 	.section ___kcrctab\sec+\name,"a"
+ 	.balign KCRC_ALIGN
+-__kcrctab_\name:
+ #if defined(CONFIG_MODULE_REL_CRCS)
+ 	.long __crc_\name - .
+ #else
+-- 
+2.17.1
 
