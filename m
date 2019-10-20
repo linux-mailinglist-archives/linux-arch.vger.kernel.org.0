@@ -2,61 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD01FDD87B
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Oct 2019 13:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02505DDE53
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Oct 2019 13:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725868AbfJSL0b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 19 Oct 2019 07:26:31 -0400
-Received: from mail.keramplus.com ([212.3.124.226]:26742 "EHLO
-        trixbox1.localdomain" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725777AbfJSL0b (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 19 Oct 2019 07:26:31 -0400
-Received: from 127.0.0.1 (trixbox1.localdomain [127.0.0.1])
-        by trixbox1.localdomain (Postfix) with SMTP id 54EE4C991ED;
-        Thu, 17 Oct 2019 23:28:59 +0300 (EEST)
-Received: from [119.127.145.42] by 127.0.0.1 with ESMTP id 04527050; Thu, 17 Oct 2019 23:24:21 +0200
-Message-ID: <hr0z$-74trj1$27b7oz365-co@l56.31u1>
-From:   "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-Reply-To: "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-To:     custserv@bmlsearch.com
-Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
-Date:   Thu, 17 Oct 19 23:24:21 GMT
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+        id S1726289AbfJTLtS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 20 Oct 2019 07:49:18 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:60264 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726282AbfJTLtR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Oct 2019 07:49:17 -0400
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1iM9hw-00084H-0h; Sun, 20 Oct 2019 13:49:12 +0200
+Date:   Sun, 20 Oct 2019 13:49:10 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Andy Lutomirski <luto@kernel.org>
+cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC patch 01/15] entry: Provide generic syscall entry
+ functionality
+In-Reply-To: <CALCETrXB92rZqHMyhSULWVY3Q5=t9q4N9aZFCTn4k0DMNPJfMQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.1910201347460.2090@nanos.tec.linutronix.de>
+References: <20190919150314.054351477@linutronix.de> <20190919150808.521907403@linutronix.de> <CALCETrXB92rZqHMyhSULWVY3Q5=t9q4N9aZFCTn4k0DMNPJfMQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="73D_380._.4.7"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, 20 Sep 2019, Andy Lutomirski wrote:
+> On Thu, Sep 19, 2019 at 8:09 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > +#ifndef _TIF_AUDIT
+> > +# define _TIF_AUDIT                    (0)
+> > +#endif
+> 
+> I'm wondering if these should be __TIF (double-underscore) or
+> MAYBE_TIF_ or something to avoid errors where people do flags |=
+> TIF_WHATEVER and get surprised.
 
---73D_380._.4.7
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+That's what exists today already. See arch/*/include/asm/threadinfo.h
+ 
+> > +/**
+> > + * syscall_enter_from_usermode - Check and handle work before invoking
+> > + *                              a syscall
+> > + * @regs:      Pointer to currents pt_regs
+> > + * @syscall:   The syscall number
+> > + *
+> > + * Invoked from architecture specific syscall entry code with interrupts
+> > + * enabled.
+> > + *
+> > + * Returns: The original or a modified syscall number
+> > + */
+> 
+> Maybe document that it can return -1 to skip the syscall and that, if
+> this happens, it may use syscall_set_error() or
+> syscall_set_return_value() first.  If neither of those is called and
+> -1 is returned, then the syscall will fail with ENOSYS.
 
-Greetings
+Sure.
 
-My name is Barrister Hans Erich.
+Thanks,
 
-I have a client who is interested to invest in your country, she is a well=
- known politician in her country and deserve a lucrative investment partne=
-rship with you outside her country without any delay   Please can you mana=
-ge such investment please Kindly reply for further details.
-
-Your full names ---------
-
-
-Your urgent response will be appreciated
-
-Thank you and God bless you.
-
-Barrister Hans Erich
-
-Yours sincerely,
-Barrister Hans Erich
-
---73D_380._.4.7--
+	tglx
 
