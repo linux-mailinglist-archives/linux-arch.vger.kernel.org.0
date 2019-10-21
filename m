@@ -2,44 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8979CDE5A2
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2019 09:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A210DDE635
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2019 10:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727607AbfJUH6n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Oct 2019 03:58:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47006 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727239AbfJUH6n (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 21 Oct 2019 03:58:43 -0400
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 77CC5218AC;
-        Mon, 21 Oct 2019 07:58:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571644721;
-        bh=HaNxatOx3Yl+LjuXNZSg9j6rwSnjKUPc8eLVmd61SU0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=luHraHozlqKNUHwEUrw+p/CKnNkzg4GhLnRI3IQVw1ZUnmvt4Cwl7ABV+5EzHS34g
-         CqVlZgKrjSy7nsjEnaLPBzt8i8/jWykyodKl+iP31wL1BC0A++0dn8emaiIgMxVUqa
-         6AeBtKgvcbANkPSenLQVsuD5VltHn5JOl0JQoRvI=
-Received: by mail-wr1-f50.google.com with SMTP id e11so3977103wrv.4;
-        Mon, 21 Oct 2019 00:58:41 -0700 (PDT)
-X-Gm-Message-State: APjAAAV4W1flYsylqq7vFVqeS8VJ1GRc94UTgTHPcKHekPMu1UneTyX2
-        fiut8z6q/ojUxrW+GLZU26l8jt0rhpc0sk23yzg=
-X-Google-Smtp-Source: APXvYqzvF6HJCASpTMUMf7HweDv3Hno9oEAxiqhI3GBGEOPTWQrWQiETxVnKLeVHbQ3ma/xucSMvECIDZp2EBxJkKe8=
-X-Received: by 2002:adf:ebcb:: with SMTP id v11mr17344477wrn.24.1571644719802;
- Mon, 21 Oct 2019 00:58:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191017174554.29840-1-hch@lst.de> <20191017174554.29840-21-hch@lst.de>
-In-Reply-To: <20191017174554.29840-21-hch@lst.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 21 Oct 2019 15:58:28 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ_VeBfi1uaafgtp+uA2skq-w2px12ig=5QD1O9J+PgbA@mail.gmail.com>
-Message-ID: <CAJF2gTQ_VeBfi1uaafgtp+uA2skq-w2px12ig=5QD1O9J+PgbA@mail.gmail.com>
-Subject: Re: [PATCH 20/21] csky: remove ioremap_cache
+        id S1727500AbfJUIXQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Oct 2019 04:23:16 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:33664 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726199AbfJUIXQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Oct 2019 04:23:16 -0400
+Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1iMSy0-0004QQ-CI; Mon, 21 Oct 2019 10:23:04 +0200
+Date:   Mon, 21 Oct 2019 10:23:03 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
 To:     Christoph Hellwig <hch@lst.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Michal Simek <monstr@monstr.eu>,
+cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
         Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
         Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
@@ -51,71 +32,41 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Michal Simek <monstr@monstr.eu>,
         linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-mtd@lists.infradead.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/21] x86: clean up ioremap
+In-Reply-To: <20191017174554.29840-9-hch@lst.de>
+Message-ID: <alpine.DEB.2.21.1910211019540.1904@nanos.tec.linutronix.de>
+References: <20191017174554.29840-1-hch@lst.de> <20191017174554.29840-9-hch@lst.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+On Thu, 17 Oct 2019, Christoph Hellwig wrote:
 
-On Fri, Oct 18, 2019 at 1:47 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> No driver that can be used on csky uses ioremap_cache, and this
-> interface has been deprecated in favor of memremap.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/csky/include/asm/io.h | 2 --
->  arch/csky/mm/ioremap.c     | 7 -------
->  2 files changed, 9 deletions(-)
->
-> diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
-> index a4b9fb616faa..f572605d5ad5 100644
-> --- a/arch/csky/include/asm/io.h
-> +++ b/arch/csky/include/asm/io.h
-> @@ -36,13 +36,11 @@
->  /*
->   * I/O memory mapping functions.
->   */
-> -extern void __iomem *ioremap_cache(phys_addr_t addr, size_t size);
->  extern void __iomem *__ioremap(phys_addr_t addr, size_t size, pgprot_t prot);
->  extern void iounmap(void *addr);
->
->  #define ioremap(addr, size)            __ioremap((addr), (size), pgprot_noncached(PAGE_KERNEL))
->  #define ioremap_wc(addr, size)         __ioremap((addr), (size), pgprot_writecombine(PAGE_KERNEL))
-> -#define ioremap_cache                  ioremap_cache
->
->  #include <asm-generic/io.h>
->
-> diff --git a/arch/csky/mm/ioremap.c b/arch/csky/mm/ioremap.c
-> index e13cd3497628..ae78256a56fd 100644
-> --- a/arch/csky/mm/ioremap.c
-> +++ b/arch/csky/mm/ioremap.c
-> @@ -44,13 +44,6 @@ void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot)
->  }
->  EXPORT_SYMBOL(__ioremap);
->
-> -void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size)
-> -{
-> -       return __ioremap_caller(phys_addr, size, PAGE_KERNEL,
-> -                               __builtin_return_address(0));
-> -}
-> -EXPORT_SYMBOL(ioremap_cache);
-> -
->  void iounmap(void __iomem *addr)
->  {
->         vunmap((void *)((unsigned long)addr & PAGE_MASK));
-> --
-> 2.20.1
->
+Please change the subject to:
 
+       x86/mm: Cleanup ioremap()
 
--- 
-Best Regards
- Guo Ren
+> Use ioremap as the main implemented function, and defined
 
-ML: https://lore.kernel.org/linux-csky/
+ioremap() please
+
+s/defined/define/
+
+> ioremap_nocache to it as a deprecated alias.
+
+ioremap_nocache() as a deprecated alias of ioremap().
+
+Aside of that this lacks any form of rationale. Please add some WHY to it.
+
+Should this go with your larger series or can this be picked up
+independently?
+
+Thanks,
+
+	tglx
