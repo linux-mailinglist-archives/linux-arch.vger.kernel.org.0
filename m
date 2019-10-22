@@ -2,35 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4FEDF5D3
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2019 21:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92837E021C
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2019 12:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728056AbfJUTSc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Oct 2019 15:18:32 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56598 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727211AbfJUTSc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Oct 2019 15:18:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=fevudOnh+qzvyYwh4cgGYP8coU0hdIEQmL6Wxn7ZTEg=; b=N76+hKEGeIU1JCoaLW7rvByeS
-        YLsvc+Hj24W7EQuukOz/azQ6lKzgjauLi2Rg3LswQe4mWjBPLWiCi6MUJX/wNKyC9GBUZeq0lla1C
-        pW7tiBPz87HWQcNYfCx7/OiSV2X16AZf9avJkOfy0gBP5Atm/EerUikGLypIRU7O3Y9Wk=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iMdC7-0004iU-3E; Mon, 21 Oct 2019 19:18:19 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 3E0E6274301C; Mon, 21 Oct 2019 20:18:18 +0100 (BST)
-Date:   Mon, 21 Oct 2019 20:18:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+        id S1727831AbfJVKcW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Oct 2019 06:32:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47538 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727101AbfJVKcV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 22 Oct 2019 06:32:21 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4BBB620B7C;
+        Tue, 22 Oct 2019 10:32:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571740341;
+        bh=BBu2NmvdVb1QtTKj1PLuJSKNxaY/KN55w4CVevFLVBo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KajojXmq4Opns6SbxaWXEo4/LI9mHBWmmp1W2aXPlozLc7kp6IXqE+gekpYO1rBBh
+         Lo3B4lTD3EkEg/8b2eTtKD0FyYK4bfLHiO9C1j8sNAxnDv/1KbiBJsZSxivB9ZdJ8X
+         RuK1hXqqdI+mNnwERHTL1PW0DZUUgSyTfsDLBJaY=
+Date:   Tue, 22 Oct 2019 11:32:13 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Dave Martin <Dave.Martin@arm.com>,
+        Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
         Paul Elliott <paul.elliott@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -52,67 +49,52 @@ Cc:     Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
         Suzuki Poulose <suzuki.poulose@arm.com>
 Subject: Re: [PATCH v2 04/12] arm64: docs: cpu-feature-registers: Document
  ID_AA64PFR1_EL1
-Message-ID: <20191021191818.GH4691@sirena.co.uk>
+Message-ID: <20191022103212.GA17035@willie-the-truck>
 References: <1570733080-21015-1-git-send-email-Dave.Martin@arm.com>
  <1570733080-21015-5-git-send-email-Dave.Martin@arm.com>
  <87zhi7l8qz.fsf@linaro.org>
  <20191011145148.GK27757@arm.com>
+ <20191021191818.GH4691@sirena.co.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3ecMC0kzqsE2ddMN"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20191011145148.GK27757@arm.com>
-X-Cookie: Why are you so hard to ignore?
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191021191818.GH4691@sirena.co.uk>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Oct 21, 2019 at 08:18:18PM +0100, Mark Brown wrote:
+> On Fri, Oct 11, 2019 at 03:51:49PM +0100, Dave Martin wrote:
+> > On Fri, Oct 11, 2019 at 02:19:48PM +0100, Alex Bennée wrote:
+> 
+> > > > -  4) ID_AA64ISAR1_EL1 - Instruction set attribute register 1
+> > > > +  5) ID_AA64ISAR1_EL1 - Instruction set attribute register 1
+> 
+> > > If I'm not mistaken .rst has support for auto-enumeration if the #
+> > > character is used. That might reduce the pain of re-numbering in future.
+> 
+> > Ack, though it would be good to go one better and generate this document
+> > from the cpufeature.c tables (or from some common source).  The numbers
+> > are relatively easy to maintain -- remembering to update the document
+> > at all seems the bigger maintenance headache right now.
+> 
+> I agree, it'd be better if the table were autogenerated.  Having tried
+> doing the modification to # it does mean that the document looks a bit
+> weird when viewing it as a text file in the kernel source which TBH is
+> how I suspect a lot of people will view it so given the infrequency with
+> which new registers are added I'm not sure it's worth it.
+> 
+> > I think this particular patch is superseded by similar fixes from other
+> > people, just not in torvalds/master yet.
+> 
+> Nor in -next for the minute :/
 
---3ecMC0kzqsE2ddMN
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Which patch is missing? The only other one on my radar is "docs/arm64:
+cpu-feature-registers: Documents missing visible fields" which is currently
+in -next as a8613e7070e7. "similar fixes from other people" isn't very
+specific :(
 
-On Fri, Oct 11, 2019 at 03:51:49PM +0100, Dave Martin wrote:
-> On Fri, Oct 11, 2019 at 02:19:48PM +0100, Alex Benn=E9e wrote:
-
-> > > -  4) ID_AA64ISAR1_EL1 - Instruction set attribute register 1
-> > > +  5) ID_AA64ISAR1_EL1 - Instruction set attribute register 1
-
-> > If I'm not mistaken .rst has support for auto-enumeration if the #
-> > character is used. That might reduce the pain of re-numbering in future.
-
-> Ack, though it would be good to go one better and generate this document
-> from the cpufeature.c tables (or from some common source).  The numbers
-> are relatively easy to maintain -- remembering to update the document
-> at all seems the bigger maintenance headache right now.
-
-I agree, it'd be better if the table were autogenerated.  Having tried
-doing the modification to # it does mean that the document looks a bit
-weird when viewing it as a text file in the kernel source which TBH is
-how I suspect a lot of people will view it so given the infrequency with
-which new registers are added I'm not sure it's worth it.
-
-> I think this particular patch is superseded by similar fixes from other
-> people, just not in torvalds/master yet.
-
-Nor in -next for the minute :/
-
---3ecMC0kzqsE2ddMN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2uBHkACgkQJNaLcl1U
-h9CU9wf9F4phS5RToa697wMpl5IT66Ka+2pom9TzQtuEDZYe1rqKq7cqKCbnaY0Y
-x2dqlS9LHXFtoqM27/GnP1X4IdK8YJl3lczLRHJnAeswjpgk3txBSslzq8EWZvnU
-TWwB3eDgHxSAEu5GAaVK90KjSR/hgDGUvgleTcBgdU5XJu2iE9BmzFCre9u9XVVO
-CFMXc12UFptoL/1rTnmUFv53ID8h5fkGMjlhsGjNR7wPXEzfGL2V7v7hBF6kua1O
-fga+W6QX0cZQ4vq27s9waSqGa89+rll2gDdQeACnJLjeicaXJcdWuAj/ehE7FfSc
-woSKnKCeyeeDQb96nUkXRP4IxbyhfQ==
-=9lxj
------END PGP SIGNATURE-----
-
---3ecMC0kzqsE2ddMN--
+Will
