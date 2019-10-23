@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18753E18B3
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 13:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4B2E1992
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 14:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404769AbfJWLU1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Oct 2019 07:20:27 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:35506 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391006AbfJWLU0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Oct 2019 07:20:26 -0400
-Received: by mail-qk1-f194.google.com with SMTP id w2so19365069qkf.2
-        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2019 04:20:24 -0700 (PDT)
+        id S2405227AbfJWMF1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Oct 2019 08:05:27 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:37857 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732349AbfJWMF0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Oct 2019 08:05:26 -0400
+Received: by mail-qt1-f195.google.com with SMTP id g50so17705462qtb.4
+        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2019 05:05:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5Ve45Cbkp1+dVFqJoOztS2GQsqj2qA+p+mi8OEM7kAU=;
-        b=TbSvsQtwvb0iCARqDXkCOjJ7obHJa4Meoochxt42qeMFM7MdfCUvj+V0SKkC6dHwPx
-         b0mH1aR0YHwrOt8D1WrsoBOOieSUUfCzZT1g+8gd6AcGbBg3xz1alHwxcYJSKAAyfbhC
-         XKgkwQGqjENQ7/CFD3ZANH0znPfxIRCQJQHYAND+64SM3g1palEnCnhDctZwv/zI97x0
-         SqFEHAATtyfK4ntTKyUOFZllzRt84Zbb7trTsfxOWyQO4z/nMowShb0/mIXMEi3zyDzA
-         24PD7WqXg8rjk238c8edo92Kd6AgjkcVbML6iPnQJch/xbiwUAKjm1si2+QRzUx8hjzY
-         +heg==
+        bh=OJtp5fltrRxQZPm10hqDV2fjQ+aetUfo8QY4Hex+jaU=;
+        b=PrLMsKtZzcM3uCvGiG4PZOezrI1TFJQmzm0dkPamQ6WChh2jJ7SXi3C17sRT6TU7XO
+         BUrLc3R/dhmjuOLDvVQeTaF8EGxby1Gk7cXGhGiD+hfjNcc719WcrKSlbqXZPPoLQco6
+         P9nd0LqlXPhhY8FH2a5k+LaO8JiBGUnfWI9gSS79yZabK30xGCRL4bx7Y7u7u4eu6ZpE
+         HfMwNy5C4EkqnrHIw22BGnSRshDjij4OiPRkMxdEqcMDG+DhgyWeOiDLa9KhOJ5nZhJk
+         H3/krWe8gLkzFYQpSN9ZroBGWMkyXZZxHhx1hxc8WT/eaUFq2aXHQL/RsampfRVXHC9b
+         WDcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5Ve45Cbkp1+dVFqJoOztS2GQsqj2qA+p+mi8OEM7kAU=;
-        b=JzRMcKWxTcAPAGIzSY+Jzmk31DIWzKAhMTaBYwuuXsGOz+n6LRDk6vELnL8qjMvFnk
-         XFqVBJ4EfcSnwREr2aP/KZsrz0qrhNljmFWmGk9MYTKPACJWtjtHEMAGHPhqSUhGokip
-         ohkxEerqJBQSeUOPQx967dyTOr0bvj1v2LA+ceDlUZnwSlIfZrIjFA+JbaEgbegjPR9e
-         wNgc8am0ouyvxun2xF8AMvIBN2jcwFDS04QRJ/zC8NmhhefQnML3V+S35WKkrlrjfiUv
-         VU6Fyo65U0A5GXj1cj2OcwW/fXcA7oo2AkYx1yHyD5gCEPE3qOFuxKcJFA8bzRj/raWC
-         LkWw==
-X-Gm-Message-State: APjAAAXsIShaX/531LdXb+L7NzXqpzFyYsl9azk0RJt2zlVzP7vNx6/5
-        /yJ/LOaJgkRnpUexkDiJD/xbJplMGQMO9gPMQ9jWkg==
-X-Google-Smtp-Source: APXvYqyLLSIuTDcfYpM75ZMUC9Nhk8X2+/mkds0gX9DOGJ8EEYEzr1FCqEGQKFpyHUD9ca1dgSwHb1i/Cno3ssy+urg=
-X-Received: by 2002:a05:620a:2158:: with SMTP id m24mr7823925qkm.250.1571829622229;
- Wed, 23 Oct 2019 04:20:22 -0700 (PDT)
+        bh=OJtp5fltrRxQZPm10hqDV2fjQ+aetUfo8QY4Hex+jaU=;
+        b=pm5AOc1v4gltMM29k4R7396SmhCcv5s6i362XhkJGj1eRKxA+b8LZp35chd4cxXY3h
+         JnlF/CMyYh4CqA+Ay3xHoQphcHYDYIYl8zsESSUNM8nW3/pz1dmGT5KrMfA+54FTa0je
+         RaPwPTfs2VMy8W0mXeUS1fToqP4oStgUKeIyVBt7cpw1DMTFcKLLeQ3y6vn9TpCcgFkv
+         ajOqS8bm4FyO2ABfXvWAY9PU0o0V0MftKdcc7bubkcF06AWSN3e5jWH3rrBjnHxheAKe
+         7bYvKjzD/lwGlXRfv8QHXZKLyZr+T6ATACJDGht7292ukIeTHq0vxVQyLn4+SkgSitJr
+         dO5w==
+X-Gm-Message-State: APjAAAXVHYPx/UDpNWCgEs3fvheOmFfJJF9lhc+6tPJbWhJdbyD8tOf/
+        HlmkIwOE5Q/znemFXpviSokV2N6wiX4RzlFf9A/Qtg==
+X-Google-Smtp-Source: APXvYqzBIOoT6ubDTuEiWu6+2SB0heEzugVH0RFfc0d26Y/thbwq5tAgmJkqOvdcmwotSn0mXgS4pQHN1wmz2wAmaLM=
+X-Received: by 2002:ac8:73c8:: with SMTP id v8mr8559171qtp.158.1571832321847;
+ Wed, 23 Oct 2019 05:05:21 -0700 (PDT)
 MIME-Version: 1.0
 References: <20191017141305.146193-1-elver@google.com> <20191017141305.146193-2-elver@google.com>
 In-Reply-To: <20191017141305.146193-2-elver@google.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 23 Oct 2019 13:20:10 +0200
-Message-ID: <CACT4Y+bBMF2BtCD_+V87Le9Tpxt7eGeAjav3djL7QAjgSy_Uew@mail.gmail.com>
+Date:   Wed, 23 Oct 2019 14:05:09 +0200
+Message-ID: <CACT4Y+aM1TagxwBioLJx7UPJ7n3g4mb+do0h5NuVAZ9bmjQ5+w@mail.gmail.com>
 Subject: Re: [PATCH v2 1/8] kcsan: Add Kernel Concurrency Sanitizer infrastructure
 To:     Marco Elver <elver@google.com>
 Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
@@ -87,7 +87,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-)On Thu, Oct 17, 2019 at 4:13 PM Marco Elver <elver@google.com> wrote:
+On Thu, Oct 17, 2019 at 4:13 PM Marco Elver <elver@google.com> wrote:
 >
 > Kernel Concurrency Sanitizer (KCSAN) is a dynamic data-race detector for
 > kernel space. KCSAN is a sampling watchpoint-based data-race detector.
@@ -1172,6 +1172,9 @@ X-Mailing-List: linux-arch@vger.kernel.org
 > +               return true;
 > +
 > +       flags = user_access_save();
+
+Why do we need user_access_save?
+
 > +       if (!try_consume_watchpoint(watchpoint, encoded_watchpoint)) {
 > +               /*
 > +                * The other thread may not print any diagnostics, as it has
@@ -1205,6 +1208,9 @@ X-Mailing-List: linux-arch@vger.kernel.org
 > +       } expect_value;
 > +       bool is_expected = true;
 > +       unsigned long ua_flags = user_access_save();
+
+Why do we need user_access_save?
+
 > +       unsigned long irq_flags;
 > +
 > +       if (!should_watch(ptr))
@@ -1691,11 +1697,6 @@ X-Mailing-List: linux-arch@vger.kernel.org
 > +       {                                                                      \
 > +               __kcsan_check_read(ptr, size);                                 \
 > +       }                                                                      \
-
-I think here we need to define the unaligned version as __alias of this one.
-Will both make code shorter, reduce icache pressure and eliminate the
-need to whitelist them in objtool (currently they are not).
-
 > +       EXPORT_SYMBOL(__tsan_read##size);                                      \
 > +       void __tsan_write##size(void *ptr)                                     \
 > +       {                                                                      \
