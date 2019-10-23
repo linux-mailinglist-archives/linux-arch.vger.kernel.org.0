@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ADFE1603
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 11:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0818CE160D
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 11:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390879AbfJWJa3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Oct 2019 05:30:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40384 "EHLO mail.kernel.org"
+        id S2390899AbfJWJah (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Oct 2019 05:30:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40566 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404008AbfJWJa2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 23 Oct 2019 05:30:28 -0400
+        id S2403925AbfJWJag (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 23 Oct 2019 05:30:36 -0400
 Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 624FD21D7E;
-        Wed, 23 Oct 2019 09:30:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA40F21D81;
+        Wed, 23 Oct 2019 09:30:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571823027;
-        bh=EN/2QNdcqzEAwdUuThUk/AmaSKEp2SwWDa6q9OAGcAI=;
+        s=default; t=1571823035;
+        bh=ZD9fECVhSrn7TL7WCPqHy81yE4igvppbXtK4EuwxKhE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XBAW2BcKb+vCfSfRjMLQaGBCGy8RY1PjqH4iiD4xQ79yo4oAKb223zTkBaJ4CJteg
-         /vK7+i/fXh+TJaq6ARWHqBG0Z0pEfJ2odXrjJovxlyQMKYfe4IIDFNOUMa5JNmNdzy
-         XFluANglX2YQcOaMwBusxwTcTKsuErMzUEvukdBU=
+        b=eiMY+btjNXAv4tI5Codtt+Kn42kB11Oj6sJx11z54O7IKOnGqJHeBSTYn8X9u85VG
+         1DN7Ra4+J7lR+1iDQJKzzwgzMZjCKYFjZ2EbNTY069Q1MGOmwkCeWE31vOdFUfsIvB
+         ycngac8tvDheSr13DKaLb2XwnyPqMOvwf6QKyn/c=
 From:   Mike Rapoport <rppt@kernel.org>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -51,9 +51,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
         linux-um@lists.infradead.org, sparclinux@vger.kernel.org,
         Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH 08/12] parisc: use pgtable-nopXd instead of 4level-fixup
-Date:   Wed, 23 Oct 2019 12:28:57 +0300
-Message-Id: <1571822941-29776-9-git-send-email-rppt@kernel.org>
+Subject: [PATCH 09/12] sparc32: use pgtable-nopud instead of 4level-fixup
+Date:   Wed, 23 Oct 2019 12:28:58 +0300
+Message-Id: <1571822941-29776-10-git-send-email-rppt@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1571822941-29776-1-git-send-email-rppt@kernel.org>
 References: <1571822941-29776-1-git-send-email-rppt@kernel.org>
@@ -64,389 +64,381 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-parisc has two or three levels of page tables and can use appropriate
-pgtable-nopXd and folding of the upper layers.
+32-bit version of sparc has three-level page tables and can use
+pgtable-nopud and folding of the upper layers.
 
-Replace usage of include/asm-generic/4level-fixup.h and explicit
-definitions of __PAGETABLE_PxD_FOLDED in parisc with
-include/asm-generic/pgtable-nopmd.h for two-level configurations and with
-include/asm-generic/pgtable-nopmd.h for three-lelve configurations and
-adjust page table manipulation macros and functions accordingly.
+Replace usage of include/asm-generic/4level-fixup.h with
+include/asm-generic/pgtable-nopud.h and adjust page table manipulation
+macros and functions accordingly.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- arch/parisc/include/asm/page.h    | 30 +++++++++++++---------
- arch/parisc/include/asm/pgalloc.h | 41 +++++++++++-------------------
- arch/parisc/include/asm/pgtable.h | 52 +++++++++++++++++++--------------------
- arch/parisc/include/asm/tlb.h     |  2 ++
- arch/parisc/kernel/cache.c        | 13 ++++++----
- arch/parisc/kernel/pci-dma.c      |  9 +++++--
- arch/parisc/mm/fixmap.c           | 10 +++++---
- 7 files changed, 81 insertions(+), 76 deletions(-)
+ arch/sparc/include/asm/pgalloc_32.h |  6 ++---
+ arch/sparc/include/asm/pgtable_32.h | 28 ++++++++++----------
+ arch/sparc/mm/fault_32.c            | 11 ++++++--
+ arch/sparc/mm/highmem.c             |  6 ++++-
+ arch/sparc/mm/io-unit.c             |  6 ++++-
+ arch/sparc/mm/iommu.c               |  6 ++++-
+ arch/sparc/mm/srmmu.c               | 51 +++++++++++++++++++++++++++++--------
+ 7 files changed, 81 insertions(+), 33 deletions(-)
 
-diff --git a/arch/parisc/include/asm/page.h b/arch/parisc/include/asm/page.h
-index 93caf17..1d339ee 100644
---- a/arch/parisc/include/asm/page.h
-+++ b/arch/parisc/include/asm/page.h
-@@ -42,48 +42,54 @@ typedef struct { unsigned long pte; } pte_t; /* either 32 or 64bit */
+diff --git a/arch/sparc/include/asm/pgalloc_32.h b/arch/sparc/include/asm/pgalloc_32.h
+index 10538a4..eae0c92 100644
+--- a/arch/sparc/include/asm/pgalloc_32.h
++++ b/arch/sparc/include/asm/pgalloc_32.h
+@@ -26,14 +26,14 @@ static inline void free_pgd_fast(pgd_t *pgd)
+ #define pgd_free(mm, pgd)	free_pgd_fast(pgd)
+ #define pgd_alloc(mm)	get_pgd_fast()
  
- /* NOTE: even on 64 bits, these entries are __u32 because we allocate
-  * the pmd and pgd in ZONE_DMA (i.e. under 4GB) */
--typedef struct { __u32 pmd; } pmd_t;
- typedef struct { __u32 pgd; } pgd_t;
- typedef struct { unsigned long pgprot; } pgprot_t;
- 
--#define pte_val(x)	((x).pte)
--/* These do not work lvalues, so make sure we don't use them as such. */
-+#if CONFIG_PGTABLE_LEVELS == 3
-+typedef struct { __u32 pmd; } pmd_t;
-+#define __pmd(x)	((pmd_t) { (x) } )
-+/* pXd_val() do not work lvalues, so make sure we don't use them as such. */
- #define pmd_val(x)	((x).pmd + 0)
-+#endif
-+
-+#define pte_val(x)	((x).pte)
- #define pgd_val(x)	((x).pgd + 0)
- #define pgprot_val(x)	((x).pgprot)
- 
- #define __pte(x)	((pte_t) { (x) } )
--#define __pmd(x)	((pmd_t) { (x) } )
- #define __pgd(x)	((pgd_t) { (x) } )
- #define __pgprot(x)	((pgprot_t) { (x) } )
- 
--#define __pmd_val_set(x,n) (x).pmd = (n)
--#define __pgd_val_set(x,n) (x).pgd = (n)
--
- #else
- /*
-  * .. while these make it easier on the compiler
-  */
- typedef unsigned long pte_t;
-+
-+#if CONFIG_PGTABLE_LEVELS == 3
- typedef         __u32 pmd_t;
-+#define pmd_val(x)      (x)
-+#define __pmd(x)	(x)
-+#endif
-+
- typedef         __u32 pgd_t;
- typedef unsigned long pgprot_t;
- 
- #define pte_val(x)      (x)
--#define pmd_val(x)      (x)
- #define pgd_val(x)      (x)
- #define pgprot_val(x)   (x)
- 
- #define __pte(x)        (x)
--#define __pmd(x)	(x)
- #define __pgd(x)        (x)
- #define __pgprot(x)     (x)
- 
--#define __pmd_val_set(x,n) (x) = (n)
--#define __pgd_val_set(x,n) (x) = (n)
--
- #endif /* STRICT_MM_TYPECHECKS */
- 
-+#define set_pmd(pmdptr, pmdval) (*(pmdptr) = (pmdval))
-+#if CONFIG_PGTABLE_LEVELS == 3
-+#define set_pud(pudptr, pudval) (*(pudptr) = (pudval))
-+#endif
-+
- typedef struct page *pgtable_t;
- 
- typedef struct __physmem_range {
-diff --git a/arch/parisc/include/asm/pgalloc.h b/arch/parisc/include/asm/pgalloc.h
-index d98647c..9ac74da 100644
---- a/arch/parisc/include/asm/pgalloc.h
-+++ b/arch/parisc/include/asm/pgalloc.h
-@@ -34,13 +34,13 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
- 		/* Populate first pmd with allocated memory.  We mark it
- 		 * with PxD_FLAG_ATTACHED as a signal to the system that this
- 		 * pmd entry may not be cleared. */
--		__pgd_val_set(*actual_pgd, (PxD_FLAG_PRESENT | 
--				        PxD_FLAG_VALID | 
--					PxD_FLAG_ATTACHED) 
--			+ (__u32)(__pa((unsigned long)pgd) >> PxD_VALUE_SHIFT));
-+		set_pgd(actual_pgd, __pgd((PxD_FLAG_PRESENT |
-+				        PxD_FLAG_VALID |
-+					PxD_FLAG_ATTACHED)
-+			+ (__u32)(__pa((unsigned long)pgd) >> PxD_VALUE_SHIFT)));
- 		/* The first pmd entry also is marked with PxD_FLAG_ATTACHED as
- 		 * a signal that this pmd may not be freed */
--		__pgd_val_set(*pgd, PxD_FLAG_ATTACHED);
-+		set_pgd(pgd, __pgd(PxD_FLAG_ATTACHED));
- #endif
- 	}
- 	spin_lock_init(pgd_spinlock(actual_pgd));
-@@ -59,10 +59,10 @@ static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
- 
- /* Three Level Page Table Support for pmd's */
- 
--static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, pmd_t *pmd)
-+static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
+-static inline void pgd_set(pgd_t * pgdp, pmd_t * pmdp)
++static inline void pud_set(pud_t * pudp, pmd_t * pmdp)
  {
--	__pgd_val_set(*pgd, (PxD_FLAG_PRESENT | PxD_FLAG_VALID) +
--		        (__u32)(__pa((unsigned long)pmd) >> PxD_VALUE_SHIFT));
-+	set_pud(pud, __pud((PxD_FLAG_PRESENT | PxD_FLAG_VALID) +
-+			(__u32)(__pa((unsigned long)pmd) >> PxD_VALUE_SHIFT)));
+ 	unsigned long pa = __nocache_pa(pmdp);
+ 
+-	set_pte((pte_t *)pgdp, __pte((SRMMU_ET_PTD | (pa >> 4))));
++	set_pte((pte_t *)pudp, __pte((SRMMU_ET_PTD | (pa >> 4))));
  }
  
- static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
-@@ -88,19 +88,6 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
- 	free_pages((unsigned long)pmd, PMD_ORDER);
- }
+-#define pgd_populate(MM, PGD, PMD)      pgd_set(PGD, PMD)
++#define pud_populate(MM, PGD, PMD)      pud_set(PGD, PMD)
  
--#else
--
--/* Two Level Page Table Support for pmd's */
--
--/*
-- * allocating and freeing a pmd is trivial: the 1-entry pmd is
-- * inside the pgd, so has no extra memory associated with it.
-- */
--
--#define pmd_alloc_one(mm, addr)		({ BUG(); ((pmd_t *)2); })
--#define pmd_free(mm, x)			do { } while (0)
--#define pgd_populate(mm, pmd, pte)	BUG()
--
- #endif
+ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm,
+ 				   unsigned long address)
+diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
+index 31da448..6d6f44c 100644
+--- a/arch/sparc/include/asm/pgtable_32.h
++++ b/arch/sparc/include/asm/pgtable_32.h
+@@ -12,7 +12,7 @@
+ #include <linux/const.h>
  
- static inline void
-@@ -110,14 +97,14 @@ pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmd, pte_t *pte)
- 	/* preserve the gateway marker if this is the beginning of
- 	 * the permanent pmd */
- 	if(pmd_flag(*pmd) & PxD_FLAG_ATTACHED)
--		__pmd_val_set(*pmd, (PxD_FLAG_PRESENT |
--				 PxD_FLAG_VALID |
--				 PxD_FLAG_ATTACHED) 
--			+ (__u32)(__pa((unsigned long)pte) >> PxD_VALUE_SHIFT));
-+		set_pmd(pmd, __pmd((PxD_FLAG_PRESENT |
-+				PxD_FLAG_VALID |
-+				PxD_FLAG_ATTACHED)
-+			+ (__u32)(__pa((unsigned long)pte) >> PxD_VALUE_SHIFT)));
- 	else
- #endif
--		__pmd_val_set(*pmd, (PxD_FLAG_PRESENT | PxD_FLAG_VALID) 
--			+ (__u32)(__pa((unsigned long)pte) >> PxD_VALUE_SHIFT));
-+		set_pmd(pmd, __pmd((PxD_FLAG_PRESENT | PxD_FLAG_VALID)
-+			+ (__u32)(__pa((unsigned long)pte) >> PxD_VALUE_SHIFT)));
- }
- 
- #define pmd_populate(mm, pmd, pte_page) \
-diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
-index 4ac374b..f0a3659 100644
---- a/arch/parisc/include/asm/pgtable.h
-+++ b/arch/parisc/include/asm/pgtable.h
-@@ -3,7 +3,12 @@
- #define _PARISC_PGTABLE_H
- 
- #include <asm/page.h>
+ #ifndef __ASSEMBLY__
 -#include <asm-generic/4level-fixup.h>
-+
-+#if CONFIG_PGTABLE_LEVELS == 3
 +#include <asm-generic/pgtable-nopud.h>
-+#elif CONFIG_PGTABLE_LEVELS == 2
-+#include <asm-generic/pgtable-nopmd.h>
-+#endif
  
- #include <asm/fixmap.h>
- 
-@@ -101,8 +106,10 @@ static inline void purge_tlb_entries(struct mm_struct *mm, unsigned long addr)
- 
- #define pte_ERROR(e) \
- 	printk("%s:%d: bad pte %08lx.\n", __FILE__, __LINE__, pte_val(e))
-+#if CONFIG_PGTABLE_LEVELS == 3
- #define pmd_ERROR(e) \
- 	printk("%s:%d: bad pmd %08lx.\n", __FILE__, __LINE__, (unsigned long)pmd_val(e))
-+#endif
- #define pgd_ERROR(e) \
- 	printk("%s:%d: bad pgd %08lx.\n", __FILE__, __LINE__, (unsigned long)pgd_val(e))
- 
-@@ -132,19 +139,18 @@ static inline void purge_tlb_entries(struct mm_struct *mm, unsigned long addr)
- #define PTRS_PER_PTE    (1UL << BITS_PER_PTE)
- 
- /* Definitions for 2nd level */
-+#if CONFIG_PGTABLE_LEVELS == 3
- #define PMD_SHIFT       (PLD_SHIFT + BITS_PER_PTE)
- #define PMD_SIZE	(1UL << PMD_SHIFT)
- #define PMD_MASK	(~(PMD_SIZE-1))
--#if CONFIG_PGTABLE_LEVELS == 3
- #define BITS_PER_PMD	(PAGE_SHIFT + PMD_ORDER - BITS_PER_PMD_ENTRY)
-+#define PTRS_PER_PMD    (1UL << BITS_PER_PMD)
- #else
--#define __PAGETABLE_PMD_FOLDED 1
- #define BITS_PER_PMD	0
- #endif
--#define PTRS_PER_PMD    (1UL << BITS_PER_PMD)
- 
- /* Definitions for 1st level */
--#define PGDIR_SHIFT	(PMD_SHIFT + BITS_PER_PMD)
-+#define PGDIR_SHIFT	(PLD_SHIFT + BITS_PER_PTE + BITS_PER_PMD)
- #if (PGDIR_SHIFT + PAGE_SHIFT + PGD_ORDER - BITS_PER_PGD_ENTRY) > BITS_PER_LONG
- #define BITS_PER_PGD	(BITS_PER_LONG - PGDIR_SHIFT)
- #else
-@@ -317,6 +323,8 @@ extern unsigned long *empty_zero_page;
- 
- #define pmd_flag(x)	(pmd_val(x) & PxD_FLAG_MASK)
- #define pmd_address(x)	((unsigned long)(pmd_val(x) &~ PxD_FLAG_MASK) << PxD_VALUE_SHIFT)
-+#define pud_flag(x)	(pud_val(x) & PxD_FLAG_MASK)
-+#define pud_address(x)	((unsigned long)(pud_val(x) &~ PxD_FLAG_MASK) << PxD_VALUE_SHIFT)
- #define pgd_flag(x)	(pgd_val(x) & PxD_FLAG_MASK)
- #define pgd_address(x)	((unsigned long)(pgd_val(x) &~ PxD_FLAG_MASK) << PxD_VALUE_SHIFT)
- 
-@@ -334,42 +342,32 @@ static inline void pmd_clear(pmd_t *pmd) {
- 	if (pmd_flag(*pmd) & PxD_FLAG_ATTACHED)
- 		/* This is the entry pointing to the permanent pmd
- 		 * attached to the pgd; cannot clear it */
--		__pmd_val_set(*pmd, PxD_FLAG_ATTACHED);
-+		set_pmd(pmd, __pmd(PxD_FLAG_ATTACHED));
- 	else
- #endif
--		__pmd_val_set(*pmd,  0);
-+		set_pmd(pmd,  __pmd(0));
+ #include <linux/spinlock.h>
+ #include <linux/mm_types.h>
+@@ -132,12 +132,12 @@ static inline struct page *pmd_page(pmd_t pmd)
+ 	return pfn_to_page((pmd_val(pmd) & SRMMU_PTD_PMASK) >> (PAGE_SHIFT-4));
  }
  
- 
- 
- #if CONFIG_PGTABLE_LEVELS == 3
--#define pgd_page_vaddr(pgd) ((unsigned long) __va(pgd_address(pgd)))
--#define pgd_page(pgd)	virt_to_page((void *)pgd_page_vaddr(pgd))
-+#define pud_page_vaddr(pud) ((unsigned long) __va(pud_address(pud)))
-+#define pud_page(pud)	virt_to_page((void *)pud_page_vaddr(pud))
- 
- /* For 64 bit we have three level tables */
- 
--#define pgd_none(x)     (!pgd_val(x))
--#define pgd_bad(x)      (!(pgd_flag(x) & PxD_FLAG_VALID))
--#define pgd_present(x)  (pgd_flag(x) & PxD_FLAG_PRESENT)
--static inline void pgd_clear(pgd_t *pgd) {
-+#define pud_none(x)     (!pud_val(x))
-+#define pud_bad(x)      (!(pud_flag(x) & PxD_FLAG_VALID))
-+#define pud_present(x)  (pud_flag(x) & PxD_FLAG_PRESENT)
-+static inline void pud_clear(pud_t *pud) {
- #if CONFIG_PGTABLE_LEVELS == 3
--	if(pgd_flag(*pgd) & PxD_FLAG_ATTACHED)
--		/* This is the permanent pmd attached to the pgd; cannot
-+	if(pud_flag(*pud) & PxD_FLAG_ATTACHED)
-+		/* This is the permanent pmd attached to the pud; cannot
- 		 * free it */
- 		return;
- #endif
--	__pgd_val_set(*pgd, 0);
-+	set_pud(pud, __pud(0));
+-static inline unsigned long pgd_page_vaddr(pgd_t pgd)
++static inline unsigned long pud_page_vaddr(pud_t pud)
+ {
+-	if (srmmu_device_memory(pgd_val(pgd))) {
++	if (srmmu_device_memory(pud_val(pud))) {
+ 		return ~0;
+ 	} else {
+-		unsigned long v = pgd_val(pgd) & SRMMU_PTD_PMASK;
++		unsigned long v = pud_val(pud) & SRMMU_PTD_PMASK;
+ 		return (unsigned long)__nocache_va(v << 4);
+ 	}
  }
--#else
--/*
-- * The "pgd_xxx()" functions here are trivial for a folded two-level
-- * setup: the pgd is never bad, and a pmd always exists (as it's folded
-- * into the pgd entry)
-- */
--static inline int pgd_none(pgd_t pgd)		{ return 0; }
--static inline int pgd_bad(pgd_t pgd)		{ return 0; }
--static inline int pgd_present(pgd_t pgd)	{ return 1; }
--static inline void pgd_clear(pgd_t * pgdp)	{ }
- #endif
+@@ -184,24 +184,24 @@ static inline void pmd_clear(pmd_t *pmdp)
+ 		set_pte((pte_t *)&pmdp->pmdv[i], __pte(0));
+ }
+ 
+-static inline int pgd_none(pgd_t pgd)          
++static inline int pud_none(pud_t pud)
+ {
+-	return !(pgd_val(pgd) & 0xFFFFFFF);
++	return !(pud_val(pud) & 0xFFFFFFF);
+ }
+ 
+-static inline int pgd_bad(pgd_t pgd)
++static inline int pud_bad(pud_t pud)
+ {
+-	return (pgd_val(pgd) & SRMMU_ET_MASK) != SRMMU_ET_PTD;
++	return (pud_val(pud) & SRMMU_ET_MASK) != SRMMU_ET_PTD;
+ }
+ 
+-static inline int pgd_present(pgd_t pgd)
++static inline int pud_present(pud_t pud)
+ {
+-	return ((pgd_val(pgd) & SRMMU_ET_MASK) == SRMMU_ET_PTD);
++	return ((pud_val(pud) & SRMMU_ET_MASK) == SRMMU_ET_PTD);
+ }
+ 
+-static inline void pgd_clear(pgd_t *pgdp)
++static inline void pud_clear(pud_t *pudp)
+ {
+-	set_pte((pte_t *)pgdp, __pte(0));
++	set_pte((pte_t *)pudp, __pte(0));
+ }
  
  /*
-@@ -452,7 +450,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
- #if CONFIG_PGTABLE_LEVELS == 3
- #define pmd_index(addr)         (((addr) >> PMD_SHIFT) & (PTRS_PER_PMD - 1))
- #define pmd_offset(dir,address) \
--((pmd_t *) pgd_page_vaddr(*(dir)) + pmd_index(address))
-+((pmd_t *) pud_page_vaddr(*(dir)) + pmd_index(address))
- #else
- #define pmd_offset(dir,addr) ((pmd_t *) dir)
- #endif
-diff --git a/arch/parisc/include/asm/tlb.h b/arch/parisc/include/asm/tlb.h
-index 8c0446b..44235f3 100644
---- a/arch/parisc/include/asm/tlb.h
-+++ b/arch/parisc/include/asm/tlb.h
-@@ -4,7 +4,9 @@
+@@ -319,9 +319,9 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ #define pgd_offset_k(address) pgd_offset(&init_mm, address)
  
- #include <asm-generic/tlb.h>
+ /* Find an entry in the second-level page table.. */
+-static inline pmd_t *pmd_offset(pgd_t * dir, unsigned long address)
++static inline pmd_t *pmd_offset(pud_t * dir, unsigned long address)
+ {
+-	return (pmd_t *) pgd_page_vaddr(*dir) +
++	return (pmd_t *) pud_page_vaddr(*dir) +
+ 		((address >> PMD_SHIFT) & (PTRS_PER_PMD - 1));
+ }
  
-+#if CONFIG_PGTABLE_LEVELS == 3
- #define __pmd_free_tlb(tlb, pmd, addr)	pmd_free((tlb)->mm, pmd)
-+#endif
- #define __pte_free_tlb(tlb, pte, addr)	pte_free((tlb)->mm, pte)
+diff --git a/arch/sparc/mm/fault_32.c b/arch/sparc/mm/fault_32.c
+index 8d69de1..89976c9 100644
+--- a/arch/sparc/mm/fault_32.c
++++ b/arch/sparc/mm/fault_32.c
+@@ -351,6 +351,8 @@ asmlinkage void do_sparc_fault(struct pt_regs *regs, int text_fault, int write,
+ 		 */
+ 		int offset = pgd_index(address);
+ 		pgd_t *pgd, *pgd_k;
++		p4d_t *p4d, *p4d_k;
++		pud_t *pud, *pud_k;
+ 		pmd_t *pmd, *pmd_k;
  
- #endif
-diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
-index a82b3ea..7b2e0ab 100644
---- a/arch/parisc/kernel/cache.c
-+++ b/arch/parisc/kernel/cache.c
-@@ -534,11 +534,14 @@ static inline pte_t *get_ptep(pgd_t *pgd, unsigned long addr)
- 	pte_t *ptep = NULL;
- 
- 	if (!pgd_none(*pgd)) {
--		pud_t *pud = pud_offset(pgd, addr);
--		if (!pud_none(*pud)) {
--			pmd_t *pmd = pmd_offset(pud, addr);
--			if (!pmd_none(*pmd))
--				ptep = pte_offset_map(pmd, addr);
-+		p4d_t *p4d = p4d_offset(pgd, addr);
-+		if (!p4d_none(*p4d)) {
-+			pud_t *pud = pud_offset(p4d, addr);
-+			if (!pud_none(*pud)) {
-+				pmd_t *pmd = pmd_offset(pud, addr);
-+				if (!pmd_none(*pmd))
-+					ptep = pte_offset_map(pmd, addr);
-+			}
+ 		pgd = tsk->active_mm->pgd + offset;
+@@ -363,8 +365,13 @@ asmlinkage void do_sparc_fault(struct pt_regs *regs, int text_fault, int write,
+ 			return;
  		}
- 	}
- 	return ptep;
-diff --git a/arch/parisc/kernel/pci-dma.c b/arch/parisc/kernel/pci-dma.c
-index ca35d9a..8859c71 100644
---- a/arch/parisc/kernel/pci-dma.c
-+++ b/arch/parisc/kernel/pci-dma.c
-@@ -133,9 +133,14 @@ static inline int map_uncached_pages(unsigned long vaddr, unsigned long size,
  
- 	dir = pgd_offset_k(vaddr);
- 	do {
-+		p4d_t *p4d;
-+		pud_t *pud;
- 		pmd_t *pmd;
--		
--		pmd = pmd_alloc(NULL, dir, vaddr);
+-		pmd = pmd_offset(pgd, address);
+-		pmd_k = pmd_offset(pgd_k, address);
++		p4d = p4d_offset(pgd, address);
++		pud = pud_offset(p4d, address);
++		pmd = pmd_offset(pud, address);
 +
-+		p4d = p4d_offset(dir, vaddr);
-+		pud = pud_offset(p4d, vaddr);
-+		pmd = pmd_alloc(NULL, pud, vaddr);
-+
- 		if (!pmd)
- 			return -ENOMEM;
- 		if (map_pmd_uncached(pmd, vaddr, end - vaddr, &paddr))
-diff --git a/arch/parisc/mm/fixmap.c b/arch/parisc/mm/fixmap.c
-index 474cd24..e2d8b0a 100644
---- a/arch/parisc/mm/fixmap.c
-+++ b/arch/parisc/mm/fixmap.c
-@@ -14,11 +14,13 @@ void notrace set_fixmap(enum fixed_addresses idx, phys_addr_t phys)
++		p4d_k = p4d_offset(pgd_k, address);
++		pud_k = pud_offset(p4d_k, address);
++		pmd_k = pmd_offset(pud_k, address);
+ 
+ 		if (pmd_present(*pmd) || !pmd_present(*pmd_k))
+ 			goto bad_area_nosemaphore;
+diff --git a/arch/sparc/mm/highmem.c b/arch/sparc/mm/highmem.c
+index 86bc2a5..d4a80ad 100644
+--- a/arch/sparc/mm/highmem.c
++++ b/arch/sparc/mm/highmem.c
+@@ -39,10 +39,14 @@ static pte_t *kmap_pte;
+ void __init kmap_init(void)
  {
- 	unsigned long vaddr = __fix_to_virt(idx);
- 	pgd_t *pgd = pgd_offset_k(vaddr);
--	pmd_t *pmd = pmd_offset(pgd, vaddr);
-+	p4d_t *p4d = p4d_offset(pgd, vaddr);
-+	pud_t *pud = pud_offset(p4d, vaddr);
-+	pmd_t *pmd = pmd_offset(pud, vaddr);
+ 	unsigned long address;
++	p4d_t *p4d;
++	pud_t *pud;
+ 	pmd_t *dir;
+ 
+ 	address = __fix_to_virt(FIX_KMAP_BEGIN);
+-	dir = pmd_offset(pgd_offset_k(address), address);
++	p4d = p4d_offset(pgd_offset_k(address), address);
++	pud = pud_offset(p4d, address);
++	dir = pmd_offset(pud, address);
+ 
+         /* cache the first kmap pte */
+         kmap_pte = pte_offset_kernel(dir, address);
+diff --git a/arch/sparc/mm/io-unit.c b/arch/sparc/mm/io-unit.c
+index f770ee7..33a0fac 100644
+--- a/arch/sparc/mm/io-unit.c
++++ b/arch/sparc/mm/io-unit.c
+@@ -239,12 +239,16 @@ static void *iounit_alloc(struct device *dev, size_t len,
+ 		page = va;
+ 		{
+ 			pgd_t *pgdp;
++			p4d_t *p4dp;
++			pud_t *pudp;
+ 			pmd_t *pmdp;
+ 			pte_t *ptep;
+ 			long i;
+ 
+ 			pgdp = pgd_offset(&init_mm, addr);
+-			pmdp = pmd_offset(pgdp, addr);
++			p4dp = p4d_offset(pgdp, addr);
++			pudp = pud_offset(p4dp, addr);
++			pmdp = pmd_offset(pudp, addr);
+ 			ptep = pte_offset_map(pmdp, addr);
+ 
+ 			set_pte(ptep, mk_pte(virt_to_page(page), dvma_prot));
+diff --git a/arch/sparc/mm/iommu.c b/arch/sparc/mm/iommu.c
+index 71ac353..4d3c699 100644
+--- a/arch/sparc/mm/iommu.c
++++ b/arch/sparc/mm/iommu.c
+@@ -343,6 +343,8 @@ static void *sbus_iommu_alloc(struct device *dev, size_t len,
+ 		page = va;
+ 		{
+ 			pgd_t *pgdp;
++			p4d_t *p4dp;
++			pud_t *pudp;
+ 			pmd_t *pmdp;
+ 			pte_t *ptep;
+ 
+@@ -354,7 +356,9 @@ static void *sbus_iommu_alloc(struct device *dev, size_t len,
+ 				__flush_page_to_ram(page);
+ 
+ 			pgdp = pgd_offset(&init_mm, addr);
+-			pmdp = pmd_offset(pgdp, addr);
++			p4dp = p4d_offset(pgdp, addr);
++			pudp = pud_offset(p4dp, addr);
++			pmdp = pmd_offset(pudp, addr);
+ 			ptep = pte_offset_map(pmdp, addr);
+ 
+ 			set_pte(ptep, mk_pte(virt_to_page(page), dvma_prot));
+diff --git a/arch/sparc/mm/srmmu.c b/arch/sparc/mm/srmmu.c
+index cc3ad64..eb95407 100644
+--- a/arch/sparc/mm/srmmu.c
++++ b/arch/sparc/mm/srmmu.c
+@@ -296,6 +296,8 @@ static void __init srmmu_nocache_init(void)
+ 	void *srmmu_nocache_bitmap;
+ 	unsigned int bitmap_bits;
+ 	pgd_t *pgd;
++	p4d_t *p4d;
++	pud_t *pud;
+ 	pmd_t *pmd;
  	pte_t *pte;
+ 	unsigned long paddr, vaddr;
+@@ -329,6 +331,8 @@ static void __init srmmu_nocache_init(void)
  
- 	if (pmd_none(*pmd))
--		pmd = pmd_alloc(NULL, pgd, vaddr);
-+		pmd = pmd_alloc(NULL, pud, vaddr);
+ 	while (vaddr < srmmu_nocache_end) {
+ 		pgd = pgd_offset_k(vaddr);
++		p4d = p4d_offset(__nocache_fix(pgd), vaddr);
++		pud = pud_offset(__nocache_fix(p4d), vaddr);
+ 		pmd = pmd_offset(__nocache_fix(pgd), vaddr);
+ 		pte = pte_offset_kernel(__nocache_fix(pmd), vaddr);
  
- 	pte = pte_offset_kernel(pmd, vaddr);
- 	if (pte_none(*pte))
-@@ -32,7 +34,9 @@ void notrace clear_fixmap(enum fixed_addresses idx)
+@@ -516,13 +520,17 @@ static inline void srmmu_mapioaddr(unsigned long physaddr,
+ 				   unsigned long virt_addr, int bus_type)
  {
- 	unsigned long vaddr = __fix_to_virt(idx);
- 	pgd_t *pgd = pgd_offset_k(vaddr);
--	pmd_t *pmd = pmd_offset(pgd, vaddr);
-+	p4d_t *p4d = p4d_offset(pgd, vaddr);
-+	pud_t *pud = pud_offset(p4d, vaddr);
-+	pmd_t *pmd = pmd_offset(pud, vaddr);
- 	pte_t *pte = pte_offset_kernel(pmd, vaddr);
+ 	pgd_t *pgdp;
++	p4d_t *p4dp;
++	pud_t *pudp;
+ 	pmd_t *pmdp;
+ 	pte_t *ptep;
+ 	unsigned long tmp;
  
- 	if (WARN_ON(pte_none(*pte)))
+ 	physaddr &= PAGE_MASK;
+ 	pgdp = pgd_offset_k(virt_addr);
+-	pmdp = pmd_offset(pgdp, virt_addr);
++	p4dp = p4d_offset(pgdp, virt_addr);
++	pudp = pud_offset(p4dp, virt_addr);
++	pmdp = pmd_offset(pudp, virt_addr);
+ 	ptep = pte_offset_kernel(pmdp, virt_addr);
+ 	tmp = (physaddr >> 4) | SRMMU_ET_PTE;
+ 
+@@ -551,11 +559,16 @@ void srmmu_mapiorange(unsigned int bus, unsigned long xpa,
+ static inline void srmmu_unmapioaddr(unsigned long virt_addr)
+ {
+ 	pgd_t *pgdp;
++	p4d_t *p4dp;
++	pud_t *pudp;
+ 	pmd_t *pmdp;
+ 	pte_t *ptep;
+ 
++
+ 	pgdp = pgd_offset_k(virt_addr);
+-	pmdp = pmd_offset(pgdp, virt_addr);
++	p4dp = p4d_offset(pgdp, virt_addr);
++	pudp = pud_offset(p4dp, virt_addr);
++	pmdp = pmd_offset(pudp, virt_addr);
+ 	ptep = pte_offset_kernel(pmdp, virt_addr);
+ 
+ 	/* No need to flush uncacheable page. */
+@@ -693,20 +706,24 @@ static void __init srmmu_early_allocate_ptable_skeleton(unsigned long start,
+ 							unsigned long end)
+ {
+ 	pgd_t *pgdp;
++	p4d_t *p4dp;
++	pud_t *pudp;
+ 	pmd_t *pmdp;
+ 	pte_t *ptep;
+ 
+ 	while (start < end) {
+ 		pgdp = pgd_offset_k(start);
+-		if (pgd_none(*(pgd_t *)__nocache_fix(pgdp))) {
++		p4dp = p4d_offset(__nocache_fix(pgdp), start);
++		pudp = pud_offset(__nocache_fix(p4dp), start);
++		if (pud_none(*(pud_t *)__nocache_fix(pudp))) {
+ 			pmdp = __srmmu_get_nocache(
+ 			    SRMMU_PMD_TABLE_SIZE, SRMMU_PMD_TABLE_SIZE);
+ 			if (pmdp == NULL)
+ 				early_pgtable_allocfail("pmd");
+ 			memset(__nocache_fix(pmdp), 0, SRMMU_PMD_TABLE_SIZE);
+-			pgd_set(__nocache_fix(pgdp), pmdp);
++			pud_set(__nocache_fix(pudp), pmdp);
+ 		}
+-		pmdp = pmd_offset(__nocache_fix(pgdp), start);
++		pmdp = pmd_offset(__nocache_fix(pudp), start);
+ 		if (srmmu_pmd_none(*(pmd_t *)__nocache_fix(pmdp))) {
+ 			ptep = __srmmu_get_nocache(PTE_SIZE, PTE_SIZE);
+ 			if (ptep == NULL)
+@@ -724,19 +741,23 @@ static void __init srmmu_allocate_ptable_skeleton(unsigned long start,
+ 						  unsigned long end)
+ {
+ 	pgd_t *pgdp;
++	p4d_t *p4dp;
++	pud_t *pudp;
+ 	pmd_t *pmdp;
+ 	pte_t *ptep;
+ 
+ 	while (start < end) {
+ 		pgdp = pgd_offset_k(start);
+-		if (pgd_none(*pgdp)) {
++		p4dp = p4d_offset(pgdp, start);
++		pudp = pud_offset(p4dp, start);
++		if (pud_none(*pudp)) {
+ 			pmdp = __srmmu_get_nocache(SRMMU_PMD_TABLE_SIZE, SRMMU_PMD_TABLE_SIZE);
+ 			if (pmdp == NULL)
+ 				early_pgtable_allocfail("pmd");
+ 			memset(pmdp, 0, SRMMU_PMD_TABLE_SIZE);
+-			pgd_set(pgdp, pmdp);
++			pud_set((pud_t *)pgdp, pmdp);
+ 		}
+-		pmdp = pmd_offset(pgdp, start);
++		pmdp = pmd_offset(pudp, start);
+ 		if (srmmu_pmd_none(*pmdp)) {
+ 			ptep = __srmmu_get_nocache(PTE_SIZE,
+ 							     PTE_SIZE);
+@@ -779,6 +800,8 @@ static void __init srmmu_inherit_prom_mappings(unsigned long start,
+ 	unsigned long probed;
+ 	unsigned long addr;
+ 	pgd_t *pgdp;
++	p4d_t *p4dp;
++	pud_t *pudp;
+ 	pmd_t *pmdp;
+ 	pte_t *ptep;
+ 	int what; /* 0 = normal-pte, 1 = pmd-level pte, 2 = pgd-level pte */
+@@ -810,18 +833,20 @@ static void __init srmmu_inherit_prom_mappings(unsigned long start,
+ 		}
+ 
+ 		pgdp = pgd_offset_k(start);
++		p4dp = p4d_offset(__nocache_fix(pgdp), start);
++		pudp = pud_offset(__nocache_fix(p4dp), start);
+ 		if (what == 2) {
+ 			*(pgd_t *)__nocache_fix(pgdp) = __pgd(probed);
+ 			start += SRMMU_PGDIR_SIZE;
+ 			continue;
+ 		}
+-		if (pgd_none(*(pgd_t *)__nocache_fix(pgdp))) {
++		if (pud_none(*(pud_t *)__nocache_fix(pudp))) {
+ 			pmdp = __srmmu_get_nocache(SRMMU_PMD_TABLE_SIZE,
+ 						   SRMMU_PMD_TABLE_SIZE);
+ 			if (pmdp == NULL)
+ 				early_pgtable_allocfail("pmd");
+ 			memset(__nocache_fix(pmdp), 0, SRMMU_PMD_TABLE_SIZE);
+-			pgd_set(__nocache_fix(pgdp), pmdp);
++			pud_set(__nocache_fix(pudp), pmdp);
+ 		}
+ 		pmdp = pmd_offset(__nocache_fix(pgdp), start);
+ 		if (srmmu_pmd_none(*(pmd_t *)__nocache_fix(pmdp))) {
+@@ -906,6 +931,8 @@ void __init srmmu_paging_init(void)
+ 	phandle cpunode;
+ 	char node_str[128];
+ 	pgd_t *pgd;
++	p4d_t *p4d;
++	pud_t *pud;
+ 	pmd_t *pmd;
+ 	pte_t *pte;
+ 	unsigned long pages_avail;
+@@ -967,7 +994,9 @@ void __init srmmu_paging_init(void)
+ 	srmmu_allocate_ptable_skeleton(PKMAP_BASE, PKMAP_END);
+ 
+ 	pgd = pgd_offset_k(PKMAP_BASE);
+-	pmd = pmd_offset(pgd, PKMAP_BASE);
++	p4d = p4d_offset(pgd, PKMAP_BASE);
++	pud = pud_offset(p4d, PKMAP_BASE);
++	pmd = pmd_offset(pud, PKMAP_BASE);
+ 	pte = pte_offset_kernel(pmd, PKMAP_BASE);
+ 	pkmap_page_table = pte;
+ 
 -- 
 2.7.4
 
