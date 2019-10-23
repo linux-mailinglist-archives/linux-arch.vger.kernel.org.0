@@ -2,76 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D69CCE2619
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2019 00:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9D8E266A
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2019 00:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436631AbfJWWG2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Oct 2019 18:06:28 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:42193 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731301AbfJWWG1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 23 Oct 2019 18:06:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1571868386;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EBZdX8XYASZ/hcfjUquvBjt91Cclb0VNS3/vMpZYZLM=;
-        b=ZZtOZ/wK+yoHVOTE9nxcdEpZe/34BkAiCsXcOCMrNKpw0nbUNaXs/08MLVVZOLB1f2wHxy
-        0i1ejtJCicsPKXok6W04tyr2A1dWqPBRYiS2iHecxsPRp97Npqc91Vsnu+PDu076D/TIDQ
-        msqegKLAFLLeXgoxkTyDjQRWlK/ZBco=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-212-D38nSc7BMIG3e80ECrNc-w-1; Wed, 23 Oct 2019 18:06:24 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 10E8F476;
-        Wed, 23 Oct 2019 22:06:23 +0000 (UTC)
-Received: from treble (ovpn-121-225.rdu2.redhat.com [10.10.121.225])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C114560C57;
-        Wed, 23 Oct 2019 22:06:20 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 17:06:18 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        id S2407893AbfJWWfn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Oct 2019 18:35:43 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:51240 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405970AbfJWWfn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Oct 2019 18:35:43 -0400
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1iNPE0-0002HD-Ee; Thu, 24 Oct 2019 00:35:29 +0200
+Date:   Thu, 24 Oct 2019 00:35:27 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
         Will Deacon <will@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         linux-arch@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
         Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [patch V2 07/17] x86/entry/64: Remove redundant interrupt disable
-Message-ID: <20191023220618.qsmog2k5oaagj27v@treble>
-References: <20191023122705.198339581@linutronix.de>
- <20191023123118.296135499@linutronix.de>
+Subject: Re: [patch V2 03/17] x86/traps: Remove pointless irq enable from
+ do_spurious_interrupt_bug()
+In-Reply-To: <20191023213107.m7ishskghswktspp@treble>
+Message-ID: <alpine.DEB.2.21.1910240018230.1852@nanos.tec.linutronix.de>
+References: <20191023122705.198339581@linutronix.de> <20191023123117.871608831@linutronix.de> <20191023213107.m7ishskghswktspp@treble>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20191023123118.296135499@linutronix.de>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-MC-Unique: D38nSc7BMIG3e80ECrNc-w-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+Content-Type: multipart/mixed; boundary="8323329-1616076872-1571870128=:1852"
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 02:27:12PM +0200, Thomas Gleixner wrote:
-> Now that the trap handlers return with interrupts disabled, the
-> unconditional disabling of interrupts in the low level entry code can be
-> removed along with the trace calls.
->=20
-> Add debug checks where appropriate.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This seems a little scary.  Does anybody other than Andy actually run
-with CONFIG_DEBUG_ENTRY?  What happens if somebody accidentally leaves
-irqs enabled?  How do we know you found all the leaks?
+--8323329-1616076872-1571870128=:1852
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
---=20
-Josh
+On Wed, 23 Oct 2019, Josh Poimboeuf wrote:
 
+> On Wed, Oct 23, 2019 at 02:27:08PM +0200, Thomas Gleixner wrote:
+> > That function returns immediately after conditionally reenabling interrupts which
+> > is more than pointless and requires the ASM code to disable interrupts again.
+> > 
+> > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> > ---
+> >  arch/x86/kernel/traps.c |    1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > --- a/arch/x86/kernel/traps.c
+> > +++ b/arch/x86/kernel/traps.c
+> > @@ -871,7 +871,6 @@ do_simd_coprocessor_error(struct pt_regs
+> >  dotraplinkage void
+> >  do_spurious_interrupt_bug(struct pt_regs *regs, long error_code)
+> >  {
+> > -	cond_local_irq_enable(regs);
+> >  }
+> 
+> I think we can just remove this handler altogether.  The Intel and AMD
+> manuals say vector 15 (X86_TRAP_SPURIOUS) is reserved.
+
+Right, but this has history. Pentium Pro Erratum:
+
+  PROBLEM: If the APIC subsystem is configured in mixed mode with Virtual
+  Wire mode implemented through the local APIC, an interrupt vector of 0Fh
+  (Intel reserved encoding) may be generated by the local APIC (Int 15).
+  This vector may be generated upon receipt of a spurious interrupt (an
+  interrupt which is removed before the system receives the INTA sequence)
+  instead of the programmed 8259 spurious interrupt vector.
+
+  IMPLICATION: The spurious interrupt vector programmed in the 8259 is
+  normally handled by an operating system’s spurious interrupt
+  handler. However, a vector of 0Fh is unknown to some operating systems,
+  which would crash if this erratum occurred.
+
+Initially (2.1.) there was a printk() in that handler, which later got
+ifdeffed out (2.1.54).
+
+So I rather keep that thing at least as long as we support PPro :) Even if
+we ditch that the handler is not really hurting anyone.
+
+Thanks,
+
+	tglx
+
+
+
+
+--8323329-1616076872-1571870128=:1852--
