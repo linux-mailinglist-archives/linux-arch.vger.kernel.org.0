@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C588AE16D4
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 11:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538B5E174B
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 12:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403864AbfJWJ43 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Oct 2019 05:56:29 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:35273 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390971AbfJWJ4W (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Oct 2019 05:56:22 -0400
-Received: by mail-qt1-f193.google.com with SMTP id m15so31464337qtq.2
-        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2019 02:56:19 -0700 (PDT)
+        id S2391034AbfJWKEK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Oct 2019 06:04:10 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:39538 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391032AbfJWKEK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Oct 2019 06:04:10 -0400
+Received: by mail-qk1-f195.google.com with SMTP id 4so19194318qki.6
+        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2019 03:04:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=K4djDL1u+JI5xzAKW04XI6cQAnUT+v0HwsOIqfQJB8s=;
-        b=U6AJscUYZCQgxFoaRajnzwzRDmVhxcGVoeVrWpeQLoeNDTEATDTZFPJ8D0ZXfrPXHX
-         4NF1FpTmB6DD3fJ8B2GnrghU2Qn4MDTQlNa9Y1AqHsYd9wX/fkaFiaKEQREJel2Qlqi1
-         C813gv3d7KJ8yQdx2NopLVk8nkpMj7GjBZ4TrS1ra789M0WHbR2JVLphVvHPpbdVbjit
-         KblK7ZZyd17ssN04mToZ8iLzMuLFYnWG9ANV9D9RcI72i1NNYThCm90whfj6GqbhARFm
-         i8SmsPn5mWQ7AiQnzow7Kerxg+zNZ9k/0O5rZJMAzzHrFjwohmb34H2ey/vHXP7X8OyP
-         +WKg==
+        bh=QqJ0ldaufIlp0tBsU24y0T/9/yH5Bcql27IM5W7jZoM=;
+        b=XsWT2i98e7xUnX8B1lwz4RtuXFXVW1QvEJGP3xV7TZd4PomcQD0BYKFUDHUwykBNeH
+         JEXFssCcpTPDJeFuj4GpkTzvhbR0WNKobsSmlQrWT31RHRDR2WAlsNGfpTnZnPuVvZEp
+         ao1qdzSg6kv9ElrHthEbtnB32JwSvVGB+K9jSVDbqu8EoOXRwi1JjiB5LAm5UjcF2pQR
+         Vd6L8SRVfqE377wHE3NiFVqs50sPhUVp7jndPjhXoTdKYmniv5DBnTyOgzHnIfv1tpav
+         kBzcxpzrgsmHLwF2orJd83erXb7StmHDeo9bBRwaLs56YbTwfXrQc8+AUUAWU4pp4Oee
+         Ur1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=K4djDL1u+JI5xzAKW04XI6cQAnUT+v0HwsOIqfQJB8s=;
-        b=Y9CCpghdXD2DfCUDW4HgRRvakQjX5Yp+IaCrZeez7Exxvowx5Vx0x3KBBlnrJopo1u
-         W0YAnw1ggQFgyttihlnzOkFcV8rjcKDTQKN5/LRLzVeUTAYlLfD0VVyLZ1hd2mAF+xDd
-         Km0gotiqaZF/a1muAH0gElJ9RObaK4tcJbT/Oyl9LYega3io7ZCO0JkbleSzTBKVp2pw
-         grbBeyMHIdKYVnSV5E6AyT5ArnJXEOc5/eeNXRY8l5+1FcHbYra95Cy/1L3gWXGVGahQ
-         jPLippPZVNag/tYsmSw2kuhGUx2JNJo3juoOhYRrBXuVAmVqyao/S5inSd/30yKwVKH+
-         emJQ==
-X-Gm-Message-State: APjAAAVWCce+EPRa8shqQ/YRB0EUYgkQwB3Ctu/CHZigGqFYcN9CibNA
-        mutS7ll6bdwvktML7cgp3TbDc+lLZxIfP3PZAsEaKw==
-X-Google-Smtp-Source: APXvYqxLot6VUk8DTfNiXJbO9nMsG3swSCT+xySJZc7sRwWYdnoOKH9g3oLlPmQbamZPHpE4PIO6pMhgpNk9pHJClEg=
-X-Received: by 2002:aed:24af:: with SMTP id t44mr7869747qtc.57.1571824576566;
- Wed, 23 Oct 2019 02:56:16 -0700 (PDT)
+        bh=QqJ0ldaufIlp0tBsU24y0T/9/yH5Bcql27IM5W7jZoM=;
+        b=ct6/JBftNzMhXXD+qEqHZykp+xeUc4lbnxxeJaI12NJtovfU+ni8USm0XqmvbF1act
+         Hta6Lc2xADTG8TduspkwFMSh8nqgLHkGV4kU0MUK3zF/AF4rXQeBKRfVGGVzI4f69cqS
+         Rt0uYYq7Mn24U8TWbBzd9AhhU9QIlfUpfDcxMkIlvSBylg9XEkH8QhnLEflweKJYp6o7
+         9Hyp80dRs44Zd8gClK2/iHKqWUlKJ1MJOip1fnuPXE6EE8dQ/IgIIqX4kX8LNiawTqeV
+         aKC7VPOWP8X2ulu3cfE33zdekqK5nTbj2NKJ+cgNsnr9DqGFzV1qNbQoXsth7XDiyIAl
+         ZSng==
+X-Gm-Message-State: APjAAAXp4Vsvymtv+ZBtMCCdSUsb/WdP+nuKwSze4aq8YuSHWZ8SOIC6
+        q78luTXCJKI5avPCyxnv7G3f//kHj2/KSyMCRXGlSqMTPlk=
+X-Google-Smtp-Source: APXvYqxS8N9VgPerljWs1/R0MdxrQI1ZHSZX192i/YJMQueAQvIBvN7WW3gLcj65oM30EzkluOR2MO4HSaSHnmoNWFY=
+X-Received: by 2002:a05:620a:16a6:: with SMTP id s6mr6839274qkj.407.1571825045656;
+ Wed, 23 Oct 2019 03:04:05 -0700 (PDT)
 MIME-Version: 1.0
 References: <20191017141305.146193-1-elver@google.com> <20191017141305.146193-2-elver@google.com>
 In-Reply-To: <20191017141305.146193-2-elver@google.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 23 Oct 2019 11:56:05 +0200
-Message-ID: <CACT4Y+b6kx-mAbTQ_aNtxtex+MqOMAtSsVVPe4KykyOkWQSS-A@mail.gmail.com>
+Date:   Wed, 23 Oct 2019 12:03:53 +0200
+Message-ID: <CACT4Y+bTY6EWhv3Q=BDee6Db=uxqxfNgifLDNRmOmpdH6=hUGQ@mail.gmail.com>
 Subject: Re: [PATCH v2 1/8] kcsan: Add Kernel Concurrency Sanitizer infrastructure
 To:     Marco Elver <elver@google.com>
 Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
@@ -87,428 +87,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-.On Thu, Oct 17, 2019 at 4:13 PM Marco Elver <elver@google.com> wrote:
-> --- a/include/linux/compiler-clang.h
-> +++ b/include/linux/compiler-clang.h
-> @@ -24,6 +24,15 @@
->  #define __no_sanitize_address
->  #endif
->
-> +#if __has_feature(thread_sanitizer)
-> +/* emulate gcc's __SANITIZE_THREAD__ flag */
-> +#define __SANITIZE_THREAD__
-> +#define __no_sanitize_thread \
-> +               __attribute__((no_sanitize("thread")))
-> +#else
-> +#define __no_sanitize_thread
-> +#endif
-> +
->  /*
->   * Not all versions of clang implement the the type-generic versions
->   * of the builtin overflow checkers. Fortunately, clang implements
-> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> index d7ee4c6bad48..de105ca29282 100644
-> --- a/include/linux/compiler-gcc.h
-> +++ b/include/linux/compiler-gcc.h
-> @@ -145,6 +145,13 @@
->  #define __no_sanitize_address
->  #endif
->
-> +#if __has_attribute(__no_sanitize_thread__) && defined(__SANITIZE_THREAD__)
-> +#define __no_sanitize_thread                                                   \
-> +       __attribute__((__noinline__)) __attribute__((no_sanitize_thread))
-> +#else
-> +#define __no_sanitize_thread
-> +#endif
-> +
->  #if GCC_VERSION >= 50100
->  #define COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW 1
->  #endif
-> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-> index 5e88e7e33abe..350d80dbee4d 100644
-> --- a/include/linux/compiler.h
-> +++ b/include/linux/compiler.h
-> @@ -178,6 +178,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
->  #endif
->
->  #include <uapi/linux/types.h>
-> +#include <linux/kcsan-checks.h>
->
->  #define __READ_ONCE_SIZE                                               \
->  ({                                                                     \
-> @@ -193,12 +194,6 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
->         }                                                               \
->  })
->
-> -static __always_inline
-> -void __read_once_size(const volatile void *p, void *res, int size)
-> -{
-> -       __READ_ONCE_SIZE;
-> -}
-> -
->  #ifdef CONFIG_KASAN
->  /*
->   * We can't declare function 'inline' because __no_sanitize_address confilcts
-> @@ -211,14 +206,38 @@ void __read_once_size(const volatile void *p, void *res, int size)
->  # define __no_kasan_or_inline __always_inline
->  #endif
->
-> -static __no_kasan_or_inline
-> +#ifdef CONFIG_KCSAN
-> +# define __no_kcsan_or_inline __no_sanitize_thread notrace __maybe_unused
-> +#else
-> +# define __no_kcsan_or_inline __always_inline
-> +#endif
-> +
-> +#if defined(CONFIG_KASAN) || defined(CONFIG_KCSAN)
-> +/* Avoid any instrumentation or inline. */
-> +#define __no_sanitize_or_inline                                                \
-> +       __no_sanitize_address __no_sanitize_thread notrace __maybe_unused
-> +#else
-> +#define __no_sanitize_or_inline __always_inline
-> +#endif
-> +
-> +static __no_kcsan_or_inline
-> +void __read_once_size(const volatile void *p, void *res, int size)
-> +{
-> +       kcsan_check_atomic_read((const void *)p, size);
-
-This cast should not be required, or we should fix kcsan_check_atomic_read.
-
-
-> +       __READ_ONCE_SIZE;
-> +}
-> +
-> +static __no_sanitize_or_inline
->  void __read_once_size_nocheck(const volatile void *p, void *res, int size)
->  {
->         __READ_ONCE_SIZE;
->  }
->
-> -static __always_inline void __write_once_size(volatile void *p, void *res, int size)
-> +static __no_kcsan_or_inline
-> +void __write_once_size(volatile void *p, void *res, int size)
->  {
-> +       kcsan_check_atomic_write((const void *)p, size);
-
-This cast should not be required, or we should fix kcsan_check_atomic_write.
-
->         switch (size) {
->         case 1: *(volatile __u8 *)p = *(__u8 *)res; break;
->         case 2: *(volatile __u16 *)p = *(__u16 *)res; break;
-> diff --git a/include/linux/kcsan-checks.h b/include/linux/kcsan-checks.h
-> new file mode 100644
-> index 000000000000..4203603ae852
-> --- /dev/null
-> +++ b/include/linux/kcsan-checks.h
-> @@ -0,0 +1,147 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _LINUX_KCSAN_CHECKS_H
-> +#define _LINUX_KCSAN_CHECKS_H
-> +
-> +#include <linux/types.h>
-> +
-> +/*
-> + * __kcsan_*: Always available when KCSAN is enabled. This may be used
-
-Aren't all functions in this file available always? They should be.
-
-> + * even in compilation units that selectively disable KCSAN, but must use KCSAN
-> + * to validate access to an address.   Never use these in header files!
-> + */
-> +#ifdef CONFIG_KCSAN
-> +/**
-> + * __kcsan_check_watchpoint - check if a watchpoint exists
-> + *
-> + * Returns true if no race was detected, and we may then proceed to set up a
-> + * watchpoint after. Returns false if either KCSAN is disabled or a race was
-> + * encountered, and we may not set up a watchpoint after.
-> + *
-> + * @ptr address of access
-> + * @size size of access
-> + * @is_write is access a write
-> + * @return true if no race was detected, false otherwise.
-> + */
-> +bool __kcsan_check_watchpoint(const volatile void *ptr, size_t size,
-> +                             bool is_write);
-> +
-> +/**
-> + * __kcsan_setup_watchpoint - set up watchpoint and report data-races
-> + *
-> + * Sets up a watchpoint (if sampled), and if a racing access was observed,
-> + * reports the data-race.
-> + *
-> + * @ptr address of access
-> + * @size size of access
-> + * @is_write is access a write
-> + */
-> +void __kcsan_setup_watchpoint(const volatile void *ptr, size_t size,
-> +                             bool is_write);
-> +#else
-> +static inline bool __kcsan_check_watchpoint(const volatile void *ptr,
-> +                                           size_t size, bool is_write)
-> +{
-> +       return true;
-> +}
-> +static inline void __kcsan_setup_watchpoint(const volatile void *ptr,
-> +                                           size_t size, bool is_write)
-> +{
-> +}
-> +#endif
-> +
-> +/*
-> + * kcsan_*: Only available when the particular compilation unit has KCSAN
-> + * instrumentation enabled. May be used in header files.
-> + */
-> +#ifdef __SANITIZE_THREAD__
-> +#define kcsan_check_watchpoint __kcsan_check_watchpoint
-> +#define kcsan_setup_watchpoint __kcsan_setup_watchpoint
-> +#else
-> +static inline bool kcsan_check_watchpoint(const volatile void *ptr, size_t size,
-> +                                         bool is_write)
-> +{
-> +       return true;
-> +}
-> +static inline void kcsan_setup_watchpoint(const volatile void *ptr, size_t size,
-> +                                         bool is_write)
-> +{
-> +}
-> +#endif
-> +
-> +/**
-> + * __kcsan_check_read - check regular read access for data-races
-> + *
-> + * Full read access that checks watchpoint and sets up a watchpoint if this
-> + * access is sampled. Note that, setting up watchpoints for plain reads is
-> + * required to also detect data-races with atomic accesses.
-> + *
-> + * @ptr address of access
-> + * @size size of access
-> + */
-> +#define __kcsan_check_read(ptr, size)                                          \
-> +       do {                                                                   \
-> +               if (__kcsan_check_watchpoint(ptr, size, false))                \
-> +                       __kcsan_setup_watchpoint(ptr, size, false);            \
-> +       } while (0)
-> +
-> +/**
-> + * __kcsan_check_write - check regular write access for data-races
-> + *
-> + * Full write access that checks watchpoint and sets up a watchpoint if this
-> + * access is sampled.
-> + *
-> + * @ptr address of access
-> + * @size size of access
-> + */
-> +#define __kcsan_check_write(ptr, size)                                         \
-> +       do {                                                                   \
-> +               if (__kcsan_check_watchpoint(ptr, size, true) &&               \
-> +                   !IS_ENABLED(CONFIG_KCSAN_PLAIN_WRITE_PRETEND_ONCE))        \
-> +                       __kcsan_setup_watchpoint(ptr, size, true);             \
-> +       } while (0)
-> +
-> +/**
-> + * kcsan_check_read - check regular read access for data-races
-> + *
-> + * @ptr address of access
-> + * @size size of access
-> + */
-> +#define kcsan_check_read(ptr, size)                                            \
-> +       do {                                                                   \
-> +               if (kcsan_check_watchpoint(ptr, size, false))                  \
-> +                       kcsan_setup_watchpoint(ptr, size, false);              \
-> +       } while (0)
-> +
-> +/**
-> + * kcsan_check_write - check regular write access for data-races
-> + *
-> + * @ptr address of access
-> + * @size size of access
-> + */
-> +#define kcsan_check_write(ptr, size)                                           \
-> +       do {                                                                   \
-> +               if (kcsan_check_watchpoint(ptr, size, true) &&                 \
-> +                   !IS_ENABLED(CONFIG_KCSAN_PLAIN_WRITE_PRETEND_ONCE))        \
-> +                       kcsan_setup_watchpoint(ptr, size, true);               \
-> +       } while (0)
-> +
-> +/*
-> + * Check for atomic accesses: if atomic access are not ignored, this simply
-> + * aliases to kcsan_check_watchpoint, otherwise becomes a no-op.
-> + */
-> +#ifdef CONFIG_KCSAN_IGNORE_ATOMICS
-> +#define kcsan_check_atomic_read(...)                                           \
-> +       do {                                                                   \
-> +       } while (0)
-> +#define kcsan_check_atomic_write(...)                                          \
-> +       do {                                                                   \
-> +       } while (0)
-> +#else
-> +#define kcsan_check_atomic_read(ptr, size)                                     \
-> +       kcsan_check_watchpoint(ptr, size, false)
-> +#define kcsan_check_atomic_write(ptr, size)                                    \
-> +       kcsan_check_watchpoint(ptr, size, true)
-> +#endif
-> +
-> +#endif /* _LINUX_KCSAN_CHECKS_H */
-> diff --git a/include/linux/kcsan.h b/include/linux/kcsan.h
-> new file mode 100644
-> index 000000000000..fd5de2ba3a16
-> --- /dev/null
-> +++ b/include/linux/kcsan.h
-> @@ -0,0 +1,108 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _LINUX_KCSAN_H
-> +#define _LINUX_KCSAN_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/kcsan-checks.h>
-> +
-> +#ifdef CONFIG_KCSAN
-> +
-> +/*
-> + * Context for each thread of execution: for tasks, this is stored in
-> + * task_struct, and interrupts access internal per-CPU storage.
-> + */
-> +struct kcsan_ctx {
-> +       int disable; /* disable counter */
-> +       int atomic_next; /* number of following atomic ops */
-> +
-> +       /*
-> +        * We use separate variables to store if we are in a nestable or flat
-> +        * atomic region. This helps make sure that an atomic region with
-> +        * nesting support is not suddenly aborted when a flat region is
-> +        * contained within. Effectively this allows supporting nesting flat
-> +        * atomic regions within an outer nestable atomic region. Support for
-> +        * this is required as there are cases where a seqlock reader critical
-> +        * section (flat atomic region) is contained within a seqlock writer
-> +        * critical section (nestable atomic region), and the "mismatching
-> +        * kcsan_end_atomic()" warning would trigger otherwise.
-> +        */
-> +       int atomic_region;
-> +       bool atomic_region_flat;
-> +};
-> +
-> +/**
-> + * kcsan_init - initialize KCSAN runtime
-> + */
-> +void kcsan_init(void);
-> +
-> +/**
-> + * kcsan_disable_current - disable KCSAN for the current context
-> + *
-> + * Supports nesting.
-> + */
-> +void kcsan_disable_current(void);
-> +
-> +/**
-> + * kcsan_enable_current - re-enable KCSAN for the current context
-> + *
-> + * Supports nesting.
-> + */
-> +void kcsan_enable_current(void);
-> +
-> +/**
-> + * kcsan_begin_atomic - use to denote an atomic region
-> + *
-> + * Accesses within the atomic region may appear to race with other accesses but
-> + * should be considered atomic.
-> + *
-> + * @nest true if regions may be nested, or false for flat region
-> + */
-> +void kcsan_begin_atomic(bool nest);
-> +
-> +/**
-> + * kcsan_end_atomic - end atomic region
-> + *
-> + * @nest must match argument to kcsan_begin_atomic().
-> + */
-> +void kcsan_end_atomic(bool nest);
-> +
-> +/**
-> + * kcsan_atomic_next - consider following accesses as atomic
-> + *
-> + * Force treating the next n memory accesses for the current context as atomic
-> + * operations.
-> + *
-> + * @n number of following memory accesses to treat as atomic.
-> + */
-> +void kcsan_atomic_next(int n);
-> +
-> +#else /* CONFIG_KCSAN */
-> +
-> +static inline void kcsan_init(void)
-> +{
-> +}
-> +
-> +static inline void kcsan_disable_current(void)
-> +{
-> +}
-> +
-> +static inline void kcsan_enable_current(void)
-> +{
-> +}
-> +
-> +static inline void kcsan_begin_atomic(bool nest)
-> +{
-> +}
-> +
-> +static inline void kcsan_end_atomic(bool nest)
-> +{
-> +}
-> +
-> +static inline void kcsan_atomic_next(int n)
-> +{
-> +}
-> +
-> +#endif /* CONFIG_KCSAN */
-> +
-> +#endif /* _LINUX_KCSAN_H */
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 2c2e56bd8913..9490e417bf4a 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -31,6 +31,7 @@
->  #include <linux/task_io_accounting.h>
->  #include <linux/posix-timers.h>
->  #include <linux/rseq.h>
-> +#include <linux/kcsan.h>
->
->  /* task_struct member predeclarations (sorted alphabetically): */
->  struct audit_context;
-> @@ -1171,6 +1172,9 @@ struct task_struct {
->  #ifdef CONFIG_KASAN
->         unsigned int                    kasan_depth;
->  #endif
-> +#ifdef CONFIG_KCSAN
-> +       struct kcsan_ctx                kcsan_ctx;
-> +#endif
->
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->         /* Index of current stored address in ret_stack: */
-> diff --git a/init/init_task.c b/init/init_task.c
-> index 9e5cbe5eab7b..e229416c3314 100644
-> --- a/init/init_task.c
-> +++ b/init/init_task.c
-> @@ -161,6 +161,14 @@ struct task_struct init_task
->  #ifdef CONFIG_KASAN
->         .kasan_depth    = 1,
->  #endif
-> +#ifdef CONFIG_KCSAN
-> +       .kcsan_ctx = {
-> +               .disable                = 1,
-> +               .atomic_next            = 0,
-> +               .atomic_region          = 0,
-> +               .atomic_region_flat     = 0,
-> +       },
-> +#endif
->  #ifdef CONFIG_TRACE_IRQFLAGS
->         .softirqs_enabled = 1,
->  #endif
-> diff --git a/init/main.c b/init/main.c
-> index 91f6ebb30ef0..4d814de017ee 100644
+On Thu, Oct 17, 2019 at 4:13 PM Marco Elver <elver@google.com> wrote:
 > --- a/init/main.c
 > +++ b/init/main.c
 > @@ -93,6 +93,7 @@
@@ -2055,11 +1634,17 @@ Aren't all functions in this file available always? They should be.
 > +       help
 > +         Kernel Concurrency Sanitizer is a dynamic data-race detector, which
 > +         uses a watchpoint-based sampling approach to detect races.
-> +
+
+It can make sense to provide a reference to the doc with full details here.
+
 > +if KCSAN
 > +
 > +config KCSAN_SELFTEST
 > +       bool "KCSAN: perform short selftests on boot"
+
+All of these configs are already inside of KCSAN submenu, so it's not
+necessary to prefix all of them with "KCSAN:".
+
 > +       default y
 > +       help
 > +         Run KCSAN selftests on boot. On test failure, causes kernel to panic.
