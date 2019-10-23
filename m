@@ -2,87 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED56E1E4A
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 16:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40561E1E8C
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 16:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389876AbfJWOhs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Oct 2019 10:37:48 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:49102 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732328AbfJWOhs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Oct 2019 10:37:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=/PR2FEiCX+iu4eBmOZGHncjejUZSgrUpVLIkHmDbJhU=; b=FnXFrZo50dOrSKOXpol2prson
-        gTlqkVnD6hYYGZ5vX+QKIYp1tlmacAw4DtTMwHmAxJIz8Q9OKuTAMPacabb4rZ5rqtjYLz9yvhYdF
-        GcNTyDoOD67WxiR5GjT4fakBYjhOFKVV7t4OyCJKIdZrr8zB3dLn1H15qt0Affa7xuR1t4uqwHI52
-        1VA2EW8gfOT6fDr7m5ZgZcUL/iwEb/vckqEB9sgi56WyUtQVMOHWUKC2FTrpdYouJNrEtbdrj+dyl
-        TFTBGjr4n+MfeKN9HhzNCTcncRmr7a+/NTp57Gq4y45KRR9sGJc0CbqkXcufhl1DW+g88P30GgKhm
-        4hCq4S+kg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iNHlY-0007VJ-Ql; Wed, 23 Oct 2019 14:37:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 770C4300EBF;
-        Wed, 23 Oct 2019 16:36:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8643A2B1D776D; Wed, 23 Oct 2019 16:37:34 +0200 (CEST)
-Date:   Wed, 23 Oct 2019 16:37:34 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
+        id S2390210AbfJWOst (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Oct 2019 10:48:49 -0400
+Received: from mga02.intel.com ([134.134.136.20]:30964 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389782AbfJWOst (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 23 Oct 2019 10:48:49 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Oct 2019 07:48:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,221,1569308400"; 
+   d="scan'208";a="191852479"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by orsmga008.jf.intel.com with ESMTP; 23 Oct 2019 07:48:48 -0700
+Date:   Wed, 23 Oct 2019 07:48:48 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
         Will Deacon <will@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         linux-arch@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [patch V2 00/17] entry: Provide generic implementation for host
- and guest entry/exit work
-Message-ID: <20191023143734.GJ1800@hirez.programming.kicks-ass.net>
+Subject: Re: [patch V2 17/17] x86/kvm: Use generic exit to guest work function
+Message-ID: <20191023144848.GH329@linux.intel.com>
 References: <20191023122705.198339581@linutronix.de>
+ <20191023123119.271229148@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191023122705.198339581@linutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191023123119.271229148@linutronix.de>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 02:27:05PM +0200, Thomas Gleixner wrote:
->  /Makefile                             |    3 
->  arch/Kconfig                          |    3 
->  arch/x86/Kconfig                      |    1 
->  arch/x86/entry/calling.h              |   12 +
->  arch/x86/entry/common.c               |  264 ++------------------------------
->  arch/x86/entry/entry_32.S             |   41 ----
->  arch/x86/entry/entry_64.S             |   32 ---
->  arch/x86/entry/entry_64_compat.S      |   30 ---
->  arch/x86/include/asm/irqflags.h       |    8 
->  arch/x86/include/asm/paravirt.h       |    9 -
->  arch/x86/include/asm/signal.h         |    1 
->  arch/x86/include/asm/thread_info.h    |    9 -
->  arch/x86/kernel/signal.c              |    2 
->  arch/x86/kernel/traps.c               |   33 ++--
->  arch/x86/kvm/x86.c                    |   17 --
->  arch/x86/mm/fault.c                   |    7 
->  b/arch/x86/include/asm/entry-common.h |  104 ++++++++++++
->  b/arch/x86/kvm/Kconfig                |    1 
->  b/include/linux/entry-common.h        |  280 ++++++++++++++++++++++++++++++++++
->  b/kernel/entry/common.c               |  184 ++++++++++++++++++++++
->  include/linux/kvm_host.h              |   64 +++++++
->  kernel/Makefile                       |    1 
->  virt/kvm/Kconfig                      |    3 
->  23 files changed, 735 insertions(+), 374 deletions(-)
+On Wed, Oct 23, 2019 at 02:27:22PM +0200, Thomas Gleixner wrote:
+> Use the generic infrastructure to check for and handle pending work before
+> entering into guest mode.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  arch/x86/kvm/Kconfig |    1 +
+>  arch/x86/kvm/x86.c   |   17 +++++------------
+>  2 files changed, 6 insertions(+), 12 deletions(-)
+> 
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -42,6 +42,7 @@ config KVM
+>  	select HAVE_KVM_MSI
+>  	select HAVE_KVM_CPU_RELAX_INTERCEPT
+>  	select HAVE_KVM_NO_POLL
+> +	select KVM_EXIT_TO_GUEST_WORK
+>  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>  	select KVM_VFIO
+>  	select SRCU
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -52,6 +52,7 @@
+>  #include <linux/irqbypass.h>
+>  #include <linux/sched/stat.h>
+>  #include <linux/sched/isolation.h>
+> +#include <linux/entry-common.h>
+>  #include <linux/mem_encrypt.h>
+>  
+>  #include <trace/events/kvm.h>
+> @@ -8115,8 +8116,8 @@ static int vcpu_enter_guest(struct kvm_v
+>  	if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
+>  		kvm_x86_ops->sync_pir_to_irr(vcpu);
+>  
+> -	if (vcpu->mode == EXITING_GUEST_MODE || kvm_request_pending(vcpu)
+> -	    || need_resched() || signal_pending(current)) {
+> +	if (vcpu->mode == EXITING_GUEST_MODE || kvm_request_pending(vcpu) ||
+> +	    exit_to_guestmode_work_pending()) {
 
-This looks really nice; esp. the cleaned up interrupt state.
+The terms EXIT_TO_GUEST and exit_to_guestmode are very confusing, as
+they're inverted from the usual virt terminology of VM-Enter (enter guest)
+and VM-Exit (exit guest).  The conflict is most obvious here, with the
+above "vcpu->mode == EXITING_GUEST_MODE", which is checking to see if the
+vCPU is being forced to exit *from* guest mode because was kicked by some
+other part of KVM.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Maybe XFER_TO_GUEST?  I.e. avoid entry/exit entirely, so that neither the
+entry code or KVM ends up with a confusing name.
+
+>  		vcpu->mode = OUTSIDE_GUEST_MODE;
+>  		smp_wmb();
+>  		local_irq_enable();
+> @@ -8309,17 +8310,9 @@ static int vcpu_run(struct kvm_vcpu *vcp
+>  
+>  		kvm_check_async_pf_completion(vcpu);
+>  
+> -		if (signal_pending(current)) {
+> -			r = -EINTR;
+> -			vcpu->run->exit_reason = KVM_EXIT_INTR;
+> -			++vcpu->stat.signal_exits;
+> +		r = exit_to_guestmode(kvm, vcpu);
+
+Ditto here.  If the run loop is stripped down to the core functionality,
+it effectively looks like:
+
+	for (;;) {
+		r = vcpu_enter_guest(vcpu);
+		if (r <= 0)
+			break;
+
+		...
+
+		r = exit_to_guestmode(kvm, vcpu);
+		if (r)
+			break;
+	}
+
+Appending _handle_work to the function would also be helpful so that it's
+somewhat clear the function isn't related to the core vcpu_enter_guest()
+functionality, e.g.:
+
+	for (;;) {
+		r = vcpu_enter_guest(vcpu);
+		if (r <= 0)
+			break;
+
+		...
+
+		r = xfer_to_guestmode_handle_work(kvm, vcpu);
+		if (r)
+			break;
+	}
+
+
+> +		if (r)
+>  			break;
+> -		}
+> -		if (need_resched()) {
+> -			srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
+> -			cond_resched();
+> -			vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
+> -		}
+>  	}
+>  
+>  	srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
+> 
+> 
