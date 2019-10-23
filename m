@@ -2,38 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E532E260C
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2019 00:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69CCE2619
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2019 00:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407825AbfJWWBU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Oct 2019 18:01:20 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:51095 "EHLO
+        id S2436631AbfJWWG2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Oct 2019 18:06:28 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:42193 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2407794AbfJWWBU (ORCPT
+        by vger.kernel.org with ESMTP id S1731301AbfJWWG1 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 23 Oct 2019 18:01:20 -0400
+        Wed, 23 Oct 2019 18:06:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1571868079;
+        s=mimecast20190719; t=1571868386;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nEg2JMs7obRnwPmfQVBb4NG9WKsi5kJp3la0gsAnYkc=;
-        b=JLdjMe5+uCvIxGem/FvNnJKAql0wh8ZI1xeiNnglXZNstJC5Rx3JGbUaP0Z5jwo+eWk0eH
-        auJf1VhqYBRK7XUoIDLepJQufNyizuv8QT2wtw7Cmk4bJnZDhkMLxV1vNqghXhbql65Knn
-        Lv9A9/sVLCL8Xcw76zsMOYaIXXMCu9M=
+        bh=EBZdX8XYASZ/hcfjUquvBjt91Cclb0VNS3/vMpZYZLM=;
+        b=ZZtOZ/wK+yoHVOTE9nxcdEpZe/34BkAiCsXcOCMrNKpw0nbUNaXs/08MLVVZOLB1f2wHxy
+        0i1ejtJCicsPKXok6W04tyr2A1dWqPBRYiS2iHecxsPRp97Npqc91Vsnu+PDu076D/TIDQ
+        msqegKLAFLLeXgoxkTyDjQRWlK/ZBco=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-180-Gi_XQU_ZPV2zJxaYVWjtRQ-1; Wed, 23 Oct 2019 18:01:15 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-212-D38nSc7BMIG3e80ECrNc-w-1; Wed, 23 Oct 2019 18:06:24 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 23F0D107AD31;
-        Wed, 23 Oct 2019 22:01:14 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 10E8F476;
+        Wed, 23 Oct 2019 22:06:23 +0000 (UTC)
 Received: from treble (ovpn-121-225.rdu2.redhat.com [10.10.121.225])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E8FB919C77;
-        Wed, 23 Oct 2019 22:01:11 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 17:01:09 -0500
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C114560C57;
+        Wed, 23 Oct 2019 22:06:20 +0000 (UTC)
+Date:   Wed, 23 Oct 2019 17:06:18 -0500
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
@@ -43,16 +43,15 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         linux-arch@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
         Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [patch V2 05/17] x86/traps: Make interrupt enable/disable
- symmetric in C code
-Message-ID: <20191023220109.jmbrluyjxenblcij@treble>
+Subject: Re: [patch V2 07/17] x86/entry/64: Remove redundant interrupt disable
+Message-ID: <20191023220618.qsmog2k5oaagj27v@treble>
 References: <20191023122705.198339581@linutronix.de>
- <20191023123118.084086112@linutronix.de>
+ <20191023123118.296135499@linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20191023123118.084086112@linutronix.de>
+In-Reply-To: <20191023123118.296135499@linutronix.de>
 User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-MC-Unique: Gi_XQU_ZPV2zJxaYVWjtRQ-1
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-MC-Unique: D38nSc7BMIG3e80ECrNc-w-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
@@ -62,25 +61,16 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 02:27:10PM +0200, Thomas Gleixner wrote:
-> --- a/arch/x86/mm/fault.c
-> +++ b/arch/x86/mm/fault.c
-> @@ -1500,10 +1500,13 @@ static noinline void
->  =09=09return;
-> =20
->  =09/* Was the fault on kernel-controlled part of the address space? */
-> -=09if (unlikely(fault_in_kernel_space(address)))
-> +=09if (unlikely(fault_in_kernel_space(address))) {
->  =09=09do_kern_addr_fault(regs, hw_error_code, address);
-> -=09else
-> +=09} else {
->  =09=09do_user_addr_fault(regs, hw_error_code, address);
-> +=09=09if (regs->flags & X86_EFLAGS_IF)
-> +=09=09=09local_irq_disable();
-> +=09}
+On Wed, Oct 23, 2019 at 02:27:12PM +0200, Thomas Gleixner wrote:
+> Now that the trap handlers return with interrupts disabled, the
+> unconditional disabling of interrupts in the low level entry code can be
+> removed along with the trace calls.
+>=20
+> Add debug checks where appropriate.
 
-The corresponding irq enable is in do_user_addr_fault(), why not do the
-disable there?
+This seems a little scary.  Does anybody other than Andy actually run
+with CONFIG_DEBUG_ENTRY?  What happens if somebody accidentally leaves
+irqs enabled?  How do we know you found all the leaks?
 
 --=20
 Josh
