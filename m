@@ -2,89 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E592E2564
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 23:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A740E256E
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 23:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404415AbfJWVbT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Oct 2019 17:31:19 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:31892 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2391179AbfJWVbT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 23 Oct 2019 17:31:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1571866278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mKJAxNSEFHg5g84xz0cpNjTeNjjB7lw6asiNQyLDQPQ=;
-        b=SqRgbd3WkfE5JLLfs+dl7YX6BLz/gib8/XBtzdpx3779ptUpSLcOEJAQiWx9bYKYwNGl4U
-        vLiHWxX4AauD3Yeczf8v4RPdeDWoD6+r41OVtVf7ZMsWzw37NfgETOAsghfJSpq8/q93xf
-        BekT0lpBaX2h6A0eRi1tNSa/SSmRnPE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-186-HutMCuPvOW-CVyb0LqMZww-1; Wed, 23 Oct 2019 17:31:14 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S2389939AbfJWVe0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Oct 2019 17:34:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44970 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406296AbfJWVe0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 23 Oct 2019 17:34:26 -0400
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 136CA1800D6B;
-        Wed, 23 Oct 2019 21:31:12 +0000 (UTC)
-Received: from treble (ovpn-121-225.rdu2.redhat.com [10.10.121.225])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C19681001E75;
-        Wed, 23 Oct 2019 21:31:09 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 16:31:07 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 0601521E6F
+        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2019 21:34:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571866465;
+        bh=kEvURABwy5dE7dIZtr9WIuD+DQoD+YYLJ57x1dBZKbc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gxJIYb6cNfXlO6PgF2UE3M5U0+aE1ipzt4xEej08Gd0dre102440y81tGBr/6wJB5
+         SRD59m026/VsnVUIKc4LKh40VRIN76Gy6H7yycewfV2PggxNshsMhm+wGrXb+3jCzU
+         Dlq+FeaAesVq+2M1f73mDFfXmw5aaPWGw6pR+14M=
+Received: by mail-wm1-f53.google.com with SMTP id c22so428044wmd.1
+        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2019 14:34:24 -0700 (PDT)
+X-Gm-Message-State: APjAAAVfF1pvsJanr15e/TIBn1azUT3YoMoPc4bumrzGX0NGHgvH1zfV
+        qC1bkRaNJo4S6OAzCpWmBpCjn/fBMyNiAuO1dmOAZg==
+X-Google-Smtp-Source: APXvYqxmBg2CFH+tCYmWc0vnLev+bxj/rdn8n+v4NKHpG5kZO9lsJeafXzB09pL0boITaAD9Bx5KUbeyPmu4Odj/Tw8=
+X-Received: by 2002:a1c:a556:: with SMTP id o83mr1913319wme.0.1571866463469;
+ Wed, 23 Oct 2019 14:34:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191023122705.198339581@linutronix.de> <20191023123118.978254388@linutronix.de>
+In-Reply-To: <20191023123118.978254388@linutronix.de>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Wed, 23 Oct 2019 14:34:12 -0700
+X-Gmail-Original-Message-ID: <CALCETrVArVWH2-ew4+WVxhX-3kzrspv2x8yw3RH3PyVGeAMudA@mail.gmail.com>
+Message-ID: <CALCETrVArVWH2-ew4+WVxhX-3kzrspv2x8yw3RH3PyVGeAMudA@mail.gmail.com>
+Subject: Re: [patch V2 14/17] entry: Provide generic exit to usermode functionality
 To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
         Will Deacon <will@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-arch@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [patch V2 03/17] x86/traps: Remove pointless irq enable from
- do_spurious_interrupt_bug()
-Message-ID: <20191023213107.m7ishskghswktspp@treble>
-References: <20191023122705.198339581@linutronix.de>
- <20191023123117.871608831@linutronix.de>
-MIME-Version: 1.0
-In-Reply-To: <20191023123117.871608831@linutronix.de>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-MC-Unique: HutMCuPvOW-CVyb0LqMZww-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 02:27:08PM +0200, Thomas Gleixner wrote:
-> That function returns immediately after conditionally reenabling interrup=
-ts which
-> is more than pointless and requires the ASM code to disable interrupts ag=
-ain.
->=20
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->  arch/x86/kernel/traps.c |    1 -
->  1 file changed, 1 deletion(-)
->=20
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -871,7 +871,6 @@ do_simd_coprocessor_error(struct pt_regs
->  dotraplinkage void
->  do_spurious_interrupt_bug(struct pt_regs *regs, long error_code)
->  {
-> -=09cond_local_irq_enable(regs);
->  }
+On Wed, Oct 23, 2019 at 5:31 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> From: Thomas Gleixner <tglx@linutronix.de>
+>
+> Provide a generic facility to handle the exit to usermode work. That's
+> aimed to replace the pointlessly different copies in each architecture.
 
-I think we can just remove this handler altogether.  The Intel and AMD
-manuals say vector 15 (X86_TRAP_SPURIOUS) is reserved.
 
---=20
-Josh
+>  /**
+> + * local_irq_enable_exit_to_user - Exit to user variant of local_irq_enable()
+> + * @ti_work:   Cached TIF flags gathered with interrupts disabled
+> + *
+> + * Defaults to local_irq_enable(). Can be supplied by architecture specific
+> + * code.
 
+What did you have in mind here?
