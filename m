@@ -2,159 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3D8E0B53
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2019 20:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82365E15C6
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 11:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731957AbfJVSR4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Oct 2019 14:17:56 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:33860 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732340AbfJVSRz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Oct 2019 14:17:55 -0400
-Received: by mail-oi1-f196.google.com with SMTP id 83so15069681oii.1
-        for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2019 11:17:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WOpu0OseuiXc08mdI69tOPOopIwWTdbk8nIc2lokKaQ=;
-        b=XJgdWmt1Fb01rtimxVs7UGUgg2nNjFELzvqXbKwOR2N0+RlvYp+1STsURqwktcTbn2
-         CYNMx5zkYFWeJy9Pp1crLJpMWkAa9lnFUFosfymwVkAw2Zg93wYs5IZnlIcSzzVhtZF0
-         FUS8z+oUFT8cShOthSahN28+4Ofg9kOnVmr4aZbNmLi3ccowGggxISCVpdu0yGs+4dht
-         HEvSGx4jDzphsM83UtxMqUGmYRC24HTm+icekjZvloyRwMHGGcP1JG6vcTt90amPncwd
-         0BBPZwnc6ueQxoqkD5kc4oeuKHk0+UEm4XXoClIYHx9pYHlHK6zhE2OqzSStqn3lR46/
-         b6Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WOpu0OseuiXc08mdI69tOPOopIwWTdbk8nIc2lokKaQ=;
-        b=EAW6KydFvj4MQ94LAfr5fazAfTeQFRvkha4zoA8nAun7vz6qKWlgqJLqkjYqU26jvE
-         ljuEfndsY7VzvnLkZGojYbGBNR7zNiCCa0ZnesIqhFe5NZMttwxO0ASrAJPf/MjwXXiw
-         eEcA6x0G5aSGH0TWBosBZBjzVlqJxoRNutcBJB0csX/WwRzKXoaaG2W4lkLhhyByGsky
-         iH9Qh+3KQwnE7DwV/C0XoPGx9ttf0snM0nrSpxj8xZo75uYOax33geib5vpRgK9sU92l
-         9xzJHmMZvpqZndtzATXdRbtnGzHg343zVWJc9u9PyZ0ZgwRYOeHWOISprddd4gUh9AXi
-         dLdg==
-X-Gm-Message-State: APjAAAWaKoRJxj3CVLbi2JDpsqYRXiBd2dagfxgflO1Aj8SkPrl4Sq14
-        iIAmTU9w9MDsiLRj8OLj4h6G2mp3QrtouBX2kxPD/g==
-X-Google-Smtp-Source: APXvYqzX+UBLuSqSX7xu+0iFpX/BMy6QMySPZgTjJ3NU0aDX6ipn2ST8I/CCQJ5VPBJ/kifUvNY+rliR1JaUu8riJKw=
-X-Received: by 2002:a05:6808:4b:: with SMTP id v11mr4195346oic.70.1571768274619;
- Tue, 22 Oct 2019 11:17:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191017141305.146193-1-elver@google.com> <20191017141305.146193-8-elver@google.com>
- <20191022123329.GC11583@lakrids.cambridge.arm.com>
-In-Reply-To: <20191022123329.GC11583@lakrids.cambridge.arm.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 22 Oct 2019 20:17:43 +0200
-Message-ID: <CANpmjNOhoyDMFMUz6by3hLtX7aBFk4pXTmzjmWYiq2+z+R5fAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 7/8] locking/atomics, kcsan: Add KCSAN instrumentation
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Alexander Potapenko <glider@google.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        id S2390879AbfJWJ3V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Oct 2019 05:29:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38740 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390363AbfJWJ3V (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 23 Oct 2019 05:29:21 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B40222084C;
+        Wed, 23 Oct 2019 09:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571822959;
+        bh=raTE4gr9LycB90WqNLOaTxg315Bd08RIPvY36znf/Wg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=zm0uBOlLjfNOneCY0DrxNyTGRsQ3RcpYf+NG45sGTTOTNOtYKCaforIBvxuiwMgtG
+         7d6vROp+GP3SAoxnGfuyqXAZYdXUbwDVVTUSxDMMmDX6/R62chzMD/RoY3d2cnUcVS
+         UeJfPj//kpH9mF/z5mUu+p396QqY/JUmXVcaAJzg=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>, Daniel Axtens <dja@axtens.net>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-efi@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "David S. Miller" <davem@davemloft.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Helge Deller <deller@gmx.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mark Salter <msalter@redhat.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Creasey <sammy@sammy.net>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-alpha@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-c6x-dev@linux-c6x.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
+        linux-um@lists.infradead.org, sparclinux@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCH 00/12] mm: remove __ARCH_HAS_4LEVEL_HACK
+Date:   Wed, 23 Oct 2019 12:28:49 +0300
+Message-Id: <1571822941-29776-1-git-send-email-rppt@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 22 Oct 2019 at 14:33, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Thu, Oct 17, 2019 at 04:13:04PM +0200, Marco Elver wrote:
-> > This adds KCSAN instrumentation to atomic-instrumented.h.
-> >
-> > Signed-off-by: Marco Elver <elver@google.com>
-> > ---
-> > v2:
-> > * Use kcsan_check{,_atomic}_{read,write} instead of
-> >   kcsan_check_{access,atomic}.
-> > * Introduce __atomic_check_{read,write} [Suggested by Mark Rutland].
-> > ---
-> >  include/asm-generic/atomic-instrumented.h | 393 +++++++++++-----------
-> >  scripts/atomic/gen-atomic-instrumented.sh |  17 +-
-> >  2 files changed, 218 insertions(+), 192 deletions(-)
->
-> The script changes and generated code look fine to me, so FWIW:
->
-> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Great, thank you Mark!
+Hi,
 
-> Thanks,
-> Mark.
->
-> > diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
-> > index e09812372b17..8b8b2a6f8d68 100755
-> > --- a/scripts/atomic/gen-atomic-instrumented.sh
-> > +++ b/scripts/atomic/gen-atomic-instrumented.sh
-> > @@ -20,7 +20,7 @@ gen_param_check()
-> >       # We don't write to constant parameters
-> >       [ ${type#c} != ${type} ] && rw="read"
-> >
-> > -     printf "\tkasan_check_${rw}(${name}, sizeof(*${name}));\n"
-> > +     printf "\t__atomic_check_${rw}(${name}, sizeof(*${name}));\n"
-> >  }
-> >
-> >  #gen_param_check(arg...)
-> > @@ -107,7 +107,7 @@ cat <<EOF
-> >  #define ${xchg}(ptr, ...)                                            \\
-> >  ({                                                                   \\
-> >       typeof(ptr) __ai_ptr = (ptr);                                   \\
-> > -     kasan_check_write(__ai_ptr, ${mult}sizeof(*__ai_ptr));          \\
-> > +     __atomic_check_write(__ai_ptr, ${mult}sizeof(*__ai_ptr));               \\
-> >       arch_${xchg}(__ai_ptr, __VA_ARGS__);                            \\
-> >  })
-> >  EOF
-> > @@ -148,6 +148,19 @@ cat << EOF
-> >
-> >  #include <linux/build_bug.h>
-> >  #include <linux/kasan-checks.h>
-> > +#include <linux/kcsan-checks.h>
-> > +
-> > +static inline void __atomic_check_read(const volatile void *v, size_t size)
-> > +{
-> > +     kasan_check_read(v, size);
-> > +     kcsan_check_atomic_read(v, size);
-> > +}
-> > +
-> > +static inline void __atomic_check_write(const volatile void *v, size_t size)
-> > +{
-> > +     kasan_check_write(v, size);
-> > +     kcsan_check_atomic_write(v, size);
-> > +}
-> >
-> >  EOF
-> >
-> > --
-> > 2.23.0.866.gb869b98d4c-goog
-> >
+These patches convert several architectures to use page table folding and
+remove __ARCH_HAS_4LEVEL_HACK along with include/asm-generic/4level-fixup.h.
+
+For the nommu configurations the folding is already implemented by the
+generic code so the only change was to use the appropriate header file.
+
+As for the rest, the changes are mostly about mechanical replacement of
+pgd accessors with pud/pmd ones and the addition of higher levels to page
+table traversals.
+
+With Vineet's patches from "elide extraneous generated code for folded
+p4d/pud/pmd" series [1] there is a small shrink of the kernel size of about
+-0.01% for the defconfig build. 
+
+The set is boot-tested on UML, qemu-{alpha,sparc} and aranym.
+
+[1] https://lore.kernel.org/lkml/20191016162400.14796-1-vgupta@synopsys.com
+
+Mike Rapoport (12):
+  alpha: use pgtable-nop4d instead of 4level-fixup
+  arm: nommu: use pgtable-nopud instead of 4level-fixup
+  c6x: use pgtable-nopud instead of 4level-fixup
+  m68k: nommu: use pgtable-nopud instead of 4level-fixup
+  m68k: mm: use pgtable-nopXd instead of 4level-fixup
+  microblaze: use pgtable-nopmd instead of 4level-fixup
+  nds32: use pgtable-nopmd instead of 4level-fixup
+  parisc: use pgtable-nopXd instead of 4level-fixup
+  sparc32: use pgtable-nopud instead of 4level-fixup
+  um: remove unused pxx_offset_proc() and addr_pte() functions
+  um: add support for folded p4d page tables
+  mm: remove __ARCH_HAS_4LEVEL_HACK and include/asm-generic/4level-fixup.h
+
+ arch/alpha/include/asm/pgalloc.h         |  4 +-
+ arch/alpha/include/asm/pgtable.h         | 24 ++++-----
+ arch/alpha/mm/init.c                     | 12 +++--
+ arch/arm/include/asm/pgtable.h           |  2 +-
+ arch/c6x/include/asm/pgtable.h           |  2 +-
+ arch/m68k/include/asm/mcf_pgalloc.h      |  7 ---
+ arch/m68k/include/asm/mcf_pgtable.h      | 28 ++++-------
+ arch/m68k/include/asm/mmu_context.h      | 12 ++++-
+ arch/m68k/include/asm/motorola_pgalloc.h |  4 +-
+ arch/m68k/include/asm/motorola_pgtable.h | 32 +++++++-----
+ arch/m68k/include/asm/page.h             |  9 ++--
+ arch/m68k/include/asm/pgtable_mm.h       | 11 +++--
+ arch/m68k/include/asm/pgtable_no.h       |  2 +-
+ arch/m68k/include/asm/sun3_pgalloc.h     |  5 --
+ arch/m68k/include/asm/sun3_pgtable.h     | 18 -------
+ arch/m68k/kernel/sys_m68k.c              | 10 +++-
+ arch/m68k/mm/init.c                      |  6 ++-
+ arch/m68k/mm/kmap.c                      | 36 ++++++++++----
+ arch/m68k/mm/mcfmmu.c                    | 16 +++++-
+ arch/m68k/mm/motorola.c                  | 17 ++++---
+ arch/microblaze/include/asm/page.h       |  3 --
+ arch/microblaze/include/asm/pgalloc.h    | 16 ------
+ arch/microblaze/include/asm/pgtable.h    | 32 +-----------
+ arch/microblaze/kernel/signal.c          | 10 ++--
+ arch/microblaze/mm/init.c                |  7 ++-
+ arch/microblaze/mm/pgtable.c             | 13 ++++-
+ arch/nds32/include/asm/page.h            |  3 --
+ arch/nds32/include/asm/pgalloc.h         |  3 --
+ arch/nds32/include/asm/pgtable.h         | 12 +----
+ arch/nds32/include/asm/tlb.h             |  1 -
+ arch/nds32/kernel/pm.c                   |  4 +-
+ arch/nds32/mm/fault.c                    | 16 ++++--
+ arch/nds32/mm/init.c                     | 11 +++--
+ arch/nds32/mm/mm-nds32.c                 |  6 ++-
+ arch/nds32/mm/proc.c                     | 26 ++++++----
+ arch/parisc/include/asm/page.h           | 30 ++++++-----
+ arch/parisc/include/asm/pgalloc.h        | 41 ++++++---------
+ arch/parisc/include/asm/pgtable.h        | 52 ++++++++++---------
+ arch/parisc/include/asm/tlb.h            |  2 +
+ arch/parisc/kernel/cache.c               | 13 +++--
+ arch/parisc/kernel/pci-dma.c             |  9 +++-
+ arch/parisc/mm/fixmap.c                  | 10 ++--
+ arch/sparc/include/asm/pgalloc_32.h      |  6 +--
+ arch/sparc/include/asm/pgtable_32.h      | 28 +++++------
+ arch/sparc/mm/fault_32.c                 | 11 ++++-
+ arch/sparc/mm/highmem.c                  |  6 ++-
+ arch/sparc/mm/io-unit.c                  |  6 ++-
+ arch/sparc/mm/iommu.c                    |  6 ++-
+ arch/sparc/mm/srmmu.c                    | 51 ++++++++++++++-----
+ arch/um/include/asm/pgtable-2level.h     |  1 -
+ arch/um/include/asm/pgtable-3level.h     |  1 -
+ arch/um/include/asm/pgtable.h            |  3 ++
+ arch/um/kernel/mem.c                     | 25 +++++++++-
+ arch/um/kernel/skas/mmu.c                | 12 ++++-
+ arch/um/kernel/skas/uaccess.c            |  7 ++-
+ arch/um/kernel/tlb.c                     | 85 +++++++++++++++++++-------------
+ arch/um/kernel/trap.c                    |  4 +-
+ include/asm-generic/4level-fixup.h       | 40 ---------------
+ include/asm-generic/tlb.h                |  2 -
+ include/linux/mm.h                       | 10 ++--
+ mm/memory.c                              |  8 ---
+ 61 files changed, 481 insertions(+), 408 deletions(-)
+ delete mode 100644 include/asm-generic/4level-fixup.h
+
+-- 
+2.7.4
+
