@@ -2,92 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7DAE257A
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2019 23:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E532E260C
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2019 00:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405741AbfJWVfi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Oct 2019 17:35:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45528 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405894AbfJWVfe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 23 Oct 2019 17:35:34 -0400
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S2407825AbfJWWBU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Oct 2019 18:01:20 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:51095 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2407794AbfJWWBU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 23 Oct 2019 18:01:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1571868079;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nEg2JMs7obRnwPmfQVBb4NG9WKsi5kJp3la0gsAnYkc=;
+        b=JLdjMe5+uCvIxGem/FvNnJKAql0wh8ZI1xeiNnglXZNstJC5Rx3JGbUaP0Z5jwo+eWk0eH
+        auJf1VhqYBRK7XUoIDLepJQufNyizuv8QT2wtw7Cmk4bJnZDhkMLxV1vNqghXhbql65Knn
+        Lv9A9/sVLCL8Xcw76zsMOYaIXXMCu9M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-180-Gi_XQU_ZPV2zJxaYVWjtRQ-1; Wed, 23 Oct 2019 18:01:15 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3446C21A4A
-        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2019 21:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571866533;
-        bh=SBMDObVtLwoJsFVjvZzIsniwPAe1oxrRAkshjAWtzj4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h3CDLvA6h0MsaxhWNI9xrgoTV+5LVFAYA+KjXLSRcwDE8Rmm5DMOpt/zPVRij91tu
-         TIXM0vtC9cBP4e31o9cuvGYOHApLj9KgvUdoZcEJlv6e96yAqpD8MYkbk2ICIqzNwa
-         7nF2y5WGCBHh2rod/Cdr0rV+N6/7E4tboKtuNBVQ=
-Received: by mail-wr1-f51.google.com with SMTP id l10so23245767wrb.2
-        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2019 14:35:33 -0700 (PDT)
-X-Gm-Message-State: APjAAAUXSaUB3rF8V7uliHSZi0cJtsEBMJOAtsyd+nsWSdJbq+1MAVd/
-        VADVdDpCqbgriPMvm+/jWCjDZF7SqruuVNozMbGCmg==
-X-Google-Smtp-Source: APXvYqxcjjEXMQAIIXDM/w44hSbq6ajR/ylOwPkVyoOrIvjXgG6QXCSCwugMOg6p+QCWdK3zhJjgOXw4o76uQhhTHl0=
-X-Received: by 2002:adf:f7d1:: with SMTP id a17mr235388wrq.111.1571866531748;
- Wed, 23 Oct 2019 14:35:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191023122705.198339581@linutronix.de> <20191023123118.386844979@linutronix.de>
- <CALCETrWLk9LKV4+_mrOKDc3GUvXbCjqA5R6cdpqq02xoRCBOHw@mail.gmail.com>
-In-Reply-To: <CALCETrWLk9LKV4+_mrOKDc3GUvXbCjqA5R6cdpqq02xoRCBOHw@mail.gmail.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Wed, 23 Oct 2019 14:35:20 -0700
-X-Gmail-Original-Message-ID: <CALCETrWvnge064VUY3FQKens2Nx8BPNDhUZAXCvF6bD7VJy93A@mail.gmail.com>
-Message-ID: <CALCETrWvnge064VUY3FQKens2Nx8BPNDhUZAXCvF6bD7VJy93A@mail.gmail.com>
-Subject: Re: [patch V2 08/17] x86/entry: Move syscall irq tracing to C code
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 23F0D107AD31;
+        Wed, 23 Oct 2019 22:01:14 +0000 (UTC)
+Received: from treble (ovpn-121-225.rdu2.redhat.com [10.10.121.225])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E8FB919C77;
+        Wed, 23 Oct 2019 22:01:11 +0000 (UTC)
+Date:   Wed, 23 Oct 2019 17:01:09 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
         Will Deacon <will@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-arch@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
         Miroslav Benes <mbenes@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [patch V2 05/17] x86/traps: Make interrupt enable/disable
+ symmetric in C code
+Message-ID: <20191023220109.jmbrluyjxenblcij@treble>
+References: <20191023122705.198339581@linutronix.de>
+ <20191023123118.084086112@linutronix.de>
+MIME-Version: 1.0
+In-Reply-To: <20191023123118.084086112@linutronix.de>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-MC-Unique: Gi_XQU_ZPV2zJxaYVWjtRQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 2:30 PM Andy Lutomirski <luto@kernel.org> wrote:
->
-> On Wed, Oct 23, 2019 at 5:31 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >
-> > Interrupt state tracing can be safely done in C code. The few stack
-> > operations in assembly do not need to be covered.
-> >
-> > Remove the now pointless indirection via .Lsyscall_32_done and jump to
-> > swapgs_restore_regs_and_return_to_usermode directly.
->
-> This doesn't look right.
->
-> >  #define SYSCALL_EXIT_WORK_FLAGS                                \
-> > @@ -279,6 +282,9 @@ static void syscall_slow_exit_work(struc
-> >  {
-> >         struct thread_info *ti;
-> >
-> > +       /* User to kernel transition disabled interrupts. */
-> > +       trace_hardirqs_off();
-> > +
->
-> So you just traced IRQs off, but...
->
-> >         enter_from_user_mode();
-> >         local_irq_enable();
->
-> Now they're on and traced on again?
->
-> I also don't see how your patch handles the fastpath case.
->
-> How about the attached patch instead?
+On Wed, Oct 23, 2019 at 02:27:10PM +0200, Thomas Gleixner wrote:
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1500,10 +1500,13 @@ static noinline void
+>  =09=09return;
+> =20
+>  =09/* Was the fault on kernel-controlled part of the address space? */
+> -=09if (unlikely(fault_in_kernel_space(address)))
+> +=09if (unlikely(fault_in_kernel_space(address))) {
+>  =09=09do_kern_addr_fault(regs, hw_error_code, address);
+> -=09else
+> +=09} else {
+>  =09=09do_user_addr_fault(regs, hw_error_code, address);
+> +=09=09if (regs->flags & X86_EFLAGS_IF)
+> +=09=09=09local_irq_disable();
+> +=09}
 
-Ignore the attached patch.  You have this in your
-do_exit_to_usermode() later in the series.  But I'm still quite
-confused by this patch.
+The corresponding irq enable is in do_user_addr_fault(), why not do the
+disable there?
+
+--=20
+Josh
+
