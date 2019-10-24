@@ -2,122 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBA1E3801
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2019 18:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 823CEE3924
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2019 19:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503456AbfJXQgN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Oct 2019 12:36:13 -0400
-Received: from foss.arm.com ([217.140.110.172]:56142 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2503452AbfJXQgI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 24 Oct 2019 12:36:08 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D418369;
-        Thu, 24 Oct 2019 09:35:52 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 459D93F71F;
-        Thu, 24 Oct 2019 09:35:48 -0700 (PDT)
-Date:   Thu, 24 Oct 2019 17:35:46 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marco Elver <elver@google.com>
-Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Alexander Potapenko <glider@google.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        id S2410048AbfJXRDj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Oct 2019 13:03:39 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:52249 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730622AbfJXRDj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Oct 2019 13:03:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1571936618;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KPuVZSjsJby28GYRrSW7KOOUQEyPDIp7ehYqx2CiMW8=;
+        b=B2KqYigeTOy41TCbKdWuujH9Kmc/DgRUCAo8a2h4j/s6nnLVD1Jetjp09J1WGB9d+QvcU3
+        048u/Ua6FXJaXijMUSEfFCR0SB5jJlC62e5lwwsQR+P06AfiYqzeiZBNtEv0QDgjzDPpfC
+        CewWVt/09BD0Cc5C/2e7lwHYjJm7sLo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-305-4DGjzRdVOO-j_UhaexIoDw-1; Thu, 24 Oct 2019 13:03:34 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1CED11800DFB;
+        Thu, 24 Oct 2019 17:03:22 +0000 (UTC)
+Received: from llong.remote.csb (dhcp-17-59.bos.redhat.com [10.18.17.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EA8096012E;
+        Thu, 24 Oct 2019 17:03:16 +0000 (UTC)
+Subject: Re: [PATCH 0/2] Enabling MSI for Microblaze
+To:     Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com,
+        palmer@sifive.com, hch@infradead.org, helgaas@kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Jackie Liu <liuyun01@kylinos.cn>,
+        Wesley Terpstra <wesley@sifive.com>,
+        Firoz Khan <firoz.khan@linaro.org>, sparclinux@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>, Daniel Axtens <dja@axtens.net>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        James Hogan <jhogan@kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Will Deacon <will@kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-efi@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH v2 4/8] seqlock, kcsan: Add annotations for KCSAN
-Message-ID: <20191024163545.GI4300@lakrids.cambridge.arm.com>
-References: <20191017141305.146193-1-elver@google.com>
- <20191017141305.146193-5-elver@google.com>
- <20191024122801.GD4300@lakrids.cambridge.arm.com>
- <CANpmjNPFkqOSEcEP475-NeeJnY5pZ44m+bEhtOs8E_xkRKr-TQ@mail.gmail.com>
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-snps-arc@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-mips@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1571911976.git.michal.simek@xilinx.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <e9feafd1-8497-025b-e81d-f0e974038f3c@redhat.com>
+Date:   Thu, 24 Oct 2019 13:03:16 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNPFkqOSEcEP475-NeeJnY5pZ44m+bEhtOs8E_xkRKr-TQ@mail.gmail.com>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+In-Reply-To: <cover.1571911976.git.michal.simek@xilinx.com>
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-MC-Unique: 4DGjzRdVOO-j_UhaexIoDw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 04:17:11PM +0200, Marco Elver wrote:
-> On Thu, 24 Oct 2019 at 14:28, Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Thu, Oct 17, 2019 at 04:13:01PM +0200, Marco Elver wrote:
-> > > Since seqlocks in the Linux kernel do not require the use of marked
-> > > atomic accesses in critical sections, we teach KCSAN to assume such
-> > > accesses are atomic. KCSAN currently also pretends that writes to
-> > > `sequence` are atomic, although currently plain writes are used (their
-> > > corresponding reads are READ_ONCE).
-> > >
-> > > Further, to avoid false positives in the absence of clear ending of a
-> > > seqlock reader critical section (only when using the raw interface),
-> > > KCSAN assumes a fixed number of accesses after start of a seqlock
-> > > critical section are atomic.
-> >
-> > Do we have many examples where there's not a clear end to a seqlock
-> > sequence? Or are there just a handful?
-> >
-> > If there aren't that many, I wonder if we can make it mandatory to have
-> > an explicit end, or to add some helper for those patterns so that we can
-> > reliably hook them.
-> 
-> In an ideal world, all usage of seqlocks would be via seqlock_t, which
-> follows a somewhat saner usage, where we already do normal begin/end
-> markings -- with subtle exception to readers needing to be flat atomic
-> regions, e.g. because usage like this:
-> - fs/namespace.c:__legitimize_mnt - unbalanced read_seqretry
-> - fs/dcache.c:d_walk - unbalanced need_seqretry
-> 
-> But anything directly accessing seqcount_t seems to be unpredictable.
-> Filtering for usage of read_seqcount_retry not following 'do { .. }
-> while (read_seqcount_retry(..));' (although even the ones in while
-> loops aren't necessarily predictable):
-> 
-> $ git grep 'read_seqcount_retry' | grep -Ev 'seqlock.h|Doc|\* ' | grep
-> -v 'while ('
-> => about 1/3 of the total read_seqcount_retry usage.
-> 
-> Just looking at fs/namei.c, I would conclude that it'd be a pretty
-> daunting task to prescribe and migrate to an interface that forces
-> clear begin/end.
-> 
-> Which is why I concluded that for now, it is probably better to make
-> KCSAN play well with the existing code.
+On 10/24/19 6:13 AM, Michal Simek wrote:
+> Hi,
+>
+> these two patches come from discussion with Christoph, Bjorn, Palmer and
+> Waiman. The first patch was suggestion by Christoph here
+> https://lore.kernel.org/linux-riscv/20191008154604.GA7903@infradead.org/
+> The second part was discussed
+> https://lore.kernel.org/linux-pci/mhng-5d9bcb53-225e-441f-86cc-b335624b3e=
+7c@palmer-si-x1e/
+> and
+> https://lore.kernel.org/linux-pci/20191017181937.7004-1-palmer@sifive.com=
+/
+>
+> Thanks,
+> Michal
+>
+>
+> Michal Simek (1):
+>   asm-generic: Make msi.h a mandatory include/asm header
+>
+> Palmer Dabbelt (1):
+>   pci: Default to PCI_MSI_IRQ_DOMAIN
+>
+>  arch/arc/include/asm/Kbuild     | 1 -
+>  arch/arm/include/asm/Kbuild     | 1 -
+>  arch/arm64/include/asm/Kbuild   | 1 -
+>  arch/mips/include/asm/Kbuild    | 1 -
+>  arch/powerpc/include/asm/Kbuild | 1 -
+>  arch/riscv/include/asm/Kbuild   | 1 -
+>  arch/sparc/include/asm/Kbuild   | 1 -
+>  drivers/pci/Kconfig             | 2 +-
+>  include/asm-generic/Kbuild      | 1 +
+>  9 files changed, 2 insertions(+), 8 deletions(-)
+>
+That looks OK.
 
-Thanks for the detailed explanation, it's very helpful.
+Acked-by: Waiman Long <longman@redhat.com>
 
-That all sounds reasonable to me -- could you fold some of that into the
-commit message?
-
-Thanks,
-Mark.
