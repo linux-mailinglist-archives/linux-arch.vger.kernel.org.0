@@ -2,132 +2,375 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 345FEE2FB9
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2019 13:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51694E306D
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2019 13:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392213AbfJXLCR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Oct 2019 07:02:17 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:34675 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390019AbfJXLCR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Oct 2019 07:02:17 -0400
-Received: by mail-ot1-f65.google.com with SMTP id m19so20291453otp.1
-        for <linux-arch@vger.kernel.org>; Thu, 24 Oct 2019 04:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wp7j55fCu8VBbV3w6xxbpPhvOdRSu/ha8VU4hcpzHdY=;
-        b=GSxZTUgn5T2HRAlKrADzvv53PhUqCr6HGwWIfZ+q0bFeBI/8il22Kv3vpugrhHlUKc
-         JSd3yXOh4TDUfIqO8JPYXGilp4Vg98FIe9l+pL6F5FO2iW7zWgkU28rHfnrJDKC/RUhT
-         9y7xvvCroceLV28G/DNxI6s3sI/MSBb0LxVcLxj5vL25ilXRyhqWJ+AnuTdwWYD+wKpX
-         O5vqsk+9Nvl/sUnYEZWYKKkmZRx3M69w2mSa0T0GYjtT0TBikdjdIHl9bdIy1avJXFGR
-         mVT16n7Jv0qZPjTSiWzuZVrSqaZmV1oEhg+iVLOxp3SXxbxsxWpuo8R2VJIKx8+2qGRR
-         M+7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wp7j55fCu8VBbV3w6xxbpPhvOdRSu/ha8VU4hcpzHdY=;
-        b=Oi5PfUi3uyv4LlS44jm8zMiIgzUMqk6Qu3BdHPdT0xZ45Cxo8BwlJ64Wb2A43vA0Br
-         NaGWAtAt3R33lRwZM8T8UCH6UdIbNmlWJZr2Z9sWQWwSqdV//K4SVBx/GZN7JfqWZbDg
-         vGp8ZYbRZmUN2TSQP7aA7Eb9a8qxCEMSISU6MlwbiDfqaVcd4sx4gedSC4B2JAEfxK3J
-         RsN0JfM7Q6XLMJoyVjXfF9iOiz2DoisC7ziJqUlFVGhFi07Q+rzFdYkI5vLTprbH+2bj
-         4qLrIGB3q+7VhMs9ypNB+/WB7BCzp9ICfxfa/vtiPX7TIU2qJ6v9KD5Fr4bS4mI9fNbS
-         AyyA==
-X-Gm-Message-State: APjAAAX2wNbYpM2dlL9YfeJnaehRpqK/SQg9/PIdjVw2tOUP7GTQBquR
-        fLcOLhMY49uIrn9YpQJ369DnrZo5n5Kq8O8ewptQRw==
-X-Google-Smtp-Source: APXvYqzzXJwi5QeAS4Gnmcn5kNWx1bB+mxOrVbyaL3mIhkaZR6F+nFKJsdPfH9bNhx4bqmlmQAfh3F8piEDK6aQ6BY4=
-X-Received: by 2002:a9d:82e:: with SMTP id 43mr8537524oty.23.1571914935893;
- Thu, 24 Oct 2019 04:02:15 -0700 (PDT)
+        id S2409130AbfJXLc7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Oct 2019 07:32:59 -0400
+Received: from foss.arm.com ([217.140.110.172]:48478 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404851AbfJXLc7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 24 Oct 2019 07:32:59 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5FE84B57;
+        Thu, 24 Oct 2019 04:32:43 -0700 (PDT)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B2753F71A;
+        Thu, 24 Oct 2019 04:32:42 -0700 (PDT)
+Date:   Thu, 24 Oct 2019 12:32:40 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Richard Henderson <richard.henderson@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, Dave.Martin@arm.com, linux-arch@vger.kernel.org,
+        ard.biesheuvel@linaro.org
+Subject: Re: [PATCH 1/1] arm64: Implement archrandom.h for ARMv8.5-RNG
+Message-ID: <20191024113239.GC4300@lakrids.cambridge.arm.com>
+References: <20191019022048.28065-1-richard.henderson@linaro.org>
+ <20191019022048.28065-2-richard.henderson@linaro.org>
 MIME-Version: 1.0
-References: <20191017141305.146193-1-elver@google.com> <20191017141305.146193-2-elver@google.com>
- <20191022154858.GA13700@redhat.com> <CANpmjNPUT2B3rWaa=5Ee2Xs3HHDaUiBGpG09Q4h9Gemhsp9KFw@mail.gmail.com>
- <20191023162432.GC14327@redhat.com>
-In-Reply-To: <20191023162432.GC14327@redhat.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 24 Oct 2019 13:02:03 +0200
-Message-ID: <CANpmjNOOT+KR7m8KpETk1czyJLr3TeHsvvejwyuY3JXKr=eajg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] kcsan: Add Kernel Concurrency Sanitizer infrastructure
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Alexander Potapenko <glider@google.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>, Daniel Axtens <dja@axtens.net>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-efi@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191019022048.28065-2-richard.henderson@linaro.org>
+User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 23 Oct 2019 at 18:24, Oleg Nesterov <oleg@redhat.com> wrote:
->
-> On 10/22, Marco Elver wrote:
-> >
-> > On Tue, 22 Oct 2019 at 17:49, Oleg Nesterov <oleg@redhat.com> wrote:
-> > >
-> > > Just for example. Suppose that task->state = TASK_UNINTERRUPTIBLE, this task
-> > > does __set_current_state(TASK_RUNNING), another CPU does wake_up_process(task)
-> > > which does the same UNINTERRUPTIBLE -> RUNNING transition.
-> > >
-> > > Looks like, this is the "data race" according to kcsan?
-> >
-> > Yes, they are "data races". They are probably not "race conditions" though.
-> >
-> > This is a fair distinction to make, and we never claimed to find "race
-> > conditions" only
->
-> I see, thanks, just wanted to be sure...
->
-> > KCSAN's goal is to find *data races* according to the LKMM.  Some data
-> > races are race conditions (usually the more interesting bugs) -- but
-> > not *all* data races are race conditions. Those are what are usually
-> > referred to as "benign", but they can still become bugs on the wrong
-> > arch/compiler combination. Hence, the need to annotate these accesses
-> > with READ_ONCE, WRITE_ONCE or use atomic_t:
->
-> Well, if I see READ_ONCE() in the code I want to understand why it was
-> used. Is it really needed for correctness or we want to shut up kcsan?
-> Say, why should wait_event(wq, *ptr) use READ_ONCE()? Nevermind, please
-> forget.
->
-> Btw, why __kcsan_check_watchpoint() does user_access_save() before
-> try_consume_watchpoint() ?
+Hi Richard,
 
-Instrumentation is added in UACCESS regions. Since we do not access
-user-memory, we do user_access_save to ensure everything is safe
-(otherwise objtool complains that we do calls to non-whitelisted
-functions). I will try to optimize this a bit, but we can't avoid it.
+On Fri, Oct 18, 2019 at 07:20:48PM -0700, Richard Henderson wrote:
+> Expose the ID_AA64ISAR0.RNDR field to userspace, as the
+> RNG system registers are always available at EL0.
+> 
+> Signed-off-by: Richard Henderson <richard.henderson@linaro.org>
+> ---
+>  Documentation/arm64/cpu-feature-registers.rst |  2 +
+>  arch/arm64/include/asm/archrandom.h           | 76 +++++++++++++++++++
+>  arch/arm64/include/asm/cpucaps.h              |  3 +-
+>  arch/arm64/include/asm/sysreg.h               |  1 +
+>  arch/arm64/kernel/cpufeature.c                | 34 +++++++++
+>  arch/arm64/Kconfig                            | 12 +++
+>  drivers/char/Kconfig                          |  4 +-
 
-> Oleg.
->
+I suspect that we may need KVM changes -- e.g. the ability to hide this
+from guests.
+
+>  7 files changed, 129 insertions(+), 3 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/archrandom.h
+> 
+> diff --git a/Documentation/arm64/cpu-feature-registers.rst b/Documentation/arm64/cpu-feature-registers.rst
+> index 2955287e9acc..78d6f5c6e824 100644
+> --- a/Documentation/arm64/cpu-feature-registers.rst
+> +++ b/Documentation/arm64/cpu-feature-registers.rst
+> @@ -117,6 +117,8 @@ infrastructure:
+>       +------------------------------+---------+---------+
+>       | Name                         |  bits   | visible |
+>       +------------------------------+---------+---------+
+> +     | RNDR                         | [63-60] |    y    |
+> +     +------------------------------+---------+---------+
+>       | TS                           | [55-52] |    y    |
+>       +------------------------------+---------+---------+
+>       | FHM                          | [51-48] |    y    |
+> diff --git a/arch/arm64/include/asm/archrandom.h b/arch/arm64/include/asm/archrandom.h
+> new file mode 100644
+> index 000000000000..80369898e274
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/archrandom.h
+> @@ -0,0 +1,76 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_ARCHRANDOM_H
+> +#define _ASM_ARCHRANDOM_H
+> +
+> +#include <asm/cpufeature.h>
+> +
+> +/* Unconditional execution of RNDR and RNDRRS.  */
+> +
+> +static inline bool arm_rndr(unsigned long *v)
+> +{
+> +	int pass;
+> +
+> +	asm("mrs %0, s3_3_c2_c4_0\n\t"  /* RNDR */
+> +	    "cset %w1, ne"
+> +	    : "=r"(*v), "=r"(pass));
+> +	return pass != 0;
+> +}
+
+Please give this a menmoic in <asm/sysreg.h>, i.e.
+
+#define SYS_RNDR	sys_reg(3, 3, 2, 4, 0)
+
+... and make this function:
+
+static inline bool read_rndr(unsigned long *v)
+{
+	unsigned long pass;
+
+	/*
+	 * Reads of RNDR set PSTATE.NZCV to 0b0000 upon success, and set
+	 * PSTATE.NZCV to 0b0100 otherwise.
+	 */
+	asm volatile(
+		__mrs_s("%0", SYS_RNDR) "\n"
+	"	cset %1, ne\n"
+	: "=r" (*v), "=r" (pass);
+	:
+	: "cc");
+
+	return pass;
+}
+
+Note that the cc clobber is important in case this gets inlined!
+
+> +
+> +static inline bool arm_rndrrs(unsigned long *v)
+> +{
+> +	int pass;
+> +
+> +	asm("mrs %0, s3_3_c2_c4_1\n\t"  /* RNDRRS */
+> +	    "cset %w1, ne"
+> +	    : "=r"(*v), "=r"(pass));
+> +	return pass != 0;
+> +}
+
+Likewise, in <asm/sysreg.h>, add:
+
+#define SYS_RNDRRS	sys_reg(3, 3, 2, 4, 1)
+
+...and here have:
+
+static inline bool read_rndrrs(unsigned long *v)
+{
+	unsigned long pass;
+
+	/*
+	 * Reads of RNDRRS set PSTATE.NZCV to 0b0000 upon success, and
+	 * set PSTATE.NZCV to 0b0100 otherwise.
+	 */
+	asm volatile (
+		__mrs_s("%0", SYS_RNDRRS) "\n"
+	"	cset %w1, ne\n"
+	: "=r" (*v), "=r" (pass)
+	:
+	: "cc");
+
+	return pass;
+}
+
+> +
+> +#ifdef CONFIG_ARCH_RANDOM
+> +
+> +/*
+> + * Note that these two interfaces, random and random_seed, are strongly
+> + * tied to the Intel instructions RDRAND and RDSEED.  RDSEED is the
+> + * "enhanced" version and has stronger guarantees.  The ARMv8.5-RNG
+> + * instruction RNDR corresponds to RDSEED, thus we put our implementation
+> + * into the random_seed set of functions.
+> + *
+> + * Note as well that Intel does not have an instruction that corresponds
+> + * to the RNDRRS instruction, so there's no generic interface for that.
+> + */
+> +static inline bool arch_has_random(void)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline bool arch_get_random_long(unsigned long *v)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline bool arch_get_random_int(unsigned int *v)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline bool arch_has_random_seed(void)
+> +{
+> +	return cpus_have_const_cap(ARM64_HAS_RNG);
+> +}
+> +
+> +static inline bool arch_get_random_seed_long(unsigned long *v)
+> +{
+> +	/* If RNDR fails, attempt to re-seed with RNDRRS.  */
+> +	return arch_has_random_seed() && (arm_rndr(v) || arm_rndrrs(v));
+> +}
+
+Here we clobber the value at v even if the reads of RNDR and RNDRRS
+failed. Is that ok?
+
+Maybe we want the accessors to only assign to v upon success.
+
+> +
+> +static inline bool arch_get_random_seed_int(unsigned int *v)
+> +{
+> +	unsigned long vl = 0;
+> +	bool ret = arch_get_random_seed_long(&vl);
+> +	*v = vl;
+> +	return ret;
+> +}
+> +
+> +#endif /* CONFIG_ARCH_RANDOM */
+> +#endif /* _ASM_ARCHRANDOM_H */
+> diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
+> index f19fe4b9acc4..2fc15765d25d 100644
+> --- a/arch/arm64/include/asm/cpucaps.h
+> +++ b/arch/arm64/include/asm/cpucaps.h
+> @@ -52,7 +52,8 @@
+>  #define ARM64_HAS_IRQ_PRIO_MASKING		42
+>  #define ARM64_HAS_DCPODP			43
+>  #define ARM64_WORKAROUND_1463225		44
+> +#define ARM64_HAS_RNG				45
+>  
+> -#define ARM64_NCAPS				45
+> +#define ARM64_NCAPS				46
+>  
+>  #endif /* __ASM_CPUCAPS_H */
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 972d196c7714..7a0c159661cd 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -539,6 +539,7 @@
+>  			 ENDIAN_SET_EL1 | SCTLR_EL1_UCI  | SCTLR_EL1_RES1)
+>  
+>  /* id_aa64isar0 */
+> +#define ID_AA64ISAR0_RNDR_SHIFT		60
+>  #define ID_AA64ISAR0_TS_SHIFT		52
+>  #define ID_AA64ISAR0_FHM_SHIFT		48
+>  #define ID_AA64ISAR0_DP_SHIFT		44
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index cabebf1a7976..34b9731e1fab 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -119,6 +119,7 @@ static void cpu_enable_cnp(struct arm64_cpu_capabilities const *cap);
+>   * sync with the documentation of the CPU feature register ABI.
+>   */
+>  static const struct arm64_ftr_bits ftr_id_aa64isar0[] = {
+> +	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_RNDR_SHIFT, 4, 0),
+>  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_TS_SHIFT, 4, 0),
+>  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_FHM_SHIFT, 4, 0),
+>  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_DP_SHIFT, 4, 0),
+> @@ -1261,6 +1262,27 @@ static bool can_use_gic_priorities(const struct arm64_cpu_capabilities *entry,
+>  }
+>  #endif
+>  
+> +#ifdef CONFIG_ARCH_RANDOM
+> +static bool can_use_rng(const struct arm64_cpu_capabilities *entry, int scope)
+> +{
+> +	unsigned long tmp;
+> +	int i;
+> +
+> +	if (!has_cpuid_feature(entry, scope))
+> +		return false;
+> +
+> +	/*
+> +	 * Re-seed from the true random number source.
+> +	 * If this fails, disable the feature.
+> +	 */
+> +	for (i = 0; i < 10; ++i) {
+> +		if (arm_rndrrs(&tmp))
+> +			return true;
+> +	}
+
+The ARM ARM (ARM DDI 0487E.a) says:
+
+| Reseeded Random Number. Returns a 64-bit random number which is
+| reseeded from the True Random Number source at an IMPLEMENTATION
+| DEFINED rate.
+
+... and:
+
+| If the instruction cannot return a genuine random number in a
+| reasonable period of time, PSTATE.NZCV is set to 0b0100 and the data
+| value returned in UNKNOWN.
+
+... so it's not clear to me if the retry logic makes sense. Naively I'd
+expect "reasonable period of time" to include 10 attempts.
+
+Given we'll have to handle failure elsewhere, I suspect that it might be
+best to assume that this works until we encounter evidence to the
+contrary.
+
+> +	return false;
+> +}
+> +#endif
+> +
+>  static const struct arm64_cpu_capabilities arm64_features[] = {
+>  	{
+>  		.desc = "GIC system register CPU interface",
+> @@ -1560,6 +1582,18 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+>  		.sign = FTR_UNSIGNED,
+>  		.min_field_value = 1,
+>  	},
+> +#endif
+> +#ifdef CONFIG_ARCH_RANDOM
+> +	{
+> +		.desc = "Random Number Generator",
+> +		.capability = ARM64_HAS_RNG,
+> +		.type = ARM64_CPUCAP_STRICT_BOOT_CPU_FEATURE,
+
+I strongly suspect we're going to encounter systems where this feature
+is mismatched, such that this can't be a boto CPU feature.
+
+If we need entropy early in boot, we could detect if the boot CPU had
+the feature, and seed the pool using it, then later make use of a
+system-wide capability.
+
+Thanks,
+Mark.
+
+> +		.matches = can_use_rng,
+> +		.sys_reg = SYS_ID_AA64ISAR0_EL1,
+> +		.field_pos = ID_AA64ISAR0_RNDR_SHIFT,
+> +		.sign = FTR_UNSIGNED,
+> +		.min_field_value = 1,
+> +	},
+>  #endif
+>  	{},
+>  };
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 950a56b71ff0..a035c178102a 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1421,6 +1421,18 @@ config ARM64_PTR_AUTH
+>  
+>  endmenu
+>  
+> +menu "ARMv8.5 architectural features"
+> +
+> +config ARCH_RANDOM
+> +	bool "Enable support for random number generation"
+> +	default y
+> +	help
+> +	  Random number generation (part of the ARMv8.5 Extensions)
+> +	  provides a high bandwidth, cryptographically secure
+> +	  hardware random number generator.
+> +
+> +endmenu
+> +
+>  config ARM64_SVE
+>  	bool "ARM Scalable Vector Extension support"
+>  	default y
+> diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+> index df0fc997dc3e..f26a0a8cc0d0 100644
+> --- a/drivers/char/Kconfig
+> +++ b/drivers/char/Kconfig
+> @@ -539,7 +539,7 @@ endmenu
+>  
+>  config RANDOM_TRUST_CPU
+>  	bool "Trust the CPU manufacturer to initialize Linux's CRNG"
+> -	depends on X86 || S390 || PPC
+> +	depends on X86 || S390 || PPC || ARM64
+>  	default n
+>  	help
+>  	Assume that CPU manufacturer (e.g., Intel or AMD for RDSEED or
+> @@ -559,4 +559,4 @@ config RANDOM_TRUST_BOOTLOADER
+>  	device randomness. Say Y here to assume the entropy provided by the
+>  	booloader is trustworthy so it will be added to the kernel's entropy
+>  	pool. Otherwise, say N here so it will be regarded as device input that
+> -	only mixes the entropy pool.
+> \ No newline at end of file
+> +	only mixes the entropy pool.
+> -- 
+> 2.17.1
+> 
