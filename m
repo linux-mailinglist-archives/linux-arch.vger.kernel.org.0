@@ -2,166 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBAEE5385
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2019 20:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82851E5535
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2019 22:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731512AbfJYSGu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Oct 2019 14:06:50 -0400
-Received: from shadbolt.e.decadent.org.uk ([88.96.1.126]:47116 "EHLO
-        shadbolt.e.decadent.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731506AbfJYSFy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 25 Oct 2019 14:05:54 -0400
-Received: from [167.98.27.226] (helo=deadeye)
-        by shadbolt.decadent.org.uk with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1iO3xz-0008Ok-AV; Fri, 25 Oct 2019 19:05:39 +0100
-Received: from ben by deadeye with local (Exim 4.92.2)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1iO3xw-0001l7-KJ; Fri, 25 Oct 2019 19:05:36 +0100
-Content-Type: text/plain; charset="UTF-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+        id S1728536AbfJYUdc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Oct 2019 16:33:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50882 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728514AbfJYUdc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 25 Oct 2019 16:33:32 -0400
+Received: from rapoport-lnx (unknown [87.70.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9F0C9205F4;
+        Fri, 25 Oct 2019 20:33:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572035611;
+        bh=+V3MYXgziPOZllvPaeN2wWalwWrmuc8yiZofvYCWoNY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1ISSeESRZG09GzO0p+0h+u/Da++xXbkOcsQ5mlswN8E+JmDJy8i2vG7sk1XtBAlth
+         O+JkATp4aZZ6UwRybaJhjTl0dq8o88pCslQd7+isc/kOjQ3j0a42WMTbSUrvr9icVT
+         /jJxJNBEQReX2euA+K+z//obJVLa7yxkT+K4iwqU=
+Date:   Fri, 25 Oct 2019 23:33:19 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Simek <monstr@monstr.eu>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Helge Deller <deller@gmx.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mark Salter <msalter@redhat.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Creasey <sammy@sammy.net>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
+        sparclinux@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH 06/12] microblaze: use pgtable-nopmd instead of
+ 4level-fixup
+Message-ID: <20191025203318.GA8413@rapoport-lnx>
+References: <1571822941-29776-1-git-send-email-rppt@kernel.org>
+ <1571822941-29776-7-git-send-email-rppt@kernel.org>
+ <aa7df5a1-5022-bc82-8816-74c956e2fd90@monstr.eu>
 MIME-Version: 1.0
-From:   Ben Hutchings <ben@decadent.org.uk>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-CC:     akpm@linux-foundation.org, Denis Kirjanov <kda@linux-powerpc.org>,
-        "Boqun Feng" <boqun.feng@gmail.com>, linux-crypto@vger.kernel.org,
-        "Daniel Jordan" <daniel.m.jordan@oracle.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        "Steffen Klassert" <steffen.klassert@secunet.com>,
-        "Andrea Parri" <andrea.parri@amarulasolutions.com>,
-        linux-arch@vger.kernel.org
-Date:   Fri, 25 Oct 2019 19:03:46 +0100
-Message-ID: <lsq.1572026582.588282827@decadent.org.uk>
-X-Mailer: LinuxStableQueue (scripts by bwh)
-X-Patchwork-Hint: ignore
-Subject: [PATCH 3.16 45/47] padata: use smp_mb in padata_reorder to avoid
- orphaned padata jobs
-In-Reply-To: <lsq.1572026581.992411028@decadent.org.uk>
-X-SA-Exim-Connect-IP: 167.98.27.226
-X-SA-Exim-Mail-From: ben@decadent.org.uk
-X-SA-Exim-Scanned: No (on shadbolt.decadent.org.uk); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa7df5a1-5022-bc82-8816-74c956e2fd90@monstr.eu>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-3.16.76-rc1 review patch.  If anyone has any objections, please let me know.
+On Fri, Oct 25, 2019 at 10:24:30AM +0200, Michal Simek wrote:
+> Hi Mike,
+> 
+> On 23. 10. 19 11:28, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > microblaze has only two-level page tables and can use pgtable-nopmd and
+> > folding of the upper layers.
+> > 
+> > Replace usage of include/asm-generic/4level-fixup.h and explicit definition
+> > of __PAGETABLE_PMD_FOLDED in microblaze with
+> > include/asm-generic/pgtable-nopmd.h and adjust page table manipulation
+> > macros and functions accordingly.
+> > 
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > ---
+> >  arch/microblaze/include/asm/page.h    |  3 ---
+> >  arch/microblaze/include/asm/pgalloc.h | 16 ----------------
+> >  arch/microblaze/include/asm/pgtable.h | 32 ++------------------------------
+> >  arch/microblaze/kernel/signal.c       | 10 +++++++---
+> >  arch/microblaze/mm/init.c             |  7 +++++--
+> >  arch/microblaze/mm/pgtable.c          | 13 +++++++++++--
+> >  6 files changed, 25 insertions(+), 56 deletions(-)
+> 
+> I have take a look at this and when this is applied on the top of
+> 5.4-rc2 there is not a problem.
+> But as was reported by 0-day there is compilation issue on the top of
+> mmotm/master tree and I am able to replicate it.
+> It means there are other changes in Andrew's tree which are causing it.
 
-------------------
+0day is still using an old tree for mmotm:
 
-From: Daniel Jordan <daniel.m.jordan@oracle.com>
+> url:    https://github.com/0day-ci/linux/commits/Mike-Rapoport/mm-remove-__ARCH_HAS_4LEVEL_HACK/20191025-063009
+> base:   git://git.cmpxchg.org/linux-mmotm.git master
+> config: microblaze-mmu_defconfig (attached as .config)
 
-commit cf144f81a99d1a3928f90b0936accfd3f45c9a0a upstream.
+A while ago Johannes moved the mmotm to github and the last commit in
+git.cmpxchg.org/linux-mmotm.git was in the end of August.
 
-Testing padata with the tcrypt module on a 5.2 kernel...
-
-    # modprobe tcrypt alg="pcrypt(rfc4106(gcm(aes)))" type=3
-    # modprobe tcrypt mode=211 sec=1
-
-...produces this splat:
-
-    INFO: task modprobe:10075 blocked for more than 120 seconds.
-          Not tainted 5.2.0-base+ #16
-    modprobe        D    0 10075  10064 0x80004080
-    Call Trace:
-     ? __schedule+0x4dd/0x610
-     ? ring_buffer_unlock_commit+0x23/0x100
-     schedule+0x6c/0x90
-     schedule_timeout+0x3b/0x320
-     ? trace_buffer_unlock_commit_regs+0x4f/0x1f0
-     wait_for_common+0x160/0x1a0
-     ? wake_up_q+0x80/0x80
-     { crypto_wait_req }             # entries in braces added by hand
-     { do_one_aead_op }
-     { test_aead_jiffies }
-     test_aead_speed.constprop.17+0x681/0xf30 [tcrypt]
-     do_test+0x4053/0x6a2b [tcrypt]
-     ? 0xffffffffa00f4000
-     tcrypt_mod_init+0x50/0x1000 [tcrypt]
-     ...
-
-The second modprobe command never finishes because in padata_reorder,
-CPU0's load of reorder_objects is executed before the unlocking store in
-spin_unlock_bh(pd->lock), causing CPU0 to miss CPU1's increment:
-
-CPU0                                 CPU1
-
-padata_reorder                       padata_do_serial
-  LOAD reorder_objects  // 0
-                                       INC reorder_objects  // 1
-                                       padata_reorder
-                                         TRYLOCK pd->lock   // failed
-  UNLOCK pd->lock
-
-CPU0 deletes the timer before returning from padata_reorder and since no
-other job is submitted to padata, modprobe waits indefinitely.
-
-Add a pair of full barriers to guarantee proper ordering:
-
-CPU0                                 CPU1
-
-padata_reorder                       padata_do_serial
-  UNLOCK pd->lock
-  smp_mb()
-  LOAD reorder_objects
-                                       INC reorder_objects
-                                       smp_mb__after_atomic()
-                                       padata_reorder
-                                         TRYLOCK pd->lock
-
-smp_mb__after_atomic is needed so the read part of the trylock operation
-comes after the INC, as Andrea points out.   Thanks also to Andrea for
-help with writing a litmus test.
-
-Fixes: 16295bec6398 ("padata: Generic parallelization/serialization interface")
-Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Paul E. McKenney <paulmck@linux.ibm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Steffen Klassert <steffen.klassert@secunet.com>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
----
- kernel/padata.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
---- a/kernel/padata.c
-+++ b/kernel/padata.c
-@@ -272,7 +272,12 @@ static void padata_reorder(struct parall
- 	 * The next object that needs serialization might have arrived to
- 	 * the reorder queues in the meantime, we will be called again
- 	 * from the timer function if no one else cares for it.
-+	 *
-+	 * Ensure reorder_objects is read after pd->lock is dropped so we see
-+	 * an increment from another task in padata_do_serial.  Pairs with
-+	 * smp_mb__after_atomic in padata_do_serial.
- 	 */
-+	smp_mb();
- 	if (atomic_read(&pd->reorder_objects)
- 			&& !(pinst->flags & PADATA_RESET))
- 		mod_timer(&pd->timer, jiffies + HZ);
-@@ -341,6 +346,13 @@ void padata_do_serial(struct padata_priv
- 	list_add_tail(&padata->list, &pqueue->reorder.list);
- 	spin_unlock(&pqueue->reorder.lock);
+[1] https://lore.kernel.org/linux-mm/20190916134327.GC29985@cmpxchg.org
  
-+	/*
-+	 * Ensure the atomic_inc of reorder_objects above is ordered correctly
-+	 * with the trylock of pd->lock in padata_reorder.  Pairs with smp_mb
-+	 * in padata_reorder.
-+	 */
-+	smp_mb__after_atomic();
-+
- 	put_cpu();
- 
- 	padata_reorder(pd);
+> Thanks,
+> Michal
+> 
+> -- 
+> Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+> w: www.monstr.eu p: +42-0-721842854
+> Maintainer of Linux kernel - Xilinx Microblaze
+> Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+> U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+> 
 
+-- 
+Sincerely yours,
+Mike.
