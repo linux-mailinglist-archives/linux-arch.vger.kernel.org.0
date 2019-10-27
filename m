@@ -2,126 +2,185 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FAFE5F19
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Oct 2019 20:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4452BE6047
+	for <lists+linux-arch@lfdr.de>; Sun, 27 Oct 2019 03:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726687AbfJZS7h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 26 Oct 2019 14:59:37 -0400
-Received: from mout-p-101.mailbox.org ([80.241.56.151]:50152 "EHLO
-        mout-p-101.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbfJZS7g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Oct 2019 14:59:36 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 470qz85SdpzKmsD;
-        Sat, 26 Oct 2019 20:59:32 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
-        with ESMTP id suRkpnqaA-TF; Sat, 26 Oct 2019 20:59:28 +0200 (CEST)
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: [PATCH RESEND v14 6/6] Documentation: path-lookup: mention LOOKUP_MAGICLINK_JUMPED
-Date:   Sun, 27 Oct 2019 05:57:00 +1100
-Message-Id: <20191026185700.10708-7-cyphar@cyphar.com>
-In-Reply-To: <20191026185700.10708-1-cyphar@cyphar.com>
-References: <20191026185700.10708-1-cyphar@cyphar.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726600AbfJ0CeW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 26 Oct 2019 22:34:22 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:35981 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726598AbfJ0CeW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Oct 2019 22:34:22 -0400
+Received: by mail-pg1-f193.google.com with SMTP id 23so4188031pgk.3
+        for <linux-arch@vger.kernel.org>; Sat, 26 Oct 2019 19:34:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:message-id:from:to:cc:subject:in-reply-to:references
+         :user-agent:mime-version;
+        bh=OBBT2t3d/CB4GMqarYF+/S8G0ZXqf6Xv8Y2CoiPXH0c=;
+        b=LBGLI/zKs3mA+6cx1+hnRflzkf02MqgrXyve+CBjoAwh6p7KKaqW43pQkZxcFcuzNz
+         oad2snKDZ0egkkUIf/V8rYqgf9rjlRT4DLPpkC6ZAdI+lT0KOGU145XWaKJSj2jjIRcM
+         pvOHwCdcunU+6svy7K1y9QSgUqy9tun/oekMq574vNgGKgBUUIdATp8Cd7RxoUHTj4vW
+         YE/3WoY6urT4CIVKxaU8eDZyqsTOS26iLJNZBpifc19qm7mpQarZ0+wTyME56q9iA4E3
+         i8DOIfvVISG/E6HZ28+sQmsj0DMOCx3SwqE1vH3zJZv/t1UO1Wt4OcQF7cYA3g/ytdtP
+         5peA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
+         :references:user-agent:mime-version;
+        bh=OBBT2t3d/CB4GMqarYF+/S8G0ZXqf6Xv8Y2CoiPXH0c=;
+        b=fs379tsHDirTS0O7HVNTU6XzL7eqal0t37K/RJdRcDcwg7E2ZjWMImTNd9zWCUCg+J
+         yaziqg9riiXRFZtBxoP+47p2n6HijW7E4pU3unSBpz7sFLaB+N63IEQQdtNGBR1/G6Mn
+         YiVrH2znmMyjBJ1BeVejjUxoXOFcfvch3ouuC2voQvwzJACFCpkdRyjKKgIURlf5k9FI
+         YcgE6+K2iSkrl0GZ9sTyjjyBSSJMUcRYNgSUB8eKQfdW7CnR5Fwo4ZX3VMz1k62bpvL3
+         rTcHIbyBG2PRQFENoTc29LY2KjAgpHlrO6YPh/JRUnLIy9ZAAyU6Rint7M1ONI1Bp2ZS
+         tO/g==
+X-Gm-Message-State: APjAAAU31MTzVSDz+7BItLw7pPG66KEBhESUJH8SGgqhvTUhKBY/9bYN
+        oGe05I+6RnuT1AYjhogPadI=
+X-Google-Smtp-Source: APXvYqxFhcdB/CcpQ6FJzqo4BJ74zWljLCXDtm3F3dVKK+6tqLpmX4lU9+DCeltQ2vjASnpW++On/g==
+X-Received: by 2002:a63:3d41:: with SMTP id k62mr13146012pga.129.1572143660586;
+        Sat, 26 Oct 2019 19:34:20 -0700 (PDT)
+Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
+        by smtp.gmail.com with ESMTPSA id p1sm6686167pfb.112.2019.10.26.19.34.17
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 26 Oct 2019 19:34:19 -0700 (PDT)
+Date:   Sun, 27 Oct 2019 11:34:13 +0900
+Message-ID: <m2blu2x6fu.wl-thehajime@gmail.com>
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     richard.weinberger@gmail.com
+Cc:     linux-um@lists.infradead.org, tavi.purdila@gmail.com,
+        retrage01@gmail.com, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH 00/47] Unifying LKL into UML
+In-Reply-To: <CAFLxGvyshYxocTNrzWV0mLQ-_qZzMG7u64=ySMbjrsu8j4cwTQ@mail.gmail.com>
+References: <cover.1571798507.git.thehajime@gmail.com>
+        <CAFLxGvyshYxocTNrzWV0mLQ-_qZzMG7u64=ySMbjrsu8j4cwTQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Now that we have a special flag to signify magic-link jumps, mention it
-within the path-lookup docs. And now that "magic link" is the correct
-term for nd_jump_link()-style symlinks, clean up references to this type
-of "symlink".
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- Documentation/filesystems/path-lookup.rst | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+Hello Richard,
 
-diff --git a/Documentation/filesystems/path-lookup.rst b/Documentation/filesystems/path-lookup.rst
-index 434a07b0002b..2c32795389bd 100644
---- a/Documentation/filesystems/path-lookup.rst
-+++ b/Documentation/filesystems/path-lookup.rst
-@@ -405,6 +405,10 @@ is requested.  Keeping a reference in the ``nameidata`` ensures that
- only one root is in effect for the entire path walk, even if it races
- with a ``chroot()`` system call.
- 
-+It should be noted that in the case of ``LOOKUP_IN_ROOT`` or
-+``LOOKUP_BENEATH``, the effective root becomes the directory file descriptor
-+passed to ``openat2()`` (which exposes these ``LOOKUP_`` flags).
-+
- The root is needed when either of two conditions holds: (1) either the
- pathname or a symbolic link starts with a "'/'", or (2) a "``..``"
- component is being handled, since "``..``" from the root must always stay
-@@ -1149,7 +1153,7 @@ so ``NULL`` is returned to indicate that the symlink can be released and
- the stack frame discarded.
- 
- The other case involves things in ``/proc`` that look like symlinks but
--aren't really::
-+aren't really (and are therefore commonly referred to as "magic-links")::
- 
-      $ ls -l /proc/self/fd/1
-      lrwx------ 1 neilb neilb 64 Jun 13 10:19 /proc/self/fd/1 -> /dev/pts/4
-@@ -1310,12 +1314,14 @@ longer needed.
- ``LOOKUP_JUMPED`` means that the current dentry was chosen not because
- it had the right name but for some other reason.  This happens when
- following "``..``", following a symlink to ``/``, crossing a mount point
--or accessing a "``/proc/$PID/fd/$FD``" symlink.  In this case the
--filesystem has not been asked to revalidate the name (with
--``d_revalidate()``).  In such cases the inode may still need to be
--revalidated, so ``d_op->d_weak_revalidate()`` is called if
-+or accessing a "``/proc/$PID/fd/$FD``" symlink (also known as a "magic
-+link"). In this case the filesystem has not been asked to revalidate the
-+name (with ``d_revalidate()``).  In such cases the inode may still need
-+to be revalidated, so ``d_op->d_weak_revalidate()`` is called if
- ``LOOKUP_JUMPED`` is set when the look completes - which may be at the
--final component or, when creating, unlinking, or renaming, at the penultimate component.
-+final component or, when creating, unlinking, or renaming, at the
-+penultimate component. ``LOOKUP_MAGICLINK_JUMPED`` is set alongside
-+``LOOKUP_JUMPED`` if a magic-link was traversed.
- 
- Final-component flags
- ~~~~~~~~~~~~~~~~~~~~~
--- 
-2.23.0
+Thanks for the review.
 
+On Sat, 26 Oct 2019 06:34:59 +0900,
+Richard Weinberger wrote:
+> 
+> On Wed, Oct 23, 2019 at 6:39 AM Hajime Tazaki <thehajime@gmail.com> wrote:
+> >
+> > This RFC patchset is to ask opinions from UML people, whether LKL codes is
+> > good to integrate into UML code base.  We wish to have any kind of feedback
+> > from your kind reviews.  There are numbers of commits which should be asked
+> > for reviews to other mailing lists; we will do it later once we got
+> > discussed in this mailing list.
+> 
+> Thanks a lot for doing this, this effort is much appreciated! :-)
+> 
+> > # sorry for the long list of patches: we can make it smaller by only
+> >   including basic set of LKL (e.g., removing foreign OS support, etc) if
+> >   you wish.
+> 
+> Let use see how the review goes. First I'll give it a high level review to make
+> sure we all talk about the same things.
+
+Thanks.
+
+> Please CC linux-arch@vger.kernel.org for the next patch round.
+> Integrating LKL (into arch/um/) is something which needs more audience and
+> feedback from Arnd Bergmann, our global arch maintainer.
+
+Sure, will Cc.
+
+> >
+> > LKL (Linux Kernel Library) is aiming to allow reusing the Linux kernel code
+> > as extensively as possible with minimal effort and reduced maintenance
+> > overhead.
+> >
+> > Examples of how LKL can be used are: creating userspace applications
+> > (running on Linux and other operating systems) that can read or write Linux
+> > filesystems or can use the Linux networking stack, creating kernel drivers
+> > for other operating systems that can read Linux filesystems, bootloaders
+> > support for reading/writing Linux filesystems, etc.
+> >
+> > With LKL, the kernel code is compiled into an object file that can be
+> > directly linked by applications. The API offered by LKL is based on the
+> > Linux system call interface.
+> >
+> > LKL is originally implemented as an architecture port in arch/lkl, but this
+> > series of commits tries to integrate this into arch/um as one of the mode
+> > of UML.  This was discussed during RFC email of LKL (*1).
+> >
+> > The latest LKL version can be found at https://github.com/lkl/linux
+> >
+> > Milestone
+> > =========
+> > This patches is just a first step toward upstreaming *library mode* of
+> > Linux kernel, but we think we need to have several steps toward our goal,
+> > describing in the below.
+> >
+> > 1. Put LKL code under arch/um (arch/um/lkl), and build it in a
+> > separate way from UML.
+> 
+> Makes sense.
+> 
+> > 2. Share common parts of implementation between UML and LKL.
+> 
+> Since both UML and LKL are usermode ports there is a lot of potential.
+> From my side it is also no big deal if there is some duplication which can be
+> resolved in later releases. Unifiing needs deep thoughts and miding odd corner
+> cases.
+
+I understand.
+
+> > 3. Reimplement UML features with LKL API (if we wish)
+> 
+> Yep. In the last release UML got virtio support, so there is hope. ;-)
+
+Good news.
+
+> > For the step 1, we put LKL as one of SUBARCH in order to make less effort
+> > to integrate (make ARCH=um SUBARCH=lkl).  The modification to existing UML
+> > code is trying to be minimized.
+> 
+> I'm not sure if SUBARCH is the right approach. How do I build a i386
+> lkl on x86_64?
+
+This is currently handled under tools/lkl: building
+arch/um/lkl part only requires toolchain information (e.g.,
+CROSS_COMPILE=).
+
+So to build i386 liblkl.a, do `make ARCH=um SUBARCH=lkl`,
+which might not be intuitive..
+
+> Maybe we can use another variable like UMMODE={library,kernel}?
+
+We will try to find this way to switch the mode instead.
+
+> > The RFC patches also includes and a bit of step 2 as a proof of possibility
+> > to share the code.  For this, we used the virtio device code of LKL and use
+> > it from UML by enabling virtio-mmio driver with UML code.
+> >
+> >
+> >
+> > Building LKL the host library and LKL applications
+> > ==================================================
+> >
+> > % cd tools/lkl
+> > % make
+> 
+> Is there a reason why tool/lkl is not under arch/um?
+
+I thought that this way makes clear distinction between host
+hardware/environment *dependent* (tools/lkl) part and
+*independent* (arch/um/lkl).
+
+We can rename it to tools/um instead.
+
+But if using new tools directory makes noisy, we would try to
+move those under arch/um.
+
+-- Hajime
