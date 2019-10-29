@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A97BE91E9
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Oct 2019 22:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD8AE9185
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Oct 2019 22:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729950AbfJ2VUp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Oct 2019 17:20:45 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:40336 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730043AbfJ2VUp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Oct 2019 17:20:45 -0400
-Received: by mail-pl1-f195.google.com with SMTP id p5so3137296plr.7
-        for <linux-arch@vger.kernel.org>; Tue, 29 Oct 2019 14:20:43 -0700 (PDT)
+        id S1729713AbfJ2VOY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Oct 2019 17:14:24 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:44088 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728897AbfJ2VOY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Oct 2019 17:14:24 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q26so6897144pfn.11
+        for <linux-arch@vger.kernel.org>; Tue, 29 Oct 2019 14:14:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ZBHIZP91az7zFwublbVFIxiUPIvhqcpifj2fGv96nM4=;
-        b=M9SLwOqlCa0SlvU6700EwTLQUuzWEag9vc7KatkdsGeJwPHlQA3WRv3Dom23V4MK8s
-         d+jpadskDGheIyph/HLT/ldCh7qJWlBJNP+9zzPq9Crtc+afBTw4Cw4pK4aix9zvmD0d
-         xIF4MEF78TJPndhmgwz2pgwlB8Vu/k8/ZcHto=
+        bh=Wn91QvvOWXGcdAukdBFPOsAS+V9wjbJFfxE/dszqFsM=;
+        b=e23Up0zA+FknG/wy6VhmeVSbZB8QZjiX0vsAsUiCjELXoASbot+u6O/Ejby5OAZXcC
+         D20Gb77Tr51mlHzmSwSoKEoW2ET0UoL8WLxGdBgnuf4w6xJFYBJGnW///YPOFqwXtqCa
+         uskFEoYIZvG0NYVP/lEJT6kwVN4SzBgoCgvaY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=ZBHIZP91az7zFwublbVFIxiUPIvhqcpifj2fGv96nM4=;
-        b=ctUnP5DXyCuZJucWAHwJzX+6cA3C0k8nq+2/KjAwWdHmhms5jaBJHmDUX21/kFwb0O
-         RmxoLfJT6p2eESAHUU40lr9RPlROj1rUFFoo5teE/jyiW0k5ZbCr8VWjziqTXmrJNlJa
-         1+RnP0eb+j91asXeQNayG5UEgk+x1dKiy9qtxvK5fwNoThTx48tHdBPqgJtyKNVFUG8X
-         OSemrSUyn44l1ya/ZllTr671BlDWTZLObejaJgen3MfQQlWl0S0+u7gZbnfzKOsiJrrI
-         aSBLPL5AHNQj2lOUnhfGrHKl9AyL86UkUYLCoLLppWx6HY/MGy+SGHpl40hDkNGauvlh
-         pirw==
-X-Gm-Message-State: APjAAAUgdQAbzTWOROvpRx44CIOuTjdYiaOsTSVGr8wU/mtZnIqkOcKH
-        B+U2/rvq7t+v/EUT8JYLWEnj0A==
-X-Google-Smtp-Source: APXvYqz+FkHH/yDgWExtFSRjauHPZVacJz4RWr1uXvh1akMds8Xo/d8oORJ64oL3kpz7Ccp5iUDQiw==
-X-Received: by 2002:a17:902:6b8a:: with SMTP id p10mr815695plk.192.1572384043174;
-        Tue, 29 Oct 2019 14:20:43 -0700 (PDT)
+        bh=Wn91QvvOWXGcdAukdBFPOsAS+V9wjbJFfxE/dszqFsM=;
+        b=DYaW9SoAUvASmAbevS/KGkUYB8r/hQWm87YB2oD8IXO9RAy+8V20Dy8v84YjCAprVl
+         zGAUj754Al/yi1dvCux9tYtdcFC6i4qtwNz+QMgO5Tp+IefqYpmiVZtrteySvYYoaWBN
+         QncyrgawOM5x2xDGNDVnJNhKQj+5n5g3I+QTw0iveNn5XcK0ihNaI7p4smZtE8sLOpJ3
+         YQhRljjxotsFot8MZLYegdJZQlZA6mMP3j+GIsg/sumH3tG3Htw00EdW9d90XaN3irJu
+         F64NDeozmwjg1bC2CFGXpzTR28aNaw9o6bV4M3Fxd67qHRvy+HJbnVDdQenYRqWCOzBu
+         wnlg==
+X-Gm-Message-State: APjAAAXw1C4Vrt4kHyllvsMhV4pU4lfQBVfMf2bi5llyWT7IU1X7kRAF
+        445nzGiAEh2mk7ieQjS7cQ7zySXPnmU=
+X-Google-Smtp-Source: APXvYqyvNm7i+bRgKLxrIbvnaiMusgEvUvRAV9KmH69+2MPaKK4I97mcIP1d4LNMzQRr44De1wfu9w==
+X-Received: by 2002:a17:90a:854c:: with SMTP id a12mr9437017pjw.2.1572383661980;
+        Tue, 29 Oct 2019 14:14:21 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r10sm132454pgn.68.2019.10.29.14.20.36
+        by smtp.gmail.com with ESMTPSA id k24sm149619pgl.6.2019.10.29.14.14.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 14:20:38 -0700 (PDT)
+        Tue, 29 Oct 2019 14:14:20 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Borislav Petkov <bp@alien8.de>
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -57,9 +57,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-c6x-dev@linux-c6x.org,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Michal Simek <monstr@monstr.eu>
-Subject: [PATCH v3 28/29] x86/mm: Report actual image regions in /proc/iomem
-Date:   Tue, 29 Oct 2019 14:13:50 -0700
-Message-Id: <20191029211351.13243-29-keescook@chromium.org>
+Subject: [PATCH v3 29/29] x86: Use INT3 instead of NOP for linker fill bytes
+Date:   Tue, 29 Oct 2019 14:13:51 -0700
+Message-Id: <20191029211351.13243-30-keescook@chromium.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191029211351.13243-1-keescook@chromium.org>
 References: <20191029211351.13243-1-keescook@chromium.org>
@@ -68,68 +68,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The resource reservations in /proc/iomem made for the kernel image did
-not reflect the gaps between text, rodata, and data. Add the "rodata"
-resource and update the start/end calculations to match the respective
-calls to free_kernel_image_pages().
+Instead of using 0x90 (NOP) to fill bytes between functions, which makes
+it easier to sloppily target functions in function pointer overwrite
+attacks, fill with 0xCC (INT3) to force a trap. Also drop the space
+between "=" and the value to better match the binutils documentation
+https://sourceware.org/binutils/docs/ld/Output-Section-Fill.html#Output-Section-Fill
 
-Before (booted with "nokaslr" for easier comparison):
+Example "objdump -d" before:
 
-00100000-bffd9fff : System RAM
-  01000000-01e011d0 : Kernel code
-  01e011d1-025619bf : Kernel data
-  02a95000-035fffff : Kernel bss
+...
+ffffffff810001e0 <start_cpu0>:
+ffffffff810001e0:       48 8b 25 e1 b1 51 01    mov 0x151b1e1(%rip),%rsp        # ffffffff8251b3c8 <initial_stack>
+ffffffff810001e7:       e9 d5 fe ff ff          jmpq   ffffffff810000c1 <secondary_startup_64+0x91>
+ffffffff810001ec:       90                      nop
+ffffffff810001ed:       90                      nop
+ffffffff810001ee:       90                      nop
+ffffffff810001ef:       90                      nop
+
+ffffffff810001f0 <__startup_64>:
+...
 
 After:
 
-00100000-bffd9fff : System RAM
-  01000000-01e011d0 : Kernel code
-  02000000-023d4fff : Kernel rodata
-  02400000-025619ff : Kernel data
-  02a95000-035fffff : Kernel bss
+...
+ffffffff810001e0 <start_cpu0>:
+ffffffff810001e0:       48 8b 25 41 79 53 01    mov 0x1537941(%rip),%rsp        # ffffffff82537b28 <initial_stack>
+ffffffff810001e7:       e9 d5 fe ff ff          jmpq   ffffffff810000c1 <secondary_startup_64+0x91>
+ffffffff810001ec:       cc                      int3
+ffffffff810001ed:       cc                      int3
+ffffffff810001ee:       cc                      int3
+ffffffff810001ef:       cc                      int3
+
+ffffffff810001f0 <__startup_64>:
+...
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/kernel/setup.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ arch/x86/kernel/vmlinux.lds.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 77ea96b794bd..591e885a852e 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -143,6 +143,13 @@ struct boot_params boot_params;
- /*
-  * Machine setup..
-  */
-+static struct resource rodata_resource = {
-+	.name	= "Kernel rodata",
-+	.start	= 0,
-+	.end	= 0,
-+	.flags	= IORESOURCE_BUSY | IORESOURCE_SYSTEM_RAM
-+};
-+
- static struct resource data_resource = {
- 	.name	= "Kernel data",
- 	.start	= 0,
-@@ -951,7 +958,9 @@ void __init setup_arch(char **cmdline_p)
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index b06d6e1188de..3a1a819da137 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -144,7 +144,7 @@ SECTIONS
+ 		*(.text.__x86.indirect_thunk)
+ 		__indirect_thunk_end = .;
+ #endif
+-	} :text = 0x9090
++	} :text =0xcccc
  
- 	code_resource.start = __pa_symbol(_text);
- 	code_resource.end = __pa_symbol(_etext)-1;
--	data_resource.start = __pa_symbol(_etext);
-+	rodata_resource.start = __pa_symbol(__start_rodata);
-+	rodata_resource.end = __pa_symbol(__end_rodata)-1;
-+	data_resource.start = __pa_symbol(_sdata);
- 	data_resource.end = __pa_symbol(_edata)-1;
- 	bss_resource.start = __pa_symbol(__bss_start);
- 	bss_resource.end = __pa_symbol(__bss_stop)-1;
-@@ -1040,6 +1049,7 @@ void __init setup_arch(char **cmdline_p)
- 
- 	/* after parse_early_param, so could debug it */
- 	insert_resource(&iomem_resource, &code_resource);
-+	insert_resource(&iomem_resource, &rodata_resource);
- 	insert_resource(&iomem_resource, &data_resource);
- 	insert_resource(&iomem_resource, &bss_resource);
- 
+ 	/* End of text section, which should occupy whole number of pages */
+ 	_etext = .;
 -- 
 2.17.1
 
