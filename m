@@ -2,139 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B519E9329
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Oct 2019 23:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75343E934C
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2019 00:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726417AbfJ2WsH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Oct 2019 18:48:07 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39708 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726321AbfJ2WsH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Oct 2019 18:48:07 -0400
-Received: by mail-pl1-f193.google.com with SMTP id t12so21086plo.6
-        for <linux-arch@vger.kernel.org>; Tue, 29 Oct 2019 15:48:06 -0700 (PDT)
+        id S1726047AbfJ2XIA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Oct 2019 19:08:00 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:46941 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726025AbfJ2XH7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Oct 2019 19:07:59 -0400
+Received: by mail-pg1-f194.google.com with SMTP id f19so108598pgn.13
+        for <linux-arch@vger.kernel.org>; Tue, 29 Oct 2019 16:07:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=0G08DVDmHHpYBvqrNiRz2P/EWIDmTXItkvaTB27EiyI=;
-        b=CkwdYGQthHbjeB7YJk2k7oOQyekpKWhBz8LE56+eFTTP9mqZeL9MuGgiv2GrcLSaBg
-         rE2sCuLvAVGnNCs4vowlSz50Su8Mv9l48u1zbUbe4ZDaypaV5WsadZZAOOcYYKfOmOIf
-         EmLxn+hz5Gpaz6QM1cM8GcO4kjJgDDwECBfv8=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EK/iR04QppfFL6hJjq1Qp4tKuC0yyvj8XT1kmd57Vc8=;
+        b=dtLNUoC1eHJFg8kN8Jl92Mm/KMo4Rv2P/Ke5YttA0vm9EMCZXYT1ihVW7e044UMAr3
+         8dejWZTNu6tNpmE10toXS+HsMsUY8loN8/tZsFYReKVrgSDC4FCwihhKTmwwbvMDYxB7
+         eH9kvuBXcG/bcdeVX7kFXgcslFNyRSVP5CdWc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=0G08DVDmHHpYBvqrNiRz2P/EWIDmTXItkvaTB27EiyI=;
-        b=HGtjJj4IevtARqselaButBxSC2HRa99jW8hIN6o0UBJU8c2T9W82rmO5krPOircf0A
-         du7fzXR71ShOfVh511NEm2/AO/eyQlfpmFcXcFaNLXTdOwCjA6Au65EvVp9ebx2D8Mac
-         yJPBEdhD+fj4UBGER6EZnEOoHSX65P4S/0YIDmv6ZN6FRemrFlfPiwyE4W+w6b0fc3nB
-         LXRnWUQN+CAvnTlsqfV1F+IrHU0zBexuma9kNXmZ+8qNTohHw7gYLn4VYoYkfTTULdsk
-         rVzfWx4VlNUKWLp7slo8RQSZeqS82ZDW3nWnrg1SqB1GqXc8UYBjreL4Icz5BL9yozJt
-         ZfDw==
-X-Gm-Message-State: APjAAAVp1W1p7qSE6DCmC4NVmWadkYntv75e4/ZUPxIa8hq7FFqgoi6E
-        gdI+Jo/V9gkLzmIzcKVlPgW95Q==
-X-Google-Smtp-Source: APXvYqy6v7l6MhB+p5gWacT10BGV47R2lNIZI3D56QBZanDs4YzchO4lyFefyJjvfINrgcE9a5Si7A==
-X-Received: by 2002:a17:902:b091:: with SMTP id p17mr1086640plr.13.1572389286296;
-        Tue, 29 Oct 2019 15:48:06 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EK/iR04QppfFL6hJjq1Qp4tKuC0yyvj8XT1kmd57Vc8=;
+        b=dh4HlrfDO7L5um7yxbdjKAwwcYFXxLQsla8PQ9+yiZJghVWoH+QgztiM0g3HQ+CVZf
+         Guk7oX7XXVDF51FD16pZTN8alYfpRhu6L8rvvGuFcVpepO3uehZSOmT2cgAFNSWSQaua
+         KyAbtak556KbilDWZJY/HApfJznTI3nFSVJOwzkWLNCpu2ght2L3d2SQxzomo6WxbAKL
+         oNp9sm9BneK617eU2v74eYwKMz53JBeThk/dqoTWHNHMq5Eja5/i0giR+HDl8ajlxPH7
+         K6gD8KOcDQaj04Vhkne3ASIgd7zlwM3Z8TL+KMesWeviSg4KX18x+FlLUmTHjKcJwVLq
+         yg7w==
+X-Gm-Message-State: APjAAAVIC99vVhOqu1h0bPchaFoH3IRP4ipRjXZitnvDHRK/eeQb6UO8
+        8nM5y261dDIv5NMPqpCVMvmbjA==
+X-Google-Smtp-Source: APXvYqxlpD8afJVfeJRJZqXRk4DC19b4p18OjNSVX2/RdrFGCqjrqXaMMfLfYxGsFkhlHHEsGanvkA==
+X-Received: by 2002:a63:8f5e:: with SMTP id r30mr21918430pgn.146.1572390479068;
+        Tue, 29 Oct 2019 16:07:59 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e7sm254020pgr.25.2019.10.29.15.48.04
+        by smtp.gmail.com with ESMTPSA id e17sm175911pfh.121.2019.10.29.16.07.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 15:48:05 -0700 (PDT)
+        Tue, 29 Oct 2019 16:07:58 -0700 (PDT)
+Date:   Tue, 29 Oct 2019 16:07:57 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/3] linux/stddef.h: Add sizeof_member() macro
-Date:   Tue, 29 Oct 2019 15:47:55 -0700
-Message-Id: <20191029224756.28618-3-keescook@chromium.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191029224756.28618-1-keescook@chromium.org>
-References: <20191029224756.28618-1-keescook@chromium.org>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Andrew Jones <drjones@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Sudakshina Das <sudi.das@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 01/12] ELF: UAPI and Kconfig additions for ELF program
+ properties
+Message-ID: <201910291607.F5DA2EE@keescook>
+References: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
+ <1571419545-20401-2-git-send-email-Dave.Martin@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1571419545-20401-2-git-send-email-Dave.Martin@arm.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
+On Fri, Oct 18, 2019 at 06:25:34PM +0100, Dave Martin wrote:
+> Pull the basic ELF definitions relating to the
+> NT_GNU_PROPERTY_TYPE_0 note from Yu-Cheng Yu's earlier x86 shstk
+> series.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-At present we have 2 different macros to calculate the size of a member
-of a struct: FIELD_SIZEOF() and sizeof_field(). As a prerequisite to
-bringing uniformity to the entire kernel source tree, add sizeof_member()
-macro as it is both more pleasant (not upper case) and more correct
-(sizeof()-family cannot operate on bit fields; this is meant to operate
-on struct members), as discussed[1].
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Future patches will replace all occurrences of above macros with
-sizeof_member().
+-Kees
 
-[1] https://www.openwall.com/lists/kernel-hardening/2019/07/02/2
+> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> ---
+>  fs/Kconfig.binfmt        | 3 +++
+>  include/linux/elf.h      | 8 ++++++++
+>  include/uapi/linux/elf.h | 1 +
+>  3 files changed, 12 insertions(+)
+> 
+> diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+> index 62dc4f5..d2cfe07 100644
+> --- a/fs/Kconfig.binfmt
+> +++ b/fs/Kconfig.binfmt
+> @@ -36,6 +36,9 @@ config COMPAT_BINFMT_ELF
+>  config ARCH_BINFMT_ELF_STATE
+>  	bool
+>  
+> +config ARCH_USE_GNU_PROPERTY
+> +	bool
+> +
+>  config BINFMT_ELF_FDPIC
+>  	bool "Kernel support for FDPIC ELF binaries"
+>  	default y if !BINFMT_ELF
+> diff --git a/include/linux/elf.h b/include/linux/elf.h
+> index e3649b3..459cddc 100644
+> --- a/include/linux/elf.h
+> +++ b/include/linux/elf.h
+> @@ -2,6 +2,7 @@
+>  #ifndef _LINUX_ELF_H
+>  #define _LINUX_ELF_H
+>  
+> +#include <linux/types.h>
+>  #include <asm/elf.h>
+>  #include <uapi/linux/elf.h>
+>  
+> @@ -56,4 +57,11 @@ static inline int elf_coredump_extra_notes_write(struct coredump_params *cprm) {
+>  extern int elf_coredump_extra_notes_size(void);
+>  extern int elf_coredump_extra_notes_write(struct coredump_params *cprm);
+>  #endif
+> +
+> +/* NT_GNU_PROPERTY_TYPE_0 header */
+> +struct gnu_property {
+> +	u32 pr_type;
+> +	u32 pr_datasz;
+> +};
+> +
+>  #endif /* _LINUX_ELF_H */
+> diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+> index 34c02e4..c377314 100644
+> --- a/include/uapi/linux/elf.h
+> +++ b/include/uapi/linux/elf.h
+> @@ -36,6 +36,7 @@ typedef __s64	Elf64_Sxword;
+>  #define PT_LOPROC  0x70000000
+>  #define PT_HIPROC  0x7fffffff
+>  #define PT_GNU_EH_FRAME		0x6474e550
+> +#define PT_GNU_PROPERTY		0x6474e553
+>  
+>  #define PT_GNU_STACK	(PT_LOOS + 0x474e551)
+>  
+> -- 
+> 2.1.4
+> 
 
-Signed-off-by: Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
-Link: https://lore.kernel.org/r/20190924105839.110713-2-pankaj.laxminarayan.bharadiya@intel.com
-Co-developed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/stddef.h                 | 13 ++++++++++++-
- tools/testing/selftests/bpf/bpf_util.h |  6 +++---
- 2 files changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/stddef.h b/include/linux/stddef.h
-index 998a4ba28eba..ecadb736c853 100644
---- a/include/linux/stddef.h
-+++ b/include/linux/stddef.h
-@@ -27,6 +27,17 @@ enum {
-  */
- #define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
- 
-+/**
-+ * sizeof_member(TYPE, MEMBER) - get the size of a struct's member
-+ *
-+ * @TYPE: the target struct
-+ * @MEMBER: the target struct's member
-+ *
-+ * Return: the size of @MEMBER in the struct definition without having a
-+ * declared instance of @TYPE.
-+ */
-+#define sizeof_member(TYPE, MEMBER)	(sizeof(((TYPE *)0)->MEMBER))
-+
- /**
-  * offsetofend(TYPE, MEMBER)
-  *
-@@ -34,6 +45,6 @@ enum {
-  * @MEMBER: The member within the structure to get the end offset of
-  */
- #define offsetofend(TYPE, MEMBER) \
--	(offsetof(TYPE, MEMBER)	+ sizeof_field(TYPE, MEMBER))
-+	(offsetof(TYPE, MEMBER)	+ sizeof_member(TYPE, MEMBER))
- 
- #endif
-diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
-index ec219f84e041..6b4b3e24ba9f 100644
---- a/tools/testing/selftests/bpf/bpf_util.h
-+++ b/tools/testing/selftests/bpf/bpf_util.h
-@@ -31,13 +31,13 @@ static inline unsigned int bpf_num_possible_cpus(void)
- # define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
- #endif
- 
--#ifndef sizeof_field
--#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
-+#ifndef sizeof_member
-+#define sizeof_member(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
- #endif
- 
- #ifndef offsetofend
- #define offsetofend(TYPE, MEMBER) \
--	(offsetof(TYPE, MEMBER)	+ sizeof_field(TYPE, MEMBER))
-+	(offsetof(TYPE, MEMBER)	+ sizeof_member(TYPE, MEMBER))
- #endif
- 
- #endif /* __BPF_UTIL__ */
 -- 
-2.17.1
-
+Kees Cook
