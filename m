@@ -2,128 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A516E827C
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Oct 2019 08:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89567E831F
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Oct 2019 09:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726034AbfJ2H0z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Oct 2019 03:26:55 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19610 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725854AbfJ2H0y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 29 Oct 2019 03:26:54 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9T7FT3m089563
-        for <linux-arch@vger.kernel.org>; Tue, 29 Oct 2019 03:26:53 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vxguvrbeh-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Tue, 29 Oct 2019 03:26:53 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-arch@vger.kernel.org> from <freude@linux.ibm.com>;
-        Tue, 29 Oct 2019 07:26:51 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 29 Oct 2019 07:26:49 -0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9T7QlAw64487570
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Oct 2019 07:26:47 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C62C42047;
-        Tue, 29 Oct 2019 07:26:47 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D5D584203F;
-        Tue, 29 Oct 2019 07:26:46 +0000 (GMT)
-Received: from funtu.home (unknown [9.145.48.204])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 29 Oct 2019 07:26:46 +0000 (GMT)
-Subject: Re: [PATCH 6/6] s390x: Mark archrandom.h functions __must_check
-To:     Richard Henderson <richard.henderson@linaro.org>,
-        linux-arch@vger.kernel.org
-Cc:     x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-References: <20191028210559.8289-1-rth@twiddle.net>
- <20191028210559.8289-7-rth@twiddle.net>
-From:   Harald Freudenberger <freude@linux.ibm.com>
-Date:   Tue, 29 Oct 2019 08:26:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728113AbfJ2IVS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Oct 2019 04:21:18 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:39016 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728550AbfJ2IVS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Oct 2019 04:21:18 -0400
+Received: by mail-wr1-f65.google.com with SMTP id a11so12556985wra.6
+        for <linux-arch@vger.kernel.org>; Tue, 29 Oct 2019 01:21:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LbGqWabkO+qsmDE6Dovu8KQsQ8ImSSqPf6QwQRVth5s=;
+        b=i6xKbxwS8JScMMcfWs747aiWLNwFekNIEHU/F7et809rV0fTf2Z1etP2smdRIclPMa
+         lhDElPf8v5ti/cVsD+at74gPj+57ePpHY3fNLUN0gidqm1w/D5T8/11fD7aJaNSIRMGI
+         oVZhfCiO0XfG6E8Ht8f7ScI6dapi7d+rOzFagYFrDCEcdijn99gGrGp8bZGVf1UL0JUB
+         TqBWqpQkCwC1zPXC6yj50TRQeTxTLqGspPZJeaI8A7ZkyROqnqwLoKnAVEIHL2stqE3B
+         o6xh9qilu4XKU/bF8Fj7I36FoMpYauUPR8LgHu7wjhJoe4VGr7qwDm/0wrvw5VhuFFmR
+         K/3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LbGqWabkO+qsmDE6Dovu8KQsQ8ImSSqPf6QwQRVth5s=;
+        b=cbpW/+WRGRfQFYBUwMXP33tGTCnc7tU2fX7KkEe5OuKzESXWd4uI62lslJANPmc61I
+         VBzHtgiiFfapOXQXYtccHpPZBSFMzLikD9RzsVlk0DkC6XdMeWVnutmFY0TlZHwkP3eD
+         7QlUXWp78chZ59Id/xvUvA3J0bxcX+bROxI4iMuEz+6Lwsz0sWgB7Rqq4t3stp3lDH3e
+         qz+Hug/9yKFuv/LRniT49S7mEK57RizIbNyk1zGBhiasa8xoAxuex/VnbyEiyS0If6IH
+         d473JLnp0bA8gYqdfKwH3u9mjedKxXTc94o8bxP8NcKd6eMwvxYZI6NpcNFeytuMjW3s
+         aXUg==
+X-Gm-Message-State: APjAAAWgiZ7DT9pgLLS2YFzoU8uWMGOU/vUHMMJpnoz2JmlcU6MI2p79
+        JRjBifKveM8aC1r0sVvzNW3mlkPzjc1iYzwQK1f0U+aljEOhHw==
+X-Google-Smtp-Source: APXvYqxq7fhyaYGafFtbCO5SV4r6hSp9ssGtNlWV8f9IBcuiRL8birbPQx/oxQqtKKJJITJiIZPwCyiQWkaM9VdkHCE=
+X-Received: by 2002:adf:fd88:: with SMTP id d8mr12239490wrr.200.1572337275488;
+ Tue, 29 Oct 2019 01:21:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191028210559.8289-7-rth@twiddle.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19102907-0028-0000-0000-000003B0A540
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102907-0029-0000-0000-00002472E4AE
-Message-Id: <935cf73a-d06c-365d-131a-23dcb350ba17@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-29_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910290075
+References: <20191028210559.8289-1-rth@twiddle.net> <20191028210559.8289-2-rth@twiddle.net>
+In-Reply-To: <20191028210559.8289-2-rth@twiddle.net>
+From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Date:   Tue, 29 Oct 2019 09:21:03 +0100
+Message-ID: <CAKv+Gu9iW341X8FLBedO1Lhr0H-XcA7jDp3bh3nQh7f7N_M0eA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] random: Mark CONFIG_ARCH_RANDOM functions __must_check
+To:     Richard Henderson <richard.henderson@linaro.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 28.10.19 22:05, Richard Henderson wrote:
+On Mon, 28 Oct 2019 at 22:06, Richard Henderson
+<richard.henderson@linaro.org> wrote:
+>
 > We cannot use the pointer output without validating the
 > success of the random read.
 >
 > Signed-off-by: Richard Henderson <rth@twiddle.net>
 > ---
-> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: linux-arch@vger.kernel.org
 > ---
->  arch/s390/include/asm/archrandom.h | 8 ++++----
+>  include/linux/random.h | 8 ++++----
 >  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/arch/s390/include/asm/archrandom.h b/arch/s390/include/asm/archrandom.h
-> index c67b82dfa558..f3f1ee0a8c38 100644
-> --- a/arch/s390/include/asm/archrandom.h
-> +++ b/arch/s390/include/asm/archrandom.h
-> @@ -33,17 +33,17 @@ static inline bool arch_has_random_seed(void)
->  	return false;
->  }
->
+> diff --git a/include/linux/random.h b/include/linux/random.h
+> index f189c927fdea..84947b489649 100644
+> --- a/include/linux/random.h
+> +++ b/include/linux/random.h
+> @@ -167,11 +167,11 @@ static inline void prandom_seed_state(struct rnd_state *state, u64 seed)
+>  #ifdef CONFIG_ARCH_RANDOM
+>  # include <asm/archrandom.h>
+>  #else
 > -static inline bool arch_get_random_long(unsigned long *v)
 > +static inline bool __must_check arch_get_random_long(unsigned long *v)
 >  {
->  	return false;
+>         return 0;
+
+For symmetry with the other cleanups, you should probably change these
+into 'return false' as well
+
 >  }
->
 > -static inline bool arch_get_random_int(unsigned int *v)
 > +static inline bool __must_check arch_get_random_int(unsigned int *v)
 >  {
->  	return false;
+>         return 0;
 >  }
->
+> @@ -179,11 +179,11 @@ static inline bool arch_has_random(void)
+>  {
+>         return 0;
+>  }
 > -static inline bool arch_get_random_seed_long(unsigned long *v)
 > +static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
 >  {
->  	if (static_branch_likely(&s390_arch_random_available)) {
->  		return s390_arch_random_generate((u8 *)v, sizeof(*v));
-> @@ -51,7 +51,7 @@ static inline bool arch_get_random_seed_long(unsigned long *v)
->  	return false;
+>         return 0;
 >  }
->
 > -static inline bool arch_get_random_seed_int(unsigned int *v)
 > +static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
 >  {
->  	if (static_branch_likely(&s390_arch_random_available)) {
->  		return s390_arch_random_generate((u8 *)v, sizeof(*v));
-Fine with me, Thanks, reviewed, build and tested.
-You may add my reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
-However, will this go into the kernel tree via crypto or s390 subsystem ?
-
+>         return 0;
+>  }
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
