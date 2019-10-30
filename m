@@ -2,200 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA4AE967D
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2019 07:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B66E9770
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2019 08:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727228AbfJ3GkA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 30 Oct 2019 02:40:00 -0400
-Received: from conuserg-12.nifty.com ([210.131.2.79]:61857 "EHLO
-        conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726108AbfJ3GkA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Oct 2019 02:40:00 -0400
-Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id x9U6d6lw008465;
-        Wed, 30 Oct 2019 15:39:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com x9U6d6lw008465
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1572417549;
-        bh=iWfwrkLnJw9f051ci1qoVF6YYPkEv18Rb84fKuOp9+M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SxQDYGDKj8kELAyO+Kg1OLi3ibM8mnnEFLu13XD5s1Rg8tvPK+vRKhjeki00taZwW
-         PEJPfxq1TXEAKMTymfAlfi/SMw//cI5lA0HKUAENK0laBCT1LlMi5vA+cfKkW+sFq0
-         A6Sq+MM5TP7LFseOHFBiALS8CMXXn/rTfWgxkrtgKoFaJgW+IQG+CZTAWTjU1VXs7k
-         Htow4cGQb/N34CB9FjJzlr6CCajmKx8CJjDANnwMYsoRTkGByufw6D1e+K3tqcJjpR
-         7qvwzzeK38N6BTFRIwHbPk+uK2XZCp6QddApCCrUQzhB1TIBV5e89m7WpwnHa+1Pdf
-         WtbWumY9/TpZw==
-X-Nifty-SrcIP: [153.142.97.92]
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Subject: [PATCH 3/3] arch: sembuf.h: make uapi asm/sembuf.h self-contained
-Date:   Wed, 30 Oct 2019 15:38:55 +0900
-Message-Id: <20191030063855.9989-3-yamada.masahiro@socionext.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191030063855.9989-1-yamada.masahiro@socionext.com>
-References: <20191030063855.9989-1-yamada.masahiro@socionext.com>
+        id S1726028AbfJ3H4S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 30 Oct 2019 03:56:18 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34796 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725822AbfJ3H4S (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 30 Oct 2019 03:56:18 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9U7oPHH146048
+        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 03:56:15 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2vy60jryay-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 03:56:14 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <freude@linux.ibm.com>;
+        Wed, 30 Oct 2019 07:56:13 -0000
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 30 Oct 2019 07:56:09 -0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9U7u7Ri45416546
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Oct 2019 07:56:08 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D5DA942042;
+        Wed, 30 Oct 2019 07:56:07 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3DCD44203F;
+        Wed, 30 Oct 2019 07:56:07 +0000 (GMT)
+Received: from funtu.home (unknown [9.145.158.134])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 30 Oct 2019 07:56:07 +0000 (GMT)
+Subject: Re: [PATCH 6/6] s390x: Mark archrandom.h functions __must_check
+To:     Richard Henderson <richard.henderson@linaro.org>,
+        linux-arch@vger.kernel.org
+Cc:     x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+References: <20191028210559.8289-1-rth@twiddle.net>
+ <20191028210559.8289-7-rth@twiddle.net>
+ <935cf73a-d06c-365d-131a-23dcb350ba17@linux.ibm.com>
+ <cd6b5b8c-77f0-ad7e-702a-27e5a929ca54@linaro.org>
+From:   Harald Freudenberger <freude@linux.ibm.com>
+Date:   Wed, 30 Oct 2019 08:56:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <cd6b5b8c-77f0-ad7e-702a-27e5a929ca54@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+x-cbid: 19103007-0028-0000-0000-000003B10491
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19103007-0029-0000-0000-00002473484E
+Message-Id: <95aa7fd3-5e80-f11b-3f74-42628f7dfba4@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-30_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910300077
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The user-space cannot compile <asm/sembuf.h> due to some missing type
-definitions. For example, building it for x86 fails as follows:
-
-  CC      usr/include/asm/sembuf.h.s
-In file included from <command-line>:32:0:
-./usr/include/asm/sembuf.h:17:20: error: field ‘sem_perm’ has incomplete type
-  struct ipc64_perm sem_perm; /* permissions .. see ipc.h */
-                    ^~~~~~~~
-./usr/include/asm/sembuf.h:24:2: error: unknown type name ‘__kernel_time_t’
-  __kernel_time_t sem_otime; /* last semop time */
-  ^~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:25:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused1;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:26:2: error: unknown type name ‘__kernel_time_t’
-  __kernel_time_t sem_ctime; /* last change time */
-  ^~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:27:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused2;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:29:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t sem_nsems; /* no. of semaphores in array */
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:30:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused3;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:31:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused4;
-  ^~~~~~~~~~~~~~~~
-
-It is just a matter of missing include directive.
-
-Include <asm/ipcbuf.h> to make it self-contained, and add it to
-the compile-test coverage.
-
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
----
-
- arch/mips/include/uapi/asm/sembuf.h    | 2 ++
- arch/parisc/include/uapi/asm/sembuf.h  | 1 +
- arch/powerpc/include/uapi/asm/sembuf.h | 2 ++
- arch/sparc/include/uapi/asm/sembuf.h   | 2 ++
- arch/x86/include/uapi/asm/sembuf.h     | 2 ++
- arch/xtensa/include/uapi/asm/sembuf.h  | 1 +
- include/uapi/asm-generic/sembuf.h      | 1 +
- usr/include/Makefile                   | 1 -
- 8 files changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/include/uapi/asm/sembuf.h b/arch/mips/include/uapi/asm/sembuf.h
-index 60c89e6cb25b..7d135b93bebd 100644
---- a/arch/mips/include/uapi/asm/sembuf.h
-+++ b/arch/mips/include/uapi/asm/sembuf.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_SEMBUF_H
- #define _ASM_SEMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * The semid64_ds structure for the MIPS architecture.
-  * Note extra padding because this structure is passed back and forth
-diff --git a/arch/parisc/include/uapi/asm/sembuf.h b/arch/parisc/include/uapi/asm/sembuf.h
-index 3c31163b1241..b17a2460b184 100644
---- a/arch/parisc/include/uapi/asm/sembuf.h
-+++ b/arch/parisc/include/uapi/asm/sembuf.h
-@@ -3,6 +3,7 @@
- #define _PARISC_SEMBUF_H
- 
- #include <asm/bitsperlong.h>
-+#include <asm/ipcbuf.h>
- 
- /* 
-  * The semid64_ds structure for parisc architecture.
-diff --git a/arch/powerpc/include/uapi/asm/sembuf.h b/arch/powerpc/include/uapi/asm/sembuf.h
-index 3f60946f77e3..f42c9c3502c7 100644
---- a/arch/powerpc/include/uapi/asm/sembuf.h
-+++ b/arch/powerpc/include/uapi/asm/sembuf.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_POWERPC_SEMBUF_H
- #define _ASM_POWERPC_SEMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * This program is free software; you can redistribute it and/or
-  * modify it under the terms of the GNU General Public License
-diff --git a/arch/sparc/include/uapi/asm/sembuf.h b/arch/sparc/include/uapi/asm/sembuf.h
-index f3d309c2e1cd..5d7764cdf80f 100644
---- a/arch/sparc/include/uapi/asm/sembuf.h
-+++ b/arch/sparc/include/uapi/asm/sembuf.h
-@@ -2,6 +2,8 @@
- #ifndef _SPARC_SEMBUF_H
- #define _SPARC_SEMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * The semid64_ds structure for sparc architecture.
-  * Note extra padding because this structure is passed back and forth
-diff --git a/arch/x86/include/uapi/asm/sembuf.h b/arch/x86/include/uapi/asm/sembuf.h
-index 89de6cd9f0a7..da0464af7aa6 100644
---- a/arch/x86/include/uapi/asm/sembuf.h
-+++ b/arch/x86/include/uapi/asm/sembuf.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_X86_SEMBUF_H
- #define _ASM_X86_SEMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * The semid64_ds structure for x86 architecture.
-  * Note extra padding because this structure is passed back and forth
-diff --git a/arch/xtensa/include/uapi/asm/sembuf.h b/arch/xtensa/include/uapi/asm/sembuf.h
-index 09f348d643f1..3b9cdd406dfe 100644
---- a/arch/xtensa/include/uapi/asm/sembuf.h
-+++ b/arch/xtensa/include/uapi/asm/sembuf.h
-@@ -22,6 +22,7 @@
- #define _XTENSA_SEMBUF_H
- 
- #include <asm/byteorder.h>
-+#include <asm/ipcbuf.h>
- 
- struct semid64_ds {
- 	struct ipc64_perm sem_perm;		/* permissions .. see ipc.h */
-diff --git a/include/uapi/asm-generic/sembuf.h b/include/uapi/asm-generic/sembuf.h
-index 0bae010f1b64..5807fcd643ba 100644
---- a/include/uapi/asm-generic/sembuf.h
-+++ b/include/uapi/asm-generic/sembuf.h
-@@ -3,6 +3,7 @@
- #define __ASM_GENERIC_SEMBUF_H
- 
- #include <asm/bitsperlong.h>
-+#include <asm/ipcbuf.h>
- 
- /*
-  * The semid64_ds structure for x86 architecture.
-diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 099d7401aa23..107d04bd5ee3 100644
---- a/usr/include/Makefile
-+++ b/usr/include/Makefile
-@@ -16,7 +16,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MD,$(depfile) -I$(objtree)/usr/include
- # Please consider to fix the header first.
- #
- # Sorted alphabetically.
--header-test- += asm/sembuf.h
- header-test- += asm/shmbuf.h
- header-test- += asm/signal.h
- header-test- += asm/ucontext.h
--- 
-2.17.1
+On 29.10.19 14:18, Richard Henderson wrote:
+> On 10/29/19 8:26 AM, Harald Freudenberger wrote:
+>> Fine with me, Thanks, reviewed, build and tested.
+>> You may add my reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
+>> However, will this go into the kernel tree via crypto or s390 subsystem ?
+> That's an excellent question.
+>
+> As an API decision, perhaps going via crypto makes more sense,
+> but none of the patches are dependent on one another, so they
+> could go through separate architecture trees.
+>
+> It has been a long time since I have done much kernel work;
+> I'm open to suggestions on the subject.
+>
+>
+> r~
+Since the change needs to be done in include/linux/random.h
+and in parallel with all the arch files in arch/xxx/include/asm/archrandom.h
+it should go in one shot. I'd suggest to post the patch series to linux-crypto
+and let Herbert Xu handle this.
 
