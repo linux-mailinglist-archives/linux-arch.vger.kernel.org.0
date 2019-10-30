@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D296E967E
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2019 07:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A317E967C
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2019 07:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727176AbfJ3GkA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1726187AbfJ3GkA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Wed, 30 Oct 2019 02:40:00 -0400
-Received: from conuserg-12.nifty.com ([210.131.2.79]:61850 "EHLO
+Received: from conuserg-12.nifty.com ([210.131.2.79]:61854 "EHLO
         conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726177AbfJ3GkA (ORCPT
+        with ESMTP id S1725855AbfJ3GkA (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Oct 2019 02:40:00 -0400
 Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id x9U6d6lu008465;
-        Wed, 30 Oct 2019 15:39:06 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com x9U6d6lu008465
+        by conuserg-12.nifty.com with ESMTP id x9U6d6lv008465;
+        Wed, 30 Oct 2019 15:39:08 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com x9U6d6lv008465
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1572417548;
-        bh=erN8NTfq9fWEVgi8xPhCmDbhwPzMq4qz2bhybl41Cg0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TM26i1euSoeVGaEdy8R0NzTO1o4dQUOca5dvyYGaDnBx4xbW535BbcaPPU+o5qIRH
-         yv8o+Zx61AU21FB4Hk49ttXCxyvjnEtuMMaF/9lCOhe/R4mlpTb5ZFv1dX/xOzn7AW
-         vfczyxVvM6R8F48f5bgm/myaNsAnXbudj2UcGxafO3Rdsz29HV+yrShO0sIN0MyKvC
-         /MJcXMy2OlRmIh3mqBHm1elaix77JuGRYb3KQSDlYzTuF5sipdizh8/+v4T6SDB5T3
-         g2xqzkzP1TXUHJvZhlZmJBVzDNMHfa2p2szAuUliCtIW6ITi3wmMG8++rL9kWD1Fh/
-         Q+Kiz4ZxG+x5A==
+        s=dec2015msa; t=1572417549;
+        bh=2GktbG0AX5EtCMHePWHIbE0q7mnCifLYNvh9ZJFHfvs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AB5pRE1Y3NFeLYxFjunbmdeVQpZ+Rf7stI8M0RDP/Ph+dAukxSOblJVGK9stHr6sL
+         w7f/sEk1cdnHuGkMVjoBaasv02Eei75cCzREIovtTn8UGedX6/3gt+dobUqQKoyV/V
+         vRM0vHaFoDIECj+TK4eafRR3gud/gqFlyXwOIVd5tvoDNPgB4a+MmWWy+wcMjfXt0y
+         VUmzpNl9ZY347AiReQZmZKHbc46t7cBvzubiz9f+92QiGHZWTd5/irFaHWscaNlTXT
+         vZ60Av9A2CfEKqsSIB6yxtqylLp6dhof/z7SJ6wYF4g+YlpEatU+keTy5swzES6xuu
+         ofHSXCu7Nyr7w==
 X-Nifty-SrcIP: [153.142.97.92]
 From:   Masahiro Yamada <yamada.masahiro@socionext.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
@@ -34,10 +34,12 @@ Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>, sparclinux@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org,
         Masahiro Yamada <yamada.masahiro@socionext.com>
-Subject: [PATCH 1/3] arch: ipcbuf.h: make uapi asm/ipcbuf.h self-contained
-Date:   Wed, 30 Oct 2019 15:38:53 +0900
-Message-Id: <20191030063855.9989-1-yamada.masahiro@socionext.com>
+Subject: [PATCH 2/3] arch: msgbuf.h: make uapi asm/msgbuf.h self-contained
+Date:   Wed, 30 Oct 2019 15:38:54 +0900
+Message-Id: <20191030063855.9989-2-yamada.masahiro@socionext.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191030063855.9989-1-yamada.masahiro@socionext.com>
+References: <20191030063855.9989-1-yamada.masahiro@socionext.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -46,119 +48,151 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The user-space cannot compile <asm/ipcbuf.h> due to some missing type
+The user-space cannot compile <asm/msgbuf.h> due to some missing type
 definitions. For example, building it for x86 fails as follows:
 
-  CC      usr/include/asm/ipcbuf.h.s
-In file included from ./usr/include/asm/ipcbuf.h:1:0,
+  CC      usr/include/asm/msgbuf.h.s
+In file included from ./usr/include/asm/msgbuf.h:6:0,
                  from <command-line>:32:
-./usr/include/asm-generic/ipcbuf.h:21:2: error: unknown type name ‘__kernel_key_t’
-  __kernel_key_t  key;
-  ^~~~~~~~~~~~~~
-./usr/include/asm-generic/ipcbuf.h:22:2: error: unknown type name ‘__kernel_uid32_t’
-  __kernel_uid32_t uid;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm-generic/ipcbuf.h:23:2: error: unknown type name ‘__kernel_gid32_t’
-  __kernel_gid32_t gid;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm-generic/ipcbuf.h:24:2: error: unknown type name ‘__kernel_uid32_t’
-  __kernel_uid32_t cuid;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm-generic/ipcbuf.h:25:2: error: unknown type name ‘__kernel_gid32_t’
-  __kernel_gid32_t cgid;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm-generic/ipcbuf.h:26:2: error: unknown type name ‘__kernel_mode_t’
-  __kernel_mode_t  mode;
+./usr/include/asm-generic/msgbuf.h:25:20: error: field ‘msg_perm’ has incomplete type
+  struct ipc64_perm msg_perm;
+                    ^~~~~~~~
+./usr/include/asm-generic/msgbuf.h:27:2: error: unknown type name ‘__kernel_time_t’
+  __kernel_time_t msg_stime; /* last msgsnd time */
   ^~~~~~~~~~~~~~~
-./usr/include/asm-generic/ipcbuf.h:28:35: error: ‘__kernel_mode_t’ undeclared here (not in a function)
-  unsigned char  __pad1[4 - sizeof(__kernel_mode_t)];
-                                   ^~~~~~~~~~~~~~~
-./usr/include/asm-generic/ipcbuf.h:31:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused1;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm-generic/ipcbuf.h:32:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused2;
-  ^~~~~~~~~~~~~~~~
+./usr/include/asm-generic/msgbuf.h:28:2: error: unknown type name ‘__kernel_time_t’
+  __kernel_time_t msg_rtime; /* last msgrcv time */
+  ^~~~~~~~~~~~~~~
+./usr/include/asm-generic/msgbuf.h:29:2: error: unknown type name ‘__kernel_time_t’
+  __kernel_time_t msg_ctime; /* last change time */
+  ^~~~~~~~~~~~~~~
+./usr/include/asm-generic/msgbuf.h:41:2: error: unknown type name ‘__kernel_pid_t’
+  __kernel_pid_t msg_lspid; /* pid of last msgsnd */
+  ^~~~~~~~~~~~~~
+./usr/include/asm-generic/msgbuf.h:42:2: error: unknown type name ‘__kernel_pid_t’
+  __kernel_pid_t msg_lrpid; /* last receive pid */
+  ^~~~~~~~~~~~~~
 
 It is just a matter of missing include directive.
 
-Include <asm/posix_types.h> to make it self-contained, and add it to
+Include <asm/ipcbuf.h> to make it self-contained, and add it to
 the compile-test coverage.
 
 Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
 
- arch/s390/include/uapi/asm/ipcbuf.h   | 2 ++
- arch/sparc/include/uapi/asm/ipcbuf.h  | 2 ++
- arch/xtensa/include/uapi/asm/ipcbuf.h | 2 ++
- include/uapi/asm-generic/ipcbuf.h     | 2 ++
- usr/include/Makefile                  | 1 -
- 5 files changed, 8 insertions(+), 1 deletion(-)
+ arch/mips/include/uapi/asm/msgbuf.h    | 1 +
+ arch/parisc/include/uapi/asm/msgbuf.h  | 1 +
+ arch/powerpc/include/uapi/asm/msgbuf.h | 2 ++
+ arch/sparc/include/uapi/asm/msgbuf.h   | 2 ++
+ arch/x86/include/uapi/asm/msgbuf.h     | 3 +++
+ arch/xtensa/include/uapi/asm/msgbuf.h  | 2 ++
+ include/uapi/asm-generic/msgbuf.h      | 2 ++
+ usr/include/Makefile                   | 1 -
+ 8 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/arch/s390/include/uapi/asm/ipcbuf.h b/arch/s390/include/uapi/asm/ipcbuf.h
-index 5b1c4f47c656..1030cd186899 100644
---- a/arch/s390/include/uapi/asm/ipcbuf.h
-+++ b/arch/s390/include/uapi/asm/ipcbuf.h
+diff --git a/arch/mips/include/uapi/asm/msgbuf.h b/arch/mips/include/uapi/asm/msgbuf.h
+index 46aa15b13e4e..2722f9b82cf2 100644
+--- a/arch/mips/include/uapi/asm/msgbuf.h
++++ b/arch/mips/include/uapi/asm/msgbuf.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_MSGBUF_H
+ #define _ASM_MSGBUF_H
+ 
++#include <asm/ipcbuf.h>
+ 
+ /*
+  * The msqid64_ds structure for the MIPS architecture.
+diff --git a/arch/parisc/include/uapi/asm/msgbuf.h b/arch/parisc/include/uapi/asm/msgbuf.h
+index 6a2e9ab2ef8d..02ae1f616347 100644
+--- a/arch/parisc/include/uapi/asm/msgbuf.h
++++ b/arch/parisc/include/uapi/asm/msgbuf.h
+@@ -3,6 +3,7 @@
+ #define _PARISC_MSGBUF_H
+ 
+ #include <asm/bitsperlong.h>
++#include <asm/ipcbuf.h>
+ 
+ /* 
+  * The msqid64_ds structure for parisc architecture, copied from sparc.
+diff --git a/arch/powerpc/include/uapi/asm/msgbuf.h b/arch/powerpc/include/uapi/asm/msgbuf.h
+index 2b1b37797a47..30d5e1b45553 100644
+--- a/arch/powerpc/include/uapi/asm/msgbuf.h
++++ b/arch/powerpc/include/uapi/asm/msgbuf.h
 @@ -2,6 +2,8 @@
- #ifndef __S390_IPCBUF_H__
- #define __S390_IPCBUF_H__
+ #ifndef _ASM_POWERPC_MSGBUF_H
+ #define _ASM_POWERPC_MSGBUF_H
  
-+#include <linux/posix_types.h>
++#include <asm/ipcbuf.h>
 +
  /*
-  * The user_ipc_perm structure for S/390 architecture.
+  * The msqid64_ds structure for the PowerPC architecture.
   * Note extra padding because this structure is passed back and forth
-diff --git a/arch/sparc/include/uapi/asm/ipcbuf.h b/arch/sparc/include/uapi/asm/ipcbuf.h
-index 9d0d125500e2..5b933a598a33 100644
---- a/arch/sparc/include/uapi/asm/ipcbuf.h
-+++ b/arch/sparc/include/uapi/asm/ipcbuf.h
+diff --git a/arch/sparc/include/uapi/asm/msgbuf.h b/arch/sparc/include/uapi/asm/msgbuf.h
+index ffc46c211d6d..81a8460fdd67 100644
+--- a/arch/sparc/include/uapi/asm/msgbuf.h
++++ b/arch/sparc/include/uapi/asm/msgbuf.h
 @@ -2,6 +2,8 @@
- #ifndef __SPARC_IPCBUF_H
- #define __SPARC_IPCBUF_H
+ #ifndef _SPARC_MSGBUF_H
+ #define _SPARC_MSGBUF_H
  
-+#include <linux/posix_types.h>
++#include <asm/ipcbuf.h>
 +
  /*
-  * The ipc64_perm structure for sparc/sparc64 architecture.
+  * The msqid64_ds structure for sparc64 architecture.
   * Note extra padding because this structure is passed back and forth
-diff --git a/arch/xtensa/include/uapi/asm/ipcbuf.h b/arch/xtensa/include/uapi/asm/ipcbuf.h
-index a57afa0b606f..3bd0642f6660 100644
---- a/arch/xtensa/include/uapi/asm/ipcbuf.h
-+++ b/arch/xtensa/include/uapi/asm/ipcbuf.h
-@@ -12,6 +12,8 @@
- #ifndef _XTENSA_IPCBUF_H
- #define _XTENSA_IPCBUF_H
- 
-+#include <linux/posix_types.h>
+diff --git a/arch/x86/include/uapi/asm/msgbuf.h b/arch/x86/include/uapi/asm/msgbuf.h
+index 90ab9a795b49..e09fd2363300 100644
+--- a/arch/x86/include/uapi/asm/msgbuf.h
++++ b/arch/x86/include/uapi/asm/msgbuf.h
+@@ -5,6 +5,9 @@
+ #if !defined(__x86_64__) || !defined(__ILP32__)
+ #include <asm-generic/msgbuf.h>
+ #else
++
++#include <asm/ipcbuf.h>
 +
  /*
-  * Pad space is left for:
-  * - 32-bit mode_t and seq
-diff --git a/include/uapi/asm-generic/ipcbuf.h b/include/uapi/asm-generic/ipcbuf.h
-index 7d80dbd336fb..41a01b494fc7 100644
---- a/include/uapi/asm-generic/ipcbuf.h
-+++ b/include/uapi/asm-generic/ipcbuf.h
-@@ -2,6 +2,8 @@
- #ifndef __ASM_GENERIC_IPCBUF_H
- #define __ASM_GENERIC_IPCBUF_H
+  * The msqid64_ds structure for x86 architecture with x32 ABI.
+  *
+diff --git a/arch/xtensa/include/uapi/asm/msgbuf.h b/arch/xtensa/include/uapi/asm/msgbuf.h
+index d6915e9f071c..1ed2c85b693a 100644
+--- a/arch/xtensa/include/uapi/asm/msgbuf.h
++++ b/arch/xtensa/include/uapi/asm/msgbuf.h
+@@ -17,6 +17,8 @@
+ #ifndef _XTENSA_MSGBUF_H
+ #define _XTENSA_MSGBUF_H
  
-+#include <linux/posix_types.h>
++#include <asm/ipcbuf.h>
++
+ struct msqid64_ds {
+ 	struct ipc64_perm msg_perm;
+ #ifdef __XTENSA_EB__
+diff --git a/include/uapi/asm-generic/msgbuf.h b/include/uapi/asm-generic/msgbuf.h
+index 9fe4881557cb..7cdc7e52490d 100644
+--- a/include/uapi/asm-generic/msgbuf.h
++++ b/include/uapi/asm-generic/msgbuf.h
+@@ -3,6 +3,8 @@
+ #define __ASM_GENERIC_MSGBUF_H
+ 
+ #include <asm/bitsperlong.h>
++#include <asm/ipcbuf.h>
 +
  /*
-  * The generic ipc64_perm structure:
-  * Note extra padding because this structure is passed back and forth
+  * generic msqid64_ds structure.
+  *
 diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 57b20f7b6729..70f8fe256aed 100644
+index 70f8fe256aed..099d7401aa23 100644
 --- a/usr/include/Makefile
 +++ b/usr/include/Makefile
 @@ -16,7 +16,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MD,$(depfile) -I$(objtree)/usr/include
  # Please consider to fix the header first.
  #
  # Sorted alphabetically.
--header-test- += asm/ipcbuf.h
- header-test- += asm/msgbuf.h
+-header-test- += asm/msgbuf.h
  header-test- += asm/sembuf.h
  header-test- += asm/shmbuf.h
+ header-test- += asm/signal.h
 -- 
 2.17.1
 
