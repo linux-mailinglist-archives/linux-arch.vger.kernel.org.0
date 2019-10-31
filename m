@@ -2,104 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 328C4EA97C
-	for <lists+linux-arch@lfdr.de>; Thu, 31 Oct 2019 04:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B655EAB02
+	for <lists+linux-arch@lfdr.de>; Thu, 31 Oct 2019 08:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbfJaDRJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 30 Oct 2019 23:17:09 -0400
-Received: from outbound.smtp.vt.edu ([198.82.183.121]:55536 "EHLO
-        omr2.cc.vt.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726347AbfJaDRJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Oct 2019 23:17:09 -0400
-Received: from mr6.cc.vt.edu (mr6.cc.ipv6.vt.edu [IPv6:2607:b400:92:8500:0:af:2d00:4488])
-        by omr2.cc.vt.edu (8.14.4/8.14.4) with ESMTP id x9V3H7NU026548
-        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 23:17:07 -0400
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-        by mr6.cc.vt.edu (8.14.7/8.14.7) with ESMTP id x9V3H21k008619
-        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 23:17:07 -0400
-Received: by mail-qk1-f199.google.com with SMTP id x77so4372970qka.11
-        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 20:17:07 -0700 (PDT)
+        id S1726575AbfJaHjA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 31 Oct 2019 03:39:00 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44595 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726596AbfJaHjA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 31 Oct 2019 03:39:00 -0400
+Received: by mail-lj1-f194.google.com with SMTP id c4so5478775lja.11
+        for <linux-arch@vger.kernel.org>; Thu, 31 Oct 2019 00:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XYiEiAeXhzSNlTeZVtybpT8lclKkW3XtSx+iKVkW34s=;
+        b=V6fRNYMgoB8Pzl1XrdHlLWkDp21wb/ZAO1KlZ7rzpLCgOKB+cLTIKkhzxBjKnpaTRq
+         wg/s5Fs8T97v4nps20HK5RGnMMQyCoRPJTQ1WSk7qZGXAWoSpTN1wt/mdQcRW0iqvpyg
+         dx5JXOcfg8IV2iczVB2WVlj1Lz68hY/phZ2co=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :mime-version:content-transfer-encoding:date:message-id;
-        bh=UjwFl/5kyrrhReHkQKPm1SCGM6jwLyZlLmQqSsl7mww=;
-        b=IJur/Y30UhkTVO3IgPuEvxPsCVpQp1NxVDJ7MgOl4A3aEi/FsUTLWZ6GRr+Z3Q5n25
-         +1Vqn5oQD7UEVFVyn7e9zEXpNVaxOHcfm8RwQhDx3jduEkjisHTCnYoNkOtH8KouSfCo
-         hUrREALNfMMaJqQs62N9ta1VVOJNFJVfeMkoqHlBawLDjXg5zLLdAJjX6u4wqeSkQJvn
-         +9BXLn7QVQuIkR3yIVahMWPXsRZnacvYCK2qhb51f9m93yj/pCbsEmHDvnTpFLMpsYDT
-         NJD6fcXGVWIsJcdRFlX7FxxxyeVeuzX/JkpwhGv3mr2mMI/fy1DIAllDI1Li0kIdz22V
-         hhjg==
-X-Gm-Message-State: APjAAAUxYY+gWWC93x5/jXyAV96tL8wm2u9dj909qaGqMH+IlHaHpudu
-        4rFySH9X1Dj+b4bFxRIugIk2KApwTRRpe8tyChb7MnO7UXY6Yak4JhzHlLbMcCpNv6CI7w1R17k
-        Quz8iEGPkvfpqIuyodEXzHuEzDdwQU7KR
-X-Received: by 2002:a37:bf02:: with SMTP id p2mr3402570qkf.42.1572491822468;
-        Wed, 30 Oct 2019 20:17:02 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyBRYNvJgULHc6/HirPX/JJlwuT5MkpOcps7z7Wgn9SXa/v+KbkipNm/PXten1R1WQp8wUltQ==
-X-Received: by 2002:a37:bf02:: with SMTP id p2mr3402548qkf.42.1572491822161;
-        Wed, 30 Oct 2019 20:17:02 -0700 (PDT)
-Received: from turing-police ([2601:5c0:c001:c9e1::359])
-        by smtp.gmail.com with ESMTPSA id t132sm1220848qke.51.2019.10.30.20.16.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 20:17:00 -0700 (PDT)
-From:   "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <valdis.kletnieks@vt.edu>
-X-Google-Original-From: "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <Valdis.Kletnieks@vt.edu>
-X-Mailer: exmh version 2.9.0 11/07/2018 with nmh-1.7+dev
-To:     "Darrick J. Wong" <darrick.wong@oracle.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-xfs@vger.kernel.org,
-        Jan Kara <jack@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-fsdevel@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC] errno.h: Provide EFSCORRUPTED for everybody
-In-Reply-To: <20191031030449.GV15222@magnolia>
-References: <20191031010736.113783-1-Valdis.Kletnieks@vt.edu>
- <20191031030449.GV15222@magnolia>
-Mime-Version: 1.0
-Content-Type: multipart/signed; boundary="==_Exmh_1572491818_4623P";
-         micalg=pgp-sha1; protocol="application/pgp-signature"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XYiEiAeXhzSNlTeZVtybpT8lclKkW3XtSx+iKVkW34s=;
+        b=TE0jq6CB3S4ZNbHLSr2bt+Ju6rVrDaCX+v3LcGQCWtJ/BbTiMGZp0dkQzzld2nl6k1
+         BQTaLbu/e5ug7rs7vusqB4XDhlrm/8PhjaRlwmgFhSzwkdk8UfaaiCZtFQHw88OaP8qZ
+         aCAthsjp2CFGXXyhUoNUXnwvpJNwk+AUoo7iUyjCPNppH+uBRfYUN97J7vtLkN0ufrKz
+         QhW06b+kng7Wy2LMpq7CQNvFQ1nzJ9rkqs1p9BqMNiTbV/YmvxeUpetxNzs2PUOZmbpi
+         6IogJb5c/v9U5DluPIjyWBze6EtRpvu2NsXMNJxr1cIFouSBdagb68msjgC/KR41N8cm
+         RBpg==
+X-Gm-Message-State: APjAAAWjL14kANVowGxWV5TdMe9wjJ4UYeZkFPc0ANdULRCk7gaTGy2q
+        EBDXkMIPmBaJIDjiw00+UuroOQ==
+X-Google-Smtp-Source: APXvYqxT3T6cYOhnMq3nmTYG/Ls910R5ah/jwnD3vDOz9VZu/fzXJoKKzY8NQwSmVmS5/uHcXqfAmA==
+X-Received: by 2002:a2e:7815:: with SMTP id t21mr2927502ljc.149.1572507537180;
+        Thu, 31 Oct 2019 00:38:57 -0700 (PDT)
+Received: from [172.16.11.28] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id n11sm1422892lfd.88.2019.10.31.00.38.55
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 31 Oct 2019 00:38:56 -0700 (PDT)
+Subject: Re: [RFC PATCH 0/5] powerpc: make iowrite32be etc. inline
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, linux-kernel@vger.kernel.org
+References: <20191031003154.21969-1-linux@rasmusvillemoes.dk>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <04799503-b423-6bc8-71cd-bee54e45883e@rasmusvillemoes.dk>
+Date:   Thu, 31 Oct 2019 08:38:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191031003154.21969-1-linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 30 Oct 2019 23:16:59 -0400
-Message-ID: <120748.1572491819@turing-police>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---==_Exmh_1572491818_4623P
-Content-Type: text/plain; charset=us-ascii
+On 31/10/2019 01.31, Rasmus Villemoes wrote:
 
-On Wed, 30 Oct 2019 20:04:49 -0700, "Darrick J. Wong" said:
+> At first I tried something that wouldn't need to touch anything
+> outside arch/powerpc/, but I ended up with conditional inclusion of
+> asm-generic headers and/or duplicating a lot of their contents.
 
-> I would add (d) can we do the same to EFSBADCRC, seeing as f2fs,
-> ext4, xfs, and jbd2 all define it the same way?
+Urrgh, this is much worse than I feared. Already 1/5 is broken because
+asm-generic.h includes asm-generic/iomap.h conditionally, but
+asm-generic/pci_iomap.h unconditionally, so now users of io.h with
+CONFIG_PCI and !CONFIG_GENERIC_IOMAP get an external declaration of
+pci_iounmap they didn't use to, in addition to the static inline defined
+in io.h.
 
-If this one flies, that's a good candidate for a second patch....
+And I didn't think 2/5 could break anything - on the premise that if
+somebody already have a non-trivial define of ioread16, they couldn't
+possibly also include asm-generic/iomap.h. alpha proves me wrong; as
+long as one doesn't define ioread16 until after iomap.h has been parsed,
+there's no problem (well, except of course if some static inline that
+uses ioread16 got parsed between the compiler seeing the extern
+declaration and alpha then defining the ioread16 macro, but apparently
+that doesn't happen).
 
---==_Exmh_1572491818_4623P
-Content-Type: application/pgp-signature
+So sorry for the noise. Maybe I'll just have to bite the bullet and
+introduce private qe_iowrite32be etc. and define them based on $ARCH.
+Any better ideas would be much appreciated.
 
------BEGIN PGP SIGNATURE-----
-Comment: Exmh version 2.9.0 11/07/2018
-
-iQIVAwUBXbpSKgdmEQWDXROgAQJYmA/+PTG0+FXdOKpnGaoDDFNKM1tIitWpnoi9
-02VrxRtAXg+D3lFix+ADGPwdAI9qKi2oMzxnOdTY81JCchjmp2rN4y1iABx5+Vy1
-8eS3gGF2xihheSUp/wLsq4tQx7mY4DkcWIRsuRSmj3PPEZotxvNMkLFox/+xHCSk
-RXdXLU/kO9LZjdFdlxQ26/X9pwhTn6USWRD73f5lVzQ49IChhB+Ww3UJj2RUm4vK
-hkzocyTyA+tGSKEqh3b508buuxiUjWjYFFr8KWUzkd5Of/zgoddbTGXG117ILwDO
-V+kQgt2ZAIESvyDXpBDnkPDclJPgv9aQgkAKdSb94BoMqiry75amO2JuxCNaZcnr
-usLK+H7vWv++FXsA7BPhPAM0xuQRBbWA0sByEcKuHZEP5Z3LKjzIG8UqcbzJsRh4
-ZbmqnW34sqYegs16RUj6Uv3CpRQmNwgit0m4lovTVfHTv+5ZK65e2O615RJajHpE
-KKmSLCZCbLPN9TSAGm+p3m0aIoDH4+b5rp6KQDjfXJR3I8o0um8cLA6ejWmzhdVc
-NMJSDVYw/px/5FU35XocFQERd9DCHYmTtNg2PhPffAKY2Og0YTzyxqxu2aT1ao5S
-xLKZ1MHhLpDGdYhkJDvDHZPypg5kjtJN47yNF7naKgY7Xnt9i4s++1xoSSUVsj1a
-8rFfLA7uEbY=
-=RvfI
------END PGP SIGNATURE-----
-
---==_Exmh_1572491818_4623P--
+Thanks,
+Rasmus
