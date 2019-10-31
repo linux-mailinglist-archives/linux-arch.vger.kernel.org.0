@@ -2,95 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B655EAB02
-	for <lists+linux-arch@lfdr.de>; Thu, 31 Oct 2019 08:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE90EB17A
+	for <lists+linux-arch@lfdr.de>; Thu, 31 Oct 2019 14:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726575AbfJaHjA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 31 Oct 2019 03:39:00 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:44595 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726596AbfJaHjA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 31 Oct 2019 03:39:00 -0400
-Received: by mail-lj1-f194.google.com with SMTP id c4so5478775lja.11
-        for <linux-arch@vger.kernel.org>; Thu, 31 Oct 2019 00:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XYiEiAeXhzSNlTeZVtybpT8lclKkW3XtSx+iKVkW34s=;
-        b=V6fRNYMgoB8Pzl1XrdHlLWkDp21wb/ZAO1KlZ7rzpLCgOKB+cLTIKkhzxBjKnpaTRq
-         wg/s5Fs8T97v4nps20HK5RGnMMQyCoRPJTQ1WSk7qZGXAWoSpTN1wt/mdQcRW0iqvpyg
-         dx5JXOcfg8IV2iczVB2WVlj1Lz68hY/phZ2co=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XYiEiAeXhzSNlTeZVtybpT8lclKkW3XtSx+iKVkW34s=;
-        b=TE0jq6CB3S4ZNbHLSr2bt+Ju6rVrDaCX+v3LcGQCWtJ/BbTiMGZp0dkQzzld2nl6k1
-         BQTaLbu/e5ug7rs7vusqB4XDhlrm/8PhjaRlwmgFhSzwkdk8UfaaiCZtFQHw88OaP8qZ
-         aCAthsjp2CFGXXyhUoNUXnwvpJNwk+AUoo7iUyjCPNppH+uBRfYUN97J7vtLkN0ufrKz
-         QhW06b+kng7Wy2LMpq7CQNvFQ1nzJ9rkqs1p9BqMNiTbV/YmvxeUpetxNzs2PUOZmbpi
-         6IogJb5c/v9U5DluPIjyWBze6EtRpvu2NsXMNJxr1cIFouSBdagb68msjgC/KR41N8cm
-         RBpg==
-X-Gm-Message-State: APjAAAWjL14kANVowGxWV5TdMe9wjJ4UYeZkFPc0ANdULRCk7gaTGy2q
-        EBDXkMIPmBaJIDjiw00+UuroOQ==
-X-Google-Smtp-Source: APXvYqxT3T6cYOhnMq3nmTYG/Ls910R5ah/jwnD3vDOz9VZu/fzXJoKKzY8NQwSmVmS5/uHcXqfAmA==
-X-Received: by 2002:a2e:7815:: with SMTP id t21mr2927502ljc.149.1572507537180;
-        Thu, 31 Oct 2019 00:38:57 -0700 (PDT)
-Received: from [172.16.11.28] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id n11sm1422892lfd.88.2019.10.31.00.38.55
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 31 Oct 2019 00:38:56 -0700 (PDT)
+        id S1727697AbfJaNrE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 31 Oct 2019 09:47:04 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:51615 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727696AbfJaNrE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 31 Oct 2019 09:47:04 -0400
+Received: from mail-qk1-f179.google.com ([209.85.222.179]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MY5XR-1iTfHn251x-00YO30; Thu, 31 Oct 2019 14:47:02 +0100
+Received: by mail-qk1-f179.google.com with SMTP id m4so7025100qke.9;
+        Thu, 31 Oct 2019 06:47:02 -0700 (PDT)
+X-Gm-Message-State: APjAAAU6PeP9agN7/anhlm5j4iLIWr18mL9ZZSSTiwGWKlT5gotlXw0G
+        bjeIJp1VUpPLLjGREFwaECh/eSQSoJForsGx0UQ=
+X-Google-Smtp-Source: APXvYqwYoQTEthtnSTVFwt/kx2esJ5/VAbLAMZ9ee49FdSHuytOsmyxwwNYKV3cufux6mKtj2roQiWuAZmQk9D9c/Io=
+X-Received: by 2002:a37:4f0a:: with SMTP id d10mr586266qkb.286.1572529621308;
+ Thu, 31 Oct 2019 06:47:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191031003154.21969-1-linux@rasmusvillemoes.dk> <04799503-b423-6bc8-71cd-bee54e45883e@rasmusvillemoes.dk>
+In-Reply-To: <04799503-b423-6bc8-71cd-bee54e45883e@rasmusvillemoes.dk>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 31 Oct 2019 14:46:41 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a17NbSuWzvjKSJiUkxPLhKbqnAEzJLBKuHkPGGjDA6QtQ@mail.gmail.com>
+Message-ID: <CAK8P3a17NbSuWzvjKSJiUkxPLhKbqnAEzJLBKuHkPGGjDA6QtQ@mail.gmail.com>
 Subject: Re: [RFC PATCH 0/5] powerpc: make iowrite32be etc. inline
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, linux-kernel@vger.kernel.org
-References: <20191031003154.21969-1-linux@rasmusvillemoes.dk>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <04799503-b423-6bc8-71cd-bee54e45883e@rasmusvillemoes.dk>
-Date:   Thu, 31 Oct 2019 08:38:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191031003154.21969-1-linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Paul Mackerras <paulus@samba.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:mHUdX1ZTCd4q6WBqCcgL4S6XxArpQsw6z1YowM0PkBXHFEHy/QX
+ joV9mwTKo/tZbs6eQ0YeXj0GXEH8RynAzN1SMN1WMVzVeA8FMbiJotNEwvh73AD9LcP53wh
+ eIWA5JBDUQWBF9Bdon9zFjoyY71b3jLVFsacwlHJR345EptVAuS50Sz/7Bx8jRynEMZRHzx
+ qrJU/xKsoied4iZXomdUA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cz6l7kZIsvA=:eKgx9G8HquZtQ8jWbhW2e5
+ cwifKxrl5vQBpPy3WeZCUnV9h0dVY+9eC+w4t4JKcNkPtyFjwTN1sw1o7r+Bub2A+BvjkzBNb
+ D6+4xVDgOHmbLMDErodIfF8CJZi5Pzqnm7c2drK+EOEh63/TdkqSwNbhC34lDt6DmZL7RTG1F
+ OTq/Jxxv382tkcDkhR8yl7ZumqIJQQOqsZFPkrF22iI8opr6Dcv1h9UbXHWdNa0bpOKa7JMW9
+ 8XOl+Baj6rP3wKbtpJoNkFzIBrM9QmK27WBCw6aAJo2mGcbdXhXo3/9iUBfeMrpes5+at5nkH
+ j3BjlgJRZn6jLERQxhT6tlm90PeXDvizIZNqHq61rUHWxD2fW+BZwVbzdctY9rhnumLYZ1wEq
+ 9Mr6dIXicefuANMXxQpgqpnTmMbvqyLr/6CTOiTz6GlKZQL/4i+bMJMg18WICyJCtF2gbVvIb
+ gXv3OHbjsNI+gOOXOeYDppOTwPf7HreOYwZ70rb+ocXCpQIhb/jA5yvkeSkzxY2X/bP0N+HO/
+ LLCcpc2Xqc+34Un6aOvGtwX10u0RyYUfAn8PXfx9ZFYIB/CXTU6pq1OVEyfJ3LPHndx7uV9vo
+ YxULOYqlHm0YpAB1q3mTbJd/SQCCv1LI3ZtciYm2zM+oBKrrFR9I5cSua3aSI4qDUzEu/jGva
+ NQe5/Ib2PLl5ZYogKhh+c7j1sQwZFhdezKirLyEnak1DZXPJA3+3pEoXDAs3A1vz9f2WTATNn
+ neGr8+vjnufMBg9LD3Hc4YT2zYsM/oXdPILVnnKq7Q/PjF8igIecNboG4NJ8dzbGgSHQGCdjR
+ bu4BeutPTFOmirac8KuHNN4VDOIFerbsHPqcfu5EU3duEIJMLXg5VkBwtgj5oAeUFfjAQoaGd
+ X0KSpH9EceFpi07bj+lg==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 31/10/2019 01.31, Rasmus Villemoes wrote:
+On Thu, Oct 31, 2019 at 8:39 AM Rasmus Villemoes
+<linux@rasmusvillemoes.dk> wrote:
+> On 31/10/2019 01.31, Rasmus Villemoes wrote:
+>
+> So sorry for the noise. Maybe I'll just have to bite the bullet and
+> introduce private qe_iowrite32be etc. and define them based on $ARCH.
+> Any better ideas would be much appreciated.
 
-> At first I tried something that wouldn't need to touch anything
-> outside arch/powerpc/, but I ended up with conditional inclusion of
-> asm-generic headers and/or duplicating a lot of their contents.
+We use that approach in a number of drivers already, I think it's ok to add it
+to another driver. Just make the powerpc case use out_be32 and everything
+else use iowrite32_be. You may also be able to enable the driver for
+CONFIG_COMPILE_TEST after that.
 
-Urrgh, this is much worse than I feared. Already 1/5 is broken because
-asm-generic.h includes asm-generic/iomap.h conditionally, but
-asm-generic/pci_iomap.h unconditionally, so now users of io.h with
-CONFIG_PCI and !CONFIG_GENERIC_IOMAP get an external declaration of
-pci_iounmap they didn't use to, in addition to the static inline defined
-in io.h.
-
-And I didn't think 2/5 could break anything - on the premise that if
-somebody already have a non-trivial define of ioread16, they couldn't
-possibly also include asm-generic/iomap.h. alpha proves me wrong; as
-long as one doesn't define ioread16 until after iomap.h has been parsed,
-there's no problem (well, except of course if some static inline that
-uses ioread16 got parsed between the compiler seeing the extern
-declaration and alpha then defining the ioread16 macro, but apparently
-that doesn't happen).
-
-So sorry for the noise. Maybe I'll just have to bite the bullet and
-introduce private qe_iowrite32be etc. and define them based on $ARCH.
-Any better ideas would be much appreciated.
-
-Thanks,
-Rasmus
+     Arnd
