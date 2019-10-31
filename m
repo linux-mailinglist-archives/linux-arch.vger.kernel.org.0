@@ -2,77 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE90EB17A
-	for <lists+linux-arch@lfdr.de>; Thu, 31 Oct 2019 14:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 536F0EB4E8
+	for <lists+linux-arch@lfdr.de>; Thu, 31 Oct 2019 17:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727697AbfJaNrE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 31 Oct 2019 09:47:04 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:51615 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727696AbfJaNrE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 31 Oct 2019 09:47:04 -0400
-Received: from mail-qk1-f179.google.com ([209.85.222.179]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MY5XR-1iTfHn251x-00YO30; Thu, 31 Oct 2019 14:47:02 +0100
-Received: by mail-qk1-f179.google.com with SMTP id m4so7025100qke.9;
-        Thu, 31 Oct 2019 06:47:02 -0700 (PDT)
-X-Gm-Message-State: APjAAAU6PeP9agN7/anhlm5j4iLIWr18mL9ZZSSTiwGWKlT5gotlXw0G
-        bjeIJp1VUpPLLjGREFwaECh/eSQSoJForsGx0UQ=
-X-Google-Smtp-Source: APXvYqwYoQTEthtnSTVFwt/kx2esJ5/VAbLAMZ9ee49FdSHuytOsmyxwwNYKV3cufux6mKtj2roQiWuAZmQk9D9c/Io=
-X-Received: by 2002:a37:4f0a:: with SMTP id d10mr586266qkb.286.1572529621308;
- Thu, 31 Oct 2019 06:47:01 -0700 (PDT)
+        id S1728626AbfJaQn0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 31 Oct 2019 12:43:26 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59658 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728521AbfJaQn0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 31 Oct 2019 12:43:26 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 71E17B243;
+        Thu, 31 Oct 2019 16:43:23 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 5597C1E482D; Thu, 31 Oct 2019 17:43:22 +0100 (CET)
+Date:   Thu, 31 Oct 2019 17:43:22 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Valdis Kletnieks <valdis.kletnieks@vt.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-xfs@vger.kernel.org, Jan Kara <jack@suse.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-fsdevel@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-arch@vger.kernel.org
+Subject: Re: [RFC] errno.h: Provide EFSCORRUPTED for everybody
+Message-ID: <20191031164322.GC13321@quack2.suse.cz>
+References: <20191031010736.113783-1-Valdis.Kletnieks@vt.edu>
 MIME-Version: 1.0
-References: <20191031003154.21969-1-linux@rasmusvillemoes.dk> <04799503-b423-6bc8-71cd-bee54e45883e@rasmusvillemoes.dk>
-In-Reply-To: <04799503-b423-6bc8-71cd-bee54e45883e@rasmusvillemoes.dk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 31 Oct 2019 14:46:41 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a17NbSuWzvjKSJiUkxPLhKbqnAEzJLBKuHkPGGjDA6QtQ@mail.gmail.com>
-Message-ID: <CAK8P3a17NbSuWzvjKSJiUkxPLhKbqnAEzJLBKuHkPGGjDA6QtQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/5] powerpc: make iowrite32be etc. inline
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:mHUdX1ZTCd4q6WBqCcgL4S6XxArpQsw6z1YowM0PkBXHFEHy/QX
- joV9mwTKo/tZbs6eQ0YeXj0GXEH8RynAzN1SMN1WMVzVeA8FMbiJotNEwvh73AD9LcP53wh
- eIWA5JBDUQWBF9Bdon9zFjoyY71b3jLVFsacwlHJR345EptVAuS50Sz/7Bx8jRynEMZRHzx
- qrJU/xKsoied4iZXomdUA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cz6l7kZIsvA=:eKgx9G8HquZtQ8jWbhW2e5
- cwifKxrl5vQBpPy3WeZCUnV9h0dVY+9eC+w4t4JKcNkPtyFjwTN1sw1o7r+Bub2A+BvjkzBNb
- D6+4xVDgOHmbLMDErodIfF8CJZi5Pzqnm7c2drK+EOEh63/TdkqSwNbhC34lDt6DmZL7RTG1F
- OTq/Jxxv382tkcDkhR8yl7ZumqIJQQOqsZFPkrF22iI8opr6Dcv1h9UbXHWdNa0bpOKa7JMW9
- 8XOl+Baj6rP3wKbtpJoNkFzIBrM9QmK27WBCw6aAJo2mGcbdXhXo3/9iUBfeMrpes5+at5nkH
- j3BjlgJRZn6jLERQxhT6tlm90PeXDvizIZNqHq61rUHWxD2fW+BZwVbzdctY9rhnumLYZ1wEq
- 9Mr6dIXicefuANMXxQpgqpnTmMbvqyLr/6CTOiTz6GlKZQL/4i+bMJMg18WICyJCtF2gbVvIb
- gXv3OHbjsNI+gOOXOeYDppOTwPf7HreOYwZ70rb+ocXCpQIhb/jA5yvkeSkzxY2X/bP0N+HO/
- LLCcpc2Xqc+34Un6aOvGtwX10u0RyYUfAn8PXfx9ZFYIB/CXTU6pq1OVEyfJ3LPHndx7uV9vo
- YxULOYqlHm0YpAB1q3mTbJd/SQCCv1LI3ZtciYm2zM+oBKrrFR9I5cSua3aSI4qDUzEu/jGva
- NQe5/Ib2PLl5ZYogKhh+c7j1sQwZFhdezKirLyEnak1DZXPJA3+3pEoXDAs3A1vz9f2WTATNn
- neGr8+vjnufMBg9LD3Hc4YT2zYsM/oXdPILVnnKq7Q/PjF8igIecNboG4NJ8dzbGgSHQGCdjR
- bu4BeutPTFOmirac8KuHNN4VDOIFerbsHPqcfu5EU3duEIJMLXg5VkBwtgj5oAeUFfjAQoaGd
- X0KSpH9EceFpi07bj+lg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191031010736.113783-1-Valdis.Kletnieks@vt.edu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 31, 2019 at 8:39 AM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
-> On 31/10/2019 01.31, Rasmus Villemoes wrote:
->
-> So sorry for the noise. Maybe I'll just have to bite the bullet and
-> introduce private qe_iowrite32be etc. and define them based on $ARCH.
-> Any better ideas would be much appreciated.
+On Wed 30-10-19 21:07:33, Valdis Kletnieks wrote:
+> Three questions: (a) ACK/NAK on this patch, (b) should it be all in one
+> patch, or one to add to errno.h and 6 patches for 6 filesystems?), and
+> (c) if one patch, who gets to shepherd it through?
+> 
+> 
+> There's currently 6 filesystems that have the same #define. Move it
+> into errno.h so it's defined in just one place.
+> 
+> Signed-off-by: Valdis Kletnieks <Valdis.Kletnieks@vt.edu>
 
-We use that approach in a number of drivers already, I think it's ok to add it
-to another driver. Just make the powerpc case use out_be32 and everything
-else use iowrite32_be. You may also be able to enable the driver for
-CONFIG_COMPILE_TEST after that.
+Looks good to me. You can add:
 
-     Arnd
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  drivers/staging/exfat/exfat.h    | 2 --
+>  fs/erofs/internal.h              | 2 --
+>  fs/ext4/ext4.h                   | 1 -
+>  fs/f2fs/f2fs.h                   | 1 -
+>  fs/xfs/xfs_linux.h               | 1 -
+>  include/linux/jbd2.h             | 1 -
+>  include/uapi/asm-generic/errno.h | 1 +
+>  7 files changed, 1 insertion(+), 8 deletions(-)
+> 
+> diff --git a/drivers/staging/exfat/exfat.h b/drivers/staging/exfat/exfat.h
+> index 84de1123e178..3cf7e54af0b7 100644
+> --- a/drivers/staging/exfat/exfat.h
+> +++ b/drivers/staging/exfat/exfat.h
+> @@ -30,8 +30,6 @@
+>  #undef DEBUG
+>  #endif
+>  
+> -#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+> -
+>  #define DENTRY_SIZE		32	/* dir entry size */
+>  #define DENTRY_SIZE_BITS	5
+>  
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index 544a453f3076..3980026a8882 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -425,7 +425,5 @@ static inline int z_erofs_init_zip_subsystem(void) { return 0; }
+>  static inline void z_erofs_exit_zip_subsystem(void) {}
+>  #endif	/* !CONFIG_EROFS_FS_ZIP */
+>  
+> -#define EFSCORRUPTED    EUCLEAN         /* Filesystem is corrupted */
+> -
+>  #endif	/* __EROFS_INTERNAL_H */
+>  
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 03db3e71676c..a86c2585457d 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -3396,6 +3396,5 @@ static inline int ext4_buffer_uptodate(struct buffer_head *bh)
+>  #endif	/* __KERNEL__ */
+>  
+>  #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+> -#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+>  
+>  #endif	/* _EXT4_H */
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 4024790028aa..04ebe77569a3 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -3752,6 +3752,5 @@ static inline bool is_journalled_quota(struct f2fs_sb_info *sbi)
+>  }
+>  
+>  #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+> -#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+>  
+>  #endif /* _LINUX_F2FS_H */
+> diff --git a/fs/xfs/xfs_linux.h b/fs/xfs/xfs_linux.h
+> index ca15105681ca..3409d02a7d21 100644
+> --- a/fs/xfs/xfs_linux.h
+> +++ b/fs/xfs/xfs_linux.h
+> @@ -123,7 +123,6 @@ typedef __u32			xfs_nlink_t;
+>  
+>  #define ENOATTR		ENODATA		/* Attribute not found */
+>  #define EWRONGFS	EINVAL		/* Mount with wrong filesystem type */
+> -#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+>  #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+>  
+>  #define SYNCHRONIZE()	barrier()
+> diff --git a/include/linux/jbd2.h b/include/linux/jbd2.h
+> index 564793c24d12..1ecd3859d040 100644
+> --- a/include/linux/jbd2.h
+> +++ b/include/linux/jbd2.h
+> @@ -1657,6 +1657,5 @@ static inline tid_t  jbd2_get_latest_transaction(journal_t *journal)
+>  #endif	/* __KERNEL__ */
+>  
+>  #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+> -#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+>  
+>  #endif	/* _LINUX_JBD2_H */
+> diff --git a/include/uapi/asm-generic/errno.h b/include/uapi/asm-generic/errno.h
+> index cf9c51ac49f9..1d5ffdf54cb0 100644
+> --- a/include/uapi/asm-generic/errno.h
+> +++ b/include/uapi/asm-generic/errno.h
+> @@ -98,6 +98,7 @@
+>  #define	EINPROGRESS	115	/* Operation now in progress */
+>  #define	ESTALE		116	/* Stale file handle */
+>  #define	EUCLEAN		117	/* Structure needs cleaning */
+> +#define	EFSCORRUPTED	EUCLEAN
+>  #define	ENOTNAM		118	/* Not a XENIX named type file */
+>  #define	ENAVAIL		119	/* No XENIX semaphores available */
+>  #define	EISNAM		120	/* Is a named type file */
+> -- 
+> 2.24.0.rc1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
