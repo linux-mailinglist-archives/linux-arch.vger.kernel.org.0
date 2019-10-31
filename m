@@ -2,102 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 931F8E9AE4
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2019 12:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1EAEA833
+	for <lists+linux-arch@lfdr.de>; Thu, 31 Oct 2019 01:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726198AbfJ3LhI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 30 Oct 2019 07:37:08 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54179 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726065AbfJ3LhI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 30 Oct 2019 07:37:08 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4735ym2XKNz9sPL;
-        Wed, 30 Oct 2019 22:37:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1572435424;
-        bh=Ukmow9kPMiVR7CRBSSLkfrTkYl/luRkDY70O/Ez8ScE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=JcbMjt25mjAa/p5TQmHhbYsbMDLQNAWLBgG+KisPaucipwHOlReXn1BMxdr8jiuF/
-         TQEhrhfC6nyl4bbiSf04t8hQnvbWd1H4WYlJbNB+6bCe8Xjl1a5dHMhJVaA95XvaTa
-         Ctkb/6vSdbVW+3EVC6zycS/u152N053ziA5BCVcW/Mvl0h8h2tEoAjTpvVgorhkZp8
-         2Ap8Eh1+sYtQBgpbanoEYCf1FXizsuVA7Iqet41OaDAY0WovQWeV9v+oCfpkBPC9v3
-         H4A2rbF05lv18BITDGxmR8CpVkPcCXCSePbv9QWGgcskjrfXANv0wPUA2DKxHv0ONE
-         8COwKqErc3MZQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Richard Henderson <richard.henderson@linaro.org>,
-        linux-arch@vger.kernel.org
-Cc:     x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        id S1726352AbfJaAcD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 30 Oct 2019 20:32:03 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:43788 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbfJaAcD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Oct 2019 20:32:03 -0400
+Received: by mail-wr1-f67.google.com with SMTP id n1so4331754wra.10
+        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 17:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LuWs8dcQ+Sr64TXmHkexn1zViahF1FUWncWFh41F/hk=;
+        b=KkZ+NNwMPyqf8TZ/0SNrTMfEEbtY6AkiKFiX1KC01wShyWiWJD4un4RhPqMCse8c3V
+         8vK8gBksSfUJfxpaB4aCkY3CXRfcAjThUYGNBHRSplOKOXvu8P10aMmaFwAncndK+2n7
+         WBZui9XlT7Gxb2n8XS6MJwcIgLAsADNcZ+Lu4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LuWs8dcQ+Sr64TXmHkexn1zViahF1FUWncWFh41F/hk=;
+        b=il35RrqMKylqUC2mi+pAjUij12bJgMF5pegy+PMEaFdXQl5hmTJO1bv7+aqPmH/+ti
+         6q7q2YQhr/GYk0Vil2jcmvXCBXAHdhybF49djB8NBV8oOsV6eTXXzfJTREUT4jNarU7C
+         j52pqfQYwq4s+pQX3HQAyaSLTfoa9HYz4FopJ0rn6323F5VOsitP5qxH/kFB7FrRrtSj
+         lvNpo+uOCljmnH153+MGA1oQl2iZbm9cx1ZOz3i2HoNA9T4Jgj1lFUtth/o0NYesThN6
+         6IDsa6mghGSoR9TSSN+AdPTGWKT0vpI/uweCmRwCXIsYuJzCpD0Sa5+5PBb+R8CgybUS
+         mDnw==
+X-Gm-Message-State: APjAAAUpndEyhMAq/pAE1FC8JniRPDKviJzaTLBEUXTcviHyYePPOs1W
+        6Ti6YkN1tvq8yPuiiBwhmL2JJ5k3TJVsdSGC
+X-Google-Smtp-Source: APXvYqz3E0Ue8yL/CCvXcgs/63oYTW+qO+n65QfV1mF9yHdNK4XvvLNQHrS7g7vfk5Y07iStl+BOkw==
+X-Received: by 2002:adf:f2d1:: with SMTP id d17mr2407775wrp.353.1572481920804;
+        Wed, 30 Oct 2019 17:32:00 -0700 (PDT)
+Received: from prevas-ravi.prevas.se (ip-5-186-115-54.cgn.fibianet.dk. [5.186.115.54])
+        by smtp.gmail.com with ESMTPSA id r13sm2357111wra.74.2019.10.30.17.31.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2019 17:32:00 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH 5/6] powerpc: Mark archrandom.h functions __must_check
-In-Reply-To: <20191028210559.8289-6-rth@twiddle.net>
-References: <20191028210559.8289-1-rth@twiddle.net> <20191028210559.8289-6-rth@twiddle.net>
-Date:   Wed, 30 Oct 2019 22:37:01 +1100
-Message-ID: <87v9s6bh2a.fsf@mpe.ellerman.id.au>
+        Paul Mackerras <paulus@samba.org>,
+        linux-kernel@vger.kernel.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [RFC PATCH 0/5] powerpc: make iowrite32be etc. inline
+Date:   Thu, 31 Oct 2019 01:31:49 +0100
+Message-Id: <20191031003154.21969-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Richard Henderson <richard.henderson@linaro.org> writes:
-> We cannot use the pointer output without validating the
-> success of the random read.
+When trying to make the QUICC Engine drivers compile on arm, I
+mechanically (with coccinelle) changed out_be32() to iowrite32be()
+etc. Christophe pointed out [1][2] that that would pessimize the
+powerpc SOCs since the IO accesses now incur a function call
+overhead. He asked that I try to make those io accessors inline on
+ppc, and this is the best I could come up with.
 
-You _can_, but you must not. </pedant>
+At first I tried something that wouldn't need to touch anything
+outside arch/powerpc/, but I ended up with conditional inclusion of
+asm-generic headers and/or duplicating a lot of their contents.
 
-> Signed-off-by: Richard Henderson <rth@twiddle.net>
-> ---
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> ---
->  arch/powerpc/include/asm/archrandom.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+The diffstat may become a little better if kernel/iomap.c can indeed
+be removed (due to !CONFIG_PPC_INDIRECT_PIO &&
+CONFIG_PPC_INDIRECT_MMIO never happening).
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au>
+[1] https://lore.kernel.org/lkml/6ee121cf-0e3d-4aa0-2593-fcb00995e429@c-s.fr/
+[2] https://lore.kernel.org/lkml/886d5218-6d6b-824c-3ab9-63aafe41ff40@c-s.fr/
 
-cheers
+Rasmus Villemoes (5):
+  asm-generic: move pcu_iounmap from iomap.h to pci_iomap.h
+  asm-generic: employ "ifndef foo; define foo foo" idiom in iomap.h
+  powerpc: move pci_iounmap() from iomap.c to pci-common.c
+  powerpc: make pcibios_vaddr_is_ioport() static
+  powerpc: make iowrite32 and friends static inline when no indirection
 
-> diff --git a/arch/powerpc/include/asm/archrandom.h b/arch/powerpc/include/asm/archrandom.h
-> index f8a887c8b7f8..ee214b153a71 100644
-> --- a/arch/powerpc/include/asm/archrandom.h
-> +++ b/arch/powerpc/include/asm/archrandom.h
-> @@ -6,17 +6,17 @@
->  
->  #include <asm/machdep.h>
->  
-> -static inline bool arch_get_random_long(unsigned long *v)
-> +static inline bool __must_check arch_get_random_long(unsigned long *v)
->  {
->  	return false;
->  }
->  
-> -static inline bool arch_get_random_int(unsigned int *v)
-> +static inline bool __must_check arch_get_random_int(unsigned int *v)
->  {
->  	return false;
->  }
->  
-> -static inline bool arch_get_random_seed_long(unsigned long *v)
-> +static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
->  {
->  	if (ppc_md.get_random_seed)
->  		return ppc_md.get_random_seed(v);
-> @@ -24,7 +24,7 @@ static inline bool arch_get_random_seed_long(unsigned long *v)
->  	return false;
->  }
->  
-> -static inline bool arch_get_random_seed_int(unsigned int *v)
-> +static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
->  {
->  	unsigned long val;
->  	bool rc;
-> -- 
-> 2.17.1
+ arch/powerpc/include/asm/io.h         | 172 ++++++++++++++++++++++++++
+ arch/powerpc/include/asm/pci-bridge.h |   9 --
+ arch/powerpc/kernel/Makefile          |   2 +-
+ arch/powerpc/kernel/iomap.c           |  13 --
+ arch/powerpc/kernel/pci-common.c      |  15 ++-
+ include/asm-generic/iomap.h           | 104 +++++++++++++---
+ include/asm-generic/pci_iomap.h       |   7 ++
+ 7 files changed, 282 insertions(+), 40 deletions(-)
+
+-- 
+2.23.0
+
