@@ -2,60 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9BBEA83B
-	for <lists+linux-arch@lfdr.de>; Thu, 31 Oct 2019 01:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFAAEA885
+	for <lists+linux-arch@lfdr.de>; Thu, 31 Oct 2019 02:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728055AbfJaAcM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 30 Oct 2019 20:32:12 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35232 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727806AbfJaAcK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Oct 2019 20:32:10 -0400
-Received: by mail-wr1-f66.google.com with SMTP id l10so4355671wrb.2
-        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 17:32:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YGjLcdx9KXKhg9YECWTpZ9bCIGLdak4UGDzKAXAAeDM=;
-        b=dSAbWiy17OZMli/VazTnjYLhJ/fBH4XviqbTVhDYKWDZTRAbfb5lfbbwzHTia3qwyX
-         SaCCsfFF5LMCBCXV1wkM4COyJ97bWFwoUrVXsDrqTPiM4PW4a4uqUepJ0JmXeJcGK4qH
-         Ab0vWhCeoL9vXwoVAOl/ZHoSAWRg+U+jWoy5I=
+        id S1726623AbfJaBID (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 30 Oct 2019 21:08:03 -0400
+Received: from outbound.smtp.vt.edu ([198.82.183.121]:43238 "EHLO
+        omr1.cc.vt.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726336AbfJaBID (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Oct 2019 21:08:03 -0400
+Received: from mr2.cc.vt.edu (mr2.cc.vt.edu [IPv6:2607:b400:92:8400:0:90:e077:bf22])
+        by omr1.cc.vt.edu (8.14.4/8.14.4) with ESMTP id x9V181re019583
+        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 21:08:01 -0400
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+        by mr2.cc.vt.edu (8.14.7/8.14.7) with ESMTP id x9V17u0h030057
+        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 21:08:01 -0400
+Received: by mail-qt1-f198.google.com with SMTP id i1so3686956qtj.19
+        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2019 18:08:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YGjLcdx9KXKhg9YECWTpZ9bCIGLdak4UGDzKAXAAeDM=;
-        b=XoDx15ZcyUG1ev7Dl/+3svw/syDMu7Zu/Jir9mRqYSr01hY3XDETAZb7Kq5akXjBZX
-         cMVK8jDjWRgzPPsDCK7NHbmkI3L7v7HeNQW68VHcFdQJrct5avby/nRFlAJ0wtD/MXKx
-         EKSvy3YGYX63T/7lfPhusEKXjRa6DxcVITYvXmF50UtCpqMnFGlk2RX7JfAMDmpp/Wze
-         0N8ZPA+vYLX+PCojVoCOt3bBFq3jE7lB3ujuhXLrZ30fviu2UHvrDCLk66MFupnJzoYM
-         NT3cWKOuJFVufdtnaCFMsimw+HxG/4t3P5AlRiIBSMnXI8tDE4hZZw9iNYfrrQdp1Zgy
-         89NQ==
-X-Gm-Message-State: APjAAAV9XMIHyssLMR4u0oq3FI13CHwEb5mbFPSIdTwxFd/aQbVovUgC
-        wHhBQzkZn0f2NvnNJ8kXb+6mW08soP1uxPD9
-X-Google-Smtp-Source: APXvYqwVUehvwoFgGnD9cecxRxGad/kVRBBgTLONSUGtsGz+C8YNoj+GJyg21DvBYXFJy2LNkBhEjQ==
-X-Received: by 2002:adf:ea01:: with SMTP id q1mr2437079wrm.240.1572481925942;
-        Wed, 30 Oct 2019 17:32:05 -0700 (PDT)
-Received: from prevas-ravi.prevas.se (ip-5-186-115-54.cgn.fibianet.dk. [5.186.115.54])
-        by smtp.gmail.com with ESMTPSA id r13sm2357111wra.74.2019.10.30.17.32.04
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=A6x5zvKJWNelVsaR2qz0QPsCww3yKpvWiohVOKat7vg=;
+        b=kxvUrFG4dNISlLpUJO5NdNZ1ckl2uW6GRalT08F87iQ/srMhCsS667th9qgAfNV5cs
+         jHeUJ0lMYvW44Y8Utmd+eZS5XzJt8gmRxEQS6C8CKYqdzJoUqnMKYxYr4Y57hRubsEeh
+         dnwXj7+qqjKjBQ97vGoB8MIRJVFczvAXpkYKYX7R7KnTKOzH+fHSK3bz2LPQJvKCVovl
+         EFZncx9GKwKObe6CCkOehH3Q7IOtZlWXtJ+ZJkGo80tAkhpi1U7Q7997t50GdeX/qAwj
+         DS1WV1eHTQi7vsvgDmmkxHthgxquVYR7toAfo99OXnHzL/nl/ReMEFiW64t9pMZy2nxv
+         VPUQ==
+X-Gm-Message-State: APjAAAXLGr2jcKJrawx/H7fKKGCrEeqUB491CeJWEgtFYByq4DIHFD+u
+        aWqacmA2hcPVbgslxo4XKrelQFsg343hftYfsBTy9jRC7swgQOPJm8SfP6halS8+2v8JQfldjs3
+        BYrx7aVW/fZfYHzInx5eYFOLZOYrDeoRB
+X-Received: by 2002:a05:620a:12c2:: with SMTP id e2mr2944283qkl.162.1572484075633;
+        Wed, 30 Oct 2019 18:07:55 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxlE8kPCGfGf/g8Sz78JkaUwhSUp0GYw6gPnzEQRzaLcuBtPOcj575mA0HsP7G//KxKX1X8dA==
+X-Received: by 2002:a05:620a:12c2:: with SMTP id e2mr2944240qkl.162.1572484075278;
+        Wed, 30 Oct 2019 18:07:55 -0700 (PDT)
+Received: from turing-police.lan ([2601:5c0:c001:c9e1::359])
+        by smtp.gmail.com with ESMTPSA id u9sm1042529qke.50.2019.10.30.18.07.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 17:32:05 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [RFC PATCH 5/5] powerpc: make iowrite32 and friends static inline when no indirection
-Date:   Thu, 31 Oct 2019 01:31:54 +0100
-Message-Id: <20191031003154.21969-6-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191031003154.21969-1-linux@rasmusvillemoes.dk>
-References: <20191031003154.21969-1-linux@rasmusvillemoes.dk>
+        Wed, 30 Oct 2019 18:07:53 -0700 (PDT)
+From:   Valdis Kletnieks <valdis.kletnieks@vt.edu>
+X-Google-Original-From: Valdis Kletnieks <Valdis.Kletnieks@vt.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Valdis Kletnieks <Valdis.Kletnieks@vt.edu>,
+        Valdis Kletnieks <valdis.kletnieks@vt.edu>,
+        Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-xfs@vger.kernel.org, Jan Kara <jack@suse.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-fsdevel@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-arch@vger.kernel.org
+Subject: [RFC] errno.h: Provide EFSCORRUPTED for everybody
+Date:   Wed, 30 Oct 2019 21:07:33 -0400
+Message-Id: <20191031010736.113783-1-Valdis.Kletnieks@vt.edu>
+X-Mailer: git-send-email 2.24.0.rc1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -63,227 +68,107 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When porting a powerpc-only driver to work on another architecture,
-one has to change e.g. out_be32 to iowrite32be. Unfortunately, while
-the other target architecture (in my case arm) may have static inline
-definitions of iowrite32 and friends, this change pessimizes the
-existing powerpc users of that driver since out_be32() is inline while
-iowrite32be() is out-of-line.
+Three questions: (a) ACK/NAK on this patch, (b) should it be all in one
+patch, or one to add to errno.h and 6 patches for 6 filesystems?), and
+(c) if one patch, who gets to shepherd it through?
 
-When neither CONFIG_PPC_INDIRECT_PIO or CONFIG_PPC_INDIRECT_MMIO are
-set (e.g. all of PPC32), there's no reason for those to be out-of-line
-as they compile to just two or three instructions. So copy the
-definitions from iomap.c into io.h, make them static inline, and add
-the self-define macro boilerplate to prevent asm-generic/iomap.h from
-providing extern declarations.
 
-This means that kernel/iomap.c is now only compiled when
-!CONFIG_PPC_INDIRECT_PIO && CONFIG_PPC_INDIRECT_MMIO - a combination I
-don't think currently exists. So it's possible that file could simply
-be deleted.
+There's currently 6 filesystems that have the same #define. Move it
+into errno.h so it's defined in just one place.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Signed-off-by: Valdis Kletnieks <Valdis.Kletnieks@vt.edu>
 ---
- arch/powerpc/include/asm/io.h | 172 ++++++++++++++++++++++++++++++++++
- arch/powerpc/kernel/Makefile  |   2 +-
- 2 files changed, 173 insertions(+), 1 deletion(-)
+ drivers/staging/exfat/exfat.h    | 2 --
+ fs/erofs/internal.h              | 2 --
+ fs/ext4/ext4.h                   | 1 -
+ fs/f2fs/f2fs.h                   | 1 -
+ fs/xfs/xfs_linux.h               | 1 -
+ include/linux/jbd2.h             | 1 -
+ include/uapi/asm-generic/errno.h | 1 +
+ 7 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
-index a63ec938636d..a59310620067 100644
---- a/arch/powerpc/include/asm/io.h
-+++ b/arch/powerpc/include/asm/io.h
-@@ -638,6 +638,178 @@ static inline void name at					\
- #define writel_relaxed(v, addr)	writel(v, addr)
- #define writeq_relaxed(v, addr)	writeq(v, addr)
+diff --git a/drivers/staging/exfat/exfat.h b/drivers/staging/exfat/exfat.h
+index 84de1123e178..3cf7e54af0b7 100644
+--- a/drivers/staging/exfat/exfat.h
++++ b/drivers/staging/exfat/exfat.h
+@@ -30,8 +30,6 @@
+ #undef DEBUG
+ #endif
  
-+#if !defined(CONFIG_PPC_INDIRECT_PIO) && !defined(CONFIG_PPC_INDIRECT_MMIO)
-+
-+#define ioread8 ioread8
-+static inline unsigned int ioread8(void __iomem *addr)
-+{
-+	return readb(addr);
-+}
-+#define ioread16 ioread16
-+static inline unsigned int ioread16(void __iomem *addr)
-+{
-+	return readw(addr);
-+}
-+#define ioread16be ioread16be
-+static inline unsigned int ioread16be(void __iomem *addr)
-+{
-+	return readw_be(addr);
-+}
-+#define ioread32 ioread32
-+static inline unsigned int ioread32(void __iomem *addr)
-+{
-+	return readl(addr);
-+}
-+#define ioread32be ioread32be
-+static inline unsigned int ioread32be(void __iomem *addr)
-+{
-+	return readl_be(addr);
-+}
-+#ifdef __powerpc64__
-+#define ioread64 ioread64
-+static inline u64 ioread64(void __iomem *addr)
-+{
-+	return readq(addr);
-+}
-+#define ioread64_lo_hi ioread64_lo_hi
-+static inline u64 ioread64_lo_hi(void __iomem *addr)
-+{
-+	return readq(addr);
-+}
-+#define ioread64_hi_lo ioread64_hi_lo
-+static inline u64 ioread64_hi_lo(void __iomem *addr)
-+{
-+	return readq(addr);
-+}
-+#define ioread64be ioread64be
-+static inline u64 ioread64be(void __iomem *addr)
-+{
-+	return readq_be(addr);
-+}
-+#define ioread64be_lo_hi ioread64be_lo_hi
-+static inline u64 ioread64be_lo_hi(void __iomem *addr)
-+{
-+	return readq_be(addr);
-+}
-+#define ioread64be_hi_lo ioread64be_hi_lo
-+static inline u64 ioread64be_hi_lo(void __iomem *addr)
-+{
-+	return readq_be(addr);
-+}
-+#endif /* __powerpc64__ */
-+
-+#define iowrite8 iowrite8
-+static inline void iowrite8(u8 val, void __iomem *addr)
-+{
-+	writeb(val, addr);
-+}
-+#define iowrite16 iowrite16
-+static inline void iowrite16(u16 val, void __iomem *addr)
-+{
-+	writew(val, addr);
-+}
-+#define iowrite16be iowrite16be
-+static inline void iowrite16be(u16 val, void __iomem *addr)
-+{
-+	writew_be(val, addr);
-+}
-+#define iowrite32 iowrite32
-+static inline void iowrite32(u32 val, void __iomem *addr)
-+{
-+	writel(val, addr);
-+}
-+#define iowrite32be iowrite32be
-+static inline void iowrite32be(u32 val, void __iomem *addr)
-+{
-+	writel_be(val, addr);
-+}
-+#ifdef __powerpc64__
-+#define iowrite64 iowrite64
-+static inline void iowrite64(u64 val, void __iomem *addr)
-+{
-+	writeq(val, addr);
-+}
-+#define iowrite64_lo_hi iowrite64_lo_hi
-+static inline void iowrite64_lo_hi(u64 val, void __iomem *addr)
-+{
-+	writeq(val, addr);
-+}
-+#define iowrite64_hi_lo iowrite64_hi_lo
-+static inline void iowrite64_hi_lo(u64 val, void __iomem *addr)
-+{
-+	writeq(val, addr);
-+}
-+#define iowrite64be iowrite64be
-+static inline void iowrite64be(u64 val, void __iomem *addr)
-+{
-+	writeq_be(val, addr);
-+}
-+#define iowrite64be_lo_hi iowrite64be_lo_hi
-+static inline void iowrite64be_lo_hi(u64 val, void __iomem *addr)
-+{
-+	writeq_be(val, addr);
-+}
-+#define iowrite64be_hi_lo iowrite64be_hi_lo
-+static inline void iowrite64be_hi_lo(u64 val, void __iomem *addr)
-+{
-+	writeq_be(val, addr);
-+}
-+#endif /* __powerpc64__ */
-+
-+/*
-+ * These are the "repeat read/write" functions. Note the
-+ * non-CPU byte order. We do things in "IO byteorder"
-+ * here.
-+ *
-+ * FIXME! We could make these do EEH handling if we really
-+ * wanted. Not clear if we do.
-+ */
-+#define ioread8_rep ioread8_rep
-+static inline void ioread8_rep(void __iomem *addr, void *dst, unsigned long count)
-+{
-+	readsb(addr, dst, count);
-+}
-+#define ioread16_rep ioread16_rep
-+static inline void ioread16_rep(void __iomem *addr, void *dst, unsigned long count)
-+{
-+	readsw(addr, dst, count);
-+}
-+#define ioread32_rep ioread32_rep
-+static inline void ioread32_rep(void __iomem *addr, void *dst, unsigned long count)
-+{
-+	readsl(addr, dst, count);
-+}
-+
-+#define iowrite8_rep iowrite8_rep
-+static inline void iowrite8_rep(void __iomem *addr, const void *src, unsigned long count)
-+{
-+	writesb(addr, src, count);
-+}
-+#define iowrite16_rep iowrite16_rep
-+static inline void iowrite16_rep(void __iomem *addr, const void *src, unsigned long count)
-+{
-+	writesw(addr, src, count);
-+}
-+#define iowrite32_rep iowrite32_rep
-+static inline void iowrite32_rep(void __iomem *addr, const void *src, unsigned long count)
-+{
-+	writesl(addr, src, count);
-+}
-+
-+#define ioport_map ioport_map
-+static inline void __iomem *ioport_map(unsigned long port, unsigned int len)
-+{
-+	return (void __iomem *) (port + _IO_BASE);
-+}
-+
-+#define ioport_unmap ioport_unmap
-+static inline void ioport_unmap(void __iomem *addr)
-+{
-+	/* Nothing to do */
-+}
-+
-+#endif /* !defined(CONFIG_PPC_INDIRECT_PIO) && !defined(CONFIG_PPC_INDIRECT_MMIO) */
-+
- #include <asm-generic/iomap.h>
+-#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+-
+ #define DENTRY_SIZE		32	/* dir entry size */
+ #define DENTRY_SIZE_BITS	5
  
- static inline void iosync(void)
-diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-index a7ca8fe62368..0991b3cd007b 100644
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -143,7 +143,7 @@ obj-$(CONFIG_PPC_IO_WORKAROUNDS)	+= io-workarounds.o
- obj-y				+= trace/
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 544a453f3076..3980026a8882 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -425,7 +425,5 @@ static inline int z_erofs_init_zip_subsystem(void) { return 0; }
+ static inline void z_erofs_exit_zip_subsystem(void) {}
+ #endif	/* !CONFIG_EROFS_FS_ZIP */
  
- ifneq ($(CONFIG_PPC_INDIRECT_PIO),y)
--obj-y				+= iomap.o
-+obj-$(CONFIG_PPC_INDIRECT_MMIO)	+= iomap.o
- endif
+-#define EFSCORRUPTED    EUCLEAN         /* Filesystem is corrupted */
+-
+ #endif	/* __EROFS_INTERNAL_H */
  
- obj64-$(CONFIG_PPC_TRANSACTIONAL_MEM)	+= tm.o
+diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+index 03db3e71676c..a86c2585457d 100644
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -3396,6 +3396,5 @@ static inline int ext4_buffer_uptodate(struct buffer_head *bh)
+ #endif	/* __KERNEL__ */
+ 
+ #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+-#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+ 
+ #endif	/* _EXT4_H */
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 4024790028aa..04ebe77569a3 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -3752,6 +3752,5 @@ static inline bool is_journalled_quota(struct f2fs_sb_info *sbi)
+ }
+ 
+ #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+-#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+ 
+ #endif /* _LINUX_F2FS_H */
+diff --git a/fs/xfs/xfs_linux.h b/fs/xfs/xfs_linux.h
+index ca15105681ca..3409d02a7d21 100644
+--- a/fs/xfs/xfs_linux.h
++++ b/fs/xfs/xfs_linux.h
+@@ -123,7 +123,6 @@ typedef __u32			xfs_nlink_t;
+ 
+ #define ENOATTR		ENODATA		/* Attribute not found */
+ #define EWRONGFS	EINVAL		/* Mount with wrong filesystem type */
+-#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+ #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+ 
+ #define SYNCHRONIZE()	barrier()
+diff --git a/include/linux/jbd2.h b/include/linux/jbd2.h
+index 564793c24d12..1ecd3859d040 100644
+--- a/include/linux/jbd2.h
++++ b/include/linux/jbd2.h
+@@ -1657,6 +1657,5 @@ static inline tid_t  jbd2_get_latest_transaction(journal_t *journal)
+ #endif	/* __KERNEL__ */
+ 
+ #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+-#define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+ 
+ #endif	/* _LINUX_JBD2_H */
+diff --git a/include/uapi/asm-generic/errno.h b/include/uapi/asm-generic/errno.h
+index cf9c51ac49f9..1d5ffdf54cb0 100644
+--- a/include/uapi/asm-generic/errno.h
++++ b/include/uapi/asm-generic/errno.h
+@@ -98,6 +98,7 @@
+ #define	EINPROGRESS	115	/* Operation now in progress */
+ #define	ESTALE		116	/* Stale file handle */
+ #define	EUCLEAN		117	/* Structure needs cleaning */
++#define	EFSCORRUPTED	EUCLEAN
+ #define	ENOTNAM		118	/* Not a XENIX named type file */
+ #define	ENAVAIL		119	/* No XENIX semaphores available */
+ #define	EISNAM		120	/* Is a named type file */
 -- 
-2.23.0
+2.24.0.rc1
 
