@@ -2,107 +2,248 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0257AEC12C
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Nov 2019 11:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C855EC42E
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Nov 2019 15:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729557AbfKAKOe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Nov 2019 06:14:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59812 "EHLO mail.kernel.org"
+        id S1727154AbfKAOE7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Nov 2019 10:04:59 -0400
+Received: from mga18.intel.com ([134.134.136.126]:57541 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728048AbfKAKOe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 1 Nov 2019 06:14:34 -0400
-Received: from [172.20.33.98] (unknown [91.217.168.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7998A2086D;
-        Fri,  1 Nov 2019 10:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572603273;
-        bh=yZctnhE8ydugwCZWCgTxz8UucAyxJoh5W9y/O7iyOQI=;
-        h=Date:In-Reply-To:References:Subject:To:CC:From:From;
-        b=slfnJUOu2R2Lq4bGn6qHIg4mJZZaAFU2VJUMCjoUXPPOJfiDzb//RzSVYyEL2uHjj
-         ep3oLIUO4xnaRN/mSzvsENH6nNaEDBZefMsHcOqj4xfzKSd10py5bZROhZBLLGfuaC
-         JHM+4ZGhc7H/dGVowx+QbrvRxbthnHAE+gl6UkqI=
-Date:   Fri, 01 Nov 2019 11:14:28 +0100
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1435962204.69872.1572600009245.JavaMail.zimbra@nod.at>
-References: <1572597584-6390-1-git-send-email-rppt@kernel.org> <1572597584-6390-13-git-send-email-rppt@kernel.org> <1435962204.69872.1572600009245.JavaMail.zimbra@nod.at>
+        id S1726789AbfKAOE7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 1 Nov 2019 10:04:59 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Nov 2019 07:04:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,255,1569308400"; 
+   d="scan'208";a="194668434"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.197]) ([10.237.72.197])
+  by orsmga008.jf.intel.com with ESMTP; 01 Nov 2019 07:04:37 -0700
+Subject: Re: [PATCH v7 27/27] x86/cet/shstk: Add Shadow Stack instructions to
+ opcode map
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>
+References: <20190606200646.3951-1-yu-cheng.yu@intel.com>
+ <20190606200646.3951-28-yu-cheng.yu@intel.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <93e915b9-975d-9876-8f89-8b6f2bc4586e@intel.com>
+Date:   Fri, 1 Nov 2019 16:03:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 12/13] um: add support for folded p4d page tables
-To:     Richard Weinberger <richard@nod.at>
-CC:     linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>, davem <davem@davemloft.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Helge Deller <deller@gmx.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        torvalds <torvalds@linux-foundation.org>,
-        Mark Salter <msalter@redhat.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Michal Simek <monstr@monstr.eu>, Peter Rosin <peda@axentia.se>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sam Creasey <sammy@sammy.net>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        linux-alpha <linux-alpha@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-c6x-dev@vger.kernel.org
-Message-Id: <20191101101432.7998A2086D@mail.kernel.org>
-From:   rppt@kernel.org
+In-Reply-To: <20190606200646.3951-28-yu-cheng.yu@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-<linux-c6x-dev@linux-c6x.org>,linux-kernel <linux-kernel@vger.kernel.org>,linux-m68k <linux-m68k@lists.linux-m68k.org>,linux-parisc <linux-parisc@vger.kernel.org>,linux-um <linux-um@lists.infradead.org>,sparclinux <sparclinux@vger.kernel.org>,Mike Rapoport <rppt@linux.ibm.com>
-From: Mike Rapoport <rppt@kernel.org>
-Message-ID: <E5D8BD4D-5286-427C-A347-D73AC26EC256@kernel.org>
+On 6/06/19 11:06 PM, Yu-cheng Yu wrote:
+> Add the following shadow stack management instructions.
+> 
+> INCSSP:
+>     Increment shadow stack pointer by the steps specified.
+> 
+> RDSSP:
+>     Read SSP register into a GPR.
+> 
+> SAVEPREVSSP:
+>     Use "prev ssp" token at top of current shadow stack to
+>     create a "restore token" on previous shadow stack.
+> 
+> RSTORSSP:
+>     Restore from a "restore token" pointed by a GPR to SSP.
+> 
+> WRSS:
+>     Write to kernel-mode shadow stack (kernel-mode instruction).
+> 
+> WRUSS:
+>     Write to user-mode shadow stack (kernel-mode instruction).
+> 
+> SETSSBSY:
+>     Verify the "supervisor token" pointed by IA32_PL0_SSP MSR,
+>     if valid, set the token to busy, and set SSP to the value
+>     of IA32_PL0_SSP MSR.
+> 
+> CLRSSBSY:
+>     Verify the "supervisor token" pointed by a GPR, if valid,
+>     clear the busy bit from the token.
 
-On November 1, 2019 10:20:09 AM GMT+01:00, Richard Weinberger <richard@nod=
-=2Eat> wrote:
->----- Urspr=C3=BCngliche Mail -----
->> Von: "Mike Rapoport" <rppt@kernel=2Eorg>
->
->[=2E=2E=2E]
->
->> #define pte_page(x) pfn_to_page(pte_pfn(x))
->> diff --git a/arch/um/kernel/mem=2Ec b/arch/um/kernel/mem=2Ec
->> index 417ff64=2E=2E6fd17bc 100644
->> --- a/arch/um/kernel/mem=2Ec
->> +++ b/arch/um/kernel/mem=2Ec
->> @@ -92,10 +92,26 @@ static void __init one_md_table_init(pud_t *pud)
->> #endif
->> }
->>=20
->> +static void __init one_pud_table_init(p4d_t *p4d)
->> +{
->> +#if CONFIG_PGTABLE_LEVELS > 3
->
->Isn't this dead code?
->
->For uml we have:
->config PGTABLE_LEVELS
->        int
->        default 3 if 3_LEVEL_PGTABLES
->        default 2
+Does the notrack prefix also need to be catered for somehow?
 
-It's kinda a provision for 4 levels support in UML :)
-I can drop this in the next respin, no problem=2E
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> ---
+>  arch/x86/lib/x86-opcode-map.txt               | 26 +++++++++++++------
+>  tools/objtool/arch/x86/lib/x86-opcode-map.txt | 26 +++++++++++++------
+>  2 files changed, 36 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
+> index e0b85930dd77..c5e825d44766 100644
+> --- a/arch/x86/lib/x86-opcode-map.txt
+> +++ b/arch/x86/lib/x86-opcode-map.txt
+> @@ -366,7 +366,7 @@ AVXcode: 1
+>  1b: BNDCN Gv,Ev (F2) | BNDMOV Ev,Gv (66) | BNDMK Gv,Ev (F3) | BNDSTX Ev,Gv
+>  1c:
+>  1d:
+> -1e:
+> +1e: RDSSP Rd (F3),REX.W
+>  1f: NOP Ev
+>  # 0x0f 0x20-0x2f
+>  20: MOV Rd,Cd
+> @@ -610,7 +610,17 @@ fe: paddd Pq,Qq | vpaddd Vx,Hx,Wx (66),(v1)
+>  ff: UD0
+>  EndTable
+>  
+> -Table: 3-byte opcode 1 (0x0f 0x38)
+> +Table: 3-byte opcode 1 (0x0f 0x01)
+> +Referrer:
+> +AVXcode:
+> +# Skip 0x00-0xe7
+> +e8: SETSSBSY (f3)
+> +e9:
+> +ea: SAVEPREVSSP (f3)
+> +# Skip 0xeb-0xff
+> +EndTable
+> +
+> +Table: 3-byte opcode 2 (0x0f 0x38)
+>  Referrer: 3-byte escape 1
+>  AVXcode: 2
+>  # 0x0f 0x38 0x00-0x0f
+> @@ -789,12 +799,12 @@ f0: MOVBE Gy,My | MOVBE Gw,Mw (66) | CRC32 Gd,Eb (F2) | CRC32 Gd,Eb (66&F2)
+>  f1: MOVBE My,Gy | MOVBE Mw,Gw (66) | CRC32 Gd,Ey (F2) | CRC32 Gd,Ew (66&F2)
+>  f2: ANDN Gy,By,Ey (v)
+>  f3: Grp17 (1A)
+> -f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v)
+> -f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v)
+> +f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v) | WRUSS Pq,Qq (66),REX.W
+> +f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v) | WRSS Pq,Qq (66),REX.W
 
->Thanks,
->//richard
+AFAICT WRSS does not have 66 prefix
 
+>  f7: BEXTR Gy,Ey,By (v) | SHLX Gy,Ey,By (66),(v) | SARX Gy,Ey,By (F3),(v) | SHRX Gy,Ey,By (F2),(v)
+>  EndTable
+>  
+> -Table: 3-byte opcode 2 (0x0f 0x3a)
+> +Table: 3-byte opcode 3 (0x0f 0x3a)
+>  Referrer: 3-byte escape 2
+>  AVXcode: 3
+>  # 0x0f 0x3a 0x00-0xff
+> @@ -948,7 +958,7 @@ GrpTable: Grp7
+>  2: LGDT Ms | XGETBV (000),(11B) | XSETBV (001),(11B) | VMFUNC (100),(11B) | XEND (101)(11B) | XTEST (110)(11B)
+>  3: LIDT Ms
+>  4: SMSW Mw/Rv
+> -5: rdpkru (110),(11B) | wrpkru (111),(11B)
+> +5: rdpkru (110),(11B) | wrpkru (111),(11B) | RSTORSSP Mq (F3)
+>  6: LMSW Ew
+>  7: INVLPG Mb | SWAPGS (o64),(000),(11B) | RDTSCP (001),(11B)
+>  EndTable
+> @@ -1019,8 +1029,8 @@ GrpTable: Grp15
+>  2: vldmxcsr Md (v1) | WRFSBASE Ry (F3),(11B)
+>  3: vstmxcsr Md (v1) | WRGSBASE Ry (F3),(11B)
+>  4: XSAVE | ptwrite Ey (F3),(11B)
+> -5: XRSTOR | lfence (11B)
+> -6: XSAVEOPT | clwb (66) | mfence (11B)
+> +5: XRSTOR | lfence (11B) | INCSSP Rd (F3),REX.W
+> +6: XSAVEOPT | clwb (66) | mfence (11B) | CLRSSBSY Mq (F3)
+>  7: clflush | clflushopt (66) | sfence (11B)
+>  EndTable
+>  
+> diff --git a/tools/objtool/arch/x86/lib/x86-opcode-map.txt b/tools/objtool/arch/x86/lib/x86-opcode-map.txt
+> index e0b85930dd77..c5e825d44766 100644
+> --- a/tools/objtool/arch/x86/lib/x86-opcode-map.txt
+> +++ b/tools/objtool/arch/x86/lib/x86-opcode-map.txt
+> @@ -366,7 +366,7 @@ AVXcode: 1
+>  1b: BNDCN Gv,Ev (F2) | BNDMOV Ev,Gv (66) | BNDMK Gv,Ev (F3) | BNDSTX Ev,Gv
+>  1c:
+>  1d:
+> -1e:
+> +1e: RDSSP Rd (F3),REX.W
+>  1f: NOP Ev
+>  # 0x0f 0x20-0x2f
+>  20: MOV Rd,Cd
+> @@ -610,7 +610,17 @@ fe: paddd Pq,Qq | vpaddd Vx,Hx,Wx (66),(v1)
+>  ff: UD0
+>  EndTable
+>  
+> -Table: 3-byte opcode 1 (0x0f 0x38)
+> +Table: 3-byte opcode 1 (0x0f 0x01)
+> +Referrer:
+> +AVXcode:
+> +# Skip 0x00-0xe7
+> +e8: SETSSBSY (f3)
+> +e9:
+> +ea: SAVEPREVSSP (f3)
+> +# Skip 0xeb-0xff
+> +EndTable
+> +
+> +Table: 3-byte opcode 2 (0x0f 0x38)
+>  Referrer: 3-byte escape 1
+>  AVXcode: 2
+>  # 0x0f 0x38 0x00-0x0f
+> @@ -789,12 +799,12 @@ f0: MOVBE Gy,My | MOVBE Gw,Mw (66) | CRC32 Gd,Eb (F2) | CRC32 Gd,Eb (66&F2)
+>  f1: MOVBE My,Gy | MOVBE Mw,Gw (66) | CRC32 Gd,Ey (F2) | CRC32 Gd,Ew (66&F2)
+>  f2: ANDN Gy,By,Ey (v)
+>  f3: Grp17 (1A)
+> -f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v)
+> -f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v)
+> +f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v) | WRUSS Pq,Qq (66),REX.W
+> +f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v) | WRSS Pq,Qq (66),REX.W
+>  f7: BEXTR Gy,Ey,By (v) | SHLX Gy,Ey,By (66),(v) | SARX Gy,Ey,By (F3),(v) | SHRX Gy,Ey,By (F2),(v)
+>  EndTable
+>  
+> -Table: 3-byte opcode 2 (0x0f 0x3a)
+> +Table: 3-byte opcode 3 (0x0f 0x3a)
+>  Referrer: 3-byte escape 2
+>  AVXcode: 3
+>  # 0x0f 0x3a 0x00-0xff
+> @@ -948,7 +958,7 @@ GrpTable: Grp7
+>  2: LGDT Ms | XGETBV (000),(11B) | XSETBV (001),(11B) | VMFUNC (100),(11B) | XEND (101)(11B) | XTEST (110)(11B)
+>  3: LIDT Ms
+>  4: SMSW Mw/Rv
+> -5: rdpkru (110),(11B) | wrpkru (111),(11B)
+> +5: rdpkru (110),(11B) | wrpkru (111),(11B) | RSTORSSP Mq (F3)
+>  6: LMSW Ew
+>  7: INVLPG Mb | SWAPGS (o64),(000),(11B) | RDTSCP (001),(11B)
+>  EndTable
+> @@ -1019,8 +1029,8 @@ GrpTable: Grp15
+>  2: vldmxcsr Md (v1) | WRFSBASE Ry (F3),(11B)
+>  3: vstmxcsr Md (v1) | WRGSBASE Ry (F3),(11B)
+>  4: XSAVE | ptwrite Ey (F3),(11B)
+> -5: XRSTOR | lfence (11B)
+> -6: XSAVEOPT | clwb (66) | mfence (11B)
+> +5: XRSTOR | lfence (11B) | INCSSP Rd (F3),REX.W
+> +6: XSAVEOPT | clwb (66) | mfence (11B) | CLRSSBSY Mq (F3)
+>  7: clflush | clflushopt (66) | sfence (11B)
+>  EndTable
+>  
+> 
 
---=20
-Sincerely yours,
-Mike
