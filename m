@@ -2,30 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CB9EDBDF
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2019 10:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031F4EDBF1
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2019 10:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727663AbfKDJsD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Nov 2019 04:48:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46068 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727236AbfKDJsD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 4 Nov 2019 04:48:03 -0500
-Received: from rapoport-lnx (nesher1.haifa.il.ibm.com [195.110.40.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 703FA222D2;
-        Mon,  4 Nov 2019 09:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572860881;
-        bh=jF2dTw4x+geuuqWT+rNLEAExdkU6oqK6ll5Aip/G7wo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yIO+RdRi15/vhMR8gf577AKF/lpxu4XVhUJZy1DLQjBpIac45yVLkW8bxFv1JrMxI
-         yZ1wC+sVzO1/hBGimU5x16z9OqkqLi949PDdXnnhKpHXL9oAbagRWpOMkzhiQoM5bs
-         EavnCVX+JUJOuq3PVNevDE54nL9/PZK4/k8P5qpU=
-Date:   Mon, 4 Nov 2019 11:47:49 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+        id S1727322AbfKDJxu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Mon, 4 Nov 2019 04:53:50 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37603 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726633AbfKDJxt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Nov 2019 04:53:49 -0500
+Received: by mail-ot1-f66.google.com with SMTP id d5so1808003otp.4;
+        Mon, 04 Nov 2019 01:53:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KliwOsaW5hNOlzjps3zd+1fC4WckuXEun2JezrBsl8M=;
+        b=VT4iPDigdyJQyY+eGSEBG2z95byYx+O72g1TWexezzCHEDkvUNFlkg4blTiZW7RrVw
+         hFTvX8Fh3YS3PgeysvD64rpU66LFNe0ESLuQthk4M/gtbvNeqY14v1aJQKDJS5FmAU0t
+         co6HVuJPCQb6GZ9i7gFZbNRe6B0WmPQ40s9MEWuLf5yDTTVm7PGyJ+69vtGLxSe/DZ1D
+         jiW03HC6MneDPJAJ/Wf7qc5+IUGuYlFIuPisg27PfM/D3TIybtr7+aB2qL5tPR82Um70
+         MwhtSmE/KagZYuxbQNq/dl8taRjDaG+rsd/WxKjbMO30Vjx5nz3QAInVjLhWJD4H55C/
+         US9A==
+X-Gm-Message-State: APjAAAWojAaNQobj/aNkU0uZZUivF4zLZ/J3/IvYrc9M8jYO1vu9ey/6
+        zUq5upExNYr84e2+Rq2sL70a3GaAcLziZhzF9rUJUQ==
+X-Google-Smtp-Source: APXvYqx7SaMbfn6eTvQqNR3qc8KtXh3qCjyaO/t3VTJ32GC2iIHqF0HiXvHrmlIBpl/gTi7AjGyf/NSZNGOTan5JhFg=
+X-Received: by 2002:a9d:73cd:: with SMTP id m13mr18480198otk.145.1572861228733;
+ Mon, 04 Nov 2019 01:53:48 -0800 (PST)
+MIME-Version: 1.0
+References: <1572850587-20314-1-git-send-email-rppt@kernel.org>
+ <1572850587-20314-6-git-send-email-rppt@kernel.org> <CAMuHMdUG3V7uxzhbetw75vVeobeP0-bQySb3r=0V5XujUF123g@mail.gmail.com>
+ <20191104094748.GB23288@rapoport-lnx>
+In-Reply-To: <20191104094748.GB23288@rapoport-lnx>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Nov 2019 10:53:37 +0100
+Message-ID: <CAMuHMdVHsNyLxhaxZcVdLvQ1PUnb=2_+ECPWVD0234V+qu+kOw@mail.gmail.com>
+Subject: Re: [PATCH v3 05/13] m68k: mm: use pgtable-nopXd instead of 4level-fixup
+To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Linux MM <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
@@ -57,185 +70,77 @@ Cc:     Linux MM <linux-mm@kvack.org>,
         linux-um@lists.infradead.org,
         sparclinux <sparclinux@vger.kernel.org>,
         Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH v3 05/13] m68k: mm: use pgtable-nopXd instead of
- 4level-fixup
-Message-ID: <20191104094748.GB23288@rapoport-lnx>
-References: <1572850587-20314-1-git-send-email-rppt@kernel.org>
- <1572850587-20314-6-git-send-email-rppt@kernel.org>
- <CAMuHMdUG3V7uxzhbetw75vVeobeP0-bQySb3r=0V5XujUF123g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdUG3V7uxzhbetw75vVeobeP0-bQySb3r=0V5XujUF123g@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 04, 2019 at 09:53:34AM +0100, Geert Uytterhoeven wrote:
-> Hi Mike,
-> 
-> On Mon, Nov 4, 2019 at 7:57 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> > m68k has two or three levels of page tables and can use appropriate
-> > pgtable-nopXd and folding of the upper layers.
-> >
-> > Replace usage of include/asm-generic/4level-fixup.h and explicit
-> > definitions of __PAGETABLE_PxD_FOLDED in m68k with
-> > include/asm-generic/pgtable-nopmd.h for two-level configurations and with
-> > include/asm-generic/pgtable-nopud.h for three-lelve configurations and
-> > adjust page table manipulation macros and functions accordingly.
-> >
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > Acked-by: Greg Ungerer <gerg@linux-m68k.org>
-> 
-> Thanks for your patch!
-> 
-> The build error reported for v1 by kbuild test robot when building for
-> sun3x is still there (m68k defconfig or sun3x_defconfig):
-> 
->     arch/m68k/sun3x/dvma.c: In function ‘dvma_map_cpu’:
->     arch/m68k/sun3x/dvma.c:98:33: error: passing argument 2 of
-> ‘pmd_alloc’ from incompatible pointer type
-> [-Werror=incompatible-pointer-types]
->        if((pmd = pmd_alloc(&init_mm, pgd, vaddr)) == NULL) {
->                                      ^~~
->     In file included from arch/m68k/sun3x/dvma.c:17:
->     include/linux/mm.h:1875:61: note: expected ‘pud_t *’ {aka ‘struct
-> <anonymous> *’} but argument is of type ‘pgd_t *’ {aka ‘struct
-> <anonymous> *’}
->      static inline pmd_t *pmd_alloc(struct mm_struct *mm, pud_t *pud,
-> unsigned long address)
->                                                           ~~~~~~~^~~
+Hi Mike,
 
-The initial report was against older mmotm (base:
-git://git.cmpxchg.org/linux-mmotm.git master) and I presumed this was the
-cause of the error. Will fix in v4.
- 
-> This indeed boots fine on ARAnyM, which emulates on 68040.
-> It would be good to have some boot testing on '020/030, too.
- 
-To be honest, I have no idea how to to that :)
+On Mon, Nov 4, 2019 at 10:48 AM Mike Rapoport <rppt@kernel.org> wrote:
+> On Mon, Nov 04, 2019 at 09:53:34AM +0100, Geert Uytterhoeven wrote:
+> > On Mon, Nov 4, 2019 at 7:57 AM Mike Rapoport <rppt@kernel.org> wrote:
+> > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > m68k has two or three levels of page tables and can use appropriate
+> > > pgtable-nopXd and folding of the upper layers.
+> > >
+> > > Replace usage of include/asm-generic/4level-fixup.h and explicit
+> > > definitions of __PAGETABLE_PxD_FOLDED in m68k with
+> > > include/asm-generic/pgtable-nopmd.h for two-level configurations and with
+> > > include/asm-generic/pgtable-nopud.h for three-lelve configurations and
+> > > adjust page table manipulation macros and functions accordingly.
+> > >
+> > > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > > Acked-by: Greg Ungerer <gerg@linux-m68k.org>
+> >
+> > Thanks for your patch!
+> >
+> > The build error reported for v1 by kbuild test robot when building for
+> > sun3x is still there (m68k defconfig or sun3x_defconfig):
+> >
+> >     arch/m68k/sun3x/dvma.c: In function ‘dvma_map_cpu’:
+> >     arch/m68k/sun3x/dvma.c:98:33: error: passing argument 2 of
+> > ‘pmd_alloc’ from incompatible pointer type
+> > [-Werror=incompatible-pointer-types]
+> >        if((pmd = pmd_alloc(&init_mm, pgd, vaddr)) == NULL) {
+> >                                      ^~~
+> >     In file included from arch/m68k/sun3x/dvma.c:17:
+> >     include/linux/mm.h:1875:61: note: expected ‘pud_t *’ {aka ‘struct
+> > <anonymous> *’} but argument is of type ‘pgd_t *’ {aka ‘struct
+> > <anonymous> *’}
+> >      static inline pmd_t *pmd_alloc(struct mm_struct *mm, pud_t *pud,
+> > unsigned long address)
+> >                                                           ~~~~~~~^~~
+>
+> The initial report was against older mmotm (base:
+> git://git.cmpxchg.org/linux-mmotm.git master) and I presumed this was the
+> cause of the error. Will fix in v4.
 
-> > --- a/arch/m68k/mm/kmap.c
-> > +++ b/arch/m68k/mm/kmap.c
-> 
-> > @@ -196,17 +198,21 @@ void __iomem *__ioremap(unsigned long physaddr, unsigned long size, int cachefla
-> >                         printk ("\npa=%#lx va=%#lx ", physaddr, virtaddr);
-> >  #endif
-> >                 pgd_dir = pgd_offset_k(virtaddr);
-> > -               pmd_dir = pmd_alloc(&init_mm, pgd_dir, virtaddr);
-> > +               p4d_dir = p4d_offset(pgd_dir, virtaddr);
-> > +               pud_dir = pud_offset(p4d_dir, virtaddr);
-> > +               pmd_dir = pmd_alloc(&init_mm, pud_dir, virtaddr);
-> >                 if (!pmd_dir) {
-> >                         printk("ioremap: no mem for pmd_dir\n");
-> >                         return NULL;
-> >                 }
-> >
-> >                 if (CPU_IS_020_OR_030) {
-> > +#if CONFIG_PGTABLE_LEVELS == 3
-> 
-> This check puzzled me a bit: when we get here, CONFIG_PGTABLE_LEVELS is
-> always true.
-> However, the check cannot be removed, as the code it protects fails to compile
-> when building for Coldfire.
-> 
-> Perhaps this can be made more clear by reverting the order?
-> I.e.
-> 
->     #if CONFIG_PGTABLE_LEVELS == 3
->             if (CPU_IS_020_OR_030) {
->                     ...
->             } else
->     #endif
->             {
-> 
-> Or is there some better way?
+OK, thanks!
 
-I think reverting the order is fine. Here it's a bit ugly because of
-'} else {', but for the other cases below it will fine.
- 
-> >                         pmd_dir->pmd[(virtaddr/PTRTREESIZE) & 15] = physaddr;
-> >                         physaddr += PTRTREESIZE;
-> >                         virtaddr += PTRTREESIZE;
-> >                         size -= PTRTREESIZE;
-> > +#endif
-> >                 } else {
-> >                         pte_dir = pte_alloc_kernel(pmd_dir, virtaddr);
-> >                         if (!pte_dir) {
-> > @@ -258,19 +264,24 @@ void __iounmap(void *addr, unsigned long size)
-> >  {
-> >         unsigned long virtaddr = (unsigned long)addr;
-> >         pgd_t *pgd_dir;
-> > +       p4d_t *p4d_dir;
-> > +       pud_t *pud_dir;
-> >         pmd_t *pmd_dir;
-> >         pte_t *pte_dir;
-> >
-> >         while ((long)size > 0) {
-> >                 pgd_dir = pgd_offset_k(virtaddr);
-> > -               if (pgd_bad(*pgd_dir)) {
-> > -                       printk("iounmap: bad pgd(%08lx)\n", pgd_val(*pgd_dir));
-> > -                       pgd_clear(pgd_dir);
-> > +               p4d_dir = p4d_offset(pgd_dir, virtaddr);
-> > +               pud_dir = pud_offset(p4d_dir, virtaddr);
-> > +               if (pud_bad(*pud_dir)) {
-> > +                       printk("iounmap: bad pgd(%08lx)\n", pud_val(*pud_dir));
-> > +                       pud_clear(pud_dir);
-> >                         return;
-> >                 }
-> > -               pmd_dir = pmd_offset(pgd_dir, virtaddr);
-> > +               pmd_dir = pmd_offset(pud_dir, virtaddr);
-> >
-> >                 if (CPU_IS_020_OR_030) {
-> > +#if CONFIG_PGTABLE_LEVELS == 3
-> 
-> Likewise.
-> 
-> >                         int pmd_off = (virtaddr/PTRTREESIZE) & 15;
-> >                         int pmd_type = pmd_dir->pmd[pmd_off] & _DESCTYPE_MASK;
-> >
-> 
-> > @@ -341,14 +355,17 @@ void kernel_set_cachemode(void *addr, unsigned long size, int cmode)
-> >
-> >         while ((long)size > 0) {
-> >                 pgd_dir = pgd_offset_k(virtaddr);
-> > -               if (pgd_bad(*pgd_dir)) {
-> > -                       printk("iocachemode: bad pgd(%08lx)\n", pgd_val(*pgd_dir));
-> > -                       pgd_clear(pgd_dir);
-> > +               p4d_dir = p4d_offset(pgd_dir, virtaddr);
-> > +               pud_dir = pud_offset(p4d_dir, virtaddr);
-> > +               if (pud_bad(*pud_dir)) {
-> > +                       printk("iocachemode: bad pud(%08lx)\n", pud_val(*pud_dir));
-> > +                       pud_clear(pud_dir);
-> >                         return;
-> >                 }
-> > -               pmd_dir = pmd_offset(pgd_dir, virtaddr);
-> > +               pmd_dir = pmd_offset(pud_dir, virtaddr);
-> >
-> >                 if (CPU_IS_020_OR_030) {
-> > +#if CONFIG_PGTABLE_LEVELS == 3
-> 
-> Likewise
-> 
-> >                         int pmd_off = (virtaddr/PTRTREESIZE) & 15;
-> >
-> >                         if ((pmd_dir->pmd[pmd_off] & _DESCTYPE_MASK) == _PAGE_PRESENT) {
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+My tree is based on m68k/master, which does not include the mmotm tree,
+and should be fairly similar to plain v5.4-rc6.
+
+> > This indeed boots fine on ARAnyM, which emulates on 68040.
+> > It would be good to have some boot testing on '020/030, too.
+>
+> To be honest, I have no idea how to to that :)
+
+Sure. This was more a request for the fellow m68k users.
+But don't worry too much about it.  If it breaks '020/'030, we can fix
+that later.
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Sincerely yours,
-Mike.
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
