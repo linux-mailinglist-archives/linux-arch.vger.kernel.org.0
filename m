@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E79C8ED941
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2019 07:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0EBED943
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2019 07:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728157AbfKDG5C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Nov 2019 01:57:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60648 "EHLO mail.kernel.org"
+        id S1728234AbfKDG5L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Nov 2019 01:57:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60884 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727567AbfKDG5C (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 4 Nov 2019 01:57:02 -0500
+        id S1728223AbfKDG5L (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 4 Nov 2019 01:57:11 -0500
 Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1DCEE222C6;
-        Mon,  4 Nov 2019 06:56:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 02946204EC;
+        Mon,  4 Nov 2019 06:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572850621;
-        bh=oG08x38Bw8t//MmcsXiMwfmG8dPNjLcnVisdmtiKgLI=;
+        s=default; t=1572850630;
+        bh=p11JZ/878S75pE68Mq2TwTFjvlVsPceSwhIak764zRU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SEYNE0An9hbEjENR3+k2a4szmqSe016GAxmPWUzX+qq4EfO8NW2Mlsy4Ttd2UUhKM
-         wy5QolUZVmKdtCG2iy3BtTTO7/xLimV51kz/mCT5ENFFXWeXV82DXk015Ea7ITOvw5
-         fGDJJpZRgZ9SGhD58U09A9iSXdGvNvO1Pjv3jB7Q=
+        b=yl19luYIpVN9yj9aWbS/N6Ywf4o+a2WiEIojSiZt5QPDi0OogL/lKkGXX91IGry+P
+         HsgsBx0sCXGHp8mGP0ZAUQGckCp0pMeJbL8h5vn55B4NbBenpEdNqsBHORE02ICICI
+         MP1mY8J0w47Nek+EyGx1TYDCPiNYKt3GfIrpQcVU=
 From:   Mike Rapoport <rppt@kernel.org>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -52,9 +52,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
         linux-um@lists.infradead.org, sparclinux@vger.kernel.org,
         Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH v3 02/13] arm: nommu: use pgtable-nopud instead of 4level-fixup
-Date:   Mon,  4 Nov 2019 08:56:16 +0200
-Message-Id: <1572850587-20314-3-git-send-email-rppt@kernel.org>
+Subject: [PATCH v3 03/13] c6x: use pgtable-nopud instead of 4level-fixup
+Date:   Mon,  4 Nov 2019 08:56:17 +0200
+Message-Id: <1572850587-20314-4-git-send-email-rppt@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1572850587-20314-1-git-send-email-rppt@kernel.org>
 References: <1572850587-20314-1-git-send-email-rppt@kernel.org>
@@ -65,31 +65,31 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-The generic nommu implementation of page table manipulation takes care of
-folding of the upper levels and does not require fixups.
+c6x is a nommu architecture and does not require fixup for upper layers of
+the page tables because it is already handled by the generic nommu
+implementation.
 
-Simply replace of include/asm-generic/4level-fixup.h with
-include/asm-generic/pgtable-nopud.h.
+Replace usage of include/asm-generic/4level-fixup.h with
+include/asm-generic/pgtable-nopud.h
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Acked-by: Russell King <rmk+kernel@armlinux.org.uk>
 ---
- arch/arm/include/asm/pgtable.h | 2 +-
+ arch/c6x/include/asm/pgtable.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
-index 3ae120c..eabcb48 100644
---- a/arch/arm/include/asm/pgtable.h
-+++ b/arch/arm/include/asm/pgtable.h
-@@ -12,7 +12,7 @@
- 
- #ifndef CONFIG_MMU
+diff --git a/arch/c6x/include/asm/pgtable.h b/arch/c6x/include/asm/pgtable.h
+index 0b6919c..197c473 100644
+--- a/arch/c6x/include/asm/pgtable.h
++++ b/arch/c6x/include/asm/pgtable.h
+@@ -8,7 +8,7 @@
+ #ifndef _ASM_C6X_PGTABLE_H
+ #define _ASM_C6X_PGTABLE_H
  
 -#include <asm-generic/4level-fixup.h>
 +#include <asm-generic/pgtable-nopud.h>
- #include <asm/pgtable-nommu.h>
  
- #else
+ #include <asm/setup.h>
+ #include <asm/page.h>
 -- 
 2.7.4
 
