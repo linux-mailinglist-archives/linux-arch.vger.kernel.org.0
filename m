@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DACED967
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2019 07:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D277ED96D
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2019 07:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728144AbfKDG5r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Nov 2019 01:57:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33474 "EHLO mail.kernel.org"
+        id S1728556AbfKDG56 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Nov 2019 01:57:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33692 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728372AbfKDG5r (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 4 Nov 2019 01:57:47 -0500
+        id S1727826AbfKDG54 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 4 Nov 2019 01:57:56 -0500
 Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C2054222CD;
-        Mon,  4 Nov 2019 06:57:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A3534222D3;
+        Mon,  4 Nov 2019 06:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572850666;
-        bh=E0BDuoRZQeTjF4nz9E/q7biOG/ySIjksDw4YyyLV0BQ=;
+        s=default; t=1572850675;
+        bh=fUgAqco8vYJcOm1T0s9V9hpIfLlR7wsDpLrunSlirY4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zJC/qnubU4zXDqJZJdUm26ZcIg02c89bLtAP+kAVu6r/n9zv9sBjMSjaZjHf+Tjdh
-         jusJBEbB21Oxoub4rWy+1qoVjzpSDfGu6aabctmFZ/vkBuG5WfSUL+M2S16yVfchAb
-         PlNQyOv/YnyYgn7t7vL1GPDbVbC63X8WGeX874zU=
+        b=wmwADu1fnw+Ih00tpybAp+WnlqBfp4Flq0JNZsok7Na44Xz273ibTmyZsYQeBLLCP
+         ixba2qV1T93E1jKIw2J4U8XYHO84j8DebzXJG6DF8/F8LP57RDL1c/VXcd7rtMKh/d
+         KhEe7YOhCO4UukfYtuytEOSieX5S4/7QuB89gwbA=
 From:   Mike Rapoport <rppt@kernel.org>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -52,9 +52,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
         linux-um@lists.infradead.org, sparclinux@vger.kernel.org,
         Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH v3 07/13] nds32: use pgtable-nopmd instead of 4level-fixup
-Date:   Mon,  4 Nov 2019 08:56:21 +0200
-Message-Id: <1572850587-20314-8-git-send-email-rppt@kernel.org>
+Subject: [PATCH v3 08/13] parisc: use pgtable-nopXd instead of 4level-fixup
+Date:   Mon,  4 Nov 2019 08:56:22 +0200
+Message-Id: <1572850587-20314-9-git-send-email-rppt@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1572850587-20314-1-git-send-email-rppt@kernel.org>
 References: <1572850587-20314-1-git-send-email-rppt@kernel.org>
@@ -65,321 +65,390 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-nds32 has only two-level page tables and can use pgtable-nopmd and folding
-of the upper layers.
+parisc has two or three levels of page tables and can use appropriate
+pgtable-nopXd and folding of the upper layers.
 
-Replace usage of include/asm-generic/4level-fixup.h and explicit definition
-of __PAGETABLE_PMD_FOLDED in nds32 with include/asm-generic/pgtable-nopmd.h
-and adjust page table manipulation macros and functions accordingly.
+Replace usage of include/asm-generic/4level-fixup.h and explicit
+definitions of __PAGETABLE_PxD_FOLDED in parisc with
+include/asm-generic/pgtable-nopmd.h for two-level configurations and with
+include/asm-generic/pgtable-nopud.h for three-lelve configurations and
+adjust page table manipulation macros and functions accordingly.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Acked-by: Helge Deller <deller@gmx.de>
 ---
- arch/nds32/include/asm/page.h    |  3 ---
- arch/nds32/include/asm/pgalloc.h |  3 ---
- arch/nds32/include/asm/pgtable.h | 12 +-----------
- arch/nds32/include/asm/tlb.h     |  1 -
- arch/nds32/kernel/pm.c           |  4 +++-
- arch/nds32/mm/fault.c            | 16 +++++++++++++---
- arch/nds32/mm/init.c             | 11 ++++++++---
- arch/nds32/mm/mm-nds32.c         |  6 +++++-
- arch/nds32/mm/proc.c             | 26 +++++++++++++++++---------
- 9 files changed, 47 insertions(+), 35 deletions(-)
+ arch/parisc/include/asm/page.h    | 30 +++++++++++++---------
+ arch/parisc/include/asm/pgalloc.h | 41 +++++++++++-------------------
+ arch/parisc/include/asm/pgtable.h | 52 +++++++++++++++++++--------------------
+ arch/parisc/include/asm/tlb.h     |  2 ++
+ arch/parisc/kernel/cache.c        | 13 ++++++----
+ arch/parisc/kernel/pci-dma.c      |  9 +++++--
+ arch/parisc/mm/fixmap.c           | 10 +++++---
+ 7 files changed, 81 insertions(+), 76 deletions(-)
 
-diff --git a/arch/nds32/include/asm/page.h b/arch/nds32/include/asm/page.h
-index 8feb1fa..86b3201 100644
---- a/arch/nds32/include/asm/page.h
-+++ b/arch/nds32/include/asm/page.h
-@@ -41,17 +41,14 @@ void clear_page(void *page);
- void copy_page(void *to, void *from);
+diff --git a/arch/parisc/include/asm/page.h b/arch/parisc/include/asm/page.h
+index 93caf17..796ae29 100644
+--- a/arch/parisc/include/asm/page.h
++++ b/arch/parisc/include/asm/page.h
+@@ -42,48 +42,54 @@ typedef struct { unsigned long pte; } pte_t; /* either 32 or 64bit */
  
+ /* NOTE: even on 64 bits, these entries are __u32 because we allocate
+  * the pmd and pgd in ZONE_DMA (i.e. under 4GB) */
+-typedef struct { __u32 pmd; } pmd_t;
+ typedef struct { __u32 pgd; } pgd_t;
+ typedef struct { unsigned long pgprot; } pgprot_t;
+ 
+-#define pte_val(x)	((x).pte)
+-/* These do not work lvalues, so make sure we don't use them as such. */
++#if CONFIG_PGTABLE_LEVELS == 3
++typedef struct { __u32 pmd; } pmd_t;
++#define __pmd(x)	((pmd_t) { (x) } )
++/* pXd_val() do not work as lvalues, so make sure we don't use them as such. */
+ #define pmd_val(x)	((x).pmd + 0)
++#endif
++
++#define pte_val(x)	((x).pte)
+ #define pgd_val(x)	((x).pgd + 0)
+ #define pgprot_val(x)	((x).pgprot)
+ 
+ #define __pte(x)	((pte_t) { (x) } )
+-#define __pmd(x)	((pmd_t) { (x) } )
+ #define __pgd(x)	((pgd_t) { (x) } )
+ #define __pgprot(x)	((pgprot_t) { (x) } )
+ 
+-#define __pmd_val_set(x,n) (x).pmd = (n)
+-#define __pgd_val_set(x,n) (x).pgd = (n)
+-
+ #else
+ /*
+  * .. while these make it easier on the compiler
+  */
  typedef unsigned long pte_t;
--typedef unsigned long pmd_t;
- typedef unsigned long pgd_t;
++
++#if CONFIG_PGTABLE_LEVELS == 3
+ typedef         __u32 pmd_t;
++#define pmd_val(x)      (x)
++#define __pmd(x)	(x)
++#endif
++
+ typedef         __u32 pgd_t;
  typedef unsigned long pgprot_t;
  
  #define pte_val(x)      (x)
 -#define pmd_val(x)      (x)
- #define pgd_val(x)	(x)
+ #define pgd_val(x)      (x)
  #define pgprot_val(x)   (x)
  
  #define __pte(x)        (x)
--#define __pmd(x)        (x)
+-#define __pmd(x)	(x)
  #define __pgd(x)        (x)
  #define __pgprot(x)     (x)
  
-diff --git a/arch/nds32/include/asm/pgalloc.h b/arch/nds32/include/asm/pgalloc.h
-index 37125e6..85c1173 100644
---- a/arch/nds32/include/asm/pgalloc.h
-+++ b/arch/nds32/include/asm/pgalloc.h
-@@ -15,9 +15,6 @@
- /*
-  * Since we have only two-level page tables, these are trivial
-  */
--#define pmd_alloc_one(mm, addr)		({ BUG(); ((pmd_t *)2); })
--#define pmd_free(mm, pmd)			do { } while (0)
--#define pgd_populate(mm, pmd, pte)	BUG()
- #define pmd_pgtable(pmd) pmd_page(pmd)
- 
- extern pgd_t *pgd_alloc(struct mm_struct *mm);
-diff --git a/arch/nds32/include/asm/pgtable.h b/arch/nds32/include/asm/pgtable.h
-index 0588ec9..a80b9c6 100644
---- a/arch/nds32/include/asm/pgtable.h
-+++ b/arch/nds32/include/asm/pgtable.h
-@@ -4,8 +4,7 @@
- #ifndef _ASMNDS32_PGTABLE_H
- #define _ASMNDS32_PGTABLE_H
- 
--#define __PAGETABLE_PMD_FOLDED 1
--#include <asm-generic/4level-fixup.h>
-+#include <asm-generic/pgtable-nopmd.h>
- #include <linux/sizes.h>
- 
- #include <asm/memory.h>
-@@ -19,26 +18,20 @@
- #ifdef CONFIG_ANDES_PAGE_SIZE_4KB
- #define PGDIR_SHIFT      22
- #define PTRS_PER_PGD     1024
--#define PMD_SHIFT        22
--#define PTRS_PER_PMD     1
- #define PTRS_PER_PTE     1024
- #endif
- 
- #ifdef CONFIG_ANDES_PAGE_SIZE_8KB
- #define PGDIR_SHIFT      24
- #define PTRS_PER_PGD     256
--#define PMD_SHIFT        24
--#define PTRS_PER_PMD     1
- #define PTRS_PER_PTE     2048
- #endif
- 
- #ifndef __ASSEMBLY__
- extern void __pte_error(const char *file, int line, unsigned long val);
--extern void __pmd_error(const char *file, int line, unsigned long val);
- extern void __pgd_error(const char *file, int line, unsigned long val);
- 
- #define pte_ERROR(pte)		__pte_error(__FILE__, __LINE__, pte_val(pte))
--#define pmd_ERROR(pmd)		__pmd_error(__FILE__, __LINE__, pmd_val(pmd))
- #define pgd_ERROR(pgd)		__pgd_error(__FILE__, __LINE__, pgd_val(pgd))
- #endif /* !__ASSEMBLY__ */
- 
-@@ -366,9 +359,6 @@ static inline pmd_t __mk_pmd(pte_t * ptep, unsigned long prot)
- /* to find an entry in a kernel page-table-directory */
- #define pgd_offset_k(addr)      pgd_offset(&init_mm, addr)
- 
--/* Find an entry in the second-level page table.. */
--#define pmd_offset(dir, addr)	((pmd_t *)(dir))
+-#define __pmd_val_set(x,n) (x) = (n)
+-#define __pgd_val_set(x,n) (x) = (n)
 -
- static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ #endif /* STRICT_MM_TYPECHECKS */
+ 
++#define set_pmd(pmdptr, pmdval) (*(pmdptr) = (pmdval))
++#if CONFIG_PGTABLE_LEVELS == 3
++#define set_pud(pudptr, pudval) (*(pudptr) = (pudval))
++#endif
++
+ typedef struct page *pgtable_t;
+ 
+ typedef struct __physmem_range {
+diff --git a/arch/parisc/include/asm/pgalloc.h b/arch/parisc/include/asm/pgalloc.h
+index d98647c..9ac74da 100644
+--- a/arch/parisc/include/asm/pgalloc.h
++++ b/arch/parisc/include/asm/pgalloc.h
+@@ -34,13 +34,13 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ 		/* Populate first pmd with allocated memory.  We mark it
+ 		 * with PxD_FLAG_ATTACHED as a signal to the system that this
+ 		 * pmd entry may not be cleared. */
+-		__pgd_val_set(*actual_pgd, (PxD_FLAG_PRESENT | 
+-				        PxD_FLAG_VALID | 
+-					PxD_FLAG_ATTACHED) 
+-			+ (__u32)(__pa((unsigned long)pgd) >> PxD_VALUE_SHIFT));
++		set_pgd(actual_pgd, __pgd((PxD_FLAG_PRESENT |
++				        PxD_FLAG_VALID |
++					PxD_FLAG_ATTACHED)
++			+ (__u32)(__pa((unsigned long)pgd) >> PxD_VALUE_SHIFT)));
+ 		/* The first pmd entry also is marked with PxD_FLAG_ATTACHED as
+ 		 * a signal that this pmd may not be freed */
+-		__pgd_val_set(*pgd, PxD_FLAG_ATTACHED);
++		set_pgd(pgd, __pgd(PxD_FLAG_ATTACHED));
+ #endif
+ 	}
+ 	spin_lock_init(pgd_spinlock(actual_pgd));
+@@ -59,10 +59,10 @@ static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+ 
+ /* Three Level Page Table Support for pmd's */
+ 
+-static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, pmd_t *pmd)
++static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
  {
- 	const unsigned long mask = 0xfff;
-diff --git a/arch/nds32/include/asm/tlb.h b/arch/nds32/include/asm/tlb.h
-index a8aff1c..6726038 100644
---- a/arch/nds32/include/asm/tlb.h
-+++ b/arch/nds32/include/asm/tlb.h
-@@ -7,6 +7,5 @@
+-	__pgd_val_set(*pgd, (PxD_FLAG_PRESENT | PxD_FLAG_VALID) +
+-		        (__u32)(__pa((unsigned long)pmd) >> PxD_VALUE_SHIFT));
++	set_pud(pud, __pud((PxD_FLAG_PRESENT | PxD_FLAG_VALID) +
++			(__u32)(__pa((unsigned long)pmd) >> PxD_VALUE_SHIFT)));
+ }
+ 
+ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+@@ -88,19 +88,6 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
+ 	free_pages((unsigned long)pmd, PMD_ORDER);
+ }
+ 
+-#else
+-
+-/* Two Level Page Table Support for pmd's */
+-
+-/*
+- * allocating and freeing a pmd is trivial: the 1-entry pmd is
+- * inside the pgd, so has no extra memory associated with it.
+- */
+-
+-#define pmd_alloc_one(mm, addr)		({ BUG(); ((pmd_t *)2); })
+-#define pmd_free(mm, x)			do { } while (0)
+-#define pgd_populate(mm, pmd, pte)	BUG()
+-
+ #endif
+ 
+ static inline void
+@@ -110,14 +97,14 @@ pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmd, pte_t *pte)
+ 	/* preserve the gateway marker if this is the beginning of
+ 	 * the permanent pmd */
+ 	if(pmd_flag(*pmd) & PxD_FLAG_ATTACHED)
+-		__pmd_val_set(*pmd, (PxD_FLAG_PRESENT |
+-				 PxD_FLAG_VALID |
+-				 PxD_FLAG_ATTACHED) 
+-			+ (__u32)(__pa((unsigned long)pte) >> PxD_VALUE_SHIFT));
++		set_pmd(pmd, __pmd((PxD_FLAG_PRESENT |
++				PxD_FLAG_VALID |
++				PxD_FLAG_ATTACHED)
++			+ (__u32)(__pa((unsigned long)pte) >> PxD_VALUE_SHIFT)));
+ 	else
+ #endif
+-		__pmd_val_set(*pmd, (PxD_FLAG_PRESENT | PxD_FLAG_VALID) 
+-			+ (__u32)(__pa((unsigned long)pte) >> PxD_VALUE_SHIFT));
++		set_pmd(pmd, __pmd((PxD_FLAG_PRESENT | PxD_FLAG_VALID)
++			+ (__u32)(__pa((unsigned long)pte) >> PxD_VALUE_SHIFT)));
+ }
+ 
+ #define pmd_populate(mm, pmd, pte_page) \
+diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
+index 4ac374b..f0a3659 100644
+--- a/arch/parisc/include/asm/pgtable.h
++++ b/arch/parisc/include/asm/pgtable.h
+@@ -3,7 +3,12 @@
+ #define _PARISC_PGTABLE_H
+ 
+ #include <asm/page.h>
+-#include <asm-generic/4level-fixup.h>
++
++#if CONFIG_PGTABLE_LEVELS == 3
++#include <asm-generic/pgtable-nopud.h>
++#elif CONFIG_PGTABLE_LEVELS == 2
++#include <asm-generic/pgtable-nopmd.h>
++#endif
+ 
+ #include <asm/fixmap.h>
+ 
+@@ -101,8 +106,10 @@ static inline void purge_tlb_entries(struct mm_struct *mm, unsigned long addr)
+ 
+ #define pte_ERROR(e) \
+ 	printk("%s:%d: bad pte %08lx.\n", __FILE__, __LINE__, pte_val(e))
++#if CONFIG_PGTABLE_LEVELS == 3
+ #define pmd_ERROR(e) \
+ 	printk("%s:%d: bad pmd %08lx.\n", __FILE__, __LINE__, (unsigned long)pmd_val(e))
++#endif
+ #define pgd_ERROR(e) \
+ 	printk("%s:%d: bad pgd %08lx.\n", __FILE__, __LINE__, (unsigned long)pgd_val(e))
+ 
+@@ -132,19 +139,18 @@ static inline void purge_tlb_entries(struct mm_struct *mm, unsigned long addr)
+ #define PTRS_PER_PTE    (1UL << BITS_PER_PTE)
+ 
+ /* Definitions for 2nd level */
++#if CONFIG_PGTABLE_LEVELS == 3
+ #define PMD_SHIFT       (PLD_SHIFT + BITS_PER_PTE)
+ #define PMD_SIZE	(1UL << PMD_SHIFT)
+ #define PMD_MASK	(~(PMD_SIZE-1))
+-#if CONFIG_PGTABLE_LEVELS == 3
+ #define BITS_PER_PMD	(PAGE_SHIFT + PMD_ORDER - BITS_PER_PMD_ENTRY)
++#define PTRS_PER_PMD    (1UL << BITS_PER_PMD)
+ #else
+-#define __PAGETABLE_PMD_FOLDED 1
+ #define BITS_PER_PMD	0
+ #endif
+-#define PTRS_PER_PMD    (1UL << BITS_PER_PMD)
+ 
+ /* Definitions for 1st level */
+-#define PGDIR_SHIFT	(PMD_SHIFT + BITS_PER_PMD)
++#define PGDIR_SHIFT	(PLD_SHIFT + BITS_PER_PTE + BITS_PER_PMD)
+ #if (PGDIR_SHIFT + PAGE_SHIFT + PGD_ORDER - BITS_PER_PGD_ENTRY) > BITS_PER_LONG
+ #define BITS_PER_PGD	(BITS_PER_LONG - PGDIR_SHIFT)
+ #else
+@@ -317,6 +323,8 @@ extern unsigned long *empty_zero_page;
+ 
+ #define pmd_flag(x)	(pmd_val(x) & PxD_FLAG_MASK)
+ #define pmd_address(x)	((unsigned long)(pmd_val(x) &~ PxD_FLAG_MASK) << PxD_VALUE_SHIFT)
++#define pud_flag(x)	(pud_val(x) & PxD_FLAG_MASK)
++#define pud_address(x)	((unsigned long)(pud_val(x) &~ PxD_FLAG_MASK) << PxD_VALUE_SHIFT)
+ #define pgd_flag(x)	(pgd_val(x) & PxD_FLAG_MASK)
+ #define pgd_address(x)	((unsigned long)(pgd_val(x) &~ PxD_FLAG_MASK) << PxD_VALUE_SHIFT)
+ 
+@@ -334,42 +342,32 @@ static inline void pmd_clear(pmd_t *pmd) {
+ 	if (pmd_flag(*pmd) & PxD_FLAG_ATTACHED)
+ 		/* This is the entry pointing to the permanent pmd
+ 		 * attached to the pgd; cannot clear it */
+-		__pmd_val_set(*pmd, PxD_FLAG_ATTACHED);
++		set_pmd(pmd, __pmd(PxD_FLAG_ATTACHED));
+ 	else
+ #endif
+-		__pmd_val_set(*pmd,  0);
++		set_pmd(pmd,  __pmd(0));
+ }
+ 
+ 
+ 
+ #if CONFIG_PGTABLE_LEVELS == 3
+-#define pgd_page_vaddr(pgd) ((unsigned long) __va(pgd_address(pgd)))
+-#define pgd_page(pgd)	virt_to_page((void *)pgd_page_vaddr(pgd))
++#define pud_page_vaddr(pud) ((unsigned long) __va(pud_address(pud)))
++#define pud_page(pud)	virt_to_page((void *)pud_page_vaddr(pud))
+ 
+ /* For 64 bit we have three level tables */
+ 
+-#define pgd_none(x)     (!pgd_val(x))
+-#define pgd_bad(x)      (!(pgd_flag(x) & PxD_FLAG_VALID))
+-#define pgd_present(x)  (pgd_flag(x) & PxD_FLAG_PRESENT)
+-static inline void pgd_clear(pgd_t *pgd) {
++#define pud_none(x)     (!pud_val(x))
++#define pud_bad(x)      (!(pud_flag(x) & PxD_FLAG_VALID))
++#define pud_present(x)  (pud_flag(x) & PxD_FLAG_PRESENT)
++static inline void pud_clear(pud_t *pud) {
+ #if CONFIG_PGTABLE_LEVELS == 3
+-	if(pgd_flag(*pgd) & PxD_FLAG_ATTACHED)
+-		/* This is the permanent pmd attached to the pgd; cannot
++	if(pud_flag(*pud) & PxD_FLAG_ATTACHED)
++		/* This is the permanent pmd attached to the pud; cannot
+ 		 * free it */
+ 		return;
+ #endif
+-	__pgd_val_set(*pgd, 0);
++	set_pud(pud, __pud(0));
+ }
+-#else
+-/*
+- * The "pgd_xxx()" functions here are trivial for a folded two-level
+- * setup: the pgd is never bad, and a pmd always exists (as it's folded
+- * into the pgd entry)
+- */
+-static inline int pgd_none(pgd_t pgd)		{ return 0; }
+-static inline int pgd_bad(pgd_t pgd)		{ return 0; }
+-static inline int pgd_present(pgd_t pgd)	{ return 1; }
+-static inline void pgd_clear(pgd_t * pgdp)	{ }
+ #endif
+ 
+ /*
+@@ -452,7 +450,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ #if CONFIG_PGTABLE_LEVELS == 3
+ #define pmd_index(addr)         (((addr) >> PMD_SHIFT) & (PTRS_PER_PMD - 1))
+ #define pmd_offset(dir,address) \
+-((pmd_t *) pgd_page_vaddr(*(dir)) + pmd_index(address))
++((pmd_t *) pud_page_vaddr(*(dir)) + pmd_index(address))
+ #else
+ #define pmd_offset(dir,addr) ((pmd_t *) dir)
+ #endif
+diff --git a/arch/parisc/include/asm/tlb.h b/arch/parisc/include/asm/tlb.h
+index 8c0446b..44235f3 100644
+--- a/arch/parisc/include/asm/tlb.h
++++ b/arch/parisc/include/asm/tlb.h
+@@ -4,7 +4,9 @@
+ 
  #include <asm-generic/tlb.h>
  
++#if CONFIG_PGTABLE_LEVELS == 3
+ #define __pmd_free_tlb(tlb, pmd, addr)	pmd_free((tlb)->mm, pmd)
++#endif
  #define __pte_free_tlb(tlb, pte, addr)	pte_free((tlb)->mm, pte)
--#define __pmd_free_tlb(tlb, pmd, addr)	pmd_free((tln)->mm, pmd)
  
  #endif
-diff --git a/arch/nds32/kernel/pm.c b/arch/nds32/kernel/pm.c
-index ffa8040..e25700e 100644
---- a/arch/nds32/kernel/pm.c
-+++ b/arch/nds32/kernel/pm.c
-@@ -14,6 +14,7 @@ unsigned int *phy_addr_sp_tmp;
- static void nds32_suspend2ram(void)
- {
- 	pgd_t *pgdv;
-+	p4d_t *p4dv;
- 	pud_t *pudv;
- 	pmd_t *pmdv;
- 	pte_t *ptev;
-@@ -21,7 +22,8 @@ static void nds32_suspend2ram(void)
- 	pgdv = (pgd_t *)__va((__nds32__mfsr(NDS32_SR_L1_PPTB) &
- 		L1_PPTB_mskBASE)) + pgd_index((unsigned int)cpu_resume);
+diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
+index a82b3ea..7b2e0ab 100644
+--- a/arch/parisc/kernel/cache.c
++++ b/arch/parisc/kernel/cache.c
+@@ -534,11 +534,14 @@ static inline pte_t *get_ptep(pgd_t *pgd, unsigned long addr)
+ 	pte_t *ptep = NULL;
  
--	pudv = pud_offset(pgdv, (unsigned int)cpu_resume);
-+	p4dv = p4d_offset(pgdv, (unsigned int)cpu_resume);
-+	pudv = pud_offset(p4dv, (unsigned int)cpu_resume);
- 	pmdv = pmd_offset(pudv, (unsigned int)cpu_resume);
- 	ptev = pte_offset_map(pmdv, (unsigned int)cpu_resume);
+ 	if (!pgd_none(*pgd)) {
+-		pud_t *pud = pud_offset(pgd, addr);
+-		if (!pud_none(*pud)) {
+-			pmd_t *pmd = pmd_offset(pud, addr);
+-			if (!pmd_none(*pmd))
+-				ptep = pte_offset_map(pmd, addr);
++		p4d_t *p4d = p4d_offset(pgd, addr);
++		if (!p4d_none(*p4d)) {
++			pud_t *pud = pud_offset(p4d, addr);
++			if (!pud_none(*pud)) {
++				pmd_t *pmd = pmd_offset(pud, addr);
++				if (!pmd_none(*pmd))
++					ptep = pte_offset_map(pmd, addr);
++			}
+ 		}
+ 	}
+ 	return ptep;
+diff --git a/arch/parisc/kernel/pci-dma.c b/arch/parisc/kernel/pci-dma.c
+index ca35d9a..8859c71 100644
+--- a/arch/parisc/kernel/pci-dma.c
++++ b/arch/parisc/kernel/pci-dma.c
+@@ -133,9 +133,14 @@ static inline int map_uncached_pages(unsigned long vaddr, unsigned long size,
  
-diff --git a/arch/nds32/mm/fault.c b/arch/nds32/mm/fault.c
-index 064ae5d..906dfb2 100644
---- a/arch/nds32/mm/fault.c
-+++ b/arch/nds32/mm/fault.c
-@@ -31,6 +31,8 @@ void show_pte(struct mm_struct *mm, unsigned long addr)
- 	pr_alert("[%08lx] *pgd=%08lx", addr, pgd_val(*pgd));
- 
+ 	dir = pgd_offset_k(vaddr);
  	do {
 +		p4d_t *p4d;
 +		pud_t *pud;
  		pmd_t *pmd;
- 
- 		if (pgd_none(*pgd))
-@@ -41,7 +43,9 @@ void show_pte(struct mm_struct *mm, unsigned long addr)
- 			break;
- 		}
- 
--		pmd = pmd_offset(pgd, addr);
-+		p4d = p4d_offset(pgd, addr);
-+		pud = pud_offset(p4d, addr);
-+		pmd = pmd_offset(pud, addr);
- #if PTRS_PER_PMD != 1
- 		pr_alert(", *pmd=%08lx", pmd_val(*pmd));
- #endif
-@@ -359,6 +363,7 @@ void do_page_fault(unsigned long entry, unsigned long addr,
- 
- 		unsigned int index = pgd_index(addr);
- 		pgd_t *pgd, *pgd_k;
-+		p4d_t *p4d, *p4d_k;
- 		pud_t *pud, *pud_k;
- 		pmd_t *pmd, *pmd_k;
- 		pte_t *pte_k;
-@@ -369,8 +374,13 @@ void do_page_fault(unsigned long entry, unsigned long addr,
- 		if (!pgd_present(*pgd_k))
- 			goto no_context;
- 
--		pud = pud_offset(pgd, addr);
--		pud_k = pud_offset(pgd_k, addr);
-+		p4d = p4d_offset(pgd, addr);
-+		p4d_k = p4d_offset(pgd_k, addr);
-+		if (!p4d_present(*p4d_k))
-+			goto no_context;
+-		
+-		pmd = pmd_alloc(NULL, dir, vaddr);
 +
-+		pud = pud_offset(p4d, addr);
-+		pud_k = pud_offset(p4d_k, addr);
- 		if (!pud_present(*pud_k))
- 			goto no_context;
- 
-diff --git a/arch/nds32/mm/init.c b/arch/nds32/mm/init.c
-index 55703b0..0be3833f 100644
---- a/arch/nds32/mm/init.c
-+++ b/arch/nds32/mm/init.c
-@@ -54,6 +54,7 @@ static void __init map_ram(void)
++		p4d = p4d_offset(dir, vaddr);
++		pud = pud_offset(p4d, vaddr);
++		pmd = pmd_alloc(NULL, pud, vaddr);
++
+ 		if (!pmd)
+ 			return -ENOMEM;
+ 		if (map_pmd_uncached(pmd, vaddr, end - vaddr, &paddr))
+diff --git a/arch/parisc/mm/fixmap.c b/arch/parisc/mm/fixmap.c
+index 474cd24..e2d8b0a 100644
+--- a/arch/parisc/mm/fixmap.c
++++ b/arch/parisc/mm/fixmap.c
+@@ -14,11 +14,13 @@ void notrace set_fixmap(enum fixed_addresses idx, phys_addr_t phys)
  {
- 	unsigned long v, p, e;
- 	pgd_t *pge;
-+	p4d_t *p4e;
- 	pud_t *pue;
- 	pmd_t *pme;
+ 	unsigned long vaddr = __fix_to_virt(idx);
+ 	pgd_t *pgd = pgd_offset_k(vaddr);
+-	pmd_t *pmd = pmd_offset(pgd, vaddr);
++	p4d_t *p4d = p4d_offset(pgd, vaddr);
++	pud_t *pud = pud_offset(p4d, vaddr);
++	pmd_t *pmd = pmd_offset(pud, vaddr);
  	pte_t *pte;
-@@ -69,7 +70,8 @@ static void __init map_ram(void)
  
- 	while (p < e) {
- 		int j;
--		pue = pud_offset(pge, v);
-+		p4e = p4d_offset(pge, v);
-+		pue = pud_offset(p4e, v);
- 		pme = pmd_offset(pue, v);
+ 	if (pmd_none(*pmd))
+-		pmd = pmd_alloc(NULL, pgd, vaddr);
++		pmd = pmd_alloc(NULL, pud, vaddr);
  
- 		if ((u32) pue != (u32) pge || (u32) pme != (u32) pge) {
-@@ -100,6 +102,7 @@ static void __init fixedrange_init(void)
+ 	pte = pte_offset_kernel(pmd, vaddr);
+ 	if (pte_none(*pte))
+@@ -32,7 +34,9 @@ void notrace clear_fixmap(enum fixed_addresses idx)
  {
- 	unsigned long vaddr;
- 	pgd_t *pgd;
-+	p4d_t *p4d;
- 	pud_t *pud;
- 	pmd_t *pmd;
- #ifdef CONFIG_HIGHMEM
-@@ -111,7 +114,8 @@ static void __init fixedrange_init(void)
- 	 */
- 	vaddr = __fix_to_virt(__end_of_fixed_addresses - 1);
- 	pgd = swapper_pg_dir + pgd_index(vaddr);
--	pud = pud_offset(pgd, vaddr);
-+	p4d = p4d_offset(pgd, vaddr);
-+	pud = pud_offset(p4d, vaddr);
- 	pmd = pmd_offset(pud, vaddr);
- 	fixmap_pmd_p = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
- 	if (!fixmap_pmd_p)
-@@ -126,7 +130,8 @@ static void __init fixedrange_init(void)
- 	vaddr = PKMAP_BASE;
+ 	unsigned long vaddr = __fix_to_virt(idx);
+ 	pgd_t *pgd = pgd_offset_k(vaddr);
+-	pmd_t *pmd = pmd_offset(pgd, vaddr);
++	p4d_t *p4d = p4d_offset(pgd, vaddr);
++	pud_t *pud = pud_offset(p4d, vaddr);
++	pmd_t *pmd = pmd_offset(pud, vaddr);
+ 	pte_t *pte = pte_offset_kernel(pmd, vaddr);
  
- 	pgd = swapper_pg_dir + pgd_index(vaddr);
--	pud = pud_offset(pgd, vaddr);
-+	p4d = p4d_offset(pgd, vaddr);
-+	pud = pud_offset(p4d, vaddr);
- 	pmd = pmd_offset(pud, vaddr);
- 	pte = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
- 	if (!pte)
-diff --git a/arch/nds32/mm/mm-nds32.c b/arch/nds32/mm/mm-nds32.c
-index 3b43798..8503bee 100644
---- a/arch/nds32/mm/mm-nds32.c
-+++ b/arch/nds32/mm/mm-nds32.c
-@@ -74,6 +74,8 @@ void setup_mm_for_reboot(char mode)
- {
- 	unsigned long pmdval;
- 	pgd_t *pgd;
-+	p4d_t *p4d;
-+	pud_t *pud;
- 	pmd_t *pmd;
- 	int i;
- 
-@@ -84,7 +86,9 @@ void setup_mm_for_reboot(char mode)
- 
- 	for (i = 0; i < USER_PTRS_PER_PGD; i++) {
- 		pmdval = (i << PGDIR_SHIFT);
--		pmd = pmd_offset(pgd + i, i << PGDIR_SHIFT);
-+		p4d = p4d_offset(pgd, i << PGDIR_SHIFT);
-+		pud = pud_offset(p4d, i << PGDIR_SHIFT);
-+		pmd = pmd_offset(pud + i, i << PGDIR_SHIFT);
- 		set_pmd(pmd, __pmd(pmdval));
- 	}
- }
-diff --git a/arch/nds32/mm/proc.c b/arch/nds32/mm/proc.c
-index ba80992..837ae77 100644
---- a/arch/nds32/mm/proc.c
-+++ b/arch/nds32/mm/proc.c
-@@ -16,10 +16,14 @@ extern struct cache_info L1_cache_info[2];
- 
- int va_kernel_present(unsigned long addr)
- {
-+	p4d_t *p4d;
-+	pud_t *pud;
- 	pmd_t *pmd;
- 	pte_t *ptep, pte;
- 
--	pmd = pmd_offset(pgd_offset_k(addr), addr);
-+	p4d = p4d_offset(pgd_offset_k(addr), addr);
-+	pud = pud_offset(p4d, addr);
-+	pmd = pmd_offset(pud, addr);
- 	if (!pmd_none(*pmd)) {
- 		ptep = pte_offset_map(pmd, addr);
- 		pte = *ptep;
-@@ -32,20 +36,24 @@ int va_kernel_present(unsigned long addr)
- pte_t va_present(struct mm_struct * mm, unsigned long addr)
- {
- 	pgd_t *pgd;
-+	p4d_t *p4d;
- 	pud_t *pud;
- 	pmd_t *pmd;
- 	pte_t *ptep, pte;
- 
- 	pgd = pgd_offset(mm, addr);
- 	if (!pgd_none(*pgd)) {
--		pud = pud_offset(pgd, addr);
--		if (!pud_none(*pud)) {
--			pmd = pmd_offset(pud, addr);
--			if (!pmd_none(*pmd)) {
--				ptep = pte_offset_map(pmd, addr);
--				pte = *ptep;
--				if (pte_present(pte))
--					return pte;
-+		p4d = p4d_offset(pgd, addr);
-+		if (!p4d_none(*p4d)) {
-+			pud = pud_offset(p4d, addr);
-+			if (!pud_none(*pud)) {
-+				pmd = pmd_offset(pud, addr);
-+				if (!pmd_none(*pmd)) {
-+					ptep = pte_offset_map(pmd, addr);
-+					pte = *ptep;
-+					if (pte_present(pte))
-+						return pte;
-+				}
- 			}
- 		}
- 	}
+ 	if (WARN_ON(pte_none(*pte)))
 -- 
 2.7.4
 
