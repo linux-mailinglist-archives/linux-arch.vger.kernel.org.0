@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C8FEE265
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2019 15:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFE6EE269
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2019 15:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728950AbfKDO3K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Nov 2019 09:29:10 -0500
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:47131 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728942AbfKDO3H (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Nov 2019 09:29:07 -0500
-Received: by mail-vk1-f201.google.com with SMTP id t190so6011367vkd.14
-        for <linux-arch@vger.kernel.org>; Mon, 04 Nov 2019 06:29:06 -0800 (PST)
+        id S1729030AbfKDO3L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Nov 2019 09:29:11 -0500
+Received: from mail-vs1-f73.google.com ([209.85.217.73]:33103 "EHLO
+        mail-vs1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728982AbfKDO3K (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Nov 2019 09:29:10 -0500
+Received: by mail-vs1-f73.google.com with SMTP id b3so2797918vsh.0
+        for <linux-arch@vger.kernel.org>; Mon, 04 Nov 2019 06:29:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=PnlUsFEddsbKHz2GK+uTFYcWeErcIfLobMYOTI3aPFU=;
-        b=XpBlnjzTP/JJfoBTfESYVVCyfq0Y28LdV7cBuhtg6jKBy/OVCuDgML+AEak4DEOggE
-         4FFwufuSvYhyjQrp6YEdsb+0R9547mXSl11TpqE3J5Gfy2l3SeOKD0jHn1XcAkiVjRsU
-         zFnVpDB/HqpAYH+HlBDp/56aQqgVWbG1whyOoHDFClGVo0d7GgzNehqkJPuug6YEWUX4
-         GESn0vSshFS4E7Pnv2PBS6OtYbR8LbeNZq2cO3cLxo5KUh9JJuHlMVjnJo2PCOa88WDn
-         E2GYi5/xuLjLSp4mmnif68wguqCwwnHfg6wwkzO66h3CRHGlahAtjZeHjE89Qv4ROYOz
-         wGdg==
+        bh=sQU0jAVefneuTdQpIgbUF6GdSN4TcMOiQRxRVI16Vls=;
+        b=FhPDq8Y8jgh3GaqH19Ri5l4th6SIgrfB5k6uYp6Qe1zCUALU5Q1h777JkPDXGoqtF+
+         rUVB4HT5dCMdMd/+svGvi1KkuFsbojwRCgfaJkdh2DPMBB53CrCa1TeF/tRilzh/U2Vv
+         rC8CcHxh3PrEaKH9Qc4nO5dN6oULNuw2D+ebZe/2C78pc5pykjiO0Bg4leEG7yFIFNxI
+         lT1Onq8IrfB98Hhn323WbkEF/3JHPJUZwZzMucC6nWXt4j1r7WLeMRYJuLt6zhN4vW9Q
+         0cZ7MGwIvE1QsZGodu2uWGo2OqoLsx5v5yIqO4x8fyNCQ7jT/uIEts0ZzNEU0DdB7OYH
+         Ef0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=PnlUsFEddsbKHz2GK+uTFYcWeErcIfLobMYOTI3aPFU=;
-        b=QV5lj9hWcRGylPUdLMOAMGOkH6mL2X3jilimUiBibVGAFeKPzZGRGf6XJ2p5piuAzx
-         rUuvZHe6cOpJCxVKjSQBRA9CxrOb4c441b1cLrMNq9sNM1yIJj97XrVV/TNLdstEaGdk
-         Nqgk9godIjRtKt1q9jvHbpn4BlZApMmXikBFnwt0oGG3KPKmx6cdBsXGbe0UQLMUL9Og
-         2E0KjNRnouEukpJcTNMgJWKRqgGZhNIkILS/IdT+25mNNtCq1xHktTdOIAGI29b+Si6I
-         v+t9BWwpLc8mdmP1ax8a+fzl0gyvriNxOGgmsnJFjepBoriycw2Kmu90Zk7x3D3M6OS0
-         4xlA==
-X-Gm-Message-State: APjAAAUVXuXPn+sQkHb+7k7ZAAcQlVAybyoh/0dyp9l5DcpVJSVc5BEO
-        vx4M+ZRqvmNnde0lnjQVSD9ydTTBPw==
-X-Google-Smtp-Source: APXvYqyxTcSSDIIgKVC9uqJiIVViZoCP8EgkGFOXLAR6swB3rAeT15fCv8Jgf2+FjQb1O2mN+n5pn+lMvg==
-X-Received: by 2002:a1f:3249:: with SMTP id y70mr4259895vky.31.1572877745747;
- Mon, 04 Nov 2019 06:29:05 -0800 (PST)
-Date:   Mon,  4 Nov 2019 15:27:41 +0100
+        bh=sQU0jAVefneuTdQpIgbUF6GdSN4TcMOiQRxRVI16Vls=;
+        b=aJpuuornen6r0UVnEJ20jdTkN2fO10BJ5+/7gDE/vsa19OuilBSWaRnAqDEMm0sTOP
+         lRHZSRHg4Nyfj8VNNm8HSUjN9Z3vekI8RI6wZSLi13Va5PofBhdDbQzWq0qdDJEFUA4L
+         yDJELRD4CJNeL6WzPN563YtMwpSwkdMmB6ZJ3SoXKDeQxLs8qhs2kEFIAgbe6Govt4OK
+         aeRSFD6xhkuZeXzCRwJ3QFrizrJAPGO8MfY/V5XZlUHTznIuaF6lnZbRoomPArKQeQJo
+         eiX9ZosfkVrb2cA3uHBrEWFNKnuQs2yeryAAEMqMq7v849DetArL1d2qfUDqtNJw3dBs
+         poiA==
+X-Gm-Message-State: APjAAAW5Hle6imi6ajPkW8rOO6cUDDTBuygByq6wiDXFdDyzbXYGa68k
+        s6xm4gbb6SKWCviKrnyexrOrXG5KTQ==
+X-Google-Smtp-Source: APXvYqxZ17ci8UfBwQliZ986Aa6FaGmsNO4/Ie/63JBd/SxBBgXy0wxlK6hBzj3ifIPGT1Jnqi5jP2CEFw==
+X-Received: by 2002:a05:6122:2c7:: with SMTP id k7mr10982783vki.97.1572877749135;
+ Mon, 04 Nov 2019 06:29:09 -0800 (PST)
+Date:   Mon,  4 Nov 2019 15:27:42 +0100
 In-Reply-To: <20191104142745.14722-1-elver@google.com>
-Message-Id: <20191104142745.14722-6-elver@google.com>
+Message-Id: <20191104142745.14722-7-elver@google.com>
 Mime-Version: 1.0
 References: <20191104142745.14722-1-elver@google.com>
 X-Mailer: git-send-email 2.24.0.rc1.363.gb1bccd3e3d-goog
-Subject: [PATCH v3 5/9] seqlock, kcsan: Add annotations for KCSAN
+Subject: [PATCH v3 6/9] seqlock: Require WRITE_ONCE surrounding raw_seqcount_barrier
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com
 Cc:     akiyks@gmail.com, stern@rowland.harvard.edu, glider@google.com,
@@ -68,174 +68,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since seqlocks in the Linux kernel do not require the use of marked
-atomic accesses in critical sections, we teach KCSAN to assume such
-accesses are atomic. KCSAN currently also pretends that writes to
-`sequence` are atomic, although currently plain writes are used (their
-corresponding reads are READ_ONCE).
+This patch proposes to require marked atomic accesses surrounding
+raw_write_seqcount_barrier. We reason that otherwise there is no way to
+guarantee propagation nor atomicity of writes before/after the barrier
+[1]. For example, consider the compiler tears stores either before or
+after the barrier; in this case, readers may observe a partial value,
+and because readers are unaware that writes are going on (writes are not
+in a seq-writer critical section), will complete the seq-reader critical
+section while having observed some partial state.
+[1] https://lwn.net/Articles/793253/
 
-Further, to avoid false positives in the absence of clear ending of a
-seqlock reader critical section (only when using the raw interface),
-KCSAN assumes a fixed number of accesses after start of a seqlock
-critical section are atomic.
-
-=== Commentary on design around absence of clear begin/end markings ===
-Seqlock usage via seqlock_t follows a predictable usage pattern, where
-clear critical section begin/end is enforced. With subtle special cases
-for readers needing to be flat atomic regions, e.g. because usage such
-as in:
-  - fs/namespace.c:__legitimize_mnt - unbalanced read_seqretry
-  - fs/dcache.c:d_walk - unbalanced need_seqretry
-
-But, anything directly accessing seqcount_t seems to be unpredictable.
-Filtering for usage of read_seqcount_retry not following 'do { .. }
-while (read_seqcount_retry(..));':
-
-  $ git grep 'read_seqcount_retry' | grep -Ev 'while \(|seqlock.h|Doc|\* '
-  => about 1/3 of the total read_seqcount_retry usage.
-
-Just looking at fs/namei.c, we conclude that it is non-trivial to
-prescribe and migrate to an interface that would force clear begin/end
-seqlock markings for critical sections.
-
-As such, we concluded that the best design currently, is to simply
-ensure that KCSAN works well with the existing code.
+This came up when designing and implementing KCSAN, because KCSAN would
+flag these accesses as data-races. After careful analysis, our reasoning
+as above led us to conclude that the best thing to do is to propose an
+amendment to the raw_seqcount_barrier usage.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
 v3:
-* Remove comment from raw_seqcount_barrier that should have been in next
-  patch.
-* Renamed kcsan_{nestable,flat}_atomic_{begin,end}
-* Elaborate why clear begin/end cannot be enforced easily.
+* Add missing comment that was in preceding seqlock patch.
 ---
- include/linux/seqlock.h | 40 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
+ include/linux/seqlock.h | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-index bcf4cf26b8c8..61232bc223fd 100644
+index 61232bc223fd..f52c91be8939 100644
 --- a/include/linux/seqlock.h
 +++ b/include/linux/seqlock.h
-@@ -37,8 +37,24 @@
- #include <linux/preempt.h>
- #include <linux/lockdep.h>
- #include <linux/compiler.h>
-+#include <linux/kcsan.h>
- #include <asm/processor.h>
- 
-+/*
-+ * The seqlock interface does not prescribe a precise sequence of read
-+ * begin/retry/end. For readers, typically there is a call to
-+ * read_seqcount_begin() and read_seqcount_retry(), however, there are more
-+ * esoteric cases which do not follow this pattern.
+@@ -265,6 +265,13 @@ static inline void raw_write_seqcount_end(seqcount_t *s)
+  * usual consistency guarantee. It is one wmb cheaper, because we can
+  * collapse the two back-to-back wmb()s.
+  *
++ * Note that, writes surrounding the barrier should be declared atomic (e.g.
++ * via WRITE_ONCE): a) to ensure the writes become visible to other threads
++ * atomically, avoiding compiler optimizations; b) to document which writes are
++ * meant to propagate to the reader critical section. This is necessary because
++ * neither writes before and after the barrier are enclosed in a seq-writer
++ * critical section that would ensure readers are aware of ongoing writes.
 + *
-+ * As a consequence, we take the following best-effort approach for raw usage
-+ * via seqcount_t under KCSAN: upon beginning a seq-reader critical section,
-+ * pessimistically mark then next KCSAN_SEQLOCK_REGION_MAX memory accesses as
-+ * atomics; if there is a matching read_seqcount_retry() call, no following
-+ * memory operations are considered atomic. Usage of seqlocks via seqlock_t
-+ * interface is not affected.
-+ */
-+#define KCSAN_SEQLOCK_REGION_MAX 1000
-+
- /*
-  * Version using sequence counter only.
-  * This can be used when code has its own mutex protecting the
-@@ -115,6 +131,7 @@ static inline unsigned __read_seqcount_begin(const seqcount_t *s)
- 		cpu_relax();
- 		goto repeat;
- 	}
-+	kcsan_atomic_next(KCSAN_SEQLOCK_REGION_MAX);
- 	return ret;
- }
- 
-@@ -131,6 +148,7 @@ static inline unsigned raw_read_seqcount(const seqcount_t *s)
- {
- 	unsigned ret = READ_ONCE(s->sequence);
- 	smp_rmb();
-+	kcsan_atomic_next(KCSAN_SEQLOCK_REGION_MAX);
- 	return ret;
- }
- 
-@@ -183,6 +201,7 @@ static inline unsigned raw_seqcount_begin(const seqcount_t *s)
- {
- 	unsigned ret = READ_ONCE(s->sequence);
- 	smp_rmb();
-+	kcsan_atomic_next(KCSAN_SEQLOCK_REGION_MAX);
- 	return ret & ~1;
- }
- 
-@@ -202,7 +221,8 @@ static inline unsigned raw_seqcount_begin(const seqcount_t *s)
-  */
- static inline int __read_seqcount_retry(const seqcount_t *s, unsigned start)
- {
--	return unlikely(s->sequence != start);
-+	kcsan_atomic_next(0);
-+	return unlikely(READ_ONCE(s->sequence) != start);
- }
- 
- /**
-@@ -225,6 +245,7 @@ static inline int read_seqcount_retry(const seqcount_t *s, unsigned start)
- 
- static inline void raw_write_seqcount_begin(seqcount_t *s)
- {
-+	kcsan_nestable_atomic_begin();
- 	s->sequence++;
- 	smp_wmb();
- }
-@@ -233,6 +254,7 @@ static inline void raw_write_seqcount_end(seqcount_t *s)
- {
- 	smp_wmb();
- 	s->sequence++;
-+	kcsan_nestable_atomic_end();
- }
- 
- /**
-@@ -271,9 +293,11 @@ static inline void raw_write_seqcount_end(seqcount_t *s)
+  *      seqcount_t seq;
+  *      bool X = true, Y = false;
+  *
+@@ -284,11 +291,11 @@ static inline void raw_write_seqcount_end(seqcount_t *s)
+  *
+  *      void write(void)
+  *      {
+- *              Y = true;
++ *              WRITE_ONCE(Y, true);
+  *
+  *              raw_write_seqcount_barrier(seq);
+  *
+- *              X = false;
++ *              WRITE_ONCE(X, false);
+  *      }
   */
  static inline void raw_write_seqcount_barrier(seqcount_t *s)
- {
-+	kcsan_nestable_atomic_begin();
- 	s->sequence++;
- 	smp_wmb();
- 	s->sequence++;
-+	kcsan_nestable_atomic_end();
- }
- 
- static inline int raw_read_seqcount_latch(seqcount_t *s)
-@@ -398,7 +422,9 @@ static inline void write_seqcount_end(seqcount_t *s)
- static inline void write_seqcount_invalidate(seqcount_t *s)
- {
- 	smp_wmb();
-+	kcsan_nestable_atomic_begin();
- 	s->sequence+=2;
-+	kcsan_nestable_atomic_end();
- }
- 
- typedef struct {
-@@ -430,11 +456,21 @@ typedef struct {
-  */
- static inline unsigned read_seqbegin(const seqlock_t *sl)
- {
--	return read_seqcount_begin(&sl->seqcount);
-+	unsigned ret = read_seqcount_begin(&sl->seqcount);
-+
-+	kcsan_atomic_next(0);  /* non-raw usage, assume closing read_seqretry */
-+	kcsan_flat_atomic_begin();
-+	return ret;
- }
- 
- static inline unsigned read_seqretry(const seqlock_t *sl, unsigned start)
- {
-+	/*
-+	 * Assume not nested: read_seqretry may be called multiple times when
-+	 * completing read critical section.
-+	 */
-+	kcsan_flat_atomic_end();
-+
- 	return read_seqcount_retry(&sl->seqcount, start);
- }
- 
 -- 
 2.24.0.rc1.363.gb1bccd3e3d-goog
 
