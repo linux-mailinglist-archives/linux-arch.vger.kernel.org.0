@@ -2,67 +2,186 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F18EF426
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2019 04:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F658EF5F0
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2019 08:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730227AbfKEDna (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Nov 2019 22:43:30 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6150 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729711AbfKEDn3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 4 Nov 2019 22:43:29 -0500
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 800408998B034BFB165D;
-        Tue,  5 Nov 2019 11:43:25 +0800 (CST)
-Received: from [10.134.22.195] (10.134.22.195) by smtp.huawei.com
- (10.3.19.208) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 5 Nov 2019
- 11:43:20 +0800
-Subject: Re: [PATCH 10/10] errno.h: Provide EFSCORRUPTED for everybody
-To:     Valdis Kletnieks <valdis.kletnieks@vt.edu>
-CC:     "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Jan Kara <jack@suse.cz>, Theodore Ts'o <tytso@mit.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, <linux-xfs@vger.kernel.org>,
-        Jan Kara <jack@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        <linux-fsdevel@vger.kernel.org>, <devel@driverdev.osuosl.org>,
-        <linux-kernel@vger.kernel.org>, <linux-erofs@lists.ozlabs.org>,
-        <linux-ext4@vger.kernel.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-arch@vger.kernel.org>
-References: <20191104014510.102356-1-Valdis.Kletnieks@vt.edu>
- <20191104014510.102356-11-Valdis.Kletnieks@vt.edu>
-From:   Chao Yu <yuchao0@huawei.com>
-Message-ID: <5c441427-7e65-fcae-3518-eb37cea5f875@huawei.com>
-Date:   Tue, 5 Nov 2019 11:43:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <20191104014510.102356-11-Valdis.Kletnieks@vt.edu>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.134.22.195]
-X-CFilter-Loop: Reflected
+        id S2387668AbfKEHPv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Nov 2019 02:15:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34332 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387442AbfKEHPv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 5 Nov 2019 02:15:51 -0500
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 376E820663;
+        Tue,  5 Nov 2019 07:15:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572938149;
+        bh=kjNCQHuIO20IAKAWjmpzSoXh0rbx0a5UW2oa2LBkQmM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e8CnLOFFAk03scBwXT2glhNQqZljnzKpdDdV9ssLH4vgZwUfT7sZlsQa0jZMc56FG
+         hU/h/q0Zcr6pcZ40FngsJHQtvgJijqR5HEkxJc+40V8Vuj3up2Q03COp7V+pPOallg
+         fILpyL0bn+D110+yGHv3uHDLybDa4PupJWXc/fN8=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Helge Deller <deller@gmx.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mark Salter <msalter@redhat.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Michal Simek <monstr@monstr.eu>, Peter Rosin <peda@axentia.se>,
+        Richard Weinberger <richard@nod.at>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Creasey <sammy@sammy.net>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-alpha@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-c6x-dev@linux-c6x.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
+        linux-um@lists.infradead.org, sparclinux@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCH v4 00/13] mm: remove __ARCH_HAS_4LEVEL_HACK
+Date:   Tue,  5 Nov 2019 09:15:22 +0200
+Message-Id: <1572938135-31886-1-git-send-email-rppt@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2019/11/4 9:45, Valdis Kletnieks wrote:
-> There's currently 6 filesystems that have the same #define. Move it
-> into errno.h so it's defined in just one place.
-> 
-> Signed-off-by: Valdis Kletnieks <Valdis.Kletnieks@vt.edu>
-> Acked-by: Darrick J. Wong <darrick.wong@oracle.com>
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> Acked-by: Theodore Ts'o <tytso@mit.edu>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
->  fs/erofs/internal.h              | 2 --
+Hi,
 
->  fs/f2fs/f2fs.h                   | 1 -
+These patches convert several architectures to use page table folding and
+remove __ARCH_HAS_4LEVEL_HACK along with include/asm-generic/4level-fixup.h.
 
-Acked-by: Chao Yu <yuchao0@huawei.com>
+For the nommu configurations the folding is already implemented by the
+generic code so the only change was to use the appropriate header file.
 
-Thanks,
+As for the rest, the changes are mostly about mechanical replacement of
+pgd accessors with pud/pmd ones and the addition of higher levels to page
+table traversals.
+
+With Vineet's patches from "elide extraneous generated code for folded
+p4d/pud/pmd" series [1] there is a small shrink of the kernel size of about
+-0.01% for the defconfig builds. 
+
+The set is boot-tested on UML, qemu-{alpha,sparc} and aranym.
+
+v4 changes:
+* m68k: fix sun3x_defconfig build and reorder ifdefs as per Geert's
+  suggestion
+
+v3 changes:
+* alpha: fix changelog to use pgtable-nopud.h rather than pgtable-nop4d.h
+* um: remove dead-code that was intended as provisioning for 4-level page
+  tables
+
+v2 changes:
+* m68k: fixed ifdefs around pmd_t defintion to work with nommu
+* parisc: added conversion of hugetlb (thanks, Helge!); lexical fixups in
+  comments and changelog
+* collected acks
+
+[1] https://lore.kernel.org/lkml/20191016162400.14796-1-vgupta@synopsys.com
+
+Helge Deller (1):
+  parisc/hugetlb: use pgtable-nopXd instead of 4level-fixup
+
+Mike Rapoport (12):
+  alpha: use pgtable-nopud instead of 4level-fixup
+  arm: nommu: use pgtable-nopud instead of 4level-fixup
+  c6x: use pgtable-nopud instead of 4level-fixup
+  m68k: nommu: use pgtable-nopud instead of 4level-fixup
+  m68k: mm: use pgtable-nopXd instead of 4level-fixup
+  microblaze: use pgtable-nopmd instead of 4level-fixup
+  nds32: use pgtable-nopmd instead of 4level-fixup
+  parisc: use pgtable-nopXd instead of 4level-fixup
+  sparc32: use pgtable-nopud instead of 4level-fixup
+  um: remove unused pxx_offset_proc() and addr_pte() functions
+  um: add support for folded p4d page tables
+  mm: remove __ARCH_HAS_4LEVEL_HACK and include/asm-generic/4level-fixup.h
+
+ arch/alpha/include/asm/mmzone.h          |  1 -
+ arch/alpha/include/asm/pgalloc.h         |  4 +-
+ arch/alpha/include/asm/pgtable.h         | 24 ++++-----
+ arch/alpha/mm/init.c                     | 12 +++--
+ arch/arm/include/asm/pgtable.h           |  2 +-
+ arch/c6x/include/asm/pgtable.h           |  2 +-
+ arch/m68k/include/asm/mcf_pgalloc.h      |  7 ---
+ arch/m68k/include/asm/mcf_pgtable.h      | 28 ++++-------
+ arch/m68k/include/asm/mmu_context.h      | 12 ++++-
+ arch/m68k/include/asm/motorola_pgalloc.h |  4 +-
+ arch/m68k/include/asm/motorola_pgtable.h | 32 +++++++-----
+ arch/m68k/include/asm/page.h             |  9 ++--
+ arch/m68k/include/asm/pgtable_mm.h       | 11 +++--
+ arch/m68k/include/asm/pgtable_no.h       |  2 +-
+ arch/m68k/include/asm/sun3_pgalloc.h     |  5 --
+ arch/m68k/include/asm/sun3_pgtable.h     | 18 -------
+ arch/m68k/kernel/sys_m68k.c              | 10 +++-
+ arch/m68k/mm/init.c                      |  6 ++-
+ arch/m68k/mm/kmap.c                      | 39 +++++++++++----
+ arch/m68k/mm/mcfmmu.c                    | 16 +++++-
+ arch/m68k/mm/motorola.c                  | 17 ++++---
+ arch/m68k/sun3x/dvma.c                   |  7 ++-
+ arch/microblaze/include/asm/page.h       |  3 --
+ arch/microblaze/include/asm/pgalloc.h    | 16 ------
+ arch/microblaze/include/asm/pgtable.h    | 32 +-----------
+ arch/microblaze/kernel/signal.c          | 10 ++--
+ arch/microblaze/mm/init.c                |  7 ++-
+ arch/microblaze/mm/pgtable.c             | 13 ++++-
+ arch/nds32/include/asm/page.h            |  3 --
+ arch/nds32/include/asm/pgalloc.h         |  3 --
+ arch/nds32/include/asm/pgtable.h         | 12 +----
+ arch/nds32/include/asm/tlb.h             |  1 -
+ arch/nds32/kernel/pm.c                   |  4 +-
+ arch/nds32/mm/fault.c                    | 16 ++++--
+ arch/nds32/mm/init.c                     | 11 +++--
+ arch/nds32/mm/mm-nds32.c                 |  6 ++-
+ arch/nds32/mm/proc.c                     | 26 ++++++----
+ arch/parisc/include/asm/page.h           | 30 ++++++-----
+ arch/parisc/include/asm/pgalloc.h        | 41 ++++++---------
+ arch/parisc/include/asm/pgtable.h        | 52 ++++++++++---------
+ arch/parisc/include/asm/tlb.h            |  2 +
+ arch/parisc/kernel/cache.c               | 13 +++--
+ arch/parisc/kernel/pci-dma.c             |  9 +++-
+ arch/parisc/mm/fixmap.c                  | 10 ++--
+ arch/parisc/mm/hugetlbpage.c             | 18 ++++---
+ arch/sparc/include/asm/pgalloc_32.h      |  6 +--
+ arch/sparc/include/asm/pgtable_32.h      | 28 +++++------
+ arch/sparc/mm/fault_32.c                 | 11 ++++-
+ arch/sparc/mm/highmem.c                  |  6 ++-
+ arch/sparc/mm/io-unit.c                  |  6 ++-
+ arch/sparc/mm/iommu.c                    |  6 ++-
+ arch/sparc/mm/srmmu.c                    | 51 ++++++++++++++-----
+ arch/um/include/asm/pgtable-2level.h     |  1 -
+ arch/um/include/asm/pgtable-3level.h     |  1 -
+ arch/um/include/asm/pgtable.h            |  3 ++
+ arch/um/kernel/mem.c                     |  8 ++-
+ arch/um/kernel/skas/mmu.c                | 12 ++++-
+ arch/um/kernel/skas/uaccess.c            |  7 ++-
+ arch/um/kernel/tlb.c                     | 85 +++++++++++++++++++-------------
+ arch/um/kernel/trap.c                    |  4 +-
+ include/asm-generic/4level-fixup.h       | 40 ---------------
+ include/asm-generic/tlb.h                |  2 -
+ include/linux/mm.h                       | 10 ++--
+ mm/memory.c                              |  8 ---
+ 64 files changed, 483 insertions(+), 418 deletions(-)
+ delete mode 100644 include/asm-generic/4level-fixup.h
+
+-- 
+2.7.4
+
