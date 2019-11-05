@@ -2,148 +2,189 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BCDEFC7A
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2019 12:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35571EFD0D
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2019 13:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730701AbfKELfx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Nov 2019 06:35:53 -0500
-Received: from mga14.intel.com ([192.55.52.115]:58868 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730636AbfKELfw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 5 Nov 2019 06:35:52 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Nov 2019 03:35:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,271,1569308400"; 
-   d="scan'208";a="227068904"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Nov 2019 03:35:42 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1iRx7b-000Fr1-O6; Tue, 05 Nov 2019 19:35:39 +0800
-Date:   Tue, 5 Nov 2019 19:35:15 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Marco Elver <elver@google.com>
-Cc:     kbuild-all@lists.01.org, elver@google.com, akiyks@gmail.com,
-        stern@rowland.harvard.edu, glider@google.com,
-        parri.andrea@gmail.com, andreyknvl@google.com, luto@kernel.org,
-        ard.biesheuvel@linaro.org, arnd@arndb.de, boqun.feng@gmail.com,
-        bp@alien8.de, dja@axtens.net, dlustig@nvidia.com,
-        dave.hansen@linux.intel.com, dhowells@redhat.com,
-        dvyukov@google.com, hpa@zytor.com, mingo@redhat.com,
-        j.alglave@ucl.ac.uk, joel@joelfernandes.org, corbet@lwn.net,
-        jpoimboe@redhat.com, luc.maranget@inria.fr, mark.rutland@arm.com,
-        npiggin@gmail.com, paulmck@kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, will@kernel.org, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH v3 5/9] seqlock, kcsan: Add annotations for KCSAN
-Message-ID: <201911051950.7sv6Mqoe%lkp@intel.com>
-References: <20191104142745.14722-6-elver@google.com>
+        id S1726754AbfKEMTA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Nov 2019 07:19:00 -0500
+Received: from mail-eopbgr1320050.outbound.protection.outlook.com ([40.107.132.50]:22912
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726612AbfKEMTA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 5 Nov 2019 07:19:00 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cvmwRLmIympDT+d6vpM/QTkSIz/pixJylIbamY65ro6UUwrE4EVhSZBomvdiZvQn73li4EQXlL9AsQ4LmUyTVrNezjQpYEzBTlY0v7PYXG1vpkzj1XGfzG+gApSOA+mWiEEkOsimavmul1fpdg7/ODiUr3C5bPsUn+gNPEPIfcaUxWZff3ZCtIeiCC3tH2c+9ZnroSWFEFg0XZ59ZrSrl1GIvp08518XELT5iWo12Zx2uIV2FfcFL9HoUmio8kV0lFlcCdrfmArh/fnwzkEhJerL0Gp9+Aa5GBhVIvW8Hx4o5f2vL6TPYDu00iYI51SoJqEGo/2vwFDyVlMeTJ7Fcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B1wfJQMw57GHZ3f/QVA+bFRWOTZP/g+o05EoNYBkI7I=;
+ b=Uyrl7jZF6NxbI3RyERW7+utmsR8YqVYlCZUt37/KOJpgMM+m55fPmzYUvRXEQynauvyiu4BcbPIxdhGZ2JOGvmkl+8JfwNA/ciFGRyXHoEa5WWBjrI5EwycslWOAcb9/gEfhQBjaupUOYL3S0HqyZcIvZzB7gfHMwg2FOXuEhzus4qSHYEAw/xOwTvrcIyYVrhckscloL0nqpYNoB8z+OXt8m15WeX+bEL4BQRlt+tgPLJT+wyS0eb0uV3j5lWmb2tbUZba/tcQ3WT/nn9b1wx0st0UI3f03OugqqJSm6au75V7+x32f5rDJuw+AUp/a8DzHBl3PNrFBkMaRZTYK5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=teo-en-ming-corp.com; dmarc=pass action=none
+ header.from=teo-en-ming-corp.com; dkim=pass header.d=teo-en-ming-corp.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=teoenmingcorp.onmicrosoft.com; s=selector2-teoenmingcorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B1wfJQMw57GHZ3f/QVA+bFRWOTZP/g+o05EoNYBkI7I=;
+ b=DQVhKj8LmWADJ88PK+QGTSKc9amy2IbuPWyFjJBSbeYxqyV4tdjguO3tbSew4QOkmF7j9pZJdWK2XKWgLPTgPx2X9wrIP3qGavuSNGwn3leCn7X95nnQQAsP8LJJ6UamnmOqdDGrRdlc8q4TLzembnz3DtbDU/99nk0ejsp3dlM=
+Received: from SG2PR01MB2141.apcprd01.prod.exchangelabs.com (10.170.143.19) by
+ SG2PR01MB2582.apcprd01.prod.exchangelabs.com (20.177.168.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2408.24; Tue, 5 Nov 2019 12:18:53 +0000
+Received: from SG2PR01MB2141.apcprd01.prod.exchangelabs.com
+ ([fe80::49d4:fc70:bde2:c3a]) by SG2PR01MB2141.apcprd01.prod.exchangelabs.com
+ ([fe80::49d4:fc70:bde2:c3a%2]) with mapi id 15.20.2408.024; Tue, 5 Nov 2019
+ 12:18:53 +0000
+From:   Turritopsis Dohrnii Teo En Ming <ceo@teo-en-ming-corp.com>
+To:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+CC:     Turritopsis Dohrnii Teo En Ming <ceo@teo-en-ming-corp.com>
+Subject: I bought my Panasonic FZ1000 Mark 2 4K hybrid bridge camera on 3 Nov
+ 2019 Sunday
+Thread-Topic: I bought my Panasonic FZ1000 Mark 2 4K hybrid bridge camera on 3
+ Nov 2019 Sunday
+Thread-Index: AdWT0yZ5Et53+B4XQcu7YRulU6LM4Q==
+Date:   Tue, 5 Nov 2019 12:18:52 +0000
+Message-ID: <SG2PR01MB2141FE7ABF38A578216D3D49877E0@SG2PR01MB2141.apcprd01.prod.exchangelabs.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ceo@teo-en-ming-corp.com; 
+x-originating-ip: [2401:7400:c802:de67:e1cf:3260:7a2:ccd6]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c2b0f4bc-6914-4f06-8032-08d761ea5287
+x-ms-traffictypediagnostic: SG2PR01MB2582:
+x-ms-exchange-purlcount: 4
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <SG2PR01MB2582E4C5364F42CDFF8DCFD8877E0@SG2PR01MB2582.apcprd01.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0212BDE3BE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(376002)(39830400003)(396003)(346002)(366004)(189003)(199004)(2351001)(476003)(5660300002)(14454004)(486006)(6916009)(71190400001)(305945005)(7736002)(6506007)(2501003)(71200400001)(508600001)(5640700003)(6436002)(7696005)(74316002)(52536014)(99286004)(9686003)(55016002)(6306002)(102836004)(86362001)(316002)(33656002)(2906002)(46003)(25786009)(107886003)(4326008)(14444005)(256004)(6116002)(966005)(66476007)(66556008)(64756008)(66446008)(76116006)(66946007)(81156014)(8936002)(186003)(8676002)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:SG2PR01MB2582;H:SG2PR01MB2141.apcprd01.prod.exchangelabs.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: teo-en-ming-corp.com does not
+ designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uAMdDKxLkgnZeSBvu5jlpceXar7Kky+qHffPeExiKn0kh2wGsbWlXjNyDdsUaAzL6bkC0J/F9xsD5u24HRi4FvVQefIG+GNKotcJie3F93uMxQ7hoU9K7B22WMto8o/rj82MlzIUcviFWFzT3vH4OPG4VKfLDyhTkIj4Yn9tEjO8VIV3JpHNxzUVYMmYJaZaJs6oOsY0jrafn8C6EHeAorIYYcJtja7yzC4s2MoxU90N3EaPGzXZoF0F9rSyoQpX2efFFNG1GJq0ZnxagvvXyUAtJjq5PXxkMGa1+wD8ykwSg4/KoPLOWiffGyJWn8KwxEKRYPK++Mo1t7DsE5FMdOQH4CfQBS+engt7C9eZZM7rKNpOWjr2SF7QboJMUwAchP7Akq0CjiYLf/+OWZNACxCE8/u2+cevfWvJNqwv+7lsITWkgKJJEs3C/+U8F5HTZAzcSEgZNQj00zaQ1VsDCIXj+30BJ6jG36dt/IblRVU=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191104142745.14722-6-elver@google.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+X-OriginatorOrg: teo-en-ming-corp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2b0f4bc-6914-4f06-8032-08d761ea5287
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2019 12:18:53.0058
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 23b3f6ae-c453-4b93-aec9-f17508e5885c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XEtwIw5MXFQn3GWgJdNx+xEcKww3TrGcWemU/RvdFNN9r5BXdbcfUGis+Y/4iM62MedHvJDh03AxNDPrs4qZ4fjqAWXBK5qVWIISoofioyA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR01MB2582
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Marco,
+Subject: I bought my Panasonic FZ1000 Mark 2 4K hybrid bridge camera on 3 N=
+ov 2019 Sunday
 
-I love your patch! Perhaps something to improve:
+Good day from Singapore,
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.4-rc6]
-[cannot apply to next-20191031]
-[if your patch is applied to the wrong git tree, please drop us a note to help
-improve the system. BTW, we also suggest to use '--base' option to specify the
-base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+I bought my Panasonic FZ1000 Mark 2 4K hybrid bridge camera at Funan Singap=
+ore shopping mall level 3 on 3 Nov 2019 Sunday at 3:25 PM Singapore Time.
 
-url:    https://github.com/0day-ci/linux/commits/Marco-Elver/Add-Kernel-Concurrency-Sanitizer-KCSAN/20191105-002542
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git a99d8080aaf358d5d23581244e5da23b35e340b9
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.1-6-g57f8611-dirty
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
+The Panasonic FZ1000 Mark 2 camera has an 1.0-inch MOS image sensor and a f=
+ocal length of 25-400 mm (37 to 592 mm in 4K video recording mode). This sa=
+ves me the hassle of constantly changing between Sony 16-50 mm kit lens, So=
+ny 55-210 mm zoom lens, and Sigma 30 mm F1.4 prime lens every now and then.=
+ I simply cannot afford to buy an expensive full-frame DSLR or mirrorless c=
+amera with expensive camera lens in excess of SGD$15,000 (like what most ph=
+otographers in Singapore do) due to my extreme poverty in Singapore. I beli=
+eve that a hybrid bridge camera with an 1.0-inch sensor and a focal length =
+of 25-400 mm costing approximately SGD$1000 will suffice. The Panasonic FZ1=
+000 Mark 2 is considered a Compact Camera, but with an image sensor much la=
+rger than 1/2.3 inch. It has a built-in flash and a hot shoe for mounting a=
+n external flash. It also features a F2.8-4 Leica lens.
 
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
+TAX INVOICE 3 NOV 2019
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Qty: 1, Panasonic FZ1000 Mark 2 bridge camera, SGD$1039
+
+Qty: 1, STEINZEISER Battery Charger + Adapter, SGD$28
+
+Qty: 1, DIVI PA-BLC12 3rd party camera battery, SGD$28
+
+Qty: 1, SIRUI UV PRO ALU 62MM lens filter, SGD$23
+
+Qty: 1, screen protector given free, SGD$0
+
+Grand Total: SGD$1118
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+This is ONLY AFTER I have sold most of my Sony A6300 4K interchangeable len=
+s camera system for a combined total of SGD$810, after using it for about 3=
+ years and 4 months since June 2016.
+
+The following items were sold for SGD$650 at 12:00 PM Singapore Time at Toa=
+ Payoh MRT station:
+
+(1) Sony A6300 camera body, with box and accessories (includes default char=
+ger), sold for SGD$400
+
+(2) Sigma 30 mm F1.4 prime lens, with box, sold for SGD$250
+
+(3) 2 units of original Sony NP-FW50 camera batteries
+
+(4) brand new Panasonic 16GB SD card worth SGD$15 given free
+
+The following item was sold for SGD$160 at 1:23 PM Singapore Time at City H=
+all MRT station:
+
+(5) Sony E-Mount 55-210 mm F4.5-6.3 telephoto zoom lens (model: SEL55210) w=
+ith box
+
+SGD$650 and SGD$160 add up to SGD$810 mathematically.
+
+I *still* have other camera accessories (belonging to my old Sony A6300 cam=
+era system) waiting to be sold. I am hoping to raise more than SGD$1000 ins=
+tead of SGD$810 so that I do not have to spend so much on my new Panasonic =
+FZ1000 Mark 2 bridge camera as I have been taking up numerous mediocre low-=
+paying part time and temporary jobs in Singapore since August 2019.
+
+Published 4 Nov 2019 Monday Singapore Time.
 
 
-sparse warnings: (new ones prefixed by >>)
 
->> include/linux/rcupdate.h:651:9: sparse: sparse: context imbalance in 'thread_group_cputime' - different lock contexts for basic block
 
-vim +/thread_group_cputime +651 include/linux/rcupdate.h
 
-^1da177e4c3f41 Linus Torvalds      2005-04-16  603  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  604  /*
-^1da177e4c3f41 Linus Torvalds      2005-04-16  605   * So where is rcu_write_lock()?  It does not exist, as there is no
-^1da177e4c3f41 Linus Torvalds      2005-04-16  606   * way for writers to lock out RCU readers.  This is a feature, not
-^1da177e4c3f41 Linus Torvalds      2005-04-16  607   * a bug -- this property is what provides RCU's performance benefits.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  608   * Of course, writers must coordinate with each other.  The normal
-^1da177e4c3f41 Linus Torvalds      2005-04-16  609   * spinlock primitives work well for this, but any other technique may be
-^1da177e4c3f41 Linus Torvalds      2005-04-16  610   * used as well.  RCU does not care how the writers keep out of each
-^1da177e4c3f41 Linus Torvalds      2005-04-16  611   * others' way, as long as they do so.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  612   */
-3d76c082907e8f Paul E. McKenney    2009-09-28  613  
-3d76c082907e8f Paul E. McKenney    2009-09-28  614  /**
-ca5ecddfa8fcbd Paul E. McKenney    2010-04-28  615   * rcu_read_unlock() - marks the end of an RCU read-side critical section.
-3d76c082907e8f Paul E. McKenney    2009-09-28  616   *
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  617   * In most situations, rcu_read_unlock() is immune from deadlock.
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  618   * However, in kernels built with CONFIG_RCU_BOOST, rcu_read_unlock()
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  619   * is responsible for deboosting, which it does via rt_mutex_unlock().
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  620   * Unfortunately, this function acquires the scheduler's runqueue and
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  621   * priority-inheritance spinlocks.  This means that deadlock could result
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  622   * if the caller of rcu_read_unlock() already holds one of these locks or
-ec84b27f9b3b56 Anna-Maria Gleixner 2018-05-25  623   * any lock that is ever acquired while holding them.
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  624   *
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  625   * That said, RCU readers are never priority boosted unless they were
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  626   * preempted.  Therefore, one way to avoid deadlock is to make sure
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  627   * that preemption never happens within any RCU read-side critical
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  628   * section whose outermost rcu_read_unlock() is called with one of
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  629   * rt_mutex_unlock()'s locks held.  Such preemption can be avoided in
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  630   * a number of ways, for example, by invoking preempt_disable() before
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  631   * critical section's outermost rcu_read_lock().
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  632   *
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  633   * Given that the set of locks acquired by rt_mutex_unlock() might change
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  634   * at any time, a somewhat more future-proofed approach is to make sure
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  635   * that that preemption never happens within any RCU read-side critical
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  636   * section whose outermost rcu_read_unlock() is called with irqs disabled.
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  637   * This approach relies on the fact that rt_mutex_unlock() currently only
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  638   * acquires irq-disabled locks.
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  639   *
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  640   * The second of these two approaches is best in most situations,
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  641   * however, the first approach can also be useful, at least to those
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  642   * developers willing to keep abreast of the set of locks acquired by
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  643   * rt_mutex_unlock().
-f27bc4873fa8b7 Paul E. McKenney    2014-05-04  644   *
-3d76c082907e8f Paul E. McKenney    2009-09-28  645   * See rcu_read_lock() for more information.
-3d76c082907e8f Paul E. McKenney    2009-09-28  646   */
-bc33f24bdca8b6 Paul E. McKenney    2009-08-22  647  static inline void rcu_read_unlock(void)
-bc33f24bdca8b6 Paul E. McKenney    2009-08-22  648  {
-f78f5b90c4ffa5 Paul E. McKenney    2015-06-18  649  	RCU_LOCKDEP_WARN(!rcu_is_watching(),
-bde23c6892878e Heiko Carstens      2012-02-01  650  			 "rcu_read_unlock() used illegally while idle");
-bc33f24bdca8b6 Paul E. McKenney    2009-08-22 @651  	__release(RCU);
-bc33f24bdca8b6 Paul E. McKenney    2009-08-22  652  	__rcu_read_unlock();
-d24209bb689e2c Paul E. McKenney    2015-01-21  653  	rcu_lock_release(&rcu_lock_map); /* Keep acq info for rls diags. */
-bc33f24bdca8b6 Paul E. McKenney    2009-08-22  654  }
-^1da177e4c3f41 Linus Torvalds      2005-04-16  655  
 
-:::::: The code at line 651 was first introduced by commit
-:::::: bc33f24bdca8b6e97376e3a182ab69e6cdefa989 rcu: Consolidate sparse and lockdep declarations in include/linux/rcupdate.h
+-----BEGIN EMAIL SIGNATURE-----
 
-:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
+The Gospel for all Targeted Individuals (TIs):
 
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+[The New York Times] Microwave Weapons Are Prime Suspect in Ills of
+U.S. Embassy Workers
+
+Link:=A0https://www.nytimes.com/2018/09/01/science/sonic-attack-cuba-microw=
+ave.html
+
+***************************************************************************=
+*****************
+
+Singaporean Mr. Turritopsis Dohrnii Teo En Ming's Academic
+Qualifications as at 14 Feb 2019 and refugee seeking attempts at the
+United Nations Refugee Agency Bangkok (21 Mar 2017) and in Taiwan (5
+Aug 2019):
+
+[1]=A0https://tdtemcerts.wordpress.com/
+
+[2]=A0https://tdtemcerts.blogspot.sg/
+
+[3]=A0https://www.scribd.com/user/270125049/Teo-En-Ming
+
+-----END EMAIL SIGNATURE-----
+
