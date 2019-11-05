@@ -2,163 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5190EF376
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2019 03:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8236EF3A2
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2019 03:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729900AbfKEC36 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Nov 2019 21:29:58 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:37644 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729760AbfKEC36 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Nov 2019 21:29:58 -0500
-Received: by mail-qk1-f195.google.com with SMTP id e187so7050738qkf.4;
-        Mon, 04 Nov 2019 18:29:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7h16af0jNCFKGEIf5mIDG7Kt6FCGs2sNKPQ6KLf4+Qg=;
-        b=VWP1tAe9P76PFpAfBgjVkwMa1D4oY3N78Yt4Ea7ef5OS0o5jUBUTBT0NhUVgSzOI1M
-         1oaolSrOGXrTTLLoeLkxEKEjJ03zBgRsaIsBqAvk3x2HPllXeoYqUqM6RLgD+gINCC/4
-         pD1I3rykpGgY9eFGSOJosUN/hy5j0KWEkacRmFKEGgMHdcGdvHpfheo4CddxCKS4EBf5
-         ie6vZrnCjp+JBVdjBGlGR5OtPAWvDiigXc9WPlZzdeRNQCL3fceNr3g/h7hwr0k/n2gM
-         Bz/ZzkEyUJ0mvkWVzO7UhVAs9ZA+zvBK1XKZ+QCKxd+Yyr9dDnbRp4887AQCpCLJT+6a
-         FGew==
+        id S1728965AbfKECqj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Nov 2019 21:46:39 -0500
+Received: from outbound.smtp.vt.edu ([198.82.183.121]:38198 "EHLO
+        omr2.cc.vt.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729312AbfKECqj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Nov 2019 21:46:39 -0500
+Received: from mr2.cc.vt.edu (mail.ipv6.vt.edu [IPv6:2607:b400:92:9:0:9d:8fcb:4116])
+        by omr2.cc.vt.edu (8.14.4/8.14.4) with ESMTP id xA52kbOY027483
+        for <linux-arch@vger.kernel.org>; Mon, 4 Nov 2019 21:46:37 -0500
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+        by mr2.cc.vt.edu (8.14.7/8.14.7) with ESMTP id xA52kWvp024909
+        for <linux-arch@vger.kernel.org>; Mon, 4 Nov 2019 21:46:37 -0500
+Received: by mail-qk1-f200.google.com with SMTP id g62so19808461qkb.20
+        for <linux-arch@vger.kernel.org>; Mon, 04 Nov 2019 18:46:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7h16af0jNCFKGEIf5mIDG7Kt6FCGs2sNKPQ6KLf4+Qg=;
-        b=K5mH7A9CIpiSQj5j8Rh+KGMdAFZTyW4jwDc8lR37s8oJCTm4AIj4WyUmqjhapubpkO
-         FOXvce4BT/hyepdI+hwq6RJ13erJvsz/7uiVaSYsCSvdNP4XJvwTCFsemtYfsYc1ne0/
-         +DKT43CRx9/BMEfcuRBsbnFgfhE4DtKZOAoHP6QhwHsxrwTVsfwdHBbdOm3eis/2qB5X
-         RUOMrAKW+9arNAy/OHGAs8Le1qUoohofjUdcKed0IJk3G5S2c8Xe8+xKu+ECnc9QKWtf
-         RlkFy7bF+gA4ZkJSrkWagoTDTMlHWv/ljw9b9PoKTK6q/uQgD9FhSJJO5aJvj2scNQaP
-         mG6A==
-X-Gm-Message-State: APjAAAX5owG2BX51GsuRDGNPvSoB/i9/UF2tav7+qi4qTCg0eK3MCfGh
-        b5wlS17mVpLSHtBMU9INBQE=
-X-Google-Smtp-Source: APXvYqxeIqWvnleHr9vw/ZojTKoSW30pOuidURAHeMlqsGtsUeDBdPrXah4akZEpoypQaLxy72fTjg==
-X-Received: by 2002:ae9:e8c5:: with SMTP id a188mr3035483qkg.17.1572920995179;
-        Mon, 04 Nov 2019 18:29:55 -0800 (PST)
-Received: from colonelthink.syslab.sandbox (sb-gw13.cs.toronto.edu. [128.100.3.13])
-        by smtp.gmail.com with ESMTPSA id e17sm10845817qtk.65.2019.11.04.18.29.53
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=RZNcm7tJHE7PJ/B2fVNd5i/u7+ifnx25OIt2h3zpLOo=;
+        b=GocLMumWVawCxAXrbppm2jjasZYMq1a+ZQmbYWSM/treHsSulJ9q9yhRHKow+SVspq
+         lSJ7abMap07bK+Q0NcCFQ4r+CfTa74duv7bJaE5dmK5CW8zMUFP90RCDaP/cN0MfwUVX
+         tqmeu6Lr8yKHwuOrvm4DGaazzNBvM+4r1mhZeRBX3qsJINIOg6Cere/0LDx85LaPsO7V
+         khATeSnPaCQD0hl4QuE/SY08UnpNVEbhh18P/5aCArbuzMVyuW9LT/dgPz5Hm2HAsUuY
+         QO3kxwLNOA5/detGtqfTZnH14g4JSY2CO0JjkdRkth9rAJm/tmIFNLaVbdclSWxLm7i1
+         3OeQ==
+X-Gm-Message-State: APjAAAW6O8mhmt/HQTxVrK6zIRjYPdahtFsgLsUNcL9ZICe1piAi66X9
+        5G0LyCMu/xEc9ZzRSpUOUicsw2G7UFkR0aOq/OYrc+y/QfAzsOz/tcIDCWmglHblhUDmHnBnr0c
+        MMl5va7Maq4wnNjpySQKL573+B+5hE2dA
+X-Received: by 2002:ad4:5349:: with SMTP id v9mr23621304qvs.55.1572921992487;
+        Mon, 04 Nov 2019 18:46:32 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyXzA6HviTv6QlEgIOFkTmQMi16KNYqK2sd8+KO7QEzhWvkSciXAH9zdUWTp/6s496+Fl8aKA==
+X-Received: by 2002:ad4:5349:: with SMTP id v9mr23621285qvs.55.1572921992189;
+        Mon, 04 Nov 2019 18:46:32 -0800 (PST)
+Received: from turing-police.lan ([2601:5c0:c001:c9e1::359])
+        by smtp.gmail.com with ESMTPSA id s21sm12156815qtc.12.2019.11.04.18.46.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 18:29:54 -0800 (PST)
-From:   Mohammad Nasirifar <far.nasiri.m@gmail.com>
-X-Google-Original-From: Mohammad Nasirifar <farnasirim@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mohammad Nasirifar <farnasirim@gmail.com>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        Mon, 04 Nov 2019 18:46:30 -0800 (PST)
+From:   Valdis Kletnieks <valdis.kletnieks@vt.edu>
+X-Google-Original-From: Valdis Kletnieks <Valdis.Kletnieks@vt.edu>
+Cc:     Valdis Kletnieks <Valdis.Kletnieks@vt.edu>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-xfs@vger.kernel.org, Jan Kara <jack@suse.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-ext4@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Valdis Kletnieks <valdis.kletnieks@vt.edu>
-Subject: [PATCH 1/1] syscalls: Fix references to filenames containing syscall defs
-Date:   Mon,  4 Nov 2019 21:29:28 -0500
-Message-Id: <20191105022928.517526-1-farnasirim@gmail.com>
-X-Mailer: git-send-email 2.23.0
+        linux-f2fs-devel@lists.sourceforge.net, linux-arch@vger.kernel.org
+Subject: [PATCH 1/1] errno.h: Provide EFSBADCRC for everybody
+Date:   Mon,  4 Nov 2019 21:46:14 -0500
+Message-Id: <20191105024618.194134-1-Valdis.Kletnieks@vt.edu>
+X-Mailer: git-send-email 2.24.0.rc1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Fix stale references to files containing syscall definitions in
-'include/linux/syscalls.h' and 'include/uapi/asm-generic/unistd.h',
-pointing to 'kernel/itimer.c', 'kernel/hrtimer.c', and 'kernel/time.c'.
-They are now under 'kernel/time'.
+Four filesystems have their own defines for this. Move it
+into errno.h so it's defined in just one place.
 
-Also definitions of 'getpid', 'getppid', 'getuid', 'geteuid', 'getgid',
-'getegid', 'gettid', and 'sysinfo' are now in 'kernel/sys.c'.
-
-To: arnd@arndb.de
-To: akpm@linux-foundation.org
-Cc: linux-api@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Acked-by: Valdis Kletnieks <valdis.kletnieks@vt.edu>
-Signed-off-by: Mohammad Nasirifar <farnasirim@gmail.com>
+Signed-off-by: Valdis Kletnieks <Valdis.Kletnieks@vt.edu>
 ---
- include/linux/syscalls.h          | 8 ++++----
- include/uapi/asm-generic/unistd.h | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ fs/ext4/ext4.h                   | 2 --
+ fs/f2fs/f2fs.h                   | 2 --
+ fs/xfs/xfs_linux.h               | 1 -
+ include/linux/jbd2.h             | 2 --
+ include/uapi/asm-generic/errno.h | 1 +
+ 5 files changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index f7c561c4dcdd..1dbefa5e00e5 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -584,13 +584,13 @@ asmlinkage long sys_get_robust_list(int pid,
- asmlinkage long sys_set_robust_list(struct robust_list_head __user *head,
- 				    size_t len);
+diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+index a86c2585457d..79b3fd8291ab 100644
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -3395,6 +3395,4 @@ static inline int ext4_buffer_uptodate(struct buffer_head *bh)
  
--/* kernel/hrtimer.c */
-+/* kernel/time/hrtimer.c */
- asmlinkage long sys_nanosleep(struct __kernel_timespec __user *rqtp,
- 			      struct __kernel_timespec __user *rmtp);
- asmlinkage long sys_nanosleep_time32(struct old_timespec32 __user *rqtp,
- 				     struct old_timespec32 __user *rmtp);
+ #endif	/* __KERNEL__ */
  
--/* kernel/itimer.c */
-+/* kernel/time/itimer.c */
- asmlinkage long sys_getitimer(int which, struct itimerval __user *value);
- asmlinkage long sys_setitimer(int which,
- 				struct itimerval __user *value,
-@@ -731,7 +731,7 @@ asmlinkage long sys_prctl(int option, unsigned long arg2, unsigned long arg3,
- 			unsigned long arg4, unsigned long arg5);
- asmlinkage long sys_getcpu(unsigned __user *cpu, unsigned __user *node, struct getcpu_cache __user *cache);
+-#define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+-
+ #endif	/* _EXT4_H */
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 04ebe77569a3..ba23fd18d44a 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -3751,6 +3751,4 @@ static inline bool is_journalled_quota(struct f2fs_sb_info *sbi)
+ 	return false;
+ }
  
--/* kernel/time.c */
-+/* kernel/time/time.c */
- asmlinkage long sys_gettimeofday(struct timeval __user *tv,
- 				struct timezone __user *tz);
- asmlinkage long sys_settimeofday(struct timeval __user *tv,
-@@ -739,7 +739,7 @@ asmlinkage long sys_settimeofday(struct timeval __user *tv,
- asmlinkage long sys_adjtimex(struct __kernel_timex __user *txc_p);
- asmlinkage long sys_adjtimex_time32(struct old_timex32 __user *txc_p);
+-#define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+-
+ #endif /* _LINUX_F2FS_H */
+diff --git a/fs/xfs/xfs_linux.h b/fs/xfs/xfs_linux.h
+index 3409d02a7d21..abdfc506618d 100644
+--- a/fs/xfs/xfs_linux.h
++++ b/fs/xfs/xfs_linux.h
+@@ -123,7 +123,6 @@ typedef __u32			xfs_nlink_t;
  
--/* kernel/timer.c */
-+/* kernel/sys.c */
- asmlinkage long sys_getpid(void);
- asmlinkage long sys_getppid(void);
- asmlinkage long sys_getuid(void);
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index 1fc8faa6e973..6423f5fa4b8e 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -328,13 +328,13 @@ __SC_COMP(__NR_set_robust_list, sys_set_robust_list, \
- __SC_COMP(__NR_get_robust_list, sys_get_robust_list, \
- 	  compat_sys_get_robust_list)
+ #define ENOATTR		ENODATA		/* Attribute not found */
+ #define EWRONGFS	EINVAL		/* Mount with wrong filesystem type */
+-#define EFSBADCRC	EBADMSG		/* Bad CRC detected */
  
--/* kernel/hrtimer.c */
-+/* kernel/time/hrtimer.c */
- #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG != 32
- #define __NR_nanosleep 101
- __SC_3264(__NR_nanosleep, sys_nanosleep_time32, sys_nanosleep)
- #endif
+ #define SYNCHRONIZE()	barrier()
+ #define __return_address __builtin_return_address(0)
+diff --git a/include/linux/jbd2.h b/include/linux/jbd2.h
+index 69411d7e0431..e07692fe6f20 100644
+--- a/include/linux/jbd2.h
++++ b/include/linux/jbd2.h
+@@ -1656,6 +1656,4 @@ static inline tid_t  jbd2_get_latest_transaction(journal_t *journal)
  
--/* kernel/itimer.c */
-+/* kernel/time/itimer.c */
- #define __NR_getitimer 102
- __SC_COMP(__NR_getitimer, sys_getitimer, compat_sys_getitimer)
- #define __NR_setitimer 103
-@@ -507,7 +507,7 @@ __SYSCALL(__NR_prctl, sys_prctl)
- #define __NR_getcpu 168
- __SYSCALL(__NR_getcpu, sys_getcpu)
+ #endif	/* __KERNEL__ */
  
--/* kernel/time.c */
-+/* kernel/time/time.c */
- #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG != 32
- #define __NR_gettimeofday 169
- __SC_COMP(__NR_gettimeofday, sys_gettimeofday, compat_sys_gettimeofday)
-@@ -517,7 +517,7 @@ __SC_COMP(__NR_settimeofday, sys_settimeofday, compat_sys_settimeofday)
- __SC_3264(__NR_adjtimex, sys_adjtimex_time32, sys_adjtimex)
- #endif
- 
--/* kernel/timer.c */
-+/* kernel/sys.c */
- #define __NR_getpid 172
- __SYSCALL(__NR_getpid, sys_getpid)
- #define __NR_getppid 173
+-#define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+-
+ #endif	/* _LINUX_JBD2_H */
+diff --git a/include/uapi/asm-generic/errno.h b/include/uapi/asm-generic/errno.h
+index 1d5ffdf54cb0..e4cae9a9ae79 100644
+--- a/include/uapi/asm-generic/errno.h
++++ b/include/uapi/asm-generic/errno.h
+@@ -55,6 +55,7 @@
+ #define	EMULTIHOP	72	/* Multihop attempted */
+ #define	EDOTDOT		73	/* RFS specific error */
+ #define	EBADMSG		74	/* Not a data message */
++#define EFSBADCRC	EBADMSG	/* Bad CRC detected */
+ #define	EOVERFLOW	75	/* Value too large for defined data type */
+ #define	ENOTUNIQ	76	/* Name not unique on network */
+ #define	EBADFD		77	/* File descriptor in bad state */
 -- 
-2.23.0
+2.24.0.rc1
 
