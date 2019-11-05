@@ -2,249 +2,205 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB765EFF8B
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2019 15:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EE7EFFBB
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2019 15:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388783AbfKEOUj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Nov 2019 09:20:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44342 "EHLO mail.kernel.org"
+        id S1728172AbfKEO3a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Nov 2019 09:29:30 -0500
+Received: from mout.gmx.net ([212.227.17.22]:55725 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388209AbfKEOUj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 5 Nov 2019 09:20:39 -0500
-Received: from paulmck-ThinkPad-P72.home (unknown [109.144.209.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 92A83214D8;
-        Tue,  5 Nov 2019 14:20:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572963638;
-        bh=Z2MPkIAzAKDglk54O+36XxRRS4oH0whPqRPz7c34+ro=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=LVMEw0wDVyt/Dy+UZrrYompGaW9qKksnSQABcvC7ArZA5iZoM8yYIALMJAaCRTjLv
-         HMb9NlU0Vnt9P9tK56zmvIsH4RvkgqmU6ZisE1/Q5ZAQFcrbZJeBTqU4NbBmrV2TRN
-         f/+OzgqNvbcmmprG5uPIP08Y0kYgGVMI4C64Og3g=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id A450B35227C0; Tue,  5 Nov 2019 06:20:35 -0800 (PST)
-Date:   Tue, 5 Nov 2019 06:20:35 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Alexander Potapenko <glider@google.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>, Daniel Axtens <dja@axtens.net>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-efi@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH v3 0/9] Add Kernel Concurrency Sanitizer (KCSAN)
-Message-ID: <20191105142035.GR20975@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20191104142745.14722-1-elver@google.com>
- <20191104164717.GE20975@paulmck-ThinkPad-P72>
- <CANpmjNOtR6NEsXGo=M1o26d8vUyF7gwj=gew+LAeE_D+qfbEmQ@mail.gmail.com>
- <20191104194658.GK20975@paulmck-ThinkPad-P72>
- <CANpmjNPpVCRhgVgfaApZJCnMKHsGxVUno+o-Fe+7OYKmPvCboQ@mail.gmail.com>
+        id S1727858AbfKEO33 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 5 Nov 2019 09:29:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1572964151;
+        bh=1ccRhMfOjQfCWgxZtJzM4hP1zgDfrNPilzzEdo9nVpk=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Y0fiQZVlL53W17TOlZbi6XyMv5zjwVPRrWuOHJMTc50mzth8UTL/m2E1lYcbSheEF
+         8jorhA7eYWbpK5PWaPEPGi/wJtl+L33sVAQqL300Yc0SHDjTKJjeHWLOB6GN35q3YS
+         +a7NPrubb/JJYnsmHtwYU8sEHifg8Yl87BpLmw98=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.150.99]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MpUYu-1i9DSt0bLI-00pqwr; Tue, 05
+ Nov 2019 15:29:11 +0100
+Subject: Re: [PATCH 07/21] parisc: remove __ioremap
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        nios2-dev@lists.rocketboards.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191029064834.23438-1-hch@lst.de>
+ <20191029064834.23438-8-hch@lst.de>
+From:   Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ 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
+ oiAieEtb6a/7+jPKZnRFTw==
+Message-ID: <23dd12c1-8af2-dd97-18f2-da3203d49a48@gmx.de>
+Date:   Tue, 5 Nov 2019 15:29:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNPpVCRhgVgfaApZJCnMKHsGxVUno+o-Fe+7OYKmPvCboQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191029064834.23438-8-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:K84d31/CVvwIJRKgEkYeLn7nG07Ceq3NW0dsqaiRS5IsUys1PNO
+ B3wZA6JSQUR3ASpFYkzv5n9DIUepkHMiZULCTf1KC+BWlAXPXnF8HuJwokTu9RHIoaGeecm
+ Ci3RRzeiRWquDPKN9RN+JUnecDqMAenupRgKRqv99/LWiBv0xQpgWSKokC8ejSoOAF87fIb
+ GlxUK3lSPzPHSDlD+KOEg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qywLIYXxQ6w=:uquN0cefM1Gv+iPhjMDm4y
+ WzeGInW3/ErqTG1UoKT/xRidojOzqlKb5yOcKxyKZooWk6bL0fIl5AhbM6blTwH8c66Kn8H1J
+ WGQc1ZJSoco0WhSHDXQ7118RQcJ0xrZYuyKBlHofDr66VPHNcDWKy5kH8jKybSP7WJTfqINRw
+ XxrfJB4efx2ltV+lzx058SbsYx4C2h/rBJPKR7Kqu12s97bSiY+nyblh2s/yxfeKFuFc/wjCs
+ lFYevasBI4YCaAngtQ6appEtRUuMVex0GquZfTkuN9kQa+RTc+z5tNk/7jbcLhxfdgxDb2A4Y
+ A/K7Bt5gq41M7Jn+KWZX/6P2XqsNOt+6inw4TwVnCWKxgaw4xs9j+1+zOqMQZiYL/+b0EeS0h
+ brYf9g9CAaFNjtMq6+/VAW2IOZ5Nv94fAwRDijmOwyrTdd18Y6DPZNsURYzGl5eEPOeFfkL/F
+ JQUcovMUYYj9ZyJXaUrtQ2Lv1lLkNS2AbR8d6Z/6jfAFZlQsxf8UPI82eUYeX00lWlgIp/SYH
+ cMXDYNrAgF3fA02cefaga+ToL9W+PJkdoWMNamBPYbInO41HfM4bO0JLXBJxLu8NxsIHwyYbL
+ jISx7DcFcwYuhtufHVwYQb2iUXssyinN3j5YlEUD5kcq0apbnaksTH/qQGR+n+GfJqmwZUeTP
+ LwRpD/4coGlhAyp/lmnCABsVRB5lwbpRNVUVoJzONql8z4AriXnPaX9nbHtB3uJ8FT1k1bImz
+ E56ha19Q0Hnmpw/rCFgb7UT4+4PlAIXgifeujs/4EfgAtwZeLMDSJkAL3PBHGUAs62iq2qh1m
+ vpSXwvx1tptIrnrGAtzQHlpMTiy3aP3TJHvhozmVGgOaIR3xRyA9CXUTBI+Hk0XuwymklVM5A
+ BvFZUGwg1Wb55/+OdgYFXa6p9XFxMk+XBpGa8NYWQXBZxnCXVRMf3ucDkauRT/6fdyMaVUBvx
+ qywVTNg1ILLrPVRP63jplKrFoDllanZJZNwQQgR0kyBWBaUMEBKRGhOn8wdgaWGOB5aC65RGx
+ AkhXGJIgOkrsNq3xEuYujqPxATUS2ohV5/RQJjOfpLXgeBUx7ZOhe063AQZ72pgAsRhU5l5bP
+ p/KTjTIG/oyqLgCyNVW9DucS2YjDRVYuPoK5r+qOQfF1oFXgONBCwUTL7hhhu/VtZ6J52BURA
+ uUYYBM/GzpGVcgiHzTrdtFtF4RDNhEibY8tLl2/IpBAL3fwmJg8W+IziWuaj77zX1IdQfs5WW
+ sY7znfNyevOrgCAOqWYYuW4MFkdA7qd6WtFYbUg==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Nov 05, 2019 at 12:10:56PM +0100, Marco Elver wrote:
-> On Mon, 4 Nov 2019 at 20:47, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Mon, Nov 04, 2019 at 07:41:30PM +0100, Marco Elver wrote:
-> > > On Mon, 4 Nov 2019 at 17:47, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > >
-> > > > On Mon, Nov 04, 2019 at 03:27:36PM +0100, Marco Elver wrote:
-> > > > > This is the patch-series for the Kernel Concurrency Sanitizer (KCSAN).
-> > > > > KCSAN is a sampling watchpoint-based data-race detector. More details
-> > > > > are included in Documentation/dev-tools/kcsan.rst. This patch-series
-> > > > > only enables KCSAN for x86, but we expect adding support for other
-> > > > > architectures is relatively straightforward (we are aware of
-> > > > > experimental ARM64 and POWER support).
-> > > > >
-> > > > > To gather early feedback, we announced KCSAN back in September, and
-> > > > > have integrated the feedback where possible:
-> > > > > http://lkml.kernel.org/r/CANpmjNPJ_bHjfLZCAPV23AXFfiPiyXXqqu72n6TgWzb2Gnu1eA@mail.gmail.com
-> > > > >
-> > > > > We want to point out and acknowledge the work surrounding the LKMM,
-> > > > > including several articles that motivate why data-races are dangerous
-> > > > > [1, 2], justifying a data-race detector such as KCSAN.
-> > > > > [1] https://lwn.net/Articles/793253/
-> > > > > [2] https://lwn.net/Articles/799218/
-> > > > >
-> > > > > The current list of known upstream fixes for data-races found by KCSAN
-> > > > > can be found here:
-> > > > > https://github.com/google/ktsan/wiki/KCSAN#upstream-fixes-of-data-races-found-by-kcsan
-> > > >
-> > > > Making this more accessible to more people seems like a good thing.
-> > > > So, for the series:
-> > > >
-> > > > Acked-by: Paul E. McKenney <paulmck@kernel.org>
-> > >
-> > > Much appreciated. Thanks, Paul!
-> > >
-> > > Any suggestions which tree this could eventually land in?
-> >
-> > I would guess that Dmitry might have some suggestions.
-> 
-> I checked and we're both unclear what the most obvious tree to land in
-> is (the other sanitizers are mm related, which KCSAN is not).
-> 
-> One suggestion that comes to my mind is for KCSAN to go through the
-> same tree (rcu?) as the LKMM due to their inherent relationship. Would
-> that make most sense?
+On 29.10.19 07:48, Christoph Hellwig wrote:
+> __ioremap is always called with the _PAGE_NO_CACHE, so fold the whole
+> thing and rename it to ioremap.  This also allows to remove the special
+> EISA quirk to force _PAGE_NO_CACHE.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-It works for me, though you guys have to continue to be the main
-developers.  ;-)
+Acked-by: Helge Deller <deller@gmx.de>
 
-I will go through the patches more carefully, and please look into the
-kbuild test robot complaint.
+Helge
 
-							Thanx, Paul
+> ---
+>  arch/parisc/include/asm/io.h | 11 +----------
+>  arch/parisc/mm/ioremap.c     | 10 ++++------
+>  2 files changed, 5 insertions(+), 16 deletions(-)
+>
+> diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
+> index 93d37010b375..46212b52c23e 100644
+> --- a/arch/parisc/include/asm/io.h
+> +++ b/arch/parisc/include/asm/io.h
+> @@ -127,16 +127,7 @@ static inline void gsc_writeq(unsigned long long va=
+l, unsigned long addr)
+>  /*
+>   * The standard PCI ioremap interfaces
+>   */
+> -
+> -extern void __iomem * __ioremap(unsigned long offset, unsigned long siz=
+e, unsigned long flags);
+> -
+> -/* Most machines react poorly to I/O-space being cacheable... Instead l=
+et's
+> - * define ioremap() in terms of ioremap_nocache().
+> - */
+> -static inline void __iomem * ioremap(unsigned long offset, unsigned lon=
+g size)
+> -{
+> -	return __ioremap(offset, size, _PAGE_NO_CACHE);
+> -}
+> +void __iomem *ioremap(unsigned long offset, unsigned long size);
+>  #define ioremap_nocache(off, sz)	ioremap((off), (sz))
+>  #define ioremap_wc			ioremap_nocache
+>  #define ioremap_uc			ioremap_nocache
+> diff --git a/arch/parisc/mm/ioremap.c b/arch/parisc/mm/ioremap.c
+> index f29f682352f0..6e7c005aa09b 100644
+> --- a/arch/parisc/mm/ioremap.c
+> +++ b/arch/parisc/mm/ioremap.c
+> @@ -25,7 +25,7 @@
+>   * have to convert them into an offset in a page-aligned mapping, but t=
+he
+>   * caller shouldn't need to know that small detail.
+>   */
+> -void __iomem * __ioremap(unsigned long phys_addr, unsigned long size, u=
+nsigned long flags)
+> +void __iomem *ioremap(unsigned long phys_addr, unsigned long size)
+>  {
+>  	void __iomem *addr;
+>  	struct vm_struct *area;
+> @@ -36,10 +36,8 @@ void __iomem * __ioremap(unsigned long phys_addr, uns=
+igned long size, unsigned l
+>  	unsigned long end =3D phys_addr + size - 1;
+>  	/* Support EISA addresses */
+>  	if ((phys_addr >=3D 0x00080000 && end < 0x000fffff) ||
+> -	    (phys_addr >=3D 0x00500000 && end < 0x03bfffff)) {
+> +	    (phys_addr >=3D 0x00500000 && end < 0x03bfffff))
+>  		phys_addr |=3D F_EXTEND(0xfc000000);
+> -		flags |=3D _PAGE_NO_CACHE;
+> -	}
+>  #endif
+>
+>  	/* Don't allow wraparound or zero size */
+> @@ -65,7 +63,7 @@ void __iomem * __ioremap(unsigned long phys_addr, unsi=
+gned long size, unsigned l
+>  	}
+>
+>  	pgprot =3D __pgprot(_PAGE_PRESENT | _PAGE_RW | _PAGE_DIRTY |
+> -			  _PAGE_ACCESSED | flags);
+> +			  _PAGE_ACCESSED | _PAGE_NO_CACHE);
+>
+>  	/*
+>  	 * Mappings have to be page-aligned
+> @@ -90,7 +88,7 @@ void __iomem * __ioremap(unsigned long phys_addr, unsi=
+gned long size, unsigned l
+>
+>  	return (void __iomem *) (offset + (char __iomem *)addr);
+>  }
+> -EXPORT_SYMBOL(__ioremap);
+> +EXPORT_SYMBOL(ioremap);
+>
+>  void iounmap(const volatile void __iomem *io_addr)
+>  {
+>
 
-> Thanks,
-> -- Marco
-> 
-> > >
-> > > > > Changelog
-> > > > > ---------
-> > > > > v3:
-> > > > > * Major changes:
-> > > > >  - Add microbenchmark.
-> > > > >  - Add instruction watchpoint skip randomization.
-> > > > >  - Refactor API and core runtime fast-path and slow-path. Compared to
-> > > > >    the previous version, with a default config and benchmarked using the
-> > > > >    added microbenchmark, this version is 3.8x faster.
-> > > > >  - Make __tsan_unaligned __alias of generic accesses.
-> > > > >  - Rename kcsan_{begin,end}_atomic ->
-> > > > >    kcsan_{nestable,flat}_atomic_{begin,end}
-> > > > >  - For filter list in debugfs.c use kmalloc+krealloc instead of
-> > > > >    kvmalloc.
-> > > > >  - Split Documentation into separate patch.
-> > > > >
-> > > > > v2: http://lkml.kernel.org/r/20191017141305.146193-1-elver@google.com
-> > > > > * Major changes:
-> > > > >  - Replace kcsan_check_access(.., {true, false}) with
-> > > > >    kcsan_check_{read,write}.
-> > > > >  - Change atomic-instrumented.h to use __atomic_check_{read,write}.
-> > > > >  - Use common struct kcsan_ctx in task_struct and for per-CPU interrupt
-> > > > >    contexts.
-> > > > >
-> > > > > v1: http://lkml.kernel.org/r/20191016083959.186860-1-elver@google.com
-> > > > >
-> > > > > Marco Elver (9):
-> > > > >   kcsan: Add Kernel Concurrency Sanitizer infrastructure
-> > > > >   kcsan: Add Documentation entry in dev-tools
-> > > > >   objtool, kcsan: Add KCSAN runtime functions to whitelist
-> > > > >   build, kcsan: Add KCSAN build exceptions
-> > > > >   seqlock, kcsan: Add annotations for KCSAN
-> > > > >   seqlock: Require WRITE_ONCE surrounding raw_seqcount_barrier
-> > > > >   asm-generic, kcsan: Add KCSAN instrumentation for bitops
-> > > > >   locking/atomics, kcsan: Add KCSAN instrumentation
-> > > > >   x86, kcsan: Enable KCSAN for x86
-> > > > >
-> > > > >  Documentation/dev-tools/index.rst         |   1 +
-> > > > >  Documentation/dev-tools/kcsan.rst         | 217 +++++++++
-> > > > >  MAINTAINERS                               |  11 +
-> > > > >  Makefile                                  |   3 +-
-> > > > >  arch/x86/Kconfig                          |   1 +
-> > > > >  arch/x86/boot/Makefile                    |   2 +
-> > > > >  arch/x86/boot/compressed/Makefile         |   2 +
-> > > > >  arch/x86/entry/vdso/Makefile              |   3 +
-> > > > >  arch/x86/include/asm/bitops.h             |   6 +-
-> > > > >  arch/x86/kernel/Makefile                  |   7 +
-> > > > >  arch/x86/kernel/cpu/Makefile              |   3 +
-> > > > >  arch/x86/lib/Makefile                     |   4 +
-> > > > >  arch/x86/mm/Makefile                      |   3 +
-> > > > >  arch/x86/purgatory/Makefile               |   2 +
-> > > > >  arch/x86/realmode/Makefile                |   3 +
-> > > > >  arch/x86/realmode/rm/Makefile             |   3 +
-> > > > >  drivers/firmware/efi/libstub/Makefile     |   2 +
-> > > > >  include/asm-generic/atomic-instrumented.h | 393 +++++++--------
-> > > > >  include/asm-generic/bitops-instrumented.h |  18 +
-> > > > >  include/linux/compiler-clang.h            |   9 +
-> > > > >  include/linux/compiler-gcc.h              |   7 +
-> > > > >  include/linux/compiler.h                  |  35 +-
-> > > > >  include/linux/kcsan-checks.h              |  97 ++++
-> > > > >  include/linux/kcsan.h                     | 115 +++++
-> > > > >  include/linux/sched.h                     |   4 +
-> > > > >  include/linux/seqlock.h                   |  51 +-
-> > > > >  init/init_task.c                          |   8 +
-> > > > >  init/main.c                               |   2 +
-> > > > >  kernel/Makefile                           |   6 +
-> > > > >  kernel/kcsan/Makefile                     |  11 +
-> > > > >  kernel/kcsan/atomic.h                     |  27 ++
-> > > > >  kernel/kcsan/core.c                       | 560 ++++++++++++++++++++++
-> > > > >  kernel/kcsan/debugfs.c                    | 275 +++++++++++
-> > > > >  kernel/kcsan/encoding.h                   |  94 ++++
-> > > > >  kernel/kcsan/kcsan.h                      | 131 +++++
-> > > > >  kernel/kcsan/report.c                     | 306 ++++++++++++
-> > > > >  kernel/kcsan/test.c                       | 121 +++++
-> > > > >  kernel/sched/Makefile                     |   6 +
-> > > > >  lib/Kconfig.debug                         |   2 +
-> > > > >  lib/Kconfig.kcsan                         | 119 +++++
-> > > > >  lib/Makefile                              |   3 +
-> > > > >  mm/Makefile                               |   8 +
-> > > > >  scripts/Makefile.kcsan                    |   6 +
-> > > > >  scripts/Makefile.lib                      |  10 +
-> > > > >  scripts/atomic/gen-atomic-instrumented.sh |  17 +-
-> > > > >  tools/objtool/check.c                     |  18 +
-> > > > >  46 files changed, 2526 insertions(+), 206 deletions(-)
-> > > > >  create mode 100644 Documentation/dev-tools/kcsan.rst
-> > > > >  create mode 100644 include/linux/kcsan-checks.h
-> > > > >  create mode 100644 include/linux/kcsan.h
-> > > > >  create mode 100644 kernel/kcsan/Makefile
-> > > > >  create mode 100644 kernel/kcsan/atomic.h
-> > > > >  create mode 100644 kernel/kcsan/core.c
-> > > > >  create mode 100644 kernel/kcsan/debugfs.c
-> > > > >  create mode 100644 kernel/kcsan/encoding.h
-> > > > >  create mode 100644 kernel/kcsan/kcsan.h
-> > > > >  create mode 100644 kernel/kcsan/report.c
-> > > > >  create mode 100644 kernel/kcsan/test.c
-> > > > >  create mode 100644 lib/Kconfig.kcsan
-> > > > >  create mode 100644 scripts/Makefile.kcsan
-> > > > >
-> > > > > --
-> > > > > 2.24.0.rc1.363.gb1bccd3e3d-goog
-> > > > >
-> > > >
-> > > > --
-> > > > You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> > > > To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> > > > To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20191104164717.GE20975%40paulmck-ThinkPad-P72.
-> >
-> > --
-> > You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20191104194658.GK20975%40paulmck-ThinkPad-P72.
