@@ -2,131 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA356F17F8
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2019 15:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C069F1806
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2019 15:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727895AbfKFOJd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Nov 2019 09:09:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:40416 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726976AbfKFOJc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 6 Nov 2019 09:09:32 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 106DC30E;
-        Wed,  6 Nov 2019 06:09:32 -0800 (PST)
-Received: from [10.1.196.37] (e121345-lin.cambridge.arm.com [10.1.196.37])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 346943F6C4;
-        Wed,  6 Nov 2019 06:09:31 -0800 (PST)
-Subject: Re: Bug 205201 - overflow of DMA mask and bus mask
-To:     Christoph Hellwig <hch@lst.de>,
-        Christian Zigotzky <chzigotzky@xenosoft.de>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org
-References: <20181213112511.GA4574@lst.de>
- <e109de27-f4af-147d-dc0e-067c8bafb29b@xenosoft.de>
- <ad5a5a8a-d232-d523-a6f7-e9377fc3857b@xenosoft.de>
- <e60d6ca3-860c-f01d-8860-c5e022ec7179@xenosoft.de>
- <008c981e-bdd2-21a7-f5f7-c57e4850ae9a@xenosoft.de>
- <20190103073622.GA24323@lst.de>
- <71A251A5-FA06-4019-B324-7AED32F7B714@xenosoft.de>
- <1b0c5c21-2761-d3a3-651b-3687bb6ae694@xenosoft.de>
- <3504ee70-02de-049e-6402-2d530bf55a84@xenosoft.de>
- <46025f1b-db20-ac23-7dcd-10bc43bbb6ee@xenosoft.de>
- <20191105162856.GA15402@lst.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <8b239ba6-29f3-9483-8696-ddfba2a49a49@arm.com>
-Date:   Wed, 6 Nov 2019 14:09:26 +0000
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191105162856.GA15402@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+        id S1727497AbfKFONY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Nov 2019 09:13:24 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:55431 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726976AbfKFONY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Nov 2019 09:13:24 -0500
+Received: by mail-wm1-f65.google.com with SMTP id b11so677179wmb.5
+        for <linux-arch@vger.kernel.org>; Wed, 06 Nov 2019 06:13:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=5J/Ofk6ylx2fNP9WdzIRZXeA0e3ywJAg5ijroGTIp5E=;
+        b=tKY8u23aHs4/HPdanAkyFxDTfKUnmDGznwlyn9XjBCxK/OLl/98xLhDrlyXoAOfIaZ
+         MTBKdzqlKcEi8Yg41n3F5ev4DIFFQCUugd5VfyB2HNWmoU4XikzTEDyANulDHbwvbcGt
+         xDbwaS0xj8NvMvT+e/hpqaCLf8gOoFmdK/P02ME8aqM1f5ZIJy6RTYY9NhG5l3KDA+Wz
+         PKOJOKmxd+5yxjo8fgNIlhqZK0EwwkMOR65hNLRR3VHbZAkOsiDGtqkOuLP1c2k9yL1F
+         S4Ldyo5DpLfVAkoXEkLbUX6dB4/D40XNuTz48F2pAWJ0Ju6Z3ObFK2KYX4cDHUyK++vo
+         VXrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=5J/Ofk6ylx2fNP9WdzIRZXeA0e3ywJAg5ijroGTIp5E=;
+        b=EjTpKjWLstFWy5XBwmQgneeFnR5F7SFoRgqH7GQeZIeIWF75gQle/wZEnR5MmdK8/w
+         LY5FdZQsuaO6WIyC/R0NpqqkLrbQqluXkQDGvDI/0wIYb5fveu52y7NheYy9NZppqOwL
+         v86Z549SDYoCX9kwxBGQ6090ieZ9NbP4l5G+/yHHTdz6AD5IfrdaUwWvVSDWasD7WMce
+         gZRjs562HUMlhmmGu8QgHwd5DILb1zkE2COI8+dnXD90aaKB0A2jH8NHSY3s/w3Nj3f7
+         onMh9CMFY4LONJeNSZQsrBSj9WyCcaKIrHs6UOQ9gSq1mS8d1GWy2l55xFVZuTVBKmWJ
+         ZW2w==
+X-Gm-Message-State: APjAAAW8hNLdq35nHkQwgOQTBwH22j3NhHs7QQYdrQgA1WOSa5rVLzPY
+        6yT6K+0bftjH3ygFXSRCOyfyWA==
+X-Google-Smtp-Source: APXvYqz5N5+MuHewN3HtZf0o/tcihZPJ2fkIuNFxsMWdBRetpBqj57Ix1x+D/JGw4/oRNCMLLNTfOw==
+X-Received: by 2002:a7b:c925:: with SMTP id h5mr2938042wml.115.1573049602083;
+        Wed, 06 Nov 2019 06:13:22 -0800 (PST)
+Received: from localhost.localdomain (31.red-176-87-122.dynamicip.rima-tde.net. [176.87.122.31])
+        by smtp.gmail.com with ESMTPSA id b3sm2837556wma.13.2019.11.06.06.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Nov 2019 06:13:21 -0800 (PST)
+From:   Richard Henderson <richard.henderson@linaro.org>
+X-Google-Original-From: Richard Henderson <rth@twiddle.net>
+To:     linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, linux-arch@vger.kernel.org,
+        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 00/10] Improvements for random.h/archrandom.h
+Date:   Wed,  6 Nov 2019 15:12:58 +0100
+Message-Id: <20191106141308.30535-1-rth@twiddle.net>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 05/11/2019 16:28, Christoph Hellwig wrote:
-> On Tue, Nov 05, 2019 at 08:56:27AM +0100, Christian Zigotzky wrote:
->> Hi All,
->>
->> We still have DMA problems with some PCI devices. Since the PowerPC updates
->> 4.21-1 [1] we need to decrease the RAM to 3500MB (mem=3500M) if we want to
->> work with our PCI devices. The FSL P5020 and P5040 have these problems
->> currently.
->>
->> Error message:
->>
->> [   25.654852] bttv 1000:04:05.0: overflow 0x00000000fe077000+4096 of DMA
->> mask ffffffff bus mask df000000
+During patch review for an addition of archrandom.h for arm64, it was
+suggeted that the arch_random_get_* functions should be marked __must_check.
+Which does sound like a good idea, since the by-reference integer output
+may be uninitialized when the boolean result is false.
 
-Hmm, that bus mask looks pretty wacky - are you able to figure out where 
-that's coming from?
+In addition, it turns out that arch_has_random() and arch_has_random_seed()
+are not used, and not easy to support for arm64.  Rather than cobble
+something together that would not be testable, remove the interfaces
+against some future accidental use.
 
-Robin.
+In addition, I noticed a few other minor inconsistencies between the
+different architectures, e.g. powerpc isn't using bool.
 
->> All 5.x Linux kernels can't initialize a SCSI PCI card anymore so booting
->> of a Linux userland isn't possible.
->>
->> PLEASE check the DMA changes in the PowerPC updates 4.21-1 [1]. The kernel
->> 4.20 works with all PCI devices without limitation of RAM.
-> 
-> Can you send me the .config and a dmesg?  And in the meantime try the
-> patch below?
-> 
-> ---
->  From 4d659b7311bd4141fdd3eeeb80fa2d7602ea01d4 Mon Sep 17 00:00:00 2001
-> From: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Date: Fri, 18 Oct 2019 13:00:43 +0200
-> Subject: dma-direct: check for overflows on 32 bit DMA addresses
-> 
-> As seen on the new Raspberry Pi 4 and sta2x11's DMA implementation it is
-> possible for a device configured with 32 bit DMA addresses and a partial
-> DMA mapping located at the end of the address space to overflow. It
-> happens when a higher physical address, not DMAable, is translated to
-> it's DMA counterpart.
-> 
-> For example the Raspberry Pi 4, configurable up to 4 GB of memory, has
-> an interconnect capable of addressing the lower 1 GB of physical memory
-> with a DMA offset of 0xc0000000. It transpires that, any attempt to
-> translate physical addresses higher than the first GB will result in an
-> overflow which dma_capable() can't detect as it only checks for
-> addresses bigger then the maximum allowed DMA address.
-> 
-> Fix this by verifying in dma_capable() if the DMA address range provided
-> is at any point lower than the minimum possible DMA address on the bus.
-> 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> ---
->   include/linux/dma-direct.h | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/include/linux/dma-direct.h b/include/linux/dma-direct.h
-> index adf993a3bd58..6ad9e9ea7564 100644
-> --- a/include/linux/dma-direct.h
-> +++ b/include/linux/dma-direct.h
-> @@ -3,6 +3,7 @@
->   #define _LINUX_DMA_DIRECT_H 1
->   
->   #include <linux/dma-mapping.h>
-> +#include <linux/memblock.h> /* for min_low_pfn */
->   #include <linux/mem_encrypt.h>
->   
->   #ifdef CONFIG_ARCH_HAS_PHYS_TO_DMA
-> @@ -27,6 +28,13 @@ static inline bool dma_capable(struct device *dev, dma_addr_t addr, size_t size)
->   	if (!dev->dma_mask)
->   		return false;
->   
-> +#ifndef CONFIG_ARCH_DMA_ADDR_T_64BIT
-> +	/* Check if DMA address overflowed */
-> +	if (min(addr, addr + size - 1) <
-> +		__phys_to_dma(dev, (phys_addr_t)(min_low_pfn << PAGE_SHIFT)))
-> +		return false;
-> +#endif
-> +
->   	return addr + size - 1 <=
->   		min_not_zero(*dev->dma_mask, dev->bus_dma_mask);
->   }
-> 
+Change since v1:
+  * Remove arch_has_random, arch_has_random_seed.
+
+
+r~
+
+
+Richard Henderson (10):
+  x86: Remove arch_has_random, arch_has_random_seed
+  powerpc: Remove arch_has_random, arch_has_random_seed
+  s390: Remove arch_has_random, arch_has_random_seed
+  linux/random.h: Remove arch_has_random, arch_has_random_seed
+  linux/random.h: Use false with bool
+  linux/random.h: Mark CONFIG_ARCH_RANDOM functions __must_check
+  x86: Mark archrandom.h functions __must_check
+  powerpc: Use bool in archrandom.h
+  powerpc: Mark archrandom.h functions __must_check
+  s390x: Mark archrandom.h functions __must_check
+
+ arch/powerpc/include/asm/archrandom.h | 27 +++++++++-----------------
+ arch/s390/include/asm/archrandom.h    | 20 ++++---------------
+ arch/x86/include/asm/archrandom.h     | 28 ++++++++++++---------------
+ include/linux/random.h                | 24 ++++++++---------------
+ 4 files changed, 33 insertions(+), 66 deletions(-)
+
+-- 
+2.17.1
+
