@@ -2,525 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BB7F1336
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2019 11:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA356F17F8
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2019 15:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728852AbfKFKD3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Nov 2019 05:03:29 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:39249 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727363AbfKFKD2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Nov 2019 05:03:28 -0500
-Received: by mail-oi1-f193.google.com with SMTP id v138so20423564oif.6
-        for <linux-arch@vger.kernel.org>; Wed, 06 Nov 2019 02:03:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oecBSvIUrZfgGbfDkFaP0N9DR+5D4Lv7CuoNOjwV1n8=;
-        b=e9psByQKWX7p/kTzMon5mlLZAxPsBNa71ePYvzcE0u/L6XvINm5TSja9Pk0tzFDm+1
-         0I2RfDYHAAgxQMaIRLEPy6osSYJLwlCZ/CWIihf5r0XOBrrmNfU0uQFtXRAngZINIPTG
-         oaXUtuVgdxjm5uSTfAfvOwrqaidY+u2m46DBJLDftvoRMsmKSXjlC1+qVZbQnZ3DKRP3
-         b320e8p4DyLOPWYYcQnCjGZe8Jsix6KfC6c9R7CP3/rQQyFyYS0sXGCTh5t6dpn+cNT3
-         4lwRtx+vczrmzNDGTlPKQkspcmNEvXmPigkbjkVPQnQjXbZ+NwJ0cyB0yuIiLmnyOnaW
-         gcSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oecBSvIUrZfgGbfDkFaP0N9DR+5D4Lv7CuoNOjwV1n8=;
-        b=uQajysfmE156J9CfhiLmEEPDPo4iNacKIR3YSfPK9BAoGygRKLirSFXG/9zUbACytr
-         vAdXYEv15K++8K+QuYvAq/Zwnk1MCHMpjMGio1y1g3zCkjheS3HhtYgGvnGpi5bJGIH1
-         geIUzXRH7Yv2gHh0kLpN1K3cQ/1DwlFYOJzSb6JTfwa91u0CTpHD1/cIV1pyV8DytJhb
-         BdfqEGBzqHrpqAYgHNMfZzQRNJNuhnDAvokSpMio+uv610zWu1TqfC2ymudpEglHMocA
-         p+pJgLdlfgQlA54phS2FyfAYglw9RY30lOv6Mgk56sPM9myweGU169AABhjEbJwmrOf1
-         Ibcg==
-X-Gm-Message-State: APjAAAU5orDxy5DC43QTSSZrFzFl/NkO074cY6Spgal/jeLcudD6ec0T
-        B9xbz6hQcSZFHoFjxCSxhTqu/e8iwvUb/h4euiW5ww==
-X-Google-Smtp-Source: APXvYqzlo3EP0QaBuW/FJixBYXJCpW9Bg7NtROEx2s/7504Ha4MenBQ0K9KDNNDokx1RK7wTjroNDXe9tGZ+mnBpwc4=
-X-Received: by 2002:aca:4dcc:: with SMTP id a195mr1496135oib.172.1573034606430;
- Wed, 06 Nov 2019 02:03:26 -0800 (PST)
+        id S1727895AbfKFOJd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Nov 2019 09:09:33 -0500
+Received: from foss.arm.com ([217.140.110.172]:40416 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726976AbfKFOJc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 6 Nov 2019 09:09:32 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 106DC30E;
+        Wed,  6 Nov 2019 06:09:32 -0800 (PST)
+Received: from [10.1.196.37] (e121345-lin.cambridge.arm.com [10.1.196.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 346943F6C4;
+        Wed,  6 Nov 2019 06:09:31 -0800 (PST)
+Subject: Re: Bug 205201 - overflow of DMA mask and bus mask
+To:     Christoph Hellwig <hch@lst.de>,
+        Christian Zigotzky <chzigotzky@xenosoft.de>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org
+References: <20181213112511.GA4574@lst.de>
+ <e109de27-f4af-147d-dc0e-067c8bafb29b@xenosoft.de>
+ <ad5a5a8a-d232-d523-a6f7-e9377fc3857b@xenosoft.de>
+ <e60d6ca3-860c-f01d-8860-c5e022ec7179@xenosoft.de>
+ <008c981e-bdd2-21a7-f5f7-c57e4850ae9a@xenosoft.de>
+ <20190103073622.GA24323@lst.de>
+ <71A251A5-FA06-4019-B324-7AED32F7B714@xenosoft.de>
+ <1b0c5c21-2761-d3a3-651b-3687bb6ae694@xenosoft.de>
+ <3504ee70-02de-049e-6402-2d530bf55a84@xenosoft.de>
+ <46025f1b-db20-ac23-7dcd-10bc43bbb6ee@xenosoft.de>
+ <20191105162856.GA15402@lst.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <8b239ba6-29f3-9483-8696-ddfba2a49a49@arm.com>
+Date:   Wed, 6 Nov 2019 14:09:26 +0000
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20191104142745.14722-1-elver@google.com> <20191104142745.14722-2-elver@google.com>
- <CACT4Y+a+ftjHnRx9PD48hEVm98muooHwO0Y7i3cHetTJobRDxg@mail.gmail.com>
-In-Reply-To: <CACT4Y+a+ftjHnRx9PD48hEVm98muooHwO0Y7i3cHetTJobRDxg@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 6 Nov 2019 11:03:14 +0100
-Message-ID: <CANpmjNPednRGHHJ=cUAvsBMxxoVxUSMwZV=Mkqnk5B-jftL3mw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/9] kcsan: Add Kernel Concurrency Sanitizer infrastructure
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Alexander Potapenko <glider@google.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>, Daniel Axtens <dja@axtens.net>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-efi@vger.kernel.org,
-        "open list:KERNEL BUILD + fi..." <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191105162856.GA15402@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Dmitry,
+On 05/11/2019 16:28, Christoph Hellwig wrote:
+> On Tue, Nov 05, 2019 at 08:56:27AM +0100, Christian Zigotzky wrote:
+>> Hi All,
+>>
+>> We still have DMA problems with some PCI devices. Since the PowerPC updates
+>> 4.21-1 [1] we need to decrease the RAM to 3500MB (mem=3500M) if we want to
+>> work with our PCI devices. The FSL P5020 and P5040 have these problems
+>> currently.
+>>
+>> Error message:
+>>
+>> [   25.654852] bttv 1000:04:05.0: overflow 0x00000000fe077000+4096 of DMA
+>> mask ffffffff bus mask df000000
 
-On Wed, 6 Nov 2019 at 10:38, Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Mon, Nov 4, 2019 at 3:28 PM Marco Elver <elver@google.com> wrote:
-> >
-> > Kernel Concurrency Sanitizer (KCSAN) is a dynamic data-race detector for
-> > kernel space. KCSAN is a sampling watchpoint-based data-race detector.
-> > See the included Documentation/dev-tools/kcsan.rst for more details.
-> ...
-> > +static inline atomic_long_t *find_watchpoint(unsigned long addr, size_t size,
-> > +                                            bool expect_write,
-> > +                                            long *encoded_watchpoint)
-> > +{
-> > +       const int slot = watchpoint_slot(addr);
-> > +       const unsigned long addr_masked = addr & WATCHPOINT_ADDR_MASK;
-> > +       atomic_long_t *watchpoint;
-> > +       unsigned long wp_addr_masked;
-> > +       size_t wp_size;
-> > +       bool is_write;
-> > +       int i;
-> > +
-> > +       BUILD_BUG_ON(CONFIG_KCSAN_NUM_WATCHPOINTS < CHECK_NUM_SLOTS);
-> > +
-> > +       for (i = 0; i < CHECK_NUM_SLOTS; ++i) {
-> > +               watchpoint = &watchpoints[SLOT_IDX(slot, i)];
->
->
-> The fast path code become much nicer!
-> I did another pass looking at how we can optimize the fast path.
-> Currently we still have 2 push/pop pairs on the fast path because of
-> register pressure. The logic in SLOT_IDX seems to be the main culprit.
-> We discussed several options offline:
-> 1. Just check 1 slot and ignore all corner cases (we will miss racing
-> unaligned access to different addresses but overlapping and crossing
-> pages, which sounds pretty esoteric)
-> 2. Check 3 slots in order and without wraparound (watchpoints[slot +
-> i], where i=-1,0,1), this will require adding dummy slots around the
-> array
-> 3. An interesting option is to check just 2 slots (that's enough!), to
-> make this work we will need to slightly offset bucket number when
-> setting a watch point (namely, if an access goes to the very end of a
-> page, we set the watchpoint into the bucket corresponding to the
-> _next_ page)
-> All of these options remove push/pop in my experiments. Obviously
-> checking fewer slots will reduce dynamic overhead even more.
->
->
-> > +               *encoded_watchpoint = atomic_long_read(watchpoint);
-> > +               if (!decode_watchpoint(*encoded_watchpoint, &wp_addr_masked,
-> > +                                      &wp_size, &is_write))
-> > +                       continue;
-> > +
-> > +               if (expect_write && !is_write)
-> > +                       continue;
-> > +
-> > +               /* Check if the watchpoint matches the access. */
-> > +               if (matching_access(wp_addr_masked, wp_size, addr_masked, size))
-> > +                       return watchpoint;
-> > +       }
-> > +
-> > +       return NULL;
-> > +}
-> > +
-> > +static inline atomic_long_t *insert_watchpoint(unsigned long addr, size_t size,
-> > +                                              bool is_write)
-> > +{
-> > +       const int slot = watchpoint_slot(addr);
-> > +       const long encoded_watchpoint = encode_watchpoint(addr, size, is_write);
-> > +       atomic_long_t *watchpoint;
-> > +       int i;
-> > +
-> > +       for (i = 0; i < CHECK_NUM_SLOTS; ++i) {
-> > +               long expect_val = INVALID_WATCHPOINT;
-> > +
-> > +               /* Try to acquire this slot. */
-> > +               watchpoint = &watchpoints[SLOT_IDX(slot, i)];
->
-> If we do this SLOT_IDX trickery to catch unaligned accesses crossing
-> pages, then I think we should not use it insert_watchpoint at all and
-> only set the watchpoint to the exact index. Otherwise, we will
-> actually miss the corner cases which defeats the whole purpose of
-> SLOT_IDX and 3 iterations.
->
-> > +               if (atomic_long_try_cmpxchg_relaxed(watchpoint, &expect_val,
-> > +                                                   encoded_watchpoint))
-> > +                       return watchpoint;
-> > +       }
-> > +
-> > +       return NULL;
-> > +}
-> > +
-> > +/*
-> > + * Return true if watchpoint was successfully consumed, false otherwise.
-> > + *
-> > + * This may return false if:
-> > + *
-> > + *     1. another thread already consumed the watchpoint;
-> > + *     2. the thread that set up the watchpoint already removed it;
-> > + *     3. the watchpoint was removed and then re-used.
-> > + */
-> > +static inline bool try_consume_watchpoint(atomic_long_t *watchpoint,
-> > +                                         long encoded_watchpoint)
-> > +{
-> > +       return atomic_long_try_cmpxchg_relaxed(watchpoint, &encoded_watchpoint,
-> > +                                              CONSUMED_WATCHPOINT);
-> > +}
-> > +
-> > +/*
-> > + * Return true if watchpoint was not touched, false if consumed.
-> > + */
-> > +static inline bool remove_watchpoint(atomic_long_t *watchpoint)
-> > +{
-> > +       return atomic_long_xchg_relaxed(watchpoint, INVALID_WATCHPOINT) !=
-> > +              CONSUMED_WATCHPOINT;
-> > +}
-> > +
-> > +static inline struct kcsan_ctx *get_ctx(void)
-> > +{
-> > +       /*
-> > +        * In interrupt, use raw_cpu_ptr to avoid unnecessary checks, that would
-> > +        * also result in calls that generate warnings in uaccess regions.
-> > +        */
-> > +       return in_task() ? &current->kcsan_ctx : raw_cpu_ptr(&kcsan_cpu_ctx);
-> > +}
-> > +
-> > +static inline bool is_atomic(const volatile void *ptr)
-> > +{
-> > +       struct kcsan_ctx *ctx = get_ctx();
-> > +
-> > +       if (unlikely(ctx->atomic_next > 0)) {
-> > +               --ctx->atomic_next;
-> > +               return true;
-> > +       }
-> > +       if (unlikely(ctx->atomic_nest_count > 0 || ctx->in_flat_atomic))
-> > +               return true;
-> > +
-> > +       return kcsan_is_atomic(ptr);
-> > +}
-> > +
-> > +static inline bool should_watch(const volatile void *ptr, int type)
-> > +{
-> > +       /*
-> > +        * Never set up watchpoints when memory operations are atomic.
-> > +        *
-> > +        * Need to check this first, before kcsan_skip check below: (1) atomics
-> > +        * should not count towards skipped instructions, and (2) to actually
-> > +        * decrement kcsan_atomic_next for consecutive instruction stream.
-> > +        */
-> > +       if ((type & KCSAN_ACCESS_ATOMIC) != 0 || is_atomic(ptr))
-> > +               return false;
->
-> should_watch and is_atomic are invoked on the fast path and do more
-> things than strictly necessary.
-> The minimal amount of actions would be:
->  - check and decrement ctx->atomic_next for atomic accesses
->  - decrement kcsan_skip
->
-> atomic_nest_count/in_flat_atomic/kcsan_is_atomic can be checked on
-> uninlined slow path.
->
-> It should not be necessary to set kcsan_skip to -1 if we _always_
-> resetup kcsan_skip on slow path.
->
-> > +       if (this_cpu_dec_return(kcsan_skip) >= 0)
-> > +               return false;
-> > +
-> > +       /* avoid underflow if !kcsan_is_enabled() */
-> > +       this_cpu_write(kcsan_skip, -1);
-> > +
-> > +       /* this operation should be watched */
-> > +       return true;
-> > +}
-> > +
-> > +static inline void reset_kcsan_skip(void)
-> > +{
-> > +       long skip_count = CONFIG_KCSAN_SKIP_WATCH -
-> > +                         (IS_ENABLED(CONFIG_KCSAN_SKIP_WATCH_RANDOMIZE) ?
-> > +                                  prandom_u32_max(CONFIG_KCSAN_SKIP_WATCH) :
-> > +                                  0);
-> > +       this_cpu_write(kcsan_skip, skip_count);
-> > +}
-> > +
-> > +static inline bool kcsan_is_enabled(void)
-> > +{
-> > +       return READ_ONCE(kcsan_enabled) && get_ctx()->disable_count == 0;
-> > +}
-> > +
-> > +static inline unsigned int get_delay(void)
-> > +{
-> > +       unsigned int delay = in_task() ? CONFIG_KCSAN_UDELAY_TASK :
-> > +                                        CONFIG_KCSAN_UDELAY_INTERRUPT;
-> > +       return delay - (IS_ENABLED(CONFIG_KCSAN_DELAY_RANDOMIZE) ?
-> > +                               prandom_u32_max(delay) :
-> > +                               0);
-> > +}
-> > +
-> > +/*
-> > + * Pull everything together: check_access() below contains the performance
-> > + * critical operations; the fast-path (including check_access) functions should
-> > + * all be inlinable by the instrumentation functions.
-> > + *
-> > + * The slow-path (kcsan_found_watchpoint, kcsan_setup_watchpoint) are
-> > + * non-inlinable -- note that, we prefix these with "kcsan_" to ensure they can
-> > + * be filtered from the stacktrace, as well as give them unique names for the
-> > + * UACCESS whitelist of objtool. Each function uses user_access_save/restore(),
-> > + * since they do not access any user memory, but instrumentation is still
-> > + * emitted in UACCESS regions.
-> > + */
-> > +
-> > +static noinline void kcsan_found_watchpoint(const volatile void *ptr,
-> > +                                           size_t size, bool is_write,
-> > +                                           bool consumed)
-> > +{
-> > +       unsigned long flags = user_access_save();
-> > +       enum kcsan_report_type report_type;
-> > +
-> > +       if (!consumed) {
-> > +               /*
-> > +                * The other thread may not print any diagnostics, as it has
-> > +                * already removed the watchpoint, or another thread consumed
-> > +                * the watchpoint before this thread.
-> > +                */
-> > +               kcsan_counter_inc(KCSAN_COUNTER_REPORT_RACES);
-> > +               report_type = KCSAN_REPORT_RACE_CHECK_RACE;
-> > +       } else {
-> > +               report_type = KCSAN_REPORT_RACE_CHECK;
-> > +       }
-> > +
-> > +       kcsan_counter_inc(KCSAN_COUNTER_DATA_RACES);
-> > +       kcsan_report(ptr, size, is_write, raw_smp_processor_id(), report_type);
-> > +
-> > +       user_access_restore(flags);
-> > +}
-> > +
-> > +static noinline void kcsan_setup_watchpoint(const volatile void *ptr,
-> > +                                           size_t size, bool is_write)
-> > +{
-> > +       atomic_long_t *watchpoint;
-> > +       union {
-> > +               u8 _1;
-> > +               u16 _2;
-> > +               u32 _4;
-> > +               u64 _8;
-> > +       } expect_value;
-> > +       bool is_expected = true;
-> > +       unsigned long ua_flags = user_access_save();
-> > +       unsigned long irq_flags;
-> > +
-> > +       if (!check_encodable((unsigned long)ptr, size)) {
-> > +               kcsan_counter_inc(KCSAN_COUNTER_UNENCODABLE_ACCESSES);
-> > +               goto out;
-> > +       }
-> > +
-> > +       /*
-> > +        * Disable interrupts & preemptions to avoid another thread on the same
-> > +        * CPU accessing memory locations for the set up watchpoint; this is to
-> > +        * avoid reporting races to e.g. CPU-local data.
-> > +        *
-> > +        * An alternative would be adding the source CPU to the watchpoint
-> > +        * encoding, and checking that watchpoint-CPU != this-CPU. There are
-> > +        * several problems with this:
-> > +        *   1. we should avoid stealing more bits from the watchpoint encoding
-> > +        *      as it would affect accuracy, as well as increase performance
-> > +        *      overhead in the fast-path;
-> > +        *   2. if we are preempted, but there *is* a genuine data race, we
-> > +        *      would *not* report it -- since this is the common case (vs.
-> > +        *      CPU-local data accesses), it makes more sense (from a data race
-> > +        *      detection point of view) to simply disable preemptions to ensure
-> > +        *      as many tasks as possible run on other CPUs.
-> > +        */
-> > +       local_irq_save(irq_flags);
-> > +
-> > +       watchpoint = insert_watchpoint((unsigned long)ptr, size, is_write);
-> > +       if (watchpoint == NULL) {
-> > +               /*
-> > +                * Out of capacity: the size of `watchpoints`, and the frequency
-> > +                * with which `should_watch()` returns true should be tweaked so
-> > +                * that this case happens very rarely.
-> > +                */
-> > +               kcsan_counter_inc(KCSAN_COUNTER_NO_CAPACITY);
-> > +               goto out_unlock;
-> > +       }
-> > +
-> > +       /*
-> > +        * Reset kcsan_skip counter: only do this if we succeeded in setting up
-> > +        * a watchpoint.
-> > +        */
-> > +       reset_kcsan_skip();
-> > +
-> > +       kcsan_counter_inc(KCSAN_COUNTER_SETUP_WATCHPOINTS);
-> > +       kcsan_counter_inc(KCSAN_COUNTER_USED_WATCHPOINTS);
-> > +
-> > +       /*
-> > +        * Read the current value, to later check and infer a race if the data
-> > +        * was modified via a non-instrumented access, e.g. from a device.
-> > +        */
-> > +       switch (size) {
-> > +       case 1:
-> > +               expect_value._1 = READ_ONCE(*(const u8 *)ptr);
-> > +               break;
-> > +       case 2:
-> > +               expect_value._2 = READ_ONCE(*(const u16 *)ptr);
-> > +               break;
-> > +       case 4:
-> > +               expect_value._4 = READ_ONCE(*(const u32 *)ptr);
-> > +               break;
-> > +       case 8:
-> > +               expect_value._8 = READ_ONCE(*(const u64 *)ptr);
-> > +               break;
-> > +       default:
-> > +               break; /* ignore; we do not diff the values */
-> > +       }
-> > +
-> > +       if (IS_ENABLED(CONFIG_KCSAN_DEBUG)) {
-> > +               kcsan_disable_current();
-> > +               pr_err("KCSAN: watching %s, size: %zu, addr: %px [slot: %d, encoded: %lx]\n",
-> > +                      is_write ? "write" : "read", size, ptr,
-> > +                      watchpoint_slot((unsigned long)ptr),
-> > +                      encode_watchpoint((unsigned long)ptr, size, is_write));
-> > +               kcsan_enable_current();
-> > +       }
-> > +
-> > +       /*
-> > +        * Delay this thread, to increase probability of observing a racy
-> > +        * conflicting access.
-> > +        */
-> > +       udelay(get_delay());
-> > +
-> > +       /*
-> > +        * Re-read value, and check if it is as expected; if not, we infer a
-> > +        * racy access.
-> > +        */
-> > +       switch (size) {
-> > +       case 1:
-> > +               is_expected = expect_value._1 == READ_ONCE(*(const u8 *)ptr);
-> > +               break;
-> > +       case 2:
-> > +               is_expected = expect_value._2 == READ_ONCE(*(const u16 *)ptr);
-> > +               break;
-> > +       case 4:
-> > +               is_expected = expect_value._4 == READ_ONCE(*(const u32 *)ptr);
-> > +               break;
-> > +       case 8:
-> > +               is_expected = expect_value._8 == READ_ONCE(*(const u64 *)ptr);
-> > +               break;
-> > +       default:
-> > +               break; /* ignore; we do not diff the values */
-> > +       }
-> > +
-> > +       /* Check if this access raced with another. */
-> > +       if (!remove_watchpoint(watchpoint)) {
-> > +               /*
-> > +                * No need to increment 'data_races' counter, as the racing
-> > +                * thread already did.
-> > +                */
-> > +               kcsan_report(ptr, size, is_write, smp_processor_id(),
-> > +                            KCSAN_REPORT_RACE_SETUP);
-> > +       } else if (!is_expected) {
-> > +               /* Inferring a race, since the value should not have changed. */
-> > +               kcsan_counter_inc(KCSAN_COUNTER_RACES_UNKNOWN_ORIGIN);
-> > +               if (IS_ENABLED(CONFIG_KCSAN_REPORT_RACE_UNKNOWN_ORIGIN))
-> > +                       kcsan_report(ptr, size, is_write, smp_processor_id(),
-> > +                                    KCSAN_REPORT_RACE_UNKNOWN_ORIGIN);
-> > +       }
-> > +
-> > +       kcsan_counter_dec(KCSAN_COUNTER_USED_WATCHPOINTS);
-> > +out_unlock:
-> > +       local_irq_restore(irq_flags);
-> > +out:
-> > +       user_access_restore(ua_flags);
-> > +}
-> > +
-> > +static inline void check_access(const volatile void *ptr, size_t size, int type)
-> > +{
-> > +       const bool is_write = (type & KCSAN_ACCESS_WRITE) != 0;
-> > +       atomic_long_t *watchpoint;
-> > +       long encoded_watchpoint;
-> > +
-> > +       if (IS_ENABLED(CONFIG_KCSAN_PLAIN_WRITE_PRETEND_ONCE) && is_write)
-> > +               type |= KCSAN_ACCESS_ATOMIC;
-> > +
-> > +       /*
-> > +        * Avoid user_access_save in fast-path: find_watchpoint is safe without
-> > +        * user_access_save, as the address that ptr points to is only used to
-> > +        * check if a watchpoint exists; ptr is never dereferenced.
-> > +        */
-> > +       watchpoint = find_watchpoint((unsigned long)ptr, size, !is_write,
-> > +                                    &encoded_watchpoint);
-> > +
-> > +       /*
-> > +        * It is safe to check kcsan_is_enabled() after find_watchpoint, but
-> > +        * right before we would enter the slow-path: no state changes that
-> > +        * cause a data race to be detected and reported have occurred yet.
-> > +        */
-> > +
-> > +       if (unlikely(watchpoint != NULL) && kcsan_is_enabled()) {
->
-> I would move kcsan_is_enabled and the rest of the code in the branch
-> into non-inlined slow path.
-> It makes the hot function much shorter.
-> There is a trick related to number of arguments, though. We would need
-> to pass ptr, size, is_write, watchpoint and encoded_watchpoint. That's
-> 5 arguments. Only 4 are passed in registers. So it may make sense to
-> combine size and type into a single word. On the inlined fast path
-> compiler packs/unpacks that statically, so it does not matter. But for
-> the function call it will just forward a single const.
->
->
-> > +               /*
-> > +                * Try consume the watchpoint as soon after finding the
-> > +                * watchpoint as possible; this must always be guarded by
-> > +                * kcsan_is_enabled() check, as otherwise we might erroneously
-> > +                * triggering reports when disabled.
-> > +                */
-> > +               const bool consumed =
-> > +                       try_consume_watchpoint(watchpoint, encoded_watchpoint);
-> > +
-> > +               kcsan_found_watchpoint(ptr, size, is_write, consumed);
-> > +       } else if (unlikely(should_watch(ptr, type)) && kcsan_is_enabled()) {
->
-> I would move kcsan_is_enabled check into kcsan_setup_watchpoint. It's
-> not executed on fast path, but bloats the host function code.
->
-> > +               kcsan_setup_watchpoint(ptr, size, is_write);
-> > +       }
-> > +}
+Hmm, that bus mask looks pretty wacky - are you able to figure out where 
+that's coming from?
 
-Thanks! I will work on these. My only worry is that some of these
-might overcomplicate the code with no measurable gain. I will try to
-find a balance here.
+Robin.
 
-Will send v4 then.
-
-Thanks,
--- Marco
+>> All 5.x Linux kernels can't initialize a SCSI PCI card anymore so booting
+>> of a Linux userland isn't possible.
+>>
+>> PLEASE check the DMA changes in the PowerPC updates 4.21-1 [1]. The kernel
+>> 4.20 works with all PCI devices without limitation of RAM.
+> 
+> Can you send me the .config and a dmesg?  And in the meantime try the
+> patch below?
+> 
+> ---
+>  From 4d659b7311bd4141fdd3eeeb80fa2d7602ea01d4 Mon Sep 17 00:00:00 2001
+> From: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Date: Fri, 18 Oct 2019 13:00:43 +0200
+> Subject: dma-direct: check for overflows on 32 bit DMA addresses
+> 
+> As seen on the new Raspberry Pi 4 and sta2x11's DMA implementation it is
+> possible for a device configured with 32 bit DMA addresses and a partial
+> DMA mapping located at the end of the address space to overflow. It
+> happens when a higher physical address, not DMAable, is translated to
+> it's DMA counterpart.
+> 
+> For example the Raspberry Pi 4, configurable up to 4 GB of memory, has
+> an interconnect capable of addressing the lower 1 GB of physical memory
+> with a DMA offset of 0xc0000000. It transpires that, any attempt to
+> translate physical addresses higher than the first GB will result in an
+> overflow which dma_capable() can't detect as it only checks for
+> addresses bigger then the maximum allowed DMA address.
+> 
+> Fix this by verifying in dma_capable() if the DMA address range provided
+> is at any point lower than the minimum possible DMA address on the bus.
+> 
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> ---
+>   include/linux/dma-direct.h | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/include/linux/dma-direct.h b/include/linux/dma-direct.h
+> index adf993a3bd58..6ad9e9ea7564 100644
+> --- a/include/linux/dma-direct.h
+> +++ b/include/linux/dma-direct.h
+> @@ -3,6 +3,7 @@
+>   #define _LINUX_DMA_DIRECT_H 1
+>   
+>   #include <linux/dma-mapping.h>
+> +#include <linux/memblock.h> /* for min_low_pfn */
+>   #include <linux/mem_encrypt.h>
+>   
+>   #ifdef CONFIG_ARCH_HAS_PHYS_TO_DMA
+> @@ -27,6 +28,13 @@ static inline bool dma_capable(struct device *dev, dma_addr_t addr, size_t size)
+>   	if (!dev->dma_mask)
+>   		return false;
+>   
+> +#ifndef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> +	/* Check if DMA address overflowed */
+> +	if (min(addr, addr + size - 1) <
+> +		__phys_to_dma(dev, (phys_addr_t)(min_low_pfn << PAGE_SHIFT)))
+> +		return false;
+> +#endif
+> +
+>   	return addr + size - 1 <=
+>   		min_not_zero(*dev->dma_mask, dev->bus_dma_mask);
+>   }
+> 
