@@ -2,108 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB987F181E
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2019 15:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FBBF19FC
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2019 16:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731904AbfKFOOB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Nov 2019 09:14:01 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:50433 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731920AbfKFONl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Nov 2019 09:13:41 -0500
-Received: by mail-wm1-f65.google.com with SMTP id 11so3633740wmk.0
-        for <linux-arch@vger.kernel.org>; Wed, 06 Nov 2019 06:13:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=EtW7c5+Vxuw361NPgarxEa4pkxF91xrS2XEr4qnN4jI=;
-        b=e5nNk39VJ5IOgRqdcXf58JkLAmLsag2O4+U458JjYo5P0PSEMekSFRL7LZc2d3m3VJ
-         URQyFUvE8jMn4eVvMtPS4S4bwU+o51HOhtfgwYme4dhoLAOHd8OHl1q5buqF/oxhumhw
-         +z3jc1g7Ck1yBgoUiT30MrVfaQcI9SAZcV6//J2C/MjC41OM02IYNasElc3UDquPybqb
-         baWyh7WRSDEfEhipTjcqjxsGo/IM/qSUCmUCE5UrGsB4dj0txgaPvPHy4E6e/8b6xTks
-         +7wsbS1O4VTbwJoSISfsP2WPk3MvEuhRHnX4Tq6FkCgrC9KgWh7M7bDPmgQZAuRo+xGE
-         Q0vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=EtW7c5+Vxuw361NPgarxEa4pkxF91xrS2XEr4qnN4jI=;
-        b=tPC7tyUG57ctDNbrV+sTZ2ngfKOsz2cgNrCcanYp7k6J1kV/+Hl34/g5x6SoKv6XJC
-         yF0U88YNh1MkV9h0fRApdZ5/QDCMTKOqhfistaPG6SkvL03LFVVK1Z4ma3nsTCTFL/e2
-         UhQiwtixZq0C7WmHNwYVgEL+iiYFLohcVBxxc99ssfl2DJQB2MoreegFS4Jca68xa2bB
-         xlA+Y/b9l3JhGkXan5+MJliRfiPcvyMxzP+QWIoT62hQ0mFKHC7g0W05Sztri7NuLJvD
-         mX7zkcXVhrcxI7XHMc3Pa4VOmH7VBLiGaUd307dfOZqSDx4V0yYsmnRoI3KEOx6Hwxhs
-         m/XQ==
-X-Gm-Message-State: APjAAAXxRK3rKoPISHAmCZFxXO9Hq2EvAcxyi9LGehSON6FYSufeJDj8
-        BxR9kYLnnAhfWu6ep0I+nWymuQ==
-X-Google-Smtp-Source: APXvYqwQkS3HkPb4xqO71j4GDBQsJDOPu6hiWKUGgF3l2gy8AO8EiMAAlXbkknCw6t0pwT+ISh1RMQ==
-X-Received: by 2002:a7b:c776:: with SMTP id x22mr2609658wmk.144.1573049619319;
-        Wed, 06 Nov 2019 06:13:39 -0800 (PST)
-Received: from localhost.localdomain (31.red-176-87-122.dynamicip.rima-tde.net. [176.87.122.31])
-        by smtp.gmail.com with ESMTPSA id b3sm2837556wma.13.2019.11.06.06.13.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2019 06:13:38 -0800 (PST)
-From:   Richard Henderson <richard.henderson@linaro.org>
-X-Google-Original-From: Richard Henderson <rth@twiddle.net>
-To:     linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, linux-arch@vger.kernel.org,
-        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 10/10] s390x: Mark archrandom.h functions __must_check
-Date:   Wed,  6 Nov 2019 15:13:08 +0100
-Message-Id: <20191106141308.30535-11-rth@twiddle.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191106141308.30535-1-rth@twiddle.net>
-References: <20191106141308.30535-1-rth@twiddle.net>
+        id S1727427AbfKFP2i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Nov 2019 10:28:38 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:45388 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727548AbfKFP2h (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Nov 2019 10:28:37 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA6FJ0cO030936;
+        Wed, 6 Nov 2019 15:26:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=Gp/4+tA+nfk9rlLajbtqYFNVsFBZek7aLAZWT5/6WUc=;
+ b=BGQBi3FnQ2UbVGpzikZN7H51H+NOmA1Z8WfOGWs5QJLjSZQdcjoKH6MPDxxhI9WyLu58
+ hMto282idxf3nuu7tonotXWJPGeR26BZaxViPDR6B16zooEIDqL4aP/GVkaDbMQ75Xid
+ gGrfPzCyhTwhzc3n4gq6yzbRbnYxTQSNjMhwfILlucCekThONZbPkHvSHblBJy9b2bXM
+ Sm4kxeZaMRCSGVYJuyIgwWPjA7tYx5Lkp38F0XRXg1EA7oyLQ8rE3z5LVzFe8Va6M7uN
+ iVX0L9Fz3kJzKTsAAAWrpHLQ3wdti/dUjovUw6icBV9RIuhwVqn3rgjiJ2RmPPHgBTM8 4g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2w12erf7tu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Nov 2019 15:26:49 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA6FONKa113587;
+        Wed, 6 Nov 2019 15:26:48 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2w35pr7wuj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Nov 2019 15:26:48 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xA6FQkiH011641;
+        Wed, 6 Nov 2019 15:26:47 GMT
+Received: from [10.39.238.145] (/10.39.238.145)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 06 Nov 2019 07:26:46 -0800
+Subject: Re: [patch V2 01/17] x86/entry/32: Remove unused resume_userspace
+ label
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-arch@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>
+References: <20191023122705.198339581@linutronix.de>
+ <20191023123117.686514045@linutronix.de>
+From:   Alexandre Chartre <alexandre.chartre@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <92929be8-d936-75b9-80c0-368d7f33162a@oracle.com>
+Date:   Wed, 6 Nov 2019 16:26:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
+MIME-Version: 1.0
+In-Reply-To: <20191023123117.686514045@linutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9433 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1911060150
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9433 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1911060150
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We must not use the pointer output without validating the
-success of the random read.
 
-Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Richard Henderson <rth@twiddle.net>
----
- arch/s390/include/asm/archrandom.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On 10/23/19 2:27 PM, Thomas Gleixner wrote:
+> The C reimplementation of SYSENTER left that unused ENTRY() label
+> around. Remove it.
+> 
+> Fixes: 5f310f739b4c ("x86/entry/32: Re-implement SYSENTER using the new C path")
+> Originally-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>   arch/x86/entry/entry_32.S |    1 -
+>   1 file changed, 1 deletion(-)
+> 
 
-diff --git a/arch/s390/include/asm/archrandom.h b/arch/s390/include/asm/archrandom.h
-index 9a6835137a16..de61ce562052 100644
---- a/arch/s390/include/asm/archrandom.h
-+++ b/arch/s390/include/asm/archrandom.h
-@@ -21,17 +21,17 @@ extern atomic64_t s390_arch_random_counter;
- 
- bool s390_arch_random_generate(u8 *buf, unsigned int nbytes);
- 
--static inline bool arch_get_random_long(unsigned long *v)
-+static inline bool __must_check arch_get_random_long(unsigned long *v)
- {
- 	return false;
- }
- 
--static inline bool arch_get_random_int(unsigned int *v)
-+static inline bool __must_check arch_get_random_int(unsigned int *v)
- {
- 	return false;
- }
- 
--static inline bool arch_get_random_seed_long(unsigned long *v)
-+static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
- {
- 	if (static_branch_likely(&s390_arch_random_available)) {
- 		return s390_arch_random_generate((u8 *)v, sizeof(*v));
-@@ -39,7 +39,7 @@ static inline bool arch_get_random_seed_long(unsigned long *v)
- 	return false;
- }
- 
--static inline bool arch_get_random_seed_int(unsigned int *v)
-+static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
- {
- 	if (static_branch_likely(&s390_arch_random_available)) {
- 		return s390_arch_random_generate((u8 *)v, sizeof(*v));
--- 
-2.17.1
+Reviewed-by: Alexandre Chartre <alexandre.chartre@oracle.com>
 
+alex.
