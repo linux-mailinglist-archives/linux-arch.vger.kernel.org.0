@@ -2,798 +2,223 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2204F35E5
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Nov 2019 18:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CD2F364C
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Nov 2019 18:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730009AbfKGRlK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Nov 2019 12:41:10 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:51374 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727132AbfKGRlJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Nov 2019 12:41:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=lnLOVpQdpg/WXuB9MxQ8JFYhZaENZTFWxiP/OhMVsRk=; b=d8E72FmQdvR38A8RpWVMsV8Mf
-        +JqYCCQm5uf4bsYr+IuhfB9CTCDqm+DG1gr7xOF7XlsEbFqO0KzDw7MhdIlM5jTmPf5NJZ+r4THUf
-        L+kDdHvtsiVdeADpxzHPVNiEI63fAsSyHyJjkYjE/rGitdCA5R9cY2IIJi/BLl+b/q6t77+l4Wm1J
-        EYTxz7g2ri+/1vQOUZYr1otLoFEO9o2lLYWOTJjbT4pEH7EskxhE98JnSN4qNKmRPX80lATDXWCJy
-        TRJBJlPNigqqdrdVpXgv+GbV/17j186IYQYrLPaTWSPRMyISqNhi0CqdJY91cwxx7Ok4wOWgvWoWG
-        gYejiOYMw==;
-Received: from [2001:4bb8:184:e48:c70:4a89:bc61:2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iSlmO-0002sZ-R5; Thu, 07 Nov 2019 17:41:09 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org
-Subject: [PATCH] dma-mapping: drop the dev argument to arch_sync_dma_for_*
-Date:   Thu,  7 Nov 2019 18:41:05 +0100
-Message-Id: <20191107174105.13842-1-hch@lst.de>
-X-Mailer: git-send-email 2.20.1
+        id S1730478AbfKGRyU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Nov 2019 12:54:20 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:60368 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730110AbfKGRyU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Nov 2019 12:54:20 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA7Hj18W001450;
+        Thu, 7 Nov 2019 17:53:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=corp-2019-08-05;
+ bh=cP3odovDn+b8l22dKmKV8q2Mp2Ep7jYU9ngn8YvoPEM=;
+ b=kkeppDWvq5LseXZ7DDEvhTVO157mnZGu2hk+C2ampz6VYdXmimU/BI55qnSltRC7wvqb
+ JvK2X4EoTDAz19GgqiYLpegozuIkVm0ah6krBTu2h0njH2HQ1GX2zUNHW7pzerIEL4/L
+ rclTXKC5HUVechhOgMd7MbdTXECda04KULLkYhowwdzlw38jQ/U7r+lWut8Er6RDshBv
+ ZgkmtJxp2yTq5G4Qb8NvQ7+eXbg37waxFHbdxPFnxgaEWAcgH76lj5gm+VWPCqZQ76mD
+ XeBGa/sifmgf3XhFQL1tJIShcNhm3xaVI/5A5SIu0cDfjl41yYlQljQpsyQXBwl0X7K/ yQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2w41w0yx6t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Nov 2019 17:53:28 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA7Hj29l038325;
+        Thu, 7 Nov 2019 17:51:27 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2w41wffu1d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Nov 2019 17:51:27 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xA7HpHGR009182;
+        Thu, 7 Nov 2019 17:51:17 GMT
+Received: from neelam.us.oracle.com (/10.152.128.16)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 07 Nov 2019 09:51:16 -0800
+From:   Alex Kogan <alex.kogan@oracle.com>
+To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
+        will.deacon@arm.com, arnd@arndb.de, longman@redhat.com,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
+        jglauber@marvell.com
+Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        alex.kogan@oracle.com, dave.dice@oracle.com,
+        rahul.x.yadav@oracle.com
+Subject: [PATCH v6 0/5] Add NUMA-awareness to qspinlock
+Date:   Thu,  7 Nov 2019 12:46:17 -0500
+Message-Id: <20191107174622.61718-1-alex.kogan@oracle.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9434 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1910280000 definitions=main-1911070165
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9434 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
+ definitions=main-1911070165
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-These are pure cache maintainance routines, so drop the unused
-struct device argument.
+Minor changes from v5, mainly based on feedback from Longman:
+-------------------------------------------------------------
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/arc/mm/dma.c                 |  8 ++++----
- arch/arm/mm/dma-mapping.c         |  8 ++++----
- arch/arm/xen/mm.c                 | 12 ++++++------
- arch/arm64/mm/dma-mapping.c       |  8 ++++----
- arch/c6x/mm/dma-coherent.c        |  8 ++++----
- arch/csky/mm/dma-mapping.c        |  8 ++++----
- arch/hexagon/kernel/dma.c         |  4 ++--
- arch/ia64/mm/init.c               |  4 ++--
- arch/m68k/kernel/dma.c            |  4 ++--
- arch/microblaze/kernel/dma.c      |  8 ++++----
- arch/mips/bmips/dma.c             |  2 +-
- arch/mips/jazz/jazzdma.c          | 17 ++++++++---------
- arch/mips/mm/dma-noncoherent.c    |  8 ++++----
- arch/nds32/kernel/dma.c           |  8 ++++----
- arch/nios2/mm/dma-mapping.c       |  8 ++++----
- arch/openrisc/kernel/dma.c        |  2 +-
- arch/parisc/kernel/pci-dma.c      |  8 ++++----
- arch/powerpc/mm/dma-noncoherent.c |  8 ++++----
- arch/sh/kernel/dma-coherent.c     |  6 +++---
- arch/sparc/kernel/ioport.c        |  4 ++--
- arch/xtensa/kernel/pci-dma.c      |  8 ++++----
- drivers/iommu/dma-iommu.c         | 10 +++++-----
- drivers/xen/swiotlb-xen.c         |  8 ++++----
- include/linux/dma-noncoherent.h   | 20 ++++++++++----------
- include/xen/swiotlb-xen.h         |  8 ++++----
- kernel/dma/direct.c               | 14 +++++++-------
- 26 files changed, 105 insertions(+), 106 deletions(-)
+- Make the intra node handoff threshold a configurable parameter 
+via the new kernel boot command-line option "numa_spinlock_threshold".
 
-diff --git a/arch/arc/mm/dma.c b/arch/arc/mm/dma.c
-index 73a7e88a1e92..e947572a521e 100644
---- a/arch/arc/mm/dma.c
-+++ b/arch/arc/mm/dma.c
-@@ -48,8 +48,8 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
-  * upper layer functions (in include/linux/dma-mapping.h)
-  */
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	switch (dir) {
- 	case DMA_TO_DEVICE:
-@@ -69,8 +69,8 @@ void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
- 	}
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	switch (dir) {
- 	case DMA_TO_DEVICE:
-diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
-index f3cbeba7f9cb..da1a32b5e192 100644
---- a/arch/arm/mm/dma-mapping.c
-+++ b/arch/arm/mm/dma-mapping.c
-@@ -2332,15 +2332,15 @@ void arch_teardown_dma_ops(struct device *dev)
- }
- 
- #ifdef CONFIG_SWIOTLB
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	__dma_page_cpu_to_dev(phys_to_page(paddr), paddr & (PAGE_SIZE - 1),
- 			      size, dir);
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	__dma_page_dev_to_cpu(phys_to_page(paddr), paddr & (PAGE_SIZE - 1),
- 			      size, dir);
-diff --git a/arch/arm/xen/mm.c b/arch/arm/xen/mm.c
-index 38fa917c8585..a6a2514e5fe8 100644
---- a/arch/arm/xen/mm.c
-+++ b/arch/arm/xen/mm.c
-@@ -70,20 +70,20 @@ static void dma_cache_maint(dma_addr_t handle, size_t size, u32 op)
-  * pfn_valid returns true the pages is local and we can use the native
-  * dma-direct functions, otherwise we call the Xen specific version.
-  */
--void xen_dma_sync_for_cpu(struct device *dev, dma_addr_t handle,
--		phys_addr_t paddr, size_t size, enum dma_data_direction dir)
-+void xen_dma_sync_for_cpu(dma_addr_t handle, phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	if (pfn_valid(PFN_DOWN(handle)))
--		arch_sync_dma_for_cpu(dev, paddr, size, dir);
-+		arch_sync_dma_for_cpu(paddr, size, dir);
- 	else if (dir != DMA_TO_DEVICE)
- 		dma_cache_maint(handle, size, GNTTAB_CACHE_INVAL);
- }
- 
--void xen_dma_sync_for_device(struct device *dev, dma_addr_t handle,
--		phys_addr_t paddr, size_t size, enum dma_data_direction dir)
-+void xen_dma_sync_for_device(dma_addr_t handle, phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	if (pfn_valid(PFN_DOWN(handle)))
--		arch_sync_dma_for_device(dev, paddr, size, dir);
-+		arch_sync_dma_for_device(paddr, size, dir);
- 	else if (dir == DMA_FROM_DEVICE)
- 		dma_cache_maint(handle, size, GNTTAB_CACHE_INVAL);
- 	else
-diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
-index 9239416e93d4..6c45350e33aa 100644
---- a/arch/arm64/mm/dma-mapping.c
-+++ b/arch/arm64/mm/dma-mapping.c
-@@ -13,14 +13,14 @@
- 
- #include <asm/cacheflush.h>
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	__dma_map_area(phys_to_virt(paddr), size, dir);
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	__dma_unmap_area(phys_to_virt(paddr), size, dir);
- }
-diff --git a/arch/c6x/mm/dma-coherent.c b/arch/c6x/mm/dma-coherent.c
-index b319808e8f6b..399ceb3f167d 100644
---- a/arch/c6x/mm/dma-coherent.c
-+++ b/arch/c6x/mm/dma-coherent.c
-@@ -160,14 +160,14 @@ static void c6x_dma_sync(struct device *dev, phys_addr_t paddr, size_t size,
- 	}
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	return c6x_dma_sync(dev, paddr, size, dir);
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	return c6x_dma_sync(dev, paddr, size, dir);
- }
-diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-index 06e85b565454..8f6571ae27c8 100644
---- a/arch/csky/mm/dma-mapping.c
-+++ b/arch/csky/mm/dma-mapping.c
-@@ -58,8 +58,8 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
- 	cache_op(page_to_phys(page), size, dma_wbinv_set_zero_range);
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--			      size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	switch (dir) {
- 	case DMA_TO_DEVICE:
-@@ -74,8 +74,8 @@ void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
- 	}
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--			   size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	switch (dir) {
- 	case DMA_TO_DEVICE:
-diff --git a/arch/hexagon/kernel/dma.c b/arch/hexagon/kernel/dma.c
-index f561b127c4b4..25f388d9cfcc 100644
---- a/arch/hexagon/kernel/dma.c
-+++ b/arch/hexagon/kernel/dma.c
-@@ -55,8 +55,8 @@ void arch_dma_free(struct device *dev, size_t size, void *vaddr,
- 	gen_pool_free(coherent_pool, (unsigned long) vaddr, size);
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	void *addr = phys_to_virt(paddr);
- 
-diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
-index bf9df2625bc8..58fd67068bac 100644
---- a/arch/ia64/mm/init.c
-+++ b/arch/ia64/mm/init.c
-@@ -73,8 +73,8 @@ __ia64_sync_icache_dcache (pte_t pte)
-  * DMA can be marked as "clean" so that lazy_mmu_prot_update() doesn't have to
-  * flush them when they get mapped into an executable vm-area.
-  */
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	unsigned long pfn = PHYS_PFN(paddr);
- 
-diff --git a/arch/m68k/kernel/dma.c b/arch/m68k/kernel/dma.c
-index 3fab684cc0db..871a0e11da34 100644
---- a/arch/m68k/kernel/dma.c
-+++ b/arch/m68k/kernel/dma.c
-@@ -61,8 +61,8 @@ void arch_dma_free(struct device *dev, size_t size, void *vaddr,
- 
- #endif /* CONFIG_MMU && !CONFIG_COLDFIRE */
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t handle,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t handle, size_t size,
-+		enum dma_data_direction dir)
- {
- 	switch (dir) {
- 	case DMA_BIDIRECTIONAL:
-diff --git a/arch/microblaze/kernel/dma.c b/arch/microblaze/kernel/dma.c
-index a89c2d4ed5ff..a9016c5ff5a4 100644
---- a/arch/microblaze/kernel/dma.c
-+++ b/arch/microblaze/kernel/dma.c
-@@ -31,14 +31,14 @@ static void __dma_sync(struct device *dev, phys_addr_t paddr, size_t size,
- 	}
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	__dma_sync(dev, paddr, size, dir);
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	__dma_sync(dev, paddr, size, dir);
- }
-diff --git a/arch/mips/bmips/dma.c b/arch/mips/bmips/dma.c
-index 3d13c77c125f..df56bf4179e3 100644
---- a/arch/mips/bmips/dma.c
-+++ b/arch/mips/bmips/dma.c
-@@ -64,7 +64,7 @@ phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t dma_addr)
- 	return dma_addr;
- }
- 
--void arch_sync_dma_for_cpu_all(struct device *dev)
-+void arch_sync_dma_for_cpu_all(void)
- {
- 	void __iomem *cbr = BMIPS_GET_CBR();
- 	u32 cfg;
-diff --git a/arch/mips/jazz/jazzdma.c b/arch/mips/jazz/jazzdma.c
-index a01e14955187..c64a297e82b3 100644
---- a/arch/mips/jazz/jazzdma.c
-+++ b/arch/mips/jazz/jazzdma.c
-@@ -592,7 +592,7 @@ static dma_addr_t jazz_dma_map_page(struct device *dev, struct page *page,
- 	phys_addr_t phys = page_to_phys(page) + offset;
- 
- 	if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
--		arch_sync_dma_for_device(dev, phys, size, dir);
-+		arch_sync_dma_for_device(phys, size, dir);
- 	return vdma_alloc(phys, size);
- }
- 
-@@ -600,7 +600,7 @@ static void jazz_dma_unmap_page(struct device *dev, dma_addr_t dma_addr,
- 		size_t size, enum dma_data_direction dir, unsigned long attrs)
- {
- 	if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
--		arch_sync_dma_for_cpu(dev, vdma_log2phys(dma_addr), size, dir);
-+		arch_sync_dma_for_cpu(vdma_log2phys(dma_addr), size, dir);
- 	vdma_free(dma_addr);
- }
- 
-@@ -612,7 +612,7 @@ static int jazz_dma_map_sg(struct device *dev, struct scatterlist *sglist,
- 
- 	for_each_sg(sglist, sg, nents, i) {
- 		if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
--			arch_sync_dma_for_device(dev, sg_phys(sg), sg->length,
-+			arch_sync_dma_for_device(sg_phys(sg), sg->length,
- 				dir);
- 		sg->dma_address = vdma_alloc(sg_phys(sg), sg->length);
- 		if (sg->dma_address == DMA_MAPPING_ERROR)
-@@ -631,8 +631,7 @@ static void jazz_dma_unmap_sg(struct device *dev, struct scatterlist *sglist,
- 
- 	for_each_sg(sglist, sg, nents, i) {
- 		if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
--			arch_sync_dma_for_cpu(dev, sg_phys(sg), sg->length,
--				dir);
-+			arch_sync_dma_for_cpu(sg_phys(sg), sg->length, dir);
- 		vdma_free(sg->dma_address);
- 	}
- }
-@@ -640,13 +639,13 @@ static void jazz_dma_unmap_sg(struct device *dev, struct scatterlist *sglist,
- static void jazz_dma_sync_single_for_device(struct device *dev,
- 		dma_addr_t addr, size_t size, enum dma_data_direction dir)
- {
--	arch_sync_dma_for_device(dev, vdma_log2phys(addr), size, dir);
-+	arch_sync_dma_for_device(vdma_log2phys(addr), size, dir);
- }
- 
- static void jazz_dma_sync_single_for_cpu(struct device *dev,
- 		dma_addr_t addr, size_t size, enum dma_data_direction dir)
- {
--	arch_sync_dma_for_cpu(dev, vdma_log2phys(addr), size, dir);
-+	arch_sync_dma_for_cpu(vdma_log2phys(addr), size, dir);
- }
- 
- static void jazz_dma_sync_sg_for_device(struct device *dev,
-@@ -656,7 +655,7 @@ static void jazz_dma_sync_sg_for_device(struct device *dev,
- 	int i;
- 
- 	for_each_sg(sgl, sg, nents, i)
--		arch_sync_dma_for_device(dev, sg_phys(sg), sg->length, dir);
-+		arch_sync_dma_for_device(sg_phys(sg), sg->length, dir);
- }
- 
- static void jazz_dma_sync_sg_for_cpu(struct device *dev,
-@@ -666,7 +665,7 @@ static void jazz_dma_sync_sg_for_cpu(struct device *dev,
- 	int i;
- 
- 	for_each_sg(sgl, sg, nents, i)
--		arch_sync_dma_for_cpu(dev, sg_phys(sg), sg->length, dir);
-+		arch_sync_dma_for_cpu(sg_phys(sg), sg->length, dir);
- }
- 
- const struct dma_map_ops jazz_dma_ops = {
-diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
-index fcf6d3eaac66..11f4d917fa2e 100644
---- a/arch/mips/mm/dma-noncoherent.c
-+++ b/arch/mips/mm/dma-noncoherent.c
-@@ -112,15 +112,15 @@ static inline void dma_sync_phys(phys_addr_t paddr, size_t size,
- 	} while (left);
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	dma_sync_phys(paddr, size, dir);
- }
- 
- #ifdef CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	if (cpu_needs_post_dma_flush(dev))
- 		dma_sync_phys(paddr, size, dir);
-diff --git a/arch/nds32/kernel/dma.c b/arch/nds32/kernel/dma.c
-index 4206d4b6c8ce..69d762182d49 100644
---- a/arch/nds32/kernel/dma.c
-+++ b/arch/nds32/kernel/dma.c
-@@ -46,8 +46,8 @@ static inline void cache_op(phys_addr_t paddr, size_t size,
- 	} while (left);
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	switch (dir) {
- 	case DMA_FROM_DEVICE:
-@@ -61,8 +61,8 @@ void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
- 	}
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	switch (dir) {
- 	case DMA_TO_DEVICE:
-diff --git a/arch/nios2/mm/dma-mapping.c b/arch/nios2/mm/dma-mapping.c
-index 9cb238664584..0ed711e37902 100644
---- a/arch/nios2/mm/dma-mapping.c
-+++ b/arch/nios2/mm/dma-mapping.c
-@@ -18,8 +18,8 @@
- #include <linux/cache.h>
- #include <asm/cacheflush.h>
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	void *vaddr = phys_to_virt(paddr);
- 
-@@ -42,8 +42,8 @@ void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
- 	}
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	void *vaddr = phys_to_virt(paddr);
- 
-diff --git a/arch/openrisc/kernel/dma.c b/arch/openrisc/kernel/dma.c
-index 4d5b8bd1d795..adec711ad39d 100644
---- a/arch/openrisc/kernel/dma.c
-+++ b/arch/openrisc/kernel/dma.c
-@@ -125,7 +125,7 @@ arch_dma_free(struct device *dev, size_t size, void *vaddr,
- 	free_pages_exact(vaddr, size);
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t addr, size_t size,
-+void arch_sync_dma_for_device(phys_addr_t addr, size_t size,
- 		enum dma_data_direction dir)
- {
- 	unsigned long cl;
-diff --git a/arch/parisc/kernel/pci-dma.c b/arch/parisc/kernel/pci-dma.c
-index ca35d9a76e50..a60d47fd4d55 100644
---- a/arch/parisc/kernel/pci-dma.c
-+++ b/arch/parisc/kernel/pci-dma.c
-@@ -439,14 +439,14 @@ void arch_dma_free(struct device *dev, size_t size, void *vaddr,
- 	free_pages((unsigned long)__va(dma_handle), order);
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	flush_kernel_dcache_range((unsigned long)phys_to_virt(paddr), size);
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	flush_kernel_dcache_range((unsigned long)phys_to_virt(paddr), size);
- }
-diff --git a/arch/powerpc/mm/dma-noncoherent.c b/arch/powerpc/mm/dma-noncoherent.c
-index 2a82984356f8..5ab4f868e919 100644
---- a/arch/powerpc/mm/dma-noncoherent.c
-+++ b/arch/powerpc/mm/dma-noncoherent.c
-@@ -104,14 +104,14 @@ static void __dma_sync_page(phys_addr_t paddr, size_t size, int dir)
- #endif
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	__dma_sync_page(paddr, size, dir);
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	__dma_sync_page(paddr, size, dir);
- }
-diff --git a/arch/sh/kernel/dma-coherent.c b/arch/sh/kernel/dma-coherent.c
-index b17514619b7e..eeb25a4fa55f 100644
---- a/arch/sh/kernel/dma-coherent.c
-+++ b/arch/sh/kernel/dma-coherent.c
-@@ -25,7 +25,7 @@ void *arch_dma_alloc(struct device *dev, size_t size, dma_addr_t *dma_handle,
- 	 * Pages from the page allocator may have data present in
- 	 * cache. So flush the cache before using uncached memory.
- 	 */
--	arch_sync_dma_for_device(dev, virt_to_phys(ret), size,
-+	arch_sync_dma_for_device(virt_to_phys(ret), size,
- 			DMA_BIDIRECTIONAL);
- 
- 	ret_nocache = (void __force *)ioremap_nocache(virt_to_phys(ret), size);
-@@ -59,8 +59,8 @@ void arch_dma_free(struct device *dev, size_t size, void *vaddr,
- 	iounmap(vaddr);
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	void *addr = sh_cacheop_vaddr(phys_to_virt(paddr));
- 
-diff --git a/arch/sparc/kernel/ioport.c b/arch/sparc/kernel/ioport.c
-index f89603855f1e..e59461d03b9a 100644
---- a/arch/sparc/kernel/ioport.c
-+++ b/arch/sparc/kernel/ioport.c
-@@ -366,8 +366,8 @@ void arch_dma_free(struct device *dev, size_t size, void *cpu_addr,
- 
- /* IIep is write-through, not flushing on cpu to device transfer. */
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	if (dir != PCI_DMA_TODEVICE)
- 		dma_make_coherent(paddr, PAGE_ALIGN(size));
-diff --git a/arch/xtensa/kernel/pci-dma.c b/arch/xtensa/kernel/pci-dma.c
-index 1c82e21de4f6..72b6222daa0b 100644
---- a/arch/xtensa/kernel/pci-dma.c
-+++ b/arch/xtensa/kernel/pci-dma.c
-@@ -44,8 +44,8 @@ static void do_cache_op(phys_addr_t paddr, size_t size,
- 		}
- }
- 
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	switch (dir) {
- 	case DMA_BIDIRECTIONAL:
-@@ -62,8 +62,8 @@ void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
- 	}
- }
- 
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir)
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- 	switch (dir) {
- 	case DMA_BIDIRECTIONAL:
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index f321279baf9e..0fa8c1d818b7 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -659,7 +659,7 @@ static void iommu_dma_sync_single_for_cpu(struct device *dev,
- 		return;
- 
- 	phys = iommu_iova_to_phys(iommu_get_dma_domain(dev), dma_handle);
--	arch_sync_dma_for_cpu(dev, phys, size, dir);
-+	arch_sync_dma_for_cpu(phys, size, dir);
- }
- 
- static void iommu_dma_sync_single_for_device(struct device *dev,
-@@ -671,7 +671,7 @@ static void iommu_dma_sync_single_for_device(struct device *dev,
- 		return;
- 
- 	phys = iommu_iova_to_phys(iommu_get_dma_domain(dev), dma_handle);
--	arch_sync_dma_for_device(dev, phys, size, dir);
-+	arch_sync_dma_for_device(phys, size, dir);
- }
- 
- static void iommu_dma_sync_sg_for_cpu(struct device *dev,
-@@ -685,7 +685,7 @@ static void iommu_dma_sync_sg_for_cpu(struct device *dev,
- 		return;
- 
- 	for_each_sg(sgl, sg, nelems, i)
--		arch_sync_dma_for_cpu(dev, sg_phys(sg), sg->length, dir);
-+		arch_sync_dma_for_cpu(sg_phys(sg), sg->length, dir);
- }
- 
- static void iommu_dma_sync_sg_for_device(struct device *dev,
-@@ -699,7 +699,7 @@ static void iommu_dma_sync_sg_for_device(struct device *dev,
- 		return;
- 
- 	for_each_sg(sgl, sg, nelems, i)
--		arch_sync_dma_for_device(dev, sg_phys(sg), sg->length, dir);
-+		arch_sync_dma_for_device(sg_phys(sg), sg->length, dir);
- }
- 
- static dma_addr_t iommu_dma_map_page(struct device *dev, struct page *page,
-@@ -714,7 +714,7 @@ static dma_addr_t iommu_dma_map_page(struct device *dev, struct page *page,
- 	dma_handle =__iommu_dma_map(dev, phys, size, prot);
- 	if (!coherent && !(attrs & DMA_ATTR_SKIP_CPU_SYNC) &&
- 	    dma_handle != DMA_MAPPING_ERROR)
--		arch_sync_dma_for_device(dev, phys, size, dir);
-+		arch_sync_dma_for_device(phys, size, dir);
- 	return dma_handle;
- }
- 
-diff --git a/drivers/xen/swiotlb-xen.c b/drivers/xen/swiotlb-xen.c
-index bd3a10dfac15..3f8b2cdb4acb 100644
---- a/drivers/xen/swiotlb-xen.c
-+++ b/drivers/xen/swiotlb-xen.c
-@@ -405,7 +405,7 @@ static dma_addr_t xen_swiotlb_map_page(struct device *dev, struct page *page,
- 
- done:
- 	if (!dev_is_dma_coherent(dev) && !(attrs & DMA_ATTR_SKIP_CPU_SYNC))
--		xen_dma_sync_for_device(dev, dev_addr, phys, size, dir);
-+		xen_dma_sync_for_device(dev_addr, phys, size, dir);
- 	return dev_addr;
- }
- 
-@@ -425,7 +425,7 @@ static void xen_swiotlb_unmap_page(struct device *hwdev, dma_addr_t dev_addr,
- 	BUG_ON(dir == DMA_NONE);
- 
- 	if (!dev_is_dma_coherent(hwdev) && !(attrs & DMA_ATTR_SKIP_CPU_SYNC))
--		xen_dma_sync_for_cpu(hwdev, dev_addr, paddr, size, dir);
-+		xen_dma_sync_for_cpu(dev_addr, paddr, size, dir);
- 
- 	/* NOTE: We use dev_addr here, not paddr! */
- 	if (is_xen_swiotlb_buffer(dev_addr))
-@@ -439,7 +439,7 @@ xen_swiotlb_sync_single_for_cpu(struct device *dev, dma_addr_t dma_addr,
- 	phys_addr_t paddr = xen_bus_to_phys(dma_addr);
- 
- 	if (!dev_is_dma_coherent(dev))
--		xen_dma_sync_for_cpu(dev, dma_addr, paddr, size, dir);
-+		xen_dma_sync_for_cpu(dma_addr, paddr, size, dir);
- 
- 	if (is_xen_swiotlb_buffer(dma_addr))
- 		swiotlb_tbl_sync_single(dev, paddr, size, dir, SYNC_FOR_CPU);
-@@ -455,7 +455,7 @@ xen_swiotlb_sync_single_for_device(struct device *dev, dma_addr_t dma_addr,
- 		swiotlb_tbl_sync_single(dev, paddr, size, dir, SYNC_FOR_DEVICE);
- 
- 	if (!dev_is_dma_coherent(dev))
--		xen_dma_sync_for_device(dev, dma_addr, paddr, size, dir);
-+		xen_dma_sync_for_device(dma_addr, paddr, size, dir);
- }
- 
- /*
-diff --git a/include/linux/dma-noncoherent.h b/include/linux/dma-noncoherent.h
-index e30fca1f1b12..ca9b5770caee 100644
---- a/include/linux/dma-noncoherent.h
-+++ b/include/linux/dma-noncoherent.h
-@@ -73,29 +73,29 @@ static inline void arch_dma_cache_sync(struct device *dev, void *vaddr,
- #endif /* CONFIG_DMA_NONCOHERENT_CACHE_SYNC */
- 
- #ifdef CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE
--void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir);
-+void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir);
- #else
--static inline void arch_sync_dma_for_device(struct device *dev,
--		phys_addr_t paddr, size_t size, enum dma_data_direction dir)
-+static inline void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- }
- #endif /* ARCH_HAS_SYNC_DMA_FOR_DEVICE */
- 
- #ifdef CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU
--void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
--		size_t size, enum dma_data_direction dir);
-+void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir);
- #else
--static inline void arch_sync_dma_for_cpu(struct device *dev,
--		phys_addr_t paddr, size_t size, enum dma_data_direction dir)
-+static inline void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir)
- {
- }
- #endif /* ARCH_HAS_SYNC_DMA_FOR_CPU */
- 
- #ifdef CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL
--void arch_sync_dma_for_cpu_all(struct device *dev);
-+void arch_sync_dma_for_cpu_all(void);
- #else
--static inline void arch_sync_dma_for_cpu_all(struct device *dev)
-+static inline void arch_sync_dma_for_cpu_all(void)
- {
- }
- #endif /* CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL */
-diff --git a/include/xen/swiotlb-xen.h b/include/xen/swiotlb-xen.h
-index d71380f6ed0b..ffc0d3902b71 100644
---- a/include/xen/swiotlb-xen.h
-+++ b/include/xen/swiotlb-xen.h
-@@ -4,10 +4,10 @@
- 
- #include <linux/swiotlb.h>
- 
--void xen_dma_sync_for_cpu(struct device *dev, dma_addr_t handle,
--		phys_addr_t paddr, size_t size, enum dma_data_direction dir);
--void xen_dma_sync_for_device(struct device *dev, dma_addr_t handle,
--		phys_addr_t paddr, size_t size, enum dma_data_direction dir);
-+void xen_dma_sync_for_cpu(dma_addr_t handle, phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir);
-+void xen_dma_sync_for_device(dma_addr_t handle, phys_addr_t paddr, size_t size,
-+		enum dma_data_direction dir);
- 
- extern int xen_swiotlb_init(int verbose, bool early);
- extern const struct dma_map_ops xen_swiotlb_dma_ops;
-diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
-index e37e7ab6e2ee..29e5a6d10e9c 100644
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@ -268,7 +268,7 @@ void dma_direct_sync_single_for_device(struct device *dev,
- 		swiotlb_tbl_sync_single(dev, paddr, size, dir, SYNC_FOR_DEVICE);
- 
- 	if (!dev_is_dma_coherent(dev))
--		arch_sync_dma_for_device(dev, paddr, size, dir);
-+		arch_sync_dma_for_device(paddr, size, dir);
- }
- EXPORT_SYMBOL(dma_direct_sync_single_for_device);
- 
-@@ -286,7 +286,7 @@ void dma_direct_sync_sg_for_device(struct device *dev,
- 					dir, SYNC_FOR_DEVICE);
- 
- 		if (!dev_is_dma_coherent(dev))
--			arch_sync_dma_for_device(dev, paddr, sg->length,
-+			arch_sync_dma_for_device(paddr, sg->length,
- 					dir);
- 	}
- }
-@@ -302,8 +302,8 @@ void dma_direct_sync_single_for_cpu(struct device *dev,
- 	phys_addr_t paddr = dma_to_phys(dev, addr);
- 
- 	if (!dev_is_dma_coherent(dev)) {
--		arch_sync_dma_for_cpu(dev, paddr, size, dir);
--		arch_sync_dma_for_cpu_all(dev);
-+		arch_sync_dma_for_cpu(paddr, size, dir);
-+		arch_sync_dma_for_cpu_all();
- 	}
- 
- 	if (unlikely(is_swiotlb_buffer(paddr)))
-@@ -321,7 +321,7 @@ void dma_direct_sync_sg_for_cpu(struct device *dev,
- 		phys_addr_t paddr = dma_to_phys(dev, sg_dma_address(sg));
- 
- 		if (!dev_is_dma_coherent(dev))
--			arch_sync_dma_for_cpu(dev, paddr, sg->length, dir);
-+			arch_sync_dma_for_cpu(paddr, sg->length, dir);
- 
- 		if (unlikely(is_swiotlb_buffer(paddr)))
- 			swiotlb_tbl_sync_single(dev, paddr, sg->length, dir,
-@@ -329,7 +329,7 @@ void dma_direct_sync_sg_for_cpu(struct device *dev,
- 	}
- 
- 	if (!dev_is_dma_coherent(dev))
--		arch_sync_dma_for_cpu_all(dev);
-+		arch_sync_dma_for_cpu_all();
- }
- EXPORT_SYMBOL(dma_direct_sync_sg_for_cpu);
- 
-@@ -380,7 +380,7 @@ dma_addr_t dma_direct_map_page(struct device *dev, struct page *page,
- 	}
- 
- 	if (!dev_is_dma_coherent(dev) && !(attrs & DMA_ATTR_SKIP_CPU_SYNC))
--		arch_sync_dma_for_device(dev, phys, size, dir);
-+		arch_sync_dma_for_device(phys, size, dir);
- 	return dma_addr;
- }
- EXPORT_SYMBOL(dma_direct_map_page);
+- Add documentation of new command-line options in kernel-parameters.txt.
+
+- Small fix in cna_try_change_tail() (use cmpxhg_relaxed()).
+
+- Small fix in cna_init_nodes() (return 0).
+
+- Minor changes in cna_pass_lock(). 
+
+
+Summary
+-------
+
+Lock throughput can be increased by handing a lock to a waiter on the
+same NUMA node as the lock holder, provided care is taken to avoid
+starvation of waiters on other NUMA nodes. This patch introduces CNA
+(compact NUMA-aware lock) as the slow path for qspinlock. It is
+enabled through a configuration option (NUMA_AWARE_SPINLOCKS).
+
+CNA is a NUMA-aware version of the MCS lock. Spinning threads are
+organized in two queues, a main queue for threads running on the same
+node as the current lock holder, and a secondary queue for threads
+running on other nodes. Threads store the ID of the node on which
+they are running in their queue nodes. After acquiring the MCS lock and
+before acquiring the spinlock, the lock holder scans the main queue
+looking for a thread running on the same node (pre-scan). If found (call
+it thread T), all threads in the main queue between the current lock
+holder and T are moved to the end of the secondary queue.  If such T
+is not found, we make another scan of the main queue after acquiring 
+the spinlock when unlocking the MCS lock (post-scan), starting at the
+node where pre-scan stopped. If both scans fail to find such T, the
+MCS lock is passed to the first thread in the secondary queue. If the
+secondary queue is empty, the MCS lock is passed to the next thread in the
+main queue. To avoid starvation of threads in the secondary queue, those
+threads are moved back to the head of the main queue after a certain
+number of intra-node lock hand-offs.
+
+More details are available at https://arxiv.org/abs/1810.05600.
+
+We have done some performance evaluation with the locktorture module
+as well as with several benchmarks from the will-it-scale repo.
+The following locktorture results are from an Oracle X5-4 server
+(four Intel Xeon E7-8895 v3 @ 2.60GHz sockets with 18 hyperthreaded
+cores each). Each number represents an average (over 25 runs) of the
+total number of ops (x10^7) reported at the end of each run. The 
+standard deviation is also reported in (), and in general is about 3%
+from the average. The 'stock' kernel is v5.4.0-rc5,
+commit 7c5e136a02ba, compiled in the default configuration. 
+'patch-CNA' is the modified kernel with NUMA_AWARE_SPINLOCKS set; 
+the speedup is calculated dividing 'patch-CNA' by 'stock'.
+
+#thr  	 stock        patch-CNA   speedup (patch-CNA/stock)
+  1  2.726 (0.107)  2.729 (0.096)  1.001
+  2  2.656 (0.113)  2.666 (0.116)  1.004
+  4  4.147 (0.085)  4.255 (0.135)  1.026
+  8  5.388 (0.146)  6.642 (0.155)  1.233
+ 16  6.688 (0.152)  8.035 (0.162)  1.202
+ 32  7.389 (0.203)  8.751 (0.192)  1.184
+ 36  7.420 (0.179)  8.818 (0.173)  1.188
+ 72  6.489 (0.122)  9.403 (0.252)  1.449
+108  6.163 (0.078)  9.504 (0.177)  1.542
+142  5.736 (0.105)  9.371 (0.181)  1.634
+
+The following tables contain throughput results (ops/us) from the same
+setup for will-it-scale/open1_threads: 
+
+#thr  	 stock        patch-CNA   speedup (patch-CNA/stock)
+  1  0.533 (0.001)  0.534 (0.002)  1.003
+  2  0.787 (0.020)  0.801 (0.022)  1.017
+  4  1.418 (0.031)  1.421 (0.022)  1.002
+  8  1.745 (0.112)  1.736 (0.104)  0.995
+ 16  1.779 (0.104)  1.696 (0.090)  0.953
+ 32  0.923 (0.060)  1.634 (0.109)  1.771
+ 36  0.899 (0.087)  1.636 (0.108)  1.821
+ 72  0.837 (0.038)  1.615 (0.086)  1.928
+108  0.841 (0.044)  1.715 (0.087)  2.041
+142  0.802 (0.040)  1.734 (0.085)  2.163
+
+and will-it-scale/lock2_threads:
+
+#thr  	 stock        patch-CNA   speedup (patch-CNA/stock)
+  1  1.590 (0.013)  1.583 (0.010)  0.995
+  2  2.714 (0.054)  2.697 (0.051)  0.994
+  4  5.251 (0.311)  5.252 (0.217)  1.000
+  8  4.358 (0.301)  4.309 (0.305)  0.989
+ 16  4.219 (0.140)  4.161 (0.114)  0.986
+ 32  2.547 (0.117)  4.134 (0.084)  1.623
+ 36  2.560 (0.071)  4.127 (0.122)  1.612
+ 72  1.982 (0.086)  4.097 (0.106)  2.067
+108  2.114 (0.089)  4.082 (0.105)  1.930
+142  1.923 (0.100)  4.024 (0.086)  2.093
+
+Our evaluation shows that CNA also improves performance of user 
+applications that have hot pthread mutexes. Those mutexes are 
+blocking, and waiting threads park and unpark via the futex 
+mechanism in the kernel. Given that kernel futex chains, which
+are hashed by the mutex address, are each protected by a 
+chain-specific spin lock, the contention on a user-mode mutex 
+translates into contention on a kernel level spinlock. 
+
+Here are the results for the leveldb ‘readrandom’ benchmark:
+
+#thr  	 stock        patch-CNA   speedup (patch-CNA/stock)
+  1  0.533 (0.014)  0.533 (0.016)  1.001
+  2  0.667 (0.029)  0.669 (0.027)  1.003
+  4  0.699 (0.018)  0.714 (0.026)  1.021
+  8  0.692 (0.020)  0.696 (0.026)  1.005
+ 16  0.730 (0.029)  0.733 (0.027)  1.004
+ 32  0.726 (0.034)  0.978 (0.118)  1.348
+ 36  0.740 (0.042)  1.099 (0.111)  1.485
+ 72  0.671 (0.033)  1.167 (0.021)  1.739
+108  0.633 (0.017)  1.161 (0.028)  1.834
+142  0.606 (0.016)  1.144 (0.018)  1.887
+
+Additional performance numbers are available in previous revisions
+of the series.
+
+Further comments are welcome and appreciated.
+
+Alex Kogan (5):
+  locking/qspinlock: Rename mcs lock/unlock macros and make them more
+    generic
+  locking/qspinlock: Refactor the qspinlock slow path
+  locking/qspinlock: Introduce CNA into the slow path of qspinlock
+  locking/qspinlock: Introduce starvation avoidance into CNA
+  locking/qspinlock: Introduce the shuffle reduction optimization into
+    CNA
+
+ Documentation/admin-guide/kernel-parameters.txt |  18 ++
+ arch/arm/include/asm/mcs_spinlock.h             |   6 +-
+ arch/x86/Kconfig                                |  19 ++
+ arch/x86/include/asm/qspinlock.h                |   4 +
+ arch/x86/kernel/alternative.c                   |  70 ++++++
+ include/asm-generic/mcs_spinlock.h              |   4 +-
+ kernel/locking/mcs_spinlock.h                   |  20 +-
+ kernel/locking/qspinlock.c                      |  77 +++++-
+ kernel/locking/qspinlock_cna.h                  | 315 ++++++++++++++++++++++++
+ kernel/locking/qspinlock_paravirt.h             |   2 +-
+ 10 files changed, 512 insertions(+), 23 deletions(-)
+ create mode 100644 kernel/locking/qspinlock_cna.h
+
 -- 
-2.20.1
+2.11.0 (Apple Git-81)
 
