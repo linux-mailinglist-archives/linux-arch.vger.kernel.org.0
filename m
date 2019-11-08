@@ -2,62 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C97BF3F2C
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Nov 2019 06:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 460B5F3F2D
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Nov 2019 06:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbfKHFDg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1726227AbfKHFDg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Fri, 8 Nov 2019 00:03:36 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:38657 "EHLO
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:38658 "EHLO
         mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726227AbfKHFDg (ORCPT
+        with ESMTP id S1725765AbfKHFDg (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Nov 2019 00:03:36 -0500
-Received: by mail-pl1-f196.google.com with SMTP id w8so3251259plq.5
+Received: by mail-pl1-f196.google.com with SMTP id w8so3251276plq.5
         for <linux-arch@vger.kernel.org>; Thu, 07 Nov 2019 21:03:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gDcSKUmTIIXm+A4H0kWEYsNMacbZNseE4HgO0FnEgVs=;
-        b=T0crjRfRSynMT+OSe2Yh7/yNSHC2LIV3XnAHiBwyx0o5sLpdvpn9zm5K9p5u7VbHuO
-         CG+UW2gcw3dsrqvcZ0S6OzjGobW2xOmMKnttkyKeXDXGuUvXQ1gBgSCPv0+SHew5GnRZ
-         L+9gwkj+4Jj+ECTxp8phKKiH5V2s29MRAy1gdyQg/ZqCsSYb18RMt4rfYWxiI0vY3xnb
-         REEAvK5GDfIu5tNAEE1kFzH9S6gHhPnh6jOTAN8cVQcwtqpYaS/l5e9LHXFaaslfvCmJ
-         jmC2LLLx+vKmx/KcH3vRWquML203ZpztZquBshDCyBVfKGdllPYbflrCUGValCiZ3ocx
-         wIlg==
+        bh=jRfv8uWvN/WjCmQb5eX/3JJAEj2Y2ooiXIdxAPXSx4Y=;
+        b=P0Cjb5vujLMViKoIpR3O2SF3wcV0bpg9HmC8p3VH3W3JWcpKAwZWGGOZqS0cob/0m0
+         hTsce8znzLNk4oc7FO6vnX9euHMSvaRseuTpqaOWkEopXTmwclO+JmPfgdhmKqb19rm3
+         BUgYKbhfhJk62m7LGWMThQanjmYqcezRJCJU6SA6vv7iQLTH+3/uHTc/40epepY5q/WW
+         42en4LPGslVlCTjA8C6ATEk+VSizdCZtvgWfJ+aXAfqO37HFUAR0cN45rSmgx0uLhQ9b
+         k+vrWCityg+rArhK6ksOXquPWi4oRqLnkZcwpgg/EPC1QjZ/Ltr8SsPU218YMArKmhmJ
+         AHAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gDcSKUmTIIXm+A4H0kWEYsNMacbZNseE4HgO0FnEgVs=;
-        b=pEkEwefOgk5a+YQzBKI4TGv3lIMmasdfcozzFnKrIynYxkfB6GI0ePeaNnv9XzXDTa
-         qOGMaVBcDBVk2FpIGWfIssLnHz6+lWfDJcM0fDWGTAGmeW7HlokAtyCi9ybvuQcAs1hJ
-         lc1eOFMJfD/DONQzGjH427g3EmN2CSUn/0NPit/7P2jLUWYSke9z/aUb4no1R992bnDK
-         X0OFOKuc8ItSB1naBncLIr5Shpk60qFS7dlURTMahQ/k4qMK2vOCZNs4OI+3Pwz0QYUN
-         BOXUFX+eBj21Jf/SWHiRxmjNFYwg5JNnB1Jd7QAgFfvVkueugm1CCoke2LdCtub9Ainx
-         /GHg==
-X-Gm-Message-State: APjAAAUDwAeHjKhdM3HbG5Y6OAS8MW0WU9LuHu8OmRKaDlOnkTMZN/mz
-        hphSy+vqz4S/XDowNVgqkyE=
-X-Google-Smtp-Source: APXvYqzhRlW8EpQJWjDb8Y0dcd1lY0io/u9ObGYTM9AESOTZgo5M16/05j5hN7JzChDlWC3ZQ6KS1A==
-X-Received: by 2002:a17:902:23:: with SMTP id 32mr8226415pla.205.1573189413860;
-        Thu, 07 Nov 2019 21:03:33 -0800 (PST)
+        bh=jRfv8uWvN/WjCmQb5eX/3JJAEj2Y2ooiXIdxAPXSx4Y=;
+        b=esxMm9EOr8FXMzeilWLYjUeCklLN2E6rizHhmH5OccA1CLks4fI8C1b22X+RlTjPYr
+         Rg2fihE0GqaL20Q8WVDZqeNl14/a6fk7XwbjdLlEYtNp6gixCWrj8bOWAhWqTp4Zo7Od
+         xzdeI1cmuTBnAzWR5IMWXFT34EzldCWpPWZ7t2WzFe4QQzpmjtRzXiaj5OtNGPeXxqUe
+         qr+K3EcI6epiRTt/XKaSVhOkPedfUlxJFn5XqAwAzyVZ+K47lG++i9Nb7KviUPyH5W0N
+         gcFi8m3Ll5Y+xlBxesA6DeKdA8/3iU4jgS2LZDvHSdLitjYg90JudUuB86xwkZYDvhJN
+         LjqA==
+X-Gm-Message-State: APjAAAV/mcBow2c5yzeNpj4D6IGJAqoNklaKjoTLpau+2VpadIx7xx1+
+        hArkXpvve8AL6N3hE2WAuXU=
+X-Google-Smtp-Source: APXvYqww3oovgTUDEP4QyCpg/zb96CvCmDDXJ/H1zdPWXsjbhEmOnDi5+Y0t3GdOK/ONtDpOlh71Gg==
+X-Received: by 2002:a17:90a:fb57:: with SMTP id iq23mr266498pjb.79.1573189414505;
+        Thu, 07 Nov 2019 21:03:34 -0800 (PST)
 Received: from earth-mac.local ([202.214.86.179])
-        by smtp.gmail.com with ESMTPSA id c1sm4177421pjc.23.2019.11.07.21.03.32
+        by smtp.gmail.com with ESMTPSA id 12sm5769325pjm.11.2019.11.07.21.03.33
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
         Thu, 07 Nov 2019 21:03:33 -0800 (PST)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id D5710201ACFD2D; Fri,  8 Nov 2019 14:03:31 +0900 (JST)
+        id DE89E201ACFD2F; Fri,  8 Nov 2019 14:03:31 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org
 Cc:     Octavian Purdila <tavi.purdila@gmail.com>,
         Akira Moroo <retrage01@gmail.com>,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
-        Hajime Tazaki <thehajime@gmail.com>,
-        Michael Zimmermann <sigmaepsilon92@gmail.com>,
-        Patrick Collins <pscollins@google.com>,
-        Yuan Liu <liuyuan@google.com>
-Subject: [RFC v2 12/37] lkl: initialization and cleanup
-Date:   Fri,  8 Nov 2019 14:02:27 +0900
-Message-Id: <ab5f51d9d2a427d25620010d498c47514dd90183.1573179553.git.thehajime@gmail.com>
+        Hajime Tazaki <thehajime@gmail.com>
+Subject: [RFC v2 13/37] lkl: plug in the build system
+Date:   Fri,  8 Nov 2019 14:02:28 +0900
+Message-Id: <b48dbefff2c7a11f263a641cc770e2e170aa097b.1573179553.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1573179553.git.thehajime@gmail.com>
 References: <cover.1573179553.git.thehajime@gmail.com>
@@ -70,306 +67,543 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Octavian Purdila <tavi.purdila@gmail.com>
 
-Add the lkl_start_kernel and lkl_sys_halt APIs that start and
-respectively stops the Linux kernel.
+Basic Makefiles for building LKL. Add a new architecture specific
+target for installing the resulting library files and headers.
 
-lkl_start_kernel creates a separate threads that will run the initial
-and idle kernel thread. It waits for the kernel to complete
-initialization before returning, to avoid races with system calls
-issues by the host application.
+To make LKL binaries build, UML introduced an additional option, UMMODE
+variable, to switch the output file of build: kernel (default), or
+library (LKL).  Those modes are not able to be ON at the same time.
 
-During the setup phase, we create "/init" in initial ramfs root
-filesystem to avoid mounting the "real" rootfs since ramfs is good
-enough for now.
+To build on library mode, users do the following:
 
-lkl_stop_kernel will shutdown the kernel, terminate all threads and
-free all host resources used by the kernel before returning.
+  make defconfig ARCH=um UMMODE=library
+  make ARCH=um UMMODE=library
 
-This patch also introduces idle CPU handling since it is closely
-related to the shutdown process. A host semaphore is used to wait for
-new interrupts when the kernel switches the CPU to idle to avoid
-wasting host CPU cycles. When the kernel is shutdown we terminate the
-idle thread at the first CPU idle event.
-
-Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
-Signed-off-by: Michael Zimmermann <sigmaepsilon92@gmail.com>
-Signed-off-by: Patrick Collins <pscollins@google.com>
-Signed-off-by: Yuan Liu <liuyuan@google.com>
 Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
+Signed-off-by: Akira Moroo <retrage01@gmail.com>
+Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
 ---
- arch/um/lkl/include/asm/setup.h         |   7 +
- arch/um/lkl/include/uapi/asm/host_ops.h |  26 ++++
- arch/um/lkl/kernel/setup.c              | 193 ++++++++++++++++++++++++
- 3 files changed, 226 insertions(+)
- create mode 100644 arch/um/lkl/include/asm/setup.h
- create mode 100644 arch/um/lkl/kernel/setup.c
+ arch/um/Kconfig             |  26 +++++++
+ arch/um/Makefile            | 151 +++---------------------------------
+ arch/um/Makefile.um         | 149 +++++++++++++++++++++++++++++++++++
+ arch/um/lkl/Kconfig         |  17 ++--
+ arch/um/lkl/Makefile        |  69 ++++++++++++++++
+ arch/um/lkl/auto.conf       |   1 +
+ arch/um/lkl/kernel/Makefile |   4 +
+ arch/um/lkl/mm/Makefile     |   1 +
+ 8 files changed, 264 insertions(+), 154 deletions(-)
+ create mode 100644 arch/um/Makefile.um
+ create mode 100644 arch/um/lkl/Makefile
+ create mode 100644 arch/um/lkl/auto.conf
+ create mode 100644 arch/um/lkl/kernel/Makefile
+ create mode 100644 arch/um/lkl/mm/Makefile
 
-diff --git a/arch/um/lkl/include/asm/setup.h b/arch/um/lkl/include/asm/setup.h
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index 3c3adfc486f2..c46bdb2987ce 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -5,6 +5,10 @@ menu "UML-specific options"
+ config UML
+ 	bool
+ 	default y
++
++config UMMODE_KERN
++	bool "UML mode: kernel mode"
++	default y if "$(UMMODE)" = "kernel"
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_NO_PREEMPT
+ 	select HAVE_ARCH_AUDITSYSCALL
+@@ -18,7 +22,25 @@ config UML
+ 	select GENERIC_CLOCKEVENTS
+ 	select HAVE_GCC_PLUGINS
+ 	select TTY # Needed for line.c
++        help
++	  This mode switches a mode to build a regular kernel executable
++          of UML.
++
++config UMMODE_LIB
++	bool "UML mode: library mode"
++	depends on !UMMODE_KERN
++	select LKL
++	default y if "$(UMMODE)" = "library"
++	help
++	  This mode switches a mode to build a library of UML (Linux
++	  Kernel Library/LKL).  This switch is exclusive to "kernel mode"
++	  of UML, which is traditional mode of UML.
++
++	  For more detail about LKL, see
++	  <file:Documentation/virt/uml/lkl.txt>.
+ 
++
++if UMMODE_KERN
+ config MMU
+ 	bool
+ 	default y
+@@ -196,6 +218,10 @@ config UML_TIME_TRAVEL_SUPPORT
+ 
+ 	  It is safe to say Y, but you probably don't need this.
+ 
++endif #UMMODE_KERN
++
+ endmenu
+ 
+ source "arch/um/drivers/Kconfig"
++
++source "arch/um/lkl/Kconfig"
+diff --git a/arch/um/Makefile b/arch/um/Makefile
+index d2daa206872d..d8cb874c8a53 100644
+--- a/arch/um/Makefile
++++ b/arch/um/Makefile
+@@ -1,148 +1,15 @@
+-#
+-# This file is included by the global makefile so that you can add your own
+-# architecture-specific flags and dependencies.
+-#
+-# Copyright (C) 2002 - 2007 Jeff Dike (jdike@{addtoit,linux.intel}.com)
+-# Licensed under the GPL
+-#
+-
+-# select defconfig based on actual architecture
+-ifeq ($(SUBARCH),x86)
+-  ifeq ($(shell uname -m),x86_64)
+-        KBUILD_DEFCONFIG := x86_64_defconfig
+-  else
+-        KBUILD_DEFCONFIG := i386_defconfig
+-  endif
+-else
+-        KBUILD_DEFCONFIG := $(SUBARCH)_defconfig
+-endif
++# SPDX-License-Identifier: GPL-2.0
+ 
+ ARCH_DIR := arch/um
+-OS := $(shell uname -s)
+-# We require bash because the vmlinux link and loader script cpp use bash
+-# features.
+-SHELL := /bin/bash
+-
+-core-y			+= $(ARCH_DIR)/kernel/		\
+-			   $(ARCH_DIR)/drivers/		\
+-			   $(ARCH_DIR)/os-$(OS)/
+-
+-MODE_INCLUDE	+= -I$(srctree)/$(ARCH_DIR)/include/shared/skas
+ 
+-HEADER_ARCH 	:= $(SUBARCH)
++# select mode of UML build
++UMMODE ?= kernel
++include $(ARCH_DIR)/lkl/auto.conf
+ 
+-ifneq ($(filter $(SUBARCH),x86 x86_64 i386),)
+-	HEADER_ARCH := x86
++ifeq ($(UMMODE),kernel)
++	include $(ARCH_DIR)/Makefile.um
++else ifeq ($(UMMODE),library)
++	include $(ARCH_DIR)/lkl/Makefile
+ endif
+ 
+-ifdef CONFIG_64BIT
+-	KBUILD_CFLAGS += -mcmodel=large
+-endif
+-
+-HOST_DIR := arch/$(HEADER_ARCH)
+-
+-include $(ARCH_DIR)/Makefile-skas
+-include $(HOST_DIR)/Makefile.um
+-
+-core-y += $(HOST_DIR)/um/
+-
+-SHARED_HEADERS	:= $(ARCH_DIR)/include/shared
+-ARCH_INCLUDE	:= -I$(srctree)/$(SHARED_HEADERS)
+-ARCH_INCLUDE	+= -I$(srctree)/$(HOST_DIR)/um/shared
+-KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/um
+-
+-# -Dvmap=kernel_vmap prevents anything from referencing the libpcap.o symbol so
+-# named - it's a common symbol in libpcap, so we get a binary which crashes.
+-#
+-# Same things for in6addr_loopback and mktime - found in libc. For these two we
+-# only get link-time error, luckily.
+-#
+-# -Dlongjmp=kernel_longjmp prevents anything from referencing the libpthread.a
+-# embedded copy of longjmp, same thing for setjmp.
+-#
+-# These apply to USER_CFLAGS to.
+-
+-KBUILD_CFLAGS += $(CFLAGS) $(CFLAGS-y) -D__arch_um__ \
+-	$(ARCH_INCLUDE) $(MODE_INCLUDE) -Dvmap=kernel_vmap	\
+-	-Dlongjmp=kernel_longjmp -Dsetjmp=kernel_setjmp \
+-	-Din6addr_loopback=kernel_in6addr_loopback \
+-	-Din6addr_any=kernel_in6addr_any -Dstrrchr=kernel_strrchr
+-
+-KBUILD_AFLAGS += $(ARCH_INCLUDE)
+-
+-USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+-		$(ARCH_INCLUDE) $(MODE_INCLUDE) $(filter -I%,$(CFLAGS)) \
+-		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
+-		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
+-
+-#This will adjust *FLAGS accordingly to the platform.
+-include $(ARCH_DIR)/Makefile-os-$(OS)
+-
+-KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/include \
+-		   -I$(srctree)/$(HOST_DIR)/include/uapi \
+-		   -I$(objtree)/$(HOST_DIR)/include/generated \
+-		   -I$(objtree)/$(HOST_DIR)/include/generated/uapi
+-
+-# -Derrno=kernel_errno - This turns all kernel references to errno into
+-# kernel_errno to separate them from the libc errno.  This allows -fno-common
+-# in KBUILD_CFLAGS.  Otherwise, it would cause ld to complain about the two different
+-# errnos.
+-# These apply to kernelspace only.
+-#
+-# strip leading and trailing whitespace to make the USER_CFLAGS removal of these
+-# defines more robust
+-
+-KERNEL_DEFINES = $(strip -Derrno=kernel_errno -Dsigprocmask=kernel_sigprocmask \
+-			 -Dmktime=kernel_mktime $(ARCH_KERNEL_DEFINES))
+-KBUILD_CFLAGS += $(KERNEL_DEFINES)
+-
+-PHONY += linux
+-
+-all: linux
+-
+-linux: vmlinux
+-	@echo '  LINK $@'
+-	$(Q)ln -f $< $@
+-
+-define archhelp
+-  echo '* linux		- Binary kernel image (./linux) - for backward'
+-  echo '		   compatibility only, this creates a hard link to the'
+-  echo '		   real kernel binary, the "vmlinux" binary you'
+-  echo '		   find in the kernel root.'
+-endef
+-
+-archheaders:
+-	$(Q)$(MAKE) -f $(srctree)/Makefile ARCH=$(HEADER_ARCH) asm-generic archheaders
+-
+-archprepare:
+-	$(Q)$(MAKE) $(build)=$(HOST_DIR)/um include/generated/user_constants.h
+-
+-LINK-$(CONFIG_LD_SCRIPT_STATIC) += -static
+-LINK-$(CONFIG_LD_SCRIPT_DYN) += -Wl,-rpath,/lib $(call cc-option, -no-pie)
+-
+-CFLAGS_NO_HARDENING := $(call cc-option, -fno-PIC,) $(call cc-option, -fno-pic,) \
+-	$(call cc-option, -fno-stack-protector,) \
+-	$(call cc-option, -fno-stack-protector-all,)
+-
+-# Options used by linker script
+-export LDS_START      := $(START)
+-export LDS_ELF_ARCH   := $(ELF_ARCH)
+-export LDS_ELF_FORMAT := $(ELF_FORMAT)
+-
+-# The wrappers will select whether using "malloc" or the kernel allocator.
+-LINK_WRAPS = -Wl,--wrap,malloc -Wl,--wrap,free -Wl,--wrap,calloc
+-
+-LD_FLAGS_CMDLINE = $(foreach opt,$(KBUILD_LDFLAGS),-Wl,$(opt))
+-
+-# Used by link-vmlinux.sh which has special support for um link
+-export CFLAGS_vmlinux := $(LINK-y) $(LINK_WRAPS) $(LD_FLAGS_CMDLINE)
+-
+-# When cleaning we don't include .config, so we don't include
+-# TT or skas makefiles and don't clean skas_ptregs.h.
+-CLEAN_FILES += linux x.i gmon.out
+-
+-archclean:
+-	@find . \( -name '*.bb' -o -name '*.bbg' -o -name '*.da' \
+-		-o -name '*.gcov' \) -type f -print | xargs rm -f
+-
+-export HEADER_ARCH SUBARCH USER_CFLAGS CFLAGS_NO_HARDENING OS DEV_NULL_PATH
++export UMMODE HEADER_ARCH HOST_DIR SRCARCH
+diff --git a/arch/um/Makefile.um b/arch/um/Makefile.um
 new file mode 100644
-index 000000000000..b40955208cc6
+index 000000000000..d54fd387a16f
 --- /dev/null
-+++ b/arch/um/lkl/include/asm/setup.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_LKL_SETUP_H
-+#define _ASM_LKL_SETUP_H
++++ b/arch/um/Makefile.um
+@@ -0,0 +1,149 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# This file is included by the global makefile so that you can add your own
++# architecture-specific flags and dependencies.
++#
++# Copyright (C) 2002 - 2007 Jeff Dike (jdike@{addtoit,linux.intel}.com)
++# Licensed under the GPL
++#
 +
-+#define COMMAND_LINE_SIZE 4096
++# select defconfig based on actual architecture
++ifeq ($(SUBARCH),x86)
++  ifeq ($(shell uname -m),x86_64)
++        KBUILD_DEFCONFIG := x86_64_defconfig
++  else
++        KBUILD_DEFCONFIG := i386_defconfig
++  endif
++else
++        KBUILD_DEFCONFIG := $(SUBARCH)_defconfig
++endif
 +
-+#endif
-diff --git a/arch/um/lkl/include/uapi/asm/host_ops.h b/arch/um/lkl/include/uapi/asm/host_ops.h
-index 6ae781419ce6..5f26e61f4b18 100644
---- a/arch/um/lkl/include/uapi/asm/host_ops.h
-+++ b/arch/um/lkl/include/uapi/asm/host_ops.h
-@@ -17,8 +17,14 @@ struct lkl_jmp_buf {
-  * These operations must be provided by a host library or by the application
-  * itself.
-  *
-+ * @virtio_devices - string containg the list of virtio devices in virtio mmio
-+ * command line format. This string is appended to the kernel command line and
-+ * is provided here for convenience to be implemented by the host library.
-+ *
-  * @print - optional operation that receives console messages
-  *
-+ * @panic - called during a kernel panic
-+ *
-  * @sem_alloc - allocate a host semaphore an initialize it to count
-  * @sem_free - free a host semaphore
-  * @sem_up - perform an up operation on the semaphore
-@@ -78,7 +84,10 @@ struct lkl_jmp_buf {
-  * @jmp_buf_longjmp - perform a jump back to the saved jump buffer
-  */
- struct lkl_host_operations {
-+	const char *virtio_devices;
++ARCH_DIR := arch/um
++OS := $(shell uname -s)
++# We require bash because the vmlinux link and loader script cpp use bash
++# features.
++SHELL := /bin/bash
 +
- 	void (*print)(const char *str, int len);
-+	void (*panic)(void);
++core-y			+= $(ARCH_DIR)/kernel/		\
++			   $(ARCH_DIR)/drivers/		\
++			   $(ARCH_DIR)/os-$(OS)/
++
++MODE_INCLUDE	+= -I$(srctree)/$(ARCH_DIR)/include/shared/skas
++
++HEADER_ARCH 	:= $(SUBARCH)
++
++ifneq ($(filter $(SUBARCH),x86 x86_64 i386),)
++	HEADER_ARCH := x86
++endif
++
++ifdef CONFIG_64BIT
++	KBUILD_CFLAGS += -mcmodel=large
++endif
++
++HOST_DIR := arch/$(HEADER_ARCH)
++
++include $(ARCH_DIR)/Makefile-skas
++include $(HOST_DIR)/Makefile.um
++
++core-y += $(HOST_DIR)/um/
++
++SHARED_HEADERS	:= $(ARCH_DIR)/include/shared
++ARCH_INCLUDE	:= -I$(srctree)/$(SHARED_HEADERS)
++ARCH_INCLUDE	+= -I$(srctree)/$(HOST_DIR)/um/shared
++KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/um
++
++# -Dvmap=kernel_vmap prevents anything from referencing the libpcap.o symbol so
++# named - it's a common symbol in libpcap, so we get a binary which crashes.
++#
++# Same things for in6addr_loopback and mktime - found in libc. For these two we
++# only get link-time error, luckily.
++#
++# -Dlongjmp=kernel_longjmp prevents anything from referencing the libpthread.a
++# embedded copy of longjmp, same thing for setjmp.
++#
++# These apply to USER_CFLAGS to.
++
++KBUILD_CFLAGS += $(CFLAGS) $(CFLAGS-y) -D__arch_um__ \
++	$(ARCH_INCLUDE) $(MODE_INCLUDE) -Dvmap=kernel_vmap	\
++	-Dlongjmp=kernel_longjmp -Dsetjmp=kernel_setjmp \
++	-Din6addr_loopback=kernel_in6addr_loopback \
++	-Din6addr_any=kernel_in6addr_any -Dstrrchr=kernel_strrchr
++
++KBUILD_AFLAGS += $(ARCH_INCLUDE)
++
++USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
++		$(ARCH_INCLUDE) $(MODE_INCLUDE) $(filter -I%,$(CFLAGS)) \
++		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
++		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
++
++#This will adjust *FLAGS accordingly to the platform.
++include $(ARCH_DIR)/Makefile-os-$(OS)
++
++KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/include \
++		   -I$(srctree)/$(HOST_DIR)/include/uapi \
++		   -I$(objtree)/$(HOST_DIR)/include/generated \
++		   -I$(objtree)/$(HOST_DIR)/include/generated/uapi
++
++# -Derrno=kernel_errno - This turns all kernel references to errno into
++# kernel_errno to separate them from the libc errno.  This allows -fno-common
++# in KBUILD_CFLAGS.  Otherwise, it would cause ld to complain about the two different
++# errnos.
++# These apply to kernelspace only.
++#
++# strip leading and trailing whitespace to make the USER_CFLAGS removal of these
++# defines more robust
++
++KERNEL_DEFINES = $(strip -Derrno=kernel_errno -Dsigprocmask=kernel_sigprocmask \
++			 -Dmktime=kernel_mktime $(ARCH_KERNEL_DEFINES))
++KBUILD_CFLAGS += $(KERNEL_DEFINES)
++
++PHONY += linux
++
++all: linux
++
++linux: vmlinux
++	@echo '  LINK $@'
++	$(Q)ln -f $< $@
++
++define archhelp
++  echo '* linux		- Binary kernel image (./linux) - for backward'
++  echo '		   compatibility only, this creates a hard link to the'
++  echo '		   real kernel binary, the "vmlinux" binary you'
++  echo '		   find in the kernel root.'
++endef
++
++archheaders:
++	$(Q)$(MAKE) -f $(srctree)/Makefile ARCH=$(HEADER_ARCH) asm-generic archheaders
++
++archprepare:
++	$(Q)$(MAKE) $(build)=$(HOST_DIR)/um include/generated/user_constants.h
++
++LINK-$(CONFIG_LD_SCRIPT_STATIC) += -static
++LINK-$(CONFIG_LD_SCRIPT_DYN) += -Wl,-rpath,/lib $(call cc-option, -no-pie)
++
++CFLAGS_NO_HARDENING := $(call cc-option, -fno-PIC,) $(call cc-option, -fno-pic,) \
++	$(call cc-option, -fno-stack-protector,) \
++	$(call cc-option, -fno-stack-protector-all,)
++
++# Options used by linker script
++export LDS_START      := $(START)
++export LDS_ELF_ARCH   := $(ELF_ARCH)
++export LDS_ELF_FORMAT := $(ELF_FORMAT)
++
++# The wrappers will select whether using "malloc" or the kernel allocator.
++LINK_WRAPS = -Wl,--wrap,malloc -Wl,--wrap,free -Wl,--wrap,calloc
++
++LD_FLAGS_CMDLINE = $(foreach opt,$(KBUILD_LDFLAGS),-Wl,$(opt))
++
++# Used by link-vmlinux.sh which has special support for um link
++export CFLAGS_vmlinux := $(LINK-y) $(LINK_WRAPS) $(LD_FLAGS_CMDLINE)
++
++# When cleaning we don't include .config, so we don't include
++# TT or skas makefiles and don't clean skas_ptregs.h.
++CLEAN_FILES += linux x.i gmon.out
++
++archclean:
++	@find . \( -name '*.bb' -o -name '*.bbg' -o -name '*.da' \
++		-o -name '*.gcov' \) -type f -print | xargs rm -f
++
++export HEADER_ARCH SUBARCH USER_CFLAGS CFLAGS_NO_HARDENING OS DEV_NULL_PATH
+diff --git a/arch/um/lkl/Kconfig b/arch/um/lkl/Kconfig
+index 1dae70f16c43..07b3699095ae 100644
+--- a/arch/um/lkl/Kconfig
++++ b/arch/um/lkl/Kconfig
+@@ -1,6 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- 	struct lkl_sem *(*sem_alloc)(int count);
- 	void (*sem_free)(struct lkl_sem *sem);
-@@ -121,6 +130,23 @@ struct lkl_host_operations {
- 	void (*jmp_buf_longjmp)(struct lkl_jmp_buf *jmpb, int val);
- };
- 
-+/**
-+ * lkl_start_kernel - registers the host operations and starts the kernel
-+ *
-+ * The function returns only after the kernel is shutdown with lkl_sys_halt.
-+ *
-+ * @lkl_ops - pointer to host operations
-+ * @cmd_line - format for command line string that is going to be used to
-+ * generate the Linux kernel command line
-+ */
-+int lkl_start_kernel(struct lkl_host_operations *lkl_ops, const char *cmd_line,
-+		     ...);
+-config UML_LKL
++menu "LKL-specific options"
 +
-+/**
-+ * lkl_is_running - returns 1 if the kernel is currently running
-+ */
-+int lkl_is_running(void);
-+
- int lkl_printf(const char *fmt, ...);
- void lkl_bug(const char *fmt, ...);
++config LKL
+        def_bool y
+        depends on !SMP && !MMU && !COREDUMP && !SECCOMP && !UPROBES && !COMPAT && !USER_RETURN_NOTIFIER
+        select ARCH_THREAD_STACK_ALLOCATOR
+@@ -59,7 +61,7 @@ config BIG_ENDIAN
+        def_bool n
  
-diff --git a/arch/um/lkl/kernel/setup.c b/arch/um/lkl/kernel/setup.c
+ config GENERIC_CSUM
+-       def_bool y
++       def_bool LKL
+ 
+ config GENERIC_HWEIGHT
+        def_bool y
+@@ -83,13 +85,4 @@ config HZ
+         int
+         default 100
+ 
+-config CONSOLE_LOGLEVEL_QUIET
+-	int "quiet console loglevel (1-15)"
+-	range 1 15
+-	default "4"
+-	help
+-	  loglevel to use when "quiet" is passed on the kernel commandline.
+-
+-	  When "quiet" is passed on the kernel commandline this loglevel
+-	  will be used as the loglevel. IOW passing "quiet" will be the
+-	  equivalent of passing "loglevel=<CONSOLE_LOGLEVEL_QUIET>"
++endmenu
+diff --git a/arch/um/lkl/Makefile b/arch/um/lkl/Makefile
 new file mode 100644
-index 000000000000..1bf973d36307
+index 000000000000..45af83c3825a
 --- /dev/null
-+++ b/arch/um/lkl/kernel/setup.c
-@@ -0,0 +1,193 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/binfmts.h>
-+#include <linux/init.h>
-+#include <linux/init_task.h>
-+#include <linux/personality.h>
-+#include <linux/reboot.h>
-+#include <linux/fs.h>
-+#include <linux/start_kernel.h>
-+#include <linux/syscalls.h>
-+#include <linux/tick.h>
-+#include <asm/host_ops.h>
-+#include <asm/irq.h>
-+#include <asm/unistd.h>
-+#include <asm/syscalls.h>
-+#include <asm/cpu.h>
++++ b/arch/um/lkl/Makefile
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: GPL-2.0
 +
-+struct lkl_host_operations *lkl_ops;
-+static char cmd_line[COMMAND_LINE_SIZE];
-+static void *init_sem;
-+static int is_running;
-+void (*pm_power_off)(void) = NULL;
-+static unsigned long mem_size = 64 * 1024 * 1024;
++HOST_DIR := $(ARCH_DIR)/lkl
++include $(HOST_DIR)/auto.conf
 +
-+static long lkl_panic_blink(int state)
-+{
-+	lkl_ops->panic();
-+	return 0;
-+}
++SRCARCH := um/lkl
++ARCH_INCLUDE += -I$(srctree)/$(HOST_DIR)/um/include
++LINUXINCLUDE := $(subst $(ARCH_DIR),$(HOST_DIR),$(LINUXINCLUDE)) $(ARCH_INCLUDE)
++KBUILD_CFLAGS += -fno-builtin -D__arch_um__
++KBUILD_DEFCONFIG := lkl_defconfig
 +
-+static int __init setup_mem_size(char *str)
-+{
-+	mem_size = memparse(str, NULL);
-+	return 0;
-+}
-+early_param("mem", setup_mem_size);
++ifneq (,$(filter $(OUTPUT_FORMAT),elf64-x86-64 elf32-i386 elf64-x86-64-freebsd elf32-littlearm elf64-littleaarch64))
++KBUILD_CFLAGS += -fPIC
++else ifneq (,$(filter $(OUTPUT_FORMAT),pe-i386 pe-x86-64 ))
++ifneq ($(OUTPUT_FORMAT),pe-x86-64)
++prefix=_
++endif
++# workaround for #include_next<stdarg.h> errors
++LINUXINCLUDE := -isystem $(HOST_DIR)/include/system $(LINUXINCLUDE)
++# workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52991
++KBUILD_CFLAGS += -mno-ms-bitfields
++else
++$(error Unrecognized platform: $(OUTPUT_FORMAT))
++endif
 +
-+void __init setup_arch(char **cl)
-+{
-+	*cl = cmd_line;
-+	panic_blink = lkl_panic_blink;
-+	parse_early_param();
-+	bootmem_init(mem_size);
-+}
++ifeq ($(shell uname -s), Linux)
++NPROC=$(shell nproc)
++else # e.g., FreeBSD
++NPROC=$(shell sysctl -n hw.ncpu)
++endif
 +
-+static void __init lkl_run_kernel(void *arg)
-+{
-+	threads_init();
-+	lkl_cpu_get();
-+	start_kernel();
-+}
++LDFLAGS_vmlinux += -r
++LKL_ENTRY_POINTS := lkl_start_kernel lkl_sys_halt lkl_syscall lkl_trigger_irq \
++	lkl_get_free_irq lkl_put_irq lkl_is_running lkl_bug lkl_printf
 +
-+int __init lkl_start_kernel(struct lkl_host_operations *ops, const char *fmt,
-+			    ...)
-+{
-+	va_list ap;
-+	int ret;
++ifeq ($(OUTPUT_FORMAT),elf32-i386)
++LKL_ENTRY_POINTS += \
++	__x86.get_pc_thunk.bx __x86.get_pc_thunk.dx __x86.get_pc_thunk.ax \
++	__x86.get_pc_thunk.cx __x86.get_pc_thunk.si __x86.get_pc_thunk.di
++endif
 +
-+	lkl_ops = ops;
++core-y += $(HOST_DIR)/kernel/
++core-y += $(HOST_DIR)/mm/
 +
-+	va_start(ap, fmt);
-+	ret = vsnprintf(boot_command_line, COMMAND_LINE_SIZE, fmt, ap);
-+	va_end(ap);
++all: lkl.o
 +
-+	if (ops->virtio_devices)
-+		strscpy(boot_command_line + ret, ops->virtio_devices,
-+			COMMAND_LINE_SIZE - ret);
++lkl.o: vmlinux
++	$(OBJCOPY) -R .eh_frame -R .syscall_defs $(foreach sym,$(LKL_ENTRY_POINTS),-G$(prefix)$(sym)) vmlinux lkl.o
 +
-+	memcpy(cmd_line, boot_command_line, COMMAND_LINE_SIZE);
++$(HOST_DIR)/include/generated/uapi/asm/syscall_defs.h: vmlinux
++	$(OBJCOPY) -j .syscall_defs -O binary --set-section-flags .syscall_defs=alloc $< $@
++	$(Q) export tmpfile=$(shell mktemp); \
++	sed 's/\x0//g' $@ > $$tmpfile; mv $$tmpfile $@ ; rm -f $$tmpfile
 +
-+	init_sem = lkl_ops->sem_alloc(0);
-+	if (!init_sem)
-+		return -ENOMEM;
++install: lkl.o headers $(HOST_DIR)/include/generated/uapi/asm/syscall_defs.h
++	@echo "  INSTALL	$(INSTALL_PATH)/lib/lkl.o"
++	@mkdir -p $(INSTALL_PATH)/lib/
++	@cp lkl.o $(INSTALL_PATH)/lib/
++	@$(srctree)/$(HOST_DIR)/scripts/headers_install.py \
++		$(subst -j,-j$(NPROC),$(findstring -j,$(MAKEFLAGS))) \
++		$(INSTALL_PATH)/include
 +
-+	ret = lkl_cpu_init();
-+	if (ret)
-+		goto out_free_init_sem;
++archclean:
++	$(Q)rm -rf $(srctree)/$(HOST_DIR)/include/generated
++	$(Q)$(MAKE) $(clean)=$(boot)
 +
-+	ret = lkl_ops->thread_create(lkl_run_kernel, NULL);
-+	if (!ret) {
-+		ret = -ENOMEM;
-+		goto out_free_init_sem;
-+	}
++define archhelp
++  echo '  install	- Install library and headers to INSTALL_PATH/{lib,include}'
++endef
+diff --git a/arch/um/lkl/auto.conf b/arch/um/lkl/auto.conf
+new file mode 100644
+index 000000000000..4bfd65a02d73
+--- /dev/null
++++ b/arch/um/lkl/auto.conf
+@@ -0,0 +1 @@
++export OUTPUT_FORMAT=$(shell $(LD) -r -print-output-format)
+diff --git a/arch/um/lkl/kernel/Makefile b/arch/um/lkl/kernel/Makefile
+new file mode 100644
+index 000000000000..ef489f2f7176
+--- /dev/null
++++ b/arch/um/lkl/kernel/Makefile
+@@ -0,0 +1,4 @@
++extra-y := vmlinux.lds
 +
-+	lkl_ops->sem_down(init_sem);
-+	lkl_ops->sem_free(init_sem);
-+	current_thread_info()->tid = lkl_ops->thread_self();
-+	lkl_cpu_change_owner(current_thread_info()->tid);
-+
-+	lkl_cpu_put();
-+	is_running = 1;
-+
-+	return 0;
-+
-+out_free_init_sem:
-+	lkl_ops->sem_free(init_sem);
-+
-+	return ret;
-+}
-+
-+int lkl_is_running(void)
-+{
-+	return is_running;
-+}
-+
-+void machine_halt(void)
-+{
-+	lkl_cpu_shutdown();
-+}
-+
-+void machine_power_off(void)
-+{
-+	machine_halt();
-+}
-+
-+void machine_restart(char *unused)
-+{
-+	machine_halt();
-+}
-+
-+long lkl_sys_halt(void)
-+{
-+	long err;
-+	long params[6] = {
-+		LINUX_REBOOT_MAGIC1,
-+		LINUX_REBOOT_MAGIC2,
-+		LINUX_REBOOT_CMD_RESTART,
-+	};
-+
-+	err = lkl_syscall(__NR_reboot, params);
-+	if (err < 0)
-+		return err;
-+
-+	is_running = false;
-+
-+	lkl_cpu_wait_shutdown();
-+
-+	syscalls_cleanup();
-+	threads_cleanup();
-+	/* Shutdown the clockevents source. */
-+	tick_suspend_local();
-+	free_mem();
-+	lkl_ops->thread_join(current_thread_info()->tid);
-+
-+	return 0;
-+}
-+
-+static int lkl_run_init(struct linux_binprm *bprm);
-+
-+static struct linux_binfmt lkl_run_init_binfmt = {
-+	.module		= THIS_MODULE,
-+	.load_binary	= lkl_run_init,
-+};
-+
-+static int lkl_run_init(struct linux_binprm *bprm)
-+{
-+	int ret;
-+
-+	if (strcmp("/init", bprm->filename) != 0)
-+		return -EINVAL;
-+
-+	ret = flush_old_exec(bprm);
-+	if (ret)
-+		return ret;
-+	set_personality(PER_LINUX);
-+	setup_new_exec(bprm);
-+	install_exec_creds(bprm);
-+
-+	set_binfmt(&lkl_run_init_binfmt);
-+
-+	init_pid_ns.child_reaper = NULL;
-+
-+	syscalls_init();
-+
-+	lkl_ops->sem_up(init_sem);
-+	lkl_ops->thread_exit();
-+
-+	return 0;
-+}
-+
-+/* skip mounting the "real" rootfs. ramfs is good enough. */
-+static int __init fs_setup(void)
-+{
-+	int fd;
-+
-+	fd = sys_open("/init", O_CREAT, 0700);
-+	WARN_ON(fd < 0);
-+	sys_close(fd);
-+
-+	register_binfmt(&lkl_run_init_binfmt);
-+
-+	return 0;
-+}
-+late_initcall(fs_setup);
++obj-y = setup.o threads.o irq.o time.o syscalls.o misc.o console.o \
++	syscalls_32.o cpu.o
+diff --git a/arch/um/lkl/mm/Makefile b/arch/um/lkl/mm/Makefile
+new file mode 100644
+index 000000000000..2af6e3051897
+--- /dev/null
++++ b/arch/um/lkl/mm/Makefile
+@@ -0,0 +1 @@
++obj-y = bootmem.o
 -- 
 2.20.1 (Apple Git-117)
 
