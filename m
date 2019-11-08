@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B65CDF3F3A
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Nov 2019 06:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E93AF3F3F
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Nov 2019 06:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726149AbfKHFDt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Nov 2019 00:03:49 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39103 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726148AbfKHFDt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Nov 2019 00:03:49 -0500
-Received: by mail-pl1-f194.google.com with SMTP id o9so3242791plk.6
-        for <linux-arch@vger.kernel.org>; Thu, 07 Nov 2019 21:03:46 -0800 (PST)
+        id S1725802AbfKHFD4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Nov 2019 00:03:56 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:43609 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726121AbfKHFD4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Nov 2019 00:03:56 -0500
+Received: by mail-pl1-f196.google.com with SMTP id a18so3224567plm.10
+        for <linux-arch@vger.kernel.org>; Thu, 07 Nov 2019 21:03:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kmFesvF3zzXHMCQ8Toa3N6kLI7GdtUj0yq4BWYkqJ20=;
-        b=E/YT8HgWrdTwbcQvbeSjseb0NF3tvfXmpGz1JYlPqEPnimNVoZhEq/UHCpJDRmZyA7
-         0OZPGWPUu9yaGdQrqb/LbgcZo7CAxyv2NkqLjzcawVFlAYHOa4QOJ3PrnFaSZvVSPeuX
-         DBhs6/CwhFQIVfSkpj+tkcfGWJ0yCkM8M9iuRZsjksmlhBOyJgYc/CEISkf+4cHHZFmI
-         7vyi7EFTKuQQzDf0rJszxNg3JckZwh86WE5OMc28QyNShjUGLKPvkXpOwKFe7UnX6m/I
-         wfK/+WfiqY95lMMrptN8hU70PO/aWHjx0f5yTSyLR76n6Pj/HEfFUSNZbCUwT5+6LjDL
-         2ASg==
+        bh=xD37sshFcRfRkPMmF6ARHfKibDyWe8IJYHwezS58gDI=;
+        b=KeknvTcNKFdpIJCZaIQ08/AL2mEFE7K06GemJC6TDM7mIyC79VawV5pv3008+P5AFe
+         52bcGp75Llfh1UZ46v0/bnBKEQ1qkxpDJjqo2c0QENc+LWOv3KIPymtvw40Dg7ROtP68
+         2qCBrnBZUY+Xq434yRf9kGFYz7J6xQOs/jTfgGvP6qKzuxF3Z6aRK02CRXVTYjMlhX+c
+         fJa0LUG180dYYCZGssmNRajuV8xacY4XPEvd8eb8G5jzUPiOQj1HVxG6kfgrXcXsDSNA
+         5cFEdPeeCY6F1pVb/NTa2EgmwF1bQG6gpHQ39ygIxyO/B0dUUcl6f9Qgs7xac0bsP25O
+         1TPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kmFesvF3zzXHMCQ8Toa3N6kLI7GdtUj0yq4BWYkqJ20=;
-        b=K7kh2YR1qKveM9IfLsHbWViOigdImclyx19HmzGHQ9GWngF5Nq3jiKsTTJ9hdtLrlm
-         6HEeHE/yyiNuRwL3KOxelofSyE27HM1Vk9GwIR8/cV/42NzUGgzYf5y56KEAvLsiOzGp
-         XdobCvH+zPmrn9n9+jWrIH75ztXXgsvtv2hoXyd0qdkPUzvS5tBct2Hj9USWdGuyifQK
-         uMWodceuCA0B+Rq1rSyc6BPwWedtFNy04nnLfA2/3XgAIIkrvx+mubOEwaDTvH+9wJtk
-         OyFTGv7Cd1+4/gFVST7TY0tRfyl+65rZM5StBCyb6u/m+8waigcfh0K0H9SoYLJ0WvRi
-         ddzg==
-X-Gm-Message-State: APjAAAVV7MMb9vRqcAH17gGcwFbG4uSk5toQmKuOvL3GxrQOBzkJyJwT
-        r6/D7adqyixPwC0nNW6dHDM=
-X-Google-Smtp-Source: APXvYqyW9TrmOUO1T5UaigRjUaXm4VeYN8VlHBr5ezUSTWxWVDJug659XWCSDaiAWtaMeGPvg+4f6A==
-X-Received: by 2002:a17:902:74c6:: with SMTP id f6mr8380963plt.167.1573189425687;
-        Thu, 07 Nov 2019 21:03:45 -0800 (PST)
+        bh=xD37sshFcRfRkPMmF6ARHfKibDyWe8IJYHwezS58gDI=;
+        b=c/o3Vr+Uwb0/oYFbHM9/hFZUGSe99M3/lGcWTO00huVew4eYGJs5jyOUmn7a6bEeZG
+         DgvOGXyTGbop/D333nCm64Fnp1bm1j/zbyN4nGpYV5KuCMRjyW55Y9aUcCLuCcZKWEIX
+         RGKKN6qyxWQLmSQ+ITe9hJyVmJgy+RO+Es8d1Ope8xuadmpLI9SDyaqtZ0lKOK8f8cfM
+         bT+F+t1hUL8lEymLgzULutJB/ihXg2QmWJeHgom2kfCCuZ/o8uQFnmMGaPXYe1X5s/bA
+         88vHL1pXMyuV+UaYea8qEb8CXXOEL9x/8y0s8gmsMT8BPR4uH8Y0ZhNLRLCa2gLz+T+Y
+         0qlQ==
+X-Gm-Message-State: APjAAAWG/5FRCnIvMGbh8DCz0woP4CbQkwnI3pHGQ76m8fVzjWCSYOnT
+        /kB+bpTp+ZJD+Map+Hl99+s=
+X-Google-Smtp-Source: APXvYqx+hGgr9g1YJh+HWVHor34d49fVJFy7ej/LUV+v5KP9CSryzaKWeAjQFZUL6CddwVxpEih6bA==
+X-Received: by 2002:a17:902:8a8c:: with SMTP id p12mr8220794plo.308.1573189434427;
+        Thu, 07 Nov 2019 21:03:54 -0800 (PST)
 Received: from earth-mac.local ([202.214.86.179])
-        by smtp.gmail.com with ESMTPSA id m15sm4232787pgv.58.2019.11.07.21.03.43
+        by smtp.gmail.com with ESMTPSA id w7sm5463020pfb.101.2019.11.07.21.03.53
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 07 Nov 2019 21:03:43 -0800 (PST)
+        Thu, 07 Nov 2019 21:03:53 -0800 (PST)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id 2A362201ACFD6D; Fri,  8 Nov 2019 14:03:42 +0900 (JST)
+        id 37FAD201ACFDC7; Fri,  8 Nov 2019 14:03:52 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org
 Cc:     Octavian Purdila <tavi.purdila@gmail.com>,
@@ -53,11 +53,14 @@ Cc:     Octavian Purdila <tavi.purdila@gmail.com>,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         Conrad Meyer <cem@FreeBSD.org>,
         Hajime Tazaki <thehajime@gmail.com>,
-        Michael Zimmermann <sigmaepsilon92@gmail.com>,
+        Mark Stillwell <mark@stillwell.me>,
+        Patrick Collins <pscollins@google.com>,
+        Pierre-Hugues Husson <phh@phh.me>,
+        Thomas Liebetraut <thomas@tommie-lie.de>,
         Yuan Liu <liuyuan@google.com>
-Subject: [RFC v2 19/37] lkl tools: host lib: filesystem helpers
-Date:   Fri,  8 Nov 2019 14:02:34 +0900
-Message-Id: <22c7ac338058a74bb231622bbc116a66324c9172.1573179553.git.thehajime@gmail.com>
+Subject: [RFC v2 20/37] lkl tools: host lib: posix host operations
+Date:   Fri,  8 Nov 2019 14:02:35 +0900
+Message-Id: <723f8d74dea45e691b760add194e8f57aa2e2fb7.1573179553.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1573179553.git.thehajime@gmail.com>
 References: <cover.1573179553.git.thehajime@gmail.com>
@@ -70,624 +73,493 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Octavian Purdila <tavi.purdila@gmail.com>
 
-Add LKL applications APIs to mount and unmount a filesystem from a
-disk added via lkl_disk_add().
-
-Also add open/close/read directory wrappers on top of
-lkl_sys_getdents64.
+Implement LKL host operations for POSIX hosts.
 
 Signed-off-by: Conrad Meyer <cem@FreeBSD.org>
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
-Signed-off-by: Michael Zimmermann <sigmaepsilon92@gmail.com>
+Signed-off-by: Mark Stillwell <mark@stillwell.me>
+Signed-off-by: Patrick Collins <pscollins@google.com>
+Signed-off-by: Pierre-Hugues Husson <phh@phh.me>
+Signed-off-by: Thomas Liebetraut <thomas@tommie-lie.de>
 Signed-off-by: Yuan Liu <liuyuan@google.com>
 Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 ---
- tools/lkl/include/lkl.h | 139 +++++++++++++
- tools/lkl/lib/Build     |   1 +
- tools/lkl/lib/fs.c      | 433 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 573 insertions(+)
- create mode 100644 tools/lkl/lib/fs.c
+ Makefile                   |   2 +
+ tools/lkl/lib/Build        |   2 +
+ tools/lkl/lib/posix-host.c | 435 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 439 insertions(+)
+ create mode 100644 tools/lkl/lib/posix-host.c
 
-diff --git a/tools/lkl/include/lkl.h b/tools/lkl/include/lkl.h
-index 967fbe4dbc26..8bda12d4c6de 100644
---- a/tools/lkl/include/lkl.h
-+++ b/tools/lkl/include/lkl.h
-@@ -389,6 +389,145 @@ int lkl_disk_add(struct lkl_disk *disk);
-  */
- int lkl_disk_remove(struct lkl_disk disk);
+diff --git a/Makefile b/Makefile
+index 0cbe8717bdb3..874c0aec0f9c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1123,7 +1123,9 @@ archprepare: archheaders archscripts scripts prepare3 outputmakefile \
+ 	asm-generic $(version_h) $(autoksyms_h) include/generated/utsrelease.h
  
-+/**
-+ * lkl_get_virtiolkl_encode_dev_from_sysfs_blkdev - extract device id from sysfs
-+ *
-+ * This function returns the device id for the given sysfs dev node.
-+ * The content of the node has to be in the form 'MAJOR:MINOR'.
-+ * Also, this function expects an absolute path which means that sysfs
-+ * already has to be mounted at the given path
-+ *
-+ * @sysfs_path - absolute path to the sysfs dev node
-+ * @pdevid - pointer to memory where dev id will be returned
-+ * @returns - 0 on success, a negative value on error
-+ */
-+int lkl_encode_dev_from_sysfs(const char *sysfs_path, uint32_t *pdevid);
-+
-+/**
-+ * lkl_get_virtio_blkdev - get device id of a disk (partition)
-+ *
-+ * This function returns the device id for the given disk.
-+ *
-+ * @disk_id - the disk id identifying the disk
-+ * @part - disk partition or zero for full disk
-+ * @pdevid - pointer to memory where dev id will be returned
-+ * @returns - 0 on success, a negative value on error
-+ */
-+int lkl_get_virtio_blkdev(int disk_id, unsigned int part, uint32_t *pdevid);
-+
-+
-+/**
-+ * lkl_mount_dev - mount a disk
-+ *
-+ * This functions creates a device file for the given disk, creates a mount
-+ * point and mounts the device over the mount point.
-+ *
-+ * @disk_id - the disk id identifying the disk to be mounted
-+ * @part - disk partition or zero for full disk
-+ * @fs_type - filesystem type
-+ * @flags - mount flags
-+ * @opts - additional filesystem specific mount options
-+ * @mnt_str - a string that will be filled by this function with the path where
-+ * the filesystem has been mounted
-+ * @mnt_str_len - size of mnt_str
-+ * @returns - 0 on success, a negative value on error
-+ */
-+long lkl_mount_dev(unsigned int disk_id, unsigned int part, const char *fs_type,
-+		   int flags, const char *opts,
-+		   char *mnt_str, unsigned int mnt_str_len);
-+
-+/**
-+ * lkl_umount_dev - umount a disk
-+ *
-+ * This functions umounts the given disks and removes the device file and the
-+ * mount point.
-+ *
-+ * @disk_id - the disk id identifying the disk to be mounted
-+ * @part - disk partition or zero for full disk
-+ * @flags - umount flags
-+ * @timeout_ms - timeout to wait for the kernel to flush closed files so that
-+ * umount can succeed
-+ * @returns - 0 on success, a negative value on error
-+ */
-+long lkl_umount_dev(unsigned int disk_id, unsigned int part, int flags,
-+		    long timeout_ms);
-+
-+/**
-+ * lkl_umount_timeout - umount filesystem with timeout
-+ *
-+ * @path - the path to unmount
-+ * @flags - umount flags
-+ * @timeout_ms - timeout to wait for the kernel to flush closed files so that
-+ * umount can succeed
-+ * @returns - 0 on success, a negative value on error
-+ */
-+long lkl_umount_timeout(char *path, int flags, long timeout_ms);
-+
-+/**
-+ * lkl_opendir - open a directory
-+ *
-+ * @path - directory path
-+ * @err - pointer to store the error in case of failure
-+ * @returns - a handle to be used when calling lkl_readdir
-+ */
-+struct lkl_dir *lkl_opendir(const char *path, int *err);
-+
-+/**
-+ * lkl_fdopendir - open a directory
-+ *
-+ * @fd - file descriptor
-+ * @err - pointer to store the error in case of failure
-+ * @returns - a handle to be used when calling lkl_readdir
-+ */
-+struct lkl_dir *lkl_fdopendir(int fd, int *err);
-+
-+/**
-+ * lkl_rewinddir - reset directory stream
-+ *
-+ * @dir - the directory handler as returned by lkl_opendir
-+ */
-+void lkl_rewinddir(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_closedir - close the directory
-+ *
-+ * @dir - the directory handler as returned by lkl_opendir
-+ */
-+int lkl_closedir(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_readdir - get the next available entry of the directory
-+ *
-+ * @dir - the directory handler as returned by lkl_opendir
-+ * @returns - a lkl_dirent64 entry or NULL if the end of the directory stream is
-+ * reached or if an error occurred; check lkl_errdir() to distinguish between
-+ * errors or end of the directory stream
-+ */
-+struct lkl_linux_dirent64 *lkl_readdir(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_errdir - checks if an error occurred during the last lkl_readdir call
-+ *
-+ * @dir - the directory handler as returned by lkl_opendir
-+ * @returns - 0 if no error occurred, or a negative value otherwise
-+ */
-+int lkl_errdir(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_dirfd - gets the file descriptor associated with the directory handle
-+ *
-+ * @dir - the directory handle as returned by lkl_opendir
-+ * @returns - a positive value,which is the LKL file descriptor associated with
-+ * the directory handle, or a negative value otherwise
-+ */
-+int lkl_dirfd(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_mount_fs - mount a file system type like proc, sys
-+ * @fstype - file system type. e.g. proc, sys
-+ * @returns - 0 on success. 1 if it's already mounted. negative on failure.
-+ */
-+int lkl_mount_fs(char *fstype);
+ prepare0: archprepare
++ifeq ($(findstring elf,$(if $(CONFIG_OUTPUT_FORMAT),$(CONFIG_OUTPUT_FORMAT),elf)),elf)
+ 	$(Q)$(MAKE) $(build)=scripts/mod
++endif
+ 	$(Q)$(MAKE) $(build)=.
  
- #ifdef __cplusplus
- }
+ # All the preparing..
 diff --git a/tools/lkl/lib/Build b/tools/lkl/lib/Build
-index d3154cfa4952..f2ee04366464 100644
+index f2ee04366464..a7a3bff27bb1 100644
 --- a/tools/lkl/lib/Build
 +++ b/tools/lkl/lib/Build
-@@ -1,5 +1,6 @@
+@@ -1,8 +1,10 @@
  CFLAGS_config.o += -I$(srctree)/tools/perf/pmu-events
++CFLAGS_posix-host.o += -D_FILE_OFFSET_BITS=64
  
-+liblkl-y += fs.o
+ liblkl-y += fs.o
  liblkl-y += iomem.o
  liblkl-y += jmp_buf.o
++liblkl-$(LKL_HOST_CONFIG_POSIX) += posix-host.o
  liblkl-y += utils.o
-diff --git a/tools/lkl/lib/fs.c b/tools/lkl/lib/fs.c
+ liblkl-y += virtio_blk.o
+ liblkl-y += virtio.o
+diff --git a/tools/lkl/lib/posix-host.c b/tools/lkl/lib/posix-host.c
 new file mode 100644
-index 000000000000..c6f197aec3fb
+index 000000000000..c2b579433b12
 --- /dev/null
-+++ b/tools/lkl/lib/fs.c
-@@ -0,0 +1,433 @@
++++ b/tools/lkl/lib/posix-host.c
+@@ -0,0 +1,435 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#include <stdarg.h>
-+#include <stdio.h>
-+#include <string.h>
++#include <pthread.h>
 +#include <stdlib.h>
++#include <sys/time.h>
++#include <time.h>
++#include <signal.h>
++#include <assert.h>
++#include <unistd.h>
++#include <errno.h>
++#include <string.h>
++#include <time.h>
++#include <stdint.h>
++#include <sys/uio.h>
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <sys/syscall.h>
++#include <poll.h>
 +#include <lkl_host.h>
++#include "iomem.h"
++#include "jmp_buf.h"
 +
-+#include "virtio.h"
++/* Let's see if the host has semaphore.h */
++#include <unistd.h>
 +
-+#define MAX_FSTYPE_LEN 50
-+int lkl_mount_fs(char *fstype)
++#ifdef _POSIX_SEMAPHORES
++#include <semaphore.h>
++/* TODO(pscollins): We don't support fork() for now, but maybe one day
++ * we will?
++ */
++#define SHARE_SEM 0
++#endif /* _POSIX_SEMAPHORES */
++
++static void print(const char *str, int len)
 +{
-+	char dir[MAX_FSTYPE_LEN+2] = "/";
-+	int flags = 0, ret = 0;
++	int ret __attribute__((unused));
 +
-+	strncat(dir, fstype, MAX_FSTYPE_LEN);
-+
-+	/* Create with regular umask */
-+	ret = lkl_sys_mkdir(dir, 0xff);
-+	if (ret && ret != -LKL_EEXIST) {
-+		lkl_perror("mount_fs mkdir", ret);
-+		return ret;
-+	}
-+
-+	/* We have no use for nonzero flags right now */
-+	ret = lkl_sys_mount("none", dir, fstype, flags, NULL);
-+	if (ret && ret != -LKL_EBUSY) {
-+		lkl_sys_rmdir(dir);
-+		return ret;
-+	}
-+
-+	if (ret == -LKL_EBUSY)
-+		return 1;
-+	return 0;
++	ret = write(STDOUT_FILENO, str, len);
 +}
 +
-+static uint32_t new_encode_dev(unsigned int major, unsigned int minor)
-+{
-+	return (minor & 0xff) | (major << 8) | ((minor & ~0xff) << 12);
-+}
-+
-+static int startswith(const char *str, const char *pre)
-+{
-+	return strncmp(pre, str, strlen(pre)) == 0;
-+}
-+
-+static int get_node_with_prefix(const char *path, const char *prefix,
-+				char *result, unsigned int result_len)
-+{
-+	struct lkl_dir *dir = NULL;
-+	struct lkl_linux_dirent64 *dirent;
-+	int ret;
-+
-+	dir = lkl_opendir(path, &ret);
-+	if (!dir)
-+		return ret;
-+
-+	ret = -LKL_ENOENT;
-+
-+	while ((dirent = lkl_readdir(dir))) {
-+		if (startswith(dirent->d_name, prefix)) {
-+			if (strlen(dirent->d_name) + 1 > result_len) {
-+				ret = -LKL_ENOMEM;
-+				break;
-+			}
-+			memcpy(result, dirent->d_name, strlen(dirent->d_name));
-+			result[strlen(dirent->d_name)] = '\0';
-+			ret = 0;
-+			break;
-+		}
-+	}
-+
-+	lkl_closedir(dir);
-+
-+	return ret;
-+}
-+
-+int lkl_encode_dev_from_sysfs(const char *sysfs_path, uint32_t *pdevid)
-+{
-+	int ret;
-+	long fd;
-+	int major, minor;
-+	char buf[16] = { 0, };
-+	char *bufptr;
-+
-+	fd = lkl_sys_open(sysfs_path, LKL_O_RDONLY, 0);
-+	if (fd < 0)
-+		return fd;
-+
-+	ret = lkl_sys_read(fd, buf, sizeof(buf));
-+	if (ret < 0)
-+		goto out_close;
-+
-+	if (ret == sizeof(buf)) {
-+		ret = -LKL_ENOBUFS;
-+		goto out_close;
-+	}
-+
-+	bufptr = strchr(buf, ':');
-+	if (bufptr == NULL) {
-+		ret = -LKL_EINVAL;
-+		goto out_close;
-+	}
-+	bufptr[0] = '\0';
-+	bufptr++;
-+
-+	major = atoi(buf);
-+	minor = atoi(bufptr);
-+
-+	*pdevid = new_encode_dev(major, minor);
-+	ret = 0;
-+
-+out_close:
-+	lkl_sys_close(fd);
-+
-+	return ret;
-+}
-+
-+#define SYSFS_DEV_VIRTIO_PLATFORM_PATH \
-+	"/sysfs/devices/platform/virtio-mmio.%d.auto"
-+#define SYSFS_DEV_VIRTIO_CMDLINE_PATH \
-+	"/sysfs/devices/virtio-mmio-cmdline/virtio-mmio.%d"
-+
-+struct abuf {
-+	char *mem, *ptr;
-+	unsigned int len;
++struct lkl_mutex {
++	pthread_mutex_t mutex;
 +};
 +
-+static int snprintf_append(struct abuf *buf, const char *fmt, ...)
++struct lkl_sem {
++#ifdef _POSIX_SEMAPHORES
++	sem_t sem;
++#else
++	pthread_mutex_t lock;
++	int count;
++	pthread_cond_t cond;
++#endif /* _POSIX_SEMAPHORES */
++};
++
++struct lkl_tls_key {
++	pthread_key_t key;
++};
++
++#define WARN_UNLESS(exp) do {						\
++		if (exp < 0)						\
++			lkl_printf("%s: %s\n", #exp, strerror(errno));	\
++	} while (0)
++
++static int _warn_pthread(int ret, char *str_exp)
 +{
-+	int ret;
-+	va_list args;
++	if (ret > 0)
++		lkl_printf("%s: %s\n", str_exp, strerror(ret));
 +
-+	if (!buf->ptr)
-+		buf->ptr = buf->mem;
-+
-+	va_start(args, fmt);
-+	ret = vsnprintf(buf->ptr, buf->len - (buf->ptr - buf->mem), fmt, args);
-+	va_end(args);
-+
-+	if (ret < 0 || (ret >= (buf->len - (buf->ptr - buf->mem))))
-+		return -LKL_ENOMEM;
-+
-+	buf->ptr += ret;
-+
-+	return 0;
++	return ret;
 +}
 +
-+int lkl_get_virtio_blkdev(int disk_id, unsigned int part, uint32_t *pdevid)
++
++/* pthread_* functions use the reverse convention */
++#define WARN_PTHREAD(exp) _warn_pthread(exp, #exp)
++
++static struct lkl_sem *sem_alloc(int count)
 +{
-+	char sysfs_path[LKL_PATH_MAX];
-+	char virtio_name[LKL_PATH_MAX];
-+	char disk_name[LKL_PATH_MAX];
-+	struct abuf sysfs_path_buf = {
-+		.mem = sysfs_path,
-+		.len = sizeof(sysfs_path),
-+	};
-+	char *fmt;
-+	int ret;
++	struct lkl_sem *sem;
 +
-+	if (disk_id < 0)
-+		return -LKL_EINVAL;
++	sem = malloc(sizeof(*sem));
++	if (!sem)
++		return NULL;
 +
-+	ret = lkl_mount_fs("sysfs");
-+	if (ret < 0)
-+		return ret;
-+
-+	if ((uint32_t) disk_id >= virtio_get_num_bootdevs()) {
-+		fmt = SYSFS_DEV_VIRTIO_PLATFORM_PATH;
-+		disk_id -= virtio_get_num_bootdevs();
-+	} else {
-+		fmt = SYSFS_DEV_VIRTIO_CMDLINE_PATH;
++#ifdef _POSIX_SEMAPHORES
++	if (sem_init(&sem->sem, SHARE_SEM, count) < 0) {
++		lkl_printf("sem_init: %s\n", strerror(errno));
++		free(sem);
++		return NULL;
 +	}
++#else
++	pthread_mutex_init(&sem->lock, NULL);
++	sem->count = count;
++	WARN_PTHREAD(pthread_cond_init(&sem->cond, NULL));
++#endif /* _POSIX_SEMAPHORES */
 +
-+	ret = snprintf_append(&sysfs_path_buf, fmt, disk_id);
-+	if (ret)
-+		return ret;
-+
-+	ret = get_node_with_prefix(sysfs_path, "virtio", virtio_name,
-+				   sizeof(virtio_name));
-+	if (ret)
-+		return ret;
-+
-+	ret = snprintf_append(&sysfs_path_buf, "/%s/block", virtio_name);
-+	if (ret)
-+		return ret;
-+
-+	ret = get_node_with_prefix(sysfs_path, "vd", disk_name,
-+				   sizeof(disk_name));
-+	if (ret)
-+		return ret;
-+
-+	if (!part)
-+		ret = snprintf_append(&sysfs_path_buf, "/%s/dev", disk_name);
-+	else
-+		ret = snprintf_append(&sysfs_path_buf, "/%s/%s%d/dev",
-+				      disk_name, disk_name, part);
-+	if (ret)
-+		return ret;
-+
-+	return lkl_encode_dev_from_sysfs(sysfs_path, pdevid);
++	return sem;
 +}
 +
-+long lkl_mount_dev(unsigned int disk_id, unsigned int part,
-+		   const char *fs_type, int flags,
-+		   const char *data, char *mnt_str, unsigned int mnt_str_len)
++static void sem_free(struct lkl_sem *sem)
 +{
-+	char dev_str[] = { "/dev/xxxxxxxx" };
-+	unsigned int dev;
++#ifdef _POSIX_SEMAPHORES
++	WARN_UNLESS(sem_destroy(&sem->sem));
++#else
++	WARN_PTHREAD(pthread_cond_destroy(&sem->cond));
++	WARN_PTHREAD(pthread_mutex_destroy(&sem->lock));
++#endif /* _POSIX_SEMAPHORES */
++	free(sem);
++}
++
++static void sem_up(struct lkl_sem *sem)
++{
++#ifdef _POSIX_SEMAPHORES
++	WARN_UNLESS(sem_post(&sem->sem));
++#else
++	WARN_PTHREAD(pthread_mutex_lock(&sem->lock));
++	sem->count++;
++	if (sem->count > 0)
++		WARN_PTHREAD(pthread_cond_signal(&sem->cond));
++	WARN_PTHREAD(pthread_mutex_unlock(&sem->lock));
++#endif /* _POSIX_SEMAPHORES */
++
++}
++
++static void sem_down(struct lkl_sem *sem)
++{
++#ifdef _POSIX_SEMAPHORES
 +	int err;
-+	char _data[4096]; /* FIXME: PAGE_SIZE is not exported by LKL */
-+
-+	if (mnt_str_len < sizeof(dev_str))
-+		return -LKL_ENOMEM;
-+
-+	err = lkl_get_virtio_blkdev(disk_id, part, &dev);
-+	if (err < 0)
-+		return err;
-+
-+	snprintf(dev_str, sizeof(dev_str), "/dev/%08x", dev);
-+	snprintf(mnt_str, mnt_str_len, "/mnt/%08x", dev);
-+
-+	err = lkl_sys_access("/dev", LKL_S_IRWXO);
-+	if (err < 0) {
-+		if (err == -LKL_ENOENT)
-+			err = lkl_sys_mkdir("/dev", 0700);
-+		if (err < 0)
-+			return err;
-+	}
-+
-+	err = lkl_sys_mknod(dev_str, LKL_S_IFBLK | 0600, dev);
-+	if (err < 0)
-+		return err;
-+
-+	err = lkl_sys_access("/mnt", LKL_S_IRWXO);
-+	if (err < 0) {
-+		if (err == -LKL_ENOENT)
-+			err = lkl_sys_mkdir("/mnt", 0700);
-+		if (err < 0)
-+			return err;
-+	}
-+
-+	err = lkl_sys_mkdir(mnt_str, 0700);
-+	if (err < 0) {
-+		lkl_sys_unlink(dev_str);
-+		return err;
-+	}
-+
-+	/* kernel always copies a full page */
-+	if (data) {
-+		strncpy(_data, data, sizeof(_data));
-+		_data[sizeof(_data) - 1] = 0;
-+	} else {
-+		_data[0] = 0;
-+	}
-+
-+	err = lkl_sys_mount(dev_str, mnt_str, (char *)fs_type, flags, _data);
-+	if (err < 0) {
-+		lkl_sys_unlink(dev_str);
-+		lkl_sys_rmdir(mnt_str);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+long lkl_umount_timeout(char *path, int flags, long timeout_ms)
-+{
-+	long incr = 10000000; /* 10 ms */
-+	struct lkl_timespec ts = {
-+		.tv_sec = 0,
-+		.tv_nsec = incr,
-+	};
-+	long err;
 +
 +	do {
-+		err = lkl_sys_umount(path, flags);
-+		if (err == -LKL_EBUSY) {
-+			lkl_sys_nanosleep((struct __lkl__kernel_timespec *)&ts,
-+					  NULL);
-+			timeout_ms -= incr / 1000000;
-+		}
-+	} while (err == -LKL_EBUSY && timeout_ms > 0);
-+
-+	return err;
++		err = sem_wait(&sem->sem);
++	} while (err < 0 && errno == EINTR);
++	if (err < 0 && errno != EINTR)
++		lkl_printf("sem_wait: %s\n", strerror(errno));
++#else
++	WARN_PTHREAD(pthread_mutex_lock(&sem->lock));
++	while (sem->count <= 0)
++		WARN_PTHREAD(pthread_cond_wait(&sem->cond, &sem->lock));
++	sem->count--;
++	WARN_PTHREAD(pthread_mutex_unlock(&sem->lock));
++#endif /* _POSIX_SEMAPHORES */
 +}
 +
-+long lkl_umount_dev(unsigned int disk_id, unsigned int part, int flags,
-+		    long timeout_ms)
++static struct lkl_mutex *mutex_alloc(int recursive)
 +{
-+	char dev_str[] = { "/dev/xxxxxxxx" };
-+	char mnt_str[] = { "/mnt/xxxxxxxx" };
-+	unsigned int dev;
-+	int err;
++	struct lkl_mutex *_mutex = malloc(sizeof(struct lkl_mutex));
++	pthread_mutex_t *mutex = NULL;
++	pthread_mutexattr_t attr;
 +
-+	err = lkl_get_virtio_blkdev(disk_id, part, &dev);
-+	if (err < 0)
-+		return err;
++	if (!_mutex)
++		return NULL;
 +
-+	snprintf(dev_str, sizeof(dev_str), "/dev/%08x", dev);
-+	snprintf(mnt_str, sizeof(mnt_str), "/mnt/%08x", dev);
++	mutex = &_mutex->mutex;
++	WARN_PTHREAD(pthread_mutexattr_init(&attr));
 +
-+	err = lkl_umount_timeout(mnt_str, flags, timeout_ms);
-+	if (err)
-+		return err;
++	/* PTHREAD_MUTEX_ERRORCHECK is *very* useful for debugging,
++	 * but has some overhead, so we provide an option to turn it
++	 * off.
++	 */
++#ifdef DEBUG
++	if (!recursive)
++		WARN_PTHREAD(pthread_mutexattr_settype(
++				     &attr, PTHREAD_MUTEX_ERRORCHECK));
++#endif /* DEBUG */
 +
-+	err = lkl_sys_unlink(dev_str);
-+	if (err)
-+		return err;
++	if (recursive)
++		WARN_PTHREAD(pthread_mutexattr_settype(
++				     &attr, PTHREAD_MUTEX_RECURSIVE));
 +
-+	return lkl_sys_rmdir(mnt_str);
++	WARN_PTHREAD(pthread_mutex_init(mutex, &attr));
++
++	return _mutex;
 +}
 +
-+struct lkl_dir {
-+	int fd;
-+	char buf[1024];
-+	char *pos;
-+	int len;
-+};
-+
-+static struct lkl_dir *lkl_dir_alloc(int *err)
++static void mutex_lock(struct lkl_mutex *mutex)
 +{
-+	struct lkl_dir *dir = lkl_host_ops.mem_alloc(sizeof(struct lkl_dir));
++	WARN_PTHREAD(pthread_mutex_lock(&mutex->mutex));
++}
 +
-+	if (!dir) {
-+		*err = -LKL_ENOMEM;
++static void mutex_unlock(struct lkl_mutex *_mutex)
++{
++	pthread_mutex_t *mutex = &_mutex->mutex;
++
++	WARN_PTHREAD(pthread_mutex_unlock(mutex));
++}
++
++static void mutex_free(struct lkl_mutex *_mutex)
++{
++	pthread_mutex_t *mutex = &_mutex->mutex;
++
++	WARN_PTHREAD(pthread_mutex_destroy(mutex));
++	free(_mutex);
++}
++
++static lkl_thread_t thread_create(void (*fn)(void *), void *arg)
++{
++	pthread_t thread;
++
++	if (WARN_PTHREAD(pthread_create(&thread, NULL, (void* (*)(void *))fn,
++					arg)))
++		return 0;
++	else
++		return (lkl_thread_t) thread;
++}
++
++static void thread_detach(void)
++{
++	WARN_PTHREAD(pthread_detach(pthread_self()));
++}
++
++static void thread_exit(void)
++{
++	pthread_exit(NULL);
++}
++
++static int thread_join(lkl_thread_t tid)
++{
++	if (WARN_PTHREAD(pthread_join((pthread_t)tid, NULL)))
++		return (-1);
++	else
++		return 0;
++}
++
++static lkl_thread_t thread_self(void)
++{
++	return (lkl_thread_t)pthread_self();
++}
++
++static int thread_equal(lkl_thread_t a, lkl_thread_t b)
++{
++	return pthread_equal((pthread_t)a, (pthread_t)b);
++}
++
++static struct lkl_tls_key *tls_alloc(void (*destructor)(void *))
++{
++	struct lkl_tls_key *ret = malloc(sizeof(struct lkl_tls_key));
++
++	if (WARN_PTHREAD(pthread_key_create(&ret->key, destructor))) {
++		free(ret);
 +		return NULL;
 +	}
-+
-+	dir->len = 0;
-+	dir->pos = NULL;
-+
-+	return dir;
-+}
-+
-+struct lkl_dir *lkl_opendir(const char *path, int *err)
-+{
-+	struct lkl_dir *dir = lkl_dir_alloc(err);
-+
-+	if (!dir) {
-+		*err = -LKL_ENOMEM;
-+		return NULL;
-+	}
-+
-+	dir->fd = lkl_sys_open(path, LKL_O_RDONLY | LKL_O_DIRECTORY, 0);
-+	if (dir->fd < 0) {
-+		*err = dir->fd;
-+		lkl_host_ops.mem_free(dir);
-+		return NULL;
-+	}
-+
-+	*err = 0;
-+
-+	return dir;
-+}
-+
-+struct lkl_dir *lkl_fdopendir(int fd, int *err)
-+{
-+	struct lkl_dir *dir = lkl_dir_alloc(err);
-+
-+	if (!dir)
-+		return NULL;
-+
-+	dir->fd = fd;
-+
-+	return dir;
-+}
-+
-+void lkl_rewinddir(struct lkl_dir *dir)
-+{
-+	lkl_sys_lseek(dir->fd, 0, LKL_SEEK_SET);
-+	dir->len = 0;
-+	dir->pos = NULL;
-+}
-+
-+int lkl_closedir(struct lkl_dir *dir)
-+{
-+	int ret;
-+
-+	ret = lkl_sys_close(dir->fd);
-+	lkl_host_ops.mem_free(dir);
-+
 +	return ret;
 +}
 +
-+struct lkl_linux_dirent64 *lkl_readdir(struct lkl_dir *dir)
++static void tls_free(struct lkl_tls_key *key)
 +{
-+	struct lkl_linux_dirent64 *de;
-+
-+	if (dir->len < 0)
-+		return NULL;
-+
-+	if (!dir->pos || dir->pos - dir->buf >= dir->len)
-+		goto read_buf;
-+
-+return_de:
-+	de = (struct lkl_linux_dirent64 *)dir->pos;
-+	dir->pos += de->d_reclen;
-+
-+	return de;
-+
-+read_buf:
-+	dir->pos = NULL;
-+	de = (struct lkl_linux_dirent64 *)dir->buf;
-+	dir->len = lkl_sys_getdents64(dir->fd, de, sizeof(dir->buf));
-+	if (dir->len <= 0)
-+		return NULL;
-+
-+	dir->pos = dir->buf;
-+	goto return_de;
++	WARN_PTHREAD(pthread_key_delete(key->key));
++	free(key);
 +}
 +
-+int lkl_errdir(struct lkl_dir *dir)
++static int tls_set(struct lkl_tls_key *key, void *data)
 +{
-+	if (dir->len >= 0)
-+		return 0;
-+
-+	return dir->len;
++	if (WARN_PTHREAD(pthread_setspecific(key->key, data)))
++		return (-1);
++	return 0;
 +}
 +
-+int lkl_dirfd(struct lkl_dir *dir)
++static void *tls_get(struct lkl_tls_key *key)
 +{
-+	return dir->fd;
++	return pthread_getspecific(key->key);
 +}
 +
-+int lkl_set_fd_limit(unsigned int fd_limit)
++static unsigned long long time_ns(void)
 +{
-+	struct lkl_rlimit rlim = {
-+		.rlim_cur = fd_limit,
-+		.rlim_max = fd_limit,
++	struct timespec ts;
++
++	clock_gettime(CLOCK_MONOTONIC, &ts);
++
++	return 1e9*ts.tv_sec + ts.tv_nsec;
++}
++
++static void *timer_alloc(void (*fn)(void *), void *arg)
++{
++	int err;
++	timer_t timer;
++	struct sigevent se =  {
++		.sigev_notify = SIGEV_THREAD,
++		.sigev_value = {
++			.sival_ptr = arg,
++		},
++		.sigev_notify_function = (void (*)(union sigval))fn,
 +	};
-+	return lkl_sys_setrlimit(LKL_RLIMIT_NOFILE, &rlim);
++
++	err = timer_create(CLOCK_REALTIME, &se, &timer);
++	if (err)
++		return NULL;
++
++	return (void *)(long)timer;
 +}
++
++static int timer_set_oneshot(void *_timer, unsigned long ns)
++{
++	timer_t timer = (timer_t)(long)_timer;
++	struct itimerspec ts = {
++		.it_value = {
++			.tv_sec = ns / 1000000000,
++			.tv_nsec = ns % 1000000000,
++		},
++	};
++
++	return timer_settime(timer, 0, &ts, NULL);
++}
++
++static void timer_free(void *_timer)
++{
++	timer_t timer = (timer_t)(long)_timer;
++
++	timer_delete(timer);
++}
++
++static void panic(void)
++{
++	assert(0);
++}
++
++static long _gettid(void)
++{
++#ifdef	__FreeBSD__
++	return (long)pthread_self();
++#else
++	return syscall(SYS_gettid);
++#endif
++}
++
++struct lkl_host_operations lkl_host_ops = {
++	.panic = panic,
++	.thread_create = thread_create,
++	.thread_detach = thread_detach,
++	.thread_exit = thread_exit,
++	.thread_join = thread_join,
++	.thread_self = thread_self,
++	.thread_equal = thread_equal,
++	.sem_alloc = sem_alloc,
++	.sem_free = sem_free,
++	.sem_up = sem_up,
++	.sem_down = sem_down,
++	.mutex_alloc = mutex_alloc,
++	.mutex_free = mutex_free,
++	.mutex_lock = mutex_lock,
++	.mutex_unlock = mutex_unlock,
++	.tls_alloc = tls_alloc,
++	.tls_free = tls_free,
++	.tls_set = tls_set,
++	.tls_get = tls_get,
++	.time = time_ns,
++	.timer_alloc = timer_alloc,
++	.timer_set_oneshot = timer_set_oneshot,
++	.timer_free = timer_free,
++	.print = print,
++	.mem_alloc = malloc,
++	.mem_free = free,
++	.ioremap = lkl_ioremap,
++	.iomem_access = lkl_iomem_access,
++	.virtio_devices = lkl_virtio_devs,
++	.gettid = _gettid,
++	.jmp_buf_set = jmp_buf_set,
++	.jmp_buf_longjmp = jmp_buf_longjmp,
++};
++
++static int fd_get_capacity(struct lkl_disk disk, unsigned long long *res)
++{
++	off_t off;
++
++	off = lseek(disk.fd, 0, SEEK_END);
++	if (off < 0)
++		return (-1);
++
++	*res = off;
++	return 0;
++}
++
++static int do_rw(ssize_t (*fn)(), struct lkl_disk disk, struct lkl_blk_req *req)
++{
++	off_t off = req->sector * 512;
++	void *addr;
++	int len;
++	int i;
++	int ret = 0;
++
++	for (i = 0; i < req->count; i++) {
++
++		addr = req->buf[i].iov_base;
++		len = req->buf[i].iov_len;
++
++		do {
++			ret = fn(disk.fd, addr, len, off);
++
++			if (ret <= 0) {
++				ret = -1;
++				goto out;
++			}
++
++			addr += ret;
++			len -= ret;
++			off += ret;
++
++		} while (len);
++	}
++
++out:
++	return ret;
++}
++
++static int blk_request(struct lkl_disk disk, struct lkl_blk_req *req)
++{
++	int err = 0;
++
++	switch (req->type) {
++	case LKL_DEV_BLK_TYPE_READ:
++		err = do_rw(pread, disk, req);
++		break;
++	case LKL_DEV_BLK_TYPE_WRITE:
++		err = do_rw(pwrite, disk, req);
++		break;
++	case LKL_DEV_BLK_TYPE_FLUSH:
++	case LKL_DEV_BLK_TYPE_FLUSH_OUT:
++#ifdef __linux__
++		err = fdatasync(disk.fd);
++#else
++		err = fsync(disk.fd);
++#endif
++		break;
++	default:
++		return LKL_DEV_BLK_STATUS_UNSUP;
++	}
++
++	if (err < 0)
++		return LKL_DEV_BLK_STATUS_IOERR;
++
++	return LKL_DEV_BLK_STATUS_OK;
++}
++
++struct lkl_dev_blk_ops lkl_dev_blk_ops = {
++	.get_capacity = fd_get_capacity,
++	.request = blk_request,
++};
++
 -- 
 2.20.1 (Apple Git-117)
 
