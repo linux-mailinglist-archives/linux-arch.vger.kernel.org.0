@@ -2,97 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0825F4568
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Nov 2019 12:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF4EF4583
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Nov 2019 12:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731028AbfKHLJC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Nov 2019 06:09:02 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:49576 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726180AbfKHLJC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Nov 2019 06:09:02 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA8B509c050132;
-        Fri, 8 Nov 2019 11:07:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=05GqX2q0ywPMyzyL60tZrM3bsF30oO3GM+yVJb7hsAM=;
- b=fEgEVf0mYnLW2QGKB5BZV2RimLE5KuUDdegqs4601sC8b2mP2+kthj/9LlDMnBElhOGe
- IQXTGGvYeykjZ5Ex0sUedxXgS78BhhlkjotTNX5xkB2ic7xkf04KYAvjwpUHhEO2sOzP
- U8fZ3BLbzJizpakGwlIpRud9qQ3Lg/5IPzjwBHrfshSaEAOXQtctSw1+RGOt4sBeJQ0N
- 9k3yS89Wmk4lCAkHrrpjdXD+8uY2UDxJ4pqaP8yGHvyMgsCpcq2Vd0DgpMQqmMU1wwF8
- QHXCc5qTTJClvLPybCXqdKEwN9t/WE7RdPDbxK2Gvb0RHKrhmtkehotcougtNg8ULXu1 Nw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2w41w14mxh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 08 Nov 2019 11:07:35 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA8B4LA8052138;
-        Fri, 8 Nov 2019 11:07:35 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2w4k31mh0m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 08 Nov 2019 11:07:34 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA8B7Vvl006484;
-        Fri, 8 Nov 2019 11:07:34 GMT
-Received: from [192.168.8.47] (/213.41.92.70)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 08 Nov 2019 03:07:31 -0800
-Subject: Re: [patch V2 07/17] x86/entry/64: Remove redundant interrupt disable
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-arch@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>
-References: <20191023122705.198339581@linutronix.de>
- <20191023123118.296135499@linutronix.de>
-From:   Alexandre Chartre <alexandre.chartre@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <86bf1670-dd35-f310-dab9-106897cc3921@oracle.com>
-Date:   Fri, 8 Nov 2019 12:07:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        id S1730224AbfKHLRT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Nov 2019 06:17:19 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:37646 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730151AbfKHLRT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Nov 2019 06:17:19 -0500
+Received: by mail-il1-f196.google.com with SMTP id s5so4808493iln.4
+        for <linux-arch@vger.kernel.org>; Fri, 08 Nov 2019 03:17:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1qQIKh0Kx09yt4UlfZE0QQimqZJs0HRuw35Gf2JD9II=;
+        b=IVmR8kmezcJBZmhiWRutQsbwJUs8c5A02ZMQsI74eWnXopE6xN9Kmsofu1U8/Dz01Q
+         c3n7sOSgQh11xtexkOR1DgTOKczAbkcdnnT62OQJL5/huG5dLZHCrt6sGuvYXEKdWbpF
+         /NSQ3lGK9mtKu4KqVyf7ovhlczzCt5k8KfVuCzuqtW7Iwe5dKSjMUDufTBvOLczQCUVZ
+         UEaje+bimWhJ3xGYLAAlToAH+PAAeYW7uSt3iwUlcC3LklYy/FTreUej6lujxpaTOcEz
+         OKO00wgy41ZJqoYbUBlJ+xg3Ctb+O+iaQu62mo8NM1LnYQbgULw7LA2CWNVY5JUMUC14
+         HZYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1qQIKh0Kx09yt4UlfZE0QQimqZJs0HRuw35Gf2JD9II=;
+        b=G1xT31JbFXLeWi/wlRGHsNGPCbyoCd/ey9A/sHKtzYs6fCheRs+MSi45es5Axh6wgA
+         okQDxbfkN+rb9YTm9DNI9bpPMoSxRuYYdUN494LP8/3iheRaHrjjykyWQTCb4bKZuHqR
+         9X/1THo8WrGK8gIsHutdNKSIZNNzDZrchqaU7xIsa39VdagwtmI/bbiEKyvqdfw6PvyH
+         T944nfMtK6OQ6emtaiPacR3gKxSNA/jc+sosIaRL1bk/OKDWJGGIo2+T1xzkJRG64cnT
+         pyZHOEnRoA3oaSrGfzzHaOxh+evAPG9/ahB+dCmTmaficsFAsS2sH8fz6zLLLIbVLwck
+         I0FA==
+X-Gm-Message-State: APjAAAUpJvMLkucbaMpV7fEg2yXIY2ZLI9zw7RELvAQh1cfZEeGtXiRk
+        bQsymmKjcrrI6fnR1t7njrixurBJoIyfAtB8Law=
+X-Google-Smtp-Source: APXvYqzwfYLNbik0CIvHznokXJnf6z56trdXVHdesXaKPD73Fgji+qOj96Mb9E45pfStlkOpQAWWF+Dd6gopE0z9Sxo=
+X-Received: by 2002:a92:8108:: with SMTP id e8mr11444965ild.209.1573211837950;
+ Fri, 08 Nov 2019 03:17:17 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191023123118.296135499@linutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9434 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1910280000 definitions=main-1911080109
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9434 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
- definitions=main-1911080109
+References: <cover.1571798507.git.thehajime@gmail.com> <cover.1573179553.git.thehajime@gmail.com>
+ <a4d1cb5c-04cd-b6c3-bc96-c5ef08bbcffe@cambridgegreys.com>
+In-Reply-To: <a4d1cb5c-04cd-b6c3-bc96-c5ef08bbcffe@cambridgegreys.com>
+From:   Octavian Purdila <tavi.purdila@gmail.com>
+Date:   Fri, 8 Nov 2019 13:17:06 +0200
+Message-ID: <CAMoF9u0EA=D=mpMy2fZ8=Et3rxrjnjDmjGRdcz83nGhS2eOKVQ@mail.gmail.com>
+Subject: Re: [RFC v2 00/37] Unifying LKL into UML
+To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc:     Hajime Tazaki <thehajime@gmail.com>, linux-um@lists.infradead.org,
+        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
+        Akira Moroo <retrage01@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, Nov 8, 2019 at 11:13 AM Anton Ivanov
+<anton.ivanov@cambridgegreys.com> wrote:
+>
+<snip>
 
-On 10/23/19 2:27 PM, Thomas Gleixner wrote:
-> Now that the trap handlers return with interrupts disabled, the
-> unconditional disabling of interrupts in the low level entry code can be
-> removed along with the trace calls.
-> 
-> Add debug checks where appropriate.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->   arch/x86/entry/entry_64.S |    9 +++------
->   1 file changed, 3 insertions(+), 6 deletions(-)
-> 
+Hi Anton,
 
-Reviewed-by: Alexandre Chartre <alexandre.chartre@oracle.com>
+> I am reading the patch-set and I have a recurring question as I read it.
+> It applies to IRQ, mmap IO, timers, devices, etc
+>
+> The question is: "What is the unerlying req to replace the existing UML
+> code for the library".
+>
+> F.e timers in UML have been moved to an underlying POSIX timers call now
+> and that can probably work on any system that offers it. If there is
+> some presentation/documentation/etc material which I can read which goes
+> through the actual choices it will be very helpful.
+>
 
-alex.
+This (old) paper should help with some of the rationale and design
+decision behind LKL:
+
+https://www.researchgate.net/publication/224164682_LKL_The_Linux_kernel_library
+
+> The same question applies the other way around too. I like the hostops
+> approach, we can probably adopt some of that in UML proper to make it
+> more portable and easier to have alternative implementations for the
+> underlying host side operations.
+>
+
+The host ops part is not properly explained in the paper as it evolved
+over time (they are called native operations there), so I will try to
+give a high level overview here.
+
+In order to make it easier to compile LKL applications for different
+targets (OSes, architectures, user/kernel) we decided to use a two
+step build process: a kernel build and a host target (+apps) build.
+This helped us reduce intrusions in the kernel build system while
+allowing to support the various requirements a host target has. As
+part of the first step a lkl.o object and a set of processed kernel
+uabi headers (to avoid conflicts with host Linux kernel headers) are
+generated. These are then use to build a library (liblkl.so) for a
+specific target. Here is where host ops are compiled in together with
+the lkl.o object. This is the reason for the split between arch/lkl
+(kernel) and tools/lkl (host target).
+
+I think this build split is the biggest challenge in integrating LKL
+with UML and I think once this is resolved it will be much easier to
+merge the rest.
+
+I am curios to learn what you think about such a split build for UML
+and if there are any low hanging fruits we could start from.
+
+Thanks,
+Tavi
