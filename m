@@ -2,58 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 906A6F3F15
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Nov 2019 06:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA01F3F14
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Nov 2019 06:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbfKHFDF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1726125AbfKHFDF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Fri, 8 Nov 2019 00:03:05 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:38610 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbfKHFDF (ORCPT
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36287 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726103AbfKHFDF (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Nov 2019 00:03:05 -0500
-Received: by mail-pl1-f196.google.com with SMTP id w8so3250440plq.5
+Received: by mail-pf1-f196.google.com with SMTP id v19so3876611pfm.3
         for <linux-arch@vger.kernel.org>; Thu, 07 Nov 2019 21:03:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NxJBcBRow1AvQI6ecmVgHCS/pUSBuJYc9TYuMuJ/9+8=;
-        b=FRllAVZrda6jMCsSgu5V7aaOLbxuTjxOdk9PQpdfqtay0M/yIOVAcz3gfFlpwLFFUy
-         S8vUSUEyLXBntqowdhUZvNwugxMzZCS+4/r2doHwUsm9f43F59zsGvudetTbekE815Vw
-         Y2/LDc128I4J/i/W/jQMI8cZjCJh12s53o9esOZ06oZU0vwggjWFChnFBieju6tWWk7A
-         /gDBdDYBfitR27LrMG/VC4np+yVO48p9QZoxgJUQbFygWNAPYMSqjNI+TlVP2P7k+eFI
-         FqIyd2b0JF4qcX+HPs9ZcakfPXIUDPO8T4JMIpUsrOUXZu6a2W+RJEccy+yP1Uv51v+f
-         IfhA==
+        bh=JdQzqUTDdPCKipZzqeoQ0qh0njqgqODS3douIl8T/zE=;
+        b=jB1Lfa1l0s66Jca6rqG2rk+hhfVNudDnUrxGClndqRmaBL/Uc+LvWED/pEB4aQkj4S
+         WkEqi3v7CHuvUwpWzy3SHLty94jNRDOsjcPAZNjXXsd8+HlJxph2NiJgnTU+r7ZSs6/9
+         uSFw851rCyDAKGfmAX8OfAX6PDY80qr64a+poRCHSTu0NzVO3qxhjzyGMApKcQWzwm6d
+         Ugi1y1OtjD3H6bvMPA4xz9YqA/W14RmO9Weym0N56Hph7cce/q80YSL3ejKj859Qo9PD
+         P6MQibhaB+uxWG53g7UdjZ2nF/A0xSzMBAQN4NnBigE+HFFaelu2qBAuODgRupawESkS
+         jmkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NxJBcBRow1AvQI6ecmVgHCS/pUSBuJYc9TYuMuJ/9+8=;
-        b=jJ2Crnj3yGUw+r5AWC5X6ci+V3W8Hs6iIFGRPohNjL7jsbU8SZ1W1jq6fMTIeEd4FN
-         ggLegtmjtzyRlm1yLYvpwLOzSWZIFgUOSJvozZCJVtaWLgSLStB4CqeE1ZdA8b1G4vup
-         S0QDs0TN3L9VuMiKLA8anyhbZCwvdi1vrfAVyErO4DOAuAOYBQkVhwBzjk4EvGa5sBo1
-         ibqzxpZuFDuawgGMJONk7fLeY6vCqrFr8kQ1HTVv3Q3+SNcrGFSuyKVBgboAV6uatBtV
-         grcHvZnYidHpob4awWJdKQ774GUx4oxa0ug62Z6IP/wQj4FsFp+USZ+lcC6uLYFBC2FC
-         9J3A==
-X-Gm-Message-State: APjAAAUvSP/Lc4FvhjZJWYaNsJiUiM72plQgo2AQvdNqi5LF3Y87GEvq
-        fM5jcKXvR5uoSPRwMySqMyZwAlDvBTJNsw==
-X-Google-Smtp-Source: APXvYqyHAIakQgLUm4cLJb+cpxpiOCi3L7tXPMzg6kR+Di4q02niLoBC0u80z7GD7Ntx5rUiiVMIOA==
-X-Received: by 2002:a17:90a:24b:: with SMTP id t11mr10776362pje.77.1573189384508;
+        bh=JdQzqUTDdPCKipZzqeoQ0qh0njqgqODS3douIl8T/zE=;
+        b=or09zWSIVkcZzjAyrWranxhm0QhuqKwRVnIW+cec4d1XWCP6KCUJhDO4hsfMTevHMa
+         +d5FaSx88I5lO54SILKBWAWiLPn/aEqcV68ehNtrrLB0/AKR3LoeQrJ9Hn2rPG2ikeiK
+         vFjbfWdOnB8P048zHUMHoHXFHlki6M88/EdrUgnaqsTQ4DXOSGdS6UoAxAl+3MV8bCSB
+         TDeJniB6IfpjavQ0Z4iLeI1Rsw88puYDNNhNgLtafn+dcFHgN4TBhbdiQizyLij+7jLT
+         MuNIWzpXcRyW4Y1AY6TrqIueUSwocFk+6szx0/EQ6OgiVJnW9VCPtYPpVb3p8mCBrJ3/
+         2DTQ==
+X-Gm-Message-State: APjAAAXxkIsexRW5FD+wfvFUF4yhu5HMuV0ApKcfEfNwmo/zN+518nbg
+        Ck3eoKnsrSdO+AlxoTlu6Os=
+X-Google-Smtp-Source: APXvYqwK4vVInJ5LQ9Ah05ybRRGnhlZ51+XIbpE/dDIfAjYDRM5yQj3F+GlZzuoX/H+iFmDjP+Zpwg==
+X-Received: by 2002:a63:eb08:: with SMTP id t8mr9673784pgh.49.1573189384295;
         Thu, 07 Nov 2019 21:03:04 -0800 (PST)
 Received: from earth-mac.local ([202.214.86.179])
-        by smtp.gmail.com with ESMTPSA id c12sm5559511pfp.67.2019.11.07.21.03.03
+        by smtp.gmail.com with ESMTPSA id y22sm4661021pfn.6.2019.11.07.21.03.03
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
         Thu, 07 Nov 2019 21:03:03 -0800 (PST)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id 9D775201ACFC45; Fri,  8 Nov 2019 14:03:01 +0900 (JST)
+        id A3628201ACFC47; Fri,  8 Nov 2019 14:03:01 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org
 Cc:     Octavian Purdila <tavi.purdila@gmail.com>,
         Akira Moroo <retrage01@gmail.com>,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org
-Subject: [RFC v2 01/37] asm-generic: atomic64: allow using generic atomic64 on 64bit platforms
-Date:   Fri,  8 Nov 2019 14:02:16 +0900
-Message-Id: <3ed3c306fc51b0073fcf3a222f7314fcaf50ccf4.1573179553.git.thehajime@gmail.com>
+Subject: [RFC v2 02/37] arch: add __SYSCALL_DEFINE_ARCH
+Date:   Fri,  8 Nov 2019 14:02:17 +0900
+Message-Id: <d2d52cac3eff859b8cef0bc755cb6ae4590f27a6.1573179553.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1573179553.git.thehajime@gmail.com>
 References: <cover.1573179553.git.thehajime@gmail.com>
@@ -66,33 +66,42 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Octavian Purdila <tavi.purdila@gmail.com>
 
-With CONFIG_64BIT enabled, atomic64 via CONFIG_GENERIC_ATOMIC64 options
-are not compiled due to type conflict of atomic64_t defined in
-linux/type.h.
-
-This commit fixes the issue and allow using generic atomic64 ops.
+This allows the architecture code to process the system call
+definitions. It is used by LKL to create strong typed function
+definitions for system calls.
 
 Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 ---
- include/asm-generic/atomic64.h | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/syscalls.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/asm-generic/atomic64.h b/include/asm-generic/atomic64.h
-index 370f01d4450f..9b15847baae5 100644
---- a/include/asm-generic/atomic64.h
-+++ b/include/asm-generic/atomic64.h
-@@ -9,9 +9,11 @@
- #define _ASM_GENERIC_ATOMIC64_H
- #include <linux/types.h>
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 88145da7d140..77e52fe19923 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -203,9 +203,14 @@ static inline int is_syscall_trace_event(struct trace_event_call *tp_event)
+ }
+ #endif
  
-+#ifndef CONFIG_64BIT
- typedef struct {
- 	s64 counter;
- } atomic64_t;
++#ifndef __SYSCALL_DEFINE_ARCH
++#define __SYSCALL_DEFINE_ARCH(x, sname, ...)
 +#endif
++
+ #ifndef SYSCALL_DEFINE0
+ #define SYSCALL_DEFINE0(sname)					\
+ 	SYSCALL_METADATA(_##sname, 0);				\
++	__SYSCALL_DEFINE_ARCH(0, _##sname);			\
+ 	asmlinkage long sys_##sname(void);			\
+ 	ALLOW_ERROR_INJECTION(sys_##sname, ERRNO);		\
+ 	asmlinkage long sys_##sname(void)
+@@ -222,6 +227,7 @@ static inline int is_syscall_trace_event(struct trace_event_call *tp_event)
  
- #define ATOMIC64_INIT(i)	{ (i) }
+ #define SYSCALL_DEFINEx(x, sname, ...)				\
+ 	SYSCALL_METADATA(sname, x, __VA_ARGS__)			\
++	__SYSCALL_DEFINE_ARCH(x, sname, __VA_ARGS__)		\
+ 	__SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
  
+ #define __PROTECT(...) asmlinkage_protect(__VA_ARGS__)
 -- 
 2.20.1 (Apple Git-117)
 
