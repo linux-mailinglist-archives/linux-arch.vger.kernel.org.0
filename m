@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A73CF7239
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2019 11:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF1EF724C
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2019 11:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726887AbfKKKeM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Nov 2019 05:34:12 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:59291 "EHLO
+        id S1726912AbfKKKgn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Nov 2019 05:36:43 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:38207 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726770AbfKKKeL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Nov 2019 05:34:11 -0500
-Received: from mail-qk1-f171.google.com ([209.85.222.171]) by
+        with ESMTP id S1726887AbfKKKgn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Nov 2019 05:36:43 -0500
+Received: from mail-qv1-f46.google.com ([209.85.219.46]) by
  mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MAOa3-1iawdn3mtn-00BubF; Mon, 11 Nov 2019 11:34:09 +0100
-Received: by mail-qk1-f171.google.com with SMTP id m125so10686797qkd.8;
-        Mon, 11 Nov 2019 02:34:07 -0800 (PST)
-X-Gm-Message-State: APjAAAXBLhPZlSPXhqcGeeCNRdMDtYj7c7RP3FBKTzorNwKWV9N6IY/h
-        dsGYRHX/iMu9ieQ2kMEDeVvtcIjaW+7sm+yx5so=
-X-Google-Smtp-Source: APXvYqzESzY62F14rsigxKLBXM91nKVjfO+E517KtV1rTG3fdeRCW+MOilAesC4Pz85XDKVkv4qCW/mxeD7p5CII2Ks=
-X-Received: by 2002:a37:4f13:: with SMTP id d19mr9320005qkb.138.1573468446947;
- Mon, 11 Nov 2019 02:34:06 -0800 (PST)
+ id 1MqbI0-1i8CQi2iKu-00mc2H; Mon, 11 Nov 2019 11:36:40 +0100
+Received: by mail-qv1-f46.google.com with SMTP id f12so4660079qvu.3;
+        Mon, 11 Nov 2019 02:36:39 -0800 (PST)
+X-Gm-Message-State: APjAAAUT3Qdeiri2nf/a9hZxYA+s9YglrpYjjU1hn5ZWkyA7i5p8Vrcc
+        QA30I7QFw7jV+rFcmPGwSBM33hztJ/+dGvx7o1E=
+X-Google-Smtp-Source: APXvYqwG9UjDI7BT4/zArLXJROi41Jfl0ozvIqGD8Z6sQp9Psd5jWuuWMeGtnWBnULPRq767xF7AmE4x/PyrFGraS9U=
+X-Received: by 2002:a0c:a9cc:: with SMTP id c12mr4580319qvb.222.1573468598676;
+ Mon, 11 Nov 2019 02:36:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-2-hch@lst.de>
-In-Reply-To: <20191029064834.23438-2-hch@lst.de>
+References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-4-hch@lst.de>
+In-Reply-To: <20191029064834.23438-4-hch@lst.de>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 11 Nov 2019 11:33:50 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3xk-mQic84Cv7CYhm2DqDCyu69+qH=i8M=JoE3xkpM=g@mail.gmail.com>
-Message-ID: <CAK8P3a3xk-mQic84Cv7CYhm2DqDCyu69+qH=i8M=JoE3xkpM=g@mail.gmail.com>
-Subject: Re: [PATCH 01/21] arm: remove ioremap_cached
+Date:   Mon, 11 Nov 2019 11:36:22 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3k2KRyhCy4OWJkToNBiw_mw0e_A=Ta6UANMMF3EXnhmA@mail.gmail.com>
+Message-ID: <CAK8P3a3k2KRyhCy4OWJkToNBiw_mw0e_A=Ta6UANMMF3EXnhmA@mail.gmail.com>
+Subject: Re: [PATCH 03/21] ia64: rename ioremap_nocache to ioremap_uc
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
         Greentime Hu <green.hu@gmail.com>,
@@ -55,27 +55,27 @@ Cc:     Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
         linux-arch <linux-arch@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Q7k81wFvoFE5E6wkXe8aVkg4UtIIhdO42eNTJCWF2OH8BAKNIYC
- ktqFVT/gUxHCzKTuvIteocEc6dCMNSblmwTqy1u69ZFn9QjpmWgW6PLcr3ijxS847YwhU+c
- GBYtgFx+LwY4VCvhh4uFz2h42SqTW/LXCUgI6o4ZQqjSZwKNrU2Hv7GTYzJItkd0nVZ06yn
- wJQX7E/0e7Av7MMyGkB9w==
+X-Provags-ID: V03:K1:1JhgznTD+nxQakSYexEK5Pk7b21gJFc2WwU/VhlwbME8N3jGV/+
+ TpZ37rg3qW3B4NpO67un+1fSQwj7nJ9WZxTx4tTw9EKEbeJLwQT1TG9P/3xrMgCSPaMoGDW
+ 4OmMhZWar6tNBwoASHsSKmwJI7CPx497+h8ii4N2nIjzGmy0KJ0TV9vHBlIGb31rRCksOx9
+ aTZ8Ir7FbCAiPNKD11llg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oR2Ibl1tMpg=:Qch93j4jtU7v7an1WaRtUY
- uQTKMSgbmv0EPsSZPfTgOVFZIWbmvPIEaWQXjS5b3cpXTDONxq3NV1AFL+oCqQR3fYn2G93Pp
- wkFmNZV9cUErVOTSsNMD6c5v3f+lmaJvWvCuYuaQfTESl8FT84aX4OwSgqDkwbp03RC/qRwwd
- cQQgtjfeaSC08MOEdxEE2oCFqW2aNpdpKU8+eX0yMEtdAIfcWVJ4axf1VSY1wycvW3Dj1uUVS
- VCktrzuSKnryj1bRphPhi4P5N9iad/8cLMOMrSWr+cS1WDmwrOztyoB3d8S9+bC+uhkJmpEe7
- EcfZ8jKZP9/DD2n6C979ElHhh8ziwOJF5aCbu9FJ/3Hwccjix+idScCwc95ajahJo34ezl3lP
- EWrM/tGIP3Z1HimZqAorMW6Kd0QIrcoqwfGD5mT9Nnj1PcSurMuSLPyN2b2lT11Qw4p0ww6B+
- oeOcMJ3fbXiNaNzLDWPI87bji3C/R/KY7rBYn5JT0MpO5pM3315Lo0hfT1CpHuMvy/kUOaN/w
- kUJYL9rH7UR0Gs13qvxRBu+Qn5t/8Lp508AYjr+SO4FU4eR3D0c/bl0AXvq1GNfOF0BMPwn9g
- GBMFaNMpAJFF9p6TcCeT6TZK+gEp8bhzkARZyPnpy65YdnXsF7gvEu10r9nhH+RM+kkPrJ/yt
- 3DoVsdY8pcVlWdCGz6eIAShOQwEvqzvLEa55zcqxLePkPrh1mYUk2JnAr8OAQp6sfgPU12HHR
- dH54ArhwI5PevKmKQK9Qx+VVtLUKVhXEm+VW2q47zxQaN3TliTK/bJYO0GJKfVqR/esKvLyQg
- 2o9ETmvdOIgOoXxzJH6TW/6+NtkBymQJzfxn4BPT2LC5PT4/SAjAvWDWBQjkLmSGfmUGljMCd
- t9k/ZM/dYSmuz8qpNCWdLYv72qTheL6z9GztXaJ1tPMJ396fIiD9u+iOlZKl1/g3gse85yPrx
- isOPo/23/1q/RDLGEpv78pVtJzsJNS0CrsUW3c5uUe/PAMdEfxCPFEerurnYjhlHEMaRzDNOb
- DqZ1WkpzuyGejI8CcALxCNpPVoDWdS4P55/uMZZfngrqEXWbis11Wvy9mUQQiFVYzg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ine2h7iyM1A=:qlrnOzki59DM0rGyHbF8c+
+ 4c41xr+Pjp3dv6qx5neQvKwVeJxerBsQ4cZwqUg3qKbbDEFa2ZPC0yEa1cbl7oJWJAwRcsdz6
+ 3MUPWCBNg96i3H6LWIf2LY64tTEzAwU6ta+wRDArNRsNPjb+cOcAHdO9J5cipKKooXSwfqh8z
+ hdrlf+Webj14QrpswR0AwC+8hKtzWd3i0xF+aE+nK/v+b1TtFw3PWqR0yiKat86EI4zUEaq5S
+ blnI1BhSm9FhHUQnRQYPCyh9wiNRLDsep8swNKAMT9kFtEYbcXHeA956UAKOL55rHOLQlxqd3
+ lAXOyepCNVYPFNUyMmMo6uXZePmp/F+60qeAs/Tm928lA24mSrrR1jN4Nq8m3JqUpjKhlZFaU
+ fvOcUxdsAUUjwEiE4xSEhPoEtQb+DOGjhCuWsoZrvcZ1CjJd2pnmp6FLV3FPDrayCN2FUB0+D
+ dmLJySIAVE94FRl52KFtqFt9/TBA0a2L4yS7XNw+74hbWZJzUFOsB1zH2ZnS90kPa5a1S22XM
+ mkuCB+Ze2kLOtqiQGKJqc0RlyWnS+sMOkWAdvTX+Rk1hGH5fKf0QbR6Le5fYNxtQWuM0JMh+f
+ By832HCI9AAhEwsUgCfxQCimkThZsEgsisrp/yb11zuIdHEeLX16avpzV0hyWrAt6yeKP7XrG
+ yjSzxrZhvOP87R/igp1n2UpO7GVNOVggicvQugamDUOVh3NDT+rQXzKcV4LH3yIkPIKuSINHm
+ GaoL/XXgPWkF56Qx6lsBsgXfh3dciBTkAIu4nPZV5+fqR9kZ2QN3jAM4eo2Ub3HntQ9Kbyv/a
+ ZDdBgC236xAnxPORQfWGJIrWohqntO0L5vDv2H4PTweI1FuenAFOsrx0PeMpr05WJvpzkeNBM
+ RntzRq/h+i22XaPj8kSJZuypgHi3M6gwdd2H+7uFpgi5116lXuTPt2gZhmC4RNHOAUMyt7F6w
+ EKVOtQp2bdxVDZZvAy6BtKT5EprzcuH1RFRAxRb4YPU7spR+xJPQCgbGgWu5JDdYB+aa/+plM
+ NJyOttaoY33T+C7Iqkgauu6DDMOdPDodJFayhYpF7V4oCFsaUB1Qh4zXbOtQenYMLA==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -83,8 +83,18 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Oct 29, 2019 at 7:48 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> No users of ioremap_cached are left, remove it.
+> On ia64 ioremap_nocache fails if attributes don't match.  Not other
+> architectures does this, and we plan to get rid of ioremap_nocache.
+> So get rid of the special semantics and define ioremap_nocache in
+> terms of ioremap as no portable driver could rely on the behavior
+> anyway.
+>
+> However x86 implements ioremap_uc in a similar way as the ia64
+> version of ioremap_nocache, in that it ignores the firmware tables.
+> Switch ia64 to override ioremap_uc instead.
 >
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+Good idea,
 
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
