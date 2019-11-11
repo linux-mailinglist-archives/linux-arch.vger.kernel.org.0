@@ -2,26 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99117F71FD
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2019 11:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB12F7208
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2019 11:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727112AbfKKK33 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Nov 2019 05:29:29 -0500
-Received: from verein.lst.de ([213.95.11.211]:48604 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726952AbfKKK32 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 11 Nov 2019 05:29:28 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 1A21068BE1; Mon, 11 Nov 2019 11:29:24 +0100 (CET)
-Date:   Mon, 11 Nov 2019 11:29:23 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>,
-        Michal Simek <monstr@monstr.eu>,
+        id S1726888AbfKKKaC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Nov 2019 05:30:02 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:54497 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726832AbfKKKaB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Nov 2019 05:30:01 -0500
+Received: from mail-qv1-f46.google.com ([209.85.219.46]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1Mbj7g-1huV1U45Ak-00dCLj; Mon, 11 Nov 2019 11:29:59 +0100
+Received: by mail-qv1-f46.google.com with SMTP id q19so4644495qvs.5;
+        Mon, 11 Nov 2019 02:29:57 -0800 (PST)
+X-Gm-Message-State: APjAAAXVlRKVBuB0v2UROjYwO1s3CSlJzruUafA8sebho1Z8+BzL9XRl
+        LUfh+JG7TXsaf/t9bNG5dda3OJjKps2Q81DSJDc=
+X-Google-Smtp-Source: APXvYqx3dRDA2rmaPEW4UpY0UEoKLtstJlcCKLowXnTab550quUX1o9OqysLm43EJTh/MA4389FmX1Acn21s2dCCBDI=
+X-Received: by 2002:a0c:d0e1:: with SMTP id b30mr23068710qvh.197.1573468197026;
+ Mon, 11 Nov 2019 02:29:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-12-hch@lst.de>
+In-Reply-To: <20191029064834.23438-12-hch@lst.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 11 Nov 2019 11:29:40 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a36-afn--XqG0ddj6VSPCzA_cfZqRxQXDuan7yk8CKg4w@mail.gmail.com>
+Message-ID: <CAK8P3a36-afn--XqG0ddj6VSPCzA_cfZqRxQXDuan7yk8CKg4w@mail.gmail.com>
+Subject: Re: [PATCH 11/21] asm-generic: don't provide ioremap for CONFIG_MMU
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
         Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
         Guan Xuetao <gxt@pku.edu.cn>,
-        the arch/x86 maintainers <x86@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         alpha <linux-alpha@vger.kernel.org>,
         "open list:SYNOPSYS ARC ARCHITECTURE" 
         <linux-snps-arc@lists.infradead.org>,
@@ -41,25 +54,41 @@ Cc:     Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>,
         linux-mtd <linux-mtd@lists.infradead.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 10/21] asm-generic: ioremap_uc should behave the same
- with and without MMU
-Message-ID: <20191111102923.GA12974@lst.de>
-References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-11-hch@lst.de> <CAK8P3a2o4R+E2hTrHrmNy7K1ki3_98aWE5a-fjkQ_NWW=xd_gQ@mail.gmail.com> <20191111101531.GA12294@lst.de> <CAK8P3a0rTvfPP2LUMw8EC0xz5gfZP5+NUkoaZBJrtYYfr6YRig@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0rTvfPP2LUMw8EC0xz5gfZP5+NUkoaZBJrtYYfr6YRig@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:igOphroMEFpMnMkrn23J291od0DWjU1aaJH47OrINMfH2gQoQzj
+ wswLmUODv8L5V0ZNS9C2vEmrWUVg+qfsgcjOowE/M+AMr3tjjJARCovdc3zW7eZSc52MaNn
+ B8zIQScI6XPXtCZ/2AwugNF73ontdS4Nl5G9zwfcfOenNk2be0dlSUdQbpujpEDBcXtnfSa
+ XEzpJADBTSkFvOEUrL4LQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cuSoAWXZmVg=:LRwo+EdjvwPeGuS9lQdNp8
+ DnQAkXW0tf/bZkz+3Uuwxu9Pdj+SF9Suk6NUgZldkZU7NsN5A9Sp5kp8X1q+owzDlSnHBCnA2
+ reicSGJClSm1yQDQTlvHBnaDGBt6i6cHu2ovNDWI9LDSbj8/yUSaYa9HI3qpunSQ2ZmPircNB
+ a5ZbFbmP4KW5IcG8SmrbdtmX56a5ulik8/5ZK1SASqZ/z3UkOHjzu5IEfDAqHq+StbMqDRi1E
+ uewNmboOTDnGVermO75HwWDlI9TUPcdKGsX8HwDtAmwVHZ8Yh2Chs+kfdGLfTTIjdeCFJDj6d
+ E8JnwMt9MfGFletNBP7f/5RMgZv5AfBReuxfYMPEUUwCejHcNNWnVOyGVzGkOGEiJzRpWS+q7
+ izgNe2yLHj7duCP/hDdsRct1hQaVaaHFEnYLoz4d8DX1BK2q+AnvvAqEg4wU54rLTY/1hDrRb
+ r8VD8AfKhsOHK1xGwzLiZM/tmPXYkZNHhHQJKMZuKq/LLLA/wTfFIOw3Il3U0pSQEkkAhrMyD
+ BMgyWqfDmkdcrPNN6UWuVqhQGHvUGXsFWWE44UrWvf5pIr3LqLO4fO9yIydWnjah2WYjDEl4f
+ +VmOl6qTHDPm9mETIz/49fnCXo2TVyrxwPiu7zpoZVzXY2tb+Z+f5gHoanfOuPSozT2RRJpRI
+ TjTUTjg5iBKiCdYi+hMLPvezFIyuBNLoTkoKXKaJiAUZJiSFBBBUOsvHnHuFQ0rTvl3JHCXVL
+ JheC7k+G0pzN985/q+BE516gWETbGZNuV0wuTwh65OgYEBClWS0uUP4RFNmwwJh/fXDCD7tF1
+ pnYja0kjlOQ8WTbMtC5/GjWUuSkoQKSXiu9hUp4J2WzCZYL4dExwgugU4O+DXUvx1FlI4pzUH
+ +sMohm92opK8jaRnuUiA==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 11, 2019 at 11:27:27AM +0100, Arnd Bergmann wrote:
-> Ok, fair enough. Let's just go with your version for now, if only to not
-> hold your series up more. I'd still suggest we change atyfb to only
-> use ioremap_uc() on i386 and maybe ia64. I can send a patch for that.
+On Tue, Oct 29, 2019 at 7:49 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> All MMU-enabled ports have a non-trivial ioremap and should thus provide
+> the prototype for their implementation instead of providing a generic
+> one unless a different symbol is not defined.  Note that this only
+> affects sparc32 nds32 as all others do provide their own version.
+>
+> Also update the kerneldoc comments in asm-generic/io.h to explain the
+> situation around the default ioremap* implementations correctly.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-I don't think we even need it on ia64.  But lets kick off a dicussion
-with the atyfb, x86 and ia64 maintainers after this series is in.
-Which was kinda my plan anyway.
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
