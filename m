@@ -2,93 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB12F7208
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2019 11:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C3AF721D
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2019 11:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726888AbfKKKaC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Nov 2019 05:30:02 -0500
-Received: from mout.kundenserver.de ([212.227.17.10]:54497 "EHLO
+        id S1726768AbfKKKb1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Nov 2019 05:31:27 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:60767 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726832AbfKKKaB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Nov 2019 05:30:01 -0500
+        with ESMTP id S1726988AbfKKKb0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Nov 2019 05:31:26 -0500
 Received: from mail-qv1-f46.google.com ([209.85.219.46]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Mbj7g-1huV1U45Ak-00dCLj; Mon, 11 Nov 2019 11:29:59 +0100
-Received: by mail-qv1-f46.google.com with SMTP id q19so4644495qvs.5;
-        Mon, 11 Nov 2019 02:29:57 -0800 (PST)
-X-Gm-Message-State: APjAAAXVlRKVBuB0v2UROjYwO1s3CSlJzruUafA8sebho1Z8+BzL9XRl
-        LUfh+JG7TXsaf/t9bNG5dda3OJjKps2Q81DSJDc=
-X-Google-Smtp-Source: APXvYqx3dRDA2rmaPEW4UpY0UEoKLtstJlcCKLowXnTab550quUX1o9OqysLm43EJTh/MA4389FmX1Acn21s2dCCBDI=
-X-Received: by 2002:a0c:d0e1:: with SMTP id b30mr23068710qvh.197.1573468197026;
- Mon, 11 Nov 2019 02:29:57 -0800 (PST)
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1M1YxX-1iSBIl08Wh-00394l; Mon, 11 Nov 2019 11:31:24 +0100
+Received: by mail-qv1-f46.google.com with SMTP id y18so4653500qve.2;
+        Mon, 11 Nov 2019 02:31:22 -0800 (PST)
+X-Gm-Message-State: APjAAAUxlJXW97+1cBVSkWYmUR6nUAyzY7pFnWR1j64svdk137UqnkjB
+        L3rL1AV0PwZOn0xobSNrp1i1ToAK7xZJ7ywQxfA=
+X-Google-Smtp-Source: APXvYqxD4F/fwy7LIVnyFzyiMun+f+kScDaMuxMbPMHFdHwTAmNy4Oax48ObAzH1ZmZyCVG2W0sxl5/9Apu79krhc7g=
+X-Received: by 2002:a0c:a9cc:: with SMTP id c12mr4561842qvb.222.1573468282069;
+ Mon, 11 Nov 2019 02:31:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-12-hch@lst.de>
-In-Reply-To: <20191029064834.23438-12-hch@lst.de>
+References: <20191029064834.23438-12-hch@lst.de> <mhng-33ea9141-2440-4a2d-8133-62094486fc48@palmer-si-x1c4>
+ <CAMuHMdVuDp_8UDeWv8tdPAH5JS84=-yfwZjOk-YQcoYKM9za+w@mail.gmail.com>
+In-Reply-To: <CAMuHMdVuDp_8UDeWv8tdPAH5JS84=-yfwZjOk-YQcoYKM9za+w@mail.gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 11 Nov 2019 11:29:40 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a36-afn--XqG0ddj6VSPCzA_cfZqRxQXDuan7yk8CKg4w@mail.gmail.com>
-Message-ID: <CAK8P3a36-afn--XqG0ddj6VSPCzA_cfZqRxQXDuan7yk8CKg4w@mail.gmail.com>
+Date:   Mon, 11 Nov 2019 11:31:05 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2a7jwmAKhh3WsowCmvdQpsde5A5nz+3NXRn7amhwUxQg@mail.gmail.com>
+Message-ID: <CAK8P3a2a7jwmAKhh3WsowCmvdQpsde5A5nz+3NXRn7amhwUxQg@mail.gmail.com>
 Subject: Re: [PATCH 11/21] asm-generic: don't provide ioremap for CONFIG_MMU
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org,
-        "moderated list:NIOS2 ARCHITECTURE" 
-        <nios2-dev@lists.rocketboards.org>, openrisc@lists.librecores.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv@lists.infradead.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
         Linux-sh list <linux-sh@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@kernel.org>,
         sparclinux <sparclinux@vger.kernel.org>,
+        linux-riscv@lists.infradead.org,
+        Vincent Chen <deanbo422@gmail.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
         linux-xtensa@linux-xtensa.org,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-mips@vger.kernel.org, alpha <linux-alpha@vger.kernel.org>,
+        "moderated list:NIOS2 ARCHITECTURE" 
+        <nios2-dev@lists.rocketboards.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:igOphroMEFpMnMkrn23J291od0DWjU1aaJH47OrINMfH2gQoQzj
- wswLmUODv8L5V0ZNS9C2vEmrWUVg+qfsgcjOowE/M+AMr3tjjJARCovdc3zW7eZSc52MaNn
- B8zIQScI6XPXtCZ/2AwugNF73ontdS4Nl5G9zwfcfOenNk2be0dlSUdQbpujpEDBcXtnfSa
- XEzpJADBTSkFvOEUrL4LQ==
+X-Provags-ID: V03:K1:GhVqUNVJ6NcFflSOEwN3xNZ+WDbcZEBsdfOJy5lHGcUzStPON3S
+ sdvrlkVnzJ4K/x3cf5tYPugN5XhSBeh1PoZWPALuD9vHbiqs7LkvRtku4dgNCYPfg2hTWD3
+ aVB9H4AYQg+3P/o5HUXDoffXlGofXmGsR9gAnSPoqG/6NQQYwaLa49lQwiosiJF/NEYAPps
+ lqR0sQiFoqXofI25s5XJA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cuSoAWXZmVg=:LRwo+EdjvwPeGuS9lQdNp8
- DnQAkXW0tf/bZkz+3Uuwxu9Pdj+SF9Suk6NUgZldkZU7NsN5A9Sp5kp8X1q+owzDlSnHBCnA2
- reicSGJClSm1yQDQTlvHBnaDGBt6i6cHu2ovNDWI9LDSbj8/yUSaYa9HI3qpunSQ2ZmPircNB
- a5ZbFbmP4KW5IcG8SmrbdtmX56a5ulik8/5ZK1SASqZ/z3UkOHjzu5IEfDAqHq+StbMqDRi1E
- uewNmboOTDnGVermO75HwWDlI9TUPcdKGsX8HwDtAmwVHZ8Yh2Chs+kfdGLfTTIjdeCFJDj6d
- E8JnwMt9MfGFletNBP7f/5RMgZv5AfBReuxfYMPEUUwCejHcNNWnVOyGVzGkOGEiJzRpWS+q7
- izgNe2yLHj7duCP/hDdsRct1hQaVaaHFEnYLoz4d8DX1BK2q+AnvvAqEg4wU54rLTY/1hDrRb
- r8VD8AfKhsOHK1xGwzLiZM/tmPXYkZNHhHQJKMZuKq/LLLA/wTfFIOw3Il3U0pSQEkkAhrMyD
- BMgyWqfDmkdcrPNN6UWuVqhQGHvUGXsFWWE44UrWvf5pIr3LqLO4fO9yIydWnjah2WYjDEl4f
- +VmOl6qTHDPm9mETIz/49fnCXo2TVyrxwPiu7zpoZVzXY2tb+Z+f5gHoanfOuPSozT2RRJpRI
- TjTUTjg5iBKiCdYi+hMLPvezFIyuBNLoTkoKXKaJiAUZJiSFBBBUOsvHnHuFQ0rTvl3JHCXVL
- JheC7k+G0pzN985/q+BE516gWETbGZNuV0wuTwh65OgYEBClWS0uUP4RFNmwwJh/fXDCD7tF1
- pnYja0kjlOQ8WTbMtC5/GjWUuSkoQKSXiu9hUp4J2WzCZYL4dExwgugU4O+DXUvx1FlI4pzUH
- +sMohm92opK8jaRnuUiA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:URlU+6+rc6w=:y5PGJEge8OBUWHMAmN3LJO
+ jIxpuP7dwcb+ik9HrK0VliiW2etopAEFn7uaY69aK9jGrqr7zmd1UGZJRBqB6CpVskEG/zCmk
+ BUxZlaXSP2HfoBeDI1gCu7bYcY4fzXvLBrG9aPN+zildJOs7QeBcOfLC01M7htudy1pUPdFtA
+ dR7SDHkntfBffPPssOnu6ozRPDnU6vL2KUZ/ZH/UXiHM1JH0SCQi3S+xNy26Z9u7aOGtjVuuO
+ PboGcUnXnq3UHc+4dGBkWnBZqMiP3HYXGf5s9IXYstXi/3xPJcP434DY79oHGBb5Q5QCS7pK3
+ Uh0sK/c6JlDeEuv/gL/RRCD0bvXv2SlkehmX2f9FT7bNgJYnNvApyh/P0EK+ylKyicCH785sG
+ xC8SI2udds3P3++DOPOSazbC3AFpHQUODsb9TOd8/7q76Uvk2Q8Cx7y4Bpi6wlIxtGNHhFxG+
+ GrbYr9XnYxkfFIfbc09D32LUFSRMlQbiKhK+f9ulUq1+DzdAaz5KJQCOdG8j5T2PMF+tZQKOX
+ fxrqTQQnVV5QO3UZ9eprc58Gh9+a+JmAzuRVILazR9h+Q4YMNvlH6mMi2Y6SEyIlDBf75q2Kb
+ ssAh+zE1KqjhRdsofdjkMYHkRgsTuR/y6OSetAY5mWDaBpp0F/+tlvsTaWXWGYx9ipHHQyRQe
+ h1E8Nf2100ZVK2stQXODwrwsTyFzK6/Jxt9vt/fi8F6opD9MMsohnz1+WQLVVQfS0XnJiJhtc
+ LNLskA15FjzURVAbK5EZaI1b5UJGTHvdRXycVdprQUsFnJ7JZaPMWksiXLm9r+Ndyaeklwakd
+ OhiMwOoJE6qrOjB9QpYGAepCg/KlNGFz3AaQBpWbKb0wXzSS4NfVpn80UjiPCOnoHPmJ6ogZ8
+ Hg9JY1zIFq3kTEw9eITg==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 7:49 AM Christoph Hellwig <hch@lst.de> wrote:
+On Wed, Nov 6, 2019 at 7:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> All MMU-enabled ports have a non-trivial ioremap and should thus provide
-> the prototype for their implementation instead of providing a generic
-> one unless a different symbol is not defined.  Note that this only
-> affects sparc32 nds32 as all others do provide their own version.
+> Hi Palmer,
 >
-> Also update the kerneldoc comments in asm-generic/io.h to explain the
-> situation around the default ioremap* implementations correctly.
+> On Wed, Nov 6, 2019 at 7:11 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> > It looks like the difference in prototype between the architectures is between
+> >
+> >     void __iomem *ioremap(resource_size_t, size_t)
+> >     void __iomem *ioremap(phys_addr_t, size_t)
+> >     void __iomem *ioremap(phys_addr_t, unsigned long)
+> >     void __iomem *ioremap(unsigned long, unsigned long)
+> >
+> > shouldn't they all just be that first one?  In other words, wouldn't it be
+> > better to always provide the generic ioremap prototype and unify the ports
+> > instead?
 >
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Agreed. But I'd go for the second one.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Right, phys_addr_t is the correct type here, resource_size_t is just a generic
+type that is at least as long as any resource, and usually the same as
+phys_addr_t, which is supposed to be used for physical addresses.
+
+      Arnd
