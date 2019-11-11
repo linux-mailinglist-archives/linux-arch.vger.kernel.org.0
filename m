@@ -2,34 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCF8F7177
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2019 11:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B191F7186
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2019 11:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbfKKKK3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Nov 2019 05:10:29 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:46443 "EHLO
+        id S1726819AbfKKKLV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Nov 2019 05:11:21 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:41619 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726819AbfKKKK3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Nov 2019 05:10:29 -0500
-Received: from mail-qt1-f171.google.com ([209.85.160.171]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1N9d91-1hrUX90ShR-015dsV; Mon, 11 Nov 2019 11:10:26 +0100
-Received: by mail-qt1-f171.google.com with SMTP id r20so986965qtp.13;
-        Mon, 11 Nov 2019 02:10:25 -0800 (PST)
-X-Gm-Message-State: APjAAAWp5mGPBDRxjUb8bwZW7YbOkDgA+TyCfkBGKpjv6I7pRTPXR3/j
-        Kh4e/mRyKtOkUzL4PHkZFeBwf2mZZFOa0iIQi10=
-X-Google-Smtp-Source: APXvYqyqP0GEnKlLDcc3YXGxYPpIsc43oy+/l9orRIfJHYpq8HDGEADC0l7WhZk0kMzg516CeAScWIBjk4MnQDDCwV4=
-X-Received: by 2002:ac8:1908:: with SMTP id t8mr24584774qtj.18.1573467024165;
- Mon, 11 Nov 2019 02:10:24 -0800 (PST)
+        with ESMTP id S1726791AbfKKKLV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Nov 2019 05:11:21 -0500
+Received: from mail-qv1-f49.google.com ([209.85.219.49]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MY60L-1iOMQt1XnZ-00YS76; Mon, 11 Nov 2019 11:11:18 +0100
+Received: by mail-qv1-f49.google.com with SMTP id g12so4612896qvy.12;
+        Mon, 11 Nov 2019 02:11:17 -0800 (PST)
+X-Gm-Message-State: APjAAAVw0WGVa93bX2rRIm+r96RX/85x++Y6Y+1THc5M39Nr7QXeXTz9
+        FNDCsmaP71q+RB31ugbw6lq7BlY3FYpr83v54fA=
+X-Google-Smtp-Source: APXvYqyPlYZ0IqFyt+F/Kw+2cGPdhPemO7nTBHjMV2hNTSSGSuWp0EuM7jgO4bHxqVV9VdMKLREBG37EpIWZ8cUBhPs=
+X-Received: by 2002:a05:6214:2c2:: with SMTP id g2mr4941532qvu.210.1573467075908;
+ Mon, 11 Nov 2019 02:11:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-13-hch@lst.de>
-In-Reply-To: <20191029064834.23438-13-hch@lst.de>
+References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-18-hch@lst.de>
+In-Reply-To: <20191029064834.23438-18-hch@lst.de>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 11 Nov 2019 11:10:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a28UDPEP7Bqu_wEXsfwSpT-5i30STB2iX3RfxdvbfzrNQ@mail.gmail.com>
-Message-ID: <CAK8P3a28UDPEP7Bqu_wEXsfwSpT-5i30STB2iX3RfxdvbfzrNQ@mail.gmail.com>
-Subject: Re: [PATCH 12/21] arch: rely on asm-generic/io.h for default
- ioremap_* definitions
+Date:   Mon, 11 Nov 2019 11:10:59 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0zfmup8DYQQnT3GNCkgcv9cWxejj2QAr+FmYWs46ZuHQ@mail.gmail.com>
+Message-ID: <CAK8P3a0zfmup8DYQQnT3GNCkgcv9cWxejj2QAr+FmYWs46ZuHQ@mail.gmail.com>
+Subject: Re: [PATCH 17/21] lib: provide a simple generic ioremap implementation
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
         Greentime Hu <green.hu@gmail.com>,
@@ -56,25 +55,25 @@ Cc:     Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
         linux-arch <linux-arch@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Ry3F/dh+b1z3bnsQ+UBRP9D/K3Mz/7Ju4+2xCL86KzNyw2dTCJf
- e9poGQj3rifB+4n2zHUDJR2bT4YBOZ99Ww6lJ803taaMFYDciQmV7FBTtmlnWKZqiBGj5at
- xlipTkzdIa6iP21zusJMcEKnGQf9+zy8gzfdg+2sjrbPSEMbDVj19UGoKuTfSje6z8ZYhnD
- ztTAx0Fuyk4d5lLeNPgSA==
+X-Provags-ID: V03:K1:Jw6R9MgtvptgNXqV/w46V9xoWHwD8XE4Gouh0J/yWwM5otV+kEB
+ 7FSvlqisGkXoarQq9FFf3XFSjfP9Khv9CrlcIQDIkUSwECgEvjTVagVGR3QxPZgRg3l/GuQ
+ 8OUkBeqU9izVWQKnuUGe6AdIB/gzwRuFEcYqOXkH7nn3G2TyXwgwM5Aa+PTWKQRCxiPSwDu
+ MOI9JFOzby7qtJJf103xg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:uDzvIBywqVo=:3NpQWLViLFRhGeSVNjkbVY
- Bwz6nPtittmtPBWklwQCfn5DpZ1HcX98NVE3Fn1q2B2RD4WAkJnlaiA3JHdhIzauhME8vle9G
- 33Ay/bZbzOJJEKTyGZrZ9W6ajRHTwpyq0XZV00s4O31g09K4JSX5sXn1563Zz93AFYvazL6GV
- Vv2ICs6jv/cng1C0JHN9DTj3z7bPgkPs75LD9UXqdymZiYp1+pujYFFAjPdDxFzC76KPfcUak
- xne2EaAtgIdTVQFNpaEPZt57Yv28urArJyhIkWs2BSoa77QBEqgFg7ufYyNHeG7LEu2RKJ4fW
- 6xEUwWzi/eWOD9g1M50df33LH7f0YLK/BttLQGj1qVrWHexRf/vCBKFQq04KzPraSoC8AF95x
- NWR+Wg1P1YjimlNUBgtcL76eyxjpx88jTKMpXnGY5ErgfUruZdb7J+5hfGwUNPBJwZ7Y40oxy
- wCYU3cziQehzifLVXSFDk/ZjJD1qHXMlhu5zqUUT6QPjWLYhcLXA43bemDyJYSk3ESr3PKqkC
- GkFCWrY7fG06OtF+5sDLpodKZ9RKp2yrF4GeMYfcjn1WFNenNOIu6AhF+HMUhYXS/KJwkjOtc
- H6IAQenCm1dMZMCdiAZcWCSETV/UwPa0Y+Wx7HIcdP9aX/l0dbdvEwVXbT7hhXvDaZHJvBgm3
- cGh/KwAHc9HoQezFUqzo/vDPun0t3sVSib0KWzgAFE/VgOR7Qb1FBPvQdssc22H3pr5eKDUAl
- E83zpJ+wouG9+G4GHJMlZB+sII/FSGh8HFAvEQRvZnacNwx2QfEENwQTJxdwoMzZ7xBLzlg2w
- j8QbhO3/ij/s9reO7VdEGCb17ZSrquutOrhUYwe0r5ac/LBgmzRFRND12wjrbDUM6SNrsmotw
- FhTjtkwvwKbFmDXOEGUA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:S8NSDlRnK1o=:vMqksgfFRp2mw5k/tQhbgV
+ lcIyqgT3ki2FIY87+u2D27KifRyeL6ThUGNX+z7MhqRBYT30ekG9g9ObGFmZYrNhCLSU5JIi4
+ 8QegsEKJ++4cbA7zusaA5qWw8EYeM54yokC/uBbDTwNxFoPYBmFIRaDyYRi3sbvoJS0aa7SPu
+ EEgGXecEUIb9p2vRpZj76b8gAKvZdxLpHHfgeJfcHQYBvC3xzw6YrQ/I5TLOgAmjswUEWoNVc
+ O2E7mq8OsfFcUwB29XiNw4PkDISlajRGQjLPBesn7pMrecfwZXFthvD5s9vCD/FQ9UUVRvi1f
+ g95QZpXTUPtqDH/KeUrh734/pxm4boI10A3DlmZNWEQE9kqVGzvtU9yLgzMHW1XfyN60r2NBv
+ Dfh804PlU/WAsfEOzP5tPUULYHw3EvRj3cbteSU3mFgTi+OrLrlTgSgdZbDF9anAMzSZ90f6o
+ SW6PEJ9IqSwzXQOVUd1YZArqfER7aBrrLblIgay+udsRoWRLP1JlMCNF92ESsTzAA6ZlOMnp2
+ XqIfHoPIQ2Gurj1lz0M1nxy4NqswmYl0JPQ11J7XH7X6k4k5kcxPKttsXPL2G1pW/uKAjld17
+ e6mFgvd6YLnYn1IHWKaW9aRCy3uXLuaGI9G59UlW2dUyrhwoxn3Pea4l2TZErVFeQx+Cl6EIb
+ knSdZ1rCFRdbIW50xX839USHFCSoTk9LxqZQvZPKKNOK7Ttiy7i+/p9M/qUD13TkmQ4ZGl56Q
+ EX4wiVhKo9JAU3CFkhOF3rpWiNyy+nxZmyL/rM+3kjfCpTgO5gtyavQJaF4GCfR0c3lYs9+N3
+ QDaQTfW5fYZWeGYexqmlIJNk5GRYSgfZQ0ajmBqUxjPZtn/u7CEiY87+wGnf/ANO+Lugo5i1b
+ M4G8dKUkBnc1NwtYJFrA==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -82,13 +81,10 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Oct 29, 2019 at 7:49 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> Various architectures that use asm-generic/io.h still defined their
-> own default versions of ioremap_nocache, ioremap_wt and ioremap_wc
-> that point back to plain ioremap directly or indirectly.  Remove these
-> definitions and rely on asm-generic/io.h instead.  For this to work
-> the backup ioremap_* defintions needs to be changed to purely cpp
-> macros instea of inlines to cover for architectures like openrisc
-> that only define ioremap after including <asm-generic/io.h>.
+> A lot of architectures reuse the same simple ioremap implementation, so
+> start lifting the most simple variant to lib/ioremap.c.  It provides
+> ioremap_prot and iounmap, plus a default ioremap that uses prot_noncached,
+> although that can be overridden by asm/io.h.
 >
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
