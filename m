@@ -2,122 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EEDF93CB
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Nov 2019 16:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DB1F95A3
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Nov 2019 17:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727176AbfKLPNw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Nov 2019 10:13:52 -0500
-Received: from www62.your-server.de ([213.133.104.62]:55050 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726896AbfKLPNw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Nov 2019 10:13:52 -0500
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1iUXrV-0001Td-3O; Tue, 12 Nov 2019 16:13:45 +0100
-Received: from [2a02:1205:507e:bf80:bef8:7f66:49c8:72e5] (helo=pc-11.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1iUXrU-000QBs-QI; Tue, 12 Nov 2019 16:13:44 +0100
-Subject: Re: Question about "asm/rwonce.h: No such file or directory"
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Xiao Yang <ice_yangxiao@163.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-References: <1da2db04-da6a-cedb-e85a-6ded68dada82@163.com>
- <20191112123125.GD17835@willie-the-truck>
- <CAK7LNARA99UUTY2v6rS=Nb4Cg5pB4RsR0PogLqdT9uNLcH20ew@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <32a3b660-f4d2-268e-2206-d50073298c0c@iogearbox.net>
-Date:   Tue, 12 Nov 2019 16:13:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727069AbfKLQ1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Nov 2019 11:27:24 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:35091 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727143AbfKLQ1X (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Nov 2019 11:27:23 -0500
+Received: by mail-ed1-f67.google.com with SMTP id r16so15439577edq.2
+        for <linux-arch@vger.kernel.org>; Tue, 12 Nov 2019 08:27:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=qNdulMghwGPBvmgJ8scwCvXDFRwh4jWCkPxL6qrSIjQ=;
+        b=WsNhISOt+hJkwbT7YN0D/1CAbxYs1x64PK9hVpM/9Lp0tdTDzA1sdtCfQ9ORQHddmu
+         SWw8MeBIFdqKCnfB+CTPjClScqjYAUa7xGNsH0xea1alpD0KKDb/71jlBRziY7Qd9qdx
+         KV0CvxkV5t6cSBUmoO5okM/7FYAgHCCesvlZyrCbTxeCe4tdDMsW85Doqmswx63GE7wZ
+         uYnLA+nQOsZqzuDT/yn8FPnBx5G04jDhrvGNcWr/+fINHW+iqGAPut6Np2TO1MBBWLIQ
+         mP8HdO9X3/9rvAsSXiTtY7np2QYRsalD3mhKoXcvIAmObokb1mwSJwDNBpAtw/Rzq2tr
+         tPFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=qNdulMghwGPBvmgJ8scwCvXDFRwh4jWCkPxL6qrSIjQ=;
+        b=r3WGv9u4q9ZR+MJIZsvYgfvRbTHWK7HyCiI6rg/ls1ED9CbCx07d/V4Cur0DAOZ0xV
+         g4uX0cflkckTaaatVVPoqpolIKKaEAxO8LhWIQZdHa3G5LdfGpjlimcJ065uR64AXSLt
+         FacDzNk9hBTgp+Gzlgj5OVUPRHHeOMGyC4t3YQoSHmMsbuKAIQeJduYlKvphggFfo2u3
+         mzvpGMdrGJ0fFPcvfhewfGoPxuSXSKveb4811JjWkm9EXWlN6ejZ4txgrE9Pde63XwCO
+         M8zEHIkkRfpw6ei/LH9nARIW9KqsHCot1QXxJTdoNfUNjxX2hvBdzQrGzZcRgJNciumx
+         RjOQ==
+X-Gm-Message-State: APjAAAWpYC/i2Ez71ZHBdj8b7ku/GT3xFYQ9DYE7XrLtn9YB+L/mXgML
+        U9T0G2SVrbHTLl4hnlMXh8H1doUHS2e2tmgUSTo=
+X-Google-Smtp-Source: APXvYqyx6ZSP9pia1ghp0mGM0db9pMWKu3Ilw5isnMyYCLiKlWaoj5hSNiGZLYdu7/xruRv858z6c1CJ/zVYY273ryQ=
+X-Received: by 2002:a05:6402:142c:: with SMTP id c12mr33378742edx.96.1573576041909;
+ Tue, 12 Nov 2019 08:27:21 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAK7LNARA99UUTY2v6rS=Nb4Cg5pB4RsR0PogLqdT9uNLcH20ew@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.101.4/25631/Tue Nov 12 10:51:17 2019)
+Received: by 2002:a05:6402:1118:0:0:0:0 with HTTP; Tue, 12 Nov 2019 08:27:21
+ -0800 (PST)
+Reply-To: walmart.b100263@gmail.com
+From:   "MS. MARYANNA B. THOMASON" <eco.bank1204@gmail.com>
+Date:   Tue, 12 Nov 2019 17:27:21 +0100
+Message-ID: <CAOE+jAB_cP8q9vvBDV62=BwoQhn_GcPJhAZsCyhMAnjxyg9-YA@mail.gmail.com>
+Subject: CONTACT WALMART TRANSFER To pick up $5000 sent to you this morning
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/12/19 1:50 PM, Masahiro Yamada wrote:
-> On Tue, Nov 12, 2019 at 9:31 PM Will Deacon <will@kernel.org> wrote:
->>
->> [+lkml, Masahiro, Alexei and Daniel]
->>
->> On Tue, Nov 12, 2019 at 04:56:39PM +0800, Xiao Yang wrote:
->>> With your patch[1], I alway get the following error when building
->>> tools/bpf:
->>
->> In case people want to reproduce this, my branch is here:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/log/?h=lto
->>
->>> ----------------------------------------------------------------------------------
->>>
->>> make -C tools/bpf/
->>> make: Entering directory
->>> '/usr/src/perf_selftests-x86_64-rhel-7.6-642a312d47ceb54603630d9d04f5052f3b46d9a3/tools/bpf'
->>>
->>> Auto-detecting system features:
->>> ... libbfd: [ on ]
->>> ... disassembler-four-args: [ OFF ]
->>>
->>> CC bpf_jit_disasm.o
->>> CC bpf_dbg.o
->>> In file included from
->>> /usr/src/perf_selftests-x86_64-rhel-7.6-642a312d47ceb54603630d9d04f5052f3b46d9a3/include/uapi/linux/filter.h:9:0,
->>> from
->>> /usr/src/perf_selftests-x86_64-rhel-7.6-642a312d47ceb54603630d9d04f5052f3b46d9a3/tools/bpf/bpf_dbg.c:41:
->>> /usr/src/perf_selftests-x86_64-rhel-7.6-642a312d47ceb54603630d9d04f5052f3b46d9a3/include/linux/compiler.h:247:24:
->>> fatal error: asm/rwonce.h: No such file or directory
->>> #include <asm/rwonce.h>
->>> ^
->>> compilation terminated.
->>> Makefile:61: recipe for target 'bpf_dbg.o' failed
->>> make: *** [bpf_dbg.o] Error 1
->>> make: *** Waiting for unfinished jobs....
->>> make: Leaving directory
->>>
->>> ----------------------------------------------------------------------------------
->>>
->>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/commit/?h=lto&id=642a312d47ceb54603630d9d04f5052f3b46d9a3
->>>
->>> It seems that include/linux/compiler.h cannot find the asm/rwonce.h because
->>> tools/bpf/Makefile doesn't include arch/*/include/generated/asm/rwonce.h.
->>
->> The problem with referring to the generated files is that they don't exist
->> unless you've configured the main source directory. The real problem here
->> seems to be that tools/bpf/ refers directly to header files in the kernel
->> sources without any understanding of kbuild, and therefore mandatory-y
->> headers simply don't exist when it goes looking for them.
+ CONTACT WALMART TRANSFER To pick up $5000 sent to you this morning
 
-Hmm, I am puzzled why that is. :/ I think there are two options, i) remove it
-from CFLAGS like below (at least this doesn't let the build fail in my case
-but requires linux headers to be installed) or ii) add a copy of filter.h to
-tools/include/uapi/linux/filter.h so the few tools can just reuse it. We do have
-bpf_common.h and bpf.h there already.
-
-diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-index 5d1995fd369c..08dfd289174c 100644
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -10,7 +10,6 @@ MAKE = make
-  INSTALL ?= install
-
-  CFLAGS += -Wall -O2
--CFLAGS += -D__EXPORTED_HEADERS__ -I$(srctree)/include/uapi -I$(srctree)/include
-
-  # This will work when bpf is built in tools env. where srctree
-  # isn't set and when invoked from selftests build, where srctree
-
-Thanks,
-Daniel
+Attn Dear Beneficiary.
+Happy to inform you,I have deposited your payment funds
+$10.500,000MillionUS DollarsWith Walmart international money
+transfers.
+Receive the Money with Walmart | MoneyGram service.
+Walmart partners with MoneyGram to allow customers
+easily receive money transfers abroad,
+Contact Walmart international money transfers office -Benin
+Receive your approval payment funds $10.500,000MillionUS Dollars
+HERE IS WALMART CONTACT INFORMATIONS.
+Contact person. Mrs. Mary Anderson,Dir. Walmart transfers-Benin
+Email: walmart.b100263@gmail.com
+Telephone. +229 68823234
+Text Her on this international phone line. (256) 284-4886
+Ask Mrs. Mary Anderson,Dir. Walmart transfers-Benin to send the transfer
+as i instructed.
+we agreed to keep sending the transfer to you $5000.00 daily.
+Until you received your total payment $10.500,000 from the office
+Once again,
+make sure you contact Mrs. Mary Anderson,Dir. Walmart transfers-Benin
+today including your infos.
+(1) Your  Full Name==============
+(2) house address=============
+(3) Your Phone Numbers=============
+Urgent to receive your transfer now without any further delay.
+Thanks
+MS. MARYANNA B. THOMASON
