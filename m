@@ -2,77 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C07FAABB
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2019 08:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C188FAB33
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2019 08:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726326AbfKMHRV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Nov 2019 02:17:21 -0500
-Received: from m12-14.163.com ([220.181.12.14]:34575 "EHLO m12-14.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725966AbfKMHRV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 13 Nov 2019 02:17:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=oxCjX
-        mUOspQTaP7Tq+vq3pr1IbDXj42KX2LjX+xk/p0=; b=cZqvoK7WPThZGEv+GUPqD
-        oLG9DvsM7fNycrmu/E2Eifk2paSy8D+qmrwMW2kIwbr8P2Ej1xUhUZM8fGglpVJk
-        /4V/eyMl/YFm27FO7dGpsK/6hZm0oR0uaztaUMkefdoSGbdOPRCEe0kkSTNuzU1n
-        WRDIue7gNeJiGL42Cn8c3A=
-Received: from [192.168.1.133] (unknown [112.25.212.39])
-        by smtp10 (Coremail) with SMTP id DsCowACXnLDVrctd72TNCg--.49S2;
-        Wed, 13 Nov 2019 15:16:38 +0800 (CST)
-Subject: Re: Question about "asm/rwonce.h: No such file or directory"
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Will Deacon <will@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-References: <1da2db04-da6a-cedb-e85a-6ded68dada82@163.com>
- <20191112123125.GD17835@willie-the-truck>
- <CAK7LNARA99UUTY2v6rS=Nb4Cg5pB4RsR0PogLqdT9uNLcH20ew@mail.gmail.com>
- <32a3b660-f4d2-268e-2206-d50073298c0c@iogearbox.net>
- <CAK7LNASR=R=gyuaMO=VzdXrY3gaQ_FVE4es60bzXf=9ASR2qUw@mail.gmail.com>
- <021e7b46-047e-d381-9dca-bd61db08e4f8@163.com>
- <CAK7LNARKh3-cAqsYgcxFwq9CGk-CgBfkiQgfNSULkxwO0xa2vw@mail.gmail.com>
-From:   Xiao Yang <ice_yangxiao@163.com>
-Message-ID: <ac4577d4-c0f2-9596-df6f-3fcc563bde3e@163.com>
-Date:   Wed, 13 Nov 2019 15:16:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726270AbfKMHsf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Nov 2019 02:48:35 -0500
+Received: from mout-p-201.mailbox.org ([80.241.56.171]:42266 "EHLO
+        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbfKMHsf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Nov 2019 02:48:35 -0500
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 47CcDY3vdYzQlBb;
+        Wed, 13 Nov 2019 08:48:29 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
+        with ESMTP id 3hMGDl1msr0T; Wed, 13 Nov 2019 08:48:23 +0100 (CET)
+Date:   Wed, 13 Nov 2019 18:47:57 +1100
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        David Drysdale <drysdale@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <asarai@suse.de>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v15 4/9] namei: LOOKUP_BENEATH: O_BENEATH-like scoped
+ resolution
+Message-ID: <20191113074757.5b4u5vlyx2u6pbn6@yavin.dot.cyphar.com>
+References: <20191105090553.6350-1-cyphar@cyphar.com>
+ <20191105090553.6350-5-cyphar@cyphar.com>
+ <20191113015534.GA26530@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <CAK7LNARKh3-cAqsYgcxFwq9CGk-CgBfkiQgfNSULkxwO0xa2vw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: DsCowACXnLDVrctd72TNCg--.49S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUDApnDUUUU
-X-Originating-IP: [112.25.212.39]
-X-CM-SenderInfo: 5lfhs5xdqj5xldr6il2tof0z/1tbiqBZsXlc7L3HmwgAAsa
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="odomi6wtik4yoblv"
+Content-Disposition: inline
+In-Reply-To: <20191113015534.GA26530@ZenIV.linux.org.uk>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/13/19 2:57 PM, Masahiro Yamada wrote:
-> Sorry, I really do not understand what you are doing.
->
-> include/linux/compiler.h is only for kernel-space.
-> Shrug if a user-land program includes it.
 
-Hi Masahiro,
+--odomi6wtik4yoblv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For building tools/bpf, it is good to fix the compiler error by Daniel's 
-patch(i.e. use linux/filter from linux header).
+On 2019-11-13, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> Minor nit here - I'd split "move the conditional call of set_root()
+> into nd_jump_root()" into a separate patch before that one.  Makes
+> for fewer distractions in this one.  I'd probably fold "and be
+> ready for errors other than -ECHILD" into the same preliminary
+> patch.
 
-linux/compiler.h may be used by other code in kernel.  Is it possible to 
-trigger the same error when the other code
+Will do.
 
-including linux/compiler.h is built? Is this kind of code able to find 
-the location of <asm/rwonce.h>?
+> > +			/* Not currently safe for scoped-lookups. */
+> > +			if (unlikely(nd->flags & LOOKUP_IS_SCOPED))
+> > +				return ERR_PTR(-EXDEV);
+>=20
+> Also a candidate for doing in nd_jump_link()...
+>=20
+> > @@ -1373,8 +1403,11 @@ static int follow_dotdot_rcu(struct nameidata *n=
+d)
+> >  	struct inode *inode =3D nd->inode;
+> > =20
+> >  	while (1) {
+> > -		if (path_equal(&nd->path, &nd->root))
+> > +		if (path_equal(&nd->path, &nd->root)) {
+> > +			if (unlikely(nd->flags & LOOKUP_BENEATH))
+> > +				return -EXDEV;
+>=20
+> Umm...  Are you sure it's not -ECHILD?
 
-Best Regards,
+It wouldn't hurt to be -ECHILD -- though it's not clear to me how likely
+a success would be in REF-walk if the parent components didn't already
+trigger an unlazy_walk() in RCU-walk.
 
-Xiao Yang
+I guess that also means LOOKUP_NO_XDEV should trigger -ECHILD in
+follow_dotdot_rcu()?
 
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
+--odomi6wtik4yoblv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXcu1KgAKCRCdlLljIbnQ
+EpYSAQDaNIB4LkhLlbFgkuRPiavU6vZ03HuSIHKseqaD6uMARwD+OcGzTDahyjJ6
+YeuKal+s33ETzSjupl7K2mKfYQpA2Q0=
+=nyQ8
+-----END PGP SIGNATURE-----
+
+--odomi6wtik4yoblv--
