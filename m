@@ -2,125 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F89FAC65
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2019 09:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F63FAE45
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2019 11:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727164AbfKMIzM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Nov 2019 03:55:12 -0500
-Received: from conssluserg-06.nifty.com ([210.131.2.91]:40465 "EHLO
-        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726086AbfKMIzM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Nov 2019 03:55:12 -0500
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id xAD8sw0x010874;
-        Wed, 13 Nov 2019 17:54:58 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com xAD8sw0x010874
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1573635299;
-        bh=49PDDQD/ue4Zb18aoWupvO71syxxVqQlzugNNXWXyuE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=c9rgbgPjooG/pyLS1VftU9lKNrTrGgLBOA5vCtxCcexKm7MOM3V7DVJLBWt/ac76u
-         D//vz4KYzmrE/9I8AwIuj4vpOcPoB0qGQA/fBlmgjkz7vAdyBVO29ecfvtzBM2j5Dc
-         LzUuqKbi3BJg2XGuTf6VsOPTn/PQTi9ZkH1VceWBBLo6Eyi4g6ZchstDHPP7xV/NZf
-         Q6NQHnCh8XHY8sVFrIzKPjOuwPMqFjPrz5NOgjpX37Ez2iD+IPok0EbO+TjTYetvEp
-         6snKFvzeKze0ZIfmKOOoz1H2cTrXNXX4jdbQXtwN3KwJH1Kj6jN0oP6O9kGc5emtSM
-         qFXwAVd5uFQTw==
-X-Nifty-SrcIP: [209.85.217.43]
-Received: by mail-vs1-f43.google.com with SMTP id u6so849144vsp.4;
-        Wed, 13 Nov 2019 00:54:58 -0800 (PST)
-X-Gm-Message-State: APjAAAXAhM5Liw/pzpAiLCaEuHN2TLSgaPBwImgHaL7ZvnZUZFUZ5AwZ
-        7pSrWNusMTpoHqv9tCYd+uvLqWAfNKuNSnEB9RQ=
-X-Google-Smtp-Source: APXvYqx6DUkYDV8ZVWSi8B9AQeo8+uox1PuYDjZmjZQ+KLmakGfYqVeoEP3k28Lz93Bf7IzvoILCAkyXaS8qNwjUdBg=
-X-Received: by 2002:a05:6102:726:: with SMTP id u6mr515745vsg.179.1573635297488;
- Wed, 13 Nov 2019 00:54:57 -0800 (PST)
+        id S1726994AbfKMKOY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Nov 2019 05:14:24 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:25731 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727247AbfKMKOY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Nov 2019 05:14:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1573640062;
+        s=strato-dkim-0002; d=xenosoft.de;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=J7/OnwrZ9IrNVa3LANzeKLBHmUi2jZG0D6gUnLn+clU=;
+        b=D0WCd2/oRBXag3La3z0m7u8Y07sXsNsYBKhiwwgIqt4dQDLIJ3SS/pdRBeGixdlp6c
+        7+v4NnRBmdrWeHSeOSX6jHJU5QiJHhR0Dl24q8UCRsf7u4Md7QlpkXH3rE2PQISxzwx3
+        R0xmaGxFrM8rYGT8wzLqve7esV8WrrqrzXpZyILUogc9SSbWxpiHI81OGnyQyBNGrogV
+        ZpNhnP76B5q0PPd/mkNvEwglYkqTUHaVJOt+IX/IWWzoAeM6SQTjHlzeJz/nl0XYI3ZF
+        B4lJPuIIX4oJy8xGp6CMtbXV0WlDq72VQPjtP3SUyKoCxM1U14sn9kIfwlVselFD6qd9
+        fY+g==
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBJSrwuuqxvPgFIzdVjkULP4r2k+hZ6iFmBbj9vw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2a02:8109:89c0:ebfc:f53b:829e:4025:ce2b]
+        by smtp.strato.de (RZmta 44.29.0 AUTH)
+        with ESMTPSA id q007c8vADAEHlLm
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Wed, 13 Nov 2019 11:14:17 +0100 (CET)
+Subject: Re: Bug 205201 - overflow of DMA mask and bus mask
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        paulus@samba.org, darren@stevens-zone.net,
+        "contact@a-eon.com" <contact@a-eon.com>, rtd2@xtra.co.nz,
+        mad skateman <madskateman@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        nsaenzjulienne@suse.de
+References: <71A251A5-FA06-4019-B324-7AED32F7B714@xenosoft.de>
+ <1b0c5c21-2761-d3a3-651b-3687bb6ae694@xenosoft.de>
+ <3504ee70-02de-049e-6402-2d530bf55a84@xenosoft.de>
+ <46025f1b-db20-ac23-7dcd-10bc43bbb6ee@xenosoft.de>
+ <20191105162856.GA15402@lst.de>
+ <2f3c81bd-d498-066a-12c0-0a7715cda18f@xenosoft.de>
+ <d2c614ec-c56e-3ec2-12d0-7561cd30c643@xenosoft.de>
+ <af32bfcc-5559-578d-e1f4-75e454c965bf@xenosoft.de>
+ <0c5a8009-d28b-601f-3d1a-9de0e869911c@xenosoft.de>
+ <a794864f-04ae-9b90-50e7-01b416c861fe@xenosoft.de>
+ <20191112144109.GA11805@lst.de>
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+Message-ID: <9b14ca1b-2d5d-52b5-c7b4-0e637dbb1157@xenosoft.de>
+Date:   Wed, 13 Nov 2019 11:14:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-References: <1da2db04-da6a-cedb-e85a-6ded68dada82@163.com> <20191112123125.GD17835@willie-the-truck>
- <CAK7LNARA99UUTY2v6rS=Nb4Cg5pB4RsR0PogLqdT9uNLcH20ew@mail.gmail.com>
- <32a3b660-f4d2-268e-2206-d50073298c0c@iogearbox.net> <CAK7LNASR=R=gyuaMO=VzdXrY3gaQ_FVE4es60bzXf=9ASR2qUw@mail.gmail.com>
- <021e7b46-047e-d381-9dca-bd61db08e4f8@163.com> <CAK7LNARKh3-cAqsYgcxFwq9CGk-CgBfkiQgfNSULkxwO0xa2vw@mail.gmail.com>
- <ac4577d4-c0f2-9596-df6f-3fcc563bde3e@163.com> <CAK7LNATfK2pFnO2YV5zMLMxJGYyaj+f8w-k4K8xaoGbJ2Bd5eQ@mail.gmail.com>
- <50602386-68b1-be38-a022-0bcf9df6a54e@163.com>
-In-Reply-To: <50602386-68b1-be38-a022-0bcf9df6a54e@163.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Wed, 13 Nov 2019 17:54:21 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ8h7zxhfndBqYRWXkaWVynH7GpBvDPLcVMZ1VEyUUX7A@mail.gmail.com>
-Message-ID: <CAK7LNAQ8h7zxhfndBqYRWXkaWVynH7GpBvDPLcVMZ1VEyUUX7A@mail.gmail.com>
-Subject: Re: Question about "asm/rwonce.h: No such file or directory"
-To:     Xiao Yang <ice_yangxiao@163.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Will Deacon <will@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191112144109.GA11805@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: de-DE
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 13, 2019 at 5:36 PM Xiao Yang <ice_yangxiao@163.com> wrote:
+Hello Christoph,
+
+I have found the issue. :-)
+
+GFP_DMA32 was renamed to GFP_DMA in the PowerPC updates 4.21-1 in 
+December last year.
+
+Some PCI devices still use GFP_DMA32 (grep -r GFP_DMA32 *). I renamed 
+GFP_DMA32 to GFP_DMA in the file 
+"drivers/media/v4l2-core/videobuf-dma-sg.c". After compiling the RC7 of 
+kernel 5.4 my TV card works again.
+
+Cheers,
+Christian
+
+
+On 12 November 2019 at 3:41 pm, Christoph Hellwig wrote:
+> On Mon, Nov 11, 2019 at 01:22:55PM +0100, Christian Zigotzky wrote:
+>> Now, I can definitely say that this patch does not solve the issue.
+>>
+>> Do you have another patch for testing or shall I bisect?
+> I'm still interested in the .config and dmesg.  Especially if the
+> board is using arch/powerpc/sysdev/fsl_pci.c, which is the only
+> place inside the powerpc arch code doing funny things with the
+> bus_dma_mask, which Robin pointed out looks fishy.
 >
-> On 11/13/19 3:53 PM, Masahiro Yamada wrote:
-> > On Wed, Nov 13, 2019 at 4:17 PM Xiao Yang <ice_yangxiao@163.com> wrote:
-> >> On 11/13/19 2:57 PM, Masahiro Yamada wrote:
-> >>> Sorry, I really do not understand what you are doing.
-> >>>
-> >>> include/linux/compiler.h is only for kernel-space.
-> >>> Shrug if a user-land program includes it.
-> >> Hi Masahiro,
-> >>
-> >> For building tools/bpf, it is good to fix the compiler error by Daniel's
-> >> patch(i.e. use linux/filter from linux header).
-> >>
-> >> linux/compiler.h may be used by other code in kernel.  Is it possible to
-> >> trigger the same error when the other code
-> >>
-> >> including linux/compiler.h is built? Is this kind of code able to find
-> >> the location of <asm/rwonce.h>?
-> >
-> > <asm/rwonce.h> is also kernel-only header.
-> >
-> > The kernel code can find <asm/rwonce.h>, but user-land code cannot.
->
-> Hi Masahiro,
->
-> Sorry, I am not familar with it.
->
-> Thanks a lot for your explanation and I have seen the LINUXINCLUDE
-> variable in Makefile.
->
-> I will try to send a patch as Daniel suggested.
->
-> Best Regards,
->
-> Xiao Yang
+>> Thanks,
+>> Christian
+> ---end quoted text---
 >
 
-Hmm, digging into the git history,
-this include path was added by the following commit:
-
-
-commit d7475de58575c904818efa369c82e88c6648ce2e
-Author: Kamal Mostafa <kamal@canonical.com>
-Date:   Wed Nov 11 14:24:27 2015 -0800
-
-    tools/net: Use include/uapi with __EXPORTED_HEADERS__
-
-    Use the local uapi headers to keep in sync with "recently" added #define's
-    (e.g. SKF_AD_VLAN_TPID).  Refactored CFLAGS, and bpf_asm doesn't need -I.
-
-    Fixes: 3f356385e8a4 ("filter: bpf_asm: add minimal bpf asm tool")
-    Signed-off-by: Kamal Mostafa <kamal@canonical.com>
-    Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-    Signed-off-by: David S. Miller <davem@davemloft.net>
-
-
-
-I am not sure how big a deal it is,
-but it could be a problem on old distros??
-
-
-
--- 
-Best Regards
-Masahiro Yamada
