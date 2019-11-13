@@ -2,145 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C476FA7B0
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2019 04:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D690FA9A3
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2019 06:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727672AbfKMD4Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Nov 2019 22:56:16 -0500
-Received: from mout-p-201.mailbox.org ([80.241.56.171]:39380 "EHLO
-        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727628AbfKMD4Q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Nov 2019 22:56:16 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 47CW4V73MqzQlBG;
-        Wed, 13 Nov 2019 04:56:10 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id ovfePb6AeJGC; Wed, 13 Nov 2019 04:56:05 +0100 (CET)
-Date:   Wed, 13 Nov 2019 14:55:42 +1100
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v15 5/9] namei: LOOKUP_IN_ROOT: chroot-like scoped
- resolution
-Message-ID: <20191113035542.3ckc7oudahn3xtnj@yavin.dot.cyphar.com>
-References: <20191105090553.6350-1-cyphar@cyphar.com>
- <20191105090553.6350-6-cyphar@cyphar.com>
- <20191113020307.GB26530@ZenIV.linux.org.uk>
- <20191113024414.wlmvtjstpnkxa36n@yavin.dot.cyphar.com>
- <20191113025941.GE26530@ZenIV.linux.org.uk>
+        id S1726057AbfKMF2y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Nov 2019 00:28:54 -0500
+Received: from conssluserg-03.nifty.com ([210.131.2.82]:29541 "EHLO
+        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbfKMF2y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Nov 2019 00:28:54 -0500
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id xAD5Sjuh001314;
+        Wed, 13 Nov 2019 14:28:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com xAD5Sjuh001314
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1573622926;
+        bh=Qbq9B8GmF3NWw0P6Am6JL6j8+Comnyre8/UeEg42WeI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hqkziXjwOkimRf7er/lZ4RNSd6Am3PAr8JyB/YLOXOQjJi1c2uFZcR2LZxBE4dSmU
+         HeaMXGOkQ8GJ+Ur+HnunlJzGAk8tA+0LPocPPCRzEazzWfSvbRe6c7mAgeW325XaJP
+         Ae2O7E7fqxd9ct7CK0iFsMddeN6L8+mmWM46/KvUoZv7z18Y2ULGQXI4p9YnVrcu7Y
+         qg38CTTg2eK8mtDVEyH+ixeWF4OhWVhNTC9c0nwd/kMB59eUALK59uCYUj8zLhJple
+         I21ukyxC8CeGKdLLe3ljPp67ZDgtvSMoi+R8xz4mi5POB4woVuI3UCJLXAbAzdj4I0
+         RCjoP2JDz/g7w==
+X-Nifty-SrcIP: [209.85.222.52]
+Received: by mail-ua1-f52.google.com with SMTP id r22so263226uam.11;
+        Tue, 12 Nov 2019 21:28:46 -0800 (PST)
+X-Gm-Message-State: APjAAAU0s1h20u43fFUQQfv1FNyMaylI2N+b46KCSuU9zs1/weRxp0yR
+        VUDUvfzr6nUDAUxYr1t1mKjO9lZUaZHPIfcmigc=
+X-Google-Smtp-Source: APXvYqzjiJwK7ddPdZDgbt+igfNsQU2VoZXDapCr1PLxPeaasgz6YTX7lkCKZsLQ+bH29yR3MerEfSiAVUNKXRM9dK8=
+X-Received: by 2002:a9f:3015:: with SMTP id h21mr765146uab.95.1573622924687;
+ Tue, 12 Nov 2019 21:28:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="j4f7d32jpyqpzflk"
-Content-Disposition: inline
-In-Reply-To: <20191113025941.GE26530@ZenIV.linux.org.uk>
+References: <1da2db04-da6a-cedb-e85a-6ded68dada82@163.com> <20191112123125.GD17835@willie-the-truck>
+ <CAK7LNARA99UUTY2v6rS=Nb4Cg5pB4RsR0PogLqdT9uNLcH20ew@mail.gmail.com> <32a3b660-f4d2-268e-2206-d50073298c0c@iogearbox.net>
+In-Reply-To: <32a3b660-f4d2-268e-2206-d50073298c0c@iogearbox.net>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Wed, 13 Nov 2019 14:28:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASR=R=gyuaMO=VzdXrY3gaQ_FVE4es60bzXf=9ASR2qUw@mail.gmail.com>
+Message-ID: <CAK7LNASR=R=gyuaMO=VzdXrY3gaQ_FVE4es60bzXf=9ASR2qUw@mail.gmail.com>
+Subject: Re: Question about "asm/rwonce.h: No such file or directory"
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Will Deacon <will@kernel.org>, Xiao Yang <ice_yangxiao@163.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Wed, Nov 13, 2019 at 12:13 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 11/12/19 1:50 PM, Masahiro Yamada wrote:
+> > On Tue, Nov 12, 2019 at 9:31 PM Will Deacon <will@kernel.org> wrote:
+> >>
+> >> [+lkml, Masahiro, Alexei and Daniel]
+> >>
+> >> On Tue, Nov 12, 2019 at 04:56:39PM +0800, Xiao Yang wrote:
+> >>> With your patch[1], I alway get the following error when building
+> >>> tools/bpf:
+> >>
+> >> In case people want to reproduce this, my branch is here:
+> >>
+> >> https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/log/?h=lto
+> >>
+> >>> ----------------------------------------------------------------------------------
+> >>>
+> >>> make -C tools/bpf/
+> >>> make: Entering directory
+> >>> '/usr/src/perf_selftests-x86_64-rhel-7.6-642a312d47ceb54603630d9d04f5052f3b46d9a3/tools/bpf'
+> >>>
+> >>> Auto-detecting system features:
+> >>> ... libbfd: [ on ]
+> >>> ... disassembler-four-args: [ OFF ]
+> >>>
+> >>> CC bpf_jit_disasm.o
+> >>> CC bpf_dbg.o
+> >>> In file included from
+> >>> /usr/src/perf_selftests-x86_64-rhel-7.6-642a312d47ceb54603630d9d04f5052f3b46d9a3/include/uapi/linux/filter.h:9:0,
+> >>> from
+> >>> /usr/src/perf_selftests-x86_64-rhel-7.6-642a312d47ceb54603630d9d04f5052f3b46d9a3/tools/bpf/bpf_dbg.c:41:
+> >>> /usr/src/perf_selftests-x86_64-rhel-7.6-642a312d47ceb54603630d9d04f5052f3b46d9a3/include/linux/compiler.h:247:24:
+> >>> fatal error: asm/rwonce.h: No such file or directory
+> >>> #include <asm/rwonce.h>
+> >>> ^
+> >>> compilation terminated.
+> >>> Makefile:61: recipe for target 'bpf_dbg.o' failed
+> >>> make: *** [bpf_dbg.o] Error 1
+> >>> make: *** Waiting for unfinished jobs....
+> >>> make: Leaving directory
+> >>>
+> >>> ----------------------------------------------------------------------------------
+> >>>
+> >>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/commit/?h=lto&id=642a312d47ceb54603630d9d04f5052f3b46d9a3
+> >>>
+> >>> It seems that include/linux/compiler.h cannot find the asm/rwonce.h because
+> >>> tools/bpf/Makefile doesn't include arch/*/include/generated/asm/rwonce.h.
+> >>
+> >> The problem with referring to the generated files is that they don't exist
+> >> unless you've configured the main source directory. The real problem here
+> >> seems to be that tools/bpf/ refers directly to header files in the kernel
+> >> sources without any understanding of kbuild, and therefore mandatory-y
+> >> headers simply don't exist when it goes looking for them.
+>
+> Hmm, I am puzzled why that is. :/ I think there are two options, i) remove it
+> from CFLAGS like below (at least this doesn't let the build fail in my case
+> but requires linux headers to be installed) or ii) add a copy of filter.h to
+> tools/include/uapi/linux/filter.h so the few tools can just reuse it. We do have
+> bpf_common.h and bpf.h there already.
+>
+> diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
+> index 5d1995fd369c..08dfd289174c 100644
+> --- a/tools/bpf/Makefile
+> +++ b/tools/bpf/Makefile
+> @@ -10,7 +10,6 @@ MAKE = make
+>   INSTALL ?= install
+>
+>   CFLAGS += -Wall -O2
+> -CFLAGS += -D__EXPORTED_HEADERS__ -I$(srctree)/include/uapi -I$(srctree)/include
+>
+>   # This will work when bpf is built in tools env. where srctree
+>   # isn't set and when invoked from selftests build, where srctree
+>
 
---j4f7d32jpyqpzflk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 2019-11-13, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> On Wed, Nov 13, 2019 at 01:44:14PM +1100, Aleksa Sarai wrote:
-> > On 2019-11-13, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > > On Tue, Nov 05, 2019 at 08:05:49PM +1100, Aleksa Sarai wrote:
-> > >=20
-> > > > @@ -2277,12 +2277,20 @@ static const char *path_init(struct nameida=
-ta *nd, unsigned flags)
-> > > > =20
-> > > >  	nd->m_seq =3D read_seqbegin(&mount_lock);
-> > > > =20
-> > > > -	/* Figure out the starting path and root (if needed). */
-> > > > -	if (*s =3D=3D '/') {
-> > > > +	/* Absolute pathname -- fetch the root. */
-> > > > +	if (flags & LOOKUP_IN_ROOT) {
-> > > > +		/* With LOOKUP_IN_ROOT, act as a relative path. */
-> > > > +		while (*s =3D=3D '/')
-> > > > +			s++;
-> > >=20
-> > > Er...  Why bother skipping slashes?  I mean, not only link_path_walk()
-> > > will skip them just fine, you are actually risking breakage in this:
-> > >                 if (*s && unlikely(!d_can_lookup(dentry))) {
-> > >                         fdput(f);
-> > >                         return ERR_PTR(-ENOTDIR);
-> > >                 }
-> > > which is downstream from there with you patch, AFAICS.
-> >=20
-> > I switched to stripping the slashes at your suggestion a few revisions
-> > ago[1], and had (wrongly) assumed we needed to handle "/" somehow in
-> > path_init(). But you're quite right about link_path_walk() -- and I'd be
-> > more than happy to drop it.
->=20
-> That, IIRC, was about untangling the weirdness around multiple calls of
-> dirfd_path_init() and basically went "we might want just strip the slashes
-> in case of that flag very early in the entire thing, so that later the
-> normal logics for absolute/relative would DTRT".
+I think this is the most sane fix
+to include the linux/filter.h in the system.
 
-Ah okay, I'd misunderstood the point you were making in that thread.
+(probably, it is located in /usr/include/linux/filter.h)
 
-> Since your check is right next to checking for absolute pathnames (and
-> not in the very beginning of path_init()), we might as well turn the
-> check for absolute pathname into *s =3D=3D '/' && !(flags &
-> LOOKUP_IN_ROOT) and be done with that.
 
-Yup, agreed.
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---j4f7d32jpyqpzflk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXct+uwAKCRCdlLljIbnQ
-EpaMAQCKfJalyFfg/QA8aH/wuTwb0JmHpxt9HKverNfj5BncXAEA8J+s2/4xFPcn
-vy6IqraafPiOMkqsiqA03ofQ3tR8tQ4=
-=Qq3t
------END PGP SIGNATURE-----
-
---j4f7d32jpyqpzflk--
+-- 
+Best Regards
+Masahiro Yamada
