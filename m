@@ -2,109 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 865F3FD0D4
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2019 23:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFADFD207
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Nov 2019 01:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726962AbfKNWQD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Nov 2019 17:16:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726613AbfKNWQD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 14 Nov 2019 17:16:03 -0500
-Received: from paulmck-ThinkPad-P72.home (unknown [199.201.64.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B271420709;
-        Thu, 14 Nov 2019 22:16:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573769762;
-        bh=LDvzI/ip5iI4UIoBSOL32SYOqpndu86kZkkikom9zAQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=evw1x+V8DbAMm1Q56y0Dl8nBXH4RuSVwxeqMsDfteUCdnCAMqUInQ8/2NhtcogIZ+
-         xon7nkORRkUbI4++x7nww4haJsBSqgHMLJ4ZzVmMjc54kDTtedT8QMdT/6hOh7Oex2
-         5vtVN19MYBPsP0sLIPE24mpdYfNsH0MiSEQ8OF60=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 87E8835227FC; Thu, 14 Nov 2019 14:15:59 -0800 (PST)
-Date:   Thu, 14 Nov 2019 14:15:59 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     akiyks@gmail.com, stern@rowland.harvard.edu, glider@google.com,
-        parri.andrea@gmail.com, andreyknvl@google.com, luto@kernel.org,
-        ard.biesheuvel@linaro.org, arnd@arndb.de, boqun.feng@gmail.com,
-        bp@alien8.de, dja@axtens.net, dlustig@nvidia.com,
-        dave.hansen@linux.intel.com, dhowells@redhat.com,
-        dvyukov@google.com, hpa@zytor.com, mingo@redhat.com,
-        j.alglave@ucl.ac.uk, joel@joelfernandes.org, corbet@lwn.net,
-        jpoimboe@redhat.com, luc.maranget@inria.fr, mark.rutland@arm.com,
-        npiggin@gmail.com, peterz@infradead.org, tglx@linutronix.de,
-        will@kernel.org, edumazet@google.com, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH v4 00/10] Add Kernel Concurrency Sanitizer (KCSAN)
-Message-ID: <20191114221559.GS2865@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20191114180303.66955-1-elver@google.com>
- <20191114195046.GP2865@paulmck-ThinkPad-P72>
- <20191114213303.GA237245@google.com>
+        id S1726986AbfKOAi1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Nov 2019 19:38:27 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:33383 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726852AbfKOAi1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Nov 2019 19:38:27 -0500
+Received: by mail-wm1-f68.google.com with SMTP id a17so8833043wmb.0;
+        Thu, 14 Nov 2019 16:38:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=V+xyAyokSVdG2YJZBQsiL4UYdt3E6o24h3s6g0fTDHQ=;
+        b=alMS8AvtcH2tnUO26K5nS7zSK+98v4P5mFBkv5HzrpQRFZdrUnC08/d/o+dCvZF771
+         PIxw8+RRGzhcv5JtqMhmNFK00a7GHIvyNyHTmJs084SQkIENknsGDyc4PuV1ARIIeqSB
+         ztUx3sBVVVX/MJScjB/cJQknV4L1rNX8tWcFY7qb3MpX0EUOpFtT7YCkp5i9Rr9iZFbc
+         8npg3kUuCrQ7lVnCaivW3205Pj2eKwC/fXKO6Rd427N2IIPs1BJBVh327D4JM1GG/RqY
+         ueb40XzyXltLWlprmaL0Eun06GDo1jZ3JWyORxThL/yCXFXzPoAUqbgzPF8FlCHAeLYF
+         v9eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=V+xyAyokSVdG2YJZBQsiL4UYdt3E6o24h3s6g0fTDHQ=;
+        b=jTJWD5dyOzO2DErh8K4cAYUyf53XZjqieqE0KjJ6U0ST9asHLjhC6SYLLIJA7fhdDC
+         DF3759Fo9EWYE0WnnNVQZ0iq/jzEeROyPwKLBWa7Achg6s5jjCcZWAFgN4VHlDcUyY+J
+         ffIQjIWIs+o0MXLQ5XNzTeQzppWeIKFrMm1jQxXHnKs9EJR7yxnrLC8FEueDUA6Fn9TZ
+         7sqoEhcVQA9kMqxr2k9Z97lOVCdDg8dLu571ddzbtf0OrTr4f/G3XWemv4C/oEE2DF+5
+         BXdQK8g4ycTpOc79tVq8SMkR99b/ykrf7PRrAj5aCqyZACFiomXJ4oZmZ69H5cp+02De
+         LITw==
+X-Gm-Message-State: APjAAAW57VIqgpBdYFts1w4Zu7c/X26h0DTo+1XFswrA9NbPjCCNA+Nj
+        4dsyV3hJuyShS+5wtk5vvJU=
+X-Google-Smtp-Source: APXvYqw+jrTZ3N3Sm7eZpuhockFOKaDrAq0PEkEBLyklk7eKmoF21L840DTBnyz29dOFz0ycSxS9pA==
+X-Received: by 2002:a1c:64d6:: with SMTP id y205mr10714765wmb.136.1573778303928;
+        Thu, 14 Nov 2019 16:38:23 -0800 (PST)
+Received: from ltop.local ([2a02:a03f:40e1:9900:b41c:b7ad:6b56:89fb])
+        by smtp.gmail.com with ESMTPSA id g133sm7856389wme.42.2019.11.14.16.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2019 16:38:23 -0800 (PST)
+Date:   Fri, 15 Nov 2019 01:38:21 +0100
+From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+To:     Alex Kogan <alex.kogan@oracle.com>
+Cc:     kbuild test robot <lkp@intel.com>, linux-sparse@vger.kernel.org,
+        kbuild-all@lists.01.org, linux@armlinux.org.uk,
+        Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
+        will.deacon@arm.com, arnd@arndb.de, longman@redhat.com,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
+        jglauber@marvell.com, steven.sistare@oracle.com,
+        daniel.m.jordan@oracle.com, dave.dice@oracle.com,
+        rahul.x.yadav@oracle.com
+Subject: Re: [PATCH v6 3/5] locking/qspinlock: Introduce CNA into the slow
+ path of qspinlock
+Message-ID: <20191115003821.raskzlj7hscz7vax@ltop.local>
+References: <20191107174622.61718-4-alex.kogan@oracle.com>
+ <201911110540.8p3UoQAR%lkp@intel.com>
+ <58623E4A-973B-46CC-8FA8-29E68DB5EFF4@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191114213303.GA237245@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <58623E4A-973B-46CC-8FA8-29E68DB5EFF4@oracle.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 10:33:03PM +0100, Marco Elver wrote:
-> On Thu, 14 Nov 2019, Paul E. McKenney wrote:
+On Thu, Nov 14, 2019 at 03:57:34PM -0500, Alex Kogan wrote:
+> + linux-sparse mailing list
 > 
-> > On Thu, Nov 14, 2019 at 07:02:53PM +0100, Marco Elver wrote:
-> > > This is the patch-series for the Kernel Concurrency Sanitizer (KCSAN).
-> > > KCSAN is a sampling watchpoint-based *data race detector*. More details
-> > > are included in **Documentation/dev-tools/kcsan.rst**. This patch-series
-> > > only enables KCSAN for x86, but we expect adding support for other
-> > > architectures is relatively straightforward (we are aware of
-> > > experimental ARM64 and POWER support).
-> > > 
-> > > To gather early feedback, we announced KCSAN back in September, and have
-> > > integrated the feedback where possible:
-> > > http://lkml.kernel.org/r/CANpmjNPJ_bHjfLZCAPV23AXFfiPiyXXqqu72n6TgWzb2Gnu1eA@mail.gmail.com
-> > > 
-> > > The current list of known upstream fixes for data races found by KCSAN
-> > > can be found here:
-> > > https://github.com/google/ktsan/wiki/KCSAN#upstream-fixes-of-data-races-found-by-kcsan
-> > > 
-> > > We want to point out and acknowledge the work surrounding the LKMM,
-> > > including several articles that motivate why data races are dangerous
-> > > [1, 2], justifying a data race detector such as KCSAN.
-> > > 
-> > > [1] https://lwn.net/Articles/793253/
-> > > [2] https://lwn.net/Articles/799218/
-> > 
-> > I queued this and ran a quick rcutorture on it, which completed
-> > successfully with quite a few reports.
-> 
-> Great. Many thanks for queuing this in -rcu. And regarding merge window
-> you mentioned, we're fine with your assumption to targeting the next
-> (v5.6) merge window.
-> 
-> I've just had a look at linux-next to check what a future rebase
-> requires:
-> 
-> - There is a change in lib/Kconfig.debug and moving KCSAN to the
->   "Generic Kernel Debugging Instruments" section seems appropriate.
-> - bitops-instrumented.h was removed and split into 3 files, and needs
->   re-inserting the instrumentation into the right places.
-> 
-> Otherwise there are no issues. Let me know what you recommend.
+> It seems like a bug in the way sparse handles “pure” functions that return
+> a pointer.
 
-Sounds good!
+Yes, it's a bug in sparse.
+ 
+> The warnings can be eliminated by adding an explicit cast, e.g.:
+> 
+> 	node = (struct mcs_spinlock *)grab_mcs_node(node, idx);
+> 
+> but this seems wrong (unnecessary) to me.
 
-I will be rebasing onto v5.5-rc1 shortly after it comes out.  My usual
-approach is to fix any conflicts during that rebasing operation.
-Does that make sense, or would you prefer to send me a rebased stack at
-that point?  Either way is fine for me.
+Indeed, it would be wrong.
 
-							Thanx, Paul
+Thanks for analyzing and reporting this,
+-- Luc 
