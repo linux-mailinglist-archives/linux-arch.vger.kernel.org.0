@@ -2,82 +2,216 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CB8FEB11
-	for <lists+linux-arch@lfdr.de>; Sat, 16 Nov 2019 08:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F7AFEB41
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Nov 2019 09:21:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726089AbfKPHGv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 16 Nov 2019 02:06:51 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:27842 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726034AbfKPHGv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 16 Nov 2019 02:06:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1573888007;
-        s=strato-dkim-0002; d=xenosoft.de;
-        h=To:Cc:Message-Id:Subject:Date:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=zuFc8xULBzIlsh03+xVDOKfPqAywShuzPS+aigybEXY=;
-        b=UB4i/dv1Fh++rrrsvW6krsp8k8+1MnAketf1Qnb5oVDyGsgQEt2BwLn1CJWErssOMB
-        QfyDwtLjCHQFLykjSrcgUezqoZMKgTfjpT4nU46cM2gigPto4FrTHs64EvAwwwn/tf4p
-        XHXcwH5t8S4m0tahYd4jEyA3sWkDNod9Fg88dcdV2AC6qRYNN4/YpIevzOzQrTAVKHlt
-        SHOK9vugxrXLnmnamG5ajImTjfKPsVhorp4bUZq8QsZna38DfcTSKA7z+R0wQhc3cDin
-        uOzpx4WzAYR7g+ohmH4BEOCSiG6wUN0sMjzoKat0FkUAAHMSgJIjEK8QapgS0sY4NphL
-        zLcQ==
-X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGN0rBVhd9dFr6KxrfO5Oh7R7NWZ537pkxH6J+aB1+9x3aDxi+HSYc7KsUHFpLrY="
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2a01:598:818d:108:b105:ba81:413a:5ece]
-        by smtp.strato.de (RZmta 44.29.0 AUTH)
-        with ESMTPSA id q007c8vAG7667Rt
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Sat, 16 Nov 2019 08:06:06 +0100 (CET)
-From:   Christian Zigotzky <chzigotzky@xenosoft.de>
-Content-Type: text/plain;
-        charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (1.0)
-Date:   Sat, 16 Nov 2019 08:06:05 +0100
-Subject: Bug 205201 - Booting halts if Dawicontrol DC-2976 UW SCSI board installed, unless RAM size limited to 3500M
-Message-Id: <F1EBB706-73DF-430E-9020-C214EC8ED5DA@xenosoft.de>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        paulus@samba.org, darren@stevens-zone.net,
-        "contact@a-eon.com" <contact@a-eon.com>, rtd2@xtra.co.nz,
-        mad skateman <madskateman@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        nsaenzjulienne@suse.de
-To:     Christoph Hellwig <hch@lst.de>
-X-Mailer: iPhone Mail (16G102)
+        id S1726257AbfKPIVJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 16 Nov 2019 03:21:09 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:41174 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726166AbfKPIVJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 16 Nov 2019 03:21:09 -0500
+Received: by mail-ot1-f67.google.com with SMTP id 94so10097765oty.8
+        for <linux-arch@vger.kernel.org>; Sat, 16 Nov 2019 00:21:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IAbPck/tyWYpcH6q1DqU0wF9VrcqMWHjsvfsasMdJQ8=;
+        b=XWnuclkqZMItq+/ksJ8Y1qa9/9oIF2fdvK7zku42Z8ODKYKzpWGUzZ/8O3BaVjf7Ag
+         P71ZJ18PYDh/S+GcXJv7JbUHBfrVxcoQ8Tvy3/rDGiRsih1j0Zfw3p0aX5sUwbDmnNzp
+         UJbeoNYdVfNU8lrJD/bixaoQ7gvdzCi0y77rY6eMix67aCD4LLAxKMFtrjIBZplbOSLa
+         whiths2ljXaRVaJ66Ty6f/l0eqANuJrB5x+g554vTxKefToWIvkl2VMJofQLrWCYVNFN
+         uMyJ4CtcCuhbdCcrnripCXXi0U9CRkogJhOh3chGjPKJVPuRp3IpvYuKiS5dSot+QvZ1
+         UFSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IAbPck/tyWYpcH6q1DqU0wF9VrcqMWHjsvfsasMdJQ8=;
+        b=lbISdAO5ZaHvTICtXbVPFNNnHheMHqxYcMOmX54yD0wrxAHIXwahCWoilTU1+rAaAY
+         eG5vWNgA2Rcis7TEHvZSseMoXdwZUxAV/GLxRPZTpMMLNUUj7+3ybfjHrCLimNSuDm2w
+         iFS+GAARm5ZTDg7EnVxpSQTltmvJcrTQLUsev55fOwp9duFCp0r6Jmt6tcKHCagpOGVi
+         PbBmmmHpFDel7h+hGXR19nzMy5ZopEQB2YSxR7sUQes+dbrMG5jfglyguN7AkkbrlBmT
+         L4CQRzFeCJIf6aXd+1LGcoN5ccZS4UZoqJE36tzM3qTSsogN136kBFBZYGc/FO/gmFLz
+         6GgA==
+X-Gm-Message-State: APjAAAWajwB1fFgmEAIqM8hqtYRAQ7I2c8HmhT3ntV40akNdYsvZWGnm
+        KO8lYof9w8w1EVHWM5LcIwm+BJWAPpTzRdZNrKzExg==
+X-Google-Smtp-Source: APXvYqyFoD1MoXKYzcJ0ETjr8RD5raPWnHWPSZdYf70aViyP/iAqqE28rDX/p+nlWotCJAjaCdGBcwat07yGzdHKecY=
+X-Received: by 2002:a9d:3d76:: with SMTP id a109mr14975357otc.233.1573892466111;
+ Sat, 16 Nov 2019 00:21:06 -0800 (PST)
+MIME-Version: 1.0
+References: <20191114180303.66955-1-elver@google.com> <20191114195046.GP2865@paulmck-ThinkPad-P72>
+ <20191114213303.GA237245@google.com> <20191114221559.GS2865@paulmck-ThinkPad-P72>
+ <CANpmjNPxAOUAxXHd9tka5gCjR_rNKmBk+k5UzRsXT0a0CtNorw@mail.gmail.com>
+ <20191115164159.GU2865@paulmck-ThinkPad-P72> <CANpmjNPy2RDBUhV-j-APzwYr-_x2V9QwgPTYZph36rCpEVqZSQ@mail.gmail.com>
+ <20191115204321.GX2865@paulmck-ThinkPad-P72>
+In-Reply-To: <20191115204321.GX2865@paulmck-ThinkPad-P72>
+From:   Marco Elver <elver@google.com>
+Date:   Sat, 16 Nov 2019 09:20:54 +0100
+Message-ID: <CANpmjNN0JCgEOC=AhKN7pH9OpmzbNB94mioP0FN9ueCQUfKzBQ@mail.gmail.com>
+Subject: Re: [PATCH v4 00/10] Add Kernel Concurrency Sanitizer (KCSAN)
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Alexander Potapenko <glider@google.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Daniel Axtens <dja@axtens.net>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-efi@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-FYI: Source files of the Dawicontrol DC 2976 UW SCSI board (PCI): https://gi=
-t.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/s=
-ym53c8xx_2?h=3Dv5.4-rc7
+On Fri, 15 Nov 2019 at 21:43, Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Fri, Nov 15, 2019 at 06:14:46PM +0100, Marco Elver wrote:
+> > On Fri, 15 Nov 2019 at 17:42, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > >
+> > > On Fri, Nov 15, 2019 at 01:02:08PM +0100, Marco Elver wrote:
+> > > > On Thu, 14 Nov 2019 at 23:16, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > >
+> > > > > On Thu, Nov 14, 2019 at 10:33:03PM +0100, Marco Elver wrote:
+> > > > > > On Thu, 14 Nov 2019, Paul E. McKenney wrote:
+> > > > > >
+> > > > > > > On Thu, Nov 14, 2019 at 07:02:53PM +0100, Marco Elver wrote:
+> > > > > > > > This is the patch-series for the Kernel Concurrency Sanitizer (KCSAN).
+> > > > > > > > KCSAN is a sampling watchpoint-based *data race detector*. More details
+> > > > > > > > are included in **Documentation/dev-tools/kcsan.rst**. This patch-series
+> > > > > > > > only enables KCSAN for x86, but we expect adding support for other
+> > > > > > > > architectures is relatively straightforward (we are aware of
+> > > > > > > > experimental ARM64 and POWER support).
+> > > > > > > >
+> > > > > > > > To gather early feedback, we announced KCSAN back in September, and have
+> > > > > > > > integrated the feedback where possible:
+> > > > > > > > http://lkml.kernel.org/r/CANpmjNPJ_bHjfLZCAPV23AXFfiPiyXXqqu72n6TgWzb2Gnu1eA@mail.gmail.com
+> > > > > > > >
+> > > > > > > > The current list of known upstream fixes for data races found by KCSAN
+> > > > > > > > can be found here:
+> > > > > > > > https://github.com/google/ktsan/wiki/KCSAN#upstream-fixes-of-data-races-found-by-kcsan
+> > > > > > > >
+> > > > > > > > We want to point out and acknowledge the work surrounding the LKMM,
+> > > > > > > > including several articles that motivate why data races are dangerous
+> > > > > > > > [1, 2], justifying a data race detector such as KCSAN.
+> > > > > > > >
+> > > > > > > > [1] https://lwn.net/Articles/793253/
+> > > > > > > > [2] https://lwn.net/Articles/799218/
+> > > > > > >
+> > > > > > > I queued this and ran a quick rcutorture on it, which completed
+> > > > > > > successfully with quite a few reports.
+> > > > > >
+> > > > > > Great. Many thanks for queuing this in -rcu. And regarding merge window
+> > > > > > you mentioned, we're fine with your assumption to targeting the next
+> > > > > > (v5.6) merge window.
+> > > > > >
+> > > > > > I've just had a look at linux-next to check what a future rebase
+> > > > > > requires:
+> > > > > >
+> > > > > > - There is a change in lib/Kconfig.debug and moving KCSAN to the
+> > > > > >   "Generic Kernel Debugging Instruments" section seems appropriate.
+> > > > > > - bitops-instrumented.h was removed and split into 3 files, and needs
+> > > > > >   re-inserting the instrumentation into the right places.
+> > > > > >
+> > > > > > Otherwise there are no issues. Let me know what you recommend.
+> > > > >
+> > > > > Sounds good!
+> > > > >
+> > > > > I will be rebasing onto v5.5-rc1 shortly after it comes out.  My usual
+> > > > > approach is to fix any conflicts during that rebasing operation.
+> > > > > Does that make sense, or would you prefer to send me a rebased stack at
+> > > > > that point?  Either way is fine for me.
+> > > >
+> > > > That's fine with me, thanks!  To avoid too much additional churn on
+> > > > your end, I just replied to the bitops patch with a version that will
+> > > > apply with the change to bitops-instrumented infrastructure.
+> > >
+> > > My first thought was to replace 8/10 of the previous version of your
+> > > patch in -rcu (047ca266cfab "asm-generic, kcsan: Add KCSAN instrumentation
+> > > for bitops"), but this does not apply.  So I am guessing that I instead
+> > > do this substitution when a rebase onto -rc1..
+> > >
+> > > Except...
+> > >
+> > > > Also considering the merge window, we had a discussion and there are
+> > > > some arguments for targeting the v5.5 merge window:
+> > > > - we'd unblock ARM and POWER ports;
+> > > > - we'd unblock people wanting to use the data_race macro;
+> > > > - we'd unblock syzbot just tracking upstream;
+> > > > Unless there are strong reasons to not target v5.5, I leave it to you
+> > > > if you think it's appropriate.
+> > >
+> > > My normal process is to send the pull request shortly after -rc5 comes
+> > > out, but you do call out some benefits of getting it in sooner, so...
+> > >
+> > > What I will do is to rebase your series onto (say) -rc7, test it, and
+> > > see about an RFC pull request.
+> > >
+> > > One possible complication is the new 8/10 patch.  But maybe it will
+> > > apply against -rc7?
+> > >
+> > > Another possible complication is this:
+> > >
+> > > scripts/kconfig/conf  --syncconfig Kconfig
+> > > *
+> > > * Restart config...
+> > > *
+> > > *
+> > > * KCSAN: watchpoint-based dynamic data race detector
+> > > *
+> > > KCSAN: watchpoint-based dynamic data race detector (KCSAN) [N/y/?] (NEW)
+> > >
+> > > Might be OK in this case because it is quite obvious what it is doing.
+> > > (Avoiding pain from this is the reason that CONFIG_RCU_EXPERT exists.)
+> > >
+> > > But I will just mention this in the pull request.
+> > >
+> > > If there is a -rc8, there is of course a higher probability of making it
+> > > into the next merge window.
+> > >
+> > > Fair enough?
+> >
+> > Totally fine with that, sounds like a good plan, thanks!
+> >
+> > If it helps, in theory we can also drop and delay the bitops
+> > instrumentation patch until the new bitops instrumentation
+> > infrastructure is in 5.5-rc1. There won't be any false positives if
+> > this is missing, we might just miss a few data races until we have it.
+>
+> That sounds advisable for an attempt to hit this coming merge window.
+>
+> So just to make sure I understand, I drop 8/10 and keep the rest during
+> a rebase to 5.4-rc7, correct?
 
-/*
- *  DMA addressing mode.
- *
- *  0 : 32 bit addressing for all chips.
- *  1 : 40 bit addressing when supported by chip.
- *  2 : 64 bit addressing when supported by chip,
- *      limited to 16 segments of 4 GB -> 64 GB max.
- */
-#define   SYM_CONF_DMA_ADDRESSING_MODE CONFIG_SCSI_SYM53C8XX_DMA_ADDRESSING_=
-MODE
+Yes, that's right.
 
-Cyrus config:
-
-CONFIG_SCSI_SYM53C8XX_DMA_ADDRESSING_MODE=3D1
-
-I will configure =E2=80=9C0 : 32 bit addressing for all chips=E2=80=9D for t=
-he RC8. Maybe this is the solution.
-
-> On 13. Nov 2019, at 12:02, Christoph Hellwig <hch@lst.de> wrote:
->=20
-> Interesting.  Give me some time to come up with a real fix, as drivers
-> really should not mess with GFP flags for these allocations, and even
-> if they did swiotlb is supposed to take care of any resulting problems.
+Many thanks,
+-- Marco
