@@ -2,29 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4260FF878
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Nov 2019 09:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E160CFFCB9
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2019 02:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725963AbfKQIKK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 17 Nov 2019 03:10:10 -0500
-Received: from [167.172.32.223] ([167.172.32.223]:41008 "EHLO TEST.localdomain"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725283AbfKQIKJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 17 Nov 2019 03:10:09 -0500
-X-Greylist: delayed 3350 seconds by postgrey-1.27 at vger.kernel.org; Sun, 17 Nov 2019 03:10:09 EST
-Received: from localhost (TEST [127.0.0.1])
-        by TEST.localdomain (Postfix) with SMTP id A12E81F5EAF
-        for <linux-arch@vger.kernel.org>; Sun, 17 Nov 2019 06:54:12 +0000 (UTC)
-From:   linux-arch@vger.kernel.org
-To:     linux-arch@vger.kernel.org
-Reply-To: prodawez@teleworm.us
-Subject: Zdravstvujte! Vas interesujut bazy dannyh dlja prodazhi Vashih tovarov i uslug?
-Message-Id: <20191117065412.A12E81F5EAF@TEST.localdomain>
-Date:   Sun, 17 Nov 2019 06:54:12 +0000 (UTC)
+        id S1726201AbfKRBKm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 17 Nov 2019 20:10:42 -0500
+Received: from proxy.kru.ru ([94.137.254.140]:25438 "EHLO proxy-xen.kru.kem"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725905AbfKRBKm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 17 Nov 2019 20:10:42 -0500
+Received: from mail.kru.ru (localhost [127.0.0.1])
+        by proxy-xen.kru.kem (Postfix) with ESMTP id D5D9676DE1B;
+        Mon, 18 Nov 2019 06:39:12 +0700 (+07)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 18 Nov 2019 00:39:12 +0100
+From:   FRANK KALUNGA <office@kru.ru>
+To:     undisclosed-recipients:;
+Subject: Re: REMADE FROM MY LAST EMAILl TO YOU
+Reply-To: frkal20@gmail.com
+Mail-Reply-To: frkal20@gmail.com
+Message-ID: <731d5acd1c598bda66e8c2a8ad2634bd@kru.ru>
+X-Sender: office@kru.ru
+User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Zdravstvujte! Vas interesujut bazy dannyh dlja prodazhi Vashih tovarov i uslug?
 
+
+-- 
+Good Day,
+
+FYI, this is the second mail am sending to you yet no response from your 
+side.Reference private investors who are seeking investments in your 
+Country/Company. I had also sent you earlier their basic information for 
+your consideration but yet to hear from you. Kindly confirm that you got 
+my message as I await for your response
+
+Sincere regards,
+FRANK KALUNGA
