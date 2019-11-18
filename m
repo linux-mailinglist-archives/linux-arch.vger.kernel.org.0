@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02492100DCF
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2019 22:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BF9100E65
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2019 22:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726909AbfKRVgJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 18 Nov 2019 16:36:09 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37818 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726272AbfKRVgJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Nov 2019 16:36:09 -0500
-Received: by mail-wm1-f66.google.com with SMTP id b17so1005683wmj.2;
-        Mon, 18 Nov 2019 13:36:07 -0800 (PST)
+        id S1726747AbfKRVwc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 18 Nov 2019 16:52:32 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:34305 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726647AbfKRVwc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Nov 2019 16:52:32 -0500
+Received: by mail-wr1-f65.google.com with SMTP id e6so21397713wrw.1;
+        Mon, 18 Nov 2019 13:52:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=3U41JlNG7bmxOGHw7h3r5PhFdgBWCIWUMpCYBIyDX5g=;
-        b=LLKAsm3rpD9z4ttlmsVYBZB0RM5zgfviHGTvw9h3rNevt9PO2W7pC69F55PWExC5or
-         xKTpurUY/Pe9PN5ERR9oct08+jkVImbmiNwqn5edtTzEzKVMVK0Ee4rgbQ5gB7XQQDZp
-         Bp7k58/kfQJxRA4F5Bgesg/0CWjUs3kcM3Tw4AGJ0az2GnW15QEhg4C1izybBN6yMwxV
-         nBBndV3fuZdkD9dyaRTaNMMQkEGx0HmT7eSZdd9SpJyc7NzL0pa1ExLbC0pcCXFhSBE2
-         IVwMB/NSYYQcjqDeyfmzKz5jIu9fL1mY63i0lfb8YPtVatTq9w9IJjpUnQFpH5+IPhRH
-         F8SA==
+        bh=RFg17RVVONYlOMgS/v5AT5Q6B713XrluYPByCtEM3YQ=;
+        b=CJolYGs0Qf/+JyoirAjBDN4t9ddPaPQC6l5G8NtNBjny2R7Iz14wqXq2DlwOpS2JbW
+         /HzwMxzqHt6ojDsYc76Q/iq4UCW2un+aEyUAG8I25QG4kXt7+4fFGhZM2rMJDErZLxd/
+         njjqAJEkOtkJ9CFUdxlerEepkmhn/ZDoQEdSk0iNslRpeTWiPCsrjpcF5A9dlf7QxjtR
+         DJHhWmyW6t/tQ7sLc8ywvBPZnl8h5C3CteEmGe2CzigvCN3no6KDYT1WUgzf1As0ZrVT
+         9CuKQJAzif0sJoY/GPQ/+t1z4rkSSUhyoGGpaTiqIh4+ZiK9sWxAjD5CRc+hUhrK2nzr
+         AuWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3U41JlNG7bmxOGHw7h3r5PhFdgBWCIWUMpCYBIyDX5g=;
-        b=OGhz694dunIhuDIwOB9V+lWKQEGU7/1dzbzsKhduRdoodN1B8UzO3lGofhHGBteQd6
-         F/85BJpjcKYNOFDK/T59kd4Rl/nvmvOeNlKLMx/idnCw2U8f3KNMauHQGqStsVozjK6X
-         dR31i1fVfpXhMVPZUxgbB6W0uSTXTySqOpstBp6URU2QcPare+rojie9gDV1H3I7Ohq4
-         0blCuwjblU0Biw95MLFxRn4qU8wvj/NWNCaoc5EZzPMbbypjPzBeaIKHFm+qdX4XiVdE
-         5/lEIWMNc02714xTYrkKd30XdZ5RbZoPUOkgPM91hTsqb4fZ/MhRGWxs7Y4o/RlHh4rK
-         dHhw==
-X-Gm-Message-State: APjAAAV+LfVzEpnQbixQSzNBzKwFg+98p/wy2oJoMh/Wge9FgsqXQ+TJ
-        4O8p/rv4Zn8GZTO5bl9TbVZB3Os=
-X-Google-Smtp-Source: APXvYqz+FxnF8eL6HtNJrp/JKyCLY4TQWIkK5/lzGWRZ4PSKc9jviQu0xhTt4sFmJ9MoTHBXKHPENg==
-X-Received: by 2002:a1c:9a4f:: with SMTP id c76mr1542479wme.103.1574112967007;
-        Mon, 18 Nov 2019 13:36:07 -0800 (PST)
+        bh=RFg17RVVONYlOMgS/v5AT5Q6B713XrluYPByCtEM3YQ=;
+        b=LMPR0dq2BIwr9GK9ZEXger5taMWvAuZ3tPJJLmUBdgiIyhtr3f4aBebvdlSNu6pe08
+         ad2SchLGeXZVZ+yJuqgk57fpghZzokPchy7XEziCvCkBH69EWccjxoOVFtOMRpZcZRvH
+         aBBswovEHCVCX9pcx4QFijp4jxKC03drwN0GB1BdHH4KFUa1a6DxAU70X+zR1XO19rFy
+         mHa0CDD7rdAfxhz4eGR0kr9w8N5xDGh4eDch6Y0ZLmP/0U5A2/9rhxQ8Wiydu9qz89LL
+         W1iabgzCC6C0yF0CnJc3VbAqB/5cg/OEOSrIwh5Ncg9B72Jj8+NUA/lH7glRXQkCtGfI
+         tZGw==
+X-Gm-Message-State: APjAAAUerd6h06gInZs/ganaY7zx5quJNjlbVd/uzYf1cXKYmBPflyLy
+        yWWoPKpn02QL+HbVHcTirnYeXb8=
+X-Google-Smtp-Source: APXvYqz0HrUfdYTI5c1gDu9NFRnvGRkNfEQmND3aCFciylfs4FiKCe1Eg7A09WKxcCEs/scGoRkdSw==
+X-Received: by 2002:adf:ea8d:: with SMTP id s13mr33327276wrm.366.1574113949897;
+        Mon, 18 Nov 2019 13:52:29 -0800 (PST)
 Received: from avx2 ([46.53.249.232])
-        by smtp.gmail.com with ESMTPSA id u18sm25048020wrp.14.2019.11.18.13.36.05
+        by smtp.gmail.com with ESMTPSA id a2sm21058093wrt.79.2019.11.18.13.52.29
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Nov 2019 13:36:06 -0800 (PST)
-Date:   Tue, 19 Nov 2019 00:36:03 +0300
+        Mon, 18 Nov 2019 13:52:29 -0800 (PST)
+Date:   Tue, 19 Nov 2019 00:52:27 +0300
 From:   Alexey Dobriyan <adobriyan@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         security@kernel.org, ben.dooks@codethink.co.uk
-Subject: Re: [PATCH] ELF: warn if process starts with executable stack
-Message-ID: <20191118213603.GA24086@avx2>
+Subject: [PATCH] exec: warn if process starts with executable stack
+Message-ID: <20191118215227.GA24536@avx2>
 References: <20191118145114.GA9228@avx2>
  <20191118125457.778e44dfd4740d24795484c7@linux-foundation.org>
 MIME-Version: 1.0
@@ -63,24 +63,9 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 12:54:57PM -0800, Andrew Morton wrote:
-> On Mon, 18 Nov 2019 17:51:15 +0300 Alexey Dobriyan <adobriyan@gmail.com> wrote:
-> 
-> > PT_GNU_STACK is fail open design,
-> 
-> Not sure what this means.  Please expand on the motivation for this
-> change.
-> 
-> > at least warn people that something
-> > isn't right.
-> 
-> People who use an executable stack get a kernel splat.  How is that
-> useful?
+There were few episodes of silent downgrade to an executable stack:
 
-There were two stories about silent downgrade to an executable stack:
-
-1)
-compiling .S file and linking it to normal code:
+1) linking innocent looking assembly file
 
 	$ cat f.S
 	.intel_syntax noprefix
@@ -89,18 +74,60 @@ compiling .S file and linking it to normal code:
 	f:
 	        ret
 
-will silently add PT_GNU_STACK segment with RWE permissions
+	$ cat main.c
+	void f(void);
+	int main(void)
+	{
+	        f();
+	        return 0;
+	}
 
-2)
-closures with nested functions will require executable stack
+	$ gcc main.c f.S
+	$ readelf -l ./a.out
+	  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                         0x0000000000000000 0x0000000000000000  RWE    0x10
+
+2) converting C99 nested function into a closure
 https://nullprogram.com/blog/2019/11/15/
 
-> > --- a/fs/exec.c
-> > +++ b/fs/exec.c
-> > @@ -762,6 +762,13 @@ int setup_arg_pages(struct linux_binprm *bprm,
-> >  		goto out_unlock;
-> >  	BUG_ON(prev != vma);
-> >  
-> > +#ifdef CONFIG_MMU
+	void intsort2(int *base, size_t nmemb, _Bool invert)
+	{
+	    int cmp(const void *a, const void *b)
+	    {
+	        int r = *(int *)a - *(int *)b;
+	        return invert ? -r : r;
+	    }
+	    qsort(base, nmemb, sizeof(*base), cmp);
+	}
 
-This code is already under CONFIG_MMU. I'll resend.
+will silently require stack trampolines while non-closure version will not.
+
+While without a double this behaviour is documented somewhere, add a warning
+so that developers and users can at least notice. After so many years of x86_64
+having proper executable stack support it should not cause too much problems.
+
+If the system is old or CPU is old, then there will be an early warning
+against init and/or support personnel will write that "uh-oh, our Enterprise
+Software absolutely requires executable stack" and close tickets and customers
+will nod heads and life moves on.
+
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+---
+
+ fs/exec.c |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -762,6 +762,11 @@ int setup_arg_pages(struct linux_binprm *bprm,
+ 		goto out_unlock;
+ 	BUG_ON(prev != vma);
+ 
++	if (vm_flags & VM_EXEC) {
++		pr_warn_once("process '%s'/%u started with executable stack\n",
++			     current->comm, current->pid);
++	}
++
+ 	/* Move stack pages down in memory. */
+ 	if (stack_shift) {
+ 		ret = shift_arg_pages(vma, stack_shift);
