@@ -2,56 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1703B102E57
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Nov 2019 22:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDAD102E98
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Nov 2019 22:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727222AbfKSVma (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Nov 2019 16:42:30 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:40409 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726874AbfKSVma (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Nov 2019 16:42:30 -0500
-Received: by mail-qk1-f195.google.com with SMTP id z16so19345618qkg.7
-        for <linux-arch@vger.kernel.org>; Tue, 19 Nov 2019 13:42:29 -0800 (PST)
+        id S1727471AbfKSVuQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Nov 2019 16:50:16 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40683 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727389AbfKSVuQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Nov 2019 16:50:16 -0500
+Received: by mail-oi1-f196.google.com with SMTP id d22so13555818oic.7
+        for <linux-arch@vger.kernel.org>; Tue, 19 Nov 2019 13:50:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=QB4SUVhpavfDd836jssG/dIvVknUQvs1rkhBHGx6mVo=;
-        b=fwZ3JQdGRF+MfMR4OTzPIKz33coTxmwMczqTMp1zgcU9vBAQTT49Lyi3EpmBIp0wef
-         tEJMyTvj/+RtuA+1K3IwMfEffYlP0HdS6jLuAz7BTerdJIY9GJv85HfAQbejgurnaa+u
-         /0nJrzt2D6JSFpTwCmgUpVRtXuqYqgQeNUf8MHJbI3dP3j8mZ+rEN0+j0vXnPZdrQxbB
-         quT+m7nIBvcr0OjrzLU6dymwzmcC38CLbEWcGNsxP//LhERqt+Vw2RttXu28w3xfTwvB
-         CmTZuar9342FqqskXbUVB1Aqc7zvW1kcHcEW/fxdHi5CzWuDjWWnBpcJbAWZwrTAHMnD
-         M/hQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nChvbzLFSqXvxVpDffdnChqvN7oTXvHT1a3fMg3wbAY=;
+        b=p5Cy99Po26kE+UyzXYPLTu1Jn3nkcb7z2Dj1EBK1McLzwW3cNilJrGCEHlm8RZAgIS
+         Q++XQ2aBBj4oOMNEb5s177mWJkSbr9Vy4IIsqRRv8IwBTtKpz3Nt0C70i0glZXPUvG+z
+         rv1x/lHc+4710wRxMyk+oQwG7IkB3SgXFSLlsRRrBmHAiDvPOeAVjtEd3OmCU2lGJ2o8
+         R08NgLmpYCP/70TiDo56BRXT+iUajfnpx379m4+CfWQrUmlTqmBumsRfIG++OudoUflv
+         gX9Kiy+Bh3aWDiXEWOCgiWlk8gm8AVNbuxGaVEaipbqus6uld3JoQG+60MvpcEapaLJY
+         tH/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=QB4SUVhpavfDd836jssG/dIvVknUQvs1rkhBHGx6mVo=;
-        b=gjd6LzCLoCmyWIdrjkk9UDxcSnpRkYKiakn9FLhpHJyxRNiQjnu6rc1lMkNiIidDUt
-         TZ3ycJVPPNipEc9IARptkc7Tp5nLtEZ+3dPWrbfvkvQZzgSHuHxS8kR8QMzDqxzX8rE9
-         O2RLB1fgiwZFSt+/r8ArRdgO1jbKFXYotJenwjwtT2XSwBcqtO8+cYTDJ5gcVwV13mnK
-         rGPw5lpwomiuKgssyYkQ8Sheh7OedJLA+ApFI1KJDJCnDUxvlJdlo7hp/Sq9UKVpHxcx
-         S9l5fd84fh9CAf5v+u5QtSiF3BrfXzj45CId+kdPq/TpHtJcKMWDrsLEeSx5PxlfXX5s
-         EpIQ==
-X-Gm-Message-State: APjAAAUyDF9flsbIPDhfKp8aoTx2KrB6bExhZwtUG6vu0zDFKu5Vu7sJ
-        s5hSu9eKcIvxB5c8D2ngcJ1XSw==
-X-Google-Smtp-Source: APXvYqx8mO+d9bo/Rcv0JrlRBZEW7R40QjO+mH4aDpl24EGipM45Jni5and68zWWOZCWwJw0gPvq9A==
-X-Received: by 2002:a37:6517:: with SMTP id z23mr32008271qkb.434.1574199749166;
-        Tue, 19 Nov 2019 13:42:29 -0800 (PST)
-Received: from ?IPv6:2600:1000:b079:1710:3c3b:2ce9:9489:b502? ([2600:1000:b079:1710:3c3b:2ce9:9489:b502])
-        by smtp.gmail.com with ESMTPSA id a19sm13439465qtk.56.2019.11.19.13.42.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Nov 2019 13:42:28 -0800 (PST)
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-From:   Qian Cai <cai@lca.pw>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v4 01/10] kcsan: Add Kernel Concurrency Sanitizer infrastructure
-Date:   Tue, 19 Nov 2019 16:42:26 -0500
-Message-Id: <A74F8151-F5E8-4532-BB67-6CFA32487D26@lca.pw>
-References: <CANpmjNPiKg++=QHUjD87dqiBU1pHHfZmGLAh1gOZ+4JKAQ4SAQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nChvbzLFSqXvxVpDffdnChqvN7oTXvHT1a3fMg3wbAY=;
+        b=KTbaGfB9hYgGlgXEw0/vuO0lNZDXg3EPPqB7HMVD9+6TCXuAAzRpQH8eMUvNTsO00g
+         LhVlxXUnYDHKGqbasmKoAXU4iwaLdH2Qe97nzhNS5YkCihUyv/WDutlxC305HCTDoeuG
+         a+tTBqU/PrZh6NHfjyKSgrTQ4ipLOM7FfZvEwsRnfyQeXrX2YZkcA6a2JB8aIVy1EpxI
+         kjM5rU+TsQvr6bZiSbbCsp43yeTKeCNWwClwdsBe6B3yoD7cqPrCmXXRc0P3Xor+dsVQ
+         SQDSUBDGTO9JY2uWnax+qdoqVE+7annH78D9W47xanj4gLuUCEv79irqaZqXz59mUAtX
+         n5nQ==
+X-Gm-Message-State: APjAAAWN6vDjgT1/ijXvNIVDciJqBfHh8FmabuY6JdxA5APMkOSJ9+yv
+        WyOUkpRU0rk+e4RdArKDQsFQ0O1H50ce1ufx1+F8FQ==
+X-Google-Smtp-Source: APXvYqwk7GX5f9KXrTBkfomV60IUjlNkqZSImNATN/Y3wyZZrnUV7+wiHWBIn6Og9vj7j9q/YXr8jWBfKyRzDXW3y+k=
+X-Received: by 2002:aca:5413:: with SMTP id i19mr6343058oib.121.1574200214595;
+ Tue, 19 Nov 2019 13:50:14 -0800 (PST)
+MIME-Version: 1.0
+References: <20191114180303.66955-1-elver@google.com> <1574194379.9585.10.camel@lca.pw>
+In-Reply-To: <1574194379.9585.10.camel@lca.pw>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 19 Nov 2019 22:50:02 +0100
+Message-ID: <CANpmjNPynCwYc8-GKTreJ8HF81k14JAHZXLt0jQJr_d+ukL=6A@mail.gmail.com>
+Subject: Re: [PATCH v4 00/10] Add Kernel Concurrency Sanitizer (KCSAN)
+To:     Qian Cai <cai@lca.pw>
 Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         Alexander Potapenko <glider@google.com>,
@@ -72,7 +68,7 @@ Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Luc Maranget <luc.maranget@inria.fr>,
-        Mark Rutland <Mark.Rutland@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -86,25 +82,51 @@ Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux Memory Management List <linux-mm@kvack.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-In-Reply-To: <CANpmjNPiKg++=QHUjD87dqiBU1pHHfZmGLAh1gOZ+4JKAQ4SAQ@mail.gmail.com>
-To:     Marco Elver <elver@google.com>
-X-Mailer: iPhone Mail (17A878)
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, 19 Nov 2019 at 21:13, Qian Cai <cai@lca.pw> wrote:
+>
+> On Thu, 2019-11-14 at 19:02 +0100, 'Marco Elver' via kasan-dev wrote:
+> > This is the patch-series for the Kernel Concurrency Sanitizer (KCSAN).
+> > KCSAN is a sampling watchpoint-based *data race detector*. More details
+> > are included in **Documentation/dev-tools/kcsan.rst**. This patch-series
+> > only enables KCSAN for x86, but we expect adding support for other
+> > architectures is relatively straightforward (we are aware of
+> > experimental ARM64 and POWER support).
+>
+> This does not allow the system to boot. Just hang forever at the end.
+>
+> https://cailca.github.io/files/dmesg.txt
+>
+> the config (dselect KASAN and select KCSAN with default options):
+>
+> https://raw.githubusercontent.com/cailca/linux-mm/master/x86.config
 
+Thanks! That config enables lots of other debug code. I could
+reproduce the hang. It's related to CONFIG_PROVE_LOCKING etc.
 
-> On Nov 19, 2019, at 2:54 PM, Marco Elver <elver@google.com> wrote:
->=20
-> Regardless of approach, my guess is that the complexity outweighs any
-> benefits this may provide in the end. Not only would a hypothetical
-> kernel that combines these be extremely slow, it'd also diminish the
-> practical value because testing and finding bugs would also be
-> impaired due to performance.
+The problem is definitely not the fact that kcsan_setup_watchpoint
+disables interrupts (tested by removing that code). Although lockdep
+still complains here, and looking at the code in kcsan/core.c, I just
+can't see how local_irq_restore cannot be called before returning (in
+the stacktrace you provided, there is no kcsan function), and
+interrupts should always be re-enabled. (Interrupts are only disabled
+during delay in kcsan_setup_watchpoint.)
 
-On the other hand, it is valuable for distros to be able to select both for t=
-he debug kernel variant. Performance is usually not a major concern over the=
-re and could be migrated by other means like selecting powerful systems etc.=
+What I also notice is that this happens when the console starts
+getting spammed with data-race reports (presumably because some extra
+debug code has lots of data races according to KCSAN).
+
+My guess is that some of the extra debug logic enabled in that config
+is incompatible with KCSAN. However, so far I cannot tell where
+exactly the problem is. For now the work-around would be not using
+KCSAN with these extra debug options.  I will investigate more, but
+nothing obviously wrong stands out..
+
+Many thanks,
+-- Marco
