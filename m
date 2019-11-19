@@ -2,128 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1810C101460
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Nov 2019 06:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E04102C87
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Nov 2019 20:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728992AbfKSFdM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Nov 2019 00:33:12 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:43106 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729504AbfKSFdM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Nov 2019 00:33:12 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAJ5TF0E134981;
-        Tue, 19 Nov 2019 05:32:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=X+d/DvKGRe+3ht5uGLcFVUVOi2MtdYAju2LrusN0PB8=;
- b=Eg57Xk7Dlr+oDb9WxKzCghU3rGfM/tKiWrrIlOnoMFTkUEIMtm2GGkDhwqr7QmVhvDmn
- I7xE5Ge7ycQseksjeyn1gKpChkowEZK6oI+Gx9G0L7SmSNoNWsTeAYg7EBwH/pTOtPpu
- lFmk56hCZGESru2ZgZWw05LkwxyF/dEiyQ1y9CJepKXRJycnt2iYW76Eqzj5C5J9b3gF
- DxSWY0Ui5q694tSUhsZwX0Sr7NOuWM0h5bRgAMPnp2ZlaP+RyW0FucXNGedoojmzEcAx
- nBVnBv7Is9MTP68ucX8p5W75u2uJ49PLjVXt7qjuNl4KaJHn95UB4/Wra2iYi4H+RvXU EA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2wa8htmkds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Nov 2019 05:32:52 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAJ5SNWL016943;
-        Tue, 19 Nov 2019 05:32:51 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2wbxm3nx20-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Nov 2019 05:32:51 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xAJ5Wo7G012724;
-        Tue, 19 Nov 2019 05:32:50 GMT
-Received: from kadam (/41.210.141.188)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 18 Nov 2019 21:32:47 -0800
-Date:   Tue, 19 Nov 2019 08:32:30 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        security@kernel.org, ben.dooks@codethink.co.uk
-Subject: Re: [PATCH] exec: warn if process starts with executable stack
-Message-ID: <20191119053230.GC5626@kadam>
-References: <20191118145114.GA9228@avx2>
- <20191118125457.778e44dfd4740d24795484c7@linux-foundation.org>
- <20191118215227.GA24536@avx2>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191118215227.GA24536@avx2>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9445 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=587
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1911190050
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9445 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=714 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1911190050
+        id S1726874AbfKST1i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Nov 2019 14:27:38 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:47067 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726620AbfKST1i (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Nov 2019 14:27:38 -0500
+Received: by mail-qt1-f194.google.com with SMTP id r20so25887855qtp.13
+        for <linux-arch@vger.kernel.org>; Tue, 19 Nov 2019 11:27:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wWke+FPRS6Ykc0nO40qrsc1dQ72uzYDMM9s/rffQgXo=;
+        b=cOwJdQ3QaoC1ghWuL5cDionr9lVRVE7w0E6xB29suEcWQZJDbarxSfoUMmuspYbOvs
+         foTc3R4N1YA6vsxpIjJbpSttqpBQ3dDDQi4PwvY4v0Tei1oeHkTXBrFblLAZtKjFSVZT
+         k6iJPky6g4ughqLuVvoeuzEMq/7B1gpdHqjeEKLzSldt+RKr3YKXU3JvPlzO5+msV6uZ
+         6v3vYAlWY89i/LBzOxKeer2saajdLI87BirnkGA6ad3ouHDNIw5STroNQNgNVW12VIMO
+         YBsvns+jHm88LTfB94IIPjtkpMzbROhq16RxFtaOcBoM1QlTB/1om5GndImlFebJg1IB
+         mGiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wWke+FPRS6Ykc0nO40qrsc1dQ72uzYDMM9s/rffQgXo=;
+        b=QiHqeVKvz3yAkdJwEBJBJW5HHNU0lvuveeeeUHulRjMdLvy3d7vyI8ShbSedHFl5WV
+         ZeltE2n/HY2BnHEjcptqGbVVJGAe0ZNEWBrTVxsXv96QR03GxhkjRSt3OdmnGjqZbVsL
+         aCwsxQUUx44zfGqF3IIQMIyBBN1xwarGAXzR4lGoOf9L65mwhjMIOz3u6ZE3iGqd7SZt
+         oy2ngXzAGkIqa0RrLkYoIo6+GzbJo0/Uz2fYskbQyZiv6ENqwAF30CFf+lvOqvHT7zy/
+         rmCEm8Vabz0UqM2CgsHJNQsz8Zt6KMeWmnIV3+21o5maJv6OG+xjR67te/9uHADoBq4i
+         2qdg==
+X-Gm-Message-State: APjAAAUMmDvVTEha7K0fSmqE8zSuhjwvQS9pb3xwrIL54+uYau3zfK9T
+        9SByLETIGYGaWvhnwI/QqEY74g==
+X-Google-Smtp-Source: APXvYqwqqbIYdbA/gvquqIqz/2jzv9H8hpK3t4AE1C7xJadrM0qWrSPiW0jc/PVgaAG39wcWgRtWhw==
+X-Received: by 2002:ac8:244e:: with SMTP id d14mr35262717qtd.388.1574191657402;
+        Tue, 19 Nov 2019 11:27:37 -0800 (PST)
+Received: from dhcp-41-57.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 134sm10319529qkn.24.2019.11.19.11.27.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 19 Nov 2019 11:27:36 -0800 (PST)
+Message-ID: <1574191653.9585.6.camel@lca.pw>
+Subject: Re: [PATCH v4 01/10] kcsan: Add Kernel Concurrency Sanitizer
+ infrastructure
+From:   Qian Cai <cai@lca.pw>
+To:     Marco Elver <elver@google.com>
+Cc:     akiyks@gmail.com, stern@rowland.harvard.edu, glider@google.com,
+        parri.andrea@gmail.com, andreyknvl@google.com, luto@kernel.org,
+        ard.biesheuvel@linaro.org, arnd@arndb.de, boqun.feng@gmail.com,
+        bp@alien8.de, dja@axtens.net, dlustig@nvidia.com,
+        dave.hansen@linux.intel.com, dhowells@redhat.com,
+        dvyukov@google.com, hpa@zytor.com, mingo@redhat.com,
+        j.alglave@ucl.ac.uk, joel@joelfernandes.org, corbet@lwn.net,
+        jpoimboe@redhat.com, luc.maranget@inria.fr, mark.rutland@arm.com,
+        npiggin@gmail.com, paulmck@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, will@kernel.org, edumazet@google.com,
+        kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org
+Date:   Tue, 19 Nov 2019 14:27:33 -0500
+In-Reply-To: <20191114180303.66955-2-elver@google.com>
+References: <20191114180303.66955-1-elver@google.com>
+         <20191114180303.66955-2-elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6 (3.22.6-10.el7) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 12:52:27AM +0300, Alexey Dobriyan wrote:
-> There were few episodes of silent downgrade to an executable stack:
-> 
-> 1) linking innocent looking assembly file
-> 
-> 	$ cat f.S
-> 	.intel_syntax noprefix
-> 	.text
-> 	.globl f
-> 	f:
-> 	        ret
-> 
-> 	$ cat main.c
-> 	void f(void);
-> 	int main(void)
-> 	{
-> 	        f();
-> 	        return 0;
-> 	}
-> 
-> 	$ gcc main.c f.S
-> 	$ readelf -l ./a.out
-> 	  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
->                          0x0000000000000000 0x0000000000000000  RWE    0x10
-> 
-> 2) converting C99 nested function into a closure
-> https://nullprogram.com/blog/2019/11/15/
-> 
-> 	void intsort2(int *base, size_t nmemb, _Bool invert)
-> 	{
-> 	    int cmp(const void *a, const void *b)
-> 	    {
-> 	        int r = *(int *)a - *(int *)b;
-> 	        return invert ? -r : r;
-> 	    }
-> 	    qsort(base, nmemb, sizeof(*base), cmp);
-> 	}
-> 
-> will silently require stack trampolines while non-closure version will not.
-> 
-> While without a double this behaviour is documented somewhere, add a warning
-                  ^^^^^^
-doubt
+On Thu, 2019-11-14 at 19:02 +0100, 'Marco Elver' via kasan-dev wrote:
 
-> so that developers and users can at least notice. After so many years of x86_64
-> having proper executable stack support it should not cause too much problems.
-> 
-> If the system is old or CPU is old, then there will be an early warning
-> against init and/or support personnel will write that "uh-oh, our Enterprise
-> Software absolutely requires executable stack" and close tickets and customers
-> will nod heads and life moves on.
-> 
+> +menuconfig KCSAN
+> +	bool "KCSAN: watchpoint-based dynamic data race detector"
+> +	depends on HAVE_ARCH_KCSAN && !KASAN && STACKTRACE
 
-regards,
-dan carpenter
+"!KASAN" makes me sorrow. What's problem of those two?
+
+> +	default n
+> +	help
+> +	  Kernel Concurrency Sanitizer is a dynamic data race detector, which
+> +	  uses a watchpoint-based sampling approach to detect races. See
+> +	  <file:Documentation/dev-tools/kcsan.rst> for more details.
+> +
+
