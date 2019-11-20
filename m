@@ -2,213 +2,199 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C43C9103386
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Nov 2019 06:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A781034D1
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Nov 2019 08:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbfKTFMz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Nov 2019 00:12:55 -0500
-Received: from mout-p-102.mailbox.org ([80.241.56.152]:55400 "EHLO
-        mout-p-102.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727198AbfKTFMz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Nov 2019 00:12:55 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 47HrRj6dCfzKmkG;
-        Wed, 20 Nov 2019 06:12:49 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id wcWUwKyK53h8; Wed, 20 Nov 2019 06:12:45 +0100 (CET)
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dev@opencontainers.org, containers@lists.linux-foundation.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: [PATCH RESEND v17 13/13] Documentation: path-lookup: include new LOOKUP flags
-Date:   Wed, 20 Nov 2019 16:06:31 +1100
-Message-Id: <20191120050631.12816-14-cyphar@cyphar.com>
-In-Reply-To: <20191120050631.12816-1-cyphar@cyphar.com>
-References: <20191120050631.12816-1-cyphar@cyphar.com>
+        id S1726163AbfKTHJ0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Nov 2019 02:09:26 -0500
+Received: from mail-eopbgr770104.outbound.protection.outlook.com ([40.107.77.104]:34030
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725268AbfKTHJ0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 20 Nov 2019 02:09:26 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R4mya0Wa0F+qQRQs9iH6dmtBRup6AwM5PJE8iO1RYW+nGUb54AuQym2TJihA3jwdlH674w+bGShJ5RQdsfwbf4LSju7bXE1bwyBdq5tc0KtjPWTO0scQz7JbR0k8zCsTbLUUPf4Olm0TB1xnZWHeU+pJtx2Xy8dTyjJs3mo66U8jnvjMae5/cJFsJiZ5sNM30sKFI0jww+JfE3KwSC4Hj1QKIUCv/AVAg44FZMcdYXLsVQ2RudC/T6RzpUdhsjnvBQof18nWp3IHoZEqchX/vW676LGImCV+6Iujn30SKzDwPaYIkJo9v7K5ZLmiI6xldzhgAhbzrDdb3O7A7M53YQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3rWXqaA9BDeb4W0MowjqtCEy8/0QhOpnWQvxEmyDiXU=;
+ b=CJp5n3t4ILVuArWs5kkaRx3NJXy73vi1Hfr4Vc/yP+75P0MLY/tpgOA/v/gD372f/+hgZ9FqX05Z22LlQWs62B2raYbGbyf4CPXJEPbiKzSIW2w1yDs4r2wQ57gA7KNd7xHumQ9wgD0WlJ/MR1GzV6+Ry5SQKU4sKwFLJldpykytrU0Z/Aq3LqiB6DA28HYrGDLt5VXjBNPyGXCztg4poqmhfcPQO77Eiyjman23zeU8oPOeibBxGzJmIRNz2gBTJsU7vmNvDynqF2KkE53ncRQqp8+9HBT+5+vkjuS0jEmM6fKTrkbGiyVCsNjoy7z3hGK7rnxIx21WQH9FyXWHOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3rWXqaA9BDeb4W0MowjqtCEy8/0QhOpnWQvxEmyDiXU=;
+ b=IlcCUEX7n5ARigZhdkYHWeKTsOk951yT/RoNsQwcioTsoN9Vn9xtZhxjLtioL/Brf+cJ6V7NMTMuLTn1WbiOWxxyrHxTvcQ29hT3YcOCo8oKoonQzimXDTm3zUrMG3fJDRYZAyJGSjphYkToPrs5Tt+IbhZ/bPi5DNYYbepAC8M=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=decui@microsoft.com; 
+Received: from BN8PR21MB1137.namprd21.prod.outlook.com (20.179.72.96) by
+ BN8PR21MB1186.namprd21.prod.outlook.com (20.179.73.78) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2495.3; Wed, 20 Nov 2019 07:09:23 +0000
+Received: from BN8PR21MB1137.namprd21.prod.outlook.com
+ ([fe80::c596:ecf5:7a6:734d]) by BN8PR21MB1137.namprd21.prod.outlook.com
+ ([fe80::c596:ecf5:7a6:734d%2]) with mapi id 15.20.2495.006; Wed, 20 Nov 2019
+ 07:09:23 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     arnd@arndb.de, bp@alien8.de, daniel.lezcano@linaro.org,
+        haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, sashal@kernel.org, sthemmin@microsoft.com,
+        tglx@linutronix.de, x86@kernel.org, mikelley@microsoft.com,
+        Alexander.Levin@microsoft.com, vkuznets@redhat.com
+Cc:     linux-arch@vger.kernel.org, Dexuan Cui <decui@microsoft.com>
+Subject: [PATCH v6] x86/hyperv: Suspend/resume the hypercall page for hibernation
+Date:   Tue, 19 Nov 2019 23:09:02 -0800
+Message-Id: <1574233742-47794-1-git-send-email-decui@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Reply-To: decui@microsoft.com
+Content-Type: text/plain
+X-ClientProxiedBy: MWHPR2001CA0015.namprd20.prod.outlook.com
+ (2603:10b6:301:15::25) To BN8PR21MB1137.namprd21.prod.outlook.com
+ (2603:10b6:408:71::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (13.77.154.182) by MWHPR2001CA0015.namprd20.prod.outlook.com (2603:10b6:301:15::25) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Wed, 20 Nov 2019 07:09:21 +0000
+X-Mailer: git-send-email 1.8.3.1
+X-Originating-IP: [13.77.154.182]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: a3b54bf7-ddcc-4aed-90db-08d76d8891e2
+X-MS-TrafficTypeDiagnostic: BN8PR21MB1186:|BN8PR21MB1186:|BN8PR21MB1186:
+X-MS-Exchange-Transport-Forked: True
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-Microsoft-Antispam-PRVS: <BN8PR21MB1186CE61A2CCC1676C1EFEF1BF4F0@BN8PR21MB1186.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 02272225C5
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(376002)(136003)(366004)(39860400002)(396003)(346002)(189003)(199004)(6506007)(478600001)(386003)(316002)(43066004)(48376002)(3450700001)(5660300002)(16586007)(66066001)(15650500001)(8676002)(50466002)(966005)(8936002)(25786009)(22452003)(1511001)(7736002)(6486002)(66556008)(66476007)(2906002)(66946007)(51416003)(52116002)(14444005)(107886003)(476003)(2616005)(186003)(47776003)(956004)(36756003)(6436002)(6666004)(3846002)(10290500003)(305945005)(10090500001)(86362001)(26005)(81156014)(81166006)(4720700003)(6116002)(50226002)(486006)(4326008)(7416002)(6306002)(16526019)(6512007)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:BN8PR21MB1186;H:BN8PR21MB1137.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+Received-SPF: None (protection.outlook.com: microsoft.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: E2m6bIUZX8AJUSW65mL5xWqLvKmaE8unFMbiwBgKreglSV1Ol0n7WETT7r4LWuiPbB34wn0VG5YEoO/LGqD6bTesuxC3vVQmgANGNhyN7/D+/FPtfQMAh3JdS1ZNQ5xQRCIJwT0qMA4gqSP7qcDikI35d4xr8qKJC4qehMvM31NjV0+/ePDODTtRohu5Db1ofPhIacAY5joZjo89K6383asDsaZGYafREVlpi88m8WUOaynODxadoMia+PC2AERTu+cEl/jkMGjPXvvt83hBe3dVJZOR7reOGO4y7cWsGryhiSFIM/KNP0evej0m48QQG091cCHMtWt8bcKUIbDkH5XCJzEeJEpoN2niLXkkdTsw8OXX9S+YInAsFTGezroN/aqoQzeJUipbtVZ3tGdWE5UaS8LmWfL+wv6DDNN2Yk0Rppu8dDbwh6zS0xIVX0LNk0UCPx+noLHPsEhkiNua6wKKH8TGN2wciyGNb9lq/eE=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3b54bf7-ddcc-4aed-90db-08d76d8891e2
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2019 07:09:23.0881
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZlGLT1oyoCDP6WFEbJhLDq4AI4fpVv6C48gfBiVNyzNpCcFhIBDo3uYUpjbR5z0BHMKFKdNIaiD+MEj/7Vd5LQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR21MB1186
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Now that we have new LOOKUP flags, we should document them in the
-relevant path-walking documentation. And now that we've settled on a
-common name for nd_jump_link() style symlinks ("magic links"), use that
-term where magic-link semantics are described.
+This is needed for hibernation, e.g. when we resume the old kernel, we need
+to disable the "current" kernel's hypercall page and then resume the old
+kernel's.
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+Signed-off-by: Dexuan Cui <decui@microsoft.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 ---
- Documentation/filesystems/path-lookup.rst | 68 +++++++++++++++++++++--
- 1 file changed, 62 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/filesystems/path-lookup.rst b/Documentation/filesystems/path-lookup.rst
-index 434a07b0002b..a3216979298b 100644
---- a/Documentation/filesystems/path-lookup.rst
-+++ b/Documentation/filesystems/path-lookup.rst
-@@ -13,6 +13,7 @@ It has subsequently been updated to reflect changes in the kernel
- including:
+This patch is part of the v5 patchset:
+  https://lkml.org/lkml/2019/9/5/1158
+  https://lkml.org/lkml/2019/9/5/1159 
+
+  The change is: I set 'hv_hypercall_pg' to NULL in hv_suspend(), and
+restore it in hv_resume(). This is suggested by Vitaly Kuznetsov.
+
+  There is no other change, compared to v1 (v2~v5 were posted with the other
+patches).
+
+  Please pick up this patch onto the tip.git tree's branch x86/hyperv.
+
+ arch/x86/hyperv/hv_init.c | 48 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 426dc8b78193..c170653da589 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -20,11 +20,15 @@
+ #include <linux/hyperv.h>
+ #include <linux/slab.h>
+ #include <linux/cpuhotplug.h>
++#include <linux/syscore_ops.h>
+ #include <clocksource/hyperv_timer.h>
  
- - per-directory parallel name lookup.
-+- ``openat2()`` resolution restriction flags.
+ void *hv_hypercall_pg;
+ EXPORT_SYMBOL_GPL(hv_hypercall_pg);
  
- Introduction to pathname lookup
- ===============================
-@@ -235,6 +236,13 @@ renamed.  If ``d_lookup`` finds that a rename happened while it
- unsuccessfully scanned a chain in the hash table, it simply tries
- again.
++/* Save the hypercall page temporarily for hibernation */
++static void *hv_hypercall_pg_saved;
++
+ u32 *hv_vp_index;
+ EXPORT_SYMBOL_GPL(hv_vp_index);
  
-+``rename_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``rename_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- inode->i_rwsem
- ~~~~~~~~~~~~~~
+@@ -245,6 +249,46 @@ static int __init hv_pci_init(void)
+ 	return 1;
+ }
  
-@@ -348,6 +356,13 @@ any changes to any mount points while stepping up.  This locking is
- needed to stabilize the link to the mounted-on dentry, which the
- refcount on the mount itself doesn't ensure.
++static int hv_suspend(void)
++{
++	union hv_x64_msr_hypercall_contents hypercall_msr;
++
++	/*
++	 * Reset hypercall page reference before reset the page,
++	 * let hypercall operations fail safely rather than
++	 * panic the kernel for using invalid hypercall page
++	 */
++	hv_hypercall_pg_saved = hv_hypercall_pg;
++	hv_hypercall_pg = NULL;
++
++	/* Reset the hypercall page */
++	rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
++	hypercall_msr.enable = 0;
++	wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
++
++	return 0;
++}
++
++static void hv_resume(void)
++{
++	union hv_x64_msr_hypercall_contents hypercall_msr;
++
++	/* Re-enable the hypercall page */
++	rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
++	hypercall_msr.enable = 1;
++	hypercall_msr.guest_physical_address =
++		vmalloc_to_pfn(hv_hypercall_pg_saved);
++	wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
++
++	hv_hypercall_pg = hv_hypercall_pg_saved;
++	hv_hypercall_pg_saved = NULL;
++}
++
++static struct syscore_ops hv_syscore_ops = {
++	.suspend = hv_suspend,
++	.resume = hv_resume,
++};
++
+ /*
+  * This function is to be invoked early in the boot sequence after the
+  * hypervisor has been detected.
+@@ -329,6 +373,8 @@ void __init hyperv_init(void)
  
-+``mount_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``mount_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- RCU
- ~~~
+ 	x86_init.pci.arch_init = hv_pci_init;
  
-@@ -405,6 +420,10 @@ is requested.  Keeping a reference in the ``nameidata`` ensures that
- only one root is in effect for the entire path walk, even if it races
- with a ``chroot()`` system call.
++	register_syscore_ops(&hv_syscore_ops);
++
+ 	return;
  
-+It should be noted that in the case of ``LOOKUP_IN_ROOT`` or
-+``LOOKUP_BENEATH``, the effective root becomes the directory file descriptor
-+passed to ``openat2()`` (which exposes these ``LOOKUP_`` flags).
-+
- The root is needed when either of two conditions holds: (1) either the
- pathname or a symbolic link starts with a "'/'", or (2) a "``..``"
- component is being handled, since "``..``" from the root must always stay
-@@ -1149,7 +1168,7 @@ so ``NULL`` is returned to indicate that the symlink can be released and
- the stack frame discarded.
+ remove_cpuhp_state:
+@@ -348,6 +394,8 @@ void hyperv_cleanup(void)
+ {
+ 	union hv_x64_msr_hypercall_contents hypercall_msr;
  
- The other case involves things in ``/proc`` that look like symlinks but
--aren't really::
-+aren't really (and are therefore commonly referred to as "magic-links")::
- 
-      $ ls -l /proc/self/fd/1
-      lrwx------ 1 neilb neilb 64 Jun 13 10:19 /proc/self/fd/1 -> /dev/pts/4
-@@ -1286,7 +1305,9 @@ A few flags
- A suitable way to wrap up this tour of pathname walking is to list
- the various flags that can be stored in the ``nameidata`` to guide the
- lookup process.  Many of these are only meaningful on the final
--component, others reflect the current state of the pathname lookup.
-+component, others reflect the current state of the pathname lookup, and some
-+apply restrictions to all path components encountered in the path lookup.
++	unregister_syscore_ops(&hv_syscore_ops);
 +
- And then there is ``LOOKUP_EMPTY``, which doesn't fit conceptually with
- the others.  If this is not set, an empty pathname causes an error
- very early on.  If it is set, empty pathnames are not considered to be
-@@ -1310,13 +1331,48 @@ longer needed.
- ``LOOKUP_JUMPED`` means that the current dentry was chosen not because
- it had the right name but for some other reason.  This happens when
- following "``..``", following a symlink to ``/``, crossing a mount point
--or accessing a "``/proc/$PID/fd/$FD``" symlink.  In this case the
--filesystem has not been asked to revalidate the name (with
--``d_revalidate()``).  In such cases the inode may still need to be
--revalidated, so ``d_op->d_weak_revalidate()`` is called if
-+or accessing a "``/proc/$PID/fd/$FD``" symlink (also known as a "magic
-+link"). In this case the filesystem has not been asked to revalidate the
-+name (with ``d_revalidate()``).  In such cases the inode may still need
-+to be revalidated, so ``d_op->d_weak_revalidate()`` is called if
- ``LOOKUP_JUMPED`` is set when the look completes - which may be at the
- final component or, when creating, unlinking, or renaming, at the penultimate component.
- 
-+Resolution-restriction flags
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+In order to allow userspace to protect itself against certain race conditions
-+and attack scenarios involving changing path components, a series of flags are
-+available which apply restrictions to all path components encountered during
-+path lookup. These flags are exposed through ``openat2()``'s ``resolve`` field.
-+
-+``LOOKUP_NO_SYMLINKS`` blocks all symlink traversals (including magic-links).
-+This is distinctly different from ``LOOKUP_FOLLOW``, because the latter only
-+relates to restricting the following of trailing symlinks.
-+
-+``LOOKUP_NO_MAGICLINKS`` blocks all magic-link traversals. Filesystems must
-+ensure that they return errors from ``nd_jump_link()``, because that is how
-+``LOOKUP_NO_MAGICLINKS`` and other magic-link restrictions are implemented.
-+
-+``LOOKUP_NO_XDEV`` blocks all ``vfsmount`` traversals (this includes both
-+bind-mounts and ordinary mounts). Note that the ``vfsmount`` which contains the
-+lookup is determined by the first mountpoint the path lookup reaches --
-+absolute paths start with the ``vfsmount`` of ``/``, and relative paths start
-+with the ``dfd``'s ``vfsmount``. Magic-links are only permitted if the
-+``vfsmount`` of the path is unchanged.
-+
-+``LOOKUP_BENEATH`` blocks any path components which resolve outside the
-+starting point of the resolution. This is done by blocking ``nd_jump_root()``
-+as well as blocking ".." if it would jump outside the starting point.
-+``rename_lock`` and ``mount_lock`` are used to detect attacks against the
-+resolution of "..". Magic-links are also blocked.
-+
-+``LOOKUP_IN_ROOT`` resolves all path components as though the starting point
-+were the filesystem root. ``nd_jump_root()`` brings the resolution back to to
-+the starting point, and ".." at the starting point will act as a no-op. As with
-+``LOOKUP_BENEATH``, ``rename_lock`` and ``mount_lock`` are used to detect
-+attacks against ".." resolution. Magic-links are also blocked.
-+
- Final-component flags
- ~~~~~~~~~~~~~~~~~~~~~
+ 	/* Reset our OS id */
+ 	wrmsrl(HV_X64_MSR_GUEST_OS_ID, 0);
  
 -- 
-2.24.0
+2.19.1
 
