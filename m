@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A781034D1
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Nov 2019 08:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A961034DB
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Nov 2019 08:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726163AbfKTHJ0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Nov 2019 02:09:26 -0500
-Received: from mail-eopbgr770104.outbound.protection.outlook.com ([40.107.77.104]:34030
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        id S1727127AbfKTHM6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Nov 2019 02:12:58 -0500
+Received: from mail-eopbgr730115.outbound.protection.outlook.com ([40.107.73.115]:6211
+        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725268AbfKTHJ0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 20 Nov 2019 02:09:26 -0500
+        id S1726163AbfKTHM5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 20 Nov 2019 02:12:57 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R4mya0Wa0F+qQRQs9iH6dmtBRup6AwM5PJE8iO1RYW+nGUb54AuQym2TJihA3jwdlH674w+bGShJ5RQdsfwbf4LSju7bXE1bwyBdq5tc0KtjPWTO0scQz7JbR0k8zCsTbLUUPf4Olm0TB1xnZWHeU+pJtx2Xy8dTyjJs3mo66U8jnvjMae5/cJFsJiZ5sNM30sKFI0jww+JfE3KwSC4Hj1QKIUCv/AVAg44FZMcdYXLsVQ2RudC/T6RzpUdhsjnvBQof18nWp3IHoZEqchX/vW676LGImCV+6Iujn30SKzDwPaYIkJo9v7K5ZLmiI6xldzhgAhbzrDdb3O7A7M53YQ==
+ b=cE8SMRkfcE9Yxq7ug07Cvv8Nkcjs976qK9hEz9PxJLnLHRvBjfHtYIhvHUzlmLPjEApPkYlJWFWhYVrAgqi90jaVc4LMlloOGVChMLlJEGHCMW8y1DPKaypvJ7giEpQmY0tqCuAPE45zaaip4G59eZIK2HodS0/g2u40ofOC9pd2Jfs936qDusxShd+yb7zhMMwh+Ku7uxWTDVeur4OdKRXgMvbmWHlXleRnY3J06MIizcrBZpVjYHGRM30Agh+jwsIjazuTOaNIk9h6Z/C3LX4JdvRQBuY9AW74fsO/5xA0NZZVRoGzNsKQQzcbe8sMzP4vueQb9KnHzEFr6F/sLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3rWXqaA9BDeb4W0MowjqtCEy8/0QhOpnWQvxEmyDiXU=;
- b=CJp5n3t4ILVuArWs5kkaRx3NJXy73vi1Hfr4Vc/yP+75P0MLY/tpgOA/v/gD372f/+hgZ9FqX05Z22LlQWs62B2raYbGbyf4CPXJEPbiKzSIW2w1yDs4r2wQ57gA7KNd7xHumQ9wgD0WlJ/MR1GzV6+Ry5SQKU4sKwFLJldpykytrU0Z/Aq3LqiB6DA28HYrGDLt5VXjBNPyGXCztg4poqmhfcPQO77Eiyjman23zeU8oPOeibBxGzJmIRNz2gBTJsU7vmNvDynqF2KkE53ncRQqp8+9HBT+5+vkjuS0jEmM6fKTrkbGiyVCsNjoy7z3hGK7rnxIx21WQH9FyXWHOA==
+ bh=EeWWHZzdpCu3t/3G0FnFvPIhQn/G8JvI0hFMJpj7glQ=;
+ b=nupwbVS90dUZShsKhyXuEUdItvRXCJDR4WEqQ8sK5LCIp+CHiTp3+RkTnU5hs5ORMyRC0GYEN3sCMhdsa0A7v9y0bBigersqeF1B879GZO7DOWBEoVE/MPsdm8eimRsK/3GaviM4DUtO7Fde6yZ8rAWSYGdftThxIt/aJWVK+cysWuu+3vmciKNrcDn/yj/nZmBV1yrVeov5zLySBGELhwd2AfsUgnkmf0JQDzOwInctKRPLo5QBVExiHzeDJSwZVxDIO70/bG8AJFgIvnZeJMVdebtToLNPUKpgHBAlx8g3EMH7cR66vO1QkrfdpqUD0cRhoyCTqr0MuYgiPXAXyw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3rWXqaA9BDeb4W0MowjqtCEy8/0QhOpnWQvxEmyDiXU=;
- b=IlcCUEX7n5ARigZhdkYHWeKTsOk951yT/RoNsQwcioTsoN9Vn9xtZhxjLtioL/Brf+cJ6V7NMTMuLTn1WbiOWxxyrHxTvcQ29hT3YcOCo8oKoonQzimXDTm3zUrMG3fJDRYZAyJGSjphYkToPrs5Tt+IbhZ/bPi5DNYYbepAC8M=
+ bh=EeWWHZzdpCu3t/3G0FnFvPIhQn/G8JvI0hFMJpj7glQ=;
+ b=hcaMAm709z40gUDLXT6iSe5PuI2k9wJhV8ir6KBF88ktVUXwqd/SbqWRTThacPj8VVs0OJncOXbh+F1fbnGdDWtH0FXGcZwGwJxv1D8AKPrFo105I/z3VYygIQV6BBlmbQ4gZ7Ns63CIv1e4WNWQOqGXL838+yvA6F7L81oxgGg=
 Authentication-Results: spf=none (sender IP is )
  smtp.mailfrom=decui@microsoft.com; 
 Received: from BN8PR21MB1137.namprd21.prod.outlook.com (20.179.72.96) by
- BN8PR21MB1186.namprd21.prod.outlook.com (20.179.73.78) with Microsoft SMTP
+ BN8PR21MB1268.namprd21.prod.outlook.com (20.179.74.89) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2495.3; Wed, 20 Nov 2019 07:09:23 +0000
+ 15.20.2495.3; Wed, 20 Nov 2019 07:12:46 +0000
 Received: from BN8PR21MB1137.namprd21.prod.outlook.com
  ([fe80::c596:ecf5:7a6:734d]) by BN8PR21MB1137.namprd21.prod.outlook.com
  ([fe80::c596:ecf5:7a6:734d%2]) with mapi id 15.20.2495.006; Wed, 20 Nov 2019
- 07:09:23 +0000
+ 07:12:46 +0000
 From:   Dexuan Cui <decui@microsoft.com>
 To:     arnd@arndb.de, bp@alien8.de, daniel.lezcano@linaro.org,
         haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
@@ -45,51 +45,50 @@ To:     arnd@arndb.de, bp@alien8.de, daniel.lezcano@linaro.org,
         tglx@linutronix.de, x86@kernel.org, mikelley@microsoft.com,
         Alexander.Levin@microsoft.com, vkuznets@redhat.com
 Cc:     linux-arch@vger.kernel.org, Dexuan Cui <decui@microsoft.com>
-Subject: [PATCH v6] x86/hyperv: Suspend/resume the hypercall page for hibernation
-Date:   Tue, 19 Nov 2019 23:09:02 -0800
-Message-Id: <1574233742-47794-1-git-send-email-decui@microsoft.com>
+Subject: [PATCH v6] clocksource/drivers: Suspend/resume Hyper-V clocksource for hibernation
+Date:   Tue, 19 Nov 2019 23:12:26 -0800
+Message-Id: <1574233946-48377-1-git-send-email-decui@microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 Reply-To: decui@microsoft.com
 Content-Type: text/plain
-X-ClientProxiedBy: MWHPR2001CA0015.namprd20.prod.outlook.com
- (2603:10b6:301:15::25) To BN8PR21MB1137.namprd21.prod.outlook.com
+X-ClientProxiedBy: MWHPR0201CA0019.namprd02.prod.outlook.com
+ (2603:10b6:301:74::32) To BN8PR21MB1137.namprd21.prod.outlook.com
  (2603:10b6:408:71::32)
 MIME-Version: 1.0
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (13.77.154.182) by MWHPR2001CA0015.namprd20.prod.outlook.com (2603:10b6:301:15::25) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Wed, 20 Nov 2019 07:09:21 +0000
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (13.77.154.182) by MWHPR0201CA0019.namprd02.prod.outlook.com (2603:10b6:301:74::32) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Wed, 20 Nov 2019 07:12:44 +0000
 X-Mailer: git-send-email 1.8.3.1
 X-Originating-IP: [13.77.154.182]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: a3b54bf7-ddcc-4aed-90db-08d76d8891e2
-X-MS-TrafficTypeDiagnostic: BN8PR21MB1186:|BN8PR21MB1186:|BN8PR21MB1186:
+X-MS-Office365-Filtering-Correlation-Id: 3cd74eaf-965a-4d96-28ae-08d76d890b3f
+X-MS-TrafficTypeDiagnostic: BN8PR21MB1268:|BN8PR21MB1268:|BN8PR21MB1268:
 X-MS-Exchange-Transport-Forked: True
 X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-X-Microsoft-Antispam-PRVS: <BN8PR21MB1186CE61A2CCC1676C1EFEF1BF4F0@BN8PR21MB1186.namprd21.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Microsoft-Antispam-PRVS: <BN8PR21MB126888E66BD752F5DD9178ABBF4F0@BN8PR21MB1268.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
 X-Forefront-PRVS: 02272225C5
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(376002)(136003)(366004)(39860400002)(396003)(346002)(189003)(199004)(6506007)(478600001)(386003)(316002)(43066004)(48376002)(3450700001)(5660300002)(16586007)(66066001)(15650500001)(8676002)(50466002)(966005)(8936002)(25786009)(22452003)(1511001)(7736002)(6486002)(66556008)(66476007)(2906002)(66946007)(51416003)(52116002)(14444005)(107886003)(476003)(2616005)(186003)(47776003)(956004)(36756003)(6436002)(6666004)(3846002)(10290500003)(305945005)(10090500001)(86362001)(26005)(81156014)(81166006)(4720700003)(6116002)(50226002)(486006)(4326008)(7416002)(6306002)(16526019)(6512007)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:BN8PR21MB1186;H:BN8PR21MB1137.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(366004)(39860400002)(346002)(396003)(376002)(136003)(199004)(189003)(6436002)(7736002)(305945005)(4720700003)(8676002)(14444005)(6666004)(66556008)(66476007)(3846002)(6306002)(47776003)(107886003)(6512007)(316002)(22452003)(6486002)(6116002)(36756003)(48376002)(478600001)(16586007)(50226002)(966005)(81166006)(86362001)(81156014)(66066001)(956004)(15650500001)(10090500001)(2616005)(43066004)(476003)(51416003)(52116002)(486006)(26005)(4326008)(6506007)(386003)(16526019)(50466002)(186003)(5660300002)(25786009)(3450700001)(1511001)(2906002)(66946007)(10290500003)(7416002)(8936002)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:BN8PR21MB1268;H:BN8PR21MB1137.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 Received-SPF: None (protection.outlook.com: microsoft.com does not designate
  permitted sender hosts)
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E2m6bIUZX8AJUSW65mL5xWqLvKmaE8unFMbiwBgKreglSV1Ol0n7WETT7r4LWuiPbB34wn0VG5YEoO/LGqD6bTesuxC3vVQmgANGNhyN7/D+/FPtfQMAh3JdS1ZNQ5xQRCIJwT0qMA4gqSP7qcDikI35d4xr8qKJC4qehMvM31NjV0+/ePDODTtRohu5Db1ofPhIacAY5joZjo89K6383asDsaZGYafREVlpi88m8WUOaynODxadoMia+PC2AERTu+cEl/jkMGjPXvvt83hBe3dVJZOR7reOGO4y7cWsGryhiSFIM/KNP0evej0m48QQG091cCHMtWt8bcKUIbDkH5XCJzEeJEpoN2niLXkkdTsw8OXX9S+YInAsFTGezroN/aqoQzeJUipbtVZ3tGdWE5UaS8LmWfL+wv6DDNN2Yk0Rppu8dDbwh6zS0xIVX0LNk0UCPx+noLHPsEhkiNua6wKKH8TGN2wciyGNb9lq/eE=
+X-Microsoft-Antispam-Message-Info: Q8X8leSWW37pywsrKFH5ADPOxKy6Phb9yuLGtIhU5/hAWk666s7E5E5tmZMZ8SeiawXJlUCBMVmxBX+Rk7oLXn//BYfmZSoc/KDpdr6olR0MjFrEMsw/OAPl5GXmfI9TL2cf2ZlYRCvqDhWxPy4RMeuRUMVFADX1EqXVDrHw3iDFxKqxOHQta1ZsieyHsNtfja2U8ttEAyHUMJaOL4rt3Tbu3GWs6RIcgZJZfB4mWUJXEhnLxqRTz2K71fsXLJtTJjuTU2Bg5dOpI14zXyI/rIwusXJnfd3mXX0Ge18ES+pXiNLDpz07PhLp9SK1ylPEnZiWk6O0vIQ/QEG8Z7beCmTM4kVNMGV+u0F98eMtvqbXZT06gPHgfFzo8DRnqFeG2ErQJ35epNh78/e01w+oz710NEzR+/TaoXu1thjL00ZXrPGs10vd95n22TZqsouaO4uzobVhyyJ6JgR2aE5Tmmi/oxKI6n0ssTwboI4hc4s=
 X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3b54bf7-ddcc-4aed-90db-08d76d8891e2
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2019 07:09:23.0881
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3cd74eaf-965a-4d96-28ae-08d76d890b3f
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2019 07:12:46.5832
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZlGLT1oyoCDP6WFEbJhLDq4AI4fpVv6C48gfBiVNyzNpCcFhIBDo3uYUpjbR5z0BHMKFKdNIaiD+MEj/7Vd5LQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR21MB1186
+X-MS-Exchange-CrossTenant-UserPrincipalName: DVDZ0hil4Ifjvvkk5ppBAvuxmYI7FUtk5jUfe6dfYohDx+Ot25EiYfSyiFhdFIt6ST91nqdkvo5ygvPFG5Ka6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR21MB1268
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 This is needed for hibernation, e.g. when we resume the old kernel, we need
-to disable the "current" kernel's hypercall page and then resume the old
-kernel's.
+to disable the "current" kernel's TSC page and then resume the old kernel's.
 
 Signed-off-by: Dexuan Cui <decui@microsoft.com>
 Reviewed-by: Michael Kelley <mikelley@microsoft.com>
@@ -97,104 +96,58 @@ Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
 This patch is part of the v5 patchset:
   https://lkml.org/lkml/2019/9/5/1158
-  https://lkml.org/lkml/2019/9/5/1159 
+  https://lkml.org/lkml/2019/9/5/1161
 
-  The change is: I set 'hv_hypercall_pg' to NULL in hv_suspend(), and
-restore it in hv_resume(). This is suggested by Vitaly Kuznetsov.
+  Actually v6 is the same as v1 (v2~v5 were posted with the other patches).
 
-  There is no other change, compared to v1 (v2~v5 were posted with the other
-patches).
+  Please pick up this patch into the tip.git tree, probably onto the branch
+timers/core.
 
-  Please pick up this patch onto the tip.git tree's branch x86/hyperv.
+ drivers/clocksource/hyperv_timer.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
- arch/x86/hyperv/hv_init.c | 48 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 426dc8b78193..c170653da589 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -20,11 +20,15 @@
- #include <linux/hyperv.h>
- #include <linux/slab.h>
- #include <linux/cpuhotplug.h>
-+#include <linux/syscore_ops.h>
- #include <clocksource/hyperv_timer.h>
- 
- void *hv_hypercall_pg;
- EXPORT_SYMBOL_GPL(hv_hypercall_pg);
- 
-+/* Save the hypercall page temporarily for hibernation */
-+static void *hv_hypercall_pg_saved;
-+
- u32 *hv_vp_index;
- EXPORT_SYMBOL_GPL(hv_vp_index);
- 
-@@ -245,6 +249,46 @@ static int __init hv_pci_init(void)
- 	return 1;
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index 287d8d58c21a..1aec08e82b7a 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -330,12 +330,37 @@ static u64 read_hv_sched_clock_tsc(void)
+ 	return read_hv_clock_tsc(NULL) - hv_sched_clock_offset;
  }
  
-+static int hv_suspend(void)
++static void suspend_hv_clock_tsc(struct clocksource *arg)
 +{
-+	union hv_x64_msr_hypercall_contents hypercall_msr;
++	u64 tsc_msr;
 +
-+	/*
-+	 * Reset hypercall page reference before reset the page,
-+	 * let hypercall operations fail safely rather than
-+	 * panic the kernel for using invalid hypercall page
-+	 */
-+	hv_hypercall_pg_saved = hv_hypercall_pg;
-+	hv_hypercall_pg = NULL;
-+
-+	/* Reset the hypercall page */
-+	rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-+	hypercall_msr.enable = 0;
-+	wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-+
-+	return 0;
++	/* Disable the TSC page */
++	hv_get_reference_tsc(tsc_msr);
++	tsc_msr &= ~BIT_ULL(0);
++	hv_set_reference_tsc(tsc_msr);
 +}
 +
-+static void hv_resume(void)
++
++static void resume_hv_clock_tsc(struct clocksource *arg)
 +{
-+	union hv_x64_msr_hypercall_contents hypercall_msr;
++	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
++	u64 tsc_msr;
 +
-+	/* Re-enable the hypercall page */
-+	rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-+	hypercall_msr.enable = 1;
-+	hypercall_msr.guest_physical_address =
-+		vmalloc_to_pfn(hv_hypercall_pg_saved);
-+	wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-+
-+	hv_hypercall_pg = hv_hypercall_pg_saved;
-+	hv_hypercall_pg_saved = NULL;
++	/* Re-enable the TSC page */
++	hv_get_reference_tsc(tsc_msr);
++	tsc_msr &= GENMASK_ULL(11, 0);
++	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
++	hv_set_reference_tsc(tsc_msr);
 +}
 +
-+static struct syscore_ops hv_syscore_ops = {
-+	.suspend = hv_suspend,
-+	.resume = hv_resume,
-+};
-+
- /*
-  * This function is to be invoked early in the boot sequence after the
-  * hypervisor has been detected.
-@@ -329,6 +373,8 @@ void __init hyperv_init(void)
+ static struct clocksource hyperv_cs_tsc = {
+ 	.name	= "hyperv_clocksource_tsc_page",
+ 	.rating	= 400,
+ 	.read	= read_hv_clock_tsc,
+ 	.mask	= CLOCKSOURCE_MASK(64),
+ 	.flags	= CLOCK_SOURCE_IS_CONTINUOUS,
++	.suspend= suspend_hv_clock_tsc,
++	.resume	= resume_hv_clock_tsc,
+ };
  
- 	x86_init.pci.arch_init = hv_pci_init;
- 
-+	register_syscore_ops(&hv_syscore_ops);
-+
- 	return;
- 
- remove_cpuhp_state:
-@@ -348,6 +394,8 @@ void hyperv_cleanup(void)
- {
- 	union hv_x64_msr_hypercall_contents hypercall_msr;
- 
-+	unregister_syscore_ops(&hv_syscore_ops);
-+
- 	/* Reset our OS id */
- 	wrmsrl(HV_X64_MSR_GUEST_OS_ID, 0);
- 
+ static u64 notrace read_hv_clock_msr(struct clocksource *arg)
 -- 
 2.19.1
 
