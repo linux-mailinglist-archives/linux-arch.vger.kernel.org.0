@@ -2,139 +2,340 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A79105466
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Nov 2019 15:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885B0105721
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Nov 2019 17:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbfKUO2Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Nov 2019 09:28:24 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:35207 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726396AbfKUO2X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Nov 2019 09:28:23 -0500
-Received: from mail-qt1-f175.google.com ([209.85.160.175]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MhlbM-1hu2qb31Zg-00doDm; Thu, 21 Nov 2019 15:28:21 +0100
-Received: by mail-qt1-f175.google.com with SMTP id o11so3828152qtr.11;
-        Thu, 21 Nov 2019 06:28:21 -0800 (PST)
-X-Gm-Message-State: APjAAAVpE/RjHL+ncTjs8J92/qo5V8Y4lkqGlbPq37p3OVWARlA3KohO
-        XoqskO+3h16FUtM80skNMPwfCV718CVABjY2b8E=
-X-Google-Smtp-Source: APXvYqxB3fiYXtrETUp5EiMiQ9fb0AeisI+RwKyT7xggRKZinaPFWQOgz7hTMTjBH+1fCN1q48qajjrjZ95bUArYxrA=
-X-Received: by 2002:ac8:18eb:: with SMTP id o40mr2519477qtk.304.1574346500017;
- Thu, 21 Nov 2019 06:28:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20191108210236.1296047-1-arnd@arndb.de> <20191108210824.1534248-8-arnd@arndb.de>
- <dd1a30609f05e800550097080c1d1b27065f91ff.camel@codethink.co.uk>
-In-Reply-To: <dd1a30609f05e800550097080c1d1b27065f91ff.camel@codethink.co.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 21 Nov 2019 15:28:03 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0VORzqLLTFpt9VYn_SONsve+-q0fTrZrPbLMpX9T6SBQ@mail.gmail.com>
-Message-ID: <CAK8P3a0VORzqLLTFpt9VYn_SONsve+-q0fTrZrPbLMpX9T6SBQ@mail.gmail.com>
-Subject: Re: [Y2038] [PATCH 08/23] y2038: ipc: remove __kernel_time_t
- reference from headers
-To:     Ben Hutchings <ben.hutchings@codethink.co.uk>
-Cc:     y2038 Mailman List <y2038@lists.linaro.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
+        id S1726293AbfKUQfE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Nov 2019 11:35:04 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:21562 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726279AbfKUQfE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Nov 2019 11:35:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1574354099;
+        s=strato-dkim-0002; d=xenosoft.de;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=MR6HbPNBWmyhl8iShSyS/i2w9Bm/K5EVySERuVVBGj4=;
+        b=TyVrdzgI1FPDm9KOIuHfLT2UKmM1GT61qGppwmtrkIUJ+BIZLy+mQE2cgaZHJB88k+
+        CKZuIbVQqGikB8MzYwEv0NeonnrKd8i5NLjs7vwBzk4hJs3sVp4Neg8cTI5V/PBO1Trx
+        XUHgFerlZH9XNt7Y8FWBvr6pVk5XmCZC0Lb6pdmW1q64E33Dg0xCeINnRptPGkttc0aX
+        7E59uwXr4gGgE2ArOQb9SuNwplcqkbMA2leyM6S2ZAfa4rYC4o5Xcu56D0lja6kiZN1v
+        Iz4vR2dMSJ+4lUO7hmuZb1b7BDzgXUTUN8AavrVhqHSNhFLbqQUZfl5FiNK2QtBMJpoA
+        cmVw==
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBJSrwuuqxvPgBcsBrTF1qGB6TwVFx4Pq4s7A="
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2a02:8109:89c0:ebfc:bd57:573a:d50f:b5]
+        by smtp.strato.de (RZmta 44.29.0 AUTH)
+        with ESMTPSA id q007c8vALGYnkb1
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Thu, 21 Nov 2019 17:34:49 +0100 (CET)
+Subject: Re: Bug 205201 - Booting halts if Dawicontrol DC-2976 UW SCSI board
+ installed, unless RAM size limited to 3500M
+To:     Robin Murphy <robin.murphy@arm.com>, Christoph Hellwig <hch@lst.de>
+Cc:     linux-arch@vger.kernel.org, darren@stevens-zone.net,
+        mad skateman <madskateman@gmail.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:LnPyaKtdAcRIfsrfVOvLgTpY2NYcJVXxz9V2TfTsyIVjaxXXWXo
- J0B/STj89T5mtEIVTc0DQpBVMrYNCU0NcRKyMbhUocUGEvCLRsv+tXSavgQ9f1ideIJ9QR/
- Y5hh36oQ5DHX7KGoy+fvIxvqyEiOiRDO5LBnW77E+fjNVlQJvkzhlyATiPB5C1vEiZb5+oS
- z+IMcyRaYAXzuuyPNj62w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8A/19T5M7NU=:IiGojC9BupST0/of+E3q2T
- awxsjk77FWMnOwQ4nks8TRVJzj8MaemtAxeTd5LZ6AU026M7mvm1hvPPHZ4QB1SOCc3AYUgwj
- JPVxeNksokjiewTxADZhlkQvmoHlH8s8IySCW9mTS2t5RD8o/IIkeCztir/MtztaDyYhZGCEF
- rJutdeF8yCwCOVEmI7Ryya6bzcLeLgOMSoT5Xc8Tr9ih6rF+jVFaOUAXQMQ6sS/CqZm07Z50W
- 7mFRhVnGeKtcmbTcT0NTLP401mk/Y8oiEAIVOQBfgMLuw2i+hxNpBaSfN4BVM41IYS3h0x3HD
- uGGmN8Xg4IinXM7DMSUMDAzn6EMtVtq/QLtMgQqKk3tDFwE1zBuRSd44KbYWGHF3Q5aMOUzd8
- 9Sz0SWtwZrbXJw+mhMw8rLqVMwp4yN0nU2VyHFcMDvtMFQ3BNUPTwIen5wbxdh2wWV5N7roDc
- doz4p7AZTAPDJskv5JNv1EKjjCl6xvoqQ7wnIp+Al8cIJxYnH6J4UDx5XPfdsrRS4pa+71lbm
- EWW0/i/p7///JQKDcKCh7ZZ4LPUrE/h1kYwBQP1MHg5hYP9OpFlu0k36Uv+f4AIeXpq+0CrfQ
- /bVHc+NPvKLBmPdC+v6whkNTSXKYLqce/eejLUwRvJjXDpqKQ00siEcCr21Vy62/XMUgoTMP0
- ruAJ3GS2Boof4iy+ow6k+pyZug2crvFBwPmgP5Um5R8Hg5YP1dPhXvfbkPFqPAfvGwOvoplet
- J2AWy7clG4cWvOnoOy52qSRXi9wlksgco1NEKVg+ITDnHMNlDT01gV4H6HNCGkOncaZ02mV1f
- WoJKk4TZPuzgJh5AqeiuSTyXXyIiy919eAAca+VxYDVUHKVsaVa633SN22EcLEV1YskVIIOMm
- T2iRBlyk5NdX4Xcg6V7A==
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org, Rob Herring <robh+dt@kernel.org>,
+        paulus@samba.org, rtd2@xtra.co.nz,
+        "contact@a-eon.com" <contact@a-eon.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        nsaenzjulienne@suse.de
+References: <F1EBB706-73DF-430E-9020-C214EC8ED5DA@xenosoft.de>
+ <20191121072943.GA24024@lst.de>
+ <dbde2252-035e-6183-7897-43348e60647e@xenosoft.de>
+ <6eec5c42-019c-a988-fc2a-cb804194683d@xenosoft.de>
+ <d0252d29-7a03-20e1-ccd7-e12d906e4bdf@arm.com>
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+Message-ID: <b3217742-2c0b-8447-c9ac-608b93265363@xenosoft.de>
+Date:   Thu, 21 Nov 2019 17:34:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
+MIME-Version: 1.0
+In-Reply-To: <d0252d29-7a03-20e1-ccd7-e12d906e4bdf@arm.com>
+Content-Type: multipart/mixed;
+ boundary="------------CA5FBA987424D6E471C8129F"
+Content-Language: de-DE
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 20, 2019 at 11:49 PM Ben Hutchings
-<ben.hutchings@codethink.co.uk> wrote:
+This is a multi-part message in MIME format.
+--------------CA5FBA987424D6E471C8129F
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Am 21.11.19 um 14:33 schrieb Robin Murphy:
+> On 21/11/2019 12:21 pm, Christian Zigotzky wrote:
+>> On 21 November 2019 at 01:16 pm, Christian Zigotzky wrote:
+>>> On 21 November 2019 at 08:29 am, Christoph Hellwig wrote:
+>>>> On Sat, Nov 16, 2019 at 08:06:05AM +0100, Christian Zigotzky wrote:
+>>>>> /*
+>>>>>   *  DMA addressing mode.
+>>>>>   *
+>>>>>   *  0 : 32 bit addressing for all chips.
+>>>>>   *  1 : 40 bit addressing when supported by chip.
+>>>>>   *  2 : 64 bit addressing when supported by chip,
+>>>>>   *      limited to 16 segments of 4 GB -> 64 GB max.
+>>>>>   */
+>>>>> #define   SYM_CONF_DMA_ADDRESSING_MODE 
+>>>>> CONFIG_SCSI_SYM53C8XX_DMA_ADDRESSING_MODE
+>>>>>
+>>>>> Cyrus config:
+>>>>>
+>>>>> CONFIG_SCSI_SYM53C8XX_DMA_ADDRESSING_MODE=1
+>>>>>
+>>>>> I will configure “0 : 32 bit addressing for all chips” for the 
+>>>>> RC8. Maybe this is the solution.
+>>>> 0 means you are going to do bounce buffering a lot, which seems
+>>>> generally like a bad idea.
+>>>>
+>>>> But why are we talking about the sym53c8xx driver now?  The last issue
+>>>> you reported was about video4linux allocations.
+>>>>
+>>> Both drivers have the same problem. They don't work if we have more 
+>>> than 3.5GB RAM. I try to find a solution until you have a good 
+>>> solution. I have already a solution for V4L but I still need one for 
+>>> the sym53c8xx driver.
+>> OK, you mean that "0" is a bad idea but maybe it works until you have 
+>> a solution. ;-)
 >
-> On Fri, 2019-11-08 at 22:07 +0100, Arnd Bergmann wrote:
-> [...]
-> > --- a/arch/x86/include/uapi/asm/sembuf.h
-> > +++ b/arch/x86/include/uapi/asm/sembuf.h
-> > @@ -21,9 +21,9 @@ struct semid64_ds {
-> >       unsigned long   sem_ctime;      /* last change time */
-> >       unsigned long   sem_ctime_high;
-> >  #else
-> > -     __kernel_time_t sem_otime;      /* last semop time */
-> > +     long            sem_otime;      /* last semop time */
-> >       __kernel_ulong_t __unused1;
-> > -     __kernel_time_t sem_ctime;      /* last change time */
-> > +     long            sem_ctime;      /* last change time */
-> >       __kernel_ulong_t __unused2;
-> >  #endif
-> >       __kernel_ulong_t sem_nsems;     /* no. of semaphores in array */
-> [...]
+> Is this on the same machine with the funny non-power-of-two 
+> bus_dma_mask as your other report? If so, does Nicolas' latest 
+> patch[1] help at all?
 >
-> We need to use __kernel_long_t here to do the right thing on x32.
+> Robin.
+>
+> [1] 
+> https://lore.kernel.org/linux-iommu/20191121092646.8449-1-nsaenzjulienne@suse.de/T/#u
+>
+Robin,
 
-Good catch, thanks for the review!
+I modified the patch and compiled a new RC8 of kernel 5.4 today. (patch 
+attached)
 
-I applied the patch below now on top.
+We have to wait to Rolands test results with his SCSI PCI card. I tested 
+it today but my TV card doesn't work with this patch.
 
-       Arnd
+Thanks
 
-commit c7ebd8a1c1825c3197732ea692cf3dde34a644f5 (HEAD)
-Author: Arnd Bergmann <arnd@arndb.de>
-Date:   Thu Nov 21 15:25:04 2019 +0100
+--------------CA5FBA987424D6E471C8129F
+Content-Type: text/x-patch;
+ name="dma-v1.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="dma-v1.patch"
 
-    y2038: ipc: fix x32 ABI breakage
+diff -rupN a/arch/powerpc/sysdev/fsl_pci.c b/arch/powerpc/sysdev/fsl_pci.c
+--- a/arch/powerpc/sysdev/fsl_pci.c	2019-11-17 23:47:30.000000000 +0100
++++ b/arch/powerpc/sysdev/fsl_pci.c	2019-11-21 15:32:50.216488955 +0100
+@@ -115,8 +115,8 @@ static void pci_dma_dev_setup_swiotlb(st
+ {
+ 	struct pci_controller *hose = pci_bus_to_host(pdev->bus);
+ 
+-	pdev->dev.bus_dma_mask =
+-		hose->dma_window_base_cur + hose->dma_window_size;
++	pdev->dev.bus_dma_limit =
++		hose->dma_window_base_cur + hose->dma_window_size - 1;
+ }
+ 
+ static void setup_swiotlb_ops(struct pci_controller *hose)
+@@ -135,7 +135,7 @@ static void fsl_pci_dma_set_mask(struct
+ 	 * mapping that allows addressing any RAM address from across PCI.
+ 	 */
+ 	if (dev_is_pci(dev) && dma_mask >= pci64_dma_offset * 2 - 1) {
+-		dev->bus_dma_mask = 0;
++		dev->bus_dma_limit = 0;
+ 		dev->archdata.dma_offset = pci64_dma_offset;
+ 	}
+ }
+diff -rupN a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+--- a/drivers/iommu/dma-iommu.c	2019-11-17 23:47:30.000000000 +0100
++++ b/drivers/iommu/dma-iommu.c	2019-11-21 15:32:50.216488955 +0100
+@@ -405,8 +405,7 @@ static dma_addr_t iommu_dma_alloc_iova(s
+ 	if (iova_len < (1 << (IOVA_RANGE_CACHE_MAX_SIZE - 1)))
+ 		iova_len = roundup_pow_of_two(iova_len);
+ 
+-	if (dev->bus_dma_mask)
+-		dma_limit &= dev->bus_dma_mask;
++	dma_limit = min_not_zero(dma_limit, dev->bus_dma_limit);
+ 
+ 	if (domain->geometry.force_aperture)
+ 		dma_limit = min(dma_limit, domain->geometry.aperture_end);
+diff -rupN a/drivers/of/device.c b/drivers/of/device.c
+--- a/drivers/of/device.c	2019-11-17 23:47:30.000000000 +0100
++++ b/drivers/of/device.c	2019-11-21 15:32:50.216488955 +0100
+@@ -93,7 +93,7 @@ int of_dma_configure(struct device *dev,
+ 	bool coherent;
+ 	unsigned long offset;
+ 	const struct iommu_ops *iommu;
+-	u64 mask;
++	u64 mask, end;
+ 
+ 	ret = of_dma_get_range(np, &dma_addr, &paddr, &size);
+ 	if (ret < 0) {
+@@ -148,12 +148,13 @@ int of_dma_configure(struct device *dev,
+ 	 * Limit coherent and dma mask based on size and default mask
+ 	 * set by the driver.
+ 	 */
+-	mask = DMA_BIT_MASK(ilog2(dma_addr + size - 1) + 1);
++	end = dma_addr + size - 1;
++	mask = DMA_BIT_MASK(ilog2(end) + 1);
+ 	dev->coherent_dma_mask &= mask;
+ 	*dev->dma_mask &= mask;
+-	/* ...but only set bus mask if we found valid dma-ranges earlier */
++	/* ...but only set bus limit if we found valid dma-ranges earlier */
+ 	if (!ret)
+-		dev->bus_dma_mask = mask;
++		dev->bus_dma_limit = end;
+ 
+ 	coherent = of_dma_is_coherent(np);
+ 	dev_dbg(dev, "device is%sdma coherent\n",
+diff -rupN a/include/linux/device.h b/include/linux/device.h
+--- a/include/linux/device.h	2019-11-17 23:47:30.000000000 +0100
++++ b/include/linux/device.h	2019-11-21 15:32:50.216488955 +0100
+@@ -1186,8 +1186,8 @@ struct dev_links_info {
+  * @coherent_dma_mask: Like dma_mask, but for alloc_coherent mapping as not all
+  * 		hardware supports 64-bit addresses for consistent allocations
+  * 		such descriptors.
+- * @bus_dma_mask: Mask of an upstream bridge or bus which imposes a smaller DMA
+- *		limit than the device itself supports.
++ * @bus_dma_limit: Limit of an upstream bridge or bus which imposes a smaller
++ *		DMA limit than the device itself supports.
+  * @dma_pfn_offset: offset of DMA memory range relatively of RAM
+  * @dma_parms:	A low level driver may set these to teach IOMMU code about
+  * 		segment limitations.
+@@ -1270,7 +1270,7 @@ struct device {
+ 					     not all hardware supports
+ 					     64 bit addresses for consistent
+ 					     allocations such descriptors. */
+-	u64		bus_dma_mask;	/* upstream dma_mask constraint */
++	u64		bus_dma_limit;	/* upstream dma constraint */
+ 	unsigned long	dma_pfn_offset;
+ 
+ 	struct device_dma_parameters *dma_parms;
+diff -rupN a/include/linux/dma-direct.h b/include/linux/dma-direct.h
+--- a/include/linux/dma-direct.h	2019-11-17 23:47:30.000000000 +0100
++++ b/include/linux/dma-direct.h	2019-11-21 15:37:40.091564417 +0100
+@@ -28,7 +28,7 @@ static inline bool dma_capable(struct de
+ 		return false;
+ 
+ 	return addr + size - 1 <=
+-		min_not_zero(*dev->dma_mask, dev->bus_dma_mask);
++		min_not_zero(*dev->dma_mask, dev->bus_dma_limit);
+ }
+ #endif /* !CONFIG_ARCH_HAS_PHYS_TO_DMA */
+ 
+diff -rupN a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
+--- a/include/linux/dma-mapping.h	2019-11-17 23:47:30.000000000 +0100
++++ b/include/linux/dma-mapping.h	2019-11-21 15:32:50.220488949 +0100
+@@ -693,7 +693,7 @@ static inline int dma_coerce_mask_and_co
+  */
+ static inline bool dma_addressing_limited(struct device *dev)
+ {
+-	return min_not_zero(dma_get_mask(dev), dev->bus_dma_mask) <
++	return min_not_zero(dma_get_mask(dev), dev->bus_dma_limit) <
+ 			    dma_get_required_mask(dev);
+ }
+ 
+diff -rupN a/kernel/dma/direct.c b/kernel/dma/direct.c
+--- a/kernel/dma/direct.c	2019-11-17 23:47:30.000000000 +0100
++++ b/kernel/dma/direct.c	2019-11-21 15:50:09.570609847 +0100
+@@ -27,10 +27,10 @@ static void report_addr(struct device *d
+ {
+ 	if (!dev->dma_mask) {
+ 		dev_err_once(dev, "DMA map on device without dma_mask\n");
+-	} else if (*dev->dma_mask >= DMA_BIT_MASK(32) || dev->bus_dma_mask) {
++	} else if (*dev->dma_mask >= DMA_BIT_MASK(32) || dev->bus_dma_limit) {
+ 		dev_err_once(dev,
+-			"overflow %pad+%zu of DMA mask %llx bus mask %llx\n",
+-			&dma_addr, size, *dev->dma_mask, dev->bus_dma_mask);
++			"overflow %pad+%zu of DMA mask %llx bus limit %llx\n",
++			&dma_addr, size, *dev->dma_mask, dev->bus_dma_limit);
+ 	}
+ 	WARN_ON_ONCE(1);
+ }
+@@ -51,15 +51,14 @@ u64 dma_direct_get_required_mask(struct
+ }
+ 
+ static gfp_t __dma_direct_optimal_gfp_mask(struct device *dev, u64 dma_mask,
+-		u64 *phys_mask)
++		u64 *phys_limit)
+ {
+-	if (dev->bus_dma_mask && dev->bus_dma_mask < dma_mask)
+-		dma_mask = dev->bus_dma_mask;
++	u64 dma_limit = min_not_zero(dma_mask, dev->bus_dma_limit);
+ 
+ 	if (force_dma_unencrypted(dev))
+-		*phys_mask = __dma_to_phys(dev, dma_mask);
++		*phys_limit = __dma_to_phys(dev, dma_limit);
+ 	else
+-		*phys_mask = dma_to_phys(dev, dma_mask);
++		*phys_limit = dma_to_phys(dev, dma_limit);
+ 
+ 	/*
+ 	 * Optimistically try the zone that the physical address mask falls
+@@ -69,9 +68,9 @@ static gfp_t __dma_direct_optimal_gfp_ma
+ 	 * Note that GFP_DMA32 and GFP_DMA are no ops without the corresponding
+ 	 * zones.
+ 	 */
+-	if (*phys_mask <= DMA_BIT_MASK(ARCH_ZONE_DMA_BITS))
++	if (*phys_limit <= DMA_BIT_MASK(ARCH_ZONE_DMA_BITS))
+ 		return GFP_DMA;
+-	if (*phys_mask <= DMA_BIT_MASK(32))
++	if (*phys_limit <= DMA_BIT_MASK(32))
+ 		return GFP_DMA32;
+ 	return 0;
+ }
+@@ -79,7 +78,7 @@ static gfp_t __dma_direct_optimal_gfp_ma
+ static bool dma_coherent_ok(struct device *dev, phys_addr_t phys, size_t size)
+ {
+ 	return phys_to_dma_direct(dev, phys) + size - 1 <=
+-			min_not_zero(dev->coherent_dma_mask, dev->bus_dma_mask);
++			min_not_zero(dev->coherent_dma_mask, dev->bus_dma_limit);
+ }
+ 
+ struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+@@ -88,7 +87,7 @@ struct page *__dma_direct_alloc_pages(st
+ 	size_t alloc_size = PAGE_ALIGN(size);
+ 	int node = dev_to_node(dev);
+ 	struct page *page = NULL;
+-	u64 phys_mask;
++	u64 phys_limit;
+ 
+ 	if (attrs & DMA_ATTR_NO_WARN)
+ 		gfp |= __GFP_NOWARN;
+@@ -96,7 +95,7 @@ struct page *__dma_direct_alloc_pages(st
+ 	/* we always manually zero the memory once we are done: */
+ 	gfp &= ~__GFP_ZERO;
+ 	gfp |= __dma_direct_optimal_gfp_mask(dev, dev->coherent_dma_mask,
+-			&phys_mask);
++			&phys_limit);
+ 	page = dma_alloc_contiguous(dev, alloc_size, gfp);
+ 	if (page && !dma_coherent_ok(dev, page_to_phys(page), size)) {
+ 		dma_free_contiguous(dev, page, alloc_size);
+@@ -110,7 +109,7 @@ again:
+ 		page = NULL;
+ 
+ 		if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+-		    phys_mask < DMA_BIT_MASK(64) &&
++		    phys_limit < DMA_BIT_MASK(64) &&
+ 		    !(gfp & (GFP_DMA32 | GFP_DMA))) {
+ 			gfp |= GFP_DMA32;
+ 			goto again;
+diff -rupN a/arch/powerpc/include/asm/dma-direct.h b/arch/powerpc/include/asm/dma-direct.h
+--- a/arch/powerpc/include/asm/dma-direct.h	2019-11-17 23:47:30.000000000 +0100
++++ b/arch/powerpc/include/asm/dma-direct.h	2019-11-21 16:18:13.316815445 +0100
+@@ -8,7 +8,7 @@ static inline bool dma_capable(struct de
+ 		return false;
+ 
+ 	return addr + size - 1 <=
+-		min_not_zero(*dev->dma_mask, dev->bus_dma_mask);
++		min_not_zero(*dev->dma_mask, dev->bus_dma_limit);
+ }
+ 
+ static inline dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
 
-    The correct type on x32 is 64-bit wide, same as for the other struct
-    members around it, so use  __kernel_long_t in place of the original
-    __kernel_time_t here, corresponding to the rest of the structure.
-
-    Fixes: caf5e32d4ea7 ("y2038: ipc: remove __kernel_time_t reference
-from headers")
-    Reported-by: Ben Hutchings <ben.hutchings@codethink.co.uk>
-    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-diff --git a/arch/x86/include/uapi/asm/sembuf.h
-b/arch/x86/include/uapi/asm/sembuf.h
-index 7c1b156695ba..20cab43c4b15 100644
---- a/arch/x86/include/uapi/asm/sembuf.h
-+++ b/arch/x86/include/uapi/asm/sembuf.h
-@@ -21,9 +21,9 @@ struct semid64_ds {
-        unsigned long   sem_ctime;      /* last change time */
-        unsigned long   sem_ctime_high;
- #else
--       long            sem_otime;      /* last semop time */
-+       __kernel_long_t sem_otime;      /* last semop time */
-        __kernel_ulong_t __unused1;
--       long            sem_ctime;      /* last change time */
-+       __kenrel_long_t sem_ctime;      /* last change time */
-        __kernel_ulong_t __unused2;
- #endif
-        __kernel_ulong_t sem_nsems;     /* no. of semaphores in array */
+--------------CA5FBA987424D6E471C8129F--
