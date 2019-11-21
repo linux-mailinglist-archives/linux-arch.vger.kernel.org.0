@@ -2,92 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A2410543B
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Nov 2019 15:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A79105466
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Nov 2019 15:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbfKUOR4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Nov 2019 09:17:56 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:49977 "EHLO
+        id S1726500AbfKUO2Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Nov 2019 09:28:24 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:35207 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726358AbfKUORz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Nov 2019 09:17:55 -0500
-Received: from mail-qv1-f53.google.com ([209.85.219.53]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MHG0U-1icD8E1LOK-00DIps; Thu, 21 Nov 2019 15:17:54 +0100
-Received: by mail-qv1-f53.google.com with SMTP id q19so1458059qvs.5;
-        Thu, 21 Nov 2019 06:17:53 -0800 (PST)
-X-Gm-Message-State: APjAAAVpqA5krgnnod1UxadtsU6tC1uPhisER2PpVRuED5J7c07/200z
-        HH6Ak6ywBu9nBl4QIQIOXAD7gRAUKjdV7n/D+ew=
-X-Google-Smtp-Source: APXvYqxLKbuQ9O3FhXwBvflrp+50FRlW8iONE6qzTZEhfSBODhQm2eIXHq1gD3J2WzsjeJ9sWHPrfZS6LlKeAqhLZMY=
-X-Received: by 2002:a0c:a9cc:: with SMTP id c12mr1679849qvb.222.1574345873081;
- Thu, 21 Nov 2019 06:17:53 -0800 (PST)
+        with ESMTP id S1726396AbfKUO2X (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Nov 2019 09:28:23 -0500
+Received: from mail-qt1-f175.google.com ([209.85.160.175]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MhlbM-1hu2qb31Zg-00doDm; Thu, 21 Nov 2019 15:28:21 +0100
+Received: by mail-qt1-f175.google.com with SMTP id o11so3828152qtr.11;
+        Thu, 21 Nov 2019 06:28:21 -0800 (PST)
+X-Gm-Message-State: APjAAAVpE/RjHL+ncTjs8J92/qo5V8Y4lkqGlbPq37p3OVWARlA3KohO
+        XoqskO+3h16FUtM80skNMPwfCV718CVABjY2b8E=
+X-Google-Smtp-Source: APXvYqxB3fiYXtrETUp5EiMiQ9fb0AeisI+RwKyT7xggRKZinaPFWQOgz7hTMTjBH+1fCN1q48qajjrjZ95bUArYxrA=
+X-Received: by 2002:ac8:18eb:: with SMTP id o40mr2519477qtk.304.1574346500017;
+ Thu, 21 Nov 2019 06:28:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20191108210236.1296047-1-arnd@arndb.de> <20191108210824.1534248-2-arnd@arndb.de>
- <a5f530323b66cd8c0055c5e642ef4eb035c53808.camel@codethink.co.uk>
-In-Reply-To: <a5f530323b66cd8c0055c5e642ef4eb035c53808.camel@codethink.co.uk>
+References: <20191108210236.1296047-1-arnd@arndb.de> <20191108210824.1534248-8-arnd@arndb.de>
+ <dd1a30609f05e800550097080c1d1b27065f91ff.camel@codethink.co.uk>
+In-Reply-To: <dd1a30609f05e800550097080c1d1b27065f91ff.camel@codethink.co.uk>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 21 Nov 2019 15:17:36 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1GSncyq6dX482ZY8TmJxT8gazFZpnJs-Jzomq6keWjHg@mail.gmail.com>
-Message-ID: <CAK8P3a1GSncyq6dX482ZY8TmJxT8gazFZpnJs-Jzomq6keWjHg@mail.gmail.com>
-Subject: Re: [Y2038] [PATCH 02/23] y2038: add __kernel_old_timespec and __kernel_old_time_t
+Date:   Thu, 21 Nov 2019 15:28:03 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0VORzqLLTFpt9VYn_SONsve+-q0fTrZrPbLMpX9T6SBQ@mail.gmail.com>
+Message-ID: <CAK8P3a0VORzqLLTFpt9VYn_SONsve+-q0fTrZrPbLMpX9T6SBQ@mail.gmail.com>
+Subject: Re: [Y2038] [PATCH 08/23] y2038: ipc: remove __kernel_time_t
+ reference from headers
 To:     Ben Hutchings <ben.hutchings@codethink.co.uk>
 Cc:     y2038 Mailman List <y2038@lists.linaro.org>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
+        "H. Peter Anvin" <hpa@zytor.com>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:B3GuU6WhlLaghY0A8lZ5hWCXgyDmfx6RZqU5h2D3zYmMZ0R/4zs
- fjxCL+797aqsaPmBxbOztp7yNcO/1yXdaORW4JZaSn3n3W33Nm+Db+l12tAqJUXunCWU23Z
- wRYdCVkEv9FFwpX6pS8B+GLVhKYFAqtbN4XpcL316oWLPQVeOdNYKM6lxU6UiFVyOJf2m4U
- WZbNMtzgKHdH7YZDNdiug==
+X-Provags-ID: V03:K1:LnPyaKtdAcRIfsrfVOvLgTpY2NYcJVXxz9V2TfTsyIVjaxXXWXo
+ J0B/STj89T5mtEIVTc0DQpBVMrYNCU0NcRKyMbhUocUGEvCLRsv+tXSavgQ9f1ideIJ9QR/
+ Y5hh36oQ5DHX7KGoy+fvIxvqyEiOiRDO5LBnW77E+fjNVlQJvkzhlyATiPB5C1vEiZb5+oS
+ z+IMcyRaYAXzuuyPNj62w==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:N5FS4rkFg2M=:XDTHmuFeQ21cgiOnd7mbPo
- oAvGHYQhrRFNA+6RYrC/+zbYT9lJyh0Cy2Q8/a4Gopo5U9KX5THNz/Lov8XOVCxToaqOfqHCh
- GVhd43PsNi5MnKMwBJkS2SQIsd7n9AlBa5Y29pUk0zZWxpUSFjW5EOAnmfCTyYuiLM2L1m4vx
- FxYlxJtkv2ASIOxcgmlVgFNRN7rOZFJQHIXdIGRZ2ivsZwSdSm5ieuohCQEIClnLSffd5Zrxo
- IsGQsnaNlgrXN2AJowx+d21XKK6/cWwpuTwgyTwd96OIxgQ/zc2ZeHgTTgV2gjouTaZxStJGA
- u3v/WsSCh5vGba+5Xq2NVbLy40nlz2dkcOepaTj3GusYTXrcBczPsJfKu1HX/CmLmyR/K6D9G
- 30V/q6j537irhkcklg0llAX0thp4QlBA/Ykau6yTvp0XwZOFxHWMMQorkQpGrlNUVavUxUNcE
- y16tVvDMtLYgGMHAxlVmre+oBA8Z6nm8d5hcB+gqmRZEG7Jillum/YUFrqYVc1YT5ueUmBF1F
- rdifi3Dx0OPXM6h4v3us//K9P0wd0k93RyunE/3SgMSleeBDn4PfSipt9+ABGldj4fi4ptC7K
- DrfT2HqdjvCo4MVYzpebtK1AZswuQHyJTNqDwHr2kX+6oKEY1T6+IcnZo9uA6h+e3Y4pj0q+C
- UhjEGu8i8W/4an10ewCT8PeW9h7mZ8nLC0QT8+WkoOAxGVq5OZpdduIqj2SlfPD7rk1yht35/
- lFOSozF1a5fjjekH3+nVBC7cLoGDsq4Ex59q9BMx+CFECQp7E6BN7AIUdLo9ZuFoBA0zQO2X0
- lOY7pA9KmrLWjLS94WXrTHs5ejOUHeZJ6TQZGCnaqYNsECGazhwdOQLh8lk9VGoShXfRjiySd
- jhGZfwdjOMMc9M9blRKA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8A/19T5M7NU=:IiGojC9BupST0/of+E3q2T
+ awxsjk77FWMnOwQ4nks8TRVJzj8MaemtAxeTd5LZ6AU026M7mvm1hvPPHZ4QB1SOCc3AYUgwj
+ JPVxeNksokjiewTxADZhlkQvmoHlH8s8IySCW9mTS2t5RD8o/IIkeCztir/MtztaDyYhZGCEF
+ rJutdeF8yCwCOVEmI7Ryya6bzcLeLgOMSoT5Xc8Tr9ih6rF+jVFaOUAXQMQ6sS/CqZm07Z50W
+ 7mFRhVnGeKtcmbTcT0NTLP401mk/Y8oiEAIVOQBfgMLuw2i+hxNpBaSfN4BVM41IYS3h0x3HD
+ uGGmN8Xg4IinXM7DMSUMDAzn6EMtVtq/QLtMgQqKk3tDFwE1zBuRSd44KbYWGHF3Q5aMOUzd8
+ 9Sz0SWtwZrbXJw+mhMw8rLqVMwp4yN0nU2VyHFcMDvtMFQ3BNUPTwIen5wbxdh2wWV5N7roDc
+ doz4p7AZTAPDJskv5JNv1EKjjCl6xvoqQ7wnIp+Al8cIJxYnH6J4UDx5XPfdsrRS4pa+71lbm
+ EWW0/i/p7///JQKDcKCh7ZZ4LPUrE/h1kYwBQP1MHg5hYP9OpFlu0k36Uv+f4AIeXpq+0CrfQ
+ /bVHc+NPvKLBmPdC+v6whkNTSXKYLqce/eejLUwRvJjXDpqKQ00siEcCr21Vy62/XMUgoTMP0
+ ruAJ3GS2Boof4iy+ow6k+pyZug2crvFBwPmgP5Um5R8Hg5YP1dPhXvfbkPFqPAfvGwOvoplet
+ J2AWy7clG4cWvOnoOy52qSRXi9wlksgco1NEKVg+ITDnHMNlDT01gV4H6HNCGkOncaZ02mV1f
+ WoJKk4TZPuzgJh5AqeiuSTyXXyIiy919eAAca+VxYDVUHKVsaVa633SN22EcLEV1YskVIIOMm
+ T2iRBlyk5NdX4Xcg6V7A==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 20, 2019 at 11:30 PM Ben Hutchings
+On Wed, Nov 20, 2019 at 11:49 PM Ben Hutchings
 <ben.hutchings@codethink.co.uk> wrote:
 >
 > On Fri, 2019-11-08 at 22:07 +0100, Arnd Bergmann wrote:
-> > The 'struct timespec' definition can no longer be part of the uapi headers
-> > because it conflicts with a a now incompatible libc definition. Also,
-> > we really want to remove it in order to prevent new uses from creeping in.
-> >
-> > The same namespace conflict exists with time_t, which should also be
-> > removed. __kernel_time_t could be used safely, but adding 'old' in the
-> > name makes it clearer that this should not be used for new interfaces.
-> >
-> > Add a replacement __kernel_old_timespec structure and __kernel_old_time_t
-> > along the lines of __kernel_old_timeval.
 > [...]
-> > --- a/include/uapi/linux/time_types.h
-> > +++ b/include/uapi/linux/time_types.h
-> > @@ -28,6 +28,11 @@ struct __kernel_old_timeval {
-> >  };
+> > --- a/arch/x86/include/uapi/asm/sembuf.h
+> > +++ b/arch/x86/include/uapi/asm/sembuf.h
+> > @@ -21,9 +21,9 @@ struct semid64_ds {
+> >       unsigned long   sem_ctime;      /* last change time */
+> >       unsigned long   sem_ctime_high;
+> >  #else
+> > -     __kernel_time_t sem_otime;      /* last semop time */
+> > +     long            sem_otime;      /* last semop time */
+> >       __kernel_ulong_t __unused1;
+> > -     __kernel_time_t sem_ctime;      /* last change time */
+> > +     long            sem_ctime;      /* last change time */
+> >       __kernel_ulong_t __unused2;
 > >  #endif
-> >
-> > +struct __kernel_old_timespec {
-> > +     __kernel_time_t tv_sec;                 /* seconds */
+> >       __kernel_ulong_t sem_nsems;     /* no. of semaphores in array */
+> [...]
 >
-> Should this be __kernel_old_time_t for consistency?
+> We need to use __kernel_long_t here to do the right thing on x32.
 
-Yes. I had already noticed this and changed it in the current version
-of "y2038: uapi: change __kernel_time_t to __kernel_old_time_t".
+Good catch, thanks for the review!
 
-      Arnd
+I applied the patch below now on top.
+
+       Arnd
+
+commit c7ebd8a1c1825c3197732ea692cf3dde34a644f5 (HEAD)
+Author: Arnd Bergmann <arnd@arndb.de>
+Date:   Thu Nov 21 15:25:04 2019 +0100
+
+    y2038: ipc: fix x32 ABI breakage
+
+    The correct type on x32 is 64-bit wide, same as for the other struct
+    members around it, so use  __kernel_long_t in place of the original
+    __kernel_time_t here, corresponding to the rest of the structure.
+
+    Fixes: caf5e32d4ea7 ("y2038: ipc: remove __kernel_time_t reference
+from headers")
+    Reported-by: Ben Hutchings <ben.hutchings@codethink.co.uk>
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+diff --git a/arch/x86/include/uapi/asm/sembuf.h
+b/arch/x86/include/uapi/asm/sembuf.h
+index 7c1b156695ba..20cab43c4b15 100644
+--- a/arch/x86/include/uapi/asm/sembuf.h
++++ b/arch/x86/include/uapi/asm/sembuf.h
+@@ -21,9 +21,9 @@ struct semid64_ds {
+        unsigned long   sem_ctime;      /* last change time */
+        unsigned long   sem_ctime_high;
+ #else
+-       long            sem_otime;      /* last semop time */
++       __kernel_long_t sem_otime;      /* last semop time */
+        __kernel_ulong_t __unused1;
+-       long            sem_ctime;      /* last change time */
++       __kenrel_long_t sem_ctime;      /* last change time */
+        __kernel_ulong_t __unused2;
+ #endif
+        __kernel_ulong_t sem_nsems;     /* no. of semaphores in array */
