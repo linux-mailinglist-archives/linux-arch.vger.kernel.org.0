@@ -2,59 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B5E10956F
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Nov 2019 23:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11454109574
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Nov 2019 23:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725992AbfKYWKl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Nov 2019 17:10:41 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:33729 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbfKYWKl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Nov 2019 17:10:41 -0500
-Received: by mail-wr1-f65.google.com with SMTP id w9so20139586wrr.0
-        for <linux-arch@vger.kernel.org>; Mon, 25 Nov 2019 14:10:40 -0800 (PST)
+        id S1725930AbfKYWOI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Nov 2019 17:14:08 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:33803 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbfKYWOI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Nov 2019 17:14:08 -0500
+Received: by mail-wr1-f67.google.com with SMTP id t2so20089590wrr.1
+        for <linux-arch@vger.kernel.org>; Mon, 25 Nov 2019 14:14:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GItM9XLVqxNn0sdCUQLWJSBGa3kbJqyrc/moSFwmETQ=;
-        b=t67XsscUtvcYGFCu8/pIb4nslkXMYNqiyJiOG6SoOj4ZqNd89J3VGLiwTqIUI6b9J+
-         7DbWj7wFe+bCCtuCpWSvdHNJbtWiXZT3f8I4rQw7DYAJgTSB4VHF2sh2RbifavpAMLsO
-         dL+RcSI7YmWFOZWpd8Em6jFk1VHTJbqQK1jeRIxyVW3wRGcnhvKTHXSGgkZbuhYtulFu
-         jDecJAvU4i18f4G0IjLJULRXdmHXrccFv2TZFs16gxm6SCLI33T4hSFI/5OtwQzGU1UB
-         XLpjn571eDW1ABVd0EyWibRC+MTK10vsVm0oTRuQ/BA9v1TSpIz27cbs5rdLu/M3jcdi
-         7UaA==
+        bh=JnocSK9XyUn0ZqlRMZJ3ltGSG/toAyjUkuU9NoNKaus=;
+        b=iqKrqJ467f0yKnyUk2TEn7njBaXQRj8M0Rc/aiVW6T+ie+T8RsfiYEC/b24uI03x+K
+         d4eMcHF5Q3VuQTSvaN6z+JJ4GTJaOkzM1o2Wk7Pi8x6YOXguasuFUA9uUiNGJ+kLZI52
+         yNHiTW2kFN5GVkaw6WDD6LvojEoWIdVRCJncWIRjCVdZstoS3Eci6Vcf8KsIFMtYg7Kv
+         YBs7A5D4cPhZ1fgT+FVsHHd9gUO8QS1suwko/fcaK9m1d15i1X+eM+TklmEN8IQxhXUt
+         ELuEqrqXpsc6quoQQeq50wNtSu2CQ0tmJ9gQ9Si/P25T0+fw6c/DztYozjKYxVfH9O8u
+         h/og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GItM9XLVqxNn0sdCUQLWJSBGa3kbJqyrc/moSFwmETQ=;
-        b=QOJyam0Y3nHhRXUAC/bbZucV2xmW0Xgs2EPr1XTn2lJH9zyQt4ppCC+zOV4NKKAaIN
-         1T3/BVCHGDzwvUmaqdOl9lAMM1RRRqf1nmPSpjh5VB30MPSssSgXDJ2hiKwakERAd6rs
-         DwfFRHM64aD2DIva5xwShsdWtjfvR6rM0ZMVyHtzqvLXZNcgr2s3XZDv80PnPccPH7jV
-         fA65EvzaJ4RaqPKxuqa2UOqkiIz9tnNmvyPr7WtFe5o8kUI16To65rqTVG60S8bT1Ibx
-         YFPxt2oBA5Dtm8jHtqZ6ojyHfGSWdgW30NUd0ndnJ9xuKjr1R78e2yaB85mXtxYBqL22
-         08WA==
-X-Gm-Message-State: APjAAAUcuejuQchNakRlq2HTUY1LdANJpcP+Kt31KIOjUCUVpRcnIyzI
-        1wLiK5CL8zz0QRpd1jF2SyOwnEIYOi5O1NrfT8o=
-X-Google-Smtp-Source: APXvYqwBxzAgMD5XGrXyFXjrbhvtES5ZQl5cOm5abQnJ/u/OZu7x70kQ6wDw5nzpVIVbQS0elzuU7ZjqYZOS8PWR1NY=
-X-Received: by 2002:adf:c449:: with SMTP id a9mr32838029wrg.240.1574719839492;
- Mon, 25 Nov 2019 14:10:39 -0800 (PST)
+        bh=JnocSK9XyUn0ZqlRMZJ3ltGSG/toAyjUkuU9NoNKaus=;
+        b=t/45yE3gKl5U1Zw0gRBH8NgNM4LASALiwUoNedY6Gwotbd0US0aysLkiG1KYHJwoe3
+         3sZL9iYjJxyNLSux+PAjwCUju1KKkaX1CSDYfs60OKcoqeJbUmupeZDLEnARK5qT+D9S
+         zkxCBxNFB+wS72YZJ3J74WIHAASVsBjFxhSn9nzcFxGxJdbPVCWlC1ZubC1vQr/d6UDW
+         4uYV4x1SPgyhad+yKJmhIFhxQ6bm9hlXD6YVU63/iwOPYtL+f0IEvjEftG/TcpA4LkZu
+         K1cJR/EH01leEqvhvnDf1to3WeWMDyq3N5ryaWWfk70ElD57oNvebbJlgd+ZEm0IIbp7
+         BVLQ==
+X-Gm-Message-State: APjAAAUjrMrtudBRcK0FPPtXv5nxk0ZC8DcILAeF/pzI1wc9dVXOFu4Q
+        WwrWkGuFs2pzFyQ8zZdA+FQT2f60KjtHxARbJrsvRxLikDE=
+X-Google-Smtp-Source: APXvYqw+SM8WZpl4YyskjYCiWihobJQJUzJayThi9uiNUzS6AIGMAqFkbfBfF/nWqznjg+i0hGz/etrio18EQLRbYUA=
+X-Received: by 2002:adf:de0a:: with SMTP id b10mr33987695wrm.268.1574720046298;
+ Mon, 25 Nov 2019 14:14:06 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1573179553.git.thehajime@gmail.com> <8b0c833bde42e761cadfd3542263ad7a8be5eb5b.1573179553.git.thehajime@gmail.com>
-In-Reply-To: <8b0c833bde42e761cadfd3542263ad7a8be5eb5b.1573179553.git.thehajime@gmail.com>
+References: <cover.1573179553.git.thehajime@gmail.com> <567fd4d5c395e2279e86ca0bfca544ad2773a31d.1573179553.git.thehajime@gmail.com>
+In-Reply-To: <567fd4d5c395e2279e86ca0bfca544ad2773a31d.1573179553.git.thehajime@gmail.com>
 From:   Richard Weinberger <richard.weinberger@gmail.com>
-Date:   Mon, 25 Nov 2019 23:10:28 +0100
-Message-ID: <CAFLxGvw_tkmAq0nGrgEs8jQFGLADDuAyUOsYhdDzAH5yhHFHEA@mail.gmail.com>
-Subject: Re: [RFC v2 05/37] lkl: memory handling
+Date:   Mon, 25 Nov 2019 23:13:55 +0100
+Message-ID: <CAFLxGvxytmS4WSFj2ibyJKCuR5TbspdNf6MvHNvzh9dtKx2rJg@mail.gmail.com>
+Subject: Re: [RFC v2 07/37] lkl: interrupt support
 To:     Hajime Tazaki <thehajime@gmail.com>
 Cc:     linux-um@lists.infradead.org,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        Levente Kurusa <levex@linux.com>,
         Octavian Purdila <tavi.purdila@gmail.com>,
         Akira Moroo <retrage01@gmail.com>,
-        Yuan Liu <liuyuan@google.com>,
-        linux-kernel-library@freelists.org
+        linux-kernel-library@freelists.org,
+        Michael Zimmermann <sigmaepsilon92@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
@@ -65,27 +64,33 @@ On Fri, Nov 8, 2019 at 6:03 AM Hajime Tazaki <thehajime@gmail.com> wrote:
 >
 > From: Octavian Purdila <tavi.purdila@gmail.com>
 >
-> LKL is a non MMU architecture and hence there is not much work left to
-> do other than initializing the boot allocator and providing the page
-> and page table definitions.
+> Add APIs that allows the host to reserve and free and interrupt number
+> and also to trigger an interrupt.
 >
-> The backstore memory is allocated via a host operation and the memory
-> size to be used is specified when the kernel is started, in the
-> lkl_start_kernel call.
+> The trigger operation will simply store the interrupt data in
+> queue. The interrupt handler is run later, at the first opportunity it
+> has to avoid races with any kernel threads.
 >
-> Signed-off-by: H.K. Jerry Chu <hkchu@google.com>
+> Currently, interrupts are run on the first interrupt enable operation
+> if interrupts are disabled and if we are not already in interrupt
+> context.
+>
+> When triggering an interrupt, it uses GCC's built-in functions for
+> atomic memory access to synchronize and simple boolean flags.
+>
 > Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
-> Signed-off-by: Levente Kurusa <levex@linux.com>
-> Signed-off-by: Yuan Liu <liuyuan@google.com>
+> Signed-off-by: Michael Zimmermann <sigmaepsilon92@gmail.com>
 > Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 > ---
->  arch/um/lkl/include/asm/page.h          | 14 ++++++
->  arch/um/lkl/include/asm/pgtable.h       | 62 +++++++++++++++++++++++
->  arch/um/lkl/include/uapi/asm/host_ops.h |  5 ++
->  arch/um/lkl/mm/bootmem.c                | 66 +++++++++++++++++++++++++
+>  arch/um/lkl/include/asm/irq.h             |  13 ++
+>  arch/um/lkl/include/uapi/asm/irq.h        |  36 ++++
+>  arch/um/lkl/include/uapi/asm/sigcontext.h |  16 ++
+>  arch/um/lkl/kernel/irq.c                  | 193 ++++++++++++++++++++++
 
-This is also something which needs unification with UML.
-UML in NOMMU mode would be LKL then...
+Like I said before, this also something to unify with UML.
+I'm aware that this is easily said but we cannot have too much duplication.
+
+Feel free to ask if UML internals give you headache. :-)
 
 --
 Thanks,
