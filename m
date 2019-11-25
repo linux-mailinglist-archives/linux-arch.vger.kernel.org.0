@@ -2,164 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C4410939E
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Nov 2019 19:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350F2109509
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Nov 2019 22:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726696AbfKYSjm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Nov 2019 13:39:42 -0500
-Received: from foss.arm.com ([217.140.110.172]:53788 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727029AbfKYSjm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 25 Nov 2019 13:39:42 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFDBE31B;
-        Mon, 25 Nov 2019 10:39:41 -0800 (PST)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 652BA3F68E;
-        Mon, 25 Nov 2019 10:39:40 -0800 (PST)
-Date:   Mon, 25 Nov 2019 18:39:38 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH 1/2] asm-generic/atomic: Prefer __always_inline for
- wrappers
-Message-ID: <20191125183936.GG32635@lakrids.cambridge.arm.com>
-References: <20191122154221.247680-1-elver@google.com>
- <20191125173756.GF32635@lakrids.cambridge.arm.com>
- <CANpmjNMLEYdW0kaLAiO9fQN1uC7bW6K08zZRG=GG7vq4fBn+WA@mail.gmail.com>
+        id S1726926AbfKYVSF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Nov 2019 16:18:05 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:56188 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725916AbfKYVSF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Nov 2019 16:18:05 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAPL9SgQ165259;
+        Mon, 25 Nov 2019 21:17:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2019-08-05; bh=K7hqDnK/TsK5jvG3JC6XMU0Tierrock1H72ajxKsRBk=;
+ b=OxsvRh5qJIREV0Nl58dZLErboXL1oTJYkpCY+bN+jUxOsaZnBggZOaWX42HmTWvi5Sdd
+ jU/vbr9jriaO9rf9vnnq/9NcUnL44XByndtFygp0jflr1w+2WgYFOylKbTvjSenpWQcA
+ Df94UVHciiRbCXw540IQwQfE4TBrib2TGIvfDDsXqpHHC9V2EZTSLY8eBcYJydFhZqtK
+ GLy/SVg92+5KEHok13Wp4sRddWEoRaJc8UrIVtl3DqdcY9HSvYoyaX8SbsHvujXaE6Jd
+ 0z0ucNwxpPE9soWGJXRUhljiIXmWJn7TqkxYKCg3/cCwCdulaqfxjDfbM79dhPIpDNlp Yg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2wewdr2917-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Nov 2019 21:17:22 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAPL8VPe156913;
+        Mon, 25 Nov 2019 21:15:22 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 2wfe80nsw4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Nov 2019 21:15:21 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xAPLFBfc020511;
+        Mon, 25 Nov 2019 21:15:11 GMT
+Received: from neelam.us.oracle.com (/10.152.128.16)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 25 Nov 2019 13:15:11 -0800
+From:   Alex Kogan <alex.kogan@oracle.com>
+To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
+        will.deacon@arm.com, arnd@arndb.de, longman@redhat.com,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
+        jglauber@marvell.com
+Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        alex.kogan@oracle.com, dave.dice@oracle.com,
+        rahul.x.yadav@oracle.com
+Subject: [PATCH v7 0/5] Add NUMA-awareness to qspinlock
+Date:   Mon, 25 Nov 2019 16:07:04 -0500
+Message-Id: <20191125210709.10293-1-alex.kogan@oracle.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNMLEYdW0kaLAiO9fQN1uC7bW6K08zZRG=GG7vq4fBn+WA@mail.gmail.com>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9452 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=988
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1911250171
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9452 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1911250171
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 25, 2019 at 07:22:33PM +0100, Marco Elver wrote:
-> On Mon, 25 Nov 2019 at 18:38, Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Fri, Nov 22, 2019 at 04:42:20PM +0100, Marco Elver wrote:
-> > > Prefer __always_inline for atomic wrappers. When building for size
-> > > (CC_OPTIMIZE_FOR_SIZE), some compilers appear to be less inclined to
-> > > inline even relatively small static inline functions that are assumed to
-> > > be inlinable such as atomic ops. This can cause problems, for example in
-> > > UACCESS regions.
-> >
-> > From looking at the link below, the problem is tat objtool isn't happy
-> > about non-whiteliested calls within UACCESS regions.
-> >
-> > Is that a problem here? are the kasan/kcsan calls whitelisted?
-> 
-> We whitelisted all the relevant functions.
-> 
-> The problem it that small static inline functions private to the
-> compilation unit do not get inlined when CC_OPTIMIZE_FOR_SIZE=y (they
-> do get inlined when CC_OPTIMIZE_FOR_PERFORMANCE=y).
-> 
-> For the runtime this is easy to fix, by just making these small
-> functions __always_inline (also avoiding these function call overheads
-> in the runtime when CC_OPTIMIZE_FOR_SIZE).
-> 
-> I stumbled upon the issue for the atomic ops, because the runtime uses
-> atomic_long_try_cmpxchg outside a user_access_save() region (and it
-> should not be moved inside). Essentially I fixed up the runtime, but
-> then objtool still complained about the access to
-> atomic64_try_cmpxchg. Hence this patch.
-> 
-> I believe it is the right thing to do, because the final inlining
-> decision should *not* be made by wrappers. I would think this patch is
-> the right thing to do irrespective of KCSAN or not.
+Minor change from v6:
+---------------------
 
-Given the wrappers are trivial, and for !KASAN && !KCSAN, this would
-make them equivalent to the things they wrap, that sounds fine to me.
+- fixed a 32-bit build failure by adding dependency on 64BIT in Kconfig.
+Reported-by: kbuild test robot <lkp@intel.com>
 
-> > > By using __always_inline, we let the real implementation and not the
-> > > wrapper determine the final inlining preference.
-> >
-> > That sounds reasonable to me, assuming that doesn't end up significantly
-> > bloating the kernel text. What impact does this have on code size?
-> 
-> It actually seems to make it smaller.
-> 
-> x86 tinyconfig:
-> - vmlinux baseline: 1316204
-> - vmlinux with patches: 1315988 (-216 bytes)
 
-Great! Fancy putting that in the commit message?
+Summary
+-------
 
-> > > This came up when addressing UACCESS warnings with CC_OPTIMIZE_FOR_SIZE
-> > > in the KCSAN runtime:
-> > > http://lkml.kernel.org/r/58708908-84a0-0a81-a836-ad97e33dbb62@infradead.org
-> > >
-> > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > Signed-off-by: Marco Elver <elver@google.com>
-> > > ---
-> > >  include/asm-generic/atomic-instrumented.h | 334 +++++++++++-----------
-> > >  include/asm-generic/atomic-long.h         | 330 ++++++++++-----------
-> > >  scripts/atomic/gen-atomic-instrumented.sh |   6 +-
-> > >  scripts/atomic/gen-atomic-long.sh         |   2 +-
-> > >  4 files changed, 336 insertions(+), 336 deletions(-)
-> >
-> > Do we need to do similar for gen-atomic-fallback.sh and the fallbacks
-> > defined in scripts/atomic/fallbacks/ ?
-> 
-> I think they should be, but I think that's debatable. Some of them do
-> a little more than just wrap things. If we want to make this
-> __always_inline, I would do it in a separate patch independent from
-> this series to not stall the fixes here.
+Lock throughput can be increased by handing a lock to a waiter on the
+same NUMA node as the lock holder, provided care is taken to avoid
+starvation of waiters on other NUMA nodes. This patch introduces CNA
+(compact NUMA-aware lock) as the slow path for qspinlock. It is
+enabled through a configuration option (NUMA_AWARE_SPINLOCKS).
 
-I would expect that they would suffer the same problem if used in a
-UACCESS region, so if that's what we're trying to fix here, I think that
-we need to do likewise there.
+CNA is a NUMA-aware version of the MCS lock. Spinning threads are
+organized in two queues, a main queue for threads running on the same
+node as the current lock holder, and a secondary queue for threads
+running on other nodes. Threads store the ID of the node on which
+they are running in their queue nodes. After acquiring the MCS lock and
+before acquiring the spinlock, the lock holder scans the main queue
+looking for a thread running on the same node (pre-scan). If found (call
+it thread T), all threads in the main queue between the current lock
+holder and T are moved to the end of the secondary queue.  If such T
+is not found, we make another scan of the main queue after acquiring 
+the spinlock when unlocking the MCS lock (post-scan), starting at the
+node where pre-scan stopped. If both scans fail to find such T, the
+MCS lock is passed to the first thread in the secondary queue. If the
+secondary queue is empty, the MCS lock is passed to the next thread in the
+main queue. To avoid starvation of threads in the secondary queue, those
+threads are moved back to the head of the main queue after a certain
+number of intra-node lock hand-offs.
 
-The majority are trivial wrappers (shuffling arguments or adding trivial
-barriers), so those seem fine. The rest call things that we're inlining
-here.
+More details are available at https://arxiv.org/abs/1810.05600.
 
-Would you be able to give that a go?
+The series applies on top of v5.4.0, commit eae56099de85.
+Performance numbers are available in previous revisions
+of the series.
 
-> > > diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
-> > > index 8b8b2a6f8d68..68532d4f36ca 100755
-> > > --- a/scripts/atomic/gen-atomic-instrumented.sh
-> > > +++ b/scripts/atomic/gen-atomic-instrumented.sh
-> > > @@ -84,7 +84,7 @@ gen_proto_order_variant()
-> > >       [ ! -z "${guard}" ] && printf "#if ${guard}\n"
-> > >
-> > >  cat <<EOF
-> > > -static inline ${ret}
-> > > +static __always_inline ${ret}
-> >
-> > We should add an include of <linux/compiler.h> to the preamble if we're
-> > explicitly using __always_inline.
-> 
-> Will add in v2.
-> 
-> > > diff --git a/scripts/atomic/gen-atomic-long.sh b/scripts/atomic/gen-atomic-long.sh
-> > > index c240a7231b2e..4036d2dd22e9 100755
-> > > --- a/scripts/atomic/gen-atomic-long.sh
-> > > +++ b/scripts/atomic/gen-atomic-long.sh
-> > > @@ -46,7 +46,7 @@ gen_proto_order_variant()
-> > >       local retstmt="$(gen_ret_stmt "${meta}")"
-> > >
-> > >  cat <<EOF
-> > > -static inline ${ret}
-> > > +static __always_inline ${ret}
-> >
-> > Likewise here
-> 
-> Will add in v2.
+Further comments are welcome and appreciated.
 
-Great; thanks!
+Alex Kogan (5):
+  locking/qspinlock: Rename mcs lock/unlock macros and make them more
+    generic
+  locking/qspinlock: Refactor the qspinlock slow path
+  locking/qspinlock: Introduce CNA into the slow path of qspinlock
+  locking/qspinlock: Introduce starvation avoidance into CNA
+  locking/qspinlock: Introduce the shuffle reduction optimization into
+    CNA
 
-Mark.
+ .../admin-guide/kernel-parameters.txt         |  18 +
+ arch/arm/include/asm/mcs_spinlock.h           |   6 +-
+ arch/x86/Kconfig                              |  20 ++
+ arch/x86/include/asm/qspinlock.h              |   4 +
+ arch/x86/kernel/alternative.c                 |  70 ++++
+ include/asm-generic/mcs_spinlock.h            |   4 +-
+ kernel/locking/mcs_spinlock.h                 |  20 +-
+ kernel/locking/qspinlock.c                    |  77 ++++-
+ kernel/locking/qspinlock_cna.h                | 319 ++++++++++++++++++
+ kernel/locking/qspinlock_paravirt.h           |   2 +-
+ 10 files changed, 517 insertions(+), 23 deletions(-)
+ create mode 100644 kernel/locking/qspinlock_cna.h
+
+-- 
+2.21.0 (Apple Git-122.2)
+
