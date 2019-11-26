@@ -2,167 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 874C1109DE3
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2019 13:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF21F109DF5
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2019 13:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727573AbfKZMZf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Nov 2019 07:25:35 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:2460 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727408AbfKZMZf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 26 Nov 2019 07:25:35 -0500
-Received: from dggemi405-hub.china.huawei.com (unknown [172.30.72.54])
-        by Forcepoint Email with ESMTP id 16878B5B3CA1538BE26F;
-        Tue, 26 Nov 2019 20:25:31 +0800 (CST)
-Received: from DGGEMI529-MBS.china.huawei.com ([169.254.5.186]) by
- dggemi405-hub.china.huawei.com ([10.3.17.143]) with mapi id 14.03.0439.000;
- Tue, 26 Nov 2019 20:25:25 +0800
-From:   "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "chengjian (D)" <cj.chengjian@huawei.com>,
-        "Libin (Huawei)" <huawei.libin@huawei.com>,
-        Xiexiuqi <xiexiuqi@huawei.com>,
-        "zhangyi (F)" <yi.zhang@huawei.com>,
-        "Liuwenliang (Abbott Liu)" <liuwenliang@huawei.com>
-Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTogbG9vcCBuZXN0aW5nIGluIGFsaWdu?=
- =?utf-8?Q?ment_exception_and_machine_check?=
-Thread-Topic: =?utf-8?B?562U5aSNOiDnrZTlpI06IGxvb3AgbmVzdGluZyBpbiBhbGlnbm1lbnQgZXhj?=
- =?utf-8?Q?eption_and_machine_check?=
-Thread-Index: AdWLzOb7zyHoVFoiQIWRpEOzZEjVL///vrgA//yweICACykWAP/qCgEQgD6hWAD//zWK8A==
-Date:   Tue, 26 Nov 2019 12:25:25 +0000
-Message-ID: <D44062DC474617438D5181ADFE2B2C21053F2AEE@dggemi529-mbs.china.huawei.com>
-References: <D44062DC474617438D5181ADFE2B2C21016DE42A@dggemi529-mbs.china.huawei.com>
- <8215aeb3-57dd-223a-29d3-45ca22b0543c@c-s.fr>
- <D44062DC474617438D5181ADFE2B2C21016E9EAA@dggemi529-mbs.china.huawei.com>
- <ef93fa2f-d98f-2e94-322e-0ae095626e75@c-s.fr>
- <D44062DC474617438D5181ADFE2B2C2101701C71@dggemi529-mbs.china.huawei.com>
- <e2429afb-a5f6-a5f1-40ec-1c5ca70edd2d@c-s.fr>
-In-Reply-To: <e2429afb-a5f6-a5f1-40ec-1c5ca70edd2d@c-s.fr>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.184.195.37]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727592AbfKZM3Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Nov 2019 07:29:25 -0500
+Received: from foss.arm.com ([217.140.110.172]:33822 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727408AbfKZM3Z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 26 Nov 2019 07:29:25 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 511831FB;
+        Tue, 26 Nov 2019 04:29:24 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA5563F52E;
+        Tue, 26 Nov 2019 04:29:22 -0800 (PST)
+Date:   Tue, 26 Nov 2019 12:29:18 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marco Elver <elver@google.com>
+Cc:     will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        arnd@arndb.de, dvyukov@google.com, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+        paulmck@kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 1/3] asm-generic/atomic: Use __always_inline for pure
+ wrappers
+Message-ID: <20191126122917.GA37833@lakrids.cambridge.arm.com>
+References: <20191126114121.85552-1-elver@google.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191126114121.85552-1-elver@google.com>
+User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-VGhhbmtzIGZvciB5b3VyIHJlcGx5LCBDaHJpc3RvcGhlLA0KDQpJIHdpbGwgdXNlICdzcGFyc2Un
-IHRvb2wgZm9yIGNoZWNraW5nIHVuc2FmZSBJTyBtZW1vcnkgYWNjZXNzLCBJIGd1ZXNzIGl0IGlz
-IHBvd2VyZnVsLg0KDQpUaGFua3MgYWdhaW4gIQ0KLS0tLS3pgq7ku7bljp/ku7YtLS0tLQ0K5Y+R
-5Lu25Lq6OiBDaHJpc3RvcGhlIExlcm95IFttYWlsdG86Y2hyaXN0b3BoZS5sZXJveUBjLXMuZnJd
-IA0K5Y+R6YCB5pe26Ze0OiAyMDE55bm0MTHmnIgyNuaXpSAxNjoxNg0K5pS25Lu25Lq6OiBXYW5n
-c2hhb2JvIChib2JvKSA8Ym9iby5zaGFvYm93YW5nQGh1YXdlaS5jb20+DQrmioTpgIE6IGxpbnV4
-LWFyY2hAdmdlci5rZXJuZWwub3JnOyBjaGVuZ2ppYW4gKEQpIDxjai5jaGVuZ2ppYW5AaHVhd2Vp
-LmNvbT47IExpYmluIChIdWF3ZWkpIDxodWF3ZWkubGliaW5AaHVhd2VpLmNvbT47IFhpZXhpdXFp
-IDx4aWV4aXVxaUBodWF3ZWkuY29tPjsgemhhbmd5aSAoRikgPHlpLnpoYW5nQGh1YXdlaS5jb20+
-OyBMaXV3ZW5saWFuZyAoQWJib3R0IExpdSkgPGxpdXdlbmxpYW5nQGh1YXdlaS5jb20+DQrkuLvp
-opg6IFJlOiDnrZTlpI06IOetlOWkjTogbG9vcCBuZXN0aW5nIGluIGFsaWdubWVudCBleGNlcHRp
-b24gYW5kIG1hY2hpbmUgY2hlY2sNCg0KDQoNCkxlIDE0LzExLzIwMTkgw6AgMDQ6NDYsIFdhbmdz
-aGFvYm8gKGJvYm8pIGEgw6ljcml0wqA6DQo+IEhpIENocmlzdG9waGUsDQo+IAlJdCB0ZXN0aWZ5
-cyBwcm9ibGVtIGZpeGVkIHdoZW4gd2UgdXNlIG1lbWNweV90b2lvKCkgaW5zdGVhZCBvZiBtZW1j
-cHkgDQo+IEluIG91ciBwcmFjdGljZSwgd2UgZm91bmQgZXZlcnl0aGluZyBpcyBvayBiZWZvcmUg
-dGhlIGNhY2hlX21lbWNweSANCj4gYmVjb21lcyBtZW1jcHkgaW4gdGhlIFBhdGNoIDBiMDVlMmQ2
-NzFjNDBjZmI1N2U2NmU0ZTQwMjMyMGQ2ZTA1NmIyZjggYWRvcHRlZCwgaXQgYWNjZWxlcmF0ZXMg
-dGhlIG1lbWNweSBidXQgaW50cm9kdWNlcyBpbXBsaWNpdCB0cm91YmxlLCBvdXIgcHJvZHVjdHMg
-Y29tbW9ubHkgdXNlZCBtZW1jcHkgZm9yIGNvbnRpbnVvdXMgbWF0YWluYW5jZSBmb3IgYSBsb25n
-IHRpbWUgLCBidXQgbm93IHRob3NlIGJlY29tZSBhIGJpZyBwcm9ibGVtIGZvciB1cyB0byBjaGVj
-ayB3aGVyZSB3ZSB1c2UgaXMgY29ycmVjdCBhbmQgd2hlcmUgaXMgd3JvbmcsIHdpdGggcmVzcGVj
-dCB0byBjYWNoYWJsZV9tZW1jcHkgYW5kIG1lbWNweV90b2lvLg0KPiAJU28sIEkgYWxzbyB3YW50
-IHRvIGFzaywNCj4gCWhvdyBjYW4gd2UgdHJ1c3RseSBhbmQgdW5pZmllZCBmaWxsIHRoZSBnYXAg
-cmVzdWx0ZWQgYnkgdGhvc2UgY2hhbmdlcyBpbiBtZW1jcHkgaW4gdmVyc2lvbiBtYW50YWluYW5j
-ZSwgaWYgeW91IGhhdmUgc29tZSB0aXBzIHBscyB0ZWxsIG1lLg0KPiAJVHRoYW5rcywgeW91ciBT
-aGFvYm8gV2FuZw0KDQpBbGwgYWNjZXNzZXMgdG8gSS9PIG1lbW9yeSBzaG91bGQgdXNlIGlvIGFj
-Y2Vzc29ycy4gRGlyZWN0IGFjY2VzcyB0byBpbyBtZW1vcnkgaXMgdW5zYWZlIGJ5IGRlZmluaXRp
-b24uDQoNCkluY29ycmVjdCBhY2Nlc3NlcyB0byBJL08gbWVtb3J5IGNhbiBiZSBkZXRlY3RlZCB3
-aXRoICdzcGFyc2UnIHRvb2wuIEZvciB0aGF0LCB5b3UganVzdCBoYXZlIHRvIGJ1aWxkIHRoZSBr
-ZXJuZWwgd2l0aCAnbWFrZSB2bWxpbnV4IEM9MicgYW5kIHlvdSdsbCBnZXQgbm90aWZpZWQgZm9y
-IHVuc2FmZSBhY2Nlc3NlcyB0byBJTyBtZW1vcnkuDQoNCkNocmlzdG9waGUNCg0KPiANCj4gLS0t
-LS3pgq7ku7bljp/ku7YtLS0tLQ0KPiDlj5Hku7bkuro6IENocmlzdG9waGUgTGVyb3kgW21haWx0
-bzpjaHJpc3RvcGhlLmxlcm95QGMtcy5mcl0NCj4g5Y+R6YCB5pe26Ze0OiAyMDE55bm0MTDmnIgz
-MeaXpSAxOToxMw0KPiDmlLbku7bkuro6IFdhbmdzaGFvYm8gKGJvYm8pIDxib2JvLnNoYW9ib3dh
-bmdAaHVhd2VpLmNvbT4NCj4g5oqE6YCBOiBjaGVuZ2ppYW4gKEQpIDxjai5jaGVuZ2ppYW5AaHVh
-d2VpLmNvbT47IExpYmluIChIdWF3ZWkpIA0KPiA8aHVhd2VpLmxpYmluQGh1YXdlaS5jb20+OyBY
-aWV4aXVxaSA8eGlleGl1cWlAaHVhd2VpLmNvbT47IHpoYW5neWkgKEYpIA0KPiA8eWkuemhhbmdA
-aHVhd2VpLmNvbT4NCj4g5Li76aKYOiBSZTog562U5aSNOiBsb29wIG5lc3RpbmcgaW4gYWxpZ25t
-ZW50IGV4Y2VwdGlvbiBhbmQgbWFjaGluZSBjaGVjaw0KPiANCj4gSGksDQo+IA0KPiBEaWQgeW91
-IHRyeSA/IERvZXMgaXQgd29yayA/DQo+IA0KPiBDaHJpc3RvcGhlDQo+IA0KPiBMZSAyOC8xMC8y
-MDE5IMOgIDA2OjU3LCBXYW5nc2hhb2JvIChib2JvKSBhIMOpY3JpdMKgOg0KPj4gSGksQ2hyaXN0
-b3BoZQ0KPj4NCj4+IFRoYW5rIHlvdSBmb3IgeW91ciBxdWljayByZXBseS4gSSB3aWxsIHRyeSB0
-byB1c2UgbWVtY3B5X3RvaW8oKSBpbnN0ZWFkIG9mIG1lbWNweSgpLg0KPj4NCj4+IC0tLS0t6YKu
-5Lu25Y6f5Lu2LS0tLS0NCj4+IOWPkeS7tuS6ujogQ2hyaXN0b3BoZSBMZXJveSBbbWFpbHRvOmNo
-cmlzdG9waGUubGVyb3lAYy1zLmZyXQ0KPj4g5Y+R6YCB5pe26Ze0OiAyMDE55bm0MTDmnIgyNuaX
-pSAxOToyMA0KPj4g5pS25Lu25Lq6OiBXYW5nc2hhb2JvIChib2JvKSA8Ym9iby5zaGFvYm93YW5n
-QGh1YXdlaS5jb20+DQo+PiDmioTpgIE6IGxpbnV4LWFyY2hAdmdlci5rZXJuZWwub3JnOyBhbGlz
-dGFpckBwb3BwbGUuaWQuYXU7IGNoZW5namlhbiAoRCkgDQo+PiA8Y2ouY2hlbmdqaWFuQGh1YXdl
-aS5jb20+OyBYaWV4aXVxaSA8eGlleGl1cWlAaHVhd2VpLmNvbT47IA0KPj4gbGludXgta2VybmVs
-QHZnZXIua2VybmVsLm9yZzsgb3NzQGJ1c2Vycm9yLm5ldDsgcGF1bHVzQHNhbWJhLm9yZzsgDQo+
-PiBMaWJpbiAoSHVhd2VpKSA8aHVhd2VpLmxpYmluQGh1YXdlaS5jb20+OyBhZ3VzdEBkZW54LmRl
-OyANCj4+IGxpbnV4cHBjLWRldkBsaXN0cy5vemxhYnMub3JnDQo+PiDkuLvpopg6IFJlOiBsb29w
-IG5lc3RpbmcgaW4gYWxpZ25tZW50IGV4Y2VwdGlvbiBhbmQgbWFjaGluZSBjaGVjaw0KPj4NCj4+
-IEhpLA0KPj4NCj4+IExlIDI2LzEwLzIwMTkgw6AgMDk6MjMsIFdhbmdzaGFvYm8gKGJvYm8pIGEg
-w6ljcml0wqA6DQo+Pj4gSGksDQo+Pj4NCj4+PiBJIGVuY291bnRlcmVkIGEgcHJvYmxlbSBhYm91
-dCBhIGxvb3AgbmVzdGluZyBvY2N1cnJlZCBpbiANCj4+PiBtYW51ZmFjdHVyaW5nIHRoZSBhbGln
-bm1lbnQgZXhjZXB0aW9uIGluIG1hY2hpbmUgY2hlY2ssIHRyaWdnZXIgYmFja2dyb3VuZCBpcyA6
-DQo+Pj4NCj4+PiBwcm9ibGVtOg0KPj4+DQo+Pj4gbWFjaGluZSBjaGVja291dCBvciBjcml0aWNh
-bCBpbnRlcnJ1cHQgLT7igKYtPmtib3hfd3JpdGVbZm9yIHJlY29yZGluZyANCj4+PiBsYXN0IHdv
-cmRzXSAtPiBtZW1jcHkoaXJyZW1hcF9hZGRyLCBzcmMsc2l6ZSk6X0dMT0JBTChtZW1jcHkp4oCm
-DQo+Pj4NCj4+PiB3aGVuIHdlIGVudGVyIG1lbWNweSxhIGNvbW1hbmQg4oCYZGNieiByMTEscjbi
-gJkgd2lsbCBjYXVzZSBhIGFsaWdubWVudCANCj4+PiBleGNlcHRpb24sIGluIHRoaXMgc2l0dWF0
-aW9uLHIxMSBsb2FkcyB0aGUgaW9yZW1hcCBhZGRyZXNzLHdoaWNoIA0KPj4+IGxlYWRzIHRvIHRo
-ZSBhbGlnbm1lbnQgZXhjZXB0aW9uLA0KPj4NCj4+IFlvdSBjYW4ndCB1c2UgbWVtY3B5KCkgb24g
-c29tZXRoaW5nIGVsc2UgdGhhbiBtZW1vcnkuDQo+Pg0KPj4gRm9yIGFuIGlvcmVtYXBwZWQgYXJl
-YSwgeW91IGhhdmUgdG8gdXNlIG1lbWNweV90b2lvKCkNCj4+DQo+PiBDaHJpc3RvcGhlDQo+Pg0K
-Pj4+DQo+Pj4gdGhlbiB0aGUgY29tbWFuZCBjYW4gbm90IGJlIHByb2Nlc3Mgc3VjY2Vzc2Z1bGx5
-LGFzIHdlIHN0aWxsIGluIA0KPj4+IG1hY2hpbmUgY2hlY2suYXQgdGhlIGVuZCAsaXQgdHJpZ2dl
-cnMgYSBuZXcgaXJxIG1hY2hpbmUgY2hlY2sgaW4gaXJxIA0KPj4+IGhhbmRsZXIgZnVuY3Rpb24s
-YSBsb29wIG5lc3RpbmcgYmVnaW5zLg0KPj4+DQo+Pj4gYW5hbHlzaXM6DQo+Pj4NCj4+PiBXZSBo
-YXZlIGFuYWx5c2VkIGEgbG90LGJ1dCBpdCBzdGlsbCBjYW4gbm90IGNvbWUgdG8gYSByZWFzb25h
-YmxlIA0KPj4+IGRlc2NyaXB0aW9uLGluIGNvbW1vbix0aGUgYWxpZ25tZW50IHRyaWdnZXJlZCBp
-biBtYWNoaW5lIGNoZWNrIA0KPj4+IGNvbnRleHQgY2FuIHN0aWxsIGJlIGNvbGxlY3RlZCBpbnRv
-IHRoZSBLYm94DQo+Pj4NCj4+PiBhZnRlciBhbGlnbm1lbnQgZXhjZXB0aW9uIGJlIGhhbmRsZWQg
-YnkgaGFuZGxlciBmdW5jdGlvbiwgYnV0IGhvdyANCj4+PiBkb2VzIHRoZSBtYWNoaW5lIGNoZWNr
-b3V0IGNhbiBiZSB0cmlnZ2VyZWQgaW4gdGhlIGhhbmRsZXIgZnVjbnRpb24gDQo+Pj4gZm9yIGFu
-eSBjYXVzZXM/IFdlIHByaW50IHJlbGV2YW50IHJlZ2lzdGVycw0KPj4+DQo+Pj4gYXMgZm9sbG93
-IHdoZW4gZmlyc3QgZW50ZXIgbWFjaGluZSBjaGVjayBhbmQgYWxpZ25tZW50IGV4Y2VwdGlvbiAN
-Cj4+PiBoYW5kbGVyDQo+Pj4gZnVuY3Rpb246DQo+Pj4NCj4+PiAgICDCoMKgwqDCoMKgwqDCoMKg
-IE1TUjoweDLCoMKgwqDCoMKgIE1TUjoweDANCj4+Pg0KPj4+ICAgIMKgwqDCoMKgwqDCoMKgwqAg
-U1JSMToweDLCoMKgwqDCoMKgIFNSUjE6MHgyMTAwMg0KPj4+DQo+Pj4gICAgwqDCoMKgwqDCoMKg
-wqDCoCBCdXQgdGhlIG1hbnVhbCBzYXlzIFNSUjEgc2hvdWxkIGJlIHNldCB0byBNU1IoMHgyKSx3
-aHkgDQo+Pj4gdGhhdCBoYXBwZW5lZCA/DQo+Pj4NCj4+PiAgICDCoMKgwqDCoMKgwqDCoMKgIFRo
-ZW4gYSBicmFuY2ggaW4gaGFuZGxlciBmdW5jdGlvbiBjb3B5IHRoZSBTUlIxIHRvIA0KPj4+IE1T
-Uix0aGlzIGVuYmxlIE1TUltNRV0gYW5kIE1TUltDRV0sc3lzdGVtIGNvbGxhcHNlcy4NCj4+Pg0K
-Pj4+IENvbmNsdXNpb246DQo+Pj4NCj4+PiAgICDCoMKgwqDCoMKgwqDCoMKgIDEpwqAgd2h5IHRo
-ZSBhbGlnbm1lbnQgZXhjZXB0aW9uIGNhbiBub3QgYmUgaGFuZGxlZCBpbiANCj4+PiBtYWNoaW5l
-IGNoZWNrID8NCj4+Pg0KPj4+ICAgIMKgwqDCoMKgwqDCoMKgwqAgMinCoCBiZXNpZGVzIG1lbWNw
-eSxhbnkgb3RoZXIgZnVuY3Rpb24gY2FuIGNhdXNlIHRoZSANCj4+PiBhbGlnbm1lbnQgZXhjZXB0
-aW9uID8NCj4+Pg0KPj4+IFdlIHN0aWxsIHJlY3VycmVudCBpdCwgdGhlIGxpbmUgYXMgZm9sbG93
-czoNCj4+Pg0KPj4+ICAgIMKgwqDCoMKgwqDCoMKgwqAgQ3B1IGRlYWQgbG9jay0+d2F0Y2ggbG9n
-LT50cmlnZ2VyDQo+Pj4gZmlxLT5rYm94X3dyaXRlLT5tZW1jcHktPmFsaWdubWVudCBleGNlcHRp
-b24tPnByaW50IGxhc3Qgd29yZHMuDQo+Pj4NCj4+PiAgICDCoMKgwqDCoMKgwqDCoMKgIGJ1dCBm
-b3IgdGhvc2UgcHJvYmxlbXMgYXMgYmVsb3csd2hhdCB0aGUga2JveCBwcmludGVkIGlzIGVtcHR5
-Lg0KPj4+DQo+Pj4gLS0tLS0tLS0tLS0tLS0tLS0ta2JveCByZXN0YXJ0OlvCoMKgIDEwLjE0NzU5
-NF0tLS0tLS0tLS0tLS0tLS0tDQo+Pj4NCj4+PiBrYm94IHZlcmlmeSBmcyBtYWdpYyBmYWlsDQo+
-Pj4NCj4+PiBrYm94IG1lbSBtYWJ5ZSBkZXN0cm95ZWQsIGZvcm1hdCBpdA0KPj4+DQo+Pj4ga2Jv
-eDogbG9hZCBPSw0KPj4+DQo+Pj4gbG9jay10YXNrOiBtYWpvclsyNDldIG1pbm9yWzBdDQo+Pj4N
-Cj4+PiAtLS0tLXN0YXJ0IHNob3dfZGVzdHJveWVkX2tib3hfbWVtX2hlYWQtLS0tDQo+Pj4NCj4+
-PiAwMDAwMDAwMDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4u
-Li4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDAxMDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAg
-MDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDAyMDogMDAwMDAwMDAg
-MDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAw
-MDAwMDAzMDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4u
-Li4uLi4uDQo+Pj4NCj4+PiAwMDAwMDA0MDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAw
-MDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDA1MDogMDAwMDAwMDAgMDAw
-MDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAw
-MDA2MDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4u
-Li4uDQo+Pj4NCj4+PiAwMDAwMDA3MDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAw
-MDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDA4MDogMDAwMDAwMDAgMDAwMDAw
-MDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDA5
-MDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4u
-DQo+Pj4NCg==
+On Tue, Nov 26, 2019 at 12:41:19PM +0100, Marco Elver wrote:
+> Prefer __always_inline for atomic wrappers. When building for size
+> (CC_OPTIMIZE_FOR_SIZE), some compilers appear to be less inclined to
+> inline even relatively small static inline functions that are assumed to
+> be inlinable such as atomic ops. This can cause problems, for example in
+> UACCESS regions.
+> 
+> By using __always_inline, we let the real implementation and not the
+> wrapper determine the final inlining preference.
+> 
+> For x86 tinyconfig we observe:
+> - vmlinux baseline: 1316204
+> - vmlinux with patch: 1315988 (-216 bytes)
+> 
+> This came up when addressing UACCESS warnings with CC_OPTIMIZE_FOR_SIZE
+> in the KCSAN runtime:
+> http://lkml.kernel.org/r/58708908-84a0-0a81-a836-ad97e33dbb62@infradead.org
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+> v2:
+> * Add missing '#include <linux/compiler.h>'
+> * Add size diff to commit message.
+> 
+> v1: http://lkml.kernel.org/r/20191122154221.247680-1-elver@google.com
+> ---
+>  include/asm-generic/atomic-instrumented.h | 335 +++++++++++-----------
+>  include/asm-generic/atomic-long.h         | 331 ++++++++++-----------
+>  scripts/atomic/gen-atomic-instrumented.sh |   7 +-
+>  scripts/atomic/gen-atomic-long.sh         |   3 +-
+>  4 files changed, 340 insertions(+), 336 deletions(-)
+
+> diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
+> index 8b8b2a6f8d68..86d27252b988 100755
+> --- a/scripts/atomic/gen-atomic-instrumented.sh
+> +++ b/scripts/atomic/gen-atomic-instrumented.sh
+> @@ -84,7 +84,7 @@ gen_proto_order_variant()
+>  	[ ! -z "${guard}" ] && printf "#if ${guard}\n"
+>  
+>  cat <<EOF
+> -static inline ${ret}
+> +static __always_inline ${ret}
+>  ${atomicname}(${params})
+>  {
+>  ${checks}
+> @@ -146,17 +146,18 @@ cat << EOF
+>  #ifndef _ASM_GENERIC_ATOMIC_INSTRUMENTED_H
+>  #define _ASM_GENERIC_ATOMIC_INSTRUMENTED_H
+>  
+> +#include <linux/compiler.h>
+>  #include <linux/build_bug.h>
+
+Sorry for the (super) trivial nit, but could you please re-order these
+two alphabetically, i.e.
+
+#include <linux/build_bug.h>
+#include <linux/compiler.h>
+
+With that:
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+[...]
+
+> @@ -64,6 +64,7 @@ cat << EOF
+>  #ifndef _ASM_GENERIC_ATOMIC_LONG_H
+>  #define _ASM_GENERIC_ATOMIC_LONG_H
+>  
+> +#include <linux/compiler.h>
+>  #include <asm/types.h>
+
+Unlike the above, this doesn't need to be re-ordered; for whatever
+reason, linux/* includes typically come before asm/* includes.
+
+Thanks,
+Mark.
