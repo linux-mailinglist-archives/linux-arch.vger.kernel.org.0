@@ -2,134 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFE6109CE9
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2019 12:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BAD109CFA
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2019 12:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726049AbfKZLVR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Nov 2019 06:21:17 -0500
-Received: from ivanoab7.miniserver.com ([37.128.132.42]:45340 "EHLO
-        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727339AbfKZLVR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 06:21:17 -0500
-X-Greylist: delayed 1875 seconds by postgrey-1.27 at vger.kernel.org; Tue, 26 Nov 2019 06:21:16 EST
-Received: from tun252.jain.kot-begemot.co.uk ([192.168.18.6] helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <anton.ivanov@kot-begemot.co.uk>)
-        id 1iZYPm-0007J0-ON; Tue, 26 Nov 2019 10:49:51 +0000
-Received: from jain.kot-begemot.co.uk ([192.168.3.3])
-        by jain.kot-begemot.co.uk with esmtp (Exim 4.92)
-        (envelope-from <anton.ivanov@kot-begemot.co.uk>)
-        id 1iZYPk-00072p-Fs; Tue, 26 Nov 2019 10:49:50 +0000
-Subject: Re: [RFC v2 17/37] lkl tools: host lib: virtio devices
-To:     Octavian Purdila <tavi.purdila@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>
-Cc:     linux-arch <linux-arch@vger.kernel.org>, cem <cem@freebsd.org>,
-        Richard Weinberger <richard@nod.at>,
-        linux-um <linux-um@lists.infradead.org>,
-        retrage01 <retrage01@gmail.com>, liuyuan <liuyuan@google.com>,
-        pscollins <pscollins@google.com>,
-        linux-kernel-library <linux-kernel-library@freelists.org>,
-        sigmaepsilon92 <sigmaepsilon92@gmail.com>,
-        Hajime Tazaki <thehajime@gmail.com>
-References: <cover.1573179553.git.thehajime@gmail.com>
- <1531c5f16a00b608635c9a62fa3951807075f950.1573179553.git.thehajime@gmail.com>
- <CAFLxGvzCwCLbLMhcF6ZJ2afeo7PSd8xLQrU9hRH6YVaMakBSyw@mail.gmail.com>
- <de90b04151bafee083727c9769833932788cf428.camel@sipsolutions.net>
- <1662825264.98055.1574758225905.JavaMail.zimbra@nod.at>
- <4ebb14dc67ccb70543617ce1f7066f3f27cd11a8.camel@sipsolutions.net>
- <243342257.98153.1574762974057.JavaMail.zimbra@nod.at>
- <98acf77a7c6f6cba7f76c12a850ac2929b9e5a48.camel@sipsolutions.net>
- <CAMoF9u3LRC_NaVJzmKPc0+XBxhAqdhnr4-ZzY_ypwQEzUz78yQ@mail.gmail.com>
-From:   Anton Ivanov <anton.ivanov@kot-begemot.co.uk>
-Message-ID: <ce1a96d4-3d5e-32be-f493-3522fc56a25b@kot-begemot.co.uk>
-Date:   Tue, 26 Nov 2019 10:49:48 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1727911AbfKZL0v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Nov 2019 06:26:51 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:19691 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727218AbfKZL0u (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 06:26:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1574767608;
+        s=strato-dkim-0002; d=xenosoft.de;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=XMLW3ZOSKguCOTt53NHCRHDrLj4NFW5PozSyNNqJ0vs=;
+        b=bYH485JbLwz1bszGtiXeBrDFh4fHScz447YzQX6J4grHvueCpKZk5y05E5RApxxzdD
+        JU2yBBjNeFGeMtvbNexzBk/XKlHiIavBzH9oV8TNFyWutpRofgSriFosoGJ3dUesKbfX
+        jiXn1R2tAVyDMpNT4167+ykVo1C2Dm1+7LTc5Ni7OahCD4+xqkrVlgvqmrIaAdIiFnk2
+        FSV/S0qS+xwuE8dJgkJV1Xgv8Pphtc+iP93KSa4sZi+/vsF+fE77R+fHHZm9ThybAzVQ
+        eFPdWDR0wUQaK3BiuaqaNLZ6q2wAYGsrmjDQwFDL2GDw63OwftUXcfqW6bK2QrIzn9ZN
+        eUUw==
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBJSrwuuqxvPhSIh0PhkEvMsMre1rbZ/xz+jsR"
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2a02:8109:89c0:ebfc:14bb:b5af:17db:dc1]
+        by smtp.strato.de (RZmta 45.0.2 AUTH)
+        with ESMTPSA id x0678cvAQBQc8Vv
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Tue, 26 Nov 2019 12:26:38 +0100 (CET)
+Subject: Re: Bug 205201 - Booting halts if Dawicontrol DC-2976 UW SCSI board
+ installed, unless RAM size limited to 3500M
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Robin Murphy <robin.murphy@arm.com>, linux-arch@vger.kernel.org,
+        darren@stevens-zone.net, mad skateman <madskateman@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org, Rob Herring <robh+dt@kernel.org>,
+        paulus@samba.org, rtd2@xtra.co.nz,
+        "contact@a-eon.com" <contact@a-eon.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        nsaenzjulienne@suse.de, Mike Rapoport <rppt@linux.ibm.com>
+References: <F1EBB706-73DF-430E-9020-C214EC8ED5DA@xenosoft.de>
+ <20191121072943.GA24024@lst.de>
+ <dbde2252-035e-6183-7897-43348e60647e@xenosoft.de>
+ <6eec5c42-019c-a988-fc2a-cb804194683d@xenosoft.de>
+ <d0252d29-7a03-20e1-ccd7-e12d906e4bdf@arm.com>
+ <b3217742-2c0b-8447-c9ac-608b93265363@xenosoft.de>
+ <20191121180226.GA3852@lst.de>
+ <2fde79cf-875f-94e6-4a1b-f73ebb2e2c32@xenosoft.de>
+ <20191125073923.GA30168@lst.de>
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+Message-ID: <4681f5fe-c095-15f5-9221-4b55e940bafc@xenosoft.de>
+Date:   Tue, 26 Nov 2019 12:26:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-In-Reply-To: <CAMoF9u3LRC_NaVJzmKPc0+XBxhAqdhnr4-ZzY_ypwQEzUz78yQ@mail.gmail.com>
+In-Reply-To: <20191125073923.GA30168@lst.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0
-X-Spam-Score: -1.0
-X-Clacks-Overhead: GNU Terry Pratchett
+Content-Transfer-Encoding: 7bit
+Content-Language: de-DE
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 26/11/2019 10:42, Octavian Purdila wrote:
-> On Tue, Nov 26, 2019 at 12:16 PM Johannes Berg
-> <johannes@sipsolutions.net> wrote:
+On 25 November 2019 at 08:39 am, Christoph Hellwig wrote:
+> On Sat, Nov 23, 2019 at 12:42:27PM +0100, Christian Zigotzky wrote:
+>> Hello Christoph,
 >>
->> On Tue, 2019-11-26 at 11:09 +0100, Richard Weinberger wrote:
->>> ----- Ursprüngliche Mail -----
->>>>> My point is that UML and LKL should try to do use the same concept/code
->>>>> regarding virtio. At the end of day both use virtual devices which use
->>>>> facilities from the host.
->>>>> If this is really not possible it needs a good explanation.
->>>>
->>>> I think it isn't possible, unless you use vhost-user over a unix domain
->>>> socket internally to talk between the kernel (virtio_uml) and hypervisor
->>>> (device) components.
->>>>
->>>> In virtio_uml, the device implementation is assumed to be a separate
->>>> process with a vhost-user connection. Here in LKL, the virtio device is
->>>> part of the "hypervisor", i.e. in the same process.
->>>
->>> Exactly, currently UML and LKL solve same things differently, but do we need to?
->>
->> It's not the same thing though :-)
->>
->> UML right now doesn't have or support virtio devices in the built-in
->> hypervisor, what we wanted to use virtio for was explicitly for the
->> vhost-user devices.
->>
->> LKL clearly wants to have device implementations in the hypervisor,
->> perhaps for networking or console etc.? That _might_ be useful since it
->> makes the device implementation more general, unlike the UML approach
->> where all devices come with a kernel- and user-side and are special
->> drivers in the kernel, vs. general virtio drivers.
->>
-> 
-> That is correct. Initially we used the same UML model, with dedicated
-> drivers for LKL, and later switched to using the built-in virtio
-> drivers (so far for network and block devices).
-> 
->> Now, arguably, since UML has all these already a combined UML/LKL
->> doesn't actually *need* any virtio devices, since all (or at least most)
->> of the things that could be covered by virtio today are already covered
->> by UML devices (block, net, console, random).
->>
->> I'd probably say then that this can be removed from an initial "minimum
->> viable product" of LKL, since once merged with UML you get the devices
->> from that. Later, we could decide that UML devices actually are better
->> done as virtio, and support something like this.
->>
-> 
-> I agree, I think it make sense to drop these since the problem of
-> dedicated vs generic / virtio drivers are orthogonal with regard to
-> UML and LKL unification and can later be worked on.
+>> Please find attached the dmesg of your Git kernel.
+> Thanks.  It looks like on your platform the swiotlb buffer isn't
+> actually addressable based on the bus dma mask limit, which is rather
+> interesting.  swiotlb_init uses memblock_alloc_low to allocate the
+> buffer, and I'll need some help from Mike and the powerpc maintainers
+> to figure out how that select where to allocate the buffer from, and
+> how we can move it to a lower address.  My gut feeling would be to try
+> to do what arm64 does and define a new ARCH_LOW_ADDRESS_LIMIT, preferably
+> without needing too much arch specific magic.
+>
+> As a quick hack can you try this patch on top of the tree from Friday?
+>
+> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> index f491690d54c6..e3f95c362922 100644
+> --- a/include/linux/memblock.h
+> +++ b/include/linux/memblock.h
+> @@ -344,7 +344,7 @@ static inline int memblock_get_region_node(const struct memblock_region *r)
+>   #define MEMBLOCK_LOW_LIMIT 0
+>   
+>   #ifndef ARCH_LOW_ADDRESS_LIMIT
+> -#define ARCH_LOW_ADDRESS_LIMIT  0xffffffffUL
+> +#define ARCH_LOW_ADDRESS_LIMIT  0x0fffffffUL
+>   #endif
+>   
+>   phys_addr_t memblock_phys_alloc_range(phys_addr_t size, phys_addr_t align,
+>
+Hello Christoph,
 
-This brings us back to the interrupt controller as noted by Richard earlier.
+The PCI TV card works with your patch! I was able to patch your Git 
+kernel with the patch above.
 
-UML devices are heavily dependent on the file io as an IRQ trigger 
-paradigm and they need an interrupt controller which has an IO event 
-feed into it. I did not see that in LKL on first read.
+I haven't found any error messages in the dmesg yet.
 
-So as a first step we should get it to work with existing UML IRQ 
-controller and whatever incremental patches are needed on top of that.
+Thank you!
 
-> 
-> _______________________________________________
-> linux-um mailing list
-> linux-um@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-um
-> 
-
--- 
-Anton R. Ivanov
-https://www.kot-begemot.co.uk/
+Cheers,
+Christian
