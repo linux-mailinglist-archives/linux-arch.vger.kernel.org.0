@@ -2,192 +2,168 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2BF109D22
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2019 12:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1ED109D24
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2019 12:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726937AbfKZLmM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Nov 2019 06:42:12 -0500
-Received: from mail-wm1-f74.google.com ([209.85.128.74]:60148 "EHLO
-        mail-wm1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725884AbfKZLmK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 06:42:10 -0500
-Received: by mail-wm1-f74.google.com with SMTP id 20so466039wmo.9
-        for <linux-arch@vger.kernel.org>; Tue, 26 Nov 2019 03:42:07 -0800 (PST)
+        id S1727171AbfKZLmz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Nov 2019 06:42:55 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:40344 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725884AbfKZLmz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 06:42:55 -0500
+Received: by mail-io1-f66.google.com with SMTP id b26so18265044ion.7
+        for <linux-arch@vger.kernel.org>; Tue, 26 Nov 2019 03:42:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UhG4TbrFQmzzMiP4BKNG5iQmKmV3aCdN4xUR1YDfRPM=;
-        b=pfMouhbRCLequNThaZW7MP2Z9T7cZW3BKnMwxJsL/Kh33hHKRxn/F78Gm1njQTHRnk
-         KPKlJb7aNIHx8AhmDhp3NVvPdJiP8ZSO8GoLlx3QnxmArmuKheHLqVczKsTG99mjwG7z
-         wGdYhDx8WsQ18FMNCIMkZTQbDASXzHPVbonyNfjHslt3u6krRS6c/FtTpxOjXIkKsklW
-         1Y38eay8DGsyakOW3mVoZTqmV33JJh5oT4UbmyKM4rFkSYwmoc+nKJTSbJb/E1cQC9Bu
-         mR4EoFAy/cIWnONn5H3sbaoScdY84CRdDXQsk9kZ4ucdp9R//wc7ti2lGCwtCg0ILoup
-         POVA==
+        bh=9JaD96opbere8Q+VrxaKwBqlMYw1qX0LjSUWhBKyJHk=;
+        b=IDBnzDADpK/kmCZd2fMouJsFOsmmXqQAADOrrlSmLybxTw9JQGhI/D9vtk15J++UvO
+         X8yJT9EDngTuOR1JD9GHUmcNqTwsIaAzRZmwa6Pm0z53nu11aC+zo2zuGmxWpWFREOA2
+         3RXeNcfl43oizttoDMCsxFvc2G7BBOwKwNjq1O2epU6FOwiT36Gt8/69yzVU4eTDKvUu
+         qXda9+oOq+WBzAcx0SMnNLf6bKM2xLFtD7vF1o5EVcFLPcUDl3d4QvvbCT+w/Wd05r4Q
+         jK+SHFmWb/Qw2rPlgzzfcusFQs2zz+CuSEatWRWMz3y0RLuRFg8yy6G6DKocqKv7v2e7
+         RW2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=UhG4TbrFQmzzMiP4BKNG5iQmKmV3aCdN4xUR1YDfRPM=;
-        b=qxEAHKw6S8FKfwOSgbUqI/wPXxuCX7tvSJ71n1fKLdbLvilGP+m/dnNsRXItBntWVi
-         mr2T4gRuDa7d/xXRuvm1B3LGHdJFogbwX4K4rSAgo1f/fLXS+kG2t7lgImQdITetncOB
-         8ZJThRbxdHu08thiwZrdq+T5UuczgUMyfy+PtDpWM+xIvmlL0rLmjLAmF+jryQKjzatH
-         IhLt69NECp7bZIlxsRQolhoiPmeW/2vZ439mbQDRogpMfITC3X6WYUHBpG1MNQEzJAKW
-         2+bFd8MFBCpK765V2FHrPfDIetR5XjKDzRRuzbRO+K4BN01q7lWvwKyWTnfbA8Uxu9Jb
-         PIJA==
-X-Gm-Message-State: APjAAAXAPo9t0+bm0/gK7m87lw9ko6FXieJaXElbCp3vlGc840nf8la7
-        h25X2udqw1wOINzqHIAgUHQPGLRqHA==
-X-Google-Smtp-Source: APXvYqwoGV7i0r1gTEUR1Tl8FkRM0G/pJpFJdLS6qomEgLxb0fRD0Pw9med/N0AXUlQtVoxl6+iFeihPdA==
-X-Received: by 2002:a5d:46c1:: with SMTP id g1mr15855542wrs.200.1574768526170;
- Tue, 26 Nov 2019 03:42:06 -0800 (PST)
-Date:   Tue, 26 Nov 2019 12:41:21 +0100
-In-Reply-To: <20191126114121.85552-1-elver@google.com>
-Message-Id: <20191126114121.85552-3-elver@google.com>
-Mime-Version: 1.0
-References: <20191126114121.85552-1-elver@google.com>
-X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
-Subject: [PATCH v2 3/3] kcsan: Prefer __always_inline for fast-path
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com
-Cc:     will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        arnd@arndb.de, dvyukov@google.com, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
-        mark.rutland@arm.com, paulmck@kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9JaD96opbere8Q+VrxaKwBqlMYw1qX0LjSUWhBKyJHk=;
+        b=lXhRUkqeb+meeA4cwR2P4HuKrB31CCmWnJRscl1qrbpfxQEI1LJRGFyNelTJgglqdK
+         eWh/6ItlRdd8UoqnnmcdFBU8YunDEKxJwPdNO2bf5qLxWpG57Iu/amgPMwCGjTTS2asp
+         xJ/2eO0afR+mKSQJdawkH8/26qTjjzpBGUMsJYY4ZXnGDerfgLtR3omN/KtpKaQSwh2L
+         Bc7k1yjKJ6Ir1F3KtU6Ji0XVBOyaq+AoLd9GjgZyqZakV37u8LlIqiYOqHqh4uoz94t2
+         3kf0zf1q7FVeOvkGEzF/yJkgGKB7SJW1ex74XQ8w0NTFsuAcuvzug7jOlarGXCGjNQ3t
+         serw==
+X-Gm-Message-State: APjAAAXaRUp7FBsTUKk2PXn6e4UOXghZOxZMzXDPeMY/En7p6Fq/DHL6
+        J8R2vWqCa8l8UqQ2/mMYKL1M7etSRDTJNVT0gFtth2UAHwAA0Q==
+X-Google-Smtp-Source: APXvYqyV6WzYl1t4cUDTlCPwtRIKzZuWPiW1cHiYJrqKSnCP7xu903AbHRJruDnhI0se4N1URMQGH8svU5c3Rf+Lm6k=
+X-Received: by 2002:a02:b793:: with SMTP id f19mr31495947jam.43.1574768574210;
+ Tue, 26 Nov 2019 03:42:54 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1573179553.git.thehajime@gmail.com> <64a5d6c94d331058331af7d191d2cdbe870d009b.1573179553.git.thehajime@gmail.com>
+ <CAFLxGvw+w+xmput3xMjKPXPn4hj9opbo+gtV6896hhzDUzQNiA@mail.gmail.com>
+In-Reply-To: <CAFLxGvw+w+xmput3xMjKPXPn4hj9opbo+gtV6896hhzDUzQNiA@mail.gmail.com>
+From:   Octavian Purdila <tavi.purdila@gmail.com>
+Date:   Tue, 26 Nov 2019 13:42:43 +0200
+Message-ID: <CAMoF9u2g2+_qjfAKh3jD-PSEBhwBVBLDvEEa8Sawutp4fQaYNw@mail.gmail.com>
+Subject: Re: [RFC v2 03/37] lkl: architecture skeleton for Linux kernel library
+To:     Richard Weinberger <richard.weinberger@gmail.com>
+Cc:     Hajime Tazaki <thehajime@gmail.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Patrick Collins <pscollins@google.com>,
+        Levente Kurusa <levex@linux.com>,
+        Matthieu Coudron <mattator@gmail.com>,
+        Conrad Meyer <cem@freebsd.org>,
+        Jens Staal <staal1978@gmail.com>,
+        Motomu Utsumi <motomuman@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Akira Moroo <retrage01@gmail.com>,
+        Petros Angelatos <petrosagg@gmail.com>,
+        Yuan Liu <liuyuan@google.com>, Xiao Jia <xiaoj@google.com>,
+        Mark Stillwell <mark@stillwell.me>,
+        linux-kernel-library <linux-kernel-library@freelists.org>,
+        Pierre-Hugues Husson <phh@phh.me>,
+        Michael Zimmermann <sigmaepsilon92@gmail.com>,
+        Luca Dariz <luca.dariz@gmail.com>,
+        "Edison M . Castro" <edisonmcastro@hotmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Prefer __always_inline for fast-path functions that are called outside
-of user_access_save, to avoid generating UACCESS warnings when
-optimizing for size (CC_OPTIMIZE_FOR_SIZE). It will also avoid future
-surprises with compiler versions that change the inlining heuristic even
-when optimizing for performance.
+On Tue, Nov 26, 2019 at 12:00 AM Richard Weinberger
+<richard.weinberger@gmail.com> wrote:
+>
+> On Fri, Nov 8, 2019 at 6:03 AM Hajime Tazaki <thehajime@gmail.com> wrote:
+> >
+> > From: Octavian Purdila <tavi.purdila@gmail.com>
+> >
+> > Adds the LKL Kconfig, vmlinux linker script, basic architecture
+> > headers and miscellaneous basic functions or stubs such as
+> > dump_stack(), show_regs() and cpuinfo proc ops.
+> >
+> > The headers we introduce in this patch are simple wrappers to the
+> > asm-generic headers or stubs for things we don't support, such as
+> > ptrace, DMA, signals, ELF handling and low level processor operations.
+> >
+> > The kernel configuration is automatically updated to reflect the
+> > endianness of the host, 64bit support or the output format for
+> > vmlinux's linker script. We do this by looking at the ld's default
+> > output format.
+> >
+> > Signed-off-by: Andreas Abel <aabel@google.com>
+> > Signed-off-by: Conrad Meyer <cem@FreeBSD.org>
+> > Signed-off-by: Edison M. Castro <edisonmcastro@hotmail.com>
+> > Signed-off-by: H.K. Jerry Chu <hkchu@google.com>
+> > Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
+> > Signed-off-by: Jens Staal <staal1978@gmail.com>
+> > Signed-off-by: Lai Jiangshan <jiangshanlai@gmail.com>
+> > Signed-off-by: Levente Kurusa <levex@linux.com>
+> > Signed-off-by: Luca Dariz <luca.dariz@gmail.com>
+> > Signed-off-by: Mark Stillwell <mark@stillwell.me>
+> > Signed-off-by: Matthieu Coudron <mattator@gmail.com>
+> > Signed-off-by: Michael Zimmermann <sigmaepsilon92@gmail.com>
+> > Signed-off-by: Motomu Utsumi <motomuman@gmail.com>
+> > Signed-off-by: Patrick Collins <pscollins@google.com>
+> > Signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+> > Signed-off-by: Pierre-Hugues Husson <phh@phh.me>
+> > Signed-off-by: Xiao Jia <xiaoj@google.com>
+> > Signed-off-by: Yuan Liu <liuyuan@google.com>
+> > Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
+>
+> Can we please have this chain cleaned up?
+> Please see process/submitting-patches.rst.
+>
+> > ---
+> >  MAINTAINERS                                |   8 +
+> >  arch/um/lkl/.gitignore                     |   2 +
+> >  arch/um/lkl/Kconfig                        |  95 ++++++
+> >  arch/um/lkl/Kconfig.debug                  |   0
+> >  arch/um/lkl/configs/lkl_defconfig          |  91 ++++++
+> >  arch/um/lkl/include/asm/Kbuild             |  80 +++++
+> >  arch/um/lkl/include/asm/bitsperlong.h      |  11 +
+> >  arch/um/lkl/include/asm/byteorder.h        |   7 +
+> >  arch/um/lkl/include/asm/cpu.h              |  14 +
+> >  arch/um/lkl/include/asm/elf.h              |  15 +
+> >  arch/um/lkl/include/asm/mutex.h            |   7 +
+> >  arch/um/lkl/include/asm/processor.h        |  60 ++++
+> >  arch/um/lkl/include/asm/ptrace.h           |  25 ++
+> >  arch/um/lkl/include/asm/sched.h            |  23 ++
+> >  arch/um/lkl/include/asm/syscalls.h         |  18 ++
+> >  arch/um/lkl/include/asm/syscalls_32.h      |  43 +++
+> >  arch/um/lkl/include/asm/tlb.h              |  12 +
+> >  arch/um/lkl/include/asm/uaccess.h          |  64 ++++
+> >  arch/um/lkl/include/asm/unistd_32.h        |  31 ++
+> >  arch/um/lkl/include/asm/vmlinux.lds.h      |  14 +
+> >  arch/um/lkl/include/asm/xor.h              |   9 +
+> >  arch/um/lkl/include/uapi/asm/Kbuild        |   9 +
+> >  arch/um/lkl/include/uapi/asm/bitsperlong.h |  13 +
+> >  arch/um/lkl/include/uapi/asm/byteorder.h   |  11 +
+> >  arch/um/lkl/include/uapi/asm/siginfo.h     |  11 +
+> >  arch/um/lkl/include/uapi/asm/swab.h        |  11 +
+> >  arch/um/lkl/include/uapi/asm/syscalls.h    | 348 +++++++++++++++++++++
+>
+> I think this is the first big thing which needs a unification.
+>
+> In UML we try hard to re-use headers from x86.
+> We also have some headers in arch/x86/um/.
+>
+> LKL should do the same. At least try hard to avoid duplication.
+>
 
-Report: http://lkml.kernel.org/r/58708908-84a0-0a81-a836-ad97e33dbb62@infradead.org
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Marco Elver <elver@google.com>
----
-Rebased on: locking/kcsan branch of tip tree.
----
- kernel/kcsan/atomic.h   |  2 +-
- kernel/kcsan/core.c     | 16 +++++++---------
- kernel/kcsan/encoding.h | 14 +++++++-------
- 3 files changed, 15 insertions(+), 17 deletions(-)
+In LKL we tried to avoid coupling the kernel build part to a
+particular architecture, to make it easier to port it (to different
+arches, but as well to other OSes or special environments [1][2]).
+That is the main reason for having two build steps, one for kernel
+proper, and one for the host. That is why the host part was placed
+into tools/lkl to make it clear that is not part of the kernel proper.
 
-diff --git a/kernel/kcsan/atomic.h b/kernel/kcsan/atomic.h
-index 576e03ddd6a3..a9c193053491 100644
---- a/kernel/kcsan/atomic.h
-+++ b/kernel/kcsan/atomic.h
-@@ -18,7 +18,7 @@
-  * than cast to volatile. Eventually, we hope to be able to remove this
-  * function.
-  */
--static inline bool kcsan_is_atomic(const volatile void *ptr)
-+static __always_inline bool kcsan_is_atomic(const volatile void *ptr)
- {
- 	/* only jiffies for now */
- 	return ptr == &jiffies;
-diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-index 3314fc29e236..c616fec639cd 100644
---- a/kernel/kcsan/core.c
-+++ b/kernel/kcsan/core.c
-@@ -78,10 +78,8 @@ static atomic_long_t watchpoints[CONFIG_KCSAN_NUM_WATCHPOINTS + NUM_SLOTS-1];
-  */
- static DEFINE_PER_CPU(long, kcsan_skip);
- 
--static inline atomic_long_t *find_watchpoint(unsigned long addr,
--					     size_t size,
--					     bool expect_write,
--					     long *encoded_watchpoint)
-+static __always_inline atomic_long_t *
-+find_watchpoint(unsigned long addr, size_t size, bool expect_write, long *encoded_watchpoint)
- {
- 	const int slot = watchpoint_slot(addr);
- 	const unsigned long addr_masked = addr & WATCHPOINT_ADDR_MASK;
-@@ -146,7 +144,7 @@ insert_watchpoint(unsigned long addr, size_t size, bool is_write)
-  *	2. the thread that set up the watchpoint already removed it;
-  *	3. the watchpoint was removed and then re-used.
-  */
--static inline bool
-+static __always_inline bool
- try_consume_watchpoint(atomic_long_t *watchpoint, long encoded_watchpoint)
- {
- 	return atomic_long_try_cmpxchg_relaxed(watchpoint, &encoded_watchpoint, CONSUMED_WATCHPOINT);
-@@ -160,7 +158,7 @@ static inline bool remove_watchpoint(atomic_long_t *watchpoint)
- 	return atomic_long_xchg_relaxed(watchpoint, INVALID_WATCHPOINT) != CONSUMED_WATCHPOINT;
- }
- 
--static inline struct kcsan_ctx *get_ctx(void)
-+static __always_inline struct kcsan_ctx *get_ctx(void)
- {
- 	/*
- 	 * In interrupts, use raw_cpu_ptr to avoid unnecessary checks, that would
-@@ -169,7 +167,7 @@ static inline struct kcsan_ctx *get_ctx(void)
- 	return in_task() ? &current->kcsan_ctx : raw_cpu_ptr(&kcsan_cpu_ctx);
- }
- 
--static inline bool is_atomic(const volatile void *ptr)
-+static __always_inline bool is_atomic(const volatile void *ptr)
- {
- 	struct kcsan_ctx *ctx = get_ctx();
- 
-@@ -193,7 +191,7 @@ static inline bool is_atomic(const volatile void *ptr)
- 	return kcsan_is_atomic(ptr);
- }
- 
--static inline bool should_watch(const volatile void *ptr, int type)
-+static __always_inline bool should_watch(const volatile void *ptr, int type)
- {
- 	/*
- 	 * Never set up watchpoints when memory operations are atomic.
-@@ -226,7 +224,7 @@ static inline void reset_kcsan_skip(void)
- 	this_cpu_write(kcsan_skip, skip_count);
- }
- 
--static inline bool kcsan_is_enabled(void)
-+static __always_inline bool kcsan_is_enabled(void)
- {
- 	return READ_ONCE(kcsan_enabled) && get_ctx()->disable_count == 0;
- }
-diff --git a/kernel/kcsan/encoding.h b/kernel/kcsan/encoding.h
-index b63890e86449..f03562aaf2eb 100644
---- a/kernel/kcsan/encoding.h
-+++ b/kernel/kcsan/encoding.h
-@@ -59,10 +59,10 @@ encode_watchpoint(unsigned long addr, size_t size, bool is_write)
- 		      (addr & WATCHPOINT_ADDR_MASK));
- }
- 
--static inline bool decode_watchpoint(long watchpoint,
--				     unsigned long *addr_masked,
--				     size_t *size,
--				     bool *is_write)
-+static __always_inline bool decode_watchpoint(long watchpoint,
-+					      unsigned long *addr_masked,
-+					      size_t *size,
-+					      bool *is_write)
- {
- 	if (watchpoint == INVALID_WATCHPOINT ||
- 	    watchpoint == CONSUMED_WATCHPOINT)
-@@ -78,13 +78,13 @@ static inline bool decode_watchpoint(long watchpoint,
- /*
-  * Return watchpoint slot for an address.
-  */
--static inline int watchpoint_slot(unsigned long addr)
-+static __always_inline int watchpoint_slot(unsigned long addr)
- {
- 	return (addr / PAGE_SIZE) % CONFIG_KCSAN_NUM_WATCHPOINTS;
- }
- 
--static inline bool matching_access(unsigned long addr1, size_t size1,
--				   unsigned long addr2, size_t size2)
-+static __always_inline bool matching_access(unsigned long addr1, size_t size1,
-+					    unsigned long addr2, size_t size2)
- {
- 	unsigned long end_range1 = addr1 + size1 - 1;
- 	unsigned long end_range2 = addr2 + size2 - 1;
--- 
-2.24.0.432.g9d3f5f5b63-goog
+I think this is one of the biggest differences between UML and LKL and
+it would be helpful to get feedback of what people think of a
+potential similar split for UML.
 
+[1] https://www.haiku-os.org/blog/lucian/2010-07-08_booting_lkl_inside_haiku/
+[2] https://github.com/lkl/lkl-ntk-driver-poc
