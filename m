@@ -2,164 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB3B109D5F
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2019 12:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 874C1109DE3
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2019 13:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727553AbfKZL5R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Nov 2019 06:57:17 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.84]:15743 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727545AbfKZL5R (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 06:57:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1574769432;
-        s=strato-dkim-0002; d=xenosoft.de;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=OiXIPkAa+jo3JWZau1B2Ey3v2wblVpCTuGCnmx5s9Rg=;
-        b=kPsfkTV/+0nWDnwAhqKgkB9HK7WKUvDz4aZCvLDQhkd89WXqsTVz8zf0LaN7f1WyFT
-        LQgUbMZ+nTEsXS2BWy2uVy2cR5ieujjwtmgyKWdZ7ftK5aOqKLQn3LTO7ioufK8QZ3yB
-        vx8XCJwE5HcGCzf4oMHyDNu8JEAClm4vNP9Uj0dr4j0DxCaQFcIjbprzYgzRNnuEL18a
-        3LBfbJzzwnLS2g2vuWq7zfNg9xA7/IXjN5WyEL0e6dj8TjiHT2f0hpfB0Fdtv+mrj9uJ
-        xWcx8DSTvSlrZe5mshEZcUGqUZ14MK/hsKnb8NCN3oEgpoMWtjc8KDlL8KIOhpBCVLyp
-        +QxQ==
-X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBJSrwuuqxvPhSIh0PhkEvMsMre1rbZ/xz+jsR"
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2a02:8109:89c0:ebfc:14bb:b5af:17db:dc1]
-        by smtp.strato.de (RZmta 45.0.2 AUTH)
-        with ESMTPSA id x0678cvAQBv38le
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Tue, 26 Nov 2019 12:57:03 +0100 (CET)
-Subject: Re: Bug 205201 - Booting halts if Dawicontrol DC-2976 UW SCSI board
- installed, unless RAM size limited to 3500M
-To:     Mike Rapoport <rppt@linux.ibm.com>, Christoph Hellwig <hch@lst.de>
-Cc:     Robin Murphy <robin.murphy@arm.com>, linux-arch@vger.kernel.org,
-        darren@stevens-zone.net, mad skateman <madskateman@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org, Rob Herring <robh+dt@kernel.org>,
-        paulus@samba.org, rtd2@xtra.co.nz,
-        "contact@a-eon.com" <contact@a-eon.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        nsaenzjulienne@suse.de
-References: <F1EBB706-73DF-430E-9020-C214EC8ED5DA@xenosoft.de>
- <20191121072943.GA24024@lst.de>
- <dbde2252-035e-6183-7897-43348e60647e@xenosoft.de>
- <6eec5c42-019c-a988-fc2a-cb804194683d@xenosoft.de>
- <d0252d29-7a03-20e1-ccd7-e12d906e4bdf@arm.com>
- <b3217742-2c0b-8447-c9ac-608b93265363@xenosoft.de>
- <20191121180226.GA3852@lst.de>
- <2fde79cf-875f-94e6-4a1b-f73ebb2e2c32@xenosoft.de>
- <20191125073923.GA30168@lst.de> <20191125093159.GA23118@linux.ibm.com>
-From:   Christian Zigotzky <chzigotzky@xenosoft.de>
-Message-ID: <b668bc25-9268-d25e-f9a0-176bb4ce1d07@xenosoft.de>
-Date:   Tue, 26 Nov 2019 12:57:02 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1727573AbfKZMZf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Nov 2019 07:25:35 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:2460 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727408AbfKZMZf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 26 Nov 2019 07:25:35 -0500
+Received: from dggemi405-hub.china.huawei.com (unknown [172.30.72.54])
+        by Forcepoint Email with ESMTP id 16878B5B3CA1538BE26F;
+        Tue, 26 Nov 2019 20:25:31 +0800 (CST)
+Received: from DGGEMI529-MBS.china.huawei.com ([169.254.5.186]) by
+ dggemi405-hub.china.huawei.com ([10.3.17.143]) with mapi id 14.03.0439.000;
+ Tue, 26 Nov 2019 20:25:25 +0800
+From:   "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "chengjian (D)" <cj.chengjian@huawei.com>,
+        "Libin (Huawei)" <huawei.libin@huawei.com>,
+        Xiexiuqi <xiexiuqi@huawei.com>,
+        "zhangyi (F)" <yi.zhang@huawei.com>,
+        "Liuwenliang (Abbott Liu)" <liuwenliang@huawei.com>
+Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTogbG9vcCBuZXN0aW5nIGluIGFsaWdu?=
+ =?utf-8?Q?ment_exception_and_machine_check?=
+Thread-Topic: =?utf-8?B?562U5aSNOiDnrZTlpI06IGxvb3AgbmVzdGluZyBpbiBhbGlnbm1lbnQgZXhj?=
+ =?utf-8?Q?eption_and_machine_check?=
+Thread-Index: AdWLzOb7zyHoVFoiQIWRpEOzZEjVL///vrgA//yweICACykWAP/qCgEQgD6hWAD//zWK8A==
+Date:   Tue, 26 Nov 2019 12:25:25 +0000
+Message-ID: <D44062DC474617438D5181ADFE2B2C21053F2AEE@dggemi529-mbs.china.huawei.com>
+References: <D44062DC474617438D5181ADFE2B2C21016DE42A@dggemi529-mbs.china.huawei.com>
+ <8215aeb3-57dd-223a-29d3-45ca22b0543c@c-s.fr>
+ <D44062DC474617438D5181ADFE2B2C21016E9EAA@dggemi529-mbs.china.huawei.com>
+ <ef93fa2f-d98f-2e94-322e-0ae095626e75@c-s.fr>
+ <D44062DC474617438D5181ADFE2B2C2101701C71@dggemi529-mbs.china.huawei.com>
+ <e2429afb-a5f6-a5f1-40ec-1c5ca70edd2d@c-s.fr>
+In-Reply-To: <e2429afb-a5f6-a5f1-40ec-1c5ca70edd2d@c-s.fr>
+Accept-Language: en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.184.195.37]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20191125093159.GA23118@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: de-DE
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 25 November 2019 at 10:32 am, Mike Rapoport wrote:
-> On Mon, Nov 25, 2019 at 08:39:23AM +0100, Christoph Hellwig wrote:
->> On Sat, Nov 23, 2019 at 12:42:27PM +0100, Christian Zigotzky wrote:
->>> Hello Christoph,
->>>
->>> Please find attached the dmesg of your Git kernel.
->> Thanks.  It looks like on your platform the swiotlb buffer isn't
->> actually addressable based on the bus dma mask limit, which is rather
->> interesting.  swiotlb_init uses memblock_alloc_low to allocate the
->> buffer, and I'll need some help from Mike and the powerpc maintainers
->> to figure out how that select where to allocate the buffer from, and
->> how we can move it to a lower address.  My gut feeling would be to try
->> to do what arm64 does and define a new ARCH_LOW_ADDRESS_LIMIT, preferably
->> without needing too much arch specific magic.
-> Presuming the problem is relevant for all CoreNet boards something like
-> this could work:
->   
-> diff --git a/arch/powerpc/include/asm/dma.h b/arch/powerpc/include/asm/dma.h
-> index 1b4f0254868f..7c6cfeeaff52 100644
-> --- a/arch/powerpc/include/asm/dma.h
-> +++ b/arch/powerpc/include/asm/dma.h
-> @@ -347,5 +347,11 @@ extern int isa_dma_bridge_buggy;
->   #define isa_dma_bridge_buggy	(0)
->   #endif
->   
-> +#ifdef CONFIG_CORENET_GENERIC
-> +extern phys_addr_t ppc_dma_phys_limit;
-> +#define ARCH_LOW_ADDRESS_LIMIT	(ppc_dma_phys_limit - 1)
-> +#endif
-> +
-> +
->   #endif /* __KERNEL__ */
->   #endif	/* _ASM_POWERPC_DMA_H */
-> diff --git a/arch/powerpc/platforms/85xx/common.c b/arch/powerpc/platforms/85xx/common.c
-> index fe0606439b5a..346b436b6d3f 100644
-> --- a/arch/powerpc/platforms/85xx/common.c
-> +++ b/arch/powerpc/platforms/85xx/common.c
-> @@ -126,3 +126,7 @@ void __init mpc85xx_qe_par_io_init(void)
->   	}
->   }
->   #endif
-> +
-> +#ifdef CONFIG_CORENET_GENERIC
-> +phys_addr_t ppc_dma_phys_limit = 0xffffffffUL;
-> +#endif
-> diff --git a/arch/powerpc/platforms/85xx/corenet_generic.c b/arch/powerpc/platforms/85xx/corenet_generic.c
-> index 7ee2c6628f64..673bcbdc7c75 100644
-> --- a/arch/powerpc/platforms/85xx/corenet_generic.c
-> +++ b/arch/powerpc/platforms/85xx/corenet_generic.c
-> @@ -64,7 +64,7 @@ void __init corenet_gen_setup_arch(void)
->   	mpc85xx_smp_init();
->   
->   	swiotlb_detect_4g();
-> -
-> +	ppc_dma_phys_limit = 0x0fffffffUL;
->   	pr_info("%s board\n", ppc_md.name);
->   
->   	mpc85xx_qe_init();
-Hello Mike,
-
-My PCI TV card works also with your patch! Before I had to add "#include 
-<asm/dma.h>" to the file "arch/powerpc/platforms/85xx/corenet_generic.c" 
-because of the following error:
-
-------
-
-   CC      arch/powerpc/platforms/85xx/corenet_generic.o
-   CC      ipc/util.o
-   CC      ipc/msgutil.o
-arch/powerpc/platforms/85xx/corenet_generic.c: In function 
-‘corenet_gen_setup_arch’:
-arch/powerpc/platforms/85xx/corenet_generic.c:77:2: error: 
-‘ppc_dma_phys_limit’ undeclared (first use in this function); did you 
-mean ‘cpu_to_phys_id’?
-   ppc_dma_phys_limit = 0x0fffffffUL;
-   ^~~~~~~~~~~~~~~~~~
-   cpu_to_phys_id
-arch/powerpc/platforms/85xx/corenet_generic.c:77:2: note: each 
-undeclared identifier is reported only once for each function it appears in
-scripts/Makefile.build:265: recipe for target 
-'arch/powerpc/platforms/85xx/corenet_generic.o' failed
-make[3]: *** [arch/powerpc/platforms/85xx/corenet_generic.o] Error 1
-scripts/Makefile.build:509: recipe for target 
-'arch/powerpc/platforms/85xx' failed
-make[2]: *** [arch/powerpc/platforms/85xx] Error 2
-scripts/Makefile.build:509: recipe for target 'arch/powerpc/platforms' 
-failed
-make[1]: *** [arch/powerpc/platforms] Error 2
-Makefile:1652: recipe for target 'arch/powerpc' failed
-make: *** [arch/powerpc] Error 2
-
-------
-
-After that I was able to compile the latest Git kernel with your patch.
-
-Thanks,
-Christian
+VGhhbmtzIGZvciB5b3VyIHJlcGx5LCBDaHJpc3RvcGhlLA0KDQpJIHdpbGwgdXNlICdzcGFyc2Un
+IHRvb2wgZm9yIGNoZWNraW5nIHVuc2FmZSBJTyBtZW1vcnkgYWNjZXNzLCBJIGd1ZXNzIGl0IGlz
+IHBvd2VyZnVsLg0KDQpUaGFua3MgYWdhaW4gIQ0KLS0tLS3pgq7ku7bljp/ku7YtLS0tLQ0K5Y+R
+5Lu25Lq6OiBDaHJpc3RvcGhlIExlcm95IFttYWlsdG86Y2hyaXN0b3BoZS5sZXJveUBjLXMuZnJd
+IA0K5Y+R6YCB5pe26Ze0OiAyMDE55bm0MTHmnIgyNuaXpSAxNjoxNg0K5pS25Lu25Lq6OiBXYW5n
+c2hhb2JvIChib2JvKSA8Ym9iby5zaGFvYm93YW5nQGh1YXdlaS5jb20+DQrmioTpgIE6IGxpbnV4
+LWFyY2hAdmdlci5rZXJuZWwub3JnOyBjaGVuZ2ppYW4gKEQpIDxjai5jaGVuZ2ppYW5AaHVhd2Vp
+LmNvbT47IExpYmluIChIdWF3ZWkpIDxodWF3ZWkubGliaW5AaHVhd2VpLmNvbT47IFhpZXhpdXFp
+IDx4aWV4aXVxaUBodWF3ZWkuY29tPjsgemhhbmd5aSAoRikgPHlpLnpoYW5nQGh1YXdlaS5jb20+
+OyBMaXV3ZW5saWFuZyAoQWJib3R0IExpdSkgPGxpdXdlbmxpYW5nQGh1YXdlaS5jb20+DQrkuLvp
+opg6IFJlOiDnrZTlpI06IOetlOWkjTogbG9vcCBuZXN0aW5nIGluIGFsaWdubWVudCBleGNlcHRp
+b24gYW5kIG1hY2hpbmUgY2hlY2sNCg0KDQoNCkxlIDE0LzExLzIwMTkgw6AgMDQ6NDYsIFdhbmdz
+aGFvYm8gKGJvYm8pIGEgw6ljcml0wqA6DQo+IEhpIENocmlzdG9waGUsDQo+IAlJdCB0ZXN0aWZ5
+cyBwcm9ibGVtIGZpeGVkIHdoZW4gd2UgdXNlIG1lbWNweV90b2lvKCkgaW5zdGVhZCBvZiBtZW1j
+cHkgDQo+IEluIG91ciBwcmFjdGljZSwgd2UgZm91bmQgZXZlcnl0aGluZyBpcyBvayBiZWZvcmUg
+dGhlIGNhY2hlX21lbWNweSANCj4gYmVjb21lcyBtZW1jcHkgaW4gdGhlIFBhdGNoIDBiMDVlMmQ2
+NzFjNDBjZmI1N2U2NmU0ZTQwMjMyMGQ2ZTA1NmIyZjggYWRvcHRlZCwgaXQgYWNjZWxlcmF0ZXMg
+dGhlIG1lbWNweSBidXQgaW50cm9kdWNlcyBpbXBsaWNpdCB0cm91YmxlLCBvdXIgcHJvZHVjdHMg
+Y29tbW9ubHkgdXNlZCBtZW1jcHkgZm9yIGNvbnRpbnVvdXMgbWF0YWluYW5jZSBmb3IgYSBsb25n
+IHRpbWUgLCBidXQgbm93IHRob3NlIGJlY29tZSBhIGJpZyBwcm9ibGVtIGZvciB1cyB0byBjaGVj
+ayB3aGVyZSB3ZSB1c2UgaXMgY29ycmVjdCBhbmQgd2hlcmUgaXMgd3JvbmcsIHdpdGggcmVzcGVj
+dCB0byBjYWNoYWJsZV9tZW1jcHkgYW5kIG1lbWNweV90b2lvLg0KPiAJU28sIEkgYWxzbyB3YW50
+IHRvIGFzaywNCj4gCWhvdyBjYW4gd2UgdHJ1c3RseSBhbmQgdW5pZmllZCBmaWxsIHRoZSBnYXAg
+cmVzdWx0ZWQgYnkgdGhvc2UgY2hhbmdlcyBpbiBtZW1jcHkgaW4gdmVyc2lvbiBtYW50YWluYW5j
+ZSwgaWYgeW91IGhhdmUgc29tZSB0aXBzIHBscyB0ZWxsIG1lLg0KPiAJVHRoYW5rcywgeW91ciBT
+aGFvYm8gV2FuZw0KDQpBbGwgYWNjZXNzZXMgdG8gSS9PIG1lbW9yeSBzaG91bGQgdXNlIGlvIGFj
+Y2Vzc29ycy4gRGlyZWN0IGFjY2VzcyB0byBpbyBtZW1vcnkgaXMgdW5zYWZlIGJ5IGRlZmluaXRp
+b24uDQoNCkluY29ycmVjdCBhY2Nlc3NlcyB0byBJL08gbWVtb3J5IGNhbiBiZSBkZXRlY3RlZCB3
+aXRoICdzcGFyc2UnIHRvb2wuIEZvciB0aGF0LCB5b3UganVzdCBoYXZlIHRvIGJ1aWxkIHRoZSBr
+ZXJuZWwgd2l0aCAnbWFrZSB2bWxpbnV4IEM9MicgYW5kIHlvdSdsbCBnZXQgbm90aWZpZWQgZm9y
+IHVuc2FmZSBhY2Nlc3NlcyB0byBJTyBtZW1vcnkuDQoNCkNocmlzdG9waGUNCg0KPiANCj4gLS0t
+LS3pgq7ku7bljp/ku7YtLS0tLQ0KPiDlj5Hku7bkuro6IENocmlzdG9waGUgTGVyb3kgW21haWx0
+bzpjaHJpc3RvcGhlLmxlcm95QGMtcy5mcl0NCj4g5Y+R6YCB5pe26Ze0OiAyMDE55bm0MTDmnIgz
+MeaXpSAxOToxMw0KPiDmlLbku7bkuro6IFdhbmdzaGFvYm8gKGJvYm8pIDxib2JvLnNoYW9ib3dh
+bmdAaHVhd2VpLmNvbT4NCj4g5oqE6YCBOiBjaGVuZ2ppYW4gKEQpIDxjai5jaGVuZ2ppYW5AaHVh
+d2VpLmNvbT47IExpYmluIChIdWF3ZWkpIA0KPiA8aHVhd2VpLmxpYmluQGh1YXdlaS5jb20+OyBY
+aWV4aXVxaSA8eGlleGl1cWlAaHVhd2VpLmNvbT47IHpoYW5neWkgKEYpIA0KPiA8eWkuemhhbmdA
+aHVhd2VpLmNvbT4NCj4g5Li76aKYOiBSZTog562U5aSNOiBsb29wIG5lc3RpbmcgaW4gYWxpZ25t
+ZW50IGV4Y2VwdGlvbiBhbmQgbWFjaGluZSBjaGVjaw0KPiANCj4gSGksDQo+IA0KPiBEaWQgeW91
+IHRyeSA/IERvZXMgaXQgd29yayA/DQo+IA0KPiBDaHJpc3RvcGhlDQo+IA0KPiBMZSAyOC8xMC8y
+MDE5IMOgIDA2OjU3LCBXYW5nc2hhb2JvIChib2JvKSBhIMOpY3JpdMKgOg0KPj4gSGksQ2hyaXN0
+b3BoZQ0KPj4NCj4+IFRoYW5rIHlvdSBmb3IgeW91ciBxdWljayByZXBseS4gSSB3aWxsIHRyeSB0
+byB1c2UgbWVtY3B5X3RvaW8oKSBpbnN0ZWFkIG9mIG1lbWNweSgpLg0KPj4NCj4+IC0tLS0t6YKu
+5Lu25Y6f5Lu2LS0tLS0NCj4+IOWPkeS7tuS6ujogQ2hyaXN0b3BoZSBMZXJveSBbbWFpbHRvOmNo
+cmlzdG9waGUubGVyb3lAYy1zLmZyXQ0KPj4g5Y+R6YCB5pe26Ze0OiAyMDE55bm0MTDmnIgyNuaX
+pSAxOToyMA0KPj4g5pS25Lu25Lq6OiBXYW5nc2hhb2JvIChib2JvKSA8Ym9iby5zaGFvYm93YW5n
+QGh1YXdlaS5jb20+DQo+PiDmioTpgIE6IGxpbnV4LWFyY2hAdmdlci5rZXJuZWwub3JnOyBhbGlz
+dGFpckBwb3BwbGUuaWQuYXU7IGNoZW5namlhbiAoRCkgDQo+PiA8Y2ouY2hlbmdqaWFuQGh1YXdl
+aS5jb20+OyBYaWV4aXVxaSA8eGlleGl1cWlAaHVhd2VpLmNvbT47IA0KPj4gbGludXgta2VybmVs
+QHZnZXIua2VybmVsLm9yZzsgb3NzQGJ1c2Vycm9yLm5ldDsgcGF1bHVzQHNhbWJhLm9yZzsgDQo+
+PiBMaWJpbiAoSHVhd2VpKSA8aHVhd2VpLmxpYmluQGh1YXdlaS5jb20+OyBhZ3VzdEBkZW54LmRl
+OyANCj4+IGxpbnV4cHBjLWRldkBsaXN0cy5vemxhYnMub3JnDQo+PiDkuLvpopg6IFJlOiBsb29w
+IG5lc3RpbmcgaW4gYWxpZ25tZW50IGV4Y2VwdGlvbiBhbmQgbWFjaGluZSBjaGVjaw0KPj4NCj4+
+IEhpLA0KPj4NCj4+IExlIDI2LzEwLzIwMTkgw6AgMDk6MjMsIFdhbmdzaGFvYm8gKGJvYm8pIGEg
+w6ljcml0wqA6DQo+Pj4gSGksDQo+Pj4NCj4+PiBJIGVuY291bnRlcmVkIGEgcHJvYmxlbSBhYm91
+dCBhIGxvb3AgbmVzdGluZyBvY2N1cnJlZCBpbiANCj4+PiBtYW51ZmFjdHVyaW5nIHRoZSBhbGln
+bm1lbnQgZXhjZXB0aW9uIGluIG1hY2hpbmUgY2hlY2ssIHRyaWdnZXIgYmFja2dyb3VuZCBpcyA6
+DQo+Pj4NCj4+PiBwcm9ibGVtOg0KPj4+DQo+Pj4gbWFjaGluZSBjaGVja291dCBvciBjcml0aWNh
+bCBpbnRlcnJ1cHQgLT7igKYtPmtib3hfd3JpdGVbZm9yIHJlY29yZGluZyANCj4+PiBsYXN0IHdv
+cmRzXSAtPiBtZW1jcHkoaXJyZW1hcF9hZGRyLCBzcmMsc2l6ZSk6X0dMT0JBTChtZW1jcHkp4oCm
+DQo+Pj4NCj4+PiB3aGVuIHdlIGVudGVyIG1lbWNweSxhIGNvbW1hbmQg4oCYZGNieiByMTEscjbi
+gJkgd2lsbCBjYXVzZSBhIGFsaWdubWVudCANCj4+PiBleGNlcHRpb24sIGluIHRoaXMgc2l0dWF0
+aW9uLHIxMSBsb2FkcyB0aGUgaW9yZW1hcCBhZGRyZXNzLHdoaWNoIA0KPj4+IGxlYWRzIHRvIHRo
+ZSBhbGlnbm1lbnQgZXhjZXB0aW9uLA0KPj4NCj4+IFlvdSBjYW4ndCB1c2UgbWVtY3B5KCkgb24g
+c29tZXRoaW5nIGVsc2UgdGhhbiBtZW1vcnkuDQo+Pg0KPj4gRm9yIGFuIGlvcmVtYXBwZWQgYXJl
+YSwgeW91IGhhdmUgdG8gdXNlIG1lbWNweV90b2lvKCkNCj4+DQo+PiBDaHJpc3RvcGhlDQo+Pg0K
+Pj4+DQo+Pj4gdGhlbiB0aGUgY29tbWFuZCBjYW4gbm90IGJlIHByb2Nlc3Mgc3VjY2Vzc2Z1bGx5
+LGFzIHdlIHN0aWxsIGluIA0KPj4+IG1hY2hpbmUgY2hlY2suYXQgdGhlIGVuZCAsaXQgdHJpZ2dl
+cnMgYSBuZXcgaXJxIG1hY2hpbmUgY2hlY2sgaW4gaXJxIA0KPj4+IGhhbmRsZXIgZnVuY3Rpb24s
+YSBsb29wIG5lc3RpbmcgYmVnaW5zLg0KPj4+DQo+Pj4gYW5hbHlzaXM6DQo+Pj4NCj4+PiBXZSBo
+YXZlIGFuYWx5c2VkIGEgbG90LGJ1dCBpdCBzdGlsbCBjYW4gbm90IGNvbWUgdG8gYSByZWFzb25h
+YmxlIA0KPj4+IGRlc2NyaXB0aW9uLGluIGNvbW1vbix0aGUgYWxpZ25tZW50IHRyaWdnZXJlZCBp
+biBtYWNoaW5lIGNoZWNrIA0KPj4+IGNvbnRleHQgY2FuIHN0aWxsIGJlIGNvbGxlY3RlZCBpbnRv
+IHRoZSBLYm94DQo+Pj4NCj4+PiBhZnRlciBhbGlnbm1lbnQgZXhjZXB0aW9uIGJlIGhhbmRsZWQg
+YnkgaGFuZGxlciBmdW5jdGlvbiwgYnV0IGhvdyANCj4+PiBkb2VzIHRoZSBtYWNoaW5lIGNoZWNr
+b3V0IGNhbiBiZSB0cmlnZ2VyZWQgaW4gdGhlIGhhbmRsZXIgZnVjbnRpb24gDQo+Pj4gZm9yIGFu
+eSBjYXVzZXM/IFdlIHByaW50IHJlbGV2YW50IHJlZ2lzdGVycw0KPj4+DQo+Pj4gYXMgZm9sbG93
+IHdoZW4gZmlyc3QgZW50ZXIgbWFjaGluZSBjaGVjayBhbmQgYWxpZ25tZW50IGV4Y2VwdGlvbiAN
+Cj4+PiBoYW5kbGVyDQo+Pj4gZnVuY3Rpb246DQo+Pj4NCj4+PiAgICDCoMKgwqDCoMKgwqDCoMKg
+IE1TUjoweDLCoMKgwqDCoMKgIE1TUjoweDANCj4+Pg0KPj4+ICAgIMKgwqDCoMKgwqDCoMKgwqAg
+U1JSMToweDLCoMKgwqDCoMKgIFNSUjE6MHgyMTAwMg0KPj4+DQo+Pj4gICAgwqDCoMKgwqDCoMKg
+wqDCoCBCdXQgdGhlIG1hbnVhbCBzYXlzIFNSUjEgc2hvdWxkIGJlIHNldCB0byBNU1IoMHgyKSx3
+aHkgDQo+Pj4gdGhhdCBoYXBwZW5lZCA/DQo+Pj4NCj4+PiAgICDCoMKgwqDCoMKgwqDCoMKgIFRo
+ZW4gYSBicmFuY2ggaW4gaGFuZGxlciBmdW5jdGlvbiBjb3B5IHRoZSBTUlIxIHRvIA0KPj4+IE1T
+Uix0aGlzIGVuYmxlIE1TUltNRV0gYW5kIE1TUltDRV0sc3lzdGVtIGNvbGxhcHNlcy4NCj4+Pg0K
+Pj4+IENvbmNsdXNpb246DQo+Pj4NCj4+PiAgICDCoMKgwqDCoMKgwqDCoMKgIDEpwqAgd2h5IHRo
+ZSBhbGlnbm1lbnQgZXhjZXB0aW9uIGNhbiBub3QgYmUgaGFuZGxlZCBpbiANCj4+PiBtYWNoaW5l
+IGNoZWNrID8NCj4+Pg0KPj4+ICAgIMKgwqDCoMKgwqDCoMKgwqAgMinCoCBiZXNpZGVzIG1lbWNw
+eSxhbnkgb3RoZXIgZnVuY3Rpb24gY2FuIGNhdXNlIHRoZSANCj4+PiBhbGlnbm1lbnQgZXhjZXB0
+aW9uID8NCj4+Pg0KPj4+IFdlIHN0aWxsIHJlY3VycmVudCBpdCwgdGhlIGxpbmUgYXMgZm9sbG93
+czoNCj4+Pg0KPj4+ICAgIMKgwqDCoMKgwqDCoMKgwqAgQ3B1IGRlYWQgbG9jay0+d2F0Y2ggbG9n
+LT50cmlnZ2VyDQo+Pj4gZmlxLT5rYm94X3dyaXRlLT5tZW1jcHktPmFsaWdubWVudCBleGNlcHRp
+b24tPnByaW50IGxhc3Qgd29yZHMuDQo+Pj4NCj4+PiAgICDCoMKgwqDCoMKgwqDCoMKgIGJ1dCBm
+b3IgdGhvc2UgcHJvYmxlbXMgYXMgYmVsb3csd2hhdCB0aGUga2JveCBwcmludGVkIGlzIGVtcHR5
+Lg0KPj4+DQo+Pj4gLS0tLS0tLS0tLS0tLS0tLS0ta2JveCByZXN0YXJ0OlvCoMKgIDEwLjE0NzU5
+NF0tLS0tLS0tLS0tLS0tLS0tDQo+Pj4NCj4+PiBrYm94IHZlcmlmeSBmcyBtYWdpYyBmYWlsDQo+
+Pj4NCj4+PiBrYm94IG1lbSBtYWJ5ZSBkZXN0cm95ZWQsIGZvcm1hdCBpdA0KPj4+DQo+Pj4ga2Jv
+eDogbG9hZCBPSw0KPj4+DQo+Pj4gbG9jay10YXNrOiBtYWpvclsyNDldIG1pbm9yWzBdDQo+Pj4N
+Cj4+PiAtLS0tLXN0YXJ0IHNob3dfZGVzdHJveWVkX2tib3hfbWVtX2hlYWQtLS0tDQo+Pj4NCj4+
+PiAwMDAwMDAwMDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4u
+Li4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDAxMDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAg
+MDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDAyMDogMDAwMDAwMDAg
+MDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAw
+MDAwMDAzMDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4u
+Li4uLi4uDQo+Pj4NCj4+PiAwMDAwMDA0MDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAw
+MDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDA1MDogMDAwMDAwMDAgMDAw
+MDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAw
+MDA2MDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4u
+Li4uDQo+Pj4NCj4+PiAwMDAwMDA3MDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAw
+MDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDA4MDogMDAwMDAwMDAgMDAwMDAw
+MDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4uDQo+Pj4NCj4+PiAwMDAwMDA5
+MDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDDCoCAuLi4uLi4uLi4uLi4uLi4u
+DQo+Pj4NCg==
