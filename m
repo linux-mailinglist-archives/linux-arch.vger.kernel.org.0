@@ -2,60 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A2810A943
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 05:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2913010A949
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 05:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbfK0EG2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Nov 2019 23:06:28 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38524 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726525AbfK0EG2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 23:06:28 -0500
-Received: by mail-pl1-f193.google.com with SMTP id o8so4791997pls.5
-        for <linux-arch@vger.kernel.org>; Tue, 26 Nov 2019 20:06:28 -0800 (PST)
+        id S1726526AbfK0EIR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Nov 2019 23:08:17 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:32839 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726525AbfK0EIR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 23:08:17 -0500
+Received: by mail-pl1-f196.google.com with SMTP id ay6so9168396plb.0
+        for <linux-arch@vger.kernel.org>; Tue, 26 Nov 2019 20:08:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version:content-transfer-encoding;
-        bh=nWCrWadR1SyGOjV0H+GqNGY+efisuZ1V6ZkGf7TSgNU=;
-        b=BK7jI1zdvguVZjIAT90XaFG3dEFHndJTsbUxZz0leQCrmjtkDUEpqvUQYxlSVxC2Y3
-         TKECbu1XcDLLfli1zAAJUYFLiubUwQip12mTH6Jz0K1HgqsXn+HBu63Kd3gUgZ3z6+14
-         3qML+w0naA7qM7upZrjDTrMReHJk8PUvf1u5iKuOjpsE0rG4iv7e30MZ6jRiv2Va3150
-         yYO/wZOVdVC7oouqZlvXISEUw4UaB04qk26OMpgpdyT+LjVEu3WBjWXEhkE21QADIspx
-         +WJdjWknIABGZHcbU9xTBgVw3S06EaBw+dnkm6PKPNCIX8fYqky5Ifj5CnuIWbfqcbXr
-         3VBQ==
+        bh=ma2Ny4OJtmFo45i8pZLjdZV3vdlSDPefHNP0fIdM2y0=;
+        b=UQ1hObs8DfToT1ZlbJlkV9Q0mQbIGVxv5RMF6vHfQsXXWLiBxbroMcTDpr7YGf25uj
+         fCbvhb6omsAnIlcsr+dkQU+RFCZNatP8AnI2SBq4HfhsNY+p2gmSzxxKytcFqHcODdg6
+         aCsIwmg17kPvrtsO6H33QaVRCWKoYNRafyBDnG1D5FH/TWHPHH3v4m/YE4Tyzo9uVdZe
+         qMartVO6Y9IANSqg/2SKU14PuPv8gknFqsawuXShBKYq97bXOTxrOSoyMEfJdPWkEWrz
+         33UOP1FBMPbR11vAMa/mWPx4WJ7xS7NgO8orpqkbTKOkM3bV0BWDYX3j27dP6piKeb1J
+         lepg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=nWCrWadR1SyGOjV0H+GqNGY+efisuZ1V6ZkGf7TSgNU=;
-        b=DiO8FVdgDfZJXQFFhxlfdM9gAgivF/y4bHB812VId4/z3/IMs2DsQ6tgmIeSdlEScb
-         TePPKDvRYRp7oF7u6b0N6FZrC3APPab/9YCmtMxbcVEgpJfmFPHHL45Elh1HyztiLXIS
-         O2WlwjgPZU3nCAEVpOQRmK5FMZ+xDAkCbbAUTJsJqbkP3o8ncbzJ1Yg1h4c+A8e5Qpfr
-         CbOkH5ohuY64R3Q10qkWf0eNOXH9MSFDiGY9u2ZbAM64widgWmRH50YCEZoRNd4Pj8TS
-         VaHROuWBgMjtnldQbwIL6a3SiRmWu2t6iaI8mWSJQpZsT6ONSmDWIqaQOZw8OBUFhNeI
-         zUNw==
-X-Gm-Message-State: APjAAAXKpLSJohacfIL8kbnc9o/XbsnGkkvas/KXWuTw+F/BuxAFOIKy
-        a8MsH11cwXYLKi+xylxLARsiqo9mRS0=
-X-Google-Smtp-Source: APXvYqw/oDtif706HC6kg2dNtThDgIUg5At8+AEcw8NUMkR0naS+2ezlpZxeKJc59UJ9FRuHdT/SaQ==
-X-Received: by 2002:a17:90a:d352:: with SMTP id i18mr3457008pjx.42.1574827587380;
-        Tue, 26 Nov 2019 20:06:27 -0800 (PST)
+        bh=ma2Ny4OJtmFo45i8pZLjdZV3vdlSDPefHNP0fIdM2y0=;
+        b=IxlsRcdU5UnSJriCHerqVcZleE3M82BJvL0RG4ToCqNMpL1oTUwJZN14Z9Gm4ScKAE
+         UCEdusEBUcoNhr2cZa/E5HFxSTVLA6PYIuK7HGzSU4mx+RMTsLJ15pXlr7GiU9MORO7U
+         JC9JTJsdXRhH1tqmQJ1wxUCZMNU1p56rXi0fRSRJ4xwOdLA8zdk8Ju9JMMOknf91t/bV
+         qnECtOEWwnZFsjYSh1b3vTCYyP+nX47vbLKpEyWHvm2eLoYWMddcji+Etmc6+dtjegSA
+         gJSVrdmkH6/h6S1I/4+5ZOJppQtWnMHxqfFgsuj9XwGF7WoU3F8W2f/wAN+0ud5epHoO
+         rryQ==
+X-Gm-Message-State: APjAAAVTebugSthqd2JU7P/l4FkJJRhdFQBE3PUbyzXL3fJ91cInsxhm
+        ACGAEovcVpSD/4K1CE7kixk=
+X-Google-Smtp-Source: APXvYqy/+IWsMA7tqZO3lWfWjX2Qqa9evQQmu/qKEeBRofHytkcbCPGWP3ixsiVTs4fQFn7O7pyycA==
+X-Received: by 2002:a17:902:6bc5:: with SMTP id m5mr1872960plt.185.1574827696049;
+        Tue, 26 Nov 2019 20:08:16 -0800 (PST)
 Received: from earth-mac.local.gmail.com ([202.214.86.179])
-        by smtp.gmail.com with ESMTPSA id f10sm13936893pfd.28.2019.11.26.20.06.24
+        by smtp.gmail.com with ESMTPSA id g192sm14075274pgc.3.2019.11.26.20.08.13
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 26 Nov 2019 20:06:26 -0800 (PST)
-Date:   Wed, 27 Nov 2019 13:06:22 +0900
-Message-ID: <m2y2w2q7y9.wl-thehajime@gmail.com>
+        Tue, 26 Nov 2019 20:08:15 -0800 (PST)
+Date:   Wed, 27 Nov 2019 13:08:11 +0900
+Message-ID: <m2wobmq7v8.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
-To:     anton.ivanov@kot-begemot.co.uk
+To:     richard@nod.at
 Cc:     tavi.purdila@gmail.com, johannes@sipsolutions.net,
-        linux-arch@vger.kernel.org, cem@freebsd.org, richard@nod.at,
+        linux-arch@vger.kernel.org, cem@freebsd.org,
         linux-um@lists.infradead.org, retrage01@gmail.com,
         linux-kernel-library@freelists.org, pscollins@google.com,
-        sigmaepsilon92@gmail.com, liuyuan@google.com
+        sigmaepsilon92@gmail.com, liuyuan@google.com,
+        anton.ivanov@cambridgegreys.com
 Subject: Re: [RFC v2 17/37] lkl tools: host lib: virtio devices
-In-Reply-To: <ce1a96d4-3d5e-32be-f493-3522fc56a25b@kot-begemot.co.uk>
-References: <cover.1573179553.git.thehajime@gmail.com>  <1531c5f16a00b608635c9a62fa3951807075f950.1573179553.git.thehajime@gmail.com>   <CAFLxGvzCwCLbLMhcF6ZJ2afeo7PSd8xLQrU9hRH6YVaMakBSyw@mail.gmail.com>    <de90b04151bafee083727c9769833932788cf428.camel@sipsolutions.net>       <1662825264.98055.1574758225905.JavaMail.zimbra@nod.at> <4ebb14dc67ccb70543617ce1f7066f3f27cd11a8.camel@sipsolutions.net>       <243342257.98153.1574762974057.JavaMail.zimbra@nod.at>  <98acf77a7c6f6cba7f76c12a850ac2929b9e5a48.camel@sipsolutions.net>       <CAMoF9u3LRC_NaVJzmKPc0+XBxhAqdhnr4-ZzY_ypwQEzUz78yQ@mail.gmail.com>    <ce1a96d4-3d5e-32be-f493-3522fc56a25b@kot-begemot.co.uk>
+In-Reply-To: <293078386.98317.1574784295793.JavaMail.zimbra@nod.at>
+References: <cover.1573179553.git.thehajime@gmail.com>  <CAFLxGvzCwCLbLMhcF6ZJ2afeo7PSd8xLQrU9hRH6YVaMakBSyw@mail.gmail.com>    <de90b04151bafee083727c9769833932788cf428.camel@sipsolutions.net>       <1662825264.98055.1574758225905.JavaMail.zimbra@nod.at> <4ebb14dc67ccb70543617ce1f7066f3f27cd11a8.camel@sipsolutions.net>       <243342257.98153.1574762974057.JavaMail.zimbra@nod.at>  <98acf77a7c6f6cba7f76c12a850ac2929b9e5a48.camel@sipsolutions.net>       <CAMoF9u3LRC_NaVJzmKPc0+XBxhAqdhnr4-ZzY_ypwQEzUz78yQ@mail.gmail.com>    <293078386.98317.1574784295793.JavaMail.zimbra@nod.at>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0
  (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
@@ -67,91 +68,72 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Tue, 26 Nov 2019 19:49:48 +0900,
-Anton Ivanov wrote:
->=20
->=20
->=20
-> On 26/11/2019 10:42, Octavian Purdila wrote:
-> > On Tue, Nov 26, 2019 at 12:16 PM Johannes Berg
-> > <johannes@sipsolutions.net> wrote:
-> >>=20
+Hello,
+
+On Wed, 27 Nov 2019 01:04:55 +0900,
+Richard Weinberger wrote:
+
 > >> On Tue, 2019-11-26 at 11:09 +0100, Richard Weinberger wrote:
-> >>> ----- Urspr=FCngliche Mail -----
-> >>>>> My point is that UML and LKL should try to do use the same concept/=
-code
-> >>>>> regarding virtio. At the end of day both use virtual devices which =
-use
-> >>>>> facilities from the host.
-> >>>>> If this is really not possible it needs a good explanation.
-> >>>>=20
-> >>>> I think it isn't possible, unless you use vhost-user over a unix dom=
-ain
-> >>>> socket internally to talk between the kernel (virtio_uml) and hyperv=
-isor
-> >>>> (device) components.
-> >>>>=20
-> >>>> In virtio_uml, the device implementation is assumed to be a separate
-> >>>> process with a vhost-user connection. Here in LKL, the virtio device=
- is
-> >>>> part of the "hypervisor", i.e. in the same process.
-> >>>=20
-> >>> Exactly, currently UML and LKL solve same things differently, but do =
-we need to?
-> >>=20
+> >> > ----- Urspr=FCngliche Mail -----
+> >> > > > My point is that UML and LKL should try to do use the same conce=
+pt/code
+> >> > > > regarding virtio. At the end of day both use virtual devices whi=
+ch use
+> >> > > > facilities from the host.
+> >> > > > If this is really not possible it needs a good explanation.
+> >> > >
+> >> > > I think it isn't possible, unless you use vhost-user over a unix d=
+omain
+> >> > > socket internally to talk between the kernel (virtio_uml) and hype=
+rvisor
+> >> > > (device) components.
+> >> > >
+> >> > > In virtio_uml, the device implementation is assumed to be a separa=
+te
+> >> > > process with a vhost-user connection. Here in LKL, the virtio devi=
+ce is
+> >> > > part of the "hypervisor", i.e. in the same process.
+> >> >
+> >> > Exactly, currently UML and LKL solve same things differently, but do=
+ we need to?
+> >>
 > >> It's not the same thing though :-)
-> >>=20
+> >>
 > >> UML right now doesn't have or support virtio devices in the built-in
 > >> hypervisor, what we wanted to use virtio for was explicitly for the
 > >> vhost-user devices.
-> >>=20
+> >>
 > >> LKL clearly wants to have device implementations in the hypervisor,
 > >> perhaps for networking or console etc.? That _might_ be useful since it
 > >> makes the device implementation more general, unlike the UML approach
 > >> where all devices come with a kernel- and user-side and are special
 > >> drivers in the kernel, vs. general virtio drivers.
-> >>=20
+> >>
 > >=20
 > > That is correct. Initially we used the same UML model, with dedicated
 > > drivers for LKL, and later switched to using the built-in virtio
 > > drivers (so far for network and block devices).
-> >=20
-> >> Now, arguably, since UML has all these already a combined UML/LKL
-> >> doesn't actually *need* any virtio devices, since all (or at least mos=
-t)
-> >> of the things that could be covered by virtio today are already covered
-> >> by UML devices (block, net, console, random).
-> >>=20
-> >> I'd probably say then that this can be removed from an initial "minimum
-> >> viable product" of LKL, since once merged with UML you get the devices
-> >> from that. Later, we could decide that UML devices actually are better
-> >> done as virtio, and support something like this.
-> >>=20
-> >=20
-> > I agree, I think it make sense to drop these since the problem of
-> > dedicated vs generic / virtio drivers are orthogonal with regard to
-> > UML and LKL unification and can later be worked on.
 >=20
-> This brings us back to the interrupt controller as noted by Richard earli=
-er.
->=20
-> UML devices are heavily dependent on the file io as an IRQ trigger
-> paradigm and they need an interrupt controller which has an IO event
-> feed into it. I did not see that in LKL on first read.
+> Can you please point out a little further why UML's net or block drivers
+> are not usable for LKL?
 
-Indeed, the current interrupt model in LKL is not directly associated
-with file IO events delivered by epoll family as UML does.  Instead,
-calling lkl_trigger_irq() at places will trigger an interrupt in the
-LKL case so, we need to adapt somehow if LKL uses UML devices.
+I think we can do it (but need to check).
 
-> So as a first step we should get it to work with existing UML IRQ
-> controller and whatever incremental patches are needed on top of that.
+LKL may use UML's drivers, and UML can also use LKL's devices/drivers
+(as my 36/37 and 37/37 patches do, though the patches has no careful
+consideration on IRQ handling).
 
-I understand and agree on your comments by all of you.
+> What is missing?
 
-If implementing LKL with current/existing UML devices is the right
-direction, I would go and try to test this approach to verify if this
-is doable.
+As Anton mentioned, the IRQ handling needs to be considered in LKL, at
+least. I need to check but there might be other factors.
+
+> Performance numbers would be also nice to have.
+> Anton did great work on improving UML's drivers.
+
+Performance improve techniques (bulk operations, offload, etc) are
+also applicable to both.  As UML can do, LKL can TSO/csum offload with
+configured virtio-net devices.
+
 
 -- Hajime
-
