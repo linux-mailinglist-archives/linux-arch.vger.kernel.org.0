@@ -2,75 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BE410B4DC
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 18:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0200F10B93A
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 21:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbfK0Rxy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Nov 2019 12:53:54 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:40059 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726990AbfK0Rxx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Nov 2019 12:53:53 -0500
-Received: by mail-qk1-f193.google.com with SMTP id a137so18480074qkc.7;
-        Wed, 27 Nov 2019 09:53:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mvcvqAyxnSZryj2Pg3WEqsLIQ5VR9B7EJrbepjuqado=;
-        b=bmz680+k1+q1KN+2jAAYJrY2Z0axaXAwr4PHnqhEhtEQtW9x1yjI9wAepxZqXefIaW
-         AHQ3Jh1TlsWYOf3BuCI4iaDl0mIOI28Mx66c+xGlP9yHiIjNC/xzmy+UhE3n71I8CJvJ
-         kGyZDAxoXgDrFtoVrnN5+3YKclRPPYWitXNzMKmDW5J7kjA4nIPXaDVSvkXT2CPvxYeF
-         Tvkzh/j5XXtbuQUABP4AH4z99mrLDd1MOpIUTOBSkQgfFfO643mtzVwP5E5TLezkiBh3
-         aI27zxJH599psJnmeyVgcfsuMmZqEGM/p5238PHnKnb2GcKPc2kOadmgKuth4Mu6ZDlh
-         UAFg==
-X-Gm-Message-State: APjAAAXzi3J9pC2RdmJYcs98xriax3MlFBAjQ7PmR1oNsBh/WqIMnafR
-        8GFFpaCVicbbvoByuNLnt4hOWogAUryAfg==
-X-Google-Smtp-Source: APXvYqx1ydnTAqF+INfT6B21G3Q/vw6SwwyLIWPUXlaPvZVcicUQJpS82K31+x9H8FIqsZUPgreTGw==
-X-Received: by 2002:a37:a947:: with SMTP id s68mr5823051qke.168.1574877232909;
-        Wed, 27 Nov 2019 09:53:52 -0800 (PST)
-Received: from dennisz-mbp.dhcp.thefacebook.com ([2620:10d:c091:500::3:5762])
-        by smtp.gmail.com with ESMTPSA id l186sm7208107qkc.58.2019.11.27.09.53.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2019 09:53:52 -0800 (PST)
-Date:   Wed, 27 Nov 2019 12:53:50 -0500
-From:   Dennis Zhou <dennis@kernel.org>
-To:     Christopher Lameter <cl@linux.com>
-Cc:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Nicholas Piggin <npiggin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] fix __percpu annotation in asm-generic
-Message-ID: <20191127175350.GA52308@dennisz-mbp.dhcp.thefacebook.com>
-References: <20191126200619.63348-1-luc.vanoostenryck@gmail.com>
- <alpine.DEB.2.21.1911271553560.16980@www.lameter.com>
+        id S1730454AbfK0UvU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Nov 2019 15:51:20 -0500
+Received: from smtprelay0074.hostedemail.com ([216.40.44.74]:46189 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730453AbfK0UvU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 27 Nov 2019 15:51:20 -0500
+X-Greylist: delayed 518 seconds by postgrey-1.27 at vger.kernel.org; Wed, 27 Nov 2019 15:51:19 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave06.hostedemail.com (Postfix) with ESMTP id 3D8BD812268B
+        for <linux-arch@vger.kernel.org>; Wed, 27 Nov 2019 20:42:42 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 1F9C6837F24D;
+        Wed, 27 Nov 2019 20:42:40 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::,RULES_HIT:41:355:379:599:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3867:3868:3870:3874:4321:5007:10004:10400:10848:11026:11658:11914:12294:12296:12297:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21627:30029:30054:30070:30075:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: screw31_34379b223a41f
+X-Filterd-Recvd-Size: 1759
+Received: from XPS-9350.home (unknown [47.151.135.224])
+        (Authenticated sender: joe@perches.com)
+        by omf12.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 27 Nov 2019 20:42:38 +0000 (UTC)
+Message-ID: <80168e5bebedeb64e999ed11d8479846270bd3d7.camel@perches.com>
+Subject: Re: [PATCH 04/16] dyndbg: rename __verbose section to __dyndbg
+From:   Joe Perches <joe@perches.com>
+To:     Jim Cromie <jim.cromie@gmail.com>, jbaron@akamai.com,
+        linux-kernel@vger.kernel.org
+Cc:     linux@rasmusvillemoes.dk, greg@kroah.com,
+        Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
+        linux-arch@vger.kernel.org
+Date:   Wed, 27 Nov 2019 12:42:12 -0800
+In-Reply-To: <20191127175051.1351346-1-jim.cromie@gmail.com>
+References: <20191127175051.1351346-1-jim.cromie@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.1911271553560.16980@www.lameter.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 03:55:19PM +0000, Christopher Lameter wrote:
-> On Tue, 26 Nov 2019, Luc Van Oostenryck wrote:
-> 
-> > So, fix the declaration of the 'pcp' variable to its correct type:
-> > the plain (non-percpu) pointer corresponding to its address.
-> > Same for raw_cpu_generic_xchg(), raw_cpu_generic_cmpxchg() &
-> > raw_cpu_generic_cmpxchg_double().
-> 
-> Acked-by: Christoph Lameter <cl@linux.com>
-> 
-> Maybe a better fix is to come up with a typeof_strip_percu() or so
-> macro for all the places where this needs to be done?
+On Wed, 2019-11-27 at 10:50 -0700, Jim Cromie wrote:
+> dyndbg populates its callsite info into __verbose section, change that
+> to a more specific and descriptive name, __dyndbg.
+[]
+> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+[]
+> @@ -1040,7 +1040,7 @@ static int __init dynamic_debug_init(void)
+>  	ddebug_init_success = 1;
+>  	vpr_info("%d modules, %d entries and %d bytes in ddebug tables, %d bytes in (readonly) verbose section\n",
 
-I like the idea of typeof_strip_percpu(). Luc do you mind spinning v2
-with a macro for this instead?
+This format should also change verbose to dyndbg
+Maybe the ddebug word too
 
-Thanks,
-Dennis
+>  		 modct, entries, (int)(modct * sizeof(struct ddebug_table)),
+> -		 verbose_bytes + (int)(__stop___verbose - __start___verbose));
+> +		 verbose_bytes + (int)(__stop___dyndbg - __start___dyndbg));
+>  
+>  	/* apply ddebug_query boot param, dont unload tables on err */
+>  	if (ddebug_setup_string[0] != '\0') {
+
