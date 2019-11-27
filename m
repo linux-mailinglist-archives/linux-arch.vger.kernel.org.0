@@ -2,144 +2,175 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2862210B3F1
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 17:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726EF10B4C6
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 18:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbfK0Q4a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Nov 2019 11:56:30 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:50890 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726984AbfK0Q4a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Nov 2019 11:56:30 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1ia0c9-0007Qs-8Q; Wed, 27 Nov 2019 09:56:29 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1ia0c8-0000wP-EY; Wed, 27 Nov 2019 09:56:29 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-api@vger.kernel.org>
-Date:   Wed, 27 Nov 2019 10:55:52 -0600
-Message-ID: <87r21tuulj.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1727218AbfK0Ru4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Nov 2019 12:50:56 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:35663 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726947AbfK0Ruz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Nov 2019 12:50:55 -0500
+Received: by mail-io1-f68.google.com with SMTP id x21so25865212ior.2;
+        Wed, 27 Nov 2019 09:50:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0e87BZGmWkpLZLDiE87VOkYIktS/iX8I8E4fJx5a9NY=;
+        b=BwJRO9m5excznuQCr5fYQ2w+2qS1FNgdVkq1dGMLZlGYvibpEqO3sZwyR5frNg6dJk
+         biR9BA/xygxtM9WdMnI4iNy3hR/f6ejrSDAFuXgnnOTklYvRuRfQEo5IkR60xCkVcEda
+         lzs/zzRrZlShaaryRYw1thLDnUMmHz0Bczjggnbu+Qgh2bd+MkmcIW2QIDJBobEKNliV
+         rg+oVTfS7fMeiMXq0LkS0r3OCt05u5i35t9AiaS4CloAZXJiIijsY884Zq6Z1ywjvOBG
+         75oyGMIHSEGJgKFmpG9b9tdvb7zg/R//19lOc/Od4X6527zqlUFCEJ/iPIn96llggtsf
+         CZxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0e87BZGmWkpLZLDiE87VOkYIktS/iX8I8E4fJx5a9NY=;
+        b=NZQ4ix33EnEbOCgkmwwkEdr/Z5GqfjIJijOhTOpPKAQ1VW8Zlr7arvPaldb5Ne1Ytu
+         f6d9BpUJYL+aXPlqWMvfQ5T0k7YwzX2hfMrIruM89FyEq6dYuelhVvbrvryiNR2xfV+b
+         F+bAc45JZ1YJlT8AgDygjsULnPcOSsNIp6keI9CQUKHYgaqx+FYxDb+PGen+VE2rqKDC
+         MCgPfRqj49FdH4lvdj4bWYy58cc/W3QlPnPFcwacUUDIlzjRAbYaAcFtIPWdDq7qbq5B
+         A6UrLBeSasZWQ7gc46fHi7pi1bbNf1ZSRnksPN1cstQiKNFAhssPhWDnFVSV1QoaIb2k
+         lJAQ==
+X-Gm-Message-State: APjAAAXlh6CRtfgEUZoWnTzpCagv6ciYbxQBnof9hQtFOHwD5/D38s30
+        +xQQNmx3DDY27XvcjCqWxj8=
+X-Google-Smtp-Source: APXvYqxfuDkQk7T2rw14N8PYKNtZLqWGSWC1fRZggHXkx/NdeUswPZbrHxNG/kNiLN3HDYPMsdhygg==
+X-Received: by 2002:a02:95c3:: with SMTP id b61mr5965190jai.21.1574877054516;
+        Wed, 27 Nov 2019 09:50:54 -0800 (PST)
+Received: from localhost.localdomain (c-24-9-77-57.hsd1.co.comcast.net. [24.9.77.57])
+        by smtp.googlemail.com with ESMTPSA id r16sm4588493ilk.63.2019.11.27.09.50.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Nov 2019 09:50:53 -0800 (PST)
+From:   Jim Cromie <jim.cromie@gmail.com>
+To:     jbaron@akamai.com, linux-kernel@vger.kernel.org
+Cc:     linux@rasmusvillemoes.dk, greg@kroah.com,
+        Jim Cromie <jim.cromie@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
+        linux-arch@vger.kernel.org
+Subject: [PATCH 04/16] dyndbg: rename __verbose section to __dyndbg
+Date:   Wed, 27 Nov 2019 10:50:50 -0700
+Message-Id: <20191127175051.1351346-1-jim.cromie@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1ia0c8-0000wP-EY;;;mid=<87r21tuulj.fsf@x220.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18CMr/x/AMiUx+XsHUs26QfjdcxgfVX5yk=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,XMSexyCombo_01,XMSubMetaSxObfu_03,XMSubMetaSx_00,
-        XM_Body_Dirty_Words autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4799]
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  1.2 XMSubMetaSxObfu_03 Obfuscated Sexy Noun-People
-        *  1.0 XMSubMetaSx_00 1+ Sexy Words
-        *  0.5 XM_Body_Dirty_Words Contains a dirty word
-        *  1.0 XMSexyCombo_01 Sexy words in both body/subject
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 402 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 3.6 (0.9%), b_tie_ro: 2.4 (0.6%), parse: 1.38
-        (0.3%), extract_message_metadata: 7 (1.8%), get_uri_detail_list: 4.1
-        (1.0%), tests_pri_-1000: 5 (1.4%), tests_pri_-950: 2.0 (0.5%),
-        tests_pri_-900: 1.61 (0.4%), tests_pri_-90: 29 (7.3%), check_bayes: 27
-        (6.7%), b_tokenize: 11 (2.8%), b_tok_get_all: 7 (1.8%), b_comp_prob:
-        3.1 (0.8%), b_tok_touch_all: 3.0 (0.7%), b_finish: 0.76 (0.2%),
-        tests_pri_0: 324 (80.7%), check_dkim_signature: 0.70 (0.2%),
-        check_dkim_adsp: 2.5 (0.6%), poll_dns_idle: 0.46 (0.1%), tests_pri_10:
-        3.3 (0.8%), tests_pri_500: 11 (2.7%), rewrite_mail: 0.00 (0.0%)
-Subject: [GIT PULL] sysctl: Remove the sysctl system call
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+dyndbg populates its callsite info into __verbose section, change that
+to a more specific and descriptive name, __dyndbg.
 
-Linus,
+Also, per checkpatch:
+  simplify __attribute(..) to __section(__dyndbg) declaration.
 
-Please pull the for-linus branch from the git tree:
+and 1 spelling fix
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git for-linus
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+ include/asm-generic/vmlinux.lds.h |  6 +++---
+ include/linux/dynamic_debug.h     |  4 ++--
+ kernel/module.c                   |  2 +-
+ lib/dynamic_debug.c               | 12 ++++++------
+ 4 files changed, 12 insertions(+), 12 deletions(-)
 
-   HEAD: 61a47c1ad3a4dc6882f01ebdc88138ac62d0df03 sysctl: Remove the sysctl system call
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index dae64600ccbf..82694efe3a83 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -285,9 +285,9 @@
+ 	*(__tracepoints)						\
+ 	/* implement dynamic printk debug */				\
+ 	. = ALIGN(8);							\
+-	__start___verbose = .;						\
+-	KEEP(*(__verbose))                                              \
+-	__stop___verbose = .;						\
++	__start___dyndbg = .;						\
++	KEEP(*(__dyndbg))						\
++	__stop___dyndbg = .;						\
+ 	LIKELY_PROFILE()		       				\
+ 	BRANCH_PROFILE()						\
+ 	TRACE_PRINTKS()							\
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index 4cf02ecd67de..802480ea8708 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -80,7 +80,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 
+ #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)		\
+ 	static struct _ddebug  __aligned(8)			\
+-	__attribute__((section("__verbose"))) name = {		\
++	__section(__dyndbg) name = {				\
+ 		.modname = KBUILD_MODNAME,			\
+ 		.function = __func__,				\
+ 		.filename = __FILE__,				\
+@@ -133,7 +133,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 
+ /*
+  * "Factory macro" for generating a call to func, guarded by a
+- * DYNAMIC_DEBUG_BRANCH. The dynamic debug decriptor will be
++ * DYNAMIC_DEBUG_BRANCH. The dynamic debug descriptor will be
+  * initialized using the fmt argument. The function will be called with
+  * the address of the descriptor as first argument, followed by all
+  * the varargs. Note that fmt is repeated in invocations of this
+diff --git a/kernel/module.c b/kernel/module.c
+index ff2d7359a418..a9c052cc30c5 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -3237,7 +3237,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 	if (section_addr(info, "__obsparm"))
+ 		pr_warn("%s: Ignoring obsolete parameters\n", mod->name);
+ 
+-	info->debug = section_objs(info, "__verbose",
++	info->debug = section_objs(info, "__dyndbg",
+ 				   sizeof(*info->debug), &info->num_debug);
+ 
+ 	return 0;
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index c86c97154657..0a4588fe342e 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -39,8 +39,8 @@
+ 
+ #include <rdma/ib_verbs.h>
+ 
+-extern struct _ddebug __start___verbose[];
+-extern struct _ddebug __stop___verbose[];
++extern struct _ddebug __start___dyndbg[];
++extern struct _ddebug __stop___dyndbg[];
+ 
+ struct ddebug_table {
+ 	struct list_head link;
+@@ -1010,14 +1010,14 @@ static int __init dynamic_debug_init(void)
+ 	int n = 0, entries = 0, modct = 0;
+ 	int verbose_bytes = 0;
+ 
+-	if (__start___verbose == __stop___verbose) {
++	if (__start___dyndbg == __stop___dyndbg) {
+ 		pr_warn("_ddebug table is empty in a CONFIG_DYNAMIC_DEBUG build\n");
+ 		return 1;
+ 	}
+-	iter = __start___verbose;
++	iter = __start___dyndbg;
+ 	modname = iter->modname;
+ 	iter_start = iter;
+-	for (; iter < __stop___verbose; iter++) {
++	for (; iter < __stop___dyndbg; iter++) {
+ 		entries++;
+ 		verbose_bytes += strlen(iter->modname) + strlen(iter->function)
+ 			+ strlen(iter->filename) + strlen(iter->format);
+@@ -1040,7 +1040,7 @@ static int __init dynamic_debug_init(void)
+ 	ddebug_init_success = 1;
+ 	vpr_info("%d modules, %d entries and %d bytes in ddebug tables, %d bytes in (readonly) verbose section\n",
+ 		 modct, entries, (int)(modct * sizeof(struct ddebug_table)),
+-		 verbose_bytes + (int)(__stop___verbose - __start___verbose));
++		 verbose_bytes + (int)(__stop___dyndbg - __start___dyndbg));
+ 
+ 	/* apply ddebug_query boot param, dont unload tables on err */
+ 	if (ddebug_setup_string[0] != '\0') {
+-- 
+2.23.0
 
-As far as I can tell we have reached the point where no one enables the
-sysctl system call anymore.  It still is enabled in a few defconfigs
-but they are mostly the rarely used one and in asking people about
-that it was more cut & paste enabled than anything else.
-
-This is single commit that just deletes code.  Leaving just enough code
-so that the deprecated sysctl warning continues to be printed.  If my
-analysis turns out to be wrong and someone actually cares it will be
-easy to revert this commit and have the system call again.
-
-There was one new xtensa defconfig in linux-next that enabled the system
-call this cycle and when asked about it the maintainer of the code
-replied that it was not enabled on purpose.  As of today's linux-next
-tree that defconfig no longer enables the system call.
-
-I have recently amended the commit to include the review status.
-
-Some of the mailing list choked on my patch posting, I don't know why
-but here is a link to part of the review that made it to linux-kernel.
-https://lore.kernel.org/lkml/201910011140.EA0181F13@keescook/
-
-What we saw in the review discussion was that if we go a step farther
-than my patch and mess with uapi headers there are pieces of code that
-won't compile, but nothing minds the system call actually disappearing
-from the kernel.
-
-Eric W. Biederman (1):
-      sysctl: Remove the sysctl system call
-
- arch/arc/configs/nps_defconfig              |    1 -
- arch/arc/configs/tb10x_defconfig            |    1 -
- arch/arm/configs/axm55xx_defconfig          |    1 -
- arch/arm/configs/keystone_defconfig         |    1 -
- arch/arm/configs/lpc32xx_defconfig          |    1 -
- arch/arm/configs/moxart_defconfig           |    1 -
- arch/arm/configs/qcom_defconfig             |    1 -
- arch/arm/configs/zx_defconfig               |    1 -
- arch/m68k/configs/m5475evb_defconfig        |    1 -
- arch/mips/configs/ci20_defconfig            |    1 -
- arch/mips/configs/loongson3_defconfig       |    1 -
- arch/mips/configs/malta_qemu_32r6_defconfig |    1 -
- arch/mips/configs/maltaaprp_defconfig       |    1 -
- arch/mips/configs/maltasmvp_defconfig       |    1 -
- arch/mips/configs/maltasmvp_eva_defconfig   |    1 -
- arch/mips/configs/maltaup_defconfig         |    1 -
- arch/mips/configs/omega2p_defconfig         |    1 -
- arch/mips/configs/qi_lb60_defconfig         |    1 -
- arch/mips/configs/vocore2_defconfig         |    1 -
- arch/nios2/configs/10m50_defconfig          |    1 -
- arch/nios2/configs/3c120_defconfig          |    1 -
- arch/parisc/configs/c8000_defconfig         |    1 -
- arch/parisc/configs/generic-32bit_defconfig |    1 -
- arch/powerpc/configs/40x/klondike_defconfig |    1 -
- arch/sh/configs/rsk7264_defconfig           |    1 -
- arch/xtensa/configs/audio_kc705_defconfig   |    1 -
- arch/xtensa/configs/cadence_csp_defconfig   |    1 -
- arch/xtensa/configs/generic_kc705_defconfig |    1 -
- arch/xtensa/configs/iss_defconfig           |    1 -
- arch/xtensa/configs/nommu_kc705_defconfig   |    1 -
- arch/xtensa/configs/smp_lx200_defconfig     |    1 -
- arch/xtensa/configs/virt_defconfig          |    1 -
- init/Kconfig                                |   17 -
- kernel/sysctl_binary.c                      | 1305 ---------------------------
- 34 files changed, 1354 deletions(-)
