@@ -2,138 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2913010A949
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 05:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C240B10A94C
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 05:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbfK0EIR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Nov 2019 23:08:17 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:32839 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726525AbfK0EIR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 23:08:17 -0500
-Received: by mail-pl1-f196.google.com with SMTP id ay6so9168396plb.0
-        for <linux-arch@vger.kernel.org>; Tue, 26 Nov 2019 20:08:16 -0800 (PST)
+        id S1726540AbfK0EPS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Nov 2019 23:15:18 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:34442 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbfK0EPR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 23:15:17 -0500
+Received: by mail-pj1-f66.google.com with SMTP id bo14so9320668pjb.1
+        for <linux-arch@vger.kernel.org>; Tue, 26 Nov 2019 20:15:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=ma2Ny4OJtmFo45i8pZLjdZV3vdlSDPefHNP0fIdM2y0=;
-        b=UQ1hObs8DfToT1ZlbJlkV9Q0mQbIGVxv5RMF6vHfQsXXWLiBxbroMcTDpr7YGf25uj
-         fCbvhb6omsAnIlcsr+dkQU+RFCZNatP8AnI2SBq4HfhsNY+p2gmSzxxKytcFqHcODdg6
-         aCsIwmg17kPvrtsO6H33QaVRCWKoYNRafyBDnG1D5FH/TWHPHH3v4m/YE4Tyzo9uVdZe
-         qMartVO6Y9IANSqg/2SKU14PuPv8gknFqsawuXShBKYq97bXOTxrOSoyMEfJdPWkEWrz
-         33UOP1FBMPbR11vAMa/mWPx4WJ7xS7NgO8orpqkbTKOkM3bV0BWDYX3j27dP6piKeb1J
-         lepg==
+         :user-agent:mime-version;
+        bh=Dz0UvRLWFteyMX6nyfuBj/UXAD6SlkrzxpLTOF/y9kI=;
+        b=pneYTvvIONuJio92y5qcunU6dcYjjziPhSE1ILjrhOXZmi/F6V7jWYrfyzhjQS2hGg
+         ccqO84xsSuWU9NuvyvPPzOvvuEyYmNmHCsCF5kpCrS35JvdJ80j78DV/srQFBbEGfeN5
+         sJqj5YfIZ8GQ8zZY0ScRFtk+e+QcArkpcMmrTCpRgsTHeT3R4Ct59tEeXlwZoAk2069j
+         58aEOnidZFtzoyu0Thba+7TWF6k9iPfk1qgZbepy/4FiLxF1F/C8PsUXD/FgBT/sZQIo
+         6SSgaOBR0s82W6ymunnxIx7YgF4JZMbxsFvvKO/9LqaXO2RjPvMPgwb4SOiVSlPUQkr4
+         OPfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=ma2Ny4OJtmFo45i8pZLjdZV3vdlSDPefHNP0fIdM2y0=;
-        b=IxlsRcdU5UnSJriCHerqVcZleE3M82BJvL0RG4ToCqNMpL1oTUwJZN14Z9Gm4ScKAE
-         UCEdusEBUcoNhr2cZa/E5HFxSTVLA6PYIuK7HGzSU4mx+RMTsLJ15pXlr7GiU9MORO7U
-         JC9JTJsdXRhH1tqmQJ1wxUCZMNU1p56rXi0fRSRJ4xwOdLA8zdk8Ju9JMMOknf91t/bV
-         qnECtOEWwnZFsjYSh1b3vTCYyP+nX47vbLKpEyWHvm2eLoYWMddcji+Etmc6+dtjegSA
-         gJSVrdmkH6/h6S1I/4+5ZOJppQtWnMHxqfFgsuj9XwGF7WoU3F8W2f/wAN+0ud5epHoO
-         rryQ==
-X-Gm-Message-State: APjAAAVTebugSthqd2JU7P/l4FkJJRhdFQBE3PUbyzXL3fJ91cInsxhm
-        ACGAEovcVpSD/4K1CE7kixk=
-X-Google-Smtp-Source: APXvYqy/+IWsMA7tqZO3lWfWjX2Qqa9evQQmu/qKEeBRofHytkcbCPGWP3ixsiVTs4fQFn7O7pyycA==
-X-Received: by 2002:a17:902:6bc5:: with SMTP id m5mr1872960plt.185.1574827696049;
-        Tue, 26 Nov 2019 20:08:16 -0800 (PST)
+         :references:user-agent:mime-version;
+        bh=Dz0UvRLWFteyMX6nyfuBj/UXAD6SlkrzxpLTOF/y9kI=;
+        b=DoEYL/zWSkK+UWhPfk/fKgZz370JEacqnPtsRg2UvQgJRHKg52pI0gLEuK5zUfqGZX
+         AAH1PYQJ0X3wkZwYqA8jjvQjL2s5sHhiXm0/sq8IxD4ijL9vuh/fXlc3HukksJA3IAFg
+         yfrdSW0P/pJfJdbUBfDFPy0+gen8XPJWdvIK2La14HtHaVPbKgioTTA74zfQ90V+0Jbu
+         DfrKDiTqEeD5qDfZhLI4Q29TvsLi4o3L7afs/CT4Jt8Q8/zi5t85rrwJUNmQNr/kvZAw
+         VjIEpuH5THVVjRmFryr5ZcLswFRn05mrZdhCRWMqelfwR0duufzfXnsdpe2gc5AWx2wW
+         8j+w==
+X-Gm-Message-State: APjAAAV2CHTA5QXuudi9FGwfNDYD137sOCX96g79VBdaMw6+XPUpoQhE
+        PQz/0dvHu33o/XF+rQVcw58=
+X-Google-Smtp-Source: APXvYqyh61AU6ikfzpZS3UvTULPdpWyjX7m6rKBzCEkIDbt1RpbqR71RVX2rQGAxEGtL4IPO+MCuUw==
+X-Received: by 2002:a17:902:9889:: with SMTP id s9mr2041254plp.18.1574828116947;
+        Tue, 26 Nov 2019 20:15:16 -0800 (PST)
 Received: from earth-mac.local.gmail.com ([202.214.86.179])
-        by smtp.gmail.com with ESMTPSA id g192sm14075274pgc.3.2019.11.26.20.08.13
+        by smtp.gmail.com with ESMTPSA id y22sm13284867pfn.6.2019.11.26.20.15.14
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 26 Nov 2019 20:08:15 -0800 (PST)
-Date:   Wed, 27 Nov 2019 13:08:11 +0900
-Message-ID: <m2wobmq7v8.wl-thehajime@gmail.com>
+        Tue, 26 Nov 2019 20:15:16 -0800 (PST)
+Date:   Wed, 27 Nov 2019 13:15:13 +0900
+Message-ID: <m2tv6qq7ji.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
-To:     richard@nod.at
-Cc:     tavi.purdila@gmail.com, johannes@sipsolutions.net,
-        linux-arch@vger.kernel.org, cem@freebsd.org,
-        linux-um@lists.infradead.org, retrage01@gmail.com,
-        linux-kernel-library@freelists.org, pscollins@google.com,
-        sigmaepsilon92@gmail.com, liuyuan@google.com,
-        anton.ivanov@cambridgegreys.com
-Subject: Re: [RFC v2 17/37] lkl tools: host lib: virtio devices
-In-Reply-To: <293078386.98317.1574784295793.JavaMail.zimbra@nod.at>
-References: <cover.1573179553.git.thehajime@gmail.com>  <CAFLxGvzCwCLbLMhcF6ZJ2afeo7PSd8xLQrU9hRH6YVaMakBSyw@mail.gmail.com>    <de90b04151bafee083727c9769833932788cf428.camel@sipsolutions.net>       <1662825264.98055.1574758225905.JavaMail.zimbra@nod.at> <4ebb14dc67ccb70543617ce1f7066f3f27cd11a8.camel@sipsolutions.net>       <243342257.98153.1574762974057.JavaMail.zimbra@nod.at>  <98acf77a7c6f6cba7f76c12a850ac2929b9e5a48.camel@sipsolutions.net>       <CAMoF9u3LRC_NaVJzmKPc0+XBxhAqdhnr4-ZzY_ypwQEzUz78yQ@mail.gmail.com>    <293078386.98317.1574784295793.JavaMail.zimbra@nod.at>
+To:     richard.weinberger@gmail.com
+Cc:     linux-um@lists.infradead.org, tavi.purdila@gmail.com,
+        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
+        retrage01@gmail.com
+Subject: Re: [RFC v2 02/37] arch: add __SYSCALL_DEFINE_ARCH
+In-Reply-To: <CAFLxGvyQhi+uKoAv34RE8LSgQMLGwDEWgCT4un1K_-mMvz29vA@mail.gmail.com>
+References: <cover.1573179553.git.thehajime@gmail.com>  <d2d52cac3eff859b8cef0bc755cb6ae4590f27a6.1573179553.git.thehajime@gmail.com>   <CAFLxGvyQhi+uKoAv34RE8LSgQMLGwDEWgCT4un1K_-mMvz29vA@mail.gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0
  (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-Hello,
-
-On Wed, 27 Nov 2019 01:04:55 +0900,
+On Tue, 26 Nov 2019 07:02:54 +0900,
 Richard Weinberger wrote:
+> 
+> On Fri, Nov 8, 2019 at 6:03 AM Hajime Tazaki <thehajime@gmail.com> wrote:
+> >
+> > From: Octavian Purdila <tavi.purdila@gmail.com>
+> >
+> > This allows the architecture code to process the system call
+> > definitions. It is used by LKL to create strong typed function
+> > definitions for system calls.
+> >
+> > Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
+> > ---
+> >  include/linux/syscalls.h | 6 ++++++
+> 
+> Same here, core developers need to agree on this.
 
-> >> On Tue, 2019-11-26 at 11:09 +0100, Richard Weinberger wrote:
-> >> > ----- Urspr=FCngliche Mail -----
-> >> > > > My point is that UML and LKL should try to do use the same conce=
-pt/code
-> >> > > > regarding virtio. At the end of day both use virtual devices whi=
-ch use
-> >> > > > facilities from the host.
-> >> > > > If this is really not possible it needs a good explanation.
-> >> > >
-> >> > > I think it isn't possible, unless you use vhost-user over a unix d=
-omain
-> >> > > socket internally to talk between the kernel (virtio_uml) and hype=
-rvisor
-> >> > > (device) components.
-> >> > >
-> >> > > In virtio_uml, the device implementation is assumed to be a separa=
-te
-> >> > > process with a vhost-user connection. Here in LKL, the virtio devi=
-ce is
-> >> > > part of the "hypervisor", i.e. in the same process.
-> >> >
-> >> > Exactly, currently UML and LKL solve same things differently, but do=
- we need to?
-> >>
-> >> It's not the same thing though :-)
-> >>
-> >> UML right now doesn't have or support virtio devices in the built-in
-> >> hypervisor, what we wanted to use virtio for was explicitly for the
-> >> vhost-user devices.
-> >>
-> >> LKL clearly wants to have device implementations in the hypervisor,
-> >> perhaps for networking or console etc.? That _might_ be useful since it
-> >> makes the device implementation more general, unlike the UML approach
-> >> where all devices come with a kernel- and user-side and are special
-> >> drivers in the kernel, vs. general virtio drivers.
-> >>
-> >=20
-> > That is correct. Initially we used the same UML model, with dedicated
-> > drivers for LKL, and later switched to using the built-in virtio
-> > drivers (so far for network and block devices).
->=20
-> Can you please point out a little further why UML's net or block drivers
-> are not usable for LKL?
-
-I think we can do it (but need to check).
-
-LKL may use UML's drivers, and UML can also use LKL's devices/drivers
-(as my 36/37 and 37/37 patches do, though the patches has no careful
-consideration on IRQ handling).
-
-> What is missing?
-
-As Anton mentioned, the IRQ handling needs to be considered in LKL, at
-least. I need to check but there might be other factors.
-
-> Performance numbers would be also nice to have.
-> Anton did great work on improving UML's drivers.
-
-Performance improve techniques (bulk operations, offload, etc) are
-also applicable to both.  As UML can do, LKL can TSO/csum offload with
-configured virtio-net devices.
-
+Okay, I'll also Cc linux-api@ from the next round.
 
 -- Hajime
