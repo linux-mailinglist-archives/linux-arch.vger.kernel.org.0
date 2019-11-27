@@ -2,145 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C88B10A50A
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2019 21:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A2810A943
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 05:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726036AbfKZUGb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Nov 2019 15:06:31 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:51258 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725970AbfKZUGb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 15:06:31 -0500
-Received: by mail-wm1-f65.google.com with SMTP id g206so4606512wme.1;
-        Tue, 26 Nov 2019 12:06:29 -0800 (PST)
+        id S1726548AbfK0EG2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Nov 2019 23:06:28 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38524 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726525AbfK0EG2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Nov 2019 23:06:28 -0500
+Received: by mail-pl1-f193.google.com with SMTP id o8so4791997pls.5
+        for <linux-arch@vger.kernel.org>; Tue, 26 Nov 2019 20:06:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+b+NNqbOQ+HR3F7WJkh1g/uLtoPIfDf6gFrchEKK20Y=;
-        b=aKmqPxE4zIAdduzRXnIUY21W9nSOe8k6KRd48MpoAU20mxNwrJXZNK4vEAEFOGGeQh
-         WW+Ylag3O6N/yRHqMWnFMEGopbNbN8SkOeM+UpM4vrWMXtn6qi8irrbTEAPx62Ad+PGp
-         amu8scDh/uVEQH2bgfSiDFap4zQnJo24z4ib0dwWMcO7shGwNMhW5Up+u/+Bwo/FBWrB
-         BuQsLzmWau0FzArJ2NZSvboeLRnGXVwBgS0OfvMo9GcmeY3XwnAJekXoInVgZGjEj0Lj
-         ElNUAKiPjzARWuXOOk7PbMY2mxU93uZgwUl/vf2qEZWhknHcvy0BnrQ1BNgNaqLDJTu4
-         auzw==
+        h=date:message-id:from:to:cc:subject:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=nWCrWadR1SyGOjV0H+GqNGY+efisuZ1V6ZkGf7TSgNU=;
+        b=BK7jI1zdvguVZjIAT90XaFG3dEFHndJTsbUxZz0leQCrmjtkDUEpqvUQYxlSVxC2Y3
+         TKECbu1XcDLLfli1zAAJUYFLiubUwQip12mTH6Jz0K1HgqsXn+HBu63Kd3gUgZ3z6+14
+         3qML+w0naA7qM7upZrjDTrMReHJk8PUvf1u5iKuOjpsE0rG4iv7e30MZ6jRiv2Va3150
+         yYO/wZOVdVC7oouqZlvXISEUw4UaB04qk26OMpgpdyT+LjVEu3WBjWXEhkE21QADIspx
+         +WJdjWknIABGZHcbU9xTBgVw3S06EaBw+dnkm6PKPNCIX8fYqky5Ifj5CnuIWbfqcbXr
+         3VBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+b+NNqbOQ+HR3F7WJkh1g/uLtoPIfDf6gFrchEKK20Y=;
-        b=Hhyp0VLTAVD0bVO7IakCg44QN7rv44Lo/n9dMpvmgu1a3ZsZh18XJwPMAI3uvVEZ32
-         LOAdRBkZi+dZks14IsLtEOqzIw5WivJEJa4gQT5kNbV6OeBvroEm7g5mfcR3/JyPKee3
-         m8vCjq4UrrHEmR4i5jprQIfxxW/q11Q+uknyFsFXH/6ZMIm95zPUmVqv+tuyS9cU6I+G
-         HwdDLeRE4cAP2QBeA2FfU1/zX1xO2Fb0Bdy5UrJ8OxzYZzOTzsq13zbEh/dhilERpeOI
-         jJsepg/0Nla6t1lo0dNJDvkLjshau4tr1bL6KKovtYGhQ6j+1gqqQTbmXI7XTOH/34Rb
-         E1aQ==
-X-Gm-Message-State: APjAAAWnQrQxoB8bgblN+d/NIbD+/hum8XG/hZb2D3hKINAL5XlZvTgz
-        Ml3fVNIz5W5FiN9P12Z7BtouvLCa
-X-Google-Smtp-Source: APXvYqyPpnIXTMhVWKAsXk68HQq7lXaM4TgV4PwH/MbLYfdIOlPwyV43g2zR3Y6A4iXqEzbNrxPzgA==
-X-Received: by 2002:a1c:2846:: with SMTP id o67mr791140wmo.7.1574798788866;
-        Tue, 26 Nov 2019 12:06:28 -0800 (PST)
-Received: from localhost.localdomain ([2a02:a03f:404e:f500:ac14:4c10:6104:457f])
-        by smtp.gmail.com with ESMTPSA id b3sm4134274wmj.44.2019.11.26.12.06.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2019 12:06:27 -0800 (PST)
-From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-To:     Dennis Zhou <dennis@kernel.org>
-Cc:     Ben Dooks <ben.dooks@codethink.co.uk>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] fix __percpu annotation in asm-generic
-Date:   Tue, 26 Nov 2019 21:06:19 +0100
-Message-Id: <20191126200619.63348-1-luc.vanoostenryck@gmail.com>
-X-Mailer: git-send-email 2.24.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=nWCrWadR1SyGOjV0H+GqNGY+efisuZ1V6ZkGf7TSgNU=;
+        b=DiO8FVdgDfZJXQFFhxlfdM9gAgivF/y4bHB812VId4/z3/IMs2DsQ6tgmIeSdlEScb
+         TePPKDvRYRp7oF7u6b0N6FZrC3APPab/9YCmtMxbcVEgpJfmFPHHL45Elh1HyztiLXIS
+         O2WlwjgPZU3nCAEVpOQRmK5FMZ+xDAkCbbAUTJsJqbkP3o8ncbzJ1Yg1h4c+A8e5Qpfr
+         CbOkH5ohuY64R3Q10qkWf0eNOXH9MSFDiGY9u2ZbAM64widgWmRH50YCEZoRNd4Pj8TS
+         VaHROuWBgMjtnldQbwIL6a3SiRmWu2t6iaI8mWSJQpZsT6ONSmDWIqaQOZw8OBUFhNeI
+         zUNw==
+X-Gm-Message-State: APjAAAXKpLSJohacfIL8kbnc9o/XbsnGkkvas/KXWuTw+F/BuxAFOIKy
+        a8MsH11cwXYLKi+xylxLARsiqo9mRS0=
+X-Google-Smtp-Source: APXvYqw/oDtif706HC6kg2dNtThDgIUg5At8+AEcw8NUMkR0naS+2ezlpZxeKJc59UJ9FRuHdT/SaQ==
+X-Received: by 2002:a17:90a:d352:: with SMTP id i18mr3457008pjx.42.1574827587380;
+        Tue, 26 Nov 2019 20:06:27 -0800 (PST)
+Received: from earth-mac.local.gmail.com ([202.214.86.179])
+        by smtp.gmail.com with ESMTPSA id f10sm13936893pfd.28.2019.11.26.20.06.24
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 26 Nov 2019 20:06:26 -0800 (PST)
+Date:   Wed, 27 Nov 2019 13:06:22 +0900
+Message-ID: <m2y2w2q7y9.wl-thehajime@gmail.com>
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     anton.ivanov@kot-begemot.co.uk
+Cc:     tavi.purdila@gmail.com, johannes@sipsolutions.net,
+        linux-arch@vger.kernel.org, cem@freebsd.org, richard@nod.at,
+        linux-um@lists.infradead.org, retrage01@gmail.com,
+        linux-kernel-library@freelists.org, pscollins@google.com,
+        sigmaepsilon92@gmail.com, liuyuan@google.com
+Subject: Re: [RFC v2 17/37] lkl tools: host lib: virtio devices
+In-Reply-To: <ce1a96d4-3d5e-32be-f493-3522fc56a25b@kot-begemot.co.uk>
+References: <cover.1573179553.git.thehajime@gmail.com>  <1531c5f16a00b608635c9a62fa3951807075f950.1573179553.git.thehajime@gmail.com>   <CAFLxGvzCwCLbLMhcF6ZJ2afeo7PSd8xLQrU9hRH6YVaMakBSyw@mail.gmail.com>    <de90b04151bafee083727c9769833932788cf428.camel@sipsolutions.net>       <1662825264.98055.1574758225905.JavaMail.zimbra@nod.at> <4ebb14dc67ccb70543617ce1f7066f3f27cd11a8.camel@sipsolutions.net>       <243342257.98153.1574762974057.JavaMail.zimbra@nod.at>  <98acf77a7c6f6cba7f76c12a850ac2929b9e5a48.camel@sipsolutions.net>       <CAMoF9u3LRC_NaVJzmKPc0+XBxhAqdhnr4-ZzY_ypwQEzUz78yQ@mail.gmail.com>    <ce1a96d4-3d5e-32be-f493-3522fc56a25b@kot-begemot.co.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0
+ (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The generic implementation of raw_cpu_generic_add_return() is:
 
-        #define raw_cpu_generic_add_return(pcp, val)            \
-        ({                                                      \
-                typeof(&(pcp)) __p = raw_cpu_ptr(&(pcp));       \
-                                                                \
-                *__p += val;                                    \
-                *__p;                                           \
-        })
+On Tue, 26 Nov 2019 19:49:48 +0900,
+Anton Ivanov wrote:
+>=20
+>=20
+>=20
+> On 26/11/2019 10:42, Octavian Purdila wrote:
+> > On Tue, Nov 26, 2019 at 12:16 PM Johannes Berg
+> > <johannes@sipsolutions.net> wrote:
+> >>=20
+> >> On Tue, 2019-11-26 at 11:09 +0100, Richard Weinberger wrote:
+> >>> ----- Urspr=FCngliche Mail -----
+> >>>>> My point is that UML and LKL should try to do use the same concept/=
+code
+> >>>>> regarding virtio. At the end of day both use virtual devices which =
+use
+> >>>>> facilities from the host.
+> >>>>> If this is really not possible it needs a good explanation.
+> >>>>=20
+> >>>> I think it isn't possible, unless you use vhost-user over a unix dom=
+ain
+> >>>> socket internally to talk between the kernel (virtio_uml) and hyperv=
+isor
+> >>>> (device) components.
+> >>>>=20
+> >>>> In virtio_uml, the device implementation is assumed to be a separate
+> >>>> process with a vhost-user connection. Here in LKL, the virtio device=
+ is
+> >>>> part of the "hypervisor", i.e. in the same process.
+> >>>=20
+> >>> Exactly, currently UML and LKL solve same things differently, but do =
+we need to?
+> >>=20
+> >> It's not the same thing though :-)
+> >>=20
+> >> UML right now doesn't have or support virtio devices in the built-in
+> >> hypervisor, what we wanted to use virtio for was explicitly for the
+> >> vhost-user devices.
+> >>=20
+> >> LKL clearly wants to have device implementations in the hypervisor,
+> >> perhaps for networking or console etc.? That _might_ be useful since it
+> >> makes the device implementation more general, unlike the UML approach
+> >> where all devices come with a kernel- and user-side and are special
+> >> drivers in the kernel, vs. general virtio drivers.
+> >>=20
+> >=20
+> > That is correct. Initially we used the same UML model, with dedicated
+> > drivers for LKL, and later switched to using the built-in virtio
+> > drivers (so far for network and block devices).
+> >=20
+> >> Now, arguably, since UML has all these already a combined UML/LKL
+> >> doesn't actually *need* any virtio devices, since all (or at least mos=
+t)
+> >> of the things that could be covered by virtio today are already covered
+> >> by UML devices (block, net, console, random).
+> >>=20
+> >> I'd probably say then that this can be removed from an initial "minimum
+> >> viable product" of LKL, since once merged with UML you get the devices
+> >> from that. Later, we could decide that UML devices actually are better
+> >> done as virtio, and support something like this.
+> >>=20
+> >=20
+> > I agree, I think it make sense to drop these since the problem of
+> > dedicated vs generic / virtio drivers are orthogonal with regard to
+> > UML and LKL unification and can later be worked on.
+>=20
+> This brings us back to the interrupt controller as noted by Richard earli=
+er.
+>=20
+> UML devices are heavily dependent on the file io as an IRQ trigger
+> paradigm and they need an interrupt controller which has an IO event
+> feed into it. I did not see that in LKL on first read.
 
-where the 'pcp' argument is a __percpu lvalue.
-There, the variable '__p' is declared as a __percpu pointer
-the type of the address of 'pcp') but:
-1) the value assigned to it, the return value of raw_cpu_ptr(), is
-   a plain (__kernel) pointer, not a __percpu one.
-2) the variable is dereferenced just after while a __percpu pointer
-   is implicitly __noderef.
+Indeed, the current interrupt model in LKL is not directly associated
+with file IO events delivered by epoll family as UML does.  Instead,
+calling lkl_trigger_irq() at places will trigger an interrupt in the
+LKL case so, we need to adapt somehow if LKL uses UML devices.
 
-So, fix the declaration of the 'pcp' variable to its correct type:
-the plain (non-percpu) pointer corresponding to its address.
-Same for raw_cpu_generic_xchg(), raw_cpu_generic_cmpxchg() &
-raw_cpu_generic_cmpxchg_double().
+> So as a first step we should get it to work with existing UML IRQ
+> controller and whatever incremental patches are needed on top of that.
 
-This remove 209 warnings on ARM, 460 on x86 & 2600+ on ppc64.
+I understand and agree on your comments by all of you.
 
-Cc: Dennis Zhou <dennis@kernel.org>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Reported-by: Ben Dooks <ben.dooks@codethink.co.uk>
-Signed-off-by: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
----
- include/asm-generic/percpu.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+If implementing LKL with current/existing UML devices is the right
+direction, I would go and try to test this approach to verify if this
+is doable.
 
-diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
-index c2de013b2cf4..4ae5f89a0e61 100644
---- a/include/asm-generic/percpu.h
-+++ b/include/asm-generic/percpu.h
-@@ -74,7 +74,7 @@ do {									\
- 
- #define raw_cpu_generic_add_return(pcp, val)				\
- ({									\
--	typeof(&(pcp)) __p = raw_cpu_ptr(&(pcp));			\
-+	typeof(pcp) __kernel __force *__p = raw_cpu_ptr(&(pcp));	\
- 									\
- 	*__p += val;							\
- 	*__p;								\
-@@ -82,7 +82,7 @@ do {									\
- 
- #define raw_cpu_generic_xchg(pcp, nval)					\
- ({									\
--	typeof(&(pcp)) __p = raw_cpu_ptr(&(pcp));			\
-+	typeof(pcp) __kernel __force *__p = raw_cpu_ptr(&(pcp));	\
- 	typeof(pcp) __ret;						\
- 	__ret = *__p;							\
- 	*__p = nval;							\
-@@ -91,7 +91,7 @@ do {									\
- 
- #define raw_cpu_generic_cmpxchg(pcp, oval, nval)			\
- ({									\
--	typeof(&(pcp)) __p = raw_cpu_ptr(&(pcp));			\
-+	typeof(pcp) __kernel __force *__p = raw_cpu_ptr(&(pcp));	\
- 	typeof(pcp) __ret;						\
- 	__ret = *__p;							\
- 	if (__ret == (oval))						\
-@@ -101,8 +101,8 @@ do {									\
- 
- #define raw_cpu_generic_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
- ({									\
--	typeof(&(pcp1)) __p1 = raw_cpu_ptr(&(pcp1));			\
--	typeof(&(pcp2)) __p2 = raw_cpu_ptr(&(pcp2));			\
-+	typeof(pcp1) __kernel __force *__p1 = raw_cpu_ptr(&(pcp1));	\
-+	typeof(pcp2) __kernel __force *__p2 = raw_cpu_ptr(&(pcp2));	\
- 	int __ret = 0;							\
- 	if (*__p1 == (oval1) && *__p2  == (oval2)) {			\
- 		*__p1 = nval1;						\
--- 
-2.24.0
+-- Hajime
 
