@@ -2,71 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF5810B14A
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 15:28:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B118510B230
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Nov 2019 16:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726881AbfK0O2l convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 27 Nov 2019 09:28:41 -0500
-Received: from lithops.sigma-star.at ([195.201.40.130]:35472 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726747AbfK0O2l (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Nov 2019 09:28:41 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 7443F6058360;
-        Wed, 27 Nov 2019 15:28:38 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id TlatcLpTclcL; Wed, 27 Nov 2019 15:28:38 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 1FEB8605A912;
-        Wed, 27 Nov 2019 15:28:38 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id FvQWTClmKLzL; Wed, 27 Nov 2019 15:28:38 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id E98146058360;
-        Wed, 27 Nov 2019 15:28:37 +0100 (CET)
-Date:   Wed, 27 Nov 2019 15:28:37 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     Hajime Tazaki <thehajime@gmail.com>
-Cc:     tavi purdila <tavi.purdila@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-arch <linux-arch@vger.kernel.org>, cem <cem@freebsd.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        retrage01 <retrage01@gmail.com>,
-        linux-kernel-library <linux-kernel-library@freelists.org>,
-        pscollins <pscollins@google.com>,
-        sigmaepsilon92 <sigmaepsilon92@gmail.com>,
-        liuyuan <liuyuan@google.com>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>
-Message-ID: <48783237.99334.1574864917843.JavaMail.zimbra@nod.at>
-In-Reply-To: <m2wobmq7v8.wl-thehajime@gmail.com>
-References: <cover.1573179553.git.thehajime@gmail.com> <1662825264.98055.1574758225905.JavaMail.zimbra@nod.at> <4ebb14dc67ccb70543617ce1f7066f3f27cd11a8.camel@sipsolutions.net> <243342257.98153.1574762974057.JavaMail.zimbra@nod.at> <98acf77a7c6f6cba7f76c12a850ac2929b9e5a48.camel@sipsolutions.net> <CAMoF9u3LRC_NaVJzmKPc0+XBxhAqdhnr4-ZzY_ypwQEzUz78yQ@mail.gmail.com> <293078386.98317.1574784295793.JavaMail.zimbra@nod.at> <m2wobmq7v8.wl-thehajime@gmail.com>
-Subject: Re: [RFC v2 17/37] lkl tools: host lib: virtio devices
+        id S1727425AbfK0PPC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Nov 2019 10:15:02 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:34527 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726655AbfK0PPC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Nov 2019 10:15:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1574867700;
+        s=strato-dkim-0002; d=xenosoft.de;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=rU6EJZnQMWHiAAMrDnvCSg5GJl/7kaL3qM/q2ihcwWc=;
+        b=nDHcEC8KNSx0uEmDXuznTw1hr4gLIQbctk3/ymPqjCzLAfUx+SZkmWNSZl/ZQEGPm/
+        XGY50eWL5q+2LtfJ8B9fRHhw4+aHH2etWCP4VKOTSoxI9pCcyUT10aWQimSKxFxpG5SU
+        EFDtFS2tTxbzWyW+0oIIZsCNBEDkFOLoBSgADKWYlz9yyep2KCJrOdq2q8nzW5cEAA21
+        4l02tfxdtNE87dPPHde1vuiYiQj454YDM/8QTqFubnUzIXJpqJATqnB64AbDWr5sEdbD
+        qQGXJqYTniJ7sd+YWIVeI6KPm+rlrfAlbZjuDTKZ4iPfhnQOziIkNNHoE2T9WuhsiJu3
+        H33Q==
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBJSrwuuqxvPhUIxnPrrzntHiDgpTRUbNSOXek"
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2a02:8109:89c0:ebfc:7591:d54e:863:4581]
+        by smtp.strato.de (RZmta 46.0.0 AUTH)
+        with ESMTPSA id n05ae1vARFEh10O
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits))
+        (Client did not present a certificate);
+        Wed, 27 Nov 2019 16:14:43 +0100 (CET)
+Subject: Re: Bug 205201 - Booting halts if Dawicontrol DC-2976 UW SCSI board
+ installed, unless RAM size limited to 3500M
+To:     Mike Rapoport <rppt@linux.ibm.com>, Christoph Hellwig <hch@lst.de>
+Cc:     Robin Murphy <robin.murphy@arm.com>, linux-arch@vger.kernel.org,
+        darren@stevens-zone.net, mad skateman <madskateman@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org, Rob Herring <robh+dt@kernel.org>,
+        paulus@samba.org, rtd2@xtra.co.nz,
+        "contact@a-eon.com" <contact@a-eon.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        nsaenzjulienne@suse.de
+References: <20191121072943.GA24024@lst.de>
+ <dbde2252-035e-6183-7897-43348e60647e@xenosoft.de>
+ <6eec5c42-019c-a988-fc2a-cb804194683d@xenosoft.de>
+ <d0252d29-7a03-20e1-ccd7-e12d906e4bdf@arm.com>
+ <b3217742-2c0b-8447-c9ac-608b93265363@xenosoft.de>
+ <20191121180226.GA3852@lst.de>
+ <2fde79cf-875f-94e6-4a1b-f73ebb2e2c32@xenosoft.de>
+ <20191125073923.GA30168@lst.de>
+ <4681f5fe-c095-15f5-9221-4b55e940bafc@xenosoft.de>
+ <20191126164026.GA8026@lst.de> <20191127065624.GB16913@linux.ibm.com>
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+Message-ID: <6a4289cf-d2b5-2357-f1ad-eeab44ab3b1e@xenosoft.de>
+Date:   Wed, 27 Nov 2019 16:14:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF68 (Linux)/8.8.12_GA_3809)
-Thread-Topic: lkl tools: host lib: virtio devices
-Thread-Index: vsG9rMhagKP3M5YFcBzxoH42Dsol8w==
+In-Reply-To: <20191127065624.GB16913@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: de-DE
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
------ Ursprüngliche Mail -----
->> Can you please point out a little further why UML's net or block drivers
->> are not usable for LKL?
-> 
-> I think we can do it (but need to check).
-> 
-> LKL may use UML's drivers, and UML can also use LKL's devices/drivers
-> (as my 36/37 and 37/37 patches do, though the patches has no careful
-> consideration on IRQ handling).
+On 27 November 2019 at 07:56 am, Mike Rapoport wrote:
+>
+> Maybe we'll simply force bottom up allocation before calling
+> swiotlb_init()? Anyway, it's the last memblock allocation.
+>
+>
+> diff --git a/arch/powerpc/mm/mem.c b/arch/powerpc/mm/mem.c
+> index 62f74b1b33bd..771e6cf7e2b9 100644
+> --- a/arch/powerpc/mm/mem.c
+> +++ b/arch/powerpc/mm/mem.c
+> @@ -286,14 +286,15 @@ void __init mem_init(void)
+>   	/*
+>   	 * book3s is limited to 16 page sizes due to encoding this in
+>   	 * a 4-bit field for slices.
+>   	 */
+>   	BUILD_BUG_ON(MMU_PAGE_COUNT > 16);
+>   
+>   #ifdef CONFIG_SWIOTLB
+> +	memblock_set_bottom_up(true);
+>   	swiotlb_init(0);
+>   #endif
+>   
+>   	high_memory = (void *) __va(max_low_pfn * PAGE_SIZE);
+>   	set_max_mapnr(max_pfn);
+>   	memblock_free_all();
+>   
+>   
+Hello Mike,
 
-Of course. So please don't get me wrong, I don't want LKL to become
-UML. I hope that UML can also benefit from LKL.
+I tested the latest Git kernel with your new patch today. My PCI TV card 
+works without any problems.
 
 Thanks,
-//richard
+Christian
