@@ -2,191 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6399410F74A
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Dec 2019 06:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076D810FA81
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Dec 2019 10:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfLCFa0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Dec 2019 00:30:26 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:53112 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbfLCFa0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Dec 2019 00:30:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=fasHx2KRVQANkAag/rtzNmdYDi10qgh4xlJuuHfsM7I=; b=Eo2Tw1qpTglRUBzzKh4KHekHS
-        MG9I0TAHFIY17B2RpTzLKPVWZ+X/jaHOGUDa/fVa+4pZWAKehkeqd+uAhmdrUBZw2tS9W8B4+6SUv
-        02RYQRnO+xCCCRh5IKgL1pHFiwxUL4oIDt8noq9UyQDLvP6O/qk+aX5y3C6VqWdB+XxUb6BN+XtdV
-        RNZLAHC5Wc+HIFCV5oAsJcyWdij865PYUk8WAPtIEJIDOrMCYQnt/ZIbUlx4aY9KVo5BWP97n95gw
-        wileGc5m4doam4/bw72H3DJOqddWzASrdMpJ60C5d2fH6IFtD3/5PPQthd/TkMOsmhRyW67sZwBX/
-        uF3q3pCCg==;
-Received: from [2601:1c0:6280:3f0::5a22]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ic0lU-0007lO-O8; Tue, 03 Dec 2019 05:30:24 +0000
-Subject: Re: [PATCH v3 3/3] kcsan: Prefer __always_inline for fast-path
-To:     Marco Elver <elver@google.com>
-Cc:     mark.rutland@arm.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, arnd@arndb.de,
-        dvyukov@google.com, linux-arch@vger.kernel.org,
-        kasan-dev@googlegroups.com
-References: <20191126140406.164870-1-elver@google.com>
- <20191126140406.164870-3-elver@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <00ee3b40-0e37-c9ac-3209-d07b233a0c1d@infradead.org>
-Date:   Mon, 2 Dec 2019 21:30:22 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1725907AbfLCJMe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Dec 2019 04:12:34 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:34613 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725774AbfLCJMe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 3 Dec 2019 04:12:34 -0500
+Received: from localhost (mailhub1-ext [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 47Rx8J0kcjz9vBK7;
+        Tue,  3 Dec 2019 10:12:32 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=Oyk10zwb; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id tQkAB2K9bzU1; Tue,  3 Dec 2019 10:12:32 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47Rx8H6djZz9vBK2;
+        Tue,  3 Dec 2019 10:12:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1575364351; bh=Tfzyfftdxt7nNkAel0mvTxcsHw6cENeeVt1BDJa4Wwk=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=Oyk10zwbEQZj+hz/ApbAX7bZU2VISoBlDzphx0qgX4vuGI5JovpO7+XhDvgSS4Ht7
+         8HTSc9mACgVCHkmuTGygTYKD88Z8cVYQajNaAgNEy52275tEGgvrZkFa67Z5XWulIZ
+         cL/BkLM5Crlkacm12sfXyMktVPVbHlCut51DSplo=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 000188B7D7;
+        Tue,  3 Dec 2019 10:12:32 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id Ni-i5GC6tlVU; Tue,  3 Dec 2019 10:12:32 +0100 (CET)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 79DBB8B787;
+        Tue,  3 Dec 2019 10:12:32 +0100 (CET)
+Subject: Re: [PATCH 0/9] Improve boot command line handling
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, danielwa@cisco.com
+Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1554195798.git.christophe.leroy@c-s.fr>
+Message-ID: <8eb90163-0e6b-c5ee-179a-c20773d54e58@c-s.fr>
+Date:   Tue, 3 Dec 2019 10:12:32 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-In-Reply-To: <20191126140406.164870-3-elver@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <cover.1554195798.git.christophe.leroy@c-s.fr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/26/19 6:04 AM, Marco Elver wrote:
-> Prefer __always_inline for fast-path functions that are called outside
-> of user_access_save, to avoid generating UACCESS warnings when
-> optimizing for size (CC_OPTIMIZE_FOR_SIZE). It will also avoid future
-> surprises with compiler versions that change the inlining heuristic even
-> when optimizing for performance.
+
+
+Le 02/04/2019 à 11:08, Christophe Leroy a écrit :
+> The purpose of this series is to improve and enhance the
+> handling of kernel boot arguments.
 > 
-> Report: http://lkml.kernel.org/r/58708908-84a0-0a81-a836-ad97e33dbb62@infradead.org
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Marco Elver <elver@google.com>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-Thanks.
-
-> ---
-> Rebased on: locking/kcsan branch of tip tree.
-> ---
->  kernel/kcsan/atomic.h   |  2 +-
->  kernel/kcsan/core.c     | 16 +++++++---------
->  kernel/kcsan/encoding.h | 14 +++++++-------
->  3 files changed, 15 insertions(+), 17 deletions(-)
+> It is first focussed on powerpc but also extends the capability
+> for other arches.
 > 
-> diff --git a/kernel/kcsan/atomic.h b/kernel/kcsan/atomic.h
-> index 576e03ddd6a3..a9c193053491 100644
-> --- a/kernel/kcsan/atomic.h
-> +++ b/kernel/kcsan/atomic.h
-> @@ -18,7 +18,7 @@
->   * than cast to volatile. Eventually, we hope to be able to remove this
->   * function.
->   */
-> -static inline bool kcsan_is_atomic(const volatile void *ptr)
-> +static __always_inline bool kcsan_is_atomic(const volatile void *ptr)
->  {
->  	/* only jiffies for now */
->  	return ptr == &jiffies;
-> diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-> index 3314fc29e236..c616fec639cd 100644
-> --- a/kernel/kcsan/core.c
-> +++ b/kernel/kcsan/core.c
-> @@ -78,10 +78,8 @@ static atomic_long_t watchpoints[CONFIG_KCSAN_NUM_WATCHPOINTS + NUM_SLOTS-1];
->   */
->  static DEFINE_PER_CPU(long, kcsan_skip);
->  
-> -static inline atomic_long_t *find_watchpoint(unsigned long addr,
-> -					     size_t size,
-> -					     bool expect_write,
-> -					     long *encoded_watchpoint)
-> +static __always_inline atomic_long_t *
-> +find_watchpoint(unsigned long addr, size_t size, bool expect_write, long *encoded_watchpoint)
->  {
->  	const int slot = watchpoint_slot(addr);
->  	const unsigned long addr_masked = addr & WATCHPOINT_ADDR_MASK;
-> @@ -146,7 +144,7 @@ insert_watchpoint(unsigned long addr, size_t size, bool is_write)
->   *	2. the thread that set up the watchpoint already removed it;
->   *	3. the watchpoint was removed and then re-used.
->   */
-> -static inline bool
-> +static __always_inline bool
->  try_consume_watchpoint(atomic_long_t *watchpoint, long encoded_watchpoint)
->  {
->  	return atomic_long_try_cmpxchg_relaxed(watchpoint, &encoded_watchpoint, CONSUMED_WATCHPOINT);
-> @@ -160,7 +158,7 @@ static inline bool remove_watchpoint(atomic_long_t *watchpoint)
->  	return atomic_long_xchg_relaxed(watchpoint, INVALID_WATCHPOINT) != CONSUMED_WATCHPOINT;
->  }
->  
-> -static inline struct kcsan_ctx *get_ctx(void)
-> +static __always_inline struct kcsan_ctx *get_ctx(void)
->  {
->  	/*
->  	 * In interrupts, use raw_cpu_ptr to avoid unnecessary checks, that would
-> @@ -169,7 +167,7 @@ static inline struct kcsan_ctx *get_ctx(void)
->  	return in_task() ? &current->kcsan_ctx : raw_cpu_ptr(&kcsan_cpu_ctx);
->  }
->  
-> -static inline bool is_atomic(const volatile void *ptr)
-> +static __always_inline bool is_atomic(const volatile void *ptr)
->  {
->  	struct kcsan_ctx *ctx = get_ctx();
->  
-> @@ -193,7 +191,7 @@ static inline bool is_atomic(const volatile void *ptr)
->  	return kcsan_is_atomic(ptr);
->  }
->  
-> -static inline bool should_watch(const volatile void *ptr, int type)
-> +static __always_inline bool should_watch(const volatile void *ptr, int type)
->  {
->  	/*
->  	 * Never set up watchpoints when memory operations are atomic.
-> @@ -226,7 +224,7 @@ static inline void reset_kcsan_skip(void)
->  	this_cpu_write(kcsan_skip, skip_count);
->  }
->  
-> -static inline bool kcsan_is_enabled(void)
-> +static __always_inline bool kcsan_is_enabled(void)
->  {
->  	return READ_ONCE(kcsan_enabled) && get_ctx()->disable_count == 0;
->  }
-> diff --git a/kernel/kcsan/encoding.h b/kernel/kcsan/encoding.h
-> index b63890e86449..f03562aaf2eb 100644
-> --- a/kernel/kcsan/encoding.h
-> +++ b/kernel/kcsan/encoding.h
-> @@ -59,10 +59,10 @@ encode_watchpoint(unsigned long addr, size_t size, bool is_write)
->  		      (addr & WATCHPOINT_ADDR_MASK));
->  }
->  
-> -static inline bool decode_watchpoint(long watchpoint,
-> -				     unsigned long *addr_masked,
-> -				     size_t *size,
-> -				     bool *is_write)
-> +static __always_inline bool decode_watchpoint(long watchpoint,
-> +					      unsigned long *addr_masked,
-> +					      size_t *size,
-> +					      bool *is_write)
->  {
->  	if (watchpoint == INVALID_WATCHPOINT ||
->  	    watchpoint == CONSUMED_WATCHPOINT)
-> @@ -78,13 +78,13 @@ static inline bool decode_watchpoint(long watchpoint,
->  /*
->   * Return watchpoint slot for an address.
->   */
-> -static inline int watchpoint_slot(unsigned long addr)
-> +static __always_inline int watchpoint_slot(unsigned long addr)
->  {
->  	return (addr / PAGE_SIZE) % CONFIG_KCSAN_NUM_WATCHPOINTS;
->  }
->  
-> -static inline bool matching_access(unsigned long addr1, size_t size1,
-> -				   unsigned long addr2, size_t size2)
-> +static __always_inline bool matching_access(unsigned long addr1, size_t size1,
-> +					    unsigned long addr2, size_t size2)
->  {
->  	unsigned long end_range1 = addr1 + size1 - 1;
->  	unsigned long end_range2 = addr2 + size2 - 1;
+> This is based on suggestion from Daniel Walker <danielwa@cisco.com>
+
+Looks like nobody has been interested in that series.
+
+It doesn't apply anymore and I don't plan to rebase it, I'll retire it.
+
+Christophe
+
+
 > 
-
-
--- 
-~Randy
-
+> Christophe Leroy (9):
+>    powerpc: enable appending of CONFIG_CMDLINE to bootloader's cmdline.
+>    Add generic function to build command line.
+>    drivers: of: use cmdline building function
+>    powerpc/prom_init: get rid of PROM_SCRATCH_SIZE
+>    powerpc: convert to generic builtin command line
+>    Add capability to prepend the command line
+>    powerpc: add capability to prepend default command line
+>    Gives arches opportunity to use generically defined boot cmdline
+>      manipulation
+>    powerpc: use generic CMDLINE manipulations
+> 
+>   arch/powerpc/Kconfig                   | 23 ++------------
+>   arch/powerpc/kernel/prom_init.c        | 38 ++++++++++-------------
+>   arch/powerpc/kernel/prom_init_check.sh |  2 +-
+>   drivers/of/fdt.c                       | 23 +++-----------
+>   include/linux/cmdline.h                | 37 ++++++++++++++++++++++
+>   init/Kconfig                           | 56 ++++++++++++++++++++++++++++++++++
+>   6 files changed, 117 insertions(+), 62 deletions(-)
+>   create mode 100644 include/linux/cmdline.h
+> 
