@@ -2,52 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F56112C7A
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Dec 2019 14:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29536112CAF
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Dec 2019 14:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727635AbfLDNWc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Dec 2019 08:22:32 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:32891 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727503AbfLDNWc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Dec 2019 08:22:32 -0500
-Received: by mail-pf1-f195.google.com with SMTP id y206so3666328pfb.0;
-        Wed, 04 Dec 2019 05:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wZJOF5sLAkP6Lj5JLT4j1oHbVGDdAKwvCkWIUq+dheE=;
-        b=pyRyiRJsR/LSFSgykNDNtWvgkjb/xDhjdWYPO4bvDoYwIrAiXaC8Q9Mfe1qKKmYaYR
-         JGPz6eDAEudYkUKAeATKN7m8fsMYj1DteNEskTvJFGYJ/At5faDtqSL/RU12cSxucLnA
-         RrbwncZHxyOUZ6HvOlL/m+ImhQucJU7j0tMmCXkom+JkJkQJJcg0/2JiLLTYBFhrYNX2
-         ZRhSs1k59HQ9adQyGfpYEk2vMSekJHU9onLCDZyH8bdnlj6UzaUbsTkXclR6XB+ik+1m
-         dflGFJf6R4P6X7Ct5JDhiuAiIqObkM0FdrlxMLHxzgMiyfo83v/ANwBZVNjQ358K8BkO
-         TxiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wZJOF5sLAkP6Lj5JLT4j1oHbVGDdAKwvCkWIUq+dheE=;
-        b=jflCQXiOv7+nLXKn1YlY6cF/4OqdpBthPswq6VHKIaxAwDlJpdprXoIJzwO9m3X3+p
-         jzgDBL915P4/P9r76qeVC2f1GC8TXvq5n68Le1DgRE1sam8IcwekcYxWVBxLF+4nIB3N
-         qRwDdlvva5fFi5anU6oi1oJnYZCND0SIpXYlmymLqJ+WTE9wRW/t/l3omc0zSqLyfFTl
-         w+uOuteupy4o7BJQ3KAvr8vBq8MULKPylUvgqdDxArRDrm/cRXLbROSFiwVPofMzcGaQ
-         vwfIFNBGmKI/ddEQ05vWsCX8mmDWJ7qm6IvBdrjZx3oi229htzJTxhfHi3uwRRNGdHsb
-         4mmA==
-X-Gm-Message-State: APjAAAUt/VA/InQSXCCx1aN6R0x1dowIFVxiV7nGvnSi/mJzxjJQmE79
-        tyVC5viUDx34xRjkVgrwnIjONQFq
-X-Google-Smtp-Source: APXvYqwkk/5MouzqntAeuXQGGYrBHHJiqg16oYZsk0XxEdxvjahSNBUzsQvvraKzr9vzruaDkgwQtw==
-X-Received: by 2002:aa7:8ad3:: with SMTP id b19mr3489646pfd.134.1575465751097;
-        Wed, 04 Dec 2019 05:22:31 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s7sm7911105pfe.22.2019.12.04.05.22.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Dec 2019 05:22:30 -0800 (PST)
-Subject: Re: [PATCH v6 10/18] sh/tlb: Convert SH to generic mmu_gather
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Peter Zijlstra <peterz@infradead.org>
+        id S1727798AbfLDNfU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Dec 2019 08:35:20 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:42890 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727530AbfLDNfU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Dec 2019 08:35:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Transfer-Encoding
+        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gsxBSJMrev/SxOwOS8U1NE/zJhvhFQpkbcsNWJa3VFA=; b=YMFdKWyJN3dcfeI/aItzDAqwaJ
+        qg4WH/eHBoJikRcEN5hWnzzg7w99XWp3sQyb4St3knyk+Us3/ZB4NvLVIpNqOmLxba2hgcvl+h8XB
+        Cj3gWb3YFio17fRpBZ2f65RjLw0hg7h+NO1xob/dknCtw+N8NVETJRg9IrG4G8kW6ia9Ee1wIr4wo
+        5rWA7o96bKeHqE1fhEgeweMTEQ/h4E7CJ7KHkjyIaN6o47ebmwrxEOMvhkK6yR4J0cYUctBiC5pb4
+        2YTR4PKZLVar7ZgulYtkU6BZQAg6Px1zN+TekGkKXcekYkfdlCMvcgiZV1r4GZQiYUJ01A2O5lEM8
+        dnQnZF7g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1icUnw-0000gz-BL; Wed, 04 Dec 2019 13:34:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7FD5B3011E0;
+        Wed,  4 Dec 2019 14:33:37 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 489B72B2679C9; Wed,  4 Dec 2019 14:34:54 +0100 (CET)
+Date:   Wed, 4 Dec 2019 14:34:54 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Will Deacon <will.deacon@arm.com>,
         "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -60,92 +48,81 @@ Cc:     Will Deacon <will.deacon@arm.com>,
         Rik van Riel <riel@surriel.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v6 10/18] sh/tlb: Convert SH to generic mmu_gather
+Message-ID: <20191204133454.GW2844@hirez.programming.kicks-ass.net>
 References: <20190219103148.192029670@infradead.org>
  <20190219103233.443069009@infradead.org>
  <CAMuHMdW3nwckjA9Bt-_Dmf50B__sZH+9E5s0_ziK1U_y9onN=g@mail.gmail.com>
  <20191204104733.GR2844@hirez.programming.kicks-ass.net>
  <CAMuHMdXs_Fm93t=O9jJPLxcREZy-T53Z_U_RtHcvaWyV+ESdjg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <156fa92f-4c5a-08bd-bcda-20029724c0de@roeck-us.net>
-Date:   Wed, 4 Dec 2019 05:22:28 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdXs_Fm93t=O9jJPLxcREZy-T53Z_U_RtHcvaWyV+ESdjg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdXs_Fm93t=O9jJPLxcREZy-T53Z_U_RtHcvaWyV+ESdjg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/4/19 4:32 AM, Geert Uytterhoeven wrote:
-> Hoi Peter,
-> 
-> On Wed, Dec 4, 2019 at 11:48 AM Peter Zijlstra <peterz@infradead.org> wrote:
->> On Tue, Dec 03, 2019 at 12:19:00PM +0100, Geert Uytterhoeven wrote:
->>> On Tue, Feb 19, 2019 at 11:35 AM Peter Zijlstra <peterz@infradead.org> wrote:
->>>> Generic mmu_gather provides everything SH needs (range tracking and
->>>> cache coherency).
->>>>
->>>> Cc: Will Deacon <will.deacon@arm.com>
->>>> Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>
->>>> Cc: Andrew Morton <akpm@linux-foundation.org>
->>>> Cc: Nick Piggin <npiggin@gmail.com>
->>>> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
->>>> Cc: Rich Felker <dalias@libc.org>
->>>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->>>
->>> I got remote access to an SH7722-based Migo-R again, which spews a long
->>> sequence of BUGs during userspace startup.  I've bisected this to commit
->>> c5b27a889da92f4a ("sh/tlb: Convert SH to generic mmu_gather").
->>
->> Whoopsy.. also, is this really the first time anybody booted an SH
->> kernel in over a year ?!?
-> 
-> Nah, but the v5.4-rc3 I booted recently on qemu -M r2d had
-> CONFIG_PGTABLE_LEVELS=2, so it didn't show the problem.
-> 
+On Wed, Dec 04, 2019 at 01:32:58PM +0100, Geert Uytterhoeven wrote:
 
-Guess that explains why I do not see the problem with my qemu boots.
-I use rts7751r2dplus_defconfig. Is it possible to reproduce the problem
-with qemu ? I don't think so, but maybe I am missing something.
-
-Guenter
-
->>> Do you have a clue?
->>
->> Does the below help?
+> > Does the below help?
 > 
 > Unfortunately not.
 > 
->> diff --git a/arch/sh/include/asm/pgalloc.h b/arch/sh/include/asm/pgalloc.h
->> index 22d968bfe9bb..73a2c00de6c5 100644
->> --- a/arch/sh/include/asm/pgalloc.h
->> +++ b/arch/sh/include/asm/pgalloc.h
->> @@ -36,9 +36,8 @@ do {                                                  \
->>   #if CONFIG_PGTABLE_LEVELS > 2
->>   #define __pmd_free_tlb(tlb, pmdp, addr)                        \
->>   do {                                                   \
->> -       struct page *page = virt_to_page(pmdp);         \
->> -       pgtable_pmd_page_dtor(page);                    \
->> -       tlb_remove_page((tlb), page);                   \
->> +       pgtable_pmd_page_dtor(pmdp);                    \
+> > diff --git a/arch/sh/include/asm/pgalloc.h b/arch/sh/include/asm/pgalloc.h
+> > index 22d968bfe9bb..73a2c00de6c5 100644
+> > --- a/arch/sh/include/asm/pgalloc.h
+> > +++ b/arch/sh/include/asm/pgalloc.h
+> > @@ -36,9 +36,8 @@ do {                                                  \
+> >  #if CONFIG_PGTABLE_LEVELS > 2
+> >  #define __pmd_free_tlb(tlb, pmdp, addr)                        \
+> >  do {                                                   \
+> > -       struct page *page = virt_to_page(pmdp);         \
+> > -       pgtable_pmd_page_dtor(page);                    \
+> > -       tlb_remove_page((tlb), page);                   \
+> > +       pgtable_pmd_page_dtor(pmdp);                    \
 > 
 > expected ‘struct page *’ but argument is of type ‘pmd_t * {aka struct
 > <anonymous> *}’
 > 
->> +       tlb_remove_page((tlb), (pmdp));                 \
+> > +       tlb_remove_page((tlb), (pmdp));                 \
 > 
 > likewise
-> 
->>   } while (0);
->>   #endif
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
 
+Duh.. clearly I misplaced my SH cross compiler. Let me go find it.
+
+Also, looking at pgtable.c the pmd_t* actually comes from a kmemcach()
+and should probably use pmd_free() (which is what the old code did too).
+
+Also, since SH doesn't have ARCH_ENABLE_SPLIT_PMD_PTLOCK, it will never
+need pgtable_pmd_page_dtor().
+
+The below seems to build se7722_defconfig using sh4-linux-. That is, the
+build fails, on 'node_reclaim_distance', not pgtable stuff.
+
+Does this fare better?
+
+---
+ arch/sh/include/asm/pgalloc.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/sh/include/asm/pgalloc.h b/arch/sh/include/asm/pgalloc.h
+index 22d968bfe9bb..c910e5bcde62 100644
+--- a/arch/sh/include/asm/pgalloc.h
++++ b/arch/sh/include/asm/pgalloc.h
+@@ -36,9 +36,7 @@ do {							\
+ #if CONFIG_PGTABLE_LEVELS > 2
+ #define __pmd_free_tlb(tlb, pmdp, addr)			\
+ do {							\
+-	struct page *page = virt_to_page(pmdp);		\
+-	pgtable_pmd_page_dtor(page);			\
+-	tlb_remove_page((tlb), page);			\
++	pmd_free((tlb)->mm, (pmdp));			\
+ } while (0);
+ #endif
+ 
