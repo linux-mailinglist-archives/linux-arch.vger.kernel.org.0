@@ -2,177 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C09B1148D4
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2019 22:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5C911498B
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2019 23:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730308AbfLEVwL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Dec 2019 16:52:11 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:36839 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729914AbfLEVwL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Dec 2019 16:52:11 -0500
-Received: by mail-io1-f67.google.com with SMTP id l17so5270267ioj.3;
-        Thu, 05 Dec 2019 13:52:10 -0800 (PST)
+        id S1726020AbfLEW4M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Dec 2019 17:56:12 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:42348 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725959AbfLEW4M (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Dec 2019 17:56:12 -0500
+Received: by mail-pj1-f67.google.com with SMTP id o11so1876677pjp.9;
+        Thu, 05 Dec 2019 14:56:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0e87BZGmWkpLZLDiE87VOkYIktS/iX8I8E4fJx5a9NY=;
-        b=vec6PHQ65zFZ2AkEnLw268Kc2K0MR2UyTczNzpYXosCpx4+PN+NNkl8QjdysVOwrA8
-         xXFACPKcNfr0dz/2BqFFsKbAjquNsT+9p/dTGLBuEoOYryMjQ3UJrz7cYVJyAbEpLtQ8
-         KEZYXG7PD6GZl9MMrVPGTNWb9ymhE1IGtsfooGAX6huHWmbYd1Mch0N3yol2Cy2B+UKX
-         6yFkSKbpRK4Y1iJGBv2ttuzxsMySdegy0pXBw4eCvjzVTMvUNFHMZVn8j0ObxZVwIuM8
-         yI4daHXMFaW62aTyy5UgPJbvpYGFJ4M45ul9koCD7p9zrkhXDOBPPvOivFbIp7sdwEKp
-         4xLA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=IDeK7oOW0B9CNYnGbhlUWhfaYDqmeePr7B16rf7vuug=;
+        b=TcJxvXpsivxWne6OpmZopXg+nQiC+1jQ/foJ47anY56k0POIuLQce7VaiLsrSG+Rdq
+         yiKg63sLTxBwMA2qld4SudrloQ8suHPXRFYdyYhCP6fL1h948ENgH/kMwxUJ7onxe3eD
+         TcOsmz0CywRwGQCzD1y/ybQ7TPUQcxtQ9eyvgGu8EyAKqpn80rP+5xlsBe5+pWXowMsg
+         MHQS4RzIXQu15CB4NOjusttvAW38VyS3y5uJbevX0UvFXRmfP46FZj6JocHsPQzA3tAo
+         lGAHWYrodz1yA0XU8UNcwBLMzNZUUjNcgFRcjhyIzJ7gMjXTng8XW24Ecp3T+jOtUcnG
+         IvKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0e87BZGmWkpLZLDiE87VOkYIktS/iX8I8E4fJx5a9NY=;
-        b=Or/yBkNaboyz1VqsN4zukYnKSJSuKofa4aGt8wA+wzwUbcOeJwF2uG+Ut3BprvWoV7
-         +w73Gf0+plZcjr8iETmDfUUc/pDo49azcr+6mo5X84wqLLhNT51Z4l4T+6gaWLVU9DJs
-         xPlmznrnV9daRWtQYutNiH3fOm/HWpT7IzCPVDYAAHPo8zXmzD8Tavp7zU7CIot/lnHN
-         3BMYE/7HE7WVW16sNywpVCRYy80FV2yIZ4wzQTkQvtkSRfwDqMAJGiSHR5Oqxt/GwU/W
-         UZYAv0wOH4FP0G/f4M1eQB3Wc4nV1w9aR1N5xCUhmjtSm51qyvd2omQGzEK9zqIFwogD
-         69CA==
-X-Gm-Message-State: APjAAAWg+yo/rmaHJ8e5znw9iX+w0CGtvi3DUjkuFQS+G91ZITjNA62H
-        sBGrhC+MoWBlMvWKdAJJw4AR+XH1sAY=
-X-Google-Smtp-Source: APXvYqw/su3Vu7qa5e4mwi0F+jZd4UYho+yw8impxRonTbKcXyESHJeH/YsM3ggchsm3ujlmrvxHNg==
-X-Received: by 2002:a5e:db0d:: with SMTP id q13mr8056229iop.199.1575582730008;
-        Thu, 05 Dec 2019 13:52:10 -0800 (PST)
-Received: from localhost.localdomain (c-24-9-77-57.hsd1.co.comcast.net. [24.9.77.57])
-        by smtp.googlemail.com with ESMTPSA id n22sm740184iog.14.2019.12.05.13.52.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2019 13:52:09 -0800 (PST)
-From:   Jim Cromie <jim.cromie@gmail.com>
-To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux@rasmusvillemoes.dk, Jim Cromie <jim.cromie@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
-        linux-arch@vger.kernel.org
-Subject: [PATCH 04/18] dyndbg: rename __verbose section to __dyndbg
-Date:   Thu,  5 Dec 2019 14:51:35 -0700
-Message-Id: <20191205215151.421926-5-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191205215151.421926-1-jim.cromie@gmail.com>
-References: <20191205215151.421926-1-jim.cromie@gmail.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IDeK7oOW0B9CNYnGbhlUWhfaYDqmeePr7B16rf7vuug=;
+        b=diyfIMvXR5Oqn8Da42y2jwdBHYOu+oO9wJyiroD+jIi8twJN0l8Q5nLL1v5za1Jfvv
+         zLnzfn4QD3ySmqV6zNEMsr2uN6CF8KiFwHfsQeUs03oEuTZnSuvRAZAp73J3ZdxS3Mz4
+         ByKvXV2E4pDCBxKkYeT1fHlsJPpU2Jil+rfqHixswfdyDxdlyPnCNcWG7nJBzjdIril5
+         ZRXJdZ6zSvUNTyLwdw+ZFAWvnKo4AyDbUdxYWJ3ffAwl6QzP9gdvEhYVnuzvQCQ4S5zw
+         kxTwylTRuEFqbp4DJQNyQlJNJPxLKX7kM2xt8S9bdI59byLypLMsJsQjutHWjVFmPMJL
+         0Ldw==
+X-Gm-Message-State: APjAAAU43IzGKM8Q7vFpD+lwBr6o06TQRC1nVUBGQ6fUzJ7BVjnuNsWO
+        pfzIz2DKgyPgzE094EQJas0=
+X-Google-Smtp-Source: APXvYqxHzb65lDkdIjAVkQB89RP4XhIHPS1Szd01E5+eADPQbmpWTvCZzqaJVF3j5vmxirtTRjda4w==
+X-Received: by 2002:a17:90a:868b:: with SMTP id p11mr12140247pjn.60.1575586571954;
+        Thu, 05 Dec 2019 14:56:11 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k3sm3746371pgc.3.2019.12.05.14.56.10
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 05 Dec 2019 14:56:11 -0800 (PST)
+Date:   Thu, 5 Dec 2019 14:56:10 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Will Deacon <will.deacon@arm.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Rik van Riel <riel@surriel.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Subject: Re: [PATCH v6 10/18] sh/tlb: Convert SH to generic mmu_gather
+Message-ID: <20191205225610.GB2532@roeck-us.net>
+References: <20190219103148.192029670@infradead.org>
+ <20190219103233.443069009@infradead.org>
+ <CAMuHMdW3nwckjA9Bt-_Dmf50B__sZH+9E5s0_ziK1U_y9onN=g@mail.gmail.com>
+ <20191204104733.GR2844@hirez.programming.kicks-ass.net>
+ <3c83eaec-8f33-1b90-1c70-9e7c1c8b1855@physik.fu-berlin.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c83eaec-8f33-1b90-1c70-9e7c1c8b1855@physik.fu-berlin.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-dyndbg populates its callsite info into __verbose section, change that
-to a more specific and descriptive name, __dyndbg.
+On Thu, Dec 05, 2019 at 08:30:17PM +0100, John Paul Adrian Glaubitz wrote:
+> Hi!
+> 
+> On 12/4/19 11:47 AM, Peter Zijlstra wrote:
+> >> I got remote access to an SH7722-based Migo-R again, which spews a long
+> >> sequence of BUGs during userspace startup.  I've bisected this to commit
+> >> c5b27a889da92f4a ("sh/tlb: Convert SH to generic mmu_gather").
+> > 
+> > Whoopsy.. also, is this really the first time anybody booted an SH
+> > kernel in over a year ?!?
+> 
+> I have to admit, I have been very lazy with kernel updates. I have been
+> planning to upgrade to a much more recent release on my boards for a while
+> now, I have just been postponing it since the machines run very stable
+> with the current kernel I am using.
+> 
 
-Also, per checkpatch:
-  simplify __attribute(..) to __section(__dyndbg) declaration.
+Hey, if you write a qemu emulation, I'll be happy to run it on a regular
+basis :-)
 
-and 1 spelling fix
+Problem is really that the architecture doesn't get as much attention as
+it needs. The backtrace pointed to by Rob has been seen for a long time,
+but either there is no one with the knowledge to fix it, or they are all
+busy with other stuff.
 
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- include/asm-generic/vmlinux.lds.h |  6 +++---
- include/linux/dynamic_debug.h     |  4 ++--
- kernel/module.c                   |  2 +-
- lib/dynamic_debug.c               | 12 ++++++------
- 4 files changed, 12 insertions(+), 12 deletions(-)
+Guenter
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index dae64600ccbf..82694efe3a83 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -285,9 +285,9 @@
- 	*(__tracepoints)						\
- 	/* implement dynamic printk debug */				\
- 	. = ALIGN(8);							\
--	__start___verbose = .;						\
--	KEEP(*(__verbose))                                              \
--	__stop___verbose = .;						\
-+	__start___dyndbg = .;						\
-+	KEEP(*(__dyndbg))						\
-+	__stop___dyndbg = .;						\
- 	LIKELY_PROFILE()		       				\
- 	BRANCH_PROFILE()						\
- 	TRACE_PRINTKS()							\
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 4cf02ecd67de..802480ea8708 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -80,7 +80,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 
- #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)		\
- 	static struct _ddebug  __aligned(8)			\
--	__attribute__((section("__verbose"))) name = {		\
-+	__section(__dyndbg) name = {				\
- 		.modname = KBUILD_MODNAME,			\
- 		.function = __func__,				\
- 		.filename = __FILE__,				\
-@@ -133,7 +133,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 
- /*
-  * "Factory macro" for generating a call to func, guarded by a
-- * DYNAMIC_DEBUG_BRANCH. The dynamic debug decriptor will be
-+ * DYNAMIC_DEBUG_BRANCH. The dynamic debug descriptor will be
-  * initialized using the fmt argument. The function will be called with
-  * the address of the descriptor as first argument, followed by all
-  * the varargs. Note that fmt is repeated in invocations of this
-diff --git a/kernel/module.c b/kernel/module.c
-index ff2d7359a418..a9c052cc30c5 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3237,7 +3237,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
- 	if (section_addr(info, "__obsparm"))
- 		pr_warn("%s: Ignoring obsolete parameters\n", mod->name);
- 
--	info->debug = section_objs(info, "__verbose",
-+	info->debug = section_objs(info, "__dyndbg",
- 				   sizeof(*info->debug), &info->num_debug);
- 
- 	return 0;
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index c86c97154657..0a4588fe342e 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -39,8 +39,8 @@
- 
- #include <rdma/ib_verbs.h>
- 
--extern struct _ddebug __start___verbose[];
--extern struct _ddebug __stop___verbose[];
-+extern struct _ddebug __start___dyndbg[];
-+extern struct _ddebug __stop___dyndbg[];
- 
- struct ddebug_table {
- 	struct list_head link;
-@@ -1010,14 +1010,14 @@ static int __init dynamic_debug_init(void)
- 	int n = 0, entries = 0, modct = 0;
- 	int verbose_bytes = 0;
- 
--	if (__start___verbose == __stop___verbose) {
-+	if (__start___dyndbg == __stop___dyndbg) {
- 		pr_warn("_ddebug table is empty in a CONFIG_DYNAMIC_DEBUG build\n");
- 		return 1;
- 	}
--	iter = __start___verbose;
-+	iter = __start___dyndbg;
- 	modname = iter->modname;
- 	iter_start = iter;
--	for (; iter < __stop___verbose; iter++) {
-+	for (; iter < __stop___dyndbg; iter++) {
- 		entries++;
- 		verbose_bytes += strlen(iter->modname) + strlen(iter->function)
- 			+ strlen(iter->filename) + strlen(iter->format);
-@@ -1040,7 +1040,7 @@ static int __init dynamic_debug_init(void)
- 	ddebug_init_success = 1;
- 	vpr_info("%d modules, %d entries and %d bytes in ddebug tables, %d bytes in (readonly) verbose section\n",
- 		 modct, entries, (int)(modct * sizeof(struct ddebug_table)),
--		 verbose_bytes + (int)(__stop___verbose - __start___verbose));
-+		 verbose_bytes + (int)(__stop___dyndbg - __start___dyndbg));
- 
- 	/* apply ddebug_query boot param, dont unload tables on err */
- 	if (ddebug_setup_string[0] != '\0') {
--- 
-2.23.0
-
+> Adrian
+> 
+> -- 
+>  .''`.  John Paul Adrian Glaubitz
+> : :' :  Debian Developer - glaubitz@debian.org
+> `. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+>   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
