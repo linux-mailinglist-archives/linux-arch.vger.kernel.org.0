@@ -2,114 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5C911498B
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2019 23:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3707B11508C
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2019 13:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726020AbfLEW4M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Dec 2019 17:56:12 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:42348 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbfLEW4M (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Dec 2019 17:56:12 -0500
-Received: by mail-pj1-f67.google.com with SMTP id o11so1876677pjp.9;
-        Thu, 05 Dec 2019 14:56:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=IDeK7oOW0B9CNYnGbhlUWhfaYDqmeePr7B16rf7vuug=;
-        b=TcJxvXpsivxWne6OpmZopXg+nQiC+1jQ/foJ47anY56k0POIuLQce7VaiLsrSG+Rdq
-         yiKg63sLTxBwMA2qld4SudrloQ8suHPXRFYdyYhCP6fL1h948ENgH/kMwxUJ7onxe3eD
-         TcOsmz0CywRwGQCzD1y/ybQ7TPUQcxtQ9eyvgGu8EyAKqpn80rP+5xlsBe5+pWXowMsg
-         MHQS4RzIXQu15CB4NOjusttvAW38VyS3y5uJbevX0UvFXRmfP46FZj6JocHsPQzA3tAo
-         lGAHWYrodz1yA0XU8UNcwBLMzNZUUjNcgFRcjhyIzJ7gMjXTng8XW24Ecp3T+jOtUcnG
-         IvKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IDeK7oOW0B9CNYnGbhlUWhfaYDqmeePr7B16rf7vuug=;
-        b=diyfIMvXR5Oqn8Da42y2jwdBHYOu+oO9wJyiroD+jIi8twJN0l8Q5nLL1v5za1Jfvv
-         zLnzfn4QD3ySmqV6zNEMsr2uN6CF8KiFwHfsQeUs03oEuTZnSuvRAZAp73J3ZdxS3Mz4
-         ByKvXV2E4pDCBxKkYeT1fHlsJPpU2Jil+rfqHixswfdyDxdlyPnCNcWG7nJBzjdIril5
-         ZRXJdZ6zSvUNTyLwdw+ZFAWvnKo4AyDbUdxYWJ3ffAwl6QzP9gdvEhYVnuzvQCQ4S5zw
-         kxTwylTRuEFqbp4DJQNyQlJNJPxLKX7kM2xt8S9bdI59byLypLMsJsQjutHWjVFmPMJL
-         0Ldw==
-X-Gm-Message-State: APjAAAU43IzGKM8Q7vFpD+lwBr6o06TQRC1nVUBGQ6fUzJ7BVjnuNsWO
-        pfzIz2DKgyPgzE094EQJas0=
-X-Google-Smtp-Source: APXvYqxHzb65lDkdIjAVkQB89RP4XhIHPS1Szd01E5+eADPQbmpWTvCZzqaJVF3j5vmxirtTRjda4w==
-X-Received: by 2002:a17:90a:868b:: with SMTP id p11mr12140247pjn.60.1575586571954;
-        Thu, 05 Dec 2019 14:56:11 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k3sm3746371pgc.3.2019.12.05.14.56.10
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 05 Dec 2019 14:56:11 -0800 (PST)
-Date:   Thu, 5 Dec 2019 14:56:10 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Will Deacon <will.deacon@arm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Rik van Riel <riel@surriel.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Subject: Re: [PATCH v6 10/18] sh/tlb: Convert SH to generic mmu_gather
-Message-ID: <20191205225610.GB2532@roeck-us.net>
-References: <20190219103148.192029670@infradead.org>
- <20190219103233.443069009@infradead.org>
- <CAMuHMdW3nwckjA9Bt-_Dmf50B__sZH+9E5s0_ziK1U_y9onN=g@mail.gmail.com>
- <20191204104733.GR2844@hirez.programming.kicks-ass.net>
- <3c83eaec-8f33-1b90-1c70-9e7c1c8b1855@physik.fu-berlin.de>
+        id S1726140AbfLFMqU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Dec 2019 07:46:20 -0500
+Received: from ozlabs.org ([203.11.71.1]:34691 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726124AbfLFMqT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 6 Dec 2019 07:46:19 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47TslW10tCz9s4Y;
+        Fri,  6 Dec 2019 23:46:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1575636375;
+        bh=oyct4tPxjrlkjB1zVGbKoKAWyEMXqFKQz+rA6a80J+Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LDjqbEKiUq8oNBats/yrnw90N+Rzv6Z+iiPnbOmZZ7DL568ZE4JOjjBHlEHFJfoeC
+         O8SOYmwLdmsN/V6kENixnnz/vOn5jzuNy7pWqQswsJTHN0f6lUjVdWV07IzT1YCnzG
+         1kL6GA7mRfq+HW2DeqJRjs0wlndNWkpM8er9OpYHENOK74c0gU4iuMOYCsOKOIFdBq
+         X+dupxBqvuGoTt7G8GxlraeFfKp5A0+6fkI8sOnQrpLnXb8TO52AAXLDQdhAsk4l/7
+         Pel8A8JoKvjlh+CqVUqwUBN4H7e+QZd4Je2t+OCOU6hgqTDNkgZRQDLShw8uq+fP7g
+         X1AGIjbhox6vg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dja@axtens.net, elver@google.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, christophe.leroy@c-s.fr,
+        linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
+        x86@kernel.org, kasan-dev@googlegroups.com
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops)
+Date:   Fri, 06 Dec 2019 23:46:11 +1100
+Message-ID: <87blslei5o.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c83eaec-8f33-1b90-1c70-9e7c1c8b1855@physik.fu-berlin.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 05, 2019 at 08:30:17PM +0100, John Paul Adrian Glaubitz wrote:
-> Hi!
-> 
-> On 12/4/19 11:47 AM, Peter Zijlstra wrote:
-> >> I got remote access to an SH7722-based Migo-R again, which spews a long
-> >> sequence of BUGs during userspace startup.  I've bisected this to commit
-> >> c5b27a889da92f4a ("sh/tlb: Convert SH to generic mmu_gather").
-> > 
-> > Whoopsy.. also, is this really the first time anybody booted an SH
-> > kernel in over a year ?!?
-> 
-> I have to admit, I have been very lazy with kernel updates. I have been
-> planning to upgrade to a much more recent release on my boards for a while
-> now, I have just been postponing it since the machines run very stable
-> with the current kernel I am using.
-> 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-Hey, if you write a qemu emulation, I'll be happy to run it on a regular
-basis :-)
+Hi Linus,
 
-Problem is really that the architecture doesn't get as much attention as
-it needs. The backtrace pointed to by Rob has been seen for a long time,
-but either there is no one with the knowledge to fix it, or they are all
-busy with other stuff.
+Please pull another powerpc update for 5.5.
 
-Guenter
+As you'll see from the diffstat this is mostly not powerpc code. In order to do
+KASAN instrumentation of bitops we needed to juggle some of the generic bitops
+headers.
 
-> Adrian
-> 
-> -- 
->  .''`.  John Paul Adrian Glaubitz
-> : :' :  Debian Developer - glaubitz@debian.org
-> `. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
->   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Because those changes potentially affect several architectures I wasn't
+confident putting them directly into my tree, so I've had them sitting in a
+topic branch. That branch (topic/kasan-bitops) has been in linux-next for a
+month, and I've not had any feedback that it's caused any problems.
+
+So I think this is good to merge, but it's a standalone pull so if anyone does
+object it's not a problem.
+
+cheers
+
+
+The following changes since commit da0c9ea146cbe92b832f1b0f694840ea8eb33cce:
+
+  Linux 5.4-rc2 (2019-10-06 14:27:30 -0700)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.5-2
+
+for you to fetch changes up to 4f4afc2c9599520300b3f2b3666d2034fca03df3:
+
+  docs/core-api: Remove possibly confusing sub-headings from Bit Operations (2019-12-04 21:20:28 +1100)
+
+- ------------------------------------------------------------------
+powerpc updates for 5.5 #2
+
+A few commits splitting the KASAN instrumented bitops header in
+three, to match the split of the asm-generic bitops headers.
+
+This is needed on powerpc because we use asm-generic/bitops/non-atomic.h,
+for the non-atomic bitops, whereas the existing KASAN instrumented
+bitops assume all the underlying operations are provided by the arch
+as arch_foo() versions.
+
+Thanks to:
+  Daniel Axtens & Christophe Leroy.
+
+- ------------------------------------------------------------------
+Daniel Axtens (2):
+      kasan: support instrumented bitops combined with generic bitops
+      powerpc: support KASAN instrumentation of bitops
+
+Michael Ellerman (1):
+      docs/core-api: Remove possibly confusing sub-headings from Bit Operations
+
+
+ Documentation/core-api/kernel-api.rst                |   8 +-
+ arch/powerpc/include/asm/bitops.h                    |  51 ++--
+ arch/s390/include/asm/bitops.h                       |   4 +-
+ arch/x86/include/asm/bitops.h                        |   4 +-
+ include/asm-generic/bitops-instrumented.h            | 263 --------------------
+ include/asm-generic/bitops/instrumented-atomic.h     | 100 ++++++++
+ include/asm-generic/bitops/instrumented-lock.h       |  81 ++++++
+ include/asm-generic/bitops/instrumented-non-atomic.h | 114 +++++++++
+ 8 files changed, 337 insertions(+), 288 deletions(-)
+ delete mode 100644 include/asm-generic/bitops-instrumented.h
+ create mode 100644 include/asm-generic/bitops/instrumented-atomic.h
+ create mode 100644 include/asm-generic/bitops/instrumented-lock.h
+ create mode 100644 include/asm-generic/bitops/instrumented-non-atomic.h
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAl3qSS4ACgkQUevqPMjh
+pYCp1Q//TrG2tPMDPHpWqCzNdWoh96zpIo2UsauDcc8l+XT7shkwHcGnpoECgCfK
+NjhP77qqXI61E+5qUCfO16/j5g6PbvvG/E/xlQEdgX7lIxBeGs4IkoRU8QjkJ9w5
+wAjG/XwaMJ21CQY2F51dn9NPQUvFxKV0o6QJ+/pIFBnv0eeYCtRWno7+tZGIiMhk
+ExfJhR0rnBdBc6oonNOTAfWn5u51FRRqUeICeo4iFoICu5v4cTbPiU3/8bZYzhSb
+wM9WdG+/IUs02PffIQF4GDyMmzi/Qm3Ujl3tUIEaFHlfN9pF6X7Yog7Co26CShJj
+No4wJK5rS3ECXmwo7Yd69sV9FZrMZZvGY9x7p7bEE7mqk1fHMaM3DMXvR8Gx6UGM
+NCXX2QIIigz3RUTbj3CW2iZa9R/FTSFXs3Ih4YDDJdPNanYpcX3/wE6mpwsco8do
+lxWcN1AMGXLiaNdQ8IkRZ6hOLH/Po34RvDo1P1mS06NzfyyTZW7JNiUtU2HSqPRs
+vjIkHDM7585ika6jeDHU4cJaLy7bsCNV2fLsHWDE3Xno43g7qcKGOx+PtO25XubZ
+iP1vojR4Qml+e3ySf6dDiOIDltSWZwjCGtbi2gmdErHiLdLeJX2XGjC36Qnep6u6
+15HIWzX41tg8y4QRJDmPyeDm3Ccbabz+m4LaccbdObgGWVwxwgA=
+=06Wr
+-----END PGP SIGNATURE-----
