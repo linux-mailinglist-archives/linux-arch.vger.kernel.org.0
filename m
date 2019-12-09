@@ -2,130 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF6D11632C
-	for <lists+linux-arch@lfdr.de>; Sun,  8 Dec 2019 18:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0A8116681
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2019 06:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbfLHRTX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 8 Dec 2019 12:19:23 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:35115 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726472AbfLHRTX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 Dec 2019 12:19:23 -0500
-Received: by mail-wr1-f67.google.com with SMTP id g17so13418850wro.2;
-        Sun, 08 Dec 2019 09:19:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=hJ551783o9ImIc/f28xz8rKXrHYxNx70TgHA3JxmnaY=;
-        b=oXnxX3E0AsCAjLUi4ymzC7mQnsVvvUvM1731+3HdPdZL6kakMAdK8IyWnTBGfbIa0K
-         cOumCj+euP80G+nRBykvoYFsRI/wtwDgI9gwkzMxyd93bEECKS1rt7gzkfEavMPOrSGN
-         0NHudKJCMgFU29ZHDk8HNn6yZa3RJocdsfjGbJWEAhvsIMMOL6cvVmRy8dCfav3BsxTI
-         PFL1PW+CUBnvlRr41msShjHwRGZkYN+kasf7ow+y70HvuXaeyig79sEP9iQXE4e189Rr
-         TvaW57XFYrZxGxnfaNfK/qckAE/I8ZwtHu5TDb33Teu0EjO2Zc605+xgHm8LhwPhvAOd
-         ftzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=hJ551783o9ImIc/f28xz8rKXrHYxNx70TgHA3JxmnaY=;
-        b=ZoKOsP0CVd93XG1qMD3EnU3vXgmOYM6UDY3wXZqj2SLF5QVcdXvqOZVRd2mWng41R4
-         v/hWVnsAPBz8Oxn1Qw57jniKTdFXqm7szZ0EKLsWzm9qedIJGNa5ghYcw0ma+iuIC019
-         ebhe22RfRdsCUl1KibadQw6iZd4uzORp9ArHdhLZ+ZlOXyIt0u7HnzakwzcsseVBfFk/
-         eCdG0QwqGnRHAdW0+u/QBrKHugG2XYnUFOQS2bQ3TIPO6HGRfFSzpfliWzv2ItjsKuff
-         Zqvk1y8/Le+vTTcaeKcSnC9PS2APdCs5XtaujUsB+mjqx8lG26utjJrSL7gajsrIaaye
-         wJaQ==
-X-Gm-Message-State: APjAAAUTu3Ip+HKA0FFBAtkoC6No5pKPYDa1u13yH7mjyFjRIKX+pxSH
-        yXfTqdVZ2PSLUmMTVe0E9Q==
-X-Google-Smtp-Source: APXvYqztbmerjte0PZPdfwvWOIfvnFfr1Lgq24F0mQ2x9aUA7P5VI0zZPPNVfdk6YUoMtOXikoulOw==
-X-Received: by 2002:adf:8150:: with SMTP id 74mr27860550wrm.114.1575825561893;
-        Sun, 08 Dec 2019 09:19:21 -0800 (PST)
-Received: from avx2 ([46.53.249.42])
-        by smtp.gmail.com with ESMTPSA id h2sm24387086wrv.66.2019.12.08.09.19.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Dec 2019 09:19:21 -0800 (PST)
-Date:   Sun, 8 Dec 2019 20:19:18 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     dan.carpenter@oracle.com, will@kernel.org, ebiederm@xmission.com,
-        linux-arch@vger.kernel.org, security@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] execve: warn if process starts with executable stack
-Message-ID: <20191208171918.GC19716@avx2>
+        id S1726495AbfLIFnX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Dec 2019 00:43:23 -0500
+Received: from ozlabs.org ([203.11.71.1]:37465 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726408AbfLIFnX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 9 Dec 2019 00:43:23 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47WXD73mCSz9sP6;
+        Mon,  9 Dec 2019 16:43:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1575870201;
+        bh=EU4lPc5IWHfktnisegd6j5Y6xKovFoBVkVjlsMX4/pE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=igRorkS97HOON5GNqt21oBCytjvq3MO/I/pbqKeA+/w/EC95/C9ComNHV83pfOIJo
+         b4BGFIKg3r1DHuXk2sPf8s03P3Ccx8hYkery5YB1CDqnFS8wlBMbZBLR3vtejfl7jy
+         h6x4j9eJEGkJyxOc4uI8gM+N1rH/AVk/tDaClHwM+fcgo3GK4PTf+I/L3YSt4sLzOe
+         RiNCkQNfxvAXHlPpCsDKltYrZ92IGr8D/O4Hj8MjwAiYJrgDx589PIR6zviioFUxG3
+         +7ISbse34yFB4L6wshgcHwRY2JHcyhf5nNMe6B1HMP9BmG6lP0V29ZZes4qk3i1bZa
+         6BWY4Z7Sl5Y9Q==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Christian Zigotzky <chzigotzky@xenosoft.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Darren Stevens <darren@stevens-zone.net>,
+        mad skateman <madskateman@gmail.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Paul Mackerras <paulus@samba.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] powerpc: ensure that swiotlb buffer is allocated from low memory
+In-Reply-To: <20191204123524.22919-1-rppt@kernel.org>
+References: <20191204123524.22919-1-rppt@kernel.org>
+Date:   Mon, 09 Dec 2019 16:43:17 +1100
+Message-ID: <87h82aqcju.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-There were few episodes of silent downgrade to an executable stack over
-years:
+Mike Rapoport <rppt@kernel.org> writes:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+>
+> Some powerpc platforms (e.g. 85xx) limit DMA-able memory way below 4G. If a
+> system has more physical memory than this limit, the swiotlb buffer is not
+> addressable because it is allocated from memblock using top-down mode.
+>
+> Force memblock to bottom-up mode before calling swiotlb_init() to ensure
+> that the swiotlb buffer is DMA-able.
+>
+> Link: https://lkml.kernel.org/r/F1EBB706-73DF-430E-9020-C214EC8ED5DA@xenosoft.de
 
-1) linking innocent looking assembly file will silently add executable
-   stack if proper linker options is not given as well:
+This wasn't bisected, but I thought it was a regression. Do we know what
+commit caused it?
 
-	$ cat f.S
-	.intel_syntax noprefix
-	.text
-	.globl f
-	f:
-	        ret
+Was it 25078dc1f74b ("powerpc: use mm zones more sensibly") ?
 
-	$ cat main.c
-	void f(void);
-	int main(void)
-	{
-	        f();
-	        return 0;
-	}
+Or was that a red herring?
 
-	$ gcc main.c f.S
-	$ readelf -l ./a.out
-	  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
-                         0x0000000000000000 0x0000000000000000  RWE    0x10
-			 					 ^^^
+cheers
 
-2) converting C99 nested function into a closure
-https://nullprogram.com/blog/2019/11/15/
-
-	void intsort2(int *base, size_t nmemb, _Bool invert)
-	{
-	    int cmp(const void *a, const void *b)
-	    {
-	        int r = *(int *)a - *(int *)b;
-	        return invert ? -r : r;
-	    }
-	    qsort(base, nmemb, sizeof(*base), cmp);
-	}
-
-will silently require stack trampolines while non-closure version will not.
-
-Without doubt this behaviour is documented somewhere, add a warning so that
-developers and users can at least notice. After so many years of x86_64 having
-proper executable stack support it should not cause too many problems.
-
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
-
-	v2: print pathname instead of comm/pid
-
- fs/exec.c |    5 +++++
- 1 file changed, 5 insertions(+)
-
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -761,6 +761,11 @@ int setup_arg_pages(struct linux_binprm *bprm,
- 		goto out_unlock;
- 	BUG_ON(prev != vma);
- 
-+	if (unlikely(vm_flags & VM_EXEC)) {
-+		pr_warn_once("process '%pD4' started with executable stack\n",
-+			     bprm->file);
-+	}
-+
- 	/* Move stack pages down in memory. */
- 	if (stack_shift) {
- 		ret = shift_arg_pages(vma, stack_shift);
+> Reported-by: Christian Zigotzky <chzigotzky@xenosoft.de>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Darren Stevens <darren@stevens-zone.net>
+> Cc: mad skateman <madskateman@gmail.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> ---
+>  arch/powerpc/mm/mem.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/arch/powerpc/mm/mem.c b/arch/powerpc/mm/mem.c
+> index be941d382c8d..14c2c53e3f9e 100644
+> --- a/arch/powerpc/mm/mem.c
+> +++ b/arch/powerpc/mm/mem.c
+> @@ -260,6 +260,14 @@ void __init mem_init(void)
+>  	BUILD_BUG_ON(MMU_PAGE_COUNT > 16);
+>  
+>  #ifdef CONFIG_SWIOTLB
+> +	/*
+> +	 * Some platforms (e.g. 85xx) limit DMA-able memory way below
+> +	 * 4G. We force memblock to bottom-up mode to ensure that the
+> +	 * memory allocated in swiotlb_init() is DMA-able.
+> +	 * As it's the last memblock allocation, no need to reset it
+> +	 * back to to-down.
+> +	 */
+> +	memblock_set_bottom_up(true);
+>  	swiotlb_init(0);
+>  #endif
+>  
+> -- 
+> 2.24.0
