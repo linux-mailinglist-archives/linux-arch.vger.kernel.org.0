@@ -2,651 +2,295 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B68291185A6
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2019 11:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 839EA118612
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2019 12:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbfLJK6P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Dec 2019 05:58:15 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46353 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbfLJK6P (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Dec 2019 05:58:15 -0500
-Received: by mail-lj1-f193.google.com with SMTP id z17so19285866ljk.13;
-        Tue, 10 Dec 2019 02:58:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=hVGRfhy9yrmfU+rOlyHiy18+MzZZ51Ax5wEwytMGsyw=;
-        b=d2Il6Y8XKPFhKtg9o9IfhVnNPv2u7ygAwBIX+YU4ZoO8BjZ4U1wOe9eYRL3+sgGCOG
-         HMDDuF0SO2xYxt7Nd1NCVXxovr9E8BpjtMzeeezA7McvWY7XYKg70qeqL85VvfAFBZvl
-         DfurwbBu2AWOUsVxNwTNqKZKZvOJkKDexxEqEVgTHb54L1F+VbvpB0RY28OQSnutZGzy
-         e/xYVWA0R+9HmGvil356LbbzfYrd17d2T048qqvNb23DQSUOyOgjKH/rLbISoJ/7VWIO
-         QKr0CgCWBUKAsOB8sn2jQgqpeB9n7laKTTIMGzmGOq78NbbWvDGZ14gBG8TW5YvdYyeJ
-         +Zeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hVGRfhy9yrmfU+rOlyHiy18+MzZZ51Ax5wEwytMGsyw=;
-        b=QOKXN9lhWmhK/wpMdGUbJGKWPk1o/leL0PtYUDHb8LgDlJIBXi8mYEnFobXtOcUY95
-         +zS+7H6pfCiGaQxQNiFC22dIQDOSk6cR3SSXqu6XqFOJSzSYbhN3f8Ww0gK377jM8NxC
-         fLzrQrbcmIDPdXsLD8d4fQjFvZG8jQkm3CDhuh86x6Hg5rDNkHXX3wYHARuJiFw4p5bG
-         hWq7hJR9q9EgA58XE+m+MdAoF/UZPqrSmS8almvh0SzG9tsVe3tZpjMjXp0WXu5U/mJG
-         1lX4/2yjjIYqoFOPvhiLUzzBfTJdNa9Kdy98s6qDDV3MeDnxn5T9T3sSDTXxv7Efl4Va
-         AUQA==
-X-Gm-Message-State: APjAAAVATUpwdKx8z/pf4crIADiW4xNIKJZcspbeog2T4i+gvI+ceFZs
-        kfb8xVRIKwSUvw1FFWz96XI=
-X-Google-Smtp-Source: APXvYqxizKdmwRv9WE3y7JgaE/HcVXr8EPFS3BZYwBpFMZrIXedMwaV/Yy3MP+g2IOb5g/NuLIHzjg==
-X-Received: by 2002:a2e:3608:: with SMTP id d8mr15287035lja.152.1575975489795;
-        Tue, 10 Dec 2019 02:58:09 -0800 (PST)
-Received: from [192.168.68.106] ([193.119.54.228])
-        by smtp.gmail.com with ESMTPSA id d24sm1528028lja.82.2019.12.10.02.58.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 Dec 2019 02:58:09 -0800 (PST)
-Subject: Re: [PATCH v2 4/4] powerpc: Book3S 64-bit "heavyweight" KASAN support
-To:     Daniel Axtens <dja@axtens.net>, linux-kernel@vger.kernel.org,
+        id S1727128AbfLJLU4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Dec 2019 06:20:56 -0500
+Received: from mga09.intel.com ([134.134.136.24]:62175 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726915AbfLJLUz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 10 Dec 2019 06:20:55 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Dec 2019 03:20:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,299,1571727600"; 
+   d="gz'50?scan'50,208,50";a="244811667"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Dec 2019 03:20:50 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iedZR-000HYZ-UF; Tue, 10 Dec 2019 19:20:49 +0800
+Date:   Tue, 10 Dec 2019 19:20:05 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Daniel Axtens <dja@axtens.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
         linux-s390@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kasan-dev@googlegroups.com, christophe.leroy@c-s.fr,
-        aneesh.kumar@linux.ibm.com
-References: <20191210044714.27265-1-dja@axtens.net>
- <20191210044714.27265-5-dja@axtens.net>
-From:   Balbir Singh <bsingharora@gmail.com>
-Message-ID: <71751e27-e9c5-f685-7a13-ca2e007214bc@gmail.com>
-Date:   Tue, 10 Dec 2019 21:57:58 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        aneesh.kumar@linux.ibm.com, bsingharora@gmail.com,
+        Daniel Axtens <dja@axtens.net>
+Subject: Re: [PATCH v2 4/4] powerpc: Book3S 64-bit "heavyweight" KASAN support
+Message-ID: <201912101903.uTvLRIgy%lkp@intel.com>
+References: <20191210044714.27265-5-dja@axtens.net>
 MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="g62ettbvkg3kwp6n"
+Content-Disposition: inline
 In-Reply-To: <20191210044714.27265-5-dja@axtens.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
+--g62ettbvkg3kwp6n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 10/12/19 3:47 pm, Daniel Axtens wrote:
-> KASAN support on powerpc64 is challenging:
-> 
->  - We want to be able to support inline instrumentation so as to be
->    able to catch global and stack issues.
-> 
->  - We run some code in real mode after boot, most notably a lot of
->    KVM code. We'd like to be able to instrument this.
-> 
->    [For those not immersed in ppc64, in real mode, the top nibble or
->    2 bits (depending on radix/hash mmu) of the address is ignored. The
->    linear mapping is placed at 0xc000000000000000. This means that a
->    pointer to part of the linear mapping will work both in real mode,
->    where it will be interpreted as a physical address of the form
->    0x000..., and out of real mode, where it will go via the linear
->    mapping.]
-> 
->  - Inline instrumentation requires a fixed offset.
-> 
->  - Because of our running things in real mode, the offset has to
->    point to valid memory both in and out of real mode.
-> 
-> This makes finding somewhere to put the KASAN shadow region challenging.
-> 
-> One approach is just to give up on inline instrumentation and override
-> the address->shadow calculation. This way we can delay all checking
-> until after we get everything set up to our satisfaction. However,
-> we'd really like to do better.
-> 
-> What we can do - if we know _at compile time_ how much contiguous
-> physical memory we have - is to set aside the top 1/8th of the memory
-> and use that. This is a big hammer (hence the "heavyweight" name) and
-> comes with 3 big consequences:
-> 
->  - kernels will simply fail to boot on machines with less memory than
->    specified when compiling.
-> 
->  - kernels running on machines with more memory than specified when
->    compiling will simply ignore the extra memory.
-> 
->  - there's no nice way to handle physically discontiguous memory, so
->    you are restricted to the first physical memory block.
-> 
-> If you can bear all this, you get full support for KASAN.
-> 
-> Despite the limitations, it can still find bugs,
-> e.g. http://patchwork.ozlabs.org/patch/1103775/
-> 
-> The current implementation is Radix only.
-> 
-> Massive thanks to mpe, who had the idea for the initial design.
-> 
-> Signed-off-by: Daniel Axtens <dja@axtens.net>
-> 
-> ---
-> Changes since v1:
->  - Landed kasan vmalloc support upstream
->  - Lots of feedback from Christophe.
-> 
-> Changes since the rfc:
-> 
->  - Boots real and virtual hardware, kvm works.
-> 
->  - disabled reporting when we're checking the stack for exception
->    frames. The behaviour isn't wrong, just incompatible with KASAN.
-> 
->  - Documentation!
-> 
->  - Dropped old module stuff in favour of KASAN_VMALLOC.
-> 
-> The bugs with ftrace and kuap were due to kernel bloat pushing
-> prom_init calls to be done via the plt. Because we did not have
-> a relocatable kernel, and they are done very early, this caused
-> everything to explode. Compile with CONFIG_RELOCATABLE!
-> ---
->  Documentation/dev-tools/kasan.rst             |   8 +-
->  Documentation/powerpc/kasan.txt               | 102 +++++++++++++++++-
->  arch/powerpc/Kconfig                          |   3 +
->  arch/powerpc/Kconfig.debug                    |  21 ++++
->  arch/powerpc/Makefile                         |  11 ++
->  arch/powerpc/include/asm/kasan.h              |  20 +++-
->  arch/powerpc/kernel/process.c                 |   8 ++
->  arch/powerpc/kernel/prom.c                    |  59 +++++++++-
->  arch/powerpc/mm/kasan/Makefile                |   3 +-
->  .../mm/kasan/{kasan_init_32.c => init_32.c}   |   0
->  arch/powerpc/mm/kasan/init_book3s_64.c        |  67 ++++++++++++
->  11 files changed, 293 insertions(+), 9 deletions(-)
->  rename arch/powerpc/mm/kasan/{kasan_init_32.c => init_32.c} (100%)
->  create mode 100644 arch/powerpc/mm/kasan/init_book3s_64.c
-> 
-> diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
-> index 4af2b5d2c9b4..d99dc580bc11 100644
-> --- a/Documentation/dev-tools/kasan.rst
-> +++ b/Documentation/dev-tools/kasan.rst
-> @@ -22,8 +22,9 @@ global variables yet.
->  Tag-based KASAN is only supported in Clang and requires version 7.0.0 or later.
->  
->  Currently generic KASAN is supported for the x86_64, arm64, xtensa and s390
-> -architectures. It is also supported on 32-bit powerpc kernels. Tag-based KASAN
-> -is supported only on arm64.
-> +architectures. It is also supported on powerpc, for 32-bit kernels, and for
-> +64-bit kernels running under the Radix MMU. Tag-based KASAN is supported only
-> +on arm64.
->  
->  Usage
->  -----
-> @@ -256,7 +257,8 @@ CONFIG_KASAN_VMALLOC
->  ~~~~~~~~~~~~~~~~~~~~
->  
->  With ``CONFIG_KASAN_VMALLOC``, KASAN can cover vmalloc space at the
-> -cost of greater memory usage. Currently this is only supported on x86.
-> +cost of greater memory usage. Currently this is optional on x86, and
-> +required on 64-bit powerpc.
->  
->  This works by hooking into vmalloc and vmap, and dynamically
->  allocating real shadow memory to back the mappings.
-> diff --git a/Documentation/powerpc/kasan.txt b/Documentation/powerpc/kasan.txt
-> index a85ce2ff8244..d6e7a415195c 100644
-> --- a/Documentation/powerpc/kasan.txt
-> +++ b/Documentation/powerpc/kasan.txt
-> @@ -1,4 +1,4 @@
-> -KASAN is supported on powerpc on 32-bit only.
-> +KASAN is supported on powerpc on 32-bit and 64-bit Radix only.
->  
->  32 bit support
->  ==============
-> @@ -10,3 +10,103 @@ fixmap area and occupies one eighth of the total kernel virtual memory space.
->  
->  Instrumentation of the vmalloc area is not currently supported, but modules
->  are.
-> +
-> +64 bit support
-> +==============
-> +
-> +Currently, only the radix MMU is supported. There have been versions for Book3E
-> +processors floating around on the mailing list, but nothing has been merged.
-> +
-> +KASAN support on Book3S is a bit tricky to get right:
-> +
-> + - We want to be able to support inline instrumentation so as to be able to
-> +   catch global and stack issues.
-> +
-> + - Inline instrumentation requires a fixed offset.
-> +
-> + - We run a lot of code in real mode. Most notably a lot of KVM runs in real
-> +   mode, and we'd like to be able to instrument it.
-> +
-> + - Because we run code in real mode after boot, the offset has to point to
-> +   valid memory both in and out of real mode.
-> +
-> +One approach is just to give up on inline instrumentation. This way we can
-> +delay all checks until after we get everything set up correctly. However, we'd
-> +really like to do better.
-> +
-> +If we know _at compile time_ how much contiguous physical memory we have, we
-> +can set aside the top 1/8th of the first block of physical memory and use
-> +that. This is a big hammer and comes with 3 big consequences:
-> +
-> + - there's no nice way to handle physically discontiguous memory, so
-> +   you are restricted to the first physical memory block.
-> +
-> + - kernels will simply fail to boot on machines with less memory than specified
-> +   when compiling.
-> +
-> + - kernels running on machines with more memory than specified when compiling
-> +   will simply ignore the extra memory.
-> +
-> +If you can live with this, you get full support for KASAN.
-> +
-> +Tips
-> +----
-> +
-> + - Compile with CONFIG_RELOCATABLE.
-> +
-> +   In development, we found boot hangs when building with ftrace and KUAP
-> +   on. These ended up being due to kernel bloat pushing prom_init calls to be
-> +   done via the PLT. Because we did not have a relocatable kernel, and they are
-> +   done very early, this caused us to jump off into somewhere invalid. Enabling
-> +   relocation fixes this.
-> +
-> +NUMA/discontiguous physical memory
-> +----------------------------------
-> +
-> +We currently cannot really deal with discontiguous physical memory. You are
-> +restricted to the physical memory that is contiguous from physical address
-> +zero, and must specify the size of that memory, not total memory, when
-> +configuring your kernel.
-> +
-> +Discontiguous memory can occur when you have a machine with memory spread
-> +across multiple nodes. For example, on a Talos II with 64GB of RAM:
-> +
-> + - 32GB runs from 0x0 to 0x0000_0008_0000_0000,
-> + - then there's a gap,
-> + - then the final 32GB runs from 0x0000_2000_0000_0000 to 0x0000_2008_0000_0000
-> +
-> +This can create _significant_ issues:
-> +
-> + - If we try to treat the machine as having 64GB of _contiguous_ RAM, we would
-> +   assume that ran from 0x0 to 0x0000_0010_0000_0000. We'd then reserve the
-> +   last 1/8th - 0x0000_000e_0000_0000 to 0x0000_0010_0000_0000 as the shadow
-> +   region. But when we try to access any of that, we'll try to access pages
-> +   that are not physically present.
-> +
+Hi Daniel,
 
-If we reserved memory for KASAN from each node (discontig region), we might survive
-this no? May be we need NUMA aware KASAN? That might be a generic change, just thinking
-out loud.
+Thank you for the patch! Yet something to improve:
 
-> + - If we try to base the shadow region size on the top address, we'll need to
-> +   reserve 0x2008_0000_0000 / 8 = 0x0401_0000_0000 bytes = 4100 GB of memory,
-> +   which will clearly not work on a system with 64GB of RAM.
-> +
-> +Therefore, you are restricted to the memory in the node starting at 0x0. For
-> +this system, that's 32GB. If you specify a contiguous physical memory size
-> +greater than the size of the first contiguous region of memory, the system will
-> +be unable to boot or even print an error message warning you.
-> +
-> +You can determine the layout of your system's memory by observing the messages
-> +that the Radix MMU prints on boot. The Talos II discussed earlier has:
-> +
-> +radix-mmu: Mapped 0x0000000000000000-0x0000000040000000 with 1.00 GiB pages (exec)
-> +radix-mmu: Mapped 0x0000000040000000-0x0000000800000000 with 1.00 GiB pages
-> +radix-mmu: Mapped 0x0000200000000000-0x0000200800000000 with 1.00 GiB pages
-> +
-> +As discussed, you'd configure this system for 32768 MB.
-> +
-> +Another system prints:
-> +
-> +radix-mmu: Mapped 0x0000000000000000-0x0000000040000000 with 1.00 GiB pages (exec)
-> +radix-mmu: Mapped 0x0000000040000000-0x0000002000000000 with 1.00 GiB pages
-> +radix-mmu: Mapped 0x0000200000000000-0x0000202000000000 with 1.00 GiB pages
-> +
-> +This machine has more memory: 0x0000_0040_0000_0000 total, but only
-> +0x0000_0020_0000_0000 is physically contiguous from zero, so we'd configure the
-> +kernel for 131072 MB of physically contiguous memory.
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 1ec34e16ed65..f68650f14e61 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -173,6 +173,9 @@ config PPC
->  	select HAVE_ARCH_HUGE_VMAP		if PPC_BOOK3S_64 && PPC_RADIX_MMU
->  	select HAVE_ARCH_JUMP_LABEL
->  	select HAVE_ARCH_KASAN			if PPC32
-> +	select HAVE_ARCH_KASAN			if PPC_BOOK3S_64 && PPC_RADIX_MMU
-> +	select HAVE_ARCH_KASAN_VMALLOC		if PPC_BOOK3S_64
-> +	select KASAN_VMALLOC			if KASAN && PPC_BOOK3S_64
->  	select HAVE_ARCH_KGDB
->  	select HAVE_ARCH_MMAP_RND_BITS
->  	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if COMPAT
-> diff --git a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debug
-> index 4e1d39847462..90bb48455cb8 100644
-> --- a/arch/powerpc/Kconfig.debug
-> +++ b/arch/powerpc/Kconfig.debug
-> @@ -394,6 +394,27 @@ config PPC_FAST_ENDIAN_SWITCH
->  	help
->  	  If you're unsure what this is, say N.
->  
-> +config PHYS_MEM_SIZE_FOR_KASAN
-> +	int "Contiguous physical memory size for KASAN (MB)" if KASAN && PPC_BOOK3S_64
-> +	default 0
-> +	help
-> +
-> +	  To get inline instrumentation support for KASAN on 64-bit Book3S
-> +	  machines, you need to know how much contiguous physical memory your
-> +	  system has. A shadow offset will be calculated based on this figure,
-> +	  which will be compiled in to the kernel. KASAN will use this offset
-> +	  to access its shadow region, which is used to verify memory accesses.
-> +
-> +	  If you attempt to boot on a system with less memory than you specify
-> +	  here, your system will fail to boot very early in the process. If you
-> +	  boot on a system with more memory than you specify, the extra memory
-> +	  will wasted - it will be reserved and not used.
-> +
-> +	  For systems with discontiguous blocks of physical memory, specify the
-> +	  size of the block starting at 0x0. You can determine this by looking
-> +	  at the memory layout info printed to dmesg by the radix MMU code
-> +	  early in boot. See Documentation/powerpc/kasan.txt.
-> +
->  config KASAN_SHADOW_OFFSET
->  	hex
->  	depends on KASAN
-> diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-> index f35730548e42..eff693527462 100644
-> --- a/arch/powerpc/Makefile
-> +++ b/arch/powerpc/Makefile
-> @@ -230,6 +230,17 @@ ifdef CONFIG_476FPE_ERR46
->  		-T $(srctree)/arch/powerpc/platforms/44x/ppc476_modules.lds
->  endif
->  
-> +ifdef CONFIG_PPC_BOOK3S_64
-> +# The KASAN shadow offset is such that linear map (0xc000...) is shadowed by
-> +# the last 8th of linearly mapped physical memory. This way, if the code uses
-> +# 0xc addresses throughout, accesses work both in in real mode (where the top
-> +# 2 bits are ignored) and outside of real mode.
-> +#
-> +# 0xc000000000000000 >> 3 = 0xa800000000000000 = 12105675798371893248
-> +KASAN_SHADOW_OFFSET = $(shell echo 7 \* 1024 \* 1024 \* $(CONFIG_PHYS_MEM_SIZE_FOR_KASAN) / 8 + 12105675798371893248 | bc)
-> +KBUILD_CFLAGS += -DKASAN_SHADOW_OFFSET=$(KASAN_SHADOW_OFFSET)UL
-> +endif
-> +
->  # No AltiVec or VSX instructions when building kernel
->  KBUILD_CFLAGS += $(call cc-option,-mno-altivec)
->  KBUILD_CFLAGS += $(call cc-option,-mno-vsx)
-> diff --git a/arch/powerpc/include/asm/kasan.h b/arch/powerpc/include/asm/kasan.h
-> index 296e51c2f066..98d995bc9b5e 100644
-> --- a/arch/powerpc/include/asm/kasan.h
-> +++ b/arch/powerpc/include/asm/kasan.h
-> @@ -14,13 +14,20 @@
->  
->  #ifndef __ASSEMBLY__
->  
-> -#include <asm/page.h>
-> +#ifdef CONFIG_KASAN
-> +void kasan_init(void);
-> +#else
-> +static inline void kasan_init(void) { }
-> +#endif
->  
->  #define KASAN_SHADOW_SCALE_SHIFT	3
->  
->  #define KASAN_SHADOW_START	(KASAN_SHADOW_OFFSET + \
->  				 (PAGE_OFFSET >> KASAN_SHADOW_SCALE_SHIFT))
->  
-> +#ifdef CONFIG_PPC32
-> +#include <asm/page.h>
-> +
->  #define KASAN_SHADOW_OFFSET	ASM_CONST(CONFIG_KASAN_SHADOW_OFFSET)
->  
->  #define KASAN_SHADOW_END	0UL
-> @@ -30,11 +37,18 @@
->  #ifdef CONFIG_KASAN
->  void kasan_early_init(void);
->  void kasan_mmu_init(void);
-> -void kasan_init(void);
->  #else
-> -static inline void kasan_init(void) { }
->  static inline void kasan_mmu_init(void) { }
->  #endif
-> +#endif
-> +
-> +#ifdef CONFIG_PPC_BOOK3S_64
-> +#include <asm/pgtable.h>
-> +
-> +#define KASAN_SHADOW_SIZE ((u64)CONFIG_PHYS_MEM_SIZE_FOR_KASAN * \
-> +				1024 * 1024 * 1 / 8)
-> +
-> +#endif /* CONFIG_PPC_BOOK3S_64 */
->  
->  #endif /* __ASSEMBLY */
->  #endif
-> diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
-> index 4df94b6e2f32..c60ff299f39b 100644
-> --- a/arch/powerpc/kernel/process.c
-> +++ b/arch/powerpc/kernel/process.c
-> @@ -2081,7 +2081,14 @@ void show_stack(struct task_struct *tsk, unsigned long *stack)
->  		/*
->  		 * See if this is an exception frame.
->  		 * We look for the "regshere" marker in the current frame.
-> +		 *
-> +		 * KASAN may complain about this. If it is an exception frame,
-> +		 * we won't have unpoisoned the stack in asm when we set the
-> +		 * exception marker. If it's not an exception frame, who knows
-> +		 * how things are laid out - the shadow could be in any state
-> +		 * at all. Just disable KASAN reporting for now.
->  		 */
-> +		kasan_disable_current();
->  		if (validate_sp(sp, tsk, STACK_INT_FRAME_SIZE)
->  		    && stack[STACK_FRAME_MARKER] == STACK_FRAME_REGS_MARKER) {
->  			struct pt_regs *regs = (struct pt_regs *)
-> @@ -2091,6 +2098,7 @@ void show_stack(struct task_struct *tsk, unsigned long *stack)
->  			       regs->trap, (void *)regs->nip, (void *)lr);
->  			firstframe = 1;
->  		}
-> +		kasan_enable_current();
->  
->  		sp = newsp;
->  	} while (count++ < kstack_depth_to_print);
-> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> index 6620f37abe73..b32036f61cad 100644
-> --- a/arch/powerpc/kernel/prom.c
-> +++ b/arch/powerpc/kernel/prom.c
-> @@ -72,6 +72,7 @@ unsigned long tce_alloc_start, tce_alloc_end;
->  u64 ppc64_rma_size;
->  #endif
->  static phys_addr_t first_memblock_size;
-> +static phys_addr_t top_phys_addr;
->  static int __initdata boot_cpu_count;
->  
->  static int __init early_parse_mem(char *p)
-> @@ -449,6 +450,21 @@ static bool validate_mem_limit(u64 base, u64 *size)
->  {
->  	u64 max_mem = 1UL << (MAX_PHYSMEM_BITS);
->  
-> +#ifdef CONFIG_KASAN
-> +	/*
-> +	 * To handle the NUMA/discontiguous memory case, don't allow a block
-> +	 * to be added if it falls completely beyond the configured physical
-> +	 * memory.
-> +	 *
-> +	 * See Documentation/powerpc/kasan.txt
-> +	 */
-> +	if (base >= (u64)CONFIG_PHYS_MEM_SIZE_FOR_KASAN * 1024 * 1024) {
-> +		pr_warn("KASAN: not adding mem block at %llx (size %llx)",
-> +			base, *size);
-> +		return false;
-> +	}
-> +#endif
-> +
->  	if (base >= max_mem)
->  		return false;
->  	if ((base + *size) > max_mem)
-> @@ -572,8 +588,11 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
->  
->  	/* Add the chunk to the MEMBLOCK list */
->  	if (add_mem_to_memblock) {
-> -		if (validate_mem_limit(base, &size))
-> +		if (validate_mem_limit(base, &size)) {
->  			memblock_add(base, size);
-> +			if (base + size > top_phys_addr)
-> +				top_phys_addr = base + size;
-> +		}
->  	}
->  }
->  
-> @@ -613,6 +632,8 @@ static void __init early_reserve_mem_dt(void)
->  static void __init early_reserve_mem(void)
->  {
->  	__be64 *reserve_map;
-> +	phys_addr_t kasan_shadow_start;
-> +	phys_addr_t kasan_memory_size;
->  
->  	reserve_map = (__be64 *)(((unsigned long)initial_boot_params) +
->  			fdt_off_mem_rsvmap(initial_boot_params));
-> @@ -651,6 +672,42 @@ static void __init early_reserve_mem(void)
->  		return;
->  	}
->  #endif
-> +
-> +	if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_PPC_BOOK3S_64)) {
-> +		kasan_memory_size =
-> +			((phys_addr_t)CONFIG_PHYS_MEM_SIZE_FOR_KASAN << 20);
-> +
-> +		if (top_phys_addr < kasan_memory_size) {
-> +			/*
-> +			 * We are doomed. Attempts to call e.g. panic() are
-> +			 * likely to fail because they call out into
-> +			 * instrumented code, which will almost certainly
-> +			 * access memory beyond the end of physical
-> +			 * memory. Hang here so that at least the NIP points
-> +			 * somewhere that will help you debug it if you look at
-> +			 * it in qemu.
-> +			 */
-> +			while (true)
-> +				;
+[auto build test ERROR on next-20191209]
+[also build test ERROR on linus/master v5.5-rc1]
+[cannot apply to powerpc/next asm-generic/master v5.4]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
-Again with the right hooks in check_memory_region_inline() these are recoverable,
-or so I think
+url:    https://github.com/0day-ci/linux/commits/Daniel-Axtens/KASAN-for-powerpc64-radix-plus-generic-mm-change/20191210-171342
+base:    6cf8298daad041cd15dc514d8a4f93ca3636c84e
+config: powerpc-allnoconfig (attached as .config)
+compiler: powerpc-linux-gcc (GCC) 7.5.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # save the attached .config to linux build tree
+        GCC_VERSION=7.5.0 make.cross ARCH=powerpc 
 
-> +		} else if (top_phys_addr > kasan_memory_size) {
-> +			/* print a biiiig warning in hopes people notice */
-> +			pr_err("===========================================\n"
-> +				"Physical memory exceeds compiled-in maximum!\n"
-> +				"This kernel was compiled for KASAN with %u MB physical memory.\n"
-> +				"The actual physical memory detected is %llu MB.\n"
-> +				"Memory above the compiled limit will not be used!\n"
-> +				"===========================================\n",
-> +				CONFIG_PHYS_MEM_SIZE_FOR_KASAN,
-> +				top_phys_addr / (1024 * 1024));
-> +		}
-> +
-> +		kasan_shadow_start = _ALIGN_DOWN(kasan_memory_size * 7 / 8,
-> +						 PAGE_SIZE);
-> +		DBG("reserving %llx -> %llx for KASAN",
-> +		    kasan_shadow_start, top_phys_addr);
-> +		memblock_reserve(kasan_shadow_start,
-> +				 top_phys_addr - kasan_shadow_start);
-> +	}
->  }
->  
->  #ifdef CONFIG_PPC_TRANSACTIONAL_MEM
-> diff --git a/arch/powerpc/mm/kasan/Makefile b/arch/powerpc/mm/kasan/Makefile
-> index 6577897673dd..f02b15c78e4d 100644
-> --- a/arch/powerpc/mm/kasan/Makefile
-> +++ b/arch/powerpc/mm/kasan/Makefile
-> @@ -2,4 +2,5 @@
->  
->  KASAN_SANITIZE := n
->  
-> -obj-$(CONFIG_PPC32)           += kasan_init_32.o
-> +obj-$(CONFIG_PPC32)           += init_32.o
-> +obj-$(CONFIG_PPC_BOOK3S_64)   += init_book3s_64.o
-> diff --git a/arch/powerpc/mm/kasan/kasan_init_32.c b/arch/powerpc/mm/kasan/init_32.c
-> similarity index 100%
-> rename from arch/powerpc/mm/kasan/kasan_init_32.c
-> rename to arch/powerpc/mm/kasan/init_32.c
-> diff --git a/arch/powerpc/mm/kasan/init_book3s_64.c b/arch/powerpc/mm/kasan/init_book3s_64.c
-> new file mode 100644
-> index 000000000000..43e9252c8bd3
-> --- /dev/null
-> +++ b/arch/powerpc/mm/kasan/init_book3s_64.c
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KASAN for 64-bit Book3S powerpc
-> + *
-> + * Copyright (C) 2019 IBM Corporation
-> + * Author: Daniel Axtens <dja@axtens.net>
-> + */
-> +
-> +#define DISABLE_BRANCH_PROFILING
-> +
-> +#include <linux/kasan.h>
-> +#include <linux/printk.h>
-> +#include <linux/sched/task.h>
-> +#include <asm/pgalloc.h>
-> +
-> +void __init kasan_init(void)
-> +{
-> +	int i;
-> +	void *k_start = kasan_mem_to_shadow((void *)RADIX_KERN_VIRT_START);
-> +	void *k_end = kasan_mem_to_shadow((void *)RADIX_VMEMMAP_END);
-> +
-> +	pte_t pte = __pte(__pa(kasan_early_shadow_page) |
-> +			  pgprot_val(PAGE_KERNEL) | _PAGE_PTE);
-> +
-> +	if (!early_radix_enabled())
-> +		panic("KASAN requires radix!");
-> +
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-I think this is avoidable, we could use a static key for disabling kasan in
-the generic code. I wonder what happens if someone tries to boot this
-image on a Power8 box and keeps panic'ing with no easy way of recovering.
+All error/warnings (new ones prefixed by >>):
 
-> +	for (i = 0; i < PTRS_PER_PTE; i++)
-> +		__set_pte_at(&init_mm, (unsigned long)kasan_early_shadow_page,
-> +			     &kasan_early_shadow_pte[i], pte, 0);
-> +
-> +	for (i = 0; i < PTRS_PER_PMD; i++)
-> +		pmd_populate_kernel(&init_mm, &kasan_early_shadow_pmd[i],
-> +				    kasan_early_shadow_pte);
-> +
-> +	for (i = 0; i < PTRS_PER_PUD; i++)
-> +		pud_populate(&init_mm, &kasan_early_shadow_pud[i],
-> +			     kasan_early_shadow_pmd);
-> +
-> +	memset(kasan_mem_to_shadow((void *)PAGE_OFFSET), KASAN_SHADOW_INIT,
-> +	       KASAN_SHADOW_SIZE);
-> +
-> +	kasan_populate_early_shadow(
-> +		kasan_mem_to_shadow((void *)RADIX_KERN_VIRT_START),
-> +		kasan_mem_to_shadow((void *)RADIX_VMALLOC_START));
-> +
-> +	/* leave a hole here for vmalloc */
-> +
-> +	kasan_populate_early_shadow(
-> +		kasan_mem_to_shadow((void *)RADIX_VMALLOC_END),
-> +		kasan_mem_to_shadow((void *)RADIX_VMEMMAP_END));
-> +
-> +	flush_tlb_kernel_range((unsigned long)k_start, (unsigned long)k_end);
-> +
-> +	/* mark early shadow region as RO and wipe */
-> +	pte = __pte(__pa(kasan_early_shadow_page) |
-> +		    pgprot_val(PAGE_KERNEL_RO) | _PAGE_PTE);
-> +	for (i = 0; i < PTRS_PER_PTE; i++)
-> +		__set_pte_at(&init_mm, (unsigned long)kasan_early_shadow_page,
-> +			     &kasan_early_shadow_pte[i], pte, 0);
-> +
-> +	memset(kasan_early_shadow_page, 0, PAGE_SIZE);
-> +
-> +	/* Enable error messages */
-> +	init_task.kasan_depth = 0;
-> +	pr_info("KASAN init done (64-bit Book3S heavyweight mode)\n");
-> +}
-> 
+   In file included from include/linux/printk.h:7:0,
+                    from include/linux/kernel.h:15,
+                    from arch/powerpc/kernel/prom.c:15:
+   arch/powerpc/kernel/prom.c: In function 'early_reserve_mem':
+>> include/linux/kern_levels.h:5:18: error: format '%llu' expects argument of type 'long long unsigned int', but argument 3 has type 'phys_addr_t {aka unsigned int}' [-Werror=format=]
+    #define KERN_SOH "\001"  /* ASCII Start Of Header */
+                     ^
+   include/linux/kern_levels.h:11:18: note: in expansion of macro 'KERN_SOH'
+    #define KERN_ERR KERN_SOH "3" /* error conditions */
+                     ^~~~~~~~
+   include/linux/printk.h:304:9: note: in expansion of macro 'KERN_ERR'
+     printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+            ^~~~~~~~
+>> arch/powerpc/kernel/prom.c:694:4: note: in expansion of macro 'pr_err'
+       pr_err("===========================================\n"
+       ^~~~~~
+   arch/powerpc/kernel/prom.c:697:48: note: format string is defined here
+        "The actual physical memory detected is %llu MB.\n"
+                                                ~~~^
+                                                %u
+   cc1: all warnings being treated as errors
+--
+   In file included from include/linux/printk.h:7:0,
+                    from include/linux/kernel.h:15,
+                    from arch/powerpc//kernel/prom.c:15:
+   arch/powerpc//kernel/prom.c: In function 'early_reserve_mem':
+>> include/linux/kern_levels.h:5:18: error: format '%llu' expects argument of type 'long long unsigned int', but argument 3 has type 'phys_addr_t {aka unsigned int}' [-Werror=format=]
+    #define KERN_SOH "\001"  /* ASCII Start Of Header */
+                     ^
+   include/linux/kern_levels.h:11:18: note: in expansion of macro 'KERN_SOH'
+    #define KERN_ERR KERN_SOH "3" /* error conditions */
+                     ^~~~~~~~
+   include/linux/printk.h:304:9: note: in expansion of macro 'KERN_ERR'
+     printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+            ^~~~~~~~
+   arch/powerpc//kernel/prom.c:694:4: note: in expansion of macro 'pr_err'
+       pr_err("===========================================\n"
+       ^~~~~~
+   arch/powerpc//kernel/prom.c:697:48: note: format string is defined here
+        "The actual physical memory detected is %llu MB.\n"
+                                                ~~~^
+                                                %u
+   cc1: all warnings being treated as errors
 
-NOTE: I can't test any of these, well may be with qemu, let me see if I can spin
-the series and provide more feedback
+vim +/pr_err +694 arch/powerpc/kernel/prom.c
 
-Balbir
+   675	
+   676		if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_PPC_BOOK3S_64)) {
+   677			kasan_memory_size =
+   678				((phys_addr_t)CONFIG_PHYS_MEM_SIZE_FOR_KASAN << 20);
+   679	
+   680			if (top_phys_addr < kasan_memory_size) {
+   681				/*
+   682				 * We are doomed. Attempts to call e.g. panic() are
+   683				 * likely to fail because they call out into
+   684				 * instrumented code, which will almost certainly
+   685				 * access memory beyond the end of physical
+   686				 * memory. Hang here so that at least the NIP points
+   687				 * somewhere that will help you debug it if you look at
+   688				 * it in qemu.
+   689				 */
+   690				while (true)
+   691					;
+   692			} else if (top_phys_addr > kasan_memory_size) {
+   693				/* print a biiiig warning in hopes people notice */
+ > 694				pr_err("===========================================\n"
+   695					"Physical memory exceeds compiled-in maximum!\n"
+   696					"This kernel was compiled for KASAN with %u MB physical memory.\n"
+   697					"The actual physical memory detected is %llu MB.\n"
+   698					"Memory above the compiled limit will not be used!\n"
+   699					"===========================================\n",
+   700					CONFIG_PHYS_MEM_SIZE_FOR_KASAN,
+   701					top_phys_addr / (1024 * 1024));
+   702			}
+   703	
+   704			kasan_shadow_start = _ALIGN_DOWN(kasan_memory_size * 7 / 8,
+   705							 PAGE_SIZE);
+   706			DBG("reserving %llx -> %llx for KASAN",
+   707			    kasan_shadow_start, top_phys_addr);
+   708			memblock_reserve(kasan_shadow_start,
+   709					 top_phys_addr - kasan_shadow_start);
+   710		}
+   711	}
+   712	
+
+---
+0-DAY kernel test infrastructure                 Open Source Technology Center
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+
+--g62ettbvkg3kwp6n
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
+
+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
+/kQSmnpMEcrnDaxA1fj/NY/aVLRaAAA=
+
+--g62ettbvkg3kwp6n--
