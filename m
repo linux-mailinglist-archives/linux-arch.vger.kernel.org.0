@@ -2,95 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3035E119FFF
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 01:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1EA11A0B3
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 02:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbfLKA3X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Dec 2019 19:29:23 -0500
-Received: from ozlabs.org ([203.11.71.1]:40799 "EHLO ozlabs.org"
+        id S1726619AbfLKBr2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Dec 2019 20:47:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57846 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725999AbfLKA3X (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 10 Dec 2019 19:29:23 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726532AbfLKBr1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 10 Dec 2019 20:47:27 -0500
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Xd8v5C5Hz9sP3;
-        Wed, 11 Dec 2019 11:29:19 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1576024160;
-        bh=kmbp6MpyHsnC/owM/o4yDj8cWLNwjC0odjA8A0F3r2Y=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Jn2SQvPiqev5TL35DBK5lCO8mnXg+BTtXzArbhl7WqrvTJu5M+ZoiCVATKvHzLOLD
-         /490q3sNuoaS8RrCEOiJfUlfiOE7FyR1xupxy+LuXjQrlnNee0sKWSvxRdwvkmFzJL
-         8cX9BG/37iHETX+SK6OEUNldhJo0kpLbionDwCbFGHrNEr/2bHr8GHHP8EvBJp2w5d
-         Oq7Yqge4fyyFATWKyy/JiMHOdF3ZSJiokdKFsNzkoblZu7BIUOmrVNWAjFd0ArDVZD
-         MSOu1H54hdcXdP2PAhbK8MNYDb646YZe392xvS8NArPz8yhZ0UaP34j/Lsl3ab+Us5
-         zD/LY1lWBWRBw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, dja@axtens.net,
-        elver@google.com, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, christophe.leroy@c-s.fr,
-        linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, kasan-dev@googlegroups.com,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops)
-In-Reply-To: <20191210101545.GL2844@hirez.programming.kicks-ass.net>
-References: <87blslei5o.fsf@mpe.ellerman.id.au> <20191206131650.GM2827@hirez.programming.kicks-ass.net> <87wob4pwnl.fsf@mpe.ellerman.id.au> <20191210101545.GL2844@hirez.programming.kicks-ass.net>
-Date:   Wed, 11 Dec 2019 11:29:16 +1100
-Message-ID: <87lfrjpuw3.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
+        by mail.kernel.org (Postfix) with ESMTPSA id 021B2205ED;
+        Wed, 11 Dec 2019 01:47:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576028847;
+        bh=aJEBHOJgbmW5u/PI+IDmgyBqpJA+BGn7BUCYF8lBBXI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a4TeTJ8lJl8q2dLF6mL0GpmczoEuiJsnjXjb9qT5uG5YEyb5hp2C9lNnNhFyLBLB2
+         031Y12L8dQGuzjXBTdQPX+qPEUotS1ySZN21FJ3Zx0yaT5gq3Tjon5oFgMy6hOLPph
+         knl2US3pMczsLrw/0BNFyQN54wFMElQ3kUNz4c4k=
+Date:   Tue, 10 Dec 2019 17:47:26 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     dan.carpenter@oracle.com, will@kernel.org, ebiederm@xmission.com,
+        linux-arch@vger.kernel.org, security@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] execve: warn if process starts with executable stack
+Message-Id: <20191210174726.101e434df59b6aec8a53cca1@linux-foundation.org>
+In-Reply-To: <20191208171918.GC19716@avx2>
+References: <20191208171918.GC19716@avx2>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
-> On Tue, Dec 10, 2019 at 04:38:54PM +1100, Michael Ellerman wrote:
->
->> Good question, I'll have a look.
->> 
->> There seems to be confusion about what the type of the bit number is,
->> which is leading to sign extension in some cases and not others.
->
-> Shiny.
->
->> It looks like the type should be unsigned long?
->
-> I'm thinking unsigned makes most sense, I mean, negative bit offsets
-> should 'work' but that's almost always guaranteed to be an out-of-bound
-> operation.
+On Sun, 8 Dec 2019 20:19:18 +0300 Alexey Dobriyan <adobriyan@gmail.com> wrote:
 
-Yeah I agree.
+> There were few episodes of silent downgrade to an executable stack over
+> years:
+> 
+> 1) linking innocent looking assembly file will silently add executable
+>    stack if proper linker options is not given as well:
+> 
+> 	$ cat f.S
+> 	.intel_syntax noprefix
+> 	.text
+> 	.globl f
+> 	f:
+> 	        ret
+> 
+> 	$ cat main.c
+> 	void f(void);
+> 	int main(void)
+> 	{
+> 	        f();
+> 	        return 0;
+> 	}
+> 
+> 	$ gcc main.c f.S
+> 	$ readelf -l ./a.out
+> 	  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+>                          0x0000000000000000 0x0000000000000000  RWE    0x10
+> 			 					 ^^^
+> 
+> 2) converting C99 nested function into a closure
+> https://nullprogram.com/blog/2019/11/15/
+> 
+> 	void intsort2(int *base, size_t nmemb, _Bool invert)
+> 	{
+> 	    int cmp(const void *a, const void *b)
+> 	    {
+> 	        int r = *(int *)a - *(int *)b;
+> 	        return invert ? -r : r;
+> 	    }
+> 	    qsort(base, nmemb, sizeof(*base), cmp);
+> 	}
+> 
+> will silently require stack trampolines while non-closure version will not.
+> 
+> Without doubt this behaviour is documented somewhere, add a warning so that
+> developers and users can at least notice. After so many years of x86_64 having
+> proper executable stack support it should not cause too many problems.
 
-> As to 'long' vs 'int', I'm not sure, 4G bits is a long bitmap. But I
-> suppose since the bitmap itself is 'unsigned long', we might as well use
-> 'unsigned long' for the bitnr too.
+hm, OK, let's give it a trial run.
 
-4G is a lot of bits, but it's not *that* many.
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -761,6 +761,11 @@ int setup_arg_pages(struct linux_binprm *bprm,
+>  		goto out_unlock;
+>  	BUG_ON(prev != vma);
+>  
+> +	if (unlikely(vm_flags & VM_EXEC)) {
+> +		pr_warn_once("process '%pD4' started with executable stack\n",
+> +			     bprm->file);
+> +	}
+> +
+>  	/* Move stack pages down in memory. */
+>  	if (stack_shift) {
+>  		ret = shift_arg_pages(vma, stack_shift);
 
-eg. If we had a bit per 4K page on a 32T machine that would be 8G bits.
+What are poor users supposed to do if this message comes out? 
+Hopefully google the message and end up at this thread.  What do you
+want to tell them?
 
-So unsigned long seems best.
-
->>   Documentation/core-api/atomic_ops.rst:  void __clear_bit_unlock(unsigned long nr, unsigned long *addr);
->>   arch/mips/include/asm/bitops.h:static inline void __clear_bit_unlock(unsigned long nr, volatile unsigned long *addr)
->>   arch/powerpc/include/asm/bitops.h:static inline void arch___clear_bit_unlock(int nr, volatile unsigned long *addr)
->>   arch/riscv/include/asm/bitops.h:static inline void __clear_bit_unlock(unsigned long nr, volatile unsigned long *addr)
->>   arch/s390/include/asm/bitops.h:static inline void arch___clear_bit_unlock(unsigned long nr,
->>   include/asm-generic/bitops/instrumented-lock.h:static inline void __clear_bit_unlock(long nr, volatile unsigned long *addr)
->>   include/asm-generic/bitops/lock.h:static inline void __clear_bit_unlock(unsigned int nr,
->> 
->> So I guess step one is to convert our versions to use unsigned long, so
->> we're at least not tripping over that difference when comparing the
->> assembly.
->
-> Yeah, I'll look at fixing the generic code, bitops/atomic.h and
-> bitops/non-atomic.h don't even agree on the type of bitnr.
-
-Thanks.
-
-cheers
