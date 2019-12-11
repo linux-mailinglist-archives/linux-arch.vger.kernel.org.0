@@ -2,78 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 372F111ABDE
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 14:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B9811AC8D
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 14:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729241AbfLKNTY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Dec 2019 08:19:24 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:44003 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729131AbfLKNTY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Dec 2019 08:19:24 -0500
-Received: by mail-oi1-f193.google.com with SMTP id x14so13159817oic.10;
-        Wed, 11 Dec 2019 05:19:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FTkf+Ktwg9EN62GCiWaT7c0zhgnuyXYMKB3RnMBCoH0=;
-        b=qaqPMo7c+hmeAmnEKMDJUOJRDrqPaNj7opPLMgqOLJ0B1+DnXGIWne+DDaC8Pxas+4
-         d5kvnqRa+q3Ap83QPW7i5ouBwdFT6OSKJBv5Jq/OnLMQRZRMKN8NcUGeYplYgn89eE3H
-         Kk68ZCrYjTMEBk1or2ymCb0sGAi9QLxZ1Xj5nOVmbaI/JBgE9i/n2NWBfMqUTtNCKY+N
-         O4ni448Kx1lO9zDKvExK/ZAC/XzvVNFUHtd2++pwQh1rz/DIFO38IskGqldlLV5jEmyI
-         8/ZqSgv7ZTl8SLBUuNdWXJZpcAv4hzCPVtEjYmVz6Rs8Jn8VH+QIssGKLP/k9gPXF+SU
-         OGMQ==
-X-Gm-Message-State: APjAAAU/3YZsVXZi//VxOtXorqGq6JtpUPfIWVoWkAnICUDRUKJ5ENhG
-        RTiwz6oHIS1NFSnvK2Yk2QwlQvquM/jIeJr0TMo=
-X-Google-Smtp-Source: APXvYqyE6D637ZfRt9JtwXbrAhQRetOOxev9A7WV3C24h2T4AFLlyRgkWlO82BfFotgCVrPUvj4kVl1vMdhmVhEfkDc=
-X-Received: by 2002:aca:36c5:: with SMTP id d188mr2823451oia.54.1576070363144;
- Wed, 11 Dec 2019 05:19:23 -0800 (PST)
+        id S1729238AbfLKN42 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Dec 2019 08:56:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46808 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729278AbfLKN42 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 11 Dec 2019 08:56:28 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC557214D8;
+        Wed, 11 Dec 2019 13:56:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576072588;
+        bh=dWkqILqfAhjEvyhCKPXISYgfOfSC3OtngOei9pUlZ5w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=enaEjm3qhz+GbI1C7GZdbjUVp+Li+O9XxQqiaGueU8xTWyFJi3xOAs08wqOcxr99A
+         TjmdjHoIohXmbLhvAqKCb708/vwcxCf5WQ+UYx2BMRwMzocjhZQpyBHCi1+hTg2dJV
+         4lSTU4jvrB9a4wmcTqpHvJGg5DZ7YKEwkIIzpHRU=
+Date:   Wed, 11 Dec 2019 14:56:19 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thomas Renninger <trenn@suse.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Felix Schnizlein <fschnizlein@suse.com>,
+        linux-kernel@vger.kernel.org,
+        Felix Schnizlein <fschnizlein@suse.de>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux@armlinux.org.uk, will.deacon@arm.com, x86@kernel.org
+Subject: Re: [PATCH 2/3] x86 cpuinfo: implement sysfs nodes for x86
+Message-ID: <20191211135619.GA538980@kroah.com>
+References: <20191206162421.15050-1-trenn@suse.de>
+ <20191206163656.GC86904@kroah.com>
+ <87sglroqix.fsf@nanos.tec.linutronix.de>
+ <4737004.4U1sY2OxSp@skinner.arch.suse.de>
 MIME-Version: 1.0
-References: <20191211120713.360281197@infradead.org> <20191211122955.769069740@infradead.org>
-In-Reply-To: <20191211122955.769069740@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 11 Dec 2019 14:19:11 +0100
-Message-ID: <CAMuHMdUA-Bj+q4g2NimMv3nnu5v=X81BEkoSgUTOTLG+rsPK4g@mail.gmail.com>
-Subject: Re: [PATCH 02/17] asm-gemeric/tlb: Remove stray function declarations
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Helge Deller <deller@gmx.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Nick Hu <nickhu@andestech.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4737004.4U1sY2OxSp@skinner.arch.suse.de>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 1:31 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> We removed the actual functions a while ago.
->
-> Fixes: 1808d65b55e4 ("asm-generic/tlb: Remove arch_tlb*_mmu()")
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Wed, Dec 11, 2019 at 11:42:35AM +0100, Thomas Renninger wrote:
+> If Greg (and others) are ok, I would add "page size exceeding" handling.
+> Hm, quick searching for an example I realize that debugfs can exceed page 
+> size. Is it that hard to expose a sysfs file larger than page size?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+No, there is a simple way to do it, but I'm not going to show you how as
+it is NOT how to use sysfs at all :)
 
-Gr{oetje,eeting}s,
+Why are you wanting to dump this whole mess into one file and then parse
+it, it's no different from having 100+ different sysfs files and then
+doing a readdir(3) on the thing, right?
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+greg k-h
