@@ -2,129 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A95119A3D
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2019 22:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3035E119FFF
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 01:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727816AbfLJVvD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Dec 2019 16:51:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55182 "EHLO mail.kernel.org"
+        id S1726769AbfLKA3X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Dec 2019 19:29:23 -0500
+Received: from ozlabs.org ([203.11.71.1]:40799 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727665AbfLJVII (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:08:08 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1725999AbfLKA3X (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 10 Dec 2019 19:29:23 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C01D2469E;
-        Tue, 10 Dec 2019 21:08:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012087;
-        bh=Kj9F+E8kssmWLrGlaaPjGhscFWLYKxX1BArT3M5lpTw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sEOTgXibgN3Dp5Nz+PJwq3YRioGG2gReyaAJCovVKKqVQV1V0sSD7NgSyksGwI+Tm
-         /fMGuTJCrje0+oWjxPGqh+1ziZvx6aqQ6AoRAl1BFBDuYTc85ssCl4dZOzFsd67auI
-         WF6frQMlAbTYQDD/EzK1hlVOMp82VMvjN7lACtXM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 065/350] tools/memory-model: Fix data race detection for unordered store and load
-Date:   Tue, 10 Dec 2019 16:02:50 -0500
-Message-Id: <20191210210735.9077-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
-References: <20191210210735.9077-1-sashal@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Xd8v5C5Hz9sP3;
+        Wed, 11 Dec 2019 11:29:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1576024160;
+        bh=kmbp6MpyHsnC/owM/o4yDj8cWLNwjC0odjA8A0F3r2Y=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Jn2SQvPiqev5TL35DBK5lCO8mnXg+BTtXzArbhl7WqrvTJu5M+ZoiCVATKvHzLOLD
+         /490q3sNuoaS8RrCEOiJfUlfiOE7FyR1xupxy+LuXjQrlnNee0sKWSvxRdwvkmFzJL
+         8cX9BG/37iHETX+SK6OEUNldhJo0kpLbionDwCbFGHrNEr/2bHr8GHHP8EvBJp2w5d
+         Oq7Yqge4fyyFATWKyy/JiMHOdF3ZSJiokdKFsNzkoblZu7BIUOmrVNWAjFd0ArDVZD
+         MSOu1H54hdcXdP2PAhbK8MNYDb646YZe392xvS8NArPz8yhZ0UaP34j/Lsl3ab+Us5
+         zD/LY1lWBWRBw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, dja@axtens.net,
+        elver@google.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, christophe.leroy@c-s.fr,
+        linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
+        x86@kernel.org, kasan-dev@googlegroups.com,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops)
+In-Reply-To: <20191210101545.GL2844@hirez.programming.kicks-ass.net>
+References: <87blslei5o.fsf@mpe.ellerman.id.au> <20191206131650.GM2827@hirez.programming.kicks-ass.net> <87wob4pwnl.fsf@mpe.ellerman.id.au> <20191210101545.GL2844@hirez.programming.kicks-ass.net>
+Date:   Wed, 11 Dec 2019 11:29:16 +1100
+Message-ID: <87lfrjpuw3.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+Peter Zijlstra <peterz@infradead.org> writes:
+> On Tue, Dec 10, 2019 at 04:38:54PM +1100, Michael Ellerman wrote:
+>
+>> Good question, I'll have a look.
+>> 
+>> There seems to be confusion about what the type of the bit number is,
+>> which is leading to sign extension in some cases and not others.
+>
+> Shiny.
+>
+>> It looks like the type should be unsigned long?
+>
+> I'm thinking unsigned makes most sense, I mean, negative bit offsets
+> should 'work' but that's almost always guaranteed to be an out-of-bound
+> operation.
 
-[ Upstream commit daebf24a8e8c6064cba3a330db9fe9376a137d2c ]
+Yeah I agree.
 
-Currently the Linux Kernel Memory Model gives an incorrect response
-for the following litmus test:
+> As to 'long' vs 'int', I'm not sure, 4G bits is a long bitmap. But I
+> suppose since the bitmap itself is 'unsigned long', we might as well use
+> 'unsigned long' for the bitnr too.
 
-C plain-WWC
+4G is a lot of bits, but it's not *that* many.
 
-{}
+eg. If we had a bit per 4K page on a 32T machine that would be 8G bits.
 
-P0(int *x)
-{
-	WRITE_ONCE(*x, 2);
-}
+So unsigned long seems best.
 
-P1(int *x, int *y)
-{
-	int r1;
-	int r2;
-	int r3;
+>>   Documentation/core-api/atomic_ops.rst:  void __clear_bit_unlock(unsigned long nr, unsigned long *addr);
+>>   arch/mips/include/asm/bitops.h:static inline void __clear_bit_unlock(unsigned long nr, volatile unsigned long *addr)
+>>   arch/powerpc/include/asm/bitops.h:static inline void arch___clear_bit_unlock(int nr, volatile unsigned long *addr)
+>>   arch/riscv/include/asm/bitops.h:static inline void __clear_bit_unlock(unsigned long nr, volatile unsigned long *addr)
+>>   arch/s390/include/asm/bitops.h:static inline void arch___clear_bit_unlock(unsigned long nr,
+>>   include/asm-generic/bitops/instrumented-lock.h:static inline void __clear_bit_unlock(long nr, volatile unsigned long *addr)
+>>   include/asm-generic/bitops/lock.h:static inline void __clear_bit_unlock(unsigned int nr,
+>> 
+>> So I guess step one is to convert our versions to use unsigned long, so
+>> we're at least not tripping over that difference when comparing the
+>> assembly.
+>
+> Yeah, I'll look at fixing the generic code, bitops/atomic.h and
+> bitops/non-atomic.h don't even agree on the type of bitnr.
 
-	r1 = READ_ONCE(*x);
-	if (r1 == 2) {
-		smp_rmb();
-		r2 = *x;
-	}
-	smp_rmb();
-	r3 = READ_ONCE(*x);
-	WRITE_ONCE(*y, r3 - 1);
-}
+Thanks.
 
-P2(int *x, int *y)
-{
-	int r4;
-
-	r4 = READ_ONCE(*y);
-	if (r4 > 0)
-		WRITE_ONCE(*x, 1);
-}
-
-exists (x=2 /\ 1:r2=2 /\ 2:r4=1)
-
-The memory model says that the plain read of *x in P1 races with the
-WRITE_ONCE(*x) in P2.
-
-The problem is that we have a write W and a read R related by neither
-fre or rfe, but rather W ->coe W' ->rfe R, where W' is an intermediate
-write (the WRITE_ONCE() in P0).  In this situation there is no
-particular ordering between W and R, so either a wr-vis link from W to
-R or an rw-xbstar link from R to W would prove that the accesses
-aren't concurrent.
-
-But the LKMM only looks for a wr-vis link, which is equivalent to
-assuming that W must execute before R.  This is not necessarily true
-on non-multicopy-atomic systems, as the WWC pattern demonstrates.
-
-This patch changes the LKMM to accept either a wr-vis or a reverse
-rw-xbstar link as a proof of non-concurrency.
-
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Acked-by: Andrea Parri <parri.andrea@gmail.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/memory-model/linux-kernel.cat | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-index ea2ff4b940749..2a9b4fe4a84eb 100644
---- a/tools/memory-model/linux-kernel.cat
-+++ b/tools/memory-model/linux-kernel.cat
-@@ -197,7 +197,7 @@ empty (wr-incoh | rw-incoh | ww-incoh) as plain-coherence
- (* Actual races *)
- let ww-nonrace = ww-vis & ((Marked * W) | rw-xbstar) & ((W * Marked) | wr-vis)
- let ww-race = (pre-race & co) \ ww-nonrace
--let wr-race = (pre-race & (co? ; rf)) \ wr-vis
-+let wr-race = (pre-race & (co? ; rf)) \ wr-vis \ rw-xbstar^-1
- let rw-race = (pre-race & fr) \ rw-xbstar
- 
- flag ~empty (ww-race | wr-race | rw-race) as data-race
--- 
-2.20.1
-
+cheers
