@@ -2,35 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBC011BCDD
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 20:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E1411BD09
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 20:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728678AbfLKT06 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Dec 2019 14:26:58 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:60335 "EHLO
+        id S1726864AbfLKTbr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Dec 2019 14:31:47 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:56131 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726487AbfLKT06 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Dec 2019 14:26:58 -0500
-Received: from mail-qk1-f171.google.com ([209.85.222.171]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1Mt7Ll-1hqKMr2ziz-00tQbm for <linux-arch@vger.kernel.org>; Wed, 11 Dec
- 2019 20:26:56 +0100
-Received: by mail-qk1-f171.google.com with SMTP id r14so12513622qke.13
-        for <linux-arch@vger.kernel.org>; Wed, 11 Dec 2019 11:26:56 -0800 (PST)
-X-Gm-Message-State: APjAAAVpYQw1luQ7IQgc+5KKWp+3s5R84J+D6x+cZx29lfPUo2BJEZc7
-        8O25iHupn4du/Zr4qfCbUzJBhcr7uoljhnU7Hs8=
-X-Google-Smtp-Source: APXvYqzp5gI76+hnxf6/hmrPMG5/BvSczTPLPStullb7LcktBYw4tJjRaFzZ4zVRtyE/ktu6JAXLohEVRyxYWiy1yZ4=
-X-Received: by 2002:a37:b283:: with SMTP id b125mr4686863qkf.352.1576092415604;
- Wed, 11 Dec 2019 11:26:55 -0800 (PST)
+        with ESMTP id S1726487AbfLKTbr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Dec 2019 14:31:47 -0500
+Received: from mail-qv1-f44.google.com ([209.85.219.44]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MTAW9-1iIGzt0Vvb-00UYVV for <linux-arch@vger.kernel.org>; Wed, 11 Dec
+ 2019 20:31:46 +0100
+Received: by mail-qv1-f44.google.com with SMTP id t7so6248632qve.4
+        for <linux-arch@vger.kernel.org>; Wed, 11 Dec 2019 11:31:45 -0800 (PST)
+X-Gm-Message-State: APjAAAVoi5Vti7gAgb9djrWhXUMwcQbavilLUbffdI+dUXSWrdduVHc1
+        QMhnKjRJJmeSpEjzsoAy/f5QglN0srrzne60WfI=
+X-Google-Smtp-Source: APXvYqxf4Xp3FM5HTNk2/2drmImAUw5dWnmacIZ0J+E8kqRJYuJMCsxwFdxNI6gooeiVMm0eDFBLHuuFTWJB+qkX2Ec=
+X-Received: by 2002:a0c:893d:: with SMTP id 58mr4762571qvp.4.1576092704997;
+ Wed, 11 Dec 2019 11:31:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20191211184027.20130-1-catalin.marinas@arm.com> <20191211184027.20130-2-catalin.marinas@arm.com>
-In-Reply-To: <20191211184027.20130-2-catalin.marinas@arm.com>
+References: <20191211184027.20130-1-catalin.marinas@arm.com> <20191211184027.20130-13-catalin.marinas@arm.com>
+In-Reply-To: <20191211184027.20130-13-catalin.marinas@arm.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 11 Dec 2019 20:26:39 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0OxNWPjekT_m55reuopHJeWZs6dm7YTtoLgd39P6y2PQ@mail.gmail.com>
-Message-ID: <CAK8P3a0OxNWPjekT_m55reuopHJeWZs6dm7YTtoLgd39P6y2PQ@mail.gmail.com>
-Subject: Re: [PATCH 01/22] mm: Reserve asm-generic prot flags 0x10 and 0x20
- for arch use
+Date:   Wed, 11 Dec 2019 20:31:28 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1-eaR7NddhDce65vXKCGeZD3xUMrTTAWN4U3oW0ecN=g@mail.gmail.com>
+Message-ID: <CAK8P3a1-eaR7NddhDce65vXKCGeZD3xUMrTTAWN4U3oW0ecN=g@mail.gmail.com>
+Subject: Re: [PATCH 12/22] arm64: mte: Add specific SIGSEGV codes
 To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -41,27 +40,28 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Andrey Konovalov <andreyknvl@google.com>,
         Linux-MM <linux-mm@kvack.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Au6++WlhDRotoAStorv/8gB/Mq0L6qYsAeEpxvMuCDs9AdMxcXb
- X7VwhrUkECw9r9ICnEK5xXZ6Z+GlqfXGQxKEm27Wc1hgnP1TvxcwN0GfNdEiWUcalrKM4LG
- +rog8MquJPDn2vnHijIXbgcc/IPU550yuPJBJ8vTzok6o1WV3tN4e0gffb8XlOuIIA2RAi2
- J96ECUg5tvH4SaOd4Gsrw==
+X-Provags-ID: V03:K1:gyzzMinpsdtlS/aJdZyhd3g0RErxntsPnrmZDKuHw0IWWV2AGvQ
+ Vz2aeslv/ULPiyjojbLMouo/lWEeJ0VU37doyJN7sd3YvRPtPcwnaThTan//Bl4a+n+5j0R
+ WhfQfp1ldUzsNz0qd9WFbuAFmX+NQkWLKA0denWh53dml1dX3YnyxCF5IXLiaxfZFLemvhI
+ UnJcQBQk49AQFgiPIFbmg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:opH4vRCleSQ=:jtFfcpfvUdEiVOm4nXaiUB
- JhBf97cHkspIrWMbBh2RgujZ5um/VI2HZn7kQKVrkRlJx2hl8j08SC2mmoXzgCo6a+k1kChj3
- m8n7/NA6ZII9QjXPY+dxA3y1yLKRXUMy1RO3So8RdZ1C6Qh/4Imjjmdh9923ziV9EzYWr4PrX
- xQtTq7FNHR+m83ScFqFAuLrbIPuF6qsRIvLyLPF9OEIP83Tax6cOBniDVBBBcU8HMZ1ExP4hy
- EkuI6aMzQ2XwnJcEam/xy6NC26+IjSOSiRjATwst8fIHxCj3uQoo9QnF6tLBKb1XoCiG9CQo0
- RGQ3s9tBgxJ49S2GIiqT7+iSTLXEkAQko4Cc9cwcm82YJZNt06NlTRJVE7c37dev9efJHsANr
- h4At2VfcCxOYhMY3rOB7q9QC1U3WInd/Zzd1//e3W0Ith5UZIu4cDPt3e826sJl40UmVS5NE9
- U/atfP11+gCXjiaPhZPFMsANUd5qDbtRbffYR9yZhBA2E/qBRVGcPYMeUfw5KUmfyJrr+Iygc
- ZeuDXmcM3ae6UXA/iHcQLEha8uuroNtcC4HH/3LxdMivPVg4o1ki1t9wVxz7FNovX6pL7Qi55
- nH79R85m9TRDx8nwT1wN19qYYb24ZxTHPER6iH5J5hf4lHjcuZ7t7Qk9dd/5U92iJzDQuRTgx
- FgZdlJahlJMWJWm9/XjmGkP2dAKkmT06F1AM/QdV46+jCedAOs0MNE2fT3kWn7sw5OrW1TKMk
- lJIGkgERMcQWUwrmL812HOvN7KNOjTqY3YwsD/Ap6aWCjtSCWiLM87O/A4VcGnVMfvDYSTn1K
- TwwDl/xmmDhdJH3z+2G4Qs2zS6HvJgF32e6VbdHQyyXKTeYH9PeE1SlQe7RP5oFZfGaFBWBnG
- uppXJzVflbqYhISXk8+g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GFWCRoYul/s=:1OERkpQlmWlG0D6uDbU1VM
+ 7Ux35gApNmvs+k/NiYw25FnbNJyg2jBjux9mfUCakLKLtRhp9EYYKalEUQaByzNwS6XXw7zom
+ ts89oM3/PHFgbYXS9xkPo0/DhmrR2Quoz2My4hNmk5YySHG9gJsxwTskbCgW3/ZQhjFVCe2BR
+ 35cY+/2srdWTeud1KYwfCauS0PbX/+U6P/gE7hkxUXTa1iOsJIPNuSQGn8yDYFC5eclOOi5n5
+ 8WQDXQOPUEvWPI2dxIzWcr+7t0PB5l5UCe9lSQKmOFj/2BMx5s0kRKAK+bJjk8/XR3n2Z6WYD
+ dKiyTabvsNiU1p0cokrAes20ryiglT5QARHrYRHU4FVpMlzK/mhsrckxrZ2JF/yuYvbduvuvU
+ yWC/tnS2pLtLnGNyj1+bCPSEfRihk+Mb9Mz9o5sK0mBf21DOV1GWysXG4KWUjPPlE3Hdrvkx8
+ CCCqTFSbr8Ptx+ttDqPqj9CoTULPOaId1qQeh0VntC4xSOZYuPiTL6/qBedVn6zv2fp3kukvY
+ U5CyMhbbY2xP1rxzHz+z7pF4d/JVbMeCU3tYlZbrmnaT98Fz5AufWGwbne0Ojr0ljcr2j9I/D
+ hIwLECacGvJWTe3nZYwS1u88cUnnNEg/UFYFSQqS0WSUj4thDEXUe3BPyszj0sKPUfD2q8NFT
+ mpagy8DNzGR4RT7HmP31mdNq4nPPXBSf3Fpvz8pLIRBx8VabcL8pYs25XIVfutJkMeiW+nJ8W
+ qP0lXhl/7J914scWf8VwmcHrTg7j5xYUDyjVqC3MXaaevWzBEEWPQROzk0PX96lPlCyDgRbVW
+ FWXYRX7/5c/FXLe1brpwrjpK0z5/KcTNQMADZ9hsKhrb6QfJ8vvG7r5Xmb5OME6lCStBNYC1E
+ Px4ai9ov8PGDKy7drhxw==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -69,19 +69,47 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Wed, Dec 11, 2019 at 7:40 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
 >
-> From: Dave Martin <Dave.Martin@arm.com>
+> From: Vincenzo Frascino <vincenzo.frascino@arm.com>
 >
-> The asm-generic/mman.h definitions are used by a few architectures that
-> also define arch-specific PROT flags with value 0x10 and 0x20. This
-> currently applies to sparc and powerpc for 0x10, while arm64 will soon
-> join with 0x10 and 0x20.
+> Add MTE-specific SIGSEGV codes to siginfo.h.
 >
-> To help future maintainers, document the use of this flag in the
-> asm-generic header too.
+> Note that the for MTE we are reusing the same SPARC ADI codes because
+> the two functionalities are similar and they cannot coexist on the same
+> system.
 >
 > Cc: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-> [catalin.marinas@arm.com: reserve 0x20 as well]
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> [catalin.marinas@arm.com: renamed precise/imprecise to sync/async]
 > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> ---
+>  include/uapi/asm-generic/siginfo.h | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+> index cb3d6c267181..a5184a5438c6 100644
+> --- a/include/uapi/asm-generic/siginfo.h
+> +++ b/include/uapi/asm-generic/siginfo.h
+> @@ -227,8 +227,13 @@ typedef struct siginfo {
+>  # define SEGV_PKUERR   4       /* failed protection key checks */
+>  #endif
+>  #define SEGV_ACCADI    5       /* ADI not enabled for mapped object */
+> -#define SEGV_ADIDERR   6       /* Disrupting MCD error */
+> -#define SEGV_ADIPERR   7       /* Precise MCD exception */
+> +#ifdef __aarch64__
+> +# define SEGV_MTEAERR  6       /* Asynchronous MTE error */
+> +# define SEGV_MTESERR  7       /* Synchronous MTE exception */
+> +#else
+> +# define SEGV_ADIDERR  6       /* Disrupting MCD error */
+> +# define SEGV_ADIPERR  7       /* Precise MCD exception */
+> +#endif
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+SEGV_ADIPERR/SEGV_ADIDERR were added together with SEGV_ACCADI,
+it seems a bit odd to make only two of them conditional but not the others.
+
+I think we are generally working towards having the same constants
+across architectures even for features that only exist on one of them.
+
+Adding Al and Eric to Cc, maybe they have another suggestion on what
+constants should be used.
+
+     Arnd
