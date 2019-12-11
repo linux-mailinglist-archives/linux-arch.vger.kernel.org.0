@@ -2,141 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 543F211A91E
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 11:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7982A11AAF9
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 13:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728890AbfLKKmi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 11 Dec 2019 05:42:38 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59534 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728030AbfLKKmi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 11 Dec 2019 05:42:38 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 376F6B13E;
-        Wed, 11 Dec 2019 10:42:36 +0000 (UTC)
-From:   Thomas Renninger <trenn@suse.de>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Felix Schnizlein <fschnizlein@suse.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
-        Felix Schnizlein <fschnizlein@suse.de>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux@armlinux.org.uk, will.deacon@arm.com, x86@kernel.org
-Subject: Re: [PATCH 2/3] x86 cpuinfo: implement sysfs nodes for x86
-Date:   Wed, 11 Dec 2019 11:42:35 +0100
-Message-ID: <4737004.4U1sY2OxSp@skinner.arch.suse.de>
-In-Reply-To: <87sglroqix.fsf@nanos.tec.linutronix.de>
-References: <20191206162421.15050-1-trenn@suse.de> <20191206163656.GC86904@kroah.com> <87sglroqix.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
+        id S1729118AbfLKMcT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Dec 2019 07:32:19 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:55136 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727402AbfLKMcQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Dec 2019 07:32:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Subject:Cc:To:From:Date:Message-Id:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=U00e+4tun2sB5OFJt+4Nz4j/tQMLxpbE5HmgeSygRhM=; b=JEbYtLe2QQvWJBZw3kBcMpX6n
+        tBAowmpgFsrFe7dQcrlHu9enNYfiUdOacOl+zgv9Z7u5yxCQfPgW1KDmFDYKYNHo7wP8e8Gn/VD91
+        P6W+j2nko7cfaiMzf7fa5+icEmAyPH+OeD48Q7Tb9a02oV2anaEO2ed4eWyaEpMJ2FRm/2WEdzU+e
+        tpZ9QxwqHDedNrfp7E7sZDfYPfJgNwq+0RMZ6t8mmKvK42MJuIQIL+yEGI4vgC8qPuwOuFgOJalTm
+        pcAgXmi3Erb2xhoErSz/fm84DLDPRynDbGbQ5pgdgXS53L2uhmgqym1lZ+mBWIaWTlTf8/zrj6IUL
+        xNleP0tpg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1if190-0003sf-JO; Wed, 11 Dec 2019 12:31:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7A6D8305E21;
+        Wed, 11 Dec 2019 13:29:42 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 184BC2026E819; Wed, 11 Dec 2019 13:31:02 +0100 (CET)
+Message-Id: <20191211120713.360281197@infradead.org>
+User-Agent: quilt/0.65
+Date:   Wed, 11 Dec 2019 13:07:13 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Helge Deller <deller@gmx.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Nick Hu <nickhu@andestech.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: [PATCH 00/17] Fixup page directory freeing
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tuesday, December 10, 2019 9:48:54 PM CET Thomas Gleixner wrote:
-> Greg KH <gregkh@linuxfoundation.org> writes:
-> > On Fri, Dec 06, 2019 at 05:24:20PM +0100, Thomas Renninger wrote:
-> >> From: Felix Schnizlein <fschnizlein@suse.de>
-> >> ==> flags <==
-> >> fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36
-> >> clflush mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc
-> >> rep_good nopl xtopology cpuid tsc_known_freq pni pclmulqdq ssse3 fma
-> >> cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave
-> >> avx f16c rdrand hypervisor lahf_lm abm cpuid_fault invpcid_single pti
-> >> ssbd ibrs ibpb fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid
-> >> xsaveopt arat umip> 
-> > One file with all of that?  We are going to run into problems
-> > eventually, that should be split up.
-> > 
-> > Just like bugs, that's going to just grow over time and eventually
-> > overflow PAGE_SIZE :(
-> > 
-> > Make this:
-> >   ├── flags
-> >   │   ├── fpu
-> >   │   ├── vme
-> > 
-> > ...
-> > 
-> > Much simpler to parse, right?
-> 
-> Well, I'm not really sure whether 100+ files are simpler to parse.
-> 
-> Aside of that I really don't see the value for 100+ files per CPU which
-> are just returning 1 or True or whatever as long as you are not
-> suggesting to provide real feature files which have 0/1 or True/False
-> content.
+Hi All,
 
-I also do not like the one file per cpu flag approach.
-This still is one "data"/"info" per sysfs file.
-Similar to:
-cpu/cpufreq/policy1/scaling_available_governors
-and probably a lot others. If PAGE_SIZE overflow has to be cared for, then be 
-it.
- 
-> But I still don't get the whole thing. The only "argument" I've seen so
-> far is the 'proc moves to sys' mantra, but that does not make it any
-> better.
-> 
-> We won't get rid of /proc/cpuinfo for a very long time simply because
-> too much userspace uses it.
+While fixing a silly bug on SH (patch #1), I realized that even with the
+trivial patch to restore prior behaviour, page directory freeing was still
+broken.
 
-The reason we will never get rid of it is:
-Newly written userspace tools still (have to) make use it.
-This is because of a small set of remaining info which is convenient
-to have in userspace but which is not avail in sysfs yet.
+The thing is, on anything SMP, freeing page directories should observe the
+exact same order as normal page freeing:
 
-Therefore only x of the 26 /proc/cpuinfo data has been picked up.
+ 1) unhook page/directory
+ 2) TLB invalidate
+ 3) free page/directory
 
-For decades unused info like:
-fpu             : yes
-fpu_exception   : yes
-cpuid level     : 13
-wp              : yes
-power management:
+Without this any concurrent page-table walk could end up with a Use-after-Free.
+This is esp. trivial for anything that has software page-table walkers
+(HAVE_FAST_GUP / software TLB fill) or the hardware caches partial page-walks
+(ie. caches page directories).
 
-shall die at (long but) some point of time.
+Even on UP this might give issues, since mmu_gather is preemptible these days.
+An interrupt or preempted task accessing user pages might stumble into the free
+page if the hardware caches page directories.
 
-It's quite some years ago when acpi and cpufreq proc info first got
-deprecated and duplicated in sys.
-It has been said that it needs years of deprecation that the event file
-on which damons were listening for acpi events can ever be removed...
-It has been 2013 when the removal has been done, more than 5 years ago:
-1696d9dc57e062ce5200f6a42a6aaada15b434bb
-ACPI: Remove the old /proc/acpi/event interface
+So I've converted everything to always observe the above order, simply so we
+don't have to worry about it.
 
-/proc/cpuinfo may need some years more, but there should be no
-reason it is still getting used.
+If however I've been over zealous and your arch/mmu really doesn't need this
+and you're offended by this potentially superfluous code, please let me know
+and I'll replace the patch with one that adds a comment describing your
+rationale for why it is not needed.
 
-> Introducing a mess in /sys/ in parallel just
-> for following the mantra does not help much.
- 
-> Also IF we ever expose feature flags in sys then this needs to be a
-> split ino
-> 
->   cpu/common_features
-> 
-> and
-> 
->   cpu/CPU$N/unique_features
-
-Makes sense.
-feature (without common/unique) is also a better naming than flags.
-
-If Greg (and others) are ok, I would add "page size exceeding" handling.
-Hm, quick searching for an example I realize that debugfs can exceed page 
-size. Is it that hard to expose a sysfs file larger than page size?
-
-> On most systems unique_features wont exist, but there is such stuff on
-> the horizon.
-
-I still wait a bit before doing work for nothing.
-I hope everybody agrees, that remaining useful info in /proc/cpuinfo should
-show up in /sys if that did not happen yet. And that userspace tools should
-not (need to) make use of /proc/cpuinfo anymore.
-
-    Thomas
-
+Also included are some patches that rename/document some of the mmu gather
+options.
 
