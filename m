@@ -2,107 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F05B511AAE5
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 13:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372F111ABDE
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 14:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729332AbfLKMbp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Dec 2019 07:31:45 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:51198 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729406AbfLKMbo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Dec 2019 07:31:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3R2DK7HvOJXWBjGxheTnCh1+oyh0A3xwV1bV88LUreM=; b=aglqWHi18wn3lAH9Lx5D/B4kie
-        lJrNLFF2pxctrEMnYBHJIEBPv58Uj2A/vOKGdU8ZDPpr8FRStCEj0aezmWfn31MarEVKYHnc5yWex
-        o4z0fl0klPQ5ega9cW16Tu2P2HCSxYvHoFGZ/aWVIoOt9c2cHZ/FcPuq3kEZvabVEq+Eq+I6OrTPN
-        dtIJQP6gNNjFP/E6MFesMAcqOR3T40Ryem7Xr9dYn2tgznxlX8JgvxiQghvD3NSRLSueGnFntUOfM
-        DcFRhZWamjcLkkYGEgDd2rlXeZIGbLC0EEw5Fjo3t1fgIYGg3VCHsMJ6tJw05K20y5rLuhDQqO5CI
-        wITu+cqA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1if192-0001Pf-Bl; Wed, 11 Dec 2019 12:31:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 026FB307093;
-        Wed, 11 Dec 2019 13:29:44 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 605A920137CBF; Wed, 11 Dec 2019 13:31:02 +0100 (CET)
-Message-Id: <20191211122956.629995180@infradead.org>
-User-Agent: quilt/0.65
-Date:   Wed, 11 Dec 2019 13:07:30 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Will Deacon <will@kernel.org>,
+        id S1729241AbfLKNTY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Dec 2019 08:19:24 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:44003 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729131AbfLKNTY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Dec 2019 08:19:24 -0500
+Received: by mail-oi1-f193.google.com with SMTP id x14so13159817oic.10;
+        Wed, 11 Dec 2019 05:19:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FTkf+Ktwg9EN62GCiWaT7c0zhgnuyXYMKB3RnMBCoH0=;
+        b=qaqPMo7c+hmeAmnEKMDJUOJRDrqPaNj7opPLMgqOLJ0B1+DnXGIWne+DDaC8Pxas+4
+         d5kvnqRa+q3Ap83QPW7i5ouBwdFT6OSKJBv5Jq/OnLMQRZRMKN8NcUGeYplYgn89eE3H
+         Kk68ZCrYjTMEBk1or2ymCb0sGAi9QLxZ1Xj5nOVmbaI/JBgE9i/n2NWBfMqUTtNCKY+N
+         O4ni448Kx1lO9zDKvExK/ZAC/XzvVNFUHtd2++pwQh1rz/DIFO38IskGqldlLV5jEmyI
+         8/ZqSgv7ZTl8SLBUuNdWXJZpcAv4hzCPVtEjYmVz6Rs8Jn8VH+QIssGKLP/k9gPXF+SU
+         OGMQ==
+X-Gm-Message-State: APjAAAU/3YZsVXZi//VxOtXorqGq6JtpUPfIWVoWkAnICUDRUKJ5ENhG
+        RTiwz6oHIS1NFSnvK2Yk2QwlQvquM/jIeJr0TMo=
+X-Google-Smtp-Source: APXvYqyE6D637ZfRt9JtwXbrAhQRetOOxev9A7WV3C24h2T4AFLlyRgkWlO82BfFotgCVrPUvj4kVl1vMdhmVhEfkDc=
+X-Received: by 2002:aca:36c5:: with SMTP id d188mr2823451oia.54.1576070363144;
+ Wed, 11 Dec 2019 05:19:23 -0800 (PST)
+MIME-Version: 1.0
+References: <20191211120713.360281197@infradead.org> <20191211122955.769069740@infradead.org>
+In-Reply-To: <20191211122955.769069740@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 11 Dec 2019 14:19:11 +0100
+Message-ID: <CAMuHMdUA-Bj+q4g2NimMv3nnu5v=X81BEkoSgUTOTLG+rsPK4g@mail.gmail.com>
+Subject: Re: [PATCH 02/17] asm-gemeric/tlb: Remove stray function declarations
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Will Deacon <will@kernel.org>,
         "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>,
         "David S. Miller" <davem@davemloft.net>,
         Helge Deller <deller@gmx.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
         Paul Burton <paulburton@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         Richard Henderson <rth@twiddle.net>,
         Nick Hu <nickhu@andestech.com>,
         Paul Walmsley <paul.walmsley@sifive.com>
-Subject: [PATCH 17/17] riscv/tlb: Fix __p*_free_tlb()
-References: <20191211120713.360281197@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Just like regular pages, page directories need to observe the
-following order:
+On Wed, Dec 11, 2019 at 1:31 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> We removed the actual functions a while ago.
+>
+> Fixes: 1808d65b55e4 ("asm-generic/tlb: Remove arch_tlb*_mmu()")
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
- 1) unhook
- 2) TLB invalidate
- 3) free
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-to ensure it is safe against concurrent accesses.
+Gr{oetje,eeting}s,
 
-Since RISC-V has page based PMDs, no software walkers and IPI based
-TLB invalidation, it can use the simple tlb_remove_page() based
-freeer.
+                        Geert
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/riscv/include/asm/pgalloc.h |   11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---- a/arch/riscv/include/asm/pgalloc.h
-+++ b/arch/riscv/include/asm/pgalloc.h
-@@ -73,14 +73,15 @@ static inline void pmd_free(struct mm_st
- 	free_page((unsigned long)pmd);
- }
- 
--#define __pmd_free_tlb(tlb, pmd, addr)  pmd_free((tlb)->mm, pmd)
-+#define __pmd_free_tlb(tlb, pmd, addr)	\
-+	tlb_remove_table((tlb), virt_to_page(pmd))
- 
- #endif /* __PAGETABLE_PMD_FOLDED */
- 
--#define __pte_free_tlb(tlb, pte, buf)   \
--do {                                    \
--	pgtable_pte_page_dtor(pte);     \
--	tlb_remove_page((tlb), pte);    \
-+#define __pte_free_tlb(tlb, pte, buf)	\
-+do {					\
-+	pgtable_pte_page_dtor(pte);	\
-+	tlb_remove_table((tlb), (pte));	\
- } while (0)
- #endif /* CONFIG_MMU */
- 
-
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
