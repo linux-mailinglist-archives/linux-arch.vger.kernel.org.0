@@ -2,61 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B9811AC8D
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 14:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 980A711AC9D
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 14:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729238AbfLKN42 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Dec 2019 08:56:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46808 "EHLO mail.kernel.org"
+        id S1728128AbfLKN6G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Dec 2019 08:58:06 -0500
+Received: from foss.arm.com ([217.140.110.172]:59152 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729278AbfLKN42 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 11 Dec 2019 08:56:28 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AC557214D8;
-        Wed, 11 Dec 2019 13:56:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576072588;
-        bh=dWkqILqfAhjEvyhCKPXISYgfOfSC3OtngOei9pUlZ5w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=enaEjm3qhz+GbI1C7GZdbjUVp+Li+O9XxQqiaGueU8xTWyFJi3xOAs08wqOcxr99A
-         TjmdjHoIohXmbLhvAqKCb708/vwcxCf5WQ+UYx2BMRwMzocjhZQpyBHCi1+hTg2dJV
-         4lSTU4jvrB9a4wmcTqpHvJGg5DZ7YKEwkIIzpHRU=
-Date:   Wed, 11 Dec 2019 14:56:19 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Thomas Renninger <trenn@suse.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Felix Schnizlein <fschnizlein@suse.com>,
-        linux-kernel@vger.kernel.org,
-        Felix Schnizlein <fschnizlein@suse.de>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux@armlinux.org.uk, will.deacon@arm.com, x86@kernel.org
-Subject: Re: [PATCH 2/3] x86 cpuinfo: implement sysfs nodes for x86
-Message-ID: <20191211135619.GA538980@kroah.com>
-References: <20191206162421.15050-1-trenn@suse.de>
- <20191206163656.GC86904@kroah.com>
- <87sglroqix.fsf@nanos.tec.linutronix.de>
- <4737004.4U1sY2OxSp@skinner.arch.suse.de>
+        id S1727554AbfLKN6F (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 11 Dec 2019 08:58:05 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25FC31FB;
+        Wed, 11 Dec 2019 05:58:05 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 83FF83F67D;
+        Wed, 11 Dec 2019 05:58:04 -0800 (PST)
+Date:   Wed, 11 Dec 2019 13:58:03 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Dave Martin <Dave.Martin@arm.com>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Andrew Jones <drjones@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Florian Weimer <fweimer@redhat.com>,
+        linux-kernel@vger.kernel.org, Sudakshina Das <sudi.das@arm.com>
+Subject: Re: [PATCH v3 02/12] ELF: Add ELF program property parsing support
+Message-ID: <20191211135803.GD3870@sirena.org.uk>
+References: <1571419545-20401-1-git-send-email-Dave.Martin@arm.com>
+ <1571419545-20401-3-git-send-email-Dave.Martin@arm.com>
+ <201910291611.69822D5E04@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3Gf/FFewwPeBMqCJ"
 Content-Disposition: inline
-In-Reply-To: <4737004.4U1sY2OxSp@skinner.arch.suse.de>
+In-Reply-To: <201910291611.69822D5E04@keescook>
+X-Cookie: NOBODY EXPECTS THE SPANISH INQUISITION!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 11:42:35AM +0100, Thomas Renninger wrote:
-> If Greg (and others) are ok, I would add "page size exceeding" handling.
-> Hm, quick searching for an example I realize that debugfs can exceed page 
-> size. Is it that hard to expose a sysfs file larger than page size?
 
-No, there is a simple way to do it, but I'm not going to show you how as
-it is NOT how to use sysfs at all :)
+--3Gf/FFewwPeBMqCJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Why are you wanting to dump this whole mess into one file and then parse
-it, it's no different from having 100+ different sysfs files and then
-doing a readdir(3) on the thing, right?
+On Tue, Oct 29, 2019 at 04:14:47PM -0700, Kees Cook wrote:
+> On Fri, Oct 18, 2019 at 06:25:35PM +0100, Dave Martin wrote:
 
-greg k-h
+A bit of a delay, sorry - I've taken this series over from Dave and
+wasn't on the CC so only just saw this.
+
+> > +#ifndef ELF_COMPAT
+> > +#define ELF_COMPAT 0
+> > +#endif
+
+> Why is "compat" interesting for the arch_ callback? Shouldn't just the
+> unsigned long size be needed?
+
+The set of properties handled or how they should be handled may vary
+depending on the ABI.  For example arm64 supports BTI only for AArch64
+but not for AArch32 so we should only handle the property for BTI for
+AArch64 binaries.
+
+--3Gf/FFewwPeBMqCJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3w9eoACgkQJNaLcl1U
+h9BmBgf+NNNCMclmwLDa2ZSVlL0/OBQcMH0ymsvXlLz6O8/LVbh/6UcTv2gnLRbZ
+4/onE8sI1dHBBZCYuiHk3LVyQElzoci7ntsEO96/Ej4HGEGddSJcy841btZcJF+o
+qJD7ZnkU9MR6mk+9QNiJ1Op5JbHinr42IhFw7jdgMDzjc3/BRzOCATyUibraciEN
+bocm5+nKJVPYNXiWolMgRER+8JH8w7I52Agj6Ob0zjZOZi9SBuxFIXTMzVqrvnyX
+iLIi/RIUpxLAdnb0ZRnyowuwgMFQdX38HKBxi6WLO2hcK4HUtytWbgez6KjRpnga
+K5oQP5sxINKD2ERveqnVOuVM/CNbJA==
+=RBvh
+-----END PGP SIGNATURE-----
+
+--3Gf/FFewwPeBMqCJ--
