@@ -2,114 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FC911CA08
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 10:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D00411CA3B
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 11:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728410AbfLLJ5y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Dec 2019 04:57:54 -0500
-Received: from relay.sw.ru ([185.231.240.75]:57816 "EHLO relay.sw.ru"
+        id S1728348AbfLLKID (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Dec 2019 05:08:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54776 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728345AbfLLJ5y (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 12 Dec 2019 04:57:54 -0500
-Received: from dhcp-172-16-25-5.sw.ru ([172.16.25.5])
-        by relay.sw.ru with esmtp (Exim 4.92.3)
-        (envelope-from <aryabinin@virtuozzo.com>)
-        id 1ifLDd-00051z-5a; Thu, 12 Dec 2019 12:57:13 +0300
-Subject: Re: [PATCH v2 4/4] powerpc: Book3S 64-bit "heavyweight" KASAN support
-To:     Daniel Axtens <dja@axtens.net>,
-        Balbir Singh <bsingharora@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com,
-        christophe.leroy@c-s.fr, aneesh.kumar@linux.ibm.com,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <20191210044714.27265-1-dja@axtens.net>
- <20191210044714.27265-5-dja@axtens.net>
- <71751e27-e9c5-f685-7a13-ca2e007214bc@gmail.com>
- <875zincu8a.fsf@dja-thinkpad.axtens.net>
- <2e0f21e6-7552-815b-1bf3-b54b0fc5caa9@gmail.com>
- <87wob3aqis.fsf@dja-thinkpad.axtens.net>
-From:   Andrey Ryabinin <aryabinin@virtuozzo.com>
-Message-ID: <023d59f1-c007-e153-9893-3231a4caf7d1@virtuozzo.com>
-Date:   Thu, 12 Dec 2019 12:56:56 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1726382AbfLLKID (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 12 Dec 2019 05:08:03 -0500
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3AC8C22B48;
+        Thu, 12 Dec 2019 10:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576145282;
+        bh=8oMGWZ4X5eA0CJO5Djd99i+IOL5EsEg13Vf8WiNVrk8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=to/x3BzMP75kgcqYnhNo7MpRT3Yjg7ArR3k/uhqgmx1WmoBWQUC07i/so0ToXoYbR
+         bgM7dtoIqrWrzghk3LxH3nXGLy/b9nIIJF7ZvGf1A+SHKFlGKXgyCmtRnc0L8Uo/rN
+         CbEdG0AEDN12X1lwHAh9IeDw1TWI2RDws6lqWZpY=
+Date:   Thu, 12 Dec 2019 10:07:56 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>, dja@axtens.net,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        christophe.leroy@c-s.fr, linux-arch@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
+ Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
+Message-ID: <20191212100756.GA11317@willie-the-truck>
+References: <87blslei5o.fsf@mpe.ellerman.id.au>
+ <20191206131650.GM2827@hirez.programming.kicks-ass.net>
+ <875zimp0ay.fsf@mpe.ellerman.id.au>
+ <20191212080105.GV2844@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <87wob3aqis.fsf@dja-thinkpad.axtens.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191212080105.GV2844@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/11/19 5:24 PM, Daniel Axtens wrote:
-> Hi Balbir,
+On Thu, Dec 12, 2019 at 09:01:05AM +0100, Peter Zijlstra wrote:
+> On Thu, Dec 12, 2019 at 04:42:13PM +1100, Michael Ellerman wrote:
+> > Peter Zijlstra <peterz@infradead.org> writes:
+> > > On Fri, Dec 06, 2019 at 11:46:11PM +1100, Michael Ellerman wrote:
+> > Some of the generic versions don't generate good code compared to our
+> > versions, but that's because READ_ONCE() is triggering stack protector
+> > to be enabled.
 > 
->>>>> +Discontiguous memory can occur when you have a machine with memory spread
->>>>> +across multiple nodes. For example, on a Talos II with 64GB of RAM:
->>>>> +
->>>>> + - 32GB runs from 0x0 to 0x0000_0008_0000_0000,
->>>>> + - then there's a gap,
->>>>> + - then the final 32GB runs from 0x0000_2000_0000_0000 to 0x0000_2008_0000_0000
->>>>> +
->>>>> +This can create _significant_ issues:
->>>>> +
->>>>> + - If we try to treat the machine as having 64GB of _contiguous_ RAM, we would
->>>>> +   assume that ran from 0x0 to 0x0000_0010_0000_0000. We'd then reserve the
->>>>> +   last 1/8th - 0x0000_000e_0000_0000 to 0x0000_0010_0000_0000 as the shadow
->>>>> +   region. But when we try to access any of that, we'll try to access pages
->>>>> +   that are not physically present.
->>>>> +
->>>>
->>>> If we reserved memory for KASAN from each node (discontig region), we might survive
->>>> this no? May be we need NUMA aware KASAN? That might be a generic change, just thinking
->>>> out loud.
->>>
->>> The challenge is that - AIUI - in inline instrumentation, the compiler
->>> doesn't generate calls to things like __asan_loadN and
->>> __asan_storeN. Instead it uses -fasan-shadow-offset to compute the
->>> checks, and only calls the __asan_report* family of functions if it
->>> detects an issue. This also matches what I can observe with objdump
->>> across outline and inline instrumentation settings.
->>>
->>> This means that for this sort of thing to work we would need to either
->>> drop back to out-of-line calls, or teach the compiler how to use a
->>> nonlinear, NUMA aware mem-to-shadow mapping.
->>
->> Yes, out of line is expensive, but seems to work well for all use cases.
+> Bah, there's never anything simple, is there :/
 > 
-> I'm not sure this is true. Looking at scripts/Makefile.kasan, allocas,
-> stacks and globals will only be instrumented if you can provide
-> KASAN_SHADOW_OFFSET. In the case you're proposing, we can't provide a
-> static offset. I _think_ this is a compiler limitation, where some of
-> those instrumentations only work/make sense with a static offset, but
-> perhaps that's not right? Dmitry and Andrey, can you shed some light on
-> this?
+> > For example, comparing an out-of-line copy of the generic and ppc
+> > versions of test_and_set_bit_lock():
+> > 
+> >    1 <generic_test_and_set_bit_lock>:           1 <ppc_test_and_set_bit_lock>:
+> >    2         addis   r2,r12,361
+> >    3         addi    r2,r2,-4240
+> >    4         stdu    r1,-48(r1)
+> >    5         rlwinm  r8,r3,29,3,28
+> >    6         clrlwi  r10,r3,26                   2         rldicl  r10,r3,58,6
+> >    7         ld      r9,3320(r13)
+> >    8         std     r9,40(r1)
+> >    9         li      r9,0
+> >   10         li      r9,1                        3         li      r9,1
+> >                                                  4         clrlwi  r3,r3,26
+> >                                                  5         rldicr  r10,r10,3,60
+> >   11         sld     r9,r9,r10                   6         sld     r3,r9,r3
+> >   12         add     r10,r4,r8                   7         add     r4,r4,r10
+> >   13         ldx     r8,r4,r8
+> >   14         and.    r8,r9,r8
+> >   15         bne     34f
+> >   16         ldarx   r7,0,r10                    8         ldarx   r9,0,r4,1
+> >   17         or      r8,r9,r7                    9         or      r10,r9,r3
+> >   18         stdcx.  r8,0,r10                   10         stdcx.  r10,0,r4
+> >   19         bne-    16b                        11         bne-    8b
+> >   20         isync                              12         isync
+> >   21         and     r9,r7,r9                   13         and     r3,r3,r9
+> >   22         addic   r7,r9,-1                   14         addic   r9,r3,-1
+> >   23         subfe   r7,r7,r9                   15         subfe   r3,r9,r3
+> >   24         ld      r9,40(r1)
+> >   25         ld      r10,3320(r13)
+> >   26         xor.    r9,r9,r10
+> >   27         li      r10,0
+> >   28         mr      r3,r7
+> >   29         bne     36f
+> >   30         addi    r1,r1,48
+> >   31         blr                                16         blr
+> >   32         nop
+> >   33         nop
+> >   34         li      r7,1
+> >   35         b       24b
+> >   36         mflr    r0
+> >   37         std     r0,64(r1)
+> >   38         bl      <__stack_chk_fail+0x8>
+> > 
+> > 
+> > If you squint, the generated code for the actual logic is pretty similar, but
+> > the stack protector gunk makes a big mess. It's particularly bad here
+> > because the ppc version doesn't even need a stack frame.
+> > 
+> > I've also confirmed that even when test_and_set_bit_lock() is inlined
+> > into an actual call site the stack protector logic still triggers.
 > 
-
-There is no code in the kernel is poisoning/unpoisoning
-redzones/variables on stack. It's because it's always done by the compiler, it inserts
-some code in prologue/epilogue of every function.
-So compiler needs to know the shadow offset which will be used to poison/unpoison
-stack frames.
-
-There is no such kind of limitation on globals instrumentation. The only reason globals
-instrumentation depends on -fasan-shadow-offset is because there was some bug related to
-globals in old gcc version which didn't support -fasan-shadow-offset.
-
-
-If you want stack instrumentation with not standard mem-to-shadow mapping, the options are:
-1. Patch compiler to make it possible the poisoning/unpoisonig of stack frames via function calls.
-2. Use out-line instrumentation and do whatever mem-to-shadow mapping you want, but keep all kernel
-stacks in some special place for which standard mem-to-shadow mapping (addr >>3 +offset)
-works.
-
-
-> Also, as it currently stands, the speed difference between inline and
-> outline is approximately 2x, and given that we'd like to run this
-> full-time in syzkaller I think there is value in trading off speed for
-> some limitations.
+> > If I change the READ_ONCE() in test_and_set_bit_lock():
+> > 
+> > 	if (READ_ONCE(*p) & mask)
+> > 		return 1;
+> > 
+> > to a regular pointer access:
+> > 
+> > 	if (*p & mask)
+> > 		return 1;
+> > 
+> > Then the generated code looks more or less the same, except for the extra early
+> > return in the generic version of test_and_set_bit_lock(), and different handling
+> > of the return code by the compiler.
 > 
+> So given that the function signature is:
+> 
+> static inline int test_and_set_bit_lock(unsigned int nr,
+> 					volatile unsigned long *p)
+> 
+> @p already carries the required volatile qualifier, so READ_ONCE() does
+> not add anything here (except for easier to read code and poor code
+> generation).
+> 
+> So your proposed change _should_ be fine. Will, I'm assuming you never
+> saw this on your ARGH64 builds when you did this code ?
+
+I did see it, but (a) looking at the code out-of-line makes it look a lot
+worse than it actually is (so the ext4 example is really helpful -- thanks
+Michael!) and (b) I chalked it up to a crappy compiler.
+
+However, see this comment from Arnd on my READ_ONCE series from the other
+day:
+
+https://lore.kernel.org/lkml/CAK8P3a0f=WvSQSBQ4t0FmEkcFE_mC3oARxaeTviTSkSa-D2qhg@mail.gmail.com
+
+In which case, I'm thinking that we should be doing better in READ_ONCE()
+for non-buggy compilers which would also keep the KCSAN folks happy for this
+code (and would help with [1] too).
+
+Will
+
+[1] https://lkml.org/lkml/2019/11/12/898
