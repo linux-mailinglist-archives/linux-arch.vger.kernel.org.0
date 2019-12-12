@@ -2,168 +2,171 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEAA411D575
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 19:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12A911D589
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 19:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730189AbfLLS1h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Dec 2019 13:27:37 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:41028 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730164AbfLLS1h (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Dec 2019 13:27:37 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1ifTBW-0006da-Da; Thu, 12 Dec 2019 11:27:34 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1ifTBV-0007Vb-8k; Thu, 12 Dec 2019 11:27:34 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Linux-MM <linux-mm@kvack.org>,
+        id S1730387AbfLLS32 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Dec 2019 13:29:28 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58080 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730306AbfLLS32 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 12 Dec 2019 13:29:28 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBCIMBqs078598
+        for <linux-arch@vger.kernel.org>; Thu, 12 Dec 2019 13:29:26 -0500
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wujxrj7w2-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Thu, 12 Dec 2019 13:29:26 -0500
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <borntraeger@de.ibm.com>;
+        Thu, 12 Dec 2019 18:29:24 -0000
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 12 Dec 2019 18:29:20 -0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBCITJTv33095812
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Dec 2019 18:29:19 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C4C8A4040;
+        Thu, 12 Dec 2019 18:29:19 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 04338A4051;
+        Thu, 12 Dec 2019 18:29:19 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.152.224.212])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 12 Dec 2019 18:29:18 +0000 (GMT)
+Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
+ Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
+To:     Will Deacon <will@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, dja@axtens.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-References: <20191211184027.20130-1-catalin.marinas@arm.com>
-        <20191211184027.20130-13-catalin.marinas@arm.com>
-        <CAK8P3a1-eaR7NddhDce65vXKCGeZD3xUMrTTAWN4U3oW0ecN=g@mail.gmail.com>
-Date:   Thu, 12 Dec 2019 12:26:41 -0600
-In-Reply-To: <CAK8P3a1-eaR7NddhDce65vXKCGeZD3xUMrTTAWN4U3oW0ecN=g@mail.gmail.com>
-        (Arnd Bergmann's message of "Wed, 11 Dec 2019 20:31:28 +0100")
-Message-ID: <87zhfxqu1q.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mark Rutland <mark.rutland@arm.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <87blslei5o.fsf@mpe.ellerman.id.au>
+ <20191206131650.GM2827@hirez.programming.kicks-ass.net>
+ <875zimp0ay.fsf@mpe.ellerman.id.au>
+ <20191212080105.GV2844@hirez.programming.kicks-ass.net>
+ <20191212100756.GA11317@willie-the-truck>
+ <20191212104610.GW2827@hirez.programming.kicks-ass.net>
+ <CAHk-=wjUBsH0BYDBv=q36482G-U7c=9bC89L_BViSciTfb8fhA@mail.gmail.com>
+ <20191212180634.GA19020@willie-the-truck>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ xsFNBE6cPPgBEAC2VpALY0UJjGmgAmavkL/iAdqul2/F9ONz42K6NrwmT+SI9CylKHIX+fdf
+ J34pLNJDmDVEdeb+brtpwC9JEZOLVE0nb+SR83CsAINJYKG3V1b3Kfs0hydseYKsBYqJTN2j
+ CmUXDYq9J7uOyQQ7TNVoQejmpp5ifR4EzwIFfmYDekxRVZDJygD0wL/EzUr8Je3/j548NLyL
+ 4Uhv6CIPf3TY3/aLVKXdxz/ntbLgMcfZsDoHgDk3lY3r1iwbWwEM2+eYRdSZaR4VD+JRD7p8
+ 0FBadNwWnBce1fmQp3EklodGi5y7TNZ/CKdJ+jRPAAnw7SINhSd7PhJMruDAJaUlbYaIm23A
+ +82g+IGe4z9tRGQ9TAflezVMhT5J3ccu6cpIjjvwDlbxucSmtVi5VtPAMTLmfjYp7VY2Tgr+
+ T92v7+V96jAfE3Zy2nq52e8RDdUo/F6faxcumdl+aLhhKLXgrozpoe2nL0Nyc2uqFjkjwXXI
+ OBQiaqGeWtxeKJP+O8MIpjyGuHUGzvjNx5S/592TQO3phpT5IFWfMgbu4OreZ9yekDhf7Cvn
+ /fkYsiLDz9W6Clihd/xlpm79+jlhm4E3xBPiQOPCZowmHjx57mXVAypOP2Eu+i2nyQrkapaY
+ IdisDQfWPdNeHNOiPnPS3+GhVlPcqSJAIWnuO7Ofw1ZVOyg/jwARAQABzUNDaHJpc3RpYW4g
+ Qm9ybnRyYWVnZXIgKDJuZCBJQk0gYWRkcmVzcykgPGJvcm50cmFlZ2VyQGxpbnV4LmlibS5j
+ b20+wsF5BBMBAgAjBQJdP/hMAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQEXu8
+ gLWmHHy/pA/+JHjpEnd01A0CCyfVnb5fmcOlQ0LdmoKWLWPvU840q65HycCBFTt6V62cDljB
+ kXFFxMNA4y/2wqU0H5/CiL963y3gWIiJsZa4ent+KrHl5GK1nIgbbesfJyA7JqlB0w/E/SuY
+ NRQwIWOo/uEvOgXnk/7+rtvBzNaPGoGiiV1LZzeaxBVWrqLtmdi1iulW/0X/AlQPuF9dD1Px
+ hx+0mPjZ8ClLpdSp5d0yfpwgHtM1B7KMuQPQZGFKMXXTUd3ceBUGGczsgIMipZWJukqMJiJj
+ QIMH0IN7XYErEnhf0GCxJ3xAn/J7iFpPFv8sFZTvukntJXSUssONnwiKuld6ttUaFhSuSoQg
+ OFYR5v7pOfinM0FcScPKTkrRsB5iUvpdthLq5qgwdQjmyINt3cb+5aSvBX2nNN135oGOtlb5
+ tf4dh00kUR8XFHRrFxXx4Dbaw4PKgV3QLIHKEENlqnthH5t0tahDygQPnSucuXbVQEcDZaL9
+ WgJqlRAAj0pG8M6JNU5+2ftTFXoTcoIUbb0KTOibaO9zHVeGegwAvPLLNlKHiHXcgLX1tkjC
+ DrvE2Z0e2/4q7wgZgn1kbvz7ZHQZB76OM2mjkFu7QNHlRJ2VXJA8tMXyTgBX6kq1cYMmd/Hl
+ OhFrAU3QO1SjCsXA2CDk9MM1471mYB3CTXQuKzXckJnxHkHOwU0ETpw8+AEQAJjyNXvMQdJN
+ t07BIPDtbAQk15FfB0hKuyZVs+0lsjPKBZCamAAexNRk11eVGXK/YrqwjChkk60rt3q5i42u
+ PpNMO9aS8cLPOfVft89Y654Qd3Rs1WRFIQq9xLjdLfHh0i0jMq5Ty+aiddSXpZ7oU6E+ud+X
+ Czs3k5RAnOdW6eV3+v10sUjEGiFNZwzN9Udd6PfKET0J70qjnpY3NuWn5Sp1ZEn6lkq2Zm+G
+ 9G3FlBRVClT30OWeiRHCYB6e6j1x1u/rSU4JiNYjPwSJA8EPKnt1s/Eeq37qXXvk+9DYiHdT
+ PcOa3aNCSbIygD3jyjkg6EV9ZLHibE2R/PMMid9FrqhKh/cwcYn9FrT0FE48/2IBW5mfDpAd
+ YvpawQlRz3XJr2rYZJwMUm1y+49+1ZmDclaF3s9dcz2JvuywNq78z/VsUfGz4Sbxy4ShpNpG
+ REojRcz/xOK+FqNuBk+HoWKw6OxgRzfNleDvScVmbY6cQQZfGx/T7xlgZjl5Mu/2z+ofeoxb
+ vWWM1YCJAT91GFvj29Wvm8OAPN/+SJj8LQazd9uGzVMTz6lFjVtH7YkeW/NZrP6znAwv5P1a
+ DdQfiB5F63AX++NlTiyA+GD/ggfRl68LheSskOcxDwgI5TqmaKtX1/8RkrLpnzO3evzkfJb1
+ D5qh3wM1t7PZ+JWTluSX8W25ABEBAAHCwV8EGAECAAkFAk6cPPgCGwwACgkQEXu8gLWmHHz8
+ 2w//VjRlX+tKF3szc0lQi4X0t+pf88uIsvR/a1GRZpppQbn1jgE44hgF559K6/yYemcvTR7r
+ 6Xt7cjWGS4wfaR0+pkWV+2dbw8Xi4DI07/fN00NoVEpYUUnOnupBgychtVpxkGqsplJZQpng
+ v6fauZtyEcUK3dLJH3TdVQDLbUcL4qZpzHbsuUnTWsmNmG4Vi0NsEt1xyd/Wuw+0kM/oFEH1
+ 4BN6X9xZcG8GYUbVUd8+bmio8ao8m0tzo4pseDZFo4ncDmlFWU6hHnAVfkAs4tqA6/fl7RLN
+ JuWBiOL/mP5B6HDQT9JsnaRdzqF73FnU2+WrZPjinHPLeE74istVgjbowvsgUqtzjPIG5pOj
+ cAsKoR0M1womzJVRfYauWhYiW/KeECklci4TPBDNx7YhahSUlexfoftltJA8swRshNA/M90/
+ i9zDo9ySSZHwsGxG06ZOH5/MzG6HpLja7g8NTgA0TD5YaFm/oOnsQVsf2DeAGPS2xNirmknD
+ jaqYefx7yQ7FJXXETd2uVURiDeNEFhVZWb5CiBJM5c6qQMhmkS4VyT7/+raaEGgkEKEgHOWf
+ ZDP8BHfXtszHqI3Fo1F4IKFo/AP8GOFFxMRgbvlAs8z/+rEEaQYjxYJqj08raw6P4LFBqozr
+ nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
+Date:   Thu, 12 Dec 2019 19:29:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1ifTBV-0007Vb-8k;;;mid=<87zhfxqu1q.fsf@x220.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18Nj1okHY+lVK9nVgaeSq2QimrMTWlLlGo=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_20,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels autolearn=disabled
-        version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
-        *      [score: 0.1506]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Arnd Bergmann <arnd@arndb.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 522 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 2.4 (0.5%), b_tie_ro: 1.69 (0.3%), parse: 0.84
-        (0.2%), extract_message_metadata: 16 (3.0%), get_uri_detail_list: 2.6
-        (0.5%), tests_pri_-1000: 10 (1.9%), tests_pri_-950: 1.26 (0.2%),
-        tests_pri_-900: 1.07 (0.2%), tests_pri_-90: 34 (6.6%), check_bayes: 33
-        (6.3%), b_tokenize: 10 (1.8%), b_tok_get_all: 13 (2.6%), b_comp_prob:
-        3.5 (0.7%), b_tok_touch_all: 4.3 (0.8%), b_finish: 0.59 (0.1%),
-        tests_pri_0: 441 (84.4%), check_dkim_signature: 0.52 (0.1%),
-        check_dkim_adsp: 2.5 (0.5%), poll_dns_idle: 0.39 (0.1%), tests_pri_10:
-        2.2 (0.4%), tests_pri_500: 10 (2.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 12/22] arm64: mte: Add specific SIGSEGV codes
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+In-Reply-To: <20191212180634.GA19020@willie-the-truck>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19121218-0016-0000-0000-000002D43707
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19121218-0017-0000-0000-000033365EAC
+Message-Id: <b37ce52d-89cc-5f2e-827d-c260e63152da@de.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-12_06:2019-12-12,2019-12-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ clxscore=1011 suspectscore=0 bulkscore=0 spamscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912120141
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Arnd Bergmann <arnd@arndb.de> writes:
 
-> On Wed, Dec 11, 2019 at 7:40 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+
+On 12.12.19 19:06, Will Deacon wrote:
+> On Thu, Dec 12, 2019 at 09:41:32AM -0800, Linus Torvalds wrote:
+>> On Thu, Dec 12, 2019 at 2:46 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>>>
+>>> +#ifdef GCC_VERSION < 40800
 >>
->> From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>> Where does that 4.8 version check come from, and why?
 >>
->> Add MTE-specific SIGSEGV codes to siginfo.h.
+>> Yeah, I know, but this really wants a comment. Sadly it looks like gcc
+>> bugzilla is down, so
 >>
->> Note that the for MTE we are reusing the same SPARC ADI codes because
->> the two functionalities are similar and they cannot coexist on the same
->> system.
-
-Please Please Please don't do that.
-
-It is actively harmful to have architecture specific si_code values.
-As it makes maintenance much more difficult.
-
-Especially as the si_codes are part of union descrimanator.
-
-If your functionality is identical reuse the numbers otherwise please
-just select the next numbers not yet used.
-
-We have at least 256 si_codes per signal 2**32 if we really need them so
-there is no need to be reuse numbers.
-
-The practical problem is that architecture specific si_codes start
-turning kernel/signal.c into #ifdef soup, and we loose a lot of
-basic compile coverage because of that.  In turn not compiling the code
-leads to bit-rot in all kinds of weird places.
-
-
-
-Now as far as the observation that this is almost the same as other
-functionality why can't this fit the existing interface exposed to
-userspace?   Sometimes there are good reasons, but technology gets
-a lot more uptake and testing when the same interfaces are more widely
-available.
-
-Eric
-
-p.s. As for coexistence there is always the possibility that one chip
-in a cpu family does supports one thing and another chip in a cpu
-family supports another.  So userspace may have to cope with the
-situation even if an individual chip doesn't.
-
-I remember a similar case where sparc had several distinct page table
-formats and we had a single kernel that had to cope with them all.
-
-
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->> [catalin.marinas@arm.com: renamed precise/imprecise to sync/async]
->> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
->> ---
->>  include/uapi/asm-generic/siginfo.h | 9 +++++++--
->>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58145
 >>
->> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
->> index cb3d6c267181..a5184a5438c6 100644
->> --- a/include/uapi/asm-generic/siginfo.h
->> +++ b/include/uapi/asm-generic/siginfo.h
->> @@ -227,8 +227,13 @@ typedef struct siginfo {
->>  # define SEGV_PKUERR   4       /* failed protection key checks */
->>  #endif
->>  #define SEGV_ACCADI    5       /* ADI not enabled for mapped object */
->> -#define SEGV_ADIDERR   6       /* Disrupting MCD error */
->> -#define SEGV_ADIPERR   7       /* Precise MCD exception */
->> +#ifdef __aarch64__
->> +# define SEGV_MTEAERR  6       /* Asynchronous MTE error */
->> +# define SEGV_MTESERR  7       /* Synchronous MTE exception */
->> +#else
->> +# define SEGV_ADIDERR  6       /* Disrupting MCD error */
->> +# define SEGV_ADIPERR  7       /* Precise MCD exception */
->> +#endif
->
-> SEGV_ADIPERR/SEGV_ADIDERR were added together with SEGV_ACCADI,
-> it seems a bit odd to make only two of them conditional but not the others.
->
-> I think we are generally working towards having the same constants
-> across architectures even for features that only exist on one of them.
->
-> Adding Al and Eric to Cc, maybe they have another suggestion on what
-> constants should be used.
->
->      Arnd
+>> currently gives an "Internal Server Error" for me.
+>>
+>> [ Delete the horrid code we have because of gcc bugs ]
+>>
+>>> +#else /* GCC_VERSION < 40800 */
+>>> +
+>>> +#define READ_ONCE_NOCHECK(x)                                           \
+>>> +({                                                                     \
+>>> +       typeof(x) __x = *(volatile typeof(x))&(x);                      \
+>>
+>> I think we can/should just do this unconditionally if it helps th eissue.
+> 
+> I'm currently trying to solve the issue by removing volatile from the bitop
+> function signatures, but it's grotty because there are quite a few callers
+> to fix up. I'm still trying to do it, because removing volatile fields from
+> structurs is generally a "good thing", but I'd be keen to simplify
+> READ_ONCE() as you suggest regardless.
+
+As I am the one who added the foundation of READ_ONCEs uglyness, I am now in
+favour of re-simplifying it again. I was first a bit scared about re-introducing
+bugs, but the gcc testsuite has this particular case covered, so hopefully we
+should not see the issue with volatile and aggregate types again.
+
+Christian
+
