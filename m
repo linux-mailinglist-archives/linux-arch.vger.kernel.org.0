@@ -2,350 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E62E11C58E
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 06:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C64B111C69A
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 08:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbfLLFmW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Dec 2019 00:42:22 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41907 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725980AbfLLFmW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 12 Dec 2019 00:42:22 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47YN3W5hTfz9sPL;
-        Thu, 12 Dec 2019 16:42:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1576129338;
-        bh=O++zJuVq/umtcNrYXf5LhasAFc6eMDvjl5VA+AjA2+I=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=nOpPdrjPzPCDNQrHjnZ7q2qw7WWDHHNICSgRUrjZBFxCHxoi5qb+ZFkLrI2Sv6kBm
-         tyNhlMWLzGjL3RJ8jzNTLnFNOejZeyORlNsX2fYynbewuk9iwNzdjkFFNWWXrQF38F
-         TQWScHI4JaWHJsRP/pCx2PqIttsAEszJ8wzmhua80EuYYRwFOMZIcqc8v2offuMCJy
-         vwSay/WBom0mokybMVtsMzjFD8hEU3GE5LodA5sTiwAh3tzRFbgajTrwUOMvXtWvjF
-         EuFRlyOhMv6DPKziq4bOpsHe96F3euxVzqEq46kpW8oe8ZdFVvtCQ399L3B0q1iFx9
-         wKCIfGudgJ7wA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, dja@axtens.net,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        christophe.leroy@c-s.fr, linux-arch@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
-In-Reply-To: <20191206131650.GM2827@hirez.programming.kicks-ass.net>
-References: <87blslei5o.fsf@mpe.ellerman.id.au> <20191206131650.GM2827@hirez.programming.kicks-ass.net>
-Date:   Thu, 12 Dec 2019 16:42:13 +1100
-Message-ID: <875zimp0ay.fsf@mpe.ellerman.id.au>
+        id S1728130AbfLLHmz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Dec 2019 02:42:55 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:38868 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728095AbfLLHmz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Dec 2019 02:42:55 -0500
+Received: by mail-lf1-f66.google.com with SMTP id r14so915323lfm.5;
+        Wed, 11 Dec 2019 23:42:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=PkUsNGoqFdl5gXqJP6bnP2J6yrhC8TrnSK9hjm92v8k=;
+        b=NMCNzYEm9Gfegz6VLnF8XP0V5Hn0WezwnX7U9NkH5MQWw+pZmvdE45rMspF3sLqxbF
+         ZZnNXwqhT2Q5GUIlC1rnmGWdvyOao7Mv2wdJk0VOhiLJ/8ruwz7CzgzsU9HcBqUHN8xb
+         OlyZ2qODoD9obyPBZzL0HLC0LDMy+X8yU/eWI5IZxzHqW/dN5qNLoU6c8k6x83yi0cTH
+         yY3XvA65/q1EilVfL5O1Awlr4X/HW8bO8iCGiDKbMOtMsyKX1Owmv2jHdInhOqTPfUY4
+         DTV3Brysx5psuGFJ/sIoP9BO6zN1aE1N5mB96sZ/Z4CD9q24KbeourzxSb0xwN0ZLlvx
+         75SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=PkUsNGoqFdl5gXqJP6bnP2J6yrhC8TrnSK9hjm92v8k=;
+        b=mOj+WDtPPnHdPG4E8aPRBCWurxxy+xGiOAiO9pEebtVBtcIwoDJNf3IqcXg6nUoLQE
+         b/S+mzM/W96hsjaVAxd6oeUrjoZCy3RSpYLEKgr4YnHAFAoRSklfj5j1f+r+pnFtFVve
+         R5YIK5v68FssEl3Okd4yb1dSh/YLd1Dt/Mta5bC06F+n/PeoLdUBtjRXf4w/6N6D8toI
+         SuotGfOUoFasuqJIfWAJxf+E/JKbpWFVZGNE/PgaNXqTAOX1a5dhy2BM3/l/0Xf+NcUR
+         ZM0LzGnFSg5IXy5GGeQBzG8Y+xvlduSEggSrXnOJkPJCEv9Vqyd3o16mN3dQk0N/q/Cy
+         WxzA==
+X-Gm-Message-State: APjAAAUuVgp7qZUMqixufk9JwckNMEe1vmj35rjXwXA1ku7kLi5pOdRv
+        KfIoX8EiPpIDMsb6YfIltcs=
+X-Google-Smtp-Source: APXvYqw61Nc9c1M7/MZ1ZVdl9tv4GQZF2ss+5I1aVe+a5lUKM/oLVCrLyFH8YTXcNcxBfb4SaCbXuQ==
+X-Received: by 2002:ac2:5975:: with SMTP id h21mr4695940lfp.165.1576136571817;
+        Wed, 11 Dec 2019 23:42:51 -0800 (PST)
+Received: from [192.168.68.108] (115-64-122-209.tpgi.com.au. [115.64.122.209])
+        by smtp.gmail.com with ESMTPSA id v5sm2444547ljk.67.2019.12.11.23.42.45
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 Dec 2019 23:42:51 -0800 (PST)
+Subject: Re: [PATCH v2 4/4] powerpc: Book3S 64-bit "heavyweight" KASAN support
+To:     Daniel Axtens <dja@axtens.net>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kasan-dev@googlegroups.com, christophe.leroy@c-s.fr,
+        aneesh.kumar@linux.ibm.com, Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>
+References: <20191210044714.27265-1-dja@axtens.net>
+ <20191210044714.27265-5-dja@axtens.net>
+ <71751e27-e9c5-f685-7a13-ca2e007214bc@gmail.com>
+ <875zincu8a.fsf@dja-thinkpad.axtens.net>
+ <2e0f21e6-7552-815b-1bf3-b54b0fc5caa9@gmail.com>
+ <87wob3aqis.fsf@dja-thinkpad.axtens.net>
+From:   Balbir Singh <bsingharora@gmail.com>
+Message-ID: <1bffad2d-db13-9808-afc9-5594f02dcf01@gmail.com>
+Date:   Thu, 12 Dec 2019 18:42:40 +1100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <87wob3aqis.fsf@dja-thinkpad.axtens.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-[ trimmed CC a bit ]
-
-Peter Zijlstra <peterz@infradead.org> writes:
-> On Fri, Dec 06, 2019 at 11:46:11PM +1100, Michael Ellerman wrote:
-...
-> you write:
->
->   "Currently bitops-instrumented.h assumes that the architecture provides
-> atomic, non-atomic and locking bitops (e.g. both set_bit and __set_bit).
-> This is true on x86 and s390, but is not always true: there is a
-> generic bitops/non-atomic.h header that provides generic non-atomic
-> operations, and also a generic bitops/lock.h for locking operations."
->
-> Is there any actual benefit for PPC to using their own atomic bitops
-> over bitops/lock.h ? I'm thinking that the generic code is fairly
-> optimal for most LL/SC architectures.
-
-Yes and no :)
-
-Some of the generic versions don't generate good code compared to our
-versions, but that's because READ_ONCE() is triggering stack protector
-to be enabled.
-
-For example, comparing an out-of-line copy of the generic and ppc
-versions of test_and_set_bit_lock():
-
-   1 <generic_test_and_set_bit_lock>:           1 <ppc_test_and_set_bit_lock>:
-   2         addis   r2,r12,361
-   3         addi    r2,r2,-4240
-   4         stdu    r1,-48(r1)
-   5         rlwinm  r8,r3,29,3,28
-   6         clrlwi  r10,r3,26                   2         rldicl  r10,r3,58,6
-   7         ld      r9,3320(r13)
-   8         std     r9,40(r1)
-   9         li      r9,0
-  10         li      r9,1                        3         li      r9,1
-                                                 4         clrlwi  r3,r3,26
-                                                 5         rldicr  r10,r10,3,60
-  11         sld     r9,r9,r10                   6         sld     r3,r9,r3
-  12         add     r10,r4,r8                   7         add     r4,r4,r10
-  13         ldx     r8,r4,r8
-  14         and.    r8,r9,r8
-  15         bne     34f
-  16         ldarx   r7,0,r10                    8         ldarx   r9,0,r4,1
-  17         or      r8,r9,r7                    9         or      r10,r9,r3
-  18         stdcx.  r8,0,r10                   10         stdcx.  r10,0,r4
-  19         bne-    16b                        11         bne-    8b
-  20         isync                              12         isync
-  21         and     r9,r7,r9                   13         and     r3,r3,r9
-  22         addic   r7,r9,-1                   14         addic   r9,r3,-1
-  23         subfe   r7,r7,r9                   15         subfe   r3,r9,r3
-  24         ld      r9,40(r1)
-  25         ld      r10,3320(r13)
-  26         xor.    r9,r9,r10
-  27         li      r10,0
-  28         mr      r3,r7
-  29         bne     36f
-  30         addi    r1,r1,48
-  31         blr                                16         blr
-  32         nop
-  33         nop
-  34         li      r7,1
-  35         b       24b
-  36         mflr    r0
-  37         std     r0,64(r1)
-  38         bl      <__stack_chk_fail+0x8>
 
 
-If you squint, the generated code for the actual logic is pretty similar, but
-the stack protector gunk makes a big mess. It's particularly bad here
-because the ppc version doesn't even need a stack frame.
+On 12/12/19 1:24 am, Daniel Axtens wrote:
+> Hi Balbir,
+> 
+>>>>> +Discontiguous memory can occur when you have a machine with memory spread
+>>>>> +across multiple nodes. For example, on a Talos II with 64GB of RAM:
+>>>>> +
+>>>>> + - 32GB runs from 0x0 to 0x0000_0008_0000_0000,
+>>>>> + - then there's a gap,
+>>>>> + - then the final 32GB runs from 0x0000_2000_0000_0000 to 0x0000_2008_0000_0000
+>>>>> +
+>>>>> +This can create _significant_ issues:
+>>>>> +
+>>>>> + - If we try to treat the machine as having 64GB of _contiguous_ RAM, we would
+>>>>> +   assume that ran from 0x0 to 0x0000_0010_0000_0000. We'd then reserve the
+>>>>> +   last 1/8th - 0x0000_000e_0000_0000 to 0x0000_0010_0000_0000 as the shadow
+>>>>> +   region. But when we try to access any of that, we'll try to access pages
+>>>>> +   that are not physically present.
+>>>>> +
+>>>>
+>>>> If we reserved memory for KASAN from each node (discontig region), we might survive
+>>>> this no? May be we need NUMA aware KASAN? That might be a generic change, just thinking
+>>>> out loud.
+>>>
+>>> The challenge is that - AIUI - in inline instrumentation, the compiler
+>>> doesn't generate calls to things like __asan_loadN and
+>>> __asan_storeN. Instead it uses -fasan-shadow-offset to compute the
+>>> checks, and only calls the __asan_report* family of functions if it
+>>> detects an issue. This also matches what I can observe with objdump
+>>> across outline and inline instrumentation settings.
+>>>
+>>> This means that for this sort of thing to work we would need to either
+>>> drop back to out-of-line calls, or teach the compiler how to use a
+>>> nonlinear, NUMA aware mem-to-shadow mapping.
+>>
+>> Yes, out of line is expensive, but seems to work well for all use cases.
+> 
+> I'm not sure this is true. Looking at scripts/Makefile.kasan, allocas,
+> stacks and globals will only be instrumented if you can provide
+> KASAN_SHADOW_OFFSET. In the case you're proposing, we can't provide a
+> static offset. I _think_ this is a compiler limitation, where some of
+> those instrumentations only work/make sense with a static offset, but
+> perhaps that's not right? Dmitry and Andrey, can you shed some light on
+> this?
+> 
 
-I've also confirmed that even when test_and_set_bit_lock() is inlined
-into an actual call site the stack protector logic still triggers.
+From what I can read, everything should still be supported, the info page
+for gcc states that globals, stack asan should be enabled by default.
+allocas may have limited meaning if stack-protector is turned on (no?)
 
-eg, if I make two versions of ext4_resize_begin() which call the generic or ppc
-version of test_and_set_bit_lock(), the generic version gets a bunch of extra
-stack protector code.
+> Also, as it currently stands, the speed difference between inline and
+> outline is approximately 2x, and given that we'd like to run this
+> full-time in syzkaller I think there is value in trading off speed for
+> some limitations.
+> 
 
-   1 c0000000005336e0 <ext4_resize_begin_generic>:           1 c0000000005335b0 <ext4_resize_begin_ppc>:
-   2         addis   r2,r12,281                              2         addis   r2,r12,281
-   3         addi    r2,r2,-12256                            3         addi    r2,r2,-11952
-   4         mflr    r0                                      4         mflr    r0
-   5         bl      <_mcount>                               5         bl      <_mcount>
-   6         mflr    r0                                      6         mflr    r0
-   7         std     r31,-8(r1)                              7         std     r31,-8(r1)
-   8         std     r30,-16(r1)                             8         std     r30,-16(r1)
-   9         mr      r31,r3                                  9         mr      r31,r3
-  10         li      r3,24                                  10         li      r3,24
-  11         std     r0,16(r1)                              11         std     r0,16(r1)
-  12         stdu    r1,-128(r1)                            12         stdu    r1,-112(r1)
-  13         ld      r9,3320(r13)
-  14         std     r9,104(r1)
-  15         li      r9,0
-  16         ld      r30,920(r31)                           13         ld      r30,920(r31)
-  17         bl      <capable+0x8>                          14         bl      <capable+0x8>
-  18         nop                                            15         nop
-  19         cmpdi   cr7,r3,0                               16         cmpdi   cr7,r3,0
-  20         beq     cr7,<ext4_resize_begin_generic+0xf0>   17         beq     cr7,<ext4_resize_begin_ppc+0xc0>
-  21         ld      r9,920(r31)                            18         ld      r9,920(r31)
-  22         ld      r10,96(r30)                            19         ld      r10,96(r30)
-  23         lwz     r7,84(r30)                             20         lwz     r7,84(r30)
-  24         ld      r8,104(r9)                             21         ld      r8,104(r9)
-  25         ld      r10,24(r10)                            22         ld      r10,24(r10)
-  26         lwz     r8,20(r8)                              23         lwz     r8,20(r8)
-  27         srd     r10,r10,r7                             24         srd     r10,r10,r7
-  28         cmpd    cr7,r10,r8                             25         cmpd    cr7,r10,r8
-  29         bne     cr7,<ext4_resize_begin_generic+0x128>  26         bne     cr7,<ext4_resize_begin_ppc+0xf8>
-  30         lhz     r10,160(r9)                            27         lhz     r10,160(r9)
-  31         andi.   r10,r10,2                              28         andi.   r10,r10,2
-  32         bne     <ext4_resize_begin_generic+0x100>
-  33         ld      r10,560(r9)
-  34         andi.   r10,r10,1
-  35         bne     <ext4_resize_begin_generic+0xe0>       29         bne     <ext4_resize_begin_ppc+0xd0>
-  36         addi    r7,r9,560                              30         addi    r9,r9,560
-  37         li      r8,1                                   31         li      r10,1
-  38         ldarx   r10,0,r7                               32         ldarx   r3,0,r9,1
-  39         or      r6,r8,r10                              33         or      r8,r3,r10
-  40         stdcx.  r6,0,r7                                34         stdcx.  r8,0,r9
-  41         bne-    <ext4_resize_begin_generic+0x90>       35         bne-    <ext4_resize_begin_ppc+0x78>
-  42         isync                                          36         isync
-                                                            37         clrldi  r3,r3,63
-  43         andi.   r9,r10,1                               38         addi    r3,r3,-1
-  44         li      r3,0                                   39         rlwinm  r3,r3,0,27,27
-  45         bne     <ext4_resize_begin_generic+0xe0>       40         addi    r3,r3,-16
-  46         ld      r9,104(r1)
-  47         ld      r10,3320(r13)
-  48         xor.    r9,r9,r10
-  49         li      r10,0
-  50         bne     <ext4_resize_begin_generic+0x158>
-  51         addi    r1,r1,128                              41         addi    r1,r1,112
-  52         ld      r0,16(r1)                              42         ld      r0,16(r1)
-  53         ld      r30,-16(r1)                            43         ld      r30,-16(r1)
-  54         ld      r31,-8(r1)                             44         ld      r31,-8(r1)
-  55         mtlr    r0                                     45         mtlr    r0
-  56         blr                                            46         blr
-  57         nop                                            47         nop
-  58         li      r3,-16
-  59         b       <ext4_resize_begin_generic+0xb0>
-  60         nop                                            48         nop
-  61         nop                                            49         nop
-  62         li      r3,-1                                  50         li      r3,-1
-  63         b       <ext4_resize_begin_generic+0xb0>       51         b       <ext4_resize_begin_ppc+0x9c>
-  64         nop                                            52         nop
-  65         nop                                            53         nop
-  66         addis   r6,r2,-118                             54         addis   r6,r2,-118
-  67         addis   r4,r2,-140                             55         addis   r4,r2,-140
-  68         mr      r3,r31                                 56         mr      r3,r31
-  69         li      r5,97                                  57         li      r5,46
-  70         addi    r6,r6,30288                            58         addi    r6,r6,30288
-  71         addi    r4,r4,3064                             59         addi    r4,r4,3040
-  72         bl      <__ext4_warning+0x8>                   60         bl      <__ext4_warning+0x8>
-  73         nop                                            61         nop
-  74         li      r3,-1                                  62         li      r3,-1
-  75         b       <ext4_resize_begin_generic+0xb0>       63         b       <ext4_resize_begin_ppc+0x9c>
-  76         ld      r9,96(r9)                              64         ld      r9,96(r9)
-  77         addis   r6,r2,-118                             65         addis   r6,r2,-118
-  78         addis   r4,r2,-140                             66         addis   r4,r2,-140
-  79         mr      r3,r31                                 67         mr      r3,r31
-  80         li      r5,87                                  68         li      r5,36
-  81         addi    r6,r6,30240                            69         addi    r6,r6,30240
-  82         addi    r4,r4,3064                             70         addi    r4,r4,3040
-  83         ld      r7,24(r9)                              71         ld      r7,24(r9)
-  84         bl      <__ext4_warning+0x8>                   72         bl      <__ext4_warning+0x8>
-  85         nop                                            73         nop
-  86         li      r3,-1                                  74         li      r3,-1
-  87         b       <ext4_resize_begin_generic+0xb0>       75         b       <ext4_resize_begin_ppc+0x9c>
-  88         bl      <__stack_chk_fail+0x8>
+Full speed vs actually working across different configurations?
 
+>> BTW, the current set of patches just hang if I try to make the default
+>> mode as out of line
+> 
+> Do you have CONFIG_RELOCATABLE?
+> 
+> I've tested the following process:
+> 
+> # 1) apply patches on a fresh linux-next
+> # 2) output dir
+> mkdir ../out-3s-kasan
+> 
+> # 3) merge in the relevant config snippets
+> cat > kasan.config << EOF
+> CONFIG_EXPERT=y
+> CONFIG_LD_HEAD_STUB_CATCH=y
+> 
+> CONFIG_RELOCATABLE=y
+> 
+> CONFIG_KASAN=y
+> CONFIG_KASAN_GENERIC=y
+> CONFIG_KASAN_OUTLINE=y
+> 
+> CONFIG_PHYS_MEM_SIZE_FOR_KASAN=2048
+> EOF
+> 
 
-If I change the READ_ONCE() in test_and_set_bit_lock():
+I think I got CONFIG_PHYS_MEM_SIZE_FOR_KASN wrong, honestly I don't get why
+we need this size? The size is in MB and the default is 0. 
 
-	if (READ_ONCE(*p) & mask)
-		return 1;
+Why does the powerpc port of KASAN need the SIZE to be explicitly specified?
 
-to a regular pointer access:
-
-	if (*p & mask)
-		return 1;
-
-Then the generated code looks more or less the same, except for the extra early
-return in the generic version of test_and_set_bit_lock(), and different handling
-of the return code by the compiler.
-
-   1 <ext4_resize_begin_generic>:                            1 <ext4_resize_begin_ppc>:
-   2         addis   r2,r12,281                              2         addis   r2,r12,281
-   3         addi    r2,r2,-12256                            3         addi    r2,r2,-11952
-   4         mflr    r0                                      4         mflr    r0
-   5         bl      <_mcount>                               5         bl      <_mcount>
-   6         mflr    r0                                      6         mflr    r0
-   7         std     r31,-8(r1)                              7         std     r31,-8(r1)
-   8         std     r30,-16(r1)                             8         std     r30,-16(r1)
-   9         mr      r31,r3                                  9         mr      r31,r3
-  10         li      r3,24                                  10         li      r3,24
-  11         std     r0,16(r1)                              11         std     r0,16(r1)
-  12         stdu    r1,-112(r1)                            12         stdu    r1,-112(r1)
-  13         ld      r30,920(r31)                           13         ld      r30,920(r31)
-  14         bl      <capable+0x8>                          14         bl      <capable+0x8>
-  15         nop                                            15         nop
-  16         cmpdi   cr7,r3,0                               16         cmpdi   cr7,r3,0
-  17         beq     cr7,<ext4_resize_begin_generic+0xe0>   17         beq     cr7,<ext4_resize_begin_ppc+0xc0>
-  18         ld      r9,920(r31)                            18         ld      r9,920(r31)
-  19         ld      r10,96(r30)                            19         ld      r10,96(r30)
-  20         lwz     r7,84(r30)                             20         lwz     r7,84(r30)
-  21         ld      r8,104(r9)                             21         ld      r8,104(r9)
-  22         ld      r10,24(r10)                            22         ld      r10,24(r10)
-  23         lwz     r8,20(r8)                              23         lwz     r8,20(r8)
-  24         srd     r10,r10,r7                             24         srd     r10,r10,r7
-  25         cmpd    cr7,r10,r8                             25         cmpd    cr7,r10,r8
-  26         bne     cr7,<ext4_resize_begin_generic+0x118>  26         bne     cr7,<ext4_resize_begin_ppc+0xf8>
-  27         lhz     r10,160(r9)                            27         lhz     r10,160(r9)
-  28         andi.   r10,r10,2                              28         andi.   r10,r10,2
-  29         bne     <ext4_resize_begin_generic+0xf0>       29         bne     <ext4_resize_begin_ppc+0xd0>
-  30         ld      r10,560(r9)
-  31         andi.   r10,r10,1
-  32         bne     <ext4_resize_begin_generic+0xc0>
-  33         addi    r7,r9,560                              30         addi    r9,r9,560
-  34         li      r8,1                                   31         li      r10,1
-  35         ldarx   r10,0,r7                               32         ldarx   r3,0,r9,1
-  36         or      r6,r8,r10                              33         or      r8,r3,r10
-  37         stdcx.  r6,0,r7                                34         stdcx.  r8,0,r9
-  38         bne-    <ext4_resize_begin_generic+0x84>       35         bne-    <ext4_resize_begin_ppc+0x78>
-  39         isync                                          36         isync
-                                                            37         clrldi  r3,r3,63
-  40         andi.   r9,r10,1                               38         addi    r3,r3,-1
-  41         li      r3,0                                   39         rlwinm  r3,r3,0,27,27
-  42         bne     <ext4_resize_begin_generic+0xc0>       40         addi    r3,r3,-16
-  43         addi    r1,r1,112                              41         addi    r1,r1,112
-  44         ld      r0,16(r1)                              42         ld      r0,16(r1)
-  45         ld      r30,-16(r1)                            43         ld      r30,-16(r1)
-  46         ld      r31,-8(r1)                             44         ld      r31,-8(r1)
-  47         mtlr    r0                                     45         mtlr    r0
-  48         blr                                            46         blr
-  49         nop                                            47         nop
-  50         addi    r1,r1,112                              48         nop
-  51         li      r3,-16
-  52         ld      r0,16(r1)
-  53         ld      r30,-16(r1)
-  54         ld      r31,-8(r1)
-  55         mtlr    r0
-  56         blr
-  57         nop                                            49         nop
-  58         li      r3,-1                                  50         li      r3,-1
-  59         b       <ext4_resize_begin_generic+0xa4>       51         b       <ext4_resize_begin_ppc+0x9c>
-  60         nop                                            52         nop
-  61         nop                                            53         nop
-  62         addis   r6,r2,-118                             54         addis   r6,r2,-118
-  63         addis   r4,r2,-140                             55         addis   r4,r2,-140
-  64         mr      r3,r31                                 56         mr      r3,r31
-  65         li      r5,97                                  57         li      r5,46
-  66         addi    r6,r6,30288                            58         addi    r6,r6,30288
-  67         addi    r4,r4,3064                             59         addi    r4,r4,3040
-  68         bl      <__ext4_warning+0x8>                   60         bl      <__ext4_warning+0x8>
-  69         nop                                            61         nop
-  70         li      r3,-1                                  62         li      r3,-1
-  71         b       <ext4_resize_begin_generic+0xa4>       63         b       <ext4_resize_begin_ppc+0x9c>
-  72         ld      r9,96(r9)                              64         ld      r9,96(r9)
-  73         addis   r6,r2,-118                             65         addis   r6,r2,-118
-  74         addis   r4,r2,-140                             66         addis   r4,r2,-140
-  75         mr      r3,r31                                 67         mr      r3,r31
-  76         li      r5,87                                  68         li      r5,36
-  77         addi    r6,r6,30240                            69         addi    r6,r6,30240
-  78         addi    r4,r4,3064                             70         addi    r4,r4,3040
-  79         ld      r7,24(r9)                              71         ld      r7,24(r9)
-  80         bl      <__ext4_warning+0x8>                   72         bl      <__ext4_warning+0x8>
-  81         nop                                            73         nop
-  82         li      r3,-1                                  74         li      r3,-1
-  83         b       <ext4_resize_begin_generic+0xa4>       75         b       <ext4_resize_begin_ppc+0x9c>
-
-
-So READ_ONCE() + STACKPROTECTOR_STRONG is problematic. The root cause is
-presumably that READ_ONCE() does an access to an on-stack variable,
-which triggers the heuristics in the compiler that the stack needs
-protecting.
-
-It seems like a compiler "mis-feature" that a constant-sized access to the stack
-triggers the stack protector logic, especially when the access is eventually
-optimised away. But I guess that's probably what we get for doing tricks like
-READ_ONCE() in the first place :/
-
-I tried going back to the version of READ_ONCE() that doesn't use a
-union, ie. effectively reverting dd36929720f4 ("kernel: make READ_ONCE()
-valid on const arguments") to get:
-
-#define READ_ONCE(x)							\
-	({ typeof(x) __val; __read_once_size(&x, &__val, sizeof(__val)); __val; })
-
-But it makes no difference, the stack protector stuff still triggers. So
-I guess it's simply taking the address of a stack variable that triggers
-it.
-
-There seems to be a function attribute to enable stack protector for a
-function, but not one to disable it:
-  https://gcc.gnu.org/onlinedocs/gcc-9.2.0/gcc/Common-Function-Attributes.html#index-stack_005fprotect-function-attribute
-
-That may not be a good solution even if it did exist, because it would
-potentially disable stack protector in places where we do want it
-enabled.
-
-cheers
+Balbir Singh.
