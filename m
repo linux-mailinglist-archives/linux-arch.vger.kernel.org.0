@@ -2,36 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD7511D7D3
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 21:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7632A11D817
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 21:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730806AbfLLUWJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Dec 2019 15:22:09 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:56626 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730707AbfLLUWJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Dec 2019 15:22:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=oVn4n9KO0Wi7WPkaRPWf1qdzcetPOXcYdPlzDCBnbRo=; b=dltFnCJkTHTijV1oeQZ+c3MLr
-        VTaCGN8lrrIBqNCfDrT/MfjGWJpbw2zWJrvGpiYseNzgjj/jQ8hsHHtt6OcvE2foPV2x1GFKXytPa
-        a/uifxzN/siY79GEwrg+ikl40vaXBzW5eWV8xyXvIsR+6rPi7/0WuTJ0KpOnDGSQTTccPNbK9oGnT
-        GVxomvni0k4qeMlOGLxp6UEK3Twx4VEo3uX1YDT1XgnByW0Mtr1F3vYoRqYg7LIt29bXDi+KydTsN
-        kSPE7oYTY5GrhVFKlE1kLLFOKjQHG/duQsHF3hBtSdx7bmvIyU6Lz8C42dtRsVNdRnfTxjz9cNA7X
-        aQKEA1mUA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ifUyG-0006Ss-Ky; Thu, 12 Dec 2019 20:22:00 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C9AF0980CCD; Thu, 12 Dec 2019 21:21:57 +0100 (CET)
-Date:   Thu, 12 Dec 2019 21:21:57 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
+        id S1730871AbfLLUuN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Dec 2019 15:50:13 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:45179 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730804AbfLLUuN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Dec 2019 15:50:13 -0500
+Received: by mail-lf1-f67.google.com with SMTP id 203so267881lfa.12
+        for <linux-arch@vger.kernel.org>; Thu, 12 Dec 2019 12:50:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=udrNHrYblR3sF99SQEkYkwez4FCarU/iIh5v4su3FS8=;
+        b=bkVtv5h8m32kLkiXM0qzlbz+nqjHfWFk9/qgPuPRhcgkiw0ZGyA729E8BGkFqzS3Dp
+         q+Wa3RFyS+SBMMZulr9ppWHo8LKoN71JFOrHQs6VbNoqHdluxrgUNcjbxTHasQy97nOf
+         M7t7yc8gf4qDYxsmtgtXGgGLWzQC2DeoAcm+w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=udrNHrYblR3sF99SQEkYkwez4FCarU/iIh5v4su3FS8=;
+        b=C6nzk/VWHt5nZVeh12BzrdDtDOkAgc833EzixETKt8VF0yjs7U9R3qehMpf7wWtGd9
+         ubCX17kop/DLaREgQhy/bNVzohPBKimOs0Cfao9i1NlsB41eY4YJdR5cG+rUD3kmnrnH
+         iToecKZDgFu4+Abd/c3TZcjAATaGDDyvRMJPGu9Q2npsXFqU91hMNMmBL7bDWVonlOM6
+         23tFXEpJEbhn4StiFr7CFU8A9cmMk1QkkSgnTfRE4csAKy+9WBs6VHi6tJJBRxxxUtoe
+         M1ydjh4xvcmEbvEaNAq9cDsVKYNv46k8aHzaZrw9jOOClssJh2F4FRXOgSEio0xYa9ZQ
+         vt0A==
+X-Gm-Message-State: APjAAAXtHawkenwEBSmT39SvKSXY+cM3JAartlrRDBUtJAlno5ZD9qdR
+        N2I1CVhprfEytEsjLzgeGiTgfa9OpGg=
+X-Google-Smtp-Source: APXvYqxZ/5PXxiCI1e8JC90XSpaS2479xNBPcJNMygcEuY5jN6tFPePRniuc+1Bc+dD7q09YowpovA==
+X-Received: by 2002:a19:cc49:: with SMTP id c70mr6938239lfg.73.1576183810410;
+        Thu, 12 Dec 2019 12:50:10 -0800 (PST)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id z15sm3580264ljm.13.2019.12.12.12.50.08
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Dec 2019 12:50:09 -0800 (PST)
+Received: by mail-lf1-f52.google.com with SMTP id n25so316107lfl.0
+        for <linux-arch@vger.kernel.org>; Thu, 12 Dec 2019 12:50:08 -0800 (PST)
+X-Received: by 2002:a19:23cb:: with SMTP id j194mr6971490lfj.79.1576183808614;
+ Thu, 12 Dec 2019 12:50:08 -0800 (PST)
+MIME-Version: 1.0
+References: <87blslei5o.fsf@mpe.ellerman.id.au> <20191206131650.GM2827@hirez.programming.kicks-ass.net>
+ <875zimp0ay.fsf@mpe.ellerman.id.au> <20191212080105.GV2844@hirez.programming.kicks-ass.net>
+ <20191212100756.GA11317@willie-the-truck> <20191212104610.GW2827@hirez.programming.kicks-ass.net>
+ <CAHk-=wjUBsH0BYDBv=q36482G-U7c=9bC89L_BViSciTfb8fhA@mail.gmail.com>
+ <20191212180634.GA19020@willie-the-truck> <CAHk-=whRxB0adkz+V7SQC8Ac_rr_YfaPY8M2mFDfJP2FFBNz8A@mail.gmail.com>
+ <20191212193401.GB19020@willie-the-truck>
+In-Reply-To: <20191212193401.GB19020@willie-the-truck>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 12 Dec 2019 12:49:52 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiMuHmWzQ7-CRQB6o+SHtA-u-Rp6VZwPcqDbjAaug80rQ@mail.gmail.com>
+Message-ID: <CAHk-=wiMuHmWzQ7-CRQB6o+SHtA-u-Rp6VZwPcqDbjAaug80rQ@mail.gmail.com>
+Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
+ Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
 To:     Will Deacon <will@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Michael Ellerman <mpe@ellerman.id.au>, dja@axtens.net,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linuxppc-dev@lists.ozlabs.org,
@@ -41,59 +71,36 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
- Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
-Message-ID: <20191212202157.GD11457@worktop.programming.kicks-ass.net>
-References: <87blslei5o.fsf@mpe.ellerman.id.au>
- <20191206131650.GM2827@hirez.programming.kicks-ass.net>
- <875zimp0ay.fsf@mpe.ellerman.id.au>
- <20191212080105.GV2844@hirez.programming.kicks-ass.net>
- <20191212100756.GA11317@willie-the-truck>
- <20191212104610.GW2827@hirez.programming.kicks-ass.net>
- <CAHk-=wjUBsH0BYDBv=q36482G-U7c=9bC89L_BViSciTfb8fhA@mail.gmail.com>
- <20191212180634.GA19020@willie-the-truck>
- <CAHk-=whRxB0adkz+V7SQC8Ac_rr_YfaPY8M2mFDfJP2FFBNz8A@mail.gmail.com>
- <20191212193401.GB19020@willie-the-truck>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191212193401.GB19020@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 07:34:01PM +0000, Will Deacon wrote:
-> void ool_store_release(volatile unsigned long *ptr, unsigned long val)
-> {
-> 	smp_store_release(ptr, val);
-> }
-> 
-> 0000000000000000 <ool_store_release>:
->    0:   a9be7bfd        stp     x29, x30, [sp, #-32]!
->    4:   90000002        adrp    x2, 0 <__stack_chk_guard>
->    8:   91000042        add     x2, x2, #0x0
->    c:   910003fd        mov     x29, sp
->   10:   f9400043        ldr     x3, [x2]
->   14:   f9000fa3        str     x3, [x29, #24]
->   18:   d2800003        mov     x3, #0x0                        // #0
->   1c:   c89ffc01        stlr    x1, [x0]
->   20:   f9400fa1        ldr     x1, [x29, #24]
->   24:   f9400040        ldr     x0, [x2]
->   28:   ca000020        eor     x0, x1, x0
->   2c:   b5000060        cbnz    x0, 38 <ool_store_release+0x38>
->   30:   a8c27bfd        ldp     x29, x30, [sp], #32
->   34:   d65f03c0        ret
->   38:   94000000        bl      0 <__stack_chk_fail>
-> 
-> It's a mess, and fixing READ_ONCE() doesn't help this case, which is why
-> I was looking at getting rid of volatile where it's not strictly needed.
-> I'm certainly open to other suggestions, I just haven't managed to think
-> of anything else.
+On Thu, Dec 12, 2019 at 11:34 AM Will Deacon <will@kernel.org> wrote:
+>
+> The root of my concern in all of this, and what started me looking at it in
+> the first place, is the interaction with 'typeof()'. Inheriting 'volatile'
+> for a pointer means that local variables in macros declared using typeof()
+> suddenly start generating *hideous* code, particularly when pointless stack
+> spills get stackprotector all excited.
 
-We could move the kernel to C++ and write:
+Yeah, removing volatile can be a bit annoying.
 
-	std::remove_volatile<typeof(p)>::type __p = (p);
+For the particular case of the bitops, though, it's not an issue.
+Since you know the type there, you can just cast it.
 
-/me runs like hell...
+And if we had the rule that READ_ONCE() was an arithmetic type, you could do
+
+    typeof(0+(*p)) __var;
+
+since you might as well get the integer promotion anyway (on the
+non-volatile result).
+
+But that doesn't work with structures or unions, of course.
+
+I'm not entirely sure we have READ_ONCE() with a struct. I do know we
+have it with 64-bit entities on 32-bit machines, but that's ok with
+the "0+" trick.
+
+               Linus
