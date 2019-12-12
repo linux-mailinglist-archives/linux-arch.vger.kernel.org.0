@@ -2,114 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E1411BD09
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2019 20:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5AF11C52D
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 06:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbfLKTbr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Dec 2019 14:31:47 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:56131 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726487AbfLKTbr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Dec 2019 14:31:47 -0500
-Received: from mail-qv1-f44.google.com ([209.85.219.44]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MTAW9-1iIGzt0Vvb-00UYVV for <linux-arch@vger.kernel.org>; Wed, 11 Dec
- 2019 20:31:46 +0100
-Received: by mail-qv1-f44.google.com with SMTP id t7so6248632qve.4
-        for <linux-arch@vger.kernel.org>; Wed, 11 Dec 2019 11:31:45 -0800 (PST)
-X-Gm-Message-State: APjAAAVoi5Vti7gAgb9djrWhXUMwcQbavilLUbffdI+dUXSWrdduVHc1
-        QMhnKjRJJmeSpEjzsoAy/f5QglN0srrzne60WfI=
-X-Google-Smtp-Source: APXvYqxf4Xp3FM5HTNk2/2drmImAUw5dWnmacIZ0J+E8kqRJYuJMCsxwFdxNI6gooeiVMm0eDFBLHuuFTWJB+qkX2Ec=
-X-Received: by 2002:a0c:893d:: with SMTP id 58mr4762571qvp.4.1576092704997;
- Wed, 11 Dec 2019 11:31:44 -0800 (PST)
+        id S1726705AbfLLFMx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Dec 2019 00:12:53 -0500
+Received: from condef-03.nifty.com ([202.248.20.68]:23871 "EHLO
+        condef-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726680AbfLLFMx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Dec 2019 00:12:53 -0500
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-03.nifty.com with ESMTP id xBC54FXY002029
+        for <linux-arch@vger.kernel.org>; Thu, 12 Dec 2019 14:04:15 +0900
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id xBC5404b010658;
+        Thu, 12 Dec 2019 14:04:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com xBC5404b010658
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1576127041;
+        bh=f0mX96dUj+4SSO7tlGuJjbJ2RUgELAxn1iGgSDGDbbA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mZ1JIZHe8zix2l9FjfNAniHgyI9oSvauhAcPoqTxKT2A4OdfQ6LoL/v8zbDHIMxYj
+         mhDcjoSh0vEu+LtXS+MtkYAcpX3jOyRNJlre+cXE2vx+SKR622V+/EdoCDiv6L9Czp
+         dtHzu1j68lvJTCpkBrcMBvfNBGz2s/SYZeCDlVHU3+Mi3/LVg1RrQyRG37YV2D6gEs
+         7MSFfyhR+rJYSoK/A9Tros/69wod/qLfHR/Wy8Lu7G3yKos64Goxe3qgV5XICmBHu5
+         BzgUVnck5bQ8tGq7xoCugzdLckDKpcc1wceT248Z9mjHWiNNHBELC/vO2+O8mLC1F/
+         GEeLkj0rANPTw==
+X-Nifty-SrcIP: [209.85.217.43]
+Received: by mail-vs1-f43.google.com with SMTP id x4so665004vsx.10;
+        Wed, 11 Dec 2019 21:04:01 -0800 (PST)
+X-Gm-Message-State: APjAAAXMPwaobBoE4sd8jkEacqCsZ7ZlT2dTD2kKyttmCH2x6FplGIYx
+        O3UTPnU1/JCCWya6SMPJgRVKP55G6i6Ym7Q36LE=
+X-Google-Smtp-Source: APXvYqwITbfxXfryxfdFs+wuDBH6lMreA653GFfyRlQshqBOwFIPRjFb2inNIzS8YEl1Z3dRS/b2hoN5oMNCFLezUXA=
+X-Received: by 2002:a67:7ac4:: with SMTP id v187mr5603811vsc.181.1576127040046;
+ Wed, 11 Dec 2019 21:04:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20191211184027.20130-1-catalin.marinas@arm.com> <20191211184027.20130-13-catalin.marinas@arm.com>
-In-Reply-To: <20191211184027.20130-13-catalin.marinas@arm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 11 Dec 2019 20:31:28 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1-eaR7NddhDce65vXKCGeZD3xUMrTTAWN4U3oW0ecN=g@mail.gmail.com>
-Message-ID: <CAK8P3a1-eaR7NddhDce65vXKCGeZD3xUMrTTAWN4U3oW0ecN=g@mail.gmail.com>
-Subject: Re: [PATCH 12/22] arm64: mte: Add specific SIGSEGV codes
+References: <20191211184027.20130-1-catalin.marinas@arm.com> <20191211184027.20130-3-catalin.marinas@arm.com>
+In-Reply-To: <20191211184027.20130-3-catalin.marinas@arm.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 12 Dec 2019 14:03:24 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARR=DjdnZdu=L+0H8ALr4XJNpVbcRTOz_sVZdZpcM0pdQ@mail.gmail.com>
+Message-ID: <CAK7LNARR=DjdnZdu=L+0H8ALr4XJNpVbcRTOz_sVZdZpcM0pdQ@mail.gmail.com>
+Subject: Re: [PATCH 02/22] kbuild: Add support for 'as-instr' to be used in
+ Kconfig files
 To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Richard Earnshaw <Richard.Earnshaw@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Linux-MM <linux-mm@kvack.org>,
+        Andrey Konovalov <andreyknvl@google.com>, linux-mm@kvack.org,
         linux-arch <linux-arch@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Vladimir Murzin <vladimir.murzin@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:gyzzMinpsdtlS/aJdZyhd3g0RErxntsPnrmZDKuHw0IWWV2AGvQ
- Vz2aeslv/ULPiyjojbLMouo/lWEeJ0VU37doyJN7sd3YvRPtPcwnaThTan//Bl4a+n+5j0R
- WhfQfp1ldUzsNz0qd9WFbuAFmX+NQkWLKA0denWh53dml1dX3YnyxCF5IXLiaxfZFLemvhI
- UnJcQBQk49AQFgiPIFbmg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GFWCRoYul/s=:1OERkpQlmWlG0D6uDbU1VM
- 7Ux35gApNmvs+k/NiYw25FnbNJyg2jBjux9mfUCakLKLtRhp9EYYKalEUQaByzNwS6XXw7zom
- ts89oM3/PHFgbYXS9xkPo0/DhmrR2Quoz2My4hNmk5YySHG9gJsxwTskbCgW3/ZQhjFVCe2BR
- 35cY+/2srdWTeud1KYwfCauS0PbX/+U6P/gE7hkxUXTa1iOsJIPNuSQGn8yDYFC5eclOOi5n5
- 8WQDXQOPUEvWPI2dxIzWcr+7t0PB5l5UCe9lSQKmOFj/2BMx5s0kRKAK+bJjk8/XR3n2Z6WYD
- dKiyTabvsNiU1p0cokrAes20ryiglT5QARHrYRHU4FVpMlzK/mhsrckxrZ2JF/yuYvbduvuvU
- yWC/tnS2pLtLnGNyj1+bCPSEfRihk+Mb9Mz9o5sK0mBf21DOV1GWysXG4KWUjPPlE3Hdrvkx8
- CCCqTFSbr8Ptx+ttDqPqj9CoTULPOaId1qQeh0VntC4xSOZYuPiTL6/qBedVn6zv2fp3kukvY
- U5CyMhbbY2xP1rxzHz+z7pF4d/JVbMeCU3tYlZbrmnaT98Fz5AufWGwbne0Ojr0ljcr2j9I/D
- hIwLECacGvJWTe3nZYwS1u88cUnnNEg/UFYFSQqS0WSUj4thDEXUe3BPyszj0sKPUfD2q8NFT
- mpagy8DNzGR4RT7HmP31mdNq4nPPXBSf3Fpvz8pLIRBx8VabcL8pYs25XIVfutJkMeiW+nJ8W
- qP0lXhl/7J914scWf8VwmcHrTg7j5xYUDyjVqC3MXaaevWzBEEWPQROzk0PX96lPlCyDgRbVW
- FWXYRX7/5c/FXLe1brpwrjpK0z5/KcTNQMADZ9hsKhrb6QfJ8vvG7r5Xmb5OME6lCStBNYC1E
- Px4ai9ov8PGDKy7drhxw==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 7:40 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+On Thu, Dec 12, 2019 at 3:40 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
 >
-> From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Similar to 'cc-option' or 'ld-option', it is occasionally necessary to
+> check whether the assembler supports certain ISA extensions. In the
+> arm64 code we currently do this in Makefile with an additional define:
 >
-> Add MTE-specific SIGSEGV codes to siginfo.h.
+> lseinstr := $(call as-instr,.arch_extension lse,-DCONFIG_AS_LSE=1)
 >
-> Note that the for MTE we are reusing the same SPARC ADI codes because
-> the two functionalities are similar and they cannot coexist on the same
-> system.
+> Add the 'as-instr' option so that it can be used in Kconfig directly:
 >
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> [catalin.marinas@arm.com: renamed precise/imprecise to sync/async]
+>         def_bool $(as-instr,.arch_extension lse)
+>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: linux-kbuild@vger.kernel.org
+> Reviewed-by: Vladimir Murzin <vladimir.murzin@arm.com>
 > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 > ---
->  include/uapi/asm-generic/siginfo.h | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+
+Please feel fee to apply this to arm64 tree.
+Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+
+>  scripts/Kconfig.include | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-> index cb3d6c267181..a5184a5438c6 100644
-> --- a/include/uapi/asm-generic/siginfo.h
-> +++ b/include/uapi/asm-generic/siginfo.h
-> @@ -227,8 +227,13 @@ typedef struct siginfo {
->  # define SEGV_PKUERR   4       /* failed protection key checks */
->  #endif
->  #define SEGV_ACCADI    5       /* ADI not enabled for mapped object */
-> -#define SEGV_ADIDERR   6       /* Disrupting MCD error */
-> -#define SEGV_ADIPERR   7       /* Precise MCD exception */
-> +#ifdef __aarch64__
-> +# define SEGV_MTEAERR  6       /* Asynchronous MTE error */
-> +# define SEGV_MTESERR  7       /* Synchronous MTE exception */
-> +#else
-> +# define SEGV_ADIDERR  6       /* Disrupting MCD error */
-> +# define SEGV_ADIPERR  7       /* Precise MCD exception */
-> +#endif
+> diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
+> index d4adfbe42690..9d07e59cbdf7 100644
+> --- a/scripts/Kconfig.include
+> +++ b/scripts/Kconfig.include
+> @@ -31,6 +31,10 @@ cc-option = $(success,$(CC) -Werror $(CLANG_FLAGS) $(1) -E -x c /dev/null -o /de
+>  # Return y if the linker supports <flag>, n otherwise
+>  ld-option = $(success,$(LD) -v $(1))
+>
+> +# $(as-instr,<instr>)
+> +# Return y if the assembler supports <instr>, n otherwise
+> +as-instr = $(success,printf "%b\n" "$(1)" | $(CC) $(CLANG_FLAGS) -c -x assembler -o /dev/null -)
+> +
+>  # check if $(CC) and $(LD) exist
+>  $(error-if,$(failure,command -v $(CC)),compiler '$(CC)' not found)
+>  $(error-if,$(failure,command -v $(LD)),linker '$(LD)' not found)
 
-SEGV_ADIPERR/SEGV_ADIDERR were added together with SEGV_ACCADI,
-it seems a bit odd to make only two of them conditional but not the others.
 
-I think we are generally working towards having the same constants
-across architectures even for features that only exist on one of them.
 
-Adding Al and Eric to Cc, maybe they have another suggestion on what
-constants should be used.
-
-     Arnd
+-- 
+Best Regards
+Masahiro Yamada
