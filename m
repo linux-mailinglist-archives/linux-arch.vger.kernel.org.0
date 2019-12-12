@@ -2,89 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D0411D20A
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 17:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4C311D310
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 18:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729776AbfLLQQl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Dec 2019 11:16:41 -0500
-Received: from foss.arm.com ([217.140.110.172]:52270 "EHLO foss.arm.com"
+        id S1729983AbfLLREf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Dec 2019 12:04:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50248 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729247AbfLLQQl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 12 Dec 2019 11:16:41 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2269C30E;
-        Thu, 12 Dec 2019 08:16:40 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9560D3F6CF;
-        Thu, 12 Dec 2019 08:16:39 -0800 (PST)
-Date:   Thu, 12 Dec 2019 16:16:38 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Paul Elliott <paul.elliott@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Andrew Jones <drjones@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Weimer <fweimer@redhat.com>,
-        Sudakshina Das <sudi.das@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Dave Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH v4 03/12] mm: Reserve asm-generic prot flag 0x10 for arch
- use
-Message-ID: <20191212161638.GG4310@sirena.org.uk>
-References: <20191211154206.46260-1-broonie@kernel.org>
- <20191211154206.46260-4-broonie@kernel.org>
- <20191212104831.GD18258@arrakis.emea.arm.com>
+        id S1729927AbfLLREf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 12 Dec 2019 12:04:35 -0500
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A4EB214AF;
+        Thu, 12 Dec 2019 17:04:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576170274;
+        bh=cStQM6dJAgiI/M8e5otdqNPehlU5HK8fnoGish0RYPA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xKrPjstBHwTbT220UQOtLkKeCMvT6WPqTLCez8mR+Lq7UVly0+SrA5HonfG1lMuyO
+         Uy6bO0rwELdpe2xXOhR9JbKXRiq4xqT6Xsi+e/OTI+9prkABIh2bIOaZcKkaGFGW5p
+         YqTrrN1JrVJnnP8s94OpHruGOkFIRCOQrvvW7fz8=
+Date:   Thu, 12 Dec 2019 17:04:28 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>, dja@axtens.net,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        christophe.leroy@c-s.fr, linux-arch@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
+ Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
+Message-ID: <20191212170427.GA16364@willie-the-truck>
+References: <87blslei5o.fsf@mpe.ellerman.id.au>
+ <20191206131650.GM2827@hirez.programming.kicks-ass.net>
+ <875zimp0ay.fsf@mpe.ellerman.id.au>
+ <20191212080105.GV2844@hirez.programming.kicks-ass.net>
+ <20191212100756.GA11317@willie-the-truck>
+ <20191212104610.GW2827@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yZnyZsPjQYjG7xG7"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191212104831.GD18258@arrakis.emea.arm.com>
-X-Cookie: We have DIFFERENT amounts of HAIR --
+In-Reply-To: <20191212104610.GW2827@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Dec 12, 2019 at 11:46:10AM +0100, Peter Zijlstra wrote:
+> On Thu, Dec 12, 2019 at 10:07:56AM +0000, Will Deacon wrote:
+> 
+> > > So your proposed change _should_ be fine. Will, I'm assuming you never
+> > > saw this on your ARGH64 builds when you did this code ?
+> > 
+> > I did see it, but (a) looking at the code out-of-line makes it look a lot
+> > worse than it actually is (so the ext4 example is really helpful -- thanks
+> > Michael!) and (b) I chalked it up to a crappy compiler.
+> > 
+> > However, see this comment from Arnd on my READ_ONCE series from the other
+> > day:
+> > 
+> > https://lore.kernel.org/lkml/CAK8P3a0f=WvSQSBQ4t0FmEkcFE_mC3oARxaeTviTSkSa-D2qhg@mail.gmail.com
+> > 
+> > In which case, I'm thinking that we should be doing better in READ_ONCE()
+> > for non-buggy compilers which would also keep the KCSAN folks happy for this
+> > code (and would help with [1] too).
+> 
+> So something like this then? Although I suppose that should be moved
+> into compiler-gcc.h and then guarded by #ifndef READ_ONCE or so.
 
---yZnyZsPjQYjG7xG7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ah wait, I think we've been looking at this wrong. The volatile pointer
+argument is actually the problem here, not READ_ONCE()! The use of typeof()
+means that the temporary variable to which __READ_ONCE_SIZE writes ends up
+being a volatile store, so it can't be optimised away. This is why we get
+a stack access and why stack protector then wrecks the codegen for us.
 
-On Thu, Dec 12, 2019 at 10:48:32AM +0000, Catalin Marinas wrote:
-> On Wed, Dec 11, 2019 at 03:41:57PM +0000, Mark Brown wrote:
+I'll cook a patch getting rid of those volatiles.
 
-> >  #define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
-> >  #define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
-
-> Since the BTI will likely be merged before the MTE series, please
-> consider reserving 0x20 as well. The updated patch, acked by Arnd:
-
-Sure.
-
---yZnyZsPjQYjG7xG7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3yZ+UACgkQJNaLcl1U
-h9AFgwf+JLQkNkowzE4VQZiMYNn6XUbklliB0rpWOXleb0MSu8ObNB1vPPCslwod
-9rFNhVqYJjlcLT+QTOfTC1CybCvKF5/d/DqmqDydGwlZUe64Nig33rAbo2WsvRy7
-Q6uZ6+zrz2pfhpOX3Hy8dt7nvxHd1mpwso9njbPcVS1LG29ib7y7cx/q8op4NcS0
-t2ZNDzL5VLxNzCP0iGZJz4uvCHw8J16Ox8h0kxG9wWnGH0pKTLtV+LXU+7m9IIdi
-ed8GP3QUtVZJ2iAE1mLBfeaheR2zEcBEHlNTyCrXlLBJt8B2pGFHa2tPfYFsLUbm
-OehiEmVIVSCFQ5vfxOP+HPspmGnmLw==
-=/Udg
------END PGP SIGNATURE-----
-
---yZnyZsPjQYjG7xG7--
+Will
