@@ -2,146 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC3F11D097
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 16:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D0411D20A
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2019 17:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728690AbfLLPLw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Dec 2019 10:11:52 -0500
-Received: from gate.crashing.org ([63.228.1.57]:50455 "EHLO gate.crashing.org"
+        id S1729776AbfLLQQl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Dec 2019 11:16:41 -0500
+Received: from foss.arm.com ([217.140.110.172]:52270 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728654AbfLLPLw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 12 Dec 2019 10:11:52 -0500
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id xBCFAuSn025295;
-        Thu, 12 Dec 2019 09:10:56 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id xBCFApXE025289;
-        Thu, 12 Dec 2019 09:10:51 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Thu, 12 Dec 2019 09:10:51 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>, dja@axtens.net,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        christophe.leroy@c-s.fr, linux-arch@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
-Message-ID: <20191212151051.GF3152@gate.crashing.org>
-References: <87blslei5o.fsf@mpe.ellerman.id.au> <20191206131650.GM2827@hirez.programming.kicks-ass.net> <875zimp0ay.fsf@mpe.ellerman.id.au>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        id S1729247AbfLLQQl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 12 Dec 2019 11:16:41 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2269C30E;
+        Thu, 12 Dec 2019 08:16:40 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9560D3F6CF;
+        Thu, 12 Dec 2019 08:16:39 -0800 (PST)
+Date:   Thu, 12 Dec 2019 16:16:38 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Dave Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v4 03/12] mm: Reserve asm-generic prot flag 0x10 for arch
+ use
+Message-ID: <20191212161638.GG4310@sirena.org.uk>
+References: <20191211154206.46260-1-broonie@kernel.org>
+ <20191211154206.46260-4-broonie@kernel.org>
+ <20191212104831.GD18258@arrakis.emea.arm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yZnyZsPjQYjG7xG7"
 Content-Disposition: inline
-In-Reply-To: <875zimp0ay.fsf@mpe.ellerman.id.au>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <20191212104831.GD18258@arrakis.emea.arm.com>
+X-Cookie: We have DIFFERENT amounts of HAIR --
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
 
-On Thu, Dec 12, 2019 at 04:42:13PM +1100, Michael Ellerman wrote:
-> Some of the generic versions don't generate good code compared to our
-> versions, but that's because READ_ONCE() is triggering stack protector
-> to be enabled.
+--yZnyZsPjQYjG7xG7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The *big* difference is the generic code has a special path that does not
-do an atomic access at all.  Either that is a good idea or not, but we
-probably should not change the behaviour here, not without benchmarking
-anyway.
+On Thu, Dec 12, 2019 at 10:48:32AM +0000, Catalin Marinas wrote:
+> On Wed, Dec 11, 2019 at 03:41:57PM +0000, Mark Brown wrote:
 
-> For example, comparing an out-of-line copy of the generic and ppc
-> versions of test_and_set_bit_lock():
+> >  #define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
+> >  #define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
 
-(With what GCC version, and what exact flags?)
+> Since the BTI will likely be merged before the MTE series, please
+> consider reserving 0x20 as well. The updated patch, acked by Arnd:
 
-(A stand-alone testcase would be nice too, btw).
+Sure.
 
-(Michael gave me one, thanks!)
+--yZnyZsPjQYjG7xG7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> If you squint, the generated code for the actual logic is pretty similar, but
-> the stack protector gunk makes a big mess.
+-----BEGIN PGP SIGNATURE-----
 
-And with stack protector it cannot shrink-wrap the exit, one of the bigger
-performance costs of the stack protector.  The extra branch in the generic
-code isn't fun either (but maybe it is good for performance?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3yZ+UACgkQJNaLcl1U
+h9AFgwf+JLQkNkowzE4VQZiMYNn6XUbklliB0rpWOXleb0MSu8ObNB1vPPCslwod
+9rFNhVqYJjlcLT+QTOfTC1CybCvKF5/d/DqmqDydGwlZUe64Nig33rAbo2WsvRy7
+Q6uZ6+zrz2pfhpOX3Hy8dt7nvxHd1mpwso9njbPcVS1LG29ib7y7cx/q8op4NcS0
+t2ZNDzL5VLxNzCP0iGZJz4uvCHw8J16Ox8h0kxG9wWnGH0pKTLtV+LXU+7m9IIdi
+ed8GP3QUtVZJ2iAE1mLBfeaheR2zEcBEHlNTyCrXlLBJt8B2pGFHa2tPfYFsLUbm
+OehiEmVIVSCFQ5vfxOP+HPspmGnmLw==
+=/Udg
+-----END PGP SIGNATURE-----
 
-> It's particularly bad here
-> because the ppc version doesn't even need a stack frame.
-
-You are hit by this:
-
-  if (... || (RECORD_OR_UNION_TYPE_P (var_type)
-              && record_or_union_type_has_array_p (var_type)) ...)
-
-(in the GCC code, stack_protect_decl_p (), cfgexpand.c)
-
-for the variable __u from
-
-#define __READ_ONCE(x, check)                                           \
-({                                                                      \
-        union { typeof(x) __val; char __c[1]; } __u;                    \
-        __read_once_size(&(x), __u.__c, sizeof(x));                     \
-        smp_read_barrier_depends(); /* Enforce dependency ordering from x */ \
-        __u.__val;                                                      \
-})
-
-This is all optimised away later, but at the point this decision is made
-GCC does not know that.
-
-> So READ_ONCE() + STACKPROTECTOR_STRONG is problematic. The root cause is
-> presumably that READ_ONCE() does an access to an on-stack variable,
-> which triggers the heuristics in the compiler that the stack needs
-> protecting.
-
-Not exactly, but the problem is READ_ONCE alright.
-
-> It seems like a compiler "mis-feature" that a constant-sized access to the stack
-> triggers the stack protector logic, especially when the access is eventually
-> optimised away. But I guess that's probably what we get for doing tricks like
-> READ_ONCE() in the first place :/
-
-__c is an array.  That is all that matters.  I don't think it is very
-reasonable to fault GCC for this.
-
-> I tried going back to the version of READ_ONCE() that doesn't use a
-> union, ie. effectively reverting dd36929720f4 ("kernel: make READ_ONCE()
-> valid on const arguments") to get:
-> 
-> #define READ_ONCE(x)							\
-> 	({ typeof(x) __val; __read_once_size(&x, &__val, sizeof(__val)); __val; })
-
-With that, it is that the address of __val is taken:
-
-  ...
-  || TREE_ADDRESSABLE (var)
-  ...
-
-> But it makes no difference, the stack protector stuff still triggers. So
-> I guess it's simply taking the address of a stack variable that triggers
-> it.
-
-Not in the earlier testcase.  Btw, there is no such thing as a "stack
-variable" at that point in the compiler: it just is a local var.
-
-> There seems to be a function attribute to enable stack protector for a
-> function, but not one to disable it:
->   https://gcc.gnu.org/onlinedocs/gcc-9.2.0/gcc/Common-Function-Attributes.html#index-stack_005fprotect-function-attribute
-
-Yes.
-
-> That may not be a good solution even if it did exist, because it would
-> potentially disable stack protector in places where we do want it
-> enabled.
-
-Right, I don't think we want that, such an attribute invites people to
-write dangerous code.  (You already can just put the functions that you
-want to be unsafe in a separate source file...  It sounds even sillier
-that way, heh).
-
-
-Segher
+--yZnyZsPjQYjG7xG7--
