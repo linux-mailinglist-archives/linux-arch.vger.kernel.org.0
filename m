@@ -2,121 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D7F11E589
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2019 15:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2754211E9B7
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2019 19:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727444AbfLMO2x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Dec 2019 09:28:53 -0500
-Received: from mail-wm1-f42.google.com ([209.85.128.42]:36828 "EHLO
-        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbfLMO2w (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Dec 2019 09:28:52 -0500
-Received: by mail-wm1-f42.google.com with SMTP id p17so6778474wma.1;
-        Fri, 13 Dec 2019 06:28:50 -0800 (PST)
+        id S1728582AbfLMSFY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Dec 2019 13:05:24 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:43786 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728550AbfLMSFY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Dec 2019 13:05:24 -0500
+Received: by mail-wr1-f66.google.com with SMTP id d16so382439wre.10
+        for <linux-arch@vger.kernel.org>; Fri, 13 Dec 2019 10:05:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6QLZHSUqVyecs2iharIBnV+waYycsRrF0PppbO8VMdc=;
-        b=X4Em0CQg7XPS3z8XGXcRnzQcQadSqmHsHNxwILAXvTkGF1A0285lgDVyCcfmeLJMPj
-         +Tk9WJ2x/6XiFUCTHg0b8xn10ROMgVaTjQnbg+3qy3Gv3aep3BkV8hyVg4Rj0h75Z/oD
-         35XebvEWDrOknx7OGqgYUi4qMIv+qa9zC1voRXNBH6drGXWrKcVy9HlcS2r/HuYmNAI9
-         OLcCG+k1GSnn6YvMkJcBCrtfY6FidTIooBhHPKYhYtE5D3BJoBZLsrfJHapK+8InoSks
-         f0UPKA4o/9sHfTcTLWVTfcOsu/7MQOC8y9flklApuHnQ61tarND+8sgZ2yf0UyGiQP7W
-         Yp+g==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+EYduUcDZi5305eYv3iFGbrJoeNChzA396oztTfjBXU=;
+        b=Z6qcTDjwl590xiTBev2JIOwenrYEXB53zCVflq2uJiIg3qv1Y9pXnAAZ8WZv8/mbi5
+         X0KUBgnta6sFq5Afijzj0YTeDIfXsvC9j24/4+0BSsiuDaf096c1ID9XuihGm2bC0lCH
+         iutnIo99KWUoEkaz6vzXVOzJz9WWMkA63FWcn0CpaeIYDX5Yo88LOdRRXYFwSqSJ8S36
+         lbHWSDHF3oYzpnHTFfYPkXypPOmtnnDo4cN9a6p48tvFYzTEmGQ7sELy1hAaQWoPN2XV
+         2M24u/AfNr7632cMFNo12oBXbt/X0+MrSVvmcen+7LrM173sKJQtNlfIecsOG+UNybBQ
+         Imaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6QLZHSUqVyecs2iharIBnV+waYycsRrF0PppbO8VMdc=;
-        b=e1PsduVgWWPPq+XS6OML6AgiNG0pHqizZ+fMSp4k4x5E0WYtf7Q4+spsaIyGb1itu9
-         BCDr4EpFN+e9OhOIP7KcYBDMP125frdK+ZBn1ozDVFWXnjhltDagnwJj00kQoJImNiON
-         sOnhBEJwbaDR5neVPbqOI+010URVGFCCCJv6x+zo6/We+W3GKpWNU+wQ5oRZwOpzsUzv
-         dJ0Q1gruUC+Rf64ORXL0FM9uuIoddNFZT+gi+2ociGtaU4dcnrUindfy5i8X7xSCGgX9
-         E8oXwvhnsnxFedLtInHdCoQf36oIsfnUBHH0uZ5l//sCM6grbvMf989H2eg0O1ViAUa/
-         /SxA==
-X-Gm-Message-State: APjAAAWSCpmOfllyRJxWc+a3ghTwJo5zJ8B5ATF/LQFep4/rQic+dylm
-        7bDnAG8hK+EA58J+rPKBXb8=
-X-Google-Smtp-Source: APXvYqwcogMDfRsO+0kr7L/xFj6Up/8vQMcepDErEiyPT73ffpPLdwealTjrhoiMySzSoGv/hvLbhQ==
-X-Received: by 2002:a1c:980e:: with SMTP id a14mr9520966wme.76.1576247330116;
-        Fri, 13 Dec 2019 06:28:50 -0800 (PST)
-Received: from ltop.local ([2a02:a03f:40f6:4600:60b0:6ca6:1eae:3b06])
-        by smtp.gmail.com with ESMTPSA id h127sm11148048wme.31.2019.12.13.06.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2019 06:28:49 -0800 (PST)
-Date:   Fri, 13 Dec 2019 15:28:46 +0100
-From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, dja@axtens.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
- Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
-Message-ID: <20191213142846.ki2t2fwljnql66lt@ltop.local>
-References: <20191212100756.GA11317@willie-the-truck>
- <20191212104610.GW2827@hirez.programming.kicks-ass.net>
- <CAHk-=wjUBsH0BYDBv=q36482G-U7c=9bC89L_BViSciTfb8fhA@mail.gmail.com>
- <20191212180634.GA19020@willie-the-truck>
- <CAHk-=whRxB0adkz+V7SQC8Ac_rr_YfaPY8M2mFDfJP2FFBNz8A@mail.gmail.com>
- <20191212193401.GB19020@willie-the-truck>
- <20191212202157.GD11457@worktop.programming.kicks-ass.net>
- <20191212205338.GB11802@worktop.programming.kicks-ass.net>
- <20191213104706.xnpqaehmtean3mkd@ltop.local>
- <20191213125618.GD2844@hirez.programming.kicks-ass.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+EYduUcDZi5305eYv3iFGbrJoeNChzA396oztTfjBXU=;
+        b=cAPEwnOwtJVOixPXAGA+ImiILLsr/H/AJtH+eoWaIO0VTKukKAM0W1XFMgJdSA2PJM
+         SIYHt3vmMntkBlzCQmvskCZzoJqO+qdRT/Un/Jf8JTXvHXo1GIzVlQtWLB0WbSFp8s/A
+         hzGFMDQ0OPrzOwsIdyxDkS4Xtz2dl99q/1dAkJqSTV5pJ3xtJQkmKG9JN6O6wOXx2+ug
+         L8JCPVmbIjJ+ZglgO0jA+wZHdeGDFyZhr/YEGRd4g6fZ5xS0y3ugMPM2KfVkLnnL8uL4
+         V8oqh2FdX9C3V0nr7aZVFGDY5xiAJCTn21PkzZO4mBhb9dg+8huaP4fv3w2zSlKho8AB
+         p67Q==
+X-Gm-Message-State: APjAAAX0iEKl9BA+SZcWgIchBhEV7rGWc4k3cuRBrBv7iaJr1G0eLQPC
+        09uH2CHyVV1t2PupWY1jzsEUPICifKoQoLgvtx9B7g==
+X-Google-Smtp-Source: APXvYqxP7jBF9PnXnDysL/SrUBCGW3Lv4EcU5tUKWTw5jUIPDgtI/jqhKpKkKz3Y5IvwtOULGC1TyfC1kP6l9kY7Leo=
+X-Received: by 2002:a5d:4984:: with SMTP id r4mr13660823wrq.137.1576260322155;
+ Fri, 13 Dec 2019 10:05:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191213125618.GD2844@hirez.programming.kicks-ass.net>
+References: <20191211184027.20130-1-catalin.marinas@arm.com>
+In-Reply-To: <20191211184027.20130-1-catalin.marinas@arm.com>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Fri, 13 Dec 2019 10:05:10 -0800
+Message-ID: <CAMn1gO6f4UUdhBe1sfiAPBW=zr-C3ypUv-Pwgx=wvmJjp4xfyA@mail.gmail.com>
+Subject: Re: [PATCH 00/22] arm64: Memory Tagging Extension user-space support
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Kostya Kortchinsky <kostyak@google.com>,
+        Kostya Serebryany <kcc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 13, 2019 at 01:56:18PM +0100, Peter Zijlstra wrote:
-> 
-> Excellent! I had to change it to something like:
-> 
-> #define unqual_typeof(x)    typeof(({_Atomic typeof(x) ___x __maybe_unused; ___x; }))
-> 
-> but that does indeed work!
-> 
-> Now I suppose we should wrap that in a symbol that indicates our
-> compiler does indeed support _Atomic, otherwise things will come apart.
-> 
-> That is, my gcc-4.6 doesn't seem to have it, while gcc-4.8 does, which
-> is exactly the range that needs the daft READ_ONCE() construct, how
-> convenient :/
-> 
-> Something a little like this perhaps?
+On Wed, Dec 11, 2019 at 10:40 AM Catalin Marinas
+<catalin.marinas@arm.com> wrote:
+> Hi,
+>
+> This series proposes the initial user-space support for the ARMv8.5
+> Memory Tagging Extension [1].
 
-Yes, this looks good to me.
-Just a small nit here below.
+Thanks for sending out this series. I have been testing it on Android
+with the FVP model and my in-development scudo changes that add memory
+tagging support [1], and have not noticed any problems so far.
 
-> ---
-> 
-> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> index 7d9cc5ec4971..c389af602da8 100644
-> --- a/arch/arm64/include/asm/barrier.h
-> +++ b/arch/arm64/include/asm/barrier.h
-> @@ -75,9 +75,9 @@ static inline unsigned long array_index_mask_nospec(unsigned long idx,
->  
->  #define __smp_store_release(p, v)					\
->  do {									\
-> -	typeof(p) __p = (p);						\
-> -	union { typeof(*p) __val; char __c[1]; } __u =			\
-> -		{ .__val = (__force typeof(*p)) (v) };			\
-> +	unqual_typeof(p) __p = (p);					\
-> +	union { unqual_typeof(*p) __val; char __c[1]; } __u =	\
-> +		{ .__val = (__force unqual_typeof(*p)) (v) };	\
+> - Clarify whether mmap(tagged_addr, PROT_MTE) pre-tags the memory with
+>   the tag given in the tagged_addr hint. Strong justification is
+>   required for this as it would force arm64 to disable the zero page.
 
-The 2 two trailing backslashes are now off by one tab.
+We would like to use this feature in scudo to tag large (>128KB on
+Android) allocations, which are currently allocated via mmap rather
+than from an allocation pool. Otherwise we would need to pay the cost
+(perf and RSS) of faulting all of their pages at allocation time
+instead of on demand, if we want to tag them.
 
--- Luc 
+If we could disable the zero page for tagged mappings only and let the
+pages be faulted as they are read, that would work for us.
+
+Peter
+
+[1] https://reviews.llvm.org/D70762
