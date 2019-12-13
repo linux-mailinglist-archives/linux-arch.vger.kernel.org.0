@@ -2,193 +2,250 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2A311E34E
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2019 13:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E49411E424
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2019 13:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726855AbfLMMIE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Dec 2019 07:08:04 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:42679 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726717AbfLMMIE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 13 Dec 2019 07:08:04 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Z8Z75M69z9sNH;
-        Fri, 13 Dec 2019 23:07:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1576238880;
-        bh=T73UbJx6DhmwQ1N/iNMIavMt3Lbs62DgCQLGRpz+/FM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=WXZ8TIT/18VCusfv0/4GxMXeLZyG9e/dxQn9uQb2kX1dBzq4bQQLvVRkSqv62BI6A
-         nf6xFtNVGbDVzJg55Mx3ZN+XCZC54kP7PVy2cg0VJSy4UAVirl9uhRJIUPUJpTjHiN
-         yOmNGNyXzg0i/vEoHp21xNf+AI3vCnFO5xIGtk7Ad+ndOIhFeluKeH/27NOg3+/kxb
-         7eiRc8TEh2W/q52qnAy4vz7t5QWgeFUNxAj9klDYnCPW4CsplJ9n6gZ0E1nTvhAcQ3
-         uv4xbOfhW0ZmA6C3Z8wDOrRZlJtjMuQfNXEdv2MzNXfL+Qr9T+DJvXS4fpvy2LZgGS
-         ccnL2ZE0DQeew==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, dja@axtens.net,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        christophe.leroy@c-s.fr, linux-arch@vger.kernel.org,
+        id S1727542AbfLMM4n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Dec 2019 07:56:43 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:46220 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727490AbfLMM4n (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Dec 2019 07:56:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=fWjlDQlwIoBg7I4Z9XSj9pI9UUWfLrkzsxAziGh6H/M=; b=iQu8Ss5CvIW0fiJBxMLgkD1jm
+        yz+ajnmICV4TjIDDgyjd7PjqlmuUEvwzpxv4iI6JOc4i4t2KIec0epVoJTyvbUHEiqpxM6AJ+Xt05
+        sKMlHGiYwJk4ddTqnO404xiUWfpw8tXg1eqIYVKvSm4e0J/vOrP4MaT79qCHrwdyRKW34PUesKBVP
+        u/FrqqKsWXFJr9rj6glrIgaha27VGjLLX/VvZx6keNKxpAzE9YM5ANFtm2gDn8hL2KCBjRWD1jabQ
+        sRW9rFRq/ySsD5jIc8sZQIUccKV4JWAI1eusNTtWdFHf/Ti/SiaUpwv58KDQc+kuAmMRc9g/B9vAp
+        wYyfUNA/g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ifkUX-0002Gq-OV; Fri, 13 Dec 2019 12:56:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 385E5305FFF;
+        Fri, 13 Dec 2019 13:54:58 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EC16A20121961; Fri, 13 Dec 2019 13:56:18 +0100 (CET)
+Date:   Fri, 13 Dec 2019 13:56:18 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, dja@axtens.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
-In-Reply-To: <20191212104610.GW2827@hirez.programming.kicks-ass.net>
-References: <87blslei5o.fsf@mpe.ellerman.id.au> <20191206131650.GM2827@hirez.programming.kicks-ass.net> <875zimp0ay.fsf@mpe.ellerman.id.au> <20191212080105.GV2844@hirez.programming.kicks-ass.net> <20191212100756.GA11317@willie-the-truck> <20191212104610.GW2827@hirez.programming.kicks-ass.net>
-Date:   Fri, 13 Dec 2019 23:07:55 +1100
-Message-ID: <87pngso2ck.fsf@mpe.ellerman.id.au>
+Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
+ Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
+Message-ID: <20191213125618.GD2844@hirez.programming.kicks-ass.net>
+References: <20191212080105.GV2844@hirez.programming.kicks-ass.net>
+ <20191212100756.GA11317@willie-the-truck>
+ <20191212104610.GW2827@hirez.programming.kicks-ass.net>
+ <CAHk-=wjUBsH0BYDBv=q36482G-U7c=9bC89L_BViSciTfb8fhA@mail.gmail.com>
+ <20191212180634.GA19020@willie-the-truck>
+ <CAHk-=whRxB0adkz+V7SQC8Ac_rr_YfaPY8M2mFDfJP2FFBNz8A@mail.gmail.com>
+ <20191212193401.GB19020@willie-the-truck>
+ <20191212202157.GD11457@worktop.programming.kicks-ass.net>
+ <20191212205338.GB11802@worktop.programming.kicks-ass.net>
+ <20191213104706.xnpqaehmtean3mkd@ltop.local>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191213104706.xnpqaehmtean3mkd@ltop.local>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
-> On Thu, Dec 12, 2019 at 10:07:56AM +0000, Will Deacon wrote:
->
->> > So your proposed change _should_ be fine. Will, I'm assuming you never
->> > saw this on your ARGH64 builds when you did this code ?
->> 
->> I did see it, but (a) looking at the code out-of-line makes it look a lot
->> worse than it actually is (so the ext4 example is really helpful -- thanks
->> Michael!) and (b) I chalked it up to a crappy compiler.
->> 
->> However, see this comment from Arnd on my READ_ONCE series from the other
->> day:
->> 
->> https://lore.kernel.org/lkml/CAK8P3a0f=WvSQSBQ4t0FmEkcFE_mC3oARxaeTviTSkSa-D2qhg@mail.gmail.com
->> 
->> In which case, I'm thinking that we should be doing better in READ_ONCE()
->> for non-buggy compilers which would also keep the KCSAN folks happy for this
->> code (and would help with [1] too).
->
-> So something like this then? Although I suppose that should be moved
-> into compiler-gcc.h and then guarded by #ifndef READ_ONCE or so.
+On Fri, Dec 13, 2019 at 11:47:06AM +0100, Luc Van Oostenryck wrote:
+> On Thu, Dec 12, 2019 at 09:53:38PM +0100, Peter Zijlstra wrote:
+> > Now, looking at the current GCC source:
+> > 
+> >   https://github.com/gcc-mirror/gcc/blob/97d7270f894395e513667a031a0c309d1819d05e/gcc/c/c-parser.c#L3707
+> > 
+> > it seems that __typeof__() is supposed to strip all qualifiers from
+> > _Atomic types. That lead me to try:
+> > 
+> > 	typeof(_Atomic typeof(p)) __p = (p);
+> > 
+> > But alas, I still get the same junk you got for ool_store_release() :/
+> 
+> I was checking this to see if Sparse was ready to support this.
+> I was a bit surprised because at first sigth GCC was doing as
+> it claims (typeof striping const & volatile on _Atomic types)
+> but your exampe wasn't working. But it's working if an
+> intermediate var is used:
+> 	_Atomic typeof(p) tmp;
+> 	typeof(tmp) __p = (p);
+> or, uglier but probably more practical:
+> 	typeof(({_Atomic typeof(p) tmp; })) __p = (p);
+> 
+> Go figure!
 
-I tried this:
+Excellent! I had to change it to something like:
 
-> @@ -295,6 +296,23 @@ void __write_once_size(volatile void *p, void *res, int size)
->   */
->  #define READ_ONCE_NOCHECK(x) __READ_ONCE(x, 0)
->  
-> +#else /* GCC_VERSION < 40800 */
-> +
-> +#define READ_ONCE_NOCHECK(x)						\
-> +({									\
-> +	typeof(x) __x = *(volatile typeof(x))&(x);			\
+#define unqual_typeof(x)    typeof(({_Atomic typeof(x) ___x __maybe_unused; ___x; }))
 
-Didn't compile, needed:
+but that does indeed work!
 
-	typeof(x) __x = *(volatile typeof(&x))&(x);			\
+Now I suppose we should wrap that in a symbol that indicates our
+compiler does indeed support _Atomic, otherwise things will come apart.
 
+That is, my gcc-4.6 doesn't seem to have it, while gcc-4.8 does, which
+is exactly the range that needs the daft READ_ONCE() construct, how
+convenient :/
 
-> +	smp_read_barrier_depends();					\
-> +	__x;
-> +})
+Something a little like this perhaps?
 
+---
 
-And that works for me. No extra stack check stuff.
-
-I guess the question is does that version of READ_ONCE() implement the
-read once semantics. Do we have a good way to test that?
-
-The only differences are because of the early return in the generic
-test_and_set_bit_lock():
-
-   1 <ext4_resize_begin_generic>:                            1 <ext4_resize_begin_ppc>:
-   2         addis   r2,r12,281                              2         addis   r2,r12,281
-   3         addi    r2,r2,-22368                            3         addi    r2,r2,-22064
-   4         mflr    r0                                      4         mflr    r0
-   5         bl      <_mcount>                               5         bl      <_mcount>
-   6         mflr    r0                                      6         mflr    r0
-   7         std     r31,-8(r1)                              7         std     r31,-8(r1)
-   8         std     r30,-16(r1)                             8         std     r30,-16(r1)
-   9         mr      r31,r3                                  9         mr      r31,r3
-  10         li      r3,24                                  10         li      r3,24
-  11         std     r0,16(r1)                              11         std     r0,16(r1)
-  12         stdu    r1,-128(r1)                            12         stdu    r1,-112(r1)
-  13         ld      r30,920(r31)                           13         ld      r30,920(r31)
-  14         bl      <capable+0x8>                          14         bl      <capable+0x8>
-  15         nop                                            15         nop
-  16         cmpdi   cr7,r3,0                               16         cmpdi   cr7,r3,0
-  17         beq     cr7,<ext4_resize_begin_generic+0xf0>   17         beq     cr7,<ext4_resize_begin_ppc+0xc0>
-  18         ld      r9,920(r31)                            18         ld      r9,920(r31)
-  19         ld      r10,96(r30)                            19         ld      r10,96(r30)
-  20         lwz     r7,84(r30)                             20         lwz     r7,84(r30)
-  21         ld      r8,104(r9)                             21         ld      r8,104(r9)
-  22         ld      r10,24(r10)                            22         ld      r10,24(r10)
-  23         lwz     r8,20(r8)                              23         lwz     r8,20(r8)
-  24         srd     r10,r10,r7                             24         srd     r10,r10,r7
-  25         cmpd    cr7,r10,r8                             25         cmpd    cr7,r10,r8
-  26         bne     cr7,<ext4_resize_begin_generic+0x128>  26         bne     cr7,<ext4_resize_begin_ppc+0xf8>
-  27         lhz     r10,160(r9)                            27         lhz     r10,160(r9)
-  28         andi.   r10,r10,2                              28         andi.   r10,r10,2
-  29         bne     <ext4_resize_begin_generic+0x100>
-  30         ld      r10,560(r9)
-  31         std     r10,104(r1)
-  32         ld      r10,104(r1)
-  33         andi.   r10,r10,1
-  34         bne     <ext4_resize_begin_generic+0xd0>       29         bne     <ext4_resize_begin_ppc+0xd0>
-  35         addi    r7,r9,560                              30         addi    r9,r9,560
-  36         li      r8,1                                   31         li      r10,1
-  37         ldarx   r10,0,r7                               32         ldarx   r3,0,r9,1
-  38         or      r6,r8,r10                              33         or      r8,r3,r10
-  39         stdcx.  r6,0,r7                                34         stdcx.  r8,0,r9
-  40         bne-    <ext4_resize_begin_generic+0x8c>       35         bne-    <ext4_resize_begin_ppc+0x78>
-  41         isync                                          36         isync
-                                                            37         clrldi  r3,r3,63
-  42         andi.   r9,r10,1                               38         addi    r3,r3,-1
-  43         li      r3,0                                   39         rlwinm  r3,r3,0,27,27
-  44         bne     <ext4_resize_begin_generic+0xd0>       40         addi    r3,r3,-16
-  45         addi    r1,r1,128                              41         addi    r1,r1,112
-  46         ld      r0,16(r1)                              42         ld      r0,16(r1)
-  47         ld      r30,-16(r1)                            43         ld      r30,-16(r1)
-  48         ld      r31,-8(r1)                             44         ld      r31,-8(r1)
-  49         mtlr    r0                                     45         mtlr    r0
-  50         blr                                            46         blr
-  51         nop                                            47         nop
-  52         nop                                            48         nop
-  53         nop                                            49         nop
-  54         addi    r1,r1,128
-  55         li      r3,-16
-  56         ld      r0,16(r1)
-  57         ld      r30,-16(r1)
-  58         ld      r31,-8(r1)
-  59         mtlr    r0
-  60         blr
-  61         nop
-  62         li      r3,-1                                  50         li      r3,-1
-  63         b       <ext4_resize_begin_generic+0xac>       51         b       <ext4_resize_begin_ppc+0x9c>
-  64         nop                                            52         nop
-  65         nop                                            53         nop
-  66         addis   r6,r2,-117                             54         addis   r6,r2,-117
-  67         addis   r4,r2,-140                             55         addis   r4,r2,-140
-  68         mr      r3,r31                                 56         mr      r3,r31
-  69         li      r5,146                                 57         li      r5,83
-  70         addi    r6,r6,-32736                           58         addi    r6,r6,-32736
-  71         addi    r4,r4,3088                             59         addi    r4,r4,3064
-  72         bl      <__ext4_warning+0x8>                   60         bl      <__ext4_warning+0x8>
-  73         nop                                            61         nop
-  74         li      r3,-1                                  62         li      r3,-1
-  75         b       <ext4_resize_begin_generic+0xac>       63         b       <ext4_resize_begin_ppc+0x9c>
-  76         ld      r9,96(r9)                              64         ld      r9,96(r9)
-  77         addis   r6,r2,-118                             65         addis   r6,r2,-118
-  78         addis   r4,r2,-140                             66         addis   r4,r2,-140
-  79         mr      r3,r31                                 67         mr      r3,r31
-  80         li      r5,136                                 68         li      r5,73
-  81         addi    r6,r6,32752                            69         addi    r6,r6,32752
-  82         addi    r4,r4,3088                             70         addi    r4,r4,3064
-  83         ld      r7,24(r9)                              71         ld      r7,24(r9)
-  84         bl      <__ext4_warning+0x8>                   72         bl      <__ext4_warning+0x8>
-  85         nop                                            73         nop
-  86         li      r3,-1                                  74         li      r3,-1
-  87         b       <ext4_resize_begin_generic+0xac>       75         b       <ext4_resize_begin_ppc+0x9c>
-
-
-cheers
+diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+index 7d9cc5ec4971..c389af602da8 100644
+--- a/arch/arm64/include/asm/barrier.h
++++ b/arch/arm64/include/asm/barrier.h
+@@ -75,9 +75,9 @@ static inline unsigned long array_index_mask_nospec(unsigned long idx,
+ 
+ #define __smp_store_release(p, v)					\
+ do {									\
+-	typeof(p) __p = (p);						\
+-	union { typeof(*p) __val; char __c[1]; } __u =			\
+-		{ .__val = (__force typeof(*p)) (v) };			\
++	unqual_typeof(p) __p = (p);					\
++	union { unqual_typeof(*p) __val; char __c[1]; } __u =	\
++		{ .__val = (__force unqual_typeof(*p)) (v) };	\
+ 	compiletime_assert_atomic_type(*p);				\
+ 	kasan_check_write(__p, sizeof(*p));				\
+ 	switch (sizeof(*p)) {						\
+@@ -110,8 +110,8 @@ do {									\
+ 
+ #define __smp_load_acquire(p)						\
+ ({									\
+-	union { typeof(*p) __val; char __c[1]; } __u;			\
+-	typeof(p) __p = (p);						\
++	union { unqual_typeof(*p) __val; char __c[1]; } __u;		\
++	unqual_typeof(p) __p = (p);					\
+ 	compiletime_assert_atomic_type(*p);				\
+ 	kasan_check_read(__p, sizeof(*p));				\
+ 	switch (sizeof(*p)) {						\
+@@ -141,8 +141,8 @@ do {									\
+ 
+ #define smp_cond_load_relaxed(ptr, cond_expr)				\
+ ({									\
+-	typeof(ptr) __PTR = (ptr);					\
+-	typeof(*ptr) VAL;						\
++	unqual_typeof(ptr) __PTR = (ptr);				\
++	unqual_typeof(*ptr) VAL;					\
+ 	for (;;) {							\
+ 		VAL = READ_ONCE(*__PTR);				\
+ 		if (cond_expr)						\
+@@ -154,8 +154,8 @@ do {									\
+ 
+ #define smp_cond_load_acquire(ptr, cond_expr)				\
+ ({									\
+-	typeof(ptr) __PTR = (ptr);					\
+-	typeof(*ptr) VAL;						\
++	unqual_typeof(ptr) __PTR = (ptr);				\
++	unqual_typeof(*ptr) VAL;					\
+ 	for (;;) {							\
+ 		VAL = smp_load_acquire(__PTR);				\
+ 		if (cond_expr)						\
+diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+index 85b28eb80b11..dd5bb055f5ab 100644
+--- a/include/asm-generic/barrier.h
++++ b/include/asm-generic/barrier.h
+@@ -228,8 +228,8 @@ do {									\
+  */
+ #ifndef smp_cond_load_relaxed
+ #define smp_cond_load_relaxed(ptr, cond_expr) ({		\
+-	typeof(ptr) __PTR = (ptr);				\
+-	typeof(*ptr) VAL;					\
++	unqual_typeof(ptr) __PTR = (ptr);			\
++	unqual_typeof(*ptr) VAL;				\
+ 	for (;;) {						\
+ 		VAL = READ_ONCE(*__PTR);			\
+ 		if (cond_expr)					\
+@@ -250,7 +250,7 @@ do {									\
+  */
+ #ifndef smp_cond_load_acquire
+ #define smp_cond_load_acquire(ptr, cond_expr) ({		\
+-	typeof(*ptr) _val;					\
++	unqual_typeof(*ptr) _val;				\
+ 	_val = smp_cond_load_relaxed(ptr, cond_expr);		\
+ 	smp_acquire__after_ctrl_dep();				\
+ 	_val;							\
+diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+index 0eb2a1cc411d..15fd7ea3882a 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -179,3 +179,10 @@
+ #endif
+ 
+ #define __no_fgcse __attribute__((optimize("-fno-gcse")))
++
++#if GCC_VERSION < 40800
++/*
++ * GCC-4.6 doesn't support _Atomic, which is required to strip qualifiers.
++ */
++#define unqual_typeof(x)	typeof(x)
++#endif
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index ad8c76144a3c..9736993f2ba1 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -279,7 +279,7 @@ void __write_once_size(volatile void *p, void *res, int size)
+ 
+ #define __READ_ONCE(x, check)						\
+ ({									\
+-	union { typeof(x) __val; char __c[1]; } __u;			\
++	union { unqual_typeof(x) __val; char __c[1]; } __u;		\
+ 	if (check)							\
+ 		__read_once_size(&(x), __u.__c, sizeof(x));		\
+ 	else								\
+@@ -302,12 +302,12 @@ unsigned long read_word_at_a_time(const void *addr)
+ 	return *(unsigned long *)addr;
+ }
+ 
+-#define WRITE_ONCE(x, val) \
+-({							\
+-	union { typeof(x) __val; char __c[1]; } __u =	\
+-		{ .__val = (__force typeof(x)) (val) }; \
+-	__write_once_size(&(x), __u.__c, sizeof(x));	\
+-	__u.__val;					\
++#define WRITE_ONCE(x, val)					\
++({								\
++	union { unqual_typeof(x) __val; char __c[1]; } __u =	\
++		{ .__val = (__force unqual_typeof(x)) (val) };	\
++	__write_once_size(&(x), __u.__c, sizeof(x));		\
++	__u.__val;						\
+ })
+ 
+ #include <linux/kcsan.h>
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 72393a8c1a6c..fe8012c54251 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -243,4 +243,11 @@ struct ftrace_likely_data {
+ #define __diag_error(compiler, version, option, comment) \
+ 	__diag_ ## compiler(version, error, option)
+ 
++#ifndef unqual_typeof
++/*
++ * GCC __typeof__() strips all qualifiers from _Atomic types.
++ */
++#define unqual_typeof(x)	typeof(({_Atomic typeof(x) ___x __maybe_unused; ___x; }))
++#endif
++
+ #endif /* __LINUX_COMPILER_TYPES_H */
