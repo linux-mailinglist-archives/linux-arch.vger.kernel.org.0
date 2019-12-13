@@ -2,235 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCA211DBB2
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2019 02:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4855A11E148
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2019 10:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731680AbfLMBb3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Dec 2019 20:31:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44630 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731631AbfLMBb3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 12 Dec 2019 20:31:29 -0500
-Received: from paulmck-ThinkPad-P72.home (unknown [199.201.64.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8112A206B7;
-        Fri, 13 Dec 2019 01:31:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576200687;
-        bh=oPr5cQKbMUvPoiWxMSN+FfKPbjo8HdSlaHewowx2Am8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=H/ST3WYjZwNb7yRtc49+wleBzA3+ZUacYKGaPZVAKHoW+WrRv/C74cIb/Hv+zQ2eY
-         nA40PyZwPyBbb4s/tAva9sobp9HASX2zK5qhcwcvb3O7uDh0ktK68ZntiodxaPNZNR
-         9ZwaUxiQJmjatsbqXX2/2+5QBYsICYviMTVvlerY=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 19AE135227E8; Thu, 12 Dec 2019 17:31:27 -0800 (PST)
-Date:   Thu, 12 Dec 2019 17:31:27 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Subject: Re: [PATCH v3 3/3] kcsan: Prefer __always_inline for fast-path
-Message-ID: <20191213013127.GE2889@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20191126140406.164870-1-elver@google.com>
- <20191126140406.164870-3-elver@google.com>
- <00ee3b40-0e37-c9ac-3209-d07b233a0c1d@infradead.org>
- <20191203160128.GC2889@paulmck-ThinkPad-P72>
- <CANpmjNOvDHoapk1cR5rCAcYgfVwf8NS0wFJncJ-bQrWzCKLPpw@mail.gmail.com>
+        id S1725799AbfLMJ5M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Dec 2019 04:57:12 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:50606 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725747AbfLMJ5M (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Dec 2019 04:57:12 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBD9ubog152811;
+        Fri, 13 Dec 2019 09:56:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2019-08-05;
+ bh=S7FcfMv5EYcYTkRgDKj3WiJgIcLQuGB+dA630iy3KgE=;
+ b=EwUctdIKdzeMK4U9V0eZodEkn7Bb+OG5JVroMMBxdp9bMxk5wASTgKNja1oZFcUIxOn9
+ tEwtlEoYUj7T1nmTMIWJefNN9uBNqLmZcBaveIJj9AF+apGkAaTRefE83UrOWgK6WPOw
+ HjC5MbEvqLZJWUT6/gWleJGhXHZfpG1tTUI2cWrApFo4/wvsq5VXZ2zz2o5Iv7BYFNXe
+ f3cZeXdDri4EXBl9H/UJUNMx6HDy21MOtARZHgTzH8lWiV5rKpcU1uDLNL2mRVZvoF1q
+ IOVwvYMv3u5y4WxG/pj0mkbmoeR4jkYl6KHCxMj0rJntCtjOOHDDgC9weq3RAMWCMtKO Yw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2wr41qr6u2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 Dec 2019 09:56:44 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBD9mlnf001336;
+        Fri, 13 Dec 2019 09:56:44 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2wumu62phb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 Dec 2019 09:56:43 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xBD9ugiY016371;
+        Fri, 13 Dec 2019 09:56:42 GMT
+Received: from kadam (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 13 Dec 2019 01:56:42 -0800
+Date:   Fri, 13 Dec 2019 12:56:34 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Willy Tarreau <w@1wt.eu>,
+        Andrew Morton <akpm@linux-foundation.org>, will@kernel.org,
+        ebiederm@xmission.com, linux-arch@vger.kernel.org,
+        security@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] execve: warn if process starts with executable stack
+Message-ID: <20191213095634.GB2407@kadam>
+References: <20191208171918.GC19716@avx2>
+ <20191210174726.101e434df59b6aec8a53cca1@linux-foundation.org>
+ <20191211072225.GB3700@avx2>
+ <20191211095937.GB31670@1wt.eu>
+ <20191211181933.GA3919@avx2>
+ <20191211182401.GF31670@1wt.eu>
+ <20191212212520.GA9682@avx2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANpmjNOvDHoapk1cR5rCAcYgfVwf8NS0wFJncJ-bQrWzCKLPpw@mail.gmail.com>
+In-Reply-To: <20191212212520.GA9682@avx2>
 User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9469 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1912130078
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9469 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1912130078
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 10:11:59PM +0100, Marco Elver wrote:
-> On Tue, 3 Dec 2019 at 17:01, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Mon, Dec 02, 2019 at 09:30:22PM -0800, Randy Dunlap wrote:
-> > > On 11/26/19 6:04 AM, Marco Elver wrote:
-> > > > Prefer __always_inline for fast-path functions that are called outside
-> > > > of user_access_save, to avoid generating UACCESS warnings when
-> > > > optimizing for size (CC_OPTIMIZE_FOR_SIZE). It will also avoid future
-> > > > surprises with compiler versions that change the inlining heuristic even
-> > > > when optimizing for performance.
-> > > >
-> > > > Report: http://lkml.kernel.org/r/58708908-84a0-0a81-a836-ad97e33dbb62@infradead.org
-> > > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > > Signed-off-by: Marco Elver <elver@google.com>
-> > >
-> > > Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> >
-> > Thank you, Randy!
+On Fri, Dec 13, 2019 at 12:25:20AM +0300, Alexey Dobriyan wrote:
+> On Wed, Dec 11, 2019 at 07:24:01PM +0100, Willy Tarreau wrote:
+> > On Wed, Dec 11, 2019 at 09:19:33PM +0300, Alexey Dobriyan wrote:
+> > > Reports are better be done by people who know what they are doing, as in
+> > > understand what executable stack is and what does it mean in reality.
+> > > 
+> > > > Otherwise it will just go to /dev/null with all warning about bad blocks
+> > > > on USB sticks and CPU core throttling under high temperature.
+> > > 
+> > > That's fine. You don't want bugreports from people who don't know what
+> > > is executable stack. Every security bug bounty program is flooded by
+> > > such people. This is why message is worded in a neutral way.
+> > 
+> > Well we definitely don't have the same experience with user reports. I
+> > was just suggesting, but since you apparently already have all the
+> > responses you needed, I'm even wondering why the warning remains.
 > 
-> Hoped this would have applied by now, but since KCSAN isn't in
-> mainline yet, should I send a version of this patch rebased on
-> -rcu/kcsan?
-> It will just conflict with the style cleanup that is in
-> -tip/locking/kcsan when another eventual merge happens. Alternatively,
-> we can delay it for now and just have to remember to apply eventually
-> (and have to live with things being messy for a bit longer :-)).
-
-Excellent question.  ;-)
-
-The first several commits are in -tip already, so they will go upstream
-in their current state by default.  And a bunch of -tip commits have
-already been merged on top of them, so it might not be easy to move them.
-
-So please feel free to port the patch to -rcu/ksan and let's see how that
-plays out.  If it gets too ugly, then maybe wait until the current set
-of patches go upstream.
-
-Another option is to port them to the kcsan merge point in -rcu.  That
-would bring in v5.5-rc1.  Would that help?
-
-							Thanx, Paul
-
-> The version as-is here applies on -tip/locking/kcsan and -next (which
-> merged -tip/locking/kcsan).
+> Willy, whatever instructions for users you have in mind must be
+> different for different people. Developer should be told to add
+> "-Wl,-z,noexecstack" and more. Regular user (define "regular") should be
+> told to send bugreport if the program really needs executable stack
+> which again splits into two situations: exec stack was added knowingly
+> because it is some old program with lost source code or it was readded
+> by mistake.
 > 
-> Thanks,
-> -- Marco
+> "Complain to linux-kernel" is meaningless, kernel is not responsible.
 > 
+> What the message is even supposed to say?
 > 
-> >                                                         Thanx, Paul
-> >
-> > > Thanks.
-> > >
-> > > > ---
-> > > > Rebased on: locking/kcsan branch of tip tree.
-> > > > ---
-> > > >  kernel/kcsan/atomic.h   |  2 +-
-> > > >  kernel/kcsan/core.c     | 16 +++++++---------
-> > > >  kernel/kcsan/encoding.h | 14 +++++++-------
-> > > >  3 files changed, 15 insertions(+), 17 deletions(-)
-> > > >
-> > > > diff --git a/kernel/kcsan/atomic.h b/kernel/kcsan/atomic.h
-> > > > index 576e03ddd6a3..a9c193053491 100644
-> > > > --- a/kernel/kcsan/atomic.h
-> > > > +++ b/kernel/kcsan/atomic.h
-> > > > @@ -18,7 +18,7 @@
-> > > >   * than cast to volatile. Eventually, we hope to be able to remove this
-> > > >   * function.
-> > > >   */
-> > > > -static inline bool kcsan_is_atomic(const volatile void *ptr)
-> > > > +static __always_inline bool kcsan_is_atomic(const volatile void *ptr)
-> > > >  {
-> > > >     /* only jiffies for now */
-> > > >     return ptr == &jiffies;
-> > > > diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-> > > > index 3314fc29e236..c616fec639cd 100644
-> > > > --- a/kernel/kcsan/core.c
-> > > > +++ b/kernel/kcsan/core.c
-> > > > @@ -78,10 +78,8 @@ static atomic_long_t watchpoints[CONFIG_KCSAN_NUM_WATCHPOINTS + NUM_SLOTS-1];
-> > > >   */
-> > > >  static DEFINE_PER_CPU(long, kcsan_skip);
-> > > >
-> > > > -static inline atomic_long_t *find_watchpoint(unsigned long addr,
-> > > > -                                        size_t size,
-> > > > -                                        bool expect_write,
-> > > > -                                        long *encoded_watchpoint)
-> > > > +static __always_inline atomic_long_t *
-> > > > +find_watchpoint(unsigned long addr, size_t size, bool expect_write, long *encoded_watchpoint)
-> > > >  {
-> > > >     const int slot = watchpoint_slot(addr);
-> > > >     const unsigned long addr_masked = addr & WATCHPOINT_ADDR_MASK;
-> > > > @@ -146,7 +144,7 @@ insert_watchpoint(unsigned long addr, size_t size, bool is_write)
-> > > >   * 2. the thread that set up the watchpoint already removed it;
-> > > >   * 3. the watchpoint was removed and then re-used.
-> > > >   */
-> > > > -static inline bool
-> > > > +static __always_inline bool
-> > > >  try_consume_watchpoint(atomic_long_t *watchpoint, long encoded_watchpoint)
-> > > >  {
-> > > >     return atomic_long_try_cmpxchg_relaxed(watchpoint, &encoded_watchpoint, CONSUMED_WATCHPOINT);
-> > > > @@ -160,7 +158,7 @@ static inline bool remove_watchpoint(atomic_long_t *watchpoint)
-> > > >     return atomic_long_xchg_relaxed(watchpoint, INVALID_WATCHPOINT) != CONSUMED_WATCHPOINT;
-> > > >  }
-> > > >
-> > > > -static inline struct kcsan_ctx *get_ctx(void)
-> > > > +static __always_inline struct kcsan_ctx *get_ctx(void)
-> > > >  {
-> > > >     /*
-> > > >      * In interrupts, use raw_cpu_ptr to avoid unnecessary checks, that would
-> > > > @@ -169,7 +167,7 @@ static inline struct kcsan_ctx *get_ctx(void)
-> > > >     return in_task() ? &current->kcsan_ctx : raw_cpu_ptr(&kcsan_cpu_ctx);
-> > > >  }
-> > > >
-> > > > -static inline bool is_atomic(const volatile void *ptr)
-> > > > +static __always_inline bool is_atomic(const volatile void *ptr)
-> > > >  {
-> > > >     struct kcsan_ctx *ctx = get_ctx();
-> > > >
-> > > > @@ -193,7 +191,7 @@ static inline bool is_atomic(const volatile void *ptr)
-> > > >     return kcsan_is_atomic(ptr);
-> > > >  }
-> > > >
-> > > > -static inline bool should_watch(const volatile void *ptr, int type)
-> > > > +static __always_inline bool should_watch(const volatile void *ptr, int type)
-> > > >  {
-> > > >     /*
-> > > >      * Never set up watchpoints when memory operations are atomic.
-> > > > @@ -226,7 +224,7 @@ static inline void reset_kcsan_skip(void)
-> > > >     this_cpu_write(kcsan_skip, skip_count);
-> > > >  }
-> > > >
-> > > > -static inline bool kcsan_is_enabled(void)
-> > > > +static __always_inline bool kcsan_is_enabled(void)
-> > > >  {
-> > > >     return READ_ONCE(kcsan_enabled) && get_ctx()->disable_count == 0;
-> > > >  }
-> > > > diff --git a/kernel/kcsan/encoding.h b/kernel/kcsan/encoding.h
-> > > > index b63890e86449..f03562aaf2eb 100644
-> > > > --- a/kernel/kcsan/encoding.h
-> > > > +++ b/kernel/kcsan/encoding.h
-> > > > @@ -59,10 +59,10 @@ encode_watchpoint(unsigned long addr, size_t size, bool is_write)
-> > > >                   (addr & WATCHPOINT_ADDR_MASK));
-> > > >  }
-> > > >
-> > > > -static inline bool decode_watchpoint(long watchpoint,
-> > > > -                                unsigned long *addr_masked,
-> > > > -                                size_t *size,
-> > > > -                                bool *is_write)
-> > > > +static __always_inline bool decode_watchpoint(long watchpoint,
-> > > > +                                         unsigned long *addr_masked,
-> > > > +                                         size_t *size,
-> > > > +                                         bool *is_write)
-> > > >  {
-> > > >     if (watchpoint == INVALID_WATCHPOINT ||
-> > > >         watchpoint == CONSUMED_WATCHPOINT)
-> > > > @@ -78,13 +78,13 @@ static inline bool decode_watchpoint(long watchpoint,
-> > > >  /*
-> > > >   * Return watchpoint slot for an address.
-> > > >   */
-> > > > -static inline int watchpoint_slot(unsigned long addr)
-> > > > +static __always_inline int watchpoint_slot(unsigned long addr)
-> > > >  {
-> > > >     return (addr / PAGE_SIZE) % CONFIG_KCSAN_NUM_WATCHPOINTS;
-> > > >  }
-> > > >
-> > > > -static inline bool matching_access(unsigned long addr1, size_t size1,
-> > > > -                              unsigned long addr2, size_t size2)
-> > > > +static __always_inline bool matching_access(unsigned long addr1, size_t size1,
-> > > > +                                       unsigned long addr2, size_t size2)
-> > > >  {
-> > > >     unsigned long end_range1 = addr1 + size1 - 1;
-> > > >     unsigned long end_range2 = addr2 + size2 - 1;
-> > > >
-> > >
-> > >
-> > > --
-> > > ~Randy
-> > >
+
+You could direct people to a website and then update the instructions
+as needed.
+
+regards,
+dan carpenter
+
