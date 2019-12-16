@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABBE120454
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Dec 2019 12:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3705A1204DE
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Dec 2019 13:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727286AbfLPLr5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Dec 2019 06:47:57 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:38902 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727241AbfLPLr5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Dec 2019 06:47:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=LwcWvPUPdHgv2odYtZcSMNnsgALZyJIt29Wbmp4VgB8=; b=NIKIK/cZilp7O4WY5tTPGdJ71
-        0bSlzirEsG8ICgflK8h81fjEYBOzirr95k2osGKphsDK4HWCEJok7EWXmBJyqpIcHKgyCKXS2WcSi
-        +X8yRLNm2YDi41R98ppiuSE8qrqlPRD/uOpsmzodOLqDFsZDqrrFYRVT/IKOO8GQb2lrrY7LKi1d+
-        Esy0g5T8tmr0jCUwWNXLRdaVxRedn/nRTNc7vfLYhetZeE+mPdLLm4axpNRPOSIcFVh4KID6EDquB
-        OxeWbfbldP7mSASAmxCSUP8gm7qmRhxNPtrypeCpUi/1bpzi2hcUu7jJ2MNrbVz3S+wCrTWLh9fYP
-        0kj67N7cg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1igoqW-0005HZ-2d; Mon, 16 Dec 2019 11:47:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 96FFC3035D4;
-        Mon, 16 Dec 2019 12:46:02 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9D3422B1A6BF1; Mon, 16 Dec 2019 12:47:24 +0100 (CET)
-Date:   Mon, 16 Dec 2019 12:47:24 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
+        id S1727558AbfLPMGo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 16 Dec 2019 07:06:44 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:50109 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727335AbfLPMGn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Dec 2019 07:06:43 -0500
+Received: from mail-qk1-f179.google.com ([209.85.222.179]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MSss2-1iGsog2KTe-00UJfA; Mon, 16 Dec 2019 13:06:40 +0100
+Received: by mail-qk1-f179.google.com with SMTP id j9so4013766qkk.1;
+        Mon, 16 Dec 2019 04:06:40 -0800 (PST)
+X-Gm-Message-State: APjAAAW4VVQq/8xxHABqZCxIIyR96iUxnZ5sDDFMMsS37TtSJlOWMOXj
+        kiu50pXVTDprT8tKFz88BDkvCUPSbxOHoI4Nsf8=
+X-Google-Smtp-Source: APXvYqzaldzKvuGG0VSm+NPjH2zK7pPG6M4z5r7MC0BxVjXSzaHMKlB7/FcMflcuRR66LlFgIuTrrgyX4wxlYfFrPhU=
+X-Received: by 2002:a37:2f02:: with SMTP id v2mr5213363qkh.3.1576497999318;
+ Mon, 16 Dec 2019 04:06:39 -0800 (PST)
+MIME-Version: 1.0
+References: <875zimp0ay.fsf@mpe.ellerman.id.au> <20191212080105.GV2844@hirez.programming.kicks-ass.net>
+ <20191212100756.GA11317@willie-the-truck> <20191212104610.GW2827@hirez.programming.kicks-ass.net>
+ <CAHk-=wjUBsH0BYDBv=q36482G-U7c=9bC89L_BViSciTfb8fhA@mail.gmail.com>
+ <20191212180634.GA19020@willie-the-truck> <CAHk-=whRxB0adkz+V7SQC8Ac_rr_YfaPY8M2mFDfJP2FFBNz8A@mail.gmail.com>
+ <20191212193401.GB19020@willie-the-truck> <CAHk-=wiMuHmWzQ7-CRQB6o+SHtA-u-Rp6VZwPcqDbjAaug80rQ@mail.gmail.com>
+ <CAK8P3a2QYpT_u3D7c_w+hoyeO-Stkj5MWyU_LgGOqnMtKLEudg@mail.gmail.com> <20191213144359.GA3826@willie-the-truck>
+In-Reply-To: <20191213144359.GA3826@willie-the-truck>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 16 Dec 2019 13:06:22 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0qgbqKTtRWTh6c0R2E93rehKbkBcB18TL3JX_RWHsTZA@mail.gmail.com>
+Message-ID: <CAK8P3a0qgbqKTtRWTh6c0R2E93rehKbkBcB18TL3JX_RWHsTZA@mail.gmail.com>
+Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
+ Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
 To:     Will Deacon <will@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Daniel Axtens <dja@axtens.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -47,44 +47,98 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Mark Rutland <mark.rutland@arm.com>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
- Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
-Message-ID: <20191216114724.GL2844@hirez.programming.kicks-ass.net>
-References: <20191212080105.GV2844@hirez.programming.kicks-ass.net>
- <20191212100756.GA11317@willie-the-truck>
- <20191212104610.GW2827@hirez.programming.kicks-ass.net>
- <CAHk-=wjUBsH0BYDBv=q36482G-U7c=9bC89L_BViSciTfb8fhA@mail.gmail.com>
- <20191212180634.GA19020@willie-the-truck>
- <CAHk-=whRxB0adkz+V7SQC8Ac_rr_YfaPY8M2mFDfJP2FFBNz8A@mail.gmail.com>
- <20191212193401.GB19020@willie-the-truck>
- <CAHk-=wiMuHmWzQ7-CRQB6o+SHtA-u-Rp6VZwPcqDbjAaug80rQ@mail.gmail.com>
- <CAK8P3a2QYpT_u3D7c_w+hoyeO-Stkj5MWyU_LgGOqnMtKLEudg@mail.gmail.com>
- <20191213144359.GA3826@willie-the-truck>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191213144359.GA3826@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:UWsuMcFFlOevk/J313gB6VGz1OHSOZcuLzsKm2jktYu+Jb74c7v
+ n49m3Y0KQsgo99+GYfL9sntR8UJzU4arEcDh5hioSmMMAIp/vdkFPGs7Up456RmIOQ//uw1
+ BphOHIiIc16GAbnyE1VCu/zOyC8vcK9m8tezMoFcX8x3lPP2Cq0u+2b2TMFZ9jHwAuHkJjW
+ PY8LdD75Nibt+cRAbxs8Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sGYUQ7XKE8M=:PCf0CczXYZYmFeBmWDClUw
+ u++4xVt/1nCcJT/59IukYBvqFnz1fPUtXT0YV4bZu1Xbqn43YcAyyxoyIGNi6p8x9H64iTAUQ
+ kQArq0h7o6zMLmPuHv0sw6iT2moeTKTsX880oQd6hrp0E63lwPxngjl0rph/ZvVthq9lhQ3jv
+ tQ238m6uLJBWhXBnOkRtS6Wlp3XcyqNTzlZ4f9AUSCEh/QKzwg8twmGmBWa+tPd6rqv3n8Avh
+ nry587NTetViUPhKpu9NcQTscDwGJ83EHtLZqO6HTMPcAsl70VHsvOtUmv+vcDl/2EdkiPqkV
+ XF6JlnkpzOmX6tfeSwxfRq0SbS437SBm/PTQVF48mds/AaWLrAFj1Ez5vaPFzpDJ4zV5xtdJ9
+ j2oNst+diwEmL2/ry4tbarPY5xK5ubyppptyekYoUwu79jzUq5qfcWS1GCcXcXmBCEFioFnrS
+ mkyOYA9cbd1FDtdEYLGKAVu/7p0J2LvIWNSs9Sf9N59jQKpYbW98q0hnBEMaepaMLr9EwxAAb
+ M6PHcSE7XSip/CPoK97UJ/YnDYUhA5cfkNvTqpB6uPXZ5taktiz0huTKscMwUMqGX+X+ip2s9
+ ksdxfNAxk4+LoIBgrXPlsLQg4Oqo8yVGeV2HMz//hTTSkCOqXatGpXbCj2843BFI3hKU8ybwC
+ w9OkoxSI3JmXVkv4g+6KbNjZXDUFzcbVCG+uqvP09P/cXqaC8UTPmteGSRL6oQ/5d2xbDMRG0
+ HucIL6JCt8wgPR5c1h/dDBJjXNOhdqy/lBgtlfedDrVLjqSNXrkIXdHPekTKwSZ5/fESBcMNe
+ ekvNwnxip4bAzGnjFWyvhUXemHpvojYdvqSxKyvyEIkwhxEFRjDVHGofFbondDYP0kBAIhkqD
+ jgR5RUxFg+LwOhnkOjvQ==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Dec 16, 2019 at 10:28:06AM +0000, Will Deacon wrote:
+On Mon, Dec 16, 2019 at 11:28 AM Will Deacon <will@kernel.org> wrote:
+> On Fri, Dec 13, 2019 at 02:17:08PM +0100, Arnd Bergmann wrote:
+> > On Thu, Dec 12, 2019 at 9:50 PM Linus Torvalds
+> > <torvalds@linux-foundation.org> wrote:
+> > > On Thu, Dec 12, 2019 at 11:34 AM Will Deacon <will@kernel.org> wrote:
+> > > > The root of my concern in all of this, and what started me looking at it in
+> > > > the first place, is the interaction with 'typeof()'. Inheriting 'volatile'
+> > > > for a pointer means that local variables in macros declared using typeof()
+> > > > suddenly start generating *hideous* code, particularly when pointless stack
+> > > > spills get stackprotector all excited.
+> > >
+> > > Yeah, removing volatile can be a bit annoying.
+> > >
+> > > For the particular case of the bitops, though, it's not an issue.
+> > > Since you know the type there, you can just cast it.
+> > >
+> > > And if we had the rule that READ_ONCE() was an arithmetic type, you could do
+> > >
+> > >     typeof(0+(*p)) __var;
+> > >
+> > > since you might as well get the integer promotion anyway (on the
+> > > non-volatile result).
+> > >
+> > > But that doesn't work with structures or unions, of course.
+> > >
+> > > I'm not entirely sure we have READ_ONCE() with a struct. I do know we
+> > > have it with 64-bit entities on 32-bit machines, but that's ok with
+> > > the "0+" trick.
+> >
+> > I'll have my randconfig builder look for instances, so far I found one,
+> > see below. My feeling is that it would be better to enforce at least
+> > the size being a 1/2/4/8, to avoid cases where someone thinks
+> > the access is atomic, but it falls back on a memcpy.
+>
+> I've been using something similar built on compiletime_assert_atomic_type()
+> and I spotted another instance in the xdp code (xskq_validate_desc()) which
+> tries to READ_ONCE() on a 128-bit descriptor, although a /very/ quick read
+> of the code suggests that this probably can't be concurrently modified if
+> the ring indexes are synchronised properly.
+
+That's the only other one I found. I have not checked how many are structs
+that are the size of a normal u8/u16/u32/u64, or if there are types that
+have a lower alignment than there size, such as a __u16[2] that might
+span a page boundary.
+
 > However, enabling this for 32-bit ARM is total carnage; as Linus mentioned,
 > a whole bunch of code appears to be relying on atomic 64-bit access of
 > READ_ONCE(); the perf ring buffer, io_uring, the scheduler, pm_runtime,
 > cpuidle, ... :(
-> 
+>
 > Unfortunately, at least some of these *do* look like bugs, but I can't see
 > how we can fix them, not least because the first two are user ABI afaict. It
 > may also be that in practice we get 2x32-bit stores, and that works out fine
 > when storing a 32-bit virtual address. I'm not sure what (if anything) the
 > compiler guarantees in these cases.
 
-Perf does indeed have a (known) problem here for the head/tail values.
-Last time we looked at that nobody could really come up with a sane
-solution that wouldn't break something.
+Would it help if 32-bit architectures use atomic64_read() and atomic64_set()
+to implement a 64-bit READ_ONCE()/WRITE_ONCE(), or would that make it
+worse in other ways?
 
-I'll try and dig out that thread. Perhaps casting the value to 'unsigned
-long' internally might work, I forgot the details.
+On mips32, riscv32 and some minor 32-bit architectures with SMP support
+(xtensa,  csky, hexagon, openrisc, parisc32, sparc32 and ppc32 AFAICT) this
+ends up using a spinlock for GENERIC_ATOMIC64, but at least ARMv6+,
+i586+ and most ARC should be fine.
+
+(Side note: the ARMv7 implementation is suboptimimal for ARMv7VE+
+if LPAE is disabled, I think we need to really add Kconfig options for
+ARMv7VE and 32-bit ARMv8 improve this and things like integer divide).
+
+      Arnd
