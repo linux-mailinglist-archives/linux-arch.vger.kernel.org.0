@@ -2,61 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAA9123451
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Dec 2019 19:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4CF12345B
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Dec 2019 19:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727797AbfLQSEw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Dec 2019 13:04:52 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:40375 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728004AbfLQSEu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Dec 2019 13:04:50 -0500
-Received: by mail-lf1-f67.google.com with SMTP id i23so7614096lfo.7
-        for <linux-arch@vger.kernel.org>; Tue, 17 Dec 2019 10:04:49 -0800 (PST)
+        id S1727754AbfLQSGP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Dec 2019 13:06:15 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:37523 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727939AbfLQSGO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Dec 2019 13:06:14 -0500
+Received: by mail-lf1-f68.google.com with SMTP id b15so7629625lfc.4
+        for <linux-arch@vger.kernel.org>; Tue, 17 Dec 2019 10:06:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lR1SiqLK9KEC99vqrA+L06g5eY9Mbqq1o4Gp42LpZMk=;
-        b=FK7jv4qNRsEY58xZMc+UmIyte9eMcd0a4A+t48QkMIcc8UodbMREUJO3iZzA7AKpln
-         03BKAH+vqDBR3VhNEzal6BtSu2hnn/lsLynWDxYrv66nuQYJnVSbzh2V+rbyH0fyrq1C
-         njp7EPb9EhK3H7gTZQ8M3AOVEH2nTx7zrpL6g=
+        bh=2FmdBG00eyF0mCLPHUhnZPiYsr9gMuTHxWDo5KEuXIA=;
+        b=RfiBPyWeZAzQgIBtq60kIzhloZUPXwDzUfA7/StNCE0CG0dtDUhp2Ewy/xVxfm6KGP
+         Df5Tk+VbkeJUcH9BCjIfG5UOSKgGvWdi5Az1/Qo1yD1OhxmYNXkDchH0t3cs5GTsnGGc
+         mY0wPUPFyCbvMDhlKo0Sh/qqCC9ol32klGEME=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lR1SiqLK9KEC99vqrA+L06g5eY9Mbqq1o4Gp42LpZMk=;
-        b=dpUmfUWQFpoVHvF5fzo2x3WzMdgzb8uJLqN4dv0gAaBUH0lxTYYVoPwadAWST5MCh7
-         xB4rWLs9TYJVzNv1VyahVshYs3T4GroyMBPQngqqblPvmT9kpvUsBS68AoOv4FeOTmZ4
-         ZkWc5qvWy6iFdX+WOK8YFlCAmbpsBlxd9BGH8Xb2z8iSBGkJUjEQm9F6sY475IuPqD7w
-         FxovgU+s3iVquEv8M28ZyiI2PLr4BSJygoLNX9M1N/alSQhZ4APKpc1n77EgNdg4ynEl
-         sM4yQKbu0cZBnvA4J1NhAd5glPBZAa/NZgPJJ9aYffnhD3jGz3Awbas0sdUb6c+8usNV
-         RToA==
-X-Gm-Message-State: APjAAAVaPR4puKSpREXL9tXg41+nzMnaLb0wJE8UTsCeVebdwvKWStkR
-        JjetJ+9YeGZteoeMpi4SkVMSl6kYv28=
-X-Google-Smtp-Source: APXvYqwXMpExqoAxF2KPgTWj1Ok62XCicG191UDVuXTvFBa0oEduHO4bvcb5lH4Sj5wowSOQIUU9oQ==
-X-Received: by 2002:a05:6512:284:: with SMTP id j4mr3388789lfp.109.1576605887593;
-        Tue, 17 Dec 2019 10:04:47 -0800 (PST)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id a21sm11109926lfg.44.2019.12.17.10.04.45
+        bh=2FmdBG00eyF0mCLPHUhnZPiYsr9gMuTHxWDo5KEuXIA=;
+        b=fExJXPWoApJlXyRvoqAruxbwbkpcz0EzAl+B459U95dgwk0Qg53RMhwBwOj6akJDm5
+         TT9ViWG+ndPoXg+zgQAzOz199KT46Rx9VSpnAXEUCMxq9qAQvBScO+a3/TyOI0q07Apf
+         UBidRQNdk0zA45UXjc6omsXN1fsCvoYFq1e0DbmwIxK302VsMt8TWJY+mwdIyDlS9G5/
+         IFDkhzxo59GrW9x9rNAJ+lBlJomM511jyZeofyWJJdtz2Rxc4SVusiYyCQMtAv9y1KSu
+         YEZBxUvgEO/AFMA/GNLkCB+7z0RDXS5HW3iDkcqVgDr8VnvjFiOhErr/Cj7nm8P/YBUE
+         uIsw==
+X-Gm-Message-State: APjAAAW0+j1I+jZpViakf1/UGIdIknriJ0m/++bA78zmFpx7jxzi2QSr
+        o9dzg9b6Ud0XN1bnAiwCfUw/CmVqGcU=
+X-Google-Smtp-Source: APXvYqzK0EN6LxZ6PeZkQ35QD+WNyXnn3w522Hsr7TYBAf4EaL5rOGTEP1EUYvziJPoQPLmQDNmhpQ==
+X-Received: by 2002:ac2:4849:: with SMTP id 9mr3536785lfy.11.1576605972406;
+        Tue, 17 Dec 2019 10:06:12 -0800 (PST)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id u20sm12969730lju.34.2019.12.17.10.06.10
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Dec 2019 10:04:45 -0800 (PST)
-Received: by mail-lj1-f170.google.com with SMTP id k8so632729ljh.5
-        for <linux-arch@vger.kernel.org>; Tue, 17 Dec 2019 10:04:45 -0800 (PST)
-X-Received: by 2002:a2e:99d0:: with SMTP id l16mr4244505ljj.1.1576605885112;
- Tue, 17 Dec 2019 10:04:45 -0800 (PST)
+        Tue, 17 Dec 2019 10:06:11 -0800 (PST)
+Received: by mail-lj1-f180.google.com with SMTP id u71so4208725lje.11
+        for <linux-arch@vger.kernel.org>; Tue, 17 Dec 2019 10:06:10 -0800 (PST)
+X-Received: by 2002:a2e:9ad8:: with SMTP id p24mr4238381ljj.148.1576605970602;
+ Tue, 17 Dec 2019 10:06:10 -0800 (PST)
 MIME-Version: 1.0
 References: <20191212100756.GA11317@willie-the-truck> <20191212104610.GW2827@hirez.programming.kicks-ass.net>
  <CAHk-=wjUBsH0BYDBv=q36482G-U7c=9bC89L_BViSciTfb8fhA@mail.gmail.com>
  <20191212180634.GA19020@willie-the-truck> <CAHk-=whRxB0adkz+V7SQC8Ac_rr_YfaPY8M2mFDfJP2FFBNz8A@mail.gmail.com>
  <20191212193401.GB19020@willie-the-truck> <CAHk-=wiMuHmWzQ7-CRQB6o+SHtA-u-Rp6VZwPcqDbjAaug80rQ@mail.gmail.com>
- <20191217170719.GA869@willie-the-truck>
-In-Reply-To: <20191217170719.GA869@willie-the-truck>
+ <20191217170719.GA869@willie-the-truck> <CAHk-=whBnZBVNwu8aVVp205EKk7xtsnQgSjs38a5=y9HyheXzQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whBnZBVNwu8aVVp205EKk7xtsnQgSjs38a5=y9HyheXzQ@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 17 Dec 2019 10:04:29 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whBnZBVNwu8aVVp205EKk7xtsnQgSjs38a5=y9HyheXzQ@mail.gmail.com>
-Message-ID: <CAHk-=whBnZBVNwu8aVVp205EKk7xtsnQgSjs38a5=y9HyheXzQ@mail.gmail.com>
+Date:   Tue, 17 Dec 2019 10:05:53 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgsbrq6sFOSd9QrjR-fCamgzqCtFuO2_8qvJANA1+Jm6g@mail.gmail.com>
+Message-ID: <CAHk-=wgsbrq6sFOSd9QrjR-fCamgzqCtFuO2_8qvJANA1+Jm6g@mail.gmail.com>
 Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
  Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
 To:     Will Deacon <will@kernel.org>
@@ -77,18 +77,15 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 9:07 AM Will Deacon <will@kernel.org> wrote:
+On Tue, Dec 17, 2019 at 10:04 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> However, I'm really banging my head against the compiler trying to get
-> your trick above to work for pointer types when the pointed-to-type is
-> not defined.
+> Let me think about it.
 
-You are right, of course. The trick works fine with arithmetic types,
-but since it does use arithmetic, it requires that pointer types be
-not only declared, but defined. The addition wants the size of the
-underlying type (even though with an addition of zero it wouldn't be
-required - but that's not how C works).
+.. and in the short term, maybe for code generation, the right thing
+is to just do the cast in the bitops, where we can just cast to
+"unsigned long *" and remove the volatile that way.
 
-Let me think about it.
+I'm still hoping there's a trick, but..
 
-             Linus
+           Linus
