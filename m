@@ -2,227 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E81A1123670
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Dec 2019 21:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4416512367F
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Dec 2019 21:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727773AbfLQUFb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Dec 2019 15:05:31 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:56539 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728425AbfLQUF3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 17 Dec 2019 15:05:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576613128;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r9zDOVhpgif2r8wUOSynylPPUD8w13YV6BIbZ8Cxr3I=;
-        b=VEIA4q3xLdaTvnttoVaUqvgc/66g8iLrMHNJPLGXmZu9iYVGfgfiUEkL/u6BDX8p+UV60Q
-        FciEVHn0y2W+ysY0EOkJrFdxzoPV3JYZkpe15twinx9sKpuhGA9ZfTNwUnLtwc7jotrEhl
-        7GuZ4hnS8/NKjFDg4pXajfVS/hb3/co=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-224-9W2NCPbKMJqPR5OnkoERkQ-1; Tue, 17 Dec 2019 15:05:20 -0500
-X-MC-Unique: 9W2NCPbKMJqPR5OnkoERkQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C1DFE108598D;
-        Tue, 17 Dec 2019 20:05:16 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-123-81.rdu2.redhat.com [10.10.123.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A9C7B5D9E1;
-        Tue, 17 Dec 2019 20:05:13 +0000 (UTC)
-Subject: Re: [PATCH v7 5/5] locking/qspinlock: Introduce the shuffle reduction
- optimization into CNA
-To:     Alex Kogan <alex.kogan@oracle.com>
-Cc:     rahul.x.yadav@oracle.com, tglx@linutronix.de,
-        linux@armlinux.org.uk, hpa@zytor.com, dave.dice@oracle.com,
-        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
-        jglauber@marvell.com, guohanjun@huawei.com, x86@kernel.org,
-        daniel.m.jordan@oracle.com, steven.sistare@oracle.com,
-        bp@alien8.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        linux-arch@vger.kernel.org
-References: <f1164ae9-ebcf-41f0-8395-224cdb0f249d@default>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <64c7b7fd-079c-55d1-258c-8c23802b992d@redhat.com>
-Date:   Tue, 17 Dec 2019 15:05:13 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727070AbfLQUHE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Dec 2019 15:07:04 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:40546 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726967AbfLQUHE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Dec 2019 15:07:04 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ihJ7T-000374-FQ; Tue, 17 Dec 2019 13:06:59 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ihJ7S-0005Fq-8R; Tue, 17 Dec 2019 13:06:58 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20191211184027.20130-1-catalin.marinas@arm.com>
+        <20191211184027.20130-13-catalin.marinas@arm.com>
+        <CAK8P3a1-eaR7NddhDce65vXKCGeZD3xUMrTTAWN4U3oW0ecN=g@mail.gmail.com>
+        <87zhfxqu1q.fsf@x220.int.ebiederm.org>
+        <20191217174808.GM5624@arrakis.emea.arm.com>
+Date:   Tue, 17 Dec 2019 14:06:01 -0600
+In-Reply-To: <20191217174808.GM5624@arrakis.emea.arm.com> (Catalin Marinas's
+        message of "Tue, 17 Dec 2019 17:48:10 +0000")
+Message-ID: <877e2ura3a.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <f1164ae9-ebcf-41f0-8395-224cdb0f249d@default>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-XM-SPF: eid=1ihJ7S-0005Fq-8R;;;mid=<877e2ura3a.fsf@x220.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/w53SFcKFMEm6MwInTxOOoRY9pew7qlnM=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa01.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.5 required=8.0 tests=ALL_TRUSTED,BAYES_00,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels autolearn=disabled
+        version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -3.0 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0056]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Catalin Marinas <catalin.marinas@arm.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 399 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 4.6 (1.1%), b_tie_ro: 4.0 (1.0%), parse: 0.64
+        (0.2%), extract_message_metadata: 12 (2.9%), get_uri_detail_list: 1.59
+        (0.4%), tests_pri_-1000: 5 (1.3%), tests_pri_-950: 1.07 (0.3%),
+        tests_pri_-900: 0.86 (0.2%), tests_pri_-90: 34 (8.5%), check_bayes: 33
+        (8.2%), b_tokenize: 7 (1.7%), b_tok_get_all: 14 (3.6%), b_comp_prob:
+        2.1 (0.5%), b_tok_touch_all: 6 (1.4%), b_finish: 0.56 (0.1%),
+        tests_pri_0: 331 (83.1%), check_dkim_signature: 0.39 (0.1%),
+        check_dkim_adsp: 2.1 (0.5%), poll_dns_idle: 0.23 (0.1%), tests_pri_10:
+        1.79 (0.4%), tests_pri_500: 5 (1.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 12/22] arm64: mte: Add specific SIGSEGV codes
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/10/19 1:56 PM, Alex Kogan wrote:
-> ----- longman@redhat.com wrote:
+Catalin Marinas <catalin.marinas@arm.com> writes:
+
+> Hi Eric,
 >
->> On 11/25/19 4:07 PM, Alex Kogan wrote:
->>> @@ -234,12 +263,13 @@ __always_inline u32 cna_pre_scan(struct
->> qspinlock *lock,
->>>  	struct cna_node *cn =3D (struct cna_node *)node;
->>> =20
->>>  	/*
->>> -	 * setting @pre_scan_result to 1 indicates that no post-scan
->>> +	 * setting @pre_scan_result to 1 or 2 indicates that no post-scan
->>>  	 * should be made in cna_pass_lock()
->>>  	 */
->>>  	cn->pre_scan_result =3D
->>> -		cn->intra_count =3D=3D intra_node_handoff_threshold ?
->>> -			1 : cna_scan_main_queue(node, node);
->>> +		(node->locked <=3D 1 && probably(SHUFFLE_REDUCTION_PROB_ARG)) ?
->>> +			1 : cn->intra_count =3D=3D intra_node_handoff_threshold ?
->>> +			2 : cna_scan_main_queue(node, node);
->>> =20
->>>  	return 0;
->>>  }
->>> @@ -253,12 +283,15 @@ static inline void cna_pass_lock(struct
->> mcs_spinlock *node,
->>> =20
->>>  	u32 scan =3D cn->pre_scan_result;
->>> =20
->>> +	if (scan =3D=3D 1)
->>> +		goto pass_lock;
->>> +
->>>  	/*
->>>  	 * check if a successor from the same numa node has not been found
->> in
->>>  	 * pre-scan, and if so, try to find it in post-scan starting from
->> the
->>>  	 * node where pre-scan stopped (stored in @pre_scan_result)
->>>  	 */
->>> -	if (scan > 1)
->>> +	if (scan > 2)
->>>  		scan =3D cna_scan_main_queue(node, decode_tail(scan));
->>> =20
->>>  	if (!scan) { /* if found a successor from the same numa node */
->>> @@ -281,5 +314,6 @@ static inline void cna_pass_lock(struct
->> mcs_spinlock *node,
->>>  		tail_2nd->next =3D next;
->>>  	}
->>> =20
->>> +pass_lock:
->>>  	arch_mcs_pass_lock(&next_holder->locked, val);
->>>  }
->> I think you might have mishandled the proper accounting of
->> intra_count.
->> How about something like:
->>
->> diff --git a/kernel/locking/qspinlock_cna.h
->> b/kernel/locking/qspinlock_cna.h
->> index f1eef6bece7b..03f8fdec2b80 100644
->> --- a/kernel/locking/qspinlock_cna.h
->> +++ b/kernel/locking/qspinlock_cna.h
->> @@ -268,7 +268,7 @@ __always_inline u32 cna_pre_scan(struct qspinlock
->> *lock,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cn->pre_scan_result =3D
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 (node->locked <=3D 1 &&
->> probably(SHUFFLE_REDUCTION_PROB_ARG)) ?
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1 : cn->i=
-ntra_count =3D=3D
->> intra_node_handoff_threshold ?
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1 : cn->i=
-ntra_count >=3D
->> intra_node_handoff_threshold ?
-> We reset =E2=80=98intra_count' in cna_init_node(), which is called befo=
-re we enter=20
-> the slow path, and set it at most once when we pass the internal (CNA) =
-lock
-> by taking the owner=E2=80=99s value + 1. Only after we get the internal=
- lock, we
-> call this cna_pre_scan() function, where we check the threshold.=20
-> IOW, having 'intra_count > intra_node_handoff_threshold' would mean a b=
-ug,=20
-> and having =E2=80=9C>=3D=E2=80=9C would mask it.=20
-> Perhaps I can add WARN_ON(cn->intra_count > intra_node_handoff_threshol=
-d)
-> here instead, although I'm not sure if that is a good idea performance-=
-wise.
-
-The code that I added below could have the possibility of making
-intra_count > intra_node_handoff_threshold. I agree with your assessment
-of the current code. This conditional check is fine if no further change
-is made.
-
-
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 2 : cn=
-a_scan_main_queue(node, node);
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
->> @@ -283,9 +283,6 @@ static inline void cna_pass_lock(struct
->> mcs_spinlock
->> *node,
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 scan =3D cn->pre_scan_r=
-esult;
->> =C2=A0
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (scan =3D=3D 1)
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 goto pass_lock;
->> -
-> The thing is that we want to avoid as much of the shuffling-related ove=
-rhead
-> as we can when the spinlock is only lightly contended. That's why we ha=
-ve this
-> early exit here that avoids the rest of the logic of triaging through p=
-ossible
-> 'scan' values.
-That is a valid point. Maybe you can document that fact you are
-optimizing for performance instead of better correctness.
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * check if a successo=
-r from the same numa node has not been
->> found in
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * pre-scan, and if so=
-, try to find it in post-scan starting
->> from the
->> @@ -294,7 +291,13 @@ static inline void cna_pass_lock(struct
->> mcs_spinlock *node,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (scan > 2)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 scan =3D cna_scan_main_queue(node, decode_tail(scan));
->> =C2=A0
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!scan) { /* if found a succe=
-ssor from the same numa node
->> */
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (scan <=3D 1) { /* if found a=
- successor from the same numa
->> node */
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 /* inc @intra_count if the secondary queue is not
->> empty */
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 ((struct cna_node *)next_holder)->intra_count =3D
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cn->intra=
-_count + (node->locked > 1);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 if ((scan =3D=3D 1)
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto pass=
-_lock;
->> +
-> Hmm, I am not sure this makes the code any better/more readable,
-> while this does add the overhead of going through 3 branches before
-> jumping to 'pass_lock'.
+> On Thu, Dec 12, 2019 at 12:26:41PM -0600, Eric W. Biederman wrote:
+>> Arnd Bergmann <arnd@arndb.de> writes:
+>> > On Wed, Dec 11, 2019 at 7:40 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>> >>
+>> >> From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>> >>
+>> >> Add MTE-specific SIGSEGV codes to siginfo.h.
+>> >>
+>> >> Note that the for MTE we are reusing the same SPARC ADI codes because
+>> >> the two functionalities are similar and they cannot coexist on the same
+>> >> system.
+>> 
+>> Please Please Please don't do that.
+>> 
+>> It is actively harmful to have architecture specific si_code values.
+>> As it makes maintenance much more difficult.
+>> 
+>> Especially as the si_codes are part of union descrimanator.
+>> 
+>> If your functionality is identical reuse the numbers otherwise please
+>> just select the next numbers not yet used.
 >
-This is just a suggestion for improving the correctness of the code. I
-am fine if you opt for better performance.
+> It makes sense.
+>
+>> We have at least 256 si_codes per signal 2**32 if we really need them so
+>> there is no need to be reuse numbers.
+>> 
+>> The practical problem is that architecture specific si_codes start
+>> turning kernel/signal.c into #ifdef soup, and we loose a lot of
+>> basic compile coverage because of that.  In turn not compiling the code
+>> leads to bit-rot in all kinds of weird places.
+>
+> Fortunately for MTE we don't need to change kernel/signal.c. It's
+> sufficient to call force_sig_fault() from the arch code with the
+> corresponding signo, code and fault address.
 
-Cheers,
-Longman
+Hooray for force_sig_fault at keeping people honest about which
+parameters they are passing.
 
+So far it looks like it is just BUS_MCEERR_AR, BUS_MCEERR_AO,
+SEGV_BNDERR, and SEGV_PKUERR that are the really confusing ones,
+as they go beyond the ordinary force_sig_fault layout.
+
+But we really do need the knowledge of how all of the cases are encoded
+or things can get very confusing.  Especially when mixing 32bit and
+64bit code.
+
+>> p.s. As for coexistence there is always the possibility that one chip
+>> in a cpu family does supports one thing and another chip in a cpu
+>> family supports another.  So userspace may have to cope with the
+>> situation even if an individual chip doesn't.
+>> 
+>> I remember a similar case where sparc had several distinct page table
+>> formats and we had a single kernel that had to cope with them all.
+>
+> We have such fun on ARM as well with the big.LITTLE systems where not
+> all CPUs support the same features. For example, MTE is only enabled
+> once all the secondary CPUs have booted and confirmed to have the
+> feature.
+
+Which all makes it possible that the alternative to MTE referenced as
+ADI might show up in some future ARM chip.  Which really makes reusing
+the numbers a bad idea.
+
+Not that I actually recall what any of this functionality actually is,
+but I can tell when people are setting themselves of for a challenge
+unnecessarily.
+
+Eric
