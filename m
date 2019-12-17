@@ -2,58 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A391228BE
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Dec 2019 11:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 429C0122D38
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Dec 2019 14:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbfLQKb6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Dec 2019 05:31:58 -0500
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:38269 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725940AbfLQKb5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 17 Dec 2019 05:31:57 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id CBD7B6C1D;
-        Tue, 17 Dec 2019 05:31:55 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 17 Dec 2019 05:31:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=WVOKI5Xa8ynfxOHUH8uTfezXeuU
-        ofMPbouYAeeiBwfo=; b=bmijsgR9pBP2Ebh5XRA1uJIvaotKaT0uunVjVlY8l1C
-        aoxODXf2Z/oIfgaiOn3GfxvN12hOlmxSVrt/DaUn2ui5y4YWSoDc09CpwSTSPvtv
-        EpCAVbR4ENthlY2tusERvGdA4V9WukWKml4U8LbisXwsFqGk1MgOy+dKLHjxHdSZ
-        tyhvxw41ZOLsopmAjnd9nL0d0uAsWaB51tldwy0lqX74f4dbGKrZ/mRVPrNLxV+M
-        svbfpDgHzf/aKOcs6RlMmOlKIh1N8lDoWOt+0RBjBAS6nPLpU/KfKRRvelNIHB04
-        GM/lHpfosT7/ny01Wzi9gelg9d+2McwmJLd6HiJHazw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=WVOKI5
-        Xa8ynfxOHUH8uTfezXeuUofMPbouYAeeiBwfo=; b=JQpNJtE7YDoUUklw9zvFjP
-        wZ9Ih3qPBkDVD9rCoT5gWFxZZMwAusismfQXbuYWFxuPirAhMF5u+liubo54g2f9
-        VSPkmDIF7Z97Skk7gKtoH/EFJbwhbIq5myFJfZ1wZMfnXUVwYdTnTdbRYh7eeVJZ
-        gJr09v+76QbaX2xWEI3SPIzQs13zYK+p0ljuNvrE/AQuYI3MW6dLZmiD5Z7rxO48
-        XkEdENERvqJHzLTz0PGGUNfi9qhPrrHD1byP+9dNJtTDnPd2NMWkBFlCPwUsYFit
-        JZjF92wtLbfZEF63mps1svac1aKgx7nquB1ubhn+c8c1T9KtwpDHE9SUMhQ+u0pA
-        ==
-X-ME-Sender: <xms:mq74XbTn4Mg9VZkNfMUDm5tvQnvEyJ2uURgkgoUYXKa8WCLK8XbTTw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvddtjedgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
-    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
-    necukfhppeekfedrkeeirdekledruddtjeenucfrrghrrghmpehmrghilhhfrhhomhepgh
-    hrvghgsehkrhhorghhrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:mq74XU4x3XQ7_I5tSP0AKITnKCi65jdaYkOmpNjBtanvDdZYLiOoiQ>
-    <xmx:mq74XQUg-13Hasut9Vfn0iVM61swGMfn27ddmuXCObXilt8-pdnw2g>
-    <xmx:mq74Xa-et88YfpMZI-Zc-HV_sTQU6ySLnoywFpS3bcb4zJHuXMgkdg>
-    <xmx:m674Xe8EJYjeh9FVPEltY81zCiKvaT4ZKJ8GAjBTR6L8hMaNwuJDaQ>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 4E5FF8005C;
-        Tue, 17 Dec 2019 05:31:54 -0500 (EST)
-Date:   Tue, 17 Dec 2019 11:31:52 +0100
-From:   Greg KH <greg@kroah.com>
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
+        id S1728381AbfLQNpa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Dec 2019 08:45:30 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:50523 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726164AbfLQNpa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Dec 2019 08:45:30 -0500
+Received: from [192.168.1.155] ([95.114.21.161]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MfYgC-1i1FZn1CtU-00fzgB; Tue, 17 Dec 2019 14:45:11 +0100
+Subject: Re: [PATCH] RFC: platform driver registering via initcall tables
+To:     Greg KH <greg@kroah.com>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>
 Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
         bgolaszewski@baylibre.com, dmitry.torokhov@gmail.com,
         jacek.anaszewski@gmail.com, pavel@ucw.cz, dmurphy@ti.com,
@@ -63,51 +26,72 @@ Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
         linux-leds@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kbuild@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: Re: [PATCH] RFC: platform driver registering via initcall tables
-Message-ID: <20191217103152.GB2914497@kroah.com>
 References: <20191217102219.29223-1-info@metux.net>
+ <20191217103152.GB2914497@kroah.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Message-ID: <6422bc88-6d0a-7b51-aaa7-640c6961b177@metux.net>
+Date:   Tue, 17 Dec 2019 14:44:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191217102219.29223-1-info@metux.net>
+In-Reply-To: <20191217103152.GB2914497@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: tl
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:UIxsKeF+t4AJ8q6DRnqSCsifxsav8JqTSzPbvflDT49nTCN38N2
+ kn8QUDipr/KlL5RzF2fLtyOuCzxNjxUSI4UZqAlp6xIsJjV2bywjnE+BMyjssnPF9+oH6ww
+ j5NFvhGrB1pzGK+XoSpXibonoL3JFM9dGJqe8hfLnfeBH94z62AKKyID1MFmz2D/kfr9ua1
+ +I6P+xiT9RjL5BBgRigTg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nhzDFcqFHhI=:Tt4Fe7MEEtN81vc41C7AoZ
+ wctLg7SjkItjTD1J3EE0wIIRp68zGRkICb7akDkm7TzGVY/Jv10cHWbbYxhEfiW4whMmm7gx1
+ calgbAvlJfzZju7vWqVRx24cZKnsPXbGGNQI6AltrredEl0JuONWHGFccnaBRDzW2rH1MKxpx
+ 7guijvh0tF+MuaZMsUVm1dIggOl4cQFDElahLOqvviCWwKyID5OeS4sL9WhPMRRYqxAHM9q5O
+ uPRf4lICI04o5CkAW0vu/jJU2fDAqqn8VRS8aZfQZtuRhCtoDTvZTEoOMN/icN7ljMBCxrxzO
+ jKVvHCAs/ZD0+MWmVOPS6sdGZYhKGJfOrGUMZTIo07lGNMYuMdb6Mvx7qAuFP3Yttazz361XR
+ WOiEbrlEia6jOwJTx0JGQiUkJqwUMutPSCYqHT+ZlswBl3PcXs2kTDeEimiMTkTWcs6cnQ5YJ
+ 0Ev+Ibgd1aJ5uVBqPmFfJs821dyrQ/nj2kpivSX944s+JlT5J79FdHn3yG5tlk4NsXcGYZpDb
+ +Su81EDqspIcaHEsqNYqm4wHR4C4MRln/yQ/qEtoFPV/rx6N17k0IIo+d/DbjDUJ5PoLA6scG
+ u5HIncBDs/JHZGLSftyL04NMt7m/WCxdQ6vh4pOOgJ+pBlIOtaNs/sr2RGvaMd1drejh8xN8T
+ oVqTHasq/lYf0bopjmsmrUnoodoESr4GakdnC5EivRzMSeLiz11uVTbijiJ6z5hpZxZEUXDoy
+ GSj9nLs8W6dvwEJKDzhLDRZdwjHLl6WE/XxOcwxG3eQ2N/ab5WauSh8y5djcp7H16KpJZ6A69
+ pcY7K1TMdNUlig8lhlUX+Ij4IEaClVQj0yKqknPNhhHZTCef462eFxVdARrJ0sbaH1PRWpIfH
+ buhiRZ+mDZotLHFEAKJ93oZ2o67FNflSKVDFquVEZb6lab6XoEveVJVdH6nxtOBexbBLcxxXW
+ ARVod/u0vtgm8aj0oa/n+a8Xz6kwOYwTrei/SbYDwnKT6YuTO5xQd
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 11:22:19AM +0100, Enrico Weigelt, metux IT consult wrote:
-> A large portion of platform drivers doesn't need their own init/exit
-> functions. At source level, the boilerplate is already replaced by
-> module_platform_driver() macro call, which creates this code under
-> the hood. But in the binary, the code is still there.
-> 
-> This patch is an attempt to remove them it, by the same approach
-> already used for the init functions: collect pointers to the driver
-> structs in special sections, which are then processed by the init
-> code which already calls the init function vectors. For each level,
-> the structs are processed right after the init funcs, so we guarantee
-> the existing order, and explicit inits always come before the automatic
-> registering.
+On 17.12.19 11:31, Greg KH wrote:
 
-No, what is so "special" about platform drivers that they require this?
+Hi,
 
-If anything, we should be moving _AWAY_ from platform drivers and use
-real bus drivers instead.
+> No, what is so "special" about platform drivers that they require this?
 
-> Downside of apprach: cluttering init code w/ a little bit knowledge
-> about driver related stuff (calls to platform_driver_register(), etc).
+Nothing, of course ;-)
 
-Exactly, don't.
+It's the the starting point for this PoC. The idea actually is doing
+this for all other driver types, too (eg. spi, pci, usb, ...). But
+they'll need their own tables, as different *_register() functions have
+to be called - just haven't implemented that yet.
 
-> For now, only implemented for the built-in case (modules still go the
-> old route). The module case is a little bit trickier: either we have to
-> extend the module header (and modpost tool) or do some dynamic symbol
-> lookup.
-> 
-> This patch is just a PoC for further discussions, not ready for mainline.
-> It also changes a few drivers, just for illustration. In case the general
-> approach is accepted, it will be cleaned up and splitted.
+> If anything, we should be moving _AWAY_ from platform drivers and use
+> real bus drivers instead.
 
-Please no, I don't see why this is even needed.
+That would be nice, but, unfortunately, we have lots of devices which
+aren't attached to any (probing-capable) bus. That's why we have things
+like oftree, etc.
 
-greg k-h
+> Please no, I don't see why this is even needed.
+
+The idea is getting rid of all the init code, which all just does the
+same, just calls some *_register() function.
+
+
+--mtx
+
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
