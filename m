@@ -2,106 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D2A1244B9
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Dec 2019 11:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 244C01245E9
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Dec 2019 12:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726551AbfLRKfI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 Dec 2019 05:35:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41672 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725785AbfLRKfI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 18 Dec 2019 05:35:08 -0500
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3894C218AC;
-        Wed, 18 Dec 2019 10:35:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576665307;
-        bh=InLIC5wnYFQUlY2vdlncOvZyGEgx+3dlq1B0ax8mV58=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RnuZHUl2OrLt+yKpn9nIh3wwmEddSGzlKWqc1qQQRkfnROQSVfzbRKViVL2j3ia2e
-         3PWMNQ9sUJRemWmeprajZ1lMxEG+g9HWBeQFK3a7Krhk2Y7n7x+Zdqkq076B94RUZj
-         QtwM5QK1MpfXpULva2PsYj9ZGb2qxVvKeqm1w3Ek=
-Date:   Wed, 18 Dec 2019 10:35:01 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, dja@axtens.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: READ_ONCE() + STACKPROTECTOR_STRONG == :/ (was Re: [GIT PULL]
- Please pull powerpc/linux.git powerpc-5.5-2 tag (topic/kasan-bitops))
-Message-ID: <20191218103501.GA15021@willie-the-truck>
-References: <875zimp0ay.fsf@mpe.ellerman.id.au>
- <20191212080105.GV2844@hirez.programming.kicks-ass.net>
- <20191212100756.GA11317@willie-the-truck>
- <20191212104610.GW2827@hirez.programming.kicks-ass.net>
- <CAHk-=wjUBsH0BYDBv=q36482G-U7c=9bC89L_BViSciTfb8fhA@mail.gmail.com>
- <20191212180634.GA19020@willie-the-truck>
- <CAHk-=whRxB0adkz+V7SQC8Ac_rr_YfaPY8M2mFDfJP2FFBNz8A@mail.gmail.com>
- <20191212193401.GB19020@willie-the-truck>
- <CAHk-=wiMuHmWzQ7-CRQB6o+SHtA-u-Rp6VZwPcqDbjAaug80rQ@mail.gmail.com>
- <fb4bba85-1f83-435e-b84e-ee29770d7090@de.ibm.com>
+        id S1726701AbfLRLhz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Dec 2019 06:37:55 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28160 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726551AbfLRLhz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 18 Dec 2019 06:37:55 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBIBbXnD062289;
+        Wed, 18 Dec 2019 06:37:35 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wye06cpfn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Dec 2019 06:37:34 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id xBIBbWmj062239;
+        Wed, 18 Dec 2019 06:37:32 -0500
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wye06cp6y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Dec 2019 06:37:32 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xBIBZ9aF005603;
+        Wed, 18 Dec 2019 11:37:08 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03dal.us.ibm.com with ESMTP id 2wvqc6x6g0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Dec 2019 11:37:08 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBIBb7A747448394
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Dec 2019 11:37:07 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B010BAC062;
+        Wed, 18 Dec 2019 11:37:07 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40DFAAC05B;
+        Wed, 18 Dec 2019 11:37:04 +0000 (GMT)
+Received: from [9.199.40.202] (unknown [9.199.40.202])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 18 Dec 2019 11:37:03 +0000 (GMT)
+Subject: Re: [PATCH v2 2/3] mm/mmu_gather: Invalidate TLB correctly on batch
+ allocation failure and flush
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Paul Mackerras <paulus@ozlabs.org>
+Cc:     akpm@linux-foundation.org, npiggin@gmail.com, mpe@ellerman.id.au,
+        will@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org
+References: <20191218053530.73053-1-aneesh.kumar@linux.ibm.com>
+ <20191218053530.73053-2-aneesh.kumar@linux.ibm.com>
+ <20191218091733.GO2844@hirez.programming.kicks-ass.net>
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Message-ID: <0f0bea3b-b7b5-fa8c-f75c-396cf78c47b4@linux.ibm.com>
+Date:   Wed, 18 Dec 2019 17:07:02 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb4bba85-1f83-435e-b84e-ee29770d7090@de.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191218091733.GO2844@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-18_03:2019-12-17,2019-12-18 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ bulkscore=0 spamscore=0 clxscore=1011 priorityscore=1501 suspectscore=2
+ mlxlogscore=999 phishscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-1912180097
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 11:22:05AM +0100, Christian Borntraeger wrote:
-> On 12.12.19 21:49, Linus Torvalds wrote:
-> > On Thu, Dec 12, 2019 at 11:34 AM Will Deacon <will@kernel.org> wrote:
-> >>
-> >> The root of my concern in all of this, and what started me looking at it in
-> >> the first place, is the interaction with 'typeof()'. Inheriting 'volatile'
-> >> for a pointer means that local variables in macros declared using typeof()
-> >> suddenly start generating *hideous* code, particularly when pointless stack
-> >> spills get stackprotector all excited.
-> > 
-> > Yeah, removing volatile can be a bit annoying.
-> > 
-> > For the particular case of the bitops, though, it's not an issue.
-> > Since you know the type there, you can just cast it.
-> > 
-> > And if we had the rule that READ_ONCE() was an arithmetic type, you could do
-> > 
-> >     typeof(0+(*p)) __var;
-> > 
-> > since you might as well get the integer promotion anyway (on the
-> > non-volatile result).
-> > 
-> > But that doesn't work with structures or unions, of course.
+On 12/18/19 2:47 PM, Peter Zijlstra wrote:
+> On Wed, Dec 18, 2019 at 11:05:29AM +0530, Aneesh Kumar K.V wrote:
+>> From: Peter Zijlstra <peterz@infradead.org>
+>>
+>> Architectures for which we have hardware walkers of Linux page table should
+>> flush TLB on mmu gather batch allocation failures and batch flush. Some
+>> architectures like POWER supports multiple translation modes (hash and radix)
 > 
-> We do have a READ_ONCE on the following union in s390 code.
+> nohash, hash and radix in fact :-)
 > 
-> union ipte_control {
->         unsigned long val;
->         struct {
->                 unsigned long k  : 1;
->                 unsigned long kh : 31;
->                 unsigned long kg : 32;
->         }; 
-> };
+>> and in the case of POWER only radix translation mode needs the above TLBI.
 > 
+>> This is because for hash translation mode kernel wants to avoid this extra
+>> flush since there are no hardware walkers of linux page table. With radix
+>> translation, the hardware also walks linux page table and with that, kernel
+>> needs to make sure to TLB invalidate page walk cache before page table pages are
+>> freed.
+>>
+>> More details in
+>> commit: d86564a2f085 ("mm/tlb, x86/mm: Support invalidating TLB caches for RCU_TABLE_FREE")
+>>
+>> Fixes: a46cc7a90fd8 ("powerpc/mm/radix: Improve TLB/PWC flushes")
+>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org
+>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>> ---
 > 
-> In fact this one was the original failure case why we change ACCESS_ONCE.
+>> diff --git a/arch/powerpc/include/asm/tlb.h b/arch/powerpc/include/asm/tlb.h
+>> index b2c0be93929d..7f3a8b902325 100644
+>> --- a/arch/powerpc/include/asm/tlb.h
+>> +++ b/arch/powerpc/include/asm/tlb.h
+>> @@ -26,6 +26,17 @@
+>>   
+>>   #define tlb_flush tlb_flush
+>>   extern void tlb_flush(struct mmu_gather *tlb);
+>> +/*
+>> + * book3s:
+>> + * Hash does not use the linux page-tables, so we can avoid
+>> + * the TLB invalidate for page-table freeing, Radix otoh does use the
+>> + * page-tables and needs the TLBI.
+>> + *
+>> + * nohash:
+>> + * We still do TLB invalidate in the __pte_free_tlb routine before we
+>> + * add the page table pages to mmu gather table batch.
 > 
-> see arch/s390/kvm/gaccess.c
+> I'm a little confused though; if nohash is a software TLB fill, why do
+> you need a TLBI for tables?
+> 
 
-Thanks. I think we should be ok just using the 'val' field instead of the
-whole union but, then again, when bitfields are involved who knows what the
-compiler might do. I thought we usually shied away from using them to mirror
-hardware structures like this?
+nohash (AKA book3e) has different mmu modes. I don't follow all the 
+details w.r.t book3e. Paul or Michael might be able to explain the need 
+for table flush with book3e.
 
-Will
+Documentation/powerpc/cpu-faimilies.rst shows different hardware assist 
+TLB fill support.
+
+What I wanted to convey with the above comment way we handle only radix 
+translation mode with tlb_needs_table_invalidate() check. Other 
+translations (hash,  different variants of book3e) are all good because 
+of the reason outlined above.
+
+-aneesh
