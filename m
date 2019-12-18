@@ -2,81 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D99124935
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Dec 2019 15:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56993124B43
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Dec 2019 16:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbfLROPf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 Dec 2019 09:15:35 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:37380 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726922AbfLROPe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Dec 2019 09:15:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=2nES9kOBc4cV/fZ0o+JoYgqv77t/8xkE/A+hcyPMYUI=; b=BZV0qpJAM9mgU5zTXeGH9+luw
-        0ncgwa+JZofxcOi8owdKKmIwwyoltYlTATau/3PhXu5TTvRQzRGwV7tsHHqHEBeB4pVx4Si4lvZOH
-        a4l6FgaINOZzxU9Yy4D8V0rzda3zW81VpI5T0WPLbSA9CSSrh8ycdYYsibY54cfVViEJ+RFrggPY/
-        mC9cxGiOs2DDtkRS+AlOaMPh44g/Ij9LksYx78+GAvSQAiMC0x7MeoyWMDrJ8Pe2yWUMFl1Fk2oeC
-        jdhSLaImANWgAhXbmEhsyoRPmql01B27AZr546QZPlZq8R7kom+CWd8NMaH12KuIjzi9UVhaupsxh
-        eNqPA6S5Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iha6T-0004bj-Jp; Wed, 18 Dec 2019 14:15:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9BC8F30038D;
-        Wed, 18 Dec 2019 15:13:38 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8933E2B276121; Wed, 18 Dec 2019 15:15:01 +0100 (CET)
-Date:   Wed, 18 Dec 2019 15:15:01 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Paul Mackerras <paulus@ozlabs.org>, akpm@linux-foundation.org,
-        npiggin@gmail.com, will@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arch@vger.kernel.org, Scott Wood <oss@buserror.net>
-Subject: Re: [PATCH v2 2/3] mm/mmu_gather: Invalidate TLB correctly on batch
- allocation failure and flush
-Message-ID: <20191218141501.GT2844@hirez.programming.kicks-ass.net>
-References: <20191218053530.73053-1-aneesh.kumar@linux.ibm.com>
- <20191218053530.73053-2-aneesh.kumar@linux.ibm.com>
- <20191218091733.GO2844@hirez.programming.kicks-ass.net>
- <0f0bea3b-b7b5-fa8c-f75c-396cf78c47b4@linux.ibm.com>
- <87v9qdn5df.fsf@mpe.ellerman.id.au>
+        id S1727417AbfLRPOR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Dec 2019 10:14:17 -0500
+Received: from mail-il1-f194.google.com ([209.85.166.194]:42257 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727141AbfLRPNy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Dec 2019 10:13:54 -0500
+Received: by mail-il1-f194.google.com with SMTP id a6so1963017ili.9
+        for <linux-arch@vger.kernel.org>; Wed, 18 Dec 2019 07:13:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
+        b=Q3vp2fJ40VWpq9rX2ikiWTUrhuiQJXzCeUu43e1oIIOk8rzGCPMljco+W3g3Sdt7mK
+         0zMp27lNXT81ott0dYeyE6wCdI4c1wfi5qCqRmoGIMvdtgle/6NMWI0GJrkD30CBojRq
+         hZbdgtbn9F/6uhvfSLkMdN7NhUpQoMVScRn9uDFKZJxofy0MWDF6kZw53YXeVt8sjWjA
+         Dd9TBzj4Ogplv/txGap2r0I252pQP7l7XSY4YOVhZ7qL539zlqhtO9W4mad505PIZ9Xp
+         yYy+XyL34oyC2pvEIWTDP8EMj+Gj6Cu0eHyc7GTPTD7Enq1rjLHU3JyAyX8LQzaLW/WP
+         +a+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
+        b=o7ynQUeDIvIwr6No3vLX79bvA3+GTK4zEXU5PMP3RnO6/2nH8ozCySywzkABbsJgZ5
+         cgHThEfu9gUTQMpBS7iLAbwKkzLT83GVsRAsb+BJIblCvUbuZ8W4G2tHriLcMVk1yzgM
+         2sGxdZXGiF0ZsZO6rjecn/jsR+bo/p/TQLJVmeHJFUVrnj/2lfjuFImOVRJh5jmYB8EX
+         uRRfD1oD1WOiY+cvkICuanzx1+Kw9Pn7VqjRDqrz1luAs1ir5a2RCg4ax88UveALaDS3
+         +jhq3cYKIycVXzFee9bo8T19JGwR7jHG7dEg5UfSf93wBBwbIH5irHhhJX2nVI/awEy1
+         b4NQ==
+X-Gm-Message-State: APjAAAUB3aLubeBoQanCb6aS9WZYmNR2pYBs5ZG3s489sW7UkyZX2xxc
+        jiAU7oA9JCtbFSt00VUkTF5aF0oOdrVm+sIoiw==
+X-Google-Smtp-Source: APXvYqzpDMY1kfzvQTGFYFDuSf5Wkv4RFsY3uCP+mpqq6wLn7kqjCTzLCYufYBbbmMCBsVo5PHwr9dpQEEDI7K8RY00=
+X-Received: by 2002:a92:cc90:: with SMTP id x16mr2363556ilo.269.1576682033220;
+ Wed, 18 Dec 2019 07:13:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v9qdn5df.fsf@mpe.ellerman.id.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a02:6603:0:0:0:0:0 with HTTP; Wed, 18 Dec 2019 07:13:52
+ -0800 (PST)
+Reply-To: dhl.expresscourier102156@outlook.fr
+From:   "MS. MARYANNA B. THOMASON" <info.zennitbankplcnigerian@gmail.com>
+Date:   Wed, 18 Dec 2019 16:13:52 +0100
+Message-ID: <CABHzvrnY8Lhdw4Y2q97jvAVrRpM9CVLFkw=Ved7y1GhGqHiAdw@mail.gmail.com>
+Subject: I WANT TO YOU TO TREAT THIS EMAIL VERY URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 19, 2019 at 12:13:48AM +1100, Michael Ellerman wrote:
+Attn Dear.
 
-> >> I'm a little confused though; if nohash is a software TLB fill, why do
-> >> you need a TLBI for tables?
-> >> 
-> >
-> > nohash (AKA book3e) has different mmu modes. I don't follow all the 
-> > details w.r.t book3e. Paul or Michael might be able to explain the need 
-> > for table flush with book3e.
-> 
-> Some of the Book3E CPUs have a partial hardware table walker. The IBM one (A2)
-> did, before we ripped that support out. And the Freescale (NXP) e6500
-> does, see eg:
-> 
->   28efc35fe68d ("powerpc/e6500: TLB miss handler with hardware tablewalk support")
-> 
-> They only support walking one level IIRC, ie. you can create a TLB entry
-> that points to a PTE page, and the hardware will dereference that to get
-> a PTE and load that into the TLB.
+Urgent delivery Notification of your ATM MASTER CARD, Dhl-Benin is
+ready for delivery of your ATM Master card worth $15.800=E2=80=99000=E2=80=
+=9900, as
+approved this morning, Date, 18/12/2019. Through the Intruction from
+INTERNATIONAL MONETARY FUNDS, I.M.F official Directors.
 
-Shiny!, all the embedded goodness. Thanks for the info.
+REGISTRATION NO :EG58945
+PARCEL NUMBER: 140479
+Delivery Schuleded now,
+Finally all we required from you is your ATM Card Proccessing Delivery
+fees $19.00 only which you must send to this DHL service to enable us
+dispatch the parcel to your destination today.
+
+Here is our receiving payment details.
+You are advised to send it Via Money Gram Service.
+
+Receiver's Name--------Alan Ude
+Country-------Benin Republic.
+City/ Address--------Cotonou
+Test Question--------In God
+Answer-------We Trust
+Amount------------$US19.00 only
+Mtcn-------------
+Sender's Name-------
+
+Your delivery  ATM card worth $15.800=E2=80=99000=E2=80=9900,
+Is Due for delivery to your address today upon confirmation of
+required fee from you asap.
+
+Call us on this phone number for any inquiry. +229 62819378
+Awaiting your urgent response.
+
+MS. MARYANNA B. THOMASON, Shipment director, DHL Express
+Courier Company-Benin
