@@ -2,108 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C30712640E
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2019 14:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C75126D51
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2019 20:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726797AbfLSNzL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Dec 2019 08:55:11 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:36985 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726760AbfLSNzL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Dec 2019 08:55:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1576763707;
-        s=strato-dkim-0002; d=xenosoft.de;
-        h=In-Reply-To:Date:Message-ID:References:Cc:To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=kI2ukjRy7KCFsfSWtfjMgsGPbi2sbVneeGOg1X7LIV8=;
-        b=YEAUceQn6QazfdesBsc7kq7wu32oddWtG0x8ZFzA5SAgf87tCs5MuSXc6cVDqJV8Sk
-        Ip8uc7MpD9C59eNDNRS2/GUMdq/wRKSLq8HV8w8d+R2aoGrHjvvFrzLo9dxYDGGn4Gmu
-        RX2vBgyamQmvkk4LCowX5Ipd7N+bty58IQzSz/Tw2F9UiNJAA0k1h6Rowya8EAdfAf0q
-        5UbK3cv9ZS6ZAN9ymq0HmSPVczYFkKF69rHfmWA3KCUSAuVrOlGoiYsLnuIEX9rruluG
-        ey6mCVbWjsjMjX+HZmEVgqHavhfdvU/8kqRGWzapHDIZIveK3qyJIvivI3+uu64Mm6DH
-        7fkw==
-X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBJSrwuuqxvPhSIk4IhhIsapUrtwdiemkXf6zUCQ=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2a02:8109:89c0:ebfc:141e:1690:4104:28ad]
-        by smtp.strato.de (RZmta 46.1.1 AUTH)
-        with ESMTPSA id 40080evBJDsS14t
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Thu, 19 Dec 2019 14:54:28 +0100 (CET)
-Subject: Re: use generic DMA mapping code in powerpc V4
-From:   Christian Zigotzky <chzigotzky@xenosoft.de>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, "R.T.Dickinson" <rtd2@xtra.co.nz>,
-        "contact@a-eon.com" <contact@a-eon.com>,
-        mad skateman <madskateman@gmail.com>,
-        Darren Stevens <darren@stevens-zone.net>
-References: <20181114082314.8965-1-hch@lst.de> <20181127074253.GB30186@lst.de>
- <87zhttfonk.fsf@concordia.ellerman.id.au>
- <535776df-dea3-eb26-6bf3-83f225e977df@xenosoft.de>
-Message-ID: <ea5433f6-ef8d-3cd0-0645-dd89c4806dca@xenosoft.de>
-Date:   Thu, 19 Dec 2019 14:54:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1727285AbfLSSjp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Dec 2019 13:39:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58110 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728267AbfLSSjn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 19 Dec 2019 13:39:43 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3482224650;
+        Thu, 19 Dec 2019 18:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576780782;
+        bh=7+IO5IoNu/pMLBYghFbd4C+cTy8Wk9Aywd1ymMe0B1o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dkp2i4M2WQrCiTzp1Luwc7st15TioRSy6PznXEtYlWbj0G8cr20KZ1k8T27W1lqjI
+         3JZIc1kmfvIlSmdAqvfRsyeC92nTqoRHGQu5Yf9YCBxVYkwKY2e+SHUiDT4dvpWST5
+         ioioWJjYGlOHcVOqj1EU+MVpECa6GM5caxTsJGeo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>, keescook@chromium.org,
+        linux-arch@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        "zhangyi (F)" <yi.zhang@huawei.com>
+Subject: [PATCH 4.4 077/162] sched/core, x86: Make struct thread_info arch specific again
+Date:   Thu, 19 Dec 2019 19:33:05 +0100
+Message-Id: <20191219183212.482196665@linuxfoundation.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20191219183150.477687052@linuxfoundation.org>
+References: <20191219183150.477687052@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-In-Reply-To: <535776df-dea3-eb26-6bf3-83f225e977df@xenosoft.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: de-DE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi All,
+From: Heiko Carstens <heiko.carstens@de.ibm.com>
 
-We still have some issues with PCI cards in our FSL P5020 and P5040 
-systems since the DMA mapping updates. [1, 2]
+commit c8061485a0d7569a865a3cc3c63347b0f42b3765 upstream.
 
-We have to limit the RAM to 3500MB for some problematic PCI cards. 
-(kernel boot argument 'mem=3500M')
+The following commit:
 
-The problematic DMA mapping code was added with the PowerPC updates 
-4.21-1 to the official kernel source code last year. [3]
+  c65eacbe290b ("sched/core: Allow putting thread_info into task_struct")
 
-We have created a bug report. [4]
+... made 'struct thread_info' a generic struct with only a
+single ::flags member, if CONFIG_THREAD_INFO_IN_TASK_STRUCT=y is
+selected.
 
-The old 4.x kernels aren't affected because they use the old DMA code.
+This change however seems to be quite x86 centric, since at least the
+generic preemption code (asm-generic/preempt.h) assumes that struct
+thread_info also has a preempt_count member, which apparently was not
+true for x86.
 
-Please check the new DMA code again.
+We could add a bit more #ifdefs to solve this problem too, but it seems
+to be much simpler to make struct thread_info arch specific
+again. This also makes the conversion to THREAD_INFO_IN_TASK_STRUCT a
+bit easier for architectures that have a couple of arch specific stuff
+in their thread_info definition.
 
-Thanks,
-Christian
+The arch specific stuff _could_ be moved to thread_struct. However
+keeping them in thread_info makes it easier: accessing thread_info
+members is simple, since it is at the beginning of the task_struct,
+while the thread_struct is at the end. At least on s390 the offsets
+needed to access members of the thread_struct (with task_struct as
+base) are too large for various asm instructions.  This is not a
+problem when keeping these members within thread_info.
 
-[1] 
-http://forum.hyperion-entertainment.com/viewtopic.php?f=58&p=49486#p49486
-[2] 
-http://forum.hyperion-entertainment.com/viewtopic.php?f=58&t=4349&start=50#p49099
-[3] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8d6973327ee84c2f40dd9efd8928d4a1186c96e2
-[4] https://bugzilla.kernel.org/show_bug.cgi?id=205201
+Signed-off-by: Heiko Carstens <heiko.carstens@de.ibm.com>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: keescook@chromium.org
+Cc: linux-arch@vger.kernel.org
+Link: http://lkml.kernel.org/r/1476901693-8492-2-git-send-email-mark.rutland@arm.com
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+[ zhangyi: skip defination of INIT_THREAD_INFO and struct thread_info ]
+Signed-off-by: zhangyi (F) <yi.zhang@huawei.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+---
+ include/linux/thread_info.h |   11 -----------
+ 1 file changed, 11 deletions(-)
 
-On 28 November 2018 at 4:55 pm, Christian Zigotzky wrote:
-> On 28 November 2018 at 12:05PM, Michael Ellerman wrote:
->> Nothing specific yet.
->>
->> I'm a bit worried it might break one of the many old obscure platforms
->> we have that aren't well tested.
->>
-> Please don't apply the new DMA mapping code if you don't be sure if it 
-> works on all supported PowerPC machines. Is the new DMA mapping code 
-> really necessary? It's not really nice, to rewrote code if the old 
-> code works perfect. We must not forget, that we work for the end 
-> users. Does the end user have advantages with this new code? Is it 
-> faster? The old code works without any problems. I am also worried 
-> about this code. How can I test this new DMA mapping code?
->
-> Thanks
->
->
+--- a/include/linux/thread_info.h
++++ b/include/linux/thread_info.h
+@@ -14,17 +14,6 @@ struct timespec;
+ struct compat_timespec;
+ 
+ #ifdef CONFIG_THREAD_INFO_IN_TASK
+-struct thread_info {
+-	u32			flags;		/* low level flags */
+-};
+-
+-#define INIT_THREAD_INFO(tsk)			\
+-{						\
+-	.flags		= 0,			\
+-}
+-#endif
+-
+-#ifdef CONFIG_THREAD_INFO_IN_TASK
+ #define current_thread_info() ((struct thread_info *)current)
+ #endif
+ 
+
 
