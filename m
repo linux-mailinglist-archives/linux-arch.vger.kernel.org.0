@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CADDA1272D8
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Dec 2019 02:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BCE127306
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Dec 2019 02:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbfLTBhZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Dec 2019 20:37:25 -0500
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:41740 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727006AbfLTBhY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Dec 2019 20:37:24 -0500
-Received: by mail-pl1-f202.google.com with SMTP id q6so2340675pls.8
-        for <linux-arch@vger.kernel.org>; Thu, 19 Dec 2019 17:37:23 -0800 (PST)
+        id S1727031AbfLTBtW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Dec 2019 20:49:22 -0500
+Received: from mail-yw1-f73.google.com ([209.85.161.73]:51330 "EHLO
+        mail-yw1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727006AbfLTBtW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Dec 2019 20:49:22 -0500
+Received: by mail-yw1-f73.google.com with SMTP id a16so5522693ywa.18
+        for <linux-arch@vger.kernel.org>; Thu, 19 Dec 2019 17:49:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc:content-transfer-encoding;
-        bh=ZRY76nUi493+xuL7Tm0FlcOAyz0Ji1nFyA0Xlgk3AOY=;
-        b=J143fqLZK4/lFzYrCfOIl3+2NbBbgVzLDSm4kEMxZktRis7lgreOCdxYJMeKPplkMr
-         hSvPqstpn+bS83eJywSg4D1b1NnNaZKth1RGcbxQlbJXzymKqYCrpDhspOdmjZMZJAIa
-         EVq6a8wp2BjjNPZhfifKOfE32LIe7ZDb7s537MMfK6RKt8WDX/8AlrlzRPwiyiVL+gdM
-         o+H4bB45aiSA0r6k6yUMWDXVt6zN/mn+OF9zD5qopCyG4wLAKpciAbuN1IyLqfDzPqaR
-         sK9p/dlPN2mXF3aCcHsGnVmUdCw2leQQMuwTxhXwL7/tkka64TwMlx9H42rQnN2jcNOi
-         fntQ==
+        bh=HZMnRQf2RzyKu0EQDfD1pRubT2qoNtln9gX9VZl7+Lw=;
+        b=QnD2X8ugKAM+uICpb7uuNo+E46l8sDMOx9E2HllXNNfZ3iUHNx7MEf5Cn0GjUwfRTd
+         OKLau0tl6dua5duaimUEqxFDkRJkuWXPc1v3yiTigDeXisZZhWPRv1M51ulShTut74/0
+         ma4/kaNbkejRaCDbNXrYqFSVIMW6S7OmDHydlpWtXpRIAnu59Prcrx0HfLn2aunMypwl
+         V/jocBvh3oyonQOMr0+IlqC4PufPaZsPxYCPTQvKCuf8MX3m8fwh0Yhq6AU39rgKPAN0
+         9TRM3nrbL70rMxgLnlQHhKSO+5WtC9JO6YIi9gIZROJcL/Yc3wkGv5PENac6siscxMHp
+         TN9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc:content-transfer-encoding;
-        bh=ZRY76nUi493+xuL7Tm0FlcOAyz0Ji1nFyA0Xlgk3AOY=;
-        b=a/uMNJq3ZoKgV+09Ub0ud6Ce74znptJWn0ukWf/HvrouuLLGyf5a9lXZMRkqOQZi33
-         gFvKx+oFygw5wHumnDUtFPz3wrtZKW3c6+BmLTVqbGHMu6Q6H0cDwvE9wVscHUJQp3Dn
-         pYgsPJATVAPbrARs6Vvz+boPeTG6VnfmkfsaUoLRJ6rHeTfLC7BnDOmT3KeIyUbdxo6d
-         hQMaYsd/y+bVRdJ7a+L3Vo1OBB+/AxOAqXFPfhS7jNr1vHxlN5dy0ME8BRMxgOXT1tbJ
-         TOa4Cr9EHOWkhHtgpsn3nW2cZhQIvK8M3Tu/ilrjIHYEWsC93XC3j5FD3h10NDCaZop7
-         /Uxg==
-X-Gm-Message-State: APjAAAUSwMI2EO2gIyttBSVygOVwg9sc6XSWX+phq5Q+wZps5zeOFvVv
-        GEOItnenVrH1bLmU/HrK1lPuRwo=
-X-Google-Smtp-Source: APXvYqxaNmZqoXs4tYB6snO5BmWk18re5etHg7lWZji+j3yxRsEA601c51JheS86Ob+7tZu24lPAgpI=
-X-Received: by 2002:a63:f107:: with SMTP id f7mr12336875pgi.76.1576805843222;
- Thu, 19 Dec 2019 17:37:23 -0800 (PST)
-Date:   Thu, 19 Dec 2019 17:36:39 -0800
-In-Reply-To: <20191217180152.GO5624@arrakis.emea.arm.com>
-Message-Id: <20191220013639.212396-1-pcc@google.com>
+        bh=HZMnRQf2RzyKu0EQDfD1pRubT2qoNtln9gX9VZl7+Lw=;
+        b=Xan57yUn9cdCPJJQgYwDaQjOz6PArMSmw059V+aAGTKW+Q2g5y0y7gwqddT1KiXgVY
+         1HFKtMNaas+nIIBNslLUJ5MzB2x8G2boAYQVOyvcrMaMey8ziNLXP4wOkJFuyFazZtyn
+         XB6ZOBG8WIZHaXUnFMhhl+8IPkd89of8hZYQ5BhQP7IJiLAhH6BL+PSc8uqbae7EJS15
+         gS0pAhm2e/K5eGXFk5JPXGYxfO+RYt9L2fDnqF7lsPjV9DofLzcnJLA0vo4PDT8a+dIb
+         s3p+cdwcDOst32im0L8bdp3T/UW004oGrof5DrRs92lMay9KUjfMrVCzc1zYHAiw7lrM
+         kDCQ==
+X-Gm-Message-State: APjAAAX2WIbi0oDxigfoWUWPLyOWSOruf3ointJ6OUkKV2ibap7GPXi6
+        XwZ6ouedqzURSNu/pH9Mr8maznY=
+X-Google-Smtp-Source: APXvYqzIKCMr5RBHVty3PxKkUeb+z/z35I8hFPiVh8D2zq2tXjZ8EsxBxsgexdyHh/iBIMSJ8f2vGqE=
+X-Received: by 2002:a81:618a:: with SMTP id v132mr9055009ywb.388.1576806560029;
+ Thu, 19 Dec 2019 17:49:20 -0800 (PST)
+Date:   Thu, 19 Dec 2019 17:48:53 -0800
+In-Reply-To: <CAMn1gO4iv1FsxV+aR3CgU=jgmVjHL0YQF-xJJG0UMv3nJZnOBw@mail.gmail.com>
+Message-Id: <20191220014853.223389-1-pcc@google.com>
 Mime-Version: 1.0
-References: <20191217180152.GO5624@arrakis.emea.arm.com>
+References: <CAMn1gO4iv1FsxV+aR3CgU=jgmVjHL0YQF-xJJG0UMv3nJZnOBw@mail.gmail.com>
 X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
-Subject: [PATCH] arm64: mte: Do not service syscalls after async tag fault
+Subject: [PATCH] arm64: mte: Clear SCTLR_EL1.TCF0 on exec
 From:   Peter Collingbourne <pcc@google.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Peter Collingbourne <pcc@google.com>,
+To:     Catalin Marinas <catalin.marinas@arm.com>,
         Evgenii Stepanov <eugenis@google.com>,
-        Kostya Serebryany <kcc@google.com>,
+        Kostya Serebryany <kcc@google.com>
+Cc:     Peter Collingbourne <pcc@google.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         linux-arch@vger.kernel.org,
         Richard Earnshaw <Richard.Earnshaw@arm.com>,
@@ -68,128 +68,177 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When entering the kernel after an async tag fault due to a syscall, rather
-than for another reason (e.g. preemption), we don't want to service the
-syscall as it may mask the tag fault. Rewind the PC to the svc instruction
-in order to give a userspace signal handler an opportunity to handle the
-fault and resume, and skip all other syscall processing.
-
 Signed-off-by: Peter Collingbourne <pcc@google.com>
 ---
-On Tue, Dec 17, 2019 at 10:01 AM Catalin Marinas <catalin.marinas@arm.com> =
-wrote:
+On Thu, Dec 19, 2019 at 12:32 PM Peter Collingbourne <pcc@google.com> wrote=
+:
 >
-> On Fri, Dec 13, 2019 at 05:43:15PM -0800, Peter Collingbourne wrote:
-> > On Wed, Dec 11, 2019 at 10:44 AM Catalin Marinas
-> > <catalin.marinas@arm.com> wrote:
-> > > diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-> > > index dd2cdc0d5be2..41fae64af82a 100644
-> > > --- a/arch/arm64/kernel/signal.c
-> > > +++ b/arch/arm64/kernel/signal.c
-> > > @@ -730,6 +730,9 @@ static void setup_return(struct pt_regs *regs, st=
-ruct k_sigaction *ka,
-> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 regs->regs[29] =3D (unsigned long)&user->=
-next_frame->fp;
-> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 regs->pc =3D (unsigned long)ka->sa.sa_han=
-dler;
-> > >
-> > > + =C2=A0 =C2=A0 =C2=A0 /* TCO (Tag Check Override) always cleared for=
- signal handlers */
-> > > + =C2=A0 =C2=A0 =C2=A0 regs->pstate &=3D ~PSR_TCO_BIT;
-> > > +
-> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (ka->sa.sa_flags & SA_RESTORER)
-> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 sigtramp =3D =
-ka->sa.sa_restorer;
-> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 else
-> > > @@ -921,6 +924,11 @@ asmlinkage void do_notify_resume(struct pt_regs =
-*regs,
-> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 if (thread_flags & _TIF_UPROBE)
-> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 uprobe_notify_resume(regs);
-> > >
-> > > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 if (thread_flags & _TIF_MTE_ASYNC_FAULT) {
-> > > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 clear_thread_flag(TIF_MTE_ASYNC_FAUL=
-T);
-> > > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 force_signal_inject(SIGSEGV, SEGV_MT=
-EAERR, 0);
-> >
-> > In the case where the kernel is entered due to a syscall, this will
-> > inject a signal, but only after servicing the syscall. This means
-> > that, for example, if the syscall is exit(), the async tag check
-> > failure will be silently ignored. I can reproduce the problem with the
-> > program below:
-> [...]
-> > This patch fixes the problem for me:
-> >
-> > diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-> > index 9a9d98a443fc..d0c8918dee00 100644
-> > --- a/arch/arm64/kernel/syscall.c
-> > +++ b/arch/arm64/kernel/syscall.c
-> > @@ -94,6 +94,8 @@ static void el0_svc_common(struct pt_regs *regs, int
-> > scno, int sc_nr,
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0const syscall_fn_t syscall_table[])
-> > =C2=A0{
-> > =C2=A0 =C2=A0 =C2=A0 =C2=A0 unsigned long flags =3D current_thread_info=
-()->flags;
-> > + =C2=A0 =C2=A0 =C2=A0 if (flags & _TIF_MTE_ASYNC_FAULT)
-> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 return;
+> On Wed, Dec 11, 2019 at 10:45 AM Catalin Marinas
+> <catalin.marinas@arm.com> wrote:
+> > + =C2=A0 =C2=A0 =C2=A0 if (current->thread.sctlr_tcf0 !=3D next->thread=
+.sctlr_tcf0)
+> > + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 update_sctlr_el1_tcf=
+0(next->thread.sctlr_tcf0);
 >
-> It needs a bit of thinking. This one wouldn't work if you want to handle
-> the signal and resume since it would skip the SVC instruction. We'd need
-> at least to do a regs->pc -=3D 4 and probably move it further down in thi=
-s
-> function.
+> I don't entirely understand why yet, but I've found that this check is
+> insufficient for ensuring consistency between SCTLR_EL1.TCF0 and
+> sctlr_tcf0. In my Android test environment with some processes having
+> sctlr_tcf0=3DSCTLR_EL1_TCF0_SYNC and others having sctlr_tcf0=3D0, I am
+> seeing intermittent tag failures coming from the sctlr_tcf0=3D0
+> processes. With this patch:
+>
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index ef3bfa2bf2b1..4e5d02520a51 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -663,6 +663,8 @@ static int do_sea(unsigned long addr, unsigned int
+> esr, struct pt_regs *regs)
+> =C2=A0static int do_tag_check_fault(unsigned long addr, unsigned int esr,
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 struct pt_regs *regs)
+> =C2=A0{
+> + =C2=A0 =C2=A0 =C2=A0 printk(KERN_ERR "do_tag_check_fault %lx %lx\n",
+> + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0current->thread.sctlr_t=
+cf0, read_sysreg(sctlr_el1));
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 do_bad_area(addr, esr, regs);
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 return 0;
+> =C2=A0}
+>
+> I see dmesg output like this:
+>
+> [ =C2=A0 15.249216] do_tag_check_fault 0 c60fc64791d
+>
+> showing that SCTLR_EL1.TCF0 became inconsistent with sctlr_tcf0. This
+> patch fixes the problem for me:
+>
+> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+> index fba89c9f070b..fb012f0baa12 100644
+> --- a/arch/arm64/kernel/process.c
+> +++ b/arch/arm64/kernel/process.c
+> @@ -518,9 +518,7 @@ static void mte_thread_switch(struct task_struct *nex=
+t)
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (!system_supports_mte())
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 return;
+>
+> - =C2=A0 =C2=A0 =C2=A0 /* avoid expensive SCTLR_EL1 accesses if no change=
+ */
+> - =C2=A0 =C2=A0 =C2=A0 if (current->thread.sctlr_tcf0 !=3D next->thread.s=
+ctlr_tcf0)
+> - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 update_sctlr_el1_tcf0(=
+next->thread.sctlr_tcf0);
+> + =C2=A0 =C2=A0 =C2=A0 update_sctlr_el1_tcf0(next->thread.sctlr_tcf0);
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 update_gcr_el1_excl(next->thread.gcr_excl);
+> =C2=A0}
+> =C2=A0#else
+> @@ -643,15 +641,8 @@ static long set_mte_ctrl(unsigned long arg)
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 return -EINVAL;
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 }
+>
+> - =C2=A0 =C2=A0 =C2=A0 /*
+> - =C2=A0 =C2=A0 =C2=A0 =C2=A0* mte_thread_switch() checks current->thread=
+.sctlr_tcf0 as an
+> - =C2=A0 =C2=A0 =C2=A0 =C2=A0* optimisation. Disable preemption so that i=
+t does not see
+> - =C2=A0 =C2=A0 =C2=A0 =C2=A0* the variable update before the SCTLR_EL1.T=
+CF0 one.
+> - =C2=A0 =C2=A0 =C2=A0 =C2=A0*/
+> - =C2=A0 =C2=A0 =C2=A0 preempt_disable();
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 current->thread.sctlr_tcf0 =3D tcf0;
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 update_sctlr_el1_tcf0(tcf0);
+> - =C2=A0 =C2=A0 =C2=A0 preempt_enable();
+>
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 current->thread.gcr_excl =3D (arg & PR_MTE_EX=
+CL_MASK) >>
+> PR_MTE_EXCL_SHIFT;
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 update_gcr_el1_excl(current->thread.gcr_excl)=
+;
+>
+> Since sysreg_clear_set only sets the sysreg if it ended up changing, I
+> wouldn't expect this to cause a significant performance hit unless
+> just reading SCTLR_EL1 is expensive. That being said, if the
+> inconsistency is indicative of a deeper problem, we should probably
+> address that.
 
-Okay, how does this look?
+I tracked it down to the flush_mte_state() function setting sctlr_tcf0 but
+failing to update SCTLR_EL1.TCF0. With this patch I am not seeing any more
+inconsistencies.
 
 Peter
 
- arch/arm64/kernel/syscall.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ arch/arm64/kernel/process.c | 37 +++++++++++++++++++++----------------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-index 9a9d98a443fc..49ea9bb47190 100644
---- a/arch/arm64/kernel/syscall.c
-+++ b/arch/arm64/kernel/syscall.c
-@@ -95,13 +95,29 @@ static void el0_svc_common(struct pt_regs *regs, int sc=
-no, int sc_nr,
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index fba89c9f070b..07e8e7bd3bec 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -319,6 +319,25 @@ static void flush_tagged_addr_state(void)
+ }
+=20
+ #ifdef CONFIG_ARM64_MTE
++static void update_sctlr_el1_tcf0(u64 tcf0)
++{
++	/* no need for ISB since this only affects EL0, implicit with ERET */
++	sysreg_clear_set(sctlr_el1, SCTLR_EL1_TCF0_MASK, tcf0);
++}
++
++static void set_sctlr_el1_tcf0(u64 tcf0)
++{
++	/*
++	 * mte_thread_switch() checks current->thread.sctlr_tcf0 as an
++	 * optimisation. Disable preemption so that it does not see
++	 * the variable update before the SCTLR_EL1.TCF0 one.
++	 */
++	preempt_disable();
++	current->thread.sctlr_tcf0 =3D tcf0;
++	update_sctlr_el1_tcf0(tcf0);
++	preempt_enable();
++}
++
+ static void flush_mte_state(void)
  {
- 	unsigned long flags =3D current_thread_info()->flags;
+ 	if (!system_supports_mte())
+@@ -327,7 +346,7 @@ static void flush_mte_state(void)
+ 	/* clear any pending asynchronous tag fault */
+ 	clear_thread_flag(TIF_MTE_ASYNC_FAULT);
+ 	/* disable tag checking */
+-	current->thread.sctlr_tcf0 =3D 0;
++	set_sctlr_el1_tcf0(0);
+ }
+ #else
+ static void flush_mte_state(void)
+@@ -497,12 +516,6 @@ static void ssbs_thread_switch(struct task_struct *nex=
+t)
+ }
 =20
--	regs->orig_x0 =3D regs->regs[0];
--	regs->syscallno =3D scno;
+ #ifdef CONFIG_ARM64_MTE
+-static void update_sctlr_el1_tcf0(u64 tcf0)
+-{
+-	/* no need for ISB since this only affects EL0, implicit with ERET */
+-	sysreg_clear_set(sctlr_el1, SCTLR_EL1_TCF0_MASK, tcf0);
+-}
 -
- 	cortex_a76_erratum_1463225_svc_handler();
- 	local_daif_restore(DAIF_PROCCTX);
- 	user_exit();
+ static void update_gcr_el1_excl(u64 excl)
+ {
+ 	/*
+@@ -643,15 +656,7 @@ static long set_mte_ctrl(unsigned long arg)
+ 		return -EINVAL;
+ 	}
 =20
-+#ifdef CONFIG_ARM64_MTE
-+	if (flags & _TIF_MTE_ASYNC_FAULT) {
-+		/*
-+		 * We entered the kernel after an async tag fault due to a
-+		 * syscall, rather than for another reason (e.g. preemption).
-+		 * In this case, we don't want to service the syscall as it may
-+		 * mask the tag fault. Rewind the PC to the svc instruction in
-+		 * order to give a userspace signal handler an opportunity to
-+		 * handle the fault and resume, and skip all other syscall
-+		 * processing.
-+		 */
-+		regs->pc -=3D 4;
-+		return;
-+	}
-+#endif
-+
-+	regs->orig_x0 =3D regs->regs[0];
-+	regs->syscallno =3D scno;
-+
- 	if (has_syscall_work(flags)) {
- 		/* set default errno for user-issued syscall(-1) */
- 		if (scno =3D=3D NO_SYSCALL)
+-	/*
+-	 * mte_thread_switch() checks current->thread.sctlr_tcf0 as an
+-	 * optimisation. Disable preemption so that it does not see
+-	 * the variable update before the SCTLR_EL1.TCF0 one.
+-	 */
+-	preempt_disable();
+-	current->thread.sctlr_tcf0 =3D tcf0;
+-	update_sctlr_el1_tcf0(tcf0);
+-	preempt_enable();
++	set_sctlr_el1_tcf0(tcf0);
+=20
+ 	current->thread.gcr_excl =3D (arg & PR_MTE_EXCL_MASK) >> PR_MTE_EXCL_SHIF=
+T;
+ 	update_gcr_el1_excl(current->thread.gcr_excl);
 --=20
 2.24.1.735.g03f4e72817-goog
 
