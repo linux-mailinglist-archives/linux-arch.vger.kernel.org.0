@@ -2,64 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE4312BE3D
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Dec 2019 19:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EF312BFDF
+	for <lists+linux-arch@lfdr.de>; Sun, 29 Dec 2019 02:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbfL1SYf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Dec 2019 13:24:35 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:33672 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbfL1SYf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Dec 2019 13:24:35 -0500
-Received: by mail-io1-f66.google.com with SMTP id z8so28322681ioh.0
-        for <linux-arch@vger.kernel.org>; Sat, 28 Dec 2019 10:24:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=JIktF4yZejX+OxhvvHfZkFw5SwWAuxa4jtYs6rRYiYA=;
-        b=j8fAKolDIqz7ilIgIuu3+QBw+im6wU1ThUrVaHX97KlSqUCDlafuSA4Nl4BJNK/kI/
-         LocQUcNeDflKT6qUQN2lb2a2agfySi0/q9BNnYXt6hi/IR6Ao5goUPTkBLV1el47kD5D
-         i5fdJhwJHfX6FEZnrZEJosVEAf60XwUIWE+tLzOy97WIcxKOUwmO14HSXtHhNkBHJRn0
-         x9jmWeqyaNDcWGbTngp5tOyOREZO/tMmNrvEmCCI8imD9jRtPDB1MEigwhl/DoycSHLk
-         DTaH81KTOChZ4eA0CW2qa7mBEE5BVlXRPaxyRw5RRW9xQsVZOBfrWdTNOqO3FNWjMqtR
-         ldGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=JIktF4yZejX+OxhvvHfZkFw5SwWAuxa4jtYs6rRYiYA=;
-        b=f5nAWZcUt+EqCNR5J7i6slsQPrJMdTkAQKE8qDNxh/VNEm31oh+w7y+BVAAuslC7UO
-         /JLP4sOVApc73Bj/A1TA0JVKVwCf1p9SDNRXsyzUInq/gxmuM77IDXtzo04+I8hefe6W
-         6Z8iJprUpiulUXMUPfxJil37XAEaFP3fJcVVudswauqqxlUEDVO4oYZas3oaa0zqPtj4
-         ColHWEQfZgX0XmDs9JWEL6zAjK1SYeBsBhsImHmJCM/wP9L2YCu+gzM88e56uxAiirNu
-         nz5bK+0Tgv6fMkjXr/otPax+gVzB8nLdMIodKmSWVkMZTC+2c507+ZpwyHhF9d1eJmdz
-         mPCQ==
-X-Gm-Message-State: APjAAAX/gyX0EevXTIYV5NbNGExCnJ3lpj7L1ZclhwWnfhTyFlJGIibg
-        BER0o+pugMjFJ3jQDuPFceAH1xr9KUOvjEK+p5I=
-X-Google-Smtp-Source: APXvYqy6jmXdNMfUHS/cW7qIHeAYhU6KrnNJDgMaHGMBZla/biDCEReGB5gNH5maokotolMkFOcBeCc19LtMCUDqByE=
-X-Received: by 2002:a6b:4e12:: with SMTP id c18mr36540605iob.221.1577557474559;
- Sat, 28 Dec 2019 10:24:34 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a02:9624:0:0:0:0:0 with HTTP; Sat, 28 Dec 2019 10:24:33
- -0800 (PST)
-Reply-To: cptarianagarin@yahoo.com
-From:   CPT Ariana Garin <sgtlucyjohn32@gmail.com>
-Date:   Sat, 28 Dec 2019 18:24:33 +0000
-Message-ID: <CAB-ZKYUfsUjBCT9oUSD=HxCtmmm_ZOCm3YD96h_dAFioshp_Qw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        id S1726315AbfL2Bbk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Dec 2019 20:31:40 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:39492 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726187AbfL2Bbk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 28 Dec 2019 20:31:40 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0C43E8EE0DA;
+        Sat, 28 Dec 2019 17:31:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1577583100;
+        bh=zbW9WWjeZOxIUrHi9cV0hkGSGh9fn/LBCcZFRjsx/Eo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=BPxXS8BVm4iNWQthxVc54Px8MbXMUronXvfS+qIJe9n7MU5v6jgY+bdi41eGNLQ/I
+         lOJtGbs5/oXzj3btPfzdfpW7qDQB83/FItyOLigClUosLNTSsfYa6F/fGB8/yvc7Ch
+         lBTMYOgbiLGgmuV9ue9DuP36FyixXfYtS7klfO8g=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 8mcakcWKeBlo; Sat, 28 Dec 2019 17:31:39 -0800 (PST)
+Received: from jarvis.lan (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 4249A8EE007;
+        Sat, 28 Dec 2019 17:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1577583099;
+        bh=zbW9WWjeZOxIUrHi9cV0hkGSGh9fn/LBCcZFRjsx/Eo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=f/jP5S5bhWkg9HidRZ3o4rOA2Ptr0sXFqzGTvye0iM2M0CpR0w1yZ2isI5SAdiQXI
+         fErms7c40y+32/icy7WsoWUZfnPpmK42uolC3zC4PBmPFXd30n6QNlHKo5sPxux3hc
+         bjvQ6QilqR3HEoc4V1OiR6u2MH5KrbAjJZqoglug=
+Message-ID: <1577583097.5661.6.camel@HansenPartnership.com>
+Subject: Re: [PATCH] mm/hugetlb: ensure signedness of large numbers
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     isidentical <batuhanosmantaskaya@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 28 Dec 2019 17:31:37 -0800
+In-Reply-To: <20191228103357.23904-1-batuhanosmantaskaya@gmail.com>
+References: <20191228103357.23904-1-batuhanosmantaskaya@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-C=C3=B3mo est=C3=A1s hoy ? soy cpt ariana garin, de estados unidos, les des=
-eo
-feliz navidad y feliz a=C3=B1o nuevo
+On Sat, 2019-12-28 at 13:33 +0300, isidentical wrote:
+> This change introduces a sanitity helper for
+> numbers that are larger than 2^5.
 
-How are you today ? i am cpt ariana garin, from united state ,I wish
-you merry xmas and happy new year
+What's the rationale for this ... i.e. what problem are you trying to
+solve?  left to its own devices, gcc will assume int size for all
+literals, so 34<<26 doesn't appear to have a problem, except that it
+will be sign extended as a negative number into a 64 bit variable. 
+However, it's designed use is for an int flags in mmap, so its current
+definition seems to be fine.
+
+> Signed-off-by: isidentical <batuhanosmantaskaya@gmail.com>
+> ---
+>  include/uapi/asm-generic/hugetlb_encode.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/asm-generic/hugetlb_encode.h
+> b/include/uapi/asm-generic/hugetlb_encode.h
+> index b0f8e87235bd..42c06c62ae17 100644
+> --- a/include/uapi/asm-generic/hugetlb_encode.h
+> +++ b/include/uapi/asm-generic/hugetlb_encode.h
+> @@ -31,6 +31,6 @@
+>  #define HUGETLB_FLAG_ENCODE_512MB	(29 <<
+> HUGETLB_FLAG_ENCODE_SHIFT)
+>  #define HUGETLB_FLAG_ENCODE_1GB		(30 <<
+> HUGETLB_FLAG_ENCODE_SHIFT)
+>  #define HUGETLB_FLAG_ENCODE_2GB		(31 <<
+> HUGETLB_FLAG_ENCODE_SHIFT)
+> -#define HUGETLB_FLAG_ENCODE_16GB	(34 <<
+> HUGETLB_FLAG_ENCODE_SHIFT)
+> +#define HUGETLB_FLAG_ENCODE_16GB	(UINT32_C(34) <<
+> HUGETLB_FLAG_ENCODE_SHIFT)
+
+And if there is a literal problem here, it can't be solved like this:
+UINT32_C is a Cism which has no analogue in the kernel because we don't
+pull in the /usr/include headers where it is defined.  Usually in the
+kernel we solve this by making the literal type explicit, like 34U, but
+as I said above, I don't see a problem that this would solve.
+
+James
+
