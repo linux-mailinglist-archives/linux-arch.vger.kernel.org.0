@@ -2,97 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9EF312BFDF
-	for <lists+linux-arch@lfdr.de>; Sun, 29 Dec 2019 02:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 303A012CD91
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Dec 2019 09:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726315AbfL2Bbk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Dec 2019 20:31:40 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:39492 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726187AbfL2Bbk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 28 Dec 2019 20:31:40 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0C43E8EE0DA;
-        Sat, 28 Dec 2019 17:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1577583100;
-        bh=zbW9WWjeZOxIUrHi9cV0hkGSGh9fn/LBCcZFRjsx/Eo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=BPxXS8BVm4iNWQthxVc54Px8MbXMUronXvfS+qIJe9n7MU5v6jgY+bdi41eGNLQ/I
-         lOJtGbs5/oXzj3btPfzdfpW7qDQB83/FItyOLigClUosLNTSsfYa6F/fGB8/yvc7Ch
-         lBTMYOgbiLGgmuV9ue9DuP36FyixXfYtS7klfO8g=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8mcakcWKeBlo; Sat, 28 Dec 2019 17:31:39 -0800 (PST)
-Received: from jarvis.lan (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727195AbfL3IXz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Dec 2019 03:23:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47566 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727175AbfL3IXy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 30 Dec 2019 03:23:54 -0500
+Received: from localhost.localdomain (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 4249A8EE007;
-        Sat, 28 Dec 2019 17:31:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1577583099;
-        bh=zbW9WWjeZOxIUrHi9cV0hkGSGh9fn/LBCcZFRjsx/Eo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=f/jP5S5bhWkg9HidRZ3o4rOA2Ptr0sXFqzGTvye0iM2M0CpR0w1yZ2isI5SAdiQXI
-         fErms7c40y+32/icy7WsoWUZfnPpmK42uolC3zC4PBmPFXd30n6QNlHKo5sPxux3hc
-         bjvQ6QilqR3HEoc4V1OiR6u2MH5KrbAjJZqoglug=
-Message-ID: <1577583097.5661.6.camel@HansenPartnership.com>
-Subject: Re: [PATCH] mm/hugetlb: ensure signedness of large numbers
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     isidentical <batuhanosmantaskaya@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 28 Dec 2019 17:31:37 -0800
-In-Reply-To: <20191228103357.23904-1-batuhanosmantaskaya@gmail.com>
-References: <20191228103357.23904-1-batuhanosmantaskaya@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        by mail.kernel.org (Postfix) with ESMTPSA id C939220748;
+        Mon, 30 Dec 2019 08:23:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1577694234;
+        bh=bxf8EZJDD9igkh37WLh+g0Si6gef3N0HX1lUMypoJt8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=W+8GXso80Dwc/3pFcCMN0HfMHf1aM3LMavYJbUL8UziJS+fG0RxQevVHV9AG5kza1
+         wB3ArfXjh2mYXmaM+swivMWpI4CEpXYJfOVmhAIxRBM0ijXq3h/I7fe66vSvAaHiD1
+         AG17nFdPOMT3TsRjvVHzY2M38nTRhB5Nt3ooty+g=
+From:   guoren@kernel.org
+To:     linux-csky@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        arnd@arndb.de, Guo Ren <ren_guo@c-sky.com>
+Subject: [PATCH 1/5] MAINTAINERS: csky: Add mailing list for csky
+Date:   Mon, 30 Dec 2019 16:23:27 +0800
+Message-Id: <20191230082331.30976-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.17.0
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 2019-12-28 at 13:33 +0300, isidentical wrote:
-> This change introduces a sanitity helper for
-> numbers that are larger than 2^5.
+From: Guo Ren <ren_guo@c-sky.com>
 
-What's the rationale for this ... i.e. what problem are you trying to
-solve?  left to its own devices, gcc will assume int size for all
-literals, so 34<<26 doesn't appear to have a problem, except that it
-will be sign extended as a negative number into a 64 bit variable. 
-However, it's designed use is for an int flags in mmap, so its current
-definition seems to be fine.
+Add mailing list and it's convenient for maintain C-SKY
+subsystem.
 
-> Signed-off-by: isidentical <batuhanosmantaskaya@gmail.com>
-> ---
->  include/uapi/asm-generic/hugetlb_encode.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/asm-generic/hugetlb_encode.h
-> b/include/uapi/asm-generic/hugetlb_encode.h
-> index b0f8e87235bd..42c06c62ae17 100644
-> --- a/include/uapi/asm-generic/hugetlb_encode.h
-> +++ b/include/uapi/asm-generic/hugetlb_encode.h
-> @@ -31,6 +31,6 @@
->  #define HUGETLB_FLAG_ENCODE_512MB	(29 <<
-> HUGETLB_FLAG_ENCODE_SHIFT)
->  #define HUGETLB_FLAG_ENCODE_1GB		(30 <<
-> HUGETLB_FLAG_ENCODE_SHIFT)
->  #define HUGETLB_FLAG_ENCODE_2GB		(31 <<
-> HUGETLB_FLAG_ENCODE_SHIFT)
-> -#define HUGETLB_FLAG_ENCODE_16GB	(34 <<
-> HUGETLB_FLAG_ENCODE_SHIFT)
-> +#define HUGETLB_FLAG_ENCODE_16GB	(UINT32_C(34) <<
-> HUGETLB_FLAG_ENCODE_SHIFT)
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-And if there is a literal problem here, it can't be solved like this:
-UINT32_C is a Cism which has no analogue in the kernel because we don't
-pull in the /usr/include headers where it is defined.  Usually in the
-kernel we solve this by making the literal type explicit, like 34U, but
-as I said above, I don't see a problem that this would solve.
-
-James
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e4f170d8bc29..1b0e8dcefb94 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3553,6 +3553,7 @@ F:	sound/pci/oxygen/
+ 
+ C-SKY ARCHITECTURE
+ M:	Guo Ren <guoren@kernel.org>
++L:	linux-csky@vger.kernel.org
+ T:	git https://github.com/c-sky/csky-linux.git
+ S:	Supported
+ F:	arch/csky/
+-- 
+2.17.0
 
