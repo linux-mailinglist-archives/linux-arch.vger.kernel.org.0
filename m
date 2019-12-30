@@ -2,70 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F5312CD9D
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Dec 2019 09:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216DF12CEB1
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Dec 2019 11:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727315AbfL3IYW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Dec 2019 03:24:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48094 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727270AbfL3IYW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 30 Dec 2019 03:24:22 -0500
-Received: from localhost.localdomain (unknown [223.93.147.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C41020748;
-        Mon, 30 Dec 2019 08:24:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577694261;
-        bh=dZYipzOSUcOEk9sfT5ToHwqu/RSsPyWAHSF4AdVtwWw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pox84xeZtTNfsPPYNYWGefD5VzWKiC7mlqPOoqoc5PWxgyA8UDzH7o/CywB3Yno23
-         CHqmI8voeuMo4w1nYvcaUePx2qHK/oMeDtrRndw+T3jffYKKIDD4kNdDgwyKEw4xYH
-         4ZzuECbY/hd/gHo7UDLb7obbazTsP7ItNv0R12J0=
-From:   guoren@kernel.org
-To:     linux-csky@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        arnd@arndb.de, Guo Ren <ren_guo@c-sky.com>,
-        Mo Qihui <qihui.mo@verisilicon.com>,
-        Zhange Jian <zhang_jian5@dahuatech.com>
-Subject: [PATCH 5/5] csky/mm: Fixup export invalid_pte_table symbol
-Date:   Mon, 30 Dec 2019 16:23:31 +0800
-Message-Id: <20191230082331.30976-5-guoren@kernel.org>
-X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20191230082331.30976-1-guoren@kernel.org>
-References: <20191230082331.30976-1-guoren@kernel.org>
+        id S1727348AbfL3KVl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Dec 2019 05:21:41 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:33837 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727273AbfL3KVl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Dec 2019 05:21:41 -0500
+Received: from mail-qk1-f171.google.com ([209.85.222.171]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MQvGz-1j9Bga1pVH-00Nyh9; Mon, 30 Dec 2019 11:21:39 +0100
+Received: by mail-qk1-f171.google.com with SMTP id r14so25901882qke.13;
+        Mon, 30 Dec 2019 02:21:39 -0800 (PST)
+X-Gm-Message-State: APjAAAUyA4e22vK4esaahomP1amX0iLHjiZSy6IE1RcmKcNQDInpwsEG
+        8hDV2gz+q8HCho9n37KLBqDVa02aMpMXpaX3vY0=
+X-Google-Smtp-Source: APXvYqzoX0OqCIDFL1Us7YAWuEEYxf5rBU2+XanWAU+CZlXKx2JHkQPiucY5FMII7XoOCHvdsvFPFmJKsXgHvGsBY5Y=
+X-Received: by 2002:a05:620a:a5b:: with SMTP id j27mr54185045qka.286.1577701298243;
+ Mon, 30 Dec 2019 02:21:38 -0800 (PST)
+MIME-Version: 1.0
+References: <20191223110004.2157-1-rppt@kernel.org> <20191227110736.GA30363@rapoport-lnx>
+In-Reply-To: <20191227110736.GA30363@rapoport-lnx>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 30 Dec 2019 11:21:22 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2ofBtooPi1ARCaHaJa9zRUVP_DKO1Td3WUgvO-0HnPSA@mail.gmail.com>
+Message-ID: <CAK8P3a2ofBtooPi1ARCaHaJa9zRUVP_DKO1Td3WUgvO-0HnPSA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] fix recent nds32 build breakage
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:OakknFVba80bLW7q5xxALsPjf5Jde0FegdpoRU/zsDbqqUStxZR
+ GjbYAX0Xmwv7iIHAyRlYFnE7Pd/W9lADl5Zp4xdYYQmx7FsyreGUgbFkpfa8qbTTln/Jx9m
+ 5Y5kPPzeDaOc8OtaGAiZVRODGR9uNN/IrW8R+tQWHWYHTe1cxQaqRSm6wxUE0D4TTqc6c3H
+ LKM0IH/UR6614wQJCleNA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WdXzbd8/Mss=:0XBl1TMV7gsMoNl2Lt6gFj
+ y3q/HlJLuq0uC1DyihNlpR7SV3909d6Nl1Pl/EYa3cpjPTmGwxpqGsVajiXjqwrDSZIVKvmwN
+ kZwI280rRNKjPGmkiNyLbEMiVECS0AWm8J/g1aZ5Nq5yL+1h7dSJddIrPpduXrG89U2COcqgb
+ E+2e6N2POW/i4YkvcmVBdMGUR3hlWISb7Fn9ffd2fI0xU21dM3l2MdGzcBxdB6e7v4qfU1Ayw
+ u4LND2hkosr0q0d6k+pcNXDU0i5SgOuCJvUAQnIJR2A4DxPl1JWr0ZIrsPNnN3sNhhg8Z8F6r
+ 7SuCMPn1rv0xdSpWoWNKXF5Zs1o9UYC9OKjGnO7aRjYn3/Rue66eAyIRp9aY1089QwEnihwNG
+ mw77E9AKo/9ZbOKtlk01A6CKSx46DLuQKMoVFiiZIW4bQAalMqsBWKhFkOvv1sJIyWK5EzLcz
+ Jiz84dh3btBXJhsGcYBKl7KKQhGe7sPsMnjtM784mwI8dOWoou8K1UgX9MuW8zZ0Mp1Md/rmO
+ 0GSY+1JjjLl7zo4NpFtLeBokVznrA8wHyj6UVPc/1q07ahklklPfKQ7HcqsbsPX5Px31bDeXk
+ h9mBj7VzKD9ZlBYCnEeioXaXwNu1ubaTLwgs9ki/wsghh4JjYql9aM336tPouoaluLa4WRzkz
+ 5TZHQ8Szb9tVL4yXTgq0p4mVqJp/YJaw6+MkASao7R/cy9MKml/qpvePYQ6rJREDRZrQegoUM
+ Pg63sfWjoXyX1rJSZHsevl8tqYxF1JIMq+Ir97bfcWfc4miBuBJwTzO8FM9lyEAepiGV4rNra
+ 5c+h8Mzp6j91LOWaBkE6dCjclsBwUuyjiXKo4GeORoMfWZ7h9cNRPBlrWcsun7K5+JCecnsAO
+ JOJu4coMZyLGltlOOLqw==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <ren_guo@c-sky.com>
+On Fri, Dec 27, 2019 at 12:07 PM Mike Rapoport <rppt@kernel.org> wrote:
+> Can you please take these via asm-generic tree?
 
-There is no present bit in csky pmd hardware, so we need to prepare invalid_pte_table
-for empty pmd entry and the functions (pmd_none & pmd_present) in pgtable.h need
-invalid_pte_talbe to get result. If a module use these functions, we need export the
-symbol for it.
+Merged into my asm-generic tree now, I'll send a pull request in a few days
+after the build bots have had a chance to check for remaining problems.
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Mo Qihui <qihui.mo@verisilicon.com>
-Cc: Zhange Jian <zhang_jian5@dahuatech.com>
----
- arch/csky/mm/init.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-index 322eb7bd7962..dbb4b2dfe4b7 100644
---- a/arch/csky/mm/init.c
-+++ b/arch/csky/mm/init.c
-@@ -31,6 +31,7 @@
- 
- pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
- pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned_bss;
-+EXPORT_SYMBOL(invalid_pte_table);
- unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
- 						__page_aligned_bss;
- EXPORT_SYMBOL(empty_zero_page);
--- 
-2.17.0
-
+       Arnd
