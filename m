@@ -2,159 +2,194 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95AA3131BA6
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2020 23:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2927131BB5
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2020 23:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbgAFWkZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Jan 2020 17:40:25 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:36615 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726742AbgAFWkZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jan 2020 17:40:25 -0500
-Received: by mail-pj1-f66.google.com with SMTP id n59so8360559pjb.1;
-        Mon, 06 Jan 2020 14:40:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=J3SHa4E3cS4gmRhRrRRBbMGMmQ7Swg+W9fTvK+8fgbo=;
-        b=QghAxNwbOpNWeCKcrY4MMLZJDUQrnsxywtSSfQVR5bQV7M+M7rv++XgA1gpLo82bsC
-         u59y/+LWBBr9YFYFfA0mH9/w8rXC9HyccLw7jQp1J7tS35SiY0zVscJ0WDjuRV3leyD4
-         gL7MRC+3jEgMXXSKVfKqFERRppct64iAp9BqPkRDLllU/3i/SQVahZ8MyMZnOCe8gWpI
-         pwViZWkaAakjgW4Lj3ptsQwvM5CuqwpE6TNYNxu8TvOUMrN43V41cpBlf/3zhVQUrpav
-         kJ8xa9NBgUxpisaayWNgqQY/brAFzqZHpAiXaRRAxoPcS86fWZhQPq/IXG5TFMiHDUaQ
-         +dQg==
-X-Gm-Message-State: APjAAAUUxReqDbtdTWKNz8LmFT/p55tdw/2g+BT6Uew853S8b2jW/y6l
-        HCj1Ra1T5PvtDw6BNNbhl6k=
-X-Google-Smtp-Source: APXvYqzL/Or94L+UYrmZszgXQkyK1iniMt70cGilBDndaFa7eg0lzxl/eodRL6mwFRsCXTaDCoazNg==
-X-Received: by 2002:a17:902:8f85:: with SMTP id z5mr108553143plo.43.1578350424536;
-        Mon, 06 Jan 2020 14:40:24 -0800 (PST)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id s24sm81687763pfd.161.2020.01.06.14.40.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2020 14:40:23 -0800 (PST)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 9822040321; Mon,  6 Jan 2020 22:40:22 +0000 (UTC)
-Date:   Mon, 6 Jan 2020 22:40:22 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        knut.omang@oracle.com, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch
- all KUnit tests
-Message-ID: <20200106224022.GX11244@42.do-not-panic.com>
-References: <20191216220555.245089-1-brendanhiggins@google.com>
+        id S1726721AbgAFWna (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Jan 2020 17:43:30 -0500
+Received: from mail-dm6nam10on2136.outbound.protection.outlook.com ([40.107.93.136]:22150
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726735AbgAFWna (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 6 Jan 2020 17:43:30 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DM38UKINbX51s0nUK8IOlWDdctGf3P6fJn5oMvVPRmmkWigbXpl/aKFc5gbDLPcCatkHQzXVXEU0piGKIqRQHuF6XtrrXTwWUtz6u4CImmiN5Ze/ADFZt1FnLVbHQgS/555+Yu3aB5bw/z1b7/ho8F6AZEMAF3hRc1uAUWJMF9wwsK5taFSVYwM8bDkUZhW129NfrNQVDOwHAz7POrcN5xD2kkTHb3xUF8aU1rq10SfDKzAuK4uS6zWX8cl3oqeimvCazmppxU6AjHqIfTmibvSPpoWM0e+T7WEtHfeaOdADJsUSYTqzGj699pqa/O4QNolFn1NrRB4lkvUI8ASTMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DCgJOcCj17EAGRsOkG92QqjGFbp62fRnm8CK5T6ZfCY=;
+ b=VuWWE4KHgRPP/iVS5MprxAY5gXnbD10SCvzeTbxxMQZozPj10N9icRb9M2JIwxcymEq0pvxw8tEOPR1GJbupcVFx3gsFPH0UVVqgSk5MAaKgInckLmg1JW8FeGEn8tiPp6gp8gBlup+Jg0o6Z2YUznNhElnToOHMweoM3xka4NvnZWYFTEyyXOj/IA5XxyTlxoQeDUpSUHg1iRQGl/DX2j3gOLi28tnqa9y9j0UdSgqaL67hjbLhHCXeXPlpbI5jIpcMObGgbRZHjhuXnt5HUQIp2X3tIIhqsNdoozI9+wt/hCzrSxgOzQaFthIxOHJS5jKvLJOF1JaAsqb5vtZNXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DCgJOcCj17EAGRsOkG92QqjGFbp62fRnm8CK5T6ZfCY=;
+ b=T5V4Hy7GHhKXd9uYrGiL7174wufRMFb73GqsQFRQlZsCjpKMD899nRX9QuCbYA6uv0XEvKaQUXyUU9LvOyWO0Je1EK7R5uwWi7l2dD1EdkFTIQPgBll6oVCBhurX90WiF7hY8BwcbJNqLYF7lMAShYHPHJ8x0AO0QgaSacVfJz8=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=decui@microsoft.com; 
+Received: from CY4PR21MB0775.namprd21.prod.outlook.com (10.173.192.21) by
+ CY4PR21MB0182.namprd21.prod.outlook.com (10.173.193.8) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2623.4; Mon, 6 Jan 2020 22:42:46 +0000
+Received: from CY4PR21MB0775.namprd21.prod.outlook.com
+ ([fe80::6155:bc1d:1d39:977b]) by CY4PR21MB0775.namprd21.prod.outlook.com
+ ([fe80::6155:bc1d:1d39:977b%8]) with mapi id 15.20.2644.002; Mon, 6 Jan 2020
+ 22:42:46 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     arnd@arndb.de, bp@alien8.de, daniel.lezcano@linaro.org,
+        haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, sashal@kernel.org, sthemmin@microsoft.com,
+        tglx@linutronix.de, x86@kernel.org, mikelley@microsoft.com,
+        Alexander.Levin@microsoft.com, vkuznets@redhat.com
+Cc:     linux-arch@vger.kernel.org, Dexuan Cui <decui@microsoft.com>
+Subject: [PATCH v6][RESEND] x86/hyperv: Suspend/resume the hypercall page for hibernation
+Date:   Mon,  6 Jan 2020 14:42:39 -0800
+Message-Id: <1578350559-130275-1-git-send-email-decui@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Reply-To: decui@microsoft.com
+Content-Type: text/plain
+X-ClientProxiedBy: MWHPR12CA0038.namprd12.prod.outlook.com
+ (2603:10b6:301:2::24) To CY4PR21MB0775.namprd21.prod.outlook.com
+ (2603:10b6:903:b8::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191216220555.245089-1-brendanhiggins@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (13.77.154.182) by MWHPR12CA0038.namprd12.prod.outlook.com (2603:10b6:301:2::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2602.12 via Frontend Transport; Mon, 6 Jan 2020 22:42:45 +0000
+X-Mailer: git-send-email 1.8.3.1
+X-Originating-IP: [13.77.154.182]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: eb2495d9-9584-4a4d-eb0f-08d792f9bfbc
+X-MS-TrafficTypeDiagnostic: CY4PR21MB0182:|CY4PR21MB0182:|CY4PR21MB0182:
+X-MS-Exchange-Transport-Forked: True
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-Microsoft-Antispam-PRVS: <CY4PR21MB01822EB28F4FF96349F1FA34BF3C0@CY4PR21MB0182.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-Forefront-PRVS: 0274272F87
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(366004)(39860400002)(376002)(346002)(396003)(136003)(189003)(199004)(5660300002)(966005)(107886003)(15650500001)(10290500003)(2906002)(3450700001)(478600001)(4326008)(6512007)(316002)(186003)(6486002)(16526019)(26005)(6666004)(956004)(81166006)(81156014)(8676002)(2616005)(8936002)(6506007)(86362001)(7416002)(66946007)(66476007)(66556008)(52116002)(36756003)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR21MB0182;H:CY4PR21MB0775.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+Received-SPF: None (protection.outlook.com: microsoft.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LphRne6k8wsntp8nqM/w6rSUHnBCS8tuWwrsVFZlzTfdCDVwWC1v6YjJ+SqRwVeMyKdA+3zq6W4WnXFsrlD+KoAYBe7AHCtwnspHIrkGbNNoMwgHjoD9fPrd/2lxyyojwc/OquUy2ai2qWDt4uZrHw2pohBohmJvOiv3XkDudRysju3MVKx4S73lR+Y9kZypCzdVhXbL44COwuHZY6Atxr9uVf/laA1fJ/+MGLXVtAylHrcMBQEezlYUQ8/vTqbBJ0oCjxYCX4/W9SxEIJ+aHeISh39K6RFafqFWDaDB84kp+6Wv3NOdA5VcndrxQ1kRuPDtGXKs1YnEA1/DooUPdItOs54X2Yg9AGoFzP9LKb1DbIiEsaxKYpY52eo+/r4F6MN7gJ9j6GXMz1f78CWK8g9MJnBCzetcXWAetSx8hCh9UXr3oD4fnL5mMU3N/qQ/g+U97uNWoKSFFCeP6iOuB1iR8nzr/IU9+h+Pd5MNtm51KWpXQRNlsOEIwIdXq/vz0YjsRaP0eqTtOc4beh8rgfnVdI27yIqg7RUAD7QLv3gy+IFTqkO/mhHY28U5ocQxlB/DHVo7xSeXoUG+PpQATQ==
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb2495d9-9584-4a4d-eb0f-08d792f9bfbc
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2020 22:42:45.9165
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AK2owzNt8jeYWm3hXkcUb0HTgwJnx4hC7PocRhhHb1oz+ARDFlJ/dsJrRW3x3qwUaY/5of0c7VVZjqvYhDta/w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR21MB0182
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Dec 16, 2019 at 02:05:49PM -0800, Brendan Higgins wrote:
-> ## TL;DR
-> 
-> This patchset adds a centralized executor to dispatch tests rather than
-> relying on late_initcall to schedule each test suite separately along
-> with a couple of new features that depend on it.
-> 
-> ## What am I trying to do?
-> 
-> Conceptually, I am trying to provide a mechanism by which test suites
-> can be grouped together so that they can be reasoned about collectively.
-> The last two patches in this series add features which depend on this:
-> 
-> RFC 5/6 Prints out a test plan right before KUnit tests are run[1]; this
->         is valuable because it makes it possible for a test harness to
->         detect whether the number of tests run matches the number of
->         tests expected to be run, ensuring that no tests silently
->         failed.
-> 
-> RFC 6/6 Add a new kernel command-line option which allows the user to
->         specify that the kernel poweroff, halt, or reboot after
->         completing all KUnit tests; this is very handy for running KUnit
->         tests on UML or a VM so that the UML/VM process exits cleanly
->         immediately after running all tests without needing a special
->         initramfs.
+This is needed for hibernation, e.g. when we resume the old kernel, we need
+to disable the "current" kernel's hypercall page and then resume the old
+kernel's.
 
-The approach seems sensible to me given that it separates from a
-semantics perspective kernel subsystem init work from *testing*, and
-so we are sure we'd run the *test* stuff *after* all subsystem init
-stuff.
+Signed-off-by: Dexuan Cui <decui@microsoft.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+---
 
-Dispatching, however is still immediate, and with a bit of work, this
-dispatcher could be configurable to run at an arbirary time after boot.
-If there are not immediate use cases for that though, then I suppose
-this is not a requirement for the dispatcher. But since there exists
-another modular test framework with its own dispatcher and it seems the
-goal is to merge the work long term, this might preempt the requirement
-to define how and when we can dispatch tests post boot.
+This is a RESEND of https://lkml.org/lkml/2019/11/20/68 .
 
-And, if we're going to do that, I can suggest that a data structure
-instead of just a function init call be used to describe tests to be
-placed into an ELF section. With my linker table work this would be
-easy, I define section ranges for code describing only executable
-routines, but it defines linker tables for when a component in the
-kernel would define a data structure, part of which can be a callback.
-Such data structure stuffed into an ELF section could allow dynamic
-configuration of the dipsatching, even post boot.
+Please review.
 
-I think this is a good stepping stone forward then, and to allow
-dynamic configuration of the dispatcher could mean eventual extensions
-to kunit's init stuff to stuff init calls into a data structure which
-can then allow configuration of the dispatching. One benefit that the
-linker table work *may* be able to help here with is that it allows
-an easy way to create kunit specific ordering, at linker time.
-There is also an example of addressing / generalizing dynamic / run time
-changes of ordering, by using the x86 IOMMU initialization as an
-example case. We don't have an easy way to do this today, but if kunit
-could benefit from such framework, it'd be another use case for
-the linker table work. That is, the ability to easilly allow
-dynamically modifying run time ordering of code through ELF sections.
+If it looks good, can you please pick it up through the tip.git tree?
 
-> In addition, by dispatching tests from a single location, we can
-> guarantee that all KUnit tests run after late_init is complete, which
-> was a concern during the initial KUnit patchset review (this has not
-> been a problem in practice, but resolving with certainty is nevertheless
-> desirable).
 
-Indeed, the concern is just a real semantics limitations. With the tests
-*always* running after all subsystem init stuff, we know we'd have a
-real full kernel ready.
+ arch/x86/hyperv/hv_init.c | 48 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-It does beg the question if this means kunit is happy to not be a tool
-to test pre basic setup stuff (terminology used in init.c, meaning prior
-to running all init levels). I suspect this is the case.
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index caaf4dce99bf..24a62d33067c 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -21,11 +21,15 @@
+ #include <linux/hyperv.h>
+ #include <linux/slab.h>
+ #include <linux/cpuhotplug.h>
++#include <linux/syscore_ops.h>
+ #include <clocksource/hyperv_timer.h>
+ 
+ void *hv_hypercall_pg;
+ EXPORT_SYMBOL_GPL(hv_hypercall_pg);
+ 
++/* Save the hypercall page temporarily for hibernation */
++static void *hv_hypercall_pg_saved;
++
+ u32 *hv_vp_index;
+ EXPORT_SYMBOL_GPL(hv_vp_index);
+ 
+@@ -246,6 +250,46 @@ static int __init hv_pci_init(void)
+ 	return 1;
+ }
+ 
++static int hv_suspend(void)
++{
++	union hv_x64_msr_hypercall_contents hypercall_msr;
++
++	/*
++	 * Reset hypercall page reference before reset the page,
++	 * let hypercall operations fail safely rather than
++	 * panic the kernel for using invalid hypercall page
++	 */
++	hv_hypercall_pg_saved = hv_hypercall_pg;
++	hv_hypercall_pg = NULL;
++
++	/* Reset the hypercall page */
++	rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
++	hypercall_msr.enable = 0;
++	wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
++
++	return 0;
++}
++
++static void hv_resume(void)
++{
++	union hv_x64_msr_hypercall_contents hypercall_msr;
++
++	/* Re-enable the hypercall page */
++	rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
++	hypercall_msr.enable = 1;
++	hypercall_msr.guest_physical_address =
++		vmalloc_to_pfn(hv_hypercall_pg_saved);
++	wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
++
++	hv_hypercall_pg = hv_hypercall_pg_saved;
++	hv_hypercall_pg_saved = NULL;
++}
++
++static struct syscore_ops hv_syscore_ops = {
++	.suspend = hv_suspend,
++	.resume = hv_resume,
++};
++
+ /*
+  * This function is to be invoked early in the boot sequence after the
+  * hypervisor has been detected.
+@@ -330,6 +374,8 @@ void __init hyperv_init(void)
+ 
+ 	x86_init.pci.arch_init = hv_pci_init;
+ 
++	register_syscore_ops(&hv_syscore_ops);
++
+ 	return;
+ 
+ remove_cpuhp_state:
+@@ -349,6 +395,8 @@ void hyperv_cleanup(void)
+ {
+ 	union hv_x64_msr_hypercall_contents hypercall_msr;
+ 
++	unregister_syscore_ops(&hv_syscore_ops);
++
+ 	/* Reset our OS id */
+ 	wrmsrl(HV_X64_MSR_GUEST_OS_ID, 0);
+ 
+-- 
+2.19.1
 
-> Other use cases for this exist, but the above features should provide an
-> idea of the value that this could provide.
-> 
-> ## What work remains to be done?
-> 
-> These patches were based on patches in our non-upstream branch[2], so we
-> have a pretty good idea that they are useable as presented;
-> nevertheless, some of the changes done in this patchset could
-> *definitely* use some review by subsystem experts (linker scripts, init,
-> etc), and will likely change a lot after getting feedback.
-> 
-> The biggest thing that I know will require additional attention is
-> integrating this patchset with the KUnit module support patchset[3]. I
-> have not even attempted to build these patches on top of the module
-> support patches as I would like to get people's initial thoughts first
-> (especially Alan's :-) ). I think that making these patches work with
-> module support should be fairly straight forward, nevertheless.
-
-Modules just have their own sections too. That's all. So it'd be a
-matter of extending the linker script for modules too. But a module's
-init is different than the core kernel's for vmlinux.
-
-  Luis
