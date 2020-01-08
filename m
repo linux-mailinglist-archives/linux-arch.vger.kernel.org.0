@@ -2,39 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A24FA133D77
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jan 2020 09:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 269AA133D97
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jan 2020 09:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbgAHIo6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 8 Jan 2020 03:44:58 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:52877 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726313AbgAHIo6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jan 2020 03:44:58 -0500
-Received: from mail-qk1-f182.google.com ([209.85.222.182]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MfHMj-1jMEiy0Wjr-00gm0v; Wed, 08 Jan 2020 09:44:55 +0100
-Received: by mail-qk1-f182.google.com with SMTP id a203so1957447qkc.3;
-        Wed, 08 Jan 2020 00:44:54 -0800 (PST)
-X-Gm-Message-State: APjAAAX/HqfzxlmtV4x1U/fKGxAmv9rT/vfSvMM8DmSA2x3G6g5atz9c
-        FEdHLPGupeYZbVYLaoyimUSYpqqYMug0lHm0vUo=
-X-Google-Smtp-Source: APXvYqwBkJ8QmnIL+nEzdyW4cVb2dCgT1+bxTVHrv/QXRUdjO9mWLnIecKxCrEVE9XkgL278ZPmA2bqFRRwBDXNH4F8=
-X-Received: by 2002:a05:620a:a5b:: with SMTP id j27mr3333439qka.286.1578473093254;
- Wed, 08 Jan 2020 00:44:53 -0800 (PST)
-MIME-Version: 1.0
-References: <1578415992-24054-1-git-send-email-krzk@kernel.org>
- <CAMuHMdW4ek0OYQDrrbcpZjNUTTP04nSbwkmiZvBmKcU=PQM9qA@mail.gmail.com>
- <CAMuHMdUBmYtJKtSYzS_5u67hVZOqcKSgFY1rDGme6gLNRBJ_gA@mail.gmail.com>
- <CAJKOXPfq9vS4kSyx1jOPHBvi9_HjviRv0LU2A8ZwdmqgUuebHQ@mail.gmail.com> <2355489c-a207-1927-54cf-85c04b62f18f@c-s.fr>
-In-Reply-To: <2355489c-a207-1927-54cf-85c04b62f18f@c-s.fr>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 8 Jan 2020 09:44:36 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a21yPrmp4ik3Ei1BZfeqZNf0wL5NZNF3uXqb4FLRDyUPw@mail.gmail.com>
-Message-ID: <CAK8P3a21yPrmp4ik3Ei1BZfeqZNf0wL5NZNF3uXqb4FLRDyUPw@mail.gmail.com>
+        id S1727466AbgAHIsu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jan 2020 03:48:50 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:9734 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727313AbgAHIsu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 8 Jan 2020 03:48:50 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 47t2wF6zpLz9v3Hd;
+        Wed,  8 Jan 2020 09:48:45 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=Cd0z8iC9; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id eHCnKMUwPC8j; Wed,  8 Jan 2020 09:48:45 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47t2wF5Z8xz9v3Hc;
+        Wed,  8 Jan 2020 09:48:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1578473325; bh=kWCAIl6qlr/NQhjX84pOmCSHzIhFMSBDwvFc83ztIuI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Cd0z8iC9RC8pjwPeyNjKHDYp8ooejNu3HGALPmb6+R1rGPni1Gqd3Osr1pzBr++DW
+         qVroJ655pO9/GIgcKq73QC5BW2ualhxp5CandPHCNUTG1TbQ4ytfyemBB8YchvhikW
+         Jys4zIMmlSAmxqdhihc3mS1nPdn3QvL04p1qUK10=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BCA2B8B7ED;
+        Wed,  8 Jan 2020 09:48:46 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id Z-k90vSTB5Ao; Wed,  8 Jan 2020 09:48:46 +0100 (CET)
+Received: from [172.25.230.100] (po15451.idsi0.si.c-s.fr [172.25.230.100])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2CC498B7EA;
+        Wed,  8 Jan 2020 09:48:46 +0100 (CET)
 Subject: Re: [RFT 00/13] iomap: Constify ioreadX() iomem argument
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
         Rich Felker <dalias@libc.org>,
         Jiri Slaby <jirislaby@gmail.com>,
         "Michael S. Tsirkin" <mst@redhat.com>,
@@ -51,13 +60,12 @@ Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         Helge Deller <deller@gmx.de>,
         Linux-sh list <linux-sh@vger.kernel.org>,
         Alexey Brodkin <abrodkin@synopsys.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
+        Ben Skeggs <bskeggs@redhat.com>, nouveau@lists.freedesktop.org,
         Dave Airlie <airlied@redhat.com>,
         Matt Turner <mattst88@gmail.com>,
         arcml <linux-snps-arc@lists.infradead.org>,
         Nick Kossifidis <mickflemm@gmail.com>,
-        Allen Hubbe <allenbh@gmail.com>,
+        Allen Hubbe <allenbh@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
         alpha <linux-alpha@vger.kernel.org>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -75,70 +83,78 @@ Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:QwaGXiRich5wImpYp8FQnHgp5kz2EKPSRExzga2LIzGLBfSa0WJ
- YnmgjVSYdk7STyuVgrutKdQc7aoKqByAaVnwi68AgQg3IFWh04Gh6pqjpKwH3m7wy2iRCA1
- PvzHznSMskO2L/HVIAkGLVZhQ2nbXsMe5JX3qhXYDTaGmuCa8roKlNaJ8gtk4H96Hm0BIPI
- zBw/C+qVbQbtL0MIhk1oQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UcFnSV1veRY=:yAYfQVlOazrC0OSa/xZ2Nn
- yp42v9FkRaF2KA4UJ3hjLCp/g9EzGQLUUTq//7jvX8/1CNRrXY8VT91084KTIyxk5Vs+EPryg
- aj2xlfhVVGolkKoUV/BYXQ1UzgTF+jRGGxmvzbPbwcRznWjbl/0+uRFH3IKIgZ3tHYMvGImty
- NSMXcL9iShsH5E6VqRg6pjGR2qpkRHXy7xlxlS++W6GEH/tAkTdr0W8n7scB8zJDHoFww+gm1
- mtNLiJQNf7AvKEuJc1lc/zQM7FFsH7pzEpFfLHipJsUdUZez7aWC5PjeoaCPO0CYMAgP6aqIK
- t3ZuhjdM2x3mdYDPc4ytUKByu0kMK6SzuEgpSNsE1h1OBPNZIN/0iVEzl5a+CGrKarZpXA9NA
- fxBdYShqIjl5+TtpR1po0zbDoSVf+6imCQsw5j4oJxHcsgl1hiJ5mif+Sw+p+65ElTSANGZfz
- 3isHRrC0FZg7bZTy6rZsBC9Fh81yzVhvb8ut8Epv5wp+AyiNKbL+Dtsv8mrPCQ6CFVXCDQIIV
- K2m8Y4gxk0BomOAq4MJywrsw25fODcLK1jVRlwZuWuyNZ/SNtdEko4BaJb5ECWS3OM3qB9j06
- RwjrEWLGO9an6mnuQqyFg8XcOq32zG5kYZphVInaxus9CsKlR2cxv7i8A9nB3LXmVBZXYxyHs
- Rx1ltzngDZdduOi0jQG/AVGiV6D/+uNwvPGg2VBVnufTIpjgMlYQhVohLhEZ4Ed+OAg6nB8uu
- LY2MUEZJYDPxl1zj4vm9pEQ9ulHV5pF3leUwNDwFRt+SLKh7CShdNt/xa4q8afWm/NAtMzk0F
- s9mraeWNkFoevqmtlU9H/+y6nNpPiZ6YfrT6GLSmJZVC1QU8R+9ystFFly9223I8kpFenpElw
- yHqdix5nJ7UFSyxlyduw==
+References: <1578415992-24054-1-git-send-email-krzk@kernel.org>
+ <CAMuHMdW4ek0OYQDrrbcpZjNUTTP04nSbwkmiZvBmKcU=PQM9qA@mail.gmail.com>
+ <CAMuHMdUBmYtJKtSYzS_5u67hVZOqcKSgFY1rDGme6gLNRBJ_gA@mail.gmail.com>
+ <CAJKOXPfq9vS4kSyx1jOPHBvi9_HjviRv0LU2A8ZwdmqgUuebHQ@mail.gmail.com>
+ <2355489c-a207-1927-54cf-85c04b62f18f@c-s.fr>
+ <CAMuHMdV=-m-eN4rOa=XQhk2oBDZZwgXXMU6RMVQRVsc6ALyeoA@mail.gmail.com>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <00a43e5c-0708-d49a-9cc4-eb2ce8b4cf99@c-s.fr>
+Date:   Wed, 8 Jan 2020 09:48:46 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
+MIME-Version: 1.0
+In-Reply-To: <CAMuHMdV=-m-eN4rOa=XQhk2oBDZZwgXXMU6RMVQRVsc6ALyeoA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 8, 2020 at 9:36 AM Christophe Leroy <christophe.leroy@c-s.fr> wrote:
-> Le 08/01/2020 à 09:18, Krzysztof Kozlowski a écrit :
-> > On Wed, 8 Jan 2020 at 09:13, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > I'll add to this one also changes to ioreadX_rep() and add another
-> > patch for volatile for reads and writes. I guess your review will be
-> > appreciated once more because of ioreadX_rep()
-> >
->
-> volatile should really only be used where deemed necessary:
->
-> https://www.kernel.org/doc/html/latest/process/volatile-considered-harmful.html
->
-> It is said: " ...  accessor functions might use volatile on
-> architectures where direct I/O memory access does work. Essentially,
-> each accessor call becomes a little critical section on its own and
-> ensures that the access happens as expected by the programmer."
+Hi Geert,
 
-The I/O accessors are one of the few places in which 'volatile' generally
-makes sense, at least for the implementations that do a plain pointer
-dereference (probably none of the ones in question here).
+Le 08/01/2020 à 09:43, Geert Uytterhoeven a écrit :
+> Hi Christophe,
+> 
+> On Wed, Jan 8, 2020 at 9:35 AM Christophe Leroy <christophe.leroy@c-s.fr> wrote:
+>> Le 08/01/2020 à 09:18, Krzysztof Kozlowski a écrit :
+>>> On Wed, 8 Jan 2020 at 09:13, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>>> On Wed, Jan 8, 2020 at 9:07 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>>>> On Tue, Jan 7, 2020 at 5:53 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>>>>> The ioread8/16/32() and others have inconsistent interface among the
+>>>>>> architectures: some taking address as const, some not.
+>>>>>>
+>>>>>> It seems there is nothing really stopping all of them to take
+>>>>>> pointer to const.
+>>>>>
+>>>>> Shouldn't all of them take const volatile __iomem pointers?
+>>>>> It seems the "volatile" is missing from all but the implementations in
+>>>>> include/asm-generic/io.h.
+>>>>
+>>>> As my "volatile" comment applies to iowrite*(), too, probably that should be
+>>>> done in a separate patch.
+>>>>
+>>>> Hence with patches 1-5 squashed, and for patches 11-13:
+>>>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>>>
+>>> I'll add to this one also changes to ioreadX_rep() and add another
+>>> patch for volatile for reads and writes. I guess your review will be
+>>> appreciated once more because of ioreadX_rep()
+>>
+>> volatile should really only be used where deemed necessary:
+>>
+>> https://www.kernel.org/doc/html/latest/process/volatile-considered-harmful.html
+>>
+>> It is said: " ...  accessor functions might use volatile on
+>> architectures where direct I/O memory access does work. Essentially,
+>> each accessor call becomes a little critical section on its own and
+>> ensures that the access happens as expected by the programmer."
+> 
+> That is exactly the use case here: all above are accessor functions.
+> 
+> Why would ioreadX() not need volatile, while readY() does?
+> 
 
-In case of readl/writel, this is what we do in asm-generic:
+My point was: it might be necessary for some arches and not for others.
 
-static inline u32 __raw_readl(const volatile void __iomem *addr)
-{
-        return *(const volatile u32 __force *)addr;
-}
+And as pointed by Arnd, the volatile is really only necessary for the 
+dereference itself, should the arch use dereferencing.
 
-The __force-cast that removes the __iomem here also means that
-the 'volatile' keyword could be dropped from the argument list,
-as it has no real effect any more, but then there are a few drivers
-that mark their iomem pointers as either 'volatile void __iomem*' or
-(worse) 'volatile void *', so we keep it in the argument list to not
-add warnings for those drivers.
+So I guess the best would be to go in the other direction: remove 
+volatile keyword wherever possible instead of adding it where it is not 
+needed.
 
-It may be time to change these drivers to not use volatile for __iomem
-pointers, but that seems out of scope for what Krzysztof is trying
-to do. Ideally we would be consistent here though, either using volatile
-all the time or never.
-
-        Arnd
+Christophe
