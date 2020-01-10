@@ -2,92 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3218E13702E
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 15:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1941371C6
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 16:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728381AbgAJOyu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jan 2020 09:54:50 -0500
-Received: from foss.arm.com ([217.140.110.172]:45970 "EHLO foss.arm.com"
+        id S1728370AbgAJPwC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jan 2020 10:52:02 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:55556 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728385AbgAJOyt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 10 Jan 2020 09:54:49 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 722F2106F;
-        Fri, 10 Jan 2020 06:54:49 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C26D83F6C4;
-        Fri, 10 Jan 2020 06:54:48 -0800 (PST)
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-arch@vger.kernel.org
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, linux-s390@vger.kernel.org,
-        herbert@gondor.apana.org.au, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 10/10] s390x: Mark archrandom.h functions __must_check
-Date:   Fri, 10 Jan 2020 14:54:22 +0000
-Message-Id: <20200110145422.49141-11-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200110145422.49141-1-broonie@kernel.org>
+        id S1728151AbgAJPwC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 Jan 2020 10:52:02 -0500
+Received: from zn.tnic (p200300EC2F0ACA0005C6612E529EFC59.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:ca00:5c6:612e:529e:fc59])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 54E781EC02C1;
+        Fri, 10 Jan 2020 16:52:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1578671520;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PG559ixUh7Dx/k476pfGogc1Fgz5iKSv3jts5x2RJcE=;
+        b=Ma+x5ECbcd8uQhY7OlRNSrHvPFMNPluXa2lr+PMdOUNQd0XtvgG24DD0Bn42megLWZ2d2c
+        KqhyncnHnzTU5kmIxXP7BIr54gmpABvKWNsV/r81n4nlTaMwiSzJWB9fmGX+pIjFlzVIBH
+        D4YxpSccbuvyLndmoojSLj1ovwg8rYc=
+Date:   Fri, 10 Jan 2020 16:51:53 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Mark Brown <broonie@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        linux-s390@vger.kernel.org, herbert@gondor.apana.org.au,
+        x86@kernel.org, linux-crypto@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 00/10] Impveovements for random.h/archrandom.h
+Message-ID: <20200110155153.GG19453@zn.tnic>
 References: <20200110145422.49141-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200110145422.49141-1-broonie@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Richard Henderson <richard.henderson@linaro.org>
+On Fri, Jan 10, 2020 at 02:54:12PM +0000, Mark Brown wrote:
+> This is a resend of a series from Richard Henderson last posted back in
+> November:
+> 
+>    https://lore.kernel.org/linux-arm-kernel/20191106141308.30535-1-rth@twiddle.net/
+> 
+> Back then Borislav said they looked good and asked if he should take
+> them through the tip tree but things seem to have got lost since then.
 
-We must not use the pointer output without validating the
-success of the random read.
+Or, alternatively, akpm could take them. In any case, if someone else
+ends up doing that, for the x86 bits:
 
-Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Richard Henderson <rth@twiddle.net>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/s390/include/asm/archrandom.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Reviewed-by: Borislav Petkov <bp@suse.de>
 
-diff --git a/arch/s390/include/asm/archrandom.h b/arch/s390/include/asm/archrandom.h
-index 9a6835137a16..de61ce562052 100644
---- a/arch/s390/include/asm/archrandom.h
-+++ b/arch/s390/include/asm/archrandom.h
-@@ -21,17 +21,17 @@ extern atomic64_t s390_arch_random_counter;
- 
- bool s390_arch_random_generate(u8 *buf, unsigned int nbytes);
- 
--static inline bool arch_get_random_long(unsigned long *v)
-+static inline bool __must_check arch_get_random_long(unsigned long *v)
- {
- 	return false;
- }
- 
--static inline bool arch_get_random_int(unsigned int *v)
-+static inline bool __must_check arch_get_random_int(unsigned int *v)
- {
- 	return false;
- }
- 
--static inline bool arch_get_random_seed_long(unsigned long *v)
-+static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
- {
- 	if (static_branch_likely(&s390_arch_random_available)) {
- 		return s390_arch_random_generate((u8 *)v, sizeof(*v));
-@@ -39,7 +39,7 @@ static inline bool arch_get_random_seed_long(unsigned long *v)
- 	return false;
- }
- 
--static inline bool arch_get_random_seed_int(unsigned int *v)
-+static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
- {
- 	if (static_branch_likely(&s390_arch_random_available)) {
- 		return s390_arch_random_generate((u8 *)v, sizeof(*v));
+Thx.
+
 -- 
-2.20.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
