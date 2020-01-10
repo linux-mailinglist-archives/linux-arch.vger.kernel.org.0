@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 860BA1376E5
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 20:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5B0137762
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 20:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728185AbgAJTYT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jan 2020 14:24:19 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:35603 "EHLO
+        id S1728224AbgAJTm4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jan 2020 14:42:56 -0500
+Received: from mout.kundenserver.de ([217.72.192.74]:33551 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728106AbgAJTYT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jan 2020 14:24:19 -0500
-Received: from mail-qv1-f41.google.com ([209.85.219.41]) by
+        with ESMTP id S1727812AbgAJTm4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jan 2020 14:42:56 -0500
+Received: from mail-qk1-f171.google.com ([209.85.222.171]) by
  mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Ml6du-1jWmM93TQ4-00lUgy; Fri, 10 Jan 2020 20:24:18 +0100
-Received: by mail-qv1-f41.google.com with SMTP id o18so1273662qvf.1;
-        Fri, 10 Jan 2020 11:24:17 -0800 (PST)
-X-Gm-Message-State: APjAAAXfCtqtVZa3zweztH807mcxq5nVQsUoitn16oXtfVsKebOMzTrf
-        szWHIc2WM5zytaE3TI9HaOfEazifq1jEusyoX7w=
-X-Google-Smtp-Source: APXvYqzd2hmstZ9l10zTYEs+f7uDdN5MQZM9KWvb/cNLE8AYGII20Ive9ghFbtq0MLUH74D2qPmefmOPczx/DA0uGUI=
-X-Received: by 2002:a0c:d788:: with SMTP id z8mr152872qvi.211.1578684256605;
- Fri, 10 Jan 2020 11:24:16 -0800 (PST)
+ id 1MeTsQ-1jQALS1vNM-00aSXi; Fri, 10 Jan 2020 20:42:54 +0100
+Received: by mail-qk1-f171.google.com with SMTP id x1so2953658qkl.12;
+        Fri, 10 Jan 2020 11:42:54 -0800 (PST)
+X-Gm-Message-State: APjAAAWBPVyLB6T267DIP/hhUxRxW7Dmm9SfiOzbkPclq7f6UEjKMm/V
+        9ST6lVkCQCtzcTcKEgGCk2iygKMPc4mIu6lJsdI=
+X-Google-Smtp-Source: APXvYqzbBDJetuIP2AxIVMlt1l/ueQP3AP+6umNRi4uyQzmIdxL8PsdmNyjbRyqK4rz4kxClVWV5FCQyR2/lEd0yr9w=
+X-Received: by 2002:a37:84a:: with SMTP id 71mr4703601qki.138.1578685373260;
+ Fri, 10 Jan 2020 11:42:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20200110165636.28035-1-will@kernel.org> <20200110165636.28035-6-will@kernel.org>
-In-Reply-To: <20200110165636.28035-6-will@kernel.org>
+References: <20200110165636.28035-1-will@kernel.org> <20200110165636.28035-8-will@kernel.org>
+In-Reply-To: <20200110165636.28035-8-will@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 10 Jan 2020 20:24:00 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1pDW7cABLeotZBNTTxLxkQ299wO0OG3AWGyDqJWmQA+A@mail.gmail.com>
-Message-ID: <CAK8P3a1pDW7cABLeotZBNTTxLxkQ299wO0OG3AWGyDqJWmQA+A@mail.gmail.com>
-Subject: Re: [RFC PATCH 5/8] READ_ONCE: Enforce atomicity for
- {READ,WRITE}_ONCE() memory accesses
+Date:   Fri, 10 Jan 2020 20:42:37 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2dBFiu37_YAvpoug-+RkKqq3i+8-Tkv5HPBag3JAEJrA@mail.gmail.com>
+Message-ID: <CAK8P3a2dBFiu37_YAvpoug-+RkKqq3i+8-Tkv5HPBag3JAEJrA@mail.gmail.com>
+Subject: Re: [RFC PATCH 7/8] locking/barriers: Use '__unqual_scalar_typeof'
+ for load-acquire macros
 To:     Will Deacon <will@kernel.org>
 Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
@@ -41,45 +41,46 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ev8K4YMvcdYPml3GY3aO/4/vuWKU7cZbfJmipe8dfz3JyngSvju
- Wv4NNUmZTSTTyU0E16+aJt3syYAiNy3NWp4ERPkdTDo0mcHbhhZZv7mzbn+HbP40vcFYe1Y
- KyQDlk1l2GqNLVtLXUi6HllsgidHr0AqBMLVu3JZuM6p9cQHJ/ZWPq0VndUsN5NcUld4iox
- S0AHYQQR99ROxBuMmdKMA==
+X-Provags-ID: V03:K1:VtWkG5t3b7jmFW/oIX7NXwWSMIe4cv+Pf3BWC5gZdss1cK3y7PL
+ t+w2jK+ARiorrug1YBOJDdS0zvN5DDTU7CtKw8tuwthIs4Oy2sUXb9CAbgRmJ6oGvg0kkel
+ zYyTPLXRIdCc92frIQxghb8D93/jtkSrgLZa4jc7jm+C+Iv86B9QxY7U5QUUrpsIr4v71Bo
+ 1sdb+1INLzdmx5XghWILA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wpkyqc6zofw=:ToNUCGqkTCirKuUdME33UK
- IhZ/Fkyf/Ux8dK5ivs4y0WMR76cYYUvMGSzo0GAV8rLea90c05nx/SWquKF3LtZ2glH2xfhLI
- kAPTK7CR1X6RoQQMU59O45BGJwyFnTR/BKF5sKjfoopx/hnTLeQYQGRvn13Wza3ikm0vtxHKJ
- fps6FiEoW45Vf3LGu5B00LiwN/k2pzFCMY0O5X++CXTaVA5lrCEtyzvM0m/7YgaszGwvtJphO
- jrlGo2YNinYzumLXEYjAHxavFHLZoSp/1/X++lEcGUsJqOpbPbEvkBMjo9gcnVzhePTv3NqBF
- uV3l/C6odOTgdyWJ8ThVJLd02EVEWLCNTV2TpFzZnEE77yCxjlO9UoQ0GBII1zLtKa3Ah2zlm
- 9XdyEJ5x2C1vz07TsIdTBC05j8kgm4plJsw4Q1bgVNh0UuiI+Tdhxtxyg9jhc9CZprmgdBzKM
- zy+EzZaoEV9U7aSkRQXr+tepXgNU7ZaMIDz+X6dpTrPVT8Tl44q7meUf+Flv1BMSjzoi4gTGd
- jlc6G/RJB+CDa1XNux+SN1VTYnB+vqNMFfnb5xGkFNLIiS1YvzTroupdI7AaBHz/PlOsbC8Ss
- VrBwj1Y+rV5ra7k0cYfT/0Y2cCZiJ4xlXi17jk0CA4ooH8YRCagawtftvS5jFoKeI/iwbd/Yr
- hX07tjd+pRUtWpNF/OJM/7taBcDcvdwjKE+ruyQvdbctR1F2oH51k4U6zLSx/yqWEAkJiB3Zd
- VZDHwBswTCCzW+D/PTdQcsPUP/1wbXi0h1Xn4dU4x5GjnqKW3dl7iTpZi6fRiD/02LosMgiev
- ZdqNQV4UlnOUA31tU/tGLzXuuHGlIyRA0D3Q6KN+1K8MT+sGke4itjh/JndDYKlHhb5BjnZpb
- MYZvSJlBKUu2g6XzrbCg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LIABXQUOcVw=:sLjGtRim3imdLEVtoiHBSh
+ 6VTo2BkYZk8Bprjd6xKuzadcf6lEFzxFAEbpzM2M8h1dsd8u5JTmggx/al78xhY6r+bbaLB58
+ QmQqZrZFAHtRD/appkPfkjZX/RTMUgFpvs9J4moQJuR8/egv6ekQIzSW/0ZqMnicsmoT0uYNw
+ 8aj+B3od+OCP3e52ew4PzKNVWKOX+LGhZDCJYRWC+tbU/lNmUwZ+MbCGxglmp7/Ketr5wzETc
+ AvU7U3Bbwiv/0IV6Pq2Bir2IQ5Y4Qf7r/pV6ElYWbNVwCuVBoBeln+R3wEryehmtxOf9JOA9A
+ RlimA2oxfqDvRj9dalsm8cMUW+Oo1Am8Y1r8wAX1Ktcc0mSMYbGdul/le6nH8nRPIwO+FZ7Ac
+ BBGbm9jHepMWbZxTOKD6MH0b3HWvXbqbaDYz5wDGIBxKsI+4SarUNRUQBUXgldjxFxdA1Hbjx
+ sy/3iMugeCsfBH7qkL5JK++W8U5oo8JfQmEe/DFpygQDftntM3tl9Im+Aw3K90RjvHXPXn+O3
+ bSh1npA9f7L7XE9xC9QRD1Tib3gOLuMSWcUdD3jRRxdMJmPXr9igF4xL2OLm0okbjBV5h9V6k
+ W8WiejfzqKI6btGhCJd3wh3jBhEnVoKBsGTr/Z3S5vmDPWRr+yI0ojH/bSpJYjn9tWeLy+2sZ
+ 0ULCtJJY9MMWolxSfa4ACZTs65LJBNIdrZcFSBst8Jh2aYk7rYJNo260h4kHzWvxnCBn3rerG
+ v6BiQMX9QyUWBRDMuC+w6fxLGdt+9RUZRE/E32hZgwQrOOWu2PwcydyVaJI78SSCdoFGNjo6J
+ l0e8GF5Qcky4CT11IwI1r+jUoiB+5x8O3ZDo5PtOAi16aWiPmfntVwAxDFfIQ2WcA589wQatO
+ gXw4uTC0FhsZQ22uyTog==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 10, 2020 at 5:56 PM Will Deacon <will@kernel.org> wrote:
+On Fri, Jan 10, 2020 at 5:57 PM Will Deacon <will@kernel.org> wrote:
 
-> +/*
-> + * Use __READ_ONCE() instead of READ_ONCE() if you do not require any
-> + * atomicity or dependency ordering guarantees. Note that this may result
-> + * in tears!
-> + */
-> +#define __READ_ONCE(x) (*(volatile typeof(x) *)&(x))
-> +
+> @@ -128,10 +128,10 @@ do {                                                                      \
+>  #ifndef __smp_load_acquire
+>  #define __smp_load_acquire(p)                                          \
+>  ({                                                                     \
+> -       typeof(*p) ___p1 = READ_ONCE(*p);                               \
+> +       __unqual_scalar_typeof(*p) ___p1 = READ_ONCE(*p);               \
+>         compiletime_assert_atomic_type(*p);                             \
+>         __smp_mb();                                                     \
+> -       ___p1;                                                          \
+> +       (typeof(*p))___p1;                                              \
+>  })
 
-This probably allows writing
+Doesn't that last  (typeof(*p))___p1 mean you put the potential
+'volatile' back on the assignment after you went through the
+effort of taking it out?
 
-       extern int i;
-       __READ_ONCE(i) = 1;
-
-and not get a warning for it. How about also casting to 'const'?
-
-        Arnd
+       Arnd
