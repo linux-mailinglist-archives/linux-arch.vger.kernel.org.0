@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1486137019
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 15:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEAF13701D
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 15:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728271AbgAJOyd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jan 2020 09:54:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:45806 "EHLO foss.arm.com"
+        id S1728185AbgAJOyf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jan 2020 09:54:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:45824 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728137AbgAJOyc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 10 Jan 2020 09:54:32 -0500
+        id S1728121AbgAJOye (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 Jan 2020 09:54:34 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 02DCD1063;
-        Fri, 10 Jan 2020 06:54:32 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B2F9106F;
+        Fri, 10 Jan 2020 06:54:34 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81E6F3F6C4;
-        Fri, 10 Jan 2020 06:54:31 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 99FF03F6C4;
+        Fri, 10 Jan 2020 06:54:33 -0800 (PST)
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-arch@vger.kernel.org
 Cc:     Richard Henderson <richard.henderson@linaro.org>,
@@ -26,9 +26,9 @@ Cc:     Richard Henderson <richard.henderson@linaro.org>,
         linux-arm-kernel@lists.infradead.org,
         Richard Henderson <rth@twiddle.net>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 02/10] powerpc: Remove arch_has_random, arch_has_random_seed
-Date:   Fri, 10 Jan 2020 14:54:14 +0000
-Message-Id: <20200110145422.49141-3-broonie@kernel.org>
+Subject: [PATCH v2 03/10] s390: Remove arch_has_random, arch_has_random_seed
+Date:   Fri, 10 Jan 2020 14:54:15 +0000
+Message-Id: <20200110145422.49141-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200110145422.49141-1-broonie@kernel.org>
 References: <20200110145422.49141-1-broonie@kernel.org>
@@ -47,30 +47,32 @@ interface, but are currently unused and can be removed.
 Signed-off-by: Richard Henderson <rth@twiddle.net>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/powerpc/include/asm/archrandom.h | 10 ----------
- 1 file changed, 10 deletions(-)
+ arch/s390/include/asm/archrandom.h | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/archrandom.h b/arch/powerpc/include/asm/archrandom.h
-index a09595f00cab..2fa7cdfbba24 100644
---- a/arch/powerpc/include/asm/archrandom.h
-+++ b/arch/powerpc/include/asm/archrandom.h
-@@ -34,16 +34,6 @@ static inline int arch_get_random_seed_int(unsigned int *v)
+diff --git a/arch/s390/include/asm/archrandom.h b/arch/s390/include/asm/archrandom.h
+index c67b82dfa558..9a6835137a16 100644
+--- a/arch/s390/include/asm/archrandom.h
++++ b/arch/s390/include/asm/archrandom.h
+@@ -21,18 +21,6 @@ extern atomic64_t s390_arch_random_counter;
  
- 	return rc;
- }
--
--static inline int arch_has_random(void)
+ bool s390_arch_random_generate(u8 *buf, unsigned int nbytes);
+ 
+-static inline bool arch_has_random(void)
 -{
--	return 0;
+-	return false;
 -}
 -
--static inline int arch_has_random_seed(void)
+-static inline bool arch_has_random_seed(void)
 -{
--	return !!ppc_md.get_random_seed;
+-	if (static_branch_likely(&s390_arch_random_available))
+-		return true;
+-	return false;
 -}
- #endif /* CONFIG_ARCH_RANDOM */
- 
- #ifdef CONFIG_PPC_POWERNV
+-
+ static inline bool arch_get_random_long(unsigned long *v)
+ {
+ 	return false;
 -- 
 2.20.1
 
