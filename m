@@ -2,121 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A12A137677
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 19:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 860BA1376E5
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 20:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728620AbgAJSys (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jan 2020 13:54:48 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:46183 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728023AbgAJSys (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jan 2020 13:54:48 -0500
-Received: by mail-lf1-f65.google.com with SMTP id f15so2226008lfl.13
-        for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2020 10:54:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j1vUATzUBpIGtELb+vItTo1wkE0Sy8cpDXXVV9tUxg4=;
-        b=Asi+Td2STF/mUZRXQIv70X1R92yzc9QNkF0hyVHvxy/vDF3BWUUgKG+s5bhHF8lXm1
-         pmZ9SkxNAja2H57ghybZjnyXwh47Lcye5VyMq5jcdrYG12Nfwt5EvKEWCQIqZHBmZpkZ
-         bLFLUI7/QsOh+k0bjEkN1VWI8BcVEG5fhLMlc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j1vUATzUBpIGtELb+vItTo1wkE0Sy8cpDXXVV9tUxg4=;
-        b=VH0KOUSP9W9Mw8iXNJAcqnimxrGCfYIcQZ+kz2e7X5njjDHf5+bWxvZcJAe7ot5YJt
-         EPSFEPC3pJfBdiQWPaGOdnZq3kJDZtBVzZLSOZdJpVakNno+NFbddj/RHjW/SqPrwB6S
-         jBIjyN8BqaYMWdR8+gdO+z3gX/l0mMAnEun/SBvVHx1LBxsIA/RAqfGRwqAWCpZQAdGC
-         PxRsbWmb25ex6O86u+GsnMuKf778qIN3FEY/lNxjD5hErhEdUlsKHJ4OupfSygpgOktF
-         Dp4+s0mJKBNuCwtZwCcG2donK7ShnzV7TqH28wSjaMTJopN5DuiE8SZag0l/zHMQDxBT
-         Y/Lw==
-X-Gm-Message-State: APjAAAVuMSbzasfn6cQYB/PVPPNZ14Dfc6WpRWGBdQOes5v33fSh+C4Q
-        iAGZCA2z5WO8SEMeAb0z4N2I1AOzG/4=
-X-Google-Smtp-Source: APXvYqx6K3IjHGMaa4MHu5U0D664TIcD6gGXE+SjW2Jfw2CeqD/udi2ju646vwbBNOlC6ELaiqpVYA==
-X-Received: by 2002:ac2:4a91:: with SMTP id l17mr3264073lfp.75.1578682485572;
-        Fri, 10 Jan 2020 10:54:45 -0800 (PST)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id z14sm1390217ljm.86.2020.01.10.10.54.43
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2020 10:54:44 -0800 (PST)
-Received: by mail-lj1-f174.google.com with SMTP id y4so3166353ljj.9
-        for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2020 10:54:43 -0800 (PST)
-X-Received: by 2002:a05:651c:282:: with SMTP id b2mr3531333ljo.41.1578682483466;
- Fri, 10 Jan 2020 10:54:43 -0800 (PST)
+        id S1728185AbgAJTYT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jan 2020 14:24:19 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:35603 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728106AbgAJTYT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jan 2020 14:24:19 -0500
+Received: from mail-qv1-f41.google.com ([209.85.219.41]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1Ml6du-1jWmM93TQ4-00lUgy; Fri, 10 Jan 2020 20:24:18 +0100
+Received: by mail-qv1-f41.google.com with SMTP id o18so1273662qvf.1;
+        Fri, 10 Jan 2020 11:24:17 -0800 (PST)
+X-Gm-Message-State: APjAAAXfCtqtVZa3zweztH807mcxq5nVQsUoitn16oXtfVsKebOMzTrf
+        szWHIc2WM5zytaE3TI9HaOfEazifq1jEusyoX7w=
+X-Google-Smtp-Source: APXvYqzd2hmstZ9l10zTYEs+f7uDdN5MQZM9KWvb/cNLE8AYGII20Ive9ghFbtq0MLUH74D2qPmefmOPczx/DA0uGUI=
+X-Received: by 2002:a0c:d788:: with SMTP id z8mr152872qvi.211.1578684256605;
+ Fri, 10 Jan 2020 11:24:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20200110165636.28035-1-will@kernel.org> <20200110165636.28035-7-will@kernel.org>
-In-Reply-To: <20200110165636.28035-7-will@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 10 Jan 2020 10:54:27 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wia5ppBsfHLMx648utCjO01JAZiME0K0eSHmhWuRyL+6w@mail.gmail.com>
-Message-ID: <CAHk-=wia5ppBsfHLMx648utCjO01JAZiME0K0eSHmhWuRyL+6w@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/8] READ_ONCE: Drop pointer qualifiers when reading
- from scalar types
+References: <20200110165636.28035-1-will@kernel.org> <20200110165636.28035-6-will@kernel.org>
+In-Reply-To: <20200110165636.28035-6-will@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 10 Jan 2020 20:24:00 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1pDW7cABLeotZBNTTxLxkQ299wO0OG3AWGyDqJWmQA+A@mail.gmail.com>
+Message-ID: <CAK8P3a1pDW7cABLeotZBNTTxLxkQ299wO0OG3AWGyDqJWmQA+A@mail.gmail.com>
+Subject: Re: [RFC PATCH 5/8] READ_ONCE: Enforce atomicity for
+ {READ,WRITE}_ONCE() memory accesses
 To:     Will Deacon <will@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Android Kernel Team <kernel-team@android.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: multipart/mixed; boundary="000000000000a42d9d059bcda82d"
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ev8K4YMvcdYPml3GY3aO/4/vuWKU7cZbfJmipe8dfz3JyngSvju
+ Wv4NNUmZTSTTyU0E16+aJt3syYAiNy3NWp4ERPkdTDo0mcHbhhZZv7mzbn+HbP40vcFYe1Y
+ KyQDlk1l2GqNLVtLXUi6HllsgidHr0AqBMLVu3JZuM6p9cQHJ/ZWPq0VndUsN5NcUld4iox
+ S0AHYQQR99ROxBuMmdKMA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wpkyqc6zofw=:ToNUCGqkTCirKuUdME33UK
+ IhZ/Fkyf/Ux8dK5ivs4y0WMR76cYYUvMGSzo0GAV8rLea90c05nx/SWquKF3LtZ2glH2xfhLI
+ kAPTK7CR1X6RoQQMU59O45BGJwyFnTR/BKF5sKjfoopx/hnTLeQYQGRvn13Wza3ikm0vtxHKJ
+ fps6FiEoW45Vf3LGu5B00LiwN/k2pzFCMY0O5X++CXTaVA5lrCEtyzvM0m/7YgaszGwvtJphO
+ jrlGo2YNinYzumLXEYjAHxavFHLZoSp/1/X++lEcGUsJqOpbPbEvkBMjo9gcnVzhePTv3NqBF
+ uV3l/C6odOTgdyWJ8ThVJLd02EVEWLCNTV2TpFzZnEE77yCxjlO9UoQ0GBII1zLtKa3Ah2zlm
+ 9XdyEJ5x2C1vz07TsIdTBC05j8kgm4plJsw4Q1bgVNh0UuiI+Tdhxtxyg9jhc9CZprmgdBzKM
+ zy+EzZaoEV9U7aSkRQXr+tepXgNU7ZaMIDz+X6dpTrPVT8Tl44q7meUf+Flv1BMSjzoi4gTGd
+ jlc6G/RJB+CDa1XNux+SN1VTYnB+vqNMFfnb5xGkFNLIiS1YvzTroupdI7AaBHz/PlOsbC8Ss
+ VrBwj1Y+rV5ra7k0cYfT/0Y2cCZiJ4xlXi17jk0CA4ooH8YRCagawtftvS5jFoKeI/iwbd/Yr
+ hX07tjd+pRUtWpNF/OJM/7taBcDcvdwjKE+ruyQvdbctR1F2oH51k4U6zLSx/yqWEAkJiB3Zd
+ VZDHwBswTCCzW+D/PTdQcsPUP/1wbXi0h1Xn4dU4x5GjnqKW3dl7iTpZi6fRiD/02LosMgiev
+ ZdqNQV4UlnOUA31tU/tGLzXuuHGlIyRA0D3Q6KN+1K8MT+sGke4itjh/JndDYKlHhb5BjnZpb
+ MYZvSJlBKUu2g6XzrbCg==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---000000000000a42d9d059bcda82d
-Content-Type: text/plain; charset="UTF-8"
+On Fri, Jan 10, 2020 at 5:56 PM Will Deacon <will@kernel.org> wrote:
 
-On Fri, Jan 10, 2020 at 8:56 AM Will Deacon <will@kernel.org> wrote:
->
-> +/* Declare an unqualified scalar type. Leaves non-scalar types unchanged. */
-> +#define __unqual_scalar_typeof(x) typeof(                                      \
+> +/*
+> + * Use __READ_ONCE() instead of READ_ONCE() if you do not require any
+> + * atomicity or dependency ordering guarantees. Note that this may result
+> + * in tears!
+> + */
+> +#define __READ_ONCE(x) (*(volatile typeof(x) *)&(x))
+> +
 
-Ugh. My eyes. That's horrendous.
+This probably allows writing
 
-I can't see any better alternatives, but it does make me go "Eww".
+       extern int i;
+       __READ_ONCE(i) = 1;
 
-Well, I do see one possible alternative: just re-write the bitop
-implementations in terms of "atomic_long_t", and just avoid the issue
-entirely.
+and not get a warning for it. How about also casting to 'const'?
 
-IOW, do something like the attached (but fleshed out and tested - this
-patch has not seen a compiler, much less any thought at all).
-
-                   Linus
-
---000000000000a42d9d059bcda82d
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k58is1210>
-X-Attachment-Id: f_k58is1210
-
-IGluY2x1ZGUvYXNtLWdlbmVyaWMvYml0b3BzL2xvY2suaCB8IDEyICsrKysrKysrKy0tLQogMSBm
-aWxlIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQg
-YS9pbmNsdWRlL2FzbS1nZW5lcmljL2JpdG9wcy9sb2NrLmggYi9pbmNsdWRlL2FzbS1nZW5lcmlj
-L2JpdG9wcy9sb2NrLmgKaW5kZXggM2FlMDIxMzY4ZjQ4Li4wNzFkOGJmZDg2ZTUgMTAwNjQ0Ci0t
-LSBhL2luY2x1ZGUvYXNtLWdlbmVyaWMvYml0b3BzL2xvY2suaAorKysgYi9pbmNsdWRlL2FzbS1n
-ZW5lcmljL2JpdG9wcy9sb2NrLmgKQEAgLTYsNiArNiwxMiBAQAogI2luY2x1ZGUgPGxpbnV4L2Nv
-bXBpbGVyLmg+CiAjaW5jbHVkZSA8YXNtL2JhcnJpZXIuaD4KIAorLyogRHJvcCB0aGUgdm9sYXRp
-bGUsIHdlIHdpbGwgYmUgZG9pbmcgUkVBRF9PTkNFIGJ5IGhhbmQgKi8KK3N0YXRpYyBpbmxpbmUg
-YXRvbWljX2xvbmdfdCAqYXRvbWljX2xvbmdfYml0X3dvcmQodW5zaWduZWQgaW50IG5yLCB2b2xh
-dGlsZSB1bnNpZ25lZCBsb25nICpwKQoreworCXJldHVybiBCSVRfV09SRChucikgKyAoYXRvbWlj
-X2xvbmdfdCAqKXA7Cit9CisKIC8qKgogICogdGVzdF9hbmRfc2V0X2JpdF9sb2NrIC0gU2V0IGEg
-Yml0IGFuZCByZXR1cm4gaXRzIG9sZCB2YWx1ZSwgZm9yIGxvY2sKICAqIEBucjogQml0IHRvIHNl
-dApAQCAtMjAsMTIgKzI2LDEyIEBAIHN0YXRpYyBpbmxpbmUgaW50IHRlc3RfYW5kX3NldF9iaXRf
-bG9jayh1bnNpZ25lZCBpbnQgbnIsCiB7CiAJbG9uZyBvbGQ7CiAJdW5zaWduZWQgbG9uZyBtYXNr
-ID0gQklUX01BU0sobnIpOworCWF0b21pY19sb25nX3QgKmxvYyA9IGF0b21pY19sb25nX2JpdF93
-b3JkKG5yLCBwKTsKIAotCXAgKz0gQklUX1dPUkQobnIpOwotCWlmIChSRUFEX09OQ0UoKnApICYg
-bWFzaykKKwlpZiAoYXRvbWljX3JlYWQobG9jKSAmIG1hc2spCiAJCXJldHVybiAxOwogCi0Jb2xk
-ID0gYXRvbWljX2xvbmdfZmV0Y2hfb3JfYWNxdWlyZShtYXNrLCAoYXRvbWljX2xvbmdfdCAqKXAp
-OworCW9sZCA9IGF0b21pY19sb25nX2ZldGNoX29yX2FjcXVpcmUobWFzaywgbG9jKTsKIAlyZXR1
-cm4gISEob2xkICYgbWFzayk7CiB9CiAK
---000000000000a42d9d059bcda82d--
+        Arnd
