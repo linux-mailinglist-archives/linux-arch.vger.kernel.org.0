@@ -2,108 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A93AA137596
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 18:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5BD137597
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 18:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728412AbgAJR56 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jan 2020 12:57:58 -0500
-Received: from mga09.intel.com ([134.134.136.24]:12106 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728248AbgAJR56 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 10 Jan 2020 12:57:58 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jan 2020 09:57:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,417,1571727600"; 
-   d="scan'208";a="223851475"
-Received: from ray.jf.intel.com (HELO [10.24.8.199]) ([10.24.8.199])
-  by orsmga006.jf.intel.com with ESMTP; 10 Jan 2020 09:57:43 -0800
-Subject: Re: [PATCH v15 00/24] selftests, powerpc, x86: Memory Protection Keys
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Sandipan Das <sandipan@linux.ibm.com>, shuahkh@osg.samsung.com,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
-        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
-        mingo@redhat.com, bauerman@linux.ibm.com, msuchanek@suse.de,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
-References: <cover.1576645161.git.sandipan@linux.ibm.com>
- <87y2ufxlci.fsf@linux.ibm.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-Message-ID: <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
-Date:   Fri, 10 Jan 2020 09:57:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728441AbgAJR60 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jan 2020 12:58:26 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:32853 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728248AbgAJR60 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jan 2020 12:58:26 -0500
+Received: from mail-qv1-f53.google.com ([209.85.219.53]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1N2E9Y-1joudy0sbW-013dgn; Fri, 10 Jan 2020 18:58:24 +0100
+Received: by mail-qv1-f53.google.com with SMTP id dp13so1120732qvb.7;
+        Fri, 10 Jan 2020 09:58:23 -0800 (PST)
+X-Gm-Message-State: APjAAAWBsAKNDbbjrtK1iMwyjbXOzMPqyhjSMSTN3Qm6s+tfmA6piWGO
+        wv7UZgQX8WWYa+gNsa2jtb5AaGIyUWlL2OH5b5g=
+X-Google-Smtp-Source: APXvYqxsFAf1yVAO2Dx/qvHSBeVQRsjroH01bU0irbPWOuPQsB6Ct3qKAM7SNfodZricPklj3XI7bhhkUqZegVp+PYc=
+X-Received: by 2002:a0c:8e08:: with SMTP id v8mr3996286qvb.4.1578679102966;
+ Fri, 10 Jan 2020 09:58:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <87y2ufxlci.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200110165636.28035-1-will@kernel.org>
+In-Reply-To: <20200110165636.28035-1-will@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 10 Jan 2020 18:58:06 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3LAirovfV=RRqf9dT7K_WkiC8SJK9oa-amn_EkibqEsA@mail.gmail.com>
+Message-ID: <CAK8P3a3LAirovfV=RRqf9dT7K_WkiC8SJK9oa-amn_EkibqEsA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/8] Rework READ_ONCE() to improve codegen
+To:     Will Deacon <will@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:fFesDrmRiPZv5CTakuBTJnnmbh+2qk9JOjx6AkTc8olib1/30a8
+ vbEgtrbhB8K6n/kO3j8Sv7ky5tTeSb/r6K45xbSEyTfoxCF3fx1SYsTZXrxNs1q/6uhIdRL
+ o3ApwlhdomsPKvLGB7mPpPC/UbLsdC1Kn1au/2xXPXtUeMAAsplb4Fn1GyH6Wgq6H/71Czn
+ YaUGoi1FMKxkTW5NR1ZzQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JRHAOP3ngTI=:LD6qW0+kF0haf/pqmGmNL8
+ NxnWenF5nQcmGVqwUg0fOEaJ9JndstgC3IbkKvkggYc2RLCuDEsAjsi1sOFd1q8I/fXnmcwLV
+ g0cSymdfZripp3mKqBIncjuWBSW/nCLgYO47gbqQut4PqrDf+M9kaW13I8cfYpcUCaTUqMnER
+ uXnCFCuHLIBRMIQ3pvSaKvoDJTnV8zKN0xDCPPAhLQH89xOUbs2LUaNFdIIa5sRYiJb29oNSy
+ qdmNeeW7Uub5ZDN3zJy6jFWvzN1po5a51G0hgNLLjszYzBlr8rCYeQNq/yV5f+EfNeWVWFzl9
+ W0debwx082pbIF/EtBLQI6WGSg38AyMgQICcCk04qQNMAWthqan7WN8VZE2E641X8zXxUCgsX
+ m/EM+PAe+UC8aPCuvr0NeNLgZxZP+GBNvmvOpuGeateDSPPh7yS/dMI6Dh3avpRNXg7cpdpgI
+ x0TavXlPmaVHURqswNSK41aTAiOPvrxNroMcuN0BckRUZBPtZ6RT3fFAlxGWnErt1KflPiABQ
+ qWb6pUSAEZRBUNNio1IbitYzttz+Cd6qv79V1dyoAfkZGcO4Vb0z0O+tb7DT48TZIj5St4uq8
+ tmGZ4X3bt3GGBJJPAxX1vWQC7FqJI1lchNXBwz54H/8ih1+Ig5pj6wyieW+WfhbyJ3D4ikq5c
+ DItua2Ug9vTE+mSOm9yUelgZt4SdZfLfO/j+kjVosqZgdXRpFnB+3uCqS0A38OhbNkV4TM+e6
+ 8bTDStieD3FIh++j2QF6GkvloOsRijlcSTZhdK7B3aP4WK3mdNyPOgrtTI1e+FCTRhHogO6s0
+ cjG1DLskcjkdOz/+s2PBt8GU64d5nrkau3LUY4SzOrxoAolPTrkWI+picYfS8T3oVxtpfSEyU
+ FQcrp9kVVGpf8tdL3gIw==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/10/20 9:38 AM, Aneesh Kumar K.V wrote:
->> v15:
->> 	(1) Rebased on top of latest master.
->> 	(2) Addressed review comments from Dave Hansen.
->> 	(3) Moved code for getting or setting pkey bits to new
->> 	    helpers. These changes replace patch 7 of v14.
->> 	(4) Added a fix which ensures that the correct count of
->> 	    reserved keys is used across different platforms.
->> 	(5) Added a fix which ensures that the correct page size
->> 	    is used as powerpc supports both 4K and 64K pages.
->>
-> Any update on merging this series? Can Intel help with testing this
-> series on Skylake server? Possibly merging to -next will result in
-> automated 01.org tests?
+On Fri, Jan 10, 2020 at 5:56 PM Will Deacon <will@kernel.org> wrote:
+>
+> Hi all,
+>
+> This is a follow-up RFC to the discussions we had on the mailing list at
+> the end of last year:
+>
+> https://lore.kernel.org/lkml/875zimp0ay.fsf@mpe.ellerman.id.au
+>
+> Unfortunately, we didn't get a "silver bullet" solution out of that
+> long thread, but I've tried to piece together some of the bits and
+> pieces we discussed and I've ended up with this series, which does at
+> least solve the pressing problem with the bitops for arm64.
+>
+> The rough summary of the series is:
+>
+>   * Drop the GCC 4.8 workarounds, so that READ_ONCE() is a
+>     straightforward dereference of a cast-to-volatile pointer.
+>
+>   * Require that the access is either 1, 2, 4 or 8 bytes in size
+>     (even 32-bit architectures tend to use 8-byte accesses here).
+>
+>   * Introduce __READ_ONCE() for tearing operations with no size
+>     restriction.
+>
+>   * Drop pointer qualifiers from scalar types, so that volatile scalars
+>     don't generate horrible stack-spilling mess. This is pretty ugly,
+>     but it's also mechanical and wrapped up in a macro.
+>
+>   * Convert acquire/release accessors to perform the same qualifier
+>     stripping.
+>
+> I gave up trying to prevent READ_ONCE() on aggregates because it is
+> pervasive, particularly within the mm/ layer on things like pmd_t.
+> Thankfully, these don't tend to be volatile.
+>
+> I have more patches in this area because I'm trying to move all the
+> read_barrier_depends() magic into arch/alpha/, but I'm holding off until
+> we agree on this part first.
 
-Could you dump these in a git tree, please?  It will make it a wee bit
-easier for me to ship the resulting tree around to a couple different
-systems.
+Looks very nice overall, thanks for working on this.
+
+I've added a the series into my randconfig build setup to see
+if I run into build-time regressions. Unfortunately there are some
+conflicts with the kcsan patches in linux-next that I have to work
+around first.
+
+       Arnd
