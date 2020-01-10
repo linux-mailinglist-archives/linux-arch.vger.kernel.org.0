@@ -2,137 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B1113751C
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 18:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93AA137596
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 18:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728215AbgAJRpL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jan 2020 12:45:11 -0500
-Received: from foss.arm.com ([217.140.110.172]:49260 "EHLO foss.arm.com"
+        id S1728412AbgAJR56 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jan 2020 12:57:58 -0500
+Received: from mga09.intel.com ([134.134.136.24]:12106 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727742AbgAJRpL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 10 Jan 2020 12:45:11 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8806C30E;
-        Fri, 10 Jan 2020 09:45:10 -0800 (PST)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 19AB03F6C4;
-        Fri, 10 Jan 2020 09:45:08 -0800 (PST)
-Date:   Fri, 10 Jan 2020 17:45:07 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@android.com, Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC PATCH 8/8] arm64: barrier: Use '__unqual_scalar_typeof' for
- acquire/release macros
-Message-ID: <20200110174506.GK33536@lakrids.cambridge.arm.com>
-References: <20200110165636.28035-1-will@kernel.org>
- <20200110165636.28035-9-will@kernel.org>
+        id S1728248AbgAJR56 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 Jan 2020 12:57:58 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jan 2020 09:57:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,417,1571727600"; 
+   d="scan'208";a="223851475"
+Received: from ray.jf.intel.com (HELO [10.24.8.199]) ([10.24.8.199])
+  by orsmga006.jf.intel.com with ESMTP; 10 Jan 2020 09:57:43 -0800
+Subject: Re: [PATCH v15 00/24] selftests, powerpc, x86: Memory Protection Keys
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>, shuahkh@osg.samsung.com,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, bauerman@linux.ibm.com, msuchanek@suse.de,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
+References: <cover.1576645161.git.sandipan@linux.ibm.com>
+ <87y2ufxlci.fsf@linux.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
+Date:   Fri, 10 Jan 2020 09:57:43 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200110165636.28035-9-will@kernel.org>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+In-Reply-To: <87y2ufxlci.fsf@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 10, 2020 at 04:56:36PM +0000, Will Deacon wrote:
-> Passing volatile-qualified pointers to the arm64 implementations of the
-> load-acquire/store-release macros results in a re-load from the stack
-> and a bunch of associated stack-protector churn due to the temporary
-> result variable inheriting the volatile semantics thanks to the use of
-> 'typeof()'.
-> 
-> Define these temporary variables using 'unqual_scalar_typeof' to drop
-> the volatile qualifier in the case that they are scalar types.
-> 
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Will Deacon <will@kernel.org>
+On 1/10/20 9:38 AM, Aneesh Kumar K.V wrote:
+>> v15:
+>> 	(1) Rebased on top of latest master.
+>> 	(2) Addressed review comments from Dave Hansen.
+>> 	(3) Moved code for getting or setting pkey bits to new
+>> 	    helpers. These changes replace patch 7 of v14.
+>> 	(4) Added a fix which ensures that the correct count of
+>> 	    reserved keys is used across different platforms.
+>> 	(5) Added a fix which ensures that the correct page size
+>> 	    is used as powerpc supports both 4K and 64K pages.
+>>
+> Any update on merging this series? Can Intel help with testing this
+> series on Skylake server? Possibly merging to -next will result in
+> automated 01.org tests?
 
-Based on my understanding of __unqual_scalar_typeof(), these changes
-look sound to me:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
-> ---
->  arch/arm64/include/asm/barrier.h | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> index 7d9cc5ec4971..fb4c27506ef4 100644
-> --- a/arch/arm64/include/asm/barrier.h
-> +++ b/arch/arm64/include/asm/barrier.h
-> @@ -76,8 +76,8 @@ static inline unsigned long array_index_mask_nospec(unsigned long idx,
->  #define __smp_store_release(p, v)					\
->  do {									\
->  	typeof(p) __p = (p);						\
-> -	union { typeof(*p) __val; char __c[1]; } __u =			\
-> -		{ .__val = (__force typeof(*p)) (v) };			\
-> +	union { __unqual_scalar_typeof(*p) __val; char __c[1]; } __u =	\
-> +		{ .__val = (__force __unqual_scalar_typeof(*p)) (v) };	\
->  	compiletime_assert_atomic_type(*p);				\
->  	kasan_check_write(__p, sizeof(*p));				\
->  	switch (sizeof(*p)) {						\
-> @@ -110,7 +110,7 @@ do {									\
->  
->  #define __smp_load_acquire(p)						\
->  ({									\
-> -	union { typeof(*p) __val; char __c[1]; } __u;			\
-> +	union { __unqual_scalar_typeof(*p) __val; char __c[1]; } __u;	\
->  	typeof(p) __p = (p);						\
->  	compiletime_assert_atomic_type(*p);				\
->  	kasan_check_read(__p, sizeof(*p));				\
-> @@ -136,33 +136,33 @@ do {									\
->  			: "Q" (*__p) : "memory");			\
->  		break;							\
->  	}								\
-> -	__u.__val;							\
-> +	(typeof(*p))__u.__val;						\
->  })
->  
->  #define smp_cond_load_relaxed(ptr, cond_expr)				\
->  ({									\
->  	typeof(ptr) __PTR = (ptr);					\
-> -	typeof(*ptr) VAL;						\
-> +	__unqual_scalar_typeof(*ptr) VAL;				\
->  	for (;;) {							\
->  		VAL = READ_ONCE(*__PTR);				\
->  		if (cond_expr)						\
->  			break;						\
->  		__cmpwait_relaxed(__PTR, VAL);				\
->  	}								\
-> -	VAL;								\
-> +	(typeof(*ptr))VAL;						\
->  })
->  
->  #define smp_cond_load_acquire(ptr, cond_expr)				\
->  ({									\
->  	typeof(ptr) __PTR = (ptr);					\
-> -	typeof(*ptr) VAL;						\
-> +	__unqual_scalar_typeof(*ptr) VAL;				\
->  	for (;;) {							\
->  		VAL = smp_load_acquire(__PTR);				\
->  		if (cond_expr)						\
->  			break;						\
->  		__cmpwait_relaxed(__PTR, VAL);				\
->  	}								\
-> -	VAL;								\
-> +	(typeof(*ptr))VAL;						\
->  })
->  
->  #include <asm-generic/barrier.h>
-> -- 
-> 2.25.0.rc1.283.g88dfdc4193-goog
-> 
+Could you dump these in a git tree, please?  It will make it a wee bit
+easier for me to ship the resulting tree around to a couple different
+systems.
