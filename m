@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CA313700F
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 15:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A83CE137014
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2020 15:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728176AbgAJOy2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jan 2020 09:54:28 -0500
-Received: from foss.arm.com ([217.140.110.172]:45768 "EHLO foss.arm.com"
+        id S1728223AbgAJOya (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jan 2020 09:54:30 -0500
+Received: from foss.arm.com ([217.140.110.172]:45786 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728137AbgAJOy2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 10 Jan 2020 09:54:28 -0500
+        id S1728239AbgAJOya (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 Jan 2020 09:54:30 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C647A30E;
-        Fri, 10 Jan 2020 06:54:27 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD80BDA7;
+        Fri, 10 Jan 2020 06:54:29 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4AFA33F6C4;
-        Fri, 10 Jan 2020 06:54:27 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 680B73F6C4;
+        Fri, 10 Jan 2020 06:54:29 -0800 (PST)
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-arch@vger.kernel.org
 Cc:     Richard Henderson <richard.henderson@linaro.org>,
@@ -24,11 +24,14 @@ Cc:     Richard Henderson <richard.henderson@linaro.org>,
         herbert@gondor.apana.org.au, x86@kernel.org,
         linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org,
+        Richard Henderson <rth@twiddle.net>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 00/10] Impveovements for random.h/archrandom.h
-Date:   Fri, 10 Jan 2020 14:54:12 +0000
-Message-Id: <20200110145422.49141-1-broonie@kernel.org>
+Subject: [PATCH v2 01/10] x86: Remove arch_has_random, arch_has_random_seed
+Date:   Fri, 10 Jan 2020 14:54:13 +0000
+Message-Id: <20200110145422.49141-2-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200110145422.49141-1-broonie@kernel.org>
+References: <20200110145422.49141-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -36,50 +39,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is a resend of a series from Richard Henderson last posted back in
-November:
+From: Richard Henderson <richard.henderson@linaro.org>
 
-   https://lore.kernel.org/linux-arm-kernel/20191106141308.30535-1-rth@twiddle.net/
+Use the expansion of these macros directly in arch_get_random_*.
 
-Back then Borislav said they looked good and asked if he should take
-them through the tip tree but things seem to have got lost since then.
+These symbols are currently part of the generic archrandom.h
+interface, but are currently unused and can be removed.
 
-Original cover letter:
+Signed-off-by: Richard Henderson <rth@twiddle.net>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/x86/include/asm/archrandom.h | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-During patch review for an addition of archrandom.h for arm64, it was
-suggeted that the arch_random_get_* functions should be marked __must_check.
-Which does sound like a good idea, since the by-reference integer output
-may be uninitialized when the boolean result is false.
-
-In addition, it turns out that arch_has_random() and arch_has_random_seed()
-are not used, and not easy to support for arm64.  Rather than cobble
-something together that would not be testable, remove the interfaces
-against some future accidental use.
-
-In addition, I noticed a few other minor inconsistencies between the
-different architectures, e.g. powerpc isn't using bool.
-
-Change since v1:
-   * Remove arch_has_random, arch_has_random_seed.
-
-Richard Henderson (10):
-  x86: Remove arch_has_random, arch_has_random_seed
-  powerpc: Remove arch_has_random, arch_has_random_seed
-  s390: Remove arch_has_random, arch_has_random_seed
-  linux/random.h: Remove arch_has_random, arch_has_random_seed
-  linux/random.h: Use false with bool
-  linux/random.h: Mark CONFIG_ARCH_RANDOM functions __must_check
-  x86: Mark archrandom.h functions __must_check
-  powerpc: Use bool in archrandom.h
-  powerpc: Mark archrandom.h functions __must_check
-  s390x: Mark archrandom.h functions __must_check
-
- arch/powerpc/include/asm/archrandom.h | 27 +++++++++-----------------
- arch/s390/include/asm/archrandom.h    | 20 ++++---------------
- arch/x86/include/asm/archrandom.h     | 28 ++++++++++++---------------
- include/linux/random.h                | 24 ++++++++---------------
- 4 files changed, 33 insertions(+), 66 deletions(-)
-
+diff --git a/arch/x86/include/asm/archrandom.h b/arch/x86/include/asm/archrandom.h
+index af45e1452f09..feb59461046c 100644
+--- a/arch/x86/include/asm/archrandom.h
++++ b/arch/x86/include/asm/archrandom.h
+@@ -73,10 +73,6 @@ static inline bool rdseed_int(unsigned int *v)
+ 	return ok;
+ }
+ 
+-/* Conditional execution based on CPU type */
+-#define arch_has_random()	static_cpu_has(X86_FEATURE_RDRAND)
+-#define arch_has_random_seed()	static_cpu_has(X86_FEATURE_RDSEED)
+-
+ /*
+  * These are the generic interfaces; they must not be declared if the
+  * stubs in <linux/random.h> are to be invoked,
+@@ -86,22 +82,22 @@ static inline bool rdseed_int(unsigned int *v)
+ 
+ static inline bool arch_get_random_long(unsigned long *v)
+ {
+-	return arch_has_random() ? rdrand_long(v) : false;
++	return static_cpu_has(X86_FEATURE_RDRAND) ? rdrand_long(v) : false;
+ }
+ 
+ static inline bool arch_get_random_int(unsigned int *v)
+ {
+-	return arch_has_random() ? rdrand_int(v) : false;
++	return static_cpu_has(X86_FEATURE_RDRAND) ? rdrand_int(v) : false;
+ }
+ 
+ static inline bool arch_get_random_seed_long(unsigned long *v)
+ {
+-	return arch_has_random_seed() ? rdseed_long(v) : false;
++	return static_cpu_has(X86_FEATURE_RDSEED) ? rdseed_long(v) : false;
+ }
+ 
+ static inline bool arch_get_random_seed_int(unsigned int *v)
+ {
+-	return arch_has_random_seed() ? rdseed_int(v) : false;
++	return static_cpu_has(X86_FEATURE_RDSEED) ? rdseed_int(v) : false;
+ }
+ 
+ extern void x86_init_rdrand(struct cpuinfo_x86 *c);
 -- 
 2.20.1
 
