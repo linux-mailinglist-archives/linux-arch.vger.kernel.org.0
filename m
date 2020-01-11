@@ -2,81 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D178137AEB
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Jan 2020 02:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE6E13828A
+	for <lists+linux-arch@lfdr.de>; Sat, 11 Jan 2020 17:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728022AbgAKBax (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jan 2020 20:30:53 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:39166 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727995AbgAKBax (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jan 2020 20:30:53 -0500
-Received: by mail-il1-f194.google.com with SMTP id x5so3286073ila.6
-        for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2020 17:30:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=kJ7xbVxtwPEzAF+se04VqwxgQEGFSkrxN6PInKK4g18=;
-        b=f+zFDYAN4/EL5Kpz1xl4MZTusWwAsEndfJyrqc2rm3YlZrxBq0iogepFL9jtdkhT3H
-         eUQjXMJZ9S+EIqgikcqaaUTCiBnnugQWTdOVIh7rDgqm6pN0WsQG+mK53NKTRM//tAsN
-         m9ThcF11//B/phL21f0wbDiy6lCVvVnVZoNFs8gpnmZ3xkt50+y4FpJQC274DZVE3hZC
-         asWW1b9jDpvGYJNYaNuQhtK2rTBZwwMbiQA30e2jSLFB674Df4jESm1P9EOSjEi3NIRW
-         06HJO44VYuMkMx6Jls3cNOT1sa9LFbmlqxdjkxu93wKA0Ep2A10FEfZhv87B3NRnbvvh
-         7tGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=kJ7xbVxtwPEzAF+se04VqwxgQEGFSkrxN6PInKK4g18=;
-        b=qRV8DDD2Hft+nkcqiUoHfMD57vQBnJ3BLzBQtAhx9+KGIcvHuYfPlej217NzknpO+e
-         OPRrnQyID4y5tqpZxyYCDvZlJTAa6SlYkemh3mgU5bx31aMHgo4CpoVW0kj9qsUEQPpg
-         SuJnXJX99qgHNyEFwr/bzsN/pZLHZYIr/Wy60r9KNl+GykcuUGXdvdqOyj9mDPXZi4cT
-         vIivqDcQqoyFuTyepXTnH/dTP1r4siG+wwRrbtI52PElXl9B6fbp9VRAj97VxwKOoMKl
-         C3SBZM5M5DDFlca5DYu0XjuqqXUSyH9PwiP+OxMEXlJD4zNn0VXLKN3BTQkuC4EmR3DF
-         GAFw==
-X-Gm-Message-State: APjAAAWwsVdpBu/r989tv6xhXaR7JXeSywVD1Q8yVf2A5/mG4y3eVyVi
-        H71sX3qEyeMRCCLOzVv4iqF/kA==
-X-Google-Smtp-Source: APXvYqzWFX4H4Nqk0plSxJ+POvbf5RF+Ea/qNv/kluRjeJOkrIPJKvY1jK5CswtigjH1VedncaXqyA==
-X-Received: by 2002:a92:b11:: with SMTP id b17mr5323857ilf.202.1578706252651;
-        Fri, 10 Jan 2020 17:30:52 -0800 (PST)
-Received: from localhost ([64.62.168.194])
-        by smtp.gmail.com with ESMTPSA id z15sm1224781ill.20.2020.01.10.17.30.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2020 17:30:52 -0800 (PST)
-Date:   Fri, 10 Jan 2020 17:30:45 -0800 (PST)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     guoren@kernel.org
-cc:     palmer@dabbelt.com, aou@eecs.berkeley.edu, Anup.Patel@wdc.com,
-        vincent.chen@sifive.com, zong.li@sifive.com,
-        greentime.hu@sifive.com, bmeng.cn@gmail.com, atish.patra@wdc.com,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        arnd@arndb.de, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <ren_guo@c-sky.com>
-Subject: Re: [PATCH 1/2] riscv: Fixup obvious bug for fp-regs reset
-In-Reply-To: <20200105025215.2522-1-guoren@kernel.org>
-Message-ID: <alpine.DEB.2.21.9999.2001101730140.38813@viisi.sifive.com>
-References: <20200105025215.2522-1-guoren@kernel.org>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        id S1730383AbgAKQuq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 Jan 2020 11:50:46 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34222 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730371AbgAKQuq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 11 Jan 2020 11:50:46 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00BGnqcc024317
+        for <linux-arch@vger.kernel.org>; Sat, 11 Jan 2020 11:50:45 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xfb43s81w-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Sat, 11 Jan 2020 11:50:45 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <sandipan@linux.ibm.com>;
+        Sat, 11 Jan 2020 16:50:44 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Sat, 11 Jan 2020 16:50:40 -0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00BGochb1048904
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 11 Jan 2020 16:50:38 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B33EDAE045;
+        Sat, 11 Jan 2020 16:50:38 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4257CAE051;
+        Sat, 11 Jan 2020 16:50:35 +0000 (GMT)
+Received: from [9.199.42.197] (unknown [9.199.42.197])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sat, 11 Jan 2020 16:50:34 +0000 (GMT)
+Subject: Re: [PATCH v15 00/24] selftests, powerpc, x86: Memory Protection Keys
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        shuahkh@osg.samsung.com, linux-kselftest@vger.kernel.org,
+        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, bauerman@linux.ibm.com, msuchanek@suse.de,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
+References: <cover.1576645161.git.sandipan@linux.ibm.com>
+ <87y2ufxlci.fsf@linux.ibm.com>
+ <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
+From:   Sandipan Das <sandipan@linux.ibm.com>
+Date:   Sat, 11 Jan 2020 22:20:34 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20011116-0028-0000-0000-000003D0407E
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20011116-0029-0000-0000-000024945B25
+Message-Id: <3a6280fe-6b0f-7e3c-08a9-8186a9c3ea46@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-11_05:2020-01-10,2020-01-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ impostorscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+ mlxlogscore=828 mlxscore=0 malwarescore=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001110147
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, 5 Jan 2020, guoren@kernel.org wrote:
+Hi Dave,
 
-> From: Guo Ren <ren_guo@c-sky.com>
+On 10/01/20 11:27 pm, Dave Hansen wrote:
 > 
-> CSR_MISA is defined in Privileged Architectures' spec: 3.1.1 Machine
-> ISA Register misa. Every bit:1 indicate a feature, so we should beqz
-> reset_done when there is no F/D bit in csr_msia register.
+> Could you dump these in a git tree, please?  It will make it a wee bit
+> easier for me to ship the resulting tree around to a couple different
+> systems.
 > 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 
-Thanks Guo Ren, queued for v5.5-rc.
+I have pushed a version of this series that uses u64 for all references
+to the pkey register irrespective of architecture. This is available at:
+
+https://github.com/sandip4n/linux/tree/pkey-selftests
 
 
-- Paul
+- Sandipan
+
