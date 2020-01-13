@@ -2,116 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A834139A35
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2020 20:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72517139C6A
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2020 23:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728633AbgAMTcR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jan 2020 14:32:17 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:46041 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726435AbgAMTcQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jan 2020 14:32:16 -0500
-Received: by mail-lf1-f66.google.com with SMTP id 203so7762523lfa.12
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jan 2020 11:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ae/+DIZn8QK4Eu0S9kiQGO5TqvMJzTIQ/bcHyd6r6aQ=;
-        b=dsTuRrPnmRxjK6yre9iMf8gYcDE0hjJkuaJ2eT9ghACf2vMogI+i+ZMgu9tiR3PjxB
-         uzQhEdyjiSlebYb6SLrus5AR2u6J5fDcOnswpR5Vfnatgy1xjOGHGAsOhngu0riP6Xcw
-         2ZfyA9EtBicLF7bVKr8HK+hd9gJ6oiCIwVO50=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ae/+DIZn8QK4Eu0S9kiQGO5TqvMJzTIQ/bcHyd6r6aQ=;
-        b=Q2Wp2usR2euL+PeC8Eevgs4IAx+fYPsiQFBFOUmfoEjVvWT80VSdKGNQGA3W80UYDl
-         MjnoNckosOJWlyAuRVEKW8p39EytPgBydXcTJnRjwdDr1enXyvjmY9pJ3nnSIUMsjbKz
-         wJ2hqVsvMWosaoP8jV3HF7bkPFj1B83TsydVnjkkBolfqkdxn/yH+dKfKagmgvNcqyLX
-         46lHFiDmWEs7NJaE0fBnSf0KcPXp2U5ymK6Fz0josyXg9Skc/c8bLsgD3GbydqzGFnoK
-         yBBYk1hVm0mAraIgCBot+VW9yLy295sqd2WQpQrBDE/kTGkJcwiRc3orr0lv79APexwD
-         TzNg==
-X-Gm-Message-State: APjAAAXNe4Y2AWKHc2DyB2x0gnY+BRXypAnae5I2QV63ddi43E69+Ibu
-        eOrn/8mifPNdeKT2DwXSJTeyGsh+KK4=
-X-Google-Smtp-Source: APXvYqw9UNn9C06THH8ZdG7BNBS3aOZ39wkxBIKVMqhF7DDQpuV8f4vkpzOyXDTfZmrVFp54yjfeQg==
-X-Received: by 2002:ac2:5444:: with SMTP id d4mr10726670lfn.49.1578943934351;
-        Mon, 13 Jan 2020 11:32:14 -0800 (PST)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id s3sm6175896lfo.77.2020.01.13.11.32.13
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jan 2020 11:32:13 -0800 (PST)
-Received: by mail-lj1-f172.google.com with SMTP id o13so11450314ljg.4
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jan 2020 11:32:13 -0800 (PST)
-X-Received: by 2002:a05:651c:282:: with SMTP id b2mr12034973ljo.41.1578943932792;
- Mon, 13 Jan 2020 11:32:12 -0800 (PST)
+        id S1728912AbgAMW2l convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Mon, 13 Jan 2020 17:28:41 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:40483 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728819AbgAMW2l (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jan 2020 17:28:41 -0500
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1ir8CG-0004Yk-9j; Mon, 13 Jan 2020 23:28:32 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 40F6F105BE6; Mon, 13 Jan 2020 23:28:31 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
+        salyzyn@android.com, 0x7f454c46@gmail.com, luto@kernel.org
+Subject: Re: [PATCH v2 2/8] lib: vdso: Build 32 bit specific functions in the right context
+In-Reply-To: <20190830135902.20861-3-vincenzo.frascino@arm.com>
+References: <20190830135902.20861-1-vincenzo.frascino@arm.com> <20190830135902.20861-3-vincenzo.frascino@arm.com>
+Date:   Mon, 13 Jan 2020 23:28:31 +0100
+Message-ID: <87tv4zq9dc.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-References: <20200110165636.28035-1-will@kernel.org> <20200110165636.28035-7-will@kernel.org>
- <CAHk-=wia5ppBsfHLMx648utCjO01JAZiME0K0eSHmhWuRyL+6w@mail.gmail.com> <20200113145954.GB4458@willie-the-truck>
-In-Reply-To: <20200113145954.GB4458@willie-the-truck>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Jan 2020 11:31:56 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wirAWFOrfD4us1FepP0vWkZMpnqXusJyKHCqwBVsR43CA@mail.gmail.com>
-Message-ID: <CAHk-=wirAWFOrfD4us1FepP0vWkZMpnqXusJyKHCqwBVsR43CA@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/8] READ_ONCE: Drop pointer qualifiers when reading
- from scalar types
-To:     Will Deacon <will@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 7:00 AM Will Deacon <will@kernel.org> wrote:
+Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
+
+> clock_gettime32 and clock_getres_time32 should be compiled only with a
+> 32 bit vdso library.
 >
-> I can't disagree with that, but the only option we've come up with so far
-> that solves this in the READ_ONCE() macro itself is the thing from PeterZ:
->
-> // Insert big fat comment here
-> #define unqual_typeof(x)    typeof(({_Atomic typeof(x) ___x __maybe_unused; ___x; }))
+> Exclude these symbols when BUILD_VDSO32 is not defined.
 
-I'm with Luc on this - that not only looks gcc-specific, it looks
-fragile too, in that it's not obvious that "_Atomic typeof(x)" really
-is guaranteed to do what we want.
+This breaks the ARM build with:
 
-> So I suppose my question is: how ill does this code really make you feel?
+arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_gettime’:
+arch/arm/vdso/vgettimeofday.c:15:9: error: implicit declaration of function ‘__cvdso_clock_gettime32’; did you mean ‘__cvdso_clock_gettime’? [-Werror=implicit-function-declaration]
+  return __cvdso_clock_gettime32(clock, ts);
+         ^~~~~~~~~~~~~~~~~~~~~~~
+         __cvdso_clock_gettime
+arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_getres’:
+arch/arm/vdso/vgettimeofday.c:33:9: error: implicit declaration of function ‘__cvdso_clock_getres_time32’; did you mean ‘__cvdso_clock_getres_common’? [-Werror=implicit-function-declaration]
+  return __cvdso_clock_getres_time32(clock_id, res);
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         __cvdso_clock_getres_common
+cc1: some warnings being treated as errors
 
-I wish the code was more obvious.
+The patch below 'fixes' at least the build. Can someone please confirm
+the correctness?
 
-One way to do that might be to do your approach, but just write it as
-a series of macros that makes it a bit more understandable what it
-does.
+Thanks,
 
-Maybe it's just because of a "pee in the snow" effect, but I think
-this is easier to explain:
+        tglx
 
-  #define __pick_scalar_type(x,type,otherwise)          \
-        __builtin_choose_expr(__same_type(x,type), (type)0, otherwise)
-
-  #define __pick_integer_type(x, type, otherwise)       \
-        __pick_scalar_type(x, unsigned type,            \
-          __pick_scalar_type(x, signed type, otherwise))
-
-  #define __unqual_scalar_typeof(x) typeof(             \
-        __pick_integer_type(x, char,                    \
-          __pick_integer_type(x, short,                 \
-            __pick_integer_type(x, int,                 \
-              __pick_integer_type(x, long,              \
-                __pick_integer_type(x, long long, x))))))
-
-just because you there's less repeated noise, and the repetition there
-is is simpler.
-
-So still "Eww", but maybe not quite _as_ "Eww".
-
-             Linus
+8<----------------
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -14,7 +14,7 @@ targets := $(obj-vdso) vdso.so vdso.so.d
+ obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
+ 
+ ccflags-y := -fPIC -fno-common -fno-builtin -fno-stack-protector
+-ccflags-y += -DDISABLE_BRANCH_PROFILING
++ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO32
+ 
+ ldflags-$(CONFIG_CPU_ENDIAN_BE8) := --be8
+ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
