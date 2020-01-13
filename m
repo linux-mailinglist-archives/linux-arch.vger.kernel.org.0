@@ -2,94 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C281397F6
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2020 18:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A834139A35
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2020 20:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727331AbgAMRmb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jan 2020 12:42:31 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36381 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726985AbgAMRmb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jan 2020 12:42:31 -0500
-Received: by mail-wr1-f67.google.com with SMTP id z3so9522242wru.3;
-        Mon, 13 Jan 2020 09:42:29 -0800 (PST)
+        id S1728633AbgAMTcR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jan 2020 14:32:17 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:46041 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726435AbgAMTcQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jan 2020 14:32:16 -0500
+Received: by mail-lf1-f66.google.com with SMTP id 203so7762523lfa.12
+        for <linux-arch@vger.kernel.org>; Mon, 13 Jan 2020 11:32:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VX/aiy+bNT0cIjEcj2DQ1zjepFgpqKkfM/HtHDWmDAI=;
-        b=BjQqyXt5fKCdk8DNnWg0JM1q4KtfXPSfkqX89TPhIQIa7oVYbCS4gF/V/TwP1R1+gS
-         qZYIqsokY4iZvxPaMjhGDc5+GQHfn0w3H61fTgu0Tmhh5cwkh0CMMrF3ES+4B0RPRqSq
-         vXnq3nCwoqIuFP53+/Vamw8bRD02xnTh8WXYssuq0EFZocsZWzi9IV8M6LLv+7mJ7sWv
-         ZKs0buEIuqEHO4HCOg9bNUXGZwhPUTC73iYV2hU3hSSjpVCEihEi82+2f4A0TBy8jMdR
-         OQ84tpZSZVYJPzv/LJIVifkw+irOZVRw2MDXWPlGyKEI/gUEgQY55hm5F7K0TipRmn4s
-         95nw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ae/+DIZn8QK4Eu0S9kiQGO5TqvMJzTIQ/bcHyd6r6aQ=;
+        b=dsTuRrPnmRxjK6yre9iMf8gYcDE0hjJkuaJ2eT9ghACf2vMogI+i+ZMgu9tiR3PjxB
+         uzQhEdyjiSlebYb6SLrus5AR2u6J5fDcOnswpR5Vfnatgy1xjOGHGAsOhngu0riP6Xcw
+         2ZfyA9EtBicLF7bVKr8HK+hd9gJ6oiCIwVO50=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VX/aiy+bNT0cIjEcj2DQ1zjepFgpqKkfM/HtHDWmDAI=;
-        b=X9RCvDyvqgWbtR3sXVphDcknVT7zeBpggM6XY7ohFfc5M231wAy1ttvawgHBiPOwKy
-         6xOc0DsW6D/ppZywZpfuJPYufmuhX+zYWE+q7ZBMt19+Mana2qgCSBORcp5paqwNHWV3
-         gxlFB8MARox/L5Xbc88SdvFOmgyWbHPG5Rjm5F179Ou033iit6MIojfGHIiDhUauFjPS
-         d7gTrL8eWAF5V8wZKHxUBIuWxINrdFDMoVHLoP5KNGHfmWyVm8IR4Q2d/sdmxTcJwPXl
-         jov0fC6zPywgTli7mMXCPbl1/wjRZLDXgX3BMHU0+cv7E6p+GPXXHTe9qyNXTAU33Drg
-         UK4g==
-X-Gm-Message-State: APjAAAWVYrpP+YUgyB60nvnJaU832KHgv6Z3W8BWXzIFU9NJdWhZ5Qsq
-        0pD6F/YQvkLenlS2wmO4K78=
-X-Google-Smtp-Source: APXvYqy9/b6n+yAw3orNojEpLtY1zjet4t3YPWmZfVFJ7OEjhl7rlyML3gas7tggQmwNZmUvG16d9w==
-X-Received: by 2002:a5d:5267:: with SMTP id l7mr21067930wrc.84.1578937348999;
-        Mon, 13 Jan 2020 09:42:28 -0800 (PST)
-Received: from ltop.local ([2a02:a03f:40c7:f800:a11f:9c52:9797:c64b])
-        by smtp.gmail.com with ESMTPSA id x132sm573127wmg.0.2020.01.13.09.42.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 09:42:28 -0800 (PST)
-Date:   Mon, 13 Jan 2020 18:42:25 +0100
-From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ae/+DIZn8QK4Eu0S9kiQGO5TqvMJzTIQ/bcHyd6r6aQ=;
+        b=Q2Wp2usR2euL+PeC8Eevgs4IAx+fYPsiQFBFOUmfoEjVvWT80VSdKGNQGA3W80UYDl
+         MjnoNckosOJWlyAuRVEKW8p39EytPgBydXcTJnRjwdDr1enXyvjmY9pJ3nnSIUMsjbKz
+         wJ2hqVsvMWosaoP8jV3HF7bkPFj1B83TsydVnjkkBolfqkdxn/yH+dKfKagmgvNcqyLX
+         46lHFiDmWEs7NJaE0fBnSf0KcPXp2U5ymK6Fz0josyXg9Skc/c8bLsgD3GbydqzGFnoK
+         yBBYk1hVm0mAraIgCBot+VW9yLy295sqd2WQpQrBDE/kTGkJcwiRc3orr0lv79APexwD
+         TzNg==
+X-Gm-Message-State: APjAAAXNe4Y2AWKHc2DyB2x0gnY+BRXypAnae5I2QV63ddi43E69+Ibu
+        eOrn/8mifPNdeKT2DwXSJTeyGsh+KK4=
+X-Google-Smtp-Source: APXvYqw9UNn9C06THH8ZdG7BNBS3aOZ39wkxBIKVMqhF7DDQpuV8f4vkpzOyXDTfZmrVFp54yjfeQg==
+X-Received: by 2002:ac2:5444:: with SMTP id d4mr10726670lfn.49.1578943934351;
+        Mon, 13 Jan 2020 11:32:14 -0800 (PST)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id s3sm6175896lfo.77.2020.01.13.11.32.13
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jan 2020 11:32:13 -0800 (PST)
+Received: by mail-lj1-f172.google.com with SMTP id o13so11450314ljg.4
+        for <linux-arch@vger.kernel.org>; Mon, 13 Jan 2020 11:32:13 -0800 (PST)
+X-Received: by 2002:a05:651c:282:: with SMTP id b2mr12034973ljo.41.1578943932792;
+ Mon, 13 Jan 2020 11:32:12 -0800 (PST)
+MIME-Version: 1.0
+References: <20200110165636.28035-1-will@kernel.org> <20200110165636.28035-7-will@kernel.org>
+ <CAHk-=wia5ppBsfHLMx648utCjO01JAZiME0K0eSHmhWuRyL+6w@mail.gmail.com> <20200113145954.GB4458@willie-the-truck>
+In-Reply-To: <20200113145954.GB4458@willie-the-truck>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 13 Jan 2020 11:31:56 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wirAWFOrfD4us1FepP0vWkZMpnqXusJyKHCqwBVsR43CA@mail.gmail.com>
+Message-ID: <CAHk-=wirAWFOrfD4us1FepP0vWkZMpnqXusJyKHCqwBVsR43CA@mail.gmail.com>
+Subject: Re: [RFC PATCH 6/8] READ_ONCE: Drop pointer qualifiers when reading
+ from scalar types
 To:     Will Deacon <will@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Android Kernel Team <kernel-team@android.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Peter Zijlstra <peterz@infradead.org>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC PATCH 6/8] READ_ONCE: Drop pointer qualifiers when reading
- from scalar types
-Message-ID: <20200113174225.xs3n7t3obysbsmzd@ltop.local>
-References: <20200110165636.28035-1-will@kernel.org>
- <20200110165636.28035-7-will@kernel.org>
- <CAHk-=wia5ppBsfHLMx648utCjO01JAZiME0K0eSHmhWuRyL+6w@mail.gmail.com>
- <20200113145954.GB4458@willie-the-truck>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200113145954.GB4458@willie-the-truck>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 02:59:54PM +0000, Will Deacon wrote:
+On Mon, Jan 13, 2020 at 7:00 AM Will Deacon <will@kernel.org> wrote:
+>
+> I can't disagree with that, but the only option we've come up with so far
+> that solves this in the READ_ONCE() macro itself is the thing from PeterZ:
+>
 > // Insert big fat comment here
 > #define unqual_typeof(x)    typeof(({_Atomic typeof(x) ___x __maybe_unused; ___x; }))
-> 
-> That apparently *requires* GCC 4.8, but I think the question is more about
-> whether it's easier to stomach the funny use of _Atomic or the nested
-> __builtin_choose_expr() I have here. I'm also worried about how reliable
-> the _Atomic thing is, or whether it's just an artifact of how GCC happens
-> to work today.
 
-As far as I understand it, it's an artifact of how GCC works today (it
-was added to support the type-generic macros in <tgmath.h>).
-I also think it's also quite fragile, for example, the unqualified type
-is returned if typeof's argument is an expression but not if it's a
-'typename'. IOW:
-	typeof(_Atomic typeof(const int))
-returns 'const int', while
-	typeof(({_Atomic typeof(const int) x; x; }))
-returns 'int'.
+I'm with Luc on this - that not only looks gcc-specific, it looks
+fragile too, in that it's not obvious that "_Atomic typeof(x)" really
+is guaranteed to do what we want.
 
--- Luc
+> So I suppose my question is: how ill does this code really make you feel?
+
+I wish the code was more obvious.
+
+One way to do that might be to do your approach, but just write it as
+a series of macros that makes it a bit more understandable what it
+does.
+
+Maybe it's just because of a "pee in the snow" effect, but I think
+this is easier to explain:
+
+  #define __pick_scalar_type(x,type,otherwise)          \
+        __builtin_choose_expr(__same_type(x,type), (type)0, otherwise)
+
+  #define __pick_integer_type(x, type, otherwise)       \
+        __pick_scalar_type(x, unsigned type,            \
+          __pick_scalar_type(x, signed type, otherwise))
+
+  #define __unqual_scalar_typeof(x) typeof(             \
+        __pick_integer_type(x, char,                    \
+          __pick_integer_type(x, short,                 \
+            __pick_integer_type(x, int,                 \
+              __pick_integer_type(x, long,              \
+                __pick_integer_type(x, long long, x))))))
+
+just because you there's less repeated noise, and the repetition there
+is is simpler.
+
+So still "Eww", but maybe not quite _as_ "Eww".
+
+             Linus
