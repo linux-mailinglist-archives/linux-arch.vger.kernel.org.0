@@ -2,111 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E47613B467
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 22:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FA913B46E
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 22:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728872AbgANVdM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jan 2020 16:33:12 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35118 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727102AbgANVdM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jan 2020 16:33:12 -0500
-Received: by mail-lj1-f194.google.com with SMTP id j1so16077886lja.2
-        for <linux-arch@vger.kernel.org>; Tue, 14 Jan 2020 13:33:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f5uoKw2YKLElJKDx+jK5wl0K2xjBXMt47XAsAkyAM+o=;
-        b=gVkyh4tPO8RK11oXNRTkFnFw5qS02VpB8fRn7yuyjXBrIM8r/+uUtu3n5AJSu/v+0r
-         3KVUAw32daILdFTdwNmZ41g6fmO4U+5YEKf3aZPOaD0BxhRqx8Hhmkwlmzo36zFaxnqP
-         lOdeXPMNVWW1hl8kB5QPM3J99EYMRT9fPNA7w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f5uoKw2YKLElJKDx+jK5wl0K2xjBXMt47XAsAkyAM+o=;
-        b=cttU/MkPpernA7j1f9QZarLh0oOv2yIbYp8gpLFxsDMdKsUeZyW/E/dG/sGISg/VzQ
-         V6YHy71QMHe9wElNnG11bixqAK6Y8uufx9rYAdDOTHwlrQUBFZfS5wRtcLbRtRKhL1vF
-         2QqkXfhw1F4fz7Aay08mJ0Zt5+2oRtWn/ztkLnA9Gk5eOOuPXlWYwHO9MFxcqS7VtxWJ
-         VxNO1nGf/YbGiVvXuO15ajmI1D5vQrWhcriBnv6hGZPlFnJXT8dyl1iu4U4sZz799HCl
-         E5P1U2IL5Gnh7VqUBzhGtkPpxAVsWll9IT3r8nNJSd++NXurFyOmJtRyPyWxlWXRwOVA
-         Ckfw==
-X-Gm-Message-State: APjAAAV6p/TOdy5G/7Wnk/2etsZPEwcrBiuAOflvS9mk6jkKKTa0jrCQ
-        Iw4hhc+GgbibXw8XN503H0GFjzXveU0=
-X-Google-Smtp-Source: APXvYqwT3kAgaaeSDMmOeUCWtF9RuiAr5C2FWzNo/P1gWUmtWGLvVlaqCvGHhZ50ZtC8lZGPc+068Q==
-X-Received: by 2002:a2e:94c8:: with SMTP id r8mr15865103ljh.28.1579037588132;
-        Tue, 14 Jan 2020 13:33:08 -0800 (PST)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id 195sm8010968ljj.55.2020.01.14.13.33.06
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2020 13:33:07 -0800 (PST)
-Received: by mail-lj1-f176.google.com with SMTP id u1so16087691ljk.7
-        for <linux-arch@vger.kernel.org>; Tue, 14 Jan 2020 13:33:06 -0800 (PST)
-X-Received: by 2002:a2e:9510:: with SMTP id f16mr15481129ljh.249.1579037586642;
- Tue, 14 Jan 2020 13:33:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20200114200846.29434-1-vgupta@synopsys.com> <20200114200846.29434-2-vgupta@synopsys.com>
-In-Reply-To: <20200114200846.29434-2-vgupta@synopsys.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 14 Jan 2020 13:32:50 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjChjfOaDnGygOJpC36R6mtT7=Xf6wWTzD_wLJm=quu0Q@mail.gmail.com>
-Message-ID: <CAHk-=wjChjfOaDnGygOJpC36R6mtT7=Xf6wWTzD_wLJm=quu0Q@mail.gmail.com>
-Subject: Re: [RFC 1/4] asm-generic/uaccess: don't define inline functions if
- noinline lib/* in use
-To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
+        id S1728912AbgANVeH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jan 2020 16:34:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44818 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726491AbgANVeH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 Jan 2020 16:34:07 -0500
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7F3924656;
+        Tue, 14 Jan 2020 21:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579037645;
+        bh=N2S7y+O790zET1Gmtmsm8tuXTXxczW82v07Ij9f4etg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=E19ztN87s0hx9TSeFhbYpD4KDYFnyV2gto/gqjaKAfYjz7c5aXHcsklLFATfRh40W
+         Krlsmw3JOJcH2iti5LhYFL3x8wnsI4XrND8lAwIc7zpyl15esGA5KHG4rQs7yW5iyD
+         XuiqPr1+p+/FgPX/3BzIPVbdApiWI0BuJYOa6yYg=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 597AF3522755; Tue, 14 Jan 2020 13:34:05 -0800 (PST)
+Date:   Tue, 14 Jan 2020 13:34:05 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Qian Cai <cai@lca.pw>
+Cc:     Marco Elver <elver@google.com>,
+        LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Alexander Potapenko <glider@google.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
         Andrey Konovalov <andreyknvl@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Daniel Axtens <dja@axtens.net>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        linux-snps-arc@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-efi@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [PATCH v4 01/10] kcsan: Add Kernel Concurrency Sanitizer
+ infrastructure
+Message-ID: <20200114213405.GX2935@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200114192220.GS2935@paulmck-ThinkPad-P72>
+ <F185919B-2D86-43B6-9BEC-D14D72871A58@lca.pw>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <F185919B-2D86-43B6-9BEC-D14D72871A58@lca.pw>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 14, 2020 at 12:09 PM Vineet Gupta
-<Vineet.Gupta1@synopsys.com> wrote:
->
-> There are 2 generic varaints of strncpy_from_user() / strnlen_user()
->  (1). inline version in asm-generic/uaccess.h
+On Tue, Jan 14, 2020 at 03:30:53PM -0500, Qian Cai wrote:
+> 
+> 
+> > On Jan 14, 2020, at 2:22 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > 
+> > Just so I understand...  Does this problem happen even in CONFIG_KCSAN=n
+> > kernels?
+> 
+> No.
 
-I think we should get rid of this entirely. It's just a buggy garbage
-implementation that nobody should ever actually use.
+Whew!!!  ;-)
 
-It does just about everything wrong that you *can* do, wrong,
-including doing the NUL-filling termination of standard strncpy() that
-"strncpy_from_user()" doesn't actually do.
+> > I have been running extensive CONFIG_KSCAN=y rcutorture tests for quite
+> > awhile now, so even if this only happens for CONFIG_KSCAN=y, it is not
+> > like it affects everyone.
+> > 
+> > Yes, it should be fixed, and Marco does have a patch on the way.
+> 
+> The concern is really about setting KSCAN=y in a distro debug kernel where it has other debug options. I’ll try to dig into more of those issues in the next few days.
 
-So:
+Understood.  But there are likely to be other issues with KCSAN, given how
+new it is.  Yes, yes, I certainly would like to believe that the patches
+we currently know about will make KCSAN perfect for distros, I have way
+too much grey hair (and too little hair as well!) to really beleive that.
 
- - the asm-generic/uaccess.h __strncpy_from_user() function is just
-horribly wrong
+As an alternative, once the patches needed for your tests to pass
+reach mainline, you could announce that KCSAN was ready to be enabled
+in distros.
 
- - the generic/uaccess.h version of strncpy_from_user() shouldn't be
-an inline function either, since the only thing it can do inline is
-the bogus one-byte access check that _barely_ makes security work (you
-also need to have a guard page to _actually_ make it work, and I'm not
-atr all convinced that people do).
+Though I confess that I don't know how that works.  Is there a separate
+testing kernel binary provided by the distros in question?
 
-the whole thing is just broken and should be removed from a header file.
-
->  (2). optimized word-at-a-time version in lib/*
-
-That is - outside of the original x86 strncpy_from_user() - the only
-copy of this function that historically gets all the corner cases
-right. And even those we've gotten wrong occasionally.
-
-I would suggest that anybody who uses asm-generic/uaccess.h needs to
-simply use the generic library version.
-
-             Linus
+							Thanx, Paul
