@@ -2,70 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0016913A3E2
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 10:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93C913A4D0
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 11:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726044AbgANJeB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 14 Jan 2020 04:34:01 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42106 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbgANJeB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jan 2020 04:34:01 -0500
-Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1irIa7-0006V0-A2; Tue, 14 Jan 2020 10:33:51 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 90C00101DEE; Tue, 14 Jan 2020 10:33:50 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
-        salyzyn@android.com, 0x7f454c46@gmail.com, luto@kernel.org
-Subject: Re: [PATCH v2 2/8] lib: vdso: Build 32 bit specific functions in the right context
-In-Reply-To: <87tv4zq9dc.fsf@nanos.tec.linutronix.de>
-References: <20190830135902.20861-1-vincenzo.frascino@arm.com> <20190830135902.20861-3-vincenzo.frascino@arm.com> <87tv4zq9dc.fsf@nanos.tec.linutronix.de>
-Date:   Tue, 14 Jan 2020 10:33:50 +0100
-Message-ID: <87r202qt4x.fsf@nanos.tec.linutronix.de>
+        id S1726053AbgANKCe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jan 2020 05:02:34 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50508 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729238AbgANKCd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 Jan 2020 05:02:33 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00EA23Pg081517;
+        Tue, 14 Jan 2020 05:02:07 -0500
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xfavytyd7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jan 2020 05:02:06 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 00EA075d020269;
+        Tue, 14 Jan 2020 10:01:56 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma02dal.us.ibm.com with ESMTP id 2xf74p13k0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jan 2020 10:01:55 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00EA1sED50921896
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jan 2020 10:01:54 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 935E5C6057;
+        Tue, 14 Jan 2020 10:01:54 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A37FC605A;
+        Tue, 14 Jan 2020 10:01:52 +0000 (GMT)
+Received: from skywalker.in.ibm.com (unknown [9.124.35.105])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Jan 2020 10:01:51 +0000 (GMT)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     akpm@linux-foundation.org, peterz@infradead.org, will@kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Subject: [PATCH v3 0/9] Fixup page directory freeing
+Date:   Tue, 14 Jan 2020 15:31:36 +0530
+Message-Id: <20200114100145.365527-1-aneesh.kumar@linux.ibm.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-14_02:2020-01-13,2020-01-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ suspectscore=2 adultscore=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=487 bulkscore=0 mlxscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001140090
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Thomas Gleixner <tglx@linutronix.de> writes:
+This is a repost of patch series from Peter with the arch specific changes except ppc64 dropped.
+ppc64 changes are added here because we are redoing the patch series on top of ppc64 changes. This makes it
+easy to backport these changes. Only the first 3 patches need to be backported to stable. 
 
-> Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
->
->> clock_gettime32 and clock_getres_time32 should be compiled only with a
->> 32 bit vdso library.
->>
->> Exclude these symbols when BUILD_VDSO32 is not defined.
->
-> This breaks the ARM build with:
->
-> arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_gettime’:
-> arch/arm/vdso/vgettimeofday.c:15:9: error: implicit declaration of function ‘__cvdso_clock_gettime32’; did you mean ‘__cvdso_clock_gettime’? [-Werror=implicit-function-declaration]
->   return __cvdso_clock_gettime32(clock, ts);
->          ^~~~~~~~~~~~~~~~~~~~~~~
->          __cvdso_clock_gettime
-> arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_getres’:
-> arch/arm/vdso/vgettimeofday.c:33:9: error: implicit declaration of function ‘__cvdso_clock_getres_time32’; did you mean ‘__cvdso_clock_getres_common’? [-Werror=implicit-function-declaration]
->   return __cvdso_clock_getres_time32(clock_id, res);
->          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->          __cvdso_clock_getres_common
-> cc1: some warnings being treated as errors
->
-> The patch below 'fixes' at least the build. Can someone please confirm
-> the correctness?
+The thing is, on anything SMP, freeing page directories should observe the
+exact same order as normal page freeing:
 
-Bah, it's not fixing it. That's what you get when you compile the wrong
-tree...
+ 1) unhook page/directory
+ 2) TLB invalidate
+ 3) free page/directory
+
+Without this, any concurrent page-table walk could end up with a Use-after-Free.
+This is esp. trivial for anything that has software page-table walkers
+(HAVE_FAST_GUP / software TLB fill) or the hardware caches partial page-walks
+(ie. caches page directories).
+
+Even on UP this might give issues since mmu_gather is preemptible these days.
+An interrupt or preempted task accessing user pages might stumble into the free
+page if the hardware caches page directories.
+
+This patch series fixup ppc64 and add generic MMU_GATHER changes to support the conversion of other architectures.
+I haven't added patches w.r.t other architecture because they are yet to be acked.
+
+
+Aneesh Kumar K.V (1):
+  powerpc/mmu_gather: Enable RCU_TABLE_FREE even for !SMP case
+
+Peter Zijlstra (8):
+  mm/mmu_gather: Invalidate TLB correctly on batch allocation failure
+    and flush
+  asm-generic/tlb: Avoid potential double flush
+  asm-gemeric/tlb: Remove stray function declarations
+  asm-generic/tlb: Add missing CONFIG symbol
+  asm-generic/tlb: Rename HAVE_RCU_TABLE_FREE
+  asm-generic/tlb: Rename HAVE_MMU_GATHER_PAGE_SIZE
+  asm-generic/tlb: Rename HAVE_MMU_GATHER_NO_GATHER
+  asm-generic/tlb: Provide MMU_GATHER_TABLE_FREE
+
+ arch/Kconfig                                 |  13 +-
+ arch/arm/Kconfig                             |   2 +-
+ arch/arm/include/asm/tlb.h                   |   4 -
+ arch/arm64/Kconfig                           |   2 +-
+ arch/powerpc/Kconfig                         |   5 +-
+ arch/powerpc/include/asm/book3s/32/pgalloc.h |   8 --
+ arch/powerpc/include/asm/book3s/64/pgalloc.h |   2 -
+ arch/powerpc/include/asm/nohash/pgalloc.h    |   8 --
+ arch/powerpc/include/asm/tlb.h               |  11 ++
+ arch/powerpc/mm/book3s64/pgtable.c           |   7 -
+ arch/s390/Kconfig                            |   4 +-
+ arch/sparc/Kconfig                           |   3 +-
+ arch/sparc/include/asm/tlb_64.h              |   9 ++
+ arch/x86/Kconfig                             |   2 +-
+ arch/x86/include/asm/tlb.h                   |   4 +-
+ include/asm-generic/tlb.h                    | 120 ++++++++++-------
+ mm/gup.c                                     |   2 +-
+ mm/mmu_gather.c                              | 134 +++++++++++++------
+ 18 files changed, 207 insertions(+), 133 deletions(-)
+
+-- 
+2.24.1
+
