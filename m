@@ -2,24 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5043913AF91
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 17:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156FC13B0DD
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 18:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbgANQjF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jan 2020 11:39:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:54578 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726195AbgANQjF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 14 Jan 2020 11:39:05 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF7CC1396;
-        Tue, 14 Jan 2020 08:39:04 -0800 (PST)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.197.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BBDE23F68E;
-        Tue, 14 Jan 2020 08:39:01 -0800 (PST)
-Date:   Tue, 14 Jan 2020 16:38:59 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
+        id S1726450AbgANR3E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jan 2020 12:29:04 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:58536 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726270AbgANR3E (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jan 2020 12:29:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=i70L8DNui8VPmavm+tZ8ivBeZkZeG8PnKWDI53xqtSM=; b=t1Oe+sLzVhteGVH2G8L+ZuR9d
+        9utrcXUyXrsEEQ/BJ6ZWl8JUkosr9QdU1c25uUJ79QZPFWw4dH0VxlptSVkRIH+eNsz7uWLaowKzz
+        bgZPklFW6glxzoPk2PfOWBAv2D8dgvyuOKSrZSrBaS7HS/Y4X20Ab+mqLujGICknxGT2E=;
+Received: from fw-tnat-cam7.arm.com ([217.140.106.55] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1irPzh-0001qO-Tk; Tue, 14 Jan 2020 17:28:45 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 97845D01965; Tue, 14 Jan 2020 17:28:45 +0000 (GMT)
+Date:   Tue, 14 Jan 2020 17:28:45 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Will Deacon <will@kernel.org>, Paul Elliott <paul.elliott@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Yu-cheng Yu <yu-cheng.yu@intel.com>,
@@ -38,38 +48,49 @@ Cc:     Will Deacon <will@kernel.org>, Paul Elliott <paul.elliott@arm.com>,
         Sudakshina Das <sudi.das@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, Dave Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH v4 05/12] elf: Allow arch to tweak initial mmap prot flags
-Message-ID: <20200114163859.GI30444@arrakis.emea.arm.com>
+Subject: Re: [PATCH v4 02/12] ELF: Add ELF program property parsing support
+Message-ID: <20200114172845.GF3897@sirena.org.uk>
 References: <20191211154206.46260-1-broonie@kernel.org>
- <20191211154206.46260-6-broonie@kernel.org>
+ <20191211154206.46260-3-broonie@kernel.org>
+ <20200114163402.GH30444@arrakis.emea.arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="656hIAUFSU7Oh46B"
 Content-Disposition: inline
-In-Reply-To: <20191211154206.46260-6-broonie@kernel.org>
+In-Reply-To: <20200114163402.GH30444@arrakis.emea.arm.com>
+X-Cookie: Programming is an unnatural act.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 03:41:59PM +0000, Mark Brown wrote:
-> From: Dave Martin <Dave.Martin@arm.com>
-> 
-> An arch may want to tweak the mmap prot flags for an
-> ELFexecutable's initial mappings.  For example, arm64 is going to
-> need to add PROT_BTI for executable pages in an ELF process whose
-> executable is marked as using Branch Target Identification (an
-> ARMv8.5-A control flow integrity feature).
-> 
-> So that this can be done in a generic way, add a hook
-> arch_elf_adjust_prot() to modify the prot flags as desired: arches
-> can select CONFIG_HAVE_ELF_PROT and implement their own backend
-> where necessary.
-> 
-> By default, leave the prot flags unchanged.
-> 
-> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+--656hIAUFSU7Oh46B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jan 14, 2020 at 04:34:03PM +0000, Catalin Marinas wrote:
+
+> The logic looks fine to me but I'm not sure the choice of returning -EIO
+> is suitable in most cases. I think apart from kernel_read() returning an
+> error, there rest look like malformed ELF notes, so rather -ENOEXEC.
+
+Sure, I don't have strong opinions either way.
+
+--656hIAUFSU7Oh46B
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl4d+koACgkQJNaLcl1U
+h9BzOAf/ZW4b8JHQ9qlWZwLXs7dElEQgCxM18zekE7pOdxU3oF7g7qLspavQhRB9
+6VwtDC7KE1ohuOMkwPE5HFSzlOW5WyGKodH8581UTigsQ3vp5Y4OKdIwNYCmvI0O
+OaPHa1Us+qy5w2fwhYFGQpJaKBAo52VFWFb1eS65cv/A1RVktrwfF0/5CUKQlOvT
+eUsZAkU1zgYf5BTaFmLlhrKlfbfOZE7U3nSMfRpM9k0uHS8TkV4gJY8Krs2/IKWG
+1ePbKRpoEnul7u915WZxspdgU8UI556Y1gmiJEO1RyMOWH56mWwEgHrQc/8MxLpG
+AoSckdNGC+G7zG4pARh7eWJDwYq3GA==
+=w1Xx
+-----END PGP SIGNATURE-----
+
+--656hIAUFSU7Oh46B--
