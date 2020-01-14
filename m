@@ -2,33 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D77513B3C4
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 21:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE5313B3DF
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 21:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727556AbgANUmf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jan 2020 15:42:35 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:51325 "EHLO
+        id S1728820AbgANU6B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jan 2020 15:58:01 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:43061 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727102AbgANUmf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jan 2020 15:42:35 -0500
-Received: from mail-qt1-f172.google.com ([209.85.160.172]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Mt71D-1jgYIj3jsP-00tQxz; Tue, 14 Jan 2020 21:42:33 +0100
-Received: by mail-qt1-f172.google.com with SMTP id e5so13721910qtm.6;
-        Tue, 14 Jan 2020 12:42:32 -0800 (PST)
-X-Gm-Message-State: APjAAAVUgLu3KybUBRWgZOQT87aqrWe4uGWtrdo3h15KL1osIR27b+Ee
-        XwO52/C8wYUZjJqAr635xsaJiE6VMkpbRTp4nGw=
-X-Google-Smtp-Source: APXvYqzxLn1Nj4qYcObdVSAkUm2fmRRi+xa7YXncyT2LEy7rE/VbjtJMaqfRb4R8TsrdH0c4vNhly9VoEeEnfkmz8pY=
-X-Received: by 2002:ac8:768d:: with SMTP id g13mr422257qtr.7.1579034551663;
- Tue, 14 Jan 2020 12:42:31 -0800 (PST)
+        with ESMTP id S1726491AbgANU6A (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jan 2020 15:58:00 -0500
+Received: from mail-qk1-f174.google.com ([209.85.222.174]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MpDa5-1jRbhI13iJ-00qlZL; Tue, 14 Jan 2020 21:57:59 +0100
+Received: by mail-qk1-f174.google.com with SMTP id j9so13607771qkk.1;
+        Tue, 14 Jan 2020 12:57:58 -0800 (PST)
+X-Gm-Message-State: APjAAAXcv/58nsBItD6xmmsBSbFGrgcAhJ2ogCVxYy6v/J+/treDGYjy
+        zFL33cjSTSOG0tHMx7z47onwA5LDgup/Ci5Go3o=
+X-Google-Smtp-Source: APXvYqwhg5lxdDG9hw24GdeXieaQIzqGf7tcgGAhb/t/luGZu0DMMqM2FGkeCDHJm3CEiDORiqOll/dN1rxk4xKyAcY=
+X-Received: by 2002:a37:a8d4:: with SMTP id r203mr19031507qke.394.1579035478013;
+ Tue, 14 Jan 2020 12:57:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20200114200846.29434-1-vgupta@synopsys.com> <20200114200846.29434-5-vgupta@synopsys.com>
-In-Reply-To: <20200114200846.29434-5-vgupta@synopsys.com>
+References: <20200114200846.29434-1-vgupta@synopsys.com> <20200114200846.29434-2-vgupta@synopsys.com>
+In-Reply-To: <20200114200846.29434-2-vgupta@synopsys.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 14 Jan 2020 21:42:15 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2GUqmcA_q33=20OrK1+cU4f3mCrgci_bO3ho4B5PRODg@mail.gmail.com>
-Message-ID: <CAK8P3a2GUqmcA_q33=20OrK1+cU4f3mCrgci_bO3ho4B5PRODg@mail.gmail.com>
-Subject: Re: [RFC 4/4] ARC: uaccess: use optimized generic __strnlen_user/__strncpy_from_user
+Date:   Tue, 14 Jan 2020 21:57:42 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3W0eLK+qypnPwq=PdcF7+ey8OZEhmOoA6Bg7hMGm5hqQ@mail.gmail.com>
+Message-ID: <CAK8P3a3W0eLK+qypnPwq=PdcF7+ey8OZEhmOoA6Bg7hMGm5hqQ@mail.gmail.com>
+Subject: Re: [RFC 1/4] asm-generic/uaccess: don't define inline functions if
+ noinline lib/* in use
 To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
 Cc:     Khalid Aziz <khalid.aziz@oracle.com>,
         Andrey Konovalov <andreyknvl@google.com>,
@@ -44,66 +45,49 @@ Cc:     Khalid Aziz <khalid.aziz@oracle.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:P0Yk7cRWAwOVl1R8QACurohhrN3Yw6BNjXW7/LXkaI/xQ3EEAan
- kK17hFITTMb1B7LSGKhrxVaMHSq08OLC//dtMZVunX2xQrxNQ2y9WrbMubS1I7KgILdFZPR
- VT+l99twvmuutCmlvEPDqfwXhzY1dO2SUdVa/aAkX9Jq0ayR4YYkS9MA3UsQ/Zqp81P/i9V
- n8K5bO2ouBi+Zt+cttTzg==
+X-Provags-ID: V03:K1:kDnJNAh/DNMBSqFPq6pLI1Nlr9B0G9P4obBew/8vuXY0oVgXmJw
+ Nv/q1RAtYWHD7iaYn6uj3/GYEEUDxyIzlxtWfs3swS+9vrwM3Eh7taZQFUCI2mVelJDhCAE
+ wtNEg0QlQWgsWNv36ps92xCvtka8T7kKwUn3F5UcFCwdTahhU4Z6+pxS+X2fuB53MKKXo+j
+ rzj+G8gQMcz7vn066OrPA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Et35N60v8/0=:4cFfVfH3vHhOjgmeYnWMlM
- k7hPuGQGyDrxVcOFGX4/Uiv3WeTvPmMeDuv8hbfGUx3fUh4B8LAGWZxpY3lhybfZlDBbaA5A7
- V2MB0JP0BUTZD+BmXfH782UO4JnvZhD1yJ1MzzB/uyrbZKIDRpTm9IUAYP2+5jT7jkr4N1vzr
- jVu3fWijUeFSSfsAXzwya7YJhTlp1gJjWdtk4MBnwp8eWzPGCAQE+tx5st7B9Ye/hUnA603kc
- 1WiScPtXlF28+hcGyUYErzHkl+kfj8T2cUSQd7XkxSxY5jZjhCUK9Fhd5o6nOtY50vxcV4vXb
- w4LLGfsTwh5rfALr8LtCwhxKRNh7kxYkUtcUKZeL8eQz5HiDxyjEk6RDIy1E8GewR6/wuTCRh
- 9Xf7gzYmMs635A+OuzxzobhyqqKvpFuG42phTFPvUMtda1j6VCytlCG5XvNWqZ/UJ/fXuxUjd
- EeuLIEmFj6W9vnNhAcICQSIqNeqU87EzsQ0nO/cF+h1vitXq1nAQFssCPIOdpfjaGJtSEANC4
- YI5Kb0PBMVEgTOj3qenlO1GzRKA+7PpQn8Bdak1R0cNVPigBHnCjTNmqphQvd/cw+0RhTeUJG
- WGl5E3e4PARxcydezPLWBmXqljo/J+0AzDQfLzbT2NR3T2OWqPcVKHNjcalCyxSbOhMc1/bED
- lx8wPUlIMJwAkotKkDkheCnJKxLbX0LzT6Fhz4WzQtxKK9q4aP2h1hZ2/x1uT6213r71vlXHl
- TeIZkraj51SB0nYbwNQbX7KG844z/eGfnq66PSIzeubVPzq/5iafldlej3JO/6JWYLhK7cE/g
- rGfh5Vwmw42u3ZRotHrzb/t9kqJcWyw6Kq5MXN3UpPiccxM8gfjW9nglfrk7alsulmJfhI6RS
- QcYhV0+c38v4uDQIhGVw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:S9alnY7jl0w=:QIO67bfjC+c2E4/f6+vfNp
+ sJ83S1el6CRwhZ7PhMdRGEQKcFOtDl5Y8+W9V7P8KOOz9VgGezLClXFxuaSS+bvKFBdVNPEg/
+ kPPr/qd2n3NlndzoFcyvs4MWwuNXWMXbrSFMig0xQFJy4caFeId5wlvbsK7BZoT23/BS6KK2R
+ s1LyXTw/NVTJ5qtsvci9u26OVjoZkWyXchDOJ5ZaC+qu1LWF8oZH16Y1x6mDvX4vwWqluSl2M
+ s80MQGJi+gZZgSU0T4nDXLhdUIlLrxbHzN6NHDhoGjeERHb4MvLwBjraNl+c2KZl5Mr7kijYa
+ qg05/GoIAohm41IKuCYpICH+rLpAmOJ9Qw5JLS63qdZ5jJGoSTwz4VaE1DmOuGbL0UVuEKYO8
+ WUiHKdqE5SfHz+qCdXuAi4Z3GLpbFoYrS+6n+mYQuRM4YGw/rV2ZVBmpHrRwyKyP/sWpaXtxL
+ PBsTzOsJEcYDGadFblz0vFkbrRRnFoLS8rDQAoNEWhL01lUgMMZXHWlAZ54k8dte4a7c7guTu
+ 4w1BtCUZDvB3HFhYG8cmrJAbJPjxSf5KRUwwsSZOi/wnS+wO4suzZ3BZNhfVVtvRheUtqmo9b
+ eNWQ/WvubyGsgJ7beGXOHWaZUrdxrCfur5ZekQer5UK9ttmZaSFAnDHJ9A6+Bfc6ffPtB+UO2
+ 0i3SLIHqs3OO1dSe1POh130jngV3WZny0LnDRnBALEtIcBugqY3vTu2FOJsQ7mfyJ2uxqSJj+
+ OlBA6QA/Nl046q4hXHZVjKM9HKtCfnAwZ2Ui0Cil1yw2FicMvQmH+CB5jT3NBp7mzxbxyEbXO
+ KjgSpY/RGYVGEeRdlEQ9SNfvLsmPUSELJRt0K5Xdu0aaWQWi3EpDDp/8DPewXZzzZ2FKOWaYb
+ WVk3Mc5AlfvNp5qwBhng==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jan 14, 2020 at 9:08 PM Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+>
+> There are 2 generic varaints of strncpy_from_user() / strnlen_user()
+>  (1). inline version in asm-generic/uaccess.h
+>  (2). optimized word-at-a-time version in lib/*
+>
+> This patch disables #1 if #2 selected. This allows arches to continue
+> reusing asm-generic/uaccess.h for rest of code
+>
+> This came up when switching ARC to generic word-at-a-time interface
+>
+> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 
-> diff --git a/arch/arc/include/asm/word-at-a-time.h b/arch/arc/include/asm/word-at-a-time.h
-> new file mode 100644
-> index 000000000000..00e92be70987
-> --- /dev/null
-> +++ b/arch/arc/include/asm/word-at-a-time.h
-> @@ -0,0 +1,49 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2020 Synopsys Inc.
-> + */
-> +#ifndef __ASM_ARC_WORD_AT_A_TIME_H
-> +#define __ASM_ARC_WORD_AT_A_TIME_H
-> +
-> +#ifdef __LITTLE_ENDIAN__
-> +
-> +#include <linux/kernel.h>
-> +
-> +struct word_at_a_time {
-> +       const unsigned long one_bits, high_bits;
-> +};
+This looks like a useful change, but I think we can do even better: It
+seems that
+there are no  callers of __strnlen_user or __strncpy_from_user  in the
+kernel today, so these should not be defined either when the Kconfig symbols
+are set. Also, I would suggest moving the 'extern' declaration for the two
+functions into the #else branch of the conditional so it does not need to be
+duplicated.
 
-What's wrong with the generic version on little-endian? Any
-chance you can find a way to make it work as well for you as
-this copy?
-
-> +static inline unsigned long find_zero(unsigned long mask)
-> +{
-> +#ifdef CONFIG_64BIT
-> +       return fls64(mask) >> 3;
-> +#else
-> +       return fls(mask) >> 3;
-> +#endif
-
-The CONFIG_64BIT check not be needed, unless you are adding
-support for 64-bit ARC really soon.
-
-       Arnd
+      Arnd
