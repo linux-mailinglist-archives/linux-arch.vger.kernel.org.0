@@ -2,78 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4A913A7B6
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 11:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA1113A7F9
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 12:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728746AbgANKuM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jan 2020 05:50:12 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:42186 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727556AbgANKuM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jan 2020 05:50:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=zpOpHUjbhC0rJlP6b+TZpjlC26yEgKMY83qh9k5bu3U=; b=06WPGrTR6s6NFO7DsI67V5+Wb
-        czeAIAK6w/njHcQBpq93jCuo23ME14WPrkiMr/UMjsHGO4vzBJNoFc9LXxprLIKuw3e+y2ZUtBvLZ
-        tesAN9rgpIW2rciGL43nVoFli7oDpK4HQ3iFt49iyuScNAwqus9zOxEK3vcqfYuHzFIeaPs0BBAi7
-        lninJVJH/XZ/XwdXFmS0UNyoy8ad6Pjp7JZ2risRViJXfec0wFZmyDB8U3Jbovtk1HYPR8Pb7tIZT
-        HHzHcW9AuK70ebMSNFvqwaf3Oa8sKUUNUr4K72419Hr6A4bsNCLcv3Ssh0Fpm7qAmHGI9JhHtBhUb
-        Y5/ugemyw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1irJls-0008BE-LF; Tue, 14 Jan 2020 10:50:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 45F9C304123;
-        Tue, 14 Jan 2020 11:48:26 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1B42629D73921; Tue, 14 Jan 2020 11:50:02 +0100 (CET)
-Date:   Tue, 14 Jan 2020 11:50:02 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     akpm@linux-foundation.org, will@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 0/9] Fixup page directory freeing
-Message-ID: <20200114105002.GD2844@hirez.programming.kicks-ass.net>
-References: <20200114100145.365527-1-aneesh.kumar@linux.ibm.com>
-MIME-Version: 1.0
+        id S1729532AbgANLId (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jan 2020 06:08:33 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:32894 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728914AbgANLIc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jan 2020 06:08:32 -0500
+Received: by mail-qk1-f193.google.com with SMTP id d71so11712286qkc.0
+        for <linux-arch@vger.kernel.org>; Tue, 14 Jan 2020 03:08:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=ukU/HTx3Lur+oN5f1R5Yulqfuax6so7AyFG3I+NXijE=;
+        b=mDLkJsF382qFbmEkUJXrjKsSsU0bztLQnJuEdueVjG+YHKn129QRMVkFBhaHs02jlb
+         S5JV36BNDDNUfL8KemT5hOsLWqTvUggPzEAa8N2CZKjqEUL2gsDnvv40g+BB+uela7dh
+         Jgrx9rDjz5OErwlXPsX7nNM+dSWsRNE8nulA4QnYl74qcvdSBJGmDk3He16/4mFZs33S
+         IzPGb27j4W2dHx0T8+OODSyZm7E16IzcLQzguhPs5vHLJASI9JeNCkexh2az/dQ96t3u
+         ruWKhzckHLSdD4ijmd79+MvrNJzlzIX0uzlRXCf+RicfDnuUK7rhsIpo8bqFBLTAzkrn
+         doog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=ukU/HTx3Lur+oN5f1R5Yulqfuax6so7AyFG3I+NXijE=;
+        b=iuhYeRW7VKm0UrrcOMotRZVnjf50MSM6wC97ZpFoXFNHX4lx5pZNEg+QTtKMwDaITg
+         HWCUEoMd19Y7SJUzumkUKl05qG+7cBuWEreKNfDLvzbtH8Gr4gl/kGCFZY50njWf/mFz
+         wQZ14GWXMe3QxyB8HnfRQdT/L3XIMOZ4fBzJWvMKOd5lnpA+kuOR/idS+tGpta31Ggui
+         1NpY9cVZmgihVHg+TWQuo94aUS9CGouA2AK/MtZLrZZtuhGzYSXR6pis/hUfz5rxtMqM
+         2iE2WX4NvdUED4L7lksNf+4ppmcAgVYAiO6CAn3khhDijWOjXjQkhR8hWIpf8Kulkx4V
+         HfWQ==
+X-Gm-Message-State: APjAAAUgPZpesgrSw8AMfivoxCmvrfnmGC7zD525IAlm8r1XpTw4F03A
+        +KPcOPzwtg1mAZuGtTtOS+4eKw==
+X-Google-Smtp-Source: APXvYqw+K7nK6v62iaPG8IRuXo2+JcN5WoG4smCXzjE2do7qUArjfSk6sdyUR46tJD8UtoLaDUB45w==
+X-Received: by 2002:a37:4b93:: with SMTP id y141mr21982856qka.205.1579000111263;
+        Tue, 14 Jan 2020 03:08:31 -0800 (PST)
+Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id i16sm6406845qkh.120.2020.01.14.03.08.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jan 2020 03:08:30 -0800 (PST)
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200114100145.365527-1-aneesh.kumar@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+From:   Qian Cai <cai@lca.pw>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v4 01/10] kcsan: Add Kernel Concurrency Sanitizer infrastructure
+Date:   Tue, 14 Jan 2020 06:08:29 -0500
+Message-Id: <53F6B915-AC53-41BB-BF32-33732515B3A0@lca.pw>
+References: <CANpmjNOC2PYFsE_TK2SYmKcHxyG+2arWc8x_fmeWPOMi0+ot8g@mail.gmail.com>
+Cc:     LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Alexander Potapenko <glider@google.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Daniel Axtens <dja@axtens.net>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-efi@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+In-Reply-To: <CANpmjNOC2PYFsE_TK2SYmKcHxyG+2arWc8x_fmeWPOMi0+ot8g@mail.gmail.com>
+To:     Marco Elver <elver@google.com>
+X-Mailer: iPhone Mail (17C54)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 14, 2020 at 03:31:36PM +0530, Aneesh Kumar K.V wrote:
-> This is a repost of patch series from Peter with the arch specific changes except ppc64 dropped.
-> ppc64 changes are added here because we are redoing the patch series on top of ppc64 changes. This makes it
-> easy to backport these changes. Only the first 3 patches need to be backported to stable. 
-> 
-> The thing is, on anything SMP, freeing page directories should observe the
-> exact same order as normal page freeing:
-> 
->  1) unhook page/directory
->  2) TLB invalidate
->  3) free page/directory
-> 
-> Without this, any concurrent page-table walk could end up with a Use-after-Free.
-> This is esp. trivial for anything that has software page-table walkers
-> (HAVE_FAST_GUP / software TLB fill) or the hardware caches partial page-walks
-> (ie. caches page directories).
-> 
-> Even on UP this might give issues since mmu_gather is preemptible these days.
-> An interrupt or preempted task accessing user pages might stumble into the free
-> page if the hardware caches page directories.
-> 
-> This patch series fixup ppc64 and add generic MMU_GATHER changes to support the conversion of other architectures.
-> I haven't added patches w.r.t other architecture because they are yet to be acked.
 
-Obviously looks good to me; will you route this through the Power tree
-since you're in a hurry to see this fixed?
+
+> On Jan 6, 2020, at 7:47 AM, Marco Elver <elver@google.com> wrote:
+>=20
+> Thanks, I'll look into KCSAN + lockdep compatibility. It's probably
+> missing some KCSAN_SANITIZE :=3D n in some Makefile.
+
+Can I have a update on fixing this? It looks like more of a problem that kcs=
+an_setup_watchpoint() will disable IRQs and then dive into the page allocato=
+r where it would complain because it might sleep.
+
+BTW, I saw Paul sent a pull request for 5.6 but it is ugly to have everybody=
+ could trigger a deadlock (sleep function called in atomic context) like thi=
+s during boot once this hits the mainline not to mention about only recently=
+ it is possible to test this feature (thanks to warning ratelimit) with the e=
+xisting debugging options because it was unable to boot due to the brokennes=
+s with debug_pagealloc as mentioned in this thread, so this does sounds like=
+ it needs more soak time for the mainline to me.
+
+0000000000000400
+[   13.416814][    T1] Call Trace:
+[   13.416814][    T1]  lock_is_held_type+0x66/0x160
+[   13.416814][    T1]  ___might_sleep+0xc1/0x1d0
+[   13.416814][    T1]  __might_sleep+0x5b/0xa0
+[   13.416814][    T1]  slab_pre_alloc_hook+0x7b/0xa0
+[   13.416814][    T1]  __kmalloc_node+0x60/0x300
+[   13.416814   T1]  ? alloc_cpumask_var_node+0x44/0x70
+[   13.416814][    T1]  ? topology_phys_to_logical_die+0x7e/0x180
+[   13.416814][    T1]  alloc_cpumask_var_node+0x44/0x70
+[   13.416814][    T1]  zalloc_cpumask_var+0x2a/0x40
+[   13.416814][    T1]  native_smp_prepare_cpus+0x246/0x425
+[   13.416814][    T1]  kernel_init_freeable+0x1b8/0x496
+[   13.416814][    T1]  ? rest_init+0x381/0x381
+[   13.416814][    T1]  kernel_init+0x18/0x17f
+[   13.416814][    T1]  ? rest_init+0x381/0x381
+[   13.416814][    T1]  ret_from_fork+0x3a/0x50
+[   13.416814][    T1] irq event stamp: 910
+[   13.416814][    T1] hardirqs last  enabled at (909): [<ffffffff8d1240f3>]=
+ _raw_write_unlock_irqrestore+0x53/0x57
+[   13.416814][    T1] hardirqs last disabled at (910): [<ffffffff8c8bba76>]=
+ kcsan_setup_watchpoint+0x96/0x460
+[   13.416814][    T1] softirqs last  enabled at (0): [<ffffffff8c6b697a>] c=
+opy_process+0x11fa/0x34f0
+[   13.416814][    T1] softirqs last disabled at (0): [<0000000000000000>] 0=
+x0
+[   13.416814][    T1] ---[ end trace 7d1df66da055aa92 ]---
+[   13.416814][    T1] possible reason: unannotated irqs-on.
+[   13.416814][ent stamp: 910
+[   13.416814][    T1] hardirqs last  enabled at (909): [<ffffffff8d1240f3>]=
+ _raw_write_unlock_irqrestore+0x53/0x57
+[   13.416814][    T1] hardirqs last disabled at (910): [<ffffffff8c8bba76>]=
+ kcsan_setup_watchpoint+0x96/0x460
+[   13.416814][    T1] softirqs last  enabled at (0): [<ffffffff8c6b697a>] c=
+opy_process+0x11fa/0x34f0
+[   13.416814][    T1] softirqs last disabled at (0): [<0000000000000000>] 0=
+x0=
