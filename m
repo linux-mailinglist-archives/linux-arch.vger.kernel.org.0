@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2534E13A4D7
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 11:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 607C413A4CB
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2020 11:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728914AbgANKCv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jan 2020 05:02:51 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24164 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726169AbgANKCa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
+        id S1729175AbgANKCa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Tue, 14 Jan 2020 05:02:30 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00EA2EO9004231;
-        Tue, 14 Jan 2020 05:02:18 -0500
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xfvt0gkdm-1
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38796 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726053AbgANKC3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 Jan 2020 05:02:29 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00EA2DH4157834;
+        Tue, 14 Jan 2020 05:02:20 -0500
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2xh7h70vdy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jan 2020 05:02:18 -0500
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 00EA1kS1008515;
-        Tue, 14 Jan 2020 10:02:16 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma04dal.us.ibm.com with ESMTP id 2xf75ks482-1
+        Tue, 14 Jan 2020 05:02:19 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 00EA0uDp029507;
+        Tue, 14 Jan 2020 10:02:25 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma01wdc.us.ibm.com with ESMTP id 2xf7502ga5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jan 2020 10:02:16 +0000
+        Tue, 14 Jan 2020 10:02:25 +0000
 Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00EA2Fs560686770
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00EA2Iuu23790018
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jan 2020 10:02:15 GMT
+        Tue, 14 Jan 2020 10:02:18 GMT
 Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 15D89C6062;
+        by IMSVA (Postfix) with ESMTP id 0F47AC605A;
+        Tue, 14 Jan 2020 10:02:18 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB55BC6061;
         Tue, 14 Jan 2020 10:02:15 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AE191C6055;
-        Tue, 14 Jan 2020 10:02:12 +0000 (GMT)
 Received: from skywalker.in.ibm.com (unknown [9.124.35.105])
         by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Jan 2020 10:02:12 +0000 (GMT)
+        Tue, 14 Jan 2020 10:02:15 +0000 (GMT)
 From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
 To:     akpm@linux-foundation.org, peterz@infradead.org, will@kernel.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org,
         "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v3 7/9] asm-generic/tlb: Rename HAVE_MMU_GATHER_PAGE_SIZE
-Date:   Tue, 14 Jan 2020 15:31:43 +0530
-Message-Id: <20200114100145.365527-8-aneesh.kumar@linux.ibm.com>
+Subject: [PATCH v3 8/9] asm-generic/tlb: Rename HAVE_MMU_GATHER_NO_GATHER
+Date:   Tue, 14 Jan 2020 15:31:44 +0530
+Message-Id: <20200114100145.365527-9-aneesh.kumar@linux.ibm.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200114100145.365527-1-aneesh.kumar@linux.ibm.com>
 References: <20200114100145.365527-1-aneesh.kumar@linux.ibm.com>
@@ -55,11 +55,11 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-14_02:2020-01-13,2020-01-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 malwarescore=0
- mlxlogscore=998 suspectscore=2 bulkscore=0 phishscore=0 mlxscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001140090
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 priorityscore=1501 spamscore=0 impostorscore=0
+ phishscore=0 bulkscore=0 adultscore=0 clxscore=1015 mlxscore=0
+ suspectscore=2 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-2001140090
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -72,98 +72,126 @@ Towards a more consistent naming scheme.
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 ---
- arch/Kconfig              | 2 +-
- arch/powerpc/Kconfig      | 2 +-
- include/asm-generic/tlb.h | 9 ++++++---
- mm/mmu_gather.c           | 4 ++--
- 4 files changed, 10 insertions(+), 7 deletions(-)
+ arch/Kconfig              |  2 +-
+ arch/s390/Kconfig         |  2 +-
+ include/asm-generic/tlb.h | 14 ++++++++++++--
+ mm/mmu_gather.c           | 10 +++++-----
+ 4 files changed, 19 insertions(+), 9 deletions(-)
 
 diff --git a/arch/Kconfig b/arch/Kconfig
-index 501d565690b5..e8548211b6a9 100644
+index e8548211b6a9..c35668fbf4d4 100644
 --- a/arch/Kconfig
 +++ b/arch/Kconfig
-@@ -396,7 +396,7 @@ config HAVE_ARCH_JUMP_LABEL_RELATIVE
- config MMU_GATHER_RCU_TABLE_FREE
- 	bool
- 
--config HAVE_MMU_GATHER_PAGE_SIZE
-+config MMU_GATHER_PAGE_SIZE
- 	bool
- 
+@@ -402,7 +402,7 @@ config MMU_GATHER_PAGE_SIZE
  config MMU_GATHER_NO_RANGE
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 955759234776..cefacb9c8f48 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -223,7 +223,7 @@ config PPC
- 	select HAVE_PERF_REGS
+ 	bool
+ 
+-config HAVE_MMU_GATHER_NO_GATHER
++config MMU_GATHER_NO_GATHER
+ 	bool
+ 
+ config ARCH_HAVE_NMI_SAFE_CMPXCHG
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index e2cde82a1a3c..de39c2e92435 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -163,7 +163,7 @@ config S390
  	select HAVE_PERF_USER_STACK_DUMP
- 	select MMU_GATHER_RCU_TABLE_FREE
--	select HAVE_MMU_GATHER_PAGE_SIZE
-+	select MMU_GATHER_PAGE_SIZE
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RELIABLE_STACKTRACE		if PPC_BOOK3S_64 && CPU_LITTLE_ENDIAN
- 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_MEMBLOCK_NODE_MAP
+ 	select HAVE_MEMBLOCK_PHYS_MAP
+-	select HAVE_MMU_GATHER_NO_GATHER
++	select MMU_GATHER_NO_GATHER
+ 	select HAVE_MOD_ARCH_SPECIFIC
+ 	select HAVE_NOP_MCOUNT
+ 	select HAVE_OPROFILE
 diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index 04a1b8f08eea..53befa5acb27 100644
+index 53befa5acb27..ca0fe75b5355 100644
 --- a/include/asm-generic/tlb.h
 +++ b/include/asm-generic/tlb.h
-@@ -121,11 +121,14 @@
+@@ -143,6 +143,16 @@
+  *  MMU_GATHER_NO_RANGE
   *
-  * Additionally there are a few opt-in features:
-  *
-- *  HAVE_MMU_GATHER_PAGE_SIZE
-+ *  MMU_GATHER_PAGE_SIZE
-  *
-  *  This ensures we call tlb_flush() every time tlb_change_page_size() actually
-  *  changes the size and provides mmu_gather::page_size to tlb_flush().
-  *
-+ *  This might be useful if your architecture has size specific TLB
-+ *  invalidation instructions.
+  *  Use this if your architecture lacks an efficient flush_tlb_range().
 + *
-  *  MMU_GATHER_RCU_TABLE_FREE
-  *
-  *  This provides tlb_remove_table(), to be used instead of tlb_remove_page()
-@@ -279,7 +282,7 @@ struct mmu_gather {
++ *  MMU_GATHER_NO_GATHER
++ *
++ *  If the option is set the mmu_gather will not track individual pages for
++ *  delayed page free anymore. A platform that enables the option needs to
++ *  provide its own implementation of the __tlb_remove_page_size() function to
++ *  free pages.
++ *
++ *  This is useful if your architecture already flushes TLB entries in the
++ *  various ptep_get_and_clear() functions.
+  */
+ 
+ #ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
+@@ -202,7 +212,7 @@ extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+ #endif /* CONFIG_MMU_GATHER_RCU_TABLE_FREE */
+ 
+ 
+-#ifndef CONFIG_HAVE_MMU_GATHER_NO_GATHER
++#ifndef CONFIG_MMU_GATHER_NO_GATHER
+ /*
+  * If we can't allocate a page to make a big batch of page pointers
+  * to work on, then just handle a few from the on-stack structure.
+@@ -277,7 +287,7 @@ struct mmu_gather {
+ 
+ 	unsigned int		batch_count;
+ 
+-#ifndef CONFIG_HAVE_MMU_GATHER_NO_GATHER
++#ifndef CONFIG_MMU_GATHER_NO_GATHER
+ 	struct mmu_gather_batch *active;
  	struct mmu_gather_batch	local;
  	struct page		*__pages[MMU_GATHER_BUNDLE];
- 
--#ifdef CONFIG_HAVE_MMU_GATHER_PAGE_SIZE
-+#ifdef CONFIG_MMU_GATHER_PAGE_SIZE
- 	unsigned int page_size;
- #endif
- #endif
-@@ -435,7 +438,7 @@ static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page)
- static inline void tlb_change_page_size(struct mmu_gather *tlb,
- 						     unsigned int page_size)
- {
--#ifdef CONFIG_HAVE_MMU_GATHER_PAGE_SIZE
-+#ifdef CONFIG_MMU_GATHER_PAGE_SIZE
- 	if (tlb->page_size && tlb->page_size != page_size) {
- 		if (!tlb->fullmm && !tlb->need_flush_all)
- 			tlb_flush_mmu(tlb);
 diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-index 86bb2176e173..297c70307367 100644
+index 297c70307367..a28c74328085 100644
 --- a/mm/mmu_gather.c
 +++ b/mm/mmu_gather.c
-@@ -69,7 +69,7 @@ bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_
+@@ -11,7 +11,7 @@
+ #include <asm/pgalloc.h>
+ #include <asm/tlb.h>
  
- 	VM_BUG_ON(!tlb->end);
+-#ifndef CONFIG_HAVE_MMU_GATHER_NO_GATHER
++#ifndef CONFIG_MMU_GATHER_NO_GATHER
  
--#ifdef CONFIG_HAVE_MMU_GATHER_PAGE_SIZE
-+#ifdef CONFIG_MMU_GATHER_PAGE_SIZE
- 	VM_WARN_ON(tlb->page_size != page_size);
- #endif
+ static bool tlb_next_batch(struct mmu_gather *tlb)
+ {
+@@ -89,7 +89,7 @@ bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_
+ 	return false;
+ }
  
-@@ -223,7 +223,7 @@ void tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
+-#endif /* HAVE_MMU_GATHER_NO_GATHER */
++#endif /* MMU_GATHER_NO_GATHER */
+ 
  #ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
- 	tlb->batch = NULL;
- #endif
--#ifdef CONFIG_HAVE_MMU_GATHER_PAGE_SIZE
-+#ifdef CONFIG_MMU_GATHER_PAGE_SIZE
- 	tlb->page_size = 0;
- #endif
  
+@@ -180,7 +180,7 @@ static void tlb_flush_mmu_free(struct mmu_gather *tlb)
+ #ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
+ 	tlb_table_flush(tlb);
+ #endif
+-#ifndef CONFIG_HAVE_MMU_GATHER_NO_GATHER
++#ifndef CONFIG_MMU_GATHER_NO_GATHER
+ 	tlb_batch_pages_flush(tlb);
+ #endif
+ }
+@@ -211,7 +211,7 @@ void tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
+ 	/* Is it from 0 to ~0? */
+ 	tlb->fullmm     = !(start | (end+1));
+ 
+-#ifndef CONFIG_HAVE_MMU_GATHER_NO_GATHER
++#ifndef CONFIG_MMU_GATHER_NO_GATHER
+ 	tlb->need_flush_all = 0;
+ 	tlb->local.next = NULL;
+ 	tlb->local.nr   = 0;
+@@ -271,7 +271,7 @@ void tlb_finish_mmu(struct mmu_gather *tlb,
+ 
+ 	tlb_flush_mmu(tlb);
+ 
+-#ifndef CONFIG_HAVE_MMU_GATHER_NO_GATHER
++#ifndef CONFIG_MMU_GATHER_NO_GATHER
+ 	tlb_batch_list_free(tlb);
+ #endif
+ 	dec_tlb_flush_pending(tlb->mm);
 -- 
 2.24.1
 
