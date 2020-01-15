@@ -2,114 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4929913BA52
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Jan 2020 08:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D9113BC0C
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Jan 2020 10:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbgAOH37 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jan 2020 02:29:59 -0500
-Received: from ozlabs.org ([203.11.71.1]:33237 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726075AbgAOH37 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Jan 2020 02:29:59 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47yJr25hjfz9sQp;
-        Wed, 15 Jan 2020 18:29:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1579073395;
-        bh=bcwwULLU5QXf1vsaknN6wE7OuZQiR3iZQInThNA9XWw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=pvTFMpB+5aKR5SALGkOvbL/teJwAOoD2l/jjWjJ/xX8792ket3BJZLD9jGsuRnHZr
-         EXW5kTYkhjpbfWLwL8hObaXzbSKuq+BujBD/YN7XToQ11fjC49y5ICez5dtEHbKTHN
-         0aue/5sMaGE1ITcaVWrDbWaGeGbRfhwc16SzVe+A3vLEpy6MvsGs067t6v6Uc1labb
-         lbecgrBZfjmYFFXTcBznyZhUvDnfIKAnMME63oK81gq1TeDnobAwEe8cOVYG610rLL
-         GANE+n8FSscfk0ZpGUrV/B55FOAzEDSus2r3hCAV37acBo2Gakx4aQJyWHiEcmK2W9
-         EZmXLNs+5JN3Q==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Sandipan Das <sandipan@linux.ibm.com>, shuahkh@osg.samsung.com,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, linux-mm@kvack.org,
-        aneesh.kumar@linux.ibm.com, x86@kernel.org, linuxram@us.ibm.com,
-        mhocko@kernel.org, dave.hansen@intel.com, mingo@redhat.com,
-        msuchanek@suse.de, linuxppc-dev@lists.ozlabs.org,
-        bauerman@linux.ibm.com
-Subject: Re: [PATCH v15 14/23] selftests/vm/pkeys: Fix assertion in test_pkey_alloc_exhaust()
-In-Reply-To: <d82e1652135569cfc38b289f88e39e94d55308ff.1576645161.git.sandipan@linux.ibm.com>
-References: <cover.1576645161.git.sandipan@linux.ibm.com> <d82e1652135569cfc38b289f88e39e94d55308ff.1576645161.git.sandipan@linux.ibm.com>
-Date:   Wed, 15 Jan 2020 17:30:01 +1000
-Message-ID: <87a76p9nye.fsf@mpe.ellerman.id.au>
+        id S1729402AbgAOJIv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jan 2020 04:08:51 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:48347 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729267AbgAOJIu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jan 2020 04:08:50 -0500
+Received: from mail-qt1-f172.google.com ([209.85.160.172]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1M6lUk-1ijOH900TO-008MZ6; Wed, 15 Jan 2020 10:08:49 +0100
+Received: by mail-qt1-f172.google.com with SMTP id w30so15100398qtd.12;
+        Wed, 15 Jan 2020 01:08:48 -0800 (PST)
+X-Gm-Message-State: APjAAAXjrxzruNS+A5ZgrtTH86BYIR9LbnyORbUf9qeBXDPQHGS6fD0w
+        0hQCucNkaX9oNICO4WgJwnHxLJ+JNlkbvRct838=
+X-Google-Smtp-Source: APXvYqx/ZPFvs8wMmfr0ffdvulPxbba2XG5TuOUCrt171EJtrRJtlrHppjn0oEiOSkVGfedyftsTi0baZQl8aPF8mWA=
+X-Received: by 2002:ac8:768d:: with SMTP id g13mr2537307qtr.7.1579079327857;
+ Wed, 15 Jan 2020 01:08:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20200114200846.29434-1-vgupta@synopsys.com> <20200114200846.29434-2-vgupta@synopsys.com>
+ <CAHk-=wjChjfOaDnGygOJpC36R6mtT7=Xf6wWTzD_wLJm=quu0Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wjChjfOaDnGygOJpC36R6mtT7=Xf6wWTzD_wLJm=quu0Q@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 15 Jan 2020 10:08:31 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2ao=xBuy3XHBkdo03KEjpMHGe9ahwj-uogtkZBXsMkGw@mail.gmail.com>
+Message-ID: <CAK8P3a2ao=xBuy3XHBkdo03KEjpMHGe9ahwj-uogtkZBXsMkGw@mail.gmail.com>
+Subject: Re: [RFC 1/4] asm-generic/uaccess: don't define inline functions if
+ noinline lib/* in use
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:lWDX0qUWw1RynUkqlI4vtOwaomIawnHND5fiVUmfjP0BXVUQOcn
+ qrN386gq8ZpJ+xSc4cmUApdYkhXz9ALxwPDRDtKJ09buEoxsrCWopArUxDIJcQozp7BWesb
+ iklMmQ9LURRhJB3sFV7mjIIvnZOcJWyXtl3ERFjR39jGZlnjnPKoE6H6WYESefz6LH9dnF6
+ l3WS7ZXIVT7MiwHhKo36g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7UqkOdDo4jc=:upeTfIyguzac+eEvj5vyJZ
+ DFBi1xGCepVqi/N9S9MYMCxtay/YTVXMCWdBFkjn8PoLbHtPWVQlJ9rG8Dhhuv+YLTI4KPdpd
+ YkYsLgtFqnNiujB2b5btJAyH/26NvV841K6O6JwCfInM3rmHr5nO+QsieFNZkmAtGS7Ssy7/J
+ 0zswOxsSM90Uzks6+mcq+gTJ7+yJTiI+QhvtQUS60UDn3DBONHo+/UB6vy3X4NrqWsu7xogQM
+ acEzd24CvxOWJ1sV6kqdPnlJDEuM+zZu8vsafxCJM0tHq9IXDPX0ABui7zHDpc3vhpnLd+urz
+ msHMMC3HI/LVxQZQT/rP1yz4oCpFv7G1rhEHvR7fRGOaDisBhjVZWf8GMASsMTawENgRSTTvw
+ inoQdHX0CrPmrFZsBg3XzHLE0Gzr5t7w+hYs8LU0P3NPcfeiJtPyTzeOZIoSZReVxQfM8YA/9
+ FDFqe3qIoiBz60v+pvRW1m8vIC6P+PjLAL2rjs1Z7DppzXq8Ct/cSxY1Jb3KSeSCYrMz2xOTz
+ juXfHPn0SZHerIs4I3dhHYoct91GmPyXaoDaDYe2JSw5OJ/q/8QbgVjc6pm4DoLm7CSe/k0Ss
+ 5RGuYjBvsMX9NcyAPhzw6GL2PLmV76bFNhxsOFJnBrqqJFF71buPJnxGxR76WuVETEmmsURZA
+ jQ7+VQ2/T5jGFycAQ7eRhsaKk90tyOqhOG+8sBB0jNHyVpHWKgZzsbap5UOoHSYzA2zlZCjiW
+ g3lEm8oPY/EcmctNJKBcH8XI3xBrmsd0Yd4ZXA/3Sag0KYHJiqHz3HGiMsIkDe6fi5Czej3QU
+ NjNcvgDhSLKCbeXn8K3i6JlGd/RdMa1UDoYnIQTgEwmlEzcSv9RScGlx/RPLfHcmT33838goy
+ BUTLc+l8THYtnY+smN3g==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Sandipan Das <sandipan@linux.ibm.com> writes:
-> From: Ram Pai <linuxram@us.ibm.com>
+On Tue, Jan 14, 2020 at 10:33 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Some pkeys which are valid on the hardware are reserved
-> and not available for application use. These keys cannot
-> be allocated.
+> On Tue, Jan 14, 2020 at 12:09 PM Vineet Gupta
+> <Vineet.Gupta1@synopsys.com> wrote:
+> >
+> > There are 2 generic varaints of strncpy_from_user() / strnlen_user()
+> >  (1). inline version in asm-generic/uaccess.h
 >
-> test_pkey_alloc_exhaust() tries to account for these and
-> has an assertion which validates if all available pkeys
-> have been exahaustively allocated. However, the expression
-> that is currently used is only valid for x86. On powerpc,
-> a pkey is additionally reserved as compared to x86. Hence,
-> the assertion is made to use an arch-specific helper to
-> get the correct count of reserved pkeys.
-
-The number of reserved keys is at the whim of the
-firmware/hypervisor/kernel.
-
-I'm not sure it makes sense to test this exhaustion behaviour, it's
-likely going to break in future.
-
-If you do want to test it you should at least move patch 21 prior to
-this one.
-
-cheers
-
-> cc: Dave Hansen <dave.hansen@intel.com>
-> cc: Florian Weimer <fweimer@redhat.com>
-> Signed-off-by: Ram Pai <linuxram@us.ibm.com>
-> Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
-> ---
->  tools/testing/selftests/vm/protection_keys.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+> I think we should get rid of this entirely. It's just a buggy garbage
+> implementation that nobody should ever actually use.
 >
-> diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-> index 1920bca84def..8d90cfe2c9bd 100644
-> --- a/tools/testing/selftests/vm/protection_keys.c
-> +++ b/tools/testing/selftests/vm/protection_keys.c
-> @@ -1152,6 +1152,7 @@ void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
->  	dprintf3("%s()::%d\n", __func__, __LINE__);
->  
->  	/*
-> +	 * On x86:
->  	 * There are 16 pkeys supported in hardware.  Three are
->  	 * allocated by the time we get here:
->  	 *   1. The default key (0)
-> @@ -1159,8 +1160,16 @@ void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
->  	 *   3. One allocated by the test code and passed in via
->  	 *      'pkey' to this function.
->  	 * Ensure that we can allocate at least another 13 (16-3).
-> +	 *
-> +	 * On powerpc:
-> +	 * There are either 5 or 32 pkeys supported in hardware
-> +	 * depending on the page size (4K or 64K). Four are
-> +	 * allocated by the time we get here. This includes
-> +	 * pkey-0, pkey-1, exec-only pkey and the one allocated
-> +	 * by the test code.
-> +	 * Ensure that we can allocate the remaining.
->  	 */
-> -	pkey_assert(i >= NR_PKEYS-3);
-> +	pkey_assert(i >= (NR_PKEYS - get_arch_reserved_keys() - 1));
->  
->  	for (i = 0; i < nr_allocated_pkeys; i++) {
->  		err = sys_pkey_free(allocated_pkeys[i]);
-> -- 
-> 2.17.1
+> It does just about everything wrong that you *can* do, wrong,
+> including doing the NUL-filling termination of standard strncpy() that
+> "strncpy_from_user()" doesn't actually do.
+>
+> So:
+>
+>  - the asm-generic/uaccess.h __strncpy_from_user() function is just
+> horribly wrong
+
+I checked who is actually using it, and the only ones I found
+are c6x and rv32-nommu. It shouldn't be hard to move them over
+to the generic version.
+
+>  - the generic/uaccess.h version of strncpy_from_user() shouldn't be
+> an inline function either, since the only thing it can do inline is
+> the bogus one-byte access check that _barely_ makes security work (you
+> also need to have a guard page to _actually_ make it work, and I'm not
+> atr all convinced that people do).
+
+That would be arc, hexagon, unicore32, and um. Hexagon already has
+the same bug in strncpy_from_user and should be converted to the
+generic version as you say. For unicore32 the existing asm imlpementation
+may be fine, but it's clearly easier to use the generic code than moving
+the range check in there.
+
+I don't know what the arch/um implementation needs, but since it's in C,
+moving the access_ok() in there is easy enough.
+
+> I would suggest that anybody who uses asm-generic/uaccess.h needs to
+> simply use the generic library version.
+
+Or possibly just everybody altogether: the remaining architectures that
+have a custom implementation don't seem to be doing any better either.
+
+     Arnd
