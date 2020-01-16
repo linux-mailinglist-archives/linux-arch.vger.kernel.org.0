@@ -2,108 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C53D13D5FB
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jan 2020 09:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C8413D8D3
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jan 2020 12:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731168AbgAPId4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jan 2020 03:33:56 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36368 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726988AbgAPIdz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 16 Jan 2020 03:33:55 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00G8Vrml024845
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jan 2020 03:33:54 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xj5xbb3ru-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jan 2020 03:33:54 -0500
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-arch@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Thu, 16 Jan 2020 08:33:52 -0000
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 16 Jan 2020 08:33:47 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00G8XkE138404580
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Jan 2020 08:33:46 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F830AE051;
-        Thu, 16 Jan 2020 08:33:46 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA152AE056;
-        Thu, 16 Jan 2020 08:33:43 +0000 (GMT)
-Received: from [9.124.35.38] (unknown [9.124.35.38])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Jan 2020 08:33:43 +0000 (GMT)
-Subject: Re: [PATCH v15 23/23] selftests: vm: pkeys: Use the correct page size
- on powerpc
-To:     Michael Ellerman <mpe@ellerman.id.au>, shuahkh@osg.samsung.com,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, linux-mm@kvack.org,
-        aneesh.kumar@linux.ibm.com, x86@kernel.org, linuxram@us.ibm.com,
-        mhocko@kernel.org, dave.hansen@intel.com, mingo@redhat.com,
-        msuchanek@suse.de, linuxppc-dev@lists.ozlabs.org,
-        bauerman@linux.ibm.com
-References: <cover.1576645161.git.sandipan@linux.ibm.com>
- <ff7c288e2a88ccfb3b79be30967646fe5b869683.1576645161.git.sandipan@linux.ibm.com>
- <87h80x9ozr.fsf@mpe.ellerman.id.au>
-From:   Sandipan Das <sandipan@linux.ibm.com>
-Date:   Thu, 16 Jan 2020 14:03:43 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1726151AbgAPLTP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Jan 2020 06:19:15 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:34868 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726084AbgAPLTP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jan 2020 06:19:15 -0500
+Received: from ip5f5bd663.dynamic.kabel-deutschland.de ([95.91.214.99] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1is3B9-0000wC-Lv; Thu, 16 Jan 2020 11:19:11 +0000
+Date:   Thu, 16 Jan 2020 12:19:11 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Cc:     linux-snps-arc@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] ARC: wireup clone3 syscall
+Message-ID: <20200116111910.b3vhwudsdb4oe5b2@wittgenstein>
+References: <20200116000948.17646-1-vgupta@synopsys.com>
 MIME-Version: 1.0
-In-Reply-To: <87h80x9ozr.fsf@mpe.ellerman.id.au>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20011608-0016-0000-0000-000002DDC834
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20011608-0017-0000-0000-000033405ED1
-Message-Id: <375ed2cc-22ea-ddbf-33d3-febed65eefc6@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-16_02:2020-01-16,2020-01-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- malwarescore=0 priorityscore=1501 mlxlogscore=999 clxscore=1015
- impostorscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001160072
+Content-Disposition: inline
+In-Reply-To: <20200116000948.17646-1-vgupta@synopsys.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Michael,
+On Wed, Jan 15, 2020 at 04:09:48PM -0800, Vineet Gupta wrote:
+> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 
-On 15/01/20 12:37 pm, Michael Ellerman wrote:
-> Sandipan Das <sandipan@linux.ibm.com> writes:
->> Both 4K and 64K pages are supported on powerpc. Parts of
->> the selftest code perform alignment computations based on
->> the PAGE_SIZE macro which is currently hardcoded to 64K
->> for powerpc. This causes some test failures on kernels
->> configured with 4K page size.
->>
->> This problem is solved by determining the correct page
->> size during the build process rather than hardcoding it
->> in the header file.
-> 
-> Doing it at build time is wrong, the test could be built on a 4K system
-> and then run on a 64K system, or vice versa.
-> 
-> You should just use getpagesize() at runtime.
-> 
-> cheers
-> 
-
-The reason I chose to do it this way was because PAGE_SIZE also determines
-the alignment for the function "lots_o_noops_around_write" (which is used
-by some of the test cases). Since __attribute__((__aligned__(X))) requires
-X to be a constant, I am not sure if there a way around this.
-
-- Sandipan
-
+Thanks!
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
