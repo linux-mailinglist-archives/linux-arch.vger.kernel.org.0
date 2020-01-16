@@ -2,148 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5F513D07B
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jan 2020 00:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8D813D0E5
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jan 2020 01:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729334AbgAOXCI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jan 2020 18:02:08 -0500
-Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:36668 "EHLO
+        id S1731450AbgAPAJx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jan 2020 19:09:53 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:39148 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726513AbgAOXCI (ORCPT
+        by vger.kernel.org with ESMTP id S1729186AbgAPAJx (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Jan 2020 18:02:08 -0500
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
+        Wed, 15 Jan 2020 19:09:53 -0500
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id EB8C4C0525;
-        Wed, 15 Jan 2020 23:02:06 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 6D728C0525;
+        Thu, 16 Jan 2020 00:09:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1579129327; bh=5N0aWvdhJXHQK2AbtZqnhO0gdG+ZUH0HvJ8mAiJFJtI=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=V/mx/1aEfZCmGOTh2331ASabO6VfNR7DTlfxYE1RKqlDCF9GPYGeBW0hOH07B8m7i
-         zDth8PMgaf7v/xnCK6pSwvSLzQt6iDePX+Lv15zCh2Y+RrC0lvlVsEeTraCtRnwHLc
-         FUwGCsJ1e5FzamqrmxgivctCljWHYC2Xm/Fcvd5vlFE8WwfV3celojwAABFiOPM06j
-         Gad31+bsoxMdVWzga32gvOdK0QjthI3etqf18OCGxqErP2FtPPKyhdAnnVuHisahl+
-         AeUxF7Ap870G/p1nn9MMCsuBKDSkKMKMuj8KG5a9xp6L7vdVXNGIXQqOWKudYaYDT0
-         4JadMwBA7sflA==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id F0063A0079;
-        Wed, 15 Jan 2020 23:02:04 +0000 (UTC)
-Received: from us01hybrid1.internal.synopsys.com (10.200.27.51) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Wed, 15 Jan 2020 15:01:50 -0800
-Received: from NAM04-SN1-obe.outbound.protection.outlook.com (10.202.3.67) by
- mrs.synopsys.com (10.200.27.51) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Wed, 15 Jan 2020 15:01:50 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BPftBxwph2nlyexCyj7MsZWPfv422SnU4ZbIoNHBaQKyshYW8m4incUd5/LKVpxcQuTZEs4hZ01N93E/uCYgey9yjS4ToLRMnfsgH4vB4PG94WhoZ7Rj/HxrmJJo3HNR17soeBSDzzRWsLx587v857+iIDj3PtJ4sp6x9mz/tCYXfo+wfh4cWUsSY3xGH2nbMjvV0vK/6dR1MLIXWItT8u9PGpceEJsqLiZ19fTJeW0KoiU4nt+Mul4C1zeWnfo6GFsgQ81lUmWaz7ZxPhuzg8McgPRWSZgPLcvG93j1OvB0vZDmhwZjNloz1eFiAEaklEM1WB1NVJJ36NWf+YkaDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5N0aWvdhJXHQK2AbtZqnhO0gdG+ZUH0HvJ8mAiJFJtI=;
- b=EeqIqxComnDXD4lAVJG5BqYuZBjUeiL9eFyd5DIEMlUIh4s9NcIBmsa5KYHh//9ZsXLq73x81ahDgZ/hxBG0JI8sgX6GQjIG5w4J2ryce2na0ZZPxhCr0SPxryXu1sLLafZnC10ITpDD3TKjmHHQMsBvJ1bJOSWa8dkuRQzG8f9IVHUUhsAJGz2ojchsNlx/BcyRQYZdEuLaSse8UGpi/G1zMqsFUosJKeP9qyakffOAXerZKuGFl2VdUa2cUqQBnrNN/V5g0Ug8U3tJVF7CNNBsF2kjiVW8ut4zm/m9lHI8wCVxS//LelZjG/DfGBgjruonXKdeIWUmnyQST5bQ9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.onmicrosoft.com; s=selector2-synopsys-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5N0aWvdhJXHQK2AbtZqnhO0gdG+ZUH0HvJ8mAiJFJtI=;
- b=YR5Mtm4wMt20wUeDkivJPElXYp7YO3c+MUzZlto7N5eaA0SK6Qi7n69akHeNd3SqHHCmiKOEuTjpfT1c9j094utXkeyslx90Gqum+PkhTbPLmw6+hm+Cgvd/Wv5+dBatvOS/2/a71zW7fT9Ti+E8Hg4/c5zm6RRQpuGwTRh7Iz8=
-Received: from BYAPR12MB3592.namprd12.prod.outlook.com (20.178.54.89) by
- BYAPR12MB3445.namprd12.prod.outlook.com (20.178.196.159) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2644.18; Wed, 15 Jan 2020 23:01:48 +0000
-Received: from BYAPR12MB3592.namprd12.prod.outlook.com
- ([fe80::39a1:22ee:7030:8333]) by BYAPR12MB3592.namprd12.prod.outlook.com
- ([fe80::39a1:22ee:7030:8333%6]) with mapi id 15.20.2623.017; Wed, 15 Jan 2020
- 23:01:48 +0000
+        t=1579133391; bh=wGe7qKxUwSLqkYniadVYIK/uchv8SHM51LLFaYp1I6A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V9LY1ZT/7QJRkwbuI7X3qOU9aauI0DaSZp6F1mFP9qOU4400k/fCZxOxuCde/Japw
+         tt7TrJOxHZCCr3wHrvwPh3pG7ePhfpAMdi6ArDTN9/pEqR0uBMrVpF1k9HEFnz5ndJ
+         HU3D/g3r2bw8N9DGLrH+Bt61aTCLb6+t22w5utPT8OUhl115pjYfJ0hGLkFTrygMjS
+         aPEc1vCRbdpTPiSGFj0x2fN76p6zkSD5gWvVizUKTjBUgAeZFd663EdECQTxQt+XEf
+         DMAhmWS2iYzdXwFYF72qn4nyDGHX/T8NtzSGfJbpUjtamvsRG+R37MNZ1YSU67FIbM
+         TNs4drFWmYCww==
+Received: from vineetg-Latitude-E7450.internal.synopsys.com (vineetg-latitude-e7450.internal.synopsys.com [10.10.161.20])
+        by mailhost.synopsys.com (Postfix) with ESMTP id B8647A00C2;
+        Thu, 16 Jan 2020 00:09:49 +0000 (UTC)
 From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
+To:     linux-snps-arc@lists.infradead.org
+Cc:     Christian Brauner <christian@brauner.io>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
         Vineet Gupta <Vineet.Gupta1@synopsys.com>
-CC:     Khalid Aziz <khalid.aziz@oracle.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Ingo Molnar" <mingo@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [RFC 1/4] asm-generic/uaccess: don't define inline functions if
- noinline lib/* in use
-Thread-Topic: [RFC 1/4] asm-generic/uaccess: don't define inline functions if
- noinline lib/* in use
-Thread-Index: AQHVyxaHbM7a7l3XuUaNwAYN+sKBiqfqpFkAgAG1AIA=
-Date:   Wed, 15 Jan 2020 23:01:48 +0000
-Message-ID: <6eb7587b-c3bc-691d-9d27-d4e687114a42@synopsys.com>
-References: <20200114200846.29434-1-vgupta@synopsys.com>
- <20200114200846.29434-2-vgupta@synopsys.com>
- <CAK8P3a3W0eLK+qypnPwq=PdcF7+ey8OZEhmOoA6Bg7hMGm5hqQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3W0eLK+qypnPwq=PdcF7+ey8OZEhmOoA6Bg7hMGm5hqQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=vgupta@synopsys.com; 
-x-originating-ip: [149.117.75.11]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 13f1effe-33a7-410b-06de-08d79a0ee684
-x-ms-traffictypediagnostic: BYAPR12MB3445:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR12MB344528246EFADD457721148CB6370@BYAPR12MB3445.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 02830F0362
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(136003)(346002)(39860400002)(366004)(376002)(199004)(189003)(66556008)(36756003)(8936002)(2616005)(81166006)(66946007)(4326008)(64756008)(66446008)(66476007)(31696002)(76116006)(6506007)(8676002)(31686004)(7416002)(110136005)(316002)(81156014)(71200400001)(6512007)(86362001)(2906002)(6486002)(186003)(53546011)(5660300002)(478600001)(54906003)(26005)(41533002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR12MB3445;H:BYAPR12MB3592.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fWlkuu5doewNfrbSIdE3skwK8DePMZ0OiWlkPXuHdOUpnQ2QgErcuxY3jeCEQzMtUW3yeE6nKhAunzLbK4BiXtJhK+CHuMeV81af6BBdekrqrSxVw/Lq4X4BEZAsT69ZGKkC+qlIx+I3e4lGvd08td1cGFx/NAxj4OFP5L7NXFy2Q9QeLG8RKF40anuNfq7EzwutiytL4fZm9IpLc9Na9h12bKMv9t17dhGmSvy28FZtVJt6uSadJjBvzbKrC9m0mFm6Gysebt/YFX1lM/Pcdtd17TY7LXtFl1aSuAKIRgXoRvnIxaNlLUREh+guXpgeoM6ey4mvwDxiUN02FPuRSTW0bSAMiCxUJJSBjisORIBuC2Xl/CljrwbCte9IDswXjdjT/Bx+xj2CGa9Xzp58KBZ122+lSkTMTzc9i3vt7PAill/G5iwGN+h4+YbnJ7isoJoCNkhOBtav+ajh6snRyhB2TDpFjV+T+bKLEB2Ft/s=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B676B95FC3FC714FA1FB6336730C5498@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Subject: [PATCH] ARC: wireup clone3 syscall
+Date:   Wed, 15 Jan 2020 16:09:48 -0800
+Message-Id: <20200116000948.17646-1-vgupta@synopsys.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13f1effe-33a7-410b-06de-08d79a0ee684
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2020 23:01:48.1957
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OFJXx6/LxoaXZHq/MShv4RY0q05dOgIbP/GWnQbkwXPQWNHVBYy2xhkbWblp97m3jIUU6QtzdyUhEDHWsO6QbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3445
-X-OriginatorOrg: synopsys.com
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gMS8xNC8yMCAxMjo1NyBQTSwgQXJuZCBCZXJnbWFubiB3cm90ZToNCj4gT24gVHVlLCBKYW4g
-MTQsIDIwMjAgYXQgOTowOCBQTSBWaW5lZXQgR3VwdGEgPFZpbmVldC5HdXB0YTFAc3lub3BzeXMu
-Y29tPiB3cm90ZToNCj4+IFRoZXJlIGFyZSAyIGdlbmVyaWMgdmFyYWludHMgb2Ygc3RybmNweV9m
-cm9tX3VzZXIoKSAvIHN0cm5sZW5fdXNlcigpDQo+PiAgKDEpLiBpbmxpbmUgdmVyc2lvbiBpbiBh
-c20tZ2VuZXJpYy91YWNjZXNzLmgNCj4+ICAoMikuIG9wdGltaXplZCB3b3JkLWF0LWEtdGltZSB2
-ZXJzaW9uIGluIGxpYi8qDQo+Pg0KPj4gVGhpcyBwYXRjaCBkaXNhYmxlcyAjMSBpZiAjMiBzZWxl
-Y3RlZC4gVGhpcyBhbGxvd3MgYXJjaGVzIHRvIGNvbnRpbnVlDQo+PiByZXVzaW5nIGFzbS1nZW5l
-cmljL3VhY2Nlc3MuaCBmb3IgcmVzdCBvZiBjb2RlDQo+Pg0KPj4gVGhpcyBjYW1lIHVwIHdoZW4g
-c3dpdGNoaW5nIEFSQyB0byBnZW5lcmljIHdvcmQtYXQtYS10aW1lIGludGVyZmFjZQ0KPj4NCj4+
-IFNpZ25lZC1vZmYtYnk6IFZpbmVldCBHdXB0YSA8dmd1cHRhQHN5bm9wc3lzLmNvbT4NCj4gVGhp
-cyBsb29rcyBsaWtlIGEgdXNlZnVsIGNoYW5nZSwgYnV0IEkgdGhpbmsgd2UgY2FuIGRvIGV2ZW4g
-YmV0dGVyOiBJdA0KPiBzZWVtcyB0aGF0DQo+IHRoZXJlIGFyZSBubyAgY2FsbGVycyBvZiBfX3N0
-cm5sZW5fdXNlciBvciBfX3N0cm5jcHlfZnJvbV91c2VyICBpbiB0aGUNCj4ga2VybmVsIHRvZGF5
-LCBzbyB0aGVzZSBzaG91bGQgbm90IGJlIGRlZmluZWQgZWl0aGVyIHdoZW4gdGhlIEtjb25maWcg
-c3ltYm9scw0KPiBhcmUgc2V0LiBBbHNvLCBJIHdvdWxkIHN1Z2dlc3QgbW92aW5nIHRoZSAnZXh0
-ZXJuJyBkZWNsYXJhdGlvbiBmb3IgdGhlIHR3bw0KPiBmdW5jdGlvbnMgaW50byB0aGUgI2Vsc2Ug
-YnJhbmNoIG9mIHRoZSBjb25kaXRpb25hbCBzbyBpdCBkb2VzIG5vdCBuZWVkIHRvIGJlDQo+IGR1
-cGxpY2F0ZWQuDQoNCkdpdmVuIHdoZXJlIHRoaW5ncyBzZWVtIHRvIGJlIGhlYWRpbmcsIGRvIHUg
-c3RpbGwgd2FudCBhbiB1cGRhdGVkIHBhdGNoIGZvciB0aGlzDQpvciBkbyB1IHBsYW4gdG8gZGl0
-Y2ggdGhlIGlubGluZSB2ZXJzaW9uIGluIHNob3J0IHRlcm0gYW55d2F5cy4NCg0KLVZpbmVldA0K
-DQo=
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+---
+ arch/arc/Kconfig                   |  1 +
+ arch/arc/include/asm/syscalls.h    |  1 +
+ arch/arc/include/uapi/asm/unistd.h |  1 +
+ arch/arc/kernel/entry.S            | 12 ++++++++++++
+ arch/arc/kernel/process.c          |  7 +++----
+ arch/arc/kernel/sys.c              |  1 +
+ 6 files changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+index 26108ea785c2..c4409eab07a9 100644
+--- a/arch/arc/Kconfig
++++ b/arch/arc/Kconfig
+@@ -28,6 +28,7 @@ config ARC
+ 	select GENERIC_SMP_IDLE_THREAD
+ 	select HAVE_ARCH_KGDB
+ 	select HAVE_ARCH_TRACEHOOK
++	select HAVE_COPY_THREAD_TLS
+ 	select HAVE_DEBUG_STACKOVERFLOW
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_FUTEX_CMPXCHG if FUTEX
+diff --git a/arch/arc/include/asm/syscalls.h b/arch/arc/include/asm/syscalls.h
+index 7ddba13e9b59..c3f4714a4f5c 100644
+--- a/arch/arc/include/asm/syscalls.h
++++ b/arch/arc/include/asm/syscalls.h
+@@ -11,6 +11,7 @@
+ #include <linux/types.h>
+ 
+ int sys_clone_wrapper(int, int, int, int, int);
++int sys_clone3_wrapper(void *, size_t);
+ int sys_cacheflush(uint32_t, uint32_t uint32_t);
+ int sys_arc_settls(void *);
+ int sys_arc_gettls(void);
+diff --git a/arch/arc/include/uapi/asm/unistd.h b/arch/arc/include/uapi/asm/unistd.h
+index 5eafa1115162..fa2713ae6bea 100644
+--- a/arch/arc/include/uapi/asm/unistd.h
++++ b/arch/arc/include/uapi/asm/unistd.h
+@@ -21,6 +21,7 @@
+ #define __ARCH_WANT_SET_GET_RLIMIT
+ #define __ARCH_WANT_SYS_EXECVE
+ #define __ARCH_WANT_SYS_CLONE
++#define __ARCH_WANT_SYS_CLONE3
+ #define __ARCH_WANT_SYS_VFORK
+ #define __ARCH_WANT_SYS_FORK
+ #define __ARCH_WANT_TIME32_SYSCALLS
+diff --git a/arch/arc/kernel/entry.S b/arch/arc/kernel/entry.S
+index 72be01270e24..7e5109dab4e8 100644
+--- a/arch/arc/kernel/entry.S
++++ b/arch/arc/kernel/entry.S
+@@ -35,6 +35,18 @@ ENTRY(sys_clone_wrapper)
+ 	b .Lret_from_system_call
+ END(sys_clone_wrapper)
+ 
++ENTRY(sys_clone3_wrapper)
++	SAVE_CALLEE_SAVED_USER
++	bl  @sys_clone3
++	DISCARD_CALLEE_SAVED_USER
++
++	GET_CURR_THR_INFO_FLAGS   r10
++	btst r10, TIF_SYSCALL_TRACE
++	bnz  tracesys_exit
++
++	b .Lret_from_system_call
++END(sys_clone3_wrapper)
++
+ ENTRY(ret_from_fork)
+ 	; when the forked child comes here from the __switch_to function
+ 	; r0 has the last task pointer.
+diff --git a/arch/arc/kernel/process.c b/arch/arc/kernel/process.c
+index e1889ce3faf9..bfd4cbe74aa3 100644
+--- a/arch/arc/kernel/process.c
++++ b/arch/arc/kernel/process.c
+@@ -171,9 +171,8 @@ asmlinkage void ret_from_fork(void);
+  * |    user_r25    |
+  * ------------------  <===== END of PAGE
+  */
+-int copy_thread(unsigned long clone_flags,
+-		unsigned long usp, unsigned long kthread_arg,
+-		struct task_struct *p)
++int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
++	unsigned long kthread_arg, struct task_struct *p, unsigned long tls)
+ {
+ 	struct pt_regs *c_regs;        /* child's pt_regs */
+ 	unsigned long *childksp;       /* to unwind out of __switch_to() */
+@@ -231,7 +230,7 @@ int copy_thread(unsigned long clone_flags,
+ 		 * set task's userland tls data ptr from 4th arg
+ 		 * clone C-lib call is difft from clone sys-call
+ 		 */
+-		task_thread_info(p)->thr_ptr = regs->r3;
++		task_thread_info(p)->thr_ptr = tls;
+ 	} else {
+ 		/* Normal fork case: set parent's TLS ptr in child */
+ 		task_thread_info(p)->thr_ptr =
+diff --git a/arch/arc/kernel/sys.c b/arch/arc/kernel/sys.c
+index fddecc76efb7..1069446bdc58 100644
+--- a/arch/arc/kernel/sys.c
++++ b/arch/arc/kernel/sys.c
+@@ -7,6 +7,7 @@
+ #include <asm/syscalls.h>
+ 
+ #define sys_clone	sys_clone_wrapper
++#define sys_clone3	sys_clone3_wrapper
+ 
+ #undef __SYSCALL
+ #define __SYSCALL(nr, call) [nr] = (call),
+-- 
+2.20.1
+
