@@ -2,121 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 123441409B0
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 13:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A87B1409F8
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 13:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726958AbgAQMZ2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jan 2020 07:25:28 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:37055 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726917AbgAQMZ2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jan 2020 07:25:28 -0500
-Received: from mail-qt1-f179.google.com ([209.85.160.179]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MWzbr-1j7c350Z3p-00XJui; Fri, 17 Jan 2020 13:25:26 +0100
-Received: by mail-qt1-f179.google.com with SMTP id c24so10803933qtp.5;
-        Fri, 17 Jan 2020 04:25:25 -0800 (PST)
-X-Gm-Message-State: APjAAAWyaVFUwC5jlUfW53w8lKga2KoOlHdbgK8Uvhppn6zesp0lu21m
-        rN8GSRZgEuAZaL6v1gOCjlUa1M3Hh+a8jYb9sBc=
-X-Google-Smtp-Source: APXvYqwqCzWv/ekQUEFKtBDinI/LcXB9oWkR28qFdPoljphngkJVa3HxtAlT8kKFFOKWjYiGgHg5a4mRNSgW5hf1vUA=
-X-Received: by 2002:ac8:47d3:: with SMTP id d19mr7117054qtr.142.1579263924900;
- Fri, 17 Jan 2020 04:25:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20200115165749.145649-1-elver@google.com> <CAK8P3a3b=SviUkQw7ZXZF85gS1JO8kzh2HOns5zXoEJGz-+JiQ@mail.gmail.com>
- <CANpmjNOpTYnF3ssqrE_s+=UA-2MpfzzdrXoyaifb3A55_mc0uA@mail.gmail.com>
- <CAK8P3a3WywSsahH2vtZ_EOYTWE44YdN+Pj6G8nt_zrL3sckdwQ@mail.gmail.com> <CANpmjNMk2HbuvmN1RaZ=8OV+tx9qZwKyRySONDRQar6RCGM1SA@mail.gmail.com>
-In-Reply-To: <CANpmjNMk2HbuvmN1RaZ=8OV+tx9qZwKyRySONDRQar6RCGM1SA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Jan 2020 13:25:08 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a066Knr-KC2v4M8Dr1phr0Gbb2KeZZLQ7Ana0fkrgPDPg@mail.gmail.com>
-Message-ID: <CAK8P3a066Knr-KC2v4M8Dr1phr0Gbb2KeZZLQ7Ana0fkrgPDPg@mail.gmail.com>
-Subject: Re: [PATCH -rcu] asm-generic, kcsan: Add KCSAN instrumentation for bitops
-To:     Marco Elver <elver@google.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        christophe leroy <christophe.leroy@c-s.fr>,
-        Daniel Axtens <dja@axtens.net>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:BjvcfnJXNixwEFNEYwkAPuoYZO1yKIZ6+zO3O5pD8DBedJuN2zp
- 2SCMTsFDi2yWr5pRYLEWvYCQ1qlmM2GEVld4rFlruaRYyoo1uV+ojxGtMsSaF7iDAZxfeZC
- gz4O3ryNAyywBE9gdeobFaEa8Q94oiplOzJKO9y8uVokMW3ERhRDut3U7O21Sy1a0vgaBOe
- uCrCZkfAF6+Xiz79dqXfQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PaLNvZoTouE=:9XtH0rnAaNZeZK2j1cP5BF
- kjDaDm4S6x9OHMSZkOkJ379ncvmgEIlKnThnpd5m3b71AVJkhn7hRjpco7eMO7E4FYv875C2M
- AWsRjzhfx9UvWLbcgi5DTUU1iGxQEB4Jpgw02n8yD7/TQYFtqwUiLNE/ec9zTHnAjHn1FWSQK
- TWmOqaxhQ0vOcMOCxvCUyBu1CGdAMmF43xLK/rIvcIY7Rx4Pp5uJWoNp27bdgiAQObo/xrcH3
- gPItH+kdOg031rzeLVK0dZwtju8C0ZpYoo51pSAb00GjdW/ESWZMAQ91xewQZPNUXyHeEBAAy
- WIx2288bvNqGETXTqNHO6tOGmR90wRww4ohrZkCnD+mLs7MQ08kqRBTuFtJdkzvouig/VIE8i
- oNs6gIoLpVmsvHfloKe6KhITdgiJgLiwvcb3PhE7DnEoxxpTiiOMcMvfmu1Ubw1hSxNW7BRI7
- VqIqQywbA1GCikYWh1NV77aRckpEWmeRa0EhJha3nlkdzChOtDEi2EYQ8kLfxKvGcOBdiWuCK
- EtL3KWG9emdLNyFhUGAxC/WfuoLklQ0ocCDvs2UPXmzIseWwfYhdcnRwR3q9yXNHEYIgN6mky
- gydikyoVbacD6Dd+pgJCf9KP7TYYyq/xQhEwXPs+WG6dyFvx6FeIYx2eVDZdurkaa0GztCX91
- Qt8WsM5V76UJ3oDeSOPhu2SSJQ/KhP8JcKtmOOaooUxneXCz/xcl7EOIn5iS8lo6h7pxpCHL3
- 8KgC0P+P21zS/RSgdG6vM+IOEVpMQ0ibrQIwGwd0FKoCmulgvShxSw/LfoEpBKwTPdFXTOuzH
- T7RNVORRjaWU6vVuUBFKhh1Bv8sHHONKFE4DNdjCpZU6lEN15+hMTunekVBQ2t/WjFBaOO6b+
- hr45UtFhNiw3AbKQ83ag==
+        id S1726559AbgAQMuO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jan 2020 07:50:14 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27170 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726554AbgAQMuO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 17 Jan 2020 07:50:14 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00HClFnT024397
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2020 07:50:14 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xk0qu3y3j-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2020 07:50:13 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <sandipan@linux.ibm.com>;
+        Fri, 17 Jan 2020 12:50:11 -0000
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 17 Jan 2020 12:50:07 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00HCnGHj49021200
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jan 2020 12:49:16 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A834952052;
+        Fri, 17 Jan 2020 12:50:05 +0000 (GMT)
+Received: from fir03.in.ibm.com (unknown [9.121.59.65])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 493AF5206D;
+        Fri, 17 Jan 2020 12:50:03 +0000 (GMT)
+From:   Sandipan Das <sandipan@linux.ibm.com>
+To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
+        dave.hansen@intel.com, x86@kernel.org, linuxram@us.ibm.com,
+        mhocko@kernel.org, linux-mm@kvack.org, mingo@redhat.com,
+        aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
+        msuchanek@suse.de, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
+Date:   Fri, 17 Jan 2020 18:19:39 +0530
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+x-cbid: 20011712-0028-0000-0000-000003D1FF9F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20011712-0029-0000-0000-000024962AF2
+Message-Id: <cover.1579265066.git.sandipan@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-17_03:2020-01-16,2020-01-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
+ phishscore=0 clxscore=1015 priorityscore=1501 impostorscore=0 spamscore=0
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001170102
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 9:50 PM Marco Elver <elver@google.com> wrote:
-> On Wed, 15 Jan 2020 at 20:55, Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Wed, Jan 15, 2020 at 8:51 PM Marco Elver <elver@google.com> wrote:
-> > > On Wed, 15 Jan 2020 at 20:27, Arnd Bergmann <arnd@arndb.de> wrote:
-> > Are there any that really just want kasan_check_write() but not one
-> > of the kcsan checks?
->
-> If I understood correctly, this suggestion would amount to introducing
-> a new header, e.g. 'ksan-checks.h', that provides unified generic
-> checks. For completeness, we will also need to consider reads. Since
-> KCSAN provides 4 check variants ({read,write} x {plain,atomic}), we
-> will need 4 generic check variants.
+Memory protection keys enables an application to protect its address
+space from inadvertent access by its own code.
 
-Yes, that was the idea.
+This feature is now enabled on powerpc and has been available since
+4.16-rc1. The patches move the selftests to arch neutral directory
+and enhance their test coverage.
 
-> I certainly do not feel comfortable blindly introducing kcsan_checks
-> in all places where we have kasan_checks, but it may be worthwhile
-> adding this infrastructure and starting with atomic-instrumented and
-> bitops-instrumented wrappers. The other locations you list above would
-> need to be evaluated on a case-by-case basis to check if we want to
-> report data races for those accesses.
+Tested on powerpc64 and x86_64 (Skylake-SP).
 
-I think the main question to answer is whether it is more likely to go
-wrong because we are missing checks when one caller accidentally
-only has one but not the other, or whether they go wrong because
-we accidentally check both when we should only be checking one.
+Changelog
+---------
+Link to previous version (v15):
+https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=149238
 
-My guess would be that the first one is more likely to happen, but
-the second one is more likely to cause problems when it happens.
+v16:
+	(1) Rebased on top of latest master.
+	(2) Switched to u64 instead of using an arch-dependent
+	    pkey_reg_t type for references to the pkey register
+	    based on suggestions from Dave, Michal and Michael.
+	(3) Removed build time determination of page size based
+	    on suggestion from Michael.
+	(4) Fixed comment before the definition of __page_o_noops()
+	    from patch 13 ("selftests/vm/pkeys: Introduce powerpc
+	    support").
 
-> As a minor data point, {READ,WRITE}_ONCE in compiler.h currently only
-> has kcsan_checks and not kasan_checks.
+v15:
+	(1) Rebased on top of latest master.
+	(2) Addressed review comments from Dave Hansen.
+	(3) Moved code for getting or setting pkey bits to new
+	    helpers. These changes replace patch 7 of v14.
+	(4) Added a fix which ensures that the correct count of
+	    reserved keys is used across different platforms.
+	(5) Added a fix which ensures that the correct page size
+	    is used as powerpc supports both 4K and 64K pages.
 
-Right. This is because we want an explicit "atomic" check for kcsan
-but we want to have the function inlined for kasan, right?
+v14:
+	(1) Incorporated another round of comments from Dave Hansen.
 
-> My personal preference would be to keep the various checks explicit,
-> clearly opting into either KCSAN and/or KASAN. Since I do not think
-> it's obvious if we want both for the existing and potentially new
-> locations (in future), the potential for error by blindly using a
-> generic 'ksan_check' appears worse than potentially adding a dozen
-> lines or so.
->
-> Let me know if you'd like to proceed with 'ksan-checks.h'.
+v13:
+	(1) Incorporated comments for Dave Hansen.
+	(2) Added one more test for correct pkey-0 behavior.
 
-Could you have a look at the files I listed and see if there are any
-other examples that probably a different set of checks between the
-two, besides the READ_ONCE() example?
+v12:
+	(1) Fixed the offset of pkey field in the siginfo structure for
+	    x86_64 and powerpc. And tries to use the actual field
+	    if the headers have it defined.
 
-If you can't find any, I would prefer having the simpler interface
-with just one set of annotations.
+v11:
+	(1) Fixed a deadlock in the ptrace testcase.
 
-     Arnd
+v10 and prior:
+	(1) Moved the testcase to arch neutral directory.
+	(2) Split the changes into incremental patches.
+
+Desnes A. Nunes do Rosario (1):
+  selftests/vm/pkeys: Fix number of reserved powerpc pkeys
+
+Ram Pai (17):
+  selftests/x86/pkeys: Move selftests to arch-neutral directory
+  selftests/vm: Rename all references to pkru to a generic name
+  selftests/vm: Move generic definitions to header file
+  selftests/vm: Typecast references to pkey register
+  selftests/vm: Fix pkey_disable_clear()
+  selftests/vm/pkeys: Fix assertion in pkey_disable_set/clear()
+  selftests/vm/pkeys: Fix alloc_random_pkey() to make it really random
+  selftests/vm/pkeys: Introduce generic pkey abstractions
+  selftests/vm/pkeys: Introduce powerpc support
+  selftests/vm/pkeys: Fix assertion in test_pkey_alloc_exhaust()
+  selftests/vm/pkeys: Improve checks to determine pkey support
+  selftests/vm/pkeys: Associate key on a mapped page and detect access
+    violation
+  selftests/vm/pkeys: Associate key on a mapped page and detect write
+    violation
+  selftests/vm/pkeys: Detect write violation on a mapped
+    access-denied-key page
+  selftests/vm/pkeys: Introduce a sub-page allocator
+  selftests/vm/pkeys: Test correct behaviour of pkey-0
+  selftests/vm/pkeys: Override access right definitions on powerpc
+
+Sandipan Das (3):
+  selftests: vm: pkeys: Add helpers for pkey bits
+  selftests: vm: pkeys: Use the correct huge page size
+  selftests: vm: pkeys: Use the correct page size on powerpc
+
+Thiago Jung Bauermann (2):
+  selftests/vm: Move some definitions to arch-specific header
+  selftests/vm: Make gcc check arguments of sigsafe_printf()
+
+ tools/testing/selftests/vm/.gitignore         |   1 +
+ tools/testing/selftests/vm/Makefile           |   1 +
+ tools/testing/selftests/vm/pkey-helpers.h     | 225 ++++++
+ tools/testing/selftests/vm/pkey-powerpc.h     | 136 ++++
+ tools/testing/selftests/vm/pkey-x86.h         | 181 +++++
+ .../selftests/{x86 => vm}/protection_keys.c   | 693 ++++++++++--------
+ tools/testing/selftests/x86/.gitignore        |   1 -
+ tools/testing/selftests/x86/pkey-helpers.h    | 219 ------
+ 8 files changed, 927 insertions(+), 530 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pkey-helpers.h
+ create mode 100644 tools/testing/selftests/vm/pkey-powerpc.h
+ create mode 100644 tools/testing/selftests/vm/pkey-x86.h
+ rename tools/testing/selftests/{x86 => vm}/protection_keys.c (74%)
+ delete mode 100644 tools/testing/selftests/x86/pkey-helpers.h
+
+-- 
+2.17.1
+
