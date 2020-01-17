@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A87B1409F8
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 13:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4A21409FA
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 13:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgAQMuO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jan 2020 07:50:14 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27170 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726554AbgAQMuO (ORCPT
+        id S1726418AbgAQMuR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jan 2020 07:50:17 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21706 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726554AbgAQMuR (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 17 Jan 2020 07:50:14 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00HClFnT024397
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2020 07:50:14 -0500
+        Fri, 17 Jan 2020 07:50:17 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00HCl7A6137361
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2020 07:50:15 -0500
 Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xk0qu3y3j-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xk0qgb3hp-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2020 07:50:13 -0500
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2020 07:50:15 -0500
 Received: from localhost
         by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-arch@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Fri, 17 Jan 2020 12:50:11 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        Fri, 17 Jan 2020 12:50:13 -0000
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
         by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 17 Jan 2020 12:50:07 -0000
+        Fri, 17 Jan 2020 12:50:10 -0000
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00HCnGHj49021200
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00HCo8hQ50528442
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jan 2020 12:49:16 GMT
+        Fri, 17 Jan 2020 12:50:08 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A834952052;
-        Fri, 17 Jan 2020 12:50:05 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 574225204E;
+        Fri, 17 Jan 2020 12:50:08 +0000 (GMT)
 Received: from fir03.in.ibm.com (unknown [9.121.59.65])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 493AF5206D;
-        Fri, 17 Jan 2020 12:50:03 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EED0152050;
+        Fri, 17 Jan 2020 12:50:05 +0000 (GMT)
 From:   Sandipan Das <sandipan@linux.ibm.com>
 To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
 Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
@@ -45,129 +45,88 @@ Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
         aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
         msuchanek@suse.de, mpe@ellerman.id.au,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
-Date:   Fri, 17 Jan 2020 18:19:39 +0530
+Subject: [PATCH v16 01/23] selftests/x86/pkeys: Move selftests to arch-neutral directory
+Date:   Fri, 17 Jan 2020 18:19:40 +0530
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1579265066.git.sandipan@linux.ibm.com>
+References: <cover.1579265066.git.sandipan@linux.ibm.com>
+In-Reply-To: <cover.1579265066.git.sandipan@linux.ibm.com>
+References: <cover.1579265066.git.sandipan@linux.ibm.com>
 X-TM-AS-GCONF: 00
-x-cbid: 20011712-0028-0000-0000-000003D1FF9F
+x-cbid: 20011712-0028-0000-0000-000003D1FFA0
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20011712-0029-0000-0000-000024962AF2
-Message-Id: <cover.1579265066.git.sandipan@linux.ibm.com>
+x-cbparentid: 20011712-0029-0000-0000-000024962AF3
+Message-Id: <5bef2b0584a6dc2863874d0e2ccd873cceab98c2.1579265066.git.sandipan@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-17_03:2020-01-16,2020-01-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
- phishscore=0 clxscore=1015 priorityscore=1501 impostorscore=0 spamscore=0
- mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ suspectscore=0 lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 clxscore=1015 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-2001170102
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Memory protection keys enables an application to protect its address
-space from inadvertent access by its own code.
+From: Ram Pai <linuxram@us.ibm.com>
 
-This feature is now enabled on powerpc and has been available since
-4.16-rc1. The patches move the selftests to arch neutral directory
-and enhance their test coverage.
+cc: Dave Hansen <dave.hansen@intel.com>
+cc: Florian Weimer <fweimer@redhat.com>
+Signed-off-by: Ram Pai <linuxram@us.ibm.com>
+Signed-off-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Acked-by: Ingo Molnar <mingo@kernel.org>
+Acked-by: Dave Hansen <dave.hansen@intel.com>
+Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
+---
+ tools/testing/selftests/vm/.gitignore                 | 1 +
+ tools/testing/selftests/vm/Makefile                   | 1 +
+ tools/testing/selftests/{x86 => vm}/pkey-helpers.h    | 0
+ tools/testing/selftests/{x86 => vm}/protection_keys.c | 0
+ tools/testing/selftests/x86/.gitignore                | 1 -
+ 5 files changed, 2 insertions(+), 1 deletion(-)
+ rename tools/testing/selftests/{x86 => vm}/pkey-helpers.h (100%)
+ rename tools/testing/selftests/{x86 => vm}/protection_keys.c (100%)
 
-Tested on powerpc64 and x86_64 (Skylake-SP).
-
-Changelog
----------
-Link to previous version (v15):
-https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=149238
-
-v16:
-	(1) Rebased on top of latest master.
-	(2) Switched to u64 instead of using an arch-dependent
-	    pkey_reg_t type for references to the pkey register
-	    based on suggestions from Dave, Michal and Michael.
-	(3) Removed build time determination of page size based
-	    on suggestion from Michael.
-	(4) Fixed comment before the definition of __page_o_noops()
-	    from patch 13 ("selftests/vm/pkeys: Introduce powerpc
-	    support").
-
-v15:
-	(1) Rebased on top of latest master.
-	(2) Addressed review comments from Dave Hansen.
-	(3) Moved code for getting or setting pkey bits to new
-	    helpers. These changes replace patch 7 of v14.
-	(4) Added a fix which ensures that the correct count of
-	    reserved keys is used across different platforms.
-	(5) Added a fix which ensures that the correct page size
-	    is used as powerpc supports both 4K and 64K pages.
-
-v14:
-	(1) Incorporated another round of comments from Dave Hansen.
-
-v13:
-	(1) Incorporated comments for Dave Hansen.
-	(2) Added one more test for correct pkey-0 behavior.
-
-v12:
-	(1) Fixed the offset of pkey field in the siginfo structure for
-	    x86_64 and powerpc. And tries to use the actual field
-	    if the headers have it defined.
-
-v11:
-	(1) Fixed a deadlock in the ptrace testcase.
-
-v10 and prior:
-	(1) Moved the testcase to arch neutral directory.
-	(2) Split the changes into incremental patches.
-
-Desnes A. Nunes do Rosario (1):
-  selftests/vm/pkeys: Fix number of reserved powerpc pkeys
-
-Ram Pai (17):
-  selftests/x86/pkeys: Move selftests to arch-neutral directory
-  selftests/vm: Rename all references to pkru to a generic name
-  selftests/vm: Move generic definitions to header file
-  selftests/vm: Typecast references to pkey register
-  selftests/vm: Fix pkey_disable_clear()
-  selftests/vm/pkeys: Fix assertion in pkey_disable_set/clear()
-  selftests/vm/pkeys: Fix alloc_random_pkey() to make it really random
-  selftests/vm/pkeys: Introduce generic pkey abstractions
-  selftests/vm/pkeys: Introduce powerpc support
-  selftests/vm/pkeys: Fix assertion in test_pkey_alloc_exhaust()
-  selftests/vm/pkeys: Improve checks to determine pkey support
-  selftests/vm/pkeys: Associate key on a mapped page and detect access
-    violation
-  selftests/vm/pkeys: Associate key on a mapped page and detect write
-    violation
-  selftests/vm/pkeys: Detect write violation on a mapped
-    access-denied-key page
-  selftests/vm/pkeys: Introduce a sub-page allocator
-  selftests/vm/pkeys: Test correct behaviour of pkey-0
-  selftests/vm/pkeys: Override access right definitions on powerpc
-
-Sandipan Das (3):
-  selftests: vm: pkeys: Add helpers for pkey bits
-  selftests: vm: pkeys: Use the correct huge page size
-  selftests: vm: pkeys: Use the correct page size on powerpc
-
-Thiago Jung Bauermann (2):
-  selftests/vm: Move some definitions to arch-specific header
-  selftests/vm: Make gcc check arguments of sigsafe_printf()
-
- tools/testing/selftests/vm/.gitignore         |   1 +
- tools/testing/selftests/vm/Makefile           |   1 +
- tools/testing/selftests/vm/pkey-helpers.h     | 225 ++++++
- tools/testing/selftests/vm/pkey-powerpc.h     | 136 ++++
- tools/testing/selftests/vm/pkey-x86.h         | 181 +++++
- .../selftests/{x86 => vm}/protection_keys.c   | 693 ++++++++++--------
- tools/testing/selftests/x86/.gitignore        |   1 -
- tools/testing/selftests/x86/pkey-helpers.h    | 219 ------
- 8 files changed, 927 insertions(+), 530 deletions(-)
- create mode 100644 tools/testing/selftests/vm/pkey-helpers.h
- create mode 100644 tools/testing/selftests/vm/pkey-powerpc.h
- create mode 100644 tools/testing/selftests/vm/pkey-x86.h
- rename tools/testing/selftests/{x86 => vm}/protection_keys.c (74%)
- delete mode 100644 tools/testing/selftests/x86/pkey-helpers.h
-
+diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+index 31b3c98b6d34..c55837bf39fa 100644
+--- a/tools/testing/selftests/vm/.gitignore
++++ b/tools/testing/selftests/vm/.gitignore
+@@ -14,3 +14,4 @@ virtual_address_range
+ gup_benchmark
+ va_128TBswitch
+ map_fixed_noreplace
++protection_keys
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 7f9a8a8c31da..4e9c741be6af 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -18,6 +18,7 @@ TEST_GEN_FILES += on-fault-limit
+ TEST_GEN_FILES += thuge-gen
+ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += userfaultfd
++TEST_GEN_FILES += protection_keys
+ 
+ ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
+ TEST_GEN_FILES += va_128TBswitch
+diff --git a/tools/testing/selftests/x86/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
+similarity index 100%
+rename from tools/testing/selftests/x86/pkey-helpers.h
+rename to tools/testing/selftests/vm/pkey-helpers.h
+diff --git a/tools/testing/selftests/x86/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+similarity index 100%
+rename from tools/testing/selftests/x86/protection_keys.c
+rename to tools/testing/selftests/vm/protection_keys.c
+diff --git a/tools/testing/selftests/x86/.gitignore b/tools/testing/selftests/x86/.gitignore
+index 7757f73ff9a3..eb30ffd83876 100644
+--- a/tools/testing/selftests/x86/.gitignore
++++ b/tools/testing/selftests/x86/.gitignore
+@@ -11,5 +11,4 @@ ldt_gdt
+ iopl
+ mpx-mini-test
+ ioperm
+-protection_keys
+ test_vdso
 -- 
 2.17.1
 
