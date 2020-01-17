@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFAB140798
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 11:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5FA1408D9
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 12:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726855AbgAQKKb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jan 2020 05:10:31 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:51849 "EHLO
+        id S1726982AbgAQLXs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jan 2020 06:23:48 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:51133 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729211AbgAQKK3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jan 2020 05:10:29 -0500
-Received: from mail-qt1-f179.google.com ([209.85.160.179]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Mo7if-1jPZsX3TI3-00papY; Fri, 17 Jan 2020 11:10:27 +0100
-Received: by mail-qt1-f179.google.com with SMTP id w8so6929852qts.11;
-        Fri, 17 Jan 2020 02:10:26 -0800 (PST)
-X-Gm-Message-State: APjAAAUEDzsZQi9ARRL4u2fVW9n7pv71gxBBz7zQFldLOUe+9rwitPKI
-        y2LXShZzdxt1zNksoOxbOwYUoHYVgj34QmX8Xsk=
-X-Google-Smtp-Source: APXvYqwJseIcLf52SoCo+jtyEMNWCmLScJZGo/aM/tEE3YgOeqebesjzIckzh3dwWAmCE7mLdstmifhUAdg/ilxjg+0=
-X-Received: by 2002:ac8:768d:: with SMTP id g13mr6672928qtr.7.1579255825449;
- Fri, 17 Jan 2020 02:10:25 -0800 (PST)
+        with ESMTP id S1726785AbgAQLXr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jan 2020 06:23:47 -0500
+Received: from mail-qt1-f172.google.com ([209.85.160.172]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MZCX1-1j5QHY2xEn-00V6oc; Fri, 17 Jan 2020 12:23:45 +0100
+Received: by mail-qt1-f172.google.com with SMTP id w47so21472012qtk.4;
+        Fri, 17 Jan 2020 03:23:45 -0800 (PST)
+X-Gm-Message-State: APjAAAWpDkR505DpUSrB+mwD4UiSMh6wouTVvTnUJKE/MOEe0a91APQm
+        Pb5WQBHH+C/O3a/WBTA+ii9h4GkFiFLkb+GZvWw=
+X-Google-Smtp-Source: APXvYqyvj+qVxj0YCsmU7P1XOliY6rtqSxryof0W+wMqmW4n2F+6uFJgm4139nMmKoUQOXfgYZ5UmpVyaFMrptCFtJ8=
+X-Received: by 2002:ac8:47d3:: with SMTP id d19mr6878361qtr.142.1579260224350;
+ Fri, 17 Jan 2020 03:23:44 -0800 (PST)
 MIME-Version: 1.0
 References: <cover.1579248206.git.michal.simek@xilinx.com> <0274919c5e3b134df19d943f99cb7e84e5135ccd.1579248206.git.michal.simek@xilinx.com>
 In-Reply-To: <0274919c5e3b134df19d943f99cb7e84e5135ccd.1579248206.git.michal.simek@xilinx.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Jan 2020 11:10:09 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3bfO9EdL6o4+yY5BCw0pc1ANYocVjyohmG34jcjLiWpA@mail.gmail.com>
-Message-ID: <CAK8P3a3bfO9EdL6o4+yY5BCw0pc1ANYocVjyohmG34jcjLiWpA@mail.gmail.com>
+Date:   Fri, 17 Jan 2020 12:23:28 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a14ASj7Bq7pntaxPRomGKfAALyD6GGR-APYEdh=ja6UkQ@mail.gmail.com>
+Message-ID: <CAK8P3a14ASj7Bq7pntaxPRomGKfAALyD6GGR-APYEdh=ja6UkQ@mail.gmail.com>
 Subject: Re: [PATCH v2 1/2] asm-generic: Make dma-contiguous.h a mandatory
  include/asm header
 To:     Michal Simek <michal.simek@xilinx.com>
@@ -67,25 +67,25 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         Heiko Carstens <heiko.carstens@de.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:NoA6lR5asYNCyYKhe9jWMGVyZrcIPwFSmU/9i+MCsvjD7l/q+0E
- xamkGFPsa8WqWcpoTbKLa0HTFaxvsRDU3Yg1Tjs5VjPvEa0YzXlOTtB3H+HkUQLhOK18FNM
- T7d7QrUxg40WjYU29hDjIqfDeU8vaco2MiUSREKxtCEILK7r8Ok0/re0d55j9UMA+dbmPdd
- Q5ORnP1qoOhIYkN4s6C9Q==
+X-Provags-ID: V03:K1:iqPNv77XDTa0tcdeV36iCL4kfPwGX7DaQUkNLXyOMGI9eqV7hw2
+ H7H8wvbSYKPKWAxlikAxs4SyQ4WFfIGfTkBuPuxFJAcjkRVoKvBAGMdd+0AqrQ4kYmZDv56
+ NG+o9UWNcnUqnGfCH4/xpJ5H5A1z2RWo9rsTO0Do372LyosgOEHVZX37UPM+oR/3H3ZmjJ8
+ Lit61zkwDJd0i4MTP7/4Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:moewDwzL1zY=:Og/pj7BHnPsRu+8o/xR4jd
- /5FTFityP5vYdrAZ8u4f+NKv6rFWAXiKCGvUNOrKPS+uozyMXVzFVn9mn0BNuk49R4sTcvGiV
- /3mU1R1HdB6XM0NufLzKsZrh0bOP0zuW69QDX6Jf3/888gGK83uWEwGF/h0j5Sq6Fq9ieEunq
- rnRa+FNRnArnru6lWAqxwFLeodgnvUTEje6C2luxM/rv31CP97nI76r/sNggx0LoD25sgb+wk
- B4fXK4r6rHxmJpsUAB4TFHFVkBQ35xEtPP1HvFhDh9jiHrI8kn86LUg/TDDRub1/uVZ7zCklw
- FDS90rkhZDfEgOXuXMmplYuydxFxZ5J5rn5dd83zA6L3Mjgy2FG6ES8eKWzao4YVmB9Wduf7P
- xT9wsLcqqiDWbnzXGf4zKotbSRmzPh5Fv++MirVf8JMCdAzbBT0boZwPJ6iWrfkU/YCcUH7pG
- WeE0UXuRO3RVbgnexVPjLzBKZyX6YPi3extl0jEV7d8yqASmv/Kl5Qf4/pnLN02wxwhhDjRSo
- LfvutuyEY11++msvCeKnQeitTSrwLo+R/VB6KHb8Ji1Zlk79m51hBudGDrxCvGbngglFlj1/5
- Aj3Kb7UwL+cXDLCuBCzC7JgcoIMS3ojk07wwIA4kF8iAyNKRU1CwXQK9oLVpyUY3ueqglKHkM
- 4gWKEIE7xrnrIqcQYwa5Q3CQNWVMakSQo08oLy0UxUEp3jPx86yTFLpOurDppOZ+TUgS5z6t5
- TN+j9px/tXMV5B/LPPgcBZfaFFBxvYLBGZtBgt/V/CIQhXpE+NReitfu1neyJdDTkzpFVQzzK
- ZLa+TVfzc5R8QNK8838TmlIcv70M4a/zkgtTMAfBbxA24lD4vyG0JIDnIcKdsI+MjZabomZMp
- X8KXQN2N5yTRNHF73S3w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cdafQtaYOIk=:zkk7ZvnyKm5EzeZkRU0des
+ 8xFhpBTVhX8NAcMqv/hFyL+BrjmrPh0+fIBEHTwIEGkx4HvtTmJmd/nd0m3mdhAyLNJCgGdt3
+ zHQq2IfKyssLKH1Yf+aJNRxaL00wTSm18klJP5cO+mMv2n8mbjpgmoKy9atPR6UWlSjH546kr
+ NRm/2oTKKd5WLZC7Q1gXGTw+JijjwIJ+r+g8CVz12+KPeFqgvNxPklu40Aai8drjGQwO/WLnJ
+ M4xiBOwQACAV78iS0mnZ6IuPR35mSbKJVgDHlxVpSabIwgv4CildM6wTWYcSPhtrrgfsm51zC
+ X38DppkbP8Ulu0LpD99CUPLs8ArVPgH6L0D3WsCgUAsDWG1weey2RBOOAulBOdpgwGIJ/aTJG
+ pap0Ml9aoFI5gYwz1h7SEBrRqbAwNrK2cSlCIDjMhJh2X1JIHFXFJLXFdtYYb+DAOtlJOEMvG
+ f8Pe10L0ZudN1b8VLNG83uuCAJefv391N1G6sjjiOSo0vqZRDi5UaljwHD8w4muPGhTOPMnJt
+ z5zGUZhHLl8pKBCuyvSvgjR3YULaDGszzZvoyzLJ1FB1S0pfj+Gk6LlZLTecI+qaq+Sb752Mr
+ W56rj7Jlw2mo1n6c8WVbyA+mPO7L4Ls2FEoTR6PoXv/BvSJoUxfp8l9i1pSLWKd6PCx3PUQ+U
+ k4tBMNo9uPeYOOzuOYXNyTUv07SX2ChoeSjJYRaD10+QlbfNRNCl80o4OOet7V4sc0eSW2L/2
+ y4yzX7iJQm93yFo1nFXHUAqr27x5yIwy789HxeTdtdFbU3hHrXJLXQxU6tIlLjSqrxQSkzwXf
+ t3B+lU27NtDFgYsH1mQA8h0IulyXdVJCsHk3z2h0luNa6cBukEVBkGJMIxtwUz+EI7Dc6Vu61
+ I0+Q378NUSEsEKgowPXw==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -102,8 +102,5 @@ On Fri, Jan 17, 2020 at 9:03 AM Michal Simek <michal.simek@xilinx.com> wrote:
 > Suggested-by: Christoph Hellwig <hch@infradead.org>
 > Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 > ---
->
-> Changes in v2:
-> - New patch suggested by Christoph
 
 Acked-by: Arnd Bergmann <arnd@arndb.de>
