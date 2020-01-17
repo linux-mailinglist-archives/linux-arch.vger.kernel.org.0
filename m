@@ -2,85 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 352F014018A
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 02:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7641404C8
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 09:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733262AbgAQBqa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jan 2020 20:46:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39162 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726741AbgAQBq2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 16 Jan 2020 20:46:28 -0500
-Received: from X1 (nat-ab2241.sltdut.senawave.net [162.218.216.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 38BFA2075B;
-        Fri, 17 Jan 2020 01:46:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579225587;
-        bh=kF0McEzzIna+OlNxDDvv0BFj+tanfJPabCZ9hgpDZTw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YLuQ4iN8bF+tZrRX09LQTvkHEz92ULIHS5nIyWSwrfb4VbMtXxH/Oe5XZvuePIEYo
-         sF47+mV/+zMy6nfyYfcd5nDd1MXB36Ni+9+XvwIfqY6iK0mnRcIs4F6WqZkN0XwLIK
-         SBIuF6vqcLWRDG/ZIbepRDIL+/bqD5sHlh96ZRAA=
-Date:   Thu, 16 Jan 2020 17:46:26 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     peterz@infradead.org, will@kernel.org, mpe@ellerman.id.au,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v4 3/9] asm-generic/tlb: Avoid potential double flush
-Message-Id: <20200116174626.0244f71bbff64eee6c7faa1d@linux-foundation.org>
-In-Reply-To: <c12bb139-9eda-74a9-b4de-b147a88ed1b0@linux.ibm.com>
-References: <20200116064531.483522-1-aneesh.kumar@linux.ibm.com>
-        <20200116064531.483522-4-aneesh.kumar@linux.ibm.com>
-        <c12bb139-9eda-74a9-b4de-b147a88ed1b0@linux.ibm.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1727002AbgAQIDi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jan 2020 03:03:38 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:51134 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728986AbgAQIDh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jan 2020 03:03:37 -0500
+Received: by mail-wm1-f66.google.com with SMTP id a5so6462856wmb.0
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2020 00:03:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i++Wnr6lskfdyTEf2bt4TSLzH2Xad/WDR/WNYAW09E4=;
+        b=V7pcvnC73rYBS0KY9vSQuPPoEpxAvmkxo2YQx7SaJqwU7P4l65Hxjt9kOwliECjw9P
+         YSW/B284rrNNrsol0MpsGM3wcVvOQakDsgmtc9GVvvGrDYey7UrZ2qH6NscydWjrDnci
+         N+w0eDBnqHXYHUDgbLNnU7vcr4iOoh8jEH0sW2C5UZ751dm6PAdbcuF6gKQqUGWShSp6
+         PLLBJbhrzE2b9vaANhz7QeZU70gLhGkoDA6DM7CgZHpV6A4EcMED9tJUSQb67/A+gmZp
+         eAE04AXEcX//EN3QzjxcaulB9DofVRVeo85B4JZCm5LtlBV1DZROEdJRinPTDd/wuMyP
+         cD8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=i++Wnr6lskfdyTEf2bt4TSLzH2Xad/WDR/WNYAW09E4=;
+        b=GrKQ5gMhP8OMQCVQzxzrWTA57bkvgb/8vgEGajLCnT48eHmZFwy1N1/fTg7PjqXi+B
+         nBIogkWzzllkJY3lAGi88stnW0N0Czs8tFZ0gbx3H51Ro12xUwRt60A0NHJIDvv7j26V
+         xr3LuWfXfPVQKcyv4DLXIuWEtjCtvZp+tQHiT764unEq+p2LJnk7syegXtUwWySwDpT0
+         5T3V37eaapYuX16d7MS4JXa6kedSzIP4jTjPYeDKRtIeB3gawAuD24nPanEYOYBqrY6g
+         tu/nTB6KYLVri8Dl4QetXFDFddoFj+fJks67DSt4s86p7GRoAHkXI4dZemliBDb+vlxV
+         xg2g==
+X-Gm-Message-State: APjAAAUvidCvcF2fE8951lXKBqVIt/cXJ3c3zNk03pouUOqaqcBMQaj8
+        vlGGaFthbzs/tQAc8qFwcOGsdw==
+X-Google-Smtp-Source: APXvYqxl96ObJwT48mJl919pgWBhjJ834NW1hgROfepdvC4HdYZrfui8PwfpswFTjDrAhkPvRoSP8Q==
+X-Received: by 2002:a05:600c:28d:: with SMTP id 13mr3383409wmk.52.1579248215057;
+        Fri, 17 Jan 2020 00:03:35 -0800 (PST)
+Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id w8sm3110202wmd.2.2020.01.17.00.03.33
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 17 Jan 2020 00:03:34 -0800 (PST)
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Paul Burton <paulburton@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Manjukumar Matha <manjukumar.harthikote-matha@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mips@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-s390@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        x86@kernel.org, Guo Ren <guoren@kernel.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Wesley Terpstra <wesley@sifive.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        James Hogan <jhogan@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Guo Ren <ren_guo@c-sky.com>
+Subject: [PATCH v2 0/2] microblaze: Enable CMA
+Date:   Fri, 17 Jan 2020 09:03:30 +0100
+Message-Id: <cover.1579248206.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.25.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 16 Jan 2020 12:19:59 +0530 "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> wrote:
+Hi,
 
-> On 1/16/20 12:15 PM, Aneesh Kumar K.V wrote:
-> > From: Peter Zijlstra <peterz@infradead.org>
-> > 
-> > Aneesh reported that:
-> > 
-> > 	tlb_flush_mmu()
-> > 	  tlb_flush_mmu_tlbonly()
-> > 	    tlb_flush()			<-- #1
-> > 	  tlb_flush_mmu_free()
-> > 	    tlb_table_flush()
-> > 	      tlb_table_invalidate()
-> > 		tlb_flush_mmu_tlbonly()
-> > 		  tlb_flush()		<-- #2
-> > 
-> > does two TLBIs when tlb->fullmm, because __tlb_reset_range() will not
-> > clear tlb->end in that case.
-> > 
-> > Observe that any caller to __tlb_adjust_range() also sets at least one
-> > of the tlb->freed_tables || tlb->cleared_p* bits, and those are
-> > unconditionally cleared by __tlb_reset_range().
-> > 
-> > Change the condition for actually issuing TLBI to having one of those
-> > bits set, as opposed to having tlb->end != 0.
-> > 
-> 
-> 
-> We should possibly get this to stable too along with the first two 
-> patches. I am not quiet sure if this will qualify for a stable backport. 
-> Hence avoided adding Cc:stable@kernel.org
+the patchset enable CMA on Microblaze. Based on Christoph request I have
+created the first patch which makes dma-continugous.h mandatory for all
+archs before Microblaze wiring.
 
-I'm not seeing any description of the user-visible runtime effects. 
-Always needed, especially for -stable, please.
+Thanks,
+Michal
 
-It appears to be a small performance benefit?  If that benefit was
-"large" and measurements were presented then that would be something
-we might wish to backport.
+Changes in v2:
+- New patch suggested by Christoph
+- Align commit message
+- Remove adding dma-contigous.h via Kbuild because it is done by previous
+  patch
 
+Michal Simek (2):
+  asm-generic: Make dma-contiguous.h a mandatory include/asm header
+  microblaze: Wire CMA allocator
+
+ arch/arm64/include/asm/Kbuild         | 1 -
+ arch/csky/include/asm/Kbuild          | 1 -
+ arch/microblaze/Kconfig               | 1 +
+ arch/microblaze/configs/mmu_defconfig | 2 ++
+ arch/microblaze/mm/init.c             | 4 ++++
+ arch/mips/include/asm/Kbuild          | 1 -
+ arch/riscv/include/asm/Kbuild         | 1 -
+ arch/s390/include/asm/Kbuild          | 1 -
+ arch/x86/include/asm/Kbuild           | 1 -
+ arch/xtensa/include/asm/Kbuild        | 1 -
+ include/asm-generic/Kbuild            | 1 +
+ 11 files changed, 8 insertions(+), 7 deletions(-)
+
+-- 
+2.25.0
 
