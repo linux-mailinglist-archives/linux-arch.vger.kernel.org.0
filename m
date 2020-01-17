@@ -2,134 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 442EC140A80
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 14:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E49141060
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2020 19:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbgAQNPB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jan 2020 08:15:01 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:40244 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726513AbgAQNPB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jan 2020 08:15:01 -0500
-Received: by mail-ot1-f47.google.com with SMTP id w21so22446208otj.7
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2020 05:15:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B8YqwuFYQqcgYYrogodMJhZN7j+MHKf9rIlBL0O/Le8=;
-        b=phe1Ud2oxwDPz6N0qGWXhYFzGha1cekzFvcn3g626qlUYghuyTbxgeFkLbD/M/5L2u
-         FDYTHp9qH37eL4oqnFRBAXta5mf/ffxwB4CRYjCptTn0qENxhEnuJ6sd/k/c5WjQtL3l
-         CZK7j9ZJcq40q1mQa/jNGhIl8VicJfvINi+VTqNF9qMX85UYRNemMrGHv6Y80fNbk6dg
-         S9PPuTsUhR6lSiS6eVa+Gbu3kWZBLzmYXabHgR1/Uj8EbZ/xevu89+zvdF3lhTPSyKkD
-         PaFZsgRegpuHk3NdVQ+8Daz+cDXqVbLvfaHQH+1GTrWlCrdFvn5XQvguxBKRfdkeZq/s
-         GNkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B8YqwuFYQqcgYYrogodMJhZN7j+MHKf9rIlBL0O/Le8=;
-        b=Pkbh4gtgp+21/UxwgkeipWEg2eXwnKwMMhK/LtEH8xPJtZFW+zl5zvmjsaNBGWP8Qv
-         VhfOl+XLMBZHJjoam/3ZAu70znVL7QFjn/dYN4D9jWz3bifssNTwvel3F0+7fKoO9EI7
-         zKKpZbLlmEzg5oZSHKLzItDyWw+dxjhivJ2+ins8PCEFYntzvV+d6Dko+t2gfgytFCbM
-         e9QKWykrX7w0AP7sorvsJTTVfj9TuDNn2Eg7QebcFYZ1UUFLtyHWhtPYNJw+TvTexZKG
-         MrWoXlwDv0DbBy/NjFV6jwpHPFdw1PmF2rnHgeGLh7FjGudu+emAuPs+qUNkArwKYl8Z
-         5p9w==
-X-Gm-Message-State: APjAAAUCwXdw3OkYuAN1ao0z3tbg6z32R7RH5QqfY+pir/vKKzxzHbaQ
-        kHarNxkgUrh4WYJKLwMyJAbqtVF6mnMnV/0GtgjstA==
-X-Google-Smtp-Source: APXvYqynE9NXU66Nq3blnE6X5VRCzGBBlylly2otE6jy/NdZxB8n4qYZlqLeRV0gBLCzSb/O+tcyFH8cZEHX5B05W4k=
-X-Received: by 2002:a9d:588c:: with SMTP id x12mr5863094otg.2.1579266899985;
- Fri, 17 Jan 2020 05:14:59 -0800 (PST)
+        id S1726897AbgAQSCg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jan 2020 13:02:36 -0500
+Received: from mga12.intel.com ([192.55.52.136]:29688 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726603AbgAQSCg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 17 Jan 2020 13:02:36 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jan 2020 10:02:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,331,1574150400"; 
+   d="scan'208";a="227286652"
+Received: from ray.jf.intel.com (HELO [10.7.201.139]) ([10.7.201.139])
+  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2020 10:02:35 -0800
+Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
+To:     Sandipan Das <sandipan@linux.ibm.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
+        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1579265066.git.sandipan@linux.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <3a14815c-b9cb-f5a5-630a-0bfb25356429@intel.com>
+Date:   Fri, 17 Jan 2020 10:02:35 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20200115165749.145649-1-elver@google.com> <CAK8P3a3b=SviUkQw7ZXZF85gS1JO8kzh2HOns5zXoEJGz-+JiQ@mail.gmail.com>
- <CANpmjNOpTYnF3ssqrE_s+=UA-2MpfzzdrXoyaifb3A55_mc0uA@mail.gmail.com>
- <CAK8P3a3WywSsahH2vtZ_EOYTWE44YdN+Pj6G8nt_zrL3sckdwQ@mail.gmail.com>
- <CANpmjNMk2HbuvmN1RaZ=8OV+tx9qZwKyRySONDRQar6RCGM1SA@mail.gmail.com> <CAK8P3a066Knr-KC2v4M8Dr1phr0Gbb2KeZZLQ7Ana0fkrgPDPg@mail.gmail.com>
-In-Reply-To: <CAK8P3a066Knr-KC2v4M8Dr1phr0Gbb2KeZZLQ7Ana0fkrgPDPg@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 17 Jan 2020 14:14:48 +0100
-Message-ID: <CANpmjNO395-atZXu_yEArZqAQ+ib3Ack-miEhA9msJ6_eJsh4g@mail.gmail.com>
-Subject: Re: [PATCH -rcu] asm-generic, kcsan: Add KCSAN instrumentation for bitops
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        christophe leroy <christophe.leroy@c-s.fr>,
-        Daniel Axtens <dja@axtens.net>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <cover.1579265066.git.sandipan@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 17 Jan 2020 at 13:25, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Jan 15, 2020 at 9:50 PM Marco Elver <elver@google.com> wrote:
-> > On Wed, 15 Jan 2020 at 20:55, Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Wed, Jan 15, 2020 at 8:51 PM Marco Elver <elver@google.com> wrote:
-> > > > On Wed, 15 Jan 2020 at 20:27, Arnd Bergmann <arnd@arndb.de> wrote:
-> > > Are there any that really just want kasan_check_write() but not one
-> > > of the kcsan checks?
-> >
-> > If I understood correctly, this suggestion would amount to introducing
-> > a new header, e.g. 'ksan-checks.h', that provides unified generic
-> > checks. For completeness, we will also need to consider reads. Since
-> > KCSAN provides 4 check variants ({read,write} x {plain,atomic}), we
-> > will need 4 generic check variants.
->
-> Yes, that was the idea.
->
-> > I certainly do not feel comfortable blindly introducing kcsan_checks
-> > in all places where we have kasan_checks, but it may be worthwhile
-> > adding this infrastructure and starting with atomic-instrumented and
-> > bitops-instrumented wrappers. The other locations you list above would
-> > need to be evaluated on a case-by-case basis to check if we want to
-> > report data races for those accesses.
->
-> I think the main question to answer is whether it is more likely to go
-> wrong because we are missing checks when one caller accidentally
-> only has one but not the other, or whether they go wrong because
-> we accidentally check both when we should only be checking one.
->
-> My guess would be that the first one is more likely to happen, but
-> the second one is more likely to cause problems when it happens.
+On 1/17/20 4:49 AM, Sandipan Das wrote:
+> Memory protection keys enables an application to protect its address
+> space from inadvertent access by its own code.
+> 
+> This feature is now enabled on powerpc and has been available since
+> 4.16-rc1. The patches move the selftests to arch neutral directory
+> and enhance their test coverage.
+> 
+> Tested on powerpc64 and x86_64 (Skylake-SP).
+I also tested the series.  The 64-bit binary works fine.  But,
 
-Right, I guess both have trade-offs.
+This is failing to build the x86 selftests:
 
-> > As a minor data point, {READ,WRITE}_ONCE in compiler.h currently only
-> > has kcsan_checks and not kasan_checks.
->
-> Right. This is because we want an explicit "atomic" check for kcsan
-> but we want to have the function inlined for kasan, right?
+make: *** No rule to make target 'protection_keys.c', needed by
+'/home/daveh/linux/tools/testing/selftests/x86/protection_keys_32'.  Stop.
 
-Yes, correct.
+I think you just forgot to remove the binary from the x86 Makefile.
 
-> > My personal preference would be to keep the various checks explicit,
-> > clearly opting into either KCSAN and/or KASAN. Since I do not think
-> > it's obvious if we want both for the existing and potentially new
-> > locations (in future), the potential for error by blindly using a
-> > generic 'ksan_check' appears worse than potentially adding a dozen
-> > lines or so.
-> >
-> > Let me know if you'd like to proceed with 'ksan-checks.h'.
->
-> Could you have a look at the files I listed and see if there are any
-> other examples that probably a different set of checks between the
-> two, besides the READ_ONCE() example?
-
-All the user-copy related code should probably have kcsan_checks as well.
-
-> If you can't find any, I would prefer having the simpler interface
-> with just one set of annotations.
-
-That's fair enough. I'll prepare a v2 series that first introduces the
-new header, and then applies it to the locations that seem obvious
-candidates for having both checks.
-
-Thanks,
--- Marco
+Which reminds me: This removes the 32-bit binary.  x86 32-bit binaries
+exercise different paths than the 64-bit ones, so we like to have both.
+ Although it isn't *essential* it would really be nice to keep the
+32-bit binary.
