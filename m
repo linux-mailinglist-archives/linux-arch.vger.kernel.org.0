@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D60F0142D16
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2020 15:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE01142D13
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2020 15:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727586AbgATOUB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jan 2020 09:20:01 -0500
-Received: from mail-wr1-f73.google.com ([209.85.221.73]:51204 "EHLO
+        id S1728826AbgATOT4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jan 2020 09:19:56 -0500
+Received: from mail-wr1-f73.google.com ([209.85.221.73]:37587 "EHLO
         mail-wr1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728827AbgATOTw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jan 2020 09:19:52 -0500
-Received: by mail-wr1-f73.google.com with SMTP id c6so14113693wrm.18
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jan 2020 06:19:51 -0800 (PST)
+        with ESMTP id S1728916AbgATOTz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jan 2020 09:19:55 -0500
+Received: by mail-wr1-f73.google.com with SMTP id z14so14316989wrs.4
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jan 2020 06:19:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=EjDI0Mf31vFhPpWjYi8Hep+KoV17mwptU+RbwnUr7FM=;
-        b=fyHqklo6nn+AGZUW6I43igH20ISRLhzgXdt6OI47vUC3A38hD3XA/MO59Mf+XxNPzD
-         CfKubfZ4UjLuL53fbHrkltyJiomkSm8dfQgSm9A3wGnXIVBil5KkHNagTzsywt7LH48A
-         w3cJjEZnRcR6WnzbgFOat7IIqQfFJOGhBmxXkbkTtSOUJC6e3jjLaEw24eJla2/AZSGP
-         L1FU+pO1gLMWFYGUF2x3pxjHhRLmS2vqhUfZyn+w0lBY6lDFZZuHxVmD8Vt2t9pJD0Oq
-         1JQkCjd5DJ0jx7B10AeCbAdkjpyC5JzuODnfU2c13GYHBsAnk+Ah9WbjbFCTYfoS1hlj
-         ID4g==
+        bh=sfeBMXRfbNdJgAnQzXh8K2r3zlp1l0BIMpCBNTG8NB8=;
+        b=LSSEn3c2vjZu0hxjSiwTarnKg/7zNzHUTp6W7Ip9UWrzRVuZnDkSlhhXZowqJXjtzg
+         urMYjrs99RlbOKWjpR219PjE4j0BGuSZn8EVeIa93/+grY7qQJq/0WiwXbIrjVxgOm1U
+         RpYw3P/PfAAqTwkQUIp50nOZEQAL84wLy3/uQ6bLtMNh7/DiAIbBrfKA30BsVdqZW4q7
+         skKvreC085/NbB3Gk4pzNbXRzJTqQB6ZcMvJJVks+ihIp7O9W+jjY/yGnEzov7U2GzL2
+         ox30Q3SZ6FxqWLqaQMtCN34JN1gnd1e0rOsBy+wlefIlQxRUnasgGBOaecV6fIfXPuda
+         z1fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=EjDI0Mf31vFhPpWjYi8Hep+KoV17mwptU+RbwnUr7FM=;
-        b=XQF3e0qQUGyad8K6NmPXzFm2AN+t5BmIPdgts+cNhqCggItyYVPYM08vU/IGuJ50yy
-         uq4wJeRUQsinRq4hh5tZzjTOILyBuAMKVxJ4+7OwHQ/RKC+z1yqSihRZQIJmaPvEWBSK
-         OCyVgpceru4UrTKED4qHoK5SUXxvQXCfSQfR+H35v1cY+895GRPlTwzjCjd4jJsQFrD+
-         i8YYfiQLj6WyyYfiMqSyX0J/6wJcjRIsgcl1QSCwsgGdVstMllwqoIphIQoWLkXqxK9h
-         QB/Ewv8XkanSt91GgY6WMQDeEd5tm4EFRlRKv5aS0/l5sBQ0lAYylPWYedcJdUaULiKK
-         JUCw==
-X-Gm-Message-State: APjAAAW+oXTlCuVK/bBmUWaj8VEBehvwZ0DGEe/Rb6+sVgTsqUPxwnjr
-        b4tYhSWx60Hxn99yN0afOjkq09nfUA==
-X-Google-Smtp-Source: APXvYqy9DCKs3N/NK1bu6qjGmnxUvBR+UP2qk+batcJeAfjxjUkzPzvJR0EzRsIP2g1vCLSpYRLGs1wc4w==
-X-Received: by 2002:a5d:5403:: with SMTP id g3mr19279976wrv.302.1579529990515;
- Mon, 20 Jan 2020 06:19:50 -0800 (PST)
-Date:   Mon, 20 Jan 2020 15:19:26 +0100
+        bh=sfeBMXRfbNdJgAnQzXh8K2r3zlp1l0BIMpCBNTG8NB8=;
+        b=tF8t5cr3rKBV5sWoZTpZMTs5FThTRFowxkNXcwnwkl5zzty49qRnI6SQkbYSPtBSzO
+         0MHGL7d5J4FXScIttOaSwigsSDKEVxwoAVcKYMelrl1hN3xt5asaMhUsxbSFv/9rpK+y
+         ZL31vtgI4J6F02S6d+tNsUsEuIv3ac4Z1LSdHoUsaFVXMjsjFm3TmI87pczX4FF4fu/u
+         OYk+66XtCBh4Gj0BOz47vMc61Xt6xr1S33VpJs4Gg6vA2LI1T9DdksvQ6Lcc3UyFU3gP
+         +mcL/q1Ro2+Gflt1N/+PXj8x1PJMXQfEC9nSQ1mAqjJrtvyFPAd181i7HDpm6Vas6rpV
+         zNqA==
+X-Gm-Message-State: APjAAAUMtL9aGbbNViJ2EL4cxaMMVkiPL2EQl1q6meCyjAwyRfociO/E
+        5iv8Od7SMT3UY2ca7EHDnCYSrzIlJg==
+X-Google-Smtp-Source: APXvYqzovcsGc038QWfGiGHCHo+z/bqiMy5fCLYOpIhcGqbJvd6Ceb9haRPFXz9ZOWkOe+tnEfMRkeuGbQ==
+X-Received: by 2002:a5d:5381:: with SMTP id d1mr18199365wrv.259.1579529993355;
+ Mon, 20 Jan 2020 06:19:53 -0800 (PST)
+Date:   Mon, 20 Jan 2020 15:19:27 +0100
 In-Reply-To: <20200120141927.114373-1-elver@google.com>
-Message-Id: <20200120141927.114373-4-elver@google.com>
+Message-Id: <20200120141927.114373-5-elver@google.com>
 Mime-Version: 1.0
 References: <20200120141927.114373-1-elver@google.com>
 X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-Subject: [PATCH 4/5] iov_iter: Use generic instrumented.h
+Subject: [PATCH 5/5] copy_to_user, copy_from_user: Use generic instrumented.h
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com
 Cc:     paulmck@kernel.org, andreyknvl@google.com, glider@google.com,
@@ -65,7 +65,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This replaces the kasan instrumentation with generic instrumentation,
+This replaces the KASAN instrumentation with generic instrumentation,
 implicitly adding KCSAN instrumentation support.
 
 For KASAN no functional change is intended.
@@ -73,27 +73,105 @@ For KASAN no functional change is intended.
 Suggested-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- lib/iov_iter.c | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ include/linux/uaccess.h | 46 +++++++++++++++++++++++++++++------------
+ lib/usercopy.c          | 14 ++++++++-----
+ 2 files changed, 42 insertions(+), 18 deletions(-)
 
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index fb29c02c6a3c..f06f6f1dd686 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -8,6 +8,7 @@
- #include <linux/splice.h>
- #include <net/checksum.h>
- #include <linux/scatterlist.h>
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index 67f016010aad..d3f2d9a8cae3 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -2,9 +2,9 @@
+ #ifndef __LINUX_UACCESS_H__
+ #define __LINUX_UACCESS_H__
+ 
 +#include <linux/instrumented.h>
+ #include <linux/sched.h>
+ #include <linux/thread_info.h>
+-#include <linux/kasan-checks.h>
  
- #define PIPE_PARANOIA /* for now */
+ #define uaccess_kernel() segment_eq(get_fs(), KERNEL_DS)
  
-@@ -137,20 +138,26 @@
- 
- static int copyout(void __user *to, const void *from, size_t n)
+@@ -58,18 +58,26 @@
+ static __always_inline __must_check unsigned long
+ __copy_from_user_inatomic(void *to, const void __user *from, unsigned long n)
  {
-+	size_t res = n;
+-	kasan_check_write(to, n);
++	unsigned long res;
 +
+ 	check_object_size(to, n, false);
+-	return raw_copy_from_user(to, from, n);
++	instrument_copy_from_user_pre(to, n);
++	res = raw_copy_from_user(to, from, n);
++	instrument_copy_from_user_post(to, n, res);
++	return res;
+ }
+ 
+ static __always_inline __must_check unsigned long
+ __copy_from_user(void *to, const void __user *from, unsigned long n)
+ {
++	unsigned long res;
++
+ 	might_fault();
+-	kasan_check_write(to, n);
+ 	check_object_size(to, n, false);
+-	return raw_copy_from_user(to, from, n);
++	instrument_copy_from_user_pre(to, n);
++	res = raw_copy_from_user(to, from, n);
++	instrument_copy_from_user_post(to, n, res);
++	return res;
+ }
+ 
+ /**
+@@ -88,18 +96,26 @@ __copy_from_user(void *to, const void __user *from, unsigned long n)
+ static __always_inline __must_check unsigned long
+ __copy_to_user_inatomic(void __user *to, const void *from, unsigned long n)
+ {
+-	kasan_check_read(from, n);
++	unsigned long res;
++
+ 	check_object_size(from, n, true);
+-	return raw_copy_to_user(to, from, n);
++	instrument_copy_to_user_pre(from, n);
++	res = raw_copy_to_user(to, from, n);
++	instrument_copy_to_user_post(from, n, res);
++	return res;
+ }
+ 
+ static __always_inline __must_check unsigned long
+ __copy_to_user(void __user *to, const void *from, unsigned long n)
+ {
++	unsigned long res;
++
+ 	might_fault();
+-	kasan_check_read(from, n);
+ 	check_object_size(from, n, true);
+-	return raw_copy_to_user(to, from, n);
++	instrument_copy_to_user_pre(from, n);
++	res = raw_copy_to_user(to, from, n);
++	instrument_copy_to_user_post(from, n, res);
++	return res;
+ }
+ 
+ #ifdef INLINE_COPY_FROM_USER
+@@ -109,8 +125,9 @@ _copy_from_user(void *to, const void __user *from, unsigned long n)
+ 	unsigned long res = n;
+ 	might_fault();
+ 	if (likely(access_ok(from, n))) {
+-		kasan_check_write(to, n);
++		instrument_copy_from_user_pre(to, n);
+ 		res = raw_copy_from_user(to, from, n);
++		instrument_copy_from_user_post(to, n, res);
+ 	}
+ 	if (unlikely(res))
+ 		memset(to + (n - res), 0, res);
+@@ -125,12 +142,15 @@ _copy_from_user(void *, const void __user *, unsigned long);
+ static inline __must_check unsigned long
+ _copy_to_user(void __user *to, const void *from, unsigned long n)
+ {
++	unsigned long res = n;
++
+ 	might_fault();
  	if (access_ok(to, n)) {
 -		kasan_check_read(from, n);
 -		n = raw_copy_to_user(to, from, n);
@@ -104,41 +182,50 @@ index fb29c02c6a3c..f06f6f1dd686 100644
 -	return n;
 +	return res;
  }
+ #else
+ extern __must_check unsigned long
+diff --git a/lib/usercopy.c b/lib/usercopy.c
+index cbb4d9ec00f2..1c20d4423b86 100644
+--- a/lib/usercopy.c
++++ b/lib/usercopy.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <linux/uaccess.h>
+ #include <linux/bitops.h>
++#include <linux/instrumented.h>
++#include <linux/uaccess.h>
  
- static int copyin(void *to, const void __user *from, size_t n)
- {
-+	size_t res = n;
-+
- 	if (access_ok(from, n)) {
+ /* out-of-line parts */
+ 
+@@ -10,8 +11,9 @@ unsigned long _copy_from_user(void *to, const void __user *from, unsigned long n
+ 	unsigned long res = n;
+ 	might_fault();
+ 	if (likely(access_ok(from, n))) {
 -		kasan_check_write(to, n);
--		n = raw_copy_from_user(to, from, n);
 +		instrument_copy_from_user_pre(to, n);
-+		res = raw_copy_from_user(to, from, n);
+ 		res = raw_copy_from_user(to, from, n);
 +		instrument_copy_from_user_post(to, n, res);
  	}
--	return n;
-+	return res;
- }
- 
- static size_t copy_page_to_iter_iovec(struct page *page, size_t offset, size_t bytes,
-@@ -638,11 +645,14 @@ EXPORT_SYMBOL(_copy_to_iter);
- #ifdef CONFIG_ARCH_HAS_UACCESS_MCSAFE
- static int copyout_mcsafe(void __user *to, const void *from, size_t n)
+ 	if (unlikely(res))
+ 		memset(to + (n - res), 0, res);
+@@ -23,12 +25,14 @@ EXPORT_SYMBOL(_copy_from_user);
+ #ifndef INLINE_COPY_TO_USER
+ unsigned long _copy_to_user(void __user *to, const void *from, unsigned long n)
  {
-+	size_t res = n;
-+
- 	if (access_ok(to, n)) {
++	unsigned long res = n;
+ 	might_fault();
+ 	if (likely(access_ok(to, n))) {
 -		kasan_check_read(from, n);
--		n = copy_to_user_mcsafe((__force void *) to, from, n);
+-		n = raw_copy_to_user(to, from, n);
 +		instrument_copy_to_user_pre(from, n);
-+		res = copy_to_user_mcsafe((__force void *) to, from, n);
++		res = raw_copy_to_user(to, from, n);
 +		instrument_copy_to_user_post(from, n, res);
  	}
 -	return n;
 +	return res;
  }
- 
- static unsigned long memcpy_mcsafe_to_page(struct page *page, size_t offset,
+ EXPORT_SYMBOL(_copy_to_user);
+ #endif
 -- 
 2.25.0.341.g760bfbb309-goog
 
