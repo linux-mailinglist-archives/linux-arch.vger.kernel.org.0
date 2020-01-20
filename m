@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38321142E0B
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2020 15:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472D7142E3B
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2020 15:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726626AbgATOwC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jan 2020 09:52:02 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:42667 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726642AbgATOwC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jan 2020 09:52:02 -0500
-Received: by mail-qk1-f193.google.com with SMTP id z14so30304185qkg.9
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jan 2020 06:52:01 -0800 (PST)
+        id S1726901AbgATO65 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jan 2020 09:58:57 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:36087 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726860AbgATO65 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jan 2020 09:58:57 -0500
+Received: by mail-qk1-f194.google.com with SMTP id a203so30363249qkc.3
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jan 2020 06:58:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9r7hLAzJ5XLPlBLlLKXbueYWLmX6BTOI1cJJxqLCq6Q=;
-        b=A33lYU15woJADc37Yd8l/Tk+tXslqR8+HwmIFXwz+bmidG/q0xW1W06s9peuwaoaVe
-         Ku7yw5P2dKxhNoc5JK1uahdePTnEDQ0VixgGWk+DNN4BNPRqkZlcnCo9ea6Euw/cGlWp
-         n9dZjyhlEYgub2FPZHvW1t99RTH6v8GSpiwEBNldm/gilrDWLHUoSf0tWIbMDwGm19Xs
-         zXrFsS4Tts5l3j0i8gO3bschp7mBiVJwLRIPUj/ujGcly/zsuBtiXvIf0k4NJK9DpUxb
-         NUiEAPTOhpjCe+YNV9KDiF1J6/FEfR3GpAkCbymgh6zbUHZu4FLktrzg+xE57vSuymIR
-         LiPg==
+        bh=eRQ0+UJNHKW1NOT+X9Ptz3p1mfuoK3ob/c2NaAESbjw=;
+        b=uKQkn4nh1Hmb1VzqfGj1kZNZpHOrqe0/gjQHY6kKXtdLQ2OKPhf5qpFDHlh2p1nbsB
+         PIyX/YsHR12twaWudeSAD22nkWJ1trGRlp0u6J1ywEvCrYSpVxAdP+GCgHpvDDhKjIAa
+         TGPNT9ThvBZL3XAszK8rudkiAUCZeKIs0ccefuE1koi0i86ip/IioT0H6sCKytubTsD7
+         PdrefwHeqlXpdr0Y868iwnvfK3sXrSKv9WanwMhA2JBenKkE92KveWk1nTE7m7nW8OJE
+         /1gjqv4qZHC93/iSDbh6GnISn0B/VoqHQD1KKGYF6LVQbPW9wJ0Csot5eALz9Agw8KqE
+         XTYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9r7hLAzJ5XLPlBLlLKXbueYWLmX6BTOI1cJJxqLCq6Q=;
-        b=BRs8sbUqpxt0J7FMC/Sz+pheiWOPjhEInu42tsOMyZXjF+U/dEDMMlb31N5RHTuDl3
-         cPqYT30gQ/+Qg+gxpbESmHWrCvRs9oWIiGuDQOD9EL3+TgwDqDp+6Ls7e57jLbtfrt+e
-         3YN++/dtedwvMv33/lHGhtjexXyrGelcQ4kaQBo+3NuXcOd8C7ohfbMqTt4UdDjGHwJu
-         z1H2Vol8o0Wh/AexuBF2TmlssTErmFQZTbv+8ekGPKTR3gLLI+CJoSrysIylaUzrTvRV
-         s+3rW5ktJr8PKtRYX4kMtVDmsL9/Z/8oSiS30JPZ+mNpYDl8PDONfYp0tZ7lnDcGtu81
-         G8OA==
-X-Gm-Message-State: APjAAAWsfEGX/oXJvLHlAAP2Z84Ex5Fhrl/8wWyUyQdQUQHcm6QtQ2uI
-        ekkS1pyXstZCiq5Dn3DVy1x+rVsF/Ew9ru8idHU3NQ==
-X-Google-Smtp-Source: APXvYqyMb/ksir73hL05SZw2P5HvQaVJaB6gVL/FfKNkJYTZNpc4zZtxepiL7b6UZTTyAveu5qcMYuu6LsATYT8+Okg=
-X-Received: by 2002:a37:e312:: with SMTP id y18mr52657374qki.250.1579531920632;
- Mon, 20 Jan 2020 06:52:00 -0800 (PST)
+        bh=eRQ0+UJNHKW1NOT+X9Ptz3p1mfuoK3ob/c2NaAESbjw=;
+        b=TTAP0UJpYL4Du9aivjOrNG2QnerM8uoNQ8CwXz9WDGTMmaqXm6MgN/bsTpeCauIYoY
+         HjnwofsIzGNpt6UNkEcGX+By+2n7MlssKJM/fflkRGR2FQwxWia+gM2QE3CXg5NJsmNQ
+         iAvT02DhWEmFroYhKxa4juwLSvSyuwMtvywc8r69CQVNl3ODR7wnghBJODEH5ODCoUg1
+         kQ9JCz0ujk9XOsF6wausMZfpJb3Px8P31adaO66/coNDwFKMwbd4gJr90EJq7qds27au
+         8VxGg6at9PPGCJlyuiJSe25hL6NFE69AUGnXMTxXkO3MbZVOqlsHQvIK+QMawKoiClb5
+         cjDg==
+X-Gm-Message-State: APjAAAX+QKUKryl6EoCBfu87KT61rlvRgKeMVak5ZcuypunWYvrHQaZ5
+        NasO6x/MRKNPGb67v2Ty/rYntzi99dGQWow2jr/WWA==
+X-Google-Smtp-Source: APXvYqzRzzU9O3ZxF6WLrarovy3UD8IDGUR8JjGUu5YnvlYVbMHVlZ9dmLHCHobXwQoPv4fnY4LrBPOppw4nTPnvn5w=
+X-Received: by 2002:a05:620a:1136:: with SMTP id p22mr52465723qkk.8.1579532336048;
+ Mon, 20 Jan 2020 06:58:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20200120141927.114373-1-elver@google.com> <20200120141927.114373-5-elver@google.com>
-In-Reply-To: <20200120141927.114373-5-elver@google.com>
+References: <20200120141927.114373-1-elver@google.com> <CACT4Y+bnRoKinPopVqyxj4av6_xa_OUN0wwnidpO3dX3iYq_gg@mail.gmail.com>
+In-Reply-To: <CACT4Y+bnRoKinPopVqyxj4av6_xa_OUN0wwnidpO3dX3iYq_gg@mail.gmail.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 20 Jan 2020 15:51:48 +0100
-Message-ID: <CACT4Y+bUvoePVPV+BqU-cwhF6bR41_eaYkr9WLLMYi-2q11JjQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] copy_to_user, copy_from_user: Use generic instrumented.h
+Date:   Mon, 20 Jan 2020 15:58:45 +0100
+Message-ID: <CACT4Y+YuTT6kZ-AkgU0c1o09qmQdFWr4_Sds4jaDg-Va6g6jkA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] include/linux: Add instrumented.h infrastructure
 To:     Marco Elver <elver@google.com>
 Cc:     paulmck@kernel.org, Andrey Konovalov <andreyknvl@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -74,173 +74,66 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 3:19 PM Marco Elver <elver@google.com> wrote:
+On Mon, Jan 20, 2020 at 3:45 PM Dmitry Vyukov <dvyukov@google.com> wrote:
 >
-> This replaces the KASAN instrumentation with generic instrumentation,
-> implicitly adding KCSAN instrumentation support.
+> On Mon, Jan 20, 2020 at 3:19 PM Marco Elver <elver@google.com> wrote:
+> >
+> > This adds instrumented.h, which provides generic wrappers for memory
+> > access instrumentation that the compiler cannot emit for various
+> > sanitizers. Currently this unifies KASAN and KCSAN instrumentation. In
+> > future this will also include KMSAN instrumentation.
+> >
+> > Note that, copy_{to,from}_user require special instrumentation,
+> > providing hooks before and after the access, since we may need to know
+> > the actual bytes accessed (currently this is relevant for KCSAN, and is
+> > also relevant in future for KMSAN).
+> >
+> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > Signed-off-by: Marco Elver <elver@google.com>
+> > ---
+> >  include/linux/instrumented.h | 153 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 153 insertions(+)
+> >  create mode 100644 include/linux/instrumented.h
+> >
+> > diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+> > new file mode 100644
+> > index 000000000000..9f83c8520223
+> > --- /dev/null
+> > +++ b/include/linux/instrumented.h
+> > @@ -0,0 +1,153 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +/*
+> > + * This header provides generic wrappers for memory access instrumentation that
+> > + * the compiler cannot emit for: KASAN, KCSAN.
+> > + */
+> > +#ifndef _LINUX_INSTRUMENTED_H
+> > +#define _LINUX_INSTRUMENTED_H
+> > +
+> > +#include <linux/compiler.h>
+> > +#include <linux/kasan-checks.h>
+> > +#include <linux/kcsan-checks.h>
+> > +#include <linux/types.h>
+> > +
+> > +/**
+> > + * instrument_read - instrument regular read access
+> > + *
+> > + * Instrument a regular read access. The instrumentation should be inserted
+> > + * before the actual read happens.
+> > + *
+> > + * @ptr address of access
+> > + * @size size of access
+> > + */
 >
-> For KASAN no functional change is intended.
+> Based on offline discussion, that's what we add for KMSAN:
 >
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  include/linux/uaccess.h | 46 +++++++++++++++++++++++++++++------------
->  lib/usercopy.c          | 14 ++++++++-----
->  2 files changed, 42 insertions(+), 18 deletions(-)
+> > +static __always_inline void instrument_read(const volatile void *v, size_t size)
+> > +{
+> > +       kasan_check_read(v, size);
+> > +       kcsan_check_read(v, size);
 >
-> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-> index 67f016010aad..d3f2d9a8cae3 100644
-> --- a/include/linux/uaccess.h
-> +++ b/include/linux/uaccess.h
-> @@ -2,9 +2,9 @@
->  #ifndef __LINUX_UACCESS_H__
->  #define __LINUX_UACCESS_H__
->
-> +#include <linux/instrumented.h>
->  #include <linux/sched.h>
->  #include <linux/thread_info.h>
-> -#include <linux/kasan-checks.h>
->
->  #define uaccess_kernel() segment_eq(get_fs(), KERNEL_DS)
->
-> @@ -58,18 +58,26 @@
->  static __always_inline __must_check unsigned long
->  __copy_from_user_inatomic(void *to, const void __user *from, unsigned long n)
->  {
-> -       kasan_check_write(to, n);
-> +       unsigned long res;
-> +
->         check_object_size(to, n, false);
-> -       return raw_copy_from_user(to, from, n);
-> +       instrument_copy_from_user_pre(to, n);
-> +       res = raw_copy_from_user(to, from, n);
-> +       instrument_copy_from_user_post(to, n, res);
-> +       return res;
->  }
+> KMSAN: nothing
 
-There is also something called strncpy_from_user() that has kasan
-instrumentation now:
-https://elixir.bootlin.com/linux/v5.5-rc6/source/lib/strncpy_from_user.c#L117
-
->  static __always_inline __must_check unsigned long
->  __copy_from_user(void *to, const void __user *from, unsigned long n)
->  {
-> +       unsigned long res;
-> +
->         might_fault();
-> -       kasan_check_write(to, n);
->         check_object_size(to, n, false);
-> -       return raw_copy_from_user(to, from, n);
-> +       instrument_copy_from_user_pre(to, n);
-> +       res = raw_copy_from_user(to, from, n);
-> +       instrument_copy_from_user_post(to, n, res);
-> +       return res;
->  }
->
->  /**
-> @@ -88,18 +96,26 @@ __copy_from_user(void *to, const void __user *from, unsigned long n)
->  static __always_inline __must_check unsigned long
->  __copy_to_user_inatomic(void __user *to, const void *from, unsigned long n)
->  {
-> -       kasan_check_read(from, n);
-> +       unsigned long res;
-> +
->         check_object_size(from, n, true);
-> -       return raw_copy_to_user(to, from, n);
-> +       instrument_copy_to_user_pre(from, n);
-> +       res = raw_copy_to_user(to, from, n);
-> +       instrument_copy_to_user_post(from, n, res);
-> +       return res;
->  }
->
->  static __always_inline __must_check unsigned long
->  __copy_to_user(void __user *to, const void *from, unsigned long n)
->  {
-> +       unsigned long res;
-> +
->         might_fault();
-> -       kasan_check_read(from, n);
->         check_object_size(from, n, true);
-> -       return raw_copy_to_user(to, from, n);
-> +       instrument_copy_to_user_pre(from, n);
-> +       res = raw_copy_to_user(to, from, n);
-> +       instrument_copy_to_user_post(from, n, res);
-> +       return res;
->  }
->
->  #ifdef INLINE_COPY_FROM_USER
-> @@ -109,8 +125,9 @@ _copy_from_user(void *to, const void __user *from, unsigned long n)
->         unsigned long res = n;
->         might_fault();
->         if (likely(access_ok(from, n))) {
-> -               kasan_check_write(to, n);
-> +               instrument_copy_from_user_pre(to, n);
->                 res = raw_copy_from_user(to, from, n);
-> +               instrument_copy_from_user_post(to, n, res);
->         }
->         if (unlikely(res))
->                 memset(to + (n - res), 0, res);
-> @@ -125,12 +142,15 @@ _copy_from_user(void *, const void __user *, unsigned long);
->  static inline __must_check unsigned long
->  _copy_to_user(void __user *to, const void *from, unsigned long n)
->  {
-> +       unsigned long res = n;
-> +
->         might_fault();
->         if (access_ok(to, n)) {
-> -               kasan_check_read(from, n);
-> -               n = raw_copy_to_user(to, from, n);
-> +               instrument_copy_to_user_pre(from, n);
-> +               res = raw_copy_to_user(to, from, n);
-> +               instrument_copy_to_user_post(from, n, res);
->         }
-> -       return n;
-> +       return res;
->  }
->  #else
->  extern __must_check unsigned long
-> diff --git a/lib/usercopy.c b/lib/usercopy.c
-> index cbb4d9ec00f2..1c20d4423b86 100644
-> --- a/lib/usercopy.c
-> +++ b/lib/usercopy.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -#include <linux/uaccess.h>
->  #include <linux/bitops.h>
-> +#include <linux/instrumented.h>
-> +#include <linux/uaccess.h>
->
->  /* out-of-line parts */
->
-> @@ -10,8 +11,9 @@ unsigned long _copy_from_user(void *to, const void __user *from, unsigned long n
->         unsigned long res = n;
->         might_fault();
->         if (likely(access_ok(from, n))) {
-> -               kasan_check_write(to, n);
-> +               instrument_copy_from_user_pre(to, n);
->                 res = raw_copy_from_user(to, from, n);
-> +               instrument_copy_from_user_post(to, n, res);
->         }
->         if (unlikely(res))
->                 memset(to + (n - res), 0, res);
-> @@ -23,12 +25,14 @@ EXPORT_SYMBOL(_copy_from_user);
->  #ifndef INLINE_COPY_TO_USER
->  unsigned long _copy_to_user(void __user *to, const void *from, unsigned long n)
->  {
-> +       unsigned long res = n;
->         might_fault();
->         if (likely(access_ok(to, n))) {
-> -               kasan_check_read(from, n);
-> -               n = raw_copy_to_user(to, from, n);
-> +               instrument_copy_to_user_pre(from, n);
-> +               res = raw_copy_to_user(to, from, n);
-> +               instrument_copy_to_user_post(from, n, res);
->         }
-> -       return n;
-> +       return res;
->  }
->  EXPORT_SYMBOL(_copy_to_user);
->  #endif
-> --
-> 2.25.0.341.g760bfbb309-goog
->
+KMSAN also has instrumentation in
+copy_to_user_page/copy_from_user_page. Do we need to do anything for
+KASAN/KCSAN for these functions?
