@@ -2,69 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7FC143131
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2020 18:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9C41431EC
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2020 20:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726982AbgATR7I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jan 2020 12:59:08 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:49074 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726642AbgATR7I (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 20 Jan 2020 12:59:08 -0500
-Received: from zn.tnic (p200300EC2F03FF0075FD4DB0C8DF3C59.dip0.t-ipconnect.de [IPv6:2003:ec:2f03:ff00:75fd:4db0:c8df:3c59])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2D4FA1EC08E5;
-        Mon, 20 Jan 2020 18:59:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1579543147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=E8yvJahz8u60P3zYVn0P6etm4lyGGmfJf6bH0Xyy7nU=;
-        b=XMd8vjuGkhMwuiJurJoolyqiOtsuPzlfQU9iSQRoOmrWlSkUGJb7hosQbL9t8FQ7PxTbpQ
-        nn4Vc78yUd31Ad58e/FLUN/VcuvyrOQ2n3W2x0sz9j4qUl0ivg4dxbMn/3PvPE2AyqacLa
-        OudmraXK5SPyti2iMRgwYV4piS2dsb8=
-Date:   Mon, 20 Jan 2020 18:59:01 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        linux-s390@vger.kernel.org, herbert@gondor.apana.org.au,
-        x86@kernel.org, linux-crypto@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 00/10] Impveovements for random.h/archrandom.h
-Message-ID: <20200120175901.GB576@zn.tnic>
-References: <20200110145422.49141-1-broonie@kernel.org>
- <20200110155153.GG19453@zn.tnic>
- <20200110170559.GA304349@mit.edu>
- <20200120172627.GH6852@sirena.org.uk>
+        id S1726586AbgATTDE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jan 2020 14:03:04 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:58153 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726112AbgATTDE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jan 2020 14:03:04 -0500
+Received: from mail-qt1-f177.google.com ([209.85.160.177]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MHGPA-1ipALF2U3E-00DGre; Mon, 20 Jan 2020 20:03:01 +0100
+Received: by mail-qt1-f177.google.com with SMTP id v25so614991qto.7;
+        Mon, 20 Jan 2020 11:03:01 -0800 (PST)
+X-Gm-Message-State: APjAAAU2b19EsYgjPqf3lWEury14h744bF3DovOfFzCgBvQyc5ygBq/O
+        pAbY0ppqjuFg5QdSF2GDwlPUaRpz4ILiGD0V6Lc=
+X-Google-Smtp-Source: APXvYqz35x39I8DSspW1D7zXoSgFG6f385p7mWbzgBb6GjESNlGfr5iF1XLATEUOO8X7/j+CYWdeJN7g8IvYvApiM0E=
+X-Received: by 2002:ac8:768d:: with SMTP id g13mr805093qtr.7.1579546980409;
+ Mon, 20 Jan 2020 11:03:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200120172627.GH6852@sirena.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200115165749.145649-1-elver@google.com> <CAK8P3a3b=SviUkQw7ZXZF85gS1JO8kzh2HOns5zXoEJGz-+JiQ@mail.gmail.com>
+ <CANpmjNOpTYnF3ssqrE_s+=UA-2MpfzzdrXoyaifb3A55_mc0uA@mail.gmail.com>
+ <CAK8P3a3WywSsahH2vtZ_EOYTWE44YdN+Pj6G8nt_zrL3sckdwQ@mail.gmail.com>
+ <CANpmjNMk2HbuvmN1RaZ=8OV+tx9qZwKyRySONDRQar6RCGM1SA@mail.gmail.com>
+ <CAK8P3a066Knr-KC2v4M8Dr1phr0Gbb2KeZZLQ7Ana0fkrgPDPg@mail.gmail.com>
+ <CANpmjNO395-atZXu_yEArZqAQ+ib3Ack-miEhA9msJ6_eJsh4g@mail.gmail.com>
+ <CANpmjNOH1h=txXnd1aCXTN8THStLTaREcQpzd5QvoXz_3r=8+A@mail.gmail.com>
+ <CAK8P3a0p9Y8080T-RR2pp-p2_A0FBae7zB-kSq09sMZ_X7AOhw@mail.gmail.com> <CANpmjNOUTed6FT8X0bUSc1tGBh3jrEJ0DRpQwBfoPF5ah8Wrhw@mail.gmail.com>
+In-Reply-To: <CANpmjNOUTed6FT8X0bUSc1tGBh3jrEJ0DRpQwBfoPF5ah8Wrhw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 20 Jan 2020 20:02:44 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a32sVU4umk2FLnWnMGMQxThvMHAKxVM+G4X-hMgpBsXMA@mail.gmail.com>
+Message-ID: <CAK8P3a32sVU4umk2FLnWnMGMQxThvMHAKxVM+G4X-hMgpBsXMA@mail.gmail.com>
+Subject: Re: [PATCH -rcu] asm-generic, kcsan: Add KCSAN instrumentation for bitops
+To:     Marco Elver <elver@google.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        christophe leroy <christophe.leroy@c-s.fr>,
+        Daniel Axtens <dja@axtens.net>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:jR7dToZSz+pkZ+H0k5vLn3WxHAvBzUvp3ljrXIGkzvRot+PDpsg
+ jvUS6yMJBrzIa5w8PoqfcIyUxp6R0ukVQsudQ5jcvbSZBzbkYiGpDO368uKbT3GS1zMTax6
+ fYr6mXoL9VkOH4vxVc/626eppN3uzhWad2gTfMiDZowwRgFPV25v52+xoRoMQwhXws8s4O6
+ XJlqCZts9DbDomGlf0i7A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:l3QBPowaTZQ=:sRbWnLFf27OK+UK7+9qpof
+ kwPt46XaHvZva95NukcvqRN8B+WTktgovYpCxLpjyzoybNq9aSo4NoTE8QmBoUZS1RmHPBN3O
+ JxuSWZwOcUWZcqjCmgwlDy5DyqJDaxkaPz/Nkgult+b7uI34ASguRqWm8dqFl7mm5sGqmi611
+ HfMxJJUOIFDrrF6j66MWYHe7WJVFbRjATPfrdN+eP9IU85Gt78j+vrpL4onL9FsJqmuu7mEQE
+ r6CbmFtYBc61T3+4ZfcoIdi0jxqcjbW6+cTwSwmhNbt5efjoxt1uXj8opXK8L4SDksSoi8HVl
+ fAlVXG7rKO05DiAS06MkyjbZe+jGNDYPevAFAOkxSIUrcIthNQaSBtFHhLzQa3Nod0Vgl2lUW
+ SMLHW53liptmhdTg0q4H8m5ChB9jWsVBRhvAbs6gvduiR/vq/goOgRKsr4AoDfXMmTwX7Ad6J
+ 1A8MuGFWykbHCnXp1OpPsG1A7DHwGt0A00wmobx5RbsZs81otdVXhWH1yo+3meC6aMDN9YLNp
+ KJswW9VlS/GYIjjv1KsGzn+pPNWxO+tHx8u9hRgZkDaB/F6u65dSDnnWrN7z00XA++XiOaoqW
+ XGQKTCYTokGcjDohE/nGDmTVXpP3MSR6tKLgly1p7mly017IANjzQtZPiAJMVpojVW8Kg/YMb
+ IA/A6xN+pNXterGSQo/Vm95Qxgq+PH7d68YGnXbRzLOiHhKVsT88gJrQFyI2W26ChyzBIZ4aP
+ Tj9K5CbGego3mfwnPMdfSTmATTp0bm3ESuGDdokiE6CCIDgmXHVyh85xewT3AoxxJFP4W8OBd
+ H898tlU9G2jc4aHY2LssA65PElWWQ1MfRAObEL+klzX2MphZ4oXhXqeAeJsNCryjxeA8V9z54
+ ucpDaNXlOUyuEr5Kn9fg==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 05:26:27PM +0000, Mark Brown wrote:
-> I think the important thing here is that *someone* takes the patches.
-> We've now got Ted and Borislav both saying they're OK applying the
-> patches, an additional proposal that Andrew takes the patches, nobody
-> saying anything negative about applying the patches and yet the patches
-> are not applied.  The random tree sounds like a sensible enough tree to
-> take this so if Ted picks them up perhaps that's most sensible?
+On Mon, Jan 20, 2020 at 4:11 PM Marco Elver <elver@google.com> wrote:
+> On Mon, 20 Jan 2020 at 15:40, Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Mon, Jan 20, 2020 at 3:23 PM Marco Elver <elver@google.com> wrote:
+> > > On Fri, 17 Jan 2020 at 14:14, Marco Elver <elver@google.com> wrote:
+> > > > On Fri, 17 Jan 2020 at 13:25, Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > > On Wed, Jan 15, 2020 at 9:50 PM Marco Elver <elver@google.com> wrote:
+> >
+> > > > > If you can't find any, I would prefer having the simpler interface
+> > > > > with just one set of annotations.
+> > > >
+> > > > That's fair enough. I'll prepare a v2 series that first introduces the
+> > > > new header, and then applies it to the locations that seem obvious
+> > > > candidates for having both checks.
+> > >
+> > > I've sent a new patch series which introduces instrumented.h:
+> > >    http://lkml.kernel.org/r/20200120141927.114373-1-elver@google.com
+> >
+> > Looks good to me, feel free to add
+> >
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> >
+> > if you are merging this through your own tree or someone else's,
+> > or let me know if I should put it into the asm-generic git tree.
+>
+> Thank you!  It seems there is still some debate around the user-copy
+> instrumentation.
+>
+> The main question we have right now is if we should add pre/post hooks
+> for them. Although in the version above I added KCSAN checks after the
+> user-copies, it seems maybe we want it before. I personally don't have
+> a strong preference, and wanted to err on the side of being more
+> conservative.
+>
+> If I send a v2, and it now turns out we do all the instrumentation
+> before the user-copies for KASAN and KCSAN, then we have a bunch of
+> empty hooks. However, for KMSAN we need the post-hook, at least for
+> copy_from_user. Do you mind a bunch of empty functions to provide
+> pre/post hooks for user-copies? Could the post-hooks be generally
+> useful for something else?
 
-Yes, Ted, pls pick them up so that we're done with this.
+I'd prefer not to add any empty hooks, let's do that once they
+are actually used.
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+      Arnd
