@@ -2,32 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E97721432DE
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2020 21:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8D714393C
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2020 10:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgATUYA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jan 2020 15:24:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33798 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726586AbgATUX7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 20 Jan 2020 15:23:59 -0500
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        id S1728831AbgAUJQI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jan 2020 04:16:08 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:41306 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbgAUJQH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jan 2020 04:16:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=LyuFNpAXFwCRQciuWpZEuClZCiBhfl/IXNpqcj5ve08=; b=BkLy0jiLon7chhIXqqOzzzgP0
+        OGa1wl43bmLxo30SES4dQs5uEFUD5np7nDMlTBVqRIoKnPnfq9mfW8i7dZ8nGIy8Pq2YRnFSEllG+
+        L5yL+dH1/WigcYzbYRhDRyTH2EpKwxojfsdYlesiMsPMnavRyxUNPvBC9se8kvXYMrSZXl+Ze3iuO
+        7pu902VrDsuN5S1o1gZqBos9F5rsYBVgFG+NkkDChX2YRR+KN37vkzRwJVv6sgDLWggikpPV2PD+g
+        8Lx/321hVttbQGi6X8DIz+aG5VWIPjjr+gVXalOQ8yB8rZuoY3en1eMdsUv3BC59+5x2/wPAvHetC
+        isYQLbwTQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1itpcm-0003XR-Jc; Tue, 21 Jan 2020 09:15:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 602D1217F4;
-        Mon, 20 Jan 2020 20:23:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579551839;
-        bh=MGYF9sxyULgvtOFmV1/7xXzuS/dRJ0cOB18po2SSB88=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Trz8UogvdPwi2ySUu9Nwbjk2CqLrbqnWjTsaoea8dGq5C83+UM6VoeRaX+AQNMkUp
-         SiXDMwHuve0psLIHdw4GzPXzs4DEjX/uLdXjOaZHmNw2lQy8w3j6DEckWRLepiYhG6
-         pUISqZizIio+gthN/zSK0TpC61CAB9lNZnhUyJLY=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 3A1093522745; Mon, 20 Jan 2020 12:23:59 -0800 (PST)
-Date:   Mon, 20 Jan 2020 12:23:59 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2BB0E30067C;
+        Tue, 21 Jan 2020 10:13:22 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3645F20983E34; Tue, 21 Jan 2020 10:15:01 +0100 (CET)
+Date:   Tue, 21 Jan 2020 10:15:01 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     Marco Elver <elver@google.com>, andreyknvl@google.com,
         glider@google.com, dvyukov@google.com, kasan-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, mark.rutland@arm.com,
@@ -39,48 +47,38 @@ Cc:     Marco Elver <elver@google.com>, andreyknvl@google.com,
         linux-arch@vger.kernel.org
 Subject: Re: [PATCH 3/5] asm-generic, kcsan: Add KCSAN instrumentation for
  bitops
-Message-ID: <20200120202359.GF2935@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
+Message-ID: <20200121091501.GF14914@hirez.programming.kicks-ass.net>
 References: <20200120141927.114373-1-elver@google.com>
  <20200120141927.114373-3-elver@google.com>
  <20200120144048.GB14914@hirez.programming.kicks-ass.net>
  <20200120162725.GE2935@paulmck-ThinkPad-P72>
  <20200120165223.GC14914@hirez.programming.kicks-ass.net>
+ <20200120202359.GF2935@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200120165223.GC14914@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200120202359.GF2935@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 05:52:23PM +0100, Peter Zijlstra wrote:
-> On Mon, Jan 20, 2020 at 08:27:25AM -0800, Paul E. McKenney wrote:
-> > On Mon, Jan 20, 2020 at 03:40:48PM +0100, Peter Zijlstra wrote:
-> > > On Mon, Jan 20, 2020 at 03:19:25PM +0100, Marco Elver wrote:
-> > > > Add explicit KCSAN checks for bitops.
-> > > > 
-> > > > Note that test_bit() is an atomic bitop, and we instrument it as such,
-> > > 
-> > > Well, it is 'atomic' in the same way that atomic_read() is. Both are
-> > > very much not atomic ops, but are part of an interface that facilitates
-> > > atomic operations.
-> > 
-> > True, but they all are either inline assembly or have either an
-> > implicit or explicit cast to volatile, so they could be treated
-> > the same as atomic_read(), correct?  If not, what am I missing?
-> 
-> Sure, but that is due to instrumentation requirements, not anything
-> else.
-> 
-> Also note the distinct lack of __test_bit(), to mirror the non-atomic
-> __set_bit() and __clear_bit().
+On Mon, Jan 20, 2020 at 12:23:59PM -0800, Paul E. McKenney wrote:
+> We also don't have __atomic_read() and __atomic_set(), yet atomic_read()
+> and atomic_set() are considered to be non-racy, right?
 
-OK, I will bite.  ;-)
+What is racy? :-) You can make data races with atomic_{read,set}() just
+fine.
 
-We also don't have __atomic_read() and __atomic_set(), yet atomic_read()
-and atomic_set() are considered to be non-racy, right?
+Anyway, traditionally we call the read-modify-write stuff atomic, not
+the trivial load-store stuff. The only reason we care about the
+load-store stuff in the first place is because C compilers are shit.
 
-							Thanx, Paul
+atomic_read() / test_bit() are just a load, all we need is the C
+compiler not to be an ass and split it. Yes, we've invented the term
+single-copy atomicity for that, but that doesn't make it more or less of
+a load.
+
+And exactly because it is just a load, there is no __test_bit(), which
+would be the exact same load.
