@@ -2,112 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5828144656
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2020 22:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0B81446E2
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2020 23:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728741AbgAUVTk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jan 2020 16:19:40 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:36778 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728748AbgAUVTk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jan 2020 16:19:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579641578;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hUDc746gEw7bmqdrDee21GPcvrO5Acs+G0v791qb43c=;
-        b=S9Yu3+P3dLrjAR0ppmzmmGFvZZLAxmuqWcSDg1CU4pamGDSk/tCUOFGOgKxI67dkp715zC
-        LoJjriDv/mt7c+B2cnmaUz5IPSURqu9taw+sXq0GbPc08LPUzCcChh4gIap8xLZRt8kit5
-        79JZzmnJiDIR5YucLWQf3zA8k7haDnI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-256-nWyzJNnJPCGv599a_xH9dg-1; Tue, 21 Jan 2020 16:19:36 -0500
-X-MC-Unique: nWyzJNnJPCGv599a_xH9dg-1
-Received: by mail-wr1-f72.google.com with SMTP id u18so1989075wrn.11
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2020 13:19:35 -0800 (PST)
+        id S1728927AbgAUWG3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jan 2020 17:06:29 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:51030 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728205AbgAUWG3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jan 2020 17:06:29 -0500
+Received: by mail-wm1-f65.google.com with SMTP id a5so4727993wmb.0
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2020 14:06:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3DHa7TnxbIOsmyeSZxXaUWK1Ell61s+NmMCLvxItjFo=;
+        b=wQLLblJDBIHGzkqNNorR8FPcykFhr9csTj6WWSAH5IRsQO+ZtETRbrf1zCbio9s6Tp
+         VJ6f1OhBz2uUkm/DKjedaIZ+ZI4nWJACl+4/QmUg0IC/wig2tnXf7ubrKoiyxDaE2xYh
+         u4zCSXxjdy+QP1EAPAS13so/dkuJKFRt6MCWhnQgoWEZn7wTFO0D0q3HzJkTFPFPGhcI
+         YYZPSXxMtKiBUPHVs8eoZhdfkaiQ4ik5Evniwp9z9KNLYguDPchSXt9nZJkxeRqGqNYo
+         CUAyPs7F0NyLbr+0eqplofWjsQ/0hVZ5GWiX4AKz/bnoFRGHYEmsU6p418Us3i+z7DFk
+         yJlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hUDc746gEw7bmqdrDee21GPcvrO5Acs+G0v791qb43c=;
-        b=bb9KXw9a7PnMwtv9gd1AWwRB0SFtnF7zipEb6yPATD/K93QJMJFquZZMimcUVOcuDe
-         xX7bNUYbiHAWQA+PWYWHSHPMG3r9BYzc2p3rDINjw9vRaeifRnuPKas4a4MfMkJnd70A
-         1UhdZUyT8tD6nb8XGtrNmp7WpZg2PMak41h/vHae0oYWWA4FLlWYxwLDVPmflRlv9Fve
-         5/EF+bFobGSUWHJlm/0PUtZFgfHcNMO2N3Kn1sg6w894mlU2Anr8GurnhcVmo3wgsbDK
-         dI+31+6TUbRi9VcEZ0OcqDAVgo/hdoqc4tBW77OkKSmya3Izow+/+tUKW6pnw3zKTqzU
-         Osdw==
-X-Gm-Message-State: APjAAAWqU2xPkHTxog2USgeP0pzb7NoeSunnodCaWwGHNE1oRUxorier
-        inaxPM6U8O0RyRydGIExFNqWJHwBNbeQOaSqAny9kfPIC620Sv1WjkJiTwdSardsvRDwt7WRoKu
-        jimcH64c2c04StOB+QzyYxg==
-X-Received: by 2002:a5d:6a02:: with SMTP id m2mr7108154wru.52.1579641574577;
-        Tue, 21 Jan 2020 13:19:34 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxoPnkxLxUGe7WRD6VylEoIv+x6W5+cow3h5Z9Uz8mj37YpcfxZ7pVN18YIIyxft0zVUg14Tg==
-X-Received: by 2002:a5d:6a02:: with SMTP id m2mr7108137wru.52.1579641574308;
-        Tue, 21 Jan 2020 13:19:34 -0800 (PST)
-Received: from x1.bristot.me ([83.136.205.253])
-        by smtp.gmail.com with ESMTPSA id v22sm872400wml.11.2020.01.21.13.19.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jan 2020 13:19:33 -0800 (PST)
-Subject: Re: [PATCH v8 4/5] locking/qspinlock: Introduce starvation avoidance
- into CNA
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Alex Kogan <alex.kogan@oracle.com>
-Cc:     linux@armlinux.org.uk, mingo@redhat.com, will.deacon@arm.com,
-        arnd@arndb.de, longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-References: <20191230194042.67789-1-alex.kogan@oracle.com>
- <20191230194042.67789-5-alex.kogan@oracle.com>
- <20200121132949.GL14914@hirez.programming.kicks-ass.net>
- <20200121135034.GA14946@hirez.programming.kicks-ass.net>
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-Message-ID: <e10414a6-dbfc-a666-18b8-a0499c93a203@redhat.com>
-Date:   Tue, 21 Jan 2020 22:19:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3DHa7TnxbIOsmyeSZxXaUWK1Ell61s+NmMCLvxItjFo=;
+        b=aeqX1qzdTH8Fx/1sjoW0njnfmqozbdNpVhwro2tT90TIAImuWAvkZ+LDuIEs/isLZc
+         U+kG77yrMyGRKEoZ49pVcMXKlpaXgvevm/HZXW6KPHqpFWVYw1auig+s87OtW/FfAd82
+         UcmdPC6ApUKSFz/CGbc8TElnRcfrdY1VmCTJZxvQxDPoY2HSAcWjj4Rhq9KcJ3PY36sB
+         XOvrz2wlZH/KEVx0dIdBulad9i/NkNPYzTfhOKX5K3KpxbbOIuxJigFvIRYJvEdNF/kD
+         qynvflnfJ579wlnhaZctcZcJo3eXXyQf1bH0DicSLPlv+Zn4sE5uCWFnCE9aG2HFKQr5
+         n8kw==
+X-Gm-Message-State: APjAAAX7YocHO/2eYnQhbQI+jKUY4QHNHJl6PZG3D6uxa2vQZGUhdWTZ
+        se+1W0NM6vSq537nju6JqZdhxiYAThcDRo3thY5IXQ==
+X-Google-Smtp-Source: APXvYqym5ElhGbj2TBisioR3/L296lisCvcxqTtBApfPRlGY3AwtbJjbfjivrUBRQ6X2b3l+gzox7owW5uYRlNE6kmA=
+X-Received: by 2002:a1c:44d5:: with SMTP id r204mr432732wma.122.1579644386652;
+ Tue, 21 Jan 2020 14:06:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200121135034.GA14946@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20191211184027.20130-1-catalin.marinas@arm.com> <20191211184027.20130-16-catalin.marinas@arm.com>
+In-Reply-To: <20191211184027.20130-16-catalin.marinas@arm.com>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Tue, 21 Jan 2020 14:06:14 -0800
+Message-ID: <CAMn1gO6dNi-97cG-a8-6PcauLy9xpRvG6JYdU0zyn9a_6tnyvA@mail.gmail.com>
+Subject: Re: [PATCH 15/22] arm64: mte: Add PROT_MTE support to mmap() and mprotect()
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/21/20 2:50 PM, Peter Zijlstra wrote:
-> On Tue, Jan 21, 2020 at 02:29:49PM +0100, Peter Zijlstra wrote:
->> On Mon, Dec 30, 2019 at 02:40:41PM -0500, Alex Kogan wrote:
->>
->>> +/*
->>> + * Controls the threshold for the number of intra-node lock hand-offs before
->>> + * the NUMA-aware variant of spinlock is forced to be passed to a thread on
->>> + * another NUMA node. By default, the chosen value provides reasonable
->>> + * long-term fairness without sacrificing performance compared to a lock
->>> + * that does not have any fairness guarantees. The default setting can
->>> + * be changed with the "numa_spinlock_threshold" boot option.
->>> + */
->>> +int intra_node_handoff_threshold __ro_after_init = 1 << 16;
->> There is a distinct lack of quantitative data to back up that
->> 'reasonable' claim there.
->>
->> Where is the table of inter-node latencies observed for the various
->> values tested, and on what criteria is this number deemed reasonable?
->>
->> To me, 64k lock hold times seems like a giant number, entirely outside
->> of reasonable.
-> Daniel, IIRC you just did a paper on constructing worst case latencies
-> from measuring pieces. Do you have data on average lock hold times?
-> 
+On Wed, Dec 11, 2019 at 10:44 AM Catalin Marinas
+<catalin.marinas@arm.com> wrote:
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 9442631fd4af..34bc9e0b4896 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -677,6 +677,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+>                 [ilog2(VM_MERGEABLE)]   = "mg",
+>                 [ilog2(VM_UFFD_MISSING)]= "um",
+>                 [ilog2(VM_UFFD_WP)]     = "uw",
+> +#ifdef CONFIG_ARM64_MTE
+> +               [ilog2(VM_MTE)]         = "mt",
 
-I am still writing the paper, but I do not have the (avg) lock times. It is it
-is in the TODO list, though!
+We should probably add an entry for VM_MTE_ALLOWED here as well.
 
--- Daniel
-
+Peter
