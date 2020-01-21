@@ -2,84 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0D0143E9C
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2020 14:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830CC143F4F
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2020 15:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729080AbgAUNuv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jan 2020 08:50:51 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:50982 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728932AbgAUNuv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jan 2020 08:50:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=RjUsqeJUUzUJuJcmpsSdcYGm0XwgRf/1551aZ5zeO3s=; b=RjMIrq2wAUkcmRdiBmTy7NcGK
-        5QtEMlFa32lozP7Jb5nLiZb/2904F3amrncL046uY2/QkmsePy6eurlt328MwWZKdQ2MTm6aSsOld
-        0PM2OZ1zHHsw1Bdaww8cj3JNqZ0OfTTISC6bQHl87U8NmJkpTdagE0u8DUyctShmE+P0zfp5tBtvm
-        q0ZZqPYaPpTS1y03H5Ph0uOipV2nAOynqXDrnR2CTalgWzkMjXtJMZPSMKQwl0Afxol6nc33q/jhF
-        SLxM/Eu3xVqnqxqC/ADaWa4BL5Va1Wybr+spaCET+wNzsBv12luA4HBkhkIeUrWPGmEEZXLdO+qtW
-        WYzq6t+TQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ittvR-0003vU-1M; Tue, 21 Jan 2020 13:50:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        id S1727817AbgAUOVK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jan 2020 09:21:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45332 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727508AbgAUOVK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 21 Jan 2020 09:21:10 -0500
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C7F8C305D3F;
-        Tue, 21 Jan 2020 14:48:55 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E9BBA20983FC0; Tue, 21 Jan 2020 14:50:34 +0100 (CET)
-Date:   Tue, 21 Jan 2020 14:50:34 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alex Kogan <alex.kogan@oracle.com>
-Cc:     linux@armlinux.org.uk, mingo@redhat.com, will.deacon@arm.com,
-        arnd@arndb.de, longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com, bristot@redhat.com
-Subject: Re: [PATCH v8 4/5] locking/qspinlock: Introduce starvation avoidance
- into CNA
-Message-ID: <20200121135034.GA14946@hirez.programming.kicks-ass.net>
-References: <20191230194042.67789-1-alex.kogan@oracle.com>
- <20191230194042.67789-5-alex.kogan@oracle.com>
- <20200121132949.GL14914@hirez.programming.kicks-ass.net>
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 80C6B217F4;
+        Tue, 21 Jan 2020 14:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579616469;
+        bh=d8N8bHZ6gdDEoq72Z0eXZ2581jVoflv+KRkpsia+jf0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=wQU1jn0f+AejKAp8s5GeUNVqP/8LaBtPd48e/iolHpmgJpHp/ooZAfw2WQjb86wDS
+         mdFBntGtw0ism+j4JSYEpc+jGoSB6Zg91mSfmgsusq6AwSuWZQWpezQO1f0FFT4+7V
+         H/nyp0F5+UCTbpc32OKHAcP90xtw2UILUTQJec2k=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 54B7F35227E4; Tue, 21 Jan 2020 06:21:09 -0800 (PST)
+Date:   Tue, 21 Jan 2020 06:21:09 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Marco Elver <elver@google.com>, andreyknvl@google.com,
+        glider@google.com, dvyukov@google.com, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
+        will@kernel.org, boqun.feng@gmail.com, arnd@arndb.de,
+        viro@zeniv.linux.org.uk, christophe.leroy@c-s.fr, dja@axtens.net,
+        mpe@ellerman.id.au, rostedt@goodmis.org, mhiramat@kernel.org,
+        mingo@kernel.org, christian.brauner@ubuntu.com,
+        daniel@iogearbox.net, cyphar@cyphar.com, keescook@chromium.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 3/5] asm-generic, kcsan: Add KCSAN instrumentation for
+ bitops
+Message-ID: <20200121142109.GQ2935@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200120141927.114373-1-elver@google.com>
+ <20200120141927.114373-3-elver@google.com>
+ <20200120144048.GB14914@hirez.programming.kicks-ass.net>
+ <20200120162725.GE2935@paulmck-ThinkPad-P72>
+ <20200120165223.GC14914@hirez.programming.kicks-ass.net>
+ <20200120202359.GF2935@paulmck-ThinkPad-P72>
+ <20200121091501.GF14914@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200121132949.GL14914@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200121091501.GF14914@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 21, 2020 at 02:29:49PM +0100, Peter Zijlstra wrote:
-> On Mon, Dec 30, 2019 at 02:40:41PM -0500, Alex Kogan wrote:
+On Tue, Jan 21, 2020 at 10:15:01AM +0100, Peter Zijlstra wrote:
+> On Mon, Jan 20, 2020 at 12:23:59PM -0800, Paul E. McKenney wrote:
+> > We also don't have __atomic_read() and __atomic_set(), yet atomic_read()
+> > and atomic_set() are considered to be non-racy, right?
 > 
-> > +/*
-> > + * Controls the threshold for the number of intra-node lock hand-offs before
-> > + * the NUMA-aware variant of spinlock is forced to be passed to a thread on
-> > + * another NUMA node. By default, the chosen value provides reasonable
-> > + * long-term fairness without sacrificing performance compared to a lock
-> > + * that does not have any fairness guarantees. The default setting can
-> > + * be changed with the "numa_spinlock_threshold" boot option.
-> > + */
-> > +int intra_node_handoff_threshold __ro_after_init = 1 << 16;
-> 
-> There is a distinct lack of quantitative data to back up that
-> 'reasonable' claim there.
-> 
-> Where is the table of inter-node latencies observed for the various
-> values tested, and on what criteria is this number deemed reasonable?
-> 
-> To me, 64k lock hold times seems like a giant number, entirely outside
-> of reasonable.
+> What is racy? :-) You can make data races with atomic_{read,set}() just
+> fine.
 
-Daniel, IIRC you just did a paper on constructing worst case latencies
-from measuring pieces. Do you have data on average lock hold times?
+Like "fairness", lots of definitions of "racy".  ;-)
+
+> Anyway, traditionally we call the read-modify-write stuff atomic, not
+> the trivial load-store stuff. The only reason we care about the
+> load-store stuff in the first place is because C compilers are shit.
+> 
+> atomic_read() / test_bit() are just a load, all we need is the C
+> compiler not to be an ass and split it. Yes, we've invented the term
+> single-copy atomicity for that, but that doesn't make it more or less of
+> a load.
+> 
+> And exactly because it is just a load, there is no __test_bit(), which
+> would be the exact same load.
+
+Very good!  Shouldn't KCSAN then define test_bit() as non-racy just as
+for atomic_read()?
+
+							Thanx, Paul
