@@ -2,152 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E36EE145C76
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2020 20:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D056145DBA
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2020 22:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbgAVTav (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jan 2020 14:30:51 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:49500 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbgAVTau (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jan 2020 14:30:50 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00MJSOLY013172;
-        Wed, 22 Jan 2020 19:29:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2019-08-05; bh=NWUObdwgZDzbSQPfNwPkqO4BXDviIlQVMJjazGC8iZI=;
- b=WblboZNmJ3T7EyFz0bU/La07yBbrviyMBLElM2gxIIjYpzinBGY4Q5e2k98xiUKKN8F2
- wXZSudBpGBeixGrpEZg3opwZ859Bfdw1gj+4Ktfwi8ZzpAvsHIogDHqkJhgww76nBHgS
- QOvtM9/RIUYrOnL59+9aRHWvkkL1jz+5j+6e2dK3IoxdU0Two7osf7KbDDJiOApa3xPm
- E8C8dNR4wiIGiE5eF9XkdhgdQbiH3NXaw63b0S5CKD+k3AeJKZpzmLnK28I7/COs2540
- jwOEg2AZFuj+CEhnALscVh4IRP7PrxEtJ7jowHd4Fz34bnjDMO9+2vXwNpTuHroyG+4k gg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2xktnrdshb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jan 2020 19:29:45 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00MJSfHr164521;
-        Wed, 22 Jan 2020 19:29:44 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2xppq18gyk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jan 2020 19:29:44 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00MJTenw028887;
-        Wed, 22 Jan 2020 19:29:40 GMT
-Received: from [10.39.195.152] (/10.39.195.152)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 22 Jan 2020 11:29:39 -0800
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH v9 0/5] Add NUMA-awareness to qspinlock
-From:   Alex Kogan <alex.kogan@oracle.com>
-In-Reply-To: <CAC4j=Y8rCeTX9oKKbh+dCdTP8Ud4hW1ybu+iE7t_nxMSYBOR5w@mail.gmail.com>
-Date:   Wed, 22 Jan 2020 14:29:36 -0500
-Cc:     linux@armlinux.org.uk, Peter Zijlstra <peterz@infradead.org>,
-        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
-        longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com, dave.dice@oracle.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        id S1728939AbgAVVVv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jan 2020 16:21:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:60730 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727590AbgAVVVu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 Jan 2020 16:21:50 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C69231B;
+        Wed, 22 Jan 2020 13:21:50 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F3353F52E;
+        Wed, 22 Jan 2020 13:21:49 -0800 (PST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4F71A184-42C0-4865-9AAA-79A636743C25@oracle.com>
-References: <20200115035920.54451-1-alex.kogan@oracle.com>
- <CAC4j=Y8rCeTX9oKKbh+dCdTP8Ud4hW1ybu+iE7t_nxMSYBOR5w@mail.gmail.com>
-To:     Lihao Liang <lihaoliang@google.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9508 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001220165
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9508 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001220165
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu " <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        =?UTF-8?q?Kristina=20Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v5 00/12] arm64: ARMv8.5-A: Branch Target Identification support
+Date:   Wed, 22 Jan 2020 21:21:32 +0000
+Message-Id: <20200122212144.6409-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Lihao.
+This series implements support for ARMv8.5-A Branch Target
+Identification (BTI), which is a control flow integrity protection
+feature introduced as part of the ARMv8.5-A extensions.
 
-> On Jan 22, 2020, at 6:45 AM, Lihao Liang <lihaoliang@google.com> =
-wrote:
->=20
-> Hi Alex,
->=20
-> On Wed, Jan 22, 2020 at 10:28 AM Alex Kogan <alex.kogan@oracle.com> =
-wrote:
->>=20
->> Summary
->> -------
->>=20
->> Lock throughput can be increased by handing a lock to a waiter on the
->> same NUMA node as the lock holder, provided care is taken to avoid
->> starvation of waiters on other NUMA nodes. This patch introduces CNA
->> (compact NUMA-aware lock) as the slow path for qspinlock. It is
->> enabled through a configuration option (NUMA_AWARE_SPINLOCKS).
->>=20
->=20
-> Thanks for your patches. The experimental results look promising!
->=20
-> I understand that the new CNA qspinlock uses randomization to achieve
-> long-term fairness, and provides the numa_spinlock_threshold parameter
-> for users to tune.
-This has been the case in the first versions of the series, but is not =
-true anymore.
-That is, the long-term fairness is achieved deterministically (and you =
-are correct=20
-that it is done through the numa_spinlock_threshold parameter).
+Changes:
 
-> As Linux runs extremely diverse workloads, it is not
-> clear how randomization affects its fairness, and how users with
-> different requirements are supposed to tune this parameter.
->=20
-> To this end, Will and I consider it beneficial to be able to answer =
-the
-> following question:
->=20
-> With different values of numa_spinlock_threshold and
-> SHUFFLE_REDUCTION_PROB_ARG, how long do threads running on different
-> sockets have to wait to acquire the lock?
-The SHUFFLE_REDUCTION_PROB_ARG parameter is intended for performance
-optimization only, and *does not* affect the long-term fairness (or, at =
-the=20
-very least, does not make it any worse). As Longman correctly pointed =
-out in=20
-his response to this email, the shuffle reduction optimization is =
-relevant only
-when the secondary queue is empty. In that case, CNA hands-off the lock
-exactly as MCS does, i.e., in the FIFO order. Note that when the =
-secondary
-queue is not empty, we do not call probably().
+v5:
+ - Changed a bunch of -EIO to -ENOEXEC in the ELF parsing code.
+ - Move PSR_BTYPE defines to UAPI.
+ - Use compat_user_mode() rather than open coding.
+ - Fix a typo s/BYTPE/BTYPE/ in syscall.c
+v4:
+ - Dropped patch fixing existing documentation as it has already been merged.
+ - Convert WARN_ON() to WARN_ON_ONCE() in "ELF: Add ELF program property
+   parsing support".
+ - Added display of guarded pages to ptdump.
+ - Updated for conversion of exception handling from assembler to C.
 
-> This is particularly relevant
-> in high contention situations when new threads keep arriving on the =
-same
-> socket as the lock holder.
-In this case, the lock will stay on the same NUMA node/socket for=20
-2^numa_spinlock_threshold times, which is the worst case scenario if we=20=
+Notes:
+ * GCC 9 can compile backwards-compatible BTI-enabled code with
+   -mbranch-protection=bti or -mbranch-protection=standard.
 
-consider the long-term fairness. And if we have multiple nodes, it will =
-take=20
-up to 2^numa_spinlock_threshold X (nr_nodes - 1) + nr_cpus_per_node
-lock transitions until any given thread will acquire the lock
-(assuming 2^numa_spinlock_threshold > nr_cpus_per_node).
+ * Binutils trunk supports the new ELF note, but this wasn't in a release
+   the last time I posted this series.  (The situation _might_ have changed
+   in the meantime...)
 
-Hopefully, it addresses your concern. Let me know if you have any =
-further=20
-questions.
+   Creation of a BTI-enabled binary requires _everything_ linked in to
+   be BTI-enabled.  For now ld --force-bti can be used to override this,
+   but some things may break until the required C library support is in
+   place.
 
-Best regards,
-=E2=80=94 Alex
+   There is no straightforward way to mark a .s file as BTI-enabled:
+   scraping the output from gcc -S works as a quick hack for now.
+
+   readelf -n can be used to examing the program properties in an ELF
+   file.
+
+ * Runtime mmap() and mprotect() can be used to enable BTI on a
+   page-by-page basis using the new PROT_BTI, but the code in the
+   affected pages still needs to be written or compiled to contain the
+   appopriate BTI landing pads.
+
+
+Dave Martin (11):
+  ELF: UAPI and Kconfig additions for ELF program properties
+  ELF: Add ELF program property parsing support
+  mm: Reserve asm-generic prot flag 0x10 for arch use
+  arm64: Basic Branch Target Identification support
+  elf: Allow arch to tweak initial mmap prot flags
+  arm64: elf: Enable BTI at exec based on ELF program properties
+  arm64: BTI: Decode BYTPE bits when printing PSTATE
+  arm64: unify native/compat instruction skipping
+  arm64: traps: Shuffle code to eliminate forward declarations
+  arm64: BTI: Reset BTYPE when skipping emulated instructions
+  KVM: arm64: BTI: Reset BTYPE when skipping emulated instructions
+
+Mark Brown (1):
+  arm64: mm: Display guarded pages in ptdump
+
+ Documentation/arm64/cpu-feature-registers.rst |   2 +
+ Documentation/arm64/elf_hwcaps.rst            |   4 +
+ arch/arm64/Kconfig                            |  29 ++++
+ arch/arm64/include/asm/cpucaps.h              |   3 +-
+ arch/arm64/include/asm/cpufeature.h           |   6 +
+ arch/arm64/include/asm/elf.h                  |  50 ++++++
+ arch/arm64/include/asm/esr.h                  |   2 +-
+ arch/arm64/include/asm/exception.h            |   1 +
+ arch/arm64/include/asm/hwcap.h                |   1 +
+ arch/arm64/include/asm/kvm_emulate.h          |   6 +-
+ arch/arm64/include/asm/mman.h                 |  37 +++++
+ arch/arm64/include/asm/pgtable-hwdef.h        |   1 +
+ arch/arm64/include/asm/pgtable.h              |   2 +-
+ arch/arm64/include/asm/ptrace.h               |   1 +
+ arch/arm64/include/asm/sysreg.h               |   4 +
+ arch/arm64/include/uapi/asm/hwcap.h           |   1 +
+ arch/arm64/include/uapi/asm/mman.h            |   9 ++
+ arch/arm64/include/uapi/asm/ptrace.h          |   9 ++
+ arch/arm64/kernel/cpufeature.c                |  33 ++++
+ arch/arm64/kernel/cpuinfo.c                   |   1 +
+ arch/arm64/kernel/entry-common.c              |  11 ++
+ arch/arm64/kernel/process.c                   |  36 ++++-
+ arch/arm64/kernel/ptrace.c                    |   2 +-
+ arch/arm64/kernel/signal.c                    |  16 ++
+ arch/arm64/kernel/syscall.c                   |  18 +++
+ arch/arm64/kernel/traps.c                     | 127 +++++++--------
+ arch/arm64/mm/dump.c                          |   5 +
+ fs/Kconfig.binfmt                             |   6 +
+ fs/binfmt_elf.c                               | 145 +++++++++++++++++-
+ fs/compat_binfmt_elf.c                        |   4 +
+ include/linux/elf.h                           |  43 ++++++
+ include/linux/mm.h                            |   3 +
+ include/uapi/asm-generic/mman-common.h        |   1 +
+ include/uapi/linux/elf.h                      |  11 ++
+ 34 files changed, 555 insertions(+), 75 deletions(-)
+ create mode 100644 arch/arm64/include/asm/mman.h
+ create mode 100644 arch/arm64/include/uapi/asm/mman.h
+
+-- 
+2.20.1
 
