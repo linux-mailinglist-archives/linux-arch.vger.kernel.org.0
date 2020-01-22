@@ -2,130 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7B2145AC4
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2020 18:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AFE145BB0
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2020 19:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729147AbgAVRZM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jan 2020 12:25:12 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:51466 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725883AbgAVRZL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jan 2020 12:25:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579713910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VHvnfO/LwUwnWaPYXVcUEbXAoTeNUswOZpwb/FvyBhE=;
-        b=CQPAe3XltXfGW6y9WZaOfuUk6PbLVU0sFt4PFbL+qrtrezYWs4+oqTkfQqu2P1+nFqoRTb
-        TY0K3ww0rZgKo/35t0YiewGpLbA9tPgLDW4JbnorAjprPlaZGiCMUzTBIbQ/OEVnyWP6kl
-        iM5gQ2Pkhj2QNGc4z4ZLRViiZOl7NIE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-146-ckjOS28dPFaMDyNWePyqDQ-1; Wed, 22 Jan 2020 12:25:06 -0500
-X-MC-Unique: ckjOS28dPFaMDyNWePyqDQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 492019920A;
-        Wed, 22 Jan 2020 17:25:03 +0000 (UTC)
-Received: from llong.remote.csb (dhcp-17-59.bos.redhat.com [10.18.17.59])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 61CEC87023;
-        Wed, 22 Jan 2020 17:24:59 +0000 (UTC)
-Subject: Re: [PATCH v9 0/5] Add NUMA-awareness to qspinlock
-To:     Lihao Liang <lihaoliang@google.com>,
-        Alex Kogan <alex.kogan@oracle.com>
-Cc:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
-        will.deacon@arm.com, arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com, dave.dice@oracle.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        Will Deacon <will@kernel.org>
-References: <20200115035920.54451-1-alex.kogan@oracle.com>
- <CAC4j=Y8rCeTX9oKKbh+dCdTP8Ud4hW1ybu+iE7t_nxMSYBOR5w@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <4e15fa1d-9540-3274-502a-4195a0d46f63@redhat.com>
-Date:   Wed, 22 Jan 2020 12:24:58 -0500
+        id S1725924AbgAVSp2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jan 2020 13:45:28 -0500
+Received: from mga14.intel.com ([192.55.52.115]:4667 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725884AbgAVSp2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 Jan 2020 13:45:28 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jan 2020 10:45:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,350,1574150400"; 
+   d="scan'208";a="229454588"
+Received: from ray.jf.intel.com (HELO [10.7.201.139]) ([10.7.201.139])
+  by orsmga006.jf.intel.com with ESMTP; 22 Jan 2020 10:45:27 -0800
+Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
+To:     Sandipan Das <sandipan@linux.ibm.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
+        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1579507768.git.sandipan@linux.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <3ceb2814-f8b0-ec6b-3c24-ec72297a99f5@intel.com>
+Date:   Wed, 22 Jan 2020 10:45:27 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <CAC4j=Y8rCeTX9oKKbh+dCdTP8Ud4hW1ybu+iE7t_nxMSYBOR5w@mail.gmail.com>
+In-Reply-To: <cover.1579507768.git.sandipan@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/22/20 6:45 AM, Lihao Liang wrote:
-> Hi Alex,
->
-> On Wed, Jan 22, 2020 at 10:28 AM Alex Kogan <alex.kogan@oracle.com> wro=
-te:
->> Summary
->> -------
->>
->> Lock throughput can be increased by handing a lock to a waiter on the
->> same NUMA node as the lock holder, provided care is taken to avoid
->> starvation of waiters on other NUMA nodes. This patch introduces CNA
->> (compact NUMA-aware lock) as the slow path for qspinlock. It is
->> enabled through a configuration option (NUMA_AWARE_SPINLOCKS).
->>
-> Thanks for your patches. The experimental results look promising!
->
-> I understand that the new CNA qspinlock uses randomization to achieve
-> long-term fairness, and provides the numa_spinlock_threshold parameter
-> for users to tune. As Linux runs extremely diverse workloads, it is not
-> clear how randomization affects its fairness, and how users with
-> different requirements are supposed to tune this parameter.
->
-> To this end, Will and I consider it beneficial to be able to answer the
-> following question:
->
-> With different values of numa_spinlock_threshold and
-> SHUFFLE_REDUCTION_PROB_ARG, how long do threads running on different
-> sockets have to wait to acquire the lock? This is particularly relevant
-> in high contention situations when new threads keep arriving on the sam=
-e
-> socket as the lock holder.
->
-> In this email, I try to provide some formal analysis to address this
-> question. Let's assume the probability for the lock to stay on the
-> same socket is *at least* p, which corresponds to the probability for
-> the function probably(unsigned int num_bits) in the patch to return *fa=
-lse*,
-> where SHUFFLE_REDUCTION_PROB_ARG is passed as the value of num_bits to =
-the
-> function.
+Still doesn't build for me:
 
-That is not strictly true from my understanding of the code. The
-probably() function does not come into play if a secondary queue is
-present. Also calling cna_scan_main_queue() doesn't guarantee that a
-waiter in the same node can be found. So the simple mathematical
-analysis isn't that applicable in this case. One will have to do an
-actual simulation to find out what the actual behavior will be.
-
-The comment in the code states that:
-
-/*
-=C2=A0* Controls the probability for enabling the scan of the main queue =
-when
-=C2=A0* the secondary queue is empty. The chosen value reduces the amount=
- of
-=C2=A0* unnecessary shuffling of threads between the two waiting queues w=
-hen
-=C2=A0* the contention is low, while responding fast enough and enabling
-=C2=A0* the shuffling when the contention is high.
-=C2=A0*/
-#define SHUFFLE_REDUCTION_PROB_ARG=C2=A0 (7)
-
-Cheers,
-Longman
-
+> # make
+> make --no-builtin-rules ARCH=x86_64 -C ../../../.. headers_install
+> make[1]: Entering directory '/home/dave/linux.git'
+>   INSTALL ./usr/include
+> make[1]: Leaving directory '/home/dave/linux.git'
+> make: *** No rule to make target '/home/dave/linux.git/tools/testing/selftests/vm/protection_keys_32', needed by 'all'.  Stop.
 
 
