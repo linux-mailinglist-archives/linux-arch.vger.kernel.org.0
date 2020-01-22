@@ -2,117 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 998BE144E1E
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2020 09:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F098144E75
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2020 10:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726194AbgAVI6Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jan 2020 03:58:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51684 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725862AbgAVI6Z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 22 Jan 2020 03:58:25 -0500
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        id S1729012AbgAVJQM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jan 2020 04:16:12 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:51022 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbgAVJQL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jan 2020 04:16:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=de9Krq9WPfYisRqIZvIrOmUj6iWBtQLyqA73nPcoF8w=; b=l9JX2nkNY2fxHyIdZU7hasx5C
+        PBAR9hJawsYgfFkrmRqc/Rjh1IZYJO9JKWNA/kTgBrTBI6NJYM1mVz+5892V502NDKCzWe+a/cedz
+        IgBMO7Lak5koQUkdc6XRGW+Cxgx1IFlGMhxK/BDZHDEqSp+VIgX8KoG+Q98hR69t91IxUo8mH6ICV
+        QdbYVrcxHkR7rxlE9HZKz8cX2eIjfOEg1Jla68Zfw8fLDY8bhsUfe8uqKlNmrBU+fVsNKRpsWJCnC
+        3VLMaxDYrVEZeFvBf9Wy6GOW/953cYk8n8ZDqUzwmfq/SUg9RjFEsy13DG2O3uC7fXfzf8eaW2eDb
+        Uhla+mRVA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iuC73-0002ue-Uc; Wed, 22 Jan 2020 09:15:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8A0542253D;
-        Wed, 22 Jan 2020 08:58:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579683503;
-        bh=wYfcRaLJtEbKOeSJp7ItR4eKrQug0zW9UUl6qHernP4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oKakU8GByrZCSyz/lp4L7EWEwgj4wGOJ0MiaU0u/6ItkamUgJaDGJIa3LpGcFOQAz
-         7iV8+yNHR0KUR9v7iY5R0Fyt3hKLJBcbbz6cuqFNugxPBUcgcyEJHPzizZSpcwa19R
-         R7FB7VvMAUYdGy6k/fp4nO2uE8tC5IPlsDo/+ER4=
-Date:   Wed, 22 Jan 2020 08:58:17 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alex Kogan <alex.kogan@oracle.com>, linux-arch@vger.kernel.org,
-        guohanjun@huawei.com, arnd@arndb.de, dave.dice@oracle.com,
-        jglauber@marvell.com, x86@kernel.org, will.deacon@arm.com,
-        linux@armlinux.org.uk, steven.sistare@oracle.com,
-        linux-kernel@vger.kernel.org, rahul.x.yadav@oracle.com,
-        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, longman@redhat.com,
-        tglx@linutronix.de, daniel.m.jordan@oracle.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 3/5] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-Message-ID: <20200122085816.GB15537@willie-the-truck>
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D3ADD305D3F;
+        Wed, 22 Jan 2020 10:14:07 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5E84920983E34; Wed, 22 Jan 2020 10:15:47 +0100 (CET)
+Date:   Wed, 22 Jan 2020 10:15:47 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alex Kogan <alex.kogan@oracle.com>
+Cc:     linux@armlinux.org.uk, mingo@redhat.com, will.deacon@arm.com,
+        arnd@arndb.de, longman@redhat.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        guohanjun@huawei.com, jglauber@marvell.com,
+        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        dave.dice@oracle.com, rahul.x.yadav@oracle.com
+Subject: Re: [PATCH v7 1/5] locking/qspinlock: Rename mcs lock/unlock macros
+ and make them more generic
+Message-ID: <20200122091547.GU14879@hirez.programming.kicks-ass.net>
 References: <20191125210709.10293-1-alex.kogan@oracle.com>
- <20191125210709.10293-4-alex.kogan@oracle.com>
- <20200121202919.GM11457@worktop.programming.kicks-ass.net>
+ <20191125210709.10293-2-alex.kogan@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200121202919.GM11457@worktop.programming.kicks-ass.net>
+In-Reply-To: <20191125210709.10293-2-alex.kogan@oracle.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 21, 2020 at 09:29:19PM +0100, Peter Zijlstra wrote:
-> 
-> various notes and changes in the below.
-> 
-> ---
-> 
-> Index: linux-2.6/kernel/locking/qspinlock.c
-> ===================================================================
-> --- linux-2.6.orig/kernel/locking/qspinlock.c
-> +++ linux-2.6/kernel/locking/qspinlock.c
-> @@ -598,10 +598,10 @@ EXPORT_SYMBOL(queued_spin_lock_slowpath)
->  #define _GEN_CNA_LOCK_SLOWPATH
->  
->  #undef pv_wait_head_or_lock
-> -#define pv_wait_head_or_lock		cna_pre_scan
-> +#define pv_wait_head_or_lock		cna_wait_head_or_lock
->  
->  #undef try_clear_tail
-> -#define try_clear_tail			cna_try_change_tail
-> +#define try_clear_tail			cna_try_clear_tail
->  
->  #undef mcs_pass_lock
->  #define mcs_pass_lock			cna_pass_lock
-> Index: linux-2.6/kernel/locking/qspinlock_cna.h
-> ===================================================================
-> --- linux-2.6.orig/kernel/locking/qspinlock_cna.h
-> +++ linux-2.6/kernel/locking/qspinlock_cna.h
-> @@ -8,37 +8,37 @@
->  /*
->   * Implement a NUMA-aware version of MCS (aka CNA, or compact NUMA-aware lock).
->   *
-> - * In CNA, spinning threads are organized in two queues, a main queue for
-> + * In CNA, spinning threads are organized in two queues, a primary queue for
->   * threads running on the same NUMA node as the current lock holder, and a
-> - * secondary queue for threads running on other nodes. Schematically, it
-> - * looks like this:
-> + * secondary queue for threads running on other nodes. Schematically, it looks
-> + * like this:
->   *
->   *    cna_node
-> - *   +----------+    +--------+        +--------+
-> - *   |mcs:next  | -> |mcs:next| -> ... |mcs:next| -> NULL      [Main queue]
-> - *   |mcs:locked| -+ +--------+        +--------+
-> + *   +----------+     +--------+         +--------+
-> + *   |mcs:next  | --> |mcs:next| --> ... |mcs:next| --> NULL  [Primary queue]
-> + *   |mcs:locked| -.  +--------+         +--------+
->   *   +----------+  |
-> - *                 +----------------------+
-> - *                                        \/
-> + *                 `----------------------.
-> + *                                        v
->   *                 +--------+         +--------+
-> - *                 |mcs:next| -> ...  |mcs:next|          [Secondary queue]
-> + *                 |mcs:next| --> ... |mcs:next|            [Secondary queue]
->   *                 +--------+         +--------+
->   *                     ^                    |
-> - *                     +--------------------+
-> + *                     `--------------------'
->   *
-> - * N.B. locked = 1 if secondary queue is absent. Othewrise, it contains the
-> + * N.B. locked := 1 if secondary queue is absent. Othewrise, it contains the
+On Mon, Nov 25, 2019 at 04:07:05PM -0500, Alex Kogan wrote:
 
-If we're redoing the comment, please can you s/Othewrise/Otherwise/ at the
-same time? It catches me every time I read it!
+> --- a/arch/arm/include/asm/mcs_spinlock.h
+> +++ b/arch/arm/include/asm/mcs_spinlock.h
+> @@ -6,7 +6,7 @@
+>  #include <asm/spinlock.h>
+>  
+>  /* MCS spin-locking. */
+> -#define arch_mcs_spin_lock_contended(lock)				\
+> +#define arch_mcs_spin_lock(lock)				\
+>  do {									\
+>  	/* Ensure prior stores are observed before we enter wfe. */	\
+>  	smp_mb();							\
+> @@ -14,9 +14,9 @@ do {									\
+>  		wfe();							\
+>  } while (0)								\
+>  
+> -#define arch_mcs_spin_unlock_contended(lock)				\
+> +#define arch_mcs_pass_lock(lock, val)					\
+>  do {									\
+> -	smp_store_release(lock, 1);					\
+> +	smp_store_release((lock), (val));				\
+>  	dsb_sev();							\
+>  } while (0)
 
-Will
+So I hate those names; it used to be clear this was the contended path,
+not so anymore. arch_mcs_spin_lock() in particular is grossly misnamed
+now.
+
+'s/arch_mcs_spin_lock/arch_mcs_spin_wait/g' could perhaps work, if you
+really want to get rid of the _contended suffix.
+
+Also, pass_lock seems unfortunately named...
