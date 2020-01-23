@@ -2,88 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 139B9146362
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 09:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0830146403
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 10:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbgAWIXN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jan 2020 03:23:13 -0500
-Received: from foss.arm.com ([217.140.110.172]:35958 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726061AbgAWIXN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Jan 2020 03:23:13 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4AADB1FB;
-        Thu, 23 Jan 2020 00:23:12 -0800 (PST)
-Received: from [10.162.16.32] (p8cg001049571a15.blr.arm.com [10.162.16.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA1773F6C4;
-        Thu, 23 Jan 2020 00:26:43 -0800 (PST)
-Subject: Re: [PATCH 0/2] mm/thp: rework the pmd protect changing flow
-To:     Xuefeng Wang <wxf.wang@hisilicon.com>, catalin.marinas@arm.com,
-        will@kernel.org, mark.rutland@arm.com, arnd@arndb.de,
-        akpm@linux-foundation.org
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        chenzhou10@huawei.com
-References: <20200123075514.15142-1-wxf.wang@hisilicon.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <50493410-c44c-7ef0-81f9-d4ce9a525c1f@arm.com>
-Date:   Thu, 23 Jan 2020 13:54:32 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726061AbgAWJBM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jan 2020 04:01:12 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:60352 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725785AbgAWJBL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jan 2020 04:01:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ZO2+biof4EL4C/JTzti+vPwupIT1oX/9/8bYDrArCwQ=; b=NOiIWQWR4GnTdEVaJdQR3fftc
+        2cjR9yhlWoh9F+xe7DPXmdBijCqW1eXE8n5Fvs/tpQU5tjazIKyXL7ozieETUP8D7R2Dr52zTYZxr
+        P/gUBWd02yvOYvrmHlHZAQBDFPQHdNFALsPqjjJj346oGnEuLC8ye6YplJxt91+stCTMCRXavRPnA
+        HDLYjxi9LLgx4ck9ovojPNc9iu6QmqJDymrRomPMUDquZklmJPPX0yYRZRvACzenYgm41Rx1LaLgA
+        PUF1NFgWuRJPJdX25fpYDxfHwEcyY85OTcn6+gGC1zLeO88BR9EM2Lhck1X3rsq9cPaXXeJRgd1XY
+        0j/R7gpyg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iuYLx-0002NM-GD; Thu, 23 Jan 2020 09:00:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 52282304121;
+        Thu, 23 Jan 2020 09:58:58 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3D19D20983FC2; Thu, 23 Jan 2020 10:00:38 +0100 (CET)
+Date:   Thu, 23 Jan 2020 10:00:38 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alex Kogan <alex.kogan@oracle.com>
+Cc:     linux@armlinux.org.uk, mingo@redhat.com, will.deacon@arm.com,
+        arnd@arndb.de, longman@redhat.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        guohanjun@huawei.com, jglauber@marvell.com,
+        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        dave.dice@oracle.com, rahul.x.yadav@oracle.com
+Subject: Re: [PATCH v7 3/5] locking/qspinlock: Introduce CNA into the slow
+ path of qspinlock
+Message-ID: <20200123090038.GD14946@hirez.programming.kicks-ass.net>
+References: <20191125210709.10293-1-alex.kogan@oracle.com>
+ <20191125210709.10293-4-alex.kogan@oracle.com>
+ <20200121202919.GM11457@worktop.programming.kicks-ass.net>
+ <20200122095127.GC14946@hirez.programming.kicks-ass.net>
+ <20200122170456.GY14879@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20200123075514.15142-1-wxf.wang@hisilicon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200122170456.GY14879@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Wed, Jan 22, 2020 at 06:04:56PM +0100, Peter Zijlstra wrote:
+> +/*
+> + * cna_splice_head -- splice the entire secondary queue onto the head of the
+> + * primary queue.
+> + */
+> +static cna_splice_head(struct qspinlock *lock, u32 val,
+> +		       struct mcs_spinlock *node, struct mcs_spinlock *next)
+> +{
+> +	struct mcs_spinlock *head_2nd, *tail_2nd;
+> +
+> +	tail_2nd = decode_tail(node->locked);
+> +	head_2nd = tail_2nd->next;
+> +
+> +	if (lock) {
 
+That should be: if (!next) {
 
-On 01/23/2020 01:25 PM, Xuefeng Wang wrote:
-> On KunPeng920 board. When changing permission of a large range region,
-> pmdp_invalidate() takes about 65% in profile (with hugepages) in JIT tool.
-> Kernel will flush tlb twice: first flush happens in pmdp_invalidate, second
-> flush happens at the end of change_protect_range(). The first pmdp_invalidate
-> is not necessary if the hardware support atomic pmdp changing. The atomic
-> changing pimd to zero can prevent the hardware from update asynchronous.
-> So reconstruct it and remove the first pmdp_invalidate. And the second tlb
-> flush can make sure the new tlb entry valid.
-> 
-> This patch series add a pmdp_modify_prot transaction abstraction firstly.
-> Then add pmdp_modify_prot_start() in arm64, which uses pmdp_huge_get_and_clear()
-> to atomically fetch the pmd and zero the entry.
+> +		u32 new = ((struct cna_node *)tail_2nd)->encoded_tail | _Q_LOCKED_VAL;
+> +		if (!atomic_try_cmpxchg_relaxed(&lock->val, &val, new))
+> +			return NULL;
+> +
+> +		/*
+> +		 * The moment we've linked the primary tail we can race with
+> +		 * the WRITE_ONCE(prev->next, node) store from new waiters.
+> +		 * That store must win.
+> +		 */
 
-There is a comment section in change_huge_pmd() which details how clearing
-the PMD entry there (in prot_numa case) can potentially race with another
-concurrent madvise(MADV_DONTNEED, ..) call. Here is the comment block for
-reference.
+And that still is a shit comment; I'll go try again.
 
-        /*
-         * In case prot_numa, we are under down_read(mmap_sem). It's critical
-         * to not clear pmd intermittently to avoid race with MADV_DONTNEED
-         * which is also under down_read(mmap_sem):
-         *
-         *      CPU0:                           CPU1:
-         *                              change_huge_pmd(prot_numa=1)
-         *                               pmdp_huge_get_and_clear_notify()
-         * madvise_dontneed()
-         *  zap_pmd_range()
-         *   pmd_trans_huge(*pmd) == 0 (without ptl)
-         *   // skip the pmd
-         *                               set_pmd_at();
-         *                               // pmd is re-established
-         *
-         * The race makes MADV_DONTNEED miss the huge pmd and don't clear it
-         * which may break userspace.
-         *
-         * pmdp_invalidate() is required to make sure we don't miss
-         * dirty/young flags set by hardware.
-         */
-
-By defining the new override with pmdp_huge_get_and_clear(), are not we
-now exposed to above race condition ?
-
-- Anshuman
+> +		cmpxchg_relaxed(&tail_2nd->next, head_2nd, next);
+> +	} else {
+> +		tail_2nd->next = next;
+> +	}
+> +
+> +	return head_2nd;
+> +}
