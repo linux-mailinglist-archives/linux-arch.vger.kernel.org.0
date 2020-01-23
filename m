@@ -2,161 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F34147185
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 20:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C95147170
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 20:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728853AbgAWTKy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jan 2020 14:10:54 -0500
-Received: from mga06.intel.com ([134.134.136.31]:9851 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728709AbgAWTKy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Jan 2020 14:10:54 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jan 2020 11:06:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,354,1574150400"; 
-   d="scan'208";a="251070651"
-Received: from viggo.jf.intel.com (HELO localhost.localdomain) ([10.54.77.144])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Jan 2020 11:06:05 -0800
-Subject: [PATCH 4/5] mm: remove arch_bprm_mm_init() hook
-To:     linux-kernel@vger.kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>, peterz@infradead.org,
-        luto@kernel.org, x86@kernel.org, torvalds@linux-foundation.org,
-        linux-arch@vger.kernel.org, benh@kernel.crashing.org,
-        paulus@samba.org, mpe@ellerman.id.au, jdike@addtoit.com,
-        richard@nod.at, anton.ivanov@cambridgegreys.com, gxt@pku.edu.cn,
-        akpm@linux-foundation.org
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-Date:   Thu, 23 Jan 2020 11:05:03 -0800
-References: <20200123190456.8E05ADE6@viggo.jf.intel.com>
-In-Reply-To: <20200123190456.8E05ADE6@viggo.jf.intel.com>
-Message-Id: <20200123190503.133804C8@viggo.jf.intel.com>
+        id S1728890AbgAWTIL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jan 2020 14:08:11 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:35137 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728709AbgAWTIL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jan 2020 14:08:11 -0500
+Received: by mail-pf1-f194.google.com with SMTP id i23so1978879pfo.2
+        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2020 11:08:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LXXh4Z7Ys4UonyudB0qYzr3yB1ZLKukDbIA0KFF43hk=;
+        b=AaYrW19Ss69F9E1/H3AHuUOsXUSL1pMRLiv4/8/2feYyQMaur+/l+RTK515Q6+w1HB
+         OdbzJBYMq9JygXFkBEU9OsWn6j5Em5CQvkwytpc/3Bc9V3cDllMLMHITXX0wJ/UKO0OA
+         +C5D3mq/goGsiHmMH8RbG9wbxEQRZHAWmhRJpwM6Ir64dS8twmemFTkIEuQV2aCh0UuJ
+         bkuLnldRhXxrZ9HqFuALtL7uoZLX4ps+X2LMqS1whdbUZudjGwDYtKUHnvIXMTYdGSeQ
+         0XgPDrZzs0Y13/BYmpTUJMen8HEv28n3DooMRIZRF0vS5w2haz3PXi1oPcXEkdRKJEEM
+         vBfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LXXh4Z7Ys4UonyudB0qYzr3yB1ZLKukDbIA0KFF43hk=;
+        b=rEqunVMN8qHy0eHC/XhsyA65UIOIxL2aa1nDoj9Jh1+BKLHHA1X613f6dlTJ88WTXH
+         5AiF8X2DpdPVlFYBus/ZHAwfGjGzYWdVft5RNo/ymBwXhiNcOOOSS2mgmOC1ZXTVC/ah
+         5Q9ZKCRlMUId03l3HWcPUq8A+WwWNzzUZTh7oh/YpxOd5S3zLJeAmspKpCUdvpgkZTeK
+         05bEW8NFRarAdKFcHU68rKyRhPvQUGrg7PhAGbExDk0p63Zk7EvMYCXtPynOo/4oJycf
+         WGOzMn1OT0BQ4FdNOjgxjFJQlS1g8ETKbi4MBCUZCQY7fg4SCGh72A+n8mcx9htq1WGc
+         cBfg==
+X-Gm-Message-State: APjAAAVEBRhXBKZBhzUBkzbzKXySaHmaK4ukU7hxuZ9P0JTWeTv7/V+5
+        jft+31RJPzv4HjrhJy4jkAamxppweC9HF+kI7qAmQg==
+X-Google-Smtp-Source: APXvYqz8KLcolmk/IP6V5UclMlJHiLMP87nUmm4I4ijn01gQ/jYgQFAoiKDyYTcvXiv35zPHbqyKQyESA9/VD8VA5vM=
+X-Received: by 2002:aa7:946a:: with SMTP id t10mr8713703pfq.165.1579806490507;
+ Thu, 23 Jan 2020 11:08:10 -0800 (PST)
+MIME-Version: 1.0
+References: <20200123153341.19947-1-will@kernel.org> <20200123153341.19947-3-will@kernel.org>
+In-Reply-To: <20200123153341.19947-3-will@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 23 Jan 2020 11:07:59 -0800
+Message-ID: <CAKwvOdm2snorniFunMF=0nDH8-RFwm7wtjYK_Tcwkd+JZinYPg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] netfilter: Avoid assigning 'const' pointer to
+ non-const pointer
+To:     Will Deacon <will@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Jan 23, 2020 at 7:33 AM Will Deacon <will@kernel.org> wrote:
+>
+> nf_remove_net_hook() uses WRITE_ONCE() to assign a 'const pointer to a
+> 'non-const' pointer. Cleanups to the implementation of WRITE_ONCE() mean
+> that this will give rise to a compiler warning, just like a plain old
+> assignment would do:
+>
+>   | In file included from ./include/linux/export.h:43,
+>   |                  from ./include/linux/linkage.h:7,
+>   |                  from ./include/linux/kernel.h:8,
+>   |                  from net/netfilter/core.c:9:
+>   | net/netfilter/core.c: In function =E2=80=98nf_remove_net_hook=E2=80=
+=99:
+>   | ./include/linux/compiler.h:216:30: warning: assignment discards =E2=
+=80=98const=E2=80=99 qualifier from pointer target type [-Wdiscarded-qualif=
+iers]
+>   |   *(volatile typeof(x) *)&(x) =3D (val);  \
+>   |                               ^
+>   | net/netfilter/core.c:379:3: note: in expansion of macro =E2=80=98WRIT=
+E_ONCE=E2=80=99
+>   |    WRITE_ONCE(orig_ops[i], &dummy_ops);
+>   |    ^~~~~~~~~~
+>
+> Follow the pattern used elsewhere in this file and add a cast to 'void *'
+> to squash the warning.
+>
+> Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+> Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
+> Cc: Florian Westphal <fw@strlen.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Signed-off-by: Will Deacon <will@kernel.org>
+> ---
+>  net/netfilter/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/netfilter/core.c b/net/netfilter/core.c
+> index 78f046ec506f..3ac7c8c1548d 100644
+> --- a/net/netfilter/core.c
+> +++ b/net/netfilter/core.c
+> @@ -376,7 +376,7 @@ static bool nf_remove_net_hook(struct nf_hook_entries=
+ *old,
+>                 if (orig_ops[i] !=3D unreg)
+>                         continue;
+>                 WRITE_ONCE(old->hooks[i].hook, accept_all);
+> -               WRITE_ONCE(orig_ops[i], &dummy_ops);
+> +               WRITE_ONCE(orig_ops[i], (void *)&dummy_ops);
 
-From: Dave Hansen <dave.hansen@linux.intel.com>
+Good thing it's the variable being modified was not declared const; I
+get spooked when I see -Wdiscarded-qualifiers because of Section
+6.7.3.6 of the ISO C11 draft spec:
 
-MPX is being removed from the kernel due to a lack of support
-in the toolchain going forward (gcc).
+```
+If an attempt is made to modify an object defined with a
+const-qualified type through use
+of an lvalue with non-const-qualified type, the behavior is undefined.
+If an attempt is
+made to refer to an object defined with a volatile-qualified type
+through use of an lvalue
+with non-volatile-qualified type, the behavior is undefined.133)
 
-arch_bprm_mm_init() is used at execve() time.  The only non-stub
-implementation is on x86 for MPX.  Remove the hook entirely from
-all architectures and generic code.
+133) This applies to those objects that behave as if they were defined
+with qualified types, even if they are
+never actually defined as objects in the program (such as an object at
+a memory-mapped input/output
+address).
+```
 
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: x86@kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-arch@vger.kernel.org
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Jeff Dike <jdike@addtoit.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Guan Xuetao <gxt@pku.edu.cn>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
----
+Which is about the modification of a const-declared variable (explicit
+UB which Clang actively exploits), and doesn't apply in this case.  I
+agree that this is the best way to fix this due to the use of typeof()
+and it's semantics of dropping qualifiers; declaring `dummy_ops` as
+non-const would be another, but that is worse IMO.  Thanks for the
+patch.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
- b/arch/powerpc/include/asm/mmu_context.h   |    5 -----
- b/arch/um/include/asm/mmu_context.h        |    5 -----
- b/arch/unicore32/include/asm/mmu_context.h |    5 -----
- b/arch/x86/include/asm/mmu_context.h       |    6 ------
- b/fs/exec.c                                |    1 -
- b/include/asm-generic/mm_hooks.h           |    5 -----
- 6 files changed, 27 deletions(-)
+>                 return true;
+>         }
+>
+> --
+> 2.25.0.341.g760bfbb309-goog
+>
 
-diff -puN arch/powerpc/include/asm/mmu_context.h~mpx-remove-generic-mm arch/powerpc/include/asm/mmu_context.h
---- a/arch/powerpc/include/asm/mmu_context.h~mpx-remove-generic-mm	2020-01-23 10:41:07.054942434 -0800
-+++ b/arch/powerpc/include/asm/mmu_context.h	2020-01-23 10:41:07.068942434 -0800
-@@ -238,11 +238,6 @@ static inline void arch_unmap(struct mm_
- 		mm->context.vdso_base = 0;
- }
- 
--static inline void arch_bprm_mm_init(struct mm_struct *mm,
--				     struct vm_area_struct *vma)
--{
--}
--
- #ifdef CONFIG_PPC_MEM_KEYS
- bool arch_vma_access_permitted(struct vm_area_struct *vma, bool write,
- 			       bool execute, bool foreign);
-diff -puN arch/um/include/asm/mmu_context.h~mpx-remove-generic-mm arch/um/include/asm/mmu_context.h
---- a/arch/um/include/asm/mmu_context.h~mpx-remove-generic-mm	2020-01-23 10:41:07.056942434 -0800
-+++ b/arch/um/include/asm/mmu_context.h	2020-01-23 10:41:07.068942434 -0800
-@@ -25,11 +25,6 @@ static inline void arch_unmap(struct mm_
- 			unsigned long start, unsigned long end)
- {
- }
--static inline void arch_bprm_mm_init(struct mm_struct *mm,
--				     struct vm_area_struct *vma)
--{
--}
--
- static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
- 		bool write, bool execute, bool foreign)
- {
-diff -puN arch/unicore32/include/asm/mmu_context.h~mpx-remove-generic-mm arch/unicore32/include/asm/mmu_context.h
---- a/arch/unicore32/include/asm/mmu_context.h~mpx-remove-generic-mm	2020-01-23 10:41:07.058942434 -0800
-+++ b/arch/unicore32/include/asm/mmu_context.h	2020-01-23 10:41:07.068942434 -0800
-@@ -89,11 +89,6 @@ static inline void arch_unmap(struct mm_
- {
- }
- 
--static inline void arch_bprm_mm_init(struct mm_struct *mm,
--				     struct vm_area_struct *vma)
--{
--}
--
- static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
- 		bool write, bool execute, bool foreign)
- {
-diff -puN arch/x86/include/asm/mmu_context.h~mpx-remove-generic-mm arch/x86/include/asm/mmu_context.h
---- a/arch/x86/include/asm/mmu_context.h~mpx-remove-generic-mm	2020-01-23 10:41:07.060942434 -0800
-+++ b/arch/x86/include/asm/mmu_context.h	2020-01-23 10:41:07.069942434 -0800
-@@ -272,12 +272,6 @@ static inline bool is_64bit_mm(struct mm
- }
- #endif
- 
--static inline void arch_bprm_mm_init(struct mm_struct *mm,
--		struct vm_area_struct *vma)
--{
--	mpx_mm_init(mm);
--}
--
- static inline void arch_unmap(struct mm_struct *mm, unsigned long start,
- 			      unsigned long end)
- {
-diff -puN fs/exec.c~mpx-remove-generic-mm fs/exec.c
---- a/fs/exec.c~mpx-remove-generic-mm	2020-01-23 10:41:07.062942434 -0800
-+++ b/fs/exec.c	2020-01-23 10:41:07.069942434 -0800
-@@ -273,7 +273,6 @@ static int __bprm_mm_init(struct linux_b
- 		goto err;
- 
- 	mm->stack_vm = mm->total_vm = 1;
--	arch_bprm_mm_init(mm, vma);
- 	up_write(&mm->mmap_sem);
- 	bprm->p = vma->vm_end - sizeof(void *);
- 	return 0;
-diff -puN include/asm-generic/mm_hooks.h~mpx-remove-generic-mm include/asm-generic/mm_hooks.h
---- a/include/asm-generic/mm_hooks.h~mpx-remove-generic-mm	2020-01-23 10:41:07.064942434 -0800
-+++ b/include/asm-generic/mm_hooks.h	2020-01-23 10:41:07.069942434 -0800
-@@ -22,11 +22,6 @@ static inline void arch_unmap(struct mm_
- {
- }
- 
--static inline void arch_bprm_mm_init(struct mm_struct *mm,
--				     struct vm_area_struct *vma)
--{
--}
--
- static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
- 		bool write, bool execute, bool foreign)
- {
-_
+
+--=20
+Thanks,
+~Nick Desaulniers
