@@ -2,96 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C242314728C
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 21:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25CD1472AA
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 21:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727141AbgAWU0K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jan 2020 15:26:10 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:40984 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726167AbgAWU0K (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Jan 2020 15:26:10 -0500
-Received: from zn.tnic (p200300EC2F095B007058F63913B24194.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:5b00:7058:f639:13b2:4194])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 35E531EC027A;
-        Thu, 23 Jan 2020 21:26:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1579811169;
+        id S1728984AbgAWUjL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jan 2020 15:39:11 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:53952 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728792AbgAWUjL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jan 2020 15:39:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579811950;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=9e5q8s9ezZPm2KWvMrhW3LKKbMdfqiNQymQ7YnxMmWo=;
-        b=ZnC+lvNP0ACUTWtquqJY+aMTN6/TEgm/fOSYTydwRQwKF7AM+1Av6CH7QQ6JUiLzNb1BGa
-        mdfx/BsGGUILqni3j84UPY9fTwsLwTJ4igYQnPmRE/qqQ1yRHLKX/SBd+VZKHIx3YGR/AC
-        EqXGtTB022GNbL6Hjb8InvyOGnY+te0=
-Date:   Thu, 23 Jan 2020 21:26:00 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Lutomirski <luto@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Guan Xuetao <gxt@pku.edu.cn>
-Subject: Re: [PATCH 0/5] x86: finish the MPX removal process
-Message-ID: <20200123202600.GG10328@zn.tnic>
-References: <20200123190456.8E05ADE6@viggo.jf.intel.com>
- <CAHk-=wgLR5JnaBgCtg0-AAxtdN3=4=LMp6-0212608=vbmCAxg@mail.gmail.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MyE9Ytq4amd8dy1aNSoOTSin79NmbQ0RcZM9I95mUT0=;
+        b=STJAmv29aw/1UJ5kiPoVoiX31pHlUVqSiD3QvSucw6+MOPoQ/LsXdhOqYdH3dKd2eEl6aI
+        +HsKMftT4pwm5x0vc0MCJvj36xW2uK/gnqB/UHpkEEd83NL6TpIQO1XjtuyG1Gsz3OK50U
+        65AZ8Ktj012bFhWLYkHrtTX6HxccPOc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-274-D5EjJrCwNdypAXS4I0YCEQ-1; Thu, 23 Jan 2020 15:39:06 -0500
+X-MC-Unique: D5EjJrCwNdypAXS4I0YCEQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 08E1F14E2;
+        Thu, 23 Jan 2020 20:39:04 +0000 (UTC)
+Received: from llong.remote.csb (dhcp-17-59.bos.redhat.com [10.18.17.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 50FE185741;
+        Thu, 23 Jan 2020 20:39:01 +0000 (UTC)
+Subject: Re: [PATCH v9 4/5] locking/qspinlock: Introduce starvation avoidance
+ into CNA
+From:   Waiman Long <longman@redhat.com>
+To:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
+        peterz@infradead.org, mingo@redhat.com, will.deacon@arm.com,
+        arnd@arndb.de, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        guohanjun@huawei.com, jglauber@marvell.com
+Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        dave.dice@oracle.com
+References: <20200115035920.54451-1-alex.kogan@oracle.com>
+ <20200115035920.54451-5-alex.kogan@oracle.com>
+ <f5e31716-d687-f64c-0fc5-f1c9b539c4ff@redhat.com>
+Organization: Red Hat
+Message-ID: <5f865b62-4867-2c7b-715a-0605759e647f@redhat.com>
+Date:   Thu, 23 Jan 2020 15:39:00 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <f5e31716-d687-f64c-0fc5-f1c9b539c4ff@redhat.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgLR5JnaBgCtg0-AAxtdN3=4=LMp6-0212608=vbmCAxg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 11:26:38AM -0800, Linus Torvalds wrote:
-> On Thu, Jan 23, 2020 at 11:23 AM Dave Hansen
-> <dave.hansen@linux.intel.com> wrote:
-> >
-> > I'd _rather_ this go in via the x86 tree, but I'm not picky.
+On 1/23/20 2:55 PM, Waiman Long wrote:
+> Playing with lock event counts, I would like you to change the meaning
+> intra_count parameter that you are tracking. Instead of tracking the
+> number of times a lock is passed to a waiter of the same node
+> consecutively, I would like you to track the number of times the head
+> waiter in the secondary queue has given up its chance to acquire the
+> lock because a later waiter has jumped the queue and acquire the lock
+> before it. This value determines the worst case latency that a secondary
+> queue waiter can experience. So
 
-Any particular reason why?
+Well, that is not strictly true as a a waiter in the middle of the
+secondary queue can go back and fro between the queues for a number of
+times. Of course, if we can ensure that when a FLUSH_SECONDARY_QUEUE is
+issued, those waiters that were in the secondary queue won't be put back
+into the secondary queue again. The parameter will then really determine
+the worst case latency.
 
-I mean, I don't care a whole lot either - I just don't see the point,
-see below.
+One way to do it is to store the tail of the secondary queue into the
+CNA node and passed it down the queue until it matches the current
+encoded tail. That will require changing both numa_node and intra_count
+into u16 to squeeze out space for another u32.
 
-> I have no strong feelings either way. I'll happily pull this tree for
-> the 5.6 merge window directly from you, or get it as part of one of
-> the x86 -tip pull requests.
-> 
-> Up to you and the -tip maintainers, really. Thomas/Ingo/Borislav?
+That will also make the code a bit easier to analyze.
 
-My reasoning to suggest to go directly to you is that there's
-practically not a whole lotta sense to add a separate branch to tip,
-merge Dave's tree and have a merge commit of the mpx branch only which
-you then merge into your master.
+Cheers,
+Longman
 
-Or I can apply each patch separately and then send you that branch so
-that there's no pointless merge commit in the history before you merge
-it but we get the same if you merge Dave's branch directly...
-
-Oh and btw: I ran a bunch of build smoke tests today of the mpx removal
-branch with tip/master merged in and except for a trivial include fix,
-there were no issues.
-
-But if someone points out a valid argument why it should go through tip,
-I'll gladly do it.
-
-Thx guys.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
