@@ -2,99 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE981470FF
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 19:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C26B2147116
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 19:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728803AbgAWSpU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jan 2020 13:45:20 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43035 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727022AbgAWSpU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jan 2020 13:45:20 -0500
-Received: by mail-pf1-f195.google.com with SMTP id x6so1930618pfo.10
-        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2020 10:45:19 -0800 (PST)
+        id S1728816AbgAWSsC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jan 2020 13:48:02 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:38328 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728792AbgAWSsC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jan 2020 13:48:02 -0500
+Received: by mail-lf1-f67.google.com with SMTP id r14so3137164lfm.5
+        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2020 10:48:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uvsi3+mVRugxOCmIL81uU90/b28J/511mNG/ZrCHXHA=;
-        b=ToaFsl9G1rGPH6lAtDVZr8Oaf9j7/1qd9QX6XKweW63AEwNAI3TZBjgIWkg78QTkoQ
-         5NmMT4+6HP8VbbljIG7r9SHWggAETrPh9wqEYEHzoaNjGip0j6I9C9ha46HGXtcNioxJ
-         YlUaEbzH2m3KjCIN7z0mcVzW/J/Xi1JN7jkawQxCcRDfdoBpDGhbRZGdUvXyeiCyKo1f
-         wV8YWAXwj4KEUSWtkq7Gq3dqjX2YfORkOX67a07l4ZYeUpAZxEtQIRj3SKlhU/RR9L3w
-         UNCked2iDLQ+0Hn2IuxGfTvvQEDcKJNLyG+VEK2wi9Htl/hEnLhsH9I4kgJaEr9joRJp
-         r2Kg==
+        bh=nTTlf7PIq8m+h1b8hl1eM7lP8o081tv0+h5Byplabe4=;
+        b=Mj9KYt/E2aNDAWdYyMNCrPSCFRO71sOFNKIv1qcIG2H25vJy2SyD3sMLVq4FaDcfeP
+         iGlcEsouR1fuzQs9IjFsmMH6TyLgOGNtzw0PWZ+6esf3f+uNHjTwy2QjoAL8divZL0PF
+         0AN44j8uLfXOosmSCqaAgRkchGVu+6EMdfKNs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uvsi3+mVRugxOCmIL81uU90/b28J/511mNG/ZrCHXHA=;
-        b=nbnoompiR5wu7I48IMAgtYhcJHhwVYB6JgxoziQgHgCzl6O+Be8GETLMgVLJ7IhunG
-         gEqLs48UNTK49BhC+eYVoc4o5TK2ZKdJApdN1tp0ULKp20G8NmhyYGiODAM26y8f1VUf
-         6MWbGT0LWu0cYBuyV8rHciF9EjN70luuhmYcsgiZTUjC3FTtfk+YizVING7ZIzcHXbln
-         E6gTz0NSdGm5N39GnWmo7VvDd4nfQ+zikoBNHCkiquSwekFuW1Mh5DKYChrinRhwcXOT
-         3pbQdzcClvbxkOi4eYBNrrli6wcIt006FXghZrWlAsIUJk+dAb2uG+aG4XWAtAymHDmK
-         GVkw==
-X-Gm-Message-State: APjAAAUre6V+wKj2XzrzX30CJViorU0ulsbckHwJxssjogu4pcGJy8Tq
-        mMQNAl2Zi/oPUWlOslgkiuwlFRH3S/+6byIm1QNpaw==
-X-Google-Smtp-Source: APXvYqyMHe8Nhew2tJBHBmTJOvyY2uoTq78E8EWJb0A/uv7w1kn1M4Th80XISCR7i0gIfcuuv6uzV9EEjHNjJkWphzo=
-X-Received: by 2002:a63:590e:: with SMTP id n14mr210602pgb.10.1579805119253;
- Thu, 23 Jan 2020 10:45:19 -0800 (PST)
+        bh=nTTlf7PIq8m+h1b8hl1eM7lP8o081tv0+h5Byplabe4=;
+        b=BuxBJuZ+7CwDWIaUUFGxcw9zunNvbRkXS1vjRvvkOI/kRHQkmwHvxUlwPPJjHPYWGG
+         aGTMPV+okFD8Uff/qYjlw3LmG1zSX0Dq8vR5HY8J2UmtBQ5Y3fVw1vx37ttpoa1TGP/p
+         A8JE6I1pLk0KX7dvWW+cGrCS3/IvKG5fq6/9TQ5wlQrarAehktj9vdE6wsrlFVxoBCFW
+         BEvVCEaceY6nAL7miOohp6V9Bjjp0W9KlNlV16Qe0LJQj6l6NZKUEW0MnzVvK36XogwL
+         EDL7rdbUgmYciQVDaBi4MMNQ2m2n/94g5EOYn/vKEBO1lK8hrJZxCaUeWubH7yj3sTjF
+         rT6A==
+X-Gm-Message-State: APjAAAXiDXYfynZEZK27f6QC8QSyvgKgjgJx7u7tv5NhdjqLWIRp5Jx4
+        M5bBO33tgDo1s3qtfOuGLsSfMjJgmu8=
+X-Google-Smtp-Source: APXvYqyo1i2JayVM7AD9IKNJ3dDL+K8zWZcv9BqjeDt7tvs5dpnzYv64n0kw8vBzgnwu4SxXxwUsoQ==
+X-Received: by 2002:a19:7b0a:: with SMTP id w10mr5510246lfc.90.1579805279345;
+        Thu, 23 Jan 2020 10:47:59 -0800 (PST)
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
+        by smtp.gmail.com with ESMTPSA id u15sm1514225lfl.87.2020.01.23.10.47.58
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jan 2020 10:47:58 -0800 (PST)
+Received: by mail-lf1-f44.google.com with SMTP id z26so3097454lfg.13
+        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2020 10:47:58 -0800 (PST)
+X-Received: by 2002:a19:4849:: with SMTP id v70mr5482335lfa.30.1579805278133;
+ Thu, 23 Jan 2020 10:47:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20200123153341.19947-1-will@kernel.org> <26ad7a8a975c4e06b44a3184d7c86e5f@AcuMS.aculab.com>
- <20200123171641.GC20126@willie-the-truck> <2bfe2be6da484f15b0d229dd02d16ae6@AcuMS.aculab.com>
-In-Reply-To: <2bfe2be6da484f15b0d229dd02d16ae6@AcuMS.aculab.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 23 Jan 2020 10:45:08 -0800
-Message-ID: <CAKwvOdkFGTeVQPm8Z3Y7mQ-=6d5CFxmEJ+hBb8ns2r2H1cb0hQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
-To:     David Laight <David.Laight@aculab.com>,
-        Will Deacon <will@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
+References: <70f99f7474826883877e84f93224e937d9c974de.1579767339.git.christophe.leroy@c-s.fr>
+In-Reply-To: <70f99f7474826883877e84f93224e937d9c974de.1579767339.git.christophe.leroy@c-s.fr>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 23 Jan 2020 10:47:42 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgcm5JzyacekDGQ4Ocoe-F5it-7-sbgU8oPnhwnSH3KAA@mail.gmail.com>
+Message-ID: <CAHk-=wgcm5JzyacekDGQ4Ocoe-F5it-7-sbgU8oPnhwnSH3KAA@mail.gmail.com>
+Subject: Re: [PATCH] lib: Reduce user_access_begin() boundaries in
+ strncpy_from_user() and strnlen_user()
+To:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        linux-arch <linux-arch@vger.kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-MM <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 9:32 AM David Laight <David.Laight@aculab.com> wrote:
+On Thu, Jan 23, 2020 at 12:34 AM Christophe Leroy
+<christophe.leroy@c-s.fr> wrote:
 >
-> From: Will Deacon
-> > Sent: 23 January 2020 17:17
-> >
-> > I think it depends how much we care about those older compilers. My series
-> > first moves it to "Good luck mate, you're on your own" and then follows up
+> The range passed to user_access_begin() by strncpy_from_user() and
+> strnlen_user() starts at 'src' and goes up to the limit of userspace
+> allthough reads will be limited by the 'count' param.
+>
+> On 32 bits powerpc (book3s/32) access has to be granted for each 256Mbytes
+> segment and the cost increases with the number of segments to unlock.
+>
+> Limit the range with 'count' param.
 
-I wish the actual warning was worded that way. :P
+Ack. I'm tempted to take this for 5.5 too, just so that the
+unquestionably trivial fixes are in that baseline, and the
+infrastructure is ready for any architecture that has issues like
+this.
 
-> > with a "Let me take that off you it's sharp".
+Adding 'linux-arch' to the participants, to see if other architectures
+are at all looking at actually implementing the whole
+user_access_begin/end() dance too..
 
-> Oh - and I need to find a newer compiler :-(
-
-What distro are you using? Does it have a package for a newer
-compiler?  I'm honestly curious about what policies if any the kernel
-has for supporting developer's toolchains from their distributions.
-(ie. Arnd usually has pretty good stats what distro's use which
-version of GCC and are still supported; Do we strive to not break
-them? Is asking kernel devs to compile their own toolchain too much to
-ask?  Is it still if they're using really old distro's/toolchains that
-we don't want to support?  Do we survey kernel devs about what they're
-using?).  Apologies if this is already documented somewhere, but if
-not I'd eventually like to brainstorm and write it down somewhere in
-the tree.  Documentation/process/changes.rst doesn't really answer the
-above questions, I think.
-
--- 
-Thanks,
-~Nick Desaulniers
+               Linus
