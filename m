@@ -2,33 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F11146FC2
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 18:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF895147031
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 18:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727590AbgAWRcM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 23 Jan 2020 12:32:12 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:20905 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727296AbgAWRcL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Jan 2020 12:32:11 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-253-NQWIpuFmOiaG-mYGmDywkg-1; Thu, 23 Jan 2020 17:32:07 +0000
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 23 Jan 2020 17:32:06 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 23 Jan 2020 17:32:06 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Will Deacon' <will@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
+        id S1727022AbgAWR7Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jan 2020 12:59:24 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:37842 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727278AbgAWR7Y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jan 2020 12:59:24 -0500
+Received: by mail-lf1-f66.google.com with SMTP id b15so3018883lfc.4
+        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2020 09:59:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zdFWsGYP+/xokr+Jc40CYV8I3yOJTReQRwsZpMafAIU=;
+        b=eYCXt9KuCjSWsxKT/LS/oRbB0oCaiHnqj4H6RJ7QasqoCu3gRsmkjJE0XL+lw9FM4Z
+         Utq4fAiOjg0fs8R1CeLtZy+7kX5ZX+QDtdxpqRuAg+ACSnejnWkdBli2iyS3I+Y8xyg8
+         2ry2FHh/zgNd68ry0JVzr2TgceUB6QJzCCqn4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zdFWsGYP+/xokr+Jc40CYV8I3yOJTReQRwsZpMafAIU=;
+        b=mC24Z5DFPsBeiLbcf9yga55FaQT4HR7i5R8dPbIxkcxqM29Mft4vEe93sLI1bgVcmn
+         zL4Z1vaR84JaNWQKbMEnyXkmAvZlImUUqD+ImZc5oVcQGk2qZ5FYKUWS/PO8fIOjrpvY
+         LVdymn/qQiZ1UeGQfcDGcgHUltaIDXp04cnQf9UsgMIlbvjxfXIGfepc8hlKbCkDI4G5
+         CFND4DIdKueEbDcdH3rf4KQ4Yp08GX3jv0VdNZN2klt5wX+yB6boObfGpbs70GKydQER
+         vlunAV3fFBMQPAK4UbXy/olwLqo+jYpvjRt6L7onZhJno/rJpwmBI2NHtseyPVfwS6R7
+         1f5Q==
+X-Gm-Message-State: APjAAAUYhAm/dBNVlVWyEDSAATCP+u5L1hx1AUhkP+lcIK8R2bfg6vpM
+        9EazMGqPLWNSBAWQ85AZ3QxNNFlUXGM=
+X-Google-Smtp-Source: APXvYqwZfWlpYHMfjPtdXaTaAYE/GFByw5g0jRP7dxS2oNdPvtV+izfULGqQEkd0rxT6B0qJQLmYWg==
+X-Received: by 2002:a19:f10e:: with SMTP id p14mr5245983lfh.3.1579802360809;
+        Thu, 23 Jan 2020 09:59:20 -0800 (PST)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id i1sm1668982lji.71.2020.01.23.09.59.19
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jan 2020 09:59:19 -0800 (PST)
+Received: by mail-lj1-f172.google.com with SMTP id n18so4555946ljo.7
+        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2020 09:59:19 -0800 (PST)
+X-Received: by 2002:a2e:9510:: with SMTP id f16mr23701334ljh.249.1579802359199;
+ Thu, 23 Jan 2020 09:59:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20200123153341.19947-1-will@kernel.org>
+In-Reply-To: <20200123153341.19947-1-will@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 23 Jan 2020 09:59:03 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjC2EDquO8_kzc-FHOGGjgODOLKjswYGJAMh58zTkyX3w@mail.gmail.com>
+Message-ID: <CAHk-=wjC2EDquO8_kzc-FHOGGjgODOLKjswYGJAMh58zTkyX3w@mail.gmail.com>
+Subject: Re: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
+To:     Will Deacon <will@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
@@ -36,68 +67,16 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Peter Oberparleiter <oberpar@linux.ibm.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>
-Subject: RE: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
-Thread-Topic: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
-Thread-Index: AQHV0gKFFdfdrbkjnU+llP+aeIA9U6f4esgQgAAC9ICAAANF8A==
-Date:   Thu, 23 Jan 2020 17:32:06 +0000
-Message-ID: <2bfe2be6da484f15b0d229dd02d16ae6@AcuMS.aculab.com>
-References: <20200123153341.19947-1-will@kernel.org>
- <26ad7a8a975c4e06b44a3184d7c86e5f@AcuMS.aculab.com>
- <20200123171641.GC20126@willie-the-truck>
-In-Reply-To: <20200123171641.GC20126@willie-the-truck>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-MC-Unique: NQWIpuFmOiaG-mYGmDywkg-1
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Will Deacon
-> Sent: 23 January 2020 17:17
-> 
-> On Thu, Jan 23, 2020 at 05:07:40PM +0000, David Laight wrote:
-> > From: Will Deacon
-> > > Sent: 23 January 2020 15:34
-> > ...
-> > >   * Only warn once at build-time if GCC prior to 4.8 is detected...
-> > >
-> > >   * ... and then raise the minimum GCC version to 4.8, with an error for
-> > >     older versions of the compiler
-> >
-> > If the kernel compiled with gcc 4.7 is likely to be buggy, don't these
-> > need to be in the other order?
-> >
-> > Otherwise you need to keep the old versions for use with the old
-> > compilers.
-> 
-> I think it depends how much we care about those older compilers. My series
-> first moves it to "Good luck mate, you're on your own" and then follows up
-> with a "Let me take that off you it's sharp".
+On Thu, Jan 23, 2020 at 7:33 AM Will Deacon <will@kernel.org> wrote:
+>
+> This is version two of the patches I previously posted as an RFC here:
 
-Depends on how 'sharp' it is.
+Looks fine to me, as far as I can tell,
 
-If the kernel suffers from the code example in the gcc bug itself
-(where 'volatile' is lost and some code is moved out of a loop)
-then things will really break somewhere odd.
-
-OTOH if it might generate code that reads something twice
-you'd have to be unlucky as well.
-
-Oh - and I need to find a newer compiler :-(
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+              Linus
