@@ -2,116 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAD71466AA
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 12:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2961466D8
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2020 12:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbgAWLW7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jan 2020 06:22:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42800 "EHLO mail.kernel.org"
+        id S1726219AbgAWLfz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jan 2020 06:35:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726771AbgAWLW6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Jan 2020 06:22:58 -0500
+        id S1726191AbgAWLfz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 23 Jan 2020 06:35:55 -0500
 Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 08E1A24125;
-        Thu, 23 Jan 2020 11:22:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DBD9224125;
+        Thu, 23 Jan 2020 11:35:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579778578;
-        bh=LgKFx4P5ScxA81AGbhPO/gALIBjOXsGoed8zoyS3Rjs=;
+        s=default; t=1579779354;
+        bh=NgRc4r3/WU3L+AaQZpJg9EMLS9NAgkFiIf8N0LyNC+Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=upMqE3/OImgO279sANVZ36MBMt8DKsuTiatp5+5AUVIg+ANe3LuJGpBT+JD3oWGPs
-         Ys4oYxg810eKeuk0MHapCHsn83c8BXqeBreMaF23wqytnAak5rWFgLupnIl/i+RNcb
-         BrnuFNunk+GQ4S9r1hmOsNE5isiH2yY5oWgZmPx8=
-Date:   Thu, 23 Jan 2020 11:22:51 +0000
+        b=jjE8q2j+F9NR+6NUtDnw5ybuvoh3/gXOO538RDz1Cem8SjaEsHRMDFEkXXNJm+lm+
+         fkLMODHS28CRnHPazsbkpUlIDTtq7FnPNF9s0Uch7YSSCvgesocygv7IoYAlNFTQaB
+         dJDXbBQRVrNqvf5CCLb60sDENtvFOlIBGjPB4vRk=
+Date:   Thu, 23 Jan 2020 11:35:47 +0000
 From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alex Kogan <alex.kogan@oracle.com>, linux-arch@vger.kernel.org,
-        guohanjun@huawei.com, arnd@arndb.de, dave.dice@oracle.com,
-        jglauber@marvell.com, x86@kernel.org, will.deacon@arm.com,
-        linux@armlinux.org.uk, steven.sistare@oracle.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, bp@alien8.de,
-        hpa@zytor.com, longman@redhat.com, tglx@linutronix.de,
-        daniel.m.jordan@oracle.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v9 3/5] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-Message-ID: <20200123112251.GC18991@willie-the-truck>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Lihao Liang <lihaoliang@google.com>,
+        Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
+        peterz@infradead.org, mingo@redhat.com, will.deacon@arm.com,
+        arnd@arndb.de, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        guohanjun@huawei.com, jglauber@marvell.com, dave.dice@oracle.com,
+        steven.sistare@oracle.com, daniel.m.jordan@oracle.com
+Subject: Re: [PATCH v9 0/5] Add NUMA-awareness to qspinlock
+Message-ID: <20200123113547.GD18991@willie-the-truck>
 References: <20200115035920.54451-1-alex.kogan@oracle.com>
- <20200115035920.54451-4-alex.kogan@oracle.com>
- <20200123092658.GC14879@hirez.programming.kicks-ass.net>
- <20200123100635.GE14946@hirez.programming.kicks-ass.net>
- <20200123101649.GF14946@hirez.programming.kicks-ass.net>
+ <CAC4j=Y8rCeTX9oKKbh+dCdTP8Ud4hW1ybu+iE7t_nxMSYBOR5w@mail.gmail.com>
+ <4e15fa1d-9540-3274-502a-4195a0d46f63@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200123101649.GF14946@hirez.programming.kicks-ass.net>
+In-Reply-To: <4e15fa1d-9540-3274-502a-4195a0d46f63@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 11:16:49AM +0100, Peter Zijlstra wrote:
-> On Thu, Jan 23, 2020 at 11:06:35AM +0100, Peter Zijlstra wrote:
-> > On Thu, Jan 23, 2020 at 10:26:58AM +0100, Peter Zijlstra wrote:
-> > > On Tue, Jan 14, 2020 at 10:59:18PM -0500, Alex Kogan wrote:
-> > > > +/* this function is called only when the primary queue is empty */
-> > > > +static inline bool cna_try_change_tail(struct qspinlock *lock, u32 val,
-> > > > +				       struct mcs_spinlock *node)
-> > > > +{
-> > > > +	struct mcs_spinlock *head_2nd, *tail_2nd;
-> > > > +	u32 new;
-> > > > +
-> > > > +	/* If the secondary queue is empty, do what MCS does. */
-> > > > +	if (node->locked <= 1)
-> > > > +		return __try_clear_tail(lock, val, node);
-> > > > +
-> > > > +	/*
-> > > > +	 * Try to update the tail value to the last node in the secondary queue.
-> > > > +	 * If successful, pass the lock to the first thread in the secondary
-> > > > +	 * queue. Doing those two actions effectively moves all nodes from the
-> > > > +	 * secondary queue into the main one.
-> > > > +	 */
-> > > > +	tail_2nd = decode_tail(node->locked);
-> > > > +	head_2nd = tail_2nd->next;
-> > > > +	new = ((struct cna_node *)tail_2nd)->encoded_tail + _Q_LOCKED_VAL;
-> > > > +
-> > > > +	if (atomic_try_cmpxchg_relaxed(&lock->val, &val, new)) {
-> > > > +		/*
-> > > > +		 * Try to reset @next in tail_2nd to NULL, but no need to check
-> > > > +		 * the result - if failed, a new successor has updated it.
-> > > > +		 */
-> > > 
-> > > I think you actually have an ordering bug here; the load of head_2nd
-> > > *must* happen before the atomic_try_cmpxchg(), otherwise it might
-> > > observe the new next and clear a valid next pointer.
-> > > 
-> > > What would be the best fix for that; I'm thinking:
-> > > 
-> > > 	head_2nd = smp_load_acquire(&tail_2nd->next);
-> > > 
-> > > Will?
-> > 
-> > Hmm, given we've not passed the lock around yet; why wouldn't something
-> > like this work:
-> > 
-> > 	smp_store_release(&tail_2nd->next, NULL);
-> 
-> Argh, make that:
-> 
-> 	tail_2nd->next = NULL;
-> 
-> 	smp_wmb();
-> 
-> > 	if (!atomic_try_cmpxchg_relaxed(&lock, &val, new)) {
+Hi folks,
 
-... or could you drop the smp_wmb() and make this
-atomic_try_cmpxchg_release()?
+(I think Lihao is travelling at the moment, so he may be delayed in his
+replies)
 
-To be honest, I've failed to understand the code prior to your changes
-in this area: it appears to reply on a control-dependency from the two
-cmpxchg_relaxed() calls (which isn't sufficient to order the store parts
-afaict) and I also don't get how we deal with a transiently circular primary
-queue.
+On Wed, Jan 22, 2020 at 12:24:58PM -0500, Waiman Long wrote:
+> On 1/22/20 6:45 AM, Lihao Liang wrote:
+> > On Wed, Jan 22, 2020 at 10:28 AM Alex Kogan <alex.kogan@oracle.com> wrote:
+> >> Summary
+> >> -------
+> >>
+> >> Lock throughput can be increased by handing a lock to a waiter on the
+> >> same NUMA node as the lock holder, provided care is taken to avoid
+> >> starvation of waiters on other NUMA nodes. This patch introduces CNA
+> >> (compact NUMA-aware lock) as the slow path for qspinlock. It is
+> >> enabled through a configuration option (NUMA_AWARE_SPINLOCKS).
+> >>
+> > Thanks for your patches. The experimental results look promising!
+> >
+> > I understand that the new CNA qspinlock uses randomization to achieve
+> > long-term fairness, and provides the numa_spinlock_threshold parameter
+> > for users to tune. As Linux runs extremely diverse workloads, it is not
+> > clear how randomization affects its fairness, and how users with
+> > different requirements are supposed to tune this parameter.
+> >
+> > To this end, Will and I consider it beneficial to be able to answer the
+> > following question:
+> >
+> > With different values of numa_spinlock_threshold and
+> > SHUFFLE_REDUCTION_PROB_ARG, how long do threads running on different
+> > sockets have to wait to acquire the lock? This is particularly relevant
+> > in high contention situations when new threads keep arriving on the same
+> > socket as the lock holder.
+> >
+> > In this email, I try to provide some formal analysis to address this
+> > question. Let's assume the probability for the lock to stay on the
+> > same socket is *at least* p, which corresponds to the probability for
+> > the function probably(unsigned int num_bits) in the patch to return *false*,
+> > where SHUFFLE_REDUCTION_PROB_ARG is passed as the value of num_bits to the
+> > function.
+> 
+> That is not strictly true from my understanding of the code. The
+> probably() function does not come into play if a secondary queue is
+> present. Also calling cna_scan_main_queue() doesn't guarantee that a
+> waiter in the same node can be found. So the simple mathematical
+> analysis isn't that applicable in this case. One will have to do an
+> actual simulation to find out what the actual behavior will be.
+
+It's certainly true that the analysis is based on the worst-case scenario,
+but I think it's still worth considering. For example, the secondary queue
+does not exist initially so it seems a bit odd that we only instantiate it
+with < 1% probability.
+
+That said, my real concern with any of this is that it makes formal
+modelling and analysis of the qspinlock considerably more challenging. I
+would /really/ like to see an update to the TLA+ model we have of the
+current implementation [1] and preferably also the userspace version I
+hacked together [2] so that we can continue to test and validate changes
+to the code outside of the usual kernel stress-testing.
 
 Will
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/cmarinas/kernel-tla.git/
+[2] https://mirrors.edge.kernel.org/pub/linux/kernel/people/will/spinbench/
