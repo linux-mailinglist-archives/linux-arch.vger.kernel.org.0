@@ -2,78 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 796C01476BC
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 02:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0921477A7
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 05:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729449AbgAXB3P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jan 2020 20:29:15 -0500
-Received: from sonic312-22.consmr.mail.bf2.yahoo.com ([74.6.128.84]:36367 "EHLO
-        sonic312-22.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729108AbgAXB3P (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Jan 2020 20:29:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1579829353; bh=ZRVo8cW60+cgKR0PbgGoTN2balmbpWdCdFkvBmd1w8c=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Lrp0/HHd8ZuEOKj4mmZ6Mh9CScF83gK2CYQ7Kw36O8C8oaGUmU1p9s8dCXrWZBzQtMaR7W6tQ7M5RocuNynuQupmedi1tSWEsDzNgyW31gFb0v8bgF5yeeRsoGf//K3N8tuiQTh9g6WgicBrFDW4UE0QSOkhyHuOT3//V+1OGwtd0EUyumhI6nLiTvglIHC6De7ur65rHJbW7kuZTMlHVkEF9f+Cnz0FjtTs747NSQBCkQHHcG0oEtB+RkTT5Z7KZP2rjw7XNxi0+xF9bWcLB0DQmqt6NVWkMdsGvDfGe2Y3UAzcq4NKkGr5RYQGCLiQdT9YkxbgDRSzsSkBqQNKkg==
-X-YMail-OSG: NxoW3ckVM1lmnlkwr_0sSv84wJJeH_XBwRVP0fODcG_5TBFtWAZ1_mYRjUYIoc9
- 60dFzLGeKV9AfVcze2BMc6Syk1UpGMqxSFszL0GUx8VBv0chSELmJsyIWzCPq5KBmjH.fbLvdO.H
- ueDv3eomE7J0B8xG1CofICiYx4q5EmkLRwl9PSFyKfbuBc7EEH5wOCqBXk6Hz0A1YcErcDnHySLq
- BGK.CfUAj.YeUTloYoDoeafsMifnT8LLetdH_A21vA5krAvcLYVVFIAhYSr6wMCey3fWhlnU3aBO
- zptyL3tJdU70aZCWtS2InFTWQuJCVoeQdD1e.EfM9CDx71NkpyhfuN3VunOpdAFv5irzL7syfeV6
- JmGTJZXlVzCa86av_ebwznMKidFV0ppkxtMemI4HzWRT4kqMefeeP3VDTXUm4I1oCTHOiFdujtCP
- V7j0vi7PQC_5dRTITfRgt1Q0Wo4VNpYACRT0MMTOH.b.814D2GMfxVZPEASB61auktutSUQ.Fpb8
- VliB0nncTUtdH8hPeXtxhCaXCZFsIqVv5F9iEE0nYYHF8yBOe5h78FNaeCnrMgOhIgs7h_qbXpaU
- Ix2_tUCe2jn1EpLlPXJP7.Sjsa7oOOiY3UzNLv2PuvzD.sXWkKmx.XMRJ49ol9WBrC5Rqx.vsdQ_
- ZK4HzTPqFmbty2cN71kQS3DASB61fI573_H_JYFMmRbZbbfkCMzTmaqXe15_0TiSkbk4aANxF4pR
- Mi9OFfqATF745GE3YFzjuDNRLpqMqiioezmY_n5jjkv60zDiuD5B_t5BkzZ5Rl.80VjhQJntcOXJ
- 0z3iBUwJOpzBh_2dChl7nE11SLCHpjXUi.qqADXadGW17zn0_MYI.qZgqrWZP3owRoiFRGtFJE_N
- X6.ycpoqy5QY4Tz8.jeEh3Gd.tEqln.7e4Hw7jVP81kl7mar1Tu1wTbrrkuSkcCWjZMf_RnhwX7n
- vV5noC18jDl.n9suaMTV.44EJV0SyY97loJ0tG2bXCNVg_BRpv8lX7MTNKworSweOVlk4kZ2pdgA
- Setg5LyjF_6ErjEMkKqt5qgZnYNzpjeOJEQu3QZlnMtV0RYS9ri_bI5LlDmeTUk0YTZVwbaoi6eQ
- poEXCE7PVv80t6obhFjVmErfx5nsbfi14xxFD8zygrNrrElO83mVN24dpHpXDMBXl7egoJ8LJHal
- XkM6AyM.7IyjplkSVPBreZ30hXh80ZsCZg.FzBZ4X1hjSW_y_S0EHhKqMkLHrsbY5l1qqtJ_zm_n
- vfFH1_FHmUqhtyws2NeeafOYIIw9TVk1HzUUzRJuhEOSPY3ZszmgN0rs6G.vm3adl.TTCoI7Znu9
- gCQ--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.bf2.yahoo.com with HTTP; Fri, 24 Jan 2020 01:29:13 +0000
-Date:   Fri, 24 Jan 2020 01:29:10 +0000 (UTC)
-From:   aderson <adersonadersonmark01@gmail.com>
-Reply-To: adersonadersonmark01@gmail.com
-Message-ID: <1739355342.10950021.1579829350788@mail.yahoo.com>
-Subject: ATTENTION: DEAR BENEFICIARY COMPLIMENTS OF THE SEASON. 2020.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1739355342.10950021.1579829350788.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.14873 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+        id S1729232AbgAXEcM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jan 2020 23:32:12 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36162 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728799AbgAXEcM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jan 2020 23:32:12 -0500
+Received: by mail-pf1-f193.google.com with SMTP id w2so485019pfd.3
+        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2020 20:32:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:message-id:from:to:cc:subject:in-reply-to:references
+         :user-agent:mime-version;
+        bh=dB6PIC7bEOxOZs3zgfEEHDXJYRlN9x+mhXs0np19giU=;
+        b=R5a8BV70MMHo3uYLeeijM9IvNDHVL3LJlGRbhgHeko0jnIpN4twx0BcpH238Hxym4b
+         8xdGm1r+vw7roID1mMwq/guElWwQIs/loZBCmDBOhjuRRvhNOAGVnKcc9+Qe6YYq1VJo
+         8aN6QmyOqZYPJu3kiVAYGdlVtSEocUGPbO9HifUZ5teCg3yozohgfmNlVl5UTz5CaZVv
+         2QE2NwCTN+k9Iy6PYQpagToYoo4SBD8PnJiZBfr/IxovJY7P7Qfs+N2RFD/Og85doKOK
+         wqaLuNo0bhRth1m90EW7jSNA4zcqk5jrs8YodTou4p519PePAxDem6HvWkwtqjiVeJYs
+         EkPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
+         :references:user-agent:mime-version;
+        bh=dB6PIC7bEOxOZs3zgfEEHDXJYRlN9x+mhXs0np19giU=;
+        b=XLRVFsoNQTLRRPo1nFdHmqLxIux6prMOyCF1zIwMFjDIXatvNhpUkQg5xCCw5mgAq2
+         la+hOkHM2d4xC81A/Fb95r3PImhY0Aj08OqmXeVuYhOFdl6TMVwyZiTjkTjI5DVZUhIE
+         iMLbE+c6RiAsp7J8RrIgvV3o05KVgbBZDvin9o7ZwOVKqZzMJuo+MGzV0UMoqJ0XJkhO
+         Cz1xRr9TqLZalvLYORL+P51rL74+1u9yrirIOWTtXvrLg+76PqO0T1xmVLijQAnOd7br
+         ZY5UsZRHhvx4sJS7BVB4jXHpEK0pRPw5d5timVx/C8cgrUgMLr4HGUwtiiUoybN9mm0m
+         tdPA==
+X-Gm-Message-State: APjAAAUamb+PqSs6NNIKPPfTzCtgBoYbaO47AdBqOaJrao5beQw3hz0Y
+        NQhvP/tzbwXnHmXyd2kAsOo=
+X-Google-Smtp-Source: APXvYqy79GWDzkbN0sjK2M5yn4HK4dNJcXrlMR5GqL4odhQsMEqMfJe/yxjHVHEFbvkbDFpQuswBOQ==
+X-Received: by 2002:a63:5fce:: with SMTP id t197mr1998123pgb.173.1579840331382;
+        Thu, 23 Jan 2020 20:32:11 -0800 (PST)
+Received: from earth-mac.local.gmail.com ([202.214.86.179])
+        by smtp.gmail.com with ESMTPSA id g19sm4070726pfh.134.2020.01.23.20.32.06
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 23 Jan 2020 20:32:10 -0800 (PST)
+Date:   Fri, 24 Jan 2020 13:32:03 +0900
+Message-ID: <m2a76dsce4.wl-thehajime@gmail.com>
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     brendanhiggins@google.com
+Cc:     kunit-dev@googlegroups.com, tavi.purdila@gmail.com,
+        mcgrof@kernel.org, davidgow@google.com, cyphar@cyphar.com,
+        linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+        pscollins@google.com, cem@FreeBSD.org, motomuman@gmail.com,
+        jiangshanlai@gmail.com, retrage01@gmail.com, petrosagg@gmail.com,
+        liuyuan@google.com, thomas@tommie-lie.de, mark@stillwell.me,
+        ddiss@suse.de, linux-kernel-library@freelists.org,
+        luca.dariz@gmail.com
+Subject: Re: [RFC v2 21/37] lkl tools: "boot" test
+In-Reply-To: <20200123193315.132434-1-brendanhiggins@google.com>
+References: <fb0fcf4ffddaabc7eae82e25d7ec5ea9c37eb2ae.1573179553.git.thehajime@gmail.com>
+        <20200123193315.132434-1-brendanhiggins@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-CONGRATULATIONS TO YOU,
 
-I RECEIVE YOUR CONTENT OF YOUR EMAIL FROM THIS FEDEX ATM CARD OFFICES
-YOUR FUNDS SUM OF $10.5MILLION DOLLARS, HAS DISCOVER HERE AFTER THE
-BOARD OF DIRECTORS MEETINGS, THE UNITED NATIONS GOVERNMENT HAVE
-DECIDED TO ISSUE YOU YOUR (ATM CARD) VALUED AT $10.5 MILLION UNITED
-STATES DOLLARS.
+Hello Brendan,
 
-THIS IS TO BRING TO YOUR NOTICE THAT YOUR VALUED SUM OF 10.5 MILLION
-DOLLARS HAS BEING CREDITED IN YOUR NAME. AS BENEFICIARY TO THIS (ATM
-CARD), AND HAS BEEN HANDLE TO THE FOREIGN REMITTANCE DEPARTMENT TO
-SEND IT TO YOU IN YOUR FAVOR IMMEDIATELY WITHOUT ANY DELAY.
+On Fri, 24 Jan 2020 04:33:15 +0900,
+Brendan Higgins wrote:
 
-WITH YOUR BELONGING (ATM CARD), YOU WILL HAVE ACCESS TO MAKE DAILY
-WITHDRAWALS OF; $5000 UNITED STATE DOLLARS DAILIES,
+> > +int lkl_test_read(void)
+> > +{
+> > +	char buf[10] = { 0, };
+> > +	long ret;
+> > +
+> > +	ret = lkl_sys_read(0, buf, sizeof(buf));
+> > +
+> > +	lkl_test_logf("lkl_sys_read=%ld buf=%s\n", ret, buf);
+> > +
+> > +	if (ret == sizeof(wrbuf) && !strcmp(wrbuf, buf))
+> > +		return TEST_SUCCESS;
+> > +
+> > +	return TEST_FAILURE;
+> > +}
+> 
+> These tests make me think that LKL could be very useful for KUnit and
+> testing syscalls.
+> 
+> Luis and I had been talking about writing KUnit tests for syscalls to
+> validate that syscalls conform to the expected behavior; however,
+> calling syscalls from the kernel obviously has issues.
+> 
+> On the other hand, testing syscalls from a userspace on a booted kernel
+> is something that we do and something that needs to be done; however,
+> this too has some issues. Writing and running tests in userspace on a
+> booted kernel is not as easy as being able to write and run tests in the
+> kernel. Also, even though some syscall end-to-end tests are necessary,
+> not all syscall tests must be end-to-end tests, especially those which
+> are only trying to exercise the entire syscall contract.
+> 
+> I think it looks like LKL might be able to help us square that circle.
 
-AS SOON AS WE RECEIVE YOUR INFORMATION'S AND YOUR HOME ADDRESS OF YOUR COUNTRY AS ALREADY PROGRAMMED; WE WILL SEND TO YOU YOUR (ATM CARD), WE HAVE RECEIVED A SIGNAL FROM THE SWISS WORLD BANK, BANK OF AMERICA, TO EFFECT YOUR TRANSFER TO YOU WITHIN ONE WEEK, WITHOUT ANY DELAY.
+That's good to know :)
 
-WE HAVE JUST FINISHED OUR ANNUAL GENERAL MEETING WITH THE CENTRAL BANK OF AMERICA (BOA). AT THE END OF THE BOARD OF DIRECTORS MEETING.
+> Hajime (and other LKL people):
+> 
+> What is the current status of this patchset? I have not seen any
+> activity for a couple months.
 
-THE BOARD OF DIRECTORS UNITED NATIONS GOVERNMENT HAS  CONCLUDED TO
-IMMEDIATELY ISSUE YOUR BELONGING (ATM CARD) SUM OF $10.5 MILLION
-DOLLARS.
+I've been a bit busy over the year-end term but recently restarted to
+work for the patchset to address the comments received from the
+discussion.
 
-ONCE AGAIN CONGRATULATIONS TO YOU AND YOUR LOVELY FAMILY'S,
-YOURS
-SINCERELY.
-MR. Aderson Mark
+> Luis,
+> 
+> Does this kind of match what you were thinking with the syscall testing?
+> I think this looks pretty close. You should be able to fully test the
+> contract here using KUnit. Is there anyone else you think would be
+> interested in this?
+> 
+> In any case, I am excited about this. Please keep me posted in the
+> future!
+
+I hope I can send v3 patches soon.
+Thanks for the interest !
+
+-- Hajime
