@@ -2,102 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0913147533
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 01:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796C01476BC
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 02:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729316AbgAXABf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jan 2020 19:01:35 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:39504 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729137AbgAXABf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jan 2020 19:01:35 -0500
-Received: by mail-lf1-f66.google.com with SMTP id t23so27115lfk.6
-        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2020 16:01:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jhm2D+li3tmVDnNelGAqg3FFAOKpjt8nabPCXHsBG0s=;
-        b=eKsTsz3Wf3wiI8V2rq1anbSVH1riJLeQn47OGE8BF0Q1CYE2V9ccR1xO7DlIcJ1pQy
-         71wkXkKtS/oqShBMuWd3FnkQjd+IxNRrQR1+BU9RCFPCvDLs2DVCbN/VY4PESU/m18IJ
-         xen30k5igK5m42e4s/djap8cawEzHd2B1YLu4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jhm2D+li3tmVDnNelGAqg3FFAOKpjt8nabPCXHsBG0s=;
-        b=i5Ilcqi/GzltmbGNM+iMGIN1ZKrqxDmJlD3Wzczpx1HrnKNtr2lFsHy2HQqnQvC0sG
-         tf9gSO5ur6vf6NS084O6mMu/rRMnZNvcGPsVPboR3Ru9vSRQkm1h8zgEq0ARfxU+YWMR
-         Dsw58mMTujWk/Cll4E+4kvXIG6ZU4Sl1wehxXtP1si/uGonVkbFpaW/g4P7MtCNSy/ht
-         cX6kS+/NW4gsvkvnpn5tI07+MOhdQgepkoq4QjrCUV4WZKJjlP0p8L9MUTZAWFvpT9CT
-         B1mGfqvRyDCm+drRp+voNgSymhFG4Pim3pjTXa1fr/9iSRhQVnXCoNHGhwkYvi/VqDkd
-         +TQQ==
-X-Gm-Message-State: APjAAAUJiVZhxWtnhmo6Gebi/syPzW0+onnaed5iaH3oUv2Z+s8v55LS
-        Agm/TTGshkH4pYxywzA1v3+0d855LsE=
-X-Google-Smtp-Source: APXvYqxlkVhh4DZCZmY6RBQgONRQEwkDhlybk4wpq+xdS1MHPnjBMoHtnEndsTe5LzV/39VQazWKDA==
-X-Received: by 2002:a19:c014:: with SMTP id q20mr146764lff.208.1579824092723;
-        Thu, 23 Jan 2020 16:01:32 -0800 (PST)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id m24sm2440560ljb.81.2020.01.23.16.01.31
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jan 2020 16:01:31 -0800 (PST)
-Received: by mail-lj1-f173.google.com with SMTP id r19so398018ljg.3
-        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2020 16:01:31 -0800 (PST)
-X-Received: by 2002:a2e:3a13:: with SMTP id h19mr556562lja.16.1579824091393;
- Thu, 23 Jan 2020 16:01:31 -0800 (PST)
+        id S1729449AbgAXB3P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jan 2020 20:29:15 -0500
+Received: from sonic312-22.consmr.mail.bf2.yahoo.com ([74.6.128.84]:36367 "EHLO
+        sonic312-22.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729108AbgAXB3P (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 23 Jan 2020 20:29:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1579829353; bh=ZRVo8cW60+cgKR0PbgGoTN2balmbpWdCdFkvBmd1w8c=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Lrp0/HHd8ZuEOKj4mmZ6Mh9CScF83gK2CYQ7Kw36O8C8oaGUmU1p9s8dCXrWZBzQtMaR7W6tQ7M5RocuNynuQupmedi1tSWEsDzNgyW31gFb0v8bgF5yeeRsoGf//K3N8tuiQTh9g6WgicBrFDW4UE0QSOkhyHuOT3//V+1OGwtd0EUyumhI6nLiTvglIHC6De7ur65rHJbW7kuZTMlHVkEF9f+Cnz0FjtTs747NSQBCkQHHcG0oEtB+RkTT5Z7KZP2rjw7XNxi0+xF9bWcLB0DQmqt6NVWkMdsGvDfGe2Y3UAzcq4NKkGr5RYQGCLiQdT9YkxbgDRSzsSkBqQNKkg==
+X-YMail-OSG: NxoW3ckVM1lmnlkwr_0sSv84wJJeH_XBwRVP0fODcG_5TBFtWAZ1_mYRjUYIoc9
+ 60dFzLGeKV9AfVcze2BMc6Syk1UpGMqxSFszL0GUx8VBv0chSELmJsyIWzCPq5KBmjH.fbLvdO.H
+ ueDv3eomE7J0B8xG1CofICiYx4q5EmkLRwl9PSFyKfbuBc7EEH5wOCqBXk6Hz0A1YcErcDnHySLq
+ BGK.CfUAj.YeUTloYoDoeafsMifnT8LLetdH_A21vA5krAvcLYVVFIAhYSr6wMCey3fWhlnU3aBO
+ zptyL3tJdU70aZCWtS2InFTWQuJCVoeQdD1e.EfM9CDx71NkpyhfuN3VunOpdAFv5irzL7syfeV6
+ JmGTJZXlVzCa86av_ebwznMKidFV0ppkxtMemI4HzWRT4kqMefeeP3VDTXUm4I1oCTHOiFdujtCP
+ V7j0vi7PQC_5dRTITfRgt1Q0Wo4VNpYACRT0MMTOH.b.814D2GMfxVZPEASB61auktutSUQ.Fpb8
+ VliB0nncTUtdH8hPeXtxhCaXCZFsIqVv5F9iEE0nYYHF8yBOe5h78FNaeCnrMgOhIgs7h_qbXpaU
+ Ix2_tUCe2jn1EpLlPXJP7.Sjsa7oOOiY3UzNLv2PuvzD.sXWkKmx.XMRJ49ol9WBrC5Rqx.vsdQ_
+ ZK4HzTPqFmbty2cN71kQS3DASB61fI573_H_JYFMmRbZbbfkCMzTmaqXe15_0TiSkbk4aANxF4pR
+ Mi9OFfqATF745GE3YFzjuDNRLpqMqiioezmY_n5jjkv60zDiuD5B_t5BkzZ5Rl.80VjhQJntcOXJ
+ 0z3iBUwJOpzBh_2dChl7nE11SLCHpjXUi.qqADXadGW17zn0_MYI.qZgqrWZP3owRoiFRGtFJE_N
+ X6.ycpoqy5QY4Tz8.jeEh3Gd.tEqln.7e4Hw7jVP81kl7mar1Tu1wTbrrkuSkcCWjZMf_RnhwX7n
+ vV5noC18jDl.n9suaMTV.44EJV0SyY97loJ0tG2bXCNVg_BRpv8lX7MTNKworSweOVlk4kZ2pdgA
+ Setg5LyjF_6ErjEMkKqt5qgZnYNzpjeOJEQu3QZlnMtV0RYS9ri_bI5LlDmeTUk0YTZVwbaoi6eQ
+ poEXCE7PVv80t6obhFjVmErfx5nsbfi14xxFD8zygrNrrElO83mVN24dpHpXDMBXl7egoJ8LJHal
+ XkM6AyM.7IyjplkSVPBreZ30hXh80ZsCZg.FzBZ4X1hjSW_y_S0EHhKqMkLHrsbY5l1qqtJ_zm_n
+ vfFH1_FHmUqhtyws2NeeafOYIIw9TVk1HzUUzRJuhEOSPY3ZszmgN0rs6G.vm3adl.TTCoI7Znu9
+ gCQ--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.bf2.yahoo.com with HTTP; Fri, 24 Jan 2020 01:29:13 +0000
+Date:   Fri, 24 Jan 2020 01:29:10 +0000 (UTC)
+From:   aderson <adersonadersonmark01@gmail.com>
+Reply-To: adersonadersonmark01@gmail.com
+Message-ID: <1739355342.10950021.1579829350788@mail.yahoo.com>
+Subject: ATTENTION: DEAR BENEFICIARY COMPLIMENTS OF THE SEASON. 2020.
 MIME-Version: 1.0
-References: <20200123190456.8E05ADE6@viggo.jf.intel.com> <CAHk-=wgLR5JnaBgCtg0-AAxtdN3=4=LMp6-0212608=vbmCAxg@mail.gmail.com>
- <20200123202600.GG10328@zn.tnic> <636d5f4b-c47f-77f6-067f-a6b342db5650@intel.com>
-In-Reply-To: <636d5f4b-c47f-77f6-067f-a6b342db5650@intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 23 Jan 2020 16:01:15 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wibZoVAzGpO-OssKN8cidpCKrfdDcMaspM6JW-3fbcSmQ@mail.gmail.com>
-Message-ID: <CAHk-=wibZoVAzGpO-OssKN8cidpCKrfdDcMaspM6JW-3fbcSmQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] x86: finish the MPX removal process
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Guan Xuetao <gxt@pku.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1739355342.10950021.1579829350788.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.14873 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 1:23 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> I'm confident I can send patches to the x86 maintainers and not make
-> them too angry.  Sending pull requests to Linus, not so much. :)
+CONGRATULATIONS TO YOU,
 
-With a diffstat summary like
+I RECEIVE YOUR CONTENT OF YOUR EMAIL FROM THIS FEDEX ATM CARD OFFICES
+YOUR FUNDS SUM OF $10.5MILLION DOLLARS, HAS DISCOVER HERE AFTER THE
+BOARD OF DIRECTORS MEETINGS, THE UNITED NATIONS GOVERNMENT HAVE
+DECIDED TO ISSUE YOU YOUR (ATM CARD) VALUED AT $10.5 MILLION UNITED
+STATES DOLLARS.
 
- 24 files changed, 2 insertions(+), 1697 deletions(-)
+THIS IS TO BRING TO YOUR NOTICE THAT YOUR VALUED SUM OF 10.5 MILLION
+DOLLARS HAS BEING CREDITED IN YOUR NAME. AS BENEFICIARY TO THIS (ATM
+CARD), AND HAS BEEN HANDLE TO THE FOREIGN REMITTANCE DEPARTMENT TO
+SEND IT TO YOU IN YOUR FAVOR IMMEDIATELY WITHOUT ANY DELAY.
 
-there's not a lot I could complain about ;l)
+WITH YOUR BELONGING (ATM CARD), YOU WILL HAVE ACCESS TO MAKE DAILY
+WITHDRAWALS OF; $5000 UNITED STATE DOLLARS DAILIES,
 
-> I'll just plan to send it to Linus directly.
+AS SOON AS WE RECEIVE YOUR INFORMATION'S AND YOUR HOME ADDRESS OF YOUR COUNTRY AS ALREADY PROGRAMMED; WE WILL SEND TO YOU YOUR (ATM CARD), WE HAVE RECEIVED A SIGNAL FROM THE SWISS WORLD BANK, BANK OF AMERICA, TO EFFECT YOUR TRANSFER TO YOU WITHIN ONE WEEK, WITHOUT ANY DELAY.
 
-I do note that while I've merged patch series from you before, I don't
-seem to have done a git pull from you.
+WE HAVE JUST FINISHED OUR ANNUAL GENERAL MEETING WITH THE CENTRAL BANK OF AMERICA (BOA). AT THE END OF THE BOARD OF DIRECTORS MEETING.
 
-But since you already have a git tree, and the tree looks fine, it
-really is just a git request-pull, and you basically already have the
-cover-letter to add to the email.
+THE BOARD OF DIRECTORS UNITED NATIONS GOVERNMENT HAS  CONCLUDED TO
+IMMEDIATELY ISSUE YOUR BELONGING (ATM CARD) SUM OF $10.5 MILLION
+DOLLARS.
 
-In fact, you don't even have to use a signed tag since it's on
-kernel.org - but it's always nice to see, and you can put the cover
-letter explanation into the tag.
-
-             Linus
+ONCE AGAIN CONGRATULATIONS TO YOU AND YOUR LOVELY FAMILY'S,
+YOURS
+SINCERELY.
+MR. Aderson Mark
