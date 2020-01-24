@@ -2,42 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE52148B05
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 16:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F0D148B2D
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 16:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729459AbgAXPNu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jan 2020 10:13:50 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:48224 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbgAXPNt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jan 2020 10:13:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=35gCEfpxVAtjI0TfMCZ1JhtcqIkWEo2HG4/U2DcwoqA=; b=W3qX1D7eKIlfLC6pgoA9hEyYm
-        AJ3QDv5UwmVIhwcakfZzw+VrHsNExGoljlLqgbrtiokyNRGEkGZQrFFnygTlaj9ZlBZnvXUB3+g2M
-        I/dgy/eQnq38v47EWpW+gKk0tJ1jSmN2DOio8ltCdwjJZ1lTAg53pO/bmLRl5BXQbjbh/l8d5G8YE
-        L+0zhq/GvAYo/asdkBTOU31ZGwmb1op68byQ2U+R5cU7a4gCAsDcKyNeT0AicZPLeR785qtJNDGD0
-        XgDS+sl3pZusZgrxRZdf9ezFTYwk/LWT8vsFw1Z73vn2QsbTTZbeWbk1c5FeekrarX9l+3cLDg6FY
-        ihbNnrDNg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iv0e0-0007Qp-QC; Fri, 24 Jan 2020 15:13:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 63A913012DC;
-        Fri, 24 Jan 2020 16:11:29 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E889620AFECE6; Fri, 24 Jan 2020 16:13:09 +0100 (CET)
-Date:   Fri, 24 Jan 2020 16:13:09 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
-        Ingo Molnar <mingo@redhat.com>,
+        id S2387698AbgAXPTd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jan 2020 10:19:33 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:60869 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726173AbgAXPTd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jan 2020 10:19:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579879172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CjNxeMNsGavEdY38q63l/ayJZ7osKKaCqYNvfelv++c=;
+        b=GD5lam+oWlfmveLusPgeGdMzqivHRQo0V41Ntgjx2MhgS2f0Hd6UFyizha1/oUZYSRxVxm
+        eKak6cn+9ZQuOwZGiVvB0djPZmQpsaZamfqQZV5UMHfJriYVyrn33s/QU0bzsxsW6kzFEB
+        caPrnxlyQCZBrs3SqIleosPd4yt2Bo4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-297-Ps6EiY_oNriTufej_AH0jA-1; Fri, 24 Jan 2020 10:19:28 -0500
+X-MC-Unique: Ps6EiY_oNriTufej_AH0jA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1844B19218ED;
+        Fri, 24 Jan 2020 15:19:20 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-124-92.rdu2.redhat.com [10.10.124.92])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9FC5D84D90;
+        Fri, 24 Jan 2020 15:19:13 +0000 (UTC)
+Subject: Re: [PATCH v8 4/5] locking/qspinlock: Introduce starvation avoidance
+ into CNA
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Alex Kogan <alex.kogan@oracle.com>
+Cc:     linux@armlinux.org.uk, Ingo Molnar <mingo@redhat.com>,
         Will Deacon <will.deacon@arm.com>,
         Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
@@ -48,9 +49,6 @@ Cc:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
         Steven Sistare <steven.sistare@oracle.com>,
         Daniel Jordan <daniel.m.jordan@oracle.com>,
         dave.dice@oracle.com
-Subject: Re: [PATCH v8 4/5] locking/qspinlock: Introduce starvation avoidance
- into CNA
-Message-ID: <20200124151309.GE14879@hirez.programming.kicks-ass.net>
 References: <20191230194042.67789-1-alex.kogan@oracle.com>
  <20191230194042.67789-5-alex.kogan@oracle.com>
  <20200121132949.GL14914@hirez.programming.kicks-ass.net>
@@ -58,49 +56,57 @@ References: <20191230194042.67789-1-alex.kogan@oracle.com>
  <3862F8A1-FF9B-40AD-A88E-2C0BA7AF6F58@oracle.com>
  <20200124075235.GX14914@hirez.programming.kicks-ass.net>
  <2c6741c5-d89d-4b2c-cebe-a7c7f6eed884@redhat.com>
+Organization: Red Hat
+Message-ID: <48ce49e5-98a7-23cd-09f4-8290a65abbb5@redhat.com>
+Date:   Fri, 24 Jan 2020 10:19:14 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <2c6741c5-d89d-4b2c-cebe-a7c7f6eed884@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 09:42:42AM -0500, Waiman Long wrote:
+On 1/24/20 9:42 AM, Waiman Long wrote:
 > On 1/24/20 2:52 AM, Peter Zijlstra wrote:
-> > On Thu, Jan 23, 2020 at 04:33:54PM -0500, Alex Kogan wrote:
-> >> Let me put this question to you. What do you think the number should be?
-> > I think it would be very good to keep the inter-node latency below 1ms.
+>> On Thu, Jan 23, 2020 at 04:33:54PM -0500, Alex Kogan wrote:
+>>> Let me put this question to you. What do you think the number should be?
+>> I think it would be very good to keep the inter-node latency below 1ms.
 > It is hard to guarantee that given that lock hold times can vary quite a
 > lot depending on the workload. What we can control is just how many
 > later lock waiters can jump ahead before a given waiter.
-
-We're not into this for easy. And exactly because it depends on a lot we
-need a lot of data.
-
-Worst case lock acquisition times directly translate into worst case
-IRQ-off latencies, and even the most die hard throughput oriented
-workloads don't like to experience multiple ticks worth of irq-off
-latencies.
-
-> > But to realize that we need data on the lock hold times. Specifically
-> > for the heavily contended locks that make CNA worth it in the first
-> > place.
-> >
-> > I don't see that data, so I don't see how we can argue about this let
-> > alone call something reasonable.
-> >
+>> But to realize that we need data on the lock hold times. Specifically
+>> for the heavily contended locks that make CNA worth it in the first
+>> place.
+>>
+>> I don't see that data, so I don't see how we can argue about this let
+>> alone call something reasonable.
+>>
 > In essence, CNA lock is for improving throughput on NUMA machines at the
 > expense of increasing worst case latency. If low latency is important,
-
-Latency is _always_ important. Otherwise we'd never have put so much
-time and effort into fair locks to begin with. Unbounded latency sucks
-unconditionally.
-
 > it should be disabled. If CONFIG_PREEMPT_RT is on,
 > CONFIG_NUMA_AWARE_SPINLOCKS should be off.
 
-You're spouting nonsense. You cannot claim any random number is
-reasonable without argument.
+Actually, what we are worrying about is the additional latency that can
+be added to important tasks or execution contexts that are waiting for a
+lock. Maybe we can make CNA lock behaves somewhat like qrwlock is that
+requests from interrupt context are giving priority. We could add a
+priority flag in the CNA node. If the flag is set, we will never put it
+into the secondary queue. In fact, we can transfer control next to it
+even if it is not on the same node. We may also set the priority flag if
+it is a RT task that is trying to acquire the lock.
+
+In this way, we can guarantee that important tasks or contexts will not
+suffer a delay in acquiring the lock. Those less important tasks,
+however, may need to wait a bit longer before they can get the lock.
+
+What do you guys think about that?
+
+Regards,
+Longman
+
