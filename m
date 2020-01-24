@@ -2,307 +2,235 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB0B147EE2
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 11:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 579351483B8
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 12:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729636AbgAXKlw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jan 2020 05:41:52 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:48768 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728767AbgAXKlw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jan 2020 05:41:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Qhn6Z0SwToIBSe55yMrad+sOLJUFbtDR/+M1QFdFMaU=; b=GBiFiU3J2JKUmZ8Tlbn3aHZk9
-        49Lm3kk+GbPWytJSoGrW+RI8hwVlfA4grCdeyMTGZFSul8UioiASHG5lL4STf1whbILLAjRX1gcP2
-        EKHw0GH3BW7prq3XoanJr3uI79g6pssMvxG6q4+tlF/QzAWskk6cE8Z7uRvJBaeqatkUPqnbxdWPC
-        YK3zXaCJ7avOES+jKEsUHUGEujM7+cCFMDgiesJ/z2oI0BmPolMSTLKB5ZBNYxiNw6m7g8gKBMcwE
-        bNr3ra9Gfws+FJg3zaW+SvuZh2ygwZmUSzEyvWu1TmXz/et+uDne1ocU4Y+mVjXRpg3ojU5NU5392
-        HuqOkmNMw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iuwPG-0003gh-8Z; Fri, 24 Jan 2020 10:41:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0B0DD3012DC;
-        Fri, 24 Jan 2020 11:39:57 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7D1072019658B; Fri, 24 Jan 2020 11:41:37 +0100 (CET)
-Date:   Fri, 24 Jan 2020 11:41:37 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
-Message-ID: <20200124104137.GH14946@hirez.programming.kicks-ass.net>
-References: <20200123153341.19947-1-will@kernel.org>
- <CAHk-=wjC2EDquO8_kzc-FHOGGjgODOLKjswYGJAMh58zTkyX3w@mail.gmail.com>
- <20200124083307.GA14914@hirez.programming.kicks-ass.net>
+        id S2391272AbgAXLXL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jan 2020 06:23:11 -0500
+Received: from mail-qv1-f65.google.com ([209.85.219.65]:44006 "EHLO
+        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391282AbgAXLXJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jan 2020 06:23:09 -0500
+Received: by mail-qv1-f65.google.com with SMTP id p2so702515qvo.10
+        for <linux-arch@vger.kernel.org>; Fri, 24 Jan 2020 03:23:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hwzQ3VCUqoiQqyG2DwDT1s000avPDz+MSypapI5GJkU=;
+        b=tBdd9AOgbGoefVh+ESSREOiklsPn1d77K/Z5wFAES3zsRlmecr69hozwJsD6NXOiwr
+         RS9KD3JteWX1fOpwBTGhtclav8Pe0gYHDDdj/dJtvD+vsycy9s7cOC27/EDv+oMXr9RU
+         N0Mvcnkok5z5ftwgqX1r0IoOqXFcd5skObUigB52pxuTzPIxARasiFCgtQq7IIhG6Twp
+         1e1r4j7OaEBbRPtsVcNZY7L07dR00eBKM0Y3O79/JgZYSKL5kqsKkFitVMMCu6wHkJt4
+         fezr3Y07wnwe/dKxSkktfScgB9kVXndNX3zywa5Sh/XZL2QwZKzROJpBtv1kp4Dh2zDh
+         Ydjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hwzQ3VCUqoiQqyG2DwDT1s000avPDz+MSypapI5GJkU=;
+        b=H1er3MJY/fzGK8x84cPZlU7qjJx4vrmMiPnddGOySglndkWahUcLuHz7IYhhnJntRW
+         Ch2tvSYJnv8jcgSuiIUjRjvmwQwNydcIY5q0cDUAJBV6DuwVhcP5ysndapdvKNcJ15aB
+         jAsmAL17Asl6YZVhMfslEdqD/p+bAuaTALvXQznDB1w5OcGC7MjkALu3F/T6mAfPbkzE
+         whVwvq8XGj2BFBIwEuEb2spSYnjYGYDawHb5Yt+WFJzxUzTI9IvGhYZPK4K6FYB3ZQlG
+         3sJrE861g3pFYjrHDq7seRAijf0WW7xJGJNjd7ye7BJWDivF3EgVDoCyksCMCE+kK42n
+         L8Cg==
+X-Gm-Message-State: APjAAAWMMvbvJsFuDOTxt5VCgr5DGH63425Z3C3TNDmMasWkUyCrrVTp
+        eEmNqPQVvv3TyIIABFgw5DTn8qL3SI+RYV6N2sau8A==
+X-Google-Smtp-Source: APXvYqwobgdvp5BoQe6vJueIBTtvwmjSRei1KJDbZLfuVUJ4xFnT3tCN7BW9EBcKj1JLiMydg7FDKvy9PT60+W+LLsk=
+X-Received: by 2002:a05:6214:1103:: with SMTP id e3mr2207642qvs.159.1579864987764;
+ Fri, 24 Jan 2020 03:23:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200124083307.GA14914@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200121160512.70887-1-elver@google.com>
+In-Reply-To: <20200121160512.70887-1-elver@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 24 Jan 2020 12:22:56 +0100
+Message-ID: <CACT4Y+aRk5=7UoPb9zmDm5XL9CcJDv9YnzndjXYtt+3FKd8maw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] include/linux: Add instrumented.h infrastructure
+To:     Marco Elver <elver@google.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Daniel Axtens <dja@axtens.net>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kees Cook <keescook@chromium.org>, cyphar@cyphar.com,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 09:33:07AM +0100, Peter Zijlstra wrote:
-> On Thu, Jan 23, 2020 at 09:59:03AM -0800, Linus Torvalds wrote:
-> > On Thu, Jan 23, 2020 at 7:33 AM Will Deacon <will@kernel.org> wrote:
-> > >
-> > > This is version two of the patches I previously posted as an RFC here:
-> > 
-> > Looks fine to me, as far as I can tell,
-> 
-> Awesome, I've picked them up with a target for tip/locking/core.
+On Tue, Jan 21, 2020 at 5:05 PM 'Marco Elver' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+>
+> This adds instrumented.h, which provides generic wrappers for memory
+> access instrumentation that the compiler cannot emit for various
+> sanitizers. Currently this unifies KASAN and KCSAN instrumentation. In
+> future this will also include KMSAN instrumentation.
+>
+> Note that, copy_{to,from}_user should use special instrumentation, since
+> we should be able to instrument both source and destination memory
+> accesses if both are kernel memory.
+>
+> The current patch only instruments the memory access where the address
+> is always in kernel space, however, both may in fact be kernel addresses
+> when a compat syscall passes an argument allocated in the kernel to a
+> real syscall. In a future change, both KASAN and KCSAN should check both
+> addresses in such cases, as well as KMSAN will make use of both
+> addresses. [It made more sense to provide the completed function
+> signature, rather than updating it and changing all locations again at a
+> later time.]
 
-FWIW, I have the following merge resolution against locking/kcsan.
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
----
-
-diff --cc include/linux/compiler.h
-index 8c0beb10c1dd,994c35638584..000000000000
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@@ -177,28 -177,69 +177,74 @@@ void ftrace_likely_update(struct ftrace
-  # define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __LINE__)
-  #endif
-  
-- #include <uapi/linux/types.h>
-- #include <linux/kcsan-checks.h>
-+ /*
-+  * Prevent the compiler from merging or refetching reads or writes. The
-+  * compiler is also forbidden from reordering successive instances of
-+  * READ_ONCE and WRITE_ONCE, but only when the compiler is aware of some
-+  * particular ordering. One way to make the compiler aware of ordering is to
-+  * put the two invocations of READ_ONCE or WRITE_ONCE in different C
-+  * statements.
-+  *
-+  * These two macros will also work on aggregate data types like structs or
-+  * unions.
-+  *
-+  * Their two major use cases are: (1) Mediating communication between
-+  * process-level code and irq/NMI handlers, all running on the same CPU,
-+  * and (2) Ensuring that the compiler does not fold, spindle, or otherwise
-+  * mutilate accesses that either do not require ordering or that interact
-+  * with an explicit memory barrier or atomic instruction that provides the
-+  * required ordering.
-+  */
-+ #include <asm/barrier.h>
-+ #include <linux/kasan-checks.h>
-+ 
-+ /*
-+  * Use __READ_ONCE() instead of READ_ONCE() if you do not require any
-+  * atomicity or dependency ordering guarantees. Note that this may result
-+  * in tears!
-+  */
-+ #define __READ_ONCE(x)	(*(const volatile __unqual_scalar_typeof(x) *)&(x))
-+ 
-+ #define __READ_ONCE_SCALAR(x)						\
-+ ({									\
-+ 	__unqual_scalar_typeof(x) __x = __READ_ONCE(x);			\
-+ 	smp_read_barrier_depends();					\
-+ 	(typeof(x))__x;							\
-+ })
-  
-- #define __READ_ONCE_SIZE						\
-+ /*
-+  * Use READ_ONCE_NOCHECK() instead of READ_ONCE() if you need
-+  * to hide memory access from KASAN.
-+  */
-+ #define READ_ONCE_NOCHECK(x)						\
-  ({									\
-- 	switch (size) {							\
-- 	case 1: *(__u8 *)res = *(volatile __u8 *)p; break;		\
-- 	case 2: *(__u16 *)res = *(volatile __u16 *)p; break;		\
-- 	case 4: *(__u32 *)res = *(volatile __u32 *)p; break;		\
-- 	case 8: *(__u64 *)res = *(volatile __u64 *)p; break;		\
-- 	default:							\
-- 		barrier();						\
-- 		__builtin_memcpy((void *)res, (const void *)p, size);	\
-- 		barrier();						\
-- 	}								\
-+ 	compiletime_assert_rwonce_type(x);				\
-+ 	__READ_ONCE_SCALAR(x);						\
-+ })
-+ 
- -#define READ_ONCE(x)	READ_ONCE_NOCHECK(x)
-++#define READ_ONCE(x)					\
-++({							\
-++	kcsan_check_atomic_read(&(x), sizeof(x));	\
-++	READ_ONCE_NOCHECK(x);				\
- +})
-  
-+ #define __WRITE_ONCE(x, val)				\
-+ do {							\
-+ 	*(volatile typeof(x) *)&(x) = (val);		\
-+ } while (0)
-+ 
-+ #define WRITE_ONCE(x, val)				\
-+ do {							\
-+ 	compiletime_assert_rwonce_type(x);		\
-++	kcsan_check_atomic_write(&(x), sizeof(x));	\
-+ 	__WRITE_ONCE(x, val);				\
-+ } while (0)
-+ 
-  #ifdef CONFIG_KASAN
-  /*
- - * We can't declare function 'inline' because __no_sanitize_address conflicts
- + * We can't declare function 'inline' because __no_sanitize_address confilcts
-   * with inlining. Attempt to inline it may cause a build failure.
--  * 	https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67368
- - *     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67368
-++ *	https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67368
-   * '__maybe_unused' allows us to avoid defined-but-not-used warnings.
-   */
-  # define __no_kasan_or_inline __no_sanitize_address notrace __maybe_unused
-@@@ -207,97 -247,6 +253,24 @@@
-  # define __no_kasan_or_inline __always_inline
-  #endif
-  
- +#define __no_kcsan __no_sanitize_thread
- +#ifdef __SANITIZE_THREAD__
- +/*
- + * Rely on __SANITIZE_THREAD__ instead of CONFIG_KCSAN, to avoid not inlining in
- + * compilation units where instrumentation is disabled. The attribute 'noinline'
- + * is required for older compilers, where implicit inlining of very small
- + * functions renders __no_sanitize_thread ineffective.
- + */
- +# define __no_kcsan_or_inline __no_kcsan noinline notrace __maybe_unused
- +# define __no_sanitize_or_inline __no_kcsan_or_inline
- +#else
- +# define __no_kcsan_or_inline __always_inline
- +#endif
- +
- +#ifndef __no_sanitize_or_inline
- +#define __no_sanitize_or_inline __always_inline
- +#endif
- +
-- static __no_kcsan_or_inline
-- void __read_once_size(const volatile void *p, void *res, int size)
-- {
-- 	kcsan_check_atomic_read(p, size);
-- 	__READ_ONCE_SIZE;
-- }
-- 
-- static __no_sanitize_or_inline
-- void __read_once_size_nocheck(const volatile void *p, void *res, int size)
-- {
-- 	__READ_ONCE_SIZE;
-- }
-- 
-- static __no_kcsan_or_inline
-- void __write_once_size(volatile void *p, void *res, int size)
-- {
-- 	kcsan_check_atomic_write(p, size);
-- 
-- 	switch (size) {
-- 	case 1: *(volatile __u8 *)p = *(__u8 *)res; break;
-- 	case 2: *(volatile __u16 *)p = *(__u16 *)res; break;
-- 	case 4: *(volatile __u32 *)p = *(__u32 *)res; break;
-- 	case 8: *(volatile __u64 *)p = *(__u64 *)res; break;
-- 	default:
-- 		barrier();
-- 		__builtin_memcpy((void *)p, (const void *)res, size);
-- 		barrier();
-- 	}
-- }
-- 
-- /*
--  * Prevent the compiler from merging or refetching reads or writes. The
--  * compiler is also forbidden from reordering successive instances of
--  * READ_ONCE and WRITE_ONCE, but only when the compiler is aware of some
--  * particular ordering. One way to make the compiler aware of ordering is to
--  * put the two invocations of READ_ONCE or WRITE_ONCE in different C
--  * statements.
--  *
--  * These two macros will also work on aggregate data types like structs or
--  * unions. If the size of the accessed data type exceeds the word size of
--  * the machine (e.g., 32 bits or 64 bits) READ_ONCE() and WRITE_ONCE() will
--  * fall back to memcpy(). There's at least two memcpy()s: one for the
--  * __builtin_memcpy() and then one for the macro doing the copy of variable
--  * - '__u' allocated on the stack.
--  *
--  * Their two major use cases are: (1) Mediating communication between
--  * process-level code and irq/NMI handlers, all running on the same CPU,
--  * and (2) Ensuring that the compiler does not fold, spindle, or otherwise
--  * mutilate accesses that either do not require ordering or that interact
--  * with an explicit memory barrier or atomic instruction that provides the
--  * required ordering.
--  */
-- #include <asm/barrier.h>
-- #include <linux/kasan-checks.h>
-- 
-- #define __READ_ONCE(x, check)						\
-- ({									\
-- 	union { typeof(x) __val; char __c[1]; } __u;			\
-- 	if (check)							\
-- 		__read_once_size(&(x), __u.__c, sizeof(x));		\
-- 	else								\
-- 		__read_once_size_nocheck(&(x), __u.__c, sizeof(x));	\
-- 	smp_read_barrier_depends(); /* Enforce dependency ordering from x */ \
-- 	__u.__val;							\
-- })
-- #define READ_ONCE(x) __READ_ONCE(x, 1)
-- 
-- /*
--  * Use READ_ONCE_NOCHECK() instead of READ_ONCE() if you need
--  * to hide memory access from KASAN.
--  */
-- #define READ_ONCE_NOCHECK(x) __READ_ONCE(x, 0)
-- 
-  static __no_kasan_or_inline
-  unsigned long read_word_at_a_time(const void *addr)
-  {
-@@@ -305,34 -254,6 +278,26 @@@
-  	return *(unsigned long *)addr;
-  }
-  
-- #define WRITE_ONCE(x, val) \
-- ({							\
-- 	union { typeof(x) __val; char __c[1]; } __u =	\
-- 		{ .__val = (__force typeof(x)) (val) }; \
-- 	__write_once_size(&(x), __u.__c, sizeof(x));	\
-- 	__u.__val;					\
-- })
-- 
- +#include <linux/kcsan.h>
- +
- +/*
- + * data_race(): macro to document that accesses in an expression may conflict with
- + * other concurrent accesses resulting in data races, but the resulting
- + * behaviour is deemed safe regardless.
- + *
- + * This macro *does not* affect normal code generation, but is a hint to tooling
- + * that data races here should be ignored.
- + */
- +#define data_race(expr)                                                        \
- +	({                                                                     \
- +		typeof(({ expr; })) __val;                                     \
- +		kcsan_nestable_atomic_begin();                                 \
- +		__val = ({ expr; });                                           \
- +		kcsan_nestable_atomic_end();                                   \
- +		__val;                                                         \
- +	})
- +#else
- +
-  #endif /* __KERNEL__ */
-  
-  /*
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Marco Elver <elver@google.com>
+> Acked-by: Alexander Potapenko <glider@google.com>
+> ---
+> v2:
+> * Simplify header, since we currently do not need pre/post user-copy
+>   distinction.
+> * Make instrument_copy_{to,from}_user function arguments match
+>   copy_{to,from}_user and update rationale in commit message.
+> ---
+>  include/linux/instrumented.h | 109 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 109 insertions(+)
+>  create mode 100644 include/linux/instrumented.h
+>
+> diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+> new file mode 100644
+> index 000000000000..43e6ea591975
+> --- /dev/null
+> +++ b/include/linux/instrumented.h
+> @@ -0,0 +1,109 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * This header provides generic wrappers for memory access instrumentation that
+> + * the compiler cannot emit for: KASAN, KCSAN.
+> + */
+> +#ifndef _LINUX_INSTRUMENTED_H
+> +#define _LINUX_INSTRUMENTED_H
+> +
+> +#include <linux/compiler.h>
+> +#include <linux/kasan-checks.h>
+> +#include <linux/kcsan-checks.h>
+> +#include <linux/types.h>
+> +
+> +/**
+> + * instrument_read - instrument regular read access
+> + *
+> + * Instrument a regular read access. The instrumentation should be inserted
+> + * before the actual read happens.
+> + *
+> + * @ptr address of access
+> + * @size size of access
+> + */
+> +static __always_inline void instrument_read(const volatile void *v, size_t size)
+> +{
+> +       kasan_check_read(v, size);
+> +       kcsan_check_read(v, size);
+> +}
+> +
+> +/**
+> + * instrument_write - instrument regular write access
+> + *
+> + * Instrument a regular write access. The instrumentation should be inserted
+> + * before the actual write happens.
+> + *
+> + * @ptr address of access
+> + * @size size of access
+> + */
+> +static __always_inline void instrument_write(const volatile void *v, size_t size)
+> +{
+> +       kasan_check_write(v, size);
+> +       kcsan_check_write(v, size);
+> +}
+> +
+> +/**
+> + * instrument_atomic_read - instrument atomic read access
+> + *
+> + * Instrument an atomic read access. The instrumentation should be inserted
+> + * before the actual read happens.
+> + *
+> + * @ptr address of access
+> + * @size size of access
+> + */
+> +static __always_inline void instrument_atomic_read(const volatile void *v, size_t size)
+> +{
+> +       kasan_check_read(v, size);
+> +       kcsan_check_atomic_read(v, size);
+> +}
+> +
+> +/**
+> + * instrument_atomic_write - instrument atomic write access
+> + *
+> + * Instrument an atomic write access. The instrumentation should be inserted
+> + * before the actual write happens.
+> + *
+> + * @ptr address of access
+> + * @size size of access
+> + */
+> +static __always_inline void instrument_atomic_write(const volatile void *v, size_t size)
+> +{
+> +       kasan_check_write(v, size);
+> +       kcsan_check_atomic_write(v, size);
+> +}
+> +
+> +/**
+> + * instrument_copy_to_user - instrument reads of copy_to_user
+> + *
+> + * Instrument reads from kernel memory, that are due to copy_to_user (and
+> + * variants). The instrumentation must be inserted before the accesses.
+> + *
+> + * @to destination address
+> + * @from source address
+> + * @n number of bytes to copy
+> + */
+> +static __always_inline void
+> +instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+> +{
+> +       kasan_check_read(from, n);
+> +       kcsan_check_read(from, n);
+> +}
+> +
+> +/**
+> + * instrument_copy_from_user - instrument writes of copy_from_user
+> + *
+> + * Instrument writes to kernel memory, that are due to copy_from_user (and
+> + * variants). The instrumentation should be inserted before the accesses.
+> + *
+> + * @to destination address
+> + * @from source address
+> + * @n number of bytes to copy
+> + */
+> +static __always_inline void
+> +instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
+> +{
+> +       kasan_check_write(to, n);
+> +       kcsan_check_write(to, n);
+> +}
+> +
+> +#endif /* _LINUX_INSTRUMENTED_H */
+> --
+> 2.25.0.341.g760bfbb309-goog
+>
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20200121160512.70887-1-elver%40google.com.
