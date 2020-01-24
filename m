@@ -2,71 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CC7147972
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 09:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3338147E83
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2020 11:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbgAXIdP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jan 2020 03:33:15 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:53408 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725843AbgAXIdP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jan 2020 03:33:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=wAaIX3Ih8IQ185qLvWSUryJc/NNBflOLyVlEkXyqLT0=; b=GxFqNFVgF5Qvy+bbO1KN26kGt
-        SL3UQ4aNwRE0TNGP2OMGlr7OE2wxmVO3HGMlq6JKjBoAChHrcCEnuAaHidCMPcPHC04u+4qQ4KA06
-        dQt/HDyYCp0LeSz5ulq6PS4ZzHr5adyESwAfzJTDZvxoSagc5pRBPczwQCF2VVBYWmKSszz8K2/sI
-        x8hhYKHGc//wox664zNwtlRaedkEqKSCe0n6AG1568SlYZBRbaRiuNnbsr5slRXq1OpSvlAytzWBc
-        s1vCNqtlavdTusKiwGBm7Ze32YHBvmRWRphmZTq+QIrupTpsUeKlhOaEE0LZzFTgnyFKg0+GTHbQn
-        XlnyNwdxA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iuuOr-0002we-CT; Fri, 24 Jan 2020 08:33:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 538913008A9;
-        Fri, 24 Jan 2020 09:31:27 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BB2A42B715B69; Fri, 24 Jan 2020 09:33:07 +0100 (CET)
-Date:   Fri, 24 Jan 2020 09:33:07 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
+        id S2387721AbgAXKLI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jan 2020 05:11:08 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:52749 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730743AbgAXKLI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 24 Jan 2020 05:11:08 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-18-4FpQZc8INzW3lfZ1t7ypNA-1; Fri, 24 Jan 2020 10:11:04 +0000
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Fri, 24 Jan 2020 10:11:03 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 24 Jan 2020 10:11:03 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Arvind Sankar' <nivedita@alum.mit.edu>,
+        Nick Desaulniers <ndesaulniers@google.com>
+CC:     Will Deacon <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
-Message-ID: <20200124083307.GA14914@hirez.programming.kicks-ass.net>
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: RE: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
+Thread-Topic: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
+Thread-Index: AQHV0gKFFdfdrbkjnU+llP+aeIA9U6f4esgQgAAC9ICAAANF8IAAGghCgAD2osA=
+Date:   Fri, 24 Jan 2020 10:11:03 +0000
+Message-ID: <a9d4a3c113ed4f09897477d3a9be1f84@AcuMS.aculab.com>
 References: <20200123153341.19947-1-will@kernel.org>
- <CAHk-=wjC2EDquO8_kzc-FHOGGjgODOLKjswYGJAMh58zTkyX3w@mail.gmail.com>
+ <26ad7a8a975c4e06b44a3184d7c86e5f@AcuMS.aculab.com>
+ <20200123171641.GC20126@willie-the-truck>
+ <2bfe2be6da484f15b0d229dd02d16ae6@AcuMS.aculab.com>
+ <CAKwvOdkFGTeVQPm8Z3Y7mQ-=6d5CFxmEJ+hBb8ns2r2H1cb0hQ@mail.gmail.com>
+ <20200123190125.GA2683468@rani.riverdale.lan>
+In-Reply-To: <20200123190125.GA2683468@rani.riverdale.lan>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjC2EDquO8_kzc-FHOGGjgODOLKjswYGJAMh58zTkyX3w@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MC-Unique: 4FpQZc8INzW3lfZ1t7ypNA-1
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 09:59:03AM -0800, Linus Torvalds wrote:
-> On Thu, Jan 23, 2020 at 7:33 AM Will Deacon <will@kernel.org> wrote:
-> >
-> > This is version two of the patches I previously posted as an RFC here:
-> 
-> Looks fine to me, as far as I can tell,
+RnJvbTogQXJ2aW5kIFNhbmthcg0KPiBTZW50OiAyMyBKYW51YXJ5IDIwMjAgMTk6MDENCi4uLg0K
+PiA+ID4gT2ggLSBhbmQgSSBuZWVkIHRvIGZpbmQgYSBuZXdlciBjb21waWxlciA6LSgNCj4gPg0K
+PiA+IFdoYXQgZGlzdHJvIGFyZSB5b3UgdXNpbmc/IERvZXMgaXQgaGF2ZSBhIHBhY2thZ2UgZm9y
+IGEgbmV3ZXINCj4gPiBjb21waWxlcj8gIEknbSBob25lc3RseSBjdXJpb3VzIGFib3V0IHdoYXQg
+cG9saWNpZXMgaWYgYW55IHRoZSBrZXJuZWwNCj4gPiBoYXMgZm9yIHN1cHBvcnRpbmcgZGV2ZWxv
+cGVyJ3MgdG9vbGNoYWlucyBmcm9tIHRoZWlyIGRpc3RyaWJ1dGlvbnMuDQoNCkxpa2UgbWFueSBk
+ZXZlbG9wZXJzIEkgZ2V0IGxhenkgd2l0aCB1cGdyYWRlcyBvZiBzb21lIHN5c3RlbXMuDQpTbyBt
+eSBtYWluIExpbnV4ICdkZXNrdG9wJyBzeXN0ZW0gaXMgcnVubmluZyBVYnVudHUgMTMuMDQgdXNl
+cnNwYWNlDQp3aXRoIGEgdmVyeSByZWNlbnQga2VybmVsLg0KU28gaXQgaGFzIGdjYyA0LjcuMyBh
+cyBkZWZhdWx0IGFuZCBhIGdjYyA0LjguMSBpbnN0YWxsZWQgKHByb2JhYmx5IG5vdCBtYXR1cmUN
+CmVub3VnaCB0byBiZSBzYWZlISkuDQooSSd2ZSAyIG90aGVyIGk3IHN5c3RlbXMgcnVubmluZyBV
+YnVudHUgMTguMDQuMHggd2l0aCB0aGUgZGlzdHJvIGtlcm5lbHMuKQ0KLi4uDQo+IEkgdGhpbmsg
+dGhlIGlzc3VlIGlzIG5vdCBqdXN0IGtlcm5lbCBkZXZzLiBVc2VycyBtYXkgbmVlZCB0byBjb21w
+aWxlIGENCj4gY3VzdG9tIGtlcm5lbCBvciBhdCBsZWFzdCBidWlsZCBhIG1vZHVsZS4NCg0KSWYg
+dGhleSBhcmUganVzdCBidWlsZGluZyBhIG1vZHVsZSB0aGV5J2xsIGJlIHVzaW5nIHRoZSBrZXJu
+ZWwgaGVhZGVycw0KdGhhdCBnbyB3aXRoIHRoZSBkaXN0cm8ga2VybmVsIC0gYW5kIHRoZSBtb2R1
+bGUgc291cmNlcyB3aWxsIG5lZWQgdG8NCm1hdGNoLiBTbyB0aGUgZGlzdHJvJ3MgZ2NjIHNob3Vs
+ZCBtYXRjaC4NCg0KTXVjaCBtb3JlIGludGVyZXN0aW5nIGlzIHRoZSBnY2MgY29tcGlsZXIgd2Ug
+dXNlIHRvIGdlbmVyYXRlIHRoZQ0KJ2JpbmFyeSBibG9iJyBmb3Igb3VyICdvdXQgb2YgdHJlZScg
+ZHJpdmVycy4NClRoZXNlIGdldCBjb21waWxlZCAod2l0aG91dCBhbnkgb2YgdGhlIGtlcm5lbCBo
+ZWFkZXJzKSBvbiB0aGUNCnNhbWUgc3lzdGVtIGFzIHdlIGJ1aWxkIHRoZSB1c2Vyc3BhY2UgcHJv
+Z3JhbXMgb24uDQpUbyBnZXQgbGliYyBhbmQgKGVzcGVjaWFsbHkpIGxpYmMrKyBjb21wYXRpYmls
+aXR5IHRoaXMgaGFzIHRvIGJlDQphIHZlcnkgb2xkIHN5c3RlbSAtIGFzIG9sZCBhcyB0aGUgb2xk
+ZXN0IHN5c3RlbSBhbnkgb2Ygb3VyDQpjdXN0b21lcnMgYXJlIGxpa2VseSB0byB1c2UuDQpJbiBw
+cmFjdGlzZSB0aGlzIChub3cpIG1lYW5zIHNvbWV0aGluZyBydW5uaW5nIGEgMi42LjMyIGVyYQ0K
+a2VybmVsIChvciBzbGlnaHRseSBlYXJsaWVyKS4NClNvIGlzIGEgZGViaWFuIGdjYyA0LjMuMi0x
+LjEgY29tcGlsZXIuDQpJIHRoaW5rIHdlJ3ZlIGZpbmFsbHkgcGVyc3VhZGVkIGFsbCBvdXIgY3Vz
+dG9tZXJzIHRvIHVwZ3JhZGUgZnJvbSAyLjYuMTguDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVk
+IEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5l
+cywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-Awesome, I've picked them up with a target for tip/locking/core.
