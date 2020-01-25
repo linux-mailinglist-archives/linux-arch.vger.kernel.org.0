@@ -2,158 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B32A7149252
-	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2020 01:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6B714926F
+	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2020 01:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729147AbgAYAjA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jan 2020 19:39:00 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:29044 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729660AbgAYAjA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 24 Jan 2020 19:39:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579912739;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gaVYkO70LUTOzuFS15WZNr0COycz0AX51ZXsTP6Rmt8=;
-        b=UVP/wIpmTYf/IrjaLDylBCJMy0lygGuHTTLX6FRXZ+jriTc0nD20h39RRsLvXvaEjOd73z
-        KO9vhQi9SeOoypnwsGbRQjuJZKffQS75jp21pXOjlTCZs4QIempeVK9uZxghQ4LWe2qR9W
-        8SAlfonbbsuz5TsEHWlk1MAT1Lq770I=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-410-odkxcsjgM5ePY3Oi8a2QAQ-1; Fri, 24 Jan 2020 19:38:55 -0500
-X-MC-Unique: odkxcsjgM5ePY3Oi8a2QAQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S2387542AbgAYA5P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jan 2020 19:57:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44822 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387475AbgAYA5O (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 24 Jan 2020 19:57:14 -0500
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4CF51477;
-        Sat, 25 Jan 2020 00:38:53 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-124-92.rdu2.redhat.com [10.10.124.92])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EF9998CCF6;
-        Sat, 25 Jan 2020 00:38:49 +0000 (UTC)
-Subject: Re: [PATCH v8 4/5] locking/qspinlock: Introduce starvation avoidance
- into CNA
+        by mail.kernel.org (Postfix) with ESMTPSA id D40442071E;
+        Sat, 25 Jan 2020 00:57:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579913833;
+        bh=7jt0GTJ/WTvnJW0J0lj3B8HCo6k1PQjNhvzflXBV4Tk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=p2zHxPE5tfiNPi2OhmhFXsfhjkb6uZL1MmWFtLvtH2bHlq5/tAqcHCSP2TZe7SDkn
+         3iI69TItHEfO9zhVah9QIqJaHhMn6rGJOIRtvf1kNaBL232FKwpOvMViCH4EG9f1R4
+         /Cbm/Lyzh+kK/9ABYtItJ/s72k1nCeBSgG6Of1Bs=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id A729D352018E; Fri, 24 Jan 2020 16:57:13 -0800 (PST)
+Date:   Fri, 24 Jan 2020 16:57:13 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Alex Kogan <alex.kogan@oracle.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux@armlinux.org.uk,
+Cc:     linux@armlinux.org.uk, Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Waiman Long <longman@redhat.com>, linux-arch@vger.kernel.org,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, hpa@zytor.com, x86@kernel.org,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Jan Glauber <jglauber@marvell.com>,
-        Steven Sistare <steven.sistare@oracle.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        dave.dice@oracle.com
-References: <20191230194042.67789-1-alex.kogan@oracle.com>
- <20191230194042.67789-5-alex.kogan@oracle.com>
- <20200121132949.GL14914@hirez.programming.kicks-ass.net>
- <cfdf635d-be2e-9d4b-c4ca-6bcbddc6868f@redhat.com>
- <3862F8A1-FF9B-40AD-A88E-2C0BA7AF6F58@oracle.com>
- <20200124075235.GX14914@hirez.programming.kicks-ass.net>
- <2c6741c5-d89d-4b2c-cebe-a7c7f6eed884@redhat.com>
- <48ce49e5-98a7-23cd-09f4-8290a65abbb5@redhat.com>
- <8D3AFB47-B595-418C-9568-08780DDC58FF@oracle.com>
- <714892cd-d96f-4d41-ae8b-d7b7642a6e3c@redhat.com>
- <1669BFDE-A1A5-4ED8-B586-035460BBF68A@oracle.com>
- <45660873-731a-a810-8c57-1a5a19d266b4@redhat.com>
- <693E6287-E37C-4C5D-BE33-B3D813BE505D@oracle.com>
- <edc53126-bfe4-5102-d2eb-2332bf3a68e5@redhat.com>
- <D39064BF-6EF3-4C13-B2D1-34C282A20F5E@oracle.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <518185c1-c03a-7e8c-9d09-f67e42c9bc82@redhat.com>
-Date:   Fri, 24 Jan 2020 19:38:50 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
+        jglauber@marvell.com, dave.dice@oracle.com,
+        steven.sistare@oracle.com, daniel.m.jordan@oracle.com
+Subject: Re: [PATCH v9 0/5] Add NUMA-awareness to qspinlock
+Message-ID: <20200125005713.GZ2935@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200115035920.54451-1-alex.kogan@oracle.com>
+ <20200124222434.GA7196@paulmck-ThinkPad-P72>
+ <6AAE7FC6-F5DE-4067-8BC4-77F27948CD09@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <D39064BF-6EF3-4C13-B2D1-34C282A20F5E@oracle.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6AAE7FC6-F5DE-4067-8BC4-77F27948CD09@oracle.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/24/20 4:27 PM, Alex Kogan wrote:
->
->> On Jan 24, 2020, at 4:12 PM, Waiman Long <longman@redhat.com> wrote:
->>
->> On 1/24/20 3:09 PM, Alex Kogan wrote:
->>>>> We also probably do not want those =E2=80=9Cprioritized=E2=80=9D th=
-reads to disrupt
->>>>> normal
->>>>> CNA operation. E.g., if the main queue looks like T1_1, P2_1, T1_2,
->>>>> =E2=80=A6, where
->>>>> T1_x is a thread running on node 1 and P2_1 is a prioritized thread
->>>>> running
->>>>> on node 2, we want to pass the lock from T1_1 to P2_1 and then to T=
-1_2
->>>>> (rather than have P2_1 to scan for another thread on node 2).
->>>>>
->>>>> There is a way to achieve that =E2=80=94 when we pass the lock to P=
-2_1,
->>>>> we can set its numa node field to 1. This means that we need to
->>>>> reset the numa
->>>>> node field in cna_init_node(), but AFAICT this is relatively cheap.
->>>>> The rest
->>>>> of the CNA logic should not change.
->>>> I won't recommend doing that. If the lock cacheline has been moved
->>>> from node 1 to 2, I will say it is better to stick with node 2 rathe=
-r
->>>> than switching back to node 1. That will mean that the secondary
->>>> queue may contain lock waiters from the same nodes, but they will
->>>> eventually be flushed back to the primary queue.
->>>>
->>> That=E2=80=99s right, assuming we do not reset intra_node count when
->>> transferring the
->>> lock to a prioritized thread from another node. Otherwise, we may sta=
-rve
->>> waiters in the secondary queue.=20
->>>
->>> Still, that can make the lock even less fair to non-prioritized
->>> threads. When
->>> you flush the secondary queue, the preference may remain with the sam=
-e
->>> node. This will not happen in the current form of CNA, as we never ge=
-t=20
->>> threads from the preferred node in the secondary queue.
->> That is true.
->>
->> However, it is no different from the current scheme that a waiter from
->> another node may have to wait for 64k other waiters to go first before
->> it has a chance to get it. Now that waiter can be from the same node a=
-s
->> well.
-> The difference is that in the current form of CNA, the preferred node _=
-will
-> change after 64k lock transitions. In the change you propose, this is n=
-o
-> longer the case. It may take another ~64k transitions for that to happe=
-n.
-> More generally, I think this makes the analysis of the lock behavior mo=
-re
-> convoluted.
->
-> I think we should treat those prioritized threads as =E2=80=9Cwild=E2=80=
-=9D cards, passing the=20
-> lock through them, but keeping the preferred node intact. This will pot=
-entially
-> cost one extra lock migration, but will make reasoning about the lock
-> behavior easier.
+On Fri, Jan 24, 2020 at 06:39:02PM -0500, Alex Kogan wrote:
+> Hi, Paul.
+> 
+> Thanks for running those experiments!
+> 
+> > On Jan 24, 2020, at 5:24 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > 
+> > On Tue, Jan 14, 2020 at 10:59:15PM -0500, Alex Kogan wrote:
+> >> Minor changes from v8 based on feedback from Longman:
+> >> -----------------------------------------------------
+> >> 
+> >> - Add __init to cna_configure_spin_lock_slowpath().
+> >> 
+> >> - Fix the comment for cna_scan_main_queue().
+> >> 
+> >> - Change the type of intra_node_handoff_threshold to unsigned int.
+> >> 
+> >> 
+> >> Summary
+> >> -------
+> >> 
+> >> Lock throughput can be increased by handing a lock to a waiter on the
+> >> same NUMA node as the lock holder, provided care is taken to avoid
+> >> starvation of waiters on other NUMA nodes. This patch introduces CNA
+> >> (compact NUMA-aware lock) as the slow path for qspinlock. It is
+> >> enabled through a configuration option (NUMA_AWARE_SPINLOCKS).
+> >> 
+> >> CNA is a NUMA-aware version of the MCS lock. Spinning threads are
+> >> organized in two queues, a main queue for threads running on the same
+> >> node as the current lock holder, and a secondary queue for threads
+> >> running on other nodes. Threads store the ID of the node on which
+> >> they are running in their queue nodes. After acquiring the MCS lock and
+> >> before acquiring the spinlock, the lock holder scans the main queue
+> >> looking for a thread running on the same node (pre-scan). If found (call
+> >> it thread T), all threads in the main queue between the current lock
+> >> holder and T are moved to the end of the secondary queue.  If such T
+> >> is not found, we make another scan of the main queue after acquiring 
+> >> the spinlock when unlocking the MCS lock (post-scan), starting at the
+> >> node where pre-scan stopped. If both scans fail to find such T, the
+> >> MCS lock is passed to the first thread in the secondary queue. If the
+> >> secondary queue is empty, the MCS lock is passed to the next thread in the
+> >> main queue. To avoid starvation of threads in the secondary queue, those
+> >> threads are moved back to the head of the main queue after a certain
+> >> number of intra-node lock hand-offs.
+> >> 
+> >> More details are available at https://urldefense.proofpoint.com/v2/url?u=https-3A__arxiv.org_abs_1810.05600&d=DwIBAg&c=RoP1YumCXCgaWHvlZYR8PZh8Bv7qIrMUB65eapI_JnE&r=Hvhk3F4omdCk-GE1PTOm3Kn0A7ApWOZ2aZLTuVxFK4k&m=1KUGGZYTHnQ25fgRFppdNvpJfI0rOO_Usdu18RDu_14&s=F12nhHutwnPNt_TQ2ELER0DhtsHlEI9EiW1nDPhm5-Y&e= <https://urldefense.proofpoint.com/v2/url?u=https-3A__arxiv.org_abs_1810.05600&d=DwIBAg&c=RoP1YumCXCgaWHvlZYR8PZh8Bv7qIrMUB65eapI_JnE&r=Hvhk3F4omdCk-GE1PTOm3Kn0A7ApWOZ2aZLTuVxFK4k&m=1KUGGZYTHnQ25fgRFppdNvpJfI0rOO_Usdu18RDu_14&s=F12nhHutwnPNt_TQ2ELER0DhtsHlEI9EiW1nDPhm5-Y&e=> .
+> >> 
+> >> The series applies on top of v5.5.0-rc6, commit b3a987b026.
+> >> Performance numbers are available in previous revisions
+> >> of the series.
+> >> 
+> >> Further comments are welcome and appreciated.
+> > 
+> > I ran this on a large system with a version of locktorture that was
+> > modified to print out the maximum and minimum per-CPU lock-acquisition
+> > counts, and with CPU hotplug disabled.  I also modified the LOCK01 and
+> > LOCK04 scenarios to use 220 hardware threads.
+> > 
+> > Here is what the test ended up with at the end of a one-hour run:
+> > 
+> > LOCK01 (exclusive):
+> > Writes:  Total: 1241107333  Max/Min: 9206962/60902 ???  Fail: 0
+> > 
+> > LOCK04 (rwlock):
+> > Writes:  Total: 232991963  Max/Min: 2631574/74582 ???  Fail: 0
+> > Reads :  Total: 216935386  Max/Min: 2735939/28665 ???  Fail: 0
+> > 
+> > The "???" strings are printed because the ratio of maximum to minimum exceeds
+> > a factor of two.
+> Is this what you expect / have seen with the existing qspinlock?
+> 
+> > 
+> > I also ran 30-minute runs on my laptop, which has 12 hardware threads:
+> > 
+> > LOCK01 (exclusive):
+> > Writes:  Total: 3992072782  Max/Min: 259368782/97231961 ???  Fail: 0
+> > 
+> > LOCK04 (rwlock):
+> > Writes:  Total: 131063892  Max/Min: 13136206/5876157 ???  Fail: 0
+> > Reads :  Total: 144876801  Max/Min: 19999535/4873442 ???  Fail: 0
+> I assume the system above is multi-socket, but your laptop is probably not?
+> 
+> If that’s the case, CNA should not be enabled on your laptop (grep
+> kernel logs for "Enabling CNA spinlock” to be sure).
+> 
+> > 
+> > These also exceed the factor-of-two cutoff, but not as dramatically.
+> > The readers for the reader-writer lock fared worst, with a 4-to-1 ratio.
+> > 
+> > These tests did run within guest OSes.
+> So I really wonder if CNA was enabled here, or whether this is what you get
+> with paravirt qspinlock.
+> 
+> >  Is that configuration out of
+> > scope for this locking algorithm?  In addition (as might well also have
+> > been the case for the locktorture runs in your paper), these tests run
+> > a pair of stress-test tasks for each hardware thread.
+> > 
+> > Is this expected behavior?
+> The results do appear skewed a bit too much, but it would be helpful to know
+> what qspinlock we are looking at, and how they compare to the existing qspinlock,
+> in case it is indeed CNA.
 
-It seems like you prefer mathematical purity than practical
-consideration. I won't object to that if you insist that is the right
-way to go. Just be mindful that you may need to add a preferred node
-value to do that. It will also complicate the code, but it is your choice=
-.
+You called it!  I will play with QEMU's -numa argument to see if I can get
+CNA to run for me.  Please accept my apologies for the false alarm.
 
-Cheers,
-Longman
-
+							Thanx, Paul
