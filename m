@@ -2,114 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86DE2149B49
-	for <lists+linux-arch@lfdr.de>; Sun, 26 Jan 2020 16:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED65149B6F
+	for <lists+linux-arch@lfdr.de>; Sun, 26 Jan 2020 16:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725908AbgAZPLm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 26 Jan 2020 10:11:42 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:43792 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726080AbgAZPLm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 26 Jan 2020 10:11:42 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1580051501; h=Date: Message-Id: Cc: To: References:
- In-Reply-To: From: Subject: Content-Transfer-Encoding: MIME-Version:
- Content-Type: Sender; bh=GgNouC08XBq9czPTNzqE2b2+ochAUWZ+cpydcRWvAGA=;
- b=fw2e9ngGC56jy1CHyl0lyy2Jlb170AKJ9nNz0Gfo/bzDCW7qHzqYEiwgVt/DtTqpCfQftoeN
- 24ESUQrbNll5DjiaJsk0h7R0CY3DPRt74cQySEMjGAHz9pbe7baSngPqwApzTnTu+ibE/hIC
- g758S4Dx002EstJwNvKjvj/+Tnk=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyI5MDNlZiIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e2dac29.7f4488aabe30-smtp-out-n01;
- Sun, 26 Jan 2020 15:11:37 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C0CA8C43383; Sun, 26 Jan 2020 15:11:37 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=2.0 tests=ALL_TRUSTED,MISSING_DATE,
-        MISSING_MID,SPF_NONE autolearn=no autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        id S1726080AbgAZPfh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 26 Jan 2020 10:35:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57562 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725908AbgAZPfg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 26 Jan 2020 10:35:36 -0500
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 77D01C43383;
-        Sun, 26 Jan 2020 15:11:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 77D01C43383
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-Content-Type: text/plain; charset="utf-8"
+        by mail.kernel.org (Postfix) with ESMTPSA id 2EAA12071A;
+        Sun, 26 Jan 2020 15:35:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580052936;
+        bh=wNZuYpHo/oqB810XSYgXonQ7QrqECablZ/abB2+Rxq4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=eBkcLRR/OVOxK9jF4dAE0VVVJJGuBwoL10Xxa8stXLh38IkJ21JBqYg4pSeBn/9OX
+         Kyf360tAyg43NBsr4G3IyY4D1KKiLXCcEc6kEPqhho9c6c9w9xOMb7y1xEH2f+v4v2
+         FEuL2in2eYunSEnck9fUMP3oOGi950PTouWTQZx0=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 070B7352277B; Sun, 26 Jan 2020 07:35:36 -0800 (PST)
+Date:   Sun, 26 Jan 2020 07:35:36 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
+        jglauber@marvell.com, dave.dice@oracle.com,
+        steven.sistare@oracle.com, daniel.m.jordan@oracle.com
+Subject: Re: [PATCH v9 0/5] Add NUMA-awareness to qspinlock
+Message-ID: <20200126153535.GL2935@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200115035920.54451-1-alex.kogan@oracle.com>
+ <20200124222434.GA7196@paulmck-ThinkPad-P72>
+ <6AAE7FC6-F5DE-4067-8BC4-77F27948CD09@oracle.com>
+ <20200125005713.GZ2935@paulmck-ThinkPad-P72>
+ <02defadb-217d-7803-88a1-ec72a37eda28@redhat.com>
+ <adb4fb09-f374-4d64-096b-ba9ad8b35fd5@redhat.com>
+ <20200125045844.GC2935@paulmck-ThinkPad-P72>
+ <967f99ee-b781-43f4-d8ba-af83786c429c@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 2/9] net: wireless: rtl818x: Constify ioreadX() iomem
- argument (as in generic implementation)
-From:   Kalle Valo <kvalo@codeaurora.org>
-In-Reply-To: <20200108200528.4614-3-krzk@kernel.org>
-References: <20200108200528.4614-3-krzk@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jiri Slaby <jirislaby@gmail.com>,
-        Nick Kossifidis <mickflemm@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
-        virtualization@lists.linux-foundation.org,
-        linux-arch@vger.kernel.org
-User-Agent: pwcli/0.0.0-git (https://github.com/kvalo/pwcli/) Python/2.7.12
-Message-Id: <20200126151137.C0CA8C43383@smtp.codeaurora.org>
-Date:   Sun, 26 Jan 2020 15:11:37 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <967f99ee-b781-43f4-d8ba-af83786c429c@redhat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Krzysztof Kozlowski <krzk@kernel.org> wrote:
+On Sat, Jan 25, 2020 at 02:41:39PM -0500, Waiman Long wrote:
+> On 1/24/20 11:58 PM, Paul E. McKenney wrote:
+> > On Fri, Jan 24, 2020 at 09:17:05PM -0500, Waiman Long wrote:
+> >> On 1/24/20 8:59 PM, Waiman Long wrote:
+> >>>> You called it!  I will play with QEMU's -numa argument to see if I can get
+> >>>> CNA to run for me.  Please accept my apologies for the false alarm.
+> >>>>
+> >>>> 							Thanx, Paul
+> >>>>
+> >>> CNA is not currently supported in a VM guest simply because the numa
+> >>> information is not reliable. You will have to run it on baremetal to
+> >>> test it. Sorry for that.
+> >> Correction. There is a command line option to force CNA lock to be used
+> >> in a VM. Use the "numa_spinlock=on" boot command line parameter.
+> > As I understand it, I need to use a series of -numa arguments to qemu
+> > combined with the numa_spinlock=on (or =1) on the kernel command line.
+> > If the kernel thinks that there is only one NUMA node, it appears to
+> > avoid doing CNA.
+> >
+> > Correct?
+> >
+> > 							Thanx, Paul
+> >
+> In auto-detection mode (the default), CNA will only be turned on when
+> paravirt qspinlock is not enabled first and there are at least 2 numa
+> nodes. The "numa_spinlock=on" option will force it on even when both of
+> the above conditions are false.
 
-> The ioreadX() helpers have inconsistent interface.  On some architectures
-> void *__iomem address argument is a pointer to const, on some not.
-> 
-> Implementations of ioreadX() do not modify the memory under the address
-> so they can be converted to a "const" version for const-safety and
-> consistency among architectures.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hmmm...
 
-I assume this and patch 9 are going via some other tree so dropping them
-from my patchwork queue.
+Here is my kernel command line taken from the console log:
 
--- 
-https://patchwork.kernel.org/patch/11324461/
+console=ttyS0 locktorture.onoff_interval=0 numa_spinlock=on locktorture.stat_interval=15 locktorture.shutdown_secs=1800 locktorture.verbose=1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Yet the string "Enabling CNA spinlock" does not appear.
+
+Ah, idiot here needs to enable CONFIG_NUMA_AWARE_SPINLOCKS in his build.
+Trying again with "--kconfig "CONFIG_NUMA_AWARE_SPINLOCKS=y"...
+
+							Thanx, Paul
