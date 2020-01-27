@@ -2,105 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E95BF149F39
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2020 08:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BF4149F90
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2020 09:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725818AbgA0H0W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Jan 2020 02:26:22 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:37505 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725765AbgA0H0V (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jan 2020 02:26:21 -0500
-Received: from mail-qk1-f178.google.com ([209.85.222.178]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MQeIA-1jGO0w1Lni-00NkXH; Mon, 27 Jan 2020 08:26:20 +0100
-Received: by mail-qk1-f178.google.com with SMTP id q15so8681606qke.9;
-        Sun, 26 Jan 2020 23:26:20 -0800 (PST)
-X-Gm-Message-State: APjAAAXo6yGNTX4WiZmZRQfrosrPSVm7SjLJUIwyt/DfqlYhuyX5Yi2a
-        rLBGazeqeZTAdef0YYieKRLfngPgXv4iPkT1fsU=
-X-Google-Smtp-Source: APXvYqxlylkK1tDp0siCP+ozzjLtsjUJ1/pYYXDqAsuxoykoyBiDLDdftjf04CgOzZk2GHrZ8hTORthbFnaJFMo2yc0=
-X-Received: by 2002:a05:620a:12e1:: with SMTP id f1mr14839537qkl.394.1580109979147;
- Sun, 26 Jan 2020 23:26:19 -0800 (PST)
+        id S1725955AbgA0IMI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Jan 2020 03:12:08 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:40326 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727093AbgA0IMI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jan 2020 03:12:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=IUm93oOamnFo5hv3nJSbaylh1DDwQYJBt4Fpf5TYElU=; b=jTFjC7I67Cn2qeRKe1K6/I5jT
+        yvg1vVFv5/oMehurUQgdtZgH4P1zAgC7IEs/6W4kcTxi86ngyic/hviSfjT5kLXfIM94MNeDRePVF
+        suzzEIMOHDLZiJxHBCoWtpUqssbdXyP4KXWOLn8vbMsuZAUYuRAJZ9PmLOpBlTYHjK0zrKGtdHvGS
+        AMGOSLfYnWMydVEwDDwURS295o9cLVcvZEpnRM4vW1IcTrPns9y77JpoypCxFTt/ouF4kko/cJOvq
+        YSQxKkAUuPH8pvIoHRc0/aEvhhLUXVqU+mCFMlPwbg2d3WCFP2gOQcQRQaG4mKDcYhzRarLqY99+c
+        9o4VxNdlQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ivzUg-00074m-49; Mon, 27 Jan 2020 08:11:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B8214300F4B;
+        Mon, 27 Jan 2020 09:09:52 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3C2F8203CF5D4; Mon, 27 Jan 2020 09:11:34 +0100 (CET)
+Date:   Mon, 27 Jan 2020 09:11:34 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Helge Deller <deller@gmx.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Nick Hu <nickhu@andestech.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: Re: [PATCH mk-II 08/17] asm-generic/tlb: Provide
+ MMU_GATHER_TABLE_FREE
+Message-ID: <20200127081134.GI14914@hirez.programming.kicks-ass.net>
+References: <20191211120713.360281197@infradead.org>
+ <20191211122956.112607298@infradead.org>
+ <20191212093205.GU2827@hirez.programming.kicks-ass.net>
+ <20200126155205.GA19169@roeck-us.net>
 MIME-Version: 1.0
-References: <20200123153341.19947-1-will@kernel.org> <26ad7a8a975c4e06b44a3184d7c86e5f@AcuMS.aculab.com>
- <20200123171641.GC20126@willie-the-truck> <2bfe2be6da484f15b0d229dd02d16ae6@AcuMS.aculab.com>
- <CAKwvOdkFGTeVQPm8Z3Y7mQ-=6d5CFxmEJ+hBb8ns2r2H1cb0hQ@mail.gmail.com>
- <20200123190125.GA2683468@rani.riverdale.lan> <20200126010959.vhq7mg4esoq5w26j@e107158-lin.cambridge.arm.com>
-In-Reply-To: <20200126010959.vhq7mg4esoq5w26j@e107158-lin.cambridge.arm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 27 Jan 2020 08:26:03 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2P41JjO8=GTSVL9WVEfjA_M+StH7Ons27SqSNK2JOrHg@mail.gmail.com>
-Message-ID: <CAK8P3a2P41JjO8=GTSVL9WVEfjA_M+StH7Ons27SqSNK2JOrHg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        David Laight <David.Laight@aculab.com>,
-        Will Deacon <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ahfyygVcR59V0LNaGPKYoyNS1BjUiiy8xN3GSibjLksSJclAyZJ
- LMCHKHudTnjEKO8AmJ3yN3xpfFPamCml9t1e7fwZJXlDSXck4+bPhE4pxH7FE4ls88jd2bk
- IvfxfNYmjsaIJQVWMIi3bMrcvG/jx0JBQo3CacojQZM8qlCWOQb8gyzZ5K7/NtKJSMppByY
- vVmEzb6cShDXHeYj87CiA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SckyZFLtMSg=:lyWcXYdhWBXEXYN4cGLYiF
- lYa2Ta3dgLaUcB2FcogMXdDX5dyefS5hU0nvIpTMIcSzS2LxhEe39zYnv1m/n/LKg1oxoAcPw
- TmjBXKge/hHBi9uW3B9qmcTx/LNXM8vnKjEtbkgnF9uVj8eNJzc20Rx9RlXUUBuEOHNfCvgiX
- g9h/aC+4i+Vm4XikHqiX1e5mur8AiQrUtSD7e/A71+PduXc4WYsE+rruYjq7vsqcXUy9dRovv
- 9TeWGbMKaQ6vQ/X2qRD37qoCtcoFLagLjLhGY2JPOgX9bC56G8ZjC8boJuR5AU620OeLyiRga
- yOmzyCsli3G7AVQ2mEDzYSoGPxtiREXpH/OksQVkA6lq+Q4dk8uvAeXLU2gW/tE1te6kaURBL
- MJtmJkJtPbw50Ga9ykrjldj7iQF3LkYF63fAQZYlTkzbAxuB9Kzn7xhyGSvSCGeT5v/N6mpET
- OD8fja5slfffpcwoO5O6FIt1purlDTKbzpzBnSGzVDtr92huRiEf+sSuT2ekcE85VL2uNfpvh
- b88SCFTDJRjhb8VS0+IfxOYjSg227GRoo97VJtPk0M3gshSf+onSv0imMvmMNVDPzFj5BymUD
- fuApRs53wgGuRd0QZKOj3d9O309V8huI8OMOn/qV4u5ONZQW5ty543uv/Cpxig9ch6Mhxv9Uj
- jJfw/pClXRXPNrYNaSSymqEk+E6dDEfBofD5G0hyViLY9zuDqQSyR6QOreIgwlu8c6yYGAxu0
- +uT0GVJ7Gwl/xDMUNXRm0P82fsYSQg3Il6Tu0hFGVzGzO1c0k6cTwMEyUPnlIy9QZKiEXxka7
- lLtD1mj4rB+z99Q00KUbAuO+9jFzNyWon4HkpD9ggCnfH8QUpE=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200126155205.GA19169@roeck-us.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jan 26, 2020 at 2:10 AM Qais Yousef <qais.yousef@arm.com> wrote:
-> On 01/23/20 14:01, Arvind Sankar wrote:
-> > On Thu, Jan 23, 2020 at 10:45:08AM -0800, Nick Desaulniers wrote:
-> > > On Thu, Jan 23, 2020 at 9:32 AM David Laight <David.Laight@aculab.com> wrote:
-> >
-> > Reposting Arnd's link
-> > https://www.spinics.net/lists/linux-kbuild/msg23648.html
->
-> This list seems to be x86 centric? I remember when the switch to GCC 4.6
-> happened a couple or more archs had to be dropped because they lacked a newer
-> compiler.
+On Sun, Jan 26, 2020 at 07:52:05AM -0800, Guenter Roeck wrote:
+> On Thu, Dec 12, 2019 at 10:32:05AM +0100, Peter Zijlstra wrote:
+> > As described in the comment, the correct order for freeing pages is:
+> > 
+> >  1) unhook page
+> >  2) TLB invalidate page
+> >  3) free page
+> > 
+> > This order equally applies to page directories.
+> > 
+> > Currently there are two correct options:
+> > 
+> >  - use tlb_remove_page(), when all page directores are full pages and
+> >    there are no futher contraints placed by things like software
+> >    walkers (HAVE_FAST_GUP).
+> > 
+> >  - use MMU_GATHER_RCU_TABLE_FREE and tlb_remove_table() when the
+> >    architecture does not do IPI based TLB invalidate and has
+> >    HAVE_FAST_GUP (or software TLB fill).
+> > 
+> > This however leaves architectures that don't have page based
+> > directories but don't need RCU in a bind. For those, provide
+> > MMU_GATHER_TABLE_FREE, which provides the independent batching for
+> > directories without the additional RCU freeing.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> 
+> Various sparc64 builds (allnoconfig, tinyconfig, as well as builds
+> with SMP disabled):
+> 
+> mm/mmu_gather.c: In function '__tlb_remove_table_free':
+> mm/mmu_gather.c:101:3: error: implicit declaration of function '__tlb_remove_table'; did you mean 'tlb_remove_table'?
 
-There are two architectures that already had problems last time:
+Thanks; I'll respin these patches against Aneesh' pile and make sure to
+look into this when I do so.
 
-- unicore32 never had any compiler that shipped with sources, only an ancient
-  set of gcc binaries that already had problems building the kernel during the
-  move to gcc-4.6. The maintainer said he'd work on providing support for
-  modern gcc or clang, but I don't think anything came out of that.
 
-- hexagon had an unmaintained gcc-4.5 port, but internally Qualcomm were
-  already using clang to build their kernels, which should now work with the
-  upstream version. I don't think there are any plans to have a more modern
-  gcc.
-
-Everything else works with mainline gcc now, openrisc and csky were the
-last to get added in gcc-9.
-
-Some of the older sub-targets (armv3, s390-g6, powerpcspe) are removed
-in gcc-9, but these have a few more years before we need to worry about
-them.
-
-     Arnd
