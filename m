@@ -2,111 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9D014A72A
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2020 16:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2712914A790
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2020 16:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729433AbgA0P0M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Jan 2020 10:26:12 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:36216 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729146AbgA0P0M (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Jan 2020 10:26:12 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07488;MF=guoren@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0TociXAZ_1580138757;
-Received: from localhost(mailfrom:guoren@linux.alibaba.com fp:SMTPD_---0TociXAZ_1580138757)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 27 Jan 2020 23:25:57 +0800
-Date:   Mon, 27 Jan 2020 23:25:57 +0800
-From:   Guo Ren <guoren@linux.alibaba.com>
-To:     paul.walmsley@sifive.com, andrew@sifive.com, palmer@dabbelt.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH V2] riscv: Use flush_icache_mm for flush_icache_user_range
-Message-ID: <20200127152557.GA8980@parallels-Parallels-Virtual-Platform>
-References: <20200127145008.2850-1-guoren@linux.alibaba.com>
+        id S1729505AbgA0Px2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Jan 2020 10:53:28 -0500
+Received: from mga02.intel.com ([134.134.136.20]:17575 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729518AbgA0Px1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Jan 2020 10:53:27 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Jan 2020 07:42:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,370,1574150400"; 
+   d="scan'208";a="231504834"
+Received: from jpolega-mobl.amr.corp.intel.com (HELO [10.251.29.252]) ([10.251.29.252])
+  by orsmga006.jf.intel.com with ESMTP; 27 Jan 2020 07:42:36 -0800
+Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
+To:     Sandipan Das <sandipan@linux.ibm.com>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
+        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1579507768.git.sandipan@linux.ibm.com>
+ <3ceb2814-f8b0-ec6b-3c24-ec72297a99f5@intel.com>
+ <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <3eca7a91-aa3e-cb01-47c8-5d36020993a2@intel.com>
+Date:   Mon, 27 Jan 2020 07:42:33 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200127145008.2850-1-guoren@linux.alibaba.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi all,
+On 1/27/20 2:11 AM, Sandipan Das wrote:
+> Hi Dave,
+> 
+> On 23/01/20 12:15 am, Dave Hansen wrote:
+>> Still doesn't build for me:
+>>
+> I have this patch that hopefully fixes this. My understanding was
+> that the vm tests are supposed to be generic but this has quite a
+> bit of x86-specific conditional code which complicates things even
+> though it is not used by any of the other tests.
+> 
+> I'm not sure if we should keep x86 multilib build support for these
+> selftests but I'll let the maintainers take a call.
 
-No ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1 in this patch, I'll remove it
-in V3.
-
-The update_mmu_cache() is wrong with sfence.vma and I'll give another
-patch to fixup it with ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1.
-
-Best Regards
- Guo Ren
-
-On Mon, Jan 27, 2020 at 10:50:08PM +0800, Guo Ren wrote:
-> The patch is the fixup for the commit 08f051eda33b by Andrew.
-> 
-> For copy_to_user_page, the only call path is:
-> __access_remote_vm -> copy_to_user_page -> flush_icache_user_range
-> 
-> Seems it's ok to use flush_icache_mm instead of flush_icache_all and
-> it could reduce flush_icache_all called on other harts.
-> 
-> Add (vma->vm_flags & VM_EXEC) condition to flush icache only for
-> executable vma area.
-> 
-> ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE is used in a lot of fs/block codes.
-> We need it to make their pages dirty and defer sync i/dcache in
-> update_mmu_cache().
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Andrew Waterman <andrew@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> 
-> ---
-> Changelog V2:
->  - Add VM_EXEC condition.
->  - Remove flush_icache_user_range definition.
->  - define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
-> ---
->  arch/riscv/include/asm/cacheflush.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-> index b69aecbb36d3..ae57d6ce63a9 100644
-> --- a/arch/riscv/include/asm/cacheflush.h
-> +++ b/arch/riscv/include/asm/cacheflush.h
-> @@ -8,7 +8,7 @@
->  
->  #include <linux/mm.h>
->  
-> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-> +#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  
->  /*
->   * The cache doesn't need to be flushed when TLB entries change when
-> @@ -62,7 +62,8 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
->  #define copy_to_user_page(vma, page, vaddr, dst, src, len) \
->  	do { \
->  		memcpy(dst, src, len); \
-> -		flush_icache_user_range(vma, page, vaddr, len); \
-> +		if (vma->vm_flags & VM_EXEC) \
-> +			flush_icache_mm(vma->vm_mm, 0); \
->  	} while (0)
->  #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
->  	memcpy(dst, src, len)
-> @@ -85,7 +86,6 @@ static inline void flush_dcache_page(struct page *page)
->   * so instead we just flush the whole thing.
->   */
->  #define flush_icache_range(start, end) flush_icache_all()
-> -#define flush_icache_user_range(vma, pg, addr, len) flush_icache_all()
->  
->  void dma_wbinv_range(unsigned long start, unsigned long end);
->  void dma_wb_range(unsigned long start, unsigned long end);
-> -- 
-> 2.17.0
+How have you tested this patch (and the whole series for that matter)?
