@@ -2,40 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9355014A470
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2020 14:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023A214A54E
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2020 14:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725938AbgA0NFe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Jan 2020 08:05:34 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:42820 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbgA0NFe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jan 2020 08:05:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Qc26HyQAHogWcsmxTgBMKkoJi2+EVu/8ujULdcjBIe0=; b=UoFaOHjohUQOSrNw18yEKcDQs
-        IPmp5D1GQJ6a3TvW8gwb54yw2Dwpjl+Rz6q2mO8GknLvkOp29yMdvGozOxzuixFcnqsgDw5BK68na
-        rnDJhEEwhB06SuDgrwnORP2PKkkO8VBLC6c2N13gey00wMDQv5RBheY6tjbnTMK4k8Rw89u3DLKRg
-        6hO1m8hgLqprxw+EC9Q9d7NkPwUsTcnIMw1lIWDzPk9H24AuimUx1cD2DdbnKiDlpTnYRQCp+Ga+a
-        4ffYMHq3F07jPYL8irFCnD2uwpbsuK9ygp975UF5DiRHMd4AIebXy2ww4zuae/JGePtC3nQNkOs68
-        wQeLRqdfQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iw44g-0001WM-55; Mon, 27 Jan 2020 13:05:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8633B302524;
-        Mon, 27 Jan 2020 14:03:21 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1BAD720D95C0C; Mon, 27 Jan 2020 14:05:03 +0100 (CET)
-Date:   Mon, 27 Jan 2020 14:05:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+        id S1727520AbgA0NnB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Jan 2020 08:43:01 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56032 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725990AbgA0NnA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Jan 2020 08:43:00 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00RDfhmH118377
+        for <linux-arch@vger.kernel.org>; Mon, 27 Jan 2020 08:42:59 -0500
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2xrffynsrw-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Mon, 27 Jan 2020 08:42:59 -0500
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <aneesh.kumar@linux.ibm.com>;
+        Mon, 27 Jan 2020 13:42:57 -0000
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 27 Jan 2020 13:42:51 -0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00RDgo5e48038068
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jan 2020 13:42:50 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 140AFA404D;
+        Mon, 27 Jan 2020 13:42:50 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1AB9BA4053;
+        Mon, 27 Jan 2020 13:42:46 +0000 (GMT)
+Received: from [9.85.84.39] (unknown [9.85.84.39])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Jan 2020 13:42:45 +0000 (GMT)
+Subject: Re: [PATCH mk-II 08/17] asm-generic/tlb: Provide
+ MMU_GATHER_TABLE_FREE
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Guenter Roeck <linux@roeck-us.net>, Will Deacon <will@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Nick Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
@@ -50,30 +57,57 @@ Cc:     Guenter Roeck <linux@roeck-us.net>, Will Deacon <will@kernel.org>,
         Richard Henderson <rth@twiddle.net>,
         Nick Hu <nickhu@andestech.com>,
         Paul Walmsley <paul.walmsley@sifive.com>
-Subject: Re: [PATCH mk-II 08/17] asm-generic/tlb: Provide
- MMU_GATHER_TABLE_FREE
-Message-ID: <20200127130503.GG14879@hirez.programming.kicks-ass.net>
 References: <20191211120713.360281197@infradead.org>
  <20191211122956.112607298@infradead.org>
  <20191212093205.GU2827@hirez.programming.kicks-ass.net>
  <20200126155205.GA19169@roeck-us.net>
  <20200127081134.GI14914@hirez.programming.kicks-ass.net>
  <33932bc9-1fca-66ae-8f55-6da2f131c5be@linux.ibm.com>
+ <20200127130503.GG14879@hirez.programming.kicks-ass.net>
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Date:   Mon, 27 Jan 2020 19:12:45 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33932bc9-1fca-66ae-8f55-6da2f131c5be@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200127130503.GG14879@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20012713-0008-0000-0000-0000034D1997
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20012713-0009-0000-0000-00004A6D8F0C
+Message-Id: <523015f1-99d0-3974-8f4a-44f54d4280c2@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-27_02:2020-01-24,2020-01-27 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ malwarescore=0 mlxlogscore=940 priorityscore=1501 impostorscore=0
+ phishscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1015 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1911200001 definitions=main-2001270116
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 01:43:34PM +0530, Aneesh Kumar K.V wrote:
-
-> I did send a change to fix that. it is to drop !SMP change in the patch
+On 1/27/20 6:35 PM, Peter Zijlstra wrote:
+> On Mon, Jan 27, 2020 at 01:43:34PM +0530, Aneesh Kumar K.V wrote:
 > 
-> https://lore.kernel.org/linux-mm/87v9p9mhnr.fsf@linux.ibm.com
+>> I did send a change to fix that. it is to drop !SMP change in the patch
+>>
+>> https://lore.kernel.org/linux-mm/87v9p9mhnr.fsf@linux.ibm.com
+> 
+> Indeed you did. Did those patches land anywhere, or is it all still up
+> in the air? (I was hoping to find those patches in a tree somewhere)
+> 
 
-Indeed you did. Did those patches land anywhere, or is it all still up
-in the air? (I was hoping to find those patches in a tree somewhere)
+Andrew did pick the series. I am not sure whether he got to pick the 
+build fix.
+
+Guenter,
+
+Can you confirm that patch did fix the build issue?
+
+
+-aneesh
+
