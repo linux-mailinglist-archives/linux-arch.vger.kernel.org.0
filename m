@@ -2,123 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC89149EF3
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2020 07:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95BF149F39
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2020 08:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725807AbgA0GRM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Jan 2020 01:17:12 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:56656 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbgA0GRM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jan 2020 01:17:12 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00R6DIcW119854;
-        Mon, 27 Jan 2020 06:16:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2019-08-05; bh=gJ/jpXTHwRBSq22rXvdlhHavOGJ9Q+e1no1Mq6F4Bvw=;
- b=Y/YSmaBFS9lARC5G6233J/9lchWbfrA75ugGtpPugGClHYpgmtGMotz2gMoQF8X/ATIJ
- ygHRsmQtsrk6wFVvWBC0NS2fLFkbJv8RkTGJBmuHc3+C4TDgVf+CJAwmIsG7qKEm7osv
- 3/R+M0BOGKKElRC4TBXo9DP5tu0yp92Kf9zNe3FPZbTkekOzi8hDht1OnMngD0E09fhL
- aRdznbzsQkbytkP5N8hEx/Wac5dc82MyS4xVbntjXZrKdO3L1qOmdOh6Jaqq/SvF98i+
- an5wMSQtn2I3E1NGzNmEh9Dk0g8euyQ3jy12mvLH1cY1JMn1piQQ8PMWX9XKLEabYKfB MQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2xrdmq5adk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jan 2020 06:16:37 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00R6ECZ9111490;
-        Mon, 27 Jan 2020 06:16:36 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2xry6qr03t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jan 2020 06:16:36 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00R6GYZC001241;
-        Mon, 27 Jan 2020 06:16:34 GMT
-Received: from [10.39.241.133] (/10.39.241.133)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 26 Jan 2020 22:16:34 -0800
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH v9 0/5] Add NUMA-awareness to qspinlock
-From:   Alex Kogan <alex.kogan@oracle.com>
-In-Reply-To: <CAC4j=Y_SMHe4WNpaaS0kK1JYfnufM+AAiwwUMBx27L8U6bD8Yg@mail.gmail.com>
-Date:   Mon, 27 Jan 2020 01:16:36 -0500
-Cc:     linux@armlinux.org.uk, Peter Zijlstra <peterz@infradead.org>,
-        mingo@redhat.com, will.deacon@arm.com, arnd@arndb.de,
-        longman@redhat.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com, dave.dice@oracle.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        Will Deacon <will@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3CBCD208-0859-458E-8A89-96E8E9A98664@oracle.com>
-References: <20200115035920.54451-1-alex.kogan@oracle.com>
- <CAC4j=Y8rCeTX9oKKbh+dCdTP8Ud4hW1ybu+iE7t_nxMSYBOR5w@mail.gmail.com>
- <4F71A184-42C0-4865-9AAA-79A636743C25@oracle.com>
- <CAC4j=Y_SMHe4WNpaaS0kK1JYfnufM+AAiwwUMBx27L8U6bD8Yg@mail.gmail.com>
-To:     Lihao Liang <lihaoliang@google.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9512 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001270054
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9512 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001270054
+        id S1725818AbgA0H0W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Jan 2020 02:26:22 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:37505 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725765AbgA0H0V (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jan 2020 02:26:21 -0500
+Received: from mail-qk1-f178.google.com ([209.85.222.178]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MQeIA-1jGO0w1Lni-00NkXH; Mon, 27 Jan 2020 08:26:20 +0100
+Received: by mail-qk1-f178.google.com with SMTP id q15so8681606qke.9;
+        Sun, 26 Jan 2020 23:26:20 -0800 (PST)
+X-Gm-Message-State: APjAAAXo6yGNTX4WiZmZRQfrosrPSVm7SjLJUIwyt/DfqlYhuyX5Yi2a
+        rLBGazeqeZTAdef0YYieKRLfngPgXv4iPkT1fsU=
+X-Google-Smtp-Source: APXvYqxlylkK1tDp0siCP+ozzjLtsjUJ1/pYYXDqAsuxoykoyBiDLDdftjf04CgOzZk2GHrZ8hTORthbFnaJFMo2yc0=
+X-Received: by 2002:a05:620a:12e1:: with SMTP id f1mr14839537qkl.394.1580109979147;
+ Sun, 26 Jan 2020 23:26:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20200123153341.19947-1-will@kernel.org> <26ad7a8a975c4e06b44a3184d7c86e5f@AcuMS.aculab.com>
+ <20200123171641.GC20126@willie-the-truck> <2bfe2be6da484f15b0d229dd02d16ae6@AcuMS.aculab.com>
+ <CAKwvOdkFGTeVQPm8Z3Y7mQ-=6d5CFxmEJ+hBb8ns2r2H1cb0hQ@mail.gmail.com>
+ <20200123190125.GA2683468@rani.riverdale.lan> <20200126010959.vhq7mg4esoq5w26j@e107158-lin.cambridge.arm.com>
+In-Reply-To: <20200126010959.vhq7mg4esoq5w26j@e107158-lin.cambridge.arm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 27 Jan 2020 08:26:03 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2P41JjO8=GTSVL9WVEfjA_M+StH7Ons27SqSNK2JOrHg@mail.gmail.com>
+Message-ID: <CAK8P3a2P41JjO8=GTSVL9WVEfjA_M+StH7Ons27SqSNK2JOrHg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Laight <David.Laight@aculab.com>,
+        Will Deacon <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ahfyygVcR59V0LNaGPKYoyNS1BjUiiy8xN3GSibjLksSJclAyZJ
+ LMCHKHudTnjEKO8AmJ3yN3xpfFPamCml9t1e7fwZJXlDSXck4+bPhE4pxH7FE4ls88jd2bk
+ IvfxfNYmjsaIJQVWMIi3bMrcvG/jx0JBQo3CacojQZM8qlCWOQb8gyzZ5K7/NtKJSMppByY
+ vVmEzb6cShDXHeYj87CiA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SckyZFLtMSg=:lyWcXYdhWBXEXYN4cGLYiF
+ lYa2Ta3dgLaUcB2FcogMXdDX5dyefS5hU0nvIpTMIcSzS2LxhEe39zYnv1m/n/LKg1oxoAcPw
+ TmjBXKge/hHBi9uW3B9qmcTx/LNXM8vnKjEtbkgnF9uVj8eNJzc20Rx9RlXUUBuEOHNfCvgiX
+ g9h/aC+4i+Vm4XikHqiX1e5mur8AiQrUtSD7e/A71+PduXc4WYsE+rruYjq7vsqcXUy9dRovv
+ 9TeWGbMKaQ6vQ/X2qRD37qoCtcoFLagLjLhGY2JPOgX9bC56G8ZjC8boJuR5AU620OeLyiRga
+ yOmzyCsli3G7AVQ2mEDzYSoGPxtiREXpH/OksQVkA6lq+Q4dk8uvAeXLU2gW/tE1te6kaURBL
+ MJtmJkJtPbw50Ga9ykrjldj7iQF3LkYF63fAQZYlTkzbAxuB9Kzn7xhyGSvSCGeT5v/N6mpET
+ OD8fja5slfffpcwoO5O6FIt1purlDTKbzpzBnSGzVDtr92huRiEf+sSuT2ekcE85VL2uNfpvh
+ b88SCFTDJRjhb8VS0+IfxOYjSg227GRoo97VJtPk0M3gshSf+onSv0imMvmMNVDPzFj5BymUD
+ fuApRs53wgGuRd0QZKOj3d9O309V8huI8OMOn/qV4u5ONZQW5ty543uv/Cpxig9ch6Mhxv9Uj
+ jJfw/pClXRXPNrYNaSSymqEk+E6dDEfBofD5G0hyViLY9zuDqQSyR6QOreIgwlu8c6yYGAxu0
+ +uT0GVJ7Gwl/xDMUNXRm0P82fsYSQg3Il6Tu0hFGVzGzO1c0k6cTwMEyUPnlIy9QZKiEXxka7
+ lLtD1mj4rB+z99Q00KUbAuO+9jFzNyWon4HkpD9ggCnfH8QUpE=
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Sun, Jan 26, 2020 at 2:10 AM Qais Yousef <qais.yousef@arm.com> wrote:
+> On 01/23/20 14:01, Arvind Sankar wrote:
+> > On Thu, Jan 23, 2020 at 10:45:08AM -0800, Nick Desaulniers wrote:
+> > > On Thu, Jan 23, 2020 at 9:32 AM David Laight <David.Laight@aculab.com> wrote:
+> >
+> > Reposting Arnd's link
+> > https://www.spinics.net/lists/linux-kbuild/msg23648.html
+>
+> This list seems to be x86 centric? I remember when the switch to GCC 4.6
+> happened a couple or more archs had to be dropped because they lacked a newer
+> compiler.
 
->>> This is particularly relevant
->>> in high contention situations when new threads keep arriving on the =
-same
->>> socket as the lock holder.
->> In this case, the lock will stay on the same NUMA node/socket for
->> 2^numa_spinlock_threshold times, which is the worst case scenario if =
-we
->> consider the long-term fairness. And if we have multiple nodes, it =
-will take
->> up to 2^numa_spinlock_threshold X (nr_nodes - 1) + nr_cpus_per_node
->> lock transitions until any given thread will acquire the lock
->> (assuming 2^numa_spinlock_threshold > nr_cpus_per_node).
->>=20
->=20
-> You're right that the latest version of the patch handles long-term =
-fairness
-> deterministically.
->=20
-> As I understand it, the n-th thread in the main queue is guaranteed to
-> acquire the lock after N lock handovers, where N is bounded by
->=20
-> n - 1 + 2^numa_spinlock_threshold * (nr_nodes - 1)
->=20
-> I'm not sure what role the variable nr_cpus_per_node plays in your =
-analysis.
+There are two architectures that already had problems last time:
 
-Yeah, that=E2=80=99s a minor point, but let me try to clarify.
+- unicore32 never had any compiler that shipped with sources, only an ancient
+  set of gcc binaries that already had problems building the kernel during the
+  move to gcc-4.6. The maintainer said he'd work on providing support for
+  modern gcc or clang, but I don't think anything came out of that.
 
-The "n-th thread in the main queue=E2=80=9D is (at most) the =
-nr_cpus_per_node-th thread=20
-for some node k. So when the node k gets the preference, that thread =
-will
-get the lock after at most nr_cpus_per_node-1 lock transitions. As we =
-consider
-the upper bound, your analysis is also correct; mine is just a bit =
-tighter.
+- hexagon had an unmaintained gcc-4.5 port, but internally Qualcomm were
+  already using clang to build their kernels, which should now work with the
+  upstream version. I don't think there are any plans to have a more modern
+  gcc.
 
-Makes sense?
+Everything else works with mainline gcc now, openrisc and csky were the
+last to get added in gcc-9.
 
-Regards,
-=E2=80=94 Alex
+Some of the older sub-targets (armv3, s390-g6, powerpcspe) are removed
+in gcc-9, but these have a few more years before we need to worry about
+them.
 
+     Arnd
