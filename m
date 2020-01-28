@@ -2,77 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 887BE14AD9B
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2020 02:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21F814B02F
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2020 08:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbgA1Bez (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Jan 2020 20:34:55 -0500
-Received: from sonic301-20.consmr.mail.ir2.yahoo.com ([77.238.176.97]:46156
-        "EHLO sonic301-20.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726083AbgA1Bez (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Jan 2020 20:34:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1580175292; bh=ZRVo8cW60+cgKR0PbgGoTN2balmbpWdCdFkvBmd1w8c=; h=Date:From:Reply-To:Subject:References:From:Subject; b=OgE01s7rEX3lEUdoHkUq9Vzn3T4ux1BJYi/rUusUbEFfBFzFfbWdoCSQjSVwiryBGwGCLgNWsADg+aQeNEfTkZri7Fm1CPsOfM0HbignQ5xObXiwFrUv8MjJxJrNo07YPVjRf5RrBfMIjPOxDVXIzI54BrXS5rj6NHWXH9e46W8OJk8pHrbCCiRibme0cFs35RhGUZFOYAlnmvAHCw3bNTTanyE/Ia8N4jIbBJz+Dmv82MRr9ygG0sT1BOy/KY3Ei2gvK/d1u3RLVj10c92k4crS0p+EXOxB5Skc8nI6kmysJZFl9yMbO+updYIqfg0x0zpwqlfMYi75EfO6S732mw==
-X-YMail-OSG: d4OOhQcVM1miM6jt8AeMGVF54MsYVoT45zjd07hBvMxizZ_MMdssZP2FTPz2RUA
- aSZzc5KeU0vkM3gw.GJBHkBKQh2pbDRpHUqurvHxwT8I0IjDyNCQnrsecj0MjrJW7bok21Jc4u1i
- 5UyS5BAPd7OfMIvcgmkXHUWdrb1dZ2VM25pTj4Nn0Dy8oC87NmcX48uyL1KdQQuWct0zGNr2c_vT
- OGbbtercskcdGnZBiINtpKAiuf7X.e1d3sm_0PObzvmh7zPI1YcuRN52qonmwAAkttZUGpPMmUPy
- quvArfhzPLaqp0Za2IcsAlkXi8BtEDQQFxpg8_ZYQgkQ6JppUyhj8AgzZwQK4QovPFHWnMkPAZ20
- DQ.cOwCiLetX2to_PTIcchelq0RElL3BmdQ2s5Xrnibt.yqiet6.oPSaDLx0kJi0GR18WefV2gzK
- 5EexIwyaOKxgscd5wokqerF.37EWn53BZ4oVUr5CyUkyYQjI1Or5OikMsafO6SKt9qHQRMN7iNDI
- 6dF4PYsf2KIBGveGkK1pYsh1hZAT1cVufz1mI_TUO0Ep7tJo78KMZMu0.MYx.Jdvj6FdrOdu0nz3
- ogRfvMM9ZqRje8BgTp_GhTMwViLC2Pr5KXCnJAK_GvVZuIKBhu.xQLbmtaF930vVDZ5j3vsyIvvq
- .5KcQWtoze1qL502HWt4nyJL47oNrKbpJuQPKT0zv1PKR9g7ybRtskAvXT3UFyMktjE9RH8ZROv.
- vQvcBx5a8TA2qZoNSO0tn08xZ9sHXuHQpDU.mYGPvJcgi9.U7B4dixTKUuS_uA0Q911UrIM17YGa
- i3GVQGvjX8I4xbX0ZQOanO.WytT98_W6IeeWGvs5ceADVI7ZlmV8NZW_SlBQ57BnOc2NASnWCGKn
- bizlxO_J13nWweN9EVvcSUgBjVRK5Dd7a6MryDiQvruZpKLvOrJKeIkBSdbahGmK3KOtDuwkrRUZ
- tuL9OtI5BsasQlNrshXLUNPCxM1xfQqcwxYX5kvpKouoA21AAfschq1c4lht0ln4aYp56rFnUXfI
- xOHHPwv__5y9CdE3w31abz1JhXAEQT3T5oZcnfby_fILzhS4iQSnINGfVjSxGalfLVpw.ADjcFxc
- nHYWqA_NEex4v_brk8q0oS_5Y5JvgsiZ_Fr_CjSXMWIx59pBmUDbBEKYMzokiriWU.NtAtV0yqX1
- N8nm.AOu00QqBbCWzN15OtM.gDEAxrs5XBKOl2C9FgYXjvFJC3tZ07ZuGufVfKS6e30JhOqz.WS7
- ExdtzCtqg58Uzk05ir.1rzOBWMgXfOan2NXgA8IYnFiQ.i5.34R0iEiJphixtzRLlxyrjY70-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ir2.yahoo.com with HTTP; Tue, 28 Jan 2020 01:34:52 +0000
-Date:   Tue, 28 Jan 2020 01:34:48 +0000 (UTC)
-From:   "Mr. Stones" <jamesmark20090@gmail.com>
-Reply-To: mr.michealstones555@gmail.com
-Message-ID: <1680089447.729.1580175288947@mail.yahoo.com>
-Subject: ATTENTION: DEAR BENEFICIARY COMPLIMENTS OF THE SEASON. 2020.
+        id S1725810AbgA1HTl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Jan 2020 02:19:41 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41598 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbgA1HTj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jan 2020 02:19:39 -0500
+Received: by mail-pf1-f193.google.com with SMTP id w62so6159874pfw.8
+        for <linux-arch@vger.kernel.org>; Mon, 27 Jan 2020 23:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3k6NKPH7fR4pIU1iDhzXIE3sCOzlwL1ZN9ZIEkKxkCM=;
+        b=srujTkRlXcMYfFAU4ajeK8XzFxdSFdtymlFDHFWwtjl6RYYdXfct49yGfp0R3Ft/Gk
+         b21LQneptyAycuw/QTxfkxRds7UsDs0nOcvfIjhPf5kg6HG/fumf1p+SOyhPDP/nWgeP
+         N5AwCoyysSHeNcp/4iev4K0SThnflmL0sS9bNw5CfETHliSa70QE6XwKZ6Bfqiixt3vq
+         zSUjHO7HdXpF/GNVk0WVWL+Zc6eaGXSoDWtvFQJdB+9aFEzKZ4wrtQexneK+aEI716Ld
+         KNu+IVGouW2wF3H1iVqEscIlzXyahFYpfZmS4xEkSoV7/uFbghBbqV5xBi32Vua8xClE
+         x64Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3k6NKPH7fR4pIU1iDhzXIE3sCOzlwL1ZN9ZIEkKxkCM=;
+        b=UTl1tnGAq16dbi2NYQ2juVC863acEa3/H40JBeiDyRoZEOsw1pFtUxFYDgN0WoXweB
+         ieCOxkw8q2/5ivM9hf9AjCP0MwOxygrv9I/e5VbvXR6QERas4fye2A1mAla8fAVKhLSr
+         rA5WnvugNGHa0eJ1+b5+NHJfK1RAyb8q7nav8I4LpWVRRrPcrLxT7y9u/UtROjsfApTL
+         9AUOoJpRKuldxsGyuL9qJ4QwaW/WlJy+O3lA6NfF2RF7zd1lDMsUavjd8ZIOrhb/ZtH8
+         3TYLg1dqv63AhKawYGtuL4Z/Io6Y6yIbYNrf0cTKXpNPs1Sk0v8bcvlB/4xZSa+5Eky7
+         e49g==
+X-Gm-Message-State: APjAAAUqqZqqv91xQMiBygXAgBDfSmJD9Vy3X7CbfCB6KS4dLdPpSUJb
+        zwLpCFvgnRCPiRauAfnaHxAJ6Nwk5xtqO32iNp6oLg==
+X-Google-Smtp-Source: APXvYqy6yh7GNcB6s7imvcW4J3ThOHyV8BHpXsRpcDoPYs5OW9TxXs3eEbw4y8pGn08q7d0OirpiVqtM1t8RAzdN/Q8=
+X-Received: by 2002:a63:597:: with SMTP id 145mr22603404pgf.384.1580195978166;
+ Mon, 27 Jan 2020 23:19:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1680089447.729.1580175288947.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15116 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+References: <20191216220555.245089-1-brendanhiggins@google.com>
+ <20200106224022.GX11244@42.do-not-panic.com> <CAFd5g456c2Zs7rCvRPgio83G=SrtPGi25zbqAUyTBHspHwtu4w@mail.gmail.com>
+ <594b7815-0611-34ea-beb5-0642114b5d82@gmail.com>
+In-Reply-To: <594b7815-0611-34ea-beb5-0642114b5d82@gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 27 Jan 2020 23:19:27 -0800
+Message-ID: <CAFd5g469TWzrLKmQNR2i0HACJ3FEu-=4-Rk005g9szB5UsZAcw@mail.gmail.com>
+Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch all
+ KUnit tests
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-CONGRATULATIONS TO YOU,
+On Mon, Jan 27, 2020 at 9:40 AM Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> On 1/23/20 4:40 PM, Brendan Higgins wrote:
+> > Sorry for the late reply. I am still catching up from being on vacation.
+> >> > On Mon, Jan 6, 2020 at 2:40 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >> It does beg the question if this means kunit is happy to not be a tool
+> >> to test pre basic setup stuff (terminology used in init.c, meaning prior
+> >> to running all init levels). I suspect this is the case.
+> >
+> > Not sure. I still haven't seen any cases where this is necessary, so I
+> > am not super worried about it. Regardless, I don't think this patchset
+> > really changes anything in that regard, we are moving from late_init
+> > to after late_init, so it isn't that big of a change for most use
+> > cases.
+> >
+> > Please share if you can think of some things that need to be tested in
+> > early init.
+>
+> I don't have a specific need for this right now.  I had not thought about
+> how the current kunit implementation forces all kunit tests to run at a
+> specific initcall level before reading this email thread.
+>
+> I can see the value of being able to have some tests run at different
+> initcall levels to verify what functionality is available and working
+> at different points in the boot sequence.
 
-I RECEIVE YOUR CONTENT OF YOUR EMAIL FROM THIS FEDEX ATM CARD OFFICES
-YOUR FUNDS SUM OF $10.5MILLION DOLLARS, HAS DISCOVER HERE AFTER THE
-BOARD OF DIRECTORS MEETINGS, THE UNITED NATIONS GOVERNMENT HAVE
-DECIDED TO ISSUE YOU YOUR (ATM CARD) VALUED AT $10.5 MILLION UNITED
-STATES DOLLARS.
+Let's cross that bridge when we get there. It should be fairly easy to
+add that functionality.
 
-THIS IS TO BRING TO YOUR NOTICE THAT YOUR VALUED SUM OF 10.5 MILLION
-DOLLARS HAS BEING CREDITED IN YOUR NAME. AS BENEFICIARY TO THIS (ATM
-CARD), AND HAS BEEN HANDLE TO THE FOREIGN REMITTANCE DEPARTMENT TO
-SEND IT TO YOU IN YOUR FAVOR IMMEDIATELY WITHOUT ANY DELAY.
+> But more important than early initcall levels, I do not want the
+> framework to prevent using or testing code and data that are marked
+> as '__init'.  So it is important to retain a way to invoke the tests
+> while __init code and data are available, if there is also a change
+> to generally invoke the tests later.
 
-WITH YOUR BELONGING (ATM CARD), YOU WILL HAVE ACCESS TO MAKE DAILY
-WITHDRAWALS OF; $5000 UNITED STATE DOLLARS DAILIES,
+Definitely. For now that still works as long as you don't build KUnit
+as a module, but I think Alan's new patches which allow KUnit to be
+run at runtime via debugfs could cause some difficulty there. Again,
+we could add Kconfigs to control this, but the compiler nevertheless
+complains because it doesn't know what phase KUnit runs in.
 
-AS SOON AS WE RECEIVE YOUR INFORMATION'S AND YOUR HOME ADDRESS OF YOUR COUNTRY AS ALREADY PROGRAMMED; WE WILL SEND TO YOU YOUR (ATM CARD), WE HAVE RECEIVED A SIGNAL FROM THE SWISS WORLD BANK, BANK OF AMERICA, TO EFFECT YOUR TRANSFER TO YOU WITHIN ONE WEEK, WITHOUT ANY DELAY.
-
-WE HAVE JUST FINISHED OUR ANNUAL GENERAL MEETING WITH THE CENTRAL BANK OF AMERICA (BOA). AT THE END OF THE BOARD OF DIRECTORS MEETING.
-
-THE BOARD OF DIRECTORS UNITED NATIONS GOVERNMENT HAS  CONCLUDED TO
-IMMEDIATELY ISSUE YOUR BELONGING (ATM CARD) SUM OF $10.5 MILLION
-DOLLARS.
-
-ONCE AGAIN CONGRATULATIONS TO YOU AND YOUR LOVELY FAMILY'S,
-YOURS
-SINCERELY.
-MR. Aderson Mark
+Is there any way to tell the compiler that it is okay for non __init
+code to call __init code? I would prefer not to have a duplicate
+version of all the KUnit libraries with all the symbols marked __init.
+Thoughts?
