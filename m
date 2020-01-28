@@ -2,57 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0A914B2A3
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2020 11:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037BE14BC66
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2020 15:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725941AbgA1KeB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Jan 2020 05:34:01 -0500
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:42481 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725903AbgA1KeB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jan 2020 05:34:01 -0500
-Received: by mail-ua1-f68.google.com with SMTP id u17so4631973uap.9
-        for <linux-arch@vger.kernel.org>; Tue, 28 Jan 2020 02:34:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Gf+QwGtA3MXc/BapWdppSC202BwaM1kT1v3NwxO2OX4=;
-        b=N3inIpzQU4T/CXuBcW5Mlq9qVan3FKJ4Gd+fl+Q0pFDXf/RktCE/yoEy6hxuteu7Mx
-         V9kRjwmI23K5qMQ3qw0p4/uDk1o26LAFSXgtCQ3TKDaHEWM0xrd3XktDqANMTXoFPHWr
-         /5Q0GP9ilRjXJN9Cvf8PtZ9/M3hEU+dEGeKxTveiU74hLO7XZD+ojcIwunOeNeRRxy/7
-         yHLf1L3qjvpe0kxTkN35qK3oAxPfxD6cjoXZBo1hwQ3zFG4UBAZOFO48NE2vtXRC0XVZ
-         A4oN5nmCb6ki7AjV+EzwQHeFOUomC5ZPbwOL4KWcE9Z43pq5x5WxYsWlJo1bgdgkrw16
-         pGoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Gf+QwGtA3MXc/BapWdppSC202BwaM1kT1v3NwxO2OX4=;
-        b=o1sMG50YrQ2Aj8LajM5ROYxdZdBalWVvtKD+KlJCNXH5xFf94BIkCybBFZNvBKC2rD
-         36zETZ+2Ut5LqQU0uGez12SQVHNO6fB7B9rEelvI7s0wnxnTPguv0I09zyFDTyLFeDjQ
-         8gvMyAqEKcLKH859bGMlhzCk9pG3QxtnpMMUiWE0OpMwx87QQT0HonrjhtuSF4LGB95B
-         xJ/Jt4QrNF68RoMSeBs73qAL6zbDl1rW4lJjD1XUyOXcSSKnr5ZO+B8nGHz9NEC//4ED
-         gIk3kWJNYQajqzPQFybW2E0yH0ycrj6HlFjZsK/3l0l+wkOi5CPP9otvsxcdNjkYnu8l
-         rq3w==
-X-Gm-Message-State: APjAAAUyNkU0kgNRDaq44rAW7gJqJzvWjcHSj9rmux68j27NqpYA4bVe
-        OXbREV4O1rm/9QezGscEduoGjFYOvFiEYheZkKs=
-X-Google-Smtp-Source: APXvYqxkEXIPHhlw/nRVQIVOxnJ9ABQWzrkmlnjN9z0tV5pGOilwLdnA4GPd8Qe+IF3FYFhiwvSG9Kyo7qJR1oU32EE=
-X-Received: by 2002:ab0:2644:: with SMTP id q4mr12836977uao.101.1580207640647;
- Tue, 28 Jan 2020 02:34:00 -0800 (PST)
+        id S1726717AbgA1O4Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Jan 2020 09:56:16 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32490 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726634AbgA1O4Q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 28 Jan 2020 09:56:16 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00SEoxJY070370
+        for <linux-arch@vger.kernel.org>; Tue, 28 Jan 2020 09:56:15 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xrj72kug5-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Tue, 28 Jan 2020 09:56:14 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <oberpar@linux.ibm.com>;
+        Tue, 28 Jan 2020 14:56:12 -0000
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 28 Jan 2020 14:56:08 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00SEu7Ti47579278
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jan 2020 14:56:07 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5E9BE52050;
+        Tue, 28 Jan 2020 14:56:07 +0000 (GMT)
+Received: from [9.152.212.29] (unknown [9.152.212.29])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id F253D52051;
+        Tue, 28 Jan 2020 14:56:06 +0000 (GMT)
+Subject: Re: [PATCH v2 10/10] gcov: Remove old GCC 3.4 support
+To:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, kernel-team@android.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <20200123153341.19947-1-will@kernel.org>
+ <20200123153341.19947-11-will@kernel.org>
+From:   Peter Oberparleiter <oberpar@linux.ibm.com>
+Date:   Tue, 28 Jan 2020 15:56:06 +0100
 MIME-Version: 1.0
-Received: by 2002:ab0:7818:0:0:0:0:0 with HTTP; Tue, 28 Jan 2020 02:34:00
- -0800 (PST)
-Reply-To: khiggins144@gmail.com
-From:   Katie Higgins <peterraphealjnr512@gmail.com>
-Date:   Tue, 28 Jan 2020 10:34:00 +0000
-Message-ID: <CADtqMwhzC8tN5KrTnk41f8TA04+1Pj30P0EZOUviKg91g_Qq0w@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200123153341.19947-11-will@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20012814-0028-0000-0000-000003D53311
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20012814-0029-0000-0000-000024997B2E
+Message-Id: <28e3e35c-1a26-5f87-064e-39f8a1fc9105@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-28_03:2020-01-28,2020-01-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ malwarescore=0 mlxlogscore=912 impostorscore=0 phishscore=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 adultscore=0
+ suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1911200001 definitions=main-2001280118
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 23.01.2020 16:33, Will Deacon wrote:
+> The kernel requires at least GCC 4.8 in order to build, and so there is
+> no need to cater for the pre-4.7 gcov format.
+> 
+> Remove the obsolete code.
+> 
+> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Signed-off-by: Will Deacon <will@kernel.org>
+> ---
+>  kernel/gcov/Kconfig   |  24 --
+>  kernel/gcov/Makefile  |   3 +-
+>  kernel/gcov/gcc_3_4.c | 573 ------------------------------------------
+>  3 files changed, 1 insertion(+), 599 deletions(-)
+>  delete mode 100644 kernel/gcov/gcc_3_4.c
+
+Acked-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+
+Compiles, boots, produces coverage output on a s390 system with a
+recent-ish GCC version, so that change is fine by me.
+
+There's a final reference to the gcc_3_4.c file in the gcc_4_7.c header
+comment, but its probably not worth the extra effort to adjust that as well.
+
 -- 
-Am Katie a military personnel and i will love to know more about you dear
+Peter Oberparleiter
+Linux on Z Development - IBM Germany
+
