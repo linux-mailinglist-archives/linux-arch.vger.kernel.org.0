@@ -2,60 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC0B14D25F
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Jan 2020 22:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1102414D27D
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Jan 2020 22:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbgA2VTJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Jan 2020 16:19:09 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46425 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726171AbgA2VTJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Jan 2020 16:19:09 -0500
-Received: by mail-pg1-f194.google.com with SMTP id z124so431241pgb.13
-        for <linux-arch@vger.kernel.org>; Wed, 29 Jan 2020 13:19:07 -0800 (PST)
+        id S1726679AbgA2V2b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Jan 2020 16:28:31 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:40017 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726648AbgA2V2b (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Jan 2020 16:28:31 -0500
+Received: by mail-pj1-f66.google.com with SMTP id 12so371292pjb.5
+        for <linux-arch@vger.kernel.org>; Wed, 29 Jan 2020 13:28:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+hDQAX34j2Scqm0cOO1CyUImmUew2WxU5247BGER7dY=;
-        b=UxSawPEjuU8FcEVTFXeV+8fPyjejUz2O2GIiBAdoDAVFy9BgrpyDdwrWW/Qw/2J7ya
-         FZ3Hx7C3W8oBpKsfbmp0gcB6UuG6HCj996xrlRomauFSWUUkw1WSDiYPt+gyeAvsDM8J
-         KOcA9yUDtsyGqXt3j9CoaEHIZjsv5vX9WRJS+1BFVxd2ZZsKZ61Y5xn2O9TyueeSevNe
-         3HynVm+hSZdJHxWhsiP6dcIrpF1AqWQTN1wm7n/YeICb9e29ywqkZW8GbIbfpGFKmKzZ
-         fBgtZeeHipIaN5zsaA1KEPpdP38j6n64hmv3cpQViCU8n8pwKNaxkHJeeBc4f/NHQRvk
-         NZJw==
+        bh=vO0tQV4IJhlk8aBFMEt3809CgjH5G7hoc7aRguIIMy0=;
+        b=QLl43wW5jYmSizLsosfazLIYuM7NJbGdr/SiA5oJT2qpSaQBj7pXlQxRT8aU1/ISJ9
+         ASkXWRvsaxiSKEW1LEWAJEQy5lwe4tkWme2r8TnXFMvonsgFb6Zev25Vot2uhzMVNvwI
+         zTiruV547KElXr7kfB7iRgCw8OmpIVM3xUiNA1fhf9T1N6OqCKr0ZoamcpyHmSLZx44o
+         5RZ9ir93x3/H7zwexGklsjEoczBLSGcdNcxgqqMh3VRSRycI3PjNmIFXaWodV8GhX9dd
+         /DIxgqBuntCoJkQpCZOzZ5+eMy2F40P5ziEJLrUKYa3T07fzwtaZ9Kmk0ptSXr0rCl6I
+         mxRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+hDQAX34j2Scqm0cOO1CyUImmUew2WxU5247BGER7dY=;
-        b=sgLanwOKXzdQK4z9elhG1pOf+5JwrYadgOudkurInQRHxsetO0alFn6Ro/a90k8Ff4
-         SiQdctCtrAPOo7nzhMbHn0Vs6TfahkDyf4bL3mYB1tZoSrylWP9knK3gUTIeS1PuuU28
-         NvxVNsRuZm6mhOHR2LjsUz2ZRB8aJv6VBHgQr3oH6+wkI2wnDP4VGzEP2Tqg1HW8aOHJ
-         ri3UhY28JoHH2IjQ1q5RQPRkpcfBWKAGolTtZAd0GK3PXCKchbXLEJu6ppBCZOhOm3Iw
-         5pOt+FA0sq6AdyuJiDll3MwOMoCcxSAb7A+v+sYjR0xCHYgiVKFcG6oD8uoPFzXO3R57
-         LHFQ==
-X-Gm-Message-State: APjAAAWLLSPFZjpsoef3CrJYjbEj2YZAYuu5WXKxyHqZsK3X6vOgduJV
-        xjheG3O0Pl1+2ITC2wqo4FAFrhFwiuMF6E/1UsX1LA==
-X-Google-Smtp-Source: APXvYqz8Ek9aAZM7bbtF2TInvqPq0TxdAQovVbgPfNg0x3Ic53N8b+s11tC5qEwNcBJ6IzRzAQElzR1+afYbaPQH8+4=
-X-Received: by 2002:a63:597:: with SMTP id 145mr1045907pgf.384.1580332747259;
- Wed, 29 Jan 2020 13:19:07 -0800 (PST)
+        bh=vO0tQV4IJhlk8aBFMEt3809CgjH5G7hoc7aRguIIMy0=;
+        b=f2OJOVscBqbg9KaNAyxnPF/SP9Wdxu8zdRUDH6MW9/TjGlOX5v0Znk4n3ZAc7DCwvQ
+         +oFwqivd7gw0H8ycPSOGGt0vnkjkNy/NfBpLsXWQQxXyXePtpsk0AVSt1DqyjDOKvF3T
+         nEBQF4+LFSyxyYNGLYGAK1QYxpkTlOk6RC68xorRC/AAvcviE1mnJHfIUiCaS1OqiBdH
+         KjL9IQsd0mRyxJfibMZIlbLNyJh+k+JsT7dSERJY4hd9q/k402LeGdd0kASko8mw0y93
+         4ei6eMpwvdcjhIIB738On8iKrlFmLioT4qdd99v//W9jb1Dmfmc8I4F9t7gF0c/5xi8D
+         uFQg==
+X-Gm-Message-State: APjAAAXNLx2yHHVY5oZkQ85/ruMwQWTGxtuEp56lS46wctRuCk70Rn0m
+        r0thmDD4ZsoQiMeHTRRxA9GMOe/BlEXyuIHSdG60+A==
+X-Google-Smtp-Source: APXvYqw+JNwlFIqkl3DtdN+LuKSj6eYC2SC+F4syXK+YNUsH4i2fdGvVcZEfrA2FR6fnQA3ixhSzro1FQcVWse+DDRE=
+X-Received: by 2002:a17:90a:858a:: with SMTP id m10mr1858022pjn.117.1580333310295;
+ Wed, 29 Jan 2020 13:28:30 -0800 (PST)
 MIME-Version: 1.0
 References: <20191216220555.245089-1-brendanhiggins@google.com>
  <20200106224022.GX11244@42.do-not-panic.com> <CAFd5g456c2Zs7rCvRPgio83G=SrtPGi25zbqAUyTBHspHwtu4w@mail.gmail.com>
  <594b7815-0611-34ea-beb5-0642114b5d82@gmail.com> <CAFd5g469TWzrLKmQNR2i0HACJ3FEu-=4-Rk005g9szB5UsZAcw@mail.gmail.com>
- <e801e4ac-b7c2-3d0a-71e7-f8153a3dfbc8@gmail.com> <ECADFF3FD767C149AD96A924E7EA6EAF982C9840@USCULXMSG17.am.sony.com>
- <CAFd5g46Ut9Suptmp_bBspkp=KKt2GP+=1C5zLu0FXJY9dGJbFQ@mail.gmail.com> <dcf2d008-c044-f2d4-63b9-47151157eeb4@gmail.com>
-In-Reply-To: <dcf2d008-c044-f2d4-63b9-47151157eeb4@gmail.com>
+ <e801e4ac-b7c2-3d0a-71e7-f8153a3dfbc8@gmail.com> <alpine.LRH.2.20.2001291006570.13921@dhcp-10-175-173-43.vpn.oracle.com>
+In-Reply-To: <alpine.LRH.2.20.2001291006570.13921@dhcp-10-175-173-43.vpn.oracle.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 29 Jan 2020 13:18:55 -0800
-Message-ID: <CAFd5g45g7B0HFpcxd-fjpj4h4gaxijSQ+LZb1=6v3t_u_=192w@mail.gmail.com>
+Date:   Wed, 29 Jan 2020 13:28:19 -0800
+Message-ID: <CAFd5g477pGY7vkYK7qTtstxpCv0NG9=11Nig=kSo1JX8vczRVA@mail.gmail.com>
 Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch all
  KUnit tests
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     "Bird, Timothy" <Tim.Bird@sony.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+To:     Alan Maguire <alan.maguire@oracle.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
         Jeff Dike <jdike@addtoit.com>,
         Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
@@ -81,48 +79,85 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 28, 2020 at 8:24 PM Frank Rowand <frowand.list@gmail.com> wrote:
+On Wed, Jan 29, 2020 at 5:07 AM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> On 1/28/20 1:53 PM, Brendan Higgins wrote:
-> > On Tue, Jan 28, 2020 at 11:35 AM <Tim.Bird@sony.com> wrote:
-> >>
-> >>> -----Original Message-----
-> >>> From:  Frank Rowand on January 28, 2020 11:37 AM
-> >>>
-> >>> On 1/28/20 1:19 AM, Brendan Higgins wrote:
-> >>>> On Mon, Jan 27, 2020 at 9:40 AM Frank Rowand <frowand.list@gmail.com> wrote:
-> >> ...
-> >>>> we could add Kconfigs to control this, but the compiler nevertheless
-> >>>> complains because it doesn't know what phase KUnit runs in.
-> >>>>
-> >>>> Is there any way to tell the compiler that it is okay for non __init
-> >>>> code to call __init code? I would prefer not to have a duplicate
-> >>>> version of all the KUnit libraries with all the symbols marked __init.
-> >>>
-> >>> I'm not sure.  The build messages have always been useful and valid in
-> >>> my context, so I never thought to consider that possibility.
-> >>>
-> >>>> Thoughts?
-> >>
-> >> I'm not sure there's a restriction on non __init code calling __init
-> >> code.  In init/main.c arch_call_reset_init() is in __init, and it calls
-> >> rest_init which is non __init, without any special handling.
-> >>
-> >> Is the compiler complaint mentioned above related to  calling
-> >> into __init code, or with some other issue?
+> On Tue, 28 Jan 2020, Frank Rowand wrote:
+>
+> > On 1/28/20 1:19 AM, Brendan Higgins wrote:
+> > > On Mon, Jan 27, 2020 at 9:40 AM Frank Rowand <frowand.list@gmail.com> wrote:
+> > >>
+> > >> On 1/23/20 4:40 PM, Brendan Higgins wrote:
+> > >>> Sorry for the late reply. I am still catching up from being on vacation.
+> > >>>>> On Mon, Jan 6, 2020 at 2:40 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > >>>> It does beg the question if this means kunit is happy to not be a tool
+> > >>>> to test pre basic setup stuff (terminology used in init.c, meaning prior
+> > >>>> to running all init levels). I suspect this is the case.
+> > >>>
+> > >>> Not sure. I still haven't seen any cases where this is necessary, so I
+> > >>> am not super worried about it. Regardless, I don't think this patchset
+> > >>> really changes anything in that regard, we are moving from late_init
+> > >>> to after late_init, so it isn't that big of a change for most use
+> > >>> cases.
+> > >>>
+> > >>> Please share if you can think of some things that need to be tested in
+> > >>> early init.
+> > >>
+> > >> I don't have a specific need for this right now.  I had not thought about
+> > >> how the current kunit implementation forces all kunit tests to run at a
+> > >> specific initcall level before reading this email thread.
+> > >>
+> > >> I can see the value of being able to have some tests run at different
+> > >> initcall levels to verify what functionality is available and working
+> > >> at different points in the boot sequence.
+> > >
+> > > Let's cross that bridge when we get there. It should be fairly easy to
+> > > add that functionality.
 > >
-> > I distinctly remember having the compiler complain at me when I was
-> > messing around with the device tree unit tests because of KUnit
-> > calling code marked as __init. Maybe it's time to start converting
-> > those to KUnit to force the issue? Frank, does that work for you?
+> > Yes. I just wanted to add the thought to the back of your mind so that
+> > it does not get precluded by future changes to the kunit architecture.
+> >
+> > >
+> > >> But more important than early initcall levels, I do not want the
+> > >> framework to prevent using or testing code and data that are marked
+> > >> as '__init'.  So it is important to retain a way to invoke the tests
+> > >> while __init code and data are available, if there is also a change
+> > >> to generally invoke the tests later.
+> > >
+> > > Definitely. For now that still works as long as you don't build KUnit
+> > > as a module, but I think Alan's new patches which allow KUnit to be
+> > > run at runtime via debugfs could cause some difficulty there. Again,
+> >
+> > Yes, Alan's patches are part of what triggered me thinking about the
+> > issues I raised.
+> >
+> >
 >
-> I have agreed to try converting the devicetree unittest to KUnit.
->
-> Now that KUnit is in 5.5, I think there is a solid foundation for
-> me to proceed.
+> As Brendan says, any such tests probably shouldn't be buildable
+> as modules, but I wonder if we need to add some sort of way
+> to ensure execution from debugfs is not allowed for such cases?
+> Even if a test suite is builtin, it can be executed via debugfs
+> in the patches I sent out, allowing suites to be re-run.  Sounds
+> like we need a way to control that behaviour based on the
+> desired test suite execution environment.
 
-Awesome! Last time we talked (offline), it sounded like you had a
-clear idea of what you wanted to do; nevertheless, feel free to reuse
-anything from my attempt at it, if you find anything useful, or
-otherwise rope me in if you have any questions, comments, or
-complaints.
+I think that's true.
+
+> Say, for example, the "struct kunit_suite" definitions associated
+> with the tests was marked as __initdata; are there any handy macros to
+> identify it as being in the __init section? If so, we could simply
+> avoid adding a "run" file to the debugfs representation for such
+> suites.  Failing that, perhaps we need some sort of flags field
+> in "struct kunit_suite" to specify execution environment constraints?
+
+I think the former would be ideal, but the latter is acceptable as
+well, assuming neither results in complaints from the compiler (I
+guess we will find out for sure once we get a hold of the device tree
+KUnit test).
+
+Luis, you mentioned your linker table work might be applicable for
+dynamic post boot configuring of dispatching. Do you think this work
+could help solve this problem?
+
+For reference, Alan's debugfs code can be found here:
+
+https://lore.kernel.org/linux-kselftest/CAFd5g46657gZ36PaP8Pi999hPPgBU2Kz94nrMspS-AzGwdBF+g@mail.gmail.com/T/#m210cadbeee267e5c5a9253d83b7b7ca723d1f871
