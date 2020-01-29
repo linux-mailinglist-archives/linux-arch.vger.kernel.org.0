@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2045A14C691
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Jan 2020 07:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B95F14C698
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Jan 2020 07:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726043AbgA2GiS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Jan 2020 01:38:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47306 "EHLO mail.kernel.org"
+        id S1726065AbgA2Gih (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Jan 2020 01:38:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47504 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725866AbgA2GiS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 Jan 2020 01:38:18 -0500
+        id S1725866AbgA2Gih (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 29 Jan 2020 01:38:37 -0500
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E1BA2064C;
-        Wed, 29 Jan 2020 06:38:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6C2A62064C;
+        Wed, 29 Jan 2020 06:38:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580279897;
-        bh=igzXSD+i/BUOTNjEhBzvGFgosW6UsPn3MYnWYPPr584=;
+        s=default; t=1580279916;
+        bh=RMW9XvEC6xztDEAPjm7/xfpZ8SdMJ1dxG571mw5qRaQ=;
         h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
-        b=xiWwiGuk8lYNmW+eBP/+gr9yInn1cPjsco52iuZ9S6JXKnAomKSJfupwmKOw5pxzz
-         G25KAASmOaSBSHmvgg3bfNN0uJl1iS37fZYcmRuxDWSv9xcjD0yZa4glNu7iBFBdIq
-         ocgTvBUvE8BLu4TOUrnFbXui9GIX6ftD2fnOLpJs=
+        b=ZS/kFlY6dhawaQwWN3FCrAPlcSHZ/KY1ZQYcmYPFmEDWAFWP4V6vXr0EgaXnfWVv0
+         xuNvmDC2+6AY9z9eTPc0ZoI2Fv4eM8WbnkIIa/2DsAZqhhKnMX2lcOmLpFoiXlcTEq
+         9dIvN1Pwn8eGV/pCk8LEUlJva+uEisX4oqKCgAGc=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200128072002.79250-4-brendanhiggins@google.com>
-References: <20200128072002.79250-1-brendanhiggins@google.com> <20200128072002.79250-4-brendanhiggins@google.com>
+In-Reply-To: <20200128072002.79250-5-brendanhiggins@google.com>
+References: <20200128072002.79250-1-brendanhiggins@google.com> <20200128072002.79250-5-brendanhiggins@google.com>
 From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v1 3/7] kunit: test: create a single centralized executor for all tests
+Subject: Re: [PATCH v1 4/7] init: main: add KUnit to kernel init
 To:     Brendan Higgins <brendanhiggins@google.com>,
         akpm@linux-foundation.org, alan.maguire@oracle.com,
         anton.ivanov@cambridgegreys.com, arnd@arndb.de,
@@ -43,27 +43,23 @@ Cc:     gregkh@linuxfoundation.org, logang@deltatee.com, mcgrof@kernel.org,
         linux-doc@vger.kernel.org,
         Brendan Higgins <brendanhiggins@google.com>
 User-Agent: alot/0.8.1
-Date:   Tue, 28 Jan 2020 22:38:16 -0800
-Message-Id: <20200129063817.3E1BA2064C@mail.kernel.org>
+Date:   Tue, 28 Jan 2020 22:38:35 -0800
+Message-Id: <20200129063836.6C2A62064C@mail.kernel.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Quoting Brendan Higgins (2020-01-27 23:19:58)
-> From: Alan Maguire <alan.maguire@oracle.com>
+Quoting Brendan Higgins (2020-01-27 23:19:59)
+> Remove KUnit from init calls entirely, instead call directly from
+> kernel_init().
 >=20
-> Add a centralized executor to dispatch tests rather than relying on
-> late_initcall to schedule each test suite separately.  Centralized
-> execution is for built-in tests only; modules will execute tests
-> when loaded.
->=20
+> Co-developed-by: Alan Maguire <alan.maguire@oracle.com>
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> Co-developed-by: Iurii Zaikin <yzaikin@google.com>
-> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-> Co-developed-by: Brendan Higgins <brendanhiggins@google.com>
 > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 > ---
 
 Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+
+Although, why can't it be squashed with the previous patch?
 
