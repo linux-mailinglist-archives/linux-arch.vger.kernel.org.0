@@ -2,145 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E46C814E318
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Jan 2020 20:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F9414E51D
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Jan 2020 22:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727503AbgA3TXl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Jan 2020 14:23:41 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:37743 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727456AbgA3TXl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Jan 2020 14:23:41 -0500
-Received: by mail-pj1-f68.google.com with SMTP id m13so1772538pjb.2
-        for <linux-arch@vger.kernel.org>; Thu, 30 Jan 2020 11:23:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=STfgILZYJSeHL29PKr26PXRGNaaOXbLTCRy3jhx8noU=;
-        b=jqYeVsahhF99yBrSGAvuHdMSc2W97p/s3hZt9gt9YFSuOjK3g3byaqJC2nQE+QDIfI
-         Z8NqxNikaMbSwQW2aQmx4Z02ThbSexr8D1XYxdrnXThBpe0rcHGSppH4YG+Li4+wqP63
-         2itQvwz4W2zBZh2IImAm5jdwB75aiWKl25l50=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=STfgILZYJSeHL29PKr26PXRGNaaOXbLTCRy3jhx8noU=;
-        b=lT+YiBWJbcxo5vTJlIF7H/CGYB3Gae+wuVCiU4TEC2VI/AfTeOAb8BGyApnqIiUXne
-         CUdPCnZvtsxbeUibyp/ZFSKBzSpZriu7WDuHXUcpthK+DGKWQLV6brjMEmGW/ScaLZCE
-         jlW+nhvi1at8ODGkFYFGrN8WD9opGxjDrlSWl7aDz+OUX92zDRQiuMSMr9a4wrp6Ezh1
-         4w1Is45UGcIT0PG20sAc4L6u4ECKw+yQcQxAzPM4UOtLaV2a8g8F36NcDb4g8rBTMvQO
-         NWYj/Ged5mr/MZl6//RcSwaqnhrSvKORTGi8Ptwi6HyPHuh6ZwjDn0CWT21kUIQWf4kv
-         D96g==
-X-Gm-Message-State: APjAAAUUNWtv4awIA64K0RnfVXZ8YU0jk734pTO3pYvFki11DH9WRYHM
-        0UkxTap0SxxnxuGOVbIU2pEjjw==
-X-Google-Smtp-Source: APXvYqw7tzrE450ZfccVZjN7IiTuW4qM2cwf555Gxth2MtTA6Fx8D7q2y+CnyzGujglJaRni3OFJmQ==
-X-Received: by 2002:a17:90a:7784:: with SMTP id v4mr7802031pjk.134.1580412220763;
-        Thu, 30 Jan 2020 11:23:40 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b185sm7608776pfa.102.2020.01.30.11.23.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2020 11:23:39 -0800 (PST)
-Date:   Thu, 30 Jan 2020 11:23:38 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Christopher Lameter <cl@linux.com>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Ursula Braun <ubraun@linux.ibm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, David Windsor <dave@nullcore.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-xfs@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Laura Abbott <labbott@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Christoffer Dall <christoffer.dall@linaro.org>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        Jan Kara <jack@suse.cz>,
-        Luis de Bethencourt <luisbg@kernel.org>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Rik van Riel <riel@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Kubecek <mkubecek@suse.cz>
-Subject: Re: [kernel-hardening] [PATCH 09/38] usercopy: Mark kmalloc caches
- as usercopy caches
-Message-ID: <202001300945.7D465B5F5@keescook>
-References: <201911121313.1097D6EE@keescook>
- <201911141327.4DE6510@keescook>
- <bfca96db-bbd0-d958-7732-76e36c667c68@suse.cz>
- <202001271519.AA6ADEACF0@keescook>
- <5861936c-1fe1-4c44-d012-26efa0c8b6e7@de.ibm.com>
- <202001281457.FA11CC313A@keescook>
- <alpine.DEB.2.21.2001291640350.1546@www.lameter.com>
- <6844ea47-8e0e-4fb7-d86f-68046995a749@de.ibm.com>
- <20200129170939.GA4277@infradead.org>
- <771c5511-c5ab-3dd1-d938-5dbc40396daa@de.ibm.com>
+        id S1725855AbgA3Vvr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Jan 2020 16:51:47 -0500
+Received: from mga02.intel.com ([134.134.136.20]:28915 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725835AbgA3Vvr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 30 Jan 2020 16:51:47 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jan 2020 13:51:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,382,1574150400"; 
+   d="scan'208";a="233107404"
+Received: from ray.jf.intel.com (HELO [10.7.201.139]) ([10.7.201.139])
+  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2020 13:51:46 -0800
+Subject: Re: [PATCH v18 00/24] selftests, powerpc, x86: Memory Protection Keys
+To:     Sandipan Das <sandipan@linux.ibm.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-mm@kvack.org, fweimer@redhat.com,
+        linuxram@us.ibm.com, mhocko@kernel.org, mingo@redhat.com,
+        aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
+        msuchanek@suse.de, mpe@ellerman.id.au
+References: <cover.1580365432.git.sandipan@linux.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <5887a858-b669-752e-b65e-ed7d7ded34aa@intel.com>
+Date:   Thu, 30 Jan 2020 13:51:45 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <771c5511-c5ab-3dd1-d938-5dbc40396daa@de.ibm.com>
+In-Reply-To: <cover.1580365432.git.sandipan@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 29, 2020 at 06:19:56PM +0100, Christian Borntraeger wrote:
-> On 29.01.20 18:09, Christoph Hellwig wrote:
-> > On Wed, Jan 29, 2020 at 06:07:14PM +0100, Christian Borntraeger wrote:
-> >>> DMA can be done to NORMAL memory as well.
-> >>
-> >> Exactly. 
-> >> I think iucv uses GFP_DMA because z/VM needs those buffers to reside below 2GB (which is ZONA_DMA for s390).
-> > 
-> > The normal way to allocate memory with addressing limits would be to
-> > use dma_alloc_coherent and friends.  Any chance to switch iucv over to
-> > that?  Or is there no device associated with it?
-> 
-> There is not necessarily a device for that. It is a hypervisor interface (an
-> instruction that is interpreted by z/VM). We do have the netiucv driver that
-> creates a virtual nic, but there is also AF_IUCV which works without a device.
-> 
-> But back to the original question: If we mark kmalloc caches as usercopy caches,
-> we should do the same for DMA kmalloc caches. As outlined by Christoph, this has
-> nothing to do with device DMA.
+On 1/29/20 10:36 PM, Sandipan Das wrote:
+> v18:
+> 	(1) Fixed issues with x86 multilib builds based on
+> 	    feedback from Dave.
+> 	(2) Moved patch 2 to the end of the series.
 
-Hm, looks like it's allocated from the low 16MB. Seems like poor naming!
-:) There seems to be a LOT of stuff using GFP_DMA, and it seems unlikely
-those are all expecting low addresses?
+These (finally) build and run successfully for me on an x86 system with
+protection keys.  Feel free to add my Tested-by, and Acked-by.
 
-Since this has only been a problem on s390, should just s390 gain the
-weakening of the usercopy restriction?  Something like:
-
-
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 1907cb2903c7..c5bbc141f20b 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1303,7 +1303,9 @@ void __init create_kmalloc_caches(slab_flags_t flags)
- 			kmalloc_caches[KMALLOC_DMA][i] = create_kmalloc_cache(
- 				kmalloc_info[i].name[KMALLOC_DMA],
- 				kmalloc_info[i].size,
--				SLAB_CACHE_DMA | flags, 0, 0);
-+				SLAB_CACHE_DMA | flags, 0,
-+				IS_ENABLED(CONFIG_S390) ?
-+					kmalloc_info[i].size : 0);
- 		}
- 	}
- #endif
-
-
-
--- 
-Kees Cook
+FWIW, I don't think look perfect, but my standards are lower for
+selftests/ than normal kernel code. :)
