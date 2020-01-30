@@ -2,175 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8940414D4E9
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Jan 2020 02:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F235114D65B
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Jan 2020 07:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727112AbgA3BCS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Jan 2020 20:02:18 -0500
-Received: from mail-eopbgr1320123.outbound.protection.outlook.com ([40.107.132.123]:16224
-        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726671AbgA3BCS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 Jan 2020 20:02:18 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j8H7lKQNeG1t2AG2SjgDj8QHf0lRJ2c/31ft6W8YgZmXl5VVxw9ZMmPachbxrqChMw+1dWsZeDI/il0UohIFpHmXj+osQRQHeBhVJVFSOsBApdAKpgcT3JHjsIPLixmETavyyKcUorhCGAFtxiQZw6hc0EUDxFkdb4sDpjHd/srNuCBoGDLxWyGRYlhLCNY6jDqyXBq82Vfb6J4GfpxTd4bDIpXn2HhdL2hAMg4k9NVkmpLEmsAWDxNzktCZFZZodo8GFTYl82sC2ESYCQuxPqCwxOV6Zds6GGpCw441UYNuqV7hGrrosTNzG7nJ4UCPwSnazjJhQOgOSnO9kgkvpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bx0If3Uk2eEktwdcZj/qm4O6VnhF2p5Fjdsq7fIogSM=;
- b=LJSsLl/PFWdLmE/cGs5bSKaUJYLSiZc6E0WPLEeExL/NWJJLMs/vJJxmihzLJWkcfQ7mtCDE8gCWk+7xt5HWHMcAJoDYlfTFWIHM9NLh4xtqY74ZVpPqLvZUFU7fEJmWpIw18J+0MEAbzXk8EyHMe629xYjJYH0O9G69BtzZUONv42eWWOSIT3LlhMJ5hEnN9dWu+ZXH6vsZkDK2F/dlEPK6CcNAElviOx8e5rbuPYl/XyFH4v2W38SThO1HDHr1zNMqjhemJmbC6Gx76TR0cAMPowWMTYI+M++hRWXXbSAPNs/WUpwR4RwB4NrFyNyyUIxGmWfGnZ1W3NSdQfrMZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bx0If3Uk2eEktwdcZj/qm4O6VnhF2p5Fjdsq7fIogSM=;
- b=dD6BX5XgDLhUV9BnqTfh/MJYSwBESrJWOIgvr4EHIwOKiNKPD/k/Y0RZp34l4wvIpJIn0yVSN8P0HfWKz3Ba5GT7ZEi43w6whaR1JakPFRcE+R6wgrThVkOvFZytBOP7ldMx33eHNhau9QOPGTAQXRwd/gDToTB30fe6hMSLFEA=
-Received: from PU1P153MB0155.APCP153.PROD.OUTLOOK.COM (10.170.189.11) by
- PU1P153MB0153.APCP153.PROD.OUTLOOK.COM (10.170.188.143) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2707.0; Thu, 30 Jan 2020 01:02:07 +0000
-Received: from PU1P153MB0155.APCP153.PROD.OUTLOOK.COM
- ([fe80::49a0:b051:e5f0:4c3a]) by PU1P153MB0155.APCP153.PROD.OUTLOOK.COM
- ([fe80::49a0:b051:e5f0:4c3a%7]) with mapi id 15.20.2707.008; Thu, 30 Jan 2020
- 01:02:06 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Sasha Levin <sashal@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>
-CC:     "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [PATCH v6][RESEND] x86/hyperv: Suspend/resume the hypercall page
- for hibernation
-Thread-Topic: [PATCH v6][RESEND] x86/hyperv: Suspend/resume the hypercall page
- for hibernation
-Thread-Index: AQHVxOKfKplvVmki0EiTTmOHhKt+Nqf6tz7wgAfBDgCAAAs2AA==
-Date:   Thu, 30 Jan 2020 01:02:06 +0000
-Message-ID: <PU1P153MB01552D8E75E152C3F3FB9C65BF040@PU1P153MB0155.APCP153.PROD.OUTLOOK.COM>
-References: <1578350559-130275-1-git-send-email-decui@microsoft.com>
- <HK0P153MB0148ED41CE96B637019DF26ABF090@HK0P153MB0148.APCP153.PROD.OUTLOOK.COM>
- <20200130000552.GD2896@sasha-vm>
-In-Reply-To: <20200130000552.GD2896@sasha-vm>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=decui@microsoft.com;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2020-01-30T01:02:02.8003111Z;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=ed8647ab-f4f5-4b45-9f41-e85affc11ce5;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=decui@microsoft.com; 
-x-originating-ip: [2601:600:a280:7f70:1191:cedf:8423:18ae]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b87e4584-6100-49e5-cd4f-08d7a52006d3
-x-ms-traffictypediagnostic: PU1P153MB0153:|PU1P153MB0153:|PU1P153MB0153:
-x-ms-exchange-transport-forked: True
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <PU1P153MB0153575FC65661A5E3055BC1BF040@PU1P153MB0153.APCP153.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 02981BE340
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(396003)(346002)(39860400002)(136003)(366004)(189003)(199004)(7696005)(966005)(316002)(54906003)(9686003)(110136005)(10290500003)(4326008)(66446008)(8676002)(86362001)(478600001)(52536014)(15650500001)(53546011)(33656002)(71200400001)(186003)(55016002)(8936002)(76116006)(8990500004)(2906002)(6506007)(66946007)(66476007)(66556008)(64756008)(81156014)(5660300002)(7416002)(81166006);DIR:OUT;SFP:1102;SCL:1;SRVR:PU1P153MB0153;H:PU1P153MB0155.APCP153.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: microsoft.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oevTPKhK7hXbPpry0TxxmzGtfrezacO82KsCb5LESBPAGFlxj9T71QlpSeqTNuHok51MIocpXD1cKmLwlWg/lhLSOyjmsubyLtPqeGdAojgNvtRQ4vnKeXIxJpjNBrpPun6bmAedZ0pYw0j0kOBh/nFJgPRWYnRBdBu4fo13mokLKf6KgvzLLqrXRKZwMAFaegi0n7OleS4bLmSrp9bIPG/IzUKJhB7R734o0Wo9oVqhy6uRjoelVdi6WAmLZvtGwGWGE2mUZVzhLz+/wZlh2fXaI2TL+QHUgdlMRp8YQ4IElTF1mSHGF0ICXV9hWJ4hzh+HSozncgtUGF+Kmw12hJGxkoKdMo48JCWPP7jt0ElHTn8NXGLceWEelhOPfR+qZJU6zCqS29zncWs1A0O6N+a6yPewWu00n0wgdd4BGSP0391VJEVdFl79sfi70vbraRcdWCcpmGcSp2nEjNNMhAsdsTAqJjePAy8QzDP+ehGdvac1aLCY//npk9NR8hv0n/029sqJnFyOXMsUNoz5JQ==
-x-ms-exchange-antispam-messagedata: C31PZxC9OgOpvi0Q0zvTra0O8Sv/v752czqtgzivE92IEULvobank+MolSBOPI4EL0ZnobyyXEiR5rI9vEMSGSDfTmBCrQH0EZJ0xEl4/x+Ot39g64mFrrrhuYnS29M4nQ24VPlC2hIMZY4iI38ocErYCqdNabMt9uYTbkpYETRsj4S3ueNWDwpSQHRhmDwZcEC8REQsnr9yAJbuJhA46Q==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1725873AbgA3GTi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Jan 2020 01:19:38 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:23902 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725865AbgA3GTi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 30 Jan 2020 01:19:38 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00U6DlAV021062
+        for <linux-arch@vger.kernel.org>; Thu, 30 Jan 2020 01:19:37 -0500
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xuagnmdjb-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-arch@vger.kernel.org>; Thu, 30 Jan 2020 01:19:37 -0500
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-arch@vger.kernel.org> from <sandipan@linux.ibm.com>;
+        Thu, 30 Jan 2020 06:19:35 -0000
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 30 Jan 2020 06:19:31 -0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00U6Ibsg42795398
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Jan 2020 06:18:38 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D5B4AE055;
+        Thu, 30 Jan 2020 06:19:29 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 54B0CAE045;
+        Thu, 30 Jan 2020 06:19:27 +0000 (GMT)
+Received: from [9.124.35.38] (unknown [9.124.35.38])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 30 Jan 2020 06:19:27 +0000 (GMT)
+Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
+        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1579507768.git.sandipan@linux.ibm.com>
+ <3ceb2814-f8b0-ec6b-3c24-ec72297a99f5@intel.com>
+ <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
+ <3eca7a91-aa3e-cb01-47c8-5d36020993a2@intel.com>
+ <fb83ce52-b92a-ed42-dc06-a86ca8431ff6@linux.ibm.com>
+ <ca6cfdeb-00f2-d926-e4e1-c1723cc25445@intel.com>
+From:   Sandipan Das <sandipan@linux.ibm.com>
+Date:   Thu, 30 Jan 2020 11:49:26 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b87e4584-6100-49e5-cd4f-08d7a52006d3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2020 01:02:06.4487
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8F++C3wtlXlP4BCUsWT603ZqpMs2qK6GAAqQrvhJnBYPyuRyn+cEWAmbE9DbgVAAVwL+ROBSV3MvIY6Za6IxxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU1P153MB0153
+In-Reply-To: <ca6cfdeb-00f2-d926-e4e1-c1723cc25445@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20013006-0016-0000-0000-000002E1F204
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20013006-0017-0000-0000-00003344BAD8
+Message-Id: <26f630e5-1f70-888c-4b43-30e73c9f270c@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-30_01:2020-01-28,2020-01-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ mlxlogscore=999 malwarescore=0 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1911200001 definitions=main-2001300041
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> From: linux-hyperv-owner@vger.kernel.org
-> <linux-hyperv-owner@vger.kernel.org> On Behalf Of Sasha Levin
-> Sent: Wednesday, January 29, 2020 4:06 PM
-> To: Dexuan Cui <decui@microsoft.com>
-> Cc: arnd@arndb.de; bp@alien8.de; daniel.lezcano@linaro.org; Haiyang Zhang
-> <haiyangz@microsoft.com>; hpa@zytor.com; KY Srinivasan
-> <kys@microsoft.com>; linux-hyperv@vger.kernel.org;
-> linux-kernel@vger.kernel.org; mingo@redhat.com; Stephen Hemminger
-> <sthemmin@microsoft.com>; tglx@linutronix.de; x86@kernel.org; Michael
-> Kelley <mikelley@microsoft.com>; Sasha Levin
-> <Alexander.Levin@microsoft.com>; vkuznets <vkuznets@redhat.com>;
-> linux-arch@vger.kernel.org
-> Subject: Re: [PATCH v6][RESEND] x86/hyperv: Suspend/resume the hypercall
-> page for hibernation
->=20
-> On Sat, Jan 25, 2020 at 01:44:31AM +0000, Dexuan Cui wrote:
-> >> From: Dexuan Cui <decui@microsoft.com>
-> >> Sent: Monday, January 6, 2020 2:43 PM
-> >>
-> >> This is needed for hibernation, e.g. when we resume the old kernel, we
-> need
-> >> to disable the "current" kernel's hypercall page and then resume the o=
-ld
-> >> kernel's.
-> >>
-> >> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> >> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> >> ---
-> >>
-> >> This is a RESEND of https://lkml.org/lkml/2019/11/20/68
-> >>
-> >> Please review.
-> >>
-> >> If it looks good, can you please pick it up through the tip.git tree?
-> >>
-> >>  arch/x86/hyperv/hv_init.c | 48
-> >> +++++++++++++++++++++++++++++++++++++++
-> >>  1 file changed, 48 insertions(+)
-> >
-> >Hi, Vitaly and x86 maintainers,
-> >Can you please take a look at this patch?
->=20
-> Ping?
->=20
-> This patch has been floating around in it's current form for the past 2
-> months. I'll happily take Hyper-V patches under arch/x86/hyperv/ via the
-> Hyper-V tree rather than tip if the x86 folks don't want to deal with
-> them.
->=20
-> --
-> Thanks,
-> Sasha
+Hi Dave,
 
-This straightforward patch is the only pending patch for v5.6 for the
-hibernation functionality of Linux VM on Hyper-V. It would be really great
-if we could merge it for v5.6-rc1. The patch is safe in that it only runs w=
-hen=20
-the VM hibernates, and the hibernation functionality of Linux VM on
-Hyper-V never worked before. I'm pretty sure the patch can not cause any
-merge conflict since nobody else tries to modify the file recently.
+On 30/01/20 12:29 am, Dave Hansen wrote:
+> On 1/28/20 1:38 AM, Sandipan Das wrote:
+>> On 27/01/20 9:12 pm, Dave Hansen wrote:
+>>> How have you tested this patch (and the whole series for that matter)?
+>>>
+>> I replaced the second patch with this one and did a build test.
+>> Till v16, I had tested the whole series (build + run) on both a POWER8
+>> system (with 4K and 64K page sizes) and a Skylake SP system but for
+>> x86_64 only.
+> 
+> Do you have any idea why I was seeing x86 build errors and you were not?
+> 
 
-Thanks,
--- Dexuan
+There were problems with patch 2 from v17. The fixed patch is what I replied
+with previously in this thread. The test results that I posted were with that
+patch included. Will post out v18 today with the fix.
+
+- Sandipan
+
