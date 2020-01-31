@@ -2,96 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0339A14E605
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Jan 2020 00:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC6014EA8D
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Jan 2020 11:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbgA3XIu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Jan 2020 18:08:50 -0500
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:48251 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727783AbgA3XIs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Jan 2020 18:08:48 -0500
-Received: by mail-pf1-f201.google.com with SMTP id y73so2770867pfg.15
-        for <linux-arch@vger.kernel.org>; Thu, 30 Jan 2020 15:08:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=dCX2LQDaoIcwFmYSq3cgmAkx+Exp0YNCPmOsw4OCxis=;
-        b=Cea+74kKLR/GteXq64Op60MuNDLPdMizqbgVfNpoWkuF8hmEB2KWidlL87tYLsXrua
-         8Xzbo2dCO77srQ679vBOopPPaT5k/SDDfLFgk2PVYP32VYXEliWcHSPQQvW7RJouxHAe
-         hc+sUOuQ6TRmwjFRtbnmDP2UOQJ2LzmbdTH38wKl5fTpIu7RcFxSIOf2vAfgqu8CZAVW
-         GLEzOaHOLVt2EVc2azlbEU9baY7XraTtjjWlZ/jKsLTm/MLozD7uXkqirkr8AYc/6GXF
-         us3u/wuW2oRnrheLqJLro/pS7keuZISgD+5hxQQ9fLdo+8fcCY/HdMmki7Y+kyw+/l1K
-         d+6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=dCX2LQDaoIcwFmYSq3cgmAkx+Exp0YNCPmOsw4OCxis=;
-        b=KET8Zh3hoMhoLuABiHs3U60wHx1+LDal0I+BBdmEPf8+NXj7D4wEznASyZ/uTzCY+M
-         PCKMcGVm4iI9P0J0T10VlMvXdi4C6gHqWJLfLWxwT5JytMPfFpG7jF1f5lPo/zbPS7c6
-         GtVc0Vg5i81kj8s0ZusKE6NkCkSHTmJqtKxdTa53Y0TKM/tCZyrC/VMc05Pf7LsVCmlH
-         n+YyIInT1VphQj97qb/D+9e6QwWKCVLDUl5cUBjmbzkC/tcKPN+JrT+nayYkFwh2WNYz
-         02BsnQdlt6buEE1n8Ya0e8BWOFPC3RjkZ9aqClrpKdMw3xhO3ElikBhXbIeTheEHI76Q
-         0Fbg==
-X-Gm-Message-State: APjAAAUgygYeCKZcMFSV9cNzVYt1F8WQUMX4B4yxM9yMHG0xv9LSJucu
-        dDVrCK+VmuHcQszYxz+1bDzAVFwo711xA9hwjWyImg==
-X-Google-Smtp-Source: APXvYqx+2ri6MUmVYy6ptSJgWKOGMVZfjLQX0JTmgMuADBux9koL0KUnaGALzsStF3tXii//z0M3FTNmV1ggHaNXMBaSXw==
-X-Received: by 2002:a63:78cf:: with SMTP id t198mr6898466pgc.287.1580425727146;
- Thu, 30 Jan 2020 15:08:47 -0800 (PST)
-Date:   Thu, 30 Jan 2020 15:08:12 -0800
-In-Reply-To: <20200130230812.142642-1-brendanhiggins@google.com>
-Message-Id: <20200130230812.142642-8-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20200130230812.142642-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-Subject: [PATCH v2 7/7] Documentation: Add kunit_shutdown to kernel-parameters.txt
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        frowand.list@gmail.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, knut.omang@oracle.com,
-        linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728307AbgAaKUi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jan 2020 05:20:38 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:39074 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728160AbgAaKUh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 31 Jan 2020 05:20:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1580466037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Rvip+9gEMjJ6H84OHoQUknXeHPGXzmy72y0DuVzxqY=;
+        b=hdbfVVhbnrTdV/DBYBjxYhjjKXuzhKygdYWxtIUNy3nk4nagKbDH/DARq/r0rJGU6xNcC/
+        zUNltzFBdClP0pcXbVnY9/mRju29LmwjXY9MyUiZOb8yteXrg4dymhN9ypx+QiUSimWnoc
+        T357e2fcnsjOQH2+55db1i1Nsd5srag=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-121-degvaMcmNIy88Nk77AIFyA-1; Fri, 31 Jan 2020 05:20:28 -0500
+X-MC-Unique: degvaMcmNIy88Nk77AIFyA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A1549107ACC4;
+        Fri, 31 Jan 2020 10:20:25 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-218.rdu2.redhat.com [10.10.120.218])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E46F5DA75;
+        Fri, 31 Jan 2020 10:20:22 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wjC2EDquO8_kzc-FHOGGjgODOLKjswYGJAMh58zTkyX3w@mail.gmail.com>
+References: <CAHk-=wjC2EDquO8_kzc-FHOGGjgODOLKjswYGJAMh58zTkyX3w@mail.gmail.com> <20200123153341.19947-1-will@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, Will Deacon <will@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v2 00/10] Rework READ_ONCE() to improve codegen
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7435.1580466021.1@warthog.procyon.org.uk>
+Date:   Fri, 31 Jan 2020 10:20:21 +0000
+Message-ID: <7436.1580466021@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add kunit_shutdown, an option to specify that the kernel shutsdown after
-running KUnit tests, to the kernel-parameters.txt documentation.
+Of course, if you're feeling adventurous and willing to at least entertain the
+mere speculation of switching the kernel source to C++, we could then use
+inline template functions:
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
----
- Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
- 1 file changed, 7 insertions(+)
+	template <typename T>
+	static inline T __READ_ONCE(T &var)
+	{
+		T val = *(const volatile T *)&var;
+		return val;
+	}
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index ade4e6ec23e03..522fd8bdec949 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2054,6 +2054,13 @@
- 			0: force disabled
- 			1: force enabled
- 
-+	kunit_shutdown	[KERNEL UNIT TESTING FRAMEWORK] Shutdown kernel after
-+			running tests.
-+			Default:	(flag not present) don't shutdown
-+			poweroff:	poweroff the kernel after running tests
-+			halt:		halt the kernel after running tests
-+			reboot:		reboot the kernel after running tests
-+
- 	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
- 			Default is 0 (don't ignore, but inject #GP)
- 
--- 
-2.25.0.341.g760bfbb309-goog
+	template <typename T>
+	static inline T READ_ONCE(T &var)
+	{
+		T val;
+		compiletime_assert_rwonce_type(var);
+		val = __READ_ONCE(var);
+		smp_read_barrier_depends();
+		return val;
+	}
+
+Of course, that would mean using C++...
+
+David
 
