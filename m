@@ -2,105 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DB814F65A
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Feb 2020 04:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BEA14F93E
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Feb 2020 18:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgBAD5Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jan 2020 22:57:25 -0500
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:34219 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727090AbgBAD5Y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jan 2020 22:57:24 -0500
-Received: by mail-vs1-f68.google.com with SMTP id g15so5733442vsf.1
-        for <linux-arch@vger.kernel.org>; Fri, 31 Jan 2020 19:57:23 -0800 (PST)
+        id S1726793AbgBAR4o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 1 Feb 2020 12:56:44 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:50180 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726731AbgBAR4o (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Feb 2020 12:56:44 -0500
+Received: by mail-pj1-f66.google.com with SMTP id r67so4402027pjb.0
+        for <linux-arch@vger.kernel.org>; Sat, 01 Feb 2020 09:56:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=MkdiFa2/QEug+aQwwP1wCb9owJcIxW3Xa9Vv3pfamtQ=;
-        b=mQp2pP++uyW5VrMLcOLwuxIRMIvDPw6qqBIGqvaKEhA2atNwfP7ZrIZqOapgj+Vhy1
-         BUADl2RakZSyv//n0JmMWQJryhYPTxq0SQa6bbLI4DkB3lcn4Uz45XPv9ivyVvqHF0nf
-         keBXQ0wcmNjGOqS0HlMfXDEB3q7h3bb3ImOOd3uGQ2CrqUzMvOfcM+EBF1eX2B4ibRz0
-         U6QjYYN0DPy26m5TGFnEJWRkVnggWd5fxrnfMBUPQdg8spNE8YGnc9fSu9YF5H4dBZ5y
-         hBOBcaJPJoyV9DcGwv/XandVaaFyTyTJI+fvGKkJS+dR2ExS89nBudMDFQDyzjRAXVX9
-         M3xA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1rxiDiiWyy+RaaD0YllXb5sVbRbHdZvAaLoyASC1RHA=;
+        b=UbIWczwiQvzV+o1/R62NbaP1lFCIW4J4I1Znu2jtuEVKVBfSBP0kAK6LdTGJ1ujZps
+         /G0uyRiL+3/xM2Hvkwz1ZQhXsnR97q5ZnjDFj6XXbM/7HbkX4QGvl8Ij1VWRDdoVEVqI
+         D9Ks/1wEw6tLdPvSdLg1Vw6B3NocqQ1gDZwAk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=MkdiFa2/QEug+aQwwP1wCb9owJcIxW3Xa9Vv3pfamtQ=;
-        b=J3rI2lZMrNgQdWv0h8DNigrptpLz1ZJ4OqqSu8p4N1ap43oUM+KoHWMYnJQFZ74Jmy
-         DfeSH5z0yvZMT4WPI0sD2o77cMAYR9RkNF1L0u4Xm3DHE9oRMPZ0vSTfhmN0eXXfi1RY
-         GPNyUD7L2bwM2NUymMppGmhYWgB92nENu+byvqd+++ob2GmJDP6/WAlbNjp8+5JDFgO2
-         Y0jlRxUvuQXAOvm8OZC3/IdqpDYZ7ZczuT0eEaYHel0d8NfrljwdS3/J5DIb9uTrFqBD
-         +z3KECSgUXV1U3sf/KZPuekoCUqnl6DO5i/iQiADc9CFcvPFiStvUNfV12vqCIXbdMIU
-         jGmw==
-X-Gm-Message-State: APjAAAU8WJzM3fH5LIsrkRT0pDiJdbThgE71MPkQk8qTYGeEEA+VeUhn
-        k/VS6kWO2JqBsEc0ZbSW+LVoLEWbbOSRfuY2zM8=
-X-Google-Smtp-Source: APXvYqzazfB6TQOFgUK2mwEveEMCi2NXh8ddn8Fq/ech7bpHgqyHQDUdHWX6J2aZlFxuz5WXr1nwpoR7wy/2ZAKHF8A=
-X-Received: by 2002:a67:bd02:: with SMTP id y2mr8838170vsq.122.1580529442778;
- Fri, 31 Jan 2020 19:57:22 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1rxiDiiWyy+RaaD0YllXb5sVbRbHdZvAaLoyASC1RHA=;
+        b=dSP6UbdZddTEpx0mp378L/59Fg5B9GBHVs5Z+e+jsz3aF9fnDV5Saj/3HqO9mpHALo
+         BCFDSDHXQsGApePET6v48MW6YO/lInuM5FODDiWXiPvyjKG0iqKtsdgmOIN7ZuWvSM4d
+         qJPok3OB1ilzBCVIgabXj+Rad6BE5eeVWEFkEykn1j/bScMPF0WUrm1a6EBKyBDxKd+f
+         U7Fck2leS7A1kUCzOWiqcGd+kiFxGRokhmyQcl8dfz3vVNMaQ5MqWZuYIYtc1YbJnAcx
+         cGRoEoT7+vNUDASjTS8litW/hV5K+bRL6QwR7K++gHeuc352kry0gEhkqKKVsmu7JeFU
+         t3cQ==
+X-Gm-Message-State: APjAAAUYShD6W5C78IXIxv6qu9PxBdQ8PjUc3AkPLla3b2aYXs90AqWH
+        6PYZFUBm+vE6mMjLa/jqhrlByA==
+X-Google-Smtp-Source: APXvYqxT3vOizdt1K5+VTatra4+LXkGQ2fpy4tPPX6L9duoaO3re51J2wolPrp+nN4BPCFA89zymvQ==
+X-Received: by 2002:a17:902:9b93:: with SMTP id y19mr15780032plp.89.1580579803746;
+        Sat, 01 Feb 2020 09:56:43 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id gc1sm14073972pjb.20.2020.02.01.09.56.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Feb 2020 09:56:42 -0800 (PST)
+Date:   Sat, 1 Feb 2020 09:56:41 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christopher Lameter <cl@linux.com>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        David Windsor <dave@nullcore.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-xfs@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Laura Abbott <labbott@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Christoffer Dall <christoffer.dall@linaro.org>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        Jan Kara <jack@suse.cz>,
+        Luis de Bethencourt <luisbg@kernel.org>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Rik van Riel <riel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Kubecek <mkubecek@suse.cz>
+Subject: Re: [kernel-hardening] [PATCH 09/38] usercopy: Mark kmalloc caches
+ as usercopy caches
+Message-ID: <202002010952.ACDA7A81@keescook>
+References: <bfca96db-bbd0-d958-7732-76e36c667c68@suse.cz>
+ <202001271519.AA6ADEACF0@keescook>
+ <5861936c-1fe1-4c44-d012-26efa0c8b6e7@de.ibm.com>
+ <202001281457.FA11CC313A@keescook>
+ <alpine.DEB.2.21.2001291640350.1546@www.lameter.com>
+ <6844ea47-8e0e-4fb7-d86f-68046995a749@de.ibm.com>
+ <20200129170939.GA4277@infradead.org>
+ <771c5511-c5ab-3dd1-d938-5dbc40396daa@de.ibm.com>
+ <202001300945.7D465B5F5@keescook>
+ <CAG48ez1a4waGk9kB0WLaSbs4muSoK0AYAVk8=XYaKj4_+6e6Hg@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a67:b342:0:0:0:0:0 with HTTP; Fri, 31 Jan 2020 19:57:22
- -0800 (PST)
-Reply-To: usmanabu61@gmail.com
-From:   Mr usman abu <abuusman121@gmail.com>
-Date:   Sat, 1 Feb 2020 04:57:22 +0100
-Message-ID: <CAKQxASPzpkqkL30JUeX2wKPUK2mHPdTRaoericwb1FCFXdUiTA@mail.gmail.com>
-Subject: FROM Mr USMAN ABU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG48ez1a4waGk9kB0WLaSbs4muSoK0AYAVk8=XYaKj4_+6e6Hg@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-FROM Mr USMAN  ABU
-BILLS AND EXCHANGE MANAGER,
-In BANK OF AFRICA (B.O.A)
-Ouagadougou Burkina Faso, IN WEST AFRCA
+On Fri, Jan 31, 2020 at 01:03:40PM +0100, Jann Horn wrote:
+> I think dma-kmalloc slabs should be handled the same way as normal
+> kmalloc slabs. When a dma-kmalloc allocation is freshly created, it is
+> just normal kernel memory - even if it might later be used for DMA -,
+> and it should be perfectly fine to copy_from_user() into such
+> allocations at that point, and to copy_to_user() out of them at the
+> end. If you look at the places where such allocations are created, you
+> can see things like kmemdup(), memcpy() and so on - all normal
+> operations that shouldn't conceptually be different from usercopy in
+> any relevant way.
 
+I can't find where the address limit for dma-kmalloc is implemented.
 
-Please i want you to read this later very carefully and please do not
-joke with this message. I am Mr USMAN  Abu, the bill and exchange
-manager in the boa bank of Africa Ouagadougou Burkina Faso.
+As to whitelisting all of dma-kmalloc -- I guess I can be talked into
+it. It still seems like the memory used for direct hardware
+communication shouldn't be exposed to userspace, but it we're dealing
+with packet data, etc, then it makes sense not to have to have bounce
+buffers, etc.
 
-In my department, I found the deposited fund amounted ($18.5 million)
-one of my bank clients who died Along with his entire family in air
-crash, On July 31 2000 please go through the
-website.http://news.bbc.co.uk/2/hi/europe/859479.stm
-
-Can you be able and capable to assist me provide your bank account
-where this $18.5 million will transfer into? Because I don=E2=80=99t want t=
-he
-money to go into our bank treasury account as an unclaimed fund, so
-this is the reason why I contacted you so that our bank will release
-this money to you as the nest of kin to the deceased customer. Please
-I would like you to keep this proposal as top secret.
-
-I shall give you 40% of the total fund as soon as this $18.5 million
-transferred into your bank account and I shall visit you in your
-country for the sharing of the funds.
-From banking experience it will take up to ( 7 ) working days to
-conclude this transfer. I want you to also know that this transaction
-will involve a little expense which will be shared among both of us.
-
-Your Urgent response is needed immediately to enable me to send to you
-application later which you have to fill and apply to the bank for the
-transfer of the $18.5 million USA dollars. Before I send to you the
-application later, you have to Fill this form bellow and resend it
-back to me immediately for more trust.
-Your Name....
-Your home addresses ....
-Your country ....
-Your city ....
-Your home telephone ....
-Your private telephone ....
-Your age ....
-Your occupation ....
-Your religion=E2=80=A6
-Your international passport or ID card ....
-
-Thanks and my regards to your family.
-Mr USMAN  ABU
+-- 
+Kees Cook
