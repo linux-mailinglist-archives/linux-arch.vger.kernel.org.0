@@ -2,109 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5D815020F
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2020 08:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B931507A9
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2020 14:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727499AbgBCHqw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Feb 2020 02:46:52 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58872 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727652AbgBCHqw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Feb 2020 02:46:52 -0500
+        id S1728147AbgBCNqX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Feb 2020 08:46:23 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:40260 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728143AbgBCNqW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Feb 2020 08:46:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=1OnLUtccVxzRGy3H6tEuURVA5Cw1eDsrX9HvO+XJeD4=; b=tIPQmbMBJJkyM1EUffKpQ6t8+
-        6fwTSe6r4ihL5NqNlss4BtnMRFyaJcEPiVZ64i/7LitZrfYs81oZ1L69NyPjMREv3zXAuPxvS0bI2
-        eMLUSHfCDe+Uhbh/03f2I/93N1FOLazKz82/5pZp0ZjY/ieytY6YhoUGFolkmaBRB9ehsBDiIZHK+
-        bkuV60ig9MmsNyEVGt8E0ZhQVk6ERJlJE/YSTpSCBFbCtPNtYKIiwbs9X9JfUX2DCkFMoZJyTbNcM
-        L+Sm7T5i2/9zTP8/s+1LrDkKFqoSf7iPfX+6fv7NwwWoLbf8UowsIMPpObCqY5IZs9aWtvn+JjE0x
-        uAmUP6+mA==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iyWRQ-0001Y1-VE; Mon, 03 Feb 2020 07:46:44 +0000
-Date:   Sun, 2 Feb 2020 23:46:44 -0800
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jann Horn <jannh@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Christopher Lameter <cl@linux.com>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Ursula Braun <ubraun@linux.ibm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        David Windsor <dave@nullcore.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-xfs@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Laura Abbott <labbott@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        Jan Kara <jack@suse.cz>, Marc Zyngier <marc.zyngier@arm.com>,
-        Matthew Garrett <mjg59@google.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Kubecek <mkubecek@suse.cz>
-Subject: Re: [kernel-hardening] [PATCH 09/38] usercopy: Mark kmalloc caches
- as usercopy caches
-Message-ID: <20200203074644.GD8731@bombadil.infradead.org>
-References: <5861936c-1fe1-4c44-d012-26efa0c8b6e7@de.ibm.com>
- <202001281457.FA11CC313A@keescook>
- <alpine.DEB.2.21.2001291640350.1546@www.lameter.com>
- <6844ea47-8e0e-4fb7-d86f-68046995a749@de.ibm.com>
- <20200129170939.GA4277@infradead.org>
- <771c5511-c5ab-3dd1-d938-5dbc40396daa@de.ibm.com>
- <202001300945.7D465B5F5@keescook>
- <CAG48ez1a4waGk9kB0WLaSbs4muSoK0AYAVk8=XYaKj4_+6e6Hg@mail.gmail.com>
- <202002010952.ACDA7A81@keescook>
- <CAG48ez2ms+TDEXQdDONuQ1GG0K20E69nV1r_yjKxxYjYKv1VCg@mail.gmail.com>
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=ydJSIlzM2hfUd3hl9T8tzcAmF2kYDsfmAnSpEAfBJFE=; b=Ifgv49xEstpI6IK+7zuM3iAvmJ
+        jr82lguHcDCP1cXc5T81M5VxnAYuFDas9953pxIHOCtEMmJ43fiGkeyF5+hY1TOStG3WChXAhdu6M
+        4bVDMfZkJo3oib3cWXIwf99ZG4eOFvzz9UTYlQB+6ZmTi7lOUJYvzrW3Gewcz/1GI3YuwmF/1zfCB
+        WDbZYc43ExER/r5rjtWqf6hxqhSyOu3QU/xD6Zhgcc8P8SgPg7BA7VOhYR4+tk0xtGx2ypu41t1Id
+        ht8N7MaR+waqTk32jUpD1OYtU/VURox040tiS7juhC4s045+nmg4kGNNZWIvu7JPUlqWEKGTC0QWo
+        c3w0IGbw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iyc2p-0004pA-2r; Mon, 03 Feb 2020 13:45:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 53105305803;
+        Mon,  3 Feb 2020 14:43:55 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5F4B82B63D250; Mon,  3 Feb 2020 14:45:40 +0100 (CET)
+Date:   Mon, 3 Feb 2020 14:45:40 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alex Kogan <alex.kogan@oracle.com>
+Cc:     Waiman Long <longman@redhat.com>, linux@armlinux.org.uk,
+        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, hpa@zytor.com, x86@kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Jan Glauber <jglauber@marvell.com>,
+        Steven Sistare <steven.sistare@oracle.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        dave.dice@oracle.com
+Subject: Re: [PATCH v8 4/5] locking/qspinlock: Introduce starvation avoidance
+ into CNA
+Message-ID: <20200203134540.GA14879@hirez.programming.kicks-ass.net>
+References: <cfdf635d-be2e-9d4b-c4ca-6bcbddc6868f@redhat.com>
+ <3862F8A1-FF9B-40AD-A88E-2C0BA7AF6F58@oracle.com>
+ <20200124075235.GX14914@hirez.programming.kicks-ass.net>
+ <2c6741c5-d89d-4b2c-cebe-a7c7f6eed884@redhat.com>
+ <48ce49e5-98a7-23cd-09f4-8290a65abbb5@redhat.com>
+ <8D3AFB47-B595-418C-9568-08780DDC58FF@oracle.com>
+ <714892cd-d96f-4d41-ae8b-d7b7642a6e3c@redhat.com>
+ <1669BFDE-A1A5-4ED8-B586-035460BBF68A@oracle.com>
+ <20200125111931.GW11457@worktop.programming.kicks-ass.net>
+ <F32558D8-4ACB-483A-AB4C-F565003A02E7@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAG48ez2ms+TDEXQdDONuQ1GG0K20E69nV1r_yjKxxYjYKv1VCg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <F32558D8-4ACB-483A-AB4C-F565003A02E7@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Feb 01, 2020 at 08:27:49PM +0100, Jann Horn wrote:
-> FWIW, as far as I understand, usercopy doesn't actually have any
-> effect on drivers that use the modern, proper APIs, since those don't
-> use the slab allocator at all - as I pointed out in my last mail, the
-> dma-kmalloc* slabs are used very rarely. (Which is good, because
-> putting objects from less-than-page-size slabs into iommu entries is a
-> terrible idea from a security and reliability perspective because it
-> gives the hardware access to completely unrelated memory.) Instead,
-> they get pages from the page allocator, and these pages may e.g. be
-> allocated from the DMA, DMA32 or NORMAL zones depending on the
-> restrictions imposed by hardware. So I think the usercopy restriction
-> only affects a few oddball drivers (like this s390 stuff), which is
-> why you're not seeing more bug reports caused by this.
+On Thu, Jan 30, 2020 at 05:05:28PM -0500, Alex Kogan wrote:
+> 
+> > On Jan 25, 2020, at 6:19 AM, Peter Zijlstra <peterz@infradead.org> wrote:
+> > 
+> > On Fri, Jan 24, 2020 at 01:19:05PM -0500, Alex Kogan wrote:
+> > 
+> >> Is there a lightweight way to identify such a “prioritized” thread?
+> > 
+> > No; people might for instance care about tail latencies between their
+> > identically spec'ed worker tasks.
+> 
+> I would argue that those users need to tune/reduce the intra-node handoff
+> threshold for their needs. Or disable CNA altogether.
 
-Getting pages from the page allocator is true for dma_alloc_coherent()
-and friends.  But it's not true for streaming DMA mappings (dma_map_*)
-for which the memory usually comes from kmalloc().  If this is something
-we want to fix (and I have an awful feeling we're going to regret it
-if we say "no, we trust the hardware"), we're going to have to come up
-with a new memory allocation API for these cases.  Or bounce bugger the
-memory for devices we don't trust.
+I really don't like boot time arguments (or tunables in generic) for a
+machine to work as it should.
 
-The problem with the dma_map_* API is that memory might end up being
-allocated once and then used multiple times by different drivers.  eg if
-I allocate an NFS packet, it might get sent first to eth0, then (when the
-route fails) sent to eth1.  Similarly in storage, a RAID-5 driver might
-map the same memory several times to send to different disk controllers.
+The default really should 'just work'.
+
+> In general, Peter, seems like you are not on board with the way Longman
+> suggested to handle prioritized threads. Am I right?
+
+Right.
+
+Presumably you have a workload where CNA is actually a win? That is,
+what inspired you to go down this road? Which actual kernel lock is so
+contended on NUMA machines that we need to do this?
