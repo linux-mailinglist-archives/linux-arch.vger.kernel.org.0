@@ -2,59 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5D414FA35
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Feb 2020 20:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5D815020F
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2020 08:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726487AbgBAT2T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 1 Feb 2020 14:28:19 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:39573 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726335AbgBAT2S (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Feb 2020 14:28:18 -0500
-Received: by mail-ot1-f66.google.com with SMTP id 77so9904381oty.6
-        for <linux-arch@vger.kernel.org>; Sat, 01 Feb 2020 11:28:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cxP/mWDrHKD9UWBcOV7z7zMrCIASBgDPmpZP09ULspU=;
-        b=DHbz0vbxuVJr39v4IG5GLko8yPJ2OS6cGBWBlCBw6koGzH+k7gmSCl86lfXXJXyTfS
-         lGLseZubt3OGJEGo7iYD6W08gI9l+Z0T6Z8qt2Sl4a584TvXAdgew2Zny1clbqb5yqTa
-         zo5P76hEP3ZOy/8YimvwqHHOOK/+kG2vflddlA4LDX2Xk+CZis5rwduV5SZe3AGIcN3F
-         N1JkutQpZB5oy9/0pQcdNCdb8eg8DZDeDkDvE3MZ2bvF7MYUe2GeY5l/edaHdyr+Ie4h
-         WulEeklbFMQFb86tSVVfFrIvW121MkB3D9LqmtYh62q+ZNYSKUgfvb5q/vKRjxTNuy/J
-         QBzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cxP/mWDrHKD9UWBcOV7z7zMrCIASBgDPmpZP09ULspU=;
-        b=gQwf7nBtzRLpO3eOcFPoVyrSsa65tSpuPpsFUWteQBpa1Pjq6q5IzVoZRIDE2P236I
-         MUTEPVzMBy9lpR7Fam7L6CRVlpNH753COKFZcJhr55MywhwxLTritLwNkTldnS0qBurb
-         6ESp5JSR6S7Nk5y7AIOFhxPuO0Bca8Agkm2jvSi4f1o1vikPUhKXxNzi9QCT2kUswp9v
-         xZNgNPQlok/HVhM+ejip2kto7F+KOQswf77gtPnk74DOk08GZcKa2Ga3mg+X7y/ncfe7
-         c16EGvwB906XwhDd/4csW6+k/8jsoQmUTWpYY7hkwoz3QxVlEGT+elHmo89HPndh6htA
-         dyVw==
-X-Gm-Message-State: APjAAAV/TNGaJe9n2Oo+vDpKqMTYb2dMd+fz4K0ijrnu34XIpErrNlmO
-        /UrmJI+D7pE3hgK8TXO67hzvM0toXM3Bq6fuSVRIIQ==
-X-Google-Smtp-Source: APXvYqwr4ptf9tE3b6yjDXLUXSR7qGzKb90HMFk1L4yOE6UqTeeItB+3BKcSnDGEm0sa3acbKu307vS9ea6L+YdsRSA=
-X-Received: by 2002:a9d:74d0:: with SMTP id a16mr1495412otl.228.1580585295885;
- Sat, 01 Feb 2020 11:28:15 -0800 (PST)
-MIME-Version: 1.0
-References: <bfca96db-bbd0-d958-7732-76e36c667c68@suse.cz> <202001271519.AA6ADEACF0@keescook>
- <5861936c-1fe1-4c44-d012-26efa0c8b6e7@de.ibm.com> <202001281457.FA11CC313A@keescook>
- <alpine.DEB.2.21.2001291640350.1546@www.lameter.com> <6844ea47-8e0e-4fb7-d86f-68046995a749@de.ibm.com>
- <20200129170939.GA4277@infradead.org> <771c5511-c5ab-3dd1-d938-5dbc40396daa@de.ibm.com>
- <202001300945.7D465B5F5@keescook> <CAG48ez1a4waGk9kB0WLaSbs4muSoK0AYAVk8=XYaKj4_+6e6Hg@mail.gmail.com>
- <202002010952.ACDA7A81@keescook>
-In-Reply-To: <202002010952.ACDA7A81@keescook>
-From:   Jann Horn <jannh@google.com>
-Date:   Sat, 1 Feb 2020 20:27:49 +0100
-Message-ID: <CAG48ez2ms+TDEXQdDONuQ1GG0K20E69nV1r_yjKxxYjYKv1VCg@mail.gmail.com>
-Subject: Re: [kernel-hardening] [PATCH 09/38] usercopy: Mark kmalloc caches as
- usercopy caches
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        id S1727499AbgBCHqw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Feb 2020 02:46:52 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:58872 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727652AbgBCHqw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Feb 2020 02:46:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=1OnLUtccVxzRGy3H6tEuURVA5Cw1eDsrX9HvO+XJeD4=; b=tIPQmbMBJJkyM1EUffKpQ6t8+
+        6fwTSe6r4ihL5NqNlss4BtnMRFyaJcEPiVZ64i/7LitZrfYs81oZ1L69NyPjMREv3zXAuPxvS0bI2
+        eMLUSHfCDe+Uhbh/03f2I/93N1FOLazKz82/5pZp0ZjY/ieytY6YhoUGFolkmaBRB9ehsBDiIZHK+
+        bkuV60ig9MmsNyEVGt8E0ZhQVk6ERJlJE/YSTpSCBFbCtPNtYKIiwbs9X9JfUX2DCkFMoZJyTbNcM
+        L+Sm7T5i2/9zTP8/s+1LrDkKFqoSf7iPfX+6fv7NwwWoLbf8UowsIMPpObCqY5IZs9aWtvn+JjE0x
+        uAmUP6+mA==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iyWRQ-0001Y1-VE; Mon, 03 Feb 2020 07:46:44 +0000
+Date:   Sun, 2 Feb 2020 23:46:44 -0800
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
         Christoph Hellwig <hch@infradead.org>,
         Christopher Lameter <cl@linux.com>,
         Jiri Slaby <jslaby@suse.cz>,
@@ -84,109 +59,52 @@ Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
         Kernel Hardening <kernel-hardening@lists.openwall.com>,
         Vlastimil Babka <vbabka@suse.cz>,
         Michal Kubecek <mkubecek@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [kernel-hardening] [PATCH 09/38] usercopy: Mark kmalloc caches
+ as usercopy caches
+Message-ID: <20200203074644.GD8731@bombadil.infradead.org>
+References: <5861936c-1fe1-4c44-d012-26efa0c8b6e7@de.ibm.com>
+ <202001281457.FA11CC313A@keescook>
+ <alpine.DEB.2.21.2001291640350.1546@www.lameter.com>
+ <6844ea47-8e0e-4fb7-d86f-68046995a749@de.ibm.com>
+ <20200129170939.GA4277@infradead.org>
+ <771c5511-c5ab-3dd1-d938-5dbc40396daa@de.ibm.com>
+ <202001300945.7D465B5F5@keescook>
+ <CAG48ez1a4waGk9kB0WLaSbs4muSoK0AYAVk8=XYaKj4_+6e6Hg@mail.gmail.com>
+ <202002010952.ACDA7A81@keescook>
+ <CAG48ez2ms+TDEXQdDONuQ1GG0K20E69nV1r_yjKxxYjYKv1VCg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG48ez2ms+TDEXQdDONuQ1GG0K20E69nV1r_yjKxxYjYKv1VCg@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-[pruned bogus addresses from recipient list]
+On Sat, Feb 01, 2020 at 08:27:49PM +0100, Jann Horn wrote:
+> FWIW, as far as I understand, usercopy doesn't actually have any
+> effect on drivers that use the modern, proper APIs, since those don't
+> use the slab allocator at all - as I pointed out in my last mail, the
+> dma-kmalloc* slabs are used very rarely. (Which is good, because
+> putting objects from less-than-page-size slabs into iommu entries is a
+> terrible idea from a security and reliability perspective because it
+> gives the hardware access to completely unrelated memory.) Instead,
+> they get pages from the page allocator, and these pages may e.g. be
+> allocated from the DMA, DMA32 or NORMAL zones depending on the
+> restrictions imposed by hardware. So I think the usercopy restriction
+> only affects a few oddball drivers (like this s390 stuff), which is
+> why you're not seeing more bug reports caused by this.
 
-On Sat, Feb 1, 2020 at 6:56 PM Kees Cook <keescook@chromium.org> wrote:
-> On Fri, Jan 31, 2020 at 01:03:40PM +0100, Jann Horn wrote:
-> > I think dma-kmalloc slabs should be handled the same way as normal
-> > kmalloc slabs. When a dma-kmalloc allocation is freshly created, it is
-> > just normal kernel memory - even if it might later be used for DMA -,
-> > and it should be perfectly fine to copy_from_user() into such
-> > allocations at that point, and to copy_to_user() out of them at the
-> > end. If you look at the places where such allocations are created, you
-> > can see things like kmemdup(), memcpy() and so on - all normal
-> > operations that shouldn't conceptually be different from usercopy in
-> > any relevant way.
->
-> I can't find where the address limit for dma-kmalloc is implemented.
+Getting pages from the page allocator is true for dma_alloc_coherent()
+and friends.  But it's not true for streaming DMA mappings (dma_map_*)
+for which the memory usually comes from kmalloc().  If this is something
+we want to fix (and I have an awful feeling we're going to regret it
+if we say "no, we trust the hardware"), we're going to have to come up
+with a new memory allocation API for these cases.  Or bounce bugger the
+memory for devices we don't trust.
 
-dma-kmalloc is a slab that uses GFP_DMA pages.
-
-Things have changed a bit through the kernel versions, but in current
-mainline, the zone limit for GFP_DMA is reported from arch code to
-generic code via zone_dma_bits, from where it is used to decide which
-zones should be used for allocations based on the address limit of a
-given device:
-
-kernel/dma/direct.c:
-/*
- * Most architectures use ZONE_DMA for the first 16 Megabytes, but some use it
- * it for entirely different regions. In that case the arch code needs to
- * override the variable below for dma-direct to work properly.
- */
-unsigned int zone_dma_bits __ro_after_init = 24;
-[...]
-static gfp_t __dma_direct_optimal_gfp_mask(struct device *dev, u64 dma_mask,
-                u64 *phys_limit)
-{
-[...]
-        /*
-         * Optimistically try the zone that the physical address mask falls
-         * into first.  If that returns memory that isn't actually addressable
-         * we will fallback to the next lower zone and try again.
-         *
-         * Note that GFP_DMA32 and GFP_DMA are no ops without the corresponding
-         * zones.
-         */
-        if (*phys_limit <= DMA_BIT_MASK(zone_dma_bits))
-                return GFP_DMA;
-        if (*phys_limit <= DMA_BIT_MASK(32))
-                return GFP_DMA32;
-        return 0;
-}
-
-
-There are only a few architectures that override the limit:
-
-powerpc:
-        /*
-         * Allow 30-bit DMA for very limited Broadcom wifi chips on many
-         * powerbooks.
-         */
-        if (IS_ENABLED(CONFIG_PPC32))
-                zone_dma_bits = 30;
-        else
-                zone_dma_bits = 31;
-
-s390:
-        zone_dma_bits = 31;
-
-and arm64:
-#define ARM64_ZONE_DMA_BITS     30
-[...]
-        if (IS_ENABLED(CONFIG_ZONE_DMA)) {
-                zone_dma_bits = ARM64_ZONE_DMA_BITS;
-                arm64_dma_phys_limit = max_zone_phys(ARM64_ZONE_DMA_BITS);
-        }
-
-
-The actual categorization of page ranges into zones happens via
-free_area_init_nodes() or free_area_init_node(); these are provided
-with arrays of maximum physical addresses or zone sizes (depending on
-which of them is called) by arch-specific code.
-For arm64, the caller is zone_sizes_init(). X86 does it in zone_sizes_init().
-
-> As to whitelisting all of dma-kmalloc -- I guess I can be talked into
-> it. It still seems like the memory used for direct hardware
-> communication shouldn't be exposed to userspace, but it we're dealing
-> with packet data, etc, then it makes sense not to have to have bounce
-> buffers, etc.
-
-FWIW, as far as I understand, usercopy doesn't actually have any
-effect on drivers that use the modern, proper APIs, since those don't
-use the slab allocator at all - as I pointed out in my last mail, the
-dma-kmalloc* slabs are used very rarely. (Which is good, because
-putting objects from less-than-page-size slabs into iommu entries is a
-terrible idea from a security and reliability perspective because it
-gives the hardware access to completely unrelated memory.) Instead,
-they get pages from the page allocator, and these pages may e.g. be
-allocated from the DMA, DMA32 or NORMAL zones depending on the
-restrictions imposed by hardware. So I think the usercopy restriction
-only affects a few oddball drivers (like this s390 stuff), which is
-why you're not seeing more bug reports caused by this.
+The problem with the dma_map_* API is that memory might end up being
+allocated once and then used multiple times by different drivers.  eg if
+I allocate an NFS packet, it might get sent first to eth0, then (when the
+route fails) sent to eth1.  Similarly in storage, a RAID-5 driver might
+map the same memory several times to send to different disk controllers.
