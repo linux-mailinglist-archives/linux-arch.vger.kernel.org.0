@@ -2,167 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BDF15200F
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Feb 2020 18:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB5915213A
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Feb 2020 20:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727314AbgBDRys (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Feb 2020 12:54:48 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:46590 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727359AbgBDRyr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Feb 2020 12:54:47 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 014HrFVZ192141;
-        Tue, 4 Feb 2020 17:53:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2019-08-05; bh=/K8bkH1tluP7AqL7A5f3qlqtdLKkacRQXpV1VnbEX58=;
- b=CbAgUNM8xdGO+4tR+vkDHikxaGnulHiTHVcPlTr45h1WaN+kHVZ93QdL3KjgbaeUemjE
- s5gJb/Ezs6mklvvIcvbbGHSRaAvtu5/pLiFFQxnal7DNdfdbRR/QR/MZ1O5t9MbwJ1Nz
- yCpfLEezeXvFO+2x170eFuhc1995C39LSCnEfhe8eFLIAZHo5qf/S+1YuepRum6eE1ok
- ifMak7JJHYO/JD13IxXFalU+ON4G7Gsuuzz+7coaqerRYOc/d4S9pzR+U9ybbkisN1B5
- 7zJJkm3adUxRPfM6HLyYTa28L+zu3gYeShH1yn1i0JBWGPMFFBeGsS1hlcSK57gRcyTD 2w== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2xw0ru8ddp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Feb 2020 17:53:56 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 014HrloE163721;
-        Tue, 4 Feb 2020 17:53:56 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2xxvusa5p5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Feb 2020 17:53:54 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 014HrngU027321;
-        Tue, 4 Feb 2020 17:53:49 GMT
-Received: from [10.11.111.157] (/10.11.111.157)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 04 Feb 2020 09:53:48 -0800
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH v8 4/5] locking/qspinlock: Introduce starvation avoidance
- into CNA
-From:   Alex Kogan <alex.kogan@oracle.com>
-In-Reply-To: <e26b3afa-80d6-71bf-39c8-0fa4b875cbb2@redhat.com>
-Date:   Tue, 4 Feb 2020 12:53:46 -0500
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux@armlinux.org.uk,
-        Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, hpa@zytor.com, x86@kernel.org,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Jan Glauber <jglauber@marvell.com>,
-        Steven Sistare <steven.sistare@oracle.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        dave.dice@oracle.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B98581F8-DE4B-4DF6-B435-112993605E8E@oracle.com>
-References: <8D3AFB47-B595-418C-9568-08780DDC58FF@oracle.com>
- <714892cd-d96f-4d41-ae8b-d7b7642a6e3c@redhat.com>
- <1669BFDE-A1A5-4ED8-B586-035460BBF68A@oracle.com>
- <20200125111931.GW11457@worktop.programming.kicks-ass.net>
- <F32558D8-4ACB-483A-AB4C-F565003A02E7@oracle.com>
- <20200203134540.GA14879@hirez.programming.kicks-ass.net>
- <6d11b22b-2fb5-7dea-f88b-b32f1576a5e0@redhat.com>
- <20200203152807.GK14914@hirez.programming.kicks-ass.net>
- <15fa978d-bd41-3ecb-83d5-896187e11244@redhat.com>
- <83762715-F68C-42DF-9B41-C4C48DF6762F@oracle.com>
- <20200204172758.GF14879@hirez.programming.kicks-ass.net>
- <e26b3afa-80d6-71bf-39c8-0fa4b875cbb2@redhat.com>
-To:     Waiman Long <longman@redhat.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9521 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=857
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2002040119
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9521 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=907 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2002040119
+        id S1727585AbgBDTfo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Feb 2020 14:35:44 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:45682 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727579AbgBDTfn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Feb 2020 14:35:43 -0500
+Received: by mail-pg1-f194.google.com with SMTP id b9so10143515pgk.12
+        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2020 11:35:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZBYf/F2Io0atf7tGD69pezEGXYzc+ynKJmxs01qZzAA=;
+        b=QOo3HD1vuYYlz+4sD+zhB2tClXMUNBEVMlO7WB2JZ9IV9rmn7SF/rbwkwtEq2KhqH6
+         JflMkH64e2XW0chioVXoRklQSjZ1ThVCqfFd4QNQZvy3cCKTKktltJOOJYcsi+dOXsiA
+         xyKnNbIPPvpQIbEox4KqyaNXHcxW2y550fV9m69L6uSplE435tmpgX9LGNn5cxycQCX2
+         WnL4rVBZyAfqQEJjgaX6r9LnrYU1cW8yz106G9HwDqFdmwyb5weFPXRl0cmTQUDEgiOT
+         IuHegvLBA08oEM5t1e51IBhTgVFYRvE/0qHfcPD02u5/ihsaye3NxsNp4XwMhOnq9rty
+         pXjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZBYf/F2Io0atf7tGD69pezEGXYzc+ynKJmxs01qZzAA=;
+        b=mTuDHPX2dUlZL0QpBTSvOowhqMZxt2NWjPi/eF7F0WDBT/7QIfflvLhPVMf8SgL/eN
+         eAU+CTKJs7TdUXD2fKfcEqs+hOiALyYGZTnG+13fCc0aUNEr+7k686bBTNvaZ3O1b65h
+         8cc00nwQcT3TyplSuXkoIF9KkSQeY1wYfi9Uz2SiIo56/8kR/Xwwo2ppIMFKX5cPYu3M
+         k3ZNsJVSmUZXce4VOEoz4AMMmN80KbT1GXfAw2KYdI0v3vmR3+M2el4ji2dCH0MAtBRs
+         UP7NFLz4zUm/88YDjk/JT0+0NfEhZRt3GyFzPDLD1zIu5fmhHgR0gtr5XP3yfX1nd883
+         ciUg==
+X-Gm-Message-State: APjAAAXXThDHscse/s8WkT1eEy/Jr+gGdviW2Yoe+clGfkLQ+KuWQT7k
+        RtdsdB5w48shMcPKnGga0qfEpaJZO0oc2IQoA//H2w==
+X-Google-Smtp-Source: APXvYqw4q+KWhmmtYLJvBYiGMg4pK4goKHR2pzDq2KQ/ueAn46fzf63AjOWVV2VKJzLV/wvMXo/IxMlPJ94Rwb3Ob+8=
+X-Received: by 2002:a63:3754:: with SMTP id g20mr17958855pgn.384.1580844941362;
+ Tue, 04 Feb 2020 11:35:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20200130230812.142642-1-brendanhiggins@google.com> <20200204071915.AF32B21582@mail.kernel.org>
+In-Reply-To: <20200204071915.AF32B21582@mail.kernel.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 4 Feb 2020 11:35:30 -0800
+Message-ID: <CAFd5g44ZG+E==gT24w49oKc6nHv4nBQFeipikKxXJH3oHdO99Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] kunit: create a centralized executor to dispatch
+ all KUnit tests
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Kees Cook <keescook@chromium.org>,
+        Richard Weinberger <richard@nod.at>, rppt@linux.ibm.com,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Knut Omang <knut.omang@oracle.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Feb 3, 2020 at 11:19 PM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Brendan Higgins (2020-01-30 15:08:05)
+> > ## TL;DR
+> >
+> > This patchset adds a centralized executor to dispatch tests rather than
+> > relying on late_initcall to schedule each test suite separately along
+> > with a couple of new features that depend on it.
+>
+> Is there any diff from v1 to v2? I don't know what changed, but I see
+> that my Reviewed-by tag has been put on everything, so I guess
+> everything I said was addressed or discussed in the previous round.
 
+Oh yes, sorry about that. I have gotten a bit lazy in regard to
+changing logs. I noticed that a lot of people don't seem to care. I'll
+make a note that you do.
 
-> On Feb 4, 2020, at 12:39 PM, Waiman Long <longman@redhat.com> wrote:
->=20
-> On 2/4/20 12:27 PM, Peter Zijlstra wrote:
->> On Tue, Feb 04, 2020 at 11:54:02AM -0500, Alex Kogan wrote:
->>>> On Feb 3, 2020, at 10:47 AM, Waiman Long <longman@redhat.com> =
-wrote:
->>>>=20
->>>> On 2/3/20 10:28 AM, Peter Zijlstra wrote:
->>>>> On Mon, Feb 03, 2020 at 09:59:12AM -0500, Waiman Long wrote:
->>>>>> On 2/3/20 8:45 AM, Peter Zijlstra wrote:
->>>>>>> Presumably you have a workload where CNA is actually a win? That =
-is,
->>>>>>> what inspired you to go down this road? Which actual kernel lock =
-is so
->>>>>>> contended on NUMA machines that we need to do this?
->>> There are quite a few actually. files_struct.file_lock, =
-file_lock_context.flc_lock
->>> and lockref.lock are some concrete examples that get very hot in =
-will-it-scale
->>> benchmarks.=20
->> Right, that's all a variant of banging on the same resources across
->> nodes. I'm not sure there's anything fundamental we can fix there.
-Not much, except gain that 2x from a better lock.
-
->>=20
->>> And then there are spinlocks in __futex_data.queues,=20
->>> which get hot when applications have contended (pthread) locks =E2=80=94=
-=20
->>> LevelDB is an example.
->> A numa aware rework of futexes has been on the todo list for years :/
-> Now, we are going to get that for free with this patchset:-)
-Exactly!!
-
->>=20
->>> Our initial motivation was based on an observation that kernel =
-qspinlock is not=20
->>> NUMA-aware. So what, you may ask. Much like people realized in the =
-past that
->>> global spinning is bad for performance, and they switched from =
-ticket lock to
->>> locks with local spinning (e.g., MCS), I think everyone would agree =
-these days that
->>> bouncing a lock (and cache lines in general) across numa nodes is =
-similarly bad.
->>> And as CNA demonstrates, we are easily leaving 2-3x speedups on the =
-table by
->>> doing just that with the current qspinlock.
->> Actual benchmarks with performance numbers are required. It helps
->> motivate the patches as well as gives reviewers clues on how to
->> reproduce / inspect the claims made.
->>=20
-> I think the cover-letter does have some benchmark results listed.
-To clarify on that, I _used to include benchmark results in the cover =
-letter=20
-for previous revisions. I stopped doing that as the changes between =
-revisions
-were rather minor =E2=80=94 maybe that is the missing part? If so, my =
-apologies, I can
-certainly publish them again.
-
-The point is that we have numbers for actual benchmarks, plus the kernel =
-build
-robot has sent quite a few reports on positive improvements in the =
-performance
-of AIM7 and other benchmarks due to CNA (plus ARM folks noticed =
-improvement
-in their benchmarks, although I think those were mostly microbenchmarks.=20=
-
-Yet, it is evident that the improvements are cross-platform.)
-
-Regards,
-=E2=80=94 Alex=
+Changes since last revision:
+- On patch 6/7, I flipped the include order and removed braces from the if
+  statements.
+- On patch 7/7, I removed the periods from the short descriptions.
