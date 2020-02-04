@@ -2,52 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C55E15225B
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Feb 2020 23:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB125152263
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Feb 2020 23:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727563AbgBDWbA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Feb 2020 17:31:00 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:43531 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727483AbgBDWa7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Feb 2020 17:30:59 -0500
-Received: by mail-pg1-f193.google.com with SMTP id u131so10375680pgc.10
-        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2020 14:30:59 -0800 (PST)
+        id S1727604AbgBDWfk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Feb 2020 17:35:40 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:46358 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727468AbgBDWfk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Feb 2020 17:35:40 -0500
+Received: by mail-pl1-f194.google.com with SMTP id y8so7868553pll.13
+        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2020 14:35:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Q2uQL/PRw6ZnTDrqiiea6tiCZJLGBQe2LOHyEh5sDJ4=;
-        b=t2lvJ5eRV7fNHCyOWIUVU0qCE/DfBdKo5P3ClEetu7j6GGIg2XASjLWPCBjl+34JdE
-         6ny6Y50jnfQsvBTWE1bwkdPqA0V8rodl3y1fXWxaInCOxiDPKI5DUt82uL3CnbUIafy9
-         p08FhbQrlWgcsmJQvhAt6LDgCuDy0Fw8IFLxqHZAcrgagsyrlNbbkaF/Ii3npSR+IoUI
-         7eByhr9nXLvJjCI+LJUlnSG+u4qzSxSKnByGmAj0+1wVSggoDvkGvv2O4f68xPLPiwOn
-         Eo9phXx8Duaklg8yw1cjFIKRIWdEeopuCCSX9Kfw4oX4UghVR0PeWwCphaOK3w9JQYsP
-         2iuQ==
+        bh=wW0tjd+cBxeR6/lhPUUjx0fEpBoP1LYYTT0FsIiI1ho=;
+        b=icGZp+gWX8+ra8EaRzj0omZeGdmp0NxlbomRJ1M8RaU/WQNP+zqgYuJZSPFcaiWcnZ
+         2pCWkyEpTMGGCi9alcZbNMp01PJ6HAZzwmE6trVB6wWJfukGW4fmAYtsgfiXedtOqqRT
+         bmFSWApPulYRdVfiU3CIZn8jePJi3U2HzSVo++6ZSgzVHry0vhZ3v1h/qeuxOx83W3He
+         S2QBe7oA9erOEncvfIOndMP6l3GHqBJB+9L+ElZ0vc5VnS5GueU9EJ3BnmcLAsA1zQb2
+         zG+yXK+320g1OiPoDFO6spKz5/W1GSM7NskP7wp/j9iQ7LQ71cVXLbv42DtWh8/5ZB7g
+         33Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Q2uQL/PRw6ZnTDrqiiea6tiCZJLGBQe2LOHyEh5sDJ4=;
-        b=siuMQw6ZoRZyfD4MmVMuH2wG123Oqp82d43k3hgsNHNF6Dg80SYIWtXr3ofPBfUSJp
-         qf1wVjfFBtsuh6gzvA49EmnVd/aDUDgEYDsxcv7hoOqvEiW8mFAXQ76fMe8syjrMiI88
-         z7UlFb7vBqnxLRMPVUxxMrXalxrEVNgTMhi5dp/xYvwrGAda522hsEyFzxdyBbQs7+vm
-         cUjFVLijadgB8ou22LELISlN/lFVxvEE+g0ZHF8qm45fv2jGQUTUuqHEP42U6S2rjle8
-         NGtJYm3gTUcLFbeg+O0rhqKqHWOJXwRY6HIC+4PJP3j70phZfHoCkdVwEYSCfszyE8UB
-         +O+A==
-X-Gm-Message-State: APjAAAVpO6fGx2wxgYS6OuEjPZ0GmxHKVvjI2s/+6qzhLbe0c5BQXVqy
-        079bheqPVlqWboDWgci0KBP//oNSfqZLZ7wEZfKv8w==
-X-Google-Smtp-Source: APXvYqwSZaY//8PRrbH3D4/3OyG0Roy306tCq51bwzXFTdTrGyFV7FF3+o89xhSA7oOCZ+Nwi4dbqV2Jsg3SEvbuwuI=
-X-Received: by 2002:aa7:8545:: with SMTP id y5mr29917679pfn.185.1580855458475;
- Tue, 04 Feb 2020 14:30:58 -0800 (PST)
+        bh=wW0tjd+cBxeR6/lhPUUjx0fEpBoP1LYYTT0FsIiI1ho=;
+        b=mcrPtdW3LudL5kYPNmUf5I4qDD8SkttDv3GYt1MLMpzWe16+gfPx1Z1nORDwp1AApH
+         m0rViN5CxTLtSwqrSMLqPw4/Tj/58dyYp4xHHf3HBtMVgnzM7kMr3KZpjD/oPuJW7588
+         dUyipbtYLFwLX9zFoGvqg8F9PON1s8JE3ShJ1RDVui+ZyHeo6e8bYVFwGKpMUt20pJhf
+         2fXeQ0WQcvQDunPp6hPvpQnGglleGi3odKegv2bVZrIiWVNJu5M409E+7mo2zPWzqLHd
+         sm46Xg1MVYJhpsIhzl9OrQw3WlOt87Hxp3P/1cCVMm1LGzv63R11Ub9QNyf/mqTSS7OY
+         ZKJw==
+X-Gm-Message-State: APjAAAXJlr0hto+4oXZUXD0dTjMen9lL/1qzNuTZLr6i+t/1RW4M8RTI
+        IermrYOv6RqlHyX6S0LGEKhcnLtpfTqdVwxGAJ8xFg==
+X-Google-Smtp-Source: APXvYqy0w6xoiM6E9N7yfGOvN2yylEfVSD+LT3cHC469AG7ZzC1NJLwbAZS26Rmu1su+jZ8vZlXD5Lh2v7ZgeQA4us4=
+X-Received: by 2002:a17:902:fe8d:: with SMTP id x13mr32717392plm.232.1580855739838;
+ Tue, 04 Feb 2020 14:35:39 -0800 (PST)
 MIME-Version: 1.0
 References: <20200130230812.142642-1-brendanhiggins@google.com>
- <20200130230812.142642-3-brendanhiggins@google.com> <e060bdfc-5cdb-fb62-48b0-cc54c7bc72ce@gmail.com>
-In-Reply-To: <e060bdfc-5cdb-fb62-48b0-cc54c7bc72ce@gmail.com>
+ <20200130230812.142642-4-brendanhiggins@google.com> <11977708-bb18-e322-db7a-9f21d7cdec54@gmail.com>
+In-Reply-To: <11977708-bb18-e322-db7a-9f21d7cdec54@gmail.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 4 Feb 2020 14:30:47 -0800
-Message-ID: <CAFd5g46irbQ7j_DOY+bQPoo1TWjwvu6n9iyQ7abe9pfqydeMYg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] arch: um: add linker section for KUnit test suites
+Date:   Tue, 4 Feb 2020 14:35:28 -0800
+Message-ID: <CAFd5g47d3=drrSAOMpn_BOf8Gw94mfdJ6NrmroRf4a__=PCEWg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] kunit: test: create a single centralized executor
+ for all tests
 To:     Frank Rowand <frowand.list@gmail.com>
 Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
@@ -76,91 +77,49 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 4, 2020 at 1:59 PM Frank Rowand <frowand.list@gmail.com> wrote:
+On Tue, Feb 4, 2020 at 2:27 PM Frank Rowand <frowand.list@gmail.com> wrote:
 >
 > On 1/30/20 5:08 PM, Brendan Higgins wrote:
-> > Add a linker section to UML where KUnit can put references to its test
-> > suites. This patch is an early step in transitioning to dispatching all
-> > KUnit tests from a centralized executor rather than having each as its
-> > own separate late_initcall.
+> > From: Alan Maguire <alan.maguire@oracle.com>
+> >
+> > Add a centralized executor to dispatch tests rather than relying on
+> > late_initcall to schedule each test suite separately.  Centralized
+> > execution is for built-in tests only; modules will execute tests
+> > when loaded.
+> >
+> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> > Co-developed-by: Iurii Zaikin <yzaikin@google.com>
+> > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> > Co-developed-by: Brendan Higgins <brendanhiggins@google.com>
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> > ---
+> >  include/kunit/test.h | 73 +++++++++++++++++++++++++++-----------------
+> >  lib/kunit/Makefile   |  3 +-
+> >  lib/kunit/executor.c | 36 ++++++++++++++++++++++
+> >  3 files changed, 83 insertions(+), 29 deletions(-)
+> >  create mode 100644 lib/kunit/executor.c
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 2dfb550c6723a..8a02f93a6b505 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
 >
-> All architectures please.
-
-I *am* supporting all architectures with this patchset.
-
-The first patch in this series adds support to all architectures
-except UML (admittedly I only tried x86 and ARM, 32 bit and 64 bit for
-both, but I am pretty sure someone tried it for POWER and something
-else, so maybe I should try it with others before submission). A patch
-specific for UML, this patch, was needed because UML is a special
-snowflake and has a bunch of special linker scripts that don't make
-the change in vmlinux.lds.h (the previous patch) sufficient.
-
-> The early versions of Kunit documented reliance on UML.  Discussion lead to
-> the conclusion that real architectures and real hardware would be supported.
-
-I am *very* aware.
-
-I would never intentionally break support for other architectures. I
-know it is very important to you, Alan, and others.
-
-> This like this are what make me reluctant to move devicetree unittests to
-> KUnit.
-
-Hopefully I can reassure you then:
-
-With Alan as a regular contributor who cares very much about non-UML
-architectures, it would be very unlikely for me to accidentally break
-support for other architectures without us finding out before a
-release.
-
-I also periodically test KUnit on linux-next on x86-64. I have gotten
-bugs for other architectures from Arnd Bergmann and one of the m86k
-maintainers who seems to play around with it as well.
-
-So yeah, other people care about this too, and I would really not want
-to make any of them unhappy.
-
-> Can you please add a section to the KUnit documentation that lists things
-> like the expectations, requirements, limitations, etc for a test case that
-> is run by KUnit?  Some examples that pop to mind from recent discussions
-> and my own experiences:
+> The following fragment does not match the test.h in Linux 5.5 or 5.4-rc1 (as one
+> possible earlier version).  And we are not to Linux 5.5-rc1 yet.  (Simple way
+> to check for the mis-match - 5.5 has kunit_test_suite() instead of
+> kunit_test_suites().)
 >
->   - Each test case is invoked after late_init is complete.
->       + Exception: the possible value of being able to run a unit test
->         at a specific runlevel has been expressed.  If an actual unit
->         test can be shown to require running earlier, this restriction
->         will be re-visited.
->
->   - Each test case must be idempotent.  Each test case may be called
->     multiple times, and must generate the same result each time it
->     is called.
->       + Exception 1: a test case can be declared to not be idempotent
->         [[ mechanism TBD ]], in which case KUnit will not call the
->         test case a second time without the kernel rebooting.
->       + Exception 2: hardware may not be deterministic, so a test that
->         always passes or fails when run under UML may not always to
->         so on real hardware.  <--- sentence copied from
->         Documentation/dev-tools/kunit/usage.rst
->           [[ This item and 1st exception do not exist yet, but will exist
->           in some form if the proposed proc filesystem interface is
->           added. ]]
->
->   - KUnit provides a helpful wrapper to simplify building a UML kernel
->     containing the KUnit test cases, booting the UML kernel, and
->     formatting the output from the test cases.  This wrapper MUST NOT
->     be required to run the test cases or to determine a test result.
->     The formatting may provide additional analysis and improve
->     readability of a test result.
->
->   - .... There is more that belongs here, but I'm getting side tracked
->     here, when I'm trying to instead convert devicetree unittests to
->     KUnit and want to get back to that.
+> I know that there is an alternate tree where some of the development occurs.
+> Can you please add a link in MAINTAINERS?  And please note (at least in
+> patch 0) what tree the series is developed against?
 
-Sure, I think that's a great start! Thanks for that. I hope you don't
-mind if I copy and paste some of it.
+Yep, I was planning on sending an update to the MAINTAINERS with that
+and some other updates soon.
 
-It kind of sounds like you are talking about more of a requirements
-doc than the design doc I was imagining in my reply to you on the
-cover letter, which is fine. The documentation is primarily for people
-other than me, so whatever you and others think is useful, I will do.
+In future revisions, I will put a link to the tree I developed
+against. In the meantime, we send pull-requests from here:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=kunit
+
+And that is what I used as my development base for this series.
