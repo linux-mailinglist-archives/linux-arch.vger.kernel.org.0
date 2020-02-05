@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7191152718
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 08:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0CC15271A
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 08:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbgBEHi2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Feb 2020 02:38:28 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44468 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727068AbgBEHi2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 02:38:28 -0500
-Received: by mail-pf1-f196.google.com with SMTP id y5so740398pfb.11
-        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2020 23:38:26 -0800 (PST)
+        id S1727083AbgBEHjF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Feb 2020 02:39:05 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:46939 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727068AbgBEHjE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 02:39:04 -0500
+Received: by mail-pg1-f195.google.com with SMTP id z124so520160pgb.13
+        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2020 23:39:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=q6gbiA7g1XEnjsY45e/GHXTvVKuuaeFbJ9vWvbdAEI0=;
-        b=vIe+tEdErPM406cyxJ3Uvp9MFmlEp/EtnjYh+DzEabn9oGzvJ0oBYnrAusQKOwAJEQ
-         9pqfsSrDQ9honJwW8aok9kxZlmUA5nygiRxfdKL3CMJ8qLjNzGaoIxVVbj4gAF1oF/yz
-         l1HvgVeH7WNCdEQd/y3Tbz+6mHRcySgGUzeFPw0V4n1ahU+bOCoarXJmUdOcqAk53Jzh
-         GPl6VrVnz/FCR/d0IhG3h0b3ByLolQI3DPEJhQ6Le2Z0Ks/tXn5ZzbRJWbLtwxXRp0vJ
-         QRIuyJ7CICXzpNl5o+k6skfSHnjh4fWGZ/qbaqi1vz1WDh9UHmlnUWGR18PJbaHp+frC
-         jLcw==
+        bh=wPNxZNcefQtXGqNsqQ4bOqLtRzkFN8K5CMyJqD0vjr0=;
+        b=QJghL7Up5Q6HpJVVz9MOUcXi+ETC1cfg2rFFFnWeaK6jcdKcP50v/Nvp1Q7HiC4DzJ
+         yi/dpNcgFvNkvAekJNPELoFXFNPKTfiq1oo6dtzdvMeLTybVryCPs1BHWMPpZTRvOdA1
+         5un92RmnvBwYVAukoxv/B6/JGYMgUUW68/e/C/dKn3P7nNkuicVwLoVRtojLqQqjDPHm
+         c+8fQ7csp4RRb1A/8BxnNcxy/odGXq0DezyDxPoz5J+HVqA5mcgijpyjDbqy0YFc2MkU
+         VG+0dagz67+h+H1UumWxsE2b5PVj6lH0JEdwc1apzKbiLb8CD0BDtsCtVRBYNufgERZt
+         9RZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=q6gbiA7g1XEnjsY45e/GHXTvVKuuaeFbJ9vWvbdAEI0=;
-        b=WdCJr8+90uQgP4Cajtvvzh6PZ89bhc54cQteT/RGVuby8f1feBHVqtJX3r+h5UPpeo
-         X9yKetdCDJQ3T54V9WdU3o480VDyQ9Zx3HkXynUnez+wSE2YE43KrBXaRyqmoSlTwNl3
-         qVdlzcSKC3hEgpfensbF0g1S4seHdKP0frF6o7/VYpVS+Uuv4+amzdLg9nlm6PGdAXNy
-         fOOmUfzmrUXJjhUnn+LoOPQgyMSJZuG96bcWQEm68INexMDTuW+12HwPdYg88KVSWZ+V
-         58HL47txtNjSqvKr85LZw11S1bonxtadTb2t0QpWE+5u/EGElVMjK8ioI9QcEb7ri7zz
-         oQbA==
-X-Gm-Message-State: APjAAAXRd+uQt5bSCfGAaFpdZtJ1gwY4mv5UJlkLNTjdr04SXZ4B6Uc3
-        AtPOibtrelb3tke7kRtKQhU=
-X-Google-Smtp-Source: APXvYqzgOl3fdPdQSOUoPCUuc4Udrh+nBSdbLpIPJKp6FWfi+X1MzVSBvrEn+WtdXKKlS4OVz/A20g==
-X-Received: by 2002:a63:28c7:: with SMTP id o190mr34417419pgo.394.1580888306090;
-        Tue, 04 Feb 2020 23:38:26 -0800 (PST)
+        bh=wPNxZNcefQtXGqNsqQ4bOqLtRzkFN8K5CMyJqD0vjr0=;
+        b=AnKHz75iEHLVMFa267O/z72OxcozDWg3xRQNaQC8Fyb4QIlcsBHnCJdHWh52xQDoYN
+         f7xhTGUPQnM8m+wUhV4N9LHUTsa96qg1c+2fqMfTQSye+rL4O5NcIV0b7YFkA+lY2NRJ
+         F/nOhO1bBnd2tu+MqPwji5FdIPzsPjASP4Hl6Od4ShBXVZ2hcmpqYsLT0c46+c7tdwPb
+         z9Vwqwda37kn8K5h3XAbq59fza4nFv9Du30XdpfnEoncmYQ2uyvbwJb3WDZQRDVwmrKc
+         UabTo/UaDHPA09nc3Lleihk9LhmX+ZYRxV5T9+xQoFIaXH5hsoFFCkUWcItTIjAjYJg2
+         lsOg==
+X-Gm-Message-State: APjAAAV67YGQSNB8J/oV7Bx1lt7C0bEdH/Opd+R0RxoAKu71L4wB0zDX
+        f2ZEoWQWlnne1OsMk8U5Jqc=
+X-Google-Smtp-Source: APXvYqzPKFZIr3Y0tBQOBcxX8tIzevY3XsC0dSf78u7juBZdrhqOtherzRKZNoKjBsHrh+GUuTpAuA==
+X-Received: by 2002:a63:360a:: with SMTP id d10mr34546187pga.366.1580888342495;
+        Tue, 04 Feb 2020 23:39:02 -0800 (PST)
 Received: from earth-mac.local.gmail.com ([202.214.86.179])
-        by smtp.gmail.com with ESMTPSA id 3sm6526468pjg.27.2020.02.04.23.38.23
+        by smtp.gmail.com with ESMTPSA id y16sm26663001pfn.177.2020.02.04.23.39.00
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 04 Feb 2020 23:38:25 -0800 (PST)
-Date:   Wed, 05 Feb 2020 16:38:22 +0900
-Message-ID: <m2imklqya9.wl-thehajime@gmail.com>
+        Tue, 04 Feb 2020 23:39:02 -0800 (PST)
+Date:   Wed, 05 Feb 2020 16:38:58 +0900
+Message-ID: <m2h805qy99.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     richard.weinberger@gmail.com
 Cc:     linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
-        levex@linux.com, tavi.purdila@gmail.com, retrage01@gmail.com,
-        liuyuan@google.com, linux-kernel-library@freelists.org
-Subject: Re: [RFC v2 05/37] lkl: memory handling
-In-Reply-To: <CAFLxGvw_tkmAq0nGrgEs8jQFGLADDuAyUOsYhdDzAH5yhHFHEA@mail.gmail.com>
+        tavi.purdila@gmail.com, retrage01@gmail.com,
+        linux-kernel-library@freelists.org, sigmaepsilon92@gmail.com
+Subject: Re: [RFC v2 07/37] lkl: interrupt support
+In-Reply-To: <CAFLxGvxytmS4WSFj2ibyJKCuR5TbspdNf6MvHNvzh9dtKx2rJg@mail.gmail.com>
 References: <cover.1573179553.git.thehajime@gmail.com>
-        <8b0c833bde42e761cadfd3542263ad7a8be5eb5b.1573179553.git.thehajime@gmail.com>
-        <CAFLxGvw_tkmAq0nGrgEs8jQFGLADDuAyUOsYhdDzAH5yhHFHEA@mail.gmail.com>
+        <567fd4d5c395e2279e86ca0bfca544ad2773a31d.1573179553.git.thehajime@gmail.com>
+        <CAFLxGvxytmS4WSFj2ibyJKCuR5TbspdNf6MvHNvzh9dtKx2rJg@mail.gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -65,41 +65,50 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Tue, 26 Nov 2019 07:10:28 +0900,
+On Tue, 26 Nov 2019 07:13:55 +0900,
 Richard Weinberger wrote:
 > 
 > On Fri, Nov 8, 2019 at 6:03 AM Hajime Tazaki <thehajime@gmail.com> wrote:
 > >
 > > From: Octavian Purdila <tavi.purdila@gmail.com>
 > >
-> > LKL is a non MMU architecture and hence there is not much work left to
-> > do other than initializing the boot allocator and providing the page
-> > and page table definitions.
+> > Add APIs that allows the host to reserve and free and interrupt number
+> > and also to trigger an interrupt.
 > >
-> > The backstore memory is allocated via a host operation and the memory
-> > size to be used is specified when the kernel is started, in the
-> > lkl_start_kernel call.
+> > The trigger operation will simply store the interrupt data in
+> > queue. The interrupt handler is run later, at the first opportunity it
+> > has to avoid races with any kernel threads.
 > >
-> > Signed-off-by: H.K. Jerry Chu <hkchu@google.com>
+> > Currently, interrupts are run on the first interrupt enable operation
+> > if interrupts are disabled and if we are not already in interrupt
+> > context.
+> >
+> > When triggering an interrupt, it uses GCC's built-in functions for
+> > atomic memory access to synchronize and simple boolean flags.
+> >
 > > Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
-> > Signed-off-by: Levente Kurusa <levex@linux.com>
-> > Signed-off-by: Yuan Liu <liuyuan@google.com>
+> > Signed-off-by: Michael Zimmermann <sigmaepsilon92@gmail.com>
 > > Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 > > ---
-> >  arch/um/lkl/include/asm/page.h          | 14 ++++++
-> >  arch/um/lkl/include/asm/pgtable.h       | 62 +++++++++++++++++++++++
-> >  arch/um/lkl/include/uapi/asm/host_ops.h |  5 ++
-> >  arch/um/lkl/mm/bootmem.c                | 66 +++++++++++++++++++++++++
+> >  arch/um/lkl/include/asm/irq.h             |  13 ++
+> >  arch/um/lkl/include/uapi/asm/irq.h        |  36 ++++
+> >  arch/um/lkl/include/uapi/asm/sigcontext.h |  16 ++
+> >  arch/um/lkl/kernel/irq.c                  | 193 ++++++++++++++++++++++
 > 
-> This is also something which needs unification with UML.
-> UML in NOMMU mode would be LKL then...
+> Like I said before, this also something to unify with UML.
+> I'm aware that this is easily said but we cannot have too much duplication.
+> 
+> Feel free to ask if UML internals give you headache. :-)
 
-At this moment, I leave those part as is; changing LKL to MMU mode
-makes less possibility to host various underlying environments
-(non-Linux hosts, non-x86 subarchs).
+Same as nommu implementation, I left this part as-is.
 
-If you have nice suggestions (such as adding texts to docs), it would
-be definitely helpful.
+Triggering interrupts with fd events (delivered by epoll&co) is a hard
+part to implement host-independent interrupts of LKL.  OTOH, the v3
+patchset shows that it is doable to use UML drivers with the LKL
+interrupt facility.
+
+I may also need more time to evaluate/find a right direction, though.
+Your comments are always welcome.
 
 -- Hajime
 
