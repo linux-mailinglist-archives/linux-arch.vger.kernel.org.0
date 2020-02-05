@@ -2,63 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3471532C4
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 15:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D393153350
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 15:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbgBEOYh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Feb 2020 09:24:37 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44393 "EHLO
+        id S1726334AbgBEOqp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Feb 2020 09:46:45 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:33825 "EHLO
         mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbgBEOYh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 09:24:37 -0500
-Received: by mail-pg1-f193.google.com with SMTP id g3so1031327pgs.11
-        for <linux-arch@vger.kernel.org>; Wed, 05 Feb 2020 06:24:37 -0800 (PST)
+        with ESMTP id S1726592AbgBEOqp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 09:46:45 -0500
+Received: by mail-pg1-f193.google.com with SMTP id j4so1082126pgi.1
+        for <linux-arch@vger.kernel.org>; Wed, 05 Feb 2020 06:46:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=gbABLLE49n2yhiqkhSn8nnzWORWiC6z8xKar+HwA+/I=;
-        b=kg9Sn1pw4Iy6kPtWetppxrrt4YP1d+5khQ0zkoZYHFVlc4p203SjJdSTLjWvKWGNYr
-         hmJtlobvFf48bqS37P5P1KkIKaop68XlaghavmaJCBBAXJ/GPwgkkDNyr0NTDcyHKbaQ
-         h570jiYesTw2owj+r8izawRPmMZMwnzNbixeQ582Ak0PLKsyaiVGQW2rmXXkNuB2zaQa
-         pBgPUtZxi4bjAWfefpEAGL0YclSVACs8wmteb2EPjKkwZCSwHvXv1mm9X48NZrpS9e9O
-         qgJhw6HkszEP6dH0W3czrRAmHC/VPmAmFXsTb5Cw+P731J4oEG3Wy27NH/uG1jTPR4An
-         ZDrw==
+        bh=VnerVuFYSXJ3ZDrE3RGGG9WiyeTQgleX/15FBOen3I8=;
+        b=I015MiL9KC1urIe7DFnBGSFKyfqHbslIUoRYLua8ldlRQciyw0LJvRjERmi2JEYRb4
+         wr+f+x4+pakJs+ZgmlFelnhxu8q05m93bWsQ/I/7SohWPBIqJefs3yxFPKW220x/2VNp
+         Q1WY79IpZKds4OqQBMD1f6AR/7Lek60RRKMFYlM9rK12fDrSZX/hfIZLPJZBX6n/6rbT
+         t3wSU32EHeCT99bzFHufYdX3H7EOnY78f6tQnLya3v9JmeKTCwai8e6j4vG1ZcCSYmnO
+         8itnrZSBGcOCi7OdzE9NH1PUX5UkeIcyARq8bH0fn2WMu+RWjJ5Eu+2b9PX7UTaZ+gQy
+         1LbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=gbABLLE49n2yhiqkhSn8nnzWORWiC6z8xKar+HwA+/I=;
-        b=Q9+sUTZVJjdW7/23pk9WuQ3+gno6zZaYFF9q0Az8UUsWc5sWqMt6RsLVDkNmZs7FQC
-         Ag7wC+3kUXr9t+UWevmhAeJBzc79fbUzGtCgYBmkOHU49ntEsrSQRxA4XKVYnznGLlhK
-         R6xOVVAEV5YIFTTojy2vAjTuufmrBTe2EwjaIscPJ8QcJqcmgZan5kHbsD66ajjX3bl+
-         0puCLqEKlhadzcTipX5dKFDfZI+F/f+FKvKLwmidJdhe+6DtKythmaskeyHwintp6Jf+
-         Z4RaUF91JZVaWAZZLL9DdEfrWUay/7xxtNzXEoT4nVDF33Ny99QPRZfo5PdkGhZ2GXt5
-         tJiw==
-X-Gm-Message-State: APjAAAXsAExEq5fmsQjq9yjdXlt+61vn44sfXJUMVv/fmfhEUaYmcrGf
-        O3YuD6ccUN6FHnPzmD3bFYf3idgWz+YtyA==
-X-Google-Smtp-Source: APXvYqzTM3SLLErn34QMZLRJfB84dU6EKiA3BC7oP1plFtsaxKPOXcUkvi3tdkYenkCKSexDkzubAA==
-X-Received: by 2002:a63:2c0e:: with SMTP id s14mr625716pgs.349.1580912676621;
-        Wed, 05 Feb 2020 06:24:36 -0800 (PST)
+        bh=VnerVuFYSXJ3ZDrE3RGGG9WiyeTQgleX/15FBOen3I8=;
+        b=ualtUMk/zQ1EdrFjS7DjbWzAJ1IatMHqYyT4VJQ51LoclXoe4gf1mTEJCvzzXeBkK1
+         cEMZGYZGyaHF0SnZbRZLtr9GjBK79KVbpkJvX2Xn/gFOsIssnRDevZdX82aRwhzGgQwp
+         FQXDN9WyzVt6HHpPQJoe9Hs8+XYcOmmCzDSMK1VHQCkFGu0Tb76IKXEYFTVp9udKCk+d
+         ZCYAlL9e9zu/5DP/oo9RKdMglVum/L71lkzEKMFv8RF8MVWq9oizJ0O4qaaweLmLK3dW
+         VjLbxwI/+88ZWfEkMiEcBIy4z/MvftMqInjoOqI7qMtOolpbK0c19p2EFcdLCs1LqqTb
+         ++0w==
+X-Gm-Message-State: APjAAAVRlklgTTudYQNI/buUAwvXqZHJRHJJ5wFpmePmEB6+Bojuj5fH
+        daSScJ74J6EUWnVv5hekung=
+X-Google-Smtp-Source: APXvYqwg+V1rUWDUZItb3nJyAP9aMYWiRKvRFgk1ALOuRoQUXFflGcSxRsWz7jHNQKe1kGNy1i/RCA==
+X-Received: by 2002:a63:d24b:: with SMTP id t11mr27009003pgi.443.1580914004684;
+        Wed, 05 Feb 2020 06:46:44 -0800 (PST)
 Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id z16sm4170449pgl.92.2020.02.05.06.24.33
+        by smtp.gmail.com with ESMTPSA id x28sm27610pgc.83.2020.02.05.06.46.41
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 05 Feb 2020 06:24:34 -0800 (PST)
-Date:   Wed, 05 Feb 2020 23:24:29 +0900
-Message-ID: <m2ftfpqfhe.wl-thehajime@gmail.com>
+        Wed, 05 Feb 2020 06:46:42 -0800 (PST)
+Date:   Wed, 05 Feb 2020 23:46:39 +0900
+Message-ID: <m2eev9qegg.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     anton.ivanov@kot-begemot.co.uk
-Cc:     richard.weinberger@gmail.com, linux-arch@vger.kernel.org,
-        tavi.purdila@gmail.com, linux-um@lists.infradead.org,
-        retrage01@gmail.com, linux-kernel-library@freelists.org,
-        sigmaepsilon92@gmail.com
-Subject: Re: [RFC v2 07/37] lkl: interrupt support
-In-Reply-To: <739ada9a-b88a-5192-fb4b-65132a74b4de@kot-begemot.co.uk>
-References: <cover.1573179553.git.thehajime@gmail.com>
-        <567fd4d5c395e2279e86ca0bfca544ad2773a31d.1573179553.git.thehajime@gmail.com>
-        <CAFLxGvxytmS4WSFj2ibyJKCuR5TbspdNf6MvHNvzh9dtKx2rJg@mail.gmail.com>
-        <m2h805qy99.wl-thehajime@gmail.com>
-        <739ada9a-b88a-5192-fb4b-65132a74b4de@kot-begemot.co.uk>
+Cc:     linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+        tavi.purdila@gmail.com, retrage01@gmail.com,
+        linux-kernel-library@freelists.org, sigmaepsilon92@gmail.com
+Subject: Re: [RFC v3 07/26] um lkl: interrupt support
+In-Reply-To: <800b1132-68df-8c63-5371-015bfc83a511@kot-begemot.co.uk>
+References: <cover.1580882335.git.thehajime@gmail.com>
+        <9d6f93f061b2b248c0fa0a7f1530792936f8e7be.1580882335.git.thehajime@gmail.com>
+        <800b1132-68df-8c63-5371-015bfc83a511@kot-begemot.co.uk>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,44 +65,54 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-Hello Anton,
-
-On Wed, 05 Feb 2020 19:49:37 +0900,
+On Wed, 05 Feb 2020 19:47:36 +0900,
 Anton Ivanov wrote:
 
-> >>>   arch/um/lkl/include/asm/irq.h             |  13 ++
-> >>>   arch/um/lkl/include/uapi/asm/irq.h        |  36 ++++
-> >>>   arch/um/lkl/include/uapi/asm/sigcontext.h |  16 ++
-> >>>   arch/um/lkl/kernel/irq.c                  | 193 ++++++++++++++++++++++
-> >> 
-> >> Like I said before, this also something to unify with UML.
-> >> I'm aware that this is easily said but we cannot have too much duplication.
-> >> 
-> >> Feel free to ask if UML internals give you headache. :-)
-> > 
-> > Same as nommu implementation, I left this part as-is.
-> > 
-> > Triggering interrupts with fd events (delivered by epoll&co) is a hard
-> > part to implement host-independent interrupts of LKL.  OTOH, the v3
-> > patchset shows that it is doable to use UML drivers with the LKL
-> > interrupt facility.
+> > +/**
+> > + * This function can be called from arbitrary host threads, so do not
+> > + * issue any Linux calls (e.g. prink) if lkl_cpu_get() was not issued
+> > + * before.
+> > + */
+> > +int lkl_trigger_irq(int irq)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (!irq || irq > NR_IRQS)
+> > +		return -EINVAL;
+> > +
+> > +	ret = lkl_cpu_try_run_irq(irq);
+> > +	if (ret <= 0)
+> > +		return ret;
+> > +
+> > +	/*
+> > +	 * Since this can be called from Linux context (e.g. lkl_trigger_irq ->
+> > +	 * IRQ -> softirq -> lkl_trigger_irq) make sure we are actually allowed
+> > +	 * to run irqs at this point
+> > +	 */
+> > +	if (!irqs_enabled) {
+> > +		set_irq_pending(irq);
+> > +		lkl_cpu_put();
+> > +		return 0;
+> > +	}
+> > +
+> > +	run_irq(irq);
+> > +
+> > +	lkl_cpu_put();
+> > +
+> > +	return 0;
 > 
-> Make sure you are testing with the vector network devices, the
-> legacy ones are scheduled to be obsoleted at some point
+> Isn't that just:
+> 
+> 	if (irqs_enabled)
+> 		run_irq(irq);
+> 	else
+> 		set_irq_pending(irq);
+> 
+> 	lkl_cpu_put();
+> 
+> 	return 0;
 
-I was aware of the commit to obsolete several backend with the vector
-device, but did not include in the patchset and tests.  I will try to
-do it for the next round.
-
-> I know this will cause a headache on non-Linux, I am happy to write
-> wrappers/emulators for recvmms/sendmmsg so these build on the
-> systems which do not support them.
-
-If UML is going to extend to support non-Linux host, yes, those kind
-of wrappers will be helpful.
-
-Right now, the patchset only focuses on x86 hosts so, this can be
-postponed.
+Thanks, this is much cleaner.  I will fix this in the next turn.
 
 -- Hajime
 
