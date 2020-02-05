@@ -2,63 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7611526F3
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 08:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0BD1526FD
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 08:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727861AbgBEHb2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Feb 2020 02:31:28 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:36994 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727083AbgBEHb2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 02:31:28 -0500
-Received: by mail-pl1-f196.google.com with SMTP id c23so516865plz.4
-        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2020 23:31:26 -0800 (PST)
+        id S1727459AbgBEHbi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Feb 2020 02:31:38 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:43863 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727930AbgBEHbi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 02:31:38 -0500
+Received: by mail-pg1-f193.google.com with SMTP id u131so519259pgc.10
+        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2020 23:31:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FeGkYni7LJnQM11cC/ZJMS21tEqO7nFsGMOBX356P0E=;
-        b=GnQ2bClCWLsD55OakblMBpb0RraY3EtgGWac1GRk5k2PNA5z0iTpfKQ1SrHxVIRz1p
-         MLzqEhOYyKn12oH68LNZGH+stXVlqqFho+D4qYRZA0k87ovfa/ZzdHik9skjN6vOAhvn
-         Qn24kRc/xhiUd2pcM7aY+HsoAD4Z9r7GhkPIYQ0JcmVkyVbBLjX4+DHuGsm9BMsmfWLg
-         9jVBx9rLcfor2pUSKVdifrYDg3zUO5FCtydtZVYNXJuMEwO64ea8Y+FGzRDOlB43K37b
-         0OZkEBW55EQeNpOlFkPgXA+8DoYcgU8W9X5U9lUhBDlyDr09YGpqxe8c+lFaj6wzugO1
-         Ztug==
+        bh=imps6g8P7Pz4OGYnQVZikVA60FQoafCxwcYjnUyS3X0=;
+        b=YcXgsaejcI5tpiINkIBqDPTnhqIlCwPpY0Tb3jXdTV8LiZ5m4Jqvtyf4O++IkTNgPh
+         veW5nyLZlqNqq4pkV/MK+94S4zbijfb+w/sjOvA56V0TfucLHJ+1dAFI2OQp8PRcGTEx
+         D4KYlmww6zX6JW0Jt3dyPUx5Y2WFmqduXNEQnv3lVGhLUYWKk8KSMNOpXD7HxH94GZQh
+         GkeHawFCW2YFv4ssmAJDWEF3rULogC3bkBUUUUrIKLeIMOKCxD65e4pyZMkBoOSgWi1Z
+         /Fa+o+wpGRLlJ6EZjtXvuBaz572OXQA8itovNiYPD48zLE4ZqRB2sNd7DN/MDyfKRh4M
+         hdIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FeGkYni7LJnQM11cC/ZJMS21tEqO7nFsGMOBX356P0E=;
-        b=uh+7Si5NGeb1q5VtvozNu9F4ngtCs7gAv1ErxlJaDHsYYz67DL+1FEtHT+l7nbMUYR
-         0qvua06D6BSzXnMik9KbERHdN55dr4OPas+ptMlBv2Wb3BbVNLM61hQVtGjL9k3SUWsv
-         8ojH82/ZUQJ+YlO8CzrQgyEhbMKkAz9LwuORQkoRCjnSJIwPgATYCrSDUB9wEdf44lvu
-         FyDnJGMo2idnpVMSvHFbssl8geBOW+m81DqY+fEjdjC6YRVChpjsDFXooQWlZC18eCvf
-         ApWe2LoRsUDuO0Ajqgsspf1WUvugEsuWFqbgRpMNYJmuag6mdln43FhZeRmQiYzjcY9s
-         xbgA==
-X-Gm-Message-State: APjAAAUvh9Zln2oNINiBzJrrCesO3lItd++xaXwh3S3xAMhHfEgkWT27
-        gV+jN3RXxi8vl13MivclOiw=
-X-Google-Smtp-Source: APXvYqxa8t7djYc8qi6HKIJEKZ1YPCytcxKktlVYF3+LpmO64/usfCvShGAz/lVB6Q8Ry2TFj4KE4g==
-X-Received: by 2002:a17:902:7009:: with SMTP id y9mr34221255plk.254.1580887886319;
-        Tue, 04 Feb 2020 23:31:26 -0800 (PST)
+        bh=imps6g8P7Pz4OGYnQVZikVA60FQoafCxwcYjnUyS3X0=;
+        b=rM/5fwJvO10koMjiyyu6Sd1IM0MCNpjnCr0BQHl9qfr8fLpUiYIMFLpJTl2rdSG0vQ
+         D8FOKUWShO0siJVu6N+Iv/aulhMSDnPI/Z5sM1PQnArG44Qj8+tcx5Yry6D4VKXxa7bo
+         0JK4Bj5H2AwiZyMIt77eth1da/16iYSm5XggjJu0Tgx+ALAB0I/RLkz7h5GwnJ2SHnqK
+         VWWQ/EB6+bS7FMXHJ9aRHO4F8aKKoGdgYYbGJl1xRE0TlZ5Pjr4uYwmTyUZBOsoXdJGs
+         V/2Qa2JHcDuEKfJggGvXbq9Kn3N9eNLQ/DavjRbH2WFec9Zdd69eRNszIJRTj0Fdu4xQ
+         Q3iA==
+X-Gm-Message-State: APjAAAXAeMxYPHpFklP6l1WFaqM/ik/7/nmT+IG3SYtMiPg1MZgp7Jzp
+        GzR3ke7G8kbf0J5x7BX8T+0=
+X-Google-Smtp-Source: APXvYqz5ZVp9TUF6Ot7akKtdfBFeBEH76HF3RYKNTBVDqhrh2d/D2abK9FF4TJDJPoeXEY0HvjdvEw==
+X-Received: by 2002:a65:68ce:: with SMTP id k14mr897268pgt.336.1580887897548;
+        Tue, 04 Feb 2020 23:31:37 -0800 (PST)
 Received: from earth-mac.local ([202.214.86.179])
-        by smtp.gmail.com with ESMTPSA id n2sm28404600pfq.50.2020.02.04.23.31.25
+        by smtp.gmail.com with ESMTPSA id x65sm28249233pfb.171.2020.02.04.23.31.35
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 04 Feb 2020 23:31:25 -0800 (PST)
+        Tue, 04 Feb 2020 23:31:35 -0800 (PST)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id CC401202573078; Wed,  5 Feb 2020 16:31:23 +0900 (JST)
+        id D2B142025730A5; Wed,  5 Feb 2020 16:31:33 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org
 Cc:     Octavian Purdila <tavi.purdila@gmail.com>,
         Akira Moroo <retrage01@gmail.com>,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
-        Conrad Meyer <cem@FreeBSD.org>, Dan Peebles <pumpkin@me.com>,
+        Conrad Meyer <cem@FreeBSD.org>,
         Petros Angelatos <petrosagg@gmail.com>,
-        Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>,
-        Yuriy Taraday <yorik.sar@gmail.com>,
         Hajime Tazaki <thehajime@gmail.com>
-Subject: [RFC v3 19/26] lkl tools: cptofs that reads/writes to/from a filesystem image
-Date:   Wed,  5 Feb 2020 16:30:28 +0900
-Message-Id: <3ebc55a46aa101db6262d277792629aca1c7e0a4.1580882335.git.thehajime@gmail.com>
+Subject: [RFC v3 20/26] lkl tools: fs2tar that converts a filesystem image to tar
+Date:   Wed,  5 Feb 2020 16:30:29 +0900
+Message-Id: <a1e18cf58ea683fd920bef01fa17f60898ce4284.1580882335.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1580882335.git.thehajime@gmail.com>
 References: <cover.1580882335.git.thehajime@gmail.com>
@@ -71,75 +69,56 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Octavian Purdila <tavi.purdila@gmail.com>
 
-A tool to read/write to/from a filesystem image without mounting the
-file to host filesystem.  Thus there is no root privilege to modify the
-contents.
+Simple utility that converts a filesystem image to a tar file,
+preserving file rights and extended attributes.
 
 Cc: Conrad Meyer <cem@FreeBSD.org>
-Cc: Dan Peebles <pumpkin@me.com>
 Cc: Petros Angelatos <petrosagg@gmail.com>
-Cc: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
-Cc: Yuriy Taraday <yorik.sar@gmail.com>
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
 Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 ---
- tools/lkl/.gitignore |   2 +
- tools/lkl/Build      |   2 +
- tools/lkl/Makefile   |   3 +
+ tools/lkl/.gitignore |   1 +
+ tools/lkl/Build      |   1 +
  tools/lkl/Targets    |   4 +
- tools/lkl/cptofs.c   | 636 +++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 647 insertions(+)
- create mode 100644 tools/lkl/cptofs.c
+ tools/lkl/fs2tar.c   | 412 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 418 insertions(+)
+ create mode 100644 tools/lkl/fs2tar.c
 
 diff --git a/tools/lkl/.gitignore b/tools/lkl/.gitignore
-index 4e08254dbd46..1a8210f4d9c4 100644
+index 1a8210f4d9c4..138e65efcad2 100644
 --- a/tools/lkl/.gitignore
 +++ b/tools/lkl/.gitignore
-@@ -7,3 +7,5 @@ tests/disk
- tests/boot
- tests/valgrind*.xml
+@@ -9,3 +9,4 @@ tests/valgrind*.xml
  *.pyc
-+cptofs
-+cpfromfs
+ cptofs
+ cpfromfs
++fs2tar
 diff --git a/tools/lkl/Build b/tools/lkl/Build
-index e69de29bb2d1..a9d12c5ca260 100644
+index a9d12c5ca260..73b37363a6de 100644
 --- a/tools/lkl/Build
 +++ b/tools/lkl/Build
-@@ -0,0 +1,2 @@
-+cptofs-$(LKL_HOST_CONFIG_ARCHIVE) += cptofs.o
-+
-diff --git a/tools/lkl/Makefile b/tools/lkl/Makefile
-index 0abccb9d86b6..03750aab98d8 100644
---- a/tools/lkl/Makefile
-+++ b/tools/lkl/Makefile
-@@ -86,6 +86,9 @@ $(OUTPUT)%$(EXESUF): $(OUTPUT)%-in.o $(OUTPUT)liblkl.a
- $(OUTPUT)%-in.o: $(OUTPUT)lib/lkl.o FORCE
- 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(patsubst %/,%,$(dir $*)) obj=$(notdir $*)
+@@ -1,2 +1,3 @@
+ cptofs-$(LKL_HOST_CONFIG_ARCHIVE) += cptofs.o
++fs2tar-$(LKL_HOST_CONFIG_ARCHIVE) += fs2tar.o
  
-+$(OUTPUT)cpfromfs$(EXESUF): $(OUTPUT)cptofs$(EXESUF)
-+	$(Q)if ! [ -e $@ ]; then ln -s $< $@; fi
-+
- 
- clean:
- 	$(call QUIET_CLEAN, objects)find $(OUTPUT) -name '*.o' -delete -o -name '\.*.cmd'\
 diff --git a/tools/lkl/Targets b/tools/lkl/Targets
-index a9f74c3cc8fb..17de965f92b3 100644
+index 17de965f92b3..3451a1856955 100644
 --- a/tools/lkl/Targets
 +++ b/tools/lkl/Targets
-@@ -4,3 +4,7 @@ progs-y += tests/boot
- progs-y += tests/disk
- progs-y += tests/net-test
- 
-+progs-$(LKL_HOST_CONFIG_ARCHIVE) += cptofs
-+progs-$(LKL_HOST_CONFIG_ARCHIVE) += cpfromfs
-+LDLIBS_cptofs-y := -larchive
-+LDLIBS_cptofs-$(LKL_HOST_CONFIG_NEEDS_LARGP) += -largp
-diff --git a/tools/lkl/cptofs.c b/tools/lkl/cptofs.c
+@@ -8,3 +8,7 @@ progs-$(LKL_HOST_CONFIG_ARCHIVE) += cptofs
+ progs-$(LKL_HOST_CONFIG_ARCHIVE) += cpfromfs
+ LDLIBS_cptofs-y := -larchive
+ LDLIBS_cptofs-$(LKL_HOST_CONFIG_NEEDS_LARGP) += -largp
++
++progs-$(LKL_HOST_CONFIG_ARCHIVE) += fs2tar
++LDLIBS_fs2tar-y := -larchive
++LDLIBS_fs2tar-$(LKL_HOST_CONFIG_NEEDS_LARGP) += -largp
+diff --git a/tools/lkl/fs2tar.c b/tools/lkl/fs2tar.c
 new file mode 100644
-index 000000000000..fb34f570fa1e
+index 000000000000..b7dbcf2028a3
 --- /dev/null
-+++ b/tools/lkl/cptofs.c
-@@ -0,0 +1,636 @@
++++ b/tools/lkl/fs2tar.c
+@@ -0,0 +1,412 @@
 +// SPDX-License-Identifier: GPL-2.0
 +#ifdef __FreeBSD__
 +#include <sys/param.h>
@@ -154,24 +133,20 @@ index 000000000000..fb34f570fa1e
 +#include <libgen.h>
 +#include <sys/stat.h>
 +#include <fcntl.h>
-+#include <fnmatch.h>
-+#include <dirent.h>
++#include <archive.h>
++#include <archive_entry.h>
 +#include <lkl.h>
 +#include <lkl_host.h>
 +
-+static const char doc_cptofs[] = "Copy files to a filesystem image";
-+static const char doc_cpfromfs[] = "Copy files from a filesystem image";
-+static const char args_doc_cptofs[] = "-t fstype -i fsimage path... fs_path";
-+static const char args_doc_cpfromfs[] = "-t fstype -i fsimage fs_path... path";
-+
++char doc[] = "";
++char args_doc[] = "-t fstype fsimage_path tar_path";
 +static struct argp_option options[] = {
 +	{"enable-printk", 'p', 0, 0, "show Linux printks"},
 +	{"partition", 'P', "int", 0, "partition number"},
 +	{"filesystem-type", 't', "string", 0,
 +	 "select filesystem type - mandatory"},
-+	{"filesystem-image", 'i', "string", 0,
-+	 "path to the filesystem image - mandatory"},
-+	{"selinux", 's', "string", 0, "selinux attributes for destination"},
++	{"selinux-contexts", 's', "file", 0,
++	 "export selinux contexts to file"},
 +	{0},
 +};
 +
@@ -180,12 +155,9 @@ index 000000000000..fb34f570fa1e
 +	int part;
 +	const char *fsimg_type;
 +	const char *fsimg_path;
-+	int npaths;
-+	char **paths;
-+	const char *selinux;
++	const char *tar_path;
++	FILE *selinux;
 +} cla;
-+
-+static int cptofs;
 +
 +static error_t parse_opt(int key, char *arg, struct argp_state *state)
 +{
@@ -201,19 +173,26 @@ index 000000000000..fb34f570fa1e
 +	case 't':
 +		cla->fsimg_type = arg;
 +		break;
-+	case 'i':
-+		cla->fsimg_path = arg;
-+		break;
 +	case 's':
-+		cla->selinux = arg;
++		cla->selinux = fopen(arg, "w");
++		if (!cla->selinux) {
++			fprintf(stderr,
++				"failed to open selinux contexts file: %s\n",
++				strerror(errno));
++			return -1;
++		}
 +		break;
 +	case ARGP_KEY_ARG:
-+		// Capture all remaining arguments in our paths array and stop
-+		// parsing here. We treat the last one as the destination and
-+		// everything before it as sources, just like cp does.
-+		cla->paths = &state->argv[state->next - 1];
-+		cla->npaths = state->argc - state->next + 1;
-+		state->next = state->argc;
++		if (!cla->fsimg_path)
++			cla->fsimg_path = arg;
++		else if (!cla->tar_path)
++			cla->tar_path = arg;
++		else
++			return -1;
++		break;
++	case ARGP_KEY_END:
++		if (state->arg_num < 2 || !cla->fsimg_type)
++			argp_usage(state);
 +		break;
 +	default:
 +		return ARGP_ERR_UNKNOWN;
@@ -222,513 +201,281 @@ index 000000000000..fb34f570fa1e
 +	return 0;
 +}
 +
-+static struct argp argp_cptofs = {
-+	.options = options,
-+	.parser = parse_opt,
-+	.args_doc = args_doc_cptofs,
-+	.doc = doc_cptofs,
-+};
++static struct argp argp = { options, parse_opt, args_doc, doc };
 +
-+static struct argp argp_cpfromfs = {
-+	.options = options,
-+	.parser = parse_opt,
-+	.args_doc = args_doc_cpfromfs,
-+	.doc = doc_cpfromfs,
-+};
++static struct archive *tar;
 +
-+static int searchdir(const char *fs_path, const char *path, const char *match);
++static int searchdir(const char *fsimg_path, const char *path);
 +
-+static int open_src(const char *path)
++static int copy_file(const char *fsimg_path, const char *path)
 +{
-+	int fd;
++	long fsimg_fd;
++	char buff[4096];
++	long len, wrote;
++	int ret = 0;
 +
-+	if (cptofs)
-+		fd = open(path, O_RDONLY, 0);
-+	else
-+		fd = lkl_sys_open(path, LKL_O_RDONLY, 0);
-+
-+	if (fd < 0)
-+		fprintf(stderr, "unable to open file %s for reading: %s\n",
-+			path, cptofs ? strerror(errno) : lkl_strerror(fd));
-+
-+	return fd;
-+}
-+
-+static int open_dst(const char *path, int mode)
-+{
-+	int fd;
-+
-+	if (cptofs)
-+		fd = lkl_sys_open(path, LKL_O_RDWR | LKL_O_TRUNC | LKL_O_CREAT,
-+				  mode);
-+	else
-+		fd = open(path, O_RDWR | O_TRUNC | O_CREAT, mode);
-+
-+	if (fd < 0)
-+		fprintf(stderr, "unable to open file %s for writing: %s\n",
-+			path, cptofs ? lkl_strerror(fd) : strerror(errno));
-+
-+	if (cla.selinux && cptofs) {
-+		int ret = lkl_sys_fsetxattr(fd, "security.selinux", cla.selinux,
-+					    strlen(cla.selinux), 0);
-+		if (ret)
-+			fprintf(stderr,
-+				"unable to set selinux attribute on %s: %s\n",
-+				path, lkl_strerror(ret));
++	fsimg_fd = lkl_sys_open(fsimg_path, LKL_O_RDONLY, 0);
++	if (fsimg_fd < 0) {
++		fprintf(stderr, "fsimg error opening %s: %s\n", fsimg_path,
++			lkl_strerror(fsimg_fd));
++		return fsimg_fd;
 +	}
 +
-+	return fd;
-+}
-+
-+static int read_src(int fd, char *buf, int len)
-+{
-+	int ret;
-+
-+	if (cptofs)
-+		ret = read(fd, buf, len);
-+	else
-+		ret = lkl_sys_read(fd, buf, len);
-+
-+	if (ret < 0)
-+		fprintf(stderr, "error reading file: %s\n",
-+			cptofs ? strerror(errno) : lkl_strerror(ret));
-+
-+	return ret;
-+}
-+
-+static int write_dst(int fd, char *buf, int len)
-+{
-+	int ret;
-+
-+	if (cptofs)
-+		ret = lkl_sys_write(fd, buf, len);
-+	else
-+		ret = write(fd, buf, len);
-+
-+	if (ret < 0)
-+		fprintf(stderr, "error writing file: %s\n",
-+			cptofs ? lkl_strerror(ret) : strerror(errno));
-+
-+	return ret;
-+}
-+
-+static void close_src(int fd)
-+{
-+	if (cptofs)
-+		close(fd);
-+	else
-+		lkl_sys_close(fd);
-+}
-+
-+static void close_dst(int fd)
-+{
-+	if (cptofs)
-+		lkl_sys_close(fd);
-+	else
-+		close(fd);
-+}
-+
-+static int copy_file(const char *src, const char *dst, int mode)
-+{
-+	long len, to_write, wrote;
-+	char buf[4096], *ptr;
-+	int ret = 0;
-+	int fd_src, fd_dst;
-+
-+	fd_src = open_src(src);
-+	if (fd_src < 0)
-+		return fd_src;
-+
-+	fd_dst = open_dst(dst, mode);
-+	if (fd_dst < 0)
-+		return fd_dst;
-+
 +	do {
-+		len = read_src(fd_src, buf, sizeof(buf));
-+
++		len = lkl_sys_read(fsimg_fd, buff, sizeof(buff));
 +		if (len > 0) {
-+			ptr = buf;
-+			to_write = len;
-+			do {
-+				wrote = write_dst(fd_dst, ptr, to_write);
-+
-+				if (wrote < 0) {
-+					ret = wrote;
-+					goto out;
-+				}
-+
-+				to_write -= wrote;
-+				ptr += len;
-+
-+			} while (to_write > 0);
++			wrote = archive_write_data(tar, buff, len);
++			if (wrote != len) {
++				fprintf(stderr,
++					"error writing file %s to archive: %s [%d %ld]\n",
++					path, archive_error_string(tar), ret,
++					len);
++				ret = -archive_errno(tar);
++				break;
++			}
 +		}
 +
-+		if (len < 0)
++		if (len < 0) {
++			fprintf(stderr, "error reading fsimg file %s: %s\n",
++				fsimg_path, lkl_strerror(len));
 +			ret = len;
++		}
 +
 +	} while (len > 0);
 +
-+out:
-+	close_src(fd_src);
-+	close_dst(fd_dst);
++	lkl_sys_close(fsimg_fd);
 +
 +	return ret;
 +}
 +
-+static int stat_src(const char *path, unsigned int *type, unsigned int *mode,
-+		    long long *size, struct lkl_timespec *mtime,
-+		    struct lkl_timespec *atime)
++static int add_link(const char *fsimg_path, const char *path,
++		    struct archive_entry *entry)
 +{
++	char buf[4096] = { 0, };
++	long len;
++
++	len = lkl_sys_readlink(fsimg_path, buf, sizeof(buf));
++	if (len < 0) {
++		fprintf(stderr, "fsimg readlink error %s: %s\n",
++			fsimg_path, lkl_strerror(len));
++		return len;
++	}
++
++	archive_entry_set_symlink(entry, buf);
++
++	return 0;
++}
++
++static inline void fsimg_copy_stat(struct stat *st, struct lkl_stat *fst)
++{
++	st->st_dev = fst->st_dev;
++	st->st_ino = fst->st_ino;
++	st->st_mode = fst->st_mode;
++	st->st_nlink = fst->st_nlink;
++	st->st_uid = fst->st_uid;
++	st->st_gid = fst->st_gid;
++	st->st_rdev = fst->st_rdev;
++	st->st_size = fst->st_size;
++	st->st_blksize = fst->st_blksize;
++	st->st_blocks = fst->st_blocks;
++	st->st_atim.tv_sec = fst->lkl_st_atime;
++	st->st_atim.tv_nsec = fst->st_atime_nsec;
++	st->st_mtim.tv_sec = fst->lkl_st_mtime;
++	st->st_mtim.tv_nsec = fst->st_mtime_nsec;
++	st->st_ctim.tv_sec = fst->lkl_st_ctime;
++	st->st_ctim.tv_nsec = fst->st_ctime_nsec;
++}
++
++static int copy_xattr(const char *fsimg_path, const char *path,
++		      struct archive_entry *entry)
++{
++	long ret;
++	char *xattr_list, *i;
++	long xattr_list_size;
++
++	ret = lkl_sys_llistxattr(fsimg_path, NULL, 0);
++	if (ret < 0) {
++		fprintf(stderr, "fsimg llistxattr(%s) error: %s\n",
++			path, lkl_strerror(ret));
++		return ret;
++	}
++
++	if (!ret)
++		return 0;
++
++	xattr_list = malloc(ret);
++
++	ret = lkl_sys_llistxattr(fsimg_path, xattr_list, ret);
++	if (ret < 0) {
++		fprintf(stderr, "fsimg llistxattr(%s) error: %s\n", path,
++			lkl_strerror(ret));
++		free(xattr_list);
++		return ret;
++	}
++
++	xattr_list_size = ret;
++
++	for (i = xattr_list; i - xattr_list < xattr_list_size;
++	     i += strlen(i) + 1) {
++		void *xattr_buf;
++
++		ret = lkl_sys_lgetxattr(fsimg_path, i, NULL, 0);
++		if (ret < 0) {
++			fprintf(stderr, "fsimg lgetxattr(%s) error: %s\n", path,
++				lkl_strerror(ret));
++			free(xattr_list);
++			return ret;
++		}
++
++		xattr_buf = malloc(ret);
++
++		ret = lkl_sys_lgetxattr(fsimg_path, i, xattr_buf, ret);
++		if (ret < 0) {
++			fprintf(stderr, "fsimg lgetxattr2(%s) error: %s\n",
++				path, lkl_strerror(ret));
++			free(xattr_list);
++			free(xattr_buf);
++			return ret;
++		}
++
++		if (cla.selinux && strcmp(i, "security.selinux") == 0)
++			fprintf(cla.selinux, "%s %s\n", path,
++				(char *)xattr_buf);
++
++		archive_entry_xattr_clear(entry);
++		archive_entry_xattr_add_entry(entry, i, xattr_buf, ret);
++
++		free(xattr_buf);
++	}
++
++	free(xattr_list);
++
++	return 0;
++}
++
++static int do_entry(const char *fsimg_path, const char *path,
++		    const struct lkl_linux_dirent64 *de)
++{
++	char fsimg_new_path[PATH_MAX], new_path[PATH_MAX];
++	struct lkl_stat fsimg_stat;
 +	struct stat stat;
-+	struct lkl_stat lkl_stat;
-+	int ret;
++	struct archive_entry *entry;
++	int ftype;
++	long ret;
 +
-+	if (cptofs) {
-+		ret = lstat(path, &stat);
-+		if (type)
-+			*type = stat.st_mode & S_IFMT;
-+		if (mode)
-+			*mode = stat.st_mode & ~S_IFMT;
-+		if (size)
-+			*size = stat.st_size;
-+		if (mtime) {
-+			mtime->tv_sec = stat.st_mtim.tv_sec;
-+			mtime->tv_nsec = stat.st_mtim.tv_nsec;
-+		}
-+		if (atime) {
-+			atime->tv_sec = stat.st_atim.tv_sec;
-+			atime->tv_nsec = stat.st_atim.tv_nsec;
-+		}
-+	} else {
-+		ret = lkl_sys_lstat(path, &lkl_stat);
-+		if (type)
-+			*type = lkl_stat.st_mode & S_IFMT;
-+		if (mode)
-+			*mode = lkl_stat.st_mode & ~S_IFMT;
-+		if (size)
-+			*size = lkl_stat.st_size;
-+		if (mtime) {
-+			mtime->tv_sec = lkl_stat.lkl_st_mtime;
-+			mtime->tv_nsec = lkl_stat.st_mtime_nsec;
-+		}
-+		if (atime) {
-+			atime->tv_sec = lkl_stat.lkl_st_atime;
-+			atime->tv_nsec = lkl_stat.st_atime_nsec;
-+		}
-+	}
++	snprintf(new_path, sizeof(new_path), "%s/%s", path, de->d_name);
++	snprintf(fsimg_new_path, sizeof(fsimg_new_path), "%s/%s", fsimg_path,
++		 de->d_name);
 +
-+	if (ret)
-+		fprintf(stderr, "fsimg lstat(%s) error: %s\n",
-+			path, cptofs ? strerror(errno) : lkl_strerror(ret));
-+
-+	return ret;
-+}
-+
-+static int mkdir_dst(const char *path, unsigned int mode)
-+{
-+	int ret;
-+
-+	if (cptofs) {
-+		ret = lkl_sys_mkdir(path, mode);
-+		if (ret == -LKL_EEXIST)
-+			ret = 0;
-+	} else {
-+		ret = mkdir(path, mode);
-+		if (ret < 0 && errno == EEXIST)
-+			ret = 0;
-+	}
-+
-+	if (ret)
-+		fprintf(stderr, "unable to create directory %s: %s\n",
-+			path, cptofs ? strerror(errno) : lkl_strerror(ret));
-+
-+	return ret;
-+}
-+
-+static int readlink_src(const char *src, char *out, int outsize)
-+{
-+	int ret;
-+
-+	if (cptofs)
-+		ret = readlink(src, out, outsize);
-+	else
-+		ret = lkl_sys_readlink(src, out, outsize);
-+
-+	if (ret < 0)
-+		fprintf(stderr, "unable to readlink '%s': %s\n", src,
-+			cptofs ? strerror(errno) : lkl_strerror(ret));
-+
-+	return ret;
-+}
-+
-+static int symlink_dst(const char *path, const char *target)
-+{
-+	int ret;
-+
-+	if (cptofs)
-+		ret = lkl_sys_symlink(target, path);
-+	else
-+		ret = symlink(target, path);
-+
-+	if (ret)
-+		fprintf(stderr, "unable to symlink '%s' with target '%s': %s\n",
-+			path, target, cptofs ? lkl_strerror(ret) :
-+			strerror(errno));
-+
-+	return ret;
-+}
-+
-+static int copy_symlink(const char *src, const char *dst)
-+{
-+	int ret;
-+	long long size, actual_size;
-+	char *target = NULL;
-+
-+	ret = stat_src(src, NULL, NULL, &size, NULL, NULL);
++	ret = lkl_sys_lstat(fsimg_new_path, &fsimg_stat);
 +	if (ret) {
-+		ret = -1;
-+		goto out;
++		fprintf(stderr, "fsimg lstat(%s) error: %s\n",
++			path, lkl_strerror(ret));
++		return ret;
 +	}
 +
-+	target = malloc(size + 1);
-+	if (!target) {
-+		fprintf(stderr, "Unable to allocate memory (%lld bytes)\n",
-+			size + 1);
-+		ret = -1;
-+		goto out;
-+	}
++	entry = archive_entry_new();
 +
-+	actual_size = readlink_src(src, target, size);
-+	if (actual_size != size) {
-+		fprintf(stderr,
-+			"readlink(%s) bad size: got %lld, expected %lld\n",
-+			src, actual_size, size);
-+		ret = -1;
-+		goto out;
-+	}
-+	target[size] = 0; // readlink doesn't append the trailing null byte
-+
-+	ret = symlink_dst(dst, target);
++	archive_entry_set_pathname(entry, new_path);
++	fsimg_copy_stat(&stat, &fsimg_stat);
++	archive_entry_copy_stat(entry, &stat);
++	ret = copy_xattr(fsimg_new_path, new_path, entry);
 +	if (ret)
-+		ret = -1;
++		return ret;
++	/* TODO: ACLs */
 +
-+out:
-+	if (target)
-+		free(target);
++	ftype = stat.st_mode & S_IFMT;
 +
-+	return ret;
-+}
-+
-+static int do_entry(const char *_src, const char *_dst, const char *name)
-+{
-+	char src[PATH_MAX], dst[PATH_MAX];
-+	struct lkl_timespec mtime, atime;
-+	unsigned int type, mode;
-+	int ret;
-+
-+	snprintf(src, sizeof(src), "%s/%s", _src, name);
-+	snprintf(dst, sizeof(dst), "%s/%s", _dst, name);
-+
-+	ret = stat_src(src, &type, &mode, NULL, &mtime, &atime);
-+
-+	switch (type) {
++	switch (ftype) {
 +	case S_IFREG:
-+	{
-+		ret = copy_file(src, dst, mode);
++		archive_write_header(tar, entry);
++		ret = copy_file(fsimg_new_path, new_path);
 +		break;
-+	}
 +	case S_IFDIR:
-+		ret = mkdir_dst(dst, mode);
-+		if (ret)
-+			break;
-+		ret = searchdir(src, dst, NULL);
++		archive_write_header(tar, entry);
++		ret = searchdir(fsimg_new_path, new_path);
 +		break;
 +	case S_IFLNK:
-+		ret = copy_symlink(src, dst);
-+		break;
++		ret = add_link(fsimg_new_path, new_path, entry);
++		/* fall through */
 +	case S_IFSOCK:
 +	case S_IFBLK:
 +	case S_IFCHR:
 +	case S_IFIFO:
++		if (ret)
++			break;
++		archive_write_header(tar, entry);
++		break;
 +	default:
-+		printf("skipping %s: unsupported entry type %d\n", src, type);
++		printf("skipping %s: unsupported entry type %d\n", new_path,
++		       ftype);
 +	}
 +
-+	if (!ret) {
-+		if (cptofs) {
-+			struct lkl_timespec lkl_ts[] = { atime, mtime };
-+
-+			ret = lkl_sys_utimensat(-1, dst,
-+						(struct __lkl__kernel_timespec
-+						 *)lkl_ts,
-+						LKL_AT_SYMLINK_NOFOLLOW);
-+		} else {
-+			struct timespec ts[] = {
-+				{ .tv_sec = atime.tv_sec,
-+				  .tv_nsec = atime.tv_nsec, },
-+				{ .tv_sec = mtime.tv_sec,
-+				  .tv_nsec = mtime.tv_nsec, },
-+			};
-+
-+			ret = utimensat(-1, dst, ts, AT_SYMLINK_NOFOLLOW);
-+		}
-+	}
++	archive_entry_free(entry);
 +
 +	if (ret)
-+		printf("error processing entry %s, aborting\n", src);
++		printf("error processing entry %s, aborting\n", new_path);
 +
 +	return ret;
 +}
 +
-+static DIR *open_dir(const char *path)
++static int searchdir(const char *fsimg_path, const char *path)
 +{
-+	DIR *dir;
-+	int err;
++	long ret, fd;
++	char buf[1024], *pos;
++	long buf_len;
 +
-+	if (cptofs)
-+		dir = opendir(path);
-+	else
-+		dir = (DIR *)lkl_opendir(path, &err);
-+
-+	if (!dir)
-+		fprintf(stderr, "unable to open directory %s: %s\n",
-+			path, cptofs ? strerror(errno) : lkl_strerror(err));
-+	return dir;
-+}
-+
-+static const char *read_dir(DIR *dir, const char *path)
-+{
-+	struct lkl_dir *lkl_dir = (struct lkl_dir *)dir;
-+	const char *name = NULL;
-+	const char *err = NULL;
-+
-+	if (cptofs) {
-+		struct dirent *de = readdir(dir);
-+
-+		if (de)
-+			name = de->d_name;
-+	} else {
-+		struct lkl_linux_dirent64 *de = lkl_readdir(lkl_dir);
-+
-+		if (de)
-+			name = de->d_name;
++	fd = lkl_sys_open(fsimg_path, LKL_O_RDONLY | LKL_O_DIRECTORY, 0);
++	if (fd < 0) {
++		fprintf(stderr, "failed to open dir %s: %s", fsimg_path,
++			lkl_strerror(fd));
++		return fd;
 +	}
 +
-+	if (!name) {
-+		if (cptofs) {
-+			if (errno)
-+				err = strerror(errno);
-+		} else {
-+			if (lkl_errdir(lkl_dir))
-+				err = lkl_strerror(lkl_errdir(lkl_dir));
++	do {
++		struct lkl_linux_dirent64 *de;
++
++		de = (struct lkl_linux_dirent64 *) buf;
++		buf_len = lkl_sys_getdents64(fd, de, sizeof(buf));
++		if (buf_len < 0) {
++			fprintf(stderr, "gentdents64 error: %s\n",
++				lkl_strerror(buf_len));
++			break;
 +		}
-+	}
 +
-+	if (err)
-+		fprintf(stderr, "error while reading directory %s: %s\n",
-+			path, err);
-+	return name;
-+}
++		for (pos = buf; pos - buf < buf_len; pos += de->d_reclen) {
++			de = (struct lkl_linux_dirent64 *)pos;
 +
-+static void close_dir(DIR *dir)
-+{
-+	if (cptofs)
-+		closedir(dir);
-+	else
-+		lkl_closedir((struct lkl_dir *)dir);
-+}
++			if (!strcmp(de->d_name, ".") ||
++			    !strcmp(de->d_name, ".."))
++				continue;
 +
-+static int searchdir(const char *src, const char *dst, const char *match)
-+{
-+	DIR *dir;
-+	const char *name;
-+	int ret = 0;
++			ret = do_entry(fsimg_path, path, de);
++			if (ret)
++				goto out;
++		}
 +
-+	dir = open_dir(src);
-+	if (!dir)
-+		return -1;
-+
-+	while ((name = read_dir(dir, src))) {
-+		if (!strcmp(name, ".") || !strcmp(name, "..") ||
-+		    (match && fnmatch(match, name, 0) != 0))
-+			continue;
-+
-+		ret = do_entry(src, dst, name);
-+		if (ret)
-+			goto out;
-+	}
++	} while (buf_len > 0);
 +
 +out:
-+	close_dir(dir);
-+
++	lkl_sys_close(fd);
 +	return ret;
-+}
-+
-+static int match_root(const char *src)
-+{
-+	const char *c = src;
-+
-+	while (*c) {
-+		switch (*c) {
-+		case '.':
-+			if (c > src && c[-1] == '.')
-+				return 0;
-+			break;
-+		case '/':
-+			break;
-+		default:
-+			return 0;
-+		}
-+		c++;
-+	}
-+
-+	return 1;
-+}
-+
-+int copy_one(const char *src, const char *mpoint, const char *dst)
-+{
-+	char *src_path_dir, *src_path_base;
-+	char src_path[PATH_MAX], dst_path[PATH_MAX];
-+
-+	if (cptofs) {
-+		snprintf(src_path, sizeof(src_path),  "%s", src);
-+		snprintf(dst_path, sizeof(dst_path),  "%s/%s", mpoint, dst);
-+	} else {
-+		snprintf(src_path, sizeof(src_path),  "%s/%s", mpoint, src);
-+		snprintf(dst_path, sizeof(dst_path),  "%s", dst);
-+	}
-+
-+	if (match_root(src))
-+		return searchdir(src_path, dst, NULL);
-+
-+	src_path_dir = dirname(strdup(src_path));
-+	src_path_base = basename(strdup(src_path));
-+
-+	return searchdir(src_path_dir, dst_path, src_path_base);
 +}
 +
 +int main(int argc, char **argv)
 +{
 +	struct lkl_disk disk;
-+	long ret, umount_ret;
-+	int i;
++	long ret;
 +	char mpoint[32];
 +	unsigned int disk_id;
 +
-+	if (strstr(argv[0], "cptofs")) {
-+		cptofs = 1;
-+		ret = argp_parse(&argp_cptofs, argc, argv, 0, 0, &cla);
-+	} else {
-+		ret = argp_parse(&argp_cpfromfs, argc, argv, 0, 0, &cla);
-+	}
-+
-+	if (ret < 0)
++	if (argp_parse(&argp, argc, argv, 0, 0, &cla) < 0)
 +		return -1;
 +
 +	if (!cla.printk)
 +		lkl_host_ops.print = NULL;
 +
-+	disk.fd = open(cla.fsimg_path, cptofs ? O_RDWR : O_RDONLY);
++	disk.fd = open(cla.fsimg_path, O_RDONLY);
 +	if (disk.fd < 0) {
 +		fprintf(stderr, "can't open fsimg %s: %s\n", cla.fsimg_path,
 +			strerror(errno));
@@ -746,27 +493,35 @@ index 000000000000..fb34f570fa1e
 +	}
 +	disk_id = ret;
 +
-+	lkl_start_kernel(&lkl_host_ops, "mem=100M");
++	lkl_start_kernel(&lkl_host_ops, "mem=10M");
 +
-+	ret = lkl_mount_dev(disk_id, cla.part, cla.fsimg_type,
-+			    cptofs ? 0 : LKL_MS_RDONLY,
++	ret = lkl_mount_dev(disk_id, cla.part, cla.fsimg_type, LKL_MS_RDONLY,
 +			    NULL, mpoint, sizeof(mpoint));
 +	if (ret) {
 +		fprintf(stderr, "can't mount disk: %s\n", lkl_strerror(ret));
 +		goto out_close;
 +	}
 +
-+	lkl_sys_umask(0);
-+
-+	for (i = 0; i < cla.npaths - 1; i++) {
-+		ret = copy_one(cla.paths[i], mpoint, cla.paths[cla.npaths - 1]);
-+		if (ret)
-+			break;
++	ret = lkl_sys_chdir(mpoint);
++	if (ret) {
++		fprintf(stderr, "can't chdir to %s: %s\n", mpoint,
++			lkl_strerror(ret));
++		goto out_umount;
 +	}
 +
-+	umount_ret = lkl_umount_dev(disk_id, cla.part, 0, 1000);
-+	if (ret == 0)
-+		ret = umount_ret;
++	tar = archive_write_new();
++	archive_write_set_format_pax_restricted(tar);
++	archive_write_open_filename(tar, cla.tar_path);
++
++	ret = searchdir(mpoint, "");
++
++	archive_write_free(tar);
++
++	if (cla.selinux)
++		fclose(cla.selinux);
++
++out_umount:
++	lkl_umount_dev(disk_id, cla.part, 0, 1000);
 +
 +out_close:
 +	close(disk.fd);
