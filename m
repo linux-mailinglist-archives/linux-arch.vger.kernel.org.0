@@ -2,61 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F7E1526D2
+	by mail.lfdr.de (Postfix) with ESMTP id C29081526D3
 	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 08:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725497AbgBEHar (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1725913AbgBEHar (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Wed, 5 Feb 2020 02:30:47 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:34535 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40813 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
         with ESMTP id S1725468AbgBEHar (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 02:30:47 -0500
-Received: by mail-pg1-f194.google.com with SMTP id j4so538333pgi.1
-        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2020 23:30:45 -0800 (PST)
+Received: by mail-pf1-f195.google.com with SMTP id q8so736268pfh.7;
+        Tue, 04 Feb 2020 23:30:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5Dna74YdYRlTvjEF+bamCzYS7zvkADnMfS5QZs5tBd4=;
-        b=fCuCVCEc0XFRXau1LqxEA0/Cm7EL/NYr6Z8jlK7R/cfQBoTFNZdhV1oXktzh04ue5u
-         Gn7NbeG9hcvhDAcdfkvH9ACcHa6gkjpeECMpVCxtwUR0HmIySPx6cjzjzfn0KCrSbMd7
-         0Bd34f9A57BL9oVj3W8cLiAwT9vM/wFU2ef6AZqLbzeyCB/OIwytFNBk0iVy8mHH51eI
-         pmmhUfvJlw9lZTuJFNSJzcFr5Z6uLZKz4F7qfeZ7GU7usepCHCt7MgdXWpijiHy3ajhF
-         kecIghzPnWRAKMTsGSNCMzbZlHYAWerax5YbXZNUtVTKyrZbHQ1Q6rZH03+tqycR6JjX
-         ENAA==
+        bh=vg6BkPgdBnIv8FR0F7bUnVnyFArf9a6FL/TT2MUcngc=;
+        b=GXOBtyBB3q0A2TeT+nsp7OGGr45mpZgvSN8MfaQ6CucjuRQnhPwYwu2AsXGc89/wb9
+         D4CAtw1uRbMwE4lGkZ+XAOo8YVSa657IaTgBFNT6hERj836Y56HO7jwzb3vdxG+Be+9C
+         DnpUTpH0CasiES8Pt3ykHhBaNPJvLPiGmeCkXG8HHBcvomBO+J340diD5wIFYYXOlNBq
+         1zq8SQJSEHZGnSlKsqA9bqybKxkPlaehOCwkWVAPL0R7tks7QPzygPwnuaMugA/Us+hb
+         TgiCJ7wtPHsnF8tNFfaTxLlTb7BWlv+fDUm+IrdC9eFvVBGneivW181WTT//CuSMki1f
+         V30g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5Dna74YdYRlTvjEF+bamCzYS7zvkADnMfS5QZs5tBd4=;
-        b=KPc7U9njhLvRGmXs+j47gMCUgKt1fuR0xd/H1QSq/NS3X7rCzdvpZXxSaNwTZ5/5Ch
-         7ntGybUatDBUtNNzKrX+FZ7/J6tj4KLn2htbm0Hur3AAGrXeHGwSzqj5yAMOkN3+v3pV
-         28LeNKTkUaGoLAUt/Yq47xHzltSsl31vNkm25lG5Z5Nc04dRnawvLb3nbuy9gNmlEnM5
-         gWemQXoaqWPg2rS/DNAXPKZvvQJK1qijF/f6d+4IsGcD6l27ws9MgL6tH42DeNytv5JG
-         F9Q/whHyGdQTMPUjs8Z+xoz4e81lQhoe+APJ5ekc2JNl9D45v+C9Yw1RsUV2/jrjzfCq
-         Rgzw==
-X-Gm-Message-State: APjAAAX5syW4knF2DE6ThnuYdeYOZO5Ss1FFJsqn1yGiNGlynPOKsqnC
-        ksKGgjD/NTJieeQsmy9w2us=
-X-Google-Smtp-Source: APXvYqzJpryItzlRmuVT9f7SRrLUg5hEL4zCL+VSqfX/etnYD0qu7lnliQBvdtx8apM1fJj4CClMQw==
-X-Received: by 2002:a62:4ecc:: with SMTP id c195mr35725224pfb.158.1580887845329;
+        bh=vg6BkPgdBnIv8FR0F7bUnVnyFArf9a6FL/TT2MUcngc=;
+        b=tCeXIuAHzcDb2w2Iskg0ZiFlVw4ow3yK93A15sjYloXBOE2l2I+SyGKeGlrXBKfNhU
+         wnT23hBsm4nkYRdrGs/eQYXfgoLevHVnkttWJVWeyMvZJuhuo5ri75CGflQiN+6RAyaN
+         l1a1XJmKFP8hCQGirWDWO1L+jHqqI7yJqe5n883ahvtfV3aR3LXUQqaFTy1n4cJg5JoY
+         69BQHWN1wNmE5WX4Dxgzf+NmXgxlWHf161Lgzu4EguZSQz0H+DU2rXP8v1cGjX0kFM9h
+         8ASgMAd0clR/+E4dVjmtKkoZL63djOfEPhDted9TYDbiQbVW5FxqnzUAfu37IfTcM1HP
+         NIrA==
+X-Gm-Message-State: APjAAAUITrRVq3ouDRlea0FO1kX+G5A8t6Nym4/hp6Y5WriAlOuKusQL
+        CLt3h0Uq/5A8hmn/vRiepVg=
+X-Google-Smtp-Source: APXvYqxvb2HbJGv3QZjO8DsJt6hJRNg/peW1+u/siA8n6J18Wwo/T9osvHo5c6KjaSQHqf+JoAdjJw==
+X-Received: by 2002:a63:f403:: with SMTP id g3mr35969352pgi.62.1580887845691;
         Tue, 04 Feb 2020 23:30:45 -0800 (PST)
 Received: from earth-mac.local ([202.214.86.179])
-        by smtp.gmail.com with ESMTPSA id r198sm25241079pfr.54.2020.02.04.23.30.44
+        by smtp.gmail.com with ESMTPSA id c74sm11679902pfb.135.2020.02.04.23.30.44
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
         Tue, 04 Feb 2020 23:30:44 -0800 (PST)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id 45C0B202572F9A; Wed,  5 Feb 2020 16:30:43 +0900 (JST)
+        id 4C4C6202572F9C; Wed,  5 Feb 2020 16:30:43 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org
 Cc:     Octavian Purdila <tavi.purdila@gmail.com>,
         Akira Moroo <retrage01@gmail.com>,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: [RFC v3 01/26] asm-generic: atomic64: allow using generic atomic64 on 64bit platforms
-Date:   Wed,  5 Feb 2020 16:30:10 +0900
-Message-Id: <39e1313ff3cf3eab6ceb5ae322fcd3e5d4432167.1580882335.git.thehajime@gmail.com>
+        linux-api@vger.kernel.org
+Subject: [RFC v3 02/26] arch: add __SYSCALL_DEFINE_ARCH
+Date:   Wed,  5 Feb 2020 16:30:11 +0900
+Message-Id: <67cc975b4ce5aaf1ce0e955d321a7487cf27d6a8.1580882335.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1580882335.git.thehajime@gmail.com>
 References: <cover.1580882335.git.thehajime@gmail.com>
@@ -69,40 +67,43 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Octavian Purdila <tavi.purdila@gmail.com>
 
-With CONFIG_64BIT enabled, atomic64 via CONFIG_GENERIC_ATOMIC64 options
-are not compiled due to type conflict of atomic64_t defined in
-linux/type.h.
-
-This commit fixes the issue and allow using generic atomic64 ops.
-
-Currently, LKL is only the user which defines GENERIC_ATOMIC64
-(lib/atomic64.c) under CONFIG_64BIT environment.  Thus, there is no
-issues before this commit.
+This allows the architecture code to process the system call
+definitions. It is used by LKL to create strong typed function
+definitions for system calls.
 
 Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: linux-api@vger.kernel.org
 ---
- include/asm-generic/atomic64.h | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/syscalls.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/asm-generic/atomic64.h b/include/asm-generic/atomic64.h
-index 370f01d4450f..9b15847baae5 100644
---- a/include/asm-generic/atomic64.h
-+++ b/include/asm-generic/atomic64.h
-@@ -9,9 +9,11 @@
- #define _ASM_GENERIC_ATOMIC64_H
- #include <linux/types.h>
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 5262b7a76d39..d61069aa869a 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -203,9 +203,14 @@ static inline int is_syscall_trace_event(struct trace_event_call *tp_event)
+ }
+ #endif
  
-+#ifndef CONFIG_64BIT
- typedef struct {
- 	s64 counter;
- } atomic64_t;
++#ifndef __SYSCALL_DEFINE_ARCH
++#define __SYSCALL_DEFINE_ARCH(x, sname, ...)
 +#endif
++
+ #ifndef SYSCALL_DEFINE0
+ #define SYSCALL_DEFINE0(sname)					\
+ 	SYSCALL_METADATA(_##sname, 0);				\
++	__SYSCALL_DEFINE_ARCH(0, _##sname);			\
+ 	asmlinkage long sys_##sname(void);			\
+ 	ALLOW_ERROR_INJECTION(sys_##sname, ERRNO);		\
+ 	asmlinkage long sys_##sname(void)
+@@ -222,6 +227,7 @@ static inline int is_syscall_trace_event(struct trace_event_call *tp_event)
  
- #define ATOMIC64_INIT(i)	{ (i) }
+ #define SYSCALL_DEFINEx(x, sname, ...)				\
+ 	SYSCALL_METADATA(sname, x, __VA_ARGS__)			\
++	__SYSCALL_DEFINE_ARCH(x, sname, __VA_ARGS__)		\
+ 	__SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
  
+ #define __PROTECT(...) asmlinkage_protect(__VA_ARGS__)
 -- 
 2.21.0 (Apple Git-122.2)
 
