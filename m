@@ -2,14 +2,14 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B4C1537FA
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 19:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E00A153804
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 19:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727911AbgBESX3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Feb 2020 13:23:29 -0500
-Received: from mga09.intel.com ([134.134.136.24]:43402 "EHLO mga09.intel.com"
+        id S1727868AbgBESX2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Feb 2020 13:23:28 -0500
+Received: from mga09.intel.com ([134.134.136.24]:43407 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727562AbgBESX1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1727563AbgBESX1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Wed, 5 Feb 2020 13:23:27 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
@@ -17,7 +17,7 @@ Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Feb 2020 10:23:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,406,1574150400"; 
-   d="scan'208";a="343835171"
+   d="scan'208";a="343835176"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga001.fm.intel.com with ESMTP; 05 Feb 2020 10:23:25 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -46,9 +46,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [RFC PATCH v9 2/7] x86/cet/ibt: User-mode Indirect Branch Tracking support
-Date:   Wed,  5 Feb 2020 10:23:03 -0800
-Message-Id: <20200205182308.4028-3-yu-cheng.yu@intel.com>
+Subject: [RFC PATCH v9 3/7] x86/cet/ibt: Handle signals for Indirect Branch Tracking
+Date:   Wed,  5 Feb 2020 10:23:04 -0800
+Message-Id: <20200205182308.4028-4-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200205182308.4028-1-yu-cheng.yu@intel.com>
 References: <20200205182308.4028-1-yu-cheng.yu@intel.com>
@@ -59,176 +59,112 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce user-mode Indirect Branch Tracking (IBT) support.  Update setup
-routines to include IBT.
+Indirect Branch Tracking setting does not change in signal delivering or
+sigreturn; except the WAIT_ENDBR status.  In general, a task is in
+WAIT_ENDBR after an indirect CALL/JMP and before the next instruction
+starts.
+
+WAIT_ENDBR status can be read from MSR_IA32_U_CET.  It is reset for signal
+delivering, but preserved on a task's stack and restored for sigreturn.
 
 v9:
-- Change cpu_feature_enabled() to static_cpu_has().
-
-v2:
-- Change noibt to no_cet_ibt.
+- Fix missing WAIT_ENDBR in signal handling.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/include/asm/cet.h                    |  5 +++
- arch/x86/include/asm/disabled-features.h      |  8 ++++-
- arch/x86/kernel/cet.c                         | 34 +++++++++++++++++++
- arch/x86/kernel/cpu/common.c                  | 17 ++++++++++
- .../arch/x86/include/asm/disabled-features.h  |  8 ++++-
- 5 files changed, 70 insertions(+), 2 deletions(-)
+ arch/x86/kernel/cet.c        | 24 ++++++++++++++++++++++--
+ arch/x86/kernel/fpu/signal.c |  8 +++++---
+ 2 files changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-index b64f6d810ae0..d3f0d50d51ec 100644
---- a/arch/x86/include/asm/cet.h
-+++ b/arch/x86/include/asm/cet.h
-@@ -16,6 +16,9 @@ struct cet_status {
- 	unsigned long	shstk_size;
- 	unsigned int	locked:1;
- 	unsigned int	shstk_enabled:1;
-+	unsigned int	ibt_enabled:1;
-+	unsigned int	ibt_bitmap_used:1;
-+	unsigned long	ibt_bitmap_base;
- };
- 
- #ifdef CONFIG_X86_INTEL_CET
-@@ -26,6 +29,8 @@ int cet_alloc_shstk(unsigned long *arg);
- void cet_disable_free_shstk(struct task_struct *p);
- int cet_restore_signal(bool ia32, struct sc_ext *sc);
- int cet_setup_signal(bool ia32, unsigned long rstor, struct sc_ext *sc);
-+int cet_setup_ibt(void);
-+void cet_disable_ibt(void);
- #else
- static inline int prctl_cet(int option, unsigned long arg2) { return -EINVAL; }
- static inline int cet_setup_thread_shstk(struct task_struct *p) { return 0; }
-diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index e1454509ad83..09f81a09dae7 100644
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@ -68,6 +68,12 @@
- #define DISABLE_SHSTK	(1<<(X86_FEATURE_SHSTK & 31))
- #endif
- 
-+#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
-+#define DISABLE_IBT	0
-+#else
-+#define DISABLE_IBT	(1<<(X86_FEATURE_IBT & 31))
-+#endif
-+
- /*
-  * Make sure to add features to the correct mask
-  */
-@@ -89,7 +95,7 @@
- #define DISABLED_MASK15	0
- #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP|DISABLE_SHSTK)
- #define DISABLED_MASK17	0
--#define DISABLED_MASK18	0
-+#define DISABLED_MASK18	(DISABLE_IBT)
- #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 19)
- 
- #endif /* _ASM_X86_DISABLED_FEATURES_H */
 diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
-index 01aa24c40a5d..26f5d7c4fbff 100644
+index 26f5d7c4fbff..07864bef23f9 100644
 --- a/arch/x86/kernel/cet.c
 +++ b/arch/x86/kernel/cet.c
-@@ -13,6 +13,8 @@
- #include <linux/uaccess.h>
- #include <linux/sched/signal.h>
- #include <linux/compat.h>
-+#include <linux/vmalloc.h>
-+#include <linux/bitops.h>
- #include <asm/msr.h>
- #include <asm/user.h>
- #include <asm/fpu/internal.h>
-@@ -342,3 +344,35 @@ int cet_setup_signal(bool ia32, unsigned long rstor_addr, struct sc_ext *sc_ext)
- 	end_update_msrs();
+@@ -280,7 +280,7 @@ int cet_restore_signal(bool ia32, struct sc_ext *sc_ext)
+ 	u64 msr_val = 0;
+ 	int err;
  
+-	if (!cet->shstk_enabled)
++	if (!cet->shstk_enabled && !cet->ibt_enabled)
+ 		return 0;
+ 
+ 	cet_user_state = get_xsave_addr(&current->thread.fpu.state.xsave,
+@@ -297,6 +297,16 @@ int cet_restore_signal(bool ia32, struct sc_ext *sc_ext)
+ 		msr_val |= MSR_IA32_CET_SHSTK_EN;
+ 	}
+ 
++	if (cet->ibt_enabled) {
++		msr_val |= (MSR_IA32_CET_ENDBR_EN | MSR_IA32_CET_NO_TRACK_EN);
++
++		if (cet->ibt_bitmap_used)
++			msr_val |= (cet->ibt_bitmap_base | MSR_IA32_CET_LEG_IW_EN);
++
++		if (sc_ext->wait_endbr)
++			msr_val |= MSR_IA32_CET_WAIT_ENDBR;
++	}
++
+ 	cet_user_state->user_cet = msr_val;
  	return 0;
-+}
-+
-+int cet_setup_ibt(void)
-+{
-+	u64 msr_val;
-+
-+	if (!static_cpu_has(X86_FEATURE_IBT))
-+		return -EOPNOTSUPP;
-+
-+	start_update_msrs();
-+	rdmsrl(MSR_IA32_U_CET, msr_val);
-+	msr_val |= (MSR_IA32_CET_ENDBR_EN | MSR_IA32_CET_NO_TRACK_EN);
-+	wrmsrl(MSR_IA32_U_CET, msr_val);
-+	end_update_msrs();
-+	current->thread.cet.ibt_enabled = 1;
-+	return 0;
-+}
-+
-+void cet_disable_ibt(void)
-+{
-+	u64 msr_val;
-+
-+	if (!static_cpu_has(X86_FEATURE_IBT))
-+		return;
-+
-+	start_update_msrs();
-+	rdmsrl(MSR_IA32_U_CET, msr_val);
-+	msr_val &= MSR_IA32_CET_SHSTK_EN;
-+	wrmsrl(MSR_IA32_U_CET, msr_val);
-+	end_update_msrs();
-+	current->thread.cet.ibt_enabled = 0;
-+}
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 40498ec72fda..c1ffde5c2ace 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -510,6 +510,23 @@ static __init int setup_disable_shstk(char *s)
- __setup("no_cet_shstk", setup_disable_shstk);
- #endif
+ }
+@@ -312,7 +322,7 @@ int cet_setup_signal(bool ia32, unsigned long rstor_addr, struct sc_ext *sc_ext)
+ 	unsigned long ssp = 0, new_ssp = 0;
+ 	int err;
  
-+#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
-+static __init int setup_disable_ibt(char *s)
-+{
-+	/* require an exact match without trailing characters */
-+	if (s[0] != '\0')
-+		return 0;
-+
-+	if (!boot_cpu_has(X86_FEATURE_IBT))
-+		return 1;
-+
-+	setup_clear_cpu_cap(X86_FEATURE_IBT);
-+	pr_info("x86: 'no_cet_ibt' specified, disabling Branch Tracking\n");
-+	return 1;
-+}
-+__setup("no_cet_ibt", setup_disable_ibt);
-+#endif
-+
- /*
-  * Some CPU features depend on higher CPUID levels, which may not always
-  * be available due to CPUID level capping or broken virtualization
-diff --git a/tools/arch/x86/include/asm/disabled-features.h b/tools/arch/x86/include/asm/disabled-features.h
-index e1454509ad83..09f81a09dae7 100644
---- a/tools/arch/x86/include/asm/disabled-features.h
-+++ b/tools/arch/x86/include/asm/disabled-features.h
-@@ -68,6 +68,12 @@
- #define DISABLE_SHSTK	(1<<(X86_FEATURE_SHSTK & 31))
- #endif
+-	if (!cet->shstk_enabled)
++	if (!cet->shstk_enabled && !cet->ibt_enabled)
+ 		return 0;
  
-+#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
-+#define DISABLE_IBT	0
-+#else
-+#define DISABLE_IBT	(1<<(X86_FEATURE_IBT & 31))
-+#endif
-+
- /*
-  * Make sure to add features to the correct mask
-  */
-@@ -89,7 +95,7 @@
- #define DISABLED_MASK15	0
- #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP|DISABLE_SHSTK)
- #define DISABLED_MASK17	0
--#define DISABLED_MASK18	0
-+#define DISABLED_MASK18	(DISABLE_IBT)
- #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 19)
+ 	if (cet->shstk_enabled) {
+@@ -339,6 +349,16 @@ int cet_setup_signal(bool ia32, unsigned long rstor_addr, struct sc_ext *sc_ext)
+ 	}
  
- #endif /* _ASM_X86_DISABLED_FEATURES_H */
+ 	start_update_msrs();
++	if (cet->ibt_enabled) {
++		u64 r;
++
++		rdmsrl(MSR_IA32_U_CET, r);
++		if (r & MSR_IA32_CET_WAIT_ENDBR) {
++			sc_ext->wait_endbr = 1;
++			wrmsrl(MSR_IA32_U_CET, r & ~MSR_IA32_CET_WAIT_ENDBR);
++		}
++	}
++
+ 	if (cet->shstk_enabled)
+ 		wrmsrl(MSR_IA32_PL3_SSP, ssp);
+ 	end_update_msrs();
+diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+index 875cc0fadce3..1d8a75408b95 100644
+--- a/arch/x86/kernel/fpu/signal.c
++++ b/arch/x86/kernel/fpu/signal.c
+@@ -57,7 +57,8 @@ int save_cet_to_sigframe(void __user *fp, unsigned long restorer, int is_ia32)
+ 	int err = 0;
+ 
+ #ifdef CONFIG_X86_INTEL_CET
+-	if (!current->thread.cet.shstk_enabled)
++	if (!current->thread.cet.shstk_enabled &&
++	    !current->thread.cet.ibt_enabled)
+ 		return 0;
+ 
+ 	if (fp) {
+@@ -89,7 +90,8 @@ static int restore_cet_from_sigframe(int is_ia32, void __user *fp)
+ 	int err = 0;
+ 
+ #ifdef CONFIG_X86_INTEL_CET
+-	if (!current->thread.cet.shstk_enabled)
++	if (!current->thread.cet.shstk_enabled &&
++	    !current->thread.cet.ibt_enabled)
+ 		return 0;
+ 
+ 	if (fp) {
+@@ -548,7 +550,7 @@ static unsigned long fpu__alloc_sigcontext_ext(unsigned long sp)
+ 	if (cpu_x86_cet_enabled()) {
+ 		struct cet_status *cet = &current->thread.cet;
+ 
+-		if (cet->shstk_enabled)
++		if (cet->shstk_enabled || cet->ibt_enabled)
+ 			sp -= (sizeof(struct sc_ext) + 8);
+ 	}
+ 
 -- 
 2.21.0
 
