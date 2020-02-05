@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D10C7153808
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 19:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 306A4153812
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 19:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbgBESX3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Feb 2020 13:23:29 -0500
-Received: from mga09.intel.com ([134.134.136.24]:43407 "EHLO mga09.intel.com"
+        id S1727977AbgBESXp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Feb 2020 13:23:45 -0500
+Received: from mga09.intel.com ([134.134.136.24]:43402 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727828AbgBESX2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1727843AbgBESX2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Wed, 5 Feb 2020 13:23:28 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Feb 2020 10:23:26 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Feb 2020 10:23:27 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,406,1574150400"; 
-   d="scan'208";a="343835184"
+   d="scan'208";a="343835191"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga001.fm.intel.com with ESMTP; 05 Feb 2020 10:23:26 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -46,9 +46,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [RFC PATCH v9 5/7] x86/cet/ibt: Add arch_prctl functions for Indirect Branch Tracking
-Date:   Wed,  5 Feb 2020 10:23:06 -0800
-Message-Id: <20200205182308.4028-6-yu-cheng.yu@intel.com>
+Subject: [RFC PATCH v9 6/7] mm: Update alloc_set_pte() for zero page
+Date:   Wed,  5 Feb 2020 10:23:07 -0800
+Message-Id: <20200205182308.4028-7-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200205182308.4028-1-yu-cheng.yu@intel.com>
 References: <20200205182308.4028-1-yu-cheng.yu@intel.com>
@@ -59,39 +59,41 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "H.J. Lu" <hjl.tools@gmail.com>
+Update alloc_set_pte() for the zero-page case.  A special mapping can also
+use a zero page for read.  One use case is the Indirect Branch Tracking
+legacy code page (introduced next).
 
-Update ARCH_X86_CET_STATUS and ARCH_X86_CET_DISABLE for Indirect Branch
-Tracking.
-
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/kernel/cet_prctl.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ mm/memory.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/x86/kernel/cet_prctl.c b/arch/x86/kernel/cet_prctl.c
-index 6cf8f87e3d98..2a3170786a3b 100644
---- a/arch/x86/kernel/cet_prctl.c
-+++ b/arch/x86/kernel/cet_prctl.c
-@@ -20,6 +20,8 @@ static int handle_get_status(unsigned long arg2)
+diff --git a/mm/memory.c b/mm/memory.c
+index 6daa28614327..58c1e4b60991 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3447,6 +3447,12 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
  
- 	if (cet->shstk_enabled)
- 		features |= GNU_PROPERTY_X86_FEATURE_1_SHSTK;
-+	if (cet->ibt_enabled)
-+		features |= GNU_PROPERTY_X86_FEATURE_1_IBT;
+ 	flush_icache_page(vma, page);
+ 	entry = mk_pte(page, vma->vm_page_prot);
++
++	if (is_zero_pfn(pte_pfn(entry))) {
++		entry = pte_mkspecial(entry);
++		goto alloc_set_pte_out;
++	}
++
+ 	if (write)
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 	/* copy-on-write page */
+@@ -3459,6 +3465,8 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
+ 		inc_mm_counter_fast(vma->vm_mm, mm_counter_file(page));
+ 		page_add_file_rmap(page, false);
+ 	}
++
++alloc_set_pte_out:
+ 	set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
  
- 	buf[0] = (unsigned long)features;
- 	buf[1] = cet->shstk_base;
-@@ -68,6 +70,8 @@ int prctl_cet(int option, unsigned long arg2)
- 			return -EPERM;
- 		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
- 			cet_disable_free_shstk(current);
-+		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_IBT)
-+			cet_disable_ibt();
- 
- 		return 0;
- 
+ 	/* no need to invalidate: a not-present page won't be cached */
 -- 
 2.21.0
 
