@@ -2,112 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC39A152406
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 01:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B24152464
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 02:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727627AbgBEATJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Feb 2020 19:19:09 -0500
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:37269 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727537AbgBEATJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Feb 2020 19:19:09 -0500
-Received: by mail-yw1-f68.google.com with SMTP id l5so786624ywd.4;
-        Tue, 04 Feb 2020 16:19:08 -0800 (PST)
+        id S1727736AbgBEBLZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Feb 2020 20:11:25 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:46754 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727714AbgBEBLZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Feb 2020 20:11:25 -0500
+Received: by mail-ed1-f67.google.com with SMTP id m8so514537edi.13
+        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2020 17:11:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NIMxNLCcbWdI9pD04SjD3Y49RygU2eutIYBAiu1d0NQ=;
-        b=kNH/YUzawP+43dSMN7Q/MuLlyAhji6r3ufngpALGZyf5tggPBwRgsMIA6Hu/D9bA6A
-         D7x8zshF5PASFC3oztn4phdjSD+oSVQjBPfSI/nUZ7jOlcJFF1eEuuffiqDyY1n1Us26
-         vkojZ56eiO52mbJGxFN9ExLX6imGA1Ez6g6vgD2fTvDyxAGk4idW9EIBICRs2JA2ulWl
-         gRAHC0S770XSNTKEY8Z425DSL3K7L+4jVSMfpeYFPNz/BrpcenLW5gF1lLxb0jwJDSpr
-         +AOVSPDxb1FvEqvX4xW5h8DPPY4WxkqLZ5ryZ4KsFmmFuwggdX809RS0UzmthCSvxD59
-         6DAg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Tzy7wMVHVGsylIbDRV1sp0LbucRQL/BdoHUbiMTR4dU=;
+        b=VOCKDZVJBRmZ/CJ+gzmglmcREuncJJUyRPhUacqfcvTWnRw+8k+3nJh46AyCH/V9q8
+         2M95Nn7084c893/onAbTMeKJuJUfSR5zTEIKYs/nzBpSbG1n0rWXtVepjzEGVlDCjrbU
+         f1ASsHa9CWolwBEtIzQuKe2xbcr5UAPifB4Zm45H8pYhgY1uQCNvW0UG54X4ZFWJhV7o
+         9C+hlK/XMt9o9BbHJ9tEr2CSUYHC8Cl88BrECwO4Wd6ckthT5IHKBYKvOVAfGAcfmic9
+         3ojz11cQkq4m/8CGXVTXPwmPh2qBaTz49eGlObWjInJ9e47n2n/SQKXYPyh4cdqVaRgm
+         DmYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NIMxNLCcbWdI9pD04SjD3Y49RygU2eutIYBAiu1d0NQ=;
-        b=UDlQHF8n6Kf3Q3UVUNb0lKKqLmbMAMVMSkB3fIBiWZVGOo+o2vBhMPKe5UCy1zoxL1
-         Gt5CFm65uDuSBYfxJf+pd+Htj9rG7GAMw+t4YQlx+e4wATFBaC8l7dbITjul5B3EdqND
-         psEsZsJBn7+3ccmeDkFkaBEWO33zahPi5v2upbofLV6MVtD7uKPE5EVEB9DItMQb9aT9
-         DAeQTkmvM0dYiicYapHjJa13r23GnbOSOIeS5aB2Yz70GLKTN55ULnx059Y5jvosghL/
-         15QlRC1AXKhxWxbfy3+jPE7C/BsyJgV8mWM+gsjOrDvLI7S4nBfCl9FA5d298w4ObY6H
-         Tn9w==
-X-Gm-Message-State: APjAAAXzCysOyIPMv5kjH4zuuTbrt+ynhda0UpMkAlMhUozir8dqC4dv
-        vH6ItCGw2TraJ+qct5h40aQ=
-X-Google-Smtp-Source: APXvYqwOMJ/fJzT9iHJ8EtyebqNOkpzqMGzGkLU+0qEGaS2WXqxmiJAiJRH2Fim/xt/KGKTmLPBAHA==
-X-Received: by 2002:a81:a903:: with SMTP id g3mr7778923ywh.427.1580861948493;
-        Tue, 04 Feb 2020 16:19:08 -0800 (PST)
-Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id y129sm10877046ywd.40.2020.02.04.16.19.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Feb 2020 16:19:08 -0800 (PST)
-Subject: Re: [PATCH v2 7/7] Documentation: Add kunit_shutdown to
- kernel-parameters.txt
-To:     Brendan Higgins <brendanhiggins@google.com>, jdike@addtoit.com,
-        richard@nod.at, anton.ivanov@cambridgegreys.com, arnd@arndb.de,
-        keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, knut.omang@oracle.com,
-        linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20200130230812.142642-1-brendanhiggins@google.com>
- <20200130230812.142642-8-brendanhiggins@google.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <d187686e-a175-e30b-2af9-6e00822fed5c@gmail.com>
-Date:   Tue, 4 Feb 2020 18:19:07 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Tzy7wMVHVGsylIbDRV1sp0LbucRQL/BdoHUbiMTR4dU=;
+        b=HPlXd4JCZIocOPn+P9R9KxzuD3iWwm3loRUcYfP5jIKAUZs6SeYIQpkxR8QgPRVVPB
+         2O9akOFIqvyTvg7zJVZAEepTzAZtu6rWwywDyGVjKdyerT6G8t0xO6ArG6Np4/tpbgu6
+         Yy3H1ZWY7kU7rpMGJ9omUP5411AJ60bcCOjov/DSYqUjna/H01PMyeTYoPqj+yaPgVsV
+         tbpr1a1c3yVpH0fs/1abt5/wHzcKYUdvnlutTz5VWZL6b7ELNa4kwpxIm5yuqfQu77C+
+         wTrMI03Q6qljxEmRVF8ZU+/xfjh2Igxf2yrt8YO18El4sGkrH0L+/bGJFTw1tOWKqKcP
+         j0kQ==
+X-Gm-Message-State: APjAAAXXsdEbtaLYINtWRT+ofl6Ui68jv2l2t69UPVNy/0pdb2X551ua
+        PkGINIJC5lGN7OER4LTsMMlMPIGa1GfrcIzWx9I=
+X-Google-Smtp-Source: APXvYqz01dwC2ETsSwMZQEtliSEC2H/lT4KE5RRPEYuKybSwAjqkq8h/ZyzmlGu9YeFQv7zQumUj5FSSFYYlMDZfvlQ=
+X-Received: by 2002:aa7:c71a:: with SMTP id i26mr2883416edq.300.1580865083863;
+ Tue, 04 Feb 2020 17:11:23 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200130230812.142642-8-brendanhiggins@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a17:906:1a14:0:0:0:0 with HTTP; Tue, 4 Feb 2020 17:11:23
+ -0800 (PST)
+Reply-To: mdzsesszika672@yahoo.com
+From:   "Isabella Dzsesszika." <mrsisabelladz@gmail.com>
+Date:   Wed, 5 Feb 2020 02:11:23 +0100
+Message-ID: <CA+0n1ATsvEKQt5SyeqeuaUy5pvy6EOXEYjChHHMx23-vZtNu4g@mail.gmail.com>
+Subject: From Mrs. Isabella Dzsesszika
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/30/20 5:08 PM, Brendan Higgins wrote:
-> Add kunit_shutdown, an option to specify that the kernel shutsdown after
-> running KUnit tests, to the kernel-parameters.txt documentation.
-> 
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index ade4e6ec23e03..522fd8bdec949 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -2054,6 +2054,13 @@
->  			0: force disabled
->  			1: force enabled
->  
-> +	kunit_shutdown	[KERNEL UNIT TESTING FRAMEWORK] Shutdown kernel after
-> +			running tests.
+-- 
 
-                        running built-in tests.  Tests configured as modules will not be run.
+By Mrs. Isabella Dzsesszika
 
-My wording might not be consistent with KUnit terminology regarding "built-in" and "modules".
-Feel free to properly word smith.
+I am Ms. Isabella Dzsesszika widow who suffers from long illness
+(cancer), there are funds I have inherited from my late loving husband
+Mr. Mseswa Dzsesszika, the sum of (US $ 1.5 million) that he has in
+the bank before his death, I need an honest and God-fearing person who
+can use these resources for God's work.
 
+I have made this decision because I have no child who inherits this
+money, and I do not want a situation where this money is used in a
+godless way. That is why I make that decision and my doctor has
+confirmed to me that I have less than three weeks to live, knowing
+that I have chosen a charity or a person who uses this money to
+support the poor and who Needy in accordance with my instructions.
 
-> +			Default:	(flag not present) don't shutdown
-> +			poweroff:	poweroff the kernel after running tests
-> +			halt:		halt the kernel after running tests
-> +			reboot:		reboot the kernel after running tests
-> +
->  	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
->  			Default is 0 (don't ignore, but inject #GP)
->  
-> 
+I want an organization that will use this fund for orphanages, schools
+and churches, widows, to spread the word and work of God. Please, if
+you could use these resources for the work of the Lord, please answer
+me. As soon as I receive your answer, I will give you further
+instructions on how to meet the requirements of these funds.
 
+Your sister in Christ,
+
+Mrs. Isabella Dzsesszika
