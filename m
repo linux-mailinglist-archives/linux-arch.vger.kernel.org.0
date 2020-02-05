@@ -2,101 +2,190 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F023E153607
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 18:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1511537ED
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2020 19:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726748AbgBERNK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Feb 2020 12:13:10 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58252 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726678AbgBERNK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 12:13:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=C/hUyKsoS2OrZqy2yiZtLSvPSVnJ/5AlsVgRpHnfbjs=; b=qXgUGKSQLR9pN5lXdK0bSaBWJh
-        RY3Ne79BLclbAxM+tsHCt5ud2AbkdoIcbtsdIX7TciHb/xGuezKdsieq70N0UWjizHg+BblL4lezb
-        Dw1mOqT6vv43ckad1zeY59HuHgo835qrDTt1P+V/88fexJLaOZ3vxe4xdIK+CQKpWcWgJ41CMXZJR
-        YlAN6P3qp8Rv4Z+GrnUojROQy6BOKO3u2SrFuZqKASFrLyNEV9okgkhlj+XZlg92+1IVuDGYaIoDc
-        w9abbYVRQr9tRM0Cl8RX9OD2RxR8SCBzLF53uAhOchYexguB6BOSUPTS1C3ixAo6S7/e1JnI/VEfW
-        4NXj73Pg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1izOEe-0003MR-Lh; Wed, 05 Feb 2020 17:13:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A9E7430257C;
-        Wed,  5 Feb 2020 18:11:20 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ADF5F2B78D5B6; Wed,  5 Feb 2020 18:13:06 +0100 (CET)
-Date:   Wed, 5 Feb 2020 18:13:06 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Octavian Purdila <tavi.purdila@gmail.com>
-Cc:     Hajime Tazaki <thehajime@gmail.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Akira Moroo <retrage01@gmail.com>,
-        linux-kernel-library <linux-kernel-library@freelists.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [RFC v3 01/26] asm-generic: atomic64: allow using generic
- atomic64 on 64bit platforms
-Message-ID: <20200205171306.GP14879@hirez.programming.kicks-ass.net>
-References: <cover.1580882335.git.thehajime@gmail.com>
- <39e1313ff3cf3eab6ceb5ae322fcd3e5d4432167.1580882335.git.thehajime@gmail.com>
- <20200205093454.GG14879@hirez.programming.kicks-ass.net>
- <CAMoF9u3Jhqyvp3SpA3mUqPhS4zDuXP9GCUu_XsYx2etE0KGkcQ@mail.gmail.com>
- <20200205124908.GL14879@hirez.programming.kicks-ass.net>
- <CAMoF9u12nko0rBGT_iOgXtapuRitS9jSMzAoo8tTykn2dZGK7g@mail.gmail.com>
+        id S1727930AbgBESW2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Feb 2020 13:22:28 -0500
+Received: from mga14.intel.com ([192.55.52.115]:20934 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726822AbgBESUY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 5 Feb 2020 13:20:24 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Feb 2020 10:20:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,406,1574150400"; 
+   d="scan'208";a="279447733"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Feb 2020 10:20:24 -0800
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [RFC PATCH v9 00/27] Control-flow Enforcement: Shadow Stack
+Date:   Wed,  5 Feb 2020 10:19:08 -0800
+Message-Id: <20200205181935.3712-1-yu-cheng.yu@intel.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMoF9u12nko0rBGT_iOgXtapuRitS9jSMzAoo8tTykn2dZGK7g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 05, 2020 at 04:00:41PM +0200, Octavian Purdila wrote:
-> On Wed, Feb 5, 2020 at 2:49 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Wed, Feb 05, 2020 at 02:24:38PM +0200, Octavian Purdila wrote:
-> > > I was not aware that not allowing GENERIC_ATOMIC64 was intentional. I
-> >
-> > It might not have been, but presented with this patch, I feel like it
-> > should've been :-)
-> >
-> > > understand your point that a 64 bit architecture that can't handle 64
-> > > bit atomic operation is broken.
-> >
-> > (sadly they actually exist, I shall name no names)
-> >
-> > > One way to deal with this in LKL would be to use GCC atomic builtins
-> > > or if that doesn't work expose them as host operations. This would
-> > > keep LKL as a meta-arch that can run on multiple physical
-> > > architectures. I'll give it a try.
-> >
-> > What is this LKL you speak of and how does it do the 32bit atomics?
-> >
-> 
-> LKL is a build of the Linux kernel as a library that can run in many
-> environments including multiple architectures and OSes [1]
+Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+return/jump-oriented programming attacks.  Details can be found in "Intel
+64 and IA-32 Architectures Software Developer's Manual" [1].
 
-Thanks, I'll put it on the to-read list.
+This series depends on the XSAVES supervisor state series that was split
+out and submitted earlier [2].
 
-> For 32bit atomics LKL also uses the asm-generic implementation. It is
-> very similar with generic 64bit atomic implementation and it is used
-> by multiple 32bit arches. I think this was my original reasoning for
-> this patch and not going with C11 atomics.
+Changes from v8:
 
-Uh no, asm-generic/atomic.h is radically different from lib/atomic64.c.
+- Simplify signal handling code.
+- Add guard pages around a Shadow Stack.
+- Replace ELF parser with Dave Martin's patch [3].
 
-asm-generic/atomic.h builds all required atomic operations from
-cmpxchg() (loops), while lib/atomic64.c builds 64bit atomics by using a
-hashed set of spinlocks.
+The goal of this posting is to seek additional comments.
 
-The asm-generic stuff gives you real atomic ops, albeit sub-optimal,
-lib/atomic64.c gives you a turd.
+[1] Intel 64 and IA-32 Architectures Software Developer's Manual:
+
+    https://software.intel.com/en-us/download/intel-64-and-ia-32-
+    architectures-sdm-combined-volumes-1-2a-2b-2c-2d-3a-3b-3c-3d-and-4
+
+[2] XSAVES supervisor states patches:
+    https://lkml.kernel.org/r/20200121201843.12047-1-yu-cheng.yu@intel.com/
+
+[3] Dave Martin's ELF program property parsing patch:
+    https://lkml.kernel.org/r/20200122212144.6409-3-broonie@kernel.org/
+
+[4] CET patches v8:
+
+    https://lkml.kernel.org/r/20190813205225.12032-1-yu-cheng.yu@intel.com/
+    https://lkml.kernel.org/r/20190813205359.12196-1-yu-cheng.yu@intel.com/
+
+Dave Martin (1):
+  ELF: Add ELF program property parsing support
+
+Yu-cheng Yu (26):
+  Documentation/x86: Add CET description
+  x86/cpufeatures: Add CET CPU feature flags for Control-flow
+    Enforcement Technology (CET)
+  x86/fpu/xstate: Introduce CET MSR XSAVES supervisor states
+  x86/cet: Add control-protection fault handler
+  x86/cet/shstk: Add Kconfig option for user-mode Shadow Stack
+    protection
+  mm: Introduce VM_SHSTK for Shadow Stack memory
+  Add guard pages around a Shadow Stack.
+  x86/mm: Change _PAGE_DIRTY to _PAGE_DIRTY_HW
+  x86/mm: Introduce _PAGE_DIRTY_SW
+  x86/mm: Update pte_modify, pmd_modify, and _PAGE_CHG_MASK for
+    _PAGE_DIRTY_SW
+  drm/i915/gvt: Change _PAGE_DIRTY to _PAGE_DIRTY_BITS
+  x86/mm: Modify ptep_set_wrprotect and pmdp_set_wrprotect for
+    _PAGE_DIRTY_SW
+  x86/mm: Shadow Stack page fault error checking
+  mm: Handle Shadow Stack page fault
+  mm: Handle THP/HugeTLB Shadow Stack page fault
+  mm: Update can_follow_write_pte() for Shadow Stack
+  x86/cet/shstk: User-mode Shadow Stack support
+  x86/cet/shstk: Introduce WRUSS instruction
+  x86/cet/shstk: Handle signals for Shadow Stack
+  ELF: UAPI and Kconfig additions for ELF program properties
+  binfmt_elf: Define GNU_PROPERTY_X86_FEATURE_1_AND
+  ELF: Introduce arch_setup_elf_property()
+  x86/cet/shstk: ELF header parsing for Shadow Stack
+  x86/cet/shstk: Handle thread Shadow Stack
+  mm/mmap: Add Shadow Stack pages to memory accounting
+  x86/cet/shstk: Add arch_prctl functions for Shadow Stack
+
+ .../admin-guide/kernel-parameters.txt         |   6 +
+ Documentation/x86/index.rst                   |   1 +
+ Documentation/x86/intel_cet.rst               | 294 +++++++++++++++
+ arch/x86/Kconfig                              |  24 ++
+ arch/x86/Makefile                             |   7 +
+ arch/x86/entry/entry_64.S                     |   2 +-
+ arch/x86/ia32/ia32_signal.c                   |  17 +
+ arch/x86/include/asm/cet.h                    |  44 +++
+ arch/x86/include/asm/cpufeatures.h            |   2 +
+ arch/x86/include/asm/disabled-features.h      |   8 +-
+ arch/x86/include/asm/elf.h                    |  13 +
+ arch/x86/include/asm/fpu/internal.h           |   2 +
+ arch/x86/include/asm/fpu/types.h              |  22 ++
+ arch/x86/include/asm/fpu/xstate.h             |   5 +-
+ arch/x86/include/asm/mmu_context.h            |   3 +
+ arch/x86/include/asm/msr-index.h              |  18 +
+ arch/x86/include/asm/pgtable.h                | 197 +++++++++-
+ arch/x86/include/asm/pgtable_types.h          |  50 ++-
+ arch/x86/include/asm/processor.h              |   5 +
+ arch/x86/include/asm/special_insns.h          |  32 ++
+ arch/x86/include/asm/traps.h                  |   5 +
+ arch/x86/include/uapi/asm/prctl.h             |   5 +
+ arch/x86/include/uapi/asm/processor-flags.h   |   2 +
+ arch/x86/include/uapi/asm/sigcontext.h        |   9 +
+ arch/x86/kernel/Makefile                      |   2 +
+ arch/x86/kernel/cet.c                         | 344 ++++++++++++++++++
+ arch/x86/kernel/cet_prctl.c                   |  84 +++++
+ arch/x86/kernel/cpu/common.c                  |  25 ++
+ arch/x86/kernel/cpu/cpuid-deps.c              |   2 +
+ arch/x86/kernel/fpu/signal.c                  |  89 +++++
+ arch/x86/kernel/fpu/xstate.c                  |  25 +-
+ arch/x86/kernel/idt.c                         |   4 +
+ arch/x86/kernel/process.c                     |  12 +-
+ arch/x86/kernel/process_64.c                  |  31 ++
+ arch/x86/kernel/relocate_kernel_64.S          |   2 +-
+ arch/x86/kernel/signal.c                      |  10 +
+ arch/x86/kernel/signal_compat.c               |   2 +-
+ arch/x86/kernel/traps.c                       |  59 +++
+ arch/x86/kvm/vmx/vmx.c                        |   2 +-
+ arch/x86/mm/fault.c                           |  18 +
+ arch/x86/mm/mmap.c                            |   2 +
+ arch/x86/mm/pgtable.c                         |  41 +++
+ drivers/gpu/drm/i915/gvt/gtt.c                |   2 +-
+ fs/Kconfig.binfmt                             |   3 +
+ fs/binfmt_elf.c                               | 131 +++++++
+ fs/compat_binfmt_elf.c                        |   4 +
+ fs/proc/task_mmu.c                            |   3 +
+ include/asm-generic/pgtable.h                 |  40 ++
+ include/linux/elf.h                           |  33 ++
+ include/linux/mm.h                            |  28 +-
+ include/uapi/asm-generic/siginfo.h            |   3 +-
+ include/uapi/linux/elf.h                      |  12 +
+ mm/gup.c                                      |   8 +-
+ mm/huge_memory.c                              |  12 +-
+ mm/memory.c                                   |   7 +-
+ mm/mmap.c                                     |   5 +
+ .../arch/x86/include/asm/disabled-features.h  |   8 +-
+ 57 files changed, 1779 insertions(+), 47 deletions(-)
+ create mode 100644 Documentation/x86/intel_cet.rst
+ create mode 100644 arch/x86/include/asm/cet.h
+ create mode 100644 arch/x86/kernel/cet.c
+ create mode 100644 arch/x86/kernel/cet_prctl.c
+
+-- 
+2.21.0
+
