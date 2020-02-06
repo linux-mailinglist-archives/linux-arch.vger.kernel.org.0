@@ -2,49 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3CA153D75
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2020 04:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 654E0153D98
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2020 04:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727883AbgBFDNl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Feb 2020 22:13:41 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33360 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727762AbgBFDNk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 22:13:40 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01639iJP087061;
-        Wed, 5 Feb 2020 22:13:08 -0500
+        id S1727577AbgBFD0G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Feb 2020 22:26:06 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10276 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727474AbgBFD0G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 22:26:06 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0163EM4O118249;
+        Wed, 5 Feb 2020 22:25:36 -0500
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xyhmhvkhn-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xyphx1566-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Feb 2020 22:13:08 -0500
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0163A3Ax088408;
-        Wed, 5 Feb 2020 22:13:07 -0500
+        Wed, 05 Feb 2020 22:25:36 -0500
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0163LKY9016276;
+        Wed, 5 Feb 2020 22:25:35 -0500
 Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xyhmhvkhc-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xyphx155m-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Feb 2020 22:13:07 -0500
+        Wed, 05 Feb 2020 22:25:35 -0500
 Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 0163D2Hi019950;
-        Thu, 6 Feb 2020 03:13:07 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma02wdc.us.ibm.com with ESMTP id 2xykc9hu9p-1
+        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 0163Blmv019116;
+        Thu, 6 Feb 2020 03:25:34 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma02wdc.us.ibm.com with ESMTP id 2xykc9hw66-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Feb 2020 03:13:07 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0163D5Ii34275744
+        Thu, 06 Feb 2020 03:25:34 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0163PXtR29163848
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Feb 2020 03:13:05 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A620FBE056;
-        Thu,  6 Feb 2020 03:13:05 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 57003BE04F;
-        Thu,  6 Feb 2020 03:12:52 +0000 (GMT)
-Received: from LeoBras.aus.stglabs.ibm.com (unknown [9.85.163.250])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Feb 2020 03:12:51 +0000 (GMT)
+        Thu, 6 Feb 2020 03:25:33 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7EA70AE05F;
+        Thu,  6 Feb 2020 03:25:33 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 350F1AE05C;
+        Thu,  6 Feb 2020 03:25:24 +0000 (GMT)
+Received: from LeoBras (unknown [9.85.163.250])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Feb 2020 03:25:23 +0000 (GMT)
+Message-ID: <760c238043196e0628c8c0eff48a8e938ef539ba.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 02/11] mm/gup: Use functions to track lockless pgtbl
+ walks on gup_pgd_range
 From:   Leonardo Bras <leonardo@linux.ibm.com>
 To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
@@ -56,7 +59,6 @@ To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Christophe Leroy <christophe.leroy@c-s.fr>,
         Steven Price <steven.price@arm.com>,
         Robin Murphy <robin.murphy@arm.com>,
-        Leonardo Bras <leonardo@linux.ibm.com>,
         Mahesh Salgaonkar <mahesh@linux.vnet.ibm.com>,
         Balbir Singh <bsingharora@gmail.com>,
         Reza Arbab <arbab@linux.ibm.com>,
@@ -65,72 +67,67 @@ To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Michal Suchanek <msuchanek@suse.de>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v6 11/11] powerpc/mm/book3s64/pgtable: Uses counting method to skip serializing
-Date:   Thu,  6 Feb 2020 00:09:00 -0300
-Message-Id: <20200206030900.147032-12-leonardo@linux.ibm.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200206030900.147032-1-leonardo@linux.ibm.com>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kvm-ppc@vger.kernel.org
+Date:   Thu, 06 Feb 2020 00:25:18 -0300
+In-Reply-To: <20200206030900.147032-3-leonardo@linux.ibm.com>
 References: <20200206030900.147032-1-leonardo@linux.ibm.com>
+         <20200206030900.147032-3-leonardo@linux.ibm.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-5TGq9qc6jmgO8SfflYEA"
+User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-02-05_06:2020-02-04,2020-02-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- impostorscore=0 malwarescore=0 priorityscore=1501 adultscore=0
- mlxlogscore=980 suspectscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002060022
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 suspectscore=0 phishscore=0
+ mlxlogscore=918 lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002060023
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-For each cpu in cpumask, checks if it's running a lockless pagetable
-walk. Then, run serialize_against_pte_lookup() only on these cpus.
 
-serialize_agains_pte_lookup() can take a long while when there are a
-lot of cpus in cpumask.
+--=-5TGq9qc6jmgO8SfflYEA
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This method is intended to reduce this waiting, while not impacting
-too much on the lockless pagetable walk.
+On Thu, 2020-02-06 at 00:08 -0300, Leonardo Bras wrote:
+>                 gup_pgd_range(addr, end, gup_flags, pages, &nr);
+> -               local_irq_enable();
+> +               end_lockless_pgtbl_walk(IRQS_ENABLED);
+>                 ret =3D nr;
+>         }
+> =20
 
-Signed-off-by: Leonardo Bras <leonardo@linux.ibm.com>
----
- arch/powerpc/mm/book3s64/pgtable.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+Just noticed IRQS_ENABLED is not available on other archs than ppc64.
+I will fix this for v7.
 
-diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c
-index bb138b628f86..4822ff1aac4b 100644
---- a/arch/powerpc/mm/book3s64/pgtable.c
-+++ b/arch/powerpc/mm/book3s64/pgtable.c
-@@ -96,8 +96,22 @@ static DEFINE_PER_CPU(int, lockless_pgtbl_walk_counter);
-  */
- void serialize_against_pte_lookup(struct mm_struct *mm)
- {
-+	int cpu;
-+	struct cpumask cm;
-+
- 	smp_mb();
--	smp_call_function_many(mm_cpumask(mm), do_nothing, NULL, 1);
-+
-+	/*
-+	 * Fills a new cpumask only with cpus that are currently doing a
-+	 * lockless pagetable walk. This reduces time spent in this function.
-+	 */
-+	cpumask_clear(&cm);
-+	for_each_cpu(cpu, mm_cpumask((mm))) {
-+		if (per_cpu(lockless_pgtbl_walk_counter, cpu) > 0)
-+			cpumask_set_cpu(cpu, &cm);
-+	}
-+
-+	smp_call_function_many(&cm, do_nothing, NULL, 1);
- }
- 
- /* begin_lockless_pgtbl_walk: Must be inserted before a function call that does
--- 
-2.24.1
+--=-5TGq9qc6jmgO8SfflYEA
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl47hx4ACgkQlQYWtz9S
+ttTS9w/9E7lK8J1xIstn8wQNOKb6Mpalq1gAoAMSwEKVsxtJCgv5GQoVzfi83uzh
+s6Qq+5ydWu172eeRW66NmQaespclUattqesFf5qhvVnLGpwTbGSPlSF0IWzKr7s9
+ofzcAbyqaDh6+DTOestPd3ADSlUZ4HWxOKc5XSi5TyHX0RP9JK/gu26hdvr9oHDI
+ZU16OrdCAecYyE7/hKY0a+VGRsyZVab3VBWy/6EJdo9Z8bNc/aquHQQ+RkdaB3M/
+VtA1A0NUOBcbu+tFKG3Q2yzPQb9/5Ob7m5uG2Oa2f3huyk8FOXySioH4qUHqZAuB
+8bZIrD49y3YXZ9sFF4b4eqyDyeutnHAoMa/FBuMPmQW/diiFKhSIvLsiEz4gu1B9
+jn04+n0wrnV8wXxe3xUEQ6ooxhCY6UmNSIjlXOewvk/j2E37mZIdaPY5Bx6GlDBM
+MSXHfcN2LtpRH1FTqH8tZvwYf7JdkspVbbBipLrr8Ba8fGZ3fKcnfIIaOSRd1tvE
+uTHEgfICZKnzXxPM/tpI3n5kx7PbB6hPFDdtvjA1Vyq3tuA295qNF5fkEmTkvzmg
+swZfIo4OEGyw3Oh+jsK0PH646dK6jkD17Q7Fe81+BF7uYygxdxBptKUj/GJEnqfU
+3ZEFP0bpEMV17eoArkTN5eP4CNvd1VRWagVtnNLWS44WlNvdOxc=
+=i1Uf
+-----END PGP SIGNATURE-----
+
+--=-5TGq9qc6jmgO8SfflYEA--
 
