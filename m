@@ -2,266 +2,240 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 641CE153C43
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2020 01:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCED153D4E
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2020 04:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727561AbgBFAQn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Feb 2020 19:16:43 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:45324 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727496AbgBFAQm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 19:16:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
-        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=ONubYgjHMQd/QUjVT/2+vNT4AEftHzZPUf0RGx/Ds5Y=; b=VYItJjyL0hBs9F+E+CLjEd7/mu
-        pwdN3TQPG1gKdnbZuxcHXYG42hp3nHLwpa9hSC3gIX6HCQB8nA6WGHpArabyYETmRJy4jklSbEtYr
-        7eSkYwqqKQrY+Glvg1U/hzkhyGiQJwt5ydSFkA+J4h44b3POF46vQztG2bup1WE73rrZqjWj87w4R
-        wN3yMd5/3oP+eFqwTJC4v0WpPSER17l9IzXCJtNW3ne+erzV4ChqeJ8Nozno7lO0uJhmlyL1rgk0B
-        5fdN39eZhJ+HCpMxOgHZjh5uV9QmikmSgdGT9KSmnDhmlAgmpSIzAGp+WSxQl7keB6sROVQAUZjWb
-        FMREOMKA==;
-Received: from [2603:3004:32:9a00::c7a3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1izUq6-0002Hf-7n; Thu, 06 Feb 2020 00:16:14 +0000
-Subject: Re: [RFC PATCH v9 01/27] Documentation/x86: Add CET description
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        id S1727780AbgBFDKL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Feb 2020 22:10:11 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34874 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727572AbgBFDKK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Feb 2020 22:10:10 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01639AVg027642;
+        Wed, 5 Feb 2020 22:09:33 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xyhpygyty-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Feb 2020 22:09:33 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 01639Wm8028517;
+        Wed, 5 Feb 2020 22:09:32 -0500
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xyhpygytm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Feb 2020 22:09:32 -0500
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01636Ymi008757;
+        Thu, 6 Feb 2020 03:09:31 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma01dal.us.ibm.com with ESMTP id 2xykc947p8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Feb 2020 03:09:31 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01639TuG41615622
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Feb 2020 03:09:29 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0002BE051;
+        Thu,  6 Feb 2020 03:09:29 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B2DB4BE04F;
+        Thu,  6 Feb 2020 03:09:13 +0000 (GMT)
+Received: from LeoBras.aus.stglabs.ibm.com (unknown [9.85.163.250])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Feb 2020 03:09:13 +0000 (GMT)
+From:   Leonardo Bras <leonardo@linux.ibm.com>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Steven Price <steven.price@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Leonardo Bras <leonardo@linux.ibm.com>,
+        Mahesh Salgaonkar <mahesh@linux.vnet.ibm.com>,
         Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
- <20200205181935.3712-2-yu-cheng.yu@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <af5ee976-3b57-4afe-6304-fcab8de45c77@infradead.org>
-Date:   Wed, 5 Feb 2020 16:16:05 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Reza Arbab <arbab@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michal Suchanek <msuchanek@suse.de>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v6 00/11] Introduces new functions for tracking lockless pagetable walks
+Date:   Thu,  6 Feb 2020 00:08:49 -0300
+Message-Id: <20200206030900.147032-1-leonardo@linux.ibm.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-In-Reply-To: <20200205181935.3712-2-yu-cheng.yu@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-05_06:2020-02-04,2020-02-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 mlxscore=0 phishscore=0 suspectscore=0 spamscore=0
+ bulkscore=0 lowpriorityscore=0 mlxlogscore=966 clxscore=1011 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002060022
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+Patches 1-2: Introduces new arch-generic functions to use before
+and after lockless pagetable walks, instead of local_irq_*, and
+applies them to generic code. It makes lockless pagetable walks
+more explicit and improves documentation about it.
 
-I have a few comments and a question (please see inline below).
+Patches 3-9: Introduces a powerpc-specific version of the above
+functions with the option to not touch irq config. Then apply them
+to all powerpc code that do lockless pagetable walks.
 
+Patches 10-11: Introduces a percpu counting method to keep track of
+the lockless page table walks, then uses this info to reduce the
+waiting time on serialize_against_pte_lookup().
 
-On 2/5/20 10:19 AM, Yu-cheng Yu wrote:
-> Explain no_cet_shstk/no_cet_ibt kernel parameters, and introduce a new
-> document on Control-flow Enforcement Technology (CET).
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> ---
->  .../admin-guide/kernel-parameters.txt         |   6 +
->  Documentation/x86/index.rst                   |   1 +
->  Documentation/x86/intel_cet.rst               | 294 ++++++++++++++++++
->  3 files changed, 301 insertions(+)
->  create mode 100644 Documentation/x86/intel_cet.rst
-> 
+Use case:
 
-> diff --git a/Documentation/x86/intel_cet.rst b/Documentation/x86/intel_cet.rst
-> new file mode 100644
-> index 000000000000..71e2462fea5c
-> --- /dev/null
-> +++ b/Documentation/x86/intel_cet.rst
-> @@ -0,0 +1,294 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=========================================
-> +Control-flow Enforcement Technology (CET)
-> +=========================================
-> +
+If a process (qemu) with a lot of CPUs (128) try to munmap() a large
+chunk of memory (496GB) mapped with THP, it takes an average of 275
+seconds, which can cause a lot of problems to the load (in qemu case,
+the guest will lock for this time).
 
-...
+Trying to find the source of this bug, I found out most of this time is
+spent on serialize_against_pte_lookup(). This function will take a lot
+of time in smp_call_function_many() if there is more than a couple CPUs
+running the user process. Since it has to happen to all THP mapped, it
+will take a very long time for large amounts of memory.
 
-> +
-> +[5] CET system calls
-> +====================
-> +
-> +The following arch_prctl() system calls are added for CET:
-> +
-> +arch_prctl(ARCH_X86_CET_STATUS, unsigned long *addr)
-> +    Return CET feature status.
-> +
-> +    The parameter 'addr' is a pointer to a user buffer.
-> +    On returning to the caller, the kernel fills the following
-> +    information::
-> +
-> +        *addr       = SHSTK/IBT status
-> +        *(addr + 1) = SHSTK base address
-> +        *(addr + 2) = SHSTK size
-> +
-> +arch_prctl(ARCH_X86_CET_DISABLE, unsigned long features)
-> +    Disable SHSTK and/or IBT specified in 'features'.  Return -EPERM
-> +    if CET is locked.
-> +
-> +arch_prctl(ARCH_X86_CET_LOCK)
-> +    Lock in CET feature.
+By the docs, serialize_against_pte_lookup() is needed in order to avoid
+pmd_t to pte_t casting inside find_current_mm_pte(), or any lockless
+pagetable walk, to happen concurrently with THP splitting/collapsing.
 
-which feature?
+It does so by calling a do_nothing() on each CPU in mm->cpu_bitmap[],
+after interrupts are re-enabled.
+Since, interrupts are (usually) disabled during lockless pagetable
+walk, and serialize_against_pte_lookup will only return after
+interrupts are enabled, it is protected.
 
-> +
-> +arch_prctl(ARCH_X86_CET_ALLOC_SHSTK, unsigned long *addr)
-> +    Allocate a new SHSTK and put a restore token at top.
-> +
-> +    The parameter 'addr' is a pointer to a user buffer and indicates
-> +    the desired SHSTK size to allocate.  On returning to the caller,
-> +    the kernel fills '*addr' with the base address of the new SHSTK.
-> +
-> +arch_prctl(ARCH_X86_CET_MARK_LEGACY_CODE, unsigned long *addr)
-> +    Mark an address range as IBT legacy code.
-> +
-> +    The parameter 'addr' is a pointer to a user buffer that has the
-> +    following information::
-> +
-> +        *addr       = starting linear address of the legacy code
-> +        *(addr + 1) = size of the legacy code
-> +        *(addr + 2) = set (1); clear (0)
-> +
-> +Note:
-> +  There is no CET-enabling arch_prctl function.  By design, CET is
-> +  enabled automatically if the binary and the system can support it.
-> +
-> +  The parameters passed are always unsigned 64-bit.  When an IA32
-> +  application passing pointers, it should only use the lower 32 bits.
-> +
-> +[6] The implementation of the SHSTK
-> +===================================
-> +
-> +SHSTK size
-> +----------
-> +
-> +A task's SHSTK is allocated from memory to a fixed size of
-> +RLIMIT_STACK.  A compat-mode thread's SHSTK size is 1/4 of
-> +RLIMIT_STACK.  The smaller 32-bit thread SHSTK allows more threads to
-> +share a 32-bit address space.
-> +
-> +Signal
-> +------
-> +
-> +The main program and its signal handlers use the same SHSTK.  Because
-> +the SHSTK stores only return addresses, a large SHSTK will cover the
-> +condition that both the program stack and the sigaltstack run out.
-> +
-> +The kernel creates a restore token at the SHSTK restoring address and
-> +verifies that token when restoring from the signal handler.
-> +
-> +IBT for signal delivering and sigreturn is the same as the main
-> +program's setup; except for WAIT_ENDBR status, which can be read from
+Percpu count-based method:
 
-s/;/,/
+So, by what I could understand, if there is no lockless pagetable walk
+running on given cpu, there is no need to call
+serialize_against_pte_lookup() there.
 
-> +MSR_IA32_U_CET.  In general, a task is in WAIT_ENDBR after an
-> +indirect CALL/JMP and before the next instruction starts.
-> +
-> +A task's WAIT_ENDBR is reset for its signal handler, but preserved on
-> +the task's stack; and then restored from sigreturn.
+To reduce the cost of running serialize_against_pte_lookup(), I
+propose a percpu-counter that keeps track of how many
+lockless pagetable walks are currently running on each cpu, and if there
+is none, just skip smp_call_function_many() for that cpu.
 
-s/;/,/
+- Every percpu-counter can be changed only by it's own CPU
+- It makes use of the original memory barrier in the functions
+- Any counter can be read by any CPU
 
-> +
-> +Fork
-> +----
-> +
-> +The SHSTK's vma has VM_SHSTK flag set; its PTEs are required to be
-> +read-only and dirty.  When a SHSTK PTE is not present, RO, and dirty,
-> +a SHSTK access triggers a page fault with an additional SHSTK bit set
-> +in the page fault error code.
-> +
-> +When a task forks a child, its SHSTK PTEs are copied and both the
-> +parent's and the child's SHSTK PTEs are cleared of the dirty bit.
-> +Upon the next SHSTK access, the resulting SHSTK page fault is handled
-> +by page copy/re-use.
-> +
-> +When a pthread child is created, the kernel allocates a new SHSTK for
-> +the new thread.
-> +
-> +Setjmp/Longjmp
-> +--------------
-> +
-> +Longjmp unwinds SHSTK until it matches the program stack.
-> +
-> +Ucontext
-> +--------
-> +
-> +In GLIBC, getcontext/setcontext is implemented in similar way as
-> +setjmp/longjmp.
-> +
-> +When makecontext creates a new ucontext, a new SHSTK is allocated for
-> +that context with ARCH_X86_CET_ALLOC_SHSTK syscall.  The kernel
-> +creates a restore token at the top of the new SHSTK and the user-mode
-> +code switches to the new SHSTK with the RSTORSSP instruction.
-> +
-> +[7] The management of read-only & dirty PTEs for SHSTK
-> +======================================================
-> +
-> +A RO and dirty PTE exists in the following cases:
-> +
-> +(a) A page is modified and then shared with a fork()'ed child;
-> +(b) A R/O page that has been COW'ed;
-> +(c) A SHSTK page.
-> +
-> +The processor only checks the dirty bit for (c).  To prevent the use
-> +of non-SHSTK memory as SHSTK, we use a spare bit of the 64-bit PTE as
-> +DIRTY_SW for (a) and (b) above.  This results to the following PTE
-> +settings::
-> +
-> +    Modified PTE:             (R/W + DIRTY_HW)
-> +    Modified and shared PTE:  (R/O + DIRTY_SW)
-> +    R/O PTE, COW'ed:          (R/O + DIRTY_SW)
-> +    SHSTK PTE:                (R/O + DIRTY_HW)
-> +    SHSTK PTE, COW'ed:        (R/O + DIRTY_HW)
-> +    SHSTK PTE, shared:        (R/O + DIRTY_SW)
-> +
-> +Note that DIRTY_SW is only used in R/O PTEs but not R/W PTEs.
-> +
-> +[8] The implementation of IBT legacy bitmap
-> +===========================================
-> +
-> +When IBT is active, a non-IBT-capable legacy library can be executed
-> +if its address ranges are specified in the legacy code bitmap.  The
-> +bitmap covers the whole user-space address, which is TASK_SIZE_MAX
-> +for 64-bit and TASK_SIZE for IA32, and its each bit indicates a 4-KB
+Due to not locking nor using atomic variables, the impact on the
+lockless pagetable walk is intended to be minimum.
 
-confusing:
-                                          its each bit
+The related functions are:
+begin_lockless_pgtbl_walk()
+        Insert before starting any lockless pgtable walk
+end_lockless_pgtbl_walk()
+        Insert after the end of any lockless pgtable walk
+        (Mostly after the ptep is last used)
 
-> +legacy code page.  It is read-only from an application, and setup by
-> +the kernel as a special mapping when the first time the application
+Results:
 
-                           drop:   when
+On my workload (qemu), I could see munmap's time reduction from 275
+seconds to 430ms.
 
-> +calls arch_prctl(ARCH_X86_CET_MARK_LEGACY_CODE).  The application
-> +manages the bitmap through the arch_prctl.
+Bonus:
 
-                      through the arch_prctl() interface.
+I documented some lockless pagetable walks in which it's not
+necessary to keep track, given they work on init_mm or guest pgd.
+
+Also fixed some misplaced local_irq_{restore, enable}.
+
+Changes since v5:
+ Changed counting approach from atomic variables to percpu variables
+ Counting method only affects powepc, arch-generic only toggle irqs
+ Changed commit order, so the counting method is introduced at the end
+ Removed config option, always enabled in powerpc
+ Rebased on top of v5.5
+ Link: http://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=133907
+
+Changes since v4:
+ Rebased on top of v5.4-rc1
+ Declared real generic functions instead of dummies
+ start_lockless_pgtbl_walk renamed to begin_lockless_pgtbl_walk
+ Interrupt {dis,en}able is now inside of {begin,end}_lockless_pgtbl_walk
+ Power implementation has option to not {dis,en}able interrupt
+ More documentation inside the funtions.
+ Some irq masks variables renamed
+ Removed some proxy mm_structs
+ Few typos fixed
+ Link: http://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=133015
+
+Changes since v3:
+ Explain (comments) why some lockless pgtbl walks don't need
+	local_irq_disable (real mode + MSR_EE=0)
+ Explain (comments) places where counting method is not needed (guest pgd,
+	which is not touched by THP)
+ Fixes some misplaced local_irq_restore()
+ Link: http://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=132417
+
+Changes since v2:
+ Rebased to v5.3
+ Adds support on __get_user_pages_fast
+ Adds usage decription to *_lockless_pgtbl_walk()
+ Better style to dummy functions
+ Link: http://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=131839
+
+Changes since v1:
+ Isolated atomic operations in functions *_lockless_pgtbl_walk()
+ Fixed behavior of decrementing before last ptep was used
+ Link: http://patchwork.ozlabs.org/patch/1163093/
+
+Special thanks for:
+Aneesh Kumar, Nick Piggin, Paul Mackerras, Michael Ellerman, Fabiano Rosas,
+Dipankar Sarma and Oliver O'Halloran.
 
 
-cheers.
+Leonardo Bras (11):
+  asm-generic/pgtable: Adds generic functions to track lockless pgtable
+    walks
+  mm/gup: Use functions to track lockless pgtbl walks on gup_pgd_range
+  powerpc/mm: Adds arch-specificic functions to track lockless pgtable
+    walks
+  powerpc/mce_power: Use functions to track lockless pgtbl walks
+  powerpc/perf: Use functions to track lockless pgtbl walks
+  powerpc/mm/book3s64/hash: Use functions to track lockless pgtbl walks
+  powerpc/kvm/e500: Use functions to track lockless pgtbl walks
+  powerpc/kvm/book3s_hv: Use functions to track lockless pgtbl walks
+  powerpc/kvm/book3s_64: Use functions to track lockless pgtbl walks
+  powerpc/mm: Adds counting method to track lockless pagetable walks
+  powerpc/mm/book3s64/pgtable: Uses counting method to skip serializing
+
+ arch/powerpc/include/asm/book3s/64/pgtable.h |   6 +
+ arch/powerpc/kernel/mce_power.c              |   6 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c          |   6 +-
+ arch/powerpc/kvm/book3s_64_mmu_radix.c       |  34 +++++-
+ arch/powerpc/kvm/book3s_64_vio_hv.c          |   6 +-
+ arch/powerpc/kvm/book3s_hv_nested.c          |  22 +++-
+ arch/powerpc/kvm/book3s_hv_rm_mmu.c          |  28 +++--
+ arch/powerpc/kvm/e500_mmu_host.c             |   9 +-
+ arch/powerpc/mm/book3s64/hash_tlb.c          |   6 +-
+ arch/powerpc/mm/book3s64/hash_utils.c        |  27 +++--
+ arch/powerpc/mm/book3s64/pgtable.c           | 120 ++++++++++++++++++-
+ arch/powerpc/perf/callchain.c                |   6 +-
+ include/asm-generic/pgtable.h                |  51 ++++++++
+ mm/gup.c                                     |  10 +-
+ 14 files changed, 288 insertions(+), 49 deletions(-)
+
 -- 
-~Randy
+2.24.1
+
