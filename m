@@ -2,47 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C67B153E9E
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2020 07:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADCF153EA9
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2020 07:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725895AbgBFGSI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Feb 2020 01:18:08 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:19642 "EHLO pegase1.c-s.fr"
+        id S1727779AbgBFGX2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Feb 2020 01:23:28 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:19958 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725809AbgBFGSI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 Feb 2020 01:18:08 -0500
+        id S1726060AbgBFGX2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Feb 2020 01:23:28 -0500
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 48CpC01NgvzB09bJ;
-        Thu,  6 Feb 2020 07:18:04 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 48CpK93w5BzB09bK;
+        Thu,  6 Feb 2020 07:23:25 +0100 (CET)
 Authentication-Results: localhost; dkim=pass
         reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=IJc3jder; dkim-adsp=pass;
+        header.d=c-s.fr header.i=@c-s.fr header.b=Y1dU660X; dkim-adsp=pass;
         dkim-atps=neutral
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id Ff_laLB1i3Yt; Thu,  6 Feb 2020 07:18:04 +0100 (CET)
+        with ESMTP id asWDc9O33Sil; Thu,  6 Feb 2020 07:23:25 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 48CpC008FQzB09bG;
-        Thu,  6 Feb 2020 07:18:04 +0100 (CET)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 48CpK92fmTzB09bJ;
+        Thu,  6 Feb 2020 07:23:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1580969884; bh=/zXspG1kSDBchHeXMPNEW4CMohV4cfmd+YhDCREVeRU=;
+        t=1580970205; bh=Uq8b4GJRWETNuaD6MUNnvgK+ffhgHHEsOWcKLASMC18=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=IJc3jderGna62CaEbuKOvFjwfgtAoqVWDE/KIjuvt5lVBel/amt4R+kH9JR8F0zKw
-         WAex/t5oBpzyaF9Z2SiGAv2B3XAU6NFAGf9SqVrv+8Utda7pe6bWVzA08BRFijg6AW
-         z6fcy7RHCPd0QkreMH9zr+46SWRtxYBXVtnBy+Ug=
+        b=Y1dU660XxRdZdA/27zEbpyOzaLtZOAGcSuIkJ/dj/pX+E56+LZXTBB0QWP8a4K+gh
+         AaHGyK/mapKR1p7C6UkWKhJ8+0ru8mvW6YrfYcPBnryov7Nzxfp7efEhnOMJBPfo8m
+         O8BFRVCXordsMjJ4rkwVuB+loP+QV7QLwGZp2vJE=
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CCBF78B85E;
-        Thu,  6 Feb 2020 07:18:04 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3838D8B85F;
+        Thu,  6 Feb 2020 07:23:26 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id JUidJKGusZ7Y; Thu,  6 Feb 2020 07:18:04 +0100 (CET)
+        with ESMTP id R5Za9e4aaC32; Thu,  6 Feb 2020 07:23:26 +0100 (CET)
 Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 289C18B776;
-        Thu,  6 Feb 2020 07:18:03 +0100 (CET)
-Subject: Re: [PATCH v6 07/11] powerpc/kvm/e500: Use functions to track
- lockless pgtbl walks
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6BBC78B776;
+        Thu,  6 Feb 2020 07:23:24 +0100 (CET)
+Subject: Re: [PATCH v6 10/11] powerpc/mm: Adds counting method to track
+ lockless pagetable walks
 To:     Leonardo Bras <leonardo@linux.ibm.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
@@ -65,14 +65,14 @@ Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         kvm-ppc@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-mm@kvack.org
 References: <20200206030900.147032-1-leonardo@linux.ibm.com>
- <20200206030900.147032-8-leonardo@linux.ibm.com>
+ <20200206030900.147032-11-leonardo@linux.ibm.com>
 From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <fae235d5-78b6-87aa-ed3f-1a908d61abf4@c-s.fr>
-Date:   Thu, 6 Feb 2020 07:18:02 +0100
+Message-ID: <d9bf6878-43d5-b45a-7abb-cdcb712a0d7a@c-s.fr>
+Date:   Thu, 6 Feb 2020 07:23:24 +0100
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.2
 MIME-Version: 1.0
-In-Reply-To: <20200206030900.147032-8-leonardo@linux.ibm.com>
+In-Reply-To: <20200206030900.147032-11-leonardo@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: fr
 Content-Transfer-Encoding: 8bit
@@ -84,88 +84,79 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 Le 06/02/2020 à 04:08, Leonardo Bras a écrit :
-> Applies the new functions used for tracking lockless pgtable walks on
-> kvmppc_e500_shadow_map().
+> Implements an additional feature to track lockless pagetable walks,
+> using a per-cpu counter: lockless_pgtbl_walk_counter.
 > 
-> Fixes the place where local_irq_restore() is called: previously, if ptep
-> was NULL, local_irq_restore() would never be called.
+> Before a lockless pagetable walk, preemption is disabled and the
+> current cpu's counter is increased.
+> When the lockless pagetable walk finishes, the current cpu counter
+> is decreased and the preemption is enabled.
 > 
-> local_irq_{save,restore} is already inside {begin,end}_lockless_pgtbl_walk,
-> so there is no need to repeat it here.
+> With that, it's possible to know in which cpus are happening lockless
+> pagetable walks, and optimize serialize_against_pte_lookup().
 > 
-> Variable that saves the	irq mask was renamed from flags to irq_mask so it
-> doesn't lose meaning now it's not directly passed to local_irq_* functions.
+> Implementation notes:
+> - Every counter can be changed only by it's CPU
+> - It makes use of the original memory barrier in the functions
+> - Any counter can be read by any CPU
+> 
+> Due to not locking nor using atomic variables, the impact on the
+> lockless pagetable walk is intended to be minimum.
+
+atomic variables have a lot less impact than preempt_enable/disable.
+
+preemt_disable forces a re-scheduling, it really has impact. Why not use 
+atomic variables instead ?
+
+Christophe
+
 > 
 > Signed-off-by: Leonardo Bras <leonardo@linux.ibm.com>
 > ---
->   arch/powerpc/kvm/e500_mmu_host.c | 9 +++++----
->   1 file changed, 5 insertions(+), 4 deletions(-)
+>   arch/powerpc/mm/book3s64/pgtable.c | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
 > 
-> diff --git a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
-> index 425d13806645..3dcf11f77256 100644
-> --- a/arch/powerpc/kvm/e500_mmu_host.c
-> +++ b/arch/powerpc/kvm/e500_mmu_host.c
-> @@ -336,7 +336,7 @@ static inline int kvmppc_e500_shadow_map(struct kvmppc_vcpu_e500 *vcpu_e500,
->   	pte_t *ptep;
->   	unsigned int wimg = 0;
->   	pgd_t *pgdir;
-> -	unsigned long flags;
-> +	unsigned long irq_mask;
+> diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c
+> index 535613030363..bb138b628f86 100644
+> --- a/arch/powerpc/mm/book3s64/pgtable.c
+> +++ b/arch/powerpc/mm/book3s64/pgtable.c
+> @@ -83,6 +83,7 @@ static void do_nothing(void *unused)
 >   
->   	/* used to check for invalidations in progress */
->   	mmu_seq = kvm->mmu_notifier_seq;
-> @@ -473,7 +473,7 @@ static inline int kvmppc_e500_shadow_map(struct kvmppc_vcpu_e500 *vcpu_e500,
->   	 * We are holding kvm->mmu_lock so a notifier invalidate
->   	 * can't run hence pfn won't change.
->   	 */
-> -	local_irq_save(flags);
-> +	irq_mask = begin_lockless_pgtbl_walk();
->   	ptep = find_linux_pte(pgdir, hva, NULL, NULL);
->   	if (ptep) {
->   		pte_t pte = READ_ONCE(*ptep);
-> @@ -481,15 +481,16 @@ static inline int kvmppc_e500_shadow_map(struct kvmppc_vcpu_e500 *vcpu_e500,
->   		if (pte_present(pte)) {
->   			wimg = (pte_val(pte) >> PTE_WIMGE_SHIFT) &
->   				MAS2_WIMGE_MASK;
-> -			local_irq_restore(flags);
->   		} else {
-> -			local_irq_restore(flags);
-> +			end_lockless_pgtbl_walk(irq_mask);
->   			pr_err_ratelimited("%s: pte not present: gfn %lx,pfn %lx\n",
->   					   __func__, (long)gfn, pfn);
->   			ret = -EINVAL;
->   			goto out;
->   		}
->   	}
-> +	end_lockless_pgtbl_walk(irq_mask);
+>   }
+>   
+> +static DEFINE_PER_CPU(int, lockless_pgtbl_walk_counter);
+>   /*
+>    * Serialize against find_current_mm_pte which does lock-less
+>    * lookup in page tables with local interrupts disabled. For huge pages
+> @@ -120,6 +121,15 @@ unsigned long __begin_lockless_pgtbl_walk(bool disable_irq)
+>   	if (disable_irq)
+>   		local_irq_save(irq_mask);
+>   
+> +	/*
+> +	 * Counts this instance of lockless pagetable walk for this cpu.
+> +	 * Disables preempt to make sure there is no cpu change between
+> +	 * begin/end lockless pagetable walk, so that percpu counting
+> +	 * works fine.
+> +	 */
+> +	preempt_disable();
+> +	(*this_cpu_ptr(&lockless_pgtbl_walk_counter))++;
 > +
-
-I don't really like unbalanced begin/end.
-
-Something like the following would be cleaner:
-
-
-begin_lockless_pgtbl_walk()
-ptep = find()
-if (ptep) {
-	pte = READ_ONCE()
-	if (pte_present(pte))
-		wing=
-	else
-		ret = -EINVAL;
-}
-end_lockless_pgtbl_walk()
-
-if (ret) {
-	pr_err_rate...()
-	goto out;
-}
-
-
-
->   	kvmppc_e500_ref_setup(ref, gtlbe, pfn, wimg);
+>   	/*
+>   	 * This memory barrier pairs with any code that is either trying to
+>   	 * delete page tables, or split huge pages. Without this barrier,
+> @@ -158,6 +168,14 @@ inline void __end_lockless_pgtbl_walk(unsigned long irq_mask, bool enable_irq)
+>   	 */
+>   	smp_mb();
 >   
->   	kvmppc_e500_setup_stlbe(&vcpu_e500->vcpu, gtlbe, tsize,
+> +	/*
+> +	 * Removes this instance of lockless pagetable walk for this cpu.
+> +	 * Enables preempt only after end lockless pagetable walk,
+> +	 * so that percpu counting works fine.
+> +	 */
+> +	(*this_cpu_ptr(&lockless_pgtbl_walk_counter))--;
+> +	preempt_enable();
+> +
+>   	/*
+>   	 * Interrupts must be disabled during the lockless page table walk.
+>   	 * That's because the deleting or splitting involves flushing TLBs,
 > 
-
-Christophe
