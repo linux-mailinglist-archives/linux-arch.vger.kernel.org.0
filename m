@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6331155159
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2020 04:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A8D155166
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2020 05:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727131AbgBGDvB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Feb 2020 22:51:01 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:59668 "EHLO
+        id S1727012AbgBGEB6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Feb 2020 23:01:58 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50112 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726838AbgBGDvA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Feb 2020 22:51:00 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0173iPCu012192;
-        Thu, 6 Feb 2020 22:50:24 -0500
+        by vger.kernel.org with ESMTP id S1726674AbgBGEB6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Feb 2020 23:01:58 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01740FH5114690;
+        Thu, 6 Feb 2020 23:01:19 -0500
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2y0p3k9m36-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xyhmpxg3t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Feb 2020 22:50:24 -0500
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0173jp7w014848;
-        Thu, 6 Feb 2020 22:50:23 -0500
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2y0p3k9m2c-1
+        Thu, 06 Feb 2020 23:01:18 -0500
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 01740FAl114711;
+        Thu, 6 Feb 2020 23:01:18 -0500
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xyhmpxg3a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Feb 2020 22:50:23 -0500
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 0173muEP023176;
-        Fri, 7 Feb 2020 03:50:22 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma04dal.us.ibm.com with ESMTP id 2xykc9xrhj-1
+        Thu, 06 Feb 2020 23:01:18 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 0173uIwE010927;
+        Fri, 7 Feb 2020 04:01:17 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma03dal.us.ibm.com with ESMTP id 2xykc9xtyf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Feb 2020 03:50:22 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0173oKbg30998926
+        Fri, 07 Feb 2020 04:01:17 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01741Fvm51183952
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Feb 2020 03:50:20 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BFD64C6059;
-        Fri,  7 Feb 2020 03:50:20 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A722CC605A;
-        Fri,  7 Feb 2020 03:50:01 +0000 (GMT)
+        Fri, 7 Feb 2020 04:01:15 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7FC91BE056;
+        Fri,  7 Feb 2020 04:01:15 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 80A1EBE053;
+        Fri,  7 Feb 2020 04:00:58 +0000 (GMT)
 Received: from LeoBras (unknown [9.85.188.217])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Feb 2020 03:50:00 +0000 (GMT)
-Message-ID: <31b7229b979da2b0bdec041724dd1698cf76298c.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 06/11] powerpc/mm/book3s64/hash: Use functions to
- track lockless pgtbl walks
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Feb 2020 04:00:57 +0000 (GMT)
+Message-ID: <77e224d460d004fd918aae1b4e9237cd3a935f78.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 04/11] powerpc/mce_power: Use functions to track
+ lockless pgtbl walks
 From:   Leonardo Bras <leonardo@linux.ibm.com>
 To:     Christophe Leroy <christophe.leroy@c-s.fr>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -70,197 +70,93 @@ To:     Christophe Leroy <christophe.leroy@c-s.fr>,
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         kvm-ppc@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-mm@kvack.org
-Date:   Fri, 07 Feb 2020 00:49:56 -0300
-In-Reply-To: <1b65f1a8-42a8-6ffc-3a06-08fbb34edab5@c-s.fr>
+Date:   Fri, 07 Feb 2020 01:00:53 -0300
+In-Reply-To: <e8a5db5a-d1a5-ef25-af46-c44949750e8a@c-s.fr>
 References: <20200206030900.147032-1-leonardo@linux.ibm.com>
-         <20200206030900.147032-7-leonardo@linux.ibm.com>
-         <1b65f1a8-42a8-6ffc-3a06-08fbb34edab5@c-s.fr>
+         <20200206030900.147032-5-leonardo@linux.ibm.com>
+         <e8a5db5a-d1a5-ef25-af46-c44949750e8a@c-s.fr>
 Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-CBJiDJxhT4An72p6WJMR"
+        protocol="application/pgp-signature"; boundary="=-JGXt/RswUQhQyg+jmosY"
 User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-02-06_04:2020-02-06,2020-02-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 impostorscore=0
- phishscore=0 spamscore=0 malwarescore=0 adultscore=0 bulkscore=0
- mlxscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002070021
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ malwarescore=0 suspectscore=0 phishscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2002070024
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---=-CBJiDJxhT4An72p6WJMR
+--=-JGXt/RswUQhQyg+jmosY
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2020-02-06 at 07:06 +0100, Christophe Leroy wrote:
-> > -	/* Get PTE and page size from page tables */
-> > +	/* Get PTE and page size from page tables :
-> > +	 * Called in from DataAccess interrupt (data_access_common: 0x300),
-> > +	 * interrupts are disabled here.
-> > +	 */
->=20
-> Comments formatting is not in line with Linux kernel rules. Should be no=
-=20
-> text on the first /* line.
-
-My mistake. Will be corrected in v7.
-
-> > +	__begin_lockless_pgtbl_walk(false);
->=20
-> I think it would be better to not use __begin_lockless_pgtbl_walk()=20
-> directly but keep it in a single place, and define something like=20
-> begin_lockless_pgtbl_walk_noirq() similar to begin_lockless_pgtbl_walk()
-
-There are places where touching irq is decided by a boolean, like in
-patch 8: http://patchwork.ozlabs.org/patch/1234130/
-
-If I were to change this, I would have to place ifs and decide to call
-either normal or *_noirq() versions in every function.
-
-What you suggest?
-
-> >   	ptep =3D find_linux_pte(pgdir, ea, &is_thp, &hugeshift);
-> >   	if (ptep =3D=3D NULL || !pte_present(*ptep)) {
-> >   		DBG_LOW(" no PTE !\n");
-> >   		rc =3D 1;
-> > -		goto bail;
-> > +		goto bail_pgtbl_walk;
->=20
-> What's the point in changing the name of this label ? There is only one=
-=20
-> label, why polute the function with so huge name ?
->=20
-> For me, everyone understand what 'bail' means. Unneccessary changes=20
-> should be avoided. If you really really want to do it, it should be=20
-> another patch.
->=20
-> See kernel codying style, chapter 'naming':
-> "LOCAL variable names should be short". This also applies to labels.
->=20
-> "C is a Spartan language, and so should your naming be. Unlike Modula-2=
-=20
-> and Pascal programmers, C programmers do not use cute names like=20
-> ThisVariableIsATemporaryCounter. A C programmer would call that variable=
-=20
-> tmp, which is much easier to write, and not the least more difficult to=
-=20
-> understand."
->=20
-
-It's not label name changing. There are two possible bails in
-hash_page_mm(): one for before __begin_lockless_pagetable_walk() and
-other for after it. The new one also runs __end_lockless_pgtbl_walk()
-before running what the previous did:
-
-> > +bail_pgtbl_walk:
-> > +	__end_lockless_pgtbl_walk(0, false);
-> >   bail:
-> >   	exception_exit(prev_state);
-> >   	return rc;
-
-As for the label name lengh, I see no problem changing it to something
-like bail_ptw.=20
-
-
-> > @@ -1545,7 +1551,7 @@ static void hash_preload(struct mm_struct *mm, un=
-signed long ea,
-> >   	unsigned long vsid;
-> >   	pgd_t *pgdir;
-> >   	pte_t *ptep;
-> > -	unsigned long flags;
-> > +	unsigned long irq_mask;
-> >   	int rc, ssize, update_flags =3D 0;
-> >   	unsigned long access =3D _PAGE_PRESENT | _PAGE_READ | (is_exec ? _PA=
-GE_EXEC : 0);
-> >  =20
-> > @@ -1567,11 +1573,12 @@ static void hash_preload(struct mm_struct *mm, =
-unsigned long ea,
-> >   	vsid =3D get_user_vsid(&mm->context, ea, ssize);
-> >   	if (!vsid)
-> >   		return;
-> > +
->=20
-> Is this new line related to the patch ?
-
-Nope. I have added while reading code and it just went trough my pre-
-sending revision. I can remove it, if it bothers.
-
->=20
-> >   	/*
-> >   	 * Hash doesn't like irqs. Walking linux page table with irq disable=
-d
-> >   	 * saves us from holding multiple locks.
-> >   	 */
-> > -	local_irq_save(flags);
-> > +	irq_mask =3D begin_lockless_pgtbl_walk();
-> >  =20
-> >   	/*
-> >   	 * THP pages use update_mmu_cache_pmd. We don't do
-> > @@ -1616,7 +1623,7 @@ static void hash_preload(struct mm_struct *mm, un=
-signed long ea,
-> >   				   mm_ctx_user_psize(&mm->context),
-> >   				   pte_val(*ptep));
-> >   out_exit:
-> > -	local_irq_restore(flags);
-> > +	end_lockless_pgtbl_walk(irq_mask);
-> >   }
-> >  =20
-> >   /*
-> > @@ -1679,16 +1686,16 @@ u16 get_mm_addr_key(struct mm_struct *mm, unsig=
-ned long address)
+On Thu, 2020-02-06 at 06:48 +0100, Christophe Leroy wrote:
+> > --- a/arch/powerpc/kernel/mce_power.c
+> > +++ b/arch/powerpc/kernel/mce_power.c
+> > @@ -29,7 +29,7 @@ unsigned long addr_to_pfn(struct pt_regs *regs, unsig=
+ned long addr)
 > >   {
 > >   	pte_t *ptep;
-> >   	u16 pkey =3D 0;
-> > -	unsigned long flags;
-> > +	unsigned long irq_mask;
-> >  =20
-> >   	if (!mm || !mm->pgd)
-> >   		return 0;
-> >  =20
-> > -	local_irq_save(flags);
-> > +	irq_mask =3D begin_lockless_pgtbl_walk();
-> >   	ptep =3D find_linux_pte(mm->pgd, address, NULL, NULL);
-> >   	if (ptep)
-> >   		pkey =3D pte_to_pkey_bits(pte_val(READ_ONCE(*ptep)));
-> > -	local_irq_restore(flags);
-> > +	end_lockless_pgtbl_walk(irq_mask);
-> >  =20
-> >   	return pkey;
-> >   }
-> >=20
+> >   	unsigned int shift;
+> > -	unsigned long pfn, flags;
+> > +	unsigned long pfn, irq_mask;
 >=20
-> Christophe
+> Why change the name ? flags is a well known historical name.
 
-Thanks for giving feedback,
+Oh, this commit missed the reasoning for flags name change.
+
+For local_irq_{save,restore} a parameter named flags makes sense, for
+the reader, as it could only be flags regarding irq.
+
+I thougt passing flags to {begin,end}_lockless_pgtbl_walk would lose
+it's meaning, given that it would only mean "flags for these functions"
+
+So, changing it to irq_mask would make the reader more aware of what it
+does mean.
+
+For other commits, I added:
+
+"Variable that saves the irq mask was renamed from flags to irq_mask so
+it doesn't lose meaning now it's not directly passed to local_irq_*
+functions."=20
+
+I can add it to this commit message.
+
+Thanks for the feedback,
 
 Leonardo Bras
 
---=-CBJiDJxhT4An72p6WJMR
+
+
+
+--=-JGXt/RswUQhQyg+jmosY
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl483mQACgkQlQYWtz9S
-ttT0RhAA0oKi/2XxY/SIX1F2r5GCR1RED6qxY0qr3xnxzpM3v721Eauf6gu1qqn+
-mLHWCjePDMZExodUEzcikEKxWX8xKJremMeTtKb9NsWunyDeBJsc/DZYjfgrbV06
-gIolgdRivEhBdPxuy1PuDVgkw1wbtWXIcbOV38cZUK5nPplruTem+BgpHUey7B9P
-X4FMTaZS4I4FLTxW21HLzr8finjGCD/Te4UeStnFaf5CWDb1rHhYmfVS6d0sVs7d
-yX97lrw9TkiQdwiCVv7ubcdyyJzP7ZJvhYvikVx2R+S2QZU2sSy9omWp14kAmmDS
-fBou25w24OyCphm2MD+cHl+i51aCOVhRwM4SmxFtUhDdoSTzSwJpLr4W+iyTOQGE
-DghnMCnPNN8f+zdJG+cofT0SxIPq8M2qvUyppRximtgc8C2mlLNgrm1dmcDj+/He
-cR0V5zvcCUNpGEQFZ7McZYh3iYkyKOOgWDbnf9NCWCO7wxKaFJm/OuRE3QnI1R1L
-wK/1YkmxJYw+e2ighyOrsIc95aezgjWO1ErqrbUr8slXMu7cj26MAFHCwa/2apCO
-gbieqVCJc80O47JXNXW9hTiTcyly25oGR98Mowr8k+C4tcRtFwFwaG8yEz1nyoUV
-54GtadMwB6OFVlSJdalc+p/GPxVPFwYyWVXGs15Y6g0DdXVkQbc=
-=D0Zg
+iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl484PUACgkQlQYWtz9S
+ttQxfg//QLE5uOYft+0dYS7Fn7jA1rJi9M6IT4QpqXdPYxPpiXrXtosRdobLCfEd
+FORoKWLRYuBXPWSR2Z7ZQsXUaJVLRF7bt04gatvV94xYzVE+1AKagv3PuKJoCL52
+Utx9nThSXjTUkU3zj+7txmBpwRRpzbbG/phpT2mpOLk1f9gkKfK2XCXxY+aOFOqd
+n/o6eU48rxmmnVKbri+LmKIPMt+XE32bwj/NnTBcODqdFX3g4c5NQycirWwq3NSj
+DPiskun8O4jfT3K/QPDTS8TJnmumOPMNt30gk7bV5D4MR8oYkm67UHFwEEyGnSHS
+Ch3ohT7PVg7FFaqXhqM6C+xVLQM425qXRB+0nKZBBRTf7EoADfSssc4yspcY7v37
+Byyj0SYqT3Qp9JIv3pgEi60uwTqdWFqhMxaWxZodnpBhW2OwQp9WWYGzOJekTkR8
+iY2StuZT2ytFfp+qWTstllNylY98iw33uYayicx1xgJ2Ni3ktGF7a72acOFfW93B
+HiDGeEMgATvKGaDorxC3o8UpPIChZp946Y9RwZzqJAjLkEzeEd5yygYeStAny8UV
+Z0bNwY4EuCdAiy07hPEhdpEdBPJzGrknLCGsejNBjNvWpOmDXi1RvX8kDRglW8Vo
+fOMw6BbIDXPAxWgy1VxXkFJtJXRwaXsUbAlPmFRbd6QI3nLpcF0=
+=db7A
 -----END PGP SIGNATURE-----
 
---=-CBJiDJxhT4An72p6WJMR--
+--=-JGXt/RswUQhQyg+jmosY--
 
