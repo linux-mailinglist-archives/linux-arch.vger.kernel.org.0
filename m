@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 115981550AB
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2020 03:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 926101550DB
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2020 04:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbgBGCUw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Feb 2020 21:20:52 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47878 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726597AbgBGCUw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Feb 2020 21:20:52 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0172JlO5065969;
-        Thu, 6 Feb 2020 21:20:12 -0500
+        id S1726597AbgBGDLu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Feb 2020 22:11:50 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16022 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726509AbgBGDLu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Feb 2020 22:11:50 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0173B2Cn091052;
+        Thu, 6 Feb 2020 22:11:10 -0500
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xyhmjuy7y-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2y0nnfscqf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Feb 2020 21:20:12 -0500
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0172KCLw066855;
-        Thu, 6 Feb 2020 21:20:12 -0500
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xyhmjuy7n-1
+        Thu, 06 Feb 2020 22:11:10 -0500
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0173B9o1091762;
+        Thu, 6 Feb 2020 22:11:09 -0500
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2y0nnfsch6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Feb 2020 21:20:12 -0500
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 0172J20M022683;
-        Fri, 7 Feb 2020 02:20:11 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma05wdc.us.ibm.com with ESMTP id 2xykc9srtj-1
+        Thu, 06 Feb 2020 22:11:09 -0500
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01738JVU028315;
+        Fri, 7 Feb 2020 03:10:30 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03wdc.us.ibm.com with ESMTP id 2xykc9t0x2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Feb 2020 02:20:11 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0172K9Yt55312662
+        Fri, 07 Feb 2020 03:10:30 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0173ATxc53346728
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Feb 2020 02:20:09 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 890F4112064;
-        Fri,  7 Feb 2020 02:20:09 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AF816112062;
-        Fri,  7 Feb 2020 02:19:50 +0000 (GMT)
+        Fri, 7 Feb 2020 03:10:29 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AD65EAC059;
+        Fri,  7 Feb 2020 03:10:29 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02534AC05B;
+        Fri,  7 Feb 2020 03:10:08 +0000 (GMT)
 Received: from LeoBras (unknown [9.85.188.217])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Feb 2020 02:19:50 +0000 (GMT)
-Message-ID: <e7f183cc19815ed07822707508d0caf4f7530216.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 01/11] asm-generic/pgtable: Adds generic functions to
- track lockless pgtable walks
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Feb 2020 03:10:08 +0000 (GMT)
+Message-ID: <34c67571bf366886aa8298373f3887f476b811a2.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 07/11] powerpc/kvm/e500: Use functions to track
+ lockless pgtbl walks
 From:   Leonardo Bras <leonardo@linux.ibm.com>
 To:     Christophe Leroy <christophe.leroy@c-s.fr>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -70,94 +70,87 @@ To:     Christophe Leroy <christophe.leroy@c-s.fr>,
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         kvm-ppc@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-mm@kvack.org
-Date:   Thu, 06 Feb 2020 23:19:45 -0300
-In-Reply-To: <f55e593c-27d5-df12-602f-ea217f62c5a1@c-s.fr>
+Date:   Fri, 07 Feb 2020 00:10:02 -0300
+In-Reply-To: <fae235d5-78b6-87aa-ed3f-1a908d61abf4@c-s.fr>
 References: <20200206030900.147032-1-leonardo@linux.ibm.com>
-         <20200206030900.147032-2-leonardo@linux.ibm.com>
-         <f55e593c-27d5-df12-602f-ea217f62c5a1@c-s.fr>
+         <20200206030900.147032-8-leonardo@linux.ibm.com>
+         <fae235d5-78b6-87aa-ed3f-1a908d61abf4@c-s.fr>
 Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-A/nJhzVPw0FwclUgBET/"
+        protocol="application/pgp-signature"; boundary="=-XtWHJcJJjtE0nWIZHITR"
 User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-02-06_04:2020-02-06,2020-02-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- impostorscore=0 malwarescore=0 priorityscore=1501 adultscore=0
- mlxlogscore=883 suspectscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 clxscore=1015 mlxlogscore=999 adultscore=0 priorityscore=1501
+ bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0 malwarescore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002070013
+ engine=8.12.0-2001150001 definitions=main-2002070018
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---=-A/nJhzVPw0FwclUgBET/
+--=-XtWHJcJJjtE0nWIZHITR
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hello Christophe, thanks for the feedback!
+Hello Christophe,=20
 
-On Thu, 2020-02-06 at 06:54 +0100, Christophe Leroy wrote:
-> > A memory barrier was also added just to make sure there is no speculati=
-ve
-> > read outside the interrupt disabled area. Other than that, it is not
-> > supposed to have any change of behavior from current code.
+On Thu, 2020-02-06 at 07:18 +0100, Christophe Leroy wrote:
 >=20
-> Is that speculative barrier necessary for all architectures ? Does it=20
-> impact performance ? Shouldn't this be another patch ?
-
-It makes sense, better keep the code as much as possible as it was. If
-any arch finds this barrier needed, it can implement it's own version
-of this function (or another patch to add this to generic, if proved to
-be needed in every arch).
-
-> > +#ifndef __HAVE_ARCH_LOCKLESS_PGTBL_WALK_CONTROL
-> > +/*
-> > + * begin_lockless_pgtbl_walk: Must be inserted before a function call =
-that does
-> > + *   lockless pagetable walks, such as __find_linux_pte()
-> > + */
-> > +static inline
-> > +unsigned long begin_lockless_pgtbl_walk(void)
+> I don't really like unbalanced begin/end.
 >=20
-> What about keeping the same syntax as local_irq_save(), something like:
+> Something like the following would be cleaner:
 >=20
-> #define begin_lockless_pgtbl_walk(flags) \
-> do {
-> 	local_irq_save(flags);
-> 	smp_mb();
-> } while (0)
+>=20
+> begin_lockless_pgtbl_walk()
+> ptep =3D find()
+> if (ptep) {
+> 	pte =3D READ_ONCE()
+> 	if (pte_present(pte))
+> 		wing=3D
+> 	else
+> 		ret =3D -EINVAL;
+> }
+> end_lockless_pgtbl_walk()
+>=20
+> if (ret) {
+> 	pr_err_rate...()
+> 	goto out;
+> }
+>=20
 >=20
 
-Makes sense. But wouldn't inlining have the same code output?=20
+Sure, looks better that way. I will change that for v7.
 
-Best regards,
+Thanks for the feedback,
+
 Leonardo Bras
 
-
---=-A/nJhzVPw0FwclUgBET/
+--=-XtWHJcJJjtE0nWIZHITR
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl48yUEACgkQlQYWtz9S
-ttRXxxAAhPXA0Cd48ZAtBfcOadiRsa1Amc03sprshQLV/+pQx2/U47Nl7YqtozUl
-pxTnysv8mkdxPHoYnQk5XDRSxTLewF+w3F9hTFAfOM6F3UIA2bUsby0SPIR/04a0
-1enrJ6U1qElB8wk/8Ncur2YVPzFgKmgpQI+i1n7NrGIuN2mHmmzrM3OLZf3H0BpL
-3jKzZWwIoa3waO81mtVyij8gctwpk2bzoUJGs6XsvBKZMCbZdiZVyWedn5kEpM5m
-an0wmHQdta85iK9XysKm55Oe0PYhmm0K9pH4sNYFWuMcC2oKtyizbiV3wq3sjpau
-XSg/9koTmUowiQzTIUoCYut0UxuLjD0WfzzoR1EKcb07dFCMwkjn9jDHOQW9eSMo
-9PhMEgZ2i1n463YUxhpUYXbZkqML+IQ6VLc4ZgyJdj7c+RVJSbT4GOwxBABnN58p
-iEFNVDmoS1+CVUq3Ysvsw2KtM2oGxsn7sx/69KesxEHXiytgs7afyOYacGV0fx5R
-OXuNlW3g5ODGdayMcXbEXY0C492e07CnMvTZvbMhwGs7YeIZUb+JfMwFpQAeSP1w
-XOYl4h9YxS1sgB2gUSZc0ETfXDeeOxB9RZ1j817ySEMfn/XCUjyexOnsqBnNGbpM
-AcWwHPwmdCYOKyWFTcej/u/8fxGkYgYZldd/GxcYTGaFy8IudyM=
-=E/z0
+iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl481QoACgkQlQYWtz9S
+ttTcdA//Xke6/twgyWIan1bRF0vWJ3qSy+yFDyf4csKImVLRQqAa/asW4bIBwGZS
+re3EzPV46Nuq6ZAg64yxwOokHEfwY1cdOmSCVmxZf0SUGViqZ2whL/CCED2H+f7f
+Lt+hw1ibONlzz8AvDLtplxj18Uc58G9mrXOOxLEz2LzqXrsL1AU/15R+NiDPaK1N
+lW5kxUsb8jHHzIOXem9B2aQRFDoCCx0uJzhNJn13ft30PZeaanSUNYqSuEa67tlA
+7iFqrtoLCD7KKXLNbvAh+43w+lvpEqRf9MBt7SoCXJQWCVrIXhj4yI3dbRaePyf3
+jY3vXrk/TapcfQQceptI47oaOtptRJ2MBntJYdh/kUYhLpy61px3q1mJvy4qZOrO
+gm9Y2YfVGf23zkcc9/YzOfOm0t+tf5VKUQj4a0rCIuSj/EgHW2vj3pq85Vt2PUB/
+aGp88Aosd2Wz3pqQ7aGsasy7vKlSc/nVOgItr/9Y8q51y3DdYkw+rUqqqZK4JH1h
+4qRGpb4jp2mZZdzvxxCklhHdqXNwLdSW+d6ZBYEww0N6T5aNCPp1hAAY16I9ZmYF
+AE/ZMZjVc9UNYqA9bHE29IETN0vuv8AIaREvwoK27Oip8cnhLpf8FA2uMWW80AcL
+7yw4v3Cojj76UcRoZkMRNCutFnPeIr7EUc5Po2GqKSMXQAYLLu8=
+=ZwdP
 -----END PGP SIGNATURE-----
 
---=-A/nJhzVPw0FwclUgBET/--
+--=-XtWHJcJJjtE0nWIZHITR--
 
