@@ -2,61 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9AE158595
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Feb 2020 23:30:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1101588E7
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Feb 2020 04:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727434AbgBJWax (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Feb 2020 17:30:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60706 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727385AbgBJWax (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 10 Feb 2020 17:30:53 -0500
-Received: from akpm3.svl.corp.google.com (unknown [104.133.8.65])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F01F20733;
-        Mon, 10 Feb 2020 22:30:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581373852;
-        bh=54nkkLQpkIxaBNzxm98DpOSXoNRzc6TpxqRSEf7qsvw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=yE9Hpuo7Y6xYunvkNsz5dQ+EYq88XNQbx27h4AiW1m0qX+2w7LbvaVX3rRyRX8DPz
-         huaTwMLmkRUH7T0j7B6bCEsYnzEnSAlU18DlgjTZW+OxjGw3wsZcF3awO5rV2MMhz6
-         MzVw96chGFwyZ1YY3N9vhQxwWD7wTdBt0j4OmQ1s=
-Date:   Mon, 10 Feb 2020 14:30:52 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] asm-generic: make more kernel-space headers mandatory
-Message-Id: <20200210143052.1d89f7e26c9bd115d617cc92@linux-foundation.org>
-In-Reply-To: <20200210175452.5030-1-masahiroy@kernel.org>
-References: <20200210175452.5030-1-masahiroy@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1727826AbgBKDlM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Feb 2020 22:41:12 -0500
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:60918 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727831AbgBKDlM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 10 Feb 2020 22:41:12 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04396;MF=guoren@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0TpeDRM7_1581392468;
+Received: from localhost(mailfrom:guoren@linux.alibaba.com fp:SMTPD_---0TpeDRM7_1581392468)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 11 Feb 2020 11:41:09 +0800
+From:   Guo Ren <guoren@linux.alibaba.com>
+To:     linux-csky@vger.kernel.org, majun258@linux.alibaba.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: Add PCI support
+Date:   Tue, 11 Feb 2020 11:41:07 +0800
+Message-Id: <20200211034107.11192-1-guoren@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.0
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 11 Feb 2020 02:54:52 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
+From: MaJun <majun258@linux.alibaba.com>
 
-> Change a header to mandatory-y if both of the following are met:
-> 
-> [1] At least one architecture (except um) specifies it as generic-y in
->     arch/*/include/asm/Kbuild
-> 
-> [2] Every architecture (except um) either has its own implementation
->     (arch/*/include/asm/*.h) or specifies it as generic-y in
->     arch/*/include/asm/Kbuild
+Add the pci related code for csky arch to support basic pci virtual
+function, such as qemu virt-pci-9pfs.
 
-(reads Documentation/kbuild/makefiles.rst to remember what these things
-do).
+Signed-off-by: MaJun <majun258@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+---
+ arch/csky/Kconfig           |  5 +++++
+ arch/csky/include/asm/pci.h | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 arch/csky/include/asm/pci.h
 
-Why are we making this change?  What's the benefit?
-
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index bf246b036dee..72b2999a889a 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -58,6 +58,11 @@ config CSKY
+ 	select TIMER_OF
+ 	select USB_ARCH_HAS_EHCI
+ 	select USB_ARCH_HAS_OHCI
++	select GENERIC_PCI_IOMAP
++	select HAVE_PCI
++	select PCI_DOMAINS_GENERIC if PCI
++	select PCI_SYSCALL if PCI
++	select PCI_MSI if PCI
+ 
+ config CPU_HAS_CACHEV2
+ 	bool
+diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
+new file mode 100644
+index 000000000000..ebc765b1f78b
+--- /dev/null
++++ b/arch/csky/include/asm/pci.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++
++#ifndef __ASM_CSKY_PCI_H
++#define __ASM_CSKY_PCI_H
++
++#include <linux/types.h>
++#include <linux/slab.h>
++#include <linux/dma-mapping.h>
++
++#include <asm/io.h>
++
++#define PCIBIOS_MIN_IO		0
++#define PCIBIOS_MIN_MEM		0
++
++/* C-SKY shim does not initialize PCI bus */
++#define pcibios_assign_all_busses() 1
++
++extern int isa_dma_bridge_buggy;
++
++#ifdef CONFIG_PCI
++static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
++{
++	/* no legacy IRQ on csky */
++	return -ENODEV;
++}
++
++static inline int pci_proc_domain(struct pci_bus *bus)
++{
++	/* always show the domain in /proc */
++	return 1;
++}
++#endif  /* CONFIG_PCI */
++
++#endif  /* __ASM_CSKY_PCI_H */
+-- 
+2.17.0
 
