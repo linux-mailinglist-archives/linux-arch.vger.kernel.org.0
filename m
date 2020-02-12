@@ -2,88 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFCA15A52C
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2020 10:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D2115A58A
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2020 11:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729045AbgBLJoB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Feb 2020 04:44:01 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:59456 "EHLO
+        id S1728781AbgBLKB3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Feb 2020 05:01:29 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:33092 "EHLO
         merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729008AbgBLJoA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Feb 2020 04:44:00 -0500
+        with ESMTP id S1728745AbgBLKB3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Feb 2020 05:01:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=XeL6LCi2HGnzcbE5ZCpOQlzWnrcj0g6s0cgd62YAoiY=; b=ZBwKYFS1bFAtH/co5Xr+8Bs/ps
-        HEsQr8l9CJyfyXwNOMqmXCK9ehnCXcCdh4XUS26aoVQGvnKgiDdWM5wii1tdeJnoPGUpU9yMUhojE
-        3X8At/BK+nSrtfMpqOuhhdyWDLq/KEF7v1A5NLCkx2BHFs6kokSXTf8Nx+DWXsDYjT9vzV5YxkpaZ
-        S71j5DLrVtWQPcvS1uK8fa20C6reT14+PJshg+q/bvzGtCE9SlswJwJRZotedo8Fwf6UE1ORfuI6B
-        Tr6jjYdFiiasG6oqY4brZRf7vHGYhqJdoBdxDAVsDkyHRvBzEum95LFqJ5p/MaBc1keH4dDj56GED
-        xz8jI50g==;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vmVcNp5qMZzdUdSZWSizA+92PAY3N8xDElToXt9qO7s=; b=RcqtaBtjoSUkXiIj/AcVat4N5a
+        5RNdGUDjTDltWOV04YoqWBTWVY6ScTJJl7zSQvvwbHWip8jZOLqI6KirYpqeQB34P+wo6+0aQkMsf
+        koy5kpkUMB5H3LwxseZgp/J4DgvDWplbRsCxdxV34tCe6CioeSUorn1D9JfZWtdyGaqku/9CIKK9g
+        PS8DdE6guOBCllTcj9GwF+4EzZkP+alnSedaO4w4zVYRRiFj7F8kNyCuyNRZIXTqLBtkUzQjqW2ov
+        S34n/4L7+JVhNZPtP8iDvcsBKKMwXVsw9EymHY9JpDpJ2dl+VdyFAqMQiFJXvyUMMsWlz3g/W+iHx
+        7Beoppmg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j1oYH-0006Az-Md; Wed, 12 Feb 2020 09:43:25 +0000
+        id 1j1opQ-0006Zo-JN; Wed, 12 Feb 2020 10:01:08 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 22AB7307851;
-        Wed, 12 Feb 2020 10:41:33 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 647DA2B9154FD; Wed, 12 Feb 2020 10:43:21 +0100 (CET)
-Message-Id: <20200212094108.063885035@infradead.org>
-User-Agent: quilt/0.65
-Date:   Wed, 12 Feb 2020 10:32:18 +0100
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AAFF7300679;
+        Wed, 12 Feb 2020 10:59:17 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9C8DB2B2A98AF; Wed, 12 Feb 2020 11:01:06 +0100 (CET)
+Date:   Wed, 12 Feb 2020 11:01:06 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org
-Cc:     peterz@infradead.org, mingo@kernel.org, joel@joelfernandes.org,
+        rostedt@goodmis.org, james.morse@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+Cc:     mingo@kernel.org, joel@joelfernandes.org,
         gregkh@linuxfoundation.org, gustavo@embeddedor.com,
         tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
         mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
-Subject: [PATCH 8/8] tracing: Remove regular RCU context for _rcuidle tracepoints (again)
+Subject: Re: [PATCH 0/8] tracing vs rcu vs nmi
+Message-ID: <20200212100106.GA14914@hirez.programming.kicks-ass.net>
 References: <20200212093210.468391728@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200212093210.468391728@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Effectively revert commit 865e63b04e9b2 ("tracing: Add back in
-rcu_irq_enter/exit_irqson() for rcuidle tracepoints") now that we've
-taught perf how to deal with not having an RCU context provided.
+On Wed, Feb 12, 2020 at 10:32:10AM +0100, Peter Zijlstra wrote:
+> Hi all,
+> 
+> These here patches are the result of Mathieu and Steve trying to get commit
+> 865e63b04e9b2 ("tracing: Add back in rcu_irq_enter/exit_irqson() for rcuidle
+> tracepoints") reverted again.
+> 
+> One of the things discovered is that tracing MUST NOT happen before nmi_enter()
+> or after nmi_exit(). I've only fixed x86, but quickly gone through other
+> architectures and there is definitely more stuff to be fixed (simply grep for
+> nmi_enter in your arch).
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- include/linux/tracepoint.h |    8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+For ARM64:
 
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -179,10 +179,8 @@ static inline struct tracepoint *tracepo
- 		 * For rcuidle callers, use srcu since sched-rcu	\
- 		 * doesn't work from the idle path.			\
- 		 */							\
--		if (rcuidle) {						\
-+		if (rcuidle)						\
- 			__idx = srcu_read_lock_notrace(&tracepoint_srcu);\
--			rcu_irq_enter_irqsave();			\
--		}							\
- 									\
- 		it_func_ptr = rcu_dereference_raw((tp)->funcs);		\
- 									\
-@@ -194,10 +192,8 @@ static inline struct tracepoint *tracepo
- 			} while ((++it_func_ptr)->func);		\
- 		}							\
- 									\
--		if (rcuidle) {						\
--			rcu_irq_exit_irqsave();				\
-+		if (rcuidle)						\
- 			srcu_read_unlock_notrace(&tracepoint_srcu, __idx);\
--		}							\
- 									\
- 		preempt_enable_notrace();				\
- 	} while (0)
+ - apei_claim_sea()
+ - __sdei_handler()
+ - do_serror()
+ - debug_exception_enter() / do_debug_exception()
 
-
+all look dodgy.
