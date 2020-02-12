@@ -2,46 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D643915B29B
+	by mail.lfdr.de (Postfix) with ESMTP id 60B4D15B29A
 	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2020 22:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729160AbgBLVOH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Feb 2020 16:14:07 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:45050 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728674AbgBLVOF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Feb 2020 16:14:05 -0500
+        id S1729197AbgBLVOO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Feb 2020 16:14:14 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:33476 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728674AbgBLVON (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Feb 2020 16:14:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=merlin.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=oJSOIpFP8iNago6vN2/fjjdKRB58K6oZEf8HaaQJENs=; b=jwrF8i5fOWi5LlFaKz50NE3Ckz
-        TM97PRuHs98wtuhKAwYFkOmT5LVeOQFRSxUsfGoeTD6WRLABApWQhoUrsGl9PHC1Yjx4YajpOOATh
-        5tAt+Cu+9LLLNJ1hKEXeCu+euONoC3JjCk/dab/3KeCSkGCb5K6WboBLTTgmHl1pDAsi3jiy+5rYM
-        1gpA+e8HoNX4rh8UrxheCJCbMkut4065Spw/9lJz+XLGkemvOOSmXgbI+CnvM0oVkCk5TvwhSN2Zu
-        lUOyFaXPAHMPwZasLzkcS0ituMHAi9ZVHmBlOCSkMaJz2nvVRuIVtevcPepr4EazJVz1vZ8eIEJpo
-        LseTO4bQ==;
+        bh=cfSfHywsIy4GHGrttczRnVt4997LxQml8cl0HP/ciiI=; b=cMlmV2zZOoNsqmF2+KF4Bt1uPO
+        mSJp/F4LqNXh/S0SGAryDrNzkZ4PS+zS7UMBViWf4G6PFKCkzm9tvdwAll/NwUpp2PrA6bwRxncoB
+        x9p0aC/as+5FzJ1PTjkTCLddcjw2ZhtuiKhT/V8qMrDskTIDVQy+DdKXt582yiegamu6kvNZeQ8Hi
+        21tGzG+BdxJiFAD/5RJ/dB24BI4mP4SP5P4SOM2lSl3/SCztLs5nGmOg1YRJLRBp2093VUDPNdj5j
+        jYpwD3zP1rB5KHdfUHC2YA2/BR3/JMysrtRtSDjoE1GpwUjn+2N5G4T+hEtS3YBsvTodzxbbbKm3O
+        9MPc5YWg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j1zKJ-0001Ao-U7; Wed, 12 Feb 2020 21:13:44 +0000
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j1zKK-0002Kj-Jv; Wed, 12 Feb 2020 21:13:44 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 456E2305803;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4646E306012;
         Wed, 12 Feb 2020 22:11:52 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 7E5DA203A899B; Wed, 12 Feb 2020 22:13:41 +0100 (CET)
-Message-Id: <20200212210749.971717428@infradead.org>
+        id 806DE203A8999; Wed, 12 Feb 2020 22:13:41 +0100 (CET)
+Message-Id: <20200212210750.028161469@infradead.org>
 User-Agent: quilt/0.65
-Date:   Wed, 12 Feb 2020 22:01:42 +0100
+Date:   Wed, 12 Feb 2020 22:01:43 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         rostedt@goodmis.org
 Cc:     peterz@infradead.org, mingo@kernel.org, joel@joelfernandes.org,
         gregkh@linuxfoundation.org, gustavo@embeddedor.com,
         tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
-Subject: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        "Steven Rostedt (VMware)" <rosted@goodmis.org>
+Subject: [PATCH v2 4/9] sched,rcu,tracing: Avoid tracing before in_nmi() is correct
 References: <20200212210139.382424693@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,79 +51,59 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-To facilitate tracers that need RCU, add some helpers to wrap the
-magic required.
+If we call into a tracer before in_nmi() becomes true, the tracer can
+no longer detect it is called from NMI context and behave correctly.
 
-The problem is that we can call into tracers (trace events and
-function tracing) while RCU isn't watching and this can happen from
-any context, including NMI.
+Therefore change nmi_{enter,exit}() to use __preempt_count_{add,sub}()
+as the normal preempt_count_{add,sub}() have a (desired) function
+trace entry.
 
-It is this latter that is causing most of the trouble; we must make
-sure in_nmi() returns true before we land in anything tracing,
-otherwise we cannot recover.
+This fixes a potential issue with current code; AFAICT when the
+function-tracer has stack-tracing enabled __trace_stack() will
+malfunction when it hits the preempt_count_add() function entry from
+NMI context.
 
-These helpers are macros because of header-hell; they're placed here
-because of the proximity to nmi_{enter,exit{().
-
+Suggested-by: Steven Rostedt (VMware) <rosted@goodmis.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/hardirq.h |   48 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ include/linux/hardirq.h |   13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 --- a/include/linux/hardirq.h
 +++ b/include/linux/hardirq.h
-@@ -89,4 +89,52 @@ extern void irq_exit(void);
- 		arch_nmi_exit();				\
- 	} while (0)
+@@ -65,6 +65,15 @@ extern void irq_exit(void);
+ #define arch_nmi_exit()		do { } while (0)
+ #endif
  
 +/*
-+ * Tracing vs RCU
++ * NMI vs Tracing
 + * --------------
 + *
-+ * tracepoints and function-tracing can happen when RCU isn't watching (idle,
-+ * or early IRQ/NMI entry).
-+ *
-+ * When it happens during idle or early during IRQ entry, tracing will have
-+ * to inform RCU that it ought to pay attention, this is done by calling
-+ * rcu_irq_enter_irqsave().
-+ *
-+ * On NMI entry, we must be very careful that tracing only happens after we've
-+ * incremented preempt_count(), otherwise we cannot tell we're in NMI and take
-+ * the special path.
++ * We must not land in a tracer until (or after) we've changed preempt_count
++ * such that in_nmi() becomes true. To that effect all NMI C entry points must
++ * be marked 'notrace' and call nmi_enter() as soon as possible.
 + */
 +
-+#define __TR_IRQ	1
-+#define __TR_NMI	2
-+
-+#define trace_rcu_enter()					\
-+({								\
-+	unsigned long state = 0;				\
-+	if (!rcu_is_watching())	{				\
-+		if (in_nmi()) {					\
-+			state = __TR_NMI;			\
-+			rcu_nmi_enter();			\
-+		} else {					\
-+			state = __TR_IRQ;			\
-+			rcu_irq_enter_irqsave();		\
-+		}						\
-+	}							\
-+	state;							\
-+})
-+
-+#define trace_rcu_exit(state)					\
-+do {								\
-+	switch (state) {					\
-+	case __TR_IRQ:						\
-+		rcu_irq_exit_irqsave();				\
-+		break;						\
-+	case __TR_NMI:						\
-+		rcu_nmi_exit();					\
-+		break;						\
-+	default:						\
-+		break;						\
-+	}							\
-+} while (0)
-+
- #endif /* LINUX_HARDIRQ_H */
+ #define nmi_enter()						\
+ 	do {							\
+ 		arch_nmi_enter();				\
+@@ -72,7 +81,7 @@ extern void irq_exit(void);
+ 		lockdep_off();					\
+ 		ftrace_nmi_enter();				\
+ 		BUG_ON(in_nmi());				\
+-		preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);	\
++		__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET); \
+ 		rcu_nmi_enter();				\
+ 		trace_hardirq_enter();				\
+ 	} while (0)
+@@ -82,7 +91,7 @@ extern void irq_exit(void);
+ 		trace_hardirq_exit();				\
+ 		rcu_nmi_exit();					\
+ 		BUG_ON(!in_nmi());				\
+-		preempt_count_sub(NMI_OFFSET + HARDIRQ_OFFSET);	\
++		__preempt_count_sub(NMI_OFFSET + HARDIRQ_OFFSET); \
+ 		ftrace_nmi_exit();				\
+ 		lockdep_on();					\
+ 		printk_nmi_exit();				\
 
 
