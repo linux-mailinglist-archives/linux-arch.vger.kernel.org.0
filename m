@@ -2,46 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB28415B493
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 00:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB0515B4A2
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 00:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729132AbgBLXUH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Feb 2020 18:20:07 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:33943 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729103AbgBLXUH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Feb 2020 18:20:07 -0500
-Received: by mail-qk1-f193.google.com with SMTP id c20so3911304qkm.1
-        for <linux-arch@vger.kernel.org>; Wed, 12 Feb 2020 15:20:06 -0800 (PST)
+        id S1729220AbgBLX1F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Feb 2020 18:27:05 -0500
+Received: from mail-qv1-f65.google.com ([209.85.219.65]:46061 "EHLO
+        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727117AbgBLX1F (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Feb 2020 18:27:05 -0500
+Received: by mail-qv1-f65.google.com with SMTP id l14so1771607qvu.12
+        for <linux-arch@vger.kernel.org>; Wed, 12 Feb 2020 15:27:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Kj4wAENiFAyk/ksaomW43f74+pAzdzX97670e6813g4=;
-        b=GfOAIlmNStttHMGlzt0UneZ8tf9pgLrxytukwlUmueS54q+x1mE/xMz3zdtNtH6K6f
-         mpSUawXfAtlBnCv93JHCT/3QXMVcL7I8BeWFpwPcmePMWVJ7Av7stI1qC7aB+qdFICYf
-         zkRY5Gdmf1xUsPc1oNtdGaFP5gj653tUK86lo=
+        bh=kTNWibF5tbkLobqhHD4V+kFeYgR//KAz2RdK40R6a+4=;
+        b=u9psciCNbDsT6qUbD5ro/cVfFEVW2xyWmVMVMqId/QwrQkrT+KrRh17aDBGPsccKoO
+         zaZKFdBejZJATq6jepTQMoGa41JY57r7F7/HW0ogqkdUwc1prWmv5MFA+scuYp4Nw6Gd
+         vBZ51+AyfLN8Mxdd60G/KDaGGqpT1ZvRRKlOs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Kj4wAENiFAyk/ksaomW43f74+pAzdzX97670e6813g4=;
-        b=FNTG98rnkud/gMiYRYhHvqCMzkmLzdCPRuGH2PD/8BO2Ir1n1tTls37MW0z8domi+T
-         Rl4LE1RNp5IGuGggoHc8qo0la9nWplrDSNTiRNpiMZ1tRcfpzVBKJnAMmOmzWDe8GMaT
-         GxHCP4W9ZD/hyZwvHsYK9gu7hDWGrGKt6ofSpbX1uYAb+YnsAPX4rFyGnZVEKcwHHtQr
-         cevvGPCVGuUTq0SyIUX3p7KetaXj/3DOpAoX5h34Iqd5cFpBv+9BGLba5MtcQ9XBY1Kv
-         RboAUXtrxXSkPfeSYGkVoy4cUqGY/IhpOwCXlDcK8f2vBeC+t3Jpl2Ow8AIDvH0MDnrK
-         rmyA==
-X-Gm-Message-State: APjAAAUMuCVNl74LcvwcdOk6+GC3kC+RfgSroBKLm8HCOhEwCkcPmmbF
-        5PYKSrEAYMzcfGsF8xeCBojs7g==
-X-Google-Smtp-Source: APXvYqzPPQXVG4awXAR6njrqOxPItwhg/7JhzN0bFRKXI6kJPXgfLcjyOVoDq69x4nhnn/QOSU8zww==
-X-Received: by 2002:a37:4894:: with SMTP id v142mr9265899qka.220.1581549606252;
-        Wed, 12 Feb 2020 15:20:06 -0800 (PST)
+        bh=kTNWibF5tbkLobqhHD4V+kFeYgR//KAz2RdK40R6a+4=;
+        b=Lq/NsrP/Jw5Hc7tbTt+Yo4iqy5vD78ibQCWFhUjPS/TAkoy/QoqU7Y4phkmd03brrw
+         K8zYynYtcs1PK/4gO310GWo8MCEIFFZ86T1pWiGp7GP3Lhmq9/+GQ2m6cBDS02JTdf0I
+         ZXHAgAm4NXrJrXeKJykGrDSwj0e+aojgECl/II/z8LEkrObzLPzB/8e6aeRNLwgpcbDV
+         +zC27Ymwmevi3XEp+kZu4IKX6NMWF+8MjloguQKFVLhzY3EqHLiBstclKEsMQWLD3crL
+         V0gCLTI/TXCpb2N5EIhgPUiPW99K5YLOlfSfMTKXjrU/fpN3+fEJr+MalDcHiSTha72L
+         dRsA==
+X-Gm-Message-State: APjAAAXNxA3zTQPYRg23ZvDC6DBc4mRw6SIBeJxHclfVECQFXRxJRq6R
+        tFcKvV3yzrvY5LimMmko4Am88Q==
+X-Google-Smtp-Source: APXvYqyeP6AQshumUNOlf+Y3b/66Lbbev3nq+A2SD1fAG9TX0YJOSCK6ZNzZtmmvlE6IG+G15uDN7Q==
+X-Received: by 2002:a0c:fe0d:: with SMTP id x13mr9506026qvr.88.1581550022806;
+        Wed, 12 Feb 2020 15:27:02 -0800 (PST)
 Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id q130sm227784qka.114.2020.02.12.15.20.05
+        by smtp.gmail.com with ESMTPSA id d18sm255530qke.75.2020.02.12.15.27.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2020 15:20:05 -0800 (PST)
-Date:   Wed, 12 Feb 2020 18:20:05 -0500
+        Wed, 12 Feb 2020 15:27:02 -0800 (PST)
+Date:   Wed, 12 Feb 2020 18:27:02 -0500
 From:   Joel Fernandes <joel@joelfernandes.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -50,7 +50,7 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
         jiangshanlai@gmail.com
 Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
-Message-ID: <20200212232005.GC115917@google.com>
+Message-ID: <20200212232702.GA170680@google.com>
 References: <20200212210139.382424693@infradead.org>
  <20200212210749.971717428@infradead.org>
 MIME-Version: 1.0
@@ -119,21 +119,12 @@ On Wed, Feb 12, 2020 at 10:01:42PM +0100, Peter Zijlstra wrote:
 > +			state = __TR_IRQ;			\
 > +			rcu_irq_enter_irqsave();		\
 
-I think this can be simplified. You don't need to rely on in_nmi() here. I
-believe for NMI's, you can just call rcu_irq_enter_irqsave() and that should
-be sufficient to get RCU watching. Paul can correct me if I'm wrong, but I am
-pretty sure that would work.
-
-In fact, I think a better naming for rcu_irq_enter_irqsave() pair could be
-(in the first patch):
-
-rcu_ensure_watching_begin();
-rcu_ensure_watching_end();
+Since rcu_irq_enter_irqsave can be called from a tracer context, should those
+be marked with notrace as well? AFAICS, there's no notrace marking on them.
 
 thanks,
 
  - Joel
-
 
 
 > +		}						\
