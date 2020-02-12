@@ -2,86 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D02315A871
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2020 12:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F74815A9A0
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2020 14:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbgBLL7B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Feb 2020 06:59:01 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:42966 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725874AbgBLL7B (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Feb 2020 06:59:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UtN8+ZGSwaPi4q3QVj9G5VCoQ9BSx691y8FRqSthTXE=; b=gfuS8CH6o/kkTpvRENuT4/WSp6
-        Y1BM52nqcvQS6tgzL2xqmbDAkKG7Jr6sk9ZDzBWzdwXp7Iy9EJoUlEwTS/4xCj7vncjj0n3vSkoV9
-        nahwIJUwMVAeXMgzUH0Oewx0QZU9xdoM6/MhGfPYhIIv7oALnyNi4aJT19l1/9n//M0qqDnMvnfT0
-        fkbLe46TnBDnbrgTdk7xPQzJR7xs7O6UK2mcDbNLKYhuGt/08Zi7obelcfwVNU4DOZ/CkabnfSNIr
-        6X5HPVho9NcDDmB9ABXR5kdCxjg4qcbeloJ3tfQVY275abz/7mAVKP50cbqNeEXgYtppW7MbCfbzo
-        HJJBZbeA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j1qet-0000HP-OM; Wed, 12 Feb 2020 11:58:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1C224300235;
-        Wed, 12 Feb 2020 12:56:30 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1683120148932; Wed, 12 Feb 2020 12:58:20 +0100 (CET)
-Date:   Wed, 12 Feb 2020 12:58:20 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org, james.morse@arm.com, catalin.marinas@arm.com,
-        mingo@kernel.org, joel@joelfernandes.org,
-        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
-        tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
-Subject: Re: [PATCH 0/8] tracing vs rcu vs nmi
-Message-ID: <20200212115820.GQ14897@hirez.programming.kicks-ass.net>
-References: <20200212093210.468391728@infradead.org>
- <20200212100106.GA14914@hirez.programming.kicks-ass.net>
- <20200212105646.GA4017@willie-the-truck>
+        id S1726728AbgBLNDE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Feb 2020 08:03:04 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:58959 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725887AbgBLNDE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Feb 2020 08:03:04 -0500
+Received: from mail-qt1-f171.google.com ([209.85.160.171]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MgRYd-1jhmbB30Rj-00hwqJ; Wed, 12 Feb 2020 14:03:02 +0100
+Received: by mail-qt1-f171.google.com with SMTP id c5so1465166qtj.6;
+        Wed, 12 Feb 2020 05:03:02 -0800 (PST)
+X-Gm-Message-State: APjAAAWRWtdXZfUQUTC8wFCdhHAnjmvxzzn00eJYoFtelnYyjnmzaduT
+        ZLOf6hkCtvd/0EvTZGmWkJTBWKck5aI4ueOj6ic=
+X-Google-Smtp-Source: APXvYqy06iM4mphE8iImJ5H3xGHM0E61H0W3gl72SDsnuQ8ERp4zy8pETyfnDlE0AXLBVDG71JEvVqBMlcGftON602Q=
+X-Received: by 2002:ac8:1977:: with SMTP id g52mr18800788qtk.18.1581512581526;
+ Wed, 12 Feb 2020 05:03:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200212105646.GA4017@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1581497860.git.michal.simek@xilinx.com>
+In-Reply-To: <cover.1581497860.git.michal.simek@xilinx.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 12 Feb 2020 14:02:45 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1NymovoUxYBF8Ok8Rfke7ECW49bmc+K-=vtH_Bz8_7jQ@mail.gmail.com>
+Message-ID: <CAK8P3a1NymovoUxYBF8Ok8Rfke7ECW49bmc+K-=vtH_Bz8_7jQ@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Hi,
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michal Simek <monstr@monstr.eu>, git@xilinx.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Borislav Petkov <bp@suse.de>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mubin Sayyed <mubinusm@xilinx.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh@kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Siva Durga Prasad Paladugu <siva.durga.paladugu@xilinx.com>,
+        Stefan Asserhall <stefan.asserhall@xilinx.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:dYBbjfk8Z7SogIlHkWnFJ6gFDKjQUD1ts7iX5TjNDEwv+GB/QB2
+ xjMGy7pc5+Dzq0zrrM6MYBYXjJSCkIEQpiKomeNMc8LsD2PjcHNWJfhH0iPTdTsWtdeeFJI
+ kVig434j7RwFrzXVuQ+y1s8yuO/NV4MNy7MtE8D+NlkaN2bxdsF08GaNkgjcMZmQ9Q+IlJJ
+ d0qWW2kRHSujsPIuW41Uw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:efXOSkONAIg=:aEwYcKVo+l66r/Gv02BnMG
+ yYo0mAAEwCxHIdeu6JbZ+rmeydcpnORwtksxJN/t7ROs8TegQp8KSUvlrgb2x4lx5zjT5wRVP
+ 6ylDZTPegC+1u+ULugfAzLXVJCrqe6dWn6+10X2V0Wt1HkgwLMW7EUto+/w7IqcMhiOJV5QRR
+ u9OR3/bta09DyOhqQfCMrjebk3VliSGad0ZgAYVmgZgUc4V+O7bAvlqZH5vSYtk8wD+4W94kp
+ QXj/eFXNP9pVYGNwJFTwmvwgDD0yYZG8GMxx4DsMS54h1edK8K1AZgC5qmruFY4RG4Dtec+TE
+ OJICgMmlmja/T6UUOiNB4RjGrfHcjW8bwHEzfDMdCYRFPQVZTklQzcp6Bej14TMDN0dHvwD7T
+ Vtn5sebb2uVb3og/6V1KeLBcHbGbZcnAhsNgmlvovDgpDHwkAkni8QG3hOYQl9euQxYykZ3Vs
+ AyutUPdqBLny335336I/cruO+eYYjWeL8Yk1AnhKuaNTAMKodRV1aPysAum4EhQupgMTUiKrD
+ h6l9zxgNdT0sSpSJj7ocG+cRlnrcN8K84ewcYLQ07T4kk2rBI476W3RjA1p4hlhdyVPIBRXfq
+ Iiy7A/QJu9dYJR5HpmFJoBGNJf/88Bs1/gWzgzMkDo6nEw+9xOPe2bWgXUQnguvZIi9fJtkdP
+ qfVgoJm8XF2gNvaOFpeBcWbJnS7r43pgjGK+A5BY9UAHQhUQJqxTozXsUicQFDLFEAPvxuHF9
+ +YVVHG6mm5qFLdfUH3SiYkw7HQQFntMgcABQGcw/yqHhPzc0LpUkEJ+R8FjhT/iMNt2FdNrwq
+ cBHQdb9uHX12sxg+7OMqlhUtYaMuurNUUp2NPB8wizou3gQr4A=
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 10:56:46AM +0000, Will Deacon wrote:
-> On Wed, Feb 12, 2020 at 11:01:06AM +0100, Peter Zijlstra wrote:
-> > On Wed, Feb 12, 2020 at 10:32:10AM +0100, Peter Zijlstra wrote:
-> > > Hi all,
-> > > 
-> > > These here patches are the result of Mathieu and Steve trying to get commit
-> > > 865e63b04e9b2 ("tracing: Add back in rcu_irq_enter/exit_irqson() for rcuidle
-> > > tracepoints") reverted again.
-> > > 
-> > > One of the things discovered is that tracing MUST NOT happen before nmi_enter()
-> > > or after nmi_exit(). I've only fixed x86, but quickly gone through other
-> > > architectures and there is definitely more stuff to be fixed (simply grep for
-> > > nmi_enter in your arch).
-> > 
-> > For ARM64:
-> > 
-> >  - apei_claim_sea()
-> >  - __sdei_handler()
-> >  - do_serror()
-> >  - debug_exception_enter() / do_debug_exception()
-> > 
-> > all look dodgy.
-> 
-> Hmm, so looks like we need to spinkle some 'notrace' annotations around
-> these. Are there are scenarios where you would want NOKPROBE_SYMBOL() but
-> *not* 'notrace'? We've already got the former for the debug exception
-> handlers and we probably (?) want it for the SDEI stuff too...
+On Wed, Feb 12, 2020 at 9:58 AM Michal Simek <michal.simek@xilinx.com> wrote:
+>
+>
+> I am sending this series as before SMP support.
+> Most of these patches are clean ups and should be easy to review them. I
+> expect there will be more discussions about SMP support.
 
-I'm not sure. In fact, I asked Steve on IRC if we'd want to teach
-objtool to report such inconsitencies.
+Agreed.
+
+I had one question about a detail, other than that:
+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
