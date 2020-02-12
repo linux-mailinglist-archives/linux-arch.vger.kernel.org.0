@@ -2,75 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8595215A72C
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2020 11:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7CE15A75B
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2020 12:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726135AbgBLK4x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Feb 2020 05:56:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59450 "EHLO mail.kernel.org"
+        id S1725887AbgBLLJI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Feb 2020 06:09:08 -0500
+Received: from foss.arm.com ([217.140.110.172]:59306 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727594AbgBLK4w (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 12 Feb 2020 05:56:52 -0500
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD1D620675;
-        Wed, 12 Feb 2020 10:56:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581505012;
-        bh=4pZYCUBDsbqAJS8ZCZ6TjAOwz6/YRSffWxenSOtB50U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QRgU7x7TZli8ZVmDnLJzwtnNVmdWfAHB0Q/qll4v64rUTI4fE8Dojv/BMAco567EH
-         jgUYQ8+QHsY1GFzOLk7bhC8SELeIyM765FUHJr+guMH4xXt2YZUleDsnsYhJNVl5e2
-         2sLuwCG2V2jkGnmXd4wcDg3I1kLckzO67mW9qQQU=
-Date:   Wed, 12 Feb 2020 10:56:46 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org, james.morse@arm.com, catalin.marinas@arm.com,
-        mingo@kernel.org, joel@joelfernandes.org,
-        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
-        tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
-Subject: Re: [PATCH 0/8] tracing vs rcu vs nmi
-Message-ID: <20200212105646.GA4017@willie-the-truck>
-References: <20200212093210.468391728@infradead.org>
- <20200212100106.GA14914@hirez.programming.kicks-ass.net>
+        id S1725821AbgBLLJI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 12 Feb 2020 06:09:08 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4489030E;
+        Wed, 12 Feb 2020 03:09:07 -0800 (PST)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.71])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9602E3F68F;
+        Wed, 12 Feb 2020 03:09:05 -0800 (PST)
+Date:   Wed, 12 Feb 2020 11:09:03 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Evgenii Stepanov <eugenis@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] arm64: mte: Do not service syscalls after async tag fault
+Message-ID: <20200212110903.GE488264@arrakis.emea.arm.com>
+References: <20191217180152.GO5624@arrakis.emea.arm.com>
+ <20191220013639.212396-1-pcc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200212100106.GA14914@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191220013639.212396-1-pcc@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 11:01:06AM +0100, Peter Zijlstra wrote:
-> On Wed, Feb 12, 2020 at 10:32:10AM +0100, Peter Zijlstra wrote:
-> > Hi all,
-> > 
-> > These here patches are the result of Mathieu and Steve trying to get commit
-> > 865e63b04e9b2 ("tracing: Add back in rcu_irq_enter/exit_irqson() for rcuidle
-> > tracepoints") reverted again.
-> > 
-> > One of the things discovered is that tracing MUST NOT happen before nmi_enter()
-> > or after nmi_exit(). I've only fixed x86, but quickly gone through other
-> > architectures and there is definitely more stuff to be fixed (simply grep for
-> > nmi_enter in your arch).
+On Thu, Dec 19, 2019 at 05:36:39PM -0800, Peter Collingbourne wrote:
+> When entering the kernel after an async tag fault due to a syscall, rather
+> than for another reason (e.g. preemption), we don't want to service the
+> syscall as it may mask the tag fault. Rewind the PC to the svc instruction
+> in order to give a userspace signal handler an opportunity to handle the
+> fault and resume, and skip all other syscall processing.
 > 
-> For ARM64:
+> Signed-off-by: Peter Collingbourne <pcc@google.com>
+> ---
+[...]
+>  arch/arm64/kernel/syscall.c | 22 +++++++++++++++++++---
+>  1 file changed, 19 insertions(+), 3 deletions(-)
 > 
->  - apei_claim_sea()
->  - __sdei_handler()
->  - do_serror()
->  - debug_exception_enter() / do_debug_exception()
-> 
-> all look dodgy.
+> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+> index 9a9d98a443fc..49ea9bb47190 100644
+> --- a/arch/arm64/kernel/syscall.c
+> +++ b/arch/arm64/kernel/syscall.c
+> @@ -95,13 +95,29 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+>  {
+>  	unsigned long flags = current_thread_info()->flags;
+>  
+> -	regs->orig_x0 = regs->regs[0];
+> -	regs->syscallno = scno;
+> -
+>  	cortex_a76_erratum_1463225_svc_handler();
+>  	local_daif_restore(DAIF_PROCCTX);
+>  	user_exit();
+>  
+> +#ifdef CONFIG_ARM64_MTE
+> +	if (flags & _TIF_MTE_ASYNC_FAULT) {
+> +		/*
+> +		 * We entered the kernel after an async tag fault due to a
+> +		 * syscall, rather than for another reason (e.g. preemption).
+> +		 * In this case, we don't want to service the syscall as it may
+> +		 * mask the tag fault. Rewind the PC to the svc instruction in
+> +		 * order to give a userspace signal handler an opportunity to
+> +		 * handle the fault and resume, and skip all other syscall
+> +		 * processing.
+> +		 */
+> +		regs->pc -= 4;
+> +		return;
+> +	}
+> +#endif
+> +
+> +	regs->orig_x0 = regs->regs[0];
+> +	regs->syscallno = scno;
 
-Hmm, so looks like we need to spinkle some 'notrace' annotations around
-these. Are there are scenarios where you would want NOKPROBE_SYMBOL() but
-*not* 'notrace'? We've already got the former for the debug exception
-handlers and we probably (?) want it for the SDEI stuff too...
+I'm slightly worried about the interaction with single-step, other
+signals. It might be better if we just use the existing syscall
+restarting mechanism. Untested diff below:
 
-Will
+-------------------8<-------------------------------
+diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+index a12c0c88d345..db25f5d6a07c 100644
+--- a/arch/arm64/kernel/syscall.c
++++ b/arch/arm64/kernel/syscall.c
+@@ -102,6 +102,16 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+ 	local_daif_restore(DAIF_PROCCTX);
+ 	user_exit();
+ 
++	if (system_supports_mte() && (flags & _TIF_MTE_ASYNC_FAULT)) {
++		/*
++		 * Process the asynchronous tag check fault before the actual
++		 * syscall. do_notify_resume() will send a signal to userspace
++		 * before the syscall is restarted.
++		 */
++		regs->regs[0] = -ERESTARTNOINTR;
++		return;
++	}
++
+ 	if (has_syscall_work(flags)) {
+ 		/* set default errno for user-issued syscall(-1) */
+ 		if (scno == NO_SYSCALL)
