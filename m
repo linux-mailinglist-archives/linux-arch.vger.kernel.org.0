@@ -2,84 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E3815B11D
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2020 20:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC83715B28D
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2020 22:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729196AbgBLT3h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Feb 2020 14:29:37 -0500
-Received: from foss.arm.com ([217.140.110.172]:37194 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729169AbgBLT3g (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 12 Feb 2020 14:29:36 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 338BD106F;
-        Wed, 12 Feb 2020 11:29:36 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 899633F68E;
-        Wed, 12 Feb 2020 11:29:35 -0800 (PST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Paul Elliott <paul.elliott@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "H . J . Lu " <hjl.tools@gmail.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        =?UTF-8?q?Kristina=20Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Weimer <fweimer@redhat.com>,
-        Sudakshina Das <sudi.das@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v6 11/11] arm64: mm: Display guarded pages in ptdump
-Date:   Wed, 12 Feb 2020 19:29:06 +0000
-Message-Id: <20200212192906.53366-12-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200212192906.53366-1-broonie@kernel.org>
-References: <20200212192906.53366-1-broonie@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727947AbgBLVOK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Feb 2020 16:14:10 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:33414 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728674AbgBLVOI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Feb 2020 16:14:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Subject:Cc:To:From:Date:Message-Id:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=NDPamACi2y3JNfAuuZKbQohXItpap+A5gFGcdigl8YU=; b=GcUXw9JKL+61en5oLNNM3Phx1s
+        N4U3vvOH2T+shLsk3ohhM0AK0snp7i1qHZEWzsAuekXFU4blKQ1IERv0AefmUUNMV6NA7isUnFYwV
+        YimPfkTjuHDVcf3h/b/luKiOTcBoHMB5fj2wEvnz79TzTQ2cp3JuJ7q5V//WHrTDrbOarGDLzLcjb
+        4QT8pv/aaL1hdPj4eFi/f/QpFIP09mD5eIOYQKZ+BabN0pNEmxD8Dvt0/0LGhb7cDRzyfFM7cvVxm
+        PHd100srBvEHeYP7DDC6zCu7gyWjSBjGj5VKtZLTYkPvfYD6FYilaCtfQqqvv1ddytHJwaaWwj6cY
+        hV/S8Tlw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j1zKK-0002Kh-Jr; Wed, 12 Feb 2020 21:13:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3B28230066E;
+        Wed, 12 Feb 2020 22:11:52 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 707ED203A8994; Wed, 12 Feb 2020 22:13:41 +0100 (CET)
+Message-Id: <20200212210139.382424693@infradead.org>
+User-Agent: quilt/0.65
+Date:   Wed, 12 Feb 2020 22:01:39 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        rostedt@goodmis.org
+Cc:     peterz@infradead.org, mingo@kernel.org, joel@joelfernandes.org,
+        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
+        tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
+Subject: [PATCH v2 0/9] tracing vs rcu vs nmi
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-v8.5-BTI introduces the GP field in stage 1 translation tables which
-indicates that blocks and pages with it set are guarded pages for which
-branch target identification checks should be performed. Decode this
-when dumping the page tables to aid debugging.
+Hi all,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm64/mm/dump.c | 5 +++++
- 1 file changed, 5 insertions(+)
+These here patches are the result of Mathieu and Steve trying to get commit
+865e63b04e9b2 ("tracing: Add back in rcu_irq_enter/exit_irqson() for rcuidle
+tracepoints") reverted again.
 
-diff --git a/arch/arm64/mm/dump.c b/arch/arm64/mm/dump.c
-index 860c00ec8bd3..78163b7a7dde 100644
---- a/arch/arm64/mm/dump.c
-+++ b/arch/arm64/mm/dump.c
-@@ -145,6 +145,11 @@ static const struct prot_bits pte_bits[] = {
- 		.val	= PTE_UXN,
- 		.set	= "UXN",
- 		.clear	= "   ",
-+	}, {
-+		.mask	= PTE_GP,
-+		.val	= PTE_GP,
-+		.set	= "GP",
-+		.clear	= "  ",
- 	}, {
- 		.mask	= PTE_ATTRINDX_MASK,
- 		.val	= PTE_ATTRINDX(MT_DEVICE_nGnRnE),
--- 
-2.20.1
+One of the things discovered is that tracing MUST NOT happen before nmi_enter()
+or after nmi_exit(). Audit results of the previous version are still valid.
+
+Changes since -v1:
+
+ - Added tags
+ - Changed #4; changed nmi_enter() to use __preempt_count_add() vs
+   marking preempt_count_add() notrace.
+ - Changed #5; confusion on which functions are notrace due to Makefile
+ - Added #9; remove limitation on the perf-function-trace coupling
 
