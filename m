@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F15615C7E1
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 17:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A925115C7E4
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 17:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728298AbgBMQQ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Feb 2020 11:16:57 -0500
-Received: from foss.arm.com ([217.140.110.172]:49822 "EHLO foss.arm.com"
+        id S1728267AbgBMQRA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Feb 2020 11:17:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:49856 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728267AbgBMQQ5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 13 Feb 2020 11:16:57 -0500
+        id S1728514AbgBMQRA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 13 Feb 2020 11:17:00 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0EB41063;
-        Thu, 13 Feb 2020 08:16:56 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62A0A1045;
+        Thu, 13 Feb 2020 08:16:59 -0800 (PST)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2028D3F6CF;
-        Thu, 13 Feb 2020 08:16:54 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D542C3F6CF;
+        Thu, 13 Feb 2020 08:16:56 -0800 (PST)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -26,9 +26,9 @@ Cc:     catalin.marinas@arm.com, will.deacon@arm.com, arnd@arndb.de,
         luto@kernel.org, mingo@redhat.com, bp@alien8.de, sboyd@kernel.org,
         salyzyn@android.com, pcc@google.com, 0x7f454c46@gmail.com,
         ndesaulniers@google.com, avagin@openvz.org
-Subject: [PATCH 05/19] linux/time.h: Extract common header for vDSO
-Date:   Thu, 13 Feb 2020 16:16:00 +0000
-Message-Id: <20200213161614.23246-6-vincenzo.frascino@arm.com>
+Subject: [PATCH 06/19] linux/time32.h: Extract common header for vDSO
+Date:   Thu, 13 Feb 2020 16:16:01 +0000
+Message-Id: <20200213161614.23246-7-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200213161614.23246-1-vincenzo.frascino@arm.com>
 References: <20200213161614.23246-1-vincenzo.frascino@arm.com>
@@ -44,49 +44,66 @@ a userspace library (UAPI and a minimal set of kernel headers). To make
 this possible it is necessary to isolate from the kernel headers the
 common parts that are strictly necessary to build the library.
 
-Split time.h into linux and common headers to make the latter suitable
+Split time32.h into linux and common headers to make the latter suitable
 for inclusion in the vDSO library.
 
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- include/common/time.h | 12 ++++++++++++
- include/linux/time.h  |  5 +----
- 2 files changed, 13 insertions(+), 4 deletions(-)
- create mode 100644 include/common/time.h
+ include/common/time32.h | 17 +++++++++++++++++
+ include/linux/time32.h  | 13 +------------
+ 2 files changed, 18 insertions(+), 12 deletions(-)
+ create mode 100644 include/common/time32.h
 
-diff --git a/include/common/time.h b/include/common/time.h
+diff --git a/include/common/time32.h b/include/common/time32.h
 new file mode 100644
-index 000000000000..90eb9bdb40ec
+index 000000000000..d5b85abdfaf1
 --- /dev/null
-+++ b/include/common/time.h
-@@ -0,0 +1,12 @@
++++ b/include/common/time32.h
+@@ -0,0 +1,17 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __COMMON_TIME_H
-+#define __COMMON_TIME_H
++#ifndef __COMMON_TIME32_H
++#define __COMMON_TIME32_H
 +
-+#include <uapi/linux/types.h>
++typedef s32		old_time32_t;
 +
-+struct timens_offset {
-+	s64	sec;
-+	u64	nsec;
++struct old_timespec32 {
++	old_time32_t	tv_sec;
++	s32		tv_nsec;
 +};
 +
-+#endif /* __COMMON_TIME_H */
-diff --git a/include/linux/time.h b/include/linux/time.h
-index 8ef5e5cc9f57..617a01e2c8bb 100644
---- a/include/linux/time.h
-+++ b/include/linux/time.h
-@@ -111,9 +111,6 @@ static inline bool itimerspec64_valid(const struct itimerspec64 *its)
-  */
- #define time_between32(t, l, h) ((u32)(h) - (u32)(l) >= (u32)(t) - (u32)(l))
++struct old_timeval32 {
++	old_time32_t	tv_sec;
++	s32		tv_usec;
++};
++
++#endif /* __COMMON_TIME32_H */
+diff --git a/include/linux/time32.h b/include/linux/time32.h
+index cad4c3186002..39ff2f55e8d7 100644
+--- a/include/linux/time32.h
++++ b/include/linux/time32.h
+@@ -11,21 +11,10 @@
  
--struct timens_offset {
--	s64	sec;
--	u64	nsec;
+ #include <linux/time64.h>
+ #include <linux/timex.h>
++#include <common/time32.h>
+ 
+ #define TIME_T_MAX	(__kernel_old_time_t)((1UL << ((sizeof(__kernel_old_time_t) << 3) - 1)) - 1)
+ 
+-typedef s32		old_time32_t;
+-
+-struct old_timespec32 {
+-	old_time32_t	tv_sec;
+-	s32		tv_nsec;
 -};
-+# include <common/time.h>
- 
- #endif
+-
+-struct old_timeval32 {
+-	old_time32_t	tv_sec;
+-	s32		tv_usec;
+-};
+-
+ struct old_itimerspec32 {
+ 	struct old_timespec32 it_interval;
+ 	struct old_timespec32 it_value;
 -- 
 2.25.0
 
