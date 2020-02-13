@@ -2,76 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C0215C880
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 17:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A1D15CA8C
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 19:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727683AbgBMQk5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Feb 2020 11:40:57 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36710 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727671AbgBMQk4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Feb 2020 11:40:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=luwMxyZU6lFzVJt3SO6czFv4ciHzh854fmX24FDkPhk=; b=EYB6bMxMkcq8ZMZOFxKpztIYpm
-        8JWzqukpe0Mwhyc9DrWPgOzOCUWcrkOCR57n3FXNizFJHMrXrV5cZYfoQ3/B2mDq5D7TpwAWeOcL1
-        BscLNMPC3RFO4Z3/WojgVh9vB4h3ihYsKmyxqhBjqQ6mjRulcMC2qo+Am4nG3blmyHSKAhrhjUuLV
-        szuKDgRj+go9B0Ka173GGhy8DJ4cn//+4EkKDYHve6MswcBITTKOin4tfLXaLhQqrnzaVNc2cC8fR
-        WtpM4snTUyzhSzyDVf5fhpq6YGxjnBJwcpRMOq6gHzXTkxOEfayMsz2nYyKfVBwW//BtDF9lX/9Ng
-        a1sKGrCQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j2HXW-0000mE-M2; Thu, 13 Feb 2020 16:40:34 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E667D307963;
-        Thu, 13 Feb 2020 17:38:41 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0EFA620206D69; Thu, 13 Feb 2020 17:40:31 +0100 (CET)
-Date:   Thu, 13 Feb 2020 17:40:31 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        id S1728060AbgBMSi1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Feb 2020 13:38:27 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:40767 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727720AbgBMSi1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Feb 2020 13:38:27 -0500
+Received: by mail-qv1-f66.google.com with SMTP id q9so2160556qvu.7
+        for <linux-arch@vger.kernel.org>; Thu, 13 Feb 2020 10:38:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=FA/jDQzw6U/ZCCi4VgdRfvIwQUyHVGJoT6PY/S7rCjI=;
+        b=YnZIhmvpQBUAmh2lcrs7K6ZFzcVvpxyqjJ5wq2FlHG+LUbz0FpbM1Ziq81a0WKFe/k
+         7qPcdx0Zxp7QXTLzGV10lyJQd2k1EGofEFFuNbHQShM0gq54CuSvTrKb0mWdILETcG/s
+         vzxCSWKHQX9M6O7OsBO2RWD8Od6vLsvNWj6x4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FA/jDQzw6U/ZCCi4VgdRfvIwQUyHVGJoT6PY/S7rCjI=;
+        b=qDlzjoB0WDliV90OCO5Cpz0ZR8GeU3aNADPH5AJp0FiBeKZo5qaXU69LL/83DMJNzv
+         lBJbOHZ1bh/FBnSkuGYPOJHz0cieQ9PvnQlZVFos0tsgPsGa00RVIi00XWigDlx7Torq
+         K4XzIJJSH4vJBFDKDcYHJ5SAYNvQxgZgltTyZMmdN2nZ8sZrNozeHikVeZAdXibBkvrL
+         hygvjIPEG5o6OSbAhDOPNH8KztaAJ5RaAjqAIAU3B1qORuGnDjmD+/qaDi0rlYkEu5Op
+         ISz36lbUMbB+2gau+ZH0IKl82XKb/DZkKFv4Y8PUkXPqjxyJRe+4WU2EPQw5lKacnTmK
+         Fjtg==
+X-Gm-Message-State: APjAAAUiunfkZyWUVoEe+3I792b2sGvopxSD/S6TSi2qQlaLLBFpxTMp
+        HRghaJcFJHhqComlTCX2JS2VSg==
+X-Google-Smtp-Source: APXvYqzMIIh+00fsRTKdPae9JRiE6STFYIEoI6392QTap2lTzcC4ppc7frj+4ki7N55cUyt2YnceKg==
+X-Received: by 2002:ad4:4e24:: with SMTP id dm4mr12561501qvb.170.1581619106235;
+        Thu, 13 Feb 2020 10:38:26 -0800 (PST)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id 17sm1787747qkh.29.2020.02.13.10.38.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2020 10:38:25 -0800 (PST)
+Date:   Thu, 13 Feb 2020 13:38:25 -0500
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         rostedt@goodmis.org, mingo@kernel.org, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
-Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
-Message-ID: <20200213164031.GH14914@hirez.programming.kicks-ass.net>
+        gustavo@embeddedor.com, tglx@linutronix.de, paulmck@kernel.org,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com,
+        "Steven Rostedt (VMware)" <rosted@goodmis.org>
+Subject: Re: [PATCH v2 6/9] perf,tracing: Prepare the perf-trace interface
+ for RCU changes
+Message-ID: <20200213183825.GA207225@google.com>
 References: <20200212210139.382424693@infradead.org>
- <20200212210749.971717428@infradead.org>
- <20200212232005.GC115917@google.com>
- <20200213082716.GI14897@hirez.programming.kicks-ass.net>
- <20200213135138.GB2935@paulmck-ThinkPad-P72>
+ <20200212210750.142334759@infradead.org>
+ <20200212232830.GB170680@google.com>
+ <20200213082951.GK14897@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200213135138.GB2935@paulmck-ThinkPad-P72>
+In-Reply-To: <20200213082951.GK14897@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 05:51:38AM -0800, Paul E. McKenney wrote:
+On Thu, Feb 13, 2020 at 09:29:51AM +0100, Peter Zijlstra wrote:
+> On Wed, Feb 12, 2020 at 06:28:30PM -0500, Joel Fernandes wrote:
+> > On Wed, Feb 12, 2020 at 10:01:45PM +0100, Peter Zijlstra wrote:
+> > > The tracepoint interface will stop providing regular RCU context; make
+> > > sure we do it ourselves, since perf makes use of regular RCU protected
+> > > data.
+> > > 
+> > > Suggested-by: Steven Rostedt (VMware) <rosted@goodmis.org>
+> > > Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > ---
+> > >  kernel/events/core.c |    5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > > 
+> > > --- a/kernel/events/core.c
+> > > +++ b/kernel/events/core.c
+> > > @@ -8950,6 +8950,7 @@ void perf_tp_event(u16 event_type, u64 c
+> > >  {
+> > >  	struct perf_sample_data data;
+> > >  	struct perf_event *event;
+> > > +	unsigned long rcu_flags;
+> > 
+> > The flags are not needed I guess, if you agree on not using in_nmi() in
+> > trace_rcu_enter().
+> 
+> Even then we need to store the state: 'didn't do nothing' vs 'did call
+> rcu_needs_to_wake_up_and_pay_attention_noaw'. That is, we only need to
+> do something (expensive!) when !rcu_is_watching().
 
-> The reason for the irq argument is to avoid invoking
-> rcu_prepare_for_idle() and rcu_dynticks_task_enter() from NMI context
-> from rcu_nmi_exit_common().  Similarly, we need to avoid invoking
-> rcu_dynticks_task_exit() and rcu_cleanup_after_idle() from NMI context
-> from rcu_nmi_enter_common().
+You are right, that sounds good. I was talking to Paul and we chatted that if
+in_nmi() is safe (which I believe it is as we are not calling RCU before you
+update the preempt counts), then in RCU we can replace the @irq with
+!in_nmi() and simplify that code.  Then we can simplify this bit as well
+(keep rcu_flags but only call rcu_irq_enter_irqsave() instead of
+rcu_nmi_enter(). May be you can do the RCU internal bits in your v3 or should
+those be separate patches? Whatever Paul and you want to do.
 
-Aaah, I see. I didn't grep hard enough earlier today (I only found
-stubs). Yes, those take locks, we mustn't call them from NMI context.
+thanks,
 
-> It might well be that I could make these functions be NMI-safe, but
-> rcu_prepare_for_idle() in particular would be a bit ugly at best.
-> So, before looking into that, I have a question.  Given these proposed
-> changes, will rcu_nmi_exit_common() and rcu_nmi_enter_common() be able
-> to just use in_nmi()?
+ - Joel
 
-That _should_ already be the case today. That is, if we end up in a
-tracer and in_nmi() is unreliable we're already screwed anyway.
+ - Joel
+
