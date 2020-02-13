@@ -2,239 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CF415CD18
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 22:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3373D15CD64
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 22:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728072AbgBMVTd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Feb 2020 16:19:33 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:37629 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727772AbgBMVTd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Feb 2020 16:19:33 -0500
-Received: by mail-qt1-f193.google.com with SMTP id w47so5526480qtk.4
-        for <linux-arch@vger.kernel.org>; Thu, 13 Feb 2020 13:19:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HFAPZcn+Gsfnq+pkLi78fn8dxW63A4F9GN/misRfXvc=;
-        b=ttvaTfn9GDCCJ6TcATAfoOXDeH+VFJvT+5Sv6wknJWYGYFK3GEzh8rOmQG34oC+raH
-         y48fmFBu7CIWlDQbVsUOCP3l3NpOn0LsX4I8XCsqr3f/lWcn6RX2Ox6scPn5w2xDY5yk
-         eQ2V+wZ8kkWBwDrUdNjN1jf5QUN0+2a2jiX6s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HFAPZcn+Gsfnq+pkLi78fn8dxW63A4F9GN/misRfXvc=;
-        b=SL98EVYUdeytXNYSdTQONQRNjpy4ze+1NJ3jcecL4oxks5RtCvLBju3ERwz/8IwLDW
-         Z7+taRb+QI+9wZum9DJuYcIAdSSSsUiQbNTDlSo1fLjzm3YgEm7Rika7caNw9A4I0Hlg
-         XslVh88lrS2lsj4740BreSAQevYOxfiNGByKJMafsfb4Bn27h+pgNfWsdJgt97zMRxXG
-         aBSnZuliVBfYth0JsUlU+32aonaSeZK8Qua0pGZQGDOcQGNe9YUN4E+lSREQJsJgQlbi
-         KtI3fkXbCW6mekNZKngbECe2xLSlCQlqSW8R2NSk2JjpARUgH0UYyu92Gcvfkjfo2K0m
-         dyzA==
-X-Gm-Message-State: APjAAAXEftB8MQiiWQJGUGtu7WOvl8F6PBvtE4/ZPAF9Cs9/bET7U3RN
-        PafEplyY1AouGCe4a7FyUGZ1tQ==
-X-Google-Smtp-Source: APXvYqwzd8D74xBX612rs+v10bo5Fmx3ylSdp6XUu8WtW4c67h9hVAm94jLMTPzMHaU2sAADC7OVdg==
-X-Received: by 2002:ac8:7299:: with SMTP id v25mr48492qto.128.1581628772072;
-        Thu, 13 Feb 2020 13:19:32 -0800 (PST)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id w2sm536691qto.73.2020.02.13.13.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2020 13:19:31 -0800 (PST)
-Date:   Thu, 13 Feb 2020 16:19:30 -0500
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        id S1728691AbgBMVi2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Feb 2020 16:38:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45060 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728690AbgBMVi2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 13 Feb 2020 16:38:28 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7BD062168B;
+        Thu, 13 Feb 2020 21:38:26 +0000 (UTC)
+Date:   Thu, 13 Feb 2020 16:38:25 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org, mingo@kernel.org, gregkh@linuxfoundation.org,
+        mingo@kernel.org, gregkh@linuxfoundation.org,
         gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        Masami Hiramatsu <mhiramat@kernel.org>
 Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
-Message-ID: <20200213211930.GG170680@google.com>
+Message-ID: <20200213163800.5c51a5f1@gandalf.local.home>
+In-Reply-To: <20200213211930.GG170680@google.com>
 References: <20200212210139.382424693@infradead.org>
- <20200212210749.971717428@infradead.org>
- <20200212232005.GC115917@google.com>
- <20200213082716.GI14897@hirez.programming.kicks-ass.net>
- <20200213135138.GB2935@paulmck-ThinkPad-P72>
- <20200213164031.GH14914@hirez.programming.kicks-ass.net>
- <20200213185612.GG2935@paulmck-ThinkPad-P72>
- <20200213204444.GA94647@google.com>
- <20200213205442.GK2935@paulmck-ThinkPad-P72>
+        <20200212210749.971717428@infradead.org>
+        <20200212232005.GC115917@google.com>
+        <20200213082716.GI14897@hirez.programming.kicks-ass.net>
+        <20200213135138.GB2935@paulmck-ThinkPad-P72>
+        <20200213164031.GH14914@hirez.programming.kicks-ass.net>
+        <20200213185612.GG2935@paulmck-ThinkPad-P72>
+        <20200213204444.GA94647@google.com>
+        <20200213205442.GK2935@paulmck-ThinkPad-P72>
+        <20200213211930.GG170680@google.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200213205442.GK2935@paulmck-ThinkPad-P72>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 12:54:42PM -0800, Paul E. McKenney wrote:
-> On Thu, Feb 13, 2020 at 03:44:44PM -0500, Joel Fernandes wrote:
-> > On Thu, Feb 13, 2020 at 10:56:12AM -0800, Paul E. McKenney wrote:
-> > [...] 
-> > > > > It might well be that I could make these functions be NMI-safe, but
-> > > > > rcu_prepare_for_idle() in particular would be a bit ugly at best.
-> > > > > So, before looking into that, I have a question.  Given these proposed
-> > > > > changes, will rcu_nmi_exit_common() and rcu_nmi_enter_common() be able
-> > > > > to just use in_nmi()?
+[ Added Masami ]
+
+On Thu, 13 Feb 2020 16:19:30 -0500
+Joel Fernandes <joel@joelfernandes.org> wrote:
+
+> On Thu, Feb 13, 2020 at 12:54:42PM -0800, Paul E. McKenney wrote:
+> > On Thu, Feb 13, 2020 at 03:44:44PM -0500, Joel Fernandes wrote:  
+> > > On Thu, Feb 13, 2020 at 10:56:12AM -0800, Paul E. McKenney wrote:
+> > > [...]   
+> > > > > > It might well be that I could make these functions be NMI-safe, but
+> > > > > > rcu_prepare_for_idle() in particular would be a bit ugly at best.
+> > > > > > So, before looking into that, I have a question.  Given these proposed
+> > > > > > changes, will rcu_nmi_exit_common() and rcu_nmi_enter_common() be able
+> > > > > > to just use in_nmi()?  
+> > > > > 
+> > > > > That _should_ already be the case today. That is, if we end up in a
+> > > > > tracer and in_nmi() is unreliable we're already screwed anyway.  
 > > > > 
-> > > > That _should_ already be the case today. That is, if we end up in a
-> > > > tracer and in_nmi() is unreliable we're already screwed anyway.
+> > > > So something like this, then?  This is untested, probably doesn't even
+> > > > build, and could use some careful review from both Peter and Steve,
+> > > > at least.  As in the below is the second version of the patch, the first
+> > > > having been missing a couple of important "!" characters.  
 > > > 
-> > > So something like this, then?  This is untested, probably doesn't even
-> > > build, and could use some careful review from both Peter and Steve,
-> > > at least.  As in the below is the second version of the patch, the first
-> > > having been missing a couple of important "!" characters.
+> > > I removed the static from rcu_nmi_enter()/exit() as it is called from
+> > > outside, that makes it build now. Updated below is Paul's diff. I also added
+> > > NOKPROBE_SYMBOL() to rcu_nmi_exit() to match rcu_nmi_enter() since it seemed
+> > > asymmetric.  
 > > 
-> > I removed the static from rcu_nmi_enter()/exit() as it is called from
-> > outside, that makes it build now. Updated below is Paul's diff. I also added
-> > NOKPROBE_SYMBOL() to rcu_nmi_exit() to match rcu_nmi_enter() since it seemed
-> > asymmetric.
+> > My compiler complained about the static and the __always_inline, so I
+> > fixed those.  But please help me out on adding the NOKPROBE_SYMBOL()
+> > to rcu_nmi_exit().  What bad thing happens if we leave this on only
+> > rcu_nmi_enter()?  
 > 
-> My compiler complained about the static and the __always_inline, so I
-> fixed those.  But please help me out on adding the NOKPROBE_SYMBOL()
-> to rcu_nmi_exit().  What bad thing happens if we leave this on only
-> rcu_nmi_enter()?
+> It seemed odd to me we were not allowing kprobe on the rcu_nmi_enter() but
+> allowing it on exit (from a code reading standpoint) so my reaction was to
+> add it to both, but we could probably keep that as a separate
+> patch/discussion since it is slightly unrelated to the patch.. Sorry to
+> confuse the topic.
+>
 
-It seemed odd to me we were not allowing kprobe on the rcu_nmi_enter() but
-allowing it on exit (from a code reading standpoint) so my reaction was to
-add it to both, but we could probably keep that as a separate
-patch/discussion since it is slightly unrelated to the patch.. Sorry to
-confuse the topic.
+rcu_nmi_enter() was marked NOKPROBE or other reasons. See commit
+c13324a505c77 ("x86/kprobes: Prohibit probing on functions before
+kprobe_int3_handler()")
 
-thanks,
+The issue was that we must not allow anything in do_int3() call kprobe
+code before kprobe_int3_handler() is called. Because ist_enter() (in
+do_int3()) calls rcu_nmi_enter() it had to be marked NOKPROBE. It had
+nothing to do with it being RCU nor NMI, but because it was simply
+called in do_int3().
 
- - Joel
+Thus, there's no reason to make rcu_nmi_exit() NOKPROBE. But a commont
+to why rcu_nmi_enter() would probably be useful, like below:
 
+-- Steve
 
-> 							Thanx, Paul
-> 
-> > ---8<-----------------------
-> > 
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index d91c9156fab2e..bbcc7767f18ee 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -614,16 +614,18 @@ void rcu_user_enter(void)
-> >  }
-> >  #endif /* CONFIG_NO_HZ_FULL */
-> >  
-> > -/*
-> > +/**
-> > + * rcu_nmi_exit - inform RCU of exit from NMI context
-> > + *
-> >   * If we are returning from the outermost NMI handler that interrupted an
-> >   * RCU-idle period, update rdp->dynticks and rdp->dynticks_nmi_nesting
-> >   * to let the RCU grace-period handling know that the CPU is back to
-> >   * being RCU-idle.
-> >   *
-> > - * If you add or remove a call to rcu_nmi_exit_common(), be sure to test
-> > + * If you add or remove a call to rcu_nmi_exit(), be sure to test
-> >   * with CONFIG_RCU_EQS_DEBUG=y.
-> >   */
-> > -static __always_inline void rcu_nmi_exit_common(bool irq)
-> > +__always_inline void rcu_nmi_exit(void)
-> >  {
-> >  	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
-> >  
-> > @@ -651,25 +653,15 @@ static __always_inline void rcu_nmi_exit_common(bool irq)
-> >  	trace_rcu_dyntick(TPS("Startirq"), rdp->dynticks_nmi_nesting, 0, atomic_read(&rdp->dynticks));
-> >  	WRITE_ONCE(rdp->dynticks_nmi_nesting, 0); /* Avoid store tearing. */
-> >  
-> > -	if (irq)
-> > +	if (!in_nmi())
-> >  		rcu_prepare_for_idle();
-> >  
-> >  	rcu_dynticks_eqs_enter();
-> >  
-> > -	if (irq)
-> > +	if (!in_nmi())
-> >  		rcu_dynticks_task_enter();
-> >  }
-> > -
-> > -/**
-> > - * rcu_nmi_exit - inform RCU of exit from NMI context
-> > - *
-> > - * If you add or remove a call to rcu_nmi_exit(), be sure to test
-> > - * with CONFIG_RCU_EQS_DEBUG=y.
-> > - */
-> > -void rcu_nmi_exit(void)
-> > -{
-> > -	rcu_nmi_exit_common(false);
-> > -}
-> > +NOKPROBE_SYMBOL(rcu_nmi_exit);
-> >  
-> >  /**
-> >   * rcu_irq_exit - inform RCU that current CPU is exiting irq towards idle
-> > @@ -693,7 +685,7 @@ void rcu_nmi_exit(void)
-> >  void rcu_irq_exit(void)
-> >  {
-> >  	lockdep_assert_irqs_disabled();
-> > -	rcu_nmi_exit_common(true);
-> > +	rcu_nmi_exit();
-> >  }
-> >  
-> >  /*
-> > @@ -777,7 +769,7 @@ void rcu_user_exit(void)
-> >  #endif /* CONFIG_NO_HZ_FULL */
-> >  
-> >  /**
-> > - * rcu_nmi_enter_common - inform RCU of entry to NMI context
-> > + * rcu_nmi_enter - inform RCU of entry to NMI context
-> >   * @irq: Is this call from rcu_irq_enter?
-> >   *
-> >   * If the CPU was idle from RCU's viewpoint, update rdp->dynticks and
-> > @@ -786,10 +778,10 @@ void rcu_user_exit(void)
-> >   * long as the nesting level does not overflow an int.  (You will probably
-> >   * run out of stack space first.)
-> >   *
-> > - * If you add or remove a call to rcu_nmi_enter_common(), be sure to test
-> > + * If you add or remove a call to rcu_nmi_enter(), be sure to test
-> >   * with CONFIG_RCU_EQS_DEBUG=y.
-> >   */
-> > -static __always_inline void rcu_nmi_enter_common(bool irq)
-> > +__always_inline void rcu_nmi_enter(void)
-> >  {
-> >  	long incby = 2;
-> >  	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
-> > @@ -807,12 +799,12 @@ static __always_inline void rcu_nmi_enter_common(bool irq)
-> >  	 */
-> >  	if (rcu_dynticks_curr_cpu_in_eqs()) {
-> >  
-> > -		if (irq)
-> > +		if (!in_nmi())
-> >  			rcu_dynticks_task_exit();
-> >  
-> >  		rcu_dynticks_eqs_exit();
-> >  
-> > -		if (irq)
-> > +		if (!in_nmi())
-> >  			rcu_cleanup_after_idle();
-> >  
-> >  		incby = 1;
-> > @@ -834,14 +826,6 @@ static __always_inline void rcu_nmi_enter_common(bool irq)
-> >  		   rdp->dynticks_nmi_nesting + incby);
-> >  	barrier();
-> >  }
-> > -
-> > -/**
-> > - * rcu_nmi_enter - inform RCU of entry to NMI context
-> > - */
-> > -void rcu_nmi_enter(void)
-> > -{
-> > -	rcu_nmi_enter_common(false);
-> > -}
-> >  NOKPROBE_SYMBOL(rcu_nmi_enter);
-> >  
-> >  /**
-> > @@ -869,7 +853,7 @@ NOKPROBE_SYMBOL(rcu_nmi_enter);
-> >  void rcu_irq_enter(void)
-> >  {
-> >  	lockdep_assert_irqs_disabled();
-> > -	rcu_nmi_enter_common(true);
-> > +	rcu_nmi_enter();
-> >  }
-> >  
-> >  /*
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 1694a6b57ad8..e2c9e3e2f480 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -846,6 +846,12 @@ void rcu_nmi_enter(void)
+ {
+ 	rcu_nmi_enter_common(false);
+ }
++/*
++ * On x86, All functions in do_int3() must be marked NOKPROBE before
++ * kprobe_int3_handler() is called. ist_enter() which is called in do_int3()
++ * before kprobe_int3_handle() happens to call rcu_nmi_enter() in which case
++ * rcu_nmi_enter() must be marked NOKRPOBE.
++ */
+ NOKPROBE_SYMBOL(rcu_nmi_enter);
+ 
+ /**
