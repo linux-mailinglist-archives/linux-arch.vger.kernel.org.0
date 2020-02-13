@@ -2,104 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2670515BFC2
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 14:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21A115C041
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2020 15:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730162AbgBMNvl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Feb 2020 08:51:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40012 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730122AbgBMNvk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 13 Feb 2020 08:51:40 -0500
-Received: from paulmck-ThinkPad-P72.home (unknown [193.85.242.128])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4AC25222C2;
-        Thu, 13 Feb 2020 13:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581601900;
-        bh=pF4wlPm9/JXNtyZZgcDgJBkXBHSKCagMx2dgXhEweXI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=MJE+YmU/LHus552WlM+1i1hPEfM2/kwib0ms+NklJoBrzVaob0EEwAW1ddWpUjgw8
-         0XDOtwXwr7RvXmP23EFI3vuy4BH/xWWFs92UAYuXbaPDaoZSPaFn0nXCnZLHRFY5kb
-         FWFkYz44r6vEkpwdPTT9cEKdwTvy0DafEO4T9dXY=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 3AAA935226E8; Thu, 13 Feb 2020 05:51:38 -0800 (PST)
-Date:   Thu, 13 Feb 2020 05:51:38 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org, mingo@kernel.org, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
-Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
-Message-ID: <20200213135138.GB2935@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200212210139.382424693@infradead.org>
- <20200212210749.971717428@infradead.org>
- <20200212232005.GC115917@google.com>
- <20200213082716.GI14897@hirez.programming.kicks-ass.net>
+        id S1726780AbgBMOZU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Feb 2020 09:25:20 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:44886 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726390AbgBMOZU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Feb 2020 09:25:20 -0500
+Received: by mail-qk1-f196.google.com with SMTP id v195so5768715qkb.11
+        for <linux-arch@vger.kernel.org>; Thu, 13 Feb 2020 06:25:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Bc0b7TzZN/NSWX0NFmEbYxGFh6qjkw/pK6nZDwFtVfU=;
+        b=e72tivqYvQ7hzD1hDEOyR4fyZzUUauEuzvGQ1N6vlP9FlkxL9ARfbqgtUfkupK82HE
+         QkWjAEhiFncYm+atr/0aEnCDVDNTgaMxj0/Pwg9HQmhiF5/yPOhPnh0lTZhCD+DUthjp
+         efugfVtBDen1rlDtGrdP9N7pjEOdNHRqT8Rhg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Bc0b7TzZN/NSWX0NFmEbYxGFh6qjkw/pK6nZDwFtVfU=;
+        b=mM08OGqcJ2DwYFDW6G4AWrJIlJNmgTCzuQEjmXrfzn2Pdnm5kMNdUW44pR9dkUqwKD
+         FEUMZbxbVbxNHiSuj4bnSyw2ktTystiq2mSgDK5bGiCrm2RY2OkendX+UjOISf4kbpwN
+         HxhwUYpClFiVJ+IXZTpIoQZGbPhT1AUtOnOdY3Lvg8cR+Dfvi755TeMGv2oQfSOKqIWd
+         vZbRFKHkgz4EJsexzCsgdIQt0hahsRqg7XRVGgafIk153fTakqQVnq9WK+LhVDdyHxBY
+         rmSzkcHYBJYaoCC0QvFtrFw+QtzcZ9pl71rZvyJWlQO0kt/7vRG6ygsQt/RH98GbdI48
+         uvWA==
+X-Gm-Message-State: APjAAAW80vii+NyhAOEsg8DREWoM5Hw2fWvhvRP2Ea2GIi63AhonCGD7
+        1evpRPeT9lyhGYxWRpLqQku683PCC/09OxE6IavptA==
+X-Google-Smtp-Source: APXvYqyqVlaAznCrTjgFnMS/rbNzkVZ+JXaavI7b9i3sKA5vbbQy2odANJfyMh8Z8Llpqed5LUZncN0z3LiE3my3DaQ=
+X-Received: by 2002:a37:6d47:: with SMTP id i68mr16018376qkc.228.1581603919781;
+ Thu, 13 Feb 2020 06:25:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200213082716.GI14897@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200212210139.382424693@infradead.org> <20200212210749.915180520@infradead.org>
+ <20200212223818.GA115917@google.com> <20200212204128.20f5e8ba@oasis.local.home>
+In-Reply-To: <20200212204128.20f5e8ba@oasis.local.home>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 13 Feb 2020 09:25:08 -0500
+Message-ID: <CAEXW_YSddXU++o7xpi-0kzg9GA6UkM5FsnoXjLQ=gAFBjPf=RA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/9] rcu: Mark rcu_dynticks_curr_cpu_in_eqs() inline
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Thomas Glexiner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 09:27:16AM +0100, Peter Zijlstra wrote:
-> On Wed, Feb 12, 2020 at 06:20:05PM -0500, Joel Fernandes wrote:
-> > On Wed, Feb 12, 2020 at 10:01:42PM +0100, Peter Zijlstra wrote:
-> 
-> > > +#define trace_rcu_enter()					\
-> > > +({								\
-> > > +	unsigned long state = 0;				\
-> > > +	if (!rcu_is_watching())	{				\
-> > > +		if (in_nmi()) {					\
-> > > +			state = __TR_NMI;			\
-> > > +			rcu_nmi_enter();			\
-> > > +		} else {					\
-> > > +			state = __TR_IRQ;			\
-> > > +			rcu_irq_enter_irqsave();		\
-> > 
-> > I think this can be simplified. You don't need to rely on in_nmi() here. I
-> > believe for NMI's, you can just call rcu_irq_enter_irqsave() and that should
-> > be sufficient to get RCU watching. Paul can correct me if I'm wrong, but I am
-> > pretty sure that would work.
-> > 
-> > In fact, I think a better naming for rcu_irq_enter_irqsave() pair could be
-> > (in the first patch):
-> > 
-> > rcu_ensure_watching_begin();
-> > rcu_ensure_watching_end();
-> 
-> So I hadn't looked deeply into rcu_irq_enter(), it seems to call
-> rcu_nmi_enter_common(), but with @irq=true.
-> 
-> What exactly is the purpose of that @irq argument, and how much will it
-> hurt to lie there? Will it come apart if we have @irq != !in_nmi()
-> for example?
-> 
-> There is a comment in there that says ->dynticks_nmi_nesting ought to be
-> odd only if we're in NMI. The only place that seems to care is
-> rcu_nmi_exit_common(), and that does indeed do something different for
-> IRQs vs NMIs.
-> 
-> So I don't think we can blindly unify this. But perhaps Paul sees a way?
+On Wed, Feb 12, 2020 at 8:41 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Wed, 12 Feb 2020 17:38:18 -0500
+> Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> > I think there are ways to turn off function inlining, such as gcc's:
+> > -fkeep-inline-functions
+> >
+> > And just to be sure weird compilers (clang *cough*) don't screw this up,
+> > could we make it static inline notrace?
+>
+> inline is defined as notrace, so not needed.
+>
+> I did that because of surprises when functions marked as inline
+> suddenly became non inlined and traced, which caused issues with
+> function tracing (before I finally got recursion protection working).
+> But even then, I figured, if something is inlined and gcc actually
+> inlines it, it wont be traced. For consistency, if something is marked
+> inline, it should not be traced.
 
-The reason for the irq argument is to avoid invoking
-rcu_prepare_for_idle() and rcu_dynticks_task_enter() from NMI context
-from rcu_nmi_exit_common().  Similarly, we need to avoid invoking
-rcu_dynticks_task_exit() and rcu_cleanup_after_idle() from NMI context
-from rcu_nmi_enter_common().
+Ah I see it, thanks for the clarification Steve! That looks like a
+good idea. I withdraw my previous comment.
 
-It might well be that I could make these functions be NMI-safe, but
-rcu_prepare_for_idle() in particular would be a bit ugly at best.
-So, before looking into that, I have a question.  Given these proposed
-changes, will rcu_nmi_exit_common() and rcu_nmi_enter_common() be able
-to just use in_nmi()?
-
-							Thanx, Paul
+- Joel
