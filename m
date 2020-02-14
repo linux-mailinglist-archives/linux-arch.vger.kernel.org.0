@@ -2,206 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B49CB15D1F1
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2020 07:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF1E15D1F8
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2020 07:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728484AbgBNGPp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Feb 2020 01:15:45 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:34964 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727965AbgBNGPp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Feb 2020 01:15:45 -0500
-Received: by mail-qt1-f194.google.com with SMTP id n17so6287390qtv.2;
-        Thu, 13 Feb 2020 22:15:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nLjjzSLzxsXY/bhp5Ddo3ITUR5xYRovctgYF6KTTt+0=;
-        b=X2WT82wf1q5dEOBm/7ntpGUysP+yzIsUyom3LG1nAUgnglY8CCi8Ke+HbeLhmtYDaZ
-         62bIaOaqmuhbiKNtULefZtTly4bLqwY4bc5tqQKmp862+RTRyJEmtc6/athdlJEil3YN
-         S6TQivrqX2Ax/RzfUmS0vJfHRBwAZK0yQT0BwKwxd3gxSggZIYqiInw42ES3yWv4yYRW
-         OCWUCzIPYpL4Ve1XGrJbI9ya6oVFUBLBfiij1mnnwDPGIvOGtK/vDVrlGQn35KOsmZdT
-         7N7AsGC80bCndY5TtxRWfv2BMLLN1JqMvDkohRuhXmnTYHA3Q7XI8X8fA5OpF3w2nzU1
-         i4CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nLjjzSLzxsXY/bhp5Ddo3ITUR5xYRovctgYF6KTTt+0=;
-        b=X+zrv/WbT8WYZ+EGfe3u6E01wq3K7O3CND9Up29zAUkU9BkHCvfEN+PHarAgVyZ0BF
-         I5DmXQDjwwXH4UH3UYxn/+/RXAGXO3MoCiKJ4f/Fb05aJl0Z0JzFeej/sWaqX1OT2gIn
-         LWvVfTGpRZNIIN9uzXNAuSZH2MI/06oCJQGIcky/3FjaS/l/8YDsmMDhWCNl9DRcEvhl
-         RQzVa8XMHKovwnRq19jjRlSfV192+oSMqY6PUCY1ZoRwuYYof+6lxcONdINrYLH6yJuh
-         cvEnyJwRILW6vjOL+MEzoYk4mGUo1Ld07WG0FJOE0qR8fFHeLKJ+2kq0zuWKDLL7Fb3f
-         55Hg==
-X-Gm-Message-State: APjAAAVQzOSxSc6jwCtigAXGrgBxSg5TRUeeUg7t84/9Y1/SXRvhMnii
-        AHpUML3RVoEAA9nRC6JPg1s=
-X-Google-Smtp-Source: APXvYqzID5BQFG1MxJUvETM/gntgvWO9e3HrAsmAWFiIEzjnfhe6vBt4l8Ri0GzbkgrqDP2tGAeUlQ==
-X-Received: by 2002:ac8:3aa6:: with SMTP id x35mr1380813qte.38.1581660943655;
-        Thu, 13 Feb 2020 22:15:43 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id l184sm2621149qkc.107.2020.02.13.22.15.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Feb 2020 22:15:43 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id D2CB521D51;
-        Fri, 14 Feb 2020 01:15:40 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 14 Feb 2020 01:15:40 -0500
-X-ME-Sender: <xms:CztGXh6UOvwVU8gbXDizyF1FDJ9A5ojOY6Lbb3Sf9-W9ScVE4veslw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrieelgdelgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucfkphephedvrd
-    duheehrdduuddurdejudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
-    ihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqd
-    eiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhl
-    rdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:CztGXqxTr3F8P5yWriJiiqHdQ_pys3sIxNyAGMGftxQW1b6bos3frA>
-    <xmx:CztGXj8Pd0AustypqxUW_r_v-P9_Po38ilQC7aH3eGgXst-rQ-qsvQ>
-    <xmx:CztGXuEB621bNhdSsBGHKmu7JYjGzinHRo95-eT2L8rCkEpexgri2w>
-    <xmx:DDtGXkitsDp2O-oFrp1lukU09QDCS14x_9j7bJBiAxGFS6Ecl8Adflhx_0k>
-Received: from localhost (unknown [52.155.111.71])
-        by mail.messagingengine.com (Postfix) with ESMTPA id D30623280069;
-        Fri, 14 Feb 2020 01:15:38 -0500 (EST)
-Date:   Fri, 14 Feb 2020 14:15:37 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
+        id S1726004AbgBNGTN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 14 Feb 2020 01:19:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60900 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725828AbgBNGTN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 14 Feb 2020 01:19:13 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29572217F4;
+        Fri, 14 Feb 2020 06:19:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581661152;
+        bh=mpFmXT6Xd6Sb4Pk1Lu3bQXzeeAAKLtOtxcaUiHtjYiU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PxPjyk9PmkZQ62oSo1us11UDwH+jkNkDbE59duc/Jxrzb0mEiW+4H+QzjCVfnio2g
+         qoQaJC4ixHsYyEHoe/1wyXRsPP/IGDTBqfsZCkR0/hvCNYaoXJTUpA5Y72oECjp61a
+         nco4pO/PcP9Cs6m715zqhIQyxI5F5+ufUPYfHyWo=
+Date:   Fri, 14 Feb 2020 15:19:06 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     paulmck@kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [RFC 3/3] tools/memory-model: Add litmus test for RMW +
- smp_mb__after_atomic()
-Message-ID: <20200214061537.GA20408@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
-References: <20200214040132.91934-1-boqun.feng@gmail.com>
- <20200214040132.91934-4-boqun.feng@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200214040132.91934-4-boqun.feng@gmail.com>
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        mingo@kernel.org, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
+Message-Id: <20200214151906.b1354a7ed6b01fc3bf2de862@kernel.org>
+In-Reply-To: <20200213223918.GN2935@paulmck-ThinkPad-P72>
+References: <20200213082716.GI14897@hirez.programming.kicks-ass.net>
+        <20200213135138.GB2935@paulmck-ThinkPad-P72>
+        <20200213164031.GH14914@hirez.programming.kicks-ass.net>
+        <20200213185612.GG2935@paulmck-ThinkPad-P72>
+        <20200213204444.GA94647@google.com>
+        <20200213205442.GK2935@paulmck-ThinkPad-P72>
+        <20200213211930.GG170680@google.com>
+        <20200213163800.5c51a5f1@gandalf.local.home>
+        <20200213215004.GM2935@paulmck-ThinkPad-P72>
+        <20200213170451.690c4e5c@gandalf.local.home>
+        <20200213223918.GN2935@paulmck-ThinkPad-P72>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 12:01:32PM +0800, Boqun Feng wrote:
-> We already use a litmus test in atomic_t.txt to describe atomic RMW +
-> smp_mb__after_atomic() is "strong acquire" (both the read and the write
-> part is ordered). So make it a litmus test in memory-model litmus-tests
-> directory, so that people can access the litmus easily.
-> 
-> Additionally, change the processor numbers "P1, P2" to "P0, P1" in
-> atomic_t.txt for the consistency with the processor numbers in the
-> litmus test, which herd can handle.
-> 
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->  Documentation/atomic_t.txt                    |  6 ++--
->  ...+mb__after_atomic-is-strong-acquire.litmus | 29 +++++++++++++++++++
->  tools/memory-model/litmus-tests/README        |  5 ++++
->  3 files changed, 37 insertions(+), 3 deletions(-)
->  create mode 100644 tools/memory-model/litmus-tests/Atomic-RMW+mb__after_atomic-is-strong-acquire.litmus
-> 
-> diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
-> index ceb85ada378e..e3ad4e4cd9ed 100644
-> --- a/Documentation/atomic_t.txt
-> +++ b/Documentation/atomic_t.txt
-> @@ -238,14 +238,14 @@ strictly stronger than ACQUIRE. As illustrated:
->    {
->    }
->  
-> -  P1(int *x, atomic_t *y)
-> +  P0(int *x, atomic_t *y)
->    {
->      r0 = READ_ONCE(*x);
->      smp_rmb();
->      r1 = atomic_read(y);
->    }
->  
-> -  P2(int *x, atomic_t *y)
-> +  P1(int *x, atomic_t *y)
->    {
->      atomic_inc(y);
->      smp_mb__after_atomic();
-> @@ -260,7 +260,7 @@ This should not happen; but a hypothetical atomic_inc_acquire() --
->  because it would not order the W part of the RMW against the following
->  WRITE_ONCE.  Thus:
->  
-> -  P1			P2
-> +  P0			P1
->  
->  			t = LL.acq *y (0)
->  			t++;
-> diff --git a/tools/memory-model/litmus-tests/Atomic-RMW+mb__after_atomic-is-strong-acquire.litmus b/tools/memory-model/litmus-tests/Atomic-RMW+mb__after_atomic-is-strong-acquire.litmus
-> new file mode 100644
-> index 000000000000..e7216cf9d92a
-> --- /dev/null
-> +++ b/tools/memory-model/litmus-tests/Atomic-RMW+mb__after_atomic-is-strong-acquire.litmus
-> @@ -0,0 +1,29 @@
-> +C Atomic-RMW+mb__after_atomic-is-strong-acquire
-> +
-> +(*
-> + * Result: Never
-> + *
-> + * Test of an atomic RMW followed by a smp_mb__after_atomic() is
-> + * "strong-acquire": both the read and write part of the RMW is ordered before
-> + * the subsequential memory accesses.
-> + *)
-> +
-> +{
-> +}
-> +
-> +P0(int *x, atomic_t *y)
-> +{
-> +	r0 = READ_ONCE(*x);
-> +	smp_rmb();
-> +	r1 = atomic_read(y);
-> +}
-> +
-> +P1(int *x, atomic_t *y)
-> +{
-> +	atomic_inc(y);
-> +	smp_mb__after_atomic();
-> +	WRITE_ONCE(*x, 1);
-> +}
-> +
-> +exists
-> +(r0=1 /\ r1=0)
+On Thu, 13 Feb 2020 14:39:18 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-Hmm.. this should be "(0:r0=1 /\ 0:r1=0)", I will fix this in next
-verison.
-
-Regards,
-Boqun
-
-> diff --git a/tools/memory-model/litmus-tests/README b/tools/memory-model/litmus-tests/README
-> index 81eeacebd160..774e10058c72 100644
-> --- a/tools/memory-model/litmus-tests/README
-> +++ b/tools/memory-model/litmus-tests/README
-> @@ -2,6 +2,11 @@
->  LITMUS TESTS
->  ============
->  
-> +Atomic-RMW+mb__after_atomic-is-strong-acquire
-> +	Test of an atomic RMW followed by a smp_mb__after_atomic() is
-> +	"strong-acquire": both the read and write part of the RMW is ordered
-> +	before the subsequential memory accesses.
-> +
->  Atomic-set-observable-to-RMW.litmus
->  	Test of the result of atomic_set() must be observable to atomic RMWs.
->  
-> -- 
-> 2.25.0
+> On Thu, Feb 13, 2020 at 05:04:51PM -0500, Steven Rostedt wrote:
+> > On Thu, 13 Feb 2020 13:50:04 -0800
+> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > 
+> > > On Thu, Feb 13, 2020 at 04:38:25PM -0500, Steven Rostedt wrote:
+> > > > [ Added Masami ]
+> > > > 
+> > > > On Thu, 13 Feb 2020 16:19:30 -0500
+> > > > Joel Fernandes <joel@joelfernandes.org> wrote:
+> > > >   
+> > > > > On Thu, Feb 13, 2020 at 12:54:42PM -0800, Paul E. McKenney wrote:  
+> > > > > > On Thu, Feb 13, 2020 at 03:44:44PM -0500, Joel Fernandes wrote:    
+> > > > > > > On Thu, Feb 13, 2020 at 10:56:12AM -0800, Paul E. McKenney wrote:
+> > > > > > > [...]     
+> > > > > > > > > > It might well be that I could make these functions be NMI-safe, but
+> > > > > > > > > > rcu_prepare_for_idle() in particular would be a bit ugly at best.
+> > > > > > > > > > So, before looking into that, I have a question.  Given these proposed
+> > > > > > > > > > changes, will rcu_nmi_exit_common() and rcu_nmi_enter_common() be able
+> > > > > > > > > > to just use in_nmi()?    
+> > > > > > > > > 
+> > > > > > > > > That _should_ already be the case today. That is, if we end up in a
+> > > > > > > > > tracer and in_nmi() is unreliable we're already screwed anyway.    
+> > > > > > > > 
+> > > > > > > > So something like this, then?  This is untested, probably doesn't even
+> > > > > > > > build, and could use some careful review from both Peter and Steve,
+> > > > > > > > at least.  As in the below is the second version of the patch, the first
+> > > > > > > > having been missing a couple of important "!" characters.    
+> > > > > > > 
+> > > > > > > I removed the static from rcu_nmi_enter()/exit() as it is called from
+> > > > > > > outside, that makes it build now. Updated below is Paul's diff. I also added
+> > > > > > > NOKPROBE_SYMBOL() to rcu_nmi_exit() to match rcu_nmi_enter() since it seemed
+> > > > > > > asymmetric.    
+> > > > > > 
+> > > > > > My compiler complained about the static and the __always_inline, so I
+> > > > > > fixed those.  But please help me out on adding the NOKPROBE_SYMBOL()
+> > > > > > to rcu_nmi_exit().  What bad thing happens if we leave this on only
+> > > > > > rcu_nmi_enter()?    
+> > > > > 
+> > > > > It seemed odd to me we were not allowing kprobe on the rcu_nmi_enter() but
+> > > > > allowing it on exit (from a code reading standpoint) so my reaction was to
+> > > > > add it to both, but we could probably keep that as a separate
+> > > > > patch/discussion since it is slightly unrelated to the patch.. Sorry to
+> > > > > confuse the topic.
+> > > > >  
+> > > > 
+> > > > rcu_nmi_enter() was marked NOKPROBE or other reasons. See commit
+> > > > c13324a505c77 ("x86/kprobes: Prohibit probing on functions before
+> > > > kprobe_int3_handler()")
+> > > > 
+> > > > The issue was that we must not allow anything in do_int3() call kprobe
+> > > > code before kprobe_int3_handler() is called. Because ist_enter() (in
+> > > > do_int3()) calls rcu_nmi_enter() it had to be marked NOKPROBE. It had
+> > > > nothing to do with it being RCU nor NMI, but because it was simply
+> > > > called in do_int3().
+> > > > 
+> > > > Thus, there's no reason to make rcu_nmi_exit() NOKPROBE. But a commont
+> > > > to why rcu_nmi_enter() would probably be useful, like below:  
+> > > 
+> > > Thank you, Steve!  Could I please have your Signed-off-by for this?
+> > 
+> > Sure, but it was untested ;-)
 > 
+> No problem!  I will fire up rcutorture on it.  ;-)
+> 
+> But experience indicates that you cannot even make a joke around here.
+> There is probably already someone out there somewhere building a
+> comment-checker based on deep semantic analysis and machine learning.  :-/
+> 
+> > Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> > 
+> > I'd like a Reviewed-by from Masami though.
+> 
+> Sounds good!  Masami, would you be willing to review?
+
+Yes, the functions before calling kprobe_int3_handler() must not
+be kprobed. It can cause an infinite recursive int3 trapping.
+
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you!
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
