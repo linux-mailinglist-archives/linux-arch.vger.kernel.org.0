@@ -2,62 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 852BF15CECD
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2020 00:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D773B15CFF1
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2020 03:28:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727595AbgBMX4C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Feb 2020 18:56:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52736 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727594AbgBMX4C (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 13 Feb 2020 18:56:02 -0500
-Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DAEF1217BA;
-        Thu, 13 Feb 2020 23:56:00 +0000 (UTC)
-Date:   Thu, 13 Feb 2020 18:55:59 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        mingo@kernel.org, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
+        id S1727782AbgBNC2o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Feb 2020 21:28:44 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37530 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727669AbgBNC2n (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Feb 2020 21:28:43 -0500
+Received: by mail-pl1-f194.google.com with SMTP id c23so3129586plz.4;
+        Thu, 13 Feb 2020 18:28:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=C4IOnB+fnAI63RVs1D18HOwt87luoRvhyKaupr5pIOI=;
+        b=C+QKtt6iINZJWgDIuAGJrZJh3OCHxD691wPY+cCb+4m3gY8gphafyhFjOsEVX906zh
+         ph6eQl+SwkXTQf4l7E6hPI+i68oEarj8zAu2PyX7BKJWA+X7r4EGtOT+q3LtyjVuZkg5
+         ZOPCLL8HhsNPk0DWbJxGcyHA6QY2Xi0Xx4dRdw89kl/Lp1K/joY8aNyL4pu0FXgQhfsv
+         mtkfamScoy8bcwFbgVnBLWjdw2QgDljmpmpOUnNfwIoEFmR4PVlBSXjgekWc5K5mvZKS
+         6aD+XBQ60xVBSrpV3SR9FvEhsbtZ/4bWLMxprDTU0dV+9rz+n1k0RX4z8XiyaZF09ljJ
+         lZFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=C4IOnB+fnAI63RVs1D18HOwt87luoRvhyKaupr5pIOI=;
+        b=avWJu5pVWGjBQemLlKuA9aUfWLDilQdkjAj7zUley4WxRcECUw28t/SwM7P2bfjKo6
+         4BGr6INTc2TvC3/NtR6djgcy1g/a/iKqBzmIG+XQ/9RAhYkMhrJQCSVvA2M034ySV2Ur
+         AAd1ixAp3mGzQxlkojt9qqd6fm99cFSG0llQRAuhHUrFmNAB5u04B8daDhb2dxFE+jl6
+         HK3y5EagBkqrhwPwyMq+/Z8kZd6H4e+bdNdIWpb4Vi0TuWCArZxEShlcs1VYMd93fa5F
+         FYpTPf8rDrnS1LmlFYjCv1hutTrqlVuLedV1J2vaJ5c6t9tsBjaHM6tJ7SLSuNDKkbcq
+         1YRg==
+X-Gm-Message-State: APjAAAVpSmXSyDtyB1PkgXq98qbPVWq6WX60dyFmFKeK8Lo8FOE3iZNC
+        KUa//i59gOPvehVg7xioN7qXQxF4
+X-Google-Smtp-Source: APXvYqysmvQH4I+SeH5DEAQx8Jqwb1QR7MI6ER9QrNNigIajV1q/MPLbd+h3SicnL9/W/BEplOMQ6w==
+X-Received: by 2002:a17:902:7797:: with SMTP id o23mr931393pll.298.1581647321769;
+        Thu, 13 Feb 2020 18:28:41 -0800 (PST)
+Received: from localhost ([2401:fa00:8f:203:5bbb:c872:f2b1:f53b])
+        by smtp.gmail.com with ESMTPSA id l73sm4709372pge.44.2020.02.13.18.28.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2020 18:28:40 -0800 (PST)
+Date:   Fri, 14 Feb 2020 11:28:39 +0900
+From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        rostedt@goodmis.org, mingo@kernel.org, joel@joelfernandes.org,
+        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
+        tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
         mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
-Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
-Message-ID: <20200213185559.65e9f520@oasis.local.home>
-In-Reply-To: <20200213225853.GB112239@google.com>
-References: <20200212210749.971717428@infradead.org>
-        <20200212232005.GC115917@google.com>
-        <20200213082716.GI14897@hirez.programming.kicks-ass.net>
-        <20200213135138.GB2935@paulmck-ThinkPad-P72>
-        <20200213164031.GH14914@hirez.programming.kicks-ass.net>
-        <20200213185612.GG2935@paulmck-ThinkPad-P72>
-        <20200213204444.GA94647@google.com>
-        <20200213205442.GK2935@paulmck-ThinkPad-P72>
-        <20200213211930.GG170680@google.com>
-        <20200213214859.GL2935@paulmck-ThinkPad-P72>
-        <20200213225853.GB112239@google.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Subject: Re: [PATCH v2 9/9] perf,tracing: Allow function tracing when !RCU
+Message-ID: <20200214022839.GG36551@google.com>
+References: <20200212210139.382424693@infradead.org>
+ <20200212210750.312024711@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200212210750.312024711@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 13 Feb 2020 17:58:53 -0500
-Joel Fernandes <joel@joelfernandes.org> wrote:
+On (20/02/12 22:01), Peter Zijlstra wrote:
+> Since perf is now able to deal with !rcu_is_watching() contexts,
+> remove the restraint.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  kernel/trace/trace_event_perf.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/kernel/trace/trace_event_perf.c
+> +++ b/kernel/trace/trace_event_perf.c
+> @@ -477,7 +477,7 @@ static int perf_ftrace_function_register
+>  {
+>  	struct ftrace_ops *ops = &event->ftrace_ops;
+>  
+> -	ops->flags   = FTRACE_OPS_FL_RCU;
+> +	ops->flags   = 0;
 
-> Oh ok, it was a fair question. Seems Steve nailed it, only the
-> rcu_nmi_enter() needs NOKPROBE, although as you mentioned in the other
-> thread, it would be good to get Masami's eyes on it since he introduced the
-> NOKPROBE.
+FTRACE_OPS_FL_ENABLED?
 
-Note, I did go and verify that the issue still exists, and the NOKPROBE
-looks to still be needed. But as you stated, because Masami added the
-NOKPROBE I'd feel more comfortable with him looking over my explanation.
-
--- Steve
+	-ss
