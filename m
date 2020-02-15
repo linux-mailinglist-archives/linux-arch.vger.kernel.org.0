@@ -2,65 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD36F15FC76
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Feb 2020 04:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E6215FE41
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Feb 2020 12:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727684AbgBOD1c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Feb 2020 22:27:32 -0500
-Received: from correo.santafe.edu.ar ([200.12.192.40]:44578 "EHLO
-        correo.santafe.edu.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726861AbgBOD1c (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Feb 2020 22:27:32 -0500
-Received: from correo.santafe.edu.ar (localhost [127.0.0.1])
-        by correo.santafe.edu.ar (Postfix) with ESMTP id 48KG004r2zz678
-        for <linux-arch@vger.kernel.org>; Sat, 15 Feb 2020 00:27:28 -0300 (-03)
-Authentication-Results: correo.santafe.edu.ar (amavisd-new);
-        dkim=pass (1024-bit key) reason="pass (just generated, assumed good)"
-        header.d=santafe.edu.ar
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=santafe.edu.ar;
-         h=organization:message-id:user-agent:reply-to:to:from:from:date
-        :date:content-transfer-encoding:content-type:content-type
-        :mime-version; s=dkim; t=1581737248; x=1584329249; bh=kr4nXjjOYQ
-        tLgNquFEYCGjXPYzIGSnmjV7cADD2KRo8=; b=VMLPag7S7uhcVSpLMD6p7l4A9Z
-        UEH7Ehw0K4T5YgPZOYHL/tnbcDUUIN3DzccL40DckPG02XCjVO8IKR/f1VE7NdSn
-        r79QotzDWzedJoyb2jKqqrxP69bkgMw+yj8D9DXY5/cfU/jIVK8sqnGEmJkSm37j
-        x2vHJI6EiMjyHVHAo=
-X-Virus-Scanned: Debian amavisd-new at debian9-asiserver.santafe.gob.ar
-X-Spam-Flag: NO
-X-Spam-Score: 3.271
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.271 tagged_above=2 required=6.2
-        tests=[ALL_TRUSTED=-1, FREEMAIL_FORGED_REPLYTO=2.503,
-        LOTS_OF_MONEY=0.001, MISSING_SUBJECT=1.767]
-        autolearn=no autolearn_force=no
-Received: from correo.santafe.edu.ar ([127.0.0.1])
-        by correo.santafe.edu.ar (correo.santafe.edu.ar [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id DRehrQjta0jj for <linux-arch@vger.kernel.org>;
-        Sat, 15 Feb 2020 00:27:28 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.santafe.edu.ar (Postfix) with ESMTPSA id 48KFxJ083Rz5cD;
-        Sat, 15 Feb 2020 00:25:08 -0300 (-03)
+        id S1726007AbgBOL42 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 Feb 2020 06:56:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42718 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725965AbgBOL42 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 15 Feb 2020 06:56:28 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F105E2072D;
+        Sat, 15 Feb 2020 11:56:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581767788;
+        bh=NaAHvFuU+ylYPII07/Q0dVeLaamkxwl2owLhdZmF30s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c/I4lBS0EkFioir+ydtfPPjtntwsQIPJ7gsuAA3lo46+qwOcC4aMnOKMd0Z3INdXb
+         +XXx9hsOBFemgKcDam3c13z6zdZPka+UYQI4oclDwsHzdHpDY/hsKWrKryaYlalWJW
+         y8S7mdF0AnUzkD5yhE5BODnxSJSI/dNdTVzG8774=
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1j2w3e-005RK7-1L; Sat, 15 Feb 2020 11:56:26 +0000
+Date:   Sat, 15 Feb 2020 11:56:24 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu " <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?UTF-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Dave Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v6 10/11] KVM: arm64: BTI: Reset BTYPE when skipping
+ emulated instructions
+Message-ID: <20200215115624.2afbf55c@why>
+In-Reply-To: <20200212192906.53366-11-broonie@kernel.org>
+References: <20200212192906.53366-1-broonie@kernel.org>
+        <20200212192906.53366-11-broonie@kernel.org>
+Organization: Approximate
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Date:   Fri, 14 Feb 2020 19:25:07 -0800
-From:   mprim37 alcorta <mprim37_alcorta@santafe.edu.ar>
-To:     undisclosed-recipients:;
-Reply-To: julieleeach@yahoo.com
-User-Agent: Roundcube Webmail
-Message-ID: <1851cca7dc24f27d6ce2d1f99366225e@santafe.edu.ar>
-X-Sender: mprim37_alcorta@santafe.edu.ar
-Organization: mprim37_alcorta@santafe.edu.ar
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, viro@zeniv.linux.org.uk, paul.elliott@arm.com, peterz@infradead.org, yu-cheng.yu@intel.com, amit.kachhap@arm.com, vincenzo.frascino@arm.com, esyr@redhat.com, szabolcs.nagy@arm.com, hjl.tools@gmail.com, drjones@redhat.com, keescook@chromium.org, arnd@arndb.de, jannh@google.com, richard.henderson@linaro.org, kristina.martsenko@arm.com, tglx@linutronix.de, fweimer@redhat.com, sudi.das@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, Dave.Martin@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Wed, 12 Feb 2020 19:29:05 +0000
+Mark Brown <broonie@kernel.org> wrote:
 
+> From: Dave Martin <Dave.Martin@arm.com>
+> 
+> Since normal execution of any non-branch instruction resets the
+> PSTATE BTYPE field to 0, so do the same thing when emulating a
+> trapped instruction.
+> 
+> Branches don't trap directly, so we should never need to assign a
+> non-zero value to BTYPE here.
+> 
+> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
 -- 
-Hello, my name is Julie Leach, winner of the  Power Ball Jackpot in 
-October 2015.I want to donate $3,000,000 for charity to help you and the 
-poor children in your community. Send me an email to: 
-julieleeach@yahoo.com for more information on how to receive my donation
+Jazz is not dead. It just smells funny...
