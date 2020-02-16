@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F39BE160289
-	for <lists+linux-arch@lfdr.de>; Sun, 16 Feb 2020 09:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D2D160291
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Feb 2020 09:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725951AbgBPITY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 16 Feb 2020 03:19:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56456 "EHLO mail.kernel.org"
+        id S1726498AbgBPITe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 16 Feb 2020 03:19:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56610 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbgBPITY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 16 Feb 2020 03:19:24 -0500
+        id S1726184AbgBPITe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 16 Feb 2020 03:19:34 -0500
 Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 629D7227BF;
-        Sun, 16 Feb 2020 08:19:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8026A206E2;
+        Sun, 16 Feb 2020 08:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581841164;
-        bh=RG9Zl/BpZrqRN3HuSpCwlDUS57jnnyLncIWtzvxDXVc=;
+        s=default; t=1581841173;
+        bh=F0cCXmb/o7liiZO71D4JlF7q0Z7SA6J4fHvegp69+aU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E7NgpYxeaRSk2/SkAj913cCKZNh269SIJFOVrDrXlknPSNUJxpvOV0l7j6vCXR2f/
-         OCoJEWhUoAUwhNP8E/NbtN6OucddnhQTEvOLMreR0idLL+UjJJrch5vg4ZTY86nb+b
-         7VeNMLFilsTsmHJnHb6l4U7xfZZEZ4A89h1E+1OY=
+        b=rBq9D5EOTNL2n6IOAtc3DNc+59sJmevw9INs0JmZ5qXchOxb1gBLusegKMjj1oy17
+         It+LItcob4cVrN357xTNxEQBRoInKjUeEQCsAn9M8FpfjdWf/lA+t2gNE2u4uAoN3w
+         fYO1ySaLyF9O8d0JM0UTuz62r+615NS1HD/ulQ0Y=
 From:   Mike Rapoport <rppt@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -57,9 +57,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         uclinux-h8-devel@lists.sourceforge.jp,
         Mike Rapoport <rppt@kernel.org>,
         Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH v2 03/13] hexagon: remove __ARCH_USE_5LEVEL_HACK
-Date:   Sun, 16 Feb 2020 10:18:33 +0200
-Message-Id: <20200216081843.28670-4-rppt@kernel.org>
+Subject: [PATCH v2 04/13] ia64: add support for folded p4d page tables
+Date:   Sun, 16 Feb 2020 10:18:34 +0200
+Message-Id: <20200216081843.28670-5-rppt@kernel.org>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20200216081843.28670-1-rppt@kernel.org>
 References: <20200216081843.28670-1-rppt@kernel.org>
@@ -72,44 +72,229 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-The hexagon architecture has 2 level page tables and as such most of the
-page table folding is already implemented in asm-generic/pgtable-nopmd.h.
-
-Fixup the only place in arch/hexagon to unfold the p4d level and remove
-__ARCH_USE_5LEVEL_HACK.
+Implement primitives necessary for the 4th level folding, add walks of p4d
+level where appropriate, remove usage of __ARCH_USE_5LEVEL_HACK and replace
+5level-fixup.h with pgtable-nop4d.h
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- arch/hexagon/include/asm/fixmap.h  | 4 ++--
- arch/hexagon/include/asm/pgtable.h | 1 -
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ arch/ia64/include/asm/pgalloc.h |  4 ++--
+ arch/ia64/include/asm/pgtable.h | 17 ++++++++---------
+ arch/ia64/mm/fault.c            |  7 ++++++-
+ arch/ia64/mm/hugetlbpage.c      | 18 ++++++++++++------
+ arch/ia64/mm/init.c             | 28 ++++++++++++++++++++++++----
+ 5 files changed, 52 insertions(+), 22 deletions(-)
 
-diff --git a/arch/hexagon/include/asm/fixmap.h b/arch/hexagon/include/asm/fixmap.h
-index 933dac167504..97b1b062e750 100644
---- a/arch/hexagon/include/asm/fixmap.h
-+++ b/arch/hexagon/include/asm/fixmap.h
-@@ -16,7 +16,7 @@
- #include <asm-generic/fixmap.h>
+diff --git a/arch/ia64/include/asm/pgalloc.h b/arch/ia64/include/asm/pgalloc.h
+index f4c491044882..2a3050345099 100644
+--- a/arch/ia64/include/asm/pgalloc.h
++++ b/arch/ia64/include/asm/pgalloc.h
+@@ -36,9 +36,9 @@ static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
  
- #define kmap_get_fixmap_pte(vaddr) \
--	pte_offset_kernel(pmd_offset(pud_offset(pgd_offset_k(vaddr), \
--				(vaddr)), (vaddr)), (vaddr))
-+	pte_offset_kernel(pmd_offset(pud_offset(p4d_offset(pgd_offset_k(vaddr), \
-+				(vaddr)), (vaddr)), (vaddr)), (vaddr))
+ #if CONFIG_PGTABLE_LEVELS == 4
+ static inline void
+-pgd_populate(struct mm_struct *mm, pgd_t * pgd_entry, pud_t * pud)
++p4d_populate(struct mm_struct *mm, p4d_t * p4d_entry, pud_t * pud)
+ {
+-	pgd_val(*pgd_entry) = __pa(pud);
++	p4d_val(*p4d_entry) = __pa(pud);
+ }
  
+ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
+diff --git a/arch/ia64/include/asm/pgtable.h b/arch/ia64/include/asm/pgtable.h
+index d602e7c622db..c87f789bc914 100644
+--- a/arch/ia64/include/asm/pgtable.h
++++ b/arch/ia64/include/asm/pgtable.h
+@@ -283,12 +283,12 @@ extern unsigned long VMALLOC_END;
+ #define pud_page(pud)			virt_to_page((pud_val(pud) + PAGE_OFFSET))
+ 
+ #if CONFIG_PGTABLE_LEVELS == 4
+-#define pgd_none(pgd)			(!pgd_val(pgd))
+-#define pgd_bad(pgd)			(!ia64_phys_addr_valid(pgd_val(pgd)))
+-#define pgd_present(pgd)		(pgd_val(pgd) != 0UL)
+-#define pgd_clear(pgdp)			(pgd_val(*(pgdp)) = 0UL)
+-#define pgd_page_vaddr(pgd)		((unsigned long) __va(pgd_val(pgd) & _PFN_MASK))
+-#define pgd_page(pgd)			virt_to_page((pgd_val(pgd) + PAGE_OFFSET))
++#define p4d_none(p4d)			(!p4d_val(p4d))
++#define p4d_bad(p4d)			(!ia64_phys_addr_valid(p4d_val(p4d)))
++#define p4d_present(p4d)		(p4d_val(p4d) != 0UL)
++#define p4d_clear(p4dp)			(p4d_val(*(p4dp)) = 0UL)
++#define p4d_page_vaddr(p4d)		((unsigned long) __va(p4d_val(p4d) & _PFN_MASK))
++#define p4d_page(p4d)			virt_to_page((p4d_val(p4d) + PAGE_OFFSET))
  #endif
-diff --git a/arch/hexagon/include/asm/pgtable.h b/arch/hexagon/include/asm/pgtable.h
-index 2fec20ad939e..83b544936eed 100644
---- a/arch/hexagon/include/asm/pgtable.h
-+++ b/arch/hexagon/include/asm/pgtable.h
-@@ -12,7 +12,6 @@
-  * Page table definitions for Qualcomm Hexagon processor.
-  */
- #include <asm/page.h>
--#define __ARCH_USE_5LEVEL_HACK
- #include <asm-generic/pgtable-nopmd.h>
  
- /* A handy thing to have if one has the RAM. Declared in head.S */
+ /*
+@@ -388,7 +388,7 @@ pgd_offset (const struct mm_struct *mm, unsigned long address)
+ #if CONFIG_PGTABLE_LEVELS == 4
+ /* Find an entry in the second-level page table.. */
+ #define pud_offset(dir,addr) \
+-	((pud_t *) pgd_page_vaddr(*(dir)) + (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1)))
++	((pud_t *) p4d_page_vaddr(*(dir)) + (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1)))
+ #endif
+ 
+ /* Find an entry in the third-level page table.. */
+@@ -582,10 +582,9 @@ extern struct page *zero_page_memmap_ptr;
+ 
+ 
+ #if CONFIG_PGTABLE_LEVELS == 3
+-#define __ARCH_USE_5LEVEL_HACK
+ #include <asm-generic/pgtable-nopud.h>
+ #endif
+-#include <asm-generic/5level-fixup.h>
++#include <asm-generic/pgtable-nop4d.h>
+ #include <asm-generic/pgtable.h>
+ 
+ #endif /* _ASM_IA64_PGTABLE_H */
+diff --git a/arch/ia64/mm/fault.c b/arch/ia64/mm/fault.c
+index c2f299fe9e04..ec994135cb74 100644
+--- a/arch/ia64/mm/fault.c
++++ b/arch/ia64/mm/fault.c
+@@ -29,6 +29,7 @@ static int
+ mapped_kernel_page_is_present (unsigned long address)
+ {
+ 	pgd_t *pgd;
++	p4d_t *p4d;
+ 	pud_t *pud;
+ 	pmd_t *pmd;
+ 	pte_t *ptep, pte;
+@@ -37,7 +38,11 @@ mapped_kernel_page_is_present (unsigned long address)
+ 	if (pgd_none(*pgd) || pgd_bad(*pgd))
+ 		return 0;
+ 
+-	pud = pud_offset(pgd, address);
++	p4d = p4d_offset(pgd, address);
++	if (p4d_none(*p4d) || p4d_bad(*p4d))
++		return 0;
++
++	pud = pud_offset(p4d, address);
+ 	if (pud_none(*pud) || pud_bad(*pud))
+ 		return 0;
+ 
+diff --git a/arch/ia64/mm/hugetlbpage.c b/arch/ia64/mm/hugetlbpage.c
+index d16e419fd712..32352a73df0c 100644
+--- a/arch/ia64/mm/hugetlbpage.c
++++ b/arch/ia64/mm/hugetlbpage.c
+@@ -30,12 +30,14 @@ huge_pte_alloc(struct mm_struct *mm, unsigned long addr, unsigned long sz)
+ {
+ 	unsigned long taddr = htlbpage_to_page(addr);
+ 	pgd_t *pgd;
++	p4d_t *p4d;
+ 	pud_t *pud;
+ 	pmd_t *pmd;
+ 	pte_t *pte = NULL;
+ 
+ 	pgd = pgd_offset(mm, taddr);
+-	pud = pud_alloc(mm, pgd, taddr);
++	p4d = p4d_offset(pgd, taddr);
++	pud = pud_alloc(mm, p4d, taddr);
+ 	if (pud) {
+ 		pmd = pmd_alloc(mm, pud, taddr);
+ 		if (pmd)
+@@ -49,17 +51,21 @@ huge_pte_offset (struct mm_struct *mm, unsigned long addr, unsigned long sz)
+ {
+ 	unsigned long taddr = htlbpage_to_page(addr);
+ 	pgd_t *pgd;
++	p4d_t *p4d;
+ 	pud_t *pud;
+ 	pmd_t *pmd;
+ 	pte_t *pte = NULL;
+ 
+ 	pgd = pgd_offset(mm, taddr);
+ 	if (pgd_present(*pgd)) {
+-		pud = pud_offset(pgd, taddr);
+-		if (pud_present(*pud)) {
+-			pmd = pmd_offset(pud, taddr);
+-			if (pmd_present(*pmd))
+-				pte = pte_offset_map(pmd, taddr);
++		p4d = p4d_offset(pgd, addr);
++		if (p4d_present(*p4d)) {
++			pud = pud_offset(p4d, taddr);
++			if (pud_present(*pud)) {
++				pmd = pmd_offset(pud, taddr);
++				if (pmd_present(*pmd))
++					pte = pte_offset_map(pmd, taddr);
++			}
+ 		}
+ 	}
+ 
+diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
+index b01d68a2d5d9..4808f58220ac 100644
+--- a/arch/ia64/mm/init.c
++++ b/arch/ia64/mm/init.c
+@@ -208,6 +208,7 @@ static struct page * __init
+ put_kernel_page (struct page *page, unsigned long address, pgprot_t pgprot)
+ {
+ 	pgd_t *pgd;
++	p4d_t *p4d;
+ 	pud_t *pud;
+ 	pmd_t *pmd;
+ 	pte_t *pte;
+@@ -215,7 +216,10 @@ put_kernel_page (struct page *page, unsigned long address, pgprot_t pgprot)
+ 	pgd = pgd_offset_k(address);		/* note: this is NOT pgd_offset()! */
+ 
+ 	{
+-		pud = pud_alloc(&init_mm, pgd, address);
++		p4d = p4d_alloc(&init_mm, pgd, address);
++		if (!p4d)
++			goto out;
++		pud = pud_alloc(&init_mm, p4d, address);
+ 		if (!pud)
+ 			goto out;
+ 		pmd = pmd_alloc(&init_mm, pud, address);
+@@ -382,6 +386,7 @@ int vmemmap_find_next_valid_pfn(int node, int i)
+ 
+ 	do {
+ 		pgd_t *pgd;
++		p4d_t *p4d;
+ 		pud_t *pud;
+ 		pmd_t *pmd;
+ 		pte_t *pte;
+@@ -392,7 +397,13 @@ int vmemmap_find_next_valid_pfn(int node, int i)
+ 			continue;
+ 		}
+ 
+-		pud = pud_offset(pgd, end_address);
++		p4d = p4d_offset(pgd, end_address);
++		if (p4d_none(*p4d)) {
++			end_address += P4D_SIZE;
++			continue;
++		}
++
++		pud = pud_offset(p4d, end_address);
+ 		if (pud_none(*pud)) {
+ 			end_address += PUD_SIZE;
+ 			continue;
+@@ -430,6 +441,7 @@ int __init create_mem_map_page_table(u64 start, u64 end, void *arg)
+ 	struct page *map_start, *map_end;
+ 	int node;
+ 	pgd_t *pgd;
++	p4d_t *p4d;
+ 	pud_t *pud;
+ 	pmd_t *pmd;
+ 	pte_t *pte;
+@@ -444,12 +456,20 @@ int __init create_mem_map_page_table(u64 start, u64 end, void *arg)
+ 	for (address = start_page; address < end_page; address += PAGE_SIZE) {
+ 		pgd = pgd_offset_k(address);
+ 		if (pgd_none(*pgd)) {
++			p4d = memblock_alloc_node(PAGE_SIZE, PAGE_SIZE, node);
++			if (!p4d)
++				goto err_alloc;
++			pgd_populate(&init_mm, pgd, p4d);
++		}
++		p4d = p4d_offset(pgd, address);
++
++		if (p4d_none(*p4d)) {
+ 			pud = memblock_alloc_node(PAGE_SIZE, PAGE_SIZE, node);
+ 			if (!pud)
+ 				goto err_alloc;
+-			pgd_populate(&init_mm, pgd, pud);
++			p4d_populate(&init_mm, p4d, pud);
+ 		}
+-		pud = pud_offset(pgd, address);
++		pud = pud_offset(p4d, address);
+ 
+ 		if (pud_none(*pud)) {
+ 			pmd = memblock_alloc_node(PAGE_SIZE, PAGE_SIZE, node);
 -- 
 2.24.0
 
