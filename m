@@ -2,99 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3202D15FF72
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Feb 2020 18:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 778FE160148
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Feb 2020 01:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbgBORNb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 15 Feb 2020 12:13:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55258 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726254AbgBORNb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 15 Feb 2020 12:13:31 -0500
-Received: from paulmck-ThinkPad-P72.home (smb-adpcdg2-04.hotspot.hub-one.net [213.174.99.138])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF00D24676;
-        Sat, 15 Feb 2020 17:13:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581786811;
-        bh=5l8Vi8hleqqzVtD4lt7Lj3hIV69+fYnulxZp4qYnC7Q=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OD6SuASqhLkiSk3WfOyp1pmpybaGcqpvStW+3m4XqP2l9Lb3Xu7kZVMTXPOL8162t
-         MKy04wUvMR2KxNoCJtdGNkCGGMQsY5xZQ3+DqZnb9X38qnicVnNwv3rsXlrH3M2eo7
-         69MW/dngshLWwqZ3/ULZG9SY1qsKhIa0e3SvNja8=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id E84FE35219C1; Sat, 15 Feb 2020 07:25:50 -0800 (PST)
-Date:   Sat, 15 Feb 2020 07:25:50 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [RFC 0/3] tools/memory-model: Add litmus tests for atomic APIs
-Message-ID: <20200215152550.GA13636@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200214040132.91934-1-boqun.feng@gmail.com>
- <Pine.LNX.4.44L0.2002141024141.1579-100000@iolanthe.rowland.org>
+        id S1726533AbgBPA6M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 Feb 2020 19:58:12 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:45571 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726389AbgBPA6M (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 15 Feb 2020 19:58:12 -0500
+Received: by mail-wr1-f67.google.com with SMTP id g3so15373983wrs.12;
+        Sat, 15 Feb 2020 16:58:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=RCDLALl/MTIpSe4w1aS0l0xdIrytoZNo1Wy/s//seUE=;
+        b=DEPP1R8JW+LustojQY7QA403o9izrtf3TSwoB003aHPvx4RISqP81Jdm4NBIVbInBD
+         DT5aBu1vdEMnk9UmiALfRRd/qAm8v6FIefInok6aPOyfGyzuRqAZ0zVqLFU0pfSMzy3h
+         1zH/jns3P8Hi0zqfN1tlj72Ovi1l/lpHmeelSYyF2WiOU87Vr5bXR8L1zFGqn8lZsfI1
+         pbe+Ukx9aFTXI7tc32hvNgdQBpwpblJ1eoCvZ+l9hUzZlFbBdIe1LiNKptbfY08KthhG
+         RG1kW0d111skz5DcU3TaUXQbnEwDsAougxy6IOZ0+6GaETwUJ5/nn6Ig3eVMswm8RM6L
+         PWyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RCDLALl/MTIpSe4w1aS0l0xdIrytoZNo1Wy/s//seUE=;
+        b=Zy1B1fFC2Oz4eEe8XZaGccmvtp9h8m1BO5zVTsxtS5QD46fMujdFpjzGVr9vL03ePT
+         Z346e9cADdLirLNTEVjIrzNMo8wPg/SyZPHnRq1rgAUqLtzNgwQpniP9AzmUPppqV1jR
+         N6p69CEvXDcKjZJKXl2DFHBVZLj7ILWMgLPQQpy5Fguhi0FEB300oM9MJKsYpXieS8SL
+         MAbQCllOHACI8kRyTBgtvLX3/Q9pGz9H5r88TbEWWy1VO4BOUndEj5Wdxt6d0KOdgKMn
+         O9cg/2GdgKg6PtV5qCLwWLnWuQ7cjWVyu2xbOljPrHEsF/P9V+KWQOU6EtsxOMKAVuY3
+         Zaqw==
+X-Gm-Message-State: APjAAAVPP3yfirVRs28Gs4KCXWk9KA0e2oWKgEd668mCNlHPsWUyW6Rd
+        jN5suKzT1VN/g7OSKH3YBXg=
+X-Google-Smtp-Source: APXvYqwSRX2xQqiK2IXILS90AZ/QGc0+LrRJsYx8r5sD4t0L7/ukx8iHvVvA4hQi7ts0HbNyVq1aTA==
+X-Received: by 2002:a5d:6789:: with SMTP id v9mr13079863wru.55.1581814688042;
+        Sat, 15 Feb 2020 16:58:08 -0800 (PST)
+Received: from andrea (ip-213-220-200-127.net.upcbroadband.cz. [213.220.200.127])
+        by smtp.gmail.com with ESMTPSA id y1sm13769417wrq.16.2020.02.15.16.58.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Feb 2020 16:58:07 -0800 (PST)
+Date:   Sun, 16 Feb 2020 01:58:01 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, mingo@kernel.org, stern@rowland.harvard.edu,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: [PATCH memory-model] Add recent references
+Message-ID: <20200216005801.GA3581@andrea>
+References: <20200214233139.GA12521@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2002141024141.1579-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200214233139.GA12521@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 10:27:44AM -0500, Alan Stern wrote:
-> On Fri, 14 Feb 2020, Boqun Feng wrote:
+On Fri, Feb 14, 2020 at 03:31:39PM -0800, Paul E. McKenney wrote:
+> This commit updates the list of LKMM-related publications in
+> Documentation/references.txt.
 > 
-> > A recent discussion raises up the requirement for having test cases for
-> > atomic APIs:
-> > 
-> > 	https://lore.kernel.org/lkml/20200213085849.GL14897@hirez.programming.kicks-ass.net/
-> > 
-> > , and since we already have a way to generate a test module from a
-> > litmus test with klitmus[1]. It makes sense that we add more litmus
-> > tests for atomic APIs into memory-model.
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+Acked-by: Andrea Parri <parri.andrea@gmail.com>
+
+Thanks,
+  Andrea
+
+
 > 
-> It might be worth discussing this point a little more fully.  The 
-> set of tests in tools/memory-model/litmus-tests/ is deliberately rather 
-> limited.  Paul has a vastly more expansive set of litmus tests in a 
-> GitHub repository, and I am doubtful about how many new tests we want 
-> to keep in the kernel source.
-
-Indeed, the current view is that the litmus tests in the kernel source
-tree are intended to provide examples of C-litmus-test-language features
-and functions, as opposed to exercising the full cross-product of
-Linux-kernel synchronization primitives.
-
-For a semi-reasonable subset of that cross-product, as Alan says, please
-see https://github.com/paulmckrcu/litmus.
-
-For a list of the Linux-kernel synchronization primitives currently
-supported by LKMM, please see tools/memory-model/linux-kernel.def.
-
-> Perhaps it makes sense to have tests corresponding to all the examples
-> in Documentation/, perhaps not.  How do people feel about this?
-
-Agreed, we don't want to say that the set of litmus tests in the kernel
-source tree is limited for all time to the set currently present, but
-rather that the justification for adding more would involve useful and
-educational examples of litmus-test features and techniques rather than
-being a full-up LKMM test suite.
-
-I would guess that there are litmus-test tricks that could usefully
-be added to tools/memory-model/litmus-tests.  Any nomination?  Perhaps
-handling CAS loops while maintaining finite state space?  Something else?
-
-							Thanx, Paul
+> diff --git a/tools/memory-model/Documentation/references.txt b/tools/memory-model/Documentation/references.txt
+> index b177f3e..ecbbaa5 100644
+> --- a/tools/memory-model/Documentation/references.txt
+> +++ b/tools/memory-model/Documentation/references.txt
+> @@ -73,6 +73,18 @@ o	Christopher Pulte, Shaked Flur, Will Deacon, Jon French,
+>  Linux-kernel memory model
+>  =========================
+>  
+> +o	Jade Alglave, Will Deacon, Boqun Feng, David Howells, Daniel
+> +	Lustig, Luc Maranget, Paul E. McKenney, Andrea Parri, Nicholas
+> +	Piggin, Alan Stern, Akira Yokosawa, and Peter Zijlstra.
+> +	2019. "Calibrating your fear of big bad optimizing compilers"
+> +	Linux Weekly News.  https://lwn.net/Articles/799218/
+> +
+> +o	Jade Alglave, Will Deacon, Boqun Feng, David Howells, Daniel
+> +	Lustig, Luc Maranget, Paul E. McKenney, Andrea Parri, Nicholas
+> +	Piggin, Alan Stern, Akira Yokosawa, and Peter Zijlstra.
+> +	2019. "Who's afraid of a big bad optimizing compiler?"
+> +	Linux Weekly News.  https://lwn.net/Articles/793253/
+> +
+>  o	Jade Alglave, Luc Maranget, Paul E. McKenney, Andrea Parri, and
+>  	Alan Stern.  2018. "Frightening small children and disconcerting
+>  	grown-ups: Concurrency in the Linux kernel". In Proceedings of
+> @@ -88,6 +100,11 @@ o	Jade Alglave, Luc Maranget, Paul E. McKenney, Andrea Parri, and
+>  	Alan Stern.  2017.  "A formal kernel memory-ordering model (part 2)"
+>  	Linux Weekly News.  https://lwn.net/Articles/720550/
+>  
+> +o	Jade Alglave, Luc Maranget, Paul E. McKenney, Andrea Parri, and
+> +	Alan Stern.  2017-2019.  "A Formal Model of Linux-Kernel Memory
+> +	Ordering" (backup material for the LWN articles)
+> +	https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/LWNLinuxMM/
+> +
+>  
+>  Memory-model tooling
+>  ====================
+> @@ -110,5 +127,5 @@ Memory-model comparisons
+>  ========================
+>  
+>  o	Paul E. McKenney, Ulrich Weigand, Andrea Parri, and Boqun
+> -	Feng. 2016. "Linux-Kernel Memory Model". (6 June 2016).
+> -	http://open-std.org/JTC1/SC22/WG21/docs/papers/2016/p0124r2.html.
+> +	Feng. 2018. "Linux-Kernel Memory Model". (27 September 2018).
+> +	http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0124r6.html.
