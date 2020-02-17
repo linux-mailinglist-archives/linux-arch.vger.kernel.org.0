@@ -2,162 +2,210 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C2A1614A4
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Feb 2020 15:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 790F81617F0
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Feb 2020 17:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727448AbgBQO2L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Feb 2020 09:28:11 -0500
-Received: from mail-mw2nam10on2046.outbound.protection.outlook.com ([40.107.94.46]:56010
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727898AbgBQO2K (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 17 Feb 2020 09:28:10 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q0dv5FZw/NPWnB79ygxlzNr71zWsOmt+3FkrpwPhPFCFfuXpD4qnWhKtSsZ/s0iJp/b6OxOgIjzILYT1VqrSw6gVH8BOUt4KBtVtKSqLfMSo0sJMLkwoScIxYYOjxY5omdknN+kB4Pj2oGycYjHKeYJEGP6vFQnzxilcf7ssMoej6hUn4EThU/VW19rwrK/PCJNgMJfv46teGoQHOjXPpfsm2Fs1dbZGF3RVTaldi5RH62+xtJjUNuDkCvIy//B0Z9gX6bQTg7ND3g8C/lruWMvCmmcqLE7SH0TotT+w/XaFgkg5M0uE+G5lgNmgEKI7JfnVOTgrfz9ClH8R++x1Eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hew4OW53CmcLQprG2bW9SimYvauhC8sgz4XUBqusP34=;
- b=bs8INouAIeYJZqJtHWhN8d+NW8rv4bX5lz4widHJCHdWfIcFvXlEI5nPlLkGK+EW0fX6Ko0lueWorfpkj34BpeVWNXriiJDlzIVXm3mJU53ypElOEnKjSnJIdGRRKQFGsKwOfyj2MskKVl47iaIGkABtmzug/Y8if64QEHiTC5BiFXSXVF4mrhP9nLLnWBM0CIGSCIQGgRU/wvmkp25n56dKPClb/Vhd4ev/dd0m/H5HDwA4cKvucpTVnaFtI4gwhyfH+ik6INZo1uuFLZW9Mz0zC3gW4xBsVaf3IQyIvxKY9h43fx9vlhQp7mU9yyzf1gBwp/+hRsKaloF6U88ysA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hew4OW53CmcLQprG2bW9SimYvauhC8sgz4XUBqusP34=;
- b=DwpIr0otddNydFxB88p9vKM7cQTEgSHpIbUBXOdeYmn7woKqU1qZyvvpodtpPTOcjuI/H6HVc7pBl7UrRjKQnxDY620eEN+OvMVs7Amamvw+NsW5ZSDhgfgGS6kIhHyPkOhtmOYnun8eC7M5ToFr1IIDKEeQOwV7xuUwePNjSHE=
-Received: from BL0PR02CA0067.namprd02.prod.outlook.com (2603:10b6:207:3d::44)
- by CH2PR02MB6086.namprd02.prod.outlook.com (2603:10b6:610:a::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2729.25; Mon, 17 Feb
- 2020 14:28:02 +0000
-Received: from CY1NAM02FT058.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e45::209) by BL0PR02CA0067.outlook.office365.com
- (2603:10b6:207:3d::44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2729.24 via Frontend
- Transport; Mon, 17 Feb 2020 14:28:01 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- CY1NAM02FT058.mail.protection.outlook.com (10.152.74.149) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2729.22
- via Frontend Transport; Mon, 17 Feb 2020 14:28:01 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1j3hNR-0000su-2u; Mon, 17 Feb 2020 06:28:01 -0800
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1j3hNL-0001fJ-Vo; Mon, 17 Feb 2020 06:27:56 -0800
-Received: from xsj-pvapsmtp01 (smtp2.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 01HERn1A030667;
-        Mon, 17 Feb 2020 06:27:49 -0800
-Received: from [172.30.17.107]
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <michals@xilinx.com>)
-        id 1j3hNF-0001ei-Eu; Mon, 17 Feb 2020 06:27:49 -0800
-Subject: Re: [PATCH 00/10] Hi,
-To:     Rob Herring <robh@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michal Simek <monstr@monstr.eu>, git <git@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Borislav Petkov <bp@suse.de>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mubin Sayyed <mubinusm@xilinx.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        id S1728371AbgBQQbN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Feb 2020 11:31:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38044 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727922AbgBQQbN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 17 Feb 2020 11:31:13 -0500
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9A7B0214D8;
+        Mon, 17 Feb 2020 16:31:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581957072;
+        bh=geBmkKBvdkCW5/3hc5Ff7VhO4lSH27P7qmkAO5Wxr9g=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=DAY6B7zUn+WVe0hHI23Stu+wQ8WvpYhKlEwAvDZriYWS0gYoQcv72U3QSG/9h/odv
+         BPqpGLFjXpZBLedhzoKxHe09LEgiclI4WkTIkiIR6fokwXyT4zCAKQgq7fU0MRqFnT
+         lbdE0I/ioM0pzv8j7aXkQ6Y/RZ8BZsWHhiChQf54=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 7757735226F4; Mon, 17 Feb 2020 08:31:12 -0800 (PST)
+Date:   Mon, 17 Feb 2020 08:31:12 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Siva Durga Prasad Paladugu <siva.durga.paladugu@xilinx.com>,
-        Stefan Asserhall <stefan.asserhall@xilinx.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        Bharat Kumar Gogada <bharatku@xilinx.com>
-References: <cover.1581497860.git.michal.simek@xilinx.com>
- <CAL_JsqJeXJ6zWvEUi=gyOV0eCcXsvNmkK9EstC9hg9AKfMXnKw@mail.gmail.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-Message-ID: <0f8140c1-da6f-ef04-0809-252d6de6a5d7@xilinx.com>
-Date:   Mon, 17 Feb 2020 15:27:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        mingo@kernel.org, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
+Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
+Message-ID: <20200217163112.GM2935@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200213204444.GA94647@google.com>
+ <20200213205442.GK2935@paulmck-ThinkPad-P72>
+ <20200213211930.GG170680@google.com>
+ <20200213163800.5c51a5f1@gandalf.local.home>
+ <20200213215004.GM2935@paulmck-ThinkPad-P72>
+ <20200213170451.690c4e5c@gandalf.local.home>
+ <20200213223918.GN2935@paulmck-ThinkPad-P72>
+ <20200214151906.b1354a7ed6b01fc3bf2de862@kernel.org>
+ <20200215145934.GD2935@paulmck-ThinkPad-P72>
+ <20200217175519.12a694a969c1a8fb2e49905e@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqJeXJ6zWvEUi=gyOV0eCcXsvNmkK9EstC9hg9AKfMXnKw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(376002)(39860400002)(136003)(346002)(396003)(199004)(189003)(316002)(336012)(6666004)(478600001)(70586007)(356004)(70206006)(4744005)(4326008)(5660300002)(9786002)(36756003)(7416002)(31696002)(26005)(2616005)(53546011)(81166006)(426003)(44832011)(8676002)(81156014)(54906003)(107886003)(186003)(2906002)(110136005)(8936002)(31686004)(106390200001);DIR:OUT;SFP:1101;SCL:1;SRVR:CH2PR02MB6086;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ddf1217e-51ec-405d-a07d-08d7b3b597ff
-X-MS-TrafficTypeDiagnostic: CH2PR02MB6086:
-X-LD-Processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
-X-Microsoft-Antispam-PRVS: <CH2PR02MB60862E5DFD39EC617DE52CB3C6160@CH2PR02MB6086.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-Forefront-PRVS: 0316567485
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7bTBQeOlAmvIWhnPS8PgAYmxoWutGAb+5B1dAH71ubHdhbADwWwlSKLJAKUzwn+w+s8yQL/Mg9u2CBBgi0O/TOp97hfHu7RhYsSo6u1OKv59vn3sAvD+2PN64gdb7dwnyUqaX3pCPfgRO8xicHdXLiKRfTIVjDwcQSnoIdJB2v1xmGqCf5V0WUaPbbpyMk8YOdobJfT+VDLeSLItyunzkc2tx8agHYn3JuVau+Sp3Y69mK4aMcCytCd9GdzE7XcrujiEu8beY0MAg9RsFx+fkGo/jC0Q0aS6RreqRWlWdXuKoTJNd0ANZ4/wutdL7smadgKZdzvzRy9X2hvcLG9OdWgyK9Alg22aFUop7uDsN88S7rX7uUPL7llFWytI8l8JwSVf9EVtcPmD7l73wmlJaeC8idUFT4BH9/vcRW8kwPMpnnWGvGhP+EKWb1DC7n0d3bmWmKGfv5iUpafgISVsD3MlbPdKPPZ5WzNpe3QJS3qhy+d4ts8guZ1dgJT4Js/B
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2020 14:28:01.5488
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ddf1217e-51ec-405d-a07d-08d7b3b597ff
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6086
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200217175519.12a694a969c1a8fb2e49905e@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Rob,
-
-On 14. 02. 20 0:47, Rob Herring wrote:
-> On Wed, Feb 12, 2020 at 2:58 AM Michal Simek <michal.simek@xilinx.com> wrote:
->>
->>
->> I am sending this series as before SMP support.
->> Most of these patches are clean ups and should be easy to review them. I
->> expect there will be more discussions about SMP support.
+On Mon, Feb 17, 2020 at 05:55:19PM +0900, Masami Hiramatsu wrote:
+> On Sat, 15 Feb 2020 06:59:34 -0800
+> "Paul E. McKenney" <paulmck@kernel.org> wrote:
 > 
-> While not really related to adding SMP, any chance you or someone
-> could look at moving microblaze PCI support to drivers/pci/? I suspect
-> much of the code should drop out as we have common helpers for much of
-> it now. That would leave only powerpc and mips for DT+PCI platforms.
+> > On Fri, Feb 14, 2020 at 03:19:06PM +0900, Masami Hiramatsu wrote:
+> > > On Thu, 13 Feb 2020 14:39:18 -0800
+> > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > 
+> > > > On Thu, Feb 13, 2020 at 05:04:51PM -0500, Steven Rostedt wrote:
+> > > > > On Thu, 13 Feb 2020 13:50:04 -0800
+> > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > > 
+> > > > > > On Thu, Feb 13, 2020 at 04:38:25PM -0500, Steven Rostedt wrote:
+> > > > > > > [ Added Masami ]
+> > > > > > > 
+> > > > > > > On Thu, 13 Feb 2020 16:19:30 -0500
+> > > > > > > Joel Fernandes <joel@joelfernandes.org> wrote:
+> > > > > > >   
+> > > > > > > > On Thu, Feb 13, 2020 at 12:54:42PM -0800, Paul E. McKenney wrote:  
+> > > > > > > > > On Thu, Feb 13, 2020 at 03:44:44PM -0500, Joel Fernandes wrote:    
+> > > > > > > > > > On Thu, Feb 13, 2020 at 10:56:12AM -0800, Paul E. McKenney wrote:
+> > > > > > > > > > [...]     
+> > > > > > > > > > > > > It might well be that I could make these functions be NMI-safe, but
+> > > > > > > > > > > > > rcu_prepare_for_idle() in particular would be a bit ugly at best.
+> > > > > > > > > > > > > So, before looking into that, I have a question.  Given these proposed
+> > > > > > > > > > > > > changes, will rcu_nmi_exit_common() and rcu_nmi_enter_common() be able
+> > > > > > > > > > > > > to just use in_nmi()?    
+> > > > > > > > > > > > 
+> > > > > > > > > > > > That _should_ already be the case today. That is, if we end up in a
+> > > > > > > > > > > > tracer and in_nmi() is unreliable we're already screwed anyway.    
+> > > > > > > > > > > 
+> > > > > > > > > > > So something like this, then?  This is untested, probably doesn't even
+> > > > > > > > > > > build, and could use some careful review from both Peter and Steve,
+> > > > > > > > > > > at least.  As in the below is the second version of the patch, the first
+> > > > > > > > > > > having been missing a couple of important "!" characters.    
+> > > > > > > > > > 
+> > > > > > > > > > I removed the static from rcu_nmi_enter()/exit() as it is called from
+> > > > > > > > > > outside, that makes it build now. Updated below is Paul's diff. I also added
+> > > > > > > > > > NOKPROBE_SYMBOL() to rcu_nmi_exit() to match rcu_nmi_enter() since it seemed
+> > > > > > > > > > asymmetric.    
+> > > > > > > > > 
+> > > > > > > > > My compiler complained about the static and the __always_inline, so I
+> > > > > > > > > fixed those.  But please help me out on adding the NOKPROBE_SYMBOL()
+> > > > > > > > > to rcu_nmi_exit().  What bad thing happens if we leave this on only
+> > > > > > > > > rcu_nmi_enter()?    
+> > > > > > > > 
+> > > > > > > > It seemed odd to me we were not allowing kprobe on the rcu_nmi_enter() but
+> > > > > > > > allowing it on exit (from a code reading standpoint) so my reaction was to
+> > > > > > > > add it to both, but we could probably keep that as a separate
+> > > > > > > > patch/discussion since it is slightly unrelated to the patch.. Sorry to
+> > > > > > > > confuse the topic.
+> > > > > > > >  
+> > > > > > > 
+> > > > > > > rcu_nmi_enter() was marked NOKPROBE or other reasons. See commit
+> > > > > > > c13324a505c77 ("x86/kprobes: Prohibit probing on functions before
+> > > > > > > kprobe_int3_handler()")
+> > > > > > > 
+> > > > > > > The issue was that we must not allow anything in do_int3() call kprobe
+> > > > > > > code before kprobe_int3_handler() is called. Because ist_enter() (in
+> > > > > > > do_int3()) calls rcu_nmi_enter() it had to be marked NOKPROBE. It had
+> > > > > > > nothing to do with it being RCU nor NMI, but because it was simply
+> > > > > > > called in do_int3().
+> > > > > > > 
+> > > > > > > Thus, there's no reason to make rcu_nmi_exit() NOKPROBE. But a commont
+> > > > > > > to why rcu_nmi_enter() would probably be useful, like below:  
+> > > > > > 
+> > > > > > Thank you, Steve!  Could I please have your Signed-off-by for this?
+> > > > > 
+> > > > > Sure, but it was untested ;-)
+> > > > 
+> > > > No problem!  I will fire up rcutorture on it.  ;-)
+> > > > 
+> > > > But experience indicates that you cannot even make a joke around here.
+> > > > There is probably already someone out there somewhere building a
+> > > > comment-checker based on deep semantic analysis and machine learning.  :-/
+> > > > 
+> > > > > Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> > > > > 
+> > > > > I'd like a Reviewed-by from Masami though.
+> > > > 
+> > > > Sounds good!  Masami, would you be willing to review?
+> > > 
+> > > Yes, the functions before calling kprobe_int3_handler() must not
+> > > be kprobed. It can cause an infinite recursive int3 trapping.
+> > > 
+> > > Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > 
+> > Thank you both!
+> > 
+> > Like this?
+> > 
+> > 							Thanx, Paul
+> > 
+> 
+> This is good to me.
 
-can you please suggest changes which could be done?
-I have CC Bharat and he could look at it.
+Thank you for looking it over!  (I already have your
 
-Thanks,
-Michal
+> BTW, if you consider the x86 specific code is in the generic file,
+> we can move NOKPROBE_SYMBOL() in arch/x86/kernel/traps.c.
+> (Sorry, I've hit this idea right now)
 
+Might this affect other architectures with NMIs and probe-like things?
+If so, it might make sense to leave it where it is.
 
+							Thanx, Paul
+
+> Thank you,
+> 
+> > ------------------------------------------------------------------------
+> > 
+> > commit 1817fdc8f4e4bd18c76305c9b937fb0dccbb1583
+> > Author: Steven Rostedt <rostedt@goodmis.org>
+> > Date:   Sat Feb 15 06:54:50 2020 -0800
+> > 
+> >     rcu: Provide comment for NOKPROBE() on rcu_nmi_enter()
+> >     
+> >     The rcu_nmi_enter() function was marked NOKPROBE() by commit
+> >     c13324a505c77 ("x86/kprobes: Prohibit probing on functions before
+> >     kprobe_int3_handler()") because the do_int3() call kprobe code must
+> >     not be invoked before kprobe_int3_handler() is called.  It turns out
+> >     that ist_enter() (in do_int3()) calls rcu_nmi_enter(), hence the
+> >     marking NOKPROBE() being added to rcu_nmi_enter().
+> >     
+> >     This commit therefore adds a comment documenting this line of reasoning.
+> >     
+> >     Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+> >     Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > 
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index 132b53e..4a885af 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -835,6 +835,12 @@ void rcu_nmi_enter(void)
+> >  		   rdp->dynticks_nmi_nesting + incby);
+> >  	barrier();
+> >  }
+> > +/*
+> > + * On x86, All functions in do_int3() must be marked NOKPROBE before
+> > + * kprobe_int3_handler() is called. ist_enter() which is called in do_int3()
+> > + * before kprobe_int3_handle() happens to call rcu_nmi_enter() which means
+> > + * that rcu_nmi_enter() must be marked NOKRPOBE.
+> > + */
+> >  NOKPROBE_SYMBOL(rcu_nmi_enter);
+> >  
+> >  /**
+> 
+> 
+> -- 
+> Masami Hiramatsu <mhiramat@kernel.org>
