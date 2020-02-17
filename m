@@ -2,106 +2,199 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C25B160A5E
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Feb 2020 07:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0585160DD7
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Feb 2020 09:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726029AbgBQGX7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Feb 2020 01:23:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36308 "EHLO mail.kernel.org"
+        id S1728575AbgBQIz1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Feb 2020 03:55:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46902 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725958AbgBQGX7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 17 Feb 2020 01:23:59 -0500
-Received: from hump (unknown [87.71.56.52])
+        id S1728217AbgBQIz0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 17 Feb 2020 03:55:26 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6A24120718;
-        Mon, 17 Feb 2020 06:23:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C331520718;
+        Mon, 17 Feb 2020 08:55:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581920638;
-        bh=/x16WuB9ipweEdbRODxI3vPb27s/qMR9LxZj9eSXNFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mJdZTvPNP7YeXjSuzPzV/mVObPxfKwGHjQ8p+ZHMpTmRtHHC4KJ+V+9rVhTjyc//R
-         yxkqqla61U/GzHYInQ60SIgL3AIru2SOxlhJ63F/uuX7uFtPbBAVrgP2PtOiwMtu2+
-         8lDq6YKKg11ilpAZTu8jTZrVhQnL/nAs55Me23Y8=
-Date:   Mon, 17 Feb 2020 08:23:44 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        James Morse <james.morse@arm.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Rich Felker <dalias@libc.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Tony Luck <tony.luck@intel.com>, Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        kvmarm@lists.cs.columbia.edu, kvm-ppc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, nios2-dev@lists.rocketboards.org,
-        openrisc@lists.librecores.org,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH v2 00/13] mm: remove __ARCH_HAS_5LEVEL_HACK
-Message-ID: <20200217062344.GA4729@hump>
-References: <20200216081843.28670-1-rppt@kernel.org>
- <20200216082230.GV25745@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200216082230.GV25745@shell.armlinux.org.uk>
+        s=default; t=1581929725;
+        bh=LiD0wpeLuAZLFDhqBJDQhakw+QOv6Ro2nF6g7+1ShYI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T7j5g6BqDf63jH2rOMD76ozsTApstwhm6WAn6KxHSeOYJd1va3x3KizirWGUirv4T
+         1V9pPbHndMu/++4cKBFG9hQXRiLTr6nfYWL7plWP3SmZLT8n05+EoTzIH33ry2rx8V
+         h1n1wdA2B9OiI9W004ewtnR6ggjG8CLQ3LH0wxiE=
+Date:   Mon, 17 Feb 2020 17:55:19 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     paulmck@kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        mingo@kernel.org, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
+Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
+Message-Id: <20200217175519.12a694a969c1a8fb2e49905e@kernel.org>
+In-Reply-To: <20200215145934.GD2935@paulmck-ThinkPad-P72>
+References: <20200213164031.GH14914@hirez.programming.kicks-ass.net>
+        <20200213185612.GG2935@paulmck-ThinkPad-P72>
+        <20200213204444.GA94647@google.com>
+        <20200213205442.GK2935@paulmck-ThinkPad-P72>
+        <20200213211930.GG170680@google.com>
+        <20200213163800.5c51a5f1@gandalf.local.home>
+        <20200213215004.GM2935@paulmck-ThinkPad-P72>
+        <20200213170451.690c4e5c@gandalf.local.home>
+        <20200213223918.GN2935@paulmck-ThinkPad-P72>
+        <20200214151906.b1354a7ed6b01fc3bf2de862@kernel.org>
+        <20200215145934.GD2935@paulmck-ThinkPad-P72>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Feb 16, 2020 at 08:22:30AM +0000, Russell King - ARM Linux admin wrote:
-> On Sun, Feb 16, 2020 at 10:18:30AM +0200, Mike Rapoport wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
+On Sat, 15 Feb 2020 06:59:34 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
+
+> On Fri, Feb 14, 2020 at 03:19:06PM +0900, Masami Hiramatsu wrote:
+> > On Thu, 13 Feb 2020 14:39:18 -0800
+> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
 > > 
-> > Hi,
+> > > On Thu, Feb 13, 2020 at 05:04:51PM -0500, Steven Rostedt wrote:
+> > > > On Thu, 13 Feb 2020 13:50:04 -0800
+> > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > 
+> > > > > On Thu, Feb 13, 2020 at 04:38:25PM -0500, Steven Rostedt wrote:
+> > > > > > [ Added Masami ]
+> > > > > > 
+> > > > > > On Thu, 13 Feb 2020 16:19:30 -0500
+> > > > > > Joel Fernandes <joel@joelfernandes.org> wrote:
+> > > > > >   
+> > > > > > > On Thu, Feb 13, 2020 at 12:54:42PM -0800, Paul E. McKenney wrote:  
+> > > > > > > > On Thu, Feb 13, 2020 at 03:44:44PM -0500, Joel Fernandes wrote:    
+> > > > > > > > > On Thu, Feb 13, 2020 at 10:56:12AM -0800, Paul E. McKenney wrote:
+> > > > > > > > > [...]     
+> > > > > > > > > > > > It might well be that I could make these functions be NMI-safe, but
+> > > > > > > > > > > > rcu_prepare_for_idle() in particular would be a bit ugly at best.
+> > > > > > > > > > > > So, before looking into that, I have a question.  Given these proposed
+> > > > > > > > > > > > changes, will rcu_nmi_exit_common() and rcu_nmi_enter_common() be able
+> > > > > > > > > > > > to just use in_nmi()?    
+> > > > > > > > > > > 
+> > > > > > > > > > > That _should_ already be the case today. That is, if we end up in a
+> > > > > > > > > > > tracer and in_nmi() is unreliable we're already screwed anyway.    
+> > > > > > > > > > 
+> > > > > > > > > > So something like this, then?  This is untested, probably doesn't even
+> > > > > > > > > > build, and could use some careful review from both Peter and Steve,
+> > > > > > > > > > at least.  As in the below is the second version of the patch, the first
+> > > > > > > > > > having been missing a couple of important "!" characters.    
+> > > > > > > > > 
+> > > > > > > > > I removed the static from rcu_nmi_enter()/exit() as it is called from
+> > > > > > > > > outside, that makes it build now. Updated below is Paul's diff. I also added
+> > > > > > > > > NOKPROBE_SYMBOL() to rcu_nmi_exit() to match rcu_nmi_enter() since it seemed
+> > > > > > > > > asymmetric.    
+> > > > > > > > 
+> > > > > > > > My compiler complained about the static and the __always_inline, so I
+> > > > > > > > fixed those.  But please help me out on adding the NOKPROBE_SYMBOL()
+> > > > > > > > to rcu_nmi_exit().  What bad thing happens if we leave this on only
+> > > > > > > > rcu_nmi_enter()?    
+> > > > > > > 
+> > > > > > > It seemed odd to me we were not allowing kprobe on the rcu_nmi_enter() but
+> > > > > > > allowing it on exit (from a code reading standpoint) so my reaction was to
+> > > > > > > add it to both, but we could probably keep that as a separate
+> > > > > > > patch/discussion since it is slightly unrelated to the patch.. Sorry to
+> > > > > > > confuse the topic.
+> > > > > > >  
+> > > > > > 
+> > > > > > rcu_nmi_enter() was marked NOKPROBE or other reasons. See commit
+> > > > > > c13324a505c77 ("x86/kprobes: Prohibit probing on functions before
+> > > > > > kprobe_int3_handler()")
+> > > > > > 
+> > > > > > The issue was that we must not allow anything in do_int3() call kprobe
+> > > > > > code before kprobe_int3_handler() is called. Because ist_enter() (in
+> > > > > > do_int3()) calls rcu_nmi_enter() it had to be marked NOKPROBE. It had
+> > > > > > nothing to do with it being RCU nor NMI, but because it was simply
+> > > > > > called in do_int3().
+> > > > > > 
+> > > > > > Thus, there's no reason to make rcu_nmi_exit() NOKPROBE. But a commont
+> > > > > > to why rcu_nmi_enter() would probably be useful, like below:  
+> > > > > 
+> > > > > Thank you, Steve!  Could I please have your Signed-off-by for this?
+> > > > 
+> > > > Sure, but it was untested ;-)
+> > > 
+> > > No problem!  I will fire up rcutorture on it.  ;-)
+> > > 
+> > > But experience indicates that you cannot even make a joke around here.
+> > > There is probably already someone out there somewhere building a
+> > > comment-checker based on deep semantic analysis and machine learning.  :-/
+> > > 
+> > > > Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> > > > 
+> > > > I'd like a Reviewed-by from Masami though.
+> > > 
+> > > Sounds good!  Masami, would you be willing to review?
 > > 
-> > These patches convert several architectures to use page table folding and
-> > remove __ARCH_HAS_5LEVEL_HACK along with include/asm-generic/5level-fixup.h.
+> > Yes, the functions before calling kprobe_int3_handler() must not
+> > be kprobed. It can cause an infinite recursive int3 trapping.
 > > 
-> > The changes are mostly about mechanical replacement of pgd accessors with p4d
-> > ones and the addition of higher levels to page table traversals.
-> > 
-> > All the patches were sent separately to the respective arch lists and
-> > maintainers hence the "v2" prefix.
+> > Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
 > 
-> You fail to explain why this change which adds 488 additional lines of
-> code is desirable.
+> Thank you both!
+> 
+> Like this?
+> 
+> 							Thanx, Paul
+> 
 
-Right, I should have been more explicit about it.
+This is good to me.
+BTW, if you consider the x86 specific code is in the generic file,
+we can move NOKPROBE_SYMBOL() in arch/x86/kernel/traps.c.
+(Sorry, I've hit this idea right now)
 
-As Christophe mentioned in his reply, removing 'HACK' and 'fixup' is an
-improvement.
-Another thing is that when all architectures behave the same it opens
-opportunities for cleaning up repeating definitions of page table
-manipulation primitives.
+Thank you,
 
- 
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-> According to speedtest.net: 11.9Mbps down 500kbps up
+> ------------------------------------------------------------------------
+> 
+> commit 1817fdc8f4e4bd18c76305c9b937fb0dccbb1583
+> Author: Steven Rostedt <rostedt@goodmis.org>
+> Date:   Sat Feb 15 06:54:50 2020 -0800
+> 
+>     rcu: Provide comment for NOKPROBE() on rcu_nmi_enter()
+>     
+>     The rcu_nmi_enter() function was marked NOKPROBE() by commit
+>     c13324a505c77 ("x86/kprobes: Prohibit probing on functions before
+>     kprobe_int3_handler()") because the do_int3() call kprobe code must
+>     not be invoked before kprobe_int3_handler() is called.  It turns out
+>     that ist_enter() (in do_int3()) calls rcu_nmi_enter(), hence the
+>     marking NOKPROBE() being added to rcu_nmi_enter().
+>     
+>     This commit therefore adds a comment documenting this line of reasoning.
+>     
+>     Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+>     Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 132b53e..4a885af 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -835,6 +835,12 @@ void rcu_nmi_enter(void)
+>  		   rdp->dynticks_nmi_nesting + incby);
+>  	barrier();
+>  }
+> +/*
+> + * On x86, All functions in do_int3() must be marked NOKPROBE before
+> + * kprobe_int3_handler() is called. ist_enter() which is called in do_int3()
+> + * before kprobe_int3_handle() happens to call rcu_nmi_enter() which means
+> + * that rcu_nmi_enter() must be marked NOKRPOBE.
+> + */
+>  NOKPROBE_SYMBOL(rcu_nmi_enter);
+>  
+>  /**
+
 
 -- 
-Sincerely yours,
-Mike.
+Masami Hiramatsu <mhiramat@kernel.org>
