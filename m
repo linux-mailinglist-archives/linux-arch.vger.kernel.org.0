@@ -2,84 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B60EE161FD1
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2020 05:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EAD162223
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2020 09:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbgBREdl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Feb 2020 23:33:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52010 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726245AbgBREdl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 17 Feb 2020 23:33:41 -0500
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7112820801;
-        Tue, 18 Feb 2020 04:33:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582000420;
-        bh=s+gskoGNYaBnlzh7fx25t6Ans0EyhxUhO9bArhIyTuM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qJXMQ5WuA0eI3rEIph5GUoTErtBNjlf9KXjTuL6c45YT7UDTh4GZWFEtvgcR6g14m
-         I4WhG2roOoqMXQQDcTgAeR1QR9IdG8DSaipc3iVKNigkik3KSANhxlZTUBR18SZrwm
-         z7GdcQiko55sStsAdhpS2GXJKem071HKn9ixdzWA=
-Date:   Tue, 18 Feb 2020 13:33:35 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     paulmck@kernel.org
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        mingo@kernel.org, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
-Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
-Message-Id: <20200218133335.c87d7b2399ee6532bf28b74a@kernel.org>
-In-Reply-To: <20200217163112.GM2935@paulmck-ThinkPad-P72>
-References: <20200213204444.GA94647@google.com>
-        <20200213205442.GK2935@paulmck-ThinkPad-P72>
-        <20200213211930.GG170680@google.com>
-        <20200213163800.5c51a5f1@gandalf.local.home>
-        <20200213215004.GM2935@paulmck-ThinkPad-P72>
-        <20200213170451.690c4e5c@gandalf.local.home>
-        <20200213223918.GN2935@paulmck-ThinkPad-P72>
-        <20200214151906.b1354a7ed6b01fc3bf2de862@kernel.org>
-        <20200215145934.GD2935@paulmck-ThinkPad-P72>
-        <20200217175519.12a694a969c1a8fb2e49905e@kernel.org>
-        <20200217163112.GM2935@paulmck-ThinkPad-P72>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        id S1726291AbgBRISq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Feb 2020 03:18:46 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:34615 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726105AbgBRISq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Feb 2020 03:18:46 -0500
+Received: by mail-pg1-f193.google.com with SMTP id j4so10580418pgi.1
+        for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2020 00:18:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:message-id:from:to:cc:subject:in-reply-to:references
+         :user-agent:mime-version;
+        bh=3QH+u+c1zJA9Tg+vDOfwSZj6vxcNHWsVgHSzwSidCFM=;
+        b=UomwDpB10AOMCz8SChXeHzBvaVHikx1psg5NkMMlfe5RrDzwIQ2D13SJTW5d2sWjt7
+         v/6nK59VokJa2yFUQPmF8CBezd/17+WBVd5DIIygj/5DmobzaCILdNSo/ZeQiTEqligC
+         gro5d1aPQWDBXaDg06qYgbi9RlNj0czvhAbZjCpBp3420gOJH1GjHPKBuwC0IrDaTUvY
+         2/5rwBncTNS/4A30l6VAcX8dsSekTvv4b70KbG0yoj3YRAM8TzpplKcaoEAsFRZcCDqk
+         LWgFIBTtV6P4ETgCmVgWI3Rdhd2K36DdUo+t0MkuduEv6sfmTFPqPXNu5kXFZyeJXqtB
+         BxVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
+         :references:user-agent:mime-version;
+        bh=3QH+u+c1zJA9Tg+vDOfwSZj6vxcNHWsVgHSzwSidCFM=;
+        b=lH1QEopOhyKs3pwl7INi7OEVyDOMtjry3Nptxi/P66QZyXeKoBEcSJGfa5rpBuVeH4
+         fRJ9RkcFtjSYbglfC7B+JIxuuXIx7gajvjWQaoyDCy6d8KY/VgxJqXImtxR4ze5ZR+t7
+         vse4ua+G2bfzM02MgR9nQlLz8M0rZy2ChpMAfhbTHTWvrigIoZ9+L66hsPRqW8dMvULe
+         3AeeGtf2vXtkiR7vin+3CO+qaal2sJC9BeN+UdXnbTBIeKrVEabOK5q/Lo1gHaHkrZd3
+         +3VPdODA5qh3+Eb8xSd7NW0Ps8uu8V2qdg+oNSiyDr+i03qvi8fy7KJ/mlCWqYPRVEKP
+         smWg==
+X-Gm-Message-State: APjAAAUmsYSWxOuF2s1dvPFKacBruiC38bM2RWTZWjJyorn6BGmA0P7m
+        v2QBMBpVZIAquDEpsRX0s6I=
+X-Google-Smtp-Source: APXvYqxPGRibZAfocM8X5NygWFzfK/MNXtoXSzJm8pGbVRzifK2OabnYw02A1yHRd+UGFgUmjJw2Sw==
+X-Received: by 2002:a62:1615:: with SMTP id 21mr20222667pfw.84.1582013925853;
+        Tue, 18 Feb 2020 00:18:45 -0800 (PST)
+Received: from earth-mac.local.gmail.com ([202.214.86.179])
+        by smtp.gmail.com with ESMTPSA id g13sm3354570pgh.82.2020.02.18.00.18.43
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 18 Feb 2020 00:18:45 -0800 (PST)
+Date:   Tue, 18 Feb 2020 17:18:41 +0900
+Message-ID: <m24kvopau6.wl-thehajime@gmail.com>
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     anton.ivanov@kot-begemot.co.uk
+Cc:     richard.weinberger@gmail.com, linux-arch@vger.kernel.org,
+        tavi.purdila@gmail.com, linux-um@lists.infradead.org,
+        retrage01@gmail.com, linux-kernel-library@freelists.org,
+        sigmaepsilon92@gmail.com
+Subject: Re: [RFC v2 07/37] lkl: interrupt support
+In-Reply-To: <m2ftfpqfhe.wl-thehajime@gmail.com>
+References: <cover.1573179553.git.thehajime@gmail.com>
+        <567fd4d5c395e2279e86ca0bfca544ad2773a31d.1573179553.git.thehajime@gmail.com>
+        <CAFLxGvxytmS4WSFj2ibyJKCuR5TbspdNf6MvHNvzh9dtKx2rJg@mail.gmail.com>
+        <m2h805qy99.wl-thehajime@gmail.com>
+        <739ada9a-b88a-5192-fb4b-65132a74b4de@kot-begemot.co.uk>
+        <m2ftfpqfhe.wl-thehajime@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 17 Feb 2020 08:31:12 -0800
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
+
+Hello,
+
+On Wed, 05 Feb 2020 23:24:29 +0900,
+Hajime Tazaki wrote:
+
+> > Make sure you are testing with the vector network devices, the
+> > legacy ones are scheduled to be obsoleted at some point
 > 
-> > BTW, if you consider the x86 specific code is in the generic file,
-> > we can move NOKPROBE_SYMBOL() in arch/x86/kernel/traps.c.
-> > (Sorry, I've hit this idea right now)
-> 
-> Might this affect other architectures with NMIs and probe-like things?
-> If so, it might make sense to leave it where it is.
+> I was aware of the commit to obsolete several backend with the vector
+> device, but did not include in the patchset and tests.  I will try to
+> do it for the next round.
 
-Yes, git grep shows that arm64 is using rcu_nmi_enter() in
-debug_exception_enter().
-OK, let's keep it, but maybe it is good to update the comment for
-arm64 too. What about following?
 
-+/*
-+ * All functions in do_int3() on x86, do_debug_exception() on arm64 must be
-+ * marked NOKPROBE before kprobes handler is called.
-+ * ist_enter() on x86 and debug_exception_enter() on arm64 which is called
-+ * before kprobes handle happens to call rcu_nmi_enter() which means
-+ * that rcu_nmi_enter() must be marked NOKRPOBE.
-+ */
+So I added a vector device support, tested with tap backend.
+Here is a list of numbers with various configurations that v3+ patch
+have.
 
-Thank you,
+disclaimer: the experiment is immature, not apple-to-apple in many
+aspects.  So this result only presents one of the parameter set that I
+took.  I will update/clean up later if there are interests.
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+- testbed
+
+               +--docker0--+
+               |           |     10GbE
+ netperf +---tap0        eth0 +==========+ eth0 +---+ netserver
+ (client)                (ixgbe)          (ixgbe)
+
+<-- Linux box (4.18.5) -->              <-- Linux box (4.17.19) -->
+
+- setup
+varied client side (netperf) with different net drivers/devices.
+tso,tx/rx csum are enabled if possible.
+
+- netperf 10secs (Mbps) result
+
+                     |TCP_STREAM  | TCP_MAERTS
+-------------------- --------------------------
+UMMODE_LIB (um-tap)  | 2290.42    |    1.04
+UMMODE_LIB (vec-tap) | 3699.98    | 5682.40
+UMMODE_LIB (virtio)  | 8029.13    | 9384.78
+UMMODE_KERN (um-tap) | 2233.17    |    7.85
+UMMODE_KERN (vec-tap)| 5527.37    | 9414.00
+
+# UMMODE_LIB (virtio) isn't included in v3 patches.
+
+full output log is here;
+https://gist.github.com/thehajime/a71878cccf7830a23a23f8f8e8cc8753
+
+result of UMMODE_LIB (vec-tap) is not stable: it sometimes shows over
+8Gbps (TCP_STREAM) while most of the times lower.
+
+But I suppose UMMODE_LIB with vector driver isn't that bad, though
+there is still a gap to UMMODE_KERN (vector).
+
+
+-- Hajime
+
