@@ -2,118 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D34F163535
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2020 22:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12F316359E
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2020 23:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727581AbgBRVj0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Feb 2020 16:39:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47642 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726481AbgBRVj0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 Feb 2020 16:39:26 -0500
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E3D362064C;
-        Tue, 18 Feb 2020 21:39:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582061966;
-        bh=k/tBVL6eIxoxj8oKzTUujuA9bmvqwEW41wa8tE6sUps=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Q84+4Y8OJYIS0OSkpyVPQhtqsUx7lfuDh9zip37wSaC4qbj8lEqkBMDoBt9MIlSyv
-         L28J8gHpSuDoDWtMBTYupKRCMXwk2DPw+o0lc57RZEu81Dk3rteFUtxxGchO+up+oM
-         mclqytuLuZCV2wzK0GL6L3CpL3rGMv+b5tvOxr+Q=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id BF0113520856; Tue, 18 Feb 2020 13:39:25 -0800 (PST)
-Date:   Tue, 18 Feb 2020 13:39:25 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org, mingo@kernel.org, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
-Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
-Message-ID: <20200218213925.GL2935@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200212210749.971717428@infradead.org>
- <20200212232005.GC115917@google.com>
- <20200213082716.GI14897@hirez.programming.kicks-ass.net>
- <20200213135138.GB2935@paulmck-ThinkPad-P72>
- <20200213164031.GH14914@hirez.programming.kicks-ass.net>
- <20200213185612.GG2935@paulmck-ThinkPad-P72>
- <20200213204444.GA94647@google.com>
- <20200218195831.GD11457@worktop.programming.kicks-ass.net>
- <20200218201728.GH2935@paulmck-ThinkPad-P72>
- <20200218204021.GJ11457@worktop.programming.kicks-ass.net>
+        id S1726438AbgBRWAL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Feb 2020 17:00:11 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34868 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726422AbgBRWAK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Feb 2020 17:00:10 -0500
+Received: by mail-wr1-f66.google.com with SMTP id w12so25830486wrt.2
+        for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2020 14:00:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RXQHJwHEEnVHauBnQEp+K06dMcddSWeFIBEKwcqNjvY=;
+        b=nreTZoRpOvqTwmumvsIXMrFVOQXcDbnv6W15HbKXapZS3n8EE++vulDuWNS626JKXw
+         +zgAgLRoc6fC6Il9RExWb4VJrWYxeW9A3UWfjSLrUx417GidXbEIcvyt6DOW901H8KG8
+         DiNoEwck1n/rwqtQ7ihZ0svt7RwwHRNHDwpmVdmUUUA40GjEvFcDcb9FkeuzTSiyzL81
+         ccvxaeOFJ9URflRugRrRHN4FbYbQg2rBsn1R5N2O2PLq4xuXt4kzQfRvD/QBS3bbaoOg
+         JsFkoI4Ejjtrng4tW/kSPuVNJ4IJ7HsjxshWOcGGeQ4LNLmP8r2hE3bJ27FuwV7azSJ2
+         kpbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RXQHJwHEEnVHauBnQEp+K06dMcddSWeFIBEKwcqNjvY=;
+        b=ZxypNBQTdJktjCTcLwzNjzi3MYqq622RrAyAduJmq+Cw6xnsL3o9RNH2v9XW2Pgm3a
+         5W8EpWyjKjp5W2GPo0K6NnHP/dMFDvFMw8P6Jyqcg8TlQzJzqu9FfrcX7bGUL3h+tD0R
+         +3jnFtL6qGRvAvh3tA35Y6w90R78FDem00VbBkmHQ66cfWTiOFCWDrSuVzP4BmgbS7nq
+         YNXhLMXkYNoKJlvdJtWbE6jOitknAB7vNvtBMI+EfBbm1hsclfsqHYErBxx4rB7dU9gX
+         xZBO5omyCast/hRToBtKJ6cJzs2CHv1uzWlSDUZf9il3KTi4kFY3++ay0QWNALaUdJbB
+         26fQ==
+X-Gm-Message-State: APjAAAUZjvXIP9K7XiQRb1ExyCk0/AscbUhgKW5VAlvyUn+iW+iL6IWF
+        Yhs4eUEcTAfZ5Js2hZGfzlsLGdXEHn3akOrPGmKS5Q==
+X-Google-Smtp-Source: APXvYqy6irBj57I3FWNNO68AlkFwJP+eCW7WSFRMfNtH7vP/kn7OPj/7/NLtMwqMwPtdUdZ5NYhKCB5JRZmiRVLY0As=
+X-Received: by 2002:adf:e40f:: with SMTP id g15mr30563070wrm.223.1582063187500;
+ Tue, 18 Feb 2020 13:59:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200218204021.GJ11457@worktop.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20191217180152.GO5624@arrakis.emea.arm.com> <20191220013639.212396-1-pcc@google.com>
+ <20200212110903.GE488264@arrakis.emea.arm.com>
+In-Reply-To: <20200212110903.GE488264@arrakis.emea.arm.com>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Tue, 18 Feb 2020 13:59:34 -0800
+Message-ID: <CAMn1gO6bDenF95Rk2sUyGhm0f7PfEj6i_tmH+geVdU3ZqcRifw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: mte: Do not service syscalls after async tag fault
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Evgenii Stepanov <eugenis@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 18, 2020 at 09:40:21PM +0100, Peter Zijlstra wrote:
-> On Tue, Feb 18, 2020 at 12:17:28PM -0800, Paul E. McKenney wrote:
-> > On Tue, Feb 18, 2020 at 08:58:31PM +0100, Peter Zijlstra wrote:
-> > > On Thu, Feb 13, 2020 at 03:44:44PM -0500, Joel Fernandes wrote:
-> > > 
-> > > > > > That _should_ already be the case today. That is, if we end up in a
-> > > > > > tracer and in_nmi() is unreliable we're already screwed anyway.
-> > > 
-> > > > I removed the static from rcu_nmi_enter()/exit() as it is called from
-> > > > outside, that makes it build now. Updated below is Paul's diff. I also added
-> > > > NOKPROBE_SYMBOL() to rcu_nmi_exit() to match rcu_nmi_enter() since it seemed
-> > > > asymmetric.
-> > > 
-> > > > +__always_inline void rcu_nmi_exit(void)
-> > > >  {
-> > > >  	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
-> > > >  
-> > > > @@ -651,25 +653,15 @@ static __always_inline void rcu_nmi_exit_common(bool irq)
-> > > >  	trace_rcu_dyntick(TPS("Startirq"), rdp->dynticks_nmi_nesting, 0, atomic_read(&rdp->dynticks));
-> > > >  	WRITE_ONCE(rdp->dynticks_nmi_nesting, 0); /* Avoid store tearing. */
-> > > >  
-> > > > -	if (irq)
-> > > > +	if (!in_nmi())
-> > > >  		rcu_prepare_for_idle();
-> > > >  
-> > > >  	rcu_dynticks_eqs_enter();
-> > > >  
-> > > > -	if (irq)
-> > > > +	if (!in_nmi())
-> > > >  		rcu_dynticks_task_enter();
-> > > >  }
-> > > 
-> > > Boris and me have been going over the #MC code (and finding loads of
-> > > 'interesting' code) and ran into ist_enter(), whish has the following
-> > > code:
-> > > 
-> > >                 /*
-> > >                  * We might have interrupted pretty much anything.  In
-> > >                  * fact, if we're a machine check, we can even interrupt
-> > >                  * NMI processing.  We don't want in_nmi() to return true,
-> > >                  * but we need to notify RCU.
-> > >                  */
-> > >                 rcu_nmi_enter();
-> > > 
-> > > 
-> > > Which, to me, sounds all sorts of broken. The IST (be it #DB or #MC) can
-> > > happen while we're holding all sorts of locks. This must be an NMI-like
-> > > context.
-> > 
-> > Ouch!  Looks like I need to hold off on getting rid of the "irq"
-> > parameters if in_nmi() isn't going to be accurate.
-> 
-> I'm currently trying to twist my brain around all this, because I
-> suspect it's all completely broken one way or another.
-> 
-> But yes, we definitely need to fix this before your patch goes in.
+On Wed, Feb 12, 2020 at 3:09 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Thu, Dec 19, 2019 at 05:36:39PM -0800, Peter Collingbourne wrote:
+> > When entering the kernel after an async tag fault due to a syscall, rather
+> > than for another reason (e.g. preemption), we don't want to service the
+> > syscall as it may mask the tag fault. Rewind the PC to the svc instruction
+> > in order to give a userspace signal handler an opportunity to handle the
+> > fault and resume, and skip all other syscall processing.
+> >
+> > Signed-off-by: Peter Collingbourne <pcc@google.com>
+> > ---
+> [...]
+> >  arch/arm64/kernel/syscall.c | 22 +++++++++++++++++++---
+> >  1 file changed, 19 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+> > index 9a9d98a443fc..49ea9bb47190 100644
+> > --- a/arch/arm64/kernel/syscall.c
+> > +++ b/arch/arm64/kernel/syscall.c
+> > @@ -95,13 +95,29 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+> >  {
+> >       unsigned long flags = current_thread_info()->flags;
+> >
+> > -     regs->orig_x0 = regs->regs[0];
+> > -     regs->syscallno = scno;
+> > -
+> >       cortex_a76_erratum_1463225_svc_handler();
+> >       local_daif_restore(DAIF_PROCCTX);
+> >       user_exit();
+> >
+> > +#ifdef CONFIG_ARM64_MTE
+> > +     if (flags & _TIF_MTE_ASYNC_FAULT) {
+> > +             /*
+> > +              * We entered the kernel after an async tag fault due to a
+> > +              * syscall, rather than for another reason (e.g. preemption).
+> > +              * In this case, we don't want to service the syscall as it may
+> > +              * mask the tag fault. Rewind the PC to the svc instruction in
+> > +              * order to give a userspace signal handler an opportunity to
+> > +              * handle the fault and resume, and skip all other syscall
+> > +              * processing.
+> > +              */
+> > +             regs->pc -= 4;
+> > +             return;
+> > +     }
+> > +#endif
+> > +
+> > +     regs->orig_x0 = regs->regs[0];
+> > +     regs->syscallno = scno;
+>
+> I'm slightly worried about the interaction with single-step, other
+> signals. It might be better if we just use the existing syscall
+> restarting mechanism. Untested diff below:
+>
+> -------------------8<-------------------------------
+> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+> index a12c0c88d345..db25f5d6a07c 100644
+> --- a/arch/arm64/kernel/syscall.c
+> +++ b/arch/arm64/kernel/syscall.c
+> @@ -102,6 +102,16 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+>         local_daif_restore(DAIF_PROCCTX);
+>         user_exit();
+>
+> +       if (system_supports_mte() && (flags & _TIF_MTE_ASYNC_FAULT)) {
+> +               /*
+> +                * Process the asynchronous tag check fault before the actual
+> +                * syscall. do_notify_resume() will send a signal to userspace
+> +                * before the syscall is restarted.
+> +                */
+> +               regs->regs[0] = -ERESTARTNOINTR;
+> +               return;
+> +       }
+> +
+>         if (has_syscall_work(flags)) {
+>                 /* set default errno for user-issued syscall(-1) */
+>                 if (scno == NO_SYSCALL)
 
-OK.  I will drop it later today, but leave tag in_nmi.2020.02.18a
-pointing at it for future reference.
+That works for me, and I verified that my small test program as well
+as some larger unit tests behave as expected.
 
-							Thanx, Paul
+Tested-by: Peter Collingbourne <pcc@google.com>
+
+
+Peter
