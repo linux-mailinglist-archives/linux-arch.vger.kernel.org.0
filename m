@@ -2,132 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B507164CF7
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 18:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2AF164D31
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 19:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbgBSRwu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Feb 2020 12:52:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52088 "EHLO mail.kernel.org"
+        id S1726651AbgBSSAQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 13:00:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54892 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726558AbgBSRwt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Feb 2020 12:52:49 -0500
-Received: from localhost.localdomain (unknown [194.230.155.125])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726582AbgBSSAP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 Feb 2020 13:00:15 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AB78B2467A;
-        Wed, 19 Feb 2020 17:52:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582134768;
-        bh=p4+U61rOL8UqXw+zdGS8TsO+9JmLa5Y9WBdlRelZRu8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O8OazZxyMRidM7JJBXHHLPQaABxyydxjwKdDR5AfvFme3mNglX8t8m7XQbcjO7Q80
-         fuLH1inydzj4U4OQuJz8BKePXKeLovvgITXtVLPQwS8S3JtPQlrzu0nrehc1XwUIv9
-         FR3oL176lbNuZt7akF7YTj7Kw+33X2n8/AiGORiM=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jiri Slaby <jirislaby@gmail.com>,
-        Nick Kossifidis <mickflemm@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
-        virtualization@lists.linux-foundation.org,
-        linux-arch@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND PATCH v2 9/9] ath5k: Constify ioreadX() iomem argument (as in generic implementation)
-Date:   Wed, 19 Feb 2020 18:50:07 +0100
-Message-Id: <20200219175007.13627-10-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200219175007.13627-1-krzk@kernel.org>
-References: <20200219175007.13627-1-krzk@kernel.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id D502024656;
+        Wed, 19 Feb 2020 18:00:13 +0000 (UTC)
+Date:   Wed, 19 Feb 2020 13:00:12 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        mingo@kernel.org, joel@joelfernandes.org,
+        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
+        tglx@linutronix.de, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        luto@kernel.org, tony.luck@intel.com, frederic@kernel.org,
+        dan.carpenter@oracle.com, mhiramat@kernel.org
+Subject: Re: [PATCH v3 13/22] tracing: Remove regular RCU context for
+ _rcuidle tracepoints (again)
+Message-ID: <20200219130012.116670fd@gandalf.local.home>
+In-Reply-To: <20200219174025.GJ2935@paulmck-ThinkPad-P72>
+References: <20200219144724.800607165@infradead.org>
+        <20200219150745.125119627@infradead.org>
+        <20200219164356.GB2935@paulmck-ThinkPad-P72>
+        <20200219164736.GL18400@hirez.programming.kicks-ass.net>
+        <20200219170507.GH14946@hirez.programming.kicks-ass.net>
+        <20200219122116.7aeaf230@gandalf.local.home>
+        <20200219174025.GJ2935@paulmck-ThinkPad-P72>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The ioreadX() helpers have inconsistent interface.  On some architectures
-void *__iomem address argument is a pointer to const, on some not.
+On Wed, 19 Feb 2020 09:40:25 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-Implementations of ioreadX() do not modify the memory under the address
-so they can be converted to a "const" version for const-safety and
-consistency among architectures.
+> > Correct, and if rcuidle is not set, and this is a macro, the SRCU
+> > portion is compiled out.  
+> 
+> Sigh!  Apologies for the noise!
+> 
+> If we are using SRCU, we don't care whether or not RCU is watching.  OK,
+> maybe finally catching up -- the whole point was use of RCU in other
+> tracing code, wasn't it?
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Acked-by: Kalle Valo <kvalo@codeaurora.org>
----
- drivers/net/wireless/ath/ath5k/ahb.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Some callbacks (namely perf) might use RCU, but then the callbacks
+need to make sure rcu is watching.
 
-diff --git a/drivers/net/wireless/ath/ath5k/ahb.c b/drivers/net/wireless/ath/ath5k/ahb.c
-index 2c9cec8b53d9..8bd01df369fb 100644
---- a/drivers/net/wireless/ath/ath5k/ahb.c
-+++ b/drivers/net/wireless/ath/ath5k/ahb.c
-@@ -138,18 +138,18 @@ static int ath_ahb_probe(struct platform_device *pdev)
- 
- 	if (bcfg->devid >= AR5K_SREV_AR2315_R6) {
- 		/* Enable WMAC AHB arbitration */
--		reg = ioread32((void __iomem *) AR5K_AR2315_AHB_ARB_CTL);
-+		reg = ioread32((const void __iomem *) AR5K_AR2315_AHB_ARB_CTL);
- 		reg |= AR5K_AR2315_AHB_ARB_CTL_WLAN;
- 		iowrite32(reg, (void __iomem *) AR5K_AR2315_AHB_ARB_CTL);
- 
- 		/* Enable global WMAC swapping */
--		reg = ioread32((void __iomem *) AR5K_AR2315_BYTESWAP);
-+		reg = ioread32((const void __iomem *) AR5K_AR2315_BYTESWAP);
- 		reg |= AR5K_AR2315_BYTESWAP_WMAC;
- 		iowrite32(reg, (void __iomem *) AR5K_AR2315_BYTESWAP);
- 	} else {
- 		/* Enable WMAC DMA access (assuming 5312 or 231x*/
- 		/* TODO: check other platforms */
--		reg = ioread32((void __iomem *) AR5K_AR5312_ENABLE);
-+		reg = ioread32((const void __iomem *) AR5K_AR5312_ENABLE);
- 		if (to_platform_device(ah->dev)->id == 0)
- 			reg |= AR5K_AR5312_ENABLE_WLAN0;
- 		else
-@@ -202,12 +202,12 @@ static int ath_ahb_remove(struct platform_device *pdev)
- 
- 	if (bcfg->devid >= AR5K_SREV_AR2315_R6) {
- 		/* Disable WMAC AHB arbitration */
--		reg = ioread32((void __iomem *) AR5K_AR2315_AHB_ARB_CTL);
-+		reg = ioread32((const void __iomem *) AR5K_AR2315_AHB_ARB_CTL);
- 		reg &= ~AR5K_AR2315_AHB_ARB_CTL_WLAN;
- 		iowrite32(reg, (void __iomem *) AR5K_AR2315_AHB_ARB_CTL);
- 	} else {
- 		/*Stop DMA access */
--		reg = ioread32((void __iomem *) AR5K_AR5312_ENABLE);
-+		reg = ioread32((const void __iomem *) AR5K_AR5312_ENABLE);
- 		if (to_platform_device(ah->dev)->id == 0)
- 			reg &= ~AR5K_AR5312_ENABLE_WLAN0;
- 		else
--- 
-2.17.1
-
+-- Steve
