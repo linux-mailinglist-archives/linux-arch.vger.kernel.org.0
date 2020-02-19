@@ -2,108 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0698D163C36
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 05:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8B7163CFF
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 07:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbgBSEyi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Feb 2020 23:54:38 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:34149 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726750AbgBSEyh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Feb 2020 23:54:37 -0500
-Received: by mail-ot1-f68.google.com with SMTP id j16so21947187otl.1;
-        Tue, 18 Feb 2020 20:54:37 -0800 (PST)
+        id S1726510AbgBSG0o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 01:26:44 -0500
+Received: from mail-qv1-f65.google.com ([209.85.219.65]:43885 "EHLO
+        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726202AbgBSG0n (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Feb 2020 01:26:43 -0500
+Received: by mail-qv1-f65.google.com with SMTP id p2so10317635qvo.10;
+        Tue, 18 Feb 2020 22:26:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Oh9QWb6pZZ5g69dU4FZ2txutGr0B2CSvIaPTiYXdnPo=;
-        b=WBwXIcH52wj5UStzSlDaw2Ph8pzj/CYP3JRSbf54GZh79pza3d3RsxczDsukrXWSZ7
-         86khT4brEkZbiwPESK+rtMahwlr7gE+9fQ0NRJakjryJkgDvh9ACjcNovCc0J9Sy5zll
-         88LmmWVIvK2n273H7MJxpeDiBFbG2x5vk5wpwRXdCTotbpecqAQ1qdXfoQlb9uRU2yC6
-         AvaBlQeWFdJnomzIM4hTbQfiEfCtrzQIMaRLgjQ8s6iN9JZCPEhU2N1slMVrr1UU1AB5
-         El1e5Hnaz3m5KCaZqWo0pgU+ojOgoCdxbASQRLncZppeIXyvOm7iU+Zj2f6dMYh6cEHr
-         9hIQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0AcgEW7Nzia0J/XRf8fWH9Xd9Cf6gra4pdDV/CfwMW8=;
+        b=GkQkIkwu3bSBbkX5iqfaiTQ/EWXrz7RZHKk2yfg4nz7wWXo3quKjX3E1IRLce3DGxm
+         DplPfnCtn7dp9hhWpY/m2B8BJGFYwXZ4UFL26QEpai5NBUKZGR5LUxerP3pM02MKRmDb
+         dbW3rq5C3WlbwtJzU7rGzptNTJ9bijeu49I5lcCvqqRyXt4Li7Nq5AHG7qh8BocxZuo8
+         3JUvL2bDAEQF29tEpfdh55zkmHyWcE/+4NjUILBwfQEZWakU1a79/LBR/96xkGKzeJYO
+         Yfxk5dow2hM9ycQ54JPXQNrGf0NQYMRyENq95jFH8CIJ0xPJUS1qXXTBufppfHlVvrnG
+         pHLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Oh9QWb6pZZ5g69dU4FZ2txutGr0B2CSvIaPTiYXdnPo=;
-        b=eEr7zdgp6grefX5RYr/3Cui9Kl+NUVu3sZWaKBycnKi8Rbwr6Q+Efghw749+QO/NqJ
-         KjvY18nlFgP5TmLM05+e2VPv+8l9OwNH03QeZa1frxuTgXKureVewbSHUMPy2NL6mxwz
-         C5yhHDHc+vpVNUqItf56O0gJWmuj0cQTuyQ5R4nc++OszPgq3QnWFB28oWfLHSEWSx7E
-         VXbhYjaJdOviA2gzg3REpWHxFPDN6e6gyF6U4LQbKZ2ECgRDhiYA9+z31IufOf4miljW
-         U7xyixRkerVWtanCBtjL7+jggyo19ULYHGZnqTBrOwGXp/vZejE/D1Q+vUVls+XRu6rS
-         wNSQ==
-X-Gm-Message-State: APjAAAUPzO6wXMt4JF17kaA/7ieWJZHPC5pfddLM6wXa9yenz1mGZplb
-        K7Te3cOyx6v/L1dK06aYgxs=
-X-Google-Smtp-Source: APXvYqxJRG2OQXc05asgj7HXthiAW2UIejHZq7541ZiIpdLqpMSEi/rSorSHXLJ0a/aaTltGwjj13Q==
-X-Received: by 2002:a05:6830:1d91:: with SMTP id y17mr17502659oti.276.1582088077039;
-        Tue, 18 Feb 2020 20:54:37 -0800 (PST)
-Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id c7sm288894otn.81.2020.02.18.20.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 20:54:36 -0800 (PST)
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        clang-built-linux@googlegroups.com,
-        Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH 6/6] kbuild: Enable -Wtautological-compare
-Date:   Tue, 18 Feb 2020 21:54:23 -0700
-Message-Id: <20200219045423.54190-7-natechancellor@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200219045423.54190-1-natechancellor@gmail.com>
-References: <20200219045423.54190-1-natechancellor@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0AcgEW7Nzia0J/XRf8fWH9Xd9Cf6gra4pdDV/CfwMW8=;
+        b=an9qdWkJg9iZy6SckGcjEHQJuO7sb44o41kielXRHYDWn+RWH5lVjYUUDioKxogaRK
+         tt+qc3TGWkUTPuSts5mXg4toWlm4Q/x3Zk+UqY0oNgEUm4v0/r1eb6EOI7s580BlwF1w
+         LABL7VBJxIZIWb4YqCwhpzVurRexHtuFBzfhr4+DJCvzSVMEAW5/9/I6RGVulfHcsoqW
+         DJVgszClK0V5Fuqt08E+5oFgNXZ2eHruF3WpGK5ToeqqanCtZFE014LZuoS7yTeUZk86
+         jRK0Cg4Y5NnDUT6DEeulA5AMEqiFnXaK2HDOKOxr1o6X2ZsL5PwmBO1MYj5ZXBBN/S4p
+         5GSQ==
+X-Gm-Message-State: APjAAAWWfEcNX8OAfoyvnNyy9w6wdRU0TmyMzibN9uYFFEOG5dpc1MSz
+        yAspTFribQ2KTsSptBb71/k=
+X-Google-Smtp-Source: APXvYqzKwD91/nC2RbUzYfJ4VcV0Uo/JIoQ1VLbyw/Ly/Uh2gsKDSrQwovgooWirT3x3ZqGaABhHpQ==
+X-Received: by 2002:a0c:a281:: with SMTP id g1mr19893975qva.168.1582093602261;
+        Tue, 18 Feb 2020 22:26:42 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id g84sm528780qke.129.2020.02.18.22.26.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 18 Feb 2020 22:26:41 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 7F9B52221A;
+        Wed, 19 Feb 2020 01:26:38 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 19 Feb 2020 01:26:38 -0500
+X-ME-Sender: <xms:GNVMXmv9xhC6qNyttzhAS_dCGFzqMF0jdB2vfajqLYe5Y2NjOIAnuQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrjeelgdelgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepuehoqhhunhcuhfgv
+    nhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucffohhmrghinhepkh
+    gvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhdpihhnrhhirgdrfhhrnecukfhppeeh
+    vddrudehhedrudduuddrjedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihht
+    hidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrg
+    hilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:GNVMXpLvH150ImJ4YxZj3Q7cZIgosNe75Fm00EUVZ6qP5-CZHjDInQ>
+    <xmx:GNVMXjgX4Y6OBKcc6r73mxGCrsDQkM7zIm9fZuXYoCio95u-9zSecQ>
+    <xmx:GNVMXtvrvoMiU0sMYDbfkbaYwRATfJM6Irh7uW_6vazje5SaU45ayQ>
+    <xmx:HtVMXiN7X9oPH7cijwrpi040vXQDHgFB4xchEe4BixliuaIOj1SJ59dEryk>
+Received: from localhost (unknown [52.155.111.71])
+        by mail.messagingengine.com (Postfix) with ESMTPA id A263A3060BD1;
+        Wed, 19 Feb 2020 01:26:31 -0500 (EST)
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [RFC v2 0/4] Documentation/locking/atomic: Add litmus tests for atomic APIs
+Date:   Wed, 19 Feb 2020 14:26:23 +0800
+Message-Id: <20200219062627.104736-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Currently, we disable -Wtautological-compare, which in turn disables a
-bunch of more specific tautological comparison warnings that are useful
-for the kernel (see clang's documentation below). Now that all of the
-major/noisy warnings have been fixed, enable -Wtautological-compare so
-that more issues can be caught at build time.
+A recent discussion raises up the requirement for having test cases for
+atomic APIs:
 
--Wtautological-constant-out-of-range-compare is kept disabled because
-there are places in the kernel where a constant or variable size can
-change based on the kernel configuration; these are not fixed in a
-clean/concise way and they are almost always harmless so this one
-subwarning is kept disabled.
+	https://lore.kernel.org/lkml/20200213085849.GL14897@hirez.programming.kicks-ass.net/
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/488
-Link: http://releases.llvm.org/9.0.0/tools/clang/docs/DiagnosticsReference.html#wtautological-compare
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
----
- Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+, and since we already have a way to generate a test module from a
+litmus test with klitmus[1]. It makes sense that we add more litmus
+tests for atomic APIs. And based on the previous discussion, I create a
+new directory Documentation/atomic-tests and put these litmus tests
+here.
 
-diff --git a/Makefile b/Makefile
-index b954c304c479..99080c57a1cb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -742,8 +742,7 @@ ifdef CONFIG_CC_IS_CLANG
- KBUILD_CPPFLAGS += -Qunused-arguments
- KBUILD_CFLAGS += -Wno-format-invalid-specifier
- KBUILD_CFLAGS += -Wno-gnu
--# Quiet clang warning: comparison of unsigned expression < 0 is always false
--KBUILD_CFLAGS += -Wno-tautological-compare
-+KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
- # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
- # source of a reference will be _MergedGlobals and not on of the whitelisted names.
- # See modpost pattern 2
+This patchset starts the work by adding the litmus tests which are
+already used in atomic_t.txt, and also improve the atomic_t.txt to make
+it consistent with the litmus tests.
+
+Previous version:
+v1: https://lore.kernel.org/linux-doc/20200214040132.91934-1-boqun.feng@gmail.com/
+
+Changes since v1:
+
+*	Move the tests into Documentation/atomic-tests directory as a
+	result of the discussion with Alan and Paul.
+
+*	Word changing on litmus test names and other sentences in
+	documents based on Alan's suggestion.
+
+*	Add local variable declarations in 
+	Atomic-RMW+mb__after_atomic-is-stronger-than-acquire to make
+	klitmus work as per Andrea's suggestion.
+
+Currently, I haven't heard anything from Luc on whether the
+atomic_add_unless() works or not for the LKMM, but based on my test and
+Andrea's previous test, I think it actually works. I will add the
+corresponding changes to the LIMITATIONS part of LKMM document if I got
+a comfirm from Luc. And my PR:
+
+	https://github.com/herd/herdtools7/pull/28
+
+is still not merged. So this version is simply an RFC and comments and
+suggesions are welcome!
+
+Regards,
+Boqun
+
+
+[1]: http://diy.inria.fr/doc/litmus.html#klitmus
+
+Boqun Feng (4):
+  Documentation/locking/atomic: Fix atomic-set litmus test
+  Documentation/locking/atomic: Introduce atomic-tests directory
+  Documentation/locking/atomic: Add a litmus test for atomic_set()
+  Documentation/locking/atomic: Add a litmus test smp_mb__after_atomic()
+
+ ...ter_atomic-is-stronger-than-acquire.litmus | 32 +++++++++++++++++++
+ ...c-RMW-ops-are-atomic-WRT-atomic_set.litmus | 24 ++++++++++++++
+ Documentation/atomic-tests/README             | 16 ++++++++++
+ Documentation/atomic_t.txt                    | 24 +++++++-------
+ MAINTAINERS                                   |  1 +
+ 5 files changed, 85 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/atomic-tests/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
+ create mode 100644 Documentation/atomic-tests/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
+ create mode 100644 Documentation/atomic-tests/README
+
 -- 
-2.25.1
+2.25.0
 
