@@ -2,78 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C096164E60
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 20:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F04164E7E
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 20:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbgBSTFW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Feb 2020 14:05:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41706 "EHLO mail.kernel.org"
+        id S1726648AbgBSTJb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 14:09:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42530 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726613AbgBSTFW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Feb 2020 14:05:22 -0500
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        id S1726609AbgBSTJa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 Feb 2020 14:09:30 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 025C624654;
-        Wed, 19 Feb 2020 19:05:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582139122;
-        bh=a8v8o/RLgXbtSPWW2aaagFCiOmMgfZKdTuyS8Lp1V+8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=aoKhVjpyyOdq2W0Mcocjnqb+Ff8EeI0eZ2hOC84yrZTmvSpFNnA6UWbKVu2QtjC48
-         xcm/bJycVQnY8Yewh/mwYYPiiXBF6eCgEfdgrAepABeWgp8/BosEa+FVsTAorMv/4p
-         9i8cE787xpfvfTYv29SzApEvz0/xZah1hbKFDT5Y=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id D2D903520BB6; Wed, 19 Feb 2020 11:05:21 -0800 (PST)
-Date:   Wed, 19 Feb 2020 11:05:21 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        mingo@kernel.org, joel@joelfernandes.org,
-        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
-        tglx@linutronix.de, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        luto@kernel.org, tony.luck@intel.com, frederic@kernel.org,
-        dan.carpenter@oracle.com, mhiramat@kernel.org
-Subject: Re: [PATCH v3 13/22] tracing: Remove regular RCU context for
- _rcuidle tracepoints (again)
-Message-ID: <20200219190521.GO2935@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200219144724.800607165@infradead.org>
- <20200219150745.125119627@infradead.org>
- <20200219164356.GB2935@paulmck-ThinkPad-P72>
- <20200219164736.GL18400@hirez.programming.kicks-ass.net>
- <20200219170507.GH14946@hirez.programming.kicks-ass.net>
- <20200219122116.7aeaf230@gandalf.local.home>
- <20200219174025.GJ2935@paulmck-ThinkPad-P72>
- <20200219130012.116670fd@gandalf.local.home>
+        by mail.kernel.org (Postfix) with ESMTPSA id E5692208C4;
+        Wed, 19 Feb 2020 19:09:28 +0000 (UTC)
+Date:   Wed, 19 Feb 2020 14:09:27 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Subject: Re: [PATCH 3/6] tracing: Wrap section comparison in
+ tracer_alloc_buffers with COMPARE_SECTIONS
+Message-ID: <20200219140927.396ca577@gandalf.local.home>
+In-Reply-To: <20200219181619.GV31668@ziepe.ca>
+References: <20200219045423.54190-1-natechancellor@gmail.com>
+        <20200219045423.54190-4-natechancellor@gmail.com>
+        <20200219093445.386f1c09@gandalf.local.home>
+        <CAKwvOdm-N1iX0SMxGDV5Vf=qS5uHPdH3S-TRs-065BuSOdKt1w@mail.gmail.com>
+        <20200219181619.GV31668@ziepe.ca>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200219130012.116670fd@gandalf.local.home>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 01:00:12PM -0500, Steven Rostedt wrote:
-> On Wed, 19 Feb 2020 09:40:25 -0800
-> "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> 
-> > > Correct, and if rcuidle is not set, and this is a macro, the SRCU
-> > > portion is compiled out.  
-> > 
-> > Sigh!  Apologies for the noise!
-> > 
-> > If we are using SRCU, we don't care whether or not RCU is watching.  OK,
-> > maybe finally catching up -- the whole point was use of RCU in other
-> > tracing code, wasn't it?
-> 
-> Some callbacks (namely perf) might use RCU, but then the callbacks
-> need to make sure rcu is watching.
+On Wed, 19 Feb 2020 14:16:19 -0400
+Jason Gunthorpe <jgg@ziepe.ca> wrote:
 
-Got it, thank you!
+> > kernel/trace/trace.h
+> > 1923:extern const char *__stop___trace_bprintk_fmt[];  
+> 
+> Godbolt says clang is happy if it is written as:
+> 
+>   if (&__stop___trace_bprintk_fmt[0] != &__start___trace_bprintk_fmt[0])
+> 
+> Which is probably the best compromise. The type here is const char
+> *[], so it would be a shame to see it go.
 
-							Thanx, Paul
+If the above works, I'd be happy with that. As it is still readable.
+
+-- Steve
