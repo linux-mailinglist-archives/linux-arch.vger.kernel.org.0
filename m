@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF637164B5E
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 18:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0F8164B73
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 18:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbgBSRDe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Feb 2020 12:03:34 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:37258 "EHLO
+        id S1726829AbgBSRFa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 12:05:30 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:37548 "EHLO
         merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbgBSRDd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Feb 2020 12:03:33 -0500
+        with ESMTP id S1726558AbgBSRFa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Feb 2020 12:05:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HuGT0b0onNFF+eYgdTRhOWLWmkCfJUhiAbKJ/uOzPwk=; b=0+sv6dEgBUXjauhqDsGQwIsxw3
-        ZFr/29TI983O1PEp315TWLrzf/jamZuvHMc8cS7yU3PEdJaJW3UgvkpB42wtcQxRlX3U5k4A4AjCQ
-        A3H4efTMWYkwpY4+GQouf6kT28KdDA1wKQaD+bE9WiDCXKlZrC4LkYoXicS7POKZP7QaiMwaBAOK5
-        kTtOYc7DWqPBc1bHPW5MNjlVnO2u4S6LL94AIja6M+A9IVcB8YJotJZACAGWCUOsMt8yRERe5PEqf
-        YL/5waRiwpbe3NGGR/YqYKX11fObbXfj7F3gf/n+BpG4nockfS/BEk6biTMwP5IPiloHR1mh0htHY
-        DunAMNHA==;
+        bh=ePiOu1LnxWN4mdSQI8iwc4P9sH/T13jtaDHZl9HWyyg=; b=3L91a3/voxU1lxybogdMIVKgaf
+        5901Bum2dxH+eLzb1LI6MsZ3mt6hn4uYcp3H5IXg2LUXOZpbw6PmHXShkj0vh75K4mBAFafKjIIXn
+        uEUY7iUkve8dDiVFQ3Gp67cNeoniFkkQ7v51RYMcwtz1wSgtu+3UTqNpE8fjj2PXnPGZ4LaDU/Mjd
+        jByrkzgUEPxQiVTvhcZf2FF7J19pPDmKCbWjYrghmXn6grNk+rWvvIIOkoxtd4/KJ38KdXMVSk12D
+        bjAp+GT3KuT5TypQxft2zT0FtQo3M8GYIyQ/LJCKTP+M4IZPBHfMfTo+CQUorkO28EHmDEVj9EV9A
+        D9iZXTow==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j4Skb-0001bJ-St; Wed, 19 Feb 2020 17:03:06 +0000
+        id 1j4Smb-0001eZ-FR; Wed, 19 Feb 2020 17:05:09 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E440A300606;
-        Wed, 19 Feb 2020 18:01:11 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 50315300606;
+        Wed, 19 Feb 2020 18:03:15 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 24ACF202287CD; Wed, 19 Feb 2020 18:03:04 +0100 (CET)
-Date:   Wed, 19 Feb 2020 18:03:04 +0100
+        id A4164202287EF; Wed, 19 Feb 2020 18:05:07 +0100 (CET)
+Date:   Wed, 19 Feb 2020 18:05:07 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -41,83 +41,44 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
         luto@kernel.org, tony.luck@intel.com, frederic@kernel.org,
         dan.carpenter@oracle.com, mhiramat@kernel.org
-Subject: Re: [PATCH v3 05/22] rcu: Make RCU IRQ enter/exit functions rely on
- in_nmi()
-Message-ID: <20200219170304.GG14946@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH v3 13/22] tracing: Remove regular RCU context for
+ _rcuidle tracepoints (again)
+Message-ID: <20200219170507.GH14946@hirez.programming.kicks-ass.net>
 References: <20200219144724.800607165@infradead.org>
- <20200219150744.661923520@infradead.org>
- <20200219163156.GY2935@paulmck-ThinkPad-P72>
- <20200219163700.GK18400@hirez.programming.kicks-ass.net>
+ <20200219150745.125119627@infradead.org>
+ <20200219164356.GB2935@paulmck-ThinkPad-P72>
+ <20200219164736.GL18400@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200219163700.GK18400@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200219164736.GL18400@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 05:37:00PM +0100, Peter Zijlstra wrote:
-> On Wed, Feb 19, 2020 at 08:31:56AM -0800, Paul E. McKenney wrote:
-
-> > Here is the latest version of that comment, posted by Steve Rostedt.
+On Wed, Feb 19, 2020 at 05:47:36PM +0100, Peter Zijlstra wrote:
+> On Wed, Feb 19, 2020 at 08:43:56AM -0800, Paul E. McKenney wrote:
+> > On Wed, Feb 19, 2020 at 03:47:37PM +0100, Peter Zijlstra wrote:
+> > > Effectively revert commit 865e63b04e9b2 ("tracing: Add back in
+> > > rcu_irq_enter/exit_irqson() for rcuidle tracepoints") now that we've
+> > > taught perf how to deal with not having an RCU context provided.
+> > > 
+> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > ---
+> > >  include/linux/tracepoint.h |    8 ++------
+> > >  1 file changed, 2 insertions(+), 6 deletions(-)
+> > > 
+> > > --- a/include/linux/tracepoint.h
+> > > +++ b/include/linux/tracepoint.h
+> > > @@ -179,10 +179,8 @@ static inline struct tracepoint *tracepo
 > > 
-> > 							Thanx, Paul
+> > Shouldn't we also get rid of this line above?
 > > 
-> > /*
-> >  * All functions called in the breakpoint trap handler (e.g. do_int3()
-> >  * on x86), must not allow kprobes until the kprobe breakpoint handler
-> >  * is called, otherwise it can cause an infinite recursion.
-> >  * On some archs, rcu_nmi_enter() is called in the breakpoint handler
-> >  * before the kprobe breakpoint handler is called, thus it must be
-> >  * marked as NOKPROBE.
-> >  */
+> > 		int __maybe_unused __idx = 0;				\
+> > 
 > 
-> Oh right, let me stick that in a separate patch. Best we not loose that
-> I suppose ;-)
+> Probably makes a lot of sense, lemme fix that!
 
-Having gone over the old thread, I ended up with the below. Anyone
-holler if I got it wrong somehow.
-
----
-Subject: rcu: Provide comment for NOKPROBE() on rcu_nmi_enter()
-From: Steven Rostedt <rostedt@goodmis.org>
-
-From: Steven Rostedt <rostedt@goodmis.org>
-
-The rcu_nmi_enter() function was marked NOKPROBE() by commit
-c13324a505c77 ("x86/kprobes: Prohibit probing on functions before
-kprobe_int3_handler()") because the do_int3() call kprobe code must
-not be invoked before kprobe_int3_handler() is called.  It turns out
-that ist_enter() (in do_int3()) calls rcu_nmi_enter(), hence the
-marking NOKPROBE() being added to rcu_nmi_enter().
-
-This commit therefore adds a comment documenting this line of
-reasoning.
-
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- kernel/rcu/tree.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
-
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -842,6 +842,14 @@ void rcu_nmi_enter(void)
- {
- 	rcu_nmi_enter_common(false);
- }
-+/*
-+ * All functions called in the breakpoint trap handler (e.g. do_int3()
-+ * on x86), must not allow kprobes until the kprobe breakpoint handler
-+ * is called, otherwise it can cause an infinite recursion.
-+ * On some archs, rcu_nmi_enter() is called in the breakpoint handler
-+ * before the kprobe breakpoint handler is called, thus it must be
-+ * marked as NOKPROBE.
-+ */
- NOKPROBE_SYMBOL(rcu_nmi_enter);
- 
- /**
+Oh wait, no! SRCU is the one that remains !
