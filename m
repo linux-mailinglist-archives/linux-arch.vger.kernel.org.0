@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F11A8163C3F
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 05:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7438F163C30
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 05:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726703AbgBSEyf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Feb 2020 23:54:35 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:41635 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726496AbgBSEye (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Feb 2020 23:54:34 -0500
-Received: by mail-ot1-f66.google.com with SMTP id r27so21881225otc.8;
-        Tue, 18 Feb 2020 20:54:33 -0800 (PST)
+        id S1726510AbgBSEyg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Feb 2020 23:54:36 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:40622 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726623AbgBSEyf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Feb 2020 23:54:35 -0500
+Received: by mail-oi1-f193.google.com with SMTP id a142so22569048oii.7;
+        Tue, 18 Feb 2020 20:54:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gB9HKBd9NE/ic7aLq2Zv7PAn+vedvEO6GTMd/7/cXT8=;
-        b=oJcPu03TiqY6QgcSJwosaNcUNgizcMJBajDzA1jPGSOgixPcHSmfe23+opqORZk+vq
-         5uEhlpBEZOCyGWUePBMoNwLLLl0IWMPZe+VWpXNaOBx9cZ2zeUJPWQtY0dTiHewXAffD
-         4ifNb7wpeVSJ/pu6EVwX48D+XsoqpU25UVo48MKzoIANF1gwZwNgeaclQE8DvLhARL6C
-         vHBM4LOnGhOmLrkDNGQWEpeKwKFqTzI1o0YnVyyE2morwLQjSjNMJuiLyIbB5rfpRg8o
-         RWSsvGScSkalMGARf0Bb9ufIkNFTU4mFhypytRC2FcYl+1mfsPuZe3rwAIyy4dICfd5R
-         Yt5Q==
+        bh=Dr2Q+aHg/1SGjzpWBsBNv11ATwozDGCBBkaKKg29VLU=;
+        b=RlTQIa8CRCM+VNzdVRfUcZhF+5zjAHPs4z0EywqhlgDJhQIBms6nhmImjyHTTHYkOy
+         kAE1qCHWRhwFAjVqLvaXZJa49nISb8dLeexOQVcMXPsAchxmy08bxmlmomC0ljC4G6r/
+         TPAs3CCUKPBkIrP/fhQdDQthulzH5Mx98wdmPnKA4kQLIIZVOm1iycVFu/zwQzT6lvAs
+         IAELIMXwPbuzc3ConrlHpGVxcz4GPCA6jwhoQCgJFAH91pN7I24IxHQJoVQwmxq+q/US
+         yFqU1TwG+sb6fsmvXFmjg9uYEDKwyxy2qReN/DutUyQQASjz7GWVWs8oeR5tslTVZTNO
+         Bd0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gB9HKBd9NE/ic7aLq2Zv7PAn+vedvEO6GTMd/7/cXT8=;
-        b=sX/RdFUe0cvKQ0y3DBeLoXTwE6BMnaK8xx8x029edWzhQZCh3muuWgfJqQDgKiB/8i
-         gHQXSgcxuxkfk0lwU/P4jcoAVoGWq0H7ojCexzAvjsD8cyGy7r8zyXUjjHdm9dCJOibl
-         VymFKNGm9emGzDXNQb+nMc0gCGy3hmpWXeCqrrSN+kK4WMAcXuAGBfEcxSF82plru+LA
-         W9GEz+kqUC5vkx9Y/xQzAD61m9sTibJJI9p0pAqLAz2M4q6Mwf1uVfIPuYgrbmoXsn8G
-         ePARjrNxgF9q5/G0v4d/nI4C40KRnPWxxQt1BjIR+KYUJlMgMZEmz0wQxNcTQ1CIXV9E
-         1VAA==
-X-Gm-Message-State: APjAAAXmuhaGNCLtD+JhR0tnFrDQE9SYcvFrsHZdBQ5Me6aPmK4eEnwW
-        jGpZXYdJSt4jsmqlcEm35rA=
-X-Google-Smtp-Source: APXvYqwdFwp4qn7ny2TvCGnaQaQjscbRAz+omD8OlFFTCu1L1VgwqztyBfFMZgIeIPZS92nhreHqNA==
-X-Received: by 2002:a9d:6b12:: with SMTP id g18mr17801067otp.211.1582088073480;
-        Tue, 18 Feb 2020 20:54:33 -0800 (PST)
+        bh=Dr2Q+aHg/1SGjzpWBsBNv11ATwozDGCBBkaKKg29VLU=;
+        b=CnNwVYxo05cDLWodHhpy6sXVZGrzR7ng5HE4yI2+0RkFCk0vbU7SV7tIcGt8vz1RjF
+         J8TRGaYDTf/ZWCw5X0Dy/zgsKOWsZCSt9MoBGNOSGgaXcr3+FEKW14ylpZi5So0ZCp1r
+         dpXF11Me7+WmKvqrIzH5LZbcebkhjbmOlQhfoUzX/v5u0D5zI73tzZ+6f3m0cPyaG9q8
+         4WQ3hdyPJG9t+TrV5N4vp30FS3Y5kUpZ1t7FKlqZt3wNDT2/6FvsWNPbmiWEvgYm0OAk
+         6mo3RfIYCiUi3oaGs9TIGwyA9tDWVW3OGegkL0oEyYNl3jXAOAVB+gj55jR4+AFaSFlA
+         /4Ww==
+X-Gm-Message-State: APjAAAUYhMnJprMKBo3NHJzCQ4/GieKIDvm2FkQ+WYHRybPE2v8R7gDF
+        gMZrjyynHJbfMT04YNy/WFI=
+X-Google-Smtp-Source: APXvYqxyb3BnXAjNQrjcn8HqOmkV+kjEbAKY9iDmYxHQnfG5ebZsrdug8IdEe5BqVTLiXeR2InjgJQ==
+X-Received: by 2002:aca:5dc3:: with SMTP id r186mr3577268oib.137.1582088074161;
+        Tue, 18 Feb 2020 20:54:34 -0800 (PST)
 Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id c7sm288894otn.81.2020.02.18.20.54.32
+        by smtp.gmail.com with ESMTPSA id c7sm288894otn.81.2020.02.18.20.54.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 20:54:32 -0800 (PST)
+        Tue, 18 Feb 2020 20:54:33 -0800 (PST)
 From:   Nathan Chancellor <natechancellor@gmail.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
@@ -57,9 +57,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         clang-built-linux@googlegroups.com,
         Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH 2/6] kernel/extable: Wrap section comparison in sort_main_extable with COMPARE_SECTIONS
-Date:   Tue, 18 Feb 2020 21:54:19 -0700
-Message-Id: <20200219045423.54190-3-natechancellor@gmail.com>
+Subject: [PATCH 3/6] tracing: Wrap section comparison in tracer_alloc_buffers with COMPARE_SECTIONS
+Date:   Tue, 18 Feb 2020 21:54:20 -0700
+Message-Id: <20200219045423.54190-4-natechancellor@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200219045423.54190-1-natechancellor@gmail.com>
 References: <20200219045423.54190-1-natechancellor@gmail.com>
@@ -73,10 +73,10 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Clang warns:
 
-../kernel/extable.c:37:52: warning: array comparison always evaluates to
-a constant [-Wtautological-compare]
-        if (main_extable_sort_needed && __stop___ex_table > __start___ex_table) {
-                                                          ^
+../kernel/trace/trace.c:9335:33: warning: array comparison always
+evaluates to true [-Wtautological-compare]
+        if (__stop___trace_bprintk_fmt != __start___trace_bprintk_fmt)
+                                       ^
 1 warning generated.
 
 These are not true arrays, they are linker defined symbols, which are
@@ -87,23 +87,22 @@ defined symbols to unsigned long, which keeps the logic the same.
 Link: https://github.com/ClangBuiltLinux/linux/issues/765
 Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
- kernel/extable.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/trace/trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/extable.c b/kernel/extable.c
-index a0024f27d3a1..17bf4ccb9de9 100644
---- a/kernel/extable.c
-+++ b/kernel/extable.c
-@@ -34,7 +34,8 @@ u32 __initdata __visible main_extable_sort_needed = 1;
- /* Sort the kernel's built-in exception table */
- void __init sort_main_extable(void)
- {
--	if (main_extable_sort_needed && __stop___ex_table > __start___ex_table) {
-+	if (main_extable_sort_needed &&
-+	    COMPARE_SECTIONS(__stop___ex_table, >, __start___ex_table)) {
- 		pr_notice("Sorting __ex_table...\n");
- 		sort_extable(__start___ex_table, __stop___ex_table);
- 	}
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index c797a15a1fc7..e1f3b16e457b 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -9332,7 +9332,7 @@ __init static int tracer_alloc_buffers(void)
+ 		goto out_free_buffer_mask;
+ 
+ 	/* Only allocate trace_printk buffers if a trace_printk exists */
+-	if (__stop___trace_bprintk_fmt != __start___trace_bprintk_fmt)
++	if (COMPARE_SECTIONS(__stop___trace_bprintk_fmt, !=, __start___trace_bprintk_fmt))
+ 		/* Must be called before global_trace.buffer is allocated */
+ 		trace_printk_init_buffers();
+ 
 -- 
 2.25.1
 
