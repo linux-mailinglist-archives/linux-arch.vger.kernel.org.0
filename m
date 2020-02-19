@@ -2,146 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4D6165238
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 23:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D89116528C
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 23:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727462AbgBSWM2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Feb 2020 17:12:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53840 "EHLO mail.kernel.org"
+        id S1727163AbgBSWdj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 17:33:39 -0500
+Received: from mga18.intel.com ([134.134.136.126]:36563 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727291AbgBSWM1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Feb 2020 17:12:27 -0500
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 81FED24681
-        for <linux-arch@vger.kernel.org>; Wed, 19 Feb 2020 22:12:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582150346;
-        bh=Edxw1/Xj6IDMQRRULmBb4YHseF9jGQhpofWf9k5TxeE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fdAQGROs0G4kvMof9V31M9lffdCcs3Dagxfh3LVPbOsVmDlGtla+YkezvbO4iYJp+
-         X6tEJehQOEnbt4571mJzKnBGWpJiGnjjjOL8Re6yhyqF9UsbJlDPj94iPgEt2zXz4d
-         nEvdIfNQMqBe3gHHVxPHzWeNh+Iz9kEWJUIu5vNk=
-Received: by mail-wr1-f54.google.com with SMTP id w12so2419246wrt.2
-        for <linux-arch@vger.kernel.org>; Wed, 19 Feb 2020 14:12:26 -0800 (PST)
-X-Gm-Message-State: APjAAAUIIqCepogiC+IkdwyAKAHmUNNDuNEk7B29dp/nrHjBa7xluvk3
-        71bMEw6yCgDeCV9DTlZWMuT+4ATg1Ld7EiKDiTEBwg==
-X-Google-Smtp-Source: APXvYqw9mumzTmIZKMTrJ8akhQtHuopoTYY+e3SanNp+3VZDeZX8YRgKlahhu91qcNwWHp7w9FySQS8wTxuP8/tMeOc=
-X-Received: by 2002:adf:ea85:: with SMTP id s5mr37297631wrm.75.1582150344766;
- Wed, 19 Feb 2020 14:12:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20200219144724.800607165@infradead.org> <20200219150744.488895196@infradead.org>
- <20200219171309.GC32346@zn.tnic> <CALCETrWBEDjenqze3wVc6TkUt_g+OFx9TQbYysLH+6fku=aWjQ@mail.gmail.com>
- <20200219173358.GP18400@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200219173358.GP18400@hirez.programming.kicks-ass.net>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Wed, 19 Feb 2020 14:12:13 -0800
-X-Gmail-Original-Message-ID: <CALCETrVdNCRoToO2-mxhPxO2zaRU6urTffBn7iSTgHaGpB523Q@mail.gmail.com>
-Message-ID: <CALCETrVdNCRoToO2-mxhPxO2zaRU6urTffBn7iSTgHaGpB523Q@mail.gmail.com>
-Subject: Re: [PATCH v3 02/22] x86,mce: Delete ist_begin_non_atomic()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        id S1727082AbgBSWdj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 Feb 2020 17:33:39 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Feb 2020 14:33:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,462,1574150400"; 
+   d="scan'208";a="236035258"
+Received: from orsmsx107.amr.corp.intel.com ([10.22.240.5])
+  by orsmga003.jf.intel.com with ESMTP; 19 Feb 2020 14:33:38 -0800
+Received: from orsmsx112.amr.corp.intel.com (10.22.240.13) by
+ ORSMSX107.amr.corp.intel.com (10.22.240.5) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Wed, 19 Feb 2020 14:33:38 -0800
+Received: from orsmsx115.amr.corp.intel.com ([169.254.4.100]) by
+ ORSMSX112.amr.corp.intel.com ([169.254.3.56]) with mapi id 14.03.0439.000;
+ Wed, 19 Feb 2020 14:33:38 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     Borislav Petkov <bp@alien8.de>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@kernel.org>,
         Joel Fernandes <joel@joelfernandes.org>,
-        Greg KH <gregkh@linuxfoundation.org>, gustavo@embeddedor.com,
-        Thomas Gleixner <tglx@linutronix.de>, paulmck@kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "Josh Triplett" <josh@joshtriplett.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: [PATCH v3 02/22] x86,mce: Delete ist_begin_non_atomic()
+Thread-Topic: [PATCH v3 02/22] x86,mce: Delete ist_begin_non_atomic()
+Thread-Index: AQHV5zdEJLdyh/tjoUWbGbyv6LI8bagjR2SAgAACawCAAANmAIAATb6A//98BSA=
+Date:   Wed, 19 Feb 2020 22:33:37 +0000
+Message-ID: <3908561D78D1C84285E8C5FCA982C28F7F57E302@ORSMSX115.amr.corp.intel.com>
+References: <20200219144724.800607165@infradead.org>
+ <20200219150744.488895196@infradead.org> <20200219171309.GC32346@zn.tnic>
+ <CALCETrWBEDjenqze3wVc6TkUt_g+OFx9TQbYysLH+6fku=aWjQ@mail.gmail.com>
+ <20200219173358.GP18400@hirez.programming.kicks-ass.net>
+ <CALCETrVdNCRoToO2-mxhPxO2zaRU6urTffBn7iSTgHaGpB523Q@mail.gmail.com>
+In-Reply-To: <CALCETrVdNCRoToO2-mxhPxO2zaRU6urTffBn7iSTgHaGpB523Q@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.22.254.140]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 9:34 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Feb 19, 2020 at 09:21:48AM -0800, Andy Lutomirski wrote:
-> > On Wed, Feb 19, 2020 at 9:13 AM Borislav Petkov <bp@alien8.de> wrote:
-> > >
-> > > On Wed, Feb 19, 2020 at 03:47:26PM +0100, Peter Zijlstra wrote:
-> > > > Subject: Re: [PATCH v3 02/22] x86,mce: Delete ist_begin_non_atomic()
-> > >
-> > > x86/mce: ...
-> > >
-> > > > It is an abomination; and in prepration of removing the whole
-> > > > ist_enter() thing, it needs to go.
-> > > >
-> > > > Convert #MC over to using task_work_add() instead; it will run the
-> > > > same code slightly later, on the return to user path of the same
-> > > > exception.
-> > >
-> > > That's fine because the error happened in userspace.
-> >
-> > Unless there is a signal pending and the signal setup code is about to
-> > hit the same failed memory.  I suppose we can just treat cases like
-> > this as "oh well, time to kill the whole system".
-> >
-> > But we should genuinely agree that we're okay with deferring this handling.
->
-> It doesn't delay much. The moment it does that local_irq_enable() it's
-> subject to preemption, just like it is on the return to user path.
->
-> Do you really want to create code that unwinds enough of nmi_enter() to
-> get you to a preemptible context? *shudder*
-
-Well, there's another way to approach this:
-
-void notrace nonothing do_machine_check(struct pt_regs *regs)
-{
-  if (user_mode(regs))
-    do_sane_machine_check(regs);
-  else
-    do_awful_machine_check(regs);
-}
-
-void do_sane_machine_check(regs)
-{
-  nothing special here.  just a regular exception, more or less.
-}
-
-void do_awful_macine_check(regs)
-{
-  basically an NMI.  No funny business, no recovery possible.
-task_work_add() not allowed.
-}
-
-Or, even better, depending on how tglx's series shakes out, we could
-build on this patch:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git/commit/?h=x86/idtentry&id=ebd8303dda34ea21476e4493cee671d998e83a48
-
-and actually have two separate do_machine_check entry points.  So we'd
-do, roughly:
-
-idtentry_ist ... normal_stack_entry=do_sane_machine_check
-ist_stack_entry=do_awful_machine_check
-
-and now there's no chance for confusion.
-
-All of the above has some issues when Tony decides that he wants to
-recover from specially annotated recoverable kernel memory accesses.
-Then task_word_add() is a nonstarter, but the current
-stack-switch-from-usermode *also* doesn't work.  I floated the idea of
-also doing the stack switch if we come from an IF=1 context, but
-that's starting to get nasty.
-
-One big question here: are memory failure #MC exceptions synchronous
-or can they be delayed?   If we get a memory failure, is it possible
-that the #MC hits some random context and not the actual context where
-the error occurred?
-
-I suppose the general consideration I'm trying to get at is: is
-task_work_add() actually useful at all here?  For the case when a
-kernel thread does memcpy_mcsafe() or similar, task work registered
-using task_work_add() will never run.
-
---Andy
+PiBPbmUgYmlnIHF1ZXN0aW9uIGhlcmU6IGFyZSBtZW1vcnkgZmFpbHVyZSAjTUMgZXhjZXB0aW9u
+cyBzeW5jaHJvbm91cw0KPiBvciBjYW4gdGhleSBiZSBkZWxheWVkPyAgIElmIHdlIGdldCBhIG1l
+bW9yeSBmYWlsdXJlLCBpcyBpdCBwb3NzaWJsZQ0KPiB0aGF0IHRoZSAjTUMgaGl0cyBzb21lIHJh
+bmRvbSBjb250ZXh0IGFuZCBub3QgdGhlIGFjdHVhbCBjb250ZXh0IHdoZXJlDQo+IHRoZSBlcnJv
+ciBvY2N1cnJlZD8NCg0KVGhlcmUgYXJlIGEgZmV3IGNhc2VzOg0KMSkgU1JBTyAoU29mdHdhcmUg
+cmVjb3ZlcmFibGUgYWN0aW9uIG9wdGlvbmFsKSBbUGF0cm9sIHNjcnViIG9yIEwzIGNhY2hlIGV2
+aWN0aW9uXQ0KVGhlc2UgYXJlbid0IHN5bmNocm9ub3VzIHdpdGggYW55IGNvcmUgZXhlY3V0aW9u
+LiBVc2luZyBtYWNoaW5lIGNoZWNrIHRvIHNpZ25hbA0Kd2FzIHByb2JhYmx5IGEgbWlzdGFrZSAt
+IGNvbXBvdW5kZWQgYnkgaXQgYmVpbmcgYnJvYWRjYXN0IDotKCAgQ291bGQgcGljayBhbnkgQ1BV
+DQp0byBoYW5kbGUgKGFjdHVhbGx5IGNob29zZSB0aGUgZmlyc3QgdG8gYXJyaXZlIGluIGRvX21h
+Y2hpbmVfY2hlY2soKSkuIFRoYXQgZ3V5IHNob3VsZA0KYXJyYW5nZSB0byBzb2Z0IG9mZmxpbmUg
+dGhlIGFmZmVjdGVkIHBhZ2UuIEV2ZXJ5IENQVSBjYW4gcmV0dXJuIHRvIHdoYXQgdGhleSB3ZXJl
+IGRvaW5nDQpiZWZvcmUuDQoNCjIpIFNSQVIgKFNvZnR3YXJlIHJlY292ZXJhYmxlIGFjdGlvbiBy
+ZXF1aXJlZCkNClRoZXNlIGFyZSBzeW5jaHJvbm91cy4gU3RhcnRpbmcgd2l0aCBTa3lsYWtlIHRo
+ZXkgbWF5IGJlIHNpZ25hbGVkIGp1c3QgdG8gdGhlIHRocmVhZA0KdGhhdCBoaXQgdGhlIHBvaXNv
+bi4gRWFybGllciBnZW5lcmF0aW9ucyBicm9hZGNhc3QuDQoJMmEpIEhpdCBpbiByaW5nMyBjb2Rl
+IC4uLiB3ZSB3YW50IHRvIG9mZmxpbmUgdGhlIHBhZ2UgYW5kIFNJR0JVUyB0aGUgdGFzayhzKQ0K
+CTJiKSBNZW1jcHlfbWNzYWZlKCkgLi4uIGtlcm5lbCBoYXMgYSByZWNvdmVyeSBwYXRoLiAiUmV0
+dXJuIiB0byB0aGUgcmVjb3ZlcnkgY29kZSBpbnN0ZWFkIG9mIHRvIHRoZSBvcmlnaW5hbCBSSVAu
+DQoJMmMpIGNvcHlfZnJvbV91c2VyIC4uLiBub3QgaW1wbGVtZW50ZWQgeWV0LiBXZSBhcmUgaW4g
+a2VybmVsLCBidXQgd291bGQgbGlrZSB0byB0cmVhdCB0aGlzIGxpa2UgY2FzZSAyYQ0KDQozKSBG
+YXRhbA0KQWx3YXlzIGJyb2FkY2FzdC4gU29tZSBiYW5rIGhhcyBNQ2lfU1RBVFVTLlBDQz09MS4g
+U3lzdGVtIG11c3QgYmUgc2h1dGRvd24uDQoNCi1Ub255DQo=
