@@ -2,123 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDC1164C46
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 18:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D73F164C48
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 18:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbgBSRmM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Feb 2020 12:42:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48352 "EHLO mail.kernel.org"
+        id S1726634AbgBSRmc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 12:42:32 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:33670 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726518AbgBSRmM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Feb 2020 12:42:12 -0500
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        id S1726518AbgBSRmc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 Feb 2020 12:42:32 -0500
+Received: from zn.tnic (p200300EC2F095500C57DC876B1A4488F.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:5500:c57d:c876:b1a4:488f])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 33950206DB;
-        Wed, 19 Feb 2020 17:42:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582134131;
-        bh=vIgg2+36Ua5x8HLBjl9/8lcExSUzV+uuuacH+jPaAXU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nAIpKrpFowh8AD0faMeogIAyLpP8hxzgnzmFYS81QqfDCsn+lJvzjeUAE0wD8YPsu
-         c+gcGvF4qhq+TM2ofGgTVpgDlhogxD1pEPMSa8mId/A0cP+wHbiEzpKWUFOZDcJf4V
-         K1IiVYU1t6nm2uPfnXU4/iGlfM2i03Ngxmut/IAw=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 0FCBF35209B0; Wed, 19 Feb 2020 09:42:11 -0800 (PST)
-Date:   Wed, 19 Feb 2020 09:42:11 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org, mingo@kernel.org, joel@joelfernandes.org,
-        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
-        tglx@linutronix.de, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        luto@kernel.org, tony.luck@intel.com, frederic@kernel.org,
-        dan.carpenter@oracle.com, mhiramat@kernel.org
-Subject: Re: [PATCH v3 05/22] rcu: Make RCU IRQ enter/exit functions rely on
- in_nmi()
-Message-ID: <20200219174211.GL2935@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9FFFF1EC0591;
+        Wed, 19 Feb 2020 18:42:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1582134150;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=DpvCtMjqcX25XbMiHHt7/X8aEcXXE9Ghl88YlkXaLKo=;
+        b=cZiQCPVUp+LrsSX1QyqrebwJk24EqpWZK+j7W+aJxC8JJ1UoTV5ioerAUuCl7iI1p2CQ/k
+        vQfI+wh/l37W+kADEV+CXvgpbnqMlhoNanR//2X50YNLOLzAiWRVfAYKjTDtCHAKBs3tis
+        Hmrq69Zv7llUJmARUzJoTwtkd6FarZk=
+Date:   Wed, 19 Feb 2020 18:42:23 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Greg KH <gregkh@linuxfoundation.org>, gustavo@embeddedor.com,
+        Thomas Gleixner <tglx@linutronix.de>, paulmck@kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v3 02/22] x86,mce: Delete ist_begin_non_atomic()
+Message-ID: <20200219174223.GE30966@zn.tnic>
 References: <20200219144724.800607165@infradead.org>
- <20200219150744.661923520@infradead.org>
- <20200219163156.GY2935@paulmck-ThinkPad-P72>
- <20200219163700.GK18400@hirez.programming.kicks-ass.net>
- <20200219170304.GG14946@hirez.programming.kicks-ass.net>
+ <20200219150744.488895196@infradead.org>
+ <20200219171309.GC32346@zn.tnic>
+ <CALCETrWBEDjenqze3wVc6TkUt_g+OFx9TQbYysLH+6fku=aWjQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200219170304.GG14946@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CALCETrWBEDjenqze3wVc6TkUt_g+OFx9TQbYysLH+6fku=aWjQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 06:03:04PM +0100, Peter Zijlstra wrote:
-> On Wed, Feb 19, 2020 at 05:37:00PM +0100, Peter Zijlstra wrote:
-> > On Wed, Feb 19, 2020 at 08:31:56AM -0800, Paul E. McKenney wrote:
-> 
-> > > Here is the latest version of that comment, posted by Steve Rostedt.
-> > > 
-> > > 							Thanx, Paul
-> > > 
-> > > /*
-> > >  * All functions called in the breakpoint trap handler (e.g. do_int3()
-> > >  * on x86), must not allow kprobes until the kprobe breakpoint handler
-> > >  * is called, otherwise it can cause an infinite recursion.
-> > >  * On some archs, rcu_nmi_enter() is called in the breakpoint handler
-> > >  * before the kprobe breakpoint handler is called, thus it must be
-> > >  * marked as NOKPROBE.
-> > >  */
-> > 
-> > Oh right, let me stick that in a separate patch. Best we not loose that
-> > I suppose ;-)
-> 
-> Having gone over the old thread, I ended up with the below. Anyone
-> holler if I got it wrong somehow.
+On Wed, Feb 19, 2020 at 09:21:48AM -0800, Andy Lutomirski wrote:
+> Unless there is a signal pending and the signal setup code is about to
+> hit the same failed memory.  I suppose we can just treat cases like
+> this as "oh well, time to kill the whole system".
+>
+> But we should genuinely agree that we're okay with deferring this handling.
 
-Looks good to me!
+Good catch!
 
-							Thanx, Paul
+static void exit_to_usermode_loop(struct pt_regs *regs, u32 cached_flags)
+{
 
-> ---
-> Subject: rcu: Provide comment for NOKPROBE() on rcu_nmi_enter()
-> From: Steven Rostedt <rostedt@goodmis.org>
-> 
-> From: Steven Rostedt <rostedt@goodmis.org>
-> 
-> The rcu_nmi_enter() function was marked NOKPROBE() by commit
-> c13324a505c77 ("x86/kprobes: Prohibit probing on functions before
-> kprobe_int3_handler()") because the do_int3() call kprobe code must
-> not be invoked before kprobe_int3_handler() is called.  It turns out
-> that ist_enter() (in do_int3()) calls rcu_nmi_enter(), hence the
-> marking NOKPROBE() being added to rcu_nmi_enter().
-> 
-> This commit therefore adds a comment documenting this line of
-> reasoning.
-> 
-> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/rcu/tree.c |    8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -842,6 +842,14 @@ void rcu_nmi_enter(void)
->  {
->  	rcu_nmi_enter_common(false);
->  }
-> +/*
-> + * All functions called in the breakpoint trap handler (e.g. do_int3()
-> + * on x86), must not allow kprobes until the kprobe breakpoint handler
-> + * is called, otherwise it can cause an infinite recursion.
-> + * On some archs, rcu_nmi_enter() is called in the breakpoint handler
-> + * before the kprobe breakpoint handler is called, thus it must be
-> + * marked as NOKPROBE.
-> + */
->  NOKPROBE_SYMBOL(rcu_nmi_enter);
->  
->  /**
+	...
+
+		/* deal with pending signal delivery */
+                if (cached_flags & _TIF_SIGPENDING)
+                        do_signal(regs);
+
+                if (cached_flags & _TIF_NOTIFY_RESUME) {
+                        clear_thread_flag(TIF_NOTIFY_RESUME);
+                        tracehook_notify_resume(regs);
+                        rseq_handle_notify_resume(NULL, regs);
+                }
+
+
+Err, can we make task_work run before we handle signals? Or there's a
+reason it is run in this order?
+
+Comment over task_work_add() says:
+
+ * This is like the signal handler which runs in kernel mode, but it doesn't
+ * try to wake up the @task.
+
+which sounds to me like this should really run before the signal
+handlers...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
