@@ -2,25 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BD8164F20
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 20:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 499D8164F4B
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 20:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726766AbgBSTnh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Feb 2020 14:43:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49514 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726634AbgBSTnh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Feb 2020 14:43:37 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 42C84207FD;
-        Wed, 19 Feb 2020 19:43:35 +0000 (UTC)
-Date:   Wed, 19 Feb 2020 14:43:33 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
+        id S1726634AbgBSTy2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 14:54:28 -0500
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:38602 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726713AbgBSTy1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Feb 2020 14:54:27 -0500
+Received: by mail-qt1-f195.google.com with SMTP id i23so1152555qtr.5
+        for <linux-arch@vger.kernel.org>; Wed, 19 Feb 2020 11:54:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=GZ9YXuE15eVQ1m82XL11R20aCz4heFp3V/a8Xs8KTDk=;
+        b=ODVc7IEJfwpkmKIQUqFybHBw620ekiVwat/n9Ac5Pfspu1Q4DuB58gmJDIsLNVVBR7
+         EpgFHQfjMKK9d8IFitaDW17i9XWGMOavG4yOJnvYsg02g18N65AN1jFk1HcjJ57HAFxd
+         Srq5n3/4F5KJ984TW6fFo2kUw679IcjtmPWAcaOWdAcZSMUz+MUTctzRJjL6rDujJi/Y
+         EZ5twEFC1HpJvBQ4+fhBpkHpbsTIlkaMeDsXOufmgAI9ouoTt9BWBKfdT8kf7Xff3/mQ
+         zcrvJjierCEsOXBM6EBzIlWLE2Y6UQ4XbCxlvapTQbBcZKR3JvyWwjtYZpGRKgkQ/k9/
+         vfwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GZ9YXuE15eVQ1m82XL11R20aCz4heFp3V/a8Xs8KTDk=;
+        b=tbHObyqFx1zO6rWoZ8LOXAivbkQhWSpY8f8PGrzxeJdqpXKrp8yv610+t8wEVoS/zb
+         ydH7b1NoZrLC4LlM5ud4QPnyYPNb9bPFgKGDSHCCgWKLNoIRPWFHUk+af9rdC2JhR3/+
+         XW5R+MaTBgQISvu7Cb0nYR/Kuq9RRkEvVQOLloxo2IeVRaTIosHpliUrEd+TxOHaORSK
+         H96ppJ/5zbOgkGml3FdI+OgC0fyRF60zwL+WelW9de11SadaTg8pkIZTIWv7DE6e1eMq
+         5Z0o28jeQDgW94k5C4ucTNouvjsvTBypXVJ9aRuruSuYrNcX9mwLx0OCVvo6rdyptKqL
+         cfYA==
+X-Gm-Message-State: APjAAAXZXjB+Sz18n1oHdvjBO0t5ALwrMzsrFmlqF7sjA9nMmpGGg/ig
+        UAKDBepGnDcz7L+apWspIca6Nw==
+X-Google-Smtp-Source: APXvYqwUhupndXBE09xsDkgUA7kwgC2NQShW8nuUAvL8wUSkyIakN42anJqBWpm/nMwac3dxI/meAg==
+X-Received: by 2002:aed:3fb7:: with SMTP id s52mr22354651qth.97.1582142065790;
+        Wed, 19 Feb 2020 11:54:25 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-68-57-212.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.57.212])
+        by smtp.gmail.com with ESMTPSA id p8sm490083qtn.71.2020.02.19.11.54.25
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 19 Feb 2020 11:54:25 -0800 (PST)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1j4VQO-0006DL-Tx; Wed, 19 Feb 2020 15:54:24 -0400
+Date:   Wed, 19 Feb 2020 15:54:24 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
@@ -34,51 +65,42 @@ Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         clang-built-linux <clang-built-linux@googlegroups.com>
 Subject: Re: [PATCH 3/6] tracing: Wrap section comparison in
  tracer_alloc_buffers with COMPARE_SECTIONS
-Message-ID: <20200219144333.1ce3f9ea@gandalf.local.home>
-In-Reply-To: <20200219192249.GA8840@ubuntu-m2-xlarge-x86>
+Message-ID: <20200219195424.GW31668@ziepe.ca>
 References: <20200219045423.54190-1-natechancellor@gmail.com>
-        <20200219045423.54190-4-natechancellor@gmail.com>
-        <20200219093445.386f1c09@gandalf.local.home>
-        <CAKwvOdm-N1iX0SMxGDV5Vf=qS5uHPdH3S-TRs-065BuSOdKt1w@mail.gmail.com>
-        <20200219181619.GV31668@ziepe.ca>
-        <CAKwvOd=8vb5eOjiLg96zr25Xsq_Xge_Ym7RsNqKK8g+ZR9KWzA@mail.gmail.com>
-        <20200219192249.GA8840@ubuntu-m2-xlarge-x86>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+ <20200219045423.54190-4-natechancellor@gmail.com>
+ <20200219093445.386f1c09@gandalf.local.home>
+ <CAKwvOdm-N1iX0SMxGDV5Vf=qS5uHPdH3S-TRs-065BuSOdKt1w@mail.gmail.com>
+ <20200219181619.GV31668@ziepe.ca>
+ <CAKwvOd=8vb5eOjiLg96zr25Xsq_Xge_Ym7RsNqKK8g+ZR9KWzA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOd=8vb5eOjiLg96zr25Xsq_Xge_Ym7RsNqKK8g+ZR9KWzA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 19 Feb 2020 12:22:49 -0700
-Nathan Chancellor <natechancellor@gmail.com> wrote:
-
-> Yes, thank you for the analysis and further discussion! I have done some
-> rudimentary printk debugging in QEMU and it looks like these are produce
-> the same value:
+On Wed, Feb 19, 2020 at 11:11:19AM -0800, Nick Desaulniers wrote:
+> > Godbolt says clang is happy if it is written as:
+> >
+> >   if (&__stop___trace_bprintk_fmt[0] != &__start___trace_bprintk_fmt[0])
+> >
+> > Which is probably the best compromise. The type here is const char
+> > *[], so it would be a shame to see it go.
 > 
-> __stop___trace_bprintk_fmt
-> &__stop___trace_bprintk_fmt
-> &__start___trace_bprintk_fmt[0]
-> 
-> as well as
-> 
-> __stop___trace_bprintk_fmt != __start___trace_bprintk_fmt
-> &__stop___trace_bprintk_fmt != &__start___trace_bprintk_fmt
-> &__stop___trace_bprintk_fmt[0] != &__start___trace_bprintk_fmt[0]
-> 
-> I'll use the second one once I confirm this is true in all callspots
-> with both Clang and GCC, since it looks cleaner. Let me know if there
-> are any objections to that.
+> If the "address" is never dereferenced, but only used for arithmetic
+> (in a way that the the pointed to type is irrelevant), does the
+> pointed to type matter? 
 
-Myself and I'm sure others would be fine with this approach as it is
-still readable. I was just against the encapsulating the logic in a
-strange macro that killed readability.
+The type is used here:
 
-I haven't looked at the resulting assembly from these, and will
-currently take your word for it ;-)  Of course, I will thoroughly test
-any patches to this code to make sure it does not hurt functionality.
+        if (*pos < start_index)
+                return __start___trace_bprintk_fmt + *pos;
 
--- Steve
+The return expression should be a const char **
+
+Presumably the caller of find_next derferences it.
+
+Jason
