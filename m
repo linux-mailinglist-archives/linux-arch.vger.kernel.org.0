@@ -2,38 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17625164811
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 16:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360B3164829
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 16:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727592AbgBSPO0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Feb 2020 10:14:26 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:35970 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726682AbgBSPOY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Feb 2020 10:14:24 -0500
+        id S1726801AbgBSPO4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 10:14:56 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:52044 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726682AbgBSPOi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Feb 2020 10:14:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=merlin.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=QFHgOH6S3AfalQFNA2OtdJ+0cM9mrfqdqHGJCieOJmI=; b=uzDOXK0R63Q0+XXmw/54vt/IE8
-        Ss6kiCjtFferUkZf032zsLjRmS7+4axQJ+89AkghX/sS2ktxifaZUgtuCMrRRD+jhythP+ux/piwI
-        ZO3sBpEVtnEBPjlEGZ4XwploNriFjG1huOkAkYP280QEvRipjYFu10FbRP+kUNXaSPPhc0gjDYsYm
-        4bT9qaNP1nJ/iFU5sn+0cOGvdB8VvqS1UqPQnYgJcDWMITOfKg56QcADfgG3eeNOFqSYY5PnS97az
-        pLxdkF19KchlTOhvWVDktOMsoXoPDJI7hphWABFOOz8N5nhWPLVXGybxPzRDtPRNkNHJEn3Ep585+
-        6ORFarxQ==;
+        bh=nf3Y+F2c5evtixK2f2CxuM8wDe9t5fJePWCPEZFSPM4=; b=0/rdzswBTpaznDPxt4TwE/hlcn
+        gli5UERNM3PP064TvrzB95qa0nAcbhVdObitOWuMu0UUm9xou96ZQbyH3cpCkEydTCzqfOJ7gvB2f
+        9xzs3kbTeshdINkFoNkrLEQxT8DdwTeC1JDc7aNiuSAVdGTHiA8MPk0xtI3X78cie5QXYfHH620yZ
+        0qOLMAbZ3rlCtBbydBG0oN9ecjsLyaV9bcOhk7n1aKEX9CRsAIxdugw7pfPTfGChnW1xRILxPIUyL
+        8HfIDFloav9wIwOYQw8nHSBuP29PBIojlWIKV8u5+CninuI/6pwDMXyvc/GMp3P541QB/9eQAmNAB
+        Tw1Oppcg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j4R3A-000119-2K; Wed, 19 Feb 2020 15:14:08 +0000
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j4R37-0007fD-HC; Wed, 19 Feb 2020 15:14:05 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 29A383062BA;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 28D0130610C;
         Wed, 19 Feb 2020 16:12:11 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 6A15B20D96A35; Wed, 19 Feb 2020 16:14:03 +0100 (CET)
-Message-Id: <20200219150744.428764577@infradead.org>
+        id 6CC4A2997CED2; Wed, 19 Feb 2020 16:14:03 +0100 (CET)
+Message-Id: <20200219150744.488895196@infradead.org>
 User-Agent: quilt/0.65
-Date:   Wed, 19 Feb 2020 15:47:25 +0100
+Date:   Wed, 19 Feb 2020 15:47:26 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         rostedt@goodmis.org
@@ -42,11 +42,8 @@ Cc:     peterz@infradead.org, mingo@kernel.org, joel@joelfernandes.org,
         tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
         mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
         luto@kernel.org, tony.luck@intel.com, frederic@kernel.org,
-        dan.carpenter@oracle.com, mhiramat@kernel.org,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 01/22] hardirq/nmi: Allow nested nmi_enter()
+        dan.carpenter@oracle.com, mhiramat@kernel.org
+Subject: [PATCH v3 02/22] x86,mce: Delete ist_begin_non_atomic()
 References: <20200219144724.800607165@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,192 +52,176 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since there are already a number of sites (ARM64, PowerPC) that
-effectively nest nmi_enter(), lets make the primitive support this
-before adding even more.
+It is an abomination; and in prepration of removing the whole
+ist_enter() thing, it needs to go.
 
-Cc: Will Deacon <will@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Petr Mladek <pmladek@suse.com>
+Convert #MC over to using task_work_add() instead; it will run the
+same code slightly later, on the return to user path of the same
+exception.
+
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/arm64/include/asm/hardirq.h |    4 ++--
- arch/arm64/kernel/sdei.c         |   14 ++------------
- arch/arm64/kernel/traps.c        |    8 ++------
- arch/powerpc/kernel/traps.c      |   19 +++++--------------
- include/linux/hardirq.h          |    2 +-
- include/linux/preempt.h          |    4 ++--
- kernel/printk/printk_safe.c      |    6 ++++--
- 7 files changed, 18 insertions(+), 39 deletions(-)
+ arch/x86/include/asm/traps.h   |    2 -
+ arch/x86/kernel/cpu/mce/core.c |   53 +++++++++++++++++++++++------------------
+ arch/x86/kernel/traps.c        |   37 ----------------------------
+ include/linux/sched.h          |    6 ++++
+ 4 files changed, 36 insertions(+), 62 deletions(-)
 
---- a/arch/arm64/include/asm/hardirq.h
-+++ b/arch/arm64/include/asm/hardirq.h
-@@ -38,7 +38,7 @@ DECLARE_PER_CPU(struct nmi_ctx, nmi_cont
+--- a/arch/x86/include/asm/traps.h
++++ b/arch/x86/include/asm/traps.h
+@@ -123,8 +123,6 @@ asmlinkage void smp_irq_move_cleanup_int
  
- #define arch_nmi_enter()							\
- 	do {									\
--		if (is_kernel_in_hyp_mode()) {					\
-+		if (is_kernel_in_hyp_mode() && !in_nmi()) {			\
- 			struct nmi_ctx *nmi_ctx = this_cpu_ptr(&nmi_contexts);	\
- 			nmi_ctx->hcr = read_sysreg(hcr_el2);			\
- 			if (!(nmi_ctx->hcr & HCR_TGE)) {			\
-@@ -50,7 +50,7 @@ DECLARE_PER_CPU(struct nmi_ctx, nmi_cont
+ extern void ist_enter(struct pt_regs *regs);
+ extern void ist_exit(struct pt_regs *regs);
+-extern void ist_begin_non_atomic(struct pt_regs *regs);
+-extern void ist_end_non_atomic(void);
  
- #define arch_nmi_exit()								\
- 	do {									\
--		if (is_kernel_in_hyp_mode()) {					\
-+		if (is_kernel_in_hyp_mode() && !in_nmi()) {			\
- 			struct nmi_ctx *nmi_ctx = this_cpu_ptr(&nmi_contexts);	\
- 			if (!(nmi_ctx->hcr & HCR_TGE))				\
- 				write_sysreg(nmi_ctx->hcr, hcr_el2);		\
---- a/arch/arm64/kernel/sdei.c
-+++ b/arch/arm64/kernel/sdei.c
-@@ -251,22 +251,12 @@ asmlinkage __kprobes notrace unsigned lo
- __sdei_handler(struct pt_regs *regs, struct sdei_registered_event *arg)
- {
- 	unsigned long ret;
--	bool do_nmi_exit = false;
+ #ifdef CONFIG_VMAP_STACK
+ void __noreturn handle_stack_overflow(const char *message,
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -42,6 +42,7 @@
+ #include <linux/export.h>
+ #include <linux/jump_label.h>
+ #include <linux/set_memory.h>
++#include <linux/task_work.h>
  
--	/*
--	 * nmi_enter() deals with printk() re-entrance and use of RCU when
--	 * RCU believed this CPU was idle. Because critical events can
--	 * interrupt normal events, we may already be in_nmi().
--	 */
--	if (!in_nmi()) {
--		nmi_enter();
--		do_nmi_exit = true;
--	}
-+	nmi_enter();
- 
- 	ret = _sdei_handler(regs, arg);
- 
--	if (do_nmi_exit)
--		nmi_exit();
-+	nmi_exit();
- 
- 	return ret;
- }
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -906,17 +906,13 @@ bool arm64_is_fatal_ras_serror(struct pt
- 
- asmlinkage void do_serror(struct pt_regs *regs, unsigned int esr)
- {
--	const bool was_in_nmi = in_nmi();
--
--	if (!was_in_nmi)
--		nmi_enter();
-+	nmi_enter();
- 
- 	/* non-RAS errors are not containable */
- 	if (!arm64_is_ras_serror(esr) || arm64_is_fatal_ras_serror(regs, esr))
- 		arm64_serror_panic(regs, esr);
- 
--	if (!was_in_nmi)
--		nmi_exit();
-+	nmi_exit();
- }
- 
- asmlinkage void enter_from_user_mode(void)
---- a/arch/powerpc/kernel/traps.c
-+++ b/arch/powerpc/kernel/traps.c
-@@ -441,15 +441,9 @@ void hv_nmi_check_nonrecoverable(struct
- void system_reset_exception(struct pt_regs *regs)
- {
- 	unsigned long hsrr0, hsrr1;
--	bool nested = in_nmi();
- 	bool saved_hsrrs = false;
- 
--	/*
--	 * Avoid crashes in case of nested NMI exceptions. Recoverability
--	 * is determined by RI and in_nmi
--	 */
--	if (!nested)
--		nmi_enter();
-+	nmi_enter();
- 
- 	/*
- 	 * System reset can interrupt code where HSRRs are live and MSR[RI]=1.
-@@ -521,8 +515,7 @@ void system_reset_exception(struct pt_re
- 		mtspr(SPRN_HSRR1, hsrr1);
+ #include <asm/intel-family.h>
+ #include <asm/processor.h>
+@@ -1084,23 +1085,6 @@ static void mce_clear_state(unsigned lon
  	}
- 
--	if (!nested)
--		nmi_exit();
-+	nmi_exit();
- 
- 	/* What should we do here? We could issue a shutdown or hard reset. */
- }
-@@ -823,9 +816,8 @@ int machine_check_generic(struct pt_regs
- void machine_check_exception(struct pt_regs *regs)
- {
- 	int recover = 0;
--	bool nested = in_nmi();
--	if (!nested)
--		nmi_enter();
-+
-+	nmi_enter();
- 
- 	__this_cpu_inc(irq_stat.mce_exceptions);
- 
-@@ -863,8 +855,7 @@ void machine_check_exception(struct pt_r
- 	return;
- 
- bail:
--	if (!nested)
--		nmi_exit();
-+	nmi_exit();
  }
  
- void SMIException(struct pt_regs *regs)
---- a/include/linux/hardirq.h
-+++ b/include/linux/hardirq.h
-@@ -71,7 +71,7 @@ extern void irq_exit(void);
- 		printk_nmi_enter();				\
- 		lockdep_off();					\
- 		ftrace_nmi_enter();				\
--		BUG_ON(in_nmi());				\
-+		BUG_ON(in_nmi() == NMI_MASK);			\
- 		preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);	\
- 		rcu_nmi_enter();				\
- 		trace_hardirq_enter();				\
---- a/include/linux/preempt.h
-+++ b/include/linux/preempt.h
-@@ -26,13 +26,13 @@
-  *         PREEMPT_MASK:	0x000000ff
-  *         SOFTIRQ_MASK:	0x0000ff00
-  *         HARDIRQ_MASK:	0x000f0000
-- *             NMI_MASK:	0x00100000
-+ *             NMI_MASK:	0x00f00000
-  * PREEMPT_NEED_RESCHED:	0x80000000
-  */
- #define PREEMPT_BITS	8
- #define SOFTIRQ_BITS	8
- #define HARDIRQ_BITS	4
--#define NMI_BITS	1
-+#define NMI_BITS	4
- 
- #define PREEMPT_SHIFT	0
- #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
---- a/kernel/printk/printk_safe.c
-+++ b/kernel/printk/printk_safe.c
-@@ -296,12 +296,14 @@ static __printf(1, 0) int vprintk_nmi(co
- 
- void notrace printk_nmi_enter(void)
- {
--	this_cpu_or(printk_context, PRINTK_NMI_CONTEXT_MASK);
-+	if (!in_nmi())
-+		this_cpu_or(printk_context, PRINTK_NMI_CONTEXT_MASK);
- }
- 
- void notrace printk_nmi_exit(void)
- {
--	this_cpu_and(printk_context, ~PRINTK_NMI_CONTEXT_MASK);
-+	if (!in_nmi())
-+		this_cpu_and(printk_context, ~PRINTK_NMI_CONTEXT_MASK);
- }
- 
+-static int do_memory_failure(struct mce *m)
+-{
+-	int flags = MF_ACTION_REQUIRED;
+-	int ret;
+-
+-	pr_err("Uncorrected hardware memory error in user-access at %llx", m->addr);
+-	if (!(m->mcgstatus & MCG_STATUS_RIPV))
+-		flags |= MF_MUST_KILL;
+-	ret = memory_failure(m->addr >> PAGE_SHIFT, flags);
+-	if (ret)
+-		pr_err("Memory error not recovered");
+-	else
+-		set_mce_nospec(m->addr >> PAGE_SHIFT);
+-	return ret;
+-}
+-
+-
  /*
+  * Cases where we avoid rendezvous handler timeout:
+  * 1) If this CPU is offline.
+@@ -1202,6 +1186,29 @@ static void __mc_scan_banks(struct mce *
+ 	*m = *final;
+ }
+ 
++static void mce_kill_me_now(struct callback_head *ch)
++{
++	force_sig(SIGBUS);
++}
++
++static void mce_kill_me_maybe(struct callback_head *cb)
++{
++	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
++	int flags = MF_ACTION_REQUIRED;
++
++	pr_err("Uncorrected hardware memory error in user-access at %llx", p->mce_addr);
++	if (!(p->mce_status & MCG_STATUS_RIPV))
++		flags |= MF_MUST_KILL;
++
++	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, flags)) {
++		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
++		return;
++	}
++
++	pr_err("Memory error not recovered");
++	mce_kill_me_now(cb);
++}
++
+ /*
+  * The actual machine check handler. This only handles real
+  * exceptions when something got corrupted coming in through int 18.
+@@ -1344,13 +1351,13 @@ void do_machine_check(struct pt_regs *re
+ 
+ 	/* Fault was in user mode and we need to take some action */
+ 	if ((m.cs & 3) == 3) {
+-		ist_begin_non_atomic(regs);
+-		local_irq_enable();
++		current->mce_addr = m.addr;
++		current->mce_status = m.mcgstatus;
++		current->mce_kill_me.func = mce_kill_me_maybe;
++		if (kill_it)
++			current->mce_kill_me.func = mce_kill_me_now;
+ 
+-		if (kill_it || do_memory_failure(&m))
+-			force_sig(SIGBUS);
+-		local_irq_disable();
+-		ist_end_non_atomic();
++		task_work_add(current, &current->mce_kill_me, true);
+ 	} else {
+ 		if (!fixup_exception(regs, X86_TRAP_MC, error_code, 0))
+ 			mce_panic("Failed kernel mode recovery", &m, msg);
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -117,43 +117,6 @@ void ist_exit(struct pt_regs *regs)
+ 		rcu_nmi_exit();
+ }
+ 
+-/**
+- * ist_begin_non_atomic() - begin a non-atomic section in an IST exception
+- * @regs:	regs passed to the IST exception handler
+- *
+- * IST exception handlers normally cannot schedule.  As a special
+- * exception, if the exception interrupted userspace code (i.e.
+- * user_mode(regs) would return true) and the exception was not
+- * a double fault, it can be safe to schedule.  ist_begin_non_atomic()
+- * begins a non-atomic section within an ist_enter()/ist_exit() region.
+- * Callers are responsible for enabling interrupts themselves inside
+- * the non-atomic section, and callers must call ist_end_non_atomic()
+- * before ist_exit().
+- */
+-void ist_begin_non_atomic(struct pt_regs *regs)
+-{
+-	BUG_ON(!user_mode(regs));
+-
+-	/*
+-	 * Sanity check: we need to be on the normal thread stack.  This
+-	 * will catch asm bugs and any attempt to use ist_preempt_enable
+-	 * from double_fault.
+-	 */
+-	BUG_ON(!on_thread_stack());
+-
+-	preempt_enable_no_resched();
+-}
+-
+-/**
+- * ist_end_non_atomic() - begin a non-atomic section in an IST exception
+- *
+- * Ends a non-atomic section started with ist_begin_non_atomic().
+- */
+-void ist_end_non_atomic(void)
+-{
+-	preempt_disable();
+-}
+-
+ int is_valid_bugaddr(unsigned long addr)
+ {
+ 	unsigned short ud;
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1285,6 +1285,12 @@ struct task_struct {
+ 	unsigned long			prev_lowest_stack;
+ #endif
+ 
++#ifdef CONFIG_X86_MCE
++	u64				mce_addr;
++	u64				mce_status;
++	struct callback_head		mce_kill_me;
++#endif
++
+ 	/*
+ 	 * New fields for task_struct should be added above here, so that
+ 	 * they are included in the randomized portion of task_struct.
 
 
