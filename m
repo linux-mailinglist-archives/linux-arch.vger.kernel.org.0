@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E2B163C46
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 05:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DA3163C2B
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 05:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbgBSEyd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1726551AbgBSEyd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Tue, 18 Feb 2020 23:54:33 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:39571 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726551AbgBSEyc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Feb 2020 23:54:32 -0500
-Received: by mail-oi1-f194.google.com with SMTP id z2so22579807oih.6;
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:34932 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726623AbgBSEyd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Feb 2020 23:54:33 -0500
+Received: by mail-oi1-f196.google.com with SMTP id b18so22608360oie.2;
         Tue, 18 Feb 2020 20:54:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Os68XGDBUjifyLXJ9YoVcjf5m29kyGwpnUt6cu21Uo4=;
-        b=WlD3m2XzyakcphSWqvY6ufrDPoLiHTqfkDQel1TWzkr4wSIEc8m6I2qtiY+qrLWeU0
-         g24miItGoafOI1Afqip5txCb4iejvdTbOEcciEI4t2EBCj5h+bH9ZcXAzvN+u3OfKper
-         lHkxw+DTwWmAZjVEJ9pySiYz9LIakW1AssZAbdku//dq8ulQQ6aGSko1ag5vhyO0v3jx
-         +9ixehPaMPDo8W1qU/yf4TdND+x19tPSzYWPvF/V7kJ1uHkDn2m4TiaQTPm6xWdI37dD
-         RyhBWAPc8LYQTGV2ukmDO4AvpZVnmIaw9KdKvw6fkGEK7i4GfP/zjQUWgjm+eEBE+aDn
-         nfCA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=z4GEXAYyqQWsp025ogzeKnxOXkjpBM0jeh4Jkb1AQ/E=;
+        b=GxU8H+8wHFYPadW4JaajZHSEVBcXNLGzyU3EcBZXx+nG/SCQ/ASmuoJLfPCPUeuTcU
+         FPKoRZq2suxke3wLsTkQ3/gIM1UWeWVU52/tJzPsh7F9zxB1xTyPTqbDXA2XcyCzn8kA
+         iWG/YrzUa7yE/uj8JF+ADOrARv+qXt5jGgHTl3dGWyQcvrNsChBzUM6v8hKbMjzOjbne
+         Dv7HJtHNa1r3sg4kQxML6Nc9dqgwX2cEoYxS/8LynvMCvXhgd/YzZn9ZWcXiUNKliTpN
+         gvs8opTGiEwt6oK3ylCI00rjpTlVbwmdaK08ckbydc41KM39Ff9Rfz2SBcq1CUbJye9R
+         M1NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Os68XGDBUjifyLXJ9YoVcjf5m29kyGwpnUt6cu21Uo4=;
-        b=JtGJsFzbtbYy9hpVw7vAX3v66jUF41pPQbA5LZKNAyfR76ggOrX6o2HsGcZ6IIzSpd
-         O48y0/sD7oeVwo9/MdFGTknETjd+Gxxa4h5iED5YDO8QanBoLzjgUatHd9chSGdcIdvB
-         ssyBTm/pZphQJ0UNjHFnW87S1wY5wh5klhy8gRWP6B9NS1Pi4BXPU7T+aq1xHt4oJvy1
-         DRg5t+0QXkJbc4XyODt4nHJaodNfuK3UAk5J2ty1D/IkLcSl7Z4XC+cHnvVZIt+r2J8m
-         I2W8OI8TykyLqOUusX3FKxuTBqNgJfRE1gWXjJmwrpuhc7fTIpvI7RepV2OYPtWYl5ZT
-         OdVw==
-X-Gm-Message-State: APjAAAW5geamwYyfA5yvh/q7hFDF8H9J5l1+r7PKv40m8WlPtf0BFnSm
-        k/3VRTjlSnZ+eoHJiF7iY94=
-X-Google-Smtp-Source: APXvYqxy9VnLpe/f+G1QU6ZpnKmD90vBPbNlWqY9osCEKUE9HSgK6fxs2ivjl+MoiJ1Q8dJ5DNS0zg==
-X-Received: by 2002:aca:1204:: with SMTP id 4mr3613290ois.143.1582088071777;
-        Tue, 18 Feb 2020 20:54:31 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=z4GEXAYyqQWsp025ogzeKnxOXkjpBM0jeh4Jkb1AQ/E=;
+        b=YFJN4/G02fdhn8rp+qetJjO4Oq/sf4ht2kjX8GBFJPUt5ZwqmG1m/fQYU4c5o7S9nN
+         Cz3qjC+75KdISfjI8JWwzxI98SNmODfFsnF9qnqBMnEYUftMTjg3GWbNQOiZO2xwibMD
+         mz19vnrnpN2OjpsB3Dmq0r8xQOk8d73j8xS2JPZ29mI9RxxJ0cifPgG+cXzJriCCIlxO
+         ctG/PeOS4m3A8pNzOEe7/LZlhDtWbXLhzuNSGI7y6Fmwab7XKJhhIIEjJaN92XwQvhCG
+         M81BYaj7d2YgecelH9lH1mE4KL1wb3OeRA+rj8IZOoRX+OxcV98guokFQgElq2Yo0G37
+         O8PA==
+X-Gm-Message-State: APjAAAWspdyzS2Yh/8DEinxL3Yh25ytexeXR+TqjmCnnbYuFLtMJsunw
+        U7FtGoyQ4rsBHUO0NpoEOhU=
+X-Google-Smtp-Source: APXvYqzPqnhDSnUTxbnbVTbSbPmWK7BxoBMVOIdmKFVTG3pZ9TJDv5U6RijdtiI3Af1f4g1Jjlyyqw==
+X-Received: by 2002:aca:c7ca:: with SMTP id x193mr3514163oif.70.1582088072470;
+        Tue, 18 Feb 2020 20:54:32 -0800 (PST)
 Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id c7sm288894otn.81.2020.02.18.20.54.30
+        by smtp.gmail.com with ESMTPSA id c7sm288894otn.81.2020.02.18.20.54.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 20:54:31 -0800 (PST)
+        Tue, 18 Feb 2020 20:54:32 -0800 (PST)
 From:   Nathan Chancellor <natechancellor@gmail.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
@@ -57,10 +57,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         clang-built-linux@googlegroups.com,
         Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH 0/6] Silence some instances of -Wtautological-compare and enable globally
-Date:   Tue, 18 Feb 2020 21:54:17 -0700
-Message-Id: <20200219045423.54190-1-natechancellor@gmail.com>
+Subject: [PATCH 1/6] asm/sections: Add COMPARE_SECTIONS macro
+Date:   Tue, 18 Feb 2020 21:54:18 -0700
+Message-Id: <20200219045423.54190-2-natechancellor@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200219045423.54190-1-natechancellor@gmail.com>
+References: <20200219045423.54190-1-natechancellor@gmail.com>
 MIME-Version: 1.0
 X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
@@ -69,61 +71,57 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi everyone,
+When building with clang's -Wtautological-compare, there are a few
+warnings around the comparison of section boundaries, which are linker
+defined symbols and just contain an address. Clang says that these
+comparisons always evaluate to a constant because it thinks they are
+regular arrays. This result is expected and reasonable since we just
+care about its boolean value. The kernel does this to figure out how
+exactly it was laid out during link time so that it can make certain
+run time decisions without hard coding them via preprocessor macros.
 
-This patch series aims to silence some instances of clang's
--Wtautological-compare that are not problematic and enable it globally
-for the kernel because it has a bunch of subwarnings that can find real
-bugs in the kernel such as
-https://lore.kernel.org/lkml/20200116222658.5285-1-natechancellor@gmail.com/
-and https://bugs.llvm.org/show_bug.cgi?id=42666, which was specifically
-requested by Dmitry.
+These comparisons always evaluate the way that the kernel wants (done by
+comparing a Clang built kernel to a GCC built kernel). As a result, this
+warning should be silenced in these particular instances so that
+-Wtautological-compare can be enabled for the kernel globally since it
+brings several useful warnings within its group. In other words, by
+disabling -Wtautological-compare, the kernel misses out on several
+useful subwarnings that are found with existing static checkers;
+catching things with the compiler at build time will make it easier to
+catch issues, especially as clang starts to be integrated into CI
+systems.
 
-The first patch adds a macro that casts the section variables to
-unsigned long (uintptr_t), which silences the warning and adds
-documentation.
+The warnings can be silenced by casting the linked defined symbols to
+unsigned long (normally uintptr_t but the kernel typedef's uintptr_t to
+unsigned long and some kernel developers prefer unsigned long) to make
+them purely numeric comparisons, which will be converted to a boolean
+without any warning from Clang. The casting is done within a macro so
+that it can be documented why this casting happens, rather than
+sprinkling random casts in the few places that this happens within the
+kernel.
 
-Patches two through four silence the warning in the places I have
-noticed it across all of my builds with -Werror, including arm, arm64,
-and x86_64 defconfig/allmodconfig/allyesconfig. There might still be
-more lurking but those will have to be teased out over time.
-
-Patch six finally enables the warning, while leaving one of the
-subwarnings disabled because it is rather noisy and somewhat pointless
-for the kernel, where core kernel code is expected to build and run with
-many different configurations where variable types can be different
-sizes.
-
-A slight meta comment: This is the first treewide patchset that I have
-sent. I pray I did everything right but please let me know if I did not.
-I assume someone like Andrew will pick this up with acks from everyone
-but let me know if there is someone better.
-
-Cheers,
-Nathan
-
-Nathan Chancellor (6):
-  asm/sections: Add COMPARE_SECTIONS macro
-  kernel/extable: Wrap section comparison in sort_main_extable with
-    COMPARE_SECTIONS
-  tracing: Wrap section comparison in tracer_alloc_buffers with
-    COMPARE_SECTIONS
-  dynamic_debug: Wrap section comparison in dynamic_debug_init with
-    COMPARE_SECTIONS
-  mm: kmemleak: Wrap section comparison in kmemleak_init with
-    COMPARE_SECTIONS
-  kbuild: Enable -Wtautological-compare
-
- Makefile                       | 3 +--
+Link: https://github.com/ClangBuiltLinux/linux/issues/765
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
  include/asm-generic/sections.h | 7 +++++++
- kernel/extable.c               | 3 ++-
- kernel/trace/trace.c           | 2 +-
- lib/dynamic_debug.c            | 2 +-
- mm/kmemleak.c                  | 3 ++-
- 6 files changed, 14 insertions(+), 6 deletions(-)
+ 1 file changed, 7 insertions(+)
 
-
-base-commit: 02815e777db630e3c183718cab73752b48a5053e
+diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
+index d1779d442aa5..e1f3095a50c1 100644
+--- a/include/asm-generic/sections.h
++++ b/include/asm-generic/sections.h
+@@ -169,4 +169,11 @@ static inline bool is_kernel_rodata(unsigned long addr)
+ 	       addr < (unsigned long)__end_rodata;
+ }
+ 
++/*
++ * Comparing section boundaries trips clang's -Wtautological-compare
++ * This silences that warning by making the comparisons purely numeric
++ */
++#define COMPARE_SECTIONS(section_one, op, section_two) \
++	((unsigned long)(section_one) op (unsigned long)(section_two))
++
+ #endif /* _ASM_GENERIC_SECTIONS_H_ */
 -- 
 2.25.1
 
