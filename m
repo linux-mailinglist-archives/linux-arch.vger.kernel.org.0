@@ -2,34 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D89116528C
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 23:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4161652A9
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2020 23:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727163AbgBSWdj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Feb 2020 17:33:39 -0500
-Received: from mga18.intel.com ([134.134.136.126]:36563 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727082AbgBSWdj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Feb 2020 17:33:39 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Feb 2020 14:33:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,462,1574150400"; 
-   d="scan'208";a="236035258"
-Received: from orsmsx107.amr.corp.intel.com ([10.22.240.5])
-  by orsmga003.jf.intel.com with ESMTP; 19 Feb 2020 14:33:38 -0800
-Received: from orsmsx112.amr.corp.intel.com (10.22.240.13) by
- ORSMSX107.amr.corp.intel.com (10.22.240.5) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Wed, 19 Feb 2020 14:33:38 -0800
-Received: from orsmsx115.amr.corp.intel.com ([169.254.4.100]) by
- ORSMSX112.amr.corp.intel.com ([169.254.3.56]) with mapi id 14.03.0439.000;
- Wed, 19 Feb 2020 14:33:38 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     Borislav Petkov <bp@alien8.de>,
+        id S1727727AbgBSWsj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 17:48:39 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33421 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727429AbgBSWsj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Feb 2020 17:48:39 -0500
+Received: by mail-pg1-f195.google.com with SMTP id 6so866385pgk.0
+        for <linux-arch@vger.kernel.org>; Wed, 19 Feb 2020 14:48:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=hFIv1StvrYt32L4fBBEwiqxcPu8uBLsOVOmRLAcoxK0=;
+        b=MWv1EDOURdMl/D7ic1YawBXtbCGgZxtevJol7GrUX3fSqC0Vb/U/T3uBDsZfr3MXaU
+         ZE5wxwixOYDXz0O7f5ZbS9tLYAA+EGNtzogzXWNr5oZUQeQhV//uAZyNYZDXMH/nDCl0
+         tVYYDbMvt8vZ33lutbQfbvquqkLOekWzFz1/V14tpdltCpMLBoC1Bl3lU7WaN0SXYBJ3
+         kGbenwI/7Y9SzOcGKas2vwrTORPq4gNolWqoEo1fD48QIolBbKMhQoDP27rl6Ds8feSx
+         QGr+Bbur5OL0T1YEYF7yS+ro4fdlw3MQmfjpphDMX5rvVnxfE4SO5WtmhJrcYWlAwO4/
+         u21Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=hFIv1StvrYt32L4fBBEwiqxcPu8uBLsOVOmRLAcoxK0=;
+        b=qOnBJN4pDFbgXiCXOtAykuR+NBZT+ssDbMBUKL1Tt/uqduEe40hxdxm+LRSF0I/6B7
+         HIhD5n0RCAcx9fhiFuvimzb3juzmigNiiyvaWh9RAJfOIvfQGc3kBZ54fObRDsEK3jQx
+         ZB+RHdrJdjsb3tSA6xNQqORh/Wyi06KimPnLOVNMGU5PO/AhUz/ShXcpSPlMZL0J+ouh
+         e6V67EQTWJuTG3jcD2YaTqFWRtjbZOs2dldjN8Si+6LSCtVl41ysfUugZAVztVvZmJSp
+         g7ho1Xq4DFwzigeQ0knThj/wf4IWn4c6MDXOY3mDYw8mTfJoJDgoGUnfNwoM/uvyBDmU
+         JFFQ==
+X-Gm-Message-State: APjAAAUScZ6oVrDKWHZhPaF6yyfccD27wUhl8za1ToS5kzCuHM+IDo4T
+        mCu8dMFK9D87nZsWupIt0jNPFw==
+X-Google-Smtp-Source: APXvYqzBf2O4QDn3AFb6u7w8cG8mDmrbIQi6UwBUORhqwOYnt3ioZ7hZuJ5u/RG5y+RvgWCcb9WOmg==
+X-Received: by 2002:a63:d0b:: with SMTP id c11mr26559314pgl.296.1582152516957;
+        Wed, 19 Feb 2020 14:48:36 -0800 (PST)
+Received: from ?IPv6:2600:1010:b02b:5157:50c5:fd84:b9f3:f00f? ([2600:1010:b02b:5157:50c5:fd84:b9f3:f00f])
+        by smtp.gmail.com with ESMTPSA id g2sm719582pgn.59.2020.02.19.14.48.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Feb 2020 14:48:36 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v3 02/22] x86,mce: Delete ist_begin_non_atomic()
+Date:   Wed, 19 Feb 2020 14:48:34 -0800
+Message-Id: <772ACE2A-FD8B-492F-960E-981ECC72E283@amacapital.net>
+References: <3908561D78D1C84285E8C5FCA982C28F7F57E302@ORSMSX115.amr.corp.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
@@ -39,59 +64,80 @@ CC:     Borislav Petkov <bp@alien8.de>,
         "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         "paulmck@kernel.org" <paulmck@kernel.org>,
-        "Josh Triplett" <josh@joshtriplett.org>,
+        Josh Triplett <josh@joshtriplett.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: RE: [PATCH v3 02/22] x86,mce: Delete ist_begin_non_atomic()
-Thread-Topic: [PATCH v3 02/22] x86,mce: Delete ist_begin_non_atomic()
-Thread-Index: AQHV5zdEJLdyh/tjoUWbGbyv6LI8bagjR2SAgAACawCAAANmAIAATb6A//98BSA=
-Date:   Wed, 19 Feb 2020 22:33:37 +0000
-Message-ID: <3908561D78D1C84285E8C5FCA982C28F7F57E302@ORSMSX115.amr.corp.intel.com>
-References: <20200219144724.800607165@infradead.org>
- <20200219150744.488895196@infradead.org> <20200219171309.GC32346@zn.tnic>
- <CALCETrWBEDjenqze3wVc6TkUt_g+OFx9TQbYysLH+6fku=aWjQ@mail.gmail.com>
- <20200219173358.GP18400@hirez.programming.kicks-ass.net>
- <CALCETrVdNCRoToO2-mxhPxO2zaRU6urTffBn7iSTgHaGpB523Q@mail.gmail.com>
-In-Reply-To: <CALCETrVdNCRoToO2-mxhPxO2zaRU6urTffBn7iSTgHaGpB523Q@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.22.254.140]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+In-Reply-To: <3908561D78D1C84285E8C5FCA982C28F7F57E302@ORSMSX115.amr.corp.intel.com>
+To:     "Luck, Tony" <tony.luck@intel.com>
+X-Mailer: iPhone Mail (17D50)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-PiBPbmUgYmlnIHF1ZXN0aW9uIGhlcmU6IGFyZSBtZW1vcnkgZmFpbHVyZSAjTUMgZXhjZXB0aW9u
-cyBzeW5jaHJvbm91cw0KPiBvciBjYW4gdGhleSBiZSBkZWxheWVkPyAgIElmIHdlIGdldCBhIG1l
-bW9yeSBmYWlsdXJlLCBpcyBpdCBwb3NzaWJsZQ0KPiB0aGF0IHRoZSAjTUMgaGl0cyBzb21lIHJh
-bmRvbSBjb250ZXh0IGFuZCBub3QgdGhlIGFjdHVhbCBjb250ZXh0IHdoZXJlDQo+IHRoZSBlcnJv
-ciBvY2N1cnJlZD8NCg0KVGhlcmUgYXJlIGEgZmV3IGNhc2VzOg0KMSkgU1JBTyAoU29mdHdhcmUg
-cmVjb3ZlcmFibGUgYWN0aW9uIG9wdGlvbmFsKSBbUGF0cm9sIHNjcnViIG9yIEwzIGNhY2hlIGV2
-aWN0aW9uXQ0KVGhlc2UgYXJlbid0IHN5bmNocm9ub3VzIHdpdGggYW55IGNvcmUgZXhlY3V0aW9u
-LiBVc2luZyBtYWNoaW5lIGNoZWNrIHRvIHNpZ25hbA0Kd2FzIHByb2JhYmx5IGEgbWlzdGFrZSAt
-IGNvbXBvdW5kZWQgYnkgaXQgYmVpbmcgYnJvYWRjYXN0IDotKCAgQ291bGQgcGljayBhbnkgQ1BV
-DQp0byBoYW5kbGUgKGFjdHVhbGx5IGNob29zZSB0aGUgZmlyc3QgdG8gYXJyaXZlIGluIGRvX21h
-Y2hpbmVfY2hlY2soKSkuIFRoYXQgZ3V5IHNob3VsZA0KYXJyYW5nZSB0byBzb2Z0IG9mZmxpbmUg
-dGhlIGFmZmVjdGVkIHBhZ2UuIEV2ZXJ5IENQVSBjYW4gcmV0dXJuIHRvIHdoYXQgdGhleSB3ZXJl
-IGRvaW5nDQpiZWZvcmUuDQoNCjIpIFNSQVIgKFNvZnR3YXJlIHJlY292ZXJhYmxlIGFjdGlvbiBy
-ZXF1aXJlZCkNClRoZXNlIGFyZSBzeW5jaHJvbm91cy4gU3RhcnRpbmcgd2l0aCBTa3lsYWtlIHRo
-ZXkgbWF5IGJlIHNpZ25hbGVkIGp1c3QgdG8gdGhlIHRocmVhZA0KdGhhdCBoaXQgdGhlIHBvaXNv
-bi4gRWFybGllciBnZW5lcmF0aW9ucyBicm9hZGNhc3QuDQoJMmEpIEhpdCBpbiByaW5nMyBjb2Rl
-IC4uLiB3ZSB3YW50IHRvIG9mZmxpbmUgdGhlIHBhZ2UgYW5kIFNJR0JVUyB0aGUgdGFzayhzKQ0K
-CTJiKSBNZW1jcHlfbWNzYWZlKCkgLi4uIGtlcm5lbCBoYXMgYSByZWNvdmVyeSBwYXRoLiAiUmV0
-dXJuIiB0byB0aGUgcmVjb3ZlcnkgY29kZSBpbnN0ZWFkIG9mIHRvIHRoZSBvcmlnaW5hbCBSSVAu
-DQoJMmMpIGNvcHlfZnJvbV91c2VyIC4uLiBub3QgaW1wbGVtZW50ZWQgeWV0LiBXZSBhcmUgaW4g
-a2VybmVsLCBidXQgd291bGQgbGlrZSB0byB0cmVhdCB0aGlzIGxpa2UgY2FzZSAyYQ0KDQozKSBG
-YXRhbA0KQWx3YXlzIGJyb2FkY2FzdC4gU29tZSBiYW5rIGhhcyBNQ2lfU1RBVFVTLlBDQz09MS4g
-U3lzdGVtIG11c3QgYmUgc2h1dGRvd24uDQoNCi1Ub255DQo=
+
+> On Feb 19, 2020, at 2:33 PM, Luck, Tony <tony.luck@intel.com> wrote:
+>=20
+> =EF=BB=BF
+>>=20
+>> One big question here: are memory failure #MC exceptions synchronous
+>> or can they be delayed?   If we get a memory failure, is it possible
+>> that the #MC hits some random context and not the actual context where
+>> the error occurred?
+>=20
+> There are a few cases:
+> 1) SRAO (Software recoverable action optional) [Patrol scrub or L3 cache e=
+viction]
+> These aren't synchronous with any core execution. Using machine check to s=
+ignal
+> was probably a mistake - compounded by it being broadcast :-(  Could pick a=
+ny CPU
+> to handle (actually choose the first to arrive in do_machine_check()). Tha=
+t guy should
+> arrange to soft offline the affected page. Every CPU can return to what th=
+ey were doing
+> before.
+
+You could handle this by sending IPI-to-self and dealing with it in the inte=
+rrupt handler. Or even wake a high-priority kthread or workqueue. irq_work m=
+ay help. Relying on task_work or the non_atomic stuff seems silly - you can=E2=
+=80=99t rely on anything about the interrupted context, and the context is m=
+ore or less irrelevant anyway.
+
+>=20
+> 2) SRAR (Software recoverable action required)
+> These are synchronous. Starting with Skylake they may be signaled just to t=
+he thread
+> that hit the poison. Earlier generations broadcast.
+
+Here=E2=80=99s where dealing with one that came from kernel code is just nas=
+ty, right?
+
+I would argue that, if IF=3D0, killing the machine is reasonable.  If IF=3D1=
+, we should be okay.  Actually making this work sanely is gross, and arguabl=
+y the goal should be minimizing grossness.
+
+Perhaps, if we came from kernel mode, we should IPI-to-self and use a specia=
+l vector that is idtentry, not apicinterrupt.  Or maybe even do this for ent=
+ries from usermode just to keep everything consistent.
+
+>    2a) Hit in ring3 code ... we want to offline the page and SIGBUS the ta=
+sk(s)
+>    2b) Memcpy_mcsafe() ... kernel has a recovery path. "Return" to the rec=
+overy code instead of to the original RIP.
+>    2c) copy_from_user ... not implemented yet. We are in kernel, but would=
+ like to treat this like case 2a
+>=20
+> 3) Fatal
+> Always broadcast. Some bank has MCi_STATUS.PCC=3D=3D1. System must be shut=
+down.
+
+Easy :)
+
+It would be really, really nice if NMI was masked in MCE context.
+
+>=20
+> -Tony
