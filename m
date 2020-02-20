@@ -2,79 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 624661652EA
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2020 00:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B73A816538C
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2020 01:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbgBSXIG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Feb 2020 18:08:06 -0500
-Received: from foss.arm.com ([217.140.110.172]:58774 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726647AbgBSXIG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Feb 2020 18:08:06 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEC5A1FB;
-        Wed, 19 Feb 2020 15:08:05 -0800 (PST)
-Received: from [192.168.1.123] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F30D3F703;
-        Wed, 19 Feb 2020 15:08:03 -0800 (PST)
-Subject: Re: [RFC PATCH] memory_hotplug: disable the functionality for 32b
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>
-Cc:     linux-arch@vger.kernel.org, bhe@redhat.com, david@redhat.com,
-        bugzilla-daemon@bugzilla.kernel.org, linux-mm@kvack.org,
-        richardw.yang@linux.intel.com, n-horiguchi@ah.jp.nec.com,
-        kkabe@vega.pgw.jp, linux-arm-kernel@lists.infradead.org,
-        osalvador@suse.de
-References: <20200218084700.GD21113@dhcp22.suse.cz>
- <200218181900.M0115079@vega.pgw.jp> <20200218100532.GA4151@dhcp22.suse.cz>
- <20200219134645.7430db57e0e59f69e7386f46@linux-foundation.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <8877ad4c-00c0-0e7a-5515-533d85014bdd@arm.com>
-Date:   Wed, 19 Feb 2020 23:07:54 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1726817AbgBTA1X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Feb 2020 19:27:23 -0500
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:44640 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726731AbgBTA1X (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Feb 2020 19:27:23 -0500
+Received: by mail-qk1-f195.google.com with SMTP id j8so1969306qka.11;
+        Wed, 19 Feb 2020 16:27:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yBk+R8vCbSw5xpNQVNRg7HmG4Olx/oWqNTA9S4QsKz0=;
+        b=rofXMqqGIaLcHwa1DG5DkXkGjySQV4pFvsjSQerHl/4pTBIxj4RfCGmJC9d8P1kecz
+         hzOu77VzsqDVsryL613Ih8cqnqbUZ6s566WLJ0j7CQmrzmXfGMtQPpIVgeFF1fkfRtp7
+         QnJqoJ5qWzP0wVprLzoX50IS4ncv0AewPPTQey1M8LZQyAD/nFCdj0ta/IUBIfgdp9iS
+         xveLRcBygb3zfi8N6+JSqjeHvAXz4dUUhGpJZWXHo+kg91bWHUHNjfmm0fzBXJz5nabO
+         ZmTSseTB7VmHOXqv7YU2BkTCrhBR7Lamq6+ZFtsllfJA0u2wwCrhTTThimUvDQWgSbwW
+         AvlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yBk+R8vCbSw5xpNQVNRg7HmG4Olx/oWqNTA9S4QsKz0=;
+        b=Arh2RH3PQmmFTovat5S2zh9g8pdCfKoFGBw3IzxZ0TpWScljcbF63B9V0Tf+MTllKp
+         De0bApXCfYKWcq33XcQGfJaDdQyzJI+9oeSkVausr9zLG3dNALDSF0NbC6I5WJ2oJyYm
+         UvtSwaNO92ficlzdtmXpfzuTlCSjix/3039HMKWg6z+R7nX/yku1+dMWp3biAmarwJXU
+         nsdUsf8gdwq3POhFL65dGyDNG9HGH4X+0Qq55kOpXmGRKRhyqd1CrsVlwHTTNqCGBjpo
+         Vd6mkuuG4XmTXQH9tct0PTaTeEEGuxwhExuBrVXCJZ3YsxVKdvaNGOH3PkoQvhUTUI5T
+         W39Q==
+X-Gm-Message-State: APjAAAXQgSJVfw3F8KAg7pl0I8gmBC0MpPKaQuQo7+TmpdOVDBr9o6R2
+        ouGpQp7r+t4heI2ohQ6vTJ8=
+X-Google-Smtp-Source: APXvYqy3aAgDyTv7/CdGh1j7DLqx5eo/zj5tVgqNJdVXqys1VHflP07r9NZtd+tEADPW35EHgmd4EQ==
+X-Received: by 2002:a37:6393:: with SMTP id x141mr22771653qkb.134.1582158442595;
+        Wed, 19 Feb 2020 16:27:22 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id r37sm889732qtj.44.2020.02.19.16.27.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 19 Feb 2020 16:27:21 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id E2D1821B34;
+        Wed, 19 Feb 2020 19:27:19 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 19 Feb 2020 19:27:19 -0500
+X-ME-Sender: <xms:Z9JNXtSPSsab4cfiU9DymOc_Fz6gZePGaLcc3dBhnb80-JaqFXAybQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrkedugddvfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucfkphephedvrd
+    duheehrdduuddurdejudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
+    ihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqd
+    eiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhl
+    rdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:Z9JNXkkS1N5F4pGJ_Xoms083kNRJUYdvwMBNQgZ7ggatZAFnhSe3sQ>
+    <xmx:Z9JNXjve57JPgQ7Ig4v3yj7yqJ_0d5iC6mEs9YAThhudqOTRd4cUEA>
+    <xmx:Z9JNXv-nnt0zLmR8I_crAYAZ2aT3LbVP68fqgErYrzZaJbFgM8-7iQ>
+    <xmx:Z9JNXkY4PT0Ybf7bgfQC_hfVE2zmhcm9xhh3cVNUa4GzM8Zl1Ur1tBbnknA>
+Received: from localhost (unknown [52.155.111.71])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9E2E63280059;
+        Wed, 19 Feb 2020 19:27:18 -0500 (EST)
+Date:   Thu, 20 Feb 2020 08:27:17 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [RFC v2 3/4] Documentation/locking/atomic: Add a litmus test for
+ atomic_set()
+Message-ID: <20200220002717.GG69864@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+References: <20200219062627.104736-4-boqun.feng@gmail.com>
+ <Pine.LNX.4.44L0.2002191004420.1514-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20200219134645.7430db57e0e59f69e7386f46@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2002191004420.1514-100000@iolanthe.rowland.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-02-19 9:46 pm, Andrew Morton wrote:
-> On Tue, 18 Feb 2020 11:05:32 +0100 Michal Hocko <mhocko@kernel.org> wrote:
+On Wed, Feb 19, 2020 at 10:07:09AM -0500, Alan Stern wrote:
+> On Wed, 19 Feb 2020, Boqun Feng wrote:
 > 
->> Subject: [PATCH] memory_hotplug: disable the functionality for 32b
->>
->> Memory hotlug is broken for 32b systems at least since c6f03e2903c9
->> ("mm, memory_hotplug: remove zone restrictions") which has considerably
->> reworked how can be memory associated with movable/kernel zones. The
->> same is not really trivial to achieve in 32b where only lowmem is the
->> kernel zone. While we can tweak this immediate problem around there are
->> likely other land mines hidden at other places.
->>
->> It is also quite dubious that there is a real usecase for the memory
->> hotplug on 32b in the first place. Low memory is just too small to be
->> hotplugable (for hot add) and generally unusable for hotremove. Adding
->> more memory to highmem is also dubious because it would increase the
->> low mem or vmalloc space pressure for memmaps.
->>
->> Restrict the functionality to 64b systems. This will help future
->> development to focus on usecases that have real life application.  We
->> can remove this restriction in future in presence of a real life usecase
->> of course but until then make it explicit that hotplug on 32b is broken
->> and requires a non trivial amount of work to fix.
+> > We already use a litmus test in atomic_t.txt to describe the behavior of
+> > an atomic_set() with the an atomic RMW, so add it into atomic-tests
+> > directory to make it easily accessible for anyone who cares about the
+> > semantics of our atomic APIs.
+> > 
+> > Additionally, change the sentences describing the test in atomic_t.txt
+> > with better wording.
 > 
-> (cc linux-arch)
+> One very minor point about the new working in atomic_t.txt:
 > 
-> (and linux-arm-kernel, as ARM is a major 32-bit user)
+> > diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
+> > index ceb85ada378e..d30cb3d87375 100644
+> > --- a/Documentation/atomic_t.txt
+> > +++ b/Documentation/atomic_t.txt
+> > @@ -85,10 +85,10 @@ smp_store_release() respectively. Therefore, if you find yourself only using
+> >  the Non-RMW operations of atomic_t, you do not in fact need atomic_t at all
+> >  and are doing it wrong.
+> >  
+> > -A subtle detail of atomic_set{}() is that it should be observable to the RMW
+> > -ops. That is:
+> > +A note for the implementation of atomic_set{}() is that it cannot break the
+> > +atomicity of the RMW ops. That is:
 > 
-> Does anyone see a problem with disabling memory hotplug on 32-bit builds?
+> This would be slightly better if you changed it to: "it must not break".
+> 
 
-32-bit Arm doesn't support memory hotplug, and as far as I'm aware 
-there's little likelihood of it ever wanting to. FWIW it looks like 
-SuperH is the only pure-32-bit architecture to have hotplug support at all.
+Got it. Indeed it's the better wording, thanks!
 
-Robin.
+Regards,
+Boqun
+
+> The comments in the litmus test and README file are okay as they stand.
+> 
+> Alan
+> 
