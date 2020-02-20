@@ -2,103 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B47166AF7
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2020 00:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26208166AFD
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2020 00:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729259AbgBTX3c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 Feb 2020 18:29:32 -0500
-Received: from zeniv.linux.org.uk ([195.92.253.2]:41814 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727135AbgBTX3c (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Feb 2020 18:29:32 -0500
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j4vG5-00G2iY-L0; Thu, 20 Feb 2020 23:29:29 +0000
-Date:   Thu, 20 Feb 2020 23:29:29 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        id S1729295AbgBTXcR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 Feb 2020 18:32:17 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:43901 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727135AbgBTXcR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Feb 2020 18:32:17 -0500
+Received: by mail-lj1-f195.google.com with SMTP id a13so240837ljm.10
+        for <linux-arch@vger.kernel.org>; Thu, 20 Feb 2020 15:32:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vWeBp/urnK4tuGJfqV9ZFGP9TrjtClq354zSDpIQQfY=;
+        b=GZX6OFO7fkNUS1d3TzfeLavrKb+nZ6HWPMW1jViAB8AtYBh8cGv3whtpphDdik8l2K
+         YtIl2m5ZcTHKKQ1z0FAj0P/4veATqWxebKwQxOZ0rcOFdozjfQo2RaKvMYrD/UncZu93
+         6QiaHgv/uUMuDaodJwlKgm24Ve6MdwTVPf/lg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vWeBp/urnK4tuGJfqV9ZFGP9TrjtClq354zSDpIQQfY=;
+        b=Z5QoxsJ22ZxS0n9k6ePgJXdf/AN25VHjKdJBcuUc0NU+LikKTLNk9jn6UJzs9M0m93
+         xpNcok0X4s+Ss6Z1YbkCzJ4OhJoWGQ1DzuaZvIe5s1zCYMOpK4pRtkQjQw+mQU3NECed
+         O3QTVdgL5rE+9U6ziOuKb8UcG4dlxgz2f4rWlzK+tRO2Ejp/YcB7gUsRoL3XwRw4bn3D
+         ZN9vuw3IK5NVMsYL4oAjjIVyU7SWhqbSqGmOf+uyy7MiwvyA4uyVUwwElARKOygiikxE
+         al4pYdoKBluPEhvTTIdGpNq4G+AmevUZfCg7nfpSB8h7a2yiOzCYwDW9m7XCPOCgZc0p
+         rZrw==
+X-Gm-Message-State: APjAAAWfP1npKVERc3IFU4NhHhDbZryMkWnMSmDCOgsorMJv2Ri02bbz
+        JQU6Q23fJqB2dPlH25wcaMYeE1K6iHw=
+X-Google-Smtp-Source: APXvYqzzJIsoYzsifUABHeLYlWRtNCZ9QRmlOVQ4jpz8rREF2IPJv/ywv6q3ibMxheSeNCc6MOuC3g==
+X-Received: by 2002:a2e:b8d0:: with SMTP id s16mr18598506ljp.32.1582241533459;
+        Thu, 20 Feb 2020 15:32:13 -0800 (PST)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id q26sm520390lfp.85.2020.02.20.15.32.12
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Feb 2020 15:32:12 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id b15so98503lfc.4
+        for <linux-arch@vger.kernel.org>; Thu, 20 Feb 2020 15:32:12 -0800 (PST)
+X-Received: by 2002:a19:f514:: with SMTP id j20mr18104253lfb.31.1582241531956;
+ Thu, 20 Feb 2020 15:32:11 -0800 (PST)
+MIME-Version: 1.0
+References: <20200217183340.GI23230@ZenIV.linux.org.uk> <CAHk-=wivKU1eP8ir4q5xEwOV0hsomFz7DMtiAot__X2zU-yGog@mail.gmail.com>
+ <20200220224707.GQ23230@ZenIV.linux.org.uk> <CAHk-=wiKs7Q2DbP6kk8JQksb0nhUvAs2wO5cNdWirNEc3CM-YQ@mail.gmail.com>
+ <20200220232929.GU23230@ZenIV.linux.org.uk>
+In-Reply-To: <20200220232929.GU23230@ZenIV.linux.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 20 Feb 2020 15:31:56 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whdat=wfwKh5rF3MuCbTxhcFwaGqmdsCXXv=H=kDERTOw@mail.gmail.com>
+Message-ID: <CAHk-=whdat=wfwKh5rF3MuCbTxhcFwaGqmdsCXXv=H=kDERTOw@mail.gmail.com>
+Subject: Re: [RFC] regset ->get() API
+To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     linux-arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC] regset ->get() API
-Message-ID: <20200220232929.GU23230@ZenIV.linux.org.uk>
-References: <20200217183340.GI23230@ZenIV.linux.org.uk>
- <CAHk-=wivKU1eP8ir4q5xEwOV0hsomFz7DMtiAot__X2zU-yGog@mail.gmail.com>
- <20200220224707.GQ23230@ZenIV.linux.org.uk>
- <CAHk-=wiKs7Q2DbP6kk8JQksb0nhUvAs2wO5cNdWirNEc3CM-YQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiKs7Q2DbP6kk8JQksb0nhUvAs2wO5cNdWirNEc3CM-YQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 02:56:28PM -0800, Linus Torvalds wrote:
-> On Thu, Feb 20, 2020 at 2:47 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > On Wed, Feb 19, 2020 at 12:01:54PM -0800, Linus Torvalds wrote:
-> >
-> > > I don't mind it, but some of those buffers are big, and the generic
-> > > code generally doesn't know how big.
-> >
-> > That's what regset_size() returns...
-> 
-> Yes, but the code ends up being disgusting. You first have to call
-> that indirect function just to get the size, then do a kmalloc, and
-> then call another indirect function to actually fill it.
+On Thu, Feb 20, 2020 at 3:29 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> We do know that caller does not want more than the value it has passed in
+> 'size' argument, though.
 
-Umm...  You do realize that this indirect function is a pathological
-case, right?  It has exactly one user - REGSET_SVE on arm64.  Everything
-else uses regset->n * regset->size.
+Ok, fair enough. That's probably a good way to handle the "allocate in
+the caller".
 
-> Don't do that. Not since we know how retpoline is a bad thing.
-> 
-> And since the size isn't always some trivial constant (ie for x86 PFU
-> it depends on the register state!), I think the only sane model is to
-> change the interface even more, and just have the "get()" function not
-> only get the data, but allocate the backing store too.
-> 
-> So you'd never pass in the result pointer - you'd get a result area
-> that you can then free.
-> 
-> Hmm?
+So then I have no issues with that approach.
 
-Do you want such allocations done in each ->get() instance?  We have
-a plenty of those instances...
-
-> > FWIW, what I have in mind is to start with making copy_regset_to_user() do
-> >         buf = kmalloc(size, GFP_KERNEL);
-> >         if (!buf)
-> >                 return -ENOMEM;
-> >         err = regset->get(target, regset, offset, size, buf, NULL);
-> 
-> See above. This doesn't work. You don't know the size. And we don't
-> have a known maximum size either.
-
-We do know that caller does not want more than the value it has passed in
-'size' argument, though.  For existing ptrace requests it's either
-min(iov->iov_len, regset->n * regset->size) (in ptrace_regset())
-or an explicit constant (usually in arch_ptrace()).  Note, BTW, that
-regset_size() is used only by coredump - that's how much we allocate
-there.  Everybody else either looks like
-        case PTRACE_GETFPREGS:  /* Get the child FPU state. */
-                return copy_regset_to_user(child,
-                                           task_user_regset_view(current),
-                                           REGSET_FP,
-                                           0, sizeof(struct user_i387_struct),
-                                           datap);
-or does regset->n * regset->size.
-
-FWIW, the real need to know the size is not in "how much do we allocated" -
-it's "how much do we copy"; I _think_ everyone except that arm64 thing
-fills exactly regset->n * regset->size (or we have a nasty infoleak in
-coredumps) and we can switch coredump to "allocate regset->n * regset->size,
-call ->get(), copy all of that into coredump unless ->get_size is there,
-copy ->get_size() bytes to coredump if ->get_size exists" as the first
-step.
-
-Longer term I would have ->get() tell how much has it filled and killed
-->get_size().  Again, there's only one user.  But I'd prefer to do that
-in the end of series, when the bodies of ->get() instances are cleaned
-up...
+          Linus
