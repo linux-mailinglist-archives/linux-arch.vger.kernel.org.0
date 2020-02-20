@@ -2,80 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9C0165AF8
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2020 11:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A661A165B99
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2020 11:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727370AbgBTKBe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 Feb 2020 05:01:34 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38847 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726801AbgBTKBe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Feb 2020 05:01:34 -0500
-Received: by mail-pg1-f195.google.com with SMTP id d6so1691812pgn.5
-        for <linux-arch@vger.kernel.org>; Thu, 20 Feb 2020 02:01:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
-        b=JF0HvXZ5B+0LK7Pqx8ddzg5TcPjFQEEZxedOLcd307vw2COPiZ1f61ZN/d4zthSpMD
-         jHwe5IVOYQYojS0zpxalm7Xb8Koky8JnAtugXoMrXbsX7Yxpm/v4c86R/bi96+K3VKIo
-         fzmuTnIjhqBdFBplESfgHOlFwxcqI3i67rk9GbHNmcszqOE5SJe0iwb2uBvJrV/fWQby
-         6KGv565mIAUvSzWo0d+vY2w7AzUTWUxcsZ5uzvRYrhtBwvt4HpXkzWhTw2IZFjHWuHw7
-         4b9KxzRzPgM+B6Vr5cw2OWmqlvNuMHOGsNj0D+7Rach9OwUMiK8De5cqyLFMXtNz65Sk
-         i/IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
-        b=pm/nfx/AA0bRmsYjFmTfpIZQLo0reUrKG9sreW9ZVh1Bs4Xbws4TF+b9mPbyZFrtsz
-         pcDOhA6nnHo9hA9Wz8pygLVZw04OijwBAOPJ1qMpO2D+jKqapdZJlwvW/AoKVziTAEnI
-         0ejeLizLWmcQSU0lk1D83oILidrLVXHuiBBqNZHBfcaCwZh1VWjMnbc7KLAs3lgkVtSZ
-         jxXU7iFCjLweWlnEz3Iil7vYXLx3jYylxEl/l2pnq35FdjcOgSoQ00dUNeX47sUAsx5t
-         RJB+BgUsP9DV14SB5+x6o47Z7n4qGOoNIZkZaiRBPE6sf/MXmOKyf+Nn9eV9BrPiDFKz
-         v0Rg==
-X-Gm-Message-State: APjAAAUU00W9c3JBZqOT9qWrp3Hpgk3Rl0HzWdNwt3FdmHGKZuUOuyg1
-        0RGxu9EUaxNEk9mnzQPLA3oO7CmDzWMPKurK8b4=
-X-Google-Smtp-Source: APXvYqwkRiAC7BkFC50InPie1rPFIzEbWQ9jGiJvva9NJ1mw1tmdI9roHdohoR1oib9a34XKjHm6lc2nRvWSBeODgw4=
-X-Received: by 2002:a62:2b8a:: with SMTP id r132mr30280276pfr.56.1582192893651;
- Thu, 20 Feb 2020 02:01:33 -0800 (PST)
+        id S1727470AbgBTKet (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 Feb 2020 05:34:49 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:54182 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727088AbgBTKet (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Feb 2020 05:34:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HKt6/QuqsefyaXBGYt8iU89pRbakH3QRmMyWQxstXMM=; b=qfu31yBcYEcO8yaVXfWXV/w2op
+        6YXlnCa4XOchCnRmTTQK8OtquM1q9Oaq4/ysovfP+8/gnzBqLkjHYZPCFkIj23iPnPRhv5VOZgHDI
+        91HMbU09ScgS62iSfds9clOJ3ArWK7D5bHRTgv1Y7suzfwalRAwaadMdF5SOIOTeufkAVD6fThfa+
+        ECH2E/gfoKLYnFft0qMXS+222TC/8sFu0n8tgf78wcJbAWNMToa2rSlXvi0L9qNtbW09r0xs0qP/H
+        3PkbNKFHp3x8aiLYJ/HsMx6SK4bRPbD3BQSC0gs/JU45DdZMGOA+3GIbSJP5miicgJi76OqKKj8ci
+        DV27kL8Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j4jA0-0000tq-B0; Thu, 20 Feb 2020 10:34:24 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E9840300606;
+        Thu, 20 Feb 2020 11:32:28 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8C0F32B2A8A9F; Thu, 20 Feb 2020 11:34:21 +0100 (CET)
+Date:   Thu, 20 Feb 2020 11:34:21 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, mingo@kernel.org,
+        joel@joelfernandes.org, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        luto@kernel.org, tony.luck@intel.com, frederic@kernel.org,
+        dan.carpenter@oracle.com, mhiramat@kernel.org
+Subject: Re: [PATCH v3 08/22] rcu,tracing: Create trace_rcu_{enter,exit}()
+Message-ID: <20200220103421.GV18400@hirez.programming.kicks-ass.net>
+References: <20200219144724.800607165@infradead.org>
+ <20200219150744.832297480@infradead.org>
+ <20200219104903.46686b81@gandalf.local.home>
+ <20200219155828.GF18400@hirez.programming.kicks-ass.net>
+ <20200219111532.719c0a6b@gandalf.local.home>
+ <20200219163535.GJ18400@hirez.programming.kicks-ass.net>
+ <20200219164449.GC2935@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Received: by 2002:a17:90a:90f:0:0:0:0 with HTTP; Thu, 20 Feb 2020 02:01:33
- -0800 (PST)
-Reply-To: cagesusan199@gmail.com
-From:   "Mrs. Susan S. Cage" <drgoodluckebelejonathan061@gmail.com>
-Date:   Thu, 20 Feb 2020 02:01:33 -0800
-Message-ID: <CALjo5=_Qzpm_i5UJy7LMJE8NVZzGGYrSOv06nwaUP2YmDSDYAg@mail.gmail.com>
-Subject: Attention:Beneficiary
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200219164449.GC2935@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
--- 
-Dearest Friend,
+On Wed, Feb 19, 2020 at 08:44:50AM -0800, Paul E. McKenney wrote:
+> On Wed, Feb 19, 2020 at 05:35:35PM +0100, Peter Zijlstra wrote:
 
-Sorry for invading your privacy, my name is Susan S. Cage I am 81
-years, citizen of United States and presently in hospital undergoing
-chromatography for bronchogenic carcinomas (Lung cancer) which
-affected both Lungs. The doctors said I have few days to live because
-the cancer has now affected my brain.
+> > Possibly, and I suppose the current version is less obviously dependent
+> > on the in_nmi() functionality as was the previous, seeing how Paul
+> > frobbed that all the way into the rcu_irq_enter*() implementation.
+> > 
+> > So sure, I can go move it I suppose.
+> 
+> No objections here.
 
-My late husband left Fifteen Million, Five Hundred British Pounds
-Sterling in my account, I want to transfer the money to you and I want
-you to use it as a donate for charitable and help the needy,
-motherless, less privileged and widows within your location.
+It now looks like so:
 
-I need your assurance that you will use the fund for charity, once I a
-favorable reply from you, will inform my Bank through my lawyer to
-transfer the fund to you as my Next of Kin and Sole Beneficiary. Once
-I receive your response, I will inform my bank in writing through my
-lawyer.
+---
+Subject: rcu,tracing: Create trace_rcu_{enter,exit}()
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Wed Feb 12 09:18:57 CET 2020
 
+To facilitate tracers that need RCU, add some helpers to wrap the
+magic required.
 
+The problem is that we can call into tracers (trace events and
+function tracing) while RCU isn't watching and this can happen from
+any context, including NMI.
 
-Thank you and God bless you.
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ include/linux/rcupdate.h |   29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-Mrs. Susan S. Cage
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -175,6 +175,35 @@ do { \
+ #error "Unknown RCU implementation specified to kernel configuration"
+ #endif
+ 
++/**
++ * trace_rcu_enter - Force RCU to be active, for code that needs RCU readers
++ *
++ * Very similar to RCU_NONIDLE() above.
++ *
++ * Tracing can happen while RCU isn't active yet, for instance in the idle loop
++ * between rcu_idle_enter() and rcu_idle_exit(), or early in exception entry.
++ * RCU will happily ignore any read-side critical sections in this case.
++ *
++ * This function ensures that RCU is aware hereafter and the code can readily
++ * rely on RCU read-side critical sections working as expected.
++ *
++ * This function is NMI safe -- provided in_nmi() is correct and will nest up-to
++ * INT_MAX/2 times.
++ */
++static inline int trace_rcu_enter(void)
++{
++	int state = !rcu_is_watching();
++	if (state)
++		rcu_irq_enter_irqsave();
++	return state;
++}
++
++static inline void trace_rcu_exit(int state)
++{
++	if (state)
++		rcu_irq_exit_irqsave();
++}
++
+ /*
+  * The init_rcu_head_on_stack() and destroy_rcu_head_on_stack() calls
+  * are needed for dynamic initialization and destruction of rcu_head
