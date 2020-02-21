@@ -2,83 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 030F81689D9
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2020 23:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C18441689E5
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2020 23:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbgBUWOw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Feb 2020 17:14:52 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45435 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726725AbgBUWOw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Feb 2020 17:14:52 -0500
-Received: by mail-pf1-f194.google.com with SMTP id 2so1969599pfg.12;
-        Fri, 21 Feb 2020 14:14:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=W8KaZGmDosurwlNJD9BGtUyzNAa4jQOZ04o70/FjZgc=;
-        b=kGkAs4Nbpvsh0LSiFUur6Wb/TbQ7PlbWJAOcbz65Qdv1Uw+Vl3ItNQQMcq77KAYZtJ
-         m2urSGoIRXXmBgm7E9zWqbYRJ+5nnXrjCjuYwEMSV5irgIy80/nbHWZ2XU6OXDiBPYJv
-         szqdDyeVflofbn6119zAg2Af45wfFrvegUCV58BoK/8EFrO8aWmVrRGB0AEm3jHvnZwq
-         g1wiEIh+kkSJDiHR4tM7g/to6tuY6/ds7sh5OENeLGPrw7vXXN0mSnsFAVAAIUn5CXPR
-         b8xb4ji8dTq0+IsQw7wVgeeGwqWP+aZc8EV+CmH2yRI8/SyKIhiNvK3/B5nUMCwO2jKu
-         gxvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=W8KaZGmDosurwlNJD9BGtUyzNAa4jQOZ04o70/FjZgc=;
-        b=UAlkI0guNtddGYE8vWPPpuxWNEgm2EEaoMCcCxoSc3j0hwpb3804V3R7yQ30u+oDB1
-         /2RTY9rH6WaeyFr3yVsxypmZc8oCeDtzae49RCO+n6iWy2E5375I8Sy5vwVdnPATP4j3
-         kUII0A+1pLVHhOaQIO2j+qqUk3sJsIwkSnHf0P9kaltYhQW2plrke/CIgLZMZ7pSbMJD
-         tyyIMCD8h1vqYHm+ui72a9GMY2lvm1uCh/WI3SwDysRZ3fTMCgf5S8qaee/QhOMj4kQW
-         ukcPyC79dm3HXAxuH/TDB/a+XDWGbl6mnIP0S6k8Z22V0ky0blj1bTX8RKL9MrnEq8qT
-         sF1g==
-X-Gm-Message-State: APjAAAXJKqF7ec4m9+ScflebulMjoyT+GykfySusl0FZrg+443M8h1Jz
-        qI5LHYO8H2CNNGtkIHpVhUeNH4Xww5c=
-X-Google-Smtp-Source: APXvYqzuFzGOe6xFIcYN9MIIJZs1pHKUSIf83YFRjQMgSwSuWxPGqeqGheyj2Ocv0clngLUDLTvy9A==
-X-Received: by 2002:aa7:8805:: with SMTP id c5mr17210828pfo.142.1582323291138;
-        Fri, 21 Feb 2020 14:14:51 -0800 (PST)
-Received: from localhost (g183.222-224-185.ppp.wakwak.ne.jp. [222.224.185.183])
-        by smtp.gmail.com with ESMTPSA id h3sm4051033pfr.15.2020.02.21.14.14.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2020 14:14:50 -0800 (PST)
-Date:   Sat, 22 Feb 2020 07:14:47 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        openrisc@lists.librecores.org, iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] openrisc: use the generic in-place uncached DMA
- allocator
-Message-ID: <20200221221447.GA7926@lianli.shorne-pla.net>
-References: <20200220170139.387354-1-hch@lst.de>
- <20200220170139.387354-3-hch@lst.de>
+        id S1726787AbgBUWVd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Feb 2020 17:21:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51716 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726731AbgBUWVc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 21 Feb 2020 17:21:32 -0500
+Received: from localhost (lfbn-ncy-1-985-231.w90-101.abo.wanadoo.fr [90.101.63.231])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A9E95206EF;
+        Fri, 21 Feb 2020 22:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582323692;
+        bh=U/Oe2Su9cuXS7/C3XLr+LnlhDygRGvtF3EzpD4iJeKY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mwDTTULy0+GJiAIQNMKNw6SrH+g+EQukVaXs8PSIYZHhbcGmJvpqFnWHqZi0/yrfU
+         n/6ZtG9Olr90e7B1THF5lFr7PosQFm0DVYE3beSXlddM9Lm5s+vnntqCZARt3ocu+r
+         khkX0m5CocedMaPFXA22dN3eoErFRG9lMJbiOOQc=
+Date:   Fri, 21 Feb 2020 23:21:30 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        rostedt@goodmis.org, mingo@kernel.org, joel@joelfernandes.org,
+        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
+        tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        luto@kernel.org, tony.luck@intel.com, dan.carpenter@oracle.com,
+        mhiramat@kernel.org, Will Deacon <will@kernel.org>,
+        Petr Mladek <pmladek@suse.com>, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v4 02/27] hardirq/nmi: Allow nested nmi_enter()
+Message-ID: <20200221222129.GB28251@lenoir>
+References: <20200221133416.777099322@infradead.org>
+ <20200221134215.149193474@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200220170139.387354-3-hch@lst.de>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20200221134215.149193474@infradead.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 09:01:39AM -0800, Christoph Hellwig wrote:
-> Switch openrisc to use the dma-direct allocator and just provide the
-> hooks for setting memory uncached or cached.
+On Fri, Feb 21, 2020 at 02:34:18PM +0100, Peter Zijlstra wrote:
+> Since there are already a number of sites (ARM64, PowerPC) that
+> effectively nest nmi_enter(), lets make the primitive support this
+> before adding even more.
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Acked-by: Will Deacon <will@kernel.org>
+> Acked-by: Marc Zyngier <maz@kernel.org>
+> ---
+>  arch/arm64/include/asm/hardirq.h |    4 ++--
+>  arch/arm64/kernel/sdei.c         |   14 ++------------
+>  arch/arm64/kernel/traps.c        |    8 ++------
+>  arch/powerpc/kernel/traps.c      |   22 ++++++----------------
+>  include/linux/hardirq.h          |    5 ++++-
+>  include/linux/preempt.h          |    4 ++--
+>  kernel/printk/printk_safe.c      |    6 ++++--
+>  7 files changed, 22 insertions(+), 41 deletions(-)
+> 
+> --- a/kernel/printk/printk_safe.c
+> +++ b/kernel/printk/printk_safe.c
+> @@ -296,12 +296,14 @@ static __printf(1, 0) int vprintk_nmi(co
+>  
+>  void notrace printk_nmi_enter(void)
+>  {
+> -	this_cpu_or(printk_context, PRINTK_NMI_CONTEXT_MASK);
+> +	if (!in_nmi())
+> +		this_cpu_or(printk_context, PRINTK_NMI_CONTEXT_MASK);
+>  }
+>  
+>  void notrace printk_nmi_exit(void)
+>  {
+> -	this_cpu_and(printk_context, ~PRINTK_NMI_CONTEXT_MASK);
+> +	if (!in_nmi())
+> +		this_cpu_and(printk_context, ~PRINTK_NMI_CONTEXT_MASK);
+>  }
 
-Reviewed-by: Stafford Horne <shorne@gmail.com>
-
-Also, I test booted openrisc with linux 5.5 + these patches.  Thanks for
-continuing to shrink my code base.
- 
+If the outermost NMI is interrupted while between printk_nmi_enter()
+and preempt_count_add(), there is still a risk that we race and clear?
