@@ -2,76 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 733C116873E
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2020 20:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74BDA168761
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2020 20:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729454AbgBUTKU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Feb 2020 14:10:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50220 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729407AbgBUTKU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 Feb 2020 14:10:20 -0500
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8CD122467E
-        for <linux-arch@vger.kernel.org>; Fri, 21 Feb 2020 19:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582312219;
-        bh=UuhNfeKn532RnvokafaA9jeGYJ66WH3o9jZo/Sjed50=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=unz4oQ/7TC92dKV3E0jiYOZiHhYJwj5JnpZtdvdxLN6WVtKs+E76VPQmoRGOP/0Ls
-         59ic49hwmZqs++ykC3FqdUHu56Y5/LYC6KpGweH979p8VnXYGlwI7NvrIYIiRo8Z/g
-         H97jnDAcgVZ7FyaD4D3EMcDoi/um2epByqJPS1pY=
-Received: by mail-wm1-f51.google.com with SMTP id a5so2887530wmb.0
-        for <linux-arch@vger.kernel.org>; Fri, 21 Feb 2020 11:10:19 -0800 (PST)
-X-Gm-Message-State: APjAAAUmk59ab6MdHvnecsk/Y4rZcwI/3W3FqfFnqSBaRPnLq7bg39vX
-        KqiTRvKcVW9Z3832w3YTAOG7dnNQUuVoMRN1MDkKCQ==
-X-Google-Smtp-Source: APXvYqyspFB2iIO50J3tDK8jOj0B1Z8Z06Wn6TefE3AoSD02hOu3MzrfXq42HPjiRp9ZzEARqYhZvwJ9X+EVJ8Ba6xc=
-X-Received: by 2002:a1c:b0c3:: with SMTP id z186mr5163664wme.36.1582312217931;
- Fri, 21 Feb 2020 11:10:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20200221133416.777099322@infradead.org> <20200221134215.385886177@infradead.org>
-In-Reply-To: <20200221134215.385886177@infradead.org>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Fri, 21 Feb 2020 11:10:05 -0800
-X-Gmail-Original-Message-ID: <CALCETrWmnkrHi1FYFLvj5G7SrmN+BrwLgKyt=NBtd-EOoRyeSQ@mail.gmail.com>
-Message-ID: <CALCETrWmnkrHi1FYFLvj5G7SrmN+BrwLgKyt=NBtd-EOoRyeSQ@mail.gmail.com>
-Subject: Re: [PATCH v4 06/27] x86/doublefault: Remove memmove() call
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Greg KH <gregkh@linuxfoundation.org>, gustavo@embeddedor.com,
-        Thomas Gleixner <tglx@linutronix.de>, paulmck@kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Andrew Lutomirski <luto@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729430AbgBUTWr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Feb 2020 14:22:47 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:40284 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726423AbgBUTWr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Feb 2020 14:22:47 -0500
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id E95FC141C8A41;
+        Fri, 21 Feb 2020 11:22:46 -0800 (PST)
+Date:   Fri, 21 Feb 2020 11:22:44 -0800 (PST)
+Message-Id: <20200221.112244.1426580944977593272.davem@davemloft.net>
+To:     viro@zeniv.linux.org.uk
+Cc:     torvalds@linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de
+Subject: Re: [RFC] regset ->get() API
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200221185903.GA3929948@ZenIV.linux.org.uk>
+References: <CAHk-=whdat=wfwKh5rF3MuCbTxhcFwaGqmdsCXXv=H=kDERTOw@mail.gmail.com>
+        <20200221033016.GV23230@ZenIV.linux.org.uk>
+        <20200221185903.GA3929948@ZenIV.linux.org.uk>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 21 Feb 2020 11:22:47 -0800 (PST)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 5:50 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> Use of memmove() in #DF is problematic when you consider tracing and
-> other instrumentation.
->
-> Remove the memmove() call and simply write out what need doing; Boris
-> argues the ranges should not overlap.
->
-> Survives selftests/x86, specifically sigreturn_64.
->
-> (Andy ?!)
+From: Al Viro <viro@zeniv.linux.org.uk>
+Date: Fri, 21 Feb 2020 18:59:03 +0000
 
-Acked-by: Andy Lutomirski <luto@kernel.org>
+> Again, a couple of copy_regset_to_user(), but there's an additional
+> twist - GETREGSET of 32bit task on sparc64 will use access_process_vm()
+> when trying to fetch L0..L7/I0..I7 of other task, using copy_from_user()
+> only when the target is equal to current.  For sparc32 this is not
+> true - it's always copy_from_user() there, so the values it reports
+> for those registers have nothing to do with the target process.  That
+> part smells like a bug; by the time GETREGSET had been introduced
+> sparc32 was not getting much attention, GETREGS worked just fine
+> (not reporting L*/I* anyway) and for coredump it was accessing the
+> caller's memory.  Not sure if anyone cares at that point...
 
-Even ignoring the tracing issue, I think this is nicer than the original code.
+That's definitely a bug and sparc64 is doing it correctly.
