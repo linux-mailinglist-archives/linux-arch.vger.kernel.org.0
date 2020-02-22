@@ -2,59 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 659D7168A78
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Feb 2020 00:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E686F168B1C
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Feb 2020 01:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbgBUXkF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Feb 2020 18:40:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729100AbgBUXkF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 Feb 2020 18:40:05 -0500
-Received: from localhost (lfbn-ncy-1-985-231.w90-101.abo.wanadoo.fr [90.101.63.231])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A531920722;
-        Fri, 21 Feb 2020 23:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582328405;
-        bh=QHfIxe9nnj+My2+C4Am5da6Z4rJloL88JjdUcIpSYJE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sEdo5mq6U22YrWp/fsxUq+XcwITqfgimA8JN/rVQO5VnZQr5oVe3A64haS8giaiMC
-         MPy1hjPzEMcSrreGHv0J5z+Xld9YqD01Tuja8rbolkR1BCFFOVenmSWIFaZw5DWaz/
-         c1Y1mOLAuj6ZDxrCXPdoOHDLDOvaPTdn8PCgpw7c=
-Date:   Sat, 22 Feb 2020 00:40:02 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org, mingo@kernel.org, joel@joelfernandes.org,
-        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
-        tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        luto@kernel.org, tony.luck@intel.com, dan.carpenter@oracle.com,
-        mhiramat@kernel.org
-Subject: Re: [PATCH v4 04/27] x86/mce: Delete ist_begin_non_atomic()
-Message-ID: <20200221234001.GC28251@lenoir>
-References: <20200221133416.777099322@infradead.org>
- <20200221134215.264229755@infradead.org>
+        id S1727167AbgBVAmA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Feb 2020 19:42:00 -0500
+Received: from zeniv.linux.org.uk ([195.92.253.2]:34010 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726697AbgBVAmA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Feb 2020 19:42:00 -0500
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j5Irl-00Gerj-Gl; Sat, 22 Feb 2020 00:41:57 +0000
+Date:   Sat, 22 Feb 2020 00:41:57 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     David Miller <davem@davemloft.net>
+Cc:     torvalds@linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de
+Subject: Re: [RFC] regset ->get() API
+Message-ID: <20200222004157.GX23230@ZenIV.linux.org.uk>
+References: <CAHk-=whdat=wfwKh5rF3MuCbTxhcFwaGqmdsCXXv=H=kDERTOw@mail.gmail.com>
+ <20200221033016.GV23230@ZenIV.linux.org.uk>
+ <20200221185903.GA3929948@ZenIV.linux.org.uk>
+ <20200221.112244.1426580944977593272.davem@davemloft.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200221134215.264229755@infradead.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200221.112244.1426580944977593272.davem@davemloft.net>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 02:34:20PM +0100, Peter Zijlstra wrote:
-> It is an abomination; and in prepration of removing the whole
-> ist_enter() thing, it needs to go.
+On Fri, Feb 21, 2020 at 11:22:44AM -0800, David Miller wrote:
+> From: Al Viro <viro@zeniv.linux.org.uk>
+> Date: Fri, 21 Feb 2020 18:59:03 +0000
 > 
-> Convert #MC over to using task_work_add() instead; it will run the
-> same code slightly later, on the return to user path of the same
-> exception.
+> > Again, a couple of copy_regset_to_user(), but there's an additional
+> > twist - GETREGSET of 32bit task on sparc64 will use access_process_vm()
+> > when trying to fetch L0..L7/I0..I7 of other task, using copy_from_user()
+> > only when the target is equal to current.  For sparc32 this is not
+> > true - it's always copy_from_user() there, so the values it reports
+> > for those registers have nothing to do with the target process.  That
+> > part smells like a bug; by the time GETREGSET had been introduced
+> > sparc32 was not getting much attention, GETREGS worked just fine
+> > (not reporting L*/I* anyway) and for coredump it was accessing the
+> > caller's memory.  Not sure if anyone cares at that point...
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> That's definitely a bug and sparc64 is doing it correctly.
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+OK...  What does the comment in
+        case PTRACE_GETREGS64:
+                ret = copy_regset_to_user(child, view, REGSET_GENERAL,
+                                          1 * sizeof(u64),
+                                          15 * sizeof(u64),
+                                          &pregs->u_regs[0]);
+                if (!ret) {
+                        /* XXX doesn't handle 'y' register correctly XXX */
+                        ret = copy_regset_to_user(child, view, REGSET_GENERAL,
+                                                  32 * sizeof(u64),
+                                                  4 * sizeof(u64),
+                                                  &pregs->tstate);
+                }
+                break;   
+refer to?  The fact that you end up with 0 in pregs->y and Y in pregs->magic?
+In that case it's probably too late to do anything about that...
+
+Or is that something different?
