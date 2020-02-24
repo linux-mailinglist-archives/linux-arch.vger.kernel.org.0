@@ -2,95 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1875B16B280
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 22:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F68016B334
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 22:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727689AbgBXVc2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Feb 2020 16:32:28 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:42534 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbgBXVc1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Feb 2020 16:32:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=91LwxLWvdfJmKpIkvnbgVBtKYjb/D3h4IRfL3vb9smw=; b=n2R+f4R/VQE8sdI8xxw08ZSM4s
-        2VktBF/WEtXYZWmIIdQvP5UhysH3fmG732lFdKX3UuW3KvVZxDlQrLYAgwAFu2KOyit6nHfP+FGnT
-        7Md1GgBE3FOnkz1ZuCi5cRgYkO3oRst5y4CJhT5TfCZfmXrg0xmNTm+jRKnAvlSTKMj3cMGERS3bX
-        Pv1uvCRdzjcnXlD2ECh65C6U91CA/ZbfyBabEGIqt0gpMQNKqKy9S0AudEZtcF3tW7erIgWu267bs
-        C4QD66T+Ig/yXxg891EnEeRR73Z8SX6hdCHRoWC3qLyTKtlssSdZsU09s274E7dP4NCl7uGM0v/NI
-        FbiOoWoQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j6LKP-0000dO-30; Mon, 24 Feb 2020 21:31:49 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 81F1C980E37; Mon, 24 Feb 2020 22:31:39 +0100 (CET)
-Date:   Mon, 24 Feb 2020 22:31:39 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Greg KH <gregkh@linuxfoundation.org>, gustavo@embeddedor.com,
-        Thomas Gleixner <tglx@linutronix.de>, paulmck@kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v4 05/27] x86: Replace ist_enter() with nmi_enter()
-Message-ID: <20200224213139.GO11457@worktop.programming.kicks-ass.net>
-References: <20200221133416.777099322@infradead.org>
- <20200221134215.328642621@infradead.org>
- <CALCETrU7nezN7d3GEZ8h8HbRfvZ0+F9+Ahb7fLvZ9FVaHN9x2w@mail.gmail.com>
- <20200221202246.GA14897@hirez.programming.kicks-ass.net>
- <20200224104346.GJ14946@hirez.programming.kicks-ass.net>
- <20200224112708.4f307ba3@gandalf.local.home>
- <20200224163409.GJ18400@hirez.programming.kicks-ass.net>
- <20200224114754.0fb798c1@gandalf.local.home>
+        id S1728040AbgBXVxa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Feb 2020 16:53:30 -0500
+Received: from mga06.intel.com ([134.134.136.31]:21809 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726980AbgBXVx3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 24 Feb 2020 16:53:29 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Feb 2020 13:53:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,481,1574150400"; 
+   d="scan'208";a="226126679"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.157])
+  by orsmga007.jf.intel.com with ESMTP; 24 Feb 2020 13:53:28 -0800
+Date:   Mon, 24 Feb 2020 13:53:28 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        openrisc@lists.librecores.org, iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] dma-direct: provide a arch_dma_clear_uncached hook
+Message-ID: <20200224215327.GB11565@iweiny-DESK2.sc.intel.com>
+References: <20200224194446.690816-1-hch@lst.de>
+ <20200224194446.690816-5-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200224114754.0fb798c1@gandalf.local.home>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200224194446.690816-5-hch@lst.de>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 11:47:54AM -0500, Steven Rostedt wrote:
-> On Mon, 24 Feb 2020 17:34:09 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
+On Mon, Feb 24, 2020 at 11:44:44AM -0800, Christoph Hellwig wrote:
+> This allows the arch code to reset the page tables to cached access when
+> freeing a dma coherent allocation that was set to uncached using
+> arch_dma_set_uncached.
 > 
-> > Looking at nmi_enter(), that leaves trace_hardirq_enter(), since we know
-> > we marked rcu_nmi_enter() as NOKPROBES, per the patches elsewhere in
-> > this series.
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  arch/Kconfig                    | 7 +++++++
+>  include/linux/dma-noncoherent.h | 1 +
+>  kernel/dma/direct.c             | 2 ++
+>  3 files changed, 10 insertions(+)
 > 
-> Maybe this was addressed already in the series, but I'm just looking at
-> Linus's master branch we have:
-> 
-> #define nmi_enter()                                             \
->         do {                                                    \
->                 arch_nmi_enter();                               \
->                 printk_nmi_enter();                             \
->                 lockdep_off();                                  \
->                 ftrace_nmi_enter();                             \
->                 BUG_ON(in_nmi());                               \
->                 preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET); \
->                 rcu_nmi_enter();                                \
->                 trace_hardirq_enter();                          \
->         } while (0)
-> 
-> 
-> Just want to confirm that printk_nmi_enter(), lockdep_off(),
-> and ftrace_nmi_enter() are all marked fully with NOKPROBE.
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 090cfe0c82a7..c26302f90c96 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -255,6 +255,13 @@ config ARCH_HAS_SET_DIRECT_MAP
+>  config ARCH_HAS_DMA_SET_UNCACHED
+>  	bool
+>  
+> +#
+> +# Select if the architectures provides the arch_dma_clear_uncached symbol
+> +# to undo an in-place page table remap for uncached access.
+> +#
+> +config ARCH_HAS_DMA_CLEAR_UNCACHED
+> +	bool
+> +
+>  # Select if arch init_task must go in the __init_task_data section
+>  config ARCH_TASK_STRUCT_ON_STACK
+>  	bool
+> diff --git a/include/linux/dma-noncoherent.h b/include/linux/dma-noncoherent.h
+> index 1a4039506673..b59f1b6be3e9 100644
+> --- a/include/linux/dma-noncoherent.h
+> +++ b/include/linux/dma-noncoherent.h
+> @@ -109,5 +109,6 @@ static inline void arch_dma_prep_coherent(struct page *page, size_t size)
+>  #endif /* CONFIG_ARCH_HAS_DMA_PREP_COHERENT */
+>  
+>  void *arch_dma_set_uncached(void *addr, size_t size);
+> +void arch_dma_clear_uncached(void *addr, size_t size);
+>  
+>  #endif /* _LINUX_DMA_NONCOHERENT_H */
+> diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+> index f01a8191fd59..a8560052a915 100644
+> --- a/kernel/dma/direct.c
+> +++ b/kernel/dma/direct.c
+> @@ -219,6 +219,8 @@ void dma_direct_free_pages(struct device *dev, size_t size, void *cpu_addr,
+>  
+>  	if (IS_ENABLED(CONFIG_DMA_REMAP) && is_vmalloc_addr(cpu_addr))
+>  		vunmap(cpu_addr);
+> +	else if (IS_ENABLED(CONFIG_ARCH_HAS_DMA_CLEAR_UNCACHED))
+> +		arch_dma_clear_uncached(cpu_addr, size);
 
-*sigh*, right you are, I only looked at notrace, not nokprobe.
+Isn't using arch_dma_clear_uncached() before patch 5 going to break
+bisectability?
 
-In particular the ftrace one is a bit off a mess, let me sort through
-that.
+Ira
+
+>  
+>  	dma_free_contiguous(dev, dma_direct_to_page(dev, dma_addr), size);
+>  }
+> -- 
+> 2.24.1
+> 
