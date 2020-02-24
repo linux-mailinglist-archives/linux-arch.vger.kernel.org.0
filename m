@@ -2,152 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD44169D57
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 06:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E6016A159
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 10:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727299AbgBXFDw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Feb 2020 00:03:52 -0500
-Received: from foss.arm.com ([217.140.110.172]:57724 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725535AbgBXFDv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 Feb 2020 00:03:51 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 453EAFEC;
-        Sun, 23 Feb 2020 21:03:51 -0800 (PST)
-Received: from p8cg001049571a15.blr.arm.com (p8cg001049571a15.blr.arm.com [10.162.16.95])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 175423F534;
-        Sun, 23 Feb 2020 21:03:45 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH V2 3/4] mm/vma: Replace all remaining open encodings with is_vm_hugetlb_page()
-Date:   Mon, 24 Feb 2020 10:33:12 +0530
-Message-Id: <1582520593-30704-4-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1582520593-30704-1-git-send-email-anshuman.khandual@arm.com>
-References: <1582520593-30704-1-git-send-email-anshuman.khandual@arm.com>
+        id S1728495AbgBXJM3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Feb 2020 04:12:29 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:48928 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728297AbgBXJM3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Feb 2020 04:12:29 -0500
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1j69me-00068V-Qy; Mon, 24 Feb 2020 10:12:13 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id A822F104083; Mon, 24 Feb 2020 10:12:11 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Marc Zyngier <maz@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        will.deacon@arm.com, linux@armlinux.org.uk, luto@kernel.org,
+        m.szyprowski@samsung.com, Mark.Rutland@arm.com
+Subject: Re: [PATCH v2 0/3] Fix arm_arch_timer clockmode when vDSO disabled
+In-Reply-To: <20200222104005.6fc4019d@why>
+References: <20200221181849.40351-1-vincenzo.frascino@arm.com> <20200222104005.6fc4019d@why>
+Date:   Mon, 24 Feb 2020 10:12:11 +0100
+Message-ID: <87h7zg4adw.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This replaces all remaining open encodings with is_vm_hugetlb_page().
+Marc Zyngier <maz@kernel.org> writes:
+> On Fri, 21 Feb 2020 18:18:46 +0000
+> Vincenzo Frascino <vincenzo.frascino@arm.com> wrote:
+>> 
+>> This patch series addresses the issue defining a default arch clockmode
+>> for arm and arm64 and using it to initialize the arm_arch_timer.
+>
+> arm only. arm64 is just fine.
 
-Cc: Paul Mackerras <paulus@ozlabs.org>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Will Deacon <will@kernel.org>
-Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nick Piggin <npiggin@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: kvm-ppc@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-mm@kvack.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/powerpc/kvm/e500_mmu_host.c | 2 +-
- fs/binfmt_elf.c                  | 3 ++-
- include/asm-generic/tlb.h        | 3 ++-
- kernel/events/core.c             | 3 ++-
- 4 files changed, 7 insertions(+), 4 deletions(-)
+Right. ARM64 unconditionaly enables VDSO
 
-diff --git a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
-index 425d13806645..df9989cf7ba3 100644
---- a/arch/powerpc/kvm/e500_mmu_host.c
-+++ b/arch/powerpc/kvm/e500_mmu_host.c
-@@ -422,7 +422,7 @@ static inline int kvmppc_e500_shadow_map(struct kvmppc_vcpu_e500 *vcpu_e500,
- 				break;
- 			}
- 		} else if (vma && hva >= vma->vm_start &&
--			   (vma->vm_flags & VM_HUGETLB)) {
-+			   is_vm_hugetlb_page(vma)) {
- 			unsigned long psize = vma_kernel_pagesize(vma);
- 
- 			tsize = (gtlbe->mas1 & MAS1_TSIZE_MASK) >>
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index f4713ea76e82..1eb63867e266 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -27,6 +27,7 @@
- #include <linux/highuid.h>
- #include <linux/compiler.h>
- #include <linux/highmem.h>
-+#include <linux/hugetlb.h>
- #include <linux/pagemap.h>
- #include <linux/vmalloc.h>
- #include <linux/security.h>
-@@ -1317,7 +1318,7 @@ static unsigned long vma_dump_size(struct vm_area_struct *vma,
- 	}
- 
- 	/* Hugetlb memory check */
--	if (vma->vm_flags & VM_HUGETLB) {
-+	if (is_vm_hugetlb_page(vma)) {
- 		if ((vma->vm_flags & VM_SHARED) && FILTER(HUGETLB_SHARED))
- 			goto whole;
- 		if (!(vma->vm_flags & VM_SHARED) && FILTER(HUGETLB_PRIVATE))
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index f391f6b500b4..3f1649a8cf55 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -13,6 +13,7 @@
- 
- #include <linux/mmu_notifier.h>
- #include <linux/swap.h>
-+#include <linux/hugetlb_inline.h>
- #include <asm/pgalloc.h>
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
-@@ -398,7 +399,7 @@ tlb_update_vma_flags(struct mmu_gather *tlb, struct vm_area_struct *vma)
- 	 * We rely on tlb_end_vma() to issue a flush, such that when we reset
- 	 * these values the batch is empty.
- 	 */
--	tlb->vma_huge = !!(vma->vm_flags & VM_HUGETLB);
-+	tlb->vma_huge = is_vm_hugetlb_page(vma);
- 	tlb->vma_exec = !!(vma->vm_flags & VM_EXEC);
- }
- 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index e453589da97c..ef5be3ed0580 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -28,6 +28,7 @@
- #include <linux/export.h>
- #include <linux/vmalloc.h>
- #include <linux/hardirq.h>
-+#include <linux/hugetlb.h>
- #include <linux/rculist.h>
- #include <linux/uaccess.h>
- #include <linux/syscalls.h>
-@@ -7693,7 +7694,7 @@ static void perf_event_mmap_event(struct perf_mmap_event *mmap_event)
- 		flags |= MAP_EXECUTABLE;
- 	if (vma->vm_flags & VM_LOCKED)
- 		flags |= MAP_LOCKED;
--	if (vma->vm_flags & VM_HUGETLB)
-+	if (is_vm_hugetlb_page(vma))
- 		flags |= MAP_HUGETLB;
- 
- 	if (file) {
--- 
-2.20.1
+>
+> This doesn't apply to -rc2, and is rather against next.
 
+More precise it's against tip timers/core which has the VDSO changes
+which caused this fallout.
+
+>> Vincenzo Frascino (3):
+>>   arm: clocksource: Add VDSO default clockmode
+>>   arm64: clocksource: Add VDSO default clockmode
+>>   clocksource: Fix arm_arch_timer clockmode when vDSO disabled
+>
+> Please squash the three patches into a single one. There is zero point
+> in having 3 patches for something that small.
+
+I really don't see why we need all this redefine foo. What's wrong with
+the obvious?
+
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -69,7 +69,12 @@ static enum arch_timer_ppi_nr arch_timer
+ static bool arch_timer_c3stop;
+ static bool arch_timer_mem_use_virtual;
+ static bool arch_counter_suspend_stop;
++
++#ifdef CONFIG_GENERIC_GETTIMEOFDAY
+ static enum vdso_clock_mode vdso_default = VDSO_CLOCKMODE_ARCHTIMER;
++#else
++static enum vdso_clock_mode vdso_default = VDSO_CLOCKMODE_NONE;
++#endif
+ 
+ static cpumask_t evtstrm_available = CPU_MASK_NONE;
+ static bool evtstrm_enable = IS_ENABLED(CONFIG_ARM_ARCH_TIMER_EVTSTREAM);
