@@ -2,94 +2,241 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6125416A9BD
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 16:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9418F16AADA
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 17:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727785AbgBXPQJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Feb 2020 10:16:09 -0500
-Received: from foss.arm.com ([217.140.110.172]:38764 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727701AbgBXPQI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 Feb 2020 10:16:08 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31D9E1FB;
-        Mon, 24 Feb 2020 07:16:08 -0800 (PST)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A05783F534;
-        Mon, 24 Feb 2020 07:16:06 -0800 (PST)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will.deacon@arm.com,
-        linux@armlinux.org.uk, tglx@linutronix.de, luto@kernel.org,
-        m.szyprowski@samsung.com, maz@kernel.org, Mark.Rutland@arm.com,
-        vincenzo.frascino@arm.com
-Subject: [PATCH v3] clocksource: Fix arm_arch_timer clockmode when vDSO disabled
-Date:   Mon, 24 Feb 2020 15:15:52 +0000
-Message-Id: <20200224151552.57274-1-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.25.0
+        id S1727668AbgBXQKl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Feb 2020 11:10:41 -0500
+Received: from smtp-sh.infomaniak.ch ([128.65.195.4]:51414 "EHLO
+        smtp-sh.infomaniak.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727090AbgBXQKk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Feb 2020 11:10:40 -0500
+X-Greylist: delayed 454 seconds by postgrey-1.27 at vger.kernel.org; Mon, 24 Feb 2020 11:10:31 EST
+Received: from smtp-2-0000.mail.infomaniak.ch ([10.5.36.107])
+        by smtp-sh.infomaniak.ch (8.14.5/8.14.5) with ESMTP id 01OG2Msv021682
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 24 Feb 2020 17:02:23 +0100
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 48R6Js1QB9zlllCn;
+        Mon, 24 Feb 2020 17:02:21 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+Subject: [RFC PATCH v14 00/10] Landlock LSM
+Date:   Mon, 24 Feb 2020 17:02:05 +0100
+Message-Id: <20200224160215.4136-1-mic@digikod.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The arm_arch_timer requires that VDSO_CLOCKMODE_ARCHTIMER to be
-defined to compile correctly. On arm the vDSO can be disabled and when
-this is the case the compilation ends prematurely with an error:
+Hi,
 
- $ make ARCH=arm multi_v7_defconfig
- $ ./scripts/config -d VDSO
- $ make
+This new version of Landlock is a major revamp of the previous series
+[1], hence the RFC tag.  The three main changes are the replacement of
+eBPF with a dedicated safe management of access rules, the replacement
+of the use of seccomp(2) with a dedicated syscall, and the management of
+filesystem access-control (back from the v10).
 
-drivers/clocksource/arm_arch_timer.c:73:44: error:
-‘VDSO_CLOCKMODE_ARCHTIMER’ undeclared here (not in a function)
-  static enum vdso_clock_mode vdso_default = VDSO_CLOCKMODE_ARCHTIMER;
-                                             ^
-scripts/Makefile.build:267: recipe for target
-'drivers/clocksource/arm_arch_timer.o' failed
-make[2]: *** [drivers/clocksource/arm_arch_timer.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-scripts/Makefile.build:505: recipe for target 'drivers/clocksource' failed
-make[1]: *** [drivers/clocksource] Error 2
-make[1]: *** Waiting for unfinished jobs....
-Makefile:1683: recipe for target 'drivers' failed
-make: *** [drivers] Error 2
+As discussed in [2], eBPF may be too powerful and dangerous to be put in
+the hand of unprivileged and potentially malicious processes, especially
+because of side-channel attacks against access-controls or other parts
+of the kernel.
 
-Define VDSO_CLOCKMODE_ARCHTIMER as VDSO_CLOCKMODE_NONE when the vDSOs are
-not enabled to address the issue.
+Thanks to this new implementation (1540 SLOC), designed from the ground
+to be used by unprivileged processes, this series enables a process to
+sandbox itself without requiring CAP_SYS_ADMIN, but only the
+no_new_privs constraint (like seccomp).  Not relying on eBPF also
+enables to improve performances, especially for stacked security
+policies thanks to mergeable rulesets.
 
-Fixes: 5e3c6a312a09 ("ARM/arm64: vdso: Use common vdso clock mode storage")
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Mark Rutland <Mark.Rutland@arm.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
- drivers/clocksource/arm_arch_timer.c | 4 ++++
- 1 file changed, 4 insertions(+)
+The compiled documentation is available here:
+https://landlock.io/linux-doc/landlock-v14/security/landlock/index.html
 
-This patch has been rebased and tested on tip/timers/core.
+This series can be applied on top of v5.6-rc3.  This can be tested with
+CONFIG_SECURITY_LANDLOCK and CONFIG_SAMPLE_LANDLOCK.  This patch series
+can be found in a Git repository here:
+https://github.com/landlock-lsm/linux/commits/landlock-v14
+I would really appreciate constructive comments on the design and the code.
 
-diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-index ee2420d56f67..d53f4c7ccaae 100644
---- a/drivers/clocksource/arm_arch_timer.c
-+++ b/drivers/clocksource/arm_arch_timer.c
-@@ -69,7 +69,11 @@ static enum arch_timer_ppi_nr arch_timer_uses_ppi = ARCH_TIMER_VIRT_PPI;
- static bool arch_timer_c3stop;
- static bool arch_timer_mem_use_virtual;
- static bool arch_counter_suspend_stop;
-+#ifdef CONFIG_GENERIC_GETTIMEOFDAY
- static enum vdso_clock_mode vdso_default = VDSO_CLOCKMODE_ARCHTIMER;
-+#else
-+static enum vdso_clock_mode vdso_default = VDSO_CLOCKMODE_NONE;
-+#endif /* CONFIG_GENERIC_GETTIMEOFDAY */
- 
- static cpumask_t evtstrm_available = CPU_MASK_NONE;
- static bool evtstrm_enable = IS_ENABLED(CONFIG_ARM_ARCH_TIMER_EVTSTREAM);
+
+# Landlock LSM
+
+The goal of Landlock is to enable to restrict ambient rights (e.g.
+global filesystem access) for a set of processes.  Because Landlock is a
+stackable LSM [3], it makes possible to create safe security sandboxes
+as new security layers in addition to the existing system-wide
+access-controls. This kind of sandbox is expected to help mitigate the
+security impact of bugs or unexpected/malicious behaviors in user-space
+applications. Landlock empower any process, including unprivileged ones,
+to securely restrict themselves.
+
+Landlock is inspired by seccomp-bpf but instead of filtering syscalls
+and their raw arguments, a Landlock rule can restrict the use of kernel
+objects like file hierarchies, according to the kernel semantic.
+Landlock also takes inspiration from other OS sandbox mechanisms: XNU
+Sandbox, FreeBSD Capsicum or OpenBSD Pledge/Unveil.
+
+
+# Current limitations
+
+## Path walk
+
+Landlock need to use dentries to identify a file hierarchy, which is
+needed for composable and unprivileged access-controls. This means that
+path resolution/walking (handled with inode_permission()) is not
+supported, yet. This could be filled with a future extension first of
+the LSM framework. The Landlock userspace ABI can handle such change
+with new option (e.g. to the struct landlock_ruleset).
+
+## UnionFS
+
+An UnionFS super-block use a set of upper and lower directories. An
+access request to a file in one of these hierarchy trigger a call to
+ovl_path_real() which generate another access request according to the
+matching hierarchy. Because such super-block is not aware of its current
+mount point, OverlayFS can't create a dedicated mnt_parent for each of
+the upper and lower directories mount clones. It is then not currently
+possible to track the source of such indirect access-request, and then
+not possible to identify a unified OverlayFS hierarchy.
+
+## Syscall
+
+Because it is only tested on x86_64, the syscall is only wired up for
+this architecture.  The whole x86 family (and probably all the others)
+will be supported in the next patch series.
+
+
+## Memory limits
+
+There is currently no limit on the memory usage.  Any idea to leverage
+an existing mechanism (e.g. rlimit)?
+
+
+# Changes since v13
+
+* Revamp of the LSM: remove the need for eBPF and seccomp(2).
+* Implement a full filesystem access-control.
+* Take care of the backward compatibility issues, especially for
+  this security features.
+
+Previous version:
+https://lore.kernel.org/lkml/20191104172146.30797-1-mic@digikod.net/
+
+[1] https://lore.kernel.org/lkml/20191104172146.30797-1-mic@digikod.net/
+[2] https://lore.kernel.org/lkml/a6b61f33-82dc-0c1c-7a6c-1926343ef63e@digikod.net/
+[3] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
+
+Regards,
+
+Mickaël Salaün (10):
+  landlock: Add object and rule management
+  landlock: Add ruleset and domain management
+  landlock: Set up the security framework and manage credentials
+  landlock: Add ptrace restrictions
+  fs,landlock: Support filesystem access-control
+  landlock: Add syscall implementation
+  arch: Wire up landlock() syscall
+  selftests/landlock: Add initial tests
+  samples/landlock: Add a sandbox manager example
+  landlock: Add user and kernel documentation
+
+ Documentation/security/index.rst              |   1 +
+ Documentation/security/landlock/index.rst     |  18 +
+ Documentation/security/landlock/kernel.rst    |  44 ++
+ Documentation/security/landlock/user.rst      | 233 +++++++
+ MAINTAINERS                                   |  12 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ fs/super.c                                    |   2 +
+ include/linux/landlock.h                      |  22 +
+ include/linux/syscalls.h                      |   3 +
+ include/uapi/asm-generic/unistd.h             |   4 +-
+ include/uapi/linux/landlock.h                 | 315 +++++++++
+ samples/Kconfig                               |   7 +
+ samples/Makefile                              |   1 +
+ samples/landlock/.gitignore                   |   1 +
+ samples/landlock/Makefile                     |  15 +
+ samples/landlock/sandboxer.c                  | 226 +++++++
+ security/Kconfig                              |  11 +-
+ security/Makefile                             |   2 +
+ security/landlock/Kconfig                     |  16 +
+ security/landlock/Makefile                    |   4 +
+ security/landlock/cred.c                      |  47 ++
+ security/landlock/cred.h                      |  55 ++
+ security/landlock/fs.c                        | 591 +++++++++++++++++
+ security/landlock/fs.h                        |  42 ++
+ security/landlock/object.c                    | 341 ++++++++++
+ security/landlock/object.h                    | 134 ++++
+ security/landlock/ptrace.c                    | 118 ++++
+ security/landlock/ptrace.h                    |  14 +
+ security/landlock/ruleset.c                   | 463 +++++++++++++
+ security/landlock/ruleset.h                   | 106 +++
+ security/landlock/setup.c                     |  38 ++
+ security/landlock/setup.h                     |  20 +
+ security/landlock/syscall.c                   | 470 +++++++++++++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/landlock/.gitignore   |   3 +
+ tools/testing/selftests/landlock/Makefile     |  13 +
+ tools/testing/selftests/landlock/config       |   4 +
+ tools/testing/selftests/landlock/test.h       |  40 ++
+ tools/testing/selftests/landlock/test_base.c  |  80 +++
+ tools/testing/selftests/landlock/test_fs.c    | 624 ++++++++++++++++++
+ .../testing/selftests/landlock/test_ptrace.c  | 293 ++++++++
+ 41 files changed, 4429 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/security/landlock/index.rst
+ create mode 100644 Documentation/security/landlock/kernel.rst
+ create mode 100644 Documentation/security/landlock/user.rst
+ create mode 100644 include/linux/landlock.h
+ create mode 100644 include/uapi/linux/landlock.h
+ create mode 100644 samples/landlock/.gitignore
+ create mode 100644 samples/landlock/Makefile
+ create mode 100644 samples/landlock/sandboxer.c
+ create mode 100644 security/landlock/Kconfig
+ create mode 100644 security/landlock/Makefile
+ create mode 100644 security/landlock/cred.c
+ create mode 100644 security/landlock/cred.h
+ create mode 100644 security/landlock/fs.c
+ create mode 100644 security/landlock/fs.h
+ create mode 100644 security/landlock/object.c
+ create mode 100644 security/landlock/object.h
+ create mode 100644 security/landlock/ptrace.c
+ create mode 100644 security/landlock/ptrace.h
+ create mode 100644 security/landlock/ruleset.c
+ create mode 100644 security/landlock/ruleset.h
+ create mode 100644 security/landlock/setup.c
+ create mode 100644 security/landlock/setup.h
+ create mode 100644 security/landlock/syscall.c
+ create mode 100644 tools/testing/selftests/landlock/.gitignore
+ create mode 100644 tools/testing/selftests/landlock/Makefile
+ create mode 100644 tools/testing/selftests/landlock/config
+ create mode 100644 tools/testing/selftests/landlock/test.h
+ create mode 100644 tools/testing/selftests/landlock/test_base.c
+ create mode 100644 tools/testing/selftests/landlock/test_fs.c
+ create mode 100644 tools/testing/selftests/landlock/test_ptrace.c
+
 -- 
 2.25.0
 
