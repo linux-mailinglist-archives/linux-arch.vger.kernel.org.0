@@ -2,76 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F8616A391
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 11:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 618AC16A397
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 11:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbgBXKLW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Feb 2020 05:11:22 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:41050 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbgBXKLW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Feb 2020 05:11:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jQLP9mf1jL7YgaAq+WWe3RXOAlNUOB8M/rZLTtdU6Ik=; b=hE/+Zv4YtW+bNi38wjH2XW0cfI
-        XfFfIrLWpB9YhWBcW920X1N79/Bwmrd5ByMeR+iEh3DuV9AB0XniibpgIkpGQLvLzSZexAJNNZtvC
-        ZHEqi0w8Iw4T2rNYXOXLOnOPyMv/1Ga/esJPtaxdJ4HNV0aRDDJtWuTWm28VlAdUc3kaCz1XDdOBZ
-        0AwppBoRlgeswmXoBXHnF1XXpMBJOhNk5+60QnK9l4nqOkhQp/h1Ao29g3L+HseGg74xXw/gEM5BK
-        zLQCD5DGJXptRxIvRF1mJfZqocuFU5WOSqnHWOCNkL01zk8bRkwi527iG/VONdS+Kv/sed9UNwaUg
-        DH3lXg5w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j6AhR-00034m-MK; Mon, 24 Feb 2020 10:10:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 91C30300F7A;
-        Mon, 24 Feb 2020 11:08:56 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F331629B39F55; Mon, 24 Feb 2020 11:10:50 +0100 (CET)
-Date:   Mon, 24 Feb 2020 11:10:50 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org, mingo@kernel.org, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, tglx@linutronix.de, paulmck@kernel.org,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, luto@kernel.org, tony.luck@intel.com,
-        frederic@kernel.org, dan.carpenter@oracle.com, mhiramat@kernel.org
-Subject: Re: [PATCH v4 01/27] lockdep: Teach lockdep about "USED" <- "IN-NMI"
- inversions
-Message-ID: <20200224101050.GE14897@hirez.programming.kicks-ass.net>
-References: <20200221133416.777099322@infradead.org>
- <20200221134215.090538203@infradead.org>
- <20200222030843.GA191380@google.com>
+        id S1726509AbgBXKMk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Feb 2020 05:12:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:34868 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726452AbgBXKMk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 24 Feb 2020 05:12:40 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7FB430E;
+        Mon, 24 Feb 2020 02:12:39 -0800 (PST)
+Received: from [192.168.1.161] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48CF83F703;
+        Mon, 24 Feb 2020 02:12:37 -0800 (PST)
+Subject: Re: [PATCH v2 0/3] Fix arm_arch_timer clockmode when vDSO disabled
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        will.deacon@arm.com, linux@armlinux.org.uk, luto@kernel.org,
+        m.szyprowski@samsung.com, Mark.Rutland@arm.com
+References: <20200221181849.40351-1-vincenzo.frascino@arm.com>
+ <20200222104005.6fc4019d@why> <87h7zg4adw.fsf@nanos.tec.linutronix.de>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <8d93d59b-f7fd-ec88-f915-0460c823992e@arm.com>
+Date:   Mon, 24 Feb 2020 10:12:52 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200222030843.GA191380@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <87h7zg4adw.fsf@nanos.tec.linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 10:08:43PM -0500, Joel Fernandes wrote:
-> On Fri, Feb 21, 2020 at 02:34:17PM +0100, Peter Zijlstra wrote:
-> > nmi_enter() does lockdep_off() and hence lockdep ignores everything.
-> > 
-> > And NMI context makes it impossible to do full IN-NMI tracking like we
-> > do IN-HARDIRQ, that could result in graph_lock recursion.
+On 2/24/20 9:12 AM, Thomas Gleixner wrote:
+> Marc Zyngier <maz@kernel.org> writes:
+>> On Fri, 21 Feb 2020 18:18:46 +0000
+>> Vincenzo Frascino <vincenzo.frascino@arm.com> wrote:
+>>>
+>>> This patch series addresses the issue defining a default arch clockmode
+>>> for arm and arm64 and using it to initialize the arm_arch_timer.
+>>
+>> arm only. arm64 is just fine.
 > 
-> The patch makes sense to me.
+> Right. ARM64 unconditionaly enables VDSO
 > 
-> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+>>
+>> This doesn't apply to -rc2, and is rather against next.
 > 
-> NOTE:
-> Also, I was wondering if we can detect the graph_lock recursion case and
-> avoid doing anything bad, that way we enable more of the lockdep
-> functionality for NMI where possible. Not sure if the suggestion makes sense
-> though!
+> More precise it's against tip timers/core which has the VDSO changes
+> which caused this fallout.
+>
 
-Yeah, I considered playing trylock games, but figured I shouldn't make
-it more complicated that it needs to be.
+Agree, I will fix it in the next iteration.
+
+>>> Vincenzo Frascino (3):
+>>>   arm: clocksource: Add VDSO default clockmode
+>>>   arm64: clocksource: Add VDSO default clockmode
+>>>   clocksource: Fix arm_arch_timer clockmode when vDSO disabled
+>>
+>> Please squash the three patches into a single one. There is zero point
+>> in having 3 patches for something that small.
+> 
+> I really don't see why we need all this redefine foo. What's wrong with
+> the obvious?
+> 
+> --- a/drivers/clocksource/arm_arch_timer.c
+> +++ b/drivers/clocksource/arm_arch_timer.c
+> @@ -69,7 +69,12 @@ static enum arch_timer_ppi_nr arch_timer
+>  static bool arch_timer_c3stop;
+>  static bool arch_timer_mem_use_virtual;
+>  static bool arch_counter_suspend_stop;
+> +
+> +#ifdef CONFIG_GENERIC_GETTIMEOFDAY
+>  static enum vdso_clock_mode vdso_default = VDSO_CLOCKMODE_ARCHTIMER;
+> +#else
+> +static enum vdso_clock_mode vdso_default = VDSO_CLOCKMODE_NONE;
+> +#endif
+>  
+>  static cpumask_t evtstrm_available = CPU_MASK_NONE;
+>  static bool evtstrm_enable = IS_ENABLED(CONFIG_ARM_ARCH_TIMER_EVTSTREAM);
+> 
+
+Nothing, I agree :) I think we over engineered here a bit.
+
+-- 
+Regards,
+Vincenzo
