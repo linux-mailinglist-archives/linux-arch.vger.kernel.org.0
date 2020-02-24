@@ -2,49 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8399A16B361
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 22:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E64016B37F
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2020 23:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727459AbgBXV5B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Feb 2020 16:57:01 -0500
-Received: from verein.lst.de ([213.95.11.211]:40500 "EHLO verein.lst.de"
+        id S1727796AbgBXWCf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Feb 2020 17:02:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727421AbgBXV5B (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 Feb 2020 16:57:01 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id C9FFA68B05; Mon, 24 Feb 2020 22:56:57 +0100 (CET)
-Date:   Mon, 24 Feb 2020 22:56:57 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        openrisc@lists.librecores.org, iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] dma-direct: provide a arch_dma_clear_uncached hook
-Message-ID: <20200224215657.GA12618@lst.de>
-References: <20200224194446.690816-1-hch@lst.de> <20200224194446.690816-5-hch@lst.de> <20200224215327.GB11565@iweiny-DESK2.sc.intel.com>
+        id S1726980AbgBXWCf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 24 Feb 2020 17:02:35 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 21B6F20CC7;
+        Mon, 24 Feb 2020 22:02:33 +0000 (UTC)
+Date:   Mon, 24 Feb 2020 17:02:31 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Greg KH <gregkh@linuxfoundation.org>, gustavo@embeddedor.com,
+        Thomas Gleixner <tglx@linutronix.de>, paulmck@kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v4 05/27] x86: Replace ist_enter() with nmi_enter()
+Message-ID: <20200224170231.3807931d@gandalf.local.home>
+In-Reply-To: <20200224213139.GO11457@worktop.programming.kicks-ass.net>
+References: <20200221133416.777099322@infradead.org>
+        <20200221134215.328642621@infradead.org>
+        <CALCETrU7nezN7d3GEZ8h8HbRfvZ0+F9+Ahb7fLvZ9FVaHN9x2w@mail.gmail.com>
+        <20200221202246.GA14897@hirez.programming.kicks-ass.net>
+        <20200224104346.GJ14946@hirez.programming.kicks-ass.net>
+        <20200224112708.4f307ba3@gandalf.local.home>
+        <20200224163409.GJ18400@hirez.programming.kicks-ass.net>
+        <20200224114754.0fb798c1@gandalf.local.home>
+        <20200224213139.GO11457@worktop.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200224215327.GB11565@iweiny-DESK2.sc.intel.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 01:53:28PM -0800, Ira Weiny wrote:
-> > +	else if (IS_ENABLED(CONFIG_ARCH_HAS_DMA_CLEAR_UNCACHED))
-> > +		arch_dma_clear_uncached(cpu_addr, size);
-> 
-> Isn't using arch_dma_clear_uncached() before patch 5 going to break
-> bisectability?
+On Mon, 24 Feb 2020 22:31:39 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Only if ARCH_HAS_DMA_CLEAR_UNCACHED is selected by anything, which
-only happens in patch 5.
+> > Just want to confirm that printk_nmi_enter(), lockdep_off(),
+> > and ftrace_nmi_enter() are all marked fully with NOKPROBE.  
+> 
+> *sigh*, right you are, I only looked at notrace, not nokprobe.
+> 
+> In particular the ftrace one is a bit off a mess, let me sort through
+> that.
+
+ftrace_nmi_enter() has two purposes. One, for archs that need to deal with
+NMIs while they still use stop machine. Although, it appears sh is the only
+arch that does that. I can look to see if it can be ripped out.
+
+The other is for the hwlat detector that measures the time it was in an
+NMI, as NMIs appear as a hardware latency too.
+
+-- Steve
