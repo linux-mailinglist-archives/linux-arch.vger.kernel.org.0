@@ -2,46 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3C716EFE4
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2020 21:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535B616EFE9
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2020 21:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731725AbgBYUOh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Feb 2020 15:14:37 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35585 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728224AbgBYUOh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Feb 2020 15:14:37 -0500
-Received: by mail-pf1-f194.google.com with SMTP id i19so147344pfa.2
-        for <linux-arch@vger.kernel.org>; Tue, 25 Feb 2020 12:14:37 -0800 (PST)
+        id S1731577AbgBYUQH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Feb 2020 15:16:07 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:39085 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731330AbgBYUQH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Feb 2020 15:16:07 -0500
+Received: by mail-pj1-f67.google.com with SMTP id e9so203771pjr.4
+        for <linux-arch@vger.kernel.org>; Tue, 25 Feb 2020 12:16:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=BTTLmTlutCOGMTV3ONbR2Fs2QQVUcjN96p4jAbuK95s=;
-        b=QB9/2Oh/cWiLYN8wCN3MJFPiDTfRIJ4E1pxfixTeHiURbdkz67+jdzh8PFJTTfyAyu
-         D3dwetUzQ2S8grF3unLt2EOypBpGybAQh2kB2M2KTKe1PtTjL8Om5GSjQE5+wg8CNBvd
-         kIY+aXUTNgORVkBwei2THalxhJyNF6vj4dofg=
+        bh=RVriVMt9B1z7tUDJAr2xJjSmnlOpNUHydkB5FDLVKeU=;
+        b=GAF43oaoRNtdxzQZenAQT+RFt4hEoY74zIx4Ts94IuklRKPnYoVAdw3Z/nLOHu1lRD
+         Fr/45UkbQl5Dwqp9UUOpoe0gg1TKGykbO5z1chVEgJeFvmHIeaUoKvwc3aIJJLq3Irjm
+         GWYJgFFGMRmY4ERQYDWhAUoQc+PURd9UAARns=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=BTTLmTlutCOGMTV3ONbR2Fs2QQVUcjN96p4jAbuK95s=;
-        b=ggT2ufH4YN/c0rN6F2piSu/hycMjD37rTZeK8b0rDP55e7DHzKkxJUgoa4LQHm23gQ
-         +qfRUbUlCiw2uKz6K5vKvb1IIfudOdLs3jM3SrOgiUCRSI4SMBr4v22x2Mrj/uDTHIKg
-         sFQB9f+HAZg743FfuwR4RujVeUBjzoaaiEai+lzFPkPQaLoRJQQiHvC+Eq2iOrO7/HY8
-         dtenyzvxuth9Xfjy/hWG6G4r5TyNyB6IDeIFm2sjR2BtV4Tx86NvyyGnpQblc8RhFDpY
-         v3Q2EBLEkN9+Co33D2QPqmAr2mGfv7+DZCpR5gGhuJrdmBNzVIoFsGvm7cSOrKq0VFap
-         c9tA==
-X-Gm-Message-State: APjAAAU1sk5rIpDM1ODGptI3C6sQ2L9JFHN9PEPGItIRgQAMLczoJm6R
-        RNhKuLyeuEfoFs/Vi91zFvQeQQ==
-X-Google-Smtp-Source: APXvYqzQRJ5UsCLDvhXrdE0i7Rc00jqGyfX6QsU0LmkGz7BPlioCLt8NE2IkhrABklXhz2sOHBeagQ==
-X-Received: by 2002:a62:6d01:: with SMTP id i1mr448865pfc.94.1582661676706;
-        Tue, 25 Feb 2020 12:14:36 -0800 (PST)
+        bh=RVriVMt9B1z7tUDJAr2xJjSmnlOpNUHydkB5FDLVKeU=;
+        b=jUAmPwjYW9oieNDenty2+MldWHU3ZQbMsBdlXxGCj977YPcnHqdhWop1Nx9mZvixU8
+         xvggnTqxDeTxb4ZCFz/LyfCBA5CuTQBavQgCL+62fTzPFjlaalNXoMvFpHBHKtg6GVX5
+         UrtE6qeOSd10qd9Dr2uuMU5mb+43xYX1VCZDVVYE4P4TA24YtXqdgjtBWg5lcjTKnQMd
+         S/otXgk+KBkvUmq7qLoMGqZlpSK3mEBp2mdHgdO6Kst8D+KiDfGjlNGdWjTX1y+yNF9T
+         Tk3pOSwkP5Zo0ga7zldUcuoDDrU6idmFljnqPTkSjnFaw+/MrD6j81jouJ4gM6MLnxsI
+         PoIw==
+X-Gm-Message-State: APjAAAVup2vLL0uPr1cgcnHxiSVmi5CnwfTeGHCoMaH5fHSY7XT9haX5
+        DrwF/A93ziaLCjVHVkrPTfx6TA==
+X-Google-Smtp-Source: APXvYqyaptWR9wI2Enrg3ZClqaJ6Jmlx/f50KgN2LoG46+BPg2u5z03Q2p2enk9db8pEcN+7i35xhA==
+X-Received: by 2002:a17:90a:2486:: with SMTP id i6mr876306pje.9.1582661766805;
+        Tue, 25 Feb 2020 12:16:06 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i14sm4258972pgh.14.2020.02.25.12.14.35
+        by smtp.gmail.com with ESMTPSA id w25sm17835454pfi.106.2020.02.25.12.16.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2020 12:14:35 -0800 (PST)
-Date:   Tue, 25 Feb 2020 12:14:34 -0800
+        Tue, 25 Feb 2020 12:16:05 -0800 (PST)
+Date:   Tue, 25 Feb 2020 12:16:04 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
@@ -67,47 +67,29 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-Subject: Re: [RFC PATCH v9 12/27] x86/mm: Modify ptep_set_wrprotect and
- pmdp_set_wrprotect for _PAGE_DIRTY_SW
-Message-ID: <202002251214.8B2063AA87@keescook>
+Subject: Re: [RFC PATCH v9 13/27] x86/mm: Shadow Stack page fault error
+ checking
+Message-ID: <202002251216.EB9BEDD9D0@keescook>
 References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
- <20200205181935.3712-13-yu-cheng.yu@intel.com>
+ <20200205181935.3712-14-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200205181935.3712-13-yu-cheng.yu@intel.com>
+In-Reply-To: <20200205181935.3712-14-yu-cheng.yu@intel.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 05, 2020 at 10:19:20AM -0800, Yu-cheng Yu wrote:
-> When Shadow Stack (SHSTK) is enabled, the [R/O + PAGE_DIRTY_HW] setting is
-> reserved only for SHSTK.  Non-Shadow Stack R/O PTEs are
-> [R/O + PAGE_DIRTY_SW].
+On Wed, Feb 05, 2020 at 10:19:21AM -0800, Yu-cheng Yu wrote:
+> If a page fault is triggered by a Shadow Stack (SHSTK) access
+> (e.g. CALL/RET) or SHSTK management instructions (e.g. WRUSSQ), then bit[6]
+> of the page fault error code is set.
 > 
-> When a PTE goes from [R/W + PAGE_DIRTY_HW] to [R/O + PAGE_DIRTY_SW], it
-> could become a transient SHSTK PTE in two cases.
+> In access_error(), verify a SHSTK page fault is within a SHSTK memory area.
+> It is always an error otherwise.
 > 
-> The first case is that some processors can start a write but end up seeing
-> a read-only PTE by the time they get to the Dirty bit, creating a transient
-> SHSTK PTE.  However, this will not occur on processors supporting SHSTK
-> therefore we don't need a TLB flush here.
-> 
-> The second case is that when the software, without atomic, tests & replaces
-> PAGE_DIRTY_HW with PAGE_DIRTY_SW, a transient SHSTK PTE can exist.  This is
-> prevented with cmpxchg.
-> 
-> Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
-> insights to the issue.  Jann Horn provided the cmpxchg solution.
-> 
-> v9:
-> - Change compile-time conditionals to runtime checks.
-> - Fix parameters of try_cmpxchg(): change pte_t/pmd_t to
->   pte_t.pte/pmd_t.pmd.
-> 
-> v4:
-> - Implement try_cmpxchg().
+> For a valid SHSTK access, set FAULT_FLAG_WRITE to effect copy-on-write.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
@@ -116,93 +98,65 @@ Reviewed-by: Kees Cook <keescook@chromium.org>
 -Kees
 
 > ---
->  arch/x86/include/asm/pgtable.h | 66 ++++++++++++++++++++++++++++++++++
->  1 file changed, 66 insertions(+)
+>  arch/x86/include/asm/traps.h |  2 ++
+>  arch/x86/mm/fault.c          | 18 ++++++++++++++++++
+>  2 files changed, 20 insertions(+)
 > 
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index 2733e7ec16b3..43cb27379208 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -1253,6 +1253,39 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
->  static inline void ptep_set_wrprotect(struct mm_struct *mm,
->  				      unsigned long addr, pte_t *ptep)
->  {
-> +	/*
-> +	 * Some processors can start a write, but end up seeing a read-only
-> +	 * PTE by the time they get to the Dirty bit.  In this case, they
-> +	 * will set the Dirty bit, leaving a read-only, Dirty PTE which
-> +	 * looks like a Shadow Stack PTE.
-> +	 *
-> +	 * However, this behavior has been improved and will not occur on
-> +	 * processors supporting Shadow Stack.  Without this guarantee, a
-> +	 * transition to a non-present PTE and flush the TLB would be
-> +	 * needed.
-> +	 *
-> +	 * When changing a writable PTE to read-only and if the PTE has
-> +	 * _PAGE_DIRTY_HW set, we move that bit to _PAGE_DIRTY_SW so that
-> +	 * the PTE is not a valid Shadow Stack PTE.
-> +	 */
-> +#ifdef CONFIG_X86_64
-> +	if (static_cpu_has(X86_FEATURE_SHSTK)) {
-> +		pte_t new_pte, pte = READ_ONCE(*ptep);
-> +
-> +		do {
-> +			/*
-> +			 * This is the same as moving _PAGE_DIRTY_HW
-> +			 * to _PAGE_DIRTY_SW.
-> +			 */
-> +			new_pte = pte_wrprotect(pte);
-> +			new_pte.pte |= (new_pte.pte & _PAGE_DIRTY_HW) >>
-> +					_PAGE_BIT_DIRTY_HW << _PAGE_BIT_DIRTY_SW;
-> +			new_pte.pte &= ~_PAGE_DIRTY_HW;
-> +		} while (!try_cmpxchg(&ptep->pte, &pte.pte, new_pte.pte));
-> +
-> +		return;
-> +	}
-> +#endif
->  	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
->  }
+> diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
+> index 7ac26bbd0bef..8023d177fcd8 100644
+> --- a/arch/x86/include/asm/traps.h
+> +++ b/arch/x86/include/asm/traps.h
+> @@ -169,6 +169,7 @@ enum {
+>   *   bit 3 ==				1: use of reserved bit detected
+>   *   bit 4 ==				1: fault was an instruction fetch
+>   *   bit 5 ==				1: protection keys block access
+> + *   bit 6 ==				1: shadow stack access fault
+>   */
+>  enum x86_pf_error_code {
+>  	X86_PF_PROT	=		1 << 0,
+> @@ -177,5 +178,6 @@ enum x86_pf_error_code {
+>  	X86_PF_RSVD	=		1 << 3,
+>  	X86_PF_INSTR	=		1 << 4,
+>  	X86_PF_PK	=		1 << 5,
+> +	X86_PF_SHSTK	=		1 << 6,
+>  };
+>  #endif /* _ASM_X86_TRAPS_H */
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index 304d31d8cbbc..9c1243302663 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1187,6 +1187,17 @@ access_error(unsigned long error_code, struct vm_area_struct *vma)
+>  				       (error_code & X86_PF_INSTR), foreign))
+>  		return 1;
 >  
-> @@ -1303,6 +1336,39 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
->  static inline void pmdp_set_wrprotect(struct mm_struct *mm,
->  				      unsigned long addr, pmd_t *pmdp)
->  {
 > +	/*
-> +	 * Some processors can start a write, but end up seeing a read-only
-> +	 * PMD by the time they get to the Dirty bit.  In this case, they
-> +	 * will set the Dirty bit, leaving a read-only, Dirty PMD which
-> +	 * looks like a Shadow Stack PMD.
-> +	 *
-> +	 * However, this behavior has been improved and will not occur on
-> +	 * processors supporting Shadow Stack.  Without this guarantee, a
-> +	 * transition to a non-present PMD and flush the TLB would be
-> +	 * needed.
-> +	 *
-> +	 * When changing a writable PMD to read-only and if the PMD has
-> +	 * _PAGE_DIRTY_HW set, we move that bit to _PAGE_DIRTY_SW so that
-> +	 * the PMD is not a valid Shadow Stack PMD.
+> +	 * Verify X86_PF_SHSTK is within a Shadow Stack VMA.
+> +	 * It is always an error if there is a Shadow Stack
+> +	 * fault outside a Shadow Stack VMA.
 > +	 */
-> +#ifdef CONFIG_X86_64
-> +	if (static_cpu_has(X86_FEATURE_SHSTK)) {
-> +		pmd_t new_pmd, pmd = READ_ONCE(*pmdp);
-> +
-> +		do {
-> +			/*
-> +			 * This is the same as moving _PAGE_DIRTY_HW
-> +			 * to _PAGE_DIRTY_SW.
-> +			 */
-> +			new_pmd = pmd_wrprotect(pmd);
-> +			new_pmd.pmd |= (new_pmd.pmd & _PAGE_DIRTY_HW) >>
-> +					_PAGE_BIT_DIRTY_HW << _PAGE_BIT_DIRTY_SW;
-> +			new_pmd.pmd &= ~_PAGE_DIRTY_HW;
-> +		} while (!try_cmpxchg(&pmdp->pmd, &pmd.pmd, new_pmd.pmd));
-> +
-> +		return;
+> +	if (error_code & X86_PF_SHSTK) {
+> +		if (!(vma->vm_flags & VM_SHSTK))
+> +			return 1;
+> +		return 0;
 > +	}
-> +#endif
->  	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
->  }
+> +
+>  	if (error_code & X86_PF_WRITE) {
+>  		/* write, present and write, not present: */
+>  		if (unlikely(!(vma->vm_flags & VM_WRITE)))
+> @@ -1344,6 +1355,13 @@ void do_user_addr_fault(struct pt_regs *regs,
 >  
+>  	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+>  
+> +	/*
+> +	 * If the fault is caused by a Shadow Stack access,
+> +	 * i.e. CALL/RET/SAVEPREVSSP/RSTORSSP, then set
+> +	 * FAULT_FLAG_WRITE to effect copy-on-write.
+> +	 */
+> +	if (hw_error_code & X86_PF_SHSTK)
+> +		flags |= FAULT_FLAG_WRITE;
+>  	if (hw_error_code & X86_PF_WRITE)
+>  		flags |= FAULT_FLAG_WRITE;
+>  	if (hw_error_code & X86_PF_INSTR)
 > -- 
 > 2.21.0
 > 
