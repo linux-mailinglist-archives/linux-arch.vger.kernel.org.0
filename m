@@ -2,147 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA7516EB3F
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2020 17:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022CF16EB7C
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2020 17:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729411AbgBYQVZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Feb 2020 11:21:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60888 "EHLO mail.kernel.org"
+        id S1730374AbgBYQcT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Feb 2020 11:32:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728051AbgBYQVZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 Feb 2020 11:21:25 -0500
-Received: from localhost (lfbn-ncy-1-985-231.w90-101.abo.wanadoo.fr [90.101.63.231])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730628AbgBYQcS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 Feb 2020 11:32:18 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 10D0A2082F;
-        Tue, 25 Feb 2020 16:21:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 79E4D21744;
+        Tue, 25 Feb 2020 16:32:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582647684;
-        bh=VtQY2mCmUh7VCyLEDecUcNrtXfnW5VJRfcEoBJHt+JQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ns40aypklqKuUib1m+hVxyk4tzndPZn+0n2YHFsg/Mu/i6dixmRh51yNFslCwXZ7H
-         lMfJapxdHIoPdvn51ZLCmVcjEXIc7zWO+4LnkmQtz/HJBYI1aoP3gqjq4HUdUwj2G1
-         aSw2SlVYtE5XSpJtvskYH64IiSVFA8YBr+9q9AZk=
-Date:   Tue, 25 Feb 2020 17:21:21 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        rostedt@goodmis.org, mingo@kernel.org, joel@joelfernandes.org,
-        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
-        tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        luto@kernel.org, tony.luck@intel.com, dan.carpenter@oracle.com,
-        mhiramat@kernel.org, Will Deacon <will@kernel.org>,
-        Petr Mladek <pmladek@suse.com>, Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH v4 02/27] hardirq/nmi: Allow nested nmi_enter()
-Message-ID: <20200225162121.GA9599@lenoir>
-References: <20200221133416.777099322@infradead.org>
- <20200221134215.149193474@infradead.org>
- <20200221222129.GB28251@lenoir>
- <20200224161318.GG14897@hirez.programming.kicks-ass.net>
- <20200225030905.GB28329@lenoir>
- <20200225154111.GM18400@hirez.programming.kicks-ass.net>
+        s=default; t=1582648337;
+        bh=MCrV5uIeOq1NBjKfFArVww7a5Bwy8RsEAJR83B5u/ts=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZGLTuMvQXqzA7Q6QXxkMg3mcTzv5qXduW8wwCbUw4s2O5ULGcL7EikLJ7hul50m5b
+         o68Fq03A9pqAEFEgbXVAz3C9jQ3WpK3QpSLfn6eG9pVBVE2ACUHj+9hHTjMJStB9TG
+         /6MGOspZd0qqHuYzFcHI2sBt42nrTEVEquWkRBgU=
+Received: by mail-qt1-f173.google.com with SMTP id p34so62564qtb.6;
+        Tue, 25 Feb 2020 08:32:17 -0800 (PST)
+X-Gm-Message-State: APjAAAWCoqy4x4g72BKcwSEcw2TZw/SrtqaTiixubT5slGGIgSC/H2Lo
+        DHGCgIwLsd3SLifWhVt44CMtmsEqSWspjmf9MQ==
+X-Google-Smtp-Source: APXvYqwaelGAkne5AZQ+7QJShUjrcFRgO3DLk3emKjSAc4go5pZt6/PclR5bStzZ+o8zDjvqFxxc6Irx4VX8P8w0noY=
+X-Received: by 2002:ac8:6747:: with SMTP id n7mr7137190qtp.224.1582648336578;
+ Tue, 25 Feb 2020 08:32:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200225154111.GM18400@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <cover.1581497860.git.michal.simek@xilinx.com> <CAL_JsqJeXJ6zWvEUi=gyOV0eCcXsvNmkK9EstC9hg9AKfMXnKw@mail.gmail.com>
+ <0f8140c1-da6f-ef04-0809-252d6de6a5d7@xilinx.com>
+In-Reply-To: <0f8140c1-da6f-ef04-0809-252d6de6a5d7@xilinx.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 25 Feb 2020 10:32:05 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLf2e3z+m14264WFcsQgiwKR35Rs9Rw0c_MgoFvKwO2Xg@mail.gmail.com>
+Message-ID: <CAL_JsqLf2e3z+m14264WFcsQgiwKR35Rs9Rw0c_MgoFvKwO2Xg@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Hi,
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michal Simek <monstr@monstr.eu>, git <git@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Borislav Petkov <bp@suse.de>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mubin Sayyed <mubinusm@xilinx.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Siva Durga Prasad Paladugu <siva.durga.paladugu@xilinx.com>,
+        Stefan Asserhall <stefan.asserhall@xilinx.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        Bharat Kumar Gogada <bharatku@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 04:41:11PM +0100, Peter Zijlstra wrote:
-> On Tue, Feb 25, 2020 at 04:09:06AM +0100, Frederic Weisbecker wrote:
-> > On Mon, Feb 24, 2020 at 05:13:18PM +0100, Peter Zijlstra wrote:
-> 
-> > > +#define arch_nmi_enter()						\
-> > > +do {									\
-> > > +	struct nmi_ctx *___ctx;						\
-> > > +	unsigned int ___cnt;						\
-> > > +									\
-> > > +	if (!is_kernel_in_hyp_mode() || in_nmi())			\
-> > > +		break;							\
-> > > +									\
-> > > +	___ctx = this_cpu_ptr(&nmi_contexts);				\
-> > > +	___cnt = ___ctx->cnt;						\
-> > > +	if (!(___cnt & 1) && __cnt) {					\
-> > > +		___ctx->cnt += 2;					\
-> > > +		break;							\
-> > > +	}								\
-> > > +									\
-> > > +	___ctx->cnt |= 1;						\
-> > > +	barrier();							\
-> > > +	nmi_ctx->hcr = read_sysreg(hcr_el2);				\
-> > > +	if (!(nmi_ctx->hcr & HCR_TGE)) {				\
-> > > +		write_sysreg(nmi_ctx->hcr | HCR_TGE, hcr_el2);		\
-> > > +		isb();							\
-> > > +	}								\
-> > > +	barrier();							\
-> > 
-> > Suppose the first NMI is interrupted here. nmi_ctx->hcr has HCR_TGE unset.
-> > The new NMI is going to overwrite nmi_ctx->hcr with HCR_TGE set. Then the
-> > first NMI will not restore the correct value upon arch_nmi_exit().
-> > 
-> > So perhaps the below, but I bet I overlooked something obvious.
-> 
-> Well, none of this is obvious :/
-> 
-> The basic idea was that the LSB signifies 'pending/in-progress' and when
-> that is set, nobody else touches no nothing. Enter will unconditionally
-> (re) write_sysreg(), exit will nothing.
-> 
-> Obviously I messed that up.
-> 
-> How's this? 
-> 
-> #define arch_nmi_enter()						\
-> do {									\
-> 	struct nmi_ctx *___ctx;						\
-> 	unsigned int ___cnt;						\
-> 									\
-> 	if (!is_kernel_in_hyp_mode() || in_nmi())			\
-> 		break;							\
-> 									\
-> 	___ctx = this_cpu_ptr(&nmi_contexts);				\
-> 	___cnt = ___ctx->cnt;						\
-> 	if (!(___cnt & 1)) { /* !IN-PROGRESS */				\
-> 		if (___cnt) {						\
-> 			___ctx->cnt += 2;				\
-> 			break;						\
-> 		}							\
-> 									\
-> 		___ctx->hcr = read_sysreg(hcr_el2);			\
-> 		barrier();						\
-> 		___ctx->cnt |= 1; /* IN-PROGRESS */			\
-> 		barrier();						\
-> 	}								\
-> 									\
-> 	if (!(___ctx->hcr & HCR_TGE)) {					\
-> 		write_sysreg(___ctx->hcr | HCR_TGE, hcr_el2);		\
-> 		isb();							\
-> 	}								\
-> 	barrier();							\
-> 	if (!(___cnt & 1))						\
-> 		___ctx->cnt++; /* COMPLETE */				\
-> } while (0)
-> 
-> #define arch_nmi_exit()							\
-> do {									\
-> 	struct nmi_ctx *___ctx;						\
-> 									\
-> 	if (!is_kernel_in_hyp_mode() || in_nmi())			\
-> 		break;							\
-> 									\
-> 	___ctx = this_cpu_ptr(&nmi_contexts);				\
-> 	if ((___ctx->cnt & 1) || (___ctx->cnt -= 2))			\
-> 		break;							\
+On Mon, Feb 17, 2020 at 8:28 AM Michal Simek <michal.simek@xilinx.com> wrote:
+>
+> Hi Rob,
+>
+> On 14. 02. 20 0:47, Rob Herring wrote:
+> > On Wed, Feb 12, 2020 at 2:58 AM Michal Simek <michal.simek@xilinx.com> wrote:
+> >>
+> >>
+> >> I am sending this series as before SMP support.
+> >> Most of these patches are clean ups and should be easy to review them. I
+> >> expect there will be more discussions about SMP support.
+> >
+> > While not really related to adding SMP, any chance you or someone
+> > could look at moving microblaze PCI support to drivers/pci/? I suspect
+> > much of the code should drop out as we have common helpers for much of
+> > it now. That would leave only powerpc and mips for DT+PCI platforms.
+>
+> can you please suggest changes which could be done?
+> I have CC Bharat and he could look at it.
 
-If you're interrupted here and __ctx->cnt == 0, the new NMI is in its right
-to overwrite __ctx->hcr. It will find HCR_TGE set in the sysreg and write it back to
-___ctx->hcr. So the following restore will fail.
+Look at the host controller drivers in drivers/pci/controller/.
+pci-host-{generic,common}.c is a good template to start with as that's
+a controller with standard config space accesses and no h/w setup
+needed. Essentially you need to call devm_pci_alloc_host_bridge(),
+pci_parse_request_of_pci_ranges() and pci_host_probe() with whatever
+h/w setup you need in between those calls.
 
-\
-> 	if (!(___ctx->hcr & HCR_TGE))					\
-> 		write_sysreg(___ctx->hcr, hcr_el2);			\
-> } while (0)
+Looking at the microblaze PCI code, looks like you may need custom
+config space accessors which is quite common. Probably all the
+resource and device scanning can be removed. If you look at arm64, all
+the arch PCI code is just for ACPI.
+
+Rob
