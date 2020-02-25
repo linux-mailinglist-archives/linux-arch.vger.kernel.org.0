@@ -2,110 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 022CF16EB7C
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2020 17:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFFA16EC7A
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2020 18:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730374AbgBYQcT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Feb 2020 11:32:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38122 "EHLO mail.kernel.org"
+        id S1728367AbgBYR10 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Feb 2020 12:27:26 -0500
+Received: from foss.arm.com ([217.140.110.172]:53552 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730628AbgBYQcS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 Feb 2020 11:32:18 -0500
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 79E4D21744;
-        Tue, 25 Feb 2020 16:32:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582648337;
-        bh=MCrV5uIeOq1NBjKfFArVww7a5Bwy8RsEAJR83B5u/ts=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZGLTuMvQXqzA7Q6QXxkMg3mcTzv5qXduW8wwCbUw4s2O5ULGcL7EikLJ7hul50m5b
-         o68Fq03A9pqAEFEgbXVAz3C9jQ3WpK3QpSLfn6eG9pVBVE2ACUHj+9hHTjMJStB9TG
-         /6MGOspZd0qqHuYzFcHI2sBt42nrTEVEquWkRBgU=
-Received: by mail-qt1-f173.google.com with SMTP id p34so62564qtb.6;
-        Tue, 25 Feb 2020 08:32:17 -0800 (PST)
-X-Gm-Message-State: APjAAAWCoqy4x4g72BKcwSEcw2TZw/SrtqaTiixubT5slGGIgSC/H2Lo
-        DHGCgIwLsd3SLifWhVt44CMtmsEqSWspjmf9MQ==
-X-Google-Smtp-Source: APXvYqwaelGAkne5AZQ+7QJShUjrcFRgO3DLk3emKjSAc4go5pZt6/PclR5bStzZ+o8zDjvqFxxc6Irx4VX8P8w0noY=
-X-Received: by 2002:ac8:6747:: with SMTP id n7mr7137190qtp.224.1582648336578;
- Tue, 25 Feb 2020 08:32:16 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1581497860.git.michal.simek@xilinx.com> <CAL_JsqJeXJ6zWvEUi=gyOV0eCcXsvNmkK9EstC9hg9AKfMXnKw@mail.gmail.com>
- <0f8140c1-da6f-ef04-0809-252d6de6a5d7@xilinx.com>
-In-Reply-To: <0f8140c1-da6f-ef04-0809-252d6de6a5d7@xilinx.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 25 Feb 2020 10:32:05 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLf2e3z+m14264WFcsQgiwKR35Rs9Rw0c_MgoFvKwO2Xg@mail.gmail.com>
-Message-ID: <CAL_JsqLf2e3z+m14264WFcsQgiwKR35Rs9Rw0c_MgoFvKwO2Xg@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Hi,
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michal Simek <monstr@monstr.eu>, git <git@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Borislav Petkov <bp@suse.de>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mubin Sayyed <mubinusm@xilinx.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Siva Durga Prasad Paladugu <siva.durga.paladugu@xilinx.com>,
-        Stefan Asserhall <stefan.asserhall@xilinx.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
+        id S1728200AbgBYR1Z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 Feb 2020 12:27:25 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21F221FB;
+        Tue, 25 Feb 2020 09:27:25 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9A6403F6CF;
+        Tue, 25 Feb 2020 09:27:24 -0800 (PST)
+Date:   Tue, 25 Feb 2020 17:27:23 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Amit Kachhap <amit.kachhap@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        Bharat Kumar Gogada <bharatku@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Dave Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v6 05/11] arm64: elf: Enable BTI at exec based on ELF
+ program properties
+Message-ID: <20200225172723.GG4633@sirena.org.uk>
+References: <20200212192906.53366-1-broonie@kernel.org>
+ <20200212192906.53366-6-broonie@kernel.org>
+ <275b9cdb-7835-0dfe-9bea-acb0d8301e36@arm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TmwHKJoIRFM7Mu/A"
+Content-Disposition: inline
+In-Reply-To: <275b9cdb-7835-0dfe-9bea-acb0d8301e36@arm.com>
+X-Cookie: Booths for two or more.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 8:28 AM Michal Simek <michal.simek@xilinx.com> wrote:
->
-> Hi Rob,
->
-> On 14. 02. 20 0:47, Rob Herring wrote:
-> > On Wed, Feb 12, 2020 at 2:58 AM Michal Simek <michal.simek@xilinx.com> wrote:
-> >>
-> >>
-> >> I am sending this series as before SMP support.
-> >> Most of these patches are clean ups and should be easy to review them. I
-> >> expect there will be more discussions about SMP support.
-> >
-> > While not really related to adding SMP, any chance you or someone
-> > could look at moving microblaze PCI support to drivers/pci/? I suspect
-> > much of the code should drop out as we have common helpers for much of
-> > it now. That would leave only powerpc and mips for DT+PCI platforms.
->
-> can you please suggest changes which could be done?
-> I have CC Bharat and he could look at it.
 
-Look at the host controller drivers in drivers/pci/controller/.
-pci-host-{generic,common}.c is a good template to start with as that's
-a controller with standard config space accesses and no h/w setup
-needed. Essentially you need to call devm_pci_alloc_host_bridge(),
-pci_parse_request_of_pci_ranges() and pci_host_probe() with whatever
-h/w setup you need in between those calls.
+--TmwHKJoIRFM7Mu/A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Looking at the microblaze PCI code, looks like you may need custom
-config space accessors which is quite common. Probably all the
-resource and device scanning can be removed. If you look at arm64, all
-the arch PCI code is just for ACPI.
+On Tue, Feb 25, 2020 at 06:58:50PM +0530, Amit Kachhap wrote:
+> On 2/13/20 12:59 AM, Mark Brown wrote:
 
-Rob
+> > +static inline int arch_parse_elf_property(u32 type, const void *data,
+> > +					  size_t datasz, bool compat,
+> > +					  struct arch_elf_state *arch)
+> > +{
+
+> Does this check here make sense to skip running extra code?
+>     if (!system_supports_bti())
+>              return 0;
+
+This specifically is the wrong place for such a test since we didn't
+even figure out if we're looking at the BTI property yet so it'd need to
+be moved if any further properties are added.
+
+> Although this check is there in arch_validate_prot.
+
+And more importantly in arch_calc_vm_prot_bits() so we never actually
+create guarded pages on a system that doesn't support BTI.  That said I
+do agree that it seems reasonable to add an explicit check in the
+parsing of the actual BTI property for robustness and clarity, I'll do a
+patch for that and roll it into any future versions or send it
+incrementally if this one is applied but it doesn't seem sensible to
+spin the whole series with the very broad CC list it has.
+
+--TmwHKJoIRFM7Mu/A
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5VWPoACgkQJNaLcl1U
+h9Bq6Af/XISIHfTbIdVWLIy9cav1xBGoNheQB8U8jrd370PqkAtHsvZwnq9aDdt3
+IxSWEuRVgj4bCprzm7gRSiLT5DSxNEqraVfT9GtbAy2Yi/ErLTSHRTCafCelguRv
+guxddwpmSo/yyNcyW0xen19YAhFjJ+VAKjlPdO0ApbplIBWPzwX7cvO7db6qnH9m
+k0GBhysZIXjhJW9KtjmFjdeiJxWGkjTXMDiC5O+Lq0/PL5MIWzrALmT45mFq4Ojf
+1rHAkV6H/8HqU7hSGxnKegK5uwx/gPT2JjhKVYoXXnTIogDeFmnBuz4ZlWMaVD0P
+3T4W1JDe639jb8v2EqZNxjdsU2XPFA==
+=os2p
+-----END PGP SIGNATURE-----
+
+--TmwHKJoIRFM7Mu/A--
