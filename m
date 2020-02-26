@@ -2,135 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6720170328
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 16:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89DF170352
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 16:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728588AbgBZPwD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 10:52:03 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:43108 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728581AbgBZPwC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 10:52:02 -0500
-Received: by mail-qk1-f195.google.com with SMTP id q18so1489792qki.10
-        for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2020 07:52:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4GYwlf0Xa2QHt1cHVU8f4uTPVQEe66S6tW8iKIjB1EY=;
-        b=PEkBC2gGo9Wp0CTNFzcX/uGLGqh45la2h+234pEbgb0JKCTWiVwR5CK2qWd8o7GV9+
-         vZ0V3mJmWDxwpkokIiWuE2AK5D0JvSuKri12uT1Y5ZmnM2+2x1lk6TfjQrITZNEH8kqT
-         OpLenMqGsrmR+s2Jh+PZTctbpw7UkSpOJj3m46DAs7sTe9V+A8PrxIZxTU0Jx2ozkU+h
-         l2FfR5Vf/ZZGO7KqofRi3aS6TzSV2SHQoTpS42nUl+B16nz+oN/qYJaqXNzKW0WQZswg
-         b+O0gHwTc4Y9Ju+CjJy1uD3JRDYV9kySWYvBERLoM4RJvQwJnkBJANxBmrBhZlFtAjqz
-         NmYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4GYwlf0Xa2QHt1cHVU8f4uTPVQEe66S6tW8iKIjB1EY=;
-        b=ArIZP5y7z99TNbxm6K2+A/k3GpTc7kNQb4KIcytesoyQk8K7eGbGguVrn02lrSzUaB
-         A8APkPSzC7RTLRhtnWB8xsWQPmFMLEp4kEMFi+IvZOnS8iNrhA/0FWw2TgEmBrs/NgKk
-         6Zq7aGn7HQZ7XVnEKxfFTk6rAIA4koPBT4QSvqecOeEQ6NvZ2mz+Aj61iFfRyUJBpvfN
-         fpecyWaeGr3YGxBUfp5ld7sLuDh6hAR1ba6CK2TqFW+QcPKo0BdH7OYRpYpkDVOwSzh2
-         E8+pn4hUedq9iktoHOuHH8ldwOqEHSWJNydrL+c7ewRsDgp/f9Ft0tI7PDyZ2BYkl63B
-         eI3A==
-X-Gm-Message-State: APjAAAU9cFtlQ/MyTepGv0AWxyHhFCDckU+OnBXfZsS5XftGdiHQpM9l
-        VKW7Ha8xjW96WQNOw2gG5wi1Ng==
-X-Google-Smtp-Source: APXvYqxycYwltSMF6mRZHm7TjXsCzQqI/GC2y1t3waZQf56agLdqkPAjaYu5yvSrjxUQYf0tQtgA0w==
-X-Received: by 2002:a37:64cb:: with SMTP id y194mr5808427qkb.364.1582732321799;
-        Wed, 26 Feb 2020 07:52:01 -0800 (PST)
-Received: from dhcp-41-57.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 3sm1332599qte.59.2020.02.26.07.51.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Feb 2020 07:52:01 -0800 (PST)
-Message-ID: <1582732318.7365.129.camel@lca.pw>
-Subject: Re: [PATCH V14] mm/debug: Add tests validating architecture page
- table helpers
-From:   Qian Cai <cai@lca.pw>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
+        id S1728522AbgBZP5W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 10:57:22 -0500
+Received: from foss.arm.com ([217.140.110.172]:37908 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728073AbgBZP5W (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 Feb 2020 10:57:22 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CC5330E;
+        Wed, 26 Feb 2020 07:57:21 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BCF33F819;
+        Wed, 26 Feb 2020 07:57:20 -0800 (PST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu " <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        =?UTF-8?q?Kristina=20Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 26 Feb 2020 10:51:58 -0500
-In-Reply-To: <7c707b7f-ce3d-993b-8042-44fdc1ed28bf@c-s.fr>
-References: <1581909460-19148-1-git-send-email-anshuman.khandual@arm.com>
-         <1582726182.7365.123.camel@lca.pw>
-         <7c707b7f-ce3d-993b-8042-44fdc1ed28bf@c-s.fr>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6 (3.22.6-10.el7) 
-Mime-Version: 1.0
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v7 00/11] arm64: Branch Target Identification support
+Date:   Wed, 26 Feb 2020 15:57:03 +0000
+Message-Id: <20200226155714.43937-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2020-02-26 at 15:45 +0100, Christophe Leroy wrote:
-> 
-> Le 26/02/2020 à 15:09, Qian Cai a écrit :
-> > On Mon, 2020-02-17 at 08:47 +0530, Anshuman Khandual wrote:
-> > > This adds tests which will validate architecture page table helpers and
-> > > other accessors in their compliance with expected generic MM semantics.
-> > > This will help various architectures in validating changes to existing
-> > > page table helpers or addition of new ones.
-> > > 
-> > > This test covers basic page table entry transformations including but not
-> > > limited to old, young, dirty, clean, write, write protect etc at various
-> > > level along with populating intermediate entries with next page table page
-> > > and validating them.
-> > > 
-> > > Test page table pages are allocated from system memory with required size
-> > > and alignments. The mapped pfns at page table levels are derived from a
-> > > real pfn representing a valid kernel text symbol. This test gets called
-> > > inside kernel_init() right after async_synchronize_full().
-> > > 
-> > > This test gets built and run when CONFIG_DEBUG_VM_PGTABLE is selected. Any
-> > > architecture, which is willing to subscribe this test will need to select
-> > > ARCH_HAS_DEBUG_VM_PGTABLE. For now this is limited to arc, arm64, x86, s390
-> > > and ppc32 platforms where the test is known to build and run successfully.
-> > > Going forward, other architectures too can subscribe the test after fixing
-> > > any build or runtime problems with their page table helpers. Meanwhile for
-> > > better platform coverage, the test can also be enabled with CONFIG_EXPERT
-> > > even without ARCH_HAS_DEBUG_VM_PGTABLE.
-> > > 
-> > > Folks interested in making sure that a given platform's page table helpers
-> > > conform to expected generic MM semantics should enable the above config
-> > > which will just trigger this test during boot. Any non conformity here will
-> > > be reported as an warning which would need to be fixed. This test will help
-> > > catch any changes to the agreed upon semantics expected from generic MM and
-> > > enable platforms to accommodate it thereafter.
-> > 
-> > How useful is this that straightly crash the powerpc?
-> > 
-> > [   23.263425][    T1] debug_vm_pgtable: debug_vm_pgtable: Validating
-> > architecture page table helpers
-> > [   23.263625][    T1] ------------[ cut here ]------------
-> > [   23.263649][    T1] kernel BUG at arch/powerpc/mm/pgtable.c:274!
-> 
-> The problem on PPC64 is known and has to be investigated and fixed.
+This patch series implements support for ARMv8.5-A Branch Target
+Identification (BTI), which is a control flow integrity protection
+feature introduced as part of the ARMv8.5-A extensions.
 
-It might be interesting to hear what powerpc64 maintainers would say about it
-and if it is actually worth "fixing" in the arch code, but that BUG_ON() was
-there since 2009 and had not been exposed until this patch comes alone?
+Changes:
+
+v7:
+ - Rebase onto v5.6-rc3.
+ - Move comment about keeping NT_GNU_PROPERTY_TYPE_0 internal into first
+   patch.
+ - Add an explicit check for system_supports_bti() when parsing BTI ELF
+   property for improved robustness.
+v6:
+ - Rebase onto v5.6-rc1.
+ - Fix typos s/BYTPE/BTYPE/ in commit log for "arm64: BTI: Decode BYTPE
+   bits when printing PSTATE".
+v5:
+ - Changed a bunch of -EIO to -ENOEXEC in the ELF parsing code.
+ - Move PSR_BTYPE defines to UAPI.
+ - Use compat_user_mode() rather than open coding.
+ - Fix a typo s/BYTPE/BTYPE/ in syscall.c
+v4:
+ - Dropped patch fixing existing documentation as it has already been merged.
+ - Convert WARN_ON() to WARN_ON_ONCE() in "ELF: Add ELF program property
+   parsing support".
+ - Added display of guarded pages to ptdump.
+ - Updated for conversion of exception handling from assembler to C.
+
+Notes:
+
+ * GCC 9 can compile backwards-compatible BTI-enabled code with
+   -mbranch-protection=bti or -mbranch-protection=standard.
+
+ * Binutils trunk supports the new ELF note, but this wasn't in a release
+   the last time I posted this series.  (The situation _might_ have changed
+   in the meantime...)
+
+   Creation of a BTI-enabled binary requires _everything_ linked in to
+   be BTI-enabled.  For now ld --force-bti can be used to override this,
+   but some things may break until the required C library support is in
+   place.
+
+   There is no straightforward way to mark a .s file as BTI-enabled:
+   scraping the output from gcc -S works as a quick hack for now.
+
+   readelf -n can be used to examing the program properties in an ELF
+   file.
+
+ * Runtime mmap() and mprotect() can be used to enable BTI on a
+   page-by-page basis using the new PROT_BTI, but the code in the
+   affected pages still needs to be written or compiled to contain the
+   appopriate BTI landing pads.
+
+The following changes since commit f8788d86ab28f61f7b46eb6be375f8a726783636:
+
+  Linux 5.6-rc3 (2020-02-23 16:17:42 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git arm64-bti
+
+for you to fetch changes up to d6897bb309fc4ef374e1de8242eb94d1fb97c13b:
+
+  arm64: mm: Display guarded pages in ptdump (2020-02-26 12:12:31 +0000)
+
+Dave Martin (10):
+  ELF: UAPI and Kconfig additions for ELF program properties
+  ELF: Add ELF program property parsing support
+  arm64: Basic Branch Target Identification support
+  elf: Allow arch to tweak initial mmap prot flags
+  arm64: elf: Enable BTI at exec based on ELF program properties
+  arm64: BTI: Decode BYTPE bits when printing PSTATE
+  arm64: unify native/compat instruction skipping
+  arm64: traps: Shuffle code to eliminate forward declarations
+  arm64: BTI: Reset BTYPE when skipping emulated instructions
+  KVM: arm64: BTI: Reset BTYPE when skipping emulated instructions
+
+Mark Brown (1):
+  arm64: mm: Display guarded pages in ptdump
+
+ Documentation/arm64/cpu-feature-registers.rst |   2 +
+ Documentation/arm64/elf_hwcaps.rst            |   5 +
+ arch/arm64/Kconfig                            |  25 +++
+ arch/arm64/include/asm/cpucaps.h              |   3 +-
+ arch/arm64/include/asm/cpufeature.h           |   6 +
+ arch/arm64/include/asm/elf.h                  |  51 ++++++
+ arch/arm64/include/asm/esr.h                  |   2 +-
+ arch/arm64/include/asm/exception.h            |   1 +
+ arch/arm64/include/asm/hwcap.h                |   1 +
+ arch/arm64/include/asm/kvm_emulate.h          |   6 +-
+ arch/arm64/include/asm/mman.h                 |  37 +++++
+ arch/arm64/include/asm/pgtable-hwdef.h        |   1 +
+ arch/arm64/include/asm/pgtable.h              |   2 +-
+ arch/arm64/include/asm/ptrace.h               |   1 +
+ arch/arm64/include/asm/sysreg.h               |   4 +
+ arch/arm64/include/uapi/asm/hwcap.h           |   1 +
+ arch/arm64/include/uapi/asm/mman.h            |   9 ++
+ arch/arm64/include/uapi/asm/ptrace.h          |   9 ++
+ arch/arm64/kernel/cpufeature.c                |  33 ++++
+ arch/arm64/kernel/cpuinfo.c                   |   1 +
+ arch/arm64/kernel/entry-common.c              |  11 ++
+ arch/arm64/kernel/process.c                   |  36 ++++-
+ arch/arm64/kernel/ptrace.c                    |   2 +-
+ arch/arm64/kernel/signal.c                    |  16 ++
+ arch/arm64/kernel/syscall.c                   |  18 +++
+ arch/arm64/kernel/traps.c                     | 127 +++++++--------
+ arch/arm64/mm/dump.c                          |   5 +
+ fs/Kconfig.binfmt                             |   6 +
+ fs/binfmt_elf.c                               | 145 +++++++++++++++++-
+ fs/compat_binfmt_elf.c                        |   4 +
+ include/linux/elf.h                           |  43 ++++++
+ include/linux/mm.h                            |   3 +
+ include/uapi/linux/elf.h                      |  11 ++
+ 33 files changed, 552 insertions(+), 75 deletions(-)
+ create mode 100644 arch/arm64/include/asm/mman.h
+ create mode 100644 arch/arm64/include/uapi/asm/mman.h
+
+-- 
+2.20.1
+
