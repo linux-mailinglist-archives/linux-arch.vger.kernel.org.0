@@ -2,46 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0920C170AAF
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 22:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825B1170AB6
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 22:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727740AbgBZVmF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 16:42:05 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:46618 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727715AbgBZVmE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 16:42:04 -0500
-Received: by mail-pg1-f193.google.com with SMTP id y30so285118pga.13
-        for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2020 13:42:04 -0800 (PST)
+        id S1727700AbgBZVnV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 16:43:21 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:43467 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727552AbgBZVnU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 16:43:20 -0500
+Received: by mail-pl1-f193.google.com with SMTP id p11so216807plq.10
+        for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2020 13:43:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=CMs6CM+hK6aKdC1S/oL5Dxo9YOdRorQKtX4mbGWHNSk=;
-        b=CU1gKkU3xVHYfQWJJENAudAyAiPTUD9x0S1kT0iOTLbD28SlxzNGyC/Pjw96hdP+Ic
-         KYiXd/ZyZjzG/MAgYZfYLykdQEZCv52NwiDmvuSsSwe5Lz0GvhE9KWl1U6RevuNcNG/3
-         Yu6+M1GqnsTAvu1IQig3Cvlyxb/ZJgDUzh5tc=
+        bh=hgnKizZ1LNZ1/7A/IJ99LWJR1HO7jmNhhyis79Qnr60=;
+        b=imPKf9umLzwdYDhQggEBl9e4ToNBXNNVON+kK1TJ+uk0+ZLljXquYPffKziNovmy2I
+         jikF8Stj2PXeTpynKemInXah8AkuFiUlmAlruPDpfecS8D7U1+/EtolYDekkiiyJzR0L
+         xQVaChv9CeeV5BH+OJ0LpRon0QJEihFy8wlUo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=CMs6CM+hK6aKdC1S/oL5Dxo9YOdRorQKtX4mbGWHNSk=;
-        b=KKHZ9mkgFGgDtrIWaM9xtXNG4b111U9KGeL2xnhnFkt3nXIvdIN5ApxUF5J+lDyZfh
-         dqehgRYNAPW5f/1MknoAgFxdUOiIVP5M3/DH9FV6cSaeJUUhQEhhB1W3F1lhkV+iGPUX
-         gA+uCdn1ZXvVc01ikGervzFpYxHpT+cWoaeGXtLB6JJMZNtKTybZzG2p7SGrJp1TF+lj
-         MYgG22dFZimLxWcklJJ7ZmqNH6MhqB6IMSnj2efSS2f8Oa8ACGtDPhxnZjFVXA1cs+ys
-         MA4B4nFQ2q9FosI71tM1Tm82HVt0daQEZKbjBpoW1qRkcrNvrZvc350agEztdB2XIzkT
-         aEyQ==
-X-Gm-Message-State: APjAAAVTc1ura4zladq9rfKmPuoiTA9pHkjYpXG1nk5RE0atPDdzvKY8
-        Suaf+mS3M+lnAd8FWjO77aNMPA==
-X-Google-Smtp-Source: APXvYqwNJNZWiE0vCSozBBya4T8gbUsaluXQ146HDDTof3lcBkuezuHeqc1lwfvZRCtbqCDz6bE47w==
-X-Received: by 2002:a62:f842:: with SMTP id c2mr746353pfm.104.1582753323721;
-        Wed, 26 Feb 2020 13:42:03 -0800 (PST)
+        bh=hgnKizZ1LNZ1/7A/IJ99LWJR1HO7jmNhhyis79Qnr60=;
+        b=HmNmlivk8fMegH+iGVYqNdYMlMR3EqUNJe+JzgBpEIReJBrx1qDABA/W/IxYp6bk/v
+         DtkGZ/cteRIUt22Zg8F88ht08PTJJbAv7eSINKyoxFD9jsYhVoUojZk4+ILrf+1Hb4Xn
+         jV5I7yMf3OvEIIeRWoPatpLnvnOdM2MLCSuLghGSmgDvOIbawK8P7FAzzfr+SUmQbp3Q
+         JAArBVuHxIaIGWjTULrzsugNVyIzEvGTWAkVivAZB11x+rRzTKJyexIXQbwnfM1NAEoU
+         /ywdt9on63/x2/L5Y+f/VYEXZrycLa8lls9edV8YR/Xs5rKebzB44vhifR26+GDXa+VL
+         Aivw==
+X-Gm-Message-State: APjAAAUeDaHrDxSgMZS5WVCP9CFiUZEYrr8V5ie+I5sZyag8mPj+fHg6
+        lT/qMM2n1otYicVaBcLrRqW/tw==
+X-Google-Smtp-Source: APXvYqwGwPpLn6uZNtEIwvru0jb8ckaRTjGt+8bMvcl7Mr+2qZiRBDB62qZdspDVpqRhvm6+PUN88w==
+X-Received: by 2002:a17:902:6ac7:: with SMTP id i7mr1238742plt.314.1582753399559;
+        Wed, 26 Feb 2020 13:43:19 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u11sm3814980pjn.2.2020.02.26.13.42.02
+        by smtp.gmail.com with ESMTPSA id q6sm4042454pfh.127.2020.02.26.13.43.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 13:42:02 -0800 (PST)
-Date:   Wed, 26 Feb 2020 13:42:01 -0800
+        Wed, 26 Feb 2020 13:43:18 -0800 (PST)
+Date:   Wed, 26 Feb 2020 13:43:17 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -66,37 +66,35 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         Dave Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH v7 06/11] arm64: BTI: Decode BYTPE bits when printing
- PSTATE
-Message-ID: <202002261341.D2BB57A@keescook>
+Subject: Re: [PATCH v7 05/11] arm64: elf: Enable BTI at exec based on ELF
+ program properties
+Message-ID: <202002261343.1D0FC8DBE@keescook>
 References: <20200226155714.43937-1-broonie@kernel.org>
- <20200226155714.43937-7-broonie@kernel.org>
+ <20200226155714.43937-6-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200226155714.43937-7-broonie@kernel.org>
+In-Reply-To: <20200226155714.43937-6-broonie@kernel.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 03:57:09PM +0000, Mark Brown wrote:
+On Wed, Feb 26, 2020 at 03:57:08PM +0000, Mark Brown wrote:
 > From: Dave Martin <Dave.Martin@arm.com>
 > 
-> The current code to print PSTATE symbolically when generating
-> backtraces etc., does not include the BYTPE field used by Branch
-> Target Identification.
+> For BTI protection to be as comprehensive as possible, it is
+> desirable to have BTI enabled from process startup.  If this is not
+> done, the process must use mprotect() to enable BTI for each of its
+> executable mappings, but this is painful to do in the libc startup
+> code.  It's simpler and more sound to have the kernel do it
+> instead.
 > 
-> So, decode BYTPE and print it too.
-> 
-> In the interests of human-readability, print the classes of BTI
-> matched.  The symbolic notation, BYTPE (PSTATE[11:10]) and
-> permitted classes of subsequent instruction are:
-> 
->     -- (BTYPE=0b00): any insn
->     jc (BTYPE=0b01): BTI jc, BTI j, BTI c, PACIxSP
->     -c (BYTPE=0b10): BTI jc, BTI c, PACIxSP
->     j- (BTYPE=0b11): BTI jc, BTI j
+> To this end, detect BTI support in the executable (or ELF
+> interpreter, as appropriate), via the
+> NT_GNU_PROGRAM_PROPERTY_TYPE_0 note, and tweak the initial prot
+> flags for the process' executable pages to include PROT_BTI as
+> appropriate.
 > 
 > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
 
@@ -106,51 +104,166 @@ Reviewed-by: Kees Cook <keescook@chromium.org>
 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  arch/arm64/kernel/process.c | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
+>  arch/arm64/Kconfig           |  3 +++
+>  arch/arm64/include/asm/elf.h | 51 ++++++++++++++++++++++++++++++++++++
+>  arch/arm64/kernel/process.c  | 19 ++++++++++++++
+>  include/uapi/linux/elf.h     |  6 +++++
+>  4 files changed, 79 insertions(+)
 > 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index e37f4f07b990..d65d226a77ec 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -9,6 +9,7 @@ config ARM64
+>  	select ACPI_MCFG if (ACPI && PCI)
+>  	select ACPI_SPCR_TABLE if ACPI
+>  	select ACPI_PPTT if ACPI
+> +	select ARCH_BINFMT_ELF_STATE
+>  	select ARCH_CLOCKSOURCE_DATA
+>  	select ARCH_HAS_DEBUG_VIRTUAL
+>  	select ARCH_HAS_DEVMEM_IS_ALLOWED
+> @@ -33,6 +34,7 @@ config ARM64
+>  	select ARCH_HAS_SYSCALL_WRAPPER
+>  	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
+>  	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+> +	select ARCH_HAVE_ELF_PROT
+>  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>  	select ARCH_INLINE_READ_LOCK if !PREEMPTION
+>  	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
+> @@ -62,6 +64,7 @@ config ARM64
+>  	select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
+>  	select ARCH_KEEP_MEMBLOCK
+>  	select ARCH_USE_CMPXCHG_LOCKREF
+> +	select ARCH_USE_GNU_PROPERTY if BINFMT_ELF
+>  	select ARCH_USE_QUEUED_RWLOCKS
+>  	select ARCH_USE_QUEUED_SPINLOCKS
+>  	select ARCH_SUPPORTS_MEMORY_FAILURE
+> diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
+> index b618017205a3..c72e381fa86d 100644
+> --- a/arch/arm64/include/asm/elf.h
+> +++ b/arch/arm64/include/asm/elf.h
+> @@ -114,7 +114,11 @@
+>  
+>  #ifndef __ASSEMBLY__
+>  
+> +#include <uapi/linux/elf.h>
+>  #include <linux/bug.h>
+> +#include <linux/errno.h>
+> +#include <linux/fs.h>
+> +#include <linux/types.h>
+>  #include <asm/processor.h> /* for signal_minsigstksz, used by ARCH_DLINFO */
+>  
+>  typedef unsigned long elf_greg_t;
+> @@ -224,6 +228,53 @@ extern int aarch32_setup_additional_pages(struct linux_binprm *bprm,
+>  
+>  #endif /* CONFIG_COMPAT */
+>  
+> +struct arch_elf_state {
+> +	int flags;
+> +};
+> +
+> +#define ARM64_ELF_BTI		(1 << 0)
+> +
+> +#define INIT_ARCH_ELF_STATE {			\
+> +	.flags = 0,				\
+> +}
+> +
+> +static inline int arch_parse_elf_property(u32 type, const void *data,
+> +					  size_t datasz, bool compat,
+> +					  struct arch_elf_state *arch)
+> +{
+> +	/* No known properties for AArch32 yet */
+> +	if (IS_ENABLED(CONFIG_COMPAT) && compat)
+> +		return 0;
+> +
+> +	if (type == GNU_PROPERTY_AARCH64_FEATURE_1_AND) {
+> +		const u32 *p = data;
+> +
+> +		if (datasz != sizeof(*p))
+> +			return -ENOEXEC;
+> +
+> +		if (IS_ENABLED(CONFIG_ARM64_BTI) &&
+> +		    system_supports_bti() &&
+> +		    (*p & GNU_PROPERTY_AARCH64_FEATURE_1_BTI))
+> +			arch->flags |= ARM64_ELF_BTI;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int arch_elf_pt_proc(void *ehdr, void *phdr,
+> +				   struct file *f, bool is_interp,
+> +				   struct arch_elf_state *state)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline int arch_check_elf(void *ehdr, bool has_interp,
+> +				 void *interp_ehdr,
+> +				 struct arch_elf_state *state)
+> +{
+> +	return 0;
+> +}
+> +
+>  #endif /* !__ASSEMBLY__ */
+>  
+>  #endif
 > diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> index b8e3faa8d406..24af13d7bde6 100644
+> index 00626057a384..b8e3faa8d406 100644
 > --- a/arch/arm64/kernel/process.c
 > +++ b/arch/arm64/kernel/process.c
-> @@ -211,6 +211,15 @@ void machine_restart(char *cmd)
->  	while (1);
->  }
+> @@ -11,6 +11,7 @@
 >  
-> +#define bstr(suffix, str) [PSR_BTYPE_ ## suffix >> PSR_BTYPE_SHIFT] = str
-> +static const char *const btypes[] = {
-> +	bstr(NONE, "--"),
-> +	bstr(  JC, "jc"),
-> +	bstr(   C, "-c"),
-> +	bstr(  J , "j-")
-> +};
-> +#undef bstr
-> +
->  static void print_pstate(struct pt_regs *regs)
->  {
->  	u64 pstate = regs->pstate;
-> @@ -229,7 +238,10 @@ static void print_pstate(struct pt_regs *regs)
->  			pstate & PSR_AA32_I_BIT ? 'I' : 'i',
->  			pstate & PSR_AA32_F_BIT ? 'F' : 'f');
->  	} else {
-> -		printk("pstate: %08llx (%c%c%c%c %c%c%c%c %cPAN %cUAO)\n",
-> +		const char *btype_str = btypes[(pstate & PSR_BTYPE_MASK) >>
-> +					       PSR_BTYPE_SHIFT];
-> +
-> +		printk("pstate: %08llx (%c%c%c%c %c%c%c%c %cPAN %cUAO BTYPE=%s)\n",
->  			pstate,
->  			pstate & PSR_N_BIT ? 'N' : 'n',
->  			pstate & PSR_Z_BIT ? 'Z' : 'z',
-> @@ -240,7 +252,8 @@ static void print_pstate(struct pt_regs *regs)
->  			pstate & PSR_I_BIT ? 'I' : 'i',
->  			pstate & PSR_F_BIT ? 'F' : 'f',
->  			pstate & PSR_PAN_BIT ? '+' : '-',
-> -			pstate & PSR_UAO_BIT ? '+' : '-');
-> +			pstate & PSR_UAO_BIT ? '+' : '-',
-> +			btype_str);
->  	}
+>  #include <linux/compat.h>
+>  #include <linux/efi.h>
+> +#include <linux/elf.h>
+>  #include <linux/export.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/debug.h>
+> @@ -18,6 +19,7 @@
+>  #include <linux/sched/task_stack.h>
+>  #include <linux/kernel.h>
+>  #include <linux/lockdep.h>
+> +#include <linux/mman.h>
+>  #include <linux/mm.h>
+>  #include <linux/stddef.h>
+>  #include <linux/sysctl.h>
+> @@ -654,3 +656,20 @@ asmlinkage void __sched arm64_preempt_schedule_irq(void)
+>  	if (system_capabilities_finalized())
+>  		preempt_schedule_irq();
 >  }
+> +
+> +#ifdef CONFIG_BINFMT_ELF
+> +int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
+> +			 bool has_interp, bool is_interp)
+> +{
+> +	if (is_interp != has_interp)
+> +		return prot;
+> +
+> +	if (!(state->flags & ARM64_ELF_BTI))
+> +		return prot;
+> +
+> +	if (prot & PROT_EXEC)
+> +		prot |= PROT_BTI;
+> +
+> +	return prot;
+> +}
+> +#endif
+> diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+> index 20900f4496b7..c6dd0215482e 100644
+> --- a/include/uapi/linux/elf.h
+> +++ b/include/uapi/linux/elf.h
+> @@ -448,4 +448,10 @@ typedef struct elf64_note {
+>    Elf64_Word n_type;	/* Content type */
+>  } Elf64_Nhdr;
 >  
+> +/* .note.gnu.property types for EM_AARCH64: */
+> +#define GNU_PROPERTY_AARCH64_FEATURE_1_AND	0xc0000000
+> +
+> +/* Bits for GNU_PROPERTY_AARCH64_FEATURE_1_BTI */
+> +#define GNU_PROPERTY_AARCH64_FEATURE_1_BTI	(1U << 0)
+> +
+>  #endif /* _UAPI_LINUX_ELF_H */
 > -- 
 > 2.20.1
 > 
