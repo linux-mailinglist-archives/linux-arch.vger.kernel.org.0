@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 334741706FF
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 19:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB38170715
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 19:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727152AbgBZSFx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 13:05:53 -0500
-Received: from mga04.intel.com ([192.55.52.120]:46219 "EHLO mga04.intel.com"
+        id S1726975AbgBZSH6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 13:07:58 -0500
+Received: from mga01.intel.com ([192.55.52.88]:36691 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726787AbgBZSFx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 13:05:53 -0500
+        id S1726787AbgBZSH5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 Feb 2020 13:07:57 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 10:05:52 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 10:07:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,489,1574150400"; 
-   d="scan'208";a="241754569"
+   d="scan'208";a="241755671"
 Received: from kcanfiel-mobl1.amr.corp.intel.com (HELO [10.251.18.127]) ([10.251.18.127])
-  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 10:05:51 -0800
-Subject: Re: [RFC PATCH v9 05/27] x86/cet/shstk: Add Kconfig option for
- user-mode Shadow Stack protection
+  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 10:07:55 -0800
+Subject: Re: [RFC PATCH v9 06/27] mm: Introduce VM_SHSTK for Shadow Stack
+ memory
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -48,7 +48,7 @@ To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
 References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
- <20200205181935.3712-6-yu-cheng.yu@intel.com>
+ <20200205181935.3712-7-yu-cheng.yu@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -94,12 +94,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-Message-ID: <d4dabb84-5636-2657-c45e-795f3f2dcbbc@intel.com>
-Date:   Wed, 26 Feb 2020 10:05:50 -0800
+Message-ID: <021394ef-e552-0639-0294-472e32e0d3fc@intel.com>
+Date:   Wed, 26 Feb 2020 10:07:54 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200205181935.3712-6-yu-cheng.yu@intel.com>
+In-Reply-To: <20200205181935.3712-7-yu-cheng.yu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -109,23 +109,14 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 2/5/20 10:19 AM, Yu-cheng Yu wrote:
-> +# Check assembler Shadow Stack suppot
+> A Shadow Stack (SHSTK) PTE must be read-only and have _PAGE_DIRTY set.
+> However, read-only and Dirty PTEs also exist for copy-on-write (COW) pages.
+> These two cases are handled differently for page faults and a new VM flag
+> is necessary for tracking SHSTK VMAs.
+> 
+> v9:
+> - Add VM_SHSTK case to arch_vma_name().
+> - Revise the commit log to explain why a new VM flag is needed.
 
-				  ^ support
-
-> +ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
-> +  ifeq ($(call as-instr, saveprevssp, y),)
-> +      $(error CONFIG_X86_INTEL_SHADOW_STACK_USER not supported by the assembler)
-> +  endif
-> +endif
-
-Is this *just* looking for instruction support in the assembler?
-
-We usually just .byte them, like this for pkeys:
-
-        asm volatile(".byte 0x0f,0x01,0xee\n\t"
-                     : "=a" (pkru), "=d" (edx)
-                     : "c" (ecx));
-
-That way everybody with old toolchains can still build the kernel (and
-run/test code with your config option on, btw...).
+To be honest, a flag is not strictly *needed*.  It is certainly
+convenient and straightforward, but it's far from being truly necessary.
