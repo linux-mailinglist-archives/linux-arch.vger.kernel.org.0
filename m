@@ -2,150 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C1D16FD5F
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 12:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3FA16FFBB
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 14:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728010AbgBZLVH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 06:21:07 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:65462 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727974AbgBZLVG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 06:21:06 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 48SCzM1tTVz9tyML;
-        Wed, 26 Feb 2020 12:21:03 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=dcbZx4t5; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id J7zfGGKBixz2; Wed, 26 Feb 2020 12:21:03 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 48SCzL6n6pz9tyLT;
-        Wed, 26 Feb 2020 12:21:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1582716063; bh=u+44lvk1l0rvN0rVt0XeRLZF9pAnZ+SeTYsCRW90jUs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=dcbZx4t5T2TqZBsmJqeETgOslZL/sjGjY3jtgZjyAkWRnWp+cZWdaA9+1CVcQnyrg
-         EAK/r3fzS6yjM9r4KrQXdxQ3U95U+v+IizkroXw9QSoxVs+Y7bA5gjhV+iBVeI3LhD
-         1eV+B927JsHKM6Lu+qpoDnmZLHfscXCGj3HKorDY=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 166CF8B844;
-        Wed, 26 Feb 2020 12:21:04 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id HTbfYZhVV_tY; Wed, 26 Feb 2020 12:21:03 +0100 (CET)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B0DBC8B776;
-        Wed, 26 Feb 2020 12:21:01 +0100 (CET)
-Subject: Re: [PATCH v2 07/13] powerpc: add support for folded p4d page tables
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        James Morse <james.morse@arm.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Rich Felker <dalias@libc.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Tony Luck <tony.luck@intel.com>, Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        kvmarm@lists.cs.columbia.edu, kvm-ppc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, nios2-dev@lists.rocketboards.org,
-        openrisc@lists.librecores.org,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        Mike Rapoport <rppt@linux.ibm.com>
-References: <20200216081843.28670-1-rppt@kernel.org>
- <20200216081843.28670-8-rppt@kernel.org>
- <c79b363c-a111-389a-5752-51cf85fa8c44@c-s.fr> <20200218105440.GA1698@hump>
- <20200226091315.GA11803@hump> <f881f732-729b-a098-f520-b30e44dc10c8@c-s.fr>
- <20200226105615.GB11803@hump>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <7a008227-433c-73d7-b01a-1c6c7c66f04e@c-s.fr>
-Date:   Wed, 26 Feb 2020 12:20:49 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726899AbgBZNQx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 08:16:53 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:39704 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726878AbgBZNQx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 08:16:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dBTEGeYdwOYe1m9MR0swroLBpZXLyk3mtt8wrgV6Ovc=; b=cGWoguhwhW+FQQ8dKZd+JTjhwk
+        BRfx7XVWuUB3DRzatCE2HAGxCVK+FemfvM1wF1N+9NIC+q4PoQWoRPcoHgwNduhGIZ6xv6CTSVclb
+        mP7JT/nGL1GrjHsOc6cW+4wlxVp6/qkWJrW7kCOIbRmyRGol6ScP038NpnPreUqhzlRXsdT833EsH
+        phK31L0UPA5dN8aerwDKGwFEvJ2iu4xSAtdLMFiXgS+1I2dGE672cOmb+b1mjTgL8XiPTSVS/XQE1
+        iPiwD/y15qhQDPs+tbK45pOqqTnbXYJHKamMcMfe3p5rYAbSZ4F2bPZepE4nxOP4DczXqKdlPfJfg
+        R/SxhgAA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j6wXq-0005Pn-4i; Wed, 26 Feb 2020 13:16:10 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4AF5E300130;
+        Wed, 26 Feb 2020 14:14:11 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8FC282B264902; Wed, 26 Feb 2020 14:16:06 +0100 (CET)
+Date:   Wed, 26 Feb 2020 14:16:06 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Greg KH <gregkh@linuxfoundation.org>, gustavo@embeddedor.com,
+        Thomas Gleixner <tglx@linutronix.de>, paulmck@kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v4 05/27] x86: Replace ist_enter() with nmi_enter()
+Message-ID: <20200226131606.GL14946@hirez.programming.kicks-ass.net>
+References: <20200221134215.328642621@infradead.org>
+ <CALCETrU7nezN7d3GEZ8h8HbRfvZ0+F9+Ahb7fLvZ9FVaHN9x2w@mail.gmail.com>
+ <20200221202246.GA14897@hirez.programming.kicks-ass.net>
+ <20200224104346.GJ14946@hirez.programming.kicks-ass.net>
+ <20200224112708.4f307ba3@gandalf.local.home>
+ <20200224163409.GJ18400@hirez.programming.kicks-ass.net>
+ <20200224114754.0fb798c1@gandalf.local.home>
+ <20200224213139.GO11457@worktop.programming.kicks-ass.net>
+ <20200224170231.3807931d@gandalf.local.home>
+ <20200226102509.GU18400@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20200226105615.GB11803@hump>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200226102509.GU18400@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 26/02/2020 à 11:56, Mike Rapoport a écrit :
-> On Wed, Feb 26, 2020 at 10:46:13AM +0100, Christophe Leroy wrote:
->>
->>
->> Le 26/02/2020 à 10:13, Mike Rapoport a écrit :
->>> On Tue, Feb 18, 2020 at 12:54:40PM +0200, Mike Rapoport wrote:
->>>> On Sun, Feb 16, 2020 at 11:41:07AM +0100, Christophe Leroy wrote:
->>>>>
->>>>>
->>>>> Le 16/02/2020 à 09:18, Mike Rapoport a écrit :
->>>>>> From: Mike Rapoport <rppt@linux.ibm.com>
->>>>>>
->>>>>> Implement primitives necessary for the 4th level folding, add walks of p4d
->>>>>> level where appropriate and replace 5level-fixup.h with pgtable-nop4d.h.
->>>>>
->>>>> I don't think it is worth adding all this additionnals walks of p4d, this
->>>>> patch could be limited to changes like:
->>>>>
->>>>> -		pud = pud_offset(pgd, gpa);
->>>>> +		pud = pud_offset(p4d_offset(pgd, gpa), gpa);
->>>>>
->>>>> The additionnal walks should be added through another patch the day powerpc
->>>>> need them.
->>>>
->>>> Ok, I'll update the patch to reduce walking the p4d.
->>>
->>> Here's what I have with more direct acceses from pgd to pud.
->>
->> I went quickly through. This looks promising.
->>
->> Do we need the walk_p4d() in arch/powerpc/mm/ptdump/hashpagetable.c ?
->> Can't we just do
->>
->> @@ -445,7 +459,7 @@ static void walk_pagetables(struct pg_state *st)
->>   		addr = KERN_VIRT_START + i * PGDIR_SIZE;
->>   		if (!pgd_none(*pgd))
->>   			/* pgd exists */
->> -			walk_pud(st, pgd, addr);
->> +			walk_pud(st, p4d_offset(pgd, addr), addr);
+On Wed, Feb 26, 2020 at 11:25:09AM +0100, Peter Zijlstra wrote:
+> Subject: sh/ftrace: Move arch_ftrace_nmi_{enter,exit} into nmi exception
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Mon Feb 24 22:26:21 CET 2020
 > 
-> We can do
+> SuperH is the last remaining user of arch_ftrace_nmi_{enter,exit}(),
+> remove it from the generic code and into the SuperH code.
 > 
-> 	addr = KERN_VIRT_START + i * PGDIR_SIZE;
-> 	p4d = p4d_offset(pgd, addr);
-> 	if (!p4d_none(*pgd))
-> 		walk_pud()
-> 
-> But I don't think this is really essential. Again, we are trading off code
-> consistency vs line count. I don't think line count is that important.
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
 
-Ok.
+> --- a/arch/sh/kernel/traps.c
+> +++ b/arch/sh/kernel/traps.c
+> @@ -170,11 +170,21 @@ BUILD_TRAP_HANDLER(bug)
+>  	force_sig(SIGTRAP);
+>  }
+>  
+> +#ifdef CONFIG_HAVE_DYNAMIC_FTRACE
 
-Christophe
+build robot just informed me that this ought to s/HAVE_//
+
+> +extern void arch_ftrace_nmi_enter(void);
+> +extern void arch_ftrace_nmi_exit(void);
+> +#else
+> +static inline void arch_ftrace_nmi_enter(void) { }
+> +static inline void arch_ftrace_nmi_exit(void) { }
+> +#endif
