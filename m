@@ -2,72 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC881702A1
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 16:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6720170328
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 16:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728325AbgBZPfo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 10:35:44 -0500
-Received: from smtp-sh2.infomaniak.ch ([128.65.195.6]:40631 "EHLO
-        smtp-sh2.infomaniak.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728145AbgBZPfn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 10:35:43 -0500
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-        by smtp-sh2.infomaniak.ch (8.14.4/8.14.4/Debian-8+deb8u2) with ESMTP id 01QFZ3Zc056663
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 26 Feb 2020 16:35:03 +0100
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 48SKcN1RPGzlhMhj;
-        Wed, 26 Feb 2020 16:35:00 +0100 (CET)
-Subject: Re: [RFC PATCH v14 00/10] Landlock LSM
-To:     J Freyensee <why2jjj.linux@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-References: <20200224160215.4136-1-mic@digikod.net>
- <6df3e6b1-ffd1-dacf-2f2d-7df8e5aca668@gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <5ec24e38-1a6f-590a-3b30-50caae177e9b@digikod.net>
-Date:   Wed, 26 Feb 2020 16:34:59 +0100
-User-Agent: 
-MIME-Version: 1.0
-In-Reply-To: <6df3e6b1-ffd1-dacf-2f2d-7df8e5aca668@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S1728588AbgBZPwD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 10:52:03 -0500
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:43108 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728581AbgBZPwC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 10:52:02 -0500
+Received: by mail-qk1-f195.google.com with SMTP id q18so1489792qki.10
+        for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2020 07:52:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=4GYwlf0Xa2QHt1cHVU8f4uTPVQEe66S6tW8iKIjB1EY=;
+        b=PEkBC2gGo9Wp0CTNFzcX/uGLGqh45la2h+234pEbgb0JKCTWiVwR5CK2qWd8o7GV9+
+         vZ0V3mJmWDxwpkokIiWuE2AK5D0JvSuKri12uT1Y5ZmnM2+2x1lk6TfjQrITZNEH8kqT
+         OpLenMqGsrmR+s2Jh+PZTctbpw7UkSpOJj3m46DAs7sTe9V+A8PrxIZxTU0Jx2ozkU+h
+         l2FfR5Vf/ZZGO7KqofRi3aS6TzSV2SHQoTpS42nUl+B16nz+oN/qYJaqXNzKW0WQZswg
+         b+O0gHwTc4Y9Ju+CjJy1uD3JRDYV9kySWYvBERLoM4RJvQwJnkBJANxBmrBhZlFtAjqz
+         NmYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4GYwlf0Xa2QHt1cHVU8f4uTPVQEe66S6tW8iKIjB1EY=;
+        b=ArIZP5y7z99TNbxm6K2+A/k3GpTc7kNQb4KIcytesoyQk8K7eGbGguVrn02lrSzUaB
+         A8APkPSzC7RTLRhtnWB8xsWQPmFMLEp4kEMFi+IvZOnS8iNrhA/0FWw2TgEmBrs/NgKk
+         6Zq7aGn7HQZ7XVnEKxfFTk6rAIA4koPBT4QSvqecOeEQ6NvZ2mz+Aj61iFfRyUJBpvfN
+         fpecyWaeGr3YGxBUfp5ld7sLuDh6hAR1ba6CK2TqFW+QcPKo0BdH7OYRpYpkDVOwSzh2
+         E8+pn4hUedq9iktoHOuHH8ldwOqEHSWJNydrL+c7ewRsDgp/f9Ft0tI7PDyZ2BYkl63B
+         eI3A==
+X-Gm-Message-State: APjAAAU9cFtlQ/MyTepGv0AWxyHhFCDckU+OnBXfZsS5XftGdiHQpM9l
+        VKW7Ha8xjW96WQNOw2gG5wi1Ng==
+X-Google-Smtp-Source: APXvYqxycYwltSMF6mRZHm7TjXsCzQqI/GC2y1t3waZQf56agLdqkPAjaYu5yvSrjxUQYf0tQtgA0w==
+X-Received: by 2002:a37:64cb:: with SMTP id y194mr5808427qkb.364.1582732321799;
+        Wed, 26 Feb 2020 07:52:01 -0800 (PST)
+Received: from dhcp-41-57.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 3sm1332599qte.59.2020.02.26.07.51.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Feb 2020 07:52:01 -0800 (PST)
+Message-ID: <1582732318.7365.129.camel@lca.pw>
+Subject: Re: [PATCH V14] mm/debug: Add tests validating architecture page
+ table helpers
+From:   Qian Cai <cai@lca.pw>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 26 Feb 2020 10:51:58 -0500
+In-Reply-To: <7c707b7f-ce3d-993b-8042-44fdc1ed28bf@c-s.fr>
+References: <1581909460-19148-1-git-send-email-anshuman.khandual@arm.com>
+         <1582726182.7365.123.camel@lca.pw>
+         <7c707b7f-ce3d-993b-8042-44fdc1ed28bf@c-s.fr>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6 (3.22.6-10.el7) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Wed, 2020-02-26 at 15:45 +0100, Christophe Leroy wrote:
+> 
+> Le 26/02/2020 à 15:09, Qian Cai a écrit :
+> > On Mon, 2020-02-17 at 08:47 +0530, Anshuman Khandual wrote:
+> > > This adds tests which will validate architecture page table helpers and
+> > > other accessors in their compliance with expected generic MM semantics.
+> > > This will help various architectures in validating changes to existing
+> > > page table helpers or addition of new ones.
+> > > 
+> > > This test covers basic page table entry transformations including but not
+> > > limited to old, young, dirty, clean, write, write protect etc at various
+> > > level along with populating intermediate entries with next page table page
+> > > and validating them.
+> > > 
+> > > Test page table pages are allocated from system memory with required size
+> > > and alignments. The mapped pfns at page table levels are derived from a
+> > > real pfn representing a valid kernel text symbol. This test gets called
+> > > inside kernel_init() right after async_synchronize_full().
+> > > 
+> > > This test gets built and run when CONFIG_DEBUG_VM_PGTABLE is selected. Any
+> > > architecture, which is willing to subscribe this test will need to select
+> > > ARCH_HAS_DEBUG_VM_PGTABLE. For now this is limited to arc, arm64, x86, s390
+> > > and ppc32 platforms where the test is known to build and run successfully.
+> > > Going forward, other architectures too can subscribe the test after fixing
+> > > any build or runtime problems with their page table helpers. Meanwhile for
+> > > better platform coverage, the test can also be enabled with CONFIG_EXPERT
+> > > even without ARCH_HAS_DEBUG_VM_PGTABLE.
+> > > 
+> > > Folks interested in making sure that a given platform's page table helpers
+> > > conform to expected generic MM semantics should enable the above config
+> > > which will just trigger this test during boot. Any non conformity here will
+> > > be reported as an warning which would need to be fixed. This test will help
+> > > catch any changes to the agreed upon semantics expected from generic MM and
+> > > enable platforms to accommodate it thereafter.
+> > 
+> > How useful is this that straightly crash the powerpc?
+> > 
+> > [   23.263425][    T1] debug_vm_pgtable: debug_vm_pgtable: Validating
+> > architecture page table helpers
+> > [   23.263625][    T1] ------------[ cut here ]------------
+> > [   23.263649][    T1] kernel BUG at arch/powerpc/mm/pgtable.c:274!
+> 
+> The problem on PPC64 is known and has to be investigated and fixed.
 
-On 25/02/2020 19:49, J Freyensee wrote:
-> 
-> 
-> On 2/24/20 8:02 AM, Mickaël Salaün wrote:
-> 
->> ## Syscall
->>
->> Because it is only tested on x86_64, the syscall is only wired up for
->> this architecture.  The whole x86 family (and probably all the others)
->> will be supported in the next patch series.
-> General question for u.  What is it meant "whole x86 family will be
-> supported".  32-bit x86 will be supported?
-
-Yes, I was referring to x86_32, x86_64 and x32, but all architectures
-should be supported.
+It might be interesting to hear what powerpc64 maintainers would say about it
+and if it is actually worth "fixing" in the arch code, but that BUG_ON() was
+there since 2009 and had not been exposed until this patch comes alone?
