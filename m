@@ -2,70 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE351708E5
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 20:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DED3170919
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 20:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727174AbgBZT1E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 14:27:04 -0500
-Received: from foss.arm.com ([217.140.110.172]:41800 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727035AbgBZT1E (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 14:27:04 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 522DD30E;
-        Wed, 26 Feb 2020 11:27:03 -0800 (PST)
-Received: from mbp (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A5A4A3F881;
-        Wed, 26 Feb 2020 11:27:01 -0800 (PST)
-Date:   Wed, 26 Feb 2020 19:26:59 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v2 09/19] arm64: mte: Add specific SIGSEGV codes
-Message-ID: <20200226192658.GA4109@mbp>
-References: <20200226180526.3272848-1-catalin.marinas@arm.com>
- <20200226180526.3272848-10-catalin.marinas@arm.com>
- <874kvdxj73.fsf@x220.int.ebiederm.org>
+        id S1727253AbgBZT5O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 14:57:14 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:54622 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727244AbgBZT5N (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 14:57:13 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id C1A811C036E; Wed, 26 Feb 2020 20:57:10 +0100 (CET)
+Date:   Wed, 26 Feb 2020 20:57:10 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+Subject: Re: [RFC PATCH v9 05/27] x86/cet/shstk: Add Kconfig option for
+ user-mode Shadow Stack protection
+Message-ID: <20200226195710.6sma4whvs3o76oux@ucw.cz>
+References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
+ <20200205181935.3712-6-yu-cheng.yu@intel.com>
+ <597fb45a-cb94-e8e7-8e80-45a26766d32a@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <874kvdxj73.fsf@x220.int.ebiederm.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <597fb45a-cb94-e8e7-8e80-45a26766d32a@intel.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 01:05:52PM -0600, Eric W. Biederman wrote:
-> Catalin Marinas <catalin.marinas@arm.com> writes:
+> On 2/5/20 10:19 AM, Yu-cheng Yu wrote:
+> > Introduce Kconfig option: X86_INTEL_SHADOW_STACK_USER.
+> > 
+> > Shadow Stack (SHSTK) provides protection against function return address
+> > corruption.  It is active when the kernel has this feature enabled, and
+> > both the processor and the application support it.  When this feature is
+> > enabled, legacy non-SHSTK applications continue to work, but without SHSTK
+> > protection.
+> > 
+> > The user-mode SHSTK protection is only implemented for the 64-bit kernel.
+> > IA32 applications are supported under the compatibility mode.
 > 
-> > From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> >
-> > Add MTE-specific SIGSEGV codes to siginfo.h.
-> >
-> > Note that the for MTE we are reusing the same SPARC ADI codes because
-> > the two functionalities are similar and they cannot coexist on the same
-> > system.
+> I think what you're trying to say here is that the hardware supports
+> shadow stacks with 32-bit kernels.  However, this series does not
+> include that support and we have no plans to add it.
 > 
-> Any chance you can move the v2 notes up into the description or
-> otherwise fix it.  The description talks about reusing the ADI codes
-> which is no longer happening.
-
-Oh, I forgot to check the patch description. I will fix it.
-
-> Otherwise the patch looks good.
+> Right?
 > 
-> Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> I'll let others weigh in, but I rather dislike the use of acronyms here.
+>  I'd much rather see the english "shadow stack" everywhere than SHSTK.
 
-Thanks.
-
--- 
-Catalin
+For the record, I like "shadow stack" better, too.
