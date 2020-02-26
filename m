@@ -2,350 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 775DB17070C
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 19:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334741706FF
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 19:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727240AbgBZSGJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 13:06:09 -0500
-Received: from foss.arm.com ([217.140.110.172]:40282 "EHLO foss.arm.com"
+        id S1727152AbgBZSFx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 13:05:53 -0500
+Received: from mga04.intel.com ([192.55.52.120]:46219 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727164AbgBZSGJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 13:06:09 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B81C4B2;
-        Wed, 26 Feb 2020 10:06:08 -0800 (PST)
-Received: from arrakis.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9D7763F881;
-        Wed, 26 Feb 2020 10:06:06 -0800 (PST)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH v2 19/19] arm64: mte: Add Memory Tagging Extension documentation
-Date:   Wed, 26 Feb 2020 18:05:26 +0000
-Message-Id: <20200226180526.3272848-20-catalin.marinas@arm.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200226180526.3272848-1-catalin.marinas@arm.com>
-References: <20200226180526.3272848-1-catalin.marinas@arm.com>
+        id S1726787AbgBZSFx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 Feb 2020 13:05:53 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 10:05:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,489,1574150400"; 
+   d="scan'208";a="241754569"
+Received: from kcanfiel-mobl1.amr.corp.intel.com (HELO [10.251.18.127]) ([10.251.18.127])
+  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 10:05:51 -0800
+Subject: Re: [RFC PATCH v9 05/27] x86/cet/shstk: Add Kconfig option for
+ user-mode Shadow Stack protection
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
+ <20200205181935.3712-6-yu-cheng.yu@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <d4dabb84-5636-2657-c45e-795f3f2dcbbc@intel.com>
+Date:   Wed, 26 Feb 2020 10:05:50 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <20200205181935.3712-6-yu-cheng.yu@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+On 2/5/20 10:19 AM, Yu-cheng Yu wrote:
+> +# Check assembler Shadow Stack suppot
 
-Memory Tagging Extension (part of the ARMv8.5 Extensions) provides
-a mechanism to detect the sources of memory related errors which
-may be vulnerable to exploitation, including bounds violations,
-use-after-free, use-after-return, use-out-of-scope and use before
-initialization errors.
+				  ^ support
 
-Add Memory Tagging Extension documentation for the arm64 linux
-kernel support.
+> +ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
+> +  ifeq ($(call as-instr, saveprevssp, y),)
+> +      $(error CONFIG_X86_INTEL_SHADOW_STACK_USER not supported by the assembler)
+> +  endif
+> +endif
 
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
----
+Is this *just* looking for instruction support in the assembler?
 
-Notes:
-    v2:
-    - Documented the uaccess kernel tag checking mode.
-    - Removed the BTI definitions from cpu-feature-registers.rst.
-    - Removed the paragraph stating that MTE depends on the tagged address
-      ABI (while the Kconfig entry does, there is no requirement for the
-      user to enable both).
-    - Changed the GCR_EL1.Exclude handling description following the change
-      in the prctl() interface (include vs exclude mask).
-    - Updated the example code.
+We usually just .byte them, like this for pkeys:
 
- Documentation/arm64/cpu-feature-registers.rst |   2 +
- Documentation/arm64/elf_hwcaps.rst            |   5 +
- Documentation/arm64/index.rst                 |   1 +
- .../arm64/memory-tagging-extension.rst        | 228 ++++++++++++++++++
- 4 files changed, 236 insertions(+)
- create mode 100644 Documentation/arm64/memory-tagging-extension.rst
+        asm volatile(".byte 0x0f,0x01,0xee\n\t"
+                     : "=a" (pkru), "=d" (edx)
+                     : "c" (ecx));
 
-diff --git a/Documentation/arm64/cpu-feature-registers.rst b/Documentation/arm64/cpu-feature-registers.rst
-index 41937a8091aa..b5679fa85ad9 100644
---- a/Documentation/arm64/cpu-feature-registers.rst
-+++ b/Documentation/arm64/cpu-feature-registers.rst
-@@ -174,6 +174,8 @@ infrastructure:
-      +------------------------------+---------+---------+
-      | Name                         |  bits   | visible |
-      +------------------------------+---------+---------+
-+     | MTE                          | [11-8]  |    y    |
-+     +------------------------------+---------+---------+
-      | SSBS                         | [7-4]   |    y    |
-      +------------------------------+---------+---------+
- 
-diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
-index 7dfb97dfe416..ca7f90e99e3a 100644
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -236,6 +236,11 @@ HWCAP2_RNG
- 
-     Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.
- 
-+HWCAP2_MTE
-+
-+    Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
-+    by Documentation/arm64/memory-tagging-extension.rst.
-+
- 4. Unused AT_HWCAP bits
- -----------------------
- 
-diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-index 5c0c69dc58aa..82970c6d384f 100644
---- a/Documentation/arm64/index.rst
-+++ b/Documentation/arm64/index.rst
-@@ -13,6 +13,7 @@ ARM64 Architecture
-     hugetlbpage
-     legacy_instructions
-     memory
-+    memory-tagging-extension
-     pointer-authentication
-     silicon-errata
-     sve
-diff --git a/Documentation/arm64/memory-tagging-extension.rst b/Documentation/arm64/memory-tagging-extension.rst
-new file mode 100644
-index 000000000000..00ac0e22d5e9
---- /dev/null
-+++ b/Documentation/arm64/memory-tagging-extension.rst
-@@ -0,0 +1,228 @@
-+===============================================
-+Memory Tagging Extension (MTE) in AArch64 Linux
-+===============================================
-+
-+Authors: Vincenzo Frascino <vincenzo.frascino@arm.com>
-+         Catalin Marinas <catalin.marinas@arm.com>
-+
-+Date: 2020-02-25
-+
-+This document describes the provision of the Memory Tagging Extension
-+functionality in AArch64 Linux.
-+
-+Introduction
-+============
-+
-+ARMv8.5 based processors introduce the Memory Tagging Extension (MTE)
-+feature. MTE is built on top of the ARMv8.0 virtual address tagging TBI
-+(Top Byte Ignore) feature and allows software to access a 4-bit
-+allocation tag for each 16-byte granule in the physical address space.
-+Such memory range must be mapped with the Normal-Tagged memory
-+attribute. A logical tag is derived from bits 59-56 of the virtual
-+address used for the memory access. A CPU with MTE enabled will compare
-+the logical tag against the allocation tag and potentially raise an
-+exception on mismatch, subject to system registers configuration.
-+
-+Userspace Support
-+=================
-+
-+When ``CONFIG_ARM64_MTE`` is selected and Memory Tagging Extension is
-+supported by the hardware, the kernel advertises the feature to
-+userspace via ``HWCAP2_MTE``.
-+
-+PROT_MTE
-+--------
-+
-+To access the allocation tags, a user process must enable the Tagged
-+memory attribute on an address range using a new ``prot`` flag for
-+``mmap()`` and ``mprotect()``:
-+
-+``PROT_MTE`` - Pages allow access to the MTE allocation tags.
-+
-+The allocation tag is set to 0 when such pages are first mapped in the
-+user address space and preserved on copy-on-write. ``MAP_SHARED`` is
-+supported and the allocation tags can be shared between processes.
-+
-+**Note**: ``PROT_MTE`` is only supported on ``MAP_ANONYMOUS`` and
-+RAM-based file mappings (``tmpfs``, ``memfd``). Passing it to other
-+types of mapping will result in ``-EINVAL`` returned by these system
-+calls.
-+
-+**Note**: The ``PROT_MTE`` flag (and corresponding memory type) cannot
-+be cleared by ``mprotect()``.
-+
-+Tag Check Faults
-+----------------
-+
-+When ``PROT_MTE`` is enabled on an address range and a mismatch between
-+the logical and allocation tags occurs on access, there are three
-+configurable behaviours:
-+
-+- *Ignore* - This is the default mode. The CPU (and kernel) ignores the
-+  tag check fault.
-+
-+- *Synchronous* - The kernel raises a ``SIGSEGV`` synchronously, with
-+  ``.si_code = SEGV_MTESERR`` and ``.si_addr = <fault-address>``. The
-+  memory access is not performed.
-+
-+- *Asynchronous* - The kernel raises a ``SIGSEGV``, in the current
-+  thread, asynchronously following one or multiple tag check faults,
-+  with ``.si_code = SEGV_MTEAERR`` and ``.si_addr = 0``.
-+
-+**Note**: There are no *match-all* logical tags available for user
-+applications.
-+
-+The user can select the above modes, per thread, using the
-+``prctl(PR_SET_TAGGED_ADDR_CTRL, flags, 0, 0, 0)`` system call where
-+``flags`` contain one of the following values in the ``PR_MTE_TCF_MASK``
-+bit-field:
-+
-+- ``PR_MTE_TCF_NONE``  - *Ignore* tag check faults
-+- ``PR_MTE_TCF_SYNC``  - *Synchronous* tag check fault mode
-+- ``PR_MTE_TCF_ASYNC`` - *Asynchronous* tag check fault mode
-+
-+Tag checking can also be disabled for a user thread by setting the
-+``PSTATE.TCO`` bit with ``MSR TCO, #1``.
-+
-+**Note**: Signal handlers are always invoked with ``PSTATE.TCO = 0``,
-+irrespective of the interrupted context.
-+
-+**Note**: Kernel accesses to user memory (e.g. ``read()`` system call)
-+follow the same tag checking mode as set by the current thread.
-+
-+Excluding Tags in the ``IRG``, ``ADDG`` and ``SUBG`` instructions
-+-----------------------------------------------------------------
-+
-+The architecture allows excluding certain tags to be randomly generated
-+via the ``GCR_EL1.Exclude`` register bit-field. By default, Linux
-+excludes all tags other than 0. A user thread can enable specific tags
-+in the randomly generated set using the ``prctl(PR_SET_TAGGED_ADDR_CTRL,
-+flags, 0, 0, 0)`` system call where ``flags`` contains the tags bitmap
-+in the ``PR_MTE_TAG_MASK`` bit-field.
-+
-+**Note**: The hardware uses an exclude mask but the ``prctl()``
-+interface provides an include mask.
-+
-+Example of correct usage
-+========================
-+
-+*MTE Example code*
-+
-+.. code-block:: c
-+
-+    /*
-+     * To be compiled with -march=armv8.5-a+memtag
-+     */
-+    #include <errno.h>
-+    #include <stdio.h>
-+    #include <stdlib.h>
-+    #include <unistd.h>
-+    #include <sys/auxv.h>
-+    #include <sys/mman.h>
-+    #include <sys/prctl.h>
-+
-+    /*
-+     * From arch/arm64/include/uapi/asm/hwcap.h
-+     */
-+    #define HWCAP2_MTE              (1 << 18)
-+
-+    /*
-+     * From arch/arm64/include/uapi/asm/mman.h
-+     */
-+    #define PROT_MTE                 0x20
-+
-+    /*
-+     * From include/uapi/linux/prctl.h
-+     */
-+    #define PR_SET_TAGGED_ADDR_CTRL 55
-+    #define PR_GET_TAGGED_ADDR_CTRL 56
-+    # define PR_TAGGED_ADDR_ENABLE  (1UL << 0)
-+    # define PR_MTE_TCF_SHIFT       1
-+    # define PR_MTE_TCF_NONE        (0UL << PR_MTE_TCF_SHIFT)
-+    # define PR_MTE_TCF_SYNC        (1UL << PR_MTE_TCF_SHIFT)
-+    # define PR_MTE_TCF_ASYNC       (2UL << PR_MTE_TCF_SHIFT)
-+    # define PR_MTE_TCF_MASK        (3UL << PR_MTE_TCF_SHIFT)
-+    # define PR_MTE_TAG_SHIFT       3
-+    # define PR_MTE_TAG_MASK        (0xffffUL << PR_MTE_TAG_SHIFT)
-+
-+    /*
-+     * Insert a random logical tag into the given pointer.
-+     */
-+    #define insert_random_tag(ptr) ({                       \
-+            __u64 __val;                                    \
-+            asm("irg %0, %1" : "=r" (__val) : "r" (ptr));   \
-+            __val;                                          \
-+    })
-+
-+    /*
-+     * Set the allocation tag on the destination address.
-+     */
-+    #define set_tag(tagged_addr) do {                                      \
-+            asm volatile("stg %0, [%0]" : : "r" (tagged_addr) : "memory"); \
-+    } while (0)
-+
-+    int main()
-+    {
-+            unsigned long *a;
-+            unsigned long page_sz = getpagesize();
-+            unsigned long hwcap2 = getauxval(AT_HWCAP2);
-+
-+            /* check if MTE is present */
-+            if (!(hwcap2 & HWCAP2_MTE))
-+                    return -1;
-+
-+            /*
-+             * Enable the tagged address ABI, synchronous MTE tag check faults and
-+             * allow all non-zero tags in the randomly generated set.
-+             */
-+            if (prctl(PR_SET_TAGGED_ADDR_CTRL,
-+                      PR_TAGGED_ADDR_ENABLE | PR_MTE_TCF_SYNC | (0xfffe << PR_MTE_TAG_SHIFT),
-+                      0, 0, 0)) {
-+                    perror("prctl() failed");
-+                    return -1;
-+            }
-+
-+            a = mmap(0, page_sz, PROT_READ | PROT_WRITE,
-+                     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+            if (a == MAP_FAILED) {
-+                    perror("mmap() failed");
-+                    return -1;
-+            }
-+
-+            /*
-+             * Enable MTE on the above anonymous mmap. The flag could be passed
-+             * directly to mmap() and skip this step.
-+             */
-+            if (mprotect(a, page_sz, PROT_READ | PROT_WRITE | PROT_MTE)) {
-+                    perror("mprotect() failed");
-+                    return -1;
-+            }
-+
-+            /* access with the default tag (0) */
-+            a[0] = 1;
-+            a[1] = 2;
-+
-+            printf("a[0] = %lu a[1] = %lu\n", a[0], a[1]);
-+
-+            /* set the logical and allocation tags */
-+            a = (unsigned long *)insert_random_tag(a);
-+            set_tag(a);
-+
-+            printf("%p\n", a);
-+
-+            /* non-zero tag access */
-+            a[0] = 3;
-+            printf("a[0] = %lu a[1] = %lu\n", a[0], a[1]);
-+
-+            /*
-+             * If MTE is enabled correctly the next instruction will generate an
-+             * exception.
-+             */
-+            printf("Expecting SIGSEGV...\n");
-+            a[2] = 0xdead;
-+
-+            /* this should not be printed in the PR_MTE_TCF_SYNC mode */
-+            printf("...done\n");
-+
-+            return 0;
-+    }
+That way everybody with old toolchains can still build the kernel (and
+run/test code with your config option on, btw...).
