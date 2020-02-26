@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FB9170B22
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 23:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C78170B65
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 23:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727708AbgBZWEp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 17:04:45 -0500
-Received: from mga03.intel.com ([134.134.136.65]:40772 "EHLO mga03.intel.com"
+        id S1727921AbgBZWUl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 17:20:41 -0500
+Received: from mga11.intel.com ([192.55.52.93]:32725 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727693AbgBZWEp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 17:04:45 -0500
+        id S1727709AbgBZWUk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 Feb 2020 17:20:40 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 14:04:44 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 14:20:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,489,1574150400"; 
-   d="scan'208";a="241823159"
+   d="scan'208";a="241827003"
 Received: from pkabrax-mobl.amr.corp.intel.com (HELO [10.251.2.6]) ([10.251.2.6])
-  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 14:04:43 -0800
-Subject: Re: [RFC PATCH v9 11/27] drm/i915/gvt: Change _PAGE_DIRTY to
- _PAGE_DIRTY_BITS
+  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 14:20:38 -0800
+Subject: Re: [RFC PATCH v9 12/27] x86/mm: Modify ptep_set_wrprotect and
+ pmdp_set_wrprotect for _PAGE_DIRTY_SW
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -48,7 +48,7 @@ To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
 References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
- <20200205181935.3712-12-yu-cheng.yu@intel.com>
+ <20200205181935.3712-13-yu-cheng.yu@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -94,12 +94,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-Message-ID: <34c83f97-f206-1b43-db40-7e6a7d0f6bb7@intel.com>
-Date:   Wed, 26 Feb 2020 14:04:43 -0800
+Message-ID: <c8ad93b2-878f-1d90-e054-970f251efc71@intel.com>
+Date:   Wed, 26 Feb 2020 14:20:38 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200205181935.3712-12-yu-cheng.yu@intel.com>
+In-Reply-To: <20200205181935.3712-13-yu-cheng.yu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -109,20 +109,95 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 2/5/20 10:19 AM, Yu-cheng Yu wrote:
-> diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-> index 4b04af569c05..e467ca182633 100644
-> --- a/drivers/gpu/drm/i915/gvt/gtt.c
-> +++ b/drivers/gpu/drm/i915/gvt/gtt.c
-> @@ -1201,7 +1201,7 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
->  	}
->  
->  	/* Clear dirty field. */
-> -	se->val64 &= ~_PAGE_DIRTY;
-> +	se->val64 &= ~_PAGE_DIRTY_BITS;
->  
->  	ops->clear_pse(se);
->  	ops->clear_ips(se);
+> When Shadow Stack (SHSTK) is enabled, the [R/O + PAGE_DIRTY_HW] setting is
+> reserved only for SHSTK.
 
-Are the i915 maintainers on cc?
+Got it.
 
-Shouldn't this use pte_mkclean() instead of open-coding?
+> Non-Shadow Stack R/O PTEs are [R/O + PAGE_DIRTY_SW].
+
+This is only true for *dirty* PTEs, right?
+
+> When a PTE goes from [R/W + PAGE_DIRTY_HW] to [R/O + PAGE_DIRTY_SW], it
+> could become a transient SHSTK PTE in two cases.
+> 
+> The first case is that some processors can start a write but end up seeing
+> a read-only PTE by the time they get to the Dirty bit, creating a transient
+> SHSTK PTE.  However, this will not occur on processors supporting SHSTK
+> therefore we don't need a TLB flush here.
+> 
+> The second case is that when the software, without atomic, tests & replaces
+> PAGE_DIRTY_HW with PAGE_DIRTY_SW, a transient SHSTK PTE can exist.  This is
+> prevented with cmpxchg.
+> 
+> Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
+> insights to the issue.  Jann Horn provided the cmpxchg solution.
+> 
+> v9:
+> - Change compile-time conditionals to runtime checks.
+> - Fix parameters of try_cmpxchg(): change pte_t/pmd_t to
+>   pte_t.pte/pmd_t.pmd.
+> 
+> v4:
+> - Implement try_cmpxchg().
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> ---
+>  arch/x86/include/asm/pgtable.h | 66 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index 2733e7ec16b3..43cb27379208 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -1253,6 +1253,39 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+>  static inline void ptep_set_wrprotect(struct mm_struct *mm,
+>  				      unsigned long addr, pte_t *ptep)
+>  {
+> +	/*
+> +	 * Some processors can start a write, but end up seeing a read-only
+> +	 * PTE by the time they get to the Dirty bit.  In this case, they
+> +	 * will set the Dirty bit, leaving a read-only, Dirty PTE which
+> +	 * looks like a Shadow Stack PTE.
+> +	 *
+> +	 * However, this behavior has been improved and will not occur on
+> +	 * processors supporting Shadow Stack.  Without this guarantee, a
+> +	 * transition to a non-present PTE and flush the TLB would be
+> +	 * needed.
+> +	 *
+> +	 * When changing a writable PTE to read-only and if the PTE has
+> +	 * _PAGE_DIRTY_HW set, we move that bit to _PAGE_DIRTY_SW so that
+> +	 * the PTE is not a valid Shadow Stack PTE.
+> +	 */
+> +#ifdef CONFIG_X86_64
+> +	if (static_cpu_has(X86_FEATURE_SHSTK)) {
+
+Judicious application of arch/x86/include/asm/disabled-features.h should
+be able to get rid of the #ifdef.  See pkeys in there for another example.
+
+> +		pte_t new_pte, pte = READ_ONCE(*ptep);
+> +
+> +		do {
+> +			/*
+> +			 * This is the same as moving _PAGE_DIRTY_HW
+> +			 * to _PAGE_DIRTY_SW.
+> +			 */
+> +			new_pte = pte_wrprotect(pte);
+> +			new_pte.pte |= (new_pte.pte & _PAGE_DIRTY_HW) >>
+> +					_PAGE_BIT_DIRTY_HW << _PAGE_BIT_DIRTY_SW;
+> +			new_pte.pte &= ~_PAGE_DIRTY_HW;
+> +		} while (!try_cmpxchg(&ptep->pte, &pte.pte, new_pte.pte));
+
+Have you tried to test this code?
+
+This is trying to transition the value at '&ptep->pte' from the
+'pte.pte' value to 'new_pte.pte'.  If the value at '&ptep->pte' does not
+match 'pte.pte', the cmpxchg will fail and we'll run through the loop again.
+
+What terminates that loop?
+
+The "old" value (pte.pte) never gets updated since it is read outside
+the loop.  There's no guarantee that the contents (&ptep->pte) will ever
+match pte.pte.
+
+Doesn't the READ_ONCE() need to be inside the loop?
