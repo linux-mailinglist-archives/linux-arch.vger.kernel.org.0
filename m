@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC55170B04
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 23:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FB9170B22
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2020 23:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727758AbgBZWCI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 17:02:08 -0500
-Received: from mga06.intel.com ([134.134.136.31]:10191 "EHLO mga06.intel.com"
+        id S1727708AbgBZWEp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 17:04:45 -0500
+Received: from mga03.intel.com ([134.134.136.65]:40772 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727672AbgBZWCI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 17:02:08 -0500
+        id S1727693AbgBZWEp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 Feb 2020 17:04:45 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 14:02:07 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 14:04:44 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,489,1574150400"; 
-   d="scan'208";a="241822675"
+   d="scan'208";a="241823159"
 Received: from pkabrax-mobl.amr.corp.intel.com (HELO [10.251.2.6]) ([10.251.2.6])
-  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 14:02:06 -0800
-Subject: Re: [RFC PATCH v9 10/27] x86/mm: Update pte_modify, pmd_modify, and
- _PAGE_CHG_MASK for _PAGE_DIRTY_SW
+  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 14:04:43 -0800
+Subject: Re: [RFC PATCH v9 11/27] drm/i915/gvt: Change _PAGE_DIRTY to
+ _PAGE_DIRTY_BITS
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -48,7 +48,7 @@ To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
 References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
- <20200205181935.3712-11-yu-cheng.yu@intel.com>
+ <20200205181935.3712-12-yu-cheng.yu@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -94,12 +94,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-Message-ID: <c215a795-1411-9ab0-10a6-520dd4771016@intel.com>
-Date:   Wed, 26 Feb 2020 14:02:06 -0800
+Message-ID: <34c83f97-f206-1b43-db40-7e6a7d0f6bb7@intel.com>
+Date:   Wed, 26 Feb 2020 14:04:43 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200205181935.3712-11-yu-cheng.yu@intel.com>
+In-Reply-To: <20200205181935.3712-12-yu-cheng.yu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -108,92 +108,21 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The subject really needs work.  Could you think of a way to summarize
-the changes here in english as opposed to just listing the symbols you
-modified?
-
-I think we could probably just auto-generate subjects for patches if the
-existing one were sufficient.
-
 On 2/5/20 10:19 AM, Yu-cheng Yu wrote:
-> After the introduction of _PAGE_DIRTY_SW, pte_modify and pmd_modify need to
-> set the Dirty bit accordingly: if Shadow Stack is enabled and _PAGE_RW is
-> cleared, use _PAGE_DIRTY_SW; otherwise _PAGE_DIRTY_HW.
-
-You've basically gone and written the code's if() statement in english
-here.  That doesn't really help me understand the patch.
-
-> Since the Dirty bit is modify by pte_modify(), remove _PAGE_DIRTY_HW from
-> PAGE_CHG_MASK.
-
-			 ^ modified
-
-This is a great example of a changelog that adds very little value.
-It's following the comments and doing what they say, but it's pretty
-obvious that the analysis stopped there.
-
-What *kinds* of bits are in _PAGE_CHG_MASK or not?  What changed about
-_PAGE_DIRTY_HW.  By this definition, shouldn't _PAGE_DIRTY_SW have
-technically been in this mask before this patch?
-
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index 62aeb118bc36..2733e7ec16b3 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -702,6 +702,14 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->  	val &= _PAGE_CHG_MASK;
->  	val |= check_pgprot(newprot) & ~_PAGE_CHG_MASK;
->  	val = flip_protnone_guard(oldval, val, PTE_PFN_MASK);
-> +
-> +	if (pte_dirty(pte)) {
-> +		if (static_cpu_has(X86_FEATURE_SHSTK) && !(val & _PAGE_RW))
-> +			val |= _PAGE_DIRTY_SW;
-> +		else
-> +			val |= _PAGE_DIRTY_HW;
-> +	}
-> +
->  	return __pte(val);
->  }
-
-OK, so this is a path we use for changing bunches of PTEs to 'newprot'.
- It doesn't use the pte_*() helpers that the previous patch fixed up, so
-we need a new site.
-
-Right?
-
-Maybe that would make good changelog text.
-
-Also, couldn't we just have a pte_fixup() function or something that did
-this logic and could be shared?
-
-> @@ -712,6 +720,14 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
->  	val &= _HPAGE_CHG_MASK;
->  	val |= check_pgprot(newprot) & ~_HPAGE_CHG_MASK;
->  	val = flip_protnone_guard(oldval, val, PHYSICAL_PMD_PAGE_MASK);
-> +
-> +	if (pmd_dirty(pmd)) {
-> +		if (static_cpu_has(X86_FEATURE_SHSTK) && !(val & _PAGE_RW))
-> +			val |= _PAGE_DIRTY_SW;
-> +		else
-> +			val |= _PAGE_DIRTY_HW;
-> +	}
-> +
->  	return __pmd(val);
->  }
+> diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
+> index 4b04af569c05..e467ca182633 100644
+> --- a/drivers/gpu/drm/i915/gvt/gtt.c
+> +++ b/drivers/gpu/drm/i915/gvt/gtt.c
+> @@ -1201,7 +1201,7 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
+>  	}
 >  
-> diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-> index 826823df917f..e7e28bf7e919 100644
-> --- a/arch/x86/include/asm/pgtable_types.h
-> +++ b/arch/x86/include/asm/pgtable_types.h
-> @@ -150,8 +150,8 @@
->   * instance, and is *not* included in this mask since
->   * pte_modify() does modify it.
->   */
-> -#define _PAGE_CHG_MASK	(PTE_PFN_MASK | _PAGE_PCD | _PAGE_PWT |		\
-> -			 _PAGE_SPECIAL | _PAGE_ACCESSED | _PAGE_DIRTY_HW |	\
-> +#define _PAGE_CHG_MASK	(PTE_PFN_MASK | _PAGE_PCD | _PAGE_PWT |	\
-> +			 _PAGE_SPECIAL | _PAGE_ACCESSED |	\
->  			 _PAGE_SOFT_DIRTY | _PAGE_DEVMAP)
->  #define _HPAGE_CHG_MASK (_PAGE_CHG_MASK | _PAGE_PSE)
+>  	/* Clear dirty field. */
+> -	se->val64 &= ~_PAGE_DIRTY;
+> +	se->val64 &= ~_PAGE_DIRTY_BITS;
+>  
+>  	ops->clear_pse(se);
+>  	ops->clear_ips(se);
 
+Are the i915 maintainers on cc?
 
+Shouldn't this use pte_mkclean() instead of open-coding?
