@@ -2,90 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E1417165C
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 12:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA75171853
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 14:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728924AbgB0Luf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Feb 2020 06:50:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:49170 "EHLO foss.arm.com"
+        id S1729099AbgB0NND (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Feb 2020 08:13:03 -0500
+Received: from foss.arm.com ([217.140.110.172]:50276 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728918AbgB0Luf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 27 Feb 2020 06:50:35 -0500
+        id S1729073AbgB0NND (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 27 Feb 2020 08:13:03 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B003D1FB;
-        Thu, 27 Feb 2020 03:50:34 -0800 (PST)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F1E73F73B;
-        Thu, 27 Feb 2020 03:50:33 -0800 (PST)
-Date:   Thu, 27 Feb 2020 11:50:31 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Will Deacon <will@kernel.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10EA030E;
+        Thu, 27 Feb 2020 05:13:03 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B1603F703;
+        Thu, 27 Feb 2020 05:13:02 -0800 (PST)
+Date:   Thu, 27 Feb 2020 13:13:00 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 10/19] arm64: mte: Handle synchronous and asynchronous
- tag check faults
-Message-ID: <20200227115031.GC3281767@arrakis.emea.arm.com>
-References: <20200226180526.3272848-1-catalin.marinas@arm.com>
- <20200226180526.3272848-11-catalin.marinas@arm.com>
+        "H . J . Lu " <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v7 00/11] arm64: Branch Target Identification support
+Message-ID: <20200227131300.GB4062@sirena.org.uk>
+References: <20200226155714.43937-1-broonie@kernel.org>
+ <202002261343.3B2ECE90@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rJwd6BRFiFCcLxzm"
 Content-Disposition: inline
-In-Reply-To: <20200226180526.3272848-11-catalin.marinas@arm.com>
+In-Reply-To: <202002261343.3B2ECE90@keescook>
+X-Cookie: Edwin Meese made me wear CORDOVANS!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 06:05:17PM +0000, Catalin Marinas wrote:
-> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-> index fc6488660f64..d4a378bc0a60 100644
-> --- a/arch/arm64/kernel/Makefile
-> +++ b/arch/arm64/kernel/Makefile
-> @@ -63,6 +63,7 @@ obj-$(CONFIG_CRASH_CORE)		+= crash_core.o
->  obj-$(CONFIG_ARM_SDE_INTERFACE)		+= sdei.o
->  obj-$(CONFIG_ARM64_SSBD)		+= ssbd.o
->  obj-$(CONFIG_ARM64_PTR_AUTH)		+= pointer_auth.o
-> +obj-$(CONFIG_ARM64_MTE)			+= mte.o
->  
->  obj-y					+= vdso/ probes/
->  obj-$(CONFIG_COMPAT_VDSO)		+= vdso32/
-> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-> index 9461d812ae27..9338b340e869 100644
-> --- a/arch/arm64/kernel/entry.S
-> +++ b/arch/arm64/kernel/entry.S
-[...]
-> @@ -738,6 +763,8 @@ work_pending:
->   */
->  ret_to_user:
->  	disable_daif
-> +	/* Check for asynchronous tag check faults in the uaccess routines */
-> +	check_mte_async_tcf x1, x2
->  	gic_prio_kentry_setup tmp=x3
->  	ldr	x1, [tsk, #TSK_TI_FLAGS]
->  	and	x2, x1, #_TIF_WORK_MASK
 
-I got this wrong, check_mte_async expects the flags as the first
-argument (one may experience weird behaviour with overriding the TIF
-flags; thanks to Kevin for debugging). The diff below should fix it:
+--rJwd6BRFiFCcLxzm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index 9338b340e869..6e7f315911e8 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -764,9 +764,9 @@ work_pending:
- ret_to_user:
- 	disable_daif
- 	/* Check for asynchronous tag check faults in the uaccess routines */
--	check_mte_async_tcf x1, x2
- 	gic_prio_kentry_setup tmp=x3
- 	ldr	x1, [tsk, #TSK_TI_FLAGS]
-+	check_mte_async_tcf x1, x2
- 	and	x2, x1, #_TIF_WORK_MASK
- 	cbnz	x2, work_pending
- finish_ret_to_user:
+On Wed, Feb 26, 2020 at 01:44:59PM -0800, Kees Cook wrote:
+
+> Looks good. I sent a few more Reviewed-bys where I could. Who is
+> expected to pick this up? Catalin? Will?
+
+Thanks, I'm expecting it'll go through the arm64 tree.
+
+--rJwd6BRFiFCcLxzm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5XwFwACgkQJNaLcl1U
+h9BVcAf+IT0x9Rm5Qvg7iutzvlk4f961QXDY77LCMmKkuIyjzf2qoM3UKYdN5A+s
+XCh02Tc8GwVaSWaipJplvGn2y3aPrb1oLBU8yp2zkFHk3UuDdkrIhwTqmg9EH6qO
+HMxhgu7d6bKkjgpIMZe78MrbRRJUCej3S9SHehfJjGHStqjcyN65h4a7GJZUkHkB
+8UMKB9ln6VV8BZHBWEZZa875jAojja3k2OzUTrtBmbq7WsuQIsIqjVblRGOIZXNQ
+6ok8vsW83J6iRtR6J46oSoIJqkXjfYucnbP7ulIOQDtUMvpS0O/C982bW0mtMvLB
+Qy9hBI9hA/mdTTxfXA8PF2WvD3HTHQ==
+=r3OK
+-----END PGP SIGNATURE-----
+
+--rJwd6BRFiFCcLxzm--
