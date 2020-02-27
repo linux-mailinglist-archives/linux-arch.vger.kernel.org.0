@@ -2,25 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54481170CFB
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 01:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD89170D45
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 01:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728040AbgB0AIJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 19:08:09 -0500
-Received: from mga11.intel.com ([192.55.52.93]:39522 "EHLO mga11.intel.com"
+        id S1728104AbgB0Aew (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 19:34:52 -0500
+Received: from mga04.intel.com ([192.55.52.120]:8536 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726413AbgB0AII (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 19:08:08 -0500
+        id S1727987AbgB0Aew (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 Feb 2020 19:34:52 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 16:08:07 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 16:34:51 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,490,1574150400"; 
-   d="scan'208";a="241854019"
+   d="scan'208";a="241860768"
 Received: from pkabrax-mobl.amr.corp.intel.com (HELO [10.251.2.6]) ([10.251.2.6])
-  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 16:08:06 -0800
-Subject: Re: [RFC PATCH v9 14/27] mm: Handle Shadow Stack page fault
+  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 16:34:50 -0800
+Subject: Re: [RFC PATCH v9 16/27] mm: Update can_follow_write_pte() for Shadow
+ Stack
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -47,7 +48,7 @@ To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
 References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
- <20200205181935.3712-15-yu-cheng.yu@intel.com>
+ <20200205181935.3712-17-yu-cheng.yu@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -93,12 +94,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-Message-ID: <4902a6ee-cb0f-2700-1f6d-9d756593183c@intel.com>
-Date:   Wed, 26 Feb 2020 16:08:06 -0800
+Message-ID: <fc4f65ef-ce4b-9410-5586-5f4637c249bc@intel.com>
+Date:   Wed, 26 Feb 2020 16:34:49 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200205181935.3712-15-yu-cheng.yu@intel.com>
+In-Reply-To: <20200205181935.3712-17-yu-cheng.yu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -107,66 +108,41 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 45442d9a4f52..6daa28614327 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -772,7 +772,8 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->  	 * If it's a COW mapping, write protect it both
->  	 * in the parent and the child
->  	 */
-> -	if (is_cow_mapping(vm_flags) && pte_write(pte)) {
-> +	if ((is_cow_mapping(vm_flags) && pte_write(pte)) ||
-> +	    arch_copy_pte_mapping(vm_flags)) {
->  		ptep_set_wrprotect(src_mm, addr, src_pte);
->  		pte = pte_wrprotect(pte);
->  	}
+> +inline bool pte_exclusive(pte_t pte, struct vm_area_struct *vma)
+> +{
+> +	if (vma->vm_flags & VM_SHSTK)
+> +		return pte_dirty_hw(pte);
+> +	else
+> +		return pte_dirty(pte);
+> +}
 
-You have to modify this because pte_write()==0 for shadow stack PTEs, right?
+I'm not really getting the naming.  What is exclusive?
 
-Aren't shadow stack ptes *logically* writable, even if they don't have
-the write bit set?  What would happen if we made pte_write()==1 for them?
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 7646bf993b25..d1dbfbde8443 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -164,10 +164,12 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
+>   * FOLL_FORCE can write to even unwritable pte's, but only
+>   * after we've gone through a COW cycle and they are dirty.
+>   */
+> -static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
+> +static inline bool can_follow_write(pte_t pte, unsigned int flags,
+> +				    struct vm_area_struct *vma)
 
-> @@ -2417,6 +2418,7 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
->  	flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
->  	entry = pte_mkyoung(vmf->orig_pte);
->  	entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-> +	entry = pte_set_vma_features(entry, vma);
->  	if (ptep_set_access_flags(vma, vmf->address, vmf->pte, entry, 1))
->  		update_mmu_cache(vma, vmf->address, vmf->pte);
->  	pte_unmap_unlock(vmf->pte, vmf->ptl);
-> @@ -2504,6 +2506,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
->  		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
->  		entry = mk_pte(new_page, vma->vm_page_prot);
->  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-> +		entry = pte_set_vma_features(entry, vma);
->  		/*
->  		 * Clear the pte entry and flush it first, before updating the
->  		 * pte with the new entry. This will avoid a race condition
-> @@ -3023,6 +3026,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  	pte = mk_pte(page, vma->vm_page_prot);
->  	if ((vmf->flags & FAULT_FLAG_WRITE) && reuse_swap_page(page, NULL)) {
->  		pte = maybe_mkwrite(pte_mkdirty(pte), vma);
-> +		pte = pte_set_vma_features(pte, vma);
->  		vmf->flags &= ~FAULT_FLAG_WRITE;
->  		ret |= VM_FAULT_WRITE;
->  		exclusive = RMAP_EXCLUSIVE;
-> @@ -3165,6 +3169,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->  	entry = mk_pte(page, vma->vm_page_prot);
->  	if (vma->vm_flags & VM_WRITE)
->  		entry = pte_mkwrite(pte_mkdirty(entry));
-> +	entry = pte_set_vma_features(entry, vma);
->  
->  	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
->  			&vmf->ptl);
-> 
+Having two identically named functions in two files in the same
+subsystem seems like a recipe for confusion when I grep or cscope for
+things.  It hardly seems worth the 4 characters of space savings IMNHO.
 
-These seem wrong, or at best inconsistent with what's already done.
+>  {
+>  	return pte_write(pte) ||
+> -		((flags & FOLL_FORCE) && (flags & FOLL_COW) && pte_dirty(pte));
+> +		((flags & FOLL_FORCE) && (flags & FOLL_COW) &&
+> +		 pte_exclusive(pte, vma));
+>  }
 
-We don't need anything like pte_set_vma_features() today because we have
-vma->vm_page_prot.  We could easily have done what you suggest here for
-things like protection keys: ignore the pkey PTE bits until we create
-the final PTE then shove them in there.
+FWIW, this is the hunk that fixed DirtyCOW.
 
-What are the bit patterns of the shadow stack bits that come out of
-these sites?  Can they be represented in ->vm_page_prot?
+The least this deserves is acknowledgement of that in the changelog and
+a missive about how you're sure you didn't just introduce
+ShadowDirtyCOW.  Don't bother.  I already registered the domain. ;)
