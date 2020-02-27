@@ -2,172 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD22117254A
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 18:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9669C172550
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 18:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730349AbgB0RnO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Feb 2020 12:43:14 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:33920 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729548AbgB0RnO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Feb 2020 12:43:14 -0500
-Received: by mail-wr1-f66.google.com with SMTP id z15so4539625wrl.1;
-        Thu, 27 Feb 2020 09:43:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=BMqi7wNVy74Epfw3/CXCjxssZh8rP45fbaF8FqplbtM=;
-        b=TSB4IyoUJM+7SNxWfQHNWp8SqiXLs/3NwcS1pRcGPyEE+D7ZuwgScsLS7CtdvbMVdO
-         VIxaPM83TNRCvMEMOXMAQ+BlQ6eapIXMfBKGpy7VEZyGYbykb6iVJfF0Z2DIUqMSTyFK
-         HKOxhaOABj9VHS1ug6APUjjZuE8ZUWftGDf/WNk9nMEIEVInQBJgQ2RRCoarqsoZbHrs
-         +caPNlVvfTCXQTeRuxQUVmZEVmCH6ISoqqH3h5Bcp5oVWwzZzAbn4RM49ylcI5hKHC2e
-         NZ9gsxnem8Q6PWNKTPVqxB3AdJDeYmj6CQujbXfVlRMncQ0LKHG8tyM1DjoUCRuQp5+Y
-         t8cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BMqi7wNVy74Epfw3/CXCjxssZh8rP45fbaF8FqplbtM=;
-        b=JDwPgJMACTlh9kVll0OvtymAlK1AmXk9zn+uslEdH6TcbsAoZgDII7chqyCqBQuBPy
-         LodSS3PD1NCsQAdAXKNbRHuiO1cXUWenjXnEF//Uc/wh3j/fBafe8ek3/3yDwXrsuqJ4
-         Ee8qwbmq8KNcEF5JLPqqyPUGyC8MGCwvxFP1sJfsmboYr+x6htKpWTl1wRaoGbeU4Pqf
-         QaUwLropsf/voOjRGPNuSokX7ZJhmEQUeDXlLsQlbQD4++HgDT23Zg6DAvMTSEDBHtw/
-         bHWUm4IAaAF+/C2q7DUTY3bEZ7RJfAjOADWKxzvrOOdGGP3T+YKCHUsMrFLWbPhLuRGl
-         F34Q==
-X-Gm-Message-State: APjAAAW3vZlJ3ylPauKyEc+QgkYcoL9xVI/jN+O5jCTuFsarw13JU1PK
-        mi/cQVIqeUe20oHMigBYj8E=
-X-Google-Smtp-Source: APXvYqxn4Muee4YpYbF0JI/llZZZN3gjxROfWrgHUwhT9fQ/79cP1fhPKjJ0y9iFYP2aqzwY+Mcn5Q==
-X-Received: by 2002:a5d:56ca:: with SMTP id m10mr6155698wrw.313.1582825391327;
-        Thu, 27 Feb 2020 09:43:11 -0800 (PST)
-Received: from andrea (ip-213-220-200-127.net.upcbroadband.cz. [213.220.200.127])
-        by smtp.gmail.com with ESMTPSA id d13sm9014648wrc.64.2020.02.27.09.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2020 09:43:09 -0800 (PST)
-Date:   Thu, 27 Feb 2020 18:43:04 +0100
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Will Deacon <will@kernel.org>,
+        id S1729426AbgB0RoV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Feb 2020 12:44:21 -0500
+Received: from foss.arm.com ([217.140.110.172]:55414 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727053AbgB0RoV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 27 Feb 2020 12:44:21 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 819B91FB;
+        Thu, 27 Feb 2020 09:44:20 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EAF9C3F73B;
+        Thu, 27 Feb 2020 09:44:19 -0800 (PST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] Documentation/locking/atomic: Add a litmus test
- for atomic_set()
-Message-ID: <20200227174304.GA11666@andrea>
-References: <20200227004049.6853-1-boqun.feng@gmail.com>
- <20200227004049.6853-5-boqun.feng@gmail.com>
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu " <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        =?UTF-8?q?Kristina=20Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v8 00/11] arm64: Branch Target Identification support
+Date:   Thu, 27 Feb 2020 17:44:06 +0000
+Message-Id: <20200227174417.23722-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200227004049.6853-5-boqun.feng@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 08:40:48AM +0800, Boqun Feng wrote:
-> We already use a litmus test in atomic_t.txt to describe the behavior of
-> an atomic_set() with the an atomic RMW, so add it into atomic-tests
-> directory to make it easily accessible for anyone who cares about the
-> semantics of our atomic APIs.
-> 
-> Additionally, change the sentences describing the test in atomic_t.txt
-> with better wording.
-> 
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->  ...c-RMW-ops-are-atomic-WRT-atomic_set.litmus | 24 +++++++++++++++++++
->  Documentation/atomic-tests/README             |  7 ++++++
->  Documentation/atomic_t.txt                    |  6 ++---
->  3 files changed, 34 insertions(+), 3 deletions(-)
->  create mode 100644 Documentation/atomic-tests/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> 
-> diff --git a/Documentation/atomic-tests/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus b/Documentation/atomic-tests/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> new file mode 100644
-> index 000000000000..5dd7f04e504a
-> --- /dev/null
-> +++ b/Documentation/atomic-tests/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> @@ -0,0 +1,24 @@
-> +C Atomic-set-observable-to-RMW
+This patch series implements support for ARMv8.5-A Branch Target
+Identification (BTI), which is a control flow integrity protection
+feature introduced as part of the ARMv8.5-A extensions.
 
-Nit: s/Atomic-set-observable-to-RMW/Atomic-RMW-ops-are-atomic-WRT-atomic_set
+Changes:
 
+v8:
+ - Remove a redundant IS_ENABLED(CONFIG_ARM64_BTI) check.
+v7:
+ - Rebase onto v5.6-rc3.
+ - Move comment about keeping NT_GNU_PROPERTY_TYPE_0 internal into first
+   patch.
+ - Add an explicit check for system_supports_bti() when parsing BTI ELF
+   property for improved robustness.
+v6:
+ - Rebase onto v5.6-rc1.
+ - Fix typos s/BYTPE/BTYPE/ in commit log for "arm64: BTI: Decode BYTPE
+   bits when printing PSTATE".
+v5:
+ - Changed a bunch of -EIO to -ENOEXEC in the ELF parsing code.
+ - Move PSR_BTYPE defines to UAPI.
+ - Use compat_user_mode() rather than open coding.
+ - Fix a typo s/BYTPE/BTYPE/ in syscall.c
+v4:
+ - Dropped patch fixing existing documentation as it has already been merged.
+ - Convert WARN_ON() to WARN_ON_ONCE() in "ELF: Add ELF program property
+   parsing support".
+ - Added display of guarded pages to ptdump.
+ - Updated for conversion of exception handling from assembler to C.
 
-> +
-> +(*
-> + * Result: Never
-> + *
-> + * Test that atomic_set() cannot break the atomicity of atomic RMWs.
-> + *)
-> +
-> +{
-> +	atomic_t v = ATOMIC_INIT(1);
-> +}
-> +
-> +P0(atomic_t *v)
-> +{
-> +	(void)atomic_add_unless(v,1,0);
+Notes:
 
-Nit: spaces after commas
+ * GCC 9 can compile backwards-compatible BTI-enabled code with
+   -mbranch-protection=bti or -mbranch-protection=standard.
 
+ * Binutils trunk supports the new ELF note, but this wasn't in a release
+   the last time I posted this series.  (The situation _might_ have changed
+   in the meantime...)
 
-> +}
-> +
-> +P1(atomic_t *v)
-> +{
-> +	atomic_set(v, 0);
-> +}
-> +
-> +exists
-> +(v=2)
-> diff --git a/Documentation/atomic-tests/README b/Documentation/atomic-tests/README
-> index ae61201a4271..a1b72410b539 100644
-> --- a/Documentation/atomic-tests/README
-> +++ b/Documentation/atomic-tests/README
-> @@ -2,3 +2,10 @@ This directory contains litmus tests that are typical to describe the semantics
->  of our atomic APIs. For more information about how to "run" a litmus test or
->  how to generate a kernel test module based on a litmus test, please see
->  tools/memory-model/README.
-> +
-> +============
-> +LITMUS TESTS
-> +============
-> +
-> +Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> +	Test that atomic_set() cannot break the atomicity of atomic RMWs.
-> diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
-> index ceb85ada378e..67d1d99f8589 100644
-> --- a/Documentation/atomic_t.txt
-> +++ b/Documentation/atomic_t.txt
-> @@ -85,10 +85,10 @@ smp_store_release() respectively. Therefore, if you find yourself only using
->  the Non-RMW operations of atomic_t, you do not in fact need atomic_t at all
->  and are doing it wrong.
->  
-> -A subtle detail of atomic_set{}() is that it should be observable to the RMW
-> -ops. That is:
-> +A note for the implementation of atomic_set{}() is that it must not break the
-> +atomicity of the RMW ops. That is:
->  
-> -  C atomic-set
-> +  C Atomic-RMW-ops-are-atomic-WRT-atomic_set
->  
->    {
->      atomic_t v = ATOMIC_INIT(1);
-> -- 
-> 2.25.0
-> 
+   Creation of a BTI-enabled binary requires _everything_ linked in to
+   be BTI-enabled.  For now ld --force-bti can be used to override this,
+   but some things may break until the required C library support is in
+   place.
+
+   There is no straightforward way to mark a .s file as BTI-enabled:
+   scraping the output from gcc -S works as a quick hack for now.
+
+   readelf -n can be used to examing the program properties in an ELF
+   file.
+
+ * Runtime mmap() and mprotect() can be used to enable BTI on a
+   page-by-page basis using the new PROT_BTI, but the code in the
+   affected pages still needs to be written or compiled to contain the
+   appopriate BTI landing pads.
+
+Dave Martin (10):
+  ELF: UAPI and Kconfig additions for ELF program properties
+  ELF: Add ELF program property parsing support
+  arm64: Basic Branch Target Identification support
+  elf: Allow arch to tweak initial mmap prot flags
+  arm64: elf: Enable BTI at exec based on ELF program properties
+  arm64: BTI: Decode BYTPE bits when printing PSTATE
+  arm64: unify native/compat instruction skipping
+  arm64: traps: Shuffle code to eliminate forward declarations
+  arm64: BTI: Reset BTYPE when skipping emulated instructions
+  KVM: arm64: BTI: Reset BTYPE when skipping emulated instructions
+
+Mark Brown (1):
+  arm64: mm: Display guarded pages in ptdump
+
+ Documentation/arm64/cpu-feature-registers.rst |   2 +
+ Documentation/arm64/elf_hwcaps.rst            |   5 +
+ arch/arm64/Kconfig                            |  25 +++
+ arch/arm64/include/asm/cpucaps.h              |   3 +-
+ arch/arm64/include/asm/cpufeature.h           |   6 +
+ arch/arm64/include/asm/elf.h                  |  50 ++++++
+ arch/arm64/include/asm/esr.h                  |   2 +-
+ arch/arm64/include/asm/exception.h            |   1 +
+ arch/arm64/include/asm/hwcap.h                |   1 +
+ arch/arm64/include/asm/kvm_emulate.h          |   6 +-
+ arch/arm64/include/asm/mman.h                 |  37 +++++
+ arch/arm64/include/asm/pgtable-hwdef.h        |   1 +
+ arch/arm64/include/asm/pgtable.h              |   2 +-
+ arch/arm64/include/asm/ptrace.h               |   1 +
+ arch/arm64/include/asm/sysreg.h               |   4 +
+ arch/arm64/include/uapi/asm/hwcap.h           |   1 +
+ arch/arm64/include/uapi/asm/mman.h            |   9 ++
+ arch/arm64/include/uapi/asm/ptrace.h          |   9 ++
+ arch/arm64/kernel/cpufeature.c                |  33 ++++
+ arch/arm64/kernel/cpuinfo.c                   |   1 +
+ arch/arm64/kernel/entry-common.c              |  11 ++
+ arch/arm64/kernel/process.c                   |  36 ++++-
+ arch/arm64/kernel/ptrace.c                    |   2 +-
+ arch/arm64/kernel/signal.c                    |  16 ++
+ arch/arm64/kernel/syscall.c                   |  18 +++
+ arch/arm64/kernel/traps.c                     | 127 +++++++--------
+ arch/arm64/mm/dump.c                          |   5 +
+ fs/Kconfig.binfmt                             |   6 +
+ fs/binfmt_elf.c                               | 145 +++++++++++++++++-
+ fs/compat_binfmt_elf.c                        |   4 +
+ include/linux/elf.h                           |  43 ++++++
+ include/linux/mm.h                            |   3 +
+ include/uapi/linux/elf.h                      |  11 ++
+ 33 files changed, 551 insertions(+), 75 deletions(-)
+ create mode 100644 arch/arm64/include/asm/mman.h
+ create mode 100644 arch/arm64/include/uapi/asm/mman.h
+
+-- 
+2.20.1
+
