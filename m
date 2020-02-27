@@ -2,109 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D23FB170E77
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 03:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F21170EE4
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 04:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728215AbgB0CeT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 21:34:19 -0500
-Received: from foss.arm.com ([217.140.110.172]:44794 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728164AbgB0CeS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 21:34:18 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9D9F1FB;
-        Wed, 26 Feb 2020 18:34:15 -0800 (PST)
-Received: from [10.163.1.119] (unknown [10.163.1.119])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D8323F819;
-        Wed, 26 Feb 2020 18:34:06 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [PATCH V14] mm/debug: Add tests validating architecture page
- table helpers
-To:     Christophe Leroy <christophe.leroy@c-s.fr>, Qian Cai <cai@lca.pw>,
-        linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        James Morse <james.morse@arm.com>
-References: <1581909460-19148-1-git-send-email-anshuman.khandual@arm.com>
- <1582726182.7365.123.camel@lca.pw> <1582726340.7365.124.camel@lca.pw>
- <eb154054-68ab-a659-065b-f4f7dcbb8671@c-s.fr>
-Message-ID: <52db1e9b-83b3-c41f-ef03-0f43e2159a83@arm.com>
-Date:   Thu, 27 Feb 2020 08:04:05 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1728221AbgB0DRh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 22:17:37 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:52861 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728253AbgB0DRh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 22:17:37 -0500
+Received: by mail-wm1-f68.google.com with SMTP id p9so1844510wmc.2
+        for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2020 19:17:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
+        b=ihcZFD3BM82Nodw/U9GNhSUm+JXeZGU3lSIVkeWU9q2iegtVf4XY8r0oismBDChX7i
+         VfJlLpZlQVHdSSeweV1eyS6vefZXU8ueNnoJXBUmL69T2B7XEW/ekTfErjxxKkzHNnMN
+         XLhgYHlW0WiTrXN8saPiAVtSfZuyMbpZS07YGoMEkaTRjmeEnO3hr1r+iIKEPCKcNgfe
+         nEJjASqGGrwHpeGbqEakjQmNhk8sZ9KWxRxpA1UfOlJW6TlroVX+vNju4hpcf/J6GStE
+         uy1kXtPDSQsbbp9XRcMRXnGgMV45E3UZ6oMzqMBBAU/7I55m8/4GXJ3s+xTbkc+7SfxT
+         Cl/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
+        b=Z1JNa7vpjDDB5q9A+HaJgrvO3li/+Tpd2MGREcJCN6Gt1yPoiYExVTPhp1WJWhxVTL
+         JiYNqveXJKQKOHp1pdvXFoJ/N/0UCRmQxI45VFURtJ3ourgUOqljl5w0XHWDojZOCTxC
+         BSXBjZ76kNbV3kiwpom90YxCRO+ijvixqY3T43DXMAsIy1yUEFQkk9/1r4Yqn5pgugu0
+         LHZchpztNF6jTFjufnQ5bNpgKtMWwQIdz/p8wEO6ORS16o0D5XX8FFSEtoGiBeIGlJQl
+         tFVrSahnD9aTMNOL0r6i+XbelfscTgdcOf0n0f5s581EWRivBvIm2MiB3zmGaTv1IhcE
+         ktZg==
+X-Gm-Message-State: APjAAAXh0cOa/czBzdZzktrOrYh4BSbiaNu0bVcNGlsUj+ubN0ddg3Lh
+        O43PkCodQf9lCgIpA6G5MVUbdd6FJzpZSwVgguc=
+X-Google-Smtp-Source: APXvYqwP43r8O2ePpYxco9pkQ8LPorHP3seAZwmx4YpCuLUFiasuIwkMZodXHupXZxwP8ez21BycGEssivrj9NbSNnc=
+X-Received: by 2002:a7b:c204:: with SMTP id x4mr2359538wmi.20.1582773453543;
+ Wed, 26 Feb 2020 19:17:33 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <eb154054-68ab-a659-065b-f4f7dcbb8671@c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Reply-To: mrsanna.h.bruun119@gmail.com
+Received: by 2002:a05:600c:149:0:0:0:0 with HTTP; Wed, 26 Feb 2020 19:17:32
+ -0800 (PST)
+From:   "Mrs. Anna H. Bruun" <mrsanna.h.bruun119@gmail.com>
+Date:   Wed, 26 Feb 2020 19:17:32 -0800
+X-Google-Sender-Auth: xSKv3xW_wS3HxM1qd6Oqp_mGDnA
+Message-ID: <CAD3OtNpobt8wahDp-PO=a56WERZ9=T_qoaEdi-Y-fuOUoHRnOQ@mail.gmail.com>
+Subject: My Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 02/26/2020 08:14 PM, Christophe Leroy wrote:
-> 
-> 
-> Le 26/02/2020 à 15:12, Qian Cai a écrit :
->> On Wed, 2020-02-26 at 09:09 -0500, Qian Cai wrote:
->>> On Mon, 2020-02-17 at 08:47 +0530, Anshuman Khandual wrote:
->>>
->>> How useful is this that straightly crash the powerpc?
->>
->> And then generate warnings on arm64,
->>
->> [  146.634626][    T1] debug_vm_pgtable: debug_vm_pgtable: Validating
->> architecture page table helpers
->> [  146.643995][    T1] ------------[ cut here ]------------
->> [  146.649350][    T1] virt_to_phys used for non-linear address:
->> (____ptrval____) (start_kernel+0x0/0x580)
-> 
-> Must be something wrong with the following in debug_vm_pgtable()
-> 
->     paddr = __pa(&start_kernel);
-> 
-> Is there any explaination why start_kernel() is not in linear memory on ARM64 ?
+My Dear
 
+My Name is Mrs. Anna H. Bruun, from Norway. I know that this message
+will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun,
+A gold merchant who owns a small gold Mine in Burkina Faso; He died of
+Cardiovascular Disease in mid-March 2011. During his life time he
+deposited the sum of =E2=82=AC 8.5 Million Euro) Eight million, Five hundre=
+d
+thousand Euros in a bank in Ouagadougou the capital city of Burkina
+Faso. The deposited money was from the sale of the shares, death
+benefits payment and entitlements of my deceased husband by his
+company.
 
-Cc: + James Morse <james.morse@arm.com>
+I am sending this message to you praying that it will reach you in
+good health, since I am not in good health condition in which I sleep
+every night without knowing if I may be alive to see the next day. I
+am suffering from long time cancer and presently i am partially
+suffering from a stroke illness which has become almost impossible for
+me to move around. I am married to my late husband for over 4 years
+before he died and is unfortunately that we don't have a child, my
+doctor confided in me that i have less chance to live. Having known my
+health condition, I decided to contact you to claim the fund since I
+don't have any relation I grew up from the orphanage home,
 
-This warning gets exposed with DEBUG_VIRTUAL due to __pa() on a kernel symbol
-i.e 'start_kernel' which might be outside the linear map. This happens due to
-kernel mapping position randomization with KASLR. Adding James here in case he
-might like to add more.
+I have decided to donate what I have to you for the support of helping
+Motherless babies/Less privileged/Widows' because I am dying and
+diagnosed of cancer for about 2 years ago. I have been touched by God
+Almighty to donate from what I have inherited from my late husband to
+you for good work of God Almighty. I have asked Almighty God to
+forgive me and believe he has, because He is a Merciful God I will be
+going in for an operation surgery soon
 
-__pa_symbol() should have been used instead, for accessing the physical address
-here. On arm64 __pa() does check for linear address with __is_lm_address() and
-switch accordingly if it is a kernel text symbol. Nevertheless, its much better
-to use __pa_symbol() here rather than __pa().
+This is the reason i need your services to stand as my next of kin or
+an executor to claim the funds for charity purposes. If this money
+remains unclaimed after my death, the bank executives or the
+government will take the money as unclaimed fund and maybe use it for
+selfish and worthless ventures, I need a very honest person who can
+claim this money and use it for Charity works, for orphanages, widows
+and also build schools for less privilege that will be named after my
+late husband and my name; I need your urgent answer to know if you
+will be able to execute this project, and I will give you more
+Information on how the fund will be transferred to your bank account.
 
-Rather than respining the patch once more, will just send a fix replacing this
-helper __pa() with __pa_symbol() for Andrew to pick up as this patch is already
-part of linux-next (next-20200226). But can definitely respin if that will be
-preferred.
-
-Thanks Qian for catching this.
-
-> 
-> Christophe
-> 
+Thanks
+Mrs. Anna H.
