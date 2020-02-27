@@ -2,29 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2DC170DB7
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 02:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2452170E41
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 03:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728105AbgB0BQ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 20:16:29 -0500
-Received: from mga11.intel.com ([192.55.52.93]:43614 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727964AbgB0BQ3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 20:16:29 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 17:16:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,490,1574150400"; 
-   d="scan'208";a="241869963"
-Received: from pkabrax-mobl.amr.corp.intel.com (HELO [10.251.2.6]) ([10.251.2.6])
-  by orsmga006.jf.intel.com with ESMTP; 26 Feb 2020 17:16:27 -0800
+        id S1728243AbgB0CL4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 21:11:56 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:36100 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728178AbgB0CL4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 21:11:56 -0500
+Received: by mail-oi1-f195.google.com with SMTP id c16so1748713oic.3;
+        Wed, 26 Feb 2020 18:11:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=he1uRJhimWdmXlH4KMyv7rZ5+f5TpR3yYZ1SBC2Q6M4=;
+        b=ayBMgFwVIB4RZSA8nsIkYYFeLoUweLRhh+hyZe9/kfucORdETI97Ul78g9Qph+9BgM
+         qu5gKbVjpy1/EPdroqPimYar+XVDAmoGWOnWfSArE33rqk2BF+cCY4OcIKbVq+0Bjtob
+         7YqFBywBuOdSgMu9muQgiFrzTobGdJVHbMuxpxbKh0c0Cnqqli/Jquqtb6kBMIcDOxAO
+         SiO97iJEgur8kaTx3rnGaHspC7w9UHps2kEIU809vgqlclK2xf62C8yXHgxZEU5fKc7R
+         sT+s9Azj0270BniGkp8FXfaJrXGu6msYhhJIqYdY0fWF50HHlaFeBymqkSVyNYvx1CVh
+         SZ7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=he1uRJhimWdmXlH4KMyv7rZ5+f5TpR3yYZ1SBC2Q6M4=;
+        b=aNggrHctv4FhbdlsuzzhQZBUMZ4KYbsFKljkG9Pw5o1LWZFNG/8RfkAwu0b0H9t9SH
+         8ipJ5n+3DDB++UvpcN2/EiVM+AnNNXJOWrRP+JpCBwv4LcZ9zEJmVVnj8Hz1EgrVworN
+         fHD4yqZh/UrJflO4PF23gRRMtEFfUvvn8YvtkKx4mYJWAuh2wwPztTUONcg/XSEnb7wm
+         pKQ4CZfn3yguoGmoLmRO1bBo3b5WCODolZ4qJPx7L2nUhPWtkOxT5T95PGfXbEKlYCwl
+         sRnVCKtqbjeEENOGdHBv1m3RvY/yAVWc9fsSGAUSWpdT2UaJtrakGJAB5Wxl+nwzsmgR
+         F5WA==
+X-Gm-Message-State: APjAAAXi1hvHHoYdD5YhEZC7bAX1sslk6WWt0mjKxkEnzi0Nr3g/Nre5
+        mTHi3mdeFj9GInZ6Gi8dsse4Hmd1FIFxtoJCouk=
+X-Google-Smtp-Source: APXvYqxsFL01V4pX4VvSoQr/+nsogbthwMlTWrKppZURcCyyczEcgFcrencOXJXVDfPnbtJSq4aFT1/nkXVy7GOU+7w=
+X-Received: by 2002:aca:43c1:: with SMTP id q184mr1584492oia.116.1582769513861;
+ Wed, 26 Feb 2020 18:11:53 -0800 (PST)
+MIME-Version: 1.0
+References: <20200205181935.3712-1-yu-cheng.yu@intel.com> <20200205181935.3712-6-yu-cheng.yu@intel.com>
+ <d4dabb84-5636-2657-c45e-795f3f2dcbbc@intel.com> <CAMe9rOouOwNC873v=LOv5rJWcbe9Zvg+od8229J33V=ZfrB1rg@mail.gmail.com>
+ <71791bbf-7ee3-fa70-b569-ae643151646e@intel.com>
+In-Reply-To: <71791bbf-7ee3-fa70-b569-ae643151646e@intel.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Wed, 26 Feb 2020 18:11:17 -0800
+Message-ID: <CAMe9rOqhf4y+e6h8i7P8+70pwLSg8n=ise6LEqABNPKarECdeA@mail.gmail.com>
 Subject: Re: [RFC PATCH v9 05/27] x86/cet/shstk: Add Kconfig option for
  user-mode Shadow Stack protection
-To:     "H.J. Lu" <hjl.tools@gmail.com>
+To:     Dave Hansen <dave.hansen@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
@@ -50,84 +78,37 @@ Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
- <20200205181935.3712-6-yu-cheng.yu@intel.com>
- <d4dabb84-5636-2657-c45e-795f3f2dcbbc@intel.com>
- <CAMe9rOouOwNC873v=LOv5rJWcbe9Zvg+od8229J33V=ZfrB1rg@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-Message-ID: <71791bbf-7ee3-fa70-b569-ae643151646e@intel.com>
-Date:   Wed, 26 Feb 2020 17:16:27 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <CAMe9rOouOwNC873v=LOv5rJWcbe9Zvg+od8229J33V=ZfrB1rg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/26/20 5:02 PM, H.J. Lu wrote:
->> That way everybody with old toolchains can still build the kernel (and
->> run/test code with your config option on, btw...).
-> CET requires a complete new OS image from kernel, toolchain, run-time.
-> CET enabled kernel without the rest of updated OS won't give you CET
-> at all.
+On Wed, Feb 26, 2020 at 5:16 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 2/26/20 5:02 PM, H.J. Lu wrote:
+> >> That way everybody with old toolchains can still build the kernel (and
+> >> run/test code with your config option on, btw...).
+> > CET requires a complete new OS image from kernel, toolchain, run-time.
+> > CET enabled kernel without the rest of updated OS won't give you CET
+> > at all.
+>
+> If you require a new toolchain, nobody even builds your fancy feature.
+> Probably including 0day and all of the lazy maintainers with crufty old
+> distros.
 
-If you require a new toolchain, nobody even builds your fancy feature.
-Probably including 0day and all of the lazy maintainers with crufty old
-distros.
+GCC 8 or above is needed since vDSO must be compiled with
+--fcf-protection=branch.
 
-The point isn't to actually run CET at all.  The point is to get as many
-people as possible testing as much of it as possible.  Testing includes
-compile testing, static analysis and bloat watching.  It also includes
-functional and performance testing when you've got the feature compiled
-in but unavailable at runtime.  Did this hurt anything even when I'm not
-using it?
+> The point isn't to actually run CET at all.  The point is to get as many
+> people as possible testing as much of it as possible.  Testing includes
+> compile testing, static analysis and bloat watching.  It also includes
+> functional and performance testing when you've got the feature compiled
+> in but unavailable at runtime.  Did this hurt anything even when I'm not
+> using it?
+>
 
+I will leave the CET toolchain issue to Yu-cheng.
+
+-- 
+H.J.
