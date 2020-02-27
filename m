@@ -2,141 +2,251 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DFC170F5E
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 05:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD882170FC8
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 05:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728335AbgB0EHW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 23:07:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:45362 "EHLO foss.arm.com"
+        id S1728373AbgB0EpM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 23:45:12 -0500
+Received: from foss.arm.com ([217.140.110.172]:45610 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728221AbgB0EHW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Feb 2020 23:07:22 -0500
+        id S1728284AbgB0EpM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 26 Feb 2020 23:45:12 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75D6F30E;
-        Wed, 26 Feb 2020 20:07:21 -0800 (PST)
-Received: from [10.163.1.119] (unknown [10.163.1.119])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E40F83F73B;
-        Wed, 26 Feb 2020 20:07:11 -0800 (PST)
-Subject: Re: [PATCH V14] mm/debug: Add tests validating architecture page
- table helpers
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>, Qian Cai <cai@lca.pw>,
-        linux-mm@kvack.org, Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1595630E;
+        Wed, 26 Feb 2020 20:45:11 -0800 (PST)
+Received: from [10.162.16.120] (a075563-lin.blr.arm.com [10.162.16.120])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C5943F73B;
+        Wed, 26 Feb 2020 20:45:04 -0800 (PST)
+Subject: Re: [PATCH v7 05/11] arm64: elf: Enable BTI at exec based on ELF
+ program properties
+To:     Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        =?UTF-8?Q?Kristina_Mart=c5=a1enko?= <kristina.martsenko@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        James Morse <james.morse@arm.com>
-References: <1581909460-19148-1-git-send-email-anshuman.khandual@arm.com>
- <1582726182.7365.123.camel@lca.pw> <1582726340.7365.124.camel@lca.pw>
- <eb154054-68ab-a659-065b-f4f7dcbb8671@c-s.fr>
- <52db1e9b-83b3-c41f-ef03-0f43e2159a83@arm.com>
- <20200226200353.ea5c8ec2efacfb1192f3f3f4@linux-foundation.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <6a4518d5-9306-8f84-b676-26a40c594bd9@arm.com>
-Date:   Thu, 27 Feb 2020 09:37:07 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Dave Martin <Dave.Martin@arm.com>
+References: <20200226155714.43937-1-broonie@kernel.org>
+ <20200226155714.43937-6-broonie@kernel.org>
+From:   Amit Kachhap <amit.kachhap@arm.com>
+Message-ID: <d79ee028-bb03-022a-12a5-37d2a5ab28ed@arm.com>
+Date:   Thu, 27 Feb 2020 10:15:06 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20200226200353.ea5c8ec2efacfb1192f3f3f4@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200226155714.43937-6-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Mark,
 
-
-On 02/27/2020 09:33 AM, Andrew Morton wrote:
-> On Thu, 27 Feb 2020 08:04:05 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+On 2/26/20 9:27 PM, Mark Brown wrote:
+> From: Dave Martin <Dave.Martin@arm.com>
 > 
->>> Must be something wrong with the following in debug_vm_pgtable()
->>>
->>>     paddr = __pa(&start_kernel);
->>>
->>> Is there any explaination why start_kernel() is not in linear memory on ARM64 ?
->>
->>
->> Cc: + James Morse <james.morse@arm.com>
->>
->> This warning gets exposed with DEBUG_VIRTUAL due to __pa() on a kernel symbol
->> i.e 'start_kernel' which might be outside the linear map. This happens due to
->> kernel mapping position randomization with KASLR. Adding James here in case he
->> might like to add more.
->>
->> __pa_symbol() should have been used instead, for accessing the physical address
->> here. On arm64 __pa() does check for linear address with __is_lm_address() and
->> switch accordingly if it is a kernel text symbol. Nevertheless, its much better
->> to use __pa_symbol() here rather than __pa().
->>
->> Rather than respining the patch once more, will just send a fix replacing this
->> helper __pa() with __pa_symbol() for Andrew to pick up as this patch is already
->> part of linux-next (next-20200226). But can definitely respin if that will be
->> preferred.
+> For BTI protection to be as comprehensive as possible, it is
+> desirable to have BTI enabled from process startup.  If this is not
+> done, the process must use mprotect() to enable BTI for each of its
+> executable mappings, but this is painful to do in the libc startup
+> code.  It's simpler and more sound to have the kernel do it
+> instead.
 > 
-> I didn't see this fix?  I assume it's this?  If so, are we sure it's OK to be
-> added to -next without testing??
-
-My patch just missed your response here within a minute :) Please consider this.
-It has been tested on x86 and arm64.
-
-https://patchwork.kernel.org/patch/11407715/
-
+> To this end, detect BTI support in the executable (or ELF
+> interpreter, as appropriate), via the
+> NT_GNU_PROGRAM_PROPERTY_TYPE_0 note, and tweak the initial prot
+> flags for the process' executable pages to include PROT_BTI as
+> appropriate.
 > 
-> 
-> 
-> From: Andrew Morton <akpm@linux-foundation.org>
-> Subject: mm-debug-add-tests-validating-architecture-page-table-helpers-fix
-> 
-> A warning gets exposed with DEBUG_VIRTUAL due to __pa() on a kernel symbol
-> i.e 'start_kernel' which might be outside the linear map.  This happens
-> due to kernel mapping position randomization with KASLR.
-> 
-> __pa_symbol() should have been used instead, for accessing the physical
-> address here.  On arm64 __pa() does check for linear address with
-> __is_lm_address() and switch accordingly if it is a kernel text symbol. 
-> Nevertheless, its much better to use __pa_symbol() here rather than
-> __pa().
-> 
-> Reported-by: Qian Cai <cai@lca.pw>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Christophe Leroy <christophe.leroy@c-s.fr>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
+>   arch/arm64/Kconfig           |  3 +++
+>   arch/arm64/include/asm/elf.h | 51 ++++++++++++++++++++++++++++++++++++
+>   arch/arm64/kernel/process.c  | 19 ++++++++++++++
+>   include/uapi/linux/elf.h     |  6 +++++
+>   4 files changed, 79 insertions(+)
 > 
->  mm/debug_vm_pgtable.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- a/mm/debug_vm_pgtable.c~mm-debug-add-tests-validating-architecture-page-table-helpers-fix
-> +++ a/mm/debug_vm_pgtable.c
-> @@ -331,7 +331,7 @@ void __init debug_vm_pgtable(void)
->  	 * helps avoid large memory block allocations to be used for mapping
->  	 * at higher page table levels.
->  	 */
-> -	paddr = __pa(&start_kernel);
-> +	paddr = __pa_symbol(&start_kernel);
->  
->  	pte_aligned = (paddr & PAGE_MASK) >> PAGE_SHIFT;
->  	pmd_aligned = (paddr & PMD_MASK) >> PAGE_SHIFT;
-> _
-> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index e37f4f07b990..d65d226a77ec 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -9,6 +9,7 @@ config ARM64
+>   	select ACPI_MCFG if (ACPI && PCI)
+>   	select ACPI_SPCR_TABLE if ACPI
+>   	select ACPI_PPTT if ACPI
+> +	select ARCH_BINFMT_ELF_STATE
+>   	select ARCH_CLOCKSOURCE_DATA
+>   	select ARCH_HAS_DEBUG_VIRTUAL
+>   	select ARCH_HAS_DEVMEM_IS_ALLOWED
+> @@ -33,6 +34,7 @@ config ARM64
+>   	select ARCH_HAS_SYSCALL_WRAPPER
+>   	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
+>   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+> +	select ARCH_HAVE_ELF_PROT
+>   	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>   	select ARCH_INLINE_READ_LOCK if !PREEMPTION
+>   	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
+> @@ -62,6 +64,7 @@ config ARM64
+>   	select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
+>   	select ARCH_KEEP_MEMBLOCK
+>   	select ARCH_USE_CMPXCHG_LOCKREF
+> +	select ARCH_USE_GNU_PROPERTY if BINFMT_ELF
+>   	select ARCH_USE_QUEUED_RWLOCKS
+>   	select ARCH_USE_QUEUED_SPINLOCKS
+>   	select ARCH_SUPPORTS_MEMORY_FAILURE
+> diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
+> index b618017205a3..c72e381fa86d 100644
+> --- a/arch/arm64/include/asm/elf.h
+> +++ b/arch/arm64/include/asm/elf.h
+> @@ -114,7 +114,11 @@
+>   
+>   #ifndef __ASSEMBLY__
+>   
+> +#include <uapi/linux/elf.h>
+>   #include <linux/bug.h>
+> +#include <linux/errno.h>
+> +#include <linux/fs.h>
+> +#include <linux/types.h>
+>   #include <asm/processor.h> /* for signal_minsigstksz, used by ARCH_DLINFO */
+>   
+>   typedef unsigned long elf_greg_t;
+> @@ -224,6 +228,53 @@ extern int aarch32_setup_additional_pages(struct linux_binprm *bprm,
+>   
+>   #endif /* CONFIG_COMPAT */
+>   
+> +struct arch_elf_state {
+> +	int flags;
+> +};
+> +
+> +#define ARM64_ELF_BTI		(1 << 0)
+> +
+> +#define INIT_ARCH_ELF_STATE {			\
+> +	.flags = 0,				\
+> +}
+> +
+> +static inline int arch_parse_elf_property(u32 type, const void *data,
+> +					  size_t datasz, bool compat,
+> +					  struct arch_elf_state *arch)
+> +{
+> +	/* No known properties for AArch32 yet */
+> +	if (IS_ENABLED(CONFIG_COMPAT) && compat)
+> +		return 0;
+> +
+> +	if (type == GNU_PROPERTY_AARCH64_FEATURE_1_AND) {
+> +		const u32 *p = data;
+> +
+> +		if (datasz != sizeof(*p))
+> +			return -ENOEXEC;
+> +
+> +		if (IS_ENABLED(CONFIG_ARM64_BTI) &&
+> +		    system_supports_bti() &&
+
+system_supports_bti() has inbuilt CONFIG_ARM64_BTI config check.
+
+For all the patch in the series.
+Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
+
+Cheers,
+Amit
+
+> +		    (*p & GNU_PROPERTY_AARCH64_FEATURE_1_BTI))
+> +			arch->flags |= ARM64_ELF_BTI;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int arch_elf_pt_proc(void *ehdr, void *phdr,
+> +				   struct file *f, bool is_interp,
+> +				   struct arch_elf_state *state)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline int arch_check_elf(void *ehdr, bool has_interp,
+> +				 void *interp_ehdr,
+> +				 struct arch_elf_state *state)
+> +{
+> +	return 0;
+> +}
+> +
+>   #endif /* !__ASSEMBLY__ */
+>   
+>   #endif
+> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+> index 00626057a384..b8e3faa8d406 100644
+> --- a/arch/arm64/kernel/process.c
+> +++ b/arch/arm64/kernel/process.c
+> @@ -11,6 +11,7 @@
+>   
+>   #include <linux/compat.h>
+>   #include <linux/efi.h>
+> +#include <linux/elf.h>
+>   #include <linux/export.h>
+>   #include <linux/sched.h>
+>   #include <linux/sched/debug.h>
+> @@ -18,6 +19,7 @@
+>   #include <linux/sched/task_stack.h>
+>   #include <linux/kernel.h>
+>   #include <linux/lockdep.h>
+> +#include <linux/mman.h>
+>   #include <linux/mm.h>
+>   #include <linux/stddef.h>
+>   #include <linux/sysctl.h>
+> @@ -654,3 +656,20 @@ asmlinkage void __sched arm64_preempt_schedule_irq(void)
+>   	if (system_capabilities_finalized())
+>   		preempt_schedule_irq();
+>   }
+> +
+> +#ifdef CONFIG_BINFMT_ELF
+> +int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
+> +			 bool has_interp, bool is_interp)
+> +{
+> +	if (is_interp != has_interp)
+> +		return prot;
+> +
+> +	if (!(state->flags & ARM64_ELF_BTI))
+> +		return prot;
+> +
+> +	if (prot & PROT_EXEC)
+> +		prot |= PROT_BTI;
+> +
+> +	return prot;
+> +}
+> +#endif
+> diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+> index 20900f4496b7..c6dd0215482e 100644
+> --- a/include/uapi/linux/elf.h
+> +++ b/include/uapi/linux/elf.h
+> @@ -448,4 +448,10 @@ typedef struct elf64_note {
+>     Elf64_Word n_type;	/* Content type */
+>   } Elf64_Nhdr;
+>   
+> +/* .note.gnu.property types for EM_AARCH64: */
+> +#define GNU_PROPERTY_AARCH64_FEATURE_1_AND	0xc0000000
+> +
+> +/* Bits for GNU_PROPERTY_AARCH64_FEATURE_1_BTI */
+> +#define GNU_PROPERTY_AARCH64_FEATURE_1_BTI	(1U << 0)
+> +
+>   #endif /* _UAPI_LINUX_ELF_H */
 > 
