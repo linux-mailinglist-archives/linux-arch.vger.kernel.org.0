@@ -2,103 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F21170EE4
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 04:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5FE170F3B
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 04:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728221AbgB0DRh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Feb 2020 22:17:37 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52861 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728253AbgB0DRh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 22:17:37 -0500
-Received: by mail-wm1-f68.google.com with SMTP id p9so1844510wmc.2
-        for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2020 19:17:34 -0800 (PST)
+        id S1728252AbgB0D5G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Feb 2020 22:57:06 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:43199 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728266AbgB0D5F (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Feb 2020 22:57:05 -0500
+Received: by mail-pf1-f193.google.com with SMTP id s1so883145pfh.10
+        for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2020 19:57:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
-        b=ihcZFD3BM82Nodw/U9GNhSUm+JXeZGU3lSIVkeWU9q2iegtVf4XY8r0oismBDChX7i
-         VfJlLpZlQVHdSSeweV1eyS6vefZXU8ueNnoJXBUmL69T2B7XEW/ekTfErjxxKkzHNnMN
-         XLhgYHlW0WiTrXN8saPiAVtSfZuyMbpZS07YGoMEkaTRjmeEnO3hr1r+iIKEPCKcNgfe
-         nEJjASqGGrwHpeGbqEakjQmNhk8sZ9KWxRxpA1UfOlJW6TlroVX+vNju4hpcf/J6GStE
-         uy1kXtPDSQsbbp9XRcMRXnGgMV45E3UZ6oMzqMBBAU/7I55m8/4GXJ3s+xTbkc+7SfxT
-         Cl/Q==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=CnaaQj5OkZlinyuOBz/+nnOP++fx4EwIlpltdiovgCE=;
+        b=CvFkH5dzd6cq24Yi56VcybisKknibFmU/ow2ZqelBQazvt8BufBh2ODr6THyJye6BK
+         pWi9IQSyRt+DW4H7LH3Aw5WOB0wmY2ss62VcGrpUEDa8LKWEhtep7DgNKCIbBL1AWb6E
+         Tq57vgFbkcc608Dp5NIyKYhwGlsVs0fuPZ3UMk/nQOtDlUMasKcyMX8I/qiEzMoaNKIQ
+         y6n/KjR0q+J0RQiLg4/94jYEXnIlUggAEkQ/dDJpkqkojBDmZJ0kwbgYurQI4Y7i8MIi
+         0yIhFypbvEihEA0ivMQ6+HmGvD0QQVI3e6COI7tobO8x7xKc8jppGDUrtCV8AD2tGzdl
+         S8/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
-        b=Z1JNa7vpjDDB5q9A+HaJgrvO3li/+Tpd2MGREcJCN6Gt1yPoiYExVTPhp1WJWhxVTL
-         JiYNqveXJKQKOHp1pdvXFoJ/N/0UCRmQxI45VFURtJ3ourgUOqljl5w0XHWDojZOCTxC
-         BSXBjZ76kNbV3kiwpom90YxCRO+ijvixqY3T43DXMAsIy1yUEFQkk9/1r4Yqn5pgugu0
-         LHZchpztNF6jTFjufnQ5bNpgKtMWwQIdz/p8wEO6ORS16o0D5XX8FFSEtoGiBeIGlJQl
-         tFVrSahnD9aTMNOL0r6i+XbelfscTgdcOf0n0f5s581EWRivBvIm2MiB3zmGaTv1IhcE
-         ktZg==
-X-Gm-Message-State: APjAAAXh0cOa/czBzdZzktrOrYh4BSbiaNu0bVcNGlsUj+ubN0ddg3Lh
-        O43PkCodQf9lCgIpA6G5MVUbdd6FJzpZSwVgguc=
-X-Google-Smtp-Source: APXvYqwP43r8O2ePpYxco9pkQ8LPorHP3seAZwmx4YpCuLUFiasuIwkMZodXHupXZxwP8ez21BycGEssivrj9NbSNnc=
-X-Received: by 2002:a7b:c204:: with SMTP id x4mr2359538wmi.20.1582773453543;
- Wed, 26 Feb 2020 19:17:33 -0800 (PST)
-MIME-Version: 1.0
-Reply-To: mrsanna.h.bruun119@gmail.com
-Received: by 2002:a05:600c:149:0:0:0:0 with HTTP; Wed, 26 Feb 2020 19:17:32
- -0800 (PST)
-From:   "Mrs. Anna H. Bruun" <mrsanna.h.bruun119@gmail.com>
-Date:   Wed, 26 Feb 2020 19:17:32 -0800
-X-Google-Sender-Auth: xSKv3xW_wS3HxM1qd6Oqp_mGDnA
-Message-ID: <CAD3OtNpobt8wahDp-PO=a56WERZ9=T_qoaEdi-Y-fuOUoHRnOQ@mail.gmail.com>
-Subject: My Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=CnaaQj5OkZlinyuOBz/+nnOP++fx4EwIlpltdiovgCE=;
+        b=olHURcPSXo+oZuMBenoQYSqmLzy9yzbYlXgjNfj0PGRUn2wVz76jaMZ4O1OFfr923G
+         Rs6VO8de7agT8nHd5BJJqyWPkLzzEdSSxumL0Malhpq2XSI/Oh2xuLqOW/6fPTr9J40K
+         M3OoqiEYVXAjxo4e+bEPjzpHNiKLP6YZU2lq2vkL6GF7JQ/l6D6fC1EbryopByu914yl
+         xA9eohIDVm65mr3c5MxVESHKAqH4Xfow5ficVFoXs/V9vLAxA1czNlTbsZeUbegoZ/Y/
+         J0Y7PN0FDOv6HoZRlLCNM/BZf5s0b9BHRJGsMIc5145yXEbKruyAhUPJC3Xs5PBwdO/m
+         LQ2g==
+X-Gm-Message-State: APjAAAXEjn4jWp2o4YV/v7se5v6o2o5OfdszLfUIWZdQqRhiBuN/VeJ8
+        MRXpx1gqQQo0nDN8ahgo5GiOdg==
+X-Google-Smtp-Source: APXvYqy28xXxMFJjJ7wZKlE7xuddyqQc8I1BmGULeVfYLEzR3Y+/xN7FT1RQFMCIBqkzWHgsDEn21A==
+X-Received: by 2002:a62:17c3:: with SMTP id 186mr2085313pfx.158.1582775824816;
+        Wed, 26 Feb 2020 19:57:04 -0800 (PST)
+Received: from ?IPv6:2600:1010:b069:8a27:ddd9:92ea:d62b:8a52? ([2600:1010:b069:8a27:ddd9:92ea:d62b:8a52])
+        by smtp.gmail.com with ESMTPSA id j21sm4165728pji.13.2020.02.26.19.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Feb 2020 19:57:03 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC PATCH v9 05/27] x86/cet/shstk: Add Kconfig option for user-mode Shadow Stack protection
+Date:   Wed, 26 Feb 2020 19:57:01 -0800
+Message-Id: <FF42D299-D7A4-4884-9E45-DBEB5853FE56@amacapital.net>
+References: <CAMe9rOqhf4y+e6h8i7P8+70pwLSg8n=ise6LEqABNPKarECdeA@mail.gmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+In-Reply-To: <CAMe9rOqhf4y+e6h8i7P8+70pwLSg8n=ise6LEqABNPKarECdeA@mail.gmail.com>
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+X-Mailer: iPhone Mail (17D50)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-My Dear
 
-My Name is Mrs. Anna H. Bruun, from Norway. I know that this message
-will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun,
-A gold merchant who owns a small gold Mine in Burkina Faso; He died of
-Cardiovascular Disease in mid-March 2011. During his life time he
-deposited the sum of =E2=82=AC 8.5 Million Euro) Eight million, Five hundre=
-d
-thousand Euros in a bank in Ouagadougou the capital city of Burkina
-Faso. The deposited money was from the sale of the shares, death
-benefits payment and entitlements of my deceased husband by his
-company.
+> On Feb 26, 2020, at 6:11 PM, H.J. Lu <hjl.tools@gmail.com> wrote:
+>=20
+> =EF=BB=BFOn Wed, Feb 26, 2020 at 5:16 PM Dave Hansen <dave.hansen@intel.co=
+m> wrote:
+>>=20
+>> On 2/26/20 5:02 PM, H.J. Lu wrote:
+>>>> That way everybody with old toolchains can still build the kernel (and
+>>>> run/test code with your config option on, btw...).
+>>> CET requires a complete new OS image from kernel, toolchain, run-time.
+>>> CET enabled kernel without the rest of updated OS won't give you CET
+>>> at all.
+>>=20
+>> If you require a new toolchain, nobody even builds your fancy feature.
+>> Probably including 0day and all of the lazy maintainers with crufty old
+>> distros.
+>=20
+> GCC 8 or above is needed since vDSO must be compiled with
+> --fcf-protection=3Dbranch.
 
-I am sending this message to you praying that it will reach you in
-good health, since I am not in good health condition in which I sleep
-every night without knowing if I may be alive to see the next day. I
-am suffering from long time cancer and presently i am partially
-suffering from a stroke illness which has become almost impossible for
-me to move around. I am married to my late husband for over 4 years
-before he died and is unfortunately that we don't have a child, my
-doctor confided in me that i have less chance to live. Having known my
-health condition, I decided to contact you to claim the fund since I
-don't have any relation I grew up from the orphanage home,
+Fair enough. I don=E2=80=99t particularly want to carry a gross hack to add t=
+he ENDBRANCHes without compiler support.
 
-I have decided to donate what I have to you for the support of helping
-Motherless babies/Less privileged/Widows' because I am dying and
-diagnosed of cancer for about 2 years ago. I have been touched by God
-Almighty to donate from what I have inherited from my late husband to
-you for good work of God Almighty. I have asked Almighty God to
-forgive me and believe he has, because He is a Merciful God I will be
-going in for an operation surgery soon
 
-This is the reason i need your services to stand as my next of kin or
-an executor to claim the funds for charity purposes. If this money
-remains unclaimed after my death, the bank executives or the
-government will take the money as unclaimed fund and maybe use it for
-selfish and worthless ventures, I need a very honest person who can
-claim this money and use it for Charity works, for orphanages, widows
-and also build schools for less privilege that will be named after my
-late husband and my name; I need your urgent answer to know if you
-will be able to execute this project, and I will give you more
-Information on how the fund will be transferred to your bank account.
-
-Thanks
-Mrs. Anna H.
