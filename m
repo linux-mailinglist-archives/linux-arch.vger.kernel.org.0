@@ -2,86 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA75171853
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 14:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A56271718C9
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2020 14:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729099AbgB0NND (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Feb 2020 08:13:03 -0500
-Received: from foss.arm.com ([217.140.110.172]:50276 "EHLO foss.arm.com"
+        id S1729162AbgB0Nel (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Feb 2020 08:34:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60990 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729073AbgB0NND (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 27 Feb 2020 08:13:03 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10EA030E;
-        Thu, 27 Feb 2020 05:13:03 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B1603F703;
-        Thu, 27 Feb 2020 05:13:02 -0800 (PST)
-Date:   Thu, 27 Feb 2020 13:13:00 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Paul Elliott <paul.elliott@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "H . J . Lu " <hjl.tools@gmail.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Weimer <fweimer@redhat.com>,
-        Sudakshina Das <sudi.das@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v7 00/11] arm64: Branch Target Identification support
-Message-ID: <20200227131300.GB4062@sirena.org.uk>
-References: <20200226155714.43937-1-broonie@kernel.org>
- <202002261343.3B2ECE90@keescook>
+        id S1729076AbgB0Nel (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 27 Feb 2020 08:34:41 -0500
+Received: from localhost (lfbn-ncy-1-985-231.w90-101.abo.wanadoo.fr [90.101.63.231])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 568AF24656;
+        Thu, 27 Feb 2020 13:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582810480;
+        bh=hd1EH5Kj0MHO9MQew6AELGq5JlBOz3GHWDMW12fIy1Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p9A0+DH5dBJgKnDVpjQb91A7WXwDFyWWxlMo9svI3aYgBDaJ12zZA54pFqYcg/VOj
+         05+PE6RScxbPG/Z9EoLZWmis+g2iqcO9njxxKiHhcV82O4/rtQov/ZMPQN8BDdW7OR
+         F5vF6SQos7BU4qr1AQOzyXgO0Ly3N5bkPoskBM00=
+Date:   Thu, 27 Feb 2020 14:34:38 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        rostedt@goodmis.org, mingo@kernel.org, joel@joelfernandes.org,
+        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
+        tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        luto@kernel.org, tony.luck@intel.com, dan.carpenter@oracle.com,
+        mhiramat@kernel.org, Will Deacon <will@kernel.org>,
+        Petr Mladek <pmladek@suse.com>, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v4 02/27] hardirq/nmi: Allow nested nmi_enter()
+Message-ID: <20200227133437.GB21795@lenoir>
+References: <20200221133416.777099322@infradead.org>
+ <20200221134215.149193474@infradead.org>
+ <20200221222129.GB28251@lenoir>
+ <20200224161318.GG14897@hirez.programming.kicks-ass.net>
+ <20200225030905.GB28329@lenoir>
+ <20200225154111.GM18400@hirez.programming.kicks-ass.net>
+ <20200225221031.GB9599@lenoir>
+ <20200227091042.GG18400@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rJwd6BRFiFCcLxzm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202002261343.3B2ECE90@keescook>
-X-Cookie: Edwin Meese made me wear CORDOVANS!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200227091042.GG18400@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Feb 27, 2020 at 10:10:42AM +0100, Peter Zijlstra wrote:
+> On Tue, Feb 25, 2020 at 11:10:32PM +0100, Frederic Weisbecker wrote:
+> > So here is my previous proposal, based on a simple counter, this time
+> > with comments and a few fixes:
+> 
+> I've presumed your SoB and made this your patch.
 
---rJwd6BRFiFCcLxzm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Feb 26, 2020 at 01:44:59PM -0800, Kees Cook wrote:
-
-> Looks good. I sent a few more Reviewed-bys where I could. Who is
-> expected to pick this up? Catalin? Will?
-
-Thanks, I'm expecting it'll go through the arm64 tree.
-
---rJwd6BRFiFCcLxzm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5XwFwACgkQJNaLcl1U
-h9BVcAf+IT0x9Rm5Qvg7iutzvlk4f961QXDY77LCMmKkuIyjzf2qoM3UKYdN5A+s
-XCh02Tc8GwVaSWaipJplvGn2y3aPrb1oLBU8yp2zkFHk3UuDdkrIhwTqmg9EH6qO
-HMxhgu7d6bKkjgpIMZe78MrbRRJUCej3S9SHehfJjGHStqjcyN65h4a7GJZUkHkB
-8UMKB9ln6VV8BZHBWEZZa875jAojja3k2OzUTrtBmbq7WsuQIsIqjVblRGOIZXNQ
-6ok8vsW83J6iRtR6J46oSoIJqkXjfYucnbP7ulIOQDtUMvpS0O/C982bW0mtMvLB
-Qy9hBI9hA/mdTTxfXA8PF2WvD3HTHQ==
-=r3OK
------END PGP SIGNATURE-----
-
---rJwd6BRFiFCcLxzm--
+Ok, thanks!
