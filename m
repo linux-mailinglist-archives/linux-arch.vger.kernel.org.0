@@ -2,76 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 174D01730CA
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 07:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61750173100
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 07:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbgB1GMl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Feb 2020 01:12:41 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:40287 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbgB1GMl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Feb 2020 01:12:41 -0500
-Received: by mail-qk1-f194.google.com with SMTP id m2so1962387qka.7;
-        Thu, 27 Feb 2020 22:12:40 -0800 (PST)
+        id S1725870AbgB1Gad (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Feb 2020 01:30:33 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:36430 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725802AbgB1Gad (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Feb 2020 01:30:33 -0500
+Received: by mail-qt1-f193.google.com with SMTP id t13so1297450qto.3;
+        Thu, 27 Feb 2020 22:30:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=wyty40W/Qu8GnwhYqxyjqRT5oV/6aZoaZV9g8IYFv9c=;
-        b=DfTtz8qok49FosFplrh33Y+hSE7m7IFREBcDa+rJ4zLj4+VeOtCsBkIFXcNYtxef9Q
-         S7JbDBWkvaFQKb3mdWIJ/cG8ZHYyVUUVvNEEYt/0ChtAsLIM9jPz/T6ZN6T5D29TY7/J
-         Y+iYrGfeDeKpbgkjx+/P+sjdyauQ3p5dH4mp/ClLnOTzOvy4aT8xdnT+vPQali2uKCDf
-         7eJXnOiqP+JNRcbASlmRqG0sKiB7DoXXxzRLZ75C25GmlUn3yGv/fVYY+CyCsJ1u+RPJ
-         /b1yWW81IIxTDabnFSHbA2wluSDV4B7QCYCa22P5BvRwB3ZTIF8r29N7qAL7n0UNhSgO
-         kkoQ==
+        bh=7TS07qm5BTzPoIctEpgMyVEvZEu8e9vIDaiI4S1jRII=;
+        b=nZYtRjO2I5BXWjnVy9qkjCyLXjT2Ji1fya8iFrWtSm7NGagYGnzGjEJpYjVg7T1sXA
+         Vehqo1LeklXK5N9yoq0o6uoFcKXMQPMfjcyp1TMBPAkEPk0SL08w8V1V1oLUzBVC9BZo
+         ZHYyIudKx0rfsTQ4leSYIpoxBSesP23LpTR9tbknlOGK4bVI//+2pXh64Sa8UsDo3ewR
+         P4UCBttEUCmQhN9K0mieJP9UjRLJKGYZgEqb4/vW2JZJ1OIIR6GHxL892zDWCHiYa0Q2
+         uEieDhkqY2mdfq1zm3bVRn1NhtasXu7+BmZhmx1AhQeYTleA6/eorLHR0C2RRG55j12x
+         EMoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=wyty40W/Qu8GnwhYqxyjqRT5oV/6aZoaZV9g8IYFv9c=;
-        b=HlMJ4DSwsiGkBKeDQNsnHQyDFfBgn9czHvisOJKqIwE3248xe+3BnejB3U1eDLgz2N
-         V9o/I+tWjFqBoDMhmRt1jT3+FRJA52DZUZfaSqD04AKcL+jRWwG9NQtf8CPF8X537WCF
-         utn83OUYW2GsIafp3V9/d3S9f5fqcUrUoCpYjuphvhHXREDupCrjfM+UtpRs77AQ6D5d
-         drbLgb+u5rocC0jBz0yUytQeG2ip5GU4JwPbkxNbXtIYKYQJWbeIbqvSgrR5jk658ZND
-         lxSLkGOUbWW8s6C6kiGcLdOd+uL0zP6z00CWGd78IzUEzV4jUBMtCn1jY3Ce3BEe7W4u
-         5I2Q==
-X-Gm-Message-State: APjAAAVDoK2QBkhcD+sArM6l/ghNc3rJ8HUoiu+/GQOrjJyyGP3VJ2eR
-        i5G6Ij0EdQR528PsK/q47Xc=
-X-Google-Smtp-Source: APXvYqyQ/W/wSgr89mAFJI+Vkpgacn91PVqegXumByTWinq73Oahtc3x5zuqEslYTpx5bV+7JFY3UQ==
-X-Received: by 2002:ae9:e413:: with SMTP id q19mr3129318qkc.248.1582870360131;
-        Thu, 27 Feb 2020 22:12:40 -0800 (PST)
+        bh=7TS07qm5BTzPoIctEpgMyVEvZEu8e9vIDaiI4S1jRII=;
+        b=q5vHH1UG0tiNgS5jSG4iPiWzEvjyR8Tue/5+/u10RdWGSJF5npwSv3yC3jBXHumdPq
+         7AKQo+Qfayy/CFVUoXEADAclSf+NLORY4CING+ZqIfyR+8VvhToUJEw4Au4uKX8UOpD1
+         jPlZ4RdvnYrJWYRLJRJ3gNYYXFA4Rgpe2Di3jDzu/D1iWaSeMp3ISXBoE/tRx53rgWEC
+         LS8hF6wFabAN28mZNI5mWD7Q5uMbp4OTT6P/a5qBdk4Jtfli/oqzW2J4S3wjwQ3q+AR7
+         U0XjbjUFRt9ZrTfSR2BsZOAAi5Tp1ZMY/aszJh22MQlQte+Ivyo/iijnzLtW33Hs8qD3
+         WZ0A==
+X-Gm-Message-State: APjAAAW/CjxP9ijXOqCZP8ERyiyQsrX4ePfiIwjDAehIgalg9bwbJ/7m
+        nn1wwvIAOhbXDWsyxGOOJQg=
+X-Google-Smtp-Source: APXvYqyKKsLHfSmrkm4O8hNO/kg9yQvuJCRhggQK6nbbKYMtA5F22j+wO2BXVUeOHtAdu68tCg666Q==
+X-Received: by 2002:ac8:1a19:: with SMTP id v25mr2978785qtj.146.1582871432010;
+        Thu, 27 Feb 2020 22:30:32 -0800 (PST)
 Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id n12sm4482218qkg.89.2020.02.27.22.12.38
+        by smtp.gmail.com with ESMTPSA id d74sm4563641qke.91.2020.02.27.22.30.30
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Feb 2020 22:12:39 -0800 (PST)
+        Thu, 27 Feb 2020 22:30:31 -0800 (PST)
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 00FB321FE5;
-        Fri, 28 Feb 2020 01:12:38 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 28 Feb 2020 01:12:38 -0500
-X-ME-Sender: <xms:VK9YXjtuyRD1ML6U8iahQ1YTxvwTYpCHHjZVeoJm3AB8stlaIybH5g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrleejgdelgecutefuodetggdotefrodftvf
+        by mailauth.nyi.internal (Postfix) with ESMTP id 26FD522223;
+        Fri, 28 Feb 2020 01:30:30 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 28 Feb 2020 01:30:30 -0500
+X-ME-Sender: <xms:grNYXsWgcUpfsfN09fLzyHZUG__G6GTb4afd0J8m0PSo1qxoP8-zqg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrleejgdelkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucffohhmrghinh
-    epkhgvrhhnvghlrdhorhhgpdhinhhrihgrrdhfrhenucfkphephedvrdduheehrdduuddu
-    rdejudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:VK9YXnpBDuVCU3KlMZF2U1uDLkdDTh_z5L00xk6z4YKjlwDIzbE7Yg>
-    <xmx:VK9YXi6Zt_kD7rVL1UBlywYHL3pxLLfNp7bKZ3-0GZr0ONyufUYsiQ>
-    <xmx:VK9YXsqQ--OyU2onyUZewe7cqOCSz22mIR_LBFT7tRW1Dfu8gZeB4w>
-    <xmx:Va9YXsn-tlpdEVVg-wauh9yuLigtr5EV17UQxcPtQnLxqOpxntrNnqj-UBY>
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucfkphephedvrd
+    duheehrdduuddurdejudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
+    ihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqd
+    eiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhl
+    rdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:grNYXs5eGZYyBdtyRgeRt5bitl3y1L8zsOhgTEfm7meDUuW658yxug>
+    <xmx:grNYXjJ74cxQy4R6lApHewhbLkliRfffyDeQwOpaHtWQb3kybLWmqw>
+    <xmx:grNYXtL_W5dH1OPLHRUMJj-hiBETIVOKPF0WhLT5vf4M9dJajaq34g>
+    <xmx:hrNYXk42OucZ4QYMvWLkxJFki1WoSWsYUa5dwpMARXh6Dxr7O7pbJJUKwH8>
 Received: from localhost (unknown [52.155.111.71])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 70FB03060BD1;
-        Fri, 28 Feb 2020 01:12:36 -0500 (EST)
-Date:   Fri, 28 Feb 2020 14:12:34 +0800
+        by mail.messagingengine.com (Postfix) with ESMTPA id DE49C3280065;
+        Fri, 28 Feb 2020 01:30:25 -0500 (EST)
+Date:   Fri, 28 Feb 2020 14:30:24 +0800
 From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Andrea Parri <parri.andrea@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
         Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Nicholas Piggin <npiggin@gmail.com>,
@@ -88,99 +87,95 @@ Cc:     linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] Documentation/locking/atomic: Add litmus tests
- for atomic APIs
-Message-ID: <20200228061234.GS69864@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
-References: <20200227004049.6853-1-boqun.feng@gmail.com>
- <20200227175441.GB12046@andrea>
+Subject: Re: [PATCH v3 2/5] Documentation/locking/atomic: Fix atomic-set
+ litmus test
+Message-ID: <20200228063024.GU69864@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+References: <20200227004049.6853-3-boqun.feng@gmail.com>
+ <Pine.LNX.4.44L0.2002271133300.1730-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200227175441.GB12046@andrea>
+In-Reply-To: <Pine.LNX.4.44L0.2002271133300.1730-100000@iolanthe.rowland.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 06:54:41PM +0100, Andrea Parri wrote:
-> On Thu, Feb 27, 2020 at 08:40:44AM +0800, Boqun Feng wrote:
-> > A recent discussion raises up the requirement for having test cases for
-> > atomic APIs:
-> > 
-> > 	https://lore.kernel.org/lkml/20200213085849.GL14897@hirez.programming.kicks-ass.net/
-> > 
-> > , and since we already have a way to generate a test module from a
-> > litmus test with klitmus[1]. It makes sense that we add more litmus
-> > tests for atomic APIs. And based on the previous discussion, I create a
-> > new directory Documentation/atomic-tests and put these litmus tests
-> > here.
-> > 
-> > This patchset starts the work by adding the litmus tests which are
-> > already used in atomic_t.txt, and also improve the atomic_t.txt to make
-> > it consistent with the litmus tests.
-> > 
-> > Previous version:
-> > v1: https://lore.kernel.org/linux-doc/20200214040132.91934-1-boqun.feng@gmail.com/
-> > v2: https://lore.kernel.org/lkml/20200219062627.104736-1-boqun.feng@gmail.com/
-> > 
-> > Changes since v2:
-> > 
-> > *	Change from "RFC" to "PATCH".
-> > 
-> > *	Wording improvement in atomic_t.txt as per Alan's suggestion.
-> > 
-> > *	Add a new patch describing the usage of atomic_add_unless() is
-> > 	not limited anymore for LKMM litmus tests.
-> > 
-> > My PR on supporting "(void) expr;" statement has been merged by Luc
-> > (Thank you, Luc). So all the litmus tests in this patchset can be
-> > handled by the herdtools compiled from latest master branch of the
-> > source code.
-> > 
-> > Comments and suggestions are welcome!
+On Thu, Feb 27, 2020 at 11:34:55AM -0500, Alan Stern wrote:
+> On Thu, 27 Feb 2020, Boqun Feng wrote:
 > 
-> A few nits (see inline), but otherwise the series looks good to me;
-> with those fixed, please feel free to add:
+> > Currently the litmus test "atomic-set" in atomic_t.txt has a few things
+> > to be improved:
+> > 
+> > 1)	The CPU/Processor numbers "P1,P2" are not only inconsistent with
+> > 	the rest of the document, which uses "CPU0" and "CPU1", but also
+> > 	unacceptable by the herd tool, which requires processors start
+> > 	at "P0".
+> > 
+> > 2)	The initialization block uses a "atomic_set()", which is OK, but
+> > 	it's better to use ATOMIC_INIT() to make clear this is an
+> > 	initialization.
+> > 
+> > 3)	The return value of atomic_add_unless() is discarded
+> > 	inexplicitly, which is OK for C language, but it will be helpful
+> > 	to the herd tool if we use a void cast to make the discard
+> > 	explicit.
+> > 
+> > Therefore fix these and this is the preparation for adding the litmus
+> > test into memory-model litmus-tests directory so that people can
+> > understand better about our requirements of atomic APIs and klitmus tool
+> > can be used to generate tests.
+> > 
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 > 
-> Acked-by: Andrea Parri <parri.andrea@gmail.com>
+> Patch 5/5 in this series does basically the same thing for 
+> Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.  How come you 
+> used one patch for that, but this is split into two patches (2/5 and 
+> 4/5)?
 > 
 
-Thank you and Alan! I will fix those in the next version.
+When I was working one the first version, I wasn't so sure that we would
+reach the agreement of where to put the litmus tests, and the litmus
+test in the atomic_t.txt obviously needs a fix, so I separated the fix
+and the adding of a litmus test to make my rebase easier ;-). But you're
+right, the separation is not needed now. 
+
+I will merge those two patches into one in the next version, also with
+the name adjustment you and Andrea have pointed out. Thanks!
 
 Regards,
 Boqun
 
-> to the entire series.
+> Alan
 > 
-> Thanks,
->   Andrea
+> > ---
+> >  Documentation/atomic_t.txt | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
+> > index 0ab747e0d5ac..ceb85ada378e 100644
+> > --- a/Documentation/atomic_t.txt
+> > +++ b/Documentation/atomic_t.txt
+> > @@ -91,15 +91,15 @@ ops. That is:
+> >    C atomic-set
+> >  
+> >    {
+> > -    atomic_set(v, 1);
+> > +    atomic_t v = ATOMIC_INIT(1);
+> >    }
+> >  
+> > -  P1(atomic_t *v)
+> > +  P0(atomic_t *v)
+> >    {
+> > -    atomic_add_unless(v, 1, 0);
+> > +    (void)atomic_add_unless(v, 1, 0);
+> >    }
+> >  
+> > -  P2(atomic_t *v)
+> > +  P1(atomic_t *v)
+> >    {
+> >      atomic_set(v, 0);
+> >    }
+> > 
 > 
 > 
-> > 
-> > Regards,
-> > Boqun
-> > 
-> > [1]: http://diy.inria.fr/doc/litmus.html#klitmus
-> > 
-> > Boqun Feng (5):
-> >   tools/memory-model: Add an exception for limitations on _unless()
-> >     family
-> >   Documentation/locking/atomic: Fix atomic-set litmus test
-> >   Documentation/locking/atomic: Introduce atomic-tests directory
-> >   Documentation/locking/atomic: Add a litmus test for atomic_set()
-> >   Documentation/locking/atomic: Add a litmus test smp_mb__after_atomic()
-> > 
-> >  ...ter_atomic-is-stronger-than-acquire.litmus | 32 +++++++++++++++++++
-> >  ...c-RMW-ops-are-atomic-WRT-atomic_set.litmus | 24 ++++++++++++++
-> >  Documentation/atomic-tests/README             | 16 ++++++++++
-> >  Documentation/atomic_t.txt                    | 24 +++++++-------
-> >  MAINTAINERS                                   |  1 +
-> >  tools/memory-model/README                     | 10 ++++--
-> >  6 files changed, 92 insertions(+), 15 deletions(-)
-> >  create mode 100644 Documentation/atomic-tests/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
-> >  create mode 100644 Documentation/atomic-tests/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> >  create mode 100644 Documentation/atomic-tests/README
-> > 
-> > -- 
-> > 2.25.0
-> > 
