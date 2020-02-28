@@ -2,97 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD06172E44
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 02:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2397172E59
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 02:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730640AbgB1BVU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Feb 2020 20:21:20 -0500
-Received: from mail-yw1-f74.google.com ([209.85.161.74]:41371 "EHLO
-        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730672AbgB1BVO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Feb 2020 20:21:14 -0500
-Received: by mail-yw1-f74.google.com with SMTP id q128so2550959ywb.8
-        for <linux-arch@vger.kernel.org>; Thu, 27 Feb 2020 17:21:13 -0800 (PST)
+        id S1730408AbgB1Bfn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Feb 2020 20:35:43 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:41023 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730155AbgB1Bfn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Feb 2020 20:35:43 -0500
+Received: by mail-pl1-f196.google.com with SMTP id t14so550759plr.8
+        for <linux-arch@vger.kernel.org>; Thu, 27 Feb 2020 17:35:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=MkaS0G1bk+Q5OhBTj99Zlxgrs85NSvS6F5H6SOsXVyU=;
-        b=IH1npzZ+v8JTFD9rsz35zQYEul6R/W7yA2D6y+OHVbHvXqTHNvw94iwhkAAP2DDbVi
-         GBl13bzJPRjEuu19+D47ufplr6qg9wjANWrvanrNpgcqF3wYeITyoFt3EBjPEKAChMee
-         DeaGGyUBsY44m410q88ZWKqK3we31TbcCkm2I/9FYqcTsjtfZrtU59w7sW8UgKR1PAJe
-         CAKr9zLHEDRGuRNAQVHoLYwNfztD6WsUdwPciC+p1QF6ZslfNc/x8Hy7CBCjDGP7F1O7
-         OMmtpISW28bF/hQBE0TciN5jdd+8PFqiw4ehn8+83YXO6s8MOtXeeqCaCT+kJgk3y0WI
-         ockg==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bMqEeWlLS8pQIJAtkSYGwz6EETfHigbDwAopBr6aqSw=;
+        b=lgtrW87iuETCM6MZfqHeUbE2DW3RSQUkTb5c9Os5peB3NMgUMmvzYpHhxFIrY0jQXl
+         gTrEBhDd72sK9/GoImcg66uzU3uAqej/TrzMSPyuRvYKJXLyOBQspS9TcAOMJg6azajt
+         4e4q0xU1JkQ3g2MaJrsC9L1l9n0PDkxKG0gN++8ID1WkaCe0ROEz0wYUUsuEolByzx4i
+         fG8Lbqc6k6bo4o2QTP0TttQdc2i28Mmr0Awltak6siB2kyTSpUJ6DCCiYQ+P2cNJRppz
+         ooeJ4vQNEK7hfzeQav9OBK3kBGi0VJ3wFrtbS7/vKcxY6xS/94NshlnQDnSNmwv45TSF
+         5zvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=MkaS0G1bk+Q5OhBTj99Zlxgrs85NSvS6F5H6SOsXVyU=;
-        b=fBtM+YLgaBuuRqJgUvtKhncdgS5Keamf9GnLBSyGcXd5QOGO+6ZyDpFKoajEekEIAg
-         z9Gtsf1puTl4re6IkXALilvJSnHEgiG04/dCCbw4kdYDHcxV87v7gTnJHkhIZ0ij5yvk
-         dTv9khRU1pQKBjjHt/LT0cstrWcLfCM8SNtIsPXkwMbCKQraOiIKU1Aqd+Ebmo4nILBV
-         MsdFoiWAXeG+daZYdEnSh/hykzBp1ycgq1k3PHCQG1tYUxIWQMqaCqJyV3iy46nOvppD
-         85u/P++sbI/dei6iJYRUozOOMKomdxXeLdCUY+pkb8fz8OD2e+wVHnmU6cRu0i09/zc3
-         QLig==
-X-Gm-Message-State: APjAAAXAOFDFgSSZowPrOWlRASIOoWoBD7nNj2N5/A28T6uXFNueoD8N
-        N+i1ML3wFmYsivEUx7ufDJ7WDQHVSq+kVCcoGFeU/w==
-X-Google-Smtp-Source: APXvYqw/2+N2t2lLq1K+89TJ7bx2qoTvJJopuhhqt7f6cbBPG3uSnhVLpCVqqF2LFAFntCjNNsq3zJIjfvM4Xn6GSUj6sQ==
-X-Received: by 2002:a0d:c584:: with SMTP id h126mr2210425ywd.173.1582852873384;
- Thu, 27 Feb 2020 17:21:13 -0800 (PST)
-Date:   Thu, 27 Feb 2020 17:20:36 -0800
-In-Reply-To: <20200228012036.15682-1-brendanhiggins@google.com>
-Message-Id: <20200228012036.15682-8-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20200228012036.15682-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
-Subject: [PATCH v3 7/7] Documentation: Add kunit_shutdown to kernel-parameters.txt
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        frowand.list@gmail.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bMqEeWlLS8pQIJAtkSYGwz6EETfHigbDwAopBr6aqSw=;
+        b=jXGvAQ88ItdvPNe4TGuwji6DVWJyJdPglc93p7DA3PaMY3d3Qeb1P/E1xPMh758XhD
+         NqtBCDC3WqwhCBj4FNdvIAnTfzvvvKuWbQCRUARUQShShg2UP0YYa+anYGUp7AX2awc6
+         sX6kXooHAF7prlpOztf31E55/A3tG6ujNspZrzzcIoDGHenoDcoB+h2yXHMN5Ba8lHoa
+         8hQVZ9AUsT2+UhGytnEKi0XxSX0gUtSbrTerhswjuxzmBWvsaTBPV7wyyP/vrqPn+9G0
+         U0daTzGC+28VKPXntU6u+e7MFzcqiGkQdpKBrws0QkA61n+pq64JDLe5YTTAMDierfvD
+         ERkQ==
+X-Gm-Message-State: APjAAAWJRH9cPfhIt6zQnJ/TRpyYVZf+PGVBE3v1gENoWR71yR6BJd/a
+        dYZ25G4u/k3H98vbEvD2KAv2KQ==
+X-Google-Smtp-Source: APXvYqzFAG8op1dk3VkVp/cpqFeD1tiz06LRZypn5EbxphJV/FMkk89RccTVZt4zprSwmIDBPcQEAA==
+X-Received: by 2002:a17:902:426:: with SMTP id 35mr1619596ple.176.1582853742556;
+        Thu, 27 Feb 2020 17:35:42 -0800 (PST)
+Received: from [192.168.1.11] (97-126-123-70.tukw.qwest.net. [97.126.123.70])
+        by smtp.gmail.com with ESMTPSA id c1sm8546037pfa.51.2020.02.27.17.35.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2020 17:35:41 -0800 (PST)
+Subject: Re: [PATCH v8 00/11] arm64: Branch Target Identification support
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        =?UTF-8?Q?Kristina_Mart=c5=a1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20200227174417.23722-1-broonie@kernel.org>
+From:   Richard Henderson <richard.henderson@linaro.org>
+Message-ID: <562edd23-9d86-800e-aae3-e54c92601929@linaro.org>
+Date:   Thu, 27 Feb 2020 17:35:39 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20200227174417.23722-1-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add kunit_shutdown, an option to specify that the kernel shutsdown after
-running KUnit tests, to the kernel-parameters.txt documentation.
+On 2/27/20 9:44 AM, Mark Brown wrote:
+>  * Binutils trunk supports the new ELF note, but this wasn't in a release
+>    the last time I posted this series.  (The situation _might_ have changed
+>    in the meantime...)
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
----
- Documentation/admin-guide/kernel-parameters.txt | 8 ++++++++
- 1 file changed, 8 insertions(+)
+I believe this support is in binutils 2.32.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index dbc22d6846275..6ad63e98916f9 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2099,6 +2099,14 @@
- 			0: force disabled
- 			1: force enabled
- 
-+	kunit_shutdown	[KERNEL UNIT TESTING FRAMEWORK] Shutdown kernel after
-+			running built-in tests. Tests configured as modules will
-+			not be run.
-+			Default:	(flag not present) don't shutdown
-+			poweroff:	poweroff the kernel after running tests
-+			halt:		halt the kernel after running tests
-+			reboot:		reboot the kernel after running tests
-+
- 	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
- 			Default is 0 (don't ignore, but inject #GP)
- 
--- 
-2.25.1.481.gfbce0eb801-goog
 
+r~
