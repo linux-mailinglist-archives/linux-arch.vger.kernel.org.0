@@ -2,150 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E3A172D17
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 01:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CA0172E24
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 02:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730443AbgB1AXA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Feb 2020 19:23:00 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:53968 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730474AbgB1AW5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Feb 2020 19:22:57 -0500
-Received: by mail-pj1-f68.google.com with SMTP id i11so435887pju.3
-        for <linux-arch@vger.kernel.org>; Thu, 27 Feb 2020 16:22:56 -0800 (PST)
+        id S1730460AbgB1BU5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Feb 2020 20:20:57 -0500
+Received: from mail-qv1-f73.google.com ([209.85.219.73]:36842 "EHLO
+        mail-qv1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730389AbgB1BU4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Feb 2020 20:20:56 -0500
+Received: by mail-qv1-f73.google.com with SMTP id b3so1263427qvy.3
+        for <linux-arch@vger.kernel.org>; Thu, 27 Feb 2020 17:20:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5pMXhDd5WkHmc2Nd9+Jjb38fhh7Zetn6tk9gX3pPvjM=;
-        b=NdpfQ9E77BQQDeLbRe4C0kneiRaa4BRWlG/661nY6+36gEg6ulvyK6zJdrM6FlpkLx
-         rZnuOrOoXJH6eCy0PMi8rot0VETFWym5wj0fDsIe9QVrzJg7KEO+1C0QPBYDgIEB4mcg
-         xFYZAsgdnMK5ZAzxXgLUxelkrt9eHsy30qa9U=
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=UxlFvDl+mYUOihiySIoFvbuwiyqTD12ewe+CWWzU0ro=;
+        b=Cc0JuZTfhaIDHKNZM37wEYgZzqrbvgr4Kpn3pNKsq4dpXHFoVOP/Iy5EaG8MPe0qHM
+         fqaKBpOtGroaVggoO0eF0KR+YehCClaj/Fe6Id9L8BwOyhmJPWqN9SqFrmwV1nMGBhYG
+         3By6Lr+I1WyhWZyW9wmCgDsFO7Rxty9/jcF6ClbLWK9kpirrBKtj1cNL9AN8bXAhQtTl
+         iBWN4ey/UqpntnkjYAfHHiMifGNshfQBWvKDt1AlkCaOsbEk/qxvpEVWm3gdz8Z47PdR
+         CVNrCbYHxZXcU6vawXUsmqm9jUqvKhaV6R3SAMk2XWXdWBznnf4nrx5vUJyFAgtSyPzD
+         0lLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5pMXhDd5WkHmc2Nd9+Jjb38fhh7Zetn6tk9gX3pPvjM=;
-        b=lL+WnRvIA1Xs5zgkU5t2Gz/IfJ3re9s+adgXRh0/+RhV7WzlpLDUMf1jq5zI4MzXMg
-         h7ZoIcrMSnmxMNqyVjuzE8ClCHavecPlmrvJ7FLNQGlasDXkGvUN5Bh4kzFFEgT2iXBs
-         WZ74J8f7m57BKyoJhSRT0izLsW8o+V3/3mn7hRgYF7dPqoZxFh4mMGOVBhGXdIFSOuak
-         I2nSKiHbxbWlyEXSrVvs0y1x8cHb3Cvuov3qnycXUL1X7xdvirBZrtsHNsOpl0gwpz1f
-         ZoG7u8MtLPr9hbZ/rKdUpqf4LyEePn1vR1Vl8l/iGFkTr/MFNlr7YBGGuLOQgLxaRGBg
-         7uxA==
-X-Gm-Message-State: APjAAAVdwriE1bMxG83kkqC/3q8y+R/SyP8PalNlwUl1Rmx2weMRm5+x
-        01KvNKpWFKg5ouV/9nHF3Kf7Qg==
-X-Google-Smtp-Source: APXvYqzuOX0XiyVaOeVuugXOJBvn7E6Nhu05xm90KTUN/qkQ34/SDiQ4lE0A5jOUkXzf88ArP2HuXA==
-X-Received: by 2002:a17:902:694b:: with SMTP id k11mr1375405plt.334.1582849375873;
-        Thu, 27 Feb 2020 16:22:55 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 3sm8455845pfi.13.2020.02.27.16.22.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2020 16:22:52 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Kees Cook <keescook@chromium.org>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        James Morse <james.morse@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 9/9] arm/boot: Warn on orphan section placement
-Date:   Thu, 27 Feb 2020 16:22:44 -0800
-Message-Id: <20200228002244.15240-10-keescook@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200228002244.15240-1-keescook@chromium.org>
-References: <20200228002244.15240-1-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=UxlFvDl+mYUOihiySIoFvbuwiyqTD12ewe+CWWzU0ro=;
+        b=i00U0BJtFHjXYfedYR4WBt+9E7Ih5BiH/e34U1vgvrOCoWGe7NU/FduhO6Suqel4Vp
+         FtaXVH389GJNXL/2CUv3A9PaYB6UEeiYCh7MaddH85lj/FINnpeGO0pKwKjW0bb3iUdF
+         XlERKtJ0flVOISs/1H1C2nxKz6zUbAft6ZTZhw1nbbNg89r5pgIAuwuw7DnKUkGnykZ4
+         L+mquAbsTncEU3KkuKZhnFCiiZqhgkF+fdEdznuNLa9bNxQNsoTUZTRAwDfNIepX2pi/
+         f/nI/bYrRo1F7wLll9OE0fdgQ0dCtkSkN6fildOBPZDyhmwQhzhZTtp3P8/MREPLT/3U
+         Wpvw==
+X-Gm-Message-State: APjAAAWmR0DMGbexvFaqAa5vbHrQ2qhBoOyctrjzA41Nwgzp4gn45lID
+        SVChoMiNvkZnAKSfg3dGPJBl7+5uD3YD5AqVlDScNg==
+X-Google-Smtp-Source: APXvYqxBgrAvVVUr+eI3w9pSyj8Z2/ifloxhO80OhuCfxDoH9J4UCvD3tbTVrS4n5PAVeq88ixanzwm/QJ1cJqGp96pfXQ==
+X-Received: by 2002:a05:620a:2288:: with SMTP id o8mr2477361qkh.368.1582852855324;
+ Thu, 27 Feb 2020 17:20:55 -0800 (PST)
+Date:   Thu, 27 Feb 2020 17:20:29 -0800
+Message-Id: <20200228012036.15682-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
+Subject: [PATCH v3 0/7] kunit: create a centralized executor to dispatch all
+ KUnit tests
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
+        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
+        akpm@linux-foundation.org, rppt@linux.ibm.com,
+        frowand.list@gmail.com
+Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
+        mcgrof@kernel.org, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We don't want to depend on the linker's orphan section placement
-heuristics as these can vary between linkers, and may change between
-versions. All sections need to be explicitly named in the linker
-script.
+## TL;DR
 
-Use common macros for debug sections, discards, and text stubs. Add
-discards for unwanted .note, and .rel sections. Finally, enable orphan
-section warning.
+This patchset adds a centralized executor to dispatch tests rather than
+relying on late_initcall to schedule each test suite separately along
+with a couple of new features that depend on it.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/arm/boot/compressed/Makefile      |  2 ++
- arch/arm/boot/compressed/vmlinux.lds.S | 17 +++++++----------
- 2 files changed, 9 insertions(+), 10 deletions(-)
+Also, sorry for the delay in getting this new revision out. I have been
+really busy for the past couple weeks.
 
-diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
-index da599c3a1193..7faa2b5e7e16 100644
---- a/arch/arm/boot/compressed/Makefile
-+++ b/arch/arm/boot/compressed/Makefile
-@@ -136,6 +136,8 @@ endif
- LDFLAGS_vmlinux += --no-undefined
- # Delete all temporary local symbols
- LDFLAGS_vmlinux += -X
-+# Report orphan sections
-+LDFLAGS_vmlinux += --orphan-handling=warn
- # Next argument is a linker script
- LDFLAGS_vmlinux += -T
- 
-diff --git a/arch/arm/boot/compressed/vmlinux.lds.S b/arch/arm/boot/compressed/vmlinux.lds.S
-index fc7ed03d8b93..a6a51b5d2328 100644
---- a/arch/arm/boot/compressed/vmlinux.lds.S
-+++ b/arch/arm/boot/compressed/vmlinux.lds.S
-@@ -2,6 +2,7 @@
- /*
-  *  Copyright (C) 2000 Russell King
-  */
-+#include <asm/vmlinux.lds.h>
- 
- #ifdef CONFIG_CPU_ENDIAN_BE8
- #define ZIMAGE_MAGIC(x) ( (((x) >> 24) & 0x000000ff) | \
-@@ -17,8 +18,11 @@ ENTRY(_start)
- SECTIONS
- {
-   /DISCARD/ : {
-+    ARM_COMMON_DISCARD
-     *(.ARM.exidx*)
-     *(.ARM.extab*)
-+    *(.note.*)
-+    *(.rel.*)
-     /*
-      * Discard any r/w data - this produces a link error if we have any,
-      * which is required for PIC decompression.  Local data generates
-@@ -37,9 +41,7 @@ SECTIONS
-     *(.text)
-     *(.text.*)
-     *(.fixup)
--    *(.gnu.warning)
--    *(.glue_7t)
--    *(.glue_7)
-+    ARM_STUBS_TEXT
-   }
-   .table : ALIGN(4) {
-     _table_start = .;
-@@ -124,12 +126,7 @@ SECTIONS
-   PROVIDE(__pecoff_data_size = ALIGN(512) - ADDR(.data));
-   PROVIDE(__pecoff_end = ALIGN(512));
- 
--  .stab 0		: { *(.stab) }
--  .stabstr 0		: { *(.stabstr) }
--  .stab.excl 0		: { *(.stab.excl) }
--  .stab.exclstr 0	: { *(.stab.exclstr) }
--  .stab.index 0		: { *(.stab.index) }
--  .stab.indexstr 0	: { *(.stab.indexstr) }
--  .comment 0		: { *(.comment) }
-+  STABS_DEBUG
-+  DWARF_DEBUG
- }
- ASSERT(_edata_real == _edata, "error: zImage file size is incorrect");
+## What am I trying to do?
+
+Conceptually, I am trying to provide a mechanism by which test suites
+can be grouped together so that they can be reasoned about collectively.
+The last two of three patches in this series add features which depend
+on this:
+
+PATCH 5/7 Prints out a test plan[1] right before KUnit tests are run;
+          this is valuable because it makes it possible for a test
+          harness to detect whether the number of tests run matches the
+          number of tests expected to be run, ensuring that no tests
+          silently failed. The test plan includes a count of tests that
+          will run. With the centralized executor, the tests are located
+          in a single data structure and thus can be counted.
+
+PATCH 6/7 Add a new kernel command-line option which allows the user to
+          specify that the kernel poweroff, halt, or reboot after
+          completing all KUnit tests; this is very handy for running
+          KUnit tests on UML or a VM so that the UML/VM process exits
+          cleanly immediately after running all tests without needing a
+          special initramfs. The centralized executor provides a
+          definitive point when all tests have completed and the
+          poweroff, halt, or reboot could occur.
+
+In addition, by dispatching tests from a single location, we can
+guarantee that all KUnit tests run after late_init is complete, which
+was a concern during the initial KUnit patchset review (this has not
+been a problem in practice, but resolving with certainty is nevertheless
+desirable).
+
+Other use cases for this exist, but the above features should provide an
+idea of the value that this could provide.
+
+## Changes since last revision:
+- On patch 7/7, I added some additional wording around the
+  kunit_shutdown command line option explaining that it runs after
+  built-in tests as suggested by Frank.
+- On the coverletter, I improved some wording and added a missing link.
+  I also specified the base-commit for the series.
+- Frank asked for some changes to the documentation; however, David is
+  taking care of that in a separate patch[2], so I did not make those
+  changes here. There will be some additional changes necessary
+  after David's patch is applied.
+
+Alan Maguire (1):
+  kunit: test: create a single centralized executor for all tests
+
+Brendan Higgins (5):
+  vmlinux.lds.h: add linker section for KUnit test suites
+  arch: um: add linker section for KUnit test suites
+  init: main: add KUnit to kernel init
+  kunit: test: add test plan to KUnit TAP format
+  Documentation: Add kunit_shutdown to kernel-parameters.txt
+
+David Gow (1):
+  kunit: Add 'kunit_shutdown' option
+
+ .../admin-guide/kernel-parameters.txt         |  8 ++
+ arch/um/include/asm/common.lds.S              |  4 +
+ include/asm-generic/vmlinux.lds.h             |  8 ++
+ include/kunit/test.h                          | 82 ++++++++++++-------
+ init/main.c                                   |  4 +
+ lib/kunit/Makefile                            |  3 +-
+ lib/kunit/executor.c                          | 71 ++++++++++++++++
+ lib/kunit/test.c                              | 11 ---
+ tools/testing/kunit/kunit_kernel.py           |  2 +-
+ tools/testing/kunit/kunit_parser.py           | 76 ++++++++++++++---
+ .../test_is_test_passed-all_passed.log        |  1 +
+ .../test_data/test_is_test_passed-crash.log   |  1 +
+ .../test_data/test_is_test_passed-failure.log |  1 +
+ 13 files changed, 218 insertions(+), 54 deletions(-)
+ create mode 100644 lib/kunit/executor.c
+
+
+base-commit: a2f0b878c3ca531a1706cb2a8b079cea3b17bafc
+
+[1] https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14-specification.md#the-plan
+[2] https://patchwork.kernel.org/patch/11383635/
+
 -- 
-2.20.1
+2.25.1.481.gfbce0eb801-goog
 
