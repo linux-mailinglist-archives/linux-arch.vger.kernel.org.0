@@ -2,144 +2,228 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B44173EEA
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 18:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3032B173FFA
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 19:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbgB1Rxk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Feb 2020 12:53:40 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:46223 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgB1Rxj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Feb 2020 12:53:39 -0500
-Received: by mail-qk1-f193.google.com with SMTP id u124so3736963qkh.13
-        for <linux-arch@vger.kernel.org>; Fri, 28 Feb 2020 09:53:37 -0800 (PST)
+        id S1726751AbgB1SyZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Feb 2020 13:54:25 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:41277 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgB1SyZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Feb 2020 13:54:25 -0500
+Received: by mail-oi1-f195.google.com with SMTP id i1so3827440oie.8
+        for <linux-arch@vger.kernel.org>; Fri, 28 Feb 2020 10:54:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7A81NCRtl/YMUGoXqhguAxYpB741arq6+hyuPYrsxj8=;
-        b=sY0DpGEQqcJV+Om5EC5uuAuFwKAdjsRvhCmg7xEn8ttC+eOSqdtl9G7psxfJzUGzyq
-         CFgexnJMO3BoZGn/iSzwSiVKiNzwcPPDrFaf2Kub18f4onnWtjyleou7j3D2qhFdanI8
-         98t3lMngB6DyG5RzEw7SjgPkXdKjFb3VE9dGVTR5oeAa+IK8b22h9bpLrpLx/BgQzkUe
-         Toz5kRGpIoqs7+ZszYosKGlJnWIVNnjOECOmsMnWFqnLNWmKzGIpmPLHE0mrnCM6fr0q
-         CIvoVZX6V+zY/5T2ce6U9NoaV0KO+J1Ir2Q/sD+StqT1lsJW9n9C8bqwLC/RPl6XtCpv
-         6fyA==
+        bh=CIzu0bxWTlPcGKncH1ZbGeY7b+QCcXLXrxcS18DRBR4=;
+        b=JfzBdla9ktw4fNC787hZT7zc7j425gzVyF0X5hWY8/xN+j/URuzBbBJxRmnDSDQVOx
+         aHQ3Fn0kKxgik2QOZOClFGPSIlVzAU8xJnSxD50jiKpsTG7ec8eTP8VKV8YVEwXVg7Hz
+         kkecREIVFjJAz+DWyiGrYGv7wzsLIrGaNBE8576fe0ZdJlh3qdW/ZCrWUv+zcNffonvP
+         HbiV8zBzNnh7FWsh0NSA5zjdpyqgCzxD+ifcv1IGOPxHrmIWm4zKpsmZ/2MpFeZQ3uU2
+         TPz4gOE650Toz2auA7PHb81dtyYUsqxgpPyM95xNNayrcko4S5oWaXejfpB7Bu0T1Ynf
+         SQjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7A81NCRtl/YMUGoXqhguAxYpB741arq6+hyuPYrsxj8=;
-        b=DFGiZDn1okkmBCYoCyOiEq69W4MyVHRev5UxXrlY8F2L44fR5myZpFK77pBxUMIo/l
-         SxLguKyGl25lOoY1WxVyC2ggSx0rbvX6MXL098Gu5qHRHsde4YrPhPxiu4azfVhqjXpy
-         Yr3EA8Rmcm/RSob4auFkULWq9qcjJuzpOju3fiyNeHCNsr6zrlI25L6O8qXWcWs4LSz+
-         U3om2kDfCH2uBRsHWt7t8CqWahQc2X//NeN7XAKMRxUBICuh5/Bd+IsIUIpU6fUxXu9W
-         nvZffDtuMfpbh7JEDNToVBFzPWgKbUpKVWXhqk/L0AsS2cBfRfKx2SokilB+/Be6irN4
-         PIMw==
-X-Gm-Message-State: APjAAAV5RReESbedzb5psA4a4vx6Bl4v1YDJnQmPfWs+j8MZOv8UYWPu
-        sxBIR578mHOl+z2Md1DBDUvMneJSUfqkqLBskV3V
-X-Google-Smtp-Source: APXvYqxuUZyxP1RTj056y0C7X/UxFsJhJD3+Tlwcqh1VF5LE+BUAzmAANREZPS01D5w3HfGzooO7MBqD5Ciibnynh/Y=
-X-Received: by 2002:ae9:f301:: with SMTP id p1mr5320690qkg.422.1582912416914;
- Fri, 28 Feb 2020 09:53:36 -0800 (PST)
+        bh=CIzu0bxWTlPcGKncH1ZbGeY7b+QCcXLXrxcS18DRBR4=;
+        b=iBMW6CqEGNchEIHm1b52sFIYLbvYhpbSlEQbTqI4rDI/dSgjU4tSXPEmJpvYHJEYXO
+         0eLfX+DH5wjgzzMXlt4aOAe0z5ZElSfET2QhgrayQPI6hLcCXHWnDdEuRev1FO9uHU9b
+         d5sCwVnTmduF1ivJdp6OjqTh6kBqL6OV+HbSwSP6rMFf5/LC3t4YtqIgPPQaFes3DNYs
+         Q2OTFybzQpiT/AOA6GG5/OAvfHjP28JDcvAZJ6GV50JdW8csUy5R0biSHcGcyU1vWPnv
+         r+A5jerimh1HaPYiqmekLeLu5wP0yyWIuAeouGXf2rKVb9zyhRtiZPxluMGSePyZrBFi
+         fGaw==
+X-Gm-Message-State: APjAAAVpozm3XrraZ9dKdxtZoSHTGviO/hIfxV9Ioo4EjCN+cHR/2w5e
+        vAQKfCWny4yfCFU8243bnNEWXx/ItoVxveY8dEIK4A==
+X-Google-Smtp-Source: APXvYqxt0rYrvlWcSwaBMM2t2EEwswWI2Tw28laQTPtRbNhE1m1zuh4EL6KxnxC0h6z8k+oOO0SSUlaSFeMMDftcDgo=
+X-Received: by 2002:a54:4510:: with SMTP id l16mr4143519oil.70.1582916062251;
+ Fri, 28 Feb 2020 10:54:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20200228012036.15682-1-brendanhiggins@google.com>
- <20200228012036.15682-2-brendanhiggins@google.com> <CAFd5g46dVaV18=5mPLTHh06KQ6nDh4Xw4r8PAZDfSXASi=Qpmg@mail.gmail.com>
-In-Reply-To: <CAFd5g46dVaV18=5mPLTHh06KQ6nDh4Xw4r8PAZDfSXASi=Qpmg@mail.gmail.com>
-From:   Iurii Zaikin <yzaikin@google.com>
-Date:   Fri, 28 Feb 2020 09:53:00 -0800
-Message-ID: <CAAXuY3qnButVR4hRQcsUbUsvLFg9cSvxSe15uG82T=j+QSQUqQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/7] vmlinux.lds.h: add linker section for KUnit test suites
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20200228164621.87523-1-elver@google.com> <Pine.LNX.4.44L0.2002281202230.1599-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2002281202230.1599-100000@iolanthe.rowland.org>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 28 Feb 2020 19:54:10 +0100
+Message-ID: <CANpmjNPHfZbBgyJu3hS2sGaN4G+F6_dfavW8Mn7ZmFj60Lb6hg@mail.gmail.com>
+Subject: Re: [PATCH] tools/memory-model/Documentation: Fix "conflict" definition
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We went with this alignment precisely because it's the largest that
-any supported arch may possibly need. The problem as I understood it
-was that the compiler, seeing a bunch of pointers decided to put them
-at the memory-access efficient alignment rather than at the section
-start. Remember that the section start used to be unaligned for some
-reason. Note that the alignment that is a multiple of smaller
-alignment is still aligned wrt the smaller alignment, so the compiler
-shouldn't need to put the pointers elsewhere.
-I wonder if there's a more robust way of forcing the compiler to put
-the pointers right at the section start and insert no gaps between
-them than playing with alignment.
+On Fri, 28 Feb 2020 at 18:24, Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Fri, 28 Feb 2020, Marco Elver wrote:
+>
+> > For language-level memory consistency models that are adaptations of
+> > data-race-free, the definition of "data race" can be summarized as
+> > "concurrent conflicting accesses, where at least one is non-sync/plain".
+> >
+> > The definition of "conflict" should not include the type of access nor
+> > whether the accesses are concurrent or not, which this patch addresses
+> > for explanation.txt.
+>
+> Why shouldn't it?  Can you provide any references to justify this
+> assertion?
 
-On Thu, Feb 27, 2020 at 11:22 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
+The definition of "conflict" as we know it and is cited by various
+papers on memory consistency models appeared in [1]: "Two accesses to
+the same variable conflict if at least one is a write; two operations
+conflict if they execute conflicting accesses."
+
+The LKMM as well as C11 are adaptations of data-race-free, which are
+based on the work in [2]. Necessarily, we need both conflicting data
+operations (plain) and synchronization operations (marked). C11's
+definition is based on [3], which defines a "data race" as:  "Two
+memory operations conflict if they access the same memory location,
+and at least one of them is a store, atomic store, or atomic
+read-modify-write operation. In a sequentially consistent execution,
+two memory operations from different threads form a type 1 data race
+if they conflict, at least one of them is a data operation, and they
+are adjacent in <T (i.e., they may be executed concurrently)."
+
+[1] D. Shasha, M. Snir, "Efficient and Correct Execution of Parallel
+Programs that Share Memory", 1988.
+      URL: http://snir.cs.illinois.edu/listed/J21.pdf
+
+[2] S. Adve, "Designing Memory Consistency Models for Shared-Memory
+Multiprocessors", 1993.
+      URL: http://sadve.cs.illinois.edu/Publications/thesis.pdf
+
+[3] H.-J. Boehm, S. Adve, "Foundations of the C++ Concurrency Memory
+Model", 2008.
+     URL: https://www.hpl.hp.com/techreports/2008/HPL-2008-56.pdf
+
+> Also, note two things: (1) The existing text does not include
+> concurrency in the definition of "conflict".  (2) Your new text does
+> include the type of access in the definition (you say that at least one
+> of the accesses must be a write).
+
+Yes, "conflict" is defined in terms of "access to the same memory
+location and at least one performs a write" (can be any operation that
+performs a write, including RMWs etc.). It should not include
+concurrency. We can have conflicting operations that are not
+concurrent, but these will never be data races.
+
+> > The definition of "data race" remains unchanged, but the informal
+> > definition for "conflict" is restored to what can be found in the
+> > literature.
 >
-> On Thu, Feb 27, 2020 at 5:20 PM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > Add a linker section where KUnit can put references to its test suites.
-> > This patch is the first step in transitioning to dispatching all KUnit
-> > tests from a centralized executor rather than having each as its own
-> > separate late_initcall.
-> >
-> > Co-developed-by: Iurii Zaikin <yzaikin@google.com>
-> > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> It does not remain unchanged.  You removed the portion that talks about
+> accesses executing on different CPUs or threads.  Without that
+> restriction, you raise the nonsensical possibility that a single thread
+> may by definition have a data race with itself (since modern CPUs use
+> multiple-instruction dispatch, in which several instructions can
+> execute at the same time).
+
+Andrea raised the point that "occur on different CPUs (or in different
+threads on the same CPU)" can be interpreted as "in different threads
+[even if they are serialized via some other synchronization]".
+
+Arguably, no sane memory model or abstract machine model permits
+observable intra-thread concurrency of instructions in the same
+thread. At the abstract machine level, whether or not there is true
+parallelism shouldn't be something that the model concerns itself
+with. Simply talking about "concurrency" is unambiguous, unless the
+model says intra-thread concurrency is a thing.
+
+I can add it back if it helps make this clearer, but we need to mention both.
+
+> > Signed-by: Marco Elver <elver@google.com>
 > > ---
-> >  include/asm-generic/vmlinux.lds.h | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
+> >  tools/memory-model/Documentation/explanation.txt | 15 ++++++---------
+> >  1 file changed, 6 insertions(+), 9 deletions(-)
 > >
-> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> > index e00f41aa8ec4f..99a866f49cb3d 100644
-> > --- a/include/asm-generic/vmlinux.lds.h
-> > +++ b/include/asm-generic/vmlinux.lds.h
-> > @@ -856,6 +856,13 @@
-> >                 KEEP(*(.con_initcall.init))                             \
-> >                 __con_initcall_end = .;
+> > diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> > index e91a2eb19592a..11cf89b5b85d9 100644
+> > --- a/tools/memory-model/Documentation/explanation.txt
+> > +++ b/tools/memory-model/Documentation/explanation.txt
+> > @@ -1986,18 +1986,15 @@ violates the compiler's assumptions, which would render the ultimate
+> >  outcome undefined.
 > >
-> > +/* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
-> > +#define KUNIT_TEST_SUITES                                              \
-> > +               . = ALIGN(8);                                           \
+> >  In technical terms, the compiler is allowed to assume that when the
+> > -program executes, there will not be any data races.  A "data race"
+> > -occurs when two conflicting memory accesses execute concurrently;
+> > -two memory accesses "conflict" if:
+> > +program executes, there will not be any data races. A "data race"
 >
-> After posting this, I saw I had gotten an email from 0day[1]. After
-> some investigation, I discovered that this 8 byte alignment works for
-> x86 64 bit fine, but only *sometimes* for 32 bit. 4 byte alignment
-> seems to work in all cases (so far). I am not sure why we went with
-> such a large alignment in hindsight. In any case, I should have a
-> fixed revision out pretty soon.
->
-> > +               __kunit_suites_start = .;                               \
-> > +               KEEP(*(.kunit_test_suites))                             \
-> > +               __kunit_suites_end = .;
-> > +
-> >  #ifdef CONFIG_BLK_DEV_INITRD
-> >  #define INIT_RAM_FS                                                    \
-> >         . = ALIGN(4);                                                   \
-> > @@ -1024,6 +1031,7 @@
-> >                 INIT_CALLS                                              \
-> >                 CON_INITCALL                                            \
-> >                 INIT_RAM_FS                                             \
-> > +               KUNIT_TEST_SUITES                                       \
-> >         }
+> Unnecessary (and inconsistent with the rest of the document) whitespace
+> change.
+
+Reverted.
+
+> > +occurs if:
 > >
-> >  #define BSS_SECTION(sbss_align, bss_align, stop_align)                 \
-> > --
+> > -     they access the same location,
+> > +     two concurrent memory accesses "conflict";
+> >
+> > -     they occur on different CPUs (or in different threads on the
+> > -     same CPU),
+> > +     and at least one of the accesses is a plain access;
+> >
+> > -     at least one of them is a plain access,
+> > -
+> > -     and at least one of them is a store.
+> > +     where two memory accesses "conflict" if they access the same
+> > +     memory location, and at least one performs a write;
+> >
+> >  The LKMM tries to determine whether a program contains two conflicting
+> >  accesses which may execute concurrently; if it does then the LKMM says
 >
-> [1] https://lists.01.org/hyperkitty/list/lkp@lists.01.org/thread/4I4UW4OAT63ETMIEUJQTOF3BFTMO6ROD/
+> To tell the truth, the only major change I can see here (apart from the
+> "differenct CPUs" restriction) is that you want to remove the "at least
+> one is plain" part from the definition of "conflict" and instead make
+> it a separate requirement for a data race.  That's fine with me in
+> principle, but there ought to be an easier way of doing it.
+
+Yes pretty much. The model needs to be able to talk about "conflicting
+synchronization accesses" where all accesses are marked. Right now the
+definition of conflict doesn't permit that.
+
+> Furthermore, this section of explanation.txt goes on to use the words
+> "conflict" and "conflicting" in a way that your patch doesn't address.
+> For example, shortly after this spot it says "Determining whether two
+> accesses conflict is easy"; you should change it to say "Determining
+> whether two accesses conflict and at least one of them is plain is
+> easy" -- but this looks pretty ungainly.  A better approach might be to
+> introduce a new term, define it to mean "conflicting accesses at least
+> one of which is plain", and then use it instead throughout.
+
+The definition of "conflict" as used in the later text is synonymous
+with "data race".
+
+> Alternatively, you could simply leave the text as it stands and just
+> add a parenthetical disclaimer pointing out that in the CS literature,
+> the term "conflict" is used even when both accesses are marked, so the
+> usage here is somewhat non-standard.
+
+The definition of what a "conflict" is, is decades old [1, 2]. I
+merely thought we should avoid changing fundamental definitions that
+have not changed in decades, to avoid confusing people. The literature
+on memory models is confusing enough, so fundamental definitions that
+are "common ground" shouldn't be changed if it can be avoided. I think
+here it is pretty trivial to avoid.
+
+Thanks,
+-- Marco
