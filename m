@@ -2,86 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0161733AB
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 10:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291B1173CA6
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 17:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbgB1JUV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Feb 2020 04:20:21 -0500
-Received: from foss.arm.com ([217.140.110.172]:35394 "EHLO foss.arm.com"
+        id S1725906AbgB1QQJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Feb 2020 11:16:09 -0500
+Received: from mga05.intel.com ([192.55.52.43]:51515 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726207AbgB1JUU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 28 Feb 2020 04:20:20 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2C8E1FB;
-        Fri, 28 Feb 2020 01:20:19 -0800 (PST)
-Received: from [10.163.1.119] (unknown [10.163.1.119])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E52C03F7B4;
-        Fri, 28 Feb 2020 01:20:10 -0800 (PST)
-Subject: Re: [PATCH] mm/debug: Add tests validating arch page table helpers
- for core features
-To:     Christophe Leroy <christophe.leroy@c-s.fr>, linux-mm@kvack.org
-Cc:     Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-riscv@lists.infradead.org,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        linux-s390@vger.kernel.org, x86@kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-snps-arc@lists.infradead.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        id S1725769AbgB1QQJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Feb 2020 11:16:09 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Feb 2020 08:16:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,496,1574150400"; 
+   d="scan'208";a="261900316"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Feb 2020 08:16:09 -0800
+Message-ID: <e35cc25c4ba1dcb4154276b1e2731891a3c600ec.camel@intel.com>
+Subject: Re: [RFC PATCH v9 01/27] Documentation/x86: Add CET description
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Vineet Gupta <vgupta@synopsys.com>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org
-References: <1582799637-11786-1-git-send-email-anshuman.khandual@arm.com>
- <51421bb3-9075-d7e9-1750-0553a1ebe64a@c-s.fr>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <f99692be-5d38-fdb7-46f1-205c7cc7481c@arm.com>
-Date:   Fri, 28 Feb 2020 14:50:09 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+Date:   Fri, 28 Feb 2020 07:55:33 -0800
+In-Reply-To: <202002251159.939AA6A@keescook>
+References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
+         <20200205181935.3712-2-yu-cheng.yu@intel.com>
+         <202002251159.939AA6A@keescook>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-In-Reply-To: <51421bb3-9075-d7e9-1750-0553a1ebe64a@c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, 2020-02-25 at 12:02 -0800, Kees Cook wrote:
+> On Wed, Feb 05, 2020 at 10:19:09AM -0800, Yu-cheng Yu wrote:
+> > Explain no_cet_shstk/no_cet_ibt kernel parameters, and introduce a new
+> > document on Control-flow Enforcement Technology (CET).
+> > 
+> > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> I'm not a huge fan of the boot param names, but I can't suggest anything
+> better. ;) I love the extensive docs!
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
+Thanks for reviewing!
 
-On 02/27/2020 04:12 PM, Christophe Leroy wrote:
-> 
-> 
-> Le 27/02/2020 à 11:33, Anshuman Khandual a écrit :
->> This adds new tests validating arch page table helpers for these following
->> core memory features. These tests create and test specific mapping types at
->> various page table levels.
->>
->> * SPECIAL mapping
->> * PROTNONE mapping
->> * DEVMAP mapping
->> * SOFTDIRTY mapping
->> * SWAP mapping
->> * MIGRATION mapping
->> * HUGETLB mapping
-> 
-> For testing HUGETLB mappings, you also have to include tests of hugepd functions/helpers. Not all archictures have hugepage size which matches with page tables levels (e.g. powerpc). Those architectures use hugepd_t.
+Yu-cheng
 
-Dont see much hugepd_t in generic HugeTLB. Just wondering which generic
-hugepd helpers can be tested here. Could you please be bit more specific.
-As we have not yet started looking for arch specific page table helpers
-test requirements, all the test scenarios here need to be generic.
-
-> 
-> Christophe
-> 
