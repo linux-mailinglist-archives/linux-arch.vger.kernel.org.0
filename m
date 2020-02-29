@@ -2,386 +2,376 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30862174101
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2020 21:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1696A17485D
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Feb 2020 18:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbgB1UbT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Feb 2020 15:31:19 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:35729 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgB1UbT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Feb 2020 15:31:19 -0500
-Received: by mail-oi1-f179.google.com with SMTP id b18so4161800oie.2
-        for <linux-arch@vger.kernel.org>; Fri, 28 Feb 2020 12:31:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QFpZW+DHoy8Dzc/faFrSVeSwAbEA+B+wfKfwlAW8gXM=;
-        b=SFVAEyNc1f5queWj+07amWwlmHutO+lwn2Pm7tFglVSR+SwizNCl5Vtvj2FDhfCLF6
-         KOMJuGYxNlegZgmwty7GMjj6jDOfuMV2aTSoZu+CyiI4C/Srqz5LHf8DfBa18CDq/niW
-         g3tzRg0rRZJ6XD30/uJgqNe9BLuR/w25xqlWmq2z0Q0PNISW2JKaJ6TuSq6mDYHPaVe7
-         DpOPr8RtKTHgssAxdCYS59TNAA/PpQzwUZe3pxoqIaCU/ugPPj+dSboBtWLNIm3N9KpO
-         5AXWRV9HBPcFFcv3VKwJQYoTQSVx/yg1HQlnFrZWG/VHY/H0QqcIAGDGFoJlhMDkm/pF
-         iXXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QFpZW+DHoy8Dzc/faFrSVeSwAbEA+B+wfKfwlAW8gXM=;
-        b=XlF8TWJDpPg80BtQ+2K59IbarOZFKjkOH747cQdjagkTD3BkeCqzMDBXMMnqpMxFt5
-         d1eDu2YZavhocpj4jAh6CCFLml7M1P/1E5GyDITK3oy2y+TmEVC1L0oC0276eaGOsbZd
-         UH4DIoPfZW7sJ9t0eukdk/7/syAGVDWPcCTd1ZZ3w5Sb4RjejUxCacIyqBfli2C/QaoE
-         C2glulNK/CXYGKtt79Ky+DaU0iiEC+72H/lD8Mw3ip0T1Pt9vvbvBonA6xLPOsnSb1o4
-         cCzqV8HY9oQJfWFii2xEdAtaBHKLja/Vq0bh77YCwgq0qLou3jItOjDcb9uytX31iP+R
-         f9Gg==
-X-Gm-Message-State: APjAAAXc6B/rCIHqzu2mZ3eOW4turUMg/h9wjSLngmXodpDdgJi4ceI8
-        8ebFN+Cw9EkcIkg49LDUF4udX6Lqz20G7rRCfvMc8w==
-X-Google-Smtp-Source: APXvYqxDd1SYnF8mCBMJdsqGi+Cd8k2+4G9bJnTyiDA35lI0ibSTjlJzHNg8iVjaEXY+GCATgeqcwHhpxAvyiJ+rtfc=
-X-Received: by 2002:a54:4510:: with SMTP id l16mr4405863oil.70.1582921876062;
- Fri, 28 Feb 2020 12:31:16 -0800 (PST)
+        id S1727194AbgB2RXq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Feb 2020 12:23:46 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:55886 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727177AbgB2RXq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Feb 2020 12:23:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=6Si9TLpxJhjW8mWab2ldu/HcfCY1uTLyNEocypbMayo=; b=qCqXkYKXQZee7Nz7LGtyQFTdWa
+        ZVGKnFYyveaS3XUHWGtQcRB3FOrAbYUm27JT/T5AyoFT3ue/iyXo8zc3ddUbZC7G9IQrm6cL/KK19
+        MThfgR/g4axpeCnWa31czFTMoSRby0YJ8yj3IwjqO2qurTtPdV/WYNmWmzPIxpE7CyLAwRzAICbq+
+        DD/JGPnBIP5lZqwP4eRIGnjzMtiBQBJtnsddAYp/iPIAYKOH3wesXgerkummOUO8SqaWGLNCP4b8j
+        H3fPBIySVY3Ur8MnMunXWtbPwqe+mlrE7w2/IRabkmxN81jPrFw5o87eGZXP6k1Sb4K+9GPfzW/iE
+        aYun8VdA==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j85q1-0006l3-4l; Sat, 29 Feb 2020 17:23:41 +0000
+Subject: Re: [RFC PATCH v14 10/10] landlock: Add user and kernel documentation
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20200224160215.4136-1-mic@digikod.net>
+ <20200224160215.4136-11-mic@digikod.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <cc8da381-d3dc-3c0a-5afd-96824362b636@infradead.org>
+Date:   Sat, 29 Feb 2020 09:23:38 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-References: <CANpmjNMOmirPRKbjX9=V+eZD-YsEvfhUU8r6EDefkOJTBLDYNQ@mail.gmail.com>
- <Pine.LNX.4.44L0.2002281424410.1599-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2002281424410.1599-100000@iolanthe.rowland.org>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 28 Feb 2020 21:31:04 +0100
-Message-ID: <CANpmjNOzh2S1fvKa+5agFoE+0ZUVUe=K2hgw3i_hj6F48Ga0Gw@mail.gmail.com>
-Subject: Re: [PATCH] tools/memory-model/Documentation: Fix "conflict" definition
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200224160215.4136-11-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 28 Feb 2020 at 21:20, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, 28 Feb 2020, Marco Elver wrote:
->
-> > On Fri, 28 Feb 2020 at 19:54, Marco Elver <elver@google.com> wrote:
-> > >
-> > > On Fri, 28 Feb 2020 at 18:24, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > >
-> > > > On Fri, 28 Feb 2020, Marco Elver wrote:
-> > > >
-> > > > > For language-level memory consistency models that are adaptations of
-> > > > > data-race-free, the definition of "data race" can be summarized as
-> > > > > "concurrent conflicting accesses, where at least one is non-sync/plain".
-> > > > >
-> > > > > The definition of "conflict" should not include the type of access nor
-> > > > > whether the accesses are concurrent or not, which this patch addresses
-> > > > > for explanation.txt.
-> > > >
-> > > > Why shouldn't it?  Can you provide any references to justify this
-> > > > assertion?
-> > >
-> > > The definition of "conflict" as we know it and is cited by various
-> > > papers on memory consistency models appeared in [1]: "Two accesses to
-> > > the same variable conflict if at least one is a write; two operations
-> > > conflict if they execute conflicting accesses."
-> > >
-> > > The LKMM as well as C11 are adaptations of data-race-free, which are
-> > > based on the work in [2]. Necessarily, we need both conflicting data
-> > > operations (plain) and synchronization operations (marked). C11's
-> > > definition is based on [3], which defines a "data race" as:  "Two
-> > > memory operations conflict if they access the same memory location,
-> > > and at least one of them is a store, atomic store, or atomic
-> > > read-modify-write operation. In a sequentially consistent execution,
-> > > two memory operations from different threads form a type 1 data race
-> > > if they conflict, at least one of them is a data operation, and they
-> > > are adjacent in <T (i.e., they may be executed concurrently)."
-> > >
-> > > [1] D. Shasha, M. Snir, "Efficient and Correct Execution of Parallel
-> > > Programs that Share Memory", 1988.
-> > >       URL: http://snir.cs.illinois.edu/listed/J21.pdf
-> > >
-> > > [2] S. Adve, "Designing Memory Consistency Models for Shared-Memory
-> > > Multiprocessors", 1993.
-> > >       URL: http://sadve.cs.illinois.edu/Publications/thesis.pdf
-> > >
-> > > [3] H.-J. Boehm, S. Adve, "Foundations of the C++ Concurrency Memory
-> > > Model", 2008.
-> > >      URL: https://www.hpl.hp.com/techreports/2008/HPL-2008-56.pdf
->
-> Okay, very good.  Please include at least one of these citations in the
-> description of the next version of your patch.
->
-> > > > Also, note two things: (1) The existing text does not include
-> > > > concurrency in the definition of "conflict".  (2) Your new text does
-> > > > include the type of access in the definition (you say that at least one
-> > > > of the accesses must be a write).
-> > >
-> > > Yes, "conflict" is defined in terms of "access to the same memory
-> > > location and at least one performs a write" (can be any operation that
-> > > performs a write, including RMWs etc.). It should not include
-> > > concurrency. We can have conflicting operations that are not
-> > > concurrent, but these will never be data races.
-> > >
-> > > > > The definition of "data race" remains unchanged, but the informal
-> > > > > definition for "conflict" is restored to what can be found in the
-> > > > > literature.
-> > > >
-> > > > It does not remain unchanged.  You removed the portion that talks about
-> > > > accesses executing on different CPUs or threads.  Without that
-> > > > restriction, you raise the nonsensical possibility that a single thread
-> > > > may by definition have a data race with itself (since modern CPUs use
-> > > > multiple-instruction dispatch, in which several instructions can
-> > > > execute at the same time).
-> > >
-> > > Andrea raised the point that "occur on different CPUs (or in different
-> > > threads on the same CPU)" can be interpreted as "in different threads
-> > > [even if they are serialized via some other synchronization]".
-> > >
-> > > Arguably, no sane memory model or abstract machine model permits
-> > > observable intra-thread concurrency of instructions in the same
-> > > thread. At the abstract machine level, whether or not there is true
-> > > parallelism shouldn't be something that the model concerns itself
-> > > with. Simply talking about "concurrency" is unambiguous, unless the
-> > > model says intra-thread concurrency is a thing.
-> > >
-> > > I can add it back if it helps make this clearer, but we need to mention both.
->
-> Then by all means, let's mention both.
->
-> > > > > Signed-by: Marco Elver <elver@google.com>
-> > > > > ---
-> > > > >  tools/memory-model/Documentation/explanation.txt | 15 ++++++---------
-> > > > >  1 file changed, 6 insertions(+), 9 deletions(-)
-> > > > >
-> > > > > diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> > > > > index e91a2eb19592a..11cf89b5b85d9 100644
-> > > > > --- a/tools/memory-model/Documentation/explanation.txt
-> > > > > +++ b/tools/memory-model/Documentation/explanation.txt
-> > > > > @@ -1986,18 +1986,15 @@ violates the compiler's assumptions, which would render the ultimate
-> > > > >  outcome undefined.
-> > > > >
-> > > > >  In technical terms, the compiler is allowed to assume that when the
-> > > > > -program executes, there will not be any data races.  A "data race"
-> > > > > -occurs when two conflicting memory accesses execute concurrently;
-> > > > > -two memory accesses "conflict" if:
-> > > > > +program executes, there will not be any data races. A "data race"
-> > > >
-> > > > Unnecessary (and inconsistent with the rest of the document) whitespace
-> > > > change.
-> > >
-> > > Reverted.
-> > >
-> > > > > +occurs if:
-> > > > >
-> > > > > -     they access the same location,
-> > > > > +     two concurrent memory accesses "conflict";
-> > > > >
-> > > > > -     they occur on different CPUs (or in different threads on the
-> > > > > -     same CPU),
-> > > > > +     and at least one of the accesses is a plain access;
-> > > > >
-> > > > > -     at least one of them is a plain access,
-> > > > > -
-> > > > > -     and at least one of them is a store.
-> > > > > +     where two memory accesses "conflict" if they access the same
-> > > > > +     memory location, and at least one performs a write;
-> > > > >
-> > > > >  The LKMM tries to determine whether a program contains two conflicting
-> > > > >  accesses which may execute concurrently; if it does then the LKMM says
-> > > >
-> > > > To tell the truth, the only major change I can see here (apart from the
-> > > > "differenct CPUs" restriction) is that you want to remove the "at least
-> > > > one is plain" part from the definition of "conflict" and instead make
-> > > > it a separate requirement for a data race.  That's fine with me in
-> > > > principle, but there ought to be an easier way of doing it.
-> > >
-> > > Yes pretty much. The model needs to be able to talk about "conflicting
-> > > synchronization accesses" where all accesses are marked. Right now the
-> > > definition of conflict doesn't permit that.
-> > >
-> > > > Furthermore, this section of explanation.txt goes on to use the words
-> > > > "conflict" and "conflicting" in a way that your patch doesn't address.
-> > > > For example, shortly after this spot it says "Determining whether two
-> > > > accesses conflict is easy"; you should change it to say "Determining
-> > > > whether two accesses conflict and at least one of them is plain is
-> > > > easy" -- but this looks pretty ungainly.  A better approach might be to
-> > > > introduce a new term, define it to mean "conflicting accesses at least
-> > > > one of which is plain", and then use it instead throughout.
-> > >
-> > > The definition of "conflict" as used in the later text is synonymous
-> > > with "data race".
-> >
-> > Correction: it's "data race" minus "concurrent" which makes things
-> > more difficult. In which case, fixing this becomes more difficult.
-> >
-> > > > Alternatively, you could simply leave the text as it stands and just
-> > > > add a parenthetical disclaimer pointing out that in the CS literature,
-> > > > the term "conflict" is used even when both accesses are marked, so the
-> > > > usage here is somewhat non-standard.
-> > >
-> > > The definition of what a "conflict" is, is decades old [1, 2]. I
-> > > merely thought we should avoid changing fundamental definitions that
-> > > have not changed in decades, to avoid confusing people. The literature
-> > > on memory models is confusing enough, so fundamental definitions that
-> > > are "common ground" shouldn't be changed if it can be avoided. I think
-> > > here it is pretty trivial to avoid.
->
-> All right.  Here is my suggestion for a patch that does more or less
-> what you want.  Fiddle around with it until you like the end result and
-> let's see what you get.
+Hi,
+Here are a few corrections for you to consider.
 
-Great, thank you!  I'll go through it and send v2 soon (won't get to
-it today though).
 
-Thanks,
--- Marco
-
-> Alan
->
->
-> Index: usb-devel/tools/memory-model/Documentation/explanation.txt
-> ===================================================================
-> --- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
-> +++ usb-devel/tools/memory-model/Documentation/explanation.txt
-> @@ -1987,28 +1987,30 @@ outcome undefined.
->
->  In technical terms, the compiler is allowed to assume that when the
->  program executes, there will not be any data races.  A "data race"
-> -occurs when two conflicting memory accesses execute concurrently;
-> -two memory accesses "conflict" if:
-> +occurs when two conflicting memory accesses execute concurrently and
-> +at least one of them is plain.  Two memory accesses "conflict" if:
->
->         they access the same location,
->
->         they occur on different CPUs (or in different threads on the
->         same CPU),
->
-> -       at least one of them is a plain access,
-> -
->         and at least one of them is a store.
->
-> -The LKMM tries to determine whether a program contains two conflicting
-> -accesses which may execute concurrently; if it does then the LKMM says
-> -there is a potential data race and makes no predictions about the
-> -program's outcome.
-> -
-> -Determining whether two accesses conflict is easy; you can see that
-> -all the concepts involved in the definition above are already part of
-> -the memory model.  The hard part is telling whether they may execute
-> -concurrently.  The LKMM takes a conservative attitude, assuming that
-> -accesses may be concurrent unless it can prove they cannot.
-> +We'll say that two accesses are "race candidates" if they conflict and
-> +at least one of them is plain.  Whether or not two candidates actually
-> +do race in a given execution then depends on whether they are
-> +concurrent.  The LKMM tries to determine whether a program contains
-> +two race candidates which may execute concurrently; if it does then
-> +the LKMM says there is a potential data race and makes no predictions
-> +about the program's outcome.
+On 2/24/20 8:02 AM, Mickaël Salaün wrote:
+> This documentation can be built with the Sphinx framework.
+> 
+> Another location might be more appropriate, though.
+> 
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
+> ---
+> 
+> Changes since v13:
+> * Rewrote the documentation according to the major revamp.
+> 
+> Previous version:
+> https://lore.kernel.org/lkml/20191104172146.30797-8-mic@digikod.net/
+> ---
+>  Documentation/security/index.rst           |   1 +
+>  Documentation/security/landlock/index.rst  |  18 ++
+>  Documentation/security/landlock/kernel.rst |  44 ++++
+>  Documentation/security/landlock/user.rst   | 233 +++++++++++++++++++++
+>  4 files changed, 296 insertions(+)
+>  create mode 100644 Documentation/security/landlock/index.rst
+>  create mode 100644 Documentation/security/landlock/kernel.rst
+>  create mode 100644 Documentation/security/landlock/user.rst
+> 
+> diff --git a/Documentation/security/landlock/index.rst b/Documentation/security/landlock/index.rst
+> new file mode 100644
+> index 000000000000..dbd33b96ce60
+> --- /dev/null
+> +++ b/Documentation/security/landlock/index.rst
+> @@ -0,0 +1,18 @@
+> +=========================================
+> +Landlock LSM: unprivileged access control
+> +=========================================
 > +
-> +Determining whether two accesses are race candidates is easy; you can
-> +see that all the concepts involved in the definition above are already
-> +part of the memory model.  The hard part is telling whether they may
-> +execute concurrently.  The LKMM takes a conservative attitude,
-> +assuming that accesses may be concurrent unless it can prove they
-> +are not.
->
->  If two memory accesses aren't concurrent then one must execute before
->  the other.  Therefore the LKMM decides two accesses aren't concurrent
-> @@ -2171,8 +2173,8 @@ again, now using plain accesses for buf:
->         }
->
->  This program does not contain a data race.  Although the U and V
-> -accesses conflict, the LKMM can prove they are not concurrent as
-> -follows:
-> +accesses are race candidates, the LKMM can prove they are not
-> +concurrent as follows:
->
->         The smp_wmb() fence in P0 is both a compiler barrier and a
->         cumul-fence.  It guarantees that no matter what hash of
-> @@ -2326,12 +2328,11 @@ could now perform the load of x before t
->  a control dependency but no address dependency at the machine level).
->
->  Finally, it turns out there is a situation in which a plain write does
-> -not need to be w-post-bounded: when it is separated from the
-> -conflicting access by a fence.  At first glance this may seem
-> -impossible.  After all, to be conflicting the second access has to be
-> -on a different CPU from the first, and fences don't link events on
-> -different CPUs.  Well, normal fences don't -- but rcu-fence can!
-> -Here's an example:
-> +not need to be w-post-bounded: when it is separated from the other
-> +race-candidate access by a fence.  At first glance this may seem
-> +impossible.  After all, to be race candidates the two accesses must
-> +be on different CPUs, and fences don't link events on different CPUs.
-> +Well, normal fences don't -- but rcu-fence can!  Here's an example:
->
->         int x, y;
->
-> @@ -2367,7 +2368,7 @@ concurrent and there is no race, even th
->  isn't w-post-bounded by any marked accesses.
->
->  Putting all this material together yields the following picture.  For
-> -two conflicting stores W and W', where W ->co W', the LKMM says the
-> +race-candidate stores W and W', where W ->co W', the LKMM says the
->  stores don't race if W can be linked to W' by a
->
->         w-post-bounded ; vis ; w-pre-bounded
-> @@ -2380,8 +2381,8 @@ sequence, and if W' is plain then they a
->
->         w-post-bounded ; vis ; r-pre-bounded
->
-> -sequence.  For a conflicting load R and store W, the LKMM says the two
-> -accesses don't race if R can be linked to W by an
-> +sequence.  For race-candidate load R and store W, the LKMM says the
-> +two accesses don't race if R can be linked to W by an
->
->         r-post-bounded ; xb* ; w-pre-bounded
->
-> @@ -2413,20 +2414,20 @@ is, the rules governing the memory subsy
->  satisfy a load request and its determination of where a store will
->  fall in the coherence order):
->
-> -       If R and W conflict and it is possible to link R to W by one
-> -       of the xb* sequences listed above, then W ->rfe R is not
-> -       allowed (i.e., a load cannot read from a store that it
-> +       If R and W are race candidates and it is possible to link R to
-> +       W by one of the xb* sequences listed above, then W ->rfe R is
-> +       not allowed (i.e., a load cannot read from a store that it
->         executes before, even if one or both is plain).
->
-> -       If W and R conflict and it is possible to link W to R by one
-> -       of the vis sequences listed above, then R ->fre W is not
-> -       allowed (i.e., if a store is visible to a load then the load
-> -       must read from that store or one coherence-after it).
-> -
-> -       If W and W' conflict and it is possible to link W to W' by one
-> -       of the vis sequences listed above, then W' ->co W is not
-> -       allowed (i.e., if one store is visible to a second then the
-> -       second must come after the first in the coherence order).
-> +       If W and R are race candidates and it is possible to link W to
-> +       R by one of the vis sequences listed above, then R ->fre W is
-> +       not allowed (i.e., if a store is visible to a load then the
-> +       load must read from that store or one coherence-after it).
+> +:Author: Mickaël Salaün
 > +
-> +       If W and W' are race candidates and it is possible to link W
-> +       to W' by one of the vis sequences listed above, then W' ->co W
-> +       is not allowed (i.e., if one store is visible to a second then
-> +       the second must come after the first in the coherence order).
->
->  This is the extent to which the LKMM deals with plain accesses.
->  Perhaps it could say more (for example, plain accesses might
->
+> +The goal of Landlock is to enable to restrict ambient rights (e.g.  global
+> +filesystem access) for a set of processes.  Because Landlock is a stackable
+> +LSM, it makes possible to create safe security sandboxes as new security layers
+> +in addition to the existing system-wide access-controls. This kind of sandbox
+> +is expected to help mitigate the security impact of bugs or
+> +unexpected/malicious behaviors in user-space applications. Landlock empower any
+
+                                                                       empowers
+
+> +process, including unprivileged ones, to securely restrict themselves.
+> +
+> +.. toctree::
+> +
+> +    user
+> +    kernel
+> diff --git a/Documentation/security/landlock/kernel.rst b/Documentation/security/landlock/kernel.rst
+> new file mode 100644
+> index 000000000000..b87769909029
+> --- /dev/null
+> +++ b/Documentation/security/landlock/kernel.rst
+> @@ -0,0 +1,44 @@
+> +==============================
+> +Landlock: kernel documentation
+> +==============================
+> +
+> +Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
+> +harden a whole system, this feature should be available to any process,
+> +including unprivileged ones.  Because such process may be compromised or
+> +backdoored (i.e. untrusted), Landlock's features must be safe to use from the
+> +kernel and other processes point of view.  Landlock's interface must therefore
+> +expose a minimal attack surface.
+> +
+> +Landlock is designed to be usable by unprivileged processes while following the
+> +system security policy enforced by other access control mechanisms (e.g. DAC,
+> +LSM).  Indeed, a Landlock rule shall not interfere with other access-controls
+> +enforced on the system, only add more restrictions.
+> +
+> +Any user can enforce Landlock rulesets on their processes.  They are merged and
+> +evaluated according to the inherited ones in a way that ensure that only more
+
+                                                           ensures
+
+> +constraints can be added.
+> +
+> +
+> +Guiding principles for safe access controls
+> +===========================================
+> +
+> +* A Landlock rule shall be focused on access control on kernel objects instead
+> +  of syscall filtering (i.e. syscall arguments), which is the purpose of
+> +  seccomp-bpf.
+> +* To avoid multiple kind of side-channel attacks (e.g. leak of security
+
+                       kinds
+
+> +  policies, CPU-based attacks), Landlock rules shall not be able to
+> +  programmatically communicate with user space.
+> +* Kernel access check shall not slow down access request from unsandboxed
+> +  processes.
+> +* Computation related to Landlock operations (e.g. enforce a ruleset) shall
+> +  only impact the processes requesting them.
+> +
+> +
+> +Landlock rulesets and domains
+> +=============================
+> +
+> +A domain is a read-only ruleset tied to a set of subjects (i.e. tasks).  A
+> +domain can transition to a new one which is the intersection of the constraints
+> +from the current and a new ruleset.  The definition of a subject is implicit
+> +for a task sandboxing itself, which makes the reasoning much easier and helps
+> +avoid pitfalls.
+> diff --git a/Documentation/security/landlock/user.rst b/Documentation/security/landlock/user.rst
+> new file mode 100644
+> index 000000000000..cbd7f61fca8c
+> --- /dev/null
+> +++ b/Documentation/security/landlock/user.rst
+> @@ -0,0 +1,233 @@
+> +=================================
+> +Landlock: userspace documentation
+> +=================================
+> +
+> +Landlock rules
+> +==============
+> +
+> +A Landlock rule enables to describe an action on an object.  An object is
+> +currently a file hierarchy, and the related filesystem actions are defined in
+> +`Access rights`_.  A set of rules are aggregated in a ruleset, which can then
+
+                                     is
+
+> +restricts the thread enforcing it, and its future children.
+
+   restrict
+
+> +
+> +
+> +Defining and enforcing a security policy
+> +----------------------------------------
+> +
+> +Before defining a security policy, an application should first probe for the
+> +features supported by the running kernel, which is important to be compatible
+> +with older kernels.  This can be done thanks to the `landlock` syscall (cf.
+> +:ref:`syscall`).
+> +
+> +.. code-block:: c
+> +
+> +    struct landlock_attr_features attr_features;
+> +
+> +    if (landlock(LANDLOCK_CMD_GET_FEATURES, LANDLOCK_OPT_GET_FEATURES,
+> +            sizeof(attr_features), &attr_features)) {
+> +        perror("Failed to probe the Landlock supported features");
+> +        return 1;
+> +    }
+> +
+> +Then, we need to create the ruleset that will contains our rules.  For this
+
+                                                 contain
+
+> +example, the ruleset will contains rules which only allow read actions, but
+
+                             contain
+
+> +write actions will be denied.  The ruleset then needs to handle both of these
+> +kind of actions.  To have a backward compatibility, these actions should be
+> +ANDed with the supported ones.
+> +
+> +.. code-block:: c
+> +
+> +    int ruleset_fd;
+> +    struct landlock_attr_ruleset ruleset = {
+> +        .handled_access_fs =
+> +            LANDLOCK_ACCESS_FS_READ |
+> +            LANDLOCK_ACCESS_FS_READDIR |
+> +            LANDLOCK_ACCESS_FS_EXECUTE |
+> +            LANDLOCK_ACCESS_FS_WRITE |
+> +            LANDLOCK_ACCESS_FS_TRUNCATE |
+> +            LANDLOCK_ACCESS_FS_CHMOD |
+> +            LANDLOCK_ACCESS_FS_CHOWN |
+> +            LANDLOCK_ACCESS_FS_CHGRP |
+> +            LANDLOCK_ACCESS_FS_LINK_TO |
+> +            LANDLOCK_ACCESS_FS_RENAME_FROM |
+> +            LANDLOCK_ACCESS_FS_RENAME_TO |
+> +            LANDLOCK_ACCESS_FS_RMDIR |
+> +            LANDLOCK_ACCESS_FS_UNLINK |
+> +            LANDLOCK_ACCESS_FS_MAKE_CHAR |
+> +            LANDLOCK_ACCESS_FS_MAKE_DIR |
+> +            LANDLOCK_ACCESS_FS_MAKE_REG |
+> +            LANDLOCK_ACCESS_FS_MAKE_SOCK |
+> +            LANDLOCK_ACCESS_FS_MAKE_FIFO |
+> +            LANDLOCK_ACCESS_FS_MAKE_BLOCK |
+> +            LANDLOCK_ACCESS_FS_MAKE_SYM,
+> +    };
+> +
+> +    ruleset.handled_access_fs &= attr_features.access_fs;
+> +    ruleset_fd = landlock(LANDLOCK_CMD_CREATE_RULESET,
+> +                    LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
+> +    if (ruleset_fd < 0) {
+> +        perror("Failed to create a ruleset");
+> +        return 1;
+> +    }
+> +
+> +We can now add a new rule to this ruleset thanks to the returned file
+> +descriptor referring to this ruleset.  The rule will only enable to read the
+> +file hierarchy ``/usr``.  Without other rule, write actions would then be
+
+                             Without other rules,
+or
+                             Without another rule,
+
+> +denied by the ruleset.  To add ``/usr`` to the ruleset, we open it with the
+> +``O_PATH`` flag and fill the &struct landlock_attr_path_beneath with this file
+> +descriptor.
+> +
+> +.. code-block:: c
+> +
+> +    int err;
+> +    struct landlock_attr_path_beneath path_beneath = {
+> +        .ruleset_fd = ruleset_fd,
+> +        .allowed_access =
+> +            LANDLOCK_ACCESS_FS_READ |
+> +            LANDLOCK_ACCESS_FS_READDIR |
+> +            LANDLOCK_ACCESS_FS_EXECUTE,
+> +    };
+> +
+> +    path_beneath.allowed_access &= attr_features.access_fs;
+> +    path_beneath.parent_fd = open("/usr", O_PATH | O_CLOEXEC);
+> +    if (path_beneath.parent_fd < 0) {
+> +        perror("Failed to open file");
+> +        close(ruleset_fd);
+> +        return 1;
+> +    }
+> +    err = landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
+> +            sizeof(path_beneath), &path_beneath);
+> +    close(path_beneath.parent_fd);
+> +    if (err) {
+> +        perror("Failed to update ruleset");
+> +        close(ruleset_fd);
+> +        return 1;
+> +    }
+> +
+> +We now have a ruleset with one rule allowing read access to ``/usr`` while
+> +denying all accesses featured in ``attr_features.access_fs`` to everything else
+> +on the filesystem.  The next step is to restrict the current thread from
+> +gaining more privileges (e.g. thanks to a SUID binary).
+> +
+> +.. code-block:: c
+> +
+> +    if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
+> +        perror("Failed to restrict privileges");
+> +        close(ruleset_fd);
+> +        return 1;
+> +    }
+> +
+> +The current thread is now ready to sandbox itself with the ruleset.
+> +
+> +.. code-block:: c
+> +
+> +    struct landlock_attr_enforce attr_enforce = {
+> +        .ruleset_fd = ruleset_fd,
+> +    };
+> +
+> +    if (landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
+> +            sizeof(attr_enforce), &attr_enforce)) {
+> +        perror("Failed to enforce ruleset");
+> +        close(ruleset_fd);
+> +        return 1;
+> +    }
+> +    close(ruleset_fd);
+> +
+> +If this last system call succeeds, the current thread is now restricted and
+
+   If this last landlock system call succeeds,
+
+[because close() is the last system call]
+
+> +this policy will be enforced on all its subsequently created children as well.
+> +Once a thread is landlocked, there is no way to remove its security policy,
+
+                                                   preferably:         policy;
+
+> +only adding more restrictions is allowed.  These threads are now in a new
+> +Landlock domain, merge of their parent one (if any) with the new ruleset.
+> +
+> +A full working code can be found in `samples/landlock/sandboxer.c`_.
+
+   Full working code
+
+> +
+> +
+> +Inheritance
+> +-----------
+> +
+> +Every new thread resulting from a :manpage:`clone(2)` inherits Landlock program
+> +restrictions from its parent.  This is similar to the seccomp inheritance (cf.
+> +:doc:`/userspace-api/seccomp_filter`) or any other LSM dealing with task's
+> +:manpage:`credentials(7)`.  For instance, one process' thread may apply
+
+                                                 process's
+
+> +Landlock rules to itself, but they will not be automatically applied to other
+> +sibling threads (unlike POSIX thread credential changes, cf.
+> +:manpage:`nptl(7)`).
+
+[snip]
+
+thanks for the documentation.
+
+-- 
+~Randy
+
