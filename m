@@ -2,242 +2,171 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1497E1760FD
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Mar 2020 18:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFAC17614D
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Mar 2020 18:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727196AbgCBR0O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Mar 2020 12:26:14 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:44746 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726997AbgCBR0O (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Mar 2020 12:26:14 -0500
-Received: by mail-oi1-f193.google.com with SMTP id d62so11037907oia.11
-        for <linux-arch@vger.kernel.org>; Mon, 02 Mar 2020 09:26:13 -0800 (PST)
+        id S1727372AbgCBRln (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Mar 2020 12:41:43 -0500
+Received: from mail-yw1-f66.google.com ([209.85.161.66]:36389 "EHLO
+        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727113AbgCBRlm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Mar 2020 12:41:42 -0500
+Received: by mail-yw1-f66.google.com with SMTP id y72so601266ywg.3;
+        Mon, 02 Mar 2020 09:41:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZaTSpHFt5MftmtYSad2hy72pa4qDj42XRRqq+4ZzagY=;
-        b=NKuXIOmW6Kp0pimikekP7b6UVUrv8Ao4Ih3ThTYwqXs3GTDmpWRxxoRjBApBQP1/Nd
-         uB8VieSU3E9sg6JuCKG27NvNMcIGzT6j7RK9vRU4FAVNpQ8wO6miysv7di6vR5w5IAKz
-         4VcolKDLzzq3JGIaEKKmO0X6IaasU+onNZo3ejuYTP1NcePjVqcVLUHxpgc8MuhZDWUX
-         HM4+u2Cr7UI09iut8dZJuMRPwAjyWQzu/Z7kvGshW48WLBsCU10OjKESE/8oVchrUltq
-         UFS/Fb3G9W8oEzX1VGdkNpV5dvPvw0EoOAIWLeiXFFoWjC6VYE+yyjAjrIGYPnvNRK99
-         X9pA==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=dYlMCFEFqOMadOO8IzsSF9BCCu0uVYKw4ttVJjvihz0=;
+        b=nb2CEkZXcfXtjfKHIGZMNZJPzPN2c5kHU5Fg9XdUWimVElcJtdjh2A7+zv60C/i9pJ
+         8yRcMh815pLGqOJdx5dYFY2fsPmz7qvqLxwKMQ5UL7X0q+JP95rOvRxcEmNy6q4CNf/m
+         C5QnVoh80VVruTlj/BuU/fq6EGnu63P41zlYsFxv6eh+S7wXKhwlW0Op0w+9mk2RQNuU
+         cFsVRUahJMQK3Dib27Xm5BxyPVybJQeH++kSH79o12bY3j1PTkSCyhwEEi0XRNqDNHy1
+         dryssjqF7zUhKHLCMvv14dzqbRnWZUOkyR5l3pdbraJ/L8G0lnyjk+mQbe50Lg6q4m6S
+         xkaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZaTSpHFt5MftmtYSad2hy72pa4qDj42XRRqq+4ZzagY=;
-        b=YjwUSpfYUPmZVMb9vIU6eLvw2aKaN0yXDCEfBshd50wIU7yw2ImkiVDu+X+4l+s5CY
-         ThP0Y00KoZqQhATTb0uMRjD0YPvcz6clmKttbhI9168qOIvkI7Ac2A1lqtlc17oOqEoD
-         3Sp3oTPGazqmm2hGhSp/CaG7WwzIKi1e++896NjMAfMmXEni6PnJI8RVbeVyO1p19ESI
-         hj5unCGjfishFyOHLjKZ+SZMGOKpxFmF8Hhyp0hhbjURxqHbachysj+O6/wjwokmZXaT
-         atHrnxnLOvX+yS/l/sRKMOSBetPVpwC5adFhbfTxOK9WNT8nKsW0w0HhKTm8N9b9Virx
-         5qlA==
-X-Gm-Message-State: ANhLgQ33oT7hIXE1oFnxSZym3iuLl1DqIY8c8dMK4x95Wg2kztXG2UZn
-        x2snvLnejMjEaxtO3mUyPySrabqEIAwXz6ChwcHBSg==
-X-Google-Smtp-Source: ADFU+vuzdmbsyQ7A/wZpIbN3I4xIuHRBw+o6xIZWogCdM+JXhx55nlFMOyS+sSzpeoos8f+VxD88eidDyh1YfrUYWyo=
-X-Received: by 2002:a54:4510:: with SMTP id l16mr138926oil.70.1583169972647;
- Mon, 02 Mar 2020 09:26:12 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dYlMCFEFqOMadOO8IzsSF9BCCu0uVYKw4ttVJjvihz0=;
+        b=pY9sB7bOuSPPy4Q8mGgOiMNPLkZQj21oH+/RSGS4/2njX0O28Z72xsIR3MmjRRAjYo
+         bO8eTdA5p1H6V791Vv+o1rSBGpK6Pkt+iKumAmKF7cbqv9y5Zqj20OXINu3Q08QaPsKP
+         TuUhWdA0qKeTWKb7Ihox/IB3Q378hnkXHC9o7BJ4ZQWbRNn6VG79xJ1B9BQk0f2nsD3+
+         94OyRli7clJh9oPtAqCpHiUuwmBpJD3AWK3JxqvCgvQuvZ1QJQIIBOGkeccbBXVaGnRu
+         cyPIYjtjxn92SCaWVzxnARYz0Owu2LDus/O+HzLsOAFyAJEjH9IvBm4OnXKlRSljJXXi
+         p8YA==
+X-Gm-Message-State: ANhLgQ2jjVXUsYEHIFTrFcm6vl+ShK73ObKZbiYOYC31NniwXwv7iSbG
+        RBHsxUJqFEJ1oNedTNgmAkc=
+X-Google-Smtp-Source: ADFU+vvaOwr52RxWLXDEfPTsHqlNlLjGEZWIP4dr8yNuQgd02OjLw5GbYYNFr0RxFTnS8szXqb3D8A==
+X-Received: by 2002:a81:4417:: with SMTP id r23mr488559ywa.240.1583170900590;
+        Mon, 02 Mar 2020 09:41:40 -0800 (PST)
+Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
+        by smtp.gmail.com with ESMTPSA id q63sm4834263ywg.106.2020.03.02.09.41.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 02 Mar 2020 09:41:40 -0800 (PST)
+Subject: Re: [PATCH v3 0/7] kunit: create a centralized executor to dispatch
+ all KUnit tests
+To:     Brendan Higgins <brendanhiggins@google.com>, jdike@addtoit.com,
+        richard@nod.at, anton.ivanov@cambridgegreys.com, arnd@arndb.de,
+        keescook@chromium.org, skhan@linuxfoundation.org,
+        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
+        akpm@linux-foundation.org, rppt@linux.ibm.com
+Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
+        mcgrof@kernel.org, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20200228012036.15682-1-brendanhiggins@google.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+Message-ID: <da91797a-8640-12c7-8265-94586aacfa4c@gmail.com>
+Date:   Mon, 2 Mar 2020 11:41:39 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20200302141819.40270-1-elver@google.com> <Pine.LNX.4.44L0.2003021134360.1555-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2003021134360.1555-100000@iolanthe.rowland.org>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 2 Mar 2020 18:26:01 +0100
-Message-ID: <CANpmjNPeRibmjpNfWEcfayPsEqKJ0uwU7=7w4CGuyWMdhdPrrg@mail.gmail.com>
-Subject: Re: [PATCH v2] tools/memory-model/Documentation: Fix "conflict" definition
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        LKMM Maintainers -- Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200228012036.15682-1-brendanhiggins@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 2 Mar 2020 at 17:47, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, 2 Mar 2020, Marco Elver wrote:
->
-> > Alan: I think this needs your Signed-off-by, since I added you as
-> > Co-developed-by.
->
-> Here you go:
->
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
->
-> > Let me know if this works for you.
->
-> See below.
->
-> > The definition of "conflict" should not include the type of access nor
-> > whether the accesses are concurrent or not, which this patch addresses.
-> > The definition of "data race" remains unchanged.
-> >
-> > The definition of "conflict" as we know it and is cited by various
-> > papers on memory consistency models appeared in [1]: "Two accesses to
-> > the same variable conflict if at least one is a write; two operations
-> > conflict if they execute conflicting accesses."
-> >
-> > The LKMM as well as the C11 memory model are adaptations of
-> > data-race-free, which are based on the work in [2]. Necessarily, we need
-> > both conflicting data operations (plain) and synchronization operations
-> > (marked). For example, C11's definition is based on [3], which defines a
-> > "data race" as: "Two memory operations conflict if they access the same
-> > memory location, and at least one of them is a store, atomic store, or
-> > atomic read-modify-write operation. In a sequentially consistent
-> > execution, two memory operations from different threads form a type 1
-> > data race if they conflict, at least one of them is a data operation,
-> > and they are adjacent in <T (i.e., they may be executed concurrently)."
-> >
-> > [1] D. Shasha, M. Snir, "Efficient and Correct Execution of Parallel
-> >     Programs that Share Memory", 1988.
-> >       URL: http://snir.cs.illinois.edu/listed/J21.pdf
-> >
-> > [2] S. Adve, "Designing Memory Consistency Models for Shared-Memory
-> >     Multiprocessors", 1993.
-> >       URL: http://sadve.cs.illinois.edu/Publications/thesis.pdf
-> >
-> > [3] H.-J. Boehm, S. Adve, "Foundations of the C++ Concurrency Memory
-> >     Model", 2008.
-> >       URL: https://www.hpl.hp.com/techreports/2008/HPL-2008-56.pdf
-> >
-> > Signed-off-by: Marco Elver <elver@google.com>
-> > Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
-> > ---
-> > v2:
-> > * Apply Alan's suggested version.
-> >   - Move "from different CPUs (or threads)" from "conflict" to "data
-> >     race" definition. Update "race candidate" accordingly.
-> > * Add citations to commit message.
-> >
-> > v1: http://lkml.kernel.org/r/20200228164621.87523-1-elver@google.com
-> > ---
-> >  .../Documentation/explanation.txt             | 77 +++++++++----------
-> >  1 file changed, 38 insertions(+), 39 deletions(-)
-> >
-> > diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> > index e91a2eb19592a..7a59cadc2f4ca 100644
-> > --- a/tools/memory-model/Documentation/explanation.txt
-> > +++ b/tools/memory-model/Documentation/explanation.txt
-> > @@ -1987,28 +1987,28 @@ outcome undefined.
-> >
-> >  In technical terms, the compiler is allowed to assume that when the
-> >  program executes, there will not be any data races.  A "data race"
-> > -occurs when two conflicting memory accesses execute concurrently;
-> > -two memory accesses "conflict" if:
-> > +occurs when two conflicting memory accesses from different CPUs (or
-> > +different threads on the same CPU) execute concurrently, and at least
-> > +one of them is plain.  Two memory accesses "conflict" if:
-> >
-> >       they access the same location,
-> >
-> > -     they occur on different CPUs (or in different threads on the
-> > -     same CPU),
-> > -
-> > -     at least one of them is a plain access,
-> > -
-> >       and at least one of them is a store.
-> >
-> > -The LKMM tries to determine whether a program contains two conflicting
-> > -accesses which may execute concurrently; if it does then the LKMM says
-> > -there is a potential data race and makes no predictions about the
-> > -program's outcome.
-> > -
-> > -Determining whether two accesses conflict is easy; you can see that
-> > -all the concepts involved in the definition above are already part of
-> > -the memory model.  The hard part is telling whether they may execute
-> > -concurrently.  The LKMM takes a conservative attitude, assuming that
-> > -accesses may be concurrent unless it can prove they cannot.
-> > +We'll say that two accesses from different threads are "race
-> > +candidates" if they conflict and at least one of them is plain.
-> > +Whether or not two candidates actually do race in a given execution
-> > +then depends on whether they are concurrent.  The LKMM tries to
-> > +determine whether a program contains race candidates which may execute
-> > +concurrently; if it does then the LKMM says there is a potential data
-> > +race and makes no predictions about the program's outcome.
->
-> Hmmm.  Although the content is okay, I don't like the organization very
-> much.  What do you think of this for the above portion of the patch)?
+On 2/27/20 7:20 PM, Brendan Higgins wrote:
+> ## TL;DR
+> 
+> This patchset adds a centralized executor to dispatch tests rather than
+> relying on late_initcall to schedule each test suite separately along
+> with a couple of new features that depend on it.
+> 
+> Also, sorry for the delay in getting this new revision out. I have been
+> really busy for the past couple weeks.
+> 
+> ## What am I trying to do?
+> 
+> Conceptually, I am trying to provide a mechanism by which test suites
+> can be grouped together so that they can be reasoned about collectively.
+> The last two of three patches in this series add features which depend
+> on this:
+> 
+> PATCH 5/7 Prints out a test plan[1] right before KUnit tests are run;
+>           this is valuable because it makes it possible for a test
+>           harness to detect whether the number of tests run matches the
+>           number of tests expected to be run, ensuring that no tests
+>           silently failed. The test plan includes a count of tests that
+>           will run. With the centralized executor, the tests are located
+>           in a single data structure and thus can be counted.
+> 
+> PATCH 6/7 Add a new kernel command-line option which allows the user to
+>           specify that the kernel poweroff, halt, or reboot after
+>           completing all KUnit tests; this is very handy for running
+>           KUnit tests on UML or a VM so that the UML/VM process exits
+>           cleanly immediately after running all tests without needing a
+>           special initramfs. The centralized executor provides a
+>           definitive point when all tests have completed and the
+>           poweroff, halt, or reboot could occur.
+> 
+> In addition, by dispatching tests from a single location, we can
+> guarantee that all KUnit tests run after late_init is complete, which
+> was a concern during the initial KUnit patchset review (this has not
+> been a problem in practice, but resolving with certainty is nevertheless
+> desirable).
+> 
+> Other use cases for this exist, but the above features should provide an
+> idea of the value that this could provide.
+> 
+> ## Changes since last revision:
+> - On patch 7/7, I added some additional wording around the
+>   kunit_shutdown command line option explaining that it runs after
+>   built-in tests as suggested by Frank.
+> - On the coverletter, I improved some wording and added a missing link.
+>   I also specified the base-commit for the series.
 
-Thanks, looks good to me. Applied in v3:
-http://lkml.kernel.org/r/20200302172101.157917-1-elver@google.com
+> - Frank asked for some changes to the documentation; however, David is
+>   taking care of that in a separate patch[2], so I did not make those
+>   changes here. There will be some additional changes necessary
+>   after David's patch is applied.
 
--- Marco
+Making the documentation changes after David's patches sounds like
+a good plan to me.
 
-> Alan Stern
->
->
->
-> Index: usb-devel/tools/memory-model/Documentation/explanation.txt
-> ===================================================================
-> --- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
-> +++ usb-devel/tools/memory-model/Documentation/explanation.txt
-> @@ -1987,28 +1987,36 @@ outcome undefined.
->
->  In technical terms, the compiler is allowed to assume that when the
->  program executes, there will not be any data races.  A "data race"
-> -occurs when two conflicting memory accesses execute concurrently;
-> -two memory accesses "conflict" if:
-> +occurs when there are two memory accesses such that:
->
-> -       they access the same location,
-> +1.     they access the same location,
->
-> -       they occur on different CPUs (or in different threads on the
-> -       same CPU),
-> +2.     at least one of them is a store,
-> +
-> +3.     at least one of them is plain,
->
-> -       at least one of them is a plain access,
-> +4.     they occur on different CPUs (or in different threads on the
-> +       same CPU), and
->
-> -       and at least one of them is a store.
-> +5.     they execute concurrently.
->
-> -The LKMM tries to determine whether a program contains two conflicting
-> -accesses which may execute concurrently; if it does then the LKMM says
-> -there is a potential data race and makes no predictions about the
-> +In the literature, two accesses are said to "conflict" if they satisfy
-> +1 and 2 above.  We'll go a little farther and say that two accesses
-> +are "race candidates" if they satisfy 1 - 4.  Thus, whether or not two
-> +race candidates actually do race in a given execution depends on
-> +whether they are concurrent.
-> +
-> +The LKMM tries to determine whether a program contains two race
-> +candidates which may execute concurrently; if it does then the LKMM
-> +says there is a potential data race and makes no predictions about the
->  program's outcome.
->
-> -Determining whether two accesses conflict is easy; you can see that
-> -all the concepts involved in the definition above are already part of
-> -the memory model.  The hard part is telling whether they may execute
-> -concurrently.  The LKMM takes a conservative attitude, assuming that
-> -accesses may be concurrent unless it can prove they cannot.
-> +Determining whether two accesses are race candidates is easy; you can
-> +see that all the concepts involved in the definition above are already
-> +part of the memory model.  The hard part is telling whether they may
-> +execute concurrently.  The LKMM takes a conservative attitude,
-> +assuming that accesses may be concurrent unless it can prove they
-> +are not.
->
->  If two memory accesses aren't concurrent then one must execute before
->  the other.  Therefore the LKMM decides two accesses aren't concurrent
->
->
+-Frank
+
+> 
+> Alan Maguire (1):
+>   kunit: test: create a single centralized executor for all tests
+> 
+> Brendan Higgins (5):
+>   vmlinux.lds.h: add linker section for KUnit test suites
+>   arch: um: add linker section for KUnit test suites
+>   init: main: add KUnit to kernel init
+>   kunit: test: add test plan to KUnit TAP format
+>   Documentation: Add kunit_shutdown to kernel-parameters.txt
+> 
+> David Gow (1):
+>   kunit: Add 'kunit_shutdown' option
+> 
+>  .../admin-guide/kernel-parameters.txt         |  8 ++
+>  arch/um/include/asm/common.lds.S              |  4 +
+>  include/asm-generic/vmlinux.lds.h             |  8 ++
+>  include/kunit/test.h                          | 82 ++++++++++++-------
+>  init/main.c                                   |  4 +
+>  lib/kunit/Makefile                            |  3 +-
+>  lib/kunit/executor.c                          | 71 ++++++++++++++++
+>  lib/kunit/test.c                              | 11 ---
+>  tools/testing/kunit/kunit_kernel.py           |  2 +-
+>  tools/testing/kunit/kunit_parser.py           | 76 ++++++++++++++---
+>  .../test_is_test_passed-all_passed.log        |  1 +
+>  .../test_data/test_is_test_passed-crash.log   |  1 +
+>  .../test_data/test_is_test_passed-failure.log |  1 +
+>  13 files changed, 218 insertions(+), 54 deletions(-)
+>  create mode 100644 lib/kunit/executor.c
+> 
+> 
+> base-commit: a2f0b878c3ca531a1706cb2a8b079cea3b17bafc
+> 
+> [1] https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14-specification.md#the-plan
+> [2] https://patchwork.kernel.org/patch/11383635/
+> 
+
