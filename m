@@ -2,180 +2,238 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A328517595E
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Mar 2020 12:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2508175CCA
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Mar 2020 15:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgCBLVW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Mar 2020 06:21:22 -0500
-Received: from mout.gmx.net ([212.227.17.21]:52817 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725996AbgCBLVW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 2 Mar 2020 06:21:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1583147984;
-        bh=W0AEuRxwaNTM1wIbdflqt1mDaAQNU2XGAUPwGpFwfWw=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=hTNTiGkPrHFpfzTv92CxoDj+m/u7w8wulahh2YNUZ3ilgCKTOf7jYgAY8yD9Ao4qv
-         SytwzZHwpUWQzFzBhJtl2DIhQoCUV/ToAeRl5zIDJgbyNck2JHuucSsXxomLmXYLp/
-         +Dei76MRo/TXrQDxaEk4FvqRCIn9xEsmVcXYatHg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.20.71.51] ([193.16.224.3]) by mail.gmx.com (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MOREc-1ijv5y1FTa-00PwQk; Mon, 02
- Mar 2020 12:19:44 +0100
-Subject: Re: [PATCH] mm/special: Create generic fallbacks for pte_special()
- and pte_mkspecial()
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Guo Ren <guoren@kernel.org>, Brian Cain <bcain@codeaurora.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sam Creasey <sammy@sammy.net>, Michal Simek <monstr@monstr.eu>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, nios2-dev@lists.rocketboards.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1583114190-7678-1-git-send-email-anshuman.khandual@arm.com>
-From:   Helge Deller <deller@gmx.de>
-Autocrypt: addr=deller@gmx.de; keydata=
- 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
- c2TFWAS8k6RLkk41ZUU8ENX8+qZx/Q==
-Message-ID: <c026934a-02c1-8589-f925-e267fcc367ad@gmx.de>
-Date:   Mon, 2 Mar 2020 12:19:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <1583114190-7678-1-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:f+ApG8Jvu59vazNgfxUkIj2cuvWszDcxfXbYPk/EcZDTaWVlxCo
- 7wV7zMdsUJ/8jZFhXwC3GlnyQOZgVfZ0Tqc6R4FGesB2+nbn2jBLiCx5ZMoN/mqbMry/kf9
- eyq62oCq0ky/yyNMdBr8GbYpjzbMZG4HJTkzpTwkQJhDroJxo7BbG6rHO3p5L2XUNdF3zq2
- 93reBzFf1arlhD1Za6wTQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Q6U3Fl2yf6I=:XplsiSzKDGRlRZREeUVR5F
- q1u66Nwa+m17Ni84QTHrQfqh1MPBgds2Rq0St0rvtAM17I0nwJMTA1QhWnVCv1kMXp64gj3je
- n/qveNqtU4I12FpRGWzlhqv8Bb8QB9zsIIjxIsdTaY9LiPUzoE/XhR5W8HieBXkw4Gdx/BRK/
- FQtJhoQ+dFfxnqMHsqqORcW5nO01y/uX97DlRWFqslh5ZLIvXgVq5pgr5yhbJBBvpZRJFVPtN
- 6tKQqh3H1WVRUGGgSFZY/dqkyMUoQdGAo2q93krCQTvrQgPHIBRXToUpnyc9V/k6j2/t9xmYC
- KwGhZJqZtDuyPb8WK0vtIuBWmZYZ2qUbjtNvtmDYcGRoOncW9aas9w8t9v0VhY4ZXPGj/kYmX
- V7AQYz0MlYRhZkeCZPOLyvyEdQ+FzAl+8v9B9iEgY9dorqE6xVO4bXx2vS+QZKfc3oFkbx+gA
- n6HybcbWcWBAdak0fQfrxPRv+vk2X9lUpxqh0ezq8wAtPV9GRQFIekxdAyLIIq1dgV5Yl+B9r
- dWiZow6ypNbsNXhKyaxMBCcIl4YoUy0X4lAEEv5WK9txC5BjSrXaMIWBIfpZ/dTqaURXE8f1m
- 0FwiDxUPcJAoaLLcxjQjSXE27gyc1Z9cOJG3EyQjapmxQGIKDdg9A1fxpx8t2C/5946ohyIr4
- g2UIQKAQ4OB9tpSFioq10E8kfFp+OW9O6pVvCKnWVzLyh00/MBZIQn1PtJyRPFeWkjhmpWXQ5
- +kfSu+T2sdyc0JdTmz6qLQTpWgN2fDWWy6MAVAyPyfMbqp7b41tM5C2t5HZ79VoddHpzXEEpl
- PXGWFG9CuGcMBJmtW9IZKwFutXmiUNlOv5v85nfBPd9J4s8uXbE8mIm+65DIYO5/uj44QyZpC
- +OCIp2JdRtyHavuV8KKclvTFNQgS9Zss+JjpRovuWAtL1Hb/IS/K6qN9DUyIzKSefQ04cUv5x
- E2uHeFHW+Tz9Qe431t3AcpC7c/z6mhFnz/fIclEX3gJwYXahGjeapukHejVaYlhNwScnDAAVF
- onQ6IIQq5GMgaH93iAjkiGBipaimgAa1DZ0IbFxy7qaKC8sG78LNuOlbNchq3W73LSpOm6PyA
- YW7Il+1s6SFWH43UabDkvk2L3d0jC+C3YQN3g+408NwCrXBRG+sFPn1LxcJhZM6VJXeiH/LS0
- wO/2Y+Gbr+HFauHL92ZFf9/jnakPUIU8ZXPL2Uy7iz5DK1tYYcFPUv+ftyvVOomXH+YIDiy2O
- jfcobYAwoNCLoQj25
+        id S1727054AbgCBOSi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Mar 2020 09:18:38 -0500
+Received: from mail-wr1-f74.google.com ([209.85.221.74]:49737 "EHLO
+        mail-wr1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727083AbgCBOSi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Mar 2020 09:18:38 -0500
+Received: by mail-wr1-f74.google.com with SMTP id w6so5838438wrm.16
+        for <linux-arch@vger.kernel.org>; Mon, 02 Mar 2020 06:18:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=fOeP7AroqcsyRTw6L8AA/q48quQG5ja31dye1VtPbXg=;
+        b=WvHVySHdGEtgJ0JON1kvEBAfJMdlOSc+5WYZ6S//3VWQ9Aci0gB4Z+6rL07YZCf0Ms
+         mdZLaFpgb2jzJQxzbbxGBpggieUflfZ40Z6EryoNQNKHFMJcpnfcyzo4++EbUYzRTAoH
+         00VjCjfNFE77ZG1/OjeyldJJfT5YPBUCcoKNFtHtZdLSNW0crq1RUXGEe7J0ogmIyJGE
+         818rS1qz/iZFtQe72W6lu+jnh+NtPz5bcwYhPu0+6HJUr71Bh4whz8jB8osmxdepg+qY
+         yXvriNM5a2cnh7sCPWPfYGFDU3xqwPqjzLiNKDj2mKEasONCigkkAztxQY7eiS9GBXZL
+         SGYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=fOeP7AroqcsyRTw6L8AA/q48quQG5ja31dye1VtPbXg=;
+        b=uFwX+kRfLImQTO7KFno4Jtazco8FmapNnP+PaF7HwRCN74tBLJi20gwGQZHbz81WAe
+         QM629XrQXyAFfj+s56j+NKGgNTTMkukuKp4Seb24Kzf2CYBNwcvz0/jhotuLYvQGLMqs
+         VJL7k3eVPc2p+7SEw360EmHRfsqJDVRWmxWCOSdtemTvvkDuI5ou5/gJeSXn5GuZJTvM
+         u0NrNEAYp+2E+VBrTujKVyqS1/2/dSSmAs6+sn7+RkOGI7S7ICI+jelcLwIwgGPQspM4
+         ro7XgO2aK7zMf6GE0YfFZ+3qyfKYlYSrlcw9CPiYo1OgA2TO3YWWNTJvA4e84/91y+lf
+         Eweg==
+X-Gm-Message-State: APjAAAX4lPvvAM5ZJkZl/ut1zRsI4p5xw6AwD4FZb4dT4kLhoZBNDFS9
+        LE4mxtPyJXNh46XcL/GYaHlVzTuaIg==
+X-Google-Smtp-Source: APXvYqzroFcifaZUNodmfvP9Bvug+ca2oUHyHP3HiTvlgyDHz5VJ8Z83t3OYcvaKvogmq3RbkjChaV4y5g==
+X-Received: by 2002:adf:f70f:: with SMTP id r15mr22945837wrp.269.1583158715118;
+ Mon, 02 Mar 2020 06:18:35 -0800 (PST)
+Date:   Mon,  2 Mar 2020 15:18:19 +0100
+Message-Id: <20200302141819.40270-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.0.265.gbab2e86ba0-goog
+Subject: [PATCH v2] tools/memory-model/Documentation: Fix "conflict" definition
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com
+Cc:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        paulmck@kernel.org, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 02.03.20 02:56, Anshuman Khandual wrote:
-> Currently there are many platforms that dont enable HAVE_ARCH_PTE_SPECIA=
-L
-> but required to define quite similar fallback stubs for special page tab=
-le
-> entry helpers such as pte_special() and pte_mkspecial(), as they get bui=
-ld
-> in generic MM without a config check. This creates two generic fallback
-> stub definitions for these helpers, eliminating much code duplication.
->
-> mips platform has a special case where pte_special() and pte_mkspecial()
-> visibility is wider than what HAVE_ARCH_PTE_SPECIAL enablement requires.
-> This restricts those symbol visibility in order to avoid redefinitions
-> which is now exposed through this new generic stubs and subsequent build
-> failure. arm platform set_pte_at() definition needs to be moved into a C
-> file just to prevent a build failure.
->
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+The definition of "conflict" should not include the type of access nor
+whether the accesses are concurrent or not, which this patch addresses.
+The definition of "data race" remains unchanged.
 
-for parisc:
+The definition of "conflict" as we know it and is cited by various
+papers on memory consistency models appeared in [1]: "Two accesses to
+the same variable conflict if at least one is a write; two operations
+conflict if they execute conflicting accesses."
 
-Acked-by: Helge Deller <deller@gmx.de> # parisc
+The LKMM as well as the C11 memory model are adaptations of
+data-race-free, which are based on the work in [2]. Necessarily, we need
+both conflicting data operations (plain) and synchronization operations
+(marked). For example, C11's definition is based on [3], which defines a
+"data race" as: "Two memory operations conflict if they access the same
+memory location, and at least one of them is a store, atomic store, or
+atomic read-modify-write operation. In a sequentially consistent
+execution, two memory operations from different threads form a type 1
+data race if they conflict, at least one of them is a data operation,
+and they are adjacent in <T (i.e., they may be executed concurrently)."
 
-Helge
+[1] D. Shasha, M. Snir, "Efficient and Correct Execution of Parallel
+    Programs that Share Memory", 1988.
+	URL: http://snir.cs.illinois.edu/listed/J21.pdf
+
+[2] S. Adve, "Designing Memory Consistency Models for Shared-Memory
+    Multiprocessors", 1993.
+	URL: http://sadve.cs.illinois.edu/Publications/thesis.pdf
+
+[3] H.-J. Boehm, S. Adve, "Foundations of the C++ Concurrency Memory
+    Model", 2008.
+	URL: https://www.hpl.hp.com/techreports/2008/HPL-2008-56.pdf
+
+Signed-off-by: Marco Elver <elver@google.com>
+Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+---
+v2:
+* Apply Alan's suggested version.
+  - Move "from different CPUs (or threads)" from "conflict" to "data
+    race" definition. Update "race candidate" accordingly.
+* Add citations to commit message.
+
+v1: http://lkml.kernel.org/r/20200228164621.87523-1-elver@google.com
+---
+ .../Documentation/explanation.txt             | 77 +++++++++----------
+ 1 file changed, 38 insertions(+), 39 deletions(-)
+
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index e91a2eb19592a..7a59cadc2f4ca 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -1987,28 +1987,28 @@ outcome undefined.
+ 
+ In technical terms, the compiler is allowed to assume that when the
+ program executes, there will not be any data races.  A "data race"
+-occurs when two conflicting memory accesses execute concurrently;
+-two memory accesses "conflict" if:
++occurs when two conflicting memory accesses from different CPUs (or
++different threads on the same CPU) execute concurrently, and at least
++one of them is plain.  Two memory accesses "conflict" if:
+ 
+ 	they access the same location,
+ 
+-	they occur on different CPUs (or in different threads on the
+-	same CPU),
+-
+-	at least one of them is a plain access,
+-
+ 	and at least one of them is a store.
+ 
+-The LKMM tries to determine whether a program contains two conflicting
+-accesses which may execute concurrently; if it does then the LKMM says
+-there is a potential data race and makes no predictions about the
+-program's outcome.
+-
+-Determining whether two accesses conflict is easy; you can see that
+-all the concepts involved in the definition above are already part of
+-the memory model.  The hard part is telling whether they may execute
+-concurrently.  The LKMM takes a conservative attitude, assuming that
+-accesses may be concurrent unless it can prove they cannot.
++We'll say that two accesses from different threads are "race
++candidates" if they conflict and at least one of them is plain.
++Whether or not two candidates actually do race in a given execution
++then depends on whether they are concurrent.  The LKMM tries to
++determine whether a program contains race candidates which may execute
++concurrently; if it does then the LKMM says there is a potential data
++race and makes no predictions about the program's outcome.
++
++Determining whether two accesses are race candidates is easy; you can
++see that all the concepts involved in the definition above are already
++part of the memory model.  The hard part is telling whether they may
++execute concurrently.  The LKMM takes a conservative attitude,
++assuming that accesses may be concurrent unless it can prove they
++are not.
+ 
+ If two memory accesses aren't concurrent then one must execute before
+ the other.  Therefore the LKMM decides two accesses aren't concurrent
+@@ -2171,8 +2171,8 @@ again, now using plain accesses for buf:
+ 	}
+ 
+ This program does not contain a data race.  Although the U and V
+-accesses conflict, the LKMM can prove they are not concurrent as
+-follows:
++accesses are race candidates, the LKMM can prove they are not
++concurrent as follows:
+ 
+ 	The smp_wmb() fence in P0 is both a compiler barrier and a
+ 	cumul-fence.  It guarantees that no matter what hash of
+@@ -2326,12 +2326,11 @@ could now perform the load of x before the load of ptr (there might be
+ a control dependency but no address dependency at the machine level).
+ 
+ Finally, it turns out there is a situation in which a plain write does
+-not need to be w-post-bounded: when it is separated from the
+-conflicting access by a fence.  At first glance this may seem
+-impossible.  After all, to be conflicting the second access has to be
+-on a different CPU from the first, and fences don't link events on
+-different CPUs.  Well, normal fences don't -- but rcu-fence can!
+-Here's an example:
++not need to be w-post-bounded: when it is separated from the other
++race-candidate access by a fence.  At first glance this may seem
++impossible.  After all, to be race candidates the two accesses must
++be on different CPUs, and fences don't link events on different CPUs.
++Well, normal fences don't -- but rcu-fence can!  Here's an example:
+ 
+ 	int x, y;
+ 
+@@ -2367,7 +2366,7 @@ concurrent and there is no race, even though P1's plain store to y
+ isn't w-post-bounded by any marked accesses.
+ 
+ Putting all this material together yields the following picture.  For
+-two conflicting stores W and W', where W ->co W', the LKMM says the
++race-candidate stores W and W', where W ->co W', the LKMM says the
+ stores don't race if W can be linked to W' by a
+ 
+ 	w-post-bounded ; vis ; w-pre-bounded
+@@ -2380,8 +2379,8 @@ sequence, and if W' is plain then they also have to be linked by a
+ 
+ 	w-post-bounded ; vis ; r-pre-bounded
+ 
+-sequence.  For a conflicting load R and store W, the LKMM says the two
+-accesses don't race if R can be linked to W by an
++sequence.  For race-candidate load R and store W, the LKMM says the
++two accesses don't race if R can be linked to W by an
+ 
+ 	r-post-bounded ; xb* ; w-pre-bounded
+ 
+@@ -2413,20 +2412,20 @@ is, the rules governing the memory subsystem's choice of a store to
+ satisfy a load request and its determination of where a store will
+ fall in the coherence order):
+ 
+-	If R and W conflict and it is possible to link R to W by one
+-	of the xb* sequences listed above, then W ->rfe R is not
+-	allowed (i.e., a load cannot read from a store that it
++	If R and W are race candidates and it is possible to link R to
++	W by one of the xb* sequences listed above, then W ->rfe R is
++	not allowed (i.e., a load cannot read from a store that it
+ 	executes before, even if one or both is plain).
+ 
+-	If W and R conflict and it is possible to link W to R by one
+-	of the vis sequences listed above, then R ->fre W is not
+-	allowed (i.e., if a store is visible to a load then the load
+-	must read from that store or one coherence-after it).
++	If W and R are race candidates and it is possible to link W to
++	R by one of the vis sequences listed above, then R ->fre W is
++	not allowed (i.e., if a store is visible to a load then the
++	load must read from that store or one coherence-after it).
+ 
+-	If W and W' conflict and it is possible to link W to W' by one
+-	of the vis sequences listed above, then W' ->co W is not
+-	allowed (i.e., if one store is visible to a second then the
+-	second must come after the first in the coherence order).
++	If W and W' are race candidates and it is possible to link W
++	to W' by one of the vis sequences listed above, then W' ->co W
++	is not allowed (i.e., if one store is visible to a second then
++	the second must come after the first in the coherence order).
+ 
+ This is the extent to which the LKMM deals with plain accesses.
+ Perhaps it could say more (for example, plain accesses might
+-- 
+2.25.0.265.gbab2e86ba0-goog
+
