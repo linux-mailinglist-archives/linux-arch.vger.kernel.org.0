@@ -2,271 +2,168 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D0017633D
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Mar 2020 19:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722BB17636B
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Mar 2020 20:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727126AbgCBSw2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Mar 2020 13:52:28 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:52894 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726451AbgCBSw2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Mar 2020 13:52:28 -0500
-Received: by mail-wm1-f65.google.com with SMTP id p9so197499wmc.2;
-        Mon, 02 Mar 2020 10:52:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=N+92nMqwyvyqnvBWahI9x0clg05C+2OnWX3BXzruqvI=;
-        b=AMAtFQWcB1swXshKwOXCZHsI4wxf/NlKaNf435jqL37KU7tkrKWFI5nCfgIweOg41R
-         dGoGUgQcJYAIXCmkBAu2xx5WwNLo4TNtxA7i0oxWREkcWf/f89RsJSYM6cGvlzdkhijO
-         TeS12crkWY4lDZGz/ah+6KGP+ZdfkBA4tIhIPXw44fF/AM6RnFUv2g1pJgCYM6Rca2Ca
-         XM/P0ce1+LJhjRpTs9lvoIctIBgKPLPqf/YLQeliKptWdoc7lSECKErYWX7XJDJqIeKX
-         8s8wGntRXu2bW7IVMb9HBIL93E3I8mFQzTYRyVi2S2uPJcKpquuXJ53CMfhplzaqgPiH
-         lwRw==
+        id S1727479AbgCBTFl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Mar 2020 14:05:41 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:56000 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727372AbgCBTFl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Mar 2020 14:05:41 -0500
+Received: by mail-pj1-f66.google.com with SMTP id a18so193018pjs.5;
+        Mon, 02 Mar 2020 11:05:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=N+92nMqwyvyqnvBWahI9x0clg05C+2OnWX3BXzruqvI=;
-        b=fuQ6v274i3hjjqNBq2q9gflnnS87s5XOTxpUiARHH6kOUUIzPECrSVL4W3iOby2nB5
-         YLcSYtBUinR5nhZgYHFqT3rWG4jtW90xtSzpISVItCKuD81TAc7f0g9GitxXYO4/ToAH
-         Sd/c0EO/12z4DuHvKO6Dh8EH2UHcefJgwGkU7OkFPw5Ym8lDenAfOidCEvYCe2NAYtA/
-         0fyiMp40Tjn8MGi1BeCMWF8zNaclXHnn0yYP/deSUWb0z+mZ57ybSO7a9xVNCLvptYtE
-         NO9+pLHvLlujmVLQhs46JM4b99QyGy5at5wJegYvi/eCse2GFNzirhgUK1MadFSr+0k7
-         qNpw==
-X-Gm-Message-State: ANhLgQ2Os7sqRoa7brANuL0gjFmqaBD/GQPaNqBxjrlSoIqzzs9Yj+0D
-        6Re/aJHAuT+QbcYF4tbtI44=
-X-Google-Smtp-Source: ADFU+vtAzXMfZgJYhKEk08s9yz5pxY8gnWercSv+ePF/LN8nXjEr4J4i+e4/MztO1Ef4td9Vdpd3VQ==
-X-Received: by 2002:a1c:e108:: with SMTP id y8mr220600wmg.147.1583175143890;
-        Mon, 02 Mar 2020 10:52:23 -0800 (PST)
-Received: from andrea (ip-213-220-200-127.net.upcbroadband.cz. [213.220.200.127])
-        by smtp.gmail.com with ESMTPSA id t187sm474548wmt.25.2020.03.02.10.52.22
+        bh=gf4KSaQWKca7V96I6NmHZqh2rr9VA3G/cTKK6IvZdwg=;
+        b=M3wS+vGjF7lbZ/LzvbJSTd4fCwPjEpwyFf/ZLO4/MgcJej+bUl+ydkb7bDe/0/y/bD
+         FlyBdFKSQBOu98Ly3sNiEK3q+8YvjAOMT1Sv1EQlHO1TcO1TOvfgTRZw1oubXKVXHdQV
+         bICe/QTdxsr3v3q3AxbzxdJJB8fXUyBDgFTN6rSD/l11w1CtYMj3iHnHRj6+jyNf8Czr
+         PazZJgP1un2PG/fKUNLepXXPb6CvsZmfzuHi/Mvco1LBfDdCZzaiIVZfhAYRCCyh94RI
+         H87wDd/zD2ov9RtUhAVIyAUbZ2vvCz0NZ1wvfALUaB3cTxNcIPNtFwJ3/FLczOoy1M+p
+         rJnw==
+X-Gm-Message-State: ANhLgQ1DFPZYAS+xbicRGYfuaT2KL7Sw+eqOQ0rASa6s0jT1gy5ktw1U
+        JWx1cXyyXlFvDc8NKr+mg64=
+X-Google-Smtp-Source: ADFU+vvJYWwumZLWp/3ZGLRXKr5ovAW9HO2pLmZdmIrQgsVTzmXuWNa7nyU7uRH3KIT0vUQ5VwwsfA==
+X-Received: by 2002:a17:90a:8915:: with SMTP id u21mr350863pjn.87.1583175939331;
+        Mon, 02 Mar 2020 11:05:39 -0800 (PST)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id t63sm22345163pfb.70.2020.03.02.11.05.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2020 10:52:22 -0800 (PST)
-Date:   Mon, 2 Mar 2020 19:52:16 +0100
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Marco Elver <elver@google.com>
-Cc:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, paulmck@kernel.org,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3] tools/memory-model/Documentation: Fix "conflict"
- definition
-Message-ID: <20200302185216.GA5320@andrea>
-References: <20200302172101.157917-1-elver@google.com>
+        Mon, 02 Mar 2020 11:05:38 -0800 (PST)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 4C2C34035F; Mon,  2 Mar 2020 19:05:37 +0000 (UTC)
+Date:   Mon, 2 Mar 2020 19:05:37 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch
+ all KUnit tests
+Message-ID: <20200302190537.GC11244@42.do-not-panic.com>
+References: <20191216220555.245089-1-brendanhiggins@google.com>
+ <20200106224022.GX11244@42.do-not-panic.com>
+ <CAFd5g456c2Zs7rCvRPgio83G=SrtPGi25zbqAUyTBHspHwtu4w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200302172101.157917-1-elver@google.com>
+In-Reply-To: <CAFd5g456c2Zs7rCvRPgio83G=SrtPGi25zbqAUyTBHspHwtu4w@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 02, 2020 at 06:21:01PM +0100, Marco Elver wrote:
-> The definition of "conflict" should not include the type of access nor
-> whether the accesses are concurrent or not, which this patch addresses.
-> The definition of "data race" remains unchanged.
+On Thu, Jan 23, 2020 at 02:40:31PM -0800, Brendan Higgins wrote:
+> On Mon, Jan 6, 2020 at 2:40 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > On Mon, Dec 16, 2019 at 02:05:49PM -0800, Brendan Higgins wrote:
+> > dispatcher could be configurable to run at an arbirary time after boot.
+> > If there are not immediate use cases for that though, then I suppose
+> > this is not a requirement for the dispatcher. But since there exists
+> > another modular test framework with its own dispatcher and it seems the
+> > goal is to merge the work long term, this might preempt the requirement
+> > to define how and when we can dispatch tests post boot.
+> >
+> > And, if we're going to do that, I can suggest that a data structure
+> > instead of just a function init call be used to describe tests to be
+> > placed into an ELF section. With my linker table work this would be
+> > easy, I define section ranges for code describing only executable
+> > routines, but it defines linker tables for when a component in the
+> > kernel would define a data structure, part of which can be a callback.
+> > Such data structure stuffed into an ELF section could allow dynamic
+> > configuration of the dipsatching, even post boot.
 > 
-> The definition of "conflict" as we know it and is cited by various
-> papers on memory consistency models appeared in [1]: "Two accesses to
-> the same variable conflict if at least one is a write; two operations
-> conflict if they execute conflicting accesses."
-> 
-> The LKMM as well as the C11 memory model are adaptations of
-> data-race-free, which are based on the work in [2]. Necessarily, we need
-> both conflicting data operations (plain) and synchronization operations
-> (marked). For example, C11's definition is based on [3], which defines a
-> "data race" as: "Two memory operations conflict if they access the same
-> memory location, and at least one of them is a store, atomic store, or
-> atomic read-modify-write operation. In a sequentially consistent
-> execution, two memory operations from different threads form a type 1
-> data race if they conflict, at least one of them is a data operation,
-> and they are adjacent in <T (i.e., they may be executed concurrently)."
-> 
-> [1] D. Shasha, M. Snir, "Efficient and Correct Execution of Parallel
->     Programs that Share Memory", 1988.
-> 	URL: http://snir.cs.illinois.edu/listed/J21.pdf
-> 
-> [2] S. Adve, "Designing Memory Consistency Models for Shared-Memory
->     Multiprocessors", 1993.
-> 	URL: http://sadve.cs.illinois.edu/Publications/thesis.pdf
-> 
-> [3] H.-J. Boehm, S. Adve, "Foundations of the C++ Concurrency Memory
->     Model", 2008.
-> 	URL: https://www.hpl.hp.com/techreports/2008/HPL-2008-56.pdf
-> 
-> Signed-off-by: Marco Elver <elver@google.com>
-> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> The linker table work does sound interesting. Do you have a link?
 
-LGTM:
+Sure
 
-Acked-by: Andrea Parri <parri.andrea@gmail.com>
+https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20170620-linker-tables-v8
 
-Thank you both,
+I had dropped this long ago mostly due to the fact that my use case
+(removal of dead code) was more long term, and not immediate so the
+use case wasn't there yet.
 
-  Andrea
+I have been meaning to pick this work up again.
 
+> I was thinking about dynamic dispatching, actually. I thought it would
+> be handy to be able to build all tests into a single kernel and then
+> run different tests on different invocations.
 
-> ---
-> v3:
-> * Apply Alan's suggestion.
-> * s/two race candidates/race candidates/
+For built-in code it would be up to it to manage that. The linker table
+stuff would just allow a way for you to systematically aggregate
+data into an ELF section in a generic way. It does have a built in
+light weight sort mechanism, if you opt out of that and say wanted
+to do your own order it'd be up to how you program it in on the data
+structure and dispatching after that.
+
+> Also, for post boot dynamic dispatching, you should check out Alan's
+> debugfs patches:
 > 
-> v2: http://lkml.kernel.org/r/20200302141819.40270-1-elver@google.com
-> * Apply Alan's suggested version.
->   - Move "from different CPUs (or threads)" from "conflict" to "data
->     race" definition. Update "race candidate" accordingly.
-> * Add citations to commit message.
+> https://lore.kernel.org/linux-kselftest/CAFd5g46657gZ36PaP8Pi999hPPgBU2Kz94nrMspS-AzGwdBF+g@mail.gmail.com/T/#m210cadbeee267e5c5a9253d83b7b7ca723d1f871
 > 
-> v1: http://lkml.kernel.org/r/20200228164621.87523-1-elver@google.com
-> ---
->  .../Documentation/explanation.txt             | 83 ++++++++++---------
->  1 file changed, 45 insertions(+), 38 deletions(-)
+> They look pretty handy!
+
+Sure.
+
+> > I think this is a good stepping stone forward then, and to allow
+> > dynamic configuration of the dispatcher could mean eventual extensions
+> > to kunit's init stuff to stuff init calls into a data structure which
+> > can then allow configuration of the dispatching. One benefit that the
+> > linker table work *may* be able to help here with is that it allows
+> > an easy way to create kunit specific ordering, at linker time.
+> > There is also an example of addressing / generalizing dynamic / run time
+> > changes of ordering, by using the x86 IOMMU initialization as an
+> > example case. We don't have an easy way to do this today, but if kunit
+> > could benefit from such framework, it'd be another use case for
+> > the linker table work. That is, the ability to easilly allow
+> > dynamically modifying run time ordering of code through ELF sections.
+> >
+> > > In addition, by dispatching tests from a single location, we can
+> > > guarantee that all KUnit tests run after late_init is complete, which
+> > > was a concern during the initial KUnit patchset review (this has not
+> > > been a problem in practice, but resolving with certainty is nevertheless
+> > > desirable).
+> >
+> > Indeed, the concern is just a real semantics limitations. With the tests
+> > *always* running after all subsystem init stuff, we know we'd have a
+> > real full kernel ready.
 > 
-> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> index e91a2eb19592a..993f800659c6a 100644
-> --- a/tools/memory-model/Documentation/explanation.txt
-> +++ b/tools/memory-model/Documentation/explanation.txt
-> @@ -1987,28 +1987,36 @@ outcome undefined.
->  
->  In technical terms, the compiler is allowed to assume that when the
->  program executes, there will not be any data races.  A "data race"
-> -occurs when two conflicting memory accesses execute concurrently;
-> -two memory accesses "conflict" if:
-> +occurs when there are two memory accesses such that:
->  
-> -	they access the same location,
-> +1.	they access the same location,
->  
-> -	they occur on different CPUs (or in different threads on the
-> -	same CPU),
-> +2.	at least one of them is a store,
->  
-> -	at least one of them is a plain access,
-> +3.	at least one of them is plain,
->  
-> -	and at least one of them is a store.
-> +4.	they occur on different CPUs (or in different threads on the
-> +	same CPU), and
->  
-> -The LKMM tries to determine whether a program contains two conflicting
-> -accesses which may execute concurrently; if it does then the LKMM says
-> -there is a potential data race and makes no predictions about the
-> -program's outcome.
-> +5.	they execute concurrently.
->  
-> -Determining whether two accesses conflict is easy; you can see that
-> -all the concepts involved in the definition above are already part of
-> -the memory model.  The hard part is telling whether they may execute
-> -concurrently.  The LKMM takes a conservative attitude, assuming that
-> -accesses may be concurrent unless it can prove they cannot.
-> +In the literature, two accesses are said to "conflict" if they satisfy
-> +1 and 2 above.  We'll go a little farther and say that two accesses
-> +are "race candidates" if they satisfy 1 - 4.  Thus, whether or not two
-> +race candidates actually do race in a given execution depends on
-> +whether they are concurrent.
-> +
-> +The LKMM tries to determine whether a program contains race candidates
-> +which may execute concurrently; if it does then the LKMM says there is
-> +a potential data race and makes no predictions about the program's
-> +outcome.
-> +
-> +Determining whether two accesses are race candidates is easy; you can
-> +see that all the concepts involved in the definition above are already
-> +part of the memory model.  The hard part is telling whether they may
-> +execute concurrently.  The LKMM takes a conservative attitude,
-> +assuming that accesses may be concurrent unless it can prove they
-> +are not.
->  
->  If two memory accesses aren't concurrent then one must execute before
->  the other.  Therefore the LKMM decides two accesses aren't concurrent
-> @@ -2171,8 +2179,8 @@ again, now using plain accesses for buf:
->  	}
->  
->  This program does not contain a data race.  Although the U and V
-> -accesses conflict, the LKMM can prove they are not concurrent as
-> -follows:
-> +accesses are race candidates, the LKMM can prove they are not
-> +concurrent as follows:
->  
->  	The smp_wmb() fence in P0 is both a compiler barrier and a
->  	cumul-fence.  It guarantees that no matter what hash of
-> @@ -2326,12 +2334,11 @@ could now perform the load of x before the load of ptr (there might be
->  a control dependency but no address dependency at the machine level).
->  
->  Finally, it turns out there is a situation in which a plain write does
-> -not need to be w-post-bounded: when it is separated from the
-> -conflicting access by a fence.  At first glance this may seem
-> -impossible.  After all, to be conflicting the second access has to be
-> -on a different CPU from the first, and fences don't link events on
-> -different CPUs.  Well, normal fences don't -- but rcu-fence can!
-> -Here's an example:
-> +not need to be w-post-bounded: when it is separated from the other
-> +race-candidate access by a fence.  At first glance this may seem
-> +impossible.  After all, to be race candidates the two accesses must
-> +be on different CPUs, and fences don't link events on different CPUs.
-> +Well, normal fences don't -- but rcu-fence can!  Here's an example:
->  
->  	int x, y;
->  
-> @@ -2367,7 +2374,7 @@ concurrent and there is no race, even though P1's plain store to y
->  isn't w-post-bounded by any marked accesses.
->  
->  Putting all this material together yields the following picture.  For
-> -two conflicting stores W and W', where W ->co W', the LKMM says the
-> +race-candidate stores W and W', where W ->co W', the LKMM says the
->  stores don't race if W can be linked to W' by a
->  
->  	w-post-bounded ; vis ; w-pre-bounded
-> @@ -2380,8 +2387,8 @@ sequence, and if W' is plain then they also have to be linked by a
->  
->  	w-post-bounded ; vis ; r-pre-bounded
->  
-> -sequence.  For a conflicting load R and store W, the LKMM says the two
-> -accesses don't race if R can be linked to W by an
-> +sequence.  For race-candidate load R and store W, the LKMM says the
-> +two accesses don't race if R can be linked to W by an
->  
->  	r-post-bounded ; xb* ; w-pre-bounded
->  
-> @@ -2413,20 +2420,20 @@ is, the rules governing the memory subsystem's choice of a store to
->  satisfy a load request and its determination of where a store will
->  fall in the coherence order):
->  
-> -	If R and W conflict and it is possible to link R to W by one
-> -	of the xb* sequences listed above, then W ->rfe R is not
-> -	allowed (i.e., a load cannot read from a store that it
-> +	If R and W are race candidates and it is possible to link R to
-> +	W by one of the xb* sequences listed above, then W ->rfe R is
-> +	not allowed (i.e., a load cannot read from a store that it
->  	executes before, even if one or both is plain).
->  
-> -	If W and R conflict and it is possible to link W to R by one
-> -	of the vis sequences listed above, then R ->fre W is not
-> -	allowed (i.e., if a store is visible to a load then the load
-> -	must read from that store or one coherence-after it).
-> +	If W and R are race candidates and it is possible to link W to
-> +	R by one of the vis sequences listed above, then R ->fre W is
-> +	not allowed (i.e., if a store is visible to a load then the
-> +	load must read from that store or one coherence-after it).
->  
-> -	If W and W' conflict and it is possible to link W to W' by one
-> -	of the vis sequences listed above, then W' ->co W is not
-> -	allowed (i.e., if one store is visible to a second then the
-> -	second must come after the first in the coherence order).
-> +	If W and W' are race candidates and it is possible to link W
-> +	to W' by one of the vis sequences listed above, then W' ->co W
-> +	is not allowed (i.e., if one store is visible to a second then
-> +	the second must come after the first in the coherence order).
->  
->  This is the extent to which the LKMM deals with plain accesses.
->  Perhaps it could say more (for example, plain accesses might
-> -- 
-> 2.25.0.265.gbab2e86ba0-goog
+> Yep.
 > 
+> > It does beg the question if this means kunit is happy to not be a tool
+> > to test pre basic setup stuff (terminology used in init.c, meaning prior
+> > to running all init levels). I suspect this is the case.
+> 
+> Not sure. I still haven't seen any cases where this is necessary, so I
+> am not super worried about it. Regardless, I don't think this patchset
+> really changes anything in that regard, we are moving from late_init
+> to after late_init, so it isn't that big of a change for most use
+> cases.
+> 
+> Please share if you can think of some things that need to be tested in
+> early init.
+
+If and when we get to that point we can deal with it then. My instincts
+tell me that for early init code we should probably be specially crafted
+tests and have they should have their own hand crafted dispatchers.
+
+  Luis
