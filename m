@@ -2,194 +2,259 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BCD176432
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Mar 2020 20:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B32F17643E
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Mar 2020 20:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbgCBTpO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Mar 2020 14:45:14 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42706 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725446AbgCBTpO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Mar 2020 14:45:14 -0500
-Received: by mail-pf1-f193.google.com with SMTP id f5so207188pfk.9;
-        Mon, 02 Mar 2020 11:45:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zv01SEUeCJ59DbCUMYh/kAHbXD3GWjSPFMrk4H/TzUU=;
-        b=eNGTsHiWbVAmw/H+i3cGcvHhAtftRRIA5WCiEA8T3uxEM4cjfuxU9iJunmtcLRS7C9
-         l0sbbROJT1cXdidej9nx0YkVUzR5nMTowCacRi0EBqjNw0wkzOcMRzZN2s36HFy/aXTp
-         G1yMSaBOIWq1TAOqOfENDbJjRyhyHpy3xTelGev5bw33vZMKI/lMbu+iJq7kmQ+fpf04
-         wLvwrepRFk4vvs/iSMSptZG9ct3Z9YfM7pwF80zxHYVINCsK+BYJq9Ox7+2dpjCZZlHD
-         wT6Bhq83/0Wxfege5+q64HvP7nFx2WluhoRdtpKBL5GTfW+VSiicr4T1Pp73ylhHpJZd
-         K7lw==
-X-Gm-Message-State: ANhLgQ1YRvDOriW4vUiXN3WFUzcG+HJbyKSooWXYkOr7HKDUL5bomZdB
-        Zwrck7ZrO5iePe/ZcF2uE8U=
-X-Google-Smtp-Source: ADFU+vsMDX1gP7FI7WhGs7DHxMv8C1GXDd1iWXtobLWN0ui4VcoCkASmipk8Z+H2vian4+OAyRRrKQ==
-X-Received: by 2002:a63:7207:: with SMTP id n7mr454669pgc.253.1583178312655;
-        Mon, 02 Mar 2020 11:45:12 -0800 (PST)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id h13sm52586pjc.9.2020.03.02.11.45.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2020 11:45:11 -0800 (PST)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 490A24035F; Mon,  2 Mar 2020 19:45:09 +0000 (UTC)
-Date:   Mon, 2 Mar 2020 19:45:09 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>, g@42.do-not-panic.com
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch
- all KUnit tests
-Message-ID: <20200302194509.GD11244@42.do-not-panic.com>
-References: <20191216220555.245089-1-brendanhiggins@google.com>
- <20200106224022.GX11244@42.do-not-panic.com>
- <CAFd5g456c2Zs7rCvRPgio83G=SrtPGi25zbqAUyTBHspHwtu4w@mail.gmail.com>
- <594b7815-0611-34ea-beb5-0642114b5d82@gmail.com>
- <CAFd5g469TWzrLKmQNR2i0HACJ3FEu-=4-Rk005g9szB5UsZAcw@mail.gmail.com>
- <e801e4ac-b7c2-3d0a-71e7-f8153a3dfbc8@gmail.com>
- <alpine.LRH.2.20.2001291006570.13921@dhcp-10-175-173-43.vpn.oracle.com>
- <CAFd5g477pGY7vkYK7qTtstxpCv0NG9=11Nig=kSo1JX8vczRVA@mail.gmail.com>
+        id S1725911AbgCBTtJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Mar 2020 14:49:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59874 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725446AbgCBTtJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 2 Mar 2020 14:49:09 -0500
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1C30124673;
+        Mon,  2 Mar 2020 19:49:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583178548;
+        bh=HlCsa0ArCLwoI7Xxr8z/Vi/VuN17RXrK58YUl9Bgh9U=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=BrzLSRNSfBt1E6Ul1HsC7e8jtgX1OqlBxw0epbcK6jUpgb4fd409QFJFGsjR/p2k6
+         2F6a6dLBBU/DOYEHQLH5AriAz6MzIo4ZFtaWVwNB9TFjYkfBydgvbJ6eVVX6wbRNnJ
+         oA27nygDXpkRjFW4/4b92C5A0YfKM+qu1cI1TfAQ=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id E4C7535226C8; Mon,  2 Mar 2020 11:49:07 -0800 (PST)
+Date:   Mon, 2 Mar 2020 11:49:07 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, stern@rowland.harvard.edu,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3] tools/memory-model/Documentation: Fix "conflict"
+ definition
+Message-ID: <20200302194907.GM2935@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200302172101.157917-1-elver@google.com>
+ <20200302185216.GA5320@andrea>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFd5g477pGY7vkYK7qTtstxpCv0NG9=11Nig=kSo1JX8vczRVA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200302185216.GA5320@andrea>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 29, 2020 at 01:28:19PM -0800, Brendan Higgins wrote:
-> On Wed, Jan 29, 2020 at 5:07 AM Alan Maguire <alan.maguire@oracle.com> wrote:
-> >
-> > On Tue, 28 Jan 2020, Frank Rowand wrote:
-> >
-> > > On 1/28/20 1:19 AM, Brendan Higgins wrote:
-> > > > On Mon, Jan 27, 2020 at 9:40 AM Frank Rowand <frowand.list@gmail.com> wrote:
-> > > >>
-> > > >> On 1/23/20 4:40 PM, Brendan Higgins wrote:
-> > > >>> Sorry for the late reply. I am still catching up from being on vacation.
-> > > >>>>> On Mon, Jan 6, 2020 at 2:40 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > >>>> It does beg the question if this means kunit is happy to not be a tool
-> > > >>>> to test pre basic setup stuff (terminology used in init.c, meaning prior
-> > > >>>> to running all init levels). I suspect this is the case.
-> > > >>>
-> > > >>> Not sure. I still haven't seen any cases where this is necessary, so I
-> > > >>> am not super worried about it. Regardless, I don't think this patchset
-> > > >>> really changes anything in that regard, we are moving from late_init
-> > > >>> to after late_init, so it isn't that big of a change for most use
-> > > >>> cases.
-> > > >>>
-> > > >>> Please share if you can think of some things that need to be tested in
-> > > >>> early init.
-> > > >>
-> > > >> I don't have a specific need for this right now.  I had not thought about
-> > > >> how the current kunit implementation forces all kunit tests to run at a
-> > > >> specific initcall level before reading this email thread.
-> > > >>
-> > > >> I can see the value of being able to have some tests run at different
-> > > >> initcall levels to verify what functionality is available and working
-> > > >> at different points in the boot sequence.
-> > > >
-> > > > Let's cross that bridge when we get there. It should be fairly easy to
-> > > > add that functionality.
-> > >
-> > > Yes. I just wanted to add the thought to the back of your mind so that
-> > > it does not get precluded by future changes to the kunit architecture.
-> > >
-> > > >
-> > > >> But more important than early initcall levels, I do not want the
-> > > >> framework to prevent using or testing code and data that are marked
-> > > >> as '__init'.  So it is important to retain a way to invoke the tests
-> > > >> while __init code and data are available, if there is also a change
-> > > >> to generally invoke the tests later.
-> > > >
-> > > > Definitely. For now that still works as long as you don't build KUnit
-> > > > as a module, but I think Alan's new patches which allow KUnit to be
-> > > > run at runtime via debugfs could cause some difficulty there. Again,
-> > >
-> > > Yes, Alan's patches are part of what triggered me thinking about the
-> > > issues I raised.
-> > >
-> > >
-> >
-> > As Brendan says, any such tests probably shouldn't be buildable
-> > as modules, but I wonder if we need to add some sort of way
-> > to ensure execution from debugfs is not allowed for such cases?
-
-The kernel's linker will ensure this doesn't happen by default, ie
-__init data called from non __init code gets a complaint at linker
-time today.
-
-*Iff* you are sure the code is proper, you *whitelist* it by adding the
-__ref tag to it.
-
-> > Even if a test suite is builtin, it can be executed via debugfs
-> > in the patches I sent out, allowing suites to be re-run.  Sounds
-> > like we need a way to control that behaviour based on the
-> > desired test suite execution environment.
+On Mon, Mar 02, 2020 at 07:52:16PM +0100, Andrea Parri wrote:
+> On Mon, Mar 02, 2020 at 06:21:01PM +0100, Marco Elver wrote:
+> > The definition of "conflict" should not include the type of access nor
+> > whether the accesses are concurrent or not, which this patch addresses.
+> > The definition of "data race" remains unchanged.
+> > 
+> > The definition of "conflict" as we know it and is cited by various
+> > papers on memory consistency models appeared in [1]: "Two accesses to
+> > the same variable conflict if at least one is a write; two operations
+> > conflict if they execute conflicting accesses."
+> > 
+> > The LKMM as well as the C11 memory model are adaptations of
+> > data-race-free, which are based on the work in [2]. Necessarily, we need
+> > both conflicting data operations (plain) and synchronization operations
+> > (marked). For example, C11's definition is based on [3], which defines a
+> > "data race" as: "Two memory operations conflict if they access the same
+> > memory location, and at least one of them is a store, atomic store, or
+> > atomic read-modify-write operation. In a sequentially consistent
+> > execution, two memory operations from different threads form a type 1
+> > data race if they conflict, at least one of them is a data operation,
+> > and they are adjacent in <T (i.e., they may be executed concurrently)."
+> > 
+> > [1] D. Shasha, M. Snir, "Efficient and Correct Execution of Parallel
+> >     Programs that Share Memory", 1988.
+> > 	URL: http://snir.cs.illinois.edu/listed/J21.pdf
+> > 
+> > [2] S. Adve, "Designing Memory Consistency Models for Shared-Memory
+> >     Multiprocessors", 1993.
+> > 	URL: http://sadve.cs.illinois.edu/Publications/thesis.pdf
+> > 
+> > [3] H.-J. Boehm, S. Adve, "Foundations of the C++ Concurrency Memory
+> >     Model", 2008.
+> > 	URL: https://www.hpl.hp.com/techreports/2008/HPL-2008-56.pdf
+> > 
+> > Signed-off-by: Marco Elver <elver@google.com>
+> > Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 > 
-> I think that's true.
+> LGTM:
 > 
-> > Say, for example, the "struct kunit_suite" definitions associated
-> > with the tests was marked as __initdata; are there any handy macros to
-> > identify it as being in the __init section? If so, we could simply
-> > avoid adding a "run" file to the debugfs representation for such
-> > suites.
+> Acked-by: Andrea Parri <parri.andrea@gmail.com>
 
-> > Failing that, perhaps we need some sort of flags field
-> > in "struct kunit_suite" to specify execution environment constraints?
+Applied, and thank you as well!
+
+							Thanx, Paul
+
+> Thank you both,
 > 
-> I think the former would be ideal, but the latter is acceptable as
-> well, assuming neither results in complaints from the compiler (I
-> guess we will find out for sure once we get a hold of the device tree
-> KUnit test).
-
-I'd split out tests in two different arrays, one with __init or
-__initdata  one without. Likewise two dispatches, one for init and
-one for non-init data.
-
-> Luis, you mentioned your linker table work might be applicable for
-> dynamic post boot configuring of dispatching. Do you think this work
-> could help solve this problem?
-
-The Linux kernel table / section ranges code helps aggregate data into
-ELF sections in a generic way, that is, hacks we have been doing over
-years into a generic way.
-
-So it would be easier to read and implement. For instance see how in
-this commit the intent/goal of kprobe blacklists is a bit easier to
-read:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?h=20170620-linker-tables-v8&id=b2662efa7c6a3c436961c07fa3082e8640f0e352
-
-In particular DEFINE_LINKTABLE_INIT_DATA() use. I think Youd' want to
-use DEFINE_LINKTABLE_INIT_DATA() for code which you want to use to
-dispatch on init and and a DEFINE_LINKTABLE_DATA() for non-init code.
-
-If a dynamic dispatcher is used you'd opt out of the using for instance
-linktable_for_each() and instead use the data structure defined for
-however you want to disaptch your run time.
-
-  Luis
+>   Andrea
+> 
+> 
+> > ---
+> > v3:
+> > * Apply Alan's suggestion.
+> > * s/two race candidates/race candidates/
+> > 
+> > v2: http://lkml.kernel.org/r/20200302141819.40270-1-elver@google.com
+> > * Apply Alan's suggested version.
+> >   - Move "from different CPUs (or threads)" from "conflict" to "data
+> >     race" definition. Update "race candidate" accordingly.
+> > * Add citations to commit message.
+> > 
+> > v1: http://lkml.kernel.org/r/20200228164621.87523-1-elver@google.com
+> > ---
+> >  .../Documentation/explanation.txt             | 83 ++++++++++---------
+> >  1 file changed, 45 insertions(+), 38 deletions(-)
+> > 
+> > diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> > index e91a2eb19592a..993f800659c6a 100644
+> > --- a/tools/memory-model/Documentation/explanation.txt
+> > +++ b/tools/memory-model/Documentation/explanation.txt
+> > @@ -1987,28 +1987,36 @@ outcome undefined.
+> >  
+> >  In technical terms, the compiler is allowed to assume that when the
+> >  program executes, there will not be any data races.  A "data race"
+> > -occurs when two conflicting memory accesses execute concurrently;
+> > -two memory accesses "conflict" if:
+> > +occurs when there are two memory accesses such that:
+> >  
+> > -	they access the same location,
+> > +1.	they access the same location,
+> >  
+> > -	they occur on different CPUs (or in different threads on the
+> > -	same CPU),
+> > +2.	at least one of them is a store,
+> >  
+> > -	at least one of them is a plain access,
+> > +3.	at least one of them is plain,
+> >  
+> > -	and at least one of them is a store.
+> > +4.	they occur on different CPUs (or in different threads on the
+> > +	same CPU), and
+> >  
+> > -The LKMM tries to determine whether a program contains two conflicting
+> > -accesses which may execute concurrently; if it does then the LKMM says
+> > -there is a potential data race and makes no predictions about the
+> > -program's outcome.
+> > +5.	they execute concurrently.
+> >  
+> > -Determining whether two accesses conflict is easy; you can see that
+> > -all the concepts involved in the definition above are already part of
+> > -the memory model.  The hard part is telling whether they may execute
+> > -concurrently.  The LKMM takes a conservative attitude, assuming that
+> > -accesses may be concurrent unless it can prove they cannot.
+> > +In the literature, two accesses are said to "conflict" if they satisfy
+> > +1 and 2 above.  We'll go a little farther and say that two accesses
+> > +are "race candidates" if they satisfy 1 - 4.  Thus, whether or not two
+> > +race candidates actually do race in a given execution depends on
+> > +whether they are concurrent.
+> > +
+> > +The LKMM tries to determine whether a program contains race candidates
+> > +which may execute concurrently; if it does then the LKMM says there is
+> > +a potential data race and makes no predictions about the program's
+> > +outcome.
+> > +
+> > +Determining whether two accesses are race candidates is easy; you can
+> > +see that all the concepts involved in the definition above are already
+> > +part of the memory model.  The hard part is telling whether they may
+> > +execute concurrently.  The LKMM takes a conservative attitude,
+> > +assuming that accesses may be concurrent unless it can prove they
+> > +are not.
+> >  
+> >  If two memory accesses aren't concurrent then one must execute before
+> >  the other.  Therefore the LKMM decides two accesses aren't concurrent
+> > @@ -2171,8 +2179,8 @@ again, now using plain accesses for buf:
+> >  	}
+> >  
+> >  This program does not contain a data race.  Although the U and V
+> > -accesses conflict, the LKMM can prove they are not concurrent as
+> > -follows:
+> > +accesses are race candidates, the LKMM can prove they are not
+> > +concurrent as follows:
+> >  
+> >  	The smp_wmb() fence in P0 is both a compiler barrier and a
+> >  	cumul-fence.  It guarantees that no matter what hash of
+> > @@ -2326,12 +2334,11 @@ could now perform the load of x before the load of ptr (there might be
+> >  a control dependency but no address dependency at the machine level).
+> >  
+> >  Finally, it turns out there is a situation in which a plain write does
+> > -not need to be w-post-bounded: when it is separated from the
+> > -conflicting access by a fence.  At first glance this may seem
+> > -impossible.  After all, to be conflicting the second access has to be
+> > -on a different CPU from the first, and fences don't link events on
+> > -different CPUs.  Well, normal fences don't -- but rcu-fence can!
+> > -Here's an example:
+> > +not need to be w-post-bounded: when it is separated from the other
+> > +race-candidate access by a fence.  At first glance this may seem
+> > +impossible.  After all, to be race candidates the two accesses must
+> > +be on different CPUs, and fences don't link events on different CPUs.
+> > +Well, normal fences don't -- but rcu-fence can!  Here's an example:
+> >  
+> >  	int x, y;
+> >  
+> > @@ -2367,7 +2374,7 @@ concurrent and there is no race, even though P1's plain store to y
+> >  isn't w-post-bounded by any marked accesses.
+> >  
+> >  Putting all this material together yields the following picture.  For
+> > -two conflicting stores W and W', where W ->co W', the LKMM says the
+> > +race-candidate stores W and W', where W ->co W', the LKMM says the
+> >  stores don't race if W can be linked to W' by a
+> >  
+> >  	w-post-bounded ; vis ; w-pre-bounded
+> > @@ -2380,8 +2387,8 @@ sequence, and if W' is plain then they also have to be linked by a
+> >  
+> >  	w-post-bounded ; vis ; r-pre-bounded
+> >  
+> > -sequence.  For a conflicting load R and store W, the LKMM says the two
+> > -accesses don't race if R can be linked to W by an
+> > +sequence.  For race-candidate load R and store W, the LKMM says the
+> > +two accesses don't race if R can be linked to W by an
+> >  
+> >  	r-post-bounded ; xb* ; w-pre-bounded
+> >  
+> > @@ -2413,20 +2420,20 @@ is, the rules governing the memory subsystem's choice of a store to
+> >  satisfy a load request and its determination of where a store will
+> >  fall in the coherence order):
+> >  
+> > -	If R and W conflict and it is possible to link R to W by one
+> > -	of the xb* sequences listed above, then W ->rfe R is not
+> > -	allowed (i.e., a load cannot read from a store that it
+> > +	If R and W are race candidates and it is possible to link R to
+> > +	W by one of the xb* sequences listed above, then W ->rfe R is
+> > +	not allowed (i.e., a load cannot read from a store that it
+> >  	executes before, even if one or both is plain).
+> >  
+> > -	If W and R conflict and it is possible to link W to R by one
+> > -	of the vis sequences listed above, then R ->fre W is not
+> > -	allowed (i.e., if a store is visible to a load then the load
+> > -	must read from that store or one coherence-after it).
+> > +	If W and R are race candidates and it is possible to link W to
+> > +	R by one of the vis sequences listed above, then R ->fre W is
+> > +	not allowed (i.e., if a store is visible to a load then the
+> > +	load must read from that store or one coherence-after it).
+> >  
+> > -	If W and W' conflict and it is possible to link W to W' by one
+> > -	of the vis sequences listed above, then W' ->co W is not
+> > -	allowed (i.e., if one store is visible to a second then the
+> > -	second must come after the first in the coherence order).
+> > +	If W and W' are race candidates and it is possible to link W
+> > +	to W' by one of the vis sequences listed above, then W' ->co W
+> > +	is not allowed (i.e., if one store is visible to a second then
+> > +	the second must come after the first in the coherence order).
+> >  
+> >  This is the extent to which the LKMM deals with plain accesses.
+> >  Perhaps it could say more (for example, plain accesses might
+> > -- 
+> > 2.25.0.265.gbab2e86ba0-goog
+> > 
