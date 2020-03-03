@@ -2,24 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB95176EFC
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Mar 2020 06:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE18176F06
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Mar 2020 06:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725944AbgCCFzr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Mar 2020 00:55:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:42678 "EHLO foss.arm.com"
+        id S1726079AbgCCF7t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Mar 2020 00:59:49 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:50442 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725845AbgCCFzr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 3 Mar 2020 00:55:47 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8AFF62F;
-        Mon,  2 Mar 2020 21:55:46 -0800 (PST)
-Received: from [10.162.16.51] (p8cg001049571a15.blr.arm.com [10.162.16.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 88AF23F6CF;
-        Mon,  2 Mar 2020 21:55:39 -0800 (PST)
+        id S1725440AbgCCF7t (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 3 Mar 2020 00:59:49 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 48WmYt2NC7z9tyyX;
+        Tue,  3 Mar 2020 06:59:46 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=sXKIwD1R; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id UVZtmD4b7vsp; Tue,  3 Mar 2020 06:59:46 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 48WmYt108kz9tyyS;
+        Tue,  3 Mar 2020 06:59:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1583215186; bh=ocYA26gERwg/bGzKOX6R9AQoOaFWREyAef/Kd9zo+5s=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=sXKIwD1RD3BLfW6HS5aTsLH2zDt5HeqokUB+K7FsxVkoJhvVgR9r7Ff79VBf3fPhg
+         IjF4WeUvoHflMO8+N2ifkTwV8WIp6KloKV0XCSvcbUBFZYWyK3co0cvATpqgmD7E3m
+         B5ViAb14Ei63PR4Qy3/Ndcwn06LEcho6L0JaXjUc=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D1E5C8B79A;
+        Tue,  3 Mar 2020 06:59:46 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id b_l-0DSpkXO5; Tue,  3 Mar 2020 06:59:46 +0100 (CET)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 081278B755;
+        Tue,  3 Mar 2020 06:59:44 +0100 (CET)
 Subject: Re: [PATCH V14] mm/debug: Add tests validating architecture page
  table helpers
-To:     Qian Cai <cai@lca.pw>, Christophe Leroy <christophe.leroy@c-s.fr>,
+To:     Qian Cai <cai@lca.pw>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
         linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Mike Rapoport <rppt@linux.ibm.com>,
@@ -47,15 +72,15 @@ References: <1581909460-19148-1-git-send-email-anshuman.khandual@arm.com>
  <1582726182.7365.123.camel@lca.pw>
  <7c707b7f-ce3d-993b-8042-44fdc1ed28bf@c-s.fr>
  <1582732318.7365.129.camel@lca.pw> <1583178042.7365.146.camel@lca.pw>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <e8516497-f1b9-b222-e219-73b68880ac75@arm.com>
-Date:   Tue, 3 Mar 2020 11:25:37 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <6757aa1d-7951-69ef-de93-50a7b7b172e0@c-s.fr>
+Date:   Tue, 3 Mar 2020 06:59:39 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
 In-Reply-To: <1583178042.7365.146.camel@lca.pw>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
@@ -64,7 +89,7 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 
-On 03/03/2020 01:10 AM, Qian Cai wrote:
+Le 02/03/2020 à 20:40, Qian Cai a écrit :
 > On Wed, 2020-02-26 at 10:51 -0500, Qian Cai wrote:
 >> On Wed, 2020-02-26 at 15:45 +0100, Christophe Leroy wrote:
 >>>
@@ -114,7 +139,7 @@ On 03/03/2020 01:10 AM, Qian Cai wrote:
 >> and if it is actually worth "fixing" in the arch code, but that BUG_ON() was
 >> there since 2009 and had not been exposed until this patch comes alone?
 > 
-> This patch below makes it works on powerpc64 in order to dodge the BUG_ON()s in 
+> This patch below makes it works on powerpc64 in order to dodge the BUG_ON()s in
 > assert_pte_locked() triggered by pte_clear_tests().
 > 
 > 
@@ -123,116 +148,60 @@ On 03/03/2020 01:10 AM, Qian Cai wrote:
 > --- a/mm/debug_vm_pgtable.c
 > +++ b/mm/debug_vm_pgtable.c
 > @@ -55,6 +55,8 @@
->  #define RANDOM_ORVALUE	GENMASK(BITS_PER_LONG - 1, S390_MASK_BITS)
->  #define RANDOM_NZVALUE	GENMASK(7, 0)
->  
+>   #define RANDOM_ORVALUE	GENMASK(BITS_PER_LONG - 1, S390_MASK_BITS)
+>   #define RANDOM_NZVALUE	GENMASK(7, 0)
+>   
 > +unsigned long vaddr;
 > +
->  static void __init pte_basic_tests(unsigned long pfn, pgprot_t prot)
->  {
->  	pte_t pte = pfn_pte(pfn, prot);
+
+Can we avoid global var ?
+
+>   static void __init pte_basic_tests(unsigned long pfn, pgprot_t prot)
+>   {
+>   	pte_t pte = pfn_pte(pfn, prot);
 > @@ -256,7 +258,7 @@ static void __init pte_clear_tests(struct mm_struct *mm,
 > pte_t *ptep)
->  
->  	pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
->  	WRITE_ONCE(*ptep, pte);
+>   
+>   	pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
+>   	WRITE_ONCE(*ptep, pte);
 > -	pte_clear(mm, 0, ptep);
 > +	pte_clear(mm, vaddr, ptep);
->  	pte = READ_ONCE(*ptep);
->  	WARN_ON(!pte_none(pte));
->  }
+>   	pte = READ_ONCE(*ptep);
+>   	WARN_ON(!pte_none(pte));
+>   }
 > @@ -310,8 +312,9 @@ void __init debug_vm_pgtable(void)
->  	pgtable_t saved_ptep;
->  	pgprot_t prot;
->  	phys_addr_t paddr;
+>   	pgtable_t saved_ptep;
+>   	pgprot_t prot;
+>   	phys_addr_t paddr;
 > -	unsigned long vaddr, pte_aligned, pmd_aligned;
+
+Can we pass local vaddr to pte_clear_tests() instead of making it a 
+global var ?
+
 > +	unsigned long pte_aligned, pmd_aligned;
->  	unsigned long pud_aligned, p4d_aligned, pgd_aligned;
+>   	unsigned long pud_aligned, p4d_aligned, pgd_aligned;
 > +	spinlock_t *ptl;
->  
->  	pr_info("Validating architecture page table helpers\n");
->  	prot = vm_get_page_prot(VMFLAGS);
+>   
+>   	pr_info("Validating architecture page table helpers\n");
+>   	prot = vm_get_page_prot(VMFLAGS);
 > @@ -344,7 +347,7 @@ void __init debug_vm_pgtable(void)
->  	p4dp = p4d_alloc(mm, pgdp, vaddr);
->  	pudp = pud_alloc(mm, p4dp, vaddr);
->  	pmdp = pmd_alloc(mm, pudp, vaddr);
+>   	p4dp = p4d_alloc(mm, pgdp, vaddr);
+>   	pudp = pud_alloc(mm, p4dp, vaddr);
+>   	pmdp = pmd_alloc(mm, pudp, vaddr);
 > -	ptep = pte_alloc_map(mm, pmdp, vaddr);
 > +	ptep = pte_alloc_map_lock(mm, pmdp, vaddr, &ptl);
->  
->  	/*
->  	 * Save all the page table page addresses as the page table
+>   
+>   	/*
+>   	 * Save all the page table page addresses as the page table
 > @@ -370,7 +373,7 @@ void __init debug_vm_pgtable(void)
->  	p4d_clear_tests(mm, p4dp);
->  	pgd_clear_tests(mm, pgdp);
->  
+>   	p4d_clear_tests(mm, p4dp);
+>   	pgd_clear_tests(mm, pgdp);
+>   
 > -	pte_unmap(ptep);
 > +	pte_unmap_unlock(ptep, ptl);
->  
->  	pmd_populate_tests(mm, pmdp, saved_ptep);
->  	pud_populate_tests(mm, pudp, saved_pmdp);
+>   
+>   	pmd_populate_tests(mm, pmdp, saved_ptep);
+>   	pud_populate_tests(mm, pudp, saved_pmdp);
 > 
 
-Below is slightly modified version of your change above and should still
-prevent the bug on powerpc. Will it be possible for you to re-test this
-? Once confirmed, will send a patch enabling this test on powerpc64
-keeping your authorship. Thank you.
-
- mm/debug_vm_pgtable.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-index 96dd7d574cef..c310f52c2b80 100644
---- a/mm/debug_vm_pgtable.c
-+++ b/mm/debug_vm_pgtable.c
-@@ -250,13 +250,14 @@ static void __init pgd_populate_tests(struct mm_struct *mm, pgd_t *pgdp,
- }
- #endif
-
--static void __init pte_clear_tests(struct mm_struct *mm, pte_t *ptep)
-+static void __init pte_clear_tests(struct mm_struct *mm, pte_t *ptep,
-+                                  unsigned long vaddr)
- {
-        pte_t pte = READ_ONCE(*ptep);
-
-        pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
-        WRITE_ONCE(*ptep, pte);
--       pte_clear(mm, 0, ptep);
-+       pte_clear(mm, vaddr, ptep);
-        pte = READ_ONCE(*ptep);
-        WARN_ON(!pte_none(pte));
- }
-@@ -302,6 +303,7 @@ static unsigned long __init get_random_vaddr(void)
- void __init debug_vm_pgtable(void)
- {
-        struct mm_struct *mm;
-+       spinlock_t *uninitialized_var(ptl);
-        pgd_t *pgdp;
-        p4d_t *p4dp, *saved_p4dp;
-        pud_t *pudp, *saved_pudp;
-@@ -344,7 +346,7 @@ void __init debug_vm_pgtable(void)
-        p4dp = p4d_alloc(mm, pgdp, vaddr);
-        pudp = pud_alloc(mm, p4dp, vaddr);
-        pmdp = pmd_alloc(mm, pudp, vaddr);
--       ptep = pte_alloc_map(mm, pmdp, vaddr);
-+       ptep = pte_alloc_map_lock(mm, pmdp, vaddr, &ptl);
-
-        /*
-         * Save all the page table page addresses as the page table
-@@ -364,13 +366,13 @@ void __init debug_vm_pgtable(void)
-        p4d_basic_tests(p4d_aligned, prot);
-        pgd_basic_tests(pgd_aligned, prot);
-
--       pte_clear_tests(mm, ptep);
-+       pte_clear_tests(mm, ptep, vaddr);
-        pmd_clear_tests(mm, pmdp);
-        pud_clear_tests(mm, pudp);
-        p4d_clear_tests(mm, p4dp);
-        pgd_clear_tests(mm, pgdp);
-
--       pte_unmap(ptep);
-+       pte_unmap_unlock(ptep, ptl);
-
-        pmd_populate_tests(mm, pmdp, saved_ptep);
-        pud_populate_tests(mm, pudp, saved_pmdp);
--- 
-2.20.1
+Christophe
