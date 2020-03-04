@@ -2,69 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA6D1795C6
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Mar 2020 17:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9471179C28
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Mar 2020 00:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729750AbgCDQyZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Mar 2020 11:54:25 -0500
-Received: from sonic309-21.consmr.mail.ne1.yahoo.com ([66.163.184.147]:46834
-        "EHLO sonic309-21.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729675AbgCDQyZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Mar 2020 11:54:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1583340863; bh=TB/VZc/UhGoo0+B79UC9Tgtg0pigPTFcBcEvkMbFOow=; h=Date:From:Reply-To:Subject:References:From:Subject; b=mdtofm6JvZ3HpB0/7eWbXYpseDJiuBWp64lFNCN7wqF2dMBJBBqghVYU4hfznIXiQ5fAwAuI083i2Sf0yFEt5Q7hCGp1HbRdS1ZU6jVHhqsh6C2n+h/j74jNXAPSfmrSHYrl4KeP01k0UOPGiHNnk7VsuQsiGMOiEUnW4YzoAWhYD3oUhZb/A0pXZuIyuJ5xFKkFrbKEr0PBeJlfLRTsWA/JIrF2eSpGZKTCKB6a65lybwhAaWLwy9jobcMu4DEVe/CT7BqHdAsJfPMle2gGr71qDC95nLwG/85NBjh1uPwSeNB5syGLS2ZDSlTC1WsBvXuDv95Na/RK6s08nbfV3A==
-X-YMail-OSG: ulqL5o4VM1mMNYdq25tGforsat.BC62SDWoQ.fvCFz9nCa9cVJaKQzcCuKKEEl6
- yVGt4WlE_DOendEWBRcn.lViONTbtZqaVVtXrO1AKkmcGq_QF3nUpKSaS7XTjdHLQiB_3alZ8NM9
- OZQMSB5z_Ni1uBFmAqQfUrFty2scPGJT9pNKtzHdkEsivdRggab_Z2iPGnhjPRVqIlGUeCohtceT
- yainQrQC1sp4.384cmMkWPK_HxEMe.bLDzqyqELt8c4DTDUtwwJfH5z_tu7t3y8S6USPFVDJVi0W
- Q81AdZgBixtMomebIoe0vzpUIPUSTJUsdt8hWEYYw.DcuZ3FS0s_JbV80nD7SGLwpkrILkz_WNnb
- uxd1ZISZH4hmDNG8SMGdBIijRDQyT0_ckik3OKWJf16aaavxl09kpcFax.rO8wcfAgFIkiX4snFb
- Rvd.2tXcug.jz6hjGjC6jTOMq9sEJXET25mRsOyRPpF.LqHntPBckzMgp.HOOhoz3Pp41tcFU1s3
- J_8ls_NLUXwaFtpEHWn4fmed9jbOsVD.Dj_ZcLdB_Pmb86zO9mwGP7wPxWcblMMlpMB520QAUKK6
- jJ95zxGNOLcT7BiBc046ldCRThLnxGK8bZRLr32ZUxDTGzfMR5Syd1xlE_ol_lSrfNRVYaBK7Rpz
- HjsUl5GAkCNHrEoz_ZmTZrXAFAXjqf8sOvSw0O57faeskm7Lr_6jhri8WuZUB5y7m6zRVkKxwVWD
- rXakYc8rrULnT7ayrrTkF7oeGlkh.TaqIU0rwSuBrRAaEB7jlHHJO5zm293KvetF29fFa0h9x5u5
- rvNqKyFKWRnlaIXTZoFv3gze8W436nHYPIS2ZpkzsPMMLAEtUI0yHpW0K3e0Uv7QQsm0BSa6NP1T
- 3xMwCkGsaMfOK8vBZ3sYdwwjVYGbbYk56LFoyt50ZyPNQoC52F4NpGIA.5HrfKktPWHO9zRynqhG
- jiI.VDWLQ_WXy3v58uTvXBzksVeIZzeqt74Mt8eHFpD8Z_8a5Bizif8POdUo6HwDyYTWyO3GRhYy
- eTHsUviEGHo8g1PvqxoWg3CAXIHkBDD502cwOB0X_wdUtYVodu5PN.xwRv.18MQl1_TFwaOddaqt
- xz0bZGR_GwqnlCCWGpCoWP4g2YiXnpe4FjYFXotJ2e9YZYCzrduEW6kkC53clC3it.hkcJijaycC
- 0gbNnit_FvLoDsncZZMUeVKG3Dsst.T0Ce312ABhJImT.ubKObk05XxZixXVPmGB3G53A_CVJshC
- r55uW01DFi6ldS4tyZrhtwM5kHDuO1IkeNSdZQS0RRGU1w4vP4DZRCiRUt5phmau9sWqEgaoC0rH
- 8qN3QdefTj8qqxtlGLwiVEgEJBlc-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Wed, 4 Mar 2020 16:54:23 +0000
-Date:   Wed, 4 Mar 2020 16:54:18 +0000 (UTC)
-From:   "MRS AMINA KADI." <mrsamina.kadi3@gmail.com>
-Reply-To: mrsamina.kadi33@gmail.com
-Message-ID: <1668171133.4336166.1583340858647@mail.yahoo.com>
-Subject: COMPLEMENT OF THE DAY TO YOU DEAR FRIEND.
+        id S2388476AbgCDXKx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Mar 2020 18:10:53 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:43904 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388400AbgCDXKx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Mar 2020 18:10:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=wrwrHXw+LNOFZFFMg/FDeMJ6lH0Xav8TTsXnysaRhrg=; b=tw5PI4uR1ew0T6GT3etvcIkt+p
+        +0P2jwaX6zsPoCndUQbxsG+QjnaokBqJWLoEEWdijEHx+9dOsWDEVEErTXnfe0qA1Y9QhRdU0XZ/S
+        qZIEVABVFOALiLdk6tLcO5jROd/WNi75N0iWSebavnHrXc99rpy90XIuY0L01YHhtryDivK96iWNx
+        6wPXyPw7jazYFat2epMU79nM8khDVBmZKzgjh0S/vwwl88V5xDiZNA68vZm7jyTJTniateEn9ZKvj
+        G7EGdpU0I9DAec1y/4EwvI/Sa4FuofkuW2kTRsnVyfaGUUB5xDMKL6hjLKQHfJAKW4e1mCbUAINyL
+        LVloTZCQ==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j9dAB-0005vr-1w; Wed, 04 Mar 2020 23:10:51 +0000
+Subject: Re: [PATCH v3 7/7] Documentation: Add kunit_shutdown to
+ kernel-parameters.txt
+To:     Brendan Higgins <brendanhiggins@google.com>, jdike@addtoit.com,
+        richard@nod.at, anton.ivanov@cambridgegreys.com, arnd@arndb.de,
+        keescook@chromium.org, skhan@linuxfoundation.org,
+        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
+        akpm@linux-foundation.org, rppt@linux.ibm.com,
+        frowand.list@gmail.com
+Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
+        mcgrof@kernel.org, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20200228012036.15682-1-brendanhiggins@google.com>
+ <20200228012036.15682-8-brendanhiggins@google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <22704191-ce7e-cac7-f7a0-1db822b20d84@infradead.org>
+Date:   Wed, 4 Mar 2020 15:10:49 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20200228012036.15682-8-brendanhiggins@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-References: <1668171133.4336166.1583340858647.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15302 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 2/27/20 5:20 PM, Brendan Higgins wrote:
+> Add kunit_shutdown, an option to specify that the kernel shutsdown after
+> running KUnit tests, to the kernel-parameters.txt documentation.
+> 
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
+Hi Brendan,
 
-COMPLEMENT OF THE DAY TO YOU DEAR FRIEND.
+To be consistent with other parameters in this file:
 
- I am MRS AMINA KADI. i want your assisstant to transfer the sum of 5.5USD into your account, I will give you more details when i hear positive responesd from you,
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index dbc22d6846275..6ad63e98916f9 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -2099,6 +2099,14 @@
+>  			0: force disabled
+>  			1: force enabled
+>  
+> +	kunit_shutdown	[KERNEL UNIT TESTING FRAMEWORK] Shutdown kernel after
 
- Please contact me with your below information to proceed for more details awaitin your positive response.
+that line should have an '=' sign after the param name:
+	kunit_shutdown=
 
-1::Your full name::
-2::Your home address::
-3::Current occupation::
-4::Age::
-5::Your Country::
-6::Your current telephone number/mobile phone
+> +			running built-in tests. Tests configured as modules will
+> +			not be run.
+> +			Default:	(flag not present) don't shutdown
+> +			poweroff:	poweroff the kernel after running tests
+> +			halt:		halt the kernel after running tests
+> +			reboot:		reboot the kernel after running tests
+> +
+>  	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
+>  			Default is 0 (don't ignore, but inject #GP)
+>  
+> 
 
- contact me with this my private emails I.D (mrsamina.kadi33@gmail.com)
+thanks.
+-- 
+~Randy
 
-From
-
-MRS AMINA KADI.
