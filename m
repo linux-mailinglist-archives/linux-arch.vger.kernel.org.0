@@ -2,193 +2,300 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A32BD1794C8
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Mar 2020 17:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169B717954F
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Mar 2020 17:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388024AbgCDQQq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Mar 2020 11:16:46 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:48278 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726561AbgCDQQq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Mar 2020 11:16:46 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 024G515n008120;
-        Wed, 4 Mar 2020 08:16:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfpt0818;
- bh=QqX6DBmhSYAp+Ek6zwjJxp8jOQpdgd0MftEbnabeMYM=;
- b=XVyAx5f5ucDprzGkRKf+v8ywR8w73lMqJN99G9cbaq75hlu9RYrmxWSn5JNTGrjfra0h
- SioIxO42nZ6ZGcKN0c7B1WVAWxMPC2bNdyJI9C6/rk3n8DSl+zfjYdWA8YYF1tykMmiu
- q72dBnP4n3eEwhPhjy2xMn7lu0ViDgjiPjaWQ3Gwb1aRlx+iH8BEAispCFmECOtRUNak
- NWUB6nXUBA/qeZ7WLFe6guYLJWltFqzJi40yMrAQEj/B0r8iiMlHz4Ifq1Nv5s+ah1jt
- mufJGNUXYBKeY/xby7J8wxveIthoLBffUp/OyL+wp1CZNWlt7tQT8ZsIhISno9OEYFW2 kw== 
-Received: from sc-exch04.marvell.com ([199.233.58.184])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2yhn0y0f7u-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 04 Mar 2020 08:16:23 -0800
-Received: from SC-EXCH02.marvell.com (10.93.176.82) by SC-EXCH04.marvell.com
- (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 4 Mar
- 2020 08:16:21 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
- by SC-EXCH02.marvell.com (10.93.176.82) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Wed, 4 Mar 2020 08:16:21 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n5Q8TNg/sCeBUCocYmwVVhJlo8QAQsgr+0xUfGHzcz9yboSJ7rdWp2aHsF77QRtdKLcJ0HiGw+XcqRdsyO0lujhNe5lf1GKuslNKUo3p7LasxlbdtXh1JXz0kTSG0as2KjjNrDxL+iSpeEvloinz5KRp/1lDbwfJZTiL2xKtsIN2/rUZraiu5km2e171vr21RSI8ljsvqz6rh9LeVIOuXrZygwiYtwCqvFB6l97qApryLcobM8UJ5HdCt1VEEI8zpxDMtMjp0ePuzIrh7LqYimMGTzgop+uSIKxd8ha4kgAOyoAAjGFr9s8EFt/enq1DnOM1QdmODuIBm9vX4qc75g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QqX6DBmhSYAp+Ek6zwjJxp8jOQpdgd0MftEbnabeMYM=;
- b=m/F4uwENtOLaAR27fBIxF9JSUA9zVUIVn8nqwGzRw1YtqQOH21L1Cb68EkPTbkiGfZgvvpN8pK+ZPa1ZhqxCGPySuc0BqI16JADx7FbGwB3oarEyxCq68Tbfgj+dBqQtJlTjKCpRJTPAwLZ88CRwwkODh5yCq53FkH6UBY74kZyNcXBnBoRLiT507mHiaOibXf/OzKi3YTezx9VZqXGRaSbYq0U6H3cN0j3c1oZ1wc6IUnvQ9BpAFy5quZ13EUGH+eyB0YbzJoi40CWiBf4TEltcVccfBQ2ntnkOE8nIf2Uagi4QxEU62/TuziijyoSkTSdgnp6+pBBg3iUrSVMvgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QqX6DBmhSYAp+Ek6zwjJxp8jOQpdgd0MftEbnabeMYM=;
- b=TkBS7vTHV0UXSkH7AGsqmozSmGuckaw6FOwaxNF/wsDy45YddxMldY1qRiIjhCDw/QoWdF3Ss4iowX9UUaKcsHembnMCT1/k5u+v/iKbqvs0Jo/Qt6jNinXS9C0soG+c/5Ge8QVBNSRR2uS6IlnZdqmyMSt25Ruo1j9RBIyRsws=
-Received: from BYAPR18MB2535.namprd18.prod.outlook.com (2603:10b6:a03:137::17)
- by BYAPR18MB2727.namprd18.prod.outlook.com (2603:10b6:a03:107::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2772.14; Wed, 4 Mar
- 2020 16:16:19 +0000
-Received: from BYAPR18MB2535.namprd18.prod.outlook.com
- ([fe80::8cd1:1741:8d2d:1c23]) by BYAPR18MB2535.namprd18.prod.outlook.com
- ([fe80::8cd1:1741:8d2d:1c23%7]) with mapi id 15.20.2772.019; Wed, 4 Mar 2020
- 16:16:19 +0000
-From:   Alex Belits <abelits@marvell.com>
-To:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>
-CC:     "mingo@kernel.org" <mingo@kernel.org>,
+        id S1729752AbgCDQbI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Mar 2020 11:31:08 -0500
+Received: from foss.arm.com ([217.140.110.172]:36876 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726764AbgCDQbI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 4 Mar 2020 11:31:08 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7ACCD31B;
+        Wed,  4 Mar 2020 08:31:07 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CEA223F6CF;
+        Wed,  4 Mar 2020 08:31:05 -0800 (PST)
+Date:   Wed, 4 Mar 2020 16:31:03 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alex Belits <abelits@marvell.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
         "peterz@infradead.org" <peterz@infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Prasun Kapoor <pkapoor@marvell.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
         "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
         "linux-mm@vger.kernel.org" <linux-mm@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: [PATCH 12/12] task_isolation: CONFIG_TASK_ISOLATION prevents
- distribution of jobs to non-housekeeping CPUs
-Thread-Topic: [PATCH 12/12] task_isolation: CONFIG_TASK_ISOLATION prevents
- distribution of jobs to non-housekeeping CPUs
-Thread-Index: AQHV8kA8ktv8P3VeKkibLdJwQ2up2Q==
-Date:   Wed, 4 Mar 2020 16:16:19 +0000
-Message-ID: <3500c34366f3857329709e155b44d5a7d9af6e05.camel@marvell.com>
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        will@kernel.org, catalin.marinas@arm.com
+Subject: Re: [PATCH 06/12] task_isolation: arch/arm64: enable task isolation
+ functionality
+Message-ID: <20200304163103.GJ3575@lakrids.cambridge.arm.com>
 References: <4473787e1b6bc3cc226067e8d122092a678b63de.camel@marvell.com>
-In-Reply-To: <4473787e1b6bc3cc226067e8d122092a678b63de.camel@marvell.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [199.233.58.128]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d27dbcf3-3215-45a2-49e4-08d7c0575f8d
-x-ms-traffictypediagnostic: BYAPR18MB2727:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR18MB2727EE08753EF6BC73F0E71CBCE50@BYAPR18MB2727.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3968;
-x-forefront-prvs: 0332AACBC3
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(39860400002)(346002)(376002)(366004)(136003)(189003)(199004)(478600001)(4326008)(26005)(36756003)(6486002)(8676002)(6512007)(8936002)(86362001)(81156014)(6506007)(71200400001)(186003)(81166006)(2616005)(64756008)(66556008)(66476007)(54906003)(110136005)(91956017)(66946007)(76116006)(316002)(66446008)(5660300002)(2906002);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR18MB2727;H:BYAPR18MB2535.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: marvell.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6nKw2PC4oqYhfoPtujZGEn0BRLRwtza/g6AK0gaiEzEvKJE5Ojcr9+0ucRJnLoUMk09RIGwRvt9yiG8VEjWWR5yzyZWvJLUOS0GdnVy+lri5DZ4CXSVboe7xzFGXl4sov4UC+deIG6QyNmoDdLHiGsGZWP5OK8DRopLKH8MrohRxTUXW/jR5Y1e+e6gHfNgtxfgEipEaU06cXHhMZszjekLcxoeDX6rDaX2q2MhADaPzILP0QI6fLO/oTAz90R5R9kSYBCyKRYOiQw6to7N2m+kPrMxn3G2exx/Z1q3URUIMS6Gb9KCZLzRrsWEyAYohrUmU5aEmejzB7WDFtTlA7SpU0BZRXJYPki5xynlY2vJVeYh8eRFUKclkyPe+ZjpPuTrLuW3COclNX6luIxfP+BCxrx4s4ymNkUobVIDXyZarzmrBVRV7t/Cc5zmiT4YT
-x-ms-exchange-antispam-messagedata: a3h/x+u7d2gzJBXmStBZq7nuNF/IkNy9PHANbCpB/ayMVga/ux7MR5pnuaAAvJX3ehJwdLgW6mgwLNWwQMkW9xjLQsuInfXS5h1SyMEwanP2TwBDOErxUdhJWWCtGYnBOmHEgE1mPdvXx/cWBou+VQ==
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <442E99C77B4B724185C9969BC3397046@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <ef365b5754ffc07980ed1df6ac8531a8ff590a17.camel@marvell.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: d27dbcf3-3215-45a2-49e4-08d7c0575f8d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2020 16:16:19.2148
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ok8MwBH41hlQH8xntXRyysBoO75qnDsNX9KT2OWE+X0FwAy8+OQZ5yTHgy7HfMc087MmZOCv/HjUsV/lt/HUfw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2727
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-04_05:2020-03-04,2020-03-04 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef365b5754ffc07980ed1df6ac8531a8ff590a17.camel@marvell.com>
+User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-VGhlcmUgYXJlIHZhcmlvdXMgbWVjaGFuaXNtcyB0aGF0IHNlbGVjdCBDUFVzIGZvciBqb2JzIG90
-aGVyIHRoYW4NCnJlZ3VsYXIgd29ya3F1ZXVlIHNlbGVjdGlvbi4gQ1BVIGlzb2xhdGlvbiBub3Jt
-YWxseSBkb2VzIG5vdA0KcHJldmVudCB0aG9zZSBqb2JzIGZyb20gcnVubmluZyBvbiBpc29sYXRl
-ZCBDUFVzLiBXaGVuIHRhc2sNCmlzb2xhdGlvbiBpcyBlbmFibGVkIHRob3NlIGpvYnMgc2hvdWxk
-IGJlIGxpbWl0ZWQgdG8gaG91c2VrZWVwaW5nDQpDUFVzLg0KDQpTaWduZWQtb2ZmLWJ5OiBBbGV4
-IEJlbGl0cyA8YWJlbGl0c0BtYXJ2ZWxsLmNvbT4NCi0tLQ0KIGRyaXZlcnMvcGNpL3BjaS1kcml2
-ZXIuYyB8ICA5ICsrKysrKysNCiBsaWIvY3B1bWFzay5jICAgICAgICAgICAgfCA1MyArKysrKysr
-KysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tDQogbmV0L2NvcmUvbmV0LXN5c2ZzLmMg
-ICAgIHwgIDkgKysrKysrKw0KIDMgZmlsZXMgY2hhbmdlZCwgNTEgaW5zZXJ0aW9ucygrKSwgMjAg
-ZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3BjaS9wY2ktZHJpdmVyLmMgYi9k
-cml2ZXJzL3BjaS9wY2ktZHJpdmVyLmMNCmluZGV4IDA0NTRjYTBlNGUzZi4uY2I4NzJjZGQxNzgy
-IDEwMDY0NA0KLS0tIGEvZHJpdmVycy9wY2kvcGNpLWRyaXZlci5jDQorKysgYi9kcml2ZXJzL3Bj
-aS9wY2ktZHJpdmVyLmMNCkBAIC0xMiw2ICsxMiw3IEBADQogI2luY2x1ZGUgPGxpbnV4L3N0cmlu
-Zy5oPg0KICNpbmNsdWRlIDxsaW51eC9zbGFiLmg+DQogI2luY2x1ZGUgPGxpbnV4L3NjaGVkLmg+
-DQorI2luY2x1ZGUgPGxpbnV4L3NjaGVkL2lzb2xhdGlvbi5oPg0KICNpbmNsdWRlIDxsaW51eC9j
-cHUuaD4NCiAjaW5jbHVkZSA8bGludXgvcG1fcnVudGltZS5oPg0KICNpbmNsdWRlIDxsaW51eC9z
-dXNwZW5kLmg+DQpAQCAtMzMyLDYgKzMzMyw5IEBAIHN0YXRpYyBib29sIHBjaV9waHlzZm5faXNf
-cHJvYmVkKHN0cnVjdCBwY2lfZGV2ICpkZXYpDQogc3RhdGljIGludCBwY2lfY2FsbF9wcm9iZShz
-dHJ1Y3QgcGNpX2RyaXZlciAqZHJ2LCBzdHJ1Y3QgcGNpX2RldiAqZGV2LA0KIAkJCSAgY29uc3Qg
-c3RydWN0IHBjaV9kZXZpY2VfaWQgKmlkKQ0KIHsNCisjaWZkZWYgQ09ORklHX1RBU0tfSVNPTEFU
-SU9ODQorCWludCBoa19mbGFncyA9IEhLX0ZMQUdfRE9NQUlOIHwgSEtfRkxBR19XUTsNCisjZW5k
-aWYNCiAJaW50IGVycm9yLCBub2RlLCBjcHU7DQogCXN0cnVjdCBkcnZfZGV2X2FuZF9pZCBkZGkg
-PSB7IGRydiwgZGV2LCBpZCB9Ow0KIA0KQEAgLTM1Myw3ICszNTcsMTIgQEAgc3RhdGljIGludCBw
-Y2lfY2FsbF9wcm9iZShzdHJ1Y3QgcGNpX2RyaXZlciAqZHJ2LCBzdHJ1Y3QgcGNpX2RldiAqZGV2
-LA0KIAkgICAgcGNpX3BoeXNmbl9pc19wcm9iZWQoZGV2KSkNCiAJCWNwdSA9IG5yX2NwdV9pZHM7
-DQogCWVsc2UNCisjaWZkZWYgQ09ORklHX1RBU0tfSVNPTEFUSU9ODQorCQljcHUgPSBjcHVtYXNr
-X2FueV9hbmQoY3B1bWFza19vZl9ub2RlKG5vZGUpLA0KKwkJCQkgICAgICBob3VzZWtlZXBpbmdf
-Y3B1bWFzayhoa19mbGFncykpOw0KKyNlbHNlDQogCQljcHUgPSBjcHVtYXNrX2FueV9hbmQoY3B1
-bWFza19vZl9ub2RlKG5vZGUpLCBjcHVfb25saW5lX21hc2spOw0KKyNlbmRpZg0KIA0KIAlpZiAo
-Y3B1IDwgbnJfY3B1X2lkcykNCiAJCWVycm9yID0gd29ya19vbl9jcHUoY3B1LCBsb2NhbF9wY2lf
-cHJvYmUsICZkZGkpOw0KZGlmZiAtLWdpdCBhL2xpYi9jcHVtYXNrLmMgYi9saWIvY3B1bWFzay5j
-DQppbmRleCAwY2I2NzJlYjEwN2MuLmRjYmMzMGE0NzYwMCAxMDA2NDQNCi0tLSBhL2xpYi9jcHVt
-YXNrLmMNCisrKyBiL2xpYi9jcHVtYXNrLmMNCkBAIC02LDYgKzYsNyBAQA0KICNpbmNsdWRlIDxs
-aW51eC9leHBvcnQuaD4NCiAjaW5jbHVkZSA8bGludXgvbWVtYmxvY2suaD4NCiAjaW5jbHVkZSA8
-bGludXgvbnVtYS5oPg0KKyNpbmNsdWRlIDxsaW51eC9zY2hlZC9pc29sYXRpb24uaD4NCiANCiAv
-KioNCiAgKiBjcHVtYXNrX25leHQgLSBnZXQgdGhlIG5leHQgY3B1IGluIGEgY3B1bWFzaw0KQEAg
-LTIwNSwyOCArMjA2LDQwIEBAIHZvaWQgX19pbml0IGZyZWVfYm9vdG1lbV9jcHVtYXNrX3Zhcihj
-cHVtYXNrX3Zhcl90IG1hc2spDQogICovDQogdW5zaWduZWQgaW50IGNwdW1hc2tfbG9jYWxfc3By
-ZWFkKHVuc2lnbmVkIGludCBpLCBpbnQgbm9kZSkNCiB7DQotCWludCBjcHU7DQorCWNvbnN0IHN0
-cnVjdCBjcHVtYXNrICptYXNrOw0KKwlpbnQgY3B1LCBtLCBuOw0KKw0KKyNpZmRlZiBDT05GSUdf
-VEFTS19JU09MQVRJT04NCisJbWFzayA9IGhvdXNla2VlcGluZ19jcHVtYXNrKEhLX0ZMQUdfRE9N
-QUlOKTsNCisJbSA9IGNwdW1hc2tfd2VpZ2h0KG1hc2spOw0KKyNlbHNlDQorCW1hc2sgPSBjcHVf
-b25saW5lX21hc2s7DQorCW0gPSBudW1fb25saW5lX2NwdXMoKTsNCisjZW5kaWYNCiANCiAJLyog
-V3JhcDogd2UgYWx3YXlzIHdhbnQgYSBjcHUuICovDQotCWkgJT0gbnVtX29ubGluZV9jcHVzKCk7
-DQotDQotCWlmIChub2RlID09IE5VTUFfTk9fTk9ERSkgew0KLQkJZm9yX2VhY2hfY3B1KGNwdSwg
-Y3B1X29ubGluZV9tYXNrKQ0KLQkJCWlmIChpLS0gPT0gMCkNCi0JCQkJcmV0dXJuIGNwdTsNCi0J
-fSBlbHNlIHsNCi0JCS8qIE5VTUEgZmlyc3QuICovDQotCQlmb3JfZWFjaF9jcHVfYW5kKGNwdSwg
-Y3B1bWFza19vZl9ub2RlKG5vZGUpLCBjcHVfb25saW5lX21hc2spDQotCQkJaWYgKGktLSA9PSAw
-KQ0KLQkJCQlyZXR1cm4gY3B1Ow0KLQ0KLQkJZm9yX2VhY2hfY3B1KGNwdSwgY3B1X29ubGluZV9t
-YXNrKSB7DQotCQkJLyogU2tpcCBOVU1BIG5vZGVzLCBkb25lIGFib3ZlLiAqLw0KLQkJCWlmIChj
-cHVtYXNrX3Rlc3RfY3B1KGNwdSwgY3B1bWFza19vZl9ub2RlKG5vZGUpKSkNCi0JCQkJY29udGlu
-dWU7DQotDQotCQkJaWYgKGktLSA9PSAwKQ0KLQkJCQlyZXR1cm4gY3B1Ow0KKwluID0gaSAlIG07
-DQorDQorCXdoaWxlIChtLS0gPiAwKSB7DQorCQlpZiAobm9kZSA9PSBOVU1BX05PX05PREUpIHsN
-CisJCQlmb3JfZWFjaF9jcHUoY3B1LCBtYXNrKQ0KKwkJCQlpZiAobi0tID09IDApDQorCQkJCQly
-ZXR1cm4gY3B1Ow0KKwkJfSBlbHNlIHsNCisJCQkvKiBOVU1BIGZpcnN0LiAqLw0KKwkJCWZvcl9l
-YWNoX2NwdV9hbmQoY3B1LCBjcHVtYXNrX29mX25vZGUobm9kZSksIG1hc2spDQorCQkJCWlmIChu
-LS0gPT0gMCkNCisJCQkJCXJldHVybiBjcHU7DQorDQorCQkJZm9yX2VhY2hfY3B1KGNwdSwgbWFz
-aykgew0KKwkJCQkvKiBTa2lwIE5VTUEgbm9kZXMsIGRvbmUgYWJvdmUuICovDQorCQkJCWlmIChj
-cHVtYXNrX3Rlc3RfY3B1KGNwdSwNCisJCQkJCQkgICAgIGNwdW1hc2tfb2Zfbm9kZShub2RlKSkp
-DQorCQkJCQljb250aW51ZTsNCisNCisJCQkJaWYgKG4tLSA9PSAwKQ0KKwkJCQkJcmV0dXJuIGNw
-dTsNCisJCQl9DQogCQl9DQogCX0NCiAJQlVHKCk7DQpkaWZmIC0tZ2l0IGEvbmV0L2NvcmUvbmV0
-LXN5c2ZzLmMgYi9uZXQvY29yZS9uZXQtc3lzZnMuYw0KaW5kZXggNGM4MjZiOGJmOWIxLi4yNTM3
-NThmMTAyZDkgMTAwNjQ0DQotLS0gYS9uZXQvY29yZS9uZXQtc3lzZnMuYw0KKysrIGIvbmV0L2Nv
-cmUvbmV0LXN5c2ZzLmMNCkBAIC0xMSw2ICsxMSw3IEBADQogI2luY2x1ZGUgPGxpbnV4L2lmX2Fy
-cC5oPg0KICNpbmNsdWRlIDxsaW51eC9zbGFiLmg+DQogI2luY2x1ZGUgPGxpbnV4L3NjaGVkL3Np
-Z25hbC5oPg0KKyNpbmNsdWRlIDxsaW51eC9zY2hlZC9pc29sYXRpb24uaD4NCiAjaW5jbHVkZSA8
-bGludXgvbnNwcm94eS5oPg0KICNpbmNsdWRlIDxuZXQvc29jay5oPg0KICNpbmNsdWRlIDxuZXQv
-bmV0X25hbWVzcGFjZS5oPg0KQEAgLTcyNSw2ICs3MjYsMTQgQEAgc3RhdGljIHNzaXplX3Qgc3Rv
-cmVfcnBzX21hcChzdHJ1Y3QgbmV0ZGV2X3J4X3F1ZXVlICpxdWV1ZSwNCiAJCXJldHVybiBlcnI7
-DQogCX0NCiANCisjaWZkZWYgQ09ORklHX1RBU0tfSVNPTEFUSU9ODQorCWNwdW1hc2tfYW5kKG1h
-c2ssIG1hc2ssIGhvdXNla2VlcGluZ19jcHVtYXNrKEhLX0ZMQUdfRE9NQUlOKSk7DQorCWlmIChj
-cHVtYXNrX3dlaWdodChtYXNrKSA9PSAwKSB7DQorCQlmcmVlX2NwdW1hc2tfdmFyKG1hc2spOw0K
-KwkJcmV0dXJuIC1FSU5WQUw7DQorCX0NCisjZW5kaWYNCisNCiAJbWFwID0ga3phbGxvYyhtYXhf
-dCh1bnNpZ25lZCBpbnQsDQogCQkJICAgIFJQU19NQVBfU0laRShjcHVtYXNrX3dlaWdodChtYXNr
-KSksIEwxX0NBQ0hFX0JZVEVTKSwNCiAJCSAgICAgIEdGUF9LRVJORUwpOw0KLS0gDQoyLjIwLjEN
-Cg0K
+Hi Alex,
+
+For patches affecting arm64, please CC LAKML and the arm64 maintainers
+(Will and Catalin). I've Cc'd the maintainers here.
+
+On Wed, Mar 04, 2020 at 04:10:28PM +0000, Alex Belits wrote:
+> From: Chris Metcalf <cmetcalf@mellanox.com>
+> 
+> In do_notify_resume(), call task_isolation_start() for
+> TIF_TASK_ISOLATION tasks. Add _TIF_TASK_ISOLATION to _TIF_WORK_MASK,
+> and define a local NOTIFY_RESUME_LOOP_FLAGS to check in the loop,
+> since we don't clear _TIF_TASK_ISOLATION in the loop.
+> 
+> We tweak syscall_trace_enter() slightly to carry the "flags"
+> value from current_thread_info()->flags for each of the tests,
+> rather than doing a volatile read from memory for each one. This
+> avoids a small overhead for each test, and in particular avoids
+> that overhead for TIF_NOHZ when TASK_ISOLATION is not enabled.
+
+Stale commit message?
+
+Looking at the patch below, this doesn't seem to be the case; it just
+calls test_thread_flag(TIF_TASK_ISOLATION).
+
+> 
+> We instrument the smp_send_reschedule() routine so that it checks for
+> isolated tasks and generates a suitable warning if needed.
+> 
+> Finally, report on page faults in task-isolation processes in
+> do_page_faults().
+> 
+> Signed-off-by: Alex Belits <abelits@marvell.com>
+
+The From line says this was from Chris Metcalf, but he's missing from
+the Sign-off chain here, which isn't right.
+
+> ---
+>  arch/arm64/Kconfig                   |  1 +
+>  arch/arm64/include/asm/thread_info.h |  5 ++++-
+>  arch/arm64/kernel/ptrace.c           | 10 ++++++++++
+>  arch/arm64/kernel/signal.c           | 13 ++++++++++++-
+>  arch/arm64/kernel/smp.c              |  7 +++++++
+>  arch/arm64/mm/fault.c                |  5 +++++
+>  6 files changed, 39 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 0b30e884e088..93b6aabc8be9 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -129,6 +129,7 @@ config ARM64
+>  	select HAVE_ARCH_PREL32_RELOCATIONS
+>  	select HAVE_ARCH_SECCOMP_FILTER
+>  	select HAVE_ARCH_STACKLEAK
+> +	select HAVE_ARCH_TASK_ISOLATION
+>  	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+>  	select HAVE_ARCH_TRACEHOOK
+>  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+> index f0cec4160136..7563098eb5b2 100644
+> --- a/arch/arm64/include/asm/thread_info.h
+> +++ b/arch/arm64/include/asm/thread_info.h
+> @@ -63,6 +63,7 @@ void arch_release_task_struct(struct task_struct *tsk);
+>  #define TIF_FOREIGN_FPSTATE	3	/* CPU's FP state is not current's */
+>  #define TIF_UPROBE		4	/* uprobe breakpoint or singlestep */
+>  #define TIF_FSCHECK		5	/* Check FS is USER_DS on return */
+> +#define TIF_TASK_ISOLATION	6
+>  #define TIF_NOHZ		7
+>  #define TIF_SYSCALL_TRACE	8	/* syscall trace active */
+>  #define TIF_SYSCALL_AUDIT	9	/* syscall auditing */
+> @@ -83,6 +84,7 @@ void arch_release_task_struct(struct task_struct *tsk);
+>  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+>  #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
+>  #define _TIF_FOREIGN_FPSTATE	(1 << TIF_FOREIGN_FPSTATE)
+> +#define _TIF_TASK_ISOLATION	(1 << TIF_TASK_ISOLATION)
+>  #define _TIF_NOHZ		(1 << TIF_NOHZ)
+>  #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
+>  #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
+> @@ -96,7 +98,8 @@ void arch_release_task_struct(struct task_struct *tsk);
+>  
+>  #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
+>  				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
+> -				 _TIF_UPROBE | _TIF_FSCHECK)
+> +				 _TIF_UPROBE | _TIF_FSCHECK | \
+> +				 _TIF_TASK_ISOLATION)
+>  
+>  #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
+>  				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
+> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+> index cd6e5fa48b9c..b35b9b0c594c 100644
+> --- a/arch/arm64/kernel/ptrace.c
+> +++ b/arch/arm64/kernel/ptrace.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/regset.h>
+>  #include <linux/tracehook.h>
+>  #include <linux/elf.h>
+> +#include <linux/isolation.h>
+>  
+>  #include <asm/compat.h>
+>  #include <asm/cpufeature.h>
+> @@ -1836,6 +1837,15 @@ int syscall_trace_enter(struct pt_regs *regs)
+>  			return -1;
+>  	}
+>  
+> +	/*
+> +	 * In task isolation mode, we may prevent the syscall from
+> +	 * running, and if so we also deliver a signal to the process.
+> +	 */
+> +	if (test_thread_flag(TIF_TASK_ISOLATION)) {
+> +		if (task_isolation_syscall(regs->syscallno) == -1)
+> +			return -1;
+> +	}
+
+As above, this doesn't match the commit message.
+
+AFAICT, task_isolation_syscall() always returns either 0 or -1, which
+isn't great as an API. I see secure_computing() seems to do the same,
+and it'd be nice to clean that up to either be a real erro code or a
+boolean.
+
+> +
+>  	/* Do the secure computing after ptrace; failures should be fast. */
+>  	if (secure_computing() == -1)
+>  		return -1;
+> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> index 339882db5a91..d488c91a4877 100644
+> --- a/arch/arm64/kernel/signal.c
+> +++ b/arch/arm64/kernel/signal.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/tracehook.h>
+>  #include <linux/ratelimit.h>
+>  #include <linux/syscalls.h>
+> +#include <linux/isolation.h>
+>  
+>  #include <asm/daifflags.h>
+>  #include <asm/debug-monitors.h>
+> @@ -898,6 +899,11 @@ static void do_signal(struct pt_regs *regs)
+>  	restore_saved_sigmask();
+>  }
+>  
+> +#define NOTIFY_RESUME_LOOP_FLAGS \
+> +	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
+> +	_TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
+> +	_TIF_UPROBE | _TIF_FSCHECK)
+> +
+>  asmlinkage void do_notify_resume(struct pt_regs *regs,
+>  				 unsigned long thread_flags)
+>  {
+> @@ -908,6 +914,8 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
+>  	 */
+>  	trace_hardirqs_off();
+>  
+> +	task_isolation_check_run_cleanup();
+> +
+>  	do {
+>  		/* Check valid user FS if needed */
+>  		addr_limit_user_check();
+> @@ -938,7 +946,10 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
+>  
+>  		local_daif_mask();
+>  		thread_flags = READ_ONCE(current_thread_info()->flags);
+> -	} while (thread_flags & _TIF_WORK_MASK);
+> +	} while (thread_flags & NOTIFY_RESUME_LOOP_FLAGS);
+> +
+> +	if (thread_flags & _TIF_TASK_ISOLATION)
+> +		task_isolation_start();
+>  }
+>  
+>  unsigned long __ro_after_init signal_minsigstksz;
+> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> index d4ed9a19d8fe..00f0f77adea0 100644
+> --- a/arch/arm64/kernel/smp.c
+> +++ b/arch/arm64/kernel/smp.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/irq_work.h>
+>  #include <linux/kexec.h>
+>  #include <linux/kvm_host.h>
+> +#include <linux/isolation.h>
+>  
+>  #include <asm/alternative.h>
+>  #include <asm/atomic.h>
+> @@ -818,6 +819,7 @@ void arch_send_call_function_single_ipi(int cpu)
+>  #ifdef CONFIG_ARM64_ACPI_PARKING_PROTOCOL
+>  void arch_send_wakeup_ipi_mask(const struct cpumask *mask)
+>  {
+> +	task_isolation_remote_cpumask(mask, "wakeup IPI");
+>  	smp_cross_call(mask, IPI_WAKEUP);
+>  }
+>  #endif
+> @@ -886,6 +888,9 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
+>  		__inc_irq_stat(cpu, ipi_irqs[ipinr]);
+>  	}
+>  
+> +	task_isolation_interrupt("IPI type %d (%s)", ipinr,
+> +				 ipinr < NR_IPI ? ipi_types[ipinr] : "unknown");
+> +
+
+Are these tracing hooks?
+
+Surely they aren't necessary for functional correctness?
+
+>  	switch (ipinr) {
+>  	case IPI_RESCHEDULE:
+>  		scheduler_ipi();
+> @@ -948,12 +953,14 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
+>  
+>  void smp_send_reschedule(int cpu)
+>  {
+> +	task_isolation_remote(cpu, "reschedule IPI");
+>  	smp_cross_call(cpumask_of(cpu), IPI_RESCHEDULE);
+>  }
+>  
+>  #ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
+>  void tick_broadcast(const struct cpumask *mask)
+>  {
+> +	task_isolation_remote_cpumask(mask, "timer IPI");
+>  	smp_cross_call(mask, IPI_TIMER);
+>  }
+>  #endif
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index 85566d32958f..fc4b42c81c4f 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/preempt.h>
+>  #include <linux/hugetlb.h>
+> +#include <linux/isolation.h>
+>  
+>  #include <asm/acpi.h>
+>  #include <asm/bug.h>
+> @@ -543,6 +544,10 @@ static int __kprobes do_page_fault(unsigned long addr, unsigned int esr,
+>  	 */
+>  	if (likely(!(fault & (VM_FAULT_ERROR | VM_FAULT_BADMAP |
+>  			      VM_FAULT_BADACCESS)))) {
+> +		/* No signal was generated, but notify task-isolation tasks. */
+> +		if (user_mode(regs))
+> +			task_isolation_interrupt("page fault at %#lx", addr);
+> +
+
+We check user_mode(regs) much earlier in this function to set
+FAULT_FLAG_USER. Is there some reason this cannot live there?
+
+Also, this seems to be a tracing hook -- is this necessary?
+
+Thanks,
+Mark.
+
+>  		/*
+>  		 * Major/minor page fault accounting is only done
+>  		 * once. If we go through a retry, it is extremely
+> -- 
+> 2.20.1
+> 
