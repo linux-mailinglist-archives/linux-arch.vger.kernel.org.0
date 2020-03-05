@@ -2,50 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9471179C28
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Mar 2020 00:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A5A179D07
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Mar 2020 01:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388476AbgCDXKx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Mar 2020 18:10:53 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:43904 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388400AbgCDXKx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Mar 2020 18:10:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=wrwrHXw+LNOFZFFMg/FDeMJ6lH0Xav8TTsXnysaRhrg=; b=tw5PI4uR1ew0T6GT3etvcIkt+p
-        +0P2jwaX6zsPoCndUQbxsG+QjnaokBqJWLoEEWdijEHx+9dOsWDEVEErTXnfe0qA1Y9QhRdU0XZ/S
-        qZIEVABVFOALiLdk6tLcO5jROd/WNi75N0iWSebavnHrXc99rpy90XIuY0L01YHhtryDivK96iWNx
-        6wPXyPw7jazYFat2epMU79nM8khDVBmZKzgjh0S/vwwl88V5xDiZNA68vZm7jyTJTniateEn9ZKvj
-        G7EGdpU0I9DAec1y/4EwvI/Sa4FuofkuW2kTRsnVyfaGUUB5xDMKL6hjLKQHfJAKW4e1mCbUAINyL
-        LVloTZCQ==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j9dAB-0005vr-1w; Wed, 04 Mar 2020 23:10:51 +0000
-Subject: Re: [PATCH v3 7/7] Documentation: Add kunit_shutdown to
- kernel-parameters.txt
-To:     Brendan Higgins <brendanhiggins@google.com>, jdike@addtoit.com,
-        richard@nod.at, anton.ivanov@cambridgegreys.com, arnd@arndb.de,
-        keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        frowand.list@gmail.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20200228012036.15682-1-brendanhiggins@google.com>
- <20200228012036.15682-8-brendanhiggins@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <22704191-ce7e-cac7-f7a0-1db822b20d84@infradead.org>
-Date:   Wed, 4 Mar 2020 15:10:49 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1725797AbgCEAyz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Mar 2020 19:54:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:41510 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725777AbgCEAyz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 4 Mar 2020 19:54:55 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D656F31B;
+        Wed,  4 Mar 2020 16:54:54 -0800 (PST)
+Received: from [10.163.1.88] (unknown [10.163.1.88])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 60E2D3F534;
+        Wed,  4 Mar 2020 16:54:46 -0800 (PST)
+Subject: Re: [PATCH V14] mm/debug: Add tests validating architecture page
+ table helpers
+To:     Qian Cai <cai@lca.pw>, Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-arch@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+References: <c022e863-0807-fab1-cd41-3c320381f448@c-s.fr>
+ <11F41980-97CF-411F-8120-41287DC1A382@lca.pw>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <57a3bc61-bbd5-e251-9621-7bc28f7901a1@arm.com>
+Date:   Thu, 5 Mar 2020 06:24:44 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <20200228012036.15682-8-brendanhiggins@google.com>
+In-Reply-To: <11F41980-97CF-411F-8120-41287DC1A382@lca.pw>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -54,47 +62,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/27/20 5:20 PM, Brendan Higgins wrote:
-> Add kunit_shutdown, an option to specify that the kernel shutsdown after
-> running KUnit tests, to the kernel-parameters.txt documentation.
+
+
+On 03/04/2020 04:59 PM, Qian Cai wrote:
 > 
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-
-Hi Brendan,
-
-To be consistent with other parameters in this file:
-
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 8 ++++++++
->  1 file changed, 8 insertions(+)
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index dbc22d6846275..6ad63e98916f9 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -2099,6 +2099,14 @@
->  			0: force disabled
->  			1: force enabled
->  
-> +	kunit_shutdown	[KERNEL UNIT TESTING FRAMEWORK] Shutdown kernel after
-
-that line should have an '=' sign after the param name:
-	kunit_shutdown=
-
-> +			running built-in tests. Tests configured as modules will
-> +			not be run.
-> +			Default:	(flag not present) don't shutdown
-> +			poweroff:	poweroff the kernel after running tests
-> +			halt:		halt the kernel after running tests
-> +			reboot:		reboot the kernel after running tests
-> +
->  	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
->  			Default is 0 (don't ignore, but inject #GP)
->  
+>> On Mar 4, 2020, at 1:49 AM, Christophe Leroy <christophe.leroy@c-s.fr> wrote:
+>>
+>> AFAIU, you are not taking an interrupt here. You are stuck in the pte_update(), most likely due to nested locks. Try with LOCKDEP ?
 > 
+> Not exactly sure what did you mean here, but the kernel has all lockdep enabled and did not flag anything here.
 
-thanks.
--- 
-~Randy
+As the patch has been dropped from Linux next (next-20200304) perhaps in
+order to fold back the __pa_symbol() fix [1], so I am planning to respin
+the original patch once more as V15 while adding Qian's signed off by for
+the powerpc part. For now lets enable radix MMU ppc64 along with existing
+ppc32. As PPC_RADIX_MMU depends on PPC_BOOK3S_64, the following change
+should be good enough ?
 
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 497b7d0b2d7e..8d5ae14c5d4c 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -116,6 +116,7 @@  config PPC
+ 	#
+ 	select ARCH_32BIT_OFF_T if PPC32
+ 	select ARCH_HAS_DEBUG_VIRTUAL
++	select ARCH_HAS_DEBUG_VM_PGTABLE if (PPC_RADIX_MMU || PPC32)
+ 	select ARCH_HAS_DEVMEM_IS_ALLOWED
+ 	select ARCH_HAS_ELF_RANDOMIZE
+ 	select ARCH_HAS_FORTIFY_SOURCE
+
+[1] https://patchwork.kernel.org/patch/11407715/
