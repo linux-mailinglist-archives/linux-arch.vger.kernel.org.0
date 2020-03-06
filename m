@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1915017BE92
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Mar 2020 14:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1181717BE95
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Mar 2020 14:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbgCFNc5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Mar 2020 08:32:57 -0500
-Received: from foss.arm.com ([217.140.110.172]:33294 "EHLO foss.arm.com"
+        id S1727067AbgCFNdA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Mar 2020 08:33:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:33324 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726054AbgCFNc5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 6 Mar 2020 08:32:57 -0500
+        id S1726054AbgCFNdA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 6 Mar 2020 08:33:00 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F04894B2;
-        Fri,  6 Mar 2020 05:32:56 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E6469101E;
+        Fri,  6 Mar 2020 05:32:59 -0800 (PST)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A6F73F6CF;
-        Fri,  6 Mar 2020 05:32:54 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3201D3F6CF;
+        Fri,  6 Mar 2020 05:32:57 -0800 (PST)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Dmitry Safonov <0x7f454c46@gmail.com>,
         Andrei Vagin <avagin@openvz.org>,
         Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v2 01/20] linux/const.h: Extract common header for vDSO
-Date:   Fri,  6 Mar 2020 13:32:23 +0000
-Message-Id: <20200306133242.26279-2-vincenzo.frascino@arm.com>
+Subject: [PATCH v2 02/20] linux/bits.h: Extract common header for vDSO
+Date:   Fri,  6 Mar 2020 13:32:24 +0000
+Message-Id: <20200306133242.26279-3-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200306133242.26279-1-vincenzo.frascino@arm.com>
 References: <20200306133242.26279-1-vincenzo.frascino@arm.com>
@@ -55,47 +55,46 @@ a userspace library (UAPI and a minimal set of kernel headers). To make
 this possible it is necessary to isolate from the kernel headers the
 common parts that are strictly necessary to build the library.
 
-Split const.h into linux and common headers to make the latter suitable
+Split bits.h into linux and common headers to make the latter suitable
 for inclusion in the vDSO library.
 
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- include/common/const.h | 10 ++++++++++
- include/linux/const.h  |  5 +----
- 2 files changed, 11 insertions(+), 4 deletions(-)
- create mode 100644 include/common/const.h
+ include/common/bits.h | 9 +++++++++
+ include/linux/bits.h  | 2 +-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+ create mode 100644 include/common/bits.h
 
-diff --git a/include/common/const.h b/include/common/const.h
+diff --git a/include/common/bits.h b/include/common/bits.h
 new file mode 100644
-index 000000000000..cc209eec47a1
+index 000000000000..6da493992e52
 --- /dev/null
-+++ b/include/common/const.h
-@@ -0,0 +1,10 @@
++++ b/include/common/bits.h
+@@ -0,0 +1,9 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __COMMON_CONST_H
-+#define __COMMON_CONST_H
++#ifndef __COMMON_BITS_H
++#define __COMMON_BITS_H
 +
-+#include <uapi/linux/const.h>
-+
-+#define UL(x)		(_UL(x))
-+#define ULL(x)		(_ULL(x))
-+
-+#endif /* __COMMON_CONST_H */
-diff --git a/include/linux/const.h b/include/linux/const.h
-index 7b55a55f5911..447a5b98d5a3 100644
---- a/include/linux/const.h
-+++ b/include/linux/const.h
-@@ -1,9 +1,6 @@
- #ifndef _LINUX_CONST_H
- #define _LINUX_CONST_H
- 
--#include <uapi/linux/const.h>
--
--#define UL(x)		(_UL(x))
--#define ULL(x)		(_ULL(x))
 +#include <common/const.h>
++
++#define BIT(nr)			(UL(1) << (nr))
++
++#endif	/* __COMMON_BITS_H */
+diff --git a/include/linux/bits.h b/include/linux/bits.h
+index 669d69441a62..aeb76fede77a 100644
+--- a/include/linux/bits.h
++++ b/include/linux/bits.h
+@@ -3,9 +3,9 @@
+ #define __LINUX_BITS_H
  
- #endif /* _LINUX_CONST_H */
+ #include <linux/const.h>
++#include <common/bits.h>
+ #include <asm/bitsperlong.h>
+ 
+-#define BIT(nr)			(UL(1) << (nr))
+ #define BIT_ULL(nr)		(ULL(1) << (nr))
+ #define BIT_MASK(nr)		(UL(1) << ((nr) % BITS_PER_LONG))
+ #define BIT_WORD(nr)		((nr) / BITS_PER_LONG)
 -- 
 2.25.1
 
