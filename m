@@ -2,94 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE2817C7B7
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Mar 2020 22:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B03217C8B7
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Mar 2020 00:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726271AbgCFVQ6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Mar 2020 16:16:58 -0500
-Received: from mga17.intel.com ([192.55.52.151]:11090 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726185AbgCFVQ6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 6 Mar 2020 16:16:58 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 13:16:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,523,1574150400"; 
-   d="scan'208";a="244724810"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga006.jf.intel.com with ESMTP; 06 Mar 2020 13:16:56 -0800
-Message-ID: <d1e483574f496d16aa2ff92562debfdacaff0f36.camel@intel.com>
-Subject: Re: [RFC PATCH v9 05/27] x86/cet/shstk: Add Kconfig option for
- user-mode Shadow Stack protection
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-Date:   Fri, 06 Mar 2020 13:16:55 -0800
-In-Reply-To: <d4e09cf8-4237-d168-7e46-929f2b536332@intel.com>
-References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
-         <20200205181935.3712-6-yu-cheng.yu@intel.com>
-         <d4dabb84-5636-2657-c45e-795f3f2dcbbc@intel.com>
-         <070d9d78981f0aad2baf740233e8dfc32ecd29d7.camel@intel.com>
-         <d4e09cf8-4237-d168-7e46-929f2b536332@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1726240AbgCFXKc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Mar 2020 18:10:32 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:33045 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726237AbgCFXKc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Mar 2020 18:10:32 -0500
+Received: by mail-lf1-f66.google.com with SMTP id c20so3240756lfb.0;
+        Fri, 06 Mar 2020 15:10:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Qe8wUFv1rWfO0Jj+EAuF6LQPlbPXK3Z6EOrgI0Gdx9k=;
+        b=LulrOrqpx0/0G8hFYqFzxTYNXXW1JCsFHC320W5pxat1R/Gq10mUIexXFg2X0IjgkH
+         R/8OhsWZREwdNq+pWnetJCN+wKY6PPWO7dlynTtYJFZLdrxNLmuvOkDAxdvIqtMfa5Pf
+         SNsnvvVnhVemr+T/5x7OgVlT89LwffGVOAG3Kgl/Qk6tX4RwNOAgMKPi67hqLUslbQpd
+         FWE6uU0yvEXZRKex0XGHlyDOzviTBdAyQl1dH+YWCS9YJG9oNNCaXTXIbmDewUqRKY7N
+         yGRAGMRJms0Yc3KcFiF3OJg4QbEE4Jg4HxqFtz9uiU5Qd3B82bawpm43rnyZe0QSVjMT
+         BuPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qe8wUFv1rWfO0Jj+EAuF6LQPlbPXK3Z6EOrgI0Gdx9k=;
+        b=KCyZKLhJbCNBYIQCKd2ReG5OvD08oUk9LtFQF6dCaJHaUZUe0JN9JnWIbPC4zRsATo
+         ZugppOY6e+iyHuIUvhR4zpT9RJutZpqRVYsKpkmD05bkHtb0g68eRGHUZt9Zrf1E9jJ6
+         tS2qeMg6O3uTYothNo4O0Jl7iZITgBWV8mfElYC/59y3wdMVc1nKYpYrKEgywB64Y5z2
+         +pau6BZuDI/Vw1oPhHrpyavFvMKbxorEx5tmdElF/bn5oC6txiZ6Fmat6LRoQFueufnc
+         Ik2HKt3GuLsWPcMZHIN3x0KvsswtLu7pj4p19uw0VhPqmP50pJf+ESLnuiCA8ec55c4r
+         qJtA==
+X-Gm-Message-State: ANhLgQ0gXqdtqcgVmOH6ij6+NilG1FM6sH7ASdGJTm2+z+UH01HY/z3u
+        e7IBsZGOJk3Inv8uEGt7kgWBkCRA68fYJUuGWJ4=
+X-Google-Smtp-Source: ADFU+vsWXcoIQAUDTax0XOY1RpvoM6JRnIfSwIJuQvEjIepHZNV7DI+yPeXZlM2SlMk1yIeSgf5HOkbcz+PE0R5Ub0o=
+X-Received: by 2002:a05:6512:304c:: with SMTP id b12mr3256481lfb.196.1583536229276;
+ Fri, 06 Mar 2020 15:10:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20200221133416.777099322@infradead.org> <20200306104335.GF3348@worktop.programming.kicks-ass.net>
+ <20200306113135.GA8787@worktop.programming.kicks-ass.net> <CAADnVQKp=UKg8HAuMOFknhmXtfm_LVu_ynTNJuedHqKdA6zh1g@mail.gmail.com>
+ <1896740806.20220.1583510668164.JavaMail.zimbra@efficios.com>
+ <20200306125500.6aa75c0d@gandalf.local.home> <609624365.20355.1583526166349.JavaMail.zimbra@efficios.com>
+ <20200306154556.6a829484@gandalf.local.home> <65796626.20397.1583528124078.JavaMail.zimbra@efficios.com>
+In-Reply-To: <65796626.20397.1583528124078.JavaMail.zimbra@efficios.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 6 Mar 2020 15:10:17 -0800
+Message-ID: <CAADnVQKot7kEYsEQrEszGeTuug4fpWGkc4GKA_yNeFi6OHe3uw@mail.gmail.com>
+Subject: Re: [PATCH v4 16/27] tracing: Remove regular RCU context for _rcuidle
+ tracepoints (again)
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Joel Fernandes, Google" <joel@joelfernandes.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        dan carpenter <dan.carpenter@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 2020-03-06 at 11:02 -0800, Dave Hansen wrote:
-> On 3/6/20 10:37 AM, Yu-cheng Yu wrote:
-> > We used to do this for CET instructions, but after adding kernel-mode
-> > instructions and inserting ENDBR's, the code becomes cluttered.  I also
-> > found an earlier discussion on the ENDBR:
-> > 
-> > https://lore.kernel.org/lkml/CALCETrVRH8LeYoo7V1VBPqg4WS0Enxtizt=T7dPvgoeWfJrdzA@mail.gmail.com/
-> > 
-> > It makes sense to let the user know early on that the system cannot support
-> > CET and cannot build a CET-enabled kernel.
-> > 
-> > One thing we can do is to disable CET in Kconfig and not in kernel
-> > build, which I will do in the next version.
-> 
-> I'll go on the record and say I think we should allow building
-> CET-enabled kernels on old toolchains.  We need it for build test
-> coverage.  We can spit out a warning, but we need to allow building it.
+On Fri, Mar 6, 2020 at 12:55 PM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> ----- On Mar 6, 2020, at 3:45 PM, rostedt rostedt@goodmis.org wrote:
+>
+> > On Fri, 6 Mar 2020 15:22:46 -0500 (EST)
+> > Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> >
+> >> I agree with the overall approach. Just a bit of nitpicking on the API:
+> >>
+> >> I understand that the "prio" argument is a separate argument because it can take
+> >> many values. However, "rcu" is just a boolean, so I wonder if we should not
+> >> rather
+> >> introduce a "int flags" with a bitmask enum, e.g.
+> >
+> > I thought about this approach, but thought it was a bit overkill. As the
+> > kernel doesn't have an internal API, I figured we can switch this over to
+> > flags when we get another flag to add. Unless you can think of one in the
+> > near future.
+>
+> The additional feature I have in mind for near future would be to register
+> a probe which can take a page fault to a "sleepable" tracepoint. This would
+> require preemption to be enabled and use of SRCU.
 
-The build test will go through (assembler or .byte), once the opcode patch
-is applied [1].  Also, when we enable kernel-mode CET, it is difficult to
-build IBT code without the right tool chain.
-
-Yu-cheng
-
-[1] opcode patch: 
-https://lore.kernel.org/lkml/20200204171425.28073-1-yu-cheng.yu@intel.com/
-
-
+I'm working on sleepable bpf as well and this extra flag for tracepoints
+would come very handy, so I would go with flags approach right away.
+We wouldn't need to touch the same protos multiple times,
+less conflicts for us all, etc.
