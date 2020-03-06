@@ -2,129 +2,207 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EF417C5D6
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Mar 2020 20:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6F817C602
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Mar 2020 20:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbgCFTCM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Mar 2020 14:02:12 -0500
-Received: from mga17.intel.com ([192.55.52.151]:1470 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726167AbgCFTCL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 6 Mar 2020 14:02:11 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 11:02:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,523,1574150400"; 
-   d="scan'208";a="244691684"
-Received: from ray.jf.intel.com (HELO [10.7.201.139]) ([10.7.201.139])
-  by orsmga006.jf.intel.com with ESMTP; 06 Mar 2020 11:02:09 -0800
-Subject: Re: [RFC PATCH v9 05/27] x86/cet/shstk: Add Kconfig option for
- user-mode Shadow Stack protection
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        id S1726676AbgCFTLy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Mar 2020 14:11:54 -0500
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:36605 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726171AbgCFTLy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Mar 2020 14:11:54 -0500
+Received: by mail-qt1-f195.google.com with SMTP id m33so2542402qtb.3
+        for <linux-arch@vger.kernel.org>; Fri, 06 Mar 2020 11:11:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=FN8/MXzRR/AXYFjO0vMe+zxEp/BtF7qqa7fcYg79KnU=;
+        b=BUu6Upe9S3G6I5PeW0Q1FQ85eIdUbzTkGvjmhNjGzqT1r73rK6HoKQUOwGc0cV6us6
+         DTyGQRyLf2sEzesiNwzJw7peGyyI+m2vMW9HIdkjFzAUtI6AmJAIIeMHyHuG5wWJBVQj
+         OaC07p4s7+ken1hfrfc6OMhT/E1J3HOlV+/84=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FN8/MXzRR/AXYFjO0vMe+zxEp/BtF7qqa7fcYg79KnU=;
+        b=eYNJQy3hVMeKM4FcWxFgtmw3h74/Hwg+AYVavar+672KEPB7cKM4KjY/wHPpdpqhIg
+         Z4g3ekf/S3atTWADeGgZ61ZM1KRV74LANZ34WLxSJU6XvjDZ2N7+I54EqbwSoPREKN35
+         sqLdx+vRf3jWFpYvE2IzrFIsYs3REDd/aFD+BvB1zwFslc6dVKX22/HfTbB4DlXQki7E
+         Q78JID+teM/cAvg62gqBqQv3PXsRpA5Ns+k+y2TQsd390Kd/2AgmdLyZC2PjyNYBHWeC
+         5Z/Du0phf2fYrEF2gZmhdl1dN67qyzhKfdH45nThgU+S873CfzGIIwLHnq7rulYt204u
+         L/Tg==
+X-Gm-Message-State: ANhLgQ3edYXGkuhEqpX30L5lNr0vc2JvSS/WPvR2XpjyRdoUR2RLil4d
+        imrThYkwgLgxDrjIxnlNPvXCxQ==
+X-Google-Smtp-Source: ADFU+vtFy4BcPn+yf6hyAkfbmKq4CxaGZBHUzQrdXiTB9EculEo5fZpCUaURb7/lshZypIXtQZY9xA==
+X-Received: by 2002:ac8:4c86:: with SMTP id j6mr4354875qtv.139.1583521911975;
+        Fri, 06 Mar 2020 11:11:51 -0800 (PST)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id v12sm16689955qti.84.2020.03.06.11.11.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2020 11:11:51 -0800 (PST)
+Date:   Fri, 6 Mar 2020 14:11:51 -0500
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     paulmck@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
- <20200205181935.3712-6-yu-cheng.yu@intel.com>
- <d4dabb84-5636-2657-c45e-795f3f2dcbbc@intel.com>
- <070d9d78981f0aad2baf740233e8dfc32ecd29d7.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-Message-ID: <d4e09cf8-4237-d168-7e46-929f2b536332@intel.com>
-Date:   Fri, 6 Mar 2020 11:02:08 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        mingo@kernel.org, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, tglx@linutronix.de, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com
+Subject: Re: [PATCH v2 3/9] rcu,tracing: Create trace_rcu_{enter,exit}()
+Message-ID: <20200306191151.GA60713@google.com>
+References: <20200213223918.GN2935@paulmck-ThinkPad-P72>
+ <20200214151906.b1354a7ed6b01fc3bf2de862@kernel.org>
+ <20200215145934.GD2935@paulmck-ThinkPad-P72>
+ <20200217175519.12a694a969c1a8fb2e49905e@kernel.org>
+ <20200217163112.GM2935@paulmck-ThinkPad-P72>
+ <20200218133335.c87d7b2399ee6532bf28b74a@kernel.org>
+ <20200218124609.1a33f868@gandalf.local.home>
+ <20200218201806.GI2935@paulmck-ThinkPad-P72>
+ <20200219114510.6f942b56868a97e06352738c@kernel.org>
+ <20200307030149.1f70bdb019ad5ea896bce5a7@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <070d9d78981f0aad2baf740233e8dfc32ecd29d7.camel@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200307030149.1f70bdb019ad5ea896bce5a7@kernel.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 3/6/20 10:37 AM, Yu-cheng Yu wrote:
-> We used to do this for CET instructions, but after adding kernel-mode
-> instructions and inserting ENDBR's, the code becomes cluttered.  I also
-> found an earlier discussion on the ENDBR:
+On Sat, Mar 07, 2020 at 03:01:49AM +0900, Masami Hiramatsu wrote:
+> Hi,
 > 
-> https://lore.kernel.org/lkml/CALCETrVRH8LeYoo7V1VBPqg4WS0Enxtizt=T7dPvgoeWfJrdzA@mail.gmail.com/
+> On Wed, 19 Feb 2020 11:45:10 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> It makes sense to let the user know early on that the system cannot support
-> CET and cannot build a CET-enabled kernel.
+> > On Tue, 18 Feb 2020 12:18:06 -0800
+> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > 
+> > > On Tue, Feb 18, 2020 at 12:46:09PM -0500, Steven Rostedt wrote:
+> > > > On Tue, 18 Feb 2020 13:33:35 +0900
+> > > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > > 
+> > > > > On Mon, 17 Feb 2020 08:31:12 -0800
+> > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > > >   
+> > > > > > > BTW, if you consider the x86 specific code is in the generic file,
+> > > > > > > we can move NOKPROBE_SYMBOL() in arch/x86/kernel/traps.c.
+> > > > > > > (Sorry, I've hit this idea right now)  
+> > > > > > 
+> > > > > > Might this affect other architectures with NMIs and probe-like things?
+> > > > > > If so, it might make sense to leave it where it is.  
+> > > > > 
+> > > > > Yes, git grep shows that arm64 is using rcu_nmi_enter() in
+> > > > > debug_exception_enter().
+> > > > > OK, let's keep it, but maybe it is good to update the comment for
+> > > > > arm64 too. What about following?
+> > > > > 
+> > > > > +/*
+> > > > > + * All functions in do_int3() on x86, do_debug_exception() on arm64 must be
+> > > > > + * marked NOKPROBE before kprobes handler is called.
+> > > > > + * ist_enter() on x86 and debug_exception_enter() on arm64 which is called
+> > > > > + * before kprobes handle happens to call rcu_nmi_enter() which means
+> > > > > + * that rcu_nmi_enter() must be marked NOKRPOBE.
+> > > > > + */
+> > > > > 
+> > > > 
+> > > > Ah, why don't we just say...
+> > > > 
+> > > > /*
+> > > >  * All functions called in the breakpoint trap handler (e.g. do_int3()
+> > > >  * on x86), must not allow kprobes until the kprobe breakpoint handler
+> > > >  * is called, otherwise it can cause an infinite recursion.
+> > > >  * On some archs, rcu_nmi_enter() is called in the breakpoint handler
+> > > >  * before the kprobe breakpoint handler is called, thus it must be
+> > > >  * marked as NOKPROBE.
+> > > >  */
+> > > > 
+> > > > And that way we don't make this an arch specific comment.
+> > > 
+> > > That looks good to me.  Masami, does this work for you?
+> > 
+> > Yes, that looks good to me too :)
 > 
-> One thing we can do is to disable CET in Kconfig and not in kernel
-> build, which I will do in the next version.
+> Oops, I'm guilty!
+> Sorry *rcu_nmi_exit()* also must be NOKPROBE, since even if we could catch
+> a recursive kprobe call, we can only skip the kprobe handler, but we must
+> exit from do_int3() and hit rcu_nmi_exit() again!
+> 
+> [45235.497591] Unrecoverable kprobe detected.
+> [45235.501400] Dumping kprobe:
+> [45235.502433] Name: (null)
+> [45235.502433] Offset: 0
+> [45235.502433] Address: rcu_nmi_exit+0x0/0x290
+> [45235.504044] ------------[ cut here ]------------
+> [45235.504855] kernel BUG at arch/x86/kernel/kprobes/core.c:646!
+> [45235.505816] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+> [45235.506615] CPU: 7 PID: 143 Comm: sh Not tainted 5.6.0-rc3+ #143
+> [45235.507662] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
+> [45235.509764] RIP: 0010:reenter_kprobe.cold+0x14/0x16
+> [45235.510630] Code: 48 8b 75 10 48 c7 c7 f0 70 0e 82 48 8b 56 28 e8 22 91 08 00 0f 0b 48 c7 c7 20 71 0e 82 e8 14 91 08 00 48 89 ef e8 23 ee 0f 00 <0f> 0b 48 89 ee 48 c7 c7 48 71 0e 82 e8 fb 90 08 00 e9 c3 fc ff ff
+> [45235.513948] RSP: 0018:ffffc90000347bf8 EFLAGS: 00010046
+> [45235.514906] RAX: 0000000000000036 RBX: 0000000000017f20 RCX: 0000000000000000
+> [45235.516109] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000001
+> [45235.517278] RBP: ffff88807c9820c0 R08: 0000000000000000 R09: 0000000000000001
+> [45235.518415] R10: 0000000000000000 R11: ffff88807c9d1f18 R12: ffff88807d9d7f20
+> [45235.519609] R13: ffffc90000347c68 R14: ffffffff810e8a60 R15: ffffffff810e8a61
+> [45235.520787] FS:  0000000001d9a8c0(0000) GS:ffff88807d9c0000(0000) knlGS:0000000000000000
+> [45235.522198] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [45235.523172] CR2: 0000000001da9000 CR3: 000000007a880000 CR4: 00000000000006a0
+> [45235.524288] Call Trace:
+> [45235.524825]  kprobe_int3_handler+0x74/0x150
+> [45235.525627]  do_int3+0x36/0xf0
+> [45235.526244]  int3+0x42/0x50
+> [45235.526767] RIP: 0010:rcu_nmi_exit+0x1/0x290
+> [45235.527551] Code: a2 0d 82 be c2 01 00 00 48 c7 c7 d5 44 0f 82 c6 05 e7 ac 24 01 01 e8 1f ba fd ff eb b8 66 66 2e 0f 1f 84 00 00 00 00 00 90 cc <57> 41 56 41 55 41 54 55 48 c7 c5 40 c2 02 00 53 48 89 eb e8 77 75
+> [45235.530898] RSP: 0018:ffffc90000347d40 EFLAGS: 00000046
+> [45235.531816] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> [45235.533001] RDX: 0000000000000001 RSI: ffffffff8101e1fe RDI: ffffffff8101e1fe
+> [45235.534252] RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+> [45235.535516] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+> [45235.536759] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> [45235.537945]  ? ist_exit+0xe/0x20
+> [45235.538593]  ? ist_exit+0xe/0x20
+> [45235.539239]  ? rcu_nmi_exit+0x1/0x290
+> [45235.541182]  int3+0x42/0x50
+> [45235.541687] RIP: 0010:0xffffffffa000005a
+> [45235.542363] Code: 2e 16 13 e1 00 00 00 00 00 00 00 00 89 f8 e9 1f 16 13 e1 00 00 00 00 00 00 00 00 89 f8 e9 20 16 13 e1 00 00 00 00 00 00 00 00 <41> 57 e9 01 8a 0e e1 00 00 00 00 00 00 00 00 41 57 e9 f2 22 26 e1
+> [45235.545628] RSP: 0018:ffffc90000347e20 EFLAGS: 00000146
+> [45235.546596] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> [45235.547989] RDX: 0000000000000001 RSI: ffffffff8101e1fe RDI: ffffffff8101e1fe
+> [45235.550183] RBP: 0000000000000000 R08: 0000000000000001 R09: ffff88807d2aa000
+> [45235.551591] R10: 0000000000000a4c R11: ffff88807bfec600 R12: 0000000000000000
+> [45235.552893] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> [45235.554633]  ? ist_exit+0xe/0x20
+> [45235.555537]  ? ist_exit+0xe/0x20
+> [45235.556565]  ? rcu_nmi_exit+0x1/0x290
+> [45235.557909]  ? int3+0x42/0x50
+> [45235.559156]  ? 0xffffffffa0000069
+> [45235.560547]  ? vfs_read+0x1/0x150
+> [45235.561522]  ? ksys_read+0x60/0xe0
+> [45235.562458]  ? do_syscall_64+0x4b/0x1e0
+> [45235.563404]  ? entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> [45235.564705] Modules linked in:
+> [45235.565556] ---[ end trace 870af8724dba9ac8 ]---
+> 
+> So all functions called from do_int3() must be NOKPROBE.
 
-I'll go on the record and say I think we should allow building
-CET-enabled kernels on old toolchains.  We need it for build test
-coverage.  We can spit out a warning, but we need to allow building it.
+Makes sense, I am curious though why you thought before that the breakpoint
+recursion was not possible *after* kprobe_int3_handler(). In the below thread
+you said it is to be marked only for functions *before*
+kprobe_int3_handler(). Was there a reason?
+https://lore.kernel.org/lkml/154998793571.31052.11301258949601150994.stgit@devbox/
 
-Andy L, do you have any heartburn with that?
+thanks,
+
+ - Joel
+
+
+> 
+> Thank you,
+> 
+> -- 
+> Masami Hiramatsu <mhiramat@kernel.org>
