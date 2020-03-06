@@ -2,89 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0406E17BBAD
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Mar 2020 12:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE3417BBB9
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Mar 2020 12:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726171AbgCFLaK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Fri, 6 Mar 2020 06:30:10 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:44732 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726108AbgCFLaK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Mar 2020 06:30:10 -0500
-Received: by mail-qk1-f196.google.com with SMTP id f198so1889167qke.11;
-        Fri, 06 Mar 2020 03:30:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Nna0nsguv2U+v9ziNQRL80k09HbQlLvP1j4KtjoAo7M=;
-        b=P7EcwBcK7dx8cF79C9pN3P6os2Z3YL6AU/wh0wx1LLH1l78jY4kiL53d5woVTM5qNl
-         zOzIhESzoLvN1T5kdKAfTD6rEiWYYQmj+xeoVvPw7HKmTpokbVUhNvpt/vCeC++Y0PcH
-         wHOg/i20WypsCUUFgbqe6UFtxftO/ptP3eLWTbAjYWfrB/oSVIeVXeKCRK/Mq3AiPiwG
-         k4Z1KVUXJK31T5j3cxAUY4fkAhBuFMhJ9kQquP2yjt/XYVvIHr687XaoKLW7wJ1X81a6
-         3WHz4RRRyGYR3Cz2V8fxrqB+uhS0usmz1JcTQn6297qOtrPwKhMR0BC3oFg/fOhY8eh/
-         o9wg==
-X-Gm-Message-State: ANhLgQ2znZ8XFgc+mygHmuNsTYQFfSoyz/gjmjdDUHVshFUUVC/DZaxY
-        LOX4AjZ68l09qOI7Cmd7s9HwHNWz9Jum35wfD7Q=
-X-Google-Smtp-Source: ADFU+vsdbMUXZ/9+PsZX4vmn+uiZw3tJKm/S0yTnSyg72ZSBwF9YNhD0HM8bKgqMu40FTOyith2U60eZc5tP18laC8U=
-X-Received: by 2002:a37:6646:: with SMTP id a67mr2383615qkc.457.1583494209166;
- Fri, 06 Mar 2020 03:30:09 -0800 (PST)
+        id S1726167AbgCFLcD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Mar 2020 06:32:03 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:51814 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgCFLcC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Mar 2020 06:32:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gVYfVAk3KO+g2j+XGdHVbdJHCQeeRvAXa6ZJkiT2+rs=; b=PBiw1JGlFqdhZJqMKou720MxCa
+        sQwQVatz60It3GeJKZHlbMRrjel7ddDYBzFLNWB75jPZRjQPpmfewC3JNMVkLQDz7/x/p2o/u39N2
+        68ERwHxQqiq8Vr+WkUd0UnlKldcCkBc3x3xxUh9SJ4gql0aP+p8PMqayBk+NCTCDbFtX/vJbYFdi7
+        GlF2HabZJZKldXtmsGC0h007HsbDZi/txNKibEuV+DkKcQDbkklLeMWHah294Osk4PeCzDmfITnxk
+        eQQnm4NCrIDXxgVRGekPEXubuhG17i+7BFIMcoMjTTyfLT41btIImNPBtbdqyfrZlAUluWzv0VoKX
+        8NzBn3TQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jABCc-00009q-9b; Fri, 06 Mar 2020 11:31:38 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 77326980DE9; Fri,  6 Mar 2020 12:31:35 +0100 (CET)
+Date:   Fri, 6 Mar 2020 12:31:35 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        rostedt@goodmis.org
+Cc:     mingo@kernel.org, joel@joelfernandes.org,
+        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
+        tglx@linutronix.de, paulmck@kernel.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        luto@kernel.org, tony.luck@intel.com, frederic@kernel.org,
+        dan.carpenter@oracle.com, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v4 16/27] tracing: Remove regular RCU context for
+ _rcuidle tracepoints (again)
+Message-ID: <20200306113135.GA8787@worktop.programming.kicks-ass.net>
+References: <20200221133416.777099322@infradead.org>
+ <20200221134216.051596115@infradead.org>
+ <20200306104335.GF3348@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20200306080905.173466-1-syq@debian.org> <87r1y53npd.fsf@mid.deneb.enyo.de>
- <8441f497-61eb-5c14-bf1e-c90a464105a7@vivier.eu> <87mu8t3mlw.fsf@mid.deneb.enyo.de>
- <40da389d-4e74-2644-2e7c-04d988fcc26f@vivier.eu>
-In-Reply-To: <40da389d-4e74-2644-2e7c-04d988fcc26f@vivier.eu>
-From:   YunQiang Su <syq@debian.org>
-Date:   Fri, 6 Mar 2020 19:29:57 +0800
-Message-ID: <CAKcpw6WEO5Rmsv+WFkOMrkH+0jwtFKKy7b2n3U9xgv-xGC0UUQ@mail.gmail.com>
-Subject: Re: [PATCH] binfmt_misc: pass binfmt_misc P flag to the interpreter
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Florian Weimer <fw@deneb.enyo.de>, torvalds@linux-foundation.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        akpm@linux-foundation.org, Al Viro <viro@zeniv.linux.org.uk>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200306104335.GF3348@worktop.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Laurent Vivier <laurent@vivier.eu> 于2020年3月6日周五 下午7:13写道：
->
-> Le 06/03/2020 à 09:37, Florian Weimer a écrit :
-> > * Laurent Vivier:
-> >
-> >> Le 06/03/2020 à 09:13, Florian Weimer a écrit :
-> >>> * YunQiang Su:
-> >>>
-> >>>> +  if (bprm->interp_flags & BINPRM_FLAGS_PRESERVE_ARGV0)
-> >>>> +          flags |= AT_FLAGS_PRESERVE_ARGV0;
-> >>>> +  NEW_AUX_ENT(AT_FLAGS, flags);
-> >>>
-> >>> Is it necessary to reuse AT_FLAGS?  I think it's cleaner to define a
-> >>> separate AT_ tag dedicated to binfmt_misc.
-> >>
-> >> Not necessary, but it seemed simpler and cleaner to re-use a flag that
-> >> is marked as unused and with a name matching the new role. It avoids to
-> >> patch other packages (like glibc) to add it as it is already defined.
-> >
-> > You still need to define AT_FLAGS_PRESERVE_ARGV0.  At that point, you
-> > might as well define AT_BINFMT and AT_BINFMT_PRESERVE_ARGV0.
-> >
->
-> Yes, you're right.
->
-> But is there any reason to not reuse AT_FLAGS?
+On Fri, Mar 06, 2020 at 11:43:35AM +0100, Peter Zijlstra wrote:
+> On Fri, Feb 21, 2020 at 02:34:32PM +0100, Peter Zijlstra wrote:
+> > Effectively revert commit 865e63b04e9b2 ("tracing: Add back in
+> > rcu_irq_enter/exit_irqson() for rcuidle tracepoints") now that we've
+> > taught perf how to deal with not having an RCU context provided.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> > ---
+> >  include/linux/tracepoint.h |    8 ++------
+> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> > 
+> > --- a/include/linux/tracepoint.h
+> > +++ b/include/linux/tracepoint.h
+> > @@ -179,10 +179,8 @@ static inline struct tracepoint *tracepo
+> >  		 * For rcuidle callers, use srcu since sched-rcu	\
+> >  		 * doesn't work from the idle path.			\
+> >  		 */							\
+> > -		if (rcuidle) {						\
+> > +		if (rcuidle)						\
+> >  			__idx = srcu_read_lock_notrace(&tracepoint_srcu);\
+> > -			rcu_irq_enter_irqsave();			\
+> > -		}							\
+> >  									\
+> >  		it_func_ptr = rcu_dereference_raw((tp)->funcs);		\
+> >  									\
+> > @@ -194,10 +192,8 @@ static inline struct tracepoint *tracepo
+> >  			} while ((++it_func_ptr)->func);		\
+> >  		}							\
+> >  									\
+> > -		if (rcuidle) {						\
+> > -			rcu_irq_exit_irqsave();				\
+> > +		if (rcuidle)						\
+> >  			srcu_read_unlock_notrace(&tracepoint_srcu, __idx);\
+> > -		}							\
+> >  									\
+> >  		preempt_enable_notrace();				\
+> >  	} while (0)
+> 
+> So what happens when BPF registers for these tracepoints? BPF very much
+> wants RCU on AFAIU.
 
-AT_* only has 32 slot and now. I was afraid that maybe we shouldn't take one.
-   /* AT_* values 18 through 22 are reserved */
-   27,28,29,30 are not used now.
-Which should we use?
+I suspect we needs something like this...
 
->
-> Thanks,
-> Laurent
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index a2f15222f205..67a39dbce0ce 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1475,11 +1475,13 @@ void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp)
+ static __always_inline
+ void __bpf_trace_run(struct bpf_prog *prog, u64 *args)
+ {
++	int rcu_flags = trace_rcu_enter();
+ 	rcu_read_lock();
+ 	preempt_disable();
+ 	(void) BPF_PROG_RUN(prog, args);
+ 	preempt_enable();
+ 	rcu_read_unlock();
++	trace_rcu_exit(rcu_flags);
+ }
+ 
+ #define UNPACK(...)			__VA_ARGS__
+
