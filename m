@@ -2,148 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F5717CC95
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Mar 2020 08:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E24617CCB5
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Mar 2020 08:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbgCGHFO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 7 Mar 2020 02:05:14 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:2841 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725907AbgCGHFO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 7 Mar 2020 02:05:14 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 48ZFqW22V5zB09Zy;
-        Sat,  7 Mar 2020 08:05:11 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=hFwvKFlt; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id JH70JFMo2Nhm; Sat,  7 Mar 2020 08:05:11 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 48ZFqW06j2zB09Zx;
-        Sat,  7 Mar 2020 08:05:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1583564711; bh=KLykoiwakmvXlj7iOgiNeBA+k4S6on8FDV27weKg6MI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=hFwvKFlt5tItEoeChiMcVbq8Z6WEJiAIueL914VqsjAkNiTW/tX4E4mkXgZPRPVQp
-         1TSwGC1wl0uEf1SM3tvrvXA0/srRG2BvZ2uOnFi+rWlXqmPEgF9Of2NNwJRqkfVxFW
-         8RUJEw8G1tWI+NWaS36EliXDmOzscoTf3q3gSbXQ=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D550D8B784;
-        Sat,  7 Mar 2020 08:05:11 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id OhKGFoGl11OV; Sat,  7 Mar 2020 08:05:11 +0100 (CET)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4A0DC8B776;
-        Sat,  7 Mar 2020 08:05:09 +0100 (CET)
-Subject: Re: [PATCH V15] mm/debug: Add tests validating architecture page
- table helpers
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Qian Cai <cai@lca.pw>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <61250cdc-f80b-2e50-5168-2ec67ec6f1e6@arm.com>
- <CEEAD95E-D468-4C58-A65B-7E8AED91168A@lca.pw>
- <a45834bc-e6f2-ac21-de9e-1aff67d12797@arm.com>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <c40d907a-b64b-ae0d-e58f-33dddf0e8edc@c-s.fr>
-Date:   Sat, 7 Mar 2020 08:05:09 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1725939AbgCGHrE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 7 Mar 2020 02:47:04 -0500
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:44329 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725878AbgCGHrE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 7 Mar 2020 02:47:04 -0500
+Received: by mail-qt1-f195.google.com with SMTP id h16so3488419qtr.11
+        for <linux-arch@vger.kernel.org>; Fri, 06 Mar 2020 23:47:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=CJaGuE6xjlwUdKde+nh834lDDnUaVIY1l9gUCqflQZs=;
+        b=mrboOzb015mzZ3cdDvl8jKCqwe6B++cNC3lPjplgSU3Rn2LrOOqmFKlya7+9SnKiKE
+         K9IGQleQRLSPUPNSg3t4FDzKjrls7eqdvZQjcrllrAbZl7OtPfK9NW8FB7y0xDgVZahC
+         UYHbP/kZVR6JzdYRDnaOaRBj3k1aF+6UR14kw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CJaGuE6xjlwUdKde+nh834lDDnUaVIY1l9gUCqflQZs=;
+        b=cIZNrTUyvmVke67jYDZ/0MsPm+ZSDsCvAS1f6FfRDq8TkV6DiXAOZ0Fr6sunoYq7D2
+         GfxBd0erUqi02owttw4Po2vaKbT35JXteZXye+jyAV6+NAy/0/sQ+GC7HRT4ZJ1jGt5F
+         LpQdzydILvgzReEAPF8c9/sy6hJcvoLtYdQV4tLJT02kNa0Guwn1BQNmeYGV/7XSPFWd
+         C/V4qmG0AL60u9OjZ4ceCjJxo1luX43J2XauhWINjtinYHyaCUFEiqJ5GCuQilDJjMNy
+         PsWWG4waojvZMR6zwtCoF4joh7JLS+S0UQz5R0USviaFMoNXOAjxjVq5a0eAWNoydWiJ
+         CiPQ==
+X-Gm-Message-State: ANhLgQ1F7idxYaDIRFkMYgZGUyD4+OCX/vKv1j6Na6WPAJjofzYg/VbG
+        sLt6NZa0jHYxNutKXIzZC8d75g==
+X-Google-Smtp-Source: ADFU+vtziRMfTg1yps/AiQZAfaYNlrFmOCmXTvfWuxMug3AFf0WhRHxfqc72oVQu22YI2hEdemYf6g==
+X-Received: by 2002:aed:38c8:: with SMTP id k66mr3241657qte.50.1583567223388;
+        Fri, 06 Mar 2020 23:47:03 -0800 (PST)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id i132sm19278276qke.41.2020.03.06.23.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2020 23:47:02 -0800 (PST)
+Date:   Sat, 7 Mar 2020 02:47:02 -0500
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
+        tglx@linutronix.de, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] x86/kprobes: Prohibit probing on rcu_nmi_exit() and
+ ist_exit()
+Message-ID: <20200307074702.GA231616@google.com>
+References: <158355013189.14191.9105069890402942867.stgit@devnote2>
+ <20200307032831.GL2935@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-In-Reply-To: <a45834bc-e6f2-ac21-de9e-1aff67d12797@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200307032831.GL2935@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 07/03/2020 à 01:56, Anshuman Khandual a écrit :
+On Fri, Mar 06, 2020 at 07:28:31PM -0800, Paul E. McKenney wrote:
+> On Sat, Mar 07, 2020 at 12:02:12PM +0900, Masami Hiramatsu wrote:
+> > Prohibit probing on rcu_nmi_exit() and ist_exit() which
+> > are called from do_int3()'s kprobe path after kprobe_int3_handler().
+> > 
+> > The commit c13324a505c7 ("x86/kprobes: Prohibit probing on
+> > functions before kprobe_int3_handler()") tried to fix similar
+> > issue, but it only marks the functions before kprobe_int3_handler()
+> > in do_int3().
+> > 
+> > If we put a kprobe on rcu_nmi_exit() or ist_exit(), the kprobes
+> > will detect reentrance. However, it only skips the kprobe handler,
+> > exits from do_int3() and hits ist_exit() and rcu_nmi_exit() again.
+> > Thus, it causes another int3 exception and finally we will get
+> > the kernel panic with "Unrecoverable kprobe detected." error message.
+> > 
+> > This is reproducible by the following commands.
+> > 
+> > / # echo 0 > /proc/sys/debug/kprobes-optimization
+> > / # echo p vfs_read > /sys/kernel/debug/tracing/kprobe_events
+> > / # echo p rcu_nmi_exit >> /sys/kernel/debug/tracing/kprobe_events
+> > / # echo 1 > /sys/kernel/debug/tracing/events/kprobes/enable
+> > 
+> > Fixes: c13324a505c7 ("x86/kprobes: Prohibit probing on functions before kprobe_int3_handler()")
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > Cc: stable@vger.kernel.org
 > 
+> From an RCU perspective:
 > 
-> On 03/07/2020 06:04 AM, Qian Cai wrote:
->>
->>
->>> On Mar 6, 2020, at 7:03 PM, Anshuman Khandual <Anshuman.Khandual@arm.com> wrote:
->>>
->>> Hmm, set_pte_at() function is not preferred here for these tests. The idea
->>> is to avoid or atleast minimize TLB/cache flushes triggered from these sort
->>> of 'static' tests. set_pte_at() is platform provided and could/might trigger
->>> these flushes or some other platform specific synchronization stuff. Just
->>
->> Why is that important for this debugging option?
-> 
-> Primarily reason is to avoid TLB/cache flush instructions on the system
-> during these tests that only involve transforming different page table
-> level entries through helpers. Unless really necessary, why should it
-> emit any TLB/cache flush instructions ?
-
-What's the problem with thoses flushes ?
-
-> 
->>
->>> wondering is there specific reason with respect to the soft lock up problem
->>> making it necessary to use set_pte_at() rather than a simple WRITE_ONCE() ?
->>
->> Looks at the s390 version of set_pte_at(), it has this comment,
->> vmaddr);
->>
->> /*
->>   * Certain architectures need to do special things when PTEs
->>   * within a page table are directly modified.  Thus, the following
->>   * hook is made available.
->>   */
->>
->> I can only guess that powerpc  could be the same here.
-> 
-> This comment is present in multiple platforms while defining set_pte_at().
-> Is not 'barrier()' here alone good enough ? Else what exactly set_pte_at()
-> does as compared to WRITE_ONCE() that avoids the soft lock up, just trying
-> to understand.
+> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 > 
 
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-Argh ! I didn't realise that you were writing directly into the page 
-tables. When it works, that's only by chance I guess.
+thanks,
 
-To properly set the page table entries, set_pte_at() has to be used:
-- On powerpc 8xx, with 16k pages, the page table entry must be copied 
-four times. set_pte_at() does it, WRITE_ONCE() doesn't.
-- On powerpc book3s/32 (hash MMU), the flag _PAGE_HASHPTE must be 
-preserved among writes. set_pte_at() preserves it, WRITE_ONCE() doesn't.
+ - Joel
 
-set_pte_at() also does a few other mandatory things, like calling 
-pte_mkpte()
-
-So, the WRITE_ONCE() must definitely become a set_pte_at()
-
-Christophe
+> > ---
+> >  arch/x86/kernel/traps.c |    1 +
+> >  kernel/rcu/tree.c       |    1 +
+> >  2 files changed, 2 insertions(+)
+> > 
+> > diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> > index 6ef00eb6fbb9..c63fb7697794 100644
+> > --- a/arch/x86/kernel/traps.c
+> > +++ b/arch/x86/kernel/traps.c
+> > @@ -115,6 +115,7 @@ void ist_exit(struct pt_regs *regs)
+> >  	if (!user_mode(regs))
+> >  		rcu_nmi_exit();
+> >  }
+> > +NOKPROBE_SYMBOL(ist_exit);
+> >  
+> >  /**
+> >   * ist_begin_non_atomic() - begin a non-atomic section in an IST exception
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index d91c9156fab2..c49ea0e919f9 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -670,6 +670,7 @@ void rcu_nmi_exit(void)
+> >  {
+> >  	rcu_nmi_exit_common(false);
+> >  }
+> > +NOKPROBE_SYMBOL(rcu_nmi_exit);
+> >  
+> >  /**
+> >   * rcu_irq_exit - inform RCU that current CPU is exiting irq towards idle
+> > 
