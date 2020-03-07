@@ -2,25 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 506D517C959
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Mar 2020 01:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5962917C9C2
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Mar 2020 01:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbgCGAD1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Mar 2020 19:03:27 -0500
-Received: from foss.arm.com ([217.140.110.172]:39500 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726245AbgCGAD1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 6 Mar 2020 19:03:27 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A3A530E;
-        Fri,  6 Mar 2020 16:03:26 -0800 (PST)
-Received: from [10.163.1.59] (unknown [10.163.1.59])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 689F93F237;
-        Fri,  6 Mar 2020 16:03:17 -0800 (PST)
-Subject: Re: [PATCH V15] mm/debug: Add tests validating architecture page
- table helpers
-To:     Qian Cai <cai@lca.pw>, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        id S1726533AbgCGAeX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Mar 2020 19:34:23 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:36984 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726300AbgCGAeX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Mar 2020 19:34:23 -0500
+Received: by mail-qt1-f196.google.com with SMTP id l20so1464183qtp.4
+        for <linux-arch@vger.kernel.org>; Fri, 06 Mar 2020 16:34:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=Llth3MhUyFBOi7p0WfyKRqezwCMBh50m9NEH4AtRH1U=;
+        b=puvFN+Oa4Vsque2ZZFahxBROstqlUCh6OUM3IAJz/PpFxOEwXVBDL1w614Lf5OgLn5
+         ZzOKj9HWOalPOfhv3WAYO45FNOPCCJIbnU41PCb5bB2Jpfed/n8m6G0z5zQoTE4+Y2y9
+         3QJpAM3ou6c7EdgrRsfCmCg49mhT4wc3UBudKo0M3IjKzr4rlUXBE2NlETbQYMK6HNXK
+         FaW2q4McGhTj2NCjdx0Iunur4hGozNvUDxm9RmqprWgyakpEZ4US8GkH1ltbTWFsHiOw
+         CwD/p2KKStXpzjgcBMWXRzzvBYt1qmOtcsAsjRrYeh1r/v9yIBxJhh+Vq48gTXYafbjW
+         E5Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=Llth3MhUyFBOi7p0WfyKRqezwCMBh50m9NEH4AtRH1U=;
+        b=g4j5A7WiVSV7dt/gIkuJ7spMf5UnktSX7ujNyw2+emxWfEhH7jjTW74vtoGVSITJIH
+         Wz6jXYA2CRZPY2SWc1a6H8PGQCDP14LKcv/OwokJKA2OFlzolrz/hm/kRy5PmX316ki0
+         mLWtzLwfCqDF+eKr+LUHmWqmiaiSVPZGmifchEkjIpN1+jUVIvgYtqCPkSKW1Nwon5tM
+         i0SCdr5Ulc6UJ/VmpshcCt+//afU7UhhJm+SyhtEEtApVpE3qbn4mC9GN9h1iLNFeIQJ
+         wfhdtMBVfPzVLMoVPjQ+Ct3EYAVcfX+Ia+olvcHdKpbczwzWxHm9ldkZ3MsVaocLENLM
+         +W0A==
+X-Gm-Message-State: ANhLgQ0OqRkWeXHMWw6ao13LGwL5ri/FQpbcKpffIBTZF3PRggEX3U2m
+        3H+HmRu7yP5+HSJ+9gNdjH/DcQ==
+X-Google-Smtp-Source: ADFU+vtIXuLKAhOxSRwmQknHK6gBQTO4ffulLvuvjqolLxIBY8IQ/C9gOq1OdEnF0L6YkCCsmh/eQw==
+X-Received: by 2002:ac8:7b94:: with SMTP id p20mr5546904qtu.122.1583541260735;
+        Fri, 06 Mar 2020 16:34:20 -0800 (PST)
+Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id 202sm18088610qkg.132.2020.03.06.16.34.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Mar 2020 16:34:19 -0800 (PST)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+From:   Qian Cai <cai@lca.pw>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH V15] mm/debug: Add tests validating architecture page table helpers
+Date:   Fri, 6 Mar 2020 19:34:18 -0500
+Message-Id: <CEEAD95E-D468-4C58-A65B-7E8AED91168A@lca.pw>
+References: <61250cdc-f80b-2e50-5168-2ec67ec6f1e6@arm.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Vineet Gupta <vgupta@synopsys.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -43,18 +75,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-riscv@lists.infradead.org, x86@kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Christophe Leroy <christophe.leroy@c-s.fr>
-References: <1583452659-11801-1-git-send-email-anshuman.khandual@arm.com>
- <1583527481.7365.165.camel@lca.pw>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <61250cdc-f80b-2e50-5168-2ec67ec6f1e6@arm.com>
-Date:   Sat, 7 Mar 2020 05:33:15 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <1583527481.7365.165.camel@lca.pw>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <61250cdc-f80b-2e50-5168-2ec67ec6f1e6@arm.com>
+To:     Anshuman Khandual <Anshuman.Khandual@arm.com>
+X-Mailer: iPhone Mail (17D50)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -62,90 +85,31 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 
-On 03/07/2020 02:14 AM, Qian Cai wrote:
-> On Fri, 2020-03-06 at 05:27 +0530, Anshuman Khandual wrote:
->> This adds tests which will validate architecture page table helpers and
->> other accessors in their compliance with expected generic MM semantics.
->> This will help various architectures in validating changes to existing
->> page table helpers or addition of new ones.
->>
->> This test covers basic page table entry transformations including but not
->> limited to old, young, dirty, clean, write, write protect etc at various
->> level along with populating intermediate entries with next page table page
->> and validating them.
->>
->> Test page table pages are allocated from system memory with required size
->> and alignments. The mapped pfns at page table levels are derived from a
->> real pfn representing a valid kernel text symbol. This test gets called
->> inside kernel_init() right after async_synchronize_full().
->>
->> This test gets built and run when CONFIG_DEBUG_VM_PGTABLE is selected. Any
->> architecture, which is willing to subscribe this test will need to select
->> ARCH_HAS_DEBUG_VM_PGTABLE. For now this is limited to arc, arm64, x86, s390
->> and ppc32 platforms where the test is known to build and run successfully.
->> Going forward, other architectures too can subscribe the test after fixing
->> any build or runtime problems with their page table helpers. Meanwhile for
->> better platform coverage, the test can also be enabled with CONFIG_EXPERT
->> even without ARCH_HAS_DEBUG_VM_PGTABLE.
->>
->> Folks interested in making sure that a given platform's page table helpers
->> conform to expected generic MM semantics should enable the above config
->> which will just trigger this test during boot. Any non conformity here will
->> be reported as an warning which would need to be fixed. This test will help
->> catch any changes to the agreed upon semantics expected from generic MM and
->> enable platforms to accommodate it thereafter.
-> 
-> OK, I get this working on powerpc hash MMU as well, so this?
-> 
-> diff --git a/Documentation/features/debug/debug-vm-pgtable/arch-support.txt
-> b/Documentation/features/debug/debug-vm-pgtable/arch-support.txt
-> index 64d0f9b15c49..c527d05c0459 100644
-> --- a/Documentation/features/debug/debug-vm-pgtable/arch-support.txt
-> +++ b/Documentation/features/debug/debug-vm-pgtable/arch-support.txt
-> @@ -22,8 +22,7 @@
->      |       nios2: | TODO |
->      |    openrisc: | TODO |
->      |      parisc: | TODO |
-> -    |  powerpc/32: |  ok  |
-> -    |  powerpc/64: | TODO |
-> +    |     powerpc: |  ok  |
->      |       riscv: | TODO |
->      |        s390: |  ok  |
->      |          sh: | TODO |
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 2e7eee523ba1..176930f40e07 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -116,7 +116,7 @@ config PPC
->  	#
->  	select ARCH_32BIT_OFF_T if PPC32
->  	select ARCH_HAS_DEBUG_VIRTUAL
-> -	select ARCH_HAS_DEBUG_VM_PGTABLE if PPC32
-> +	select ARCH_HAS_DEBUG_VM_PGTABLE
->  	select ARCH_HAS_DEVMEM_IS_ALLOWED
->  	select ARCH_HAS_ELF_RANDOMIZE
->  	select ARCH_HAS_FORTIFY_SOURCE
-> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-> index 96a91bda3a85..98990a515268 100644
-> --- a/mm/debug_vm_pgtable.c
-> +++ b/mm/debug_vm_pgtable.c
-> @@ -256,7 +256,8 @@ static void __init pte_clear_tests(struct mm_struct *mm,
-> pte_t *ptep,
->  	pte_t pte = READ_ONCE(*ptep);
->  
->  	pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
-> -	WRITE_ONCE(*ptep, pte);
-> +	set_pte_at(mm, vaddr, ptep, pte);
+> On Mar 6, 2020, at 7:03 PM, Anshuman Khandual <Anshuman.Khandual@arm.com> w=
+rote:
+>=20
+> Hmm, set_pte_at() function is not preferred here for these tests. The idea=
 
-Hmm, set_pte_at() function is not preferred here for these tests. The idea
-is to avoid or atleast minimize TLB/cache flushes triggered from these sort
-of 'static' tests. set_pte_at() is platform provided and could/might trigger
-these flushes or some other platform specific synchronization stuff. Just
-wondering is there specific reason with respect to the soft lock up problem
-making it necessary to use set_pte_at() rather than a simple WRITE_ONCE() ?
+> is to avoid or atleast minimize TLB/cache flushes triggered from these sor=
+t
+> of 'static' tests. set_pte_at() is platform provided and could/might trigg=
+er
+> these flushes or some other platform specific synchronization stuff. Just
 
-> +	barrier();
->  	pte_clear(mm, vaddr, ptep);
->  	pte = READ_ONCE(*ptep);
->  	WARN_ON(!pte_none(pte));
-> 
+Why is that important for this debugging option?
+
+> wondering is there specific reason with respect to the soft lock up proble=
+m
+> making it necessary to use set_pte_at() rather than a simple WRITE_ONCE() ?=
+
+
+Looks at the s390 version of set_pte_at(), it has this comment,
+vmaddr);
+
+/*
+ * Certain architectures need to do special things when PTEs
+ * within a page table are directly modified.  Thus, the following
+ * hook is made available.
+ */
+
+I can only guess that powerpc  could be the same here.=
