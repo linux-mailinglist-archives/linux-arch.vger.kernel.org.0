@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 856ED17D5F7
-	for <lists+linux-arch@lfdr.de>; Sun,  8 Mar 2020 20:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C733917D5F2
+	for <lists+linux-arch@lfdr.de>; Sun,  8 Mar 2020 20:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbgCHT5D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 8 Mar 2020 15:57:03 -0400
-Received: from mout.gmx.net ([212.227.15.19]:42973 "EHLO mout.gmx.net"
+        id S1726332AbgCHT4y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 8 Mar 2020 15:56:54 -0400
+Received: from mout.gmx.net ([212.227.15.15]:36435 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726403AbgCHT5C (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 8 Mar 2020 15:57:02 -0400
+        id S1726322AbgCHT4y (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 8 Mar 2020 15:56:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1583697395;
-        bh=k4B7xsbQs+bGw1/7XAkvqtfIygtmmkN+AUAITvCNN/c=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=dMwiXmLYL52XV8WSu9yMkmq0S+luVbFbLbWoj+XuVizgA/OBMQV0RbyDYuLEUGNZZ
-         SPsT4HG1k8jfjcIT8p7uzvFbaTviNgXFMCYnzXoObQisd35cFvjWrNJqMPtQuclLc5
-         ED+DLfpxgPG084xMFFyObMRNHx8Lj33Qjt8ftcjE=
+        s=badeba3b8450; t=1583697397;
+        bh=38FDTv2DovrAZC0jG9Kb3CZj8F6XQ+T5cAYhHGRE+LU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=XWTWpanP0PHP8JUViG23jLRgctrOIK++1hCLBOI02pwLGKARbIGTml4DevLtO8YKz
+         jfzc5mYqVC8LWt0jf8yYXprvVJRaWDvpb1/ljwP0psd4m24VTgCEHa4h/eTdtmI1MX
+         +BKD294dZEoLZxw2MsIFCMVZ+lZvEcv3wDvO1tuk=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.214.212]) by mail.gmx.com (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfYLa-1jqyUd0tRo-00g3N3; Sun, 08
- Mar 2020 20:56:35 +0100
+Received: from longitude ([37.201.214.212]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M6lpM-1jH5Vj00PG-008J6v; Sun, 08
+ Mar 2020 20:56:37 +0100
 From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
 To:     linux-doc@vger.kernel.org
 Cc:     Alan Stern <stern@rowland.harvard.edu>,
@@ -39,56 +39,77 @@ Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org,
         =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Subject: [PATCH 0/3] docs: a few improvements for atomic_ops.rst
-Date:   Sun,  8 Mar 2020 20:56:15 +0100
-Message-Id: <20200308195618.22768-1-j.neuschaefer@gmx.net>
+Subject: [PATCH 1/3] docs: atomic_ops: Remove colons where they don't make sense
+Date:   Sun,  8 Mar 2020 20:56:16 +0100
+Message-Id: <20200308195618.22768-2-j.neuschaefer@gmx.net>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200308195618.22768-1-j.neuschaefer@gmx.net>
+References: <20200308195618.22768-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2bg8Bw8rRMj0oQrgWU3DtrKtOTVoYSHypqxza7mwLqSU6cjHy7t
- HpxSsUXtJnGg4PJvcF/WuMzdv5v8zwtOzwku9Rz/GUDhwJ+Ncj5MS5AR4JFAzLSW7UMxmV9
- DusUfn8Z3oUJcMmh5KpTEu2gTm0vilnq6GAKaHcvNnqbviO4D+NtGHomHRHTzCkYF/i7RSy
- 15mW72yvO88kd2Q/ovVFg==
+X-Provags-ID: V03:K1:S3Xm2L2CM68z7ATr6orhnChOL0WmFyPpp3u1n3QJokjgaYRpssY
+ Z1i1bMoTuvK/Pihnj7mKINv2SOnf/ovYm00IwW8MkQFQ7dxKlS4L9aDqhly97JEY0hAfrG+
+ 6+yTf4u+GOyJLX4ucb8SRAZfFgtcJK6CQ7k9pafi9VKQPwFB92rVhMV2Xsk+yPqWXTRSWnA
+ ciGIn+lT+gDmlGuz8DyPQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2km+uksWJ5M=:+BGq6we/viAuTeermSySs0
- aLE3qtDiTK2CsCUTKziii8WMqPYrX9qlgVC5/7Kf7msmsF1brw86mqPfSANg9ZsODcHJG9ZFS
- 0UYafyIirulDcvowp2v5pmpst8NXYnO2lli3D7BZ0lUoOH87icTr2mG1T7ZH5evSbFoJRn1k2
- blUTUACesrC1Qm04hBlGxMa9sRddrjLlQTdBjwXSEuqWInYBJtjaj8o6dF2CF1eceAvBfjvS6
- 9/PpkOcto8SWPP/rLZQ+OA1fsKjefWyWSozV8SY0TzXLgqayKo6sSahIL2hiy4FlD6oclGLNI
- 1Kh6VuBzM1+jPWKq+pJVDMdsmAXRVlHuSL3RokNGrWTo4/pctEA5XXoYWdvD0qfpOxhqExwKD
- i9m/ezrJiYe0Z+kdJvvdilZcsRCwuSfLgbjLxFmCVvj1Yk6YE29qP5nDkg2tIzWEW/X9zF49n
- uCbzKN9baKwOtLauSNyy350l2VUFfM0pc3KwoQThuNMWgQwwNQqCQf9oO//gcOsrYu2SobRVO
- Q7nsxC8jpUcpFQf15SeWyCduIQoVizINptckXx70blOsnPHV8wp/unClL5/BPX3NQGXG/nP8R
- GIL+SRa9BUs58lFPsIdve7mQtD8Kc60r3rAwKDl9ci6bviIpeRlAJTnXxKeyvf7JDndOb+YHB
- lGrEIkRpy2YGsn7Tium/VdCKw6HVSgtAx5L1tRmVBxGJxocBurMT6/yOw9GQVvjjDZDP7ksgv
- +tSPixnXDcJxXk2Z0X2yZPeKrXYOUdF8/JtmiOJ+Z/e0VNQYwLGPs92DOtiC4WVNFSgBziNoK
- qddxZZ79JPicJEriHCiPDkcBD4g+uDhJF35L/OS8W0UM/SdtayeErP9O4UCXH9iHoYsCaGVOh
- sn9wYrTyWtV21I5ZNyfIJiYDmN+R/HRj1a2KONb1oUVSN/PsmV0H/Wd8Gvvz8SoqZIHVS96oM
- n8tlEhAYx7nSRKYi6rg+xsb+H6Sq6V4XGFmHnroFnMTUSR7g9xpwvHStrTZZ/uVDtonmVgfVl
- eMW9aDb8htQ7ORFbXs7AVoQ6nrnYUH24RckMI5epo1S9nj5ikPnjNpaKOubMk0SMxuN4qfWKj
- pOQa3LC0Y6LSZQs3KkmoRXTZJv9THA1tSAv53k8mpJlrn/yb8q++NFiuPyy652dB65LNgMasN
- JOAArZV8CkS/a6FXdHA7/eYRTwPSDKue23/9nF7ShjhcX3bTJwHqneW2WcIGKuWQyFI84tOnM
- flTRSV0JpZZtWF2HZ
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AafdUW6kwkk=:I3BsMddyeZsvvG5Lu+ZKjR
+ DfaugBml+lPtcouDSFmMNRnIdg93qYC7zPx4His+6HX22L22Xqrb/IgguP1S+G9ccYSCjzFZe
+ TCOvB+rJACjIhAcxSEWHjRJqPwJ8yMHf19UOYykAh4d7Av+PXASSUwHdi/vtytlNckXJKcVai
+ MZul+O/7Y7klKY5imM95sf3HCPpHngRVwgW7pBtweh5Vw/KVvYlIStxLBhJGAaYOEwctjeYF6
+ wiMBmdq9WCYD+mjnx166iyMLR5sSNCh8rJbfnYtrgqSrP45xoehwyaymPNUjg4+jOMkbYFrOv
+ hgnb9DgSCksg2aHkf5Wo6tFQrped69kJSGhuKBTkMNp8VDX04zN7VMbQDK40CkT2fAcT3S0/o
+ lb6WLE6fdoPEwRXzH8x8cTWMMN2BSprtjX8PhlbVxT0FSrqrnWVdf7VxYBboWuwQe4e/sn9Bk
+ t32SCPKjH4ZsVzPecORmP3pPzc7hjW4oD7RewVaqIQVarxNZScwsOyVkwrNhnW8gR5mo2x3os
+ F23aci1gBg4iPsbB8UDXQK0vQyYcgcVh+AyClKt/VyIQd79fC3TaJ5bPR8fI4VyKCtS5DLSUt
+ duoagei3VIHyqfrEDno09PEQzS9rBCkLiEoN+BTvIdsiZhi9OeWcxRunTnKI+LCXHTqnIeY/q
+ BBW3i6Q4FYfzvG7Q84sws6oCRmu2XqSSkTkGdSOgqfssbPz8pbvp2e9iOlK42ZhpkiHorMU5j
+ A+4Ytv6k+dZFPsv3uZ5LU/dHDwSgm+qN5OMZmwHAci3KNHuk7eBO/v7PkEh3RRb7A5MOzfcR9
+ XYGTFRWUgTjCMYtFQEY3bgGZIKUzLLLiIoDlkIlaCim/BRc8O/Hos5JaS16htHhV+gd1EFViB
+ +V4IKrhTnI9qc8+cjICqT5Nxh0cMYJsLpMSUJfsBK4uMHPBYKaTh+8TwykTJulr6SXe7vvf3Q
+ d8NC7YB6/iOAyQ3XOne2Z+OeoJPHjYv/g31Kv/if6klyKFVQwbk8hYxrYkwShEvgNDF9TFxoR
+ 8R0kY9LP0LuioT/3ePSU+woD2T6ILuZE+srBlrMNi0t7R+rryCzoZLJOB8QA8mGqr+MHp96WE
+ K1wMPdDkgYm7zk7G1Gys8cfuW3IPArqE7Z+9cb/hj+8GhtbKpc7XUP6GF8S7sH4M6UHwQ2tsM
+ ZVMzm4T99nEm+I5Iveo9gz0mBVS42OW1Qh8WjOelVRiKx+pCNqt9dFnZM3pACgZ8UQB+pDGJu
+ 3rPvqQ/LzYhOybzqY
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+There are a few cases on atomic_ops.rst, where a end-of-line colon
+before a code block seems semantically wrong, because the code block is
+not related to the sentence before it.
 
-this is a short series of unrelated fixes that make the atomic
-operations documentation look and read a bit better.
+End those lines with `. ::` instead, which is rendered as a period but
+still formats the next line/block as a code block.
 
-Jonathan Neusch=C3=A4fer (3):
-  docs: atomic_ops: Remove colons where they don't make sense
-  docs: atomic_ops: Move two paragraphs into the warning block above
-  docs: atomic_ops: Steer readers towards using refcount_t for reference
-    counts
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ Documentation/core-api/atomic_ops.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- Documentation/core-api/atomic_ops.rst         | 24 ++++++++++++-------
- Documentation/core-api/refcount-vs-atomic.rst |  2 ++
- 2 files changed, 17 insertions(+), 9 deletions(-)
+diff --git a/Documentation/core-api/atomic_ops.rst b/Documentation/core-ap=
+i/atomic_ops.rst
+index 724583453e1f..650b9693469a 100644
+=2D-- a/Documentation/core-api/atomic_ops.rst
++++ b/Documentation/core-api/atomic_ops.rst
+@@ -242,13 +242,13 @@ given atomic counter.  They return a boolean indicat=
+ing whether the
+ resulting counter value was zero or not.
+
+ Again, these primitives provide explicit memory barrier semantics around
+-the atomic operation::
++the atomic operation. ::
+
+ 	int atomic_sub_and_test(int i, atomic_t *v);
+
+ This is identical to atomic_dec_and_test() except that an explicit
+ decrement is given instead of the implicit "1".  This primitive must
+-provide explicit memory barrier semantics around the operation::
++provide explicit memory barrier semantics around the operation. ::
+
+ 	int atomic_add_negative(int i, atomic_t *v);
 
 =2D-
 2.20.1
