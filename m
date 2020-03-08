@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F8A17D302
-	for <lists+linux-arch@lfdr.de>; Sun,  8 Mar 2020 10:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A8B17D31F
+	for <lists+linux-arch@lfdr.de>; Sun,  8 Mar 2020 10:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbgCHJx2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 8 Mar 2020 05:53:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37310 "EHLO mail.kernel.org"
+        id S1726475AbgCHJxc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 8 Mar 2020 05:53:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37418 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgCHJx2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 8 Mar 2020 05:53:28 -0400
+        id S1725306AbgCHJxa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 8 Mar 2020 05:53:30 -0400
 Received: from localhost.localdomain (unknown [89.208.247.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 473AB2084E;
-        Sun,  8 Mar 2020 09:53:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EDB6B20828;
+        Sun,  8 Mar 2020 09:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583661207;
-        bh=v/rkpyCiyVkM4xjp/Bzdx6fW3ahc9p7Z2LZmcrKYbCo=;
+        s=default; t=1583661210;
+        bh=5bpP4wMCQfaX+IKe4Ot/2AMhW1qZtJCQhDHd5qDbi0s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=COk/YYhD/miww0ROVSzFmR11LP/jEXVV6+FaX3E84SFuHxHnu2Yp+Unmbs4LAHhkS
-         yCU3abWp7tROP9Re/rE1nKGxQio1BPicgCzb1HfG2OAxB2Phy6iMWjW4A8BQ5Ifv+O
-         OG8x72VcAXMonY72tx637xB9Slgymapas1zu1MTM=
+        b=DZ3cuu0ct5yXdL2CfQe9Xou1gpghhwYdyQxzpU69tPebqcnlA6BwdgX/Q7dopJX6P
+         p80MIGbibANWcaQod6FczX+BWexkzJOY8AZN6yaySIsljcvkMF50NuUUaAJmdTpswt
+         HvvmBYjYFuOr8dXNrJ8XTUhrpnCKtTXRIn970HJo=
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com, Anup.Patel@wdc.com,
         greentime.hu@sifive.com
@@ -31,9 +31,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         Guo Ren <guoren@linux.alibaba.com>,
         Dave Martin <Dave.Martin@arm.com>
-Subject: [RFC PATCH V3 03/11] riscv: Extending cpufeature.c to detect V-extension
-Date:   Sun,  8 Mar 2020 17:49:46 +0800
-Message-Id: <20200308094954.13258-4-guoren@kernel.org>
+Subject: [RFC PATCH V3 04/11] riscv: Add CSR defines related to VECTOR extension
+Date:   Sun,  8 Mar 2020 17:49:47 +0800
+Message-Id: <20200308094954.13258-5-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
 In-Reply-To: <20200308094954.13258-1-guoren@kernel.org>
 References: <20200308094954.13258-1-guoren@kernel.org>
@@ -44,51 +44,56 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-From: Guo Ren <ren_guo@c-sky.com>
-
-Current cpufeature.c doesn't support detecting V-extension, because
-"rv64" also contain a 'v' letter and we need to skip it.
+Follow the spec to define the regs' bits and regs' number.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Reviewed-by: Anup Patel <anup@brainfault.org>
 ---
- arch/riscv/include/uapi/asm/hwcap.h | 1 +
- arch/riscv/kernel/cpufeature.c      | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ arch/riscv/include/asm/csr.h | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/uapi/asm/hwcap.h b/arch/riscv/include/uapi/asm/hwcap.h
-index dee98ee28318..a913e9a38819 100644
---- a/arch/riscv/include/uapi/asm/hwcap.h
-+++ b/arch/riscv/include/uapi/asm/hwcap.h
-@@ -21,5 +21,6 @@
- #define COMPAT_HWCAP_ISA_F	(1 << ('F' - 'A'))
- #define COMPAT_HWCAP_ISA_D	(1 << ('D' - 'A'))
- #define COMPAT_HWCAP_ISA_C	(1 << ('C' - 'A'))
-+#define COMPAT_HWCAP_ISA_V	(1 << ('V' - 'A'))
+diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+index 435b65532e29..49b93b638680 100644
+--- a/arch/riscv/include/asm/csr.h
++++ b/arch/riscv/include/asm/csr.h
+@@ -24,6 +24,12 @@
+ #define SR_FS_CLEAN	_AC(0x00004000, UL)
+ #define SR_FS_DIRTY	_AC(0x00006000, UL)
  
- #endif /* _UAPI_ASM_RISCV_HWCAP_H */
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index a5ad00043104..c8527d770c98 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -30,6 +30,7 @@ void riscv_fill_hwcap(void)
- 	isa2hwcap['f'] = isa2hwcap['F'] = COMPAT_HWCAP_ISA_F;
- 	isa2hwcap['d'] = isa2hwcap['D'] = COMPAT_HWCAP_ISA_D;
- 	isa2hwcap['c'] = isa2hwcap['C'] = COMPAT_HWCAP_ISA_C;
-+	isa2hwcap['v'] = isa2hwcap['V'] = COMPAT_HWCAP_ISA_V;
++#define SR_VS           _AC(0x01800000, UL) /* Vector Status */
++#define SR_VS_OFF       _AC(0x00000000, UL)
++#define SR_VS_INITIAL   _AC(0x00800000, UL)
++#define SR_VS_CLEAN     _AC(0x01000000, UL)
++#define SR_VS_DIRTY     _AC(0x01800000, UL)
++
+ #define SR_XS		_AC(0x00018000, UL) /* Extension Status */
+ #define SR_XS_OFF	_AC(0x00000000, UL)
+ #define SR_XS_INITIAL	_AC(0x00008000, UL)
+@@ -31,9 +37,9 @@
+ #define SR_XS_DIRTY	_AC(0x00018000, UL)
  
- 	elf_hwcap = 0;
+ #ifndef CONFIG_64BIT
+-#define SR_SD		_AC(0x80000000, UL) /* FS/XS dirty */
++#define SR_SD		_AC(0x80000000, UL) /* FS/VS/XS dirty */
+ #else
+-#define SR_SD		_AC(0x8000000000000000, UL) /* FS/XS dirty */
++#define SR_SD		_AC(0x8000000000000000, UL) /* FS/VS/XS dirty */
+ #endif
  
-@@ -44,7 +45,8 @@ void riscv_fill_hwcap(void)
- 			continue;
- 		}
+ /* SATP flags */
+@@ -102,6 +108,13 @@
+ #define CSR_MIP			0x344
+ #define CSR_MHARTID		0xf14
  
--		for (i = 0; i < strlen(isa); ++i)
-+		/* Skip rv64/rv32 to support v/V:vector */
-+		for (i = 4; i < strlen(isa); ++i)
- 			this_hwcap |= isa2hwcap[(unsigned char)(isa[i])];
- 
- 		/*
++#define CSR_VSTART		0x8
++#define CSR_VXSAT		0x9
++#define CSR_VXRM		0xa
++#define CSR_VL			0xc20
++#define CSR_VTYPE		0xc21
++#define CSR_VLENB		0xc22
++
+ #ifdef CONFIG_RISCV_M_MODE
+ # define CSR_STATUS	CSR_MSTATUS
+ # define CSR_IE		CSR_MIE
 -- 
 2.17.0
 
