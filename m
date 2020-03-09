@@ -2,62 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D8517D83A
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 04:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB64317D853
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 04:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbgCIDCw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 8 Mar 2020 23:02:52 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:40284 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726680AbgCIDCw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 Mar 2020 23:02:52 -0400
-Received: by mail-wm1-f68.google.com with SMTP id e26so8064199wme.5
-        for <linux-arch@vger.kernel.org>; Sun, 08 Mar 2020 20:02:50 -0700 (PDT)
+        id S1726546AbgCIDlt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 8 Mar 2020 23:41:49 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:45192 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbgCIDlt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 Mar 2020 23:41:49 -0400
+Received: by mail-qt1-f196.google.com with SMTP id a4so6030714qto.12
+        for <linux-arch@vger.kernel.org>; Sun, 08 Mar 2020 20:41:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WkSc13XnIRhL4+ZUuijkRluVT9uWdnyORe6lvTinvZY=;
-        b=bNttHm0f6kzQ8pXxgSJDiB9leXf+790sUgjQYgQkO4sAVxFPp7QoZSZHrTjTM/3MbV
-         Fi4dxUWFxpaE4n3fCODg8MD5FhK+VP5EM+gmeMpiE5LblN3GfeJTuZdzL8zh72x9qTLC
-         uTUEDiFLsvQvqVsHZMn12xyN/X6vQj3e+I8bF9L5fL6tdJo60oPq55UP5siwlnlki3+x
-         NeMN+8AJnGbwNp+1OA6H7k8CAAYU7nH46UNUOd6WquGa+wTYAVQ9eJQjQTqAlLgCWet4
-         0eeFIKbdF3vHuJqTHkSUcxvdSfPydorZfcnfG6jg5L17B6XciQlnzPuvNidsZfA/cxoJ
-         Ze9g==
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CNYYFTCalmUuSxAWR7XaCM/gxKPhcvr0JtZkj6eTI9Y=;
+        b=VHknv8LB3GFRw23ZbiPdreuz6d01GLWWAJvdX5EgeD9/c/GcOS3IP+ZhkeICb0JhfH
+         XVw67cYfVsHCMH6qw7HsKBL6jpr+j6KBSqMec750uAs+10sQ6riV2cVg2oqfVtKcQHyP
+         Z9hT3Z+Ws38DjPnOB/+jFMRTCz1yayzN6dXEs0YuebKNXz0BN2awgZsy5VV/cWs6MZoZ
+         d94/E5LVYK9fXw1NUB6hQ8fdh3XQZyglH788D+Wk2e0T7MP2IAqDsaAincG5B8kjJe9i
+         NQzh+apsnX9PlOHTG2BZPhAyc6uIbxHgmQJKN3JkWRl0MO23Fvjem4bcygW4f+/zlNW8
+         V8iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WkSc13XnIRhL4+ZUuijkRluVT9uWdnyORe6lvTinvZY=;
-        b=OYjOR6AobyBYzkfROSFveMxT+iXl1mkOE5cI7d6+RBKr6Qxur0vHDbRLzAJjiJ6Hw7
-         d2/Kitc3ZqjPIvAAYp1Q2XKNAsIzMzJ1B2Bivp3SgiAx3kp6+Ww+0Q9+IywR26yFpz3d
-         cLkQuE6kF6D2DpIbWBN0Pi285YmzEahQcJiD2Kz5dM3bUaVvuXPDlzhreSViAvnKad4K
-         MhNCVNPPdwcrq2miO6LB4eh2BO/RoC09J/gFV8YXKWEdL5JmpkOHZL0KUMrNfuSireHj
-         hx6taPvbKRAlDKMr52EvME+h6+Tu49c8GdZVmdvgyxBszjf2/KZFUuoTOGyxMPfXHdKw
-         f8OQ==
-X-Gm-Message-State: ANhLgQ1qwFAP3oGof4CRgMbOq4UBuEfzMtGkCHphxyV88dAbP94y7W2o
-        Zwt9SAPWYSApKyls3mjRREgmzVKn5HYsg6Vf/dk=
-X-Google-Smtp-Source: ADFU+vvLP/SiRl5BDV9T//kCSxzauTI8ghJWCR3WzXdRf94KudKy8eSaE5ZLlHD3orQ6sn7YL+f/YrwrVPplEXYcl/Q=
-X-Received: by 2002:a05:600c:4151:: with SMTP id h17mr18656711wmm.189.1583722969892;
- Sun, 08 Mar 2020 20:02:49 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CNYYFTCalmUuSxAWR7XaCM/gxKPhcvr0JtZkj6eTI9Y=;
+        b=qvWYebpWVvDM0Pgs7v0uD9nxVeM3/qyzXJR8fiZ8hPGicmOmBKVM9FbTJRn6P57/Hn
+         F2qSYIYzcdA4cjrHK+l+3PFyYYpSlTHvLYCIlllUCgaXT5nEPiAr30T3JJBTn3etXtEC
+         kPhmd5GV/j+fPxQoaxJYeGCG2hkbSGNrjjgQ0i4QzeVmlO/Wtu95Wu84kWmjxbOCDvD8
+         M8I48vguldp3ogLEslEaS2NZYOYUwFAPctuMZVwf9niC0p3Hpl3fi3PTwwCAF01JUY5p
+         Le/rybUvxZbmTiK8Q8o6+nE7Aef4IUbTdi/l1yFoH74OuOGCVBG11ZLOyyYt55SYNsGV
+         1gSg==
+X-Gm-Message-State: ANhLgQ2/LcGznDKkPnkr5NBiNr/m1ertYeo4kGrQxyjIgJzP+4cz3B7X
+        0gnTpfOM7jpceRsVfzmscqAy4PL+d6tkiuVFrll8aA==
+X-Google-Smtp-Source: ADFU+vt7hRKCpjY9Y/6PbDXX5/P/aKDMHT0L5G/8Gt3a3KMISifEbxYw8sWoZVsjM25ruYRMFoTYggX7kXK+ZNULFqA=
+X-Received: by 2002:ac8:1345:: with SMTP id f5mr12999290qtj.128.1583725308848;
+ Sun, 08 Mar 2020 20:41:48 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:adf:ed10:0:0:0:0:0 with HTTP; Sun, 8 Mar 2020 20:02:49 -0700 (PDT)
-Reply-To: bankderictormrsired@aol.com
-From:   BANK DERICTOR <adamhana1907@gmail.com>
-Date:   Mon, 9 Mar 2020 03:02:49 +0000
-Message-ID: <CAOGreOnhSMcHW5UpvwgbLtTCAfQVo+LWHWaWDoHEQiDsJ-4R8A@mail.gmail.com>
-Subject: I need your urgently response.
-To:     undisclosed-recipients:;
+References: <20200308094954.13258-1-guoren@kernel.org>
+In-Reply-To: <20200308094954.13258-1-guoren@kernel.org>
+From:   Greentime Hu <greentime.hu@sifive.com>
+Date:   Mon, 9 Mar 2020 11:41:37 +0800
+Message-ID: <CAHCEeh+XYD3uVmaQRGpY=VGxpO9hzMeKasNmAojhkZe9PJ9Lug@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 00/11] riscv: Add vector ISA support
+To:     guoren@kernel.org
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Anup.Patel@wdc.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, arnd@arndb.de,
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Liu Zhiwei <zhiwei_liu@c-sky.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-I am contacting you to assist retrieve a huge deposit of Ten Million
-Five Hundred Thousand Dollars left in the bank by my client(Late)
-Eng.Robert Wilson,before its get confiscated by the bank. Due to the
-confidentiality of this information,I would want you to send me your
-private email where I can send you a comprehensive information of
-(Late) Eng.Robert Wilson,and every other information you may need to
-retrieve the fund in the bank.Here is my contact email.
-bankderictormrsired@aol.com )
+On Sun, Mar 8, 2020 at 5:50 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The implementation follow the RISC-V "V" Vector Extension draft v0.8 with
+> 128bit-vlen and it's based on linux-5.6-rc3 and tested with qemu [1].
+>
+> The patch implement basic context switch, sigcontext save/restore and
+> ptrace interface with a new regset NT_RISCV_VECTOR. Only fixed 128bit-vlen
+> is implemented. We need to discuss about vlen-size for libc sigcontext and
+> ptrace (the maximum size of vlen is unlimited in spec).
+>
+> Puzzle:
+> Dave Martin has talked "Growing CPU register state without breaking ABI" [2]
+> before, and riscv also met vlen size problem. Let's discuss the common issue
+> for all architectures and we need a better solution for unlimited vlen.
+>
+> Any help are welcomed :)
+>
+>  1: https://github.com/romanheros/qemu.git branch:vector-upstream-v3
+
+Hi Guo,
+
+Thanks for your patch.
+It seems the qemu repo doesn't have this branch?
