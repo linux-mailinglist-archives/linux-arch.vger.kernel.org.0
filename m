@@ -2,365 +2,291 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B3717E291
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 15:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 607AE17E538
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 17:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbgCIOaQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Mar 2020 10:30:16 -0400
-Received: from foss.arm.com ([217.140.110.172]:53252 "EHLO foss.arm.com"
+        id S1727349AbgCIQ7v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Mar 2020 12:59:51 -0400
+Received: from foss.arm.com ([217.140.110.172]:54762 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726617AbgCIOaQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 9 Mar 2020 10:30:16 -0400
+        id S1727185AbgCIQ7u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 9 Mar 2020 12:59:50 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93AAF30E;
-        Mon,  9 Mar 2020 07:30:15 -0700 (PDT)
-Received: from [10.1.195.53] (e123572-lin.cambridge.arm.com [10.1.195.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D3AD3F67D;
-        Mon,  9 Mar 2020 07:30:13 -0700 (PDT)
-Subject: Re: [PATCH v2 19/19] arm64: mte: Add Memory Tagging Extension
- documentation
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org
-References: <20200226180526.3272848-1-catalin.marinas@arm.com>
- <20200226180526.3272848-20-catalin.marinas@arm.com>
-From:   Kevin Brodsky <kevin.brodsky@arm.com>
-Message-ID: <a5fccd25-4c4f-dd60-ab0b-371ff1f6b08e@arm.com>
-Date:   Mon, 9 Mar 2020 14:30:12 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 020081FB;
+        Mon,  9 Mar 2020 09:59:50 -0700 (PDT)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1926E3F534;
+        Mon,  9 Mar 2020 09:59:47 -0700 (PDT)
+Date:   Mon, 9 Mar 2020 16:59:46 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alex Belits <abelits@marvell.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Prasun Kapoor <pkapoor@marvell.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "will@kernel.org" <will@kernel.org>
+Subject: Re: [PATCH v2 06/12] task_isolation: arch/arm64: enable task
+ isolation functionality
+Message-ID: <20200309165945.GB44566@lakrids.cambridge.arm.com>
+References: <4473787e1b6bc3cc226067e8d122092a678b63de.camel@marvell.com>
+ <aed12dd15ea2981bc9554cfa8b5e273c1342c756.camel@marvell.com>
+ <b559513e03dfd09f64ace29452590ddb92c3196f.camel@marvell.com>
 MIME-Version: 1.0
-In-Reply-To: <20200226180526.3272848-20-catalin.marinas@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b559513e03dfd09f64ace29452590ddb92c3196f.camel@marvell.com>
+User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 26/02/2020 18:05, Catalin Marinas wrote:
-> From: Vincenzo Frascino <vincenzo.frascino@arm.com>
->
-> Memory Tagging Extension (part of the ARMv8.5 Extensions) provides
-> a mechanism to detect the sources of memory related errors which
-> may be vulnerable to exploitation, including bounds violations,
-> use-after-free, use-after-return, use-out-of-scope and use before
-> initialization errors.
->
-> Add Memory Tagging Extension documentation for the arm64 linux
-> kernel support.
->
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+On Sun, Mar 08, 2020 at 03:50:58AM +0000, Alex Belits wrote:
+> From: Chris Metcalf <cmetcalf@mellanox.com>
+> 
+> In do_notify_resume(), call task_isolation_start() for
+> TIF_TASK_ISOLATION tasks. Add _TIF_TASK_ISOLATION to _TIF_WORK_MASK,
+> and define a local NOTIFY_RESUME_LOOP_FLAGS to check in the loop,
+> since we don't clear _TIF_TASK_ISOLATION in the loop.
+> 
+> We instrument the smp_send_reschedule() routine so that it checks for
+> isolated tasks and generates a suitable warning if needed.
+> 
+> Finally, report on page faults in task-isolation processes in
+> do_page_faults().
+> 
+> Signed-off-by: Chris Metcalf <cmetcalf@mellanox.com>
+> [abelits@marvell.com: simplified to match kernel 5.6]
+> Signed-off-by: Alex Belits <abelits@marvell.com>
 > ---
->
-> Notes:
->      v2:
->      - Documented the uaccess kernel tag checking mode.
->      - Removed the BTI definitions from cpu-feature-registers.rst.
->      - Removed the paragraph stating that MTE depends on the tagged address
->        ABI (while the Kconfig entry does, there is no requirement for the
->        user to enable both).
->      - Changed the GCR_EL1.Exclude handling description following the change
->        in the prctl() interface (include vs exclude mask).
->      - Updated the example code.
->
->   Documentation/arm64/cpu-feature-registers.rst |   2 +
->   Documentation/arm64/elf_hwcaps.rst            |   5 +
->   Documentation/arm64/index.rst                 |   1 +
->   .../arm64/memory-tagging-extension.rst        | 228 ++++++++++++++++++
->   4 files changed, 236 insertions(+)
->   create mode 100644 Documentation/arm64/memory-tagging-extension.rst
->
-> diff --git a/Documentation/arm64/cpu-feature-registers.rst b/Documentation/arm64/cpu-feature-registers.rst
-> index 41937a8091aa..b5679fa85ad9 100644
-> --- a/Documentation/arm64/cpu-feature-registers.rst
-> +++ b/Documentation/arm64/cpu-feature-registers.rst
-> @@ -174,6 +174,8 @@ infrastructure:
->        +------------------------------+---------+---------+
->        | Name                         |  bits   | visible |
->        +------------------------------+---------+---------+
-> +     | MTE                          | [11-8]  |    y    |
-> +     +------------------------------+---------+---------+
->        | SSBS                         | [7-4]   |    y    |
->        +------------------------------+---------+---------+
->   
-> diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
-> index 7dfb97dfe416..ca7f90e99e3a 100644
-> --- a/Documentation/arm64/elf_hwcaps.rst
-> +++ b/Documentation/arm64/elf_hwcaps.rst
-> @@ -236,6 +236,11 @@ HWCAP2_RNG
->   
->       Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.
->   
-> +HWCAP2_MTE
-> +
-> +    Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
-> +    by Documentation/arm64/memory-tagging-extension.rst.
-> +
->   4. Unused AT_HWCAP bits
->   -----------------------
->   
-> diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-> index 5c0c69dc58aa..82970c6d384f 100644
-> --- a/Documentation/arm64/index.rst
-> +++ b/Documentation/arm64/index.rst
-> @@ -13,6 +13,7 @@ ARM64 Architecture
->       hugetlbpage
->       legacy_instructions
->       memory
-> +    memory-tagging-extension
->       pointer-authentication
->       silicon-errata
->       sve
-> diff --git a/Documentation/arm64/memory-tagging-extension.rst b/Documentation/arm64/memory-tagging-extension.rst
-> new file mode 100644
-> index 000000000000..00ac0e22d5e9
-> --- /dev/null
-> +++ b/Documentation/arm64/memory-tagging-extension.rst
-> @@ -0,0 +1,228 @@
-> +===============================================
-> +Memory Tagging Extension (MTE) in AArch64 Linux
-> +===============================================
-> +
-> +Authors: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> +         Catalin Marinas <catalin.marinas@arm.com>
-> +
-> +Date: 2020-02-25
-> +
-> +This document describes the provision of the Memory Tagging Extension
-> +functionality in AArch64 Linux.
-> +
-> +Introduction
-> +============
-> +
-> +ARMv8.5 based processors introduce the Memory Tagging Extension (MTE)
-> +feature. MTE is built on top of the ARMv8.0 virtual address tagging TBI
-> +(Top Byte Ignore) feature and allows software to access a 4-bit
-> +allocation tag for each 16-byte granule in the physical address space.
-> +Such memory range must be mapped with the Normal-Tagged memory
-> +attribute. A logical tag is derived from bits 59-56 of the virtual
-> +address used for the memory access. A CPU with MTE enabled will compare
-> +the logical tag against the allocation tag and potentially raise an
-> +exception on mismatch, subject to system registers configuration.
-> +
-> +Userspace Support
-> +=================
-> +
-> +When ``CONFIG_ARM64_MTE`` is selected and Memory Tagging Extension is
-> +supported by the hardware, the kernel advertises the feature to
-> +userspace via ``HWCAP2_MTE``.
-> +
-> +PROT_MTE
-> +--------
-> +
-> +To access the allocation tags, a user process must enable the Tagged
-> +memory attribute on an address range using a new ``prot`` flag for
-> +``mmap()`` and ``mprotect()``:
-> +
-> +``PROT_MTE`` - Pages allow access to the MTE allocation tags.
-> +
-> +The allocation tag is set to 0 when such pages are first mapped in the
-> +user address space and preserved on copy-on-write. ``MAP_SHARED`` is
-> +supported and the allocation tags can be shared between processes.
-> +
-> +**Note**: ``PROT_MTE`` is only supported on ``MAP_ANONYMOUS`` and
-> +RAM-based file mappings (``tmpfs``, ``memfd``). Passing it to other
-> +types of mapping will result in ``-EINVAL`` returned by these system
-> +calls.
-> +
-> +**Note**: The ``PROT_MTE`` flag (and corresponding memory type) cannot
-> +be cleared by ``mprotect()``.
-> +
-> +Tag Check Faults
-> +----------------
-> +
-> +When ``PROT_MTE`` is enabled on an address range and a mismatch between
-> +the logical and allocation tags occurs on access, there are three
-> +configurable behaviours:
-> +
-> +- *Ignore* - This is the default mode. The CPU (and kernel) ignores the
-> +  tag check fault.
-> +
-> +- *Synchronous* - The kernel raises a ``SIGSEGV`` synchronously, with
-> +  ``.si_code = SEGV_MTESERR`` and ``.si_addr = <fault-address>``. The
-> +  memory access is not performed.
-> +
-> +- *Asynchronous* - The kernel raises a ``SIGSEGV``, in the current
-> +  thread, asynchronously following one or multiple tag check faults,
-> +  with ``.si_code = SEGV_MTEAERR`` and ``.si_addr = 0``.
-> +
-> +**Note**: There are no *match-all* logical tags available for user
-> +applications.
-> +
-> +The user can select the above modes, per thread, using the
-> +``prctl(PR_SET_TAGGED_ADDR_CTRL, flags, 0, 0, 0)`` system call where
-> +``flags`` contain one of the following values in the ``PR_MTE_TCF_MASK``
-> +bit-field:
-> +
-> +- ``PR_MTE_TCF_NONE``  - *Ignore* tag check faults
-> +- ``PR_MTE_TCF_SYNC``  - *Synchronous* tag check fault mode
-> +- ``PR_MTE_TCF_ASYNC`` - *Asynchronous* tag check fault mode
-> +
-> +Tag checking can also be disabled for a user thread by setting the
-> +``PSTATE.TCO`` bit with ``MSR TCO, #1``.
-> +
-> +**Note**: Signal handlers are always invoked with ``PSTATE.TCO = 0``,
-> +irrespective of the interrupted context.
-> +
-> +**Note**: Kernel accesses to user memory (e.g. ``read()`` system call)
-> +follow the same tag checking mode as set by the current thread.
-> +
-> +Excluding Tags in the ``IRG``, ``ADDG`` and ``SUBG`` instructions
-> +-----------------------------------------------------------------
-> +
-> +The architecture allows excluding certain tags to be randomly generated
-> +via the ``GCR_EL1.Exclude`` register bit-field. By default, Linux
-> +excludes all tags other than 0. A user thread can enable specific tags
-> +in the randomly generated set using the ``prctl(PR_SET_TAGGED_ADDR_CTRL,
-> +flags, 0, 0, 0)`` system call where ``flags`` contains the tags bitmap
-> +in the ``PR_MTE_TAG_MASK`` bit-field.
-> +
-> +**Note**: The hardware uses an exclude mask but the ``prctl()``
-> +interface provides an include mask.
+>  arch/arm64/Kconfig                   |  1 +
+>  arch/arm64/include/asm/thread_info.h |  5 ++++-
+>  arch/arm64/kernel/ptrace.c           | 10 ++++++++++
+>  arch/arm64/kernel/signal.c           | 13 ++++++++++++-
+>  arch/arm64/kernel/smp.c              |  7 +++++++
+>  arch/arm64/mm/fault.c                |  5 +++++
+>  6 files changed, 39 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 0b30e884e088..93b6aabc8be9 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -129,6 +129,7 @@ config ARM64
+>  	select HAVE_ARCH_PREL32_RELOCATIONS
+>  	select HAVE_ARCH_SECCOMP_FILTER
+>  	select HAVE_ARCH_STACKLEAK
+> +	select HAVE_ARCH_TASK_ISOLATION
+>  	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+>  	select HAVE_ARCH_TRACEHOOK
+>  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+> index f0cec4160136..7563098eb5b2 100644
+> --- a/arch/arm64/include/asm/thread_info.h
+> +++ b/arch/arm64/include/asm/thread_info.h
+> @@ -63,6 +63,7 @@ void arch_release_task_struct(struct task_struct *tsk);
+>  #define TIF_FOREIGN_FPSTATE	3	/* CPU's FP state is not current's */
+>  #define TIF_UPROBE		4	/* uprobe breakpoint or singlestep */
+>  #define TIF_FSCHECK		5	/* Check FS is USER_DS on return */
+> +#define TIF_TASK_ISOLATION	6
+>  #define TIF_NOHZ		7
+>  #define TIF_SYSCALL_TRACE	8	/* syscall trace active */
+>  #define TIF_SYSCALL_AUDIT	9	/* syscall auditing */
+> @@ -83,6 +84,7 @@ void arch_release_task_struct(struct task_struct *tsk);
+>  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+>  #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
+>  #define _TIF_FOREIGN_FPSTATE	(1 << TIF_FOREIGN_FPSTATE)
+> +#define _TIF_TASK_ISOLATION	(1 << TIF_TASK_ISOLATION)
+>  #define _TIF_NOHZ		(1 << TIF_NOHZ)
+>  #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
+>  #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
+> @@ -96,7 +98,8 @@ void arch_release_task_struct(struct task_struct *tsk);
+>  
+>  #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
+>  				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
+> -				 _TIF_UPROBE | _TIF_FSCHECK)
+> +				 _TIF_UPROBE | _TIF_FSCHECK | \
+> +				 _TIF_TASK_ISOLATION)
+>  
+>  #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
+>  				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
+> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+> index cd6e5fa48b9c..b35b9b0c594c 100644
+> --- a/arch/arm64/kernel/ptrace.c
+> +++ b/arch/arm64/kernel/ptrace.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/regset.h>
+>  #include <linux/tracehook.h>
+>  #include <linux/elf.h>
+> +#include <linux/isolation.h>
+>  
+>  #include <asm/compat.h>
+>  #include <asm/cpufeature.h>
+> @@ -1836,6 +1837,15 @@ int syscall_trace_enter(struct pt_regs *regs)
+>  			return -1;
+>  	}
+>  
+> +	/*
+> +	 * In task isolation mode, we may prevent the syscall from
+> +	 * running, and if so we also deliver a signal to the process.
+> +	 */
+> +	if (test_thread_flag(TIF_TASK_ISOLATION)) {
+> +		if (task_isolation_syscall(regs->syscallno) == -1)
 
-Maybe it's worth mentioning that a tag mask of 0x0, or equivalently an exclusion mask 
-of  0xFFFF, results in the generated tag being always 0. This is not very clear even 
-in the Arm ARM, where this is only specified in the pseudocode (I shall report this 
-internally).
+Please use NO_SYSCALL rather than -1 here.
 
-Kevin
+> +			return -1;
+> +	}
+> +
+>  	/* Do the secure computing after ptrace; failures should be fast. */
+>  	if (secure_computing() == -1)
+>  		return -1;
+> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> index 339882db5a91..d488c91a4877 100644
+> --- a/arch/arm64/kernel/signal.c
+> +++ b/arch/arm64/kernel/signal.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/tracehook.h>
+>  #include <linux/ratelimit.h>
+>  #include <linux/syscalls.h>
+> +#include <linux/isolation.h>
+>  
+>  #include <asm/daifflags.h>
+>  #include <asm/debug-monitors.h>
+> @@ -898,6 +899,11 @@ static void do_signal(struct pt_regs *regs)
+>  	restore_saved_sigmask();
+>  }
+>  
+> +#define NOTIFY_RESUME_LOOP_FLAGS \
+> +	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
+> +	_TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
+> +	_TIF_UPROBE | _TIF_FSCHECK)
+> +
+>  asmlinkage void do_notify_resume(struct pt_regs *regs,
+>  				 unsigned long thread_flags)
+>  {
+> @@ -908,6 +914,8 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
+>  	 */
+>  	trace_hardirqs_off();
+>  
+> +	task_isolation_check_run_cleanup();
+> +
+>  	do {
+>  		/* Check valid user FS if needed */
+>  		addr_limit_user_check();
+> @@ -938,7 +946,10 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
+>  
+>  		local_daif_mask();
+>  		thread_flags = READ_ONCE(current_thread_info()->flags);
+> -	} while (thread_flags & _TIF_WORK_MASK);
+> +	} while (thread_flags & NOTIFY_RESUME_LOOP_FLAGS);
+> +
+> +	if (thread_flags & _TIF_TASK_ISOLATION)
+> +		task_isolation_start();
+>  }
+>  
+>  unsigned long __ro_after_init signal_minsigstksz;
+> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> index d4ed9a19d8fe..00f0f77adea0 100644
+> --- a/arch/arm64/kernel/smp.c
+> +++ b/arch/arm64/kernel/smp.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/irq_work.h>
+>  #include <linux/kexec.h>
+>  #include <linux/kvm_host.h>
+> +#include <linux/isolation.h>
+>  
+>  #include <asm/alternative.h>
+>  #include <asm/atomic.h>
+> @@ -818,6 +819,7 @@ void arch_send_call_function_single_ipi(int cpu)
+>  #ifdef CONFIG_ARM64_ACPI_PARKING_PROTOCOL
+>  void arch_send_wakeup_ipi_mask(const struct cpumask *mask)
+>  {
+> +	task_isolation_remote_cpumask(mask, "wakeup IPI");
+>  	smp_cross_call(mask, IPI_WAKEUP);
+>  }
+>  #endif
+> @@ -886,6 +888,9 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
+>  		__inc_irq_stat(cpu, ipi_irqs[ipinr]);
+>  	}
+>  
+> +	task_isolation_interrupt("IPI type %d (%s)", ipinr,
+> +				 ipinr < NR_IPI ? ipi_types[ipinr] : "unknown");
+
+When I previously asked about tracing, I was asking about the format
+strings, since we don't bother with that kind of thing elsewhere.
+
+What exactly are these hooks used for? I assume the strings are only
+there as a debugging aid?
+
+What about other IRQs? Does we need something in the irqchip driver? 
+
+If we need to track that /any/ interrupt was received, I think that
+would be better to put in the top-level interrupt exception handler than
+to sprinkle hooks into every potential handler.
 
 > +
-> +Example of correct usage
-> +========================
-> +
-> +*MTE Example code*
-> +
-> +.. code-block:: c
-> +
-> +    /*
-> +     * To be compiled with -march=armv8.5-a+memtag
-> +     */
-> +    #include <errno.h>
-> +    #include <stdio.h>
-> +    #include <stdlib.h>
-> +    #include <unistd.h>
-> +    #include <sys/auxv.h>
-> +    #include <sys/mman.h>
-> +    #include <sys/prctl.h>
-> +
-> +    /*
-> +     * From arch/arm64/include/uapi/asm/hwcap.h
-> +     */
-> +    #define HWCAP2_MTE              (1 << 18)
-> +
-> +    /*
-> +     * From arch/arm64/include/uapi/asm/mman.h
-> +     */
-> +    #define PROT_MTE                 0x20
-> +
-> +    /*
-> +     * From include/uapi/linux/prctl.h
-> +     */
-> +    #define PR_SET_TAGGED_ADDR_CTRL 55
-> +    #define PR_GET_TAGGED_ADDR_CTRL 56
-> +    # define PR_TAGGED_ADDR_ENABLE  (1UL << 0)
-> +    # define PR_MTE_TCF_SHIFT       1
-> +    # define PR_MTE_TCF_NONE        (0UL << PR_MTE_TCF_SHIFT)
-> +    # define PR_MTE_TCF_SYNC        (1UL << PR_MTE_TCF_SHIFT)
-> +    # define PR_MTE_TCF_ASYNC       (2UL << PR_MTE_TCF_SHIFT)
-> +    # define PR_MTE_TCF_MASK        (3UL << PR_MTE_TCF_SHIFT)
-> +    # define PR_MTE_TAG_SHIFT       3
-> +    # define PR_MTE_TAG_MASK        (0xffffUL << PR_MTE_TAG_SHIFT)
-> +
-> +    /*
-> +     * Insert a random logical tag into the given pointer.
-> +     */
-> +    #define insert_random_tag(ptr) ({                       \
-> +            __u64 __val;                                    \
-> +            asm("irg %0, %1" : "=r" (__val) : "r" (ptr));   \
-> +            __val;                                          \
-> +    })
-> +
-> +    /*
-> +     * Set the allocation tag on the destination address.
-> +     */
-> +    #define set_tag(tagged_addr) do {                                      \
-> +            asm volatile("stg %0, [%0]" : : "r" (tagged_addr) : "memory"); \
-> +    } while (0)
-> +
-> +    int main()
-> +    {
-> +            unsigned long *a;
-> +            unsigned long page_sz = getpagesize();
-> +            unsigned long hwcap2 = getauxval(AT_HWCAP2);
-> +
-> +            /* check if MTE is present */
-> +            if (!(hwcap2 & HWCAP2_MTE))
-> +                    return -1;
-> +
-> +            /*
-> +             * Enable the tagged address ABI, synchronous MTE tag check faults and
-> +             * allow all non-zero tags in the randomly generated set.
-> +             */
-> +            if (prctl(PR_SET_TAGGED_ADDR_CTRL,
-> +                      PR_TAGGED_ADDR_ENABLE | PR_MTE_TCF_SYNC | (0xfffe << PR_MTE_TAG_SHIFT),
-> +                      0, 0, 0)) {
-> +                    perror("prctl() failed");
-> +                    return -1;
-> +            }
-> +
-> +            a = mmap(0, page_sz, PROT_READ | PROT_WRITE,
-> +                     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +            if (a == MAP_FAILED) {
-> +                    perror("mmap() failed");
-> +                    return -1;
-> +            }
-> +
-> +            /*
-> +             * Enable MTE on the above anonymous mmap. The flag could be passed
-> +             * directly to mmap() and skip this step.
-> +             */
-> +            if (mprotect(a, page_sz, PROT_READ | PROT_WRITE | PROT_MTE)) {
-> +                    perror("mprotect() failed");
-> +                    return -1;
-> +            }
-> +
-> +            /* access with the default tag (0) */
-> +            a[0] = 1;
-> +            a[1] = 2;
-> +
-> +            printf("a[0] = %lu a[1] = %lu\n", a[0], a[1]);
-> +
-> +            /* set the logical and allocation tags */
-> +            a = (unsigned long *)insert_random_tag(a);
-> +            set_tag(a);
-> +
-> +            printf("%p\n", a);
-> +
-> +            /* non-zero tag access */
-> +            a[0] = 3;
-> +            printf("a[0] = %lu a[1] = %lu\n", a[0], a[1]);
-> +
-> +            /*
-> +             * If MTE is enabled correctly the next instruction will generate an
-> +             * exception.
-> +             */
-> +            printf("Expecting SIGSEGV...\n");
-> +            a[2] = 0xdead;
-> +
-> +            /* this should not be printed in the PR_MTE_TCF_SYNC mode */
-> +            printf("...done\n");
-> +
-> +            return 0;
-> +    }
+>  	switch (ipinr) {
+>  	case IPI_RESCHEDULE:
+>  		scheduler_ipi();
+> @@ -948,12 +953,14 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
+>  
+>  void smp_send_reschedule(int cpu)
+>  {
+> +	task_isolation_remote(cpu, "reschedule IPI");
+>  	smp_cross_call(cpumask_of(cpu), IPI_RESCHEDULE);
+>  }
+>  
+>  #ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
+>  void tick_broadcast(const struct cpumask *mask)
+>  {
+> +	task_isolation_remote_cpumask(mask, "timer IPI");
+>  	smp_cross_call(mask, IPI_TIMER);
+>  }
+>  #endif
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index 85566d32958f..fc4b42c81c4f 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/preempt.h>
+>  #include <linux/hugetlb.h>
+> +#include <linux/isolation.h>
+>  
+>  #include <asm/acpi.h>
+>  #include <asm/bug.h>
+> @@ -543,6 +544,10 @@ static int __kprobes do_page_fault(unsigned long addr, unsigned int esr,
+>  	 */
+>  	if (likely(!(fault & (VM_FAULT_ERROR | VM_FAULT_BADMAP |
+>  			      VM_FAULT_BADACCESS)))) {
+> +		/* No signal was generated, but notify task-isolation tasks. */
+> +		if (user_mode(regs))
+> +			task_isolation_interrupt("page fault at %#lx", addr);
 
+This isn't an interrupt. Why do we need to hook this?
+
+What about /other/ exceptions caused by userspace?
+
+If we need to notify userspace, it would be much more reliable to do so
+in the return path.
+
+Thanks,
+Mark.
+
+> +
+>  		/*
+>  		 * Major/minor page fault accounting is only done
+>  		 * once. If we go through a retry, it is extremely
+> -- 
+> 2.20.1
+> 
