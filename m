@@ -2,140 +2,227 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8595517EC96
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Mar 2020 00:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF9417ECC9
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Mar 2020 00:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727242AbgCIXVA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Mar 2020 19:21:00 -0400
-Received: from mga12.intel.com ([192.55.52.136]:4307 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726698AbgCIXVA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 9 Mar 2020 19:21:00 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Mar 2020 16:20:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,535,1574150400"; 
-   d="scan'208";a="245503019"
-Received: from acrisan1-mobl1.amr.corp.intel.com (HELO [10.251.22.118]) ([10.251.22.118])
-  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2020 16:20:58 -0700
-Subject: Re: [RFC PATCH v9 01/27] Documentation/x86: Add CET description
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-References: <CAMe9rOoRTVUzNC88Ho2XTTNJCymrd3L=XdB9xFcgxPVwAZ0FWA@mail.gmail.com>
- <AE81FEF5-ECC5-46AA-804D-9D64E656D16E@amacapital.net>
- <CAMe9rOoDMenvD9XRL1szR5yLQEwv9Q6f4O7CtwbdZ-cJqzezKA@mail.gmail.com>
- <0088001c-0b12-a7dc-ff2a-9d5c282fa36b@intel.com>
- <CAMe9rOqf0OHL9397Vikgb=UWhRMf+FmGq-9VAJNmfmzNMMDkCw@mail.gmail.com>
- <56ab33ac-865b-b37e-75f2-a489424566c3@intel.com>
- <CAMe9rOrzrXORQgcAwzGn+=PBvxCEgc5Km_TQq+P7uoqwiacJSA@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-Message-ID: <c06073a2-6858-d5dc-d74b-ef2568bd9423@intel.com>
-Date:   Mon, 9 Mar 2020 16:20:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727273AbgCIXpW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Mar 2020 19:45:22 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:39212 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727405AbgCIXpW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Mar 2020 19:45:22 -0400
+Received: by mail-ot1-f68.google.com with SMTP id a9so5238214otl.6
+        for <linux-arch@vger.kernel.org>; Mon, 09 Mar 2020 16:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fmBdIxd2DBH3drat2RxXw5EvMETx4X35UelSAv/ALh8=;
+        b=TEQwnLgh8B3PsJKBlW2TWyJTnA9DDlkOy51XwT8ZvW45CdlsU0L88IRmKnKkRltzBm
+         kGOI6UBw/K7+paEi85+jlPPq3aiTme3vzGx0b9SuJDLCK0DjPl3v+LDgpJwsWFjalO1g
+         VMe5PrqnKGg8d5GsqbZHoRMhh7Niv0b3RLcDFnfMlagHZIzScsm1LLtypLf7E73dZsIz
+         Uu+rOdydlnVXzRtmsfDp6JQRHCADpg+3xOUK4fvE+ZcX7GO7hPaNAxIED0JiHv2Ndvjm
+         IgTFCLoYEf13ad9TCi4MxxRLj54zFArGjR3fZwoYAoFD1Y+5F1sl/nxCYT1zPUp2xbwH
+         keJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fmBdIxd2DBH3drat2RxXw5EvMETx4X35UelSAv/ALh8=;
+        b=K7GvNS7GPtLgsgutrmj1bfBNocLOG1YzgMPq+fHDUxXmPeASx6QLbkWE8fPQRFMqDv
+         5wb4GbP6aeOYcjcoL1GAL43AcRi6ifgOx3SzKDFnb50gse8HYp3Ty2h+C5Knyj577uAL
+         VHxm9FmzSZyQkj9gOcPTVJpzKqHD79aD638FD78O0oxYzyROPXhx/lMdvZVhM4r9p9Jj
+         Cu6h30Kaoa0UYwMhmJYfVmS3zoba9c0Ho0M5iYuYxf5sdan/3F8SnGnb35pce9YcGoTR
+         XgCIf6Kn0AYS0XUNoB6FUJ4Ql9BRnV/jZX2/QWu3LqCXBz6YmBygDeZobMwF5wZgq8Lm
+         HQRA==
+X-Gm-Message-State: ANhLgQ07k9IJb8cMccxB26InbNlDKdZx8ZghBDUW5j752GY1UrP9G9QG
+        5ziG//BzeTG6246pvnFp/ryul2rLDjS2IBwnNr/1NQ==
+X-Google-Smtp-Source: ADFU+vu3ctqe66UiWnus61OOtoDCVSNb+kXOZJ2waD27t2a3YUthZNqfb4fWuw2uMljnqbH/s6/XwWZrmf2yGIRlebQ=
+X-Received: by 2002:a9d:7358:: with SMTP id l24mr14121308otk.228.1583797521077;
+ Mon, 09 Mar 2020 16:45:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAMe9rOrzrXORQgcAwzGn+=PBvxCEgc5Km_TQq+P7uoqwiacJSA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200224160215.4136-1-mic@digikod.net>
+In-Reply-To: <20200224160215.4136-1-mic@digikod.net>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 10 Mar 2020 00:44:54 +0100
+Message-ID: <CAG48ez21bEn0wL1bbmTiiu8j9jP5iEWtHOwz4tURUJ+ki0ydYw@mail.gmail.com>
+Subject: Re: [RFC PATCH v14 00/10] Landlock LSM
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-doc@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 3/9/20 4:11 PM, H.J. Lu wrote:
-> A threaded application is loaded from disk.  The object file on disk is
-> either CET enabled or not CET enabled.
+On Mon, Feb 24, 2020 at 5:03 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+> This new version of Landlock is a major revamp of the previous series
+> [1], hence the RFC tag.  The three main changes are the replacement of
+> eBPF with a dedicated safe management of access rules, the replacement
+> of the use of seccomp(2) with a dedicated syscall, and the management of
+> filesystem access-control (back from the v10).
+>
+> As discussed in [2], eBPF may be too powerful and dangerous to be put in
+> the hand of unprivileged and potentially malicious processes, especially
+> because of side-channel attacks against access-controls or other parts
+> of the kernel.
+>
+> Thanks to this new implementation (1540 SLOC), designed from the ground
+> to be used by unprivileged processes, this series enables a process to
+> sandbox itself without requiring CAP_SYS_ADMIN, but only the
+> no_new_privs constraint (like seccomp).  Not relying on eBPF also
+> enables to improve performances, especially for stacked security
+> policies thanks to mergeable rulesets.
+>
+> The compiled documentation is available here:
+> https://landlock.io/linux-doc/landlock-v14/security/landlock/index.html
+>
+> This series can be applied on top of v5.6-rc3.  This can be tested with
+> CONFIG_SECURITY_LANDLOCK and CONFIG_SAMPLE_LANDLOCK.  This patch series
+> can be found in a Git repository here:
+> https://github.com/landlock-lsm/linux/commits/landlock-v14
+> I would really appreciate constructive comments on the design and the cod=
+e.
 
-Huh.  Are you saying that all instructions executed on userspace on
-Linux come off of object files on the disk?  That's an interesting
-assertion.  You might want to go take a look at the processes on your
-systems.  Here's my browser for example:
+I've looked through the patchset, and I think that it would be
+possible to simplify it quite a bit. I have tried to do that (and
+compiled-tested it, but not actually tried running it); here's what I
+came up with:
 
-# for p in $(ps aux | grep chromium | awk '{print $2}' ); do cat
-/proc/$p/maps; done | grep ' r-xp 00000000 00:00 0'
-...
-202f00082000-202f000bf000 r-xp 00000000 00:00 0
-202f000c2000-202f000c3000 r-xp 00000000 00:00 0
-202f00102000-202f00103000 r-xp 00000000 00:00 0
-202f00142000-202f00143000 r-xp 00000000 00:00 0
-202f00182000-202f001bf000 r-xp 00000000 00:00 0
+https://github.com/thejh/linux/commits/landlock-mod
 
-Lots of funny looking memory areas which are anonymous and executable!
-Those didn't come off the disk.  Same thing in firefox.  Weird.  Any
-idea what those are?
+The three modified patches (patches 1, 2 and 5) are marked with
+"[MODIFIED]" in their title. Please take a look - what do you think?
+Feel free to integrate my changes into your patches if you think they
+make sense.
 
-One guess: https://en.wikipedia.org/wiki/Just-in-time_compilation
+
+Apart from simplifying the code, I also found the following issues,
+which I have fixed in the modified patches:
+
+put_hierarchy() has to drop a reference on its parent. (However, this
+must not recurse, so we have to do it with a loop.)
+
+put_ruleset() is not in an RCU read-side critical section, so as soon
+as it calls kfree_rcu(), "freeme" might disappear; but "orig" is in
+"freeme", so when the loop tries to find the next element with
+rb_next(orig), that can be a UAF.
+rbtree_postorder_for_each_entry_safe() exists for dealing with such
+issues.
+
+AFAIK the calls to rb_erase() in clean_ruleset() is not safe if
+someone is concurrently accessing the rbtree as an RCU reader, because
+concurrent rotations can prevent a lookup from succeeding. The
+simplest fix is probably to just make any rbtree that has been
+installed on a process immutable, and give up on the cleaning -
+arguably the memory wastage that can cause is pretty limited. (By the
+way, as a future optimization, we might want to turn the rbtree into a
+hashtable when installing it?)
+
+The iput() in landlock_release_inode() looks unsafe - you need to
+guarantee that even if the deletion of a ruleset races with
+generic_shutdown_super(), every iput() for that superblock finishes
+before landlock_release_inodes() returns, even if the iput() is
+happening in the context of ruleset deletion. This is why
+fsnotify_unmount_inodes() has that wait_var_event() at the end.
+
+
+Aside from those things, there is also a major correctness issue where
+I'm not sure how to solve it properly:
+
+Let's say a process installs a filter on itself like this:
+
+struct landlock_attr_ruleset ruleset =3D { .handled_access_fs =3D
+ACCESS_FS_ROUGHLY_WRITE};
+int ruleset_fd =3D landlock(LANDLOCK_CMD_CREATE_RULESET,
+LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
+struct landlock_attr_path_beneath path_beneath =3D {
+  .ruleset_fd =3D ruleset_fd,
+  .allowed_access =3D ACCESS_FS_ROUGHLY_WRITE,
+  .parent_fd =3D open("/tmp/foobar", O_PATH),
+};
+landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
+sizeof(path_beneath), &path_beneath);
+prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+struct landlock_attr_enforce attr_enforce =3D { .ruleset_fd =3D ruleset_fd =
+};
+landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
+sizeof(attr_enforce), &attr_enforce);
+
+At this point, the process is not supposed to be able to write to
+anything outside /tmp/foobar, right? But what happens if the process
+does the following next?
+
+struct landlock_attr_ruleset ruleset =3D { .handled_access_fs =3D
+ACCESS_FS_ROUGHLY_WRITE};
+int ruleset_fd =3D landlock(LANDLOCK_CMD_CREATE_RULESET,
+LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
+struct landlock_attr_path_beneath path_beneath =3D {
+  .ruleset_fd =3D ruleset_fd,
+  .allowed_access =3D ACCESS_FS_ROUGHLY_WRITE,
+  .parent_fd =3D open("/", O_PATH),
+};
+landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
+sizeof(path_beneath), &path_beneath);
+prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+struct landlock_attr_enforce attr_enforce =3D { .ruleset_fd =3D ruleset_fd =
+};
+landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
+sizeof(attr_enforce), &attr_enforce);
+
+As far as I can tell from looking at the source, after this, you will
+have write access to the entire filesystem again. I think the idea is
+that LANDLOCK_CMD_ENFORCE_RULESET should only let you drop privileges,
+not increase them, right?
+
+I think the easy way to fix this would be to add a bitmask to each
+rule that says from which ruleset it originally comes, and then let
+check_access_path() collect these bitmasks from each rule with OR, and
+check at the end whether the resulting bitmask is full - if not, at
+least one of the rulesets did not permit the access, and it should be
+denied.
+
+But maybe it would make more sense to change how the API works
+instead, and get rid of the concept of "merging" two rulesets
+together? Instead, we could make the API work like this:
+
+ - LANDLOCK_CMD_CREATE_RULESET gives you a file descriptor whose
+->private_data contains a pointer to the old ruleset of the process,
+as well as a pointer to a new empty ruleset.
+ - LANDLOCK_CMD_ADD_RULE fails if the specified rule would not be
+permitted by the old ruleset, then adds the rule to the new ruleset
+ - LANDLOCK_CMD_ENFORCE_RULESET fails if the old ruleset pointer in
+->private_data doesn't match the current ruleset of the process, then
+replaces the old ruleset with the new ruleset.
+
+With this, the new ruleset is guaranteed to be a subset of the old
+ruleset because each of the new ruleset's rules is permitted by the
+old ruleset. (Unless the directory hierarchy rotates, but in that case
+the inaccuracy isn't much worse than what would've been possible
+through RCU path walk anyway AFAIK.)
+
+What do you think?
