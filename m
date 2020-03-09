@@ -2,113 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFC517D82F
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 03:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D8517D83A
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 04:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbgCICiq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 8 Mar 2020 22:38:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49420 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726363AbgCICip (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 8 Mar 2020 22:38:45 -0400
-Received: from localhost (lfbn-ncy-1-985-231.w90-101.abo.wanadoo.fr [90.101.63.231])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1967920675;
-        Mon,  9 Mar 2020 02:38:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583721524;
-        bh=NYBnKnoFGHiKr8KFP5sPc644yQ3JlTxiVZ/OVEyT5kM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZoL5T7WMQ1L5KDgXAkmHsFCSmrpvYGWHDYhIsPfh2SNqKbDbBJXqmI6gsl5tz1+dm
-         rw33KSreeT0C31iozs1WGnkwVbboEvSWzW+nxTJD+plXMvbYqDnFHtbF+7B3dMOJhA
-         79dptiGbAhG3DT5Ia1hzMdbu9qL/+NGDRkGikkIk=
-Date:   Mon, 9 Mar 2020 03:38:42 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Alex Belits <abelits@marvell.com>
-Cc:     "mingo@kernel.org" <mingo@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "will@kernel.org" <will@kernel.org>
-Subject: Re: [EXT] Re: [PATCH 08/12] task_isolation: don't interrupt CPUs
- with tick_nohz_full_kick_cpu()
-Message-ID: <20200309023841.GC9615@lenoir>
-References: <4473787e1b6bc3cc226067e8d122092a678b63de.camel@marvell.com>
- <d7ce01e57d4a35b126e1cb96a63109eaa9781cb6.camel@marvell.com>
- <20200306160341.GE8590@lenoir>
- <646a22fd24e8dfeb1eb3101ae7be2b88e91dbfa3.camel@marvell.com>
+        id S1726770AbgCIDCw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 8 Mar 2020 23:02:52 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:40284 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726680AbgCIDCw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 Mar 2020 23:02:52 -0400
+Received: by mail-wm1-f68.google.com with SMTP id e26so8064199wme.5
+        for <linux-arch@vger.kernel.org>; Sun, 08 Mar 2020 20:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=WkSc13XnIRhL4+ZUuijkRluVT9uWdnyORe6lvTinvZY=;
+        b=bNttHm0f6kzQ8pXxgSJDiB9leXf+790sUgjQYgQkO4sAVxFPp7QoZSZHrTjTM/3MbV
+         Fi4dxUWFxpaE4n3fCODg8MD5FhK+VP5EM+gmeMpiE5LblN3GfeJTuZdzL8zh72x9qTLC
+         uTUEDiFLsvQvqVsHZMn12xyN/X6vQj3e+I8bF9L5fL6tdJo60oPq55UP5siwlnlki3+x
+         NeMN+8AJnGbwNp+1OA6H7k8CAAYU7nH46UNUOd6WquGa+wTYAVQ9eJQjQTqAlLgCWet4
+         0eeFIKbdF3vHuJqTHkSUcxvdSfPydorZfcnfG6jg5L17B6XciQlnzPuvNidsZfA/cxoJ
+         Ze9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=WkSc13XnIRhL4+ZUuijkRluVT9uWdnyORe6lvTinvZY=;
+        b=OYjOR6AobyBYzkfROSFveMxT+iXl1mkOE5cI7d6+RBKr6Qxur0vHDbRLzAJjiJ6Hw7
+         d2/Kitc3ZqjPIvAAYp1Q2XKNAsIzMzJ1B2Bivp3SgiAx3kp6+Ww+0Q9+IywR26yFpz3d
+         cLkQuE6kF6D2DpIbWBN0Pi285YmzEahQcJiD2Kz5dM3bUaVvuXPDlzhreSViAvnKad4K
+         MhNCVNPPdwcrq2miO6LB4eh2BO/RoC09J/gFV8YXKWEdL5JmpkOHZL0KUMrNfuSireHj
+         hx6taPvbKRAlDKMr52EvME+h6+Tu49c8GdZVmdvgyxBszjf2/KZFUuoTOGyxMPfXHdKw
+         f8OQ==
+X-Gm-Message-State: ANhLgQ1qwFAP3oGof4CRgMbOq4UBuEfzMtGkCHphxyV88dAbP94y7W2o
+        Zwt9SAPWYSApKyls3mjRREgmzVKn5HYsg6Vf/dk=
+X-Google-Smtp-Source: ADFU+vvLP/SiRl5BDV9T//kCSxzauTI8ghJWCR3WzXdRf94KudKy8eSaE5ZLlHD3orQ6sn7YL+f/YrwrVPplEXYcl/Q=
+X-Received: by 2002:a05:600c:4151:: with SMTP id h17mr18656711wmm.189.1583722969892;
+ Sun, 08 Mar 2020 20:02:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <646a22fd24e8dfeb1eb3101ae7be2b88e91dbfa3.camel@marvell.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Received: by 2002:adf:ed10:0:0:0:0:0 with HTTP; Sun, 8 Mar 2020 20:02:49 -0700 (PDT)
+Reply-To: bankderictormrsired@aol.com
+From:   BANK DERICTOR <adamhana1907@gmail.com>
+Date:   Mon, 9 Mar 2020 03:02:49 +0000
+Message-ID: <CAOGreOnhSMcHW5UpvwgbLtTCAfQVo+LWHWaWDoHEQiDsJ-4R8A@mail.gmail.com>
+Subject: I need your urgently response.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Mar 08, 2020 at 07:28:22AM +0000, Alex Belits wrote:
-> On Fri, 2020-03-06 at 17:03 +0100, Frederic Weisbecker wrote:
-> > On Wed, Mar 04, 2020 at 04:12:40PM +0000, Alex Belits wrote:
-> > > From: Yuri Norov <ynorov@marvell.com>
-> > > 
-> > > For nohz_full CPUs the desirable behavior is to receive interrupts
-> > > generated by tick_nohz_full_kick_cpu(). But for hard isolation it's
-> > > obviously not desirable because it breaks isolation.
-> > > 
-> > > This patch adds check for it.
-> > > 
-> > > Signed-off-by: Alex Belits <abelits@marvell.com>
-> > > ---
-> > >  kernel/time/tick-sched.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> > > index 1d4dec9d3ee7..fe4503ba1316 100644
-> > > --- a/kernel/time/tick-sched.c
-> > > +++ b/kernel/time/tick-sched.c
-> > > @@ -20,6 +20,7 @@
-> > >  #include <linux/sched/clock.h>
-> > >  #include <linux/sched/stat.h>
-> > >  #include <linux/sched/nohz.h>
-> > > +#include <linux/isolation.h>
-> > >  #include <linux/module.h>
-> > >  #include <linux/irq_work.h>
-> > >  #include <linux/posix-timers.h>
-> > > @@ -262,7 +263,7 @@ static void tick_nohz_full_kick(void)
-> > >   */
-> > >  void tick_nohz_full_kick_cpu(int cpu)
-> > >  {
-> > > -	if (!tick_nohz_full_cpu(cpu))
-> > > +	if (!tick_nohz_full_cpu(cpu) || task_isolation_on_cpu(cpu))
-> > >  		return;
-> > 
-> > I fear you can't do that. A nohz full CPU is kicked for a reason.
-> > As for the other cases, you need to fix the callers.
-> > 
-> > In the general case, randomly ignoring an interrupt is a correctness
-> > issue.
-> 
-> Not ignoring, just delaying until we are back from userspace. We know
-> that everything was done on this CPU when we successfully entered
-> userspace in isolated mode -- otherwise we would be kicked out. We
-> restart timers when we are back in kernel again on cleanup, so things
-> will be back to normal at that point. Between those moments we can just
-> as well remain in userspace and forget about the timers until we are
-> back in kernel.
-
-Well, if another CPU requests the tick on our isolated CPU, we can't ignore
-it. This can be a posix cpu timer belonging to our process, a timer bound
-to our CPU or tasks added to our CPU that require the scheduler tick.
-Denying any of that can crash the kernel randomly.
-
-The only thing we can do is to simply avoid these situations. But those
-are requirements anyway if you want to run a task undisturbed.
+I am contacting you to assist retrieve a huge deposit of Ten Million
+Five Hundred Thousand Dollars left in the bank by my client(Late)
+Eng.Robert Wilson,before its get confiscated by the bank. Due to the
+confidentiality of this information,I would want you to send me your
+private email where I can send you a comprehensive information of
+(Late) Eng.Robert Wilson,and every other information you may need to
+retrieve the fund in the bank.Here is my contact email.
+bankderictormrsired@aol.com )
