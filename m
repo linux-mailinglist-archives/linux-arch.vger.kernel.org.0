@@ -2,79 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A24E317DC19
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 10:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0226D17DD81
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 11:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbgCIJHI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Mar 2020 05:07:08 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:45998 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726215AbgCIJHH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Mar 2020 05:07:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Transfer-Encoding
-        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=ovwAOrod+pcHugf+bHywQDDeJcz0ScIRA7A9zSI+2vM=; b=ifovaK/kO8/X67kmI3vvmgEMFF
-        FRSpZQLKfdun9jAgIFz5xMpIbEQmoH41eGKCSSh1F6bXXTZUqrzvxgkB6MR9siuaACaSXzRB8gXVV
-        Ddy7r00J7jM5rnenJgxdYK754Vmg1vbuV9cO8I/GOeu6BK+NpAlw9+tr9GNvOArkHMjPMTRQBZ4OW
-        cuNZfFIN5WE47Vsrr9kAx877r+CBW1CDcn80mrcumxiRjtgmU+/obDicBiUc1JftwOWOIHIjLEhNj
-        wJJH9keSms1ln6ufyZZVdcSmFiRJO5nS1vW7yIOtlM23aQcpgf1BjOs560IsOYwmGMjxg06N53Mnc
-        YslE+Hzw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jBENB-0001JG-PJ; Mon, 09 Mar 2020 09:06:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F295030066E;
-        Mon,  9 Mar 2020 10:06:50 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D590225F2C26C; Mon,  9 Mar 2020 10:06:50 +0100 (CET)
-Date:   Mon, 9 Mar 2020 10:06:50 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-doc@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH 0/3] docs: a few improvements for atomic_ops.rst
-Message-ID: <20200309090650.GF12561@hirez.programming.kicks-ass.net>
-References: <20200308195618.22768-1-j.neuschaefer@gmx.net>
+        id S1726248AbgCIK1N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Mar 2020 06:27:13 -0400
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:42580 "EHLO
+        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725956AbgCIK1N (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Mar 2020 06:27:13 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1169725|-1;CH=blue;DM=||false|;DS=CONTINUE|ham_system_inform|0.0111236-0.0031218-0.985755;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03300;MF=zhiwei_liu@c-sky.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.GyXya.O_1583749628;
+Received: from 172.16.31.150(mailfrom:zhiwei_liu@c-sky.com fp:SMTPD_---.GyXya.O_1583749628)
+          by smtp.aliyun-inc.com(10.147.41.143);
+          Mon, 09 Mar 2020 18:27:09 +0800
+Subject: Re: [RFC PATCH V3 00/11] riscv: Add vector ISA support
+To:     Greentime Hu <greentime.hu@sifive.com>, guoren@kernel.org
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Anup.Patel@wdc.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, arnd@arndb.de,
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Dave Martin <Dave.Martin@arm.com>
+References: <20200308094954.13258-1-guoren@kernel.org>
+ <CAHCEeh+XYD3uVmaQRGpY=VGxpO9hzMeKasNmAojhkZe9PJ9Lug@mail.gmail.com>
+From:   LIU Zhiwei <zhiwei_liu@c-sky.com>
+Message-ID: <95e3bba4-65c0-8991-9523-c16977f6350f@c-sky.com>
+Date:   Mon, 9 Mar 2020 18:27:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <CAHCEeh+XYD3uVmaQRGpY=VGxpO9hzMeKasNmAojhkZe9PJ9Lug@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200308195618.22768-1-j.neuschaefer@gmx.net>
+Content-Language: en-US
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Mar 08, 2020 at 08:56:15PM +0100, Jonathan Neuschäfer wrote:
-> Hi,
-> 
-> this is a short series of unrelated fixes that make the atomic
-> operations documentation look and read a bit better.
-> 
-> Jonathan Neuschäfer (3):
->   docs: atomic_ops: Remove colons where they don't make sense
->   docs: atomic_ops: Move two paragraphs into the warning block above
->   docs: atomic_ops: Steer readers towards using refcount_t for reference
->     counts
-> 
->  Documentation/core-api/atomic_ops.rst         | 24 ++++++++++++-------
 
-FWIW, I consider this a dead document. I've written
-Documentation/atomic_t.txt and Documentation/atomic_bitops.txt as a
-replacement. If there is anything in atomic_ops you feel is missing from
-those two, please tell as I'm planing to delete atomic_ops soon.
+
+On 2020/3/9 11:41, Greentime Hu wrote:
+> On Sun, Mar 8, 2020 at 5:50 PM <guoren@kernel.org> wrote:
+>> From: Guo Ren <guoren@linux.alibaba.com>
+>>
+>> The implementation follow the RISC-V "V" Vector Extension draft v0.8 with
+>> 128bit-vlen and it's based on linux-5.6-rc3 and tested with qemu [1].
+>>
+>> The patch implement basic context switch, sigcontext save/restore and
+>> ptrace interface with a new regset NT_RISCV_VECTOR. Only fixed 128bit-vlen
+>> is implemented. We need to discuss about vlen-size for libc sigcontext and
+>> ptrace (the maximum size of vlen is unlimited in spec).
+>>
+>> Puzzle:
+>> Dave Martin has talked "Growing CPU register state without breaking ABI" [2]
+>> before, and riscv also met vlen size problem. Let's discuss the common issue
+>> for all architectures and we need a better solution for unlimited vlen.
+>>
+>> Any help are welcomed :)
+>>
+>>   1: https://github.com/romanheros/qemu.git branch:vector-upstream-v3
+> Hi Guo,
+>
+> Thanks for your patch.
+> It seems the qemu repo doesn't have this branch?
+Hi Greentime,
+
+It's a promise from me. Now it's ready.Â  You can turn on vector by 
+"qemu-system-riscv64 -cpu rv64,v=true,vext_spec=v0.7.1".
+
+Zhiwei
+
+
