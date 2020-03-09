@@ -2,89 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB64317D853
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 04:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A0517D8AD
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 05:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbgCIDlt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 8 Mar 2020 23:41:49 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:45192 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726463AbgCIDlt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 Mar 2020 23:41:49 -0400
-Received: by mail-qt1-f196.google.com with SMTP id a4so6030714qto.12
-        for <linux-arch@vger.kernel.org>; Sun, 08 Mar 2020 20:41:49 -0700 (PDT)
+        id S1725962AbgCIE7w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Mar 2020 00:59:52 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:35156 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbgCIE7w (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Mar 2020 00:59:52 -0400
+Received: by mail-io1-f66.google.com with SMTP id h8so7894179iob.2
+        for <linux-arch@vger.kernel.org>; Sun, 08 Mar 2020 21:59:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CNYYFTCalmUuSxAWR7XaCM/gxKPhcvr0JtZkj6eTI9Y=;
-        b=VHknv8LB3GFRw23ZbiPdreuz6d01GLWWAJvdX5EgeD9/c/GcOS3IP+ZhkeICb0JhfH
-         XVw67cYfVsHCMH6qw7HsKBL6jpr+j6KBSqMec750uAs+10sQ6riV2cVg2oqfVtKcQHyP
-         Z9hT3Z+Ws38DjPnOB/+jFMRTCz1yayzN6dXEs0YuebKNXz0BN2awgZsy5VV/cWs6MZoZ
-         d94/E5LVYK9fXw1NUB6hQ8fdh3XQZyglH788D+Wk2e0T7MP2IAqDsaAincG5B8kjJe9i
-         NQzh+apsnX9PlOHTG2BZPhAyc6uIbxHgmQJKN3JkWRl0MO23Fvjem4bcygW4f+/zlNW8
-         V8iw==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=wrJuG9mS3QlS14iOkG17Kdz10DlOg76sfdfHPS+MJE8=;
+        b=sOIyhSN5N/VIA0nMz3el8UE2Hv55oaNji/LWhlfbea7pPx9dMt8OO/3GEBL5ZXlDnx
+         jPiAHVkyPfiijoXhGZJPAcOEGAQdZfmb19HKK2+HMA57338yeXMSauVutUrKMSbuXwK+
+         QO0oFncA509EliYeNxnF4Qkc5me1c55cpMi8v+1krFCqSatx+Lv85Kp4wdx6s+fJoaXt
+         iG92LNAffMHLr5YEMIMRFtz5ZJ0+SLwvRXWJFCCV9Pwb192DXZxqxRhuTv8xFdTalTbg
+         pP/PcWOGww1JSS0vh4vRaYVMH+zhVU16k2zOVBjOZKlfCM4OBXew/9v0aSuvMS5CQZ1k
+         723Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CNYYFTCalmUuSxAWR7XaCM/gxKPhcvr0JtZkj6eTI9Y=;
-        b=qvWYebpWVvDM0Pgs7v0uD9nxVeM3/qyzXJR8fiZ8hPGicmOmBKVM9FbTJRn6P57/Hn
-         F2qSYIYzcdA4cjrHK+l+3PFyYYpSlTHvLYCIlllUCgaXT5nEPiAr30T3JJBTn3etXtEC
-         kPhmd5GV/j+fPxQoaxJYeGCG2hkbSGNrjjgQ0i4QzeVmlO/Wtu95Wu84kWmjxbOCDvD8
-         M8I48vguldp3ogLEslEaS2NZYOYUwFAPctuMZVwf9niC0p3Hpl3fi3PTwwCAF01JUY5p
-         Le/rybUvxZbmTiK8Q8o6+nE7Aef4IUbTdi/l1yFoH74OuOGCVBG11ZLOyyYt55SYNsGV
-         1gSg==
-X-Gm-Message-State: ANhLgQ2/LcGznDKkPnkr5NBiNr/m1ertYeo4kGrQxyjIgJzP+4cz3B7X
-        0gnTpfOM7jpceRsVfzmscqAy4PL+d6tkiuVFrll8aA==
-X-Google-Smtp-Source: ADFU+vt7hRKCpjY9Y/6PbDXX5/P/aKDMHT0L5G/8Gt3a3KMISifEbxYw8sWoZVsjM25ruYRMFoTYggX7kXK+ZNULFqA=
-X-Received: by 2002:ac8:1345:: with SMTP id f5mr12999290qtj.128.1583725308848;
- Sun, 08 Mar 2020 20:41:48 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=wrJuG9mS3QlS14iOkG17Kdz10DlOg76sfdfHPS+MJE8=;
+        b=OYyW1f/vyn1xxPnrSlqrd1onFT4/evs17JyN+ZIkHfn3GipncoAEilMWCu1HtzSTCy
+         7RFQMhHUIUi49whrenIk3IoFJYyS847WeXiyJEcqaiEMe856ENQVyTw4g1rdkoy0oCvh
+         9NUgilvN8yD+A1DfFU3ug4E6YoEnduLybnezsxw08Y2iFxCEEk5r2aADJ8QqEwXwlBOV
+         0UXQ/dLxPJr6wzDKYixJvBhv/pEesP09n9mjfJIRFM9gHZeL8Xr0xgy8nBwhw72EZ1IF
+         QdjjJUn5marwEcgrZqZgVqlFe2u+rk60daCjQX4INAD8epuZXUkV0q5WBxysaWBX+qAN
+         odGA==
+X-Gm-Message-State: ANhLgQ3nGuxLrVaMZgRobnWQVJuySy02AyKnR/jFmYPVhhnK7yTplZfc
+        RXCXeHN+myqpaNiKaAb5MMzAd2ws0oohF2bOgng=
+X-Google-Smtp-Source: ADFU+vuzx2bPynqroHB3VT9xvY1jg4i8NesXno+xoCaCCTYXlYFcvGafdSamrepBe6IIv//6F4KK7466pg34sLztzS8=
+X-Received: by 2002:a5d:8555:: with SMTP id b21mr11869205ios.200.1583729990396;
+ Sun, 08 Mar 2020 21:59:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200308094954.13258-1-guoren@kernel.org>
-In-Reply-To: <20200308094954.13258-1-guoren@kernel.org>
-From:   Greentime Hu <greentime.hu@sifive.com>
-Date:   Mon, 9 Mar 2020 11:41:37 +0800
-Message-ID: <CAHCEeh+XYD3uVmaQRGpY=VGxpO9hzMeKasNmAojhkZe9PJ9Lug@mail.gmail.com>
-Subject: Re: [RFC PATCH V3 00/11] riscv: Add vector ISA support
-To:     guoren@kernel.org
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Anup.Patel@wdc.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org, arnd@arndb.de,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Liu Zhiwei <zhiwei_liu@c-sky.com>
+Received: by 2002:a5d:9b98:0:0:0:0:0 with HTTP; Sun, 8 Mar 2020 21:59:50 -0700 (PDT)
+Reply-To: elisabeth1981@mail.com
+From:   Mrs Elizabeth Edawrds <madam.elizabethe07@gmail.com>
+Date:   Mon, 9 Mar 2020 05:59:50 +0100
+Message-ID: <CACSsx-m9ymbm-Yz=NnTKaF0A7zqvqyEk1gnT+zwscvbm=XVXdg@mail.gmail.com>
+Subject: Attn: Dear Friend
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Mar 8, 2020 at 5:50 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> The implementation follow the RISC-V "V" Vector Extension draft v0.8 with
-> 128bit-vlen and it's based on linux-5.6-rc3 and tested with qemu [1].
->
-> The patch implement basic context switch, sigcontext save/restore and
-> ptrace interface with a new regset NT_RISCV_VECTOR. Only fixed 128bit-vlen
-> is implemented. We need to discuss about vlen-size for libc sigcontext and
-> ptrace (the maximum size of vlen is unlimited in spec).
->
-> Puzzle:
-> Dave Martin has talked "Growing CPU register state without breaking ABI" [2]
-> before, and riscv also met vlen size problem. Let's discuss the common issue
-> for all architectures and we need a better solution for unlimited vlen.
->
-> Any help are welcomed :)
->
->  1: https://github.com/romanheros/qemu.git branch:vector-upstream-v3
+Dear Friend,
 
-Hi Guo,
+Please forgive me for stressing you with my predicaments as I know
+that this letter may come to you as big surprise. Actually, as my
+pastor advised me to reject earthly reward and thinks by handing the
+project to someone I have never seen or met for a greater reward in
+heaven awaits for whoever can give such a costly donation. I came
+across your E-mail from my personal search, and I decided to email you
+directly believing that you will be honest to fulfill my final wish
+before or after my death.
 
-Thanks for your patch.
-It seems the qemu repo doesn't have this branch?
+ Meanwhile, I am Madam Elizabeth Edwards, 73 years, am from USA, still
+childless. I am suffering from Adenocarcinoma Cancer of the lungs for
+the past 8 years and from all indication my condition is really
+deteriorating as my doctors have confirmed and courageously advised me
+that I may not live beyond 2 weeks from now for the reason that my
+tumor has reached a critical stage which has defiled all forms of
+medical treatment.
+
+Since my days are numbered, I=E2=80=99ve decided willingly to fulfill my
+long-time vow to donate to the underprivileged the sum of Eighteen
+million five hundred thousand dollars ($18.5m) I deposited in a
+different account over 8 years now because I have tried to handle this
+project by myself but I have seen that my health could not allow me to
+do so anymore. My promise for the poor includes building of
+well-equipped charity foundation hospital and a technical school for
+their survival.
+
+If you will be honest, kind and willing to assist me handle this
+charity project as I=E2=80=99ve mentioned here, I will like you to provide =
+me
+your personal data like. Contact me through this email address
+(elisabethe1981@mail.com) and also send me your private email address.
+
+(1) Your full name:
+(2) country:
+(3) phone number:
+(4) Age:
+
+Best Regards!
+Mrs. Elizabeth Edwards
