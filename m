@@ -2,46 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB8217D8C2
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 06:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0B717DC0B
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 10:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbgCIFLb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Mar 2020 01:11:31 -0400
-Received: from mailgw.unisannio.it ([193.206.108.11]:33468 "EHLO
-        mailgw.unisannio.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725796AbgCIFLb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Mar 2020 01:11:31 -0400
-X-Greylist: delayed 522 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Mar 2020 01:11:30 EDT
-Received: from localhost (unknown [127.0.0.1])
-        by mailgw.unisannio.it (Postfix) with ESMTP id 8686C500EF3;
-        Mon,  9 Mar 2020 05:08:34 +0000 (UTC)
-Received: from mailgw.unisannio.it ([127.0.0.1])
- by localhost (mailgw.unisannio.it [127.0.0.1]) (amavisd-maia, port 10024)
- with ESMTP id 15337-03-3; Mon,  9 Mar 2020 06:08:33 +0100 (CET)
-Received: from pamx1.unisannio.it (pamx1.unisannio.it [193.206.108.12])
-        by mailgw.unisannio.it (Postfix) with ESMTP id 796D1500EFA;
-        Mon,  9 Mar 2020 06:08:28 +0100 (CET)
-Received: from webmail.unisannio.it (webmail.unisannio.it [193.206.108.9])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        id S1726450AbgCIJBt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Mar 2020 05:01:49 -0400
+Received: from paleo.ru ([195.178.204.132]:48697 "EHLO mail.paleo.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726027AbgCIJBs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 9 Mar 2020 05:01:48 -0400
+X-Greylist: delayed 661 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Mar 2020 05:01:46 EDT
+Received: from mail.paleo.ru (paleo.ru [195.178.204.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: ppavone)
-        by pamx1.unisannio.it (Postfix) with ESMTPSA id EB21B1E0512;
-        Mon,  9 Mar 2020 01:15:04 +0100 (CET)
+        by mail.paleo.ru (Postfix) with ESMTPSA id 7D9011E9F55;
+        Mon,  9 Mar 2020 08:43:33 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
+Content-Type: text/plain; charset=US-ASCII;
  format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Mon, 09 Mar 2020 03:15:04 +0300
-From:   "Banca IMI S.P.A" <ppavone@unisannio.it>
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 09 Mar 2020 10:43:33 +0200
+From:   "Michael J. Weirsky" <mikhailov@paleo.ru>
 To:     undisclosed-recipients:;
-Subject: Finanzielles Angebot @1,3%
-Organization: Banca IMI S.P.A
-Reply-To: infobancaimi@financier.com
-Mail-Reply-To: infobancaimi@financier.com
-Message-ID: <571063737e0c5a49691b35e33a87ae32@unisannio.it>
-X-Sender: ppavone@unisannio.it
+Reply-To: micjsky@aol.com
+Mail-Reply-To: micjsky@aol.com
+Message-ID: <b49abeef61f9247d0a0f1b2f9bde1d81@paleo.ru>
+X-Sender: mikhailov@paleo.ru
 User-Agent: Roundcube Webmail/1.3.9
-X-Virus-Scanned: Maia Mailguard 1.0.0
+X-Spam: Yes
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -50,26 +39,8 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 -- 
-Grüße Herr / Frau,
-
-Benötigen Sie finanzielle Unterstützung (Darlehen)?
-Sprechen Sie mit uns bei Banca IMI S.P.A, wir lösen Ihre finanziellen
-Probleme.
-
-Unser Zinssatz beträgt 1,3% jährlich. Bitte bewerben Sie sich jetzt und
-geben Sie folgende Bewerbungsdetails ein:
-
-Vollständiger Name:____________________
-Darlehensbetrag: _______________________
-Leihdauer: ___________________
-Darlehen Zweck: _________________
-Telefon:____________________
-
-Wir warten auf Ihren Antrag, damit Ihr Kreditantrag bearbeitet werden 
-kann.
-
-
-Herzliche Grüße
-
-BANCA IMI S.P.A
-Email: infobancaimi@financier.com
+My name is Michael J. Weirsky, I'm an unemployed Handy man , winner of 
+$273million Jackpot in March 8, 2019. I donate $1.000.000,00 to you. 
+Contact me via email: micjsky@aol.com for info / claim.
+Continue reading: 
+https://abcnews.go.com/WNT/video/jersey-handyman-forward-273m-lottery-winner-61544244
