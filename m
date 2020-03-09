@@ -2,96 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0094517EAB8
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 22:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2081217EAEB
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 22:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726822AbgCIVFH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Mar 2020 17:05:07 -0400
-Received: from foss.arm.com ([217.140.110.172]:57536 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726157AbgCIVFH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 9 Mar 2020 17:05:07 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1222D1FB;
-        Mon,  9 Mar 2020 14:05:07 -0700 (PDT)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 891E23F534;
-        Mon,  9 Mar 2020 14:05:06 -0700 (PDT)
-Date:   Mon, 9 Mar 2020 21:05:05 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Paul Elliott <paul.elliott@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "H . J . Lu " <hjl.tools@gmail.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Weimer <fweimer@redhat.com>,
-        Sudakshina Das <sudi.das@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v8 00/11] arm64: Branch Target Identification support
-Message-ID: <20200309210505.GM4101@sirena.org.uk>
-References: <20200227174417.23722-1-broonie@kernel.org>
- <20200306102729.GC2503422@arrakis.emea.arm.com>
+        id S1726645AbgCIVNK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Mar 2020 17:13:10 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:36337 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbgCIVNK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Mar 2020 17:13:10 -0400
+Received: by mail-oi1-f195.google.com with SMTP id t24so11715073oij.3;
+        Mon, 09 Mar 2020 14:13:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3z8EHLpMCQvcYpt6UukodjjMPaKQSfJoSvh+H1FwXpE=;
+        b=Uo33X2KRJb36R+pDGYk+8RIeN85dKzwpgdLbDUPr+9B9BMZ85RveP6Gg4P9oyZxbm4
+         2K3e4tdKvGoGtgRpjcwgMiWQZt8UJb/UFNJHw5tLF0NOWHFrNFdyRXTkFSbkf5H4tsc6
+         IcpYpKYWqffJV6s2v90EZdhLsDqIKsO+RfndJ8vdAPvApbSRQC+o9evQVkA1fncfVn94
+         /r1A5ShhXUejgZgxKKIPCMr3s+3DprNyhVawLwBIFSWp9lSWYYnxpaTqXttawWDI94Z0
+         rwKxBj33qEtxur5xqGdRtakBXCrM+5cjMBQn/XmEncvVst15+znYnLuBqtLxKgb9OaTt
+         ARPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3z8EHLpMCQvcYpt6UukodjjMPaKQSfJoSvh+H1FwXpE=;
+        b=XaRcRA0nnFmk6hUImivNgx9D/4/iz6PE4iE+71d3TjFW9RVjTA2V2/+5wjvWgMBhBm
+         XNclZSpwrGhfWJ8JL/Nwc6u+duX3OLhmim5PkI3qae1HbRus1MGcpGjMu0j2pt8ytvJI
+         YLPlcXa7Lolo6e1mUbj1GkTBR+4zmpzr+A/0pu68C6C9nEpLYVsZEOIh5rS2Jr7KO/Ub
+         P7JozaSqeZ9SfzuNVOWa4IrZsVMr77HR03H5Fq8JSHN51EANQ1n8FzPrGmpC+D61y0u7
+         mSPH65yPrq9PfxKCFkdiLTlK3PM7tlbciDKtKIMvEtZyBVNVIpqiCAgufA8YCxnAeOHN
+         MfXQ==
+X-Gm-Message-State: ANhLgQ2vVITex+zonIROH+r5Hv99/GsMYcyolwHIvlO9BfOSB3U7Fi5W
+        y0bz+nEgO9yO6/QhMgOhE7flTErhC4mO8WOUCP8=
+X-Google-Smtp-Source: ADFU+vuIWAeuG6fp3KaR1L5/2IvghcQfrXPwsJh/m5EVZSNOWjVc3Evh0yp9ILZ/129trtK5JRkTF3lPbT5uuTXehkU=
+X-Received: by 2002:aca:aa12:: with SMTP id t18mr853523oie.95.1583788387706;
+ Mon, 09 Mar 2020 14:13:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qySB1iFW++5nzUxH"
-Content-Disposition: inline
-In-Reply-To: <20200306102729.GC2503422@arrakis.emea.arm.com>
-X-Cookie: Above all things, reverence yourself.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAMe9rOoRTVUzNC88Ho2XTTNJCymrd3L=XdB9xFcgxPVwAZ0FWA@mail.gmail.com>
+ <AE81FEF5-ECC5-46AA-804D-9D64E656D16E@amacapital.net> <CAMe9rOoDMenvD9XRL1szR5yLQEwv9Q6f4O7CtwbdZ-cJqzezKA@mail.gmail.com>
+ <0088001c-0b12-a7dc-ff2a-9d5c282fa36b@intel.com>
+In-Reply-To: <0088001c-0b12-a7dc-ff2a-9d5c282fa36b@intel.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Mon, 9 Mar 2020 14:12:31 -0700
+Message-ID: <CAMe9rOqf0OHL9397Vikgb=UWhRMf+FmGq-9VAJNmfmzNMMDkCw@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 01/27] Documentation/x86: Add CET description
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Mar 9, 2020 at 1:59 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 3/9/20 1:54 PM, H.J. Lu wrote:
+> >> If a program with the magic ELF CET flags missing can=E2=80=99t make a
+> >> thread with IBT and/or SHSTK enabled, then I think we=E2=80=99ve made =
+an
+> >> error and should fix it.
+> >>
+> > A non-CET program can start a CET program and vice versa.
+>
+> Could we be specific here, please?
+>
+> HJ are you saying that:
+> * CET program can execve() a non-CET program, and
+> * a non-CET program can execve() a CET program
+>
+> ?
 
---qySB1iFW++5nzUxH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yes.
 
-On Fri, Mar 06, 2020 at 10:27:29AM +0000, Catalin Marinas wrote:
-> On Thu, Feb 27, 2020 at 05:44:06PM +0000, Mark Brown wrote:
+> That's obvious.
+>
+> But what are the rules for clone()?  Should there be rules for
+> mismatches for CET enabling between threads if a process (not child
+> processes)?
 
-> > This patch series implements support for ARMv8.5-A Branch Target
-> > Identification (BTI), which is a control flow integrity protection
-> > feature introduced as part of the ARMv8.5-A extensions.
+What did you mean? A threaded application is either CET enabled or not
+CET enabled.   A new thread from clone makes no difference.
 
-> Does this series affect uprobes in any way? I.e. can you probe a landing
-> pad?
-
-You can't probe a landing pad, uprobes on landing pads will be silently
-ignored so the program isn't disrupted, you just don't get the expected
-trace from those uprobes.  This isn't new with the BTI support since
-the landing pads are generally pointer auth instructions, these already
-can't be probed regardless of what's going on with this series.  It's
-already on the list to get sorted.
-
---qySB1iFW++5nzUxH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5mr4AACgkQJNaLcl1U
-h9Blwwf8CR8zwN1uUuwJWSzyItw8ZiSf2fLHJ6Smgao/rc/O876dKM+ZZQqzuQ3B
-kG8nQyocUyEa7jghPeuTnqveuK4hpSDe/++EG1Ncl+7gMe8pmbTLVfOCYZzs1TPc
-3QiBL54YSDsAtYFT/Q+2Q27pv4vP3Xm7vsyhvWHYujG6HuFVt3Oco0Nnh8ipL6Eo
-XPOS5rfxJTLe2vcwFfj6Nf03zK+DoS2gU4LAXCjQeXGuwGep9BYzoEQhXk8srTA7
-ZJSrDH0XTMYRRmkmHTcppBRfqbKwES2xZYt6GDRWKqG7yvnEcq+v1MFR2Mgw87ZA
-eQr2xNhLMxU8o5zqjJiwHMI5S3jMoQ==
-=TGul
------END PGP SIGNATURE-----
-
---qySB1iFW++5nzUxH--
+--=20
+H.J.
