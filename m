@@ -2,291 +2,223 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 607AE17E538
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 17:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CE217E540
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Mar 2020 18:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727349AbgCIQ7v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Mar 2020 12:59:51 -0400
-Received: from foss.arm.com ([217.140.110.172]:54762 "EHLO foss.arm.com"
+        id S1727211AbgCIRA7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Mar 2020 13:00:59 -0400
+Received: from mga07.intel.com ([134.134.136.100]:41999 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727185AbgCIQ7u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 9 Mar 2020 12:59:50 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 020081FB;
-        Mon,  9 Mar 2020 09:59:50 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1926E3F534;
-        Mon,  9 Mar 2020 09:59:47 -0700 (PDT)
-Date:   Mon, 9 Mar 2020 16:59:46 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alex Belits <abelits@marvell.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "will@kernel.org" <will@kernel.org>
-Subject: Re: [PATCH v2 06/12] task_isolation: arch/arm64: enable task
- isolation functionality
-Message-ID: <20200309165945.GB44566@lakrids.cambridge.arm.com>
-References: <4473787e1b6bc3cc226067e8d122092a678b63de.camel@marvell.com>
- <aed12dd15ea2981bc9554cfa8b5e273c1342c756.camel@marvell.com>
- <b559513e03dfd09f64ace29452590ddb92c3196f.camel@marvell.com>
+        id S1727101AbgCIRA7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 9 Mar 2020 13:00:59 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Mar 2020 10:00:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,534,1574150400"; 
+   d="scan'208";a="230995194"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by orsmga007.jf.intel.com with ESMTP; 09 Mar 2020 10:00:56 -0700
+Message-ID: <0f43463e02d1be2af6bcf8ff6917e751ba7676a0.camel@intel.com>
+Subject: Re: [RFC PATCH v9 01/27] Documentation/x86: Add CET description
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+Date:   Mon, 09 Mar 2020 10:00:56 -0700
+In-Reply-To: <9ae1cf84-1d84-1d34-c0ce-48b0d70b8f3f@intel.com>
+References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
+         <20200205181935.3712-2-yu-cheng.yu@intel.com>
+         <9ae1cf84-1d84-1d34-c0ce-48b0d70b8f3f@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b559513e03dfd09f64ace29452590ddb92c3196f.camel@marvell.com>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Mar 08, 2020 at 03:50:58AM +0000, Alex Belits wrote:
-> From: Chris Metcalf <cmetcalf@mellanox.com>
+On Wed, 2020-02-26 at 09:57 -0800, Dave Hansen wrote:
+> > index ade4e6ec23e0..8b69ebf0baed 100644
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -3001,6 +3001,12 @@
+> >  			noexec=on: enable non-executable mappings (default)
+> >  			noexec=off: disable non-executable mappings
+> >  
+> > +	no_cet_shstk	[X86-64] Disable Shadow Stack for user-mode
+> > +			applications
 > 
-> In do_notify_resume(), call task_isolation_start() for
-> TIF_TASK_ISOLATION tasks. Add _TIF_TASK_ISOLATION to _TIF_WORK_MASK,
-> and define a local NOTIFY_RESUME_LOOP_FLAGS to check in the loop,
-> since we don't clear _TIF_TASK_ISOLATION in the loop.
+> If we ever add kernel support, "no_cet_shstk" will mean "no cet shstk
+> for userspace"?
+
+What about no_user_shstk, no_kernel_shstk?
+
 > 
-> We instrument the smp_send_reschedule() routine so that it checks for
-> isolated tasks and generates a suitable warning if needed.
+> > +	no_cet_ibt	[X86-64] Disable Indirect Branch Tracking for user-mode
+> > +			applications
+> > +
+> >  	nosmap		[X86,PPC]
+> >  			Disable SMAP (Supervisor Mode Access Prevention)
+> >  			even if it is supported by processor.
 > 
-> Finally, report on page faults in task-isolation processes in
-> do_page_faults().
+> BTW, this documentation is misplaced.  It needs to go to the spot where
+> you introduce the code for these options.
+
+We used to introduce the document later in the series.  The feedback was to
+introduce it first so that readers know what to expect.
+
+[...]
+
+> > diff --git a/Documentation/x86/intel_cet.rst b/Documentation/x86/intel_cet.rst
+> > new file mode 100644
+> > index 000000000000..71e2462fea5c
+> > --- /dev/null
+> > +++ b/Documentation/x86/intel_cet.rst
+> > @@ -0,0 +1,294 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +=========================================
+> > +Control-flow Enforcement Technology (CET)
+> > +=========================================
+> > +
+> > +[1] Overview
+> > +============
+> > +
+> > +Control-flow Enforcement Technology (CET) provides protection against
+> > +return/jump-oriented programming (ROP) attacks.  It can be setup to
+
+[...]
+
+> > +
+> > +There are two kernel configuration options:
+> > +
+> > +    X86_INTEL_SHADOW_STACK_USER, and
+> > +    X86_INTEL_BRANCH_TRACKING_USER.
+> > +
+> > +To build a CET-enabled kernel, Binutils v2.31 and GCC v8.1 or later
+> > +are required.
 > 
-> Signed-off-by: Chris Metcalf <cmetcalf@mellanox.com>
-> [abelits@marvell.com: simplified to match kernel 5.6]
-> Signed-off-by: Alex Belits <abelits@marvell.com>
-> ---
->  arch/arm64/Kconfig                   |  1 +
->  arch/arm64/include/asm/thread_info.h |  5 ++++-
->  arch/arm64/kernel/ptrace.c           | 10 ++++++++++
->  arch/arm64/kernel/signal.c           | 13 ++++++++++++-
->  arch/arm64/kernel/smp.c              |  7 +++++++
->  arch/arm64/mm/fault.c                |  5 +++++
->  6 files changed, 39 insertions(+), 2 deletions(-)
+> Why are these needed to build a CET-enabled kernel?
+
+We could (and used to) allow legacy toolchains, but after considering
+practical purposes, dropped the support.  We can continue the discussion,
+and if those are desired, bring them back.
+
+[...]
+
+> > +[2] CET assembly instructions
+> > +=============================
 > 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 0b30e884e088..93b6aabc8be9 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -129,6 +129,7 @@ config ARM64
->  	select HAVE_ARCH_PREL32_RELOCATIONS
->  	select HAVE_ARCH_SECCOMP_FILTER
->  	select HAVE_ARCH_STACKLEAK
-> +	select HAVE_ARCH_TASK_ISOLATION
->  	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
->  	select HAVE_ARCH_TRACEHOOK
->  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
-> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-> index f0cec4160136..7563098eb5b2 100644
-> --- a/arch/arm64/include/asm/thread_info.h
-> +++ b/arch/arm64/include/asm/thread_info.h
-> @@ -63,6 +63,7 @@ void arch_release_task_struct(struct task_struct *tsk);
->  #define TIF_FOREIGN_FPSTATE	3	/* CPU's FP state is not current's */
->  #define TIF_UPROBE		4	/* uprobe breakpoint or singlestep */
->  #define TIF_FSCHECK		5	/* Check FS is USER_DS on return */
-> +#define TIF_TASK_ISOLATION	6
->  #define TIF_NOHZ		7
->  #define TIF_SYSCALL_TRACE	8	/* syscall trace active */
->  #define TIF_SYSCALL_AUDIT	9	/* syscall auditing */
-> @@ -83,6 +84,7 @@ void arch_release_task_struct(struct task_struct *tsk);
->  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
->  #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
->  #define _TIF_FOREIGN_FPSTATE	(1 << TIF_FOREIGN_FPSTATE)
-> +#define _TIF_TASK_ISOLATION	(1 << TIF_TASK_ISOLATION)
->  #define _TIF_NOHZ		(1 << TIF_NOHZ)
->  #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
->  #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
-> @@ -96,7 +98,8 @@ void arch_release_task_struct(struct task_struct *tsk);
->  
->  #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
->  				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
-> -				 _TIF_UPROBE | _TIF_FSCHECK)
-> +				 _TIF_UPROBE | _TIF_FSCHECK | \
-> +				 _TIF_TASK_ISOLATION)
->  
->  #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
->  				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
-> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-> index cd6e5fa48b9c..b35b9b0c594c 100644
-> --- a/arch/arm64/kernel/ptrace.c
-> +++ b/arch/arm64/kernel/ptrace.c
-> @@ -29,6 +29,7 @@
->  #include <linux/regset.h>
->  #include <linux/tracehook.h>
->  #include <linux/elf.h>
-> +#include <linux/isolation.h>
->  
->  #include <asm/compat.h>
->  #include <asm/cpufeature.h>
-> @@ -1836,6 +1837,15 @@ int syscall_trace_enter(struct pt_regs *regs)
->  			return -1;
->  	}
->  
-> +	/*
-> +	 * In task isolation mode, we may prevent the syscall from
-> +	 * running, and if so we also deliver a signal to the process.
-> +	 */
-> +	if (test_thread_flag(TIF_TASK_ISOLATION)) {
-> +		if (task_isolation_syscall(regs->syscallno) == -1)
+> Why do we need this in the kernel?  What is specific to Linux or the
+> kernel?  Why wouldn't I just go read the SDM if I want to know how the
+> instructions work?
 
-Please use NO_SYSCALL rather than -1 here.
+Now the SDM has this.  I will drop this section.
 
-> +			return -1;
-> +	}
-> +
->  	/* Do the secure computing after ptrace; failures should be fast. */
->  	if (secure_computing() == -1)
->  		return -1;
-> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-> index 339882db5a91..d488c91a4877 100644
-> --- a/arch/arm64/kernel/signal.c
-> +++ b/arch/arm64/kernel/signal.c
-> @@ -20,6 +20,7 @@
->  #include <linux/tracehook.h>
->  #include <linux/ratelimit.h>
->  #include <linux/syscalls.h>
-> +#include <linux/isolation.h>
->  
->  #include <asm/daifflags.h>
->  #include <asm/debug-monitors.h>
-> @@ -898,6 +899,11 @@ static void do_signal(struct pt_regs *regs)
->  	restore_saved_sigmask();
->  }
->  
-> +#define NOTIFY_RESUME_LOOP_FLAGS \
-> +	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
-> +	_TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
-> +	_TIF_UPROBE | _TIF_FSCHECK)
-> +
->  asmlinkage void do_notify_resume(struct pt_regs *regs,
->  				 unsigned long thread_flags)
->  {
-> @@ -908,6 +914,8 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
->  	 */
->  	trace_hardirqs_off();
->  
-> +	task_isolation_check_run_cleanup();
-> +
->  	do {
->  		/* Check valid user FS if needed */
->  		addr_limit_user_check();
-> @@ -938,7 +946,10 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
->  
->  		local_daif_mask();
->  		thread_flags = READ_ONCE(current_thread_info()->flags);
-> -	} while (thread_flags & _TIF_WORK_MASK);
-> +	} while (thread_flags & NOTIFY_RESUME_LOOP_FLAGS);
-> +
-> +	if (thread_flags & _TIF_TASK_ISOLATION)
-> +		task_isolation_start();
->  }
->  
->  unsigned long __ro_after_init signal_minsigstksz;
-> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> index d4ed9a19d8fe..00f0f77adea0 100644
-> --- a/arch/arm64/kernel/smp.c
-> +++ b/arch/arm64/kernel/smp.c
-> @@ -32,6 +32,7 @@
->  #include <linux/irq_work.h>
->  #include <linux/kexec.h>
->  #include <linux/kvm_host.h>
-> +#include <linux/isolation.h>
->  
->  #include <asm/alternative.h>
->  #include <asm/atomic.h>
-> @@ -818,6 +819,7 @@ void arch_send_call_function_single_ipi(int cpu)
->  #ifdef CONFIG_ARM64_ACPI_PARKING_PROTOCOL
->  void arch_send_wakeup_ipi_mask(const struct cpumask *mask)
->  {
-> +	task_isolation_remote_cpumask(mask, "wakeup IPI");
->  	smp_cross_call(mask, IPI_WAKEUP);
->  }
->  #endif
-> @@ -886,6 +888,9 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
->  		__inc_irq_stat(cpu, ipi_irqs[ipinr]);
->  	}
->  
-> +	task_isolation_interrupt("IPI type %d (%s)", ipinr,
-> +				 ipinr < NR_IPI ? ipi_types[ipinr] : "unknown");
-
-When I previously asked about tracing, I was asking about the format
-strings, since we don't bother with that kind of thing elsewhere.
-
-What exactly are these hooks used for? I assume the strings are only
-there as a debugging aid?
-
-What about other IRQs? Does we need something in the irqchip driver? 
-
-If we need to track that /any/ interrupt was received, I think that
-would be better to put in the top-level interrupt exception handler than
-to sprinkle hooks into every potential handler.
-
-> +
->  	switch (ipinr) {
->  	case IPI_RESCHEDULE:
->  		scheduler_ipi();
-> @@ -948,12 +953,14 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
->  
->  void smp_send_reschedule(int cpu)
->  {
-> +	task_isolation_remote(cpu, "reschedule IPI");
->  	smp_cross_call(cpumask_of(cpu), IPI_RESCHEDULE);
->  }
->  
->  #ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
->  void tick_broadcast(const struct cpumask *mask)
->  {
-> +	task_isolation_remote_cpumask(mask, "timer IPI");
->  	smp_cross_call(mask, IPI_TIMER);
->  }
->  #endif
-> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-> index 85566d32958f..fc4b42c81c4f 100644
-> --- a/arch/arm64/mm/fault.c
-> +++ b/arch/arm64/mm/fault.c
-> @@ -23,6 +23,7 @@
->  #include <linux/perf_event.h>
->  #include <linux/preempt.h>
->  #include <linux/hugetlb.h>
-> +#include <linux/isolation.h>
->  
->  #include <asm/acpi.h>
->  #include <asm/bug.h>
-> @@ -543,6 +544,10 @@ static int __kprobes do_page_fault(unsigned long addr, unsigned int esr,
->  	 */
->  	if (likely(!(fault & (VM_FAULT_ERROR | VM_FAULT_BADMAP |
->  			      VM_FAULT_BADACCESS)))) {
-> +		/* No signal was generated, but notify task-isolation tasks. */
-> +		if (user_mode(regs))
-> +			task_isolation_interrupt("page fault at %#lx", addr);
-
-This isn't an interrupt. Why do we need to hook this?
-
-What about /other/ exceptions caused by userspace?
-
-If we need to notify userspace, it would be much more reliable to do so
-in the return path.
-
-Thanks,
-Mark.
-
-> +
->  		/*
->  		 * Major/minor page fault accounting is only done
->  		 * once. If we go through a retry, it is extremely
-> -- 
-> 2.20.1
+> > +[3] Application Enabling
+> > +========================
+> > +
+> > +An application's CET capability is marked in its ELF header and can
+> > +be verified from the following command output, in the
+> > +NT_GNU_PROPERTY_TYPE_0 field:
+> > +
+> > +    readelf -n <application>
+> > +
+> > +If an application supports CET and is statically linked, it will run
+> > +with CET protection.  If the application needs any shared libraries,
+> > +the loader checks all dependencies and enables CET only when all
+> > +requirements are met.
 > 
+> What about shared libraries loaded after the program starts?
+
+The loader does the check for dlopen().
+
+
+> > +[4] Legacy Libraries
+> > +====================
+> > +
+> > +GLIBC provides a few tunables for backward compatibility.
+> > +
+> > +GLIBC_TUNABLES=glibc.tune.hwcaps=-SHSTK,-IBT
+> > +    Turn off SHSTK/IBT for the current shell.
+> > +
+> > +GLIBC_TUNABLES=glibc.tune.x86_shstk=<on, permissive>
+> > +    This controls how dlopen() handles SHSTK legacy libraries::
+> > +
+> > +        on         - continue with SHSTK enabled;
+> > +        permissive - continue with SHSTK off.
+> 
+> This seems like manpage fodder more than kernel documentation to me.
+
+Yes, we can drop this as well.
+
+[...]
+
+> > +Note:
+> > +  There is no CET-enabling arch_prctl function.  By design, CET is
+> > +  enabled automatically if the binary and the system can support it.
+> 
+> This is kinda interesting.  It means that a JIT couldn't choose to
+> protect the code it generates and have different rules from itself?
+
+JIT needs to be updated for CET first.  Once that is done, it runs with CET
+enabled.  It can use the NOTRACK prefix, for example.
+
+> > +  The parameters passed are always unsigned 64-bit.  When an IA32
+> > +  application passing pointers, it should only use the lower 32 bits.
+> 
+> Won't a 32-bit app calling prctl() use the 32-bit ABI?  How would it
+> even know it's running on a 64-bit kernel?
+
+The 32-bit app is passing only a pointer to an array of 64-bit numbers.
+
+> 
+> > +[6] The implementation of the SHSTK
+> > +===================================
+> > +
+> > +SHSTK size
+> > +----------
+> > +
+> > +A task's SHSTK is allocated from memory to a fixed size of
+> > +RLIMIT_STACK.
+> 
+> I can't really parse that sentence.  Is this saying that shadow stacks
+> are limited by and share space with normal stacks via RLIMIT_STACK?
+> 
+> >  A compat-mode thread's SHSTK size is 1/4 of
+> > +RLIMIT_STACK.  The smaller 32-bit thread SHSTK allows more threads to
+> > +share a 32-bit address space.
+> 
+> I thought the size was passed in from userspace?  Where does this sizing
+> take place?  Is this a convention or is it being enforced?
+
+I will make this (and other things you pointed out) clear in the next
+version.
+
+Yu-cheng
+
