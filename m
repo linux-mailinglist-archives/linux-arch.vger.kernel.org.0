@@ -2,74 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0529217FC82
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Mar 2020 14:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 180E817FD98
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Mar 2020 14:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728059AbgCJNVj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Mar 2020 09:21:39 -0400
-Received: from mail.11d01.mspz7.gob.ec ([190.152.145.91]:38658 "EHLO
-        mail.11d01.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726598AbgCJNGA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Mar 2020 09:06:00 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 8A7162F74A5C;
-        Tue, 10 Mar 2020 04:32:12 -0500 (-05)
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id wmm9FFIfxz4y; Tue, 10 Mar 2020 04:32:11 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 150D72F72428;
-        Tue, 10 Mar 2020 04:06:10 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.9.2 mail.11d01.mspz7.gob.ec 150D72F72428
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=11d01.mspz7.gob.ec;
-        s=50CBC7E4-8BED-11E9-AF6C-F1A741A224D3; t=1583831170;
-        bh=o+H3O7n1+zJcXo0FhJs7spyf8HmE4ClnBa/Y2Gk0DL0=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
-         From:Date:Reply-To:Message-Id;
-        b=rka3W8snvMkij38sYh5e6Mota4KcSwN7AbFC9uCnL02a0Fwir5Nqga52A41RTuAH1
-         IDG/07TYTugSedKx8IzjvqX5TSuZ36ftXc/nczzoZWiAcNmERxQFgzB0svDUN7blW9
-         YL+wm3+eAZ9qkURiFnCIB9IYmBxeu7FKf2UJwfB4=
-X-Virus-Scanned: amavisd-new at 11d01.mspz7.gob.ec
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dk8n4vBHtOv1; Tue, 10 Mar 2020 04:06:09 -0500 (-05)
-Received: from [10.19.167.32] (unknown [105.0.4.171])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTPSA id 104402F6B58F;
-        Tue, 10 Mar 2020 03:16:48 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
+        id S1729572AbgCJN2d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Mar 2020 09:28:33 -0400
+Received: from elvis.franken.de ([193.175.24.41]:60394 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728887AbgCJN2d (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 10 Mar 2020 09:28:33 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jBevd-0006Jg-00; Tue, 10 Mar 2020 14:28:13 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id D9C6FC0FAF; Tue, 10 Mar 2020 14:27:47 +0100 (CET)
+Date:   Tue, 10 Mar 2020 14:27:47 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Guo Ren <guoren@kernel.org>, Brian Cain <bcain@codeaurora.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sam Creasey <sammy@sammy.net>, Michal Simek <monstr@monstr.eu>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, nios2-dev@lists.rocketboards.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] mm/special: Create generic fallbacks for
+ pte_special() and pte_mkspecial()
+Message-ID: <20200310132747.GA12601@alpha.franken.de>
+References: <1583802551-15406-1-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
-To:     Recipients <ronald.pena@11d01.mspz7.gob.ec>
-From:   ''Michael weirsky'' <ronald.pena@11d01.mspz7.gob.ec>
-Date:   Tue, 10 Mar 2020 10:46:17 +0200
-Reply-To: mikeweirskyspende@gmail.com
-Message-Id: <20200310081649.104402F6B58F@mail.11d01.mspz7.gob.ec>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1583802551-15406-1-git-send-email-anshuman.khandual@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Lieber Freund,
+On Tue, Mar 10, 2020 at 06:39:11AM +0530, Anshuman Khandual wrote:
+> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> index aef5378f909c..8e4e4be1ca00 100644
+> --- a/arch/mips/include/asm/pgtable.h
+> +++ b/arch/mips/include/asm/pgtable.h
+> @@ -269,6 +269,36 @@ static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+>   */
+>  extern pgd_t swapper_pg_dir[];
+>  
+> +/*
+> + * Platform specific pte_special() and pte_mkspecial() definitions
+> + * are required only when ARCH_HAS_PTE_SPECIAL is enabled.
+> + */
+> +#if !defined(CONFIG_32BIT) && !defined(CONFIG_CPU_HAS_RIXI)
 
-Ich bin Herr Mike Weirsky, New Jersey, Vereinigte Staaten von Amerika, der =
-Mega-Gewinner von $ 273million In Mega Millions Jackpot, spende ich an 5 zu=
-f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
-il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
-meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
-und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
-Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
- spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen.
-Das ist dein Spendencode: [MW530342019]
-www.youtube.com/watch?v=3Dun8yRTmrYMY
+this looks wrong.
 
-Antworten Sie mit dem SPENDE-CODE an diese =
+current Kconfig statement is
 
+select ARCH_HAS_PTE_SPECIAL if !(32BIT && CPU_HAS_RIXI)
 
-E-Mail:mikeweirskyspende@gmail.com
+so we can't use PTE_SPECIAL on 32bit _and_ CPUs with RIXI support.
 
-Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
+Why can't we use
 
-Gr=C3=BC=C3=9Fe
-Herr Mike Weirsky
+#if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
+
+here as the comment already suggests ?
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
