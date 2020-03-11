@@ -2,90 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D13391816DD
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Mar 2020 12:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6248418171D
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Mar 2020 12:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729084AbgCKL3w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Mar 2020 07:29:52 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:55266 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726000AbgCKL3w (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 11 Mar 2020 07:29:52 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 2C5005F22DA3ED759626;
-        Wed, 11 Mar 2020 19:29:47 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.487.0; Wed, 11 Mar 2020
- 19:29:37 +0800
-Subject: Re: [RFC PATCH v1 0/3] arm64: tlb: add support for TTL field
-To:     Marc Zyngier <maz@kernel.org>
-CC:     <mark.rutland@arm.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <aneesh.kumar@linux.ibm.com>,
-        <steven.price@arm.com>, <broonie@kernel.org>,
-        <guohanjun@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>
-References: <20200311025309.1743-1-yezhenyu2@huawei.com>
- <247ad619edf17eb266f856d937dac826@kernel.org>
-From:   "yezhenyu (A)" <yezhenyu2@huawei.com>
-Message-ID: <6279257b-2b8c-10d0-8bb8-b0f4b851febb@huawei.com>
-Date:   Wed, 11 Mar 2020 19:29:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1729067AbgCKLxH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Mar 2020 07:53:07 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:35516 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729140AbgCKLxH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Mar 2020 07:53:07 -0400
+Received: by mail-lj1-f195.google.com with SMTP id u12so2003935ljo.2
+        for <linux-arch@vger.kernel.org>; Wed, 11 Mar 2020 04:53:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=TViWHe/fCibeg71RMzs+W48ldBatY/PqH+UEQJGff2s=;
+        b=XQyOIEqVmHUuvA8do/hR9cWN/5B/Pq5WuSQw9T5QqkHZeFGyvQHWuFMg059cC3A7sq
+         REnYegi9phGdMQuu2CbB6l+Bk7ClIuZ2Iy445fY3UmDc33kCrMXMhuGYhOZezqNwCYfQ
+         mza42pwyNalj0iaRs36NsllgjUbzD2Si+Yz4RO94u35zHriMEpQ3OUnrJotesxbZ3i2O
+         zMs/jFYIhbiZBW5xErwegVPEIgqZgZ8YVrNOOK8mjodNXoM+7JNcc24baEB0x7BoXz4D
+         u/Cr+fwh1pPTzgHYldOFpl8JQkLskRZOkPcqfaPG4AXea9r01bQH12QKThdW3qPLx/Kc
+         HxCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=TViWHe/fCibeg71RMzs+W48ldBatY/PqH+UEQJGff2s=;
+        b=F4E9QXMiStiz7wnzv/UaK8chBqsnoivdMhzRkvqU11ezvGz9LG4PYB8XDUwKF2W2XR
+         CFu8gopYXbDNlEoJ/JZ6fvgTXRwolEHS+MVzrtBlJij6n54wl27ogYqH3cK2+d+66uvb
+         XWOtGhDqBWHXd6uomzBWKCs9yLad4wgCXU8nLUC5JaRyWq8wc8A+CqPoVQ206XYOQ6sW
+         aZEdQpLqu4zTYUuTCqXFzjE8r2+PKc57nRazzfiDvnqsvPlP+t3GLSVvMNSRoZ4g8g4z
+         NNFEzPh9OceVZneBxSM470oKWzsBL9hBkguNV15H9azN55eN6PpNFRxg5PNX5FnU7X29
+         VEjA==
+X-Gm-Message-State: ANhLgQ2wIVfHn09L7q7ZgN49D8AxZXX0mv0t5mK7mIcKHdqFxnOI2Fjg
+        bz9hMiwOYwVcC6989rCAOh3LERmIlMrB7KQpUA==
+X-Google-Smtp-Source: ADFU+vuZUf17nRKGYnio2raMzuywqdv1GtkwJ+F6UbRnbW0mJpW8fAaijSgIuEXrDSQ69NAyQzbHvKzxAA2xyP2S+xE=
+X-Received: by 2002:a2e:2203:: with SMTP id i3mr1945614lji.160.1583927585172;
+ Wed, 11 Mar 2020 04:53:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <247ad619edf17eb266f856d937dac826@kernel.org>
+Received: by 2002:a19:5013:0:0:0:0:0 with HTTP; Wed, 11 Mar 2020 04:53:04
+ -0700 (PDT)
+Reply-To: daoudaali2200@gmail.com
+From:   Daouda Ali <mralidaouda@gmail.com>
+Date:   Wed, 11 Mar 2020 11:53:04 +0000
+Message-ID: <CALMuGHONzc6ueYb7Pb87+gCN8eef2NCD5cnUrxNhHOLW5nVv+Q@mail.gmail.com>
+Subject: INVESTMENT PROPOSAL.
+To:     daoudaali2200@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.173.220.25]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Marc,
+It=E2=80=99s my pleasure to contact you through this media because I need a=
+n
+investment assistance in your country. However I have a profitable
+investment proposal with  good interest to share with you, amounted
+the sum of (Twenty Eight Million Four Hundred Thousand United State
+Dollar ($28.400.000.00). If you  are willing to handle this project
+kindly reply urgent to enable me provide you more information about
+the investment funds and the project.
 
-On 2020/3/11 17:12, Marc Zyngier wrote:
-> Zhenyu,
-> 
-> On 2020-03-11 02:53, Zhenyu Ye wrote:
->> ARMv8.4-TTL provides the TTL field in tlbi instruction to indicate
->> the level of translation table walk holding the leaf entry for the
->> address that is being invalidated. Hardware can use this information
->> to determine if there was a risk of splintering.
->>
->> This set of patches adds TTL field to __TLBI_ADDR, and uses
->> Architecture-specific MM context to pass the TTL value to tlb interface.
->>
->> The default value of TTL is 0, which will not have any impact on the
->> TLB maintenance instructions. The last patch trys to use TTL field in
->> some obviously tlb-flush interface.
-> 
-> I have already posted some support for ARMv8.4-TTL as part of my NV series [1],
-> patches 62, 67, 68 and 69. This only deals with Stage-2 translation so far.
-> If you intend to add Stage-1, please build on top of what I have already posted
-> (I can extract the patches on a separate branch if you want).
-> 
-> Thanks,
-> 
->         M.
-> 
-> [1] https://lore.kernel.org/linux-arm-kernel/20200211174938.27809-1-maz@kernel.org/
+I am waiting to hear from you through this my private
+email(daoudaali2200@gmail.com) so we can proceed further.
 
-I just readed your code changes to TTL. You pass the TTL value by changing the
-function interface, which only involves the ARM and ARM64 architectures in Stage-2
-translation.
-
-However, in Stage-1, many common interfaces(such as flush_tlb_range) need to be
-modified, which involves very much architectures. So I try to use MM context in
-mm_struct to pass the TTL value.
-
-I will send patch v2 based on top of your kvm-arm64/nv-5.6-rc1 branch soon.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=kvm-arm64/nv-5.6-rc1
-
-
-Thanks,
-Zhenyu
-
+Best Regards.
+Mr. Daouda Ali.
