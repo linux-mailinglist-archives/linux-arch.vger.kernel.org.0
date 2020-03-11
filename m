@@ -2,105 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB20181D58
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Mar 2020 17:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB0F181DD4
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Mar 2020 17:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730202AbgCKQNC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Mar 2020 12:13:02 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2550 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730192AbgCKQNB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 11 Mar 2020 12:13:01 -0400
-Received: from LHREML710-CAH.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 2AB209834BBA91B04D59;
-        Wed, 11 Mar 2020 16:13:00 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- LHREML710-CAH.china.huawei.com (10.201.108.33) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Wed, 11 Mar 2020 16:12:59 +0000
-Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Wed, 11 Mar
- 2020 16:12:59 +0000
-Subject: Re: About commit "io: change inX() to have their own IO barrier
- overrides"
-From:   John Garry <john.garry@huawei.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     linux-arch <linux-arch@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sinan Kaya <okaya@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "xuwei (O)" <xuwei5@hisilicon.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <2e80d7bc-32a0-cc40-00a9-8a383a1966c2@huawei.com>
- <c1489f55-369d-2cff-ff36-b10fb5d3ee79@kernel.org>
- <8207cd51-5b94-2f15-de9f-d85c9c385bca@huawei.com>
- <6115fa56-a471-1e9f-edbb-e643fa4e7e11@kernel.org>
- <7c955142-1fcb-d99e-69e4-1e0d3d9eb8c3@huawei.com>
- <CAK8P3a0f9hnKGd6GJ8qFZSu+J-n4fY23TCGxQkmgJaxbpre50Q@mail.gmail.com>
- <90af535f-00ef-c1e3-ec20-aae2bd2a0d88@kernel.org>
- <CAK8P3a2Grd0JsBNsB19oAxrAFtOdpvjrpGcfeArKe7zD_jrUZw@mail.gmail.com>
- <ae0a1bf1-948f-7df0-9efb-cd1e94e27d2d@huawei.com>
- <CAK8P3a2wdCrBP=a8ZypWoC=HyCU3oYYNeCddWM7oT+xM9gTPhw@mail.gmail.com>
- <182a37c2-7437-b1bd-8b86-5c9ce2e29f00@huawei.com>
- <CAK8P3a22fEGdVKVVs_40Rc_vs9SQ2ikejwMtFpyR_o+74utWaA@mail.gmail.com>
- <15e7158d-184d-9591-89a6-cd6b10ef054d@huawei.com>
-Message-ID: <96b407eb-f9cd-960c-02e5-5e2a4ece33d8@huawei.com>
-Date:   Wed, 11 Mar 2020 16:12:58 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1729631AbgCKQ3E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Mar 2020 12:29:04 -0400
+Received: from foss.arm.com ([217.140.110.172]:51624 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729511AbgCKQ3E (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 11 Mar 2020 12:29:04 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8FD47FA;
+        Wed, 11 Mar 2020 09:29:03 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.71])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B93C63F6CF;
+        Wed, 11 Mar 2020 09:29:00 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 16:28:58 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu " <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v8 00/11] arm64: Branch Target Identification support
+Message-ID: <20200311162858.GK3216816@arrakis.emea.arm.com>
+References: <20200227174417.23722-1-broonie@kernel.org>
+ <20200306102729.GC2503422@arrakis.emea.arm.com>
+ <20200309210505.GM4101@sirena.org.uk>
+ <20200310124226.GC4106@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <15e7158d-184d-9591-89a6-cd6b10ef054d@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.226.45]
-X-ClientProxiedBy: lhreml735-chm.china.huawei.com (10.201.108.86) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200310124226.GC4106@sirena.org.uk>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06/03/2020 16:43, John Garry wrote:
-> On 06/03/2020 16:29, Arnd Bergmann wrote:
->>> The idea is good, but it would be nice if we just somehow use a common
->>> asm-generic io.h definition directly in logic_pio.c, like:
->>>
->>> asm-generic io.h:
->>>
->>> #ifndef __raw_inw // name?
->>> #define __raw_inw __raw_inw
->>> static inline u16 __raw_inw(unsigned long addr)
->>> {
->>>          u16 val;
->>>
->>>          __io_pbr();
->>>          val = __le16_to_cpu(__raw_readw(addr));
->>>          __io_par(val);
->>>          return val;
->>> }
->>> #endif
->>>
->>> #include <linux/logic_pio.h>
->>>
->>> #ifndef inw
->>> #define inw __raw_inw
->>> #endif
->> Yes, makes sense. Maybe __arch_inw() then? Not great either, but I think
->> that's better than __raw_inw() because __raw_* would sound like it
->> mirrors __raw_readl() that lacks the barriers and byteswaps.
+On Tue, Mar 10, 2020 at 12:42:26PM +0000, Mark Brown wrote:
+> On Mon, Mar 09, 2020 at 09:05:05PM +0000, Mark Brown wrote:
+> > On Fri, Mar 06, 2020 at 10:27:29AM +0000, Catalin Marinas wrote:
 > 
-> Right, I had the same concern. And maybe the "arch" prefix is 
-> misleading. Just __inw could be ok, and hopefully not conflict with the 
-> arch/arm/mach-* definitions.
+> > > Does this series affect uprobes in any way? I.e. can you probe a landing
+> > > pad?
 > 
+> > You can't probe a landing pad, uprobes on landing pads will be silently
+> > ignored so the program isn't disrupted, you just don't get the expected
+> > trace from those uprobes.  This isn't new with the BTI support since
+> > the landing pads are generally pointer auth instructions, these already
+> > can't be probed regardless of what's going on with this series.  It's
+> > already on the list to get sorted.
+> 
+> Sorry, I realized thanks to Amit's off-list prompting that I was testing
+> that I was verifying with the wrong kernel binary here (user error since
+> it took me a while to sort out uprobes) so this isn't quite right - you
+> can probe the landing pads with or without this series.
 
-I think that it hasn't been mentioned already, but it looks like the 
-outX methods also need the same treatment, from a7851aa54c.
+Can we not change aarch64_insn_is_nop() to actually return true only for
+NOP and ignore everything else in the hint space? We tend to re-use the
+hint instructions for new things in the architecture, so I'd rather
+white-list what we know we can safely probe than black-listing only some
+of the hint instructions.
 
-thanks,
-John
+I haven't assessed the effort of doing the above (probably not a lot)
+but as a short-term workaround we could add the BTI and PAC hint
+instructions to the aarch64_insn_is_nop() (though my preferred option is
+the white-list one).
+
+-- 
+Catalin
