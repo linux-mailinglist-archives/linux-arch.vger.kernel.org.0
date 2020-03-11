@@ -2,120 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A55C181432
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Mar 2020 10:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9A2181449
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Mar 2020 10:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728739AbgCKJKR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Mar 2020 05:10:17 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:57991 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726934AbgCKJKR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Mar 2020 05:10:17 -0400
-Received: from [192.168.100.1] ([82.252.135.106]) by mrelayeu.kundenserver.de
- (mreue011 [213.165.67.103]) with ESMTPSA (Nemesis) id
- 1Mtf39-1jTCoN43Bv-00v4sP; Wed, 11 Mar 2020 10:09:57 +0100
-Subject: Re: [PATCH] binfmt_misc: pass binfmt_misc P flag to the interpreter
-To:     YunQiang Su <syq@debian.org>, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, James.Bottomley@hansenpartnership.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org
-References: <20200306080905.173466-1-syq@debian.org>
-From:   Laurent Vivier <laurent@vivier.eu>
-Autocrypt: addr=laurent@vivier.eu; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <5546ac4d-b9d1-336e-3861-b1f37e1d059c@vivier.eu>
-Date:   Wed, 11 Mar 2020 10:09:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1728708AbgCKJM5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Mar 2020 05:12:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50740 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728512AbgCKJM5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 11 Mar 2020 05:12:57 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4CB812146E;
+        Wed, 11 Mar 2020 09:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583917976;
+        bh=JmnH83cEqMuYqwzSAJmmIggEZjH2zaw0Mir9SbgqzBg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ILo3w++eSM5mDVtsHN7CfbOR+uFkOP8FGJV4g+jMwBHXf7Gp1Oq+92oifNxxhL+rA
+         yGwUU0UbGeQwBbvp1Q38b4ryrd9AdHkucGojc6tgmNRWfgs46M7A/Cyb3wJUGk6Z8Y
+         lVUKVDQ56EDE59d8xVIZCG7rSZjnK0cvMv158vw0=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1jBxQ6-00BrX3-KP; Wed, 11 Mar 2020 09:12:54 +0000
 MIME-Version: 1.0
-In-Reply-To: <20200306080905.173466-1-syq@debian.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:lAozgkA//WI+gNeI7GeQ1JEEsF4qsVMzHEBbTrjSp3Uky3Lnj5D
- jNqvJD3SVYaTwlfb1VlwfX5vBsBaq+F2aMMkXWaxyT0Tei07zQETghL5sIgiTYruraZNXIo
- bToPoGJOi+O6annHd31/l2oUmOpDOXT4yW6HMWF5h6cKAYhlBs11ShrKb60U/lW+be7Rvb4
- hsNosXhAUVLh4SjpmCksw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5ocj1Lop8+I=:NOgnaxkImTf7dif5pi8Vlr
- jbhNtSicg5sQix3ezHuiXA/ODxzkSX9gyfvWd1q8RI2XaQZYd0PzQtgwJkFnxUUta5zLvraoS
- YkqFnkj4QE1aMwYS64PuN2kiQhjHEJVJAInN9Ig34ZGqeV2qxjukKsl5us4/rjW1egygKo+Fn
- Gs27rxclqCba0nHSUtRsei/IGwu6DDhWl9xNE9jZxpe9DEvy6PM0ORqsqTqtYMtssNtO7pAtz
- YCHdMZ7uIPcLXy3IPHmEZqAr17JYPigk8CdR5RkpxuiZvXrDiwjOHBpp61pT1pvXMfX4nRU74
- DRvyr808nueGjOJ0NmJJzVRP17+xU6FjP/wpo3+Vjhp+FxWrBTihKXnV9/Qa+5BtLpYctNat6
- w+X7GBVBwbID81IBOYeUcjIAa82VJsIzqHZ0HWr3zm3dAPYUhwqwtzW1cWHyyrgj9TASy+lAr
- rhWXTfM3qcK69vPIuHy6IX58/Y/x2LWQ2PnSRynYicy/Fnqz9Eb5J9ZbubKeNoxRxcOh/HyGK
- 2cuHIf4vg488V4TNPKUpQb1rIDU6Yuq5I1I1RoDKffhdHWlefAdMICG+exWyMPhphykmCB1Ss
- +Ytuatomg7s5QbbCJXA+JxYk0/YAIUyy3ukOFPBrhK10xKnX0PjeCxM6DnIxdeEfXKBfFliAe
- H83WvMnRSIshDP/IHq5od6iIyqNoFgvb6nuuGwdaIatA8dvl+g7n1H/rQLeU4wGc3/RmLvUMV
- +AjZGsEoB/M7GVvsIX+bgX9dOLKQvbf0agldjo9+Ci9RHJm0rHLSFZPaON6mti+n2hD4HXWoy
- kUbPJeXdgiUDr4pMpNqeypATzn1hA12VZnwZYy9Q1EHVwiMEtC1+Si7Mheqyve9tsF0+7e5
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 11 Mar 2020 09:12:54 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Zhenyu Ye <yezhenyu2@huawei.com>
+Cc:     mark.rutland@arm.com, catalin.marinas@arm.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, steven.price@arm.com,
+        broonie@kernel.org, guohanjun@huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org,
+        xiexiangyou@huawei.com, prime.zeng@hisilicon.com
+Subject: Re: [RFC PATCH v1 0/3] arm64: tlb: add support for TTL field
+In-Reply-To: <20200311025309.1743-1-yezhenyu2@huawei.com>
+References: <20200311025309.1743-1-yezhenyu2@huawei.com>
+Message-ID: <247ad619edf17eb266f856d937dac826@kernel.org>
+X-Sender: maz@kernel.org
+User-Agent: Roundcube Webmail/1.3.10
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: yezhenyu2@huawei.com, mark.rutland@arm.com, catalin.marinas@arm.com, will@kernel.org, aneesh.kumar@linux.ibm.com, steven.price@arm.com, broonie@kernel.org, guohanjun@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org, xiexiangyou@huawei.com, prime.zeng@hisilicon.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Le 06/03/2020 à 09:09, YunQiang Su a écrit :
-> From: Laurent Vivier <laurent@vivier.eu>
-> 
-> It can be useful to the interpreter to know which flags are in use.
-> 
-> For instance, knowing if the preserve-argv[0] is in use would
-> allow to skip the pathname argument.
-> 
-> This patch uses an unused auxiliary vector, AT_FLAGS, to add a
-> flag to inform interpreter if the preserve-argv[0] is enabled.
-> 
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
-> Signed-off-by: YunQiang Su <syq@debian.org>
-> ---
+Zhenyu,
 
-Any advice to have this merged?
+On 2020-03-11 02:53, Zhenyu Ye wrote:
+> ARMv8.4-TTL provides the TTL field in tlbi instruction to indicate
+> the level of translation table walk holding the leaf entry for the
+> address that is being invalidated. Hardware can use this information
+> to determine if there was a risk of splintering.
+> 
+> This set of patches adds TTL field to __TLBI_ADDR, and uses
+> Architecture-specific MM context to pass the TTL value to tlb 
+> interface.
+> 
+> The default value of TTL is 0, which will not have any impact on the
+> TLB maintenance instructions. The last patch trys to use TTL field in
+> some obviously tlb-flush interface.
 
-Do I really need to use another AT_ entry?
+I have already posted some support for ARMv8.4-TTL as part of my NV 
+series [1],
+patches 62, 67, 68 and 69. This only deals with Stage-2 translation so 
+far.
+If you intend to add Stage-1, please build on top of what I have already 
+posted
+(I can extract the patches on a separate branch if you want).
 
 Thanks,
-Laurent
 
+         M.
+
+[1] 
+https://lore.kernel.org/linux-arm-kernel/20200211174938.27809-1-maz@kernel.org/
+-- 
+Jazz is not dead. It just smells funny...
