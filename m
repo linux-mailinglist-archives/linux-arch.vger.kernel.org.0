@@ -2,71 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6248418171D
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Mar 2020 12:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB20181D58
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Mar 2020 17:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729067AbgCKLxH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Mar 2020 07:53:07 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:35516 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729140AbgCKLxH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Mar 2020 07:53:07 -0400
-Received: by mail-lj1-f195.google.com with SMTP id u12so2003935ljo.2
-        for <linux-arch@vger.kernel.org>; Wed, 11 Mar 2020 04:53:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=TViWHe/fCibeg71RMzs+W48ldBatY/PqH+UEQJGff2s=;
-        b=XQyOIEqVmHUuvA8do/hR9cWN/5B/Pq5WuSQw9T5QqkHZeFGyvQHWuFMg059cC3A7sq
-         REnYegi9phGdMQuu2CbB6l+Bk7ClIuZ2Iy445fY3UmDc33kCrMXMhuGYhOZezqNwCYfQ
-         mza42pwyNalj0iaRs36NsllgjUbzD2Si+Yz4RO94u35zHriMEpQ3OUnrJotesxbZ3i2O
-         zMs/jFYIhbiZBW5xErwegVPEIgqZgZ8YVrNOOK8mjodNXoM+7JNcc24baEB0x7BoXz4D
-         u/Cr+fwh1pPTzgHYldOFpl8JQkLskRZOkPcqfaPG4AXea9r01bQH12QKThdW3qPLx/Kc
-         HxCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=TViWHe/fCibeg71RMzs+W48ldBatY/PqH+UEQJGff2s=;
-        b=F4E9QXMiStiz7wnzv/UaK8chBqsnoivdMhzRkvqU11ezvGz9LG4PYB8XDUwKF2W2XR
-         CFu8gopYXbDNlEoJ/JZ6fvgTXRwolEHS+MVzrtBlJij6n54wl27ogYqH3cK2+d+66uvb
-         XWOtGhDqBWHXd6uomzBWKCs9yLad4wgCXU8nLUC5JaRyWq8wc8A+CqPoVQ206XYOQ6sW
-         aZEdQpLqu4zTYUuTCqXFzjE8r2+PKc57nRazzfiDvnqsvPlP+t3GLSVvMNSRoZ4g8g4z
-         NNFEzPh9OceVZneBxSM470oKWzsBL9hBkguNV15H9azN55eN6PpNFRxg5PNX5FnU7X29
-         VEjA==
-X-Gm-Message-State: ANhLgQ2wIVfHn09L7q7ZgN49D8AxZXX0mv0t5mK7mIcKHdqFxnOI2Fjg
-        bz9hMiwOYwVcC6989rCAOh3LERmIlMrB7KQpUA==
-X-Google-Smtp-Source: ADFU+vuZUf17nRKGYnio2raMzuywqdv1GtkwJ+F6UbRnbW0mJpW8fAaijSgIuEXrDSQ69NAyQzbHvKzxAA2xyP2S+xE=
-X-Received: by 2002:a2e:2203:: with SMTP id i3mr1945614lji.160.1583927585172;
- Wed, 11 Mar 2020 04:53:05 -0700 (PDT)
+        id S1730202AbgCKQNC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Mar 2020 12:13:02 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2550 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730192AbgCKQNB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 11 Mar 2020 12:13:01 -0400
+Received: from LHREML710-CAH.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 2AB209834BBA91B04D59;
+        Wed, 11 Mar 2020 16:13:00 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ LHREML710-CAH.china.huawei.com (10.201.108.33) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Wed, 11 Mar 2020 16:12:59 +0000
+Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Wed, 11 Mar
+ 2020 16:12:59 +0000
+Subject: Re: About commit "io: change inX() to have their own IO barrier
+ overrides"
+From:   John Garry <john.garry@huawei.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     linux-arch <linux-arch@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sinan Kaya <okaya@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "xuwei (O)" <xuwei5@hisilicon.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <2e80d7bc-32a0-cc40-00a9-8a383a1966c2@huawei.com>
+ <c1489f55-369d-2cff-ff36-b10fb5d3ee79@kernel.org>
+ <8207cd51-5b94-2f15-de9f-d85c9c385bca@huawei.com>
+ <6115fa56-a471-1e9f-edbb-e643fa4e7e11@kernel.org>
+ <7c955142-1fcb-d99e-69e4-1e0d3d9eb8c3@huawei.com>
+ <CAK8P3a0f9hnKGd6GJ8qFZSu+J-n4fY23TCGxQkmgJaxbpre50Q@mail.gmail.com>
+ <90af535f-00ef-c1e3-ec20-aae2bd2a0d88@kernel.org>
+ <CAK8P3a2Grd0JsBNsB19oAxrAFtOdpvjrpGcfeArKe7zD_jrUZw@mail.gmail.com>
+ <ae0a1bf1-948f-7df0-9efb-cd1e94e27d2d@huawei.com>
+ <CAK8P3a2wdCrBP=a8ZypWoC=HyCU3oYYNeCddWM7oT+xM9gTPhw@mail.gmail.com>
+ <182a37c2-7437-b1bd-8b86-5c9ce2e29f00@huawei.com>
+ <CAK8P3a22fEGdVKVVs_40Rc_vs9SQ2ikejwMtFpyR_o+74utWaA@mail.gmail.com>
+ <15e7158d-184d-9591-89a6-cd6b10ef054d@huawei.com>
+Message-ID: <96b407eb-f9cd-960c-02e5-5e2a4ece33d8@huawei.com>
+Date:   Wed, 11 Mar 2020 16:12:58 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Received: by 2002:a19:5013:0:0:0:0:0 with HTTP; Wed, 11 Mar 2020 04:53:04
- -0700 (PDT)
-Reply-To: daoudaali2200@gmail.com
-From:   Daouda Ali <mralidaouda@gmail.com>
-Date:   Wed, 11 Mar 2020 11:53:04 +0000
-Message-ID: <CALMuGHONzc6ueYb7Pb87+gCN8eef2NCD5cnUrxNhHOLW5nVv+Q@mail.gmail.com>
-Subject: INVESTMENT PROPOSAL.
-To:     daoudaali2200@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <15e7158d-184d-9591-89a6-cd6b10ef054d@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.202.226.45]
+X-ClientProxiedBy: lhreml735-chm.china.huawei.com (10.201.108.86) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-It=E2=80=99s my pleasure to contact you through this media because I need a=
-n
-investment assistance in your country. However I have a profitable
-investment proposal with  good interest to share with you, amounted
-the sum of (Twenty Eight Million Four Hundred Thousand United State
-Dollar ($28.400.000.00). If you  are willing to handle this project
-kindly reply urgent to enable me provide you more information about
-the investment funds and the project.
+On 06/03/2020 16:43, John Garry wrote:
+> On 06/03/2020 16:29, Arnd Bergmann wrote:
+>>> The idea is good, but it would be nice if we just somehow use a common
+>>> asm-generic io.h definition directly in logic_pio.c, like:
+>>>
+>>> asm-generic io.h:
+>>>
+>>> #ifndef __raw_inw // name?
+>>> #define __raw_inw __raw_inw
+>>> static inline u16 __raw_inw(unsigned long addr)
+>>> {
+>>>          u16 val;
+>>>
+>>>          __io_pbr();
+>>>          val = __le16_to_cpu(__raw_readw(addr));
+>>>          __io_par(val);
+>>>          return val;
+>>> }
+>>> #endif
+>>>
+>>> #include <linux/logic_pio.h>
+>>>
+>>> #ifndef inw
+>>> #define inw __raw_inw
+>>> #endif
+>> Yes, makes sense. Maybe __arch_inw() then? Not great either, but I think
+>> that's better than __raw_inw() because __raw_* would sound like it
+>> mirrors __raw_readl() that lacks the barriers and byteswaps.
+> 
+> Right, I had the same concern. And maybe the "arch" prefix is 
+> misleading. Just __inw could be ok, and hopefully not conflict with the 
+> arch/arm/mach-* definitions.
+> 
 
-I am waiting to hear from you through this my private
-email(daoudaali2200@gmail.com) so we can proceed further.
+I think that it hasn't been mentioned already, but it looks like the 
+outX methods also need the same treatment, from a7851aa54c.
 
-Best Regards.
-Mr. Daouda Ali.
+thanks,
+John
