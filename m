@@ -2,82 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9971835D1
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Mar 2020 17:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482A2183615
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Mar 2020 17:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727059AbgCLQDu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Mar 2020 12:03:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57494 "EHLO mail.kernel.org"
+        id S1727265AbgCLQZJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Mar 2020 12:25:09 -0400
+Received: from mga04.intel.com ([192.55.52.120]:7804 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727001AbgCLQDu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 12 Mar 2020 12:03:50 -0400
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EF1E5206FA;
-        Thu, 12 Mar 2020 16:03:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584029030;
-        bh=8013QSNjwl3hVjqclDefXb05VNEWtFHh+9iu+zc6Ugo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=r1FbKQMBSjx+u0m/DW4h3Pl+dtRquD3/XyVqRDGIg8vvMoU9Z5E79l4H5v70Qu77i
-         qrmaRR2f6kVk3o6FLsq/rljo8kZas1fNZADsxIHzsIhT8jBkrzVvGW/V7bSzu0YL+D
-         L2xN3GiwpuAn+Qeo77aa90Et45se/H8aJwJ1AJYk=
-Received: by mail-lf1-f41.google.com with SMTP id b13so5277712lfb.12;
-        Thu, 12 Mar 2020 09:03:49 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ34x+CkQmo7dN3X92wLxQohQszOfOUdZKIOO/TegldnoMEBorf6
-        HgMZO+p5lx9uLQeKOulrUJ/X2rYMS3iA6J3CzqA=
-X-Google-Smtp-Source: ADFU+vuoqiRPpALaPb3vAH2E88rNtmGTNcB/OqxahlgrnaZFB5AhQlWmriyJa0LvZSP3nMz82H3GA8VVRfVyYeyWYZ4=
-X-Received: by 2002:a05:6512:1116:: with SMTP id l22mr5770907lfg.70.1584029028030;
- Thu, 12 Mar 2020 09:03:48 -0700 (PDT)
+        id S1727228AbgCLQZJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 12 Mar 2020 12:25:09 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Mar 2020 09:25:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,545,1574150400"; 
+   d="scan'208";a="322522522"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga001.jf.intel.com with ESMTP; 12 Mar 2020 09:25:05 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jCQdv-0092ut-3b; Thu, 12 Mar 2020 18:25:07 +0200
+Date:   Thu, 12 Mar 2020 18:25:07 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        linux-nvme@lists.infradead.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v1] asm-generic: Provide generic {get, put}_unaligned_{l,
+ b}e24()
+Message-ID: <20200312162507.GF1922688@smile.fi.intel.com>
+References: <20200312113941.81162-1-andriy.shevchenko@linux.intel.com>
+ <efe5daa3-8e37-101a-9203-676be33eb934@acm.org>
 MIME-Version: 1.0
-References: <1583854376-15598-1-git-send-email-majun258@linux.alibaba.com>
-In-Reply-To: <1583854376-15598-1-git-send-email-majun258@linux.alibaba.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 13 Mar 2020 00:03:36 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRFj=aQYHgM6KV7GYM22Nti8D2q_QNi+5WhOHS9-86Wew@mail.gmail.com>
-Message-ID: <CAJF2gTRFj=aQYHgM6KV7GYM22Nti8D2q_QNi+5WhOHS9-86Wew@mail.gmail.com>
-Subject: Re: [PATCH]arch/csky:Enable the gcov function in csky achitecture
-To:     Ma Jun <majun258@linux.alibaba.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <efe5daa3-8e37-101a-9203-676be33eb934@acm.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+On Thu, Mar 12, 2020 at 08:18:07AM -0700, Bart Van Assche wrote:
+> On 2020-03-12 04:39, Andy Shevchenko wrote:
+> > There are users in kernel that duplicate {get,put}_unaligned_{l,b}e24()
+> > implementation. Provide generic helpers once for all.
+> 
+> Hi Andy,
+> 
+> Thanks for having done this work. In case you would not yet have noticed
+> the patch series that I posted some time ago but for which I did not
+> have the time to continue working on it, please take a look at
+> https://lore.kernel.org/lkml/20191028200700.213753-1-bvanassche@acm.org/.
 
-On Thu, Mar 12, 2020 at 4:59 PM Ma Jun <majun258@linux.alibaba.com> wrote:
->
-> Support the gcov function in csky architecture
->
-> Signed-off-by: Ma Jun <majun258@linux.alibaba.com>
-> ---
->  arch/csky/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 047427f..9c4749d 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -64,6 +64,7 @@ config CSKY
->         select PCI_DOMAINS_GENERIC if PCI
->         select PCI_SYSCALL if PCI
->         select PCI_MSI if PCI
-> +       select ARCH_HAS_GCOV_PROFILE_ALL
->
->  config CPU_HAS_CACHEV2
->         bool
-> --
-> 1.8.3.1
->
+Can you send a new version?
+
+Also, consider to use byteshift to avoid this limitation:
+"Only use get_unaligned_be24() if reading p - 1 is allowed."
 
 
 -- 
-Best Regards
- Guo Ren
+With Best Regards,
+Andy Shevchenko
 
-ML: https://lore.kernel.org/linux-csky/
+
