@@ -2,123 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B12CA184C3C
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Mar 2020 17:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E0C185178
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Mar 2020 23:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbgCMQTc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Mar 2020 12:19:32 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:36061 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726461AbgCMQTc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Mar 2020 12:19:32 -0400
-Received: by mail-wm1-f68.google.com with SMTP id g62so10964713wme.1;
-        Fri, 13 Mar 2020 09:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DzWpdx6328OZ0aH4x17MPaDC7GHF6Gljp2V0qUX/DXo=;
-        b=UaJGqhaStKvtpmCHIX3kKDpHnWc+X5jToC5SA/qFSF367bfEjsz2TVGFQPWSP8HeUx
-         GRLu8BKAOod/fH4D9Sowc0g+v0PGZvefYUcatrjW7Hns/gHMn0/5MvDT//4Z9EWPhYvQ
-         KJah4mfhH2zRxGewD8tH3WSFEYvcHtW/vfQO6ucpmC8zuWcsqvQ5w246yKiWspujo/Ly
-         vdN9l8dgYdikc6SF9YTp5CKa4Mi8ppQT3A9PbDL/lzQqsfGXhMpz8T50Q2WliEJDvN7x
-         nJt9rp5Tyx77XMF6/Rv1OlehOLOIkgQL2QYO5J0J0WTA4aa++VluIhkdS0C3yTOp8PjN
-         Y+nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DzWpdx6328OZ0aH4x17MPaDC7GHF6Gljp2V0qUX/DXo=;
-        b=NYITuNGP1USg2O+J0QUggvMzwJGEABlr/kQ8vA6LpF7qh8OypZIH5jS67eFUxDPVvR
-         vHxHw3p5hnWaCXAuLpaft2KSxZOtrTWNIv1fbNvoyBKgcLhY/f8n5XTIUUj/TSVouRcC
-         VP6xtTFV52lZGKaTxqqh9XK15ZUtxQsrKQNqn7aKD41l6n9qMPTh+zX8lD0S7sz2siwC
-         bdUApVEE1Zwbj8yUuS1w3W9+eBGyHMsiZHzebskGOi3rGZQkg944tYxjcuUubsGjBVqE
-         GN7Cpx9rJu5lLlBAaYE7z9U0iXlRrnhOwUBy7tDEhmOzLRQ+dZmiYK7pGclTiOvZivb7
-         Y+6A==
-X-Gm-Message-State: ANhLgQ0nkLk+z7jmzJ5oE8HbNJpPdIJJmng49E2+NFABaxEv4GqIBD/Z
-        GJDguFYk8wQI5ptm9hj9eik=
-X-Google-Smtp-Source: ADFU+vsq06fil7othF27XQT8Yzw4TwrwXBYm7m6KjdoRKe730VpT0nmboNEJS30sUYpx7sh4hoWlkQ==
-X-Received: by 2002:a1c:791a:: with SMTP id l26mr11500620wme.103.1584116370132;
-        Fri, 13 Mar 2020 09:19:30 -0700 (PDT)
-Received: from [10.83.36.153] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id w1sm16365071wmc.11.2020.03.13.09.19.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Mar 2020 09:19:29 -0700 (PDT)
-Subject: Re: [PATCH v3 00/26] Introduce common headers for vDSO
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com, x86@kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Burton <paul.burton@mips.com>,
+        id S1727414AbgCMWAX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Mar 2020 18:00:23 -0400
+Received: from mga04.intel.com ([192.55.52.120]:3418 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726543AbgCMWAX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 13 Mar 2020 18:00:23 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Mar 2020 15:00:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,550,1574150400"; 
+   d="scan'208";a="416431849"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by orsmga005.jf.intel.com with ESMTP; 13 Mar 2020 15:00:21 -0700
+Message-ID: <c8c394fba4b64c9151201952752647d61324c0a8.camel@intel.com>
+Subject: Re: [RFC PATCH v9 15/27] mm: Handle THP/HugeTLB Shadow Stack page
+ fault
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>
-References: <20200313154345.56760-1-vincenzo.frascino@arm.com>
-From:   Dmitry Safonov <0x7f454c46@gmail.com>
-Message-ID: <693b6a61-b5f6-2744-1579-b356e6510547@gmail.com>
-Date:   Fri, 13 Mar 2020 16:19:23 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+Date:   Fri, 13 Mar 2020 15:00:20 -0700
+In-Reply-To: <202002251258.7D6DA92@keescook>
+References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
+         <20200205181935.3712-16-yu-cheng.yu@intel.com>
+         <202002251258.7D6DA92@keescook>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-In-Reply-To: <20200313154345.56760-1-vincenzo.frascino@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Vincenzo, all
+On Tue, 2020-02-25 at 12:59 -0800, Kees Cook wrote:
+> On Wed, Feb 05, 2020 at 10:19:23AM -0800, Yu-cheng Yu wrote:
+> > This patch implements THP Shadow Stack (SHSTK) copying in the same way as
+> > in the previous patch for regular PTE.
+> > 
+> > In copy_huge_pmd(), clear the dirty bit from the PMD to cause a page fault
+> > upon the next SHSTK access to the PMD.  At that time, fix the PMD and
+> > copy/re-use the page.
+> 
+> Now is as good a time as any to ask: do you have selftests for all this?
+> It seems like it would be really nice to have a way to verify SHSTK is
+> working correctly.
 
-I like the idea, but I'm wondering if we could have less-grained
-headers? Like, AFAICS the patches create headers < 10 lines and even
-mostly < 5 lines.. I like that header's names perfectly describe what's
-inside, but I'm not sure how effective to have a lot of extra-small
-includes.
+Yes, I have some simple tests at https://github.com/yyu168/cet-smoke-test.
+I also run Linux/tools/testing/selftests/x86 and GLIBC tests with CET and THP
+combinations.
 
-Or maybe there's a plan to grow the code in them?
+Yu-cheng
 
-On 3/13/20 3:43 PM, Vincenzo Frascino wrote:
-[..]
->  create mode 100644 arch/arm/include/asm/vdso/clocksource.h
->  create mode 100644 arch/arm/include/asm/vdso/cp15.h
->  create mode 100644 arch/arm/include/asm/vdso/processor.h
->  create mode 100644 arch/arm64/include/asm/vdso/arch_timer.h
->  create mode 100644 arch/arm64/include/asm/vdso/clocksource.h
->  create mode 100644 arch/arm64/include/asm/vdso/processor.h
->  create mode 100644 arch/mips/include/asm/vdso/clocksource.h
->  create mode 100644 arch/mips/include/asm/vdso/processor.h
->  create mode 100644 arch/x86/include/asm/vdso/clocksource.h
->  create mode 100644 arch/x86/include/asm/vdso/processor.h
->  create mode 100644 include/vdso/bits.h
->  create mode 100644 include/vdso/clocksource.h
->  create mode 100644 include/vdso/const.h
->  create mode 100644 include/vdso/jiffies.h
->  create mode 100644 include/vdso/ktime.h
->  create mode 100644 include/vdso/limits.h
->  create mode 100644 include/vdso/math64.h
->  create mode 100644 include/vdso/processor.h
->  create mode 100644 include/vdso/time.h
->  create mode 100644 include/vdso/time32.h
->  create mode 100644 include/vdso/time64.h
 
-Maybe we could made them less-grained?
-
-I.e, time32 + time64 + time.h => time.h?
-
-Thanks for Cc,
-          Dmitry
