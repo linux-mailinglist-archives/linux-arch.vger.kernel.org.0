@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7288184B30
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Mar 2020 16:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A7B184B4E
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Mar 2020 16:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbgCMPpE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Mar 2020 11:45:04 -0400
-Received: from foss.arm.com ([217.140.110.172]:58874 "EHLO foss.arm.com"
+        id S1727356AbgCMPpJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Mar 2020 11:45:09 -0400
+Received: from foss.arm.com ([217.140.110.172]:58910 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727369AbgCMPpE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 13 Mar 2020 11:45:04 -0400
+        id S1727389AbgCMPpH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 13 Mar 2020 11:45:07 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8764C31B;
-        Fri, 13 Mar 2020 08:45:03 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF7571063;
+        Fri, 13 Mar 2020 08:45:06 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 73A0E3F67D;
-        Fri, 13 Mar 2020 08:45:00 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE3123F67D;
+        Fri, 13 Mar 2020 08:45:03 -0700 (PDT)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -40,9 +40,9 @@ Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Marc Zyngier <maz@kernel.org>,
         Mark Rutland <Mark.Rutland@arm.com>,
         Will Deacon <will@kernel.org>
-Subject: [PATCH v3 18/26] arm64: Introduce asm/vdso/processor.h
-Date:   Fri, 13 Mar 2020 15:43:37 +0000
-Message-Id: <20200313154345.56760-19-vincenzo.frascino@arm.com>
+Subject: [PATCH v3 19/26] arm64: vdso: Include common headers in the vdso library
+Date:   Fri, 13 Mar 2020 15:43:38 +0000
+Message-Id: <20200313154345.56760-20-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200313154345.56760-1-vincenzo.frascino@arm.com>
 References: <20200313154345.56760-1-vincenzo.frascino@arm.com>
@@ -58,96 +58,41 @@ a userspace library (UAPI and a minimal set of kernel headers). To make
 this possible it is necessary to isolate from the kernel headers the
 common parts that are strictly necessary to build the library.
 
-Introduce asm/vdso/processor.h to contain all the arm64 specific
-functions that are suitable for vDSO inclusion.
+Refactor the vdso implementation to include common headers.
 
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- arch/arm64/include/asm/processor.h      | 16 ++-----------
- arch/arm64/include/asm/vdso/processor.h | 31 +++++++++++++++++++++++++
- 2 files changed, 33 insertions(+), 14 deletions(-)
- create mode 100644 arch/arm64/include/asm/vdso/processor.h
+ arch/arm64/include/asm/vdso/gettimeofday.h | 1 -
+ arch/arm64/kernel/vdso/vgettimeofday.c     | 2 --
+ 2 files changed, 3 deletions(-)
 
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index 5ba63204d078..89ba2c5be504 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -28,6 +28,8 @@
- #include <linux/string.h>
- #include <linux/thread_info.h>
+diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
+index 5a534432aa5d..afba6ba332f8 100644
+--- a/arch/arm64/include/asm/vdso/gettimeofday.h
++++ b/arch/arm64/include/asm/vdso/gettimeofday.h
+@@ -8,7 +8,6 @@
+ #ifndef __ASSEMBLY__
  
-+#include <vdso/processor.h>
-+
- #include <asm/alternative.h>
- #include <asm/cpufeature.h>
- #include <asm/hw_breakpoint.h>
-@@ -47,15 +49,6 @@
- #define TASK_SIZE_64		(UL(1) << vabits_actual)
+ #include <asm/unistd.h>
+-#include <uapi/linux/time.h>
  
- #ifdef CONFIG_COMPAT
--#if defined(CONFIG_ARM64_64K_PAGES) && defined(CONFIG_KUSER_HELPERS)
--/*
-- * With CONFIG_ARM64_64K_PAGES enabled, the last page is occupied
-- * by the compat vectors page.
-- */
--#define TASK_SIZE_32		UL(0x100000000)
--#else
--#define TASK_SIZE_32		(UL(0x100000000) - PAGE_SIZE)
--#endif /* CONFIG_ARM64_64K_PAGES */
- #define TASK_SIZE		(test_thread_flag(TIF_32BIT) ? \
- 				TASK_SIZE_32 : TASK_SIZE_64)
- #define TASK_SIZE_OF(tsk)	(test_tsk_thread_flag(tsk, TIF_32BIT) ? \
-@@ -256,11 +249,6 @@ extern void release_thread(struct task_struct *);
+ #define VDSO_HAS_CLOCK_GETRES		1
  
- unsigned long get_wchan(struct task_struct *p);
+diff --git a/arch/arm64/kernel/vdso/vgettimeofday.c b/arch/arm64/kernel/vdso/vgettimeofday.c
+index 747635501a14..4236cf34d7d9 100644
+--- a/arch/arm64/kernel/vdso/vgettimeofday.c
++++ b/arch/arm64/kernel/vdso/vgettimeofday.c
+@@ -5,8 +5,6 @@
+  * Copyright (C) 2018 ARM Limited
+  *
+  */
+-#include <linux/time.h>
+-#include <linux/types.h>
  
--static inline void cpu_relax(void)
--{
--	asm volatile("yield" ::: "memory");
--}
--
- /* Thread switching */
- extern struct task_struct *cpu_switch_to(struct task_struct *prev,
- 					 struct task_struct *next);
-diff --git a/arch/arm64/include/asm/vdso/processor.h b/arch/arm64/include/asm/vdso/processor.h
-new file mode 100644
-index 000000000000..fb4883212a2d
---- /dev/null
-+++ b/arch/arm64/include/asm/vdso/processor.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2020 ARM Ltd.
-+ */
-+#ifndef __ASM_VDSO_PROCESSOR_H
-+#define __ASM_VDSO_PROCESSOR_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <asm/page-def.h>
-+
-+#ifdef CONFIG_COMPAT
-+#if defined(CONFIG_ARM64_64K_PAGES) && defined(CONFIG_KUSER_HELPERS)
-+/*
-+ * With CONFIG_ARM64_64K_PAGES enabled, the last page is occupied
-+ * by the compat vectors page.
-+ */
-+#define TASK_SIZE_32		UL(0x100000000)
-+#else
-+#define TASK_SIZE_32		(UL(0x100000000) - PAGE_SIZE)
-+#endif /* CONFIG_ARM64_64K_PAGES */
-+#endif /* CONFIG_COMPAT */
-+
-+static inline void cpu_relax(void)
-+{
-+	asm volatile("yield" ::: "memory");
-+}
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* __ASM_VDSO_PROCESSOR_H */
+ int __kernel_clock_gettime(clockid_t clock,
+ 			   struct __kernel_timespec *ts)
 -- 
 2.25.1
 
