@@ -2,79 +2,434 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C6A185BCD
-	for <lists+linux-arch@lfdr.de>; Sun, 15 Mar 2020 11:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C89185EBC
+	for <lists+linux-arch@lfdr.de>; Sun, 15 Mar 2020 18:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728202AbgCOKDE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 15 Mar 2020 06:03:04 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:49936 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728197AbgCOKDE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 15 Mar 2020 06:03:04 -0400
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jDQ6Y-0007T9-0n; Sun, 15 Mar 2020 11:02:46 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 09DCD101305; Sun, 15 Mar 2020 11:02:45 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com, x86@kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Burton <paul.burton@mips.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>
-Subject: Re: [PATCH v3 00/26] Introduce common headers for vDSO
-In-Reply-To: <693b6a61-b5f6-2744-1579-b356e6510547@gmail.com>
-References: <20200313154345.56760-1-vincenzo.frascino@arm.com> <693b6a61-b5f6-2744-1579-b356e6510547@gmail.com>
-Date:   Sun, 15 Mar 2020 11:02:45 +0100
-Message-ID: <87fteadjga.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+        id S1728949AbgCORbb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 15 Mar 2020 13:31:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44388 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728947AbgCORbb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 15 Mar 2020 13:31:31 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BBCB8206B1;
+        Sun, 15 Mar 2020 17:31:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584293490;
+        bh=wyPKiOwBox4zyYo6q4dHotbRk4wts+qz3vKFfmPqolk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LnsavhJMuq/NfHWvZLaILWN92IBV/MUgTdzSm8qzytNbdVlShyvTlPcZ/UGvknQpc
+         FTnDmZIXPUXP8HRjtrwwg/npWk6tSc2YPUDCgvym2OGyftE+7hs8gibfYmfWVIWEw3
+         gC3O/qUFjixe+nL7uu+GD5nu7l3X/q35hSi9/k1c=
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=big-swifty.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1jDX6l-00CueO-MT; Sun, 15 Mar 2020 17:31:27 +0000
+Date:   Sun, 15 Mar 2020 17:31:25 +0000
+Message-ID: <86v9n5zfrm.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     will@kernel.org, ardb@kernel.org, arnd@arndb.de,
+        catalin.marinas@arm.com, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
+        olaf@aepfle.de, apw@canonical.com, vkuznets@redhat.com,
+        jasowang@redhat.com, marcelo.cerri@canonical.com,
+        kys@microsoft.com, sunilmut@microsoft.com, boqun.feng@gmail.com
+Subject: Re: [PATCH v6 01/10] arm64: hyperv: Add core Hyper-V include files
+In-Reply-To: <1584200119-18594-2-git-send-email-mikelley@microsoft.com>
+References: <1584200119-18594-1-git-send-email-mikelley@microsoft.com>
+        <1584200119-18594-2-git-send-email-mikelley@microsoft.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 EasyPG/1.0.0 Emacs/26
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: mikelley@microsoft.com, will@kernel.org, ardb@kernel.org, arnd@arndb.de, catalin.marinas@arm.com, mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, olaf@aepfle.de, apw@canonical.com, vkuznets@redhat.com, jasowang@redhat.com, marcelo.cerri@canonical.com, kys@microsoft.com, sunilmut@microsoft.com, boqun.feng@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dmitry Safonov <0x7f454c46@gmail.com> writes:
-> I like the idea, but I'm wondering if we could have less-grained
-> headers? Like, AFAICS the patches create headers < 10 lines and even
-> mostly < 5 lines.. I like that header's names perfectly describe what's
-> inside, but I'm not sure how effective to have a lot of extra-small
-> includes.
+On Sat, 14 Mar 2020 15:35:10 +0000,
+Hi Michael,
 
-If that goes all into a big header then the headers from where the bits and
-pieces are split out would have all to include this big header which
-might result in other include dependency nightmares.
+Michael Kelley <mikelley@microsoft.com> wrote:
+> 
+> hyperv-tlfs.h defines Hyper-V interfaces from the Hyper-V Top Level
+> Functional Spec (TLFS). The TLFS is distinctly oriented to x86/x64,
+> and Hyper-V has not separated out the architecture-dependent parts into
+> x86/x64 vs. ARM64. So hyperv-tlfs.h includes information for ARM64
+> that is not yet formally published. The TLFS is available here:
+> 
+>   docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/reference/tlfs
+> 
+> mshyperv.h defines Linux-specific structures and routines for
+> interacting with Hyper-V on ARM64, and #includes the architecture-
+> independent part of mshyperv.h in include/asm-generic.
+> 
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>  MAINTAINERS                          |   2 +
+>  arch/arm64/include/asm/hyperv-tlfs.h | 413 +++++++++++++++++++++++++++++++++++
+>  arch/arm64/include/asm/mshyperv.h    | 115 ++++++++++
+>  3 files changed, 530 insertions(+)
+>  create mode 100644 arch/arm64/include/asm/hyperv-tlfs.h
+>  create mode 100644 arch/arm64/include/asm/mshyperv.h
 
->>  create mode 100644 include/vdso/time.h
->>  create mode 100644 include/vdso/time32.h
->>  create mode 100644 include/vdso/time64.h
->
-> Maybe we could made them less-grained?
->
-> I.e, time32 + time64 + time.h => time.h?
+So this is a pretty large patch, mostly containing constants and other
+data structures that don't necessarily make sense immediately (or at
+least, I can't make sense of it without reading all the other 9
+patches and going back to patch #1).
 
-Then you end up with ifdeffery. I like the clear separation.
+Could you please consider splitting this into more discreet bits that
+get added as required by the supporting code?
+
+So here's only a few sparse comments:
+
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 58bb5c4..398cfdb 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7809,6 +7809,8 @@ F:	arch/x86/include/asm/trace/hyperv.h
+>  F:	arch/x86/include/asm/hyperv-tlfs.h
+>  F:	arch/x86/kernel/cpu/mshyperv.c
+>  F:	arch/x86/hyperv
+> +F:	arch/arm64/include/asm/hyperv-tlfs.h
+> +F:	arch/arm64/include/asm/mshyperv.h
+>  F:	drivers/clocksource/hyperv_timer.c
+>  F:	drivers/hid/hid-hyperv.c
+>  F:	drivers/hv/
+> diff --git a/arch/arm64/include/asm/hyperv-tlfs.h b/arch/arm64/include/asm/hyperv-tlfs.h
+> new file mode 100644
+> index 0000000..5e6a087
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/hyperv-tlfs.h
+> @@ -0,0 +1,413 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * This file contains definitions from the Hyper-V Hypervisor Top-Level
+> + * Functional Specification (TLFS):
+> + * https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/reference/tlfs
+> + *
+> + * Copyright (C) 2019, Microsoft, Inc.
+> + *
+> + * Author : Michael Kelley <mikelley@microsoft.com>
+> + */
+> +
+> +#ifndef _ASM_HYPERV_TLFS_H
+> +#define _ASM_HYPERV_TLFS_H
+> +
+> +#include <linux/types.h>
+> +
+> +/*
+> + * All data structures defined in the TLFS that are shared between Hyper-V
+> + * and a guest VM use Little Endian byte ordering.  This matches the default
+> + * byte ordering of Linux running on ARM64, so no special handling is required.
+> + */
+> +
+> +
+> +/*
+> + * While not explicitly listed in the TLFS, Hyper-V always runs with a page
+> + * size of 4096. These definitions are used when communicating with Hyper-V
+> + * using guest physical pages and guest physical page addresses, since the
+> + * guest page size may not be 4096 on ARM64.
+> + */
+> +#define HV_HYP_PAGE_SHIFT	12
+> +#define HV_HYP_PAGE_SIZE	(1 << HV_HYP_PAGE_SHIFT)
+
+Probably worth writing this as 1UL to be on the safe side.
+
+> +#define HV_HYP_PAGE_MASK	(~(HV_HYP_PAGE_SIZE - 1))
+> +
+> +/*
+> + * These Hyper-V registers provide information equivalent to the CPUID
+> + * instruction on x86/x64.
+> + */
+> +#define HV_REGISTER_HYPERVISOR_VERSION		0x00000100 /*CPUID 0x40000002 */
+> +#define	HV_REGISTER_PRIVILEGES_AND_FEATURES	0x00000200 /*CPUID 0x40000003 */
+> +#define	HV_REGISTER_FEATURES			0x00000201 /*CPUID 0x40000004 */
+> +#define	HV_REGISTER_IMPLEMENTATION_LIMITS	0x00000202 /*CPUID 0x40000005 */
+> +#define HV_ARM64_REGISTER_INTERFACE_VERSION	0x00090006 /*CPUID 0x40000001 */
+> +
+> +/*
+> + * Feature identification. HvRegisterPrivilegesAndFeaturesInfo returns a
+> + * 128-bit value with flags indicating which features are available to the
+> + * partition based upon the current partition privileges. The 128-bit
+> + * value is broken up with different portions stored in different 32-bit
+> + * fields in the ms_hyperv structure.
+> + */
+> +
+> +/* Partition Reference Counter available*/
+> +#define HV_MSR_TIME_REF_COUNT_AVAILABLE		BIT(1)
+> +
+> +/* Synthetic Timers available */
+> +#define HV_MSR_SYNTIMER_AVAILABLE		BIT(3)
+> +
+> +/* Reference TSC available */
+> +#define HV_MSR_REFERENCE_TSC_AVAILABLE		BIT(9)
+> +
+> +
+> +/*
+> + * This group of flags is in the high order 64-bits of the returned
+> + * 128-bit value. Note that this set of bit positions differs from what
+> + * is used on x86/x64 architecture.
+> + */
+> +
+> +/* Crash MSRs available */
+> +#define HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE	BIT(8)
+
+It is confusing that you don't have a single bit space for all these
+flags. It'd probably help if you had a structure describing this
+128bit value in multiple 32bit or 64bit words, and indicating which
+field the bit position is relevant to.
+
+[...]
+
+> +/* Define the hypercall status result */
+> +
+> +union hv_hypercall_status {
+> +	u64 as_uint64;
+
+nit: it'd be more consistent if as_uint64 was actually a uint64 type.
+
+> +	struct {
+> +		u16 status;
+> +		u16 reserved;
+> +		u16 reps_completed;  /* Low 12 bits */
+> +		u16 reserved2;
+> +	};
+> +};
+> +
+> +/* hypercall status code */
+> +#define HV_STATUS_SUCCESS			0
+> +#define HV_STATUS_INVALID_HYPERCALL_CODE	2
+> +#define HV_STATUS_INVALID_HYPERCALL_INPUT	3
+> +#define HV_STATUS_INVALID_ALIGNMENT		4
+> +#define HV_STATUS_INSUFFICIENT_MEMORY		11
+> +#define HV_STATUS_INVALID_CONNECTION_ID		18
+> +#define HV_STATUS_INSUFFICIENT_BUFFERS		19
+> +
+> +/* Define input and output layout for Get VP Register hypercall */
+> +struct hv_get_vp_register_input {
+> +	u64 partitionid;
+> +	u32 vpindex;
+> +	u8  inputvtl;
+> +	u8  padding[3];
+> +	u32 name0;
+> +	u32 name1;
+> +} __packed;
+> +
+> +struct hv_get_vp_register_output {
+> +	u64 registervaluelow;
+> +	u64 registervaluehigh;
+> +} __packed;
+> +
+> +#define HV_FLUSH_ALL_PROCESSORS			BIT(0)
+> +#define HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES	BIT(1)
+> +#define HV_FLUSH_NON_GLOBAL_MAPPINGS_ONLY	BIT(2)
+
+I"m curious: Are these supposed to be PV'd TLB invalidation
+operations?
+
+> +#define HV_FLUSH_USE_EXTENDED_RANGE_FORMAT	BIT(3)
+> +
+> +enum HV_GENERIC_SET_FORMAT {
+> +	HV_GENERIC_SET_SPARSE_4K,
+> +	HV_GENERIC_SET_ALL,
+> +};
+> +
+> +/*
+> + * The Hyper-V TimeRefCount register and the TSC
+> + * page provide a guest VM clock with 100ns tick rate
+> + */
+> +#define HV_CLOCK_HZ (NSEC_PER_SEC/100)
+> +
+> +/*
+> + * The fields in this structure are set by Hyper-V and read
+> + * by the Linux guest.  They should be accessed with READ_ONCE()
+> + * so the compiler doesn't optimize in a way that will cause
+> + * problems.  The union pads the size out to the page size
+> + * used to communicate with Hyper-V.
+> + */
+> +struct ms_hyperv_tsc_page {
+> +	union {
+> +		struct {
+> +			u32 tsc_sequence;
+> +			u32 reserved1;
+> +			u64 tsc_scale;
+> +			s64 tsc_offset;
+> +		} __packed;
+> +		u8 reserved2[HV_HYP_PAGE_SIZE];
+> +	};
+> +};
+> +
+> +/* Define the number of synthetic interrupt sources. */
+> +#define HV_SYNIC_SINT_COUNT		(16)
+> +/* Define the expected SynIC version. */
+> +#define HV_SYNIC_VERSION_1		(0x1)
+> +
+> +#define HV_SYNIC_CONTROL_ENABLE		(1ULL << 0)
+> +#define HV_SYNIC_SIMP_ENABLE		(1ULL << 0)
+> +#define HV_SYNIC_SIEFP_ENABLE		(1ULL << 0)
+> +#define HV_SYNIC_SINT_MASKED		(1ULL << 16)
+> +#define HV_SYNIC_SINT_AUTO_EOI		(1ULL << 17)
+> +#define HV_SYNIC_SINT_VECTOR_MASK	(0xFF)
+
+Let's me guess: a PV interrupt controller? Do you really need this?
+Specially as I don't see any PV irqchip driver in this submission...
+
+[...]
+
+> diff --git a/arch/arm64/include/asm/mshyperv.h b/arch/arm64/include/asm/mshyperv.h
+> new file mode 100644
+> index 0000000..60b3f68
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/mshyperv.h
+> @@ -0,0 +1,115 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * Linux-specific definitions for managing interactions with Microsoft's
+> + * Hyper-V hypervisor. The definitions in this file are specific to
+> + * the ARM64 architecture.  See include/asm-generic/mshyperv.h for
+> + * definitions are that architecture independent.
+> + *
+> + * Definitions that are specified in the Hyper-V Top Level Functional
+> + * Spec (TLFS) should not go in this file, but should instead go in
+> + * hyperv-tlfs.h.
+> + *
+> + * Copyright (C) 2019, Microsoft, Inc.
+> + *
+> + * Author : Michael Kelley <mikelley@microsoft.com>
+> + */
+> +
+> +#ifndef _ASM_MSHYPERV_H
+> +#define _ASM_MSHYPERV_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/clocksource.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqdesc.h>
+> +#include <linux/arm-smccc.h>
+> +#include <asm/hyperv-tlfs.h>
+> +
+> +/*
+> + * Define the IRQ numbers/vectors used by Hyper-V VMbus interrupts
+> + * and by STIMER0 Direct Mode interrupts. Hyper-V should be supplying
+> + * these values through ACPI, but there are no other interrupting
+> + * devices in a Hyper-V VM on ARM64, so it's OK to hard code for now.
+
+I'm not convinced it is OK. If you don't try to do the right thing
+now, what is the incentive to do it later? Starting to hard code
+things is akin to going back to the ARM board files of old. Been
+there, managed to fix it, not going back to it again anytime soon.
+
+> + * The "CALLBACK_VECTOR" terminology is a left-over from the x86/x64
+> + * world that is used in architecture independent Hyper-V code.
+> + */
+> +#define HYPERVISOR_CALLBACK_VECTOR 16
+> +#define	HV_STIMER0_IRQNR	   17
+> +
+> +extern u64 hv_do_hvc(u64 control, ...);
+> +extern u64 hv_do_hvc_fast_get(u64 control, u64 input1, u64 input2, u64 input3,
+> +		struct hv_get_vp_register_output *output);
+> +
+> +/*
+> + * Declare calls to get and set Hyper-V VP register values on ARM64, which
+> + * requires a hypercall.
+> + */
+> +extern void hv_set_vpreg(u32 reg, u64 value);
+> +extern u64 hv_get_vpreg(u32 reg);
+> +extern void hv_get_vpreg_128(u32 reg, struct hv_get_vp_register_output *result);
+> +
+> +/*
+> + * Use the Hyper-V provided stimer0 as the timer that is made
+> + * available to the architecture independent Hyper-V drivers.
+> + */
+> +#define hv_init_timer(timer, tick) \
+> +		hv_set_vpreg(HV_REGISTER_STIMER0_COUNT + (2*timer), tick)
+> +#define hv_init_timer_config(timer, val) \
+> +		hv_set_vpreg(HV_REGISTER_STIMER0_CONFIG + (2*timer), val)
+> +#define hv_get_current_tick(tick) \
+> +		(tick = hv_get_vpreg(HV_REGISTER_TIME_REFCOUNT))
+> +
+> +#define hv_get_simp(val) (val = hv_get_vpreg(HV_REGISTER_SIPP))
+> +#define hv_set_simp(val) hv_set_vpreg(HV_REGISTER_SIPP, val)
+> +
+> +#define hv_get_siefp(val) (val = hv_get_vpreg(HV_REGISTER_SIFP))
+> +#define hv_set_siefp(val) hv_set_vpreg(HV_REGISTER_SIFP, val)
+> +
+> +#define hv_get_synic_state(val) (val = hv_get_vpreg(HV_REGISTER_SCONTROL))
+> +#define hv_set_synic_state(val) hv_set_vpreg(HV_REGISTER_SCONTROL, val)
+> +
+> +#define hv_get_vp_index(index) (index = hv_get_vpreg(HV_REGISTER_VPINDEX))
+> +
+> +#define hv_signal_eom()	hv_set_vpreg(HV_REGISTER_EOM, 0)
+> +
+> +/*
+> + * Hyper-V SINT registers are numbered sequentially, so we can just
+> + * add the SINT number to the register number of SINT0
+> + */
+> +#define hv_get_synint_state(sint_num, val) \
+> +		(val = hv_get_vpreg(HV_REGISTER_SINT0 + sint_num))
+> +#define hv_set_synint_state(sint_num, val) \
+> +		hv_set_vpreg(HV_REGISTER_SINT0 + sint_num, val)
+> +
+> +#define hv_get_crash_ctl(val) \
+> +		(val = hv_get_vpreg(HV_REGISTER_CRASH_CTL))
+> +#define hv_get_time_ref_count(val) \
+> +		(val = hv_get_vpreg(HV_REGISTER_TIME_REFCOUNT))
+> +#define hv_get_reference_tsc(val) \
+> +		(val = hv_get_vpreg(HV_REGISTER_REFERENCE_TSC))
+> +#define hv_set_reference_tsc(val) \
+> +		hv_set_vpreg(HV_REGISTER_REFERENCE_TSC, val)
+> +#define hv_enable_vdso_clocksource()
+> +#define hv_set_clocksource_vdso(val) \
+> +		((val).vdso_clock_mode = VDSO_CLOCKMODE_NONE)
+> +
+> +#if IS_ENABLED(CONFIG_HYPERV)
+
+I don't think this guards anything useful.
+
+> +#define hv_enable_stimer0_percpu_irq(irq)	enable_percpu_irq(irq, 0)
+> +#define hv_disable_stimer0_percpu_irq(irq)	disable_percpu_irq(irq)
+
+and this looks pretty premature.
+
+> +#endif
+> +
+> +/* ARM64 specific code to read the hardware clock */
+> +#define hv_get_raw_timer() arch_timer_read_counter()
+> +
+> +/* SMCCC hypercall parameters */
+> +#define HV_SMCCC_FUNC_NUMBER	1
+> +#define HV_FUNC_ID	ARM_SMCCC_CALL_VAL(			\
+> +				ARM_SMCCC_STD_CALL,		\
+> +				ARM_SMCCC_SMC_64,		\
+> +				ARM_SMCCC_OWNER_VENDOR_HYP,	\
+
+This is only defined in patch #2...
+
+> +				HV_SMCCC_FUNC_NUMBER)
+> +
+> +#include <asm-generic/mshyperv.h>
+> +
+> +#endif
 
 Thanks,
 
-        tglx
+	M.
+
+-- 
+Jazz is not dead, it just smells funny.
