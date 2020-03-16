@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58474186653
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Mar 2020 09:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 044EC18665E
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Mar 2020 09:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730028AbgCPIXD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Mar 2020 04:23:03 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:58117 "EHLO
+        id S1730047AbgCPIZT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 16 Mar 2020 04:25:19 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:59141 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729996AbgCPIXD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Mar 2020 04:23:03 -0400
-Received: from mail-qt1-f169.google.com ([209.85.160.169]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1N95qT-1jPBAJ3dQd-016BI8; Mon, 16 Mar 2020 09:23:01 +0100
-Received: by mail-qt1-f169.google.com with SMTP id i26so3623539qtq.8;
-        Mon, 16 Mar 2020 01:23:00 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ3xyfcPRwFSzpeJHpB02bVNYnMix+hqaL2TAx+V5/DHrVCtMDwV
-        APA9BSIltVIHF3dEDKrOIaC7gTDksyZLSOuXI2A=
-X-Google-Smtp-Source: ADFU+vtvCxAlAeHfmkkAPmp7/hL77mUzkuyTzG3N03DevkjajATYqP8pbnWgan39uFZ96E87M222njLjT5t037hM4uU=
-X-Received: by 2002:ac8:6f6e:: with SMTP id u14mr3828514qtv.304.1584346979438;
- Mon, 16 Mar 2020 01:22:59 -0700 (PDT)
+        with ESMTP id S1728302AbgCPIZT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Mar 2020 04:25:19 -0400
+Received: from mail-qt1-f177.google.com ([209.85.160.177]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1M3DBd-1jABcW2wc1-003ckp; Mon, 16 Mar 2020 09:25:17 +0100
+Received: by mail-qt1-f177.google.com with SMTP id l13so13371896qtv.10;
+        Mon, 16 Mar 2020 01:25:17 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ1SmegqKI9XIC1GBqCwgbf25tv5rj83+7XQ8JxPFsCDSr2/f8mC
+        c1EA88wi7dIVibVAVWFxRNPZs6+ia7WzNsE5V7w=
+X-Google-Smtp-Source: ADFU+vsWAC/0lo+zE5AbQT0noMV/ZvJVnNxBInM+WO6OIJI68cMfZZhm1vhJ/+ZDY5xIHR7TVICkzE3S8xA3+jp3s3U=
+X-Received: by 2002:aed:3b4c:: with SMTP id q12mr23609109qte.18.1584347116325;
+ Mon, 16 Mar 2020 01:25:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <1584200119-18594-1-git-send-email-mikelley@microsoft.com> <1584200119-18594-5-git-send-email-mikelley@microsoft.com>
-In-Reply-To: <1584200119-18594-5-git-send-email-mikelley@microsoft.com>
+References: <1584200119-18594-1-git-send-email-mikelley@microsoft.com> <1584200119-18594-6-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1584200119-18594-6-git-send-email-mikelley@microsoft.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 16 Mar 2020 09:22:43 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2Hnm74aUMNFHbjMr4HwHGZn1+xa4ERsxAJY6hMzhEOhQ@mail.gmail.com>
-Message-ID: <CAK8P3a2Hnm74aUMNFHbjMr4HwHGZn1+xa4ERsxAJY6hMzhEOhQ@mail.gmail.com>
-Subject: Re: [PATCH v6 04/10] arm64: hyperv: Add memory alloc/free functions
- for Hyper-V size pages
+Date:   Mon, 16 Mar 2020 09:25:00 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2yve3R1w5igBYMy3HSFJ8Xt4BHhXQcaTAkNCdZXZ1v-w@mail.gmail.com>
+Message-ID: <CAK8P3a2yve3R1w5igBYMy3HSFJ8Xt4BHhXQcaTAkNCdZXZ1v-w@mail.gmail.com>
+Subject: Re: [PATCH v6 05/10] arm64: hyperv: Add interrupt handlers for VMbus
+ and stimer
 To:     Michael Kelley <mikelley@microsoft.com>
 Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -47,52 +47,46 @@ Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
         "K. Y. Srinivasan" <kys@microsoft.com>, sunilmut@microsoft.com,
         Boqun Feng <boqun.feng@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:rqvFYvTxsNB/VV4Ocr+6BAiwKkIrYd8B02+pZ+Os++8CyuYV2q6
- AHa4ZaI92MwibaXB/GPD6z10SooQtH4JTmEB0orR7G3WmI9D3NSi8e4lKRzk92yuqt+2/1H
- cxWPTsUPyfiwMLwiOnhEDJi3APVLJ3vRulumgKMgqLq+El7+OLjp5eEII1Lf5Xb6cP6TN54
- V9NiW07GxzXvrD4bNGFuw==
+X-Provags-ID: V03:K1:RSt4Vy8AZ22Uplf08DmKL+IBZhi00ObAlZi+4cX/qqvqut+iWjl
+ ABahf7e/i29lFZWFpsYdXLBuGTnWfHBd3Wo2hMu71x6+vPeXJHU21Rjdic01Gl6nwEc3kxX
+ yFlhfBAPTdWKI0+9U737iax4AyH0pCFI7fLmzSjjwvBuknpU7/XIaJpO23N3N2GpJUwVP3B
+ YzIXd24CHuNzuPouL6yag==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:v1VISpsAiv8=:+8YnIBomi1CFkBf1trecP1
- x7wAohu20sbMq/WFkqpq7UNc59Qedqyy3k/u2jIa+VUYVF04aeUae9w628Uh/ni1XLnf1UsnO
- cpJJSLxE0HS34dYCKozr8VU31i3eRJ4exNQxIzOxkJg2ZiuWP9pUrgu3YwwU9cC3LLB+f/xK8
- fu2bksv46j9KtS/JVS90rJ9WkI9hL+RCQSm96o6+b8xhwHdzUSr7OwNVYlP3XOHUed/iv2OZu
- Wumm2oKIzlEQlyFg9N2osIyLbYy7ZnT7u54YDF/Zu5vQmEFd/CrWyBUu7E1QwEy0i33e2mFRC
- H+BRwBGknsFFUHBPf/9YFXhlcEHrlS+I3L2gCHa2G9P01DBrMH6lK/gQAMxWp0SQwwUAH3U03
- NGzp77jeD04JjXA6LsEFVc8e4YcVitp+zAo+tXpoVM1//Tx6rU4B7oGEf0E/eTBjus0uoy8x3
- eEtSCGr/PHkJc0NzVLmh5UmfXfNvLcVkrf+6so6B2FTpnwv8I8XtTisj5GUxSR4vLcXmm1poD
- DANLgtR6x3u+RfimdBB9ZldOQxcmujUUn8b69SQxBZLZDZ01v/b+WCJ2Vvtkbypl4msYzVeOr
- QjYCS/ephQzGsswq8z6B+zK+NMMFq6Z79fIZ65EEHsBg2dtVylF4X3Nm74dG7FSnal1tsBvJN
- RUBQDxpa0ZLgWcG/ma8iSL/5Q//J/dj5FVsFec7PP5wyql8K4CoBBkEvO+Akcnk12Qh4xdyj2
- D2gpDjqPGgISdbJPk+Dq2ij8QU+hAX9JlEp15XGwBuLL/jo+D/WkA4xFzcqiCm8ofZaW1Tr+V
- ReIPtGupH3qQkig4TOdrr1KIcIB6NynTkaHB8DcpEt83zRKkkk=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9C7T5Fy+g94=:DFUeRhoatv9F65NQ52yJhW
+ Sir3aFC5t6lZtj0qNno5WK+VBCOdiYUhV64W4qtB2/I8COipbxA/sP+VEfGktEfO2u5nkfPDJ
+ alwwPR0S6/Dtwj7cv4w5JHKfBA+VwkvHtfpB+zZ9S/Xqt3vZ+8fjGtpsFZIbov+tKnpqsCf7K
+ ZSXlnyMMZ1luzg36ArCyxt6ASXr5ixAA0zULIbDkILojey/EenJ9EljQPSJUpO5OCN/qsRF/W
+ Qd923KmYC+ZdIg1L9T630OU+MUIjwt8pR1yw3uS1VSdKxksrkMcyJibUS5Csy3cxJNw9z/Hry
+ qnDZEeN/o/CKC3Y3ntDdgcZFzB7Hmu02amw2yRVqbRAbrUJ8WchO9nNroZGVkYnt2JOsqcWv7
+ 4rLzJ9U6BjtZLxfiTtnglrXWviftbR+d7sBZuz+9t+JoTcR89x+rogmwTEv1+NoXAEzNcr6TD
+ xiJ+jmHBd4D8TFHCb1kYi25UqKEY2X3z3B3CMZpN8Wet0PZWTQd0uQY7Adv6h0k1RU+1r63Z1
+ Bp/oxEuQN6nesz5Oq/4DT7cteK6XYP3Vb1/ca/TLnipJn+YuVCoJb6tQMKkkRp0X+RU2+CUmp
+ Rv1d3z8AHNOlGtip4RMfOk3TNxOCFW6EsolJ2AYrzDCKG0EOlFt2T0+Rcj9/gt26Ll4ipywl7
+ mCvQhYivu8DvP/PngtfAQnP0htduWKjvzc+HArROhZs4R9DfGGJ/8oWnOkb+SqVc1YCI3Ygvr
+ VrUsX+lLkrQ66JJTQT8OwAOjoE6FmpmkYqUr4txdlKcByshxYsbq2x1bjdTwpBU02WxuRJ+RM
+ xg/dcIwe1JAr+Dkcpn0gTeviuQ7RrCZMxk2yUkhAzZjytoj++g=
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Sat, Mar 14, 2020 at 4:36 PM Michael Kelley <mikelley@microsoft.com> wrote:
->  /*
-> + * Functions for allocating and freeing memory with size and
-> + * alignment HV_HYP_PAGE_SIZE. These functions are needed because
-> + * the guest page size may not be the same as the Hyper-V page
-> + * size. We depend upon kmalloc() aligning power-of-two size
-> + * allocations to the allocation size boundary, so that the
-> + * allocated memory appears to Hyper-V as a page of the size
-> + * it expects.
-> + *
-> + * These functions are used by arm64 specific code as well as
-> + * arch independent Hyper-V drivers.
-> + */
-> +
-> +void *hv_alloc_hyperv_page(void)
-> +{
-> +       BUILD_BUG_ON(PAGE_SIZE <  HV_HYP_PAGE_SIZE);
-> +       return kmalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
-> +}
-> +EXPORT_SYMBOL_GPL(hv_alloc_hyperv_page);
+>
+> Add ARM64-specific code to set up and handle the interrupts
+> generated by Hyper-V for VMbus messages and for stimer expiration.
+>
+> This code is architecture dependent and is mostly driven by
+> architecture independent code in the VMbus driver and the
+> Hyper-V timer clocksource driver.
+>
+> This code is built only when CONFIG_HYPERV is enabled.
+>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-I don't think there is any guarantee that kmalloc() returns page-aligned
-allocations in general. How about using get_free_pages()
-to implement this?
+This looks like it should be a nested irqchip driver instead, so your
+device drivers can use the normal request_irq() functions etc.
 
-       Arnd
+Is anything preventing you from doing that? If so, please describe
+that in the changelog and in a comment in the driver.
+
+     Arnd
