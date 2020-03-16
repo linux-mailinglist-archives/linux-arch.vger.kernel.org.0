@@ -2,86 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40398186EAE
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Mar 2020 16:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C1E186F08
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Mar 2020 16:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731511AbgCPPhC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Mar 2020 11:37:02 -0400
-Received: from foss.arm.com ([217.140.110.172]:50756 "EHLO foss.arm.com"
+        id S1731878AbgCPPsm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 16 Mar 2020 11:48:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48700 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731505AbgCPPhC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 16 Mar 2020 11:37:02 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 400A51FB;
-        Mon, 16 Mar 2020 08:37:01 -0700 (PDT)
-Received: from [10.37.9.38] (unknown [10.37.9.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03C833F534;
-        Mon, 16 Mar 2020 08:36:55 -0700 (PDT)
-Subject: Re: [PATCH v3 21/26] arm64: Introduce asm/vdso/arch_timer.h
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com, x86@kernel.org,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Burton <paul.burton@mips.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Will Deacon <will@kernel.org>
-References: <20200313154345.56760-1-vincenzo.frascino@arm.com>
- <20200313154345.56760-22-vincenzo.frascino@arm.com>
- <20200315183151.GE32205@mbp>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <4914ad9c-3eaf-b328-f31b-5d3077ef272f@arm.com>
-Date:   Mon, 16 Mar 2020 15:37:23 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1731685AbgCPPsm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 16 Mar 2020 11:48:42 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D217C2051A;
+        Mon, 16 Mar 2020 15:48:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584373721;
+        bh=hgo1mJoERylQnqXK/Qzm4LRDUpgAiG0+pmKFSvZomaQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Za6mh7KDdv9dR38PI076BNUhiopaZCf0+hr79++iIoZYWraYO/CUHmaixd7xgv8Le
+         yueJN2TPyLFVFJfjUaPpJyEFNje6v5oiYHwgY2t9gCshrsIrjDkyUmxmvBOzDxW5dQ
+         h2cofCD3g2K0Xmafbqbs+gf8bKMoav5gNbUAF3/g=
+Date:   Mon, 16 Mar 2020 15:48:35 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        linux-doc@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 0/3] docs: a few improvements for atomic_ops.rst
+Message-ID: <20200316154835.GA13004@willie-the-truck>
+References: <20200308195618.22768-1-j.neuschaefer@gmx.net>
+ <20200309090650.GF12561@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20200315183151.GE32205@mbp>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200309090650.GF12561@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Catalin,
-
-On 3/15/20 6:32 PM, Catalin Marinas wrote:
-> On Fri, Mar 13, 2020 at 03:43:40PM +0000, Vincenzo Frascino wrote:
->> The vDSO library should only include the necessary headers required for
->> a userspace library (UAPI and a minimal set of kernel headers). To make
->> this possible it is necessary to isolate from the kernel headers the
->> common parts that are strictly necessary to build the library.
->>
->> Introduce asm/vdso/arch_timer.h to contain all the arm64 specific
->> code. This allows to replace the second isb() in __arch_get_hw_counter()
->> with a fake dependent stack read of the counter which improves the vdso
->> library peformances of ~4.5%. Below the results of vdsotest [1] ran for
->> 100 iterations.
+On Mon, Mar 09, 2020 at 10:06:50AM +0100, Peter Zijlstra wrote:
+> On Sun, Mar 08, 2020 at 08:56:15PM +0100, Jonathan Neuschäfer wrote:
+> > Hi,
+> > 
+> > this is a short series of unrelated fixes that make the atomic
+> > operations documentation look and read a bit better.
+> > 
+> > Jonathan Neuschäfer (3):
+> >   docs: atomic_ops: Remove colons where they don't make sense
+> >   docs: atomic_ops: Move two paragraphs into the warning block above
+> >   docs: atomic_ops: Steer readers towards using refcount_t for reference
+> >     counts
+> > 
+> >  Documentation/core-api/atomic_ops.rst         | 24 ++++++++++++-------
 > 
-> The subject seems to imply a non-functional change but as you read, it
-> gets a lot more complicated. Could you keep the functional change
-> separate from the header clean-up, maybe submit it as an independent
-> patch? And it shouldn't go in without Will's ack ;).
-> 
+> FWIW, I consider this a dead document. I've written
+> Documentation/atomic_t.txt and Documentation/atomic_bitops.txt as a
+> replacement. If there is anything in atomic_ops you feel is missing from
+> those two, please tell as I'm planing to delete atomic_ops soon.
 
-It is fine by me. I will repost the series with the required fixes and without
-this patch. This will give to me enough time to address Mark's comments as well
-and to Will to have a proper look.
+For the deletion:
 
--- 
-Regards,
-Vincenzo
+Acked-by: Will Deacon <will@kernel.org>
+
+Will
