@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CF21883AD
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Mar 2020 13:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A921883AF
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Mar 2020 13:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbgCQMXP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Mar 2020 08:23:15 -0400
-Received: from foss.arm.com ([217.140.110.172]:36664 "EHLO foss.arm.com"
+        id S1726958AbgCQMXS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Mar 2020 08:23:18 -0400
+Received: from foss.arm.com ([217.140.110.172]:36702 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726916AbgCQMXO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 17 Mar 2020 08:23:14 -0400
+        id S1726992AbgCQMXR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 17 Mar 2020 08:23:17 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EB6E30E;
-        Tue, 17 Mar 2020 05:23:14 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39ED3FEC;
+        Tue, 17 Mar 2020 05:23:17 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F1EC63F534;
-        Tue, 17 Mar 2020 05:23:10 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 443C83F534;
+        Tue, 17 Mar 2020 05:23:14 -0700 (PDT)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
@@ -38,11 +38,10 @@ Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Andrei Vagin <avagin@openvz.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Paul Burton <paulburton@kernel.org>
-Subject: [PATCH v4 07/26] mips: Introduce asm/vdso/clocksource.h
-Date:   Tue, 17 Mar 2020 12:22:01 +0000
-Message-Id: <20200317122220.30393-8-vincenzo.frascino@arm.com>
+        Mark Rutland <Mark.Rutland@arm.com>
+Subject: [PATCH v4 08/26] linux/clocksource.h: Extract common header for vDSO
+Date:   Tue, 17 Mar 2020 12:22:02 +0000
+Message-Id: <20200317122220.30393-9-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200317122220.30393-1-vincenzo.frascino@arm.com>
 References: <20200317122220.30393-1-vincenzo.frascino@arm.com>
@@ -58,49 +57,67 @@ a userspace library (UAPI and a minimal set of kernel headers). To make
 this possible it is necessary to isolate from the kernel headers the
 common parts that are strictly necessary to build the library.
 
-Introduce asm/vdso/clocksource.h to contain all the arm64 specific
-functions that are suitable for vDSO inclusion.
+Split clocksource.h into linux and common headers to make the latter
+suitable for inclusion in the vDSO library.
 
-This header will be required by a future patch that will generalize
-vdso/clocksource.h.
-
-Cc: Paul Burton <paulburton@kernel.org>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- arch/mips/include/asm/clocksource.h      | 4 +---
- arch/mips/include/asm/vdso/clocksource.h | 9 +++++++++
- 2 files changed, 10 insertions(+), 3 deletions(-)
- create mode 100644 arch/mips/include/asm/vdso/clocksource.h
+ include/linux/clocksource.h | 11 +----------
+ include/vdso/clocksource.h  | 23 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 10 deletions(-)
+ create mode 100644 include/vdso/clocksource.h
 
-diff --git a/arch/mips/include/asm/clocksource.h b/arch/mips/include/asm/clocksource.h
-index de659cae0d4e..2f1ebbea3d72 100644
---- a/arch/mips/include/asm/clocksource.h
-+++ b/arch/mips/include/asm/clocksource.h
-@@ -6,8 +6,6 @@
- #ifndef __ASM_CLOCKSOURCE_H
- #define __ASM_CLOCKSOURCE_H
+diff --git a/include/linux/clocksource.h b/include/linux/clocksource.h
+index 02e3282719bd..86d143db6523 100644
+--- a/include/linux/clocksource.h
++++ b/include/linux/clocksource.h
+@@ -28,16 +28,7 @@ struct module;
+ #include <asm/clocksource.h>
+ #endif
  
--#define VDSO_ARCH_CLOCKMODES	\
--	VDSO_CLOCKMODE_R4K,	\
--	VDSO_CLOCKMODE_GIC
-+#include <asm/vdso/clocksource.h>
+-enum vdso_clock_mode {
+-	VDSO_CLOCKMODE_NONE,
+-#ifdef CONFIG_GENERIC_GETTIMEOFDAY
+-	VDSO_ARCH_CLOCKMODES,
+-#endif
+-	VDSO_CLOCKMODE_MAX,
+-
+-	/* Indicator for time namespace VDSO */
+-	VDSO_CLOCKMODE_TIMENS = INT_MAX
+-};
++#include <vdso/clocksource.h>
  
- #endif /* __ASM_CLOCKSOURCE_H */
-diff --git a/arch/mips/include/asm/vdso/clocksource.h b/arch/mips/include/asm/vdso/clocksource.h
+ /**
+  * struct clocksource - hardware abstraction for a free running counter
+diff --git a/include/vdso/clocksource.h b/include/vdso/clocksource.h
 new file mode 100644
-index 000000000000..510e1671d898
+index 000000000000..ab58330e4e5d
 --- /dev/null
-+++ b/arch/mips/include/asm/vdso/clocksource.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+#ifndef __ASM_VDSOCLOCKSOURCE_H
-+#define __ASM_VDSOCLOCKSOURCE_H
++++ b/include/vdso/clocksource.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __VDSO_CLOCKSOURCE_H
++#define __VDSO_CLOCKSOURCE_H
 +
-+#define VDSO_ARCH_CLOCKMODES	\
-+	VDSO_CLOCKMODE_R4K,	\
-+	VDSO_CLOCKMODE_GIC
++#include <vdso/limits.h>
 +
-+#endif /* __ASM_VDSOCLOCKSOURCE_H */
++#if defined(CONFIG_ARCH_CLOCKSOURCE_DATA) || \
++	defined(CONFIG_GENERIC_GETTIMEOFDAY)
++#include <asm/vdso/clocksource.h>
++#endif /* CONFIG_ARCH_CLOCKSOURCE_DATA || CONFIG_GENERIC_GETTIMEOFDAY */
++
++enum vdso_clock_mode {
++	VDSO_CLOCKMODE_NONE,
++#ifdef CONFIG_GENERIC_GETTIMEOFDAY
++	VDSO_ARCH_CLOCKMODES,
++#endif
++	VDSO_CLOCKMODE_MAX,
++
++	/* Indicator for time namespace VDSO */
++	VDSO_CLOCKMODE_TIMENS = INT_MAX
++};
++
++#endif /* __VDSO_CLOCKSOURCE_H */
 -- 
 2.25.1
 
