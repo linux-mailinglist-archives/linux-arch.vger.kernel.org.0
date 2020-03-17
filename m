@@ -2,239 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C83B2188E41
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Mar 2020 20:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263DD1890C5
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Mar 2020 22:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726494AbgCQTq0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Mar 2020 15:46:26 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:43329 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726549AbgCQTq0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Mar 2020 15:46:26 -0400
-Received: by mail-ot1-f65.google.com with SMTP id a6so22935606otb.10
-        for <linux-arch@vger.kernel.org>; Tue, 17 Mar 2020 12:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9s2Sb3c4MxnnBmpoBuePNWugbWE68PyhFAR020YyxKI=;
-        b=JI600Y+S7vaaL+M1SlEKgAEtEUPT5Q45PYyhNUPJY82ExiEm4yLvuyoLjANOxrw/L8
-         K0LSxUZhq+pXM1GGwp3j51HMQSJZsaS91TWVYRhmi3aC265XUUVxVsf85Lt6C4FHfODU
-         F+8841uMdqRd6VymvDirqjn9SmklKMzELb2nq4ltyUMq1nVMo8mh6KrYIj6CXSK8975s
-         8Wppxc9EDwI6+CuP2CcdW21eufAGc9NTfDD0XTQ6x9Ta4mXhWmyFq+EubLApEE3PIMY3
-         UluxszB5ZBrGmCkrxM1stsbflxhZ846CG2/SzeG3kVFjDKkewelUAmzGKrdjkzgjSzUp
-         gkCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9s2Sb3c4MxnnBmpoBuePNWugbWE68PyhFAR020YyxKI=;
-        b=S95ldYTFexdiiL33cdPbcwcTIYQ+QeW48IVkCvpsEtOYZpIIOT5GAAvHu1WhdKfzbY
-         NzCVb0JLjq0GGC7N2otWnyPNT/xJvqYS1OqW2fjDq6rPDPIW1ZASsbAcoUGnHk/gwXVM
-         S3cEZSu8dM5NDYhESiNWhsRav9Otj2LSnovVcFSJAbbrmUTkOf8q+IONmFd2oryXGfll
-         Z6qie1KIzCy0oaxt7WlFdfzOFrQlHRnhZC1435cJOUOHFu2erJuEk8PWDoeG+zVviYr/
-         xja09lxj/xvbbu74ti68T/xuxmYz+xgzvC1+kTUoddkcQLKxVN9YKkLX1egz9hoIIOGR
-         rTCA==
-X-Gm-Message-State: ANhLgQ2mkT527ZKK/Sy/EM134nKnGOFj46/0TH9UmCK5F9sbMvCHV7Uo
-        gF+uDe0sEfYQ3uOwilf6/FNM7nsaBJ5TQgrDudxdGQ==
-X-Google-Smtp-Source: ADFU+vuKl0l5cSfO5Cy+yKgBZm1XSTGaBWgXbflYl3a2hR5fw7Go07ECSMEPZtHP+SUIHarbwT5aqXaP0EMleeCdfQE=
-X-Received: by 2002:a9d:5e8b:: with SMTP id f11mr858477otl.110.1584474384151;
- Tue, 17 Mar 2020 12:46:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200224160215.4136-1-mic@digikod.net> <CAG48ez21bEn0wL1bbmTiiu8j9jP5iEWtHOwz4tURUJ+ki0ydYw@mail.gmail.com>
- <873d7419-bdd9-8a52-0a9b-dddbe31df4f9@digikod.net> <CAG48ez0=0W5Ok-8nASqZrZ28JboXRRi3gDxV5u6mdcOtzwuRVA@mail.gmail.com>
- <688dda0f-0907-34eb-c19e-3e9e5f613a74@digikod.net>
-In-Reply-To: <688dda0f-0907-34eb-c19e-3e9e5f613a74@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 17 Mar 2020 20:45:57 +0100
-Message-ID: <CAG48ez16yT+zbK1WPxr2TnxrifW5c2DnpFLbWRRLUT_WpuFNmw@mail.gmail.com>
-Subject: Re: [RFC PATCH v14 00/10] Landlock LSM
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
+        id S1726494AbgCQVxF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Mar 2020 17:53:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57516 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726476AbgCQVxF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 17 Mar 2020 17:53:05 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F25DB20724;
+        Tue, 17 Mar 2020 21:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584481984;
+        bh=4fpXMStLT3ChZUSNNoR5DM0vAh+pn633V+leBozCyWA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j9izuxAJEYWfwOlyHm+dzHMrstapzlPoXAEYb7DfotjV7f8+lIrKsh/8yjOmRey35
+         G6BkqEvgCCE0/nxL4u9SrTR3Ai5Q51DCYkWMsq7w+HwzxaZHlQeiS4oaslEAOKqBXs
+         HfHocYpm5b4/XhOJrKH+WzAynGxE3ddRp080wgDc=
+Date:   Tue, 17 Mar 2020 21:52:57 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Borislav Petkov <bp@suse.de>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-doc@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/9] arm64/build: Use common DISCARDS in linker script
+Message-ID: <20200317215256.GA20788@willie-the-truck>
+References: <20200228002244.15240-1-keescook@chromium.org>
+ <20200228002244.15240-7-keescook@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200228002244.15240-7-keescook@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 6:50 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
-> On 17/03/2020 17:19, Jann Horn wrote:
-> > On Thu, Mar 12, 2020 at 12:38 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.=
-net> wrote:
-> >> On 10/03/2020 00:44, Jann Horn wrote:
-> >>> On Mon, Feb 24, 2020 at 5:03 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod=
-.net> wrote:
->
-> [...]
->
-> >>> Aside from those things, there is also a major correctness issue wher=
-e
-> >>> I'm not sure how to solve it properly:
-> >>>
-> >>> Let's say a process installs a filter on itself like this:
-> >>>
-> >>> struct landlock_attr_ruleset ruleset =3D { .handled_access_fs =3D
-> >>> ACCESS_FS_ROUGHLY_WRITE};
-> >>> int ruleset_fd =3D landlock(LANDLOCK_CMD_CREATE_RULESET,
-> >>> LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
-> >>> struct landlock_attr_path_beneath path_beneath =3D {
-> >>>   .ruleset_fd =3D ruleset_fd,
-> >>>   .allowed_access =3D ACCESS_FS_ROUGHLY_WRITE,
-> >>>   .parent_fd =3D open("/tmp/foobar", O_PATH),
-> >>> };
-> >>> landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
-> >>> sizeof(path_beneath), &path_beneath);
-> >>> prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-> >>> struct landlock_attr_enforce attr_enforce =3D { .ruleset_fd =3D rules=
-et_fd };
-> >>> landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
-> >>> sizeof(attr_enforce), &attr_enforce);
-> >>>
-> >>> At this point, the process is not supposed to be able to write to
-> >>> anything outside /tmp/foobar, right? But what happens if the process
-> >>> does the following next?
-> >>>
-> >>> struct landlock_attr_ruleset ruleset =3D { .handled_access_fs =3D
-> >>> ACCESS_FS_ROUGHLY_WRITE};
-> >>> int ruleset_fd =3D landlock(LANDLOCK_CMD_CREATE_RULESET,
-> >>> LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
-> >>> struct landlock_attr_path_beneath path_beneath =3D {
-> >>>   .ruleset_fd =3D ruleset_fd,
-> >>>   .allowed_access =3D ACCESS_FS_ROUGHLY_WRITE,
-> >>>   .parent_fd =3D open("/", O_PATH),
-> >>> };
-> >>> landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
-> >>> sizeof(path_beneath), &path_beneath);
-> >>> prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-> >>> struct landlock_attr_enforce attr_enforce =3D { .ruleset_fd =3D rules=
-et_fd };
-> >>> landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
-> >>> sizeof(attr_enforce), &attr_enforce);
-> >>>
-> >>> As far as I can tell from looking at the source, after this, you will
-> >>> have write access to the entire filesystem again. I think the idea is
-> >>> that LANDLOCK_CMD_ENFORCE_RULESET should only let you drop privileges=
-,
-> >>> not increase them, right?
-> >>
-> >> There is an additionnal check in syscall.c:get_path_from_fd(): it is
-> >> forbidden to add a rule with a path which is not accessible (according
-> >> to LANDLOCK_ACCESS_FS_OPEN) thanks to a call to security_file_open(),
-> >> but this is definitely not perfect.
-> >
-> > Ah, I missed that.
-> >
-> >>> I think the easy way to fix this would be to add a bitmask to each
-> >>> rule that says from which ruleset it originally comes, and then let
-> >>> check_access_path() collect these bitmasks from each rule with OR, an=
-d
-> >>> check at the end whether the resulting bitmask is full - if not, at
-> >>> least one of the rulesets did not permit the access, and it should be
-> >>> denied.
-> >>>
-> >>> But maybe it would make more sense to change how the API works
-> >>> instead, and get rid of the concept of "merging" two rulesets
-> >>> together? Instead, we could make the API work like this:
-> >>>
-> >>>  - LANDLOCK_CMD_CREATE_RULESET gives you a file descriptor whose
-> >>> ->private_data contains a pointer to the old ruleset of the process,
-> >>> as well as a pointer to a new empty ruleset.
-> >>>  - LANDLOCK_CMD_ADD_RULE fails if the specified rule would not be
-> >>> permitted by the old ruleset, then adds the rule to the new ruleset
-> >>>  - LANDLOCK_CMD_ENFORCE_RULESET fails if the old ruleset pointer in
-> >>> ->private_data doesn't match the current ruleset of the process, then
-> >>> replaces the old ruleset with the new ruleset.
-> >>>
-> >>> With this, the new ruleset is guaranteed to be a subset of the old
-> >>> ruleset because each of the new ruleset's rules is permitted by the
-> >>> old ruleset. (Unless the directory hierarchy rotates, but in that cas=
-e
-> >>> the inaccuracy isn't much worse than what would've been possible
-> >>> through RCU path walk anyway AFAIK.)
-> >>>
-> >>> What do you think?
-> >>>
-> >>
-> >> I would prefer to add the same checks you described at first (with
-> >> check_access_path), but only when creating a new ruleset with
-> >> merge_ruleset() (which should probably be renamed). This enables not t=
-o
-> >> rely on a parent ruleset/domain until the enforcement, which is the ca=
-se
-> >> anyway.
-> >> Unfortunately this doesn't work for some cases with bind mounts. Becau=
-se
-> >> check_access_path() goes through one path, another (bind mounted) path
-> >> could be illegitimately allowed.
-> >
-> > Hmm... I'm not sure what you mean. At the moment, landlock doesn't
-> > allow any sandboxed process to change the mount hierarchy, right? Can
-> > you give an example where this would go wrong?
->
-> Indeed, a Landlocked process must no be able to change its mount
-> namespace layout. However, bind mounts may already exist.
-> Let's say a process sandbox itself to only access /a in a read-write
-> way.
+On Thu, Feb 27, 2020 at 04:22:41PM -0800, Kees Cook wrote:
+> Use the common DISCARDS rule for the linker script in an effort to
+> regularize the linker script to prepare for warning on orphaned
+> sections.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/arm64/kernel/vmlinux.lds.S | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+> index 497f9675071d..c61d9ab3211c 100644
+> --- a/arch/arm64/kernel/vmlinux.lds.S
+> +++ b/arch/arm64/kernel/vmlinux.lds.S
+> @@ -6,6 +6,7 @@
+>   */
+>  
+>  #define RO_EXCEPTION_TABLE_ALIGN	8
+> +#define RUNTIME_DISCARD_EXIT
+>  
+>  #include <asm-generic/vmlinux.lds.h>
+>  #include <asm/cache.h>
+> @@ -19,7 +20,6 @@
+>  
+>  /* .exit.text needed in case of alternative patching */
+>  #define ARM_EXIT_KEEP(x)	x
+> -#define ARM_EXIT_DISCARD(x)
+>  
+>  OUTPUT_ARCH(aarch64)
+>  ENTRY(_text)
+> @@ -94,12 +94,8 @@ SECTIONS
+>  	 * matching the same input section name.  There is no documented
+>  	 * order of matching.
+>  	 */
+> +	DISCARDS
+>  	/DISCARD/ : {
+> -		ARM_EXIT_DISCARD(EXIT_TEXT)
+> -		ARM_EXIT_DISCARD(EXIT_DATA)
+> -		EXIT_CALL
+> -		*(.discard)
+> -		*(.discard.*)
+>  		*(.interp .dynamic)
+>  		*(.dynsym .dynstr .hash .gnu.hash)
+>  		*(.eh_frame)
 
-So, first policy:
+Acked-by: Will Deacon <will@kernel.org>
 
-/a RW
-
-> Then, this process (or one of its children) add a new restriction
-> on /a/b to only be able to read this hierarchy.
-
-You mean with the second policy looking like this?
-
-/a RW
-/a/b R
-
-Then the resulting policy would be:
-
-/a RW policy_bitmask=3D0x00000003 (bits 0 and 1 set)
-/a/b R policy_bitmask=3D0x00000002 (bit 1 set)
-required_bits=3D0x00000003 (bits 0 and 1 set)
-
-> The check at insertion
-> time would allow this because this access right is a subset of the
-> access right allowed with the parent directory. However, If /a/b is bind
-> mounted somewhere else, let's say in /private/b, then the second
-> enforcement just gave new access rights to this hierarchy too.
-
-But with the solution I proposed, landlock's path walk would see
-something like this when accessing a file at /private/b/foo:
-/private/b/foo <no rules>
-  policies seen until now: 0x00000000
-/private/b <access: R, policy_bitmask=3D0x00000002>
-  policies seen until now: 0x00000002
-/private <no rules>
-  policies seen until now: 0x00000002
-/ <no rules>
-  policies seen until now: 0x00000002
-
-It wouldn't encounter any rule from the first policy, so the OR of the
-seen policy bitmasks would be 0x00000002, which is not the required
-value 0x00000003, and so the access would be denied.
+Will
