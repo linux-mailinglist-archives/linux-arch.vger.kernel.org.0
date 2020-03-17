@@ -2,107 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8FD187080
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Mar 2020 17:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E27C187F43
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Mar 2020 12:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732227AbgCPQv3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Mar 2020 12:51:29 -0400
-Received: from foss.arm.com ([217.140.110.172]:52372 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732296AbgCPQv1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 16 Mar 2020 12:51:27 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2820313D5;
-        Mon, 16 Mar 2020 09:51:27 -0700 (PDT)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FE373F67D;
-        Mon, 16 Mar 2020 09:51:26 -0700 (PDT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Paul Elliott <paul.elliott@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "H . J . Lu " <hjl.tools@gmail.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        =?UTF-8?q?Kristina=20Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Weimer <fweimer@redhat.com>,
-        Sudakshina Das <sudi.das@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Dave Martin <Dave.Martin@arm.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v10 13/13] arm64: BTI: Add Kconfig entry for userspace BTI
-Date:   Mon, 16 Mar 2020 16:50:55 +0000
-Message-Id: <20200316165055.31179-14-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200316165055.31179-1-broonie@kernel.org>
-References: <20200316165055.31179-1-broonie@kernel.org>
+        id S1727531AbgCQK7z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Mar 2020 06:59:55 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:11705 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726619AbgCQK7z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 17 Mar 2020 06:59:55 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id CC8CE9A663F0575FBBF9;
+        Tue, 17 Mar 2020 18:59:51 +0800 (CST)
+Received: from [127.0.0.1] (10.173.220.25) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.487.0; Tue, 17 Mar 2020
+ 18:59:42 +0800
+Subject: Re: [RFC PATCH v1 0/3] arm64: tlb: add support for TTL field
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <mark.rutland@arm.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <aneesh.kumar@linux.ibm.com>,
+        <steven.price@arm.com>, <broonie@kernel.org>,
+        <guohanjun@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
+        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>
+References: <20200311025309.1743-1-yezhenyu2@huawei.com>
+ <247ad619edf17eb266f856d937dac826@kernel.org>
+From:   "yezhenyu (A)" <yezhenyu2@huawei.com>
+Message-ID: <e155d744-4433-b9a6-109f-f665316dd928@huawei.com>
+Date:   Tue, 17 Mar 2020 18:59:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
+In-Reply-To: <247ad619edf17eb266f856d937dac826@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.173.220.25]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Dave Martin <Dave.Martin@arm.com>
+Hi Marc,
 
-Now that the code for userspace BTI support is in the kernel add the
-Kconfig entry so that it can be built and used.
+On 2020/3/11 17:12, Marc Zyngier wrote:
+> Zhenyu,
+> 
+> On 2020-03-11 02:53, Zhenyu Ye wrote:
+>> ARMv8.4-TTL provides the TTL field in tlbi instruction to indicate
+>> the level of translation table walk holding the leaf entry for the
+>> address that is being invalidated. Hardware can use this information
+>> to determine if there was a risk of splintering.
+>>
+>> This set of patches adds TTL field to __TLBI_ADDR, and uses
+>> Architecture-specific MM context to pass the TTL value to tlb interface.
+>>
+>> The default value of TTL is 0, which will not have any impact on the
+>> TLB maintenance instructions. The last patch trys to use TTL field in
+>> some obviously tlb-flush interface.
+> 
+> I have already posted some support for ARMv8.4-TTL as part of my NV series [1],
+> patches 62, 67, 68 and 69. This only deals with Stage-2 translation so far.
+> If you intend to add Stage-1, please build on top of what I have already posted
+> (I can extract the patches on a separate branch if you want).
+> 
+> Thanks,
+> 
+>         M.
+> 
+> [1] https://lore.kernel.org/linux-arm-kernel/20200211174938.27809-1-maz@kernel.org/
 
-[Split out of "arm64: Basic Branch Target Identification support"
-    -- broonie]
+I have sent the PATCH v2 on 2020-03-12 [1]. Do you have any suggestion
+for my code?  Is it appropriate to post my code based on your branch?
 
-Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm64/Kconfig | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Looking forward to your suggestions.
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 8a15bc68dadd..d65d226a77ec 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1522,6 +1522,28 @@ endmenu
- 
- menu "ARMv8.5 architectural features"
- 
-+config ARM64_BTI
-+	bool "Branch Target Identification support"
-+	default y
-+	help
-+	  Branch Target Identification (part of the ARMv8.5 Extensions)
-+	  provides a mechanism to limit the set of locations to which computed
-+	  branch instructions such as BR or BLR can jump.
-+
-+	  To make use of BTI on CPUs that support it, say Y.
-+
-+	  BTI is intended to provide complementary protection to other control
-+	  flow integrity protection mechanisms, such as the Pointer
-+	  authentication mechanism provided as part of the ARMv8.3 Extensions.
-+	  For this reason, it does not make sense to enable this option without
-+	  also enabling support for pointer authentication.  Thus, when
-+	  enabling this option you should also select ARM64_PTR_AUTH=y.
-+
-+	  Userspace binaries must also be specifically compiled to make use of
-+	  this mechanism.  If you say N here or the hardware does not support
-+	  BTI, such binaries can still run, but you get no additional
-+	  enforcement of branch destinations.
-+
- config ARM64_E0PD
- 	bool "Enable support for E0PD"
- 	default y
--- 
-2.20.1
+
+Thanks,
+
+	zhenyu
+
+[1] https://lkml.org/lkml/2020/3/12/2
+	
 
