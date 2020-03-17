@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D67B1188398
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Mar 2020 13:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668D818839E
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Mar 2020 13:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbgCQMXC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Mar 2020 08:23:02 -0400
-Received: from foss.arm.com ([217.140.110.172]:36520 "EHLO foss.arm.com"
+        id S1726851AbgCQMXF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Mar 2020 08:23:05 -0400
+Received: from foss.arm.com ([217.140.110.172]:36552 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726664AbgCQMXB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 17 Mar 2020 08:23:01 -0400
+        id S1726664AbgCQMXE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 17 Mar 2020 08:23:04 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DA221045;
-        Tue, 17 Mar 2020 05:23:01 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4ACBB30E;
+        Tue, 17 Mar 2020 05:23:04 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2874E3F534;
-        Tue, 17 Mar 2020 05:22:58 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53C193F534;
+        Tue, 17 Mar 2020 05:23:01 -0700 (PDT)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
@@ -39,9 +39,9 @@ Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Marc Zyngier <maz@kernel.org>,
         Mark Rutland <Mark.Rutland@arm.com>
-Subject: [PATCH v4 03/26] linux/limits.h: Extract common header for vDSO
-Date:   Tue, 17 Mar 2020 12:21:57 +0000
-Message-Id: <20200317122220.30393-4-vincenzo.frascino@arm.com>
+Subject: [PATCH v4 04/26] x86:Introduce asm/vdso/clocksource.h
+Date:   Tue, 17 Mar 2020 12:21:58 +0000
+Message-Id: <20200317122220.30393-5-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200317122220.30393-1-vincenzo.frascino@arm.com>
 References: <20200317122220.30393-1-vincenzo.frascino@arm.com>
@@ -57,66 +57,55 @@ a userspace library (UAPI and a minimal set of kernel headers). To make
 this possible it is necessary to isolate from the kernel headers the
 common parts that are strictly necessary to build the library.
 
-Split limits.h into linux and common headers to make the latter suitable
-for inclusion in the vDSO library.
+Introduce asm/vdso/clocksource.h to contain all the arm64 specific
+functions that are suitable for vDSO inclusion.
 
+This header will be required by a future patch that will generalize
+vdso/clocksource.h.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- include/linux/limits.h | 13 +------------
- include/vdso/limits.h  | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+), 12 deletions(-)
- create mode 100644 include/vdso/limits.h
+ arch/x86/include/asm/clocksource.h      |  5 +----
+ arch/x86/include/asm/vdso/clocksource.h | 10 ++++++++++
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+ create mode 100644 arch/x86/include/asm/vdso/clocksource.h
 
-diff --git a/include/linux/limits.h b/include/linux/limits.h
-index 76afcd24ff8c..7fc497ee1393 100644
---- a/include/linux/limits.h
-+++ b/include/linux/limits.h
-@@ -4,19 +4,8 @@
+diff --git a/arch/x86/include/asm/clocksource.h b/arch/x86/include/asm/clocksource.h
+index d561db67f96d..dc9dc7b3911a 100644
+--- a/arch/x86/include/asm/clocksource.h
++++ b/arch/x86/include/asm/clocksource.h
+@@ -4,10 +4,7 @@
+ #ifndef _ASM_X86_CLOCKSOURCE_H
+ #define _ASM_X86_CLOCKSOURCE_H
  
- #include <uapi/linux/limits.h>
- #include <linux/types.h>
-+#include <vdso/limits.h>
+-#define VDSO_ARCH_CLOCKMODES	\
+-	VDSO_CLOCKMODE_TSC,	\
+-	VDSO_CLOCKMODE_PVCLOCK,	\
+-	VDSO_CLOCKMODE_HVCLOCK
++#include <asm/vdso/clocksource.h>
  
--#define USHRT_MAX	((unsigned short)~0U)
--#define SHRT_MAX	((short)(USHRT_MAX >> 1))
--#define SHRT_MIN	((short)(-SHRT_MAX - 1))
--#define INT_MAX		((int)(~0U >> 1))
--#define INT_MIN		(-INT_MAX - 1)
--#define UINT_MAX	(~0U)
--#define LONG_MAX	((long)(~0UL >> 1))
--#define LONG_MIN	(-LONG_MAX - 1)
--#define ULONG_MAX	(~0UL)
--#define LLONG_MAX	((long long)(~0ULL >> 1))
--#define LLONG_MIN	(-LLONG_MAX - 1)
--#define ULLONG_MAX	(~0ULL)
- #define SIZE_MAX	(~(size_t)0)
- #define PHYS_ADDR_MAX	(~(phys_addr_t)0)
+ extern unsigned int vclocks_used;
  
-diff --git a/include/vdso/limits.h b/include/vdso/limits.h
+diff --git a/arch/x86/include/asm/vdso/clocksource.h b/arch/x86/include/asm/vdso/clocksource.h
 new file mode 100644
-index 000000000000..0197888ad0e0
+index 000000000000..119ac8612d89
 --- /dev/null
-+++ b/include/vdso/limits.h
-@@ -0,0 +1,19 @@
++++ b/arch/x86/include/asm/vdso/clocksource.h
+@@ -0,0 +1,10 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __VDSO_LIMITS_H
-+#define __VDSO_LIMITS_H
++#ifndef __ASM_VDSO_CLOCKSOURCE_H
++#define __ASM_VDSO_CLOCKSOURCE_H
 +
-+#define USHRT_MAX	((unsigned short)~0U)
-+#define SHRT_MAX	((short)(USHRT_MAX >> 1))
-+#define SHRT_MIN	((short)(-SHRT_MAX - 1))
-+#define INT_MAX		((int)(~0U >> 1))
-+#define INT_MIN		(-INT_MAX - 1)
-+#define UINT_MAX	(~0U)
-+#define LONG_MAX	((long)(~0UL >> 1))
-+#define LONG_MIN	(-LONG_MAX - 1)
-+#define ULONG_MAX	(~0UL)
-+#define LLONG_MAX	((long long)(~0ULL >> 1))
-+#define LLONG_MIN	(-LLONG_MAX - 1)
-+#define ULLONG_MAX	(~0ULL)
-+#define UINTPTR_MAX	ULONG_MAX
++#define VDSO_ARCH_CLOCKMODES	\
++	VDSO_CLOCKMODE_TSC,	\
++	VDSO_CLOCKMODE_PVCLOCK,	\
++	VDSO_CLOCKMODE_HVCLOCK
 +
-+#endif /* __VDSO_LIMITS_H */
++#endif /* __ASM_VDSO_CLOCKSOURCE_H */
 -- 
 2.25.1
 
