@@ -2,87 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E27C187F43
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Mar 2020 12:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BCE1882F0
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Mar 2020 13:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727531AbgCQK7z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Mar 2020 06:59:55 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:11705 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726619AbgCQK7z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 17 Mar 2020 06:59:55 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id CC8CE9A663F0575FBBF9;
-        Tue, 17 Mar 2020 18:59:51 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS401-HUB.china.huawei.com
- (10.3.19.201) with Microsoft SMTP Server id 14.3.487.0; Tue, 17 Mar 2020
- 18:59:42 +0800
-Subject: Re: [RFC PATCH v1 0/3] arm64: tlb: add support for TTL field
-To:     Marc Zyngier <maz@kernel.org>
-CC:     <mark.rutland@arm.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <aneesh.kumar@linux.ibm.com>,
-        <steven.price@arm.com>, <broonie@kernel.org>,
-        <guohanjun@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>
-References: <20200311025309.1743-1-yezhenyu2@huawei.com>
- <247ad619edf17eb266f856d937dac826@kernel.org>
-From:   "yezhenyu (A)" <yezhenyu2@huawei.com>
-Message-ID: <e155d744-4433-b9a6-109f-f665316dd928@huawei.com>
-Date:   Tue, 17 Mar 2020 18:59:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1726717AbgCQMHm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Mar 2020 08:07:42 -0400
+Received: from sonic316-53.consmr.mail.ne1.yahoo.com ([66.163.187.179]:35450
+        "EHLO sonic316-53.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726634AbgCQMHm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 17 Mar 2020 08:07:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584446861; bh=kcevCRoll2+Bsa3FDERpIV72LVcB1A4YV1b5N2AWYBk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Pb8awjjoPLFbNPmlQcu+WfCpP1H8sAWwGgUp/Qx3Pcwhle2D+T+WaYyyUz3vhZc2sA8NWoswwQdZ/KESghs2zHwyJkIhXirXdAWNfFjUMk6Vp5O1n1ssbnqImAU4JjwDvjPE5MiKdDafzrksDX4SA4DXIy3uw5z0PxrkIBF4rhXMelpuym9jxC1A98OCGLpGKyrDFefSjQwR23hJ1LBEYAkVeqH1sTp6WjsgvuUGHHmG5uvgEDPMYyYwVJrLSDgjhr+D47MjFHu3UYl0qgRYHmrqCxT/2wEVkfOA8TgtmwXkxAQI+xiOEn1iZBc8Ai4JPRlE3U//zdU8HtFFhdooIw==
+X-YMail-OSG: Ue05kJkVM1kESe4wgeLl5H8zREvh9Jzy0vP8VCQLM8PJGTeuE2buNJODfhWweCz
+ 1vmvxN8bsrpdUqTgf2mSrVOEBI.Ykkt2.MdNW7QLP647uWFlWjQeYgGe7NeWJiw5boZWccc74Xve
+ Rn7DMObgN4KIVRULTFYteROsjYJkQpmeQWepDBY4fpCdiH30k9535EWUI0WxZlFJaoX3gbj_wO09
+ OMMzjJ29Cl_6GZ5hldNpoyk4odcOtKvAR1uXCf.wcnhzNPfN1IVlbYWvvgoCKcHelF9z3CwgAER_
+ 2IkRnL0Q5gd.ZkBJq1H.5S_qpnqzS7_zOwVWyEoycZV5qZmk5ySbQbPNkWTPC1_cang8S_pkNwLa
+ 6cD8jXdjHmy0iBJjqgcPoVk5U733gBVcbKpYBfkUCW9lSdxlL7oq4egYb1uf1UqUk49YAI_MWlCm
+ fdxr7PR_R0Y9vobxL361O.c18fFAcZrRHrbdIPQd1_aPKX9ZnQAfa0JqybNCXwPv5PbnH9N9S6o9
+ 9pAZ3LjofqtQ7oYl.cJW2feoDSc84dpceyLQcv.c9rtdNbLuG0thHf0c8bB_ll5yUuivz5YevWeg
+ p7uV7BK9m8XQaJs9ZQWfLbxkMY11wurI2_1AQZJx4mLZoneoUxFdSMIYCrW6XXyzxozAv_MQCjN2
+ .GxaWHIhPX9US1PCLq_Bo.o7drbVfXns0bg1nf18xZIwaaP7pTEwSERqmOGkhB8.k0tHolr_fBUO
+ _0XWkHmkW9BQGNzLLNUlzM_WlwXZVfRohS7Y.NSj6oXoVzS4K7k1RShrbQHzY.bz5rOUmvf0LPcU
+ PZRHdh1mKoTnp0no_jn1QLzvq_KdLL5yM0QzzD4zmzieLNpdoyi7.ivQHwqmyptSAx8AsISpMSq4
+ 2EljxAKn1U_HQ.3T7diRxivv0i7lXGdpoaf2SPZoqvOtiqAkNOOS.RUE9yQEMPypCVVZKocs1u2F
+ cn0NDKNeQEP3NiFbhUcnyGLkBPerjrE_wGJCFUx8jOPPo6KJmqVVs.s.KF0o7UybWp7oMFyE1ZjE
+ ioEq54V8SuHpDJg_VGg0RfHWCkNz4uBY1TVmk1OxfW0..lKWUr__xU.zLCsYiUtIrGSXXr9hwjPm
+ Jy0EhQezMrKtXCcjbuFZlo8wBhTRz5vd52jWiPNuM1hIQ3xBdKifILYQfx7XzclZ1amj.0cBBd0p
+ TeR.zjTgez6D1UpxAViLVXosPhE5.5yTsELYGSUfdQuDWIQqUqFi4IvtVtJvpXvE_JpsiCc68mfJ
+ B9zjNbXYJAVi1fD0XysOM46aYeTgFM9diGwAee9dlxG.EQVigxo7L5xIva2GR9zacfaQbh8YtHvA
+ VS76Cjecx2.KNJJSY3qTPpnKGKsc-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Mar 2020 12:07:41 +0000
+Date:   Tue, 17 Mar 2020 12:05:39 +0000 (UTC)
+From:   Stephen Li <stenn8@gabg.net>
+Reply-To: stephli947701@gmail.com
+Message-ID: <1756093619.1826605.1584446739147@mail.yahoo.com>
+Subject: REF
 MIME-Version: 1.0
-In-Reply-To: <247ad619edf17eb266f856d937dac826@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.173.220.25]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1756093619.1826605.1584446739147.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15342 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Marc,
-
-On 2020/3/11 17:12, Marc Zyngier wrote:
-> Zhenyu,
-> 
-> On 2020-03-11 02:53, Zhenyu Ye wrote:
->> ARMv8.4-TTL provides the TTL field in tlbi instruction to indicate
->> the level of translation table walk holding the leaf entry for the
->> address that is being invalidated. Hardware can use this information
->> to determine if there was a risk of splintering.
->>
->> This set of patches adds TTL field to __TLBI_ADDR, and uses
->> Architecture-specific MM context to pass the TTL value to tlb interface.
->>
->> The default value of TTL is 0, which will not have any impact on the
->> TLB maintenance instructions. The last patch trys to use TTL field in
->> some obviously tlb-flush interface.
-> 
-> I have already posted some support for ARMv8.4-TTL as part of my NV series [1],
-> patches 62, 67, 68 and 69. This only deals with Stage-2 translation so far.
-> If you intend to add Stage-1, please build on top of what I have already posted
-> (I can extract the patches on a separate branch if you want).
-> 
-> Thanks,
-> 
->         M.
-> 
-> [1] https://lore.kernel.org/linux-arm-kernel/20200211174938.27809-1-maz@kernel.org/
-
-I have sent the PATCH v2 on 2020-03-12 [1]. Do you have any suggestion
-for my code?  Is it appropriate to post my code based on your branch?
-
-Looking forward to your suggestions.
 
 
-Thanks,
-
-	zhenyu
-
-[1] https://lkml.org/lkml/2020/3/12/2
-	
-
+Greetings,
+I was searching through a local business directory when I found your
+profile. I am Soliciting On-Behalf of my private client who is
+interested in having a serious business investment in your country. If
+you have a valid business, investment or project he can invest
+back to me for more details. Your swift response is highly needed.
+Sincerely
+Stephen Li
+Please response back to me with is my private email below for more details
+stephli947701@gmail.com
