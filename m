@@ -2,43 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B221892C7
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Mar 2020 01:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D161897E2
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Mar 2020 10:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgCRASm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Mar 2020 20:18:42 -0400
-Received: from mail-eopbgr770101.outbound.protection.outlook.com ([40.107.77.101]:27902
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726735AbgCRASm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 17 Mar 2020 20:18:42 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g9qs5GRq9v40XZmFfW5YDJH3ci7OFvETTsQ7B3HiJ2pK9i821Ezd+oLCggVpXzgrFHmoI1vOPJH+jlSR3Tae0+as33bvUdnhxhZhY6k1wG4Y8IA1y5SAM48zoLmLaXknAGZVGmXaJivkI6jgdZghqZtrH3aYj5vVfdsw7whZXJI5oInoiXq3shK/UwPD45XV1yW9trkeYjOTsvHnYRBPo9GxdB0aqpxDtomNSsP3USkHrluNkGJiJ0u5QQFXJPxbJxD0mkBh9+kdUa+VXsY80+nlAAysFaJj1fSx6nx9OR1RMThzEllFF/S7xfLUdCcBiu0EJzNmEO2pI7ommCaJCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1d+VYi8g7pTo0pUctlsP9nsPPvpQ/jGV+rl1Qn8AErE=;
- b=BFOcqGpdSmNFf5oFwa2cnouOoEkFuqbTCqv9IX5y2UShyAaTj7U0m7PiaU2HyeQDZbujHcs87UUuDXv5ZDbIeLEUOVVIoEjqxjFpMG7bi1vCGfloHBqkiA1GpA3PijK9v7+nLP5zPtlA0hl6+23dRNvM7dBgZ1/H0XilIQvuui3Y6RgYam98Xtn+Qvy33fPwoL1UmJznbRFzs1J+DdOP7jkTZfJgeWr93eydXlDceGpm0/grvUACvVluguvsI0qFnlIyKifzStJlC3aV+cDUruErkrxLBjrNAh5/Zp32VmoyFDf3vjglEw0Ii40Ut8JpVfV3wDeRGi+brlPLYa//zQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1d+VYi8g7pTo0pUctlsP9nsPPvpQ/jGV+rl1Qn8AErE=;
- b=VojK9mX+FrTBR4KsjJzW43N7eFPGIB8UrdePlsh/hefTJlRvAcfDNMgUd2H+dlk/O8Op6eskdKm0OEJmhZnMrwrfnWnSooPJI1x96gdTy6bl8ZMXi3GhNlLfk4LdCYaaw33nyP6TxN8DYvpkAIGVS9O0AOyYwe83bQPNuzyGMwY=
-Received: from MW2PR2101MB1052.namprd21.prod.outlook.com (2603:10b6:302:a::16)
- by MW2PR2101MB1082.namprd21.prod.outlook.com (2603:10b6:302:a::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2835.7; Wed, 18 Mar
- 2020 00:18:39 +0000
-Received: from MW2PR2101MB1052.namprd21.prod.outlook.com
- ([fe80::71ee:121:71bd:6156]) by MW2PR2101MB1052.namprd21.prod.outlook.com
- ([fe80::71ee:121:71bd:6156%9]) with mapi id 15.20.2835.003; Wed, 18 Mar 2020
- 00:18:39 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        id S1727495AbgCRJ1M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Mar 2020 05:27:12 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:45273 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727378AbgCRJ1M (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Mar 2020 05:27:12 -0400
+Received: from mail-qv1-f52.google.com ([209.85.219.52]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MKbc4-1j07t41OrU-00L17b; Wed, 18 Mar 2020 10:27:10 +0100
+Received: by mail-qv1-f52.google.com with SMTP id q73so3052817qvq.2;
+        Wed, 18 Mar 2020 02:27:09 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ3RjbbUDjhwv0qAy37qLDbu4U/HkMOQO3PlT+TfwUO75OjzkFna
+        3poEfz8B9wodc2xeFJNrhsdhI07NU+nWGcA8Kv0=
+X-Google-Smtp-Source: ADFU+vt7gawMELH51e53V+lfgh4tcfw+GTIfcD3E5r0fL6EUTEgpPXQEXZxqtN5P7/SqAe4TJoaZf/SOj1Csy9P5qbQ=
+X-Received: by 2002:a0c:a602:: with SMTP id s2mr3278276qva.222.1584523628935;
+ Wed, 18 Mar 2020 02:27:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <1584200119-18594-1-git-send-email-mikelley@microsoft.com>
+ <1584200119-18594-10-git-send-email-mikelley@microsoft.com>
+ <CAK8P3a1YUjhaVUmjVC2pCoTTBTU408iN44Q=QZ0RDz8rmzJisQ@mail.gmail.com> <MW2PR2101MB10524254D2FE3EFC72329465D7F70@MW2PR2101MB1052.namprd21.prod.outlook.com>
+In-Reply-To: <MW2PR2101MB10524254D2FE3EFC72329465D7F70@MW2PR2101MB1052.namprd21.prod.outlook.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 18 Mar 2020 10:26:52 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1YCtc3LJ-_3iT90_Srehb96gLHvTXsbJ0wT6NFYCG=TQ@mail.gmail.com>
+Message-ID: <CAK8P3a1YCtc3LJ-_3iT90_Srehb96gLHvTXsbJ0wT6NFYCG=TQ@mail.gmail.com>
+Subject: Re: [PATCH v6 09/10] arm64: efi: Export screen_info
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -55,79 +49,60 @@ CC:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
         KY Srinivasan <kys@microsoft.com>,
         Sunil Muthuswamy <sunilmut@microsoft.com>,
         Boqun Feng <boqun.feng@gmail.com>
-Subject: RE: [PATCH v6 09/10] arm64: efi: Export screen_info
-Thread-Topic: [PATCH v6 09/10] arm64: efi: Export screen_info
-Thread-Index: AQHV+hZM60S+LKGqSUO5qXQSEIBQyahK416AgAKQkEA=
-Date:   Wed, 18 Mar 2020 00:18:39 +0000
-Message-ID: <MW2PR2101MB10524254D2FE3EFC72329465D7F70@MW2PR2101MB1052.namprd21.prod.outlook.com>
-References: <1584200119-18594-1-git-send-email-mikelley@microsoft.com>
- <1584200119-18594-10-git-send-email-mikelley@microsoft.com>
- <CAK8P3a1YUjhaVUmjVC2pCoTTBTU408iN44Q=QZ0RDz8rmzJisQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a1YUjhaVUmjVC2pCoTTBTU408iN44Q=QZ0RDz8rmzJisQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=mikelley@ntdev.microsoft.com;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2020-03-18T00:18:36.7972300Z;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=92eac9d0-fc23-4dc8-9926-4f5d9b19181f;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=mikelley@microsoft.com; 
-x-originating-ip: [24.22.167.197]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 39cc58c0-2c60-48cb-5116-08d7cad1e86b
-x-ms-traffictypediagnostic: MW2PR2101MB1082:|MW2PR2101MB1082:|MW2PR2101MB1082:
-x-ms-exchange-transport-forked: True
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <MW2PR2101MB1082BD0386B7115665EB1D14D7F70@MW2PR2101MB1082.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 03468CBA43
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(346002)(376002)(396003)(39860400002)(366004)(199004)(10290500003)(55016002)(478600001)(7696005)(5660300002)(9686003)(54906003)(2906002)(7416002)(8990500004)(53546011)(33656002)(52536014)(6506007)(6916009)(76116006)(71200400001)(186003)(4744005)(66946007)(66476007)(66446008)(64756008)(66556008)(4326008)(8676002)(316002)(86362001)(81156014)(8936002)(81166006)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:MW2PR2101MB1082;H:MW2PR2101MB1052.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-received-spf: None (protection.outlook.com: microsoft.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MIuoynU3lG/4CEJHwvOc3DUUrjvzesO/IF7QFmPuUKIkEaoNjqYOg9TUC/cLgSltN/rLeZ5fwjU9zYHKFl8dSrevPLnlkTCKJ6KRMtTPZwU0H6Y1jiiZvJ9uwV17UII3I64GKIVHQzz6npucUkoT9JWmKezymJsITuUitGAyNcpqOUjaPf6e9+lenzOfoMdpqHh+ECo8aaz7ecLk3+Ej3De3I7lO4zVW8hfG//td+ztVeohKwxXVICH9Cl4qEUHPdhaHJneHpVggHlAXZW4rCeFzHYCfz9KMYcQU1t0ToD+Mimuduf73n5FYdoXK7g38tpwiSe2bK6YWijfFnZfOsi/YQo3N8J7eCgSD3xRAWZ64oMYITT66bMrrnuQY6wydjutWw8mG+x9tsQIQdaeDXcJN0MDLlumvCjDXskMDC69ISKt7QCKlUV0ttGBC4Qf5
-x-ms-exchange-antispam-messagedata: 7VQPMRZBgY1mWcLu8YDz+RVEoqF40yQoksCiG9tX9cP9MIZsau0F83BeENi7eIYqcCexY6PxtuGSXT6i/hg0G5DXIwRs6P8Z1AD616/B4z/nCY2KbmpjfySxISqaeNNuoSl5fNlk2DYKmIojaveXKA==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39cc58c0-2c60-48cb-5116-08d7cad1e86b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2020 00:18:39.0758
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Psd0mnrks8as3rv16Tp4Ra8aNacOu3+ok9lahG4zuNKlYVA2MUs80IQ852swg9lugDtUiy6MKsZMcGFeaMwWSZCf5Y+lBIkalSZvR6x3v4I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR2101MB1082
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:bY4eEKG4UHYos/scM4jTadQCtBvU2fp8j3wO3vu0V3KQYbxBoFz
+ /hhqWVjTyEphKIB7oDVFcWbNO/vulQGgEUjmXc0Pwhdf3L2dz5qhz4EWgu1MMkIp7vr8JVn
+ WWov+w9oLuaD5VJW2awkfMzePjDAD049OSZyok51d1/AYw1Q85o++lNXVLd6WB1qlG7wwvJ
+ TbMcXwYPzG1wMEQTeGMSw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+uHVysZQnsI=:zO4Ahm4qYxwLZrOHu5D8mu
+ foizfJqelS4Exx0HET32VmU1liLAZO0X28PTNbHyN8WUYADoUYPPNw2vDUdvcY3ErC4viNrtD
+ sUL9vcAZSJa2mUPXw1t2+2v2iKQLMYqzmS4cpFVOyXBOvAby89dEx4tv96Ziahw5zGyXprOLj
+ 4nz4MfqfRc7k13q5mdv5SrZPO5bXUKL0QVfBNUVXv3HO1njNJBGBim6jQNW0aXir8ub4LS1HQ
+ eAchZPqKrun520NICYr844nZkeMl3OqwA3X6l20uA4nWEapE80cLspmgRI97yzwDILwVWkDjX
+ k6kS1N2HcgekiXH3h2W4pmz6pGjM2bJo0B1gL/vBzPjvwCdzsaNxcfQTUj+xQwb5U3djopJwg
+ AZ7lCG+g6yoO6tLaGUMXzUtJ2yKmh7WaLiLt1h3EhAdxtb9QkfovOPXQJ+K8gfIKzcqerIKqa
+ gwcob0OV2CiLLcWNu2T4Y/9eLsBEX5tpVAt3TCDTHzD1mwliWePr5mxL7P2DxL6lIb6qOBkXm
+ jmdQqNcYlB4Yeeu6rbN9ikIJxNna09hewHwoJTlTqzcecwEqu7MaAQWgT/DVajtq4ZQysujrn
+ 440Q3oZYg5a2Q9S+isCFqJT6SKJd0ZenY50HO4FuobyObzPRjqCGaqFlkZ6iHMk17zNqzKIaE
+ /6R3JakpWJezdnQ5XNCRQ9VogZ9A59Bb3xgmMmjh66ao4DrDXGpxF0UiUP4WvpKigvRBIwMTv
+ v5gF8Co+6V0Wl7dWh8nDqZNZ6SCZGwa44tNZrch/l6tMIr8yWgSHeQWDFRvv+2DWWxDzPegd4
+ Eqv7fcUsQbO9FyOy5Wyhg33ThQSidlO+UFSulM7/BiaX6kUa3Y=
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4NCj4gDQo+IE9uIFNhdCwgTWFyIDE0
-LCAyMDIwIGF0IDQ6MzYgUE0gTWljaGFlbCBLZWxsZXkgPG1pa2VsbGV5QG1pY3Jvc29mdC5jb20+
-IHdyb3RlOg0KPiA+DQo+ID4gVGhlIEh5cGVyLVYgZnJhbWUgYnVmZmVyIGRyaXZlciBtYXkgYmUg
-YnVpbHQgYXMgYSBtb2R1bGUsIGFuZA0KPiA+IGl0IG5lZWRzIGFjY2VzcyB0byBzY3JlZW5faW5m
-by4gU28gZXhwb3J0IHNjcmVlbl9pbmZvLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogTWljaGFl
-bCBLZWxsZXkgPG1pa2VsbGV5QG1pY3Jvc29mdC5jb20+DQo+IA0KPiBJcyB0aGVyZSBhbnkgY2hh
-bmNlIG9mIHVzaW5nIGEgbW9yZSBtb2Rlcm4gS01TIGJhc2VkIGRyaXZlciBmb3IgdGhlIHNjcmVl
-bg0KPiB0aGFuIHRoZSBvbGQgZmJkZXYgc3Vic3lzdGVtPyBJIGhhZCBob3BlZCB0byBvbmUgZGF5
-IGNvbXBsZXRlbHkgcmVtb3ZlDQo+IHN1cHBvcnQgZm9yIHRoZSBvbGQgQ09ORklHX1ZJREVPX0ZC
-REVWIGFuZCBzY3JlZW5faW5mbyBmcm9tIG1vZGVybg0KPiBhcmNoaXRlY3R1cmVzLg0KPiANCg0K
-VGhlIGN1cnJlbnQgaHlwZXJ2X2ZiLmMgZHJpdmVyIGlzIGFsbCB3ZSBoYXZlIHRvZGF5IGZvciB0
-aGUgc3ludGhldGljIEh5cGVyLVYNCmZyYW1lIGJ1ZmZlciBkZXZpY2UuICBUaGF0IGRyaXZlciBi
-dWlsZHMgYW5kIHJ1bnMgb24gYm90aCBBUk02NCBhbmQgeDg2Lg0KDQpJJ20gbm90IGtub3dsZWRn
-ZWFibGUgYWJvdXQgdmlkZW8vZ3JhcGhpY3MgZHJpdmVycywgYnV0IHdoZW4geW91DQpzYXkgImEg
-bW9yZSBtb2Rlcm4gS01TIGJhc2VkIGRyaXZlciIsIGFyZSB5b3UgbWVhbmluZyBvbmUgYmFzZWQg
-b24NCkRSTSAmIEtNUz8gIERvZXMgRFJNIG1ha2Ugc2Vuc2UgZm9yIGEgImR1bWIiIGZyYW1lIGJ1
-ZmZlciBkZXZpY2U/DQpBcmUgdGhlcmUgYW55IGRyaXZlcnMgdGhhdCB3b3VsZCBiZSBhIGdvb2Qg
-cGF0dGVybiB0byBsb29rIGF0Pw0KDQpNaWNoYWVsDQoNCg==
+On Wed, Mar 18, 2020 at 1:18 AM Michael Kelley <mikelley@microsoft.com> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> > On Sat, Mar 14, 2020 at 4:36 PM Michael Kelley <mikelley@microsoft.com> wrote:
+> > >
+> > > The Hyper-V frame buffer driver may be built as a module, and
+> > > it needs access to screen_info. So export screen_info.
+> > >
+> > > Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> >
+> > Is there any chance of using a more modern KMS based driver for the screen
+> > than the old fbdev subsystem? I had hoped to one day completely remove
+> > support for the old CONFIG_VIDEO_FBDEV and screen_info from modern
+> > architectures.
+> >
+>
+> The current hyperv_fb.c driver is all we have today for the synthetic Hyper-V
+> frame buffer device.  That driver builds and runs on both ARM64 and x86.
+>
+> I'm not knowledgeable about video/graphics drivers, but when you
+> say "a more modern KMS based driver", are you meaning one based on
+> DRM & KMS?  Does DRM make sense for a "dumb" frame buffer device?
+> Are there any drivers that would be a good pattern to look at?
+
+It used to be a lot harder to write a DRM driver compared to an fbdev
+driver, but this has changed to the opposite over the years.
+
+A fairly minimal example would be drivers/gpu/drm/pl111/pl111_drv.c
+or anything in drivers/gpu/drm/tiny/, but you may want to look at the
+other hypervisor platforms first, i.e drivers/gpu/drm/virtio/virtgpu_drv.c,
+drivers/gpu/drm/vmwgfx/vmwgfx_drv.c, drivers/gpu/drm/xen/xen_drm_front.c,
+drivers/gpu/drm/qxl/qxl_drv.c, and drivers/gpu/drm/bochs/bochs_drv.c.
+
+       Arnd
