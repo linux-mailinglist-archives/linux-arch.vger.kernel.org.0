@@ -2,187 +2,321 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4AA1898F6
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Mar 2020 11:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B41189BA0
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Mar 2020 13:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727602AbgCRKK2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 Mar 2020 06:10:28 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:57155 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbgCRKK1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Mar 2020 06:10:27 -0400
-Received: from mail-qk1-f173.google.com ([209.85.222.173]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MfYDO-1jlMQi0Qg4-00fxps; Wed, 18 Mar 2020 11:10:24 +0100
-Received: by mail-qk1-f173.google.com with SMTP id h14so37696429qke.5;
-        Wed, 18 Mar 2020 03:10:23 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ3gSZgWkdJWHoe5WeZY5cW3/nvNMwgMzj5hms8APhafXakm590l
-        9NJGnWJhwlf82cGKUu9D65XKxdX7Vl3aaBMUyyo=
-X-Google-Smtp-Source: ADFU+vvAakuOMd3ErCSUomMX8z0py4x5kF0p1NXkPKJUf0Yfay59WpIhVqcU89UsHhxlAYx4b/h6YAwzOwru6S0xj2Q=
-X-Received: by 2002:a37:6455:: with SMTP id y82mr3173930qkb.286.1584526222619;
- Wed, 18 Mar 2020 03:10:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <1584200119-18594-1-git-send-email-mikelley@microsoft.com>
- <1584200119-18594-2-git-send-email-mikelley@microsoft.com>
- <CAK8P3a1GFDUY4mXzst4Ds+S-4SGXso6-jfpsYyy-eHyceAC1Zg@mail.gmail.com> <MW2PR2101MB10524879CD685710A51AB740D7F70@MW2PR2101MB1052.namprd21.prod.outlook.com>
-In-Reply-To: <MW2PR2101MB10524879CD685710A51AB740D7F70@MW2PR2101MB1052.namprd21.prod.outlook.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 18 Mar 2020 11:10:06 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a02EULGxyuKFq8YnbG8BQ_m-RKciaNEc9ZbdP2yz9dt+Q@mail.gmail.com>
-Message-ID: <CAK8P3a02EULGxyuKFq8YnbG8BQ_m-RKciaNEc9ZbdP2yz9dt+Q@mail.gmail.com>
-Subject: Re: [PATCH v6 01/10] arm64: hyperv: Add core Hyper-V include files
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
+        id S1726759AbgCRMGr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Mar 2020 08:06:47 -0400
+Received: from smtp-190e.mail.infomaniak.ch ([185.125.25.14]:43555 "EHLO
+        smtp-190e.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726643AbgCRMGr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 18 Mar 2020 08:06:47 -0400
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 64BCE1004EFFF;
+        Wed, 18 Mar 2020 13:06:42 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (ns3096276.ip-94-23-54.eu [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 48j80H12DLzljFcN;
+        Wed, 18 Mar 2020 13:06:39 +0100 (CET)
+Subject: Re: [RFC PATCH v14 00/10] Landlock LSM
+To:     Jann Horn <jannh@google.com>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        Andy Whitcroft <apw@canonical.com>,
-        vkuznets <vkuznets@redhat.com>, Jason Wang <jasowang@redhat.com>,
-        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:smUb2w4heNdSNB9yZ7n4eJSJIj6+13Vm+vxn/gMm+oubjVt2Lco
- t8yfV/Ua7OQdDkxM7g3doew78zjj7ezzCeYrKRQq/mroH4od0IXyB1IdDIo+PTu94Sn+UOK
- mK3mx6EplklCazvbzSQW6nJwYey6gq+cQ0XWbZxZ5D3OAJmUxiqLaIK4K/WRYbgyH2sn8tq
- TGfToRBZx6AAlkPN5T+Ng==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zssKbvN/uHk=:jBOpXsKPnuklkLOyBfwouw
- 0cLBo+4jc+SDTrVRt0sQZkDldoP8lRoj12f9Ov0RJ8v/gU21hdbXpWaGYHRY3yqvMrDAx6VvI
- JKJHdu+gCG/b2SwxARWLawNOqKFpqEKkhEGa+ixW//T5D0hE7L49ciubbucsUNAavij0/+K3N
- RM4PoAXhqlWU3mbwTbPhTtviaVkyg58dEoK8hV4k4UvoTy4512AGrKKPTpf+nFN663V3e7d4B
- Za4fwWotIYQgZsPU25u+YUpOrhuBQmEwURv8JQhnI8EwDuZgP0I2F0qNrh2sjs1DgNT3C7PUc
- RCMAPUPD8h/eUGKl9vM1ULsq+8CO8NNmt6MZTdrTZIbvQw0UBazlXScKq9kMriBkSZZGHK7gA
- TnlyeynkGylrq6SSucAZwszmIsyqCTolyn4ScYCgfMI4C3tUORVM/E+jhte2MG3HOG0D3CZKO
- TAYFLCGpz39POJTAQ9FQGam6gQpysbbN6MA/9r6s4wBxV8g3xZedmUua+w011fOxeBKEAQX3v
- d3gCZs3eBLcVfSVWB9X5BlG5F3x1D5HmYND2iYVSokNs9fveBTVFIoQjR/xD1v7lghJAbNNtb
- CXd7JrcUFIQaDJ8nuTevvoatIrircKhEtk3Wnd4mu6a79DODD9VrntsT9u6bx62EaKCuvJofo
- iiE0vjgUvyrYL+JP4Nkj5AmvIwkJID5at4RP4ZtCBnDkETtUhNrhEQz/d+gbrzzD06OdqJ7Re
- KDdo+OvgT5Hi46VmnA/+aCqr7OvBbhxaB0IiltQyy5ihG/XVib6QEiHRYWTP8FmJAqIXck4FG
- EsIP+Jqfnuw4KCDdli1myGaGs9CtqR/L3j+bbSUwKsp+7VPuv8=
+        linux-doc@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+References: <20200224160215.4136-1-mic@digikod.net>
+ <CAG48ez21bEn0wL1bbmTiiu8j9jP5iEWtHOwz4tURUJ+ki0ydYw@mail.gmail.com>
+ <873d7419-bdd9-8a52-0a9b-dddbe31df4f9@digikod.net>
+ <CAG48ez0=0W5Ok-8nASqZrZ28JboXRRi3gDxV5u6mdcOtzwuRVA@mail.gmail.com>
+ <688dda0f-0907-34eb-c19e-3e9e5f613a74@digikod.net>
+ <CAG48ez16yT+zbK1WPxr2TnxrifW5c2DnpFLbWRRLUT_WpuFNmw@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <e8530226-f295-a897-1132-7e6970dad49f@digikod.net>
+Date:   Wed, 18 Mar 2020 13:06:38 +0100
+User-Agent: 
+MIME-Version: 1.0
+In-Reply-To: <CAG48ez16yT+zbK1WPxr2TnxrifW5c2DnpFLbWRRLUT_WpuFNmw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 1:12 AM Michael Kelley <mikelley@microsoft.com> wrote:
-> From: Arnd Bergmann <arnd@arndb.de> Sent: Monday, March 16, 2020 1:48 AM
-> > On Sat, Mar 14, 2020 at 4:36 PM Michael Kelley <mikelley@microsoft.com> wrote:
-> >
-> > > +
-> > > +/* Define input and output layout for Get VP Register hypercall */
-> > > +struct hv_get_vp_register_input {
-> > > +       u64 partitionid;
-> > > +       u32 vpindex;
-> > > +       u8  inputvtl;
-> > > +       u8  padding[3];
-> > > +       u32 name0;
-> > > +       u32 name1;
-> > > +} __packed;
-> >
-> > Are you sure these need to be made byte-aligned according to the
-> > specification? If the structure itself is aligned to 64 bit, better mark only
-> > the individual fields that are misaligned as __packed.
-> >
-> > If the structure is aligned to only 32-bit addresses instead of
-> > 64-bit, mark it as "__packed __aligned(4)" to let the compiler
-> > generate better code for accessing it.
->
-> None of the fields are misaligned and it will always be aligned to 64-bit
-> addresses, so there should be no padding needed or added.  There was
-> a discussion of __packed and the Hyper-V data structures in general on
-> LKML here:  https://lkml.org/lkml/2018/11/30/848.  Adding __packed was
-> done as a preventative measure, not because anything was actually
-> broken.  Marking as __aligned(8) here would indicate the correct intent,
-> though the use of the structure always ensures 64-bit alignment.
 
-Just drop the __packed annotations then, they just confuse the compiler
-in this case. In particular, when the compiler thinks that a structure is
-misaligned, it tries to avoid using load/store instructions on it that are
-inefficient or trap with misaligned code, so having default alignment
-produces better object code.
+On 17/03/2020 20:45, Jann Horn wrote:
+> On Tue, Mar 17, 2020 at 6:50 PM Mickaël Salaün <mic@digikod.net> wrote:
+>> On 17/03/2020 17:19, Jann Horn wrote:
+>>> On Thu, Mar 12, 2020 at 12:38 AM Mickaël Salaün <mic@digikod.net> wrote:
+>>>> On 10/03/2020 00:44, Jann Horn wrote:
+>>>>> On Mon, Feb 24, 2020 at 5:03 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>
+>> [...]
+>>
+>>>>> Aside from those things, there is also a major correctness issue where
+>>>>> I'm not sure how to solve it properly:
+>>>>>
+>>>>> Let's say a process installs a filter on itself like this:
+>>>>>
+>>>>> struct landlock_attr_ruleset ruleset = { .handled_access_fs =
+>>>>> ACCESS_FS_ROUGHLY_WRITE};
+>>>>> int ruleset_fd = landlock(LANDLOCK_CMD_CREATE_RULESET,
+>>>>> LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
+>>>>> struct landlock_attr_path_beneath path_beneath = {
+>>>>>   .ruleset_fd = ruleset_fd,
+>>>>>   .allowed_access = ACCESS_FS_ROUGHLY_WRITE,
+>>>>>   .parent_fd = open("/tmp/foobar", O_PATH),
+>>>>> };
+>>>>> landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
+>>>>> sizeof(path_beneath), &path_beneath);
+>>>>> prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+>>>>> struct landlock_attr_enforce attr_enforce = { .ruleset_fd = ruleset_fd };
+>>>>> landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
+>>>>> sizeof(attr_enforce), &attr_enforce);
+>>>>>
+>>>>> At this point, the process is not supposed to be able to write to
+>>>>> anything outside /tmp/foobar, right? But what happens if the process
+>>>>> does the following next?
+>>>>>
+>>>>> struct landlock_attr_ruleset ruleset = { .handled_access_fs =
+>>>>> ACCESS_FS_ROUGHLY_WRITE};
+>>>>> int ruleset_fd = landlock(LANDLOCK_CMD_CREATE_RULESET,
+>>>>> LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
+>>>>> struct landlock_attr_path_beneath path_beneath = {
+>>>>>   .ruleset_fd = ruleset_fd,
+>>>>>   .allowed_access = ACCESS_FS_ROUGHLY_WRITE,
+>>>>>   .parent_fd = open("/", O_PATH),
+>>>>> };
+>>>>> landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
+>>>>> sizeof(path_beneath), &path_beneath);
+>>>>> prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+>>>>> struct landlock_attr_enforce attr_enforce = { .ruleset_fd = ruleset_fd };
+>>>>> landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
+>>>>> sizeof(attr_enforce), &attr_enforce);
+>>>>>
+>>>>> As far as I can tell from looking at the source, after this, you will
+>>>>> have write access to the entire filesystem again. I think the idea is
+>>>>> that LANDLOCK_CMD_ENFORCE_RULESET should only let you drop privileges,
+>>>>> not increase them, right?
+>>>>
+>>>> There is an additionnal check in syscall.c:get_path_from_fd(): it is
+>>>> forbidden to add a rule with a path which is not accessible (according
+>>>> to LANDLOCK_ACCESS_FS_OPEN) thanks to a call to security_file_open(),
+>>>> but this is definitely not perfect.
+>>>
+>>> Ah, I missed that.
+>>>
+>>>>> I think the easy way to fix this would be to add a bitmask to each
+>>>>> rule that says from which ruleset it originally comes, and then let
+>>>>> check_access_path() collect these bitmasks from each rule with OR, and
+>>>>> check at the end whether the resulting bitmask is full - if not, at
+>>>>> least one of the rulesets did not permit the access, and it should be
+>>>>> denied.
+>>>>>
+>>>>> But maybe it would make more sense to change how the API works
+>>>>> instead, and get rid of the concept of "merging" two rulesets
+>>>>> together? Instead, we could make the API work like this:
+>>>>>
+>>>>>  - LANDLOCK_CMD_CREATE_RULESET gives you a file descriptor whose
+>>>>> ->private_data contains a pointer to the old ruleset of the process,
+>>>>> as well as a pointer to a new empty ruleset.
+>>>>>  - LANDLOCK_CMD_ADD_RULE fails if the specified rule would not be
+>>>>> permitted by the old ruleset, then adds the rule to the new ruleset
+>>>>>  - LANDLOCK_CMD_ENFORCE_RULESET fails if the old ruleset pointer in
+>>>>> ->private_data doesn't match the current ruleset of the process, then
+>>>>> replaces the old ruleset with the new ruleset.
+>>>>>
+>>>>> With this, the new ruleset is guaranteed to be a subset of the old
+>>>>> ruleset because each of the new ruleset's rules is permitted by the
+>>>>> old ruleset. (Unless the directory hierarchy rotates, but in that case
+>>>>> the inaccuracy isn't much worse than what would've been possible
+>>>>> through RCU path walk anyway AFAIK.)
+>>>>>
+>>>>> What do you think?
+>>>>>
+>>>>
+>>>> I would prefer to add the same checks you described at first (with
+>>>> check_access_path), but only when creating a new ruleset with
+>>>> merge_ruleset() (which should probably be renamed). This enables not to
+>>>> rely on a parent ruleset/domain until the enforcement, which is the case
+>>>> anyway.
+>>>> Unfortunately this doesn't work for some cases with bind mounts. Because
+>>>> check_access_path() goes through one path, another (bind mounted) path
+>>>> could be illegitimately allowed.
+>>>
+>>> Hmm... I'm not sure what you mean. At the moment, landlock doesn't
+>>> allow any sandboxed process to change the mount hierarchy, right? Can
+>>> you give an example where this would go wrong?
+>>
+>> Indeed, a Landlocked process must no be able to change its mount
+>> namespace layout. However, bind mounts may already exist.
+>> Let's say a process sandbox itself to only access /a in a read-write
+>> way.
+> 
+> So, first policy:
+> 
+> /a RW
+> 
+>> Then, this process (or one of its children) add a new restriction
+>> on /a/b to only be able to read this hierarchy.
+> 
+> You mean with the second policy looking like this?
 
-> > Also, in order to write portable code, it would be helpful to mark
-> > all the fields as explicitly little-endian, and use __le32_to_cpu()
-> > etc for accessing them.
->
-> There's an opening comment in this file stating that all data
-> structures shared between Hyper-V and a guest VM are little
-> endian.  Is there some other marking to consider using?
+Right.
 
-Yes, device drivers should generally define data structures using
-the __le32, __le64 etc types, and use the conversion functions
-to access them. Building with 'make C=1' usually tells you when
-you have mismatched annotations.
+> 
+> /a RW
+> /a/b R
+> 
+> Then the resulting policy would be:
+> 
+> /a RW policy_bitmask=0x00000003 (bits 0 and 1 set)
+> /a/b R policy_bitmask=0x00000002 (bit 1 set)
+> required_bits=0x00000003 (bits 0 and 1 set)
+> 
+>> The check at insertion
+>> time would allow this because this access right is a subset of the
+>> access right allowed with the parent directory. However, If /a/b is bind
+>> mounted somewhere else, let's say in /private/b, then the second
+>> enforcement just gave new access rights to this hierarchy too.
+> 
+> But with the solution I proposed, landlock's path walk would see
+> something like this when accessing a file at /private/b/foo:
+> /private/b/foo <no rules>
+>   policies seen until now: 0x00000000
+> /private/b <access: R, policy_bitmask=0x00000002>
+>   policies seen until now: 0x00000002
+> /private <no rules>
+>   policies seen until now: 0x00000002
+> / <no rules>
+>   policies seen until now: 0x00000002
+> 
+> It wouldn't encounter any rule from the first policy, so the OR of the
+> seen policy bitmasks would be 0x00000002, which is not the required
+> value 0x00000003, and so the access would be denied.
+As I understand your proposition, we need to build the required_bits
+when adding a rule or enforcing/merging a ruleset with a domain. The
+issue is that a rule only refers to a struct inode, not a struct path.
+For your proposition to work, we would need to walk through the file
+path when adding a rule to a ruleset, which means that we need to depend
+of the current view of the process (i.e. its mount namespace), and its
+Landlock domain. If the required_bits field is set when the ruleset is
+merged with the domain, it is not possible anymore to walk through the
+corresponding initial file path, which makes the enforcement step too
+late to check for such consistency. The important point is that a
+ruleset/domain doesn't have a notion of file hierarchy, a ruleset is
+only a set of tagged inodes.
 
-> We have definitely not allowed for the case of Hyper-V running on
-> a big endian architecture.  There are a *lot* of messages and data
-> structures passed between the guest and Hyper-V, and coding
-> to handle either endianness is a big project.  I'm doubtful
-> of the value until and unless we actually have a need for it.
+I'm not sure I got your proposition right, though. When and how would
+you generate the required_bits?
 
-In general, the use of big-endian software on Linux is declining, however
+Here is my updated proposition: add a layer level and a depth to each
+rule (once enforced/merged with a domain), and a top layer level for a
+domain. When enforcing a ruleset (i.e. merging a ruleset into the
+current domain), the layer level of a new rule would be the incremented
+top layer level. If there is no rule (from this domain) tied to the same
+inode, then the depth of the new rule is 1. However, if there is already
+a rule tied to the same inode and if this rule's layer level is the
+previous top layer level, then the depth and the layer level are both
+incremented and the rule is updated with the new access rights (boolean
+AND).
 
-- arm64 as an architecture is meant to support both endian types,
-  and we still try to ensure it works either way as long as there are
-  users that depend on it.
+The policy looks like this:
+domain top_layer=2
+/a RW policy_bitmask=0x00000003 layer=1 depth=1
+/a/b R policy_bitmask=0x00000002 layer=2 depth=1
 
-- The remaining users of big-endian software are probably
-  more likely to run on virtual machines than on real hardware
+The path walk access check walks through all inodes and start with a
+layer counter equal to the top layer of the current domain. For each
+encountered inode tied to a rule, the access rights are checked and a
+new check ensures that the layer of the matching rule is the same as the
+counter (this may be a merged ruleset containing rules pertaining to the
+same hierarchy, which is fine) or equal to the decremented counter (i.e.
+the path walk just reached the underlying layer). If the path walk
+encounter a rule with a layer strictly less than the counter minus one,
+there is a whole in the layers which means that the ruleset
+hierarchy/subset does not match, and the access must be denied.
 
-- Any device driver should generally be written against portable
-  interfaces, even if you think you know how it will be used. As
-  driver writers tend to look at existing code for new drivers, it's
-  better to have them all be portable. (This is a similar argument
-  to the irqchip interface).
+When accessing a file at /private/b/foo for a read access:
+/private/b/foo <no rules>
+  allowed_access=unknown layer_counter=2
+/private/b <access: R, policy_bitmask=0x00000002, layer=2, depth=1>
+  allowed_access=allowed layer_counter=2
+/private <no rules>
+  allowed_access=allowed layer_counter=2
+/ <no rules>
+  allowed_access=allowed layer_counter=2
 
-Even if you don't convert any of the existing architecture independent
-code to run both ways, I see no reason to not do it for new drivers.
+Because the layer_counter didn't reach 1, the access request is then denied.
 
-> > > +/* Define synthetic interrupt controller message flags. */
-> > > +union hv_message_flags {
-> > > +       __u8 asu8;
-> > > +       struct {
-> > > +               __u8 msg_pending:1;
-> > > +               __u8 reserved:7;
-> > > +       } __packed;
-> > > +};
-> >
-> > For similar reasons, please avoid bit fields and just use a
-> > bit mask on the first member of the union.
->
-> Unfortunately, changing to a bit mask ripples into
-> architecture independent code and into the x86
-> implementation.  I'd prefer not to drag that complexity
-> into this patch set.
+This proposition enables not to rely on a parent ruleset at first, only
+when enforcing/merging a ruleset with a domain. This also solves the
+issue with multiple inherited/nested rules on the same inode (in which
+case the depth just grows). Moreover, this enables to safely stop the
+path walk as soon as we reach the layer 1.
 
-How so? If this file is arm64 specific, there should be no need to make
-x86 do the same change.
+Here is a more complex example. A process sandbox itself with a first rule:
+domain top_layer=1
+/a RW policy_bitmask=0x00000003 layer=1 depth=1
 
-> > > + * Use the Hyper-V provided stimer0 as the timer that is made
-> > > + * available to the architecture independent Hyper-V drivers.
-> > > + */
-> > > +#define hv_init_timer(timer, tick) \
-> > > +               hv_set_vpreg(HV_REGISTER_STIMER0_COUNT + (2*timer), tick)
-> > > +#define hv_init_timer_config(timer, val) \
-> > > +               hv_set_vpreg(HV_REGISTER_STIMER0_CONFIG + (2*timer), val)
-> > > +#define hv_get_current_tick(tick) \
-> > > +               (tick = hv_get_vpreg(HV_REGISTER_TIME_REFCOUNT))
-> >
-> > In general, we prefer inline functions over macros in header files.
->
-> I can change the "set" calls to inline functions.  As you can see, the "get"
-> functions are coded and used in architecture independent code and on
-> the x86 side in a way that won't convert to inline functions.
+Then the sandbox process enforces to itself this second (useless) ruleset:
+/a/b RW policy_bitmask=0x00000003
 
-Ok.
+The resulting domain is then:
+domain top_layer=2
+/a RW policy_bitmask=0x00000003 layer=1 depth=1
+/a/b RW policy_bitmask=0x00000003 layer=2 depth=1
 
-        Arnd
+Then the sandbox process enforces to itself this third ruleset (which
+effectively reduces its access):
+/a/b R policy_bitmask=0x00000002
+
+The resulting domain is then:
+domain top_layer=3
+/a RW policy_bitmask=0x00000003 layer=1 depth=1
+/a/b R policy_bitmask=0x00000002 layer=3 depth=2
+
+At this time, only /a/b is accessible in a read way. The access rights
+on /a are ignored (but still inherited).
+
+Then the sandbox process enforces to itself this fourth ruleset:
+/c R policy_bitmask=0x00000002
+
+The resulting domain is then:
+domain top_layer=4
+/a RW policy_bitmask=0x00000003 layer=1 depth=1
+/a/b R policy_bitmask=0x00000002 layer=3 depth=2
+/c R policy_bitmask=0x00000002 layer=4 depth=1
+
+Now, every read or write access requests will be denied.
+
+Then the sandbox process enforces to itself this fifth ruleset:
+/a R policy_bitmask=0x00000002
+
+Because /a is not in a contiguous underneath layer, the resulting domain
+is unchanged (except the top_layer which may be incremented anyway).
+Of course, we must check that the top_layer is not overflowing, in which
+case an error must be returned to inform userspace that the ruleset
+can't be enforced.
