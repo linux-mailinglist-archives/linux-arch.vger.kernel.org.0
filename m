@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C5C18D203
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 15:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B44D18D1E7
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 15:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726814AbgCTOzD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Mar 2020 10:55:03 -0400
-Received: from foss.arm.com ([217.140.110.172]:50196 "EHLO foss.arm.com"
+        id S1726997AbgCTOzJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Mar 2020 10:55:09 -0400
+Received: from foss.arm.com ([217.140.110.172]:50230 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727468AbgCTOzD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 20 Mar 2020 10:55:03 -0400
+        id S1727504AbgCTOzG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 20 Mar 2020 10:55:06 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4E911FB;
-        Fri, 20 Mar 2020 07:55:02 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1AEE07FA;
+        Fri, 20 Mar 2020 07:55:06 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CEB7C3F792;
-        Fri, 20 Mar 2020 07:54:59 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 06B2F3F792;
+        Fri, 20 Mar 2020 07:55:02 -0700 (PDT)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
@@ -37,10 +37,11 @@ Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Andrei Vagin <avagin@openvz.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>
-Subject: [PATCH v5 06/26] arm64: Introduce asm/vdso/clocksource.h
-Date:   Fri, 20 Mar 2020 14:53:31 +0000
-Message-Id: <20200320145351.32292-7-vincenzo.frascino@arm.com>
+        Mark Rutland <Mark.Rutland@arm.com>,
+        Paul Burton <paulburton@kernel.org>
+Subject: [PATCH v5 07/26] mips: Introduce asm/vdso/clocksource.h
+Date:   Fri, 20 Mar 2020 14:53:32 +0000
+Message-Id: <20200320145351.32292-8-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200320145351.32292-1-vincenzo.frascino@arm.com>
 References: <20200320145351.32292-1-vincenzo.frascino@arm.com>
@@ -62,43 +63,43 @@ functions that are suitable for vDSO inclusion.
 This header will be required by a future patch that will generalize
 vdso/clocksource.h.
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Paul Burton <paulburton@kernel.org>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- arch/arm64/include/asm/clocksource.h      | 3 +--
- arch/arm64/include/asm/vdso/clocksource.h | 8 ++++++++
- 2 files changed, 9 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm64/include/asm/vdso/clocksource.h
+ arch/mips/include/asm/clocksource.h      | 4 +---
+ arch/mips/include/asm/vdso/clocksource.h | 9 +++++++++
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+ create mode 100644 arch/mips/include/asm/vdso/clocksource.h
 
-diff --git a/arch/arm64/include/asm/clocksource.h b/arch/arm64/include/asm/clocksource.h
-index eb82e9d95c5d..482185566b0c 100644
---- a/arch/arm64/include/asm/clocksource.h
-+++ b/arch/arm64/include/asm/clocksource.h
-@@ -2,7 +2,6 @@
- #ifndef _ASM_CLOCKSOURCE_H
- #define _ASM_CLOCKSOURCE_H
+diff --git a/arch/mips/include/asm/clocksource.h b/arch/mips/include/asm/clocksource.h
+index de659cae0d4e..2f1ebbea3d72 100644
+--- a/arch/mips/include/asm/clocksource.h
++++ b/arch/mips/include/asm/clocksource.h
+@@ -6,8 +6,6 @@
+ #ifndef __ASM_CLOCKSOURCE_H
+ #define __ASM_CLOCKSOURCE_H
  
 -#define VDSO_ARCH_CLOCKMODES	\
--	VDSO_CLOCKMODE_ARCHTIMER
+-	VDSO_CLOCKMODE_R4K,	\
+-	VDSO_CLOCKMODE_GIC
 +#include <asm/vdso/clocksource.h>
  
- #endif
-diff --git a/arch/arm64/include/asm/vdso/clocksource.h b/arch/arm64/include/asm/vdso/clocksource.h
+ #endif /* __ASM_CLOCKSOURCE_H */
+diff --git a/arch/mips/include/asm/vdso/clocksource.h b/arch/mips/include/asm/vdso/clocksource.h
 new file mode 100644
-index 000000000000..df6ea65c1dec
+index 000000000000..510e1671d898
 --- /dev/null
-+++ b/arch/arm64/include/asm/vdso/clocksource.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/arch/mips/include/asm/vdso/clocksource.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
 +#ifndef __ASM_VDSOCLOCKSOURCE_H
 +#define __ASM_VDSOCLOCKSOURCE_H
 +
 +#define VDSO_ARCH_CLOCKMODES	\
-+	VDSO_CLOCKMODE_ARCHTIMER
++	VDSO_CLOCKMODE_R4K,	\
++	VDSO_CLOCKMODE_GIC
 +
-+#endif
++#endif /* __ASM_VDSOCLOCKSOURCE_H */
 -- 
 2.25.1
 
