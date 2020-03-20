@@ -2,134 +2,169 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFF518D49D
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 17:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7552018D504
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 17:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726935AbgCTQi3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Mar 2020 12:38:29 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:34089 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727414AbgCTQi3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Mar 2020 12:38:29 -0400
-Received: from mail-lf1-f51.google.com ([209.85.167.51]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MT9v5-1iqloL16QJ-00UZqk; Fri, 20 Mar 2020 17:38:26 +0100
-Received: by mail-lf1-f51.google.com with SMTP id v4so1370135lfo.12;
-        Fri, 20 Mar 2020 09:38:26 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ0jHU9iddxIi5SbUse46sruQf7T5EkCIdEC0e8FM+f/+9xJFMDN
-        ALOmf+wtTzo8R9Z2jyg4qj2Yrr75SHvjhsCxjVw=
-X-Google-Smtp-Source: ADFU+vtDZNMNKwMI70MLhlIra5oX/KaY/A/S1YKukFTCrCxBIkwCOeyp0t9ZbbgR8Fv4tYMpVwDwO7KgBnd4/HFsTvw=
-X-Received: by 2002:a19:6406:: with SMTP id y6mr5994490lfb.125.1584722305592;
- Fri, 20 Mar 2020 09:38:25 -0700 (PDT)
+        id S1727358AbgCTQy6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Mar 2020 12:54:58 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:35221 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727555AbgCTQy6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Mar 2020 12:54:58 -0400
+Received: by mail-qk1-f195.google.com with SMTP id d8so7592934qka.2
+        for <linux-arch@vger.kernel.org>; Fri, 20 Mar 2020 09:54:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7285IhCSSBT15iW2Q2eR5fvPtG69GQ4u+ypVdruEBmY=;
+        b=wSiHnFOGohFnM89TGZsMvNdn7fQHYp/jIDzOnu2eVjZJ1WdOi7Yxld9BnWTMYn3FmJ
+         Sq+ZK7ZfpKRLk+TKy3F9ZRhKD78DBBjvO4gBqBcS5XDsfousY32veKAENdhAXEG/dfwa
+         DhEXoBvcOhvZis8wfr9Ht+b8NKDB7rN9AEDkg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7285IhCSSBT15iW2Q2eR5fvPtG69GQ4u+ypVdruEBmY=;
+        b=WwbVHriHN+Qhe1MS4tXie3ZBOXhYFLTyvu2xNENSVoBv2p2eOj6ea1WxiGfc6Z7Nsz
+         5XxmLTpDsk4DKm+tIiU6MYbgb8OLVlYOh7+asMmUOC4zq+tbrLDXSWA73x8Bkc7ke2u8
+         YgF34mgFA1fKDpfvCJarbIni+qQwhxAQl2PgBR92kF/FR5/BGplGGQSZGM48xZ/OZSAE
+         1Y7sTrjff8vbp51CY6KgBs7IXrx0aLSQee1+vWS5Dcren8i4tUvr1W6xDRtrvr92viiO
+         gJEgPX1bmU64OAlnR4puW127uEV30/GqRKDSDBqeJfZ/qQF6aioF/oJ3CzqxdURNa/S5
+         EmuQ==
+X-Gm-Message-State: ANhLgQ3BxIdhanxVuChtq+j7eWsWi/H0TyA5m9lA1uZMUtPySWwM1xTU
+        C/37a4cDjpqsmzHQB/hGF45jHQ==
+X-Google-Smtp-Source: ADFU+vulLoHlR563V1moHA8eR15I3kHirfQLyvZInTWb9FE37SMNRwa2Bo3vqeSw84Pch6eTHGnRUg==
+X-Received: by 2002:a37:50d4:: with SMTP id e203mr8724974qkb.153.1584723296834;
+        Fri, 20 Mar 2020 09:54:56 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id w28sm5250664qtc.27.2020.03.20.09.54.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2020 09:54:56 -0700 (PDT)
+Date:   Fri, 20 Mar 2020 12:54:54 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>, linux-arch@vger.kernel.org,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 1/3] LKMM: Add litmus test for RCU GP guarantee where
+ updater frees object
+Message-ID: <20200320165454.GA155212@google.com>
+References: <20200320102603.GA22784@andrea>
+ <Pine.LNX.4.44L0.2003201104220.27303-100000@netrider.rowland.org>
 MIME-Version: 1.0
-References: <1584200119-18594-1-git-send-email-mikelley@microsoft.com>
- <1584200119-18594-2-git-send-email-mikelley@microsoft.com>
- <CAK8P3a1GFDUY4mXzst4Ds+S-4SGXso6-jfpsYyy-eHyceAC1Zg@mail.gmail.com>
- <MW2PR2101MB10524879CD685710A51AB740D7F70@MW2PR2101MB1052.namprd21.prod.outlook.com>
- <CAK8P3a02EULGxyuKFq8YnbG8BQ_m-RKciaNEc9ZbdP2yz9dt+Q@mail.gmail.com> <MW2PR2101MB1052686237C57955148F173ED7F40@MW2PR2101MB1052.namprd21.prod.outlook.com>
-In-Reply-To: <MW2PR2101MB1052686237C57955148F173ED7F40@MW2PR2101MB1052.namprd21.prod.outlook.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 20 Mar 2020 17:38:09 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0y==1RsoMOnME9bgP5V_mts4rbaUW08Tt7mS9csXBqDw@mail.gmail.com>
-Message-ID: <CAK8P3a0y==1RsoMOnME9bgP5V_mts4rbaUW08Tt7mS9csXBqDw@mail.gmail.com>
-Subject: Re: [PATCH v6 01/10] arm64: hyperv: Add core Hyper-V include files
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        Andy Whitcroft <apw@canonical.com>,
-        vkuznets <vkuznets@redhat.com>, Jason Wang <jasowang@redhat.com>,
-        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:+Zbwt++57axzA9aupg4DjqJmK2MeBxIpG9CQL7afvRU8sRHbOPB
- 39VMPvs1yH7jLxqx8V8ecXmyIhSqswZttoB8td0VF54ccerAalS59jnypIpRpFt1QaSx7Xb
- vRLUQaFM7N7E+PQ9YVDNdNaMN4OxSBHJsc/ZRFzcb4zSnAa8U67f7ML3DLaJAG6ofwuTJFf
- hOFE+n0k6YE48JCKDJGMQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L1nzbCZCVRw=:+M6+N6UoCkmIO6sNJvSVo1
- 6kOoFg1LViy6r7VhEPNtew0IsfmQ6kYCmHp37edJ5vNNClIz/qRLQxepWRMboYytpTm1r+c2g
- M6pljUHSyAOvnX2A5e0b/EViTYg/g6xB5Ax4PrBJrCxWnZj5Hzf/ctigwq3EQcaDLJMADPRaK
- e33JXrOWWxhFlD33R9KYl48cfwQiIkERB0g0RjJxE1AUahdjb4j5AslXJRvP0pSMFMMknXqZy
- 97Bm259PxPlwL/zu+XtbsdJYRBylTcmxND4Vba/sY+T+V8RPFgxKlryxKYeElojc8yFnwe5T5
- Z+OiCyksnbFbgeAfQO6+fS/uAPbLwPTjO0BTjCTI2RTOm6QB129b+MurHY+Uih8nBGo0YS9qv
- HMTiXVZuvJ1hEO+e3KSJDNxN0a60MM8fU92a1L9Bg1hZ5bMVJfwfQNQQ7ri/FbAv+Apm4jUIK
- XS6l7exsYenoTt06HMM9UgHYyIuOHDZzvKvKEzXVyqwBORmmHAwPTkds56zwGKAU+aAdP29k7
- Fb3t+lKGWWn8i7muuw2Pp7/dOpgVOgwTA2E/qAHG0FlxwlXfzdWE1InpCXLGSJnSGI1ENPYRX
- n4/UbYAn/xkpsjgmXeWFAO9S64zGKnz9+169o3qODwV5h4AL18yxL2mo6KwJDPu4Fizb5tI6H
- rr03lr3ubzQeJ8RC3Xx57s8Wac36QGl18kvWgEMCT1n64lb4dRxQ7RA8kdEygf9LvnSyC82Cb
- kcd3PPMRQ1HpkmGPjbdGM+fspp/EHmjb8Q7nKivnqKr96uywH9cOoXi7CIBiS2z7bg2zLIfC9
- A/0l7Jao8Mn03EiV58Lbdz8SVMypQVVGDeyRu/wE+S1kr50g8I=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2003201104220.27303-100000@netrider.rowland.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 19, 2020 at 10:31 PM Michael Kelley <mikelley@microsoft.com> wrote:
-> From: Arnd Bergmann <arnd@arndb.de> Sent: Wednesday, March 18, 2020 3:10 AM
-> > Just drop the __packed annotations then, they just confuse the compiler
-> > in this case. In particular, when the compiler thinks that a structure is
-> > misaligned, it tries to avoid using load/store instructions on it that are
-> > inefficient or trap with misaligned code, so having default alignment
-> > produces better object code.
->
-> So I'm confused a bit.  Were the original concerns in the above LKML
-> discussion bogus?  Is it legal for the compiler to reorder fields or add
-> padding, even if the layout of fields in the structure doesn't require it?
-> If the compiler *could* do such, then it seems like keeping the __packed
-> would be appropriate per the LKML discussion.
+On Fri, Mar 20, 2020 at 11:07:10AM -0400, Alan Stern wrote:
+> On Fri, 20 Mar 2020, Andrea Parri wrote:
+> 
+> > On Fri, Mar 20, 2020 at 02:55:50AM -0400, Joel Fernandes (Google) wrote:
+> > > This adds an example for the important RCU grace period guarantee, which
+> > > shows an RCU reader can never span a grace period.
+> > > 
+> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > ---
+> > >  .../litmus-tests/RCU+sync+free.litmus         | 40 +++++++++++++++++++
+> > >  1 file changed, 40 insertions(+)
+> > >  create mode 100644 tools/memory-model/litmus-tests/RCU+sync+free.litmus
+> > > 
+> > > diff --git a/tools/memory-model/litmus-tests/RCU+sync+free.litmus b/tools/memory-model/litmus-tests/RCU+sync+free.litmus
+> > > new file mode 100644
+> > > index 0000000000000..c4682502dd296
+> > > --- /dev/null
+> > > +++ b/tools/memory-model/litmus-tests/RCU+sync+free.litmus
+> > > @@ -0,0 +1,40 @@
+> > > +C RCU+sync+free
+> > > +
+> > > +(*
+> > > + * Result: Never
+> > > + *
+> > > + * This litmus test demonstrates that an RCU reader can never see a write after
+> > > + * the grace period, if it saw writes that happen before the grace period. This
+> > > + * is a typical pattern of RCU usage, where the write before the grace period
+> > > + * assigns a pointer, and the writes after destroy the object that the pointer
+> > > + * points to.
+> > > + *
+> > > + * This guarantee also implies, an RCU reader can never span a grace period and
+> > > + * is an important RCU grace period memory ordering guarantee.
+> > > + *)
+> > > +
+> > > +{
+> > > +x = 1;
+> > > +y = x;
+> > > +z = 1;
+> > 
+> > FYI, this could become a little more readable if we wrote it as follows:
+> > 
+> > int x = 1;
+> > int *y = &x;
+> > int z = 1;
+> 
+> Also, the test won't work with klitmus7 unless you do this.
 
-The padding is defined in the ELF psABI document for a particular
-architecture. In theory an architecture might require padding around
-smaller members, but they generally don't when you look at the ones
-that Linux runs on. The few odd ones are those that require less
-padding, only aligning members to 16 or 32 bit rather than natural
-alignment, or padding the size of the structure to 32 bit even if it
-only contains 8-bit or 16-bit members. When you have structures
-in which every member is naturally aligned and the size it a multiple
-of 32 bit, better leave out the __packed.
+Will do.
 
-Aside from generating sub-optimal code, the __packed annotation
-can also lead to undefined behavior, if you pass a pointer to
-an unaligned member into a function call that takes an aligned
-pointer. Newer compilers warn about this.
+> > The LKMM tools are happy either way, just a matter of style/preference;
+> > and yes, MP+onceassign+derefonce isn't currently following mine...  ;-/
+> > 
+> > 
+> > > +}
+> > > +
+> > > +P0(int *x, int *z, int **y)
+> > > +{
+> > > +	int r0;
+> > 
+> > This would need to be "int *r0;" in order to make klitmus7(+gcc) happy.
 
-> > > Unfortunately, changing to a bit mask ripples into
-> > > architecture independent code and into the x86
-> > > implementation.  I'd prefer not to drag that complexity
-> > > into this patch set.
-> >
-> > How so? If this file is arm64 specific, there should be no need to make
-> > x86 do the same change.
->
-> This file, hyperv-tlfs.h, is duplicating some definitions on the x86 and
-> ARM64 sides that are used by arch independent code, and this is one
-> of those definitions.  I had held off on breaking the file into arch
-> independent and arch specific portions because the Hyper-V team has
-> left some gray areas for functionality that isn't yet used on the ARM64
-> side.  So in some cases, it's hard to know what functionality to put
-> into the arch independent portion.
->
-> But I think I'll go ahead and make the separation with reasonably good
-> accuracy, and update the x86 side accordingly.  That will reduce the size
-> of this patch set to contain only the things that we know are ARM64
-> specific and which are actually used by the ARM64 code.  Things like the
-> hv_message_flags will go into the arch independent portion so that
-> they can be used by the arch independent code without cluttering up
-> the arch specific code.  Making the change will help reduce any
-> confusion about what is ARM64-specific. The other core #include file,
-> mshyperv.h, has already been done this way.
+Sorry fixed it now, my version of herd did not complain on this so I missed it.
 
-Ok, sounds good.
+> > > +	int r1;
+> > > +
+> > > +	rcu_read_lock();
+> > > +	r0 = rcu_dereference(*y);
+> > > +	r1 = READ_ONCE(*r0);
+> > > +	rcu_read_unlock();
+> > > +}
+> > > +
+> > > +P1(int *x, int *z, int **y)
+> > > +{
+> > > +	rcu_assign_pointer(*y, z);
+> > 
+> > AFAICT, you don't need this "RELEASE"; e.g., compare this test with the
+> > example in:
+> > 
+> >   https://www.kernel.org/doc/Documentation/RCU/Design/Requirements/Requirements.html#Grace-Period%20Guarantee
+> > 
+> > What am I missing?
+> 
+> If z were not a simple variable but a more complicated structure, the
+> RELEASE would be necessary to ensure that all P1's prior changes to z
+> became visible before the write to y.
+> 
+> Besides, it's good form always to match rcu_dereference() with 
+> rcu_assign_pointer(), for code documentation if nothing else.
 
-     Arnd
+Yes, adding to what Alan said, you can see the effect of not using
+rcu_assign_pointer() in: MP+onceassign+derefonce.litmus
+
+Alan and Andrea, may I add your Reviewed-by or Acked-by tags on the v2?
+
+thanks,
+
+ - Joel
+
