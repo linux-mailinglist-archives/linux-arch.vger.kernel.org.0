@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F23318D1E9
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 15:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382FA18D1B3
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 15:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727532AbgCTOzL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Mar 2020 10:55:11 -0400
-Received: from foss.arm.com ([217.140.110.172]:50262 "EHLO foss.arm.com"
+        id S1727526AbgCTOzO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Mar 2020 10:55:14 -0400
+Received: from foss.arm.com ([217.140.110.172]:50294 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727526AbgCTOzJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 20 Mar 2020 10:55:09 -0400
+        id S1727545AbgCTOzN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 20 Mar 2020 10:55:13 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48B22FEC;
-        Fri, 20 Mar 2020 07:55:09 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 749641FB;
+        Fri, 20 Mar 2020 07:55:12 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 510D33F792;
-        Fri, 20 Mar 2020 07:55:06 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F0E33F792;
+        Fri, 20 Mar 2020 07:55:09 -0700 (PDT)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
@@ -38,9 +38,9 @@ Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Marc Zyngier <maz@kernel.org>,
         Mark Rutland <Mark.Rutland@arm.com>
-Subject: [PATCH v5 08/26] linux/clocksource.h: Extract common header for vDSO
-Date:   Fri, 20 Mar 2020 14:53:33 +0000
-Message-Id: <20200320145351.32292-9-vincenzo.frascino@arm.com>
+Subject: [PATCH v5 09/26] linux/math64.h: Extract common header for vDSO
+Date:   Fri, 20 Mar 2020 14:53:34 +0000
+Message-Id: <20200320145351.32292-10-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200320145351.32292-1-vincenzo.frascino@arm.com>
 References: <20200320145351.32292-1-vincenzo.frascino@arm.com>
@@ -56,67 +56,84 @@ a userspace library (UAPI and a minimal set of kernel headers). To make
 this possible it is necessary to isolate from the kernel headers the
 common parts that are strictly necessary to build the library.
 
-Split clocksource.h into linux and common headers to make the latter
-suitable for inclusion in the vDSO library.
+Split math64.h into linux and common headers to make the latter suitable
+for inclusion in the vDSO library.
 
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- include/linux/clocksource.h | 11 +----------
- include/vdso/clocksource.h  | 23 +++++++++++++++++++++++
- 2 files changed, 24 insertions(+), 10 deletions(-)
- create mode 100644 include/vdso/clocksource.h
+ include/linux/math64.h | 20 +-------------------
+ include/vdso/math64.h  | 24 ++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 19 deletions(-)
+ create mode 100644 include/vdso/math64.h
 
-diff --git a/include/linux/clocksource.h b/include/linux/clocksource.h
-index 02e3282719bd..86d143db6523 100644
---- a/include/linux/clocksource.h
-+++ b/include/linux/clocksource.h
-@@ -28,16 +28,7 @@ struct module;
- #include <asm/clocksource.h>
- #endif
+diff --git a/include/linux/math64.h b/include/linux/math64.h
+index 65bef21cdddb..11a267413e8e 100644
+--- a/include/linux/math64.h
++++ b/include/linux/math64.h
+@@ -3,6 +3,7 @@
+ #define _LINUX_MATH64_H
  
--enum vdso_clock_mode {
--	VDSO_CLOCKMODE_NONE,
--#ifdef CONFIG_GENERIC_GETTIMEOFDAY
--	VDSO_ARCH_CLOCKMODES,
--#endif
--	VDSO_CLOCKMODE_MAX,
+ #include <linux/types.h>
++#include <vdso/math64.h>
+ #include <asm/div64.h>
+ 
+ #if BITS_PER_LONG == 64
+@@ -142,25 +143,6 @@ static inline s64 div_s64(s64 dividend, s32 divisor)
+ 
+ u32 iter_div_u64_rem(u64 dividend, u32 divisor, u64 *remainder);
+ 
+-static __always_inline u32
+-__iter_div_u64_rem(u64 dividend, u32 divisor, u64 *remainder)
+-{
+-	u32 ret = 0;
 -
--	/* Indicator for time namespace VDSO */
--	VDSO_CLOCKMODE_TIMENS = INT_MAX
--};
-+#include <vdso/clocksource.h>
- 
- /**
-  * struct clocksource - hardware abstraction for a free running counter
-diff --git a/include/vdso/clocksource.h b/include/vdso/clocksource.h
+-	while (dividend >= divisor) {
+-		/* The following asm() prevents the compiler from
+-		   optimising this loop into a modulo operation.  */
+-		asm("" : "+rm"(dividend));
+-
+-		dividend -= divisor;
+-		ret++;
+-	}
+-
+-	*remainder = dividend;
+-
+-	return ret;
+-}
+-
+ #ifndef mul_u32_u32
+ /*
+  * Many a GCC version messes this up and generates a 64x64 mult :-(
+diff --git a/include/vdso/math64.h b/include/vdso/math64.h
 new file mode 100644
-index 000000000000..ab58330e4e5d
+index 000000000000..7da703ee5561
 --- /dev/null
-+++ b/include/vdso/clocksource.h
-@@ -0,0 +1,23 @@
++++ b/include/vdso/math64.h
+@@ -0,0 +1,24 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __VDSO_CLOCKSOURCE_H
-+#define __VDSO_CLOCKSOURCE_H
++#ifndef __VDSO_MATH64_H
++#define __VDSO_MATH64_H
 +
-+#include <vdso/limits.h>
++static __always_inline u32
++__iter_div_u64_rem(u64 dividend, u32 divisor, u64 *remainder)
++{
++	u32 ret = 0;
 +
-+#if defined(CONFIG_ARCH_CLOCKSOURCE_DATA) || \
-+	defined(CONFIG_GENERIC_GETTIMEOFDAY)
-+#include <asm/vdso/clocksource.h>
-+#endif /* CONFIG_ARCH_CLOCKSOURCE_DATA || CONFIG_GENERIC_GETTIMEOFDAY */
++	while (dividend >= divisor) {
++		/* The following asm() prevents the compiler from
++		   optimising this loop into a modulo operation.  */
++		asm("" : "+rm"(dividend));
 +
-+enum vdso_clock_mode {
-+	VDSO_CLOCKMODE_NONE,
-+#ifdef CONFIG_GENERIC_GETTIMEOFDAY
-+	VDSO_ARCH_CLOCKMODES,
-+#endif
-+	VDSO_CLOCKMODE_MAX,
++		dividend -= divisor;
++		ret++;
++	}
 +
-+	/* Indicator for time namespace VDSO */
-+	VDSO_CLOCKMODE_TIMENS = INT_MAX
-+};
++	*remainder = dividend;
 +
-+#endif /* __VDSO_CLOCKSOURCE_H */
++	return ret;
++}
++
++#endif /* __VDSO_MATH64_H */
 -- 
 2.25.1
 
