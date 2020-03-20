@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06CA318D1D8
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 15:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE8218D1EE
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 15:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727767AbgCTOzm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Mar 2020 10:55:42 -0400
-Received: from foss.arm.com ([217.140.110.172]:50598 "EHLO foss.arm.com"
+        id S1727790AbgCTOzr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Mar 2020 10:55:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:50630 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727744AbgCTOzm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 20 Mar 2020 10:55:42 -0400
+        id S1727744AbgCTOzp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 20 Mar 2020 10:55:45 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63F2DFEC;
-        Fri, 20 Mar 2020 07:55:41 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F97D1045;
+        Fri, 20 Mar 2020 07:55:44 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F3C83F792;
-        Fri, 20 Mar 2020 07:55:38 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AB903F792;
+        Fri, 20 Mar 2020 07:55:41 -0700 (PDT)
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
@@ -38,9 +38,9 @@ Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Marc Zyngier <maz@kernel.org>,
         Mark Rutland <Mark.Rutland@arm.com>
-Subject: [PATCH v5 18/26] arm64: vdso32: Code clean up
-Date:   Fri, 20 Mar 2020 14:53:43 +0000
-Message-Id: <20200320145351.32292-19-vincenzo.frascino@arm.com>
+Subject: [PATCH v5 19/26] arm64: Introduce asm/vdso/processor.h
+Date:   Fri, 20 Mar 2020 14:53:44 +0000
+Message-Id: <20200320145351.32292-20-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200320145351.32292-1-vincenzo.frascino@arm.com>
 References: <20200320145351.32292-1-vincenzo.frascino@arm.com>
@@ -51,84 +51,72 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The compat vdso library had some checks that are not anymore relevant.
+The vDSO library should only include the necessary headers required for
+a userspace library (UAPI and a minimal set of kernel headers). To make
+this possible it is necessary to isolate from the kernel headers the
+common parts that are strictly necessary to build the library.
 
-Remove the unused code from the compat vDSO library.
-
-Note: This patch is preparatory for a future one that will introduce
-asm/vdso/processor.h on arm64.
+Introduce asm/vdso/processor.h to contain all the arm64 specific
+functions that are suitable for vDSO inclusion.
 
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Link: https://lore.kernel.org/lkml/20200317122220.30393-19-vincenzo.frascino@arm.com
 ---
- arch/arm64/include/asm/vdso/compat_gettimeofday.h |  8 --------
- arch/arm64/kernel/vdso32/vgettimeofday.c          | 12 ------------
- 2 files changed, 20 deletions(-)
+ arch/arm64/include/asm/processor.h      |  7 ++-----
+ arch/arm64/include/asm/vdso/processor.h | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm64/include/asm/vdso/processor.h
 
-diff --git a/arch/arm64/include/asm/vdso/compat_gettimeofday.h b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-index 81b0c394f1d8..401df2bcd741 100644
---- a/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-+++ b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-@@ -76,10 +76,6 @@ int clock_getres_fallback(clockid_t _clkid, struct __kernel_timespec *_ts)
- 	register long ret asm ("r0");
- 	register long nr asm("r7") = __NR_compat_clock_getres_time64;
+diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+index 5ba63204d078..e51ef2dc5749 100644
+--- a/arch/arm64/include/asm/processor.h
++++ b/arch/arm64/include/asm/processor.h
+@@ -28,6 +28,8 @@
+ #include <linux/string.h>
+ #include <linux/thread_info.h>
  
--	/* The checks below are required for ABI consistency with arm */
--	if ((_clkid >= MAX_CLOCKS) && (_ts == NULL))
--		return -EINVAL;
--
- 	asm volatile(
- 	"       swi #0\n"
- 	: "=r" (ret)
-@@ -97,10 +93,6 @@ int clock_getres32_fallback(clockid_t _clkid, struct old_timespec32 *_ts)
- 	register long ret asm ("r0");
- 	register long nr asm("r7") = __NR_compat_clock_getres;
++#include <vdso/processor.h>
++
+ #include <asm/alternative.h>
+ #include <asm/cpufeature.h>
+ #include <asm/hw_breakpoint.h>
+@@ -256,11 +258,6 @@ extern void release_thread(struct task_struct *);
  
--	/* The checks below are required for ABI consistency with arm */
--	if ((_clkid >= MAX_CLOCKS) && (_ts == NULL))
--		return -EINVAL;
--
- 	asm volatile(
- 	"       swi #0\n"
- 	: "=r" (ret)
-diff --git a/arch/arm64/kernel/vdso32/vgettimeofday.c b/arch/arm64/kernel/vdso32/vgettimeofday.c
-index 54fc1c2ce93f..ddbad47efaa4 100644
---- a/arch/arm64/kernel/vdso32/vgettimeofday.c
-+++ b/arch/arm64/kernel/vdso32/vgettimeofday.c
-@@ -11,20 +11,12 @@
- int __vdso_clock_gettime(clockid_t clock,
- 			 struct old_timespec32 *ts)
- {
--	/* The checks below are required for ABI consistency with arm */
--	if ((u32)ts >= TASK_SIZE_32)
--		return -EFAULT;
--
- 	return __cvdso_clock_gettime32(clock, ts);
- }
+ unsigned long get_wchan(struct task_struct *p);
  
- int __vdso_clock_gettime64(clockid_t clock,
- 			   struct __kernel_timespec *ts)
- {
--	/* The checks below are required for ABI consistency with arm */
--	if ((u32)ts >= TASK_SIZE_32)
--		return -EFAULT;
+-static inline void cpu_relax(void)
+-{
+-	asm volatile("yield" ::: "memory");
+-}
 -
- 	return __cvdso_clock_gettime(clock, ts);
- }
- 
-@@ -37,10 +29,6 @@ int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
- int __vdso_clock_getres(clockid_t clock_id,
- 			struct old_timespec32 *res)
- {
--	/* The checks below are required for ABI consistency with arm */
--	if ((u32)res >= TASK_SIZE_32)
--		return -EFAULT;
--
- 	return __cvdso_clock_getres_time32(clock_id, res);
- }
- 
+ /* Thread switching */
+ extern struct task_struct *cpu_switch_to(struct task_struct *prev,
+ 					 struct task_struct *next);
+diff --git a/arch/arm64/include/asm/vdso/processor.h b/arch/arm64/include/asm/vdso/processor.h
+new file mode 100644
+index 000000000000..ff830b766ad2
+--- /dev/null
++++ b/arch/arm64/include/asm/vdso/processor.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2020 ARM Ltd.
++ */
++#ifndef __ASM_VDSO_PROCESSOR_H
++#define __ASM_VDSO_PROCESSOR_H
++
++#ifndef __ASSEMBLY__
++
++static inline void cpu_relax(void)
++{
++	asm volatile("yield" ::: "memory");
++}
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* __ASM_VDSO_PROCESSOR_H */
 -- 
 2.25.1
 
