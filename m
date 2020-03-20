@@ -2,45 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC34A18C7BA
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 07:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7178A18C7BD
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 07:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbgCTG4B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Mar 2020 02:56:01 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:37770 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726232AbgCTG4B (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Mar 2020 02:56:01 -0400
-Received: by mail-qk1-f195.google.com with SMTP id z25so5865150qkj.4
-        for <linux-arch@vger.kernel.org>; Thu, 19 Mar 2020 23:56:01 -0700 (PDT)
+        id S1726884AbgCTG4E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Mar 2020 02:56:04 -0400
+Received: from mail-qv1-f65.google.com ([209.85.219.65]:39108 "EHLO
+        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726829AbgCTG4E (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Mar 2020 02:56:04 -0400
+Received: by mail-qv1-f65.google.com with SMTP id v38so2427868qvf.6
+        for <linux-arch@vger.kernel.org>; Thu, 19 Mar 2020 23:56:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H7qI0J6UdPPMxMo89bJspgFfE6kReY5LFKqgcFnVjEE=;
-        b=M8wPPWkw74OJ30O2RObg0NV3Uqad/cBAquf9jWLlhnwkQWlKMsX15vW5/llQc7ZVma
-         kPOuv5pWfIfh9QqyZlJXrNJB4Ux8KA/twWx2iH39XKFkgXxG/T5IhWKyDHPbqnw2gSVe
-         p1+JNPzVnbVxNJz2extJx7+1rarPEomTnUDRs=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lZktbxS0i0oIpqeQrOD+jHQIgM5+6wOIwrhIyNa/H6M=;
+        b=OGS30BXKvOOsiK6bD9IHOQ/GNBieNsiIIavZuTQRPmaN+dLmHB72W7AG9FSAKiF68g
+         QRPpdBrWYryk/9Q4y39ZNGQ9DEhRzN2NNMESkxWC+20ZItrbfMAM4eIWJclNOKm1WtD8
+         MbAR5IBjM8/daadm5FSS1NRGtu7/JG+3gQ9w0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H7qI0J6UdPPMxMo89bJspgFfE6kReY5LFKqgcFnVjEE=;
-        b=KQQEuQQsK0Wf2UOz2O2kcJw6ls0m9wYmGfufmcdrBWE+JFYJZFR9WNOe8tpL3IBrYl
-         /TxwNddkfYZI8S/IlXY2GIv0xlAzDeXYCvUPln4mHEsVaxlJt00NAz0BBqQL8hcLXekF
-         MmqxMcolcF0AbZl2+rdhZtc5Azo4cc07aEWq3A8fLu7hUEax1dw+7FL0ONZCU4thCu0x
-         iAjN7/Q6dWBMPEBmNC9FwICMkFzoEpLOafOkZ7QdEy5CFexpoUE3bP8i2WhKz6epGcDu
-         +KJbCuyAQ/XAGEf3lNq8bm5BhaybpUTA0KQl+ki51RpU9yNMboyNfYWIVNDZw4rhwAkF
-         wLOA==
-X-Gm-Message-State: ANhLgQ3POAJcNgX2T6VF3OhA9p3bZI1m7NkDddhzFt1fPBKe2EbdjfO8
-        7WhcaOYYJl3xEtw/1RLYJ0ayzg==
-X-Google-Smtp-Source: ADFU+vvbBbRAvpvItKU3CDLenRkmMnn64zsTki3i6k9ySmu292eqsPkuvXJtQLwlXVDMfaaK0W5jlQ==
-X-Received: by 2002:a37:6556:: with SMTP id z83mr6558870qkb.381.1584687360401;
-        Thu, 19 Mar 2020 23:56:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lZktbxS0i0oIpqeQrOD+jHQIgM5+6wOIwrhIyNa/H6M=;
+        b=Jf5gAYnqeOjiv53sFlfQxp3zhRj+/el2HOje2BBs+4q2qSt47Y418gF43eQECM3reI
+         PMBlmNNO+LYeIraEM2MOPcrYK3/v8Y6JhfyqipFGzwA59ki/q9+51/kLdeyaXcdYYaL0
+         P0EB9A9r78CdcjWB6a2GY4fZFrQgAwzyyM+NCuni3X9DaKdawuQqFBurcMMEqlr/QWBc
+         GqpIPGhITtreK/Tw3jBofu/n+WZiADk236ncbgVY0DQpVoo4Y7hUVHREPshdmIGtt5hM
+         /ki87PKPhCB9skwJU2lZK9txFbEDuGMRqoVU93UW+DZG0PyhHU/lRlBrgTxDxHMKJ9Vj
+         c22A==
+X-Gm-Message-State: ANhLgQ2VJbRez3UBZGnn/lVxkftoWQEbr9HkZY/CGsg+iqdZTmj6fgPn
+        eaPHyIlhf6+ahSBOCC10WMXV2Q==
+X-Google-Smtp-Source: ADFU+vsBfhVA6txgEV2FXFv04i7OnbCf4MVeIQfB2DE8puxWcSZZqD9MC2EXp6EPoVIRkmczAddJfg==
+X-Received: by 2002:a0c:eeca:: with SMTP id h10mr6656674qvs.206.1584687361491;
+        Thu, 19 Mar 2020 23:56:01 -0700 (PDT)
 Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id m15sm419985qkk.26.2020.03.19.23.55.59
+        by smtp.gmail.com with ESMTPSA id m15sm419985qkk.26.2020.03.19.23.56.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 23:55:59 -0700 (PDT)
+        Thu, 19 Mar 2020 23:56:01 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
@@ -56,10 +56,12 @@ Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>
-Subject: [PATCH 1/3] LKMM: Add litmus test for RCU GP guarantee where updater frees object
-Date:   Fri, 20 Mar 2020 02:55:50 -0400
-Message-Id: <20200320065552.253696-1-joel@joelfernandes.org>
+Subject: [PATCH 2/3] LKMM: Add litmus test for RCU GP guarantee where reader stores
+Date:   Fri, 20 Mar 2020 02:55:51 -0400
+Message-Id: <20200320065552.253696-2-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.25.1.696.g5e7596f4ac-goog
+In-Reply-To: <20200320065552.253696-1-joel@joelfernandes.org>
+References: <20200320065552.253696-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -72,56 +74,53 @@ shows an RCU reader can never span a grace period.
 
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- .../litmus-tests/RCU+sync+free.litmus         | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 tools/memory-model/litmus-tests/RCU+sync+free.litmus
+ .../litmus-tests/RCU+sync+read.litmus         | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 tools/memory-model/litmus-tests/RCU+sync+read.litmus
 
-diff --git a/tools/memory-model/litmus-tests/RCU+sync+free.litmus b/tools/memory-model/litmus-tests/RCU+sync+free.litmus
+diff --git a/tools/memory-model/litmus-tests/RCU+sync+read.litmus b/tools/memory-model/litmus-tests/RCU+sync+read.litmus
 new file mode 100644
-index 0000000000000..c4682502dd296
+index 0000000000000..73557772e2a32
 --- /dev/null
-+++ b/tools/memory-model/litmus-tests/RCU+sync+free.litmus
-@@ -0,0 +1,40 @@
-+C RCU+sync+free
++++ b/tools/memory-model/litmus-tests/RCU+sync+read.litmus
+@@ -0,0 +1,37 @@
++C RCU+sync+read
 +
 +(*
 + * Result: Never
 + *
-+ * This litmus test demonstrates that an RCU reader can never see a write after
-+ * the grace period, if it saw writes that happen before the grace period. This
-+ * is a typical pattern of RCU usage, where the write before the grace period
-+ * assigns a pointer, and the writes after destroy the object that the pointer
-+ * points to.
++ * This litmus test demonstrates that after a grace period, an RCU updater always
++ * sees all stores done in prior RCU read-side critical sections. Such
++ * read-side critical sections would have ended before the grace period ended.
 + *
 + * This guarantee also implies, an RCU reader can never span a grace period and
 + * is an important RCU grace period memory ordering guarantee.
 + *)
 +
 +{
-+x = 1;
-+y = x;
-+z = 1;
++x = 0;
++y = 0;
 +}
 +
-+P0(int *x, int *z, int **y)
++P0(int *x, int *y)
++{
++	rcu_read_lock();
++	WRITE_ONCE(*x, 1);
++	WRITE_ONCE(*y, 1);
++	rcu_read_unlock();
++}
++
++P1(int *x, int *y)
 +{
 +	int r0;
 +	int r1;
 +
-+	rcu_read_lock();
-+	r0 = rcu_dereference(*y);
-+	r1 = READ_ONCE(*r0);
-+	rcu_read_unlock();
-+}
-+
-+P1(int *x, int *z, int **y)
-+{
-+	rcu_assign_pointer(*y, z);
++	r0 = READ_ONCE(*x);
 +	synchronize_rcu();
-+	WRITE_ONCE(*x, 0);
++	r1 = READ_ONCE(*y);
 +}
 +
-+exists (0:r0=x /\ 0:r1=0)
++exists (1:r0=1 /\ 1:r1=0)
 -- 
 2.25.1.696.g5e7596f4ac-goog
 
