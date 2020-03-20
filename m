@@ -2,157 +2,297 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D093918D5AB
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 18:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CDA18D5F4
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Mar 2020 18:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbgCTRWV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Mar 2020 13:22:21 -0400
-Received: from mail-dm6nam12on2134.outbound.protection.outlook.com ([40.107.243.134]:18817
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        id S1726880AbgCTRkS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Mar 2020 13:40:18 -0400
+Received: from mail-eopbgr70057.outbound.protection.outlook.com ([40.107.7.57]:3968
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726801AbgCTRWU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 20 Mar 2020 13:22:20 -0400
+        id S1726801AbgCTRkR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 20 Mar 2020 13:40:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1UXMyLHPRI9LMRz6KCwfVqkpzIqzfZoCZnMBdG+JWB0=;
+ b=n/PXHMpMPm9Bj8Sj2kZa8zCdaT7EUgpxtvBoRoQFSTCxqWdLQ8aBNfmpO5odrH2nJvuuMfIHCrhWSCeTD3jzbbJxengPe7JUn1xsRaWaA/OL9mvcb3BXKjBIPya77kowadedJxJLvKUWf9Rd54s+34AwqH1ZNS0coAZRW3WUMh0=
+Received: from DBBPR09CA0023.eurprd09.prod.outlook.com (2603:10a6:10:c0::35)
+ by DB8PR08MB4028.eurprd08.prod.outlook.com (2603:10a6:10:a8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2835.18; Fri, 20 Mar
+ 2020 17:40:08 +0000
+Received: from DB5EUR03FT019.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:c0:cafe::4c) by DBBPR09CA0023.outlook.office365.com
+ (2603:10a6:10:c0::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2835.20 via Frontend
+ Transport; Fri, 20 Mar 2020 17:40:08 +0000
+Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; vger.kernel.org; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;vger.kernel.org; dmarc=bestguesspass
+ action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DB5EUR03FT019.mail.protection.outlook.com (10.152.20.163) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2814.13 via Frontend Transport; Fri, 20 Mar 2020 17:40:08 +0000
+Received: ("Tessian outbound f88013e987c7:v48"); Fri, 20 Mar 2020 17:40:08 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: d6cbd01de5062be5
+X-CR-MTA-TID: 64aa7808
+Received: from e67c07784683.3
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 51950004-4DEF-4479-ADFA-AB04BA3CAAEB.1;
+        Fri, 20 Mar 2020 17:40:02 +0000
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id e67c07784683.3
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Fri, 20 Mar 2020 17:40:02 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L5ziMGbtFepxslExpUcQwmJbJ4M/N8rpft6LL5v5lejOzbat1dZ6Isls1DPtMNTx7bkqaHK0UG2Jy3i/Qb4FyGtQs2eAbbBiVgK1lTXooTOPJ3OPDeo3/NeeangLvCRQFCt4rGTBCYZVKU5S/4OyAFaHfjjcwewYBKpJrccxlFkw2GpSCgUXTsWUByX5d0v/ZR8XZOdtmZYi+1Z+cDaWbiJJJ473aW4OZkVR977rxXlZgE274AEmkIZVJ9gtCEZEnZFyul63DonJQG+BqfECPBz4PQwJMDJD2L/aj9LG4sxVyNuQdm3H+FjRCa8EUuVQlOTLaJgflNTwisUXNyzL9A==
+ b=AVteRUTsdmT1xKsDJwkVuSwDfvGDCEn8itpCq2fhTn/3dYZC0ryT5+k/2ErlJoVl16tLB5H4YcnXR1JMr8kHzTmA85hlqTkOhTayVIV7tK+D8BvrdCasbrjrlfGrRFnFWV0FB6xlY2+BYBruRxFnvfz0+53R9HIOT+H+v/mL8JZIMS5NLieTcJDxJ0on+KgXqSHN/WKrS8a+ccHB1JTv61f702lF57k/GFz/aEPwOf+ndv25zlK8N3opXsW/rGFQOJlJ8TGi4ZMmkd8/gbqiDPnyEDPIgVdHASnMtDV9cR2beO5ZYKXH7EOkT8K2L3UzoY/gVeAkMRwQWGVash8y2Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4252JX0+KpIkSNxL4cgOQW9Kyf9lUpxRX/bHw+/4OX0=;
- b=hJSVr1Mam5Mc4zdYl+rCTTnb9KaQZYsl5YmzHkk17okOxeT/vcYRxFIYofF0SQJ0K7MmIwxNpmHe/LJ/y0EefMJy8cPwz0lt8ge9SBSrbadLyCXIDbsPq6YnoEa5d9kkVzNeuXwkScEism4Xk7y2xoEj5cSjQ8ZH8+S7Tz5UaETka1nj/qbpoi8QfAWPRISQjjqXruv57PnYqza3GEylxVFQHY6rkS6s2mxgj5yURddT27uaAbTjT63CNkB9dxvK4rd8T2XHW3WbqgNVz4Dc5aSP8voFgro8wFGTujEHoE7wprxnKzVqjIliPhFBHsDc7U+YcImvZac9xxs4MNSZIQ==
+ bh=1UXMyLHPRI9LMRz6KCwfVqkpzIqzfZoCZnMBdG+JWB0=;
+ b=cLg1A33UaCsP+nRsEphrbIEEBNtx9sbulAItuaSDodOkQ3vT2Y5uIpvB+LgUnbF+cggMlhwKJOpkHnxC0e1b6uEhhgDY7bBge1nZdNPBz74lsJtvZmoU0n3EchPCLEvLQpO12mDeOH1WHab+PmwWg876Seb7dUakm4eboFHrC3fKbnxoeO/fgu3gxwsI/33nnxDWFSyPYmUClDrmrN3r1v7Zfw2P2wY4vDGyeM9pN65/CUzutdtdgRqrXVy+IU6pC2PqbLiJEsmS8qpA3tHeebnU6JR2GO/AwwWvaZ8oGEO6WnqZBi6zJniOXWA84f3p+Q2X8J/OMOdufBkLIjVUow==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4252JX0+KpIkSNxL4cgOQW9Kyf9lUpxRX/bHw+/4OX0=;
- b=h7nGFldSkKp+lv/H37Bp4pCPUy1uyCcsRhiobM0G9c3AmH7g7CDSd4jy8zt9m/GZLEXrXMTE+4rgnBGvhp2ugV7b8mM/qU5u6Ad1vHh0kTaTYAoJpx0J72SaJAG3/uxsZRE/RtNsnf9hbWbLMsp/ir61edO1gUq7M7YxlP6uhCU=
-Received: from MW2PR2101MB1052.namprd21.prod.outlook.com (2603:10b6:302:a::16)
- by MW2PR2101MB1002.namprd21.prod.outlook.com (2603:10b6:302:4::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2835.2; Fri, 20 Mar
- 2020 17:22:16 +0000
-Received: from MW2PR2101MB1052.namprd21.prod.outlook.com
- ([fe80::71ee:121:71bd:6156]) by MW2PR2101MB1052.namprd21.prod.outlook.com
- ([fe80::71ee:121:71bd:6156%10]) with mapi id 15.20.2856.012; Fri, 20 Mar 2020
- 17:22:16 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Marc Zyngier <maz@kernel.org>, gregkh <gregkh@linuxfoundation.org>,
+ bh=1UXMyLHPRI9LMRz6KCwfVqkpzIqzfZoCZnMBdG+JWB0=;
+ b=n/PXHMpMPm9Bj8Sj2kZa8zCdaT7EUgpxtvBoRoQFSTCxqWdLQ8aBNfmpO5odrH2nJvuuMfIHCrhWSCeTD3jzbbJxengPe7JUn1xsRaWaA/OL9mvcb3BXKjBIPya77kowadedJxJLvKUWf9Rd54s+34AwqH1ZNS0coAZRW3WUMh0=
+Authentication-Results-Original: spf=none (sender IP is )
+ smtp.mailfrom=Szabolcs.Nagy@arm.com; 
+Received: from DB7PR08MB3292.eurprd08.prod.outlook.com (52.134.111.30) by
+ DB7PR08MB3466.eurprd08.prod.outlook.com (20.176.238.151) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2814.21; Fri, 20 Mar 2020 17:39:57 +0000
+Received: from DB7PR08MB3292.eurprd08.prod.outlook.com
+ ([fe80::d48a:40f:822:6a0a]) by DB7PR08MB3292.eurprd08.prod.outlook.com
+ ([fe80::d48a:40f:822:6a0a%7]) with mapi id 15.20.2835.017; Fri, 20 Mar 2020
+ 17:39:57 +0000
+Date:   Fri, 20 Mar 2020 17:39:46 +0000
+From:   Szabolcs Nagy <szabolcs.nagy@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        Andy Whitcroft <apw@canonical.com>,
-        vkuznets <vkuznets@redhat.com>, Jason Wang <jasowang@redhat.com>,
-        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: RE: [PATCH v6 04/10] arm64: hyperv: Add memory alloc/free functions
- for Hyper-V size pages
-Thread-Topic: [PATCH v6 04/10] arm64: hyperv: Add memory alloc/free functions
- for Hyper-V size pages
-Thread-Index: AQHV+hZH2sSK6TnWLUqKIqZdhn3BQ6hK4/SAgAACOwCAAACGAIACfgqwgAC+cYCAAlRDsIABPYUAgAAOQwA=
-Date:   Fri, 20 Mar 2020 17:22:16 +0000
-Message-ID: <MW2PR2101MB10521A71057BDEEDF2BB4F23D7F50@MW2PR2101MB1052.namprd21.prod.outlook.com>
-References: <1584200119-18594-1-git-send-email-mikelley@microsoft.com>
- <1584200119-18594-5-git-send-email-mikelley@microsoft.com>
- <CAK8P3a2Hnm74aUMNFHbjMr4HwHGZn1+xa4ERsxAJY6hMzhEOhQ@mail.gmail.com>
- <632eb459dbe53a9b69df2a4f030a755b@kernel.org>
- <CAK8P3a3aihZeriUWAhWJMsOtdiY4Lo29syrRbB4Po3v4dsLhvA@mail.gmail.com>
- <MW2PR2101MB1052D91D3A9CEEBD7E2EA82FD7F70@MW2PR2101MB1052.namprd21.prod.outlook.com>
- <CAK8P3a2AO4k3vJ7WuJQz7ick+XPgGY3Jfk8-ROqtwyNs0nWkDA@mail.gmail.com>
- <MW2PR2101MB10520CEF065A41EEBC17FFC2D7F40@MW2PR2101MB1052.namprd21.prod.outlook.com>
- <CAK8P3a1MfYDTiQ9j0o3tnd=ymZukPoSmuExLhEMRR+GRwVD7xA@mail.gmail.com>
-In-Reply-To: <CAK8P3a1MfYDTiQ9j0o3tnd=ymZukPoSmuExLhEMRR+GRwVD7xA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=mikelley@ntdev.microsoft.com;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2020-03-20T17:22:13.9185970Z;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=0ba56700-64ff-4d20-868d-5319aa9c83e1;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=mikelley@microsoft.com; 
-x-originating-ip: [24.22.167.197]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 8f3dd840-015b-49f6-ac53-08d7ccf33caf
-x-ms-traffictypediagnostic: MW2PR2101MB1002:|MW2PR2101MB1002:|MW2PR2101MB1002:
-x-ms-exchange-transport-forked: True
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <MW2PR2101MB10022F73E9FA53370F842E01D7F50@MW2PR2101MB1002.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 03484C0ABF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(39860400002)(136003)(376002)(346002)(366004)(396003)(199004)(478600001)(81166006)(7416002)(76116006)(54906003)(81156014)(9686003)(55016002)(66446008)(10290500003)(66476007)(33656002)(66946007)(66556008)(64756008)(8676002)(8936002)(6916009)(53546011)(86362001)(71200400001)(186003)(6506007)(2906002)(52536014)(5660300002)(8990500004)(4326008)(26005)(7696005)(316002);DIR:OUT;SFP:1102;SCL:1;SRVR:MW2PR2101MB1002;H:MW2PR2101MB1052.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-received-spf: None (protection.outlook.com: microsoft.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: X7cmKdzQKYlypkbgpMmdB/KqOiE4l+J6xFJNZVXpyWJQHXU53T4eki0pIDdRHTnbWSnh1Gdv1tijG4wPk4xrmrkzVGYJeXsE6nWeB5okssL6JjztVvd65EAfWevIZThYBtuwfVWV+4J01Nz+YRLJgwyEEiGqDQDR1S2PP5QU2t/oP7qF0YzyLmsjCmOzp2E7781XUFPqbCZwSJ4RkKeUKQajpuN+BHirJrD7PIqWTvIcXCTx2xyDbC72g37lOlKXYiFPKIrVM8vRCKZjgEDIj/jqiQR9EklKpikSUM1J+Nbm0qIG/dkanaQmKgFK89PT+km89ZJeOsf3I0yoFrAVMye13TGWaxox1bJVNGJ11JYuRmdmSQphE0g4x/QM/PR7tNPJ10Ql52OR5JSXA3DxbFPo1bE76c/7IvLMdzzTXHvjQB/csxLOBktcvOD7VDSj
-x-ms-exchange-antispam-messagedata: nIjl6UoV4iUAHAt7IbBcJpJDrMSxNXyEGk1FB1YUQJe0LZQ74ci12DbInsH8lRyYDPTdapXS6UpfOgvdEai0S6gqWOvSiwiZicmtNIPY7+3ERzCXFhBtM9s9rHWVGHJR0yPq+UDLgAENxsWQMHViig==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        "H . J . Lu " <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        nd@arm.com
+Subject: Re: [PATCH v10 00/13] arm64: Branch Target Identification support
+Message-ID: <20200320173945.GC27072@arm.com>
+References: <20200316165055.31179-1-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200316165055.31179-1-broonie@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: DM6PR13CA0061.namprd13.prod.outlook.com
+ (2603:10b6:5:134::38) To DB7PR08MB3292.eurprd08.prod.outlook.com
+ (2603:10a6:5:1f::30)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f3dd840-015b-49f6-ac53-08d7ccf33caf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2020 17:22:16.1920
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from arm.com (217.140.106.55) by DM6PR13CA0061.namprd13.prod.outlook.com (2603:10b6:5:134::38) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2835.12 via Frontend Transport; Fri, 20 Mar 2020 17:39:51 +0000
+X-Originating-IP: [217.140.106.55]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 941aff2f-c862-4991-c166-08d7ccf5bba1
+X-MS-TrafficTypeDiagnostic: DB7PR08MB3466:|DB7PR08MB3466:|DB8PR08MB4028:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB8PR08MB4028480A8E156060D0339C1CEDF50@DB8PR08MB4028.eurprd08.prod.outlook.com>
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Oob-TLC-OOBClassifiers: OLM:972;OLM:972;
+X-Forefront-PRVS: 03484C0ABF
+X-Forefront-Antispam-Report-Untrusted: SFV:NSPM;SFS:(10009020)(4636009)(396003)(346002)(136003)(376002)(366004)(39860400002)(199004)(81166006)(8936002)(81156014)(54906003)(36756003)(8676002)(16526019)(26005)(2616005)(186003)(316002)(6916009)(1076003)(44832011)(8886007)(33656002)(55016002)(956004)(4326008)(52116002)(66946007)(7416002)(66476007)(66556008)(2906002)(7696005)(6666004)(86362001)(478600001)(5660300002)(45080400002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR08MB3466;H:DB7PR08MB3292.eurprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
+Received-SPF: None (protection.outlook.com: arm.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: CJyxLAlsdNdFlj8RN/dp5y/VTVKzXpvthb2yKv2zVtnSixdilLbd1uAD0K0E1iRKlnZhb26rjhO/Z57qzHGwBJJ8P/0Ak+/160isp54pAhtaldEdmV/ky9bm0uiuGxv+qmS+yGXMIpz08NvB9ATbk3yge6Cv8kNR0PA9Biot6k/wCcefIY3aTLtIvwqm0RYiN/uvbbVyg/9Alakt6mlzzklS1QJ4tTxU2/1XPLRNhwzG0ALpF305sTT9K83fJ0DxOzPyHuJY3ovpc0k1yVtZe/8TEYPc7RpgXZTDk+a/EUqbIHMuemYNgGSCGyXVlN9a7hWrhAt9PeW/NkNV8qFOMO+myS0hGtvIVeIvC4WY2C9Ny6GmOLHbAwJlg9ae11rFwwioj3oHfY/mBSMTaYmTLIwpSs8kYXLWgwwJkKTtbFJySXwx2DWjOEICl0sMpGRv
+X-MS-Exchange-AntiSpam-MessageData: 4hdYRuvkSHlR2jS5e1Kos0u+pH5XN7wWisGglvfxFrdWLrYGng7KV7uGGryMspqMKwSSGdeU58FXBaBGakFTjCK/bOlG48U7XlBVZ4BoCjuBpnbLcpsQ7cnCIf7tqmdHVpPyVf9aEAIXhAVlQ7V7Ig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR08MB3466
+Original-Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=Szabolcs.Nagy@arm.com; 
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT019.eop-EUR03.prod.protection.outlook.com
+X-Forefront-Antispam-Report: CIP:63.35.35.123;IPV:CAL;SCL:-1;CTRY:IE;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(376002)(396003)(346002)(199004)(46966005)(8936002)(316002)(450100002)(33656002)(5660300002)(26826003)(4326008)(336012)(45080400002)(478600001)(36756003)(1076003)(2906002)(70586007)(6666004)(7696005)(47076004)(8676002)(8886007)(81166006)(16526019)(186003)(55016002)(26005)(70206006)(6862004)(356004)(44832011)(86362001)(54906003)(81156014)(956004)(2616005);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR08MB4028;H:64aa7808-outbound-1.mta.getcheckrecipient.com;FPR:;SPF:Pass;LANG:en;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;A:1;
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 4821911d-6d4f-45ca-ada0-08d7ccf5b51b
+X-Forefront-PRVS: 03484C0ABF
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yaThnNBUYWIoCL+SDFZi2s9whrInbmvebDefRAQqPEBx/fh830BIptijkUSGaInHwYqqhKcJ6JfculXi48t9WdYugSJQqGgdmk9opiq+GgTjUm3bhqpS6U79K4N2N/V7tZBBb+3IANO6T2q5DfCLvxbur+Ko9TusGgEveXKSu3TrfVj7Tsrhzdg2CUtwC50RBZERS+9EDt7GNXTuILTtKdHEQQyRoAyMLLCZl55Wrvr+/ecz4wtJwDt08trx1l2AGPEF/VGFqvKjCntFRh0bk2AuqTM+NtQWlfYggAPV3aYHiBa4hjQn93UGvLdCJIiRh22qkliZQRs2qWFSQf26v6KYHgnPyAW97xkgebW/fxRFlC/AcVZaFb6y4GzDMcrW0p3fHF1OeVRtGbnZRaeBHJAYREFerfdrZ+RM31y9wrlFNg5VgQclsipmWRqxOJW8hAWlg2hH4iyY6GQkxDbb3c+qJLsnijAOKI/7t6lopK97M0fW9tATNAGTL0SCJ+ZYOG6tknLWjN3UIoHUvToGzA==
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2020 17:40:08.3088
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i3nxu0DuCdm75uABAe629t/dfDf+EidhXRwLPj6y6OAI9rTURajy64T1VspeWb8XcLES24Ktq2YUlvMD4PGGql2MXcrNrmwNixmbECv4z/8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR2101MB1002
+X-MS-Exchange-CrossTenant-Network-Message-Id: 941aff2f-c862-4991-c166-08d7ccf5bba1
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR08MB4028
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4gU2VudDogRnJpZGF5LCBNYXJjaCAy
-MCwgMjAyMCA5OjI4IEFNDQo+IA0KPiBPbiBUaHUsIE1hciAxOSwgMjAyMCBhdCAxMDo0MyBQTSBN
-aWNoYWVsIEtlbGxleSA8bWlrZWxsZXlAbWljcm9zb2Z0LmNvbT4gd3JvdGU6DQo+ID4gRnJvbTog
-QXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4gU2VudDogV2VkbmVzZGF5LCBNYXJjaCAxOCwg
-MjAyMCAyOjU4IEFNDQo+ID4gPiBPbiBXZWQsIE1hciAxOCwgMjAyMCBhdCAxOjE1IEFNIE1pY2hh
-ZWwgS2VsbGV5IDxtaWtlbGxleUBtaWNyb3NvZnQuY29tPiB3cm90ZToNCj4gPiA+IE15IHBvaW50
-IHdhcyB0byBrZWVwIHRoZSBmdW5jdGlvbnMgYnV0IHVzZSBhbGxvY19wYWdlcygpIGludGVybmFs
-bHksDQo+ID4gPiBzbyB5b3UgY2FuIGRlYWwgd2l0aCB0aGUgaHlwZXJ2aXNvciBoYXZpbmcgYSBs
-YXJnZXIgcGFnZSBzaXplIHRoYW4NCj4gPiA+IHRoZSBndWVzdCwgd2hpY2ggc2VlbXMgdG8gYmUg
-YSBtb3JlIGltcG9ydGFudCBzY2VuYXJpbyBpZiBJIGNvcnJlY3RseQ0KPiA+ID4gdW5kZXJzdGFu
-ZCB0aGUgZGlmZmVyZW5jZXMgYmV0d2VlbiB0aGUgd2F5IFdpbmRvd3MgYW5kIExpbnV4DQo+ID4g
-PiBkZWFsIHdpdGggcGFnZSBjYWNoZS4NCj4gPg0KPiA+IE9LLCBJIHNlZSBub3cgd2hhdCB5b3Ug
-YXJlIGdldHRpbmcgYXQuICBJIHNob3VsZCBzcGVsbCBvdXQgbXkNCj4gPiBhc3N1bXB0aW9uLCB3
-aGljaCBpcyB0aGUgb3Bwb3NpdGUuICBIeXBlci1WIHdvbid0IGhhdmUgYSBwYWdlDQo+ID4gc2l6
-ZSBvdGhlciB0aGFuIDRLIGFueXRpbWUgaW4gdGhlIGZvcmVzZWVhYmxlIGZ1dHVyZS4gIFRoZQ0K
-PiA+IGNvZGUgaXMgdG9vIHdlZGRlZCB0byB0aGUgeDg2IDRLIHBhZ2Ugc2l6ZSwgYW5kIHRoZSBo
-b3N0LWd1ZXN0DQo+ID4gaW50ZXJmYWNlcyBoYXZlIGEgbG90IG9mIGltcGxpY2l0IGFzc3VtcHRp
-b25zIHRoYXQgdGhlIHBhZ2Ugc2l6ZSBpcw0KPiA+IDRLICh1bmZvcnR1bmF0ZWx5KS4gIEJ1dCB0
-aGUgbGFzdCB0aW1lIEkgbG9va2VkLCBSSEVMIGZvciBBUk02NCBpcw0KPiA+IGRlbGl2ZXJlZCB3
-aXRoIGEgNjRLIHBhZ2Ugc2l6ZS4gIFNvIG15IGFzc3VtcHRpb24gaXMgdGhhdCB0aGUgb25seQ0K
-PiA+IGNvbWJpbmF0aW9uIHRoYXQgcmVhbGx5IG1hdHRlcnMgaXMgdGhlIGd1ZXN0IHBhZ2Ugc2l6
-ZSBiZWluZyBsYXJnZXINCj4gPiB0aGFuIHRoZSBIeXBlci1WIHBhZ2Ugc2l6ZS4gIFRoZSBvdGhl
-ciB3YXkgYXJvdW5kIGp1c3Qgd29uJ3QNCj4gPiBoYXBwZW4gd2l0aG91dCBhIG1ham9yIG92ZXJo
-YXVsIHRvIEh5cGVyLVYsIGluY2x1ZGluZyBhIHJld29yaw0KPiA+IG9mIHRoZSBndWVzdC1ob3N0
-IGludGVyZmFjZS4NCj4gDQo+IE9rLCBnb3QgaXQuIFdlIHNob3VsZCByZWFsbHkgYXNrIFJlZCBI
-YXQgdG8gY2hhbmdlIHRoZSBwYWdlIHNpemUsDQo+IGJ1dCBhcyBsb25nIGFzIHlvdSBjYXJlIGV4
-aXN0aW5nIHN5c3RlbXMsIGFuZCB5b3UgZXhwZWN0IHRoaXMgdG8NCj4gcmVzdWx0IGluIGdpZ2Fi
-eXRlcyBvZiBhbGxvY2F0aW9uIG9uIGZ1dHVyZSBzeXN0ZW1zLCBoYXZpbmcgdGhlDQo+IHdyYXBw
-ZXIgc2VlbXMgcmVhc29uYWJsZS4NCj4gDQo+IE1heWJlIHlvdSBjb3VsZCBmYWxsIGJhY2sgdG8g
-YWxsb2NfcGFnZSB3aGVuIFBBR0VfU0laRSBlcXVhbHMNCj4gSFZfSFlQX1BBR0VfU0laRSB0aG91
-Z2g/IEknbSBub3Qgc3VyZSB3aGF0IHRoZSB0cmFkZW9mZg0KPiBiZXR3ZWVuIGttYWxsb2MgYW5k
-IGFsbG9jX3BhZ2UgaXMgdGhlc2UgZGF5cywgb3RoZXIgdGhhbiB0aGUNCj4gZmVlbGluZyB0aGF0
-IGFsbG9jX3BhZ2UgaXMgdGhlIG1vcmUgb2J2aW91cyBjaG9pY2Ugd2hlbiB5b3Uga25vdw0KPiB5
-b3UgYWx3YXlzIHdhbnQgZXhhY3RseSBhIHBhZ2UgaGVyZS4NCj4gDQoNClllcywgdGhhdCB3b3Jr
-cyBmb3IgbWUuDQoNCk1pY2hhZWwNCg0KDQo=
+The 03/16/2020 16:50, Mark Brown wrote:
+> This patch series implements support for ARMv8.5-A Branch Target
+> Identification (BTI), which is a control flow integrity protection
+> feature introduced as part of the ARMv8.5-A extensions.
+
+i was playing with this and it seems the kernel does not add
+PROT_BTI to non-static executables (i.e. there is an interpreter).
+
+i thought any elf that the kernel maps would get PROT_BTI from the
+kernel. (i want to remove the mprotect in glibc when not necessary)
+
+i tested by linking a hello world exe with -Wl,-z,force-bti (and
+verified that the property note is there) and expected it to crash
+(with SIGILL) when the dynamic linker jumps to _start in the exe,
+but it executed without errors (if i do the mprotect in glibc then
+i get SIGILL as expected).
+
+is this deliberate? does the kernel map static exe and dynamic
+linked exe differently?
+
+i cant tell looking at the patches where this logic comes from.
+
+> 
+> Changes:
+> 
+> v10:
+>  - Fix build for !COMPAT configurations.
+> v9:
+>  - Move Kconfig addition to final patch in series.
+>  - Add patch from Daniel Kiss adding BTI information to smaps, this has
+>    a trivial conflict with a .rst conversion in -next.
+> v8:
+>  - Remove a redundant IS_ENABLED(CONFIG_ARM64_BTI) check.
+> v7:
+>  - Rebase onto v5.6-rc3.
+>  - Move comment about keeping NT_GNU_PROPERTY_TYPE_0 internal into first
+>    patch.
+>  - Add an explicit check for system_supports_bti() when parsing BTI ELF
+>    property for improved robustness.
+> v6:
+>  - Rebase onto v5.6-rc1.
+>  - Fix typos s/BYTPE/BTYPE/ in commit log for "arm64: BTI: Decode BYTPE
+>    bits when printing PSTATE".
+> v5:
+>  - Changed a bunch of -EIO to -ENOEXEC in the ELF parsing code.
+>  - Move PSR_BTYPE defines to UAPI.
+>  - Use compat_user_mode() rather than open coding.
+>  - Fix a typo s/BYTPE/BTYPE/ in syscall.c
+> v4:
+>  - Dropped patch fixing existing documentation as it has already been merged.
+>  - Convert WARN_ON() to WARN_ON_ONCE() in "ELF: Add ELF program property
+>    parsing support".
+>  - Added display of guarded pages to ptdump.
+>  - Updated for conversion of exception handling from assembler to C.
+> 
+> Notes:
+> 
+>  * GCC 9 can compile backwards-compatible BTI-enabled code with
+>    -mbranch-protection=bti or -mbranch-protection=standard.
+> 
+>  * Binutils 2.33 and later support the new ELF note.
+> 
+>    Creation of a BTI-enabled binary requires _everything_ linked in to
+>    be BTI-enabled.  For now ld --force-bti can be used to override this,
+>    but some things may break until the required C library support is in
+>    place.
+> 
+>    There is no straightforward way to mark a .s file as BTI-enabled:
+>    scraping the output from gcc -S works as a quick hack for now.
+> 
+>    readelf -n can be used to examing the program properties in an ELF
+>    file.
+> 
+>  * Runtime mmap() and mprotect() can be used to enable BTI on a
+>    page-by-page basis using the new PROT_BTI, but the code in the
+>    affected pages still needs to be written or compiled to contain the
+>    appropriate BTI landing pads.
+> 
+> Daniel Kiss (1):
+>   mm: smaps: Report arm64 guarded pages in smaps
+> 
+> Dave Martin (11):
+>   ELF: UAPI and Kconfig additions for ELF program properties
+>   ELF: Add ELF program property parsing support
+>   arm64: Basic Branch Target Identification support
+>   elf: Allow arch to tweak initial mmap prot flags
+>   arm64: elf: Enable BTI at exec based on ELF program properties
+>   arm64: BTI: Decode BYTPE bits when printing PSTATE
+>   arm64: unify native/compat instruction skipping
+>   arm64: traps: Shuffle code to eliminate forward declarations
+>   arm64: BTI: Reset BTYPE when skipping emulated instructions
+>   KVM: arm64: BTI: Reset BTYPE when skipping emulated instructions
+>   arm64: BTI: Add Kconfig entry for userspace BTI
+> 
+> Mark Brown (1):
+>   arm64: mm: Display guarded pages in ptdump
+> 
+>  Documentation/arm64/cpu-feature-registers.rst |   2 +
+>  Documentation/arm64/elf_hwcaps.rst            |   5 +
+>  Documentation/filesystems/proc.txt            |   1 +
+>  arch/arm64/Kconfig                            |  25 +++
+>  arch/arm64/include/asm/cpucaps.h              |   3 +-
+>  arch/arm64/include/asm/cpufeature.h           |   6 +
+>  arch/arm64/include/asm/elf.h                  |  50 ++++++
+>  arch/arm64/include/asm/esr.h                  |   2 +-
+>  arch/arm64/include/asm/exception.h            |   1 +
+>  arch/arm64/include/asm/hwcap.h                |   1 +
+>  arch/arm64/include/asm/kvm_emulate.h          |   6 +-
+>  arch/arm64/include/asm/mman.h                 |  37 +++++
+>  arch/arm64/include/asm/pgtable-hwdef.h        |   1 +
+>  arch/arm64/include/asm/pgtable.h              |   2 +-
+>  arch/arm64/include/asm/ptrace.h               |   1 +
+>  arch/arm64/include/asm/sysreg.h               |   4 +
+>  arch/arm64/include/uapi/asm/hwcap.h           |   1 +
+>  arch/arm64/include/uapi/asm/mman.h            |   9 ++
+>  arch/arm64/include/uapi/asm/ptrace.h          |   9 ++
+>  arch/arm64/kernel/cpufeature.c                |  33 ++++
+>  arch/arm64/kernel/cpuinfo.c                   |   1 +
+>  arch/arm64/kernel/entry-common.c              |  11 ++
+>  arch/arm64/kernel/process.c                   |  36 ++++-
+>  arch/arm64/kernel/ptrace.c                    |   2 +-
+>  arch/arm64/kernel/signal.c                    |  16 ++
+>  arch/arm64/kernel/syscall.c                   |  18 +++
+>  arch/arm64/kernel/traps.c                     | 131 ++++++++--------
+>  arch/arm64/mm/dump.c                          |   5 +
+>  fs/Kconfig.binfmt                             |   6 +
+>  fs/binfmt_elf.c                               | 145 +++++++++++++++++-
+>  fs/compat_binfmt_elf.c                        |   4 +
+>  fs/proc/task_mmu.c                            |   3 +
+>  include/linux/elf.h                           |  43 ++++++
+>  include/linux/mm.h                            |   3 +
+>  include/uapi/linux/elf.h                      |  11 ++
+>  35 files changed, 560 insertions(+), 74 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/mman.h
+>  create mode 100644 arch/arm64/include/uapi/asm/mman.h
+> 
+> 
+> base-commit: f8788d86ab28f61f7b46eb6be375f8a726783636
+> -- 
+> 2.20.1
+> 
+
+-- 
