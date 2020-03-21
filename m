@@ -2,96 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8868018DBB2
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Mar 2020 00:21:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D4318DD92
+	for <lists+linux-arch@lfdr.de>; Sat, 21 Mar 2020 03:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbgCTXVJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Mar 2020 19:21:09 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:53647 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726801AbgCTXVI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Mar 2020 19:21:08 -0400
-Received: by mail-pj1-f65.google.com with SMTP id l36so3164607pjb.3
-        for <linux-arch@vger.kernel.org>; Fri, 20 Mar 2020 16:21:08 -0700 (PDT)
+        id S1726851AbgCUCFK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Mar 2020 22:05:10 -0400
+Received: from mail-qv1-f65.google.com ([209.85.219.65]:34620 "EHLO
+        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726801AbgCUCFK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Mar 2020 22:05:10 -0400
+Received: by mail-qv1-f65.google.com with SMTP id o18so4176803qvf.1;
+        Fri, 20 Mar 2020 19:05:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=clkZQy76N5lqDvPEfomSFrpTluUVK0zQr3gsx7h7nC8=;
-        b=Yu/8u83xc3BAK8swCPa1v47AYLOMOLAmKQCRaueAmpwbsZvhLe7j+g4VjaRWcl5977
-         8fC/o3X/U6nxKRhiSjURBtP56L1M68KMGL+Rs1ZlLDmm5u4cAhnafvmSejO0Pqby2rfp
-         hWfTochJhDhieWfuL68RKl+pRruYOx+rwqnvE=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GqEPVEoRdujNeFvEZNFf0K2LnjjxzBACdE/GEwgTyq8=;
+        b=WDBYDUXCK+1lMxLHrnuS6uf0lXjiRANYqCWKcTMIfO6V3o+Oc2yGZvl5In+Qr+dXIV
+         HNtdC83n5ayc8+Q6YdiEHxxI7cUKyR2lSohl01YK94+6ThXeq0cwU855n3sj7iG/7lFV
+         5UOQiECJhSP9FTfkJ0KWVd37tWwkFIRcP7aUUhDGycWeGPntMPwY0k8IoP27sfjWNMon
+         QcMb6DM3PZGkZjn2P4cnI1u/4LA8pdpqmWBnQgS8h3yU2/VvZS0tVcSWVnkDCmh7ag6H
+         TizLfo7mEHx6H3i5I6WR3edra/dJQPzRCESwqQtlqbSrTP69Ud81kDahzcBqptsY8LQf
+         D3gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=clkZQy76N5lqDvPEfomSFrpTluUVK0zQr3gsx7h7nC8=;
-        b=g237B6CJBIjO7xqIhhHOI2/uqVS8EIR9ib45CGHAY2lw3MoB0KQIxRU4e6n9PnAUR+
-         N8lDr9kTxAEzq8ZbQ8sm12b3+elXVkavEv0JIrtgcPp7G5SgNX/PzsTPICBEB12vNmKh
-         HqSSkVsPaMIrMjaubDSUExKPFQNDPq+vRElJiHdyip1zyOSdPQCOiSQUBUrI4sHTLXUn
-         MXudsS4Kbs+6cDF+fllX4vOaSShBIT9Llx2taY0IoBqZn/2VpaBj+0SZJ0l2W03934ap
-         +3WSl+PZRz2Slgbmpy7H+JmWS3Cs1pE50fEM9f9DAb+y3YlsNSDpUapkh7naiGDXR+RF
-         FAIw==
-X-Gm-Message-State: ANhLgQ2Ulp6d+9w42p8LeB+fugVnnydEGIf1U2BI/p2IDr9Ti/GmuzrR
-        muG8Rb/DOj6z69Qhl0nCr91xCg==
-X-Google-Smtp-Source: ADFU+vv6GHvXzRwWkdEiLmO10nDPyub2Yebvzznb5KqbElkhWXj+ptG2lYIyNxGql1P+Jw5Jn/kvcw==
-X-Received: by 2002:a17:902:8e8b:: with SMTP id bg11mr11012475plb.138.1584746467739;
-        Fri, 20 Mar 2020 16:21:07 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id w4sm3427639pfc.57.2020.03.20.16.21.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2020 16:21:07 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GqEPVEoRdujNeFvEZNFf0K2LnjjxzBACdE/GEwgTyq8=;
+        b=PvlcGc5ikjUOaxz66AE8dAcwoho2LbpdppPbybBr2CCYKGamI9qYyVGTyqadbONrHm
+         R7DtsKn8MhEitUc1rRlAdAjurhml9OHdacH0JzWdf3kyuNwQUXBPWnWMBQRCsi3Lql3s
+         5LO24c94lymwyNxXqnmtO5lnC/nMghkOS0P4DGUGLM7gNjDcsLcT3c8RcYMF2EpYk+Sq
+         vXPhQ0Y727I2k9H+156NeAfMc6kHjSlr8xTafZfpKCMXI5iLbrLTHLrlQoaLROH5M3cE
+         sof4IfkuzLza5fdFd51gNxLfYuai3T3Ro/aYh2BNG0d+/vOxusrP9GOU2UQMdaVPFagJ
+         nfdA==
+X-Gm-Message-State: ANhLgQ1OhEyjV64QtUFKmJ0oyARuvGN8JM3YplVbD0TVag+CEQlHCosj
+        ohLZnAC7Er9oj2t2qM0T+K8=
+X-Google-Smtp-Source: ADFU+vsp9j0kc5FQVKZ7/33nHlYdtFh1uju+hCOgUj/rYWoUd/WdTaOQRe7tNWMyrwuHQjXbtlBRQA==
+X-Received: by 2002:ad4:4c12:: with SMTP id bz18mr11370560qvb.17.1584756308536;
+        Fri, 20 Mar 2020 19:05:08 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id n6sm5660317qkh.70.2020.03.20.19.05.07
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 20 Mar 2020 19:05:07 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id AF45A27C0054;
+        Fri, 20 Mar 2020 22:05:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 20 Mar 2020 22:05:06 -0400
+X-ME-Sender: <xms:T3Z1XtSmmSLKsgAuuJX7R-ns3aNuJ6uPB1C0NtUL2aPRs8MHg72yXw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudegvddgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuffhomhgrih
+    hnpehtgihtrdgshidpmhgrrhgtrdhinhhfohenucfkphephedvrdduheehrdduuddurdej
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvg
+X-ME-Proxy: <xmx:T3Z1XtQfLNBv9PoNmITJJrWJY-DaEWhapkxQOq0pSXFXnT6OaYwhLQ>
+    <xmx:T3Z1Xg0QvA-PQEm4p2o-QohgmN6xSlOcHmRzihoc7wfgHyQUxP-25Q>
+    <xmx:T3Z1XnzPJMkTvVvcXion7Zw86pyzHhJ8rDyazdQ40YHgW61Sk01skQ>
+    <xmx:UnZ1Xg4ckfDIexzkUuxQxhhjLuyZoatIpjfk1TO3hw7tMAZbdvjQDnnJf1Y>
+Received: from localhost (unknown [52.155.111.71])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 3A2F5328005D;
+        Fri, 20 Mar 2020 22:05:03 -0400 (EDT)
+Date:   Sat, 21 Mar 2020 10:05:01 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>, linux-arch@vger.kernel.org,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 2/3] LKMM: Add litmus test for RCU GP guarantee where
+ reader stores
+Message-ID: <20200321020501.GF105953@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+References: <20200320165948.GB155212@google.com>
+ <Pine.LNX.4.44L0.2003201643370.31761-100000@netrider.rowland.org>
+ <20200320214432.GB129293@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200320145351.32292-19-vincenzo.frascino@arm.com>
-References: <20200320145351.32292-1-vincenzo.frascino@arm.com> <20200320145351.32292-19-vincenzo.frascino@arm.com>
-Subject: Re: [PATCH v5 18/26] arm64: vdso32: Code clean up
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Burton <paul.burton@mips.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, x86@kernel.org
-Date:   Fri, 20 Mar 2020 16:21:06 -0700
-Message-ID: <158474646622.125146.3263940499372231797@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200320214432.GB129293@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Quoting Vincenzo Frascino (2020-03-20 07:53:43)
-> The compat vdso library had some checks that are not anymore relevant.
+On Fri, Mar 20, 2020 at 05:44:32PM -0400, Joel Fernandes wrote:
+> On Fri, Mar 20, 2020 at 04:56:59PM -0400, Alan Stern wrote:
+> > On Fri, 20 Mar 2020, Joel Fernandes wrote:
+> > 
+> > > On Fri, Mar 20, 2020 at 11:03:30AM -0400, Alan Stern wrote:
+> > > > On Fri, 20 Mar 2020, Joel Fernandes (Google) wrote:
+> > > > 
+> > > > > This adds an example for the important RCU grace period guarantee, which
+> > > > > shows an RCU reader can never span a grace period.
+> > > > > 
+> > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > ---
+> > > > >  .../litmus-tests/RCU+sync+read.litmus         | 37 +++++++++++++++++++
+> > > > >  1 file changed, 37 insertions(+)
+> > > > >  create mode 100644 tools/memory-model/litmus-tests/RCU+sync+read.litmus
+> > > > > 
+> > > > > diff --git a/tools/memory-model/litmus-tests/RCU+sync+read.litmus b/tools/memory-model/litmus-tests/RCU+sync+read.litmus
+> > > > > new file mode 100644
+> > > > > index 0000000000000..73557772e2a32
+> > > > > --- /dev/null
+> > > > > +++ b/tools/memory-model/litmus-tests/RCU+sync+read.litmus
+> > > > 
+> > > > Do these new tests really belong here?  I thought we were adding a new 
+> > > > directory under Documentation/ for litmus tests that illustrate parts 
+> > > > of the LKMM or memory-barriers.txt.
+> > > > 
+> > > > By contrast, the tests under tools/memory-model are merely to show 
+> > > > people what litmus tests look like and how they should be written.
+> > > 
+> > > I could add it to tools/memory-model/Documentation/ under a new
+> > > 'examples' directory there. We could also create an 'rcu' directory in
+> > > tools/memory-model/litmus-tests/ and add these there. Thoughts?
+> > 
+> > What happened was that about a month ago, Boqun Feng added
+> > Documentation/atomic-tests for litmus tests related to handling of
+> > atomic_t types (see
+> > <https://marc.info/?l=linux-kernel&m=158276408609029&w=2>.)  Should we
+> > interpose an extra directory level, making it
+> > Documentation/litmus-tests/atomic?  Or
+> > Documentation/LKMM-litmus-tests/atomic?
+> > 
+> > Then the new tests added here could go into
+> > Documentation/litmus-tests/rcu, or whatever.
+> 
+> That's fine with me. Unless anyone objects, I will add to
+> Documentation/litmus-tests/rcu and resend.
+> 
 
-Can we get the information on why they aren't relevant anymore in the
-commit text? I'd rather not find this commit three years from now and
-have no idea why it was applied.
+Seems good to me, I will resend my patchset with the new directory. And
+I assume in your patchset you will include the MAINTAINERS part for
+adding Documentation/litmus-tests/ as a diretory watched by LKMM group?
+In that case, I won't need to add any change to MAINTAINERS file in mine
+and we won't have any conflict. ;-)
 
->=20
-> Remove the unused code from the compat vDSO library.
->=20
-> Note: This patch is preparatory for a future one that will introduce
-> asm/vdso/processor.h on arm64.
->=20
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Link: https://lore.kernel.org/lkml/20200317122220.30393-19-vincenzo.frasc=
-ino@arm.com
+Regards,
+Boqun
+
+
+> thanks,
+> 
+>  - Joel
+> 
