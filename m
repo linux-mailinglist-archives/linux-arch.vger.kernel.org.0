@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF8518F80A
-	for <lists+linux-arch@lfdr.de>; Mon, 23 Mar 2020 16:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B23118F8A3
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Mar 2020 16:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727096AbgCWPCQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 23 Mar 2020 11:02:16 -0400
-Received: from foss.arm.com ([217.140.110.172]:50762 "EHLO foss.arm.com"
+        id S1727067AbgCWPcb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 23 Mar 2020 11:32:31 -0400
+Received: from foss.arm.com ([217.140.110.172]:51124 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726962AbgCWPCQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 23 Mar 2020 11:02:16 -0400
+        id S1727137AbgCWPcb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 23 Mar 2020 11:32:31 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35DAA1FB;
-        Mon, 23 Mar 2020 08:02:16 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 460B13F7C3;
-        Mon, 23 Mar 2020 08:02:12 -0700 (PDT)
-Date:   Mon, 23 Mar 2020 15:02:09 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 640121FB;
+        Mon, 23 Mar 2020 08:32:30 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B83F23F7C3;
+        Mon, 23 Mar 2020 08:32:29 -0700 (PDT)
+Date:   Mon, 23 Mar 2020 15:32:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Will Deacon <will@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -44,52 +44,67 @@ Cc:     Mark Brown <broonie@kernel.org>,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         nd@arm.com
 Subject: Re: [PATCH v10 00/13] arm64: Branch Target Identification support
-Message-ID: <20200323150209.GC3959@C02TD0UTHF1T.local>
+Message-ID: <20200323153228.GE4948@sirena.org.uk>
 References: <20200316165055.31179-1-broonie@kernel.org>
  <20200320173945.GC27072@arm.com>
  <20200323122143.GB4892@mbp>
  <20200323132412.GD4948@sirena.org.uk>
  <20200323135722.GA3959@C02TD0UTHF1T.local>
  <20200323143954.GC4892@mbp>
+ <20200323145546.GB3959@C02TD0UTHF1T.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2hMgfIw2X+zgXrFs"
 Content-Disposition: inline
-In-Reply-To: <20200323143954.GC4892@mbp>
+In-Reply-To: <20200323145546.GB3959@C02TD0UTHF1T.local>
+X-Cookie: Stay on the trail.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 23, 2020 at 02:39:55PM +0000, Catalin Marinas wrote:
-> On Mon, Mar 23, 2020 at 01:57:22PM +0000, Mark Rutland wrote:
-> > On Mon, Mar 23, 2020 at 01:24:12PM +0000, Mark Brown wrote:
-> > > On Mon, Mar 23, 2020 at 12:21:44PM +0000, Catalin Marinas wrote:
-> > > > On Fri, Mar 20, 2020 at 05:39:46PM +0000, Szabolcs Nagy wrote:
-> > > 
-> > > > +int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
-> > > > +                        bool has_interp, bool is_interp)
-> > > > +{
-> > > > +       if (is_interp != has_interp)
-> > > > +               return prot;
-> > > > +
-> > > > +       if (!(state->flags & ARM64_ELF_BTI))
-> > > > +               return prot;
-> > > > +
-> > > > +       if (prot & PROT_EXEC)
-> > > > +               prot |= PROT_BTI;
-> > > > +
-> > > > +       return prot;
-> > > > +}
 
-> > I think it would be best to document the current behaviour, as it's a
-> > simple ABI that we can guarantee, and the dynamic linker will have to be
-> > aware of BTI in order to do the right thing anyhow.
-> 
-> That's a valid point. If we have an old dynamic linker and the kernel
-> enabled BTI automatically for the main executable, could things go wrong
-> (e.g. does the PLT need to be BTI-aware)?
+--2hMgfIw2X+zgXrFs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Also worth noting that an old dynamic linker won't have ARM64_ELF_BTI
-set, so the kernel will not enable BTI for this.
+On Mon, Mar 23, 2020 at 02:55:46PM +0000, Mark Rutland wrote:
+> On Mon, Mar 23, 2020 at 02:39:55PM +0000, Catalin Marinas wrote:
 
-Mark.
+> > So this means that the interpreter will have to mprotect(PROT_BTI) the
+> > text section of the primary executable.
+
+> Yes, but after fixing up any relocations in that section it's going to
+> have to call mprotect() on it anyhow (e.g. in order to make it
+> read-only), and in doing so would throw away BTI unless it was BTI
+> aware.
+
+Ah, of course - I forgot that's not a read/modify/write cycle.  I'll
+send the comment version.
+
+> > That's a valid point. If we have an old dynamic linker and the kernel
+> > enabled BTI automatically for the main executable, could things go wrong
+> > (e.g. does the PLT need to be BTI-aware)?
+
+> I believe that a PLT in an unguarded page needs no special treatment. A
+> PLT within a guarded page needs to be built specially for BTI.
+
+Unguarded stuff is unaffected.
+
+--2hMgfIw2X+zgXrFs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl541osACgkQJNaLcl1U
+h9A4pAf+IvJV9iWwP6vJKgT868+5ZjhSjiVsOKwt0PqgVzwOcV5HIX7k7mlf91GM
+k1Fn/ZsPWecmng93bj0iUlMtnBCoxTyE4F20odXx1vgUhscr6RjCvtPkGlLEgYEz
+0Cs6mB6NDjJxcTJDxB54HIXhlP4lL3Jo++u+yRS2/0lLHba08FUu7/gJYjh7TTCV
+n9kw50W8boGR1DgRe51u0Yn08RqNt2Boe/tauY2huT9H5zgbM2d40jv7qVcdTffJ
+PWeuF23KN9w9E/burfR4MrA8JtLgZHrnjt5cuSXuogtP28D1UcfgaKfr8JSDPT6P
+VjN8hBGRZhte6hqR58+ZsNUrKDDLIw==
+=1CsH
+-----END PGP SIGNATURE-----
+
+--2hMgfIw2X+zgXrFs--
