@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EE51911C2
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Mar 2020 14:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AB01911C9
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Mar 2020 14:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727398AbgCXNqV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Mar 2020 09:46:21 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12188 "EHLO huawei.com"
+        id S1727857AbgCXNqc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Mar 2020 09:46:32 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12187 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727581AbgCXNqV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1727498AbgCXNqV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Tue, 24 Mar 2020 09:46:21 -0400
 Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 832F217CAAF3D6C1D6B5;
+        by Forcepoint Email with ESMTP id 7822A9255E05E2122FC4;
         Tue, 24 Mar 2020 21:46:16 +0800 (CST)
 Received: from DESKTOP-KKJBAGG.china.huawei.com (10.173.220.25) by
  DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 24 Mar 2020 21:46:05 +0800
+ 14.3.487.0; Tue, 24 Mar 2020 21:46:07 +0800
 From:   Zhenyu Ye <yezhenyu2@huawei.com>
 To:     <will@kernel.org>, <mark.rutland@arm.com>,
         <catalin.marinas@arm.com>, <aneesh.kumar@linux.ibm.com>,
@@ -29,9 +29,9 @@ CC:     <yezhenyu2@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
         <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
         <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>
-Subject: [RFC PATCH v4 5/6] arm64: tlb: Use translation level hint in vm_flags
-Date:   Tue, 24 Mar 2020 21:45:33 +0800
-Message-ID: <20200324134534.1570-6-yezhenyu2@huawei.com>
+Subject: [RFC PATCH v4 6/6] mm: Set VM_LEVEL flags in some tlb_flush functions
+Date:   Tue, 24 Mar 2020 21:45:34 +0800
+Message-ID: <20200324134534.1570-7-yezhenyu2@huawei.com>
 X-Mailer: git-send-email 2.22.0.windows.1
 In-Reply-To: <20200324134534.1570-1-yezhenyu2@huawei.com>
 References: <20200324134534.1570-1-yezhenyu2@huawei.com>
@@ -45,96 +45,121 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch used the VM_LEVEL flags in vma->vm_flags to set the
-TTL field in tlbi instruction.
+Set VM_LEVEL flags in some tlb_flush functions.
+The relevant functions are:
+
+	tlb_flush in asm/tlb.h
+	get_clear_flush and clear_flush in mm/hugetlbpage.c
+	flush_pmd|pud_tlb_range in asm-generic/patable.h
+	do_huge_pmd_numa_page and move_huge_pmd in mm/huge_memory.c
 
 Signed-off-by: Zhenyu Ye <yezhenyu2@huawei.com>
 ---
- arch/arm64/include/asm/mmu.h      |  2 ++
- arch/arm64/include/asm/tlbflush.h | 14 ++++++++------
- arch/arm64/mm/mmu.c               | 14 ++++++++++++++
- 3 files changed, 24 insertions(+), 6 deletions(-)
+ arch/arm64/include/asm/tlb.h  | 12 ++++++++++++
+ arch/arm64/mm/hugetlbpage.c   |  4 ++--
+ include/asm-generic/pgtable.h | 16 ++++++++++++++--
+ mm/huge_memory.c              |  8 +++++++-
+ 4 files changed, 35 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
-index d79ce6df9e12..a8b8824a7405 100644
---- a/arch/arm64/include/asm/mmu.h
-+++ b/arch/arm64/include/asm/mmu.h
-@@ -86,6 +86,8 @@ extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
- extern void *fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot);
- extern void mark_linear_text_alias_ro(void);
- extern bool kaslr_requires_kpti(void);
-+extern unsigned int get_vma_level(struct vm_area_struct *vma);
+diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
+index b76df828e6b7..77fe942b30b6 100644
+--- a/arch/arm64/include/asm/tlb.h
++++ b/arch/arm64/include/asm/tlb.h
+@@ -27,6 +27,18 @@ static inline void tlb_flush(struct mmu_gather *tlb)
+ 	bool last_level = !tlb->freed_tables;
+ 	unsigned long stride = tlb_get_unmap_size(tlb);
+ 
++	/*
++	 * mm_gather tracked which levels of the page tables
++	 * have been cleared, we can use this info to set
++	 * vm->vm_flags.
++	 */
++	if (tlb->cleared_ptes)
++		vma.vm_flags |= VM_LEVEL_PTE;
++	else if (tlb->cleared_pmds)
++		vma.vm_flags |= VM_LEVEL_PMD;
++	else if (tlb->cleared_puds)
++		vma.vm_flags |= VM_LEVEL_PUD;
 +
- 
- #define INIT_MM_CONTEXT(name)	\
- 	.pgd = init_pg_dir,
-diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
-index d141c080e494..93bb09fdfafd 100644
---- a/arch/arm64/include/asm/tlbflush.h
-+++ b/arch/arm64/include/asm/tlbflush.h
-@@ -218,10 +218,11 @@ static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
- 					 unsigned long uaddr)
- {
- 	unsigned long addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
-+	unsigned int level = get_vma_level(vma);
- 
- 	dsb(ishst);
--	__tlbi_level(vale1is, addr, 0);
--	__tlbi_user_level(vale1is, addr, 0);
-+	__tlbi_level(vale1is, addr, level);
-+	__tlbi_user_level(vale1is, addr, level);
- }
- 
- static inline void flush_tlb_page(struct vm_area_struct *vma,
-@@ -242,6 +243,7 @@ static inline void __flush_tlb_range(struct vm_area_struct *vma,
- 				     unsigned long stride, bool last_level)
- {
- 	unsigned long asid = ASID(vma->vm_mm);
-+	unsigned int level = get_vma_level(vma);
- 	unsigned long addr;
- 
- 	start = round_down(start, stride);
-@@ -261,11 +263,11 @@ static inline void __flush_tlb_range(struct vm_area_struct *vma,
- 	dsb(ishst);
- 	for (addr = start; addr < end; addr += stride) {
- 		if (last_level) {
--			__tlbi_level(vale1is, addr, 0);
--			__tlbi_user_level(vale1is, addr, 0);
-+			__tlbi_level(vale1is, addr, level);
-+			__tlbi_user_level(vale1is, addr, level);
- 		} else {
--			__tlbi_level(vae1is, addr, 0);
--			__tlbi_user_level(vae1is, addr, 0);
-+			__tlbi_level(vae1is, addr, level);
-+			__tlbi_user_level(vae1is, addr, level);
- 		}
+ 	/*
+ 	 * If we're tearing down the address space then we only care about
+ 	 * invalidating the walk-cache, since the ASID allocator won't
+diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+index bbeb6a5a6ba6..c35a1bd06bd0 100644
+--- a/arch/arm64/mm/hugetlbpage.c
++++ b/arch/arm64/mm/hugetlbpage.c
+@@ -140,7 +140,7 @@ static pte_t get_clear_flush(struct mm_struct *mm,
  	}
- 	dsb(ish);
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 128f70852bf3..e6a1221cd86b 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -60,6 +60,20 @@ static pud_t bm_pud[PTRS_PER_PUD] __page_aligned_bss __maybe_unused;
  
- static DEFINE_SPINLOCK(swapper_pgdir_lock);
- 
-+inline unsigned int get_vma_level(struct vm_area_struct *vma)
-+{
-+	unsigned int level = 0;
-+	if (vma->vm_flags & VM_LEVEL_PUD)
-+		level = 1;
-+	else if (vma->vm_flags & VM_LEVEL_PMD)
-+		level = 2;
-+	else if (vma->vm_flags & VM_LEVEL_PTE)
-+		level = 3;
-+
-+	vma->vm_flags &= ~(VM_LEVEL_PUD | VM_LEVEL_PMD | VM_LEVEL_PTE);
-+	return level;
-+}
-+
- void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
+ 	if (valid) {
+-		struct vm_area_struct vma = TLB_FLUSH_VMA(mm, 0);
++		struct vm_area_struct vma = TLB_FLUSH_VMA(mm, VM_LEVEL_PTE);
+ 		flush_tlb_range(&vma, saddr, addr);
+ 	}
+ 	return orig_pte;
+@@ -161,7 +161,7 @@ static void clear_flush(struct mm_struct *mm,
+ 			     unsigned long pgsize,
+ 			     unsigned long ncontig)
  {
- 	pgd_t *fixmap_pgdp;
+-	struct vm_area_struct vma = TLB_FLUSH_VMA(mm, 0);
++	struct vm_area_struct vma = TLB_FLUSH_VMA(mm, VM_LEVEL_PTE);
+ 	unsigned long i, saddr = addr;
+ 
+ 	for (i = 0; i < ncontig; i++, addr += pgsize, ptep++)
+diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
+index e2e2bef07dd2..391e704faf7a 100644
+--- a/include/asm-generic/pgtable.h
++++ b/include/asm-generic/pgtable.h
+@@ -1160,8 +1160,20 @@ static inline int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
+  * invalidate the entire TLB which is not desitable.
+  * e.g. see arch/arc: flush_pmd_tlb_range
+  */
+-#define flush_pmd_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
+-#define flush_pud_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
++#define flush_pmd_tlb_range(vma, addr, end)				\
++	do {								\
++		vma->vm_flags &= ~(VM_LEVEL_PUD | VM_LEVEL_PTE);	\
++		vma->vm_flags |= VM_LEVEL_PMD;				\
++		flush_tlb_range(vma, addr, end);			\
++	} while (0)
++
++#define flush_pud_tlb_range(vma, addr, end)				\
++	do {								\
++		vma->vm_flags &= ~(VM_LEVEL_PMD | VM_LEVEL_PTE);	\
++		vma->vm_flags |= VM_LEVEL_PUD;				\
++		flush_tlb_range(vma, addr, end);			\
++	} while (0)
++
+ #else
+ #define flush_pmd_tlb_range(vma, addr, end)	BUILD_BUG()
+ #define flush_pud_tlb_range(vma, addr, end)	BUILD_BUG()
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 24ad53b4dfc0..9a78b8d865f0 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1646,6 +1646,8 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf, pmd_t pmd)
+ 	 * mapping or not. Hence use the tlb range variant
+ 	 */
+ 	if (mm_tlb_flush_pending(vma->vm_mm)) {
++		vma->vm_flags &= ~(VM_LEVEL_PUD | VM_LEVEL_PTE);
++		vma->vm_flags |= VM_LEVEL_PMD;
+ 		flush_tlb_range(vma, haddr, haddr + HPAGE_PMD_SIZE);
+ 		/*
+ 		 * change_huge_pmd() released the pmd lock before
+@@ -1917,8 +1919,12 @@ bool move_huge_pmd(struct vm_area_struct *vma, unsigned long old_addr,
+ 		}
+ 		pmd = move_soft_dirty_pmd(pmd);
+ 		set_pmd_at(mm, new_addr, new_pmd, pmd);
+-		if (force_flush)
++		if (force_flush) {
++			vma->vm_flags &= ~(VM_LEVEL_PUD | VM_LEVEL_PTE);
++			vma->vm_flags |= VM_LEVEL_PMD;
+ 			flush_tlb_range(vma, old_addr, old_addr + PMD_SIZE);
++		}
++
+ 		if (new_ptl != old_ptl)
+ 			spin_unlock(new_ptl);
+ 		spin_unlock(old_ptl);
 -- 
 2.19.1
 
