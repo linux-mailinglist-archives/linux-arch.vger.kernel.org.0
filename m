@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9DE19360C
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 03:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140DC19360F
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 03:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727560AbgCZCkt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Mar 2020 22:40:49 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:34174 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727576AbgCZCkt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Mar 2020 22:40:49 -0400
-Received: by mail-qk1-f196.google.com with SMTP id i6so5054390qke.1;
-        Wed, 25 Mar 2020 19:40:48 -0700 (PDT)
+        id S1727796AbgCZCku (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Mar 2020 22:40:50 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:36032 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727773AbgCZCku (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Mar 2020 22:40:50 -0400
+Received: by mail-qt1-f193.google.com with SMTP id m33so4147771qtb.3;
+        Wed, 25 Mar 2020 19:40:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1af+D2AebQAL+ZNe9HKMFm9Ob8sejTypDhg8sutTV4I=;
-        b=qTQVCMmrM1xJU21p3GyIaBlSY9bI6VbPXSH2UrWtbGqro3Z00+cuGfDgKZ82tqdDEF
-         1a2bcImmvUoTpRlMpsAIK/pvgugeX5KIgfJQuao+XLfEI34n5BFI14ab9L3hD/uLpNzL
-         9ItHnG3TDxjxr11F6NNdqmHyb/hk+y1guWUCFkUhNttX3ESAfJUcIKcPORSLFU1voIwX
-         Q4BbgAbVlcorsL8nuXEewnzor7ZI0bWRB2ze1Ev1fqVuoLZRxUDgYIgumTaxYogpRTtw
-         aazs0pagqo1uRfb3NnqKrm4fARNZSc5ZDllkFtUFbeAs0uftbQq2vHNZfC7R/0olgF1y
-         iscg==
+        bh=ymOtg1zY13/0gvEuEv8PYty/GwrY16D/sS/lvSTOBKg=;
+        b=A+lTHgkvL6IQV2vhGnqWuyJSOMgPPT41ZEW/gMH3jYzlThqIQR7Mba7GpNsIBCA6Tl
+         gfUriisjXlyGpJUYHPCt7WKeQvs1n9ev7Y1mACqavbq9XUxV/BPIMGS1lB6lVZ3hzTlb
+         Vm/4R9OIy6qPVluf0WIANdvNXZSDJDz89hLq1euun7qFkWH5wd59YBGpXM0E5Q9qcSML
+         ClOkJue5bSF7yhnBZ7cALVCZSdOBlECvAnKUa96sOBbAFwkUvMVZCWwYoQbyjlTXF6B6
+         72OwG0Gvwr6o5HjIHC5D6DDtDIlO5jD9i8CvdDbyZNMgCz+jJLnxFaXP2wHljdwDkc8c
+         F31A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1af+D2AebQAL+ZNe9HKMFm9Ob8sejTypDhg8sutTV4I=;
-        b=cR4SGPOQo+Gos/L1rCOObMHn6PzI0V7YGo7f7w/1kKLjjzw35xw1Sl/Xua0qK+m9ug
-         fts3jSt2YWiEfv1pJFCXYas7JHD+eRycqFZ2AlSdD9n0MmV5U5sBGvj1PWTOBqu+arFe
-         wwpwNTVPkAwIx/aWiniOZ1YjBKtYHmDPwvoZCZj7Fgx6ClzLT912oLPjIMZ1DDYCPjIr
-         7nwU5hrao+60PpBtXEUrWIXDreMHvfu8lPe7x/3WcLaMh+zG5DICUScp72m0Sl8XW4b9
-         oreTN0rOiVvp+ZFoyDo9X1HHGLcHTwuJBKrOU+X+kyYjppeJyIUVhYAUoU0At7VWUnPO
-         T0Bw==
-X-Gm-Message-State: ANhLgQ3p8BOKW52184wDYJJ9A8W0xZWkq4HldUbxvsSldSCelhyaD2sB
-        jpFxpB9Dq5kmipPvbBNSLGQ=
-X-Google-Smtp-Source: ADFU+vv6CrtxltXHQ+tWyD+SenKIy/DQ5b2cpEeIKQakujzkIu4sCAAbpaJgrUXhpNbPwi9zJHEFMg==
-X-Received: by 2002:ae9:ebc1:: with SMTP id b184mr5904222qkg.49.1585190447577;
-        Wed, 25 Mar 2020 19:40:47 -0700 (PDT)
+        bh=ymOtg1zY13/0gvEuEv8PYty/GwrY16D/sS/lvSTOBKg=;
+        b=jL60/jTkNxM9Q/+XeTMMAL5F43jSchQNfTPp98/vT1usAVHa/2VMasAipaXAXBQM6n
+         JtwU5BcyxFtwkjEOAf9KqiMFdl+neROa7Q1LdtpkveaXU1ZxYM36+f+2cPVBKvH4a/CH
+         RlMYwyHZ7IOYCHsX3o9MdRh0NX5F1ZofT4Evcda9m+BsZ87Q7CLZuHSHmgnJsUcV15oX
+         9jw8IvaEqzX2xdwIKNnzRqPFkiLP7w45vijmPDetEQAKRvxbI6hM4Dd1Q0SlAMtqXw6x
+         KkQG6zdZBG5vGZc1WlZN7hdophzjwwcEjW8/yPGVpmv+IkBIO/1y2L/gmBgSd7bgLf52
+         aSvQ==
+X-Gm-Message-State: ANhLgQ3q+cNsC6P0qQg2STGnZIgxAq3yJ4SgzSKVl4AlERR8ULchK2d5
+        w2Pfhd/UGvwjIuwERu+kMhQ=
+X-Google-Smtp-Source: ADFU+vvqu6Oc5Lvz+hNS1j/pYRoEZ0WdkdBFrSuLGkJb1hbfunbCls7GF1rTZY8fL810+etLbY2Vnw==
+X-Received: by 2002:ac8:7a72:: with SMTP id w18mr6004923qtt.260.1585190449103;
+        Wed, 25 Mar 2020 19:40:49 -0700 (PDT)
 Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id z18sm657779qtz.77.2020.03.25.19.40.45
+        by smtp.gmail.com with ESMTPSA id f201sm518969qke.119.2020.03.25.19.40.47
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 Mar 2020 19:40:46 -0700 (PDT)
+        Wed, 25 Mar 2020 19:40:48 -0700 (PDT)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9D8FD27C0058;
-        Wed, 25 Mar 2020 22:40:45 -0400 (EDT)
+        by mailauth.nyi.internal (Postfix) with ESMTP id A824127C0054;
+        Wed, 25 Mar 2020 22:40:47 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 25 Mar 2020 22:40:45 -0400
-X-ME-Sender: <xms:LRZ8Xs50mDUrjKI688-r7iyppocEhsXdU4sTQbVjsby6JqWgiKPu_A>
+  by compute3.internal (MEProxy); Wed, 25 Mar 2020 22:40:47 -0400
+X-ME-Sender: <xms:LxZ8XjyXfZdteMYXVlH-i_US2S7bjjQ0Utitsx9rc-_cMICyUGEOnA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudehhedggeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -59,13 +59,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudehhedggeejucetufdoteggod
     rghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthi
     dqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghi
     lhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:LRZ8XhWsR60j6MirpO8r4rPmP5sJ4BwjKLVQdIs5P8CrOi38W--Oww>
-    <xmx:LRZ8XoM8FlEY7Kg0G_b5VHMlbx5nX2DG85r4gqPS_SiQykmIzJqp5A>
-    <xmx:LRZ8Xkhj11fW0lxJH6yqC4QFFFoO1BUV5zqMswADVEJEtADpeXe2HQ>
-    <xmx:LRZ8Xqs7MiIB0cDXLlgknbuaPQNSqo9LWSbIsfMRyo80XI_QJsm6U4t9DFg>
+X-ME-Proxy: <xmx:LxZ8Xmzfu2xIzZF5XB5itoBipk72YRpv7wn8FqIznBeLMybrFomuzQ>
+    <xmx:LxZ8XjxT6ju9ZzINVhBejnWmLduhYAZ27g1ZG_mSmziLqRnDuVGHzw>
+    <xmx:LxZ8XoYV8wGRbLsEiU5GKtEwQSXD8nc4hxebjDBbLcdLfgtphIoSPg>
+    <xmx:LxZ8XmrHZSNBbuyxkRK2HHbYxlJTaCh1i-eEgRnhwh884AY0XbZ_T_13IR0>
 Received: from localhost (unknown [52.155.111.71])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 14932328005E;
-        Wed, 25 Mar 2020 22:40:44 -0400 (EDT)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 242CC328005A;
+        Wed, 25 Mar 2020 22:40:46 -0400 (EDT)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Alan Stern <stern@rowland.harvard.edu>,
@@ -88,9 +88,9 @@ Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Joel Fernandes <joel@joelfernandes.org>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v4 1/4] tools/memory-model: Add an exception for limitations on _unless() family
-Date:   Thu, 26 Mar 2020 10:40:19 +0800
-Message-Id: <20200326024022.7566-2-boqun.feng@gmail.com>
+Subject: [PATCH v4 2/4] Documentation/litmus-tests: Introduce atomic directory
+Date:   Thu, 26 Mar 2020 10:40:20 +0800
+Message-Id: <20200326024022.7566-3-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200326024022.7566-1-boqun.feng@gmail.com>
 References: <20200326024022.7566-1-boqun.feng@gmail.com>
@@ -101,40 +101,43 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-According to Luc, atomic_add_unless() is directly provided by herd7,
-therefore it can be used in litmus tests. So change the limitation
-section in README to unlimit the use of atomic_add_unless().
+Although we have atomic_t.txt and its friends to describe the semantics
+of atomic APIs and lib/atomic64_test.c for build testing and testing in
+UP mode, the tests for our atomic APIs in real SMP mode are still
+missing. Since now we have the LKMM tool in kernel and litmus tests can
+be used to generate kernel modules for testing purpose with "klitmus" (a
+tool from the LKMM toolset), it makes sense to put a few typical litmus
+tests into kernel so that
 
-Cc: Luc Maranget <luc.maranget@inria.fr>
+1)	they are the examples to describe the conceptual mode of the
+	semantics of atomic APIs, and
+
+2)	they can be used to generate kernel test modules for anyone
+	who is interested to test the atomic APIs implementation (in
+	most cases, is the one who implements the APIs for a new arch)
+
+Therefore, introduce the atomic directory for this purpose. The
+directory is maintained by the LKMM group to make sure the litmus tests
+are always aligned with our memory model.
+
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 Acked-by: Andrea Parri <parri.andrea@gmail.com>
 ---
- tools/memory-model/README | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ Documentation/litmus-tests/atomic/README | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 Documentation/litmus-tests/atomic/README
 
-diff --git a/tools/memory-model/README b/tools/memory-model/README
-index fc07b52f2028..b9c562e92981 100644
---- a/tools/memory-model/README
-+++ b/tools/memory-model/README
-@@ -207,11 +207,15 @@ The Linux-kernel memory model (LKMM) has the following limitations:
- 		case as a store release.
- 
- 	b.	The "unless" RMW operations are not currently modeled:
--		atomic_long_add_unless(), atomic_add_unless(),
--		atomic_inc_unless_negative(), and
--		atomic_dec_unless_positive().  These can be emulated
-+		atomic_long_add_unless(), atomic_inc_unless_negative(),
-+		and atomic_dec_unless_positive().  These can be emulated
- 		in litmus tests, for example, by using atomic_cmpxchg().
- 
-+		One exception of this limitation is atomic_add_unless(),
-+		which is provided directly by herd7 (so no corresponding
-+		definition in linux-kernel.def).  atomic_add_unless() is
-+		modeled by herd7 therefore it can be used in litmus tests.
-+
- 	c.	The call_rcu() function is not modeled.  It can be
- 		emulated in litmus tests by adding another process that
- 		invokes synchronize_rcu() and the body of the callback
+diff --git a/Documentation/litmus-tests/atomic/README b/Documentation/litmus-tests/atomic/README
+new file mode 100644
+index 000000000000..ae61201a4271
+--- /dev/null
++++ b/Documentation/litmus-tests/atomic/README
+@@ -0,0 +1,4 @@
++This directory contains litmus tests that are typical to describe the semantics
++of our atomic APIs. For more information about how to "run" a litmus test or
++how to generate a kernel test module based on a litmus test, please see
++tools/memory-model/README.
 -- 
 2.25.1
 
