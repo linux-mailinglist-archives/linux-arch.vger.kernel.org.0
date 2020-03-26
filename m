@@ -2,134 +2,391 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E41F193306
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Mar 2020 22:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5B31935C0
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 03:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727356AbgCYVvP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Mar 2020 17:51:15 -0400
-Received: from mga14.intel.com ([192.55.52.115]:65091 "EHLO mga14.intel.com"
+        id S1727666AbgCZCSl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Mar 2020 22:18:41 -0400
+Received: from foss.arm.com ([217.140.110.172]:55270 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726081AbgCYVvO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 25 Mar 2020 17:51:14 -0400
-IronPort-SDR: djFS2Wy2Bm0pYdKq90Kv16FTpCEzT3qGacrldRkPofD7BLTfivDxiwADK4KH3gQfJe67tkWQEH
- XYYarTIaPd7A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 14:51:14 -0700
-IronPort-SDR: 6xgudFIjy1CzWRRc48LtFdeAxHVrlYFfTo63YZE4NYbvMjdkFxHVPJPGrO+UNQp0Xr2jTj3nKa
- WTzhXN/fIh5w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,305,1580803200"; 
-   d="scan'208";a="238631971"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Mar 2020 14:51:14 -0700
-Message-ID: <e1122e1d77dec0d5f0a698c855833050c740a4bc.camel@intel.com>
-Subject: Re: [RFC PATCH v9 25/27] x86/cet/shstk: Handle thread Shadow Stack
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        id S1727639AbgCZCSl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 25 Mar 2020 22:18:41 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7ADDF1FB;
+        Wed, 25 Mar 2020 19:18:40 -0700 (PDT)
+Received: from [10.163.1.31] (unknown [10.163.1.31])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A5A9D3F52E;
+        Wed, 25 Mar 2020 19:18:32 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH V2 1/3] mm/debug: Add tests validating arch page table
+ helpers for core features
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     linux-mm@kvack.org, christophe.leroy@c-s.fr,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-Date:   Wed, 25 Mar 2020 14:51:13 -0700
-In-Reply-To: <202002251324.5D515260@keescook>
-References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
-         <20200205181935.3712-26-yu-cheng.yu@intel.com>
-         <202002251324.5D515260@keescook>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1585027375-9997-1-git-send-email-anshuman.khandual@arm.com>
+ <1585027375-9997-2-git-send-email-anshuman.khandual@arm.com>
+ <89E72C74-A32F-4A5B-B5F3-8A63428507A5@nvidia.com>
+Message-ID: <5b188e44-73d5-673c-8df1-f2c42b556cf9@arm.com>
+Date:   Thu, 26 Mar 2020 07:48:26 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <89E72C74-A32F-4A5B-B5F3-8A63428507A5@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2020-02-25 at 13:29 -0800, Kees Cook wrote:
-> On Wed, Feb 05, 2020 at 10:19:33AM -0800, Yu-cheng Yu wrote:
-> > [...]
-> > A 64-bit SHSTK has a fixed size of RLIMIT_STACK. A compat-mode thread SHSTK
-> > has a fixed size of 1/4 RLIMIT_STACK.  This allows more threads to share a
-> > 32-bit address space.
+
+On 03/24/2020 06:59 PM, Zi Yan wrote:
+> On 24 Mar 2020, at 1:22, Anshuman Khandual wrote:
 > 
-> I am not understanding this part. :) Entries are sizeof(unsigned long),
-> yes? A 1/2 RLIMIT_STACK would cover 32-bit, but 1/4 is less, so why does
-> that provide for more threads?
-
-Each thread has a separate shadow stack.  If each shadow stack is smaller, the
-address space can accommodate more shadow stack allocations.
-
-> >[...]
-> > diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
-> > index cba5c7656aab..5b45abda80a1 100644
-> > --- a/arch/x86/kernel/cet.c
-> > +++ b/arch/x86/kernel/cet.c
-> > @@ -170,6 +170,47 @@ int cet_setup_shstk(void)
-> >  	return 0;
-> >  }
-> >  
-> > +int cet_setup_thread_shstk(struct task_struct *tsk)
-> > +{
-> > +	unsigned long addr, size;
-> > +	struct cet_user_state *state;
-> > +	struct cet_status *cet = &tsk->thread.cet;
-> > +
-> > +	if (!cet->shstk_enabled)
-> > +		return 0;
-> > +
-> > +	state = get_xsave_addr(&tsk->thread.fpu.state.xsave,
-> > +			       XFEATURE_CET_USER);
-> > +
-> > +	if (!state)
-> > +		return -EINVAL;
-> > +
-> > +	size = rlimit(RLIMIT_STACK);
+>> This adds new tests validating arch page table helpers for these following
+>> core memory features. These tests create and test specific mapping types at
+>> various page table levels.
+>>
+>> 1. SPECIAL mapping
+>> 2. PROTNONE mapping
+>> 3. DEVMAP mapping
+>> 4. SOFTDIRTY mapping
+>> 5. SWAP mapping
+>> 6. MIGRATION mapping
+>> 7. HUGETLB mapping
+>> 8. THP mapping
+>>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Mike Rapoport <rppt@linux.ibm.com>
+>> Cc: Vineet Gupta <vgupta@synopsys.com>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>> Cc: Paul Mackerras <paulus@samba.org>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+>> Cc: Vasily Gorbik <gor@linux.ibm.com>
+>> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: "H. Peter Anvin" <hpa@zytor.com>
+>> Cc: Kirill A. Shutemov <kirill@shutemov.name>
+>> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+>> Cc: linux-snps-arc@lists.infradead.org
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linuxppc-dev@lists.ozlabs.org
+>> Cc: linux-s390@vger.kernel.org
+>> Cc: linux-riscv@lists.infradead.org
+>> Cc: x86@kernel.org
+>> Cc: linux-arch@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>  mm/debug_vm_pgtable.c | 291 +++++++++++++++++++++++++++++++++++++++++-
+>>  1 file changed, 290 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+>> index 98990a515268..15055a8f6478 100644
+>> --- a/mm/debug_vm_pgtable.c
+>> +++ b/mm/debug_vm_pgtable.c
+>> @@ -289,6 +289,267 @@ static void __init pmd_populate_tests(struct mm_struct *mm, pmd_t *pmdp,
+>>  	WARN_ON(pmd_bad(pmd));
+>>  }
+>>
+>> +static void __init pte_special_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pte_t pte = pfn_pte(pfn, prot);
+>> +
+>> +	if (!IS_ENABLED(CONFIG_ARCH_HAS_PTE_SPECIAL))
+>> +		return;
+>> +
+>> +	WARN_ON(!pte_special(pte_mkspecial(pte)));
+>> +}
+>> +
+>> +static void __init pte_protnone_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pte_t pte = pfn_pte(pfn, prot);
+>> +
+>> +	if (!IS_ENABLED(CONFIG_NUMA_BALANCING))
+>> +		return;
+>> +
+>> +	WARN_ON(!pte_protnone(pte));
+>> +	WARN_ON(!pte_present(pte));
+>> +}
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +static void __init pmd_protnone_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pmd_t pmd = pfn_pmd(pfn, prot);
+>> +
+>> +	if (!IS_ENABLED(CONFIG_NUMA_BALANCING))
+>> +		return;
+>> +
+>> +	WARN_ON(!pmd_protnone(pmd));
+>> +	WARN_ON(!pmd_present(pmd));
+>> +}
+>> +#else
+>> +static void __init pmd_protnone_tests(unsigned long pfn, pgprot_t prot) { }
+>> +#endif
+>> +
+>> +#ifdef CONFIG_ARCH_HAS_PTE_DEVMAP
+>> +static void __init pte_devmap_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pte_t pte = pfn_pte(pfn, prot);
+>> +
+>> +	WARN_ON(!pte_devmap(pte_mkdevmap(pte)));
+>> +}
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +static void __init pmd_devmap_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pmd_t pmd = pfn_pmd(pfn, prot);
+>> +
+>> +	WARN_ON(!pmd_devmap(pmd_mkdevmap(pmd)));
+>> +}
+>> +
+>> +#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+>> +static void __init pud_devmap_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pud_t pud = pfn_pud(pfn, prot);
+>> +
+>> +	WARN_ON(!pud_devmap(pud_mkdevmap(pud)));
+>> +}
+>> +#else
+>> +static void __init pud_devmap_tests(unsigned long pfn, pgprot_t prot) { }
+>> +#endif
+>> +#else
+>> +static void __init pmd_devmap_tests(unsigned long pfn, pgprot_t prot) { }
+>> +static void __init pud_devmap_tests(unsigned long pfn, pgprot_t prot) { }
+>> +#endif
+>> +#else
+>> +static void __init pte_devmap_tests(unsigned long pfn, pgprot_t prot) { }
+>> +static void __init pmd_devmap_tests(unsigned long pfn, pgprot_t prot) { }
+>> +static void __init pud_devmap_tests(unsigned long pfn, pgprot_t prot) { }
+>> +#endif
+>> +
+>> +static void __init pte_soft_dirty_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pte_t pte = pfn_pte(pfn, prot);
+>> +
+>> +	if (!IS_ENABLED(CONFIG_HAVE_ARCH_SOFT_DIRTY))
+>> +		return;
+>> +
+>> +	WARN_ON(!pte_soft_dirty(pte_mksoft_dirty(pte)));
+>> +	WARN_ON(pte_soft_dirty(pte_clear_soft_dirty(pte)));
+>> +}
+>> +
+>> +static void __init pte_swap_soft_dirty_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pte_t pte = pfn_pte(pfn, prot);
+>> +
+>> +	if (!IS_ENABLED(CONFIG_HAVE_ARCH_SOFT_DIRTY))
+>> +		return;
+>> +
+>> +	WARN_ON(!pte_swp_soft_dirty(pte_swp_mksoft_dirty(pte)));
+>> +	WARN_ON(pte_swp_soft_dirty(pte_swp_clear_soft_dirty(pte)));
+>> +}
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +static void __init pmd_soft_dirty_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pmd_t pmd = pfn_pmd(pfn, prot);
+>> +
+>> +	if (!IS_ENABLED(CONFIG_HAVE_ARCH_SOFT_DIRTY))
+>> +		return;
+>> +
+>> +	WARN_ON(!pmd_soft_dirty(pmd_mksoft_dirty(pmd)));
+>> +	WARN_ON(pmd_soft_dirty(pmd_clear_soft_dirty(pmd)));
+>> +}
+>> +
+>> +static void __init pmd_swap_soft_dirty_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pmd_t pmd = pfn_pmd(pfn, prot);
+>> +
+>> +	if (!IS_ENABLED(CONFIG_HAVE_ARCH_SOFT_DIRTY) ||
+>> +		!IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION))
+>> +		return;
+>> +
+>> +	WARN_ON(!pmd_swp_soft_dirty(pmd_swp_mksoft_dirty(pmd)));
+>> +	WARN_ON(pmd_swp_soft_dirty(pmd_swp_clear_soft_dirty(pmd)));
+>> +}
+>> +#else
+>> +static void __init pmd_soft_dirty_tests(unsigned long pfn, pgprot_t prot) { }
+>> +static void __init pmd_swap_soft_dirty_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +}
+>> +#endif
+>> +
+>> +static void __init pte_swap_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	swp_entry_t swp;
+>> +	pte_t pte;
+>> +
+>> +	pte = pfn_pte(pfn, prot);
+>> +	swp = __pte_to_swp_entry(pte);
+>> +	WARN_ON(!pte_same(pte, __swp_entry_to_pte(swp)));
+>> +}
+>> +
+>> +#ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+>> +static void __init pmd_swap_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	swp_entry_t swp;
+>> +	pmd_t pmd;
+>> +
+>> +	pmd = pfn_pmd(pfn, prot);
+>> +	swp = __pmd_to_swp_entry(pmd);
+>> +	WARN_ON(!pmd_same(pmd, __swp_entry_to_pmd(swp)));
+>> +}
+>> +#else
+>> +static void __init pmd_swap_tests(unsigned long pfn, pgprot_t prot) { }
+>> +#endif
+>> +
+>> +static void __init swap_migration_tests(void)
+>> +{
+>> +	struct page *page;
+>> +	swp_entry_t swp;
+>> +
+>> +	if (!IS_ENABLED(CONFIG_MIGRATION))
+>> +		return;
+>> +	/*
+>> +	 * swap_migration_tests() requires a dedicated page as it needs to
+>> +	 * be locked before creating a migration entry from it. Locking the
+>> +	 * page that actually maps kernel text ('start_kernel') can be real
+>> +	 * problematic. Lets allocate a dedicated page explicitly for this
+>> +	 * purpose that will be freed subsequently.
+>> +	 */
+>> +	page = alloc_page(GFP_KERNEL);
+>> +	if (!page) {
+>> +		pr_err("page allocation failed\n");
+>> +		return;
+>> +	}
+>> +
+>> +	/*
+>> +	 * make_migration_entry() expects given page to be
+>> +	 * locked, otherwise it stumbles upon a BUG_ON().
+>> +	 */
+>> +	__SetPageLocked(page);
+>> +	swp = make_migration_entry(page, 1);
+>> +	WARN_ON(!is_migration_entry(swp));
+>> +	WARN_ON(!is_write_migration_entry(swp));
+>> +
+>> +	make_migration_entry_read(&swp);
+>> +	WARN_ON(!is_migration_entry(swp));
+>> +	WARN_ON(is_write_migration_entry(swp));
+>> +
+>> +	swp = make_migration_entry(page, 0);
+>> +	WARN_ON(!is_migration_entry(swp));
+>> +	WARN_ON(is_write_migration_entry(swp));
+>> +	__ClearPageLocked(page);
+>> +	__free_page(page);
+>> +}
+>> +
+>> +#ifdef CONFIG_HUGETLB_PAGE
+>> +static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	struct page *page;
+>> +	pte_t pte;
+>> +
+>> +	/*
+>> +	 * Accessing the page associated with the pfn is safe here,
+>> +	 * as it was previously derived from a real kernel symbol.
+>> +	 */
+>> +	page = pfn_to_page(pfn);
+>> +	pte = mk_huge_pte(page, prot);
+>> +
+>> +	WARN_ON(!huge_pte_dirty(huge_pte_mkdirty(pte)));
+>> +	WARN_ON(!huge_pte_write(huge_pte_mkwrite(huge_pte_wrprotect(pte))));
+>> +	WARN_ON(huge_pte_write(huge_pte_wrprotect(huge_pte_mkwrite(pte))));
+>> +
+>> +#ifdef CONFIG_ARCH_WANT_GENERAL_HUGETLB
+>> +	pte = pfn_pte(pfn, prot);
+>> +
+>> +	WARN_ON(!pte_huge(pte_mkhuge(pte)));
+>> +#endif
+>> +}
+>> +#else
+>> +static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot) { }
+>> +#endif
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +static void __init pmd_thp_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +	pmd_t pmd;
+>> +
+>> +	/*
+>> +	 * pmd_trans_huge() and pmd_present() must return positive
+>> +	 * after MMU invalidation with pmd_mknotpresent().
+>> +	 */
+>> +	pmd = pfn_pmd(pfn, prot);
+>> +	WARN_ON(!pmd_trans_huge(pmd_mkhuge(pmd)));
+>> +
+>> +#ifndef __HAVE_ARCH_PMDP_INVALIDATE
+>> +	WARN_ON(!pmd_trans_huge(pmd_mknotpresent(pmd_mkhuge(pmd))));
+>> +	WARN_ON(!pmd_present(pmd_mknotpresent(pmd_mkhuge(pmd))));
+>> +#endif
 > 
-> Is SHSTK incompatible with RLIM_INFINITY stack rlimits?
+> I think we need a better comment here, because requiring pmd_trans_huge() and
+> pmd_present() returning true after pmd_mknotpresent() is not straightforward.
 
-I will change it to:
-
-	size = min(rlimit(RLIMIT_STACK), 4 GB);
+Thats right.
 
 > 
-> > +
-> > +	/*
-> > +	 * Compat-mode pthreads share a limited address space.
-> > +	 * If each function call takes an average of four slots
-> > +	 * stack space, we need 1/4 of stack size for shadow stack.
-> > +	 */
-> > +	if (in_compat_syscall())
-> > +		size /= 4;
-> > +
-> > +	addr = alloc_shstk(size);
+> According to Andrea Arcangeli’s email (https://lore.kernel.org/linux-mm/20181017020930.GN30832@redhat.com/),
+> This behavior is an optimization for transparent huge page.
+> pmd_trans_huge() must be true if pmd_page() returns you a valid THP to avoid
+> taking the pmd_lock when others walk over non transhuge pmds (i.e. there are no
+> THP allocated). Especially when we split a THP, removing the present bit from
+> the pmd, pmd_trans_huge() still needs to return true. pmd_present() should
+> be true whenever pmd_trans_huge() returns true.
+
+Sure, will modify the existing comment here like this.
+
+	/*
+	 * pmd_trans_huge() and pmd_present() must return positive after
+	 * MMU invalidation with pmd_mknotpresent(). This behavior is an
+	 * optimization for transparent huge page. pmd_trans_huge() must
+	 * be true if pmd_page() returns a valid THP to avoid taking the
+	 * pmd_lock when others walk over non transhuge pmds (i.e. there
+	 * are no THP allocated). Especially when splitting a THP and
+	 * removing the present bit from the pmd, pmd_trans_huge() still
+	 * needs to return true. pmd_present() should be true whenever
+	 * pmd_trans_huge() returns true.
+	 */
+
 > 
-> I assume it'd fail here, but I worry about Stack Clash style attacks.
-> I'd like to see test cases that make sure the SHSTK gap is working
-> correctly.
+> I think it is also worth either putting Andres’s email or the link to it
+> in the rst file in your 3rd patch. It is a good documentation for this special
+> case.
 
-I will work on some tests.
+Makes sense. Will update Andrea's email link in the .rst file as well.
 
-Thanks,
-Yu-cheng
-
-
+> 
+> —
+> Best Regards,
+> Yan Zi
+> 
