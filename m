@@ -2,133 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA16D194774
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 20:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFC0194867
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 21:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728525AbgCZTa0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Mar 2020 15:30:26 -0400
-Received: from mga11.intel.com ([192.55.52.93]:38363 "EHLO mga11.intel.com"
+        id S1726540AbgCZULu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Mar 2020 16:11:50 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:57510 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726340AbgCZTa0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 26 Mar 2020 15:30:26 -0400
-IronPort-SDR: mDB488nTJ1t0G1mJpw++Jh1WetYsRIILADLGVOfvkOEof6ddae5SDUGmVdXkbZ1nJ9z/zkUlju
- ZOcVDIXW8WmA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 12:30:24 -0700
-IronPort-SDR: ZyLSCtqgJScVr7aqeHSnOwxeNlPWt1c5RUxNFZK0b2siQoxQuHTBeaHTASLBJmUqhx03Q5DtO+
- ZCt5bvMnSTtA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,309,1580803200"; 
-   d="scan'208";a="420832916"
-Received: from scymds01.sc.intel.com ([10.148.94.138])
-  by orsmga005.jf.intel.com with ESMTP; 26 Mar 2020 12:30:23 -0700
-Received: from gnu-skx-1.sc.intel.com (gnu-skx-1.sc.intel.com [172.25.70.205])
-        by scymds01.sc.intel.com
-        with ESMTP id 02QJUMMM017331;
-        Thu, 26 Mar 2020 12:30:22 -0700
-Received: from gnu-skx-1.sc.intel.com (localhost [IPv6:::1])
-        by gnu-skx-1.sc.intel.com (Postfix) with ESMTP id F0BF52C006B;
-        Thu, 26 Mar 2020 12:30:21 -0700 (PDT)
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Lutomirski <luto@kernel.org>,
+        id S1726363AbgCZULu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 26 Mar 2020 16:11:50 -0400
+Received: from zn.tnic (p200300EC2F0A49004CB08B568021E004.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:4900:4cb0:8b56:8021:e004])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2DC961EC0626;
+        Thu, 26 Mar 2020 21:11:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1585253508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PrESSnpiQpeyEnZVO2sr/PNnhIexYw4+4+Gg/n72Er4=;
+        b=c0tBcOqSU9e4nZEuADM41EdBHYNpKdFJnzwnJhbLoIplCRJmBnMhYr9zSIUj1feHQgB4Iq
+        tmEJJKOozc+Ct9IpRyAyXm8C1Xpvm29alFj6PkbT8VSI5bzj97jwwYZTvxNnw9aDp4wz4Y
+        IJ8curNYCqmhBe+EF5B1FQ7b+eVjpbw=
+Date:   Thu, 26 Mar 2020 21:11:42 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "H.J. Lu" <hjl.tools@gmail.com>, linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
         Thomas Lendacky <Thomas.Lendacky@amd.com>,
         Sami Tolvanen <samitolvanen@google.com>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Ingo Molnar <mingo@redhat.com>,
         "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
         Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
         Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH 2/2] Discard .note.gnu.property sections in generic NOTES
-Date:   Thu, 26 Mar 2020 12:30:21 -0700
-Message-Id: <20200326193021.255002-2-hjl.tools@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200326193021.255002-1-hjl.tools@gmail.com>
+Subject: Re: [PATCH 1/2] Add RUNTIME_DISCARD_EXIT to generic DISCARDS
+Message-ID: <20200326201142.GJ11398@zn.tnic>
 References: <20200326193021.255002-1-hjl.tools@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200326193021.255002-1-hjl.tools@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-With the command-line option, -mx86-used-note=yes, the x86 assembler
-in binutils 2.32 and above generates a program property note in a note
-section, .note.gnu.property, to encode used x86 ISAs and features.  But
-kernel linker script only contains a single NOTE segment:
+On Thu, Mar 26, 2020 at 12:30:20PM -0700, H.J. Lu wrote:
+> In x86 kernel, .exit.text and .exit.data sections are discarded at
+> runtime, not by linker.  Add RUNTIME_DISCARD_EXIT to generic DISCARDS
+> and define it in x86 kernel linker script to keep them.
+> 
+> Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/x86/kernel/vmlinux.lds.S     |  1 +
+>  include/asm-generic/vmlinux.lds.h | 10 ++++++++--
+>  2 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+> index e3296aa028fe..7206e1ac23dd 100644
+> --- a/arch/x86/kernel/vmlinux.lds.S
+> +++ b/arch/x86/kernel/vmlinux.lds.S
+> @@ -21,6 +21,7 @@
+>  #define LOAD_OFFSET __START_KERNEL_map
+>  #endif
+>  
+> +#define RUNTIME_DISCARD_EXIT
+>  #define EMITS_PT_NOTE
+>  #define RO_EXCEPTION_TABLE_ALIGN	16
+>  
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index e00f41aa8ec4..6b943fb8c5fd 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -894,10 +894,16 @@
+>   * section definitions so that such archs put those in earlier section
+>   * definitions.
+>   */
+> +#ifdef RUNTIME_DISCARD_EXIT
+> +#define EXIT_DISCARDS
+> +#else
+> +#define EXIT_DISCARDS							\
+> +	EXIT_TEXT							\
+> +	EXIT_DATA
+> +#endif
 
-PHDRS {
- text PT_LOAD FLAGS(5);
- data PT_LOAD FLAGS(6);
- percpu PT_LOAD FLAGS(6);
- init PT_LOAD FLAGS(7);
- note PT_NOTE FLAGS(0);
-}
-SECTIONS
-{
-...
- .notes : AT(ADDR(.notes) - 0xffffffff80000000) { __start_notes = .; KEEP(*(.not
-e.*)) __stop_notes = .; } :text :note
-...
-}
+/me goes back and reads the old thread on this...
 
-The NOTE segment generated by kernel linker script is aligned to 4 bytes.
-But .note.gnu.property section must be aligned to 8 bytes on x86-64 and
-we get
+Kees, do you expect other arches to actually need this
+RUNTIME_DISCARD_EXIT thing or was that a hypothetical thing?
 
-[hjl@gnu-skx-1 linux]$ readelf -n vmlinux
+/me searches more...
 
-Displaying notes found in: .notes
-  Owner                Data size Description
-  Xen                  0x00000006 Unknown note type: (0x00000006)
-   description data: 6c 69 6e 75 78 00
-  Xen                  0x00000004 Unknown note type: (0x00000007)
-   description data: 32 2e 36 00
-  xen-3.0              0x00000005 Unknown note type: (0x006e6558)
-   description data: 08 00 00 00 03
-readelf: Warning: note with invalid namesz and/or descsz found at offset 0x50
-readelf: Warning:  type: 0xffffffff, namesize: 0x006e6558, descsize:
-0x80000000, alignment: 8
-[hjl@gnu-skx-1 linux]$
+oh, there's a patchset from you
 
-Since note.gnu.property section in kernel image is never used, this patch
-discards .note.gnu.property sections in kernel linker script by adding
+https://lkml.kernel.org/r/20200228002244.15240-1-keescook@chromium.org
 
-/DISCARD/ : {
-  *(.note.gnu.property)
-}
+which already contains this patch *and* an ARM64 patch which defines
+RUNTIME_DISCARD_EXIT so I'm guessing ARM64 wants to discard at runtime
+too.
 
-before kernel NOTE segment in generic NOTES.
+Which leaves the question why is H.J. sending that patch separate and
+you carry it in a patchset about orphan section warning? Seems like it
+wants to be in your patchset?
 
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- include/asm-generic/vmlinux.lds.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thx.
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 6b943fb8c5fd..6659a7c07c84 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -818,7 +818,14 @@
- #define TRACEDATA
- #endif
- 
-+/*
-+ * Discard .note.gnu.property sections which are unused and have
-+ * different alignment requirement from kernel note sections.
-+ */
- #define NOTES								\
-+	/DISCARD/ : {							\
-+		*(.note.gnu.property)					\
-+	}								\
- 	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
- 		__start_notes = .;					\
- 		KEEP(*(.note.*))					\
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
