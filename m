@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08034193611
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 03:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B0B193614
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 03:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727821AbgCZCkx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Mar 2020 22:40:53 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:36034 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727805AbgCZCkw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Mar 2020 22:40:52 -0400
-Received: by mail-qt1-f193.google.com with SMTP id m33so4147815qtb.3;
-        Wed, 25 Mar 2020 19:40:51 -0700 (PDT)
+        id S1727805AbgCZCky (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Mar 2020 22:40:54 -0400
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:37428 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727773AbgCZCky (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Mar 2020 22:40:54 -0400
+Received: by mail-qv1-f66.google.com with SMTP id n1so2243620qvz.4;
+        Wed, 25 Mar 2020 19:40:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=b3wMLtwJjVx+cW6i5BwYTXEhVTKTsG2r4lo8N4p/ptY=;
-        b=G+XtDpPYFDSyRzm0QXWKZwQ1v4BUaj6m0HrOPZTJHDU3pfomu98YgSKwFfgzg6spNT
-         MA/Im34q5ZDnMIVDB04KS2MZ6ywaKwGuzN5sxLdAkkKzrzv/xALvRWvBLm67Jg8GmqcD
-         SDvcbfJSJPkLPYIEtwwQ3HIO7SB+UZa2Ef2ghVJshGBcGjJTJRcnJb/vg5+Lq4qiU3oA
-         vdBKRD1F9pBN9MB4xTVS7Eb7+NXh7FQmfPPvAmCZs76yu8PUFLYQlzk6EcglAeT3iq9G
-         NXH1XN2z1N78uOO5wCL/szfhsHW/bQUbR62QUD2MvRgWj1vuu7ac5itB89CuebQUegGO
-         S6sw==
+        bh=CDkP0xS8y57msegU04s88KpDDAiPZL218+4rLGcZdeE=;
+        b=GD5Re1YPr+bT+fcFm1zknxALyyjys58Bfjg8guvY8KpiMqK4sWykpsOrcorynIZdsM
+         S7Eny9aic6xx2cFO2yNpQyu4xbO96/JhBHR4vRhC3/L97qxkbfmhcPcjjdFAGSV28xQf
+         yl4wro+zivt1SoZrIp7OSFGXkty+gk4GwLRva/wM7BpKNS+QD1OpJFbAyXOWm3FvyFQ8
+         ozq0KM7WcDXbuUM+uPM6xCZI+IMQqDZXS11VYFK68h0pxh1FSUPLW+SodxgaRk7hrVIh
+         Oskh9gOD0fTo7g28uaAd31Rzbwc6vPAHK23HNGi4Lqyw92+qaw6WI13EHGwDbISQW5tc
+         tI5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=b3wMLtwJjVx+cW6i5BwYTXEhVTKTsG2r4lo8N4p/ptY=;
-        b=lO9U8w6+OCI7bBn8ie+i28oIdNMmtjgs9nffZCCEDIAO43pePl23M5oDTQCEd0oIpD
-         pEwz85sKVZabPcTqi6BTYOvRHKCyXnXX8lSWTtAkio27o8l9rdw0hHUmZtpCmEUSxDQO
-         r9uV8EZWeRaI8LFYiyci+4HFoRKDdZtmOW528bm29VzlHcahHkXC50ikhsw8YPe6BJCA
-         BFEEUJeLuVlNIA1WtpNpr1Yx7APUGE/h3ZhWWQQeeuuqw5/IFLGPwGR2GHzIho6caMlu
-         /Xg0ZKWM84W6LWUqS5k+5QO5du/TD2es4xwjHocAiMKY6tWK/DX0n7CebUCmenbc3aLA
-         ECXg==
-X-Gm-Message-State: ANhLgQ1ZJkDCSLwWBi0xYRyPADWJU40ouutSkSfC9clm/n6XDOlvValb
-        ZJY7ylBXnwRTDei3j1/pN6g=
-X-Google-Smtp-Source: ADFU+vuBYJphO1kTx7mC+IwOjpOMaxnxWuorjwSu3zdstMRXUhAMpjk5Wd3f7oSj7xg9X7A6HUovpA==
-X-Received: by 2002:ac8:5458:: with SMTP id d24mr6099798qtq.255.1585190450781;
-        Wed, 25 Mar 2020 19:40:50 -0700 (PDT)
+        bh=CDkP0xS8y57msegU04s88KpDDAiPZL218+4rLGcZdeE=;
+        b=Mi2Cjvpae0uBtP5v8XSP+J9st1m24wJ/xbLEN17p+AOGLrhs0urDwufKVcwRm8G18D
+         Uvu8Rxjyxt6xr42FpW9juCo5lRlujSr+rRfOGJTbOXLIkmzwHbEF7nQsGQgdU1LkuB2n
+         q2Jd92UuKzsAGwmNGAJk6cTE+Pfhkwx1CGteHsLv5NgnRSWdxOoNbv4XPrcHCQJCCk4I
+         G22W1PmkTbE/3COq+RWcZ1OWFQJfkWiMJy2Q/vp2hZTWvt1Cy040e7G+1I1wNjk514vl
+         t6QjIFzSMRXpK1fwtofamSoyN86EnP0btK0Tfrrj6bUxoUTxZytolrir7HYqBHQAJL70
+         VnJQ==
+X-Gm-Message-State: ANhLgQ3xPsIi4Q8jdWASfaW98CStmMa2Nvo0J2W05qQI0JtSv2Tqta8Y
+        sUpbr2T3aig/j2O9khMV+Rg=
+X-Google-Smtp-Source: ADFU+vvrGMv+AfF6WJTwqJcQtFoJ6xDjfC6ceKdmKfmw0s/38JFkENT0B6/d8W+L5TuJO7hFILvHYg==
+X-Received: by 2002:ad4:5427:: with SMTP id g7mr6131032qvt.23.1585190452760;
+        Wed, 25 Mar 2020 19:40:52 -0700 (PDT)
 Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id u15sm671282qte.91.2020.03.25.19.40.49
+        by smtp.gmail.com with ESMTPSA id c27sm552831qkk.0.2020.03.25.19.40.51
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 Mar 2020 19:40:50 -0700 (PDT)
+        Wed, 25 Mar 2020 19:40:52 -0700 (PDT)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id A946227C0054;
-        Wed, 25 Mar 2020 22:40:49 -0400 (EDT)
+        by mailauth.nyi.internal (Postfix) with ESMTP id 8026027C0054;
+        Wed, 25 Mar 2020 22:40:51 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 25 Mar 2020 22:40:49 -0400
-X-ME-Sender: <xms:MRZ8Xqd8-e4xC1P39ujhKq2Cuq7B4duhzav-mY5x6Nao14FdrU43cg>
+  by compute3.internal (MEProxy); Wed, 25 Mar 2020 22:40:51 -0400
+X-ME-Sender: <xms:MxZ8XjKkQy2hzboiBz1t4UPlja2i28B7fMebjELNaJ8fPJ5ZOnInkg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudehhedggeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -59,13 +59,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudehhedggeejucetufdoteggod
     rghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthi
     dqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghi
     lhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:MRZ8XtIR3odx_LF3yzi81FiCAFdznMqZoAVYaOoLhkhBjZaMKRdwvQ>
-    <xmx:MRZ8XkRopE2VapEkhzcYlNz9SqWQ0difShU7j7nyusQlX4ZP4iAJ7Q>
-    <xmx:MRZ8XrGX5wVt6WtziPOuUHhgv5x3wTjshA0ZcEXQv55_IZmJ7UHlGw>
-    <xmx:MRZ8XgnzRFB-Ng4uvMGCighA-lZ7GYgscs2tR7on794xWeWpf6GyiZYOs8o>
+X-ME-Proxy: <xmx:MxZ8XrbKjmaN807oQyJUe3d9gcBkm8U3E_7slKuJOsjCU-9mLBhoEA>
+    <xmx:MxZ8XmvAXmpz1i-jxlQ4fNXdbTRA3KC5yBSJDrhES_ZSO1VkXXbvlw>
+    <xmx:MxZ8XgsZ26YoqoIEzowpo7SR8ZxZBhXePWuNc7yy985_EENwSkguUg>
+    <xmx:MxZ8XpNUUKpHrbznJ05LDG3R5z0wf1dDYc8jHSJ70HRbUrGz79fyRPoOpvc>
 Received: from localhost (unknown [52.155.111.71])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 27FAE3067F32;
-        Wed, 25 Mar 2020 22:40:49 -0400 (EDT)
+        by mail.messagingengine.com (Postfix) with ESMTPA id ED0223067F8B;
+        Wed, 25 Mar 2020 22:40:50 -0400 (EDT)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Alan Stern <stern@rowland.harvard.edu>,
@@ -88,9 +88,9 @@ Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Joel Fernandes <joel@joelfernandes.org>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v4 3/4] Documentation/litmus-tests/atomic: Add a test for atomic_set()
-Date:   Thu, 26 Mar 2020 10:40:21 +0800
-Message-Id: <20200326024022.7566-4-boqun.feng@gmail.com>
+Subject: [PATCH v4 4/4] Documentation/litmus-tests/atomic: Add a test for smp_mb__after_atomic()
+Date:   Thu, 26 Mar 2020 10:40:22 +0800
+Message-Id: <20200326024022.7566-5-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200326024022.7566-1-boqun.feng@gmail.com>
 References: <20200326024022.7566-1-boqun.feng@gmail.com>
@@ -101,120 +101,122 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We already use a litmus test in atomic_t.txt to describe the behavior of
-an atomic_set() with the an atomic RMW, so add it into atomic-tests
-directory to make it easily accessible for anyone who cares about the
-semantics of our atomic APIs.
+We already use a litmus test in atomic_t.txt to describe atomic RMW +
+smp_mb__after_atomic() is stronger than acquire (both the read and the
+write parts are ordered). So make it a litmus test in atomic-tests
+directory, so that people can access the litmus easily.
 
-Besides currently the litmus test "atomic-set" in atomic_t.txt has a few
-things to be improved:
-
-1)	The CPU/Processor numbers "P1,P2" are not only inconsistent with
-	the rest of the document, which uses "CPU0" and "CPU1", but also
-	unacceptable by the herd tool, which requires processors start
-	at "P0".
-
-2)	The initialization block uses a "atomic_set()", which is OK, but
-	it's better to use ATOMIC_INIT() to make clear this is an
-	initialization.
-
-3)	The return value of atomic_add_unless() is discarded
-	inexplicitly, which is OK for C language, but it will be helpful
-	to the herd tool if we use a void cast to make the discard
-	explicit.
-
-4)	The name and the paragraph describing the test need to be more
-	accurate and aligned with our wording in LKMM.
-
-Therefore fix these in both atomic_t.txt and the new added litmus test.
+Additionally, change the processor numbers "P1, P2" to "P0, P1" in
+atomic_t.txt for the consistency with the processor numbers in the
+litmus test, which herd can handle.
 
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 Acked-by: Andrea Parri <parri.andrea@gmail.com>
 ---
- Documentation/atomic_t.txt                    | 14 +++++------
- ...c-RMW-ops-are-atomic-WRT-atomic_set.litmus | 24 +++++++++++++++++++
- Documentation/litmus-tests/atomic/README      |  7 ++++++
- 3 files changed, 38 insertions(+), 7 deletions(-)
- create mode 100644 Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
+ Documentation/atomic_t.txt                    | 10 +++---
+ ...ter_atomic-is-stronger-than-acquire.litmus | 32 +++++++++++++++++++
+ Documentation/litmus-tests/atomic/README      |  5 +++
+ 3 files changed, 42 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/litmus-tests/atomic/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
 
 diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
-index 0ab747e0d5ac..67d1d99f8589 100644
+index 67d1d99f8589..0f1fdedf36bb 100644
 --- a/Documentation/atomic_t.txt
 +++ b/Documentation/atomic_t.txt
-@@ -85,21 +85,21 @@ smp_store_release() respectively. Therefore, if you find yourself only using
- the Non-RMW operations of atomic_t, you do not in fact need atomic_t at all
- and are doing it wrong.
+@@ -233,19 +233,19 @@ as well. Similarly, something like:
+ is an ACQUIRE pattern (though very much not typical), but again the barrier is
+ strictly stronger than ACQUIRE. As illustrated:
  
--A subtle detail of atomic_set{}() is that it should be observable to the RMW
--ops. That is:
-+A note for the implementation of atomic_set{}() is that it must not break the
-+atomicity of the RMW ops. That is:
- 
--  C atomic-set
-+  C Atomic-RMW-ops-are-atomic-WRT-atomic_set
+-  C strong-acquire
++  C Atomic-RMW+mb__after_atomic-is-stronger-than-acquire
  
    {
--    atomic_set(v, 1);
-+    atomic_t v = ATOMIC_INIT(1);
    }
  
--  P1(atomic_t *v)
-+  P0(atomic_t *v)
+-  P1(int *x, atomic_t *y)
++  P0(int *x, atomic_t *y)
    {
--    atomic_add_unless(v, 1, 0);
-+    (void)atomic_add_unless(v, 1, 0);
+     r0 = READ_ONCE(*x);
+     smp_rmb();
+     r1 = atomic_read(y);
    }
  
--  P2(atomic_t *v)
-+  P1(atomic_t *v)
+-  P2(int *x, atomic_t *y)
++  P1(int *x, atomic_t *y)
    {
-     atomic_set(v, 0);
+     atomic_inc(y);
+     smp_mb__after_atomic();
+@@ -253,14 +253,14 @@ strictly stronger than ACQUIRE. As illustrated:
    }
-diff --git a/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus b/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
+ 
+   exists
+-  (r0=1 /\ r1=0)
++  (0:r0=1 /\ 0:r1=0)
+ 
+ This should not happen; but a hypothetical atomic_inc_acquire() --
+ (void)atomic_fetch_inc_acquire() for instance -- would allow the outcome,
+ because it would not order the W part of the RMW against the following
+ WRITE_ONCE.  Thus:
+ 
+-  P1			P2
++  P0			P1
+ 
+ 			t = LL.acq *y (0)
+ 			t++;
+diff --git a/Documentation/litmus-tests/atomic/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus b/Documentation/litmus-tests/atomic/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
 new file mode 100644
-index 000000000000..49385314d911
+index 000000000000..9a8e31a44b28
 --- /dev/null
-+++ b/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-@@ -0,0 +1,24 @@
-+C Atomic-RMW-ops-are-atomic-WRT-atomic_set
++++ b/Documentation/litmus-tests/atomic/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
+@@ -0,0 +1,32 @@
++C Atomic-RMW+mb__after_atomic-is-stronger-than-acquire
 +
 +(*
 + * Result: Never
 + *
-+ * Test that atomic_set() cannot break the atomicity of atomic RMWs.
++ * Test that an atomic RMW followed by a smp_mb__after_atomic() is
++ * stronger than a normal acquire: both the read and write parts of
++ * the RMW are ordered before the subsequential memory accesses.
 + *)
 +
 +{
-+	atomic_t v = ATOMIC_INIT(1);
 +}
 +
-+P0(atomic_t *v)
++P0(int *x, atomic_t *y)
 +{
-+	(void)atomic_add_unless(v, 1, 0);
++	int r0;
++	int r1;
++
++	r0 = READ_ONCE(*x);
++	smp_rmb();
++	r1 = atomic_read(y);
 +}
 +
-+P1(atomic_t *v)
++P1(int *x, atomic_t *y)
 +{
-+	atomic_set(v, 0);
++	atomic_inc(y);
++	smp_mb__after_atomic();
++	WRITE_ONCE(*x, 1);
 +}
 +
 +exists
-+(v=2)
++(0:r0=1 /\ 0:r1=0)
 diff --git a/Documentation/litmus-tests/atomic/README b/Documentation/litmus-tests/atomic/README
-index ae61201a4271..a1b72410b539 100644
+index a1b72410b539..714cf93816ea 100644
 --- a/Documentation/litmus-tests/atomic/README
 +++ b/Documentation/litmus-tests/atomic/README
-@@ -2,3 +2,10 @@ This directory contains litmus tests that are typical to describe the semantics
- of our atomic APIs. For more information about how to "run" a litmus test or
- how to generate a kernel test module based on a litmus test, please see
- tools/memory-model/README.
+@@ -7,5 +7,10 @@ tools/memory-model/README.
+ LITMUS TESTS
+ ============
+ 
++Atomic-RMW+mb__after_atomic-is-stronger-than-acquire
++	Test that an atomic RMW followed by a smp_mb__after_atomic() is
++	stronger than a normal acquire: both the read and write parts of
++	the RMW are ordered before the subsequential memory accesses.
 +
-+============
-+LITMUS TESTS
-+============
-+
-+Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-+	Test that atomic_set() cannot break the atomicity of atomic RMWs.
+ Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
+ 	Test that atomic_set() cannot break the atomicity of atomic RMWs.
 -- 
 2.25.1
 
