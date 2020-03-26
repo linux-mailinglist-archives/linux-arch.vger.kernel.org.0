@@ -2,221 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B0B193614
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 03:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACA61938D1
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 07:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727805AbgCZCky (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Mar 2020 22:40:54 -0400
-Received: from mail-qv1-f66.google.com ([209.85.219.66]:37428 "EHLO
-        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727773AbgCZCky (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Mar 2020 22:40:54 -0400
-Received: by mail-qv1-f66.google.com with SMTP id n1so2243620qvz.4;
-        Wed, 25 Mar 2020 19:40:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CDkP0xS8y57msegU04s88KpDDAiPZL218+4rLGcZdeE=;
-        b=GD5Re1YPr+bT+fcFm1zknxALyyjys58Bfjg8guvY8KpiMqK4sWykpsOrcorynIZdsM
-         S7Eny9aic6xx2cFO2yNpQyu4xbO96/JhBHR4vRhC3/L97qxkbfmhcPcjjdFAGSV28xQf
-         yl4wro+zivt1SoZrIp7OSFGXkty+gk4GwLRva/wM7BpKNS+QD1OpJFbAyXOWm3FvyFQ8
-         ozq0KM7WcDXbuUM+uPM6xCZI+IMQqDZXS11VYFK68h0pxh1FSUPLW+SodxgaRk7hrVIh
-         Oskh9gOD0fTo7g28uaAd31Rzbwc6vPAHK23HNGi4Lqyw92+qaw6WI13EHGwDbISQW5tc
-         tI5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CDkP0xS8y57msegU04s88KpDDAiPZL218+4rLGcZdeE=;
-        b=Mi2Cjvpae0uBtP5v8XSP+J9st1m24wJ/xbLEN17p+AOGLrhs0urDwufKVcwRm8G18D
-         Uvu8Rxjyxt6xr42FpW9juCo5lRlujSr+rRfOGJTbOXLIkmzwHbEF7nQsGQgdU1LkuB2n
-         q2Jd92UuKzsAGwmNGAJk6cTE+Pfhkwx1CGteHsLv5NgnRSWdxOoNbv4XPrcHCQJCCk4I
-         G22W1PmkTbE/3COq+RWcZ1OWFQJfkWiMJy2Q/vp2hZTWvt1Cy040e7G+1I1wNjk514vl
-         t6QjIFzSMRXpK1fwtofamSoyN86EnP0btK0Tfrrj6bUxoUTxZytolrir7HYqBHQAJL70
-         VnJQ==
-X-Gm-Message-State: ANhLgQ3xPsIi4Q8jdWASfaW98CStmMa2Nvo0J2W05qQI0JtSv2Tqta8Y
-        sUpbr2T3aig/j2O9khMV+Rg=
-X-Google-Smtp-Source: ADFU+vvrGMv+AfF6WJTwqJcQtFoJ6xDjfC6ceKdmKfmw0s/38JFkENT0B6/d8W+L5TuJO7hFILvHYg==
-X-Received: by 2002:ad4:5427:: with SMTP id g7mr6131032qvt.23.1585190452760;
-        Wed, 25 Mar 2020 19:40:52 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id c27sm552831qkk.0.2020.03.25.19.40.51
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 Mar 2020 19:40:52 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8026027C0054;
-        Wed, 25 Mar 2020 22:40:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 25 Mar 2020 22:40:51 -0400
-X-ME-Sender: <xms:MxZ8XjKkQy2hzboiBz1t4UPlja2i28B7fMebjELNaJ8fPJ5ZOnInkg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudehhedggeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecukfhppeehvd
-    drudehhedrudduuddrjedunecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehm
-    rghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthi
-    dqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghi
-    lhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:MxZ8XrbKjmaN807oQyJUe3d9gcBkm8U3E_7slKuJOsjCU-9mLBhoEA>
-    <xmx:MxZ8XmvAXmpz1i-jxlQ4fNXdbTRA3KC5yBSJDrhES_ZSO1VkXXbvlw>
-    <xmx:MxZ8XgsZ26YoqoIEzowpo7SR8ZxZBhXePWuNc7yy985_EENwSkguUg>
-    <xmx:MxZ8XpNUUKpHrbznJ05LDG3R5z0wf1dDYc8jHSJ70HRbUrGz79fyRPoOpvc>
-Received: from localhost (unknown [52.155.111.71])
-        by mail.messagingengine.com (Postfix) with ESMTPA id ED0223067F8B;
-        Wed, 25 Mar 2020 22:40:50 -0400 (EDT)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v4 4/4] Documentation/litmus-tests/atomic: Add a test for smp_mb__after_atomic()
-Date:   Thu, 26 Mar 2020 10:40:22 +0800
-Message-Id: <20200326024022.7566-5-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200326024022.7566-1-boqun.feng@gmail.com>
-References: <20200326024022.7566-1-boqun.feng@gmail.com>
+        id S1726180AbgCZGqH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Mar 2020 02:46:07 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12196 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726298AbgCZGqH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 26 Mar 2020 02:46:07 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id AB80A3012A2B4E7E1AE2;
+        Thu, 26 Mar 2020 14:45:56 +0800 (CST)
+Received: from [127.0.0.1] (10.173.220.25) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.487.0; Thu, 26 Mar 2020
+ 14:45:48 +0800
+Subject: Re: [RFC PATCH v4 0/6] arm64: tlb: add support for TTL feature
+To:     James Morse <james.morse@arm.com>
+CC:     <will@kernel.org>, <mark.rutland@arm.com>,
+        <catalin.marinas@arm.com>, <aneesh.kumar@linux.ibm.com>,
+        <akpm@linux-foundation.org>, <npiggin@gmail.com>,
+        <peterz@infradead.org>, <arnd@arndb.de>, <rostedt@goodmis.org>,
+        <maz@kernel.org>, <suzuki.poulose@arm.com>, <tglx@linutronix.de>,
+        <yuzhao@google.com>, <Dave.Martin@arm.com>, <steven.price@arm.com>,
+        <broonie@kernel.org>, <guohanjun@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
+        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>
+References: <20200324134534.1570-1-yezhenyu2@huawei.com>
+ <aaf017a8-3658-fe4d-c0cf-2f45656020af@arm.com>
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+Message-ID: <7859561b-78b4-4a12-2642-3741d7d3e7b8@huawei.com>
+Date:   Thu, 26 Mar 2020 14:45:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <aaf017a8-3658-fe4d-c0cf-2f45656020af@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.173.220.25]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We already use a litmus test in atomic_t.txt to describe atomic RMW +
-smp_mb__after_atomic() is stronger than acquire (both the read and the
-write parts are ordered). So make it a litmus test in atomic-tests
-directory, so that people can access the litmus easily.
+Hi James,
 
-Additionally, change the processor numbers "P1, P2" to "P0, P1" in
-atomic_t.txt for the consistency with the processor numbers in the
-litmus test, which herd can handle.
+On 2020/3/26 0:15, James Morse wrote:
+> Hi Zhenyu,
+> 
+> On 3/24/20 1:45 PM, Zhenyu Ye wrote:
+>> In order to reduce the cost of TLB invalidation, the ARMv8.4 TTL
+>> feature allows TLBs to be issued with a level allowing for quicker
+>> invalidation.  This series provide support for this feature. 
+>>
+>> Patch 1 and Patch 2 was provided by Marc on his NV series[1] patches,
+>> which detect the TTL feature and add __tlbi_level interface.
+> 
+> How does this interact with THP?
+> (I don't see anything on that in the series.)
+> 
+> With THP, there is no one answer to the size of mapping in a VMA.
+> This is a problem because the arm-arm has in "Translation table level
+> hints" in D5.10.2 of DDI0487E.a:
+> | If an incorrect value for the entry being invalidated by the
+> | instruction is specified in the TTL field, then no entries are
+> | required by the architecture to be invalidated from the TLB.
+> 
+> If we get it wrong, not TLB maintenance occurs!
+> 
 
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Acked-by: Andrea Parri <parri.andrea@gmail.com>
----
- Documentation/atomic_t.txt                    | 10 +++---
- ...ter_atomic-is-stronger-than-acquire.litmus | 32 +++++++++++++++++++
- Documentation/litmus-tests/atomic/README      |  5 +++
- 3 files changed, 42 insertions(+), 5 deletions(-)
- create mode 100644 Documentation/litmus-tests/atomic/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
+Thanks for your review.  With THP, we should update the TTL value
+after the page collapse and merge.  If not sure what it should be,
+we can set it to 0 to avoid "no TLB maintenance occur" problem.
+The Table D5-53 in DDI0487E.a says:
+| when TTL[1:0] is 0b00:
+|   This value is reserved, and hardware should treat this as if TTL[3:2] is 0b00
+| when TTL[3:2] is 0b00:
+|   Hardware must assume that the entry can be from any level.
 
-diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
-index 67d1d99f8589..0f1fdedf36bb 100644
---- a/Documentation/atomic_t.txt
-+++ b/Documentation/atomic_t.txt
-@@ -233,19 +233,19 @@ as well. Similarly, something like:
- is an ACQUIRE pattern (though very much not typical), but again the barrier is
- strictly stronger than ACQUIRE. As illustrated:
- 
--  C strong-acquire
-+  C Atomic-RMW+mb__after_atomic-is-stronger-than-acquire
- 
-   {
-   }
- 
--  P1(int *x, atomic_t *y)
-+  P0(int *x, atomic_t *y)
-   {
-     r0 = READ_ONCE(*x);
-     smp_rmb();
-     r1 = atomic_read(y);
-   }
- 
--  P2(int *x, atomic_t *y)
-+  P1(int *x, atomic_t *y)
-   {
-     atomic_inc(y);
-     smp_mb__after_atomic();
-@@ -253,14 +253,14 @@ strictly stronger than ACQUIRE. As illustrated:
-   }
- 
-   exists
--  (r0=1 /\ r1=0)
-+  (0:r0=1 /\ 0:r1=0)
- 
- This should not happen; but a hypothetical atomic_inc_acquire() --
- (void)atomic_fetch_inc_acquire() for instance -- would allow the outcome,
- because it would not order the W part of the RMW against the following
- WRITE_ONCE.  Thus:
- 
--  P1			P2
-+  P0			P1
- 
- 			t = LL.acq *y (0)
- 			t++;
-diff --git a/Documentation/litmus-tests/atomic/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus b/Documentation/litmus-tests/atomic/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
-new file mode 100644
-index 000000000000..9a8e31a44b28
---- /dev/null
-+++ b/Documentation/litmus-tests/atomic/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
-@@ -0,0 +1,32 @@
-+C Atomic-RMW+mb__after_atomic-is-stronger-than-acquire
-+
-+(*
-+ * Result: Never
-+ *
-+ * Test that an atomic RMW followed by a smp_mb__after_atomic() is
-+ * stronger than a normal acquire: both the read and write parts of
-+ * the RMW are ordered before the subsequential memory accesses.
-+ *)
-+
-+{
-+}
-+
-+P0(int *x, atomic_t *y)
-+{
-+	int r0;
-+	int r1;
-+
-+	r0 = READ_ONCE(*x);
-+	smp_rmb();
-+	r1 = atomic_read(y);
-+}
-+
-+P1(int *x, atomic_t *y)
-+{
-+	atomic_inc(y);
-+	smp_mb__after_atomic();
-+	WRITE_ONCE(*x, 1);
-+}
-+
-+exists
-+(0:r0=1 /\ 0:r1=0)
-diff --git a/Documentation/litmus-tests/atomic/README b/Documentation/litmus-tests/atomic/README
-index a1b72410b539..714cf93816ea 100644
---- a/Documentation/litmus-tests/atomic/README
-+++ b/Documentation/litmus-tests/atomic/README
-@@ -7,5 +7,10 @@ tools/memory-model/README.
- LITMUS TESTS
- ============
- 
-+Atomic-RMW+mb__after_atomic-is-stronger-than-acquire
-+	Test that an atomic RMW followed by a smp_mb__after_atomic() is
-+	stronger than a normal acquire: both the read and write parts of
-+	the RMW are ordered before the subsequential memory accesses.
-+
- Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
- 	Test that atomic_set() cannot break the atomicity of atomic RMWs.
--- 
-2.25.1
+> Unless THP leaves its fingerprints on the vma, I think you can only do
+> this for VMA types that THP can't mess with. (see
+> transparent_hugepage_enabled())
+> 
+
+I will try to add struct mmu_gather to TLBI interfaces, which has enough
+info to track tlb's level.  See in next patch version!
+
+
+Thanks,
+Zhenyu
+
+.
 
