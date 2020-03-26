@@ -2,88 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEF9193975
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 08:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D157194131
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Mar 2020 15:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgCZHPu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Mar 2020 03:15:50 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:36782 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726014AbgCZHPt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 26 Mar 2020 03:15:49 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id C2F379D56FD4517F2B7F;
-        Thu, 26 Mar 2020 15:15:38 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Thu, 26 Mar 2020
- 15:15:29 +0800
-Subject: Re: [RFC PATCH v4 0/6] arm64: tlb: add support for TTL feature
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <mark.rutland@arm.com>, <catalin.marinas@arm.com>,
-        <linux-mm@kvack.org>, <guohanjun@huawei.com>, <will@kernel.org>,
-        <linux-arch@vger.kernel.org>, <yuzhao@google.com>,
-        <maz@kernel.org>, <steven.price@arm.com>, <arm@kernel.org>,
-        <Dave.Martin@arm.com>, <arnd@arndb.de>, <suzuki.poulose@arm.com>,
-        <npiggin@gmail.com>, <zhangshaokun@hisilicon.com>,
-        <broonie@kernel.org>, <rostedt@goodmis.org>,
-        <prime.zeng@hisilicon.com>, <tglx@linutronix.de>,
-        <linux-arm-kernel@lists.infradead.org>, <xiexiangyou@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <aneesh.kumar@linux.ibm.com>,
-        <akpm@linux-foundation.org>
-References: <20200324134534.1570-1-yezhenyu2@huawei.com>
- <20200324150155.GH20713@hirez.programming.kicks-ass.net>
- <fb06ba92-a3ce-6925-e914-167a85837f27@huawei.com>
- <20200325133201.GI20713@hirez.programming.kicks-ass.net>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <43164360-8204-89c6-0d4d-c38b1aa09642@huawei.com>
-Date:   Thu, 26 Mar 2020 15:15:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1727993AbgCZOXW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Mar 2020 10:23:22 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:52687 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727982AbgCZOXW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Mar 2020 10:23:22 -0400
+Received: (qmail 6696 invoked by uid 500); 26 Mar 2020 10:23:21 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 26 Mar 2020 10:23:21 -0400
+Date:   Thu, 26 Mar 2020 10:23:21 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Boqun Feng <boqun.feng@gmail.com>
+cc:     linux-kernel@vger.kernel.org,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        <linux-arch@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v4 3/4] Documentation/litmus-tests/atomic: Add a test
+ for atomic_set()
+In-Reply-To: <20200326024022.7566-4-boqun.feng@gmail.com>
+Message-ID: <Pine.LNX.4.44L0.2003261023010.5714-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20200325133201.GI20713@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.173.220.25]
-X-CFilter-Loop: Reflected
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020/3/25 21:32, Peter Zijlstra wrote:
-> On Wed, Mar 25, 2020 at 12:49:45PM +0800, Zhenyu Ye wrote:
->> Hi Peter,
->>
->> On 2020/3/24 23:01, Peter Zijlstra wrote:
->>> On Tue, Mar 24, 2020 at 09:45:28PM +0800, Zhenyu Ye wrote:
->>>> In order to reduce the cost of TLB invalidation, the ARMv8.4 TTL
->>>> feature allows TLBs to be issued with a level allowing for quicker
->>>> invalidation.  This series provide support for this feature. 
->>>>
->>>> Patch 1 and Patch 2 was provided by Marc on his NV series[1] patches,
->>>> which detect the TTL feature and add __tlbi_level interface.
->>>
->>> I realy hate how it makes vma->vm_flags more important for tlbi.
->>>
->>
->> Thanks for your review.
->>
->> The tlbi interfaces only have two parameters: vma and addr. If we
->> try to not use vma->vm_flags, we may should have to add a parameter
->> to some of these interfaces(such as flush_tlb_range), which are
->> common to all architectures.
->>
->> I'm not sure if this is feasible, because this feature is only
->> supported by ARM64 currently.
-> 
-> Power (p9-radix) also has level dependent invalidation instructions, so
-> at the very least you can hook them up as well.
-> 
-> .
->
+On Thu, 26 Mar 2020, Boqun Feng wrote:
 
-Thanks, I will push my next version soon.
+> We already use a litmus test in atomic_t.txt to describe the behavior of
+> an atomic_set() with the an atomic RMW, so add it into atomic-tests
+> directory to make it easily accessible for anyone who cares about the
+> semantics of our atomic APIs.
+> 
+> Besides currently the litmus test "atomic-set" in atomic_t.txt has a few
+> things to be improved:
+> 
+> 1)	The CPU/Processor numbers "P1,P2" are not only inconsistent with
+> 	the rest of the document, which uses "CPU0" and "CPU1", but also
+> 	unacceptable by the herd tool, which requires processors start
+> 	at "P0".
+> 
+> 2)	The initialization block uses a "atomic_set()", which is OK, but
+> 	it's better to use ATOMIC_INIT() to make clear this is an
+> 	initialization.
+> 
+> 3)	The return value of atomic_add_unless() is discarded
+> 	inexplicitly, which is OK for C language, but it will be helpful
+> 	to the herd tool if we use a void cast to make the discard
+> 	explicit.
+> 
+> 4)	The name and the paragraph describing the test need to be more
+> 	accurate and aligned with our wording in LKMM.
+> 
+> Therefore fix these in both atomic_t.txt and the new added litmus test.
+> 
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Acked-by: Andrea Parri <parri.andrea@gmail.com>
+> ---
 
-Zhenyu
-.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+>  Documentation/atomic_t.txt                    | 14 +++++------
+>  ...c-RMW-ops-are-atomic-WRT-atomic_set.litmus | 24 +++++++++++++++++++
+>  Documentation/litmus-tests/atomic/README      |  7 ++++++
+>  3 files changed, 38 insertions(+), 7 deletions(-)
+>  create mode 100644 Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
+> 
+> diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
+> index 0ab747e0d5ac..67d1d99f8589 100644
+> --- a/Documentation/atomic_t.txt
+> +++ b/Documentation/atomic_t.txt
+> @@ -85,21 +85,21 @@ smp_store_release() respectively. Therefore, if you find yourself only using
+>  the Non-RMW operations of atomic_t, you do not in fact need atomic_t at all
+>  and are doing it wrong.
+>  
+> -A subtle detail of atomic_set{}() is that it should be observable to the RMW
+> -ops. That is:
+> +A note for the implementation of atomic_set{}() is that it must not break the
+> +atomicity of the RMW ops. That is:
+>  
+> -  C atomic-set
+> +  C Atomic-RMW-ops-are-atomic-WRT-atomic_set
+>  
+>    {
+> -    atomic_set(v, 1);
+> +    atomic_t v = ATOMIC_INIT(1);
+>    }
+>  
+> -  P1(atomic_t *v)
+> +  P0(atomic_t *v)
+>    {
+> -    atomic_add_unless(v, 1, 0);
+> +    (void)atomic_add_unless(v, 1, 0);
+>    }
+>  
+> -  P2(atomic_t *v)
+> +  P1(atomic_t *v)
+>    {
+>      atomic_set(v, 0);
+>    }
+> diff --git a/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus b/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
+> new file mode 100644
+> index 000000000000..49385314d911
+> --- /dev/null
+> +++ b/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
+> @@ -0,0 +1,24 @@
+> +C Atomic-RMW-ops-are-atomic-WRT-atomic_set
+> +
+> +(*
+> + * Result: Never
+> + *
+> + * Test that atomic_set() cannot break the atomicity of atomic RMWs.
+> + *)
+> +
+> +{
+> +	atomic_t v = ATOMIC_INIT(1);
+> +}
+> +
+> +P0(atomic_t *v)
+> +{
+> +	(void)atomic_add_unless(v, 1, 0);
+> +}
+> +
+> +P1(atomic_t *v)
+> +{
+> +	atomic_set(v, 0);
+> +}
+> +
+> +exists
+> +(v=2)
+> diff --git a/Documentation/litmus-tests/atomic/README b/Documentation/litmus-tests/atomic/README
+> index ae61201a4271..a1b72410b539 100644
+> --- a/Documentation/litmus-tests/atomic/README
+> +++ b/Documentation/litmus-tests/atomic/README
+> @@ -2,3 +2,10 @@ This directory contains litmus tests that are typical to describe the semantics
+>  of our atomic APIs. For more information about how to "run" a litmus test or
+>  how to generate a kernel test module based on a litmus test, please see
+>  tools/memory-model/README.
+> +
+> +============
+> +LITMUS TESTS
+> +============
+> +
+> +Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
+> +	Test that atomic_set() cannot break the atomicity of atomic RMWs.
+> 
 
