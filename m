@@ -2,137 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F2E1956D1
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Mar 2020 13:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA1A19584A
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Mar 2020 14:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727336AbgC0MLI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Mar 2020 08:11:08 -0400
-Received: from mga04.intel.com ([192.55.52.120]:15166 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726515AbgC0MLH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 27 Mar 2020 08:11:07 -0400
-IronPort-SDR: 5nFlaLwLGO2mBuKb96aKPsoiwuFUJtzjZnUddlmLRoaH7PEXPc168qVUGMAHYhzyd8NvNFbk9w
- 8CbCNRGSIX1g==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2020 05:11:07 -0700
-IronPort-SDR: Etf54K1EPTAIVD5gLsmN0O763p6q57L8A07aMXJxHLdGUittQwkQoWYLs9duLjsfEU8WYr4gYm
- PZnKQIi665Gw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,312,1580803200"; 
-   d="scan'208";a="448986424"
-Received: from scymds01.sc.intel.com ([10.148.94.138])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Mar 2020 05:11:07 -0700
-Received: from gnu-skx-1.sc.intel.com (gnu-skx-1.sc.intel.com [172.25.70.205])
-        by scymds01.sc.intel.com
-        with ESMTP id 02RCB2r8031618;
-        Fri, 27 Mar 2020 05:11:02 -0700
-Received: from gnu-skx-1.sc.intel.com (localhost [IPv6:::1])
-        by gnu-skx-1.sc.intel.com (Postfix) with ESMTP id 0B90A2C0574;
-        Fri, 27 Mar 2020 05:11:02 -0700 (PDT)
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH] Discard .note.gnu.property sections in generic NOTES
-Date:   Fri, 27 Mar 2020 05:11:01 -0700
-Message-Id: <20200327121101.948934-1-hjl.tools@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1727444AbgC0Nr0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Mar 2020 09:47:26 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:43622 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726275AbgC0Nr0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Mar 2020 09:47:26 -0400
+Received: by mail-il1-f196.google.com with SMTP id g15so8750047ilj.10
+        for <linux-arch@vger.kernel.org>; Fri, 27 Mar 2020 06:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=uIvUjlehSVigkxhw02yxSAS/Jekd0JL8sbxoZE/mhG8=;
+        b=vMKfO0Nik1ecNd1fuyz4boYLMsEnQ3XrWRcGvuULe27HRlE+XLdnCHA6ud4b2njeZo
+         CyEf/vkfo/M7qXHN2uAloFaMfl+Z7A6I8wrc8CYabN98swY+G+IldawBXjLy7wCRp4Fk
+         6cbUOxSg51Olu3Aa58WDjYB4mff/oRNghLwDkzVdtzJToZbekTXUia3rq7MwAQBRVzCO
+         akixpszRNJmpxxBuyO+1j7h38OWzILztG4NmNbfOclbcbBLdfLoA39zMHQNmlYNlDucw
+         yCDFTzggFc7LC+Crl9NpGABaOHVwkG10dYHKaczgG93RxJOcP1AGHICDyCAB3ovBbw/w
+         BiWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=uIvUjlehSVigkxhw02yxSAS/Jekd0JL8sbxoZE/mhG8=;
+        b=faUpBgPnxlr3rpTOjNLvKr/t7njr+ucEX+6ZDpvI8MhSjgVQfKOO1NG8TTYR6klXca
+         QwUk9FArk1MEuMW/vzWMRtuDWJqXmOHE0HliQH5RaiZs1hLF7fTtasHkdmnEDlME7MlK
+         IRrjoA/a5Zf5SQ4UDPjj2aUxCvLJoBIVQAgF4s2E/g6KzeOqt82eCDf6TENYQGOiOLB1
+         7tdjn1gZlSd9QFgngtTOOsOYEi024J7suhj7fkW9qfZPRRtaBPQu5PXIGGrDxW8PjU11
+         NzU3p34Ep3coYCbMLfqzUL++Xmt25NT9jBGIOSi+E/Vmi7AtWhLQ3cysLxRXvAhTIcYr
+         jz0Q==
+X-Gm-Message-State: ANhLgQ2nY2K5Tm1oIBDekyo4XDc4CBbjfQ6xSWy00Yk3XSPD4OjbDR4S
+        14yFQDjBgcIAa7tA20S5FKWZCW/2NbGmBtQ/LwY=
+X-Google-Smtp-Source: ADFU+vuaGm037U/W3HJcYic6TH6pSwkyl75eGbNXJiIEH77hZ9GT7qUMEIrK6CxJWrcBUJlJ6qiFUuMKRXvfZ47BDdk=
+X-Received: by 2002:a92:2452:: with SMTP id k79mr13936865ilk.174.1585316845427;
+ Fri, 27 Mar 2020 06:47:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a5e:8817:0:0:0:0:0 with HTTP; Fri, 27 Mar 2020 06:47:25
+ -0700 (PDT)
+Reply-To: officework_progress@yahoo.com
+From:   Andrew Ede <consumingfirechurch4@gmail.com>
+Date:   Fri, 27 Mar 2020 15:47:25 +0200
+Message-ID: <CAK6CGFdfAHiTXnHEgj3KBcXeX4HucGBtY-Bu86Av4EZxnVHM-w@mail.gmail.com>
+Subject: HOW ARE YOU?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-**"this patch depends on patch Add RUNTIME_DISCARD_EXIT to generic DISCARDS"**
+Good day.
 
-With the command-line option, -mx86-used-note=yes, which can also be
-enabled at binutils build time with
+My reason of contacting you is that I and my colleagues working in our
+country=E2=80=99s National Petroleum Corporation want to buy any existing
+modern crude oil refinery in any part of the world.
 
-  --enable-x86-used-note  generate GNU x86 used ISA and feature properties
+We are ready to buy any available land to build the Refinery or buy
+the existing one anywhere outside Africa. We will make you our foreign
+partner abroad with some percentage shareholding if you will be
+interested to work with us on this project.
 
-the x86 assembler in binutils 2.32 and above generates a program property
-note in a note section, .note.gnu.property, to encode used x86 ISAs and
-features.  But kernel linker script only contains a single NOTE segment:
+We have the sum of ($600 Million Dollars) Six Hundred Million Dollars
+for this project.
 
-PHDRS {
- text PT_LOAD FLAGS(5);
- data PT_LOAD FLAGS(6);
- percpu PT_LOAD FLAGS(6);
- init PT_LOAD FLAGS(7);
- note PT_NOTE FLAGS(0);
-}
-SECTIONS
-{
-...
- .notes : AT(ADDR(.notes) - 0xffffffff80000000) { __start_notes = .; KEEP(*(.not
-e.*)) __stop_notes = .; } :text :note
-...
-}
+Meanwhile, this amount of ($600 Million Dollars) will be accessible
+through Foreign Contract Purchase Fund. We are going to clarify what
+we meant by Foreign Contract Purchase Fund as soon as we hear from you
+for better understanding and the way forward.
 
-The NOTE segment generated by kernel linker script is aligned to 4 bytes.
-But .note.gnu.property section must be aligned to 8 bytes on x86-64 and
-we get
+However, in case you are not capable to handle this project with us,
+please kindly connect us to any capable person or company that would
+handle the project with us in order to enable us proceed at once.
 
-[hjl@gnu-skx-1 linux]$ readelf -n vmlinux
+We hope to hear you in no distance time through this e-mail address
+at: officework_progress@yahoo.com, for immediate communication and
+more facts on how to go on.
 
-Displaying notes found in: .notes
-  Owner                Data size Description
-  Xen                  0x00000006 Unknown note type: (0x00000006)
-   description data: 6c 69 6e 75 78 00
-  Xen                  0x00000004 Unknown note type: (0x00000007)
-   description data: 32 2e 36 00
-  xen-3.0              0x00000005 Unknown note type: (0x006e6558)
-   description data: 08 00 00 00 03
-readelf: Warning: note with invalid namesz and/or descsz found at offset 0x50
-readelf: Warning:  type: 0xffffffff, namesize: 0x006e6558, descsize:
-0x80000000, alignment: 8
-[hjl@gnu-skx-1 linux]$
+With respect
 
-Since note.gnu.property section in kernel image is never used, discard
-.note.gnu.property sections in kernel linker script by adding
+Best Regards
 
-/DISCARD/ : {
-  *(.note.gnu.property)
-}
-
-before kernel NOTE segment in generic NOTES.
-
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- include/asm-generic/vmlinux.lds.h | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 6b943fb8c5fd..6659a7c07c84 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -818,7 +818,14 @@
- #define TRACEDATA
- #endif
- 
-+/*
-+ * Discard .note.gnu.property sections which are unused and have
-+ * different alignment requirement from kernel note sections.
-+ */
- #define NOTES								\
-+	/DISCARD/ : {							\
-+		*(.note.gnu.property)					\
-+	}								\
- 	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
- 		__start_notes = .;					\
- 		KEEP(*(.note.*))					\
--- 
-2.25.1
-
+Andrew Ede and Co,,
