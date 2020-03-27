@@ -2,99 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 990EE1961EA
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Mar 2020 00:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDF61961F2
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Mar 2020 00:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727199AbgC0XaL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Mar 2020 19:30:11 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:35876 "EHLO
+        id S1727433AbgC0XbX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Mar 2020 19:31:23 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:35888 "EHLO
         ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726065AbgC0XaK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Mar 2020 19:30:10 -0400
+        with ESMTP id S1726065AbgC0XbU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Mar 2020 19:31:20 -0400
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jHyQQ-004KFl-9L; Fri, 27 Mar 2020 23:30:06 +0000
-Date:   Fri, 27 Mar 2020 23:30:06 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
+        id 1jHyRZ-004KK2-Uk; Fri, 27 Mar 2020 23:31:18 +0000
+From:   Al Viro <viro@ZenIV.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC][PATCHSET] uaccess: getting csum_and_copy_..._user() into saner
- shape
-Message-ID: <20200327233006.GW23230@ZenIV.linux.org.uk>
+Subject: [RFC][PATCH 01/14] get rid of csum_partial_copy_to_user()
+Date:   Fri, 27 Mar 2020 23:31:04 +0000
+Message-Id: <20200327233117.1031393-1-viro@ZenIV.linux.org.uk>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200327233006.GW23230@ZenIV.linux.org.uk>
+References: <20200327233006.GW23230@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-        In that area uaccess primitives actually used by the rest of the kernel
-are csum_and_copy_{to,from}_user().  Currently we have a strange mix;
-        * some architectures supply csum_and_copy_from_user().  That's
-indicated by defining _HAVE_ARCH_COPY_AND_CSUM_FROM_USER
-        * the rest end up using the wrapper from net/checksum.h instead;
-that (fairly thin) wrapper expects to find csum_partial_copy_from_user().
-Some among those have csum_partial_copy_from_user() that tries to be smart,
-some end up picking a dumb one from lib/checksum.c, some have a literal
-copy of that dumb version...
-        * some architectures supply csum_and_copy_to_user().  Those define
-HAVE_CSUM_COPY_USER.
-        * the rest pick the dumb (inlined) implementation from net/checksum.h
-        * to confuse the situation even more, there's a couple of architectures
-that call their csum_and_copy_to_user() "csum_partial_copy_to_user" instead...
-and have a macro defining csum_and_copy_to_user as csum_partial_copy_to_user.
-        The rules for access_ok() location are also messy - in principle,
-csum_partial_copy_from_user() expects to have access_ok() done in the wrapper,
-but e.g. i386 one does that on its own.
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-        A saner approach would be to turn the csum_partial_copy_from_user()
-instances into csum_and_copy_from_user() ones, getting rid of the wrapper
-for those, then move the dumb one (also converted) into net/checksum.h.
-The series below does that; it lives in
-	git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #next.uaccess-4
-based at #next.uaccess-3.  Individual patches in followups; please review.
-Not sure which tree would that best go through, TBH...
+For historical reasons some architectures call their csum_and_copy_to_user()
+csum_partial_copy_to_user() instead (and supply a macro defining the
+former as the latter).  That's the last remnants of old experiment that
+went nowhere; time to bury them.  Rename those to csum_and_copy_to_user()
+and get rid of the macros.
 
-Diffstat:
- arch/alpha/include/asm/checksum.h    |  3 ++-
- arch/alpha/lib/csum_partial_copy.c   |  6 +++---
- arch/arm/include/asm/checksum.h      | 14 ++++++++++++++
- arch/c6x/lib/checksum.c              | 22 ----------------------
- arch/ia64/include/asm/checksum.h     | 10 ----------
- arch/ia64/lib/csum_partial_copy.c    | 32 ++------------------------------
- arch/m68k/include/asm/checksum.h     |  3 ++-
- arch/m68k/lib/checksum.c             |  4 ++--
- arch/nios2/include/asm/checksum.h    |  2 --
- arch/parisc/include/asm/checksum.h   |  7 -------
- arch/parisc/lib/checksum.c           | 20 --------------------
- arch/s390/include/asm/checksum.h     | 19 -------------------
- arch/sh/include/asm/checksum_32.h    |  9 +++++++--
- arch/sparc/include/asm/checksum.h    |  1 +
- arch/sparc/include/asm/checksum_32.h | 15 ++++++++++-----
- arch/sparc/include/asm/checksum_64.h |  2 +-
- arch/x86/include/asm/checksum.h      |  2 ++
- arch/x86/include/asm/checksum_32.h   | 21 +++++++++++----------
- arch/x86/include/asm/checksum_64.h   | 12 ++----------
- arch/x86/lib/csum-wrappers_64.c      | 35 ++++++++++++++++++-----------------
- arch/x86/um/asm/checksum.h           | 20 --------------------
- arch/xtensa/include/asm/checksum.h   | 11 +++++++----
- include/asm-generic/checksum.h       |  9 ---------
- include/net/checksum.h               |  8 ++------
- lib/checksum.c                       | 20 --------------------
- 25 files changed, 86 insertions(+), 221 deletions(-)
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ arch/sparc/include/asm/checksum_32.h | 7 +++----
+ arch/x86/include/asm/checksum_64.h   | 4 +---
+ arch/x86/lib/csum-wrappers_64.c      | 6 +++---
+ 3 files changed, 7 insertions(+), 10 deletions(-)
 
-Shortlog:
-      get rid of csum_partial_copy_to_user()
-      x86_64: csum_..._copy_..._user(): switch to unsafe_..._user()
-      x86: switch both 32bit and 64bit to providing csum_and_copy_from_user()
-      x86: switch 32bit csum_and_copy_to_user() to user_access_{begin,end}()
-      ia64: csum_partial_copy_nocheck(): don't abuse csum_partial_copy_from_user()
-      ia64: turn csum_partial_copy_from_user() into csum_and_copy_from_user()
-      alpha: turn csum_partial_copy_from_user() into csum_and_copy_from_user()
-      parisc: turn csum_partial_copy_from_user() into csum_and_copy_from_user()
-      sparc: switch to providing csum_and_copy_from_user()
-      xtensa: switch to providing csum_and_copy_from_user()
-      m68k: convert to csum_and_copy_from_user()
-      sh32: convert to csum_and_copy_from_user()
-      arm: switch to csum_and_copy_from_user()
-      take the dummy csum_and_copy_from_user() into net/checksum.h
+diff --git a/arch/sparc/include/asm/checksum_32.h b/arch/sparc/include/asm/checksum_32.h
+index 5fc98d80b03b..450ddfb444c8 100644
+--- a/arch/sparc/include/asm/checksum_32.h
++++ b/arch/sparc/include/asm/checksum_32.h
+@@ -83,8 +83,10 @@ csum_partial_copy_from_user(const void __user *src, void *dst, int len,
+ 	return (__force __wsum)ret;
+ }
+ 
++#define HAVE_CSUM_COPY_USER
++
+ static inline __wsum
+-csum_partial_copy_to_user(const void *src, void __user *dst, int len,
++csum_and_copy_to_user(const void *src, void __user *dst, int len,
+ 			  __wsum sum, int *err)
+ {
+ 	if (!access_ok(dst, len)) {
+@@ -113,9 +115,6 @@ csum_partial_copy_to_user(const void *src, void __user *dst, int len,
+ 	}
+ }
+ 
+-#define HAVE_CSUM_COPY_USER
+-#define csum_and_copy_to_user csum_partial_copy_to_user
+-
+ /* ihl is always 5 or greater, almost always is 5, and iph is word aligned
+  * the majority of the time.
+  */
+diff --git a/arch/x86/include/asm/checksum_64.h b/arch/x86/include/asm/checksum_64.h
+index 3ec6d3267cf9..ac9c06494827 100644
+--- a/arch/x86/include/asm/checksum_64.h
++++ b/arch/x86/include/asm/checksum_64.h
+@@ -141,13 +141,11 @@ extern __visible __wsum csum_partial_copy_generic(const void *src, const void *d
+ 
+ extern __wsum csum_partial_copy_from_user(const void __user *src, void *dst,
+ 					  int len, __wsum isum, int *errp);
+-extern __wsum csum_partial_copy_to_user(const void *src, void __user *dst,
++extern __wsum csum_and_copy_to_user(const void *src, void __user *dst,
+ 					int len, __wsum isum, int *errp);
+ extern __wsum csum_partial_copy_nocheck(const void *src, void *dst,
+ 					int len, __wsum sum);
+ 
+-/* Old names. To be removed. */
+-#define csum_and_copy_to_user csum_partial_copy_to_user
+ #define csum_and_copy_from_user csum_partial_copy_from_user
+ 
+ /**
+diff --git a/arch/x86/lib/csum-wrappers_64.c b/arch/x86/lib/csum-wrappers_64.c
+index c66c8b00f236..875c2f5968a0 100644
+--- a/arch/x86/lib/csum-wrappers_64.c
++++ b/arch/x86/lib/csum-wrappers_64.c
+@@ -71,7 +71,7 @@ csum_partial_copy_from_user(const void __user *src, void *dst,
+ EXPORT_SYMBOL(csum_partial_copy_from_user);
+ 
+ /**
+- * csum_partial_copy_to_user - Copy and checksum to user space.
++ * csum_and_copy_to_user - Copy and checksum to user space.
+  * @src: source address
+  * @dst: destination address (user space)
+  * @len: number of bytes to be copied.
+@@ -82,7 +82,7 @@ EXPORT_SYMBOL(csum_partial_copy_from_user);
+  * src and dst are best aligned to 64bits.
+  */
+ __wsum
+-csum_partial_copy_to_user(const void *src, void __user *dst,
++csum_and_copy_to_user(const void *src, void __user *dst,
+ 			  int len, __wsum isum, int *errp)
+ {
+ 	__wsum ret;
+@@ -116,7 +116,7 @@ csum_partial_copy_to_user(const void *src, void __user *dst,
+ 	clac();
+ 	return ret;
+ }
+-EXPORT_SYMBOL(csum_partial_copy_to_user);
++EXPORT_SYMBOL(csum_and_copy_to_user);
+ 
+ /**
+  * csum_partial_copy_nocheck - Copy and checksum.
+-- 
+2.11.0
+
