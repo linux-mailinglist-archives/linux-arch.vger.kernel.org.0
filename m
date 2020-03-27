@@ -2,93 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BC5195322
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Mar 2020 09:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F2E1956D1
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Mar 2020 13:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbgC0InJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Mar 2020 04:43:09 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:44756 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbgC0InI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Mar 2020 04:43:08 -0400
-Received: by mail-vs1-f67.google.com with SMTP id e138so5663286vsc.11;
-        Fri, 27 Mar 2020 01:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=92v3v9O6F1Q3whXiHw17g/dqUG5CfN1T3QTIoEEIQ7I=;
-        b=p81juotZx1bUgpdZ8gT/wQT4KZ2KZ5jHpKcKYDqJLluurY2AkbcvlxofvjDUeK+Hm2
-         uMijT84QxPlGZXhx5PD13awOZJtygx15wwcn8InHDNhwSdQPlt0iBVgM+7jC/tenVZWo
-         i9CcAzd+UFgSbdUaCTNzqTrY09VXiVhT3OYMWgIsaAiey7ala7gN0Hu1IVHazDRRF/uL
-         um2TPgUL9WxZhuKUKGNhYgYmfN4g+/5P1oqdCo6cF2oPAeEP2+FJLcNNOzKGXOxlsYZD
-         rVuo840bAwmJsxoAqVTc0ZgZyQP/GKfUEzxUM5lunnkN0E+Cl4cglPhs1cus5PQH+0j0
-         gfaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=92v3v9O6F1Q3whXiHw17g/dqUG5CfN1T3QTIoEEIQ7I=;
-        b=oGLzgp1Wh8d6UyPbn3Dk1XRVAkBECJBCt4xCZUwyUQT3S3zq3yrJpjVAt9JhAB3xu6
-         1UsoPzQdK6K7mxduxEBXJPBab6GmcDx/PfQ9O2+I2UkZ3A4KpTN8wkY183KXBQ3MI9hW
-         NZkDfIO7oD+b1gMoF+bnLhBicZF6azzyi8w0JjqDJKpHm/7bi2ZWaaGxBIMnMih0bdtv
-         HXB0apkrUgsIunL1I2/Kxzw1riM+VZA51Tom+4xGh1W+wji+Nc4gKyoLW3pO2jqATbZn
-         nLNNiWXMgSDMSZypyVWxmJ2GOKKeZ6yz+tzSDaNOGj+04EE1XXfoTH/8mYtu+vkFUR3W
-         ZlEw==
-X-Gm-Message-State: ANhLgQ1zn47b8j5HcPpUUUF0QjFxaMoEWFLrDlgJE5MRqABKJxiGaNpZ
-        5yfkHJdI2edoBCxgu/36zaGQYzwRJAe3lX/uzzo=
-X-Google-Smtp-Source: ADFU+vsaaXTxlvmi+j4L1dYa6RpljDs7DpBADmI8karwZkMAv/1NaPX5Jt9jmLZwtSpHb+EgRO9uuM5HEK8Fb1dVevc=
-X-Received: by 2002:a67:2786:: with SMTP id n128mr11373783vsn.21.1585298587138;
- Fri, 27 Mar 2020 01:43:07 -0700 (PDT)
+        id S1727336AbgC0MLI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Mar 2020 08:11:08 -0400
+Received: from mga04.intel.com ([192.55.52.120]:15166 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726515AbgC0MLH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 27 Mar 2020 08:11:07 -0400
+IronPort-SDR: 5nFlaLwLGO2mBuKb96aKPsoiwuFUJtzjZnUddlmLRoaH7PEXPc168qVUGMAHYhzyd8NvNFbk9w
+ 8CbCNRGSIX1g==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2020 05:11:07 -0700
+IronPort-SDR: Etf54K1EPTAIVD5gLsmN0O763p6q57L8A07aMXJxHLdGUittQwkQoWYLs9duLjsfEU8WYr4gYm
+ PZnKQIi665Gw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,312,1580803200"; 
+   d="scan'208";a="448986424"
+Received: from scymds01.sc.intel.com ([10.148.94.138])
+  by fmsmga006.fm.intel.com with ESMTP; 27 Mar 2020 05:11:07 -0700
+Received: from gnu-skx-1.sc.intel.com (gnu-skx-1.sc.intel.com [172.25.70.205])
+        by scymds01.sc.intel.com
+        with ESMTP id 02RCB2r8031618;
+        Fri, 27 Mar 2020 05:11:02 -0700
+Received: from gnu-skx-1.sc.intel.com (localhost [IPv6:::1])
+        by gnu-skx-1.sc.intel.com (Postfix) with ESMTP id 0B90A2C0574;
+        Fri, 27 Mar 2020 05:11:02 -0700 (PDT)
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH] Discard .note.gnu.property sections in generic NOTES
+Date:   Fri, 27 Mar 2020 05:11:01 -0700
+Message-Id: <20200327121101.948934-1-hjl.tools@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <4473787e1b6bc3cc226067e8d122092a678b63de.camel@marvell.com>
- <aed12dd15ea2981bc9554cfa8b5e273c1342c756.camel@marvell.com> <105f17f25e90a9a58299a7ed644bdd0f36434c87.camel@marvell.com>
-In-Reply-To: <105f17f25e90a9a58299a7ed644bdd0f36434c87.camel@marvell.com>
-From:   Marta Rybczynska <rybczynska@gmail.com>
-Date:   Fri, 27 Mar 2020 09:42:55 +0100
-Message-ID: <CAApg2=ThxqOj8a2uZbRVgXZFjHWHk9g_xY3eseobQWwHLxiREg@mail.gmail.com>
-Subject: Re: [PATCH v2 03/12] task_isolation: userspace hard isolation from kernel
-To:     Alex Belits <abelits@marvell.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "will@kernel.org" <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Mar 8, 2020 at 4:48 AM Alex Belits <abelits@marvell.com> wrote:
-> +/* Enable task_isolation mode for TASK_ISOLATION kernels. */
-> +#define PR_TASK_ISOLATION              48
-> +# define PR_TASK_ISOLATION_ENABLE      (1 << 0)
-> +# define PR_TASK_ISOLATION_SET_SIG(sig)        (((sig) & 0x7f) << 8)
-> +# define PR_TASK_ISOLATION_GET_SIG(bits) (((bits) >> 8) & 0x7f)
-> +
-Thank you for resurrecting this code!
+**"this patch depends on patch Add RUNTIME_DISCARD_EXIT to generic DISCARDS"**
 
-I have a question on the UAPI: the example code is using
-PR_TASK_ISOLATION_USERSIG and it seems to be removed from this
-version.
+With the command-line option, -mx86-used-note=yes, which can also be
+enabled at binutils build time with
 
-To enable isolation with SIGUSR1 the task should run:
-prctl(PR_SET_TASK_ISOLATION, PR_TASK_ISOLATION_ENABLE
-    | PR_TASK_ISOLATION_SET_SIG(SIGUSR1), 0, 0, 0);
+  --enable-x86-used-note  generate GNU x86 used ISA and feature properties
 
-And to disable:
-prctl(PR_SET_TASK_ISOLATION, 0, 0, 0, 0);
+the x86 assembler in binutils 2.32 and above generates a program property
+note in a note section, .note.gnu.property, to encode used x86 ISAs and
+features.  But kernel linker script only contains a single NOTE segment:
 
-Is this correct?
-Marta
+PHDRS {
+ text PT_LOAD FLAGS(5);
+ data PT_LOAD FLAGS(6);
+ percpu PT_LOAD FLAGS(6);
+ init PT_LOAD FLAGS(7);
+ note PT_NOTE FLAGS(0);
+}
+SECTIONS
+{
+...
+ .notes : AT(ADDR(.notes) - 0xffffffff80000000) { __start_notes = .; KEEP(*(.not
+e.*)) __stop_notes = .; } :text :note
+...
+}
+
+The NOTE segment generated by kernel linker script is aligned to 4 bytes.
+But .note.gnu.property section must be aligned to 8 bytes on x86-64 and
+we get
+
+[hjl@gnu-skx-1 linux]$ readelf -n vmlinux
+
+Displaying notes found in: .notes
+  Owner                Data size Description
+  Xen                  0x00000006 Unknown note type: (0x00000006)
+   description data: 6c 69 6e 75 78 00
+  Xen                  0x00000004 Unknown note type: (0x00000007)
+   description data: 32 2e 36 00
+  xen-3.0              0x00000005 Unknown note type: (0x006e6558)
+   description data: 08 00 00 00 03
+readelf: Warning: note with invalid namesz and/or descsz found at offset 0x50
+readelf: Warning:  type: 0xffffffff, namesize: 0x006e6558, descsize:
+0x80000000, alignment: 8
+[hjl@gnu-skx-1 linux]$
+
+Since note.gnu.property section in kernel image is never used, discard
+.note.gnu.property sections in kernel linker script by adding
+
+/DISCARD/ : {
+  *(.note.gnu.property)
+}
+
+before kernel NOTE segment in generic NOTES.
+
+Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+---
+ include/asm-generic/vmlinux.lds.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 6b943fb8c5fd..6659a7c07c84 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -818,7 +818,14 @@
+ #define TRACEDATA
+ #endif
+ 
++/*
++ * Discard .note.gnu.property sections which are unused and have
++ * different alignment requirement from kernel note sections.
++ */
+ #define NOTES								\
++	/DISCARD/ : {							\
++		*(.note.gnu.property)					\
++	}								\
+ 	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
+ 		__start_notes = .;					\
+ 		KEEP(*(.note.*))					\
+-- 
+2.25.1
+
