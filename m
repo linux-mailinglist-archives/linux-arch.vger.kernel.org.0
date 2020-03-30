@@ -2,62 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9559197EDD
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Mar 2020 16:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4E5197EDE
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Mar 2020 16:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbgC3OsX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Mar 2020 10:48:23 -0400
-Received: from mail-pf1-f179.google.com ([209.85.210.179]:46190 "EHLO
-        mail-pf1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727183AbgC3OsX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Mar 2020 10:48:23 -0400
-Received: by mail-pf1-f179.google.com with SMTP id q3so8656443pff.13
-        for <linux-arch@vger.kernel.org>; Mon, 30 Mar 2020 07:48:20 -0700 (PDT)
+        id S1727904AbgC3OsZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Mar 2020 10:48:25 -0400
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:37847 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727183AbgC3OsZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Mar 2020 10:48:25 -0400
+Received: by mail-pl1-f181.google.com with SMTP id x1so6813712plm.4
+        for <linux-arch@vger.kernel.org>; Mon, 30 Mar 2020 07:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XNACQsOzFYlxcZi20fAeRmb2vLMaf+w0ke2mZUmN0Nw=;
-        b=DYzV0EUlq0SHIYI3+P0vipHKLeNhS4wj+WrPqldtqGTjrU7VkkKTj/JKD/Mk+4eLGZ
-         jmPmyKxkOb8KaV9EDRNdKa3xlkYttonQK96fGZyVMsLSLIJ4xZrAGN/9EngosJh8F4Y0
-         bhG7hyEaowK3ohZW91fiZvL5DeAmdldBXkAwR9ZymyFThsQZlZPfUBvV+2zzu2SomCSB
-         o9whzXAAEycSsmm2CyRp9dmIYUuN509LkqQHT2vgWYRgH8yrvLwzQLnCqaNuxEusev7p
-         mYBWIv+BnWZKiEG4PT0Np2mTsV95ynYuR6+tanA/xT8jW/Bc3BV0okACOA0A4TsxRXm7
-         ni5w==
+        bh=8RkGkzvpEn2gE6ufEUfTmXKju5Dp210suWhMm1w9oYg=;
+        b=GrDwNAH0WCdAruDR2vlb2GixUp32KNVjA1xdPTaaHzg5AV3HFQbP4VYSLu39FUFAVv
+         DF0OahuEKkewaaH8KCwsyV8s6CbTQqVUbVyLZUcglIPixX0uxWNvLEuO+U0BE+i8hICH
+         ziwHQLlAXt8HqM28dxKO1afmb0PenOaKLbwJ5maEYOAQZdZCl4C1nvgVwEmTGWgpBDd0
+         MF1a2714AAkTot534vMU6agA/NMqGmIny1re9TEVaCyzHXkLx/D4Xk6BIPgEmiHKzfgE
+         6LIealkrfViOg8qQdPejBEQSGl9GLhdLoY4XwhoCzOK2mIWSQJMbDbPpsybm4S6pFUkz
+         wpfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XNACQsOzFYlxcZi20fAeRmb2vLMaf+w0ke2mZUmN0Nw=;
-        b=TJDBPeFW82AGtD6iol/8u4KKFEe8sMLoX9oa/4+G95wYQbiRrMP6Y9Ueh8Er1MOLZt
-         TCsmq2+r7gJFYTVN49y7sz35B3gjb3apmI2jj3bdecSNI4Cf5LnAWmjRUdRJYn3EMODK
-         2Thm7E3da/J938/v9WeemHOQ3ctMun+xI+XVCLQxr7UlCWCanlXlBjRitLqPY+ypJKCQ
-         DKHmHqbqBGTf69z3BeX59d6d/t4NtnKQmwWmlVp6SJ0hz6j6y9CGy2rj8hHgNNxtLqz1
-         0LUz2iItB7PzJ3JjjKRn8O+LinVi961LrtFPmF8CGaRRHihWCzHVbuDg3FB7tRFWfOsH
-         tzBw==
-X-Gm-Message-State: ANhLgQ0+E+ws8hb7p4E4pTLIQf2e5P8ud6jL5QZ0oG14e7mexkAUrd5X
-        0Y7kTSBX6G3EsuK266Gh+Sk=
-X-Google-Smtp-Source: ADFU+vu4Q169vTMpGK41O70ni1RaxM2+ppoiF4176xomnUSF3bnDfNZwnxebTkncLLTgoRtn9gpO3A==
-X-Received: by 2002:a63:e607:: with SMTP id g7mr12905205pgh.303.1585579699282;
-        Mon, 30 Mar 2020 07:48:19 -0700 (PDT)
+        bh=8RkGkzvpEn2gE6ufEUfTmXKju5Dp210suWhMm1w9oYg=;
+        b=LzMPv+n/DGAl9er9iTTD9n5tv6W4hcI9KsEtSCCbWVv5v6IFKqbOBQ7EftRCTSMGK/
+         x/Fh86poF2kHBW6vDlFNiJmABRLpyTj1Gt79XTxSQgpgKf7ql9LXHaoH58y0nRMPAZzv
+         aGSuwKF3NPSG0nNJNKAmkZQb4O8etpVxsYgxHcElXURcA7lsDpKvJlmSwRsv0TGGGq7N
+         3lHBpKbCmHtV8+rX3lrI0Qsgn/ENeZwTLZFRPD+md+peA96/LlpzUHXOSaQnJeYTpZx/
+         2R05ge4Ayn3uHgKu9vp2zXvLkOG2ADz9uOQt8pLRjHudmVSwwJSY6Q5jLZeFP76+0vbq
+         ckyA==
+X-Gm-Message-State: ANhLgQ0NSh8GwZX0x4fUhCr6QOtq59RXrRExCG4n58uhmonkN/Hqs2W0
+        ncUWpclWn8bTaLZiMTp4oACwikOJ37HexQ==
+X-Google-Smtp-Source: ADFU+vvKD6fi6KeNUEa083IDPVpmuJ3GOegOTD/XqHjp4Mu6L8kt8KoR8dnHBg9SiYntKJ3XmsZx8w==
+X-Received: by 2002:a17:902:8c94:: with SMTP id t20mr12792932plo.170.1585579702376;
+        Mon, 30 Mar 2020 07:48:22 -0700 (PDT)
 Received: from earth-mac.local (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id c21sm4056215pgn.84.2020.03.30.07.48.18
+        by smtp.gmail.com with ESMTPSA id o11sm9703435pgh.78.2020.03.30.07.48.21
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 30 Mar 2020 07:48:18 -0700 (PDT)
+        Mon, 30 Mar 2020 07:48:21 -0700 (PDT)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id 5CA08202804DDB; Mon, 30 Mar 2020 23:48:16 +0900 (JST)
+        id BCBF0202804DF2; Mon, 30 Mar 2020 23:48:19 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org
 Cc:     Octavian Purdila <tavi.purdila@gmail.com>,
         Akira Moroo <retrage01@gmail.com>,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
-        Hajime Tazaki <thehajime@gmail.com>,
-        Conrad Meyer <cem@FreeBSD.org>,
-        Michael Zimmermann <sigmaepsilon92@gmail.com>,
-        Yuan Liu <liuyuan@google.com>
-Subject: [RFC v4 14/25] lkl tools: host lib: filesystem helpers
-Date:   Mon, 30 Mar 2020 23:45:46 +0900
-Message-Id: <403e9ca733a581621945eca015884572d91d7410.1585579244.git.thehajime@gmail.com>
+        Hajime Tazaki <thehajime@gmail.com>
+Subject: [RFC v4 15/25] lkl tools: host lib: networking helpers
+Date:   Mon, 30 Mar 2020 23:45:47 +0900
+Message-Id: <94b12a3395df2184c2faa9a95393166fc7fca46a.1585579244.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1585579244.git.thehajime@gmail.com>
 References: <cover.1585579244.git.thehajime@gmail.com>
@@ -68,687 +65,1209 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add LKL applications APIs to mount and unmount a filesystem from a
-disk added via lkl_disk_add().
+This commit adds LKL application APIs to control network related
+resources of kernel via LKL syscall, ioctl, and via netlink messages.
 
-Also add open/close/read directory wrappers on top of
-lkl_sys_getdents64.
-
-Cc: Conrad Meyer <cem@FreeBSD.org>
-Cc: Michael Zimmermann <sigmaepsilon92@gmail.com>
-Cc: Yuan Liu <liuyuan@google.com>
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
-Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 ---
- tools/lkl/include/lkl.h | 165 ++++++++++++++
- tools/lkl/lib/Build     |   1 +
- tools/lkl/lib/fs.c      | 471 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 637 insertions(+)
- create mode 100644 tools/lkl/lib/fs.c
+ tools/lkl/include/lkl.h      | 241 ++++++++++
+ tools/lkl/include/lkl_host.h |  85 ++++
+ tools/lkl/lib/Build          |   1 +
+ tools/lkl/lib/net.c          | 826 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 1153 insertions(+)
+ create mode 100644 tools/lkl/lib/net.c
 
 diff --git a/tools/lkl/include/lkl.h b/tools/lkl/include/lkl.h
-index 4b95d0ef8e5b..cdae92300320 100644
+index cdae92300320..1f4291ad9455 100644
 --- a/tools/lkl/include/lkl.h
 +++ b/tools/lkl/include/lkl.h
-@@ -350,6 +350,171 @@ const char *lkl_strerror(int err);
+@@ -516,6 +516,247 @@ int lkl_dirfd(struct lkl_dir *dir);
   */
- void lkl_perror(char *msg, int err);
+ int lkl_mount_fs(char *fstype);
  
 +/**
-+ * struct lkl_dev_blk_ops - block device host operations, defined in lkl_host.h.
++ * lkl_if_up - activate network interface
++ *
++ * @ifindex - the ifindex of the interface
++ * @returns - return 0 if no error: otherwise negative value returns
 + */
-+struct lkl_dev_blk_ops;
++int lkl_if_up(int ifindex);
 +
 +/**
-+ * lkl_disk - host disk handle
++ * lkl_if_down - deactivate network interface
 + *
-+ * @dev - a pointer to private information for this disk backend
-+ * @fd - a POSIX file descriptor that can be used by preadv/pwritev
-+ * @handle - an NT file handle that can be used by ReadFile/WriteFile
++ * @ifindex - the ifindex of the interface
++ * @returns - return 0 if no error: otherwise negative value returns
 + */
-+struct lkl_disk {
-+	void *dev;
-+	union {
-+		int fd;
-+		void *handle;
-+	};
-+	struct lkl_dev_blk_ops *ops;
++int lkl_if_down(int ifindex);
++
++/**
++ * lkl_if_set_mtu - set MTU on interface
++ *
++ * @ifindex - the ifindex of the interface
++ * @mtu - the requested MTU size
++ * @returns - return 0 if no error: otherwise negative value returns
++ */
++int lkl_if_set_mtu(int ifindex, int mtu);
++
++/**
++ * lkl_if_set_ipv4 - set IPv4 address on interface
++ *
++ * @ifindex - the ifindex of the interface
++ * @addr - 4-byte IP address (i.e., struct in_addr)
++ * @netmask_len - prefix length of the @addr
++ * @returns - return 0 if no error: otherwise negative value returns
++ */
++int lkl_if_set_ipv4(int ifindex, unsigned int addr, unsigned int netmask_len);
++
++/**
++ * lkl_set_ipv4_gateway - add an IPv4 default route
++ *
++ * @addr - 4-byte IP address of the gateway (i.e., struct in_addr)
++ * @returns - return 0 if no error: otherwise negative value returns
++ */
++int lkl_set_ipv4_gateway(unsigned int addr);
++
++/**
++ * lkl_if_set_ipv4_gateway - add an IPv4 default route in rule table
++ *
++ * @ifindex - the ifindex of the interface, used for tableid calculation
++ * @addr - 4-byte IP address of the interface
++ * @netmask_len - prefix length of the @addr
++ * @gw_addr - 4-byte IP address of the gateway
++ * @returns - return 0 if no error: otherwise negative value returns
++ */
++int lkl_if_set_ipv4_gateway(int ifindex, unsigned int addr,
++		unsigned int netmask_len, unsigned int gw_addr);
++
++/**
++ * lkl_if_set_ipv6 - set IPv6 address on interface
++ * must be called after interface is up.
++ *
++ * @ifindex - the ifindex of the interface
++ * @addr - 16-byte IPv6 address (i.e., struct in6_addr)
++ * @netprefix_len - prefix length of the @addr
++ * @returns - return 0 if no error: otherwise negative value returns
++ */
++int lkl_if_set_ipv6(int ifindex, void *addr, unsigned int netprefix_len);
++
++/**
++ * lkl_set_ipv6_gateway - add an IPv6 default route
++ *
++ * @addr - 16-byte IPv6 address of the gateway (i.e., struct in6_addr)
++ * @returns - return 0 if no error: otherwise negative value returns
++ */
++int lkl_set_ipv6_gateway(void *addr);
++
++/**
++ * lkl_if_set_ipv6_gateway - add an IPv6 default route in rule table
++ *
++ * @ifindex - the ifindex of the interface, used for tableid calculation
++ * @addr - 16-byte IP address of the interface
++ * @netmask_len - prefix length of the @addr
++ * @gw_addr - 16-byte IP address of the gateway (i.e., struct in_addr)
++ * @returns - return 0 if no error: otherwise negative value returns
++ */
++int lkl_if_set_ipv6_gateway(int ifindex, void *addr,
++		unsigned int netmask_len, void *gw_addr);
++
++/**
++ * lkl_ifname_to_ifindex - obtain ifindex of an interface by name
++ *
++ * @name - string of an interface
++ * @returns - return an integer of ifindex if no error
++ */
++int lkl_ifname_to_ifindex(const char *name);
++
++/**
++ * lkl_netdev_get_ifindex - retrieve the interface index for a given network
++ * device id
++ *
++ * @id - the network device id
++ * @returns the interface index or a stricly negative value in case of error
++ */
++int lkl_netdev_get_ifindex(int id);
++
++/**
++ * lkl_add_neighbor - add a permanent arp entry
++ * @ifindex - the ifindex of the interface
++ * @af - address family of the ip address. Must be LKL_AF_INET or LKL_AF_INET6
++ * @ip - ip address of the entry in network byte order
++ * @mac - mac address of the entry
++ */
++int lkl_add_neighbor(int ifindex, int af, void *addr, void *mac);
++
++/**
++ * lkl_if_add_ip - add an ip address
++ * @ifindex - the ifindex of the interface
++ * @af - address family of the ip address. Must be LKL_AF_INET or LKL_AF_INET6
++ * @addr - ip address of the entry in network byte order
++ * @netprefix_len - prefix length of the @addr
++ */
++int lkl_if_add_ip(int ifindex, int af, void *addr, unsigned int netprefix_len);
++
++/**
++ * lkl_if_del_ip - add an ip address
++ * @ifindex - the ifindex of the interface
++ * @af - address family of the ip address. Must be LKL_AF_INET or LKL_AF_INET6
++ * @addr - ip address of the entry in network byte order
++ * @netprefix_len - prefix length of the @addr
++ */
++int lkl_if_del_ip(int ifindex, int af, void *addr, unsigned int netprefix_len);
++
++/**
++ * lkl_add_gateway - add a gateway
++ * @af - address family of the ip address. Must be LKL_AF_INET or LKL_AF_INET6
++ * @gwaddr - 4-byte IP address of the gateway (i.e., struct in_addr)
++ */
++int lkl_add_gateway(int af, void *gwaddr);
++
++/**
++ * XXX Should I use OIF selector?
++ * temporary table idx = ifindex * 2 + 0 <- ipv4
++ * temporary table idx = ifindex * 2 + 1 <- ipv6
++ */
++/**
++ * lkl_if_add_rule_from_addr - create an ip rule table with "from" selector
++ * @ifindex - the ifindex of the interface, used for table id calculation
++ * @af - address family of the ip address. Must be LKL_AF_INET or LKL_AF_INET6
++ * @saddr - network byte order ip address, "from" selector address of this rule
++ */
++int lkl_if_add_rule_from_saddr(int ifindex, int af, void *saddr);
++
++/**
++ * lkl_if_add_gateway - add gateway to rule table
++ * @ifindex - the ifindex of the interface, used for table id calculation
++ * @af - address family of the ip address. Must be LKL_AF_INET or LKL_AF_INET6
++ * @gwaddr - 4-byte IP address of the gateway (i.e., struct in_addr)
++ */
++int lkl_if_add_gateway(int ifindex, int af, void *gwaddr);
++
++/**
++ * lkl_if_add_linklocal - add linklocal route to rule table
++ * @ifindex - the ifindex of the interface, used for table id calculation
++ * @af - address family of the ip address. Must be LKL_AF_INET or LKL_AF_INET6
++ * @addr - ip address of the entry in network byte order
++ * @netprefix_len - prefix length of the @addr
++ */
++int lkl_if_add_linklocal(int ifindex, int af,  void *addr, int netprefix_len);
++
++/**
++ * lkl_if_wait_ipv6_dad - wait for DAD to be done for a ipv6 address
++ * must be called after interface is up
++ *
++ * @ifindex - the ifindex of the interface
++ * @addr - ip address of the entry in network byte order
++ */
++int lkl_if_wait_ipv6_dad(int ifindex, void *addr);
++
++/**
++ * lkl_set_fd_limit - set the maximum number of file descriptors allowed
++ * @fd_limit - fd max limit
++ */
++int lkl_set_fd_limit(unsigned int fd_limit);
++
++/**
++ * lkl_qdisc_add - set qdisc rule onto an interface
++ *
++ * @ifindex - the ifindex of the interface
++ * @root - the name of root class (e.g., "root");
++ * @type - the type of qdisc (e.g., "fq")
++ */
++int lkl_qdisc_add(int ifindex, const char *root, const char *type);
++
++/**
++ * lkl_qdisc_parse_add - Add a qdisc entry for an interface with strings
++ *
++ * @ifindex - the ifindex of the interface
++ * @entries - strings of qdisc configurations in the form of
++ *            "root|type;root|type;..."
++ */
++void lkl_qdisc_parse_add(int ifindex, const char *entries);
++
++/**
++ * lkl_netdev - host network device handle, defined in lkl_host.h.
++ */
++struct lkl_netdev;
++
++/**
++ * lkl_netdev_args - arguments to lkl_netdev_add
++ * @mac - optional MAC address for the device
++ * @offload - offload bits for the device
++ */
++struct lkl_netdev_args {
++	void *mac;
++	unsigned int offload;
++};
++
++/*
++ * lkl_register_dbg_handler- register a signal handler that loads a debug lib.
++ *
++ * The signal handler is triggered by Ctrl-Z. It creates a new pthread which
++ * call dbg_entrance().
++ *
++ * If you run the program from shell script, make sure you ignore SIGTSTP by
++ * "trap '' TSTP" in the shell script.
++ */
++void lkl_register_dbg_handler(void);
++
++/**
++ * lkl_sysctl - write a sysctl value
++ *
++ * @path - the path to an sysctl entry (e.g., "net.ipv4.tcp_wmem");
++ * @value - the value of the sysctl (e.g., "4096 87380 2147483647")
++ */
++int lkl_sysctl(const char *path, const char *value);
++
++/**
++ * lkl_sysctl_parse_write - Configure sysctl parameters with strings
++ *
++ * @sysctls - Configure sysctl parameters as the form of "key=value;..."
++ */
++void lkl_sysctl_parse_write(const char *sysctls);
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff --git a/tools/lkl/include/lkl_host.h b/tools/lkl/include/lkl_host.h
+index 85e80eb4ad0d..4e6d6e031498 100644
+--- a/tools/lkl/include/lkl_host.h
++++ b/tools/lkl/include/lkl_host.h
+@@ -18,6 +18,91 @@ extern struct lkl_host_operations lkl_host_ops;
+  */
+ int lkl_printf(const char *fmt, ...);
+ 
++#ifdef LKL_HOST_CONFIG_POSIX
++#include <sys/uio.h>
++#else
++struct iovec {
++	void *iov_base;
++	size_t iov_len;
++};
++#endif
++
++struct lkl_netdev {
++	struct lkl_dev_net_ops *ops;
++	int id;
++	uint8_t has_vnet_hdr: 1;
 +};
 +
 +/**
-+ * lkl_disk_add - add a new disk
-+ *
-+ * @disk - the host disk handle
-+ * @returns a disk id (0 is valid) or a strictly negative value in case of error
++ * struct lkl_dev_net_ops - network device host operations
 + */
-+int lkl_disk_add(struct lkl_disk *disk);
++struct lkl_dev_net_ops {
++	/**
++	 * @tx: writes a L2 packet into the net device
++	 *
++	 * The data buffer can only hold 0 or 1 complete packets.
++	 *
++	 * @nd - pointer to the network device;
++	 * @iov - pointer to the buffer vector;
++	 * @cnt - # of vectors in iov.
++	 *
++	 * @returns number of bytes transmitted
++	 */
++	int (*tx)(struct lkl_netdev *nd, struct iovec *iov, int cnt);
 +
-+/**
-+ * lkl_disk_remove - remove a disk
-+ *
-+ * This function makes a cleanup of the @disk's private information
-+ * that was initialized by lkl_disk_add before.
-+ *
-+ * @disk - the host disk handle
-+ */
-+int lkl_disk_remove(struct lkl_disk disk);
++	/**
++	 * @rx: reads a packet from the net device.
++	 *
++	 * It must only read one complete packet if present.
++	 *
++	 * If the buffer is too small for the packet, the implementation may
++	 * decide to drop it or trim it.
++	 *
++	 * @nd - pointer to the network device
++	 * @iov - pointer to the buffer vector to store the packet
++	 * @cnt - # of vectors in iov.
++	 *
++	 * @returns number of bytes read for success or < 0 if error
++	 */
++	int (*rx)(struct lkl_netdev *nd, struct iovec *iov, int cnt);
 +
-+/**
-+ * lkl_encode_dev_from_sysfs_blkdev - extract device id from sysfs
-+ *
-+ * This function returns the device id for the given sysfs dev node.
-+ * The content of the node has to be in the form 'MAJOR:MINOR'.
-+ * Also, this function expects an absolute path which means that sysfs
-+ * already has to be mounted at the given path
-+ *
-+ * @sysfs_path - absolute path to the sysfs dev node
-+ * @pdevid - pointer to memory where dev id will be returned
-+ * @returns - 0 on success, a negative value on error
-+ */
-+int lkl_encode_dev_from_sysfs(const char *sysfs_path, uint32_t *pdevid);
++#define LKL_DEV_NET_POLL_RX		1
++#define LKL_DEV_NET_POLL_TX		2
++#define LKL_DEV_NET_POLL_HUP		4
 +
-+/**
-+ * lkl_mount_dev - mount a disk
-+ *
-+ * This functions creates a device file for the given disk, creates a mount
-+ * point and mounts the device over the mount point.
-+ *
-+ * @disk_id - the disk id identifying the disk to be mounted
-+ * @part - disk partition or zero for full disk
-+ * @fs_type - filesystem type
-+ * @flags - mount flags
-+ * @opts - additional filesystem specific mount options
-+ * @mnt_str - a string that will be filled by this function with the path where
-+ * the filesystem has been mounted
-+ * @mnt_str_len - size of mnt_str
-+ * @returns - 0 on success, a negative value on error
-+ */
-+long lkl_mount_dev(unsigned int disk_id, unsigned int part, const char *fs_type,
-+		   int flags, const char *opts,
-+		   char *mnt_str, unsigned int mnt_str_len);
++	/**
++	 * @poll: polls a net device
++	 *
++	 * Supports the following events: LKL_DEV_NET_POLL_RX
++	 * (readable), LKL_DEV_NET_POLL_TX (writable) or
++	 * LKL_DEV_NET_POLL_HUP (the close operations has been issued
++	 * and we need to clean up). Blocks until one event is
++	 * available.
++	 *
++	 * @nd - pointer to the network device
++	 *
++	 * @returns - LKL_DEV_NET_POLL_RX, LKL_DEV_NET_POLL_TX,
++	 * LKL_DEV_NET_POLL_HUP or a negative value for errors
++	 */
++	int (*poll)(struct lkl_netdev *nd);
 +
-+/**
-+ * lkl_umount_dev - umount a disk
-+ *
-+ * This functions umounts the given disks and removes the device file and the
-+ * mount point.
-+ *
-+ * @disk_id - the disk id identifying the disk to be mounted
-+ * @part - disk partition or zero for full disk
-+ * @flags - umount flags
-+ * @timeout_ms - timeout to wait for the kernel to flush closed files so that
-+ * umount can succeed
-+ * @returns - 0 on success, a negative value on error
-+ */
-+long lkl_umount_dev(unsigned int disk_id, unsigned int part, int flags,
-+		    long timeout_ms);
++	/**
++	 * @poll_hup: make poll wakeup and return LKL_DEV_NET_POLL_HUP
++	 *
++	 * @nd - pointer to the network device
++	 */
++	void (*poll_hup)(struct lkl_netdev *nd);
 +
-+/**
-+ * lkl_umount_timeout - umount filesystem with timeout
-+ *
-+ * @path - the path to unmount
-+ * @flags - umount flags
-+ * @timeout_ms - timeout to wait for the kernel to flush closed files so that
-+ * umount can succeed
-+ * @returns - 0 on success, a negative value on error
-+ */
-+long lkl_umount_timeout(char *path, int flags, long timeout_ms);
-+
-+/**
-+ * lkl_opendir - open a directory
-+ *
-+ * @path - directory path
-+ * @err - pointer to store the error in case of failure
-+ * @returns - a handle to be used when calling lkl_readdir
-+ */
-+struct lkl_dir *lkl_opendir(const char *path, int *err);
-+
-+/**
-+ * lkl_fdopendir - open a directory
-+ *
-+ * @fd - file descriptor
-+ * @err - pointer to store the error in case of failure
-+ * @returns - a handle to be used when calling lkl_readdir
-+ */
-+struct lkl_dir *lkl_fdopendir(int fd, int *err);
-+
-+/**
-+ * lkl_rewinddir - reset directory stream
-+ *
-+ * @dir - the directory handler as returned by lkl_opendir
-+ */
-+void lkl_rewinddir(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_closedir - close the directory
-+ *
-+ * @dir - the directory handler as returned by lkl_opendir
-+ */
-+int lkl_closedir(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_readdir - get the next available entry of the directory
-+ *
-+ * @dir - the directory handler as returned by lkl_opendir
-+ * @returns - a lkl_dirent64 entry or NULL if the end of the directory stream is
-+ * reached or if an error occurred; check lkl_errdir() to distinguish between
-+ * errors or end of the directory stream
-+ */
-+struct lkl_linux_dirent64 *lkl_readdir(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_errdir - checks if an error occurred during the last lkl_readdir call
-+ *
-+ * @dir - the directory handler as returned by lkl_opendir
-+ * @returns - 0 if no error occurred, or a negative value otherwise
-+ */
-+int lkl_errdir(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_dirfd - gets the file descriptor associated with the directory handle
-+ *
-+ * @dir - the directory handle as returned by lkl_opendir
-+ * @returns - a positive value,which is the LKL file descriptor associated with
-+ * the directory handle, or a negative value otherwise
-+ */
-+int lkl_dirfd(struct lkl_dir *dir);
-+
-+/**
-+ * lkl_mount_fs - mount a file system type like proc, sys
-+ * @fstype - file system type. e.g. proc, sys
-+ * @returns - 0 on success. 1 if it's already mounted. negative on failure.
-+ */
-+int lkl_mount_fs(char *fstype);
++	/**
++	 * @free: frees a network device
++	 *
++	 * Implementation must release its resources and free the network device
++	 * structure.
++	 *
++	 * @nd - pointer to the network device
++	 */
++	void (*free)(struct lkl_netdev *nd);
++};
  
  #ifdef __cplusplus
  }
 diff --git a/tools/lkl/lib/Build b/tools/lkl/lib/Build
-index 658bfa865b9c..4a444337b0e7 100644
+index 4a444337b0e7..dba530424e4a 100644
 --- a/tools/lkl/lib/Build
 +++ b/tools/lkl/lib/Build
-@@ -1,5 +1,6 @@
+@@ -1,6 +1,7 @@
  CFLAGS_config.o += -I$(srctree)/tools/perf/pmu-events
  
-+liblkl-y += fs.o
+ liblkl-y += fs.o
++liblkl-y += net.o
  liblkl-y += jmp_buf.o
  liblkl-y += utils.o
  liblkl-y += dbg.o
-diff --git a/tools/lkl/lib/fs.c b/tools/lkl/lib/fs.c
+diff --git a/tools/lkl/lib/net.c b/tools/lkl/lib/net.c
 new file mode 100644
-index 000000000000..d51d928c14b6
+index 000000000000..cf6894c35e46
 --- /dev/null
-+++ b/tools/lkl/lib/fs.c
-@@ -0,0 +1,471 @@
++++ b/tools/lkl/lib/net.c
+@@ -0,0 +1,826 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#include <stdarg.h>
-+#include <stdio.h>
 +#include <string.h>
-+#include <stdlib.h>
++#include <stdio.h>
++#include "endian.h"
 +#include <lkl_host.h>
 +
-+#define MAX_FSTYPE_LEN 50
++#ifdef __MINGW32__
++#include <ws2tcpip.h>
 +
-+static struct lkl_disk *lkl_disks[16];
-+
-+int lkl_disk_add(struct lkl_disk *disk)
++int lkl_inet_pton(int af, const char *src, void *dst)
 +{
-+	int ret = -1;
++	struct addrinfo hint, *res = NULL;
++	int err;
 +
-+	switch (disk->backend) {
-+	case BLK_BACKEND_UM:
-+		ret = lkl_disk_um_add(disk, disk->dev);
++	memset(&hint, 0, sizeof(struct addrinfo));
++
++	hint.ai_family = af;
++	hint.ai_flags = AI_NUMERICHOST;
++
++	err = getaddrinfo(src, NULL, &hint, &res);
++	if (err)
++		return 0;
++
++	switch (af) {
++	case AF_INET:
++		*(struct in_addr *)dst =
++			((struct sockaddr_in *)&res->ai_addr)->sin_addr;
++		break;
++	case AF_INET6:
++		*(struct in6_addr *)dst =
++			((struct sockaddr_in6 *)&res->ai_addr)->sin6_addr;
 +		break;
 +	default:
-+		break;
++		freeaddrinfo(res);
++		return 0;
 +	}
 +
-+	lkl_disks[ret] = disk;
++	freeaddrinfo(res);
++	return 1;
++}
++#endif
 +
-+	return ret;
++static inline void set_sockaddr(struct lkl_sockaddr_in *sin, unsigned int addr,
++				unsigned short port)
++{
++	sin->sin_family = LKL_AF_INET;
++	sin->sin_addr.lkl_s_addr = addr;
++	sin->sin_port = port;
 +}
 +
-+int lkl_disk_remove(struct lkl_disk disk)
++static inline int ifindex_to_name(int sock, struct lkl_ifreq *ifr, int ifindex)
 +{
-+	switch (disk.backend) {
-+	case BLK_BACKEND_UM:
-+	default:
-+		break;
-+	}
-+
-+	return 0;
++	ifr->lkl_ifr_ifindex = ifindex;
++	return lkl_sys_ioctl(sock, LKL_SIOCGIFNAME, (long)ifr);
 +}
 +
-+int lkl_mount_fs(char *fstype)
++int lkl_ifname_to_ifindex(const char *name)
 +{
-+	char dir[MAX_FSTYPE_LEN+2] = "/";
-+	int flags = 0, ret = 0;
++	struct lkl_ifreq ifr;
++	int fd, ret;
 +
-+	strncat(dir, fstype, MAX_FSTYPE_LEN);
-+
-+	/* Create with regular umask */
-+	ret = lkl_sys_mkdir(dir, 0xff);
-+	if (ret && ret != -LKL_EEXIST) {
-+		lkl_perror("mount_fs mkdir", ret);
-+		return ret;
-+	}
-+
-+	/* We have no use for nonzero flags right now */
-+	ret = lkl_sys_mount("none", dir, fstype, flags, NULL);
-+	if (ret && ret != -LKL_EBUSY) {
-+		lkl_sys_rmdir(dir);
-+		return ret;
-+	}
-+
-+	if (ret == -LKL_EBUSY)
-+		return 1;
-+	return 0;
-+}
-+
-+static uint32_t new_encode_dev(unsigned int major, unsigned int minor)
-+{
-+	return (minor & 0xff) | (major << 8) | ((minor & ~0xff) << 12);
-+}
-+
-+static int startswith(const char *str, const char *pre)
-+{
-+	return strncmp(pre, str, strlen(pre)) == 0;
-+}
-+
-+static int get_node_with_prefix(const char *path, const char *prefix,
-+				char *result, unsigned int result_len)
-+{
-+	struct lkl_dir *dir = NULL;
-+	struct lkl_linux_dirent64 *dirent;
-+	int ret;
-+
-+	dir = lkl_opendir(path, &ret);
-+	if (!dir)
-+		return ret;
-+
-+	ret = -LKL_ENOENT;
-+
-+	while ((dirent = lkl_readdir(dir))) {
-+		if (startswith(dirent->d_name, prefix)) {
-+			if (strlen(dirent->d_name) + 1 > result_len) {
-+				ret = -LKL_ENOMEM;
-+				break;
-+			}
-+			memcpy(result, dirent->d_name, strlen(dirent->d_name));
-+			result[strlen(dirent->d_name)] = '\0';
-+			ret = 0;
-+			break;
-+		}
-+	}
-+
-+	lkl_closedir(dir);
-+
-+	return ret;
-+}
-+
-+int lkl_encode_dev_from_sysfs(const char *sysfs_path, uint32_t *pdevid)
-+{
-+	int ret;
-+	long fd;
-+	int major, minor;
-+	char buf[16] = { 0, };
-+	char *bufptr;
-+
-+	fd = lkl_sys_open(sysfs_path, LKL_O_RDONLY, 0);
++	fd = lkl_sys_socket(LKL_AF_INET, LKL_SOCK_DGRAM, 0);
 +	if (fd < 0)
 +		return fd;
 +
-+	ret = lkl_sys_read(fd, buf, sizeof(buf));
-+	if (ret < 0)
-+		goto out_close;
++	if (strlen(name) >= LKL_IFNAMSIZ)
++		return -LKL_ENAMETOOLONG;
 +
-+	if (ret == sizeof(buf)) {
-+		ret = -LKL_ENOBUFS;
-+		goto out_close;
-+	}
++	strcpy(ifr.lkl_ifr_name, name);
 +
-+	bufptr = strchr(buf, ':');
-+	if (bufptr == NULL) {
-+		ret = -LKL_EINVAL;
-+		goto out_close;
-+	}
-+	bufptr[0] = '\0';
-+	bufptr++;
-+
-+	major = atoi(buf);
-+	minor = atoi(bufptr);
-+
-+	*pdevid = new_encode_dev(major, minor);
-+	ret = 0;
-+
-+out_close:
-+	lkl_sys_close(fd);
-+
-+	return ret;
-+}
-+
-+#define SYSFS_DEV_UMBLK_CMDLINE_PATH \
-+	"/sysfs/devices/platform/uml-blkdev.%d"
-+
-+struct abuf {
-+	char *mem, *ptr;
-+	unsigned int len;
-+};
-+
-+static int snprintf_append(struct abuf *buf, const char *fmt, ...)
-+{
-+	int ret;
-+	va_list args;
-+
-+	if (!buf->ptr)
-+		buf->ptr = buf->mem;
-+
-+	va_start(args, fmt);
-+	ret = vsnprintf(buf->ptr, buf->len - (buf->ptr - buf->mem), fmt, args);
-+	va_end(args);
-+
-+	if (ret < 0 || (ret >= (int)(buf->len - (buf->ptr - buf->mem))))
-+		return -LKL_ENOMEM;
-+
-+	buf->ptr += ret;
-+
-+	return 0;
-+}
-+
-+static int __lkl_get_blkdev(int disk_id, unsigned int part, uint32_t *pdevid,
-+			    const char *sysfs_path_fmt, const char *drv_prefix,
-+			    const char *disk_prefix)
-+{
-+	char sysfs_path[LKL_PATH_MAX];
-+	char drv_name[LKL_PATH_MAX];
-+	char disk_name[LKL_PATH_MAX];
-+	struct abuf sysfs_path_buf = {
-+		.mem = sysfs_path,
-+		.len = sizeof(sysfs_path),
-+	};
-+	int ret;
-+
-+	if (disk_id < 0)
-+		return -LKL_EINVAL;
-+
-+	ret = lkl_mount_fs("sysfs");
++	ret = lkl_sys_ioctl(fd, LKL_SIOCGIFINDEX, (long)&ifr);
 +	if (ret < 0)
 +		return ret;
 +
-+	ret = snprintf_append(&sysfs_path_buf, sysfs_path_fmt, disk_id);
-+	if (ret)
-+		return ret;
-+
-+	ret = get_node_with_prefix(sysfs_path, drv_prefix, drv_name,
-+				   sizeof(drv_name));
-+	if (ret)
-+		return ret;
-+
-+	ret = snprintf_append(&sysfs_path_buf, "/%s/block", drv_name);
-+	if (ret)
-+		return ret;
-+
-+	ret = get_node_with_prefix(sysfs_path, disk_prefix, disk_name,
-+				   sizeof(disk_name));
-+	if (ret)
-+		return ret;
-+
-+	if (!part)
-+		ret = snprintf_append(&sysfs_path_buf, "/%s/dev", disk_name);
-+	else
-+		ret = snprintf_append(&sysfs_path_buf, "/%s/%s%d/dev",
-+				      disk_name, disk_name, part);
-+	if (ret)
-+		return ret;
-+
-+	return lkl_encode_dev_from_sysfs(sysfs_path, pdevid);
++	return ifr.lkl_ifr_ifindex;
 +}
 +
-+int lkl_get_blkdev(int disk_id, unsigned int part, uint32_t *pdevid)
++int lkl_if_up(int ifindex)
 +{
-+	char *fmt;
-+	struct lkl_disk *disk = lkl_disks[disk_id];
++	struct lkl_ifreq ifr;
++	int err, sock = lkl_sys_socket(LKL_AF_INET, LKL_SOCK_DGRAM, 0);
 +
-+	switch (disk->backend) {
-+	case BLK_BACKEND_UM:
-+		fmt = SYSFS_DEV_UMBLK_CMDLINE_PATH;
-+		return __lkl_get_blkdev(disk_id, part, pdevid, fmt,
-+					"", "ubd");
-+	default:
-+		break;
-+	}
-+
-+	return -1;
-+}
-+
-+long lkl_mount_dev(unsigned int disk_id, unsigned int part,
-+		   const char *fs_type, int flags,
-+		   const char *data, char *mnt_str, unsigned int mnt_str_len)
-+{
-+	char dev_str[] = { "/dev/xxxxxxxx" };
-+	unsigned int dev;
-+	int err;
-+	char _data[4096]; /* FIXME: PAGE_SIZE is not exported by LKL */
-+
-+	if (mnt_str_len < sizeof(dev_str))
-+		return -LKL_ENOMEM;
-+
-+	err = lkl_get_blkdev(disk_id, part, &dev);
++	if (sock < 0)
++		return sock;
++	err = ifindex_to_name(sock, &ifr, ifindex);
 +	if (err < 0)
 +		return err;
 +
-+	snprintf(dev_str, sizeof(dev_str), "/dev/%08x", dev);
-+	snprintf(mnt_str, mnt_str_len, "/mnt/%08x", dev);
-+
-+	err = lkl_sys_access("/dev", LKL_S_IRWXO);
-+	if (err < 0) {
-+		if (err == -LKL_ENOENT)
-+			err = lkl_sys_mkdir("/dev", 0700);
-+		if (err < 0)
-+			return err;
++	err = lkl_sys_ioctl(sock, LKL_SIOCGIFFLAGS, (long)&ifr);
++	if (!err) {
++		ifr.lkl_ifr_flags |= LKL_IFF_UP;
++		err = lkl_sys_ioctl(sock, LKL_SIOCSIFFLAGS, (long)&ifr);
 +	}
 +
-+	err = lkl_sys_mknod(dev_str, LKL_S_IFBLK | 0600, dev);
-+	if (err < 0)
-+		return err;
-+
-+	err = lkl_sys_access("/mnt", LKL_S_IRWXO);
-+	if (err < 0) {
-+		if (err == -LKL_ENOENT)
-+			err = lkl_sys_mkdir("/mnt", 0700);
-+		if (err < 0)
-+			return err;
-+	}
-+
-+	err = lkl_sys_mkdir(mnt_str, 0700);
-+	if (err < 0) {
-+		lkl_sys_unlink(dev_str);
-+		return err;
-+	}
-+
-+	/* kernel always copies a full page */
-+	if (data) {
-+		strncpy(_data, data, sizeof(_data));
-+		_data[sizeof(_data) - 1] = 0;
-+	} else {
-+		_data[0] = 0;
-+	}
-+
-+	err = lkl_sys_mount(dev_str, mnt_str, (char *)fs_type, flags, _data);
-+	if (err < 0) {
-+		lkl_sys_unlink(dev_str);
-+		lkl_sys_rmdir(mnt_str);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+long lkl_umount_timeout(char *path, int flags, long timeout_ms)
-+{
-+	long incr = 10000000; /* 10 ms */
-+	struct lkl_timespec ts = {
-+		.tv_sec = 0,
-+		.tv_nsec = incr,
-+	};
-+	long err;
-+
-+	do {
-+		err = lkl_sys_umount(path, flags);
-+		if (err == -LKL_EBUSY) {
-+			lkl_sys_nanosleep((struct __lkl__kernel_timespec *)&ts,
-+					  NULL);
-+			timeout_ms -= incr / 1000000;
-+		}
-+	} while (err == -LKL_EBUSY && timeout_ms > 0);
++	lkl_sys_close(sock);
 +
 +	return err;
 +}
 +
-+long lkl_umount_dev(unsigned int disk_id, unsigned int part, int flags,
-+		    long timeout_ms)
++int lkl_if_down(int ifindex)
 +{
-+	char dev_str[] = { "/dev/xxxxxxxx" };
-+	char mnt_str[] = { "/mnt/xxxxxxxx" };
-+	unsigned int dev;
-+	int err;
++	struct lkl_ifreq ifr;
++	int err, sock;
 +
-+	err = lkl_get_blkdev(disk_id, part, &dev);
++	sock = lkl_sys_socket(LKL_AF_INET, LKL_SOCK_DGRAM, 0);
++	if (sock < 0)
++		return sock;
++
++	err = ifindex_to_name(sock, &ifr, ifindex);
 +	if (err < 0)
 +		return err;
 +
-+	snprintf(dev_str, sizeof(dev_str), "/dev/%08x", dev);
-+	snprintf(mnt_str, sizeof(mnt_str), "/mnt/%08x", dev);
++	err = lkl_sys_ioctl(sock, LKL_SIOCGIFFLAGS, (long)&ifr);
++	if (!err) {
++		ifr.lkl_ifr_flags &= ~LKL_IFF_UP;
++		err = lkl_sys_ioctl(sock, LKL_SIOCSIFFLAGS, (long)&ifr);
++	}
 +
-+	err = lkl_umount_timeout(mnt_str, flags, timeout_ms);
-+	if (err)
-+		return err;
++	lkl_sys_close(sock);
 +
-+	err = lkl_sys_unlink(dev_str);
-+	if (err)
-+		return err;
-+
-+	return lkl_sys_rmdir(mnt_str);
++	return err;
 +}
 +
-+struct lkl_dir {
-+	int fd;
-+	char buf[1024];
-+	char *pos;
-+	int len;
++int lkl_if_set_mtu(int ifindex, int mtu)
++{
++	struct lkl_ifreq ifr;
++	int err, sock;
++
++	sock = lkl_sys_socket(LKL_AF_INET, LKL_SOCK_DGRAM, 0);
++	if (sock < 0)
++		return sock;
++
++	err = ifindex_to_name(sock, &ifr, ifindex);
++	if (err < 0)
++		return err;
++
++	ifr.lkl_ifr_mtu = mtu;
++
++	err = lkl_sys_ioctl(sock, LKL_SIOCSIFMTU, (long)&ifr);
++
++	lkl_sys_close(sock);
++
++	return err;
++}
++
++int lkl_if_set_ipv4(int ifindex, unsigned int addr, unsigned int netmask_len)
++{
++	return lkl_if_add_ip(ifindex, LKL_AF_INET, &addr, netmask_len);
++}
++
++int lkl_if_set_ipv4_gateway(int ifindex, unsigned int src_addr,
++		unsigned int src_masklen, unsigned int via_addr)
++{
++	int err;
++
++	err = lkl_if_add_rule_from_saddr(ifindex, LKL_AF_INET, &src_addr);
++	if (err)
++		return err;
++	err = lkl_if_add_linklocal(ifindex, LKL_AF_INET,
++					&src_addr, src_masklen);
++	if (err)
++		return err;
++	return lkl_if_add_gateway(ifindex, LKL_AF_INET, &via_addr);
++}
++
++int lkl_set_ipv4_gateway(unsigned int addr)
++{
++	return lkl_add_gateway(LKL_AF_INET, &addr);
++}
++
++int lkl_netdev_get_ifindex(int id)
++{
++	struct lkl_ifreq ifr;
++	int sock, ret;
++
++	sock = lkl_sys_socket(LKL_AF_INET, LKL_SOCK_DGRAM, 0);
++	if (sock < 0)
++		return sock;
++
++	snprintf(ifr.lkl_ifr_name, sizeof(ifr.lkl_ifr_name), "eth%d", id);
++	ret = lkl_sys_ioctl(sock, LKL_SIOCGIFINDEX, (long)&ifr);
++	lkl_sys_close(sock);
++
++	return ret < 0 ? ret : ifr.lkl_ifr_ifindex;
++}
++
++static int netlink_sock(unsigned int groups)
++{
++	struct lkl_sockaddr_nl la;
++	int fd, err;
++
++	fd = lkl_sys_socket(LKL_AF_NETLINK, LKL_SOCK_DGRAM, LKL_NETLINK_ROUTE);
++	if (fd < 0)
++		return fd;
++
++	memset(&la, 0, sizeof(la));
++	la.nl_family = LKL_AF_NETLINK;
++	la.nl_groups = groups;
++	err = lkl_sys_bind(fd, (struct lkl_sockaddr *)&la, sizeof(la));
++	if (err < 0)
++		return err;
++
++	return fd;
++}
++
++static int parse_rtattr(struct lkl_rtattr *tb[], int max,
++			struct lkl_rtattr *rta, int len)
++{
++	unsigned short type;
++
++	memset(tb, 0, sizeof(struct lkl_rtattr *) * (max + 1));
++	while (LKL_RTA_OK(rta, len)) {
++		type = rta->rta_type;
++		if ((type <= max) && (!tb[type]))
++			tb[type] = rta;
++		rta = LKL_RTA_NEXT(rta, len);
++	}
++	if (len)
++		lkl_printf("!!!Deficit %d, rta_len=%d\n", len,
++			rta->rta_len);
++	return 0;
++}
++
++struct addr_filter {
++	unsigned int ifindex;
++	void *addr;
 +};
 +
-+static struct lkl_dir *lkl_dir_alloc(int *err)
++static unsigned int get_ifa_flags(struct lkl_ifaddrmsg *ifa,
++				  struct lkl_rtattr *ifa_flags_attr)
 +{
-+	struct lkl_dir *dir = lkl_host_ops.mem_alloc(sizeof(struct lkl_dir));
++	return ifa_flags_attr ? *(unsigned int *)LKL_RTA_DATA(ifa_flags_attr) :
++				ifa->ifa_flags;
++}
 +
-+	if (!dir) {
-+		*err = -LKL_ENOMEM;
-+		return NULL;
++/* returns:
++ * 0 - dad succeed.
++ * -1 - dad failed or other error.
++ * 1 - should wait for new msg.
++ */
++static int check_ipv6_dad(struct lkl_sockaddr_nl *nladdr,
++			  struct lkl_nlmsghdr *n, void *arg)
++{
++	struct addr_filter *filter = arg;
++	struct lkl_ifaddrmsg *ifa = LKL_NLMSG_DATA(n);
++	struct lkl_rtattr *rta_tb[LKL_IFA_MAX+1];
++	unsigned int ifa_flags;
++	int len = n->nlmsg_len;
++
++	if (n->nlmsg_type != LKL_RTM_NEWADDR)
++		return 1;
++
++	len -= LKL_NLMSG_LENGTH(sizeof(*ifa));
++	if (len < 0) {
++		lkl_printf("BUG: wrong nlmsg len %d\n", len);
++		return -1;
 +	}
 +
-+	dir->len = 0;
-+	dir->pos = NULL;
++	parse_rtattr(rta_tb, LKL_IFA_MAX, LKL_IFA_RTA(ifa),
++		     n->nlmsg_len - LKL_NLMSG_LENGTH(sizeof(*ifa)));
 +
-+	return dir;
-+}
++	ifa_flags = get_ifa_flags(ifa, rta_tb[LKL_IFA_FLAGS]);
 +
-+struct lkl_dir *lkl_opendir(const char *path, int *err)
-+{
-+	struct lkl_dir *dir = lkl_dir_alloc(err);
++	if (ifa->ifa_index != filter->ifindex)
++		return 1;
++	if (ifa->ifa_family != LKL_AF_INET6)
++		return 1;
 +
-+	if (!dir) {
-+		*err = -LKL_ENOMEM;
-+		return NULL;
++	if (!rta_tb[LKL_IFA_LOCAL])
++		rta_tb[LKL_IFA_LOCAL] = rta_tb[LKL_IFA_ADDRESS];
++
++	if (!rta_tb[LKL_IFA_LOCAL] ||
++	    (filter->addr && memcmp(LKL_RTA_DATA(rta_tb[LKL_IFA_LOCAL]),
++				    filter->addr, 16))) {
++		return 1;
 +	}
-+
-+	dir->fd = lkl_sys_open(path, LKL_O_RDONLY | LKL_O_DIRECTORY, 0);
-+	if (dir->fd < 0) {
-+		*err = dir->fd;
-+		lkl_host_ops.mem_free(dir);
-+		return NULL;
++	if (ifa_flags & LKL_IFA_F_DADFAILED) {
++		lkl_printf("IPV6 DAD failed.\n");
++		return -1;
 +	}
-+
-+	*err = 0;
-+
-+	return dir;
++	if (!(ifa_flags & LKL_IFA_F_TENTATIVE))
++		return 0;
++	return 1;
 +}
 +
-+struct lkl_dir *lkl_fdopendir(int fd, int *err)
++/* Copied from iproute2/lib/ */
++static int rtnl_listen(int fd, int (*handler)(struct lkl_sockaddr_nl *nladdr,
++					      struct lkl_nlmsghdr *, void *),
++		       void *arg)
 +{
-+	struct lkl_dir *dir = lkl_dir_alloc(err);
++	int status;
++	struct lkl_nlmsghdr *h;
++	struct lkl_sockaddr_nl nladdr = { .nl_family = LKL_AF_NETLINK };
++	struct lkl_iovec iov;
++	struct lkl_user_msghdr msg = {
++		.msg_name = &nladdr,
++		.msg_namelen = sizeof(nladdr),
++		.msg_iov = &iov,
++		.msg_iovlen = 1,
++	};
++	char   buf[16384];
 +
-+	if (!dir)
-+		return NULL;
++	iov.iov_base = buf;
++	while (1) {
++		iov.iov_len = sizeof(buf);
++		status = lkl_sys_recvmsg(fd, &msg, 0);
 +
-+	dir->fd = fd;
++		if (status < 0) {
++			if (status == -LKL_EINTR || status == -LKL_EAGAIN)
++				continue;
++			lkl_printf("netlink receive error %s (%d)\n",
++				lkl_strerror(status), status);
++			if (status == -LKL_ENOBUFS)
++				continue;
++			return status;
++		}
++		if (status == 0) {
++			lkl_printf("EOF on netlink\n");
++			return -1;
++		}
++		if (msg.msg_namelen != sizeof(nladdr)) {
++			lkl_printf("Sender address length == %d\n",
++				msg.msg_namelen);
++			return -1;
++		}
 +
-+	return dir;
++		for (h = (struct lkl_nlmsghdr *)buf;
++		     (unsigned int)status >= sizeof(*h);) {
++			int err;
++			int len = h->nlmsg_len;
++			int l = len - sizeof(*h);
++
++			if (l < 0 || len > status) {
++				if (msg.msg_flags & LKL_MSG_TRUNC) {
++					lkl_printf("Truncated message\n");
++					return -1;
++				}
++				lkl_printf("!!!malformed message: len=%d\n",
++					len);
++				return -1;
++			}
++
++			err = handler(&nladdr, h, arg);
++			if (err <= 0)
++				return err;
++
++			status -= LKL_NLMSG_ALIGN(len);
++			h = (struct lkl_nlmsghdr *)((char *)h +
++						    LKL_NLMSG_ALIGN(len));
++		}
++		if (msg.msg_flags & LKL_MSG_TRUNC) {
++			lkl_printf("Message truncated\n");
++			continue;
++		}
++		if (status) {
++			lkl_printf("!!!Remnant of size %d\n", status);
++			return -1;
++		}
++	}
 +}
 +
-+void lkl_rewinddir(struct lkl_dir *dir)
++int lkl_if_wait_ipv6_dad(int ifindex, void *addr)
 +{
-+	lkl_sys_lseek(dir->fd, 0, LKL_SEEK_SET);
-+	dir->len = 0;
-+	dir->pos = NULL;
-+}
++	struct addr_filter filter = {.ifindex = ifindex, .addr = addr};
++	int fd, ret;
++	struct {
++		struct lkl_nlmsghdr		nlmsg_info;
++		struct lkl_ifaddrmsg	ifaddrmsg_info;
++	} req;
 +
-+int lkl_closedir(struct lkl_dir *dir)
-+{
-+	int ret;
++	fd = netlink_sock(1 << (LKL_RTNLGRP_IPV6_IFADDR - 1));
++	if (fd < 0)
++		return fd;
 +
-+	ret = lkl_sys_close(dir->fd);
-+	lkl_host_ops.mem_free(dir);
-+
++	memset(&req, 0, sizeof(req));
++	req.nlmsg_info.nlmsg_len =
++			LKL_NLMSG_LENGTH(sizeof(struct lkl_ifaddrmsg));
++	req.nlmsg_info.nlmsg_flags = LKL_NLM_F_REQUEST | LKL_NLM_F_DUMP;
++	req.nlmsg_info.nlmsg_type = LKL_RTM_GETADDR;
++	req.ifaddrmsg_info.ifa_family = LKL_AF_INET6;
++	req.ifaddrmsg_info.ifa_index = ifindex;
++	ret = lkl_sys_send(fd, &req, req.nlmsg_info.nlmsg_len, 0);
++	if (ret < 0) {
++		lkl_perror("lkl_sys_send", ret);
++		return ret;
++	}
++	ret = rtnl_listen(fd, check_ipv6_dad, (void *)&filter);
++	lkl_sys_close(fd);
 +	return ret;
 +}
 +
-+struct lkl_linux_dirent64 *lkl_readdir(struct lkl_dir *dir)
++int lkl_if_set_ipv6(int ifindex, void *addr, unsigned int netprefix_len)
 +{
-+	struct lkl_linux_dirent64 *de;
++	int err = lkl_if_add_ip(ifindex, LKL_AF_INET6, addr, netprefix_len);
 +
-+	if (dir->len < 0)
-+		return NULL;
-+
-+	if (!dir->pos || dir->pos - dir->buf >= dir->len)
-+		goto read_buf;
-+
-+return_de:
-+	de = (struct lkl_linux_dirent64 *)dir->pos;
-+	dir->pos += de->d_reclen;
-+
-+	return de;
-+
-+read_buf:
-+	dir->pos = NULL;
-+	de = (struct lkl_linux_dirent64 *)dir->buf;
-+	dir->len = lkl_sys_getdents64(dir->fd, de, sizeof(dir->buf));
-+	if (dir->len <= 0)
-+		return NULL;
-+
-+	dir->pos = dir->buf;
-+	goto return_de;
++	if (err)
++		return err;
++	return lkl_if_wait_ipv6_dad(ifindex, addr);
 +}
 +
-+int lkl_errdir(struct lkl_dir *dir)
++int lkl_if_set_ipv6_gateway(int ifindex, void *src_addr,
++		unsigned int src_masklen, void *via_addr)
 +{
-+	if (dir->len >= 0)
-+		return 0;
++	int err;
 +
-+	return dir->len;
++	err = lkl_if_add_rule_from_saddr(ifindex, LKL_AF_INET6, src_addr);
++	if (err)
++		return err;
++	err = lkl_if_add_linklocal(ifindex, LKL_AF_INET6,
++					src_addr, src_masklen);
++	if (err)
++		return err;
++	return lkl_if_add_gateway(ifindex, LKL_AF_INET6, via_addr);
 +}
 +
-+int lkl_dirfd(struct lkl_dir *dir)
++int lkl_set_ipv6_gateway(void *addr)
 +{
-+	return dir->fd;
++	return lkl_add_gateway(LKL_AF_INET6, addr);
 +}
 +
-+int lkl_set_fd_limit(unsigned int fd_limit)
++/* returns:
++ * 0 - succeed.
++ * < 0 - error number.
++ * 1 - should wait for new msg.
++ */
++static int check_error(struct lkl_sockaddr_nl *nladdr, struct lkl_nlmsghdr *n,
++		       void *arg)
 +{
-+	struct lkl_rlimit rlim = {
-+		.rlim_cur = fd_limit,
-+		.rlim_max = fd_limit,
++	unsigned int s = *(unsigned int *)arg;
++
++	if (nladdr->nl_pid != 0 || n->nlmsg_seq != s) {
++		/* Don't forget to skip that message. */
++		return 1;
++	}
++
++	if (n->nlmsg_type == LKL_NLMSG_ERROR) {
++		struct lkl_nlmsgerr *err =
++			(struct lkl_nlmsgerr *)LKL_NLMSG_DATA(n);
++		int l = n->nlmsg_len - sizeof(*n);
++
++		if (l < (int)sizeof(struct lkl_nlmsgerr))
++			lkl_printf("ERROR truncated\n");
++		else if (!err->error)
++			return 0;
++
++		lkl_printf("RTNETLINK answers: %s\n",
++			lkl_strerror(-err->error));
++		return err->error;
++	}
++	lkl_printf("Unexpected reply!!!\n");
++	return -1;
++}
++
++static unsigned int seq;
++static int rtnl_talk(int fd, struct lkl_nlmsghdr *n)
++{
++	int status;
++	struct lkl_sockaddr_nl nladdr = {.nl_family = LKL_AF_NETLINK};
++	struct lkl_iovec iov = {.iov_base = (void *)n, .iov_len = n->nlmsg_len};
++	struct lkl_user_msghdr msg = {
++			.msg_name = &nladdr,
++			.msg_namelen = sizeof(nladdr),
++			.msg_iov = &iov,
++			.msg_iovlen = 1,
 +	};
-+	return lkl_sys_setrlimit(LKL_RLIMIT_NOFILE, &rlim);
++
++	n->nlmsg_seq = seq;
++	n->nlmsg_flags |= LKL_NLM_F_ACK;
++
++	status = lkl_sys_sendmsg(fd, &msg, 0);
++	if (status < 0) {
++		lkl_perror("Cannot talk to rtnetlink", status);
++		return status;
++	}
++
++	status = rtnl_listen(fd, check_error, (void *)&seq);
++	seq++;
++	return status;
++}
++
++static int addattr_l(struct lkl_nlmsghdr *n, unsigned int maxlen,
++		     int type, const void *data, int alen)
++{
++	int len = LKL_RTA_LENGTH(alen);
++	struct lkl_rtattr *rta;
++
++	if (LKL_NLMSG_ALIGN(n->nlmsg_len) + LKL_RTA_ALIGN(len) > maxlen) {
++		lkl_printf("%s ERROR: message exceeded bound of %d\n", __func__,
++			   maxlen);
++		return -1;
++	}
++	rta = ((struct lkl_rtattr *) (((void *) (n)) +
++				      LKL_NLMSG_ALIGN(n->nlmsg_len)));
++	rta->rta_type = type;
++	rta->rta_len = len;
++	memcpy(LKL_RTA_DATA(rta), data, alen);
++	n->nlmsg_len = LKL_NLMSG_ALIGN(n->nlmsg_len) + LKL_RTA_ALIGN(len);
++	return 0;
++}
++
++int lkl_add_neighbor(int ifindex, int af, void *ip, void *mac)
++{
++	struct {
++		struct lkl_nlmsghdr n;
++		struct lkl_ndmsg r;
++		char buf[1024];
++	} req = {
++		.n.nlmsg_len = LKL_NLMSG_LENGTH(sizeof(struct lkl_ndmsg)),
++		.n.nlmsg_type = LKL_RTM_NEWNEIGH,
++		.n.nlmsg_flags = LKL_NLM_F_REQUEST |
++				 LKL_NLM_F_CREATE | LKL_NLM_F_REPLACE,
++		.r.ndm_family = af,
++		.r.ndm_ifindex = ifindex,
++		.r.ndm_state = LKL_NUD_PERMANENT,
++
++	};
++	int err, addr_sz;
++	int fd;
++
++	if (af == LKL_AF_INET)
++		addr_sz = 4;
++	else if (af == LKL_AF_INET6)
++		addr_sz = 16;
++	else {
++		lkl_printf("Bad address family: %d\n", af);
++		return -1;
++	}
++
++	fd = netlink_sock(0);
++	if (fd < 0)
++		return fd;
++
++	// create the IP attribute
++	addattr_l(&req.n, sizeof(req), LKL_NDA_DST, ip, addr_sz);
++
++	// create the MAC attribute
++	addattr_l(&req.n, sizeof(req), LKL_NDA_LLADDR, mac, 6);
++
++	err = rtnl_talk(fd, &req.n);
++	lkl_sys_close(fd);
++	return err;
++}
++
++static int ipaddr_modify(int cmd, int flags, int ifindex, int af, void *addr,
++			 unsigned int netprefix_len)
++{
++	struct {
++		struct lkl_nlmsghdr n;
++		struct lkl_ifaddrmsg ifa;
++		char buf[256];
++	} req = {
++		.n.nlmsg_len = LKL_NLMSG_LENGTH(sizeof(struct lkl_ifaddrmsg)),
++		.n.nlmsg_flags = LKL_NLM_F_REQUEST | flags,
++		.n.nlmsg_type = cmd,
++		.ifa.ifa_family = af,
++		.ifa.ifa_prefixlen = netprefix_len,
++		.ifa.ifa_index = ifindex,
++	};
++	int err, addr_sz;
++	int fd;
++
++	if (af == LKL_AF_INET)
++		addr_sz = 4;
++	else if (af == LKL_AF_INET6)
++		addr_sz = 16;
++	else {
++		lkl_printf("Bad address family: %d\n", af);
++		return -1;
++	}
++
++	fd = netlink_sock(0);
++	if (fd < 0)
++		return fd;
++
++	// create the IP attribute
++	addattr_l(&req.n, sizeof(req), LKL_IFA_LOCAL, addr, addr_sz);
++
++	err = rtnl_talk(fd, &req.n);
++
++	lkl_sys_close(fd);
++	return err;
++}
++
++int lkl_if_add_ip(int ifindex, int af, void *addr, unsigned int netprefix_len)
++{
++	return ipaddr_modify(LKL_RTM_NEWADDR, LKL_NLM_F_CREATE | LKL_NLM_F_EXCL,
++			     ifindex, af, addr, netprefix_len);
++}
++
++int lkl_if_del_ip(int ifindex, int af, void *addr, unsigned int netprefix_len)
++{
++	return ipaddr_modify(LKL_RTM_DELADDR, 0, ifindex, af,
++			     addr, netprefix_len);
++}
++
++static int iproute_modify(int cmd, unsigned int flags, int ifindex, int af,
++		void *route_addr, int route_masklen, void *gwaddr)
++{
++	struct {
++		struct lkl_nlmsghdr	n;
++		struct lkl_rtmsg	r;
++		char			buf[1024];
++	} req = {
++		.n.nlmsg_len = LKL_NLMSG_LENGTH(sizeof(struct lkl_rtmsg)),
++		.n.nlmsg_flags = LKL_NLM_F_REQUEST | flags,
++		.n.nlmsg_type = cmd,
++		.r.rtm_family = af,
++		.r.rtm_table = LKL_RT_TABLE_MAIN,
++		.r.rtm_scope = LKL_RT_SCOPE_UNIVERSE,
++	};
++	int err, addr_sz;
++	int i, fd;
++
++	fd = netlink_sock(0);
++	if (fd < 0) {
++		lkl_printf("netlink_sock error: %d\n", fd);
++		return fd;
++	}
++
++	if (af == LKL_AF_INET)
++		addr_sz = 4;
++	else if (af == LKL_AF_INET6)
++		addr_sz = 16;
++	else {
++		lkl_printf("Bad address family: %d\n", af);
++		return -1;
++	}
++
++	if (cmd != LKL_RTM_DELROUTE) {
++		req.r.rtm_protocol = LKL_RTPROT_BOOT;
++		req.r.rtm_scope = LKL_RT_SCOPE_UNIVERSE;
++		req.r.rtm_type = LKL_RTN_UNICAST;
++	}
++
++	if (gwaddr)
++		addattr_l(&req.n, sizeof(req),
++				LKL_RTA_GATEWAY, gwaddr, addr_sz);
++
++	if (af == LKL_AF_INET && route_addr) {
++		unsigned int netaddr = *(unsigned int *)route_addr;
++
++		netaddr = ntohl(netaddr);
++		netaddr = (netaddr >> (32 - route_masklen));
++		netaddr = (netaddr << (32 - route_masklen));
++		netaddr =  htonl(netaddr);
++		*(unsigned int *)route_addr = netaddr;
++		req.r.rtm_dst_len = route_masklen;
++		addattr_l(&req.n, sizeof(req), LKL_RTA_DST,
++					route_addr, addr_sz);
++	}
++
++	if (af == LKL_AF_INET6 && route_addr) {
++		struct lkl_in6_addr netaddr =
++			*(struct lkl_in6_addr *)route_addr;
++		int rmbyte = route_masklen/8;
++		int rmbit = route_masklen%8;
++
++		for (i = 0; i < rmbyte; i++)
++			netaddr.in6_u.u6_addr8[15-i] = 0;
++		netaddr.in6_u.u6_addr8[15-rmbyte] =
++			(netaddr.in6_u.u6_addr8[15-rmbyte] >> rmbit);
++		netaddr.in6_u.u6_addr8[15-rmbyte] =
++			(netaddr.in6_u.u6_addr8[15-rmbyte] << rmbit);
++		*(struct lkl_in6_addr *)route_addr = netaddr;
++		req.r.rtm_dst_len = route_masklen;
++		addattr_l(&req.n, sizeof(req), LKL_RTA_DST,
++					route_addr, addr_sz);
++	}
++
++	if (ifindex != LKL_RT_TABLE_MAIN) {
++		if (af == LKL_AF_INET)
++			req.r.rtm_table = ifindex * 2;
++		else if (af == LKL_AF_INET6)
++			req.r.rtm_table = ifindex * 2 + 1;
++		addattr_l(&req.n, sizeof(req), LKL_RTA_OIF, &ifindex, addr_sz);
++	}
++	err = rtnl_talk(fd, &req.n);
++	lkl_sys_close(fd);
++	return err;
++}
++
++int lkl_if_add_linklocal(int ifindex, int af,  void *addr, int netprefix_len)
++{
++	return iproute_modify(LKL_RTM_NEWROUTE, LKL_NLM_F_CREATE|LKL_NLM_F_EXCL,
++			ifindex, af, addr, netprefix_len, NULL);
++}
++
++int lkl_if_add_gateway(int ifindex, int af, void *gwaddr)
++{
++	return iproute_modify(LKL_RTM_NEWROUTE, LKL_NLM_F_CREATE|LKL_NLM_F_EXCL,
++			ifindex, af, NULL, 0, gwaddr);
++}
++
++int lkl_add_gateway(int af, void *gwaddr)
++{
++	return iproute_modify(LKL_RTM_NEWROUTE, LKL_NLM_F_CREATE|LKL_NLM_F_EXCL,
++			LKL_RT_TABLE_MAIN, af, NULL, 0, gwaddr);
++}
++
++static int iprule_modify(int cmd, int ifindex, int af, void *saddr)
++{
++	struct {
++		struct lkl_nlmsghdr	n;
++		struct lkl_rtmsg		r;
++		char			buf[1024];
++	} req = {
++		.n.nlmsg_type = cmd,
++		.n.nlmsg_len = LKL_NLMSG_LENGTH(sizeof(struct lkl_rtmsg)),
++		.n.nlmsg_flags = LKL_NLM_F_REQUEST,
++		.r.rtm_protocol = LKL_RTPROT_BOOT,
++		.r.rtm_scope = LKL_RT_SCOPE_UNIVERSE,
++		.r.rtm_family = af,
++		.r.rtm_type = LKL_RTN_UNSPEC,
++	};
++	int fd, err;
++	int addr_sz;
++
++	if (af == LKL_AF_INET)
++		addr_sz = 4;
++	else if (af == LKL_AF_INET6)
++		addr_sz = 16;
++	else {
++		lkl_printf("Bad address family: %d\n", af);
++		return -1;
++	}
++
++	fd = netlink_sock(0);
++	if (fd < 0)
++		return fd;
++
++	if (cmd == LKL_RTM_NEWRULE) {
++		req.n.nlmsg_flags |= LKL_NLM_F_CREATE|LKL_NLM_F_EXCL;
++		req.r.rtm_type = LKL_RTN_UNICAST;
++	}
++
++	//set from address
++	req.r.rtm_src_len = 8 * addr_sz;
++	addattr_l(&req.n, sizeof(req), LKL_FRA_SRC, saddr, addr_sz);
++
++	//use ifindex as table id
++	if (af == LKL_AF_INET)
++		req.r.rtm_table = ifindex * 2;
++	else if (af == LKL_AF_INET6)
++		req.r.rtm_table = ifindex * 2 + 1;
++	err = rtnl_talk(fd, &req.n);
++
++	lkl_sys_close(fd);
++	return err;
++}
++
++int lkl_if_add_rule_from_saddr(int ifindex, int af, void *saddr)
++{
++	return iprule_modify(LKL_RTM_NEWRULE, ifindex, af, saddr);
++}
++
++static int qdisc_add(int cmd, int flags, int ifindex,
++		     const char *root, const char *type)
++{
++	struct {
++		struct lkl_nlmsghdr n;
++		struct lkl_tcmsg tc;
++		char buf[2*1024];
++	} req = {
++		.n.nlmsg_len = LKL_NLMSG_LENGTH(sizeof(struct lkl_tcmsg)),
++		.n.nlmsg_flags = LKL_NLM_F_REQUEST|flags,
++		.n.nlmsg_type = cmd,
++		.tc.tcm_family = LKL_AF_UNSPEC,
++	};
++	int err, fd;
++
++	if (!root || !type) {
++		lkl_printf("root and type arguments\n");
++		return -1;
++	}
++
++	if (strcmp(root, "root") == 0)
++		req.tc.tcm_parent = LKL_TC_H_ROOT;
++	req.tc.tcm_ifindex = ifindex;
++
++	fd = netlink_sock(0);
++	if (fd < 0)
++		return fd;
++
++	// create the qdisc attribute
++	addattr_l(&req.n, sizeof(req), LKL_TCA_KIND, type, strlen(type)+1);
++
++	err = rtnl_talk(fd, &req.n);
++	lkl_sys_close(fd);
++	return err;
++}
++
++int lkl_qdisc_add(int ifindex, const char *root, const char *type)
++{
++	return qdisc_add(LKL_RTM_NEWQDISC, LKL_NLM_F_CREATE | LKL_NLM_F_EXCL,
++			 ifindex, root, type);
++}
++
++/* Add a qdisc entry for an interface in the form of
++ * "root|type;root|type;..."
++ */
++void lkl_qdisc_parse_add(int ifindex, const char *entries)
++{
++	char *saveptr = NULL, *token = NULL;
++	char *root = NULL, *type = NULL;
++	char strings[256];
++	int ret = 0;
++
++	if (strlen(entries) >= sizeof(strings)) {
++		lkl_printf("Error: long strings of input: %s\n", entries);
++		return;
++	}
++
++	strcpy(strings, entries);
++
++	for (token = strtok_r(strings, ";", &saveptr); token;
++	     token = strtok_r(NULL, ";", &saveptr)) {
++		root = strtok(token, "|");
++		type = strtok(NULL, "|");
++		ret = lkl_qdisc_add(ifindex, root, type);
++		if (ret) {
++			lkl_printf("Failed to add qdisc entry: %s\n",
++				   lkl_strerror(ret));
++			return;
++		}
++	}
 +}
 -- 
 2.21.0 (Apple Git-122.2)
