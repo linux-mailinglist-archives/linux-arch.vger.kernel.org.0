@@ -2,57 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF3D197A43
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Mar 2020 13:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E20197BAB
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Mar 2020 14:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729624AbgC3LBK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Mar 2020 07:01:10 -0400
-Received: from mail.11d01.mspz7.gob.ec ([190.152.145.91]:53490 "EHLO
-        mail.11d01.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729553AbgC3LBJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Mar 2020 07:01:09 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 8D0A72F6F5CE;
-        Mon, 30 Mar 2020 04:16:31 -0500 (-05)
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id wHDWD2jiTREe; Mon, 30 Mar 2020 04:16:31 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 0CCE52F693CB;
-        Mon, 30 Mar 2020 04:16:31 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.9.2 mail.11d01.mspz7.gob.ec 0CCE52F693CB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=11d01.mspz7.gob.ec;
-        s=50CBC7E4-8BED-11E9-AF6C-F1A741A224D3; t=1585559791;
-        bh=cLQbOHa1aY+/FyDjaDQOZOnnnlZDxMu+rBX/cg5yps8=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
-         From:Date:Reply-To:Message-Id;
-        b=I0rXDmCJi1DmUgV7kL/YWhU/SEjtjx3nHfmw9Fvm+1qaWWE48cvghCn7IXuLPzq9m
-         noTS1gQ6QjgHQK61jJdJ85k+vrJp9oJ7fMhy8dWy/cFx9wuFZ+1wP0xSkenk/+SpA8
-         vMBthVTDknFQkNI7Y+FmccFxisBOcqCb1ocpszcU=
-X-Virus-Scanned: amavisd-new at 11d01.mspz7.gob.ec
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id eHtT7xwanvL8; Mon, 30 Mar 2020 04:16:30 -0500 (-05)
-Received: from [10.121.152.251] (unknown [105.12.0.10])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTPSA id 5FC382F6F56A;
-        Mon, 30 Mar 2020 04:16:19 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1729881AbgC3MRN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Mar 2020 08:17:13 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:51342 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729705AbgC3MRM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Mar 2020 08:17:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1TmVSV9PEicpV15saljgYzRTqRrIyUodG1iYOZDlCEw=; b=jug3rhODTJBTFOCabmEpKv3Ciy
+        OQM9n6+JLCgJaVH13pLjAddV5iCyN6VkzJewzO5/zEWXS0jthSH5yZe4C+fBjXhYKc8qcHxnPjBJ2
+        3k0FhnMmnjUl6Z8PZwD0cHVa8+QzePq02+E7Qr1bv4keJir+bSI1/esyOwt5AYFDjDetGBu2r2CHQ
+        8ZDHvI7evDFQxiGZK2RtBJ6wCGAZsIN5cGaqdjOtB85vmkkhbKSeK2gMBqRRNxfr1+aFDoj104nQq
+        QuwEtQdU3Cqt+u9I7HuSEBBq2KVdHmPuVh1ef2y2D7+8la/4B4ZcASgg37TwV3AIfzXRHcYGJfC6B
+        abEyRCXA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jItLd-0004XC-Ka; Mon, 30 Mar 2020 12:16:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EAFAE303C41;
+        Mon, 30 Mar 2020 14:16:54 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CDA5F29D04D6E; Mon, 30 Mar 2020 14:16:54 +0200 (CEST)
+Date:   Mon, 30 Mar 2020 14:16:54 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Zhenyu Ye <yezhenyu2@huawei.com>
+Cc:     npiggin@gmail.com, will.deacon@arm.com, mingo@kernel.org,
+        torvalds@linux-foundation.org, schwidefsky@de.ibm.com,
+        akpm@linux-foundation.org, luto@kernel.org, bp@alien8.de,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, arm@kernel.org, xiexiangyou@huawei.com
+Subject: Re: [RFC][Qusetion] the value of cleared_(ptes|pmds|puds|p4ds) in
+ struct mmu_gather
+Message-ID: <20200330121654.GL20696@hirez.programming.kicks-ass.net>
+References: <fbb00ac0-9104-8d25-f225-7b3d1b17a01f@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: spende von 2.000.000,00 Euro
-To:     Recipients <luis.sanchez@11d01.mspz7.gob.ec>
-From:   "Manuel Franco" <luis.sanchez@11d01.mspz7.gob.ec>
-Date:   Mon, 30 Mar 2020 11:47:33 +0200
-Reply-To: manuelfrancospende11@gmail.com
-Message-Id: <20200330091620.5FC382F6F56A@mail.11d01.mspz7.gob.ec>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fbb00ac0-9104-8d25-f225-7b3d1b17a01f@huawei.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Ich bin Manuel Franco, ich spende Ihnen 2.000.000,00 Euro. Kontaktieren Sie=
- mich jetzt, damit wir fortfahren k=F6nnen.
+On Sat, Mar 28, 2020 at 12:30:50PM +0800, Zhenyu Ye wrote:
+> Hi all,
+> 
+> commit a6d60245 "Track which levels of the page tables have been cleared"
+> added cleared_(ptes|pmds|puds|p4ds) in struct mmu_gather, and the values
+> of them are set in some places. For example:
+> 
+> In include/asm-generic/tlb.h, pte_free_tlb() set the tlb->cleared_pmds:
+> ---8<---
+> #ifndef pte_free_tlb
+> #define pte_free_tlb(tlb, ptep, address)			\
+> 	do {							\
+> 		__tlb_adjust_range(tlb, address, PAGE_SIZE);	\
+> 		tlb->freed_tables = 1;				\
+> 		tlb->cleared_pmds = 1;				\
+> 		__pte_free_tlb(tlb, ptep, address);		\
+> 	} while (0)
+> #endif
+> ---8<---
+> 
+> 
+> However, in arch/s390/include/asm/tlb.h, pte_free_tlb() set the tlb->cleared_ptes:
+> ---8<---
+> static inline void pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
+>                                 unsigned long address)
+> {
+> 	__tlb_adjust_range(tlb, address, PAGE_SIZE);
+> 	tlb->mm->context.flush_mm = 1;
+> 	tlb->freed_tables = 1;
+> 	tlb->cleared_ptes = 1;
+> 	/*
+> 	 * page_table_free_rcu takes care of the allocation bit masks
+> 	 * of the 2K table fragments in the 4K page table page,
+> 	 * then calls tlb_remove_table.
+> 	 */
+> 	page_table_free_rcu(tlb, (unsigned long *) pte, address);
+> }
+> ---8<---
+> 
+> 
+> In my view, the cleared_(ptes|pmds|puds) and (pte|pmd|pud)_free_tlb
+> correspond one-to-one.  So we should set cleared_ptes in pte_free_tlb(),
+> then use it when needed.
 
-I am Manuel Franco, I donate to you 2,000,000.00 euros. Contact me now so w=
-e can proceed.
+So pte_free_tlb() clears a table of PTE entries, or a PMD level entity,
+also see free_pte_range(). So the generic code makes sense to me. The
+PTE level invalidations will have happened on tlb_remove_tlb_entry().
+
+> I'm very confused about this. Which is wrong? Or is there something
+> I understand wrong?
+
+I agree the s390 case is puzzling, Martin does s390 need a PTE level
+invalidate for removing a PTE table or was this a mistake?
