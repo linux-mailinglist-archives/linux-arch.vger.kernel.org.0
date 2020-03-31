@@ -2,60 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69694198A09
-	for <lists+linux-arch@lfdr.de>; Tue, 31 Mar 2020 04:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9C3198CAC
+	for <lists+linux-arch@lfdr.de>; Tue, 31 Mar 2020 09:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729624AbgCaCiN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Mar 2020 22:38:13 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:46245 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727464AbgCaCiM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Mar 2020 22:38:12 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q3so9584036pff.13
-        for <linux-arch@vger.kernel.org>; Mon, 30 Mar 2020 19:38:11 -0700 (PDT)
+        id S1726174AbgCaHIX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 Mar 2020 03:08:23 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34176 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726001AbgCaHIX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 Mar 2020 03:08:23 -0400
+Received: by mail-pl1-f193.google.com with SMTP id a23so7786880plm.1
+        for <linux-arch@vger.kernel.org>; Tue, 31 Mar 2020 00:08:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=flZxqn5EyqTevSwFMF7D5Y8OM06DVGUHbu2b6k5ECT8=;
-        b=ECFHY/KsBUGLdilUOnq61TWd36EQLF9QGO6L3JA/Orf/2JlgmfwGjBYx+lu/uaIVgD
-         oXCFbqnKsMM3iFTyb2A9lWhdho4lewUtabAoPXGjRED2H6YxG6rDvTLwatD0wyjMaLc8
-         20/vB0Y3hPULCH/knsJl0/bVzqsBCWN9Q2lZ8v7QsNpo+aJMOzlGEWUR3rta8hafudRg
-         3BxOaWqYsmaebA1GGtPj1hEXhgRMPCzuuR6vCzBCwJgYNg2OHmf6mYNxNEgqubt/0VLr
-         AJvmhNHreP4VRQ/NZ1p1LtN+eFfKaZ8pL/DpoQKzC6uibhgkBQfKhAC458qWodxRCBsk
-         RFoA==
+        bh=4fXBBIP7yCwLaOciJr2l+EL0pxUIeTDa6jH3ZkD8zqE=;
+        b=UTnZWrfsz85/giZfiRv5V19yXZjhywUZQ6FLNWt6B9f+ZxWj2oBImd6RxBocUTaWtu
+         fUmYZtg/03s1R0wuvdpz12EWi4GJ1UNZLmKmnMAvZZgst2a8p1FSJskZqjFDoODws1ez
+         AtGO6dpN7a4rcKXB2b2k5gNRBZTQgDb92gS8T2p9TB51Q/xK6KuR5aX2E5210LHm+vsx
+         lZMPEnB8iquxRaFuSsc30IYlWdNO+0Y9eSbTN+8D5/UdZUy/3R7TADMK+HO4DYT4mids
+         s5F+4X9Uvt9SFtWmSacagv31Vi05BGvil7Ohz0fT4+HY03n9vwqFphqF6NM5oL+bJVU+
+         nt5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=flZxqn5EyqTevSwFMF7D5Y8OM06DVGUHbu2b6k5ECT8=;
-        b=onFlcm4U+Odr+/41nDDiVoq6Ufh41+lf/o80Du5yIY+wVwa747HOEMH6l/C9bcpD2c
-         /i0dqECS2tUioZcLNcmWXRVPlaqYl8YmDK4xcvc32waMUjPTpPEuahMCp81n4zkLcIbC
-         9lMPPtarSSb43Ah7KDxREDTOw42A1gdM3KN9EsUv1yG/WAg6EDAcklDz9UDCtNT7+RlW
-         cc6J4mB8BXFcUqnZcIw5vkYWc7ST3U5TW1uhmVkNKZuFeXPDRZCrSA+jQ54ffYerH+3T
-         yjVrPVu2KYg0bxOkp0SSwG76RD7QCtMMBnkXkWGNGtkUFVDWOIAEXZfeXT0y6CutNwvk
-         vRTw==
-X-Gm-Message-State: ANhLgQ3JCLfvyVP/o6E+7d26wlq/IYVpAyyNwv64RUUBvpKRwA7Ra3AT
-        wmywwVQM7lGgoNxo5HIyuSbE7/ZCPKI2A1uQ
-X-Google-Smtp-Source: ADFU+vu9sUGvXVhs/m0wBHBJOjW4RloYe8cBFnrOHE9g1tqQ5bfUTM0LOFAq1hFbqPaLJR/sqhazrg==
-X-Received: by 2002:aa7:8f22:: with SMTP id y2mr16234089pfr.300.1585622291086;
-        Mon, 30 Mar 2020 19:38:11 -0700 (PDT)
+        bh=4fXBBIP7yCwLaOciJr2l+EL0pxUIeTDa6jH3ZkD8zqE=;
+        b=OS6oVIvO9tZFRWLiDZtQ3UdKsNB0/NQdS13sD+WnsT/U1EsXFOr58xuURj3EwKBehe
+         3ZzUs4mcQZFGpgstl/sVEjDZFvQxyUyV/ymxC+aB+P17IV4jSajka+s/opdFmb6k6Kok
+         xfixNMF+n4sxRfWkRhyGCCujkigfG3T/pXZW1bCeSQmtbsUlQMnAO7Q8Lph/D6bLT4Kz
+         W8YNggSi7hJ12oEnHn0y3vw15Gj7UawKPUqILAyAN0HgnYjo72BpMLqkdFztGooyP+9H
+         nZE1U8OacgLegGvwEXsIzC/srTt/ck+1MCbUZxA3vDs3M4UKEFbOfhKx5NL2E3/6/kj/
+         7+oA==
+X-Gm-Message-State: AGi0PuYvfb+vyR/WAJzrEGQ/ipocCTgdKPEErM6qO2QwXxIQGVqu1RzH
+        A4o1kVNU40i1lsO+h2MyY40=
+X-Google-Smtp-Source: APiQypJrMuU2M3SCq8TairMf+FlB4O6FAAisMrY2Ya5RqfkypeLvRundHMsg62JTtOtl15PO6rpSzg==
+X-Received: by 2002:a17:90a:9317:: with SMTP id p23mr2150549pjo.19.1585638499394;
+        Tue, 31 Mar 2020 00:08:19 -0700 (PDT)
 Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id m68sm735095pjb.0.2020.03.30.19.38.08
+        by smtp.gmail.com with ESMTPSA id g4sm11841582pfb.169.2020.03.31.00.08.12
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 30 Mar 2020 19:38:10 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 11:38:07 +0900
-Message-ID: <m25zelxn8w.wl-thehajime@gmail.com>
+        Tue, 31 Mar 2020 00:08:18 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 16:08:10 +0900
+Message-ID: <m21rp9xaqt.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
-To:     johannes@sipsolutions.net
-Cc:     linux-um@lists.infradead.org, tavi.purdila@gmail.com,
-        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
-        retrage01@gmail.com
-Subject: Re: [RFC v4 23/25] um lkl: add UML network driver for lkl
-In-Reply-To: <b2a730a4bcafb13cb1b29a637f8f8449cf3521d6.camel@sipsolutions.net>
+To:     richard.weinberger@gmail.com
+Cc:     johannes@sipsolutions.net, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, levex@linux.com, mattator@gmail.com,
+        cem@freebsd.org, tavi.purdila@gmail.com, staal1978@gmail.com,
+        motomuman@gmail.com, jiangshanlai@gmail.com, retrage01@gmail.com,
+        petrosagg@gmail.com, edisonmcastro@hotmail.com, xiaoj@google.com,
+        mark@stillwell.me, linux-kernel-library@freelists.org,
+        pscollins@google.com, phh@phh.me, sigmaepsilon92@gmail.com,
+        luca.dariz@gmail.com, liuyuan@google.com
+Subject: Re: [RFC v4 02/25] um lkl: architecture skeleton for Linux kernel library
+In-Reply-To: <CAFLxGvyFqXZSmMcD_=o81AHLzdM_u2iH8h412w7VZrxON7Ohig@mail.gmail.com>
 References: <cover.1585579244.git.thehajime@gmail.com>
-        <0f087b36ad579eeb8062b12e9e61566d9b5b18ac.1585579244.git.thehajime@gmail.com>
-        <b2a730a4bcafb13cb1b29a637f8f8449cf3521d6.camel@sipsolutions.net>
+        <dca6ea7260830a03c060f57e6ab9961f16ad55ed.1585579244.git.thehajime@gmail.com>
+        <a84f3d7bcddbaa6125349c4bcdec6e3e07d6b783.camel@sipsolutions.net>
+        <CAFLxGvyFqXZSmMcD_=o81AHLzdM_u2iH8h412w7VZrxON7Ohig@mail.gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -65,84 +71,176 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-Thanks for the comments, Johannes.
+Hello Johannes, Richard
 
-On Tue, 31 Mar 2020 06:31:15 +0900,
-Johannes Berg wrote:
+On Tue, 31 Mar 2020 07:12:38 +0900,
+Richard Weinberger wrote:
 > 
+> Johannes, Hajime,
 > 
-> > +++ b/arch/um/lkl/include/asm/irq.h
-> > @@ -2,6 +2,9 @@
-> >  #ifndef _ASM_LKL_IRQ_H
-> >  #define _ASM_LKL_IRQ_H
-> >  
-> > +/* pull UML's definitions */
-> > +#include "../../../include/asm/irq.h"
+> On Mon, Mar 30, 2020 at 11:53 PM Johannes Berg
+> <johannes@sipsolutions.net> wrote:
+> >
+> > On Mon, 2020-03-30 at 23:45 +0900, Hajime Tazaki wrote:
+> > > From: Octavian Purdila <tavi.purdila@gmail.com>
+> > >
+> > > Adds the LKL Kconfig, vmlinux linker script, basic architecture
+> > > headers and miscellaneous basic functions or stubs such as
+> > > dump_stack(), show_regs() and cpuinfo proc ops.
+> > >
+> > > The headers we introduce in this patch are simple wrappers to the
+> > > asm-generic headers or stubs for things we don't support, such as
+> > > ptrace, DMA, signals, ELF handling and low level processor operations.
+> > >
+> > > The kernel configuration is automatically updated to reflect the
+> > > endianness of the host, 64bit support or the output format for
+> > > vmlinux's linker script. We do this by looking at the ld's default
+> > > output format.
+> >
+> > Can you elaborate what the plan is here?
+
+I always wrote down the current plan that I have in my mind in the
+cover letter (patch 00); please take a look at the "Milestone" block.
+
+Quoted:
+
+> Milestone
+> =========
+> This patches is a first step toward upstreaming *library mode* of Linux kernel,
+> but we think we need to have several steps toward our goal, describing in the
+> below.
 > 
-> This is _really_ ugly.
-
-Hmm, in previous patchset (until v3), I was using the worse approach
-(I thought) to avoid this include.
-
-+KBUILD_CFLAGS  += -DTIMER_IRQ=0 -DUBD_IRQ=4 -DUM_ETH_IRQ=5 -DLAST_IRQ=15
-
-And I thought the current way is better than before.
-
-
-> > +#if defined(__linux) && (defined(__i386) || defined(__x86_64))
-> > +#include <os.h>
-> > +#endif
-> > +void *um_os_signal(int signum, void *handler);
+> 1. Put LKL code under arch/um (arch/um/lkl), and build it in a separate way
+> from UML.
+> 2. Use UML driver implementations in LKL as a minimum set of patches
+> -  Only support x86 sub architecture (dependency to UML drivers)
+> 3. Support broader host supports
+> - add virtio device features
 > 
-> and arguably those random declarations you're sprinkling are worse.
+> For the step 1, we put LKL as one of UMMODE in order to make less effort to
+> integrate (make ARCH=um UMMODE=library).  The modification to existing UML
+> code is trying to be minimized.
 
-It means that those are only used when UML drivers (net, block) are
-enabled, which are only available on Intel/linux hosts.  OTOH,
-UMMODE_LIB _will_ support non-Intel/Linux hosts in the future thus,
-this ifdefs exist.
 
-> > @@ -181,6 +196,11 @@ void init_IRQ(void)
-> >  	for (i = 0; i < NR_IRQS; i++)
-> >  		irq_set_chip_and_handler(i, &dummy_irq_chip, handle_simple_irq);
-> >  
-> > +#if defined(__linux) && (defined(__i386) || defined(__x86_64))
+> > I mean, you're not actually "unifying" anything with ARCH=um, you're
+> > just basically splitting ARCH=um into ARCH=um-um and ARCH=um-lkl or
+> > something. Is there much point?
+
+The current step (1 in the milestone) tries to cover this goal:
+splitting ARCH=um into UMMODE_KERNEL and UMMODE_LIB.
+
+> > Even the basic underlying building blocks are _very_ different, e.g. in
+> > UML the host interface is just a bunch of functions that must be
+> > implemented (os_*()), while you have a "struct lkl_host_operations". If
+> > we can't even unify at that trivial level, is there any point in it at
+> > all? I'm not even really sure what those ops are used for - are all of
+> > those things that the *application* using LKL necessarily must provide?
+> >
+> > Similarly with the IRQ routing mechanism - two completely different
+> > concepts. Where's the "unifying"?
+> >
+> > Ultimately, I can see two ways this goes:
+> >
+> > 1) We give up, and get ARCH=lkl, sharing just (some of) the drivers
+> >    while moving them into the right drivers/somewhere/ place. Even that
+> >    looks somewhat awkward looking at the later patches in this set, but
+> >    seems like that at *least* should be done.
 > 
-> What's with all those ifdefs with this condition?
+> Yeah, this would be a goal.
+> UML and LKL are quite different but they should share at least their userspace
+> drivers.
+> I also don't mind if we don't share every driver at the beginning but
+> it should be
+> a feasible goal for the future.
 
-Same as above.
-but I agree that the ifdefs are cryptic; I'll try to make it more
-understandable if I use ifdefs.
+Sharing drivers code is also included in this patchset, step 2 in the
+milestone.
 
-> > +++ b/tools/lkl/lib/um/um_glue.c
-> > @@ -0,0 +1,39 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +#include <stdio.h>
-> > +#include <stdlib.h>
-> > +#include <string.h>
-> > +#include <unistd.h>
-> > +#include <errno.h>
-> > +
-> > +
-> > +
-> > +char lkl_um_devs[4096];
-> > +
-> > +/* from sigio.c */
-> > +void maybe_sigio_broken(int fd, int read)
-> > +{
-> > +}
-> > +
-> > +/* from process.c */
-> > +int os_getpid(void)
-> > +{
-> > +	return getpid();
-> > +}
+I was thinking that implementing os_*() functions with lkl_host_ops
+would be the further goal (e.g., step 3 or 4).
+
+> > 2) Ideally, instead, we actually unify: LKL grows support for userspace
+> >    processes using UML infrastructure, the "in-kernel" IRQ mechanisms
+> >    are unified, UML stuff moves into lkl-ops, and the UML binary
+> >    basically becomes a user of the LKL library to start everything up.
+> >    There may be some bits remaining that are just not interesting (e.g.
+> >    some drivers you don't care about would continue to make direct calls
+> >    to the user side instead of lkl-ops, and then they're just not
+> >    compatible with lkl, only with the uml special case of lkl), but then
+> >    things are clean.
 > 
-> All of this really is quite ugly - are you sure it's needed for just the
-> vector network driver??
+> A few months ago I though this is doable but now I'm not so sure anymore.
 
-Those are needed when we use UML_NET or BLK_DEV_UBD is enabled.  I was
-trying to minimize those glue code as much as possible; I need another
-try to check if we can remove more or eliminate completely by other
-ways.
+For the part of (2) which Johannes pointed out (I mean the part "UML
+stuff moves into lkl-ops"), I become to think that implementing os_*()
+functions using lkl_host_ops would be also interesting if those
+re-implementation makes the glue code eliminated.
+
+I'll work on that.
+
+> > Now, of course it seems like (2) would actually be better - LKL would
+> > actually get support for userspace processes using UML's tricks, most of
+> > the code is unified, and even LKL's users can take advantage of new
+> > things. At the same time, all of the duplication is avoided.
+> >
+> > However, I just don't know if it's actually _possible_ to do that
+> > though. Conceptually, it seems like it should be - why shouldn't a
+> > library be able to spawn other userspace processes - I mean, it's not
+> > really in the model that LKL really _wants_ since it's supposed to offer
+> > the syscall API, but you could make a "bool run_normal_init" or
+> > something in the lkl-ops for the user of the library to determine what
+> > should happen, right?
+> >
+> > However, there clearly are huge differences between LKL and UML in all
+> > respects, and I don't know if this wouldn't conflict with the library
+> > model, e.g. there may be linker issues etc. Or maybe the specific UML
+> > interrupt handling is required in UML and cannot be done in LKL (but
+> > then perhaps it could be put into the hypothetical UML-application vs.
+> > UML-the-LKL-library?)
+
+
+For the other part of (2), I agree that your definition of the
+unification will be the best and final goal of this integration.
+
+But, especially the support for UML userspace processes in LKL is not
+easy as far as I can see, at least the current LKL doesn't have, I
+treat those extensions (from the LKL pov) as further goals.
+
+Or the title of the cover letter is somehow overstatement: instead,
+"Minimum integration of UML with LKL" or something like this would be
+better ?
+
+> > Ultimately, personally I think it's going to have to be one or the other
+> > of those two options though, I don't really see much value in what
+> > you're doing here in the patchset now. This way just messes up
+> > everything, it's not clear what's UML and what's LKL, and they're
+> > intertwined with ifdefs everywhere; just look at where you have to add
+> > ifdefs in patch 23 - how would anyone later understand which part gets
+> > compiled for which of them?
+
+Since the patchset of LKL is relatively huge, I was trying to make a
+minimum patchset for the first step.  Because having #ifdefs and glue
+code makes existing arch/um code untouched, I took this way to make
+the patchset as small as possible.
+
+But if this is not the case, I will look for the other way and touch
+arch/um code to fit the current LKL implementation.
+
+What do you think ?
+
+# For the particular ifdefs in patch 23, I will try to make it easy to
+  understand.
+
+> > johannes
+> >
+> > PS: actually having something like lkl-ops in UML would've been nice
+> > also for my "time-travel" work, since it neatly abstracts the timers
+> > out. I do wonder a bit about the overhead of jumping through function
+> > pointers all the time though, it may be worth rethinking that overall
+> > anyway!
+> 
+> Agreed. UML can also learn from LKL. :-)
+
+Ditto;  this is also my wish.
 
 -- Hajime
