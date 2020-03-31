@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6933B1992E7
-	for <lists+linux-arch@lfdr.de>; Tue, 31 Mar 2020 11:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF541992E9
+	for <lists+linux-arch@lfdr.de>; Tue, 31 Mar 2020 11:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730217AbgCaJ7V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 31 Mar 2020 05:59:21 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:26396 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730324AbgCaJ7U (ORCPT
+        id S1730381AbgCaJ7Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 Mar 2020 05:59:24 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9314 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730324AbgCaJ7Y (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 31 Mar 2020 05:59:20 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02V9iX8a048298
-        for <linux-arch@vger.kernel.org>; Tue, 31 Mar 2020 05:59:20 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3043g7097n-1
+        Tue, 31 Mar 2020 05:59:24 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02V9X19k119121
+        for <linux-arch@vger.kernel.org>; Tue, 31 Mar 2020 05:59:22 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 303v2skh8r-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Tue, 31 Mar 2020 05:59:19 -0400
+        for <linux-arch@vger.kernel.org>; Tue, 31 Mar 2020 05:59:22 -0400
 Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-arch@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Tue, 31 Mar 2020 10:59:04 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Tue, 31 Mar 2020 10:59:08 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 31 Mar 2020 10:59:00 +0100
+        Tue, 31 Mar 2020 10:59:03 +0100
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02V9xBjc50069542
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02V9xEkI42139692
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Mar 2020 09:59:11 GMT
+        Tue, 31 Mar 2020 09:59:14 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8FEDA4C044;
+        by IMSVA (Postfix) with ESMTP id 95DEA4C044;
+        Tue, 31 Mar 2020 09:59:14 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DC27C4C05A;
         Tue, 31 Mar 2020 09:59:11 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBABD4C059;
-        Tue, 31 Mar 2020 09:59:08 +0000 (GMT)
 Received: from fir03.in.ibm.com (unknown [9.121.59.65])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Mar 2020 09:59:08 +0000 (GMT)
+        Tue, 31 Mar 2020 09:59:11 +0000 (GMT)
 From:   Sandipan Das <sandipan@linux.ibm.com>
 To:     akpm@linux-foundation.org
 Cc:     linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -47,92 +47,84 @@ Cc:     linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
         fweimer@redhat.com, linuxram@us.ibm.com, mhocko@kernel.org,
         mingo@redhat.com, aneesh.kumar@linux.ibm.com,
         bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
-        shuah@kernel.org,
-        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
-Subject: [PATCH v19 14/24] selftests/vm/pkeys: Fix number of reserved powerpc pkeys
-Date:   Tue, 31 Mar 2020 15:28:15 +0530
+        shuah@kernel.org, Dave Hansen <dave.hansen@intel.com>
+Subject: [PATCH v19 15/24] selftests/vm/pkeys: Fix assertion in test_pkey_alloc_exhaust()
+Date:   Tue, 31 Mar 2020 15:28:16 +0530
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1585646528.git.sandipan@linux.ibm.com>
 References: <cover.1585646528.git.sandipan@linux.ibm.com>
 In-Reply-To: <cover.1585646528.git.sandipan@linux.ibm.com>
 References: <cover.1585646528.git.sandipan@linux.ibm.com>
 X-TM-AS-GCONF: 00
-x-cbid: 20033109-0016-0000-0000-000002FB8F41
+x-cbid: 20033109-4275-0000-0000-000003B6D56E
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20033109-0017-0000-0000-0000335F4DAD
-Message-Id: <0341a0ca961166814b44c9e724774672c18d54ca.1585646528.git.sandipan@linux.ibm.com>
+x-cbparentid: 20033109-4276-0000-0000-000038CC24A8
+Message-Id: <38b08d0318820ae46af3aa6048384fd8056c3df7.1585646528.git.sandipan@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-03-31_03:2020-03-30,2020-03-31 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0 clxscore=1015
- phishscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0
- suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999
+ adultscore=0 suspectscore=3 spamscore=0 clxscore=1015 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2003310086
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+From: Ram Pai <linuxram@us.ibm.com>
 
-The number of reserved pkeys in a PowerNV environment is
-different from that on PowerVM or KVM.
+Some pkeys which are valid on the hardware are reserved
+and not available for application use. These keys cannot
+be allocated.
 
-Tested on PowerVM and PowerNV environments.
+test_pkey_alloc_exhaust() tries to account for these and
+has an assertion which validates if all available pkeys
+have been exahaustively allocated. However, the expression
+that is currently used is only valid for x86. On powerpc,
+a pkey is additionally reserved as compared to x86. Hence,
+the assertion is made to use an arch-specific helper to
+get the correct count of reserved pkeys.
 
-Signed-off-by: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+cc: Dave Hansen <dave.hansen@intel.com>
+cc: Florian Weimer <fweimer@redhat.com>
 Signed-off-by: Ram Pai <linuxram@us.ibm.com>
 Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
 Acked-by: Dave Hansen <dave.hansen@intel.com>
 ---
- tools/testing/selftests/vm/pkey-powerpc.h | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ tools/testing/selftests/vm/protection_keys.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/pkey-powerpc.h b/tools/testing/selftests/vm/pkey-powerpc.h
-index c79f4160a6a08..319673bbab0b3 100644
---- a/tools/testing/selftests/vm/pkey-powerpc.h
-+++ b/tools/testing/selftests/vm/pkey-powerpc.h
-@@ -28,7 +28,10 @@
- #define NR_RESERVED_PKEYS_4K	27 /* pkey-0, pkey-1, exec-only-pkey
- 				      and 24 other keys that cannot be
- 				      represented in the PTE */
--#define NR_RESERVED_PKEYS_64K	3  /* pkey-0, pkey-1 and exec-only-pkey */
-+#define NR_RESERVED_PKEYS_64K_3KEYS	3 /* PowerNV and KVM: pkey-0,
-+					     pkey-1 and exec-only key */
-+#define NR_RESERVED_PKEYS_64K_4KEYS	4 /* PowerVM: pkey-0, pkey-1,
-+					     pkey-31 and exec-only key */
- #define PKEY_BITS_PER_PKEY	2
- #define HPAGE_SIZE		(1UL << 24)
- #define PAGE_SIZE		(1UL << 16)
-@@ -65,12 +68,27 @@ static inline int cpu_has_pku(void)
- 	return 1;
- }
+diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+index e6de078a9196f..5fcbbc525364e 100644
+--- a/tools/testing/selftests/vm/protection_keys.c
++++ b/tools/testing/selftests/vm/protection_keys.c
+@@ -1153,6 +1153,7 @@ void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
+ 	dprintf3("%s()::%d\n", __func__, __LINE__);
  
-+static inline bool arch_is_powervm()
-+{
-+	struct stat buf;
-+
-+	if ((stat("/sys/firmware/devicetree/base/ibm,partition-name", &buf) == 0) &&
-+	    (stat("/sys/firmware/devicetree/base/hmc-managed?", &buf) == 0) &&
-+	    (stat("/sys/firmware/devicetree/base/chosen/qemu,graphic-width", &buf) == -1) )
-+		return true;
-+
-+	return false;
-+}
-+
- static inline int get_arch_reserved_keys(void)
- {
- 	if (sysconf(_SC_PAGESIZE) == 4096)
- 		return NR_RESERVED_PKEYS_4K;
- 	else
--		return NR_RESERVED_PKEYS_64K;
-+		if (arch_is_powervm())
-+			return NR_RESERVED_PKEYS_64K_4KEYS;
-+		else
-+			return NR_RESERVED_PKEYS_64K_3KEYS;
- }
+ 	/*
++	 * On x86:
+ 	 * There are 16 pkeys supported in hardware.  Three are
+ 	 * allocated by the time we get here:
+ 	 *   1. The default key (0)
+@@ -1160,8 +1161,16 @@ void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
+ 	 *   3. One allocated by the test code and passed in via
+ 	 *      'pkey' to this function.
+ 	 * Ensure that we can allocate at least another 13 (16-3).
++	 *
++	 * On powerpc:
++	 * There are either 5, 28, 29 or 32 pkeys supported in
++	 * hardware depending on the page size (4K or 64K) and
++	 * platform (powernv or powervm). Four are allocated by
++	 * the time we get here. These include pkey-0, pkey-1,
++	 * exec-only pkey and the one allocated by the test code.
++	 * Ensure that we can allocate the remaining.
+ 	 */
+-	pkey_assert(i >= NR_PKEYS-3);
++	pkey_assert(i >= (NR_PKEYS - get_arch_reserved_keys() - 1));
  
- void expect_fault_on_read_execonly_key(void *p1, int pkey)
+ 	for (i = 0; i < nr_allocated_pkeys; i++) {
+ 		err = sys_pkey_free(allocated_pkeys[i]);
 -- 
 2.17.1
 
