@@ -2,157 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1FC19B157
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Apr 2020 18:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371DA19B637
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Apr 2020 21:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387893AbgDAQeL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Apr 2020 12:34:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60808 "EHLO mail.kernel.org"
+        id S1732244AbgDATIT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Apr 2020 15:08:19 -0400
+Received: from mga07.intel.com ([134.134.136.100]:29382 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387696AbgDAQeL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 1 Apr 2020 12:34:11 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0BD3A21582;
-        Wed,  1 Apr 2020 16:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585758850;
-        bh=uTdpVzB4sMS1kq2S/jZxD1mCnBHts7WJPO28p1TG1uE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=AhSy97Z1a0DxYTbCKWG0HJI/YELNG8gYEXfmmUZX1BJgMC11K9JvlWVCo8nKsaWZo
-         rwIUvsyGwTgmJuZ0vGCLOBluG/GGOsf1rEJ+XnrLIRui/ddMT1j98D8l+VvRDCfvP7
-         I4f/4LTlxHoxJd8X6Ob88mKUCkJblsp80vb0w828=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id B64FA3522887; Wed,  1 Apr 2020 09:34:09 -0700 (PDT)
-Date:   Wed, 1 Apr 2020 09:34:09 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
+        id S1726785AbgDATIT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 1 Apr 2020 15:08:19 -0400
+IronPort-SDR: 6rPHb3i30bmshs2l1nA7fsTqzRgqpXAiWsbkxVGSA7U79LyUZg30INaqM9m7wtH10/ziDzfxV5
+ A3irZdjC5Tbw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2020 12:08:18 -0700
+IronPort-SDR: in2xdzjovyULgkguc9M6PuUxwD1BffwldF242QJfyCpxPS5pR3+7QyNM7BfJFISOePMd2m+Ifb
+ Yaqs2nxNS4bw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,332,1580803200"; 
+   d="scan'208";a="252735857"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by orsmga006.jf.intel.com with ESMTP; 01 Apr 2020 12:08:17 -0700
+Message-ID: <6f68d7af6a618c087a85d2db6ad40b346e055452.camel@intel.com>
+Subject: Re: [RFC PATCH v9 09/27] x86/mm: Introduce _PAGE_DIRTY_SW
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] Documentation/litmus-tests: Add litmus tests for
- atomic APIs
-Message-ID: <20200401163409.GZ19865@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200326024022.7566-1-boqun.feng@gmail.com>
- <20200327221843.GA226939@google.com>
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+Date:   Wed, 01 Apr 2020 12:08:16 -0700
+In-Reply-To: <325d3a25-0016-ea19-c0c9-7958066fc94e@intel.com>
+References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
+         <20200205181935.3712-10-yu-cheng.yu@intel.com>
+         <325d3a25-0016-ea19-c0c9-7958066fc94e@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200327221843.GA226939@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 06:18:43PM -0400, Joel Fernandes wrote:
-> On Thu, Mar 26, 2020 at 10:40:18AM +0800, Boqun Feng wrote:
-> > A recent discussion raises up the requirement for having test cases for
-> > atomic APIs:
+On Wed, 2020-02-26 at 13:35 -0800, Dave Hansen wrote:
+> On 2/5/20 10:19 AM, Yu-cheng Yu wrote:
+> > When Shadow Stack (SHSTK) is introduced, a R/O and Dirty PTE exists in the
+> > following cases:
 > > 
-> > 	https://lore.kernel.org/lkml/20200213085849.GL14897@hirez.programming.kicks-ass.net/
-> > 
-> > , and since we already have a way to generate a test module from a
-> > litmus test with klitmus[1]. It makes sense that we add more litmus
-> > tests for atomic APIs. And based on the previous discussion, I create a
-> > new directory Documentation/atomic-tests and put these litmus tests
-> > here.
-> > 
-> > This patchset starts the work by adding the litmus tests which are
-> > already used in atomic_t.txt, and also improve the atomic_t.txt to make
-> > it consistent with the litmus tests.
-> > 
-> > Previous version:
-> > v1: https://lore.kernel.org/linux-doc/20200214040132.91934-1-boqun.feng@gmail.com/
-> > v2: https://lore.kernel.org/lkml/20200219062627.104736-1-boqun.feng@gmail.com/
-> > v3: https://lore.kernel.org/linux-doc/20200227004049.6853-1-boqun.feng@gmail.com/
-> 
-> For full series:
-> 
-> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > (a) A modified, copy-on-write (COW) page;
+> > (b) A R/O page that has been COW'ed;
+> > (c) A SHSTK page.
+[...]
 
-Queued in place of the following commits, with Joel's and Alan's tags
-added, thank you all!
+> > diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+> > index e647e3c75578..826823df917f 100644
+> > --- a/arch/x86/include/asm/pgtable_types.h
+> > +++ b/arch/x86/include/asm/pgtable_types.h
+> > @@ -23,7 +23,8 @@
+> >  #define _PAGE_BIT_SOFTW2	10	/* " */
+> >  #define _PAGE_BIT_SOFTW3	11	/* " */
+> >  #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
+> > -#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
+> > +#define _PAGE_BIT_SOFTW4	57	/* available for programmer */
+> > +#define _PAGE_BIT_SOFTW5	58	/* available for programmer */
+> >  #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
+> >  #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
+> >  #define _PAGE_BIT_PKEY_BIT2	61	/* Protection Keys, bit 3/4 */
+> > @@ -35,6 +36,12 @@
+> >  #define _PAGE_BIT_SOFT_DIRTY	_PAGE_BIT_SOFTW3 /* software dirty tracking */
+> >  #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
+> >  
+> > +/*
+> > + * This bit indicates a copy-on-write page, and is different from
+> > + * _PAGE_BIT_SOFT_DIRTY, which tracks which pages a task writes to.
+> > + */
+> > +#define _PAGE_BIT_DIRTY_SW	_PAGE_BIT_SOFTW5 /* was written to */
+> 
+> Does it *only* indicate a copy-on-write (or copy-on-access) page?  If
+> so, haven't we misnamed it?
 
-							Thanx, Paul
+It indicates either a copy-on-write page or a read-only page that has been
+cow'ed.  What about _PAGE_BIT_COW?
 
-c13c55d4 tools/memory-model: Add an exception for limitations on _unless() family
-59ffd85 Documentation/locking/atomic: Fix atomic-set litmus test
-23c19c8 Documentation/locking/atomic: Introduce atomic-tests directory
-3bd201c Documentation/locking/atomic: Add a litmus test for atomic_set()
-833f53b Documentation/locking/atomic: Add a litmus test smp_mb__after_atomic()
+Yu-cheng
 
-> One question I had was in the existing atomic_set() documentation, it talks
-> about atomic_add_unless() implementation based on locking could have issues.
-> It says the way to fix such cases is:
-> 
-> Quote:
->     the typical solution is to then implement atomic_set{}() with
->     atomic_xchg().
-> 
-> I didn't get how using atomic_xchg() fixes it. Is the assumption there that
-> atomic_xchg() would be implemented using locking to avoid atomic_set() having
-> issues? If so, we could clarify that in the document.
-> 
-> thanks,
-> 
->  - Joel
-> 
-> > 
-> > Changes since v3:
-> > 
-> > *	Merge two patches on atomic-set litmus test into one as per
-> > 	Alan. (Alan, you have acked only one of the two patches, so I
-> > 	don't add you acked-by for the combined patch).
-> > 
-> > *	Move the atomic litmus tests into litmus-tests/atomic to align
-> > 	with Joel's recent patches on RCU litmus tests.
-> > 
-> > I think we still haven't reach to a conclusion for the difference of
-> > atomic_add_unless() in herdtools, and I'm currently reading the source
-> > code of herd to resovle this. This is just an updated version to resolve
-> > ealier comments and react on Joel's RCU litmus tests.
-> > 
-> > Regards,
-> > Boqun
-> > 
-> > [1]: http://diy.inria.fr/doc/litmus.html#klitmus
-> > 
-> > Boqun Feng (4):
-> >   tools/memory-model: Add an exception for limitations on _unless()
-> >     family
-> >   Documentation/litmus-tests: Introduce atomic directory
-> >   Documentation/litmus-tests/atomic: Add a test for atomic_set()
-> >   Documentation/litmus-tests/atomic: Add a test for
-> >     smp_mb__after_atomic()
-> > 
-> >  Documentation/atomic_t.txt                    | 24 +++++++-------
-> >  ...ter_atomic-is-stronger-than-acquire.litmus | 32 +++++++++++++++++++
-> >  ...c-RMW-ops-are-atomic-WRT-atomic_set.litmus | 24 ++++++++++++++
-> >  Documentation/litmus-tests/atomic/README      | 16 ++++++++++
-> >  tools/memory-model/README                     | 10 ++++--
-> >  5 files changed, 91 insertions(+), 15 deletions(-)
-> >  create mode 100644 Documentation/litmus-tests/atomic/Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
-> >  create mode 100644 Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> >  create mode 100644 Documentation/litmus-tests/atomic/README
-> > 
-> > -- 
-> > 2.25.1
-> > 
+
