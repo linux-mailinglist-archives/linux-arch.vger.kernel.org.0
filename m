@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A61A19BD19
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 09:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5771619BD2F
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 09:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbgDBHws (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Apr 2020 03:52:48 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:37457 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387652AbgDBHwr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 03:52:47 -0400
-Received: by mail-pg1-f196.google.com with SMTP id r4so8776pgg.4
-        for <linux-arch@vger.kernel.org>; Thu, 02 Apr 2020 00:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wMJKmTTsK/J+IkhN0DYHwWD+qI/x4I12UK39qAaI4hw=;
-        b=JVhBgOBNj/ogaZ6plMcURom9R/4s6tKRMUcMQabcCnJ/9rsQpv5Ie069+tPiB7QCI1
-         Y0ppqs59FxVwUEe6y3sIhTHE62x5W9Xl/nk7kcjX05pnj4FSI2lsKBg9mK+ANa2M9tUH
-         DOK61ctwVrS0KCqZqrJM+wHmAX4j0XrVJ+eSc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wMJKmTTsK/J+IkhN0DYHwWD+qI/x4I12UK39qAaI4hw=;
-        b=UHlOnwQgLUDvxsxVHRAvvrEm2nzaZB30sb9wqxQEvug6pH2FzVyTmYq9V9cHptHPfH
-         eljU+BUUYjlHPzKOxrvWRL36J4cHPv6muQ22KELGrBY/LIkWReIm77omT87r54qPKIr6
-         wm8B7t12s7VacrZUbxpocpo9xfB6rCmIcAJ/CYiybSepyi0azRQ44niKyuJrjMFGUncZ
-         +vppf3AGITDf3XsVH6snivSCunxkm/s1bT7aJgP1x7pCtqj5fDA0QyvUmWCZuStsWcd6
-         +db32x4D5M6GhQs1ZSyVfuOfc04j2zBgyTGgnGgjEztzWBnokenoz2i9gesid4z+29xI
-         kgbg==
-X-Gm-Message-State: AGi0PubOiUI3TZ57Dyc8Iew1rpcIQWJMO9zgdzuFqC8NuhrBt+Z8E9XT
-        M9rotULKHwgaeLyY0nx7CFDWhw==
-X-Google-Smtp-Source: APiQypLxyScrMFlGEbqcPJce1oUPxqcVt+1SraiQF0IBuOLbROJ84rjl6KmSAQXSXKHNuRXpGB/I/Q==
-X-Received: by 2002:a63:c212:: with SMTP id b18mr2109019pgd.92.1585813964449;
-        Thu, 02 Apr 2020 00:52:44 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q91sm3157033pjb.11.2020.04.02.00.52.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2020 00:52:43 -0700 (PDT)
-Date:   Thu, 2 Apr 2020 00:52:41 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
+        id S2387509AbgDBH7p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Apr 2020 03:59:45 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:15715 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387482AbgDBH7o (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 2 Apr 2020 03:59:44 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 48tFpP4VCTz9txn7;
+        Thu,  2 Apr 2020 09:59:41 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=K2qSbeVr; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id tbdPKUFxzZ1c; Thu,  2 Apr 2020 09:59:41 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 48tFpP32Vdz9txn5;
+        Thu,  2 Apr 2020 09:59:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1585814381; bh=43GKGI0k75m1jMuar17d+4+DhdGR59q9yzVFw5zV0xg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=K2qSbeVrPsfu8z1CMpXAlEYM1yWe37c7NfFevmx7ryqhDzQfVQRDRs32WIX5yp+TZ
+         ywtDBo55GNAC5LEHXK38csaNzIV+L8t0pry8KwAfr0f5yZHSbG5+18iTKc2PfJjSN8
+         A62kH9kShZs4OS9xtLYqVd9modYuFioAzsIKVvQM=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 582B18B776;
+        Thu,  2 Apr 2020 09:59:42 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id Y1pqTqStopDu; Thu,  2 Apr 2020 09:59:42 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 076088B75E;
+        Thu,  2 Apr 2020 09:59:39 +0200 (CEST)
+Subject: Re: [PATCH RESEND 3/4] drm/i915/gem: Replace user_access_begin by
+ user_write_access_begin
+To:     Kees Cook <keescook@chromium.org>
 Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>, airlied@linux.ie,
@@ -51,126 +51,102 @@ Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         viro@zeniv.linux.org.uk, akpm@linux-foundation.org, hpa@zytor.com,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH RESEND 4/4] powerpc/uaccess: Implement
- user_read_access_begin and user_write_access_begin
-Message-ID: <202004020052.47DB88E3C@keescook>
 References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
- <ebcf8256e02a7dffb292f3d800e264dce263cac5.1585811416.git.christophe.leroy@c-s.fr>
+ <6da6fa391c0d6344cc9ff99a69fcaa65666f3947.1585811416.git.christophe.leroy@c-s.fr>
+ <202004020051.649C6B8@keescook>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <e5e1ad22-e3b2-5779-2662-1bd464eae175@c-s.fr>
+Date:   Thu, 2 Apr 2020 09:59:36 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebcf8256e02a7dffb292f3d800e264dce263cac5.1585811416.git.christophe.leroy@c-s.fr>
+In-Reply-To: <202004020051.649C6B8@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 02, 2020 at 07:34:19AM +0000, Christophe Leroy wrote:
-> Add support for selective read or write user access with
-> user_read_access_begin/end and user_write_access_begin/end.
+
+
+Le 02/04/2020 à 09:52, Kees Cook a écrit :
+> On Thu, Apr 02, 2020 at 07:34:18AM +0000, Christophe Leroy wrote:
+>> When i915_gem_execbuffer2_ioctl() is using user_access_begin(),
+>> that's only to perform unsafe_put_user() so use
+>> user_write_access_begin() in order to only open write access.
+>>
+>> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 > 
-> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+> Why is this split from the other conversions?
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
 
--Kees
+I split it from the other because this one is in drivers while other 
+ones are in core part of the kernel.
 
-> ---
->  arch/powerpc/include/asm/book3s/32/kup.h |  4 ++--
->  arch/powerpc/include/asm/kup.h           | 14 +++++++++++++-
->  arch/powerpc/include/asm/uaccess.h       | 22 ++++++++++++++++++++++
->  3 files changed, 37 insertions(+), 3 deletions(-)
+Is it better to squash it in the previous patch ?
+
+Christophe
+
 > 
-> diff --git a/arch/powerpc/include/asm/book3s/32/kup.h b/arch/powerpc/include/asm/book3s/32/kup.h
-> index 3c0ba22dc360..1617e73bee30 100644
-> --- a/arch/powerpc/include/asm/book3s/32/kup.h
-> +++ b/arch/powerpc/include/asm/book3s/32/kup.h
-> @@ -108,7 +108,7 @@ static __always_inline void allow_user_access(void __user *to, const void __user
->  	u32 addr, end;
->  
->  	BUILD_BUG_ON(!__builtin_constant_p(dir));
-> -	BUILD_BUG_ON(dir == KUAP_CURRENT);
-> +	BUILD_BUG_ON(dir & ~KUAP_READ_WRITE);
->  
->  	if (!(dir & KUAP_WRITE))
->  		return;
-> @@ -131,7 +131,7 @@ static __always_inline void prevent_user_access(void __user *to, const void __us
->  
->  	BUILD_BUG_ON(!__builtin_constant_p(dir));
->  
-> -	if (dir == KUAP_CURRENT) {
-> +	if (dir & KUAP_CURRENT_WRITE) {
->  		u32 kuap = current->thread.kuap;
->  
->  		if (unlikely(!kuap))
-> diff --git a/arch/powerpc/include/asm/kup.h b/arch/powerpc/include/asm/kup.h
-> index 92bcd1a26d73..c745ee41ad66 100644
-> --- a/arch/powerpc/include/asm/kup.h
-> +++ b/arch/powerpc/include/asm/kup.h
-> @@ -10,7 +10,9 @@
->   * Use the current saved situation instead of the to/from/size params.
->   * Used on book3s/32
->   */
-> -#define KUAP_CURRENT	4
-> +#define KUAP_CURRENT_READ	4
-> +#define KUAP_CURRENT_WRITE	8
-> +#define KUAP_CURRENT		(KUAP_CURRENT_READ | KUAP_CURRENT_WRITE)
->  
->  #ifdef CONFIG_PPC64
->  #include <asm/book3s/64/kup-radix.h>
-> @@ -101,6 +103,16 @@ static inline void prevent_current_access_user(void)
->  	prevent_user_access(NULL, NULL, ~0UL, KUAP_CURRENT);
->  }
->  
-> +static inline void prevent_current_read_from_user(void)
-> +{
-> +	prevent_user_access(NULL, NULL, ~0UL, KUAP_CURRENT_READ);
-> +}
-> +
-> +static inline void prevent_current_write_to_user(void)
-> +{
-> +	prevent_user_access(NULL, NULL, ~0UL, KUAP_CURRENT_WRITE);
-> +}
-> +
->  #endif /* !__ASSEMBLY__ */
->  
->  #endif /* _ASM_POWERPC_KUAP_H_ */
-> diff --git a/arch/powerpc/include/asm/uaccess.h b/arch/powerpc/include/asm/uaccess.h
-> index 2f500debae21..4427d419eb1d 100644
-> --- a/arch/powerpc/include/asm/uaccess.h
-> +++ b/arch/powerpc/include/asm/uaccess.h
-> @@ -468,6 +468,28 @@ static __must_check inline bool user_access_begin(const void __user *ptr, size_t
->  #define user_access_save	prevent_user_access_return
->  #define user_access_restore	restore_user_access
->  
-> +static __must_check inline bool
-> +user_read_access_begin(const void __user *ptr, size_t len)
-> +{
-> +	if (unlikely(!access_ok(ptr, len)))
-> +		return false;
-> +	allow_read_from_user(ptr, len);
-> +	return true;
-> +}
-> +#define user_read_access_begin	user_read_access_begin
-> +#define user_read_access_end		prevent_current_read_from_user
-> +
-> +static __must_check inline bool
-> +user_write_access_begin(const void __user *ptr, size_t len)
-> +{
-> +	if (unlikely(!access_ok(ptr, len)))
-> +		return false;
-> +	allow_write_to_user((void __user *)ptr, len);
-> +	return true;
-> +}
-> +#define user_write_access_begin	user_write_access_begin
-> +#define user_write_access_end		prevent_current_write_to_user
-> +
->  #define unsafe_op_wrap(op, err) do { if (unlikely(op)) goto err; } while (0)
->  #define unsafe_get_user(x, p, e) unsafe_op_wrap(__get_user_allowed(x, p), e)
->  #define unsafe_put_user(x, p, e) unsafe_op_wrap(__put_user_allowed(x, p), e)
-> -- 
-> 2.25.0
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 > 
-
--- 
-Kees Cook
+> 
+>> ---
+>>   drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c | 11 ++++++-----
+>>   1 file changed, 6 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+>> index 7643a30ba4cd..4be8205a70b6 100644
+>> --- a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+>> @@ -1611,14 +1611,14 @@ static int eb_copy_relocations(const struct i915_execbuffer *eb)
+>>   		 * happened we would make the mistake of assuming that the
+>>   		 * relocations were valid.
+>>   		 */
+>> -		if (!user_access_begin(urelocs, size))
+>> +		if (!user_write_access_begin(urelocs, size))
+>>   			goto end;
+>>   
+>>   		for (copied = 0; copied < nreloc; copied++)
+>>   			unsafe_put_user(-1,
+>>   					&urelocs[copied].presumed_offset,
+>>   					end_user);
+>> -		user_access_end();
+>> +		user_write_access_end();
+>>   
+>>   		eb->exec[i].relocs_ptr = (uintptr_t)relocs;
+>>   	}
+>> @@ -1626,7 +1626,7 @@ static int eb_copy_relocations(const struct i915_execbuffer *eb)
+>>   	return 0;
+>>   
+>>   end_user:
+>> -	user_access_end();
+>> +	user_write_access_end();
+>>   end:
+>>   	kvfree(relocs);
+>>   	err = -EFAULT;
+>> @@ -2991,7 +2991,8 @@ i915_gem_execbuffer2_ioctl(struct drm_device *dev, void *data,
+>>   		 * And this range already got effectively checked earlier
+>>   		 * when we did the "copy_from_user()" above.
+>>   		 */
+>> -		if (!user_access_begin(user_exec_list, count * sizeof(*user_exec_list)))
+>> +		if (!user_write_access_begin(user_exec_list,
+>> +					     count * sizeof(*user_exec_list)))
+>>   			goto end;
+>>   
+>>   		for (i = 0; i < args->buffer_count; i++) {
+>> @@ -3005,7 +3006,7 @@ i915_gem_execbuffer2_ioctl(struct drm_device *dev, void *data,
+>>   					end_user);
+>>   		}
+>>   end_user:
+>> -		user_access_end();
+>> +		user_write_access_end();
+>>   end:;
+>>   	}
+>>   
+>> -- 
+>> 2.25.0
+>>
+> 
