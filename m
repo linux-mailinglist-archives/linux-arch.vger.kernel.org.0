@@ -2,263 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0C019C019
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 13:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB01019C6FB
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 18:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388084AbgDBLYV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Apr 2020 07:24:21 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12606 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388012AbgDBLYU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 2 Apr 2020 07:24:20 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 30743A876D0C1A482D0C;
-        Thu,  2 Apr 2020 19:24:13 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Thu, 2 Apr 2020
- 19:24:06 +0800
-Subject: Re: [RFC PATCH v5 4/8] mm: tlb: Pass struct mmu_gather to
- flush_pmd_tlb_range
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <mark.rutland@arm.com>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <aneesh.kumar@linux.ibm.com>,
-        <akpm@linux-foundation.org>, <npiggin@gmail.com>, <arnd@arndb.de>,
-        <rostedt@goodmis.org>, <maz@kernel.org>, <suzuki.poulose@arm.com>,
-        <tglx@linutronix.de>, <yuzhao@google.com>, <Dave.Martin@arm.com>,
-        <steven.price@arm.com>, <broonie@kernel.org>,
-        <guohanjun@huawei.com>, <corbet@lwn.net>, <vgupta@synopsys.com>,
-        <tony.luck@intel.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
-        <kuhn.chenqun@huawei.com>
-References: <20200331142927.1237-1-yezhenyu2@huawei.com>
- <20200331142927.1237-5-yezhenyu2@huawei.com>
- <20200331151331.GS20730@hirez.programming.kicks-ass.net>
- <fe12101e-8efe-22ad-0258-e6aeafc798cc@huawei.com>
- <20200401122004.GE20713@hirez.programming.kicks-ass.net>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <53675fb9-21c7-5309-07b8-1bbc1e775f9b@huawei.com>
-Date:   Thu, 2 Apr 2020 19:24:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S2389728AbgDBQUx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Apr 2020 12:20:53 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:38137 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389689AbgDBQUx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 12:20:53 -0400
+Received: by mail-wm1-f68.google.com with SMTP id f6so4338067wmj.3;
+        Thu, 02 Apr 2020 09:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=M0qIKEE/jPMCSL2VsYtN2C2Vz0+dVANDDtua/KUa0Wk=;
+        b=J06tr+PDUUN0IuhiAKpC+JkPY8VyKtaIEVjjLgKOrK9s0Lgl7OAV2j9iM0iy52w24n
+         6dWnSzs8jK0HUWqS8ELNCbmtvITkrSQi8Fbz+QXKVEg8wTxsvSJzP1HAvRppPpmLDZUv
+         zWPeFfZNTNCgd4FjcJJddVmDR1Tn/3iz1z2UHrJTP4fF3lbtaW8wkEQTCcORfER94HoW
+         YnUoQn90b8mUWIHdd2dp6rV9wWOIgKOa8gcKXO65WKz1zY8raCBr/mNZLQQILksnvan/
+         s7800d80UPo046XvmJ6sl+ewPWq9fnkenr/FUti1D0iSnvkxe+pYTF8IbkeN40uPMq9k
+         b/dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=M0qIKEE/jPMCSL2VsYtN2C2Vz0+dVANDDtua/KUa0Wk=;
+        b=uSvukANxJdmcxWAmA7rIR+pjer7Koczt/KCimm0Kptb/psLqDSprvSgfExjwn3g+o4
+         HPKwVxL6iWMKvfzrvydGtLvVw8BHVcLnFUGgy06EF/WyrRl7VAbbVQAUBwWIRV6nO2Sb
+         t3/3KsG+bUuftgOp9xDmFYK2h4lzwUUCiBhqlXn8fyIaSHv3mHYuit+KFO2yMhUEZX4a
+         gTe6WD4FLdWAD3Ph8KDMrByJ5Sm33cXi6ocfbVv2ImcpRXrOZvND57Iejswgk434veRR
+         X2HHSCSDhOuGugs4nAWSGCqRf/7XVziGeETfKXUp05g0BFWpaCIbn81LOmPWZuxLq4gl
+         sLbQ==
+X-Gm-Message-State: AGi0PubQbHGozYEewaqErD3MktKrEDwubwPV9Jxrb4xw5fpq1LiWAIbs
+        8roH1EuClNv7O6GV2TgCbnV7zQUFKq6mcwx+ix4=
+X-Google-Smtp-Source: APiQypLQKCLfKaI9g7CDIQB0Dt1MIKvoDGOCHMQ5uuabLjQMqtvD8ITI3S55KR8iAO4oibBgm83EghWn2uGq6sjdu14=
+X-Received: by 2002:a1c:4e11:: with SMTP id g17mr4310690wmh.80.1585844450712;
+ Thu, 02 Apr 2020 09:20:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200401122004.GE20713@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.173.220.25]
-X-CFilter-Loop: Reflected
+References: <20200228002244.15240-1-keescook@chromium.org>
+In-Reply-To: <20200228002244.15240-1-keescook@chromium.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 2 Apr 2020 18:20:57 +0200
+Message-ID: <CA+icZUWTnP8DYfbaMwKtJbG30v7bB4w6=ywo8gn8fvwr731mUQ@mail.gmail.com>
+Subject: Re: [PATCH 0/9] Enable orphan section warning
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Borislav Petkov <bp@suse.de>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Peter,
+On Fri, Feb 28, 2020 at 1:22 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Hi!
+>
+> A recent bug was solved for builds linked with ld.lld, and tracking
+> it down took way longer than it needed to (a year). Ultimately, it
+> boiled down to differences between ld.bfd and ld.lld's handling of
+> orphan sections. Similarly, the recent FGKASLR series brough up orphan
+> section handling too[2]. In both cases, it would have been nice if the
+> linker was running with --orphan-handling=warn so that surprise sections
+> wouldn't silently get mapped into the kernel image at locations up to
+> the whim of the linker's orphan handling logic. Instead, all desired
+> sections should be explicitly identified in the linker script (to be
+> either kept or discarded) with any orphans throwing a warning. The
+> powerpc architecture actually already does this, so this series seeks
+> to extend this coverage to x86, arm64, and arm.
+>
+> This series depends on tip/x86/boot (where recent .eh_frame fixes[3]
+> landed), and has a minor conflict[4] with the ARM tree (related to
+> the earlier mentioned bug). As it uses refactorings in the asm-generic
+> linker script, and makes changes to kbuild, I think the cleanest place
+> for this series to land would also be through -tip. Once again (like
+> my READ_IMPLIES_EXEC series), I'm looking to get maintainer Acks so
+> this can go all together with the least disruption. Splitting it up by
+> architecture seems needlessly difficult.
+>
+> Thanks!
+>
 
-On 2020/4/1 20:20, Peter Zijlstra wrote:
-> On Wed, Apr 01, 2020 at 04:51:15PM +0800, Zhenyu Ye wrote:
->> On 2020/3/31 23:13, Peter Zijlstra wrote:
-> 
->>> Instead of trying to retro-fit flush_*tlb_range() to take an mmu_gather
->>> parameter, please replace them out-right.
->>>
->>
->> I'm sorry that I'm not sure what "replace them out-right" means.  Do you
->> mean that I should define flush_*_tlb_range like this?
->>
->> #define flush_pmd_tlb_range(vma, addr, end)				\
->> 	do {								\
->> 		struct mmu_gather tlb;					\
->> 		tlb_gather_mmu(&tlb, (vma)->vm_mm, addr, end);		\
->> 		tlba.cleared_pmds = 1;					\
->> 		flush_tlb_range(&tlb, vma, addr, end);			\
->> 		tlb_finish_mmu(&tlb, addr, end);			\
->> 	} while (0)
->>
-> 
-> I was thinking to remove flush_*tlb_range() entirely (from generic
-> code).
-> 
-> And specifically to not use them like the above; instead extend the
-> mmu_gather API.
-> 
-> Specifically, if you wanted to express flush_pmd_tlb_range() in mmu
-> gather, you'd write it like:
-> 
-> static inline void flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long addr, unsigned long end)
-> {
-> 	struct mmu_gather tlb;
-> 
-> 	tlb_gather_mmu(&tlb, vma->vm_mm, addr, end);
-> 	tlb_start_vma(&tlb, vma);
-> 	tlb.cleared_pmds = 1;
-> 	__tlb_adjust_range(addr, end - addr);
-> 	tlb_end_vma(&tlb, vma);
-> 	tlb_finish_mmu(&tlb, addr, end);
-> }
-> 
-> Except of course, that the code between start_vma and end_vma is not a
-> proper mmu_gather API.
-> 
-> So maybe add:
-> 
->   tlb_flush_{pte,pmd,pud,p4d}_range()
-> 
-> Then we can write:
-> 
-> static inline void flush_XXX_tlb_range(struct vm_area_struct *vma, unsigned long addr, unsigned long end)
-> {
-> 	struct mmu_gather tlb;
-> 
-> 	tlb_gather_mmu(&tlb, vma->vm_mm, addr, end);
-> 	tlb_start_vma(&tlb, vma);
-> 	tlb_flush_XXX_range(&tlb, addr, end - addr);
-> 	tlb_end_vma(&tlb, vma);
-> 	tlb_finish_mmu(&tlb, addr, end);
-> }
-> 
-> But when I look at the output of:
-> 
->   git grep flush_.*tlb_range -- :^arch/
-> 
-> I doubt it makes sense to provide wrappers like the above.
-> 
+Hi Kees,
 
-Thanks for your detailed explanation.  I notice that you used
-`tlb_end_vma` replace `flush_tlb_range`, which will call `tlb_flush`,
-then finally call `flush_tlb_range` in generic code.  However, some
-architectures define tlb_end_vma|tlb_flush|flush_tlb_range themselves,
-so this may cause problems.
+what is the status of this patchset?
+Looks like it is not in tip or linux-next Git.
 
-For example, in s390, it defines:
+Thanks.
 
-#define tlb_end_vma(tlb, vma)			do { } while (0)
+Regards,
+- Sedat -
 
-And it doesn't define it's own flush_pmd_tlb_range().  So there will be
-a mistake if we changed flush_pmd_tlb_range() using tlb_end_vma().
-
-Is this really a problem or something I understand wrong ?
-
-
-
-If true, I think there are three ways to solve this problem:
-
-1. use `flush_tlb_range` rather than `tlb_end_vma` in flush_XXX_tlb_range;
-   In this way, we still need retro-fit `flush_tlb_range` to take an mmu_gather
-parameter.
-
-2. use `tlb_flush` rather than `tlb_end_vma`.
-   There is a constraint such like:
-
-	#ifndef tlb_flush
-	#if defined(tlb_start_vma) || defined(tlb_end_vma)
-	#error Default tlb_flush() relies on default tlb_start_vma() and tlb_end_vma()
-	#endif
-
-   So all architectures that define tlb_{start|end}_vma have defined tlb_flush.
-Also, we can add a constraint to flush_XXX_tlb_range such like:
-
-	#ifndef flush_XXX_tlb_range
-	#if defined(tlb_start_vma) || defined(tlb_end_vma)
-	#error Default flush_XXX_tlb_range() relies on default tlb_start/end_vma()
-	#endif
-
-3. Define flush_XXX_tlb_range() architecture-self, and keep original define in
-generic code, such as:
-
-In arm64:
-	#define flush_XXX_tlb_range flush_XXX_tlb_range
-
-In generic:
-	#ifndef flush_XXX_tlb_range
-	#define flush_XXX_tlb_range flush_tlb_range
-
-
-Which do you think is more appropriate?
-
-
-> ( Also, we should probably remove the (addr, end) arguments from
-> tlb_finish_mmu(), Will? )
-> 
-
-This can be changed quickly. If you want I can do this with a
-separate patch.
-
-> ---
-> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-> index f391f6b500b4..be5452a8efaa 100644
-> --- a/include/asm-generic/tlb.h
-> +++ b/include/asm-generic/tlb.h
-> @@ -511,6 +511,34 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
->  }
->  #endif
->  
-> +static inline void tlb_flush_pte_range(struct mmu_gather *tlb,
-> +				       unsigned long address, unsigned long size)
-> +{
-> +	__tlb_adjust_range(tlb, address, size);
-> +	tlb->cleared_ptes = 1;
-> +}
-> +
-> +static inline void tlb_flush_pmd_range(struct mmu_gather *tlb,
-> +				       unsigned long address, unsigned long size)
-> +{
-> +	__tlb_adjust_range(tlb, address, size);
-> +	tlb->cleared_pmds = 1;
-> +}
-> +
-> +static inline void tlb_flush_pud_range(struct mmu_gather *tlb,
-> +				       unsigned long address, unsigned long size)
-> +{
-> +	__tlb_adjust_range(tlb, address, size);
-> +	tlb->cleared_puds = 1;
-> +}
-> +
-> +static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
-> +				       unsigned long address, unsigned long size)
-> +{
-> +	__tlb_adjust_range(tlb, address, size);
-> +	tlb->cleared_p4ds = 1;
-> +}
-> +
-
-By the way, I think the name of tlb_set_XXX_range() is more suitable, because
-we don't do actual flush there.
-
->  #ifndef __tlb_remove_tlb_entry
->  #define __tlb_remove_tlb_entry(tlb, ptep, address) do { } while (0)
->  #endif
-> @@ -524,8 +552,7 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
->   */
->  #define tlb_remove_tlb_entry(tlb, ptep, address)		\
->  	do {							\
-> -		__tlb_adjust_range(tlb, address, PAGE_SIZE);	\
-> -		tlb->cleared_ptes = 1;				\
-> +		tlb_flush_pte_range(tlb, address, PAGE_SIZE);	\
->  		__tlb_remove_tlb_entry(tlb, ptep, address);	\
->  	} while (0)
->  
-> @@ -550,8 +577,7 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
->  
->  #define tlb_remove_pmd_tlb_entry(tlb, pmdp, address)			\
->  	do {								\
-> -		__tlb_adjust_range(tlb, address, HPAGE_PMD_SIZE);	\
-> -		tlb->cleared_pmds = 1;					\
-> +		tlb_flush_pmd_range(tlb, address, HPAGE_PMD_SIZE);	\
->  		__tlb_remove_pmd_tlb_entry(tlb, pmdp, address);		\
->  	} while (0)
->  
-> @@ -565,8 +591,7 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
->  
->  #define tlb_remove_pud_tlb_entry(tlb, pudp, address)			\
->  	do {								\
-> -		__tlb_adjust_range(tlb, address, HPAGE_PUD_SIZE);	\
-> -		tlb->cleared_puds = 1;					\
-> +		tlb_flush_pud_range(tlb, address, HPAGE_PUD_SIZE);	\
->  		__tlb_remove_pud_tlb_entry(tlb, pudp, address);		\
->  	} while (0)
->  
-> 
-> .
-> 
-
+> -Kees
+>
+> [1] https://github.com/ClangBuiltLinux/linux/issues/282
+> [2] https://lore.kernel.org/lkml/202002242122.AA4D1B8@keescook/
+> [3] https://lore.kernel.org/lkml/158264960194.28353.10560165361470246192.tip-bot2@tip-bot2/
+> [4] https://www.arm.linux.org.uk/developer/patches/viewpatch.php?id=8959/1
+>
+> H.J. Lu (1):
+>   Add RUNTIME_DISCARD_EXIT to generic DISCARDS
+>
+> Kees Cook (8):
+>   scripts/link-vmlinux.sh: Delay orphan handling warnings until final
+>     link
+>   vmlinux.lds.h: Add .gnu.version* to DISCARDS
+>   x86/build: Warn on orphan section placement
+>   x86/boot: Warn on orphan section placement
+>   arm64/build: Use common DISCARDS in linker script
+>   arm64/build: Warn on orphan section placement
+>   arm/build: Warn on orphan section placement
+>   arm/boot: Warn on orphan section placement
+>
+>  arch/arm/Makefile                             |  4 ++++
+>  arch/arm/boot/compressed/Makefile             |  2 ++
+>  arch/arm/boot/compressed/vmlinux.lds.S        | 17 ++++++--------
+>  .../arm/{kernel => include/asm}/vmlinux.lds.h | 22 ++++++++++++++-----
+>  arch/arm/kernel/vmlinux-xip.lds.S             |  5 ++---
+>  arch/arm/kernel/vmlinux.lds.S                 |  5 ++---
+>  arch/arm64/Makefile                           |  4 ++++
+>  arch/arm64/kernel/vmlinux.lds.S               | 13 +++++------
+>  arch/x86/Makefile                             |  4 ++++
+>  arch/x86/boot/compressed/Makefile             |  3 ++-
+>  arch/x86/boot/compressed/vmlinux.lds.S        | 13 +++++++++++
+>  arch/x86/kernel/vmlinux.lds.S                 |  7 ++++++
+>  include/asm-generic/vmlinux.lds.h             | 11 ++++++++--
+>  scripts/link-vmlinux.sh                       |  6 +++++
+>  14 files changed, 85 insertions(+), 31 deletions(-)
+>  rename arch/arm/{kernel => include/asm}/vmlinux.lds.h (92%)
+>
+> --
+> 2.20.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20200228002244.15240-1-keescook%40chromium.org.
