@@ -2,20 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3147219C857
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 19:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA2019C8D9
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 20:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388452AbgDBRux (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Apr 2020 13:50:53 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:49726 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727439AbgDBRux (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 13:50:53 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jK3z6-008rAv-W9; Thu, 02 Apr 2020 17:50:33 +0000
-Date:   Thu, 2 Apr 2020 18:50:32 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
+        id S2389108AbgDBSfM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Apr 2020 14:35:12 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:12271 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729033AbgDBSfM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 2 Apr 2020 14:35:12 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 48tWvg1mkHz9v0Dy;
+        Thu,  2 Apr 2020 20:35:11 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=sDk1SEu9; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id vGOZxJA0GbEI; Thu,  2 Apr 2020 20:35:11 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 48tWvg0JMhz9v0Dw;
+        Thu,  2 Apr 2020 20:35:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1585852511; bh=xsC8tyWdt4REunwIPC9Ykpfqa7PmWmLgFHcC/3QwWiI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=sDk1SEu9KbD6+CPdF0zQdsnvsipGxinh4BheDbsyX0gJNOiz0wAI5K5LR+I3/MHti
+         35Ooqvvfdd3pLQjLA0XRgV6pk+vqfu0AWlt+UcxdPIGsv/3guu0uVJqZMMdK3Fj+Mc
+         IwU+7wszU6q2Km78BzOoHqXbJI3ksTWTIYia0lfk=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E3E978B940;
+        Thu,  2 Apr 2020 20:35:10 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id yvBrCbyn7qgh; Thu,  2 Apr 2020 20:35:10 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CE3238B925;
+        Thu,  2 Apr 2020 20:35:09 +0200 (CEST)
+Subject: Re: [PATCH RESEND 1/4] uaccess: Add user_read_access_begin/end and
+ user_write_access_begin/end
+To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>, airlied@linux.ie,
@@ -25,72 +53,41 @@ Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Russell King <linux@armlinux.org.uk>,
         Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: [PATCH RESEND 1/4] uaccess: Add user_read_access_begin/end and
- user_write_access_begin/end
-Message-ID: <20200402175032.GH23230@ZenIV.linux.org.uk>
 References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
  <20200402162942.GG23230@ZenIV.linux.org.uk>
  <67e21b65-0e2d-7ca5-7518-cec1b7abc46c@c-s.fr>
+ <20200402175032.GH23230@ZenIV.linux.org.uk>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <24095989-57be-332c-f08c-acb1672c7e6f@c-s.fr>
+Date:   Thu, 2 Apr 2020 20:35:09 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67e21b65-0e2d-7ca5-7518-cec1b7abc46c@c-s.fr>
+In-Reply-To: <20200402175032.GH23230@ZenIV.linux.org.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 02, 2020 at 07:03:28PM +0200, Christophe Leroy wrote:
 
-> user_access_begin() grants both read and write.
+
+Le 02/04/2020 à 19:50, Al Viro a écrit :
+> On Thu, Apr 02, 2020 at 07:03:28PM +0200, Christophe Leroy wrote:
 > 
-> This patch adds user_read_access_begin() and user_write_access_begin() but
-> it doesn't remove user_access_begin()
-
-Ouch...  So the most generic name is for the rarest case?
- 
-> > What should we do about that?  Do we prohibit such blocks outside
-> > of arch?
-> > 
-> > What should we do about arm and s390?  There we want a cookie passed
-> > from beginning of block to its end; should that be a return value?
+>> user_access_begin() grants both read and write.
+>>
+>> This patch adds user_read_access_begin() and user_write_access_begin() but
+>> it doesn't remove user_access_begin()
 > 
-> That was the way I implemented it in January, see
-> https://patchwork.ozlabs.org/patch/1227926/
-> 
-> There was some discussion around that and most noticeable was:
-> 
-> H. Peter (hpa) said about it: "I have *deep* concern with carrying state in
-> a "key" variable: it's a direct attack vector for a crowbar attack,
-> especially since it is by definition live inside a user access region."
+> Ouch...  So the most generic name is for the rarest case?
+>   
 
-> This patch minimises the change by just adding user_read_access_begin() and
-> user_write_access_begin() keeping the same parameters as the existing
-> user_access_begin().
+I can add another patch at the end of the series to rename 
+user_access_begin() to user_full_access_begin().
 
-Umm...  What about the arm situation?  The same concerns would apply there,
-wouldn't they?  Currently we have
-static __always_inline unsigned int uaccess_save_and_enable(void)
-{
-#ifdef CONFIG_CPU_SW_DOMAIN_PAN
-        unsigned int old_domain = get_domain();
+Would it suit you ?
 
-        /* Set the current domain access to permit user accesses */
-        set_domain((old_domain & ~domain_mask(DOMAIN_USER)) |
-                   domain_val(DOMAIN_USER, DOMAIN_CLIENT));
-
-        return old_domain;
-#else
-        return 0;
-#endif
-}
-and
-static __always_inline void uaccess_restore(unsigned int flags)
-{
-#ifdef CONFIG_CPU_SW_DOMAIN_PAN
-        /* Restore the user access mask */
-        set_domain(flags);
-#endif
-}
-
-How much do we need nesting on those, anyway?  rmk?
+Christophe
