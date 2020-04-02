@@ -2,148 +2,194 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4956A19BD35
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 10:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A530119BD41
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 10:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387476AbgDBIBJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Apr 2020 04:01:09 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:61305 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387403AbgDBIBJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 2 Apr 2020 04:01:09 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 48tFqx4zWqz9tyQ2;
-        Thu,  2 Apr 2020 10:01:01 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=MkQiLMX9; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 2CaVvBPeukaV; Thu,  2 Apr 2020 10:01:01 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 48tFqx3jqYz9tyQ1;
-        Thu,  2 Apr 2020 10:01:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1585814461; bh=DBRr4a/YotdE3HAHpPGxsgA6Pc/14KHKGaSYgbQil3g=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=MkQiLMX9a4Y0UYIR5VMPjSKQa/H/XdtfRDVvU59elCFe/+G5t9ZWFGRkdanq3nGkp
-         +WTGjvWrISFnKe7CCNatvGvesPO1bZLQXWPFP8I5/eLMwUfx2LBSi2Psl4bkh/eusJ
-         1gQw+6sCfL8oyQChcpSNuqCFWzksNm7OyWq5z01E=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 076758B76E;
-        Thu,  2 Apr 2020 10:01:02 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id sFQHXTLLR5mH; Thu,  2 Apr 2020 10:01:01 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 28AF68B75E;
-        Thu,  2 Apr 2020 10:00:58 +0200 (CEST)
-Subject: Re: [PATCH RESEND 2/4] uaccess: Selectively open read or write user
- access
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, airlied@linux.ie,
-        daniel@ffwll.ch, torvalds@linux-foundation.org,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org
-References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
- <25040ad2d2a2cef45a2442b0e934141987e11b71.1585811416.git.christophe.leroy@c-s.fr>
- <202004020047.401CEBED2@keescook>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <1f8ec312-80f4-03e5-8683-57f97528888c@c-s.fr>
-Date:   Thu, 2 Apr 2020 10:00:54 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S2387476AbgDBIEJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Apr 2020 04:04:09 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:34906 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726841AbgDBIEI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 04:04:08 -0400
+Received: by mail-qk1-f195.google.com with SMTP id k13so3059509qki.2;
+        Thu, 02 Apr 2020 01:04:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RrpRpmxA/fGboHRy3eyeHpJ/mOa8uiqe+HX3yiHuZEQ=;
+        b=gUrX7ZZc0XLA2HPpXA8mci+HiDbRIHNoRDPjCEoo8m0heDllzPu+jhZt2xdegVDfTk
+         ayF+S4CV4+5gmXr16QS7MdV1Hmj65KEecMkLiteAPgPNRWchkszkSMDAJzZU8rv1qWmT
+         Yryoabdcv1SqjDXIzzPmawPqeWSmqP1+SaaXih3l8R3bIp3egiXaNUiJ+ku0B3es8YdB
+         hcEqRiH/MhHqr2IlChpXy2mcQ+kTyJrBbgjPWOVS4QvoOVcthmYl8Zny9ZLeiAivoxGp
+         SzWVDJ3XGyLc51QPQbyutFCSeaqaBNLl+v2UYZJROR5zJnoaBEY3oafxYz3X29Ed4H3y
+         seRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RrpRpmxA/fGboHRy3eyeHpJ/mOa8uiqe+HX3yiHuZEQ=;
+        b=HfcxbNfEp3vuXISLBDGrrwoiQH2aTwCIlTk6SdgSLG0nYsrtxyYZlMXeu7kKd01Ilm
+         b7Bd/4yKO4TIGy49/TvHudNPZzaNW6oYfTiy7jSB0f7WHXlUJdQmimSjz/OQJEnzjb2a
+         OkDlC2OL8veZ2GTRj2otL2qoUGxIsO4TsR2o4/TyIdeMMVaqrXce7kGzmEv9SN+SaHb4
+         8v1SwnfXn346IoQh8L86umu48ziky0agajsH+MxLnMFWo7OBKFt20Vj+zpvZJ9SmVtZ1
+         Mc904Z+6m+MX8+Mufx63xFkuK0CNjNLavpZfEIRiPy+4StcQNgXS1B5YgVKPdGAcUbtn
+         HmWg==
+X-Gm-Message-State: AGi0PuZ7n/xoLxaauYxkhy6ZjY4RRozHJZhV10IqjRTHrrsu3vPMrOIY
+        E/RrvCVN74Qe3HI4mguWEvk=
+X-Google-Smtp-Source: APiQypJpCr7nUnc3rF94SHauVHaTkWD05E+isjAAeyRD9zOI+oAc/3RVxfTZ7SxFL63nlfKnGtqudA==
+X-Received: by 2002:a37:27cd:: with SMTP id n196mr2320125qkn.144.1585814645559;
+        Thu, 02 Apr 2020 01:04:05 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id w28sm3296712qtc.27.2020.04.02.01.04.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 Apr 2020 01:04:04 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0881227C0058;
+        Thu,  2 Apr 2020 04:04:03 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 02 Apr 2020 04:04:03 -0400
+X-ME-Sender: <xms:cJyFXpzN2snz4Kko4y3ygTaIP7yvOCU3KKHyrYkMP1ltoM7L4gboKg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrtdefgdduvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuffhomhgrih
+    hnpehkvghrnhgvlhdrohhrghenucfkphephedvrdduheehrdduuddurdejudenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvg
+    hsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheeh
+    hedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:cJyFXm9sH9adqCr8497XOy9_vdG4WsKKER-oqdc8CaTsSM4x9vk5Mw>
+    <xmx:cJyFXtx7fF9IsOv0RCNT73pwBVywEDfL8eut7crZUyERimJ6uunpVA>
+    <xmx:cJyFXjuG4n8OzlCoSpp5SBAphH83V0pAAH4sDUI-eBumC7VWwckLKg>
+    <xmx:c5yFXiEYB70MKHpCqsjdPbd5GgMKPA3nIJRB-rUKAUozPLaL8YTCjpAVuw8>
+Received: from localhost (unknown [52.155.111.71])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 5F856328005A;
+        Thu,  2 Apr 2020 04:04:00 -0400 (EDT)
+Date:   Thu, 2 Apr 2020 16:03:58 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] Documentation/litmus-tests: Add litmus tests for
+ atomic APIs
+Message-ID: <20200402080358.GC59159@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+References: <20200326024022.7566-1-boqun.feng@gmail.com>
+ <20200327221843.GA226939@google.com>
+ <20200331014037.GB59159@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+ <20200402035816.GA46686@google.com>
 MIME-Version: 1.0
-In-Reply-To: <202004020047.401CEBED2@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200402035816.GA46686@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Wed, Apr 01, 2020 at 11:58:16PM -0400, Joel Fernandes wrote:
+> On Tue, Mar 31, 2020 at 09:40:37AM +0800, Boqun Feng wrote:
+> > On Fri, Mar 27, 2020 at 06:18:43PM -0400, Joel Fernandes wrote:
+> > > On Thu, Mar 26, 2020 at 10:40:18AM +0800, Boqun Feng wrote:
+> > > > A recent discussion raises up the requirement for having test cases for
+> > > > atomic APIs:
+> > > > 
+> > > > 	https://lore.kernel.org/lkml/20200213085849.GL14897@hirez.programming.kicks-ass.net/
+> > > > 
+> > > > , and since we already have a way to generate a test module from a
+> > > > litmus test with klitmus[1]. It makes sense that we add more litmus
+> > > > tests for atomic APIs. And based on the previous discussion, I create a
+> > > > new directory Documentation/atomic-tests and put these litmus tests
+> > > > here.
+> > > > 
+> > > > This patchset starts the work by adding the litmus tests which are
+> > > > already used in atomic_t.txt, and also improve the atomic_t.txt to make
+> > > > it consistent with the litmus tests.
+> > > > 
+> > > > Previous version:
+> > > > v1: https://lore.kernel.org/linux-doc/20200214040132.91934-1-boqun.feng@gmail.com/
+> > > > v2: https://lore.kernel.org/lkml/20200219062627.104736-1-boqun.feng@gmail.com/
+> > > > v3: https://lore.kernel.org/linux-doc/20200227004049.6853-1-boqun.feng@gmail.com/
+> > > 
+> > > For full series:
+> > > 
+> > > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > 
+> > > One question I had was in the existing atomic_set() documentation, it talks
+> > > about atomic_add_unless() implementation based on locking could have issues.
+> > > It says the way to fix such cases is:
+> > > 
+> > > Quote:
+> > >     the typical solution is to then implement atomic_set{}() with
+> > >     atomic_xchg().
+> > > 
+> > > I didn't get how using atomic_xchg() fixes it. Is the assumption there that
+> > > atomic_xchg() would be implemented using locking to avoid atomic_set() having
+> > 
+> > Right, I think that's the intent of the sentence.
+> > 
+> > > issues? If so, we could clarify that in the document.
+> > > 
+> > 
+> > Patches are welcome ;-)
+> 
+> 
+> ---8<-----------------------
+> 
+> Like this? I'll add it to my tree and send it to Paul during my next
+> series, unless you disagree ;-)
+> 
+> Subject: [PATCH] doc: atomic_t: Document better about the locking within
+>  atomic_xchg()
+> 
+> It is not fully clear how the atomic_set() would not cause an issue with
+> preservation of the atomicity of RMW in this example. Make it clear that
+> locking within atomic_xchg() would save the day.
+> 
+> Suggested-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
+Thanks!
 
-Le 02/04/2020 à 09:51, Kees Cook a écrit :
-> On Thu, Apr 02, 2020 at 07:34:17AM +0000, Christophe Leroy wrote:
->> [...]
->> diff --git a/kernel/compat.c b/kernel/compat.c
->> index 843dd17e6078..705ca7e418c6 100644
->> --- a/kernel/compat.c
->> +++ b/kernel/compat.c
->> @@ -199,7 +199,7 @@ long compat_get_bitmap(unsigned long *mask, const compat_ulong_t __user *umask,
->>   	bitmap_size = ALIGN(bitmap_size, BITS_PER_COMPAT_LONG);
->>   	nr_compat_longs = BITS_TO_COMPAT_LONGS(bitmap_size);
->>   
->> -	if (!user_access_begin(umask, bitmap_size / 8))
->> +	if (!user_write_access_begin(umask, bitmap_size / 8))
-> 
-> This looks mismatched: should be user_read_access_begin()?
+Acked-by: Boqun Feng <boqun.feng@gmail.com>
 
-Oops, looks like a copy/paste/modify where I modified the original 
-instead of the copy.
+Regards,
+Boqun
 
-
+> ---
+>  Documentation/atomic_t.txt | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
->>   		return -EFAULT;
->>   
->>   	while (nr_compat_longs > 1) {
->> @@ -211,11 +211,11 @@ long compat_get_bitmap(unsigned long *mask, const compat_ulong_t __user *umask,
->>   	}
->>   	if (nr_compat_longs)
->>   		unsafe_get_user(*mask, umask++, Efault);
->> -	user_access_end();
->> +	user_read_access_end();
->>   	return 0;
->>   
->>   Efault:
->> -	user_access_end();
->> +	user_read_access_end();
->>   	return -EFAULT;
->>   }
+> diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
+> index 0f1fdedf36bbb..1d9c307c73a7c 100644
+> --- a/Documentation/atomic_t.txt
+> +++ b/Documentation/atomic_t.txt
+> @@ -129,6 +129,8 @@ with a lock:
+>      unlock();
+>  
+>  the typical solution is to then implement atomic_set{}() with atomic_xchg().
+> +The locking within the atomic_xchg() in CPU1 would ensure that the value read
+> +in CPU0 would not be overwritten.
+>  
+>  
+>  RMW ops:
+> -- 
+> 2.26.0.292.g33ef6b2f38-goog
 > 
-> (These correctly end read access.)
-> 
->>   
->> @@ -228,7 +228,7 @@ long compat_put_bitmap(compat_ulong_t __user *umask, unsigned long *mask,
->>   	bitmap_size = ALIGN(bitmap_size, BITS_PER_COMPAT_LONG);
->>   	nr_compat_longs = BITS_TO_COMPAT_LONGS(bitmap_size);
->>   
->> -	if (!user_access_begin(umask, bitmap_size / 8))
->> +	if (!user_read_access_begin(umask, bitmap_size / 8))
-> 
-> And ..._write_... here?
-> 
->>   		return -EFAULT;
->>   
->>   	while (nr_compat_longs > 1) {
->> @@ -239,10 +239,10 @@ long compat_put_bitmap(compat_ulong_t __user *umask, unsigned long *mask,
->>   	}
->>   	if (nr_compat_longs)
->>   		unsafe_put_user((compat_ulong_t)*mask, umask++, Efault);
->> -	user_access_end();
->> +	user_write_access_end();
->>   	return 0;
->>   Efault:
->> -	user_access_end();
->> +	user_write_access_end();
->>   	return -EFAULT;
->>   }
-> 
-> (These correctly end write access.)
-> 
-> 
-> All the others look correct. With the above fixed:
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
-
-Thanks
-Christophe
