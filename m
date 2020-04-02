@@ -2,164 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF84B19BCC6
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 09:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C148119BD1F
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 09:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387605AbgDBHe0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Apr 2020 03:34:26 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:23971 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387585AbgDBHeW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 2 Apr 2020 03:34:22 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 48tFF71dHqz9txL4;
-        Thu,  2 Apr 2020 09:34:19 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=dH316VTH; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id cB3Z9uspnlX0; Thu,  2 Apr 2020 09:34:19 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 48tFF70Y5dz9txKx;
-        Thu,  2 Apr 2020 09:34:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1585812859; bh=IXjiKlijLtzQuR/CNi0kS3j7+7PM/7fqUO8AWUmnzeg=;
-        h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
-        b=dH316VTHpWXN0YwLXZ5i4UWGULcgudGp9mJnek1fhSl0Y/HsAU4fG8J2L9yvSuQ6J
-         LtfleDEeqfOjrsgHyJgx32CxRiKk0g0FuYneuZ2HGj96JA8ujXYKOc3/PbwHswqtXy
-         RHm7GnY1kAbKArKT/1gngRh5Jt3O3QfObjlI9G8U=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 06BA88B76E;
-        Thu,  2 Apr 2020 09:34:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id CME2grp4VRse; Thu,  2 Apr 2020 09:34:19 +0200 (CEST)
-Received: from pc16570vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9E8318B75E;
-        Thu,  2 Apr 2020 09:34:19 +0200 (CEST)
-Received: by pc16570vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 6E5E8656BF; Thu,  2 Apr 2020 07:34:19 +0000 (UTC)
-Message-Id: <ebcf8256e02a7dffb292f3d800e264dce263cac5.1585811416.git.christophe.leroy@c-s.fr>
-In-Reply-To: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
-References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [PATCH RESEND 4/4] powerpc/uaccess: Implement user_read_access_begin and
- user_write_access_begin
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        id S2387595AbgDBHzi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Apr 2020 03:55:38 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:37970 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726841AbgDBHzh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 03:55:37 -0400
+Received: by mail-pg1-f195.google.com with SMTP id x7so1482249pgh.5
+        for <linux-arch@vger.kernel.org>; Thu, 02 Apr 2020 00:55:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cNKPt9zws6tETOtG4clSFgvYQggRaWY4PbOPgRy3R/Q=;
+        b=NEr/HOuFOs50bDB/L0pQZVsoQ+Nyg7UDyLD4S8+MDPajx7NSq21pauFLuu8fuuS5HT
+         dA7TbZA2aW9xfHzx8uCcccW9e7W+yaqO5sU6kFMZUqI2AY+iLus6FD4e+eesLB4+PTnk
+         oebi07I1vQWsVfSymxAqSpu68Tvq2bSlWm8+E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cNKPt9zws6tETOtG4clSFgvYQggRaWY4PbOPgRy3R/Q=;
+        b=CN7tV8H0sEzU4jZVThCZAsV6R8Bk1JWZ8F+CLAAvDlzU4mGgVZFu1xzeqclrueYU2n
+         q6cVa1IW7nrmnpPYD+dU7lmHLHNWK8nA2dmLjvjgayetmIYq3C/HjsbyDy5zz8AYBFNq
+         H3O+1UzgTKKbaInKFy8wvA2oiLmPSg1P3GLhSAf8Y+eAGcZKQwQ4yIozaOPHeoRh2Z1F
+         iFKH7Sy2k3xIE7QDtx8a8DemcRzfmph8xZChYGseELPmIzWjiTPPLb19WFtkPmYz8kPr
+         57+fQJCdW8Du0Ye+9rmlmaRjZrRWAKm8sYurS56AL3NCbQquOVTfEXbOxh/ozeej8pzR
+         FU/A==
+X-Gm-Message-State: AGi0PuYT3YHz639kxmgPluWUXiy32T5ZpOSI3W5Exr8uUlAxC87OGgAc
+        V8zNds9sPDcuQgwmGhL5gz3ZvQ==
+X-Google-Smtp-Source: APiQypLB2ZurOAtjAAZY1rw1Oc9/IReJTqNfIyojiVL6ct3p3zeLZXi1W1njrDdywOR0TVbU9jwgMA==
+X-Received: by 2002:a62:1c4c:: with SMTP id c73mr1880326pfc.64.1585814134808;
+        Thu, 02 Apr 2020 00:55:34 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u21sm3185973pjy.8.2020.04.02.00.55.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2020 00:55:34 -0700 (PDT)
+Date:   Thu, 2 Apr 2020 00:46:56 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>, airlied@linux.ie,
         daniel@ffwll.ch, torvalds@linux-foundation.org,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        keescook@chromium.org, hpa@zytor.com
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org
-Date:   Thu,  2 Apr 2020 07:34:19 +0000 (UTC)
+Subject: Re: [PATCH RESEND 1/4] uaccess: Add user_read_access_begin/end and
+ user_write_access_begin/end
+Message-ID: <202004020046.96A2D21F@keescook>
+References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add support for selective read or write user access with
-user_read_access_begin/end and user_write_access_begin/end.
+On Thu, Apr 02, 2020 at 07:34:16AM +0000, Christophe Leroy wrote:
+> Some architectures like powerpc64 have the capability to separate
+> read access and write access protection.
+> For get_user() and copy_from_user(), powerpc64 only open read access.
+> For put_user() and copy_to_user(), powerpc64 only open write access.
+> But when using unsafe_get_user() or unsafe_put_user(),
+> user_access_begin open both read and write.
+> 
+> Other architectures like powerpc book3s 32 bits only allow write
+> access protection. And on this architecture protection is an heavy
+> operation as it requires locking/unlocking per segment of 256Mbytes.
+> On those architecture it is therefore desirable to do the unlocking
+> only for write access. (Note that book3s/32 ranges from very old
+> powermac from the 90's with powerpc 601 processor, till modern
+> ADSL boxes with PowerQuicc II modern processors for instance so it
+> is still worth considering)
+> 
+> In order to avoid any risk based of hacking some variable parameters
+> passed to user_access_begin/end that would allow hacking and
+> leaving user access open or opening too much, it is preferable to
+> use dedicated static functions that can't be overridden.
+> 
+> Add a user_read_access_begin and user_read_access_end to only open
+> read access.
+> 
+> Add a user_write_access_begin and user_write_access_end to only open
+> write access.
+> 
+> By default, when undefined, those new access helpers default on the
+> existing user_access_begin and user_access_end.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 
-Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
----
- arch/powerpc/include/asm/book3s/32/kup.h |  4 ++--
- arch/powerpc/include/asm/kup.h           | 14 +++++++++++++-
- arch/powerpc/include/asm/uaccess.h       | 22 ++++++++++++++++++++++
- 3 files changed, 37 insertions(+), 3 deletions(-)
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/arch/powerpc/include/asm/book3s/32/kup.h b/arch/powerpc/include/asm/book3s/32/kup.h
-index 3c0ba22dc360..1617e73bee30 100644
---- a/arch/powerpc/include/asm/book3s/32/kup.h
-+++ b/arch/powerpc/include/asm/book3s/32/kup.h
-@@ -108,7 +108,7 @@ static __always_inline void allow_user_access(void __user *to, const void __user
- 	u32 addr, end;
- 
- 	BUILD_BUG_ON(!__builtin_constant_p(dir));
--	BUILD_BUG_ON(dir == KUAP_CURRENT);
-+	BUILD_BUG_ON(dir & ~KUAP_READ_WRITE);
- 
- 	if (!(dir & KUAP_WRITE))
- 		return;
-@@ -131,7 +131,7 @@ static __always_inline void prevent_user_access(void __user *to, const void __us
- 
- 	BUILD_BUG_ON(!__builtin_constant_p(dir));
- 
--	if (dir == KUAP_CURRENT) {
-+	if (dir & KUAP_CURRENT_WRITE) {
- 		u32 kuap = current->thread.kuap;
- 
- 		if (unlikely(!kuap))
-diff --git a/arch/powerpc/include/asm/kup.h b/arch/powerpc/include/asm/kup.h
-index 92bcd1a26d73..c745ee41ad66 100644
---- a/arch/powerpc/include/asm/kup.h
-+++ b/arch/powerpc/include/asm/kup.h
-@@ -10,7 +10,9 @@
-  * Use the current saved situation instead of the to/from/size params.
-  * Used on book3s/32
-  */
--#define KUAP_CURRENT	4
-+#define KUAP_CURRENT_READ	4
-+#define KUAP_CURRENT_WRITE	8
-+#define KUAP_CURRENT		(KUAP_CURRENT_READ | KUAP_CURRENT_WRITE)
- 
- #ifdef CONFIG_PPC64
- #include <asm/book3s/64/kup-radix.h>
-@@ -101,6 +103,16 @@ static inline void prevent_current_access_user(void)
- 	prevent_user_access(NULL, NULL, ~0UL, KUAP_CURRENT);
- }
- 
-+static inline void prevent_current_read_from_user(void)
-+{
-+	prevent_user_access(NULL, NULL, ~0UL, KUAP_CURRENT_READ);
-+}
-+
-+static inline void prevent_current_write_to_user(void)
-+{
-+	prevent_user_access(NULL, NULL, ~0UL, KUAP_CURRENT_WRITE);
-+}
-+
- #endif /* !__ASSEMBLY__ */
- 
- #endif /* _ASM_POWERPC_KUAP_H_ */
-diff --git a/arch/powerpc/include/asm/uaccess.h b/arch/powerpc/include/asm/uaccess.h
-index 2f500debae21..4427d419eb1d 100644
---- a/arch/powerpc/include/asm/uaccess.h
-+++ b/arch/powerpc/include/asm/uaccess.h
-@@ -468,6 +468,28 @@ static __must_check inline bool user_access_begin(const void __user *ptr, size_t
- #define user_access_save	prevent_user_access_return
- #define user_access_restore	restore_user_access
- 
-+static __must_check inline bool
-+user_read_access_begin(const void __user *ptr, size_t len)
-+{
-+	if (unlikely(!access_ok(ptr, len)))
-+		return false;
-+	allow_read_from_user(ptr, len);
-+	return true;
-+}
-+#define user_read_access_begin	user_read_access_begin
-+#define user_read_access_end		prevent_current_read_from_user
-+
-+static __must_check inline bool
-+user_write_access_begin(const void __user *ptr, size_t len)
-+{
-+	if (unlikely(!access_ok(ptr, len)))
-+		return false;
-+	allow_write_to_user((void __user *)ptr, len);
-+	return true;
-+}
-+#define user_write_access_begin	user_write_access_begin
-+#define user_write_access_end		prevent_current_write_to_user
-+
- #define unsafe_op_wrap(op, err) do { if (unlikely(op)) goto err; } while (0)
- #define unsafe_get_user(x, p, e) unsafe_op_wrap(__get_user_allowed(x, p), e)
- #define unsafe_put_user(x, p, e) unsafe_op_wrap(__put_user_allowed(x, p), e)
+-Kees
+
+> Link: https://patchwork.ozlabs.org/patch/1227926/
+> ---
+> Resending this series as I mistakenly only sent it to powerpc list
+> begining of February (https://patchwork.ozlabs.org/patch/1233172/)
+> 
+> This series is based on the discussion we had in January, see
+> https://patchwork.ozlabs.org/patch/1227926/ . I tried to
+> take into account all remarks, especially @hpa 's remark to use
+> a fixed API on not base the relocking on a magic id returned at
+> unlocking.
+> 
+> This series is awaited for implementing selective lkdtm test to
+> test powerpc64 independant read and write protection, see
+> https://patchwork.ozlabs.org/patch/1231765/
+> 
+>  include/linux/uaccess.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+> index 67f016010aad..9861c89f93be 100644
+> --- a/include/linux/uaccess.h
+> +++ b/include/linux/uaccess.h
+> @@ -378,6 +378,14 @@ extern long strnlen_unsafe_user(const void __user *unsafe_addr, long count);
+>  static inline unsigned long user_access_save(void) { return 0UL; }
+>  static inline void user_access_restore(unsigned long flags) { }
+>  #endif
+> +#ifndef user_write_access_begin
+> +#define user_write_access_begin user_access_begin
+> +#define user_write_access_end user_access_end
+> +#endif
+> +#ifndef user_read_access_begin
+> +#define user_read_access_begin user_access_begin
+> +#define user_read_access_end user_access_end
+> +#endif
+>  
+>  #ifdef CONFIG_HARDENED_USERCOPY
+>  void usercopy_warn(const char *name, const char *detail, bool to_user,
+> -- 
+> 2.25.0
+> 
+
 -- 
-2.25.0
-
+Kees Cook
