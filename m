@@ -2,179 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A3019C792
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 19:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F02919C7F3
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 19:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733055AbgDBRDd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Apr 2020 13:03:33 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:58988 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732218AbgDBRDc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 2 Apr 2020 13:03:32 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 48tTsr5rRRz9vBmV;
-        Thu,  2 Apr 2020 19:03:28 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=ACiTytRZ; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id AvlDP2sR7zTb; Thu,  2 Apr 2020 19:03:28 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 48tTsr4JmWz9vBmS;
-        Thu,  2 Apr 2020 19:03:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1585847008; bh=JzGfy64woJ08evugoWBAVtqz/vtq+HHi55dh1/1+x5A=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ACiTytRZC+Xj1EuNnjHaWbbYCnJ8CD46NNiCXRQXdSw8VyzeFkJ2iXIguFAur/WXP
-         cGiaTz0jzh4b++Xtfz3FYdDzGi39XWjPpP47djmAbDbgW6+Qcumeu76BQzwby7Kadg
-         qsGptG6uO/KhtseD57NVkod6GcuUBabHLVYA7YLY=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id EDF298B93A;
-        Thu,  2 Apr 2020 19:03:29 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id IdlgMSKFOZLT; Thu,  2 Apr 2020 19:03:29 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C52AF8B925;
-        Thu,  2 Apr 2020 19:03:28 +0200 (CEST)
-Subject: Re: [PATCH RESEND 1/4] uaccess: Add user_read_access_begin/end and
- user_write_access_begin/end
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, airlied@linux.ie,
-        daniel@ffwll.ch, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, keescook@chromium.org, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        id S2388908AbgDBR0m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Apr 2020 13:26:42 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:39072 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388815AbgDBR0l (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 13:26:41 -0400
+Received: by mail-pg1-f194.google.com with SMTP id g32so2149326pgb.6
+        for <linux-arch@vger.kernel.org>; Thu, 02 Apr 2020 10:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H5lB7pAvXIGYlFSVzFQn+Y4Z8wDMSG1ZSww0VcSBoT8=;
+        b=gKNvgOy8hc6wCQvlSge37MBqulJCBRagCkj447Qm1o8xx2FINMhQg5yknXEoUR6m+Z
+         ULQfZI01R/Qh6BD8443+HVRJj3c4uKax+LRFJqInEv1IolAfai65y4GBiay60zRG7BpJ
+         TCadjYWSD4d+eJ6tLlRgQ4de9aCNzq574JQwM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H5lB7pAvXIGYlFSVzFQn+Y4Z8wDMSG1ZSww0VcSBoT8=;
+        b=Supc1wPuuSQcwZBg50XMMzSxWkTqD8hMsBQ1N9phtg+vzGeVhaoQo6J3SV5tJeAGte
+         jhjUMJE5oEQyBPR2eWDxdx+KdE7Ix6slp3W1EPlRME9Gt20YfqzcwSqUQ5/Og0I1EtQD
+         zj9rFlfAelSkNVE2OBFBp1aHxel8sM8dNMcqZkqFu/zWDnQ6sN8P51V5DEXyG8zHENBf
+         9F2EZD0pIsRlLWsZQy2+F5pOm83P+ZHEFjc5Aaxs7zZzbXS8zAMepSZfY6CpB+5UHtWP
+         f4UNUuFWA26EJkUx4Dcy7ZYMovNpeKs+J7iFgBAKPQIqL1rMUk/Xei1SsfwcHXYwVwjU
+         tuSw==
+X-Gm-Message-State: AGi0PuZMIITpibh9+6wDHgDmVi75GSshGaD0mo1vBUuhlkCdSm+NIerx
+        69UOxzZORHwNZhYZJmcavfbRPg==
+X-Google-Smtp-Source: APiQypJ2hmcB7ZLOhajLAuwgEV7uDtr5aTLCSP2mbBo/qg5FkMdgwdaJkp+Be18iVsLhUUcAH8dMmA==
+X-Received: by 2002:a05:6a00:2cf:: with SMTP id b15mr4105568pft.174.1585848400117;
+        Thu, 02 Apr 2020 10:26:40 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p1sm4171243pjr.40.2020.04.02.10.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2020 10:26:39 -0700 (PDT)
+Date:   Thu, 2 Apr 2020 10:26:38 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Borislav Petkov <bp@suse.de>, "H.J. Lu" <hjl.tools@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
- <20200402162942.GG23230@ZenIV.linux.org.uk>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <67e21b65-0e2d-7ca5-7518-cec1b7abc46c@c-s.fr>
-Date:   Thu, 2 Apr 2020 19:03:28 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/9] Enable orphan section warning
+Message-ID: <202004021023.D3D8AA3BE@keescook>
+References: <20200228002244.15240-1-keescook@chromium.org>
+ <CA+icZUWTnP8DYfbaMwKtJbG30v7bB4w6=ywo8gn8fvwr731mUQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200402162942.GG23230@ZenIV.linux.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+icZUWTnP8DYfbaMwKtJbG30v7bB4w6=ywo8gn8fvwr731mUQ@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 02/04/2020 à 18:29, Al Viro a écrit :
-> On Thu, Apr 02, 2020 at 07:34:16AM +0000, Christophe Leroy wrote:
->> Some architectures like powerpc64 have the capability to separate
->> read access and write access protection.
->> For get_user() and copy_from_user(), powerpc64 only open read access.
->> For put_user() and copy_to_user(), powerpc64 only open write access.
->> But when using unsafe_get_user() or unsafe_put_user(),
->> user_access_begin open both read and write.
->>
->> Other architectures like powerpc book3s 32 bits only allow write
->> access protection. And on this architecture protection is an heavy
->> operation as it requires locking/unlocking per segment of 256Mbytes.
->> On those architecture it is therefore desirable to do the unlocking
->> only for write access. (Note that book3s/32 ranges from very old
->> powermac from the 90's with powerpc 601 processor, till modern
->> ADSL boxes with PowerQuicc II modern processors for instance so it
->> is still worth considering)
->>
->> In order to avoid any risk based of hacking some variable parameters
->> passed to user_access_begin/end that would allow hacking and
->> leaving user access open or opening too much, it is preferable to
->> use dedicated static functions that can't be overridden.
->>
->> Add a user_read_access_begin and user_read_access_end to only open
->> read access.
->>
->> Add a user_write_access_begin and user_write_access_end to only open
->> write access.
->>
->> By default, when undefined, those new access helpers default on the
->> existing user_access_begin and user_access_end.
+On Thu, Apr 02, 2020 at 06:20:57PM +0200, Sedat Dilek wrote:
+> On Fri, Feb 28, 2020 at 1:22 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Hi!
+> >
+> > A recent bug was solved for builds linked with ld.lld, and tracking
+> > it down took way longer than it needed to (a year). Ultimately, it
+> > boiled down to differences between ld.bfd and ld.lld's handling of
+> > orphan sections. Similarly, the recent FGKASLR series brough up orphan
+> > section handling too[2]. In both cases, it would have been nice if the
+> > linker was running with --orphan-handling=warn so that surprise sections
+> > wouldn't silently get mapped into the kernel image at locations up to
+> > the whim of the linker's orphan handling logic. Instead, all desired
+> > sections should be explicitly identified in the linker script (to be
+> > either kept or discarded) with any orphans throwing a warning. The
+> > powerpc architecture actually already does this, so this series seeks
+> > to extend this coverage to x86, arm64, and arm.
+> >
+> > This series depends on tip/x86/boot (where recent .eh_frame fixes[3]
+> > landed), and has a minor conflict[4] with the ARM tree (related to
+> > the earlier mentioned bug). As it uses refactorings in the asm-generic
+> > linker script, and makes changes to kbuild, I think the cleanest place
+> > for this series to land would also be through -tip. Once again (like
+> > my READ_IMPLIES_EXEC series), I'm looking to get maintainer Acks so
+> > this can go all together with the least disruption. Splitting it up by
+> > architecture seems needlessly difficult.
+> >
+> > Thanks!
+> >
 > 
-> The only problem I have is that we'd better choose the calling
-> conventions that work for other architectures as well.
+> Hi Kees,
 > 
-> AFAICS, aside of ppc and x86 we have (at least) this:
-> arm:
-> 	unsigned int __ua_flags = uaccess_save_and_enable();
-> 	...
-> 	uaccess_restore(__ua_flags);
-> arm64:
-> 	uaccess_enable_not_uao();
-> 	...
-> 	uaccess_disable_not_uao();
-> riscv:
-> 	__enable_user_access();
-> 	...
-> 	__disable_user_access();
-> s390/mvc:
-> 	old_fs = enable_sacf_uaccess();
-> 	...
->          disable_sacf_uaccess(old_fs);
-> 
-> arm64 and riscv are easy - they map well on what we have now.
-> The interesting ones are ppc, arm and s390.
-> 
-> You wants to specify the kind of access; OK, but...  it's not just read
-> vs. write - there's read-write as well.  AFAICS, there are 3 users of
-> that:
-> 	* copy_in_user()
-> 	* arch_futex_atomic_op_inuser()
-> 	* futex_atomic_cmpxchg_inatomic()
-> The former is of dubious utility (all users outside of arch are in
-> the badly done compat code), but the other two are not going to go
-> away.
+> what is the status of this patchset?
+> Looks like it is not in tip or linux-next Git.
 
-user_access_begin() grants both read and write.
+Based on the feedback, I have 3 TODO items:
 
-This patch adds user_read_access_begin() and user_write_access_begin() 
-but it doesn't remove user_access_begin()
+- track down and eliminate (or explain) the source of the .got.plt on arm64
+- enable orphan warnings for _all_ architectures
+- refactor final link logic to perform the orphan warning in a clean way
 
-> 
-> What should we do about that?  Do we prohibit such blocks outside
-> of arch?
-> 
-> What should we do about arm and s390?  There we want a cookie passed
-> from beginning of block to its end; should that be a return value?
+I'm working through these (and other work) still. I'm hoping to have
+another version up some time next week.
 
-That was the way I implemented it in January, see 
-https://patchwork.ozlabs.org/patch/1227926/
-
-There was some discussion around that and most noticeable was:
-
-H. Peter (hpa) said about it: "I have *deep* concern with carrying state 
-in a "key" variable: it's a direct attack vector for a crowbar attack, 
-especially since it is by definition live inside a user access region."
-
-> 
-> And at least on arm that thing nests (see e.g. __clear_user_memset()
-> there), so "stash that cookie in current->something" is not a solution...
-> 
-> Folks, let's sort that out while we still have few users of that
-> interface; changing the calling conventions later will be much harder.
-> Comments?
-> 
-
-This patch minimises the change by just adding user_read_access_begin() 
-and user_write_access_begin() keeping the same parameters as the 
-existing user_access_begin().
-
-So I can come back to a mix of this patch and the January version if it 
-corresponds to everyone's view, it will also be a bit easier for powerpc 
-(especially book3s/32). But that didn't seem to be the expected 
-direction back when we discussed it in January.
-
-Christophe
+-- 
+Kees Cook
