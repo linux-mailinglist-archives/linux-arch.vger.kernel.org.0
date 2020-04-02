@@ -2,140 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A17F019C8DC
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 20:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6871D19CA0D
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 21:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389665AbgDBSgA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Apr 2020 14:36:00 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34485 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389618AbgDBSgA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 14:36:00 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 23so2177258pfj.1
-        for <linux-arch@vger.kernel.org>; Thu, 02 Apr 2020 11:36:00 -0700 (PDT)
+        id S2388658AbgDBTeZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Apr 2020 15:34:25 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:40056 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729033AbgDBTeZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 15:34:25 -0400
+Received: by mail-ed1-f68.google.com with SMTP id w26so5871892edu.7
+        for <linux-arch@vger.kernel.org>; Thu, 02 Apr 2020 12:34:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MBBRhcWlTmLjshW9NwjTAABOEAhTDX32vhb9ox45OjU=;
-        b=IEfTzILKyLkhfpwHgMwKAHNo0SXkWWQIbDRvPlZWRptpe05omv5tLovfYlECAnyWcE
-         tiE4YcdCHVMysKGnFUGnEjP0YzlOl8lC/YVB5X+cGbPq+ubht5zYup99LDWEVEf37kzF
-         V2Lm4oZXPYl9YKd/oMwN6nHggdELP0qetvbBw=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VNVfYQcU5r7QqnygVgwbeTwWR3NWKnCIk7XJifmEK+g=;
+        b=WFRj2oMOOBQ9Ye/JZJICZujrvRy2hkbOR9uXKlMdFDvf9Q5Lq80wgWioeP0e0rs0oj
+         n0Wk/vH8ieHoUcWgLtyDYX5P7nJxjuAYNdlNyNknULgO81UVaZJ0LqdKLLefqzuqrqZf
+         RMdkwJXPuZPoAbZGgiU6xp+RQahaYFh5oXLKg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MBBRhcWlTmLjshW9NwjTAABOEAhTDX32vhb9ox45OjU=;
-        b=fWYDA4vX6mBprUa1YYLjmwNjWfZ3LSDcERHmvjD5AsxEwYftyxw9PciKkqCcejRudk
-         nOGk9fFXijY+0dM1aNis8h05XxfDkItqn4UrccAuurDeL0kD2m78mvKp8J7NCS9R6rY9
-         4ulbk3COtcVljEDaqtVTwr13C5AI3GfAkpk/u1VNiKphID3p7dfAo88KgmaD/CL/ZH7p
-         Oq+g00BSmNukSSs/+KhWhHfEH4QOfi51uq020Ge5ARw1jyKN1G4cmO5bsrnhQ+XRL8re
-         ixpylh6202Bd7FPsOedY0BMHGooV4NUE+bfNtN7d8uZlt6jFZ7LStqgHbH1o7Kn8WuMh
-         +KiQ==
-X-Gm-Message-State: AGi0PuZUybgccDVl9Ab6rt/NMb3Cf1OWe92A+Frx0deNrrE6n5nbEvme
-        SXSb7ia0N2QeMcdfuv31PQa3yA==
-X-Google-Smtp-Source: APiQypL88WhZOnrTMVmaoC4rwp7riCtTsgSSYjJzsJsGIRi1RUlgzkKuTBBp5rtjR5K09Q2BMk3zag==
-X-Received: by 2002:a65:62ce:: with SMTP id m14mr56221pgv.174.1585852559728;
-        Thu, 02 Apr 2020 11:35:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h198sm4203102pfe.76.2020.04.02.11.35.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2020 11:35:58 -0700 (PDT)
-Date:   Thu, 2 Apr 2020 11:35:57 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VNVfYQcU5r7QqnygVgwbeTwWR3NWKnCIk7XJifmEK+g=;
+        b=tU4lOyKao++XHIKd/6pABYwEW3Z0TY14gAq3MhLBo4TfkgJEOynU43UUh23w+9kLT2
+         xEiy7TD2N9wgJA38uswvXij5IhTleMa6vBKSumH0RS98P36fD3U3pgPtAgM/fLlrit57
+         OUC4lsH5zcul5xtRkND+TLuy6PPLg2/t8oL+taE/5vy2rDZ4OdGG1KW/FStG54crspTC
+         KRs8qNJNef4pXSxazftYnUV2GguNfpJ7huZU7xbHtEFv+tQxqwtLJaQVRp1DnWKDDu+l
+         KxVy9kq/nk3dCOS4E//b01zo6acxlSFsHh2CmWBPRSqaVGQuEEdkeoul+ZAN7/BTPyA7
+         ChJw==
+X-Gm-Message-State: AGi0PuZxKTeh7O7G5ogM2HVskQwzBnjVxZLnWvHrn0ntBSb28y1e/3Q5
+        CAQfEHOjnVMERugki9gq7+jrwnbHjTs=
+X-Google-Smtp-Source: APiQypLRiGaR15cGO3J4n0OPPRNs2IClo4DoUahZU917UdP6wzvKq0RkpET3P6fG2DmuH7w0X3T3WQ==
+X-Received: by 2002:aa7:d78b:: with SMTP id s11mr4699970edq.226.1585856062947;
+        Thu, 02 Apr 2020 12:34:22 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id s15sm1108154edu.97.2020.04.02.12.34.22
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Apr 2020 12:34:22 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id h15so5632335wrx.9
+        for <linux-arch@vger.kernel.org>; Thu, 02 Apr 2020 12:34:22 -0700 (PDT)
+X-Received: by 2002:a2e:8911:: with SMTP id d17mr2938169lji.16.1585855628859;
+ Thu, 02 Apr 2020 12:27:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
+ <20200402162942.GG23230@ZenIV.linux.org.uk> <67e21b65-0e2d-7ca5-7518-cec1b7abc46c@c-s.fr>
+ <20200402175032.GH23230@ZenIV.linux.org.uk> <202004021132.813F8E88@keescook>
+In-Reply-To: <202004021132.813F8E88@keescook>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 2 Apr 2020 12:26:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg9cSm=AjPmkasNHBDwuW4D10jszjv6EeCKp8V9Qbx2hg@mail.gmail.com>
+Message-ID: <CAHk-=wg9cSm=AjPmkasNHBDwuW4D10jszjv6EeCKp8V9Qbx2hg@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/4] uaccess: Add user_read_access_begin/end and user_write_access_begin/end
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, airlied@linux.ie,
-        daniel@ffwll.ch, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Anvin <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Russell King <linux@armlinux.org.uk>,
         Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: [PATCH RESEND 1/4] uaccess: Add user_read_access_begin/end and
- user_write_access_begin/end
-Message-ID: <202004021132.813F8E88@keescook>
-References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
- <20200402162942.GG23230@ZenIV.linux.org.uk>
- <67e21b65-0e2d-7ca5-7518-cec1b7abc46c@c-s.fr>
- <20200402175032.GH23230@ZenIV.linux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200402175032.GH23230@ZenIV.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 02, 2020 at 06:50:32PM +0100, Al Viro wrote:
-> On Thu, Apr 02, 2020 at 07:03:28PM +0200, Christophe Leroy wrote:
-> 
-> > user_access_begin() grants both read and write.
-> > 
-> > This patch adds user_read_access_begin() and user_write_access_begin() but
-> > it doesn't remove user_access_begin()
-> 
-> Ouch...  So the most generic name is for the rarest case?
->  
-> > > What should we do about that?  Do we prohibit such blocks outside
-> > > of arch?
-> > > 
-> > > What should we do about arm and s390?  There we want a cookie passed
-> > > from beginning of block to its end; should that be a return value?
-> > 
-> > That was the way I implemented it in January, see
-> > https://patchwork.ozlabs.org/patch/1227926/
-> > 
-> > There was some discussion around that and most noticeable was:
-> > 
-> > H. Peter (hpa) said about it: "I have *deep* concern with carrying state in
-> > a "key" variable: it's a direct attack vector for a crowbar attack,
-> > especially since it is by definition live inside a user access region."
-> 
-> > This patch minimises the change by just adding user_read_access_begin() and
-> > user_write_access_begin() keeping the same parameters as the existing
-> > user_access_begin().
-> 
-> Umm...  What about the arm situation?  The same concerns would apply there,
-> wouldn't they?  Currently we have
-> static __always_inline unsigned int uaccess_save_and_enable(void)
-> {
-> #ifdef CONFIG_CPU_SW_DOMAIN_PAN
->         unsigned int old_domain = get_domain();
-> 
->         /* Set the current domain access to permit user accesses */
->         set_domain((old_domain & ~domain_mask(DOMAIN_USER)) |
->                    domain_val(DOMAIN_USER, DOMAIN_CLIENT));
-> 
->         return old_domain;
-> #else
->         return 0;
-> #endif
-> }
-> and
-> static __always_inline void uaccess_restore(unsigned int flags)
-> {
-> #ifdef CONFIG_CPU_SW_DOMAIN_PAN
->         /* Restore the user access mask */
->         set_domain(flags);
-> #endif
-> }
-> 
-> How much do we need nesting on those, anyway?  rmk?
+On Thu, Apr 2, 2020 at 11:36 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Yup, I think it's a weakness of the ARM implementation and I'd like to
+> not extend it further. AFAIK we should never nest, but I would not be
+> surprised at all if we did.
 
-Yup, I think it's a weakness of the ARM implementation and I'd like to
-not extend it further. AFAIK we should never nest, but I would not be
-surprised at all if we did.
+Wel, at least the user_access_begin/end() sections can't nest. objtool
+verifies and warns about that on x86.
 
-If we were looking at a design goal for all architectures, I'd like
-to be doing what the public PaX patchset did for their memory access
-switching, which is to alarm if calling into "enable" found the access
-already enabled, etc. Such a condition would show an unexpected nesting
-(like we've seen with similar constructs with set_fs() not getting reset
-during an exception handler, etc etc).
+> If we were looking at a design goal for all architectures, I'd like
+> to be doing what the public PaX patchset
 
--- 
-Kees Cook
+We already do better than PaX ever did. Seriously. Mainline has long
+since passed their hacky garbage.
+
+Plus PaX  and grsecurity should be actively shunned. Don't look at it,
+don't use it, and tell everybody you know to not use that shit.
+
+                Linus
