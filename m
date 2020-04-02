@@ -2,159 +2,330 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AA319BACC
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 05:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F1719BBE0
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Apr 2020 08:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732667AbgDBD6V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Apr 2020 23:58:21 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:35663 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387440AbgDBD6T (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Apr 2020 23:58:19 -0400
-Received: by mail-qt1-f194.google.com with SMTP id e14so2240514qts.2
-        for <linux-arch@vger.kernel.org>; Wed, 01 Apr 2020 20:58:17 -0700 (PDT)
+        id S1726743AbgDBGoy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Apr 2020 02:44:54 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36459 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728628AbgDBGox (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 02:44:53 -0400
+Received: by mail-pf1-f194.google.com with SMTP id n10so1315036pff.3
+        for <linux-arch@vger.kernel.org>; Wed, 01 Apr 2020 23:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FIyZcbBeG4NXJvMIHPgjJKueNZcgIVXv/zRU7nobAb0=;
-        b=Pc/GApuxKxKJ4bznwNkN+CkN4TiVYXmSvMHqy3rRcc2gAFWoLbpnys6Er6Ql+hrGx5
-         uWA5/opZRWMsm0gpqLB6ENnw2y+J3UKL1HFFWzEO3kqeNAUHHgdpqPP23VSHgYl4JylN
-         Vh7w3QiNKuKjVsCz12A9nX5Tl3VEfmxtkYzg8=
+        d=gmail.com; s=20161025;
+        h=date:message-id:from:to:cc:subject:in-reply-to:references
+         :user-agent:mime-version;
+        bh=S4SlQ3e+EZ6SDaUiakB1CPyQmRVNGf9vc9KaHceq+BU=;
+        b=ic6Zuf81nmEyqySK7chhogXXgcva9iEtBkp//7BP6obgEDp8l5crUTzEZA81lmjLLN
+         9QTQlMXxLzWGOEs15bhq9/QR9nbqB37vLS9ED/zKaQf8YCHm2I8MEd1cJypO0QKCD20A
+         ogK9zjFWOkdDCxrh8brrqnDD7N3YTGTMbBqrgxdAwxRsJIJOZ4Lvz0loM3xdSpLTXjKj
+         dAC1XuFD3rYkiLswW9MRzbV35/ZTmhjINDuhvaMtNVcwNWqAXBGSgDtSDhHRER1mcWQ1
+         AMXt75uluOG6L0JT6NzkSpx5fEUr8WkHnqT9uCiLJg/N8ZI7zQxdkjgDBLWWMMWcZLQ7
+         nZKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FIyZcbBeG4NXJvMIHPgjJKueNZcgIVXv/zRU7nobAb0=;
-        b=Di+CStj7drlV59Sg7sHlkXvZwgsRzDzxa6lTT1wBDs62gZCMEaJOpD6FGEOx/utF4y
-         +FcCOoftYu0Qa974h8GUSsvL64jrAPkcdJ8RWscGND+FIknprJsNRrSlNehq0GpPkxZQ
-         J8rYZQ06X+FEnvZQ4PFBU7575nvVyw96Vt6+NTgpv74XKTMzKR6Ao883Z/T5qsFMkJBN
-         FQP8xZpjbuULsAguviRaQr3/qSHrrJ2QqYKqxVuernd8gfmQMlDAu6NKDtdYCPo0vzWy
-         KjXdyMxzLxFQrBqdzxftFsX13Bu4/220jhZZUtZNZ7NYHQEcnWXDyaPK5nuI49IZLG8O
-         h0/g==
-X-Gm-Message-State: AGi0PuYarmZNezv92n2EaXaQB08zaHe8JnxfQJp4eZEZB2zJhMzFmntG
-        W9CKSjIH/3H9vceHHNorqD1+bw==
-X-Google-Smtp-Source: APiQypLI/ljsVswFPJHBN8JmhzhORetkqVNWwTsAxc6mCYlKhNGyM+vomCJUSXIada/n7ObMO2EvJw==
-X-Received: by 2002:ac8:33cd:: with SMTP id d13mr990302qtb.265.1585799897328;
-        Wed, 01 Apr 2020 20:58:17 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id x74sm2833685qkb.40.2020.04.01.20.58.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2020 20:58:16 -0700 (PDT)
-Date:   Wed, 1 Apr 2020 23:58:16 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] Documentation/litmus-tests: Add litmus tests for
- atomic APIs
-Message-ID: <20200402035816.GA46686@google.com>
-References: <20200326024022.7566-1-boqun.feng@gmail.com>
- <20200327221843.GA226939@google.com>
- <20200331014037.GB59159@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200331014037.GB59159@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
+         :references:user-agent:mime-version;
+        bh=S4SlQ3e+EZ6SDaUiakB1CPyQmRVNGf9vc9KaHceq+BU=;
+        b=gSMyfGeWFGjoeKOLX+XpMVrRpCXUZRxLasSvcq+7bN/E3wV1GQevNmdWFNU/Enr9I0
+         RkHLKtIiXmwwu6XJG7jyfNBpIuoHWTstB6G/dVmV8zEatZY04cRdWKKlRwTFLFtfn4rd
+         O2Y69jZsq0ycWZ2cdVEKWmY1Sr1uYXBtH/uUpcVIAm5qkZrXja2kr93PWc2HtA5EFgL/
+         v7MJwiMGk+/gNsRRVRV/gbKpbaVBSf8KjCK4eU5GhQ5XMuECU1aXDXi7mU697VGVMExl
+         tl6rYG0s5xsnMd/nbGfXJimAmeeMn/rnG46o24Sd2X8ljASzjoASpw6oBA15kFwTAXNY
+         zpsQ==
+X-Gm-Message-State: AGi0PubVGVa0QIDnvjxRm91V0+Ftof4VSzazAL8GUVsQt2VNXj81adOS
+        J0TW7A+l+30KLcwHdScXVkWSYq298gnvbw==
+X-Google-Smtp-Source: APiQypKWnAnuPOUFIUEXQ209MjGkBtq7cBbciDB6ElIZlkUhrjLYc5oIpt0nx76x9C5LkA0kHuhDig==
+X-Received: by 2002:aa7:9a47:: with SMTP id x7mr1684845pfj.29.1585809891764;
+        Wed, 01 Apr 2020 23:44:51 -0700 (PDT)
+Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
+        by smtp.gmail.com with ESMTPSA id o3sm2710651pgk.21.2020.04.01.23.44.45
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 01 Apr 2020 23:44:50 -0700 (PDT)
+Date:   Thu, 02 Apr 2020 15:44:44 +0900
+Message-ID: <m2tv22wfmr.wl-thehajime@gmail.com>
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     johannes@sipsolutions.net
+Cc:     richard.weinberger@gmail.com, linux-arch@vger.kernel.org,
+        levex@linux.com, mattator@gmail.com, cem@freebsd.org,
+        tavi.purdila@gmail.com, jiangshanlai@gmail.com,
+        staal1978@gmail.com, motomuman@gmail.com,
+        linux-um@lists.infradead.org, retrage01@gmail.com,
+        petrosagg@gmail.com, liuyuan@google.com, mark@stillwell.me,
+        pscollins@google.com, linux-kernel-library@freelists.org,
+        phh@phh.me, sigmaepsilon92@gmail.com, luca.dariz@gmail.com,
+        edisonmcastro@hotmail.com
+Subject: Re: [RFC v4 02/25] um lkl: architecture skeleton for Linux kernel library
+In-Reply-To: <ba2199bd17b6457c97305f6688b13ed36e7feac3.camel@sipsolutions.net>
+References: <cover.1585579244.git.thehajime@gmail.com>
+        <dca6ea7260830a03c060f57e6ab9961f16ad55ed.1585579244.git.thehajime@gmail.com>
+        <a84f3d7bcddbaa6125349c4bcdec6e3e07d6b783.camel@sipsolutions.net>
+        <CAFLxGvyFqXZSmMcD_=o81AHLzdM_u2iH8h412w7VZrxON7Ohig@mail.gmail.com>
+        <m21rp9xaqt.wl-thehajime@gmail.com>
+        <ba2199bd17b6457c97305f6688b13ed36e7feac3.camel@sipsolutions.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 09:40:37AM +0800, Boqun Feng wrote:
-> On Fri, Mar 27, 2020 at 06:18:43PM -0400, Joel Fernandes wrote:
-> > On Thu, Mar 26, 2020 at 10:40:18AM +0800, Boqun Feng wrote:
-> > > A recent discussion raises up the requirement for having test cases for
-> > > atomic APIs:
-> > > 
-> > > 	https://lore.kernel.org/lkml/20200213085849.GL14897@hirez.programming.kicks-ass.net/
-> > > 
-> > > , and since we already have a way to generate a test module from a
-> > > litmus test with klitmus[1]. It makes sense that we add more litmus
-> > > tests for atomic APIs. And based on the previous discussion, I create a
-> > > new directory Documentation/atomic-tests and put these litmus tests
-> > > here.
-> > > 
-> > > This patchset starts the work by adding the litmus tests which are
-> > > already used in atomic_t.txt, and also improve the atomic_t.txt to make
-> > > it consistent with the litmus tests.
-> > > 
-> > > Previous version:
-> > > v1: https://lore.kernel.org/linux-doc/20200214040132.91934-1-boqun.feng@gmail.com/
-> > > v2: https://lore.kernel.org/lkml/20200219062627.104736-1-boqun.feng@gmail.com/
-> > > v3: https://lore.kernel.org/linux-doc/20200227004049.6853-1-boqun.feng@gmail.com/
-> > 
-> > For full series:
-> > 
-> > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > 
-> > One question I had was in the existing atomic_set() documentation, it talks
-> > about atomic_add_unless() implementation based on locking could have issues.
-> > It says the way to fix such cases is:
-> > 
-> > Quote:
-> >     the typical solution is to then implement atomic_set{}() with
-> >     atomic_xchg().
-> > 
-> > I didn't get how using atomic_xchg() fixes it. Is the assumption there that
-> > atomic_xchg() would be implemented using locking to avoid atomic_set() having
+
+Hello,
+
+# dropped an address from Cc as it's not reachable.
+
+On Wed, 01 Apr 2020 05:16:58 +0900,
+Johannes Berg wrote:
+
+> > > For the step 1, we put LKL as one of UMMODE in order to make less effort to
+> > > integrate (make ARCH=um UMMODE=library).  The modification to existing UML
+> > > code is trying to be minimized.
 > 
-> Right, I think that's the intent of the sentence.
+> > The current step (1 in the milestone) tries to cover this goal:
+> > splitting ARCH=um into UMMODE_KERNEL and UMMODE_LIB.
 > 
-> > issues? If so, we could clarify that in the document.
+> So maybe we're doing this backwards?
+> 
+> I mean ... you're trying to minimize the UML code changes, while I'm
+> sort of arguing for maximizing them, to achieve a cleaner split.
+
+I see the point.
+
+> In a sense, I think if this is to happen, then we're in it for the long
+> haul. Meaning that we don't actually need all of this working
+> immediately.
+> 
+> So I think conceptually we should answer the questions that I raised
+> below first (basically a kind of "can it be done?" question), and then
+> work towards that goal? IMHO.
+
+okay, agree.
+
+> > > > 1) We give up, and get ARCH=lkl, sharing just (some of) the drivers
+> > > >    while moving them into the right drivers/somewhere/ place. Even that
+> > > >    looks somewhat awkward looking at the later patches in this set, but
+> > > >    seems like that at *least* should be done.
+> > > 
+> > > Yeah, this would be a goal.
+> > > UML and LKL are quite different but they should share at least their userspace
+> > > drivers.
+> > > I also don't mind if we don't share every driver at the beginning but
+> > > it should be
+> > > a feasible goal for the future.
 > > 
+> > Sharing drivers code is also included in this patchset, step 2 in the
+> > milestone.
+> > 
+> > I was thinking that implementing os_*() functions with lkl_host_ops
+> > would be the further goal (e.g., step 3 or 4).
 > 
-> Patches are welcome ;-)
+> Personally, I think this is backwards. That step is the actually
+> *interesting* part, because if this turns out not to be possible, then
+> we should pick option (1) instead of trying to do option (2), failing,
+> and leaving the code a mess (at least personally I think that after this
+> patchset, the code is kinda a mess with all the ifdefs, duplication,
+> etc.) Yes, I know you're in this for the long haul, but still - it'd be
+> a shame to have to do that.
+> 
+> So in a sense, I myself would actually prefer to have an LKL _without_
+> drivers, but integrated well with UML, over the one that you have now.
 
+LKL without drivers might be nothing, but let's see if this will end a
+clean, and minimal viable patchset.
 
----8<-----------------------
+> > > > 2) Ideally, instead, we actually unify: LKL grows support for userspace
+> > > >    processes using UML infrastructure, the "in-kernel" IRQ mechanisms
+> > > >    are unified, UML stuff moves into lkl-ops, and the UML binary
+> > > >    basically becomes a user of the LKL library to start everything up.
+> > > >    There may be some bits remaining that are just not interesting (e.g.
+> > > >    some drivers you don't care about would continue to make direct calls
+> > > >    to the user side instead of lkl-ops, and then they're just not
+> > > >    compatible with lkl, only with the uml special case of lkl), but then
+> > > >    things are clean.
+> > > 
+> > > A few months ago I though this is doable but now I'm not so sure anymore.
+> > 
+> > For the part of (2) which Johannes pointed out (I mean the part "UML
+> > stuff moves into lkl-ops"), I become to think that implementing os_*()
+> > functions using lkl_host_ops would be also interesting if those
+> > re-implementation makes the glue code eliminated.
+> > 
+> > I'll work on that.
+> 
+> Don't go too fast :-)
+> 
+> I really think that this only makes sense if we can also share much of
+> the other code, e.g. the interrupt processing, thread model, etc. If we
+> just share the lkl ops underneath, and then end up implementing two IRQ
+> models and all on top of those, IMHO we've won nothing.
+> 
+> So I (at least) really see it as a choice between these two options:
+> 
+> 1) add LKL as arch/lkl/ and share the drivers, but not the arch code
+> 
+> 2) really unify LKL and UML, and have them share the arch code, and make
+>    UML a special case of LKL, but not in the sense that it has vastly
+>    different arch code (like special interrupt handling, etc.)
 
-Like this? I'll add it to my tree and send it to Paul during my next
-series, unless you disagree ;-)
+1) is not an option; we discussed this before not to have similar
+archs in different directories.
 
-Subject: [PATCH] doc: atomic_t: Document better about the locking within
- atomic_xchg()
+# Richard, correct me if I'm wrong.
 
-It is not fully clear how the atomic_set() would not cause an issue with
-preservation of the atomicity of RMW in this example. Make it clear that
-locking within atomic_xchg() would save the day.
+2) may be doable, the followings would be the list of things what we need:
+- unify the driver codes
+- unify interrupt handling, need to be x86/linux-independent
+- unify thread model (i.e., struct thread_info)
+- unify code scheduling  (e.g., __switch_to())
+- unify memory management (mmu v.s. nommu)
+- unify host interface (os_*() v.s. lkl_host_ops)
+- support multiple syscall handlings (ptrace-based interception,
+  direct func call, etc)
+- (may still miss something..)
 
-Suggested-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- Documentation/atomic_t.txt | 2 ++
- 1 file changed, 2 insertions(+)
+Those are actually the list of differences between UML and LKL.
+And each item is inter-related: interrupt handling depends on how the
+code/thread is executed, thread implementation interacts with memory
+management, etc.
 
-diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
-index 0f1fdedf36bbb..1d9c307c73a7c 100644
---- a/Documentation/atomic_t.txt
-+++ b/Documentation/atomic_t.txt
-@@ -129,6 +129,8 @@ with a lock:
-     unlock();
- 
- the typical solution is to then implement atomic_set{}() with atomic_xchg().
-+The locking within the atomic_xchg() in CPU1 would ensure that the value read
-+in CPU0 would not be overwritten.
- 
- 
- RMW ops:
--- 
-2.26.0.292.g33ef6b2f38-goog
+Thus for instance, unifying IRQ mechanism may involve several points
+of the above list to be reorganized/reimplemented UML code to support
+the library mode.  I thought this makes broader changes to UML, which
+I was trying to avoid in v4 patch.
 
+> Now, you allude to the fact that UML is pretty much x86 only, and
+> perhaps that's a point where we can do (2) but only support userspace
+> programs on x86, or such?
+
+x86/linux only (LKL also has x86/win32 support).
+
+> I don't know where the host architecture
+> actually comes in much in UML, and where that may or may not be the case
+> in LKL.
+> 
+> > For the other part of (2), I agree that your definition of the
+> > unification will be the best and final goal of this integration.
+> 
+> Fair, but the problem is that we have to decide *now* whether it's
+> actually possible or not. If not, then IMHO it's a bad choice to even
+> put LKL under arch/um/.
+> 
+> > But, especially the support for UML userspace processes in LKL is not
+> > easy as far as I can see
+> 
+> OK, I'll bite - why not? I mean, what's different enough in LKL and UML
+> to make this "not easy"?
+> 
+> I'm not trying to paint you into a corner here with that, I'm just
+> trying to understand the innards of LKL better. I have a _bit_ of a
+> grasp of the UML internals by now, but of course not LKL.
+> 
+> So where do they differ? Conceptually, they seem very similar, but the
+> details actually are different.
+> 
+
+The differences (and also conflicts) between UML and LKL are pretty
+much the unification list of above 2).
+
+The current LKL design assumes that there is only a single
+process/application (but can have multiple threads) in a single LKL
+kernel instance.
+
+This assumption makes the design simple in several places of the
+kernel:
+
+- no memory protection across multiple users/processes needed
+- no address space separation between user- and kernel-code
+
+as a result, userspace code can directly call syscalls as function
+calls.
+
+This part is needed to expand more to support multiple processes
+running/spawned (as UML does), which I mentioned the current LKL
+doesn't have.
+
+> But I have the same question on e.g. the IRQ model. I mean, OK, I
+> understand that LKL started from a different base and all, but is it
+> actually *necessary* for LKL to have a different IRQ model? Or is that
+> "just" intertia?
+
+As for the interrupt handling, the currently LKL's interrupt is
+triggered by the function call (lkl_trigger_irq or equivalent) while
+UML's one is triggered by fd notification (epoll).
+# LKL actually uses fd events but encapsulates into the lkl_host_ops.
+
+So now we have three options for interrupt handling:
+- use UML IRQ model in LKL (and UML)
+- use LKL IRQ model in UML (and LKL)
+- use two IRQ models (the current v4 patch)
+
+I gave up to take the 1st approach as it drops host-independent
+characteristics of LKL, thus took 3rd approach.  So to answer your
+question, yes, it was needed to have a different IRQ model.
+
+But maybe I should try the 2nd approach as well to avoid duplication.
+I will conduct another experiment if this sounds the right direction.
+
+> > Or the title of the cover letter is somehow overstatement: instead,
+> > "Minimum integration of UML with LKL" or something like this would be
+> > better ?
+> 
+> Heh, well, doesn't really matter?
+>
+> But again, there are a few different aspects here:
+>  - what's technically feasible
+>  - what this patchset achieves
+>  - where we want to be in the end
+> 
+> I think right now these are diverging enough that we can't even answer
+> that last question, much less find the road to get there.
+
+I think the option 2) is the final goal.
+
+> > Since the patchset of LKL is relatively huge, I was trying to make a
+> > minimum patchset for the first step.  Because having #ifdefs and glue
+> > code makes existing arch/um code untouched, I took this way to make
+> > the patchset as small as possible.
+> > 
+> > But if this is not the case, I will look for the other way and touch
+> > arch/um code to fit the current LKL implementation.
+> > 
+> > What do you think ?
+> 
+> I think that'd be fine, if indeed that's what we want to do.
+> 
+> I really think we're beating around the bush, and need to first figure
+> out the technical differences between UML and LKL and decide between the
+> options (1) and (2) above. Maybe there's a compromise there somewhere,
+> where some small bits of code still _are_ different, but IMHO having two
+> (IRQ, thread, memory) models, two host interfaces (lkl-ops vs. os_*
+> functions), even two include/asm/ source trees (and so on) is not
+> appropriate.
+> 
+> This may take some patches, and some experimentation. I'd leave drivers
+> out of this initially - you should be able to test LKL with something
+> simpler, right? The API surface is basically the syscall interface as
+> functions, so you can start the library and call something simple
+> initially? Though I guess you need some driver for the IRQ model to make
+> sense, etc.
+
+okay.
+
+> And like I said before, that decision will frame everything else. I
+> really don't think we can make significant progress here without having
+> decided whether this is possible.
+>
+> Perhaps UML *can* become a "special case" of LKL, with a special API
+> function (that's not part of the syscall surface) to "boot(cmdline)" or
+> something. But if it can't, and has to remain as separated as the two
+> are today, I would argue we're better off just not calling them the same
+> architecture.
+
+I agree with this if the unification has all completed.
+
+Thanks,
+-- Hajime
