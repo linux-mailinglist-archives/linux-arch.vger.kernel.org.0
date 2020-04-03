@@ -2,110 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0A219CFAE
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Apr 2020 07:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C2419D113
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Apr 2020 09:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728856AbgDCFPF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Apr 2020 01:15:05 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:57378 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726343AbgDCFPE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 3 Apr 2020 01:15:04 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id B7A21FC5A06C31E14932;
-        Fri,  3 Apr 2020 13:14:32 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS408-HUB.china.huawei.com
- (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Fri, 3 Apr 2020
- 13:14:23 +0800
-Subject: Re: [RFC PATCH v5 4/8] mm: tlb: Pass struct mmu_gather to
- flush_pmd_tlb_range
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <mark.rutland@arm.com>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <aneesh.kumar@linux.ibm.com>,
-        <akpm@linux-foundation.org>, <npiggin@gmail.com>, <arnd@arndb.de>,
-        <rostedt@goodmis.org>, <maz@kernel.org>, <suzuki.poulose@arm.com>,
-        <tglx@linutronix.de>, <yuzhao@google.com>, <Dave.Martin@arm.com>,
-        <steven.price@arm.com>, <broonie@kernel.org>,
-        <guohanjun@huawei.com>, <corbet@lwn.net>, <vgupta@synopsys.com>,
-        <tony.luck@intel.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
-        <kuhn.chenqun@huawei.com>
-References: <20200331142927.1237-1-yezhenyu2@huawei.com>
- <20200331142927.1237-5-yezhenyu2@huawei.com>
- <20200331151331.GS20730@hirez.programming.kicks-ass.net>
- <fe12101e-8efe-22ad-0258-e6aeafc798cc@huawei.com>
- <20200401122004.GE20713@hirez.programming.kicks-ass.net>
- <53675fb9-21c7-5309-07b8-1bbc1e775f9b@huawei.com>
- <20200402163849.GM20713@hirez.programming.kicks-ass.net>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <d512b28f-99d3-5a26-d189-2ebac7a412c7@huawei.com>
-Date:   Fri, 3 Apr 2020 13:14:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
-MIME-Version: 1.0
-In-Reply-To: <20200402163849.GM20713@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.173.220.25]
-X-CFilter-Loop: Reflected
+        id S2388227AbgDCHUy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Apr 2020 03:20:54 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:35320 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731040AbgDCHUx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Apr 2020 03:20:53 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 48trv657qcz9tvql;
+        Fri,  3 Apr 2020 09:20:50 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=HYEqwDJP; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id DSySj9k_iDCl; Fri,  3 Apr 2020 09:20:50 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 48trv62kb0z9tvqN;
+        Fri,  3 Apr 2020 09:20:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1585898450; bh=BZGJ5lVxmRqDhQrXM2sVvZ1tiVXP/OZYoFckJ7hz26w=;
+        h=From:Subject:To:Cc:Date:From;
+        b=HYEqwDJPd7pLuLcru8tvGKy02G4omKmTEBy2HWkNdcMwjpWMTsKY8Os7kGmqSyYz1
+         DtiG+ll6jKULsdFcCzPljIy8bB2J/pRH2BabZc+R54EPfIMJAA4IitiwVuaxC2ViUw
+         8xN2lqiBArzBSR2Flyb0A8ffbZ+BnajNKY9XIC3E=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0A7B98B943;
+        Fri,  3 Apr 2020 09:20:51 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id hL4GD4U_URSX; Fri,  3 Apr 2020 09:20:50 +0200 (CEST)
+Received: from pc16570vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AC8D28B75B;
+        Fri,  3 Apr 2020 09:20:50 +0200 (CEST)
+Received: by pc16570vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id 548C665700; Fri,  3 Apr 2020 07:20:50 +0000 (UTC)
+Message-Id: <36e43241c7f043a24b5069e78c6a7edd11043be5.1585898438.git.christophe.leroy@c-s.fr>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: [PATCH v2 1/5] uaccess: Add user_read_access_begin/end and
+ user_write_access_begin/end
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, airlied@linux.ie,
+        daniel@ffwll.ch, torvalds@linux-foundation.org,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        keescook@chromium.org, hpa@zytor.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org
+Date:   Fri,  3 Apr 2020 07:20:50 +0000 (UTC)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Peter,
+Some architectures like powerpc64 have the capability to separate
+read access and write access protection.
+For get_user() and copy_from_user(), powerpc64 only open read access.
+For put_user() and copy_to_user(), powerpc64 only open write access.
+But when using unsafe_get_user() or unsafe_put_user(),
+user_access_begin open both read and write.
 
-On 2020/4/3 0:38, Peter Zijlstra wrote:
-> On Thu, Apr 02, 2020 at 07:24:04PM +0800, Zhenyu Ye wrote:
->> Thanks for your detailed explanation.  I notice that you used
->> `tlb_end_vma` replace `flush_tlb_range`, which will call `tlb_flush`,
->> then finally call `flush_tlb_range` in generic code.  However, some
->> architectures define tlb_end_vma|tlb_flush|flush_tlb_range themselves,
->> so this may cause problems.
->>
->> For example, in s390, it defines:
->>
->> #define tlb_end_vma(tlb, vma)			do { } while (0)
->>
->> And it doesn't define it's own flush_pmd_tlb_range().  So there will be
->> a mistake if we changed flush_pmd_tlb_range() using tlb_end_vma().
->>
->> Is this really a problem or something I understand wrong ?
-> 
-> If tlb_end_vma() is a no-op, then tlb_finish_mmu() will do:
-> tlb_flush_mmu() -> tlb_flush_mmu_tlbonly() -> tlb_flush()
-> 
-> And s390 has tlb_flush().
-> 
-> If tlb_end_vma() is not a no-op and it calls tlb_flush_mmu_tlbonly(),
-> then tlb_finish_mmu()'s invocation of tlb_flush_mmu_tlbonly() will
-> terniate early due o no flags set.
-> 
-> IOW, it should all just work.
-> 
-> 
-> FYI the whole tlb_{start,end}_vma() thing is a only needed when the
-> architecture doesn't implement tlb_flush() and instead default to using
-> flush_tlb_range(), at which point we need to provide a 'fake' vma.
-> 
-> At the time I audited all architectures and they only look at VM_EXEC
-> (to do $I invalidation) and VM_HUGETLB (for pmd level invalidations),
-> but I forgot which architectures that were.
+Other architectures like powerpc book3s 32 bits only allow write
+access protection. And on this architecture protection is an heavy
+operation as it requires locking/unlocking per segment of 256Mbytes.
+On those architecture it is therefore desirable to do the unlocking
+only for write access. (Note that book3s/32 ranges from very old
+powermac from the 90's with powerpc 601 processor, till modern
+ADSL boxes with PowerQuicc II processors for instance so it
+is still worth considering.)
 
-Many architectures, such as alpha, arc, arm and so on.
-I really understand why you hate making vma->vm_flags more important for
-tlbi :).
+In order to avoid any risk based of hacking some variable parameters
+passed to user_access_begin/end that would allow hacking and
+leaving user access open or opening too much, it is preferable to
+use dedicated static functions that can't be overridden.
 
-> But that is all legacy code; eventually we'll get all archs a native
-> tlb_flush() and this can go away.
-> 
+Add a user_read_access_begin and user_read_access_end to only open
+read access.
 
-Thanks for your reply.  Currently, to enable the TTL feature, extending
-the flush_*tlb_range() may be more convenient.
-I will send a formal PATCH soon.
+Add a user_write_access_begin and user_write_access_end to only open
+write access.
 
-Thanks,
-Zhenyu
+By default, when undefined, those new access helpers default on the
+existing user_access_begin and user_access_end.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+---
+v2: no change in this patch. See each patch for related changes.
+
+v1 at https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=168174
+
+This series is based on the discussion we had in January, see
+https://patchwork.ozlabs.org/patch/1227926/ . I tried to
+take into account all remarks, especially @hpa 's remark to use
+a fixed API on not base the relocking on a magic id returned at
+unlocking.
+
+This series is awaited for implementing selective lkdtm test to
+test powerpc64 independant read and write protection, see
+https://patchwork.ozlabs.org/patch/1231765/
+
+Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+---
+ include/linux/uaccess.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index 67f016010aad..9861c89f93be 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -378,6 +378,14 @@ extern long strnlen_unsafe_user(const void __user *unsafe_addr, long count);
+ static inline unsigned long user_access_save(void) { return 0UL; }
+ static inline void user_access_restore(unsigned long flags) { }
+ #endif
++#ifndef user_write_access_begin
++#define user_write_access_begin user_access_begin
++#define user_write_access_end user_access_end
++#endif
++#ifndef user_read_access_begin
++#define user_read_access_begin user_access_begin
++#define user_read_access_end user_access_end
++#endif
+ 
+ #ifdef CONFIG_HARDENED_USERCOPY
+ void usercopy_warn(const char *name, const char *detail, bool to_user,
+-- 
+2.25.0
 
