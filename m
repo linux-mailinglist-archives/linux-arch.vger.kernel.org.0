@@ -2,72 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E9A19CDFC
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Apr 2020 02:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0A219CFAE
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Apr 2020 07:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390138AbgDCA6x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Apr 2020 20:58:53 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:54420 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389574AbgDCA6w (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Apr 2020 20:58:52 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jKAfH-009AzZ-B4; Fri, 03 Apr 2020 00:58:31 +0000
-Date:   Fri, 3 Apr 2020 01:58:31 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, airlied@linux.ie,
-        daniel@ffwll.ch, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: [PATCH RESEND 1/4] uaccess: Add user_read_access_begin/end and
- user_write_access_begin/end
-Message-ID: <20200403005831.GI23230@ZenIV.linux.org.uk>
-References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
- <20200402162942.GG23230@ZenIV.linux.org.uk>
- <67e21b65-0e2d-7ca5-7518-cec1b7abc46c@c-s.fr>
- <20200402175032.GH23230@ZenIV.linux.org.uk>
- <202004021132.813F8E88@keescook>
+        id S1728856AbgDCFPF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Apr 2020 01:15:05 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:57378 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726343AbgDCFPE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Apr 2020 01:15:04 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id B7A21FC5A06C31E14932;
+        Fri,  3 Apr 2020 13:14:32 +0800 (CST)
+Received: from [127.0.0.1] (10.173.220.25) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Fri, 3 Apr 2020
+ 13:14:23 +0800
+Subject: Re: [RFC PATCH v5 4/8] mm: tlb: Pass struct mmu_gather to
+ flush_pmd_tlb_range
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     <mark.rutland@arm.com>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <aneesh.kumar@linux.ibm.com>,
+        <akpm@linux-foundation.org>, <npiggin@gmail.com>, <arnd@arndb.de>,
+        <rostedt@goodmis.org>, <maz@kernel.org>, <suzuki.poulose@arm.com>,
+        <tglx@linutronix.de>, <yuzhao@google.com>, <Dave.Martin@arm.com>,
+        <steven.price@arm.com>, <broonie@kernel.org>,
+        <guohanjun@huawei.com>, <corbet@lwn.net>, <vgupta@synopsys.com>,
+        <tony.luck@intel.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
+        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
+        <kuhn.chenqun@huawei.com>
+References: <20200331142927.1237-1-yezhenyu2@huawei.com>
+ <20200331142927.1237-5-yezhenyu2@huawei.com>
+ <20200331151331.GS20730@hirez.programming.kicks-ass.net>
+ <fe12101e-8efe-22ad-0258-e6aeafc798cc@huawei.com>
+ <20200401122004.GE20713@hirez.programming.kicks-ass.net>
+ <53675fb9-21c7-5309-07b8-1bbc1e775f9b@huawei.com>
+ <20200402163849.GM20713@hirez.programming.kicks-ass.net>
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+Message-ID: <d512b28f-99d3-5a26-d189-2ebac7a412c7@huawei.com>
+Date:   Fri, 3 Apr 2020 13:14:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202004021132.813F8E88@keescook>
+In-Reply-To: <20200402163849.GM20713@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.173.220.25]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 02, 2020 at 11:35:57AM -0700, Kees Cook wrote:
+Hi Peter,
 
-> Yup, I think it's a weakness of the ARM implementation and I'd like to
-> not extend it further. AFAIK we should never nest, but I would not be
-> surprised at all if we did.
+On 2020/4/3 0:38, Peter Zijlstra wrote:
+> On Thu, Apr 02, 2020 at 07:24:04PM +0800, Zhenyu Ye wrote:
+>> Thanks for your detailed explanation.  I notice that you used
+>> `tlb_end_vma` replace `flush_tlb_range`, which will call `tlb_flush`,
+>> then finally call `flush_tlb_range` in generic code.  However, some
+>> architectures define tlb_end_vma|tlb_flush|flush_tlb_range themselves,
+>> so this may cause problems.
+>>
+>> For example, in s390, it defines:
+>>
+>> #define tlb_end_vma(tlb, vma)			do { } while (0)
+>>
+>> And it doesn't define it's own flush_pmd_tlb_range().  So there will be
+>> a mistake if we changed flush_pmd_tlb_range() using tlb_end_vma().
+>>
+>> Is this really a problem or something I understand wrong ?
 > 
-> If we were looking at a design goal for all architectures, I'd like
-> to be doing what the public PaX patchset did for their memory access
-> switching, which is to alarm if calling into "enable" found the access
-> already enabled, etc. Such a condition would show an unexpected nesting
-> (like we've seen with similar constructs with set_fs() not getting reset
-> during an exception handler, etc etc).
+> If tlb_end_vma() is a no-op, then tlb_finish_mmu() will do:
+> tlb_flush_mmu() -> tlb_flush_mmu_tlbonly() -> tlb_flush()
+> 
+> And s390 has tlb_flush().
+> 
+> If tlb_end_vma() is not a no-op and it calls tlb_flush_mmu_tlbonly(),
+> then tlb_finish_mmu()'s invocation of tlb_flush_mmu_tlbonly() will
+> terniate early due o no flags set.
+> 
+> IOW, it should all just work.
+> 
+> 
+> FYI the whole tlb_{start,end}_vma() thing is a only needed when the
+> architecture doesn't implement tlb_flush() and instead default to using
+> flush_tlb_range(), at which point we need to provide a 'fake' vma.
+> 
+> At the time I audited all architectures and they only look at VM_EXEC
+> (to do $I invalidation) and VM_HUGETLB (for pmd level invalidations),
+> but I forgot which architectures that were.
 
-FWIW, maybe I'm misreading the ARM uaccess logics, but... it smells like
-KERNEL_DS is somewhat more dangerous there than on e.g. x86.
+Many architectures, such as alpha, arc, arm and so on.
+I really understand why you hate making vma->vm_flags more important for
+tlbi :).
 
-Look: with CONFIG_CPU_DOMAINS, set_fs(KERNEL_DS) tells MMU to ignore
-per-page permission bits in DOMAIN_KERNEL (i.e. for kernel address
-ranges), allowing them even if they would normally be denied.  We need
-that for actual uaccess loads/stores, since those use insns that pretend
-to be done in user mode and we want them to access the kernel pages.
-But that affects the normal loads/stores as well; unless I'm misreading
-that code, it will ignore (supervisor) r/o on a page.  And that's not
-just for the code inside the uaccess blocks; *everything* done under
-KERNEL_DS is subject to that.
+> But that is all legacy code; eventually we'll get all archs a native
+> tlb_flush() and this can go away.
+> 
 
-Why do we do that (modify_domain(), that is) inside set_fs() and not
-in uaccess_enable() et.al.?
+Thanks for your reply.  Currently, to enable the TTL feature, extending
+the flush_*tlb_range() may be more convenient.
+I will send a formal PATCH soon.
+
+Thanks,
+Zhenyu
+
