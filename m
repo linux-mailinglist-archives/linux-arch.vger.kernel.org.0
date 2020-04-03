@@ -2,127 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1224119D576
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Apr 2020 13:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB0B19D5C3
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Apr 2020 13:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727953AbgDCLFk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Apr 2020 07:05:40 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:40727 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727792AbgDCLFk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Apr 2020 07:05:40 -0400
-Received: by mail-pg1-f196.google.com with SMTP id t24so3351151pgj.7;
-        Fri, 03 Apr 2020 04:05:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :user-agent:message-id:content-transfer-encoding;
-        bh=x9Gh9Ne5hehOj6WK8fXAryOv2SRTsZsEIVDa4lvYavs=;
-        b=QKJvx6WRjaROA10YzVatzEwmmznxq1ITVAMtYv++ze5uDv6j6xOlVP/VNt6ue3kGoY
-         RBLVfU2HTNBI9fO4q81SJ38mUb+pfV1StfjzDocjBaFe4AkswiIL76gv/peKsu2JzD0W
-         0+EINrDhU3d/1Ow/OKrXq1kcha/YwfD+6mP0Bi4AiDj2RaC1OlBu3S6+62+lfuXER/0v
-         MDVzsst4lRcxBrHTk08NVs+VpRMQcSD6TB5ad+yejWecUIOk1HJ8Z77es0Cw0/8+mgRy
-         QndZDBm44syZEy6UnKyMzdFV34SZgn0K7pRuc1ueFiMSvVy0bgyCOcwNPZBctt+rJEDr
-         VUwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:user-agent:message-id:content-transfer-encoding;
-        bh=x9Gh9Ne5hehOj6WK8fXAryOv2SRTsZsEIVDa4lvYavs=;
-        b=uFhUJHH2sQgi/IoqR6tvXR9BErVhKtknIzRF2vMc0htVwthSTfgdla9WGUBr6mHxGU
-         rPb4RlJfxPujkvHfdu4W7Xq/EFYch199WaLfAWV1iJMs21VPenLIiF5tgJGWDZ0GTx5J
-         lsdA1ehOWYsqpToZSd0QWm63tgT08m7FG1yIOqR1Se0VPtJ141qSsqmXsedsbm0BRXBL
-         3lH9GHdCBN6vIaWm9DWogLv9lpCo30axWqWHQ4U/cgJqv5hHyB/STgDbXqVzpXctKCC3
-         Q4AjXw0YsNC/LC42Ski4sNouyVC/J7Xf20E2ZKjxAPXs5z7LKta4/+7PvAgXobNJI+0s
-         81/Q==
-X-Gm-Message-State: AGi0PuaITMrO6G+JhOPBrNGki9+FJ5VjUbxxBM9IaqtU4+XVkOZd4Z+w
-        2aBnsztUInFtJGnE6bZ3acM=
-X-Google-Smtp-Source: APiQypITP86igCzfZB/PGqJtrjO/2PRknSxfizUBsnugT9boahO/Sg8qOx8MOCUdCQzhs+hzbU239A==
-X-Received: by 2002:a62:19d8:: with SMTP id 207mr8084940pfz.278.1585911937914;
-        Fri, 03 Apr 2020 04:05:37 -0700 (PDT)
-Received: from localhost (60-241-117-97.tpgi.com.au. [60.241.117.97])
-        by smtp.gmail.com with ESMTPSA id w15sm5607378pfj.28.2020.04.03.04.05.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2020 04:05:36 -0700 (PDT)
-Date:   Fri, 03 Apr 2020 21:05:26 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 1/4] powerpc/64s: implement probe_kernel_read/write
- without touching AMR
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20200403093529.43587-1-npiggin@gmail.com>
-        <558b6131-60b4-98b7-dc40-25d8dacea05a@c-s.fr>
-In-Reply-To: <558b6131-60b4-98b7-dc40-25d8dacea05a@c-s.fr>
+        id S1728049AbgDCL0Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Apr 2020 07:26:16 -0400
+Received: from foss.arm.com ([217.140.110.172]:51928 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728022AbgDCL0P (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Apr 2020 07:26:15 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C6D737FA;
+        Fri,  3 Apr 2020 04:26:14 -0700 (PDT)
+Received: from mbp (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 916893F68F;
+        Fri,  3 Apr 2020 04:26:12 -0700 (PDT)
+Date:   Fri, 3 Apr 2020 12:26:10 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, airlied@linux.ie,
+        daniel@ffwll.ch, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: Re: [PATCH RESEND 1/4] uaccess: Add user_read_access_begin/end and
+ user_write_access_begin/end
+Message-ID: <20200403112609.GB26633@mbp>
+References: <27106d62fdbd4ffb47796236050e418131cb837f.1585811416.git.christophe.leroy@c-s.fr>
+ <20200402162942.GG23230@ZenIV.linux.org.uk>
+ <67e21b65-0e2d-7ca5-7518-cec1b7abc46c@c-s.fr>
+ <20200402175032.GH23230@ZenIV.linux.org.uk>
+ <202004021132.813F8E88@keescook>
+ <20200403005831.GI23230@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-User-Agent: astroid/0.15.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1585911072.njtr9qmios.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200403005831.GI23230@ZenIV.linux.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Christophe Leroy's on April 3, 2020 8:31 pm:
->=20
->=20
-> Le 03/04/2020 =C3=A0 11:35, Nicholas Piggin a =C3=A9crit=C2=A0:
->> There is no need to allow user accesses when probing kernel addresses.
->=20
-> I just discovered the following commit=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3D75a1a607bb7e6d918be3aca11ec2214a275392f4
->=20
-> This commit adds probe_kernel_read_strict() and probe_kernel_write_strict=
-().
->=20
-> When reading the commit log, I understand that probe_kernel_read() may=20
-> be used to access some user memory. Which will not work anymore with=20
-> your patch.
+On Fri, Apr 03, 2020 at 01:58:31AM +0100, Al Viro wrote:
+> On Thu, Apr 02, 2020 at 11:35:57AM -0700, Kees Cook wrote:
+> > Yup, I think it's a weakness of the ARM implementation and I'd like to
+> > not extend it further. AFAIK we should never nest, but I would not be
+> > surprised at all if we did.
+> > 
+> > If we were looking at a design goal for all architectures, I'd like
+> > to be doing what the public PaX patchset did for their memory access
+> > switching, which is to alarm if calling into "enable" found the access
+> > already enabled, etc. Such a condition would show an unexpected nesting
+> > (like we've seen with similar constructs with set_fs() not getting reset
+> > during an exception handler, etc etc).
+> 
+> FWIW, maybe I'm misreading the ARM uaccess logics, but... it smells like
+> KERNEL_DS is somewhat more dangerous there than on e.g. x86.
+> 
+> Look: with CONFIG_CPU_DOMAINS, set_fs(KERNEL_DS) tells MMU to ignore
+> per-page permission bits in DOMAIN_KERNEL (i.e. for kernel address
+> ranges), allowing them even if they would normally be denied.  We need
+> that for actual uaccess loads/stores, since those use insns that pretend
+> to be done in user mode and we want them to access the kernel pages.
+> But that affects the normal loads/stores as well; unless I'm misreading
+> that code, it will ignore (supervisor) r/o on a page.  And that's not
+> just for the code inside the uaccess blocks; *everything* done under
+> KERNEL_DS is subject to that.
 
-Hmm, I looked at _strict but obviously not hard enough. Good catch.
+That's correct. Luckily this only affects ARMv5 and earlier. From ARMv6
+onwards, CONFIG_CPU_USE_DOMAINS is no longer selected and the uaccess
+instructions are just plain ldr/str.
 
-I don't think probe_kernel_read() should ever access user memory,
-the comment certainly says it doesn't, but that patch sort of implies
-that they do.
+Russell should know the details on whether there was much choice. Since
+the kernel was living in the linear map with full rwx permissions, the
+KERNEL_DS overriding was probably not a concern and the ldrt/strt for
+uaccess deemed more secure. We also have weird permission setting
+pre-ARMv6 (or rather v6k) where RO user pages are writable from the
+kernel with standard str instructions (breaking CoW). I don't recall
+whether it was a choice made by the kernel or something the architecture
+enforced. The vectors page has to be kernel writable (and user RO) to
+store the TLS value in the absence of a TLS register but maybe we could
+do this via the linear alias together with the appropriate cache
+maintenance.
 
-I think it's wrong. The non-_strict maybe could return userspace data to=20
-you if you did pass a user address? I don't see why that shouldn't just=20
-be disallowed always though.
+From ARMv6, the domain overriding had the side-effect of ignoring the XN
+bit and causing random instruction fetches from ioremap() areas. So we
+had to remove the domain switching. We also gained a dedicated TLS
+register.
 
-And if the _strict version is required to be safe, then it seems like a
-bug or security issue to just allow everyone that doesn't explicitly
-override it to use the default implementation.
+> Why do we do that (modify_domain(), that is) inside set_fs() and not
+> in uaccess_enable() et.al.?
 
-Also, the way the weak linkage is done in that patch, means parisc and
-um archs that were previously overriding probe_kernel_read() now get
-the default probe_kernel_read_strict(), which would be wrong for them.
+I think uaccess_enable() could indeed switch the kernel domain if
+KERNEL_DS is set and move this out of set_fs(). It would reduce the
+window the kernel domain permissions are overridden. Anyway,
+uaccess_enable() appeared much later on arm when Russell introduced PAN
+(SMAP) like support by switching the user domain.
 
->=20
-> Isn't it probe_kernel_read_strict() and probe_kernel_write_strict() that=20
-> you want to add ?
->=20
->>=20
->> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
->> ---
->> v2:
->> - Enable for all powerpc (suggested by Christophe)
->> - Fold helper function together (Christophe)
->> - Rename uaccess.c to maccess.c to match kernel/maccess.c.
->>=20
->>   arch/powerpc/include/asm/uaccess.h | 25 +++++++++++++++-------
->>   arch/powerpc/lib/Makefile          |  2 +-
->>   arch/powerpc/lib/maccess.c         | 34 ++++++++++++++++++++++++++++++
->=20
-> x86 does it in mm/maccess.c
-
-Yeah I'll fix that up, thanks.
-
-Thanks,
-Nick
-=
+-- 
+Catalin
