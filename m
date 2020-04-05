@@ -2,152 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE30D19E76E
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Apr 2020 21:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F9E19EAA7
+	for <lists+linux-arch@lfdr.de>; Sun,  5 Apr 2020 13:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbgDDT56 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 4 Apr 2020 15:57:58 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:46862 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbgDDT56 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 4 Apr 2020 15:57:58 -0400
-Received: by mail-qt1-f195.google.com with SMTP id g7so9473371qtj.13
-        for <linux-arch@vger.kernel.org>; Sat, 04 Apr 2020 12:57:56 -0700 (PDT)
+        id S1726473AbgDELOr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Apr 2020 07:14:47 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:37825 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726399AbgDELOr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Apr 2020 07:14:47 -0400
+Received: by mail-wr1-f67.google.com with SMTP id w10so13967575wrm.4;
+        Sun, 05 Apr 2020 04:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9CbVDZTIMk5DedKHwOhqZguosZYkuF+efmzxSvwSHmA=;
-        b=KVr7ugD1uCChONGUAtH0ZrG1JFeu24vOGuBSUCXWE9Hd/QJ6QGr2dmamlEzvoswCpj
-         8o9wKR62qOm72sk7VVi5b8MpjFHEnicmKJh86KHMgBuj5wQLnq/P6MlDkNo8xrERB2eD
-         Xg8Y3KzC7dxU+ioN1VAr8OUON4n7JstpkEL6w=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=NxJKrbYiQ4xe+r7i0H/o0qPIvinu13Q5NjffxcFXndY=;
+        b=tmuPFlShLkL/FtM6K000R0oIzbEJBdxtfaZ2Bp7ll7HAhcaoM4vmVqtI9An+MPUhjL
+         CQZy46bFQ+2giUsJaV70ct6TXxsWTiXEGCcBa3dkqCIHgfiGzEa825SZRMTufg+h8wyR
+         p3ts4bZbPZZRfULPr3SDm0NbQRs9GNe2/gBjZzBejNQ2yDjRc+c3EvHF17htbo4eW134
+         XUtQr4hx/UomkRbXlvh+AUa2VwC4ta8hCjVALJ3tqapeQnKyvrp+b1zuEnHw/8jbmRfN
+         doDExUHLxCmJ/l4j77DTp7usvNwPweO50tXVS9kCPuO0cPH7RKfytk47dZUCGZhd6gH6
+         FIHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9CbVDZTIMk5DedKHwOhqZguosZYkuF+efmzxSvwSHmA=;
-        b=uL0gzi8a4Oc9BjGMSRHwBlzeDM5nUtXW4IjCy+g9gM9z/xiliGnuRHbY6m33LlG42E
-         TzMt3Lsud9akvopHEsVLXTU6BZILFUbF9lme4meoJxQ0F5jbRAgv7Dl9HBeYDlZZRvl2
-         pyjQxUq7O3b2odVsDW/1ObmBREBAbrB9mEqsTK2SvtTubB1TOqcqUNNg00Jah8eQgS5t
-         srzOfq0aaXLBoE9OQq5cyNqDlO/VATAR7iZou8cclN7WuU0lQ4/rPzRXTN4N9bm5sRg/
-         amalmJ6oYR7HwQZ0pBT6VY0ofvUaakAgE4hDJgHVpLEc+PALvpotsshi1nJj32DV/NBk
-         y1fA==
-X-Gm-Message-State: AGi0PubZvtTbG8uSoNsuBB3pcuYLtHlE/njfyoLVJ1F+jlUEicZUu72Z
-        SSQ93nAH8Whp4/Ey0qC/CP7DtA==
-X-Google-Smtp-Source: APiQypLKG/hPeALBgzrGmT3BqaE9y/Jr3Gs9BPj6JbRbIsn3Qc3jFF/ApsTcSf//hZQhFM/LuuyVsg==
-X-Received: by 2002:ac8:f4a:: with SMTP id l10mr14435539qtk.146.1586030276074;
-        Sat, 04 Apr 2020 12:57:56 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id w17sm1403373qkb.11.2020.04.04.12.57.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Apr 2020 12:57:55 -0700 (PDT)
-Date:   Sat, 4 Apr 2020 15:57:55 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] Documentation/litmus-tests: Add litmus tests for
- atomic APIs
-Message-ID: <20200404195755.GB83565@google.com>
-References: <20200326024022.7566-1-boqun.feng@gmail.com>
- <20200327221843.GA226939@google.com>
- <20200331014037.GB59159@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
- <20200402035816.GA46686@google.com>
- <20200402080358.GC59159@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=NxJKrbYiQ4xe+r7i0H/o0qPIvinu13Q5NjffxcFXndY=;
+        b=pQEwvrpaIPlSjn5WN/4I7BWYRoDKVqfLp+FcbdRwIyQC7/Te6Zmr/J4J844ZKoJnxl
+         n296DeTs4JZnkTNX+WsEnTDXXl6QreatbQqV6SoNUaBOGxt73Pglj2C0QoEe8zsxl37S
+         oZekQCAVgPXVWw0P7kUpIlQN9G4wF8LERklCWL9b2bQpn9VwmYuVn/FP8Ds6e57OMaKr
+         SXoXvveEVhhS2SH9zQjKg2HEBLt5OHhd9KZfD6H2NMkFDlxWZ86zKr6V88mBatJkbRJr
+         3kaxr73yb2qZs8txNTPXG6g3FW2dUNdu6jD5gp07AW1ZmSaC88L2/X50W/DwHHR9XaeY
+         cbTg==
+X-Gm-Message-State: AGi0PuatMQzX1COVonN1W3e+dnGGMMrd2HNthEODM2zZ3V5M9ZHjq3ge
+        +D/3n8HzW3f8L9Q0R6SKueOI2F34DmQigMKGThw=
+X-Google-Smtp-Source: APiQypJo+6EuZfrkPrLQzDLqUU6JycKAfBtQI7non1VFonreceCbe9cNRfQjuuVbBjWlchnfwHmCBimpf6PFBTUnZlQ=
+X-Received: by 2002:adf:bb94:: with SMTP id q20mr3453756wrg.179.1586085284762;
+ Sun, 05 Apr 2020 04:14:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200402080358.GC59159@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+References: <20200228002244.15240-1-keescook@chromium.org> <CA+icZUWTnP8DYfbaMwKtJbG30v7bB4w6=ywo8gn8fvwr731mUQ@mail.gmail.com>
+ <202004021023.D3D8AA3BE@keescook>
+In-Reply-To: <202004021023.D3D8AA3BE@keescook>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 5 Apr 2020 13:15:01 +0200
+Message-ID: <CA+icZUXi_iA7XkTEbrK7b6m673iG9qPKnDBE1V0JRywDLBc9jw@mail.gmail.com>
+Subject: Re: [PATCH 0/9] Enable orphan section warning
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Borislav Petkov <bp@suse.de>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 02, 2020 at 04:03:58PM +0800, Boqun Feng wrote:
-> On Wed, Apr 01, 2020 at 11:58:16PM -0400, Joel Fernandes wrote:
-> > On Tue, Mar 31, 2020 at 09:40:37AM +0800, Boqun Feng wrote:
-> > > On Fri, Mar 27, 2020 at 06:18:43PM -0400, Joel Fernandes wrote:
-> > > > On Thu, Mar 26, 2020 at 10:40:18AM +0800, Boqun Feng wrote:
-> > > > > A recent discussion raises up the requirement for having test cases for
-> > > > > atomic APIs:
-> > > > > 
-> > > > > 	https://lore.kernel.org/lkml/20200213085849.GL14897@hirez.programming.kicks-ass.net/
-> > > > > 
-> > > > > , and since we already have a way to generate a test module from a
-> > > > > litmus test with klitmus[1]. It makes sense that we add more litmus
-> > > > > tests for atomic APIs. And based on the previous discussion, I create a
-> > > > > new directory Documentation/atomic-tests and put these litmus tests
-> > > > > here.
-> > > > > 
-> > > > > This patchset starts the work by adding the litmus tests which are
-> > > > > already used in atomic_t.txt, and also improve the atomic_t.txt to make
-> > > > > it consistent with the litmus tests.
-> > > > > 
-> > > > > Previous version:
-> > > > > v1: https://lore.kernel.org/linux-doc/20200214040132.91934-1-boqun.feng@gmail.com/
-> > > > > v2: https://lore.kernel.org/lkml/20200219062627.104736-1-boqun.feng@gmail.com/
-> > > > > v3: https://lore.kernel.org/linux-doc/20200227004049.6853-1-boqun.feng@gmail.com/
-> > > > 
-> > > > For full series:
-> > > > 
-> > > > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > 
-> > > > One question I had was in the existing atomic_set() documentation, it talks
-> > > > about atomic_add_unless() implementation based on locking could have issues.
-> > > > It says the way to fix such cases is:
-> > > > 
-> > > > Quote:
-> > > >     the typical solution is to then implement atomic_set{}() with
-> > > >     atomic_xchg().
-> > > > 
-> > > > I didn't get how using atomic_xchg() fixes it. Is the assumption there that
-> > > > atomic_xchg() would be implemented using locking to avoid atomic_set() having
-> > > 
-> > > Right, I think that's the intent of the sentence.
-> > > 
-> > > > issues? If so, we could clarify that in the document.
-> > > > 
-> > > 
-> > > Patches are welcome ;-)
-> > 
-> > 
-> > ---8<-----------------------
-> > 
-> > Like this? I'll add it to my tree and send it to Paul during my next
-> > series, unless you disagree ;-)
-> > 
-> > Subject: [PATCH] doc: atomic_t: Document better about the locking within
-> >  atomic_xchg()
-> > 
-> > It is not fully clear how the atomic_set() would not cause an issue with
-> > preservation of the atomicity of RMW in this example. Make it clear that
-> > locking within atomic_xchg() would save the day.
-> > 
-> > Suggested-by: Boqun Feng <boqun.feng@gmail.com>
-> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> 
-> Thanks!
-> 
-> Acked-by: Boqun Feng <boqun.feng@gmail.com>
+On Thu, Apr 2, 2020 at 7:26 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Apr 02, 2020 at 06:20:57PM +0200, Sedat Dilek wrote:
+> > On Fri, Feb 28, 2020 at 1:22 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Hi!
+> > >
+> > > A recent bug was solved for builds linked with ld.lld, and tracking
+> > > it down took way longer than it needed to (a year). Ultimately, it
+> > > boiled down to differences between ld.bfd and ld.lld's handling of
+> > > orphan sections. Similarly, the recent FGKASLR series brough up orphan
+> > > section handling too[2]. In both cases, it would have been nice if the
+> > > linker was running with --orphan-handling=warn so that surprise sections
+> > > wouldn't silently get mapped into the kernel image at locations up to
+> > > the whim of the linker's orphan handling logic. Instead, all desired
+> > > sections should be explicitly identified in the linker script (to be
+> > > either kept or discarded) with any orphans throwing a warning. The
+> > > powerpc architecture actually already does this, so this series seeks
+> > > to extend this coverage to x86, arm64, and arm.
+> > >
+> > > This series depends on tip/x86/boot (where recent .eh_frame fixes[3]
+> > > landed), and has a minor conflict[4] with the ARM tree (related to
+> > > the earlier mentioned bug). As it uses refactorings in the asm-generic
+> > > linker script, and makes changes to kbuild, I think the cleanest place
+> > > for this series to land would also be through -tip. Once again (like
+> > > my READ_IMPLIES_EXEC series), I'm looking to get maintainer Acks so
+> > > this can go all together with the least disruption. Splitting it up by
+> > > architecture seems needlessly difficult.
+> > >
+> > > Thanks!
+> > >
+> >
+> > Hi Kees,
+> >
+> > what is the status of this patchset?
+> > Looks like it is not in tip or linux-next Git.
+>
+> Based on the feedback, I have 3 TODO items:
+>
+> - track down and eliminate (or explain) the source of the .got.plt on arm64
+> - enable orphan warnings for _all_ architectures
+> - refactor final link logic to perform the orphan warning in a clean way
+>
+> I'm working through these (and other work) still. I'm hoping to have
+> another version up some time next week.
+>
 
-Thanks for the Ack, will send it to Paul during next series with your tag.
+Please CC when possible with a pointer to a git-link.
 
- - Joel
+Thanks.
 
+- sed@ -
