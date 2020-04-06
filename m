@@ -2,130 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B89419F5EB
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Apr 2020 14:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA1519F932
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Apr 2020 17:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728026AbgDFMhT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Apr 2020 08:37:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39072 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727989AbgDFMhT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 6 Apr 2020 08:37:19 -0400
-Received: from localhost.localdomain (89.208.247.74.16clouds.com [89.208.247.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BDC8D21D82;
-        Mon,  6 Apr 2020 12:37:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586176638;
-        bh=SEe7dpsbSIG9Vldwf8gU5V4sDR/CwnSv9c8VsT4XWFg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TFPTKDLTEfUiAs0UycDPJuwFjdV7VuPcCjOgBNXrS3AiISNs9HHgDMuLNL/+bjgjh
-         RYVOk05NhzUlzMtyar+AkgCK+KJHMAAppL8AU/5Ov3uTOusnaQWDOw96tz0QlhR9YL
-         tujw2OoSdaFi6Fe47SrpA7FPfWVE2dOHTPIQnPtE=
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [ GIT PULL ] csky updates for v5.7-rc1
-Date:   Mon,  6 Apr 2020 20:37:13 +0800
-Message-Id: <20200406123713.30492-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.17.0
+        id S1729004AbgDFPxg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Apr 2020 11:53:36 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:37659 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728945AbgDFPxg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Apr 2020 11:53:36 -0400
+Received: by mail-pf1-f194.google.com with SMTP id u65so7723565pfb.4;
+        Mon, 06 Apr 2020 08:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=PvwW/9sQV91GxFUMxx/QXPp3Z+S4dWs0vj3Jf2cw5SI=;
+        b=dTtf3LcuHq9DVSUmTHwwFyk0GqNwJ8mmft/rvyPrytkiB+AE7if1Ewt4ZChTfA9cwa
+         urTa9BVMKk/fjtxmdlXnZ+UrSYyLSK9CBgax/QDFF/cOGdoy2EHOTcNkjmQ/LbTLsPeE
+         XyXvdVn8Sd2KiANJECpKl2aO3BCUkqtIp93IZb9M/sK7VrEqBM4RBHwotf52k+tAgh89
+         /BARescvH5q+Jid5Y7T4jb/+mktcyTP7C3A9yRplOJXKMJ9Ib28xpnew2k1qr2LdkUbF
+         rdeUy1niAO9oA27ZDtaVtz5bi7oyUWH5atxERg7CSNPJTp9S4AeBVsaHkmwfJ9hxcP1k
+         m73g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=PvwW/9sQV91GxFUMxx/QXPp3Z+S4dWs0vj3Jf2cw5SI=;
+        b=c8MMQo3l/+Gi5QdD9IDbFqVLPOXJgGEZ6gpbJSxjWuCNG9tI0kufCsRaGseZKgOWJ5
+         D+DagIJkwQ1x4KSFJIJXJJA/GLWsyWzzG/BjBUfG2Z/O22+HVf/LfeHrylAg5ISxodch
+         OOBF3tQqvC/kib8E6WT9kE1Y1zEEQx3h1+4k1fCzwFNm/MWkFv/p4ncQZ7TBD4+55R/2
+         URy4iRK9ij5b4GuITjkooSkeSUrCIRiMhCsp1/Ii7Z/wuLA96PbbN0d4aWfoaEy9/uRH
+         CZsLbMJKxpyW6y356gScWRg1mu+aCxWubvkEYiVtXejh0n7JKxWvWfwOU3r3VJMHqUPt
+         OBOw==
+X-Gm-Message-State: AGi0PuYkqCK5Ei2kmEEwf4S1eMSQ/lNCdALoONGimY4yuAfDsPkaf2Al
+        +6/J/6HGA1eZvzm+h2yHvxj1d9+b
+X-Google-Smtp-Source: APiQypLlXZ9/q2dQeTVcu9eqF5ReVI3oGbpaCb79uKaT6u+hpkBbBGhfqjEIbl7GsUqZMbAn53jo+Q==
+X-Received: by 2002:aa7:9f12:: with SMTP id g18mr120263pfr.262.1586188415045;
+        Mon, 06 Apr 2020 08:53:35 -0700 (PDT)
+Received: from localhost.corp.microsoft.com ([131.107.160.210])
+        by smtp.googlemail.com with ESMTPSA id 79sm11823275pfz.23.2020.04.06.08.53.34
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 06 Apr 2020 08:53:34 -0700 (PDT)
+From:   ltykernel@gmail.com
+X-Google-Original-From: Tianyu.Lan@microsoft.com
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        liuwe@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, x86@kernel.org, arnd@arndb.de,
+        michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vkuznets@redhat.com
+Subject: [PATCH V4 0/6] x86/Hyper-V: Panic code path fixes
+Date:   Mon,  6 Apr 2020 08:53:25 -0700
+Message-Id: <20200406155331.2105-1-Tianyu.Lan@microsoft.com>
+X-Mailer: git-send-email 2.14.5
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-Please pull the changes for v5.7-rc1. In this round, we have some features
-and fixups.
+This patchset fixes some issues in the Hyper-V panic code path.
+Patch 1 resolves issue that panic system still responses network
+packets.
+Patch 2-3,5-6 resolves crash enlightenment issues.
+Patch 4 is to set crash_kexec_post_notifiers to true for Hyper-V
+VM in order to report crash data or kmsg to host before running
+kdump kernel.
 
-Best Regards
- Guo Ren
+Tianyu Lan (6):
+  x86/Hyper-V: Unload vmbus channel in hv panic callback
+  x86/Hyper-V: Free hv_panic_page when fail to register kmsg dump
+  x86/Hyper-V: Trigger crash enlightenment only once during
+    0;136;0c0;136;0c system crash.
+  x86/Hyper-V: Report crash register data or kmsg before  running crash
+    kernel
+  x86/Hyper-V: Report crash register data when sysctl_record_panic_msg
+    is not set
+  x86/Hyper-V: Report crash data in die() when panic_on_oops is set
 
-The following changes since commit 98d54f81e36ba3bf92172791eba5ca5bd813989b:
+ arch/x86/hyperv/hv_init.c      |  6 +++-
+ arch/x86/kernel/cpu/mshyperv.c | 10 +++++++
+ drivers/hv/channel_mgmt.c      |  3 ++
+ drivers/hv/vmbus_drv.c         | 62 ++++++++++++++++++++++++++++++------------
+ include/asm-generic/mshyperv.h |  2 +-
+ 5 files changed, 63 insertions(+), 20 deletions(-)
 
-  Linux 5.6-rc4 (2020-03-01 16:38:46 -0600)
+-- 
+2.14.5
 
-are available in the Git repository at:
-
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.7-rc1
-
-for you to fetch changes up to aefd9461d34a1b0a2acad0750c43216c1c27b9d4:
-
-  csky: Fixup cpu speculative execution to IO area (2020-04-03 12:40:07 +0800)
-
-----------------------------------------------------------------
-csky updates for 5.7-rc1
-
- - Add kproobes/uprobes support
- - Add lockdep, rseq, gcov support
- - Fixup init_fpu
- - Fixup ftrace_modify deadlock
- - Fixup speculative execution on IO area
-
-----------------------------------------------------------------
-Guo Ren (10):
-      csky: Fixup init_fpu compile warning with __init
-      csky: Implement ptrace regs and stack API
-      csky: Add support for restartable sequence
-      csky: Implement ftrace with regs
-      csky/ftrace: Fixup ftrace_modify_code deadlock without CPU_HAS_ICACHE_INS
-      csky: Fixup get wrong psr value from phyical reg
-      csky: Enable LOCKDEP_SUPPORT
-      csky: Add kprobes supported
-      csky: Add uprobes support
-      csky: Fixup cpu speculative execution to IO area
-
-Ma Jun (1):
-      csky: Enable the gcov function
-
- arch/csky/Kconfig                            |  13 +
- arch/csky/abiv1/inc/abi/entry.h              |   5 +-
- arch/csky/abiv2/fpu.c                        |   5 -
- arch/csky/abiv2/inc/abi/entry.h              |  67 +++-
- arch/csky/abiv2/inc/abi/fpu.h                |   3 +-
- arch/csky/abiv2/mcount.S                     |  48 +++
- arch/csky/include/asm/Kbuild                 |   1 -
- arch/csky/include/asm/ftrace.h               |   2 +
- arch/csky/include/asm/kprobes.h              |  48 +++
- arch/csky/include/asm/probes.h               |  24 ++
- arch/csky/include/asm/processor.h            |   1 +
- arch/csky/include/asm/ptrace.h               |  43 +++
- arch/csky/include/asm/thread_info.h          |   2 +
- arch/csky/include/asm/uprobes.h              |  33 ++
- arch/csky/kernel/Makefile                    |   1 +
- arch/csky/kernel/asm-offsets.c               |   1 +
- arch/csky/kernel/entry.S                     |  18 +-
- arch/csky/kernel/ftrace.c                    |  42 +++
- arch/csky/kernel/head.S                      |   5 +
- arch/csky/kernel/probes/Makefile             |   7 +
- arch/csky/kernel/probes/decode-insn.c        |  49 +++
- arch/csky/kernel/probes/decode-insn.h        |  20 ++
- arch/csky/kernel/probes/ftrace.c             |  66 ++++
- arch/csky/kernel/probes/kprobes.c            | 499 +++++++++++++++++++++++++++
- arch/csky/kernel/probes/kprobes_trampoline.S |  19 +
- arch/csky/kernel/probes/simulate-insn.c      | 398 +++++++++++++++++++++
- arch/csky/kernel/probes/simulate-insn.h      |  49 +++
- arch/csky/kernel/probes/uprobes.c            | 150 ++++++++
- arch/csky/kernel/ptrace.c                    | 103 ++++++
- arch/csky/kernel/setup.c                     |  63 +---
- arch/csky/kernel/signal.c                    |   6 +
- arch/csky/kernel/smp.c                       |   6 +
- arch/csky/kernel/traps.c                     |  29 +-
- arch/csky/mm/cachev2.c                       |  45 ++-
- arch/csky/mm/fault.c                         |  11 +
- 35 files changed, 1807 insertions(+), 75 deletions(-)
- create mode 100644 arch/csky/include/asm/kprobes.h
- create mode 100644 arch/csky/include/asm/probes.h
- create mode 100644 arch/csky/include/asm/uprobes.h
- create mode 100644 arch/csky/kernel/probes/Makefile
- create mode 100644 arch/csky/kernel/probes/decode-insn.c
- create mode 100644 arch/csky/kernel/probes/decode-insn.h
- create mode 100644 arch/csky/kernel/probes/ftrace.c
- create mode 100644 arch/csky/kernel/probes/kprobes.c
- create mode 100644 arch/csky/kernel/probes/kprobes_trampoline.S
- create mode 100644 arch/csky/kernel/probes/simulate-insn.c
- create mode 100644 arch/csky/kernel/probes/simulate-insn.h
- create mode 100644 arch/csky/kernel/probes/uprobes.c
