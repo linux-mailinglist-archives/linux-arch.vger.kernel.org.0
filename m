@@ -2,47 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E1819F944
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Apr 2020 17:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3B119F93F
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Apr 2020 17:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729150AbgDFPxy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Apr 2020 11:53:54 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42161 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729113AbgDFPxl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Apr 2020 11:53:41 -0400
-Received: by mail-pf1-f193.google.com with SMTP id 22so7700062pfa.9;
-        Mon, 06 Apr 2020 08:53:40 -0700 (PDT)
+        id S1729139AbgDFPxn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Apr 2020 11:53:43 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40330 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729120AbgDFPxm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Apr 2020 11:53:42 -0400
+Received: by mail-pl1-f196.google.com with SMTP id h11so6071394plk.7;
+        Mon, 06 Apr 2020 08:53:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=8eQoSe2M/BULPKm6rT4KkJz9rHpLzA8oR8K4h6ArKs8=;
-        b=Fmv6RyJy69p1jnLwXZSETpPwyqLmL3CXQEGqcV7c9Qut2x6fVsSibS1N8SZ7HrSDGd
-         9Uxw0MAYpzKT08tSPmcdmBHZCGrcZCwlfWY/YBPpWz59Is4BKO9PbgrWzAqiaAq9MLL2
-         fCVsUhtlQJkk09wqYqSl7+YVtQ9bmGgpjqVVP7Us/fwmmyJuqnMBUxEVK6TVM/8U6cZa
-         Nse+a3HY5J9btTJzzg8Q0IBAI9rcgLt7BcngHfAStAqfczA+KeWBWS+0VpmjPMFI7hrI
-         /4aeVtOp4ILMJJH+tXCrq92dOoPhX6kbyHSGP0v3kDXmljcCmFkRZJwlXlRgmYuFNfP0
-         WDgw==
+        bh=XrqzwjI0j/nMPAOrM34wtWItxFTYrHCtPj6nWTiU39U=;
+        b=K4d+VMtQX1FGgK6IRSZUkqDLpw4X7hN4+EwKFJ2zQ2vJsuEUiRlLI35bTgxtfPggIK
+         Mpn/NXJI4NU7nqEOhGPfI4PjiXBvu686SyIfekEZ/9K64RivXS/i14m47LR28rAjLy5E
+         U5+ciRL+R1gaU6sDEamDzLLRIVJB1J9bGA8a+hnoInuzPQOoB5wJPbAYMSRN+Ngf4Geg
+         z8z18AyZ4jlylFcgNb7kggTgts1fmhTyM0dZNZimd0jNd3GHObXyBtWZMChBRUzxUl7i
+         nWEWwJujtGW6s5NA8+ubaGttj1l2tG/SWQJ3svhwjdznjkma2kBxK/bjtVOfMdCyhEQj
+         uGMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=8eQoSe2M/BULPKm6rT4KkJz9rHpLzA8oR8K4h6ArKs8=;
-        b=cDrXMvjeXNudjQT37E2K0yu5YNVuBf/rF/IOZb0RWzTgT/HqhvCBpFk72p0nzOe2xH
-         xAHzrLga4xnzg7vl6FpNo4nPuFobzGaCCFB2FBEWU/jKv07uevj9mC6lJZ2SjdMRftUY
-         z2ZVgDdj8Cdz71JZe9QhhQhKFvTRjU2zUvbQ/rouQr8Vkj/CAJ9PQ00vgkBy92xLtyVa
-         iY1wB5WlFCbtubB4IjqQ5a1/zF94Xljku4LZeDUfcCbEzgaMF9sRgQg0s9Bm6wEBXPQz
-         Bo018YZ3KaXSLxlWifnRZsxLeORMvD8+NwFofMbB76iTVihxGsHgE5VCCS7RTuZzIYzF
-         tzzA==
-X-Gm-Message-State: AGi0PuZCfxx0V09Ky6Lq1XvAkh28WXPN7WkkG236/6TepVgDsm9QBt+7
-        s7Fosef17RtwfZ1UfqCCsU8=
-X-Google-Smtp-Source: APiQypKcbocApIfduaFaeNXg5AUesFEAxP8JcjHgJ/l8LdMfUbt9UNZfVUT3Wb/1fexunRtGokzDeA==
-X-Received: by 2002:a62:687:: with SMTP id 129mr103400pfg.209.1586188419798;
-        Mon, 06 Apr 2020 08:53:39 -0700 (PDT)
+        bh=XrqzwjI0j/nMPAOrM34wtWItxFTYrHCtPj6nWTiU39U=;
+        b=dfweJXhHSRaHNC1bHjX7jBuyW45zfIsCnOEgTqa4r7lvh7bdWKv6joAnJxof3lbcPk
+         NPnzNL9jP1ImUDlk0HJDS965BTk10eVamX8qZmuCyVowg2EREKjDXZ8STKMKe7VnWNKL
+         lHvMtV+XdaJ/cC0VheJ7RfxPsaSCiTXbxB+DK9EyEz2MaWIH4Ecy9i6AiPE3QSzyyMWw
+         lXPrCPN/xstw2Q9Dzrk6HOf2OEIIVAOpmu/UlcfEU2kE57cmh10C/IqELYzMoS7S1do0
+         NkXVLd9O+LXPk5uqjNAKvLhPoSR39d+FZJQ4ggZTQn50KsWiQImjvKWA1iTRGcw672ze
+         /GXQ==
+X-Gm-Message-State: AGi0PuYJdUTlRAYgrzlZh83Luw7FihdgxYYnchzV01wdeptFPGCI5Oee
+        kZlSer+4jMUVNrxEWtd+VWY=
+X-Google-Smtp-Source: APiQypKxfSP0gOXTwB28CTPsaKYc32lPalwB8tcRZHWYSRxl7nNfLLCooTqlfWpYo4oOZtOoZQ5oIQ==
+X-Received: by 2002:a17:90a:354e:: with SMTP id q72mr52988pjb.174.1586188420785;
+        Mon, 06 Apr 2020 08:53:40 -0700 (PDT)
 Received: from localhost.corp.microsoft.com ([131.107.160.210])
-        by smtp.googlemail.com with ESMTPSA id 79sm11823275pfz.23.2020.04.06.08.53.38
+        by smtp.googlemail.com with ESMTPSA id 79sm11823275pfz.23.2020.04.06.08.53.39
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 06 Apr 2020 08:53:39 -0700 (PDT)
+        Mon, 06 Apr 2020 08:53:40 -0700 (PDT)
 From:   ltykernel@gmail.com
 X-Google-Original-From: Tianyu.Lan@microsoft.com
 To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
@@ -52,9 +52,9 @@ To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
 Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, vkuznets@redhat.com
-Subject: [PATCH V4 5/6] x86/Hyper-V: Report crash register data when sysctl_record_panic_msg is not set
-Date:   Mon,  6 Apr 2020 08:53:30 -0700
-Message-Id: <20200406155331.2105-6-Tianyu.Lan@microsoft.com>
+Subject: [PATCH V4 6/6] x86/Hyper-V: Report crash data in die() when panic_on_oops is set
+Date:   Mon,  6 Apr 2020 08:53:31 -0700
+Message-Id: <20200406155331.2105-7-Tianyu.Lan@microsoft.com>
 X-Mailer: git-send-email 2.14.5
 In-Reply-To: <20200406155331.2105-1-Tianyu.Lan@microsoft.com>
 References: <20200406155331.2105-1-Tianyu.Lan@microsoft.com>
@@ -65,75 +65,96 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-When sysctl_record_panic_msg is not set, the panic will
-not be reported to Hyper-V via hyperv_report_panic_msg().
-So the crash should be reported via hyperv_report_panic().
+When oops happens with panic_on_oops unset, the oops
+thread is killed by die() and system continues to run.
+In such case, guest should not report crash register
+data to host since system still runs. Check panic_on_oops
+and return directly in hyperv_report_panic() when the function
+is called in the die() and panic_on_oops is unset. Fix it.
 
-Fixes: 81b18bce48af ("Drivers: HV: Send one page worth of kmsg dump over Hyper-V during panic")
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Fixes: 7ed4325a44ea ("Drivers: hv: vmbus: Make panic reporting to be more useful")
 Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
 ---
 Change since v3:
+	- Fix compile error.
         - Add fix commit in the change log
 ---
- drivers/hv/vmbus_drv.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ arch/x86/hyperv/hv_init.c      | 6 +++++-
+ drivers/hv/vmbus_drv.c         | 5 +++--
+ include/asm-generic/mshyperv.h | 2 +-
+ 3 files changed, 9 insertions(+), 4 deletions(-)
 
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index b0da5320bcff..31e1d70f7e03 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -20,6 +20,7 @@
+ #include <linux/mm.h>
+ #include <linux/hyperv.h>
+ #include <linux/slab.h>
++#include <linux/kernel.h>
+ #include <linux/cpuhotplug.h>
+ #include <linux/syscore_ops.h>
+ #include <clocksource/hyperv_timer.h>
+@@ -419,11 +420,14 @@ void hyperv_cleanup(void)
+ }
+ EXPORT_SYMBOL_GPL(hyperv_cleanup);
+ 
+-void hyperv_report_panic(struct pt_regs *regs, long err)
++void hyperv_report_panic(struct pt_regs *regs, long err, bool in_die)
+ {
+ 	static bool panic_reported;
+ 	u64 guest_id;
+ 
++	if (in_die && !panic_on_oops)
++		return;
++
+ 	/*
+ 	 * We prefer to report panic on 'die' chain as we have proper
+ 	 * registers to report, but if we miss it (e.g. on BUG()) we need
 diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 333dad39b1c1..172ceae69abb 100644
+index 172ceae69abb..a68bce4d0ddb 100644
 --- a/drivers/hv/vmbus_drv.c
 +++ b/drivers/hv/vmbus_drv.c
-@@ -48,6 +48,18 @@ static int hyperv_cpuhp_online;
- 
- static void *hv_panic_page;
- 
-+/*
-+ * Boolean to control whether to report panic messages over Hyper-V.
-+ *
-+ * It can be set via /proc/sys/kernel/hyperv/record_panic_msg
-+ */
-+static int sysctl_record_panic_msg = 1;
-+
-+static int hyperv_report_reg(void)
-+{
-+	return !sysctl_record_panic_msg || !hv_panic_page;
-+}
-+
- static int hyperv_panic_event(struct notifier_block *nb, unsigned long val,
- 			      void *args)
- {
-@@ -61,7 +73,7 @@ static int hyperv_panic_event(struct notifier_block *nb, unsigned long val,
- 	 * the notification here.
- 	 */
+@@ -31,6 +31,7 @@
+ #include <linux/kdebug.h>
+ #include <linux/efi.h>
+ #include <linux/random.h>
++#include <linux/kernel.h>
+ #include <linux/syscore_ops.h>
+ #include <clocksource/hyperv_timer.h>
+ #include "hyperv_vmbus.h"
+@@ -75,7 +76,7 @@ static int hyperv_panic_event(struct notifier_block *nb, unsigned long val,
  	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE
--	    && !hv_panic_page) {
-+	    && hyperv_report_reg()) {
+ 	    && hyperv_report_reg()) {
  		regs = current_pt_regs();
- 		hyperv_report_panic(regs, val);
+-		hyperv_report_panic(regs, val);
++		hyperv_report_panic(regs, val, false);
  	}
-@@ -79,7 +91,7 @@ static int hyperv_die_event(struct notifier_block *nb, unsigned long val,
- 	 * doing hyperv_report_panic_msg() later with kmsg data, don't do
- 	 * the notification here.
- 	 */
--	if (!hv_panic_page)
-+	if (hyperv_report_reg())
- 		hyperv_report_panic(regs, val);
  	return NOTIFY_DONE;
  }
-@@ -1267,13 +1279,6 @@ static void vmbus_isr(void)
- 	add_interrupt_randomness(HYPERVISOR_CALLBACK_VECTOR, 0);
+@@ -92,7 +93,7 @@ static int hyperv_die_event(struct notifier_block *nb, unsigned long val,
+ 	 * the notification here.
+ 	 */
+ 	if (hyperv_report_reg())
+-		hyperv_report_panic(regs, val);
++		hyperv_report_panic(regs, val, true);
+ 	return NOTIFY_DONE;
  }
  
--/*
-- * Boolean to control whether to report panic messages over Hyper-V.
-- *
-- * It can be set via /proc/sys/kernel/hyperv/record_panic_msg
-- */
--static int sysctl_record_panic_msg = 1;
--
- /*
-  * Callback from kmsg_dump. Grab as much as possible from the end of the kmsg
-  * buffer and call into Hyper-V to transfer the data.
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index b3f1082cc435..1c4fd950f091 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -163,7 +163,7 @@ static inline int cpumask_to_vpset(struct hv_vpset *vpset,
+ 	return nr_bank;
+ }
+ 
+-void hyperv_report_panic(struct pt_regs *regs, long err);
++void hyperv_report_panic(struct pt_regs *regs, long err, bool in_die);
+ void hyperv_report_panic_msg(phys_addr_t pa, size_t size);
+ bool hv_is_hyperv_initialized(void);
+ bool hv_is_hibernation_supported(void);
 -- 
 2.14.5
 
