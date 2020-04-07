@@ -2,156 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE071A1363
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Apr 2020 20:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31E61A15F3
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Apr 2020 21:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbgDGSO7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Apr 2020 14:14:59 -0400
-Received: from mga11.intel.com ([192.55.52.93]:7315 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726380AbgDGSO7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 7 Apr 2020 14:14:59 -0400
-IronPort-SDR: sWPo7ahmYzt2gzCFCyAnVLINzSO06zNZ5b2uNofdOn87uTqIp2gexTYA3840XSZ1G7MqNYIvlE
- VoLEQeMuVftw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2020 11:14:58 -0700
-IronPort-SDR: kJCrsPjoVYdbrOIa/DsHhlgy3v2nC4JN+UUwMGWfglVpv1BJLsoVZYjqnzPZ63YyNHofXQ22Jn
- Cr26BsaSkbgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,356,1580803200"; 
-   d="scan'208";a="451316171"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Apr 2020 11:14:58 -0700
-Message-ID: <444d97c4a4f70ccbb12da5e8f7ff498b37a9f60d.camel@intel.com>
-Subject: Re: [RFC PATCH v9 14/27] mm: Handle Shadow Stack page fault
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-Date:   Tue, 07 Apr 2020 11:14:58 -0700
-In-Reply-To: <4902a6ee-cb0f-2700-1f6d-9d756593183c@intel.com>
-References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
-         <20200205181935.3712-15-yu-cheng.yu@intel.com>
-         <4902a6ee-cb0f-2700-1f6d-9d756593183c@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1726701AbgDGTZl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Apr 2020 15:25:41 -0400
+Received: from mail-lj1-f179.google.com ([209.85.208.179]:45210 "EHLO
+        mail-lj1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726628AbgDGTZl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Apr 2020 15:25:41 -0400
+Received: by mail-lj1-f179.google.com with SMTP id t17so4998847ljc.12
+        for <linux-arch@vger.kernel.org>; Tue, 07 Apr 2020 12:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cTvV83D9tyi0R+IQtypCgkVC9GEIyiZWJmJET7kjhGw=;
+        b=HAlLzotb9PU34aLkQ1YZV2sHVnDWRiDqERuQNFq1Lgpueu8nNAMhW2f3TEg5ZiceVe
+         esVXN+LhFhJoA+x8yyZi25C9SQrqSJgx4lISXRug/CODk3ch8AANRIfqsT5D/msE8vkC
+         D2fuP8LLh2OgAyRsBpkAInIMOtk8ylp8kWfujJrZqvkfe2Cyb3qY4L4Bmqt0kYYnMrH2
+         C7t6yD6IFiGSr8W+pq7Ipzr3zoqfs3d+dXGyKMq2HtSqW6+HN0bAgcR4907fKfn3bXXK
+         nZZGWnQZfCs1NiUF3C4UY+mxSR84ZLCe2jS6JQPp6ufo9JQGvuFsgpd0atZ3LhcXau8i
+         bmqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cTvV83D9tyi0R+IQtypCgkVC9GEIyiZWJmJET7kjhGw=;
+        b=PmYjLCmhTX8uL1IRU4v40kMmFX2wp5WQB65H7NVRb/fb8eQk/S1RYri5F6PzNmcNKi
+         Fj1f4GIoe4ENXOsfrUp2sSwDdsTjz+bU//vUiirbHZVYn8Z7XMq6PfzGPGFHw8pSsFZi
+         hUG7OQT7kTLHtVrxVj9CGnTDmYk61BEJ52dQyD0l6dHUozxZpI7k+AbwHu3VpdHDoViO
+         2k3DZ09289WtiRriNSjIW47V+Sb6T99NDRqPthSH0eHNEb6YftalmwqUUpfqt4i2B3Hj
+         FtHtAjugISJX+xrn8D8Cax5qqWGWgZlVDDnX5L7f3NC/VTqqBKvSRHQBOaTf6azUfkNH
+         2L7A==
+X-Gm-Message-State: AGi0PuaNM2H70Uq05/rp+UxcZrSC7G3ube8ooxDrp7aiWLuolSL2eAZg
+        ZT+Qb7lZB0GFkgv/LlvOV90k2m/oWakkpaPY1hI=
+X-Google-Smtp-Source: APiQypJd52M9JP6lflf4jxKcg8K0qiC7e7im/va0coeD1jvOIT2UPF3K1VUelMFxAWQKwNWPJvEFYaiiJjkEopZC/Pw=
+X-Received: by 2002:a2e:a586:: with SMTP id m6mr2463483ljp.32.1586287538708;
+ Tue, 07 Apr 2020 12:25:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <cover.1585579244.git.thehajime@gmail.com> <dca6ea7260830a03c060f57e6ab9961f16ad55ed.1585579244.git.thehajime@gmail.com>
+ <a84f3d7bcddbaa6125349c4bcdec6e3e07d6b783.camel@sipsolutions.net>
+ <CAFLxGvyFqXZSmMcD_=o81AHLzdM_u2iH8h412w7VZrxON7Ohig@mail.gmail.com>
+ <m21rp9xaqt.wl-thehajime@gmail.com> <ba2199bd17b6457c97305f6688b13ed36e7feac3.camel@sipsolutions.net>
+ <m2tv22wfmr.wl-thehajime@gmail.com>
+In-Reply-To: <m2tv22wfmr.wl-thehajime@gmail.com>
+From:   Octavian Purdila <tavi.purdila@gmail.com>
+Date:   Tue, 7 Apr 2020 22:25:27 +0300
+Message-ID: <CAMoF9u11mUvOO6NZoEq9Hu=ndOz_2he3Mjb2dEpCEAT6fk_CjQ@mail.gmail.com>
+Subject: Re: [RFC v4 02/25] um lkl: architecture skeleton for Linux kernel library
+To:     Hajime Tazaki <thehajime@gmail.com>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Richard Weinberger <richard.weinberger@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Levente Kurusa <levex@linux.com>,
+        Matthieu Coudron <mattator@gmail.com>, cem <cem@freebsd.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Jens Staal <staal1978@gmail.com>,
+        Motomu Utsumi <motomuman@gmail.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Akira Moroo <retrage01@gmail.com>,
+        Petros Angelatos <petrosagg@gmail.com>,
+        Yuan Liu <liuyuan@google.com>,
+        Mark Stillwell <mark@stillwell.me>,
+        pscollins <pscollins@google.com>,
+        linux-kernel-library <linux-kernel-library@freelists.org>,
+        Pierre-Hugues Husson <phh@phh.me>,
+        sigmaepsilon92 <sigmaepsilon92@gmail.com>,
+        Luca Dariz <luca.dariz@gmail.com>,
+        "Edison M . Castro" <edisonmcastro@hotmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2020-02-26 at 16:08 -0800, Dave Hansen wrote:
-> > diff --git a/mm/memory.c b/mm/memory.c
-> > index 45442d9a4f52..6daa28614327 100644
-> > --- a/mm/memory.c
-> > +++ b/mm/memory.c
-> > @@ -772,7 +772,8 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
-> >  	 * If it's a COW mapping, write protect it both
-> >  	 * in the parent and the child
-> >  	 */
-> > -	if (is_cow_mapping(vm_flags) && pte_write(pte)) {
-> > +	if ((is_cow_mapping(vm_flags) && pte_write(pte)) ||
-> > +	    arch_copy_pte_mapping(vm_flags)) {
-> >  		ptep_set_wrprotect(src_mm, addr, src_pte);
-> >  		pte = pte_wrprotect(pte);
-> >  	}
-> 
-> You have to modify this because pte_write()==0 for shadow stack PTEs, right?
-> 
-> Aren't shadow stack ptes *logically* writable, even if they don't have
-> the write bit set?  What would happen if we made pte_write()==1 for them?
+<snip>
 
-Here the vm_flags needs to have VM_MAYWRITE, and the PTE needs to have
-_PAGE_WRITE.  A shadow stack does not have either.
 
-To fix checking vm_flags, what about adding a "arch_is_cow_mappping()" to the
-generic is_cow_mapping()?
+> > And like I said before, that decision will frame everything else. I
+> > really don't think we can make significant progress here without having
+> > decided whether this is possible.
+> >
+> > Perhaps UML *can* become a "special case" of LKL, with a special API
+> > function (that's not part of the syscall surface) to "boot(cmdline)" or
+> > something. But if it can't, and has to remain as separated as the two
+> > are today, I would argue we're better off just not calling them the sam=
+e
+> > architecture.
+>
+> I agree with this if the unification has all completed.
+>
 
-For the PTE, the check actually tries to determine if the PTE is not already
-being copy-on-write, which is:
+I tought a lot about this and I agree with Johannes that if we want to
+unity UML and LKL we should start with the hard parts.
 
-	(!_PAGE_RW && !_PAGE_DIRTY_HW)
+I am also starting to think that it is unlikely to be able to merge the
+two "nicely" and that we should probably turn this on its head and start
+with reworking UML towards the LKL features. We will end up
+re-implementing *some* of the LKL concepts from scratch in UML but I
+think at this point this is unavoidable.
 
-So what about making it pte_cow()?
+Here are my thoughts on a very rough plan for doing that:
 
-	/*
-	 * The PTE is in copy-on-write status.
-	 */
-	static inline int pte_cow(pte_t pte)
-	{
-		return !(pte_flags(pte) & (_PAGE_WRITE | _PAGE_DIRTY_HW));
-	}
-> 
-> > @@ -2417,6 +2418,7 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
-> >  	flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
-> >  	entry = pte_mkyoung(vmf->orig_pte);
-> >  	entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-> > +	entry = pte_set_vma_features(entry, vma);
-> >  	if (ptep_set_access_flags(vma, vmf->address, vmf->pte, entry, 1))
-> >  		update_mmu_cache(vma, vmf->address, vmf->pte);
-> >  	pte_unmap_unlock(vmf->pte, vmf->ptl);
-> > @@ -2504,6 +2506,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
-> >  		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
-> >  		entry = mk_pte(new_page, vma->vm_page_prot);
-> >  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-> > +		entry = pte_set_vma_features(entry, vma);
-> >  		/*
-> >  		 * Clear the pte entry and flush it first, before updating the
-> >  		 * pte with the new entry. This will avoid a race condition
-> > @@ -3023,6 +3026,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
-> >  	pte = mk_pte(page, vma->vm_page_prot);
-> >  	if ((vmf->flags & FAULT_FLAG_WRITE) && reuse_swap_page(page, NULL)) {
-> >  		pte = maybe_mkwrite(pte_mkdirty(pte), vma);
-> > +		pte = pte_set_vma_features(pte, vma);
-> >  		vmf->flags &= ~FAULT_FLAG_WRITE;
-> >  		ret |= VM_FAULT_WRITE;
-> >  		exclusive = RMAP_EXCLUSIVE;
-> > @@ -3165,6 +3169,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
-> >  	entry = mk_pte(page, vma->vm_page_prot);
-> >  	if (vma->vm_flags & VM_WRITE)
-> >  		entry = pte_mkwrite(pte_mkdirty(entry));
-> > +	entry = pte_set_vma_features(entry, vma);
-> >  
-> >  	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
-> >  			&vmf->ptl);
-> > 
-> 
-> These seem wrong, or at best inconsistent with what's already done.
-> 
-> We don't need anything like pte_set_vma_features() today because we have
-> vma->vm_page_prot.  We could easily have done what you suggest here for
-> things like protection keys: ignore the pkey PTE bits until we create
-> the final PTE then shove them in there.
-> 
-> What are the bit patterns of the shadow stack bits that come out of
-> these sites?  Can they be represented in ->vm_page_prot?
+Milestone 1: LKL lib on top of UML
+ * Kernel - Host build split
+   Build UML as a relocatable object using the UML=E2=80=99s kernel linker
+   script.
+   Move the ptrace and other well isolated os code out of arch/um to
+   tools/um (or maybe start directly with tools/lkl?)
+   Use standard host toolchain to create a static library stripped of
+   the ptrace code. Use standard host toolchain to build the main UML
+   executable.
+   Add library init API that creates the UML kernel process and starts
+   UML.
+* System calls APIs
+   Add new system call interface dbased on fd irq.
+   Use the LKL scripts to export the required headers to create system
+   calls APIs that use the UML system calls infrastructure.
+   Keep the underlying host and driver operations (threads, irqs, etc.)
+   as they are now in UML.
+ * Boot test
+   Port the LKL boot test to verify that we are able to programatically
+   issue system calls.
 
-Yes, we can put _PAGE_DIRTY_HW in vm_page_prot.  Also set the bit in
-ptep_set_access_flags() for shadow stack PTEs.
+Milestone 2: add virtio disk support
+ * Export asm/io.h operations to host/os. Create IO access operations
+   and redirect them to weak os_ variants that use the current UML
+   implementation.
+ * Add the LKL IO access layer including generic virtio handling and the
+   virtio block device code.
+ * Port LKL disk test and disk apps (lklfuse, fs2tar, cptofs)
 
+Milestone 3: new arch ports
+  * Abstrac the system call / IRQ mode the move the implementation to host
+  * Abstract the thread model and move the implementation to host
+  * Add LKL thread model and LKL ports
+
+Thanks,
+Tavi
