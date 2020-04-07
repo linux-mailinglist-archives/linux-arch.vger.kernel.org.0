@@ -2,143 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D31E61A15F3
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Apr 2020 21:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CA71A17E8
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 00:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbgDGTZl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Apr 2020 15:25:41 -0400
-Received: from mail-lj1-f179.google.com ([209.85.208.179]:45210 "EHLO
-        mail-lj1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726628AbgDGTZl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Apr 2020 15:25:41 -0400
-Received: by mail-lj1-f179.google.com with SMTP id t17so4998847ljc.12
-        for <linux-arch@vger.kernel.org>; Tue, 07 Apr 2020 12:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cTvV83D9tyi0R+IQtypCgkVC9GEIyiZWJmJET7kjhGw=;
-        b=HAlLzotb9PU34aLkQ1YZV2sHVnDWRiDqERuQNFq1Lgpueu8nNAMhW2f3TEg5ZiceVe
-         esVXN+LhFhJoA+x8yyZi25C9SQrqSJgx4lISXRug/CODk3ch8AANRIfqsT5D/msE8vkC
-         D2fuP8LLh2OgAyRsBpkAInIMOtk8ylp8kWfujJrZqvkfe2Cyb3qY4L4Bmqt0kYYnMrH2
-         C7t6yD6IFiGSr8W+pq7Ipzr3zoqfs3d+dXGyKMq2HtSqW6+HN0bAgcR4907fKfn3bXXK
-         nZZGWnQZfCs1NiUF3C4UY+mxSR84ZLCe2jS6JQPp6ufo9JQGvuFsgpd0atZ3LhcXau8i
-         bmqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cTvV83D9tyi0R+IQtypCgkVC9GEIyiZWJmJET7kjhGw=;
-        b=PmYjLCmhTX8uL1IRU4v40kMmFX2wp5WQB65H7NVRb/fb8eQk/S1RYri5F6PzNmcNKi
-         Fj1f4GIoe4ENXOsfrUp2sSwDdsTjz+bU//vUiirbHZVYn8Z7XMq6PfzGPGFHw8pSsFZi
-         hUG7OQT7kTLHtVrxVj9CGnTDmYk61BEJ52dQyD0l6dHUozxZpI7k+AbwHu3VpdHDoViO
-         2k3DZ09289WtiRriNSjIW47V+Sb6T99NDRqPthSH0eHNEb6YftalmwqUUpfqt4i2B3Hj
-         FtHtAjugISJX+xrn8D8Cax5qqWGWgZlVDDnX5L7f3NC/VTqqBKvSRHQBOaTf6azUfkNH
-         2L7A==
-X-Gm-Message-State: AGi0PuaNM2H70Uq05/rp+UxcZrSC7G3ube8ooxDrp7aiWLuolSL2eAZg
-        ZT+Qb7lZB0GFkgv/LlvOV90k2m/oWakkpaPY1hI=
-X-Google-Smtp-Source: APiQypJd52M9JP6lflf4jxKcg8K0qiC7e7im/va0coeD1jvOIT2UPF3K1VUelMFxAWQKwNWPJvEFYaiiJjkEopZC/Pw=
-X-Received: by 2002:a2e:a586:: with SMTP id m6mr2463483ljp.32.1586287538708;
- Tue, 07 Apr 2020 12:25:38 -0700 (PDT)
+        id S1726420AbgDGWWI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Apr 2020 18:22:08 -0400
+Received: from mga09.intel.com ([134.134.136.24]:30926 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726386AbgDGWWI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 7 Apr 2020 18:22:08 -0400
+IronPort-SDR: AfsxHqqmUNBE+YXhfpW/d2+zS5UWYjbK9FW1oKxKy6Xe+Qe/juotInwiMefR4iDDoEhcegNJu4
+ use7AZ5sUbJQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2020 15:22:06 -0700
+IronPort-SDR: MHqNrBVUSFnEW0SwAq44PvRuJRi2rd4NlBahYEO7RpbBCKWzXtcB0NZMVrXO6kqpzjaM3KUQy2
+ cW+QrYij3Uqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,356,1580803200"; 
+   d="scan'208";a="254604510"
+Received: from chenb-mobl1.amr.corp.intel.com (HELO [10.255.231.128]) ([10.255.231.128])
+  by orsmga006.jf.intel.com with ESMTP; 07 Apr 2020 15:21:59 -0700
+Subject: Re: [RFC PATCH v9 14/27] mm: Handle Shadow Stack page fault
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
+References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
+ <20200205181935.3712-15-yu-cheng.yu@intel.com>
+ <4902a6ee-cb0f-2700-1f6d-9d756593183c@intel.com>
+ <444d97c4a4f70ccbb12da5e8f7ff498b37a9f60d.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <e432d102-7f69-7ba3-6146-c0165eef87e1@intel.com>
+Date:   Tue, 7 Apr 2020 15:21:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <cover.1585579244.git.thehajime@gmail.com> <dca6ea7260830a03c060f57e6ab9961f16ad55ed.1585579244.git.thehajime@gmail.com>
- <a84f3d7bcddbaa6125349c4bcdec6e3e07d6b783.camel@sipsolutions.net>
- <CAFLxGvyFqXZSmMcD_=o81AHLzdM_u2iH8h412w7VZrxON7Ohig@mail.gmail.com>
- <m21rp9xaqt.wl-thehajime@gmail.com> <ba2199bd17b6457c97305f6688b13ed36e7feac3.camel@sipsolutions.net>
- <m2tv22wfmr.wl-thehajime@gmail.com>
-In-Reply-To: <m2tv22wfmr.wl-thehajime@gmail.com>
-From:   Octavian Purdila <tavi.purdila@gmail.com>
-Date:   Tue, 7 Apr 2020 22:25:27 +0300
-Message-ID: <CAMoF9u11mUvOO6NZoEq9Hu=ndOz_2he3Mjb2dEpCEAT6fk_CjQ@mail.gmail.com>
-Subject: Re: [RFC v4 02/25] um lkl: architecture skeleton for Linux kernel library
-To:     Hajime Tazaki <thehajime@gmail.com>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard.weinberger@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Levente Kurusa <levex@linux.com>,
-        Matthieu Coudron <mattator@gmail.com>, cem <cem@freebsd.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Jens Staal <staal1978@gmail.com>,
-        Motomu Utsumi <motomuman@gmail.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Akira Moroo <retrage01@gmail.com>,
-        Petros Angelatos <petrosagg@gmail.com>,
-        Yuan Liu <liuyuan@google.com>,
-        Mark Stillwell <mark@stillwell.me>,
-        pscollins <pscollins@google.com>,
-        linux-kernel-library <linux-kernel-library@freelists.org>,
-        Pierre-Hugues Husson <phh@phh.me>,
-        sigmaepsilon92 <sigmaepsilon92@gmail.com>,
-        Luca Dariz <luca.dariz@gmail.com>,
-        "Edison M . Castro" <edisonmcastro@hotmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <444d97c4a4f70ccbb12da5e8f7ff498b37a9f60d.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-<snip>
+On 4/7/20 11:14 AM, Yu-cheng Yu wrote:
+> On Wed, 2020-02-26 at 16:08 -0800, Dave Hansen wrote:
+>>> diff --git a/mm/memory.c b/mm/memory.c
+>>> index 45442d9a4f52..6daa28614327 100644
+>>> --- a/mm/memory.c
+>>> +++ b/mm/memory.c
+>>> @@ -772,7 +772,8 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+>>>  	 * If it's a COW mapping, write protect it both
+>>>  	 * in the parent and the child
+>>>  	 */
+>>> -	if (is_cow_mapping(vm_flags) && pte_write(pte)) {
+>>> +	if ((is_cow_mapping(vm_flags) && pte_write(pte)) ||
+>>> +	    arch_copy_pte_mapping(vm_flags)) {
+>>>  		ptep_set_wrprotect(src_mm, addr, src_pte);
+>>>  		pte = pte_wrprotect(pte);
+>>>  	}
+>>
+>> You have to modify this because pte_write()==0 for shadow stack PTEs, right?
+>>
+>> Aren't shadow stack ptes *logically* writable, even if they don't have
+>> the write bit set?  What would happen if we made pte_write()==1 for them?
+> 
+> Here the vm_flags needs to have VM_MAYWRITE, and the PTE needs to have
+> _PAGE_WRITE.  A shadow stack does not have either.
 
+I literally mean taking pte_write(), and doing something l
 
-> > And like I said before, that decision will frame everything else. I
-> > really don't think we can make significant progress here without having
-> > decided whether this is possible.
-> >
-> > Perhaps UML *can* become a "special case" of LKL, with a special API
-> > function (that's not part of the syscall surface) to "boot(cmdline)" or
-> > something. But if it can't, and has to remain as separated as the two
-> > are today, I would argue we're better off just not calling them the sam=
-e
-> > architecture.
->
-> I agree with this if the unification has all completed.
->
+static inline int pte_write(pte_t pte)
+{
+	if (pte_present(pte) && pte_is_shadow_stack(pte))
+		return 1;
 
-I tought a lot about this and I agree with Johannes that if we want to
-unity UML and LKL we should start with the hard parts.
+        return pte_flags(pte) & _PAGE_RW;
+}
 
-I am also starting to think that it is unlikely to be able to merge the
-two "nicely" and that we should probably turn this on its head and start
-with reworking UML towards the LKL features. We will end up
-re-implementing *some* of the LKL concepts from scratch in UML but I
-think at this point this is unavoidable.
+Then if is_cow_mapping() returns true for shadow stack VMAs, the above
+code doesn't need to change.
 
-Here are my thoughts on a very rough plan for doing that:
+> To fix checking vm_flags, what about adding a "arch_is_cow_mappping()" to the
+> generic is_cow_mapping()?
 
-Milestone 1: LKL lib on top of UML
- * Kernel - Host build split
-   Build UML as a relocatable object using the UML=E2=80=99s kernel linker
-   script.
-   Move the ptrace and other well isolated os code out of arch/um to
-   tools/um (or maybe start directly with tools/lkl?)
-   Use standard host toolchain to create a static library stripped of
-   the ptrace code. Use standard host toolchain to build the main UML
-   executable.
-   Add library init API that creates the UML kernel process and starts
-   UML.
-* System calls APIs
-   Add new system call interface dbased on fd irq.
-   Use the LKL scripts to export the required headers to create system
-   calls APIs that use the UML system calls infrastructure.
-   Keep the underlying host and driver operations (threads, irqs, etc.)
-   as they are now in UML.
- * Boot test
-   Port the LKL boot test to verify that we are able to programatically
-   issue system calls.
+That makes good sense to me.
 
-Milestone 2: add virtio disk support
- * Export asm/io.h operations to host/os. Create IO access operations
-   and redirect them to weak os_ variants that use the current UML
-   implementation.
- * Add the LKL IO access layer including generic virtio handling and the
-   virtio block device code.
- * Port LKL disk test and disk apps (lklfuse, fs2tar, cptofs)
+> For the PTE, the check actually tries to determine if the PTE is not already
+> being copy-on-write, which is:
+> 
+> 	(!_PAGE_RW && !_PAGE_DIRTY_HW)
+> 
+> So what about making it pte_cow()?
+> 
+> 	/*
+> 	 * The PTE is in copy-on-write status.
+> 	 */
+> 	static inline int pte_cow(pte_t pte)
+> 	{
+> 		return !(pte_flags(pte) & (_PAGE_WRITE | _PAGE_DIRTY_HW));
+> 	}
 
-Milestone 3: new arch ports
-  * Abstrac the system call / IRQ mode the move the implementation to host
-  * Abstract the thread model and move the implementation to host
-  * Add LKL thread model and LKL ports
-
-Thanks,
-Tavi
+... with appropriate comments that seems fine to me.
