@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 253CA1A20CE
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 14:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE531A2121
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 14:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728946AbgDHMAm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Apr 2020 08:00:42 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:49226 "EHLO
+        id S1728963AbgDHMAv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Apr 2020 08:00:51 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:49806 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728331AbgDHMAl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Apr 2020 08:00:41 -0400
+        with ESMTP id S1728331AbgDHMAt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Apr 2020 08:00:49 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=KEFtYuqpBrCVgZp8M6bEdJZafIEARW6kIJmg3biR4K0=; b=LRZUycqFMV229C2W8BGfXZ4U40
-        c9uECl7UL+Q6WlTw2K2vpM6qbyXzXWKSEYHuGB9euL1doXvNACBXGwCe263BitSOP4m2FERpGA9gN
-        TRzLryKZj3ipBzNzWf0PXyDi5Kld8X9dVhvWgI8ekPvXDXSzfpVR0fb0fPZ1YdalSvqohkCsUL3vN
-        VI5JDnsndNAUg3JHPJcZeDv+TZT4Bppz0sXAEwaJrsSsGwe03LMwV08FDQSJiCUaJCwj5b1iw+qeR
-        jPTA3RC7G61mI7HFz3NI2vi6CsCteSNh4cY2jdpfECo8JkHV3DyS8Nb9htyHHLOBRPfRaU3BqsP77
-        06Ii0T3g==;
+        bh=WTia+Kd8nLd79kGizEELYmSwhhdp0SP7Ry4KHt9ID+U=; b=GyHNoqndZkpQJn55E5OLkEOGoU
+        irtZeGy5qWin01/AJaYhblfYS1g6ItN0UlMnbbOvKVQarA+eYO3v49gGTr4ZjqCCUTcOgcyMH8XCC
+        FqcTSzdza8XnpOqaWH9tsRV7+ZlwC3YEun2+4/nwP1qTiqE50qQt2Dn5VWO05aPK5gqbC6vdZ9ZeP
+        Lx9oX4FKwloVnBSXIHqBcoHe3ON/RgEcNoSUpXOTbaPELyDAA1s2qfraMBj1YRdAMtwTmX9ZyRci3
+        2Q3I+EJGRKpU+mOjiWU55Iqw7+AMIxu+mCXNDStF8MOl5GdJbi7jEHL9hY3O+pAaQDMI9Ur5AEbk2
+        T7uJxzuA==;
 Received: from [2001:4bb8:180:5765:65b6:f11e:f109:b151] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jM9NV-0004ke-IF; Wed, 08 Apr 2020 12:00:22 +0000
+        id 1jM9NY-00051s-NB; Wed, 08 Apr 2020 12:00:25 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
@@ -46,9 +46,9 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         iommu@lists.linux-foundation.org,
         linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 14/28] mm: don't return the number of pages from map_kernel_range{,_noflush}
-Date:   Wed,  8 Apr 2020 13:59:12 +0200
-Message-Id: <20200408115926.1467567-15-hch@lst.de>
+Subject: [PATCH 15/28] mm: remove map_vm_range
+Date:   Wed,  8 Apr 2020 13:59:13 +0200
+Message-Id: <20200408115926.1467567-16-hch@lst.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200408115926.1467567-1-hch@lst.de>
 References: <20200408115926.1467567-1-hch@lst.de>
@@ -60,36 +60,149 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-None of the callers needs the number of pages, and a 0 / -errno return
-value is a lot more intuitive.
+Switch all callers to map_kernel_range, which symmetric to the unmap
+side (as well as the _noflush versions).
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- mm/vmalloc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/core-api/cachetlb.rst |  2 +-
+ include/linux/vmalloc.h             | 10 ++++------
+ mm/vmalloc.c                        | 21 +++++++--------------
+ mm/zsmalloc.c                       |  4 +++-
+ net/ceph/ceph_common.c              |  3 +--
+ 5 files changed, 16 insertions(+), 24 deletions(-)
 
+diff --git a/Documentation/core-api/cachetlb.rst b/Documentation/core-api/cachetlb.rst
+index 93cb65d52720..a1582cc79f0f 100644
+--- a/Documentation/core-api/cachetlb.rst
++++ b/Documentation/core-api/cachetlb.rst
+@@ -213,7 +213,7 @@ Here are the routines, one by one:
+ 	there will be no entries in the cache for the kernel address
+ 	space for virtual addresses in the range 'start' to 'end-1'.
+ 
+-	The first of these two routines is invoked after map_vm_area()
++	The first of these two routines is invoked after map_kernel_range()
+ 	has installed the page table entries.  The second is invoked
+ 	before unmap_kernel_range() deletes the page table entries.
+ 
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index 3070b4dbc2d9..15ffbd8e8e65 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -168,11 +168,11 @@ extern struct vm_struct *__get_vm_area_caller(unsigned long size,
+ extern struct vm_struct *remove_vm_area(const void *addr);
+ extern struct vm_struct *find_vm_area(const void *addr);
+ 
+-extern int map_vm_area(struct vm_struct *area, pgprot_t prot,
+-			struct page **pages);
+ #ifdef CONFIG_MMU
+ extern int map_kernel_range_noflush(unsigned long start, unsigned long size,
+ 				    pgprot_t prot, struct page **pages);
++int map_kernel_range(unsigned long start, unsigned long size, pgprot_t prot,
++		struct page **pages);
+ extern void unmap_kernel_range_noflush(unsigned long addr, unsigned long size);
+ extern void unmap_kernel_range(unsigned long addr, unsigned long size);
+ static inline void set_vm_flush_reset_perms(void *addr)
+@@ -189,14 +189,12 @@ map_kernel_range_noflush(unsigned long start, unsigned long size,
+ {
+ 	return size >> PAGE_SHIFT;
+ }
++#define map_kernel_range map_kernel_range_noflush
+ static inline void
+ unmap_kernel_range_noflush(unsigned long addr, unsigned long size)
+ {
+ }
+-static inline void
+-unmap_kernel_range(unsigned long addr, unsigned long size)
+-{
+-}
++#define unmap_kernel_range unmap_kernel_range_noflush
+ static inline void set_vm_flush_reset_perms(void *addr)
+ {
+ }
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index a3d810def567..ca8dc5d42580 100644
+index ca8dc5d42580..b0c7cdc8701a 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -249,7 +249,7 @@ static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
-  * function.
-  *
-  * RETURNS:
-- * The number of pages mapped on success, -errno on failure.
-+ * 0 on success, -errno on failure.
-  */
- int map_kernel_range_noflush(unsigned long addr, unsigned long size,
- 			     pgprot_t prot, struct page **pages)
-@@ -269,7 +269,7 @@ int map_kernel_range_noflush(unsigned long addr, unsigned long size,
- 			return err;
- 	} while (pgd++, addr = next, addr != end);
- 
--	return nr;
-+	return 0;
+@@ -272,8 +272,8 @@ int map_kernel_range_noflush(unsigned long addr, unsigned long size,
+ 	return 0;
  }
  
- static int map_kernel_range(unsigned long start, unsigned long size,
+-static int map_kernel_range(unsigned long start, unsigned long size,
+-			   pgprot_t prot, struct page **pages)
++int map_kernel_range(unsigned long start, unsigned long size, pgprot_t prot,
++		struct page **pages)
+ {
+ 	int ret;
+ 
+@@ -2027,16 +2027,6 @@ void unmap_kernel_range(unsigned long addr, unsigned long size)
+ 	flush_tlb_kernel_range(addr, end);
+ }
+ 
+-int map_vm_area(struct vm_struct *area, pgprot_t prot, struct page **pages)
+-{
+-	unsigned long addr = (unsigned long)area->addr;
+-	int err;
+-
+-	err = map_kernel_range(addr, get_vm_area_size(area), prot, pages);
+-
+-	return err > 0 ? 0 : err;
+-}
+-
+ static inline void setup_vmalloc_vm_locked(struct vm_struct *vm,
+ 	struct vmap_area *va, unsigned long flags, const void *caller)
+ {
+@@ -2408,7 +2398,8 @@ void *vmap(struct page **pages, unsigned int count,
+ 	if (!area)
+ 		return NULL;
+ 
+-	if (map_vm_area(area, prot, pages)) {
++	if (map_kernel_range((unsigned long)area->addr, size, prot,
++			pages) < 0) {
+ 		vunmap(area->addr);
+ 		return NULL;
+ 	}
+@@ -2471,8 +2462,10 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 	}
+ 	atomic_long_add(area->nr_pages, &nr_vmalloc_pages);
+ 
+-	if (map_vm_area(area, prot, pages))
++	if (map_kernel_range((unsigned long)area->addr, get_vm_area_size(area),
++			prot, pages) < 0)
+ 		goto fail;
++
+ 	return area->addr;
+ 
+ fail:
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index ac0524330b9b..f6dc0673e62c 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -1138,7 +1138,9 @@ static inline void __zs_cpu_down(struct mapping_area *area)
+ static inline void *__zs_map_object(struct mapping_area *area,
+ 				struct page *pages[2], int off, int size)
+ {
+-	BUG_ON(map_vm_area(area->vm, PAGE_KERNEL, pages));
++	unsigned long addr = (unsigned long)area->vm->addr;
++
++	BUG_ON(map_kernel_range(addr, PAGE_SIZE * 2, PAGE_KERNEL, pages) < 0);
+ 	area->vm_addr = area->vm->addr;
+ 	return area->vm_addr + off;
+ }
+diff --git a/net/ceph/ceph_common.c b/net/ceph/ceph_common.c
+index a0e97f6c1072..66f22e8aa529 100644
+--- a/net/ceph/ceph_common.c
++++ b/net/ceph/ceph_common.c
+@@ -190,8 +190,7 @@ EXPORT_SYMBOL(ceph_compare_options);
+  * kvmalloc() doesn't fall back to the vmalloc allocator unless flags are
+  * compatible with (a superset of) GFP_KERNEL.  This is because while the
+  * actual pages are allocated with the specified flags, the page table pages
+- * are always allocated with GFP_KERNEL.  map_vm_area() doesn't even take
+- * flags because GFP_KERNEL is hard-coded in {p4d,pud,pmd,pte}_alloc().
++ * are always allocated with GFP_KERNEL.
+  *
+  * ceph_kvmalloc() may be called with GFP_KERNEL, GFP_NOFS or GFP_NOIO.
+  */
 -- 
 2.25.1
 
