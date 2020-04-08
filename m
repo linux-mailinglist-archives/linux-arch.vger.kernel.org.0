@@ -2,131 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 284861A2864
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 20:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89101A2A3C
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 22:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729613AbgDHSSm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Apr 2020 14:18:42 -0400
-Received: from mga02.intel.com ([134.134.136.20]:9409 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729567AbgDHSSm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 8 Apr 2020 14:18:42 -0400
-IronPort-SDR: iBzdk4uT5hwrJAJNXwA3SKDmB6fhcVoiV9G4OKur+zJNuYnocK8Ps1WpH4RFS3fN3NtFRwg9U6
- +vIvCd4uBFsQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2020 11:18:40 -0700
-IronPort-SDR: CNm41iviOJIvAgGIZX8BJww1bpJ5otfTDnIih7sOZvyjmkptybo793Ymrk15h0DnpBroWhaorW
- ju876jl99enA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,359,1580803200"; 
-   d="scan'208";a="269829512"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga002.jf.intel.com with ESMTP; 08 Apr 2020 11:18:40 -0700
-Message-ID: <231585ae895a083b0d65be766c6e2e9c44e933da.camel@intel.com>
-Subject: Re: [RFC PATCH v9 14/27] mm: Handle Shadow Stack page fault
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-Date:   Wed, 08 Apr 2020 11:18:40 -0700
-In-Reply-To: <e432d102-7f69-7ba3-6146-c0165eef87e1@intel.com>
-References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
-         <20200205181935.3712-15-yu-cheng.yu@intel.com>
-         <4902a6ee-cb0f-2700-1f6d-9d756593183c@intel.com>
-         <444d97c4a4f70ccbb12da5e8f7ff498b37a9f60d.camel@intel.com>
-         <e432d102-7f69-7ba3-6146-c0165eef87e1@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1728841AbgDHUTw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Apr 2020 16:19:52 -0400
+Received: from mail-dm6nam12on2121.outbound.protection.outlook.com ([40.107.243.121]:35425
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726891AbgDHUTv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 8 Apr 2020 16:19:51 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K0zXQZ8IIY8lQ2+SmlqgKN6XqyG0bzqyoO1V71rUWKDVQD8LDNmguCKZ+J6lc3CXwaxPUOAH0cwEsV1eKPwq0OBqfeFR56GwtG8LNuoFF3QnEyM8blvEFU3dDijKCueWmvwh3A/ouEYtvrK2COEidxGGA8eGE6F2Hcy29HeuIUuSeLVxpJmsGYsiAEImp9P1LXld7TbHKXsY+LKva9Bbo1NxYSKBtKpoMn74xnEC7X3KCCqBHCGLdUTTGiP3g8NpJiQ12LCRrCTnI1AXl1UgD2J+i4Ct3Y/jy9yLNvNhuwx66BUiBVGK+cigEESncA9SZZy4SZ79naBKLZ6YS5YQ9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vqX0uOBUZZq1mMBJZG/TsuyKJXLWyKd3Z47NmKnK7LU=;
+ b=gTtUn5/YP1q7jTK9R/9MEiVPWlMPUeT6uYwQ8u/aPYqkwkGOKyuiQ5bf0cJCP/EypPPKyPG/+bsiBrWbs36LMcxcXu0z0KsKLZuzQFAJuIDXDysZe79zslm73PZ5AHfkR8aVGAVcZXzxSAxM0P43/vtG3rAoWowb7+KEFbDgzqJ53Ois1Vg6Q/wjcrVGbtLotuMkJ2LkbO9ufkVfjtXTL3ppSIhmAW3YIUyBkg7OyMlqVjxykfrQPrS/vdwXulru5DH+v3fA/12qmQnvrUvjOG6n5L/opmiAH6t5rrw5Mf5ogkndXhT8wU0g/rIBH0129dJdfAxZsw8BI8SiDoEqYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vqX0uOBUZZq1mMBJZG/TsuyKJXLWyKd3Z47NmKnK7LU=;
+ b=XZpUByJWt5KJAAPnGO6Hpke7oQd8p9HUWhhKSTJ4v+4Y7Eglz0eTuyp+3hLzZPgTgG7JZkawQnYuQeUEdEwbVpvr7zTkIfGEp8yg6wICl39u6tvH9/8SRaJeNjyVOcNoAb6NztsSxfjAiziuBC7uII6sxkHTupf48A/4DIZTTEY=
+Received: from MW2PR2101MB1052.namprd21.prod.outlook.com (2603:10b6:302:a::16)
+ by MW2PR2101MB0921.namprd21.prod.outlook.com (2603:10b6:302:10::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.9; Wed, 8 Apr
+ 2020 20:19:47 +0000
+Received: from MW2PR2101MB1052.namprd21.prod.outlook.com
+ ([fe80::71ee:121:71bd:6156]) by MW2PR2101MB1052.namprd21.prod.outlook.com
+ ([fe80::71ee:121:71bd:6156%9]) with mapi id 15.20.2900.012; Wed, 8 Apr 2020
+ 20:19:47 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     "ltykernel@gmail.com" <ltykernel@gmail.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <liuwe@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "x86@kernel.org" <x86@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>
+CC:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        vkuznets <vkuznets@redhat.com>
+Subject: RE: [PATCH V4 6/6] x86/Hyper-V: Report crash data in die() when
+ panic_on_oops is set
+Thread-Topic: [PATCH V4 6/6] x86/Hyper-V: Report crash data in die() when
+ panic_on_oops is set
+Thread-Index: AQHWDCuMQ3aW2IzR1UuBUYCKtr2r9ahvrWpQ
+Date:   Wed, 8 Apr 2020 20:19:47 +0000
+Message-ID: <MW2PR2101MB10524CB8CBF3FE49C2EDAA8DD7C00@MW2PR2101MB1052.namprd21.prod.outlook.com>
+References: <20200406155331.2105-1-Tianyu.Lan@microsoft.com>
+ <20200406155331.2105-7-Tianyu.Lan@microsoft.com>
+In-Reply-To: <20200406155331.2105-7-Tianyu.Lan@microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=mikelley@ntdev.microsoft.com;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2020-04-08T20:19:45.6671367Z;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=73197f4a-2e50-4b6b-b494-c5b7595feb6f;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=mikelley@microsoft.com; 
+x-originating-ip: [24.22.167.197]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 2069d018-3cd5-4b1b-f9f9-08d7dbfa2f4d
+x-ms-traffictypediagnostic: MW2PR2101MB0921:|MW2PR2101MB0921:|MW2PR2101MB0921:
+x-ms-exchange-transport-forked: True
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-microsoft-antispam-prvs: <MW2PR2101MB09218BE4B31DF3FD8D6A9730D7C00@MW2PR2101MB0921.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:277;
+x-forefront-prvs: 0367A50BB1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR2101MB1052.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(4636009)(346002)(366004)(396003)(376002)(136003)(39860400002)(66446008)(478600001)(8936002)(8676002)(64756008)(66556008)(81156014)(8990500004)(76116006)(5660300002)(81166007)(4744005)(10290500003)(66946007)(7416002)(7696005)(52536014)(33656002)(71200400001)(110136005)(6506007)(54906003)(86362001)(66476007)(4326008)(316002)(82950400001)(2906002)(186003)(82960400001)(9686003)(55016002)(26005)(921003)(1121003);DIR:OUT;SFP:1102;
+received-spf: None (protection.outlook.com: microsoft.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JHNG894KAE/rFoUAte4/6X42aDFXRvCXpzPUkqy7Lx6Qd9V8lc7hL8G4HaUtk7HHmH30KKpVdEZ24FfanMiE/Wvjn42js/XBCW1/pHi9NMVTQg++pxGJg78S2ZtwFPFQlVDF9kcEUcR3ILyb+L+yJEoQHT5J3Nvw2IiqG1R7SZiO1GUr8IiyNjsZTceITHrVZjhxD2Ks+LWIgNJ+yQL3KFSIjPJoVBi7KS2HvuUlF+gJAVZelyLJtsPf4wPRbMEAa0G5IPcPcGIlljQ9FNF/rnb07vk09heAa080wRKygJ4tzvDhq8Ereo1aEG74T/SBVzEMzxo3388dw7EqSNgp++Xom0LeRAYPfErk8JWrA9wNbilpw+RFsZgxCiHS7sgqPYEo3mH/JDM7BcncSzlZAEnVpH0NAluD+SWjx8EucD8ZQ+QX8QQeIHPA2pJi5ExbIcGB6rNKqJp+C+MKNwIAzbjXiRJAuNRyMPq4tB4uHEZn72im7UdZgHTkUv2M11bZ
+x-ms-exchange-antispam-messagedata: 0Ekn5c52LtJ2Kui1X6cgdqyx0+P5sfYzeqX++yFLOFpT0XX8zC7tM9jP1CG0Uso95RImCpGng5y8fs6nopNesaO+ifX1GmpLXxVw/RsGqozDk31pO7InjbVi/3Z+ZVk1JEXuI8P04PQbvVhTJCBCmw==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2069d018-3cd5-4b1b-f9f9-08d7dbfa2f4d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2020 20:19:47.6391
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: thMmeVQWNE56XlDRYqlH+YrvK8rkHZVdEmVoAtzSKfghuExHbBsopc9yOQsOP+01ExmKMZkUXsU69gpAl2uCkLl2RfIjEK/tz5H0b2BL+e4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR2101MB0921
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2020-04-07 at 15:21 -0700, Dave Hansen wrote:
-> On 4/7/20 11:14 AM, Yu-cheng Yu wrote:
-> > On Wed, 2020-02-26 at 16:08 -0800, Dave Hansen wrote:
-> > > > diff --git a/mm/memory.c b/mm/memory.c
-> > > > index 45442d9a4f52..6daa28614327 100644
-> > > > --- a/mm/memory.c
-> > > > +++ b/mm/memory.c
-> > > > @@ -772,7 +772,8 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
-> > > >  	 * If it's a COW mapping, write protect it both
-> > > >  	 * in the parent and the child
-> > > >  	 */
-> > > > -	if (is_cow_mapping(vm_flags) && pte_write(pte)) {
-> > > > +	if ((is_cow_mapping(vm_flags) && pte_write(pte)) ||
-> > > > +	    arch_copy_pte_mapping(vm_flags)) {
-> > > >  		ptep_set_wrprotect(src_mm, addr, src_pte);
-> > > >  		pte = pte_wrprotect(pte);
-> > > >  	}
-> > > 
-> > > You have to modify this because pte_write()==0 for shadow stack PTEs, right?
-> > > 
-> > > Aren't shadow stack ptes *logically* writable, even if they don't have
-> > > the write bit set?  What would happen if we made pte_write()==1 for them?
-> > 
-> > Here the vm_flags needs to have VM_MAYWRITE, and the PTE needs to have
-> > _PAGE_WRITE.  A shadow stack does not have either.
-> 
-> I literally mean taking pte_write(), and doing something l
-> 
-> static inline int pte_write(pte_t pte)
-> {
-> 	if (pte_present(pte) && pte_is_shadow_stack(pte))
-> 		return 1;
-> 
->         return pte_flags(pte) & _PAGE_RW;
-> }
-> 
-> Then if is_cow_mapping() returns true for shadow stack VMAs, the above
-> code doesn't need to change.
+From: Tianyu Lan <Tianyu.Lan@microsoft.com> Sent: Monday, April 6, 2020 8:5=
+4 AM
+>=20
+> When oops happens with panic_on_oops unset, the oops
+> thread is killed by die() and system continues to run.
+> In such case, guest should not report crash register
+> data to host since system still runs. Check panic_on_oops
+> and return directly in hyperv_report_panic() when the function
+> is called in the die() and panic_on_oops is unset. Fix it.
+>=20
+> Fixes: 7ed4325a44ea ("Drivers: hv: vmbus: Make panic reporting to be more=
+ useful")
+> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+> ---
+> Change since v3:
+> 	- Fix compile error.
+>         - Add fix commit in the change log
+> ---
+>  arch/x86/hyperv/hv_init.c      | 6 +++++-
+>  drivers/hv/vmbus_drv.c         | 5 +++--
+>  include/asm-generic/mshyperv.h | 2 +-
+>  3 files changed, 9 insertions(+), 4 deletions(-)
 
-One benefit of this change is can_follow_write_pte() does not need any changes. 
-A shadow stack PTE not in copy-on-write status is pte_write().
-
-However, there are places that use pte_write() to determine if the PTE can be
-made _PAGE_RW.  One such case is in change_pte_range(), where
-
-	preserve_write = prot_numa && pte_write(oldpte);
-
-and later,
-
-	if (preserve_write)
-		ptent = pte_mk_savedwrite(ptent);
-
-Currently, there are other checks and shadow stack PTEs won't become _PAGE_RW. 
-I am wondering if this can be overlooked later when the code is modified.
-
-Another potential issue is, because pte_write()==1, a shadow stack PTE is made a
-write migration entry, and can later accidentally become _PAGE_RW.  I think the
-page fault handler would catch that, but still call it out in case I miss
-anything.
-
-Yu-cheng
-
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
