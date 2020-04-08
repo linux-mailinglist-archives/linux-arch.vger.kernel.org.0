@@ -2,173 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CA71A17E8
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 00:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7393C1A1C0D
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 08:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbgDGWWI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Apr 2020 18:22:08 -0400
-Received: from mga09.intel.com ([134.134.136.24]:30926 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726386AbgDGWWI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 7 Apr 2020 18:22:08 -0400
-IronPort-SDR: AfsxHqqmUNBE+YXhfpW/d2+zS5UWYjbK9FW1oKxKy6Xe+Qe/juotInwiMefR4iDDoEhcegNJu4
- use7AZ5sUbJQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2020 15:22:06 -0700
-IronPort-SDR: MHqNrBVUSFnEW0SwAq44PvRuJRi2rd4NlBahYEO7RpbBCKWzXtcB0NZMVrXO6kqpzjaM3KUQy2
- cW+QrYij3Uqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,356,1580803200"; 
-   d="scan'208";a="254604510"
-Received: from chenb-mobl1.amr.corp.intel.com (HELO [10.255.231.128]) ([10.255.231.128])
-  by orsmga006.jf.intel.com with ESMTP; 07 Apr 2020 15:21:59 -0700
-Subject: Re: [RFC PATCH v9 14/27] mm: Handle Shadow Stack page fault
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, x86-patch-review@intel.com
-References: <20200205181935.3712-1-yu-cheng.yu@intel.com>
- <20200205181935.3712-15-yu-cheng.yu@intel.com>
- <4902a6ee-cb0f-2700-1f6d-9d756593183c@intel.com>
- <444d97c4a4f70ccbb12da5e8f7ff498b37a9f60d.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-Message-ID: <e432d102-7f69-7ba3-6146-c0165eef87e1@intel.com>
-Date:   Tue, 7 Apr 2020 15:21:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726597AbgDHG4j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Apr 2020 02:56:39 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:60995 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726477AbgDHG4j (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Apr 2020 02:56:39 -0400
+X-Originating-IP: 50.39.163.217
+Received: from localhost (50-39-163-217.bvtn.or.frontiernet.net [50.39.163.217])
+        (Authenticated sender: josh@joshtriplett.org)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 2E360C0007;
+        Wed,  8 Apr 2020 06:56:32 +0000 (UTC)
+Date:   Tue, 7 Apr 2020 23:56:29 -0700
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH v3 0/3] Support userspace-selected fds
+Message-ID: <cover.1586321767.git.josh@joshtriplett.org>
 MIME-Version: 1.0
-In-Reply-To: <444d97c4a4f70ccbb12da5e8f7ff498b37a9f60d.camel@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/7/20 11:14 AM, Yu-cheng Yu wrote:
-> On Wed, 2020-02-26 at 16:08 -0800, Dave Hansen wrote:
->>> diff --git a/mm/memory.c b/mm/memory.c
->>> index 45442d9a4f52..6daa28614327 100644
->>> --- a/mm/memory.c
->>> +++ b/mm/memory.c
->>> @@ -772,7 +772,8 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->>>  	 * If it's a COW mapping, write protect it both
->>>  	 * in the parent and the child
->>>  	 */
->>> -	if (is_cow_mapping(vm_flags) && pte_write(pte)) {
->>> +	if ((is_cow_mapping(vm_flags) && pte_write(pte)) ||
->>> +	    arch_copy_pte_mapping(vm_flags)) {
->>>  		ptep_set_wrprotect(src_mm, addr, src_pte);
->>>  		pte = pte_wrprotect(pte);
->>>  	}
->>
->> You have to modify this because pte_write()==0 for shadow stack PTEs, right?
->>
->> Aren't shadow stack ptes *logically* writable, even if they don't have
->> the write bit set?  What would happen if we made pte_write()==1 for them?
-> 
-> Here the vm_flags needs to have VM_MAYWRITE, and the PTE needs to have
-> _PAGE_WRITE.  A shadow stack does not have either.
+(Note: numbering this updated version v3, to avoid confusion with Jens'
+v2 that built on my v1. Jens, if you like this approach, please feel
+free to stack your additional patches from the io_uring-fd-select branch
+atop this series. 5.8 material, not intended for the current merge window.)
 
-I literally mean taking pte_write(), and doing something l
+Inspired by the X protocol's handling of XIDs, allow userspace to select
+the file descriptor opened by a call like openat2, so that it can use
+the resulting file descriptor in subsequent system calls without waiting
+for the response to the initial openat2 syscall.
 
-static inline int pte_write(pte_t pte)
-{
-	if (pte_present(pte) && pte_is_shadow_stack(pte))
-		return 1;
+The first patch is independent of the other two; it allows reserving
+file descriptors below a certain minimum for userspace-selected fd
+allocation only.
 
-        return pte_flags(pte) & _PAGE_RW;
-}
+The second patch implements userspace-selected fd allocation for
+openat2, introducing a new O_SPECIFIC_FD flag and an fd field in struct
+open_how. In io_uring, this allows sequences like openat2/read/close
+without waiting for the openat2 to complete. Multiple such sequences can
+overlap, as long as each uses a distinct file descriptor.
 
-Then if is_cow_mapping() returns true for shadow stack VMAs, the above
-code doesn't need to change.
+The third patch adds userspace-selected fd allocation to pipe2 as well.
+I did this partly as a demonstration of how simple it is to wire up
+O_SPECIFIC_FD support for any fd-allocating system call, and partly in
+the hopes that this may make it more useful to wire up io_uring support
+for pipe2 in the future.
 
-> To fix checking vm_flags, what about adding a "arch_is_cow_mappping()" to the
-> generic is_cow_mapping()?
+If this gets accepted, I'm happy to also write corresponding manpage
+patches.
 
-That makes good sense to me.
+v3:
+This new version has an API to atomically increase the minimum fd and
+return the previous minimum, rather than just getting and setting the
+minimum; this makes it easier to allocate a range. (A library that might
+initialize after the program has already opened other file descriptors
+may need to check for existing open fds in the range after reserving it,
+and reserve more fds if needed; this can be done entirely in userspace,
+and we can't really do anything simpler in the kernel due to limitations
+on file-descriptor semantics, so this patch series avoids introducing
+any extra complexity in the kernel.)
 
-> For the PTE, the check actually tries to determine if the PTE is not already
-> being copy-on-write, which is:
-> 
-> 	(!_PAGE_RW && !_PAGE_DIRTY_HW)
-> 
-> So what about making it pte_cow()?
-> 
-> 	/*
-> 	 * The PTE is in copy-on-write status.
-> 	 */
-> 	static inline int pte_cow(pte_t pte)
-> 	{
-> 		return !(pte_flags(pte) & (_PAGE_WRITE | _PAGE_DIRTY_HW));
-> 	}
+This new version also supports a __get_specific_unused_fd_flags call
+which accepts the limit for RLIMIT_NOFILE as an argument, analogous to
+__get_unused_fd_flags, since io_uring needs that to correctly handle
+RLIMIT_NOFILE.
 
-... with appropriate comments that seems fine to me.
+Josh Triplett (3):
+  fs: Support setting a minimum fd for "lowest available fd" allocation
+  fs: openat2: Extend open_how to allow userspace-selected fds
+  fs: pipe2: Support O_SPECIFIC_FD
+
+ fs/fcntl.c                       |  2 +-
+ fs/file.c                        | 62 ++++++++++++++++++++++++++++----
+ fs/io_uring.c                    |  3 +-
+ fs/open.c                        |  6 ++--
+ fs/pipe.c                        | 16 ++++++---
+ include/linux/fcntl.h            |  5 +--
+ include/linux/fdtable.h          |  1 +
+ include/linux/file.h             |  4 +++
+ include/uapi/asm-generic/fcntl.h |  4 +++
+ include/uapi/linux/openat2.h     |  2 ++
+ include/uapi/linux/prctl.h       |  3 ++
+ kernel/sys.c                     |  5 +++
+ 12 files changed, 97 insertions(+), 16 deletions(-)
+
+-- 
+2.26.0
