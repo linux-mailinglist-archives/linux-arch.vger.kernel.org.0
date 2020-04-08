@@ -2,23 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CAD1A218F
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 14:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6181A21D1
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 14:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgDHMSP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Apr 2020 08:18:15 -0400
-Received: from foss.arm.com ([217.140.110.172]:38012 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726924AbgDHMSP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 8 Apr 2020 08:18:15 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94ADC31B;
-        Wed,  8 Apr 2020 05:18:12 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3217A3F73D;
-        Wed,  8 Apr 2020 05:18:09 -0700 (PDT)
-Date:   Wed, 8 Apr 2020 13:18:02 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
+        id S1728143AbgDHMVh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Apr 2020 08:21:37 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:57288 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726605AbgDHMVh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Apr 2020 08:21:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3ZqnNnyTvHfqcEkmuTyQ2LPQ2OpYuhXibwpvxMqZKrM=; b=Wq6VQLh7N6K0YWKu3Ue3rhR1W6
+        uPBkkMsNf6/oDdxLwjvSEebhtXDxpta8ctMX3AXxxQtPmAR2J+2NvjDAQ2GuZQbEgQcRFIs0Uh8a4
+        q/KDbO0lwFUvtXqown2kw13Y2h8hXVn8KbPRn0q+BAyo1R4JeWx6mLApKc3oAhNA7djcKdAw1oQbM
+        KRmYIUtFQOJZvRFNoOcseeSgBXpm6Sgnq9wqzvLPflPkgGLBpryMqX12jZ7xIgN+vL/xiKvc+GPAO
+        H86wFLe8WEU+0qO5K7uXu5rgIXC3C0pN4XcAwuVMP5rzFHvMEfrrCJTR2fn2NFfwMo4f+UhEJBb/M
+        0BvJqDAg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jM9hd-0001dI-4e; Wed, 08 Apr 2020 12:21:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CE886307972;
+        Wed,  8 Apr 2020 14:21:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B4EEE2B2354E8; Wed,  8 Apr 2020 14:21:04 +0200 (CEST)
+Date:   Wed, 8 Apr 2020 14:21:04 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
@@ -34,58 +48,30 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Nitin Gupta <ngupta@vflare.org>,
         Robin Murphy <robin.murphy@arm.com>,
         Christophe Leroy <christophe.leroy@c-s.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
         linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         iommu@lists.linux-foundation.org,
         linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com
-Subject: Re: [PATCH 26/28] arm64: use __vmalloc_node in arch_alloc_vmap_stack
-Message-ID: <20200408121802.GA36478@lakrids.cambridge.arm.com>
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 17/28] mm: remove the prot argument from vm_map_ram
+Message-ID: <20200408122104.GZ20713@hirez.programming.kicks-ass.net>
 References: <20200408115926.1467567-1-hch@lst.de>
- <20200408115926.1467567-27-hch@lst.de>
+ <20200408115926.1467567-18-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200408115926.1467567-27-hch@lst.de>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+In-Reply-To: <20200408115926.1467567-18-hch@lst.de>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 01:59:24PM +0200, Christoph Hellwig wrote:
-> arch_alloc_vmap_stack can use a slightly higher level vmalloc function.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+On Wed, Apr 08, 2020 at 01:59:15PM +0200, Christoph Hellwig wrote:
+> This is always GFP_KERNEL - for long term mappings with other properties
+> vmap should be used.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+ PAGE_KERNEL != GFP_KERNEL :-)
 
-Mark.
-
-> ---
->  arch/arm64/include/asm/vmap_stack.h | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/vmap_stack.h b/arch/arm64/include/asm/vmap_stack.h
-> index 0a12115d9638..0cc6636e3f15 100644
-> --- a/arch/arm64/include/asm/vmap_stack.h
-> +++ b/arch/arm64/include/asm/vmap_stack.h
-> @@ -19,10 +19,8 @@ static inline unsigned long *arch_alloc_vmap_stack(size_t stack_size, int node)
->  {
->  	BUILD_BUG_ON(!IS_ENABLED(CONFIG_VMAP_STACK));
->  
-> -	return __vmalloc_node_range(stack_size, THREAD_ALIGN,
-> -				    VMALLOC_START, VMALLOC_END,
-> -				    THREADINFO_GFP, PAGE_KERNEL, 0, node,
-> -				    __builtin_return_address(0));
-> +	return __vmalloc_node(stack_size, THREAD_ALIGN, THREADINFO_GFP, node,
-> +			__builtin_return_address(0));
->  }
->  
->  #endif /* __ASM_VMAP_STACK_H */
-> -- 
-> 2.25.1
-> 
+> -	return vm_map_ram(mock->pages, mock->npages, 0, PAGE_KERNEL);
+> +	return vm_map_ram(mock->pages, mock->npages, 0);
