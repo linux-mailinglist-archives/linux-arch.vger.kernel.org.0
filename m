@@ -2,157 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0871A21E9
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 14:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F2F1A2219
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Apr 2020 14:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728221AbgDHMZK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Apr 2020 08:25:10 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:39773 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726829AbgDHMZK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Apr 2020 08:25:10 -0400
-Received: by mail-wr1-f66.google.com with SMTP id p10so7564583wrt.6
-        for <linux-arch@vger.kernel.org>; Wed, 08 Apr 2020 05:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=S+T3eMWPDVVKjkhAMCN4OLY+AXtsqs3KpyYmqj2eyPw=;
-        b=iTDVFh9zGz+cA8knHYYQ0Yf9dPIyYyDTxXa4CjSfrmLiD5i70f+PrvxbUf3+NKNs6P
-         0FpMET5mzx+JLVZSzcC1hvsXM+4Tttd8dTrz+Xv2lGQ2cbnW/q88kgg5209meIQ7muh4
-         h9U+2WX4Hzg6PB+HIxI6ZXmC8Lzm/Rzktbqts=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=S+T3eMWPDVVKjkhAMCN4OLY+AXtsqs3KpyYmqj2eyPw=;
-        b=oX3FJl4UiCSk+hieKO+KPt3vcdIqcBR04MR2Wk+nF+328bNLadgJruibDbo1/837CT
-         GdCQ6nIOkTvq2P1/TExQ0mDEE9FXg38aSUKFgkauof2P43jeqTMpFwIsQ5wBSjj9A+Re
-         NUBw06b66CuLNwCo8HaB9B+K7d4wnBiMNfOs/xpboQmMZnTODleL0/WmKSXD8yo0FyBR
-         3pSzORayGoCeasVjMs1aTMcLGTu90YAOu/daGeOe9kqDiN2H31F72WeXhD8NZnm/r0+W
-         lIl3/H6sXVZR+zbQdQUJl706VyA4ujSJnk5H5dwF+L9dFyyiCD4fedVhXGgyCePqfhQM
-         NCkw==
-X-Gm-Message-State: AGi0Pubvul9vgMsjl1gcSuCQPfpOLwYEBkAdDfjvCdTGlzvAKFIKoF3y
-        xZ9rqNnl1a1j+yTuORRgU/9VHA==
-X-Google-Smtp-Source: APiQypJvxn06n6RmmZE3e7ZfAJg02E1DO8+MxqNnF9onm5w/+2r1QjPARt8wv7KYk/4tgJKIUOQMMQ==
-X-Received: by 2002:a5d:4111:: with SMTP id l17mr8794439wrp.271.1586348708002;
-        Wed, 08 Apr 2020 05:25:08 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id v7sm35651554wrs.96.2020.04.08.05.25.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2020 05:25:07 -0700 (PDT)
-Date:   Wed, 8 Apr 2020 14:25:04 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christoph Hellwig <hch@lst.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laura Abbott <labbott@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/28] gpu/drm: remove the powerpc hack in
- drm_legacy_sg_alloc
-Message-ID: <20200408122504.GO3456981@phenom.ffwll.local>
-Mail-Followup-To: Christoph Hellwig <hch@lst.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
-        David Airlie <airlied@linux.ie>, Laura Abbott <labbott@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200408115926.1467567-1-hch@lst.de>
- <20200408115926.1467567-20-hch@lst.de>
+        id S1728696AbgDHMex (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Apr 2020 08:34:53 -0400
+Received: from mout-p-103.mailbox.org ([80.241.56.161]:58474 "EHLO
+        mout-p-103.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728207AbgDHMex (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Apr 2020 08:34:53 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 48y3RT1xT9zKmXH;
+        Wed,  8 Apr 2020 14:26:29 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id m9ZmrmVd4PFA; Wed,  8 Apr 2020 14:26:25 +0200 (CEST)
+Date:   Wed, 8 Apr 2020 22:26:01 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Josh Triplett <josh@joshtriplett.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v3 0/3] Support userspace-selected fds
+Message-ID: <20200408122601.kvrdjksjkl7ktgt4@yavin.dot.cyphar.com>
+References: <cover.1586321767.git.josh@joshtriplett.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="753o2egv4zmh6vyt"
 Content-Disposition: inline
-In-Reply-To: <20200408115926.1467567-20-hch@lst.de>
-X-Operating-System: Linux phenom 5.3.0-3-amd64 
+In-Reply-To: <cover.1586321767.git.josh@joshtriplett.org>
+X-Rspamd-Queue-Id: DDA58175B
+X-Rspamd-Score: -6.44 / 15.00 / 15.00
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 01:59:17PM +0200, Christoph Hellwig wrote:
-> If this code was broken for non-coherent caches a crude powerpc hack
-> isn't going to help anyone else.  Remove the hack as it is the last
-> user of __vmalloc passing a page protection flag other than PAGE_KERNEL.
 
-Well Ben added this to make stuff work on ppc, ofc the home grown dma
-layer in drm from back then isn't going to work in other places. I guess
-should have at least an ack from him, in case anyone still cares about
-this on ppc. Adding Ben to cc.
--Daniel
+--753o2egv4zmh6vyt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/gpu/drm/drm_scatter.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_scatter.c b/drivers/gpu/drm/drm_scatter.c
-> index ca520028b2cb..f4e6184d1877 100644
-> --- a/drivers/gpu/drm/drm_scatter.c
-> +++ b/drivers/gpu/drm/drm_scatter.c
-> @@ -43,15 +43,6 @@
->  
->  #define DEBUG_SCATTER 0
->  
-> -static inline void *drm_vmalloc_dma(unsigned long size)
-> -{
-> -#if defined(__powerpc__) && defined(CONFIG_NOT_COHERENT_CACHE)
-> -	return __vmalloc(size, GFP_KERNEL, pgprot_noncached_wc(PAGE_KERNEL));
-> -#else
-> -	return vmalloc_32(size);
-> -#endif
-> -}
-> -
->  static void drm_sg_cleanup(struct drm_sg_mem * entry)
->  {
->  	struct page *page;
-> @@ -126,7 +117,7 @@ int drm_legacy_sg_alloc(struct drm_device *dev, void *data,
->  		return -ENOMEM;
->  	}
->  
-> -	entry->virtual = drm_vmalloc_dma(pages << PAGE_SHIFT);
-> +	entry->virtual = vmalloc_32(pages << PAGE_SHIFT);
->  	if (!entry->virtual) {
->  		kfree(entry->busaddr);
->  		kfree(entry->pagelist);
-> -- 
-> 2.25.1
-> 
+On 2020-04-07, Josh Triplett <josh@joshtriplett.org> wrote:
+> (Note: numbering this updated version v3, to avoid confusion with Jens'
+> v2 that built on my v1. Jens, if you like this approach, please feel
+> free to stack your additional patches from the io_uring-fd-select branch
+> atop this series. 5.8 material, not intended for the current merge window=
+=2E)
+>=20
+> Inspired by the X protocol's handling of XIDs, allow userspace to select
+> the file descriptor opened by a call like openat2, so that it can use
+> the resulting file descriptor in subsequent system calls without waiting
+> for the response to the initial openat2 syscall.
+>=20
+> The first patch is independent of the other two; it allows reserving
+> file descriptors below a certain minimum for userspace-selected fd
+> allocation only.
+>=20
+> The second patch implements userspace-selected fd allocation for
+> openat2, introducing a new O_SPECIFIC_FD flag and an fd field in struct
+> open_how. In io_uring, this allows sequences like openat2/read/close
+> without waiting for the openat2 to complete. Multiple such sequences can
+> overlap, as long as each uses a distinct file descriptor.
+>=20
+> The third patch adds userspace-selected fd allocation to pipe2 as well.
+> I did this partly as a demonstration of how simple it is to wire up
+> O_SPECIFIC_FD support for any fd-allocating system call, and partly in
+> the hopes that this may make it more useful to wire up io_uring support
+> for pipe2 in the future.
+>=20
+> If this gets accepted, I'm happy to also write corresponding manpage
+> patches.
+>=20
+> v3:
+> This new version has an API to atomically increase the minimum fd and
+> return the previous minimum, rather than just getting and setting the
+> minimum; this makes it easier to allocate a range. (A library that might
+> initialize after the program has already opened other file descriptors
+> may need to check for existing open fds in the range after reserving it,
+> and reserve more fds if needed; this can be done entirely in userspace,
+> and we can't really do anything simpler in the kernel due to limitations
+> on file-descriptor semantics, so this patch series avoids introducing
+> any extra complexity in the kernel.)
+>=20
+> This new version also supports a __get_specific_unused_fd_flags call
+> which accepts the limit for RLIMIT_NOFILE as an argument, analogous to
+> __get_unused_fd_flags, since io_uring needs that to correctly handle
+> RLIMIT_NOFILE.
+>=20
+> Josh Triplett (3):
+>   fs: Support setting a minimum fd for "lowest available fd" allocation
+>   fs: openat2: Extend open_how to allow userspace-selected fds
+>   fs: pipe2: Support O_SPECIFIC_FD
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Aside from my specific comments and questions, the changes to openat2
+deserve at least one or two selftests.
+
+>  fs/fcntl.c                       |  2 +-
+>  fs/file.c                        | 62 ++++++++++++++++++++++++++++----
+>  fs/io_uring.c                    |  3 +-
+>  fs/open.c                        |  6 ++--
+>  fs/pipe.c                        | 16 ++++++---
+>  include/linux/fcntl.h            |  5 +--
+>  include/linux/fdtable.h          |  1 +
+>  include/linux/file.h             |  4 +++
+>  include/uapi/asm-generic/fcntl.h |  4 +++
+>  include/uapi/linux/openat2.h     |  2 ++
+>  include/uapi/linux/prctl.h       |  3 ++
+>  kernel/sys.c                     |  5 +++
+>  12 files changed, 97 insertions(+), 16 deletions(-)
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--753o2egv4zmh6vyt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXo3C0QAKCRCdlLljIbnQ
+EhhjAQDFUJ5VOPLwbFaGpNlrcUpjPunloiKcWks6ACx6gv1cSwEA9Ii9QQBfqGMO
+K8HrFWauN6ip0V8Sf5777xDP7rGWww8=
+=OtzS
+-----END PGP SIGNATURE-----
+
+--753o2egv4zmh6vyt--
