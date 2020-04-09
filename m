@@ -2,106 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1039D1A3896
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Apr 2020 19:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50B01A3975
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Apr 2020 20:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbgDIRIS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Apr 2020 13:08:18 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:45387 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726725AbgDIRIS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Apr 2020 13:08:18 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w11so1077230pga.12;
-        Thu, 09 Apr 2020 10:08:18 -0700 (PDT)
+        id S1726477AbgDISAT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Apr 2020 14:00:19 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:51647 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725987AbgDISAT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Apr 2020 14:00:19 -0400
+Received: by mail-pj1-f67.google.com with SMTP id n4so1616099pjp.1
+        for <linux-arch@vger.kernel.org>; Thu, 09 Apr 2020 11:00:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bQvrRMm1xrJntOiYTsW2Lx5FztmdO0PKJyWqixStKZM=;
-        b=SMSIs7zBXCYahuaxAxR+LoWlUnZeIr9zTb2pf+IjX3ssSGO4f/LJ71rs7cs+jdg3O/
-         IC2318r5GGhJcELuDl/Ze0uwNXia0OcIjwna6k5blB77mj0Y4XtCiMcbIK8st3rNlQ+e
-         osVfwDBBL2rIaU7lZns6ACclP5PoeUh8qegQnwkKt4YjmRM4qERNzP7oJBRDLPzgJljZ
-         qy1lKCQ8rFVztGlVzfI/Rkmzy7LEt8LalUdIpP0YHvwYF+bjfC0BE4mFZcwtZ0vyDnDC
-         IIFREURwImK0S68ylJtyrSaPkrzDPGZiOeOLFfr2hQJsER61wmNg7KZF/yKS5L8L3Igm
-         o7XQ==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=zmgHj370LBNKV1cbwyo1caCm3JQLWtu1rtTInvPHiUM=;
+        b=tzNrLp6SmTl4zuvoJWbv/IhrraqC8y+wpruozs/0zZ2WxqUK+8LU0L9I4hzVj2ua9U
+         KY4iUimjpe58mMHQ5aLQgiS86vHoYVT/MPfC/f04JDPoelZ7dXayZ2gxrJoZJFqWqlAW
+         tyC5H1xGmGRb3Es0DTFD6S73K5nQgskuaNMbgkZqBFc2BUEe7mEjWpXrG4IMCVehJ+K9
+         mV7IN/uS5qiJOsvVoX7uMjJXer1hGe247YoLfdMK4bapF4kUSj1XtqPwbXfUvPZqUfTw
+         +FmtN9UGx2prFh+/QoNprDQvyAWYCBn4UgnDGGocPkf5wCqL2lbyaPVsgzPfXKK0MFtg
+         Wb+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=bQvrRMm1xrJntOiYTsW2Lx5FztmdO0PKJyWqixStKZM=;
-        b=i3nkaZ13ETB5IUczlsyQYc9Thcx/YHhjSVhB6zhwj1wGO7PkZIEa6KzjIM2eTvuzeV
-         VhoVoJa0Fp1Zm1+Io1kOZxgm0T9P4SXeu08JuiXSS636dOvB3VPRlDpOQ3Ud/is5Q4JU
-         HVd1YybmDVTykG4wtC8DYe6ce3/XHFzmlCT/o7xYk6E3XwQBnN5uWX2JgWmaAbR6Ky+0
-         /ieUaHVV0NvprR31j0ZxEJfAoZNTI65EEbPugMNnZnf0EeM/JuwJia9D7J87dUmhx6HA
-         /uscLSKdpmxDn9pZUVolGR0Ra7RmB+Y5cCHhLRSelCQs9EcXPxwt3b7QAIBXMsV7bqMD
-         Ny7w==
-X-Gm-Message-State: AGi0PuahRDUn8Tv1zLIE7P0ApJYSh0GbBOnoGIPeVUMxDm31Gv0Zog2S
-        kW17R47N+UzkY32rOCOpEVI=
-X-Google-Smtp-Source: APiQypIGXl7ptK897jLts3QdF+EDBFxPJWcYJ6uqbpmOLvOgFWAldqFqZYwLtwgtv4/3t4lh0qbzWw==
-X-Received: by 2002:a63:d143:: with SMTP id c3mr401112pgj.171.1586452097545;
-        Thu, 09 Apr 2020 10:08:17 -0700 (PDT)
-Received: from google.com ([2601:647:4001:3000::50e3])
-        by smtp.gmail.com with ESMTPSA id w142sm1167934pff.111.2020.04.09.10.08.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2020 10:08:16 -0700 (PDT)
-Date:   Thu, 9 Apr 2020 10:08:13 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laura Abbott <labbott@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sergey.senozhatsky@gmail.com
-Subject: Re: [PATCH 10/28] mm: only allow page table mappings for built-in
- zsmalloc
-Message-ID: <20200409170813.GD247701@google.com>
-References: <20200408115926.1467567-1-hch@lst.de>
- <20200408115926.1467567-11-hch@lst.de>
- <20200409160826.GC247701@google.com>
- <20200409165030.GG20713@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200409165030.GG20713@hirez.programming.kicks-ass.net>
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=zmgHj370LBNKV1cbwyo1caCm3JQLWtu1rtTInvPHiUM=;
+        b=g/uVjZT8KhtVDPOcV0zmlGIUKGmU6fOW30KGJSoBxMBqijPFRFq5GVlJayPCVBOGrb
+         8Ydd9mC2f/nv6fzxnHw1L9qcUgsw3ORHu9r9ITF+duDmTYEkJJ72LhAHbhOmymj71wUB
+         TBEUt26Edt+9bSAwBhLU6ME5rLGwbyeAYmAtYbrTE7Jbsq/Zt3lYqkVnWmfcmZv/sHGp
+         epU+/8854nB4opDZwM6t3y6TvslaEd+GFJRi/+vTyuzAaDb5xqU7rL4KgWvxQ+AzCEy8
+         ck1FFjQjRYwdkJqWJDTrwb+Mk93ojycxKXZbcw71rJELTYFTXqQc4yECui2OpM9ydwAe
+         2SzQ==
+X-Gm-Message-State: AGi0PuZn9DlgGAObt1vSCn0O38tQeUqfkHBvyPjCSiHmqr6w696CxZVm
+        B66n3BPcYwcNZSlQvMvwrdbfDg==
+X-Google-Smtp-Source: APiQypIyuBEG4mydIIZ8UiVlFa6tJQNZqilN3DYnHlSeONtErGyrPOPpHqhOZbnewz+YO15faSZe2w==
+X-Received: by 2002:a17:902:ff14:: with SMTP id f20mr731344plj.206.1586455218768;
+        Thu, 09 Apr 2020 11:00:18 -0700 (PDT)
+Received: from ?IPv6:2601:646:c200:1ef2:d3f:18b:ffcb:12f6? ([2601:646:c200:1ef2:d3f:18b:ffcb:12f6])
+        by smtp.gmail.com with ESMTPSA id c3sm2461610pfa.160.2020.04.09.11.00.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Apr 2020 11:00:18 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v3 04/13] task_isolation: userspace hard isolation from kernel
+Date:   Thu, 9 Apr 2020 11:00:16 -0700
+Message-Id: <915489BC-B2C9-4D47-A205-FC597FC68B98@amacapital.net>
+References: <58995f108f1af4d59aa8ccd412cdff92711a9990.camel@marvell.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Prasun Kapoor <pkapoor@marvell.com>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+In-Reply-To: <58995f108f1af4d59aa8ccd412cdff92711a9990.camel@marvell.com>
+To:     Alex Belits <abelits@marvell.com>
+X-Mailer: iPhone Mail (17E255)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 09, 2020 at 06:50:30PM +0200, Peter Zijlstra wrote:
-> On Thu, Apr 09, 2020 at 09:08:26AM -0700, Minchan Kim wrote:
-> > On Wed, Apr 08, 2020 at 01:59:08PM +0200, Christoph Hellwig wrote:
-> > > This allows to unexport map_vm_area and unmap_kernel_range, which are
-> > > rather deep internal and should not be available to modules.
-> > 
-> > Even though I don't know how many usecase we have using zsmalloc as
-> > module(I heard only once by dumb reason), it could affect existing
-> > users. Thus, please include concrete explanation in the patch to
-> > justify when the complain occurs.
-> 
-> The justification is 'we can unexport functions that have no sane reason
-> of being exported in the first place'.
-> 
-> The Changelog pretty much says that.
 
-Okay, I hope there is no affected user since this patch.
-If there are someone, they need to provide sane reason why they want
-to have zsmalloc as module.
 
-Acked-by: Minchan Kim <minchan@kernel.org>
+> On Apr 9, 2020, at 8:21 AM, Alex Belits <abelits@marvell.com> wrote:
+>=20
+> =EF=BB=BFThe existing nohz_full mode is designed as a "soft" isolation mod=
+e
+> that makes tradeoffs to minimize userspace interruptions while
+> still attempting to avoid overheads in the kernel entry/exit path,
+> to provide 100% kernel semantics, etc.
+>=20
+> However, some applications require a "hard" commitment from the
+> kernel to avoid interruptions, in particular userspace device driver
+> style applications, such as high-speed networking code.
+>=20
+> This change introduces a framework to allow applications
+> to elect to have the "hard" semantics as needed, specifying
+> prctl(PR_TASK_ISOLATION, PR_TASK_ISOLATION_ENABLE) to do so.
+>=20
+> The kernel must be built with the new TASK_ISOLATION Kconfig flag
+> to enable this mode, and the kernel booted with an appropriate
+> "isolcpus=3Dnohz,domain,CPULIST" boot argument to enable
+> nohz_full and isolcpus. The "task_isolation" state is then indicated
+> by setting a new task struct field, task_isolation_flag, to the
+> value passed by prctl(), and also setting a TIF_TASK_ISOLATION
+> bit in the thread_info flags. When the kernel is returning to
+> userspace from the prctl() call and sees TIF_TASK_ISOLATION set,
+> it calls the new task_isolation_start() routine to arrange for
+> the task to avoid being interrupted in the future.
+>=20
+> With interrupts disabled, task_isolation_start() ensures that kernel
+> subsystems that might cause a future interrupt are quiesced. If it
+> doesn't succeed, it adjusts the syscall return value to indicate that
+> fact, and userspace can retry as desired. In addition to stopping
+> the scheduler tick, the code takes any actions that might avoid
+> a future interrupt to the core, such as a worker thread being
+> scheduled that could be quiesced now (e.g. the vmstat worker)
+> or a future IPI to the core to clean up some state that could be
+> cleaned up now (e.g. the mm lru per-cpu cache).
+>=20
+> Once the task has returned to userspace after issuing the prctl(),
+> if it enters the kernel again via system call, page fault, or any
+> other exception or irq, the kernel will kill it with SIGKILL.
+
+I could easily imagine myself using task isolation, but not with the SIGKILL=
+ semantics. SIGKILL causes data loss. Please at least let users choose what s=
+ignal to send.=
