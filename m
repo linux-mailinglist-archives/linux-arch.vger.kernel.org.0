@@ -2,122 +2,219 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D50B01A3975
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Apr 2020 20:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD5C1A3C60
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Apr 2020 00:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgDISAT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Apr 2020 14:00:19 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:51647 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725987AbgDISAT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Apr 2020 14:00:19 -0400
-Received: by mail-pj1-f67.google.com with SMTP id n4so1616099pjp.1
-        for <linux-arch@vger.kernel.org>; Thu, 09 Apr 2020 11:00:19 -0700 (PDT)
+        id S1726689AbgDIWZS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Apr 2020 18:25:18 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:41654 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726638AbgDIWZR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Apr 2020 18:25:17 -0400
+Received: by mail-qk1-f196.google.com with SMTP id y3so433427qky.8;
+        Thu, 09 Apr 2020 15:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=zmgHj370LBNKV1cbwyo1caCm3JQLWtu1rtTInvPHiUM=;
-        b=tzNrLp6SmTl4zuvoJWbv/IhrraqC8y+wpruozs/0zZ2WxqUK+8LU0L9I4hzVj2ua9U
-         KY4iUimjpe58mMHQ5aLQgiS86vHoYVT/MPfC/f04JDPoelZ7dXayZ2gxrJoZJFqWqlAW
-         tyC5H1xGmGRb3Es0DTFD6S73K5nQgskuaNMbgkZqBFc2BUEe7mEjWpXrG4IMCVehJ+K9
-         mV7IN/uS5qiJOsvVoX7uMjJXer1hGe247YoLfdMK4bapF4kUSj1XtqPwbXfUvPZqUfTw
-         +FmtN9UGx2prFh+/QoNprDQvyAWYCBn4UgnDGGocPkf5wCqL2lbyaPVsgzPfXKK0MFtg
-         Wb+A==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9zZmDvv9VsaMcSR+uAlcqBBO7fDfxOBX/cPeyIGlPXM=;
+        b=W4onPV0FDtRSS9y6l1W+W/FVY7uMwYmp/vLxbV+vsTO2W55vIfLst1ikMIBLMv47KZ
+         64ToStA7a/6zppDU+wTlTfU6Un6EOx32pfCLeSVtqFEU4ptlSPugU0N+X034gxeIEd+F
+         sZ22vzsQqnM3Miz22Gk0POiNvD6ME0G4DRZUu2V8o+JOPEqF23MicCWNGTbmmYIhLe6V
+         3W5oV53czY23X0IJIdp9cV+2Oc5V3oKlN3PwYT1QLJTo9I26Y6rC6ay6XFYA6QD+wQeh
+         /I0xueubtqoupnFXkcYtIoaN9TVAPRTkCMdnq3avNZap0J3hFNk8iJ7/qgVG1ZOC7J6L
+         Bwaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=zmgHj370LBNKV1cbwyo1caCm3JQLWtu1rtTInvPHiUM=;
-        b=g/uVjZT8KhtVDPOcV0zmlGIUKGmU6fOW30KGJSoBxMBqijPFRFq5GVlJayPCVBOGrb
-         8Ydd9mC2f/nv6fzxnHw1L9qcUgsw3ORHu9r9ITF+duDmTYEkJJ72LhAHbhOmymj71wUB
-         TBEUt26Edt+9bSAwBhLU6ME5rLGwbyeAYmAtYbrTE7Jbsq/Zt3lYqkVnWmfcmZv/sHGp
-         epU+/8854nB4opDZwM6t3y6TvslaEd+GFJRi/+vTyuzAaDb5xqU7rL4KgWvxQ+AzCEy8
-         ck1FFjQjRYwdkJqWJDTrwb+Mk93ojycxKXZbcw71rJELTYFTXqQc4yECui2OpM9ydwAe
-         2SzQ==
-X-Gm-Message-State: AGi0PuZn9DlgGAObt1vSCn0O38tQeUqfkHBvyPjCSiHmqr6w696CxZVm
-        B66n3BPcYwcNZSlQvMvwrdbfDg==
-X-Google-Smtp-Source: APiQypIyuBEG4mydIIZ8UiVlFa6tJQNZqilN3DYnHlSeONtErGyrPOPpHqhOZbnewz+YO15faSZe2w==
-X-Received: by 2002:a17:902:ff14:: with SMTP id f20mr731344plj.206.1586455218768;
-        Thu, 09 Apr 2020 11:00:18 -0700 (PDT)
-Received: from ?IPv6:2601:646:c200:1ef2:d3f:18b:ffcb:12f6? ([2601:646:c200:1ef2:d3f:18b:ffcb:12f6])
-        by smtp.gmail.com with ESMTPSA id c3sm2461610pfa.160.2020.04.09.11.00.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Apr 2020 11:00:18 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v3 04/13] task_isolation: userspace hard isolation from kernel
-Date:   Thu, 9 Apr 2020 11:00:16 -0700
-Message-Id: <915489BC-B2C9-4D47-A205-FC597FC68B98@amacapital.net>
-References: <58995f108f1af4d59aa8ccd412cdff92711a9990.camel@marvell.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-In-Reply-To: <58995f108f1af4d59aa8ccd412cdff92711a9990.camel@marvell.com>
-To:     Alex Belits <abelits@marvell.com>
-X-Mailer: iPhone Mail (17E255)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9zZmDvv9VsaMcSR+uAlcqBBO7fDfxOBX/cPeyIGlPXM=;
+        b=HaNwndENF/NVCfd2FrwfFiaH0kd1Zt9uBuZLve2yhLpfItXKDvMGekFwZikF432J1G
+         KCgb0HplqaysFQ5b3x8Rw4qSNmGmpin0gPFtZdqN66Sx6IkpbxqI8lZrPTfZQ4RQIHyw
+         zWtRH79bGXZlCD7eW23FqqqmvuV15CXPB3aVqBG0zoFfHPiMinh1kvOZ2oQrJNZWcLEp
+         MHzSKyxbny7wf6v+CMQYILokhvcR17GaojOMp+MLM85wjUnVuFyCDWr4HzNSh3VcI72j
+         3sAs7HbZO6NFUfOSzOuM8Cy5QKUm5rwpy6yOaxDosAfiNKcEsBl983xluSemfzieD/tS
+         4+eg==
+X-Gm-Message-State: AGi0PuZtjkfALYyWRMozReFfWn1kIyyfpwd0i/Xd6lJdB5nPA1TEV2gC
+        2FpOaubbhcopK5JTcWeQnfYgIQsU5LlQc6JSqef9ynlJ4O0=
+X-Google-Smtp-Source: APiQypIwNq7wZY1PnpGu/Qv59bzelpOE6CP1WGeABev8jhWjEtJ5m8SKmmGAGV+0ntLTtupM9GwEs2trz+3rj7Qjirg=
+X-Received: by 2002:a37:6587:: with SMTP id z129mr1198478qkb.437.1586471114653;
+ Thu, 09 Apr 2020 15:25:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200408115926.1467567-1-hch@lst.de> <20200408115926.1467567-26-hch@lst.de>
+In-Reply-To: <20200408115926.1467567-26-hch@lst.de>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 9 Apr 2020 15:25:03 -0700
+Message-ID: <CAEf4BzZOC2tLrqt_Km=WQb=9xiya2e31i6K3oJuzgYQt6wp1LQ@mail.gmail.com>
+Subject: Re: [PATCH 25/28] mm: remove vmalloc_user_node_flags
+To:     Christoph Hellwig <hch@lst.de>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laura Abbott <labbott@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+cc Johannes who suggested this API call originally
 
-
-> On Apr 9, 2020, at 8:21 AM, Alex Belits <abelits@marvell.com> wrote:
->=20
-> =EF=BB=BFThe existing nohz_full mode is designed as a "soft" isolation mod=
-e
-> that makes tradeoffs to minimize userspace interruptions while
-> still attempting to avoid overheads in the kernel entry/exit path,
-> to provide 100% kernel semantics, etc.
->=20
-> However, some applications require a "hard" commitment from the
-> kernel to avoid interruptions, in particular userspace device driver
-> style applications, such as high-speed networking code.
->=20
-> This change introduces a framework to allow applications
-> to elect to have the "hard" semantics as needed, specifying
-> prctl(PR_TASK_ISOLATION, PR_TASK_ISOLATION_ENABLE) to do so.
->=20
-> The kernel must be built with the new TASK_ISOLATION Kconfig flag
-> to enable this mode, and the kernel booted with an appropriate
-> "isolcpus=3Dnohz,domain,CPULIST" boot argument to enable
-> nohz_full and isolcpus. The "task_isolation" state is then indicated
-> by setting a new task struct field, task_isolation_flag, to the
-> value passed by prctl(), and also setting a TIF_TASK_ISOLATION
-> bit in the thread_info flags. When the kernel is returning to
-> userspace from the prctl() call and sees TIF_TASK_ISOLATION set,
-> it calls the new task_isolation_start() routine to arrange for
-> the task to avoid being interrupted in the future.
->=20
-> With interrupts disabled, task_isolation_start() ensures that kernel
-> subsystems that might cause a future interrupt are quiesced. If it
-> doesn't succeed, it adjusts the syscall return value to indicate that
-> fact, and userspace can retry as desired. In addition to stopping
-> the scheduler tick, the code takes any actions that might avoid
-> a future interrupt to the core, such as a worker thread being
-> scheduled that could be quiesced now (e.g. the vmstat worker)
-> or a future IPI to the core to clean up some state that could be
-> cleaned up now (e.g. the mm lru per-cpu cache).
->=20
-> Once the task has returned to userspace after issuing the prctl(),
-> if it enters the kernel again via system call, page fault, or any
-> other exception or irq, the kernel will kill it with SIGKILL.
-
-I could easily imagine myself using task isolation, but not with the SIGKILL=
- semantics. SIGKILL causes data loss. Please at least let users choose what s=
-ignal to send.=
+On Wed, Apr 8, 2020 at 5:03 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> Open code it in __bpf_map_area_alloc, which is the only caller.  Also
+> clean up __bpf_map_area_alloc to have a single vmalloc call with
+> slightly different flags instead of the current two different calls.
+>
+> For this to compile for the nommu case add a __vmalloc_node_range stub
+> to nommu.c.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  include/linux/vmalloc.h |  1 -
+>  kernel/bpf/syscall.c    | 23 +++++++++++++----------
+>  mm/nommu.c              | 14 ++++++++------
+>  mm/vmalloc.c            | 20 --------------------
+>  4 files changed, 21 insertions(+), 37 deletions(-)
+>
+> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> index 108f49b47756..f90f2946aac2 100644
+> --- a/include/linux/vmalloc.h
+> +++ b/include/linux/vmalloc.h
+> @@ -106,7 +106,6 @@ extern void *vzalloc(unsigned long size);
+>  extern void *vmalloc_user(unsigned long size);
+>  extern void *vmalloc_node(unsigned long size, int node);
+>  extern void *vzalloc_node(unsigned long size, int node);
+> -extern void *vmalloc_user_node_flags(unsigned long size, int node, gfp_t flags);
+>  extern void *vmalloc_exec(unsigned long size);
+>  extern void *vmalloc_32(unsigned long size);
+>  extern void *vmalloc_32_user(unsigned long size);
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 48d98ea8fad6..249d9bd43321 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -281,26 +281,29 @@ static void *__bpf_map_area_alloc(u64 size, int numa_node, bool mmapable)
+>          * __GFP_RETRY_MAYFAIL to avoid such situations.
+>          */
+>
+> -       const gfp_t flags = __GFP_NOWARN | __GFP_ZERO;
+> +       const gfp_t gfp = __GFP_NOWARN | __GFP_ZERO;
+> +       unsigned int flags = 0;
+> +       unsigned long align = 1;
+>         void *area;
+>
+>         if (size >= SIZE_MAX)
+>                 return NULL;
+>
+>         /* kmalloc()'ed memory can't be mmap()'ed */
+> -       if (!mmapable && size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
+> -               area = kmalloc_node(size, GFP_USER | __GFP_NORETRY | flags,
+> +       if (mmapable) {
+> +               BUG_ON(!PAGE_ALIGNED(size));
+> +               align = SHMLBA;
+> +               flags = VM_USERMAP;
+> +       } else if (size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
+> +               area = kmalloc_node(size, gfp | GFP_USER | __GFP_NORETRY,
+>                                     numa_node);
+>                 if (area != NULL)
+>                         return area;
+>         }
+> -       if (mmapable) {
+> -               BUG_ON(!PAGE_ALIGNED(size));
+> -               return vmalloc_user_node_flags(size, numa_node, GFP_KERNEL |
+> -                                              __GFP_RETRY_MAYFAIL | flags);
+> -       }
+> -       return __vmalloc_node(size, 1, GFP_KERNEL | __GFP_RETRY_MAYFAIL | flags,
+> -                             numa_node, __builtin_return_address(0));
+> +
+> +       return __vmalloc_node_range(size, align, VMALLOC_START, VMALLOC_END,
+> +                       gfp | GFP_KERNEL | __GFP_RETRY_MAYFAIL, PAGE_KERNEL,
+> +                       flags, numa_node, __builtin_return_address(0));
+>  }
+>
+>  void *bpf_map_area_alloc(u64 size, int numa_node)
+> diff --git a/mm/nommu.c b/mm/nommu.c
+> index 81a86cd85893..b42cd6003d7d 100644
+> --- a/mm/nommu.c
+> +++ b/mm/nommu.c
+> @@ -150,6 +150,14 @@ void *__vmalloc(unsigned long size, gfp_t gfp_mask)
+>  }
+>  EXPORT_SYMBOL(__vmalloc);
+>
+> +void *__vmalloc_node_range(unsigned long size, unsigned long align,
+> +               unsigned long start, unsigned long end, gfp_t gfp_mask,
+> +               pgprot_t prot, unsigned long vm_flags, int node,
+> +               const void *caller)
+> +{
+> +       return __vmalloc(size, flags);
+> +}
+> +
+>  void *__vmalloc_node(unsigned long size, unsigned long align, gfp_t gfp_mask,
+>                 int node, const void *caller)
+>  {
+> @@ -180,12 +188,6 @@ void *vmalloc_user(unsigned long size)
+>  }
+>  EXPORT_SYMBOL(vmalloc_user);
+>
+> -void *vmalloc_user_node_flags(unsigned long size, int node, gfp_t flags)
+> -{
+> -       return __vmalloc_user_flags(size, flags | __GFP_ZERO);
+> -}
+> -EXPORT_SYMBOL(vmalloc_user_node_flags);
+> -
+>  struct page *vmalloc_to_page(const void *addr)
+>  {
+>         return virt_to_page(addr);
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 333fbe77255a..f6f2acdaf70c 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -2658,26 +2658,6 @@ void *vzalloc_node(unsigned long size, int node)
+>  }
+>  EXPORT_SYMBOL(vzalloc_node);
+>
+> -/**
+> - * vmalloc_user_node_flags - allocate memory for userspace on a specific node
+> - * @size: allocation size
+> - * @node: numa node
+> - * @flags: flags for the page level allocator
+> - *
+> - * The resulting memory area is zeroed so it can be mapped to userspace
+> - * without leaking data.
+> - *
+> - * Return: pointer to the allocated memory or %NULL on error
+> - */
+> -void *vmalloc_user_node_flags(unsigned long size, int node, gfp_t flags)
+> -{
+> -       return __vmalloc_node_range(size, SHMLBA,  VMALLOC_START, VMALLOC_END,
+> -                                   flags | __GFP_ZERO, PAGE_KERNEL,
+> -                                   VM_USERMAP, node,
+> -                                   __builtin_return_address(0));
+> -}
+> -EXPORT_SYMBOL(vmalloc_user_node_flags);
+> -
+>  /**
+>   * vmalloc_exec - allocate virtually contiguous, executable memory
+>   * @size:        allocation size
+> --
+> 2.25.1
+>
