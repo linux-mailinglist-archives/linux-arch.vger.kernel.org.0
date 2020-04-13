@@ -2,110 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 655561A65CD
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Apr 2020 13:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E3C1A66A2
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Apr 2020 15:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729193AbgDMLt4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Apr 2020 07:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729169AbgDMLtz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Apr 2020 07:49:55 -0400
-X-Greylist: delayed 526 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Apr 2020 07:49:55 EDT
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F5AC008611
-        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 04:41:09 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id t10so8207557iln.2
-        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 04:41:09 -0700 (PDT)
+        id S1729679AbgDMM7p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Apr 2020 08:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729673AbgDMM7o (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Apr 2020 08:59:44 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955F1C008749;
+        Mon, 13 Apr 2020 05:54:17 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id w3so3359832plz.5;
+        Mon, 13 Apr 2020 05:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=qlKWExEze9qCqlwbpw1q4+d2Zjr4ETGVa64TcX+dTlk=;
-        b=HxOaFJZljqXQIeSLw7dw+YeTIVe76Yo57NkC3rYQjPPsruaWLZEetJYgTw7mDA7iYw
-         4KM/sQKuVdxfTyBgHy0QGrcgvhBAp/s2WR+7lhwMEms7c5U3ARzlxX4w9gHN6kyIVCTo
-         InVjjBwajQbgYMLlLr/dGAnfAOq75HLmi2bmQShdg5UrDH6ZNHdmpjirCjsFE3E+W3lI
-         4HPNdhIk9GHy3wOVy8qt79oLhQ3V0WJ+l2R8YfTk5No8OB207Mc1ssyzLdiNdU6iDIon
-         HSnId1sWR9JHq8BkscMOY+TVCS7WuDDdfTSRJRDObUGUY3pKdsd/NGq97n4qtv5szVJr
-         IEMQ==
+        bh=eLerIzKtSl3zsn2Oymq5fsiJKLq+NQe813C4SL5fbLw=;
+        b=D3TacET4LkxgSZwrtk0YaO57GIAKjGq2FPxhPIibWo0sfykUkoRPbtT1f79Yc1c0me
+         Jg6ubg805mJwW/UIK0xFjVnvaAhSuErW6yXPEECe9C+aijrMJqQi12GvPnicnJXPQkAD
+         7s5ZhWNwDiR14hLg1/l5CXCsGNCCoW09+cbd+G7vLYprIu8mAYrfJt5Z7Ej+3+oEbWCm
+         negw6h/cLHxbJGqVoj0xGCTjzWVbxBdALQozOIeVH71ZFyuZ+tbY4voNU7sWACEIebF3
+         JVVOML3yuc3rFmdAauFn6vfYwVjRjOsHKMlXRUgQBOAmXItxjBRIE1V3smOcR1mge9fP
+         +3Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=qlKWExEze9qCqlwbpw1q4+d2Zjr4ETGVa64TcX+dTlk=;
-        b=Kn7NNedwX+UXnaObuwd6NibfUlmE3L8OMaUx0hFZh6J92ew6D/5FL6cGdPIHp0n2lR
-         06xiEOEjhhCeUbykKH2S7uAF5nD/ycPPmgg96o1VOfyv7vxc7IrnLudhY411Sh+Exr2y
-         blGPWlUQ1rR0YuzTq2cmk4eJbi/+7mUykNW6VtM1Osc1l8mv5Ooe1pD08F9ewpfi7JBN
-         Ct3F4fy1QuHpnZNBSYyZ0oRV0C7JxooTfWmqFwYyGzu/WFuwuEKMyedySFOvTTkOqLuK
-         ZF0BSfYVcLCnK1WB5DBVm/EvmIKMBwOnJORQmHB9UdHZwj4jnaj4LKB4sQwukZS6oe1t
-         ROTw==
-X-Gm-Message-State: AGi0PuZWXGghH7udds7HvkszXdH3bRHKPEZk3c6pX6xw4PXp9YfPpb6P
-        qe9+bp2xiPeIKO2WLWCZawTSJLZR61EFiR5XyA==
-X-Google-Smtp-Source: APiQypJ8Xf5JZIaJmuakcegBHklRN/w3ObzOY1fG2hZhiF0393fUgrxf6qaSVcLD5pLEm/4TEQgoj9oGK8tQ5EeyGAU=
-X-Received: by 2002:a05:6e02:c8f:: with SMTP id b15mr14965961ile.35.1586778068198;
- Mon, 13 Apr 2020 04:41:08 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eLerIzKtSl3zsn2Oymq5fsiJKLq+NQe813C4SL5fbLw=;
+        b=rg6S73pwG4Q7icl6RQdQujMnAOn+/zFlQKZZPK/pX5mVQTE8TBXgGEUsyYjOP22EHy
+         hYC/9GuFF1tEFu/N1wcciKVkwhqGFyA1UNAwkCrwGhhcn+b9u/HbRU1Ifv65VE5yzx9m
+         PFrnbfAMWdAgDtPbcdAoJoD+I1tHXKUEA/INs+JeJq7OaoHB/G5GnltTtOSUVr7tWsH8
+         z0YQa6f3RFFUG34uU7xxZpaxio6XfjLwMPKL3/sVySfvLtIzdzyuU7AMR4CfS/J565Oc
+         saoC3UTgKUtxj2KobkaOkeJlTwfoUa+dnCQAqsV0QVIoRhx2zXRCBHCoRi1yX8i+yILj
+         5XRg==
+X-Gm-Message-State: AGi0PubGFZwkWthmoYmhV6gjvDZaLJVUebv/al5odT4w/FlHbML5rnnH
+        q7wejAmuUlHKnwy8NCjwPb4=
+X-Google-Smtp-Source: APiQypIuKwevaVe7P950qwu0WviRlHpRByIKxXMptZO8oQOn38nAcJkm8e5eaH+Vq6duTZluVkSCtw==
+X-Received: by 2002:a17:902:464:: with SMTP id 91mr17811244ple.261.1586782456770;
+        Mon, 13 Apr 2020 05:54:16 -0700 (PDT)
+Received: from bobo.ibm.com (60-241-117-97.tpgi.com.au. [60.241.117.97])
+        by smtp.gmail.com with ESMTPSA id j24sm9235610pji.20.2020.04.13.05.54.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2020 05:54:15 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-mm@kvack.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v2 0/4] huge vmalloc mappings
+Date:   Mon, 13 Apr 2020 22:52:59 +1000
+Message-Id: <20200413125303.423864-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Received: by 2002:a02:5e49:0:0:0:0:0 with HTTP; Mon, 13 Apr 2020 04:41:07
- -0700 (PDT)
-Reply-To: mgbenin903@gmail.com
-From:   Barrister Robert Richter UN-Attorney at Law Court-Benin 
-        <info.zennitbankplcnigerian@gmail.com>
-Date:   Mon, 13 Apr 2020 13:41:07 +0200
-Message-ID: <CABHzvrm3rWryg1yAooKeHwdxzrKD47PRAEfC+ay1A6i5z3Wdiw@mail.gmail.com>
-Subject: I have already sent you first payment US$5000.00 this morning through
- MONEY Gram service.it is available to pick up in address now.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ATTN DEAR BENEFICIARY.
+We can get a significant win with larger mappings for some of the big
+global hashes.
 
-GOOD NEWS.
+Since RFC, relevant architectures have added p?d_leaf accessors so no
+real arch changes required, and I changed it not to allocate huge
+mappings for modules and a bunch of other fixes.
 
-I have already sent you first payment US$5000.00 this morning through
-MONEY Gram service.it is available to pick up in address now.
+Nicholas Piggin (4):
+  mm/vmalloc: fix vmalloc_to_page for huge vmap mappings
+  mm: Move ioremap page table mapping function to mm/
+  mm: HUGE_VMAP arch query functions cleanup
+  mm/vmalloc: Hugepage vmalloc mappings
 
-So we advise you to Contact This Money Gram office to pick up your
-transfer $US5000.00 today.
+ arch/arm64/mm/mmu.c                      |   8 +-
+ arch/powerpc/mm/book3s64/radix_pgtable.c |   6 +-
+ arch/x86/mm/ioremap.c                    |   6 +-
+ include/linux/io.h                       |   3 -
+ include/linux/vmalloc.h                  |  15 +
+ lib/ioremap.c                            | 203 +----------
+ mm/vmalloc.c                             | 413 +++++++++++++++++++----
+ 7 files changed, 380 insertions(+), 274 deletions(-)
 
+-- 
+2.23.0
 
-Note that your compensation payment funds is total amount $US2.800,000
-Million Dollars.We have instructed the Money Gram Agent,Mr. James
-Gadner to keep sending the transfer to you daily, but the maximum
-amount you will be receiving everyday is US$5000.00. Contact Agent now
-to pick up your first payment $US5000.00 immediately.
-
-Contact Person, Mr. James Gadner, Dir. Money Gram Benin.
-Email: mgbenin903@gmail.com
-Telephone Numbers: +229 62819378/ +229 98477762
-
-HERE IS YOUR PAYMENT DETAILS FOR THE FIRST =C2=A3US5000.00 SENT TODAY.
-
-Track View Website link:
-https://secure.moneygram.com/track
-Sender=E2=80=99s First name: David
-Sender=E2=80=99s Last Name: Joiner
-Money Transfer Control Number (MTCN) (REFERENCE)# 26046856
-
-Contact the Mmoney Gram Urgent and reconfirm your address to the
-office before, they will allow you to pick up the transfer today.
-
-HERE IS WHAT REQUIRED OF YOU.
-
-YOUR FULL NAME---------
-ADDRESS--------------
-COUNTRY-----------------------------
-TELEPHONE NUMBERS-----------------
-
-Note, I paid the transfer fee for you, but only you are required to
-send to the office is $75 only,Been Your Payment File activation fee,
-Send once you contact the office,before you can able to pick up your
-transfer today.
-
-Let me know once you pick up first payment today.
-
-Barrister Robert Richter UN-Attorney at Law Court-Benin
