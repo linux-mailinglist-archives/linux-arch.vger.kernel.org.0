@@ -2,72 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8409F1A676D
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Apr 2020 16:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5E41A6CEC
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Apr 2020 22:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730219AbgDMOCV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Apr 2020 10:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730187AbgDMOCU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Apr 2020 10:02:20 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C812C0A3BDC
-        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 07:02:20 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id o11so8536584ilq.7
-        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 07:02:20 -0700 (PDT)
+        id S2388200AbgDMUDL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Apr 2020 16:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388202AbgDMUDL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Apr 2020 16:03:11 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35CBC0A3BE2
+        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 13:03:09 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id o19so3531687qkk.5
+        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 13:03:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=dOb2NN7Jo9kxO1F0sYtG5OD3THF5S6tbeFZPMZ4fcJA=;
-        b=FW6enD3IeOEIsl5M9aPuFCZCCL0bGGpcQYagBtkM2Ba2yGSAlM4wCsu91+9h5AaBWQ
-         v/T8gdPHrUp4fYLS9bfEOD06lCMlEOAdLGExsDDl+M+2AJ5CN84T34LNYV1VeD2w5pg2
-         FW9dwtMg0L8l0hVA9Bc6Qdppb/KTz03qc8gA5G2XCaQnEyi5o+lhjsBRXmVaLZJfNK3P
-         9Q516MQwrgnqHfl4DPKbdZ3xvYA8YT2E5Zs+XnJalYUVxbAKc4AzS28BhpR4oRxMPThx
-         s35ZRx73z4roHsn87NPiiwhSyXgPn4bqfpSFj68UXHsenB64fjEdZ4o+TrrpsATj0aM9
-         lC4A==
+        d=cmpxchg-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OEtNtfUfCfknsSkfuodbs8GxJYII1GNua8MgFwL7K04=;
+        b=juG10l2QIUDc0d5n1SeOUdB0siwuJQOGCU6pnQRUaf/usairEJnMWI4NCHxVUL2frR
+         HT8Dj0G2KFCEAuDZkPEiGVv3NLV5ooo7kJcA7V4T4xV81925vc++8cQ5KHVSBI1+By+5
+         +/+66XSDZZW/XkKLCzanTlv78m+KRuVYwmVlKC0N09gqxCMtKrGm1srU2i7+Kw1dkX5x
+         DPoyq7kDqoEsqgMu8qGEr3vtIBlmiQWaBKBOz/tbp3ah+kvBa7aU6x3A1gaLlMlwJUeg
+         hUM97swfra3YIkYNCDFX0ZcS8Au+7KacD3c88l4X9gBMGqiNfPjeT92Va5NYJ5lvz0rD
+         aygw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=dOb2NN7Jo9kxO1F0sYtG5OD3THF5S6tbeFZPMZ4fcJA=;
-        b=iVxSEYSpow9XP6kyeRxickMKUYT46179fZysv4EMghLj77obFlZdylWDXlyXo6VZMA
-         oaH9fcFIGoWrINJZ4WMOjSU6iMpjmEuNbTGzLWR8qhuSMSeg7Fava6w5uKwuomM6jHff
-         J6o10TIbzIUrcMmPToTX8Qs9vP/CKUFGpmwrROb0fo8iOjbKQabp5OMgRgWc3txRZGOB
-         EqepXodYq3nqHljRRFJBfMF7BIAN2eWaTM6X9+ULSyQvsqj/0MrJRsav3l/yPYtYnyAB
-         QamY4qPQGKKk3FUGGYnmLUOPWj9l8v1z8AfgoWqqGaEgi1soW1Obj+xr75J4jdhch4Vd
-         WDuw==
-X-Gm-Message-State: AGi0Pub0X4pB7ZgbmIwxjFe5zn+TS6uX4Wh7bEMDCaJCcqZ9ne7I7n+c
-        UfA5yt4fvWmVSn8q7oakgRmHQ81/CwA3HgyV7gE=
-X-Google-Smtp-Source: APiQypLOYhCgq6X2z24dRs2ZaXlXf2JuaqKei3S0C+xMxCmnYUZDAj4I5yHT/IP0NmDcXx8IV7YvnShYXJl7p+bSrYg=
-X-Received: by 2002:a92:9fc4:: with SMTP id z65mr17731313ilk.198.1586786539500;
- Mon, 13 Apr 2020 07:02:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OEtNtfUfCfknsSkfuodbs8GxJYII1GNua8MgFwL7K04=;
+        b=N5dckJHMyQ4IwFqiA2y8YFXtx6uzyrIHKaK5yL4VRTTzcrUgw9wE2HTwTMJTQXhvpk
+         m5FypXu83Cb6bF8UPcclkX9+N8Ol/MDzqlFuXE57GXwtcT15qxNuQ5++/UJAVNEg8XxJ
+         gU6CSRDNYpdLuDkerP1zdrL+fowMUm5vCx2mB1amOQohlTrgBm8/5qZLXoTRXAjcZG3B
+         BxUVGSvZ28a4P0MbtPsCXQyXIQYlXZEoZbsBhgdD8cgQX6TR0YJIcLstDDlSSFofpDom
+         EOTDXP/5UPoA7VJyXPXSt65F/Fyz+e4bX9/ZzFlvtjOpQtDcni5lVwfiLwqDDe3GRqFP
+         J2PA==
+X-Gm-Message-State: AGi0PuYfWIVBieW2mtD21XZRIf69XyNKYNb17H2gGeYUsqpq0EyEQpJt
+        GaQdzYdFTkA4tTbwqYin+57rlQ==
+X-Google-Smtp-Source: APiQypJVwvSR1oEkK4bhCoeIIw8batoCJN92/jh4PNjnx+deBvO5XKiPj+RRAmN7IK2twvZnNWUNMA==
+X-Received: by 2002:a37:d93:: with SMTP id 141mr7293908qkn.32.1586808188246;
+        Mon, 13 Apr 2020 13:03:08 -0700 (PDT)
+Received: from localhost (70.44.39.90.res-cmts.bus.ptd.net. [70.44.39.90])
+        by smtp.gmail.com with ESMTPSA id x66sm9119423qka.121.2020.04.13.13.03.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2020 13:03:07 -0700 (PDT)
+Date:   Mon, 13 Apr 2020 16:03:06 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laura Abbott <labbott@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 25/28] mm: remove vmalloc_user_node_flags
+Message-ID: <20200413200306.GC99267@cmpxchg.org>
+References: <20200408115926.1467567-1-hch@lst.de>
+ <20200408115926.1467567-26-hch@lst.de>
+ <CAEf4BzZOC2tLrqt_Km=WQb=9xiya2e31i6K3oJuzgYQt6wp1LQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a02:606d:0:0:0:0:0 with HTTP; Mon, 13 Apr 2020 07:02:19
- -0700 (PDT)
-Reply-To: drharunabello4@gmail.com
-From:   drharunabello <azarara92@gmail.com>
-Date:   Mon, 13 Apr 2020 07:02:19 -0700
-Message-ID: <CAOsPUbQYvDk6V6qyJBDU-01x6K-2oz0YREZHT-TiWKBnjCrzUw@mail.gmail.com>
-Subject: GOOD DAY DEAR
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZOC2tLrqt_Km=WQb=9xiya2e31i6K3oJuzgYQt6wp1LQ@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
--- 
+On Thu, Apr 09, 2020 at 03:25:03PM -0700, Andrii Nakryiko wrote:
+> cc Johannes who suggested this API call originally
 
-Good day Sir
+I forgot why we did it this way - probably just cruft begetting more
+cruft. Either way, Christoph's cleanup makes this look a lot better.
 
-I have a project of $18.5 Million Us Dollars which I will like you to
-support me
-so that the fund will be transfer to your bank account.
-Please if you are capable reply back to me so that i will give more
-details about this
-project.
+> On Wed, Apr 8, 2020 at 5:03 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > Open code it in __bpf_map_area_alloc, which is the only caller.  Also
+> > clean up __bpf_map_area_alloc to have a single vmalloc call with
+> > slightly different flags instead of the current two different calls.
+> >
+> > For this to compile for the nommu case add a __vmalloc_node_range stub
+> > to nommu.c.
+> >
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Thank you I am waiting to hear from you
-
-Dr Bello
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
