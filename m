@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 188481A7C2F
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 15:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4A51A7E63
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 15:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502740AbgDNNO5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S2502736AbgDNNO5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Tue, 14 Apr 2020 09:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502728AbgDNNOw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Apr 2020 09:14:52 -0400
+        with ESMTP id S2502731AbgDNNOx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Apr 2020 09:14:53 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D748C061A0F;
-        Tue, 14 Apr 2020 06:14:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EECC061A10;
+        Tue, 14 Apr 2020 06:14:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=ounqfI9CXMUIXqEGvecn2fVMevKBON5/GtrMu/96rgE=; b=JXYdttdnaHgBP+lrnbNQv+l484
-        AiTLXkeT89LiTTe8UjKuAOXDWRuFGAcQ/0CnDrMoy9ZGKz4sk7r96NGt6CuvaRdpA66qBYAJs0u4x
-        u7ZGjCB5NfHcOgUfTmMxihPOpHU3YzO7ATv3rEodE1mB0A6EDcsMfLgynRGNEoH0URG1N67vsvQ19
-        2xBcQNMtObO5UAoeqB1qDJY5ftdJr1rvZS8JlFIjADihw193xCv/FJPXcuqN0qXZ02y6IQK+CKIx5
-        yQbDGbmNwBHeYmOIds2Y0zr7VGGy4VAfNmsEEGLFdUk7woS9f96wHe5hQkcMuG6kN1pDBO+UDwMcB
-        358La5gQ==;
+        bh=kDWxNR99BXM0mYvZJ8aft2fdXgy+jyVb2k5m2hDhDIg=; b=m99mv6+L6NEGc5NsA05meTZ7J4
+        pET4ii0TRtjQCrdWlxaL+Z3i+1UptXtFxQGlSdBzQ21ohBGQEpsm2M9Vft9jJlWjOu19cVSMmyEje
+        0W2E7OvYWUFCIVLO80Sg9o0BZPGaQA1gW/JQLBqCnSWgvbRsrUncgPC43+OGZ32lMwtrlOJABgpmP
+        dr9dO3PUdumoeIRhWb8CKqgTbCH+YaovAGUKzCjWGK+2U4vCn6pUJZSRIvNXmAxIaRcb8mHUrLnCb
+        kt1YUre6HJ0Ez+Ip2qdE7zqvvZHdZOwfghfirz0wiudpSSYO5JMcU+7yljHPY3nC7FtZMX6hoowY6
+        r5y6QnkA==;
 Received: from [2001:4bb8:180:384b:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jOLOY-0006i4-0d; Tue, 14 Apr 2020 13:14:30 +0000
+        id 1jOLOb-0006lI-8l; Tue, 14 Apr 2020 13:14:33 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
@@ -49,9 +49,9 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         iommu@lists.linux-foundation.org,
         linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 11/29] mm: only allow page table mappings for built-in zsmalloc
-Date:   Tue, 14 Apr 2020 15:13:30 +0200
-Message-Id: <20200414131348.444715-12-hch@lst.de>
+Subject: [PATCH 12/29] mm: pass addr as unsigned long to vb_free
+Date:   Tue, 14 Apr 2020 15:13:31 +0200
+Message-Id: <20200414131348.444715-13-hch@lst.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200414131348.444715-1-hch@lst.de>
 References: <20200414131348.444715-1-hch@lst.de>
@@ -63,56 +63,68 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This allows to unexport map_vm_area and unmap_kernel_range, which are
-rather deep internal and should not be available to modules, as they for
-example allow fine grained control of mapping permissions, and also
-allow splitting the setup of a vmalloc area and the actual mapping and
-thus expose vmalloc internals.
-
-zsmalloc is typically built-in and continues to work (just like the
-percpu-vm code using a similar patter), while modular zsmalloc also
-continues to work, but must use copies.
+Ever use of addr in vb_free casts to unsigned long first, and the caller
+has an unsigned long version of the address available anyway.  Just pass
+that and avoid all the casts.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- mm/Kconfig   | 2 +-
- mm/vmalloc.c | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ mm/vmalloc.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 09a9edfb8461..5c0362bd8d56 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -707,7 +707,7 @@ config ZSMALLOC
- 
- config ZSMALLOC_PGTABLE_MAPPING
- 	bool "Use page table mapping to access object in zsmalloc"
--	depends on ZSMALLOC
-+	depends on ZSMALLOC=y
- 	help
- 	  By default, zsmalloc uses a copy-based object mapping method to
- 	  access allocations that span two pages. However, if a particular
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 3375f9508ef6..9183fc0d365a 100644
+index 9183fc0d365a..aada9e9144bd 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -2046,7 +2046,6 @@ void unmap_kernel_range(unsigned long addr, unsigned long size)
- 	vunmap_page_range(addr, end);
- 	flush_tlb_kernel_range(addr, end);
+@@ -1664,7 +1664,7 @@ static void *vb_alloc(unsigned long size, gfp_t gfp_mask)
+ 	return vaddr;
  }
--EXPORT_SYMBOL_GPL(unmap_kernel_range);
  
- int map_vm_area(struct vm_struct *area, pgprot_t prot, struct page **pages)
+-static void vb_free(const void *addr, unsigned long size)
++static void vb_free(unsigned long addr, unsigned long size)
  {
-@@ -2058,7 +2057,6 @@ int map_vm_area(struct vm_struct *area, pgprot_t prot, struct page **pages)
+ 	unsigned long offset;
+ 	unsigned long vb_idx;
+@@ -1674,24 +1674,22 @@ static void vb_free(const void *addr, unsigned long size)
+ 	BUG_ON(offset_in_page(size));
+ 	BUG_ON(size > PAGE_SIZE*VMAP_MAX_ALLOC);
  
- 	return err > 0 ? 0 : err;
- }
--EXPORT_SYMBOL_GPL(map_vm_area);
+-	flush_cache_vunmap((unsigned long)addr, (unsigned long)addr + size);
++	flush_cache_vunmap(addr, addr + size);
  
- static inline void setup_vmalloc_vm_locked(struct vm_struct *vm,
- 	struct vmap_area *va, unsigned long flags, const void *caller)
+ 	order = get_order(size);
+ 
+-	offset = (unsigned long)addr & (VMAP_BLOCK_SIZE - 1);
+-	offset >>= PAGE_SHIFT;
++	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
+ 
+-	vb_idx = addr_to_vb_idx((unsigned long)addr);
++	vb_idx = addr_to_vb_idx(addr);
+ 	rcu_read_lock();
+ 	vb = radix_tree_lookup(&vmap_block_tree, vb_idx);
+ 	rcu_read_unlock();
+ 	BUG_ON(!vb);
+ 
+-	vunmap_page_range((unsigned long)addr, (unsigned long)addr + size);
++	vunmap_page_range(addr, addr + size);
+ 
+ 	if (debug_pagealloc_enabled_static())
+-		flush_tlb_kernel_range((unsigned long)addr,
+-					(unsigned long)addr + size);
++		flush_tlb_kernel_range(addr, addr + size);
+ 
+ 	spin_lock(&vb->lock);
+ 
+@@ -1791,7 +1789,7 @@ void vm_unmap_ram(const void *mem, unsigned int count)
+ 
+ 	if (likely(count <= VMAP_MAX_ALLOC)) {
+ 		debug_check_no_locks_freed(mem, size);
+-		vb_free(mem, size);
++		vb_free(addr, size);
+ 		return;
+ 	}
+ 
 -- 
 2.25.1
 
