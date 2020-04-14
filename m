@@ -2,107 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5E41A6CEC
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Apr 2020 22:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB5A1A7008
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 02:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388200AbgDMUDL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Apr 2020 16:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388202AbgDMUDL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 13 Apr 2020 16:03:11 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35CBC0A3BE2
-        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 13:03:09 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id o19so3531687qkk.5
-        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 13:03:09 -0700 (PDT)
+        id S2390446AbgDNA2B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Apr 2020 20:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390443AbgDNA2A (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Apr 2020 20:28:00 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7951CC0A3BE2
+        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 17:28:00 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id b72so5277783pfb.11
+        for <linux-arch@vger.kernel.org>; Mon, 13 Apr 2020 17:28:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OEtNtfUfCfknsSkfuodbs8GxJYII1GNua8MgFwL7K04=;
-        b=juG10l2QIUDc0d5n1SeOUdB0siwuJQOGCU6pnQRUaf/usairEJnMWI4NCHxVUL2frR
-         HT8Dj0G2KFCEAuDZkPEiGVv3NLV5ooo7kJcA7V4T4xV81925vc++8cQ5KHVSBI1+By+5
-         +/+66XSDZZW/XkKLCzanTlv78m+KRuVYwmVlKC0N09gqxCMtKrGm1srU2i7+Kw1dkX5x
-         DPoyq7kDqoEsqgMu8qGEr3vtIBlmiQWaBKBOz/tbp3ah+kvBa7aU6x3A1gaLlMlwJUeg
-         hUM97swfra3YIkYNCDFX0ZcS8Au+7KacD3c88l4X9gBMGqiNfPjeT92Va5NYJ5lvz0rD
-         aygw==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=Iab8a1FKfuOAzK+EtN5ksWX3Ch8SBZHLkolYH18vMow=;
+        b=lct5lXl+IscuWLrw6XCAopB0jz61pOOckI0TmsidUgK4aX5mFUXIL+srhSrr7xsXiI
+         R858On8eqIKqa3BXB4MJdWnfFhKywElGKTmO4z+5bqMcrhqViWsYCBSTHeu5VymTDvXy
+         vzDM5SQexLRHSqiZTMW5uVEwHz6m0ToMk5ffxuaUr7dFrUjGIrbFJSlBk8RtMkG1HFta
+         e9YzM1vFQZlEpZx+IwYLnAg7oi80UtsWCGSGE9hdWjS2nYrQr6DSDyUzhadbwcYpuzTu
+         tfVONL2lwfWuYRw4uqk4mrPTFWRAPc4c1PM/LJ8V399ICf9ZbS1MhBB39wQOxCgx1dGp
+         +4hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OEtNtfUfCfknsSkfuodbs8GxJYII1GNua8MgFwL7K04=;
-        b=N5dckJHMyQ4IwFqiA2y8YFXtx6uzyrIHKaK5yL4VRTTzcrUgw9wE2HTwTMJTQXhvpk
-         m5FypXu83Cb6bF8UPcclkX9+N8Ol/MDzqlFuXE57GXwtcT15qxNuQ5++/UJAVNEg8XxJ
-         gU6CSRDNYpdLuDkerP1zdrL+fowMUm5vCx2mB1amOQohlTrgBm8/5qZLXoTRXAjcZG3B
-         BxUVGSvZ28a4P0MbtPsCXQyXIQYlXZEoZbsBhgdD8cgQX6TR0YJIcLstDDlSSFofpDom
-         EOTDXP/5UPoA7VJyXPXSt65F/Fyz+e4bX9/ZzFlvtjOpQtDcni5lVwfiLwqDDe3GRqFP
-         J2PA==
-X-Gm-Message-State: AGi0PuYfWIVBieW2mtD21XZRIf69XyNKYNb17H2gGeYUsqpq0EyEQpJt
-        GaQdzYdFTkA4tTbwqYin+57rlQ==
-X-Google-Smtp-Source: APiQypJVwvSR1oEkK4bhCoeIIw8batoCJN92/jh4PNjnx+deBvO5XKiPj+RRAmN7IK2twvZnNWUNMA==
-X-Received: by 2002:a37:d93:: with SMTP id 141mr7293908qkn.32.1586808188246;
-        Mon, 13 Apr 2020 13:03:08 -0700 (PDT)
-Received: from localhost (70.44.39.90.res-cmts.bus.ptd.net. [70.44.39.90])
-        by smtp.gmail.com with ESMTPSA id x66sm9119423qka.121.2020.04.13.13.03.06
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=Iab8a1FKfuOAzK+EtN5ksWX3Ch8SBZHLkolYH18vMow=;
+        b=YyrtvCn5bwznSyB7M8/g/eRC1Z4c87UQcaVxXiqzSOhjo28TjKrUVXmWjPXKiXPDcL
+         9PFY3UpP7sWtM9ri/Ayu6UnvopzrGBW1hTiiB/s7PmeXeQKA7oPDMQ65mPS6fQVpUZdK
+         OX/qhNu9UmZWXQZHcoeGhdkYjkrJ5qNn27FnxfqGNuRCbVn39zRE+Qvzj4pDyJgCCZcm
+         m16YzieEyAw3EP5u8EcCFg+kVvCdwK7gsaX+RtSfUV6dJ1ulV6DxnApTspcwJp4hIwrV
+         cX64zJc4NK9ElyCW0e9UC9L2Er4tewALydl8Rr4qKFCr1noEosxtRu3FU9hthn+H1X6W
+         19CQ==
+X-Gm-Message-State: AGi0PuYa+oGPHh+NKgcSNhi/4nQ4ClaQWgErOy3xiMFI6M/nxTPSIonc
+        Bsky4GnxMyTgx2OMxjtPOs1WhA==
+X-Google-Smtp-Source: APiQypLZpjmT/ThpynRDdIZHTO4aZH7CnvngDUK8vlIGwZhBDCAfCPTuSg0ilh9qJ0MLoF72azaR+A==
+X-Received: by 2002:a63:5724:: with SMTP id l36mr15697582pgb.366.1586824079677;
+        Mon, 13 Apr 2020 17:27:59 -0700 (PDT)
+Received: from [2620:15c:17:3:3a5:23a7:5e32:4598] ([2620:15c:17:3:3a5:23a7:5e32:4598])
+        by smtp.gmail.com with ESMTPSA id 132sm9849909pfc.183.2020.04.13.17.27.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 13:03:07 -0700 (PDT)
-Date:   Mon, 13 Apr 2020 16:03:06 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laura Abbott <labbott@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 25/28] mm: remove vmalloc_user_node_flags
-Message-ID: <20200413200306.GC99267@cmpxchg.org>
-References: <20200408115926.1467567-1-hch@lst.de>
- <20200408115926.1467567-26-hch@lst.de>
- <CAEf4BzZOC2tLrqt_Km=WQb=9xiya2e31i6K3oJuzgYQt6wp1LQ@mail.gmail.com>
+        Mon, 13 Apr 2020 17:27:59 -0700 (PDT)
+Date:   Mon, 13 Apr 2020 17:27:58 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+X-X-Sender: rientjes@chino.kir.corp.google.com
+To:     Nicholas Piggin <npiggin@gmail.com>
+cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 0/4] huge vmalloc mappings
+In-Reply-To: <20200413125303.423864-1-npiggin@gmail.com>
+Message-ID: <alpine.DEB.2.21.2004131727150.260270@chino.kir.corp.google.com>
+References: <20200413125303.423864-1-npiggin@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZOC2tLrqt_Km=WQb=9xiya2e31i6K3oJuzgYQt6wp1LQ@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 09, 2020 at 03:25:03PM -0700, Andrii Nakryiko wrote:
-> cc Johannes who suggested this API call originally
+On Mon, 13 Apr 2020, Nicholas Piggin wrote:
 
-I forgot why we did it this way - probably just cruft begetting more
-cruft. Either way, Christoph's cleanup makes this look a lot better.
+> We can get a significant win with larger mappings for some of the big
+> global hashes.
+> 
+> Since RFC, relevant architectures have added p?d_leaf accessors so no
+> real arch changes required, and I changed it not to allocate huge
+> mappings for modules and a bunch of other fixes.
+> 
 
-> On Wed, Apr 8, 2020 at 5:03 AM Christoph Hellwig <hch@lst.de> wrote:
-> >
-> > Open code it in __bpf_map_area_alloc, which is the only caller.  Also
-> > clean up __bpf_map_area_alloc to have a single vmalloc call with
-> > slightly different flags instead of the current two different calls.
-> >
-> > For this to compile for the nommu case add a __vmalloc_node_range stub
-> > to nommu.c.
-> >
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
+Hi Nicholas,
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Any performance numbers to share besides the git diff in the last patch in 
+the series?  I'm wondering if anything from mmtests or lkp-tests makes 
+sense to try?
+
+> Nicholas Piggin (4):
+>   mm/vmalloc: fix vmalloc_to_page for huge vmap mappings
+>   mm: Move ioremap page table mapping function to mm/
+>   mm: HUGE_VMAP arch query functions cleanup
+>   mm/vmalloc: Hugepage vmalloc mappings
+> 
+>  arch/arm64/mm/mmu.c                      |   8 +-
+>  arch/powerpc/mm/book3s64/radix_pgtable.c |   6 +-
+>  arch/x86/mm/ioremap.c                    |   6 +-
+>  include/linux/io.h                       |   3 -
+>  include/linux/vmalloc.h                  |  15 +
+>  lib/ioremap.c                            | 203 +----------
+>  mm/vmalloc.c                             | 413 +++++++++++++++++++----
+>  7 files changed, 380 insertions(+), 274 deletions(-)
+> 
+> -- 
+> 2.23.0
+> 
+> 
+> 
