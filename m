@@ -2,102 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0333E1A7AFE
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 14:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CB81A7B9E
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 15:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440150AbgDNMlo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Apr 2020 08:41:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48826 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2440146AbgDNMlm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 14 Apr 2020 08:41:42 -0400
-Received: from localhost.localdomain (unknown [223.93.147.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D44AC20768;
-        Tue, 14 Apr 2020 12:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586868101;
-        bh=9KRqqTKaIASeKnXv5UC9x+S15ibXz/EkB3du77R8j4I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cs0VnoGUuOKql4W/lnTEp6dYcykdwAiqsSrzh50bWdKeHZkRzdnKDbwQdN+aQtdrQ
-         z3peq0s4qbpEn/U4llX3yw+Vxr/eKj9b7MU721nGm0HM9067E8r6B9jv1aGWjPhg70
-         tSifnl9A3Ss1T1nIzNUg/C1MFT4pEakcKPplTPSE=
-From:   guoren@kernel.org
-To:     linux-csky@vger.kernel.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, guoren@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH] csky: Fixup perf probe -x hungup
-Date:   Tue, 14 Apr 2020 20:41:29 +0800
-Message-Id: <20200414124129.9048-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.17.0
+        id S2502479AbgDNNCR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Apr 2020 09:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2502475AbgDNNCL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 Apr 2020 09:02:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9952DC061A0C;
+        Tue, 14 Apr 2020 06:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=T6z0bd+fqDvkVl7fHhA0/8UcwUryWcByqLrcGyIrH5s=; b=bOGD0uXfBJxjATisnWE13caPpw
+        yM9EhSXpjZ/69j68Wx2mvv4rPOnCCnL4tZZOnQ/NrScoRBkaop1XY/iOcVOh0AkRZpQOQz5AVjtpv
+        cMV61Q/X5bapJJYHYlrURSsjHy7o3Gg83EN4vlKiDfRTyRH5zdQnD3aKzJJQD/Kfm9D/MZmyrS5dF
+        6Bl0eEJCl5IRt9WB6xgPE10wzHrxN2D4jZ8Wklbvo3XU7xQtw94VjIEPtaSS9ZKYl/NsjwULmC+Yi
+        /zy17VuWZ3bNc0Ndims46fX3T7ww6xbwzSO+4eEXTFMbss0b2VRfn9nH14CqQ8MjZl0Uf7RSHY+CP
+        kRablIbA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jOLCV-0005fb-Ei; Tue, 14 Apr 2020 13:02:03 +0000
+Date:   Tue, 14 Apr 2020 06:02:03 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, x86@kernel.org
+Subject: Re: [PATCH v2 4/4] mm/vmalloc: Hugepage vmalloc mappings
+Message-ID: <20200414130203.GA20867@infradead.org>
+References: <20200413125303.423864-1-npiggin@gmail.com>
+ <20200413125303.423864-5-npiggin@gmail.com>
+ <20200414072316.GA5503@infradead.org>
+ <1586864403.0qfilei2ft.astroid@bobo.none>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1586864403.0qfilei2ft.astroid@bobo.none>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Tue, Apr 14, 2020 at 10:13:44PM +1000, Nicholas Piggin wrote:
+> Which case? Usually the answer would be because you don't want to use
+> contiguous physical memory and/or you don't want to use the linear 
+> mapping.
 
-case:
- # perf probe -x /lib/libc-2.28.9000.so memcpy
- # perf record -e probe_libc:memcpy -aR sleep 1
-
-System hangup and cpu get in trap_c loop, because our hardware
-singlestep state could still get interrupt signal. When we get in
-uprobe_xol singlestep slot, we should disable irq in pt_regs->psr.
-
-And is_swbp_insn() need a csky arch implementation with a low 16bit
-mask.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
----
- arch/csky/kernel/probes/uprobes.c | 5 +++++
- arch/csky/kernel/ptrace.c         | 6 ++++++
- 2 files changed, 11 insertions(+)
-
-diff --git a/arch/csky/kernel/probes/uprobes.c b/arch/csky/kernel/probes/uprobes.c
-index b3a56c260e3e..1a9e0961b2b5 100644
---- a/arch/csky/kernel/probes/uprobes.c
-+++ b/arch/csky/kernel/probes/uprobes.c
-@@ -11,6 +11,11 @@
- 
- #define UPROBE_TRAP_NR	UINT_MAX
- 
-+bool is_swbp_insn(uprobe_opcode_t *insn)
-+{
-+	return (*insn & 0xffff) == UPROBE_SWBP_INSN;
-+}
-+
- unsigned long uprobe_get_swbp_addr(struct pt_regs *regs)
- {
- 	return instruction_pointer(regs);
-diff --git a/arch/csky/kernel/ptrace.c b/arch/csky/kernel/ptrace.c
-index 21ac2608f205..5a82230bddf9 100644
---- a/arch/csky/kernel/ptrace.c
-+++ b/arch/csky/kernel/ptrace.c
-@@ -41,6 +41,9 @@ static void singlestep_disable(struct task_struct *tsk)
- 
- 	regs = task_pt_regs(tsk);
- 	regs->sr = (regs->sr & TRACE_MODE_MASK) | TRACE_MODE_RUN;
-+
-+	/* Enable irq */
-+	regs->sr |= BIT(6);
- }
- 
- static void singlestep_enable(struct task_struct *tsk)
-@@ -49,6 +52,9 @@ static void singlestep_enable(struct task_struct *tsk)
- 
- 	regs = task_pt_regs(tsk);
- 	regs->sr = (regs->sr & TRACE_MODE_MASK) | TRACE_MODE_SI;
-+
-+	/* Disable irq */
-+	regs->sr &= ~BIT(6);
- }
- 
- /*
--- 
-2.17.0
-
+But with huge pages you do by definition already use large contiguous
+areas.  So you want allocations larger than "small" huge pages but not
+using gigantic pages using vmalloc?
