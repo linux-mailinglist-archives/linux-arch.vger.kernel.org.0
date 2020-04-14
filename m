@@ -2,64 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CB81A7B9E
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 15:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26541A7C12
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 15:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502479AbgDNNCR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Apr 2020 09:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2502475AbgDNNCL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 14 Apr 2020 09:02:11 -0400
+        id S2502669AbgDNNOZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Apr 2020 09:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502664AbgDNNON (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Apr 2020 09:14:13 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9952DC061A0C;
-        Tue, 14 Apr 2020 06:02:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F5BC061A0C;
+        Tue, 14 Apr 2020 06:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=T6z0bd+fqDvkVl7fHhA0/8UcwUryWcByqLrcGyIrH5s=; b=bOGD0uXfBJxjATisnWE13caPpw
-        yM9EhSXpjZ/69j68Wx2mvv4rPOnCCnL4tZZOnQ/NrScoRBkaop1XY/iOcVOh0AkRZpQOQz5AVjtpv
-        cMV61Q/X5bapJJYHYlrURSsjHy7o3Gg83EN4vlKiDfRTyRH5zdQnD3aKzJJQD/Kfm9D/MZmyrS5dF
-        6Bl0eEJCl5IRt9WB6xgPE10wzHrxN2D4jZ8Wklbvo3XU7xQtw94VjIEPtaSS9ZKYl/NsjwULmC+Yi
-        /zy17VuWZ3bNc0Ndims46fX3T7ww6xbwzSO+4eEXTFMbss0b2VRfn9nH14CqQ8MjZl0Uf7RSHY+CP
-        kRablIbA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jOLCV-0005fb-Ei; Tue, 14 Apr 2020 13:02:03 +0000
-Date:   Tue, 14 Apr 2020 06:02:03 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH v2 4/4] mm/vmalloc: Hugepage vmalloc mappings
-Message-ID: <20200414130203.GA20867@infradead.org>
-References: <20200413125303.423864-1-npiggin@gmail.com>
- <20200413125303.423864-5-npiggin@gmail.com>
- <20200414072316.GA5503@infradead.org>
- <1586864403.0qfilei2ft.astroid@bobo.none>
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=s9wO1kktwKhWfxkNKBlR4BadnfNxuXVCWsOuMusKhWU=; b=rg2UNX+oDOoOmlIrOoATZfvHJo
+        yXYLxsNWr2T1nJZrGxGk5Lv5RIM+MPtFqTLpUBL+OtQmXF3dvx+r/E34dM9LM/msmhlhCadHxgEIS
+        pWLlsjvDOXkWGefwhB3ab1TbSjUnXSZ4O+DhmchdWfxHMd4ltbCqfxvArHED4bAzh+LrU5N0g8RQ/
+        sMGiG1d5h+8y+YZLDA1ZDHHjyY6lnNQFIUnXfoqPK7R0pAFuXPpCBcPa9tHT3OZrp88howxBXTV4j
+        g8suig+TIKVixAxTM0KrW7filVEfIW9iQoItZ9Ea9AdgUOMqiNFBCHWAFRBbLBwX140HeueDrEM53
+        qriivVXQ==;
+Received: from [2001:4bb8:180:384b:c70:4a89:bc61:2] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jOLNu-0006Fe-Le; Tue, 14 Apr 2020 13:13:54 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laura Abbott <labbott@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: decruft the vmalloc API v2
+Date:   Tue, 14 Apr 2020 15:13:19 +0200
+Message-Id: <20200414131348.444715-1-hch@lst.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1586864403.0qfilei2ft.astroid@bobo.none>
+Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 10:13:44PM +1000, Nicholas Piggin wrote:
-> Which case? Usually the answer would be because you don't want to use
-> contiguous physical memory and/or you don't want to use the linear 
-> mapping.
+Hi all,
 
-But with huge pages you do by definition already use large contiguous
-areas.  So you want allocations larger than "small" huge pages but not
-using gigantic pages using vmalloc?
+Peter noticed that with some dumb luck you can toast the kernel address
+space with exported vmalloc symbols.
+
+I used this as an opportunity to decruft the vmalloc.c API and make it
+much more systematic.  This also removes any chance to create vmalloc
+mappings outside the designated areas or using executable permissions
+from modules.  Besides that it removes more than 300 lines of code.
+
+A git tree is also available here:
+
+    git://git.infradead.org/users/hch/misc.git sanitize-vmalloc-api.2
+
+Gitweb:
+
+    http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/sanitize-vmalloc-api.2
+
+Changes since v1:
+ - implement pgprot_nx for arm64 (Mark Rutland)
+ - fix a patch description
+ - properly pass pgprot to vmap in ion
+ - add a new patch to fix vmap() API misuse
+ - fix a vmap argument in x86
+ - two more vmalloc cleanups
+ - cleanup use of the unmap_kernel_range API
+ - rename ioremap_pbh to ioremap_phb
