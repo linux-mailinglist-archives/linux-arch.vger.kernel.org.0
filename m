@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4341A7E66
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 15:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1F61A7C3B
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 15:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502757AbgDNNPE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Apr 2020 09:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54958 "EHLO
+        id S2502763AbgDNNPH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Apr 2020 09:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502748AbgDNNO7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Apr 2020 09:14:59 -0400
+        with ESMTP id S2502750AbgDNNPA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Apr 2020 09:15:00 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B129C061A0F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6981EC061A10;
         Tue, 14 Apr 2020 06:14:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=MpeupzvgpEqnfkrgU67Yb1a4x+y3iqN0nzmL/bt6hXs=; b=qNNie7Om2OVo5RfG/yvHOZ5B6f
-        YvJRXnbW9/6E6MwFckGLJXrvDnIv9l8M9gc4UOGmpnybKChZUWz3d2aGtx4Uw9clqXpEyMLwkDFxO
-        vqizncH9flXaVBQAvFGQ6C1oAfh3TZpQHLdcWc2THIuGUxjbG4nP9Ao84blj707cvMTH1crz0qDkV
-        gFOCLdcNSV/TR1D0Y9L9P8wo7AyraAHJOzvOXV/aR4wt1yFBFAbgLugghJeYvYojjdxDQ+Zb60qn4
-        7qGwDGaSlKpu5JX96H75W0kD7avku7EHd7u0Qd7e5x6AEMkNL0Rl1yBQRQ0uQU4zO8kF9JD/6MFCr
-        sHBbh3YQ==;
+        bh=tYFsPxnL5Cf0xutooZZA35BzCM3FXJLWimeyQwU4Geo=; b=efsgNLHpIN4Yqr2HXTNKVny1ja
+        RhW54NXX4njkSCMHQvjm7Ifv3W88BOeKN4BVJFdmqKBn+Hq39bpTnIk/9zF+3R7iZ5ADItXTYxs/T
+        GB+rmDWWsKteetqgaAAsSQFaXnWz7cfVUL4O3rb57CERc94sZm33IyCmii25oGkan0JESdDkCtWLD
+        9R7w8VTfPFqpoQoGM/uLMEXjDDeP4lLIFmaRZa0n7fbiJvWGNvpriyAoqbJzAxWzxGDaVIiKp6O9n
+        8UQVzDh4mbS8gOi5U1IUZXQH0by+DSTL/IUiHNEJFj2H1K3Vkwp9Lzn+tMtCKou/z5ti5OwdqIHpa
+        jlEnYuxg==;
 Received: from [2001:4bb8:180:384b:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jOLOi-0006vf-4M; Tue, 14 Apr 2020 13:14:40 +0000
+        id 1jOLOl-0006yj-6V; Tue, 14 Apr 2020 13:14:43 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
@@ -49,9 +49,9 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         iommu@lists.linux-foundation.org,
         linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 14/29] mm: rename vmap_page_range to map_kernel_range
-Date:   Tue, 14 Apr 2020 15:13:33 +0200
-Message-Id: <20200414131348.444715-15-hch@lst.de>
+Subject: [PATCH 15/29] mm: don't return the number of pages from map_kernel_range{,_noflush}
+Date:   Tue, 14 Apr 2020 15:13:34 +0200
+Message-Id: <20200414131348.444715-16-hch@lst.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200414131348.444715-1-hch@lst.de>
 References: <20200414131348.444715-1-hch@lst.de>
@@ -63,57 +63,37 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This matches the map_kernel_range_noflush API.  Also change to pass
-a size instead of the end, similar to the noflush version.
+None of the callers needs the number of pages, and a 0 / -errno return
+value is a lot more intuitive.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- mm/vmalloc.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ mm/vmalloc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 55df5dc6a9fc..a3d810def567 100644
+index a3d810def567..ca8dc5d42580 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -272,13 +272,13 @@ int map_kernel_range_noflush(unsigned long addr, unsigned long size,
- 	return nr;
+@@ -249,7 +249,7 @@ static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
+  * function.
+  *
+  * RETURNS:
+- * The number of pages mapped on success, -errno on failure.
++ * 0 on success, -errno on failure.
+  */
+ int map_kernel_range_noflush(unsigned long addr, unsigned long size,
+ 			     pgprot_t prot, struct page **pages)
+@@ -269,7 +269,7 @@ int map_kernel_range_noflush(unsigned long addr, unsigned long size,
+ 			return err;
+ 	} while (pgd++, addr = next, addr != end);
+ 
+-	return nr;
++	return 0;
  }
  
--static int vmap_page_range(unsigned long start, unsigned long end,
-+static int map_kernel_range(unsigned long start, unsigned long size,
- 			   pgprot_t prot, struct page **pages)
- {
- 	int ret;
- 
--	ret = map_kernel_range_noflush(start, end - start, prot, pages);
--	flush_cache_vmap(start, end);
-+	ret = map_kernel_range_noflush(start, size, prot, pages);
-+	flush_cache_vmap(start, start + size);
- 	return ret;
- }
- 
-@@ -1866,7 +1866,7 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node, pgprot_t pro
- 
- 	kasan_unpoison_vmalloc(mem, size);
- 
--	if (vmap_page_range(addr, addr + size, prot, pages) < 0) {
-+	if (map_kernel_range(addr, size, prot, pages) < 0) {
- 		vm_unmap_ram(mem, count);
- 		return NULL;
- 	}
-@@ -2030,10 +2030,9 @@ void unmap_kernel_range(unsigned long addr, unsigned long size)
- int map_vm_area(struct vm_struct *area, pgprot_t prot, struct page **pages)
- {
- 	unsigned long addr = (unsigned long)area->addr;
--	unsigned long end = addr + get_vm_area_size(area);
- 	int err;
- 
--	err = vmap_page_range(addr, end, prot, pages);
-+	err = map_kernel_range(addr, get_vm_area_size(area), prot, pages);
- 
- 	return err > 0 ? 0 : err;
- }
+ static int map_kernel_range(unsigned long start, unsigned long size,
 -- 
 2.25.1
 
