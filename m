@@ -2,110 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8131A79C5
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 13:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C29C1A79F3
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 13:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439463AbgDNLlh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Apr 2020 07:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2439459AbgDNLlg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 14 Apr 2020 07:41:36 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06D3C061A0C;
-        Tue, 14 Apr 2020 04:41:35 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id t4so4540275plq.12;
-        Tue, 14 Apr 2020 04:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=8Esq4uJjc7hCqZPSyfuH3UXfV8N/MZeW3NHhinZ8EQA=;
-        b=ocqZqq6sP10NyE5Oqrsyu24BO4bUv9d+CybYLvjUEA0qRTbQq8IAo2pJTWQfIqu4RO
-         sPTYsA+WN55nEjfpiAKwJ3efgvE0y02zIRGr4QJLeGvUEOTkWEwmF8lPwgWo+rxrPEs5
-         VDTf42M1YbD+ARAsRZhdeD47bvnZpwfdPk63IxzHlEP4FOS+xZOTFLokGOmvq6qCsYSC
-         9tfWtMbUwXgESksl6KkJnUtYDYhwxUwpcnrbpFt8xAH3B/hJvFo4WpPegEXCjs4dhUzZ
-         W26SU5gqovyT9qgqJ6qWu6cT8BV0oBUpmf+pSVOyif6EAbW821Qd95yr49cfUdak8sxQ
-         mhEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=8Esq4uJjc7hCqZPSyfuH3UXfV8N/MZeW3NHhinZ8EQA=;
-        b=WGFvk2eopzzhnzAKMqczAIyD6wLlBVfs7PY3INiZdxfU4MPoGd4n3TTWjqarVcnweU
-         C5Yt9OmQcvvdATPOIYsmM1eOXWh0r4RUve1Me1zIlD6+oqn2mXTKOVexUMrQ1Ov+/o0X
-         ynOXyCsBNxbUJlVv0/wwC/ZkXbv4XCxbcLcSRlPLyTi6IEgqAjHU7pp70Qm47VbQa8ws
-         Jf3MRlCZfJv0WkX8lIv3Wu3p5whHDO113j81OCw19rXVwykUvjsP5Uc/P1H7L3FI/5BQ
-         MUYifou97+SfNF2BarIGH0Re0WqMR+xW+pdPB0CanvoGes7kyAcQxhxrkQnC/O1YhLYa
-         EaMw==
-X-Gm-Message-State: AGi0PuYM1E+KZqhuTkSMqNpb470s3CdfuWvXcLewXGUJuc9u8cjggT1f
-        v1t7DbgwdN962Kd9Oo4Vx+k=
-X-Google-Smtp-Source: APiQypLIBjtk6RQd/AotCq9xnqN6ML09PMuOg/nS9Dm4xLrHmr38av9P0xvvmudk1+K5veWBSwJi4w==
-X-Received: by 2002:a17:90a:2281:: with SMTP id s1mr27766299pjc.68.1586864495571;
-        Tue, 14 Apr 2020 04:41:35 -0700 (PDT)
-Received: from localhost ([203.18.28.220])
-        by smtp.gmail.com with ESMTPSA id 132sm11155833pfc.183.2020.04.14.04.41.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 04:41:35 -0700 (PDT)
-Date:   Tue, 14 Apr 2020 21:39:53 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 4/4] mm/vmalloc: Hugepage vmalloc mappings
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
+        id S2439518AbgDNLo6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Apr 2020 07:44:58 -0400
+Received: from foss.arm.com ([217.140.110.172]:53666 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2439489AbgDNLoy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 Apr 2020 07:44:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF0571FB;
+        Tue, 14 Apr 2020 04:44:52 -0700 (PDT)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.1.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E0B493F6C4;
+        Tue, 14 Apr 2020 04:44:42 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, x86@kernel.org
-References: <20200413125303.423864-1-npiggin@gmail.com>
-        <20200413125303.423864-5-npiggin@gmail.com>
-        <20200413134106.GN21484@bombadil.infradead.org>
-In-Reply-To: <20200413134106.GN21484@bombadil.infradead.org>
-MIME-Version: 1.0
-Message-Id: <1586863931.xb4yeowkao.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] mm/hugetlb: Add some new arch enabling macros
+Date:   Tue, 14 Apr 2020 17:14:27 +0530
+Message-Id: <1586864670-21799-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Matthew Wilcox's message of April 13, 2020 11:41 pm:
-> On Mon, Apr 13, 2020 at 10:53:03PM +1000, Nicholas Piggin wrote:
->> +static int vmap_pages_range_noflush(unsigned long start, unsigned long =
-end,
->> +				    pgprot_t prot, struct page **pages,
->> +				    unsigned int page_shift)
->> +{
->> +	if (page_shift =3D=3D PAGE_SIZE) {
->=20
-> ... I think you meant 'page_shift =3D=3D PAGE_SHIFT'
+This series adds two macros which platforms can enable to override generic
+fallback definitions. Before that it drops __HAVE_ARCH_HUGE_PTEP_GET from
+arm64 platform.
 
-Thanks, good catch. I obviously didn't test the fallback path (the
-other path works for small pages, it just goes one at a time).
+1. HAVE_ARCH_IS_HUGEPAGE_ONLY_RANGE - is_hugepage_only_range()
+2. HAVE_ARCH_CLEAR_HUGEPAGE_FLAGS   - arch_clear_hugepage_flags()
 
-> Overall I like this series, although it's a bit biased towards CPUs
-> which have page sizes which match PMD/PUD sizes.  It doesn't offer the
-> possibility of using 64kB page sizes on ARM, for example.
+This has been boot tested on arm64 and x86 platforms but built tested on
+some more platforms including the changed ones here. This series applies
+on v5.7-rc1. After this arm (32 bit) remains the sole platform defining
+it's own huge_ptep_get() via __HAVE_ARCH_HUGE_PTEP_GET.
 
-No, it's just an incremental step on existing huge vmap stuff in
-tree, so such a thing would be out of scope.
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: x86@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-> But it's a
-> step in the right direction.
->=20
+Anshuman Khandual (3):
+  arm64/mm: Drop __HAVE_ARCH_HUGE_PTEP_GET
+  mm/hugetlb: Introduce HAVE_ARCH_IS_HUGEPAGE_ONLY_RANGE
+  mm/hugetlb: Introduce HAVE_ARCH_CLEAR_HUGEPAGE_FLAGS
 
-I don't know about moving kernel maps away from a generic Linux page
-table format. I quite like moving to it and making it as generic as
-possible.
+ arch/arm/include/asm/hugetlb.h     |  7 +------
+ arch/arm64/include/asm/hugetlb.h   | 13 +------------
+ arch/ia64/include/asm/hugetlb.h    |  5 +----
+ arch/mips/include/asm/hugetlb.h    | 11 -----------
+ arch/parisc/include/asm/hugetlb.h  | 10 ----------
+ arch/powerpc/include/asm/hugetlb.h |  5 +----
+ arch/riscv/include/asm/hugetlb.h   | 10 ----------
+ arch/s390/include/asm/hugetlb.h    |  8 +-------
+ arch/sh/include/asm/hugetlb.h      |  7 +------
+ arch/sparc/include/asm/hugetlb.h   | 10 ----------
+ arch/x86/include/asm/hugetlb.h     | 10 ----------
+ include/linux/hugetlb.h            | 12 ++++++++++++
+ 12 files changed, 18 insertions(+), 90 deletions(-)
 
-On the other hand, I also would like to make some arch-specific
-allowances for certain special cases that may not fit within the
-standard page table format, but it might be a much more specific and
-limited interface than the general vmalloc stuff.
+-- 
+2.20.1
 
-Thanks,
-Nick
