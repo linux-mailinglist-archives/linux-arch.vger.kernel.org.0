@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 458851A7980
+	by mail.lfdr.de (Postfix) with ESMTP id B61221A7981
 	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 13:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439160AbgDNLak (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Apr 2020 07:30:40 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2315 "EHLO huawei.com"
+        id S2439172AbgDNLam (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Apr 2020 07:30:42 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:2316 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2439124AbgDNL3E (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 14 Apr 2020 07:29:04 -0400
+        id S2439123AbgDNL3D (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 Apr 2020 07:29:03 -0400
 Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 44DE362D7C198D4FE206;
+        by Forcepoint Email with ESMTP id 4C70C735B70B8CB2A2C5;
         Tue, 14 Apr 2020 19:28:57 +0800 (CST)
 Received: from DESKTOP-KKJBAGG.china.huawei.com (10.173.220.25) by
  DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 14 Apr 2020 19:28:46 +0800
+ 14.3.487.0; Tue, 14 Apr 2020 19:28:47 +0800
 From:   Zhenyu Ye <yezhenyu2@huawei.com>
 To:     <will@kernel.org>, <catalin.marinas@arm.com>,
         <suzuki.poulose@arm.com>, <maz@kernel.org>, <steven.price@arm.com>,
@@ -26,10 +26,12 @@ CC:     <yezhenyu2@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
         <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
         <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
         <kuhn.chenqun@huawei.com>
-Subject: [RFC PATCH v3 0/2] arm64: tlb: add support for TLBI RANGE instructions
-Date:   Tue, 14 Apr 2020 19:28:33 +0800
-Message-ID: <20200414112835.1121-1-yezhenyu2@huawei.com>
+Subject: [RFC PATCH v3 1/2] arm64: tlb: Detect the ARMv8.4 TLBI RANGE feature
+Date:   Tue, 14 Apr 2020 19:28:34 +0800
+Message-ID: <20200414112835.1121-2-yezhenyu2@huawei.com>
 X-Mailer: git-send-email 2.22.0.windows.1
+In-Reply-To: <20200414112835.1121-1-yezhenyu2@huawei.com>
+References: <20200414112835.1121-1-yezhenyu2@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -41,26 +43,80 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 ARMv8.4-TLBI provides TLBI invalidation instruction that apply to a
-range of input addresses. This series add support for this feature.
+range of input addresses. This patch detect this feature.
 
---
-ChangeList:
-v3:
-rebase this series on Linux 5.7-rc1.
+Signed-off-by: Zhenyu Ye <yezhenyu2@huawei.com>
+---
+ arch/arm64/include/asm/cpucaps.h |  3 ++-
+ arch/arm64/include/asm/sysreg.h  |  4 ++++
+ arch/arm64/kernel/cpufeature.c   | 11 +++++++++++
+ 3 files changed, 17 insertions(+), 1 deletion(-)
 
-v2:
-Link: https://lkml.org/lkml/2019/11/11/348
-
-Zhenyu Ye (2):
-  arm64: tlb: Detect the ARMv8.4 TLBI RANGE feature
-  arm64: tlb: Use the TLBI RANGE feature in arm64
-
- arch/arm64/include/asm/cpucaps.h  |   3 +-
- arch/arm64/include/asm/sysreg.h   |   4 ++
- arch/arm64/include/asm/tlbflush.h | 108 +++++++++++++++++++++++++++++-
- arch/arm64/kernel/cpufeature.c    |  11 +++
- 4 files changed, 124 insertions(+), 2 deletions(-)
-
+diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
+index 8eb5a088ae65..950095a72617 100644
+--- a/arch/arm64/include/asm/cpucaps.h
++++ b/arch/arm64/include/asm/cpucaps.h
+@@ -61,7 +61,8 @@
+ #define ARM64_HAS_AMU_EXTN			51
+ #define ARM64_HAS_ADDRESS_AUTH			52
+ #define ARM64_HAS_GENERIC_AUTH			53
++#define ARM64_HAS_TLBI_RANGE			54
+ 
+-#define ARM64_NCAPS				54
++#define ARM64_NCAPS				55
+ 
+ #endif /* __ASM_CPUCAPS_H */
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index ebc622432831..ac1b98650234 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -592,6 +592,7 @@
+ 
+ /* id_aa64isar0 */
+ #define ID_AA64ISAR0_RNDR_SHIFT		60
++#define ID_AA64ISAR0_TLBI_RANGE_SHIFT	56
+ #define ID_AA64ISAR0_TS_SHIFT		52
+ #define ID_AA64ISAR0_FHM_SHIFT		48
+ #define ID_AA64ISAR0_DP_SHIFT		44
+@@ -605,6 +606,9 @@
+ #define ID_AA64ISAR0_SHA1_SHIFT		8
+ #define ID_AA64ISAR0_AES_SHIFT		4
+ 
++#define ID_AA64ISAR0_TLBI_RANGE_NI	0x0
++#define ID_AA64ISAR0_TLBI_RANGE		0x2
++
+ /* id_aa64isar1 */
+ #define ID_AA64ISAR1_I8MM_SHIFT		52
+ #define ID_AA64ISAR1_DGH_SHIFT		48
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 9fac745aa7bb..31bcfd0722b5 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -124,6 +124,7 @@ static bool __system_matches_cap(unsigned int n);
+  */
+ static const struct arm64_ftr_bits ftr_id_aa64isar0[] = {
+ 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_RNDR_SHIFT, 4, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_TLBI_RANGE_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_TS_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_FHM_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_DP_SHIFT, 4, 0),
+@@ -1779,6 +1780,16 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.min_field_value = 1,
+ 	},
+ #endif
++	{
++		.desc = "TLB range maintenance instruction",
++		.capability = ARM64_HAS_TLBI_RANGE,
++		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
++		.matches = has_cpuid_feature,
++		.sys_reg = SYS_ID_AA64ISAR0_EL1,
++		.field_pos = ID_AA64ISAR0_TLBI_RANGE_SHIFT,
++		.sign = FTR_UNSIGNED,
++		.min_field_value = ID_AA64ISAR0_TLBI_RANGE,
++	},
+ 	{},
+ };
+ 
 -- 
 2.19.1
 
