@@ -2,89 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F98C1A8045
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 16:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D42A1A81C6
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Apr 2020 17:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405085AbgDNOsW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Apr 2020 10:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404893AbgDNOsT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Apr 2020 10:48:19 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7320DC061A0C;
-        Tue, 14 Apr 2020 07:48:19 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id h69so3556867pgc.8;
-        Tue, 14 Apr 2020 07:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=L6wwBLpMMetY/zxOEci/JVLuRBV/3LI/LldPvH06RfY=;
-        b=jbyVR3i63K7T908IixpVArje1gguIVF9o17an2Ju6P4xd56heYoFmO/WcdvYUGOw83
-         7DsRgEXQ7GdDOshFt28h6IZryHi6pCoL9TxpwNMwOPQ1WwJTF7JTL9c2RLAhjn11+Qtp
-         81zgUeMjSRjvbeaU+lfmouqsrC6Fr6iqJFDEiznZAV1GOr4656U3Wr5nQootJ2ZQFOWS
-         HzUhnCiHoZIIV8+m2lFOeHdd0TIJ4MPu25GdxxAiCtY8PSM3nTP3iBUlJWWpsDaARXRV
-         7mWxg96+Qw9Kqu5tSPqHXEfSOUh6hwqt5xIdzBQ9ngUs43LWc7bZzpLIK5dfh+q7KRpc
-         C80A==
+        id S2437441AbgDNPOS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Apr 2020 11:14:18 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:54473 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437681AbgDNPNt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Apr 2020 11:13:49 -0400
+Received: by mail-wm1-f65.google.com with SMTP id h2so13341992wmb.4;
+        Tue, 14 Apr 2020 08:13:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=L6wwBLpMMetY/zxOEci/JVLuRBV/3LI/LldPvH06RfY=;
-        b=igIZC2ygC1bklltKSTFjfvS57G7cwdVoxJHQ8tO904m9P4HtlpRvG9ixt6nAOUmRsU
-         sZ3DqUgWbHU26vnhwcvUUAQtgzvKiHhMILqlSefUP4OmTIQ7FkI+BSP1ScMoOZYZ1Y8k
-         BLoxwxc5tATVeqFPH81Gh8qwVZuUC3v62z0J9jAOcMzqBG9zoS41vlrWB4jT2SEU4eSr
-         YDxKkVYhfInGk9Ss4WxBHsRTOADWok7GAKrNNmBqgEvmdIPhHe+sRTbyk48eyhuh8Z5z
-         FZgLgGRIBeqJ2KpTIhu4nSdU+YS23oaQ9+E8/ELH6KU9vZszzZEqvYtA8CkZallnjdrr
-         Nwcg==
-X-Gm-Message-State: AGi0PuahLJdpzme9o5s3J/bpqDr6KEYCF10jVsGSw9YP47wJDORRt2GX
-        HBf9A9PVfh1nZlcSrsl09BI=
-X-Google-Smtp-Source: APiQypK52jNzLdOIfO1gpMRdMkm3ocgjZEpddsb7bx1IdjG1eoLljeSOsDojocPs+NcHrGI7xJxuPA==
-X-Received: by 2002:a65:688c:: with SMTP id e12mr1438881pgt.194.1586875698800;
-        Tue, 14 Apr 2020 07:48:18 -0700 (PDT)
-Received: from localhost ([203.18.28.220])
-        by smtp.gmail.com with ESMTPSA id k12sm10439963pgj.33.2020.04.14.07.48.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HmBLSR0xc1v+9c640X8yq/gCGBtmZiJRhg2yrai8Uso=;
+        b=D14QHr9SaRvNqJrN7V4ylJqJZJppU9twbzkK/fNI+KX4UE4L+iib2DfQxpN0Kyf9k0
+         0jWxU8/32Xv3x3XlfJ86tDihFLVOxvOlzEi+ZMdwJLITS8dFK0BX1BnSFMbIukqCz67j
+         Ry1D6UKhhWu8p54BC/8irvBUyM3rgmP6+q/b2UJkE1sNp9+K1kUVaK3Hqvzd2UaPuxIZ
+         anSMQsSW2BVe26VRK/LLL2FrqobB6z1ttZtlJECb+JJs28wjdhWhRht82hzPbhtmGZQY
+         R0TVcuvCAw7BpJsD+qr74o0Ega4Th5Rzz6uz0/Q9BGJM7Sc2yzOzFgFMlpPGsGilpct1
+         7zIg==
+X-Gm-Message-State: AGi0PuZzw+k35gwrD6pHLwZlJLjT1GDlWp2uALnwrcBTshm1PN1umiRv
+        3/JHGYY/h+9WzdYhOwjiHQA=
+X-Google-Smtp-Source: APiQypKJS2zs752mK3EmkKLPxDY+LMikzE4AHuLMlZzMU6rlOFHrjCq5D1gZZCfYEUzJLxq6M+CEVA==
+X-Received: by 2002:a7b:c190:: with SMTP id y16mr393464wmi.50.1586877227391;
+        Tue, 14 Apr 2020 08:13:47 -0700 (PDT)
+Received: from debian (44.142.6.51.dyn.plus.net. [51.6.142.44])
+        by smtp.gmail.com with ESMTPSA id t67sm20386094wmg.40.2020.04.14.08.13.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 07:48:17 -0700 (PDT)
-Date:   Wed, 15 Apr 2020 00:48:13 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 4/4] mm/vmalloc: Hugepage vmalloc mappings
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, x86@kernel.org
-References: <20200413125303.423864-1-npiggin@gmail.com>
-        <20200413125303.423864-5-npiggin@gmail.com>
-        <20200414072316.GA5503@infradead.org>
-        <1586864403.0qfilei2ft.astroid@bobo.none>
-        <20200414130203.GA20867@infradead.org>
-In-Reply-To: <20200414130203.GA20867@infradead.org>
+        Tue, 14 Apr 2020 08:13:46 -0700 (PDT)
+Date:   Tue, 14 Apr 2020 16:13:44 +0100
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laura Abbott <labbott@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Kelley <mikelley@microsoft.com>,
+        Gao Xiang <xiang@kernel.org>
+Subject: Re: [PATCH 21/29] mm: remove the pgprot argument to __vmalloc
+Message-ID: <20200414151344.zgt2pnq7cjq2bgv6@debian>
+References: <20200414131348.444715-1-hch@lst.de>
+ <20200414131348.444715-22-hch@lst.de>
 MIME-Version: 1.0
-Message-Id: <1586875675.f8q1grbltc.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200414131348.444715-22-hch@lst.de>
+User-Agent: NeoMutt/20180716
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Christoph Hellwig's message of April 14, 2020 11:02 pm:
-> On Tue, Apr 14, 2020 at 10:13:44PM +1000, Nicholas Piggin wrote:
->> Which case? Usually the answer would be because you don't want to use
->> contiguous physical memory and/or you don't want to use the linear=20
->> mapping.
->=20
-> But with huge pages you do by definition already use large contiguous
-> areas.  So you want allocations larger than "small" huge pages but not
-> using gigantic pages using vmalloc?
+On Tue, Apr 14, 2020 at 03:13:40PM +0200, Christoph Hellwig wrote:
+> The pgprot argument to __vmalloc is always PROT_KERNEL now, so remove
+> it.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com> [hyperv]
+> Acked-by: Gao Xiang <xiang@kernel.org> [erofs]
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/x86/hyperv/hv_init.c              |  3 +--
+[...]
+> 
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 5a4b363ba67b..a3d689dfc745 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -95,8 +95,7 @@ static int hv_cpu_init(unsigned int cpu)
+>  	 * not be stopped in the case of CPU offlining and the VM will hang.
+>  	 */
+>  	if (!*hvp) {
+> -		*hvp = __vmalloc(PAGE_SIZE, GFP_KERNEL | __GFP_ZERO,
+> -				 PAGE_KERNEL);
+> +		*hvp = __vmalloc(PAGE_SIZE, GFP_KERNEL | __GFP_ZERO);
+>  	}
 
-Yes.
-
-Thanks,
-Nick
+Acked-by: Wei Liu <wei.liu@kernel.org>
