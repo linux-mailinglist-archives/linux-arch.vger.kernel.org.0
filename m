@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 633B81AAED2
+	by mail.lfdr.de (Postfix) with ESMTP id D11351AAED3
 	for <lists+linux-arch@lfdr.de>; Wed, 15 Apr 2020 18:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410518AbgDOQxL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Apr 2020 12:53:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55100 "EHLO mail.kernel.org"
+        id S2410522AbgDOQxP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Apr 2020 12:53:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410513AbgDOQxJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Apr 2020 12:53:09 -0400
+        id S2410519AbgDOQxM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Apr 2020 12:53:12 -0400
 Received: from localhost.localdomain (unknown [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A1BEE208FE;
-        Wed, 15 Apr 2020 16:53:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5C763214D8;
+        Wed, 15 Apr 2020 16:53:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586969588;
-        bh=G13fe0U2+2ZpJqPiS3FSgXyfcn//elPJNIal9BP4qMU=;
+        s=default; t=1586969591;
+        bh=UWCZwgUi/5hA8DzTgTllhpqi3iIWXPcCN9OKPEVeNoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XlYb5qc3CFH6Mm46PdxdSYP3xKBFBOWKLRm+NykuYeR/qFerIcRR+ouJCa5shYwwo
-         DpBy8MeRUruJ3Czq1T3fABH3dj4b+OIR5Mym1J83T7WtDvMinejKPYE91JXkkJTHV8
-         dYMWLANO4Xp47ZMnz7IHzcsoxLrfQG7iuJlss9Hw=
+        b=C3BKWk2m5xwB/3iat7hv4KTZRavT4y6ajwhkRTP21BOyBkjnuKfoYFJRBvkKGaF1Y
+         4X+qhtXrLG5e0vrIqyY+WJb7NP3Ny5npm0Jx0PKhE2Lud0zCnSaxwXKvuIw5Uvj0zq
+         fcYDmtc2EJ2Ra+nSbocDVoVjauQV5PI20Zh7A6Xk=
 From:   Will Deacon <will@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arch@vger.kernel.org, kernel-team@android.com,
@@ -37,9 +37,9 @@ Cc:     linux-arch@vger.kernel.org, kernel-team@android.com,
         Peter Oberparleiter <oberpar@linux.ibm.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v3 07/12] READ_ONCE: Enforce atomicity for {READ,WRITE}_ONCE() memory accesses
-Date:   Wed, 15 Apr 2020 17:52:13 +0100
-Message-Id: <20200415165218.20251-8-will@kernel.org>
+Subject: [PATCH v3 08/12] READ_ONCE: Drop pointer qualifiers when reading from scalar types
+Date:   Wed, 15 Apr 2020 17:52:14 +0100
+Message-Id: <20200415165218.20251-9-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200415165218.20251-1-will@kernel.org>
 References: <20200415165218.20251-1-will@kernel.org>
@@ -50,130 +50,88 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-{READ,WRITE}_ONCE() cannot guarantee atomicity for arbitrary data sizes.
-This can be surprising to callers that might incorrectly be expecting
-atomicity for accesses to aggregate structures, although there are other
-callers where tearing is actually permissable (e.g. if they are using
-something akin to sequence locking to protect the access).
+Passing a volatile-qualified pointer to READ_ONCE() is an absolute
+trainwreck for code generation: the use of 'typeof()' to define a
+temporary variable inside the macro means that the final evaluation in
+macro scope ends up forcing a read back from the stack. When stack
+protector is enabled (the default for arm64, at least), this causes
+the compiler to vomit up all sorts of junk.
 
-Linus sayeth:
+Unfortunately, dropping pointer qualifiers inside the macro poses quite
+a challenge, especially since the pointed-to type is permitted to be an
+aggregate, and this is relied upon by mm/ code accessing things like
+'pmd_t'. Based on numerous hacks and discussions on the mailing list,
+this is the best I've managed to come up with.
 
-  | We could also look at being stricter for the normal READ/WRITE_ONCE(),
-  | and require that they are
-  |
-  | (a) regular integer types
-  |
-  | (b) fit in an atomic word
-  |
-  | We actually did (b) for a while, until we noticed that we do it on
-  | loff_t's etc and relaxed the rules. But maybe we could have a
-  | "non-atomic" version of READ/WRITE_ONCE() that is used for the
-  | questionable cases?
+Introduce '__unqual_scalar_typeof()' which takes an expression and, if
+the expression is an optionally qualified 8, 16, 32 or 64-bit scalar
+type, evaluates to the unqualified type. Other input types, including
+aggregates, remain unchanged. Hopefully READ_ONCE() on volatile aggregate
+pointers isn't something we do on a fast-path.
 
-The slight snag is that we also have to support 64-bit accesses on 32-bit
-architectures, as these appear to be widespread and tend to work out ok
-if either the architecture supports atomic 64-bit accesses (x86, armv7)
-or if the variable being accesses represents a virtual address and
-therefore only requires 32-bit atomicity in practice.
-
-Take a step in that direction by introducing a variant of
-'compiletime_assert_atomic_type()' and use it to check the pointer
-argument to {READ,WRITE}_ONCE(). Expose __{READ,WRITE_ONCE}() variants
-which are allowed to tear and convert the one broken caller over to the
-new macros.
-
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
 Cc: Arnd Bergmann <arnd@arndb.de>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: Michael Ellerman <mpe@ellerman.id.au>
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- drivers/xen/time.c       |  2 +-
- include/linux/compiler.h | 37 +++++++++++++++++++++++++++++++++----
- 2 files changed, 34 insertions(+), 5 deletions(-)
+ include/linux/compiler.h       |  6 +++---
+ include/linux/compiler_types.h | 21 +++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/xen/time.c b/drivers/xen/time.c
-index 0968859c29d0..108edbcbc040 100644
---- a/drivers/xen/time.c
-+++ b/drivers/xen/time.c
-@@ -64,7 +64,7 @@ static void xen_get_runstate_snapshot_cpu_delta(
- 	do {
- 		state_time = get64(&state->state_entry_time);
- 		rmb();	/* Hypervisor might update data. */
--		*res = READ_ONCE(*state);
-+		*res = __READ_ONCE(*state);
- 		rmb();	/* Hypervisor might update data. */
- 	} while (get64(&state->state_entry_time) != state_time ||
- 		 (state_time & XEN_RUNSTATE_UPDATE));
 diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 0bf6c04b3f8f..3e0b14de3504 100644
+index 3e0b14de3504..00a68063d9d5 100644
 --- a/include/linux/compiler.h
 +++ b/include/linux/compiler.h
-@@ -198,24 +198,43 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- #include <asm/barrier.h>
- #include <linux/kasan-checks.h>
- 
-+/*
-+ * Use __READ_ONCE() instead of READ_ONCE() if you do not require any
-+ * atomicity or dependency ordering guarantees. Note that this may result
-+ * in tears!
-+ */
-+#define __READ_ONCE(x)	(*(const volatile typeof(x) *)&(x))
-+
-+#define __READ_ONCE_SCALAR(x)						\
-+({									\
-+	typeof(x) __x = __READ_ONCE(x);					\
-+	smp_read_barrier_depends();					\
-+	__x;								\
-+})
-+
- /*
-  * Use READ_ONCE_NOCHECK() instead of READ_ONCE() if you need
-  * to hide memory access from KASAN.
+@@ -203,13 +203,13 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+  * atomicity or dependency ordering guarantees. Note that this may result
+  * in tears!
   */
- #define READ_ONCE_NOCHECK(x)						\
+-#define __READ_ONCE(x)	(*(const volatile typeof(x) *)&(x))
++#define __READ_ONCE(x)	(*(const volatile __unqual_scalar_typeof(x) *)&(x))
+ 
+ #define __READ_ONCE_SCALAR(x)						\
  ({									\
--	typeof(x) __x = *(volatile typeof(x) *)&(x);			\
--	smp_read_barrier_depends();					\
+-	typeof(x) __x = __READ_ONCE(x);					\
++	__unqual_scalar_typeof(x) __x = __READ_ONCE(x);			\
+ 	smp_read_barrier_depends();					\
 -	__x;								\
-+	compiletime_assert_rwonce_type(x);				\
-+	__READ_ONCE_SCALAR(x);						\
++	(typeof(x))__x;							\
  })
  
- #define READ_ONCE(x)	READ_ONCE_NOCHECK(x)
- 
--#define WRITE_ONCE(x, val)				\
-+#define __WRITE_ONCE(x, val)				\
- do {							\
- 	*(volatile typeof(x) *)&(x) = (val);		\
- } while (0)
- 
-+#define WRITE_ONCE(x, val)				\
-+do {							\
-+	compiletime_assert_rwonce_type(x);		\
-+	__WRITE_ONCE(x, val);				\
-+} while (0)
-+
- #ifdef CONFIG_KASAN
  /*
-  * We can't declare function 'inline' because __no_sanitize_address conflicts
-@@ -299,6 +318,16 @@ static inline void *offset_to_ptr(const int *off)
- 	compiletime_assert(__native_word(t),				\
- 		"Need native word sized stores/loads for atomicity.")
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index e970f97a7fcb..233066c92f6f 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -210,6 +210,27 @@ struct ftrace_likely_data {
+ /* Are two types/vars the same type (ignoring qualifiers)? */
+ #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
  
 +/*
-+ * Yes, this permits 64-bit accesses on 32-bit architectures. These will
-+ * actually be atomic in many cases (namely x86), but for others we rely on
-+ * the access being split into 2x32-bit accesses for a 32-bit quantity (e.g.
-+ * a virtual address) and a strong prevailing wind.
++ * __unqual_scalar_typeof(x) - Declare an unqualified scalar type, leaving
++ *			       non-scalar types unchanged.
++ *
++ * We build this out of a couple of helper macros in a vain attempt to
++ * help you keep your lunch down while reading it.
 + */
-+#define compiletime_assert_rwonce_type(t)					\
-+	compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),	\
-+		"Unsupported access size for {READ,WRITE}_ONCE().")
++#define __pick_scalar_type(x, type, otherwise)					\
++	__builtin_choose_expr(__same_type(x, type), (type)0, otherwise)
 +
- /* &a[0] degrades to a pointer: a different type from an array */
- #define __must_be_array(a)	BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
- 
++#define __pick_integer_type(x, type, otherwise)					\
++	__pick_scalar_type(x, unsigned type,					\
++		__pick_scalar_type(x, signed type, otherwise))
++
++#define __unqual_scalar_typeof(x) typeof(					\
++	__pick_integer_type(x, char,						\
++		__pick_integer_type(x, short,					\
++			__pick_integer_type(x, int,				\
++				__pick_integer_type(x, long,			\
++					__pick_integer_type(x, long long, x))))))
++
+ /* Is this type a native word size -- useful for atomic operations */
+ #define __native_word(t) \
+ 	(sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
 -- 
 2.26.0.110.g2183baf09c-goog
 
