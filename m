@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C251AB136
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Apr 2020 21:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CD81AB0FF
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Apr 2020 21:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411766AbgDOTIC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Apr 2020 15:08:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45914 "EHLO mail.kernel.org"
+        id S2411780AbgDOTIP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Apr 2020 15:08:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45942 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1416860AbgDOSts (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1416861AbgDOSts (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Wed, 15 Apr 2020 14:49:48 -0400
 Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C2B3321569;
-        Wed, 15 Apr 2020 18:49:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 18228215A4;
+        Wed, 15 Apr 2020 18:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1586976588;
-        bh=Iqy7olmWTGFsAB7j1jAOyQi0betLtkAJ66NGYId1SDc=;
+        bh=qliPcXgbk/xRPVAz0PYha9JPnj6oxTj+gchEtQmm5FI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QwQ6eDPRXqiq474j0FH2lAMcFRsLU7qsbtLZtPR0KiLFnFvvJ9Ezn9n+yQC7WWI0J
-         +/ItFIGgTsEoagfUmqmYgv+b7Ci9aJ8Bs5uCtvlHcuigaQeHZzM87yj7gutF3Tr+4I
-         rQa2RjPhLz17mW/eZrcP9mX3xiYEIoovlJKc4K4s=
+        b=p8636ajAogvbWYwXcGWeD5pUPWrNrv2REdMrxjlktzanL8Bp3mU0DzVf184LKAjgy
+         1u3GPUk75QSgnmxZjCUbOXwkScqmALCzYHVWsGGjju+j040urjjVGpYSQ/BUxPts4Y
+         qjvE3XiVAagtZeAmG/9wF+3EYDPEeVCTeEi5GfNw=
 From:   paulmck@kernel.org
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         kernel-team@fb.com, mingo@kernel.org
@@ -32,9 +32,9 @@ Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
         akiyks@gmail.com,
         "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH lkmm tip/core/rcu 04/10] Documentation: LKMM: Add litmus test for RCU GP guarantee where updater frees object
-Date:   Wed, 15 Apr 2020 11:49:39 -0700
-Message-Id: <20200415184945.16487-4-paulmck@kernel.org>
+Subject: [PATCH lkmm tip/core/rcu 05/10] Documentation: LKMM: Add litmus test for RCU GP guarantee where reader stores
+Date:   Wed, 15 Apr 2020 11:49:40 -0700
+Message-Id: <20200415184945.16487-5-paulmck@kernel.org>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20200415183343.GA12265@paulmck-ThinkPad-P72>
 References: <20200415183343.GA12265@paulmck-ThinkPad-P72>
@@ -52,58 +52,67 @@ Acked-by: Andrea Parri <parri.andrea@gmail.com>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- .../litmus-tests/rcu/RCU+sync+free.litmus          | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/litmus-tests/rcu/RCU+sync+free.litmus
+ Documentation/litmus-tests/README                  |  5 +++
+ .../litmus-tests/rcu/RCU+sync+read.litmus          | 37 ++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+ create mode 100644 Documentation/litmus-tests/rcu/RCU+sync+read.litmus
 
-diff --git a/Documentation/litmus-tests/rcu/RCU+sync+free.litmus b/Documentation/litmus-tests/rcu/RCU+sync+free.litmus
+diff --git a/Documentation/litmus-tests/README b/Documentation/litmus-tests/README
+index 84208bc..79d187f 100644
+--- a/Documentation/litmus-tests/README
++++ b/Documentation/litmus-tests/README
+@@ -7,3 +7,8 @@ RCU (/rcu directory)
+ MP+onceassign+derefonce.litmus
+     Demonstrates that rcu_assign_pointer() and rcu_dereference() to
+     ensure that an RCU reader will not see pre-initialization garbage.
++
++RCU+sync+read.litmus
++RCU+sync+free.litmus
++    Both the above litmus tests demonstrate the RCU grace period guarantee
++    that an RCU read-side critical section can never span a grace period.
+diff --git a/Documentation/litmus-tests/rcu/RCU+sync+read.litmus b/Documentation/litmus-tests/rcu/RCU+sync+read.litmus
 new file mode 100644
-index 0000000..4ee67e1
+index 0000000..f341767
 --- /dev/null
-+++ b/Documentation/litmus-tests/rcu/RCU+sync+free.litmus
-@@ -0,0 +1,42 @@
-+C RCU+sync+free
++++ b/Documentation/litmus-tests/rcu/RCU+sync+read.litmus
+@@ -0,0 +1,37 @@
++C RCU+sync+read
 +
 +(*
 + * Result: Never
 + *
-+ * This litmus test demonstrates that an RCU reader can never see a write that
-+ * follows a grace period, if it did not see writes that precede that grace
-+ * period.
-+ *
-+ * This is a typical pattern of RCU usage, where the write before the grace
-+ * period assigns a pointer, and the writes following the grace period destroy
-+ * the object that the pointer used to point to.
++ * This litmus test demonstrates that after a grace period, an RCU updater always
++ * sees all stores done in prior RCU read-side critical sections. Such
++ * read-side critical sections would have ended before the grace period ended.
 + *
 + * This is one implication of the RCU grace-period guarantee, which says (among
 + * other things) that an RCU read-side critical section cannot span a grace period.
 + *)
 +
 +{
-+int x = 1;
-+int *y = &x;
-+int z = 1;
++int x = 0;
++int y = 0;
 +}
 +
-+P0(int *x, int *z, int **y)
++P0(int *x, int *y)
 +{
-+	int *r0;
-+	int r1;
-+
 +	rcu_read_lock();
-+	r0 = rcu_dereference(*y);
-+	r1 = READ_ONCE(*r0);
++	WRITE_ONCE(*x, 1);
++	WRITE_ONCE(*y, 1);
 +	rcu_read_unlock();
 +}
 +
-+P1(int *x, int *z, int **y)
++P1(int *x, int *y)
 +{
-+	rcu_assign_pointer(*y, z);
++	int r0;
++	int r1;
++
++	r0 = READ_ONCE(*x);
 +	synchronize_rcu();
-+	WRITE_ONCE(*x, 0);
++	r1 = READ_ONCE(*y);
 +}
 +
-+exists (0:r0=x /\ 0:r1=0)
++exists (1:r0=1 /\ 1:r1=0)
 -- 
 2.9.5
 
