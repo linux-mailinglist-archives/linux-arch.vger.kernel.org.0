@@ -2,125 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9561AA1AB
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Apr 2020 14:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99C31AAEC8
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Apr 2020 18:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S370166AbgDOMoj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Apr 2020 08:44:39 -0400
-Received: from foss.arm.com ([217.140.110.172]:44580 "EHLO foss.arm.com"
+        id S2410481AbgDOQwu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Apr 2020 12:52:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54656 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2898196AbgDOMof (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Apr 2020 08:44:35 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52E4A1063;
-        Wed, 15 Apr 2020 05:44:34 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E44413F68F;
-        Wed, 15 Apr 2020 05:44:30 -0700 (PDT)
-Date:   Wed, 15 Apr 2020 13:44:27 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alex Belits <abelits@marvell.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v3 03/13] task_isolation: add instruction synchronization
- memory barrier
-Message-ID: <20200415124427.GB28304@C02TD0UTHF1T.local>
-References: <4473787e1b6bc3cc226067e8d122092a678b63de.camel@marvell.com>
- <aed12dd15ea2981bc9554cfa8b5e273c1342c756.camel@marvell.com>
- <07c25c246c55012981ec0296eee23e68c719333a.camel@marvell.com>
- <d995795c731d6ecceb36bdf1c1df3d72fefd023d.camel@marvell.com>
+        id S2410478AbgDOQwt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Apr 2020 12:52:49 -0400
+Received: from localhost.localdomain (unknown [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29EED20737;
+        Wed, 15 Apr 2020 16:52:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586969568;
+        bh=MBTHGFuyd6RkQ3mM9tXpCw5qvy6Khusn8uo3qKblggE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sZnKIEafLDe3NdRw0M16kTS1yp9wM/RpCYwALwJm6Wb4JytGDxVyhNcexnnI7Mqk9
+         CBUg1bVfYaFjIzM3hHOOTQUG5VVoiRHDBsBEF9m+kbX/KWPQff0/mDp8nEQvRC7d5L
+         UJ7vJo8xAT4lr8vpQvb0ELDatkf8ZJOLS9QPOSoY=
+From:   Will Deacon <will@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, kernel-team@android.com,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v3 00/12] Rework READ_ONCE() to improve codegen
+Date:   Wed, 15 Apr 2020 17:52:06 +0100
+Message-Id: <20200415165218.20251-1-will@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d995795c731d6ecceb36bdf1c1df3d72fefd023d.camel@marvell.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 09, 2020 at 03:17:40PM +0000, Alex Belits wrote:
-> Some architectures implement memory synchronization instructions for
-> instruction cache. Make a separate kind of barrier that calls them.
+Hi everyone,
 
-Modifying the instruction caches requries more than an ISB, and the
-'IMB' naming implies you're trying to order against memory accesses,
-which isn't what ISB (generally) does.
+This is version three of the patches I previously posted for improving
+the code generation of READ_ONCE() and moving the minimum GCC version
+to 4.8:
 
-What exactly do you want to use this for?
+RFC: https://lore.kernel.org/lkml/20200110165636.28035-1-will@kernel.org
+v2:  https://lore.kernel.org/lkml/20200123153341.19947-1-will@kernel.org
 
-As-is, I don't think this makes sense as a generic barrier.
+Although v2 was queued up by Peter in -tip, it was found to break the
+build for m68k and sparc32. We fixed m68k during the merge window and
+I've since posted patches to fix sparc32 here:
 
-Thanks,
-Mark.
+  https://lore.kernel.org/lkml/20200414214011.2699-1-will@kernel.org
 
-> 
-> Signed-off-by: Alex Belits <abelits@marvell.com>
-> ---
->  arch/arm/include/asm/barrier.h   | 2 ++
->  arch/arm64/include/asm/barrier.h | 2 ++
->  include/asm-generic/barrier.h    | 4 ++++
->  3 files changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm/include/asm/barrier.h b/arch/arm/include/asm/barrier.h
-> index 83ae97c049d9..6def62c95937 100644
-> --- a/arch/arm/include/asm/barrier.h
-> +++ b/arch/arm/include/asm/barrier.h
-> @@ -64,12 +64,14 @@ extern void arm_heavy_mb(void);
->  #define mb()		__arm_heavy_mb()
->  #define rmb()		dsb()
->  #define wmb()		__arm_heavy_mb(st)
-> +#define imb()		isb()
->  #define dma_rmb()	dmb(osh)
->  #define dma_wmb()	dmb(oshst)
->  #else
->  #define mb()		barrier()
->  #define rmb()		barrier()
->  #define wmb()		barrier()
-> +#define imb()		barrier()
->  #define dma_rmb()	barrier()
->  #define dma_wmb()	barrier()
->  #endif
-> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> index 7d9cc5ec4971..12a7dbd68bed 100644
-> --- a/arch/arm64/include/asm/barrier.h
-> +++ b/arch/arm64/include/asm/barrier.h
-> @@ -45,6 +45,8 @@
->  #define rmb()		dsb(ld)
->  #define wmb()		dsb(st)
->  
-> +#define imb()		isb()
-> +
->  #define dma_rmb()	dmb(oshld)
->  #define dma_wmb()	dmb(oshst)
->  
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index 85b28eb80b11..d5a822fb3e92 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -46,6 +46,10 @@
->  #define dma_wmb()	wmb()
->  #endif
->  
-> +#ifndef imb
-> +#define imb		barrier()
-> +#endif
-> +
->  #ifndef read_barrier_depends
->  #define read_barrier_depends()		do { } while (0)
->  #endif
-> -- 
-> 2.20.1
-> 
+This series is a refresh on top of 5.7-rc1, the main changes being:
+
+  * Fix another issue where 'const' is assigned to non-const via
+    WRITE_ONCE(), this time in the tls code
+
+  * Fix READ_ONCE_NOCHECK() abuse in arm64 checksum code
+
+  * Added Reviewed-bys and Acks from v2
+
+Hopefully this can be considered for 5.8, along with the sparc32 changes.
+
+Cheers,
+
+Will
+
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Segher Boessenkool <segher@kernel.crashing.org>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+
+--->8
+
+Will Deacon (12):
+  compiler/gcc: Emit build-time warning for GCC prior to version 4.8
+  netfilter: Avoid assigning 'const' pointer to non-const pointer
+  net: tls: Avoid assigning 'const' pointer to non-const pointer
+  fault_inject: Don't rely on "return value" from WRITE_ONCE()
+  arm64: csum: Disable KASAN for do_csum()
+  READ_ONCE: Simplify implementations of {READ,WRITE}_ONCE()
+  READ_ONCE: Enforce atomicity for {READ,WRITE}_ONCE() memory accesses
+  READ_ONCE: Drop pointer qualifiers when reading from scalar types
+  locking/barriers: Use '__unqual_scalar_typeof' for load-acquire macros
+  arm64: barrier: Use '__unqual_scalar_typeof' for acquire/release
+    macros
+  compiler/gcc: Raise minimum GCC version for kernel builds to 4.8
+  gcov: Remove old GCC 3.4 support
+
+ Documentation/process/changes.rst |   2 +-
+ arch/arm/crypto/Kconfig           |  12 +-
+ arch/arm64/include/asm/barrier.h  |  16 +-
+ arch/arm64/lib/csum.c             |  20 +-
+ crypto/Kconfig                    |   1 -
+ drivers/xen/time.c                |   2 +-
+ include/asm-generic/barrier.h     |  16 +-
+ include/linux/compiler-gcc.h      |   5 +-
+ include/linux/compiler.h          | 129 +++----
+ include/linux/compiler_types.h    |  21 ++
+ init/Kconfig                      |   5 +-
+ kernel/gcov/Kconfig               |  24 --
+ kernel/gcov/Makefile              |   3 +-
+ kernel/gcov/gcc_3_4.c             | 573 ------------------------------
+ lib/fault-inject.c                |   4 +-
+ net/netfilter/core.c              |   2 +-
+ net/tls/tls_main.c                |   2 +-
+ scripts/Kconfig.include           |   6 +
+ scripts/gcc-plugins/Kconfig       |   2 +-
+ 19 files changed, 126 insertions(+), 719 deletions(-)
+ delete mode 100644 kernel/gcov/gcc_3_4.c
+
+-- 
+2.26.0.110.g2183baf09c-goog
+
