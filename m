@@ -2,104 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D26031AB310
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Apr 2020 23:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17411AB381
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Apr 2020 23:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442243AbgDOVFz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Apr 2020 17:05:55 -0400
-Received: from mga03.intel.com ([134.134.136.65]:64181 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2442230AbgDOVFv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Apr 2020 17:05:51 -0400
-IronPort-SDR: nq9YjgNK/4XFOHxF3yVKJdmaTrLXAYoJt/MX7BaNqLJYhok4WtOkdAAFR8qI6YZvav1Zz11LP3
- UkT2+O+mh8GQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2020 14:05:22 -0700
-IronPort-SDR: /3wxs7lSvnXTFU9E5rikRIDFkaKDkt4Hnpv2Ff3lR79C5AaUyVoPDX00qghzx41lUm1OUmVhOd
- hwoexv/S/Jvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,388,1580803200"; 
-   d="scan'208";a="455035573"
-Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.209.116.191])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Apr 2020 14:05:19 -0700
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     arjan@linux.intel.com, linux-kernel@vger.kernel.org,
-        kernel-hardening@lists.openwall.com, rick.p.edgecomb@intel.com,
-        linux-arch@vger.kernel.org
-Subject: [PATCH 5/9] x86: make sure _etext includes function sections
-Date:   Wed, 15 Apr 2020 14:04:47 -0700
-Message-Id: <20200415210452.27436-6-kristen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415210452.27436-1-kristen@linux.intel.com>
-References: <20200415210452.27436-1-kristen@linux.intel.com>
+        id S1730422AbgDOVtL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Apr 2020 17:49:11 -0400
+Received: from smtprelay0186.hostedemail.com ([216.40.44.186]:59556 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728269AbgDOVtK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Apr 2020 17:49:10 -0400
+X-Greylist: delayed 415 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Apr 2020 17:49:09 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id C9F4418036414
+        for <linux-arch@vger.kernel.org>; Wed, 15 Apr 2020 21:42:17 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 84C59181D3025;
+        Wed, 15 Apr 2020 21:42:12 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1431:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:4321:5007:6119:6742:7514:7901:8957:9586:10004:10400:10471:11232:11658:11914:12043:12048:12297:12679:12740:12760:12895:13069:13255:13311:13357:13439:14181:14659:14721:21080:21451:21627:21809:30054:30064:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: paint15_875805ccbe953
+X-Filterd-Recvd-Size: 2157
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf20.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 15 Apr 2020 21:42:09 +0000 (UTC)
+Message-ID: <1288d0e231eb61566fefc8a9c0510fc123528da2.camel@perches.com>
+Subject: Re: [PATCH lkmm tip/core/rcu 06/10] MAINTAINERS: Update maintainers
+ for new Documentaion/litmus-tests/
+From:   Joe Perches <joe@perches.com>
+To:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Date:   Wed, 15 Apr 2020 14:39:59 -0700
+In-Reply-To: <20200415184945.16487-6-paulmck@kernel.org>
+References: <20200415183343.GA12265@paulmck-ThinkPad-P72>
+         <20200415184945.16487-6-paulmck@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We will be using -ffunction-sections to place each function in
-it's own text section so it can be randomized at load time. The
-linker considers these .text.* sections "orphaned sections", and
-will place them after the first similar section (.text). However,
-we need to move _etext so that it is after both .text and .text.*
-We also need to calculate text size to include .text AND .text.*
+On Wed, 2020-04-15 at 11:49 -0700, paulmck@kernel.org wrote:
+> Also add me as Reviewer for LKMM. Previously a patch to do this was
+> Acked but somewhere along the line got lost. Add myself in this patch.
+[]
+> diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> @@ -9806,6 +9806,7 @@ M:	Luc Maranget <luc.maranget@inria.fr>
+>  M:	"Paul E. McKenney" <paulmck@kernel.org>
+>  R:	Akira Yokosawa <akiyks@gmail.com>
+>  R:	Daniel Lustig <dlustig@nvidia.com>
+> +R:	Joel Fernandes <joel@joelfernandes.org>
+>  L:	linux-kernel@vger.kernel.org
+>  L:	linux-arch@vger.kernel.org
+>  S:	Supported
+> @@ -9816,6 +9817,7 @@ F:	Documentation/core-api/atomic_ops.rst
+>  F:	Documentation/core-api/refcount-vs-atomic.rst
+>  F:	Documentation/memory-barriers.txt
+>  F:	tools/memory-model/
+> +F:	Documentation/litmus-tests/
 
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
----
- arch/x86/kernel/vmlinux.lds.S     | 18 +++++++++++++++++-
- include/asm-generic/vmlinux.lds.h |  2 +-
- 2 files changed, 18 insertions(+), 2 deletions(-)
+trivia:
 
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 1bf7e312361f..044f7528a2f0 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -147,8 +147,24 @@ SECTIONS
- #endif
- 	} :text =0xcccc
- 
--	/* End of text section, which should occupy whole number of pages */
-+#ifdef CONFIG_FG_KASLR
-+	/*
-+	 * -ffunction-sections creates .text.* sections, which are considered
-+	 * "orphan sections" and added after the first similar section (.text).
-+	 * Adding this ALIGN statement causes the address of _etext
-+	 * to be below that of all the .text.* orphaned sections
-+	 */
-+	. = ALIGN(PAGE_SIZE);
-+#endif
- 	_etext = .;
-+
-+	/*
-+	 * the size of the .text section is used to calculate the address
-+	 * range for orc lookups. If we just use SIZEOF(.text), we will
-+	 * miss all the .text.* sections. Calculate the size using _etext
-+	 * and _stext and save the value for later.
-+	 */
-+	text_size = _etext - _stext;
- 	. = ALIGN(PAGE_SIZE);
- 
- 	X86_ALIGN_RODATA_BEGIN
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 71e387a5fe90..f5baee74854c 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -813,7 +813,7 @@
- 	. = ALIGN(4);							\
- 	.orc_lookup : AT(ADDR(.orc_lookup) - LOAD_OFFSET) {		\
- 		orc_lookup = .;						\
--		. += (((SIZEOF(.text) + LOOKUP_BLOCK_SIZE - 1) /	\
-+		. += (((text_size + LOOKUP_BLOCK_SIZE - 1) /	\
- 			LOOKUP_BLOCK_SIZE) + 1) * 4;			\
- 		orc_lookup_end = .;					\
- 	}
--- 
-2.20.1
+Alphabetic ordering of F: entries please.
+This should be between core-api and memory-barriers.
+
+>  LIS3LV02D ACCELEROMETER DRIVER
+>  M:	Eric Piel <eric.piel@tremplin-utc.net>
 
