@@ -2,80 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A17411AB381
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Apr 2020 23:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7271AB4AC
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Apr 2020 02:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730422AbgDOVtL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Apr 2020 17:49:11 -0400
-Received: from smtprelay0186.hostedemail.com ([216.40.44.186]:59556 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728269AbgDOVtK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Apr 2020 17:49:10 -0400
-X-Greylist: delayed 415 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Apr 2020 17:49:09 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id C9F4418036414
-        for <linux-arch@vger.kernel.org>; Wed, 15 Apr 2020 21:42:17 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 84C59181D3025;
-        Wed, 15 Apr 2020 21:42:12 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1431:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:4321:5007:6119:6742:7514:7901:8957:9586:10004:10400:10471:11232:11658:11914:12043:12048:12297:12679:12740:12760:12895:13069:13255:13311:13357:13439:14181:14659:14721:21080:21451:21627:21809:30054:30064:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: paint15_875805ccbe953
-X-Filterd-Recvd-Size: 2157
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf20.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 15 Apr 2020 21:42:09 +0000 (UTC)
-Message-ID: <1288d0e231eb61566fefc8a9c0510fc123528da2.camel@perches.com>
+        id S2387405AbgDPARo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Apr 2020 20:17:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57980 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729625AbgDPARm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Apr 2020 20:17:42 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A0AF2078B;
+        Thu, 16 Apr 2020 00:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586996261;
+        bh=8ZQpLIyNQ6xi0fOhO4mCXoEaA0yi2F4kZ5SGENO7/iM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=1mYg783pLKeIT3Vs6V1bsfRFNrd+8xsKVJCqJuRlJmFTDRf8WgJCBAfHH43lEBT6f
+         UkELQtSEYyiuzrqLENpa5ofYeQ5RC07OgZXODRyY8LJyBU1cW7eXkInA4889tMYRQW
+         ijwnM3iAb42KBmlrThDQ83H6gccJAXqI591uFW2o=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 629C73522AD1; Wed, 15 Apr 2020 17:17:41 -0700 (PDT)
+Date:   Wed, 15 Apr 2020 17:17:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, mingo@kernel.org, stern@rowland.harvard.edu,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
 Subject: Re: [PATCH lkmm tip/core/rcu 06/10] MAINTAINERS: Update maintainers
  for new Documentaion/litmus-tests/
-From:   Joe Perches <joe@perches.com>
-To:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org
-Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Date:   Wed, 15 Apr 2020 14:39:59 -0700
-In-Reply-To: <20200415184945.16487-6-paulmck@kernel.org>
+Message-ID: <20200416001741.GJ17661@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
 References: <20200415183343.GA12265@paulmck-ThinkPad-P72>
-         <20200415184945.16487-6-paulmck@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+ <20200415184945.16487-6-paulmck@kernel.org>
+ <1288d0e231eb61566fefc8a9c0510fc123528da2.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1288d0e231eb61566fefc8a9c0510fc123528da2.camel@perches.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2020-04-15 at 11:49 -0700, paulmck@kernel.org wrote:
-> Also add me as Reviewer for LKMM. Previously a patch to do this was
-> Acked but somewhere along the line got lost. Add myself in this patch.
-[]
-> diff --git a/MAINTAINERS b/MAINTAINERS
-[]
-> @@ -9806,6 +9806,7 @@ M:	Luc Maranget <luc.maranget@inria.fr>
->  M:	"Paul E. McKenney" <paulmck@kernel.org>
->  R:	Akira Yokosawa <akiyks@gmail.com>
->  R:	Daniel Lustig <dlustig@nvidia.com>
-> +R:	Joel Fernandes <joel@joelfernandes.org>
->  L:	linux-kernel@vger.kernel.org
->  L:	linux-arch@vger.kernel.org
->  S:	Supported
-> @@ -9816,6 +9817,7 @@ F:	Documentation/core-api/atomic_ops.rst
->  F:	Documentation/core-api/refcount-vs-atomic.rst
->  F:	Documentation/memory-barriers.txt
->  F:	tools/memory-model/
-> +F:	Documentation/litmus-tests/
+On Wed, Apr 15, 2020 at 02:39:59PM -0700, Joe Perches wrote:
+> On Wed, 2020-04-15 at 11:49 -0700, paulmck@kernel.org wrote:
+> > Also add me as Reviewer for LKMM. Previously a patch to do this was
+> > Acked but somewhere along the line got lost. Add myself in this patch.
+> []
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> []
+> > @@ -9806,6 +9806,7 @@ M:	Luc Maranget <luc.maranget@inria.fr>
+> >  M:	"Paul E. McKenney" <paulmck@kernel.org>
+> >  R:	Akira Yokosawa <akiyks@gmail.com>
+> >  R:	Daniel Lustig <dlustig@nvidia.com>
+> > +R:	Joel Fernandes <joel@joelfernandes.org>
+> >  L:	linux-kernel@vger.kernel.org
+> >  L:	linux-arch@vger.kernel.org
+> >  S:	Supported
+> > @@ -9816,6 +9817,7 @@ F:	Documentation/core-api/atomic_ops.rst
+> >  F:	Documentation/core-api/refcount-vs-atomic.rst
+> >  F:	Documentation/memory-barriers.txt
+> >  F:	tools/memory-model/
+> > +F:	Documentation/litmus-tests/
+> 
+> trivia:
+> 
+> Alphabetic ordering of F: entries please.
+> This should be between core-api and memory-barriers.
+> 
+> >  LIS3LV02D ACCELEROMETER DRIVER
+> >  M:	Eric Piel <eric.piel@tremplin-utc.net>
 
-trivia:
+New one on me, but it does make a lot of sense, especially for cases
+with lots of scattered paths.  How about the following?
 
-Alphabetic ordering of F: entries please.
-This should be between core-api and memory-barriers.
+							Thanx, Paul
 
->  LIS3LV02D ACCELEROMETER DRIVER
->  M:	Eric Piel <eric.piel@tremplin-utc.net>
+------------------------------------------------------------------------
 
+commit e3b73adbd732e13e7e9f42c9adc95e7b9439426c
+Author: Joel Fernandes (Google) <joel@joelfernandes.org>
+Date:   Sun Mar 22 21:57:35 2020 -0400
+
+    MAINTAINERS: Update maintainers for new Documentation/litmus-tests
+    
+    This commit adds Joel Fernandes as official LKMM reviewer.
+    
+    Acked-by: Boqun Feng <boqun.feng@gmail.com>
+    Acked-by: Andrea Parri <parri.andrea@gmail.com>
+    Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+    [ paulmck: Apply Joe Perches alphabetization feedback. ]
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e64e5db..15eb800 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9806,6 +9806,7 @@ M:	Luc Maranget <luc.maranget@inria.fr>
+ M:	"Paul E. McKenney" <paulmck@kernel.org>
+ R:	Akira Yokosawa <akiyks@gmail.com>
+ R:	Daniel Lustig <dlustig@nvidia.com>
++R:	Joel Fernandes <joel@joelfernandes.org>
+ L:	linux-kernel@vger.kernel.org
+ L:	linux-arch@vger.kernel.org
+ S:	Supported
+@@ -9814,6 +9815,7 @@ F:	Documentation/atomic_bitops.txt
+ F:	Documentation/atomic_t.txt
+ F:	Documentation/core-api/atomic_ops.rst
+ F:	Documentation/core-api/refcount-vs-atomic.rst
++F:	Documentation/litmus-tests/
+ F:	Documentation/memory-barriers.txt
+ F:	tools/memory-model/
+ 
