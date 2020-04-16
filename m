@@ -2,99 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2151AB5A5
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Apr 2020 03:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362EA1AB5FA
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Apr 2020 04:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729491AbgDPBsl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Apr 2020 21:48:41 -0400
-Received: from smtprelay0171.hostedemail.com ([216.40.44.171]:47966 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387838AbgDPBsh (ORCPT
+        id S2387827AbgDPCim (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Apr 2020 22:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732153AbgDPCik (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Apr 2020 21:48:37 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id A4AD86130;
-        Thu, 16 Apr 2020 01:48:34 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1431:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2553:2559:2562:2731:2828:3138:3139:3140:3141:3142:3353:3622:3653:3865:3866:3867:3868:3870:3872:3874:4321:4362:5007:6119:6742:7514:7901:7903:8957:9586:10004:10400:10471:10848:11232:11658:11914:12043:12297:12555:12740:12760:12895:13069:13138:13231:13255:13311:13357:13439:13548:14096:14097:14181:14659:14721:21080:21451:21611:21627:21809:30029:30030:30054:30064:30070:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
-X-HE-Tag: vein82_67ab8ba175634
-X-Filterd-Recvd-Size: 3060
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf20.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 16 Apr 2020 01:48:32 +0000 (UTC)
-Message-ID: <9cd5b3c0a9a0f55d799a3d3ebd68ba8ff5f907d8.camel@perches.com>
-Subject: Re: [PATCH lkmm tip/core/rcu 06/10] MAINTAINERS: Update maintainers
- for new Documentaion/litmus-tests/
-From:   Joe Perches <joe@perches.com>
-To:     paulmck@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@fb.com, mingo@kernel.org, stern@rowland.harvard.edu,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Date:   Wed, 15 Apr 2020 18:46:21 -0700
-In-Reply-To: <20200416001741.GJ17661@paulmck-ThinkPad-P72>
-References: <20200415183343.GA12265@paulmck-ThinkPad-P72>
-         <20200415184945.16487-6-paulmck@kernel.org>
-         <1288d0e231eb61566fefc8a9c0510fc123528da2.camel@perches.com>
-         <20200416001741.GJ17661@paulmck-ThinkPad-P72>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+        Wed, 15 Apr 2020 22:38:40 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABADC061A0C;
+        Wed, 15 Apr 2020 19:38:38 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 188so921226pgj.13;
+        Wed, 15 Apr 2020 19:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=inF2oUQWOVUn1zSzuLcDRWp19ZrU3frGNXSsTZrmfdQ=;
+        b=jrHbU5WLW/3NRzRL4tUP93CurNe3euf3u04ZSvHtx4DoKvg6BdTPCBmBNvMyBxrmZ7
+         TgU6cisZ6MbOW00sFnL3XXqhrZos/MnOzXaPFFHxANt1Lbnm9vbEaY/H69/eXJTkDffy
+         ipYXWrWZ5P1cZa1xWZhnN8U2oyc9HkCyolyDPlTsvYS1NbDcLglMyXiC04gAJ3QohUCR
+         jjhhKSZFl5DZdnIqOWAvjUvsN7l3N7G0oCbfxTH2p8/CtE0JdvlD3sOFTmXSKJceP4wx
+         +WBjX7cQkyZuAZdZmSzBG05XUhJpmhNFkrmD+CwNHb8SpwSIZ1DZTATXqT/9abQkBz88
+         tb5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=inF2oUQWOVUn1zSzuLcDRWp19ZrU3frGNXSsTZrmfdQ=;
+        b=HBQY6RygLqh0Xsz/eR3ySaemX6k9UPmfL1o5GwXkq3jaVaC743Wa2sW2PIQAxd7kjT
+         TonJHlVxA7zRWX/eyAPTTNSSy/yPk5nKvSS9jUHq/1j4QEQaZZ+BoBBzB4AkihJyG/6Z
+         Ori/6l2qIsKHxWzCKKHrnX7/w+clg0xcMsnqzto+4a4T8KB515xKF0PNv/i+peI8yNDl
+         VehmoxF+bgA33H35IB0FUsNfVV11+3OxfhHCN9TQx5I08K258OIdW6lCobzwMaWfTDUH
+         /OTiNPRdsln4bsuEO6+pDVbGTagBGdi6X6DjQfDeLM+OoIXPa3gtVKcYuG+plgBGhb5D
+         xKyA==
+X-Gm-Message-State: AGi0PubdI6IWBjFOScn6xHAKmJjH9if5+ANryksO5yJTA4/FfY9masoj
+        nKr1q/u7/7rDjrT0ysqmOjo=
+X-Google-Smtp-Source: APiQypLiACMHB4H40lzo7TjDzMxKO4UkcSYRYlY6AuEcTVgyHDfawhLANelI41IO6oDhsCuzUrA+DA==
+X-Received: by 2002:a62:7811:: with SMTP id t17mr31223582pfc.268.1587004718236;
+        Wed, 15 Apr 2020 19:38:38 -0700 (PDT)
+Received: from localhost ([203.18.28.220])
+        by smtp.gmail.com with ESMTPSA id 198sm15506729pfa.87.2020.04.15.19.38.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2020 19:38:37 -0700 (PDT)
+Date:   Thu, 16 Apr 2020 12:38:00 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 4/4] mm/vmalloc: Hugepage vmalloc mappings
+To:     Will Deacon <will@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org
+References: <20200413125303.423864-1-npiggin@gmail.com>
+        <20200413125303.423864-5-npiggin@gmail.com>
+        <20200415104755.GD12621@willie-the-truck>
+In-Reply-To: <20200415104755.GD12621@willie-the-truck>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-Id: <1587003993.x84ylh11b2.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2020-04-15 at 17:17 -0700, Paul E. McKenney wrote:
-> On Wed, Apr 15, 2020 at 02:39:59PM -0700, Joe Perches wrote:
-> > On Wed, 2020-04-15 at 11:49 -0700, paulmck@kernel.org wrote:
-> > > Also add me as Reviewer for LKMM. Previously a patch to do this was
-> > > Acked but somewhere along the line got lost. Add myself in this patch.
-> > []
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > []
-> > > @@ -9806,6 +9806,7 @@ M:	Luc Maranget <luc.maranget@inria.fr>
-> > >  M:	"Paul E. McKenney" <paulmck@kernel.org>
-> > >  R:	Akira Yokosawa <akiyks@gmail.com>
-> > >  R:	Daniel Lustig <dlustig@nvidia.com>
-> > > +R:	Joel Fernandes <joel@joelfernandes.org>
-> > >  L:	linux-kernel@vger.kernel.org
-> > >  L:	linux-arch@vger.kernel.org
-> > >  S:	Supported
-> > > @@ -9816,6 +9817,7 @@ F:	Documentation/core-api/atomic_ops.rst
-> > >  F:	Documentation/core-api/refcount-vs-atomic.rst
-> > >  F:	Documentation/memory-barriers.txt
-> > >  F:	tools/memory-model/
-> > > +F:	Documentation/litmus-tests/
-> > 
-> > trivia:
-> > 
-> > Alphabetic ordering of F: entries please.
-> > This should be between core-api and memory-barriers.
-> > 
-> > >  LIS3LV02D ACCELEROMETER DRIVER
-> > >  M:	Eric Piel <eric.piel@tremplin-utc.net>
-> 
-> New one on me, but it does make a lot of sense, especially for cases
-> with lots of scattered paths.  How about the following?
+Excerpts from Will Deacon's message of April 15, 2020 8:47 pm:
+> Hi Nick,
+>=20
+> On Mon, Apr 13, 2020 at 10:53:03PM +1000, Nicholas Piggin wrote:
+>> For platforms that define HAVE_ARCH_HUGE_VMAP and support PMD vmap mappi=
+ngs,
+>> have vmalloc attempt to allocate PMD-sized pages first, before falling b=
+ack
+>> to small pages. Allocations which use something other than PAGE_KERNEL
+>> protections are not permitted to use huge pages yet, not all callers exp=
+ect
+>> this (e.g., module allocations vs strict module rwx).
+>>=20
+>> This gives a 6x reduction in dTLB misses for a `git diff` (of linux), fr=
+om
+>> 45600 to 6500 and a 2.2% reduction in cycles on a 2-node POWER9.
+>=20
+> I wonder if it's worth extending vmap() to handle higher order pages in
+> a similar way? That might be helpful for tracing PMUs such as Arm SPE,
+> where the CPU streams tracing data out to a virtually addressed buffer
+> (see rb_alloc_aux_page()).
 
-Thanks Paul.
+Yeah it becomes pretty trivial to do that with VM_HUGE_PAGES after
+this patch, I have something to do it but no callers ready yet, if
+you have an easy one we can add it.
 
-If the recent commits that Linus did just before v5.7-rc1:
+>> This can result in more internal fragmentation and memory overhead for a
+>> given allocation. It can also cause greater NUMA unbalance on hashdist
+>> allocations.
+>>=20
+>> There may be other callers that expect small pages under vmalloc but use
+>> PAGE_KERNEL, I'm not sure if it's feasible to catch them all. An
+>> alternative would be a new function or flag which enables large mappings=
+,
+>> and use that in callers.
+>>=20
+>> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+>> ---
+>>  include/linux/vmalloc.h |   2 +
+>>  mm/vmalloc.c            | 135 +++++++++++++++++++++++++++++-----------
+>>  2 files changed, 102 insertions(+), 35 deletions(-)
+>>=20
+>> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+>> index 291313a7e663..853b82eac192 100644
+>> --- a/include/linux/vmalloc.h
+>> +++ b/include/linux/vmalloc.h
+>> @@ -24,6 +24,7 @@ struct notifier_block;		/* in notifier.h */
+>>  #define VM_UNINITIALIZED	0x00000020	/* vm_struct is not fully initializ=
+ed */
+>>  #define VM_NO_GUARD		0x00000040      /* don't add guard page */
+>>  #define VM_KASAN		0x00000080      /* has allocated kasan shadow memory =
+*/
+>> +#define VM_HUGE_PAGES		0x00000100	/* may use huge pages */
+>=20
+> Please can you add a check for this in the arm64 change_memory_common()
+> code? Other architectures might need something similar, but we need to
+> forbid changing memory attributes for portions of the huge page.
 
-3b50142d8528 ("MAINTAINERS: sort field names for all entries")
-4400b7d68f6e ("MAINTAINERS: sort entries by entry name")
+Yeah good idea, I can look about adding some more checks.
 
-don't create too many problems I suppose
+>=20
+> In general, I'm a bit wary of software table walkers tripping over this.
+> For example, I don't think apply_to_existing_page_range() can handle
+> huge mappings at all, but the one user (KASAN) only ever uses page mappin=
+gs
+> so it's ok there.
 
-$ scripts/parse-maintainers.pl --order --input=MAINTAINERS --output=MAINTAINERS
+Right, I have something to warn for apply to page range (and looking
+at adding support for bigger pages). It doesn't even have a test and
+warn at the moment which isn't good practice IMO so we should add one
+even without huge vmap.
 
-could be run just before every -rc1 to keep all this stuff organized.
+>=20
+>> @@ -2325,9 +2356,11 @@ static struct vm_struct *__get_vm_area_node(unsig=
+ned long size,
+>>  	if (unlikely(!size))
+>>  		return NULL;
+>> =20
+>> -	if (flags & VM_IOREMAP)
+>> -		align =3D 1ul << clamp_t(int, get_count_order_long(size),
+>> -				       PAGE_SHIFT, IOREMAP_MAX_ORDER);
+>> +	if (flags & VM_IOREMAP) {
+>> +		align =3D max(align,
+>> +			    1ul << clamp_t(int, get_count_order_long(size),
+>> +					   PAGE_SHIFT, IOREMAP_MAX_ORDER));
+>> +	}
+>=20
+>=20
+> I don't follow this part. Please could you explain why you're potentially
+> aligning above IOREMAP_MAX_ORDER? It doesn't seem to follow from the rest
+> of the patch.
 
-We'll see.
+Trying to remember. If the caller asks for a particular alignment we=20
+shouldn't reduce it. Should put it in another patch.
 
-
+Thanks,
+Nick
