@@ -2,139 +2,492 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC101AF725
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Apr 2020 07:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305D21AF966
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Apr 2020 12:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725923AbgDSFIa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 19 Apr 2020 01:08:30 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:17576 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725769AbgDSFIa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 19 Apr 2020 01:08:30 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03J57iuO019262;
-        Sat, 18 Apr 2020 22:07:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfpt0818;
- bh=Hze6eJcQaBvBwRk4Uu8GpnnohOomUk3J0gv4mNvf8vM=;
- b=Pt3bl+9ZC2iQrHb9khdTf2HZWKmdlnxT5TmxEFV7BH/b22Te91Jm5AMv0zlOKtW+wPpn
- 6rEZbYMpgmMES8N940N52JTCbx/NaKV1fwVD4FnY2Lm0XTUjLP3wQazwZKImUhxY6Shp
- 7No21rKp6zi3NuVBvn+4SSVrpeYpESyTzmJoY7eYrq/GdJ21wbHLbvcEVAAVuHP9X/AV
- oMP5svtc1+5wqRS/Ffp7Z3rRix4RsgFgAxEQjFLo8bMi0Wl655pPAwM2nYPZ4MKwZWbS
- PAQDcmADR/leLT+2xQVj7kxXHVtbgC6Dps2r0h/2ocUi2Kk3v58RsD/JxxyqZiB9FXpc CQ== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 30fxwp2s25-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Sat, 18 Apr 2020 22:07:44 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 18 Apr
- 2020 22:07:43 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
- by SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Sat, 18 Apr 2020 22:07:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P0dWnN/FsBNHNEvt7xRdKmLbrpUcLZ4nwi5iR3y+tpZSaOhofebAOVwgK0xY8sw6pvam/kqNk2NLfgj/wK2qO68RXjwLqnolbxKqwbAMRIPmpbwKsXvw73gHUw4r9y4oVzW0WBMCOAY6dIQucrb3e8XDSeHutubAyRDmrQBcmPSLGMloCHAx89TxcjLgcPNW0PlyNmNxJqY+XA4hF22NiOHcZ97YucjstF+6I5pVsTffzrJ2gXp/tb/9ZAy/vO9RXzqOE+W4/KTTdyUxg6H0+ra3ESxuXNbWR4sANHG8NH6Jz4WH/i9xeM6jPtpJMFGwwTOZsvbHDGHomAwnMwBoXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hze6eJcQaBvBwRk4Uu8GpnnohOomUk3J0gv4mNvf8vM=;
- b=jzzZmnbcjtmybp3lm5PY45QcULi+lzPjQ2QFK1IKxnykuAYivZkupn2l8IDj/K1kmaUH1UD1Z+bFmjfgxdDOa/lKb+r0qnA9rUoKQCE82pnWXBEKiBlXBNm9wSOqqVnrAHh+Nd1ITLcWn+lAL92Vx2RX7+alk57g3x+LKR6sEyiTI8jAfKIpUxKJ4lcIOPZEQb2Ngfu9R4UFvs7Ct7fNsgz838rPP7yJ7JGk3JWEdb6S6Kx+7jZe75+r7ZU6EGBg5Kpjw4GpRxxgFR6GcNeVgxu6zkBWjd1Zb4bvj0zX28oxmvNb1Q5QVYMDuMKilzaVeds7Tk9v9HHzv30fiD3tnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hze6eJcQaBvBwRk4Uu8GpnnohOomUk3J0gv4mNvf8vM=;
- b=hNqDcqvETGN66slKJ8iKPL2V9YAWQq/7Pbh7AP8bVmzNuCtiHxn7JlVsiAmQE5zqYMTb98cn4Pl2TCYyWntqoJN64SD4CDKQMEo40Ku+fraG+vp01ka+xadBCdetO39KNZxoMcz5uvCqloBiZuUsp0EEmXqNDsVCjgXj7WTlhZM=
-Received: from BYAPR18MB2535.namprd18.prod.outlook.com (2603:10b6:a03:137::17)
- by BYAPR18MB2933.namprd18.prod.outlook.com (2603:10b6:a03:10e::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Sun, 19 Apr
- 2020 05:07:42 +0000
-Received: from BYAPR18MB2535.namprd18.prod.outlook.com
- ([fe80::65f8:9bfe:5fa5:1280]) by BYAPR18MB2535.namprd18.prod.outlook.com
- ([fe80::65f8:9bfe:5fa5:1280%3]) with mapi id 15.20.2921.027; Sun, 19 Apr 2020
- 05:07:41 +0000
-From:   Alex Belits <abelits@marvell.com>
-To:     "luto@amacapital.net" <luto@amacapital.net>
-CC:     "mingo@kernel.org" <mingo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 04/13] task_isolation: userspace hard isolation from
- kernel
-Thread-Topic: [PATCH v3 04/13] task_isolation: userspace hard isolation from
- kernel
-Thread-Index: AQHWFgh0Cq6Sp1qrB0WB/pY8n1YWIQ==
-Date:   Sun, 19 Apr 2020 05:07:41 +0000
-Message-ID: <bdea1b5d70460386303e59fdc7438d9013293147.camel@marvell.com>
-References: <58995f108f1af4d59aa8ccd412cdff92711a9990.camel@marvell.com>
-         <915489BC-B2C9-4D47-A205-FC597FC68B98@amacapital.net>
-In-Reply-To: <915489BC-B2C9-4D47-A205-FC597FC68B98@amacapital.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [173.228.7.197]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a76721a9-0958-463b-db22-08d7e41f96b0
-x-ms-traffictypediagnostic: BYAPR18MB2933:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR18MB2933646E962406E3700A9CB5BCD70@BYAPR18MB2933.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 0378F1E47A
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR18MB2535.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(366004)(136003)(396003)(346002)(39850400004)(376002)(316002)(66476007)(26005)(66446008)(64756008)(76116006)(66556008)(66946007)(186003)(478600001)(2616005)(6916009)(7416002)(966005)(54906003)(6506007)(5660300002)(8676002)(6486002)(8936002)(81156014)(71200400001)(6512007)(2906002)(4744005)(4326008)(36756003)(86362001);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: marvell.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jIOsfThepBKKZbqgekvEPqCT6xjC7BhjUDrDTxtujcZiFrXCaTwsOMGTwfZUmtN/AfLmMN9eW5wLT3ceWTcHR3+p6vSdwUJRg/iFXciapok0YPgnQjjZ0mkbVmB15IFPfS3wWQnqkcCYaSwA6IPqLp0u4iC5CHPmcUx12qAaCd9fekI8I9LwsbN/U8aWqH9bcMO9IzexUwyDt+NpITlTS6vr7XLUWzaK/ermrZOoidvpcdInSpoM8Fdu/2bWchYWMGNVuK+SGgmx1FNIae2+ew3wWlmObWCsTCOfgzA4NadZ/zB/jZdR7Pt0MHQaT+xxew5OppMwy1yyssOplggBycz9qXyOXZTb0gA6ebssYLcItTBpSb6d18bnpkU42GWItLtYeQribprVhA+yabheZrDOE2RwhqXGzL3K0bpIpcqDq08es3Q34YaaZV+O/suqlhWted9FKlL6ergj/v4srQ1/03DDFKuleHL16bID6p+a1zak+YljFFU4rsBmVhIu8yox0kNaT8GfhXwL/j/TyQ==
-x-ms-exchange-antispam-messagedata: HfwMLOOr/4m5fZ3OxVU9q/ib++cpJxWwoprn88tLImVBvEZCgqtyaRoyamrE+HnLqJQO4T1IWmiMeSAfP3P8I0uSuTndoVVUaTHh+kI1GwuxlDbpsaUeNelWDHP3RexB7zIwhIx4tK1gkC4NLNlwYHUeJbX5njTzTsqX5Q2jn/zZ+np5fQW8xpbMcgTonhNwzoyTtnaTTUL3tlLMJpr7ZkhSC0BmTSJsqBWKc6bBXLgOho3y+5uo8AM3bAjOOInZoxhDx9u0AvZS98bLGhX3YpzSQJxSVOCVaPeNpWxInFx+TSZFDG/Jyp6MxD5uI8WpWDNd7hufWzG9ACFjTcByuzb3uWddyIUKYvGJ02huHgUy/2UTxRh27Lvx1q3TwU57KxJsQtTldkXcHiS64veof9+sAXMo9edZU24bsPbE6dHWCvLjcel40gV84XPD0t5s9GTTYt+hI+RWwkyLPu2AZ4/r+Rfj2y2bhZvEabzS0E0A8OGE0YII+fNgfUD2ziGf0y59+dWgyS8kX8avYhp5UVT4iJDoGTEVOBllUSyrSGACF+TNHjMaCaGf4lalL0evpKZ/dRIhXFR5zEyuQ7itQ7//WavHCyKtjLUuy9rJbJyw7FqcjoYJojH9rBX66zL6IhcUwrvQAQ5TL9ZHg9pnvy5MuNnDR6ZC36ycaOBf42mJHCVvcZmpTEiVFkG8vfwx/jGLS5E4g/TF3Koo9HKFUx7QprHQXSQVsRXtPJ7xP0EJ63mhHNyXhp8oVxgSqYFUGHFfD5JhgiyQCEUB8vqwml0zk4y7d4eFHc6yArt687Q=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C53B81AD43CDF74E93D23C0D24037623@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1725959AbgDSKoZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 19 Apr 2020 06:44:25 -0400
+Received: from mout-p-101.mailbox.org ([80.241.56.151]:18118 "EHLO
+        mout-p-101.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725923AbgDSKoY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Apr 2020 06:44:24 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 494mfZ31SmzKmZX;
+        Sun, 19 Apr 2020 12:44:22 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id 1tc6z-XEnpVC; Sun, 19 Apr 2020 12:44:18 +0200 (CEST)
+Date:   Sun, 19 Apr 2020 20:44:04 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Josh Triplett <josh@joshtriplett.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v4 2/3] fs: openat2: Extend open_how to allow
+ userspace-selected fds
+Message-ID: <20200419104404.j4e5gxdn2duvmu6s@yavin.dot.cyphar.com>
+References: <cover.1586830316.git.josh@joshtriplett.org>
+ <f969e7d45a8e83efc1ca13d675efd8775f13f376.1586830316.git.josh@joshtriplett.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: a76721a9-0958-463b-db22-08d7e41f96b0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2020 05:07:41.8407
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MfbkLB4IQWWoIfrbGP9p9M9GYlXjMGkWZ7tLbQ7fl75JGvjUefZs/cOaR+R6jyReTTyF2iaoDZpHIB7GfDqIzA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2933
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-18_10:2020-04-17,2020-04-18 signatures=0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="sf7fp3oycsacoxul"
+Content-Disposition: inline
+In-Reply-To: <f969e7d45a8e83efc1ca13d675efd8775f13f376.1586830316.git.josh@joshtriplett.org>
+X-Rspamd-Queue-Id: 0050E176D
+X-Rspamd-Score: -7.79 / 15.00 / 15.00
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-DQpPbiBUaHUsIDIwMjAtMDQtMDkgYXQgMTE6MDAgLTA3MDAsIEFuZHkgTHV0b21pcnNraSB3cm90
-ZToNCj4gDQo+ID4gDQo+ID4gT25jZSB0aGUgdGFzayBoYXMgcmV0dXJuZWQgdG8gdXNlcnNwYWNl
-IGFmdGVyIGlzc3VpbmcgdGhlIHByY3RsKCksDQo+ID4gaWYgaXQgZW50ZXJzIHRoZSBrZXJuZWwg
-YWdhaW4gdmlhIHN5c3RlbSBjYWxsLCBwYWdlIGZhdWx0LCBvciBhbnkNCj4gPiBvdGhlciBleGNl
-cHRpb24gb3IgaXJxLCB0aGUga2VybmVsIHdpbGwga2lsbCBpdCB3aXRoIFNJR0tJTEwuDQo+IA0K
-PiBJIGNvdWxkIGVhc2lseSBpbWFnaW5lIG15c2VsZiB1c2luZyB0YXNrIGlzb2xhdGlvbiwgYnV0
-IG5vdCB3aXRoIHRoZQ0KPiBTSUdLSUxMIHNlbWFudGljcy4gU0lHS0lMTCBjYXVzZXMgZGF0YSBs
-b3NzLiBQbGVhc2UgYXQgbGVhc3QgbGV0DQo+IHVzZXJzIGNob29zZSB3aGF0IHNpZ25hbCB0byBz
-ZW5kLg0KDQpUaGlzIGlzIGFscmVhZHkgZG9uZSwgZXZlbiB0aG91Z2ggdGhlIGRvY3VtZW50YXRp
-b24gaXMgbm90IHVwZGF0ZWQuDQpUaGVyZSBpcyBldmVuIGEgdXNlcnNwYWNlIGxpYnJhcnkgdGhh
-dCBkZWFscyB3aXRoIHRoaXMgd2hpbGUNCmNvbXBlbnNhdGluZyBmb3IgcG9zc2libGUgcmFjZSBj
-b25kaXRpb25zIG9uIGlzb2xhdGlvbiBlbnRyeSBhbmQNCmF1dG9tYXRpYyByZS1lbnRyeSBhZnRl
-ciBpc29sYXRpb24gaXMgYnJva2VuOiANCmh0dHBzOi8vZ2l0aHViLmNvbS9hYmVsaXRzL2xpYnRt
-Yw0KDQotLSANCkFsZXgNCg==
+
+--sf7fp3oycsacoxul
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 2020-04-13, Josh Triplett <josh@joshtriplett.org> wrote:
+> Inspired by the X protocol's handling of XIDs, allow userspace to select
+> the file descriptor opened by openat2, so that it can use the resulting
+> file descriptor in subsequent system calls without waiting for the
+> response to openat2.
+>=20
+> In io_uring, this allows sequences like openat2/read/close without
+> waiting for the openat2 to complete. Multiple such sequences can
+> overlap, as long as each uses a distinct file descriptor.
+
+I'm not sure I understand this explanation -- how can you trigger a
+syscall with an fd that hasn't yet been registered (unless you're just
+hoping the race goes in your favour)?
+
+> Add a new O_SPECIFIC_FD open flag to enable this behavior, only accepted
+> by openat2 for now (ignored by open/openat like all unknown flags). Add
+> an fd field to struct open_how (along with appropriate padding, and
+> verify that the padding is 0 to allow replacing the padding with a field
+> in the future).
+>=20
+> The file table has a corresponding new function
+> get_specific_unused_fd_flags, which gets the specified file descriptor
+> if O_SPECIFIC_FD is set (and the fd isn't -1); otherwise it falls back
+> to get_unused_fd_flags, to simplify callers.
+>=20
+> The specified file descriptor must not already be open; if it is,
+> get_specific_unused_fd_flags will fail with -EBUSY. This helps catch
+> userspace errors.
+>=20
+> When O_SPECIFIC_FD is set, and fd is not -1, openat2 will use the
+> specified file descriptor rather than finding the lowest available one.
+
+I still don't like that you can enable this feature with O_SPECIFIC_FD
+but then disable it by specifying fd as -1. I understand why this is
+needed for pipe2() and socketpair() and that's totally fine, but I don't
+think it makes sense for openat2() or other interfaces where there's
+only one fd being returned -- what does it mean to say "give me a
+specific fd, but actually I don't care what it is"?
+
+I know this is a trade-off between consistency of O_SPECIFIC_FD
+interfaces and having wart-less interfaces for each syscall, but I don't
+think it breaks consistency to say "syscalls that only give you one fd
+don't have a second way of disabling the feature -- just don't pass
+O_SPECIFIC_FD".
+
+> Test program:
+>=20
+>     #include <err.h>
+>     #include <fcntl.h>
+>     #include <stdio.h>
+>     #include <unistd.h>
+>=20
+>     int main(void)
+>     {
+>         struct open_how how =3D {
+> 	    .flags =3D O_RDONLY | O_SPECIFIC_FD,
+> 	    .fd =3D 42
+> 	};
+>         int fd =3D openat2(AT_FDCWD, "/dev/null", &how, sizeof(how));
+>         if (fd < 0)
+>             err(1, "openat2");
+>         printf("fd=3D%d\n", fd); // prints fd=3D42
+>         return 0;
+>     }
+>=20
+> Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+> ---
+>  fs/fcntl.c                                    |  2 +-
+>  fs/file.c                                     | 39 +++++++++++++++++++
+>  fs/io_uring.c                                 |  3 +-
+>  fs/open.c                                     |  8 +++-
+>  include/linux/fcntl.h                         |  5 ++-
+>  include/linux/file.h                          |  3 ++
+>  include/uapi/asm-generic/fcntl.h              |  4 ++
+>  include/uapi/linux/openat2.h                  |  3 ++
+>  tools/testing/selftests/openat2/helpers.c     |  2 +-
+>  tools/testing/selftests/openat2/helpers.h     | 21 +++++++---
+>  .../testing/selftests/openat2/openat2_test.c  | 29 +++++++++++++-
+>  11 files changed, 105 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/fs/fcntl.c b/fs/fcntl.c
+> index 2e4c0fa2074b..0357ad667563 100644
+> --- a/fs/fcntl.c
+> +++ b/fs/fcntl.c
+> @@ -1033,7 +1033,7 @@ static int __init fcntl_init(void)
+>  	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+>  	 * is defined as O_NONBLOCK on some platforms and not on others.
+>  	 */
+> -	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=3D
+> +	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=3D
+>  		HWEIGHT32(
+>  			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+>  			__FMODE_EXEC | __FMODE_NONOTIFY));
+> diff --git a/fs/file.c b/fs/file.c
+> index ba06140d89af..0674c3a2d3a5 100644
+> --- a/fs/file.c
+> +++ b/fs/file.c
+> @@ -567,6 +567,45 @@ void put_unused_fd(unsigned int fd)
+> =20
+>  EXPORT_SYMBOL(put_unused_fd);
+> =20
+> +int __get_specific_unused_fd_flags(unsigned int fd, unsigned int flags,
+> +				   unsigned long nofile)
+> +{
+> +	int ret;
+> +	struct fdtable *fdt;
+> +	struct files_struct *files =3D current->files;
+> +
+> +	if (!(flags & O_SPECIFIC_FD) || fd =3D=3D UINT_MAX)
+> +		return __get_unused_fd_flags(flags, nofile);
+> +
+> +	if (fd >=3D nofile)
+> +		return -EBADF;
+> +
+> +	spin_lock(&files->file_lock);
+> +	ret =3D expand_files(files, fd);
+> +	if (unlikely(ret < 0))
+> +		goto out_unlock;
+> +	fdt =3D files_fdtable(files);
+> +	if (fdt->fd[fd]) {
+> +		ret =3D -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	__set_open_fd(fd, fdt);
+> +	if (flags & O_CLOEXEC)
+> +		__set_close_on_exec(fd, fdt);
+> +	else
+> +		__clear_close_on_exec(fd, fdt);
+> +	ret =3D fd;
+> +
+> +out_unlock:
+> +	spin_unlock(&files->file_lock);
+> +	return ret;
+> +}
+> +
+> +int get_specific_unused_fd_flags(unsigned int fd, unsigned int flags)
+> +{
+> +	return __get_specific_unused_fd_flags(fd, flags, rlimit(RLIMIT_NOFILE));
+> +}
+> +
+>  /*
+>   * Install a file pointer in the fd array.
+>   *
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 358f97be9c7b..4a69e1daf3fe 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -2997,7 +2997,8 @@ static int io_openat2(struct io_kiocb *req, bool fo=
+rce_nonblock)
+>  	if (ret)
+>  		goto err;
+> =20
+> -	ret =3D __get_unused_fd_flags(req->open.how.flags, req->open.nofile);
+> +	ret =3D __get_specific_unused_fd_flags(req->open.how.fd,
+> +			req->open.how.flags, req->open.nofile);
+>  	if (ret < 0)
+>  		goto err;
+> =20
+> diff --git a/fs/open.c b/fs/open.c
+> index 719b320ede52..c1c2dd2d408d 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -962,6 +962,8 @@ inline struct open_how build_open_how(int flags, umod=
+e_t mode)
+>  		.mode =3D mode & S_IALLUGO,
+>  	};
+> =20
+> +	/* O_SPECIFIC_FD doesn't work in open calls that use build_open_how. */
+> +	how.flags &=3D ~O_SPECIFIC_FD;
+>  	/* O_PATH beats everything else. */
+>  	if (how.flags & O_PATH)
+>  		how.flags &=3D O_PATH_FLAGS;
+> @@ -989,6 +991,10 @@ inline int build_open_flags(const struct open_how *h=
+ow, struct open_flags *op)
+>  		return -EINVAL;
+>  	if (how->resolve & ~VALID_RESOLVE_FLAGS)
+>  		return -EINVAL;
+> +	if (how->pad !=3D 0)
+> +		return -EINVAL;
+> +	if (!(flags & O_SPECIFIC_FD) && how->fd !=3D 0)
+> +		return -EINVAL;
+> =20
+>  	/* Deal with the mode. */
+>  	if (WILL_CREATE(flags)) {
+> @@ -1143,7 +1149,7 @@ static long do_sys_openat2(int dfd, const char __us=
+er *filename,
+>  	if (IS_ERR(tmp))
+>  		return PTR_ERR(tmp);
+> =20
+> -	fd =3D get_unused_fd_flags(how->flags);
+> +	fd =3D get_specific_unused_fd_flags(how->fd, how->flags);
+>  	if (fd >=3D 0) {
+>  		struct file *f =3D do_filp_open(dfd, tmp, &op);
+>  		if (IS_ERR(f)) {
+> diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+> index 7bcdcf4f6ab2..728849bcd8fa 100644
+> --- a/include/linux/fcntl.h
+> +++ b/include/linux/fcntl.h
+> @@ -10,7 +10,7 @@
+>  	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC |=
+ \
+>  	 O_APPEND | O_NDELAY | O_NONBLOCK | O_NDELAY | __O_SYNC | O_DSYNC | \
+>  	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+> -	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
+> +	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_SPECIFIC_FD)
+> =20
+>  /* List of all valid flags for the how->upgrade_mask argument: */
+>  #define VALID_UPGRADE_FLAGS \
+> @@ -23,7 +23,8 @@
+> =20
+>  /* List of all open_how "versions". */
+>  #define OPEN_HOW_SIZE_VER0	24 /* sizeof first published struct */
+> -#define OPEN_HOW_SIZE_LATEST	OPEN_HOW_SIZE_VER0
+> +#define OPEN_HOW_SIZE_VER1	32 /* added fd and pad */
+> +#define OPEN_HOW_SIZE_LATEST	OPEN_HOW_SIZE_VER1
+> =20
+>  #ifndef force_o_largefile
+>  #define force_o_largefile() (!IS_ENABLED(CONFIG_ARCH_32BIT_OFF_T))
+> diff --git a/include/linux/file.h b/include/linux/file.h
+> index b67986f818d2..a63301864a36 100644
+> --- a/include/linux/file.h
+> +++ b/include/linux/file.h
+> @@ -87,6 +87,9 @@ extern void set_close_on_exec(unsigned int fd, int flag=
+);
+>  extern bool get_close_on_exec(unsigned int fd);
+>  extern int __get_unused_fd_flags(unsigned flags, unsigned long nofile);
+>  extern int get_unused_fd_flags(unsigned flags);
+> +extern int __get_specific_unused_fd_flags(unsigned int fd, unsigned int =
+flags,
+> +	unsigned long nofile);
+> +extern int get_specific_unused_fd_flags(unsigned int fd, unsigned int fl=
+ags);
+>  extern void put_unused_fd(unsigned int fd);
+>  extern unsigned int increase_min_fd(unsigned int num);
+> =20
+> diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/=
+fcntl.h
+> index 9dc0bf0c5a6e..d3de5b8b3955 100644
+> --- a/include/uapi/asm-generic/fcntl.h
+> +++ b/include/uapi/asm-generic/fcntl.h
+> @@ -89,6 +89,10 @@
+>  #define __O_TMPFILE	020000000
+>  #endif
+> =20
+> +#ifndef O_SPECIFIC_FD
+> +#define O_SPECIFIC_FD	01000000000	/* open as specified fd */
+> +#endif
+> +
+>  /* a horrid kludge trying to make sure that this will fail on old kernel=
+s */
+>  #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+>  #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)     =20
+> diff --git a/include/uapi/linux/openat2.h b/include/uapi/linux/openat2.h
+> index 58b1eb711360..63974a276fb2 100644
+> --- a/include/uapi/linux/openat2.h
+> +++ b/include/uapi/linux/openat2.h
+> @@ -15,11 +15,14 @@
+>   * @flags: O_* flags.
+>   * @mode: O_CREAT/O_TMPFILE file mode.
+>   * @resolve: RESOLVE_* flags.
+> + * @fd: Specific file descriptor to use, for O_SPECIFIC_FD.
+>   */
+>  struct open_how {
+>  	__u64 flags;
+>  	__u64 mode;
+>  	__u64 resolve;
+> +	__u32 fd;
+> +	__u32 pad; /* Must be 0 in the current version */
+>  };
+> =20
+>  /* how->resolve flags for openat2(2). */
+> diff --git a/tools/testing/selftests/openat2/helpers.c b/tools/testing/se=
+lftests/openat2/helpers.c
+> index 5074681ffdc9..b6533f0b1124 100644
+> --- a/tools/testing/selftests/openat2/helpers.c
+> +++ b/tools/testing/selftests/openat2/helpers.c
+> @@ -98,7 +98,7 @@ void __attribute__((constructor)) init(void)
+>  	struct open_how how =3D {};
+>  	int fd;
+> =20
+> -	BUILD_BUG_ON(sizeof(struct open_how) !=3D OPEN_HOW_SIZE_VER0);
+> +	BUILD_BUG_ON(sizeof(struct open_how) !=3D OPEN_HOW_SIZE_VER1);
+> =20
+>  	/* Check openat2(2) support. */
+>  	fd =3D sys_openat2(AT_FDCWD, ".", &how);
+> diff --git a/tools/testing/selftests/openat2/helpers.h b/tools/testing/se=
+lftests/openat2/helpers.h
+> index a6ea27344db2..b7dea87c17b9 100644
+> --- a/tools/testing/selftests/openat2/helpers.h
+> +++ b/tools/testing/selftests/openat2/helpers.h
+> @@ -24,28 +24,37 @@
+>  #endif /* SYS_openat2 */
+> =20
+>  /*
+> - * Arguments for how openat2(2) should open the target path. If @resolve=
+ is
+> - * zero, then openat2(2) operates very similarly to openat(2).
+> + * Arguments for how openat2(2) should open the target path. If only @fl=
+ags and
+> + * @mode are non-zero, then openat2(2) operates very similarly to openat=
+(2).
+>   *
+> - * However, unlike openat(2), unknown bits in @flags result in -EINVAL r=
+ather
+> - * than being silently ignored. @mode must be zero unless one of {O_CREA=
+T,
+> - * O_TMPFILE} are set.
+> + * However, unlike openat(2), unknown or invalid bits in @flags result in
+> + * -EINVAL rather than being silently ignored. @mode must be zero unless=
+ one of
+> + * {O_CREAT, O_TMPFILE} are set.
+>   *
+>   * @flags: O_* flags.
+>   * @mode: O_CREAT/O_TMPFILE file mode.
+>   * @resolve: RESOLVE_* flags.
+> + * @fd: Specific file descriptor to use, for O_SPECIFIC_FD.
+>   */
+>  struct open_how {
+>  	__u64 flags;
+>  	__u64 mode;
+>  	__u64 resolve;
+> +	__u32 fd;
+> +	__u32 pad; /* Must be 0 in the current version */
+
+Small nit: This field should be called __padding to make it more
+explicit it's something internal and shouldn't be looked at by
+userspace. And the comment should just be "must be zeroed".
+
+>  };
+> =20
+> +/* List of all open_how "versions". */
+>  #define OPEN_HOW_SIZE_VER0	24 /* sizeof first published struct */
+> -#define OPEN_HOW_SIZE_LATEST	OPEN_HOW_SIZE_VER0
+> +#define OPEN_HOW_SIZE_VER1	32 /* added fd and pad */
+> +#define OPEN_HOW_SIZE_LATEST	OPEN_HOW_SIZE_VER1
+> =20
+>  bool needs_openat2(const struct open_how *how);
+> =20
+> +#ifndef O_SPECIFIC_FD
+> +#define O_SPECIFIC_FD  01000000000
+> +#endif
+> +
+>  #ifndef RESOLVE_IN_ROOT
+>  /* how->resolve flags for openat2(2). */
+>  #define RESOLVE_NO_XDEV		0x01 /* Block mount-point crossings
+> diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testi=
+ng/selftests/openat2/openat2_test.c
+> index b386367c606b..cf21a83c70c9 100644
+> --- a/tools/testing/selftests/openat2/openat2_test.c
+> +++ b/tools/testing/selftests/openat2/openat2_test.c
+> @@ -40,7 +40,7 @@ struct struct_test {
+>  	int err;
+>  };
+> =20
+> -#define NUM_OPENAT2_STRUCT_TESTS 7
+> +#define NUM_OPENAT2_STRUCT_TESTS 8
+>  #define NUM_OPENAT2_STRUCT_VARIATIONS 13
+> =20
+>  void test_openat2_struct(void)
+> @@ -52,6 +52,9 @@ void test_openat2_struct(void)
+>  		{ .name =3D "normal struct",
+>  		  .arg.inner.flags =3D O_RDONLY,
+>  		  .size =3D sizeof(struct open_how) },
+> +		{ .name =3D "v0 struct",
+> +		  .arg.inner.flags =3D O_RDONLY,
+> +		  .size =3D OPEN_HOW_SIZE_VER0 },
+>  		/* Bigger struct, with zeroed out end. */
+>  		{ .name =3D "bigger struct (zeroed out)",
+>  		  .arg.inner.flags =3D O_RDONLY,
+> @@ -155,7 +158,7 @@ struct flag_test {
+>  	int err;
+>  };
+> =20
+> -#define NUM_OPENAT2_FLAG_TESTS 23
+> +#define NUM_OPENAT2_FLAG_TESTS 29
+> =20
+>  void test_openat2_flags(void)
+>  {
+> @@ -223,6 +226,24 @@ void test_openat2_flags(void)
+>  		{ .name =3D "invalid how.resolve and O_PATH",
+>  		  .how.flags =3D O_PATH,
+>  		  .how.resolve =3D 0x1337, .err =3D -EINVAL },
+> +
+> +		/* O_SPECIFIC_FD tests */
+> +		{ .name =3D "O_SPECIFIC_FD",
+> +		  .how.flags =3D O_RDONLY | O_SPECIFIC_FD, .how.fd =3D 42 },
+> +		{ .name =3D "O_SPECIFIC_FD if fd exists",
+> +		  .how.flags =3D O_RDONLY | O_SPECIFIC_FD, .how.fd =3D 2,
+> +		  .err =3D -EBUSY },
+> +		{ .name =3D "O_SPECIFIC_FD with fd -1",
+> +		  .how.flags =3D O_RDONLY | O_SPECIFIC_FD, .how.fd =3D -1 },
+> +		{ .name =3D "fd without O_SPECIFIC_FD",
+> +		  .how.flags =3D O_RDONLY, .how.fd =3D 42,
+> +		  .err =3D -EINVAL },
+> +		{ .name =3D "fd -1 without O_SPECIFIC_FD",
+> +		  .how.flags =3D O_RDONLY, .how.fd =3D -1,
+> +		  .err =3D -EINVAL },
+> +		{ .name =3D "existing fd without O_SPECIFIC_FD",
+> +		  .how.flags =3D O_RDONLY, .how.fd =3D 2,
+> +		  .err =3D -EINVAL },
+
+It would be good to add a test to make sure that a non-zero value of
+how->__padding also gives -EINVAL.
+
+>  	};
+> =20
+>  	BUILD_BUG_ON(ARRAY_LEN(tests) !=3D NUM_OPENAT2_FLAG_TESTS);
+> @@ -268,6 +289,10 @@ void test_openat2_flags(void)
+>  			if (!(test->how.flags & O_LARGEFILE))
+>  				fdflags &=3D ~O_LARGEFILE;
+>  			failed |=3D (fdflags !=3D test->how.flags);
+> +
+> +			if (test->how.flags & O_SPECIFIC_FD
+> +			    && test->how.fd !=3D -1)
+> +				failed |=3D (fd !=3D test->how.fd);
+>  		}
+> =20
+>  		if (failed) {
+> --=20
+> 2.26.0
+>=20
+
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--sf7fp3oycsacoxul
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXpwrcQAKCRCdlLljIbnQ
+EgrqAQCyOyZICl1GRqDHXI7/LzLnAKSwaDlysVYeW+BA5CxlDwEA3aSfVFR/b8W0
+SW48hvipk3aSeiyRoIxgh5lk9i3X8Ak=
+=WjfK
+-----END PGP SIGNATURE-----
+
+--sf7fp3oycsacoxul--
