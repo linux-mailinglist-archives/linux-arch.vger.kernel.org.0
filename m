@@ -2,131 +2,175 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D05EB1B1165
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Apr 2020 18:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF981B1363
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Apr 2020 19:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728073AbgDTQUf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Apr 2020 12:20:35 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23542 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726878AbgDTQUf (ORCPT
+        id S1726798AbgDTRnl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Apr 2020 13:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726457AbgDTRnk (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 20 Apr 2020 12:20:35 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03KG3DmY022366
-        for <linux-arch@vger.kernel.org>; Mon, 20 Apr 2020 12:20:33 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30ghu601c4-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-arch@vger.kernel.org>; Mon, 20 Apr 2020 12:20:33 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-arch@vger.kernel.org> from <gerald.schaefer@de.ibm.com>;
-        Mon, 20 Apr 2020 17:19:49 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 20 Apr 2020 17:19:43 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03KGKPl455509026
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Apr 2020 16:20:25 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E70A842042;
-        Mon, 20 Apr 2020 16:20:24 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D9874203F;
-        Mon, 20 Apr 2020 16:20:24 +0000 (GMT)
-Received: from thinkpad (unknown [9.145.190.22])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Apr 2020 16:20:24 +0000 (GMT)
-Date:   Mon, 20 Apr 2020 18:20:23 +0200
-From:   Gerald Schaefer <gerald.schaefer@de.ibm.com>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Zhenyu Ye <yezhenyu2@huawei.com>, npiggin@gmail.com,
-        will.deacon@arm.com, mingo@kernel.org,
-        torvalds@linux-foundation.org, Vasily Gorbik <gor@linux.ibm.com>,
-        akpm@linux-foundation.org, luto@kernel.org, bp@alien8.de,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, arm@kernel.org, xiexiangyou@huawei.com,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>
-Subject: Re: [RFC][Qusetion] the value of cleared_(ptes|pmds|puds|p4ds) in
- struct mmu_gather
-In-Reply-To: <68affa6e-44cd-37e3-cdfc-8eec31c4097e@de.ibm.com>
-References: <fbb00ac0-9104-8d25-f225-7b3d1b17a01f@huawei.com>
-        <20200330121654.GL20696@hirez.programming.kicks-ass.net>
-        <68affa6e-44cd-37e3-cdfc-8eec31c4097e@de.ibm.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Mon, 20 Apr 2020 13:43:40 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCD4C061A10
+        for <linux-arch@vger.kernel.org>; Mon, 20 Apr 2020 10:43:40 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id ng8so180074pjb.2
+        for <linux-arch@vger.kernel.org>; Mon, 20 Apr 2020 10:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UbWvOzsjdwKmCuURzqakr712Hwz970Vkw5PGIrntIJg=;
+        b=jQBTeSx5RVM7KT1U22GJEb3DH2uZPfcy8Q8n8Z4yMQbR4xX77sT7UNorH68BHXQklv
+         iqyP+lyhtbiw1Z8E6mrIAOVUfrKDbExPTw1eCNreicq7+fmKaKDC0t3L5Z68emnhhiQY
+         F68qqIHfXsfIWhK8AMTQ6lJSl/wFSmFVqe+Fs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UbWvOzsjdwKmCuURzqakr712Hwz970Vkw5PGIrntIJg=;
+        b=uj+g2MQrodk0UbZX7lQAKmVtGxtVSJV5xxAUAl+Wy5pazhpr0tnyFuSVpSkq4m4vUd
+         9p/lQ19TldL8ae1nxQgSH4H5fkFwNVHNm+cf4IKfmw6upj6cDhidzVHd1l4Xj39Y520q
+         p0FAmgnT/2l3t7SKy772Q1DHyrrY/qHzCnsVgn4gVuHG+hAJQ/DKXq6cPU2/2Yj9PxBZ
+         IDze3r1fhlnuCqFKoFnsywSW9A9b+TXUe/h2PYjDFsnL/ADqrItcnSqCLpr8NBdWUzBj
+         rZUl+yn2ivpAu9qtluLbzeqlWmOQGNxKt1Dl2F9x89Eht2gZL9+I5qyagXQRNPrVAMO+
+         bGug==
+X-Gm-Message-State: AGi0Pube264Y5bGr04Pj1afa5+y4bR3zG0+g+5t1w7SS0TfwaoVK1YTa
+        YtcKffJ9PVcreV4Y0gEhorW3EQ==
+X-Google-Smtp-Source: APiQypLBX8wx/oUkDoqkb/2Bm8ippA2jak1OrscI29iIv8/MVYRimaZ8XN8jTccr1R5iuIwy3W5LTA==
+X-Received: by 2002:a17:902:6b01:: with SMTP id o1mr18181334plk.100.1587404619781;
+        Mon, 20 Apr 2020 10:43:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v26sm106522pff.45.2020.04.20.10.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2020 10:43:38 -0700 (PDT)
+Date:   Mon, 20 Apr 2020 10:43:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christopher Lameter <cl@linux.com>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        David Windsor <dave@nullcore.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-xfs@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Laura Abbott <labbott@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Christoffer Dall <christoffer.dall@linaro.org>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        Jan Kara <jack@suse.cz>,
+        Luis de Bethencourt <luisbg@kernel.org>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Rik van Riel <riel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Michal Kubecek <mkubecek@suse.cz>
+Subject: Re: [kernel-hardening] [PATCH 09/38] usercopy: Mark kmalloc caches
+ as usercopy caches
+Message-ID: <202004201043.538A7B3F2@keescook>
+References: <5861936c-1fe1-4c44-d012-26efa0c8b6e7@de.ibm.com>
+ <202001281457.FA11CC313A@keescook>
+ <alpine.DEB.2.21.2001291640350.1546@www.lameter.com>
+ <6844ea47-8e0e-4fb7-d86f-68046995a749@de.ibm.com>
+ <20200129170939.GA4277@infradead.org>
+ <771c5511-c5ab-3dd1-d938-5dbc40396daa@de.ibm.com>
+ <202001300945.7D465B5F5@keescook>
+ <CAG48ez1a4waGk9kB0WLaSbs4muSoK0AYAVk8=XYaKj4_+6e6Hg@mail.gmail.com>
+ <7d810f6d-8085-ea2f-7805-47ba3842dc50@suse.cz>
+ <548e6212-7b3c-5925-19f2-699af451fd16@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20042016-4275-0000-0000-000003C366E0
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20042016-4276-0000-0000-000038D8E918
-Message-Id: <20200420182023.6b8e143a@thinkpad>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-20_05:2020-04-20,2020-04-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=757
- suspectscore=2 bulkscore=0 spamscore=0 phishscore=0 adultscore=0
- clxscore=1015 malwarescore=0 priorityscore=1501 lowpriorityscore=0
- mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004200131
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <548e6212-7b3c-5925-19f2-699af451fd16@suse.cz>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 8 Apr 2020 10:51:59 +0200
-Christian Borntraeger <borntraeger@de.ibm.com> wrote:
-
-[...]
+On Mon, Apr 20, 2020 at 09:53:20AM +0200, Jiri Slaby wrote:
+> On 07. 04. 20, 10:00, Vlastimil Babka wrote:
+> > From d5190e4e871689a530da3c3fd327be45a88f006a Mon Sep 17 00:00:00 2001
+> > From: Vlastimil Babka <vbabka@suse.cz>
+> > Date: Tue, 7 Apr 2020 09:58:00 +0200
+> > Subject: [PATCH] usercopy: Mark dma-kmalloc caches as usercopy caches
+> > 
+> > We have seen a "usercopy: Kernel memory overwrite attempt detected to SLUB
+> > object 'dma-kmalloc-1 k' (offset 0, size 11)!" error on s390x, as IUCV uses
+> > kmalloc() with __GFP_DMA because of memory address restrictions.
+> > The issue has been discussed [2] and it has been noted that if all the kmalloc
+> > caches are marked as usercopy, there's little reason not to mark dma-kmalloc
+> > caches too. The 'dma' part merely means that __GFP_DMA is used to restrict
+> > memory address range.
+> > 
+> > As Jann Horn put it [3]:
+> > 
+> > "I think dma-kmalloc slabs should be handled the same way as normal
+> > kmalloc slabs. When a dma-kmalloc allocation is freshly created, it is
+> > just normal kernel memory - even if it might later be used for DMA -,
+> > and it should be perfectly fine to copy_from_user() into such
+> > allocations at that point, and to copy_to_user() out of them at the
+> > end. If you look at the places where such allocations are created, you
+> > can see things like kmemdup(), memcpy() and so on - all normal
+> > operations that shouldn't conceptually be different from usercopy in
+> > any relevant way."
+> > 
+> > Thus this patch marks the dma-kmalloc-* caches as usercopy.
+> > 
+> > [1] https://bugzilla.suse.com/show_bug.cgi?id=1156053
+> > [2] https://lore.kernel.org/kernel-hardening/bfca96db-bbd0-d958-7732-76e36c667c68@suse.cz/
+> > [3] https://lore.kernel.org/kernel-hardening/CAG48ez1a4waGk9kB0WLaSbs4muSoK0AYAVk8=XYaKj4_+6e6Hg@mail.gmail.com/
+> > 
+> > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 > 
-> adding Gerald and Vasily. Gerald can you have a look?
+> Friendly ping.
 > 
-> >>
-> >>
-> >> In my view, the cleared_(ptes|pmds|puds) and (pte|pmd|pud)_free_tlb
-> >> correspond one-to-one.  So we should set cleared_ptes in pte_free_tlb(),
-> >> then use it when needed.
+> Acked-by: Jiri Slaby <jslaby@suse.cz>
+
+Should this go via -mm?
+
+-Kees
+
+> 
+> > ---
+> >  mm/slab_common.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
 > > 
-> > So pte_free_tlb() clears a table of PTE entries, or a PMD level entity,
-> > also see free_pte_range(). So the generic code makes sense to me. The
-> > PTE level invalidations will have happened on tlb_remove_tlb_entry().
+> > diff --git a/mm/slab_common.c b/mm/slab_common.c
+> > index 5282f881d2f5..ae9486160594 100644
+> > --- a/mm/slab_common.c
+> > +++ b/mm/slab_common.c
+> > @@ -1303,7 +1303,8 @@ void __init create_kmalloc_caches(slab_flags_t flags)
+> >  			kmalloc_caches[KMALLOC_DMA][i] = create_kmalloc_cache(
+> >  				kmalloc_info[i].name[KMALLOC_DMA],
+> >  				kmalloc_info[i].size,
+> > -				SLAB_CACHE_DMA | flags, 0, 0);
+> > +				SLAB_CACHE_DMA | flags, 0,
+> > +				kmalloc_info[i].size);
+> >  		}
+> >  	}
+> >  #endif
 > > 
-> >> I'm very confused about this. Which is wrong? Or is there something
-> >> I understand wrong?
-> > 
-> > I agree the s390 case is puzzling, Martin does s390 need a PTE level
-> > invalidate for removing a PTE table or was this a mistake?
-> > 
+> 
+> thanks,
+> -- 
+> js
+> suse labs
 
-Peter is right, the PTE level invalidations will happen before. For
-s390, not exactly at the tlb_remove_tlb_entry() itself, since
-__tlb_remove_tlb_entry() is not defined, but rather directly at the
-preceding ptep_get_and_clear(). I think this also the reason why we
-cannot easily optimize for larger granularity.
-
-Anyway, pte_free_tlb() will then later only take care of freeing
-the page table page, no further PTE level clearing/invalidation
-needed. I see no reason why s390 should behave differently from
-the generic code, wrt to cleared_pxds setting in pxd_free_tlb().
-
-So I guess this was an "off-by-one" mistake in commit 9de7d833e3708
-("s390/tlb: Convert to generic mmu_gather"), since the other
-pxd_free_tlb() functions also show similar puzzling behavior.
-Not consistently off-by-one though, as pmd_free_tlb() seems
-to behave correctly, setting tlb->cleared_puds = 1, similar to
-generic code.
-
-That was a very nice catch, Zhenyu, thanks for reporting!
-We are not yet making use of the tlb->cleared_pxds for s390, but
-we would certainly have stumbled over this if we ever tried.
-Will send a patch to make s390 behave like generic code here.
-
-Regards,
-Gerald
-
+-- 
+Kees Cook
