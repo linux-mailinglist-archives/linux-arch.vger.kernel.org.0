@@ -2,80 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F19E41B2E13
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 19:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FA21B2E2F
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 19:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725963AbgDURQ6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Apr 2020 13:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726878AbgDURQ6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 21 Apr 2020 13:16:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE17C061A41;
-        Tue, 21 Apr 2020 10:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=25trWX6WEnBP45ZCKj9I9u577utZjAybZI5wPJusmTQ=; b=JsuqJaG0t9Ueemdh2TossAsFXC
-        Enrc7icqmuLeubDIWEaAT8FC8ETFfjzIlJOEAILBdsTGMbDcu60kY/dRzNlHkaNQNapU/WhlLsI3W
-        SXMGRUIjSNAmO/5V8lpbJLl/PP765eLZhsRsTy62aL+ultW7JRjuzfm1AvUK4S6QhqngrKZN+aWyy
-        oIbCtOi5vkohLY+qd3CdwTjwSa85Fqb9xkFdAz1xq++dGUb3WLzczuYGzJGRg5cHuWoHRliDDuqwq
-        Ls9bYiHbS7DZacH/jygXDL7msouWmqPaKftbzP0qznzzEsDberPVYswJU3L6+GgFpZPNtatL+MhJq
-        OSsK/Fkg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jQwVl-00077n-1R; Tue, 21 Apr 2020 17:16:41 +0000
-Date:   Tue, 21 Apr 2020 10:16:41 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Zhenyu Ye <yezhenyu2@huawei.com>, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com,
-        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
-        npiggin@gmail.com, arnd@arndb.de, rostedt@goodmis.org,
-        maz@kernel.org, suzuki.poulose@arm.com, tglx@linutronix.de,
-        yuzhao@google.com, Dave.Martin@arm.com, steven.price@arm.com,
-        broonie@kernel.org, guohanjun@huawei.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiexiangyou@huawei.com, zhangshaokun@hisilicon.com,
-        linux-mm@kvack.org, arm@kernel.org, prime.zeng@hisilicon.com,
-        kuhn.chenqun@huawei.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 1/6] arm64: Detect the ARMv8.4 TTL feature
-Message-ID: <20200421171641.GA25391@infradead.org>
-References: <20200403090048.938-1-yezhenyu2@huawei.com>
- <20200403090048.938-2-yezhenyu2@huawei.com>
- <20200421165346.GA11171@infradead.org>
- <20200421171328.GW20730@hirez.programming.kicks-ass.net>
+        id S1726018AbgDURUm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Apr 2020 13:20:42 -0400
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:52159 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725990AbgDURUm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Apr 2020 13:20:42 -0400
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 03LHKKav006129;
+        Wed, 22 Apr 2020 02:20:21 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 03LHKKav006129
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1587489621;
+        bh=IZDOvI93ZiEs2ySqKJLK+IJjqkugZDH4i3dH/lP0Wc4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Q2K4Eqxi9WkQpZ3H5GI7/C4lPlhj2ZZypnj8V9O0Os1uoHtk3MCM0FTER80sakIrd
+         yhjrj6YT2WTtjLkQS/d7zLkS1Yjnrl48KxS7d7gyoOlhPj0/gM9AU8JqbLBsrYhqFh
+         qiv11uvOjDvqqEE+KA70xzQehp1qF3f9x3rAsa2/ohO77MEq/QN/A1ENP9mnkv5Qf9
+         PXNS4mLqUVQnvahdpjL/LswA0AAF6i8JINZgPhjjysC2zf8SBdDCzh82bViVRec3f+
+         qtNxZQLavYu84XNtN9HgRwTFMILUhAoS6JNq97mTYPyb5U/eI1w2h0T+DzGFddm15r
+         wQZ+KgbJVB9zw==
+X-Nifty-SrcIP: [209.85.217.44]
+Received: by mail-vs1-f44.google.com with SMTP id y185so8937041vsy.8;
+        Tue, 21 Apr 2020 10:20:21 -0700 (PDT)
+X-Gm-Message-State: AGi0PuaFsLgAMF87UnfQlPLX9xee6H1KRfgi17MjRRy7BG0EGVR4kF9k
+        zwsXBIRSYbv34Ww+4vi4fvLBLc22P+BT1If6oLE=
+X-Google-Smtp-Source: APiQypIO/mg952cAkpo/UKnpWumkr9bju/j1AcYRzLPShWlvdpVvTkp2+164266qYKziJBhb5oWiFReVc6rLVQIOvng=
+X-Received: by 2002:a67:6e07:: with SMTP id j7mr10361884vsc.181.1587489620053;
+ Tue, 21 Apr 2020 10:20:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200421171328.GW20730@hirez.programming.kicks-ass.net>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20200421151537.19241-1-will@kernel.org> <20200421151537.19241-12-will@kernel.org>
+In-Reply-To: <20200421151537.19241-12-will@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 22 Apr 2020 02:19:43 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATuvjY=SKuc-otRg0zPoJZeKOoTFzdyuyY_9X78p+twxQ@mail.gmail.com>
+Message-ID: <CAK7LNATuvjY=SKuc-otRg0zPoJZeKOoTFzdyuyY_9X78p+twxQ@mail.gmail.com>
+Subject: Re: [PATCH v4 11/11] gcov: Remove old GCC 3.4 support
+To:     Will Deacon <will@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 07:13:28PM +0200, Peter Zijlstra wrote:
-> On Tue, Apr 21, 2020 at 09:53:46AM -0700, Christoph Hellwig wrote:
-> > On Fri, Apr 03, 2020 at 05:00:43PM +0800, Zhenyu Ye wrote:
-> > > From: Marc Zyngier <maz@kernel.org>
-> > > 
-> > > In order to reduce the cost of TLB invalidation, the ARMv8.4 TTL
-> > > feature allows TLBs to be issued with a level allowing for quicker
-> > > invalidation.
-> > 
-> > What does "issued with a level" mean?
-> 
-> What I understood it to be is page-size based on page-table hierarchy.
-> Just like we have on x86, 4k, 2m, 1g etc..
-> 
-> So where x86 INVLPG will tear down any sized page for the address given,
-> you can now day, kill me the PMD level translation for @addr.
-> 
-> Power9 radix also has things like this.
+On Wed, Apr 22, 2020 at 12:16 AM Will Deacon <will@kernel.org> wrote:
+>
+> The kernel requires at least GCC 4.8 in order to build, and so there is
+> no need to cater for the pre-4.7 gcov format.
+>
+> Remove the obsolete code.
+>
+> Acked-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Will Deacon <will@kernel.org>
 
-Maybe this needs to be spelled out a little more?  The current commit
-log sounds like paper generated by a neural network.
+
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Thanks!
+
+
+-- 
+Best Regards
+Masahiro Yamada
