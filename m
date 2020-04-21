@@ -2,82 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FA21B2E2F
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 19:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFAD1B2F34
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 20:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726018AbgDURUm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Apr 2020 13:20:42 -0400
-Received: from conssluserg-04.nifty.com ([210.131.2.83]:52159 "EHLO
-        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725990AbgDURUm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Apr 2020 13:20:42 -0400
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 03LHKKav006129;
-        Wed, 22 Apr 2020 02:20:21 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 03LHKKav006129
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1587489621;
-        bh=IZDOvI93ZiEs2ySqKJLK+IJjqkugZDH4i3dH/lP0Wc4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Q2K4Eqxi9WkQpZ3H5GI7/C4lPlhj2ZZypnj8V9O0Os1uoHtk3MCM0FTER80sakIrd
-         yhjrj6YT2WTtjLkQS/d7zLkS1Yjnrl48KxS7d7gyoOlhPj0/gM9AU8JqbLBsrYhqFh
-         qiv11uvOjDvqqEE+KA70xzQehp1qF3f9x3rAsa2/ohO77MEq/QN/A1ENP9mnkv5Qf9
-         PXNS4mLqUVQnvahdpjL/LswA0AAF6i8JINZgPhjjysC2zf8SBdDCzh82bViVRec3f+
-         qtNxZQLavYu84XNtN9HgRwTFMILUhAoS6JNq97mTYPyb5U/eI1w2h0T+DzGFddm15r
-         wQZ+KgbJVB9zw==
-X-Nifty-SrcIP: [209.85.217.44]
-Received: by mail-vs1-f44.google.com with SMTP id y185so8937041vsy.8;
-        Tue, 21 Apr 2020 10:20:21 -0700 (PDT)
-X-Gm-Message-State: AGi0PuaFsLgAMF87UnfQlPLX9xee6H1KRfgi17MjRRy7BG0EGVR4kF9k
-        zwsXBIRSYbv34Ww+4vi4fvLBLc22P+BT1If6oLE=
-X-Google-Smtp-Source: APiQypIO/mg952cAkpo/UKnpWumkr9bju/j1AcYRzLPShWlvdpVvTkp2+164266qYKziJBhb5oWiFReVc6rLVQIOvng=
-X-Received: by 2002:a67:6e07:: with SMTP id j7mr10361884vsc.181.1587489620053;
- Tue, 21 Apr 2020 10:20:20 -0700 (PDT)
+        id S1725870AbgDUSe2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Apr 2020 14:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729282AbgDUSe1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Apr 2020 14:34:27 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F58C0610D6
+        for <linux-arch@vger.kernel.org>; Tue, 21 Apr 2020 11:34:25 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id u6so15081349ljl.6
+        for <linux-arch@vger.kernel.org>; Tue, 21 Apr 2020 11:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h2Sxsn5oS4nqpkBX5BqB24mfzH+Rga+VCB+qgnhYUWk=;
+        b=EN4eMrfRCQ2BTajrHemVrZRGdfNv+VjF0Hxxcl6iPzUIc4bkpVZwbpHp6Y8qjqbOly
+         NQiQcxT3IZhkG8k/a9SX63SzMRhr6smIcOvnSUCBWIYLh5jNRcmyHxwhZdGgJqJWyNtZ
+         yrajiBGrLqcdHIip5S59MA6DWpMQ2o4gnwtCo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h2Sxsn5oS4nqpkBX5BqB24mfzH+Rga+VCB+qgnhYUWk=;
+        b=UPJZCLJj0N0Iwc1Efqie3jROvjoqfyrr4j5+yqrFV9zlSfh0v9LzAZG2UFStVT9l2i
+         vtuSKBmEzdvh5Iu9wu3EgoqfYo2zxVputAx+CtsTjNyTP3WaVIvU+v7AM1EcdFvrOKkq
+         U1clO3lZyYFJEUv3CrnugToQb2MOYTjIF87ENeLaNqUuhuys1NdUMrDuBKk8Hw1jQL5G
+         +SfWhRfooWv6KfU/lzTDHoz/+M0oVraZYIP4V89ptfXX4ouIOC8jkQIuLHaZtGZwmeyc
+         N9W9Ckd9fxXjj7IAO20kKQwzX9w7HGUcUIYi0msVXJgSQZSx96xsxBJxjJXgm5irI271
+         FQ0A==
+X-Gm-Message-State: AGi0PubAEwVg6bjcdifMCnhyTDditILefI0kU6SDdEPkm+tWe4mQW2b8
+        1pzHi9ujzVKJ6KCw/AewjUUFXIJE9Io=
+X-Google-Smtp-Source: APiQypJliLAKEtJ0GCKY5LTrXbRMQjeDjaE9Op/aSNL3Ex5byRHgTkTyjB9z9V2oSWnqdrO5tdfGEQ==
+X-Received: by 2002:a2e:3813:: with SMTP id f19mr13783514lja.216.1587494063147;
+        Tue, 21 Apr 2020 11:34:23 -0700 (PDT)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id r14sm2542856ljn.4.2020.04.21.11.34.21
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Apr 2020 11:34:22 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id e25so15088543ljg.5
+        for <linux-arch@vger.kernel.org>; Tue, 21 Apr 2020 11:34:21 -0700 (PDT)
+X-Received: by 2002:a2e:8512:: with SMTP id j18mr9624239lji.201.1587494060836;
+ Tue, 21 Apr 2020 11:34:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200421151537.19241-1-will@kernel.org> <20200421151537.19241-12-will@kernel.org>
-In-Reply-To: <20200421151537.19241-12-will@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 22 Apr 2020 02:19:43 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATuvjY=SKuc-otRg0zPoJZeKOoTFzdyuyY_9X78p+twxQ@mail.gmail.com>
-Message-ID: <CAK7LNATuvjY=SKuc-otRg0zPoJZeKOoTFzdyuyY_9X78p+twxQ@mail.gmail.com>
-Subject: Re: [PATCH v4 11/11] gcov: Remove old GCC 3.4 support
-To:     Will Deacon <will@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Mark Rutland <mark.rutland@arm.com>,
+References: <36e43241c7f043a24b5069e78c6a7edd11043be5.1585898438.git.christophe.leroy@c-s.fr>
+ <42da416106d5c1cf92bda1e058434fe240b35f44.1585898438.git.christophe.leroy@c-s.fr>
+ <CAHk-=wh_DY_dysMX0NuvJmMFr3+QDKOZPZqWKwLkkjgZTuyQ+A@mail.gmail.com>
+ <20200403205205.GK23230@ZenIV.linux.org.uk> <20200421024919.GA23230@ZenIV.linux.org.uk>
+In-Reply-To: <20200421024919.GA23230@ZenIV.linux.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 21 Apr 2020 11:34:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiuHxXwuPynLFh-fYjuUE3_HNPh79e_P6MFMbq4Ki+QCw@mail.gmail.com>
+Message-ID: <CAHk-=wiuHxXwuPynLFh-fYjuUE3_HNPh79e_P6MFMbq4Ki+QCw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] uaccess: Rename user_access_begin/end() to user_full_access_begin/end()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>, Peter Anvin <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org,
+        Russell King <linux@armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 12:16 AM Will Deacon <will@kernel.org> wrote:
+On Mon, Apr 20, 2020 at 7:49 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 >
-> The kernel requires at least GCC 4.8 in order to build, and so there is
-> no need to cater for the pre-4.7 gcov format.
->
-> Remove the obsolete code.
->
-> Acked-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Will Deacon <will@kernel.org>
+>         The only source I'd been able to find speaks of >= 60 cycles
+> (and possibly much more) for non-pipelined coprocessor instructions;
+> the list of such does contain loads and stores to a bunch of registers.
+> However, the register in question (p15/c3) has only store mentioned there,
+> so loads might be cheap; no obvious reasons for those to be slow.
+> That's a question to arm folks, I'm afraid...  rmk?
 
+_If_ it turns out to be expensive, is there any reason we couldn't
+just cache the value in general?
 
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+That's what x86 tends to do with expensive system registers. One
+example would be "msr_misc_features_shadow".
 
-Thanks!
+But maybe that's something to worry about when/if it turns out to
+actually be a problem?
 
-
--- 
-Best Regards
-Masahiro Yamada
+                 Linus
