@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F15501B296F
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 16:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6EE1B2970
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 16:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728725AbgDUO0S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Apr 2020 10:26:18 -0400
-Received: from foss.arm.com ([217.140.110.172]:35878 "EHLO foss.arm.com"
+        id S1728847AbgDUO0V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Apr 2020 10:26:21 -0400
+Received: from foss.arm.com ([217.140.110.172]:35892 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726628AbgDUO0R (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 21 Apr 2020 10:26:17 -0400
+        id S1726628AbgDUO0T (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 21 Apr 2020 10:26:19 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5E4A101E;
-        Tue, 21 Apr 2020 07:26:16 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B320CC14;
+        Tue, 21 Apr 2020 07:26:18 -0700 (PDT)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3457F3F68F;
-        Tue, 21 Apr 2020 07:26:15 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 15C1C3F68F;
+        Tue, 21 Apr 2020 07:26:16 -0700 (PDT)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Will Deacon <will@kernel.org>,
@@ -28,9 +28,9 @@ Cc:     Will Deacon <will@kernel.org>,
         Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
         linux-arch@vger.kernel.org,
         Suzuki K Poulose <Suzuki.Poulose@arm.com>
-Subject: [PATCH v3 03/23] arm64: mte: CPU feature detection and initial sysreg configuration
-Date:   Tue, 21 Apr 2020 15:25:43 +0100
-Message-Id: <20200421142603.3894-4-catalin.marinas@arm.com>
+Subject: [PATCH v3 04/23] arm64: mte: Use Normal Tagged attributes for the linear map
+Date:   Tue, 21 Apr 2020 15:25:44 +0100
+Message-Id: <20200421142603.3894-5-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200421142603.3894-1-catalin.marinas@arm.com>
 References: <20200421142603.3894-1-catalin.marinas@arm.com>
@@ -41,185 +41,201 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Once user space is given access to tagged memory, the kernel must be
+able to clear/save/restore tags visible to the user. This is done via
+the linear mapping, therefore map it as such. The new MT_NORMAL_TAGGED
+index for MAIR_EL1 is initially mapped as Normal memory and later
+changed to Normal Tagged via the cpufeature infrastructure. From a
+mismatched attribute aliases perspective, the Tagged memory is
+considered a permission and it won't lead to undefined behaviour.
 
-Add the cpufeature and hwcap entries to detect the presence of MTE on
-the boot CPUs (primary and secondary). Any late secondary CPU not
-supporting the feature, if detected during boot, will be parked.
+The empty_zero_page is cleared to ensure that the tags it contains are
+already zeroed. The actual tags-aware clear_page() implementation is
+part of a subsequent patch.
 
-In addition, add the minimum SCTLR_EL1 and HCR_EL2 bits for enabling
-MTE. Without subsequent setting of MAIR, these bits do not have an
-effect on tag checking.
-
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
 Cc: Suzuki K Poulose <Suzuki.Poulose@arm.com>
 ---
- arch/arm64/include/asm/cpucaps.h    |  4 +++-
- arch/arm64/include/asm/cpufeature.h |  6 ++++++
- arch/arm64/include/asm/hwcap.h      |  1 +
- arch/arm64/include/asm/kvm_arm.h    |  2 +-
- arch/arm64/include/asm/sysreg.h     |  1 +
- arch/arm64/include/uapi/asm/hwcap.h |  2 ++
- arch/arm64/kernel/cpufeature.c      | 30 +++++++++++++++++++++++++++++
- arch/arm64/kernel/cpuinfo.c         |  2 ++
- 8 files changed, 46 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
-index 8eb5a088ae65..4731ebacff54 100644
---- a/arch/arm64/include/asm/cpucaps.h
-+++ b/arch/arm64/include/asm/cpucaps.h
-@@ -61,7 +61,9 @@
- #define ARM64_HAS_AMU_EXTN			51
- #define ARM64_HAS_ADDRESS_AUTH			52
- #define ARM64_HAS_GENERIC_AUTH			53
-+/* 54 reserved for ARM64_BTI */
-+#define ARM64_MTE				55
- 
--#define ARM64_NCAPS				54
-+#define ARM64_NCAPS				56
- 
- #endif /* __ASM_CPUCAPS_H */
-diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-index afe08251ff95..afc315814563 100644
---- a/arch/arm64/include/asm/cpufeature.h
-+++ b/arch/arm64/include/asm/cpufeature.h
-@@ -674,6 +674,12 @@ static inline bool system_uses_irq_prio_masking(void)
- 	       cpus_have_const_cap(ARM64_HAS_IRQ_PRIO_MASKING);
- }
- 
-+static inline bool system_supports_mte(void)
-+{
-+	return IS_ENABLED(CONFIG_ARM64_MTE) &&
-+		cpus_have_const_cap(ARM64_MTE);
-+}
-+
- static inline bool system_has_prio_mask_debugging(void)
- {
- 	return IS_ENABLED(CONFIG_ARM64_DEBUG_PRIORITY_MASKING) &&
-diff --git a/arch/arm64/include/asm/hwcap.h b/arch/arm64/include/asm/hwcap.h
-index 0f00265248b5..8b302c88cfeb 100644
---- a/arch/arm64/include/asm/hwcap.h
-+++ b/arch/arm64/include/asm/hwcap.h
-@@ -94,6 +94,7 @@
- #define KERNEL_HWCAP_BF16		__khwcap2_feature(BF16)
- #define KERNEL_HWCAP_DGH		__khwcap2_feature(DGH)
- #define KERNEL_HWCAP_RNG		__khwcap2_feature(RNG)
-+#define KERNEL_HWCAP_MTE		__khwcap2_feature(MTE)
+Notes:
+    v3:
+    - Restrict the safe attribute change in pgattr_change_is_safe() only to
+      Normal to/from Normal-Tagged (old version allow any other type as long
+      as old or new was Normal(-Tagged)).
+
+ arch/arm64/include/asm/memory.h       |  1 +
+ arch/arm64/include/asm/pgtable-prot.h |  2 ++
+ arch/arm64/kernel/cpufeature.c        | 30 +++++++++++++++++++++++++++
+ arch/arm64/mm/dump.c                  |  4 ++++
+ arch/arm64/mm/mmu.c                   | 22 ++++++++++++++++++--
+ arch/arm64/mm/proc.S                  |  8 +++++--
+ 6 files changed, 63 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+index a1871bb32bb1..472c77a68225 100644
+--- a/arch/arm64/include/asm/memory.h
++++ b/arch/arm64/include/asm/memory.h
+@@ -136,6 +136,7 @@
+ #define MT_NORMAL_NC		3
+ #define MT_NORMAL		4
+ #define MT_NORMAL_WT		5
++#define MT_NORMAL_TAGGED	6
  
  /*
-  * This yields a mask that user programs can use to figure out what
-diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
-index 8a1cbfd544d6..6c3b2fc922bb 100644
---- a/arch/arm64/include/asm/kvm_arm.h
-+++ b/arch/arm64/include/asm/kvm_arm.h
-@@ -78,7 +78,7 @@
- 			 HCR_AMO | HCR_SWIO | HCR_TIDCP | HCR_RW | HCR_TLOR | \
- 			 HCR_FMO | HCR_IMO)
- #define HCR_VIRT_EXCP_MASK (HCR_VSE | HCR_VI | HCR_VF)
--#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK)
-+#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK | HCR_ATA)
- #define HCR_HOST_VHE_FLAGS (HCR_RW | HCR_TGE | HCR_E2H)
+  * Memory types for Stage-2 translation
+diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
+index 1305e28225fc..9c924b09d5c8 100644
+--- a/arch/arm64/include/asm/pgtable-prot.h
++++ b/arch/arm64/include/asm/pgtable-prot.h
+@@ -39,6 +39,7 @@ extern bool arm64_use_ng_mappings;
+ #define PROT_NORMAL_NC		(PROT_DEFAULT | PTE_PXN | PTE_UXN | PTE_WRITE | PTE_ATTRINDX(MT_NORMAL_NC))
+ #define PROT_NORMAL_WT		(PROT_DEFAULT | PTE_PXN | PTE_UXN | PTE_WRITE | PTE_ATTRINDX(MT_NORMAL_WT))
+ #define PROT_NORMAL		(PROT_DEFAULT | PTE_PXN | PTE_UXN | PTE_WRITE | PTE_ATTRINDX(MT_NORMAL))
++#define PROT_NORMAL_TAGGED	(PROT_DEFAULT | PTE_PXN | PTE_UXN | PTE_WRITE | PTE_ATTRINDX(MT_NORMAL_TAGGED))
  
- /* TCR_EL2 Registers bits */
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index e823e93b7429..86236ae6c4e7 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -604,6 +604,7 @@
- 			 SCTLR_EL1_SA0  | SCTLR_EL1_SED  | SCTLR_ELx_I    |\
- 			 SCTLR_EL1_DZE  | SCTLR_EL1_UCT                   |\
- 			 SCTLR_EL1_NTWE | SCTLR_ELx_IESB | SCTLR_EL1_SPAN |\
-+			 SCTLR_ELx_ITFSB| SCTLR_ELx_ATA  | SCTLR_EL1_ATA0 |\
- 			 ENDIAN_SET_EL1 | SCTLR_EL1_UCI  | SCTLR_EL1_RES1)
+ #define PROT_SECT_DEVICE_nGnRE	(PROT_SECT_DEFAULT | PMD_SECT_PXN | PMD_SECT_UXN | PMD_ATTRINDX(MT_DEVICE_nGnRE))
+ #define PROT_SECT_NORMAL	(PROT_SECT_DEFAULT | PMD_SECT_PXN | PMD_SECT_UXN | PMD_ATTRINDX(MT_NORMAL))
+@@ -48,6 +49,7 @@ extern bool arm64_use_ng_mappings;
+ #define _HYP_PAGE_DEFAULT	_PAGE_DEFAULT
  
- /* MAIR_ELx memory attributes (used by Linux) */
-diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
-index 7752d93bb50f..73ac5aede18c 100644
---- a/arch/arm64/include/uapi/asm/hwcap.h
-+++ b/arch/arm64/include/uapi/asm/hwcap.h
-@@ -73,5 +73,7 @@
- #define HWCAP2_BF16		(1 << 14)
- #define HWCAP2_DGH		(1 << 15)
- #define HWCAP2_RNG		(1 << 16)
-+/* bit 17 reserved for HWCAP2_BTI */
-+#define HWCAP2_MTE		(1 << 18)
- 
- #endif /* _UAPI__ASM_HWCAP_H */
+ #define PAGE_KERNEL		__pgprot(PROT_NORMAL)
++#define PAGE_KERNEL_TAGGED	__pgprot(PROT_NORMAL_TAGGED)
+ #define PAGE_KERNEL_RO		__pgprot((PROT_NORMAL & ~PTE_WRITE) | PTE_RDONLY)
+ #define PAGE_KERNEL_ROX		__pgprot((PROT_NORMAL & ~(PTE_WRITE | PTE_PXN)) | PTE_RDONLY)
+ #define PAGE_KERNEL_EXEC	__pgprot(PROT_NORMAL & ~PTE_PXN)
 diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 9fac745aa7bb..512a8b24c5df 100644
+index 512a8b24c5df..d2fe8ff72324 100644
 --- a/arch/arm64/kernel/cpufeature.c
 +++ b/arch/arm64/kernel/cpufeature.c
-@@ -182,6 +182,8 @@ static const struct arm64_ftr_bits ftr_id_aa64pfr0[] = {
+@@ -1414,13 +1414,43 @@ static bool can_use_gic_priorities(const struct arm64_cpu_capabilities *entry,
+ #ifdef CONFIG_ARM64_MTE
+ static void cpu_enable_mte(struct arm64_cpu_capabilities const *cap)
+ {
++	u64 mair;
++
+ 	/* all non-zero tags excluded by default */
+ 	write_sysreg_s(SYS_GCR_EL1_RRND | SYS_GCR_EL1_EXCL_MASK, SYS_GCR_EL1);
+ 	write_sysreg_s(0, SYS_TFSR_EL1);
+ 	write_sysreg_s(0, SYS_TFSRE0_EL1);
  
- static const struct arm64_ftr_bits ftr_id_aa64pfr1[] = {
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_SSBS_SHIFT, 4, ID_AA64PFR1_SSBS_PSTATE_NI),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_MTE),
-+		       FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_MTE_SHIFT, 4, ID_AA64PFR1_MTE_NI),
- 	ARM64_FTR_END,
- };
- 
-@@ -1409,6 +1411,18 @@ static bool can_use_gic_priorities(const struct arm64_cpu_capabilities *entry,
++	/*
++	 * Update the MT_NORMAL_TAGGED index in MAIR_EL1. Tag checking is
++	 * disabled for the kernel, so there won't be any observable effect
++	 * other than allowing the kernel to read and write tags.
++	 */
++	mair = read_sysreg_s(SYS_MAIR_EL1);
++	mair &= ~MAIR_ATTRIDX(MAIR_ATTR_MASK, MT_NORMAL_TAGGED);
++	mair |= MAIR_ATTRIDX(MAIR_ATTR_NORMAL_TAGGED, MT_NORMAL_TAGGED);
++	write_sysreg_s(mair, SYS_MAIR_EL1);
++
+ 	isb();
  }
- #endif
- 
-+#ifdef CONFIG_ARM64_MTE
-+static void cpu_enable_mte(struct arm64_cpu_capabilities const *cap)
++
++static int __init system_enable_mte(void)
 +{
-+	/* all non-zero tags excluded by default */
-+	write_sysreg_s(SYS_GCR_EL1_RRND | SYS_GCR_EL1_EXCL_MASK, SYS_GCR_EL1);
-+	write_sysreg_s(0, SYS_TFSR_EL1);
-+	write_sysreg_s(0, SYS_TFSRE0_EL1);
++	if (!system_supports_mte())
++		return 0;
 +
-+	isb();
++	/* Ensure the TLB does not have stale MAIR attributes */
++	flush_tlb_all();
++
++	/*
++	 * Clear the zero page (again) so that tags are reset. This needs to
++	 * be done via the linear map which has the Tagged attribute.
++	 */
++	clear_page(lm_alias(empty_zero_page));
++
++	return 0;
 +}
-+#endif /* CONFIG_ARM64_MTE */
-+
++core_initcall(system_enable_mte);
+ #endif /* CONFIG_ARM64_MTE */
+ 
  /* Internal helper functions to match cpu capability type */
- static bool
- cpucap_late_cpu_optional(const struct arm64_cpu_capabilities *cap)
-@@ -1779,6 +1793,19 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
- 		.min_field_value = 1,
- 	},
+diff --git a/arch/arm64/mm/dump.c b/arch/arm64/mm/dump.c
+index 860c00ec8bd3..416a2404ac83 100644
+--- a/arch/arm64/mm/dump.c
++++ b/arch/arm64/mm/dump.c
+@@ -165,6 +165,10 @@ static const struct prot_bits pte_bits[] = {
+ 		.mask	= PTE_ATTRINDX_MASK,
+ 		.val	= PTE_ATTRINDX(MT_NORMAL),
+ 		.set	= "MEM/NORMAL",
++	}, {
++		.mask	= PTE_ATTRINDX_MASK,
++		.val	= PTE_ATTRINDX(MT_NORMAL_TAGGED),
++		.set	= "MEM/NORMAL-TAGGED",
+ 	}
+ };
+ 
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index a374e4f51a62..37bb5b19bdf4 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -121,7 +121,7 @@ static bool pgattr_change_is_safe(u64 old, u64 new)
+ 	 * The following mapping attributes may be updated in live
+ 	 * kernel mappings without the need for break-before-make.
+ 	 */
+-	static const pteval_t mask = PTE_PXN | PTE_RDONLY | PTE_WRITE | PTE_NG;
++	pteval_t mask = PTE_PXN | PTE_RDONLY | PTE_WRITE | PTE_NG;
+ 
+ 	/* creating or taking down mappings is always safe */
+ 	if (old == 0 || new == 0)
+@@ -135,6 +135,19 @@ static bool pgattr_change_is_safe(u64 old, u64 new)
+ 	if (old & ~new & PTE_NG)
+ 		return false;
+ 
++	if (system_supports_mte()) {
++		/*
++		 * Changing the memory type between Normal and Normal-Tagged
++		 * is safe since Tagged is considered a permission attribute
++		 * from the mismatched attribute aliases perspective.
++		 */
++		if (((old & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL) ||
++		     (old & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL_TAGGED)) &&
++		    ((new & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL) ||
++		     (new & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL_TAGGED)))
++			mask |= PTE_ATTRINDX_MASK;
++	}
++
+ 	return ((old ^ new) & ~mask) == 0;
+ }
+ 
+@@ -489,7 +502,12 @@ static void __init map_mem(pgd_t *pgdp)
+ 		if (memblock_is_nomap(reg))
+ 			continue;
+ 
+-		__map_memblock(pgdp, start, end, PAGE_KERNEL, flags);
++		/*
++		 * The linear map must allow allocation tags reading/writing
++		 * if MTE is present. Otherwise, it has the same attributes as
++		 * PAGE_KERNEL.
++		 */
++		__map_memblock(pgdp, start, end, PAGE_KERNEL_TAGGED, flags);
+ 	}
+ 
+ 	/*
+diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+index 197a9ba2d5ea..48891095eaed 100644
+--- a/arch/arm64/mm/proc.S
++++ b/arch/arm64/mm/proc.S
+@@ -44,14 +44,18 @@
+ #define TCR_KASAN_FLAGS 0
  #endif
-+#ifdef CONFIG_ARM64_MTE
-+	{
-+		.desc = "Memory Tagging Extension",
-+		.capability = ARM64_MTE,
-+		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-+		.matches = has_cpuid_feature,
-+		.sys_reg = SYS_ID_AA64PFR1_EL1,
-+		.field_pos = ID_AA64PFR1_MTE_SHIFT,
-+		.min_field_value = ID_AA64PFR1_MTE,
-+		.sign = FTR_UNSIGNED,
-+		.cpu_enable = cpu_enable_mte,
-+	},
-+#endif /* CONFIG_ARM64_MTE */
- 	{},
- };
  
-@@ -1892,6 +1919,9 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
- 	HWCAP_MULTI_CAP(ptr_auth_hwcap_addr_matches, CAP_HWCAP, KERNEL_HWCAP_PACA),
- 	HWCAP_MULTI_CAP(ptr_auth_hwcap_gen_matches, CAP_HWCAP, KERNEL_HWCAP_PACG),
- #endif
-+#ifdef CONFIG_ARM64_MTE
-+	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_MTE_SHIFT, FTR_UNSIGNED, ID_AA64PFR1_MTE, CAP_HWCAP, KERNEL_HWCAP_MTE),
-+#endif /* CONFIG_ARM64_MTE */
- 	{},
- };
+-/* Default MAIR_EL1 */
++/*
++ * Default MAIR_EL1. MT_NORMAL_TAGGED is initially mapped as Normal memory and
++ * changed later to Normal Tagged if the system supports MTE.
++ */
+ #define MAIR_EL1_SET							\
+ 	(MAIR_ATTRIDX(MAIR_ATTR_DEVICE_nGnRnE, MT_DEVICE_nGnRnE) |	\
+ 	 MAIR_ATTRIDX(MAIR_ATTR_DEVICE_nGnRE, MT_DEVICE_nGnRE) |	\
+ 	 MAIR_ATTRIDX(MAIR_ATTR_DEVICE_GRE, MT_DEVICE_GRE) |		\
+ 	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_NC, MT_NORMAL_NC) |		\
+ 	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL, MT_NORMAL) |			\
+-	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_WT, MT_NORMAL_WT))
++	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_WT, MT_NORMAL_WT) |		\
++	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL, MT_NORMAL_TAGGED))
  
-diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
-index 86136075ae41..d14b29de2c73 100644
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -92,6 +92,8 @@ static const char *const hwcap_str[] = {
- 	"bf16",
- 	"dgh",
- 	"rng",
-+	"",		/* reserved for BTI */
-+	"mte",
- 	NULL
- };
- 
+ #ifdef CONFIG_CPU_PM
+ /**
