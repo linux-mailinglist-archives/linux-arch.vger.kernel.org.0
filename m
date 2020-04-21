@@ -2,47 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C16E11B25D8
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 14:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399E81B294D
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 16:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728391AbgDUMWq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Apr 2020 08:22:46 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2855 "EHLO huawei.com"
+        id S1729086AbgDUOTM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Apr 2020 10:19:12 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:2826 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726018AbgDUMWq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 21 Apr 2020 08:22:46 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id DD693E80D4C4184FD20D;
-        Tue, 21 Apr 2020 20:22:42 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Tue, 21 Apr 2020
- 20:22:35 +0800
-Subject: Re: [PATCH v1 6/6] arm64: tlb: Set the TTL field in flush_tlb_range
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>
+        id S1728337AbgDUOTM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 21 Apr 2020 10:19:12 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 37F28F4CD612CA17545A;
+        Tue, 21 Apr 2020 22:19:09 +0800 (CST)
+Received: from [127.0.0.1] (10.173.220.25) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Tue, 21 Apr 2020
+ 22:18:59 +0800
+Subject: Re: [PATCH v1 5/6] mm: tlb: Provide flush_*_tlb_range wrappers
+To:     Peter Zijlstra <peterz@infradead.org>
 CC:     <mark.rutland@arm.com>, <will@kernel.org>,
         <catalin.marinas@arm.com>, <aneesh.kumar@linux.ibm.com>,
         <akpm@linux-foundation.org>, <npiggin@gmail.com>, <arnd@arndb.de>,
-        <maz@kernel.org>, <suzuki.poulose@arm.com>, <tglx@linutronix.de>,
-        <yuzhao@google.com>, <Dave.Martin@arm.com>, <steven.price@arm.com>,
-        <broonie@kernel.org>, <guohanjun@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
+        <rostedt@goodmis.org>, <maz@kernel.org>, <suzuki.poulose@arm.com>,
+        <tglx@linutronix.de>, <yuzhao@google.com>, <Dave.Martin@arm.com>,
+        <steven.price@arm.com>, <broonie@kernel.org>,
+        <guohanjun@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
         <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
         <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
         <kuhn.chenqun@huawei.com>
 References: <20200403090048.938-1-yezhenyu2@huawei.com>
- <20200403090048.938-7-yezhenyu2@huawei.com>
- <20200420121055.GF20696@hirez.programming.kicks-ass.net>
- <20200420200616.44c7c7ea@oasis.local.home>
- <20200421083043.GP20730@hirez.programming.kicks-ass.net>
+ <20200403090048.938-6-yezhenyu2@huawei.com>
+ <20200420120916.GE20696@hirez.programming.kicks-ass.net>
 From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <25267000-9c39-cd1c-33c8-c62bfb41d905@huawei.com>
-Date:   Tue, 21 Apr 2020 20:22:33 +0800
+Message-ID: <8f6e877c-1462-441b-23ec-2a6bd3308099@huawei.com>
+Date:   Tue, 21 Apr 2020 22:18:57 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <20200421083043.GP20730@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200420120916.GE20696@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="gbk"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.173.220.25]
@@ -52,105 +49,145 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020/4/21 16:30, Peter Zijlstra wrote:
-> On Mon, Apr 20, 2020 at 08:06:16PM -0400, Steven Rostedt wrote:
->> Peter Zijlstra <peterz@infradead.org> wrote:
->>> On Fri, Apr 03, 2020 at 05:00:48PM +0800, Zhenyu Ye wrote:
-> 
->>>> +static inline int tlb_get_level(struct mmu_gather *tlb)
->>>> +{
->>>> +	int sum = tlb->cleared_ptes + tlb->cleared_pmds +
->>>> +		  tlb->cleared_puds + tlb->cleared_p4ds;
->>>> +
->>>> +	if (sum != 1)
->>>> +		return 0;
->>>> +	else if (tlb->cleared_ptes)
->>>> +		return 3;
->>>> +	else if (tlb->cleared_pmds)
->>>> +		return 2;
->>>> +	else if (tlb->cleared_puds)
->>>> +		return 1;
->>>> +
->>>> +	return 0;
->>>> +}  
->>>
->>> That's some mighty wonky code. Please look at the generated asm.
+Hi Peter,
+
+On 2020/4/20 20:09, Peter Zijlstra wrote:
+> On Fri, Apr 03, 2020 at 05:00:47PM +0800, Zhenyu Ye wrote:
+>> This patch provides flush_{pte|pmd|pud|p4d}_tlb_range() in generic
+>> code, which are expressed through the mmu_gather APIs.  These
+>> interface set tlb->cleared_* and finally call tlb_flush(), so we
+>> can do the tlb invalidation according to the information in
+>> struct mmu_gather.
 >>
->> Without even looking at the generated asm, if a condition returns,
->> there's no reason to add an else for that condition.
+>> Signed-off-by: Zhenyu Ye <yezhenyu2@huawei.com>
+>> ---
+>>  include/asm-generic/pgtable.h | 12 +++++++--
+>>  mm/pgtable-generic.c          | 50 +++++++++++++++++++++++++++++++++++
+>>  2 files changed, 60 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
+>> index e2e2bef07dd2..2bedeee94131 100644
+>> --- a/include/asm-generic/pgtable.h
+>> +++ b/include/asm-generic/pgtable.h
+>> @@ -1160,11 +1160,19 @@ static inline int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
+>>   * invalidate the entire TLB which is not desitable.
+>>   * e.g. see arch/arc: flush_pmd_tlb_range
+>>   */
+>> -#define flush_pmd_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
+>> -#define flush_pud_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
+>> +extern void flush_pte_tlb_range(struct vm_area_struct *vma,
+>> +				unsigned long addr, unsigned long end);
+>> +extern void flush_pmd_tlb_range(struct vm_area_struct *vma,
+>> +				unsigned long addr, unsigned long end);
+>> +extern void flush_pud_tlb_range(struct vm_area_struct *vma,
+>> +				unsigned long addr, unsigned long end);
+>> +extern void flush_p4d_tlb_range(struct vm_area_struct *vma,
+>> +				unsigned long addr, unsigned long end);
+>>  #else
+>> +#define flush_pte_tlb_range(vma, addr, end)	BUILD_BUG()
+>>  #define flush_pmd_tlb_range(vma, addr, end)	BUILD_BUG()
+>>  #define flush_pud_tlb_range(vma, addr, end)	BUILD_BUG()
+>> +#define flush_p4d_tlb_range(vma, addr, end)	BUILD_BUG()
+>>  #endif
+>>  #endif
 > 
-> Not really the point; he wants to guarantee he only returns >0 when
-> there's a single bit set. But the thing is, cleared_* is a bitfield, and
-> I'm afraid that the above will result in some terrible code-gen.
+> Ideally you'd make __HAVE_ARCH_FLUSH_PMD_TLB_RANGE go away. Power
+> certainly doesnt need it with the below.
 > 
-> Maybe something like:
+
+However, arch `arc` also uses __HAVE_ARCH_FLUSH_PMD_TLB_RANGE :
+
+grep -nr __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+	mm/pgtable-generic.c:104:#ifndef __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+	mm/pgtable-generic.c:152:#endif /* __HAVE_ARCH_FLUSH_PMD_TLB_RANGE */
+	include/asm-generic/pgtable.h:1153:#ifndef __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+	arch/powerpc/include/asm/book3s/64/tlbflush.h:49:#define __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+	arch/arc/include/asm/hugepage.h:69:#define __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+
+So I am not sure if we can remove it.
+
+And if we remove the __HAVE_ARCH_FLUSH_PMD_TLB_RANGE, how to ensure not
+redefine flush_pXX_tlb_range() ?
+
+>> diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
+>> index 3d7c01e76efc..0f5414a4a2ec 100644
+>> --- a/mm/pgtable-generic.c
+>> +++ b/mm/pgtable-generic.c
+>> @@ -101,6 +101,56 @@ pte_t ptep_clear_flush(struct vm_area_struct *vma, unsigned long address,
+>>  
+>>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>>  
+>> +#ifndef __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+>> +void flush_pte_tlb_range(struct vm_area_struct *vma,
+>> +			 unsigned long addr, unsigned long end)
+>> +{
+>> +	struct mmu_gather tlb;
+>> +
+>> +	tlb_gather_mmu(&tlb, vma->vm_mm, addr, end);
+>> +	tlb_start_vma(&tlb, vma);
+>> +	tlb_set_pte_range(&tlb, addr, end - addr);
+>> +	tlb_end_vma(&tlb, vma);
+>> +	tlb_finish_mmu(&tlb, addr, end);
+>> +}
+>> +
+>> +void flush_pmd_tlb_range(struct vm_area_struct *vma,
+>> +			 unsigned long addr, unsigned long end)
+>> +{
+>> +	struct mmu_gather tlb;
+>> +
+>> +	tlb_gather_mmu(&tlb, vma->vm_mm, addr, end);
+>> +	tlb_start_vma(&tlb, vma);
+>> +	tlb_set_pmd_range(&tlb, addr, end - addr);
+>> +	tlb_end_vma(&tlb, vma);
+>> +	tlb_finish_mmu(&tlb, addr, end);
+>> +}
+>> +
+>> +void flush_pud_tlb_range(struct vm_area_struct *vma,
+>> +			 unsigned long addr, unsigned long end)
+>> +{
+>> +	struct mmu_gather tlb;
+>> +
+>> +	tlb_gather_mmu(&tlb, vma->vm_mm, addr, end);
+>> +	tlb_start_vma(&tlb, vma);
+>> +	tlb_set_pud_range(&tlb, addr, end - addr);
+>> +	tlb_end_vma(&tlb, vma);
+>> +	tlb_finish_mmu(&tlb, addr, end);
+>> +}
+>> +
+>> +void flush_p4d_tlb_range(struct vm_area_struct *vma,
+>> +			 unsigned long addr, unsigned long end)
+>> +{
+>> +	struct mmu_gather tlb;
+>> +
+>> +	tlb_gather_mmu(&tlb, vma->vm_mm, addr, end);
+>> +	tlb_start_vma(&tlb, vma);
+>> +	tlb_set_p4d_range(&tlb, addr, end - addr);
+>> +	tlb_end_vma(&tlb, vma);
+>> +	tlb_finish_mmu(&tlb, addr, end);
+>> +}
+>> +#endif /* __HAVE_ARCH_FLUSH_PMD_TLB_RANGE */
 > 
-> 	if (tlb->cleared_ptes && !(tlb->cleared_pmds ||
-> 				   tlb->cleared_puds ||
-> 				   tlb->cleared_p4ds))
-> 		return 3;
+> You're nowhere near lazy enough:
 > 
-> 	if (tlb->cleared_pmds && !(tlb->cleared_ptes ||
-> 				   tlb->cleared_puds ||
-> 				   tlb->cleared_p4ds))
-> 		return 2;
+> #define FLUSH_Pxx_TLB_RANGE(_pxx) \
+> void flush_##_pxx##_tlb_range(struct vm_area_struct *vma, \
+> 			      unsigned long addr, unsigned long end) \
+> { \
+> 	struct mmu_gather tlb; \
+> 	\
+> 	tlb_gather_mmu(&tlb, vma->vm_mm, addr, end); \
+> 	tlb_start_vma(&tlb, vma); \
+> 	tlb_flush_##_pxx##_range(&tlb, addr, end-addr); \
+> 	tlb_end_vma(&tlb, vma); \
+> 	tlb_finish_mmu(&tlb, addr, end); \
+> }
 > 
-> 	if (tlb->cleared_puds && !(tlb->cleared_ptes ||
-> 				   tlb->cleared_pmds ||
-> 				   tlb->cleared_p4ds))
-> 		return 1;
+> FLUSH_Pxx_TLB_RANGE(pte)
+> FLUSH_Pxx_TLB_RANGE(pmd)
+> FLUSH_Pxx_TLB_RANGE(pud)
+> FLUSH_Pxx_TLB_RANGE(p4d)
 > 
-> 	return 0;
 > 
-> Which I admit is far too much typing, but I suspect it generates far
-> saner code (just a few masks and branches).
+> .
 > 
-> But maybe the compiler surprises us, what do I konw.
-
-Thanks for your review.  In my view, the asm-code should behave the same
-as the C code, even if cleared_* are bitfields (below 02 optimization).
-
-Below is the generated asm of my code (gcc version is 7.3.0):
-
-<tlb_flush_mmu_tlbonly.part.110>:
-	...
-	ubfx	x5, x2, #3, #1		// x2 stores the values of cleared_*
-	ubfx	x1, x2, #4, #1
-	add	w1, w1, w5
-	ubfx	x5, x2, #5, #1
-	add	w1, w1, w5
-	ubfx	x2, x2, #6, #1
-	add	w1, w1, w2		// then the w1 = sum of cleared_*
-	tbnz	w3, #3, 001030f8b8
-	tbz	w3, #4, 001030fac0
-	cmp	w1, #0x1		// cmp the w1 to select branch
-	mov	w5, #0x2
-	...				// do the if-else below...
-
-
-Then with your code above, the generated asm is:
-
-<tlb_flush_mmu_tlbonly.part.110>:
-	...
-	tbnz    w1, #3, 001030f8a0	// w1 stores the values of cleared_*
-	tbz     w1, #4, 001030fac0
-	and     w2, w1, #0x78		// mask the cleared_* to w2
-	mov     x4, #0x200000
-	mov     w7, #0x15
-	mov     w6, #0x3
-	cmp     w2, #0x8		// cmp the w2 to 0x8, 0x10, 0x20 to
-					// select branch
-	b.ne    ffff80001030f8b8
-	...				// do the if-else below...
-
-So at the gen-asm level, both of our codes are OK.  But your code is really
-more saner than mine at the gen-asm level.
-
-Thanks for your suggestion of this, I will send a new patch series soon.
-
-Zhenyu
-
-.
-
-
 
