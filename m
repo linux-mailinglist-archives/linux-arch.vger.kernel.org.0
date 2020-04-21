@@ -2,900 +2,259 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2BB1B2C12
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 18:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F4C1B2C67
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 18:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbgDUQOg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Apr 2020 12:14:36 -0400
-Received: from conuserg-10.nifty.com ([210.131.2.77]:20068 "EHLO
-        conuserg-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726168AbgDUQOf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Apr 2020 12:14:35 -0400
-Received: from oscar.flets-west.jp (softbank126090202047.bbtec.net [126.90.202.47]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 03LGE0EK029890;
-        Wed, 22 Apr 2020 01:14:00 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 03LGE0EK029890
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1587485640;
-        bh=A92vaWYsm/R81gtu29PQ7qPZwGCwJSxP/ZmxFgy/G1Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=13ZhGqyPzfPnWkxPsZWYiZzQdM+WeDFIrm0I+1apSJfoD4ZMRsHrT9F9KCKJg5ZjB
-         8br3jPNXIb6MPYUYVjY8HleLFC1PD0MqVjL8LLB56gcCVMXIegutSBhyK4/kKNP5rt
-         LVtq6ak3tCJXeXuuvEsv+8J032OMzuMkIIgAQnbNumuseUp+LCd3oqaNhMNUHuGQz3
-         5INj/obJ3tPtKcJ6CjbVJfZaRSoaVAl8S1XKsSFHrm89296lrU+020lesx+mL1SC+H
-         WMrgsuK1bLCrlCLAithmu9Ty9OzIpQtXRQATxPMC7MCb/Dqspvz02usIHNqSnWy4t4
-         0XcvBEorhkcNw==
-X-Nifty-SrcIP: [126.90.202.47]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org, Jessica Yu <jeyu@kernel.org>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH v2] arch: split MODULE_ARCH_VERMAGIC definitions out to <asm/vermagic.h>
-Date:   Wed, 22 Apr 2020 01:13:55 +0900
-Message-Id: <20200421161355.1357112-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        id S1727900AbgDUQRJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Apr 2020 12:17:09 -0400
+Received: from mga18.intel.com ([134.134.136.126]:55926 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726378AbgDUQRJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 21 Apr 2020 12:17:09 -0400
+IronPort-SDR: X8qZqP2KAnPQURDobRYcRpVlCzf127nkLrDDS5kH4Qxsbst2RDGAN2iAiG7MI62Xc3l2kk6ILr
+ rwLvu/vrIPVA==
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2020 09:17:07 -0700
+IronPort-SDR: XALjvezF56ivcRHV0d/2zCurfffdMTEr3JadGE4uHkEhGYH5+nmnaQKf2REvk5qbSQcrs9K95G
+ UrMnIwFqOosQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,410,1580803200"; 
+   d="gz'50?scan'50,208,50";a="300653614"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Apr 2020 09:17:05 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jQvZy-000EMx-CQ; Wed, 22 Apr 2020 00:16:58 +0800
+Date:   Wed, 22 Apr 2020 00:16:12 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>, linux-kbuild@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Leon Romanovsky <leonro@mellanox.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kbuild@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Leon Romanovsky <leonro@mellanox.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arch: split MODULE_ARCH_VERMAGIC definitions out to
+ <asm/vermagic.h>
+Message-ID: <202004220013.Ji0JcrHY%lkp@intel.com>
+References: <20200419222804.483191-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="liOOAslEiF7prFVr"
+Content-Disposition: inline
+In-Reply-To: <20200419222804.483191-1-masahiroy@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-As the bug report [1] pointed out, <linux/vermagic.h> must be included
-after <linux/module.h>.
 
-I believe we should not impose any include order restriction. We often
-sort include directives alphabetically, but it is just coding style
-convention. Technically, we can include header files in any order by
-making every header self-contained.
+--liOOAslEiF7prFVr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Currently, arch-specific MODULE_ARCH_VERMAGIC is defined in
-<asm/module.h>, which is not included from <linux/vermagic.h>.
+Hi Masahiro,
 
-Hence, the straight-forward fix-up would be as follows:
+I love your patch! Yet something to improve:
 
-|--- a/include/linux/vermagic.h
-|+++ b/include/linux/vermagic.h
-|@@ -1,5 +1,6 @@
-| /* SPDX-License-Identifier: GPL-2.0 */
-| #include <generated/utsrelease.h>
-|+#include <linux/module.h>
-|
-| /* Simply sanity version stamp for modules. */
-| #ifdef CONFIG_SMP
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.7-rc2 next-20200421]
+[cannot apply to arm/for-next arm64/for-next/core ia64/next powerpc/next jeyu/modules-next arc/for-next tip/x86/core]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
-This works enough, but for further cleanups, I split MODULE_ARCH_VERMAGIC
-definitions into <asm/vermagic.h>.
+url:    https://github.com/0day-ci/linux/commits/Masahiro-Yamada/arch-split-MODULE_ARCH_VERMAGIC-definitions-out-to-asm-vermagic-h/20200421-194238
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git ae83d0b416db002fe95601e7f97f64b59514d936
+config: openrisc-simple_smp_defconfig (attached as .config)
+compiler: or1k-linux-gcc (GCC) 9.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # save the attached .config to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day GCC_VERSION=9.3.0 make.cross ARCH=openrisc 
 
-With this, <linux/module.h> and <linux/vermagic.h> will be orthogonal,
-and the location of MODULE_ARCH_VERMAGIC definitions will be consistent.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kbuild test robot <lkp@intel.com>
 
-For arc and ia64, MODULE_PROC_FAMILY is only used for defining
-MODULE_ARCH_VERMAGIC. I squashed it.
+All errors (new ones prefixed by >>):
 
-For hexagon, nds32, and xtensa, I removed <asm/modules.h> entirely
-because they contained nothing but MODULE_ARCH_VERMAGIC definition.
-Kbuild will automatically generate <asm/modules.h> at build-time,
-wrapping <asm-generic/module.h>.
+   In file included from include/linux/vermagic.h:6,
+                    from net/ethtool/ioctl.c:20:
+>> ./arch/openrisc/include/generated/asm/vermagic.h:1:10: fatal error: asm-generic/vermagic.h: No such file or directory
+       1 | #include <asm-generic/vermagic.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
-[1] https://lore.kernel.org/lkml/20200411155623.GA22175@zn.tnic
-
-Reported-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
-I do not mean to replace the work by Leon Romanovsky:
-https://lkml.org/lkml/2020/4/19/201
+--liOOAslEiF7prFVr
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
 
-His work intends to hide <linux/vermagic.h> from driver writers.
-It is solving a different problem.
-It does not solve the include order restriction reported by [1].
-It still relies on kernel/module.c and *.mod.c
-include <linux/vermagic.h> after <linux/module.h>.
+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
+EZUBaKoaOSpsnfsX9jT+HwYugJ++eQAA
 
-I believe we should not impose any restriction about the include order.
-So, this patch is the direct answer to the bug report [1].
-
-BTW, I think commit f58dd03b1157bdf3b64c36e9525f8d7f69c25df2
-was a bad way to suppress the problem, but that is another story.
-
-
-Changes in v2:
-  - add include/asm-generic/vermagic.h
-  - add Reported-by
-
- arch/arc/include/asm/module.h                 |  5 --
- arch/arc/include/asm/vermagic.h               |  8 +++
- arch/arm/include/asm/module.h                 | 24 -------
- arch/arm/include/asm/vermagic.h               | 31 +++++++++
- arch/arm64/include/asm/module.h               |  2 -
- arch/arm64/include/asm/vermagic.h             | 10 +++
- .../include/asm/{module.h => vermagic.h}      |  8 +--
- arch/ia64/include/asm/module.h                |  4 --
- arch/ia64/include/asm/vermagic.h              | 15 ++++
- arch/mips/include/asm/module.h                | 61 -----------------
- arch/mips/include/asm/vermagic.h              | 66 ++++++++++++++++++
- .../include/asm/{module.h => vermagic.h}      |  8 +--
- arch/powerpc/include/asm/module.h             | 18 -----
- arch/powerpc/include/asm/vermagic.h           | 20 ++++++
- arch/riscv/include/asm/module.h               |  2 -
- arch/riscv/include/asm/vermagic.h             |  9 +++
- arch/sh/include/asm/module.h                  | 28 --------
- arch/sh/include/asm/vermagic.h                | 34 ++++++++++
- arch/x86/include/asm/module.h                 | 60 ----------------
- arch/x86/include/asm/vermagic.h               | 68 +++++++++++++++++++
- .../include/asm/{module.h => vermagic.h}      | 13 ++--
- include/asm-generic/Kbuild                    |  1 +
- include/asm-generic/vermagic.h                |  7 ++
- include/linux/vermagic.h                      |  8 ++-
- 24 files changed, 287 insertions(+), 223 deletions(-)
- create mode 100644 arch/arc/include/asm/vermagic.h
- create mode 100644 arch/arm/include/asm/vermagic.h
- create mode 100644 arch/arm64/include/asm/vermagic.h
- rename arch/hexagon/include/asm/{module.h => vermagic.h} (64%)
- create mode 100644 arch/ia64/include/asm/vermagic.h
- create mode 100644 arch/mips/include/asm/vermagic.h
- rename arch/nds32/include/asm/{module.h => vermagic.h} (52%)
- create mode 100644 arch/powerpc/include/asm/vermagic.h
- create mode 100644 arch/riscv/include/asm/vermagic.h
- create mode 100644 arch/sh/include/asm/vermagic.h
- create mode 100644 arch/x86/include/asm/vermagic.h
- rename arch/xtensa/include/asm/{module.h => vermagic.h} (72%)
- create mode 100644 include/asm-generic/vermagic.h
-
-diff --git a/arch/arc/include/asm/module.h b/arch/arc/include/asm/module.h
-index 48f13a4ace4b..f534a1fef070 100644
---- a/arch/arc/include/asm/module.h
-+++ b/arch/arc/include/asm/module.h
-@@ -3,7 +3,6 @@
-  * Copyright (C) 2004, 2007-2010, 2011-2012 Synopsys, Inc. (www.synopsys.com)
-  *
-  * Amit Bhor, Sameer Dhavale: Codito Technologies 2004
--
-  */
- 
- #ifndef _ASM_ARC_MODULE_H
-@@ -19,8 +18,4 @@ struct mod_arch_specific {
- 	const char *secstr;
- };
- 
--#define MODULE_PROC_FAMILY "ARC700"
--
--#define MODULE_ARCH_VERMAGIC MODULE_PROC_FAMILY
--
- #endif /* _ASM_ARC_MODULE_H */
-diff --git a/arch/arc/include/asm/vermagic.h b/arch/arc/include/asm/vermagic.h
-new file mode 100644
-index 000000000000..a10257d2c62c
---- /dev/null
-+++ b/arch/arc/include/asm/vermagic.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
-+
-+#define MODULE_ARCH_VERMAGIC "ARC700"
-+
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/arm/include/asm/module.h b/arch/arm/include/asm/module.h
-index 182163b55546..4b0df09cbe67 100644
---- a/arch/arm/include/asm/module.h
-+++ b/arch/arm/include/asm/module.h
-@@ -37,30 +37,6 @@ struct mod_arch_specific {
- struct module;
- u32 get_module_plt(struct module *mod, unsigned long loc, Elf32_Addr val);
- 
--/*
-- * Add the ARM architecture version to the version magic string
-- */
--#define MODULE_ARCH_VERMAGIC_ARMVSN "ARMv" __stringify(__LINUX_ARM_ARCH__) " "
--
--/* Add __virt_to_phys patching state as well */
--#ifdef CONFIG_ARM_PATCH_PHYS_VIRT
--#define MODULE_ARCH_VERMAGIC_P2V "p2v8 "
--#else
--#define MODULE_ARCH_VERMAGIC_P2V ""
--#endif
--
--/* Add instruction set architecture tag to distinguish ARM/Thumb kernels */
--#ifdef CONFIG_THUMB2_KERNEL
--#define MODULE_ARCH_VERMAGIC_ARMTHUMB "thumb2 "
--#else
--#define MODULE_ARCH_VERMAGIC_ARMTHUMB ""
--#endif
--
--#define MODULE_ARCH_VERMAGIC \
--	MODULE_ARCH_VERMAGIC_ARMVSN \
--	MODULE_ARCH_VERMAGIC_ARMTHUMB \
--	MODULE_ARCH_VERMAGIC_P2V
--
- #ifdef CONFIG_THUMB2_KERNEL
- #define HAVE_ARCH_KALLSYMS_SYMBOL_VALUE
- static inline unsigned long kallsyms_symbol_value(const Elf_Sym *sym)
-diff --git a/arch/arm/include/asm/vermagic.h b/arch/arm/include/asm/vermagic.h
-new file mode 100644
-index 000000000000..62ce94e26a63
---- /dev/null
-+++ b/arch/arm/include/asm/vermagic.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
-+
-+#include <linux/stringify.h>
-+
-+/*
-+ * Add the ARM architecture version to the version magic string
-+ */
-+#define MODULE_ARCH_VERMAGIC_ARMVSN "ARMv" __stringify(__LINUX_ARM_ARCH__) " "
-+
-+/* Add __virt_to_phys patching state as well */
-+#ifdef CONFIG_ARM_PATCH_PHYS_VIRT
-+#define MODULE_ARCH_VERMAGIC_P2V "p2v8 "
-+#else
-+#define MODULE_ARCH_VERMAGIC_P2V ""
-+#endif
-+
-+/* Add instruction set architecture tag to distinguish ARM/Thumb kernels */
-+#ifdef CONFIG_THUMB2_KERNEL
-+#define MODULE_ARCH_VERMAGIC_ARMTHUMB "thumb2 "
-+#else
-+#define MODULE_ARCH_VERMAGIC_ARMTHUMB ""
-+#endif
-+
-+#define MODULE_ARCH_VERMAGIC \
-+	MODULE_ARCH_VERMAGIC_ARMVSN \
-+	MODULE_ARCH_VERMAGIC_ARMTHUMB \
-+	MODULE_ARCH_VERMAGIC_P2V
-+
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/arm64/include/asm/module.h b/arch/arm64/include/asm/module.h
-index 1e93de68c044..4e7fa2623896 100644
---- a/arch/arm64/include/asm/module.h
-+++ b/arch/arm64/include/asm/module.h
-@@ -7,8 +7,6 @@
- 
- #include <asm-generic/module.h>
- 
--#define MODULE_ARCH_VERMAGIC	"aarch64"
--
- #ifdef CONFIG_ARM64_MODULE_PLTS
- struct mod_plt_sec {
- 	int			plt_shndx;
-diff --git a/arch/arm64/include/asm/vermagic.h b/arch/arm64/include/asm/vermagic.h
-new file mode 100644
-index 000000000000..a1eec6a000f1
---- /dev/null
-+++ b/arch/arm64/include/asm/vermagic.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2012 ARM Ltd.
-+ */
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
-+
-+#define MODULE_ARCH_VERMAGIC	"aarch64"
-+
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/hexagon/include/asm/module.h b/arch/hexagon/include/asm/vermagic.h
-similarity index 64%
-rename from arch/hexagon/include/asm/module.h
-rename to arch/hexagon/include/asm/vermagic.h
-index e8de4fe03543..0e8dedc8c486 100644
---- a/arch/hexagon/include/asm/module.h
-+++ b/arch/hexagon/include/asm/vermagic.h
-@@ -3,11 +3,11 @@
-  * Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
-  */
- 
--#ifndef _ASM_MODULE_H
--#define _ASM_MODULE_H
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
- 
--#include <asm-generic/module.h>
-+#include <linux/stringify.h>
- 
- #define MODULE_ARCH_VERMAGIC __stringify(PROCESSOR_MODEL_NAME) " "
- 
--#endif
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/ia64/include/asm/module.h b/arch/ia64/include/asm/module.h
-index f319144260ce..5a29652e6def 100644
---- a/arch/ia64/include/asm/module.h
-+++ b/arch/ia64/include/asm/module.h
-@@ -26,10 +26,6 @@ struct mod_arch_specific {
- 	unsigned int next_got_entry;	/* index of next available got entry */
- };
- 
--#define MODULE_PROC_FAMILY	"ia64"
--#define MODULE_ARCH_VERMAGIC	MODULE_PROC_FAMILY \
--	"gcc-" __stringify(__GNUC__) "." __stringify(__GNUC_MINOR__)
--
- #define ARCH_SHF_SMALL	SHF_IA_64_SHORT
- 
- #endif /* _ASM_IA64_MODULE_H */
-diff --git a/arch/ia64/include/asm/vermagic.h b/arch/ia64/include/asm/vermagic.h
-new file mode 100644
-index 000000000000..29c7424f4c25
---- /dev/null
-+++ b/arch/ia64/include/asm/vermagic.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2003 Hewlett-Packard Co
-+ *	David Mosberger-Tang <davidm@hpl.hp.com>
-+ */
-+
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
-+
-+#include <linux/stringify.h>
-+
-+#define MODULE_ARCH_VERMAGIC	"ia64" \
-+	"gcc-" __stringify(__GNUC__) "." __stringify(__GNUC_MINOR__)
-+
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/mips/include/asm/module.h b/arch/mips/include/asm/module.h
-index 9846047b3d3d..724a0882576b 100644
---- a/arch/mips/include/asm/module.h
-+++ b/arch/mips/include/asm/module.h
-@@ -83,65 +83,4 @@ search_module_dbetables(unsigned long addr)
- }
- #endif
- 
--#ifdef CONFIG_CPU_BMIPS
--#define MODULE_PROC_FAMILY "BMIPS "
--#elif defined CONFIG_CPU_MIPS32_R1
--#define MODULE_PROC_FAMILY "MIPS32_R1 "
--#elif defined CONFIG_CPU_MIPS32_R2
--#define MODULE_PROC_FAMILY "MIPS32_R2 "
--#elif defined CONFIG_CPU_MIPS32_R6
--#define MODULE_PROC_FAMILY "MIPS32_R6 "
--#elif defined CONFIG_CPU_MIPS64_R1
--#define MODULE_PROC_FAMILY "MIPS64_R1 "
--#elif defined CONFIG_CPU_MIPS64_R2
--#define MODULE_PROC_FAMILY "MIPS64_R2 "
--#elif defined CONFIG_CPU_MIPS64_R6
--#define MODULE_PROC_FAMILY "MIPS64_R6 "
--#elif defined CONFIG_CPU_R3000
--#define MODULE_PROC_FAMILY "R3000 "
--#elif defined CONFIG_CPU_TX39XX
--#define MODULE_PROC_FAMILY "TX39XX "
--#elif defined CONFIG_CPU_VR41XX
--#define MODULE_PROC_FAMILY "VR41XX "
--#elif defined CONFIG_CPU_R4X00
--#define MODULE_PROC_FAMILY "R4X00 "
--#elif defined CONFIG_CPU_TX49XX
--#define MODULE_PROC_FAMILY "TX49XX "
--#elif defined CONFIG_CPU_R5000
--#define MODULE_PROC_FAMILY "R5000 "
--#elif defined CONFIG_CPU_R5500
--#define MODULE_PROC_FAMILY "R5500 "
--#elif defined CONFIG_CPU_NEVADA
--#define MODULE_PROC_FAMILY "NEVADA "
--#elif defined CONFIG_CPU_R10000
--#define MODULE_PROC_FAMILY "R10000 "
--#elif defined CONFIG_CPU_RM7000
--#define MODULE_PROC_FAMILY "RM7000 "
--#elif defined CONFIG_CPU_SB1
--#define MODULE_PROC_FAMILY "SB1 "
--#elif defined CONFIG_CPU_LOONGSON32
--#define MODULE_PROC_FAMILY "LOONGSON32 "
--#elif defined CONFIG_CPU_LOONGSON2EF
--#define MODULE_PROC_FAMILY "LOONGSON2EF "
--#elif defined CONFIG_CPU_LOONGSON64
--#define MODULE_PROC_FAMILY "LOONGSON64 "
--#elif defined CONFIG_CPU_CAVIUM_OCTEON
--#define MODULE_PROC_FAMILY "OCTEON "
--#elif defined CONFIG_CPU_XLR
--#define MODULE_PROC_FAMILY "XLR "
--#elif defined CONFIG_CPU_XLP
--#define MODULE_PROC_FAMILY "XLP "
--#else
--#error MODULE_PROC_FAMILY undefined for your processor configuration
--#endif
--
--#ifdef CONFIG_32BIT
--#define MODULE_KERNEL_TYPE "32BIT "
--#elif defined CONFIG_64BIT
--#define MODULE_KERNEL_TYPE "64BIT "
--#endif
--
--#define MODULE_ARCH_VERMAGIC \
--	MODULE_PROC_FAMILY MODULE_KERNEL_TYPE
--
- #endif /* _ASM_MODULE_H */
-diff --git a/arch/mips/include/asm/vermagic.h b/arch/mips/include/asm/vermagic.h
-new file mode 100644
-index 000000000000..24dc3d35161c
---- /dev/null
-+++ b/arch/mips/include/asm/vermagic.h
-@@ -0,0 +1,66 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
-+
-+#ifdef CONFIG_CPU_BMIPS
-+#define MODULE_PROC_FAMILY "BMIPS "
-+#elif defined CONFIG_CPU_MIPS32_R1
-+#define MODULE_PROC_FAMILY "MIPS32_R1 "
-+#elif defined CONFIG_CPU_MIPS32_R2
-+#define MODULE_PROC_FAMILY "MIPS32_R2 "
-+#elif defined CONFIG_CPU_MIPS32_R6
-+#define MODULE_PROC_FAMILY "MIPS32_R6 "
-+#elif defined CONFIG_CPU_MIPS64_R1
-+#define MODULE_PROC_FAMILY "MIPS64_R1 "
-+#elif defined CONFIG_CPU_MIPS64_R2
-+#define MODULE_PROC_FAMILY "MIPS64_R2 "
-+#elif defined CONFIG_CPU_MIPS64_R6
-+#define MODULE_PROC_FAMILY "MIPS64_R6 "
-+#elif defined CONFIG_CPU_R3000
-+#define MODULE_PROC_FAMILY "R3000 "
-+#elif defined CONFIG_CPU_TX39XX
-+#define MODULE_PROC_FAMILY "TX39XX "
-+#elif defined CONFIG_CPU_VR41XX
-+#define MODULE_PROC_FAMILY "VR41XX "
-+#elif defined CONFIG_CPU_R4X00
-+#define MODULE_PROC_FAMILY "R4X00 "
-+#elif defined CONFIG_CPU_TX49XX
-+#define MODULE_PROC_FAMILY "TX49XX "
-+#elif defined CONFIG_CPU_R5000
-+#define MODULE_PROC_FAMILY "R5000 "
-+#elif defined CONFIG_CPU_R5500
-+#define MODULE_PROC_FAMILY "R5500 "
-+#elif defined CONFIG_CPU_NEVADA
-+#define MODULE_PROC_FAMILY "NEVADA "
-+#elif defined CONFIG_CPU_R10000
-+#define MODULE_PROC_FAMILY "R10000 "
-+#elif defined CONFIG_CPU_RM7000
-+#define MODULE_PROC_FAMILY "RM7000 "
-+#elif defined CONFIG_CPU_SB1
-+#define MODULE_PROC_FAMILY "SB1 "
-+#elif defined CONFIG_CPU_LOONGSON32
-+#define MODULE_PROC_FAMILY "LOONGSON32 "
-+#elif defined CONFIG_CPU_LOONGSON2EF
-+#define MODULE_PROC_FAMILY "LOONGSON2EF "
-+#elif defined CONFIG_CPU_LOONGSON64
-+#define MODULE_PROC_FAMILY "LOONGSON64 "
-+#elif defined CONFIG_CPU_CAVIUM_OCTEON
-+#define MODULE_PROC_FAMILY "OCTEON "
-+#elif defined CONFIG_CPU_XLR
-+#define MODULE_PROC_FAMILY "XLR "
-+#elif defined CONFIG_CPU_XLP
-+#define MODULE_PROC_FAMILY "XLP "
-+#else
-+#error MODULE_PROC_FAMILY undefined for your processor configuration
-+#endif
-+
-+#ifdef CONFIG_32BIT
-+#define MODULE_KERNEL_TYPE "32BIT "
-+#elif defined CONFIG_64BIT
-+#define MODULE_KERNEL_TYPE "64BIT "
-+#endif
-+
-+#define MODULE_ARCH_VERMAGIC \
-+	MODULE_PROC_FAMILY MODULE_KERNEL_TYPE
-+
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/nds32/include/asm/module.h b/arch/nds32/include/asm/vermagic.h
-similarity index 52%
-rename from arch/nds32/include/asm/module.h
-rename to arch/nds32/include/asm/vermagic.h
-index a3a08e993c65..f772e7ba33f1 100644
---- a/arch/nds32/include/asm/module.h
-+++ b/arch/nds32/include/asm/vermagic.h
-@@ -1,11 +1,9 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- // Copyright (C) 2005-2017 Andes Technology Corporation
- 
--#ifndef _ASM_NDS32_MODULE_H
--#define _ASM_NDS32_MODULE_H
--
--#include <asm-generic/module.h>
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
- 
- #define MODULE_ARCH_VERMAGIC	"NDS32v3"
- 
--#endif /* _ASM_NDS32_MODULE_H */
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/powerpc/include/asm/module.h b/arch/powerpc/include/asm/module.h
-index 356658711a86..5398bfc465b4 100644
---- a/arch/powerpc/include/asm/module.h
-+++ b/arch/powerpc/include/asm/module.h
-@@ -3,28 +3,10 @@
- #define _ASM_POWERPC_MODULE_H
- #ifdef __KERNEL__
- 
--/*
-- */
--
- #include <linux/list.h>
- #include <asm/bug.h>
- #include <asm-generic/module.h>
- 
--
--#ifdef CONFIG_MPROFILE_KERNEL
--#define MODULE_ARCH_VERMAGIC_FTRACE	"mprofile-kernel "
--#else
--#define MODULE_ARCH_VERMAGIC_FTRACE	""
--#endif
--
--#ifdef CONFIG_RELOCATABLE
--#define MODULE_ARCH_VERMAGIC_RELOCATABLE	"relocatable "
--#else
--#define MODULE_ARCH_VERMAGIC_RELOCATABLE	""
--#endif
--
--#define MODULE_ARCH_VERMAGIC MODULE_ARCH_VERMAGIC_FTRACE MODULE_ARCH_VERMAGIC_RELOCATABLE
--
- #ifndef __powerpc64__
- /*
-  * Thanks to Paul M for explaining this.
-diff --git a/arch/powerpc/include/asm/vermagic.h b/arch/powerpc/include/asm/vermagic.h
-new file mode 100644
-index 000000000000..b054a8576e5d
---- /dev/null
-+++ b/arch/powerpc/include/asm/vermagic.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
-+
-+#ifdef CONFIG_MPROFILE_KERNEL
-+#define MODULE_ARCH_VERMAGIC_FTRACE	"mprofile-kernel "
-+#else
-+#define MODULE_ARCH_VERMAGIC_FTRACE	""
-+#endif
-+
-+#ifdef CONFIG_RELOCATABLE
-+#define MODULE_ARCH_VERMAGIC_RELOCATABLE	"relocatable "
-+#else
-+#define MODULE_ARCH_VERMAGIC_RELOCATABLE	""
-+#endif
-+
-+#define MODULE_ARCH_VERMAGIC \
-+		MODULE_ARCH_VERMAGIC_FTRACE MODULE_ARCH_VERMAGIC_RELOCATABLE
-+
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/riscv/include/asm/module.h b/arch/riscv/include/asm/module.h
-index 46202dad365d..76aa96a9fc08 100644
---- a/arch/riscv/include/asm/module.h
-+++ b/arch/riscv/include/asm/module.h
-@@ -6,8 +6,6 @@
- 
- #include <asm-generic/module.h>
- 
--#define MODULE_ARCH_VERMAGIC    "riscv"
--
- struct module;
- unsigned long module_emit_got_entry(struct module *mod, unsigned long val);
- unsigned long module_emit_plt_entry(struct module *mod, unsigned long val);
-diff --git a/arch/riscv/include/asm/vermagic.h b/arch/riscv/include/asm/vermagic.h
-new file mode 100644
-index 000000000000..7b9441a57466
---- /dev/null
-+++ b/arch/riscv/include/asm/vermagic.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2017 Andes Technology Corporation */
-+
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
-+
-+#define MODULE_ARCH_VERMAGIC    "riscv"
-+
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/sh/include/asm/module.h b/arch/sh/include/asm/module.h
-index 9f38fb35fe96..337663a028db 100644
---- a/arch/sh/include/asm/module.h
-+++ b/arch/sh/include/asm/module.h
-@@ -11,32 +11,4 @@ struct mod_arch_specific {
- };
- #endif
- 
--#ifdef CONFIG_CPU_LITTLE_ENDIAN
--# ifdef CONFIG_CPU_SH2
--#  define MODULE_PROC_FAMILY "SH2LE "
--# elif defined  CONFIG_CPU_SH3
--#  define MODULE_PROC_FAMILY "SH3LE "
--# elif defined  CONFIG_CPU_SH4
--#  define MODULE_PROC_FAMILY "SH4LE "
--# elif defined  CONFIG_CPU_SH5
--#  define MODULE_PROC_FAMILY "SH5LE "
--# else
--#  error unknown processor family
--# endif
--#else
--# ifdef CONFIG_CPU_SH2
--#  define MODULE_PROC_FAMILY "SH2BE "
--# elif defined  CONFIG_CPU_SH3
--#  define MODULE_PROC_FAMILY "SH3BE "
--# elif defined  CONFIG_CPU_SH4
--#  define MODULE_PROC_FAMILY "SH4BE "
--# elif defined  CONFIG_CPU_SH5
--#  define MODULE_PROC_FAMILY "SH5BE "
--# else
--#  error unknown processor family
--# endif
--#endif
--
--#define MODULE_ARCH_VERMAGIC MODULE_PROC_FAMILY
--
- #endif /* _ASM_SH_MODULE_H */
-diff --git a/arch/sh/include/asm/vermagic.h b/arch/sh/include/asm/vermagic.h
-new file mode 100644
-index 000000000000..13d8eaa9188e
---- /dev/null
-+++ b/arch/sh/include/asm/vermagic.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
-+
-+#ifdef CONFIG_CPU_LITTLE_ENDIAN
-+# ifdef CONFIG_CPU_SH2
-+#  define MODULE_PROC_FAMILY "SH2LE "
-+# elif defined  CONFIG_CPU_SH3
-+#  define MODULE_PROC_FAMILY "SH3LE "
-+# elif defined  CONFIG_CPU_SH4
-+#  define MODULE_PROC_FAMILY "SH4LE "
-+# elif defined  CONFIG_CPU_SH5
-+#  define MODULE_PROC_FAMILY "SH5LE "
-+# else
-+#  error unknown processor family
-+# endif
-+#else
-+# ifdef CONFIG_CPU_SH2
-+#  define MODULE_PROC_FAMILY "SH2BE "
-+# elif defined  CONFIG_CPU_SH3
-+#  define MODULE_PROC_FAMILY "SH3BE "
-+# elif defined  CONFIG_CPU_SH4
-+#  define MODULE_PROC_FAMILY "SH4BE "
-+# elif defined  CONFIG_CPU_SH5
-+#  define MODULE_PROC_FAMILY "SH5BE "
-+# else
-+#  error unknown processor family
-+# endif
-+#endif
-+
-+#define MODULE_ARCH_VERMAGIC MODULE_PROC_FAMILY
-+
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/x86/include/asm/module.h b/arch/x86/include/asm/module.h
-index c215d2762488..e988bac0a4a1 100644
---- a/arch/x86/include/asm/module.h
-+++ b/arch/x86/include/asm/module.h
-@@ -13,64 +13,4 @@ struct mod_arch_specific {
- #endif
- };
- 
--#ifdef CONFIG_X86_64
--/* X86_64 does not define MODULE_PROC_FAMILY */
--#elif defined CONFIG_M486SX
--#define MODULE_PROC_FAMILY "486SX "
--#elif defined CONFIG_M486
--#define MODULE_PROC_FAMILY "486 "
--#elif defined CONFIG_M586
--#define MODULE_PROC_FAMILY "586 "
--#elif defined CONFIG_M586TSC
--#define MODULE_PROC_FAMILY "586TSC "
--#elif defined CONFIG_M586MMX
--#define MODULE_PROC_FAMILY "586MMX "
--#elif defined CONFIG_MCORE2
--#define MODULE_PROC_FAMILY "CORE2 "
--#elif defined CONFIG_MATOM
--#define MODULE_PROC_FAMILY "ATOM "
--#elif defined CONFIG_M686
--#define MODULE_PROC_FAMILY "686 "
--#elif defined CONFIG_MPENTIUMII
--#define MODULE_PROC_FAMILY "PENTIUMII "
--#elif defined CONFIG_MPENTIUMIII
--#define MODULE_PROC_FAMILY "PENTIUMIII "
--#elif defined CONFIG_MPENTIUMM
--#define MODULE_PROC_FAMILY "PENTIUMM "
--#elif defined CONFIG_MPENTIUM4
--#define MODULE_PROC_FAMILY "PENTIUM4 "
--#elif defined CONFIG_MK6
--#define MODULE_PROC_FAMILY "K6 "
--#elif defined CONFIG_MK7
--#define MODULE_PROC_FAMILY "K7 "
--#elif defined CONFIG_MK8
--#define MODULE_PROC_FAMILY "K8 "
--#elif defined CONFIG_MELAN
--#define MODULE_PROC_FAMILY "ELAN "
--#elif defined CONFIG_MCRUSOE
--#define MODULE_PROC_FAMILY "CRUSOE "
--#elif defined CONFIG_MEFFICEON
--#define MODULE_PROC_FAMILY "EFFICEON "
--#elif defined CONFIG_MWINCHIPC6
--#define MODULE_PROC_FAMILY "WINCHIPC6 "
--#elif defined CONFIG_MWINCHIP3D
--#define MODULE_PROC_FAMILY "WINCHIP3D "
--#elif defined CONFIG_MCYRIXIII
--#define MODULE_PROC_FAMILY "CYRIXIII "
--#elif defined CONFIG_MVIAC3_2
--#define MODULE_PROC_FAMILY "VIAC3-2 "
--#elif defined CONFIG_MVIAC7
--#define MODULE_PROC_FAMILY "VIAC7 "
--#elif defined CONFIG_MGEODEGX1
--#define MODULE_PROC_FAMILY "GEODEGX1 "
--#elif defined CONFIG_MGEODE_LX
--#define MODULE_PROC_FAMILY "GEODE "
--#else
--#error unknown processor family
--#endif
--
--#ifdef CONFIG_X86_32
--# define MODULE_ARCH_VERMAGIC MODULE_PROC_FAMILY
--#endif
--
- #endif /* _ASM_X86_MODULE_H */
-diff --git a/arch/x86/include/asm/vermagic.h b/arch/x86/include/asm/vermagic.h
-new file mode 100644
-index 000000000000..75884d2cdec3
---- /dev/null
-+++ b/arch/x86/include/asm/vermagic.h
-@@ -0,0 +1,68 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
-+
-+#ifdef CONFIG_X86_64
-+/* X86_64 does not define MODULE_PROC_FAMILY */
-+#elif defined CONFIG_M486SX
-+#define MODULE_PROC_FAMILY "486SX "
-+#elif defined CONFIG_M486
-+#define MODULE_PROC_FAMILY "486 "
-+#elif defined CONFIG_M586
-+#define MODULE_PROC_FAMILY "586 "
-+#elif defined CONFIG_M586TSC
-+#define MODULE_PROC_FAMILY "586TSC "
-+#elif defined CONFIG_M586MMX
-+#define MODULE_PROC_FAMILY "586MMX "
-+#elif defined CONFIG_MCORE2
-+#define MODULE_PROC_FAMILY "CORE2 "
-+#elif defined CONFIG_MATOM
-+#define MODULE_PROC_FAMILY "ATOM "
-+#elif defined CONFIG_M686
-+#define MODULE_PROC_FAMILY "686 "
-+#elif defined CONFIG_MPENTIUMII
-+#define MODULE_PROC_FAMILY "PENTIUMII "
-+#elif defined CONFIG_MPENTIUMIII
-+#define MODULE_PROC_FAMILY "PENTIUMIII "
-+#elif defined CONFIG_MPENTIUMM
-+#define MODULE_PROC_FAMILY "PENTIUMM "
-+#elif defined CONFIG_MPENTIUM4
-+#define MODULE_PROC_FAMILY "PENTIUM4 "
-+#elif defined CONFIG_MK6
-+#define MODULE_PROC_FAMILY "K6 "
-+#elif defined CONFIG_MK7
-+#define MODULE_PROC_FAMILY "K7 "
-+#elif defined CONFIG_MK8
-+#define MODULE_PROC_FAMILY "K8 "
-+#elif defined CONFIG_MELAN
-+#define MODULE_PROC_FAMILY "ELAN "
-+#elif defined CONFIG_MCRUSOE
-+#define MODULE_PROC_FAMILY "CRUSOE "
-+#elif defined CONFIG_MEFFICEON
-+#define MODULE_PROC_FAMILY "EFFICEON "
-+#elif defined CONFIG_MWINCHIPC6
-+#define MODULE_PROC_FAMILY "WINCHIPC6 "
-+#elif defined CONFIG_MWINCHIP3D
-+#define MODULE_PROC_FAMILY "WINCHIP3D "
-+#elif defined CONFIG_MCYRIXIII
-+#define MODULE_PROC_FAMILY "CYRIXIII "
-+#elif defined CONFIG_MVIAC3_2
-+#define MODULE_PROC_FAMILY "VIAC3-2 "
-+#elif defined CONFIG_MVIAC7
-+#define MODULE_PROC_FAMILY "VIAC7 "
-+#elif defined CONFIG_MGEODEGX1
-+#define MODULE_PROC_FAMILY "GEODEGX1 "
-+#elif defined CONFIG_MGEODE_LX
-+#define MODULE_PROC_FAMILY "GEODE "
-+#else
-+#error unknown processor family
-+#endif
-+
-+#ifdef CONFIG_X86_32
-+# define MODULE_ARCH_VERMAGIC MODULE_PROC_FAMILY
-+#else
-+# define MODULE_ARCH_VERMAGIC ""
-+#endif
-+
-+#endif /* _ASM_VERMAGIC_H */
-diff --git a/arch/xtensa/include/asm/module.h b/arch/xtensa/include/asm/vermagic.h
-similarity index 72%
-rename from arch/xtensa/include/asm/module.h
-rename to arch/xtensa/include/asm/vermagic.h
-index 488b40c6f9b9..6f9e359a54ac 100644
---- a/arch/xtensa/include/asm/module.h
-+++ b/arch/xtensa/include/asm/vermagic.h
-@@ -1,6 +1,4 @@
- /*
-- * include/asm-xtensa/module.h
-- *
-  * This file contains the module code specific to the Xtensa architecture.
-  *
-  * This file is subject to the terms and conditions of the GNU General Public
-@@ -10,11 +8,12 @@
-  * Copyright (C) 2001 - 2005 Tensilica Inc.
-  */
- 
--#ifndef _XTENSA_MODULE_H
--#define _XTENSA_MODULE_H
-+#ifndef _ASM_VERMAGIC_H
-+#define _ASM_VERMAGIC_H
- 
--#define MODULE_ARCH_VERMAGIC "xtensa-" __stringify(XCHAL_CORE_ID) " "
-+#include <linux/stringify.h>
-+#include <variant/core.h>
- 
--#include <asm-generic/module.h>
-+#define MODULE_ARCH_VERMAGIC "xtensa-" __stringify(XCHAL_CORE_ID) " "
- 
--#endif	/* _XTENSA_MODULE_H */
-+#endif	/* _ASM_VERMAGIC_H */
-diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
-index 36341dfded70..44ec80e70518 100644
---- a/include/asm-generic/Kbuild
-+++ b/include/asm-generic/Kbuild
-@@ -56,6 +56,7 @@ mandatory-y += topology.h
- mandatory-y += trace_clock.h
- mandatory-y += uaccess.h
- mandatory-y += unaligned.h
-+mandatory-y += vermagic.h
- mandatory-y += vga.h
- mandatory-y += word-at-a-time.h
- mandatory-y += xor.h
-diff --git a/include/asm-generic/vermagic.h b/include/asm-generic/vermagic.h
-new file mode 100644
-index 000000000000..084274a1219e
---- /dev/null
-+++ b/include/asm-generic/vermagic.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef _ASM_GENERIC_VERMAGIC_H
-+#define _ASM_GENERIC_VERMAGIC_H
-+
-+#define MODULE_ARCH_VERMAGIC ""
-+
-+#endif /* _ASM_GENERIC_VERMAGIC_H */
-diff --git a/include/linux/vermagic.h b/include/linux/vermagic.h
-index 9aced11e9000..dc236577b92f 100644
---- a/include/linux/vermagic.h
-+++ b/include/linux/vermagic.h
-@@ -1,5 +1,9 @@
- /* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_VERMAGIC_H
-+#define _LINUX_VERMAGIC_H
-+
- #include <generated/utsrelease.h>
-+#include <asm/vermagic.h>
- 
- /* Simply sanity version stamp for modules. */
- #ifdef CONFIG_SMP
-@@ -24,9 +28,6 @@
- #else
- #define MODULE_VERMAGIC_MODVERSIONS ""
- #endif
--#ifndef MODULE_ARCH_VERMAGIC
--#define MODULE_ARCH_VERMAGIC ""
--#endif
- #ifdef RANDSTRUCT_PLUGIN
- #include <generated/randomize_layout_hash.h>
- #define MODULE_RANDSTRUCT_PLUGIN "RANDSTRUCT_PLUGIN_" RANDSTRUCT_HASHED_SEED
-@@ -41,3 +42,4 @@
- 	MODULE_ARCH_VERMAGIC						\
- 	MODULE_RANDSTRUCT_PLUGIN
- 
-+#endif /* _LINUX_VERMAGIC_H */
--- 
-2.25.1
-
+--liOOAslEiF7prFVr--
