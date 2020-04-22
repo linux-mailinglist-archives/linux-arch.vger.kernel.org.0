@@ -2,27 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 728451B4282
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Apr 2020 13:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D591B4362
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Apr 2020 13:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727829AbgDVLCD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Apr 2020 07:02:03 -0400
-Received: from foss.arm.com ([217.140.110.172]:47618 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732384AbgDVLB7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 22 Apr 2020 07:01:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBF8A31B;
-        Wed, 22 Apr 2020 04:01:58 -0700 (PDT)
-Received: from [10.57.33.63] (unknown [10.57.33.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C7E03F6CF;
-        Wed, 22 Apr 2020 04:01:55 -0700 (PDT)
-Subject: Re: [PATCH v4 05/11] arm64: csum: Disable KASAN for do_csum()
-To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@android.com, Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1726875AbgDVLha (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Apr 2020 07:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726261AbgDVLha (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 Apr 2020 07:37:30 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498B9C03C1A8;
+        Wed, 22 Apr 2020 04:37:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=js1Zyy8BIVwm7dXq/z2cFwiQcL5H3VEJb75X+ObOHy0=; b=si7drRH+3Qj4mrA77klXk9QyQL
+        7bxV6TMaNDF91zyCSY45V7w9RPD2n1UAvKhYQu1lpZMA0Mcotn+AOAHjgvkEsxDiw+c9H3xRbYsVZ
+        yAA9fjjvm3HYEI9JumzLK02x7EsqinSd8nT2EfRDC+2BK+uokrXb11aP67/hX8c10W/siQtBM/B0U
+        fGtR+GVh5HL+SqL0ShYHAx+Ug9RcvM3cf7r8f4kFwwTjajY/W2TkSCSJO/LWPAEPFFIc2ub6XPn2P
+        qs+dOv2EUBRiRL60MNgV4JtMgxw+TJYAVWdpL8JkrlbIl3Ni0pDCE9v7oTCEaD4SSI5I7AbUJo1Qf
+        j0bp07ww==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jRDgy-0002eM-2Z; Wed, 22 Apr 2020 11:37:24 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C708C30477A;
+        Wed, 22 Apr 2020 13:37:21 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9933C20280194; Wed, 22 Apr 2020 13:37:21 +0200 (CEST)
+Date:   Wed, 22 Apr 2020 13:37:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
@@ -30,64 +51,35 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Peter Oberparleiter <oberpar@linux.ibm.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v4 00/11] Rework READ_ONCE() to improve codegen
+Message-ID: <20200422113721.GA20730@hirez.programming.kicks-ass.net>
 References: <20200421151537.19241-1-will@kernel.org>
- <20200421151537.19241-6-will@kernel.org>
- <20200422094951.GA54428@lakrids.cambridge.arm.com>
- <20200422104138.GA30265@willie-the-truck>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <6efa0cc1-bd3e-b9b6-4e69-7ac05e6efe35@arm.com>
-Date:   Wed, 22 Apr 2020 12:01:53 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ <CAHk-=wjjz927czq5zKkV1TUvajbWZGsPeFBSgnQftLNWmCcoSg@mail.gmail.com>
+ <20200422081838.GA29541@willie-the-truck>
 MIME-Version: 1.0
-In-Reply-To: <20200422104138.GA30265@willie-the-truck>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200422081838.GA29541@willie-the-truck>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-04-22 11:41 am, Will Deacon wrote:
-> On Wed, Apr 22, 2020 at 10:49:52AM +0100, Mark Rutland wrote:
->> On Tue, Apr 21, 2020 at 04:15:31PM +0100, Will Deacon wrote:
->>> do_csum() over-reads the source buffer and therefore abuses
->>> READ_ONCE_NOCHECK() to avoid tripping up KASAN. In preparation for
->>> READ_ONCE_NOCHECK() becoming a macro, and therefore losing its
->>> '__no_sanitize_address' annotation, just annotate do_csum() explicitly
->>> and fall back to normal loads.
->>>
->>> Cc: Mark Rutland <mark.rutland@arm.com>
->>> Cc: Robin Murphy <robin.murphy@arm.com>
->>> Signed-off-by: Will Deacon <will@kernel.org>
->>
->>  From a functional perspective:
->>
->> Acked-by: Mark Rutland <mark.rutland@arm.com>
+On Wed, Apr 22, 2020 at 09:18:39AM +0100, Will Deacon wrote:
+> On Tue, Apr 21, 2020 at 11:42:56AM -0700, Linus Torvalds wrote:
+> > On Tue, Apr 21, 2020 at 8:15 AM Will Deacon <will@kernel.org> wrote:
+> > >
+> > > It's me again. This is version four of the READ_ONCE() codegen improvement
+> > > patches [...]
+> > 
+> > Let's just plan on biting the bullet and do this for 5.8. I'm assuming
+> > that I'll juet get a pull request from you?
 > 
-> Thanks.
-> 
->> I know that Robin had a concern w.r.t. how this would affect the
->> codegen, but I think we can follow that up after the series as a whole
->> is merged.
-> 
-> Makes sense. I did look at the codegen, fwiw, and it didn't seem especially
-> bad. One of the LDP's gets cracked in the unlikely() path, but it didn't
-> look like it would be a disaster (and sprinkling barrier() around to force
-> the LDP felt really fragile!).
+> Sure thing, thanks. I'll get it into -next along with the arm64 bits for
+> 5.8, but I'll send it as a separate pull when the time comes. I'll also
+> include the sparc32 changes because otherwise the build falls apart and
+> we'll get an army of angry robots yelling at us (they seem to form the
+> majority of the active sparc32 user base afaict).
 
-Sure - I have a nagging feeling that it could still do better WRT 
-pipelining the loads anyway, so I'm happy to come back and reconsider 
-the local codegen later. It certainly doesn't deserve to stand in the 
-way of cross-arch rework.
-
-Other than dereferencing the ptr argument, this code has no cause to 
-make any explicit memory accesses of its own, so I don't think we lose 
-any practical KASAN coverage by moving the annotation to function level. 
-Given all that,
-
-Acked-by: Robin Murphy <robin.murphy@arm.com>
-
-Cheers,
-Robin.
+So I'm obviously all for these patches; do note however that it collides
+most mighty with the KCSAN stuff, which I believe is still pending.
