@@ -2,97 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CD41B2F5C
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Apr 2020 20:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C241B34E4
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Apr 2020 04:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729501AbgDUSnT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Apr 2020 14:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729590AbgDUSnS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 21 Apr 2020 14:43:18 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC4DC061BD3
-        for <linux-arch@vger.kernel.org>; Tue, 21 Apr 2020 11:43:17 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id m2so11935799lfo.6
-        for <linux-arch@vger.kernel.org>; Tue, 21 Apr 2020 11:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P3kAvJO++eguajRXsG/n5n7oYF1JgCMF+hUCYrN1/xg=;
-        b=OrV75sJ7JQKXSTP33LjV3QbwQ+1OpDpShCbzluaAml47IaJlXUCvCFVNh0dT2ICaOR
-         tP0ellSgXMcc5k5ikER9Nrb93hnp/fuQwpjpJAgKovwu7iy+//ZOUhUHick8HqdJW50T
-         eqBCUYMnjMNZdxRwIOyjYkSeElTNWpr5H0uG0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P3kAvJO++eguajRXsG/n5n7oYF1JgCMF+hUCYrN1/xg=;
-        b=q0uK305Wwolugn4R37Cde67UtEebcgijRXZJVgfzYLb3LQWbq0JFvW8ggvV/IfjQdi
-         XVoTLEvcAOt1YOrwf3birSxydCVuXs+amUc5Tu6y8zQ7mwHQDs2/8h5UY+zCy0gWIYvp
-         RvlN0rtBtNAV0GPdnDlehLH7K9zs5sIPe5lZRopET2IW/dyojTJiYj+5fb1YnQmSO638
-         HG77YTWLLPD8Kqn5VrZBLUys5R/dOIhuDC++o5W7655XaSajh4omYTG3TdovYWsIibil
-         vIMIXi8W9E6cjBNJe0lunWUXmTumG6/ZsN5uM2hl3C0cICt4O879S456Q+NxFt+I0MY0
-         vqHA==
-X-Gm-Message-State: AGi0PuY6CQbdbLjcdDfQ3MjgZ2pW1PhQNA2aaX6asaH6tydmkSHHzuQ4
-        /qrYWT28dnZhklBHZYUCDe/Kw7p/Rj8=
-X-Google-Smtp-Source: APiQypKx9uZYWGq+gz6HSCalaA4JF87ws4Niyu8ZjmEsWPFtkVi0U0KEAuhlfJS3r8RYKrU7cpMfUQ==
-X-Received: by 2002:a19:700b:: with SMTP id h11mr14773782lfc.89.1587494594955;
-        Tue, 21 Apr 2020 11:43:14 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id u13sm2685155lji.27.2020.04.21.11.43.12
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Apr 2020 11:43:13 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id m2so11935657lfo.6
-        for <linux-arch@vger.kernel.org>; Tue, 21 Apr 2020 11:43:12 -0700 (PDT)
-X-Received: by 2002:a19:9109:: with SMTP id t9mr14821322lfd.10.1587494592604;
- Tue, 21 Apr 2020 11:43:12 -0700 (PDT)
+        id S1726386AbgDVCNy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Apr 2020 22:13:54 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:2827 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726024AbgDVCNx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 21 Apr 2020 22:13:53 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 2520FFF88CC5973942B7;
+        Wed, 22 Apr 2020 10:13:51 +0800 (CST)
+Received: from [127.0.0.1] (10.173.220.25) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Wed, 22 Apr 2020
+ 10:13:41 +0800
+Subject: Re: [PATCH v1 1/6] arm64: Detect the ARMv8.4 TTL feature
+To:     Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     <mark.rutland@arm.com>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <aneesh.kumar@linux.ibm.com>,
+        <akpm@linux-foundation.org>, <npiggin@gmail.com>, <arnd@arndb.de>,
+        <rostedt@goodmis.org>, <maz@kernel.org>, <suzuki.poulose@arm.com>,
+        <tglx@linutronix.de>, <yuzhao@google.com>, <Dave.Martin@arm.com>,
+        <steven.price@arm.com>, <broonie@kernel.org>,
+        <guohanjun@huawei.com>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xiexiangyou@huawei.com>,
+        <zhangshaokun@hisilicon.com>, <linux-mm@kvack.org>,
+        <arm@kernel.org>, <prime.zeng@hisilicon.com>,
+        <kuhn.chenqun@huawei.com>, <linux-arm-kernel@lists.infradead.org>
+References: <20200403090048.938-1-yezhenyu2@huawei.com>
+ <20200403090048.938-2-yezhenyu2@huawei.com>
+ <20200421165346.GA11171@infradead.org>
+ <20200421171328.GW20730@hirez.programming.kicks-ass.net>
+ <20200421171641.GA25391@infradead.org>
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+Message-ID: <62414595-298a-da11-28eb-36ad1dc59e65@huawei.com>
+Date:   Wed, 22 Apr 2020 10:13:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-References: <20200421151537.19241-1-will@kernel.org>
-In-Reply-To: <20200421151537.19241-1-will@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 21 Apr 2020 11:42:56 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjjz927czq5zKkV1TUvajbWZGsPeFBSgnQftLNWmCcoSg@mail.gmail.com>
-Message-ID: <CAHk-=wjjz927czq5zKkV1TUvajbWZGsPeFBSgnQftLNWmCcoSg@mail.gmail.com>
-Subject: Re: [PATCH v4 00/11] Rework READ_ONCE() to improve codegen
-To:     Will Deacon <will@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200421171641.GA25391@infradead.org>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.173.220.25]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 8:15 AM Will Deacon <will@kernel.org> wrote:
+On 2020/4/22 1:16, Christoph Hellwig wrote:
+> On Tue, Apr 21, 2020 at 07:13:28PM +0200, Peter Zijlstra wrote:
+>> On Tue, Apr 21, 2020 at 09:53:46AM -0700, Christoph Hellwig wrote:
+>>> On Fri, Apr 03, 2020 at 05:00:43PM +0800, Zhenyu Ye wrote:
+>>>> From: Marc Zyngier <maz@kernel.org>
+>>>>
+>>>> In order to reduce the cost of TLB invalidation, the ARMv8.4 TTL
+>>>> feature allows TLBs to be issued with a level allowing for quicker
+>>>> invalidation.
+>>>
+>>> What does "issued with a level" mean?
+>>
+>> What I understood it to be is page-size based on page-table hierarchy.
+>> Just like we have on x86, 4k, 2m, 1g etc..
+>>
+>> So where x86 INVLPG will tear down any sized page for the address given,
+>> you can now day, kill me the PMD level translation for @addr.
+>>
+>> Power9 radix also has things like this.
+> 
+> Maybe this needs to be spelled out a little more?  The current commit
+> log sounds like paper generated by a neural network.
 >
-> It's me again. This is version four of the READ_ONCE() codegen improvement
-> patches [...]
 
-Let's just plan on biting the bullet and do this for 5.8. I'm assuming
-that I'll juet get a pull request from you?
+Emm... This patch was synchronized from Marc's NV series [1].
+"issued with a level" means the TLBs now can get which levels of
+page tables the @addr is in. You can also understand it as
+page-size as Peter said above, just like pud, pmd, pte...
 
-> (I'm interpreting the silence as monumental joy)
+Anyway, I will explain this in more detail.
 
-By now I think we can take that for granted.
+Thanks,
+Zhenyu
 
-Because "monumental joy" is certainly exactly what I felt re-reading
-that "unqualified scalar type" macro.
-
-Or maybe it was just my breakfast trying to say "Hi!".
-
-                 Linus
