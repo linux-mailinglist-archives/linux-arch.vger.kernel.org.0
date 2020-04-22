@@ -2,164 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EAD1B43FD
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Apr 2020 14:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2971B4510
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Apr 2020 14:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbgDVMIR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Apr 2020 08:08:17 -0400
-Received: from foss.arm.com ([217.140.110.172]:48626 "EHLO foss.arm.com"
+        id S1726050AbgDVM0f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Apr 2020 08:26:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726110AbgDVMIR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 22 Apr 2020 08:08:17 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A2C131B;
-        Wed, 22 Apr 2020 05:08:16 -0700 (PDT)
-Received: from gaia (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 983793F6CF;
-        Wed, 22 Apr 2020 05:08:14 -0700 (PDT)
-Date:   Wed, 22 Apr 2020 13:08:12 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Alex Belits <abelits@marvell.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v3 07/13] task_isolation: arch/arm64: enable task
- isolation functionality
-Message-ID: <20200422120811.GA3585@gaia>
-References: <07c25c246c55012981ec0296eee23e68c719333a.camel@marvell.com>
- <299c02b268a6438704693ddb77cdcb49f382c0ea.camel@marvell.com>
+        id S1725810AbgDVM0e (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 Apr 2020 08:26:34 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D498620882;
+        Wed, 22 Apr 2020 12:26:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587558394;
+        bh=WoG2dRF24011ASSJYkMybNHc6GOGg8Zw81SdJa7uWmA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JL01+7NyGCwL4SlN73HMZYvZs4+e0Kpgw5i4ViVCGIdgw9rRAAkJE1o9XG9xEXdzs
+         bmrk6baGNDggzYYVj4vUQIpIcMlF4kuKxlK/2MGRUlIeJLKFvmKPfouVDoupzAal9P
+         UJoM+AYccAuas6549mdjRFCs08BhdDEiaOjCYUxY=
+Date:   Wed, 22 Apr 2020 13:26:27 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v4 00/11] Rework READ_ONCE() to improve codegen
+Message-ID: <20200422122626.GA676@willie-the-truck>
+References: <20200421151537.19241-1-will@kernel.org>
+ <CAHk-=wjjz927czq5zKkV1TUvajbWZGsPeFBSgnQftLNWmCcoSg@mail.gmail.com>
+ <20200422081838.GA29541@willie-the-truck>
+ <20200422113721.GA20730@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <299c02b268a6438704693ddb77cdcb49f382c0ea.camel@marvell.com>
+In-Reply-To: <20200422113721.GA20730@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 09, 2020 at 03:23:35PM +0000, Alex Belits wrote:
-> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-> index f0cec4160136..7563098eb5b2 100644
-> --- a/arch/arm64/include/asm/thread_info.h
-> +++ b/arch/arm64/include/asm/thread_info.h
-> @@ -63,6 +63,7 @@ void arch_release_task_struct(struct task_struct *tsk);
->  #define TIF_FOREIGN_FPSTATE	3	/* CPU's FP state is not current's */
->  #define TIF_UPROBE		4	/* uprobe breakpoint or singlestep */
->  #define TIF_FSCHECK		5	/* Check FS is USER_DS on return */
-> +#define TIF_TASK_ISOLATION	6
->  #define TIF_NOHZ		7
->  #define TIF_SYSCALL_TRACE	8	/* syscall trace active */
->  #define TIF_SYSCALL_AUDIT	9	/* syscall auditing */
-> @@ -83,6 +84,7 @@ void arch_release_task_struct(struct task_struct *tsk);
->  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
->  #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
->  #define _TIF_FOREIGN_FPSTATE	(1 << TIF_FOREIGN_FPSTATE)
-> +#define _TIF_TASK_ISOLATION	(1 << TIF_TASK_ISOLATION)
->  #define _TIF_NOHZ		(1 << TIF_NOHZ)
->  #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
->  #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
-> @@ -96,7 +98,8 @@ void arch_release_task_struct(struct task_struct *tsk);
->  
->  #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
->  				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
-> -				 _TIF_UPROBE | _TIF_FSCHECK)
-> +				 _TIF_UPROBE | _TIF_FSCHECK | \
-> +				 _TIF_TASK_ISOLATION)
->  
->  #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
->  				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
-> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-> index cd6e5fa48b9c..b35b9b0c594c 100644
-> --- a/arch/arm64/kernel/ptrace.c
-> +++ b/arch/arm64/kernel/ptrace.c
-> @@ -29,6 +29,7 @@
->  #include <linux/regset.h>
->  #include <linux/tracehook.h>
->  #include <linux/elf.h>
-> +#include <linux/isolation.h>
->  
->  #include <asm/compat.h>
->  #include <asm/cpufeature.h>
-> @@ -1836,6 +1837,15 @@ int syscall_trace_enter(struct pt_regs *regs)
->  			return -1;
->  	}
->  
-> +	/*
-> +	 * In task isolation mode, we may prevent the syscall from
-> +	 * running, and if so we also deliver a signal to the process.
-> +	 */
-> +	if (test_thread_flag(TIF_TASK_ISOLATION)) {
-> +		if (task_isolation_syscall(regs->syscallno) == -1)
-> +			return -1;
-> +	}
+On Wed, Apr 22, 2020 at 01:37:21PM +0200, Peter Zijlstra wrote:
+> On Wed, Apr 22, 2020 at 09:18:39AM +0100, Will Deacon wrote:
+> > On Tue, Apr 21, 2020 at 11:42:56AM -0700, Linus Torvalds wrote:
+> > > On Tue, Apr 21, 2020 at 8:15 AM Will Deacon <will@kernel.org> wrote:
+> > > >
+> > > > It's me again. This is version four of the READ_ONCE() codegen improvement
+> > > > patches [...]
+> > > 
+> > > Let's just plan on biting the bullet and do this for 5.8. I'm assuming
+> > > that I'll juet get a pull request from you?
+> > 
+> > Sure thing, thanks. I'll get it into -next along with the arm64 bits for
+> > 5.8, but I'll send it as a separate pull when the time comes. I'll also
+> > include the sparc32 changes because otherwise the build falls apart and
+> > we'll get an army of angry robots yelling at us (they seem to form the
+> > majority of the active sparc32 user base afaict).
+> 
+> So I'm obviously all for these patches; do note however that it collides
+> most mighty with the KCSAN stuff, which I believe is still pending.
 
-Is this supposed to be called only when syscall tracing is enabled?
-It only gets here if the task has any of the _TIF_SYSCALL_WORK flags.
+That stuff has been pending for the last two releases afaict :/
 
-> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-> index 339882db5a91..d488c91a4877 100644
-> --- a/arch/arm64/kernel/signal.c
-> +++ b/arch/arm64/kernel/signal.c
-> @@ -20,6 +20,7 @@
->  #include <linux/tracehook.h>
->  #include <linux/ratelimit.h>
->  #include <linux/syscalls.h>
-> +#include <linux/isolation.h>
->  
->  #include <asm/daifflags.h>
->  #include <asm/debug-monitors.h>
-> @@ -898,6 +899,11 @@ static void do_signal(struct pt_regs *regs)
->  	restore_saved_sigmask();
->  }
->  
-> +#define NOTIFY_RESUME_LOOP_FLAGS \
-> +	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
-> +	_TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
-> +	_TIF_UPROBE | _TIF_FSCHECK)
+Anyway, I'm happy to either provide a branch with this series on, or do
+the merge myself, or send this again based on something else. What works
+best for you? The only thing I'd obviously like to avoid is tightly
+coupling this to KCSAN if there's a chance of it missing the merge window
+again.
 
-AFAICT, that's just _TIF_WORK_MASK without _TIF_TASK_ISOLATION. I'd
-rather not duplicate these, they are prone to get out of sync. You could
-do something like:
+Cheers,
 
-#define NOTIFY_RESUME_LOOP_FLAGS (_TIF_WORK_MASK & ~_TIF_TASK_ISOLATION)
-
-> +
->  asmlinkage void do_notify_resume(struct pt_regs *regs,
->  				 unsigned long thread_flags)
->  {
-> @@ -908,6 +914,8 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
->  	 */
->  	trace_hardirqs_off();
->  
-> +	task_isolation_check_run_cleanup();
-> +
->  	do {
->  		/* Check valid user FS if needed */
->  		addr_limit_user_check();
-> @@ -938,7 +946,10 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
->  
->  		local_daif_mask();
->  		thread_flags = READ_ONCE(current_thread_info()->flags);
-> -	} while (thread_flags & _TIF_WORK_MASK);
-> +	} while (thread_flags & NOTIFY_RESUME_LOOP_FLAGS);
-> +
-> +	if (thread_flags & _TIF_TASK_ISOLATION)
-> +		task_isolation_start();
->  }
->  
->  unsigned long __ro_after_init signal_minsigstksz;
-
--- 
-Catalin
+Will
