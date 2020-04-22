@@ -2,87 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C241B34E4
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Apr 2020 04:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A361B359B
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Apr 2020 05:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbgDVCNy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Apr 2020 22:13:54 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2827 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726024AbgDVCNx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 21 Apr 2020 22:13:53 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 2520FFF88CC5973942B7;
-        Wed, 22 Apr 2020 10:13:51 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Wed, 22 Apr 2020
- 10:13:41 +0800
-Subject: Re: [PATCH v1 1/6] arm64: Detect the ARMv8.4 TTL feature
-To:     Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     <mark.rutland@arm.com>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <aneesh.kumar@linux.ibm.com>,
-        <akpm@linux-foundation.org>, <npiggin@gmail.com>, <arnd@arndb.de>,
-        <rostedt@goodmis.org>, <maz@kernel.org>, <suzuki.poulose@arm.com>,
-        <tglx@linutronix.de>, <yuzhao@google.com>, <Dave.Martin@arm.com>,
-        <steven.price@arm.com>, <broonie@kernel.org>,
-        <guohanjun@huawei.com>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xiexiangyou@huawei.com>,
-        <zhangshaokun@hisilicon.com>, <linux-mm@kvack.org>,
-        <arm@kernel.org>, <prime.zeng@hisilicon.com>,
-        <kuhn.chenqun@huawei.com>, <linux-arm-kernel@lists.infradead.org>
-References: <20200403090048.938-1-yezhenyu2@huawei.com>
- <20200403090048.938-2-yezhenyu2@huawei.com>
- <20200421165346.GA11171@infradead.org>
- <20200421171328.GW20730@hirez.programming.kicks-ass.net>
- <20200421171641.GA25391@infradead.org>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <62414595-298a-da11-28eb-36ad1dc59e65@huawei.com>
-Date:   Wed, 22 Apr 2020 10:13:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1726337AbgDVDiq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Apr 2020 23:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726228AbgDVDip (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 21 Apr 2020 23:38:45 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D40C0610D6;
+        Tue, 21 Apr 2020 20:38:45 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id t11so448885lfe.4;
+        Tue, 21 Apr 2020 20:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cjSTi7hlF1/NelCXmbeNWnOnAcO/OjzgBK0nAtkVF1M=;
+        b=HsYir1MD1qN3cOFB5Lr3179LEcQcQ1a/Qq3NCUTytLRTeuLM6l9Rixek6ovajwT16b
+         BMP9vfjjaXChJCfi00vAzyGiJPpHofR2+PIw9/z7h8vSXN9Ha0RkgU3gQTFJgkAe2HGQ
+         W5fCz7w7LP1mkVNxJDhgDJsp586/okfTrd0rancohGo7/OAN863jRiEwLN8kGkOC4P+h
+         9IPyvWOfG/qXyqqXp4L2tadElFAk//2zk3q6qm3zcY0lBsTOw3BLEg0BSy6YGPPF+otf
+         pnpXsE6oUgHvE10hJqnJrncoARHmSXGczeEb3AZtba2V4x0ku1caTdPk7cba5nhn1Mw3
+         hYkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cjSTi7hlF1/NelCXmbeNWnOnAcO/OjzgBK0nAtkVF1M=;
+        b=oCHQFWo9/CeYmde5RL7xiQClD3oiFv1UVYIQ3O3G9k/dvWUmjfBhEzS9F7KSQVCeYn
+         fFp6teUs6ge8OmAnH848Nfq7KXeD1h9teTWI9LrwJ0gvmVl1xBIM2HQ1rCKlRHvmJ+2V
+         b4lw/Q+Qxd/aw5XZ4tW74HiZfXov/qo7T5T/Z3VnkGxlMF6V4Bk7UPcQohvZk8kkhMmK
+         b3bwUf9iTy3vKmx4srDyCzWsJL7mF7mXqnfheSqdxbLxXpRlRii+0YgkxX6xpn94ieIU
+         aGoMMtxCyqNCASc0CfuSyUssfL/8woZQ8WLQCr4YjBeT8dI+BK3FmsfGIpNXgOvGulmV
+         EvxA==
+X-Gm-Message-State: AGi0PubJvgD6GgKLOZbF/6AvPWX7OBDj9vKh1qI7/hM9S2hK+8WaTgHm
+        rJZPeUJIHmmcrtXuBzWzxMNev59chdo1E0feBkBtM4FiKQ0=
+X-Google-Smtp-Source: APiQypIpUMoiM4pLlpvoneXnVmUpQwIHtS5zEdjT4qynaypGLsgcvfd5TCUNGVuboXjX5mw49Gl/fP8JXcB430T44RI=
+X-Received: by 2002:ac2:519c:: with SMTP id u28mr15656394lfi.17.1587526723542;
+ Tue, 21 Apr 2020 20:38:43 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200421171641.GA25391@infradead.org>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.173.220.25]
-X-CFilter-Loop: Reflected
+References: <20200420071548.62112-1-nate.karstens@garmin.com>
+ <20200420071548.62112-2-nate.karstens@garmin.com> <36dce9b4-a0bf-0015-f6bc-1006938545b1@gmail.com>
+In-Reply-To: <36dce9b4-a0bf-0015-f6bc-1006938545b1@gmail.com>
+From:   Changli Gao <xiaosuo@gmail.com>
+Date:   Wed, 22 Apr 2020 11:38:32 +0800
+Message-ID: <CABa6K_HWsy9DdjsKXE2d_JrC+OsNuW+OALS+-_HiV3r2XgC1bw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] fs: Implement close-on-fork
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     Nate Karstens <nate.karstens@garmin.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org,
+        Linux Netdev List <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020/4/22 1:16, Christoph Hellwig wrote:
-> On Tue, Apr 21, 2020 at 07:13:28PM +0200, Peter Zijlstra wrote:
->> On Tue, Apr 21, 2020 at 09:53:46AM -0700, Christoph Hellwig wrote:
->>> On Fri, Apr 03, 2020 at 05:00:43PM +0800, Zhenyu Ye wrote:
->>>> From: Marc Zyngier <maz@kernel.org>
->>>>
->>>> In order to reduce the cost of TLB invalidation, the ARMv8.4 TTL
->>>> feature allows TLBs to be issued with a level allowing for quicker
->>>> invalidation.
->>>
->>> What does "issued with a level" mean?
->>
->> What I understood it to be is page-size based on page-table hierarchy.
->> Just like we have on x86, 4k, 2m, 1g etc..
->>
->> So where x86 INVLPG will tear down any sized page for the address given,
->> you can now day, kill me the PMD level translation for @addr.
->>
->> Power9 radix also has things like this.
-> 
-> Maybe this needs to be spelled out a little more?  The current commit
-> log sounds like paper generated by a neural network.
+On Mon, Apr 20, 2020 at 6:25 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
+>
+>
+>
+> On 4/20/20 12:15 AM, Nate Karstens wrote:
+> > The close-on-fork flag causes the file descriptor to be closed
+> > atomically in the child process before the child process returns
+> > from fork(). Implement this feature and provide a method to
+> > get/set the close-on-fork flag using fcntl(2).
+> >
+> > This functionality was approved by the Austin Common Standards
+> > Revision Group for inclusion in the next revision of the POSIX
+> > standard (see issue 1318 in the Austin Group Defect Tracker).
+>
+> Oh well... yet another feature slowing down a critical path.
+>
+> >
+> > Co-developed-by: Changli Gao <xiaosuo@gmail.com>
+> > Signed-off-by: Changli Gao <xiaosuo@gmail.com>
+> > Signed-off-by: Nate Karstens <nate.karstens@garmin.com>
+> > ---
+> >  fs/fcntl.c                             |  2 ++
+> >  fs/file.c                              | 50 +++++++++++++++++++++++++-
+> >  include/linux/fdtable.h                |  7 ++++
+> >  include/linux/file.h                   |  2 ++
+> >  include/uapi/asm-generic/fcntl.h       |  5 +--
+> >  tools/include/uapi/asm-generic/fcntl.h |  5 +--
+> >  6 files changed, 66 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/fs/fcntl.c b/fs/fcntl.c
+> > index 2e4c0fa2074b..23964abf4a1a 100644
+> > --- a/fs/fcntl.c
+> > +++ b/fs/fcntl.c
+> > @@ -335,10 +335,12 @@ static long do_fcntl(int fd, unsigned int cmd, unsigned long arg,
+> >               break;
+> >       case F_GETFD:
+> >               err = get_close_on_exec(fd) ? FD_CLOEXEC : 0;
+> > +             err |= get_close_on_fork(fd) ? FD_CLOFORK : 0;
+> >               break;
+> >       case F_SETFD:
+> >               err = 0;
+> >               set_close_on_exec(fd, arg & FD_CLOEXEC);
+> > +             set_close_on_fork(fd, arg & FD_CLOFORK);
+> >               break;
+> >       case F_GETFL:
+> >               err = filp->f_flags;
+> > diff --git a/fs/file.c b/fs/file.c
+> > index c8a4e4c86e55..de7260ba718d 100644
+> > --- a/fs/file.c
+> > +++ b/fs/file.c
+> > @@ -57,6 +57,8 @@ static void copy_fd_bitmaps(struct fdtable *nfdt, struct fdtable *ofdt,
+> >       memset((char *)nfdt->open_fds + cpy, 0, set);
+> >       memcpy(nfdt->close_on_exec, ofdt->close_on_exec, cpy);
+> >       memset((char *)nfdt->close_on_exec + cpy, 0, set);
+> > +     memcpy(nfdt->close_on_fork, ofdt->close_on_fork, cpy);
+> > +     memset((char *)nfdt->close_on_fork + cpy, 0, set);
+> >
+>
+> I suggest we group the two bits of a file (close_on_exec, close_on_fork) together,
+> so that we do not have to dirty two separate cache lines.
+>
+> Otherwise we will add yet another cache line miss at every file opening/closing for processes
+> with big file tables.
+>
+> Ie having a _single_ bitmap array, even bit for close_on_exec, odd bit for close_on_fork
+>
+> static inline void __set_close_on_exec(unsigned int fd, struct fdtable *fdt)
+> {
+>         __set_bit(fd * 2, fdt->close_on_fork_exec);
+> }
+>
+> static inline void __set_close_on_fork(unsigned int fd, struct fdtable *fdt)
+> {
+>         __set_bit(fd * 2 + 1, fdt->close_on_fork_exec);
+> }
+>
+> Also the F_GETFD/F_SETFD implementation must use a single function call,
+> to not acquire the spinlock twice.
 >
 
-Emm... This patch was synchronized from Marc's NV series [1].
-"issued with a level" means the TLBs now can get which levels of
-page tables the @addr is in. You can also understand it as
-page-size as Peter said above, just like pud, pmd, pte...
+Good suggestions.
 
-Anyway, I will explain this in more detail.
+At the same time, we'd better extend other syscalls, which set the
+FD_CLOEXEC when  creating FDs. i.e. open, pipe3...
 
-Thanks,
-Zhenyu
 
+-- 
+Regards,
+Changli Gao(xiaosuo@gmail.com)
