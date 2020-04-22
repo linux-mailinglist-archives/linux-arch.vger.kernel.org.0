@@ -2,55 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 730311B3EEB
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Apr 2020 12:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19EC1B3FE9
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Apr 2020 12:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730506AbgDVKZK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Apr 2020 06:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730499AbgDVKZI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Apr 2020 06:25:08 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2991EC03C1A8
-        for <linux-arch@vger.kernel.org>; Wed, 22 Apr 2020 03:25:07 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id u16so1703347wmc.5
-        for <linux-arch@vger.kernel.org>; Wed, 22 Apr 2020 03:25:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=knCP+aW8Y5W/PEzN9s6sK2CQNm77tzBl1PV89WdKtO8=;
-        b=HSWxiMXMmyQS4oSTX9w7RsB9TQfw8MQXxMJYukgHAavi2y+mFGugiOpVIQO0wAzWgD
-         dC8EYYHRBD69HWWWiUKJaZaLavOGSYiVS8HdMjCbqgJRyOgzJR0fIjaLaMS6CXplCUJD
-         HVWMDwOvpolQ6wXQe4IbWRp0m+sWByb3EWA9Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=knCP+aW8Y5W/PEzN9s6sK2CQNm77tzBl1PV89WdKtO8=;
-        b=bOT9abXsbXQZL9Za7UG73jYIwewg4qFq5dUICaMavcHFUjjc7gDzPn5f43pUwSbVc3
-         qkNWts3nE8aCFh/jWr0nCk1F85lUQ9h7a148jLass9ozQZe03obPtZftHBerV7YgQtgb
-         RHaNvp4L7C0M4ZRONZctsS8jNPFiwAwvxXPWX7MIKL1IPkzusHYGopfqpxijl6hiU1hr
-         cc9sAaLwFBRFIwvsqiOzf53nKztbCLtvAUgiFwgyslHri+kNpd67xIcQNXacPzWvQpUN
-         CPj5532YaiUv3Qb0SpE3CfPXlw9Io1ytKExp4RjHlh99nxYT5Lx6WBsPJqsX71vfOPcZ
-         jX/g==
-X-Gm-Message-State: AGi0PubC3dloecZRiPyMhLxj2sINOWvXwGV+wrjS/WuMAWEWi/hnnksP
-        TM7YMtj2fGI8/hMbspvEmDGTJA==
-X-Google-Smtp-Source: APiQypJGosHQPF1ZsovGLZqXng+4NqAXsZZT0+x9rW0B7ixde2wymhQ4VWtJizufYNWp9iDN0SsCkg==
-X-Received: by 2002:a1c:e284:: with SMTP id z126mr10265956wmg.32.1587551105770;
-        Wed, 22 Apr 2020 03:25:05 -0700 (PDT)
-Received: from [192.168.1.149] (ip-5-186-116-45.cgn.fibianet.dk. [5.186.116.45])
-        by smtp.gmail.com with ESMTPSA id g69sm7524299wmg.17.2020.04.22.03.25.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Apr 2020 03:25:05 -0700 (PDT)
-Subject: Re: [PATCH v4 08/11] READ_ONCE: Drop pointer qualifiers when reading
- from scalar types
-To:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, kernel-team@android.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        id S1731678AbgDVKlq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Apr 2020 06:41:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48260 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731676AbgDVKlp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 Apr 2020 06:41:45 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 13DB920656;
+        Wed, 22 Apr 2020 10:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587552104;
+        bh=RaH8GmcCaHjF24H4jq5aU+IOTvZCTVKwCvJaJZS2Pvc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wEiD4PFlGQoID5iAv2BZy14zXuBWGKiqGD5MAuQwu5nFF6X3qjHwUAOz0Nvwtl0Vh
+         GQsSF8v8sH3AOBfat8LL2JQk0Y1UqLD6sPIUlO0x/WFoCX+8VHyZarb+pjEj4rEx5n
+         2ti1AHupvnAf7NH1ZQb64NDOzzAIgqeIWbtLvoM8=
+Date:   Wed, 22 Apr 2020 11:41:38 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@android.com, Michael Ellerman <mpe@ellerman.id.au>,
         Peter Zijlstra <peterz@infradead.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Segher Boessenkool <segher@kernel.crashing.org>,
@@ -59,73 +36,48 @@ Cc:     linux-arch@vger.kernel.org, kernel-team@android.com,
         Arnd Bergmann <arnd@arndb.de>,
         Peter Oberparleiter <oberpar@linux.ibm.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v4 05/11] arm64: csum: Disable KASAN for do_csum()
+Message-ID: <20200422104138.GA30265@willie-the-truck>
 References: <20200421151537.19241-1-will@kernel.org>
- <20200421151537.19241-9-will@kernel.org>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <6cbc8ae1-8eb1-a5a0-a584-2081fca1c4aa@rasmusvillemoes.dk>
-Date:   Wed, 22 Apr 2020 12:25:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ <20200421151537.19241-6-will@kernel.org>
+ <20200422094951.GA54428@lakrids.cambridge.arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200421151537.19241-9-will@kernel.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200422094951.GA54428@lakrids.cambridge.arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 21/04/2020 17.15, Will Deacon wrote:
-> Passing a volatile-qualified pointer to READ_ONCE() is an absolute
-> trainwreck for code generation: the use of 'typeof()' to define a
-> temporary variable inside the macro means that the final evaluation in
-> macro scope ends up forcing a read back from the stack. When stack
-> protector is enabled (the default for arm64, at least), this causes
-> the compiler to vomit up all sorts of junk.
+On Wed, Apr 22, 2020 at 10:49:52AM +0100, Mark Rutland wrote:
+> On Tue, Apr 21, 2020 at 04:15:31PM +0100, Will Deacon wrote:
+> > do_csum() over-reads the source buffer and therefore abuses
+> > READ_ONCE_NOCHECK() to avoid tripping up KASAN. In preparation for
+> > READ_ONCE_NOCHECK() becoming a macro, and therefore losing its
+> > '__no_sanitize_address' annotation, just annotate do_csum() explicitly
+> > and fall back to normal loads.
+> > 
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > Cc: Robin Murphy <robin.murphy@arm.com>
+> > Signed-off-by: Will Deacon <will@kernel.org>
 > 
-> Unfortunately, dropping pointer qualifiers inside the macro poses quite
-> a challenge, especially since the pointed-to type is permitted to be an
-> aggregate, and this is relied upon by mm/ code accessing things like
-> 'pmd_t'. Based on numerous hacks and discussions on the mailing list,
-> this is the best I've managed to come up with.
+> From a functional perspective:
+> 
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-Hm, maybe this can be brought to work, only very lightly tested. It
-basically abuses what -Wignored-qualifiers points out:
+Thanks.
 
-  warning: type qualifiers ignored on function return type
+> I know that Robin had a concern w.r.t. how this would affect the
+> codegen, but I think we can follow that up after the series as a whole
+> is merged.
 
-Example showing the idea:
+Makes sense. I did look at the codegen, fwiw, and it didn't seem especially
+bad. One of the LDP's gets cracked in the unlikely() path, but it didn't
+look like it would be a disaster (and sprinkling barrier() around to force
+the LDP felt really fragile!).
 
-const int c(void);
-volatile int v(void);
-
-int hack(int x, int y)
-{
-	typeof(c()) a = x;
-	typeof(v()) b = y;
-
-	a += b;
-	b += a;
-	a += b;
-	return a;
-}
-
-Since that compiles, a cannot be const-qualified, and the generated code
-certainly suggests that b is not volatile-qualified. So something like
-
-#define unqual_type(x) _unqual_type(x, unique_id_dance)
-#define _unqual_type(x, id) typeof( ({
-  typeof(x) id(void);
-  id();
-}) )
-
-and perhaps some _Pragma("GCC diagnostic push")/_Pragma("GCC diagnostic
-ignored -Wignored-qualifiers")/_Pragma("GCC diagnostic pop") could
-prevent the warning (which is in -Wextra, so I don't think it would
-appear in a normal build anyway).
-
-No idea how well any of this would work across gcc versions or with clang.
-
-Rasmus
+Will
