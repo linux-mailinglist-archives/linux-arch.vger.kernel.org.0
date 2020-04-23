@@ -2,128 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0436C1B5F0A
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Apr 2020 17:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B402D1B6180
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Apr 2020 19:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728705AbgDWPYB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Apr 2020 11:24:01 -0400
-Received: from foss.arm.com ([217.140.110.172]:42208 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729024AbgDWPYA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Apr 2020 11:24:00 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9B7531B;
-        Thu, 23 Apr 2020 08:23:59 -0700 (PDT)
-Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 80EE13F6CF;
-        Thu, 23 Apr 2020 08:23:58 -0700 (PDT)
-Date:   Thu, 23 Apr 2020 16:23:52 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 18/23] arm64: mte: Restore the GCR_EL1 register after
- a suspend
-Message-ID: <20200423152352.GA21616@e121166-lin.cambridge.arm.com>
-References: <20200421142603.3894-1-catalin.marinas@arm.com>
- <20200421142603.3894-19-catalin.marinas@arm.com>
+        id S1729719AbgDWRCn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Apr 2020 13:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729674AbgDWRCn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Apr 2020 13:02:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A773FC09B042;
+        Thu, 23 Apr 2020 10:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=woeHLzx2UyIQ/D6tJ1KvK2T3SJtwi4BVd49pVJRsTWA=; b=ATuZoGTyc71GfTDwe7WeYFXr9q
+        +WpG5ohuvFc54tA/SLkPuogLnOrIeym1WzQF1KkHX3thClqxLuoXTvhkIz+6+7vt27NDPsTidcAQz
+        9aakKqD4YCXnkPWDraxl9M5BjIxbzIak65UrGHF3yWYVb3rY578OGlqzweZa4qJsGSlt5FdjDu5ax
+        QTblip1z4/5b9WIJi4cC/5hsmzugJnAPFOIG88rHPtFs0gN7sYgtfP99RzlSaSwUTCETiC9j+2dMM
+        Fmtia4VisQQOurt8+ipErRxMouYYiiusb3Gx8BIn/Q4KBaXjtReBO34OZ4ex8r2uhBGWaWO7uzrux
+        /jo/9Gyw==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jRfFI-0001fB-J5; Thu, 23 Apr 2020 17:02:40 +0000
+Subject: Re: [PATCH v2] io: correct documentation mismatches for io memcpy
+To:     Wang Wenhu <wenhu.wang@vivo.com>, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com
+References: <20200423000945.118231-1-wenhu.wang@vivo.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <84b453cb-886c-2ec6-e562-e300a3cd55d4@infradead.org>
+Date:   Thu, 23 Apr 2020 10:02:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200421142603.3894-19-catalin.marinas@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200423000945.118231-1-wenhu.wang@vivo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 03:25:58PM +0100, Catalin Marinas wrote:
-> The CPU resume/suspend routines only take care of the common system
-> registers. Restore GCR_EL1 in addition via the __cpu_suspend_exit()
-> function.
+On 4/22/20 5:09 PM, Wang Wenhu wrote:
+> Minor mismatches exist between funtion documentations and parameter
+> definitions. Also a dash '-' is needed between a function name and
+> its description.
 > 
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>
+> Function definitions are as following:
+> static inline void memcpy_fromio(void *buffer,
+> 				 const volatile void __iomem *addr,
+> 				 size_t size)
+> static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
+> 			       size_t size)
+> 
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Wang Wenhu <wenhu.wang@vivo.com>
+
+Hi,
+Sorry to just notice this, but could you also fix up all of
+the kernel-doc notation for memset_io() in the same manner?
+
+thanks.
+
 > ---
+> Changes since v1:
+>  * Dashes added between the function names and their descriptions.
 > 
-> Notes:
->     New in v3.
+>  include/asm-generic/io.h | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 > 
->  arch/arm64/include/asm/mte.h | 4 ++++
->  arch/arm64/kernel/mte.c      | 8 ++++++++
->  arch/arm64/kernel/suspend.c  | 4 ++++
->  3 files changed, 16 insertions(+)
+> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+> index d39ac997dda8..b6a9131ec4d4 100644
+> --- a/include/asm-generic/io.h
+> +++ b/include/asm-generic/io.h
+> @@ -1066,10 +1066,10 @@ static inline void memset_io(volatile void __iomem *addr, int value,
+>  #ifndef memcpy_fromio
+>  #define memcpy_fromio memcpy_fromio
+>  /**
+> - * memcpy_fromio	Copy a block of data from I/O memory
+> - * @dst:		The (RAM) destination for the copy
+> - * @src:		The (I/O memory) source for the data
+> - * @count:		The number of bytes to copy
+> + * memcpy_fromio -	Copy a block of data from I/O memory
+> + * @buffer:		The (RAM) destination for the copy
+> + * @addr:		The (I/O memory) source for the data
+> + * @size:		The number of bytes to copy
+>   *
+>   * Copy a block of data from I/O memory.
+>   */
+> @@ -1084,10 +1084,10 @@ static inline void memcpy_fromio(void *buffer,
+>  #ifndef memcpy_toio
+>  #define memcpy_toio memcpy_toio
+>  /**
+> - * memcpy_toio		Copy a block of data into I/O memory
+> - * @dst:		The (I/O memory) destination for the copy
+> - * @src:		The (RAM) source for the data
+> - * @count:		The number of bytes to copy
+> + * memcpy_toio -	Copy a block of data into I/O memory
+> + * @addr:		The (I/O memory) destination for the copy
+> + * @buffer:		The (RAM) source for the data
+> + * @size:		The number of bytes to copy
+>   *
+>   * Copy a block of data to I/O memory.
+>   */
+> 
 
-Reviewed-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 
-> diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
-> index 3dc0a7977124..22eb3e06f311 100644
-> --- a/arch/arm64/include/asm/mte.h
-> +++ b/arch/arm64/include/asm/mte.h
-> @@ -12,6 +12,7 @@ int mte_memcmp_pages(const void *page1_addr, const void *page2_addr);
->  #ifdef CONFIG_ARM64_MTE
->  void flush_mte_state(void);
->  void mte_thread_switch(struct task_struct *next);
-> +void mte_suspend_exit(void);
->  long set_mte_ctrl(unsigned long arg);
->  long get_mte_ctrl(void);
->  #else
-> @@ -21,6 +22,9 @@ static inline void flush_mte_state(void)
->  static inline void mte_thread_switch(struct task_struct *next)
->  {
->  }
-> +static inline void mte_suspend_exit(void)
-> +{
-> +}
->  static inline long set_mte_ctrl(unsigned long arg)
->  {
->  	return 0;
-> diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
-> index 212b9fac294d..fa4a4196b248 100644
-> --- a/arch/arm64/kernel/mte.c
-> +++ b/arch/arm64/kernel/mte.c
-> @@ -76,6 +76,14 @@ void mte_thread_switch(struct task_struct *next)
->  	update_gcr_el1_excl(next->thread.gcr_incl);
->  }
->  
-> +void mte_suspend_exit(void)
-> +{
-> +	if (!system_supports_mte())
-> +		return;
-> +
-> +	update_gcr_el1_excl(current->thread.gcr_incl);
-> +}
-> +
->  long set_mte_ctrl(unsigned long arg)
->  {
->  	u64 tcf0;
-> diff --git a/arch/arm64/kernel/suspend.c b/arch/arm64/kernel/suspend.c
-> index 9405d1b7f4b0..1d405b73d009 100644
-> --- a/arch/arm64/kernel/suspend.c
-> +++ b/arch/arm64/kernel/suspend.c
-> @@ -9,6 +9,7 @@
->  #include <asm/daifflags.h>
->  #include <asm/debug-monitors.h>
->  #include <asm/exec.h>
-> +#include <asm/mte.h>
->  #include <asm/pgtable.h>
->  #include <asm/memory.h>
->  #include <asm/mmu_context.h>
-> @@ -74,6 +75,9 @@ void notrace __cpu_suspend_exit(void)
->  	 */
->  	if (arm64_get_ssbd_state() == ARM64_SSBD_FORCE_DISABLE)
->  		arm64_set_ssbd_mitigation(false);
-> +
-> +	/* Restore additional MTE-specific configuration */
-> +	mte_suspend_exit();
->  }
->  
->  /*
+-- 
+~Randy
+
