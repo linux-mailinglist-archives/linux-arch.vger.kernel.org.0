@@ -2,116 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B402D1B6180
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Apr 2020 19:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE4B1B63AA
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Apr 2020 20:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729719AbgDWRCn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Apr 2020 13:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
+        id S1730221AbgDWS1l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Apr 2020 14:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729674AbgDWRCn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Apr 2020 13:02:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A773FC09B042;
-        Thu, 23 Apr 2020 10:02:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=woeHLzx2UyIQ/D6tJ1KvK2T3SJtwi4BVd49pVJRsTWA=; b=ATuZoGTyc71GfTDwe7WeYFXr9q
-        +WpG5ohuvFc54tA/SLkPuogLnOrIeym1WzQF1KkHX3thClqxLuoXTvhkIz+6+7vt27NDPsTidcAQz
-        9aakKqD4YCXnkPWDraxl9M5BjIxbzIak65UrGHF3yWYVb3rY578OGlqzweZa4qJsGSlt5FdjDu5ax
-        QTblip1z4/5b9WIJi4cC/5hsmzugJnAPFOIG88rHPtFs0gN7sYgtfP99RzlSaSwUTCETiC9j+2dMM
-        Fmtia4VisQQOurt8+ipErRxMouYYiiusb3Gx8BIn/Q4KBaXjtReBO34OZ4ex8r2uhBGWaWO7uzrux
-        /jo/9Gyw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jRfFI-0001fB-J5; Thu, 23 Apr 2020 17:02:40 +0000
-Subject: Re: [PATCH v2] io: correct documentation mismatches for io memcpy
-To:     Wang Wenhu <wenhu.wang@vivo.com>, arnd@arndb.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com
-References: <20200423000945.118231-1-wenhu.wang@vivo.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <84b453cb-886c-2ec6-e562-e300a3cd55d4@infradead.org>
-Date:   Thu, 23 Apr 2020 10:02:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S1730291AbgDWS0w (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Apr 2020 14:26:52 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F07C09B051
+        for <linux-arch@vger.kernel.org>; Thu, 23 Apr 2020 11:26:51 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id z2so7488185iol.11
+        for <linux-arch@vger.kernel.org>; Thu, 23 Apr 2020 11:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
+        b=g40sBMuaO0eKdotmx6qgQBl63DKBmrekz5bvyEQHA4wVZtcqrxc+aFVgh/QD84O9VQ
+         7GeGJGwCstc5CQBYUut5JFB/SR9hiHRBoNucBdQ5+M/xcZE7LYnQNVriX94nlJDQQ53M
+         WWNnGuPMmJMtuCxOc6M3BOG48McWyi9pwkfv1qCbwmDhh95byI3UmcGK9ZJ59xQm/kqA
+         giNgZwxUHu+XTIAoqn/uu1orK63Ur+6hMBQW2TB101zb0oJ5HpVThkCq6id/TjpQtg27
+         HPMb1DcYsj7bM6wQaeV1UkPK6mgUhECRFNV10F5zDhvx1RXP4ikb8uuEIGMKOSNWVb51
+         vLew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
+        b=JollOwiDI9yi5SMsujgSnhXz2FGfVgWTmIXSJ3VToGrAkNqVyLKCISBqv8Wy1P9cJY
+         0o5sD1dQZgyJRRKIQcEZXNjgI87BKVh2N9/7mo076thXk6qPIUfM/aPrbwncz9EtfJ0b
+         A5pBkWIwX1g0ZE+kv43TKvLpES5mVaenC6Hgs2IfWEZLGGBaRfir6UP33ppEk+uwJYgm
+         k7Kph68KETZgMKp+sDp9yc63sF9xG5gVVH60k/ga/HQJKaQYR0yO1ANZCryVadQmW1yw
+         GCxsydPFfmaLAN3CrKPeU+Li1WSxQFgtFUBdrmmXchhrwIUhiFxFO6k6LHpzYSzdB4T9
+         TnWQ==
+X-Gm-Message-State: AGi0PuZr1VFCRFSMwimNuB+dVRBMYHqeGjgyPX6K8MueyEoY4XvLQKER
+        +LtBxVicLUX80aGMiRmzejPBW/XlwIrUPLrPyA==
+X-Google-Smtp-Source: APiQypKZ88CB7WlyCjo0k9+cU4PX0VcggKkKtzSKgRJHkcPGizF0yZXAjzEMBgo6XH4xzBXv0KAOMjPM9p1sgpp6/70=
+X-Received: by 2002:a5e:9416:: with SMTP id q22mr2547966ioj.93.1587666410194;
+ Thu, 23 Apr 2020 11:26:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200423000945.118231-1-wenhu.wang@vivo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:26:49
+ -0700 (PDT)
+Reply-To: boa.benin107@yahoo.com
+From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
+Date:   Thu, 23 Apr 2020 20:26:49 +0200
+Message-ID: <CABHzvr=N78snvtMHePMOa+RLFdcZEjXLPkuhkojt4VoZGNzBsQ@mail.gmail.com>
+Subject: Contact Bank of Africa-Benin to receive your payment funds transfer
+ amount of $12.800.000,00 Million USD,approved this morning by IMF.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/22/20 5:09 PM, Wang Wenhu wrote:
-> Minor mismatches exist between funtion documentations and parameter
-> definitions. Also a dash '-' is needed between a function name and
-> its description.
-> 
-> Function definitions are as following:
-> static inline void memcpy_fromio(void *buffer,
-> 				 const volatile void __iomem *addr,
-> 				 size_t size)
-> static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
-> 			       size_t size)
-> 
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Wang Wenhu <wenhu.wang@vivo.com>
-
-Hi,
-Sorry to just notice this, but could you also fix up all of
-the kernel-doc notation for memset_io() in the same manner?
-
-thanks.
-
-> ---
-> Changes since v1:
->  * Dashes added between the function names and their descriptions.
-> 
->  include/asm-generic/io.h | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index d39ac997dda8..b6a9131ec4d4 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -1066,10 +1066,10 @@ static inline void memset_io(volatile void __iomem *addr, int value,
->  #ifndef memcpy_fromio
->  #define memcpy_fromio memcpy_fromio
->  /**
-> - * memcpy_fromio	Copy a block of data from I/O memory
-> - * @dst:		The (RAM) destination for the copy
-> - * @src:		The (I/O memory) source for the data
-> - * @count:		The number of bytes to copy
-> + * memcpy_fromio -	Copy a block of data from I/O memory
-> + * @buffer:		The (RAM) destination for the copy
-> + * @addr:		The (I/O memory) source for the data
-> + * @size:		The number of bytes to copy
->   *
->   * Copy a block of data from I/O memory.
->   */
-> @@ -1084,10 +1084,10 @@ static inline void memcpy_fromio(void *buffer,
->  #ifndef memcpy_toio
->  #define memcpy_toio memcpy_toio
->  /**
-> - * memcpy_toio		Copy a block of data into I/O memory
-> - * @dst:		The (I/O memory) destination for the copy
-> - * @src:		The (RAM) source for the data
-> - * @count:		The number of bytes to copy
-> + * memcpy_toio -	Copy a block of data into I/O memory
-> + * @addr:		The (I/O memory) destination for the copy
-> + * @buffer:		The (RAM) source for the data
-> + * @size:		The number of bytes to copy
->   *
->   * Copy a block of data to I/O memory.
->   */
-> 
-
-
--- 
-~Randy
-
+Attn Dear.
+Contact Bank of Africa-Benin to receive your payment funds transfer amount =
+of
+$12.800.000,00 Million USD,approved this morning by IMF.
+Happy to inform you, we have finally deposited your payment funds
+$12.8 million us dollars with the Paying Bank of Africa-Benin
+to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
+Contact the bank immediately you receive this email now.
+Director Bank of Africa-Benin: Dr. Festus Obiara
+Email id:  boa.benin107@yahoo.com
+Tel/mobile, (229) 62819378
+BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
+Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
+Phone:(229) 62819378.
+2020 GROUPE BANK OF AFRICA
+Be advised to re-confirm your bank details to this bank as listed.
+Your account Holder's name----------------
+Bank Name----------------------------------------------------------
+Bank address----------------------------------------------
+Account Numbers---------------------------------------
+Rounting-----------------------------------------------------------------
+Your direct Phone Numbers----------------------------------------------
+Note,I have paid the deposit and insurance fees for you
+But the only money you are to send to this bank is $150.00 us dollars
+Been for the wire transfer fees of your funds
+Contact Him now to receive your transfer deposited this morning
+I wait for your reply upon confirmation
+Mrs. Angella Michelle
+Editor, Zenith Bank- Companies Benin
+mrsa9389@gmail.com
