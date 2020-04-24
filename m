@@ -2,58 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8DD1B66FE
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Apr 2020 00:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2E31B6B09
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Apr 2020 04:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727894AbgDWWqv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Apr 2020 18:46:51 -0400
-Received: from mx2.orghim.ua ([91.193.204.246]:55852 "EHLO mx2.orghim.ua"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726060AbgDWWqu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Apr 2020 18:46:50 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mx2.orghim.ua (Postfix) with ESMTP id C02B915EB387;
-        Fri, 24 Apr 2020 01:35:32 +0300 (EEST)
-Received: from mx2.orghim.ua ([127.0.0.1])
-        by localhost (mx2.orghim.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CFfvfplmYKDi; Fri, 24 Apr 2020 01:35:32 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mx2.orghim.ua (Postfix) with ESMTP id 45D7C15AD8BA;
-        Fri, 24 Apr 2020 01:35:13 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mx2.orghim.ua 45D7C15AD8BA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orghim.ua; s=mail;
-        t=1587681313; bh=KGJgLnmsaq60nW9BaulKhyLfDBldjta7PUyF6pnDMys=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=gkuyzG1Z/VEi7nsRyObyRsJu0ikX7sihRm2skPNquC8CXO8FZqTIXkOu2wlhqyD+G
-         W8uzMGdG7em4H4FVGRzEYyuTopyT1zYLz/PP6WpGp2GOs+ANlz9q/3QVVDhi5JGCGS
-         3KM5RIj0m1UI7G1jM0YgZ16JXkqxZCygqN33nqo33l1FDM/RAANd2H5pDiZI9tQSFs
-         kPbyMRHBRG3L5VOSC5/knpvU1TdGwkKFRSKwlbs+tL22vO684q0y+xsI6I3sVkBVRm
-         NRMHvThSM5/IEYO/+BVnYdrgeNVdLxL3EKqr0zPv5PScetDHirQqu+ClLJqqKz/RT2
-         dV0Smyx9cHSpQ==
-X-Virus-Scanned: amavisd-new at mx2.orghim.ua
-Received: from mx2.orghim.ua ([127.0.0.1])
-        by localhost (mx2.orghim.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5_2Pu8ACgazV; Fri, 24 Apr 2020 01:35:13 +0300 (EEST)
-Received: from [192.168.43.54] (unknown [105.112.108.146])
-        by mx2.orghim.ua (Postfix) with ESMTPSA id 63E9415E9682;
-        Fri, 24 Apr 2020 01:34:47 +0300 (EEST)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?2MILLIONEN_=E2=82=AC_SPENDE_F=C3=9CR_SIE=2E?=
-To:     Recipients <DONATION@orghim.ua>
-From:   DONATION@orghim.ua
-Date:   Thu, 23 Apr 2020 15:34:39 -0700
-Reply-To: shanemissler495@gmail.com
-Message-Id: <20200423223447.63E9415E9682@mx2.orghim.ua>
+        id S1726032AbgDXCJB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Apr 2020 22:09:01 -0400
+Received: from m17616.mail.qiye.163.com ([59.111.176.16]:10025 "EHLO
+        m17616.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725884AbgDXCJB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Apr 2020 22:09:01 -0400
+Received: from ubuntu.localdomain (unknown [58.251.74.226])
+        by m17616.mail.qiye.163.com (Hmail) with ESMTPA id 870BF1065B6;
+        Fri, 24 Apr 2020 10:08:48 +0800 (CST)
+From:   Wang Wenhu <wenhu.wang@vivo.com>
+To:     arnd@arndb.de, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     rdunlap@infradead.org, kernel@vivo.com,
+        Wang Wenhu <wenhu.wang@vivo.com>
+Subject: [PATCH v3] io: correct doc-mismatches for io mem ops
+Date:   Thu, 23 Apr 2020 19:08:31 -0700
+Message-Id: <20200424020831.30494-1-wenhu.wang@vivo.com>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZT1VNS05LS0tLSkJLTEhPQllXWShZQU
+        hPN1dZLVlBSVdZCQ4XHghZQVk1NCk2OjckKS43PlkG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PyI6PRw5DDg5DlYDAzQvGToR
+        Gi4KCTVVSlVKTkNMTUJPSkhNT09PVTMWGhIXVQweFRMOVQwaFRw7DRINFFUYFBZFWVdZEgtZQVlO
+        Q1VJTkpVTE9VSUlNWVdZCAFZQUhITkk3Bg++
+X-HM-Tid: 0a71a9f1ce729374kuws870bf1065b6
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Mein Name ist Shane Missler und ich habe eine Jackpot-Lotterie im Wert von =
-451 Millionen Dollar gewonnen. Ich habe beschlossen, Ihnen als Teil meines =
-Wohlt=E4tigkeitsprojekts 2.000.000,00 $ zu spenden und der Menschheit Gutes=
- zu tun. Bitte sende eine Antwort an meine private Email shanemissler95@gma=
-il.com
+Minor mismatches exist between funtion documentations and parameter
+definitions. Also a dash '-' is needed between a function name and
+its description.
+
+Function definitions are as following:
+static inline void memset_io(volatile void __iomem *addr, int value,
+			     size_t size)
+static inline void memcpy_fromio(void *buffer,
+				 const volatile void __iomem *addr,
+				 size_t size)
+static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
+			       size_t size)
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Wang Wenhu <wenhu.wang@vivo.com>
+---
+ include/asm-generic/io.h | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index d39ac997dda8..83ac47bfa33a 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -1049,10 +1049,10 @@ static inline void *bus_to_virt(unsigned long address)
+ #ifndef memset_io
+ #define memset_io memset_io
+ /**
+- * memset_io	Set a range of I/O memory to a constant value
++ * memset_io -	Set a range of I/O memory to a constant value
+  * @addr:	The beginning of the I/O-memory range to set
+- * @val:	The value to set the memory to
+- * @count:	The number of bytes to set
++ * @value:	The value to set the memory to
++ * @size:	The number of bytes to set
+  *
+  * Set a range of I/O memory to a given value.
+  */
+@@ -1066,10 +1066,10 @@ static inline void memset_io(volatile void __iomem *addr, int value,
+ #ifndef memcpy_fromio
+ #define memcpy_fromio memcpy_fromio
+ /**
+- * memcpy_fromio	Copy a block of data from I/O memory
+- * @dst:		The (RAM) destination for the copy
+- * @src:		The (I/O memory) source for the data
+- * @count:		The number of bytes to copy
++ * memcpy_fromio -	Copy a block of data from I/O memory
++ * @buffer:		The (RAM) destination for the copy
++ * @addr:		The (I/O memory) source for the data
++ * @size:		The number of bytes to copy
+  *
+  * Copy a block of data from I/O memory.
+  */
+@@ -1084,10 +1084,10 @@ static inline void memcpy_fromio(void *buffer,
+ #ifndef memcpy_toio
+ #define memcpy_toio memcpy_toio
+ /**
+- * memcpy_toio		Copy a block of data into I/O memory
+- * @dst:		The (I/O memory) destination for the copy
+- * @src:		The (RAM) source for the data
+- * @count:		The number of bytes to copy
++ * memcpy_toio -	Copy a block of data into I/O memory
++ * @addr:		The (I/O memory) destination for the copy
++ * @buffer:		The (RAM) source for the data
++ * @size:		The number of bytes to copy
+  *
+  * Copy a block of data to I/O memory.
+  */
+-- 
+2.17.1
+
