@@ -2,36 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C80AE1B7C6D
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Apr 2020 19:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8AB1B7D2E
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Apr 2020 19:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbgDXRLl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Apr 2020 13:11:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59080 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726698AbgDXRLl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 24 Apr 2020 13:11:41 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        id S1728075AbgDXRoS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Apr 2020 13:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727049AbgDXRoS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 24 Apr 2020 13:44:18 -0400
+Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A84AC09B047;
+        Fri, 24 Apr 2020 10:44:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+je/+5kxZIoIQnbkwLglonBV4JK5dKADqvUN+mdCKic=; b=MRvBqARKPVSGhrXD2OdOuvfH1p
+        aDOeFf9k3OpEhJZBx72lZ3D7fLT43vTqx8IJq+Jj8Ifdz/rVMC0Uf8whFQtbVwqEAKPlr+lEO11/f
+        cftLVJ70AAPqO/YBU+e4hEH7T0D/VSX6uDctvTWZTb79/ssK+Zq8cgaxXeDwtybq0SfBDYkPxieyX
+        fynZ3E8gEvNpThC8UyI1qEpjPw/RhazzrLbQOPG2Ch86WtiZWxRijb6vMCQPdkD83Lomn2+fMwa2y
+        y+H79req+9UGe/LHV7H1lvsmYPVuPRM3/167myXhOiCwfQY/mOhqo1AA2wSfZ4aZ7m+0QE/ebBt8T
+        cJkThxcw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jS2MU-0000Bu-QL; Fri, 24 Apr 2020 17:43:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 971282071E;
-        Fri, 24 Apr 2020 17:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587748301;
-        bh=9jEOw2L3MHVOlD3E3RkkTs8hYyIrS2sIHwqWTfEUINY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hE3Unk+lDA+zAw1P2RXYJ/1omDZLpmdrNTWJshvgvX/EGu1wcn2d7k0U+Ld7CX1om
-         q+fsVwY7tdvpla+AoT2BdIN72XB/htT4CTIe2S9jo2zzSJ1CsYHEbsj2qo4rtYWXvd
-         fgRyAGqduBEJUwabN90iSsvKDDnPChs9gnP6/v/w=
-Date:   Fri, 24 Apr 2020 18:11:35 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Jann Horn <jannh@google.com>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 100F73010C8;
+        Fri, 24 Apr 2020 19:43:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ED6E42BA49057; Fri, 24 Apr 2020 19:43:34 +0200 (CEST)
+Date:   Fri, 24 Apr 2020 19:43:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Jann Horn <jannh@google.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         kernel-team <kernel-team@android.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
@@ -42,57 +54,26 @@ Cc:     kernel list <linux-kernel@vger.kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>
 Subject: Re: [PATCH v4 07/11] READ_ONCE: Enforce atomicity for
  {READ,WRITE}_ONCE() memory accesses
-Message-ID: <20200424171135.GJ21141@willie-the-truck>
+Message-ID: <20200424174334.GB13592@hirez.programming.kicks-ass.net>
 References: <20200421151537.19241-1-will@kernel.org>
  <20200421151537.19241-8-will@kernel.org>
  <CAG48ez2n6g6nenHM8uB5U+e-Zo1PSA6n9LOBHeqG2HdUnwFpSQ@mail.gmail.com>
+ <20200424171135.GJ21141@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAG48ez2n6g6nenHM8uB5U+e-Zo1PSA6n9LOBHeqG2HdUnwFpSQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200424171135.GJ21141@willie-the-truck>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Apr 24, 2020 at 06:31:35PM +0200, Jann Horn wrote:
-> On Tue, Apr 21, 2020 at 5:15 PM Will Deacon <will@kernel.org> wrote:
-> > {READ,WRITE}_ONCE() cannot guarantee atomicity for arbitrary data sizes.
-> > This can be surprising to callers that might incorrectly be expecting
-> > atomicity for accesses to aggregate structures, although there are other
-> > callers where tearing is actually permissable (e.g. if they are using
-> > something akin to sequence locking to protect the access).
-> [...]
-> > The slight snag is that we also have to support 64-bit accesses on 32-bit
-> > architectures, as these appear to be widespread and tend to work out ok
-> > if either the architecture supports atomic 64-bit accesses (x86, armv7)
-> > or if the variable being accesses represents a virtual address and
-> > therefore only requires 32-bit atomicity in practice.
-> >
-> > Take a step in that direction by introducing a variant of
-> > 'compiletime_assert_atomic_type()' and use it to check the pointer
-> > argument to {READ,WRITE}_ONCE(). Expose __{READ,WRITE}_ONCE() variants
-> > which are allowed to tear and convert the one broken caller over to the
-> > new macros.
-> [...]
-> > +/*
-> > + * Yes, this permits 64-bit accesses on 32-bit architectures. These will
-> > + * actually be atomic in many cases (namely x86), but for others we rely on
-> 
-> I don't think that's correct?
+On Fri, Apr 24, 2020 at 06:11:35PM +0100, Will Deacon wrote:
+> My apologies, you're completely right. I thought that PAE mandated 64-bit
+> atomicity, like it does on 32-bit ARM, but that's apparently not the case
+> and looking at the 32-bit x86 pgtable code they have to be really careful
+> there.
 
-[...]
-
-> AFAIK 32-bit X86 code that wants to atomically load 8 bytes of memory
-> has to use CMPXCHG8B; and gcc won't generate such code just based on a
-> volatile load/store.
-
-My apologies, you're completely right. I thought that PAE mandated 64-bit
-atomicity, like it does on 32-bit ARM, but that's apparently not the case
-and looking at the 32-bit x86 pgtable code they have to be really careful
-there.
-
-I'll update the comment.
-
-Will
+They added CMPXCHG8B for PAE, but then we never used it for that because
+it's dead slow (MS did use it I think). Instead we play horrible split
+word games, grep for CONFIG_GUP_GET_PTE_LOW_HIGH.
