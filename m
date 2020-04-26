@@ -2,24 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C74871B904C
-	for <lists+linux-arch@lfdr.de>; Sun, 26 Apr 2020 15:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7E81B91D5
+	for <lists+linux-arch@lfdr.de>; Sun, 26 Apr 2020 18:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726146AbgDZNB2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 26 Apr 2020 09:01:28 -0400
-Received: from mout-p-202.mailbox.org ([80.241.56.172]:62214 "EHLO
-        mout-p-202.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726142AbgDZNB2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 26 Apr 2020 09:01:28 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        id S1726155AbgDZQoe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 26 Apr 2020 12:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726143AbgDZQod (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 26 Apr 2020 12:44:33 -0400
+X-Greylist: delayed 557 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Apr 2020 09:44:33 PDT
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C55FC061A0F;
+        Sun, 26 Apr 2020 09:44:33 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
         (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4997MS4qqFzQlKB;
-        Sun, 26 Apr 2020 15:01:24 +0200 (CEST)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 499D662DTMzQlLM;
+        Sun, 26 Apr 2020 18:35:10 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
-        with ESMTP id 8JlkoUFgfQI2; Sun, 26 Apr 2020 15:01:18 +0200 (CEST)
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
+        with ESMTP id lFiSgdPsNgDS; Sun, 26 Apr 2020 18:35:05 +0200 (CEST)
 From:   Hagen Paul Pfeifer <hagen@jauu.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Weimer <fweimer@redhat.com>,
@@ -28,7 +32,7 @@ Cc:     Florian Weimer <fweimer@redhat.com>,
         Christian Brauner <christian@brauner.io>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
         Brian Gerst <brgerst@gmail.com>,
         Sami Tolvanen <samitolvanen@google.com>,
         David Howells <dhowells@redhat.com>,
@@ -39,13 +43,15 @@ Cc:     Florian Weimer <fweimer@redhat.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sargun Dhillon <sargun@sargun.me>, linux-api@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: [RFC] ptrace, pidfd: add pidfd_ptrace syscall
-Date:   Sun, 26 Apr 2020 15:01:00 +0200
-Message-Id: <20200426130100.306246-1-hagen@jauu.net>
+Subject: [RFC v2] ptrace, pidfd: add pidfd_ptrace syscall
+Date:   Sun, 26 Apr 2020 18:34:30 +0200
+Message-Id: <20200426163430.22743-1-hagen@jauu.net>
+In-Reply-To: <20200426130100.306246-1-hagen@jauu.net>
+References: <20200426130100.306246-1-hagen@jauu.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: A24BE1742
-X-Rspamd-Score: 3.37 / 15.00 / 15.00
+X-Rspamd-Queue-Id: 808B21799
+X-Rspamd-Score: 3.05 / 15.00 / 15.00
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -68,7 +74,7 @@ API:
 
 Based on original ptrace, the following API changes where made:
 
-- Process identificator (pidfd) is now moved as first argument, this is aligned
+- Process identificator (pidfd) is now moved to start, this is aligned
   with pidfd_send_signal(int pidfd, ...) because potential future pidfd_* will have
   one thing in common: the pid identifier. I think is natural to have
   this argument upfront
@@ -83,14 +89,90 @@ for a new syscall. Still missing:
 - re-use shared functions and move to common place
 - perf syscall registration
 - selftests
-- ...
+- ...|
 
-Signed-off-by: Hagen Paul Pfeifer <hagen@jauu.net>
+Userspace Example:
+
+#define _GNU_SOURCE
+#include <errno.h>
+#include <sched.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/user.h>
+#include <sys/ptrace.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <linux/limits.h>
+
+#ifndef __NR_pidfd_ptrace
+#define __NR_pidfd_ptrace 439
+#endif
+
+static inline long do_pidfd_ptrace(int pidfd, int request, void *addr, void *data, unsigned int flags)
+{
+#ifdef __NR_pidfd_ptrace
+        return syscall(__NR_pidfd_ptrace, pidfd, request, addr, data, flags);
+#else
+        return -ENOSYS;
+#endif
+}
+
+int main(int argc, char *argv[])
+{
+	int pid, pidfd, ret, sleep_time = 10;
+	char pid_path[PATH_MAX];
+	struct user_regs_struct regs;
+
+	if (argc < 2) {
+		fprintf(stderr, "Usage: %s <pid>\n", argv[0]);
+		goto err;
+	}
+	pid = atoi(argv[1]);
+
+	sprintf(pid_path, "/proc/%d", pid);
+	pidfd = open(pid_path, O_DIRECTORY | O_CLOEXEC);
+	if (pidfd == -1) {
+		fprintf(stderr, "failed to open %s\n", pid_path);
+		goto err;
+	}
+
+	ret = do_pidfd_ptrace(pidfd, PTRACE_ATTACH, 0, 0, 0);
+	if (ret < 0) {
+		perror("do_pidfd_ptrace, PTRACE_ATTACH:");
+		goto err;
+	}
+	waitpid(pid, NULL, 0);
+	ret = do_pidfd_ptrace(pidfd, PTRACE_GETREGS, NULL, &regs, 0);
+	if (ret == -1) {
+		perror("do_pidfd_ptrace, PTRACE_GETREGS:");
+		goto err;
+	}
+	printf("RIP: %llx\nRAX: %llx\nRCX: %llx\nRDX: %llx\nRSI: %llx\nRDI: %llx\n",
+	       regs.rip, regs.rax, regs.rcx, regs.rdx, regs.rsi, regs.rdi);
+	fprintf(stdout, "stopping task for %d seconds\n",  sleep_time);
+	sleep(sleep_time);
+	ret = do_pidfd_ptrace(pidfd, PTRACE_DETACH, 0, 0, 0);
+	if (ret == -1) {
+		perror("do_pidfd_ptrace, PTRACE_DETACH:");
+		goto err;
+	}
+
+	exit(EXIT_SUCCESS);
+err:
+	exit(EXIT_FAILURE);
+}
+
+
 Cc: Christian Brauner <christian@brauner.io>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Borislav Petkov <bp@alien8.de>
-Cc: H. Peter Anvin <hpa@zytor.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Brian Gerst <brgerst@gmail.com>
 Cc: Sami Tolvanen <samitolvanen@google.com>
@@ -103,14 +185,21 @@ Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
 Cc: Sargun Dhillon <sargun@sargun.me>
 Cc: linux-api@vger.kernel.org
 Cc: linux-arch@vger.kernel.org
+Signed-off-by: Hagen Paul Pfeifer <hagen@jauu.net>
+---
+
+v2:
+- fixed a OOPS in __x64_sys_pidfd_ptrace+0x1bf/0x220 (call to __put_task_struct())
+- add userland example
+
 ---
  arch/x86/entry/syscalls/syscall_32.tbl |   1 +
  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
  include/linux/syscalls.h               |   2 +
  include/uapi/asm-generic/unistd.h      |   4 +-
- kernel/ptrace.c                        | 129 ++++++++++++++++++++-----
+ kernel/ptrace.c                        | 126 ++++++++++++++++++++-----
  kernel/sys_ni.c                        |   1 +
- 6 files changed, 115 insertions(+), 23 deletions(-)
+ 6 files changed, 113 insertions(+), 22 deletions(-)
 
 diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
 index 54581ac671b4..593f7fab90eb 100644
@@ -147,14 +236,14 @@ index 1815065d52f3..254b071a5334 100644
  /*
   * Architecture-specific system calls
 diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index 3a3201e4618e..64749a6f156e 100644
+index 3a3201e4618e..d62505742447 100644
 --- a/include/uapi/asm-generic/unistd.h
 +++ b/include/uapi/asm-generic/unistd.h
 @@ -855,9 +855,11 @@ __SYSCALL(__NR_clone3, sys_clone3)
  __SYSCALL(__NR_openat2, sys_openat2)
  #define __NR_pidfd_getfd 438
  __SYSCALL(__NR_pidfd_getfd, sys_pidfd_getfd)
-+#define __NR_pidfd_getfd 439
++#define __NR_pidfd_ptrace 439
 +__SYSCALL(__NR_pidfd_ptrace, sys_pidfd_ptrace)
  
  #undef __NR_syscalls
@@ -164,7 +253,7 @@ index 3a3201e4618e..64749a6f156e 100644
  /*
   * 32 bit systems traditionally used different
 diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 43d6179508d6..8f4e99247742 100644
+index 43d6179508d6..e9e7e3225b9a 100644
 --- a/kernel/ptrace.c
 +++ b/kernel/ptrace.c
 @@ -29,6 +29,7 @@
@@ -175,7 +264,7 @@ index 43d6179508d6..8f4e99247742 100644
  #include <linux/compat.h>
  #include <linux/sched/signal.h>
  
-@@ -1239,48 +1240,132 @@ int ptrace_request(struct task_struct *child, long request,
+@@ -1239,10 +1240,39 @@ int ptrace_request(struct task_struct *child, long request,
  #define arch_ptrace_attach(child)	do { } while (0)
  #endif
  
@@ -205,7 +294,6 @@ index 43d6179508d6..8f4e99247742 100644
 +		ptrace_unfreeze_traced(task);
 +
 + out:
-+	put_task_struct(task);
 +	return ret;
 +}
 +
@@ -217,11 +305,8 @@ index 43d6179508d6..8f4e99247742 100644
  	long ret;
  
  	if (request == PTRACE_TRACEME) {
- 		ret = ptrace_traceme();
- 		if (!ret)
- 			arch_ptrace_attach(current);
--		goto out;
-+		return ret;
+@@ -1252,35 +1282,89 @@ SYSCALL_DEFINE4(ptrace, long, request, long, pid, unsigned long, addr,
+ 		goto out;
  	}
  
 -	child = find_get_task_by_vpid(pid);
@@ -238,8 +323,8 @@ index 43d6179508d6..8f4e99247742 100644
 -		 * Some architectures need to do book-keeping after
 -		 * a ptrace attach.
 -		 */
-+
 +	ret = ptrace_call(task, request, addr, data);
++	put_task_struct(task);
 +out:
 +	return ret;
 +}
