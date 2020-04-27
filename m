@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2EF1BAA85
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Apr 2020 18:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712BA1BAA87
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Apr 2020 18:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726223AbgD0Q4q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Apr 2020 12:56:46 -0400
-Received: from foss.arm.com ([217.140.110.172]:38266 "EHLO foss.arm.com"
+        id S1726162AbgD0Q5l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Apr 2020 12:57:41 -0400
+Received: from foss.arm.com ([217.140.110.172]:38294 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726162AbgD0Q4q (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Apr 2020 12:56:46 -0400
+        id S1725963AbgD0Q5l (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Apr 2020 12:57:41 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADB1531B;
-        Mon, 27 Apr 2020 09:56:45 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0028131B;
+        Mon, 27 Apr 2020 09:57:40 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 297AA3F68F;
-        Mon, 27 Apr 2020 09:56:44 -0700 (PDT)
-Date:   Mon, 27 Apr 2020 17:56:42 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AF013F68F;
+        Mon, 27 Apr 2020 09:57:39 -0700 (PDT)
+Date:   Mon, 27 Apr 2020 17:57:37 +0100
 From:   Dave Martin <dave.martin@arm.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
@@ -26,53 +26,78 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 20/23] fs: Allow copy_mount_options() to access
- user-space in a single pass
-Message-ID: <20200427165641.GC15808@arm.com>
+Subject: Re: [PATCH v3 01/23] arm64: alternative: Allow alternative_insn to
+ always issue the first instruction
+Message-ID: <20200427165737.GD15808@arm.com>
 References: <20200421142603.3894-1-catalin.marinas@arm.com>
- <20200421142603.3894-21-catalin.marinas@arm.com>
+ <20200421142603.3894-2-catalin.marinas@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200421142603.3894-21-catalin.marinas@arm.com>
+In-Reply-To: <20200421142603.3894-2-catalin.marinas@arm.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 03:26:00PM +0100, Catalin Marinas wrote:
-> The copy_mount_options() function takes a user pointer argument but not
-> a size. It tries to read up to a PAGE_SIZE. However, copy_from_user() is
-> not guaranteed to return all the accessible bytes if, for example, the
-> access crosses a page boundary and gets a fault on the second page. To
-> work around this, the current copy_mount_options() implementations
-> performs to copy_from_user() passes, first to the end of the current
-> page and the second to what's left in the subsequent page.
+On Tue, Apr 21, 2020 at 03:25:41PM +0100, Catalin Marinas wrote:
+> There are situations where we do not want to disable the whole block
+> based on a config option, only the alternative part while keeping the
+> first instruction. Improve the alternative_insn assembler macro to take
+> a 'first_insn' argument, default 0, to preserve the current behaviour.
 > 
-> Some architectures like arm64 can guarantee an exact copy_from_user()
-> depending on the size (since the arch function performs some alignment
-> on the source register). Introduce an arch_has_exact_copy_from_user()
-> function and allow copy_mount_options() to perform the user access in a
-> single pass.
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+>  arch/arm64/include/asm/alternative.h | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> While this function is not on a critical path, the single-pass behaviour
-> is required for arm64 MTE (memory tagging) support where a uaccess can
-> trigger intra-page faults (tag not matching). With the current
-> implementation, if this happens during the first page, the function will
-> return -EFAULT.
+> diff --git a/arch/arm64/include/asm/alternative.h b/arch/arm64/include/asm/alternative.h
+> index 5e5dc05d63a0..67d7cc608336 100644
+> --- a/arch/arm64/include/asm/alternative.h
+> +++ b/arch/arm64/include/asm/alternative.h
+> @@ -111,7 +111,11 @@ static inline void apply_alternatives_module(void *start, size_t length) { }
+>  	.byte \alt_len
+>  .endm
+>  
+> -.macro alternative_insn insn1, insn2, cap, enable = 1
+> +/*
+> + * Disable the whole block if enable == 0, unless first_insn == 1 in which
+> + * case insn1 will always be issued but without an alternative insn2.
+> + */
+> +.macro alternative_insn insn1, insn2, cap, enable = 1, first_insn = 0
+>  	.if \enable
+>  661:	\insn1
+>  662:	.pushsection .altinstructions, "a"
+> @@ -122,6 +126,8 @@ static inline void apply_alternatives_module(void *start, size_t length) { }
+>  664:	.popsection
+>  	.org	. - (664b-663b) + (662b-661b)
+>  	.org	. - (662b-661b) + (664b-663b)
+> +	.elseif \first_insn
+> +	\insn1
 
-Do you know how much extra overhead we'd incur if we read at must one
-tag granule at a time, instead of PAGE_SIZE?
+This becomes quite unreadable at the invocation site, especially when
+invoked as "alternative_insn ..., 1".  "... first_insn=1" is not much
+better either).
 
-I'm guessing that in practice strcpy_from_user() type operations copy
-much less than a page most of the time, so what we lose in uaccess
-overheads we _might_ regain in less redundant copying.
+I'm struggling to find non-trivial users of this that actually want the
+whole block to be deleted dependent on the config.
 
-Would need behchmarking though.
+Can we instead just always behave as if first_insn=1 instead?  This this
+works intuitively as an alternative, not the current weird 3-way choice
+between insn1, insn2 and nothing at all.  The only time that makes sense
+is when one of the insns is a branch that skips the block, but that's
+handled via the alternative_if macros instead.
+
+Behaving always like first_insn=1 provides an if-else that is statically
+optimised if the relevant feature is configured out, which I think is
+the only thing people are ever going to want.
+
+Maybe something depends on the current behaviour, but I can't see it so
+far...
 
 [...]
 
