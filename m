@@ -2,92 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD3A1BC462
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 18:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583BA1BC47A
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 18:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728318AbgD1QBv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Apr 2020 12:01:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56300 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728151AbgD1QBu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Apr 2020 12:01:50 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AC13F20575;
-        Tue, 28 Apr 2020 16:01:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588089710;
-        bh=+hCcSrtU4Z9NRNiGVI8Xsd43qyZ27ONKAD8GFB/miMU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ilt3xTEkYMKB4sqTEUeQ5Qt9HWHPAIk9ZUBmkp4cvxACNz+SabFBXiVl5D67vY2Ps
-         MaAXQNKjTVFGpMSTnWuxXiiGB160mdCBU9AkxqppIi9bY9vg6eg/U+dj2uXxLjq66z
-         Hv1w6WxTY0r9q0pcA8koz/oNQuQXrlcFAsnmn/es=
-Date:   Tue, 28 Apr 2020 17:01:43 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Paul Elliott <paul.elliott@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "H . J . Lu " <hjl.tools@gmail.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Weimer <fweimer@redhat.com>,
-        Sudakshina Das <sudi.das@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v10 00/13] arm64: Branch Target Identification support
-Message-ID: <20200428160141.GD12697@willie-the-truck>
-References: <20200316165055.31179-1-broonie@kernel.org>
- <20200422154436.GJ4898@sirena.org.uk>
- <20200422162954.GF3585@gaia>
- <20200428132804.GF6791@willie-the-truck>
- <20200428151205.GH5677@sirena.org.uk>
- <20200428151815.GB12697@willie-the-truck>
- <20200428155808.GJ5677@sirena.org.uk>
+        id S1728037AbgD1QFW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Apr 2020 12:05:22 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:44447 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727917AbgD1QFW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Apr 2020 12:05:22 -0400
+Received: from mail-lf1-f41.google.com ([209.85.167.41]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1Mqal4-1iq1KL0via-00mXI4; Tue, 28 Apr 2020 18:05:21 +0200
+Received: by mail-lf1-f41.google.com with SMTP id y3so1734911lfy.1;
+        Tue, 28 Apr 2020 09:05:21 -0700 (PDT)
+X-Gm-Message-State: AGi0Pua4VbAhm36z1vDTJi/ZBPM9rfrNid34H3ekg8u3XA6iyzBCvNdw
+        5ByqYXHWxNKgrVC2R+34zFEmysEZw7raUklJEwQ=
+X-Google-Smtp-Source: APiQypLrh7goUYFCcrHRyRyMKDsyAveCKs6dCpTFYxufTmhSFxrioTA6Q8bARt9FHX/ytYSEYl2HA7MOF3TO7A8k8/I=
+X-Received: by 2002:a19:40d0:: with SMTP id n199mr19399076lfa.161.1588089920707;
+ Tue, 28 Apr 2020 09:05:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200428155808.GJ5677@sirena.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1588079622.git.christophe.leroy@c-s.fr> <e78344d3fcc1d33bfb1782e430b7f0529f6c612f.1588079622.git.christophe.leroy@c-s.fr>
+In-Reply-To: <e78344d3fcc1d33bfb1782e430b7f0529f6c612f.1588079622.git.christophe.leroy@c-s.fr>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 28 Apr 2020 18:05:03 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2aXJRWjxWO8oMRX2AJkfeVeeoYbOPbpd9-UTgjqM4B7g@mail.gmail.com>
+Message-ID: <CAK8P3a2aXJRWjxWO8oMRX2AJkfeVeeoYbOPbpd9-UTgjqM4B7g@mail.gmail.com>
+Subject: Re: [PATCH v8 8/8] powerpc/vdso: Provide __kernel_clock_gettime64()
+ on vdso32
+To:     Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:KXW1vp4IRKpuGN24fAWiEMrLgVx6g1nnuyzT/+lteK2DmgDCz5A
+ H3dK4oQYzrosbDrxY9whDSudBmPFIA251jhXDxPUv7a1c+zTZ4FSO9ENoBuX09O/pTvnXHk
+ GUYmNivqqhhvDiemzYqK5YYB4ZWi5QPVS+qnD2tFYXZfNrW2442Tr0prPeYFD5TLMYToAcs
+ JAFw70fU8A5C26OTpdYNw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:J3v//L4+2dE=:XtMZ0duPJdOdCkk+fjNIUH
+ BoLHWrHDymzaPvMYmasOMjLO4zdgnqGlPf8kyhhNb8Lwb0sHffLdExpbBp3ww6JXul8Ir3Bw6
+ dNe7rmzQsKOcZGTAR46eacLlafFCivO8b/xJGKiCboc5MqmTsneYsz6ZznH0V41DAEzo9Shb2
+ R9mENcYu2nsGIPGmURP9tPMryWZQvTXnmUfftZ14C7bvIt8WXO4JWbLjHWvGv61srTDICdPS+
+ Yjy/KLqELBu/VBRMVbcpvlyO/ljBSbfkvesJG3gyBLVRQCqaGdp1SFWTlRQfVZg4aUdzTxd2Y
+ HWP89XUcXkRgpQpvZmBd+9fPBQvd3CtqG6YopSq0QFBNLPYos/9HYXD0AhHkTRBRgXnQ23lVo
+ P5Z3RVg6Os5rVWkzlJPzEvZqgAwOyG0OCGfDL1AgoCmZkNsu9scDgls6EOZes+23454CYiFFF
+ zgSXdKXd5SK7hy406i/ghO9mFc/cHH+zEYgblFIJmSEnAGjFODkB157tF0rkRcLTvBiTr5fBf
+ uOA1oJP3JCue09DEpEMGvCnMWzp205gg3FqcYN7cVxNoQTfEwRZ1cn+ksmC4lj9XqkRA6n1tG
+ kriwSzq4G+FQISxdwCE0xdA9MaH7Cz6vMqN+MWE5pC2RZ3C/x/qq5RASZrzZPSbbvUYRxAh0t
+ qJBhrQOFov78VutJAU3f0tF6lQSgZnHKgQioQ4RQ8/oL3LGGMOW3XwyleRTAiBK7Oxe/Z3Iqj
+ ehygLE6MqnkkHpRA6b1VleGT2GTimiWr/TYDAXG5lHDrRqOPjbUyI/HnrchfWDl9IjN5KVSW3
+ Q++gBNh+yi9oXIben5eq1Haf+AD4vd/8tZlUJTqbWKQV/Z6Wk4=
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 04:58:12PM +0100, Mark Brown wrote:
-> On Tue, Apr 28, 2020 at 04:18:16PM +0100, Will Deacon wrote:
-> > On Tue, Apr 28, 2020 at 04:12:05PM +0100, Mark Brown wrote:
-> 
-> > > It's probably easier for me if you just use the existing branch, I've
-> > > already got a branch based on a merge down.
-> 
-> > Okey doke, I'll funnel that in the direction of linux-next then. It does
-> > mean that any subsequent patches for 5.8 that depend on BTI will need to
-> > be based on this branch, so as long as you're ok with that then it's fine
-> > by me (since I won't be able to apply patches if they refer to changes
-> > introduced in the recent merge window).
-> 
-> That's not a problem, that's what I've got already and if I try to send
-> everything based off -rc3 directly the series would get unmanagably
-> large.  Actually unless you think it's a bad idea I think what I'll do
-> is go and send out a couple of the preparatory changes (the insn updates
-> and the last bit of annotation conversions) separately for that branch
-> while I finalize the revisions of the main BTI kernel bit, hopefully
-> that'll make the review a bit more approachable.
+On Tue, Apr 28, 2020 at 3:16 PM Christophe Leroy
+<christophe.leroy@c-s.fr> wrote:
+>
+> Provides __kernel_clock_gettime64() on vdso32. This is the
+> 64 bits version of __kernel_clock_gettime() which is
+> y2038 compliant.
+>
+> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 
-Okey doke, sounds good to me. I'm queuing stuff atm, so as long you tell
-me what I need to apply things against then we should be good.
+Looks good to me
 
-Will
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+
+There was a bug on ARM for the corresponding function, so far it is unclear
+if this was a problem related to particular hardware, the 32-bit kernel code,
+or the common implementation of clock_gettime64 in the vdso library,
+see https://github.com/richfelker/musl-cross-make/issues/96
+
+Just to be sure that powerpc is not affected by the same issue, can you
+confirm that repeatedly calling clock_gettime64 on powerpc32, alternating
+between vdso and syscall, results in monotically increasing times?
+
+       Arnd
