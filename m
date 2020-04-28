@@ -2,151 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A491BB399
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 03:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E8F1BB508
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 06:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726375AbgD1BtF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Apr 2020 21:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726261AbgD1BtE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Apr 2020 21:49:04 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCB4C03C1A8;
-        Mon, 27 Apr 2020 18:49:03 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id 18so9911032pfx.6;
-        Mon, 27 Apr 2020 18:49:03 -0700 (PDT)
+        id S1726335AbgD1ER3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Apr 2020 00:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725917AbgD1ER3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Apr 2020 00:17:29 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E93C09B050
+        for <linux-arch@vger.kernel.org>; Mon, 27 Apr 2020 21:17:29 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id a31so564301pje.1
+        for <linux-arch@vger.kernel.org>; Mon, 27 Apr 2020 21:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vloW/Le5uTQWcHYDSa4UBFwJd+x/1yJE7+IrW0Uir68=;
-        b=tMY7Nqx0yqobkZe58YFhx1OG8yv4pf1IV9qs+bvamO0ssZ2DNHnvG9NWFBdyJ9zDhq
-         3NhdKMcuGNglY0QeMweyW3U2rebJhB5xvUW03S8hTpb2axpkIL4LmSie7xv3Bz62ZwM1
-         2BMffB9lJb7ZswTHs481noJ5CUOIo//yGyCBf6lVS0VEEeSowKcgM/eOn9EdY2nFKUkq
-         OuxDgnm0HxCUwwMHMvGyGKQwpiGmQzpwRM23EMdJHC83mqrQ09+TuyCh8iShhOD/Uad0
-         QE8Zuj8UnFf0Ani8mhF33kVeWYBepv5F7VAhs2ZOz2yfKR8tuVrSbpNaAa/3885mDRi5
-         uMAw==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=8h84Asdal8ddGdf/Sbj5GbMgUMmfxecNR/DGTl7C5Ms=;
+        b=yiHvCugecQvQXY4FTuCZbAeqgRSihOJpQiYtv4ucRIIrYF1q36lTJjRozoR5D2wm8l
+         VF5mZ+dZWbk4kz4QBYd/2RYXIZsNZUFA3jT2mhccQQOrk4CDxQfdWsRtKyQt+hzc65zA
+         /Lwe94WK5jLX/Xkq6KGUGJSydKi60TWSj82uliq2QsNMQOdvgmjwYgBolGWdJVeZIlJw
+         zEBx5YWicx1ACchhvJrZuuhjE2KatYX7Roy/bZsMcDTdbNnn9ggDu3FliVQKv3H8etFL
+         c1VjXCKqOC68ekMz/k10f3g29XEVCnMCtiCVnoVGRNtETVAeyEvWVFrv+Cxld/ekYTKu
+         eJSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vloW/Le5uTQWcHYDSa4UBFwJd+x/1yJE7+IrW0Uir68=;
-        b=jUR5FBaq2ssqcdUdivAQRrt8U1CLt8wuGaUdmhKNKx9/wBqIfpDDiIfoXSOeSZXsFg
-         MmDszkS+1Gpq0FYZyRqIP2sziK5/9M4ePEyQJjGoARWjyAN+8mTbk66poQru6vUJNY53
-         5MmmOF3A+Na4j84KQRGKPtWX9zCQyD6DD3oCOwdof/4OTkZuKVTHOHlemXHRCrswmmQg
-         8t95UqH47eTE+KDX00EGSmEtAd3ci5xEODzOkYA+SgNA3MeExjHp5yYy+1tJUT0wJaoQ
-         Fe9gYr/E2KwN9fZib8R+535lyRRAU/7mpci+trU8PcApsVkim6kJXCz5E6QAvCd7lira
-         iB0g==
-X-Gm-Message-State: AGi0Pub3IUMxANSAUC6/uvRbRSviNAmgWGO/GR41vSWrFkEqsTsZkB0o
-        gBgmmGXncnyaOpPYJYYCu8k=
-X-Google-Smtp-Source: APiQypIrs/KyEZGo9isIYbNHduvrckXj0XCrJMMoQhBOT/pJSBv9dMK3h8aO2de9vySF1HvRt3aMWg==
-X-Received: by 2002:a63:f958:: with SMTP id q24mr6909810pgk.338.1588038542846;
-        Mon, 27 Apr 2020 18:49:02 -0700 (PDT)
-Received: from gnu-cfl-2.localdomain (c-69-181-90-243.hsd1.ca.comcast.net. [69.181.90.243])
-        by smtp.gmail.com with ESMTPSA id t188sm11667641pgb.80.2020.04.27.18.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 18:49:01 -0700 (PDT)
-Received: from gnu-cfl-2.localdomain (localhost [IPv6:::1])
-        by gnu-cfl-2.localdomain (Postfix) with ESMTP id 9E060C034D;
-        Mon, 27 Apr 2020 18:49:00 -0700 (PDT)
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Kees Cook <keescook@chromium.org>,
-        Borislav Petkov <bp@suse.de>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 2/2] Discard .note.gnu.property sections in generic NOTES
-Date:   Mon, 27 Apr 2020 18:49:00 -0700
-Message-Id: <20200428014900.407098-2-hjl.tools@gmail.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200428014900.407098-1-hjl.tools@gmail.com>
-References: <20200428014900.407098-1-hjl.tools@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=8h84Asdal8ddGdf/Sbj5GbMgUMmfxecNR/DGTl7C5Ms=;
+        b=DOTNDT4Aro/ZFhy6dOyiKqdqQ+NAJBAcVaiNo43F7lNJwT7zIHTuUaKjit+rb383tr
+         nD08/hpERyHJ71MyUBdbhzTwGfW1mng9P3Ri/oG9AsvKTt588SG+SghRpAAZ4/Jj2rn6
+         7XafNwE+y1aapk2mddckptRoTwxa5hJQ/otUIozMdqzItvu3tE5f/HaQAmodKAJnehPS
+         kb/MuVbG9ZS0FmqJuoAb0Y65zrIarnxWupqZf9j04i9gNnJeH2l2IqGlOKdPc+q4lzRG
+         jx8NV++s56XouLW5v5KPAVq/hlP2TnQDfIwQ9tHrYUGl+ZGSmcGrfjTzBj7/ML2CTNEa
+         dliA==
+X-Gm-Message-State: AGi0PubxrVdzOeC8aFgN6Fh4O4Kk64iwO7DOHJ8K0FZox3NdROEwGmKB
+        F5St7xlc7P+V3NU3V//CjlP9UQ==
+X-Google-Smtp-Source: APiQypJLqu+Wcex4ySa91E5OvARz+j/btwustQ54FAzsCqbRYotfFZWp6P/WtLNIim1eeXg4dsa0kQ==
+X-Received: by 2002:a17:90a:2b8f:: with SMTP id u15mr2718879pjd.137.1588047448950;
+        Mon, 27 Apr 2020 21:17:28 -0700 (PDT)
+Received: from ?IPv6:2601:646:c200:1ef2:95ae:5ea5:619c:8559? ([2601:646:c200:1ef2:95ae:5ea5:619c:8559])
+        by smtp.gmail.com with ESMTPSA id z190sm13652412pfb.1.2020.04.27.21.17.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Apr 2020 21:17:28 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC v2] ptrace, pidfd: add pidfd_ptrace syscall
+Date:   Mon, 27 Apr 2020 21:17:26 -0700
+Message-Id: <B7A115CB-0C8C-4719-B97B-74D94231CD1E@amacapital.net>
+References: <CAHk-=wga3O=BoKZXR27-CDnAFareWcMxXhpWerwtCffdaH6_ow@mail.gmail.com>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jann Horn <jannh@google.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Brian Gerst <brgerst@gmail.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+In-Reply-To: <CAHk-=wga3O=BoKZXR27-CDnAFareWcMxXhpWerwtCffdaH6_ow@mail.gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+X-Mailer: iPhone Mail (17E262)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-With the command-line option, -mx86-used-note=yes, the x86 assembler
-in binutils 2.32 and above generates a program property note in a note
-section, .note.gnu.property, to encode used x86 ISAs and features.  But
-kernel linker script only contains a single NOTE segment:
 
-PHDRS {
- text PT_LOAD FLAGS(5);
- data PT_LOAD FLAGS(6);
- percpu PT_LOAD FLAGS(6);
- init PT_LOAD FLAGS(7);
- note PT_NOTE FLAGS(0);
-}
-SECTIONS
-{
-...
- .notes : AT(ADDR(.notes) - 0xffffffff80000000) { __start_notes = .; KEEP(*(.not
-e.*)) __stop_notes = .; } :text :note
-...
-}
 
-The NOTE segment generated by kernel linker script is aligned to 4 bytes.
-But .note.gnu.property section must be aligned to 8 bytes on x86-64 and
-we get
+> On Apr 27, 2020, at 6:36 PM, Linus Torvalds <torvalds@linux-foundation.org=
+> wrote:
+>=20
+> =EF=BB=BFOn Mon, Apr 27, 2020 at 5:46 PM Aleksa Sarai <cyphar@cyphar.com> w=
+rote:
+>>=20
+>> I agree. It would be a shame to add a new ptrace syscall and not take
+>> the opportunity to fix the multitude of problems with the existing API.
+>> But that's a Pandora's box which we shouldn't open unless we want to
+>> wait a long time to get an API everyone is okay with -- a pretty high
+>> price to just get pidfds support in ptrace.
+>=20
+> We should really be very very careful with some "smarter ptrace".
+> We've had _so_ many security issues with ptrace that it's not even
+> funny.
+>=20
+> And that's ignoring all the practical issues we've had.
+>=20
+> I would definitely not want to have anything that looks like ptrace AT
+> ALL using pidfd. If we have a file descriptor to specify the target
+> process, then we should probably take advantage of that file
+> descriptor to actually make it more of a asynchronous interface that
+> doesn't cause the kinds of deadlocks that we've had with ptrace.
+>=20
+> The synchronous nature of ptrace() means that not only do we have
+> those nasty deadlocks, it's also very very expensive to use. It also
+> has some other fundamental problems, like the whole "take over parent"
+> and the SIGCHLD behavior.
+>=20
+> It also is hard to ptrace a ptracer. Which is annoying when you're
+> debugging gdb or strace or whatever.
+>=20
+> So I think the thing to do is ask the gdb (and strace) people if they
+> have any _very_ particular painpoints that we could perhaps help with.
+>=20
+> And then very carefully think things through and not repeat all the
+> mistakes ptrace did.
+>=20
+> I'm not very optimistic.
 
-[hjl@gnu-skx-1 linux]$ readelf -n vmlinux
+I hate to say this, but I=E2=80=99m not convinced that asking the gdb folks i=
+s the right approach. GDB has an ancient architecture and is *incredibly* bu=
+ggy.  I=E2=80=99m sure ptrace is somewhere on the pain point list, but I sus=
+pect it=E2=80=99s utterly dwarfed by everything else.
 
-Displaying notes found in: .notes
-  Owner                Data size Description
-  Xen                  0x00000006 Unknown note type: (0x00000006)
-   description data: 6c 69 6e 75 78 00
-  Xen                  0x00000004 Unknown note type: (0x00000007)
-   description data: 32 2e 36 00
-  xen-3.0              0x00000005 Unknown note type: (0x006e6558)
-   description data: 08 00 00 00 03
-readelf: Warning: note with invalid namesz and/or descsz found at offset 0x50
-readelf: Warning:  type: 0xffffffff, namesize: 0x006e6558, descsize:
-0x80000000, alignment: 8
-[hjl@gnu-skx-1 linux]$
+Maybe the LLDB people would have a better perspective?  The rr folks would b=
+e a good bet, too. Or, and I know this is sacrilege, the VSCode people?
 
-Since note.gnu.property section in kernel image is never used, this patch
-discards .note.gnu.property sections in kernel linker script by adding
 
-/DISCARD/ : {
-  *(.note.gnu.property)
-}
+I think one requirement for a better ptrace is that it should work if you tr=
+y to debug, simultaneously, a debugger and its debugee. Maybe not perfectly,=
+ but it should work. And you should be able to debug init.
 
-before kernel NOTE segment in generic NOTES.
-
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- include/asm-generic/vmlinux.lds.h | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 71e387a5fe90..95cd678428f4 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -833,7 +833,14 @@
- #define TRACEDATA
- #endif
- 
-+/*
-+ * Discard .note.gnu.property sections which are unused and have
-+ * different alignment requirement from kernel note sections.
-+ */
- #define NOTES								\
-+	/DISCARD/ : {							\
-+		*(.note.gnu.property)					\
-+	}								\
- 	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
- 		__start_notes = .;					\
- 		KEEP(*(.note.*))					\
--- 
-2.25.4
-
+Another major pain point I=E2=80=99ve seen is compat. A 64-bit debugger shou=
+ld be able to debug a program that switches back and forth between 32-bit an=
+d 64-bit.  A debugger that is entirely unaware of a set of registers should b=
+e able to debug a process using those registers.
