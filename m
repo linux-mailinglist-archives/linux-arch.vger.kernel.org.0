@@ -2,92 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 393E31BB30A
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 02:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD211BB37B
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 03:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgD1Avp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Apr 2020 20:51:45 -0400
-Received: from mout-p-103.mailbox.org ([80.241.56.161]:41566 "EHLO
-        mout-p-103.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726264AbgD1Avp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Apr 2020 20:51:45 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 49B34Z34sLzKmZM;
-        Tue, 28 Apr 2020 02:51:42 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
-        with ESMTP id r3EXWYFXzHLQ; Tue, 28 Apr 2020 02:51:38 +0200 (CEST)
-Date:   Tue, 28 Apr 2020 10:51:26 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Cyril Hrubis <chrubis@suse.cz>
-Cc:     kernel test robot <rong.a.chen@intel.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        linux-arch@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        lkp@lists.01.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
-        ltp@lists.linux.it
-Subject: Re: [LTP] [fs] ce436509a8: ltp.openat203.fail
-Message-ID: <20200428005126.6wncibudt6ohghvc@yavin.dot.cyphar.com>
-References: <f969e7d45a8e83efc1ca13d675efd8775f13f376.1586830316.git.josh@joshtriplett.org>
- <20200427135210.GB5770@shao2-debian>
- <20200427142733.GD7661@rei>
+        id S1726259AbgD1Bg6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Apr 2020 21:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726251AbgD1Bg5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Apr 2020 21:36:57 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFD5C03C1A8
+        for <linux-arch@vger.kernel.org>; Mon, 27 Apr 2020 18:36:57 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id u15so19724048ljd.3
+        for <linux-arch@vger.kernel.org>; Mon, 27 Apr 2020 18:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6dLKuml1l37VsUNUL7W3+8Plw3oZZU13zk85vygbzVU=;
+        b=Bd+HoaOQxYuuh8Zf1OdODQuVSh84RUl4JQmlzGerUyQmf8yQo21wChRkbSt91VRbi7
+         rW7nVLys2SsQX2Zyf0eFgqihojc0YmFDp8m/iu9CZyEhvrn1ELZTebPjm+Ei/dLS9xRA
+         fQg/tEt3Rd0+Q259PEVjDGKRpewOS/+lcY8FU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6dLKuml1l37VsUNUL7W3+8Plw3oZZU13zk85vygbzVU=;
+        b=QTpdMOR54JnRDCQ4WSYokBgV050MCZnXvZMQ15mAnqqUJ7UCp2NHlLKg5svHExAzYV
+         k3s35robXcKkTqqT66j1CNSFqcnyekAoMnKmKUGtBJh1Z82B57r6rxm4qIz/qzbvZTLe
+         8f1dgAECcd+86si+ZLUCAFkodqbC5zLees419IW+fdNrUS5pVPTtTOyAejbON1T7np+/
+         Rru7aJkBgGUkma4aQzw/tTMVt0rQXm5JdBTq2Gs/uXalcupO+BK9JRBwf7GoEKt8a0dq
+         Kx43Y0r3frot76XIxPPOFFSJmv3zu/x5yM+RroZfM0zqCn1yRVK4NEsnEm6ZqEwd1kFv
+         k+ug==
+X-Gm-Message-State: AGi0PuYiJ0i075HuP6krplOlS9AGIDaWBdY+XGHFzJqffcF5ro514nfB
+        ESLRuEohHmgBvQfUHmJPMwcXA3qEiI4=
+X-Google-Smtp-Source: APiQypIwNNMI6hps8qcyO4faIp46H3ztwc2LkJSyexdhGBgG5n88JLqtOTgRHHKkf4YWi5uau3wubA==
+X-Received: by 2002:a2e:b162:: with SMTP id a2mr15880126ljm.25.1588037815168;
+        Mon, 27 Apr 2020 18:36:55 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id l2sm11307361ljg.89.2020.04.27.18.36.52
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Apr 2020 18:36:54 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id u15so19723954ljd.3
+        for <linux-arch@vger.kernel.org>; Mon, 27 Apr 2020 18:36:52 -0700 (PDT)
+X-Received: by 2002:a05:6512:14a:: with SMTP id m10mr17156490lfo.152.1588037812064;
+ Mon, 27 Apr 2020 18:36:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tk4luxag2mt2b3sb"
-Content-Disposition: inline
-In-Reply-To: <20200427142733.GD7661@rei>
-X-Rspamd-Queue-Id: 0E0701771
-X-Rspamd-Score: -9.44 / 15.00 / 15.00
+References: <20200426130100.306246-1-hagen@jauu.net> <20200426163430.22743-1-hagen@jauu.net>
+ <20200427170826.mdklazcrn4xaeafm@wittgenstein> <CAG48ez0hskhN7OkxwHX-Bo5HGboJaVEk8udFukkTgiC=43ixcw@mail.gmail.com>
+ <87zhawdc6w.fsf@x220.int.ebiederm.org> <20200427185929.GA1768@laniakea>
+ <CAK8P3a2Ux1pDZEBjgRSPMJXvwUAvbPastX2ynVVC2iPTTDK_ow@mail.gmail.com>
+ <20200427201303.tbiipopeapxofn6h@wittgenstein> <20200428004546.mlpwixgms2ekpfdm@yavin.dot.cyphar.com>
+In-Reply-To: <20200428004546.mlpwixgms2ekpfdm@yavin.dot.cyphar.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 27 Apr 2020 18:36:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wga3O=BoKZXR27-CDnAFareWcMxXhpWerwtCffdaH6_ow@mail.gmail.com>
+Message-ID: <CAHk-=wga3O=BoKZXR27-CDnAFareWcMxXhpWerwtCffdaH6_ow@mail.gmail.com>
+Subject: Re: [RFC v2] ptrace, pidfd: add pidfd_ptrace syscall
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jann Horn <jannh@google.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Brian Gerst <brgerst@gmail.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Apr 27, 2020 at 5:46 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+>
+> I agree. It would be a shame to add a new ptrace syscall and not take
+> the opportunity to fix the multitude of problems with the existing API.
+> But that's a Pandora's box which we shouldn't open unless we want to
+> wait a long time to get an API everyone is okay with -- a pretty high
+> price to just get pidfds support in ptrace.
 
---tk4luxag2mt2b3sb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We should really be very very careful with some "smarter ptrace".
+We've had _so_ many security issues with ptrace that it's not even
+funny.
 
-On 2020-04-27, Cyril Hrubis <chrubis@suse.cz> wrote:
-> Hi!
-> > commit: ce436509a8e109330c56bb4d8ec87d258788f5f4 ("[PATCH v4 2/3] fs: o=
-penat2: Extend open_how to allow userspace-selected fds")
-> > url: https://github.com/0day-ci/linux/commits/Josh-Triplett/Support-use=
-rspace-selected-fds/20200414-102939
-> > base: https://git.kernel.org/cgit/linux/kernel/git/shuah/linux-kselftes=
-t.git next
->=20
-> This commit adds fd parameter to the how structure where LTP test was
-> previously passing garbage, which obviously causes the difference in
-> errno.
->=20
-> This could be safely ignored for now, if the patch gets merged the test
-> needs to be updated.
+And that's ignoring all the practical issues we've had.
 
-It wouldn't be a bad idea to switch the test to figure out the ksize of
-the struct, so that you only add bad padding after that. But then again,
-this would be a bit ugly -- having CHECK_FIELDS would make this simpler.
+I would definitely not want to have anything that looks like ptrace AT
+ALL using pidfd. If we have a file descriptor to specify the target
+process, then we should probably take advantage of that file
+descriptor to actually make it more of a asynchronous interface that
+doesn't cause the kinds of deadlocks that we've had with ptrace.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+The synchronous nature of ptrace() means that not only do we have
+those nasty deadlocks, it's also very very expensive to use. It also
+has some other fundamental problems, like the whole "take over parent"
+and the SIGCHLD behavior.
 
---tk4luxag2mt2b3sb
-Content-Type: application/pgp-signature; name="signature.asc"
+It also is hard to ptrace a ptracer. Which is annoying when you're
+debugging gdb or strace or whatever.
 
------BEGIN PGP SIGNATURE-----
+So I think the thing to do is ask the gdb (and strace) people if they
+have any _very_ particular painpoints that we could perhaps help with.
 
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXqd+CwAKCRCdlLljIbnQ
-EgeUAP9m6EkEl0AGN+/eOT+i/EalQ0VpBQZ8UYtvJP5HbYDC8gEA3HtLFj8eHbce
-Y9pj4AZCRJVLhR1qVwrou+X6rZVJ0Ao=
-=p2HM
------END PGP SIGNATURE-----
+And then very carefully think things through and not repeat all the
+mistakes ptrace did.
 
---tk4luxag2mt2b3sb--
+I'm not very optimistic.
+
+              Linus
