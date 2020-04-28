@@ -2,109 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4591BBED2
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 15:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8C61BBEC9
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 15:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbgD1NQ4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Apr 2020 09:16:56 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:44196 "EHLO pegase1.c-s.fr"
+        id S1727780AbgD1NQ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Apr 2020 09:16:57 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:3827 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726764AbgD1NQz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Apr 2020 09:16:55 -0400
+        id S1727113AbgD1NQ5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 28 Apr 2020 09:16:57 -0400
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 49BMcN4J7Jz9v0DC;
-        Tue, 28 Apr 2020 15:16:52 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 49BMcP44Xvz9v0DD;
+        Tue, 28 Apr 2020 15:16:53 +0200 (CEST)
 Authentication-Results: localhost; dkim=pass
         reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=tZ696ccJ; dkim-adsp=pass;
+        header.d=c-s.fr header.i=@c-s.fr header.b=EGP+17FU; dkim-adsp=pass;
         dkim-atps=neutral
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id UgvCY0KN0IY2; Tue, 28 Apr 2020 15:16:52 +0200 (CEST)
+        with ESMTP id rf5D1e_IVsZz; Tue, 28 Apr 2020 15:16:53 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 49BMcN3DPWz9v0D9;
-        Tue, 28 Apr 2020 15:16:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1588079812; bh=uI9Ui2HzQEfNGrmOOyGMT9HmBbcvnao0kBvyV0cXwes=;
-        h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
-        b=tZ696ccJCjTNT30zuKCU4FPtR8kT4yN4PhJDU1leZmitbqQlXkwgVvApDfOiCq647
-         4/LWGWb95wycCso8i7xm1MBaoamK1r4Kn/MlJxI8Gc+579AW76fcmyfO51lG7eexTi
-         xp99JTgiAqDxWq/Rd8kCGTymwik+xjNFJh0wcvt4=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E07CB8B828;
+        by pegase1.c-s.fr (Postfix) with ESMTP id 49BMcP2yx4z9v0D9;
         Tue, 28 Apr 2020 15:16:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1588079813; bh=YfPkauzIyCeOMfowGFOnX/WimsokQATkU8PycJPLUOA=;
+        h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
+        b=EGP+17FU9URqpq33EWQTH6HnYvTrtRXP8CwurvJz9/zD+/7ZeLKisxlBOlVc7NswC
+         QNAhMAdvdbVTFSjzfyROB12uVBpfZW/qvbw9HNSjRKmMUezGp2q4auLVRu6oBIJ23d
+         4mJtKY4W5j0g0KHR6hgWnEgn/rzB2/8+/dOGJNBc=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id ECDDF8B82C;
+        Tue, 28 Apr 2020 15:16:54 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id UoafEZMJBl87; Tue, 28 Apr 2020 15:16:53 +0200 (CEST)
+        with ESMTP id gIISc0XOCgp8; Tue, 28 Apr 2020 15:16:54 +0200 (CEST)
 Received: from pc16570vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A10448B82C;
-        Tue, 28 Apr 2020 15:16:53 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AF3298B828;
+        Tue, 28 Apr 2020 15:16:54 +0200 (CEST)
 Received: by pc16570vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 6CD66658AD; Tue, 28 Apr 2020 13:16:53 +0000 (UTC)
-Message-Id: <1ab6a62c356c3bec35d1623563ef9c636205bcda.1588079622.git.christophe.leroy@c-s.fr>
+        id 7FAF6658AD; Tue, 28 Apr 2020 13:16:54 +0000 (UTC)
+Message-Id: <e78344d3fcc1d33bfb1782e430b7f0529f6c612f.1588079622.git.christophe.leroy@c-s.fr>
 In-Reply-To: <cover.1588079622.git.christophe.leroy@c-s.fr>
 References: <cover.1588079622.git.christophe.leroy@c-s.fr>
 From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [PATCH v8 7/8] lib/vdso: force inlining of
- __cvdso_clock_gettime_common()
+Subject: [PATCH v8 8/8] powerpc/vdso: Provide __kernel_clock_gettime64() on
+ vdso32
 To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
         luto@kernel.org, linux-arch@vger.kernel.org
-Date:   Tue, 28 Apr 2020 13:16:53 +0000 (UTC)
+Date:   Tue, 28 Apr 2020 13:16:54 +0000 (UTC)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When adding gettime64() to a 32 bit architecture (namely powerpc/32)
-it has been noticed that GCC doesn't inline anymore
-__cvdso_clock_gettime_common() because it is called twice
-(Once by __cvdso_clock_gettime() and once by
-__cvdso_clock_gettime32).
-
-This has the effect of seriously degrading the performance:
-
-Before the implementation of gettime64(), gettime() runs in:
-
-	clock-gettime-monotonic-raw:    vdso: 1003 nsec/call
-	clock-gettime-monotonic-coarse:    vdso: 592 nsec/call
-	clock-gettime-monotonic:    vdso: 942 nsec/call
-
-When adding a gettime64() entry point, the standard gettime()
-performance is degraded by 30% to 50%:
-
-	clock-gettime-monotonic-raw:    vdso: 1300 nsec/call
-	clock-gettime-monotonic-coarse:    vdso: 900 nsec/call
-	clock-gettime-monotonic:    vdso: 1232 nsec/call
-
-Adding __always_inline() to __cvdso_clock_gettime_common()
-regains the original performance.
-
-In terms of code size, the inlining increases the code size
-by only 176 bytes. This is in the noise for a kernel image.
+Provides __kernel_clock_gettime64() on vdso32. This is the
+64 bits version of __kernel_clock_gettime() which is
+y2038 compliant.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 ---
- lib/vdso/gettimeofday.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/kernel/vdso32/gettimeofday.S  | 9 +++++++++
+ arch/powerpc/kernel/vdso32/vdso32.lds.S    | 1 +
+ arch/powerpc/kernel/vdso32/vgettimeofday.c | 6 ++++++
+ 3 files changed, 16 insertions(+)
 
-diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index a2909af4b924..7938d3c4901d 100644
---- a/lib/vdso/gettimeofday.c
-+++ b/lib/vdso/gettimeofday.c
-@@ -210,7 +210,7 @@ static __always_inline int do_coarse(const struct vdso_data *vd, clockid_t clk,
- 	return 0;
+diff --git a/arch/powerpc/kernel/vdso32/gettimeofday.S b/arch/powerpc/kernel/vdso32/gettimeofday.S
+index fd7b01c51281..a6e29f880e0e 100644
+--- a/arch/powerpc/kernel/vdso32/gettimeofday.S
++++ b/arch/powerpc/kernel/vdso32/gettimeofday.S
+@@ -35,6 +35,15 @@ V_FUNCTION_BEGIN(__kernel_clock_gettime)
+ 	cvdso_call __c_kernel_clock_gettime
+ V_FUNCTION_END(__kernel_clock_gettime)
+ 
++/*
++ * Exact prototype of clock_gettime64()
++ *
++ * int __kernel_clock_gettime64(clockid_t clock_id, struct __timespec64 *ts);
++ *
++ */
++V_FUNCTION_BEGIN(__kernel_clock_gettime64)
++	cvdso_call __c_kernel_clock_gettime64
++V_FUNCTION_END(__kernel_clock_gettime64)
+ 
+ /*
+  * Exact prototype of clock_getres()
+diff --git a/arch/powerpc/kernel/vdso32/vdso32.lds.S b/arch/powerpc/kernel/vdso32/vdso32.lds.S
+index 6cf729612268..05b462143238 100644
+--- a/arch/powerpc/kernel/vdso32/vdso32.lds.S
++++ b/arch/powerpc/kernel/vdso32/vdso32.lds.S
+@@ -144,6 +144,7 @@ VERSION
+ #ifndef CONFIG_PPC_BOOK3S_601
+ 		__kernel_gettimeofday;
+ 		__kernel_clock_gettime;
++		__kernel_clock_gettime64;
+ 		__kernel_clock_getres;
+ 		__kernel_time;
+ 		__kernel_get_tbfreq;
+diff --git a/arch/powerpc/kernel/vdso32/vgettimeofday.c b/arch/powerpc/kernel/vdso32/vgettimeofday.c
+index 0b9ab4c22ef2..f7f71fecf4ed 100644
+--- a/arch/powerpc/kernel/vdso32/vgettimeofday.c
++++ b/arch/powerpc/kernel/vdso32/vgettimeofday.c
+@@ -11,6 +11,12 @@ int __c_kernel_clock_gettime(clockid_t clock, struct old_timespec32 *ts,
+ 	return __cvdso_clock_gettime32_data(vd, clock, ts);
  }
  
--static __maybe_unused int
-+static __always_inline int
- __cvdso_clock_gettime_common(const struct vdso_data *vd, clockid_t clock,
- 			     struct __kernel_timespec *ts)
++int __c_kernel_clock_gettime64(clockid_t clock, struct __kernel_timespec *ts,
++			       const struct vdso_data *vd)
++{
++	return __cvdso_clock_gettime_data(vd, clock, ts);
++}
++
+ int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz,
+ 			    const struct vdso_data *vd)
  {
 -- 
 2.25.0
