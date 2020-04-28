@@ -2,112 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9EE51BB303
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 02:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393E31BB30A
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 02:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726233AbgD1AqQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Apr 2020 20:46:16 -0400
-Received: from mout-p-102.mailbox.org ([80.241.56.152]:11350 "EHLO
-        mout-p-102.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726337AbgD1AqQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Apr 2020 20:46:16 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        id S1726275AbgD1Avp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Apr 2020 20:51:45 -0400
+Received: from mout-p-103.mailbox.org ([80.241.56.161]:41566 "EHLO
+        mout-p-103.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726264AbgD1Avp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Apr 2020 20:51:45 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
         (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 49B2yB31ClzKmbp;
-        Tue, 28 Apr 2020 02:46:10 +0200 (CEST)
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 49B34Z34sLzKmZM;
+        Tue, 28 Apr 2020 02:51:42 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
-        with ESMTP id Hb0F5KawT22P; Tue, 28 Apr 2020 02:46:05 +0200 (CEST)
-Date:   Tue, 28 Apr 2020 10:45:46 +1000
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
+        with ESMTP id r3EXWYFXzHLQ; Tue, 28 Apr 2020 02:51:38 +0200 (CEST)
+Date:   Tue, 28 Apr 2020 10:51:26 +1000
 From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Hagen Paul Pfeifer <hagen@jauu.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Jann Horn <jannh@google.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Brian Gerst <brgerst@gmail.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [RFC v2] ptrace, pidfd: add pidfd_ptrace syscall
-Message-ID: <20200428004546.mlpwixgms2ekpfdm@yavin.dot.cyphar.com>
-References: <20200426130100.306246-1-hagen@jauu.net>
- <20200426163430.22743-1-hagen@jauu.net>
- <20200427170826.mdklazcrn4xaeafm@wittgenstein>
- <CAG48ez0hskhN7OkxwHX-Bo5HGboJaVEk8udFukkTgiC=43ixcw@mail.gmail.com>
- <87zhawdc6w.fsf@x220.int.ebiederm.org>
- <20200427185929.GA1768@laniakea>
- <CAK8P3a2Ux1pDZEBjgRSPMJXvwUAvbPastX2ynVVC2iPTTDK_ow@mail.gmail.com>
- <20200427201303.tbiipopeapxofn6h@wittgenstein>
+To:     Cyril Hrubis <chrubis@suse.cz>
+Cc:     kernel test robot <rong.a.chen@intel.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        linux-arch@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        lkp@lists.01.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        ltp@lists.linux.it
+Subject: Re: [LTP] [fs] ce436509a8: ltp.openat203.fail
+Message-ID: <20200428005126.6wncibudt6ohghvc@yavin.dot.cyphar.com>
+References: <f969e7d45a8e83efc1ca13d675efd8775f13f376.1586830316.git.josh@joshtriplett.org>
+ <20200427135210.GB5770@shao2-debian>
+ <20200427142733.GD7661@rei>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3oqbxiocwy4jimao"
+        protocol="application/pgp-signature"; boundary="tk4luxag2mt2b3sb"
 Content-Disposition: inline
-In-Reply-To: <20200427201303.tbiipopeapxofn6h@wittgenstein>
-X-Rspamd-Queue-Id: 43C7D1693
-X-Rspamd-Score: -4.76 / 15.00 / 15.00
+In-Reply-To: <20200427142733.GD7661@rei>
+X-Rspamd-Queue-Id: 0E0701771
+X-Rspamd-Score: -9.44 / 15.00 / 15.00
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---3oqbxiocwy4jimao
+--tk4luxag2mt2b3sb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 2020-04-27, Christian Brauner <christian.brauner@ubuntu.com> wrote:
-> On Mon, Apr 27, 2020 at 10:08:03PM +0200, Arnd Bergmann wrote:
-> > The way I understood Jann was that instead of a new syscall that duplic=
-ates
-> > everything in ptrace(), there would only need to be a new ptrace request
-> > such as PTRACE_ATTACH_PIDFD that behaves like PTRACE_ATTACH
-> > but takes a pidfd as the second argument, perhaps setting the return va=
-lue
-> > to the pid on success. Same for PTRACE_SEIZE.
+On 2020-04-27, Cyril Hrubis <chrubis@suse.cz> wrote:
+> Hi!
+> > commit: ce436509a8e109330c56bb4d8ec87d258788f5f4 ("[PATCH v4 2/3] fs: o=
+penat2: Extend open_how to allow userspace-selected fds")
+> > url: https://github.com/0day-ci/linux/commits/Josh-Triplett/Support-use=
+rspace-selected-fds/20200414-102939
+> > base: https://git.kernel.org/cgit/linux/kernel/git/shuah/linux-kselftes=
+t.git next
 >=20
-> That was my initial suggestion, yes. Any enum that identifies a target
-> by a pid will get a new _PIDFD version and the pidfd is passed as pid_t
-> argument. That should work and is similar to what I did for waitid()
-> P_PIDFD. Realistically, there shouldn't be any system where pid_t is
-> smaller than an int that we care about.
+> This commit adds fd parameter to the how structure where LTP test was
+> previously passing garbage, which obviously causes the difference in
+> errno.
 >=20
-> > In effect this is not much different from your a), just a variation on =
-the
-> > calling conventions. The main upside is that it avoids adding another
-> > ugly interface, the flip side is that it makes the existing one slightl=
-y worse
-> > by adding complexity.
->=20
-> Basically, if a new syscall than please a proper re-design with real
-> benefits.
->=20
-> In the meantime we could make due with the _PIDFD variant. And then if
-> someone wants to do the nitty gritty work of adding a ptrace variant
-> purely based on pidfds and with a better api and features that e.g. Jann
-> pointed out then by all means, please do so. I'm sure we would all
-> welcome this as well.
+> This could be safely ignored for now, if the patch gets merged the test
+> needs to be updated.
 
-I agree. It would be a shame to add a new ptrace syscall and not take
-the opportunity to fix the multitude of problems with the existing API.
-But that's a Pandora's box which we shouldn't open unless we want to
-wait a long time to get an API everyone is okay with -- a pretty high
-price to just get pidfds support in ptrace.
+It wouldn't be a bad idea to switch the test to figure out the ksize of
+the struct, so that you only add bad padding after that. But then again,
+this would be a bit ugly -- having CHECK_FIELDS would make this simpler.
 
 --=20
 Aleksa Sarai
@@ -115,15 +79,15 @@ Senior Software Engineer (Containers)
 SUSE Linux GmbH
 <https://www.cyphar.com/>
 
---3oqbxiocwy4jimao
+--tk4luxag2mt2b3sb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXqd8tgAKCRCdlLljIbnQ
-EgHUAP0eXsMeBvX6165xj8TEMgh4rB2Aum2qA+WKvKBlmmoq6AD/UQdz5i+S0aA6
-FmHhKfcX0nKnO3Qpss//v+w7UiJH/AQ=
-=FQhY
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXqd+CwAKCRCdlLljIbnQ
+EgeUAP9m6EkEl0AGN+/eOT+i/EalQ0VpBQZ8UYtvJP5HbYDC8gEA3HtLFj8eHbce
+Y9pj4AZCRJVLhR1qVwrou+X6rZVJ0Ao=
+=p2HM
 -----END PGP SIGNATURE-----
 
---3oqbxiocwy4jimao--
+--tk4luxag2mt2b3sb--
