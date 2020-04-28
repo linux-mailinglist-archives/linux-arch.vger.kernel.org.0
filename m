@@ -2,94 +2,180 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A08C1BC093
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 16:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07031BC3AA
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 17:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727985AbgD1OGc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Apr 2020 10:06:32 -0400
-Received: from foss.arm.com ([217.140.110.172]:52454 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726942AbgD1OGb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Apr 2020 10:06:31 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9E2731B;
-        Tue, 28 Apr 2020 07:06:30 -0700 (PDT)
-Received: from gaia (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 30FA73F68F;
-        Tue, 28 Apr 2020 07:06:29 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 15:06:27 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Dave Martin <dave.martin@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 20/23] fs: Allow copy_mount_options() to access
- user-space in a single pass
-Message-ID: <20200428140626.GJ3868@gaia>
-References: <20200421142603.3894-1-catalin.marinas@arm.com>
- <20200421142603.3894-21-catalin.marinas@arm.com>
- <20200427165641.GC15808@arm.com>
+        id S1728448AbgD1P2v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Apr 2020 11:28:51 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:46298 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728265AbgD1P2u (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 28 Apr 2020 11:28:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588087728;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uS5bW1tQf/8QdjoKBzoxx0eucD1SomGr+9LtePI5mU8=;
+        b=M7G5N5zOq33wnCRv5PCT2qSE5g0tv3Mj/kHq9mC1j61PAucvXTB0L6OwYQqkEei1/bAY5/
+        QfevW2sFByuahf4L4fkGs8dLdc5EGY2X/za/U5m72DOEr0EKOAwG4cedVwlrokoXRzYalT
+        G9cbjYq9o+u6N34NgZrcXmh8AbNOW+w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-236-tseay-lCPfqnD1DA0RbCNg-1; Tue, 28 Apr 2020 11:28:46 -0400
+X-MC-Unique: tseay-lCPfqnD1DA0RbCNg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AF268872FE1;
+        Tue, 28 Apr 2020 15:28:44 +0000 (UTC)
+Received: from fuller.cnet (ovpn-116-77.gru2.redhat.com [10.97.116.77])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 29F045D710;
+        Tue, 28 Apr 2020 15:28:44 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id ADCC7416C88E; Tue, 28 Apr 2020 11:12:50 -0300 (-03)
+Date:   Tue, 28 Apr 2020 11:12:50 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        Alex Belits <abelits@marvell.com>
+Cc:     Alex Belits <abelits@marvell.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Prasun Kapoor <pkapoor@marvell.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-mm@vger.kernel.org" <linux-mm@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 03/12] task_isolation: userspace hard isolation from
+ kernel
+Message-ID: <20200428141250.GA28012@fuller.cnet>
+References: <4473787e1b6bc3cc226067e8d122092a678b63de.camel@marvell.com>
+ <36d84b8dd168a38e6a56549dedc15dd6ebf8c09e.camel@marvell.com>
+ <20200305183313.GA29033@lenoir>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200427165641.GC15808@arm.com>
+In-Reply-To: <20200305183313.GA29033@lenoir>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Apr 27, 2020 at 05:56:42PM +0100, Dave P Martin wrote:
-> On Tue, Apr 21, 2020 at 03:26:00PM +0100, Catalin Marinas wrote:
-> > The copy_mount_options() function takes a user pointer argument but not
-> > a size. It tries to read up to a PAGE_SIZE. However, copy_from_user() is
-> > not guaranteed to return all the accessible bytes if, for example, the
-> > access crosses a page boundary and gets a fault on the second page. To
-> > work around this, the current copy_mount_options() implementations
-> > performs to copy_from_user() passes, first to the end of the current
-> > page and the second to what's left in the subsequent page.
+
+I like the idea as well, especially the reporting infrastructure, and 
+would like to see something like this integrated upstream.
+
+On Thu, Mar 05, 2020 at 07:33:13PM +0100, Frederic Weisbecker wrote:
+> On Wed, Mar 04, 2020 at 04:07:12PM +0000, Alex Belits wrote:
+> > The existing nohz_full mode is designed as a "soft" isolation mode
+> > that makes tradeoffs to minimize userspace interruptions while
+> > still attempting to avoid overheads in the kernel entry/exit path,
+> > to provide 100% kernel semantics, etc.
 > > 
-> > Some architectures like arm64 can guarantee an exact copy_from_user()
-> > depending on the size (since the arch function performs some alignment
-> > on the source register). Introduce an arch_has_exact_copy_from_user()
-> > function and allow copy_mount_options() to perform the user access in a
-> > single pass.
+> > However, some applications require a "hard" commitment from the
+> > kernel to avoid interruptions, in particular userspace device driver
+> > style applications, such as high-speed networking code.
 > > 
-> > While this function is not on a critical path, the single-pass behaviour
-> > is required for arm64 MTE (memory tagging) support where a uaccess can
-> > trigger intra-page faults (tag not matching). With the current
-> > implementation, if this happens during the first page, the function will
-> > return -EFAULT.
+> > This change introduces a framework to allow applications
+> > to elect to have the "hard" semantics as needed, specifying
+> > prctl(PR_TASK_ISOLATION, PR_TASK_ISOLATION_ENABLE) to do so.
+> > 
+> > The kernel must be built with the new TASK_ISOLATION Kconfig flag
+> > to enable this mode, and the kernel booted with an appropriate
+> > "isolcpus=nohz,domain,CPULIST" boot argument to enable
+> > nohz_full and isolcpus. The "task_isolation" state is then indicated
+> > by setting a new task struct field, task_isolation_flag, to the
+> > value passed by prctl(), and also setting a TIF_TASK_ISOLATION
+> > bit in the thread_info flags. When the kernel is returning to
+> > userspace from the prctl() call and sees TIF_TASK_ISOLATION set,
+> > it calls the new task_isolation_start() routine to arrange for
+> > the task to avoid being interrupted in the future.
+> > 
+> > With interrupts disabled, task_isolation_start() ensures that kernel
+> > subsystems that might cause a future interrupt are quiesced. If it
+> > doesn't succeed, it adjusts the syscall return value to indicate that
+> > fact, and userspace can retry as desired. In addition to stopping
+> > the scheduler tick, the code takes any actions that might avoid
+> > a future interrupt to the core, such as a worker thread being
+> > scheduled that could be quiesced now (e.g. the vmstat worker)
+> > or a future IPI to the core to clean up some state that could be
+> > cleaned up now (e.g. the mm lru per-cpu cache).
+> > 
+> > Once the task has returned to userspace after issuing the prctl(),
+> > if it enters the kernel again via system call, page fault, or any
+> > other exception or irq, the kernel will kill it with SIGKILL.
+
+This severely limits usage of the interface. 
+
+I suppose the reason for blocking system calls is to make sure 
+userspace does not initiate actions that might generate interruptions, 
+such as IPI flushes (memory unmaps or changes), vmstat work items
+(page dirtying), or is there any reason for it ?
+
+
++/* Only a few syscalls are valid once we are in task isolation mode. */
++static bool is_acceptable_syscall(int syscall)
++{
++       /* No need to incur an isolation signal if we are just exiting. */
++       if (syscall == __NR_exit || syscall == __NR_exit_group)
++               return true;
++       
++       /* Check to see if it's the prctl for isolation. */
++       if (syscall == __NR_prctl) {
++               unsigned long arg[SYSCALL_MAX_ARGS];
++       
++               syscall_get_arguments(current, current_pt_regs(), arg);
++               if (arg[0] == PR_TASK_ISOLATION)
++                       return true;
++       }
++ 
++       return false;
++}
+
+
+> > In addition to sending a signal, the code supports a kernel
+> > command-line "task_isolation_debug" flag which causes a stack
+> > backtrace to be generated whenever a task loses isolation.
+> > 
+> > To allow the state to be entered and exited, the syscall checking
+> > test ignores the prctl(PR_TASK_ISOLATION) syscall so that we can
+> > clear the bit again later, and ignores exit/exit_group to allow
+> > exiting the task without a pointless signal being delivered.
+> > 
+> > The prctl() API allows for specifying a signal number to use instead
+> > of the default SIGKILL, to allow for catching the notification
+> > signal; for example, in a production environment, it might be
+> > helpful to log information to the application logging mechanism
+> > before exiting. Or, the signal handler might choose to reset the
+> > program counter back to the code segment intended to be run isolated
+> > via prctl() to continue execution.
 > 
-> Do you know how much extra overhead we'd incur if we read at must one
-> tag granule at a time, instead of PAGE_SIZE?
+> Hi Alew,
+> 
+> I'm glad this patchset is being resurected.
+> Reading that changelog, I like the general idea and the direction.
+> The diff is a bit scary though but I'll check the patches in detail
+> in the upcoming days.
+> 
+> > 
+> > In a number of cases we can tell on a remote cpu that we are
+> > going to be interrupting the cpu, e.g. via an IPI or a TLB flush.
+> > In that case we generate the diagnostic (and optional stack dump)
+> > on the remote core to be able to deliver better diagnostics.
+> > If the interrupt is not something caught by Linux (e.g. a
+> > hypervisor interrupt) we can also request a reschedule IPI to
+> > be sent to the remote core so it can be sure to generate a
+> > signal to notify the process.
+> 
+> I'm wondering if it's wise to run that on a guest at all :-)
+> Or we should consider any guest exit to the host as a
+> disturbance, we would then need some sort of paravirt
+> driver to notify that, etc... That doesn't sound appealing.
+> 
+> Thanks.
 
-Our copy routines already read 16 bytes at a time, so that's the tag
-granule. With current copy_mount_options() we have the issue that it
-assumes a fault in the first page is fatal.
-
-Even if we change it to a loop of smaller uaccess, we still have the
-issue of unaligned accesses which can fail without reading all that's
-possible (i.e. the access goes across a tag granule boundary).
-
-The previous copy_mount_options() implementation (from couple of months
-ago I think) had a fallback to byte-by-byte, didn't have this issue.
-
-> I'm guessing that in practice strcpy_from_user() type operations copy
-> much less than a page most of the time, so what we lose in uaccess
-> overheads we _might_ regain in less redundant copying.
-
-strncpy_from_user() has a fallback to byte by byte, so we don't have an
-issue here.
-
-The above is only for synchronous accesses. For async, in v3 I disabled
-such checks for the uaccess routines.
-
--- 
-Catalin
