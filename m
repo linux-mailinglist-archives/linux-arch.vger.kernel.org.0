@@ -2,131 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A9D1BBCB5
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 13:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A588D1BBEC5
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 15:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbgD1Ln7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Apr 2020 07:43:59 -0400
-Received: from foss.arm.com ([217.140.110.172]:49966 "EHLO foss.arm.com"
+        id S1726864AbgD1NQs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Apr 2020 09:16:48 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:16939 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726426AbgD1Ln7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Apr 2020 07:43:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BE9430E;
-        Tue, 28 Apr 2020 04:43:58 -0700 (PDT)
-Received: from gaia (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE3BB3F73D;
-        Tue, 28 Apr 2020 04:43:56 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 12:43:54 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Dave Martin <dave.martin@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 01/23] arm64: alternative: Allow alternative_insn to
- always issue the first instruction
-Message-ID: <20200428114354.GE3868@gaia>
-References: <20200421142603.3894-1-catalin.marinas@arm.com>
- <20200421142603.3894-2-catalin.marinas@arm.com>
- <20200427165737.GD15808@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200427165737.GD15808@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726764AbgD1NQs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 28 Apr 2020 09:16:48 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 49BMcF42Gcz9tyZy;
+        Tue, 28 Apr 2020 15:16:45 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=dy+skcaG; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id moQddnqFTmZz; Tue, 28 Apr 2020 15:16:45 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 49BMcF2YPZz9tyb5;
+        Tue, 28 Apr 2020 15:16:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1588079805; bh=j2evlJVbC4DblvaOZbL9aC5MHHjN3Brop8EHn8xM2LY=;
+        h=From:Subject:To:Cc:Date:From;
+        b=dy+skcaG+aamFAjpi4FX0JOVppUyIIwwj4QjmWk8xaqvtue5byUWNU4fUZaRcw3zQ
+         9NdNwgEcOW91kbzO5WaxmbFeZDEbmpXIVcocAAq1GNlCR6QEsCy0J9c+VTzfSb2C/X
+         hVStv4eOviZLqxyo7RDFU6QkipVdjR0HQQ1GokQo=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id DE5228B82C;
+        Tue, 28 Apr 2020 15:16:46 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id yvysETkW__7X; Tue, 28 Apr 2020 15:16:46 +0200 (CEST)
+Received: from pc16570vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 938688B82D;
+        Tue, 28 Apr 2020 15:16:46 +0200 (CEST)
+Received: by pc16570vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id 2666F658AD; Tue, 28 Apr 2020 13:16:46 +0000 (UTC)
+Message-Id: <cover.1588079622.git.christophe.leroy@c-s.fr>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: [PATCH v8 0/8] powerpc: switch VDSO to C implementation
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
+        luto@kernel.org, linux-arch@vger.kernel.org
+Date:   Tue, 28 Apr 2020 13:16:46 +0000 (UTC)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Dave,
+This is the seventh version of a series to switch powerpc VDSO to
+generic C implementation.
 
-On Mon, Apr 27, 2020 at 05:57:37PM +0100, Dave P Martin wrote:
-> On Tue, Apr 21, 2020 at 03:25:41PM +0100, Catalin Marinas wrote:
-> > There are situations where we do not want to disable the whole block
-> > based on a config option, only the alternative part while keeping the
-> > first instruction. Improve the alternative_insn assembler macro to take
-> > a 'first_insn' argument, default 0, to preserve the current behaviour.
-> > 
-> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > ---
-> >  arch/arm64/include/asm/alternative.h | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/include/asm/alternative.h b/arch/arm64/include/asm/alternative.h
-> > index 5e5dc05d63a0..67d7cc608336 100644
-> > --- a/arch/arm64/include/asm/alternative.h
-> > +++ b/arch/arm64/include/asm/alternative.h
-> > @@ -111,7 +111,11 @@ static inline void apply_alternatives_module(void *start, size_t length) { }
-> >  	.byte \alt_len
-> >  .endm
-> >  
-> > -.macro alternative_insn insn1, insn2, cap, enable = 1
-> > +/*
-> > + * Disable the whole block if enable == 0, unless first_insn == 1 in which
-> > + * case insn1 will always be issued but without an alternative insn2.
-> > + */
-> > +.macro alternative_insn insn1, insn2, cap, enable = 1, first_insn = 0
-> >  	.if \enable
-> >  661:	\insn1
-> >  662:	.pushsection .altinstructions, "a"
-> > @@ -122,6 +126,8 @@ static inline void apply_alternatives_module(void *start, size_t length) { }
-> >  664:	.popsection
-> >  	.org	. - (664b-663b) + (662b-661b)
-> >  	.org	. - (662b-661b) + (664b-663b)
-> > +	.elseif \first_insn
-> > +	\insn1
-> 
-> This becomes quite unreadable at the invocation site, especially when
-> invoked as "alternative_insn ..., 1".  "... first_insn=1" is not much
-> better either).
+Main changes since v7 are:
+- Added gettime64 on PPC32
 
-That I agree.
+This series applies on today's powerpc/merge branch.
 
-The reason I didn't leave the alternative in place here is that if gas
-doesn't support MTE, it will fail to compile. I wanted to avoid the
-several #ifdef's.
+See the last patches for details on changes and performance.
 
-> I'm struggling to find non-trivial users of this that actually want the
-> whole block to be deleted dependent on the config.
+Christophe Leroy (8):
+  powerpc/vdso64: Switch from __get_datapage() to get_datapage inline
+    macro
+  powerpc/vdso: Remove __kernel_datapage_offset and simplify
+    __get_datapage()
+  powerpc/vdso: Remove unused \tmp param in __get_datapage()
+  powerpc/processor: Move cpu_relax() into asm/vdso/processor.h
+  powerpc/vdso: Prepare for switching VDSO to generic C implementation.
+  powerpc/vdso: Switch VDSO to generic C implementation.
+  lib/vdso: force inlining of __cvdso_clock_gettime_common()
+  powerpc/vdso: Provide __kernel_clock_gettime64() on vdso32
 
-Some of the errata stuff like CONFIG_ARM64_REPEAT_TLBI ends up with
-unnecessary nops. Similarly for CONFIG_ARM64_UAO/PAN and maybe a few
-others (it's all additional nops). We also have a few errata workaround
-where we didn't bother with the config enable option at all.
-
-While this is C code + inline asm, I'd like to have a consistent
-behaviour of ALTERNATIVE between C and .S files. Now, given that some of
-them (like UAO/PAN) are on by default, it probably doesn't make any
-difference if we always keep the first block (non-alternative).
-
-We could add a new macro ALTERNATIVE_OR_NOP.
-
-> Can we instead just always behave as if first_insn=1 instead?  This this
-> works intuitively as an alternative, not the current weird 3-way choice
-> between insn1, insn2 and nothing at all.  The only time that makes sense
-> is when one of the insns is a branch that skips the block, but that's
-> handled via the alternative_if macros instead.
-> 
-> Behaving always like first_insn=1 provides an if-else that is statically
-> optimised if the relevant feature is configured out, which I think is
-> the only thing people are ever going to want.
-> 
-> Maybe something depends on the current behaviour, but I can't see it so
-> far...
-
-I'll give it a go in v4 and see how it looks.
-
-Another option would be an alternative_else which takes an enable
-argument.
-
-Thanks.
+ arch/powerpc/Kconfig                         |   2 +
+ arch/powerpc/include/asm/clocksource.h       |   7 +
+ arch/powerpc/include/asm/processor.h         |  10 +-
+ arch/powerpc/include/asm/vdso/clocksource.h  |   7 +
+ arch/powerpc/include/asm/vdso/gettimeofday.h | 175 +++++++++++
+ arch/powerpc/include/asm/vdso/processor.h    |  23 ++
+ arch/powerpc/include/asm/vdso/vsyscall.h     |  25 ++
+ arch/powerpc/include/asm/vdso_datapage.h     |  50 ++--
+ arch/powerpc/kernel/asm-offsets.c            |  49 +--
+ arch/powerpc/kernel/time.c                   |  91 +-----
+ arch/powerpc/kernel/vdso.c                   |  58 +---
+ arch/powerpc/kernel/vdso32/Makefile          |  32 +-
+ arch/powerpc/kernel/vdso32/cacheflush.S      |   2 +-
+ arch/powerpc/kernel/vdso32/config-fake32.h   |  34 +++
+ arch/powerpc/kernel/vdso32/datapage.S        |   7 +-
+ arch/powerpc/kernel/vdso32/gettimeofday.S    | 300 +------------------
+ arch/powerpc/kernel/vdso32/vdso32.lds.S      |   8 +-
+ arch/powerpc/kernel/vdso32/vgettimeofday.c   |  35 +++
+ arch/powerpc/kernel/vdso64/Makefile          |  23 +-
+ arch/powerpc/kernel/vdso64/cacheflush.S      |   9 +-
+ arch/powerpc/kernel/vdso64/datapage.S        |  31 +-
+ arch/powerpc/kernel/vdso64/gettimeofday.S    | 243 +--------------
+ arch/powerpc/kernel/vdso64/vdso64.lds.S      |   7 +-
+ arch/powerpc/kernel/vdso64/vgettimeofday.c   |  29 ++
+ lib/vdso/gettimeofday.c                      |   2 +-
+ 25 files changed, 460 insertions(+), 799 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/clocksource.h
+ create mode 100644 arch/powerpc/include/asm/vdso/clocksource.h
+ create mode 100644 arch/powerpc/include/asm/vdso/gettimeofday.h
+ create mode 100644 arch/powerpc/include/asm/vdso/processor.h
+ create mode 100644 arch/powerpc/include/asm/vdso/vsyscall.h
+ create mode 100644 arch/powerpc/kernel/vdso32/config-fake32.h
+ create mode 100644 arch/powerpc/kernel/vdso32/vgettimeofday.c
+ create mode 100644 arch/powerpc/kernel/vdso64/vgettimeofday.c
 
 -- 
-Catalin
+2.25.0
+
