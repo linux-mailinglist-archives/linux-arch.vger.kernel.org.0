@@ -2,150 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF561BBF17
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 15:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4458A1BBF80
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 15:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727974AbgD1NVJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Apr 2020 09:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727804AbgD1NVJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Apr 2020 09:21:09 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7698DC03C1AB;
-        Tue, 28 Apr 2020 06:21:08 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id h11so8348810plr.11;
-        Tue, 28 Apr 2020 06:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vloW/Le5uTQWcHYDSa4UBFwJd+x/1yJE7+IrW0Uir68=;
-        b=uugDtdaaPea9Qem1yWXNMLi9gRG0GI/Vgl/Z+2D8dNgR0YSKpud6IPhbq5RS8gDIWD
-         zdrj7X8QwHwITgj6rGtnWk9zsSUe+HdFNCjSJgQycxot+o2TGvW23sKBdrguYrSdNXYW
-         kyPeeRIVqQ4jme4VsO/ZAU0BbglFDS24Lg4v/vb9GO3GmRnykawt7JA36rysNz8P02yx
-         QChX37YVxcMRuhA6NgC8s81uDJU3cyxsab1R1vx0DHFubvApL6dvSBOXChEPEbdHtvlb
-         rUrB40lVSAlmD+hrnrNFidfvV/YfhQjh3KiwIOO5XfmR3Sy8QiL2HnXDuhL7p0kxD2Hf
-         2/hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vloW/Le5uTQWcHYDSa4UBFwJd+x/1yJE7+IrW0Uir68=;
-        b=uCU74+P03q+UTYRGdURrdZWRx5L1fyrmiAc5sl/D+WQ79CiWcAa6YSMJTRZRAGSHHn
-         Pc2H7U2c3id/cmhw37erhn1wKa4TNwqz1nvJSTpveSbLNiOG0sp2Ixp+G7hhltYSOA+Q
-         zNzGp0mvGd99W9jV0ciNCEDVYUuhpDW/GUArBgRLVpF2dZA557iFQ6s2PivchjdUjQlF
-         RBa4VTjBAX+CqrF60wydHPOZfVQ1MwUupStrG+EoG8mhFLyh9VD9tF78GXB1ddecB+tW
-         5kHzv+L1xQaMJeLyINQZlVJ1sDHe5iTV1lIxWmJmTrN5eyiv4/rCUsthrUH9ptoA87Yy
-         Ql/w==
-X-Gm-Message-State: AGi0PuYtnumI1dIT0ptp9tyaXDL7mVl8p/jh+zBHojh3x7uO55jEDJH0
-        EIF6xgzYNUsCf33bZ6lYHSk=
-X-Google-Smtp-Source: APiQypIcd+DvKwzZS/3gA8jfo7SAiP8Tv8dawrVg3z4qxHYJvH/TJSd8+LSZgGW5y8rVr0Og2hpZLQ==
-X-Received: by 2002:a17:90a:3268:: with SMTP id k95mr4895519pjb.185.1588080067940;
-        Tue, 28 Apr 2020 06:21:07 -0700 (PDT)
-Received: from gnu-cfl-2.localdomain (c-69-181-90-243.hsd1.ca.comcast.net. [69.181.90.243])
-        by smtp.gmail.com with ESMTPSA id r12sm12957662pgv.59.2020.04.28.06.21.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 06:21:07 -0700 (PDT)
-Received: from gnu-cfl-2.localdomain (localhost [IPv6:::1])
-        by gnu-cfl-2.localdomain (Postfix) with ESMTP id 511E7C037D;
-        Tue, 28 Apr 2020 06:21:06 -0700 (PDT)
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
+        id S1726949AbgD1N2N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Apr 2020 09:28:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59472 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726798AbgD1N2M (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 28 Apr 2020 09:28:12 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 439F5206F0;
+        Tue, 28 Apr 2020 13:28:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588080492;
+        bh=e2h+YGX8UNd7RGu9S/wztUu2W9Zxes42cCR7ChuzclQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IaFvCu6krhFeoqDRhlxn4Rt0HIxMcHkb8PJJjF/01l9E9bBbYc0uSUxxo5MRegT8S
+         rcMlMNwdwADZCmdFUqk1E3PWHt/iQ+TBzEOqu6W95E2Gppu3nhQV4pELCaIVMxuAMr
+         VdBgg/Q/DMYyELaZHTFaB9/B+wUhZEkt8jkDc01A=
+Date:   Tue, 28 Apr 2020 14:28:05 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Elliott <paul.elliott@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Amit Kachhap <amit.kachhap@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu " <hjl.tools@gmail.com>,
+        Andrew Jones <drjones@redhat.com>,
         Kees Cook <keescook@chromium.org>,
-        Borislav Petkov <bp@suse.de>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 2/2] Discard .note.gnu.property sections in generic NOTES
-Date:   Tue, 28 Apr 2020 06:21:05 -0700
-Message-Id: <20200428132105.170886-2-hjl.tools@gmail.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200428132105.170886-1-hjl.tools@gmail.com>
-References: <20200428132105.170886-1-hjl.tools@gmail.com>
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Sudakshina Das <sudi.das@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v10 00/13] arm64: Branch Target Identification support
+Message-ID: <20200428132804.GF6791@willie-the-truck>
+References: <20200316165055.31179-1-broonie@kernel.org>
+ <20200422154436.GJ4898@sirena.org.uk>
+ <20200422162954.GF3585@gaia>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200422162954.GF3585@gaia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-With the command-line option, -mx86-used-note=yes, the x86 assembler
-in binutils 2.32 and above generates a program property note in a note
-section, .note.gnu.property, to encode used x86 ISAs and features.  But
-kernel linker script only contains a single NOTE segment:
+On Wed, Apr 22, 2020 at 05:29:54PM +0100, Catalin Marinas wrote:
+> On Wed, Apr 22, 2020 at 04:44:36PM +0100, Mark Brown wrote:
+> > On Mon, Mar 16, 2020 at 04:50:42PM +0000, Mark Brown wrote:
+> > > This patch series implements support for ARMv8.5-A Branch Target
+> > > Identification (BTI), which is a control flow integrity protection
+> > > feature introduced as part of the ARMv8.5-A extensions.
+> > 
+> > I've not resent this since the branch is still sitting in the arm64 tree
+> > but it's also not in -next at the minute - is there anything you're
+> > waiting for from my end here?
+> 
+> It's up to Will whether he wants a new series posted. The for-next/bti
+> branch is complete AFAICT, only that normally we start queueing stuff
+> (and push to -next) around -rc3.
 
-PHDRS {
- text PT_LOAD FLAGS(5);
- data PT_LOAD FLAGS(6);
- percpu PT_LOAD FLAGS(6);
- init PT_LOAD FLAGS(7);
- note PT_NOTE FLAGS(0);
-}
-SECTIONS
-{
-...
- .notes : AT(ADDR(.notes) - 0xffffffff80000000) { __start_notes = .; KEEP(*(.not
-e.*)) __stop_notes = .; } :text :note
-...
-}
+I'm happy either way, but it would be nice to base other BTI patches on
+top of this branch. Mark -- is it easier for you to refresh the series
+against v5.7-rc3, or leave it like it is? Please just let me know either
+way.
 
-The NOTE segment generated by kernel linker script is aligned to 4 bytes.
-But .note.gnu.property section must be aligned to 8 bytes on x86-64 and
-we get
+Thanks,
 
-[hjl@gnu-skx-1 linux]$ readelf -n vmlinux
-
-Displaying notes found in: .notes
-  Owner                Data size Description
-  Xen                  0x00000006 Unknown note type: (0x00000006)
-   description data: 6c 69 6e 75 78 00
-  Xen                  0x00000004 Unknown note type: (0x00000007)
-   description data: 32 2e 36 00
-  xen-3.0              0x00000005 Unknown note type: (0x006e6558)
-   description data: 08 00 00 00 03
-readelf: Warning: note with invalid namesz and/or descsz found at offset 0x50
-readelf: Warning:  type: 0xffffffff, namesize: 0x006e6558, descsize:
-0x80000000, alignment: 8
-[hjl@gnu-skx-1 linux]$
-
-Since note.gnu.property section in kernel image is never used, this patch
-discards .note.gnu.property sections in kernel linker script by adding
-
-/DISCARD/ : {
-  *(.note.gnu.property)
-}
-
-before kernel NOTE segment in generic NOTES.
-
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- include/asm-generic/vmlinux.lds.h | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 71e387a5fe90..95cd678428f4 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -833,7 +833,14 @@
- #define TRACEDATA
- #endif
- 
-+/*
-+ * Discard .note.gnu.property sections which are unused and have
-+ * different alignment requirement from kernel note sections.
-+ */
- #define NOTES								\
-+	/DISCARD/ : {							\
-+		*(.note.gnu.property)					\
-+	}								\
- 	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
- 		__start_notes = .;					\
- 		KEEP(*(.note.*))					\
--- 
-2.25.4
-
+Will
