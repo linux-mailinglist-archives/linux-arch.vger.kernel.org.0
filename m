@@ -2,134 +2,429 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B60C41BBED5
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 15:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC311BBED1
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Apr 2020 15:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbgD1NRN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Apr 2020 09:17:13 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:51161 "EHLO pegase1.c-s.fr"
+        id S1727106AbgD1NQy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Apr 2020 09:16:54 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:3827 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727060AbgD1NQx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Apr 2020 09:16:53 -0400
+        id S1727085AbgD1NQy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 28 Apr 2020 09:16:54 -0400
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 49BMcK4Mfpz9v0D7;
-        Tue, 28 Apr 2020 15:16:49 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 49BMcM1fXQz9v0D5;
+        Tue, 28 Apr 2020 15:16:51 +0200 (CEST)
 Authentication-Results: localhost; dkim=pass
         reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=BBzGvZ8k; dkim-adsp=pass;
+        header.d=c-s.fr header.i=@c-s.fr header.b=uWtUed58; dkim-adsp=pass;
         dkim-atps=neutral
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id X5Vvr4pVF-Uy; Tue, 28 Apr 2020 15:16:49 +0200 (CEST)
+        with ESMTP id UYRbkq6Pk551; Tue, 28 Apr 2020 15:16:51 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 49BMcK3FSkz9v0D5;
-        Tue, 28 Apr 2020 15:16:49 +0200 (CEST)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 49BMcM0ZStz9v0D3;
+        Tue, 28 Apr 2020 15:16:51 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1588079809; bh=WKIJIRaf8oXkf9VgP9fXf8zvNImGk/BdmYQq2UVHkpg=;
+        t=1588079811; bh=xkNSXKMfmQa2Z6EYr/C10z6fJ08gLLkxqCTbdwDvJJ8=;
         h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
-        b=BBzGvZ8k5MkcBDY21UwgDiYY3heRye8kpjdyWbxYMe0uMznI9X58y0+5UD01ucImS
-         5kNhWHi4oz6Wc6jOZyqRJOsN2zKjBeH+eZ9mOJA0+6MFBvlNqM/XBR3KiFSiKSf3vL
-         4N6vdo22QwgExfcx4hb6g9bGVGd1flBMusfoblKM=
+        b=uWtUed58qgSOVSSFGdYTtJ/8brcZ6wSYDo8hVgx+wpBvNYXuHrC7JF7OykWKpvLvg
+         INmKc1cvwKqKFLmDHwJpFAOSLbIdHlwauN9YRmywhmklU/HHfU7Aw68XwC7PTvaOO6
+         mh1sxedpFM6VZaOfl+dA5fUIxLpHut3UWJE15yMI=
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DEFD58B814;
-        Tue, 28 Apr 2020 15:16:50 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5FB048B831;
+        Tue, 28 Apr 2020 15:16:52 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 3yNGiFGztxKf; Tue, 28 Apr 2020 15:16:50 +0200 (CEST)
+        with ESMTP id IGyMt7dIJebb; Tue, 28 Apr 2020 15:16:52 +0200 (CEST)
 Received: from pc16570vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8F5158B82D;
-        Tue, 28 Apr 2020 15:16:50 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BED598B82E;
+        Tue, 28 Apr 2020 15:16:51 +0200 (CEST)
 Received: by pc16570vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 577D0658AD; Tue, 28 Apr 2020 13:16:50 +0000 (UTC)
-Message-Id: <d2751eb1f030d22607f63ddd4cd510e6d5a529c7.1588079622.git.christophe.leroy@c-s.fr>
+        id 5EDE5658AD; Tue, 28 Apr 2020 13:16:51 +0000 (UTC)
+Message-Id: <2a67c333893454868bbfda773ba4b01c20272a5d.1588079622.git.christophe.leroy@c-s.fr>
 In-Reply-To: <cover.1588079622.git.christophe.leroy@c-s.fr>
 References: <cover.1588079622.git.christophe.leroy@c-s.fr>
 From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [PATCH v8 4/8] powerpc/processor: Move cpu_relax() into
- asm/vdso/processor.h
+Subject: [PATCH v8 5/8] powerpc/vdso: Prepare for switching VDSO to generic C
+ implementation.
 To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
         luto@kernel.org, linux-arch@vger.kernel.org
-Date:   Tue, 28 Apr 2020 13:16:50 +0000 (UTC)
+Date:   Tue, 28 Apr 2020 13:16:51 +0000 (UTC)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-cpu_relax() need to be in asm/vdso/processor.h to be used by
-the C VDSO generic library.
+Prepare for switching VDSO to generic C implementation in following
+patch. Here, we:
+- Modify __get_datapage() to take an offset
+- Prepare the helpers to call the C VDSO functions
+- Prepare the required callbacks for the C VDSO functions
+- Prepare the clocksource.h files to define VDSO_ARCH_CLOCKMODES
+- Add the C trampolines to the generic C VDSO functions
 
-Move it there.
+powerpc is a bit special for VDSO as well as system calls in the
+way that it requires setting CR SO bit which cannot be done in C.
+Therefore, entry/exit needs to be performed in ASM.
+
+Implementing __arch_get_vdso_data() would clobber the link register,
+requiring the caller to save it. As the ASM calling function already
+has to set a stack frame and saves the link register before calling
+the C vdso function, retriving the vdso data pointer there is lighter.
+
+Implement __arch_vdso_capable() and:
+- When the timebase is used, make it always return true.
+- When the RTC clock is used, make it always return false.
+
+Provide vdso_shift_ns(), as the generic x >> s gives the following
+bad result:
+
+  18:	35 25 ff e0 	addic.  r9,r5,-32
+  1c:	41 80 00 10 	blt     2c <shift+0x14>
+  20:	7c 64 4c 30 	srw     r4,r3,r9
+  24:	38 60 00 00 	li      r3,0
+...
+  2c:	54 69 08 3c 	rlwinm  r9,r3,1,0,30
+  30:	21 45 00 1f 	subfic  r10,r5,31
+  34:	7c 84 2c 30 	srw     r4,r4,r5
+  38:	7d 29 50 30 	slw     r9,r9,r10
+  3c:	7c 63 2c 30 	srw     r3,r3,r5
+  40:	7d 24 23 78 	or      r4,r9,r4
+
+In our case the shift is always <= 32. In addition,  the upper 32 bits
+of the result are likely nul. Lets GCC know it, it also optimises the
+following calculations.
+
+With the patch, we get:
+   0:	21 25 00 20 	subfic  r9,r5,32
+   4:	7c 69 48 30 	slw     r9,r3,r9
+   8:	7c 84 2c 30 	srw     r4,r4,r5
+   c:	7d 24 23 78 	or      r4,r9,r4
+  10:	7c 63 2c 30 	srw     r3,r3,r5
 
 Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 ---
- arch/powerpc/include/asm/processor.h      | 10 ++--------
- arch/powerpc/include/asm/vdso/processor.h | 23 +++++++++++++++++++++++
- 2 files changed, 25 insertions(+), 8 deletions(-)
- create mode 100644 arch/powerpc/include/asm/vdso/processor.h
+v8:
+- New, splitted out of last patch of the series
+---
+ arch/powerpc/include/asm/clocksource.h       |   7 +
+ arch/powerpc/include/asm/vdso/clocksource.h  |   7 +
+ arch/powerpc/include/asm/vdso/gettimeofday.h | 175 +++++++++++++++++++
+ arch/powerpc/include/asm/vdso_datapage.h     |   6 +-
+ arch/powerpc/kernel/vdso32/vgettimeofday.c   |  29 +++
+ arch/powerpc/kernel/vdso64/vgettimeofday.c   |  29 +++
+ 6 files changed, 250 insertions(+), 3 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/clocksource.h
+ create mode 100644 arch/powerpc/include/asm/vdso/clocksource.h
+ create mode 100644 arch/powerpc/include/asm/vdso/gettimeofday.h
+ create mode 100644 arch/powerpc/kernel/vdso32/vgettimeofday.c
+ create mode 100644 arch/powerpc/kernel/vdso64/vgettimeofday.c
 
-diff --git a/arch/powerpc/include/asm/processor.h b/arch/powerpc/include/asm/processor.h
-index bfa336fbcfeb..8390503c44a2 100644
---- a/arch/powerpc/include/asm/processor.h
-+++ b/arch/powerpc/include/asm/processor.h
-@@ -6,6 +6,8 @@
-  * Copyright (C) 2001 PPC 64 Team, IBM Corp
-  */
- 
-+#include <vdso/processor.h>
-+
- #include <asm/reg.h>
- 
- #ifdef CONFIG_VSX
-@@ -63,14 +65,6 @@ extern int _chrp_type;
- 
- #endif /* defined(__KERNEL__) && defined(CONFIG_PPC32) */
- 
--/* Macros for adjusting thread priority (hardware multi-threading) */
--#define HMT_very_low()   asm volatile("or 31,31,31   # very low priority")
--#define HMT_low()	 asm volatile("or 1,1,1	     # low priority")
--#define HMT_medium_low() asm volatile("or 6,6,6      # medium low priority")
--#define HMT_medium()	 asm volatile("or 2,2,2	     # medium priority")
--#define HMT_medium_high() asm volatile("or 5,5,5      # medium high priority")
--#define HMT_high()	 asm volatile("or 3,3,3	     # high priority")
--
- #ifdef __KERNEL__
- 
- #ifdef CONFIG_PPC64
-diff --git a/arch/powerpc/include/asm/vdso/processor.h b/arch/powerpc/include/asm/vdso/processor.h
+diff --git a/arch/powerpc/include/asm/clocksource.h b/arch/powerpc/include/asm/clocksource.h
 new file mode 100644
-index 000000000000..39b9beace9ca
+index 000000000000..482185566b0c
 --- /dev/null
-+++ b/arch/powerpc/include/asm/vdso/processor.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __ASM_VDSO_PROCESSOR_H
-+#define __ASM_VDSO_PROCESSOR_H
++++ b/arch/powerpc/include/asm/clocksource.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_CLOCKSOURCE_H
++#define _ASM_CLOCKSOURCE_H
 +
-+#ifndef __ASSEMBLY__
++#include <asm/vdso/clocksource.h>
 +
-+/* Macros for adjusting thread priority (hardware multi-threading) */
-+#define HMT_very_low()		asm volatile("or 31, 31, 31	# very low priority")
-+#define HMT_low()		asm volatile("or 1, 1, 1	# low priority")
-+#define HMT_medium_low()	asm volatile("or 6, 6, 6	# medium low priority")
-+#define HMT_medium()		asm volatile("or 2, 2, 2	# medium priority")
-+#define HMT_medium_high()	asm volatile("or 5, 5, 5	# medium high priority")
-+#define HMT_high()		asm volatile("or 3, 3, 3	# high priority")
++#endif
+diff --git a/arch/powerpc/include/asm/vdso/clocksource.h b/arch/powerpc/include/asm/vdso/clocksource.h
+new file mode 100644
+index 000000000000..ec5d672d2569
+--- /dev/null
++++ b/arch/powerpc/include/asm/vdso/clocksource.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_VDSOCLOCKSOURCE_H
++#define __ASM_VDSOCLOCKSOURCE_H
 +
-+#ifdef CONFIG_PPC64
-+#define cpu_relax()	do { HMT_low(); HMT_medium(); barrier(); } while (0)
++#define VDSO_ARCH_CLOCKMODES	VDSO_CLOCKMODE_ARCHTIMER
++
++#endif
+diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
+new file mode 100644
+index 000000000000..4452897f9bd8
+--- /dev/null
++++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
+@@ -0,0 +1,175 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_VDSO_GETTIMEOFDAY_H
++#define __ASM_VDSO_GETTIMEOFDAY_H
++
++#include <asm/ptrace.h>
++
++#ifdef __ASSEMBLY__
++
++.macro cvdso_call funct
++  .cfi_startproc
++	PPC_STLU	r1, -STACK_FRAME_OVERHEAD(r1)
++	mflr		r0
++  .cfi_register lr, r0
++	PPC_STL		r0, STACK_FRAME_OVERHEAD + PPC_LR_STKOFF(r1)
++	get_datapage	r5, VDSO_DATA_OFFSET
++	bl		\funct
++	PPC_LL		r0, STACK_FRAME_OVERHEAD + PPC_LR_STKOFF(r1)
++	cmpwi		r3, 0
++	mtlr		r0
++  .cfi_restore lr
++	addi		r1, r1, STACK_FRAME_OVERHEAD
++	crclr		so
++	beqlr+
++	crset		so
++	neg		r3, r3
++	blr
++  .cfi_endproc
++.endm
++
++.macro cvdso_call_time funct
++  .cfi_startproc
++	PPC_STLU	r1, -STACK_FRAME_OVERHEAD(r1)
++	mflr		r0
++  .cfi_register lr, r0
++	PPC_STL		r0, STACK_FRAME_OVERHEAD + PPC_LR_STKOFF(r1)
++	get_datapage	r4, VDSO_DATA_OFFSET
++	bl		\funct
++	PPC_LL		r0, STACK_FRAME_OVERHEAD + PPC_LR_STKOFF(r1)
++	crclr		so
++	mtlr		r0
++  .cfi_restore lr
++	addi		r1, r1, STACK_FRAME_OVERHEAD
++	blr
++  .cfi_endproc
++.endm
++
 +#else
-+#define cpu_relax()	barrier()
++
++#include <asm/time.h>
++#include <asm/unistd.h>
++#include <uapi/linux/time.h>
++
++#define VDSO_HAS_CLOCK_GETRES		1
++
++#define VDSO_HAS_TIME			1
++
++static __always_inline int do_syscall_2(const unsigned long _r0, const unsigned long _r3,
++					const unsigned long _r4)
++{
++	register long r0 asm("r0") = _r0;
++	register unsigned long r3 asm("r3") = _r3;
++	register unsigned long r4 asm("r4") = _r4;
++	register int ret asm ("r3");
++
++	asm volatile(
++		"       sc\n"
++		"	bns+	1f\n"
++		"	neg	%0, %0\n"
++		"1:\n"
++	: "=r" (ret), "+r" (r4), "+r" (r0)
++	: "r" (r3)
++	: "memory", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12", "cr0", "ctr");
++
++	return ret;
++}
++
++static __always_inline
++int gettimeofday_fallback(struct __kernel_old_timeval *_tv, struct timezone *_tz)
++{
++	return do_syscall_2(__NR_gettimeofday, (unsigned long)_tv, (unsigned long)_tz);
++}
++
++static __always_inline
++int clock_gettime_fallback(clockid_t _clkid, struct __kernel_timespec *_ts)
++{
++	return do_syscall_2(__NR_clock_gettime, _clkid, (unsigned long)_ts);
++}
++
++static __always_inline
++int clock_getres_fallback(clockid_t _clkid, struct __kernel_timespec *_ts)
++{
++	return do_syscall_2(__NR_clock_getres, _clkid, (unsigned long)_ts);
++}
++
++#ifdef CONFIG_VDSO32
++
++#define BUILD_VDSO32		1
++
++static __always_inline
++int clock_gettime32_fallback(clockid_t _clkid, struct old_timespec32 *_ts)
++{
++	return do_syscall_2(__NR_clock_gettime, _clkid, (unsigned long)_ts);
++}
++
++static __always_inline
++int clock_getres32_fallback(clockid_t _clkid, struct old_timespec32 *_ts)
++{
++	return do_syscall_2(__NR_clock_getres, _clkid, (unsigned long)_ts);
++}
 +#endif
 +
++static __always_inline u64 __arch_get_hw_counter(s32 clock_mode)
++{
++	return get_tb();
++}
++
++const struct vdso_data *__arch_get_vdso_data(void);
++
++static inline bool vdso_clocksource_ok(const struct vdso_data *vd)
++{
++	return !__USE_RTC();
++}
++#define vdso_clocksource_ok vdso_clocksource_ok
++
++/*
++ * powerpc specific delta calculation.
++ *
++ * This variant removes the masking of the subtraction because the
++ * clocksource mask of all VDSO capable clocksources on powerpc is U64_MAX
++ * which would result in a pointless operation. The compiler cannot
++ * optimize it away as the mask comes from the vdso data and is not compile
++ * time constant.
++ */
++static __always_inline u64 vdso_calc_delta(u64 cycles, u64 last, u64 mask, u32 mult)
++{
++	return (cycles - last) * mult;
++}
++#define vdso_calc_delta vdso_calc_delta
++
++#ifndef __powerpc64__
++static __always_inline u64 vdso_shift_ns(u64 ns, unsigned long shift)
++{
++	u32 hi = ns >> 32;
++	u32 lo = ns;
++
++	lo >>= shift;
++	lo |= hi << (32 - shift);
++	hi >>= shift;
++
++	if (likely(hi == 0))
++		return lo;
++
++	return ((u64)hi << 32) | lo;
++}
++#define vdso_shift_ns vdso_shift_ns
++#endif
++
++#ifdef __powerpc64__
++int __c_kernel_clock_gettime(clockid_t clock, struct __kernel_timespec *ts,
++			     const struct vdso_data *vd);
++int __c_kernel_clock_getres(clockid_t clock_id, struct __kernel_timespec *res,
++			    const struct vdso_data *vd);
++#else
++int __c_kernel_clock_gettime(clockid_t clock, struct old_timespec32 *ts,
++			     const struct vdso_data *vd);
++int __c_kernel_clock_getres(clockid_t clock_id, struct old_timespec32 *res,
++			    const struct vdso_data *vd);
++#endif
++int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz,
++			    const struct vdso_data *vd);
++__kernel_old_time_t __c_kernel_time(__kernel_old_time_t *time,
++				    const struct vdso_data *vd);
 +#endif /* __ASSEMBLY__ */
 +
-+#endif /* __ASM_VDSO_PROCESSOR_H */
++#endif /* __ASM_VDSO_GETTIMEOFDAY_H */
+diff --git a/arch/powerpc/include/asm/vdso_datapage.h b/arch/powerpc/include/asm/vdso_datapage.h
+index f3d7e4e2a45b..78b8f67e9873 100644
+--- a/arch/powerpc/include/asm/vdso_datapage.h
++++ b/arch/powerpc/include/asm/vdso_datapage.h
+@@ -116,14 +116,14 @@ extern struct vdso_data *vdso_data;
+ 
+ #else /* __ASSEMBLY__ */
+ 
+-.macro get_datapage ptr
++.macro get_datapage ptr, offset=0
+ 	bcl	20, 31, .+4
+ 999:
+ 	mflr	\ptr
+ #if CONFIG_PPC_PAGE_SHIFT > 14
+-	addis	\ptr, \ptr, (_vdso_datapage - 999b)@ha
++	addis	\ptr, \ptr, (_vdso_datapage + \offset - 999b)@ha
+ #endif
+-	addi	\ptr, \ptr, (_vdso_datapage - 999b)@l
++	addi	\ptr, \ptr, (_vdso_datapage + \offset - 999b)@l
+ .endm
+ 
+ #endif /* __ASSEMBLY__ */
+diff --git a/arch/powerpc/kernel/vdso32/vgettimeofday.c b/arch/powerpc/kernel/vdso32/vgettimeofday.c
+new file mode 100644
+index 000000000000..0b9ab4c22ef2
+--- /dev/null
++++ b/arch/powerpc/kernel/vdso32/vgettimeofday.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Powerpc userspace implementations of gettimeofday() and similar.
++ */
++#include <linux/time.h>
++#include <linux/types.h>
++
++int __c_kernel_clock_gettime(clockid_t clock, struct old_timespec32 *ts,
++			     const struct vdso_data *vd)
++{
++	return __cvdso_clock_gettime32_data(vd, clock, ts);
++}
++
++int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz,
++			    const struct vdso_data *vd)
++{
++	return __cvdso_gettimeofday_data(vd, tv, tz);
++}
++
++int __c_kernel_clock_getres(clockid_t clock_id, struct old_timespec32 *res,
++			    const struct vdso_data *vd)
++{
++	return __cvdso_clock_getres_time32_data(vd, clock_id, res);
++}
++
++__kernel_old_time_t __c_kernel_time(__kernel_old_time_t *time, const struct vdso_data *vd)
++{
++	return __cvdso_time_data(vd, time);
++}
+diff --git a/arch/powerpc/kernel/vdso64/vgettimeofday.c b/arch/powerpc/kernel/vdso64/vgettimeofday.c
+new file mode 100644
+index 000000000000..5b5500058344
+--- /dev/null
++++ b/arch/powerpc/kernel/vdso64/vgettimeofday.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Powerpc userspace implementations of gettimeofday() and similar.
++ */
++#include <linux/time.h>
++#include <linux/types.h>
++
++int __c_kernel_clock_gettime(clockid_t clock, struct __kernel_timespec *ts,
++			     const struct vdso_data *vd)
++{
++	return __cvdso_clock_gettime_data(vd, clock, ts);
++}
++
++int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz,
++			    const struct vdso_data *vd)
++{
++	return __cvdso_gettimeofday_data(vd, tv, tz);
++}
++
++int __c_kernel_clock_getres(clockid_t clock_id, struct __kernel_timespec *res,
++			    const struct vdso_data *vd)
++{
++	return __cvdso_clock_getres_data(vd, clock_id, res);
++}
++
++__kernel_old_time_t __c_kernel_time(__kernel_old_time_t *time, const struct vdso_data *vd)
++{
++	return __cvdso_time_data(vd, time);
++}
 -- 
 2.25.0
 
