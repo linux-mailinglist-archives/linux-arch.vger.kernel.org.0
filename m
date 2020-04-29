@@ -2,116 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9011BD98A
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Apr 2020 12:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B041BD991
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Apr 2020 12:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbgD2K0c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Apr 2020 06:26:32 -0400
-Received: from foss.arm.com ([217.140.110.172]:36810 "EHLO foss.arm.com"
+        id S1726836AbgD2K04 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Apr 2020 06:26:56 -0400
+Received: from foss.arm.com ([217.140.110.172]:36828 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726355AbgD2K0c (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 Apr 2020 06:26:32 -0400
+        id S1726830AbgD2K0z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 29 Apr 2020 06:26:55 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADEBDC14;
-        Wed, 29 Apr 2020 03:26:31 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6410C14;
+        Wed, 29 Apr 2020 03:26:54 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 445393F73D;
-        Wed, 29 Apr 2020 03:26:30 -0700 (PDT)
-Date:   Wed, 29 Apr 2020 11:26:28 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 218AA3F73D;
+        Wed, 29 Apr 2020 03:26:53 -0700 (PDT)
+Date:   Wed, 29 Apr 2020 11:26:51 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arch@vger.kernel.org,
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Will Deacon <will@kernel.org>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 10/23] arm64: mte: Handle synchronous and asynchronous
- tag check faults
-Message-ID: <20200429102628.GB30377@arm.com>
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 20/23] fs: Allow copy_mount_options() to access
+ user-space in a single pass
+Message-ID: <20200429102650.GC30377@arm.com>
 References: <20200421142603.3894-1-catalin.marinas@arm.com>
- <20200421142603.3894-11-catalin.marinas@arm.com>
- <20200427165822.GE15808@arm.com>
- <20200428134301.GI3868@gaia>
+ <20200421142603.3894-21-catalin.marinas@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200428134301.GI3868@gaia>
+In-Reply-To: <20200421142603.3894-21-catalin.marinas@arm.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 02:43:01PM +0100, Catalin Marinas wrote:
-> On Mon, Apr 27, 2020 at 05:58:22PM +0100, Dave P Martin wrote:
-> > On Tue, Apr 21, 2020 at 03:25:50PM +0100, Catalin Marinas wrote:
-> > > From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> > > 
-> > > The Memory Tagging Extension has two modes of notifying a tag check
-> > > fault at EL0, configurable through the SCTLR_EL1.TCF0 field:
-> > > 
-> > > 1. Synchronous raising of a Data Abort exception with DFSC 17.
-> > > 2. Asynchronous setting of a cumulative bit in TFSRE0_EL1.
-> > > 
-> > > Add the exception handler for the synchronous exception and handling of
-> > > the asynchronous TFSRE0_EL1.TF0 bit setting via a new TIF flag in
-> > > do_notify_resume().
-> > > 
-> > > On a tag check failure in user-space, whether synchronous or
-> > > asynchronous, a SIGSEGV will be raised on the faulting thread.
-> > 
-> > Has there been any discussion on whether this should be SIGSEGV or
-> > SIGBUS?
-> > 
-> > Probably neither is much more appropriate than the other.
-> 
-> You could argue either way. I don't recall a firm conclusion on this, so
-> I picked one that follows SPARC ADI.
+On Tue, Apr 21, 2020 at 03:26:00PM +0100, Catalin Marinas wrote:
+> The copy_mount_options() function takes a user pointer argument but not
+> a size. It tries to read up to a PAGE_SIZE. However, copy_from_user() is
+> not guaranteed to return all the accessible bytes if, for example, the
+> access crosses a page boundary and gets a fault on the second page. To
+> work around this, the current copy_mount_options() implementations
+> performs to copy_from_user() passes, first to the end of the current
 
-Agreed, that precedent is good enough for me.  I hadn't refreshed my
-memory of how sparc was using these signals.
+implementation performs two
 
+> page and the second to what's left in the subsequent page.
 > 
-> > > diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-> > > index 339882db5a91..e377d77c065e 100644
-> > > --- a/arch/arm64/kernel/signal.c
-> > > +++ b/arch/arm64/kernel/signal.c
-> > > @@ -732,6 +732,9 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
-> > >  	regs->regs[29] = (unsigned long)&user->next_frame->fp;
-> > >  	regs->pc = (unsigned long)ka->sa.sa_handler;
-> > >  
-> > > +	/* TCO (Tag Check Override) always cleared for signal handlers */
-> > > +	regs->pstate &= ~PSR_TCO_BIT;
-> > > +
-> > >  	if (ka->sa.sa_flags & SA_RESTORER)
-> > >  		sigtramp = ka->sa.sa_restorer;
-> > >  	else
-> > > @@ -923,6 +926,11 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
-> > >  			if (thread_flags & _TIF_UPROBE)
-> > >  				uprobe_notify_resume(regs);
-> > >  
-> > > +			if (thread_flags & _TIF_MTE_ASYNC_FAULT) {
-> > > +				clear_thread_flag(TIF_MTE_ASYNC_FAULT);
-> > > +				force_signal_inject(SIGSEGV, SEGV_MTEAERR, 0);
-> > > +			}
-> > > +
-> > 
-> > Should this definitely be a force_signal_inject()?
-> > 
-> > SEGV_MTEAERR is not intrinsically fatal: it must be possible to run past
-> > the error, because that's the whole point -- chances are we already did.
-> > 
-> > Compare this with MTESERR where running past the signal would lead to a
-> > spin.
+> Some architectures like arm64 can guarantee an exact copy_from_user()
+> depending on the size (since the arch function performs some alignment
+> on the source register). Introduce an arch_has_exact_copy_from_user()
+> function and allow copy_mount_options() to perform the user access in a
+> single pass.
 > 
-> Good point. This can be a send_sig_fault() (I need to check the right
-> API).
+> While this function is not on a critical path, the single-pass behaviour
+> is required for arm64 MTE (memory tagging) support where a uaccess can
+> trigger intra-page faults (tag not matching). With the current
+> implementation, if this happens during the first page, the function will
+> return -EFAULT.
+> 
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+> 
+> Notes:
+>     New in v3.
+> 
+>  arch/arm64/include/asm/uaccess.h | 11 +++++++++++
+>  fs/namespace.c                   |  7 +++++--
+>  include/linux/uaccess.h          |  8 ++++++++
+>  3 files changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+> index 32fc8061aa76..566da441eba2 100644
+> --- a/arch/arm64/include/asm/uaccess.h
+> +++ b/arch/arm64/include/asm/uaccess.h
+> @@ -416,6 +416,17 @@ extern unsigned long __must_check __arch_copy_in_user(void __user *to, const voi
+>  #define INLINE_COPY_TO_USER
+>  #define INLINE_COPY_FROM_USER
+>  
+> +static inline bool arch_has_exact_copy_from_user(unsigned long n)
+> +{
+> +	/*
+> +	 * copy_from_user() aligns the source pointer if the size is greater
+> +	 * than 15. Since all the loads are naturally aligned, they can only
+> +	 * fail on the first byte.
+> +	 */
+> +	return n > 15;
+> +}
+> +#define arch_has_exact_copy_from_user
 
-Sounds fair.
+Did you mean:
+
+#define arch_has_exact_copy_from_user arch_has_exact_copy_from_user
+
+Mind you, if this expands to 1 I'd have expected copy_mount_options()
+not to compile, so I may be missing something.
+
+[...]
+
+> diff --git a/fs/namespace.c b/fs/namespace.c
+> index a28e4db075ed..8febc50dfc5d 100644
+> --- a/fs/namespace.c
+> +++ b/fs/namespace.c
+> @@ -3025,13 +3025,16 @@ void *copy_mount_options(const void __user * data)
+
+[ Is this applying a band-aid to duct tape?
+
+The fs presumably knows ahead of time whether it's expecting a string or
+a fixed-size blob for data, so I'd hope we could just DTRT rather than
+playing SEGV roulette here.
+
+This might require more refactoring than makes sense for this series
+though. ]
+
+>  	if (!copy)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -	size = PAGE_SIZE - offset_in_page(data);
+> +	size = PAGE_SIZE;
+> +	if (!arch_has_exact_copy_from_user(size))
+> +		size -= offset_in_page(data);
+>  
+> -	if (copy_from_user(copy, data, size)) {
+> +	if (copy_from_user(copy, data, size) == size) {
+>  		kfree(copy);
+>  		return ERR_PTR(-EFAULT);
+>  	}
+>  	if (size != PAGE_SIZE) {
+> +		WARN_ON(1);
+>  		if (copy_from_user(copy + size, data + size, PAGE_SIZE - size))
+>  			memset(copy + size, 0, PAGE_SIZE - size);
+>  	}
+
+[...]
 
 Cheers
 ---Dave
