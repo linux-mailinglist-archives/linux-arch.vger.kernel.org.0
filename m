@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B50F1BEB97
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Apr 2020 00:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8061BEB93
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Apr 2020 00:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728076AbgD2WJA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1728092AbgD2WJA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Wed, 29 Apr 2020 18:09:00 -0400
-Received: from mga09.intel.com ([134.134.136.24]:61308 "EHLO mga09.intel.com"
+Received: from mga09.intel.com ([134.134.136.24]:61306 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728059AbgD2WI6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 Apr 2020 18:08:58 -0400
-IronPort-SDR: dadns9QhPv5UryhguMQXcGDhH9+xq6fx+39jTxPLlpiNlz8B8fhswmhjezAYS4MMpHgiSnMtOm
- Vf+SZbZbMMtA==
+        id S1727085AbgD2WI7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 29 Apr 2020 18:08:59 -0400
+IronPort-SDR: dHFCcmu8co/ufUWlVlI8NAR12KVXEfM66fNGRMdzER75LqV7PNdbcUCKmSvQJs0A7+sDCAamYY
+ HgPNJ1j6WiUw==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 15:08:55 -0700
-IronPort-SDR: 9gcKwhvbHzr2PzbwK7j19tLnl6PrCaK1/7js6IHdj4K0we/ZoBaCVwpdjZoRrKOe24btfX7Xgn
- zqpM34nLw8zg==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 15:08:56 -0700
+IronPort-SDR: uLifCKL/hIIieGg3MZVyvjYueoOMMBb/D7dhKJ1nB7ry6OWDrd9WzlqOHBwWZSHHAoAAOo7i8T
+ ZlRt35UzFMwQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,333,1583222400"; 
-   d="scan'208";a="276308941"
+   d="scan'208";a="276308944"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga002.jf.intel.com with ESMTP; 29 Apr 2020 15:08:54 -0700
+  by orsmga002.jf.intel.com with ESMTP; 29 Apr 2020 15:08:55 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -51,9 +51,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v10 25/26] x86/cet/shstk: Handle thread shadow stack
-Date:   Wed, 29 Apr 2020 15:07:31 -0700
-Message-Id: <20200429220732.31602-26-yu-cheng.yu@intel.com>
+Subject: [PATCH v10 26/26] x86/cet/shstk: Add arch_prctl functions for shadow stack
+Date:   Wed, 29 Apr 2020 15:07:32 -0700
+Message-Id: <20200429220732.31602-27-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200429220732.31602-1-yu-cheng.yu@intel.com>
 References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
@@ -64,147 +64,245 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The kernel allocates (and frees on thread exit) a new shadow stack for a
-pthread child.
+arch_prctl(ARCH_X86_CET_STATUS, u64 *args)
+    Get CET feature status.
 
-    It is possible for the kernel to complete the clone syscall and set the
-    child's shadow stack pointer to NULL and let the child thread allocate
-    a shadow stack for itself.  There are two issues in this approach: It
-    is not compatible with existing code that does inline syscall and it
-    cannot handle signals before the child can successfully allocate a
-    shadow stack.
+    The parameter 'args' is a pointer to a user buffer.  The kernel returns
+    the following information:
 
-A 64-bit shadow stack has a size of min(RLIMIT_STACK, 4 GB).  A compat-mode
-thread shadow stack has a size of 1/4 min(RLIMIT_STACK, 4 GB).  This allows
-more threads to run in a 32-bit address space.
+    *args = shadow stack/IBT status
+    *(args + 1) = shadow stack base address
+    *(args + 2) = shadow stack size
+
+arch_prctl(ARCH_X86_CET_DISABLE, u64 features)
+    Disable CET features specified in 'features'.  Return -EPERM if CET is
+    locked.
+
+arch_prctl(ARCH_X86_CET_LOCK)
+    Lock in CET features.
+
+arch_prctl(ARCH_X86_CET_ALLOC_SHSTK, u64 *args)
+    Allocate a new shadow stack.
+
+    The parameter 'args' is a pointer to a user buffer containing the
+    desired size to allocate.  The kernel returns the allocated shadow
+    stack address in *args.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
 v10:
-- Limit shadow stack size to 4 GB.
+- Verify CET is enabled before handling arch_prctl.
+- Change input parameters from unsigned long to u64, to make it clear they
+  are 64-bit.
 
- arch/x86/include/asm/cet.h         |  2 ++
- arch/x86/include/asm/mmu_context.h |  3 +++
- arch/x86/kernel/cet.c              | 41 ++++++++++++++++++++++++++++++
- arch/x86/kernel/process.c          |  7 +++++
- 4 files changed, 53 insertions(+)
+ arch/x86/include/asm/cet.h        |  4 ++
+ arch/x86/include/uapi/asm/prctl.h |  5 ++
+ arch/x86/kernel/Makefile          |  2 +-
+ arch/x86/kernel/cet.c             | 29 +++++++++++
+ arch/x86/kernel/cet_prctl.c       | 87 +++++++++++++++++++++++++++++++
+ arch/x86/kernel/process.c         |  4 +-
+ 6 files changed, 128 insertions(+), 3 deletions(-)
+ create mode 100644 arch/x86/kernel/cet_prctl.c
 
 diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-index 56fe08eebae6..71dc92acd2f2 100644
+index 71dc92acd2f2..99e6e741d28c 100644
 --- a/arch/x86/include/asm/cet.h
 +++ b/arch/x86/include/asm/cet.h
-@@ -18,11 +18,13 @@ struct cet_status {
+@@ -14,16 +14,20 @@ struct sc_ext;
+ struct cet_status {
+ 	unsigned long	shstk_base;
+ 	unsigned long	shstk_size;
++	unsigned int	locked:1;
+ };
  
  #ifdef CONFIG_X86_INTEL_CET
++int prctl_cet(int option, u64 arg2);
  int cet_setup_shstk(void);
-+int cet_setup_thread_shstk(struct task_struct *p);
+ int cet_setup_thread_shstk(struct task_struct *p);
++int cet_alloc_shstk(unsigned long *arg);
  void cet_disable_free_shstk(struct task_struct *p);
  int cet_verify_rstor_token(bool ia32, unsigned long ssp, unsigned long *new_ssp);
  void cet_restore_signal(struct sc_ext *sc);
  int cet_setup_signal(bool ia32, unsigned long rstor, struct sc_ext *sc);
  #else
-+static inline int cet_setup_thread_shstk(struct task_struct *p) { return 0; }
++static inline int prctl_cet(int option, u64 arg2) { return -EINVAL; }
+ static inline int cet_setup_thread_shstk(struct task_struct *p) { return 0; }
  static inline void cet_disable_free_shstk(struct task_struct *p) {}
  static inline void cet_restore_signal(struct sc_ext *sc) { return; }
- static inline int cet_setup_signal(bool ia32, unsigned long rstor,
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 4e55370e48e8..bb7a4a2d6923 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -12,6 +12,7 @@
- #include <asm/pgalloc.h>
- #include <asm/tlbflush.h>
- #include <asm/paravirt.h>
-+#include <asm/cet.h>
- #include <asm/debugreg.h>
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 5a6aac9fa41f..d962f0ec9ccf 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -14,4 +14,9 @@
+ #define ARCH_MAP_VDSO_32	0x2002
+ #define ARCH_MAP_VDSO_64	0x2003
  
- extern atomic64_t last_mm_ctx_id;
-@@ -155,6 +156,8 @@ do {						\
- #else
- #define deactivate_mm(tsk, mm)			\
- do {						\
-+	if (!tsk->vfork_done)			\
-+		cet_disable_free_shstk(tsk);	\
- 	load_gs_index(0);			\
- 	loadsegment(fs, 0);			\
- } while (0)
++#define ARCH_X86_CET_STATUS		0x3001
++#define ARCH_X86_CET_DISABLE		0x3002
++#define ARCH_X86_CET_LOCK		0x3003
++#define ARCH_X86_CET_ALLOC_SHSTK	0x3004
++
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index e9cc2551573b..0b621e2afbdc 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -144,7 +144,7 @@ obj-$(CONFIG_UNWINDER_ORC)		+= unwind_orc.o
+ obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
+ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+ 
+-obj-$(CONFIG_X86_INTEL_CET)		+= cet.o
++obj-$(CONFIG_X86_INTEL_CET)		+= cet.o cet_prctl.o
+ 
+ ###
+ # 64 bit specific files
 diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
-index 274fecdd9669..121552047b86 100644
+index 121552047b86..c1b9b540c03e 100644
 --- a/arch/x86/kernel/cet.c
 +++ b/arch/x86/kernel/cet.c
-@@ -169,6 +169,47 @@ int cet_setup_shstk(void)
+@@ -145,6 +145,35 @@ static int create_rstor_token(bool ia32, unsigned long ssp,
  	return 0;
  }
  
-+int cet_setup_thread_shstk(struct task_struct *tsk)
++int cet_alloc_shstk(unsigned long *arg)
 +{
-+	unsigned long addr, size;
-+	struct cet_user_state *state;
-+	struct cet_status *cet = &tsk->thread.cet;
++	unsigned long len = *arg;
++	unsigned long addr;
++	unsigned long token;
++	unsigned long ssp;
 +
-+	if (!cet->shstk_size)
-+		return 0;
++	addr = alloc_shstk(round_up(len, PAGE_SIZE));
 +
-+	state = get_xsave_addr(&tsk->thread.fpu.state.xsave,
-+			       XFEATURE_CET_USER);
-+
-+	if (!state)
-+		return -EINVAL;
-+
-+	/* Cap shadow stack size to 4 GB */
-+	size = min(rlimit(RLIMIT_STACK), 1UL << 32);
-+
-+	/*
-+	 * Compat-mode pthreads share a limited address space.
-+	 * If each function call takes an average of four slots
-+	 * stack space, we need 1/4 of stack size for shadow stack.
-+	 */
-+	if (in_compat_syscall())
-+		size /= 4;
-+	size = round_up(size, PAGE_SIZE);
-+	addr = alloc_shstk(size);
-+
-+	if (IS_ERR((void *)addr)) {
-+		cet->shstk_base = 0;
-+		cet->shstk_size = 0;
++	if (IS_ERR((void *)addr))
 +		return PTR_ERR((void *)addr);
++
++	/* Restore token is 8 bytes and aligned to 8 bytes */
++	ssp = addr + len;
++	token = ssp;
++
++	if (!in_ia32_syscall())
++		token |= TOKEN_MODE_64;
++	ssp -= 8;
++
++	if (write_user_shstk_64(ssp, token)) {
++		vm_munmap(addr, len);
++		return -EINVAL;
 +	}
 +
-+	fpu__prepare_write(&tsk->thread.fpu);
-+	state->user_ssp = (u64)(addr + size);
-+	cet->shstk_base = addr;
-+	cet->shstk_size = size;
++	*arg = addr;
 +	return 0;
 +}
 +
- void cet_disable_free_shstk(struct task_struct *tsk)
+ int cet_setup_shstk(void)
  {
- 	struct cet_status *cet = &tsk->thread.cet;
+ 	unsigned long addr, size;
+diff --git a/arch/x86/kernel/cet_prctl.c b/arch/x86/kernel/cet_prctl.c
+new file mode 100644
+index 000000000000..0139c48f2215
+--- /dev/null
++++ b/arch/x86/kernel/cet_prctl.c
+@@ -0,0 +1,87 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#include <linux/errno.h>
++#include <linux/uaccess.h>
++#include <linux/prctl.h>
++#include <linux/compat.h>
++#include <linux/mman.h>
++#include <linux/elfcore.h>
++#include <asm/processor.h>
++#include <asm/prctl.h>
++#include <asm/cet.h>
++
++/* See Documentation/x86/intel_cet.rst. */
++
++static int handle_get_status(u64 arg2)
++{
++	struct cet_status *cet = &current->thread.cet;
++	u64 buf[3] = {0, 0, 0};
++
++	if (cet->shstk_size) {
++		buf[0] |= GNU_PROPERTY_X86_FEATURE_1_SHSTK;
++		buf[1] = (u64)cet->shstk_base;
++		buf[2] = (u64)cet->shstk_size;
++	}
++
++	return copy_to_user((u64 __user *)arg2, buf, sizeof(buf));
++}
++
++static int handle_alloc_shstk(u64 arg2)
++{
++	int err = 0;
++	unsigned long arg;
++	unsigned long addr = 0;
++	unsigned long size = 0;
++
++	if (get_user(arg, (unsigned long __user *)arg2))
++		return -EFAULT;
++
++	size = arg;
++	err = cet_alloc_shstk(&arg);
++	if (err)
++		return err;
++
++	addr = arg;
++	if (put_user((u64)addr, (u64 __user *)arg2)) {
++		vm_munmap(addr, size);
++		return -EFAULT;
++	}
++
++	return 0;
++}
++
++int prctl_cet(int option, u64 arg2)
++{
++	struct cet_status *cet;
++
++	if (!IS_ENABLED(CONFIG_X86_INTEL_CET))
++		return -EINVAL;
++
++	if (option == ARCH_X86_CET_STATUS)
++		return handle_get_status(arg2);
++
++	if (!static_cpu_has(X86_FEATURE_SHSTK))
++		return -EINVAL;
++
++	cet = &current->thread.cet;
++
++	switch (option) {
++	case ARCH_X86_CET_DISABLE:
++		if (cet->locked)
++			return -EPERM;
++		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
++			cet_disable_free_shstk(current);
++
++		return 0;
++
++	case ARCH_X86_CET_LOCK:
++		cet->locked = 1;
++		return 0;
++
++	case ARCH_X86_CET_ALLOC_SHSTK:
++		return handle_alloc_shstk(arg2);
++
++	default:
++		return -EINVAL;
++	}
++}
 diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 9d9cff2c1018..ef1c2b8086a2 100644
+index ef1c2b8086a2..de6773dd6a16 100644
 --- a/arch/x86/kernel/process.c
 +++ b/arch/x86/kernel/process.c
-@@ -109,6 +109,7 @@ void exit_thread(struct task_struct *tsk)
- 
- 	free_vm86(t);
- 
-+	cet_disable_free_shstk(tsk);
- 	fpu__drop(fpu);
+@@ -996,7 +996,7 @@ long do_arch_prctl_common(struct task_struct *task, int option,
+ 		return get_cpuid_mode();
+ 	case ARCH_SET_CPUID:
+ 		return set_cpuid_mode(task, cpuid_enabled);
++	default:
++		return prctl_cet(option, cpuid_enabled);
+ 	}
+-
+-	return -EINVAL;
  }
- 
-@@ -179,6 +180,12 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long sp,
- 	if (clone_flags & CLONE_SETTLS)
- 		ret = set_new_tls(p, tls);
- 
-+#ifdef CONFIG_X86_64
-+	/* Allocate a new shadow stack for pthread */
-+	if (!ret && (clone_flags & (CLONE_VFORK | CLONE_VM)) == CLONE_VM)
-+		ret = cet_setup_thread_shstk(p);
-+#endif
-+
- 	if (!ret && unlikely(test_tsk_thread_flag(current, TIF_IO_BITMAP)))
- 		io_bitmap_share(p);
- 
 -- 
 2.21.0
 
