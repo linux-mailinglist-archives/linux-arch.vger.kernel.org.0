@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEDD1BEBCB
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Apr 2020 00:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20391BEBC8
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Apr 2020 00:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728243AbgD2WJx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Apr 2020 18:09:53 -0400
-Received: from mga09.intel.com ([134.134.136.24]:61302 "EHLO mga09.intel.com"
+        id S1728244AbgD2WJr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Apr 2020 18:09:47 -0400
+Received: from mga09.intel.com ([134.134.136.24]:61308 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727950AbgD2WIt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 29 Apr 2020 18:08:49 -0400
-IronPort-SDR: GhThBs38UiYH1SK8Mq8lqsTyJE2qsq3kqr90+uYEyPxREFd8ixNhQPElIg4yAUbpLXfy1cjlHt
- 7IVG4bD5yvBQ==
+        id S1727961AbgD2WIv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 29 Apr 2020 18:08:51 -0400
+IronPort-SDR: XCmkXFXzVWUmkNJRRf0wBESQzsmYH44P0LBIa9ULutLMPljIZu1i7q1NDuy3b9mfwu+BkATcmu
+ vdU4oH76aK2w==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 15:08:49 -0700
-IronPort-SDR: Qxlpm41s9e3hABYhsoQMLiJrtMgVEIS429u+AeFHDZxyQzsrH5/X3lh9fukI9DQrkktfrtoneu
- GWZhzr7KNIhA==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 15:08:50 -0700
+IronPort-SDR: wHiZvt4QeK+1g8UwKX+7tHC1VH92phIoYfNMA55H6uojHwMG3eXRdnqDDBJ8Mm+gl53kjXn4eE
+ 8xXE0tBgskhQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,333,1583222400"; 
-   d="scan'208";a="276308911"
+   d="scan'208";a="276308915"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga002.jf.intel.com with ESMTP; 29 Apr 2020 15:08:48 -0700
+  by orsmga002.jf.intel.com with ESMTP; 29 Apr 2020 15:08:49 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -51,9 +51,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v10 17/26] mm/mmap: Add shadow stack pages to memory accounting
-Date:   Wed, 29 Apr 2020 15:07:23 -0700
-Message-Id: <20200429220732.31602-18-yu-cheng.yu@intel.com>
+Subject: [PATCH v10 18/26] mm: Update can_follow_write_pte() for shadow stack
+Date:   Wed, 29 Apr 2020 15:07:24 -0700
+Message-Id: <20200429220732.31602-19-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200429220732.31602-1-yu-cheng.yu@intel.com>
 References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
@@ -64,81 +64,80 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Account shadow stack pages to stack memory.
+Can_follow_write_pte() ensures a read-only page is COWed by checking the
+FOLL_COW flag, and uses pte_dirty() to validate the flag is still valid.
+
+Like a writable data page, a shadow stack page is writable, and becomes
+read-only during copy-on-write, but it is always dirty.  Thus, in the
+can_follow_write_pte() check, it belongs to the writable page case and
+should be excluded from the read-only page pte_dirty() check.  Apply
+the same changes to can_follow_write_pmd().
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
 v10:
-- Use arch_shadow_stack_mapping() to make meaning clear.
+- Reverse name changes to can_follow_write_*().
 
-v8:
-- Change shadow stake pages from data_vm to stack_vm.
+ mm/gup.c         | 8 +++++---
+ mm/huge_memory.c | 8 +++++---
+ 2 files changed, 10 insertions(+), 6 deletions(-)
 
- arch/x86/mm/pgtable.c         |  7 +++++++
- include/asm-generic/pgtable.h | 11 +++++++++++
- mm/mmap.c                     |  5 +++++
- 3 files changed, 23 insertions(+)
-
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index aa4d396ff98d..f384e0314ba7 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -890,3 +890,10 @@ int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
- 
- #endif /* CONFIG_X86_64 */
- #endif	/* CONFIG_HAVE_ARCH_HUGE_VMAP */
-+
-+#ifdef CONFIG_ARCH_HAS_SHADOW_STACK
-+bool arch_shadow_stack_mapping(vm_flags_t vm_flags)
-+{
-+	return (vm_flags & VM_SHSTK);
-+}
-+#endif
-diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
-index 2c3875724809..dbd415ab7dd8 100644
---- a/include/asm-generic/pgtable.h
-+++ b/include/asm-generic/pgtable.h
-@@ -1215,6 +1215,17 @@ static inline pmd_t arch_maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma
- #endif /* CONFIG_ARCH_MAYBE_MKWRITE */
- #endif /* CONFIG_MMU */
- 
-+#ifdef CONFIG_MMU
-+#ifdef CONFIG_ARCH_HAS_SHADOW_STACK
-+bool arch_shadow_stack_mapping(vm_flags_t vm_flags);
-+#else
-+static inline bool arch_shadow_stack_mapping(vm_flags_t vm_flags)
-+{
-+	return false;
-+}
-+#endif /* CONFIG_ARCH_HAS_SHADOW_STACK */
-+#endif /* CONFIG_MMU */
-+
- /*
-  * Architecture PAGE_KERNEL_* fallbacks
-  *
-diff --git a/mm/mmap.c b/mm/mmap.c
-index f609e9ec4a25..70d240b3559c 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1681,6 +1681,9 @@ static inline int accountable_mapping(struct file *file, vm_flags_t vm_flags)
- 	if (file && is_file_hugepages(file))
- 		return 0;
- 
-+	if (arch_shadow_stack_mapping(vm_flags))
-+		return 1;
-+
- 	return (vm_flags & (VM_NORESERVE | VM_SHARED | VM_WRITE)) == VM_WRITE;
+diff --git a/mm/gup.c b/mm/gup.c
+index 50681f0286de..c737782403ee 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -385,10 +385,12 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
+  * FOLL_FORCE can write to even unwritable pte's, but only
+  * after we've gone through a COW cycle and they are dirty.
+  */
+-static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
++static inline bool can_follow_write_pte(pte_t pte, unsigned int flags,
++					struct vm_area_struct *vma)
+ {
+ 	return pte_write(pte) ||
+-		((flags & FOLL_FORCE) && (flags & FOLL_COW) && pte_dirty(pte));
++		((flags & FOLL_FORCE) && (flags & FOLL_COW) &&
++		 !arch_shadow_stack_mapping(vma->vm_flags) && pte_dirty(pte));
  }
  
-@@ -3318,6 +3321,8 @@ void vm_stat_account(struct mm_struct *mm, vm_flags_t flags, long npages)
- 		mm->stack_vm += npages;
- 	else if (is_data_mapping(flags))
- 		mm->data_vm += npages;
-+	else if (arch_shadow_stack_mapping(flags))
-+		mm->stack_vm += npages;
+ static struct page *follow_page_pte(struct vm_area_struct *vma,
+@@ -431,7 +433,7 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+ 	}
+ 	if ((flags & FOLL_NUMA) && pte_protnone(pte))
+ 		goto no_page;
+-	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags)) {
++	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags, vma)) {
+ 		pte_unmap_unlock(ptep, ptl);
+ 		return NULL;
+ 	}
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 608746bb9d19..cb1b0cb4b4eb 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1520,10 +1520,12 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf, pmd_t orig_pmd)
+  * FOLL_FORCE can write to even unwritable pmd's, but only
+  * after we've gone through a COW cycle and they are dirty.
+  */
+-static inline bool can_follow_write_pmd(pmd_t pmd, unsigned int flags)
++static inline bool can_follow_write_pmd(pmd_t pmd, unsigned int flags,
++					struct vm_area_struct *vma)
+ {
+ 	return pmd_write(pmd) ||
+-	       ((flags & FOLL_FORCE) && (flags & FOLL_COW) && pmd_dirty(pmd));
++	       ((flags & FOLL_FORCE) && (flags & FOLL_COW) &&
++		!arch_shadow_stack_mapping(vma->vm_flags) && pmd_dirty(pmd));
  }
  
- static vm_fault_t special_mapping_fault(struct vm_fault *vmf);
+ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
+@@ -1536,7 +1538,7 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
+ 
+ 	assert_spin_locked(pmd_lockptr(mm, pmd));
+ 
+-	if (flags & FOLL_WRITE && !can_follow_write_pmd(*pmd, flags))
++	if (flags & FOLL_WRITE && !can_follow_write_pmd(*pmd, flags, vma))
+ 		goto out;
+ 
+ 	/* Avoid dumping huge zero page */
 -- 
 2.21.0
 
