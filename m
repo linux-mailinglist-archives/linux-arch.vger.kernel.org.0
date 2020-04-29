@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 476141BEB90
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Apr 2020 00:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B50F1BEB97
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Apr 2020 00:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728068AbgD2WI7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Apr 2020 18:08:59 -0400
-Received: from mga09.intel.com ([134.134.136.24]:61302 "EHLO mga09.intel.com"
+        id S1728076AbgD2WJA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Apr 2020 18:09:00 -0400
+Received: from mga09.intel.com ([134.134.136.24]:61308 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728065AbgD2WI6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1728059AbgD2WI6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Wed, 29 Apr 2020 18:08:58 -0400
-IronPort-SDR: jPtmDdrKDJisvezLJYjwrK2Hxq03Zmj3+8Pgx0/aMkypd6SIDIp0AwidPgu1ghtLX1B+gDvyl4
- TA6Zi6J45pVw==
+IronPort-SDR: dadns9QhPv5UryhguMQXcGDhH9+xq6fx+39jTxPLlpiNlz8B8fhswmhjezAYS4MMpHgiSnMtOm
+ Vf+SZbZbMMtA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 15:08:55 -0700
-IronPort-SDR: hCpBR8JgmBUArba48RcnGTPFc5gh6uFPvXCw7CalaqG7T7/E46TXDiTalLMUPIIFuAM8DGo8v2
- lWvfarYOuZHQ==
+IronPort-SDR: 9gcKwhvbHzr2PzbwK7j19tLnl6PrCaK1/7js6IHdj4K0we/ZoBaCVwpdjZoRrKOe24btfX7Xgn
+ zqpM34nLw8zg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,333,1583222400"; 
-   d="scan'208";a="276308937"
+   d="scan'208";a="276308941"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by orsmga002.jf.intel.com with ESMTP; 29 Apr 2020 15:08:54 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -51,9 +51,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v10 24/26] x86/cet/shstk: ELF header parsing for shadow stack
-Date:   Wed, 29 Apr 2020 15:07:30 -0700
-Message-Id: <20200429220732.31602-25-yu-cheng.yu@intel.com>
+Subject: [PATCH v10 25/26] x86/cet/shstk: Handle thread shadow stack
+Date:   Wed, 29 Apr 2020 15:07:31 -0700
+Message-Id: <20200429220732.31602-26-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200429220732.31602-1-yu-cheng.yu@intel.com>
 References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
@@ -64,93 +64,147 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Check an ELF file's .note.gnu.property, and setup shadow stack if the
-application supports it.
+The kernel allocates (and frees on thread exit) a new shadow stack for a
+pthread child.
+
+    It is possible for the kernel to complete the clone syscall and set the
+    child's shadow stack pointer to NULL and let the child thread allocate
+    a shadow stack for itself.  There are two issues in this approach: It
+    is not compatible with existing code that does inline syscall and it
+    cannot handle signals before the child can successfully allocate a
+    shadow stack.
+
+A 64-bit shadow stack has a size of min(RLIMIT_STACK, 4 GB).  A compat-mode
+thread shadow stack has a size of 1/4 min(RLIMIT_STACK, 4 GB).  This allows
+more threads to run in a 32-bit address space.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
-v9:
-- Change cpu_feature_enabled() to static_cpu_has().
+v10:
+- Limit shadow stack size to 4 GB.
 
- arch/x86/Kconfig             |  2 ++
- arch/x86/include/asm/elf.h   | 13 +++++++++++++
- arch/x86/kernel/process_64.c | 29 +++++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+)
+ arch/x86/include/asm/cet.h         |  2 ++
+ arch/x86/include/asm/mmu_context.h |  3 +++
+ arch/x86/kernel/cet.c              | 41 ++++++++++++++++++++++++++++++
+ arch/x86/kernel/process.c          |  7 +++++
+ 4 files changed, 53 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index ac07e1f6a2bc..8b7b97ff5fb4 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1970,6 +1970,8 @@ config X86_INTEL_SHADOW_STACK_USER
- 	select X86_INTEL_CET
- 	select ARCH_MAYBE_MKWRITE
- 	select ARCH_HAS_SHADOW_STACK
-+	select ARCH_USE_GNU_PROPERTY
-+	select ARCH_BINFMT_ELF_STATE
- 	help
- 	  Shadow Stacks provides protection against program stack
- 	  corruption.  It's a hardware feature.  This only matters
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index 69c0f892e310..fac79b621e0a 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -367,6 +367,19 @@ extern int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
- 					      int uses_interp);
- #define compat_arch_setup_additional_pages compat_arch_setup_additional_pages
+diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+index 56fe08eebae6..71dc92acd2f2 100644
+--- a/arch/x86/include/asm/cet.h
++++ b/arch/x86/include/asm/cet.h
+@@ -18,11 +18,13 @@ struct cet_status {
  
-+#ifdef CONFIG_ARCH_BINFMT_ELF_STATE
-+struct arch_elf_state {
-+	unsigned int gnu_property;
-+};
-+
-+#define INIT_ARCH_ELF_STATE {	\
-+	.gnu_property = 0,	\
-+}
-+
-+#define arch_elf_pt_proc(ehdr, phdr, elf, interp, state) (0)
-+#define arch_check_elf(ehdr, interp, interp_ehdr, state) (0)
-+#endif
-+
- /* Do not change the values. See get_align_mask() */
- enum align_flags {
- 	ALIGN_VA_32	= BIT(0),
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 5ef9d8f25b0e..93ba4afd0c19 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -730,3 +730,32 @@ unsigned long KSTK_ESP(struct task_struct *task)
- {
- 	return task_pt_regs(task)->sp;
+ #ifdef CONFIG_X86_INTEL_CET
+ int cet_setup_shstk(void);
++int cet_setup_thread_shstk(struct task_struct *p);
+ void cet_disable_free_shstk(struct task_struct *p);
+ int cet_verify_rstor_token(bool ia32, unsigned long ssp, unsigned long *new_ssp);
+ void cet_restore_signal(struct sc_ext *sc);
+ int cet_setup_signal(bool ia32, unsigned long rstor, struct sc_ext *sc);
+ #else
++static inline int cet_setup_thread_shstk(struct task_struct *p) { return 0; }
+ static inline void cet_disable_free_shstk(struct task_struct *p) {}
+ static inline void cet_restore_signal(struct sc_ext *sc) { return; }
+ static inline int cet_setup_signal(bool ia32, unsigned long rstor,
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index 4e55370e48e8..bb7a4a2d6923 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -12,6 +12,7 @@
+ #include <asm/pgalloc.h>
+ #include <asm/tlbflush.h>
+ #include <asm/paravirt.h>
++#include <asm/cet.h>
+ #include <asm/debugreg.h>
+ 
+ extern atomic64_t last_mm_ctx_id;
+@@ -155,6 +156,8 @@ do {						\
+ #else
+ #define deactivate_mm(tsk, mm)			\
+ do {						\
++	if (!tsk->vfork_done)			\
++		cet_disable_free_shstk(tsk);	\
+ 	load_gs_index(0);			\
+ 	loadsegment(fs, 0);			\
+ } while (0)
+diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
+index 274fecdd9669..121552047b86 100644
+--- a/arch/x86/kernel/cet.c
++++ b/arch/x86/kernel/cet.c
+@@ -169,6 +169,47 @@ int cet_setup_shstk(void)
+ 	return 0;
  }
-+
-+#ifdef CONFIG_ARCH_USE_GNU_PROPERTY
-+int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
-+			     bool compat, struct arch_elf_state *state)
+ 
++int cet_setup_thread_shstk(struct task_struct *tsk)
 +{
-+	if (type != GNU_PROPERTY_X86_FEATURE_1_AND)
++	unsigned long addr, size;
++	struct cet_user_state *state;
++	struct cet_status *cet = &tsk->thread.cet;
++
++	if (!cet->shstk_size)
 +		return 0;
 +
-+	if (datasz != sizeof(unsigned int))
-+		return -ENOEXEC;
++	state = get_xsave_addr(&tsk->thread.fpu.state.xsave,
++			       XFEATURE_CET_USER);
 +
-+	state->gnu_property = *(unsigned int *)data;
++	if (!state)
++		return -EINVAL;
++
++	/* Cap shadow stack size to 4 GB */
++	size = min(rlimit(RLIMIT_STACK), 1UL << 32);
++
++	/*
++	 * Compat-mode pthreads share a limited address space.
++	 * If each function call takes an average of four slots
++	 * stack space, we need 1/4 of stack size for shadow stack.
++	 */
++	if (in_compat_syscall())
++		size /= 4;
++	size = round_up(size, PAGE_SIZE);
++	addr = alloc_shstk(size);
++
++	if (IS_ERR((void *)addr)) {
++		cet->shstk_base = 0;
++		cet->shstk_size = 0;
++		return PTR_ERR((void *)addr);
++	}
++
++	fpu__prepare_write(&tsk->thread.fpu);
++	state->user_ssp = (u64)(addr + size);
++	cet->shstk_base = addr;
++	cet->shstk_size = size;
 +	return 0;
 +}
 +
-+int arch_setup_elf_property(struct arch_elf_state *state)
-+{
-+	int r = 0;
-+
-+	memset(&current->thread.cet, 0, sizeof(struct cet_status));
-+
-+	if (static_cpu_has(X86_FEATURE_SHSTK)) {
-+		if (state->gnu_property & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
-+			r = cet_setup_shstk();
-+	}
-+
-+	return r;
-+}
+ void cet_disable_free_shstk(struct task_struct *tsk)
+ {
+ 	struct cet_status *cet = &tsk->thread.cet;
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 9d9cff2c1018..ef1c2b8086a2 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -109,6 +109,7 @@ void exit_thread(struct task_struct *tsk)
+ 
+ 	free_vm86(t);
+ 
++	cet_disable_free_shstk(tsk);
+ 	fpu__drop(fpu);
+ }
+ 
+@@ -179,6 +180,12 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long sp,
+ 	if (clone_flags & CLONE_SETTLS)
+ 		ret = set_new_tls(p, tls);
+ 
++#ifdef CONFIG_X86_64
++	/* Allocate a new shadow stack for pthread */
++	if (!ret && (clone_flags & (CLONE_VFORK | CLONE_VM)) == CLONE_VM)
++		ret = cet_setup_thread_shstk(p);
 +#endif
++
+ 	if (!ret && unlikely(test_tsk_thread_flag(current, TIF_IO_BITMAP)))
+ 		io_bitmap_share(p);
+ 
 -- 
 2.21.0
 
