@@ -2,98 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 488DF1C092D
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Apr 2020 23:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D831C0C32
+	for <lists+linux-arch@lfdr.de>; Fri,  1 May 2020 04:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726909AbgD3V0c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Apr 2020 17:26:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41480 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726447AbgD3V0c (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 Apr 2020 17:26:32 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C0E112166E;
-        Thu, 30 Apr 2020 21:26:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588281991;
-        bh=uWky6TNBymUqSLkL11ZzartRuKqUlPuvanXrysasMkM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uerb66Arhg5vhl7hcybSXvksTonsCmKFdJefGcHkKMVr/lMrnQV3W1SU6xQoz+pI0
-         RE39P+64BgmzRvjs0ZSjXa8yV5+5WfUx7KSDiyjU+TsaTP7CBSjQ5f3B4Np6V13L2B
-         OaGgWhEyi+eZlWVYMSp1aRYwZqusI1Vbyq7Sa8fI=
-Date:   Thu, 30 Apr 2020 22:26:24 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Paul Elliott <paul.elliott@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Amit Kachhap <amit.kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        "H . J . Lu " <hjl.tools@gmail.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Kristina =?utf-8?Q?Mart=C5=A1enko?= <kristina.martsenko@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Weimer <fweimer@redhat.com>,
-        Sudakshina Das <sudi.das@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v10 00/13] arm64: Branch Target Identification support
-Message-ID: <20200430212623.GA802@willie-the-truck>
-References: <20200316165055.31179-1-broonie@kernel.org>
- <20200422154436.GJ4898@sirena.org.uk>
- <20200422162954.GF3585@gaia>
- <20200428132804.GF6791@willie-the-truck>
- <20200428151205.GH5677@sirena.org.uk>
- <20200428151815.GB12697@willie-the-truck>
- <20200428155808.GJ5677@sirena.org.uk>
- <20200428160141.GD12697@willie-the-truck>
+        id S1728126AbgEACiZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Apr 2020 22:38:25 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:21372 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728008AbgEACiZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 30 Apr 2020 22:38:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588300703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P8k2aTeCbIA0Pe5nqRNlnguJBbZob6iEKj+wNv40n6s=;
+        b=X+kNky8FxvVt4czptIdJNzpjOTygN2raEEp0wFsi0Athju4aulnSJQuVY0TkeQo0wAZEA0
+        c3IVN06HAPUKUtEBtE6r1BTTxEhh21viVgRmRrXLqEW2rc12ce1p/vc9t5//pffmjcrOk/
+        kmfDbQXXw1XSR/oS8EwhSnLZbykGyj0=
+Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
+ [209.85.222.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-479-Pje_80YYPOS_YzghbXGVRQ-1; Thu, 30 Apr 2020 22:38:22 -0400
+X-MC-Unique: Pje_80YYPOS_YzghbXGVRQ-1
+Received: by mail-ua1-f72.google.com with SMTP id v17so3666675uao.7
+        for <linux-arch@vger.kernel.org>; Thu, 30 Apr 2020 19:38:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P8k2aTeCbIA0Pe5nqRNlnguJBbZob6iEKj+wNv40n6s=;
+        b=E7p0QHvzVF6vFPg403lQTP+hwwuxcsncC4X6MNynQ5A1JOSVhALheqA4NnkPqco7bs
+         Gn4odqIT8PxAYfGM2cNPYcZT+e4c0pP/2Vr6CkImgB+u0P8UV3o0EfzRluUcOv7cm3DW
+         Y+TZR6rZjygnL095PeoHVcGdzI3rLKheYR19FARaUcozL1PGJsq4t7Vt5eTcegNL1Xvo
+         56lGWXjCp7JTdueYCxQ6uMP072Kxq1UjAjTybdzFHJT+VdnmIvOsSHN984f1hWpDYEWu
+         AZWUGK/iv5sDuqTB6jsYHUx7fuOblvCa/CdivL17Fq73bwyUFjfMlD6KRbgoeksUeMuq
+         kKsg==
+X-Gm-Message-State: AGi0PubfQ8aNZZhQM7BramtMPdGer/tr4yVPgWvbVLWwh/Zp0rUf6fAh
+        MMXExfxDFccYD0NLtxiiRR2NNzjpKbv3AeGes6HP8N7RWrtMy76bbgkwwN0nOF++acPKM72jn7Y
+        RQVxKbEqcLaTTafzL8Qfm7g7znZfpX7pXmT/2HA==
+X-Received: by 2002:a05:6102:4d:: with SMTP id k13mr1848880vsp.198.1588300701704;
+        Thu, 30 Apr 2020 19:38:21 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKu6ClZ61atP80MD4lQJkn2FtP3gZkiC+YuTXU2rwKV21SshkG1nW93zQxISm3Y7jRVOl6JpuyIYF8Yu55j3FA=
+X-Received: by 2002:a05:6102:4d:: with SMTP id k13mr1848869vsp.198.1588300701546;
+ Thu, 30 Apr 2020 19:38:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200428160141.GD12697@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200414131348.444715-1-hch@lst.de> <20200414131348.444715-22-hch@lst.de>
+ <20200414151344.zgt2pnq7cjq2bgv6@debian> <CAMeeMh8Q3Od76WaTasw+BpYVF58P-HQMaiFKHxXbZ_Q3tQPZ=A@mail.gmail.com>
+In-Reply-To: <CAMeeMh8Q3Od76WaTasw+BpYVF58P-HQMaiFKHxXbZ_Q3tQPZ=A@mail.gmail.com>
+From:   John Dorminy <jdorminy@redhat.com>
+Date:   Thu, 30 Apr 2020 22:38:10 -0400
+Message-ID: <CAMeeMh_9N0ORhPM8EmkGeeuiDoQY3+QoAPX5QBuK7=gsC5ONng@mail.gmail.com>
+Subject: Re: [PATCH 21/29] mm: remove the pgprot argument to __vmalloc
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>, x86@kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laura Abbott <labbott@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        bpf@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Gao Xiang <xiang@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 05:01:43PM +0100, Will Deacon wrote:
-> On Tue, Apr 28, 2020 at 04:58:12PM +0100, Mark Brown wrote:
-> > On Tue, Apr 28, 2020 at 04:18:16PM +0100, Will Deacon wrote:
-> > > On Tue, Apr 28, 2020 at 04:12:05PM +0100, Mark Brown wrote:
-> > 
-> > > > It's probably easier for me if you just use the existing branch, I've
-> > > > already got a branch based on a merge down.
-> > 
-> > > Okey doke, I'll funnel that in the direction of linux-next then. It does
-> > > mean that any subsequent patches for 5.8 that depend on BTI will need to
-> > > be based on this branch, so as long as you're ok with that then it's fine
-> > > by me (since I won't be able to apply patches if they refer to changes
-> > > introduced in the recent merge window).
-> > 
-> > That's not a problem, that's what I've got already and if I try to send
-> > everything based off -rc3 directly the series would get unmanagably
-> > large.  Actually unless you think it's a bad idea I think what I'll do
-> > is go and send out a couple of the preparatory changes (the insn updates
-> > and the last bit of annotation conversions) separately for that branch
-> > while I finalize the revisions of the main BTI kernel bit, hopefully
-> > that'll make the review a bit more approachable.
-> 
-> Okey doke, sounds good to me. I'm queuing stuff atm, so as long you tell
-> me what I need to apply things against then we should be good.
+>> On Tue, Apr 14, 2020 at 03:13:40PM +0200, Christoph Hellwig wrote:
+>> > The pgprot argument to __vmalloc is always PROT_KERNEL now, so remove
+>> > it.
 
-Just a heads up: I've renamed for-next/bti to for-next/bti-user, so it
-doesn't get confusing with the pending in-kernel BTI patches. All the commit
-SHAs remain unchanged.
+Greetings;
 
-Will
+I recently noticed this change via the linux-next tree.
+
+It may not be possible to edit at this late date, but the change
+description refers to PROT_KERNEL, which is a symbol which does not
+appear to exist; perhaps PAGE_KERNEL was meant? The mismatch caused me
+and a couple other folks some confusion briefly until we decided it
+was supposed to be PAGE_KERNEL; if it's not too late, editing the
+description to clarify so would be nice.
+
+Many thanks.
+
+John Dorminy
+
