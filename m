@@ -2,121 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 782B61C362E
-	for <lists+linux-arch@lfdr.de>; Mon,  4 May 2020 11:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180F41C3875
+	for <lists+linux-arch@lfdr.de>; Mon,  4 May 2020 13:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728452AbgEDJxJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 4 May 2020 05:53:09 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8288 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728339AbgEDJxJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 May 2020 05:53:09 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0449Wevn154538;
-        Mon, 4 May 2020 05:52:01 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30s50fcewg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 May 2020 05:52:00 -0400
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0449Y0Fw161848;
-        Mon, 4 May 2020 05:51:59 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30s50fcew4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 May 2020 05:51:59 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 0449ofx1028861;
-        Mon, 4 May 2020 09:51:57 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 30s0g5ht3w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 May 2020 09:51:57 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0449ptPp10682730
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 4 May 2020 09:51:55 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B19B52050;
-        Mon,  4 May 2020 09:51:55 +0000 (GMT)
-Received: from localhost (unknown [9.85.127.4])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EE3F75204F;
-        Mon,  4 May 2020 09:51:54 +0000 (GMT)
-Date:   Mon, 04 May 2020 15:21:53 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: [PATCH 12/14] docs: move remaining stuff under
- Documentation/*.txt to Documentation/staging
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        =?iso-8859-1?q?Greg=0A?= Kroah-Hartman 
-        <gregkh@linuxfoundation.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        linux-arch@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        =?iso-8859-1?q?Sameer=0A?= Rahmani <lxsameer@gnu.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        tee-dev@lists.linaro.org, Thomas Gleixner <tglx@linutronix.de>
-References: <cover.1588345503.git.mchehab+huawei@kernel.org>
-        <28687056965ff46c0e6c81663a419bc59cfb94b4.1588345503.git.mchehab+huawei@kernel.org>
-        <20200504085415.db8e0e3b40e795f2fb4af009@kernel.org>
-In-Reply-To: <20200504085415.db8e0e3b40e795f2fb4af009@kernel.org>
+        id S1728278AbgEDLlM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 May 2020 07:41:12 -0400
+Received: from mga18.intel.com ([134.134.136.126]:57390 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726797AbgEDLlL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 4 May 2020 07:41:11 -0400
+IronPort-SDR: SQuyBrnTNt/XjkAq/e7HnsbwGtIBWgOWFBKaSarp61eXXnHU9GKjwB9Atffxlgh+N/xT8lVnIR
+ Dq4P9W+1LzXA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2020 04:41:10 -0700
+IronPort-SDR: nK1XVmEP/7h0Dz9nRq3BHsCwEWqIAqIaOYKzPSsL9UGWuseFvAxw0CBmTaJZwhBHb/MKLwbX/x
+ FvpEWpGlLdfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,351,1583222400"; 
+   d="scan'208";a="248193832"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007.jf.intel.com with ESMTP; 04 May 2020 04:41:06 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jVZTB-004bjy-4p; Mon, 04 May 2020 14:41:09 +0300
+Date:   Mon, 4 May 2020 14:41:09 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Syed Nayyar Waris <syednwaris@gmail.com>
+Cc:     akpm@linux-foundation.org, vilhelm.gray@gmail.com,
+        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        yamada.masahiro@socionext.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 0/4] Introduce the for_each_set_clump macro
+Message-ID: <20200504114109.GE185537@smile.fi.intel.com>
+References: <cover.1588460322.git.syednwaris@gmail.com>
 MIME-Version: 1.0
-User-Agent: astroid/v0.15-13-gb675b421
- (https://github.com/astroidmail/astroid)
-Message-Id: <1588585777.904qzycqcn.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-05-04_05:2020-05-01,2020-05-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1011 impostorscore=0 adultscore=0 priorityscore=1501
- malwarescore=0 phishscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005040078
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1588460322.git.syednwaris@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Masami Hiramatsu wrote:
-> On Fri,  1 May 2020 17:37:56 +0200
-> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+On Sun, May 03, 2020 at 04:38:36AM +0530, Syed Nayyar Waris wrote:
+> This patchset introduces a new generic version of for_each_set_clump. 
+> The previous version of for_each_set_clump8 used a fixed size 8-bit
+> clump, but the new generic version can work with clump of any size but
+> less than or equal to BITS_PER_LONG. The patchset utilizes the new macro 
+> in several GPIO drivers.
 > 
->> There are several files that I was unable to find a proper place
->> for them, and 3 ones that are still in plain old text format.
->> 
->> Let's place those stuff behind the carpet, as we'd like to keep the
->> root directory clean.
->> 
->> We can later discuss and move those into better places.
+> The earlier 8-bit for_each_set_clump8 facilitated a
+> for-loop syntax that iterates over a memory region entire groups of set
+> bits at a time.
 > 
-> Hi Mauro,
+> For example, suppose you would like to iterate over a 32-bit integer 8
+> bits at a time, skipping over 8-bit groups with no set bit, where
+> XXXXXXXX represents the current 8-bit group:
 > 
-> Thanks for cleaning it up! Tentatively moving kprobes.txt under
-> staging/ is good to me.
+>     Example:        10111110 00000000 11111111 00110011
+>     First loop:     10111110 00000000 11111111 XXXXXXXX
+>     Second loop:    10111110 00000000 XXXXXXXX 00110011
+>     Third loop:     XXXXXXXX 00000000 11111111 00110011
 > 
-> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+> Each iteration of the loop returns the next 8-bit group that has at
+> least one set bit.
 > 
-> BTW, I think kprobes.txt is under trace/ or we may be better
-> making a new core-api/events/ directory and prepare other event
-> systems (PMU, uprobes, and hw_breakpoint.) 
+> But with the new for_each_set_clump the clump size can be different from 8 bits.
+> Moreover, the clump can be split at word boundary in situations where word 
+> size is not multiple of clump size. Following are examples showing the working 
+> of new macro for clump sizes of 24 bits and 6 bits.
+> 
+> Example 1:
+> clump size: 24 bits, Number of clumps (or ports): 10
+> bitmap stores the bit information from where successive clumps are retrieved.
+> 
+>      /* bitmap memory region */
+>         0x00aa0000ff000000;  /* Most significant bits */
+>         0xaaaaaa0000ff0000;
+>         0x000000aa000000aa;
+>         0xbbbbabcdeffedcba;  /* Least significant bits */
+> 
+> Different iterations of for_each_set_clump:-
+> 'offset' is the bit position and 'clump' is the 24 bit clump from the
+> above bitmap.
+> Iteration first:        offset: 0 clump: 0xfedcba
+> Iteration second:       offset: 24 clump: 0xabcdef
+> Iteration third:        offset: 48 clump: 0xaabbbb
+> Iteration fourth:       offset: 96 clump: 0xaa
+> Iteration fifth:        offset: 144 clump: 0xff
+> Iteration sixth:        offset: 168 clump: 0xaaaaaa
+> Iteration seventh:      offset: 216 clump: 0xff
+> Loop breaks because in the end the remaining bits (0x00aa) size was less
+> than clump size of 24 bits.
+> 
+> In above example it can be seen that in iteration third, the 24 bit clump
+> that was retrieved was split between bitmap[0] and bitmap[1]. This example 
+> also shows that 24 bit zeroes if present in between, were skipped (preserving
+> the previous for_each_set_macro8 behaviour). 
+> 
+> Example 2:
+> clump size = 6 bits, Number of clumps (or ports) = 3.
+> 
+>      /* bitmap memory region */
+>         0x00aa0000ff000000;  /* Most significant bits */
+>         0xaaaaaa0000ff0000;
+>         0x0f00000000000000;
+>         0x0000000000000ac0;  /* Least significant bits */
+> 
+> Different iterations of for_each_set_clump:
+> 'offset' is the bit position and 'clump' is the 6 bit clump from the
+> above bitmap.
+> Iteration first:        offset: 6 clump: 0x2b
+> Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
+> Here 6 * 3 is clump size * no. of clumps.
 
-I think it would be good to move kprobes.txt under trace/ -- all other 
-tracing bits are already present there, including uprobes.
+Looking into the last patches where we have examples I still do not see a
+benefit of variadic clump sizes. power of 2 sizes would make sense (and be
+optimized accordingly (64-bit, 32-bit).
 
+-- 
+With Best Regards,
+Andy Shevchenko
 
-- Naveen
 
