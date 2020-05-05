@@ -2,118 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F121C568B
-	for <lists+linux-arch@lfdr.de>; Tue,  5 May 2020 15:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCF91C576E
+	for <lists+linux-arch@lfdr.de>; Tue,  5 May 2020 15:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729022AbgEENQ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 May 2020 09:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729019AbgEENQ3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 May 2020 09:16:29 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:3201:214:fdff:fe10:1be6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C31C061A0F;
-        Tue,  5 May 2020 06:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=MB282HLZkeyYhgLoz3UzvjWBjtseuypJMoQRy7x6wmU=; b=1uVH8dV30INpdk9iqTu+UxJiJ
-        ApkVzBDRp1hvwrn1MEk70bp0j+d5oqaTrdBJ62gec4/5fN7BzLR5xD6gCdG+lZO1FWDB5r7X3Rof6
-        veb6S7/h86xM6xQEpIGOYHVW8Bl0S8VjUHKY9chFQ7mnjAx7CWTlWjeR+Qxl9OLnUYKI9iwA2Dqgf
-        kn1gYq1vQIK1VufPto2p/wbwVobs88Z39Msi8Vinde2ujrHbb47O/5eQDGwEitDNqXOhR5M0ZMrWg
-        eqpUIgwt4+wWF6Wd3xld/RFuWc1LY0W8VW3ik4aKyW7XyOCsR9sc/317qMD3vC5EVxoJce7n34mKW
-        8YSpJA3OA==;
-Received: from shell.armlinux.org.uk ([2002:4e20:1eda:1:5054:ff:fe00:4ec]:54034)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1jVxQr-0002Yl-H2; Tue, 05 May 2020 14:16:21 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1jVxQp-0007BJ-Ro; Tue, 05 May 2020 14:16:19 +0100
-Date:   Tue, 5 May 2020 14:16:19 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Will Deacon <will@kernel.org>
-Cc:     Dave Martin <Dave.Martin@arm.com>, linux-arch@vger.kernel.org,
-        linux-man@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: RFC: Adding arch-specific user ABI documentation in linux-man
-Message-ID: <20200505131619.GG1551@shell.armlinux.org.uk>
-References: <20200504153214.GH30377@arm.com>
- <20200505104454.GC19710@willie-the-truck>
- <20200505124351.GF1551@shell.armlinux.org.uk>
- <20200505130629.GK19710@willie-the-truck>
+        id S1729070AbgEENwE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 May 2020 09:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728993AbgEENwD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 May 2020 09:52:03 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64787C061A0F;
+        Tue,  5 May 2020 06:52:03 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id z6so838631plk.10;
+        Tue, 05 May 2020 06:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zSUqQDWC8kjEfI7Zwy/W0Ml7p1PvgRlntpeykuMm0bw=;
+        b=hl68Rx6+hwqgjCDnRBIJ4ghqd/Mbjw3qnNO117CIrop6ybuvdvRuSN03pEe7LfHEPI
+         DEpOBZgu6KgRtAIgWgd9EZ6+ZSZpdmdrcUwE4xCJSRrgUf6ZClZVqGvF71hyrA1fE0CG
+         5XBjSIhRA4+6zJ8uXyhuPujWQz6cVK4l21vd5YazoEAGPJUkjCT72SOFXQTriCqkd2pk
+         uSYVpm7onCs3V/dcpk87Lc0IyMldYKecnD5gtwshAbJHKmuG7rbftbJtgtq4Hf5Eu4Dp
+         pPA8M/GBhnv2uvwEAgQAizkTBjG2gVDkDo7CwZbbHIjISSjFrMXB3MnYmb9f6aJ5H9kM
+         v4jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zSUqQDWC8kjEfI7Zwy/W0Ml7p1PvgRlntpeykuMm0bw=;
+        b=YrmUYUHWiqz1uko2DTOZU0kjuiCIF8oMjwoqtqJ1gOBycGoAyV6zAXWtpMX6PE+WRF
+         rkX3PzGaZWR0S9q9ei5/R5nNkHgi7d1yGjotALkON57FyRJxH3wGEfoJZD+yE9qCHWya
+         266jjWjU4u4h5I5wzjhzapg9ewJEePzj7Oo5X3/Npjbi8TCHl+FahcxZFE0g+sMvEtg3
+         XGTtDrxlYkGnXGY4K26LqGMHAJLLt1LIi09gxBdvCOaGGzm3mzaSb3WqMR6K73jqnDvk
+         VLwp5ekXCEVv2EYJ0htytVUy2MxwMHWC9DVEgbMSj4BnP8lbESq3WHF/3BWPi8y2vSiK
+         ftPQ==
+X-Gm-Message-State: AGi0Pua5/mAfQ2kNuhXgXSbKWC2YaqPOT+UXXiFhbjY38K4awGA6sn5q
+        Qeys2cTkYPXb4rySw/YJozpeHDHJ/4SP4fwuz8/NzVNn
+X-Google-Smtp-Source: APiQypJNEHsSL0GExSztmK2I6nxQUgw+68Y8I+I3LffAVV8E4crlumGaO3BAzZEfzHPrp79Ypgd2ypo3cV1x0ObIE9w=
+X-Received: by 2002:a17:90a:fa81:: with SMTP id cu1mr3234534pjb.25.1588686722930;
+ Tue, 05 May 2020 06:52:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200505130629.GK19710@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1588460322.git.syednwaris@gmail.com> <20200504114109.GE185537@smile.fi.intel.com>
+ <20200504143638.GA4635@shinobu>
+In-Reply-To: <20200504143638.GA4635@shinobu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 5 May 2020 16:51:56 +0300
+Message-ID: <CAHp75Vf_vP1qM9x81dErPeaJ4-cK-GOMnmEkxkhPY2gCvtmVbA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce the for_each_set_clump macro
+To:     William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Syed Nayyar Waris <syednwaris@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>, rrichter@marvell.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 05, 2020 at 02:06:30PM +0100, Will Deacon wrote:
-> On Tue, May 05, 2020 at 01:43:51PM +0100, Russell King - ARM Linux admin wrote:
-> > On Tue, May 05, 2020 at 11:44:55AM +0100, Will Deacon wrote:
-> > > Michael has been nagging me on and off about that for, what, 10 years now?
-> > > I would therefore be very much in favour of having our ptrace extensions
-> > > documented!
-> > > 
-> > > We could even put this stuff under Documentation/arm64/man/ if it's deemed
-> > > too CPU-specific for the man-pages project, but my preference would still
-> > > be for it to be hosted there alongside all the other man pages.
-> > 
-> > Stuffing random things into the kernel tree is painful for some people.
-> > 
-> > For example, if you cross-build your kernel, then the stuff in the
-> > tools/ subdirectory is totally useless (I think everything except
-> > perf) because you can't build it.
-> > 
-> > Let's stop making the mistake of constantly shoving stuff into the
-> > kernel source tree.
-> 
-> For userspace tools, I'm inclined to agree, but this is just documentation
-> so it shouldn't cause any issues with cross building. But to be clear: I'd
-> still prefer it to be part of the man-pages project, and would only consider
-> it for inclusion in the kernel tree if it was rejected for being too
-> CPU-specific.
+On Mon, May 4, 2020 at 5:41 PM William Breathitt Gray
+<vilhelm.gray@gmail.com> wrote:
+> On Mon, May 04, 2020 at 02:41:09PM +0300, Andy Shevchenko wrote:
+> > On Sun, May 03, 2020 at 04:38:36AM +0530, Syed Nayyar Waris wrote:
 
-I don't think that should be a concern; the man-pages project already
-contains documentation that is specific to kernel versions, including
-documentation for interfaces that are architecture specific (such as
-prctl is a big one, ptrace to a lesser extent.)  syscall(2) contains
-a whole bunch of architecture stuff about the calling convention for
-syscalls.
+...
 
-Interestingly, I notice that syscall(2) is wrong for arm/OABI. I am
-not surprised, because that documentation never came my way, and I am
-the author of the kernel's OABI syscall interface.
+> > Looking into the last patches where we have examples I still do not see a
+> > benefit of variadic clump sizes. power of 2 sizes would make sense (and be
+> > optimized accordingly (64-bit, 32-bit).
+> >
+> > --
+> > With Best Regards,
+> > Andy Shevchenko
+>
+> There is of course benefit in defining for_each_set_clump with clump
+> sizes of powers of 2 (we can optimize for 32 and 64 bit sizes and avoid
+> boundary checks that we know will not occur), but at the very least the
+> variable size bitmap_set_value and bitmap_get_value provide significant
+> benefit for the readability of the gpio-xilinx code:
+>
+>         bitmap_set_value(old, state[0], 0, width[0]);
+>         bitmap_set_value(old, state[1], width[0], width[1]);
+>         ...
+>         state[0] = bitmap_get_value(new, 0, width[0]);
+>         state[1] = bitmap_get_value(new, width[0], width[1]);
+>
+> These lines are simple and clear to read: we know immediately what they
+> do. But if we did not have bitmap_set_value/bitmap_get_value, we'd have
+> to use several bitwise operations for each line; the obfuscation of the
+> code would be an obvious hinderance here.
 
-It claims:
-
-       arch/ABI      arg1  arg2  arg3  arg4  arg5  arg6  arg7  Notes
-       ──────────────────────────────────────────────────────────────
-       arm/OABI      a1    a2    a3    a4    v1    v2    v3
-
-whereas, at the time I invented it, I decided that it shall pass
-arguments in r0 to r6.  That's r0 to r6.  Not the APCS register
-names that this document claims.  Not everything in OABI is APCS,
-as illustrated here - APCS passes the first four arguments in a1
-to a4, and then the rest on the stack.  The OABI syscall interface
-doesn't do that.
-
-I guess that's what happens when someone else writes interface
-documentation and doesn't bother to get it reviewed by those who
-created the interface in the first place.
+Do I understand correctly that width[0] and width[1] may not be power
+of two and it's actually the case?
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 10.2Mbps down 587kbps up
+With Best Regards,
+Andy Shevchenko
