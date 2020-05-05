@@ -2,70 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6FD1C53BD
-	for <lists+linux-arch@lfdr.de>; Tue,  5 May 2020 12:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BF31C53E3
+	for <lists+linux-arch@lfdr.de>; Tue,  5 May 2020 13:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728238AbgEEKz2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 May 2020 06:55:28 -0400
-Received: from foss.arm.com ([217.140.110.172]:37084 "EHLO foss.arm.com"
+        id S1728705AbgEELFX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 May 2020 07:05:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:37290 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728180AbgEEKz2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 5 May 2020 06:55:28 -0400
+        id S1728608AbgEELFX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 5 May 2020 07:05:23 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7EAC30E;
-        Tue,  5 May 2020 03:55:27 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD1CD30E;
+        Tue,  5 May 2020 04:05:22 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E4183F305;
-        Tue,  5 May 2020 03:55:26 -0700 (PDT)
-Date:   Tue, 5 May 2020 11:55:24 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABBB23F305;
+        Tue,  5 May 2020 04:05:21 -0700 (PDT)
+Date:   Tue, 5 May 2020 12:05:19 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
-To:     Walter Harms <wharms@bfs.de>
+To:     Will Deacon <will@kernel.org>
 Cc:     Michael Kerrisk <mtk.manpages@gmail.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: Adding arch-specific user ABI documentation in linux-man
-Message-ID: <20200505105522.GL30377@arm.com>
+        linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: RFC: Adding arch-specific user ABI documentation in linux-man
+Message-ID: <20200505110519.GM30377@arm.com>
 References: <20200504153214.GH30377@arm.com>
- <32259f3763344500a058a8ca8a3a33d8@bfs.de>
+ <20200505104454.GC19710@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <32259f3763344500a058a8ca8a3a33d8@bfs.de>
+In-Reply-To: <20200505104454.GC19710@willie-the-truck>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 05, 2020 at 07:45:32AM +0000, Walter Harms wrote:
+On Tue, May 05, 2020 at 11:44:55AM +0100, Will Deacon wrote:
 > Hi Dave,
-> you are pointing to an (IMHO) interesting question.
-> How to document different CPUs ?
-> Given that an operating system should hide the different CPU's using
-> CPU specific features should be used sparsely at best.
+> 
+> On Mon, May 04, 2020 at 04:32:35PM +0100, Dave Martin wrote:
+> > I considering trying to plug some gaps in the arch-specific ABI
+> > documentation in the linux man-pages, specifically for arm64 (and
+> > possibly arm, where compat means we have some overlap).
+> > 
+> > For arm64, there are now significant new extensions (Pointer
+> > authentication, SVE, MTE etc.)  Currently there is some user-facing
+> > documentation mixed in with the kernel-facing documentation in the
+> > kernel tree, but this situation isn't ideal.
+> > 
+> > Do you have an opinion on where in the man-pages documentation should be
+> > added, and how to structure it?
+> > 
+> > 
+> > Affected areas include:
+> > 
+> >  * exec interface
+> >  * aux vector, hwcaps
+> >  * arch-specific signals
+> >  * signal frame
+> >  * mmap/mprotect extensions
+> >  * prctl calls
+> >  * ptrace quirks and extensions
+> >  * coredump contents
+> > 
+> > 
+> > Not everything has an obvious home in an existing page, and adding
+> > specifics for every architecture could make some existing manpages very
+> > unwieldy.
+> > 
+> > I think for some arch features, we really need some "overview" pages
+> > too: just documenting the low-level details is of limited value
+> > without some guide as to how to use them together.
+> > 
+> > 
+> > Does the following sketch look reasonable?
+> > 
+> >  * man7/arm64.7: new page: overview of arm64-specific ABI extensions
+> > 
+> >  * man7/sve.7 (or man7/arm64-sve.7 or man7/sve.7arm64): new page:
+> >    overview of arm64 SVE ABI
+> > 
+> >  * man2/arm64-ptrace.2 (or man2/ptrace.2arm64): new page:
+> >    arm64 ptrace extensions
+> 
+> Michael has been nagging me on and off about that for, what, 10 years now?
+> I would therefore be very much in favour of having our ptrace extensions
+> documented!
+> 
+> We could even put this stuff under Documentation/arm64/man/ if it's deemed
+> too CPU-specific for the man-pages project, but my preference would still
+> be for it to be hosted there alongside all the other man pages.
 
-Agreed!  But there are real situations where cpu specifics can't be
-avoided, and having documentation will help people to use those features
-correctly.
+Heh, perhaps we could build that into the kernel and mount it somewhere.
 
-> the easy part are adds-on like flags for prctrl etc. simply add it to the page.
 
-For prctl, that makes sense (it's a jumble of arch specifics already).
+Seriously though,
 
-But would it be considered a problem if the ptrace page, say, becomes
-80% arch-specific stuff?  That page is cumbersome enough already...
+I guess I can start off with straightforward small things for which the
+documentation has an obvious home (like prctls[*]) and then move on to
+the bigger stuff like ptrace.
 
-> Other things should go to a cpu specific pages (can of worms). The problem will
-> be to keep that small but informative. I have no idea about the level of detail
-> (and i have worked with a range of CPUs) that could be interesting for a programmer.
-> An of cause every other CPU now needs also a page.
+If people start shouting about a page getting too big or messy I can try
+to split it up.
 
-Fair enough.
+Make sense?
 
 Cheers
 ---Dave
+
+
+[*] "straightforward" was a joke, obviously
