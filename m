@@ -2,104 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B41E1C7DAB
-	for <lists+linux-arch@lfdr.de>; Thu,  7 May 2020 01:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70ED41C7DC3
+	for <lists+linux-arch@lfdr.de>; Thu,  7 May 2020 01:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726134AbgEFXDZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 May 2020 19:03:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57566 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726086AbgEFXDZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 6 May 2020 19:03:25 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 398182145D;
-        Wed,  6 May 2020 23:03:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588806204;
-        bh=XcKljOyA8MI70ejLn0nQwtirIILJp1QajO5LmILJmlg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Wyt/JGZoLBoCyrBbn+nfKaptsftweK+J/hSN/lanGug2dLve6x9IIG1O6u0eohq7L
-         g4TBx58wLXTZ9ZQQB9ddeTSyd/ZG5lVk4uhkoH+gu/r1TWmz6j62pfp9AeV6LqRpFR
-         L7TA0Un44Wj8o//D5Mkep7vCrBa8XeG24QfzeOpw=
-Received: by mail-ed1-f54.google.com with SMTP id r7so3603802edo.11;
-        Wed, 06 May 2020 16:03:24 -0700 (PDT)
-X-Gm-Message-State: AGi0PuadTxLMVe5qsoznW672L/ylmB1W/sTF9Fi2pIT6iH4DXdrzZVMN
-        eQhyWSQKvK6G8OG3ov2EqLtr2ut+yUR4DoxNWEs=
-X-Google-Smtp-Source: APiQypL7jasVVzwLhx3EaVL/2cJEk9MJtHeXT6qkCc1Y5SzHENoGQP9owkfX68fn1CyN/mdLVs9MduopS6s761TG+e0=
-X-Received: by 2002:a50:d6d0:: with SMTP id l16mr9650852edj.317.1588806202552;
- Wed, 06 May 2020 16:03:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20180508181924.19939-1-mcgrof@kernel.org>
-In-Reply-To: <20180508181924.19939-1-mcgrof@kernel.org>
+        id S1726476AbgEFXN7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 May 2020 19:13:59 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35999 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726074AbgEFXN6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 May 2020 19:13:58 -0400
+Received: by mail-pg1-f196.google.com with SMTP id d22so1905981pgk.3;
+        Wed, 06 May 2020 16:13:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yNC3GM3ywGXGoZzk8/YUTPNRyoicVYswjVnBQiUzaYs=;
+        b=gyNHFGXtO+bRy10kSQnOFHiuKnpiqxqI/tir6hskR7d6mMoC1Le41qHBv/7SZRB+qN
+         fmoGEE68vFwzQEUdj6atkKL8FGWOsAGoFL9QO8FiO7bSV4TkqjLgfavfVC6GEnyuhlvt
+         xr5nJGUwpcLqyteJzA6M1/Fm2l6H89xE/JKCmXjIC5krtEoqtti8FkjgqXwX2d0N6+1f
+         c82JVef/3dvAYwxBwuraS05Cf/vNWOrUejZqRKNzJtcngptYuXq1GIjIlmWktPHPRh+i
+         gW8Dq1gSRANZRM2hdXtGDap04zXxKXEgP3dtQTOxcBSpFa6jcDLETsy2RWC7edwkM1lc
+         PlXA==
+X-Gm-Message-State: AGi0PubeZOCAvHwGE4gHE6Ld27/RHpOS1LDv9pvxlM3Qg8Y6hPAQRnrZ
+        MxKB28wW87FQu8+a3bqU9kI=
+X-Google-Smtp-Source: APiQypI1cZz5e5aUdny1xt+BmLGd0u9WZ/XOxzZEhrSJwWx5Olumva6WOJu2WNhYATPEGbj5pYvHsA==
+X-Received: by 2002:a62:1994:: with SMTP id 142mr180656pfz.259.1588806837760;
+        Wed, 06 May 2020 16:13:57 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id f6sm2924188pfn.189.2020.05.06.16.13.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2020 16:13:56 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 505C5403EA; Wed,  6 May 2020 23:13:55 +0000 (UTC)
 From:   Luis Chamberlain <mcgrof@kernel.org>
-Date:   Wed, 6 May 2020 17:03:15 -0600
-X-Gmail-Original-Message-ID: <CAB=NE6WnO+6Mn-t9coVHKSVY5iNpTcb+VGCAfBJWrwj3jNNAKA@mail.gmail.com>
-Message-ID: <CAB=NE6WnO+6Mn-t9coVHKSVY5iNpTcb+VGCAfBJWrwj3jNNAKA@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: expland documentation over __read_mostly
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christopher Lamenter <cl@linux.com>,
-        Rafael Aquini <aquini@redhat.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Waiman Long <longman@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Randy Dunlap <rdunlap@infradead.org>, joel.opensrc@gmail.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     cl@linux.com, akpm@linux-foundation.org
+Cc:     arnd@arndb.de, willy@infradead.org, aquini@redhat.com,
+        keescook@chromium.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH] mm: expland documentation over __read_mostly
+Date:   Wed,  6 May 2020 23:13:53 +0000
+Message-Id: <20200506231353.32451-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.23.0.rc1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 8, 2018 at 12:19 PM Luis R. Rodriguez <mcgrof@kernel.org> wrote:
->
-> __read_mostly can easily be misused by folks, its not meant for
-> just read-only data. There are performance reasons for using it, but
-> we also don't provide any guidance about its use. Provide a bit more
-> guidance over it use.
->
-> Acked-by: Christoph Lameter <cl@linux.com>
-> Signed-off-by: Luis R. Rodriguez <mcgrof@kernel.org>
+__read_mostly can easily be misused by folks, its not meant for
+just read-only data. There are performance reasons for using it, but
+we also don't provide any guidance about its use. Provide a bit more
+guidance over it use.
 
-After 2 years, this patch was never applied... and so people can
-easily keep misusing this. I'll resend now.
+Acked-by: Christoph Lameter <cl@linux.com>
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
 
-  Luis
-> ---
->  include/linux/cache.h | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/cache.h b/include/linux/cache.h
-> index 750621e41d1c..4967566ed08c 100644
-> --- a/include/linux/cache.h
-> +++ b/include/linux/cache.h
-> @@ -15,8 +15,16 @@
->
->  /*
->   * __read_mostly is used to keep rarely changing variables out of frequently
-> - * updated cachelines. If an architecture doesn't support it, ignore the
-> - * hint.
-> + * updated cachelines. Its use should be reserved for data that is used
-> + * frequently in hot paths. Performance traces can help decide when to use
-> + * this. You want __read_mostly data to be tightly packed, so that in the
-> + * best case multiple frequently read variables for a hot path will be next
-> + * to each other in order to reduce the number of cachelines needed to
-> + * execute a critial path. We should be mindful and selective of its use.
-> + * ie: if you're going to use it please supply a *good* justification in your
-> + * commit log.
-> + *
-> + * If an architecture doesn't support it, ignore the hint.
->   */
->  #ifndef __read_mostly
->  #define __read_mostly
-> --
-> 2.17.0
->
+I sent this 2 years ago, but it fell through the cracks. This time
+I'm adding Andrew Morton now, the fix0r-of-falling-through-the-cracks.
+
+Resending as I just saw a patch which doesn't clearly justifiy the
+merits of the use of __read_mostly on it.
+
+ include/linux/cache.h | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/cache.h b/include/linux/cache.h
+index 750621e41d1c..8106fb304fa7 100644
+--- a/include/linux/cache.h
++++ b/include/linux/cache.h
+@@ -15,8 +15,14 @@
+ 
+ /*
+  * __read_mostly is used to keep rarely changing variables out of frequently
+- * updated cachelines. If an architecture doesn't support it, ignore the
+- * hint.
++ * updated cachelines. Its use should be reserved for data that is used
++ * frequently in hot paths. Performance traces can help decide when to use
++ * this. You want __read_mostly data to be tightly packed, so that in the
++ * best case multiple frequently read variables for a hot path will be next
++ * to each other in order to reduce the number of cachelines needed to
++ * execute a critial path. We should be mindful and selective of its use.
++ * ie: if you're going to use it please supply a *good* justification in your
++ * commit log
+  */
+ #ifndef __read_mostly
+ #define __read_mostly
+-- 
+2.25.1
+
