@@ -2,285 +2,187 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3499E1C6823
-	for <lists+linux-arch@lfdr.de>; Wed,  6 May 2020 08:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 007421C6EAE
+	for <lists+linux-arch@lfdr.de>; Wed,  6 May 2020 12:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727916AbgEFGNb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 May 2020 02:13:31 -0400
-Received: from foss.arm.com ([217.140.110.172]:56338 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726558AbgEFGNa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 6 May 2020 02:13:30 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53ECD30E;
-        Tue,  5 May 2020 23:13:29 -0700 (PDT)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.71.196])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 856E53F68F;
-        Tue,  5 May 2020 23:13:18 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 3/3] mm/hugetlb: Define a generic fallback for arch_clear_hugepage_flags()
-Date:   Wed,  6 May 2020 11:42:14 +0530
-Message-Id: <1588745534-24418-4-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588745534-24418-1-git-send-email-anshuman.khandual@arm.com>
-References: <1588745534-24418-1-git-send-email-anshuman.khandual@arm.com>
+        id S1726924AbgEFKrW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 May 2020 06:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726906AbgEFKrW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 May 2020 06:47:22 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE577C061A0F;
+        Wed,  6 May 2020 03:47:21 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id x25so2059124wmc.0;
+        Wed, 06 May 2020 03:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=cc:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=U0c/o/ih8XjkFs39T8/w2Mwm5aWOHE3x26AvSmeqkow=;
+        b=ByXxKed4vRtB5iUhx98ERXa2zcUOX8CFtZIoDyqobQQJ4GDJvGgI+4leRrmWAI6hPw
+         +WhK+co7vjVRa6K0kU2NANHtsOfvy9EYTKk7sfizvaHp45b3sDQHcZm0mTOr+shYNnIF
+         UMDzuDL60DVOdgOC0Ux+2fBwwEN3f0qWeg3Q8bc7bghSXlynWtB4K6cIgbLhv3tky2qJ
+         /8aNnjhm/qOwaUg6WVffawlKMXKz5PcZe9HADlw91OkPgWOzUD/Xfw/13GwMn4y2ug/H
+         P9RNGPFQAHYdxKgHwo1/GxIt9BB8AQgqPTdtDIYKlgZ30NPyZnNUIpeQzBCriumQoUX3
+         bkFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=U0c/o/ih8XjkFs39T8/w2Mwm5aWOHE3x26AvSmeqkow=;
+        b=LZ2DPwMUsfLpRbREDpzfIYo6bqhX/zqJGC2/Vtht5Ekl/lUuB3aybBW/t3rzGEjYV6
+         rjT/j7AAKsqEwYwknGYMHMSmAbVu2fs0N6tj8KgC8MzR0d9v2SNu+RRVeCR+EVtd69iY
+         suCKrFO5u5agtjGEG2LitMpWGZD9N4K0/oKf345Q8eFhDiOk8MOEe48JMs9zj0tXZe4G
+         BFPwYo3THJ+sECnhHqpYIUhP4POG6k3+oHAFpFLLDnntliOvl2zjep4ak5g5eOuIAWTF
+         /+eZMIrZqAXgwC7TJrV46LC7reVTT03JbV2oU/pmFR7FzrgGk80pXrfQgRe3BfVrZq+t
+         k8wg==
+X-Gm-Message-State: AGi0PuYxF+WEaHgjaVwbs4U8Bh27aiMki4UJFJ0YWbQPFAxNdVr8DVac
+        u3HkufAdz5MBcYICfkXvSSU=
+X-Google-Smtp-Source: APiQypJ8txgcmPuJN8scqmElYyg8NVhJ5SI+oZnH5Ko3rK0TUA6rrxrBxXMiCzbtry3mhMJeZsL4sw==
+X-Received: by 2002:a1c:e444:: with SMTP id b65mr3924139wmh.6.1588762040281;
+        Wed, 06 May 2020 03:47:20 -0700 (PDT)
+Received: from ?IPv6:2001:a61:2482:101:a081:4793:30bf:f3d5? ([2001:a61:2482:101:a081:4793:30bf:f3d5])
+        by smtp.gmail.com with ESMTPSA id l5sm2325865wmi.22.2020.05.06.03.47.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 May 2020 03:47:19 -0700 (PDT)
+Cc:     mtk.manpages@gmail.com, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: RFC: Adding arch-specific user ABI documentation in linux-man
+To:     Dave Martin <Dave.Martin@arm.com>
+References: <20200504153214.GH30377@arm.com>
+From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Message-ID: <07855941-d0f7-2ec6-819e-e43a8935e29e@gmail.com>
+Date:   Wed, 6 May 2020 12:47:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <20200504153214.GH30377@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-There are multiple similar definitions for arch_clear_hugepage_flags() on
-various platforms. Lets just add it's generic fallback definition for
-platforms that do not override. This help reduce code duplication.
+Hello Dave, et al.
 
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: x86@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-ia64@vger.kernel.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-riscv@lists.infradead.org
-Cc: linux-s390@vger.kernel.org
-Cc: linux-sh@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/arm/include/asm/hugetlb.h     | 1 +
- arch/arm64/include/asm/hugetlb.h   | 1 +
- arch/ia64/include/asm/hugetlb.h    | 4 ----
- arch/mips/include/asm/hugetlb.h    | 4 ----
- arch/parisc/include/asm/hugetlb.h  | 4 ----
- arch/powerpc/include/asm/hugetlb.h | 4 ----
- arch/riscv/include/asm/hugetlb.h   | 4 ----
- arch/s390/include/asm/hugetlb.h    | 1 +
- arch/sh/include/asm/hugetlb.h      | 1 +
- arch/sparc/include/asm/hugetlb.h   | 4 ----
- arch/x86/include/asm/hugetlb.h     | 4 ----
- include/linux/hugetlb.h            | 5 +++++
- 12 files changed, 9 insertions(+), 28 deletions(-)
+On 5/4/20 5:32 PM, Dave Martin wrote:
+> Hi all,
+> 
+> I considering trying to plug some gaps in the arch-specific ABI
+> documentation in the linux man-pages, specifically for arm64 (and
+> possibly arm, where compat means we have some overlap).
 
-diff --git a/arch/arm/include/asm/hugetlb.h b/arch/arm/include/asm/hugetlb.h
-index 9ecd516d1ff7..d02d6ca88e92 100644
---- a/arch/arm/include/asm/hugetlb.h
-+++ b/arch/arm/include/asm/hugetlb.h
-@@ -18,5 +18,6 @@ static inline void arch_clear_hugepage_flags(struct page *page)
- {
- 	clear_bit(PG_dcache_clean, &page->flags);
- }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
+Sounds good to me.
+
+> For arm64, there are now significant new extensions (Pointer
+> authentication, SVE, MTE etc.)  Currently there is some user-facing
+> documentation mixed in with the kernel-facing documentation in the
+> kernel tree, but this situation isn't ideal.
+> 
+> Do you have an opinion on where in the man-pages documentation should be
+> added, and how to structure it?
+> 
+> 
+> Affected areas include:
+> 
+>  * exec interface
+
+Not sure what the details are here, so I have no opinion yet.
+But probably, as additions to execve(2).
+
+>  * aux vector, hwcaps
+
+==> getauxval(3)
+
+>  * arch-specific signals
+>  * signal frame
+
+Not sure what the details are here, so I have no opinion yet.
+
+>  * mmap/mprotect extensions
+
+See below.
+
+>  * prctl calls
+
+As additions in prctl(2) would be fine, I think.
+
+>  * ptrace quirks and extensions
+
+See below.
+
+>  * coredump contents
+
+Not sure what the details are here, so I have no opinion yet.
+Possibly as additions to core(5).
+
+> Not everything has an obvious home in an existing page, 
+
+Yes.
+
+> and adding
+> specifics for every architecture could make some existing manpages very
+> unwieldy.
+
+Still, I think it's worth adding details, especially for widely
+used architectures.
  
- #endif /* _ASM_ARM_HUGETLB_H */
-diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
-index 8f58e052697a..94ba0c5bced2 100644
---- a/arch/arm64/include/asm/hugetlb.h
-+++ b/arch/arm64/include/asm/hugetlb.h
-@@ -21,6 +21,7 @@ static inline void arch_clear_hugepage_flags(struct page *page)
- {
- 	clear_bit(PG_dcache_clean, &page->flags);
- }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
- 
- extern pte_t arch_make_huge_pte(pte_t entry, struct vm_area_struct *vma,
- 				struct page *page, int writable);
-diff --git a/arch/ia64/include/asm/hugetlb.h b/arch/ia64/include/asm/hugetlb.h
-index 6ef50b9a4bdf..7e46ebde8c0c 100644
---- a/arch/ia64/include/asm/hugetlb.h
-+++ b/arch/ia64/include/asm/hugetlb.h
-@@ -28,10 +28,6 @@ static inline void huge_ptep_clear_flush(struct vm_area_struct *vma,
- {
- }
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #include <asm-generic/hugetlb.h>
- 
- #endif /* _ASM_IA64_HUGETLB_H */
-diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
-index 8b201e281f67..10e3be870df7 100644
---- a/arch/mips/include/asm/hugetlb.h
-+++ b/arch/mips/include/asm/hugetlb.h
-@@ -75,10 +75,6 @@ static inline int huge_ptep_set_access_flags(struct vm_area_struct *vma,
- 	return changed;
- }
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #include <asm-generic/hugetlb.h>
- 
- #endif /* __ASM_HUGETLB_H */
-diff --git a/arch/parisc/include/asm/hugetlb.h b/arch/parisc/include/asm/hugetlb.h
-index 411d9d867baa..a69cf9efb0c1 100644
---- a/arch/parisc/include/asm/hugetlb.h
-+++ b/arch/parisc/include/asm/hugetlb.h
-@@ -42,10 +42,6 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
- 					     unsigned long addr, pte_t *ptep,
- 					     pte_t pte, int dirty);
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #include <asm-generic/hugetlb.h>
- 
- #endif /* _ASM_PARISC64_HUGETLB_H */
-diff --git a/arch/powerpc/include/asm/hugetlb.h b/arch/powerpc/include/asm/hugetlb.h
-index b167c869d72d..e6dfa63da552 100644
---- a/arch/powerpc/include/asm/hugetlb.h
-+++ b/arch/powerpc/include/asm/hugetlb.h
-@@ -61,10 +61,6 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
- 			       unsigned long addr, pte_t *ptep,
- 			       pte_t pte, int dirty);
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #include <asm-generic/hugetlb.h>
- 
- #else /* ! CONFIG_HUGETLB_PAGE */
-diff --git a/arch/riscv/include/asm/hugetlb.h b/arch/riscv/include/asm/hugetlb.h
-index 866f6ae6467c..a5c2ca1d1cd8 100644
---- a/arch/riscv/include/asm/hugetlb.h
-+++ b/arch/riscv/include/asm/hugetlb.h
-@@ -5,8 +5,4 @@
- #include <asm-generic/hugetlb.h>
- #include <asm/page.h>
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #endif /* _ASM_RISCV_HUGETLB_H */
-diff --git a/arch/s390/include/asm/hugetlb.h b/arch/s390/include/asm/hugetlb.h
-index 7d27ea96ec2f..9ddf4a43a590 100644
---- a/arch/s390/include/asm/hugetlb.h
-+++ b/arch/s390/include/asm/hugetlb.h
-@@ -39,6 +39,7 @@ static inline void arch_clear_hugepage_flags(struct page *page)
- {
- 	clear_bit(PG_arch_1, &page->flags);
- }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
- 
- static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
- 				  pte_t *ptep, unsigned long sz)
-diff --git a/arch/sh/include/asm/hugetlb.h b/arch/sh/include/asm/hugetlb.h
-index 536ad2cb8aa4..ae4de7b89210 100644
---- a/arch/sh/include/asm/hugetlb.h
-+++ b/arch/sh/include/asm/hugetlb.h
-@@ -30,6 +30,7 @@ static inline void arch_clear_hugepage_flags(struct page *page)
- {
- 	clear_bit(PG_dcache_clean, &page->flags);
- }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
- 
- #include <asm-generic/hugetlb.h>
- 
-diff --git a/arch/sparc/include/asm/hugetlb.h b/arch/sparc/include/asm/hugetlb.h
-index a056fe1119f5..53838a173f62 100644
---- a/arch/sparc/include/asm/hugetlb.h
-+++ b/arch/sparc/include/asm/hugetlb.h
-@@ -47,10 +47,6 @@ static inline int huge_ptep_set_access_flags(struct vm_area_struct *vma,
- 	return changed;
- }
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #define __HAVE_ARCH_HUGETLB_FREE_PGD_RANGE
- void hugetlb_free_pgd_range(struct mmu_gather *tlb, unsigned long addr,
- 			    unsigned long end, unsigned long floor,
-diff --git a/arch/x86/include/asm/hugetlb.h b/arch/x86/include/asm/hugetlb.h
-index cc98f79074d0..1721b1aadeb1 100644
---- a/arch/x86/include/asm/hugetlb.h
-+++ b/arch/x86/include/asm/hugetlb.h
-@@ -7,8 +7,4 @@
- 
- #define hugepages_supported() boot_cpu_has(X86_FEATURE_PSE)
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #endif /* _ASM_X86_HUGETLB_H */
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index c01c0c6f7fd4..04bc794becfc 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -600,6 +600,11 @@ static inline int is_hugepage_only_range(struct mm_struct *mm,
- #define is_hugepage_only_range is_hugepage_only_range
- #endif
- 
-+#ifndef arch_clear_hugepage_flags
-+static inline void arch_clear_hugepage_flags(struct page *page) { }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
-+#endif
-+
- #ifndef arch_make_huge_pte
- static inline pte_t arch_make_huge_pte(pte_t entry, struct vm_area_struct *vma,
- 				       struct page *page, int writable)
+> I think for some arch features, we really need some "overview" pages
+> too: just documenting the low-level details is of limited value
+> without some guide as to how to use them together.
+> 
+> 
+> Does the following sketch look reasonable?
+> 
+>  * man7/arm64.7: new page: overview of arm64-specific ABI extensions
+
+I'm a little unclear on what would land in here, but sounds 
+reasonable in principle.
+
+>  * man7/sve.7 (or man7/arm64-sve.7 or man7/sve.7arm64): new page:
+>    overview of arm64 SVE ABI
+
+Sounds reasonable to me.
+
+>  * man2/arm64-ptrace.2 (or man2/ptrace.2arm64): new page:
+>    arm64 ptrace extensions
+
+I think maybe better is: ptrace-arm64.2
+
+I'm agnostic about whether there should be a new page, or whether 
+these should be added to ptrace(2). But, we could start with the
+idea of a new page.
+
+>  * man2/mmap.2: extend with arm64-specific flags (only two flags, so we
+>    add them to the existing man page rather than creating a new one).
+
+Sounds good to me
+
+> etc.
+> 
+> 
+> Ideally, I'd like to adopt a pattern that other arches can follow.
+
+Well, if they do follow. Arch-specific documentation is woefully
+thin at the moment. I'm not going to worry too much about the right
+pattern (don't let perfect get in the way of good, yadda, yadda),
+until I get so much arch-specific documentation that some refactoring
+may be required. (I'm not going to hold my breath waiting for that
+to happen ;-).)
+
+Cheers,
+
+Michael
+
 -- 
-2.20.1
-
+Michael Kerrisk
+Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
+Linux/UNIX System Programming Training: http://man7.org/training/
