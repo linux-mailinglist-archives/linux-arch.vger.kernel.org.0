@@ -2,93 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF351C98AC
-	for <lists+linux-arch@lfdr.de>; Thu,  7 May 2020 20:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38C21C9CDC
+	for <lists+linux-arch@lfdr.de>; Thu,  7 May 2020 22:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728303AbgEGSEe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 May 2020 14:04:34 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:24331 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726320AbgEGSEd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 May 2020 14:04:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588874671;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aVlr0go0O97QccJtyz40igefS9Blw7pPEqjgMac+DVM=;
-        b=epM5gyCGJzABhLeI+ZOrAc2sjMexjOgaeLyjTeJMG+J/lH8mlo6T5KpQWQt1226T80ik7y
-        yE5MlsGfumgl0t1nRST8ddXU4Ho9MRJR9sTtx8lzDvYEr/FS3wAotovoCtEtkusDcjVl/M
-        oOoBYDDUQvBLnoswkN4dJwnl2H8E6sE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-305-2Rl7Y8AMNGiXSJRh-oNJeA-1; Thu, 07 May 2020 14:04:28 -0400
-X-MC-Unique: 2Rl7Y8AMNGiXSJRh-oNJeA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5A57864A7A;
-        Thu,  7 May 2020 18:04:26 +0000 (UTC)
-Received: from optiplex-lnx (unknown [10.3.128.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 06EE260CCC;
-        Thu,  7 May 2020 18:04:23 +0000 (UTC)
-Date:   Thu, 7 May 2020 14:04:20 -0400
-From:   Rafael Aquini <aquini@redhat.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     cl@linux.com, akpm@linux-foundation.org, arnd@arndb.de,
-        willy@infradead.org, keescook@chromium.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: expand documentation over __read_mostly
-Message-ID: <20200507180420.GE205881@optiplex-lnx>
-References: <20200507161424.2584-1-mcgrof@kernel.org>
+        id S1726491AbgEGU7x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 May 2020 16:59:53 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49278 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726218AbgEGU7x (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 May 2020 16:59:53 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 047KXEPA092959;
+        Thu, 7 May 2020 16:59:10 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30ux6fbgv5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 May 2020 16:59:10 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 047KcG9Q103121;
+        Thu, 7 May 2020 16:59:09 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30ux6fbgu5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 May 2020 16:59:09 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 047KpZWI004436;
+        Thu, 7 May 2020 20:59:06 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma01fra.de.ibm.com with ESMTP id 30s0g5cxas-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 May 2020 20:59:06 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 047Kx4uI50593830
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 May 2020 20:59:04 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8698C4C04A;
+        Thu,  7 May 2020 20:59:04 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 01C9A4C040;
+        Thu,  7 May 2020 20:59:02 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.148.201.211])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  7 May 2020 20:59:01 +0000 (GMT)
+Date:   Thu, 7 May 2020 23:59:00 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Rich Felker <dalias@libc.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-c6x-dev@linux-c6x.org" <linux-c6x-dev@linux-c6x.org>,
+        Baoquan He <bhe@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH v2 17/20] mm: free_area_init: allow defining max_zone_pfn
+ in descending order
+Message-ID: <20200507205900.GH683243@linux.ibm.com>
+References: <20200429121126.17989-1-rppt@kernel.org>
+ <20200429121126.17989-18-rppt@kernel.org>
+ <20200503174138.GA114085@roeck-us.net>
+ <20200503184300.GA154219@roeck-us.net>
+ <20200504153901.GM14260@kernel.org>
+ <a0b20e15-fddb-aa9c-fd67-f1c8e735b4a4@synopsys.com>
+ <20200505091946.GG342687@linux.ibm.com>
+ <88b9465b-6e6d-86ca-3776-ccb7a5b60b7f@synopsys.com>
+ <20200505201522.GA683243@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20200507161424.2584-1-mcgrof@kernel.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200505201522.GA683243@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-07_14:2020-05-07,2020-05-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
+ spamscore=0 suspectscore=5 phishscore=0 priorityscore=1501 clxscore=1015
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005070163
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 07, 2020 at 04:14:24PM +0000, Luis Chamberlain wrote:
-> __read_mostly can easily be misused by folks, its not meant for
-> just read-only data. There are performance reasons for using it, but
-> we also don't provide any guidance about its use. Provide a bit more
-> guidance over its use.
+On Tue, May 05, 2020 at 11:15:22PM +0300, Mike Rapoport wrote:
+> On Tue, May 05, 2020 at 06:07:46PM +0000, Vineet Gupta wrote:
+> > On 5/5/20 2:19 AM, Mike Rapoport wrote:
 > 
-> Acked-by: Christoph Lameter <cl@linux.com>
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
+> >  - Is it not better to have the core retain the flexibility just in case
 > 
-> This v2 just has a few spelling fixes.
+> If the requirement to have support for 3-banks is a theoretical
+> possibility, I would prefer to adjust ARC's version of
+> arch_has_descending_max_zone_pfns() to cope with either of 2-banks
+> configuration (PAE40 and non-PAE40) and deal with the third bank when/if
+> it actually materializes.
 > 
->  include/linux/cache.h | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+> > Thx,
+> > -Vineet
 > 
-> diff --git a/include/linux/cache.h b/include/linux/cache.h
-> index 750621e41d1c..8106fb304fa7 100644
-> --- a/include/linux/cache.h
-> +++ b/include/linux/cache.h
-> @@ -15,8 +15,14 @@
->  
->  /*
->   * __read_mostly is used to keep rarely changing variables out of frequently
-> - * updated cachelines. If an architecture doesn't support it, ignore the
-> - * hint.
-> + * updated cachelines. Its use should be reserved for data that is used
-> + * frequently in hot paths. Performance traces can help decide when to use
-> + * this. You want __read_mostly data to be tightly packed, so that in the
-> + * best case multiple frequently read variables for a hot path will be next
-> + * to each other in order to reduce the number of cachelines needed to
-> + * execute a critical path. We should be mindful and selective of its use.
-> + * ie: if you're going to use it please supply a *good* justification in your
-> + * commit log
->   */
->  #ifndef __read_mostly
->  #define __read_mostly
-> -- 
-> 2.25.1
-> 
-Acked-by: Rafael Aquini <aquini@redhat.com>
 
+The fix below should take care of any 2-bank configurations. 
+This is vs. current mmotm.
+
+From eb8124fb3584607d1036b7ae00c8092ae43e480d Mon Sep 17 00:00:00 2001
+From: Mike Rapoport <rppt@linux.ibm.com>
+Date: Thu, 7 May 2020 23:44:15 +0300
+Subject: [PATCH] arc: free_area_init(): take into account PAE40 mode
+
+The arch_has_descending_max_zone_pfns() does not take into account physical
+memory layout for PAE40 configuration.
+With PAE40 enabled, the HIGHMEM is actually higher than NORMAL and
+arch_has_descending_max_zone_pfns() should return false in this case.
+
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+---
+ arch/arc/mm/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
+index 386959bac3d2..e7bdc2ac1c87 100644
+--- a/arch/arc/mm/init.c
++++ b/arch/arc/mm/init.c
+@@ -79,7 +79,7 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
+ 
+ bool arch_has_descending_max_zone_pfns(void)
+ {
+-	return true;
++	return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
+ }
+ 
+ /*
+-- 
+2.26.1
+
+
+-- 
+Sincerely yours,
+Mike.
