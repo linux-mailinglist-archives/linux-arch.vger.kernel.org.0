@@ -2,136 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 701BE1C9595
-	for <lists+linux-arch@lfdr.de>; Thu,  7 May 2020 17:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650AE1C961E
+	for <lists+linux-arch@lfdr.de>; Thu,  7 May 2020 18:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbgEGPzU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 May 2020 11:55:20 -0400
-Received: from mga18.intel.com ([134.134.136.126]:17091 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726531AbgEGPzU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 7 May 2020 11:55:20 -0400
-IronPort-SDR: rduIOAOwLWAAJKdiyqDBvB5TZrciCI/pqOqKJ5Q+Py4as7WE0sl//ktWJmhahEHbe7lh4LgzUh
- OASsyHtRIn7A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 08:55:19 -0700
-IronPort-SDR: muapVYKlG/jL2kfEB5cLiKWVtT5GeCqaa4YI5TFTF3ShZk/Kq0feZ9BdVO3yf0EexXO6D3GR+F
- LlcRmtyxQROg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,364,1583222400"; 
-   d="scan'208";a="263980375"
-Received: from smericks-mobl.amr.corp.intel.com (HELO [10.252.140.100]) ([10.252.140.100])
-  by orsmga006.jf.intel.com with ESMTP; 07 May 2020 08:55:18 -0700
-Subject: Re: [PATCH v10 05/26] x86/cet/shstk: Add Kconfig option for user-mode
- Shadow Stack
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
- <20200429220732.31602-6-yu-cheng.yu@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <f4329e8c-0b3a-2c52-2145-08ea4dcab26e@intel.com>
-Date:   Thu, 7 May 2020 08:55:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726736AbgEGQOF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 May 2020 12:14:05 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15518 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726467AbgEGQOF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 May 2020 12:14:05 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 047G4OvV160549;
+        Thu, 7 May 2020 12:12:41 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30vmp6jc3d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 May 2020 12:12:41 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 047G5fk6165277;
+        Thu, 7 May 2020 12:12:40 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30vmp6jc2g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 May 2020 12:12:40 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 047G9kSs025490;
+        Thu, 7 May 2020 16:12:38 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 30s0g5unrs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 May 2020 16:12:37 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 047GCZYR1048834
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 May 2020 16:12:35 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA52442041;
+        Thu,  7 May 2020 16:12:35 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2DFA142047;
+        Thu,  7 May 2020 16:12:21 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.148.201.211])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  7 May 2020 16:12:20 +0000 (GMT)
+Date:   Thu, 7 May 2020 19:11:55 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-sh@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-mm@kvack.org, Paul Mackerras <paulus@samba.org>,
+        linux-hexagon@vger.kernel.org, Will Deacon <will@kernel.org>,
+        kvmarm@lists.cs.columbia.edu, Jonas Bonn <jonas@southpole.se>,
+        linux-arch@vger.kernel.org, Brian Cain <bcain@codeaurora.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, kvm-ppc@vger.kernel.org,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        openrisc@lists.librecores.org, Stafford Horne <shorne@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        linux-arm-kernel@lists.infradead.org,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Tony Luck <tony.luck@intel.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        nios2-dev@lists.rocketboards.org, linuxppc-dev@lists.ozlabs.org,
+        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH v4 02/14] arm: add support for folded p4d page tables
+Message-ID: <20200507161155.GE683243@linux.ibm.com>
+References: <20200414153455.21744-1-rppt@kernel.org>
+ <20200414153455.21744-3-rppt@kernel.org>
+ <CGME20200507121658eucas1p240cf4a3e0fe5c22dda5ec4f72734149f@eucas1p2.samsung.com>
+ <39ba8a04-d6b5-649d-c289-0c8b27cb66c5@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <20200429220732.31602-6-yu-cheng.yu@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <39ba8a04-d6b5-649d-c289-0c8b27cb66c5@samsung.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-07_10:2020-05-07,2020-05-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ priorityscore=1501 suspectscore=1 malwarescore=0 impostorscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005070125
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/29/20 3:07 PM, Yu-cheng Yu wrote:
-> +config X86_INTEL_SHADOW_STACK_USER
-> +	prompt "Intel Shadow Stacks for user-mode"
-> +	def_bool n
-> +	depends on CPU_SUP_INTEL && X86_64
-> +	depends on AS_HAS_SHADOW_STACK
-> +	select ARCH_USES_HIGH_VMA_FLAGS
-> +	select X86_INTEL_CET
-> +	select ARCH_HAS_SHADOW_STACK
+Hi,
 
-I called protection keys: X86_INTEL_MEMORY_PROTECTION_KEYS
+On Thu, May 07, 2020 at 02:16:56PM +0200, Marek Szyprowski wrote:
+> Hi
+> 
+> On 14.04.2020 17:34, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> >
+> > Implement primitives necessary for the 4th level folding, add walks of p4d
+> > level where appropriate, and remove __ARCH_USE_5LEVEL_HACK.
+> >
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Today I've noticed that kexec is broken on ARM 32bit. Bisecting between 
+> current linux-next and v5.7-rc1 pointed to this commit. I've tested this 
+> on Odroid XU4 and Raspberry Pi4 boards. Here is the relevant log:
+> 
+> # kexec --kexec-syscall -l zImage --append "$(cat /proc/cmdline)"
+> memory_range[0]:0x40000000..0xbe9fffff
+> memory_range[0]:0x40000000..0xbe9fffff
+> # kexec -e
+> kexec_core: Starting new kernel
+> 8<--- cut here ---
+> Unable to handle kernel paging request at virtual address c010f1f4
+> pgd = c6817793
+> [c010f1f4] *pgd=4000041e(bad)
+> Internal error: Oops: 80d [#1] PREEMPT ARM
+> Modules linked in:
+> CPU: 0 PID: 1329 Comm: kexec Tainted: G        W 
+> 5.7.0-rc3-00127-g6cba81ed0f62 #611
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+> PC is at machine_kexec+0x40/0xfc
 
-AMD recently posted documentation which shows them implementing it as
-well.  The "INTEL_" is feeling now like a mistake.
+Any chance you have the debug info in this kernel?
+scripts/faddr2line would come handy here.
 
-Going forward, we should probably avoid sticking the company name on
-them, if for no other reason than avoiding confusion and/or churn in the
-future.
+> LR is at 0xffffffff
+> pc : [<c010f0b4>]    lr : [<ffffffff>]    psr: 60000013
+> sp : ebc13e60  ip : 40008000  fp : 00000001
+> r10: 00000058  r9 : fee1dead  r8 : 00000001
+> r7 : c121387c  r6 : 6c224000  r5 : ece40c00  r4 : ec222000
+> r3 : c010f1f4  r2 : c1100000  r1 : c1100000  r0 : 418d0000
+> Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+> Control: 10c5387d  Table: 6bc14059  DAC: 00000051
+> Process kexec (pid: 1329, stack limit = 0x366bb4dc)
+> Stack: (0xebc13e60 to 0xebc14000)
+> ...
+> [<c010f0b4>] (machine_kexec) from [<c01c0d84>] (kernel_kexec+0x74/0x7c)
+> [<c01c0d84>] (kernel_kexec) from [<c014b1bc>] (__do_sys_reboot+0x1f8/0x210)
+> [<c014b1bc>] (__do_sys_reboot) from [<c0100060>] (ret_fast_syscall+0x0/0x28)
+> Exception stack(0xebc13fa8 to 0xebc13ff0)
+> ...
+> ---[ end trace 3e8d6c81723c778d ]---
+> 1329 Segmentation fault      ./kexec -e
+> 
+> > ---
+> >   arch/arm/include/asm/pgtable.h     |  1 -
+> >   arch/arm/lib/uaccess_with_memcpy.c |  7 +++++-
+> >   arch/arm/mach-sa1100/assabet.c     |  2 +-
+> >   arch/arm/mm/dump.c                 | 29 +++++++++++++++++-----
+> >   arch/arm/mm/fault-armv.c           |  7 +++++-
+> >   arch/arm/mm/fault.c                | 22 ++++++++++------
+> >   arch/arm/mm/idmap.c                |  3 ++-
+> >   arch/arm/mm/init.c                 |  2 +-
+> >   arch/arm/mm/ioremap.c              | 12 ++++++---
+> >   arch/arm/mm/mm.h                   |  2 +-
+> >   arch/arm/mm/mmu.c                  | 35 +++++++++++++++++++++-----
+> >   arch/arm/mm/pgd.c                  | 40 ++++++++++++++++++++++++------
+> >   12 files changed, 125 insertions(+), 37 deletions(-)
+> >
+> > ...
+> 
+> Best regards
+> -- 
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
+> 
 
-Shadow stacks, for instance, seem like something that another vendor
-might implement one day.  So, let's at least remove the "INTEL_" from
-the config option names themselves.  Mentioning Intel in the changelog
-and the Kconfig help text is fine.
+-- 
+Sincerely yours,
+Mike.
