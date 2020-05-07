@@ -2,206 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E431C8A42
-	for <lists+linux-arch@lfdr.de>; Thu,  7 May 2020 14:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701BE1C9595
+	for <lists+linux-arch@lfdr.de>; Thu,  7 May 2020 17:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726074AbgEGMRD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 May 2020 08:17:03 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:38686 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbgEGMRB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 May 2020 08:17:01 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200507121659euoutp0130134b196d36649fee372093381b253f~MviF4DxTt3103131031euoutp01p;
-        Thu,  7 May 2020 12:16:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200507121659euoutp0130134b196d36649fee372093381b253f~MviF4DxTt3103131031euoutp01p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1588853819;
-        bh=+0bSafdqNc6S4bL9vEty9BPH/rbVn5QLED7naWqmpz8=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=LXFU2Q9Lhx6b8gh4rlmMfRU7Wl/uygI1LFV8ej1938MBW4PXQBu1mm6OYGHSJOCyH
-         CRip2q0s/ovbd/k6WdmcJkneHqwQob1RDdo0RPKut9fwHOSGljob338Ets2tYQnzXD
-         qLFZScLDfymGjBJQtA0thhhPMGogM7bwVnAUFbxI=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200507121659eucas1p26a10dcbc8fe175821e21df8ac520305c~MviFl1y090729007290eucas1p26;
-        Thu,  7 May 2020 12:16:59 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 82.44.60698.B3CF3BE5; Thu,  7
-        May 2020 13:16:59 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200507121658eucas1p240cf4a3e0fe5c22dda5ec4f72734149f~MviFLRGLh0728607286eucas1p2p;
-        Thu,  7 May 2020 12:16:58 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200507121658eusmtrp18cffaa2b9f5206ccfc4335c60b0f241b~MviFKHTUk1203712037eusmtrp1o;
-        Thu,  7 May 2020 12:16:58 +0000 (GMT)
-X-AuditID: cbfec7f5-a0fff7000001ed1a-61-5eb3fc3bb0ef
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 43.6A.08375.A3CF3BE5; Thu,  7
-        May 2020 13:16:58 +0100 (BST)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200507121656eusmtip2fdff08fcfd2429469bb24f2c1d011a1e~MviDWmdYd2670726707eusmtip2d;
-        Thu,  7 May 2020 12:16:56 +0000 (GMT)
-Subject: Re: [PATCH v4 02/14] arm: add support for folded p4d page tables
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-sh@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-mm@kvack.org, Paul Mackerras <paulus@samba.org>,
-        linux-hexagon@vger.kernel.org, Will Deacon <will@kernel.org>,
-        kvmarm@lists.cs.columbia.edu, Jonas Bonn <jonas@southpole.se>,
-        linux-arch@vger.kernel.org, Brian Cain <bcain@codeaurora.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, kvm-ppc@vger.kernel.org,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org, Stafford Horne <shorne@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        linux-arm-kernel@lists.infradead.org,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Tony Luck <tony.luck@intel.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        nios2-dev@lists.rocketboards.org, linuxppc-dev@lists.ozlabs.org,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <39ba8a04-d6b5-649d-c289-0c8b27cb66c5@samsung.com>
-Date:   Thu, 7 May 2020 14:16:56 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.7.0
+        id S1726641AbgEGPzU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 May 2020 11:55:20 -0400
+Received: from mga18.intel.com ([134.134.136.126]:17091 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726531AbgEGPzU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 7 May 2020 11:55:20 -0400
+IronPort-SDR: rduIOAOwLWAAJKdiyqDBvB5TZrciCI/pqOqKJ5Q+Py4as7WE0sl//ktWJmhahEHbe7lh4LgzUh
+ OASsyHtRIn7A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 08:55:19 -0700
+IronPort-SDR: muapVYKlG/jL2kfEB5cLiKWVtT5GeCqaa4YI5TFTF3ShZk/Kq0feZ9BdVO3yf0EexXO6D3GR+F
+ LlcRmtyxQROg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,364,1583222400"; 
+   d="scan'208";a="263980375"
+Received: from smericks-mobl.amr.corp.intel.com (HELO [10.252.140.100]) ([10.252.140.100])
+  by orsmga006.jf.intel.com with ESMTP; 07 May 2020 08:55:18 -0700
+Subject: Re: [PATCH v10 05/26] x86/cet/shstk: Add Kconfig option for user-mode
+ Shadow Stack
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
+ <20200429220732.31602-6-yu-cheng.yu@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <f4329e8c-0b3a-2c52-2145-08ea4dcab26e@intel.com>
+Date:   Thu, 7 May 2020 08:55:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200414153455.21744-3-rppt@kernel.org>
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200429220732.31602-6-yu-cheng.yu@intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Tb0xTVxjGd+6/XojFQ5FxxsiWdNNkGnDGubyJC5lzS+62D8PEfdAFXKc3
-        1YyC6W11arJ0/DGloRsUWLGt26zZFFMkFC2UUZVGQcdgwypBI+pQwjBAoU6nUGS9XMz49rzv
-        ec7zO8+Hw9Oax1wmv6fIJBqLdIVaLpkJdD3ty94Ybyl486qTAU+Tj4M5R5cKmuubWAiWDzIw
-        VVJOQ/SXSgTWUgqOPZ1h4fD3m+Co24FgLtTMQfzIFAXjsTUw/Vu3Cm6ETyK48+s3CXv7Iwb8
-        9wZYiJa1cTBlnWQh0u7h4LZvngVPvJaGcF0Iwey/zxIozxUWzljCHNhcIxz4KyIc+C4eV8HF
-        plYKBmstHITq7iLo9TckYH/eZuBsT5SGslsb4I4jRL27SvD94ENCZKCfFmZnHEgo/+4JJ0S+
-        tVOCd8zCCNW92ULQNaQSjneMUULleBkr+E9VcII/5lAJfe4pRrhcP8sIVd4LSPjD76PzsrYn
-        v7NLLNyzTzSuzf08ebe1YfneaPpXg41u2oJcqTaUxBP8FnH2WjkbSuY1+CQiZd5OWhn+QeRq
-        /02kDA8RcVePqp5fsY2e52StwScQORb4VDFFEel/WE/LB2n4Q2JvucTIegXOI4GYnZFNNPbw
-        pGb8+gIjDXspYp8vWYji8Dpim7AtaDXOJbPxUMLE8wx+nXS4UmSZjvOJc2Cr4kglV47cZ+R1
-        Et5ALo0cktc0fpWUnnXTis4gN+//SMkkgoeTyO8jPy8kEvw+6fRqlC5p5EH3mcVeWaSnppJR
-        /KWI/NXXqFKGSkQiJfVIcW0kt/pmODmIxm+Qpva1ynoTcUZbKSU/hQxOpCpvSCGOgHMRqybW
-        w4vYVcTVfVpVhV5zLSnjWtLAtaSB63/WT4g5hTJEs2TQi9L6InF/jqQzSOYifc7OYoMfJX5D
-        z7PuR23oXPyLMMI80i5Tw3RLgYbV7ZMOGMKI8LR2hXrZk+YCjXqX7sBB0Vi8w2guFKUwepln
-        tBnq9d6xfA3W60zil6K4VzQ+P6X4pEwLulZT3GgZmauYvLB8i346b3J0S+yjQ84bKR+02U/n
-        rv674m3j/sdgC4qRbQ2Zd6+lt2g+/qxj89DRmBGud0kdZr3JpA6vaQsMj5s3mya2Z+e/aGc6
-        c155gS95EHJq8/mVK+uCL7G2+NCwvauqxvBJPHxvayiYtWP+YPXXje+1TtZqGWm3bt1q2ijp
-        /gMIjfFfCQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0xTZxSH895/vRjKrgXGG4Zxqc4FN+ouWDkYRbd98OI2XWL8sgms0Tsw
-        Uup6WzNnslUBLVUmViBYUBGmmeZupLc6BO3ARlAkKkgkaAZsQeLcFCrLEKGAvQETvj3vOc/v
-        PTnJYUldORPP7sy3idZ8U56eWUB1TN/oT1od8mV9MNaUCNX1MgNT7jYNeCvraWgs6qUgeKCI
-        hJFzRxA4Cwg483KChoMVH8LJKjeCKb+XgdCJIAFPR9+D57duaOBB4GcEA1f2h/Wm/ylQBnto
-        GCm8zEDQOUxDd1M1A/3yDA3VoTISAuV+BJMvpsOjqttpuOgIMODyDDGgFHczIF+v08D1+gYC
-        esscDPjL/0RwWzkfHtbZT8GljhESCv8wwoDbT6xfJsinZCR093SRwuSEGwlFR8cZofvHEkKo
-        feKghGO3k4RGT59GqLv6hBCOPC2kBeVCMSMoo26NcKcqSAk3KycpobS2BQl3FZn8POELwxqr
-        xW4T3861SLa1+i95SDbwaWBIXplm4FNSM1cnG/Ur0tfsEPN27hGtK9K/MuQ6z7+xeyT2295f
-        qkgH8ix0oQgWcyux63Ez40ILWB13FuH/hu/Ts40E3F7hmONoHOpxzUnPEC7yFiO1Ec1l4BJf
-        K6VyDLcJt08MUapEcjUsHr35mFAf0VwNgRua20jV0nHZuLPgCqEyw/HY9Uz9NoLVcul4MuQP
-        OyxLcUvxVU+UirFcJi7sSpw1FuL2E48otRzBGXHr0D61THKr8CnfX+QsL8YFl6rmOA4/fHSa
-        KEXRnnlpz7yIZ17EMy9Sg6gLKEa0S+Ycs8QbJJNZsufnGLZbzAoKn+RvbS99l9E975YA4lik
-        j9TCc1+WjjbtkfaaAwizpD5GGznuzdJpd5j2fidaLdlWe54oBZAxvNkxMj52uyV84Pm2bN7I
-        p0Ian5qSmrIK9HFaJ3dtm47LMdnEXaK4W7S+zhFsRLwDvfVpX0COa9v1w6HGsYdRXWLL2p8S
-        yzKCmpPjEHl2bNO1SpKOKu3c9827X7ta/x6W+/6Rgh8XD2ad21qXd9wd2PiAWv7Zhg7F5Eg/
-        lH3H+Wtmx5KZmX8XN/x+unZg+v2SdXIL8c6yaWZzrH1QSWpOOHz8Td/U1PeLMsHwSV/JRxlH
-        B2x6Sso18ctJq2R6BVeOmCioAwAA
-X-CMS-MailID: 20200507121658eucas1p240cf4a3e0fe5c22dda5ec4f72734149f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200507121658eucas1p240cf4a3e0fe5c22dda5ec4f72734149f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200507121658eucas1p240cf4a3e0fe5c22dda5ec4f72734149f
-References: <20200414153455.21744-1-rppt@kernel.org>
-        <20200414153455.21744-3-rppt@kernel.org>
-        <CGME20200507121658eucas1p240cf4a3e0fe5c22dda5ec4f72734149f@eucas1p2.samsung.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi
+On 4/29/20 3:07 PM, Yu-cheng Yu wrote:
+> +config X86_INTEL_SHADOW_STACK_USER
+> +	prompt "Intel Shadow Stacks for user-mode"
+> +	def_bool n
+> +	depends on CPU_SUP_INTEL && X86_64
+> +	depends on AS_HAS_SHADOW_STACK
+> +	select ARCH_USES_HIGH_VMA_FLAGS
+> +	select X86_INTEL_CET
+> +	select ARCH_HAS_SHADOW_STACK
 
-On 14.04.2020 17:34, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
->
-> Implement primitives necessary for the 4th level folding, add walks of p4d
-> level where appropriate, and remove __ARCH_USE_5LEVEL_HACK.
->
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+I called protection keys: X86_INTEL_MEMORY_PROTECTION_KEYS
 
-Today I've noticed that kexec is broken on ARM 32bit. Bisecting between 
-current linux-next and v5.7-rc1 pointed to this commit. I've tested this 
-on Odroid XU4 and Raspberry Pi4 boards. Here is the relevant log:
+AMD recently posted documentation which shows them implementing it as
+well.  The "INTEL_" is feeling now like a mistake.
 
-# kexec --kexec-syscall -l zImage --append "$(cat /proc/cmdline)"
-memory_range[0]:0x40000000..0xbe9fffff
-memory_range[0]:0x40000000..0xbe9fffff
-# kexec -e
-kexec_core: Starting new kernel
-8<--- cut here ---
-Unable to handle kernel paging request at virtual address c010f1f4
-pgd = c6817793
-[c010f1f4] *pgd=4000041e(bad)
-Internal error: Oops: 80d [#1] PREEMPT ARM
-Modules linked in:
-CPU: 0 PID: 1329 Comm: kexec Tainted: G        W 
-5.7.0-rc3-00127-g6cba81ed0f62 #611
-Hardware name: Samsung Exynos (Flattened Device Tree)
-PC is at machine_kexec+0x40/0xfc
-LR is at 0xffffffff
-pc : [<c010f0b4>]    lr : [<ffffffff>]    psr: 60000013
-sp : ebc13e60  ip : 40008000  fp : 00000001
-r10: 00000058  r9 : fee1dead  r8 : 00000001
-r7 : c121387c  r6 : 6c224000  r5 : ece40c00  r4 : ec222000
-r3 : c010f1f4  r2 : c1100000  r1 : c1100000  r0 : 418d0000
-Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-Control: 10c5387d  Table: 6bc14059  DAC: 00000051
-Process kexec (pid: 1329, stack limit = 0x366bb4dc)
-Stack: (0xebc13e60 to 0xebc14000)
-...
-[<c010f0b4>] (machine_kexec) from [<c01c0d84>] (kernel_kexec+0x74/0x7c)
-[<c01c0d84>] (kernel_kexec) from [<c014b1bc>] (__do_sys_reboot+0x1f8/0x210)
-[<c014b1bc>] (__do_sys_reboot) from [<c0100060>] (ret_fast_syscall+0x0/0x28)
-Exception stack(0xebc13fa8 to 0xebc13ff0)
-...
----[ end trace 3e8d6c81723c778d ]---
-1329 Segmentation fault      ./kexec -e
+Going forward, we should probably avoid sticking the company name on
+them, if for no other reason than avoiding confusion and/or churn in the
+future.
 
-> ---
->   arch/arm/include/asm/pgtable.h     |  1 -
->   arch/arm/lib/uaccess_with_memcpy.c |  7 +++++-
->   arch/arm/mach-sa1100/assabet.c     |  2 +-
->   arch/arm/mm/dump.c                 | 29 +++++++++++++++++-----
->   arch/arm/mm/fault-armv.c           |  7 +++++-
->   arch/arm/mm/fault.c                | 22 ++++++++++------
->   arch/arm/mm/idmap.c                |  3 ++-
->   arch/arm/mm/init.c                 |  2 +-
->   arch/arm/mm/ioremap.c              | 12 ++++++---
->   arch/arm/mm/mm.h                   |  2 +-
->   arch/arm/mm/mmu.c                  | 35 +++++++++++++++++++++-----
->   arch/arm/mm/pgd.c                  | 40 ++++++++++++++++++++++++------
->   12 files changed, 125 insertions(+), 37 deletions(-)
->
-> ...
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+Shadow stacks, for instance, seem like something that another vendor
+might implement one day.  So, let's at least remove the "INTEL_" from
+the config option names themselves.  Mentioning Intel in the changelog
+and the Kconfig help text is fine.
