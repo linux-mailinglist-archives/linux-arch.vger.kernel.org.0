@@ -2,290 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 322681CB203
-	for <lists+linux-arch@lfdr.de>; Fri,  8 May 2020 16:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9161E1CB637
+	for <lists+linux-arch@lfdr.de>; Fri,  8 May 2020 19:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728237AbgEHOk7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 May 2020 10:40:59 -0400
-Received: from 8bytes.org ([81.169.241.247]:41758 "EHLO theia.8bytes.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728186AbgEHOk6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 8 May 2020 10:40:58 -0400
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 85B084D9; Fri,  8 May 2020 16:40:51 +0200 (CEST)
-From:   Joerg Roedel <joro@8bytes.org>
-To:     x86@kernel.org
-Cc:     hpa@zytor.com, Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S1727114AbgEHRoN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 May 2020 13:44:13 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47428 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726797AbgEHRoN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 May 2020 13:44:13 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 048HZWAC120545;
+        Fri, 8 May 2020 13:42:43 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30vtveutta-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 May 2020 13:42:43 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 048HaDP7122403;
+        Fri, 8 May 2020 13:42:42 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30vtveutsc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 May 2020 13:42:42 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 048HeoYq020104;
+        Fri, 8 May 2020 17:42:40 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 30s0g5wvbw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 May 2020 17:42:40 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 048HgbZm43712600
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 8 May 2020 17:42:37 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BBCB542041;
+        Fri,  8 May 2020 17:42:37 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6EED54203F;
+        Fri,  8 May 2020 17:42:34 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.148.202.219])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri,  8 May 2020 17:42:34 +0000 (GMT)
+Date:   Fri, 8 May 2020 20:42:32 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Joerg Roedel <jroedel@suse.de>, joro@8bytes.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: [RFC PATCH 7/7] x86/mm: Remove vmalloc faulting
-Date:   Fri,  8 May 2020 16:40:43 +0200
-Message-Id: <20200508144043.13893-8-joro@8bytes.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200508144043.13893-1-joro@8bytes.org>
-References: <20200508144043.13893-1-joro@8bytes.org>
+        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-sh@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-mm@kvack.org, Paul Mackerras <paulus@samba.org>,
+        linux-hexagon@vger.kernel.org, Will Deacon <will@kernel.org>,
+        kvmarm@lists.cs.columbia.edu, Jonas Bonn <jonas@southpole.se>,
+        linux-arch@vger.kernel.org, Brian Cain <bcain@codeaurora.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, kvm-ppc@vger.kernel.org,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        openrisc@lists.librecores.org, Stafford Horne <shorne@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        linux-arm-kernel@lists.infradead.org,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Tony Luck <tony.luck@intel.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        nios2-dev@lists.rocketboards.org, linuxppc-dev@lists.ozlabs.org,
+        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH v4 02/14] arm: add support for folded p4d page tables
+Message-ID: <20200508174232.GA759899@linux.ibm.com>
+References: <20200414153455.21744-1-rppt@kernel.org>
+ <20200414153455.21744-3-rppt@kernel.org>
+ <CGME20200507121658eucas1p240cf4a3e0fe5c22dda5ec4f72734149f@eucas1p2.samsung.com>
+ <39ba8a04-d6b5-649d-c289-0c8b27cb66c5@samsung.com>
+ <20200507161155.GE683243@linux.ibm.com>
+ <98229ab1-fbf8-0a89-c5d6-270c828799e7@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <98229ab1-fbf8-0a89-c5d6-270c828799e7@samsung.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-08_15:2020-05-08,2020-05-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ suspectscore=1 spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005080144
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+On Fri, May 08, 2020 at 08:53:27AM +0200, Marek Szyprowski wrote:
+> Hi Mike,
+> 
+> On 07.05.2020 18:11, Mike Rapoport wrote:
+> > On Thu, May 07, 2020 at 02:16:56PM +0200, Marek Szyprowski wrote:
+> >> On 14.04.2020 17:34, Mike Rapoport wrote:
+> >>> From: Mike Rapoport <rppt@linux.ibm.com>
+> >>>
+> >>> Implement primitives necessary for the 4th level folding, add walks of p4d
+> >>> level where appropriate, and remove __ARCH_USE_5LEVEL_HACK.
+> >>>
+> >>> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> >> Today I've noticed that kexec is broken on ARM 32bit. Bisecting between
+> >> current linux-next and v5.7-rc1 pointed to this commit. I've tested this
+> >> on Odroid XU4 and Raspberry Pi4 boards. Here is the relevant log:
+> >>
+> >> # kexec --kexec-syscall -l zImage --append "$(cat /proc/cmdline)"
+> >> memory_range[0]:0x40000000..0xbe9fffff
+> >> memory_range[0]:0x40000000..0xbe9fffff
+> >> # kexec -e
+> >> kexec_core: Starting new kernel
+> >> 8<--- cut here ---
+> >> Unable to handle kernel paging request at virtual address c010f1f4
+> >> pgd = c6817793
+> >> [c010f1f4] *pgd=4000041e(bad)
+> >> Internal error: Oops: 80d [#1] PREEMPT ARM
+> >> Modules linked in:
+> >> CPU: 0 PID: 1329 Comm: kexec Tainted: G        W
+> >> 5.7.0-rc3-00127-g6cba81ed0f62 #611
+> >> Hardware name: Samsung Exynos (Flattened Device Tree)
+> >> PC is at machine_kexec+0x40/0xfc
+> > Any chance you have the debug info in this kernel?
+> > scripts/faddr2line would come handy here.
+> 
+> # ./scripts/faddr2line --list vmlinux machine_kexec+0x40
+> machine_kexec+0x40/0xf8:
+> 
+> machine_kexec at arch/arm/kernel/machine_kexec.c:182
+>   177            reboot_code_buffer = 
+> page_address(image->control_code_page);
+>   178
+>   179            /* Prepare parameters for reboot_code_buffer*/
+>   180            set_kernel_text_rw();
+>   181            kexec_start_address = image->start;
+>  >182<           kexec_indirection_page = page_list;
+>   183            kexec_mach_type = machine_arch_type;
+>   184            kexec_boot_atags = image->arch.kernel_r2;
+>   185
+>   186            /* copy our kernel relocation code to the control code 
+> page */
+>   187            reboot_entry = fncpy(reboot_code_buffer,
 
-Remove fault handling on vmalloc areas, as the vmalloc code now takes
-care of synchronizing changes to all page-tables in the system.
+Can you please try the patch below:
 
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
----
- arch/x86/include/asm/switch_to.h |  23 ------
- arch/x86/kernel/setup_percpu.c   |   6 +-
- arch/x86/mm/fault.c              | 134 -------------------------------
- arch/x86/mm/pti.c                |   8 +-
- 4 files changed, 4 insertions(+), 167 deletions(-)
+diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
+index 963b5284d284..f86b3d17928e 100644
+--- a/arch/arm/mm/init.c
++++ b/arch/arm/mm/init.c
+@@ -571,7 +571,7 @@ static inline void section_update(unsigned long addr, pmdval_t mask,
+ {
+ 	pmd_t *pmd;
+ 
+-	pmd = pmd_off_k(addr);
++	pmd = pmd_offset(pud_offset(p4d_offset(pgd_offset(mm, addr), addr), addr), addr);
+ 
+ #ifdef CONFIG_ARM_LPAE
+ 	pmd[0] = __pmd((pmd_val(pmd[0]) & mask) | prot);
 
-diff --git a/arch/x86/include/asm/switch_to.h b/arch/x86/include/asm/switch_to.h
-index 0e059b73437b..9f69cc497f4b 100644
---- a/arch/x86/include/asm/switch_to.h
-+++ b/arch/x86/include/asm/switch_to.h
-@@ -12,27 +12,6 @@ struct task_struct *__switch_to_asm(struct task_struct *prev,
- __visible struct task_struct *__switch_to(struct task_struct *prev,
- 					  struct task_struct *next);
- 
--/* This runs runs on the previous thread's stack. */
--static inline void prepare_switch_to(struct task_struct *next)
--{
--#ifdef CONFIG_VMAP_STACK
--	/*
--	 * If we switch to a stack that has a top-level paging entry
--	 * that is not present in the current mm, the resulting #PF will
--	 * will be promoted to a double-fault and we'll panic.  Probe
--	 * the new stack now so that vmalloc_fault can fix up the page
--	 * tables if needed.  This can only happen if we use a stack
--	 * in vmap space.
--	 *
--	 * We assume that the stack is aligned so that it never spans
--	 * more than one top-level paging entry.
--	 *
--	 * To minimize cache pollution, just follow the stack pointer.
--	 */
--	READ_ONCE(*(unsigned char *)next->thread.sp);
--#endif
--}
--
- asmlinkage void ret_from_fork(void);
- 
- /*
-@@ -67,8 +46,6 @@ struct fork_frame {
- 
- #define switch_to(prev, next, last)					\
- do {									\
--	prepare_switch_to(next);					\
--									\
- 	((last) = __switch_to_asm((prev), (next)));			\
- } while (0)
- 
-diff --git a/arch/x86/kernel/setup_percpu.c b/arch/x86/kernel/setup_percpu.c
-index e6d7894ad127..fd945ce78554 100644
---- a/arch/x86/kernel/setup_percpu.c
-+++ b/arch/x86/kernel/setup_percpu.c
-@@ -287,9 +287,9 @@ void __init setup_per_cpu_areas(void)
- 	/*
- 	 * Sync back kernel address range again.  We already did this in
- 	 * setup_arch(), but percpu data also needs to be available in
--	 * the smpboot asm.  We can't reliably pick up percpu mappings
--	 * using vmalloc_fault(), because exception dispatch needs
--	 * percpu data.
-+	 * the smpboot asm and arch_sync_kernel_mappings() doesn't sync to
-+	 * swapper_pg_dir on 32-bit. The per-cpu mappings need to be available
-+	 * there too.
- 	 *
- 	 * FIXME: Can the later sync in setup_cpu_entry_areas() replace
- 	 * this call?
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index 255fc631b042..dffe8e4d3140 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -214,44 +214,6 @@ void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
- 	}
- }
- 
--/*
-- * 32-bit:
-- *
-- *   Handle a fault on the vmalloc or module mapping area
-- */
--static noinline int vmalloc_fault(unsigned long address)
--{
--	unsigned long pgd_paddr;
--	pmd_t *pmd_k;
--	pte_t *pte_k;
--
--	/* Make sure we are in vmalloc area: */
--	if (!(address >= VMALLOC_START && address < VMALLOC_END))
--		return -1;
--
--	/*
--	 * Synchronize this task's top level page-table
--	 * with the 'reference' page table.
--	 *
--	 * Do _not_ use "current" here. We might be inside
--	 * an interrupt in the middle of a task switch..
--	 */
--	pgd_paddr = read_cr3_pa();
--	pmd_k = vmalloc_sync_one(__va(pgd_paddr), address);
--	if (!pmd_k)
--		return -1;
--
--	if (pmd_large(*pmd_k))
--		return 0;
--
--	pte_k = pte_offset_kernel(pmd_k, address);
--	if (!pte_present(*pte_k))
--		return -1;
--
--	return 0;
--}
--NOKPROBE_SYMBOL(vmalloc_fault);
--
- /*
-  * Did it hit the DOS screen memory VA from vm86 mode?
-  */
-@@ -316,79 +278,6 @@ static void dump_pagetable(unsigned long address)
- 
- #else /* CONFIG_X86_64: */
- 
--/*
-- * 64-bit:
-- *
-- *   Handle a fault on the vmalloc area
-- */
--static noinline int vmalloc_fault(unsigned long address)
--{
--	pgd_t *pgd, *pgd_k;
--	p4d_t *p4d, *p4d_k;
--	pud_t *pud;
--	pmd_t *pmd;
--	pte_t *pte;
--
--	/* Make sure we are in vmalloc area: */
--	if (!(address >= VMALLOC_START && address < VMALLOC_END))
--		return -1;
--
--	/*
--	 * Copy kernel mappings over when needed. This can also
--	 * happen within a race in page table update. In the later
--	 * case just flush:
--	 */
--	pgd = (pgd_t *)__va(read_cr3_pa()) + pgd_index(address);
--	pgd_k = pgd_offset_k(address);
--	if (pgd_none(*pgd_k))
--		return -1;
--
--	if (pgtable_l5_enabled()) {
--		if (pgd_none(*pgd)) {
--			set_pgd(pgd, *pgd_k);
--			arch_flush_lazy_mmu_mode();
--		} else {
--			BUG_ON(pgd_page_vaddr(*pgd) != pgd_page_vaddr(*pgd_k));
--		}
--	}
--
--	/* With 4-level paging, copying happens on the p4d level. */
--	p4d = p4d_offset(pgd, address);
--	p4d_k = p4d_offset(pgd_k, address);
--	if (p4d_none(*p4d_k))
--		return -1;
--
--	if (p4d_none(*p4d) && !pgtable_l5_enabled()) {
--		set_p4d(p4d, *p4d_k);
--		arch_flush_lazy_mmu_mode();
--	} else {
--		BUG_ON(p4d_pfn(*p4d) != p4d_pfn(*p4d_k));
--	}
--
--	BUILD_BUG_ON(CONFIG_PGTABLE_LEVELS < 4);
--
--	pud = pud_offset(p4d, address);
--	if (pud_none(*pud))
--		return -1;
--
--	if (pud_large(*pud))
--		return 0;
--
--	pmd = pmd_offset(pud, address);
--	if (pmd_none(*pmd))
--		return -1;
--
--	if (pmd_large(*pmd))
--		return 0;
--
--	pte = pte_offset_kernel(pmd, address);
--	if (!pte_present(*pte))
--		return -1;
--
--	return 0;
--}
--NOKPROBE_SYMBOL(vmalloc_fault);
--
- #ifdef CONFIG_CPU_SUP_AMD
- static const char errata93_warning[] =
- KERN_ERR 
-@@ -1227,29 +1116,6 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
- 	 */
- 	WARN_ON_ONCE(hw_error_code & X86_PF_PK);
- 
--	/*
--	 * We can fault-in kernel-space virtual memory on-demand. The
--	 * 'reference' page table is init_mm.pgd.
--	 *
--	 * NOTE! We MUST NOT take any locks for this case. We may
--	 * be in an interrupt or a critical region, and should
--	 * only copy the information from the master page table,
--	 * nothing more.
--	 *
--	 * Before doing this on-demand faulting, ensure that the
--	 * fault is not any of the following:
--	 * 1. A fault on a PTE with a reserved bit set.
--	 * 2. A fault caused by a user-mode access.  (Do not demand-
--	 *    fault kernel memory due to user-mode accesses).
--	 * 3. A fault caused by a page-level protection violation.
--	 *    (A demand fault would be on a non-present page which
--	 *     would have X86_PF_PROT==0).
--	 */
--	if (!(hw_error_code & (X86_PF_RSVD | X86_PF_USER | X86_PF_PROT))) {
--		if (vmalloc_fault(address) >= 0)
--			return;
--	}
--
- 	/* Was the fault spurious, caused by lazy TLB invalidation? */
- 	if (spurious_kernel_fault(hw_error_code, address))
- 		return;
-diff --git a/arch/x86/mm/pti.c b/arch/x86/mm/pti.c
-index 843aa10a4cb6..da0fb17a1a36 100644
---- a/arch/x86/mm/pti.c
-+++ b/arch/x86/mm/pti.c
-@@ -448,13 +448,7 @@ static void __init pti_clone_user_shared(void)
- 		 * the sp1 and sp2 slots.
- 		 *
- 		 * This is done for all possible CPUs during boot to ensure
--		 * that it's propagated to all mms.  If we were to add one of
--		 * these mappings during CPU hotplug, we would need to take
--		 * some measure to make sure that every mm that subsequently
--		 * ran on that CPU would have the relevant PGD entry in its
--		 * pagetables.  The usual vmalloc_fault() mechanism would not
--		 * work for page faults taken in entry_SYSCALL_64 before RSP
--		 * is set up.
-+		 * that it's propagated to all mms.
- 		 */
- 
- 		unsigned long va = (unsigned long)&per_cpu(cpu_tss_rw, cpu);
+>  > ...
+> 
+> Best regards
+> -- 
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
+> 
+
 -- 
-2.17.1
-
+Sincerely yours,
+Mike.
