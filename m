@@ -2,93 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F42181CBFC3
-	for <lists+linux-arch@lfdr.de>; Sat,  9 May 2020 11:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B161CC280
+	for <lists+linux-arch@lfdr.de>; Sat,  9 May 2020 17:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbgEIJZi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 9 May 2020 05:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725930AbgEIJZh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 May 2020 05:25:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6288C061A0C;
-        Sat,  9 May 2020 02:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bA5nO5V8ZyRNYM2NOJh3nHt5mHB7m7A6hzO/Xb8C0mA=; b=LqHS/VLYuKSWgHx/3b4w+O5Hre
-        mznk17I+H+n7V4tjG+K4HbsbQurnpIFGfHXy5NQYxvY8nEkRe2DplXdtbl947B6niE2R2Q+RoDAp8
-        1jmbn0GDUrM1YeuwmzFIJHDKbVSRucfX9eMz29/dmS3lWpqODgM/Aqe8ipHw5RfjPwmHexiU+vtTS
-        jZo4P11lUQ6EEyFE6V4xaiwdK0lRNTIlo9OCvFQh6BL3FF7uMzmCL1Jqs0CDO0MFWLqe6qqhg47KH
-        w9QIu+x1SzOCiwvZXhc8kpcO85+YQOy7ujwb58mxLpGiVj3d5mCQP5DS55jczRX4P4e02mhXgznn9
-        8onTSIOw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jXLjT-0007YB-Ts; Sat, 09 May 2020 09:25:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 33E48301EFB;
-        Sat,  9 May 2020 11:25:16 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 23A77203AA832; Sat,  9 May 2020 11:25:16 +0200 (CEST)
-Date:   Sat, 9 May 2020 11:25:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Joerg Roedel <jroedel@suse.de>
-Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org, hpa@zytor.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, rjw@rjwysocki.net,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [RFC PATCH 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
-Message-ID: <20200509092516.GC2957@hirez.programming.kicks-ass.net>
-References: <20200508144043.13893-1-joro@8bytes.org>
- <20200508192000.GB2957@hirez.programming.kicks-ass.net>
- <20200508213407.GT8135@suse.de>
+        id S1727787AbgEIPyb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 9 May 2020 11:54:31 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:38197 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727105AbgEIPyb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 9 May 2020 11:54:31 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 49KBb73l86z9v0Zm;
+        Sat,  9 May 2020 17:54:27 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id hhT93JtYMSPR; Sat,  9 May 2020 17:54:27 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 49KBb72sdxz9v2CW;
+        Sat,  9 May 2020 17:54:27 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 91C698B775;
+        Sat,  9 May 2020 17:54:29 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id QdzKxSQXGUVx; Sat,  9 May 2020 17:54:29 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6232E8B75F;
+        Sat,  9 May 2020 17:54:28 +0200 (CEST)
+Subject: Re: [PATCH v8 8/8] powerpc/vdso: Provide __kernel_clock_gettime64()
+ on vdso32
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+References: <cover.1588079622.git.christophe.leroy@c-s.fr>
+ <e78344d3fcc1d33bfb1782e430b7f0529f6c612f.1588079622.git.christophe.leroy@c-s.fr>
+ <CAK8P3a2aXJRWjxWO8oMRX2AJkfeVeeoYbOPbpd9-UTgjqM4B7g@mail.gmail.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <d3f303f1-8b2c-0c54-5380-0b9a370a4eb3@csgroup.eu>
+Date:   Sat, 9 May 2020 17:54:25 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200508213407.GT8135@suse.de>
+In-Reply-To: <CAK8P3a2aXJRWjxWO8oMRX2AJkfeVeeoYbOPbpd9-UTgjqM4B7g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 08, 2020 at 11:34:07PM +0200, Joerg Roedel wrote:
-> Hi Peter,
+
+
+Le 28/04/2020 à 18:05, Arnd Bergmann a écrit :
+> On Tue, Apr 28, 2020 at 3:16 PM Christophe Leroy
+> <christophe.leroy@c-s.fr> wrote:
+>>
+>> Provides __kernel_clock_gettime64() on vdso32. This is the
+>> 64 bits version of __kernel_clock_gettime() which is
+>> y2038 compliant.
+>>
+>> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 > 
-> thanks for reviewing this!
+> Looks good to me
 > 
-> On Fri, May 08, 2020 at 09:20:00PM +0200, Peter Zijlstra wrote:
-> > The only concern I have is the pgd_lock lock hold times.
-> > 
-> > By not doing on-demand faults anymore, and consistently calling
-> > sync_global_*(), we iterate that pgd_list thing much more often than
-> > before if I'm not mistaken.
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 > 
-> Should not be a problem, from what I have seen this function is not
-> called often on x86-64.  The vmalloc area needs to be synchronized at
-> the top-level there, which is by now P4D (with 4-level paging). And the
-> vmalloc area takes 64 entries, when all of them are populated the
-> function will not be called again.
+> There was a bug on ARM for the corresponding function, so far it is unclear
+> if this was a problem related to particular hardware, the 32-bit kernel code,
+> or the common implementation of clock_gettime64 in the vdso library,
+> see https://github.com/richfelker/musl-cross-make/issues/96
+> 
+> Just to be sure that powerpc is not affected by the same issue, can you
+> confirm that repeatedly calling clock_gettime64 on powerpc32, alternating
+> between vdso and syscall, results in monotically increasing times?
+> 
 
-Right; it's just that the moment you do trigger it, it'll iterate that
-pgd_list and that is potentially huge. Then again, that's not a new
-problem.
+I think that's one of the things vdsotest checks, so yes that's ok I think.
 
-I suppose we can deal with it if/when it becomes an actual problem.
-
-I had a quick look and I think it might be possible to make it an RCU
-managed list. We'd have to remove the pgd_list entry in
-put_task_struct_rcu_user(). Then we can play games in sync_global_*()
-and use RCU iteration. New tasks (which can be missed in the RCU
-iteration) will already have a full clone of the PGD anyway.
-
-But like said, something for later I suppose.
+Christophe
