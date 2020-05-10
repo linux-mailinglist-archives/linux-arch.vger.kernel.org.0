@@ -2,161 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F051CC4CE
-	for <lists+linux-arch@lfdr.de>; Sat,  9 May 2020 23:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C17D1CC5EC
+	for <lists+linux-arch@lfdr.de>; Sun, 10 May 2020 03:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728011AbgEIV5U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 9 May 2020 17:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726120AbgEIV5U (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 May 2020 17:57:20 -0400
-X-Greylist: delayed 112585 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 09 May 2020 14:57:19 PDT
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD78C061A0C;
-        Sat,  9 May 2020 14:57:19 -0700 (PDT)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id A91AA389; Sat,  9 May 2020 23:57:15 +0200 (CEST)
-Date:   Sat, 9 May 2020 23:57:13 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Joerg Roedel <jroedel@suse.de>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        id S1727124AbgEJBMW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 9 May 2020 21:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726565AbgEJBMW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 May 2020 21:12:22 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A858C061A0C;
+        Sat,  9 May 2020 18:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=X7BNwZm/qeSoH9rk5fDt+Xdu9teDBRzeq1dYQOdzLtQ=; b=sIcN8Hg6HHavcmr49SGf56f5l5
+        cGi+tKsydbSSSzCjWR/1pHj2ymlF3jcWYTC7vk+JghdQUSyROOh9UubwC6c0zHZkQG6ai1pkI+2Ma
+        V6ipDtighug9Y32X8MvqrdHVOFND8L2TdBI2i7g84zgCvtl9ot/a1hme67GC5uPdWKoE9FYZ8MQyu
+        B3grFCxDZ+7aGj7shhExulokE6uClW2/hoAFiDx+Ayb9tDRNTvHEYuDHtxPCMJTCKpwgTsmKJ1QcF
+        qbWrcUfYDp2hx5vDhXGC9xkmE+2FiwRn3Musd1aFQlEOtnuNp+KcxXSSopMDQ61GtAgRzCe/LUq6b
+        HZF01I8Q==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jXaVZ-0008UL-UC; Sun, 10 May 2020 01:11:57 +0000
+Date:   Sat, 9 May 2020 18:11:57 -0700
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Joerg Roedel <jroedel@suse.de>, Joerg Roedel <joro@8bytes.org>,
+        x86@kernel.org, hpa@zytor.com,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Lutomirski <luto@kernel.org>, rjw@rjwysocki.net,
         Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
+        Michal Hocko <mhocko@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
 Subject: Re: [RFC PATCH 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
-Message-ID: <20200509215713.GE18353@8bytes.org>
+Message-ID: <20200510011157.GU16070@bombadil.infradead.org>
 References: <20200508144043.13893-1-joro@8bytes.org>
- <CALCETrX0ubjc0Gf4hCY9RWH6cVEKF1hv3RzqToKMt9_bEXXBvw@mail.gmail.com>
- <20200508213609.GU8135@suse.de>
- <CALCETrVxP87o2+aaf=RLW--DSpMrs=BXSQphN6bG5Y4X+OY8GQ@mail.gmail.com>
- <20200509175217.GV8135@suse.de>
- <CALCETrVU-+G3K5ABBRSEMiwnskL4mZsVcoTESZXnu34J7TaOqw@mail.gmail.com>
+ <20200508192000.GB2957@hirez.programming.kicks-ass.net>
+ <20200508213407.GT8135@suse.de>
+ <20200509092516.GC2957@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALCETrVU-+G3K5ABBRSEMiwnskL4mZsVcoTESZXnu34J7TaOqw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200509092516.GC2957@hirez.programming.kicks-ass.net>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Andy,
+On Sat, May 09, 2020 at 11:25:16AM +0200, Peter Zijlstra wrote:
+> On Fri, May 08, 2020 at 11:34:07PM +0200, Joerg Roedel wrote:
+> > On Fri, May 08, 2020 at 09:20:00PM +0200, Peter Zijlstra wrote:
+> > > The only concern I have is the pgd_lock lock hold times.
+> > > 
+> > > By not doing on-demand faults anymore, and consistently calling
+> > > sync_global_*(), we iterate that pgd_list thing much more often than
+> > > before if I'm not mistaken.
+> > 
+> > Should not be a problem, from what I have seen this function is not
+> > called often on x86-64.  The vmalloc area needs to be synchronized at
+> > the top-level there, which is by now P4D (with 4-level paging). And the
+> > vmalloc area takes 64 entries, when all of them are populated the
+> > function will not be called again.
+> 
+> Right; it's just that the moment you do trigger it, it'll iterate that
+> pgd_list and that is potentially huge. Then again, that's not a new
+> problem.
+> 
+> I suppose we can deal with it if/when it becomes an actual problem.
+> 
+> I had a quick look and I think it might be possible to make it an RCU
+> managed list. We'd have to remove the pgd_list entry in
+> put_task_struct_rcu_user(). Then we can play games in sync_global_*()
+> and use RCU iteration. New tasks (which can be missed in the RCU
+> iteration) will already have a full clone of the PGD anyway.
 
-On Sat, May 09, 2020 at 12:05:29PM -0700, Andy Lutomirski wrote:
-> 1. Non-PAE.  There is a single 4k top-level page table per mm, and
-> this table contains either 512 or 1024 entries total. Of those
-> entries, some fraction (half or less) control the kernel address
-> space, and some fraction of *that* is for vmalloc space.  Those
-> entries are the *only* thing that needs syncing -- all mms will either
-> have null (not present) in those slots or will have pointers to the
-> *same* next-level-down directories.
-
-Not entirely correct, on 32-bit non-PAE there are two levels with 1024
-entries each. In Linux these map to PMD and PTE levels. With 1024
-entries each PMD maps 4MB of address space.
-
-How much of these 1024 top-level entries are used for the kernel is
-configuration dependent in Linux, it can be 768, 512, or 256.
-
-> 2. PAE.  Depending on your perspective, there could be a grand total
-> of four top-level paging pointers, of which one (IIRC) is for the
-> kernel.
-
-That is again configuration dependent, up to 3 of the top-level pointers
-could be used for kernel-space.
-
-> That points to the same place for all mms.  Or, if you look at it the
-> other way, PAE is just like #1 except that the top-level table has
-> only four entries and only one points to VMALLOC space.
-
-There are more differences. In PAE an entry is 64-bit, which means each
-PMD-entry only maps 2MB of address space, which means you need two PTE
-pages to map the same amount of address space you could map with one
-page without PAE paging.
-And as noted above, all 3 of the top-level pointers can point to vmalloc
-space (not exclusivly).
- 
-> So, unless I'm missing something here, there is an absolute maximum of
-> 512 top-level entries that ever need to be synchronized.
-
-And here is where your assumption is wrong. On 32-bit PAE systems it is
-not the top-level entries that need to be synchronized for vmalloc, but
-the second-level entries. And dependent on the kernel configuration,
-there are (in total, not only vmalloc) 1536, 1024, or 512 of these
-second-level entries. How much of them are actually used for vmalloc
-depends on the size of the system RAM (but is at least 64), because
-the vmalloc area begins after the kernel direct-mapping (with an 8MB
-unmapped hole).
-
-With 512MB of RAM you need 256 entries for the kernel direct-mapping (I
-ignore the ISA hole here). After that there are 4 unmapped entries and
-the rest is vmalloc, minus some fixmap and ldt mappings at the end of
-the address space. I havn't looked up the exact number, but 4 entries
-(8MB) for this should be close to the real value.
-
-	  1536 total PMD entries
-	-  256 for direct-mapping
-	-    4 for ISA hole
-	-    4 for stuff at the end of the address space
-
-	= 1272 PMD entries for VMALLOC space which need synchronization.
-
-With less RAM it is even more, and to get rid of faulting and
-synchronization you need to pre-allocate a 4k PTE page for each of these
-PMD entries.
-
-> Now, there's an additional complication.  On x86_64, we have a rule:
-> those entries that need to be synced start out null and may, during
-> the lifetime of the system, change *once*.  They are never unmapped or
-> modified after being allocated.  This means that those entries can
-> only ever point to a page *table* and not to a ginormous page.  So,
-> even if the hardware were to support ginormous pages (which, IIRC, it
-> doesn't), we would be limited to merely immense and not ginormous
-> pages in the vmalloc range.  On x86_32, I don't think we have this
-> rule right now.  And this means that it's possible for one of these
-> pages to be unmapped or modified.
-
-The reason for x86-32 being different is that the address space is
-orders of magnitude smaller than on x86-64. We just have 4 top-level
-entries with PAE paging and can't afford to partition kernel-adress
-space on that level like we do on x86-64. That is the reason the address
-space is partitioned on the second (PMD) level, which is also the reason
-vmalloc synchronization needs to happen on that level. And because
-that's not enough yet, its also the page-table level to map huge-pages.
-
-> So my suggestion is that just apply the x86_64 rule to x86_32 as well.
-> The practical effect will be that 2-level-paging systems will not be
-> able to use huge pages in the vmalloc range, since the rule will be
-> that the vmalloc-relevant entries in the top-level table must point to
-> page *tables* instead of huge pages.
-
-I could very well live with prohibiting huge-page ioremap mappings for
-x86-32. But as I wrote before, this doesn't solve the problems I am
-trying to address with this patch-set, or would only address them if
-significant amount of total system memory is used.
-
-The pre-allocation solution would work for x86-64, it would only need
-256kb of preallocated memory for the vmalloc range to never synchronize
-or fault again. I have thought about that and did the math before
-writing this patch-set, but doing the math for 32 bit drove me away from
-it for reasons written above.
-
-And since a lot of the vmalloc_sync_(un)mappings problems I debugged
-were actually related to 32-bit, I want a solution that works for 32 and
-64-bit x86 (at least until support for x86-32 is removed). And I think
-this patch-set provides a solution that works well for both.
-
-
-	Joerg
+One of the things on my long-term todo list is to replace mm_struct.mmlist
+with an XArray containing all mm_structs.  Then we can use one mark
+to indicate maybe-swapped and another mark to indicate ... whatever it
+is pgd_list indicates.  Iterating an XArray (whether the entire thing
+or with marks) is RCU-safe and faster than iterating a linked list,
+so this should solve the problem?
