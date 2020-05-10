@@ -2,112 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C05531CC85B
-	for <lists+linux-arch@lfdr.de>; Sun, 10 May 2020 09:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD871CC950
+	for <lists+linux-arch@lfdr.de>; Sun, 10 May 2020 10:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729389AbgEJH5G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 10 May 2020 03:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729383AbgEJH5D (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 10 May 2020 03:57:03 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDA1C061A0C;
-        Sun, 10 May 2020 00:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=gbS3mnDejF/vbSIU5cFMJ7gbJPhVms+ouuUae9XApr4=; b=Jeef/M6wRiQsyUU6ARprddeFuW
-        Ih3QL7O0SFvbRRu8d9DBgFL0JfqU6LDoAq0ftGNMQ+HpMiy87MHTfwgYDMrMHa1QK6oTbqTUmomeS
-        4Xci1co32+BUzy12zKd4SHNSBbsG5vmZ/syewkkPZgcwUxVKWSK7oro2yZKpxtN3HkNt+4dKT5Xw3
-        31qRqq9wSzv6I5a23Wt/9IX/GozigKBBtCvioHR8DpuHVpWbCyIPgWxsqtXtv82dBjJVCJkvjPaBY
-        b8KPnCXNq8XtRWDr8/HSFCirxUDoAJl2NAcgiGp3HJ00NuMrZfS+7sRc/linPe+sVj5kQYB/rO2WU
-        2zABr8zA==;
-Received: from [2001:4bb8:180:9d3f:c70:4a89:bc61:2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jXgpO-0001Pa-9R; Sun, 10 May 2020 07:56:50 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Andrew Morton <akpm@linux-foundation.org>,
+        id S1727834AbgEJIPV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 10 May 2020 04:15:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60116 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726630AbgEJIPV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 10 May 2020 04:15:21 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id AF43EAC69;
+        Sun, 10 May 2020 08:15:21 +0000 (UTC)
+Date:   Sun, 10 May 2020 10:15:16 +0200
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Joerg Roedel <joro@8bytes.org>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Arnd Bergmann <arnd@arndb.de>,
-        Roman Zippel <zippel@linux-m68k.org>
-Cc:     Jessica Yu <jeyu@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-c6x-dev@linux-c6x.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH 31/31] module: move the set_fs hack for flush_icache_range to m68k
-Date:   Sun, 10 May 2020 09:55:10 +0200
-Message-Id: <20200510075510.987823-32-hch@lst.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200510075510.987823-1-hch@lst.de>
-References: <20200510075510.987823-1-hch@lst.de>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [RFC PATCH 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
+Message-ID: <20200510081516.GX8135@suse.de>
+References: <20200508144043.13893-1-joro@8bytes.org>
+ <CALCETrX0ubjc0Gf4hCY9RWH6cVEKF1hv3RzqToKMt9_bEXXBvw@mail.gmail.com>
+ <20200508213609.GU8135@suse.de>
+ <CALCETrVxP87o2+aaf=RLW--DSpMrs=BXSQphN6bG5Y4X+OY8GQ@mail.gmail.com>
+ <20200509175217.GV8135@suse.de>
+ <CALCETrVU-+G3K5ABBRSEMiwnskL4mZsVcoTESZXnu34J7TaOqw@mail.gmail.com>
+ <20200509215713.GE18353@8bytes.org>
+ <CALCETrWyQA=4y57PsKhhcRWpxfCufBpda5g7gyEVSST6H5FNJQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrWyQA=4y57PsKhhcRWpxfCufBpda5g7gyEVSST6H5FNJQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-flush_icache_range generally operates on kernel addresses, but for some
-reason m68k needed a set_fs override.  Move that into the m68k code
-insted of keeping it in the module loader.
+On Sat, May 09, 2020 at 10:05:43PM -0700, Andy Lutomirski wrote:
+> On Sat, May 9, 2020 at 2:57 PM Joerg Roedel <joro@8bytes.org> wrote:
+> I spent some time looking at the code, and I'm guessing you're talking
+> about the 3-level !SHARED_KERNEL_PMD case.  I can't quite figure out
+> what's going on.
+> 
+> Can you explain what is actually going on that causes different
+> mms/pgds to have top-level entries in the kernel range that point to
+> different tables?  Because I'm not seeing why this makes any sense.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/m68k/mm/cache.c | 4 ++++
- kernel/module.c      | 8 --------
- 2 files changed, 4 insertions(+), 8 deletions(-)
+There are three cases where the PMDs are not shared on x86-32:
 
-diff --git a/arch/m68k/mm/cache.c b/arch/m68k/mm/cache.c
-index 7915be3a09712..5ecb3310e8745 100644
---- a/arch/m68k/mm/cache.c
-+++ b/arch/m68k/mm/cache.c
-@@ -107,7 +107,11 @@ void flush_icache_user_range(unsigned long address, unsigned long endaddr)
- 
- void flush_icache_range(unsigned long address, unsigned long endaddr)
- {
-+	mm_segment_t old_fs = get_fs();
-+
-+	set_fs(KERNEL_DS);
- 	flush_icache_user_range(address, endaddr);
-+	set_fs(old_fs);
- }
- EXPORT_SYMBOL(flush_icache_range);
- 
-diff --git a/kernel/module.c b/kernel/module.c
-index 646f1e2330d2b..b1673ed49594f 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3312,12 +3312,6 @@ static int check_module_license_and_versions(struct module *mod)
- 
- static void flush_module_icache(const struct module *mod)
- {
--	mm_segment_t old_fs;
--
--	/* flush the icache in correct context */
--	old_fs = get_fs();
--	set_fs(KERNEL_DS);
--
- 	/*
- 	 * Flush the instruction cache, since we've played with text.
- 	 * Do it before processing of module parameters, so the module
-@@ -3329,8 +3323,6 @@ static void flush_module_icache(const struct module *mod)
- 				   + mod->init_layout.size);
- 	flush_icache_range((unsigned long)mod->core_layout.base,
- 			   (unsigned long)mod->core_layout.base + mod->core_layout.size);
--
--	set_fs(old_fs);
- }
- 
- int __weak module_frob_arch_sections(Elf_Ehdr *hdr,
--- 
-2.26.2
+	1) With non-PAE the top-level is already the PMD level, because
+	   the page-table only has two levels. Since the top-level can't
+	   be shared, the PMDs are also not shared.
+
+	2) For some reason Xen-PV also does not share kernel PMDs on PAE
+	   systems, but I havn't looked into why.
+
+	3) On 32-bit PAE with PTI enabled the kernel address space
+	   contains the LDT mapping, which is also different per-PGD.
+	   There is one PMD entry reserved for the LDT, giving it 2MB of
+	   address space. I implemented it this way to keep the 32-bit
+	   implementation of PTI mostly similar to the 64-bit one.
+
+> Why does it need to be partitioned at all?  The only thing that comes
+> to mind is that the LDT range is per-mm.  So I can imagine that the
+> PAE case with a 3G user / 1G kernel split has to have the vmalloc
+> range and the LDT range in the same top-level entry.  Yuck.
+
+PAE with 3G user / 1G kernel has _all_ of the kernel mappings in one
+top-level entry (direct-mapping, vmalloc, ldt, fixmap).
+
+> If it's *just* the LDT that's a problem, we could plausibly shrink the
+> user address range a little bit and put the LDT in the user portion.
+> I suppose this could end up creating its own set of problems involving
+> tracking which code owns which page tables.
+
+Yeah, for the PTI case it is only the LDT that causes the unshared
+kernel PMDs, but even if we move the LDT somewhere else we still have
+two-level paging and the xen-pv case.
+
+
+	Joerg
 
