@@ -2,69 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1EE1CE600
-	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 22:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAFE1CE7C9
+	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 23:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731583AbgEKUus (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 May 2020 16:50:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34052 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727873AbgEKUus (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 11 May 2020 16:50:48 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B1E0820752;
-        Mon, 11 May 2020 20:50:46 +0000 (UTC)
-Date:   Mon, 11 May 2020 16:50:45 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Joerg Roedel <jroedel@suse.de>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Joerg Roedel <joro@8bytes.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S1725860AbgEKVyb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 May 2020 17:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727930AbgEKVya (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 11 May 2020 17:54:30 -0400
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ad])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9E5C061A0E
+        for <linux-arch@vger.kernel.org>; Mon, 11 May 2020 14:54:29 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49LZTY342WzlhGkQ;
+        Mon, 11 May 2020 23:54:25 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49LZTW6g0pzlhpJn;
+        Mon, 11 May 2020 23:54:23 +0200 (CEST)
+Subject: Re: [PATCH v17 00/10] Landlock LSM
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [RFC PATCH 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
-Message-ID: <20200511165045.36198080@gandalf.local.home>
-In-Reply-To: <20200511191414.GY8135@suse.de>
-References: <20200508144043.13893-1-joro@8bytes.org>
-        <CALCETrX0ubjc0Gf4hCY9RWH6cVEKF1hv3RzqToKMt9_bEXXBvw@mail.gmail.com>
-        <20200508213609.GU8135@suse.de>
-        <CALCETrVxP87o2+aaf=RLW--DSpMrs=BXSQphN6bG5Y4X+OY8GQ@mail.gmail.com>
-        <20200509175217.GV8135@suse.de>
-        <CALCETrVU-+G3K5ABBRSEMiwnskL4mZsVcoTESZXnu34J7TaOqw@mail.gmail.com>
-        <20200511074243.GE2957@hirez.programming.kicks-ass.net>
-        <CALCETrVyoAXXOqm8cYs+31fjWK8mcnKR+wM0_HeJx9=bOaZC6Q@mail.gmail.com>
-        <20200511191414.GY8135@suse.de>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20200511192156.1618284-1-mic@digikod.net>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <91cab792-5a13-c71f-a8cb-782be21d86f5@digikod.net>
+Date:   Mon, 11 May 2020 23:54:23 +0200
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200511192156.1618284-1-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 11 May 2020 21:14:14 +0200
-Joerg Roedel <jroedel@suse.de> wrote:
 
-> > Or maybe we don't want to defeature this much, or maybe the memory hit
-> > from this preallocation will hurt little 2-level 32-bit systems too
-> > much.  
+On 11/05/2020 21:21, Mickaël Salaün wrote:
+> Hi,
 > 
-> It will certainly make Linux less likely to boot on low-memory x86-32
-> systems, whoever will be affected by this.
+> This new patch series brings some improvements and add new tests:
+> 
+> Use smaller userspace structures (attributes) to save space, and check
+> at built time that every attribute don't contain hole and are 8-bits
+> aligned.
 
-That may be an issue, as I'm guessing the biggest users of x86-32, is
-probably small systems that uses Intel's attempts at the embedded space.
-
--- Steve
+8-bytes aligned, of course.
