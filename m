@@ -2,125 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C143C1CE48E
-	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 21:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69031CE558
+	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 22:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731199AbgEKTgb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 May 2020 15:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731243AbgEKTga (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 11 May 2020 15:36:30 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96776C061A0E
-        for <linux-arch@vger.kernel.org>; Mon, 11 May 2020 12:36:30 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id f15so4350885plr.3
-        for <linux-arch@vger.kernel.org>; Mon, 11 May 2020 12:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=v1qEow1xr6Tl9HbXqv92zljMgDOgKRbT8DcK2r8augk=;
-        b=plDyvByAezPxhtBNLRCuVK5NXRrexQXBfSR++YGjC0ACfezjvSTQ4rrVuyxXsCEEtI
-         BbW2+qXKERUMz2XYA8LhCw/+uX3PWkPklugw6VNmlNZHrIV9ej6nD8FWRwEx4o/TnPww
-         kdkwcs9KYpIuASMr/BNGVsia2pyZK0W8b74Y7BYxSeziRLkruJFJtlwWfB42Jb/9JiYn
-         jpE//U7WrRm9hAm7hc+DTdNO5lt3CAdRHqXSFSO4ZA0Pcf/8p0ITa134SktFrq7OsKod
-         PUhx3J9d5uROpjm74uAh0LSUBbPjFLkfCcx5a7c2NiuPxx+1GBDwMHyv2zsWWB661Y5j
-         xlXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=v1qEow1xr6Tl9HbXqv92zljMgDOgKRbT8DcK2r8augk=;
-        b=ScXW1EWPws/fLVOaNsYLTr8yfff633gcYzr9YHFhkjktJrmCIkl2TRqfXmotv6sTpk
-         UyBQTa5D2pkFXSzDWziO1KzsPAOom8RyPZg1c9JJtsO3c7mnc4XvDjCKMW9CY4ns15J6
-         OqphWUR+6mUhobTOSusC8vlo+jjqhLh+NHmOGRTA+EUDd1Nz6vIqCvhldxrNXvRwxfzj
-         Ls5DqAHE8AHJZXmmMxtH0ZIgPXXFvZ2vOndl5eRGZYdF66U3PkL9sASiOVLjNU6IeL0f
-         Pc/6O82g+p4+CbO68H51sxvy0/1Vxtww/pCMo1ciXKZgmv5B8Vws1bmkQ3/xgWNiuZ7J
-         4y2g==
-X-Gm-Message-State: AGi0PuYpGz0SVxAzP/DueIgoKoS+pyrCXtXLdifPHNH+8kxhKfJQJF/N
-        6WD8hzgDx+6LRGNYF+XtJMs1nQ==
-X-Google-Smtp-Source: APiQypJ1YiMdk4N4C7CbB/W/+fhruAj/pk5oDUlcqa/TNtBxnj77+hdowSnvFuUKeaQO4a8ClZqGSA==
-X-Received: by 2002:a17:902:8b86:: with SMTP id ay6mr16163755plb.338.1589225790091;
-        Mon, 11 May 2020 12:36:30 -0700 (PDT)
-Received: from ?IPv6:2601:646:c200:1ef2:8:ac6e:cd4:7f73? ([2601:646:c200:1ef2:8:ac6e:cd4:7f73])
-        by smtp.gmail.com with ESMTPSA id u17sm4090429pgo.90.2020.05.11.12.36.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2020 12:36:29 -0700 (PDT)
+        id S1731485AbgEKUYt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 May 2020 16:24:49 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:51222 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728283AbgEKUYs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 May 2020 16:24:48 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04BKN1ae178275;
+        Mon, 11 May 2020 20:23:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=Zo5Cza0n1Es3FSckgTZNHDduwVjYv8Se3/rnvi5K1+U=;
+ b=zNA36/v3LiAoVOKNe46hByFJzcgmlm6fSXJxh2iNnyOiub80LYucHlnc0/E56KgILM9H
+ IFRiKn4q0LUdaR2nYs6dCPMSq80mGCHofR6f2TqItyeoJMBmDZXvQ7v2tUhfVy9k1X36
+ tcBZGa4jzU7DQvWfHUpO9TKxtWFGYZZ9nF7VsO1e0ZGnb9D9DoRmFfbUB6r4TRv4NYPv
+ o37UJDnsiD3w8Clee8jwQnZrV85aEd6/M09htR49v5WSHMk/NB7F5FD5bkmsoKKY23Ji
+ COyA88eG4SJcYvBMQXLI4Ajl98LrSZ6SUDDOJAn/OQQSjR8daR7AoTwaaFTFsvb7nqV0 BA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 30x3mbqayv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 11 May 2020 20:23:14 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04BKMUL6165379;
+        Mon, 11 May 2020 20:23:13 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 30xbgfkcvb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 11 May 2020 20:23:13 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04BKMsCT016911;
+        Mon, 11 May 2020 20:22:55 GMT
+Received: from [192.168.2.157] (/73.164.160.178)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 11 May 2020 13:22:53 -0700
+Subject: Re: [PATCH V3 3/3] mm/hugetlb: Define a generic fallback for
+ arch_clear_hugepage_flags()
+To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1588907271-11920-1-git-send-email-anshuman.khandual@arm.com>
+ <1588907271-11920-4-git-send-email-anshuman.khandual@arm.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <cbccae27-ff79-5580-80be-0a9493d063ba@oracle.com>
+Date:   Mon, 11 May 2020 13:22:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <1588907271-11920-4-git-send-email-anshuman.khandual@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [RFC PATCH 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
-Date:   Mon, 11 May 2020 12:36:19 -0700
-Message-Id: <8D6745B7-0EC2-4FCC-B6FC-E7E1557EB18E@amacapital.net>
-References: <20200511191414.GY8135@suse.de>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Joerg Roedel <joro@8bytes.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-In-Reply-To: <20200511191414.GY8135@suse.de>
-To:     Joerg Roedel <jroedel@suse.de>
-X-Mailer: iPhone Mail (17E262)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=784
+ spamscore=0 suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005110154
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 impostorscore=0
+ mlxscore=0 suspectscore=0 bulkscore=0 mlxlogscore=817 phishscore=0
+ malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005110154
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 5/7/20 8:07 PM, Anshuman Khandual wrote:
+> There are multiple similar definitions for arch_clear_hugepage_flags() on
+> various platforms. Lets just add it's generic fallback definition for
+> platforms that do not override. This help reduce code duplication.
+> 
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Fenghua Yu <fenghua.yu@intel.com>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: x86@kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-ia64@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-parisc@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linux-s390@vger.kernel.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-arch@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-> On May 11, 2020, at 12:14 PM, Joerg Roedel <jroedel@suse.de> wrote:
->=20
-> =EF=BB=BFOn Mon, May 11, 2020 at 08:36:31AM -0700, Andy Lutomirski wrote:
->> What if we make 32-bit PTI depend on PAE?
->=20
-> It already does, PTI support for legacy paging had to be removed because
-> there were memory corruption problems with THP. The reason was that huge
-> PTEs in the user-space area were mapped in two page-tables (kernel and
-> user), but A/D bits were only fetched from the kernel part. To not make
-> things more complicated we agreed on just not supporting PTI without
-> PAE.
->=20
->> And drop 32-bit Xen PV support?  And make 32-bit huge pages depend on
->> PAE?  Then 32-bit non-PAE can use the direct-mapped LDT, 32-bit PTI
->> (and optionally PAE non-PTI) can use the evil virtually mapped LDT.
->> And 32-bit non-PAE (the 2-level case) will only have pointers to page
->> tables at the top level.  And then we can preallocate.
->=20
-> Not sure I can follow you here. How can 32-bit PTI with PAE use the LDT
-> from the direct mapping? I am guessing you want to get rid of the
-> SHARED_KERNEL_PMD=3D=3D0 case for PAE kernels.
+Thanks!
+Removing duplicate code is good.
 
-I wrote nonsense. I mean bite off a piece of the *user* portion of the addre=
-ss space and stick the LDT there.
+Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-I contemplated doing this when I wrote the 64-bit code, but I decided we had=
- so much address space to throw around that I liked my solution better.
-
-> This would indeed make
-> syncing unneccessary on PAE, but pre-allocation would still be needed
-> for 2-level paging. Just the amount of memory needed for the
-> pre-allocated PTE pages is half as big as it would be with PAE.
->=20
->> Or maybe we don't want to defeature this much, or maybe the memory hit
->> from this preallocation will hurt little 2-level 32-bit systems too
->> much.
->=20
-> It will certainly make Linux less likely to boot on low-memory x86-32
-> systems, whoever will be affected by this.
->=20
->=20
-
-I=E2=80=99m guessing the right solution is either your series or your series=
- plus preallocation on 64-bit. I=E2=80=99m just grumpy about it...=
+-- 
+Mike Kravetz
