@@ -2,63 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6C31CE133
-	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 19:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590011CE13B
+	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 19:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730744AbgEKRGJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 May 2020 13:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        id S1730775AbgEKRHV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 May 2020 13:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730734AbgEKRGJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 May 2020 13:06:09 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAF1C061A0C
-        for <linux-arch@vger.kernel.org>; Mon, 11 May 2020 10:06:09 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id e8so1377242ilm.7
-        for <linux-arch@vger.kernel.org>; Mon, 11 May 2020 10:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xMthw49hZu9qHb1A3FQZQpIzp6MT1FOKf7dSwlMye7w=;
-        b=IrwefWVfw/QbxCjvARJ65xJck1m2QI35ZK4EbkxcViHjSJ7gX0xvRZn3Rrb2HugnU4
-         m8apJAmhH5mgHPmuAV3RqezAkuU6GhEV6tUT8Bo/3+gjTuIjdwd5sJKG/N1BD9BYzclg
-         2+V1UbHQtHVtpoMI4uoV4Mr10e1V6djyPgknh88p0PrLIT8OYnj+5QvJrXF/PDQrj7AN
-         YFl8hfxy8Z1TJJKQUv3Elh/f8NGe8OqyS7d5LkVsgKe/Gpsqpp/2Imw/OkQSFZARsOyY
-         FrU35mAMW5BccMtL/DzUJXWnP+hLjKdoOm7xD3zKLlRKEydmSG/RwgKaEfpfdL1pVJZO
-         u6Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xMthw49hZu9qHb1A3FQZQpIzp6MT1FOKf7dSwlMye7w=;
-        b=lrSJ4ctbBQTXMaB+pup8rZ0LvkhFJ1PeEpdWOpl6TYOLCcbr8QqrTpkLi940PWTrih
-         yVPZjsd9YoGquR9HlQoBE/KvhvLmRq3MgPBGk1673FDHA32/SbujLUS335V1O+4lZ6Q5
-         kMx10enF5eeYx5IioFP4UCeZHhcqwU2U/QhwsXFpQBxNL1TysHWEfWegC7AmwE57ovpP
-         Cpx3OXfTD5u/Ex9PSMROAheLhiNxbNGRSK0JYwyByJ2G3evj69tOEpEzAKBYHsc0Q5sy
-         SgclX9dhhHXPP4lyQJro943QF03BEz4bumame4W6jtPEgUDDDn3ZWikgdv70kKgJ07J7
-         GVzA==
-X-Gm-Message-State: AGi0Pual+r1BxD+bxtVyoBwn8Iyn1nJpdOUXqnQqN8FOfKP8gVk4QXP5
-        ybyZudhNvRKKSXg9EKpJMXOP4NmB14AqOpaXEHU=
-X-Google-Smtp-Source: APiQypIgHZBehfmzgUNG7kKKDwAUqACF9p4MwA22Z8SBCcH9F13FLEG7WokdYNi7vcHQOfN+jzsRBMA+wlxrDmzw6zg=
-X-Received: by 2002:a05:6e02:4c4:: with SMTP id f4mr13328981ils.278.1589216768742;
- Mon, 11 May 2020 10:06:08 -0700 (PDT)
+        with ESMTP id S1730734AbgEKRHU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 May 2020 13:07:20 -0400
+Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92009C061A0C;
+        Mon, 11 May 2020 10:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bXc6/TC/fZd2A0tKIOuFHMPLNl2BdCBVGsE8fSj7QXY=; b=28Ffg6ORBIyHGTftSfOhouhHMk
+        Tf6ecTJhdIajQ7tRRE5NmP+qKfDtEpdZqHsg1bIEjirRoF04iCG8I8WLGSm1Gw9pmxsrPQ2IdIFpY
+        VKbR0W/fH6z41vCLkx8zhHyHRWCJOsavPXoNvuHkJnV4yc7HdLXSQ2ODzRIjk6cPZb4/BzPp9tNQs
+        QWtW1PJTDA1PJFTLBCTPGXUkNSk8AxJtjyijDCBoKVBmyxwwmKP00bSlhHnUnSydU0IEKovGUGlvO
+        zJ3qYS/6jVxeMgQas8m1UMDn8FODT5RlJejjWdTV4esB8mYPiId7Zv94MjBPSXjRltpaNDKSyMpyE
+        4YST0k2A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jYBtB-00043D-UG; Mon, 11 May 2020 17:06:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D0CA4301A66;
+        Mon, 11 May 2020 19:06:46 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BCF2B29DA4B49; Mon, 11 May 2020 19:06:46 +0200 (CEST)
+Date:   Mon, 11 May 2020 19:06:46 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Joerg Roedel <jroedel@suse.de>, Joerg Roedel <joro@8bytes.org>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [RFC PATCH 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
+Message-ID: <20200511170646.GJ2957@hirez.programming.kicks-ass.net>
+References: <20200508144043.13893-1-joro@8bytes.org>
+ <CALCETrX0ubjc0Gf4hCY9RWH6cVEKF1hv3RzqToKMt9_bEXXBvw@mail.gmail.com>
+ <20200508213609.GU8135@suse.de>
+ <CALCETrVxP87o2+aaf=RLW--DSpMrs=BXSQphN6bG5Y4X+OY8GQ@mail.gmail.com>
+ <20200509175217.GV8135@suse.de>
+ <CALCETrVU-+G3K5ABBRSEMiwnskL4mZsVcoTESZXnu34J7TaOqw@mail.gmail.com>
+ <20200511074243.GE2957@hirez.programming.kicks-ass.net>
+ <CALCETrVyoAXXOqm8cYs+31fjWK8mcnKR+wM0_HeJx9=bOaZC6Q@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ac0:8d4d:0:0:0:0:0 with HTTP; Mon, 11 May 2020 10:06:08
- -0700 (PDT)
-Reply-To: lawsonamegan343@gmail.com
-From:   "Mr. Lawson Amegan." <annabelleedo36@gmail.com>
-Date:   Mon, 11 May 2020 19:06:08 +0200
-Message-ID: <CAEFP4efHO=riGmafr3psHm9TBzoc1whOzd02AtUbwCiopCCF_w@mail.gmail.com>
-Subject: Good Day..
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrVyoAXXOqm8cYs+31fjWK8mcnKR+wM0_HeJx9=bOaZC6Q@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Good Day..
+On Mon, May 11, 2020 at 08:36:31AM -0700, Andy Lutomirski wrote:
+> On Mon, May 11, 2020 at 12:42 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Sat, May 09, 2020 at 12:05:29PM -0700, Andy Lutomirski wrote:
+> >
+> > > On x86_64, the only real advantage is that the handful of corner cases
+> > > that make vmalloc faults unpleasant (mostly relating to vmap stacks)
+> > > go away.  On x86_32, a bunch of mind-bending stuff (everything your
+> > > series deletes but also almost everything your series *adds*) goes
+> > > away.  There may be a genuine tiny performance hit on 2-level systems
+> > > due to the loss of huge pages in vmalloc space, but I'm not sure I
+> > > care or that we use them anyway on these systems.  And PeterZ can stop
+> > > even thinking about RCU.
+> > >
+> > > Am I making sense?
+> >
+> > I think it'll work for x86_64 and that is really all I care about :-)
+> 
+> Sadly, I think that Joerg has convinced my that this doesn't really
+> work for 32-bit unless we rework the LDT code or drop support for
+> something that we might not want to drop support for.
 
-I contacted you earlier for an important info, kindly get back to me.
-
-Best regards,
+I was thinking keep these patches for 32bit and fix 64bit 'proper'. But
+sure, if we can get rid of it all by stripping 32bit features I'm not
+going to object either.
