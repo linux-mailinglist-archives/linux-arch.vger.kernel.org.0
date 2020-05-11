@@ -2,82 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D471C1CD31A
-	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 09:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EFB1CD326
+	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 09:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728402AbgEKHnE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 May 2020 03:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725790AbgEKHnD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 May 2020 03:43:03 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF15CC061A0C;
-        Mon, 11 May 2020 00:43:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DAesUFHs3+q5GtlegIPJlfeGWtX+Y+hxDiwu9e6F0sY=; b=kVWkXI+hLMTACOSwPqCaOyS2We
-        VFyTICdLnsGOW4GySQeVAHxa/bnE/VB27ScJS0+ibDJVEy3tQvZoSwSNXToYYtW+aLUcLjOiXW9pU
-        f41QUPV25MliC0FCocYSJnQ37unthzZT17mmsih8cG+znSLkJJzOF+BGfz25pBJEbMiyUwJhrXhjR
-        x33YDWAcnzViVhSZQb0c3gKT7+qtWLTufIlevJdS0sXlTBfbTyBpC9QPBrs7ZIX3f3A2At227q3fP
-        5k51WwJAmlHUvyM5f7JFs0pu1Tcaww4yZFrCp/ZdhnsKGAy+xCihTerrfmBqFVehwvniM7PydMxpy
-        Cc97eILA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jY35J-0007Gl-US; Mon, 11 May 2020 07:42:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 386CB303DA0;
-        Mon, 11 May 2020 09:42:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1D4392870C6C3; Mon, 11 May 2020 09:42:43 +0200 (CEST)
-Date:   Mon, 11 May 2020 09:42:43 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Joerg Roedel <jroedel@suse.de>, Joerg Roedel <joro@8bytes.org>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [RFC PATCH 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
-Message-ID: <20200511074243.GE2957@hirez.programming.kicks-ass.net>
-References: <20200508144043.13893-1-joro@8bytes.org>
- <CALCETrX0ubjc0Gf4hCY9RWH6cVEKF1hv3RzqToKMt9_bEXXBvw@mail.gmail.com>
- <20200508213609.GU8135@suse.de>
- <CALCETrVxP87o2+aaf=RLW--DSpMrs=BXSQphN6bG5Y4X+OY8GQ@mail.gmail.com>
- <20200509175217.GV8135@suse.de>
- <CALCETrVU-+G3K5ABBRSEMiwnskL4mZsVcoTESZXnu34J7TaOqw@mail.gmail.com>
+        id S1727927AbgEKHqa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 May 2020 03:46:30 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:46070 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725790AbgEKHqa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 May 2020 03:46:30 -0400
+Received: by mail-oi1-f195.google.com with SMTP id k133so14121675oih.12;
+        Mon, 11 May 2020 00:46:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2yJ6ElOmiCSyE9da4JBaYJBkgTCIAd7AfbCRMY3E6sk=;
+        b=CYgJuZ4uypKOO7akrvDzrgeG0+luXAu1rsayCe7ORe03spcvQoouZAZ/hHAgv7GsLE
+         VBazfrnHjJcMVRdaOELsqm3jifzqBc8lUnUEFayOlgAknCldcC1ptX79Yvo64k9WqowY
+         DIc8WbEKalmQp5v18VAIrdinyB9NKhcWzoR/I2fAE0ULy6jb/jDSlCDAkqaa/vTOXUsY
+         HlZUNUqhUIuq9h6+ICTMpW7lFA8IbDXh8NhdQOw+JSu7a+iMVmLrb5PEFFDz9PXFheTb
+         70/4Fo3h7g18VpCdhUNkflqBUShF4Gw4uRQiJ4Eqnn0LRKkYxREciR1our9j17AZqlg3
+         +zOw==
+X-Gm-Message-State: AGi0PuZ8VV4gxFIxHnJJ1huBFN2IEXztT1MSIbYFPCT5oknAUEs9XMep
+        PEx9CL1Fz1d8zXffLbr0uRFi2VBGyhjapyPxuJk=
+X-Google-Smtp-Source: APiQypIoFxa7a3EUthZ/8xx0aZ//Vc0pDLpqFY6DB0zkXv6WP4wkoKn8ne3ghzK30RcpwYDHtmi30TMFV3MiIELEMLg=
+X-Received: by 2002:aca:895:: with SMTP id 143mr18042949oii.153.1589183188927;
+ Mon, 11 May 2020 00:46:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALCETrVU-+G3K5ABBRSEMiwnskL4mZsVcoTESZXnu34J7TaOqw@mail.gmail.com>
+References: <20200510075510.987823-1-hch@lst.de>
+In-Reply-To: <20200510075510.987823-1-hch@lst.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 11 May 2020 09:46:17 +0200
+Message-ID: <CAMuHMdXazsBw0mjJd0uFHQud7qbb5-Uw-PTDB3+-M=huRWOfgQ@mail.gmail.com>
+Subject: Re: sort out the flush_icache_range mess
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Roman Zippel <zippel@linux-m68k.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Michal Simek <monstr@monstr.eu>,
+        Jessica Yu <jeyu@kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-c6x-dev@linux-c6x.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-riscv@lists.infradead.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, May 09, 2020 at 12:05:29PM -0700, Andy Lutomirski wrote:
+Hi Christoph,
 
-> On x86_64, the only real advantage is that the handful of corner cases
-> that make vmalloc faults unpleasant (mostly relating to vmap stacks)
-> go away.  On x86_32, a bunch of mind-bending stuff (everything your
-> series deletes but also almost everything your series *adds*) goes
-> away.  There may be a genuine tiny performance hit on 2-level systems
-> due to the loss of huge pages in vmalloc space, but I'm not sure I
-> care or that we use them anyway on these systems.  And PeterZ can stop
-> even thinking about RCU.
-> 
-> Am I making sense?
+On Sun, May 10, 2020 at 9:55 AM Christoph Hellwig <hch@lst.de> wrote:
+> none of which really are used by a typical MMU enabled kernel, as a.out can
+> only be build for alpha and m68k to start with.
 
-I think it'll work for x86_64 and that is really all I care about :-)
+Quoting myself:
+"I think it's safe to assume no one still runs a.out binaries on m68k."
+http://lore.kernel.org/r/CAMuHMdW+m0Q+j3rsQdMXnrEPm+XB5Y2AQrxW5sD1mZAKgmEqoA@mail.gmail.com
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
