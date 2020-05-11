@@ -2,107 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 310DA1CD6FA
-	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 13:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951E51CD9A4
+	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 14:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729564AbgEKLAZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 May 2020 07:00:25 -0400
-Received: from foss.arm.com ([217.140.110.172]:56316 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729086AbgEKLAZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 11 May 2020 07:00:25 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4AD751FB;
-        Mon, 11 May 2020 04:00:24 -0700 (PDT)
-Received: from gaia (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DFC143F305;
-        Mon, 11 May 2020 04:00:20 -0700 (PDT)
-Date:   Mon, 11 May 2020 12:00:14 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, james.morse@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Roman Zippel <zippel@linux-m68k.org>,
-        Jessica Yu <jeyu@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-c6x-dev@linux-c6x.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 02/31] arm64: fix the flush_icache_range arguments in
- machine_kexec
-Message-ID: <20200511110014.GA19176@gaia>
-References: <20200510075510.987823-1-hch@lst.de>
- <20200510075510.987823-3-hch@lst.de>
- <20200511075115.GA16134@willie-the-truck>
+        id S1729812AbgEKMZv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 May 2020 08:25:51 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4389 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729763AbgEKMZs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 11 May 2020 08:25:48 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 009F7FA603E696F8AFB2;
+        Mon, 11 May 2020 20:25:43 +0800 (CST)
+Received: from [127.0.0.1] (10.173.220.25) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Mon, 11 May 2020
+ 20:25:32 +0800
+Subject: Re: [RFC PATCH v3 1/2] arm64: tlb: Detect the ARMv8.4 TLBI RANGE
+ feature
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     <will@kernel.org>, <catalin.marinas@arm.com>,
+        <suzuki.poulose@arm.com>, <maz@kernel.org>, <steven.price@arm.com>,
+        <guohanjun@huawei.com>, <olof@lixom.net>,
+        <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xiexiangyou@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linux-mm@kvack.org>, <arm@kernel.org>, <prime.zeng@hisilicon.com>,
+        <kuhn.chenqun@huawei.com>, <linux-arm-kernel@lists.infradead.org>
+References: <20200414112835.1121-1-yezhenyu2@huawei.com>
+ <20200414112835.1121-2-yezhenyu2@huawei.com>
+ <20200505101405.GB82424@C02TD0UTHF1T.local>
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+Message-ID: <cb9d32b6-a9d8-3737-e69d-df4191b7afa9@huawei.com>
+Date:   Mon, 11 May 2020 20:25:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200511075115.GA16134@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200505101405.GB82424@C02TD0UTHF1T.local>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.173.220.25]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 11, 2020 at 08:51:15AM +0100, Will Deacon wrote:
-> On Sun, May 10, 2020 at 09:54:41AM +0200, Christoph Hellwig wrote:
-> > The second argument is the end "pointer", not the length.
-> > 
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > ---
-> >  arch/arm64/kernel/machine_kexec.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
-> > index 8e9c924423b4e..a0b144cfaea71 100644
-> > --- a/arch/arm64/kernel/machine_kexec.c
-> > +++ b/arch/arm64/kernel/machine_kexec.c
-> > @@ -177,6 +177,7 @@ void machine_kexec(struct kimage *kimage)
-> >  	 * the offline CPUs. Therefore, we must use the __* variant here.
-> >  	 */
-> >  	__flush_icache_range((uintptr_t)reboot_code_buffer,
-> > +			     (uintptr_t)reboot_code_buffer +
-> >  			     arm64_relocate_new_kernel_size);
+On 2020/5/5 18:14, Mark Rutland wrote:
+> On Tue, Apr 14, 2020 at 07:28:34PM +0800, Zhenyu Ye wrote:
+>> ARMv8.4-TLBI provides TLBI invalidation instruction that apply to a
+>> range of input addresses. This patch detect this feature.
+>>
+>> Signed-off-by: Zhenyu Ye <yezhenyu2@huawei.com>
+>> ---
+>>  arch/arm64/include/asm/cpucaps.h |  3 ++-
+>>  arch/arm64/include/asm/sysreg.h  |  4 ++++
+>>  arch/arm64/kernel/cpufeature.c   | 11 +++++++++++
+>>  3 files changed, 17 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
+>> index 8eb5a088ae65..950095a72617 100644
+>> --- a/arch/arm64/include/asm/cpucaps.h
+>> +++ b/arch/arm64/include/asm/cpucaps.h
+>> @@ -61,7 +61,8 @@
+>>  #define ARM64_HAS_AMU_EXTN			51
+>>  #define ARM64_HAS_ADDRESS_AUTH			52
+>>  #define ARM64_HAS_GENERIC_AUTH			53
+>> +#define ARM64_HAS_TLBI_RANGE			54
+>>  
+>> -#define ARM64_NCAPS				54
+>> +#define ARM64_NCAPS				55
+>>  
+>>  #endif /* __ASM_CPUCAPS_H */
+>> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+>> index ebc622432831..ac1b98650234 100644
+>> --- a/arch/arm64/include/asm/sysreg.h
+>> +++ b/arch/arm64/include/asm/sysreg.h
+>> @@ -592,6 +592,7 @@
+>>  
+>>  /* id_aa64isar0 */
+>>  #define ID_AA64ISAR0_RNDR_SHIFT		60
+>> +#define ID_AA64ISAR0_TLBI_RANGE_SHIFT	56
+>>  #define ID_AA64ISAR0_TS_SHIFT		52
+>>  #define ID_AA64ISAR0_FHM_SHIFT		48
+>>  #define ID_AA64ISAR0_DP_SHIFT		44
+>> @@ -605,6 +606,9 @@
+>>  #define ID_AA64ISAR0_SHA1_SHIFT		8
+>>  #define ID_AA64ISAR0_AES_SHIFT		4
+>>  
+>> +#define ID_AA64ISAR0_TLBI_RANGE_NI	0x0
+>> +#define ID_AA64ISAR0_TLBI_RANGE		0x2
+>> +
+>>  /* id_aa64isar1 */
+>>  #define ID_AA64ISAR1_I8MM_SHIFT		52
+>>  #define ID_AA64ISAR1_DGH_SHIFT		48
+>> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+>> index 9fac745aa7bb..31bcfd0722b5 100644
+>> --- a/arch/arm64/kernel/cpufeature.c
+>> +++ b/arch/arm64/kernel/cpufeature.c
+>> @@ -124,6 +124,7 @@ static bool __system_matches_cap(unsigned int n);
+>>   */
+>>  static const struct arm64_ftr_bits ftr_id_aa64isar0[] = {
+>>  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_RNDR_SHIFT, 4, 0),
+>> +	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_TLBI_RANGE_SHIFT, 4, 0),
 > 
-> Urgh, well spotted. It's annoyingly different from __flush_dcache_area().
+> This should be FTR_HIDDEN as userspace has no reason to see this.
 > 
-> But now I'm wondering what this code actually does... the loop condition
-> in invalidate_icache_by_line works with 64-bit arithmetic, so we could
-> spend a /very/ long time here afaict.
+> Otherwise this all seems to match the ARM ARM.
+> 
+> Mark.
+> 
 
-I think it goes through the loop only once. The 'b.lo' saves us here.
-OTOH, there is no I-cache maintenance done.
+OK, I will change it to FTR_HIDDEN in next version series.
 
-> It's also a bit annoying that we do a bunch of redundant D-cache
-> maintenance too. Should we use invalidate_icache_range() here instead?
+Thanks,
+Zhenyu
 
-Since we have the __flush_dcache_area() above it for cleaning to PoC, we
-could use invalidate_icache_range() here. We probably didn't have this
-function at the time, it was added for KVM (commit 4fee94736603cd6).
 
-> (and why does that thing need to toggle uaccess)?
-
-invalidate_icache_range() doesn't need to, it works on the kernel linear
-map.
-
-__flush_icache_range() doesn't need to either, that's a side-effect of
-the fall-through implementation.
-
-Anyway, I think Christoph's patch needs to go in with a fixes tag:
-
-Fixes: d28f6df1305a ("arm64/kexec: Add core kexec support")
-Cc: <stable@vger.kernel.org> # 4.8.x-
-
-and we'll change these functions/helpers going forward for arm64.
-
-Happy to pick this up via the arm64 for-next/fixes branch.
-
--- 
-Catalin
