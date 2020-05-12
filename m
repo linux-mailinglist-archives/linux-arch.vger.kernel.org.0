@@ -2,68 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAFE1CE7C9
-	for <lists+linux-arch@lfdr.de>; Mon, 11 May 2020 23:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED321CF79C
+	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 16:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725860AbgEKVyb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 May 2020 17:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727930AbgEKVya (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 11 May 2020 17:54:30 -0400
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ad])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9E5C061A0E
-        for <linux-arch@vger.kernel.org>; Mon, 11 May 2020 14:54:29 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49LZTY342WzlhGkQ;
-        Mon, 11 May 2020 23:54:25 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49LZTW6g0pzlhpJn;
-        Mon, 11 May 2020 23:54:23 +0200 (CEST)
-Subject: Re: [PATCH v17 00/10] Landlock LSM
-To:     linux-kernel@vger.kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
+        id S1730211AbgELOpM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 May 2020 10:45:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35970 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726055AbgELOpM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 12 May 2020 10:45:12 -0400
+Received: from [10.44.0.192] (unknown [103.48.210.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E64CB206A3;
+        Tue, 12 May 2020 14:45:03 +0000 (UTC)
+Subject: Re: [PATCH 16/31] m68knommu: use asm-generic/cacheflush.h
+To:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-References: <20200511192156.1618284-1-mic@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <91cab792-5a13-c71f-a8cb-782be21d86f5@digikod.net>
-Date:   Mon, 11 May 2020 23:54:23 +0200
-User-Agent: 
+        Roman Zippel <zippel@linux-m68k.org>
+Cc:     Jessica Yu <jeyu@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-c6x-dev@linux-c6x.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-fsdevel@vger.kernel.org
+References: <20200510075510.987823-1-hch@lst.de>
+ <20200510075510.987823-17-hch@lst.de>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+Message-ID: <fb98853b-c02a-a682-443e-2ae62d0502d9@linux-m68k.org>
+Date:   Wed, 13 May 2020 00:44:59 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200511192156.1618284-1-mic@digikod.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+In-Reply-To: <20200510075510.987823-17-hch@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Christoph,
 
-On 11/05/2020 21:21, Mickaël Salaün wrote:
-> Hi,
+On 10/5/20 5:54 pm, Christoph Hellwig wrote:
+> m68knommu needs almost no cache flushing routines of its own.  Rely on
+> asm-generic/cacheflush.h for the defaults.
 > 
-> This new patch series brings some improvements and add new tests:
-> 
-> Use smaller userspace structures (attributes) to save space, and check
-> at built time that every attribute don't contain hole and are 8-bits
-> aligned.
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-8-bytes aligned, of course.
+Acked-by: Greg Ungerer <gerg@linux-m68k.org>
+
+Regards
+Greg
+
+
+> ---
+>   arch/m68k/include/asm/cacheflush_no.h | 19 ++-----------------
+>   1 file changed, 2 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/m68k/include/asm/cacheflush_no.h b/arch/m68k/include/asm/cacheflush_no.h
+> index 11e9a9dcbfb24..2731f07e7be8c 100644
+> --- a/arch/m68k/include/asm/cacheflush_no.h
+> +++ b/arch/m68k/include/asm/cacheflush_no.h
+> @@ -9,25 +9,8 @@
+>   #include <asm/mcfsim.h>
+>   
+>   #define flush_cache_all()			__flush_cache_all()
+> -#define flush_cache_mm(mm)			do { } while (0)
+> -#define flush_cache_dup_mm(mm)			do { } while (0)
+> -#define flush_cache_range(vma, start, end)	do { } while (0)
+> -#define flush_cache_page(vma, vmaddr)		do { } while (0)
+>   #define flush_dcache_range(start, len)		__flush_dcache_all()
+> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
+> -#define flush_dcache_page(page)			do { } while (0)
+> -#define flush_dcache_mmap_lock(mapping)		do { } while (0)
+> -#define flush_dcache_mmap_unlock(mapping)	do { } while (0)
+>   #define flush_icache_range(start, len)		__flush_icache_all()
+> -#define flush_icache_page(vma,pg)		do { } while (0)
+> -#define flush_icache_user_range(vma,pg,adr,len)	do { } while (0)
+> -#define flush_cache_vmap(start, end)		do { } while (0)
+> -#define flush_cache_vunmap(start, end)		do { } while (0)
+> -
+> -#define copy_to_user_page(vma, page, vaddr, dst, src, len) \
+> -	memcpy(dst, src, len)
+> -#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
+> -	memcpy(dst, src, len)
+>   
+>   void mcf_cache_push(void);
+>   
+> @@ -98,4 +81,6 @@ static inline void cache_clear(unsigned long paddr, int len)
+>   	__clear_cache_all();
+>   }
+>   
+> +#include <asm-generic/cacheflush.h>
+> +
+>   #endif /* _M68KNOMMU_CACHEFLUSH_H */
+> 
