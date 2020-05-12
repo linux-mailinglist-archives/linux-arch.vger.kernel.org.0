@@ -2,141 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4861CFAF8
-	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 18:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4052B1CFB0E
+	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 18:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728186AbgELQiA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 May 2020 12:38:00 -0400
-Received: from foss.arm.com ([217.140.110.172]:58262 "EHLO foss.arm.com"
+        id S1726324AbgELQlH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 May 2020 12:41:07 -0400
+Received: from mga05.intel.com ([192.55.52.43]:39793 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726367AbgELQiA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 12 May 2020 12:38:00 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C23D1FB;
-        Tue, 12 May 2020 09:37:59 -0700 (PDT)
-Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5B7423F305;
-        Tue, 12 May 2020 09:37:58 -0700 (PDT)
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     mtk.manpages@gmail.com
+        id S1725987AbgELQlF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 12 May 2020 12:41:05 -0400
+IronPort-SDR: c3LzygBB1Qd9rmbZBrAHAOxp38vHyac1xSSXnSHhugpgPZAc+n6vjbNECGUImwnzMQ6gsP+sor
+ 9Yi19PbSd+mQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 09:41:05 -0700
+IronPort-SDR: MxcIZZ+SGh1yrByn6k4lXr3e/NGTMvLOcoT7ghVRAwiPTGiCnLEQJEYRI3UlBz4b0Bk4pGzy3D
+ Fk5kxm7DVxWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,384,1583222400"; 
+   d="scan'208";a="265564222"
+Received: from vmrsic-mobl.amr.corp.intel.com (HELO [10.255.229.212]) ([10.255.229.212])
+  by orsmga006.jf.intel.com with ESMTP; 12 May 2020 09:41:05 -0700
+Subject: Re: [PATCH 07/14] prctl.2: Document removal of Intel MPX prctls
+To:     Dave Martin <Dave.Martin@arm.com>, mtk.manpages@gmail.com
 Cc:     linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH 14/14] prctl.2: Add PR_PAC_RESET_KEYS (arm64)
-Date:   Tue, 12 May 2020 17:36:59 +0100
-Message-Id: <1589301419-24459-15-git-send-email-Dave.Martin@arm.com>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
 References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
+ <1589301419-24459-8-git-send-email-Dave.Martin@arm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <a1d1460f-cc18-342e-1c60-af593ed7a5c1@intel.com>
+Date:   Tue, 12 May 2020 09:41:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <1589301419-24459-8-git-send-email-Dave.Martin@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add documentation for the PR_PAC_RESET_KEYS ioctl added in Linux
-5.0 for arm64.
+On 5/12/20 9:36 AM, Dave Martin wrote:
+> The Intel MPX API was removed from Linux 5.4.  See Linux
+> commit f240652b6032 ("x86/mpx: Remove MPX APIs")
+> 
+> Document this change.
 
-Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Amit Daniel Kachhap <amit.kachhap@arm.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
+Thanks for doing this!
 
----
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 
-Note that the comment about PR_PAC_RESET_KEYS(0) being the recommended
-way to set up a fresh execution context is not present in the existing
-kernel documentation.
-
-I vaguely remember some discussion to this effect; in any case, it seems
-sensible, given that there must have been _some_ rationale for this
-feature...  Shout if it sounds wrong!
----
- man2/prctl.2 | 61 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
-
-diff --git a/man2/prctl.2 b/man2/prctl.2
-index dd16227..7ea60e2 100644
---- a/man2/prctl.2
-+++ b/man2/prctl.2
-@@ -950,6 +950,46 @@ behavior.
- A value of 1 indicates
- .BR execve (2)
- will operate in the privilege-restricting mode described above.
-+.\" prctl PR_PAC_RESET_KEYS
-+.\" commit ba830885656414101b2f8ca88786524d4bb5e8c1
-+.TP
-+.BR PR_PAC_RESET_KEYS " (since Linux 5.0, only on arm64)"
-+Securely reset the thread's pointer authentication keys
-+to fresh random values generated by the kernel.
-+.IP
-+The set of keys to be reset is specified by
-+.IR arg2 ,
-+which must be a logical OR of zero or more of the following:
-+.RS
-+.TP
-+.B PR_PAC_APIAKEY
-+instruction authentication key A
-+.TP
-+.B PR_PAC_APIBKEY
-+instruction authentication key B
-+.TP
-+.B PR_PAC_APDAKEY
-+data authentication key A
-+.TP
-+.B PR_PAC_APDBKEY
-+data authentication key B
-+.TP
-+.B PR_PAC_APGAKEY
-+generic authentication \(lqA\(rq key.
-+.IP
-+(Yes folks, there really is no generic B key.)
-+.RE
-+.IP
-+As a special case, if
-+.I arg2
-+is zero then all the keys are reset.
-+Since new keys could be added in future,
-+this is the recommended way to completely wipe the existing keys
-+when creating a new execution context.
-+.IP
-+The remaining arguments
-+.IR arg3 ", " arg4 " and " arg5
-+must all be zero.
- .\" prctl PR_SET_PDEATHSIG
- .TP
- .BR PR_SET_PDEATHSIG " (since Linux 2.1.57)"
-@@ -1920,6 +1960,27 @@ are not 0.
- .B EINVAL
- .I option
- was
-+.B PR_PAC_RESET_KEYS
-+and
-+.I arg2
-+contains non-zero bits other than
-+.BR
-+.BR PR_PAC_APIAKEY ,
-+.BR PR_PAC_APIBKEY ,
-+.BR PR_PAC_APDAKEY ,
-+.B PR_PAC_APDBKEY
-+and
-+.BR PR_PAC_APGAKEY ;
-+or
-+.IR arg3 ,
-+.I arg4
-+and
-+.I arg5
-+were not all zero.
-+.TP
-+.B EINVAL
-+.I option
-+was
- .B PR_SVE_SET_VL
- and
- .I arg2
--- 
-2.1.4
 
