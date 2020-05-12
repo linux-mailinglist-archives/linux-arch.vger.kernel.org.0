@@ -2,123 +2,177 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A63D01CFDF5
-	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 21:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927481D02B2
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 01:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbgELTFY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 May 2020 15:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
+        id S1731622AbgELXAb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 May 2020 19:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbgELTFY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 May 2020 15:05:24 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF171C061A0C
-        for <linux-arch@vger.kernel.org>; Tue, 12 May 2020 12:05:22 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id i14so13684164qka.10
-        for <linux-arch@vger.kernel.org>; Tue, 12 May 2020 12:05:22 -0700 (PDT)
+        with ESMTP id S1731570AbgELXAa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 May 2020 19:00:30 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35700C061A0E
+        for <linux-arch@vger.kernel.org>; Tue, 12 May 2020 16:00:29 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id k19so6041888pll.9
+        for <linux-arch@vger.kernel.org>; Tue, 12 May 2020 16:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=UI6RUzLO2uiSdCmhyivddJoxgBl/MIl48jarD2peWbs=;
-        b=BFbHfn98jaGHpu9xzKX+MtSFyYJFBTaHBIt7T3i12X1xzHaO5DG2IOXYytD8A4j/sw
-         ZWOt9i4uHd+XqVOA3HUuDyzhDJX9f7OyFa+vVlb1q6Ash9xC5BH7HlmvAknlXIA7lzOy
-         OpgAPF1IrwiU/Vi1mMHFLAKYu8i14mADsufWBrahExAGByxA5spM9Pv1JP+avyL7l6rp
-         3zm0ZFvv4IpTowGzjbA4uZr0c40u+sI6Al+xrDdK1zOR9rP/S20AraDtbbmyvUxqMGGf
-         uZW7bE3JEfI0KzON5dj6KzECbXQNMvGXckvIhxfViSlgPu02tRufwwLmy8advGwvP+E5
-         6Tqw==
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TxR+iMR41NNC8Tp0Yh5G0J9anaHo/y+mAo5OJ6FnE3w=;
+        b=YV0IEXO5IABYUMUtMWw6Y0a2xNZhYt4iDNMNdBJAdhkLz+DhDJrEb2/tely+kMRfBe
+         elzT7mfwntttCi0+nBJzpxqW1RzbdA4k2z5m0sbPhXbgm86NhUGJ6ezv1UWvqUAF6AFb
+         GwYEyZnEpPlXtS0AdB1oOMIXhoSzH1oQ3QYdKyFvf7rV9a0F5474HoxquQdEEcVsoVZk
+         mkFDvy/LaDlTuj+uY+/sZnyRH+3w/Rut2ArIzwHPIrhPI856FrWtiOC99MOqCPnAlAt1
+         y5de0EiQgDBn8VhocdW7T7X+feJnXd114pzMo7qEMcn1qfbF3zf4gbB8O6Pkx7p0q4QB
+         ZmJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UI6RUzLO2uiSdCmhyivddJoxgBl/MIl48jarD2peWbs=;
-        b=R4xXMZk0KKiwIOeBhB5+qgzi44r4Xy4G8pDE2OZOmXpZTnAmvWfXYjGLE2LTN0yvOj
-         1Llayk0D5NjKP9IsAYwb1AMX4AedFVUQdCU/UDn4GoricKp3yRQuwIHp1kOqcUS3Dl9M
-         chXqWvlsc7xyTPlZjSzXob3kEV9vBaqbyhaq33yPyvCf4RKajwRReRSCN1tpFqr7nK5H
-         QAFrsI+ugxWAK6vEvlrOPITbz0GWlxxs9Oc9JpiHZLFTZYH/bbzL+VlFccnnLXQbPr7c
-         ZfjQpWQFPe0rqtgFchvvWoGyvUZMRnuSY0Fk5iwBEPq+wO3u/OS7LGiJG7RyQZil6w/q
-         uGGw==
-X-Gm-Message-State: AGi0PuaJJDTLvvxXI+uqCk8YpuogR90kXT0KklVyY/6sryxKlTMr+XxX
-        KKQEVqZFD9oL0tRBghaqQW6LsA==
-X-Google-Smtp-Source: APiQypI4CZtjCar/kgfGa4Bfbol01l3EXMP1gUNn0S19TRhpzZu5I+980B7SFbBcj15iChRZHQHcWg==
-X-Received: by 2002:a05:620a:624:: with SMTP id 4mr22287532qkv.86.1589310321938;
-        Tue, 12 May 2020 12:05:21 -0700 (PDT)
-Received: from [192.168.0.185] ([191.34.158.63])
-        by smtp.gmail.com with ESMTPSA id k3sm1025697qkb.112.2020.05.12.12.05.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2020 12:05:20 -0700 (PDT)
-Subject: Re: [PATCH v3 19/23] arm64: mte: Add PTRACE_{PEEK,POKE}MTETAGS
- support
-To:     Catalin Marinas <catalin.marinas@arm.com>,
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=TxR+iMR41NNC8Tp0Yh5G0J9anaHo/y+mAo5OJ6FnE3w=;
+        b=qg6KUZxGdKpHLxvGX+6bSzuCVsuz/h8q6ephKayW3u6x4Fx79Rrx+aysx7cH1a8J17
+         jbLrvyHvif/WPMerrgwthMjewKQ1TK9s7yLgjbBxulkNaQ3Zx7lLMYWzh2gaF5ezJjjA
+         hMd5zPX2U6uWDEeqjYfxrJFfgDYkRFxoZ54Bcg1cHzr0IOb04wFOadO5wN7f6d7CV5mb
+         CMstP93oSoUn5MBD2AcZ8Q80DAxZefkNmFkGuhSgDLb22qZTwMbTrD6ICXYj5bVcNDnL
+         M9DwqVEAZifppAECKuTmuf0SzTAW2/lIJ8FoZcMcO1gpQH2qsPj5Kh6tWyCl/ylBOJHo
+         go0g==
+X-Gm-Message-State: AGi0PubVs7zsjqyx4Tu9ROyEttph0DEUPT5DmLj0R0LdKkB/WPMf60/N
+        JcE0zLF3daP5e/Fs/BUVdo3vRA==
+X-Google-Smtp-Source: APiQypKPbiNIuzOhnfWZK3aSuAimZ6kMvjtjoB3PUVWkLgrXCsrrvonJs2vHPqxiHQA1YoMJYuJ02Q==
+X-Received: by 2002:a17:90a:2281:: with SMTP id s1mr31687737pjc.68.1589324428530;
+        Tue, 12 May 2020 16:00:28 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id w143sm12602170pfc.165.2020.05.12.16.00.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 16:00:26 -0700 (PDT)
+Date:   Tue, 12 May 2020 16:00:26 -0700 (PDT)
+X-Google-Original-Date: Tue, 12 May 2020 15:59:50 PDT (-0700)
+Subject:     Re: [PATCH 19/31] riscv: use asm-generic/cacheflush.h
+In-Reply-To: <20200510075510.987823-20-hch@lst.de>
+CC:     akpm@linux-foundation.org, Arnd Bergmann <arnd@arndb.de>,
+        zippel@linux-m68k.org, linux-arch@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, monstr@monstr.eu, jeyu@kernel.org,
+        linux-ia64@vger.kernel.org, linux-c6x-dev@linux-c6x.org,
+        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        x86@kernel.org, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
+        openrisc@lists.librecores.org, linux-alpha@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org
-Cc:     Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Alan Hayward <Alan.Hayward@arm.com>,
-        Omair Javaid <omair.javaid@linaro.org>
-References: <20200421142603.3894-1-catalin.marinas@arm.com>
- <20200421142603.3894-20-catalin.marinas@arm.com>
-From:   Luis Machado <luis.machado@linaro.org>
-Message-ID: <a7569985-eb85-497b-e3b2-5dce0acb1332@linaro.org>
-Date:   Tue, 12 May 2020 16:05:15 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200421142603.3894-20-catalin.marinas@arm.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Christoph Hellwig <hch@lst.de>
+Message-ID: <mhng-8adbedbc-0f91-4291-9471-2df5eb7b802b@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Catalin,
-
-On 4/21/20 11:25 AM, Catalin Marinas wrote:
-> Add support for bulk setting/getting of the MTE tags in a tracee's
-> address space at 'addr' in the ptrace() syscall prototype. 'data' points
-> to a struct iovec in the tracer's address space with iov_base
-> representing the address of a tracer's buffer of length iov_len. The
-> tags to be copied to/from the tracer's buffer are stored as one tag per
-> byte.
-> 
-> On successfully copying at least one tag, ptrace() returns 0 and updates
-> the tracer's iov_len with the number of tags copied. In case of error,
-> either -EIO or -EFAULT is returned, trying to follow the ptrace() man
-> page.
-> 
-> Note that the tag copying functions are not performance critical,
-> therefore they lack optimisations found in typical memory copy routines.
-> 
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Alan Hayward <Alan.Hayward@arm.com>
-> Cc: Luis Machado <luis.machado@linaro.org>
-> Cc: Omair Javaid <omair.javaid@linaro.org>
-> ---
-> 
-> Notes:
->      New in v3.
-> 
->   arch/arm64/include/asm/mte.h         |  17 ++++
->   arch/arm64/include/uapi/asm/ptrace.h |   3 +
->   arch/arm64/kernel/mte.c              | 127 +++++++++++++++++++++++++++
->   arch/arm64/kernel/ptrace.c           |  15 +++-
->   arch/arm64/lib/mte.S                 |  50 +++++++++++
->   5 files changed, 211 insertions(+), 1 deletion(-)
+On Sun, 10 May 2020 00:54:58 PDT (-0700), Christoph Hellwig wrote:
+> RISC-V needs almost no cache flushing routines of its own.  Rely on
+> asm-generic/cacheflush.h for the defaults.
 >
-I started working on MTE support for GDB and I'm wondering if we've 
-already defined a way to check for runtime MTE support (as opposed to a 
-HWCAP2-based check) in a traced process.
+> Also remove the pointless __KERNEL__ ifdef while we're at it.
+> ---
+>  arch/riscv/include/asm/cacheflush.h | 62 ++---------------------------
+>  1 file changed, 3 insertions(+), 59 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+> index c8677c75f82cb..a167b4fbdf007 100644
+> --- a/arch/riscv/include/asm/cacheflush.h
+> +++ b/arch/riscv/include/asm/cacheflush.h
+> @@ -8,65 +8,6 @@
+>
+>  #include <linux/mm.h>
+>
+> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
+> -
+> -/*
+> - * The cache doesn't need to be flushed when TLB entries change when
+> - * the cache is mapped to physical memory, not virtual memory
+> - */
+> -static inline void flush_cache_all(void)
+> -{
+> -}
+> -
+> -static inline void flush_cache_mm(struct mm_struct *mm)
+> -{
+> -}
+> -
+> -static inline void flush_cache_dup_mm(struct mm_struct *mm)
+> -{
+> -}
+> -
+> -static inline void flush_cache_range(struct vm_area_struct *vma,
+> -				     unsigned long start,
+> -				     unsigned long end)
+> -{
+> -}
+> -
+> -static inline void flush_cache_page(struct vm_area_struct *vma,
+> -				    unsigned long vmaddr,
+> -				    unsigned long pfn)
+> -{
+> -}
+> -
+> -static inline void flush_dcache_mmap_lock(struct address_space *mapping)
+> -{
+> -}
+> -
+> -static inline void flush_dcache_mmap_unlock(struct address_space *mapping)
+> -{
+> -}
+> -
+> -static inline void flush_icache_page(struct vm_area_struct *vma,
+> -				     struct page *page)
+> -{
+> -}
+> -
+> -static inline void flush_cache_vmap(unsigned long start, unsigned long end)
+> -{
+> -}
+> -
+> -static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
+> -{
+> -}
+> -
+> -#define copy_to_user_page(vma, page, vaddr, dst, src, len) \
+> -	do { \
+> -		memcpy(dst, src, len); \
+> -		flush_icache_user_range(vma, page, vaddr, len); \
+> -	} while (0)
+> -#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
+> -	memcpy(dst, src, len)
+> -
+>  static inline void local_flush_icache_all(void)
+>  {
+>  	asm volatile ("fence.i" ::: "memory");
+> @@ -79,6 +20,7 @@ static inline void flush_dcache_page(struct page *page)
+>  	if (test_bit(PG_dcache_clean, &page->flags))
+>  		clear_bit(PG_dcache_clean, &page->flags);
+>  }
+> +#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+>
+>  /*
+>   * RISC-V doesn't have an instruction to flush parts of the instruction cache,
+> @@ -105,4 +47,6 @@ void flush_icache_mm(struct mm_struct *mm, bool local);
+>  #define SYS_RISCV_FLUSH_ICACHE_LOCAL 1UL
+>  #define SYS_RISCV_FLUSH_ICACHE_ALL   (SYS_RISCV_FLUSH_ICACHE_LOCAL)
+>
+> +#include <asm-generic/cacheflush.h>
+> +
+>  #endif /* _ASM_RISCV_CACHEFLUSH_H */
 
-Originally we were going to do it via empty-parameter ptrace calls, but 
-you had mentioned something about a proc-based method, if I'm not mistaken.
+Thanks!
 
-Regards,
-Luis
+Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+
+Were you trying to get these all in at once, or do you want me to take it into
+my tree?
