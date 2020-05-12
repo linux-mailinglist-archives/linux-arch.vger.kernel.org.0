@@ -2,82 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 595621CF7B4
-	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 16:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD201CF842
+	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 17:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730211AbgELOrH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 May 2020 10:47:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36974 "EHLO mail.kernel.org"
+        id S1730014AbgELPCz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 May 2020 11:02:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46198 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727099AbgELOrH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 12 May 2020 10:47:07 -0400
-Received: from [10.44.0.192] (unknown [103.48.210.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5779E206A3;
-        Tue, 12 May 2020 14:46:58 +0000 (UTC)
-Subject: Re: [PATCH 29/31] binfmt_flat: use flush_icache_user_range
-To:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S1725929AbgELPCy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 12 May 2020 11:02:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 95DD1AB64;
+        Tue, 12 May 2020 15:02:55 +0000 (UTC)
+Date:   Tue, 12 May 2020 17:02:50 +0200
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Andy Lutomirski <luto@amacapital.net>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Arnd Bergmann <arnd@arndb.de>,
-        Roman Zippel <zippel@linux-m68k.org>
-Cc:     Jessica Yu <jeyu@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-c6x-dev@linux-c6x.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-fsdevel@vger.kernel.org
-References: <20200510075510.987823-1-hch@lst.de>
- <20200510075510.987823-30-hch@lst.de>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-Message-ID: <484af2c0-2450-b40a-8322-e691495c45aa@linux-m68k.org>
-Date:   Wed, 13 May 2020 00:46:55 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [RFC PATCH 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
+Message-ID: <20200512150250.GC8135@suse.de>
+References: <20200511191414.GY8135@suse.de>
+ <8D6745B7-0EC2-4FCC-B6FC-E7E1557EB18E@amacapital.net>
 MIME-Version: 1.0
-In-Reply-To: <20200510075510.987823-30-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8D6745B7-0EC2-4FCC-B6FC-E7E1557EB18E@amacapital.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Christoph,
+On Mon, May 11, 2020 at 12:36:19PM -0700, Andy Lutomirski wrote:
+> I’m guessing the right solution is either your series or your series
+> plus preallocation on 64-bit. I’m just grumpy about it...
 
-On 10/5/20 5:55 pm, Christoph Hellwig wrote:
-> load_flat_file works on user addresses.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+Okay, so we can do the pre-allocation when it turns out the pgd_list
+lock-times become a problem on x86-64. The tracking code in vmalloc.c is
+needed anyway for 32-bit and there is no reason why 64-bit shouldn't use
+it as well for now.
+I don't think that taking the lock _will_ be a problem, as it is only
+taken when a new PGD/P4D entry is populated. And it is pretty unlikely
+that a system will populate all 64 of them, with 4-level paging each of
+these entries will map 512GB of address space. But if I am wrong here
+pre-allocating is still an option.
 
-Acked-by: Greg Ungerer <gerg@linux-m68k.org>
 
-Regards
-Greg
-
-
-
-> ---
->   fs/binfmt_flat.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/binfmt_flat.c b/fs/binfmt_flat.c
-> index 831a2b25ba79f..6f0aca5379da2 100644
-> --- a/fs/binfmt_flat.c
-> +++ b/fs/binfmt_flat.c
-> @@ -854,7 +854,7 @@ static int load_flat_file(struct linux_binprm *bprm,
->   #endif /* CONFIG_BINFMT_FLAT_OLD */
->   	}
->   
-> -	flush_icache_range(start_code, end_code);
-> +	flush_icache_user_range(start_code, end_code);
->   
->   	/* zero the BSS,  BRK and stack areas */
->   	if (clear_user((void __user *)(datapos + data_len), bss_len +
-> 
+	Joerg
