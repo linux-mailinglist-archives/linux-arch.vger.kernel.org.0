@@ -2,177 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 927481D02B2
-	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 01:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DCB1D02F5
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 01:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731622AbgELXAb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 May 2020 19:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731570AbgELXAa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 May 2020 19:00:30 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35700C061A0E
-        for <linux-arch@vger.kernel.org>; Tue, 12 May 2020 16:00:29 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id k19so6041888pll.9
-        for <linux-arch@vger.kernel.org>; Tue, 12 May 2020 16:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TxR+iMR41NNC8Tp0Yh5G0J9anaHo/y+mAo5OJ6FnE3w=;
-        b=YV0IEXO5IABYUMUtMWw6Y0a2xNZhYt4iDNMNdBJAdhkLz+DhDJrEb2/tely+kMRfBe
-         elzT7mfwntttCi0+nBJzpxqW1RzbdA4k2z5m0sbPhXbgm86NhUGJ6ezv1UWvqUAF6AFb
-         GwYEyZnEpPlXtS0AdB1oOMIXhoSzH1oQ3QYdKyFvf7rV9a0F5474HoxquQdEEcVsoVZk
-         mkFDvy/LaDlTuj+uY+/sZnyRH+3w/Rut2ArIzwHPIrhPI856FrWtiOC99MOqCPnAlAt1
-         y5de0EiQgDBn8VhocdW7T7X+feJnXd114pzMo7qEMcn1qfbF3zf4gbB8O6Pkx7p0q4QB
-         ZmJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=TxR+iMR41NNC8Tp0Yh5G0J9anaHo/y+mAo5OJ6FnE3w=;
-        b=qg6KUZxGdKpHLxvGX+6bSzuCVsuz/h8q6ephKayW3u6x4Fx79Rrx+aysx7cH1a8J17
-         jbLrvyHvif/WPMerrgwthMjewKQ1TK9s7yLgjbBxulkNaQ3Zx7lLMYWzh2gaF5ezJjjA
-         hMd5zPX2U6uWDEeqjYfxrJFfgDYkRFxoZ54Bcg1cHzr0IOb04wFOadO5wN7f6d7CV5mb
-         CMstP93oSoUn5MBD2AcZ8Q80DAxZefkNmFkGuhSgDLb22qZTwMbTrD6ICXYj5bVcNDnL
-         M9DwqVEAZifppAECKuTmuf0SzTAW2/lIJ8FoZcMcO1gpQH2qsPj5Kh6tWyCl/ylBOJHo
-         go0g==
-X-Gm-Message-State: AGi0PubVs7zsjqyx4Tu9ROyEttph0DEUPT5DmLj0R0LdKkB/WPMf60/N
-        JcE0zLF3daP5e/Fs/BUVdo3vRA==
-X-Google-Smtp-Source: APiQypKPbiNIuzOhnfWZK3aSuAimZ6kMvjtjoB3PUVWkLgrXCsrrvonJs2vHPqxiHQA1YoMJYuJ02Q==
-X-Received: by 2002:a17:90a:2281:: with SMTP id s1mr31687737pjc.68.1589324428530;
-        Tue, 12 May 2020 16:00:28 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id w143sm12602170pfc.165.2020.05.12.16.00.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 16:00:26 -0700 (PDT)
-Date:   Tue, 12 May 2020 16:00:26 -0700 (PDT)
-X-Google-Original-Date: Tue, 12 May 2020 15:59:50 PDT (-0700)
-Subject:     Re: [PATCH 19/31] riscv: use asm-generic/cacheflush.h
-In-Reply-To: <20200510075510.987823-20-hch@lst.de>
-CC:     akpm@linux-foundation.org, Arnd Bergmann <arnd@arndb.de>,
-        zippel@linux-m68k.org, linux-arch@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, monstr@monstr.eu, jeyu@kernel.org,
-        linux-ia64@vger.kernel.org, linux-c6x-dev@linux-c6x.org,
-        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        x86@kernel.org, linux-um@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
-        openrisc@lists.librecores.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Christoph Hellwig <hch@lst.de>
-Message-ID: <mhng-8adbedbc-0f91-4291-9471-2df5eb7b802b@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1729646AbgELXU3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 May 2020 19:20:29 -0400
+Received: from mga04.intel.com ([192.55.52.120]:19892 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726031AbgELXU3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 12 May 2020 19:20:29 -0400
+IronPort-SDR: YdYNx9pKyBQHCPxFmdAz9etEPjqCe0hxmlIKAw31JWiR80A1g3yGf3uzNI9B5iVutV+d2sA1u+
+ xUyEgcqYJvXA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 16:20:28 -0700
+IronPort-SDR: 2bY9aIWdEVA4WohSO5BDZLI/cBY8KdAlvgEdhIP3IFHm0VOoDp5+sZbA7MgK4kJDb3DtXanXPV
+ d+dfWu+hj77A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,385,1583222400"; 
+   d="scan'208";a="280304543"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by orsmga002.jf.intel.com with ESMTP; 12 May 2020 16:20:28 -0700
+Message-ID: <5cc163ff9058d1b27778e5f0a016c88a3b1a1598.camel@intel.com>
+Subject: Re: [PATCH v10 01/26] Documentation/x86: Add CET description
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Date:   Tue, 12 May 2020 16:20:32 -0700
+In-Reply-To: <dd5b9bab31ecf247a0b4890e22bfbb486ff52001.camel@intel.com>
+References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
+         <20200429220732.31602-2-yu-cheng.yu@intel.com>
+         <b5197a8d-5d8b-e1f7-68d4-58d80261904c@intel.com>
+         <dd5b9bab31ecf247a0b4890e22bfbb486ff52001.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, 10 May 2020 00:54:58 PDT (-0700), Christoph Hellwig wrote:
-> RISC-V needs almost no cache flushing routines of its own.  Rely on
-> asm-generic/cacheflush.h for the defaults.
->
-> Also remove the pointless __KERNEL__ ifdef while we're at it.
-> ---
->  arch/riscv/include/asm/cacheflush.h | 62 ++---------------------------
->  1 file changed, 3 insertions(+), 59 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-> index c8677c75f82cb..a167b4fbdf007 100644
-> --- a/arch/riscv/include/asm/cacheflush.h
-> +++ b/arch/riscv/include/asm/cacheflush.h
-> @@ -8,65 +8,6 @@
->
->  #include <linux/mm.h>
->
-> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-> -
-> -/*
-> - * The cache doesn't need to be flushed when TLB entries change when
-> - * the cache is mapped to physical memory, not virtual memory
-> - */
-> -static inline void flush_cache_all(void)
-> -{
-> -}
-> -
-> -static inline void flush_cache_mm(struct mm_struct *mm)
-> -{
-> -}
-> -
-> -static inline void flush_cache_dup_mm(struct mm_struct *mm)
-> -{
-> -}
-> -
-> -static inline void flush_cache_range(struct vm_area_struct *vma,
-> -				     unsigned long start,
-> -				     unsigned long end)
-> -{
-> -}
-> -
-> -static inline void flush_cache_page(struct vm_area_struct *vma,
-> -				    unsigned long vmaddr,
-> -				    unsigned long pfn)
-> -{
-> -}
-> -
-> -static inline void flush_dcache_mmap_lock(struct address_space *mapping)
-> -{
-> -}
-> -
-> -static inline void flush_dcache_mmap_unlock(struct address_space *mapping)
-> -{
-> -}
-> -
-> -static inline void flush_icache_page(struct vm_area_struct *vma,
-> -				     struct page *page)
-> -{
-> -}
-> -
-> -static inline void flush_cache_vmap(unsigned long start, unsigned long end)
-> -{
-> -}
-> -
-> -static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
-> -{
-> -}
-> -
-> -#define copy_to_user_page(vma, page, vaddr, dst, src, len) \
-> -	do { \
-> -		memcpy(dst, src, len); \
-> -		flush_icache_user_range(vma, page, vaddr, len); \
-> -	} while (0)
-> -#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
-> -	memcpy(dst, src, len)
-> -
->  static inline void local_flush_icache_all(void)
->  {
->  	asm volatile ("fence.i" ::: "memory");
-> @@ -79,6 +20,7 @@ static inline void flush_dcache_page(struct page *page)
->  	if (test_bit(PG_dcache_clean, &page->flags))
->  		clear_bit(PG_dcache_clean, &page->flags);
->  }
-> +#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->
->  /*
->   * RISC-V doesn't have an instruction to flush parts of the instruction cache,
-> @@ -105,4 +47,6 @@ void flush_icache_mm(struct mm_struct *mm, bool local);
->  #define SYS_RISCV_FLUSH_ICACHE_LOCAL 1UL
->  #define SYS_RISCV_FLUSH_ICACHE_ALL   (SYS_RISCV_FLUSH_ICACHE_LOCAL)
->
-> +#include <asm-generic/cacheflush.h>
-> +
->  #endif /* _ASM_RISCV_CACHEFLUSH_H */
+On Wed, 2020-04-29 at 16:02 -0700, Yu-cheng Yu wrote:
+> On Wed, 2020-04-29 at 15:53 -0700, Dave Hansen wrote:
+> > On 4/29/20 3:07 PM, Yu-cheng Yu wrote:
+> > > +Note:
+> > > +  There is no CET-enabling arch_prctl function.  By design, CET is enabled
+> > > +  automatically if the binary and the system can support it.
+> > 
+> > I think Andy and I danced around this last time.  Let me try to say it
+> > more explicitly.
+> > 
+> > I want CET kernel enabling to able to be disconnected from the on-disk
+> > binary.  I want a binary compiled with CET to be able to disable it, and
+> > I want a binary not compiled with CET to be able to enable it.  I want
+> > different threads in a process to be able to each have different CET status.
+> 
+> The kernel patches we have now can be modified to support this model.  If after
+> discussion this is favorable, I will modify code accordingly.
 
-Thanks!
+To turn on/off and to lock CET are application-level decisions.  The kernel does
+not prevent any of those.  Should there be a need to provide an arch_prctl() to
+turn on CET, it can be added without any conflict to this series.
 
-Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
-Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> > Which JITs was this tested with?  I think as a bare minimum we need to
+> > know that this design can accommodate _a_ modern JIT.  It would be
+> > horrible if the browser javascript engines couldn't use this design, for
+> > instance.
+> 
+> JIT work is still in progress.  When that is available I will test it.
 
-Were you trying to get these all in at once, or do you want me to take it into
-my tree?
+I found CET has been enabled in LLVM JIT, Mesa JIT as well as sljit which is
+used by jit.  So the current model works with JIT.
+
+Yu-cheng
+
