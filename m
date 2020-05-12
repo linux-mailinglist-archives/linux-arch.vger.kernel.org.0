@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B491CFAEF
-	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 18:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23CD1CFAF1
+	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 18:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728102AbgELQhz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 May 2020 12:37:55 -0400
-Received: from foss.arm.com ([217.140.110.172]:58198 "EHLO foss.arm.com"
+        id S1726922AbgELQh5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 May 2020 12:37:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:58234 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726922AbgELQhz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 12 May 2020 12:37:55 -0400
+        id S1726367AbgELQh4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 12 May 2020 12:37:56 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19354106F;
-        Tue, 12 May 2020 09:37:55 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A648D6E;
+        Tue, 12 May 2020 09:37:56 -0700 (PDT)
 Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2A0F23F305;
-        Tue, 12 May 2020 09:37:54 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4D2873F305;
+        Tue, 12 May 2020 09:37:55 -0700 (PDT)
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     mtk.manpages@gmail.com
 Cc:     linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Tim Chen <tim.c.chen@linux.intel.com>,
+        Waiman Long <longman@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 10/14] prctl.2: Add PR_SPEC_INDIRECT_BRANCH for SPECULATION_CTRL prctls
-Date:   Tue, 12 May 2020 17:36:55 +0100
-Message-Id: <1589301419-24459-11-git-send-email-Dave.Martin@arm.com>
+Subject: [PATCH 11/14] prctl.2: Add PR_SPEC_DISABLE_NOEXEC for SPECULATION_CTRL prctls
+Date:   Tue, 12 May 2020 17:36:56 +0100
+Message-Id: <1589301419-24459-12-git-send-email-Dave.Martin@arm.com>
 X-Mailer: git-send-email 2.1.4
 In-Reply-To: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
 References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
@@ -34,64 +34,67 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add the PR_SPEC_INDIRECT_BRANCH "misfeature" added in Linux 4.20
-for PR_SET_SPECULATION_CTRL and PR_GET_SPECULATION_CTRL.
+Add the PR_SPEC_DISABLE_NOEXEC mode added in Linux 5.1
+for the PR_SPEC_STORE_BYPASS "misfeature" of
+PR_SET_SPECULATION_CTRL and PR_GET_SPECULATION_CTRL.
 
 Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-Cc: Tim Chen <tim.c.chen@linux.intel.com>
+Cc: Waiman Long <longman@redhat.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 ---
- man2/prctl.2 | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ man2/prctl.2 | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
 diff --git a/man2/prctl.2 b/man2/prctl.2
-index e8eaf95..66417cf 100644
+index 66417cf..2361b44 100644
 --- a/man2/prctl.2
 +++ b/man2/prctl.2
-@@ -1213,11 +1213,20 @@ arguments must be specified as 0; otherwise the call fails with the error
- .\" commit 356e4bfff2c5489e016fdb925adbf12a1e3950ee
- Sets the state of the speculation misfeature specified in
- .IR arg2 .
--Currently, the only permitted value for this argument is
-+Currently, this argument must be one of:
-+.RS
-+.TP
- .B PR_SPEC_STORE_BYPASS
--(otherwise the call fails with the error
-+speculative store bypass control, or
-+.\" commit 9137bb27e60e554dab694eafa4cca241fa3a694f
-+.TP
-+.BR PR_SPEC_INDIRECT_BRANCH " (since Linux 4.20)"
-+indirect branch speculation control.
-+.RE
-+.IP
-+(Otherwise the call fails with the error
- .BR ENODEV ).
--This setting is a per-thread attribute.
-+These settings are per-thread attributes.
- The
- .IR arg3
- argument is used to hand in the control value,
-@@ -1235,13 +1244,16 @@ Same as
- .BR PR_SPEC_DISABLE ,
+@@ -1187,6 +1187,12 @@ The speculation feature is disabled, mitigation is enabled.
+ Same as
+ .B PR_SPEC_DISABLE
  but cannot be undone.
- A subsequent
--.B
--prctl(..., PR_SPEC_ENABLE)
-+.BR prctl (\c
-+.IR arg2 ,
-+.BR PR_SPEC_ENABLE )
-+with the same value for
-+.I arg2
- will fail with the error
- .BR EPERM .
++.TP
++.BR PR_SPEC_DISABLE_NOEXEC " (since Linux 5.1)"
++Same as
++.BR PR_SPEC_DISABLE ,
++but but the state will be cleared on
++.BR execve (2).
  .RE
  .IP
--Any other value in
-+Any unsupported value in
+ If all bits are 0,
+@@ -1251,6 +1257,17 @@ with the same value for
+ .I arg2
+ will fail with the error
+ .BR EPERM .
++.\" commit 71368af9027f18fe5d1c6f372cfdff7e4bde8b48
++.TP
++.BR PR_SPEC_DISABLE_NOEXEC " (since Linux 5.1)"
++Same as
++.BR PR_SPEC_DISABLE ,
++but but the state will be cleared on
++.BR execve (2).
++Currently only supported for
++.I arg2
++equal to
++.B PR_SPEC_STORE_BYPASS.
+ .RE
+ .IP
+ Any unsupported value in
+@@ -1898,11 +1915,12 @@ was
+ .BR PR_SET_SPECULATION_CTRL
+ and
  .IR arg3
- will result in the call failing with the error
- .BR ERANGE .
+-is neither
++is not
+ .BR PR_SPEC_ENABLE ,
+ .BR PR_SPEC_DISABLE ,
++.BR PR_SPEC_FORCE_DISABLE ,
+ nor
+-.BR PR_SPEC_FORCE_DISABLE .
++.BR PR_SPEC_DISABLE_NOEXEC .
+ .SH VERSIONS
+ The
+ .BR prctl ()
 -- 
 2.1.4
 
