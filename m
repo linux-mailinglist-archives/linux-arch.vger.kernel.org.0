@@ -2,87 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4052B1CFB0E
-	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 18:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63D01CFDF5
+	for <lists+linux-arch@lfdr.de>; Tue, 12 May 2020 21:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726324AbgELQlH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 May 2020 12:41:07 -0400
-Received: from mga05.intel.com ([192.55.52.43]:39793 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725987AbgELQlF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 12 May 2020 12:41:05 -0400
-IronPort-SDR: c3LzygBB1Qd9rmbZBrAHAOxp38vHyac1xSSXnSHhugpgPZAc+n6vjbNECGUImwnzMQ6gsP+sor
- 9Yi19PbSd+mQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 09:41:05 -0700
-IronPort-SDR: MxcIZZ+SGh1yrByn6k4lXr3e/NGTMvLOcoT7ghVRAwiPTGiCnLEQJEYRI3UlBz4b0Bk4pGzy3D
- Fk5kxm7DVxWw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,384,1583222400"; 
-   d="scan'208";a="265564222"
-Received: from vmrsic-mobl.amr.corp.intel.com (HELO [10.255.229.212]) ([10.255.229.212])
-  by orsmga006.jf.intel.com with ESMTP; 12 May 2020 09:41:05 -0700
-Subject: Re: [PATCH 07/14] prctl.2: Document removal of Intel MPX prctls
-To:     Dave Martin <Dave.Martin@arm.com>, mtk.manpages@gmail.com
-Cc:     linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
- <1589301419-24459-8-git-send-email-Dave.Martin@arm.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <a1d1460f-cc18-342e-1c60-af593ed7a5c1@intel.com>
-Date:   Tue, 12 May 2020 09:41:04 -0700
+        id S1725950AbgELTFY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 May 2020 15:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725554AbgELTFY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 May 2020 15:05:24 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF171C061A0C
+        for <linux-arch@vger.kernel.org>; Tue, 12 May 2020 12:05:22 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id i14so13684164qka.10
+        for <linux-arch@vger.kernel.org>; Tue, 12 May 2020 12:05:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=UI6RUzLO2uiSdCmhyivddJoxgBl/MIl48jarD2peWbs=;
+        b=BFbHfn98jaGHpu9xzKX+MtSFyYJFBTaHBIt7T3i12X1xzHaO5DG2IOXYytD8A4j/sw
+         ZWOt9i4uHd+XqVOA3HUuDyzhDJX9f7OyFa+vVlb1q6Ash9xC5BH7HlmvAknlXIA7lzOy
+         OpgAPF1IrwiU/Vi1mMHFLAKYu8i14mADsufWBrahExAGByxA5spM9Pv1JP+avyL7l6rp
+         3zm0ZFvv4IpTowGzjbA4uZr0c40u+sI6Al+xrDdK1zOR9rP/S20AraDtbbmyvUxqMGGf
+         uZW7bE3JEfI0KzON5dj6KzECbXQNMvGXckvIhxfViSlgPu02tRufwwLmy8advGwvP+E5
+         6Tqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UI6RUzLO2uiSdCmhyivddJoxgBl/MIl48jarD2peWbs=;
+        b=R4xXMZk0KKiwIOeBhB5+qgzi44r4Xy4G8pDE2OZOmXpZTnAmvWfXYjGLE2LTN0yvOj
+         1Llayk0D5NjKP9IsAYwb1AMX4AedFVUQdCU/UDn4GoricKp3yRQuwIHp1kOqcUS3Dl9M
+         chXqWvlsc7xyTPlZjSzXob3kEV9vBaqbyhaq33yPyvCf4RKajwRReRSCN1tpFqr7nK5H
+         QAFrsI+ugxWAK6vEvlrOPITbz0GWlxxs9Oc9JpiHZLFTZYH/bbzL+VlFccnnLXQbPr7c
+         ZfjQpWQFPe0rqtgFchvvWoGyvUZMRnuSY0Fk5iwBEPq+wO3u/OS7LGiJG7RyQZil6w/q
+         uGGw==
+X-Gm-Message-State: AGi0PuaJJDTLvvxXI+uqCk8YpuogR90kXT0KklVyY/6sryxKlTMr+XxX
+        KKQEVqZFD9oL0tRBghaqQW6LsA==
+X-Google-Smtp-Source: APiQypI4CZtjCar/kgfGa4Bfbol01l3EXMP1gUNn0S19TRhpzZu5I+980B7SFbBcj15iChRZHQHcWg==
+X-Received: by 2002:a05:620a:624:: with SMTP id 4mr22287532qkv.86.1589310321938;
+        Tue, 12 May 2020 12:05:21 -0700 (PDT)
+Received: from [192.168.0.185] ([191.34.158.63])
+        by smtp.gmail.com with ESMTPSA id k3sm1025697qkb.112.2020.05.12.12.05.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 May 2020 12:05:20 -0700 (PDT)
+Subject: Re: [PATCH v3 19/23] arm64: mte: Add PTRACE_{PEEK,POKE}MTETAGS
+ support
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Alan Hayward <Alan.Hayward@arm.com>,
+        Omair Javaid <omair.javaid@linaro.org>
+References: <20200421142603.3894-1-catalin.marinas@arm.com>
+ <20200421142603.3894-20-catalin.marinas@arm.com>
+From:   Luis Machado <luis.machado@linaro.org>
+Message-ID: <a7569985-eb85-497b-e3b2-5dce0acb1332@linaro.org>
+Date:   Tue, 12 May 2020 16:05:15 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <1589301419-24459-8-git-send-email-Dave.Martin@arm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200421142603.3894-20-catalin.marinas@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -90,14 +78,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/12/20 9:36 AM, Dave Martin wrote:
-> The Intel MPX API was removed from Linux 5.4.  See Linux
-> commit f240652b6032 ("x86/mpx: Remove MPX APIs")
+Hi Catalin,
+
+On 4/21/20 11:25 AM, Catalin Marinas wrote:
+> Add support for bulk setting/getting of the MTE tags in a tracee's
+> address space at 'addr' in the ptrace() syscall prototype. 'data' points
+> to a struct iovec in the tracer's address space with iov_base
+> representing the address of a tracer's buffer of length iov_len. The
+> tags to be copied to/from the tracer's buffer are stored as one tag per
+> byte.
 > 
-> Document this change.
+> On successfully copying at least one tag, ptrace() returns 0 and updates
+> the tracer's iov_len with the number of tags copied. In case of error,
+> either -EIO or -EFAULT is returned, trying to follow the ptrace() man
+> page.
+> 
+> Note that the tag copying functions are not performance critical,
+> therefore they lack optimisations found in typical memory copy routines.
+> 
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Alan Hayward <Alan.Hayward@arm.com>
+> Cc: Luis Machado <luis.machado@linaro.org>
+> Cc: Omair Javaid <omair.javaid@linaro.org>
+> ---
+> 
+> Notes:
+>      New in v3.
+> 
+>   arch/arm64/include/asm/mte.h         |  17 ++++
+>   arch/arm64/include/uapi/asm/ptrace.h |   3 +
+>   arch/arm64/kernel/mte.c              | 127 +++++++++++++++++++++++++++
+>   arch/arm64/kernel/ptrace.c           |  15 +++-
+>   arch/arm64/lib/mte.S                 |  50 +++++++++++
+>   5 files changed, 211 insertions(+), 1 deletion(-)
+>
+I started working on MTE support for GDB and I'm wondering if we've 
+already defined a way to check for runtime MTE support (as opposed to a 
+HWCAP2-based check) in a traced process.
 
-Thanks for doing this!
+Originally we were going to do it via empty-parameter ptrace calls, but 
+you had mentioned something about a proc-based method, if I'm not mistaken.
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-
-
+Regards,
+Luis
