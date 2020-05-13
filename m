@@ -2,136 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1236D1D107F
-	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 13:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC091D10D0
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 13:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729337AbgEMLDd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 May 2020 07:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728498AbgEMLDa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 May 2020 07:03:30 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA13CC061A0C;
-        Wed, 13 May 2020 04:03:29 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id j5so20363330wrq.2;
-        Wed, 13 May 2020 04:03:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=cc:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Nh7DyJO+DcViOqeU3sNNSJYNP3Q1t6sUi1HzAPYYVu4=;
-        b=XC7R3Z8D2P+2DjVhpBCDocDEHgLNV3dVkUCrmrki+JJqmjTbn/6Pz5XjCJYfmI9eDq
-         n0hXdb5hqlm3kmJp8aL5CW2hBe28Ndr8jS5TAlMOc73gKJ61KGv6Tbmgy8hf7RCzj2tJ
-         7CfJjPwYGl3jrTd/3h1lS2FDI+0dJr3DvcxiZz6idvQYQR5Lt6WbVOD8uag6anI7OqSh
-         mVbIIa3ic/93ck98KrmshiOfl6uBhXSX+mRaev+DC+bRTZiqa9dwQVa5j+78gOXpx4hx
-         m8NYDA8SKQJMyJkmqcuBpt/NAEmsgkEB0cn5naYstVDYLV5ZE99fPcPIM11I22e8F7Y0
-         ju6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Nh7DyJO+DcViOqeU3sNNSJYNP3Q1t6sUi1HzAPYYVu4=;
-        b=XcSDs92PphF8DH7xJVGpew0m10utq8xZjm3Sqj9f1XbU3wKT06jglSGuOy4UtApiaJ
-         WyeafTGNbWzbPVOc9JhenHpJCWgI17pg8jYDxMkdAH/5AWgEEovoVnujJjGiH2OItNaJ
-         lzuyrZ9F7d4yHiKDlcYsrDsTAbs5W3wTtmzWZ3AC8AUeQSK+hokeHJQXz8OnNih3t9OT
-         Q48UjbmT9dijbbRtIiO0mlOtDZ5plPyRc4cviamAycKj3Drfx0isvdFxg6Gzxgs1aWpk
-         E59hChbBNZEVnjzVbfrd3m/NkTJtAI31Pz8nF9hUyOqw+EFB+qUSa5y6lJ3iYeIXSgBR
-         i3Xw==
-X-Gm-Message-State: AGi0PuZ9NaESTEXJqOt3Tq/4TvYqWhQH4WUzxngKIfP8hiZM8p2ia/Bv
-        JmjQ3nAgesK9tgjgFCReBTM=
-X-Google-Smtp-Source: APiQypLtpJHo8ffwbbRkV/avsRbKUL1xHjzoj2MxEP2X+KQPOSe2utWuS8fB9xpuBPcH+EAxWl8lEw==
-X-Received: by 2002:adf:a74b:: with SMTP id e11mr28414461wrd.99.1589367808517;
-        Wed, 13 May 2020 04:03:28 -0700 (PDT)
-Received: from ?IPv6:2001:a61:2482:101:a081:4793:30bf:f3d5? ([2001:a61:2482:101:a081:4793:30bf:f3d5])
-        by smtp.gmail.com with ESMTPSA id s2sm4208877wme.33.2020.05.13.04.03.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2020 04:03:28 -0700 (PDT)
-Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 04/14] prctl.2: srcfix add comments for navigation
-To:     Dave Martin <Dave.Martin@arm.com>
+        id S1730925AbgEMLNp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 May 2020 07:13:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:43554 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730908AbgEMLNo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 13 May 2020 07:13:44 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8085C30E;
+        Wed, 13 May 2020 04:13:43 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D09BF3F71E;
+        Wed, 13 May 2020 04:13:42 -0700 (PDT)
+Date:   Wed, 13 May 2020 12:13:40 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Cc:     linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 02/14] prctl.2: Add health warning
+Message-ID: <20200513111340.GF21779@arm.com>
 References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
- <1589301419-24459-5-git-send-email-Dave.Martin@arm.com>
- <8b882b6e-376b-111d-3c3c-7a042b0e91b5@gmail.com>
- <20200513105620.GE21779@arm.com>
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <9770249d-0d5a-1b02-4de1-bbb6343b5829@gmail.com>
-Date:   Wed, 13 May 2020 13:03:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ <1589301419-24459-3-git-send-email-Dave.Martin@arm.com>
+ <93c5bfe6-fbbe-93ca-ef9c-91228c99d31b@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200513105620.GE21779@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93c5bfe6-fbbe-93ca-ef9c-91228c99d31b@gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Dave,
-
-On 5/13/20 12:56 PM, Dave Martin wrote:
-> On Wed, May 13, 2020 at 12:09:27PM +0200, Michael Kerrisk (man-pages) wrote:
->> Hi Dave,
->>
->> On 5/12/20 6:36 PM, Dave Martin wrote:
->>> The prctl.2 source is unnecessarily hard to navigate, not least
->>> because prctl option flags are traditionally named PR_* and so look
->>> just like prctl names.
->>>
->>> For each actual prctl, add a comment of the form
->>>
->>> 	.\" prctl PR_FOO
->>>
->>> to make it move obvious where each top-level prctl starts.
->>>
->>> Of course, we could add some clever macros, but let's not confuse
->>> dumb parsers.
->>
->> A patch like this, which makes sweeping changes across the page,
->> should be best placed at the end of a series, I think.
->> The reason is that if I fail to apply this patch (and I am a
->> little dubious about it), then probably the rest of the patches
->> in the series won't apply. (Furthermore, it also forced me to
->> apply patch 02 already, which I wanted to reflect on a little.)
+On Wed, May 13, 2020 at 12:10:25PM +0200, Michael Kerrisk (man-pages) wrote:
+> Hi Dave,
 > 
-> Agreed, I'll try to do that in future.
+> On 5/12/20 6:36 PM, Dave Martin wrote:
+> > In reality, almost every prctl interferes with assumptions that the
+> > compiler and C library / runtime rely on.  prctl() can therefore
+> > make userspace explode in a variety ways that are likely to be hard
+> > to debug.
+> > 
+> > This is not obvious to the uninitiated, so add a warning.
 > 
->> That said, I'll apply it, so that the remaining patches
->> apply cleanly. I'll consider later whether to keep this
->> change. For example, I wonder if a visually distinctive 
->> source line that is always the same would be better than
->> these comments that repeat the PR_* names. For example, 
->> something like
->>
->> .\" ==========================
->>
->> I'll circle back to this later.
-> 
-> I'd prefer to keep the name if we can, since navigating by search is
-> otherwise bothersome due to false hits.
-> 
-> Could we do both, say:
-> 
-> .\" === PR_FOO ===
+> Patch applied. But see my comments on patch 04. I may want to 
+> circle back on this patch later, since the wording feels a 
+> little strong to me (we simply must use prctl for some things, 
+> and not all of those things break user-space/runtime as far 
+> as I know). If you have some thoughts on softening the warning,
+> let me know.
 
-Okay -- I'll give that some thought.
+Certainly the "if at all" can go -- this was just a suggestion
+really.
 
-> If you prefer to reject this patch, I'm happy to rebase and repost the
-> series as appropriate.
-> 
-> In any case, this one is nice to have rather than essential.
+Maybe the whole thing is superfluous.  In C anything can screw up the
+runtime if you try hard enough.
 
-For now, the patch is already committed and pushed.
 
-Cheers,
+The background to this patch is that things like the new
+PR_PAC_RESET_KEYS and PR_SVE_SET_VL are likely to crash the program, or
+place a timebomb that will explode later when someone upgrades their
+toolchain or links with a new version of some library.  Many existing
+prctls that look equally unfriendly...
 
-Michael
+I didn't want to say nothing at all, but I didn't want to get into the
+gory details either.
 
--- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
+Doing the digging to document the safety requirements of each prctl
+would be a lot of work, and probably an exercise in futility anyway --
+how to use a lot of prctls safely depends on the run-time environment as
+much as it does on the kernel.
+
+
+If you want to drop this, I'm happy to add explicit notes to just the
+new arm64 prctls instead for now.
+
+Cheers
+---Dave
