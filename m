@@ -2,52 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 704D81D0719
-	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 08:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E571D09E2
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 09:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728498AbgEMGXY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 May 2020 02:23:24 -0400
-Received: from verein.lst.de ([213.95.11.211]:44438 "EHLO verein.lst.de"
+        id S1729866AbgEMHZg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 May 2020 03:25:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54236 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728913AbgEMGXY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 13 May 2020 02:23:24 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id E27C468C65; Wed, 13 May 2020 08:23:18 +0200 (CEST)
-Date:   Wed, 13 May 2020 08:23:18 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Christoph Hellwig <hch@lst.de>, akpm@linux-foundation.org,
-        Arnd Bergmann <arnd@arndb.de>, zippel@linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        monstr@monstr.eu, jeyu@kernel.org, linux-ia64@vger.kernel.org,
-        linux-c6x-dev@linux-c6x.org, linux-sh@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, x86@kernel.org,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-m68k@lists.linux-m68k.org, openrisc@lists.librecores.org,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 19/31] riscv: use asm-generic/cacheflush.h
-Message-ID: <20200513062318.GA24133@lst.de>
-References: <20200510075510.987823-20-hch@lst.de> <mhng-8adbedbc-0f91-4291-9471-2df5eb7b802b@palmerdabbelt-glaptop1>
+        id S1728490AbgEMHZg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 13 May 2020 03:25:36 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE215206D6;
+        Wed, 13 May 2020 07:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589354736;
+        bh=d2t7R4QJrDWoBwJ02LKHn8VL7euf7xXP4+pCOOTGAD4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KgJHmknkg5NaSi773FegHzNdz6RQpQ4pBfqjUQqEa9SlZZwygBreOdfzhDFCQsjp6
+         GALb6nuTiK1OewBJERg2ZXQMpF8J8iM+OfjaVAuKZRSCq4tJELrrMmokzn2/DEbaqv
+         iTQDmGRFdiPADLM800Ub93PuyyaLPqJkK+aEUyLg=
+Date:   Wed, 13 May 2020 08:25:31 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH 14/14] prctl.2: Add PR_PAC_RESET_KEYS (arm64)
+Message-ID: <20200513072530.GA18196@willie-the-truck>
+References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
+ <1589301419-24459-15-git-send-email-Dave.Martin@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-8adbedbc-0f91-4291-9471-2df5eb7b802b@palmerdabbelt-glaptop1>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <1589301419-24459-15-git-send-email-Dave.Martin@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 12, 2020 at 04:00:26PM -0700, Palmer Dabbelt wrote:
-> Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
-> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
->
-> Were you trying to get these all in at once, or do you want me to take it into
-> my tree?
+Hi Dave,
 
-Except for the small fixups at the beginning of the series this needs
-to go in together.  I'll have to do at least another resend, and after
-that I hope Andrew is going to pick it up.
+On Tue, May 12, 2020 at 05:36:59PM +0100, Dave Martin wrote:
+> diff --git a/man2/prctl.2 b/man2/prctl.2
+> index dd16227..7ea60e2 100644
+> --- a/man2/prctl.2
+> +++ b/man2/prctl.2
+> @@ -950,6 +950,46 @@ behavior.
+>  A value of 1 indicates
+>  .BR execve (2)
+>  will operate in the privilege-restricting mode described above.
+> +.\" prctl PR_PAC_RESET_KEYS
+> +.\" commit ba830885656414101b2f8ca88786524d4bb5e8c1
+> +.TP
+> +.BR PR_PAC_RESET_KEYS " (since Linux 5.0, only on arm64)"
+> +Securely reset the thread's pointer authentication keys
+> +to fresh random values generated by the kernel.
+> +.IP
+> +The set of keys to be reset is specified by
+> +.IR arg2 ,
+> +which must be a logical OR of zero or more of the following:
+> +.RS
+> +.TP
+> +.B PR_PAC_APIAKEY
+> +instruction authentication key A
+> +.TP
+> +.B PR_PAC_APIBKEY
+> +instruction authentication key B
+> +.TP
+> +.B PR_PAC_APDAKEY
+> +data authentication key A
+> +.TP
+> +.B PR_PAC_APDBKEY
+> +data authentication key B
+> +.TP
+> +.B PR_PAC_APGAKEY
+> +generic authentication \(lqA\(rq key.
+> +.IP
+> +(Yes folks, there really is no generic B key.)
+> +.RE
+> +.IP
+> +As a special case, if
+> +.I arg2
+> +is zero then all the keys are reset.
+> +Since new keys could be added in future,
+> +this is the recommended way to completely wipe the existing keys
+> +when creating a new execution context.
+
+I see what you're saying, but the keys are also reset on exec() iirc, so we
+don't want to encourage people to issue the prctl() unnecessarily
+immediately following an exec().
+
+> +.IP
+> +The remaining arguments
+> +.IR arg3 ", " arg4 " and " arg5
+> +must all be zero.
+>  .\" prctl PR_SET_PDEATHSIG
+>  .TP
+>  .BR PR_SET_PDEATHSIG " (since Linux 2.1.57)"
+> @@ -1920,6 +1960,27 @@ are not 0.
+>  .B EINVAL
+>  .I option
+>  was
+> +.B PR_PAC_RESET_KEYS
+> +and
+> +.I arg2
+> +contains non-zero bits other than
+> +.BR
+> +.BR PR_PAC_APIAKEY ,
+> +.BR PR_PAC_APIBKEY ,
+> +.BR PR_PAC_APDAKEY ,
+> +.B PR_PAC_APDBKEY
+> +and
+> +.BR PR_PAC_APGAKEY ;
+> +or
+> +.IR arg3 ,
+> +.I arg4
+> +and
+> +.I arg5
+> +were not all zero.
+
+Do we care about other reasons for -EINVAL, such as the system not
+supporting pointer authentication?
+
+Will
