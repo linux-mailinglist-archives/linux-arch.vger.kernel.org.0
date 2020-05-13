@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6691D192A
-	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 17:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23A01D192C
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 17:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732394AbgEMPVp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1732369AbgEMPVp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Wed, 13 May 2020 11:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732196AbgEMPVo (ORCPT
+        with ESMTP id S1730668AbgEMPVo (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 13 May 2020 11:21:44 -0400
 Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E63DC061A0E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05818C061A0C;
         Wed, 13 May 2020 08:21:44 -0700 (PDT)
 Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id C40DF642; Wed, 13 May 2020 17:21:40 +0200 (CEST)
+        id EF577695; Wed, 13 May 2020 17:21:40 +0200 (CEST)
 From:   Joerg Roedel <joro@8bytes.org>
 To:     x86@kernel.org
 Cc:     hpa@zytor.com, Dave Hansen <dave.hansen@linux.intel.com>,
@@ -30,9 +30,9 @@ Cc:     hpa@zytor.com, Dave Hansen <dave.hansen@linux.intel.com>,
         Joerg Roedel <jroedel@suse.de>, joro@8bytes.org,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 1/7] mm: Add functions to track page directory modifications
-Date:   Wed, 13 May 2020 17:21:31 +0200
-Message-Id: <20200513152137.32426-2-joro@8bytes.org>
+Subject: [PATCH v2 2/7] mm/vmalloc: Track which page-table levels were modified
+Date:   Wed, 13 May 2020 17:21:32 +0200
+Message-Id: <20200513152137.32426-3-joro@8bytes.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200513152137.32426-1-joro@8bytes.org>
 References: <20200513152137.32426-1-joro@8bytes.org>
@@ -43,140 +43,275 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Joerg Roedel <jroedel@suse.de>
 
-Add page-table allocation functions which will keep track of changed
-directory entries. They are needed for new PGD, P4D, PUD, and PMD
-entries and will be used in vmalloc and ioremap code to decide whether
-any changes in the kernel mappings need to be synchronized between
-page-tables in the system.
+Track at which levels in the page-table entries were modified by
+vmap/vunmap. After the page-table has been modified, use that
+information do decide whether the new arch_sync_kernel_mappings()
+needs to be called.
 
 Signed-off-by: Joerg Roedel <jroedel@suse.de>
 ---
- include/asm-generic/5level-fixup.h |  5 ++--
- include/asm-generic/pgtable.h      | 23 +++++++++++++++
- include/linux/mm.h                 | 46 ++++++++++++++++++++++++++++++
- 3 files changed, 72 insertions(+), 2 deletions(-)
+ include/linux/vmalloc.h | 16 ++++++++
+ mm/vmalloc.c            | 88 ++++++++++++++++++++++++++++++-----------
+ 2 files changed, 80 insertions(+), 24 deletions(-)
 
-diff --git a/include/asm-generic/5level-fixup.h b/include/asm-generic/5level-fixup.h
-index 4c74b1c1d13b..58046ddc08d0 100644
---- a/include/asm-generic/5level-fixup.h
-+++ b/include/asm-generic/5level-fixup.h
-@@ -17,8 +17,9 @@
- 	((unlikely(pgd_none(*(p4d))) && __pud_alloc(mm, p4d, address)) ? \
- 		NULL : pud_offset(p4d, address))
- 
--#define p4d_alloc(mm, pgd, address)	(pgd)
--#define p4d_offset(pgd, start)		(pgd)
-+#define p4d_alloc(mm, pgd, address)		(pgd)
-+#define p4d_alloc_track(mm, pgd, address, mask)	(pgd)
-+#define p4d_offset(pgd, start)			(pgd)
- 
- #ifndef __ASSEMBLY__
- static inline int p4d_none(p4d_t p4d)
-diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
-index 329b8c8ca703..bf1418ae91a2 100644
---- a/include/asm-generic/pgtable.h
-+++ b/include/asm-generic/pgtable.h
-@@ -1209,6 +1209,29 @@ static inline bool arch_has_pfn_modify_check(void)
- # define PAGE_KERNEL_EXEC PAGE_KERNEL
- #endif
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index a95d3cc74d79..c80bdb8a6b55 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -144,6 +144,22 @@ extern int remap_vmalloc_range(struct vm_area_struct *vma, void *addr,
+ void vmalloc_sync_mappings(void);
+ void vmalloc_sync_unmappings(void);
  
 +/*
-+ * Page Table Modification bits for pgtbl_mod_mask.
-+ *
-+ * These are used by the p?d_alloc_track*() set of functions an in the generic
-+ * vmalloc/ioremap code to track at which page-table levels entries have been
-+ * modified. Based on that the code can better decide when vmalloc and ioremap
-+ * mapping changes need to be synchronized to other page-tables in the system.
++ * Architectures can set this mask to a combination of PGTBL_P?D_MODIFIED values
++ * and let generic vmalloc and ioremap code know when arch_sync_kernel_mappings()
++ * needs to be called.
 + */
-+#define		__PGTBL_PGD_MODIFIED	0
-+#define		__PGTBL_P4D_MODIFIED	1
-+#define		__PGTBL_PUD_MODIFIED	2
-+#define		__PGTBL_PMD_MODIFIED	3
-+#define		__PGTBL_PTE_MODIFIED	4
++#ifndef ARCH_PAGE_TABLE_SYNC_MASK
++#define ARCH_PAGE_TABLE_SYNC_MASK 0
++#endif
 +
-+#define		PGTBL_PGD_MODIFIED	BIT(__PGTBL_PGD_MODIFIED)
-+#define		PGTBL_P4D_MODIFIED	BIT(__PGTBL_P4D_MODIFIED)
-+#define		PGTBL_PUD_MODIFIED	BIT(__PGTBL_PUD_MODIFIED)
-+#define		PGTBL_PMD_MODIFIED	BIT(__PGTBL_PMD_MODIFIED)
-+#define		PGTBL_PTE_MODIFIED	BIT(__PGTBL_PTE_MODIFIED)
++/*
++ * There is no default implementation for arch_sync_kernel_mappings(). It is
++ * relied upon the compiler to optimize calls out if ARCH_PAGE_TABLE_SYNC_MASK
++ * is 0.
++ */
++void arch_sync_kernel_mappings(unsigned long start, unsigned long end);
 +
-+/* Page-Table Modification Mask */
-+typedef unsigned int pgtbl_mod_mask;
-+
- #endif /* !__ASSEMBLY__ */
+ /*
+  *	Lowlevel-APIs (not for driver use!)
+  */
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 9a8227afa073..184f5a556cf7 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -69,7 +69,8 @@ static void free_work(struct work_struct *w)
  
- #ifndef io_remap_pfn_range
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 5a323422d783..022fe682af9e 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2078,13 +2078,54 @@ static inline pud_t *pud_alloc(struct mm_struct *mm, p4d_t *p4d,
- 	return (unlikely(p4d_none(*p4d)) && __pud_alloc(mm, p4d, address)) ?
- 		NULL : pud_offset(p4d, address);
- }
-+
-+static inline p4d_t *p4d_alloc_track(struct mm_struct *mm, pgd_t *pgd,
-+				     unsigned long address,
-+				     pgtbl_mod_mask *mod_mask)
-+
-+{
-+	if (unlikely(pgd_none(*pgd))) {
-+		if (__p4d_alloc(mm, pgd, address))
-+			return NULL;
-+		*mod_mask |= PGTBL_PGD_MODIFIED;
-+	}
-+
-+	return p4d_offset(pgd, address);
-+}
-+
- #endif /* !__ARCH_HAS_5LEVEL_HACK */
+ /*** Page table manipulation functions ***/
  
-+static inline pud_t *pud_alloc_track(struct mm_struct *mm, p4d_t *p4d,
-+				     unsigned long address,
-+				     pgtbl_mod_mask *mod_mask)
-+{
-+	if (unlikely(p4d_none(*p4d))) {
-+		if (__pud_alloc(mm, p4d, address))
-+			return NULL;
-+		*mod_mask |= PGTBL_P4D_MODIFIED;
-+	}
-+
-+	return pud_offset(p4d, address);
-+}
-+
- static inline pmd_t *pmd_alloc(struct mm_struct *mm, pud_t *pud, unsigned long address)
+-static void vunmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end)
++static void vunmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
++			     pgtbl_mod_mask *mask)
  {
- 	return (unlikely(pud_none(*pud)) && __pmd_alloc(mm, pud, address))?
- 		NULL: pmd_offset(pud, address);
+ 	pte_t *pte;
+ 
+@@ -78,73 +79,104 @@ static void vunmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end)
+ 		pte_t ptent = ptep_get_and_clear(&init_mm, addr, pte);
+ 		WARN_ON(!pte_none(ptent) && !pte_present(ptent));
+ 	} while (pte++, addr += PAGE_SIZE, addr != end);
++	*mask |= PGTBL_PTE_MODIFIED;
  }
-+
-+static inline pmd_t *pmd_alloc_track(struct mm_struct *mm, pud_t *pud,
-+				     unsigned long address,
-+				     pgtbl_mod_mask *mod_mask)
-+{
-+	if (unlikely(pud_none(*pud))) {
-+		if (__pmd_alloc(mm, pud, address))
-+			return NULL;
-+		*mod_mask |= PGTBL_PUD_MODIFIED;
-+	}
-+
-+	return pmd_offset(pud, address);
-+}
- #endif /* CONFIG_MMU */
  
- #if USE_SPLIT_PTE_PTLOCKS
-@@ -2200,6 +2241,11 @@ static inline void pgtable_pte_page_dtor(struct page *page)
- 	((unlikely(pmd_none(*(pmd))) && __pte_alloc_kernel(pmd))? \
- 		NULL: pte_offset_kernel(pmd, address))
+-static void vunmap_pmd_range(pud_t *pud, unsigned long addr, unsigned long end)
++static void vunmap_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
++			     pgtbl_mod_mask *mask)
+ {
+ 	pmd_t *pmd;
+ 	unsigned long next;
++	int cleared;
  
-+#define pte_alloc_kernel_track(pmd, address, mask)			\
-+	((unlikely(pmd_none(*(pmd))) &&					\
-+	  (__pte_alloc_kernel(pmd) || ({*(mask)|=PGTBL_PMD_MODIFIED;0;})))?\
-+		NULL: pte_offset_kernel(pmd, address))
+ 	pmd = pmd_offset(pud, addr);
+ 	do {
+ 		next = pmd_addr_end(addr, end);
+-		if (pmd_clear_huge(pmd))
 +
- #if USE_SPLIT_PMD_PTLOCKS
++		cleared = pmd_clear_huge(pmd);
++		if (cleared || pmd_bad(*pmd))
++			*mask |= PGTBL_PMD_MODIFIED;
++
++		if (cleared)
+ 			continue;
+ 		if (pmd_none_or_clear_bad(pmd))
+ 			continue;
+-		vunmap_pte_range(pmd, addr, next);
++		vunmap_pte_range(pmd, addr, next, mask);
+ 	} while (pmd++, addr = next, addr != end);
+ }
  
- static struct page *pmd_to_page(pmd_t *pmd)
+-static void vunmap_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end)
++static void vunmap_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
++			     pgtbl_mod_mask *mask)
+ {
+ 	pud_t *pud;
+ 	unsigned long next;
++	int cleared;
+ 
+ 	pud = pud_offset(p4d, addr);
+ 	do {
+ 		next = pud_addr_end(addr, end);
+-		if (pud_clear_huge(pud))
++
++		cleared = pud_clear_huge(pud);
++		if (cleared || pud_bad(*pud))
++			*mask |= PGTBL_PUD_MODIFIED;
++
++		if (cleared)
+ 			continue;
+ 		if (pud_none_or_clear_bad(pud))
+ 			continue;
+-		vunmap_pmd_range(pud, addr, next);
++		vunmap_pmd_range(pud, addr, next, mask);
+ 	} while (pud++, addr = next, addr != end);
+ }
+ 
+-static void vunmap_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end)
++static void vunmap_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
++			     pgtbl_mod_mask *mask)
+ {
+ 	p4d_t *p4d;
+ 	unsigned long next;
++	int cleared;
+ 
+ 	p4d = p4d_offset(pgd, addr);
+ 	do {
+ 		next = p4d_addr_end(addr, end);
+-		if (p4d_clear_huge(p4d))
++
++		cleared = p4d_clear_huge(p4d);
++		if (cleared || p4d_bad(*p4d))
++			*mask |= PGTBL_P4D_MODIFIED;
++
++		if (cleared)
+ 			continue;
+ 		if (p4d_none_or_clear_bad(p4d))
+ 			continue;
+-		vunmap_pud_range(p4d, addr, next);
++		vunmap_pud_range(p4d, addr, next, mask);
+ 	} while (p4d++, addr = next, addr != end);
+ }
+ 
+-static void vunmap_page_range(unsigned long addr, unsigned long end)
++static void vunmap_page_range(unsigned long start, unsigned long end)
+ {
+ 	pgd_t *pgd;
++	unsigned long addr = start;
+ 	unsigned long next;
++	pgtbl_mod_mask mask = 0;
+ 
+ 	BUG_ON(addr >= end);
++	start = addr;
+ 	pgd = pgd_offset_k(addr);
+ 	do {
+ 		next = pgd_addr_end(addr, end);
++		if (pgd_bad(*pgd))
++			mask |= PGTBL_PGD_MODIFIED;
+ 		if (pgd_none_or_clear_bad(pgd))
+ 			continue;
+-		vunmap_p4d_range(pgd, addr, next);
++		vunmap_p4d_range(pgd, addr, next, &mask);
+ 	} while (pgd++, addr = next, addr != end);
++
++	if (mask & ARCH_PAGE_TABLE_SYNC_MASK)
++		arch_sync_kernel_mappings(start, end);
+ }
+ 
+ static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
+-		unsigned long end, pgprot_t prot, struct page **pages, int *nr)
++		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
++		pgtbl_mod_mask *mask)
+ {
+ 	pte_t *pte;
+ 
+@@ -153,7 +185,7 @@ static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
+ 	 * callers keep track of where we're up to.
+ 	 */
+ 
+-	pte = pte_alloc_kernel(pmd, addr);
++	pte = pte_alloc_kernel_track(pmd, addr, mask);
+ 	if (!pte)
+ 		return -ENOMEM;
+ 	do {
+@@ -166,55 +198,59 @@ static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
+ 		set_pte_at(&init_mm, addr, pte, mk_pte(page, prot));
+ 		(*nr)++;
+ 	} while (pte++, addr += PAGE_SIZE, addr != end);
++	*mask |= PGTBL_PTE_MODIFIED;
+ 	return 0;
+ }
+ 
+ static int vmap_pmd_range(pud_t *pud, unsigned long addr,
+-		unsigned long end, pgprot_t prot, struct page **pages, int *nr)
++		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
++		pgtbl_mod_mask *mask)
+ {
+ 	pmd_t *pmd;
+ 	unsigned long next;
+ 
+-	pmd = pmd_alloc(&init_mm, pud, addr);
++	pmd = pmd_alloc_track(&init_mm, pud, addr, mask);
+ 	if (!pmd)
+ 		return -ENOMEM;
+ 	do {
+ 		next = pmd_addr_end(addr, end);
+-		if (vmap_pte_range(pmd, addr, next, prot, pages, nr))
++		if (vmap_pte_range(pmd, addr, next, prot, pages, nr, mask))
+ 			return -ENOMEM;
+ 	} while (pmd++, addr = next, addr != end);
+ 	return 0;
+ }
+ 
+ static int vmap_pud_range(p4d_t *p4d, unsigned long addr,
+-		unsigned long end, pgprot_t prot, struct page **pages, int *nr)
++		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
++		pgtbl_mod_mask *mask)
+ {
+ 	pud_t *pud;
+ 	unsigned long next;
+ 
+-	pud = pud_alloc(&init_mm, p4d, addr);
++	pud = pud_alloc_track(&init_mm, p4d, addr, mask);
+ 	if (!pud)
+ 		return -ENOMEM;
+ 	do {
+ 		next = pud_addr_end(addr, end);
+-		if (vmap_pmd_range(pud, addr, next, prot, pages, nr))
++		if (vmap_pmd_range(pud, addr, next, prot, pages, nr, mask))
+ 			return -ENOMEM;
+ 	} while (pud++, addr = next, addr != end);
+ 	return 0;
+ }
+ 
+ static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
+-		unsigned long end, pgprot_t prot, struct page **pages, int *nr)
++		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
++		pgtbl_mod_mask *mask)
+ {
+ 	p4d_t *p4d;
+ 	unsigned long next;
+ 
+-	p4d = p4d_alloc(&init_mm, pgd, addr);
++	p4d = p4d_alloc_track(&init_mm, pgd, addr, mask);
+ 	if (!p4d)
+ 		return -ENOMEM;
+ 	do {
+ 		next = p4d_addr_end(addr, end);
+-		if (vmap_pud_range(p4d, addr, next, prot, pages, nr))
++		if (vmap_pud_range(p4d, addr, next, prot, pages, nr, mask))
+ 			return -ENOMEM;
+ 	} while (p4d++, addr = next, addr != end);
+ 	return 0;
+@@ -234,16 +270,20 @@ static int vmap_page_range_noflush(unsigned long start, unsigned long end,
+ 	unsigned long addr = start;
+ 	int err = 0;
+ 	int nr = 0;
++	pgtbl_mod_mask mask = 0;
+ 
+ 	BUG_ON(addr >= end);
+ 	pgd = pgd_offset_k(addr);
+ 	do {
+ 		next = pgd_addr_end(addr, end);
+-		err = vmap_p4d_range(pgd, addr, next, prot, pages, &nr);
++		err = vmap_p4d_range(pgd, addr, next, prot, pages, &nr, &mask);
+ 		if (err)
+ 			return err;
+ 	} while (pgd++, addr = next, addr != end);
+ 
++	if (mask & ARCH_PAGE_TABLE_SYNC_MASK)
++		arch_sync_kernel_mappings(start, end);
++
+ 	return nr;
+ }
+ 
 -- 
 2.17.1
 
