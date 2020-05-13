@@ -2,66 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0751D0ADA
-	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 10:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841541D0AEC
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 10:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732279AbgEMIa0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 May 2020 04:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S1732256AbgEMIgv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 May 2020 04:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732174AbgEMIaZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 May 2020 04:30:25 -0400
+        with ESMTP id S1726092AbgEMIgv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 May 2020 04:36:51 -0400
 Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB8AC061A0E;
-        Wed, 13 May 2020 01:30:25 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j5so19764165wrq.2;
-        Wed, 13 May 2020 01:30:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D0BC061A0C;
+        Wed, 13 May 2020 01:36:50 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id v12so19732016wrp.12;
+        Wed, 13 May 2020 01:36:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=cc:subject:to:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8l9HrcUFnk7kl0t2CmIVlAAJuCz/BXpTPIzI3hkWiBA=;
-        b=uAEo1oCd3RKQgeafKRTc6XK3toSohfZ6YY2sfQqvyt4dH/Li/8vuIjRhFVyOaRkb8N
-         bubv6gLtqn9Ncd4b7xp721kIvVZgOGrOq6P2h1jvK5CqCRXoj79JX6r3svZZMddLRSad
-         TNbP8ga3zem/nujg/vrQBYTjViwQiEUXfxZWVa7bSdh56BXtNYexy+3rRRFeu7O+JwRT
-         v8cGEVbxGMHCboZ0EbrKjpgKczEhIuhk8OVPSbqGqSuig6whJBXagLNzkMcifalny+2T
-         oGED0+LeRQnKI7jcrmZNrRekmAqjaq93DpVzxLo9bymt/4mHLmNnrkrEzUoSaMP4QSoF
-         gDHg==
+        bh=9RyZJv7HY0Ixg7ftiF9ixqiE/9e7o2gZum7cB+e4h0Y=;
+        b=WVP/C7F+2cJKAcbrifCxGKV7t16e5sHZQL3vut7Hfp5rd+UyGwtmjdvAW1voAeqolu
+         5ugydIP1OQohKqJvisjZ4lB2qpQTxAmc07MvBs5I7OksQ/Gi3GEEpMk5eXjn/5vbqW+O
+         o6Ang5Hy6kGv3D+aZIGzxQG57Uh5Rw5YZjET9GUtNInPuYdpB7Fy76Hpfndfxhk33i+s
+         DDQrnk1paUDAx7+5eBq1cSO0Cx9CQqz2upP6KO9SLql/cOhsDr413fk7OqDsmkpp3WMP
+         L1CXbRYpuzQ3e7SbY/W1R2BaXVn9XJVss5Z9ecL56Xn/zmsk+6XS55KIq0kxa4u/ggRB
+         0dKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:cc:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=8l9HrcUFnk7kl0t2CmIVlAAJuCz/BXpTPIzI3hkWiBA=;
-        b=Ck3LEEjQv/twrJGzPzqGp00l59TIPtBd3K0s9RucIxh/db1fE4tgtwJdcvjv4G91JC
-         mEKbuagnKICL0oydkua/lKnKisY7tS7EE2RU/KS5Vcl0+Hm7LNfz/FDP7PCKrXmNGx1e
-         34N5DwpIAHge9iPI34CfbUAQ8+rThzgeIIhYUOTHWwonH/1U5YtP4J1JI06+wvx5v1pR
-         BogzBaVWqcBEg5ZmiAAIUIm2hKDqGk0Lf+lROaNpHl0PF0YSN33RrUsERHHiLMdKyFBf
-         pwSA6MHdijQuQvIg/lJ4QANfYxzVxW80KSlaGKaIS/J7DyoSxsGwtipkT2nRi4oRIWAU
-         hP8g==
-X-Gm-Message-State: AGi0PubreKWQLXY/AHFVFBScdnCyBLao+sQGPMi2OXKFy8tXig73JzLH
-        RtLcNeF4oRsaAFFLC1EoIgg=
-X-Google-Smtp-Source: APiQypKYBs2sCuo3l1m1ENhx2oY7S1cH2Eu8OgQj7ADDfIbfWFZEz+SFvHs5upX8JcAk98tGebUI8g==
-X-Received: by 2002:adf:a285:: with SMTP id s5mr32533885wra.60.1589358624147;
-        Wed, 13 May 2020 01:30:24 -0700 (PDT)
+        bh=9RyZJv7HY0Ixg7ftiF9ixqiE/9e7o2gZum7cB+e4h0Y=;
+        b=ag95tr2gt55PRxzFUdmwrLfnQNLvKOXvq/FVv3ES5colDz5d8hxQYk+34ZdOGdrcvq
+         2qVD2g8M4Dd9m0Z9Dl0tqLHtxgCtJdvC96W0uvKQgQbmgOxh+XVMxDvkFU4w+oeqM+qg
+         rRUSMiSqrjE1Q2DgLEBHgqfMOtw28yROdaKnbeDHMdjGykNcyOznsGl2GalnivDXlXnR
+         6Z9u7yKlnJOY4NQtLkYqakxSEdolxdi4AUgcon48pS5G7SkJ4LUva4drAO3NBBHCs9Lh
+         bJG2lDOQqYbYgm/QuVIKacfr33owcOTk+bTYiEz+vYukcWO3oOer4ReWqxnabupNvcq3
+         9I6g==
+X-Gm-Message-State: AGi0PuZLzuj2JzvaWqNwGxzQPzaAUc7wTTT7ZuPkOkAi3s+RtApDUiru
+        lv4OivI2Fe6AEEdrvk4fV7TB4qnb
+X-Google-Smtp-Source: APiQypKBfhCCUB9bek4i/DCgmt07/TQF/wJbvJEj9l00SAnbye5VS6xrLivOh50PqZsHdYfmkcJEmw==
+X-Received: by 2002:a05:6000:1010:: with SMTP id a16mr27919089wrx.291.1589359009404;
+        Wed, 13 May 2020 01:36:49 -0700 (PDT)
 Received: from ?IPv6:2001:a61:2482:101:a081:4793:30bf:f3d5? ([2001:a61:2482:101:a081:4793:30bf:f3d5])
-        by smtp.gmail.com with ESMTPSA id v124sm35279304wme.45.2020.05.13.01.30.23
+        by smtp.gmail.com with ESMTPSA id z7sm26435557wrl.88.2020.05.13.01.36.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2020 01:30:23 -0700 (PDT)
+        Wed, 13 May 2020 01:36:48 -0700 (PDT)
 Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 01/14] prctl.2: tfix clarify that prctl can apply to
- threads
+Subject: Re: [PATCH 03/14] prctl.2: tfix mis-description of thread ID values
+ in procfs
 To:     Dave Martin <Dave.Martin@arm.com>
 References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
- <1589301419-24459-2-git-send-email-Dave.Martin@arm.com>
+ <1589301419-24459-4-git-send-email-Dave.Martin@arm.com>
 From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <d15dd1a7-4358-f08c-9149-4a70a7c339ee@gmail.com>
-Date:   Wed, 13 May 2020 10:30:20 +0200
+Message-ID: <8e93c847-9fea-26f0-f872-42cf35d5f8f4@gmail.com>
+Date:   Wed, 13 May 2020 10:36:48 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <1589301419-24459-2-git-send-email-Dave.Martin@arm.com>
+In-Reply-To: <1589301419-24459-4-git-send-email-Dave.Martin@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -71,14 +71,11 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 5/12/20 6:36 PM, Dave Martin wrote:
-> The current synopsis for prctl(2) misleadingly claims that prctl
-> operates on a process.  Rather, some (in fact, most) prctls operate
-> on a thread.
+> Under PR_SET_NAME, the [tid] value seen in procfs as
+> /proc/self/task/[tid] is mistakenly described as the name of the
+> thread, whereas really the name is on /proc/self/task/[tid]/comm.
 > 
-> The wording probably dates back to the old days when Linux didn't
-> really have threads at all.
-> 
-> Reword as appropriate.
+> Fix it.
 
 Thanks, Dave. Patch applied.
 
@@ -88,33 +85,26 @@ Michael
 
 > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
 > ---
->  man2/prctl.2 | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  man2/prctl.2 | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
 > diff --git a/man2/prctl.2 b/man2/prctl.2
-> index 7a5af76..7932ada 100644
+> index a35b748..9736434 100644
 > --- a/man2/prctl.2
 > +++ b/man2/prctl.2
-> @@ -53,7 +53,7 @@
->  .\"
->  .TH PRCTL 2 2020-04-11 "Linux" "Linux Programmer's Manual"
->  .SH NAME
-> -prctl \- operations on a process
-> +prctl \- operations on a process or thread
->  .SH SYNOPSIS
->  .nf
->  .B #include <sys/prctl.h>
-> @@ -63,6 +63,10 @@ prctl \- operations on a process
->  .fi
->  .SH DESCRIPTION
->  .BR prctl ()
-> +manipulates various aspects of the behavior
-> +of the calling thread or process.
-> +.PP
-> +.BR prctl ()
->  is called with a first argument describing what to do
->  (with values defined in \fI<linux/prctl.h>\fP), and further
->  arguments with a significance depending on the first one.
+> @@ -808,8 +808,10 @@ and retrieved using
+>  The attribute is likewise accessible via
+>  .IR /proc/self/task/[tid]/comm ,
+>  where
+> -.I tid
+> -is the name of the calling thread.
+> +.I [tid]
+> +is the the thread ID of the calling thread, as returned by
+> +.BR gettid (2).
+> +.\" prctl PR_GET_NAME
+>  .TP
+>  .BR PR_GET_NAME " (since Linux 2.6.11)"
+>  Return the name of the calling thread,
 > 
 
 
