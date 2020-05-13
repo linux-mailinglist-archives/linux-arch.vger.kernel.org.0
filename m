@@ -2,168 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E57C11D1247
-	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 14:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0171D1344
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 14:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732714AbgEMMGm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 May 2020 08:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
+        id S1733001AbgEMMxB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 May 2020 08:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727778AbgEMMGl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 May 2020 08:06:41 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D43C061A0C;
-        Wed, 13 May 2020 05:06:40 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id e1so6638715wrt.5;
-        Wed, 13 May 2020 05:06:40 -0700 (PDT)
+        with ESMTP id S1732967AbgEMMxB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 May 2020 08:53:01 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8E4C061A0C
+        for <linux-arch@vger.kernel.org>; Wed, 13 May 2020 05:53:01 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id r3so8135174qvm.1
+        for <linux-arch@vger.kernel.org>; Wed, 13 May 2020 05:53:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=cc:subject:to:references:from:message-id:date:user-agent
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fhDNmmvpzcm8F44Tpv9IkktsDhvARR3ewt8RuiOuBoA=;
-        b=beeHv2OAHYMxvQRdS0dGGTcvJZSVDRI8XdA2wxJmK9wwv+MDp31Gd5wu3TselVR2/8
-         rmN9sAkbrajGgJenRb/nwB9p7z80N7YObbaYKItKby8SGY9Mkm+qj29KUUXDcSQ3XKfE
-         BV4YxjHVkMG16zNhHHyyVW9RlDbheebn2ZmyCURlG14mk061hXorpdzcgcA94kqYcY3D
-         SauCek2rrKM9o3GZwejTQh+M1XCjElH9zvNrn1QUTv4gnzxhsbnPyE2QDzYmsEvi19iu
-         dXpVlHutjrawC61GVZuOGn7OHsTb5zLcfOv9qZJaAV66f+tkx7vq1jYFJ+uZACFG0w8W
-         ksKQ==
+        bh=vnfrgpoFxGJaJB68G0PLMe3O7CSCW9nax/g5rkjMJIg=;
+        b=oKes9yfCt8iLYLqXAPpbI7QwOh5gdVMab7InMMO+IDvEEVKn2F+5CO/QfNhjodL2H4
+         Knr5X+ASs+kRBpeLahuJb5saanLeGfuBYV+LQ3wCIQxL8GZANd4euPnyc5DpH7WSfwez
+         2VdOi6XDDyIGdErfZX8p+TeqaDi5mcjXZrrgrfAWK1MpAHfNHsIqi14ezu7QN8F4bdHs
+         KHdrTzfiRSy/dJIIgJqya3pE0QIigXv/jXU1Tq/2QE4dE2d9vyEGKOAl5DxNT0zgFTJm
+         nhz4tFI/Sjf1MBLk+0qzXR3pqIFW9Wcp5wF5hiL7uaDcCJNbjZHTI9HH+O6rZnYxPFiS
+         KeSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=fhDNmmvpzcm8F44Tpv9IkktsDhvARR3ewt8RuiOuBoA=;
-        b=em1SyTm7hXbVuowsn54v4xilgQx97wk3sni/YyvdBgC6Ucxxm0H6fAiNo9+7s4drGy
-         fZXA9Ee+ormTGIp6hcgumNzrLlDae+s/kHub82WeHOCETPgX5qCo2T8EezyugOT8DgP2
-         X7VOldBvQSj4nPGjyFitU9moNzkUp0Mq1bG0/StRhMEEVePAsxfYkH+h6RCM4YwBtwX2
-         5tz5pRhEfxZstaDUlzWZ6tVxCCsCXccsODC4RcQhtbDX6+3S8jZTnRhrbZ+PqXxQhL7P
-         IX3eWOdbQEN1NzEJ01hqOGA8COdBiSYbzU5ryZ8TEA6L3+GdQxqsXreWyyi2UYae1X9B
-         VU/w==
-X-Gm-Message-State: AGi0PuZyer3kW7EcEqVii4d2QWmZ1/WZbNiCF/2z97vrCWt53+6BLZ0m
-        QXgmxQtio92PjxyIePlYDLo=
-X-Google-Smtp-Source: APiQypJ+JkfUFgeVGuy2lwVKtUdi+R+XLHBgJnoRbjyKUvjsmd6yl5GVgPkk19ITONcmJLFxERAcJA==
-X-Received: by 2002:adf:fe89:: with SMTP id l9mr30432002wrr.400.1589371599386;
-        Wed, 13 May 2020 05:06:39 -0700 (PDT)
-Received: from ?IPv6:2001:a61:2482:101:a081:4793:30bf:f3d5? ([2001:a61:2482:101:a081:4793:30bf:f3d5])
-        by smtp.gmail.com with ESMTPSA id p8sm26809589wre.11.2020.05.13.05.06.38
+        bh=vnfrgpoFxGJaJB68G0PLMe3O7CSCW9nax/g5rkjMJIg=;
+        b=A/u9kFgRiEY5IhnoltcBU0UN4IyATxdOuciqIV4pBFnyC1p3snUbtVo2L6hELSiyOn
+         P5/U6EuPmPWr7CtqOULLaF8Hs1fmMmDQ7FIEhvTqyhbdYHK8wy4pZi76WWpHNvm3ZhBd
+         oLBpH20bE22P3B5DXS3crw2f/54lZ7YCOFFiaFIo5nzCUykoiWBEWP8jCgKmLyDm+ZS/
+         rCv1oVKRfWVrPQ0mgPJez+/HvblO7IYSqUne64PVEUXZQzzynfXJb3PoXSWc8cHs4Iv+
+         3M9REMtHrp+nVlMyZ5scHmBYeQGJR1jbLZ606SHKIZxR+B8lXx5jRe9PSWfCHmYFMz/P
+         Y9VQ==
+X-Gm-Message-State: AGi0Pub0fcEwJOtdryvi1ji9Ah9niGvWbdDrVXXUCGWTaU3DiCpFFpLW
+        xZf4dNp1y0AUnsMNr48+hF6g7Q==
+X-Google-Smtp-Source: APiQypKsodqC9oZhkQXwAznVyvCkHIt8nBznWgddu7FmHdLWksRHFGtiYKblVPj8gIPiC55qsdwvWQ==
+X-Received: by 2002:ad4:466f:: with SMTP id z15mr18059221qvv.101.1589374380390;
+        Wed, 13 May 2020 05:53:00 -0700 (PDT)
+Received: from ?IPv6:2804:7f0:8283:1510:1c7:af77:437a:ffd0? ([2804:7f0:8283:1510:1c7:af77:437a:ffd0])
+        by smtp.gmail.com with ESMTPSA id 88sm824883qth.9.2020.05.13.05.52.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2020 05:06:38 -0700 (PDT)
-Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 10/14] prctl.2: Add PR_SPEC_INDIRECT_BRANCH for
- SPECULATION_CTRL prctls
-To:     Dave Martin <Dave.Martin@arm.com>
-References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
- <1589301419-24459-11-git-send-email-Dave.Martin@arm.com>
- <bd548916-11c8-a53f-67b5-876c79088258@gmail.com>
- <20200513114915.GL21779@arm.com>
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <604879eb-1c7e-d08b-a6b8-165e4259b60c@gmail.com>
-Date:   Wed, 13 May 2020 14:06:38 +0200
+        Wed, 13 May 2020 05:52:59 -0700 (PDT)
+Subject: Re: [PATCH v3 19/23] arm64: mte: Add PTRACE_{PEEK,POKE}MTETAGS
+ support
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Alan Hayward <Alan.Hayward@arm.com>,
+        Omair Javaid <omair.javaid@linaro.org>
+References: <20200421142603.3894-1-catalin.marinas@arm.com>
+ <20200421142603.3894-20-catalin.marinas@arm.com>
+ <a7569985-eb85-497b-e3b2-5dce0acb1332@linaro.org>
+ <20200513104849.GC2719@gaia>
+From:   Luis Machado <luis.machado@linaro.org>
+Message-ID: <3d2621ac-9d08-53ea-6c22-c62532911377@linaro.org>
+Date:   Wed, 13 May 2020 09:52:52 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200513114915.GL21779@arm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200513104849.GC2719@gaia>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/13/20 1:49 PM, Dave Martin wrote:
-> On Wed, May 13, 2020 at 01:21:12PM +0200, Michael Kerrisk (man-pages) wrote:
->> Hello Dave,
->>
->> On 5/12/20 6:36 PM, Dave Martin wrote:
->>> Add the PR_SPEC_INDIRECT_BRANCH "misfeature" added in Linux 4.20
->>> for PR_SET_SPECULATION_CTRL and PR_GET_SPECULATION_CTRL.
+On 5/13/20 7:48 AM, Catalin Marinas wrote:
+> Hi Luis,
+> 
+> On Tue, May 12, 2020 at 04:05:15PM -0300, Luis Machado wrote:
+>> On 4/21/20 11:25 AM, Catalin Marinas wrote:
+>>> Add support for bulk setting/getting of the MTE tags in a tracee's
+>>> address space at 'addr' in the ptrace() syscall prototype. 'data' points
+>>> to a struct iovec in the tracer's address space with iov_base
+>>> representing the address of a tracer's buffer of length iov_len. The
+>>> tags to be copied to/from the tracer's buffer are stored as one tag per
+>>> byte.
 >>>
->>> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
->>> Cc: Tim Chen <tim.c.chen@linux.intel.com>
->>> Cc: Thomas Gleixner <tglx@linutronix.de>
->>
->> Thanks. Patch applied, but not yet pushed while I wait to see if any
->> Review/Ack arrives.
->>
->> Also, could you please check the tweaks I note below.
->>
+>>> On successfully copying at least one tag, ptrace() returns 0 and updates
+>>> the tracer's iov_len with the number of tags copied. In case of error,
+>>> either -EIO or -EFAULT is returned, trying to follow the ptrace() man
+>>> page.
+>>>
+>>> Note that the tag copying functions are not performance critical,
+>>> therefore they lack optimisations found in typical memory copy routines.
+>>>
+>>> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+>>> Cc: Will Deacon <will@kernel.org>
+>>> Cc: Alan Hayward <Alan.Hayward@arm.com>
+>>> Cc: Luis Machado <luis.machado@linaro.org>
+>>> Cc: Omair Javaid <omair.javaid@linaro.org>
 >>> ---
->>>  man2/prctl.2 | 24 ++++++++++++++++++------
->>>  1 file changed, 18 insertions(+), 6 deletions(-)
 >>>
->>> diff --git a/man2/prctl.2 b/man2/prctl.2
->>> index e8eaf95..66417cf 100644
->>> --- a/man2/prctl.2
->>> +++ b/man2/prctl.2
->>> @@ -1213,11 +1213,20 @@ arguments must be specified as 0; otherwise the call fails with the error
->>>  .\" commit 356e4bfff2c5489e016fdb925adbf12a1e3950ee
->>>  Sets the state of the speculation misfeature specified in
->>>  .IR arg2 .
->>> -Currently, the only permitted value for this argument is
->>> +Currently, this argument must be one of:
->>> +.RS
->>> +.TP
->>>  .B PR_SPEC_STORE_BYPASS
->>> -(otherwise the call fails with the error
->>> +speculative store bypass control, or
+>>> Notes:
+>>>       New in v3.
+>>>
+>>>    arch/arm64/include/asm/mte.h         |  17 ++++
+>>>    arch/arm64/include/uapi/asm/ptrace.h |   3 +
+>>>    arch/arm64/kernel/mte.c              | 127 +++++++++++++++++++++++++++
+>>>    arch/arm64/kernel/ptrace.c           |  15 +++-
+>>>    arch/arm64/lib/mte.S                 |  50 +++++++++++
+>>>    5 files changed, 211 insertions(+), 1 deletion(-)
+>>>
+>> I started working on MTE support for GDB and I'm wondering if we've already
+>> defined a way to check for runtime MTE support (as opposed to a HWCAP2-based
+>> check) in a traced process.
 >>
->> s/speculative/enable speculative/
->>
->>> +.\" commit 9137bb27e60e554dab694eafa4cca241fa3a694f
->>> +.TP
->>> +.BR PR_SPEC_INDIRECT_BRANCH " (since Linux 4.20)"
->>> +indirect branch speculation control.
->>
->> s/indirect/enable indirect/
+>> Originally we were going to do it via empty-parameter ptrace calls, but you
+>> had mentioned something about a proc-based method, if I'm not mistaken.
 > 
-> That doesn't seem quite right.
+> We could expose more information via proc_pid_arch_status() but that
+> would be the tagged address ABI and tag check fault mode and intended
+> for human consumption mostly. We don't have any ptrace interface that
+> exposes HWCAPs. Since the gdbserver runs on the same machine as the
+> debugged process, it can check the HWCAPs itself, they are the same for
+> all processes.
 
-My goof, not looking at the bigger context of the patch.
+Sorry, I think i haven't made it clear. I already have access to HWCAP2 
+both from GDB's and gdbserver's side. But HWCAP2 only indicates the 
+availability of a particular feature in a CPU, it doesn't necessarily 
+means the traced process is actively using MTE, right?
+
+So GDB/gdbserver would need runtime checks to be able to tell if a 
+process is using MTE, in which case the tools will pay attention to tags 
+and additional MTE-related registers (sctlr and gcr) we plan to make 
+available to userspace.
+
+This would be similar to SVE, where we have a HWCAP bit indicating the 
+presence of the feature, but it may not be in use at runtime for a 
+particular running process.
+
+The original proposal was to have GDB send PTRACE_PEEKMTETAGS with a 
+NULL address and check the result. Then GDB would be able to decide if 
+the process is using MTE or not.
 
 > 
-> arg2 just identifies what behaviour to configure.
-> It's arg3 that says whether to disable / enable it or whatever.
+> BTW, in my pre-v4 patches (hopefully I'll post v4 this week), I changed
+> the ptrace tag access slightly to return an error (and no tags copied)
+> if the page has not been mapped with PROT_MTE. The other option would
+> have been read-as-zero/write-ignored as per the hardware behaviour.
+> Either option is fine by me but I thought the write-ignored part would
+> be more confusing for the debugger. If you have any preference here,
+> please let me know.
 > 
-> 
-> While editing this I did wonder whether the "control" was helpful.
-> Maybe just dropping that word from these entries would help.
 
-Okay I tried to fix things, and made also some other edits.
-How does the following look to you?
-
-      PR_SET_SPECULATION_CTRL (since Linux 4.17)
-              Sets the state of the speculation misfeature  specified  in
-              arg2.   The  speculation-misfeature settings are per-thread
-              attributes.
-
-              Currently, arg2 must be one of:
-
-              PR_SPEC_STORE_BYPASS
-                     Set the state of the speculative store  bypass  mis‐
-                     feature.
-
-              PR_SPEC_INDIRECT_BRANCH (since Linux 4.20)
-                     Set  the  state  of  the indirect branch speculation
-                     misfeature.
-
-              If arg2 does not have one of the  above  values,  then  the
-              call fails with the error ENODEV.
-
-              The  arg3  argument  is  used to hand in the control value,
-              which is one of the following:
-
-              ...
-
-Cheers,
-
-Michael
-
-
--- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
+I think erroring out is a better alternative, as long as the debugger 
+can tell what the error means, like, for example, "this particular 
+address doesn't make use of tags".
