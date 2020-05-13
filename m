@@ -2,17 +2,17 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DCB1D1937
-	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 17:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E9D1D192E
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 17:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730938AbgEMPWH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 May 2020 11:22:07 -0400
-Received: from 8bytes.org ([81.169.241.247]:42596 "EHLO theia.8bytes.org"
+        id S2389290AbgEMPVq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 May 2020 11:21:46 -0400
+Received: from 8bytes.org ([81.169.241.247]:42656 "EHLO theia.8bytes.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729502AbgEMPVo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 13 May 2020 11:21:44 -0400
+        id S1732271AbgEMPVp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 13 May 2020 11:21:45 -0400
 Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 4C0966BB; Wed, 13 May 2020 17:21:41 +0200 (CEST)
+        id 7C24C736; Wed, 13 May 2020 17:21:41 +0200 (CEST)
 From:   Joerg Roedel <joro@8bytes.org>
 To:     x86@kernel.org
 Cc:     hpa@zytor.com, Dave Hansen <dave.hansen@linux.intel.com>,
@@ -27,9 +27,9 @@ Cc:     hpa@zytor.com, Dave Hansen <dave.hansen@linux.intel.com>,
         Joerg Roedel <jroedel@suse.de>, joro@8bytes.org,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 4/7] x86/mm/64: Implement arch_sync_kernel_mappings()
-Date:   Wed, 13 May 2020 17:21:34 +0200
-Message-Id: <20200513152137.32426-5-joro@8bytes.org>
+Subject: [PATCH v2 5/7] x86/mm/32: Implement arch_sync_kernel_mappings()
+Date:   Wed, 13 May 2020 17:21:35 +0200
+Message-Id: <20200513152137.32426-6-joro@8bytes.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200513152137.32426-1-joro@8bytes.org>
 References: <20200513152137.32426-1-joro@8bytes.org>
@@ -45,37 +45,88 @@ to all page-tables.
 
 Signed-off-by: Joerg Roedel <jroedel@suse.de>
 ---
- arch/x86/include/asm/pgtable_64_types.h | 2 ++
- arch/x86/mm/init_64.c                   | 5 +++++
- 2 files changed, 7 insertions(+)
+ arch/x86/include/asm/pgtable-2level_types.h |  2 ++
+ arch/x86/include/asm/pgtable-3level_types.h |  2 ++
+ arch/x86/mm/fault.c                         | 25 +++++++++++++--------
+ 3 files changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include/asm/pgtable_64_types.h
-index 52e5f5f2240d..8f63efb2a2cc 100644
---- a/arch/x86/include/asm/pgtable_64_types.h
-+++ b/arch/x86/include/asm/pgtable_64_types.h
-@@ -159,4 +159,6 @@ extern unsigned int ptrs_per_p4d;
+diff --git a/arch/x86/include/asm/pgtable-2level_types.h b/arch/x86/include/asm/pgtable-2level_types.h
+index 6deb6cd236e3..7f6ccff0ba72 100644
+--- a/arch/x86/include/asm/pgtable-2level_types.h
++++ b/arch/x86/include/asm/pgtable-2level_types.h
+@@ -20,6 +20,8 @@ typedef union {
  
- #define PGD_KERNEL_START	((PAGE_SIZE / 2) / sizeof(pgd_t))
+ #define SHARED_KERNEL_PMD	0
  
-+#define ARCH_PAGE_TABLE_SYNC_MASK	(pgtable_l5_enabled() ?	PGTBL_PGD_MODIFIED : PGTBL_P4D_MODIFIED)
-+
- #endif /* _ASM_X86_PGTABLE_64_DEFS_H */
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index 3b289c2f75cd..541af8e5bcd4 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -217,6 +217,11 @@ void sync_global_pgds(unsigned long start, unsigned long end)
- 		sync_global_pgds_l4(start, end);
- }
- 
-+void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
-+{
-+	sync_global_pgds(start, end);
-+}
++#define ARCH_PAGE_TABLE_SYNC_MASK	PGTBL_PMD_MODIFIED
 +
  /*
-  * NOTE: This function is marked __ref because it calls __init function
-  * (alloc_bootmem_pages). It's safe to do it ONLY when after_bootmem == 0.
+  * traditional i386 two-level paging structure:
+  */
+diff --git a/arch/x86/include/asm/pgtable-3level_types.h b/arch/x86/include/asm/pgtable-3level_types.h
+index 33845d36897c..80fbb4a9ed87 100644
+--- a/arch/x86/include/asm/pgtable-3level_types.h
++++ b/arch/x86/include/asm/pgtable-3level_types.h
+@@ -27,6 +27,8 @@ typedef union {
+ #define SHARED_KERNEL_PMD	(!static_cpu_has(X86_FEATURE_PTI))
+ #endif
+ 
++#define ARCH_PAGE_TABLE_SYNC_MASK	(SHARED_KERNEL_PMD ? 0 : PGTBL_PMD_MODIFIED)
++
+ /*
+  * PGDIR_SHIFT determines what a top-level page table entry can map
+  */
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index a51df516b87b..edeb2adaf31f 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -190,16 +190,13 @@ static inline pmd_t *vmalloc_sync_one(pgd_t *pgd, unsigned long address)
+ 	return pmd_k;
+ }
+ 
+-static void vmalloc_sync(void)
++void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
+ {
+-	unsigned long address;
+-
+-	if (SHARED_KERNEL_PMD)
+-		return;
++	unsigned long addr;
+ 
+-	for (address = VMALLOC_START & PMD_MASK;
+-	     address >= TASK_SIZE_MAX && address < VMALLOC_END;
+-	     address += PMD_SIZE) {
++	for (addr = start & PMD_MASK;
++	     addr >= TASK_SIZE_MAX && addr < VMALLOC_END;
++	     addr += PMD_SIZE) {
+ 		struct page *page;
+ 
+ 		spin_lock(&pgd_lock);
+@@ -210,13 +207,23 @@ static void vmalloc_sync(void)
+ 			pgt_lock = &pgd_page_get_mm(page)->page_table_lock;
+ 
+ 			spin_lock(pgt_lock);
+-			vmalloc_sync_one(page_address(page), address);
++			vmalloc_sync_one(page_address(page), addr);
+ 			spin_unlock(pgt_lock);
+ 		}
+ 		spin_unlock(&pgd_lock);
+ 	}
+ }
+ 
++static void vmalloc_sync(void)
++{
++	unsigned long address;
++
++	if (SHARED_KERNEL_PMD)
++		return;
++
++	arch_sync_kernel_mappings(VMALLOC_START, VMALLOC_END);
++}
++
+ void vmalloc_sync_mappings(void)
+ {
+ 	vmalloc_sync();
 -- 
 2.17.1
 
