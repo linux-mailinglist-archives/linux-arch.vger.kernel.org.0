@@ -2,99 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB34F1D11C1
-	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 13:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E91CD1D11C6
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 13:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726190AbgEMLtT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 May 2020 07:49:19 -0400
-Received: from foss.arm.com ([217.140.110.172]:44196 "EHLO foss.arm.com"
+        id S1726031AbgEMLvT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 May 2020 07:51:19 -0400
+Received: from foss.arm.com ([217.140.110.172]:44228 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726024AbgEMLtT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 13 May 2020 07:49:19 -0400
+        id S1725982AbgEMLvS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 13 May 2020 07:51:18 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90F0530E;
-        Wed, 13 May 2020 04:49:18 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2503730E;
+        Wed, 13 May 2020 04:51:18 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABC773F71E;
-        Wed, 13 May 2020 04:49:17 -0700 (PDT)
-Date:   Wed, 13 May 2020 12:49:15 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 744D93F71E;
+        Wed, 13 May 2020 04:51:17 -0700 (PDT)
+Date:   Wed, 13 May 2020 12:51:15 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
 Cc:     linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 10/14] prctl.2: Add PR_SPEC_INDIRECT_BRANCH for
- SPECULATION_CTRL prctls
-Message-ID: <20200513114915.GL21779@arm.com>
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 06/14] prctl.2: ffix quotation mark tweaks
+Message-ID: <20200513115115.GM21779@arm.com>
 References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
- <1589301419-24459-11-git-send-email-Dave.Martin@arm.com>
- <bd548916-11c8-a53f-67b5-876c79088258@gmail.com>
+ <1589301419-24459-7-git-send-email-Dave.Martin@arm.com>
+ <7afe32a5-9675-74d4-7c39-f1271d475afd@gmail.com>
+ <20200513113949.GI21779@arm.com>
+ <f575e35d-cd5e-5808-bed4-91bdfb9c2905@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bd548916-11c8-a53f-67b5-876c79088258@gmail.com>
+In-Reply-To: <f575e35d-cd5e-5808-bed4-91bdfb9c2905@gmail.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 13, 2020 at 01:21:12PM +0200, Michael Kerrisk (man-pages) wrote:
-> Hello Dave,
-> 
-> On 5/12/20 6:36 PM, Dave Martin wrote:
-> > Add the PR_SPEC_INDIRECT_BRANCH "misfeature" added in Linux 4.20
-> > for PR_SET_SPECULATION_CTRL and PR_GET_SPECULATION_CTRL.
+On Wed, May 13, 2020 at 01:46:22PM +0200, Michael Kerrisk (man-pages) wrote:
+> On 5/13/20 1:39 PM, Dave Martin wrote:
+> > On Wed, May 13, 2020 at 12:11:21PM +0200, Michael Kerrisk (man-pages) wrote:
+> >> Hello Dave,
+> >>
+> >> On 5/12/20 6:36 PM, Dave Martin wrote:
+> >>> Convert quote marks used for information terms in prose to use
+> >>> \(oq .. \(cq, for better graphical rendering.
+> >>>
+> >>> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> >>
+> >> Again, this is a patch that I would prefer to see near the end 
+> >> of a series, rather than in the middle.
+> >>
+> >> I'm currently agnostic about this change. But, I do not
+> >> want to apply this patch, since no other pages in man-pages
+> >> use \(oq...\(cq.
+> >>
+> >> I haven't applied this patch. Luckily, that does not prevent
+> >> any of the later patches applying.
 > > 
-> > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-> > Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Thanks. Patch applied, but not yet pushed while I wait to see if any
-> Review/Ack arrives.
-> 
-> Also, could you please check the tweaks I note below.
-> 
-> > ---
-> >  man2/prctl.2 | 24 ++++++++++++++++++------
-> >  1 file changed, 18 insertions(+), 6 deletions(-)
+> > I'll be careful to move this sort of thing to the end of a series in
+> > future.
 > > 
-> > diff --git a/man2/prctl.2 b/man2/prctl.2
-> > index e8eaf95..66417cf 100644
-> > --- a/man2/prctl.2
-> > +++ b/man2/prctl.2
-> > @@ -1213,11 +1213,20 @@ arguments must be specified as 0; otherwise the call fails with the error
-> >  .\" commit 356e4bfff2c5489e016fdb925adbf12a1e3950ee
-> >  Sets the state of the speculation misfeature specified in
-> >  .IR arg2 .
-> > -Currently, the only permitted value for this argument is
-> > +Currently, this argument must be one of:
-> > +.RS
-> > +.TP
-> >  .B PR_SPEC_STORE_BYPASS
-> > -(otherwise the call fails with the error
-> > +speculative store bypass control, or
+> > This was a provocative patch, so I'm happy for it to be dropped.
+> > 
+> > 
+> > The main motivation was that ' renders to PostScript etc. as a closing
+> > quote, which is fine for apostrophes but not fine for an opening quote
+> > mark.  Most of the current quotes in here are actually ", but I don't
+> > see an actual promise from groff that that renders as a neutral glyph
+> > either, so it seemed best to avoid.  For now " does seem to be rendered
+> > with a neutral glyph (i.e., neither opening or closing).
 > 
-> s/speculative/enable speculative/
+> See my commit 11b0b31a14bd2c7dcb0cf7bc815b4c1887444a89, just pushed,
+> which addresses the ' issues.
 > 
-> > +.\" commit 9137bb27e60e554dab694eafa4cca241fa3a694f
-> > +.TP
-> > +.BR PR_SPEC_INDIRECT_BRANCH " (since Linux 4.20)"
-> > +indirect branch speculation control.
+> >>> ---
+> >>>
+> >>> Note, this can lead to misrendering on badly-configured systems.
+> >>> However, many man pages do it.
+> >>
+> >> Can you say some more about this please?
+> > 
+> > Terminal character maps need to match LANG etc. in order for fancy
+> > characters coming out of nroff to display correctly.
+> > 
+> > ssh attempts to send LANG across, but terminal sessions between systems
+> > that have different locales installed can be a problem, as can dumb
+> > serial links that don't magically pass the locale and terminal type
+> > settings across.
+> > 
+> > The fact that I hit this problem a lot in some situations (particularly
+> > the serial link case) suggested to me that fancy characters are
+> > considered fine nowadays, but perhaps I'd need to dig into it some more
+> > to understand the situation fully.
 > 
-> s/indirect/enable indirect/
+> Thanks for the clarification.
+> 
+> > (There are one or two ' that should really be \(aq anyway, but I'll
+> > try to address that separately.)
+> 
+> See above. I presume that patch is what you wanted?
 
-That doesn't seem quite right.
+Yup, works for me.
 
-arg2 just identifies what behaviour to configure.
-It's arg3 that says whether to disable / enable it or whatever.
-
-
-While editing this I did wonder whether the "control" was helpful.
-Maybe just dropping that word from these entries would help.
-
-[...]
+I'll keep an eye out for other instances, but those were the ones that
+stood out.
 
 Cheers
 ---Dave
