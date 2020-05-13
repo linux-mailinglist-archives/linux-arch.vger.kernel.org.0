@@ -2,136 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA0A1D178A
-	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 16:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F941D17BA
+	for <lists+linux-arch@lfdr.de>; Wed, 13 May 2020 16:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388833AbgEMO0a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 May 2020 10:26:30 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:8391 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388827AbgEMO03 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 May 2020 10:26:29 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ebc030c0000>; Wed, 13 May 2020 07:24:12 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 13 May 2020 07:26:28 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Wed, 13 May 2020 07:26:28 -0700
-Received: from [10.40.103.138] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 13 May
- 2020 14:26:19 +0000
-Subject: Re: RE: [PATCH v6 09/10] arm64: efi: Export screen_info
-To:     Michael Kelley <mikelley@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>
-CC:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        id S2388996AbgEMOg6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 May 2020 10:36:58 -0400
+Received: from foss.arm.com ([217.140.110.172]:48194 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388857AbgEMOg6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 13 May 2020 10:36:58 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A35431B;
+        Wed, 13 May 2020 07:36:57 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0FF283F71E;
+        Wed, 13 May 2020 07:36:55 -0700 (PDT)
+Date:   Wed, 13 May 2020 15:36:54 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        Andy Whitcroft <apw@canonical.com>,
-        vkuznets <vkuznets@redhat.com>, Jason Wang <jasowang@redhat.com>,
-        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <1584200119-18594-1-git-send-email-mikelley@microsoft.com>
- <1584200119-18594-10-git-send-email-mikelley@microsoft.com>
- <CAK8P3a1YUjhaVUmjVC2pCoTTBTU408iN44Q=QZ0RDz8rmzJisQ@mail.gmail.com>
- <MW2PR2101MB10524254D2FE3EFC72329465D7F70@MW2PR2101MB1052.namprd21.prod.outlook.com>
- <CAK8P3a1YCtc3LJ-_3iT90_Srehb96gLHvTXsbJ0wT6NFYCG=TQ@mail.gmail.com>
- <MW2PR2101MB1052E413218D295EF24E5E05D7F40@MW2PR2101MB1052.namprd21.prod.outlook.com>
-From:   Nikhil Mahale <nmahale@nvidia.com>
-Message-ID: <f2b63853-24ae-d6b7-cd43-5792c0d4d31b@nvidia.com>
-Date:   Wed, 13 May 2020 19:56:14 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH 14/14] prctl.2: Add PR_PAC_RESET_KEYS (arm64)
+Message-ID: <20200513143653.GQ21779@arm.com>
+References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
+ <1589301419-24459-15-git-send-email-Dave.Martin@arm.com>
+ <20200513072530.GA18196@willie-the-truck>
 MIME-Version: 1.0
-In-Reply-To: <MW2PR2101MB1052E413218D295EF24E5E05D7F40@MW2PR2101MB1052.namprd21.prod.outlook.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1589379852; bh=x1UAKVn8+/u2cz6MzDi8dZRv1jolqDgwkL4uosH9XXA=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=cW+1fl8Ga69Q1QXp46sGezHshzti2A6hHcqXU68jSAv0HbHLeJQvepipXJ0eSuDBo
-         51KMndVzf/sPPYlWVGm/bE21jU3XJS+EeiVEM2ruDJCnu64Jz80k49jv2OjlI7Vnjj
-         DhPtiz/99TQ94aCjvD+0pTQoBQQ/lwcbhEddYghMCPLZE9sM9eXPYXm18cFxeGfTO2
-         15ETxGo1tsLmjRLBCgkqhz7TYdryxI170K82U/Oez6e+yjci90BE8uVyGq0TXp/K63
-         ks9G06QTA88P3fNC9kzZfxZonCfJndFQz5TkuaWAKoONJmCQ+9rIQ5hxcdLWAb+Cng
-         7pKiTeecW804A==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200513072530.GA18196@willie-the-truck>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 3/20/20 3:16 AM, Michael Kelley wrote:
-> From: Arnd Bergmann <arnd@arndb.de> Sent: Wednesday, March 18, 2020 2:27 AM
->>
->> On Wed, Mar 18, 2020 at 1:18 AM Michael Kelley <mikelley@microsoft.com> wrote:
->>> From: Arnd Bergmann <arnd@arndb.de>
->>>> On Sat, Mar 14, 2020 at 4:36 PM Michael Kelley <mikelley@microsoft.com> wrote:
->>>>>
->>>>> The Hyper-V frame buffer driver may be built as a module, and
->>>>> it needs access to screen_info. So export screen_info.
->>>>>
->>>>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
->>>>
->>>> Is there any chance of using a more modern KMS based driver for the screen
->>>> than the old fbdev subsystem? I had hoped to one day completely remove
->>>> support for the old CONFIG_VIDEO_FBDEV and screen_info from modern
->>>> architectures.
->>>>
->>>
->>> The current hyperv_fb.c driver is all we have today for the synthetic Hyper-V
->>> frame buffer device.  That driver builds and runs on both ARM64 and x86.
->>>
->>> I'm not knowledgeable about video/graphics drivers, but when you
->>> say "a more modern KMS based driver", are you meaning one based on
->>> DRM & KMS?  Does DRM make sense for a "dumb" frame buffer device?
->>> Are there any drivers that would be a good pattern to look at?
->>
->> It used to be a lot harder to write a DRM driver compared to an fbdev
->> driver, but this has changed to the opposite over the years.
->>
->> A fairly minimal example would be drivers/gpu/drm/pl111/pl111_drv.c
->> or anything in drivers/gpu/drm/tiny/, but you may want to look at the
->> other hypervisor platforms first, i.e drivers/gpu/drm/virtio/virtgpu_drv.c,
->> drivers/gpu/drm/vmwgfx/vmwgfx_drv.c, drivers/gpu/drm/xen/xen_drm_front.c,
->> drivers/gpu/drm/qxl/qxl_drv.c, and drivers/gpu/drm/bochs/bochs_drv.c.
->>
+On Wed, May 13, 2020 at 08:25:31AM +0100, Will Deacon wrote:
+> Hi Dave,
 > 
-> Thanks for the pointers, especially for the other hypervisors.
+> On Tue, May 12, 2020 at 05:36:59PM +0100, Dave Martin wrote:
+> > diff --git a/man2/prctl.2 b/man2/prctl.2
+> > index dd16227..7ea60e2 100644
+> > --- a/man2/prctl.2
+> > +++ b/man2/prctl.2
+> > @@ -950,6 +950,46 @@ behavior.
+> >  A value of 1 indicates
+> >  .BR execve (2)
+> >  will operate in the privilege-restricting mode described above.
+> > +.\" prctl PR_PAC_RESET_KEYS
+> > +.\" commit ba830885656414101b2f8ca88786524d4bb5e8c1
+> > +.TP
+> > +.BR PR_PAC_RESET_KEYS " (since Linux 5.0, only on arm64)"
+> > +Securely reset the thread's pointer authentication keys
+> > +to fresh random values generated by the kernel.
+> > +.IP
+> > +The set of keys to be reset is specified by
+> > +.IR arg2 ,
+> > +which must be a logical OR of zero or more of the following:
+> > +.RS
+> > +.TP
+> > +.B PR_PAC_APIAKEY
+> > +instruction authentication key A
+> > +.TP
+> > +.B PR_PAC_APIBKEY
+> > +instruction authentication key B
+> > +.TP
+> > +.B PR_PAC_APDAKEY
+> > +data authentication key A
+> > +.TP
+> > +.B PR_PAC_APDBKEY
+> > +data authentication key B
+> > +.TP
+> > +.B PR_PAC_APGAKEY
+> > +generic authentication \(lqA\(rq key.
+> > +.IP
+> > +(Yes folks, there really is no generic B key.)
+> > +.RE
+> > +.IP
+> > +As a special case, if
+> > +.I arg2
+> > +is zero then all the keys are reset.
+> > +Since new keys could be added in future,
+> > +this is the recommended way to completely wipe the existing keys
+> > +when creating a new execution context.
 > 
-Sorry if anybody in 'to' or 'cc' is receiving this reply multiple times.
-I had configured by email client incorrectly to reply.
+> I see what you're saying, but the keys are also reset on exec() iirc, so we
+> don't want to encourage people to issue the prctl() unnecessarily
+> immediately following an exec().
 
-screen_info is still useful with a modern KMS-based driver.  It exposes
-the mode parameters that the GOP driver chose.  This information is
-needed to implement seamless or glitchless boot, by both ensuring that
-the scanout parameters don't change and being able to read back the
-scanout image to populate the initial contents of the new surface.
+I thought of saying that, then pulled it out again.
 
-This works today on arches which implement (U)EFI and export
-screen_info, including x86 and powerpc, but doesn't work on arm or
-arm64.  As arm64 systems that implement UEFI with real GOP drivers
-become more prevalent, it would be nice to be have these features there
-as well.
+How about:
 
-Thanks,
-Nikhil Mahale
+"[...] a new execution context within an existing process.  Note that
+execve() always resets all the keys as part of its operation, without
+the need for this prctl() call.  PR_PAC_RESET_KEYS is intended for
+custom situations that do not involve execve(), such as creating a new
+managed run-time sandbox."
 
-> Michael
+I deliberately don't say "thread" because that's probably libc's job.
+I'll need to check glibc does, though.  There may be issues with
+pthreads semantics that mean we can't reset the keys there.
+
 > 
+> > +.IP
+> > +The remaining arguments
+> > +.IR arg3 ", " arg4 " and " arg5
+> > +must all be zero.
+> >  .\" prctl PR_SET_PDEATHSIG
+> >  .TP
+> >  .BR PR_SET_PDEATHSIG " (since Linux 2.1.57)"
+> > @@ -1920,6 +1960,27 @@ are not 0.
+> >  .B EINVAL
+> >  .I option
+> >  was
+> > +.B PR_PAC_RESET_KEYS
+> > +and
+> > +.I arg2
+> > +contains non-zero bits other than
+> > +.BR
+> > +.BR PR_PAC_APIAKEY ,
+> > +.BR PR_PAC_APIBKEY ,
+> > +.BR PR_PAC_APDAKEY ,
+> > +.B PR_PAC_APDBKEY
+> > +and
+> > +.BR PR_PAC_APGAKEY ;
+> > +or
+> > +.IR arg3 ,
+> > +.I arg4
+> > +and
+> > +.I arg5
+> > +were not all zero.
+> 
+> Do we care about other reasons for -EINVAL, such as the system not
+> supporting pointer authentication?
+
+Again, I tried to catch that under the new "not supported by this
+platform" wording in the earlier patch.  Do you think that's sufficient,
+or do we need something else here?
+
+Cheers
+---Dave
