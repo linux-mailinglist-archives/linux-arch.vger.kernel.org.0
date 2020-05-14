@@ -2,151 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FD01D4185
-	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 01:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 454F31D4190
+	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 01:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728508AbgENXGg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 May 2020 19:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S1726090AbgENXQ0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 May 2020 19:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728386AbgENXGf (ORCPT
+        by vger.kernel.org with ESMTP id S1726088AbgENXQZ (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 14 May 2020 19:06:35 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B05CC061A0C;
-        Thu, 14 May 2020 16:06:35 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id x12so373865qts.9;
-        Thu, 14 May 2020 16:06:35 -0700 (PDT)
+        Thu, 14 May 2020 19:16:25 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23F1C061A0C;
+        Thu, 14 May 2020 16:16:25 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id x2so57366pfx.7;
+        Thu, 14 May 2020 16:16:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GfWzlFsuAoUDmdua/9uNW6OpJdltnvCGSH8AunyR6Aw=;
-        b=dmHN/+qed5ck2ukkXg9tSwKuGSueTRQ7MyAf9K22IGxsHiAion1j6GJvRTVVEorB8S
-         MLoKu+d2yfbCGMPAvCodrteG3tGfI4ItYnb5XmWTEBgY7lHK59yyx9OoMbIPjAViV/L3
-         Tf023jZee/oTBzXiYBZ7hwcdUAJf4ooM2hozL9ZyaizYzQNPudOlC50+HqCLIrXnscyy
-         Cc3BlDrjgyv3B8HqVQR44DeZ9xxR5KAiyUfsgdUxl0pD7k0wuFGdSkL+ZVbjkmboSHtF
-         nRTx25zrGP1owLbLwzPOa4zFLvMsroc21ZpWrH1Y3mX7RlK17t4qBm1E1eZ4xY3gPV2j
-         wrpA==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=/+eJp01tcGIi1FS6nFoffCHP/3vMG+E9qZfC/akFkdg=;
+        b=DcMY/BwGW9Ui9hS5lf+6zAGj+OmK2cB2fnuNjh62obBQ8tM0MRuSOYJ+fncTgpIzjl
+         Fr+G43Ze3vE389xISo74EvA5+F+pwxdq08UOHL93AoQVJdRseYr71wLDSffjOCejHxOw
+         sDUEWQJaYfVGt1pPvT5UhdNq5b5EWWJT/dYV39X3soljP5oukSwuraLSZhNMgD8gT36O
+         0WY12k7mzMgqL4i7LU2CROOvdP9Z4u4fVAPH0G8g5zT2l+dEtVq0T1+UQQwHYSHwXwmY
+         PddE82IB1dy4WSCzikNexASjizHGyyXjKkSKQBK6Yi7BCXESMSIB5m833S0uF/PqqNEl
+         vzog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GfWzlFsuAoUDmdua/9uNW6OpJdltnvCGSH8AunyR6Aw=;
-        b=ULMtu/DH3wU8UbZyXi0IZoetXE+TMYNT69B/YPQl2P6lbkMDmHPNvMkpbokbbQHpGR
-         DwlXRPUNPSYCkPU8B8b2UM8zsG9FVkPyF8NlkWmiQ6Dh6EuuWpr5ftrDEWUOFVkH99uM
-         n6yIgLy+32vvCofYW0qPEt/5df8IhHWXHtpKWnpPA83SPAOBu8W2NoS/+z+bFeKxEYdb
-         GSBrIAzM2jP1JD//Yf/BbX9g34sA2dzHfVX2sCuQ46D02uYBEIGYALQq886IuGap8AHh
-         yjdIkiamEeCTXF0D7GpbZ6JArWJOXUXoJiTpPzW4Pq5uHAKhQOy09aadHFB22L4Rd3qS
-         rYGg==
-X-Gm-Message-State: AOAM5312fEIjZDj8MTCUlNk8+2R3KLrfwCYxjiHRMThu+2VykfYUOYLu
-        5CthfH2d/1mbRGtOOsYKCrVvX0mUpR+D+PKqLAc=
-X-Google-Smtp-Source: ABdhPJxap0Mg4yJ1qtZcnaDhQEIudfGg97y5b6RxA41JA8Q/RM+whiJBkVDsozZeZuovG4h9zY4U1FffOrriKMDojjE=
-X-Received: by 2002:aed:24a1:: with SMTP id t30mr575276qtc.93.1589497594152;
- Thu, 14 May 2020 16:06:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=/+eJp01tcGIi1FS6nFoffCHP/3vMG+E9qZfC/akFkdg=;
+        b=fN2mwNfRXOLbBbXHyJKasdooL0v4wzNDdfoLida50w3Oi72d8+Ahgt9znwcaVKmvJ+
+         TtKqFtLoSsgNzSomzEkVBatSNrVrKQi4u3gnKLHzwIh9tTk1GVe4b0/mlCPJx1WiI2s6
+         ND3EejEyu0Y1quDRMpyUe66RwtAmb4IgDGwPvlUlP05PKD5HlKfzkCjHyogWNGWNcV/S
+         I9Mm6BMg3VYD7SZM5lcI9SurNWYWz4EoBR6vVqYPg+WrQs6kjfYHz2GEfDrFX8X1Qjq4
+         +ghZsMukrAB1kytCSxn1de6hjW1E88M9MmHZZWjSYcgWbUBkuNagjpQo1odedv9E+Gx1
+         Zs9Q==
+X-Gm-Message-State: AOAM533tKT2BFNTGbRF/v83nM64+SoEQFY3O+9J/KOlZ+BAq6x4SOcbH
+        2pTcXBCUzckHn+6d6ULPCV0=
+X-Google-Smtp-Source: ABdhPJwRRq+bL5xaxHN1P6mCwtKSPR/WiDUgW/JFP+3vWldtyl1raVdBJTKBlG9MkAPg1TEaxdcXGg==
+X-Received: by 2002:a63:5026:: with SMTP id e38mr430641pgb.149.1589498185092;
+        Thu, 14 May 2020 16:16:25 -0700 (PDT)
+Received: from syed ([106.223.1.212])
+        by smtp.gmail.com with ESMTPSA id t14sm231437pgr.61.2020.05.14.16.16.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 14 May 2020 16:16:24 -0700 (PDT)
+Date:   Fri, 15 May 2020 04:46:03 +0530
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
+        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        yamada.masahiro@socionext.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v6 0/4] Introduce the for_each_set_clump macro
+Message-ID: <cover.1589497311.git.syednwaris@gmail.com>
 MIME-Version: 1.0
-References: <20200513192532.4058934-1-andriin@fb.com> <20200513192532.4058934-2-andriin@fb.com>
- <20200514121848.052966b3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <87h7wixndi.fsf@nanos.tec.linutronix.de> <CAEf4Bzbj-WvRkoGxkSFtK5_1JfQxthoFid398C97RM0ppBb0dA@mail.gmail.com>
- <20200514225646.4kgc7lrsviusujg2@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20200514225646.4kgc7lrsviusujg2@ast-mbp.dhcp.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 14 May 2020 16:06:23 -0700
-Message-ID: <CAEf4Bza2eD4de6m2e_vmbB9pDsCYr+jsWfMe+u2wWrfRaxXZdw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/6] bpf: implement BPF ring buffer and verifier
- support for it
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, linux-arch@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 14, 2020 at 3:56 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, May 14, 2020 at 02:30:11PM -0700, Andrii Nakryiko wrote:
-> > On Thu, May 14, 2020 at 1:39 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> > >
-> > > Jakub Kicinski <kuba@kernel.org> writes:
-> > >
-> > > > On Wed, 13 May 2020 12:25:27 -0700 Andrii Nakryiko wrote:
-> > > >> One interesting implementation bit, that significantly simplifies (and thus
-> > > >> speeds up as well) implementation of both producers and consumers is how data
-> > > >> area is mapped twice contiguously back-to-back in the virtual memory. This
-> > > >> allows to not take any special measures for samples that have to wrap around
-> > > >> at the end of the circular buffer data area, because the next page after the
-> > > >> last data page would be first data page again, and thus the sample will still
-> > > >> appear completely contiguous in virtual memory. See comment and a simple ASCII
-> > > >> diagram showing this visually in bpf_ringbuf_area_alloc().
-> > > >
-> > > > Out of curiosity - is this 100% okay to do in the kernel and user space
-> > > > these days? Is this bit part of the uAPI in case we need to back out of
-> > > > it?
-> > > >
-> > > > In the olden days virtually mapped/tagged caches could get confused
-> > > > seeing the same physical memory have two active virtual mappings, or
-> > > > at least that's what I've been told in school :)
-> > >
-> > > Yes, caching the same thing twice causes coherency problems.
-> > >
-> > > VIVT can be found in ARMv5, MIPS, NDS32 and Unicore32.
-> > >
-> > > > Checking with Paul - he says that could have been the case for Itanium
-> > > > and PA-RISC CPUs.
-> > >
-> > > Itanium: PIPT L1/L2.
-> > > PA-RISC: VIPT L1 and PIPT L2
-> > >
-> > > Thanks,
-> > >
-> >
-> > Jakub, thanks for bringing this up.
-> >
-> > Thomas, Paul, what kind of problems are we talking about here? What
-> > are the possible problems in practice?
->
-> VIVT cpus will have issues with coherency protocol between cpus.
-> I don't think it applies to this case.
-> Here all cpus we have the same phys page seen in two virtual pages.
-> That mapping is the same across all cpus.
-> But any given range of virtual addresses in these two pages will
-> be accessed by only one cpu at a time.
-> At least that's my understanding of Andrii's algorithm.
-> We probably need to white board the overlapping case a bit more.
-> Worst case I think it's fine to disallow this new ring buffer
-> on such architectures. The usability from bpf program side
-> is too great to give up.
+This patchset introduces a new generic version of for_each_set_clump. 
+The previous version of for_each_set_clump8 used a fixed size 8-bit
+clump, but the new generic version can work with clump of any size but
+less than or equal to BITS_PER_LONG. The patchset utilizes the new macro 
+in several GPIO drivers.
 
-From what Paul described, I think this will work in any case. Each
-byte of reserved/committed record is going to be both written and
-consumed using exactly the same virtual mapping and only that one.
-E.g., in case of samples starting at the end of ringbuf and ending at
-the beginning. Header and first part will be read using first set of
-mapped pages, while second part will be written and read using second
-set of pages (never first set of pages). So it seems like everything
-should be fine even on VIVT architectures?
+The earlier 8-bit for_each_set_clump8 facilitated a
+for-loop syntax that iterates over a memory region entire groups of set
+bits at a time.
 
-More visually, copying diagram from the code:
+For example, suppose you would like to iterate over a 32-bit integer 8
+bits at a time, skipping over 8-bit groups with no set bit, where
+XXXXXXXX represents the current 8-bit group:
 
-------------------------------------------------------
-| meta pages |     mapping 1     |     mapping 2     |
-------------------------------------------------------
-|            | 1 2 3 4 5 6 7 8 9 | 1 2 3 4 5 6 7 8 9 |
-------------------------------------------------------
-|            | TA             DA | TA             DA |
-------------------------------------------------------
-                              ^^^^^^^
+    Example:        10111110 00000000 11111111 00110011
+    First loop:     10111110 00000000 11111111 XXXXXXXX
+    Second loop:    10111110 00000000 XXXXXXXX 00110011
+    Third loop:     XXXXXXXX 00000000 11111111 00110011
 
-DA is always written/read using "mapping 1", while TA is always
-written/read through mapping 2. Never DA is accessed through "mapping
-2", nor TA is accessed through "mapping 1".
+Each iteration of the loop returns the next 8-bit group that has at
+least one set bit.
+
+But with the new for_each_set_clump the clump size can be different from 8 bits.
+Moreover, the clump can be split at word boundary in situations where word 
+size is not multiple of clump size. Following are examples showing the working 
+of new macro for clump sizes of 24 bits and 6 bits.
+
+Example 1:
+clump size: 24 bits, Number of clumps (or ports): 10
+bitmap stores the bit information from where successive clumps are retrieved.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x000000aa000000aa;
+        0xbbbbabcdeffedcba;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:-
+'offset' is the bit position and 'clump' is the 24 bit clump from the
+above bitmap.
+Iteration first:        offset: 0 clump: 0xfedcba
+Iteration second:       offset: 24 clump: 0xabcdef
+Iteration third:        offset: 48 clump: 0xaabbbb
+Iteration fourth:       offset: 96 clump: 0xaa
+Iteration fifth:        offset: 144 clump: 0xff
+Iteration sixth:        offset: 168 clump: 0xaaaaaa
+Iteration seventh:      offset: 216 clump: 0xff
+Loop breaks because in the end the remaining bits (0x00aa) size was less
+than clump size of 24 bits.
+
+In above example it can be seen that in iteration third, the 24 bit clump
+that was retrieved was split between bitmap[0] and bitmap[1]. This example 
+also shows that 24 bit zeroes if present in between, were skipped (preserving
+the previous for_each_set_macro8 behaviour). 
+
+Example 2:
+clump size = 6 bits, Number of clumps (or ports) = 3.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x0f00000000000000;
+        0x0000000000000ac0;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:
+'offset' is the bit position and 'clump' is the 6 bit clump from the
+above bitmap.
+Iteration first:        offset: 6 clump: 0x2b
+Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
+Here 6 * 3 is clump size * no. of clumps.
+
+Changes in v6:
+ - [Patch 2/4]: Make 'for loop' inside test_for_each_set_clump more
+   succinct.
+
+Changes in v5:
+ - [Patch 4/4]: Minor change: Hardcode value for better code readability.
+
+Changes in v4:
+ - [Patch 2/4]: Use 'for' loop in test function of for_each_set_clump.
+ - [Patch 3/4]: Minor change: Inline value for better code readability.
+ - [Patch 4/4]: Minor change: Inline value for better code readability.
+
+Changes in v3:
+ - [Patch 3/4]: Change datatype of some variables from u64 to unsigned long
+   in function thunderx_gpio_set_multiple.
+
+CHanges in v2:
+ - [Patch 2/4]: Unify different tests for 'for_each_set_clump'. Pass test data as
+   function parameters.
+ - [Patch 2/4]: Remove unnecessary bitmap_zero calls.
+
+Syed Nayyar Waris (4):
+  bitops: Introduce the the for_each_set_clump macro
+  lib/test_bitmap.c: Add for_each_set_clump test cases
+  gpio: thunderx: Utilize for_each_set_clump macro
+  gpio: xilinx: Utilize for_each_set_clump macro
+
+ drivers/gpio/gpio-thunderx.c      |  11 ++-
+ drivers/gpio/gpio-xilinx.c        |  62 ++++++-------
+ include/asm-generic/bitops/find.h |  19 ++++
+ include/linux/bitmap.h            |  61 +++++++++++++
+ include/linux/bitops.h            |  13 +++
+ lib/find_bit.c                    |  14 +++
+ lib/test_bitmap.c                 | 142 ++++++++++++++++++++++++++++++
+ 7 files changed, 288 insertions(+), 34 deletions(-)
+
+
+base-commit: 5f458e572071a54841b93f41e25fbe8ded82df79
+-- 
+2.26.2
+
