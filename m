@@ -2,219 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E171D3512
-	for <lists+linux-arch@lfdr.de>; Thu, 14 May 2020 17:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF95C1D35B8
+	for <lists+linux-arch@lfdr.de>; Thu, 14 May 2020 17:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726117AbgENP2u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 May 2020 11:28:50 -0400
-Received: from foss.arm.com ([217.140.110.172]:38980 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726056AbgENP2u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 14 May 2020 11:28:50 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67FDB1FB;
-        Thu, 14 May 2020 08:28:49 -0700 (PDT)
-Received: from gaia (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 495F93F71E;
-        Thu, 14 May 2020 08:28:47 -0700 (PDT)
-Date:   Thu, 14 May 2020 16:28:40 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Zhenyu Ye <yezhenyu2@huawei.com>
-Cc:     will@kernel.org, suzuki.poulose@arm.com, maz@kernel.org,
-        steven.price@arm.com, guohanjun@huawei.com, olof@lixom.net,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org,
-        xiexiangyou@huawei.com, prime.zeng@hisilicon.com,
-        zhangshaokun@hisilicon.com, kuhn.chenqun@huawei.com
-Subject: Re: [RFC PATCH v3 2/2] arm64: tlb: Use the TLBI RANGE feature in
- arm64
-Message-ID: <20200514152840.GC1907@gaia>
-References: <20200414112835.1121-1-yezhenyu2@huawei.com>
- <20200414112835.1121-3-yezhenyu2@huawei.com>
+        id S1727836AbgENP6I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 May 2020 11:58:08 -0400
+Received: from sonic307-15.consmr.mail.ne1.yahoo.com ([66.163.190.38]:41839
+        "EHLO sonic307-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727849AbgENP6H (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 14 May 2020 11:58:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1589471886; bh=lJfqCN099Mb/d5ojj5Nm59+7L4ICZfqVdceuNiAe6iU=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=AwPGAJS+tjHS43tR0ADM9VPjxCISoS8Qi/iGUfpPobm0/ghSl/5b+i5PhRy6Du/wOcfziASUvrQ3xu6EtjBcdy0H+GYgAedX7fQcjYCcCYQ80YxpGJGMOwH62q166MrTisOgQVtpqAkDXOJlrmcXaE/Np9x3nElSTdOuJ3JxQxxVjcMg6KW4+QHTFnjhKtQYnOFGMk0hEpaokZyEAKgXp4owX79w29KW2tKFYqOl2u6J1e5q4rkXBI8lgdFaF4u8+9mwiu6jjV2fQrvH1dspcaoQ9k3bUWaS/9rv6ciiVgg3zVE9nggo4jvKHo/dpDu+pstGCCaCjsP8rIlZ0W3AFw==
+X-YMail-OSG: TL2Hmq0VM1lCEVKkmqdbc1i.iOnNwL9OyLISaMlPR8GJwJHLJgjAQRGc5elTEU1
+ c37wz3Ap7HzZjUq5qOeycqG9Jn.649DteV_VPr8HddjlPUT4h_b8VbAevHTolBnN2IAvV_cTt9kB
+ HNEqe7aalAyWZRpv1AiDE.Fcmm6zHZRDcySbPG3cF8fuKURVqBtcvJ4sueNwU2MgTOeyI5b8P83L
+ OUZ9WJUcDCXP4B.z2kVNsJA6ax6RayAXbrpoFbL7Uk42S_rlkdsXhKms5JBKtcOruHpbVp6_mWgh
+ bp8yROUQkkT3GxuJgHUviOjzulJuR1MW_I6QgKVZtzBj_GHBRArYlTD6t2ymF3XBIWTGveU4uQ1I
+ iiNn7YCQPCUUJIo1aAH2zOzwNuySUf21t4IPsGjuwaCDpKOFDeZNQjNADltrVc82yx8gdlttFNdB
+ wFh89hEfc5ZEQ2FATYDEshEmKzlPeAQ6VAC0HQ1jdf.O5IUdOGkE8bvMXT48p4s8iGoKKJFvLY5d
+ hs2uuCrk9b4.riL.Py0GkcZgNnJ68qH3wXsQRGJH90zAC.JkfCpHlQVtkcjpe1VsExrnjM3Vaz7t
+ exWnmXi4JF5BlpYW4chOs9HsAWwWSym4jiXru3tHdMowBR6_L6gjI6XP_Ye_liUXFnYZbYIq9Fed
+ sQKREodyjAEw48o3AzOlD2YtDQKWG542ykBov4KUWaiwUvl5zocxqIDZzF29Hf4zEAlWVBDrtsJW
+ urUy6X3eJOIFxaunUloXSMsUiT3CHQMkA7Spw809boBmGQorD7Ie9grUOBC.jw_8nwV1KxY4v5Yd
+ frQO2OveB0We_p7FMcurUJ.9mHvoF_Phsyt11eYEI5uKcM32nYBWXFosnuYcF.s__q.wbPHws.RE
+ hHRK9MJz24bU78JbKIP1Iu1KwdW7nYr1KPOV.tTxnJrazapeyWLre0PA_Lte0uUl24Adt5s9mc0r
+ sBb6TSXdBI2bf0wboH1_1OYCNbqKe.XV1GYCIT1IZcExEMHqbaR2YOY7XQRz8U.9F6SAcrakIjLd
+ Q6_4fOCv_mN9AEYJJcj_UiLRFDJ8MwhBLPcTM0e5e24d5iUTw70s5hGTIG266lvVWY9g3LCTnMMh
+ CGtqsx9aogVT44V..lDngW7CPeQ6VDnIuTkAbUSaS7P4Ztv8ydqAV_Mc5fkCUD16I5fl83iTYN1V
+ 43335SA7PQgXiue46A5.g7_bTEClCv8mUrBOAcn_kg7D96mJklMRjdcYZmx9H1N0aJzqk7qKgrxD
+ .dnKqDrlW7iDVEcfYBgyilvRBazPyQANEXdrJzMXpD8IgEyf2.ELmImNSNcYCLlNDYVXfmEZgD5V
+ h9zsl3tjJQHRJD28XS_XjAiDPlqVEfyCecfoQlLbrUj02TaBTbb5fh.VNrEnhKTI.bo4e63UUpFe
+ pYO3hNJTrdvZyw1fOr00uku7uZk5BQoyYK0VWFkGP_RNMiUfw5PLUSd1PXtEPKnah7gJ3vl_yfuD
+ VtExuDPw8dyZo20QhPlAZJBRUHmiQ0z2NqCRqyl8W0QPK_rWxWxfuQQQ-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Thu, 14 May 2020 15:58:06 +0000
+Received: by smtp419.mail.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID e3935901ce24bb77d4947cc41492c6c4;
+          Thu, 14 May 2020 15:58:05 +0000 (UTC)
+Subject: Re: [PATCH v17 05/10] fs,landlock: Support filesystem access-control
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        James Morris <jmorris@namei.org>
+Cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20200511192156.1618284-1-mic@digikod.net>
+ <20200511192156.1618284-6-mic@digikod.net>
+ <alpine.LRH.2.21.2005141335280.30052@namei.org>
+ <c159d845-6108-4b67-6527-405589fa5382@digikod.net>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Autocrypt: addr=casey@schaufler-ca.com; keydata=
+ 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
+ abzjfg==
+Message-ID: <bcfa8f74-5bc9-b363-5372-b254ba2e88a7@schaufler-ca.com>
+Date:   Thu, 14 May 2020 08:58:03 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200414112835.1121-3-yezhenyu2@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <c159d845-6108-4b67-6527-405589fa5382@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Mailer: WebService/1.1.15941 hermes_yahoo Apache-HttpAsyncClient/4.1.4 (Java/11.0.6)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Zhenyu,
+On 5/14/2020 3:39 AM, Micka=C3=ABl Sala=C3=BCn wrote:
+> On 14/05/2020 05:37, James Morris wrote:
+>> On Mon, 11 May 2020, Micka=C3=ABl Sala=C3=BCn wrote:
+>>
+>>
+>>> diff --git a/include/linux/fs.h b/include/linux/fs.h
+>>> index 45cc10cdf6dd..2276642f8e05 100644
+>>> --- a/include/linux/fs.h
+>>> +++ b/include/linux/fs.h
+>>> @@ -1517,6 +1517,11 @@ struct super_block {
+>>>  	/* Pending fsnotify inode refs */
+>>>  	atomic_long_t s_fsnotify_inode_refs;
+>>> =20
+>>> +#ifdef CONFIG_SECURITY_LANDLOCK
+>>> +	/* References to Landlock underlying objects */
+>>> +	atomic_long_t s_landlock_inode_refs;
+>>> +#endif
+>>> +
+>> This needs to be converted to the LSM API via superblock blob stacking=
+=2E
+>>
+>> See Casey's old patch:=20
+>> https://lore.kernel.org/linux-security-module/20190829232935.7099-2-ca=
+sey@schaufler-ca.com/
+> s_landlock_inode_refs is quite similar to s_fsnotify_inode_refs, but I
+> can do it once the superblock security blob patch is upstream. Is it a
+> blocker for now? What is the current status of lbs_superblock?
 
-On Tue, Apr 14, 2020 at 07:28:35PM +0800, Zhenyu Ye wrote:
-> diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
-> index b76df828e6b7..3a1816770bd1 100644
-> --- a/arch/arm64/include/asm/tlb.h
-> +++ b/arch/arm64/include/asm/tlb.h
-> @@ -38,7 +38,12 @@ static inline void tlb_flush(struct mmu_gather *tlb)
->  		return;
->  	}
->  
-> -	__flush_tlb_range(&vma, tlb->start, tlb->end, stride, last_level);
-> +	if (cpus_have_const_cap(ARM64_HAS_TLBI_RANGE))
-> +		__flush_tlb_range_directly(&vma, tlb->start, tlb->end,
-> +					   stride, last_level);
-> +	else
-> +		__flush_tlb_range(&vma, tlb->start, tlb->end,
-> +				  stride, last_level);
+As no currently stackable modules conflict over the superblock
+(SELinux and Smack are the existing users) there has been no need
+to move its management into the infrastructure. The active push for
+stacking does not (yet) include everything needed for SELinux+Smack.
+It includes what is needed for SELinux+AppArmor and Smack+AppArmor.
+That does not include the superblock blob.
 
-I think you could move such check in __flush_tlb_range() and avoid
-cpus_have_const_cap() in two places. More on this below.
+You can include a patch in the landlock set that provides infrastructure
+management of the superblock blob. Feel free to glean it from my proposal=
+=2E
 
-> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
-> index bc3949064725..a482188ea563 100644
-> --- a/arch/arm64/include/asm/tlbflush.h
-> +++ b/arch/arm64/include/asm/tlbflush.h
-> @@ -59,6 +59,44 @@
->  		__ta;						\
->  	})
->  
-> +/*
-> + * This macro creates a properly formatted VA operand for the TLBI RANGE.
-> + * The value bit assignments are:
-> + *
-> + * +----------+------+-------+-------+-------+----------------------+
-> + * |   ASID   |  TG  | SCALE |  NUM  |  TTL  |        BADDR         |
-> + * +-----------------+-------+-------+-------+----------------------+
-> + * |63      48|47  46|45   44|43   39|38   37|36                   0|
-> + *
-> + * The address range is determined by below formula:
-> + * [BADDR, BADDR + (NUM + 1) * 2^(5*SCALE + 1) * PAGESIZE)
-> + *
-> + */
-> +#define __TLBI_VADDR_RANGE(addr, asid, tg, scale, num, ttl)	\
-> +	({							\
-> +		unsigned long __ta = (addr) >> PAGE_SHIFT;	\
-> +		__ta &= GENMASK_ULL(36, 0);			\
-> +		__ta |= (unsigned long)(ttl) << 37;		\
-> +		__ta |= (unsigned long)(num) << 39;		\
-> +		__ta |= (unsigned long)(scale) << 44;		\
-> +		__ta |= (unsigned long)(tg) << 46;		\
-> +		__ta |= (unsigned long)(asid) << 48;		\
-> +		__ta;						\
-> +	})
-> +
-> +#define TLB_RANGE_MASK_SHIFT 5
-> +#define TLB_RANGE_MASK GENMASK_ULL(TLB_RANGE_MASK_SHIFT - 1, 0)
-> +
-> +/*
-> + * __TG defines translation granule of the system, which is defined by
-> + * PAGE_SHIFT.  Used by TTL.
-> + *  - 4KB	: 1
-> + *  - 16KB	: 2
-> + *  - 64KB	: 3
-> + */
-> +#define __TG	((PAGE_SHIFT - 12) / 2 + 1)
+>
+> Anyway, we also need to have a call to landlock_release_inodes() in
+> generic_shutdown_super(), which does not fit the LSM framework, and I
+> think it is not an issue. Landlock handling of inodes is quite similar
+> to fsnotify.
 
-I don't think we need __TLBI_VADDR_RANGE to take a tg argument since
-it's always the same.
-
-> +
-> +
->  /*
->   *	TLB Invalidation
->   *	================
-> @@ -171,12 +209,83 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
->  	dsb(ish);
->  }
->  
-> +/* The maximum range size of one TLBI-RANGE instruction */
-> +#define MAX_TLBI_RANGE_SIZE	(1UL << 21)
-
-Nitpick: call this MAX_TLBI_RANGE_PAGES as that's not an address range.
-
-It may be useful to have a macro for the range here, something like:
-
-#define __TLBI_PAGES(num, scale)	((num + 1) << (5 * scale + 1))
-
-and define MAX_TLBI_RANGE_PAGES in terms of this macro as
-__TLBI_PAGES(31, 3).
-
-> +
-> +/*
-> + * This interface uses the *rvale1is* instruction to flush TLBs
-> + * in [start, end) directly.
-> + * This instruction is supported from ARM v8.4.
-> + */
-> +static inline void __flush_tlb_range_directly(struct vm_area_struct *vma,
-> +				unsigned long start, unsigned long end,
-> +				unsigned long stride, bool last_level)
-> +{
-> +	int num = 0;
-> +	int scale = 0;
-> +	unsigned long asid = ASID(vma->vm_mm);
-> +	unsigned long addr = 0;
-> +	unsigned long range_size;
-> +
-> +	start = round_down(start, stride);
-> +	end = round_up(end, stride);
-> +	range_size = (end - start) >> PAGE_SHIFT;
-> +
-> +	if (range_size > MAX_TLBI_RANGE_SIZE) {
-> +		flush_tlb_mm(vma->vm_mm);
-> +		return;
-> +	}
-> +
-> +	dsb(ishst);
-> +
-> +	/*
-> +	 * The minimum size of TLB RANGE is 2 PAGE;
-> +	 * Use normal TLB instruction to handle odd PAGEs
-
-Nitpick: no need to capitalise PAGE.
-
-> +	 */
-> +	if (range_size % 2 == 1) {
-> +		addr = __TLBI_VADDR(start, asid);
-> +		if (last_level) {
-> +			__tlbi(vale1is, addr);
-> +			__tlbi_user(vale1is, addr);
-> +		} else {
-> +			__tlbi(vae1is, addr);
-> +			__tlbi_user(vae1is, addr);
-> +		}
-> +		start += 1 << PAGE_SHIFT;
-> +		range_size -= 1;
-> +	}
-> +
-> +	range_size >>= 1;
-> +	while (range_size > 0) {
-> +		num = (range_size & TLB_RANGE_MASK) - 1;
-> +		if (num >= 0) {
-> +			addr = __TLBI_VADDR_RANGE(start, asid, __TG,
-> +						  scale, num, 0);
-> +			if (last_level) {
-> +				__tlbi(rvale1is, addr);
-> +				__tlbi_user(rvale1is, addr);
-> +			} else {
-> +				__tlbi(rvae1is, addr);
-> +				__tlbi_user(rvae1is, addr);
-> +			}
-> +			start += (num + 1) << (5 * scale + 1) << PAGE_SHIFT;
-
-You could use the __TLBI_PAGES macro I proposed above.
-
-> +		}
-> +		scale++;
-> +		range_size >>= TLB_RANGE_MASK_SHIFT;
-> +	}
-
-So, you start from scale 0 and increment it until you reach the maximum.
-I think (haven't done the maths on paper) you could also start from the
-top with something like scale = ilog2(range_size) / 5. Not sure it's
-significantly better though, maybe avoiding the loop 3 times if your
-range is 2MB (which happens with huge pages).
-
-Anyway, I think it would be more efficient if we combine the
-__flush_tlb_range() and the _directly one into the same function with a
-single loop for both. For example, if the stride is 2MB already, we can
-handle this with a single classic TLBI without all the calculations for
-the range operation. The hardware may also handle this better since the
-software already told it there can be only one entry in that 2MB range.
-So each loop iteration could figure which operation to use based on
-cpucaps, TLBI range ops, stride and reduce range_size accordingly.
-
--- 
-Catalin
