@@ -2,29 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FB11D2578
-	for <lists+linux-arch@lfdr.de>; Thu, 14 May 2020 05:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A731D2CB3
+	for <lists+linux-arch@lfdr.de>; Thu, 14 May 2020 12:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbgENDiU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 May 2020 23:38:20 -0400
-Received: from namei.org ([65.99.196.166]:58860 "EHLO namei.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725925AbgENDiU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 13 May 2020 23:38:20 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 04E3bnC3001625;
-        Thu, 14 May 2020 03:37:49 GMT
-Date:   Thu, 14 May 2020 13:37:49 +1000 (AEST)
-From:   James Morris <jmorris@namei.org>
-To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        id S1726301AbgENK1x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 May 2020 06:27:53 -0400
+Received: from smtp-42ae.mail.infomaniak.ch ([84.16.66.174]:51637 "EHLO
+        smtp-42ae.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725925AbgENK1w (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 14 May 2020 06:27:52 -0400
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49N75w45kTzlhj0J;
+        Thu, 14 May 2020 12:27:48 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 49N75t2qqnzljHmw;
+        Thu, 14 May 2020 12:27:46 +0200 (CEST)
+Subject: Re: [PATCH v17 02/10] landlock: Add ruleset and domain management
+To:     James Morris <jmorris@namei.org>
+Cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@amacapital.net>,
         Arnd Bergmann <arnd@arndb.de>,
         Casey Schaufler <casey@schaufler-ca.com>,
         Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
         "Serge E . Hallyn" <serge@hallyn.com>,
         Shuah Khan <shuah@kernel.org>,
         Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
@@ -32,52 +35,101 @@ cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v17 05/10] fs,landlock: Support filesystem
- access-control
-In-Reply-To: <20200511192156.1618284-6-mic@digikod.net>
-Message-ID: <alpine.LRH.2.21.2005141335280.30052@namei.org>
-References: <20200511192156.1618284-1-mic@digikod.net> <20200511192156.1618284-6-mic@digikod.net>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+References: <20200511192156.1618284-1-mic@digikod.net>
+ <20200511192156.1618284-3-mic@digikod.net>
+ <alpine.LRH.2.21.2005141302330.30052@namei.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <f646e1c7-33cf-333f-070c-0a40ad0468cd@digikod.net>
+Date:   Thu, 14 May 2020 12:27:45 +0200
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1665246916-1014880157-1589427470=:30052"
+In-Reply-To: <alpine.LRH.2.21.2005141302330.30052@namei.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---1665246916-1014880157-1589427470=:30052
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+On 14/05/2020 05:09, James Morris wrote:
+> On Mon, 11 May 2020, Mickaël Salaün wrote:
+> 
+>> + * .. warning::
+>> + *
+>> + *   It is currently not possible to restrict some file-related actions
+>> + *   accessible through these syscall families: :manpage:`chdir(2)`,
+>> + *   :manpage:`truncate(2)`, :manpage:`stat(2)`, :manpage:`flock(2)`,
+>> + *   :manpage:`chmod(2)`, :manpage:`chown(2)`, :manpage:`setxattr(2)`,
+>> + *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`.
+>> + *   Future Landlock evolutions will enable to restrict them.
+> 
+> I have to wonder how useful Landlock will be without more coverage per 
+> the above.
 
-On Mon, 11 May 2020, Mickaël Salaün wrote:
+This is the result of previous discussions (on mailing lists and
+conferences) to minimize the code of Landlock to ease review. There is
+also network and other subsystems which are not covered, the same way
+other LSMs may not cover everything. However, Landlock is designed to be
+extensible without breaking user space, so extending this access-control
+will not be a problem. Previous versions of this patch series handled
+much more.
 
+Moreover, we can compare the current situation with seccomp. Indeed,
+seccomp only enables to restrict system calls according to their number
+and their raw arguments. seccomp is designed to limit the attack surface
+of the kernel but it is also used to remove ways to access kernel
+resources. Application developers willing to sandbox their products are
+already using seccomp but there is limitations (e.g. file access
+control). Landlock addresses such limitations, which improves the
+current situation.
 
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index 45cc10cdf6dd..2276642f8e05 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -1517,6 +1517,11 @@ struct super_block {
->  	/* Pending fsnotify inode refs */
->  	atomic_long_t s_fsnotify_inode_refs;
->  
-> +#ifdef CONFIG_SECURITY_LANDLOCK
-> +	/* References to Landlock underlying objects */
-> +	atomic_long_t s_landlock_inode_refs;
-> +#endif
-> +
+We can also view seccomp as a complementary solution to the current
+limitations of Landlock. Indeed, seccomp filters can block or restrict
+the use of syscall families which may not be currently handled by Landlock.
 
-This needs to be converted to the LSM API via superblock blob stacking.
+> 
+> It would be helpful if you could outline a threat model for this initial 
+> version, so people can get an idea of what kind of useful protection may
+> be gained from it.
 
-See Casey's old patch: 
-https://lore.kernel.org/linux-security-module/20190829232935.7099-2-casey@schaufler-ca.com/
+The main threat model may be seen as protecting from vulnerable (i.e.
+malicious) code. But because Landlock policies are defined by
+application developers, they also define their own threat model.
 
+> 
+> Are there any distros or other major users who are planning on enabling or 
+> at least investigating Landlock?
 
+I think the question should be: is there any distros which are not
+interested to improve the security of their users? :)
+Landlock is mainly designed for application developers, and most Linux
+distros rely on applications which are not developed by themselves.
 
--- 
-James Morris
-<jmorris@namei.org>
+Some hardened distros such as CLIP OS and Chrome OS are interested to
+extend the security of the whole system with tailored sandboxing (e.g.
+internal and critical services, security brokers). For example, Chrome
+OS folks investigated with a previous version of Landlock:
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel-next/+/658517/
+I'm sure there is other tailored distros which will be interested once
+Landlock will be upstream (e.g. Tails, Qubes OS, Subgraph OS, etc.).
 
---1665246916-1014880157-1589427470=:30052--
+> 
+> Do you have any examples of a practical application of this scheme?
+
+We can start with applications with builtin sandboxing, like web
+browsers, web services, email services, SSH, etc. There is also all
+system services handled by an init system which provides security
+features (e.g. systemd). There is also the security sandbox tools (e.g.
+Minijail [1], Firejail [2], nsjail [3], Flatpak [4], etc.). And finally,
+security-oriented APIs such as Sandboxed API [5]. Most of them should
+welcome new Linux sandboxing features provided by Landlock.
+
+[1] https://android.googlesource.com/platform/external/minijail
+[2] https://firejail.wordpress.com/
+[3] https://nsjail.dev/
+[4] https://flatpak.org/
+[5] https://github.com/google/sandboxed-api
