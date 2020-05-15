@@ -2,435 +2,239 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FB31D5755
-	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 19:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA971D5913
+	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 20:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726290AbgEORRP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 May 2020 13:17:15 -0400
-Received: from foss.arm.com ([217.140.110.172]:59644 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726231AbgEORRO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 15 May 2020 13:17:14 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 717BB1042;
-        Fri, 15 May 2020 10:17:13 -0700 (PDT)
-Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DF6B53F305;
-        Fri, 15 May 2020 10:17:11 -0700 (PDT)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>
-Subject: [PATCH v4 26/26] arm64: mte: Add Memory Tagging Extension documentation
-Date:   Fri, 15 May 2020 18:16:12 +0100
-Message-Id: <20200515171612.1020-27-catalin.marinas@arm.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200515171612.1020-1-catalin.marinas@arm.com>
-References: <20200515171612.1020-1-catalin.marinas@arm.com>
+        id S1726261AbgEOS2a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 May 2020 14:28:30 -0400
+Received: from mail-co1nam11on2122.outbound.protection.outlook.com ([40.107.220.122]:26849
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726197AbgEOS23 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 15 May 2020 14:28:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M1/Q0XwfSFkfe8O0pvIp5nugu6LvliySz1Jf+GKVI/y9flrsLTdxkIKOe8vT0TYF6bADTH1m0D9U+cP7T7MP6HaHw3m+tanGeIPFlolb8fwNPZi6/UCOS1h7bwAvMf+Oi0KQa4ShLohww8ARcrBssTF9uzwN2SAWrKBww4u9P6hMDeRBEu28EcZxqF2lHcUTarqMUN8qQytStZLxUuDBmwzmcZXsT/Gf2WBG8ahSRyQNYNl956aJHy+ufTdQEbjCSNlt1yUNSxPYpRT8QrHZpL4Qnw9xzzCvP6a98BX3rbkqEW+1lnNpEzbRkYCWs9Mve2XzbFJohv7f4iEQqm46Wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iA1ihPiBKFgqe1fKLb7Y6dpXxm+uKyCgsfeeWfLOxMs=;
+ b=nwO/tv0zeyM+uQQi2IWi0wTwAy0M8m1Gd3eTNjmyG9vVNK5hzFfYd9VwH79IqYmxrpsd9Rb26W2r4nxQfLAp4Eyj7SkR7ERhHpXoR9sbR+g+kURap4/CTfBuKIClMhxQ58JE8BteS6G96g8H48vQdCu3SkXqlthBUdfNQxSLLXb95sINuBcRNFaqgmD7L/PYMJPHc9nGR77vqoE6xq+fpVHFrWbApbrOR/WqZNZHKs/yBbPfiVCZCggfuYXTxXshGLScQnhTdPV6Gk/P9TkRXIWXB4tVxZ8dCURLErdGQ/mR5K85QnVXKiZsvJNu8QIwNNAKY45hegk63oLWAU3RCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 204.77.163.244) smtp.rcpttodomain=hansenpartnership.com
+ smtp.mailfrom=garmin.com; dmarc=pass (p=quarantine sp=quarantine pct=100)
+ action=none header.from=garmin.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garmin.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iA1ihPiBKFgqe1fKLb7Y6dpXxm+uKyCgsfeeWfLOxMs=;
+ b=cR8P1Poz96S1yCi3OVUU5aCsUMvrq+87gLYR8sUlrF563ttv2VYdHhct6owYI2x5eaVhkC+5+OuZ/2vMWw6LQl1y8WuL1meocIVNTH+m3LJ3KwUHjX0KAGY5XmDfRHeE7SnN7+9TCS2qZm7+9D8Fiii7IM3cf5PEj1EzSeye+qvyefZdA+J2RhC6IaQUPxhzt8qrHtWiioyrp2AQja23zdwSuCbPEv+yCAG6YBgg+y1JanKQseU26LRi+iHPrRe37hnTlP78LAd5MS8X3kEMtliaEt2Hn7kN+RQv+8qvIG8prGF2cO1GUV99jG+Nu4dEYQOGV984sHa7XbE+HxSfzA==
+Received: from DM5PR17CA0065.namprd17.prod.outlook.com (2603:10b6:3:13f::27)
+ by CY4PR04MB0919.namprd04.prod.outlook.com (2603:10b6:910:5b::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.34; Fri, 15 May
+ 2020 18:28:23 +0000
+Received: from DM6NAM10FT006.eop-nam10.prod.protection.outlook.com
+ (2603:10b6:3:13f:cafe::ed) by DM5PR17CA0065.outlook.office365.com
+ (2603:10b6:3:13f::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.24 via Frontend
+ Transport; Fri, 15 May 2020 18:28:23 +0000
+Authentication-Results: spf=pass (sender IP is 204.77.163.244)
+ smtp.mailfrom=garmin.com; HansenPartnership.com; dkim=none (message not
+ signed) header.d=none;HansenPartnership.com; dmarc=pass action=none
+ header.from=garmin.com;
+Received-SPF: Pass (protection.outlook.com: domain of garmin.com designates
+ 204.77.163.244 as permitted sender) receiver=protection.outlook.com;
+ client-ip=204.77.163.244; helo=edgetransport.garmin.com;
+Received: from edgetransport.garmin.com (204.77.163.244) by
+ DM6NAM10FT006.mail.protection.outlook.com (10.13.153.14) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3000.19 via Frontend Transport; Fri, 15 May 2020 18:28:22 +0000
+Received: from OLAWPA-EXMB3.ad.garmin.com (10.5.144.15) by
+ olawpa-edge5.garmin.com (10.60.4.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1466.3; Fri, 15 May 2020 13:28:20 -0500
+Received: from OLAWPA-EXMB7.ad.garmin.com (10.5.144.21) by
+ OLAWPA-EXMB3.ad.garmin.com (10.5.144.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Fri, 15 May 2020 13:28:21 -0500
+Received: from OLAWPA-EXMB7.ad.garmin.com ([fe80::68cc:dab9:e96a:c89]) by
+ OLAWPA-EXMB7.ad.garmin.com ([fe80::68cc:dab9:e96a:c89%23]) with mapi id
+ 15.01.1913.007; Fri, 15 May 2020 13:28:21 -0500
+From:   "Karstens, Nate" <Nate.Karstens@garmin.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Matthew Wilcox <willy@infradead.org>
+CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        David Laight <David.Laight@aculab.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Changli Gao <xiaosuo@gmail.com>,
+        "a.josey@opengroup.org" <a.josey@opengroup.org>
+Subject: RE: [PATCH v2] Implement close-on-fork
+Thread-Topic: [PATCH v2] Implement close-on-fork
+Thread-Index: AQHWKtGJQW28Wposd0uF0sb7I7R5yaipTiDwgABbDAD//8IccA==
+Date:   Fri, 15 May 2020 18:28:20 +0000
+Message-ID: <4964fe0ccdf7495daf4045c195b14ed6@garmin.com>
+References: <20200515152321.9280-1-nate.karstens@garmin.com>
+         <20200515155730.GF16070@bombadil.infradead.org>
+         <5b1929aa9f424e689c7f430663891827@garmin.com>
+ <1589559950.3653.11.camel@HansenPartnership.com>
+In-Reply-To: <1589559950.3653.11.camel@HansenPartnership.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.50.4.7]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-TM-AS-Product-Ver: SMEX-12.5.0.1300-8.5.1020-25422.001
+X-TM-AS-Result: No-24.660800-8.000000-10
+X-TMASE-MatchedRID: 8HTFlOrbAtFjFj/UuKzq9Qm6mWzI013H+KgiyLtJrSBsMPuLZB/IRyaC
+        jkFKp/+evR2IGXL11cAbfdh3Hrbds2bR7KDoJhGbN19PjPJahlK0UsBMUGKgfnN4oJrDvdmBnM1
+        dYeGe93EBL2g6g557BbhV7es37XUhsJNnHjvcOolFM72aEhcbjcV0QyhMrtsxEt/W/Pt5w8c3YX
+        JtvKOnOVl7IU/aBS0GS9KN/ejlLD70nMCL2lyVdnpRh12Siy9rz2Mm4Q3wKRsy/xh6GqNHVSg77
+        wugamceSjUZtWeiLnmEDhdS1weMH6gZIrutfM9NMIxbvM3AVog5iooXtStiHvPG92V4Sj8j5Fn6
+        Wz/jziF4hguXBP/sxySlqWcgaF36PTsJ3Tg6TUU4zuezdSAFjVoR8WAKiZ2PipwWNGS5ADgwV12
+        /6ktutzd5TYrunab88q5GINhvEEAnmCeHyLMZHuIfK/Jd5eHmL7DjpoDqNZnR8qSEccyfO5t+T6
+        w9CMQiVH79j+f18/U1La7l+470Uu7Gghg9I/XgB/XUnmGGOOrLRD51bz5RZCLT+St7cam6m/w4E
+        oYoYmuNoxD32zE0Ft23HqVai7RF52/pxZx2tzRTL5B6BWU2DXpxIzIwLRluHdFjikZMLIdk6DvI
+        SydC9/gqvgaKLRVbpJO1Fs6p7s7yha4uErRN/X4neC0h7SAD9zefYQcHZp8oglbEnCQoca5Pqqb
+        CfIUPTAK2sVwEDfY9Wev+qZL2rj1iiwOv4P/78eSmTJSmEv1nbl5PcviP9PHSsb509cZ3LPJtWp
+        bJjY3AR2ZLBV/mk4lCcfGIeGsgJ+JZYQfxoHyeAiCmPx4NwMFrpUbb72MU1kTfEkyaZdz6C0ePs
+        7A07YVH0dq7wY7uA/3R8k/14e0=
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--24.660800-8.000000
+X-TMASE-Version: SMEX-12.5.0.1300-8.5.1020-25422.001
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:204.77.163.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:edgetransport.garmin.com;PTR:extedge.garmin.com;CAT:NONE;SFTY:;SFS:(39860400002)(136003)(346002)(396003)(376002)(46966005)(110136005)(54906003)(108616005)(82310400002)(2616005)(8676002)(316002)(7696005)(36756003)(426003)(53546011)(2906002)(47076004)(7636003)(24736004)(356005)(82740400003)(86362001)(478600001)(5660300002)(186003)(4326008)(336012)(7416002)(26005)(70586007)(966005)(70206006)(8936002);DIR:OUT;SFP:1102;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0ed33752-dfff-45b4-5de2-08d7f8fdbfd1
+X-MS-TrafficTypeDiagnostic: CY4PR04MB0919:
+X-Microsoft-Antispam-PRVS: <CY4PR04MB09191D8E26F495FBE67D6C879CBD0@CY4PR04MB0919.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Forefront-PRVS: 04041A2886
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zDbVoe/wvHcFcTc81XOZj/iDASHrjjUv/9EZ3qSyvIgCp5LKGDeQf7yzt8CCEjozBNS8DJJjU9GFZYB7LwjBbz/lj3EiYfdqOEYCpQljFYE2sxmdAG4f5nN+/Met7HbaMTy88wyS5oRiSmdQuUQoRYAmn8R36ioNWfF4tedS6nqMO93jkRWUXdO3eJ58rJXd7KiL5k373Xvy2E13H0P4rlvtztgbM52jCZ+bza6mbRTn1NDkPq9nr0si9Up4TzFmJLFJ2k85jMP3B5cRnatxTZ2P2AnAXcjTqxy4SrHw9iwHyI0RjxvHWwbAW7vLiC9RFzmfp+srcwQRti/9vDTxij0DZJuG1fAcvdJbHPydOEyNG7xy9LHgCNXZQg6T8I7lPfo9s4yIfRWn47jZcwakTeVB9J3DqRqhvPhOvUTw+ehP6mMh/80/TM6ubH2ErXtTB4F0lqRSbIWzr8N415at0wBKF5LDROBXSrslyIbHfLnV+pHlVZeWDa237+xD/CaEF10RHEEam8ZW4uBDUVFOivq6FP/4h8+l0bH1ETVCVWrHuHIuaCmVpo0Wfcqt7/nJ5MLbcyHKuKHaCWnz9T+59Q==
+X-OriginatorOrg: garmin.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2020 18:28:22.3748
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ed33752-dfff-45b4-5de2-08d7f8fdbfd1
+X-MS-Exchange-CrossTenant-Id: 38d0d425-ba52-4c0a-a03e-2a65c8e82e2d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38d0d425-ba52-4c0a-a03e-2a65c8e82e2d;Ip=[204.77.163.244];Helo=[edgetransport.garmin.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR04MB0919
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-
-Memory Tagging Extension (part of the ARMv8.5 Extensions) provides
-a mechanism to detect the sources of memory related errors which
-may be vulnerable to exploitation, including bounds violations,
-use-after-free, use-after-return, use-out-of-scope and use before
-initialization errors.
-
-Add Memory Tagging Extension documentation for the arm64 linux
-kernel support.
-
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
----
-
-Notes:
-    v4:
-    - Document behaviour of madvise(MADV_DONTNEED/MADV_FREE).
-    - Document the initial process state on fork/execve.
-    - Clarify when the kernel uaccess checks the tags.
-    - Minor updates to the example code.
-    - A few other minor clean-ups following review.
-    
-    v3:
-    - Modify the uaccess checking conditions: only when the sync mode is
-      selected by the user. In async mode, the kernel uaccesses are not
-      checked.
-    - Clarify that an include mask of 0 (exclude mask 0xffff) results in
-      always generating tag 0.
-    - Document the ptrace() interface.
-    
-    v2:
-    - Documented the uaccess kernel tag checking mode.
-    - Removed the BTI definitions from cpu-feature-registers.rst.
-    - Removed the paragraph stating that MTE depends on the tagged address
-      ABI (while the Kconfig entry does, there is no requirement for the
-      user to enable both).
-    - Changed the GCR_EL1.Exclude handling description following the change
-      in the prctl() interface (include vs exclude mask).
-    - Updated the example code.
-
- Documentation/arm64/cpu-feature-registers.rst |   2 +
- Documentation/arm64/elf_hwcaps.rst            |   5 +
- Documentation/arm64/index.rst                 |   1 +
- .../arm64/memory-tagging-extension.rst        | 297 ++++++++++++++++++
- 4 files changed, 305 insertions(+)
- create mode 100644 Documentation/arm64/memory-tagging-extension.rst
-
-diff --git a/Documentation/arm64/cpu-feature-registers.rst b/Documentation/arm64/cpu-feature-registers.rst
-index 41937a8091aa..b5679fa85ad9 100644
---- a/Documentation/arm64/cpu-feature-registers.rst
-+++ b/Documentation/arm64/cpu-feature-registers.rst
-@@ -174,6 +174,8 @@ infrastructure:
-      +------------------------------+---------+---------+
-      | Name                         |  bits   | visible |
-      +------------------------------+---------+---------+
-+     | MTE                          | [11-8]  |    y    |
-+     +------------------------------+---------+---------+
-      | SSBS                         | [7-4]   |    y    |
-      +------------------------------+---------+---------+
- 
-diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
-index 7dfb97dfe416..ca7f90e99e3a 100644
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -236,6 +236,11 @@ HWCAP2_RNG
- 
-     Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.
- 
-+HWCAP2_MTE
-+
-+    Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
-+    by Documentation/arm64/memory-tagging-extension.rst.
-+
- 4. Unused AT_HWCAP bits
- -----------------------
- 
-diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-index 09cbb4ed2237..4cd0e696f064 100644
---- a/Documentation/arm64/index.rst
-+++ b/Documentation/arm64/index.rst
-@@ -14,6 +14,7 @@ ARM64 Architecture
-     hugetlbpage
-     legacy_instructions
-     memory
-+    memory-tagging-extension
-     pointer-authentication
-     silicon-errata
-     sve
-diff --git a/Documentation/arm64/memory-tagging-extension.rst b/Documentation/arm64/memory-tagging-extension.rst
-new file mode 100644
-index 000000000000..e7cdcecb656a
---- /dev/null
-+++ b/Documentation/arm64/memory-tagging-extension.rst
-@@ -0,0 +1,297 @@
-+===============================================
-+Memory Tagging Extension (MTE) in AArch64 Linux
-+===============================================
-+
-+Authors: Vincenzo Frascino <vincenzo.frascino@arm.com>
-+         Catalin Marinas <catalin.marinas@arm.com>
-+
-+Date: 2020-02-25
-+
-+This document describes the provision of the Memory Tagging Extension
-+functionality in AArch64 Linux.
-+
-+Introduction
-+============
-+
-+ARMv8.5 based processors introduce the Memory Tagging Extension (MTE)
-+feature. MTE is built on top of the ARMv8.0 virtual address tagging TBI
-+(Top Byte Ignore) feature and allows software to access a 4-bit
-+allocation tag for each 16-byte granule in the physical address space.
-+Such memory range must be mapped with the Normal-Tagged memory
-+attribute. A logical tag is derived from bits 59-56 of the virtual
-+address used for the memory access. A CPU with MTE enabled will compare
-+the logical tag against the allocation tag and potentially raise an
-+exception on mismatch, subject to system registers configuration.
-+
-+Userspace Support
-+=================
-+
-+When ``CONFIG_ARM64_MTE`` is selected and Memory Tagging Extension is
-+supported by the hardware, the kernel advertises the feature to
-+userspace via ``HWCAP2_MTE``.
-+
-+PROT_MTE
-+--------
-+
-+To access the allocation tags, a user process must enable the Tagged
-+memory attribute on an address range using a new ``prot`` flag for
-+``mmap()`` and ``mprotect()``:
-+
-+``PROT_MTE`` - Pages allow access to the MTE allocation tags.
-+
-+The allocation tag is set to 0 when such pages are first mapped in the
-+user address space and preserved on copy-on-write. ``MAP_SHARED`` is
-+supported and the allocation tags can be shared between processes.
-+
-+**Note**: ``PROT_MTE`` is only supported on ``MAP_ANONYMOUS`` and
-+RAM-based file mappings (``tmpfs``, ``memfd``). Passing it to other
-+types of mapping will result in ``-EINVAL`` returned by these system
-+calls.
-+
-+**Note**: The ``PROT_MTE`` flag (and corresponding memory type) cannot
-+be cleared by ``mprotect()``.
-+
-+**Note**: ``madvise()`` memory ranges with ``MADV_DONTNEED`` and
-+``MADV_FREE`` may have the allocation tags cleared (set to 0) at any
-+point after the system call.
-+
-+Tag Check Faults
-+----------------
-+
-+When ``PROT_MTE`` is enabled on an address range and a mismatch between
-+the logical and allocation tags occurs on access, there are three
-+configurable behaviours:
-+
-+- *Ignore* - This is the default mode. The CPU (and kernel) ignores the
-+  tag check fault.
-+
-+- *Synchronous* - The kernel raises a ``SIGSEGV`` synchronously, with
-+  ``.si_code = SEGV_MTESERR`` and ``.si_addr = <fault-address>``. The
-+  memory access is not performed. If ``SIGSEGV`` is ignored or blocked
-+  by the offending thread, the containing process is terminated with a
-+  ``coredump``.
-+
-+- *Asynchronous* - The kernel raises a ``SIGSEGV``, in the offending
-+  thread, asynchronously following one or multiple tag check faults,
-+  with ``.si_code = SEGV_MTEAERR`` and ``.si_addr = 0`` (the faulting
-+  address is unknown).
-+
-+The user can select the above modes, per thread, using the
-+``prctl(PR_SET_TAGGED_ADDR_CTRL, flags, 0, 0, 0)`` system call where
-+``flags`` contain one of the following values in the ``PR_MTE_TCF_MASK``
-+bit-field:
-+
-+- ``PR_MTE_TCF_NONE``  - *Ignore* tag check faults
-+- ``PR_MTE_TCF_SYNC``  - *Synchronous* tag check fault mode
-+- ``PR_MTE_TCF_ASYNC`` - *Asynchronous* tag check fault mode
-+
-+The current tag check fault mode can be read using the
-+``prctl(PR_GET_TAGGED_ADDR_CTRL, 0, 0, 0, 0)`` system call.
-+
-+Tag checking can also be disabled for a user thread by setting the
-+``PSTATE.TCO`` bit with ``MSR TCO, #1``.
-+
-+**Note**: Signal handlers are always invoked with ``PSTATE.TCO = 0``,
-+irrespective of the interrupted context. ``PSTATE.TCO`` is restored on
-+``sigreturn()``.
-+
-+**Note**: There are no *match-all* logical tags available for user
-+applications.
-+
-+**Note**: Kernel accesses to the user address space (e.g. ``read()``
-+system call) are not checked if the user thread tag checking mode is
-+``PR_MTE_TCF_NONE`` or ``PR_MTE_TCF_ASYNC``. If the tag checking mode is
-+``PR_MTE_TCF_SYNC``, the kernel makes a best effort to check its user
-+address accesses, however it cannot always guarantee it.
-+
-+Excluding Tags in the ``IRG``, ``ADDG`` and ``SUBG`` instructions
-+-----------------------------------------------------------------
-+
-+The architecture allows excluding certain tags to be randomly generated
-+via the ``GCR_EL1.Exclude`` register bit-field. By default, Linux
-+excludes all tags other than 0. A user thread can enable specific tags
-+in the randomly generated set using the ``prctl(PR_SET_TAGGED_ADDR_CTRL,
-+flags, 0, 0, 0)`` system call where ``flags`` contains the tags bitmap
-+in the ``PR_MTE_TAG_MASK`` bit-field.
-+
-+**Note**: The hardware uses an exclude mask but the ``prctl()``
-+interface provides an include mask. An include mask of ``0`` (exclusion
-+mask ``0xffff``) results in the CPU always generating tag ``0``.
-+
-+Initial process state
-+---------------------
-+
-+On ``execve()``, the new process has the following configuration:
-+
-+- ``PR_TAGGED_ADDR_ENABLE`` set to 0 (disabled)
-+- Tag checking mode set to ``PR_MTE_TCF_NONE``
-+- ``PR_MTE_TAG_MASK`` set to 0 (all tags excluded)
-+- ``PSTATE.TCO`` set to 0
-+- ``PROT_MTE`` not set on any of the initial memory maps
-+
-+On ``fork()``, the new process inherits the parent's configuration and
-+memory map attributes with the exception of the ``madvise()`` ranges
-+with ``MADV_WIPEONFORK`` which will have the data and tags cleared (set
-+to 0).
-+
-+The ``ptrace()`` interface
-+--------------------------
-+
-+``PTRACE_PEEKMTETAGS`` and ``PTRACE_POKEMTETAGS`` allow a tracer to read
-+the tags from or set the tags to a tracee's address space. The
-+``ptrace()`` system call is invoked as ``ptrace(request, pid, addr,
-+data)`` where:
-+
-+- ``request`` - one of ``PTRACE_PEEKMTETAGS`` or ``PTRACE_PEEKMTETAGS``.
-+- ``pid`` - the tracee's PID.
-+- ``addr`` - address in the tracee's address space.
-+- ``data`` - pointer to a ``struct iovec`` where ``iov_base`` points to
-+  a buffer of ``iov_len`` length in the tracer's address space.
-+
-+The tags in the tracer's ``iov_base`` buffer are represented as one
-+4-bit tag per byte and correspond to a 16-byte MTE tag granule in the
-+tracee's address space.
-+
-+**Note**: If ``addr`` is not aligned to a 16-byte granule, the kernel
-+will use the corresponding aligned address.
-+
-+``ptrace()`` return value:
-+
-+- 0 - tags were copied, the tracer's ``iov_len`` was updated to the
-+  number of tags transferred. This may be smaller than the requested
-+  ``iov_len`` if the requested address range in the tracee's or the
-+  tracer's space cannot be accessed or does not have valid tags.
-+- ``-EPERM`` - the specified process cannot be traced.
-+- ``-EIO`` - the tracee's address range cannot be accessed (e.g. invalid
-+  address) and no tags copied. ``iov_len`` not updated.
-+- ``-EFAULT`` - fault on accessing the tracer's memory (``struct iovec``
-+  or ``iov_base`` buffer) and no tags copied. ``iov_len`` not updated.
-+- ``-EOPNOTSUPP`` - the tracee's address does not have valid tags (never
-+  mapped with the ``PROT_MTE`` flag). ``iov_len`` not updated.
-+
-+**Note**: There are no transient errors for the requests above, so user
-+programs should not retry in case of a non-zero system call return.
-+
-+Example of correct usage
-+========================
-+
-+*MTE Example code*
-+
-+.. code-block:: c
-+
-+    /*
-+     * To be compiled with -march=armv8.5-a+memtag
-+     */
-+    #include <errno.h>
-+    #include <stdio.h>
-+    #include <stdlib.h>
-+    #include <unistd.h>
-+    #include <sys/auxv.h>
-+    #include <sys/mman.h>
-+    #include <sys/prctl.h>
-+
-+    /*
-+     * From arch/arm64/include/uapi/asm/hwcap.h
-+     */
-+    #define HWCAP2_MTE              (1 << 18)
-+
-+    /*
-+     * From arch/arm64/include/uapi/asm/mman.h
-+     */
-+    #define PROT_MTE                 0x20
-+
-+    /*
-+     * From include/uapi/linux/prctl.h
-+     */
-+    #define PR_SET_TAGGED_ADDR_CTRL 55
-+    #define PR_GET_TAGGED_ADDR_CTRL 56
-+    # define PR_TAGGED_ADDR_ENABLE  (1UL << 0)
-+    # define PR_MTE_TCF_SHIFT       1
-+    # define PR_MTE_TCF_NONE        (0UL << PR_MTE_TCF_SHIFT)
-+    # define PR_MTE_TCF_SYNC        (1UL << PR_MTE_TCF_SHIFT)
-+    # define PR_MTE_TCF_ASYNC       (2UL << PR_MTE_TCF_SHIFT)
-+    # define PR_MTE_TCF_MASK        (3UL << PR_MTE_TCF_SHIFT)
-+    # define PR_MTE_TAG_SHIFT       3
-+    # define PR_MTE_TAG_MASK        (0xffffUL << PR_MTE_TAG_SHIFT)
-+
-+    /*
-+     * Insert a random logical tag into the given pointer.
-+     */
-+    #define insert_random_tag(ptr) ({                       \
-+            __u64 __val;                                    \
-+            asm("irg %0, %1" : "=r" (__val) : "r" (ptr));   \
-+            __val;                                          \
-+    })
-+
-+    /*
-+     * Set the allocation tag on the destination address.
-+     */
-+    #define set_tag(tagged_addr) do {                                      \
-+            asm volatile("stg %0, [%0]" : : "r" (tagged_addr) : "memory"); \
-+    } while (0)
-+
-+    int main()
-+    {
-+            unsigned char *a;
-+            unsigned long page_sz = sysconf(_SC_PAGESIZE);
-+            unsigned long hwcap2 = getauxval(AT_HWCAP2);
-+
-+            /* check if MTE is present */
-+            if (!(hwcap2 & HWCAP2_MTE))
-+                    return EXIT_FAILURE;
-+
-+            /*
-+             * Enable the tagged address ABI, synchronous MTE tag check faults and
-+             * allow all non-zero tags in the randomly generated set.
-+             */
-+            if (prctl(PR_SET_TAGGED_ADDR_CTRL,
-+                      PR_TAGGED_ADDR_ENABLE | PR_MTE_TCF_SYNC | (0xfffe << PR_MTE_TAG_SHIFT),
-+                      0, 0, 0)) {
-+                    perror("prctl() failed");
-+                    return EXIT_FAILURE;
-+            }
-+
-+            a = mmap(0, page_sz, PROT_READ | PROT_WRITE,
-+                     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+            if (a == MAP_FAILED) {
-+                    perror("mmap() failed");
-+                    return EXIT_FAILURE;
-+            }
-+
-+            /*
-+             * Enable MTE on the above anonymous mmap. The flag could be passed
-+             * directly to mmap() and skip this step.
-+             */
-+            if (mprotect(a, page_sz, PROT_READ | PROT_WRITE | PROT_MTE)) {
-+                    perror("mprotect() failed");
-+                    return EXIT_FAILURE;
-+            }
-+
-+            /* access with the default tag (0) */
-+            a[0] = 1;
-+            a[1] = 2;
-+
-+            printf("a[0] = %hhu a[1] = %hhu\n", a[0], a[1]);
-+
-+            /* set the logical and allocation tags */
-+            a = (unsigned char *)insert_random_tag(a);
-+            set_tag(a);
-+
-+            printf("%p\n", a);
-+
-+            /* non-zero tag access */
-+            a[0] = 3;
-+            printf("a[0] = %hhu a[1] = %hhu\n", a[0], a[1]);
-+
-+            /*
-+             * If MTE is enabled correctly the next instruction will generate an
-+             * exception.
-+             */
-+            printf("Expecting SIGSEGV...\n");
-+            a[16] = 0xdd;
-+
-+            /* this should not be printed in the PR_MTE_TCF_SYNC mode */
-+            printf("...haven't got one\n");
-+
-+            return EXIT_FAILURE;
-+    }
+SmFtZXMsDQoNClNvcnJ5LCBwZXJoYXBzIEkgd2FzIGluZGlyZWN0LCBidXQgSSB0aG91Z2h0IEkg
+aGFkIHJlc3BvbmRlZCB0byB0aGF0IGluIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWZz
+ZGV2ZWwvZGU2YWRjZTc2YjUzNDMxMDk3NWU0ZDNjNGE0ZmFjYjJAZ2FybWluLmNvbS8uDQoNCkkg
+cmVhbGx5IGhvcGUgSSBkbyBub3QgY29tZSBvZmYgYXMgY29tcGxhaW5pbmcgYWJvdXQgdGhpcyBp
+c3N1ZS4gV2UgaWRlbnRpZmllZCB3aGF0IHNlZW1lZCB0byBiZSBzb21ldGhpbmcgdGhhdCB3YXMg
+b3Zlcmxvb2tlZCB3aXRoIHRoZSB2YXJpb3VzIEFQSXMgYXJvdW5kIGNyZWF0aW5nIGNoaWxkIHBy
+b2Nlc3Nlcy4gUmF0aGVyIHRoYW4gZml4aW5nIGl0IG91cnNlbHZlcyBhbmQgbW92aW5nIG9uIHdl
+IGNob3NlIHRvIGludmVzdCBtb3JlIHRpbWUgYW5kIGVmZm9ydCBpbnRvIGl0IGJ5IGVuZ2FnaW5n
+IHRoZSBjb21tdW5pdHkgKGZpcnN0IFBPU0lYLCBhbmQgbm93IHRoaXMgb25lKSBpbiBhIGRpc2N1
+c3Npb24uIEkgaHVtYmx5IGFuZCBzaW5jZXJlbHkgYXNrIGlmIHlvdSB3b3VsZCBoZWxwIG1lIHVu
+ZGVyc3RhbmQsIGlmIHdlIGNvdWxkIHR1cm4gYmFjayB0aGUgY2xvY2ssIGhvdyBvdXIgYXBwbGlj
+YXRpb24gY291bGQgaGF2ZSBiZWVuIHdyaXR0ZW4gdG8gYXZvaWQgdGhpcyBpc3N1ZToNCg0KKkEg
+cGFyZW50IHByb2Nlc3MgZm9ya3MgYSBjaGlsZC4gQW5vdGhlciB0aHJlYWQgaW4gdGhlIHBhcmVu
+dCBwcm9jZXNzIGNsb3NlcyBhbmQgYXR0ZW1wdHMgdG8gcmVvcGVuIGEgc29ja2V0LCBmaWxlLCBv
+ciBvdGhlciByZXNvdXJjZSBpdCBuZWVkcyBleGNsdXNpdmUgYWNjZXNzIHRvLiBUaGlzIGZhaWxz
+IGJlY2F1c2UgdGhlIC1vcGVyYXRpbmcgc3lzdGVtLSBzdGlsbCBoYXMgYSByZWZlcmVuY2UgdG8g
+dGhhdCByZXNvdXJjZSB0aGF0IGl0IGlzIGtlZXBpbmcgb24gYmVoYWxmIG9mIHRoZSBjaGlsZC4g
+VGhlIGNoaWxkIGV2ZW50dWFsbHkgY2FsbHMgZXhlYyBhbmQgdGhlIHJlc291cmNlIGlzIGNsb3Nl
+ZCBiZWNhdXNlIHRoZSBjbG9zZS1vbi1leGVjIGZsYWcgaXMgc2V0LioNCg0KT3VyIGZpcnN0IGF0
+dGVtcHQsIHdoaWNoIHdhcyB0byB1c2UgdGhlIHB0aHJlYWRfYXRmb3JrKCkgaGFuZGxlcnMsIGZh
+aWxlZCBiZWNhdXNlIHN5c3RlbSgpIGlzIG5vdCByZXF1aXJlZCB0byBjYWxsIHRoZSBoYW5kbGVy
+cy4NCg0KTW9zdCBvZiB0aGUgZmVlZGJhY2sgd2UncmUgZ2V0dGluZyBvbiB0aGlzIHNlZW1zIHRv
+IHNheSAiZG9uJ3QgdXNlIHN5c3RlbSgpLCBpdCBpcyB1bnNhZmUgZm9yIHRocmVhZGVkIGFwcGxp
+Y2F0aW9ucyIuIElzIHRoYXQgZG9jdW1lbnRlZCBhbnl3aGVyZT8gVGhlIG1hbiBwYWdlIHNheXMg
+aXQgaXMgIk1ULVNhZmUiLg0KDQpBc2lkZSBmcm9tIHRoYXQsIGV2ZW4gaWYgd2UgcmVtb3ZlIGFs
+bCB1c2VzIG9mIHN5c3RlbSgpIGZyb20gb3VyIGFwcGxpY2F0aW9uICh3aGljaCB3ZSBhbHJlYWR5
+IGhhdmUpLCB0aGVuIG91ciBhcHBsaWNhdGlvbiwgbGlrZSBtYW55IG90aGVyIGFwcGxpY2F0aW9u
+cywgbmVlZHMgdG8gdXNlIHRoaXJkLXBhcnR5IHNoYXJlZCBsaWJyYXJpZXMuIFRoZXJlIGlzIG5v
+dGhpbmcgdGhhdCBwcmV2ZW50cyB0aG9zZSBsaWJyYXJpZXMgZnJvbSB1c2luZyBzeXN0ZW0oKS4g
+V2UgY2FuIGF1ZGl0IHRob3NlIGxpYnJhcmllcyBhbmQgZ28gYmFjayB3aXRoIHRoZSB2ZW5kb3Ig
+d2l0aCBhIHJlcXVlc3QgdG8gcmVwbGFjZSBzeXN0ZW0oKSB3aXRoIGEgc3RhbmRhcmQgZm9yay9l
+eGVjLCBidXQgdGhleSB3aWxsIGFsc28gd2FudCBkb2N1bWVudGF0aW9uIHN1cHBvcnRpbmcgdGhh
+dC4NCg0KV2UgY2FuIGFsc28gdGFrZSBzdGVwcyB0byBjaGFuZ2Ugb3IgcmVtb3ZlIHN5c3RlbSgp
+IGZyb20gb3VyIHN0YW5kYXJkIGxpYnJhcnkuIEl0IGZpeGVzIG91ciBpc3N1ZSwgYnV0IHN0aWxs
+IGxlYXZlcyB0aGUgY29tbXVuaXR5IHdpdGggYW4gQVBJIHRoYXQgaXMgYnJva2VuL2ZsYXdlZC9w
+b29ybHktZG9jdW1lbnRlZCAoZGVwZW5kaW5nIG9uIGhvdyBvbmUgbG9va3MgYXQgaXQpLg0KDQpJ
+ZiB0aGUgZmVlZGJhY2sgZnJvbSB0aGUgY29tbXVuaXR5IGlzIHRydWx5IGFuZCBmaW5hbGx5IHRo
+YXQgc3lzdGVtKCkgc2hvdWxkIG5vdCBiZSB1c2VkIGluIHRoZXNlIGFwcGxpY2F0aW9ucywgdGhl
+biBpcyB0aGVyZSBzdXBwb3J0IGZvciB1cGRhdGluZyB0aGUgbWFuIHBhZ2UgdG8gYmV0dGVyIGNv
+bW11bmljYXRlIHRoYXQ/DQoNClRoYW5rcyBmb3IgeW91ciBoZWxwIHdpdGggdGhpcy4NCg0KTmF0
+ZQ0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogSmFtZXMgQm90dG9tbGV5IDxK
+YW1lcy5Cb3R0b21sZXlASGFuc2VuUGFydG5lcnNoaXAuY29tPg0KU2VudDogRnJpZGF5LCBNYXkg
+MTUsIDIwMjAgMTE6MjYNClRvOiBLYXJzdGVucywgTmF0ZSA8TmF0ZS5LYXJzdGVuc0BnYXJtaW4u
+Y29tPjsgTWF0dGhldyBXaWxjb3ggPHdpbGx5QGluZnJhZGVhZC5vcmc+DQpDYzogQWxleGFuZGVy
+IFZpcm8gPHZpcm9AemVuaXYubGludXgub3JnLnVrPjsgSmVmZiBMYXl0b24gPGpsYXl0b25Aa2Vy
+bmVsLm9yZz47IEouIEJydWNlIEZpZWxkcyA8YmZpZWxkc0BmaWVsZHNlcy5vcmc+OyBBcm5kIEJl
+cmdtYW5uIDxhcm5kQGFybmRiLmRlPjsgUmljaGFyZCBIZW5kZXJzb24gPHJ0aEB0d2lkZGxlLm5l
+dD47IEl2YW4gS29rc2hheXNreSA8aW5rQGp1cmFzc2ljLnBhcmsubXN1LnJ1PjsgTWF0dCBUdXJu
+ZXIgPG1hdHRzdDg4QGdtYWlsLmNvbT47IEhlbGdlIERlbGxlciA8ZGVsbGVyQGdteC5kZT47IERh
+dmlkIFMuIE1pbGxlciA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD47IEpha3ViIEtpY2luc2tpIDxrdWJh
+QGtlcm5lbC5vcmc+OyBFcmljIER1bWF6ZXQgPGVkdW1hemV0QGdvb2dsZS5jb20+OyBEYXZpZCBM
+YWlnaHQgPERhdmlkLkxhaWdodEBhY3VsYWIuY29tPjsgbGludXgtZnNkZXZlbEB2Z2VyLmtlcm5l
+bC5vcmc7IGxpbnV4LWFyY2hAdmdlci5rZXJuZWwub3JnOyBsaW51eC1hbHBoYUB2Z2VyLmtlcm5l
+bC5vcmc7IGxpbnV4LXBhcmlzY0B2Z2VyLmtlcm5lbC5vcmc7IHNwYXJjbGludXhAdmdlci5rZXJu
+ZWwub3JnOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
+b3JnOyBDaGFuZ2xpIEdhbyA8eGlhb3N1b0BnbWFpbC5jb20+OyBhLmpvc2V5QG9wZW5ncm91cC5v
+cmcNClN1YmplY3Q6IFJlOiBbUEFUQ0ggdjJdIEltcGxlbWVudCBjbG9zZS1vbi1mb3JrDQoNCkNB
+VVRJT04gLSBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGFueSBsaW5rcyBvciBvcGVuIGFu
+eSBhdHRhY2htZW50cyB1bmxlc3MgeW91IHRydXN0IHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNv
+bnRlbnQgaXMgc2FmZS4NCg0KDQpPbiBGcmksIDIwMjAtMDUtMTUgYXQgMTY6MDcgKzAwMDAsIEth
+cnN0ZW5zLCBOYXRlIHdyb3RlOg0KPiBNYXR0aGV3LA0KPg0KPiBXaGF0IGFsdGVybmF0aXZlIHdv
+dWxkIHlvdSBzdWdnZXN0Pw0KPg0KPiBGcm9tIGFuIGVhcmxpZXIgZW1haWw6DQo+DQo+ID4gLi4u
+bm90aGluZyBlbHNlIGFkZHJlc3NlcyB0aGUgdW5kZXJseWluZyBpc3N1ZTogdGhlcmUgaXMgbm8g
+d2F5IHRvDQo+ID4gcHJldmVudCBhIGZvcmsoKSBmcm9tIGR1cGxpY2F0aW5nIHRoZSByZXNvdXJj
+ZS4gVGhlIGNsb3NlLW9uLWV4ZWMNCj4gPiBmbGFnIHBhcnRpYWxseS1hZGRyZXNzZXMgdGhpcyBi
+eSBhbGxvd2luZyB0aGUgcGFyZW50IHByb2Nlc3MgdG8gbWFyaw0KPiA+IGEgZmlsZSBkZXNjcmlw
+dG9yIGFzIGV4Y2x1c2l2ZSB0byBpdHNlbGYsIGJ1dCB0aGVyZSBpcyBzdGlsbCBhDQo+ID4gcGVy
+aW9kIG9mIHRpbWUgdGhlIGZhaWx1cmUgY2FuIG9jY3VyIGJlY2F1c2UgdGhlIGF1dG8tY2xvc2Ug
+b25seQ0KPiA+IG9jY3VycyBkdXJpbmcgdGhlIGV4ZWMoKS4gUGVyaGFwcyB0aGlzIHdvdWxkIG5v
+dCBiZSBhbiBpc3N1ZSB3aXRoIGENCj4gPiBkaWZmZXJlbnQgcHJvY2Vzcy90aHJlYWRpbmcgbW9k
+ZWwsIGJ1dCB0aGF0IGlzIGFub3RoZXIgZGlzY3Vzc2lvbg0KPiA+IGVudGlyZWx5Lg0KPg0KPiBE
+byB5b3UgZGlzYWdyZWUgdGhlcmUgaXMgYW4gaXNzdWU/DQoNCk9oIGdvb2QgZ3JpZWYgdGhhdCdz
+IGEgbGVhZGluZyBxdWVzdGlvbjogV2hlbiBJIHdyaXRlIGJhZCBjb2RlIGFuZCBpdCBjcmFzaGVz
+LCBtb3N0IHBlb3BsZSB3b3VsZCBhZ3JlZSB0aGVyZSBpcyBhbiBpc3N1ZTsgdmVyeSBmZXcgd291
+bGQgYWdyZWUgdGhlIGtlcm5lbCBzaG91bGQgYmUgY2hhbmdlZCB0byBmaXggaXQuIFNldmVyYWwg
+b2YgdXMgaGF2ZSBhbHJlYWR5IHNhaWQgdGhlIHByb2JsZW0gc2VlbXMgdG8gYmUgd2l0aCB0aGUg
+d2F5IHlvdXIgYXBwbGljYXRpb24gaXMgd3JpdHRlbi4gIFlvdSBkaWRuJ3QgZXZlbiBhbnN3ZXIg
+ZW1haWxzIGxpa2UgdGhpcyBzcGVjdWxhdGluZyBhYm91dCB0aGUgY2F1c2UgYmVpbmcgdGhlIHdh
+eSB5b3VyIGFwcGxpY2F0aW9uIGNvdW50cyByZXNvdXJjZXM6DQoNCmh0dHBzOi8vbG9yZS5rZXJu
+ZWwub3JnL2xpbnV4LWZzZGV2ZWwvMTU4NzU2OTY2My4zNDg1LjE4LmNhbWVsQEhhbnNlblBhcnRu
+ZXJzaGlwLmNvbS8NCg0KVGhlIGJvdHRvbSBsaW5lIGlzIHRoYXQgd2UgdGhpbmsgeW91IGNvdWxk
+IHJld3JpdGUgdGhpcyBvbmUgYXBwbGljYXRpb24gbm90IHRvIGhhdmUgdGhlIHByb2JsZW0geW91
+J3JlIGNvbXBsYWluaW5nIGFib3V0IHJhdGhlciB0aGFuIGludHJvZHVjZSBhIG5ldyBrZXJuZWwg
+QVBJIHRvICJmaXgiIGl0Lg0KDQpKYW1lcw0KDQoNCg0KDQpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXw0KDQpDT05GSURFTlRJQUxJVFkgTk9USUNFOiBUaGlzIGVtYWlsIGFuZCBhbnkg
+YXR0YWNobWVudHMgYXJlIGZvciB0aGUgc29sZSB1c2Ugb2YgdGhlIGludGVuZGVkIHJlY2lwaWVu
+dChzKSBhbmQgY29udGFpbiBpbmZvcm1hdGlvbiB0aGF0IG1heSBiZSBHYXJtaW4gY29uZmlkZW50
+aWFsIGFuZC9vciBHYXJtaW4gbGVnYWxseSBwcml2aWxlZ2VkLiBJZiB5b3UgaGF2ZSByZWNlaXZl
+ZCB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcmVwbHkg
+ZW1haWwgYW5kIGRlbGV0ZSB0aGUgbWVzc2FnZS4gQW55IGRpc2Nsb3N1cmUsIGNvcHlpbmcsIGRp
+c3RyaWJ1dGlvbiBvciB1c2Ugb2YgdGhpcyBjb21tdW5pY2F0aW9uIChpbmNsdWRpbmcgYXR0YWNo
+bWVudHMpIGJ5IHNvbWVvbmUgb3RoZXIgdGhhbiB0aGUgaW50ZW5kZWQgcmVjaXBpZW50IGlzIHBy
+b2hpYml0ZWQuIFRoYW5rIHlvdS4NCg==
