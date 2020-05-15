@@ -2,94 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 747DB1D46B0
-	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 09:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13811D4B23
+	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 12:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726615AbgEOHHa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 May 2020 03:07:30 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4786 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726485AbgEOHH3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 15 May 2020 03:07:29 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 6610CA908959FDAF50FF;
-        Fri, 15 May 2020 15:07:25 +0800 (CST)
-Received: from [10.57.101.250] (10.57.101.250) by
- DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 15 May 2020 15:07:16 +0800
-Subject: Re: [PATCH v2 0/3] io.h, logic_pio: Allow barriers for inX() and
- outX() be overridden
-To:     John Garry <john.garry@huawei.com>, <xuwei5@huawei.com>,
-        <arnd@arndb.de>
-References: <1585325174-195915-1-git-send-email-john.garry@huawei.com>
-CC:     <okaya@kernel.org>, <bhelgaas@google.com>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-        <olof@lixom.net>, <jiaxun.yang@flygoat.com>
-From:   Wei Xu <xuwei5@hisilicon.com>
-Message-ID: <5EBE3FA3.2060703@hisilicon.com>
-Date:   Fri, 15 May 2020 15:07:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.2.0
+        id S1728060AbgEOKit (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 May 2020 06:38:49 -0400
+Received: from foss.arm.com ([217.140.110.172]:53134 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728013AbgEOKis (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 15 May 2020 06:38:48 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF24B2F;
+        Fri, 15 May 2020 03:38:47 -0700 (PDT)
+Received: from gaia (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B4033F71E;
+        Fri, 15 May 2020 03:38:46 -0700 (PDT)
+Date:   Fri, 15 May 2020 11:38:40 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-arch@vger.kernel.org,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 23/23] arm64: mte: Add Memory Tagging Extension
+ documentation
+Message-ID: <20200515103839.GA22393@gaia>
+References: <20200421142603.3894-1-catalin.marinas@arm.com>
+ <20200421142603.3894-24-catalin.marinas@arm.com>
+ <20200429164705.GF30377@arm.com>
+ <20200430162316.GJ2717@gaia>
+ <20200504164617.GK30377@arm.com>
+ <20200511164018.GC19176@gaia>
+ <20200513154845.GT21779@arm.com>
+ <20200514113722.GA1907@gaia>
 MIME-Version: 1.0
-In-Reply-To: <1585325174-195915-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.57.101.250]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200514113722.GA1907@gaia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi John,
+On Thu, May 14, 2020 at 12:37:22PM +0100, Catalin Marinas wrote:
+> On Wed, May 13, 2020 at 04:48:46PM +0100, Dave P Martin wrote:
+> > > > > On Wed, Apr 29, 2020 at 05:47:05PM +0100, Dave P Martin wrote:
+> > > > > > On Tue, Apr 21, 2020 at 03:26:03PM +0100, Catalin Marinas wrote:
+> > > > > > > +excludes all tags other than 0. A user thread can enable specific tags
+> > > > > > > +in the randomly generated set using the ``prctl(PR_SET_TAGGED_ADDR_CTRL,
+> > > > > > > +flags, 0, 0, 0)`` system call where ``flags`` contains the tags bitmap
+> > > > > > > +in the ``PR_MTE_TAG_MASK`` bit-field.
+> > > > > > > +
+> > > > > > > +**Note**: The hardware uses an exclude mask but the ``prctl()``
+> > > > > > > +interface provides an include mask. An include mask of ``0`` (exclusion
+> > > > > > > +mask ``0xffff``) results in the CPU always generating tag ``0``.
+> > > > > > 
+> > > > > > Is there no way to make this default to 1 rather than having a magic
+> > > > > > meaning for 0?
+> [...]
+> > The only configuration that doesn't make sense is "no tags allowed", so
+> > I'd argue for explicity blocking that, even if the architeture aliases
+> > that encoding to something else.
+> > 
+> > If we prefer 0 as a default value so that init inherits the correct
+> > value from the kernel without any special acrobatics, then we make it an
+> > exclude mask, with the semantics that the hardware is allowed to
+> > generate any of these tags, but does not have to be capable of
+> > generating all of them.
+> 
+> That's more of a question to the libc people and their preference.
+> We have two options with suboptions:
+> 
+> 1. prctl() gets an exclude mask with 0xffff illegal even though the
+>    hardware accepts it:
+>    a) default exclude mask 0, allowing all tags to be generated by IRG
+>    b) default exclude mask of 0xfffe so that only tag 0 is generated
+> 
+> 2. prctl() gets an include mask with 0 illegal:
+>    a) default include mask is 0xffff, allowing all tags to be generated
+>    b) default include mask 0f 0x0001 so that only tag 0 is generated
+> 
+> We currently have (2) with mask 0 but could be changed to (2.b). If we
+> are to follow the hardware description (which makes more sense to me but
+> I don't write the C library), (1.a) is the most appropriate.
 
-On 2020/3/28 0:06, John Garry wrote:
-> Since commits a7851aa54c0c ("io: change outX() to have their own IO
-> barrier overrides") and 87fe2d543f81 ("io: change inX() to have their own
-> IO barrier overrides"), the outX() and inX() functions have memory
-> barriers which can be overridden per-arch.
-> 
-> However, under CONFIG_INDIRECT_PIO, logic_pio defines its own version of
-> inX() and outX(), which still use readb et al. For these, the barrier
-> after a raw read is weaker than it otherwise would be. 
-> 
-> This series generates consistent behaviour for logic_pio, by defining
-> generic _inX() and _outX() in asm-generic/io.h, and using those in
-> logic_pio. Generic _inX() and _outX() have per-arch overrideable
-> barriers.
-> 
-> The topic was discussed there originally:
-> https://lore.kernel.org/lkml/2e80d7bc-32a0-cc40-00a9-8a383a1966c2@huawei.com/
-> 
-> A small tidy-up patch is included.
-> 
-> I hope that series can go through the arm-soc tree, as with other recent
-> logic_pio changes.
-> 
-> Hi Arnd,
-> 
-> I added your tag, but please let me know if you have any issue with the
-> updated change in patch #1.
-> 
-> cheers
-> 
-> - Differences to v1
-> 	- fix x86 clang build by adding extra build swicth for _{in,out}X
-> 	- added Arnd's RB tag
-> 
-> John Garry (3):
->   io: Provide _inX() and _outX()
->   logic_pio: Improve macro argument name
->   logic_pio: Use _inX() and _outX()
-> 
->  include/asm-generic/io.h | 64 +++++++++++++++++++++++++++++++++---------------
->  lib/logic_pio.c          | 22 ++++++++---------
->  2 files changed, 55 insertions(+), 31 deletions(-)
-> 
+Thinking some more about this, as we are to expose the GCR_EL1.Excl via
+a ptrace interface as a regset, it makes more sense to move back to an
+exclude mask here with default 0. That would be option 1.a above.
 
-Thanks!
-Series applied to the hisilicon SoC tree.
-
-Best Regards,
-Wei
+-- 
+Catalin
