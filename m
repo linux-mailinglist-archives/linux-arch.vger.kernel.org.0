@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9111D5735
-	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 19:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB1C1D5736
+	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 19:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726295AbgEORQj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 May 2020 13:16:39 -0400
-Received: from foss.arm.com ([217.140.110.172]:59418 "EHLO foss.arm.com"
+        id S1726297AbgEORQl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 May 2020 13:16:41 -0400
+Received: from foss.arm.com ([217.140.110.172]:59430 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726292AbgEORQj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 15 May 2020 13:16:39 -0400
+        id S1726292AbgEORQl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 15 May 2020 13:16:41 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 735701063;
-        Fri, 15 May 2020 10:16:38 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 512231042;
+        Fri, 15 May 2020 10:16:40 -0700 (PDT)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D68D93F305;
-        Fri, 15 May 2020 10:16:36 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A9C103F305;
+        Fri, 15 May 2020 10:16:38 -0700 (PDT)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
@@ -27,9 +27,9 @@ Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>
-Subject: [PATCH v4 08/26] arm64: mte: Tags-aware copy_page() implementation
-Date:   Fri, 15 May 2020 18:15:54 +0100
-Message-Id: <20200515171612.1020-9-catalin.marinas@arm.com>
+Subject: [PATCH v4 09/26] arm64: mte: Tags-aware aware memcmp_pages() implementation
+Date:   Fri, 15 May 2020 18:15:55 +0100
+Message-Id: <20200515171612.1020-10-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200515171612.1020-1-catalin.marinas@arm.com>
 References: <20200515171612.1020-1-catalin.marinas@arm.com>
@@ -40,116 +40,88 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+When the Memory Tagging Extension is enabled, two pages are identical
+only if both their data and tags are identical.
 
-When the Memory Tagging Extension is enabled, the tags need to be
-preserved across page copy (e.g. for copy-on-write).
+Make the generic memcmp_pages() a __weak function and add an
+arm64-specific implementation which returns non-zero if any of the two
+pages contain valid MTE tags (PG_mte_tagged set). There isn't much
+benefit in comparing the tags of two pages since these are normally used
+for heap allocations and likely to differ anyway.
 
-Introduce MTE-aware copy_page() which preserves the tags across page
-copy.
-
+Co-developed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
 ---
 
 Notes:
     v4:
-    - Moved the tag copying to a separate function in mte.S and only called
-      if the source page has the PG_mte_tagged flag set.
+    - Remove page tag comparison. This is not very useful to detect
+      identical pages as long as set_pte_at() can zero the tags on a page
+      without copy-on-write if mapped with PROT_MTE. This can be improved
+      if a real case appears but it's unlikely for heap pages to be
+      identical across multiple processes.
+    - Move the memcmp_pages() function to mte.c.
 
- arch/arm64/include/asm/mte.h |  4 ++++
- arch/arm64/lib/mte.S         | 19 +++++++++++++++++++
- arch/arm64/mm/copypage.c     | 14 ++++++++++++--
- 3 files changed, 35 insertions(+), 2 deletions(-)
+ arch/arm64/kernel/mte.c | 26 ++++++++++++++++++++++++++
+ mm/util.c               |  2 +-
+ 2 files changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
-index 4310a7ff10c0..c1a09499c678 100644
---- a/arch/arm64/include/asm/mte.h
-+++ b/arch/arm64/include/asm/mte.h
-@@ -19,6 +19,7 @@ void mte_clear_page_tags(void *addr, size_t size);
- #define PG_mte_tagged	PG_arch_2
- 
- void mte_sync_tags(pte_t *ptep, pte_t pte);
-+void mte_copy_page_tags(void *kto, const void *kfrom);
- void flush_mte_state(void);
- 
- #else
-@@ -29,6 +30,9 @@ void flush_mte_state(void);
- static inline void mte_sync_tags(pte_t *ptep, pte_t pte)
- {
- }
-+static inline void mte_copy_page_tags(void *kto, const void *kfrom)
-+{
-+}
- static inline void flush_mte_state(void)
- {
- }
-diff --git a/arch/arm64/lib/mte.S b/arch/arm64/lib/mte.S
-index 130fb7047e17..a531b52fa5ba 100644
---- a/arch/arm64/lib/mte.S
-+++ b/arch/arm64/lib/mte.S
+diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+index 65a2f8490d18..da2d70178a4b 100644
+--- a/arch/arm64/kernel/mte.c
++++ b/arch/arm64/kernel/mte.c
 @@ -5,6 +5,7 @@
- #include <linux/linkage.h>
  
- #include <asm/assembler.h>
-+#include <asm/page.h>
- 
- 	.arch	armv8.5-a+memtag
- 
-@@ -21,3 +22,21 @@ SYM_FUNC_START(mte_clear_page_tags)
- 	cbnz	x1, 1b
- 	ret
- SYM_FUNC_END(mte_clear_page_tags)
-+
-+/*
-+ * Copy the tags from the source page to the destination one
-+ *   x0 - address of the destination page
-+ *   x1 - address of the source page
-+ */
-+SYM_FUNC_START(mte_copy_page_tags)
-+	mov	x2, x0
-+	mov	x3, x1
-+	multitag_transfer_size x5, x6
-+1:	ldgm	x4, [x3]
-+	stgm	x4, [x2]
-+	add	x2, x2, x5
-+	add	x3, x3, x5
-+	tst	x2, #(PAGE_SIZE - 1)
-+	b.ne	1b
-+2:
-+SYM_FUNC_END(mte_copy_page_tags)
-diff --git a/arch/arm64/mm/copypage.c b/arch/arm64/mm/copypage.c
-index 2ee7b73433a5..2560ddc479ac 100644
---- a/arch/arm64/mm/copypage.c
-+++ b/arch/arm64/mm/copypage.c
-@@ -6,16 +6,26 @@
-  * Copyright (C) 2012 ARM Ltd.
-  */
- 
-+#include <linux/bitops.h>
+ #include <linux/bitops.h>
  #include <linux/mm.h>
++#include <linux/string.h>
+ #include <linux/thread_info.h>
  
- #include <asm/page.h>
- #include <asm/cacheflush.h>
-+#include <asm/cpufeature.h>
-+#include <asm/mte.h>
- 
- void __cpu_copy_user_page(void *kto, const void *kfrom, unsigned long vaddr)
- {
--	struct page *page = virt_to_page(kto);
-+	struct page *to_page = virt_to_page(kto);
-+	struct page *from_page = virt_to_page(kfrom);
-+
- 	copy_page(kto, kfrom);
--	flush_dcache_page(page);
-+	if (system_supports_mte() &&
-+	    test_bit(PG_mte_tagged, &from_page->flags)) {
-+		mte_copy_page_tags(kto, kfrom);
-+		set_bit(PG_mte_tagged, &to_page->flags);
-+	}
-+	flush_dcache_page(to_page);
+ #include <asm/cpufeature.h>
+@@ -23,6 +24,31 @@ void mte_sync_tags(pte_t *ptep, pte_t pte)
+ 	mte_clear_page_tags(page_address(page), page_size(page));
  }
- EXPORT_SYMBOL_GPL(__cpu_copy_user_page);
  
++int memcmp_pages(struct page *page1, struct page *page2)
++{
++	char *addr1, *addr2;
++	int ret;
++
++	addr1 = page_address(page1);
++	addr2 = page_address(page2);
++	ret = memcmp(addr1, addr2, PAGE_SIZE);
++
++	if (!system_supports_mte() || ret)
++		return ret;
++
++	/*
++	 * If the page content is identical but at least one of the pages is
++	 * tagged, return non-zero to avoid KSM merging. If only one of the
++	 * pages is tagged, set_pte_at() may zero or change the tags of the
++	 * other page via mte_sync_tags().
++	 */
++	if (test_bit(PG_mte_tagged, &page1->flags) ||
++	    test_bit(PG_mte_tagged, &page2->flags))
++		return addr1 != addr2;
++
++	return ret;
++}
++
+ void flush_mte_state(void)
+ {
+ 	if (!system_supports_mte())
+diff --git a/mm/util.c b/mm/util.c
+index 988d11e6c17c..662fb3da6d01 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -899,7 +899,7 @@ int get_cmdline(struct task_struct *task, char *buffer, int buflen)
+ 	return res;
+ }
+ 
+-int memcmp_pages(struct page *page1, struct page *page2)
++int __weak memcmp_pages(struct page *page1, struct page *page2)
+ {
+ 	char *addr1, *addr2;
+ 	int ret;
