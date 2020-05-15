@@ -2,61 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 804011D4E5F
-	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 15:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8BC1D4FBA
+	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 16:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbgEONDT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 May 2020 09:03:19 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58712 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726371AbgEONDS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 15 May 2020 09:03:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 30290ABC7;
-        Fri, 15 May 2020 13:03:19 +0000 (UTC)
-Date:   Fri, 15 May 2020 15:03:13 +0200
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S1726301AbgEOOA2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 May 2020 10:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726163AbgEOOA2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 15 May 2020 10:00:28 -0400
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15CAC05BD09;
+        Fri, 15 May 2020 07:00:27 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 4181D379; Fri, 15 May 2020 16:00:25 +0200 (CEST)
+From:   Joerg Roedel <joro@8bytes.org>
+To:     x86@kernel.org
+Cc:     hpa@zytor.com, Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
         Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Michal Hocko <mhocko@kernel.org>,
         Matthew Wilcox <willy@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v2 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
-Message-ID: <20200515130313.GI8135@suse.de>
-References: <20200513152137.32426-1-joro@8bytes.org>
- <CALCETrW1Y2Q7dWwv4X7PHf3yxOGMcDaBG0NK7BWPAR=FiqsoPQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALCETrW1Y2Q7dWwv4X7PHf3yxOGMcDaBG0NK7BWPAR=FiqsoPQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Joerg Roedel <jroedel@suse.de>, joro@8bytes.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v3 0/7] mm: Get rid of vmalloc_sync_(un)mappings()
+Date:   Fri, 15 May 2020 16:00:16 +0200
+Message-Id: <20200515140023.25469-1-joro@8bytes.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 13, 2020 at 09:01:04AM -0700, Andy Lutomirski wrote:
-> I would love to see a followup patch that preallocates the vmalloc
-> region on 64-bit and compiles out pgd_list and all of the associated
-> gunk.
+Hi,
 
-Looked a bit into this, with pre-allocation and a few more changes all
-but one users of pgd_list and pgd_lock can be get rid of on x86-64. But
-there is the XEN-PV code which also needs to traverse pgd_list, and I am
-not sure how to get rid of that.
+here is the updated version of this series with these
+changes:
+
+	- Removed sync_current_stack_to_mm() too.
+
+	- Added Acked-by's from Andy Lutomirski
+
+The previous versions can be found here:
+
+	v1: https://lore.kernel.org/lkml/20200508144043.13893-1-joro@8bytes.org/
+
+	v2: https://lore.kernel.org/lkml/20200513152137.32426-1-joro@8bytes.org/
+
+The cover-letter of v1 has more details on the motivation
+for this patch-set.
+
+Please review.
 
 Regards,
 
 	Joerg
+
+Joerg Roedel (7):
+  mm: Add functions to track page directory modifications
+  mm/vmalloc: Track which page-table levels were modified
+  mm/ioremap: Track which page-table levels were modified
+  x86/mm/64: Implement arch_sync_kernel_mappings()
+  x86/mm/32: Implement arch_sync_kernel_mappings()
+  mm: Remove vmalloc_sync_(un)mappings()
+  x86/mm: Remove vmalloc faulting
+
+ arch/x86/include/asm/pgtable-2level_types.h |   2 +
+ arch/x86/include/asm/pgtable-3level_types.h |   2 +
+ arch/x86/include/asm/pgtable_64_types.h     |   2 +
+ arch/x86/include/asm/switch_to.h            |  23 ---
+ arch/x86/kernel/setup_percpu.c              |   6 +-
+ arch/x86/mm/fault.c                         | 176 +-------------------
+ arch/x86/mm/init_64.c                       |   5 +
+ arch/x86/mm/pti.c                           |   8 +-
+ arch/x86/mm/tlb.c                           |  37 ----
+ drivers/acpi/apei/ghes.c                    |   6 -
+ include/asm-generic/5level-fixup.h          |   5 +-
+ include/asm-generic/pgtable.h               |  23 +++
+ include/linux/mm.h                          |  46 +++++
+ include/linux/vmalloc.h                     |  18 +-
+ kernel/notifier.c                           |   1 -
+ kernel/trace/trace.c                        |  12 --
+ lib/ioremap.c                               |  46 +++--
+ mm/nommu.c                                  |  12 --
+ mm/vmalloc.c                                | 109 +++++++-----
+ 19 files changed, 204 insertions(+), 335 deletions(-)
+
+-- 
+2.17.1
+
