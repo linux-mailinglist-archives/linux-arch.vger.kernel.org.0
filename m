@@ -2,352 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0381D5A7F
-	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 22:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74861D5BA9
+	for <lists+linux-arch@lfdr.de>; Fri, 15 May 2020 23:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726223AbgEOUBo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 May 2020 16:01:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52570 "EHLO mail.kernel.org"
+        id S1726183AbgEOVdq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 May 2020 17:33:46 -0400
+Received: from mga11.intel.com ([192.55.52.93]:49479 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726197AbgEOUBo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 15 May 2020 16:01:44 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8AED420727;
-        Fri, 15 May 2020 20:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589572903;
-        bh=hrb0NjlAGs243jz20skr4JyPcHlHUFR+OdxSllgZnYM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VnImy+mbJ7aCP3ALfPDqJ1xZma70fF5k5/smHK7ELq1um0M3nRPni8+qpkYQkoiB8
-         6EnEoZa2bty30wH7st+xf1j918NgjMe7piFPa6D+RZFvXRGM70OdLTsm8yebYnCPrw
-         qhX76ha6l4t06mZAxe3rljHXmXNEAhvuAKP5TZ0w=
-Date:   Fri, 15 May 2020 13:01:42 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     x86@kernel.org, hpa@zytor.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
+        id S1726301AbgEOVdq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 15 May 2020 17:33:46 -0400
+IronPort-SDR: rjx1Bjtp71FatJIwHqJg2ZcIKG5tXG0BFAMW9FpOneoRHQRZKhidfZzC66oRgSt17keFIE7WWC
+ Ou4NizKCeDJA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 14:33:45 -0700
+IronPort-SDR: gOvKgDGmB5WzruN5yXXKLsAMyljyX+RYXJfeyIzc1yrVpIPo7o0atEfAuJk8N9xLs8ad2pQRhT
+ 9yEIkVHRnUcQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,396,1583222400"; 
+   d="scan'208";a="263317095"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by orsmga003.jf.intel.com with ESMTP; 15 May 2020 14:33:44 -0700
+Message-ID: <44c055342bda4fb4730703f987ae35195d1d0c38.camel@intel.com>
+Subject: Re: [PATCH v10 01/26] Documentation/x86: Add CET description
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Joerg Roedel <jroedel@suse.de>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v3 2/7] mm/vmalloc: Track which page-table levels were
- modified
-Message-Id: <20200515130142.4ca90ee590e9d8ab88497676@linux-foundation.org>
-In-Reply-To: <20200515140023.25469-3-joro@8bytes.org>
-References: <20200515140023.25469-1-joro@8bytes.org>
-        <20200515140023.25469-3-joro@8bytes.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Date:   Fri, 15 May 2020 14:33:49 -0700
+In-Reply-To: <b0581ddc-0d99-cbcf-278e-0be55ba939a0@intel.com>
+References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
+         <20200429220732.31602-2-yu-cheng.yu@intel.com>
+         <b5197a8d-5d8b-e1f7-68d4-58d80261904c@intel.com>
+         <dd5b9bab31ecf247a0b4890e22bfbb486ff52001.camel@intel.com>
+         <5cc163ff9058d1b27778e5f0a016c88a3b1a1598.camel@intel.com>
+         <b0581ddc-0d99-cbcf-278e-0be55ba939a0@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 15 May 2020 16:00:18 +0200 Joerg Roedel <joro@8bytes.org> wrote:
+On Fri, 2020-05-15 at 11:39 -0700, Dave Hansen wrote:
+> On 5/12/20 4:20 PM, Yu-cheng Yu wrote:
+> > On Wed, 2020-04-29 at 16:02 -0700, Yu-cheng Yu wrote:
+> > > On Wed, 2020-04-29 at 15:53 -0700, Dave Hansen wrote:
+> > > > On 4/29/20 3:07 PM, Yu-cheng Yu wrote:
+> > > > > +Note:
+> > > > > +  There is no CET-enabling arch_prctl function.  By design, CET is enabled
+> > > > > +  automatically if the binary and the system can support it.
+> > > > 
+> > > > I think Andy and I danced around this last time.  Let me try to say it
+> > > > more explicitly.
+> > > > 
+> > > > I want CET kernel enabling to able to be disconnected from the on-disk
+> > > > binary.  I want a binary compiled with CET to be able to disable it, and
+> > > > I want a binary not compiled with CET to be able to enable it.  I want
+> > > > different threads in a process to be able to each have different CET status.
+> > > 
+> > > The kernel patches we have now can be modified to support this model.  If after
+> > > discussion this is favorable, I will modify code accordingly.
+> > 
+> > To turn on/off and to lock CET are application-level decisions.  The kernel does
+> > not prevent any of those.  Should there be a need to provide an arch_prctl() to
+> > turn on CET, it can be added without any conflict to this series.
+> 
+> I spelled out what I wanted pretty clearly.  On your next post, could
+> you please directly address each of the things I asked for?  Please
+> directly answer the following questions in your next post with respect
+> to the code you post:
+> 
+> Can a binary compiled with CET run without CET?
 
-> Track at which levels in the page-table entries were modified by
-> vmap/vunmap. After the page-table has been modified, use that
-> information do decide whether the new arch_sync_kernel_mappings()
-> needs to be called.
+Yes, but a few details:
 
-Lots of collisions here with Christoph's "decruft the vmalloc API" series
-(http://lkml.kernel.org/r/20200414131348.444715-1-hch@lst.de).
+- The shadow stack is transparent to the application.  A CET application does
+not have anything different from a non-CET application.  However, if a CET
+application uses any CET instructions (e.g. INCSSP), it must first check if CET
+is turned on.
+- If an application is compiled for IBT, the compiler inserts ENDBRs at branch
+targets.  These are nops if IBT is not on.
 
-I attempted to fix things up.
+> Can a binary compiled without CET run CET-enabled code?
 
-unmap_kernel_range_noflush() needed to be redone.
+Partially yes, but in reality somewhat difficult.
 
-map_kernel_range_noflush() might need the arch_sync_kernel_mappings() call?
+- If a non-CET application does exec() of a CET binary, then CET is enabled.
+- If a not-CET application does fork(), and the child wants to turn on CET, it
+would be difficult to manage the stack frames, unless the child knows what is is
+doing.  The JIT examples I mentioned previously run with CET enabled from the
+beginning.  Do you have a reason to do this?  In other words, if the JIT code
+needs CET, the app could have started with CET in the first place.
+- If you are asking about dlopen(), the library will have the same setting as
+the main application.  Do you have any reason to have a library running with
+CET, but the application does not have CET?
 
+> Can different threads in a process have different CET enabling state?
 
-From: Joerg Roedel <jroedel@suse.de>
-Subject: mm/vmalloc: Track which page-table levels were modified
+Yes, if the parent starts with CET, children can turn it off.  But for the same
+reason described above, it is difficult to turn on CET from the middle.
 
-Track at which levels in the page-table entries were modified by
-vmap/vunmap.  After the page-table has been modified, use that information
-do decide whether the new arch_sync_kernel_mappings() needs to be called.
+> > > > Which JITs was this tested with?  I think as a bare minimum we need to
+> > > > know that this design can accommodate _a_ modern JIT.  It would be
+> > > > horrible if the browser javascript engines couldn't use this design, for
+> > > > instance.
+> > > 
+> > > JIT work is still in progress.  When that is available I will test it.
+> > 
+> > I found CET has been enabled in LLVM JIT, Mesa JIT as well as sljit which is
+> > used by jit.  So the current model works with JIT.
+> 
+> Great!  I'm glad the model works.  That's not what I asked, though.
+> 
+> Does this *code* work?  Could you please indicate which JITs have been
+> enabled to use the code in this series?  How much of the new ABI is in use?
 
-Link: http://lkml.kernel.org/r/20200515140023.25469-3-joro@8bytes.org
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Acked-by: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
+JIT does not necessarily use all of the ABI.  The JIT changes mainly fix stack
+frames and insert ENDBRs.  I do not work on JIT.  What I found is LLVM JIT fixes
+are tested and in the master branch.  Sljit fixes are in the release.
 
- include/linux/vmalloc.h |   16 ++++++
- mm/vmalloc.c            |   91 +++++++++++++++++++++++++++-----------
- 2 files changed, 81 insertions(+), 26 deletions(-)
+> Where are the selftests/ for this new ABI?  Were you planning on
+> submitting any with this series?
 
---- a/include/linux/vmalloc.h~mm-vmalloc-track-which-page-table-levels-were-modified
-+++ a/include/linux/vmalloc.h
-@@ -134,6 +134,22 @@ void vmalloc_sync_mappings(void);
- void vmalloc_sync_unmappings(void);
- 
- /*
-+ * Architectures can set this mask to a combination of PGTBL_P?D_MODIFIED values
-+ * and let generic vmalloc and ioremap code know when arch_sync_kernel_mappings()
-+ * needs to be called.
-+ */
-+#ifndef ARCH_PAGE_TABLE_SYNC_MASK
-+#define ARCH_PAGE_TABLE_SYNC_MASK 0
-+#endif
-+
-+/*
-+ * There is no default implementation for arch_sync_kernel_mappings(). It is
-+ * relied upon the compiler to optimize calls out if ARCH_PAGE_TABLE_SYNC_MASK
-+ * is 0.
-+ */
-+void arch_sync_kernel_mappings(unsigned long start, unsigned long end);
-+
-+/*
-  *	Lowlevel-APIs (not for driver use!)
-  */
- 
---- a/mm/vmalloc.c~mm-vmalloc-track-which-page-table-levels-were-modified
-+++ a/mm/vmalloc.c
-@@ -69,7 +69,8 @@ static void free_work(struct work_struct
- 
- /*** Page table manipulation functions ***/
- 
--static void vunmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end)
-+static void vunmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
-+			     pgtbl_mod_mask *mask)
- {
- 	pte_t *pte;
- 
-@@ -78,59 +79,81 @@ static void vunmap_pte_range(pmd_t *pmd,
- 		pte_t ptent = ptep_get_and_clear(&init_mm, addr, pte);
- 		WARN_ON(!pte_none(ptent) && !pte_present(ptent));
- 	} while (pte++, addr += PAGE_SIZE, addr != end);
-+	*mask |= PGTBL_PTE_MODIFIED;
- }
- 
--static void vunmap_pmd_range(pud_t *pud, unsigned long addr, unsigned long end)
-+static void vunmap_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
-+			     pgtbl_mod_mask *mask)
- {
- 	pmd_t *pmd;
- 	unsigned long next;
-+	int cleared;
- 
- 	pmd = pmd_offset(pud, addr);
- 	do {
- 		next = pmd_addr_end(addr, end);
--		if (pmd_clear_huge(pmd))
-+
-+		cleared = pmd_clear_huge(pmd);
-+		if (cleared || pmd_bad(*pmd))
-+			*mask |= PGTBL_PMD_MODIFIED;
-+
-+		if (cleared)
- 			continue;
- 		if (pmd_none_or_clear_bad(pmd))
- 			continue;
--		vunmap_pte_range(pmd, addr, next);
-+		vunmap_pte_range(pmd, addr, next, mask);
- 	} while (pmd++, addr = next, addr != end);
- }
- 
--static void vunmap_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end)
-+static void vunmap_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
-+			     pgtbl_mod_mask *mask)
- {
- 	pud_t *pud;
- 	unsigned long next;
-+	int cleared;
- 
- 	pud = pud_offset(p4d, addr);
- 	do {
- 		next = pud_addr_end(addr, end);
--		if (pud_clear_huge(pud))
-+
-+		cleared = pud_clear_huge(pud);
-+		if (cleared || pud_bad(*pud))
-+			*mask |= PGTBL_PUD_MODIFIED;
-+
-+		if (cleared)
- 			continue;
- 		if (pud_none_or_clear_bad(pud))
- 			continue;
--		vunmap_pmd_range(pud, addr, next);
-+		vunmap_pmd_range(pud, addr, next, mask);
- 	} while (pud++, addr = next, addr != end);
- }
- 
--static void vunmap_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end)
-+static void vunmap_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
-+			     pgtbl_mod_mask *mask)
- {
- 	p4d_t *p4d;
- 	unsigned long next;
-+	int cleared;
- 
- 	p4d = p4d_offset(pgd, addr);
- 	do {
- 		next = p4d_addr_end(addr, end);
--		if (p4d_clear_huge(p4d))
-+
-+		cleared = p4d_clear_huge(p4d);
-+		if (cleared || p4d_bad(*p4d))
-+			*mask |= PGTBL_P4D_MODIFIED;
-+
-+		if (cleared)
- 			continue;
- 		if (p4d_none_or_clear_bad(p4d))
- 			continue;
--		vunmap_pud_range(p4d, addr, next);
-+		vunmap_pud_range(p4d, addr, next, mask);
- 	} while (p4d++, addr = next, addr != end);
- }
- 
- /**
-  * unmap_kernel_range_noflush - unmap kernel VM area
-- * @addr: start of the VM area to unmap
-+ * @start: start of the VM area to unmap
-  * @size: size of the VM area to unmap
-  *
-  * Unmap PFN_UP(@size) pages at @addr.  The VM area @addr and @size specify
-@@ -141,24 +164,33 @@ static void vunmap_p4d_range(pgd_t *pgd,
-  * for calling flush_cache_vunmap() on to-be-mapped areas before calling this
-  * function and flush_tlb_kernel_range() after.
-  */
--void unmap_kernel_range_noflush(unsigned long addr, unsigned long size)
-+void unmap_kernel_range_noflush(unsigned long start, unsigned long size)
- {
--	unsigned long end = addr + size;
-+	unsigned long end = start + size;
- 	unsigned long next;
- 	pgd_t *pgd;
-+	unsigned long addr = start;
-+	pgtbl_mod_mask mask = 0;
- 
- 	BUG_ON(addr >= end);
-+	start = addr;
- 	pgd = pgd_offset_k(addr);
- 	do {
- 		next = pgd_addr_end(addr, end);
-+		if (pgd_bad(*pgd))
-+			mask |= PGTBL_PGD_MODIFIED;
- 		if (pgd_none_or_clear_bad(pgd))
- 			continue;
--		vunmap_p4d_range(pgd, addr, next);
-+		vunmap_p4d_range(pgd, addr, next, &mask);
- 	} while (pgd++, addr = next, addr != end);
-+
-+	if (mask & ARCH_PAGE_TABLE_SYNC_MASK)
-+		arch_sync_kernel_mappings(start, end);
- }
- 
- static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
--		unsigned long end, pgprot_t prot, struct page **pages, int *nr)
-+		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
-+		pgtbl_mod_mask *mask)
- {
- 	pte_t *pte;
- 
-@@ -167,7 +199,7 @@ static int vmap_pte_range(pmd_t *pmd, un
- 	 * callers keep track of where we're up to.
- 	 */
- 
--	pte = pte_alloc_kernel(pmd, addr);
-+	pte = pte_alloc_kernel_track(pmd, addr, mask);
- 	if (!pte)
- 		return -ENOMEM;
- 	do {
-@@ -180,55 +212,59 @@ static int vmap_pte_range(pmd_t *pmd, un
- 		set_pte_at(&init_mm, addr, pte, mk_pte(page, prot));
- 		(*nr)++;
- 	} while (pte++, addr += PAGE_SIZE, addr != end);
-+	*mask |= PGTBL_PTE_MODIFIED;
- 	return 0;
- }
- 
- static int vmap_pmd_range(pud_t *pud, unsigned long addr,
--		unsigned long end, pgprot_t prot, struct page **pages, int *nr)
-+		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
-+		pgtbl_mod_mask *mask)
- {
- 	pmd_t *pmd;
- 	unsigned long next;
- 
--	pmd = pmd_alloc(&init_mm, pud, addr);
-+	pmd = pmd_alloc_track(&init_mm, pud, addr, mask);
- 	if (!pmd)
- 		return -ENOMEM;
- 	do {
- 		next = pmd_addr_end(addr, end);
--		if (vmap_pte_range(pmd, addr, next, prot, pages, nr))
-+		if (vmap_pte_range(pmd, addr, next, prot, pages, nr, mask))
- 			return -ENOMEM;
- 	} while (pmd++, addr = next, addr != end);
- 	return 0;
- }
- 
- static int vmap_pud_range(p4d_t *p4d, unsigned long addr,
--		unsigned long end, pgprot_t prot, struct page **pages, int *nr)
-+		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
-+		pgtbl_mod_mask *mask)
- {
- 	pud_t *pud;
- 	unsigned long next;
- 
--	pud = pud_alloc(&init_mm, p4d, addr);
-+	pud = pud_alloc_track(&init_mm, p4d, addr, mask);
- 	if (!pud)
- 		return -ENOMEM;
- 	do {
- 		next = pud_addr_end(addr, end);
--		if (vmap_pmd_range(pud, addr, next, prot, pages, nr))
-+		if (vmap_pmd_range(pud, addr, next, prot, pages, nr, mask))
- 			return -ENOMEM;
- 	} while (pud++, addr = next, addr != end);
- 	return 0;
- }
- 
- static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
--		unsigned long end, pgprot_t prot, struct page **pages, int *nr)
-+		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
-+		pgtbl_mod_mask *mask)
- {
- 	p4d_t *p4d;
- 	unsigned long next;
- 
--	p4d = p4d_alloc(&init_mm, pgd, addr);
-+	p4d = p4d_alloc_track(&init_mm, pgd, addr, mask);
- 	if (!p4d)
- 		return -ENOMEM;
- 	do {
- 		next = p4d_addr_end(addr, end);
--		if (vmap_pud_range(p4d, addr, next, prot, pages, nr))
-+		if (vmap_pud_range(p4d, addr, next, prot, pages, nr, mask))
- 			return -ENOMEM;
- 	} while (p4d++, addr = next, addr != end);
- 	return 0;
-@@ -260,12 +296,15 @@ int map_kernel_range_noflush(unsigned lo
- 	pgd_t *pgd;
- 	int err = 0;
- 	int nr = 0;
-+	pgtbl_mod_mask mask = 0;
- 
- 	BUG_ON(addr >= end);
- 	pgd = pgd_offset_k(addr);
- 	do {
- 		next = pgd_addr_end(addr, end);
--		err = vmap_p4d_range(pgd, addr, next, prot, pages, &nr);
-+		if (pgd_bad(*pgd))
-+			mask |= PGTBL_PGD_MODIFIED;
-+		err = vmap_p4d_range(pgd, addr, next, prot, pages, &nr, &mask);
- 		if (err)
- 			return err;
- 	} while (pgd++, addr = next, addr != end);
-_
+The ABI is more related to the application side, and therefore most suitable for
+GLIBC unit tests.  The more complicated areas such as pthreads, signals,
+ucontext, fork() are all included there.  I have been constantly running these
+tests without any problems.  I can provide more details if testing is the
+concern.
+
+Yu-cheng
 
