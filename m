@@ -2,67 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1B71D611C
-	for <lists+linux-arch@lfdr.de>; Sat, 16 May 2020 14:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36141D6158
+	for <lists+linux-arch@lfdr.de>; Sat, 16 May 2020 15:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726301AbgEPM4p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 16 May 2020 08:56:45 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60782 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726295AbgEPM4p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 16 May 2020 08:56:45 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id B3754AB8F;
-        Sat, 16 May 2020 12:56:46 +0000 (UTC)
-Date:   Sat, 16 May 2020 14:56:41 +0200
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org, hpa@zytor.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
+        id S1726385AbgEPN3w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 16 May 2020 09:29:52 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:34046 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726298AbgEPN3v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 16 May 2020 09:29:51 -0400
+Received: from ip5f5af183.dynamic.kabel-deutschland.de ([95.90.241.131] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jZwsS-0004mh-36; Sat, 16 May 2020 13:29:20 +0000
+Date:   Sat, 16 May 2020 15:29:18 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Nate Karstens <nate.karstens@garmin.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v3 2/7] mm/vmalloc: Track which page-table levels were
- modified
-Message-ID: <20200516125641.GK8135@suse.de>
-References: <20200515140023.25469-1-joro@8bytes.org>
- <20200515140023.25469-3-joro@8bytes.org>
- <20200515130142.4ca90ee590e9d8ab88497676@linux-foundation.org>
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Changli Gao <xiaosuo@gmail.com>,
+        a.josey@opengroup.org
+Subject: Re: [PATCH v2] Implement close-on-fork
+Message-ID: <20200516132918.edq7p2tyh6elorjm@wittgenstein>
+References: <20200515152321.9280-1-nate.karstens@garmin.com>
+ <20200515155730.GF16070@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200515130142.4ca90ee590e9d8ab88497676@linux-foundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200515155730.GF16070@bombadil.infradead.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Andrew,
-
-On Fri, May 15, 2020 at 01:01:42PM -0700, Andrew Morton wrote:
-> On Fri, 15 May 2020 16:00:18 +0200 Joerg Roedel <joro@8bytes.org> wrote:
-> Lots of collisions here with Christoph's "decruft the vmalloc API" series
-> (http://lkml.kernel.org/r/20200414131348.444715-1-hch@lst.de).
+On Fri, May 15, 2020 at 08:57:30AM -0700, Matthew Wilcox wrote:
+> On Fri, May 15, 2020 at 10:23:17AM -0500, Nate Karstens wrote:
+> > Series of 4 patches to implement close-on-fork. Tests have been
+> > published to https://github.com/nkarstens/ltp/tree/close-on-fork
+> > and cover close-on-fork functionality in the following syscalls:
 > 
-> I attempted to fix things up.
+> [...]
 > 
-> unmap_kernel_range_noflush() needed to be redone.
+> > This functionality was approved by the Austin Common Standards
+> > Revision Group for inclusion in the next revision of the POSIX
+> > standard (see issue 1318 in the Austin Group Defect Tracker).
 > 
-> map_kernel_range_noflush() might need the arch_sync_kernel_mappings() call?
+> NAK to this patch series, and the entire concept.
 
-Yes, map_kernel_range_noflush() needs the arch_sync_kernel_mappings()
-call as well.
+Yeah.
+But also, stuff like this should really be on linux-api.
 
-Regards,
-
-	Joerg
-
+Christian
