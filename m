@@ -2,91 +2,269 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD021D7714
-	for <lists+linux-arch@lfdr.de>; Mon, 18 May 2020 13:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2E31D7865
+	for <lists+linux-arch@lfdr.de>; Mon, 18 May 2020 14:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbgERLbJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 18 May 2020 07:31:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57762 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726855AbgERLbJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 18 May 2020 07:31:09 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D8B0920756;
-        Mon, 18 May 2020 11:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589801468;
-        bh=mA5LuL+NZ4U22EpIeu1yY/QuHzmG+4ZlK35nDxAZ3lY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XF7NkBh2RpP7Djhlw6gtpIkyVTqRimk+VriVrbaCTcWm/aslkIwjKrKCrs5T2jQ4v
-         B9xYMQiqzJR3hkd0a/BLad5a4SW3AkDSXqzrObZQ4NfAO9jrtvsYsOiJ/lEIeuhY3z
-         c01YbNXnW0VfZBr3F1izfcNFuOr49q89HEZl1o5I=
-Date:   Mon, 18 May 2020 12:31:03 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Vladimir Murzin <vladimir.murzin@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Dave P Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH v4 24/26] arm64: mte: Introduce early param to disable
- MTE support
-Message-ID: <20200518113103.GA32394@willie-the-truck>
-References: <20200515171612.1020-1-catalin.marinas@arm.com>
- <20200515171612.1020-25-catalin.marinas@arm.com>
- <a2ad6cbf-2632-3cda-eb49-74ddfbed2cec@arm.com>
+        id S1726946AbgERMVN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 18 May 2020 08:21:13 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:58482 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726855AbgERMVM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 18 May 2020 08:21:12 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 34D43CE30EA30A57DDB;
+        Mon, 18 May 2020 20:21:10 +0800 (CST)
+Received: from [127.0.0.1] (10.173.220.25) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.487.0; Mon, 18 May 2020
+ 20:21:04 +0800
+Subject: Re: [RFC PATCH v3 2/2] arm64: tlb: Use the TLBI RANGE feature in
+ arm64
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     <will@kernel.org>, <suzuki.poulose@arm.com>, <maz@kernel.org>,
+        <steven.price@arm.com>, <guohanjun@huawei.com>, <olof@lixom.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
+        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
+        <kuhn.chenqun@huawei.com>
+References: <20200414112835.1121-1-yezhenyu2@huawei.com>
+ <20200414112835.1121-3-yezhenyu2@huawei.com> <20200514152840.GC1907@gaia>
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+Message-ID: <54468aae-dbb1-66bd-c633-82fc75936206@huawei.com>
+Date:   Mon, 18 May 2020 20:21:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a2ad6cbf-2632-3cda-eb49-74ddfbed2cec@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200514152840.GC1907@gaia>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.173.220.25]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 18, 2020 at 12:26:30PM +0100, Vladimir Murzin wrote:
-> On 5/15/20 6:16 PM, Catalin Marinas wrote:
-> > For performance analysis it may be desirable to disable MTE altogether
-> > via an early param. Introduce arm64.mte_disable and, if true, filter out
-> > the sanitised ID_AA64PFR1_EL1.MTE field to avoid exposing the HWCAP to
-> > user.
-> > 
-> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > ---
-> > 
-> > Notes:
-> >     New in v4.
-> > 
-> >  Documentation/admin-guide/kernel-parameters.txt |  4 ++++
-> >  arch/arm64/kernel/cpufeature.c                  | 11 +++++++++++
-> >  2 files changed, 15 insertions(+)
-> > 
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > index f2a93c8679e8..7436e7462b85 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -373,6 +373,10 @@
-> >  	arcrimi=	[HW,NET] ARCnet - "RIM I" (entirely mem-mapped) cards
-> >  			Format: <io>,<irq>,<nodeID>
-> >  
-> > +	arm64.mte_disable=
-> > +			[ARM64] Disable Linux support for the Memory
-> > +			Tagging Extension (both user and in-kernel).
-> > +
+Hi Catalin,
+
+Thanks for your review.
+
+On 2020/5/14 23:28, Catalin Marinas wrote:
+> Hi Zhenyu,
 > 
-> Should it really to take parameter (on/off/true/false)? It may lead to expectation
-> that arm64.mte_disable=false should enable MT and, yes, double negatives make it
-> look ugly, so if we do need parameter, can it be arm64.mte=on/off/true/false?
+> On Tue, Apr 14, 2020 at 07:28:35PM +0800, Zhenyu Ye wrote:
+>> diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
+>> index b76df828e6b7..3a1816770bd1 100644
+>> --- a/arch/arm64/include/asm/tlb.h
+>> +++ b/arch/arm64/include/asm/tlb.h
+>> @@ -38,7 +38,12 @@ static inline void tlb_flush(struct mmu_gather *tlb)
+>>  		return;
+>>  	}
+>>  
+>> -	__flush_tlb_range(&vma, tlb->start, tlb->end, stride, last_level);
+>> +	if (cpus_have_const_cap(ARM64_HAS_TLBI_RANGE))
+>> +		__flush_tlb_range_directly(&vma, tlb->start, tlb->end,
+>> +					   stride, last_level);
+>> +	else
+>> +		__flush_tlb_range(&vma, tlb->start, tlb->end,
+>> +				  stride, last_level);
+> 
+> I think you could move such check in __flush_tlb_range() and avoid
+> cpus_have_const_cap() in two places. More on this below.
+> 
 
-I don't think "performance analysis" is a good justification for this
-parameter tbh. We don't tend to add these options for other architectural
-features, and I don't see why MTE is any different in this regard.
+Then we must mix the __flush_tlb_range() and the _directly one together.
+I'm worried this will make the code very complicated.  See the end for
+details.
 
-Will
+>> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+>> index bc3949064725..a482188ea563 100644
+>> --- a/arch/arm64/include/asm/tlbflush.h
+>> +++ b/arch/arm64/include/asm/tlbflush.h
+>> @@ -59,6 +59,44 @@
+>>  		__ta;						\
+>>  	})
+>>  
+>> +/*
+>> + * This macro creates a properly formatted VA operand for the TLBI RANGE.
+>> + * The value bit assignments are:
+>> + *
+>> + * +----------+------+-------+-------+-------+----------------------+
+>> + * |   ASID   |  TG  | SCALE |  NUM  |  TTL  |        BADDR         |
+>> + * +-----------------+-------+-------+-------+----------------------+
+>> + * |63      48|47  46|45   44|43   39|38   37|36                   0|
+>> + *
+>> + * The address range is determined by below formula:
+>> + * [BADDR, BADDR + (NUM + 1) * 2^(5*SCALE + 1) * PAGESIZE)
+>> + *
+>> + */
+>> +#define __TLBI_VADDR_RANGE(addr, asid, tg, scale, num, ttl)	\
+>> +	({							\
+>> +		unsigned long __ta = (addr) >> PAGE_SHIFT;	\
+>> +		__ta &= GENMASK_ULL(36, 0);			\
+>> +		__ta |= (unsigned long)(ttl) << 37;		\
+>> +		__ta |= (unsigned long)(num) << 39;		\
+>> +		__ta |= (unsigned long)(scale) << 44;		\
+>> +		__ta |= (unsigned long)(tg) << 46;		\
+>> +		__ta |= (unsigned long)(asid) << 48;		\
+>> +		__ta;						\
+>> +	})
+>> +
+>> +#define TLB_RANGE_MASK_SHIFT 5
+>> +#define TLB_RANGE_MASK GENMASK_ULL(TLB_RANGE_MASK_SHIFT - 1, 0)
+>> +
+>> +/*
+>> + * __TG defines translation granule of the system, which is defined by
+>> + * PAGE_SHIFT.  Used by TTL.
+>> + *  - 4KB	: 1
+>> + *  - 16KB	: 2
+>> + *  - 64KB	: 3
+>> + */
+>> +#define __TG	((PAGE_SHIFT - 12) / 2 + 1)
+> 
+> I don't think we need __TLBI_VADDR_RANGE to take a tg argument since
+> it's always the same.
+> 
+
+OK.
+
+>> +
+>> +
+>>  /*
+>>   *	TLB Invalidation
+>>   *	================
+>> @@ -171,12 +209,83 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
+>>  	dsb(ish);
+>>  }
+>>  
+>> +/* The maximum range size of one TLBI-RANGE instruction */
+>> +#define MAX_TLBI_RANGE_SIZE	(1UL << 21)
+> 
+> Nitpick: call this MAX_TLBI_RANGE_PAGES as that's not an address range.
+> 
+> It may be useful to have a macro for the range here, something like:
+> 
+> #define __TLBI_PAGES(num, scale)	((num + 1) << (5 * scale + 1))
+> 
+> and define MAX_TLBI_RANGE_PAGES in terms of this macro as
+> __TLBI_PAGES(31, 3).
+> 
+
+OK, thanks for your great suggestion.
+
+>> +
+>> +/*
+>> + * This interface uses the *rvale1is* instruction to flush TLBs
+>> + * in [start, end) directly.
+>> + * This instruction is supported from ARM v8.4.
+>> + */
+>> +static inline void __flush_tlb_range_directly(struct vm_area_struct *vma,
+>> +				unsigned long start, unsigned long end,
+>> +				unsigned long stride, bool last_level)
+>> +{
+>> +	int num = 0;
+>> +	int scale = 0;
+>> +	unsigned long asid = ASID(vma->vm_mm);
+>> +	unsigned long addr = 0;
+>> +	unsigned long range_size;
+>> +
+>> +	start = round_down(start, stride);
+>> +	end = round_up(end, stride);
+>> +	range_size = (end - start) >> PAGE_SHIFT;
+>> +
+>> +	if (range_size > MAX_TLBI_RANGE_SIZE) {
+>> +		flush_tlb_mm(vma->vm_mm);
+>> +		return;
+>> +	}
+>> +
+>> +	dsb(ishst);
+>> +
+>> +	/*
+>> +	 * The minimum size of TLB RANGE is 2 PAGE;
+>> +	 * Use normal TLB instruction to handle odd PAGEs
+> 
+> Nitpick: no need to capitalise PAGE.
+> 
+
+OK.
+
+>> +	 */
+>> +	if (range_size % 2 == 1) {
+>> +		addr = __TLBI_VADDR(start, asid);
+>> +		if (last_level) {
+>> +			__tlbi(vale1is, addr);
+>> +			__tlbi_user(vale1is, addr);
+>> +		} else {
+>> +			__tlbi(vae1is, addr);
+>> +			__tlbi_user(vae1is, addr);
+>> +		}
+>> +		start += 1 << PAGE_SHIFT;
+>> +		range_size -= 1;
+>> +	}
+>> +
+>> +	range_size >>= 1;
+>> +	while (range_size > 0) {
+>> +		num = (range_size & TLB_RANGE_MASK) - 1;
+>> +		if (num >= 0) {
+>> +			addr = __TLBI_VADDR_RANGE(start, asid, __TG,
+>> +						  scale, num, 0);
+>> +			if (last_level) {
+>> +				__tlbi(rvale1is, addr);
+>> +				__tlbi_user(rvale1is, addr);
+>> +			} else {
+>> +				__tlbi(rvae1is, addr);
+>> +				__tlbi_user(rvae1is, addr);
+>> +			}
+>> +			start += (num + 1) << (5 * scale + 1) << PAGE_SHIFT;
+> 
+> You could use the __TLBI_PAGES macro I proposed above.
+> 
+
+OK.
+
+>> +		}
+>> +		scale++;
+>> +		range_size >>= TLB_RANGE_MASK_SHIFT;
+>> +	}
+> 
+> So, you start from scale 0 and increment it until you reach the maximum.
+> I think (haven't done the maths on paper) you could also start from the
+> top with something like scale = ilog2(range_size) / 5. Not sure it's
+> significantly better though, maybe avoiding the loop 3 times if your
+> range is 2MB (which happens with huge pages).
+> 
+
+This optimization is only effective when the range is a multiple of 256KB
+(when the page size is 4KB), and I'm worried about the performance
+of ilog2().  I traced the __flush_tlb_range() last year and found that in
+most cases the range is less than 256K (see details in [1]).
+
+I will test the performance of your suggestion and then reply you again
+here.
+
+> Anyway, I think it would be more efficient if we combine the
+> __flush_tlb_range() and the _directly one into the same function with a
+> single loop for both. For example, if the stride is 2MB already, we can
+> handle this with a single classic TLBI without all the calculations for
+> the range operation. The hardware may also handle this better since the
+> software already told it there can be only one entry in that 2MB range.
+> So each loop iteration could figure which operation to use based on
+> cpucaps, TLBI range ops, stride and reduce range_size accordingly.
+> 
+
+Summarize your suggestion in one sentence: use 'stride' to optimize the
+preformance of TLBI.  This can also be done by dividing into two functions,
+and this should indeed be taken into account in the TLBI RANGE feature.
+
+But if we figure which operation to use based on cpucaps in each loop
+iteration, then cpus_have_const_cap() will be called frequently, which
+may affect performance of TLBI.  In my opinion, we should do as few
+judgments as possible in the loop, so judge the cpucaps outside the
+loop maybe a good choice.
+
+
+[1] https://lkml.org/lkml/2019/11/11/593
+
+Thanks,
+Zhenyu
+
