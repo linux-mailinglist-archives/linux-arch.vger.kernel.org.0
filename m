@@ -2,80 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 635A01D7BF0
-	for <lists+linux-arch@lfdr.de>; Mon, 18 May 2020 16:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E851D7DF7
+	for <lists+linux-arch@lfdr.de>; Mon, 18 May 2020 18:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727954AbgERO4r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 18 May 2020 10:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726940AbgERO4r (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 May 2020 10:56:47 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42280C061A0C
-        for <linux-arch@vger.kernel.org>; Mon, 18 May 2020 07:56:47 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id j2so10122264ilr.5
-        for <linux-arch@vger.kernel.org>; Mon, 18 May 2020 07:56:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=UrO6DCUD3WZyWf0uLceohYZ6wHDZ1nA58MuuYTF088s=;
-        b=MrwSUYx1CXsPj2AgHpRq9rVzfX/Tn6XhRlpEmqYcbCEhdhss5stuP9sGlypAUuUioi
-         1rTbvke7GAD+Kw4Gz/q0h3S2JKDtlihM5QDN5H/mMqgnkTqyihIk3HXEe7LwE/OlufTB
-         et/hy60ey/r+DBiyng7QuuzCoqm8vhNJ1DQyNza1121xKHsZINvETkKCRdGRnAegkENO
-         GECHPYbAc9CL7JvUEQ20tvzyC4YrANQVDQGSWnfqzpHZqtXMsS/FOsNqf1jFGdx2GgFP
-         a+UY92DImkmuwHduxsc3TMutbhekezqa71nv1T9ePH8dCT9UPXO73/X+crz3ClTKygJO
-         WDTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=UrO6DCUD3WZyWf0uLceohYZ6wHDZ1nA58MuuYTF088s=;
-        b=mU4szqBurlxlm/z0X99rYaqyT144QXt0Qk4fnPNLaXQlde9qlqAoFPmgGICnM8/LQ3
-         nf0v5sD0aX8w89LtSNecIBbMa/fhEw8lSwdmLeMzyItkoW0dEObT6l7Y8TD3KOkDh/3c
-         5x5SOYYmW5W3LjLxtYQtCo4iCS92qNreZZKGXNXRYp8zI7Kh1yRJpIrGZNw2eI7pqHGa
-         PLcqo77VZ0HuZF5GYkclUy/2UC/GfvJb2JUmAcR5u+aEwwupR2eI3tXfCvTHZDTHJnDp
-         yFegeRbPmWQBhgqGvm4WS92ALwWwIT5fbY2tHPnlsDNDl5IKUjuvUkt6BGwhC5j5e7b2
-         oyjw==
-X-Gm-Message-State: AOAM532QakbLjUoeF2D8KKE99o5eH5su9VQE767DWfFWM9eZDn4Fo7B3
-        hbllsP1jvTExGwOEmS1oukFLZgpCBRZzRasFDAk=
-X-Google-Smtp-Source: ABdhPJw11E5AIxmf5M7PI1RVv/UaawHPoyy5Lt1ElCofz7nnO/IZIKygSTIkoD6Yl3Le93M1ZtLREMkrjhgg5WsqAMc=
-X-Received: by 2002:a05:6e02:ca3:: with SMTP id 3mr16424773ilg.285.1589813806627;
- Mon, 18 May 2020 07:56:46 -0700 (PDT)
+        id S1727050AbgERQLc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 18 May 2020 12:11:32 -0400
+Received: from foss.arm.com ([217.140.110.172]:43622 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727007AbgERQLc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 18 May 2020 12:11:32 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E0C7106F;
+        Mon, 18 May 2020 09:11:31 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 74E9C3F52E;
+        Mon, 18 May 2020 09:11:30 -0700 (PDT)
+Date:   Mon, 18 May 2020 17:11:28 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH 14/14] prctl.2: Add PR_PAC_RESET_KEYS (arm64)
+Message-ID: <20200518161128.GB21779@arm.com>
+References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
+ <1589301419-24459-15-git-send-email-Dave.Martin@arm.com>
+ <20200513072530.GA18196@willie-the-truck>
+ <20200513143653.GQ21779@arm.com>
+ <20200513210022.GA28594@willie-the-truck>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:2203:0:0:0:0 with HTTP; Mon, 18 May 2020 07:56:45
- -0700 (PDT)
-Reply-To: derek_russ@hotmail.com
-From:   Derek Russ <moore.carrick99@gmail.com>
-Date:   Mon, 18 May 2020 17:56:45 +0300
-Message-ID: <CAPi-CLKBBBf14mSm59BLU64zHJfCFE=-ROwB60bi4wjVa=akwg@mail.gmail.com>
-Subject: Darlehen Angebot
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200513210022.GA28594@willie-the-truck>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Hallo,
+On Wed, May 13, 2020 at 10:00:22PM +0100, Will Deacon wrote:
+> On Wed, May 13, 2020 at 03:36:54PM +0100, Dave Martin wrote:
+> > On Wed, May 13, 2020 at 08:25:31AM +0100, Will Deacon wrote:
+> > > On Tue, May 12, 2020 at 05:36:59PM +0100, Dave Martin wrote:
+> > > > +As a special case, if
+> > > > +.I arg2
+> > > > +is zero then all the keys are reset.
+> > > > +Since new keys could be added in future,
+> > > > +this is the recommended way to completely wipe the existing keys
+> > > > +when creating a new execution context.
+> > > 
+> > > I see what you're saying, but the keys are also reset on exec() iirc, so we
+> > > don't want to encourage people to issue the prctl() unnecessarily
+> > > immediately following an exec().
+> > 
+> > I thought of saying that, then pulled it out again.
+> > 
+> > How about:
+> > 
+> > "[...] a new execution context within an existing process.  Note that
+> > execve() always resets all the keys as part of its operation, without
+> > the need for this prctl() call.  PR_PAC_RESET_KEYS is intended for
+> > custom situations that do not involve execve(), such as creating a new
+> > managed run-time sandbox."
+> > 
+> > I deliberately don't say "thread" because that's probably libc's job.
+> > I'll need to check glibc does, though.  There may be issues with
+> > pthreads semantics that mean we can't reset the keys there.
+> 
+> That's better, but you may even be able to drop the "such as..." part, I
+> reckon.
+> 
+> > > > @@ -1920,6 +1960,27 @@ are not 0.
+> > > >  .B EINVAL
+> > > >  .I option
+> > > >  was
+> > > > +.B PR_PAC_RESET_KEYS
+> > > > +and
+> > > > +.I arg2
+> > > > +contains non-zero bits other than
+> > > > +.BR
+> > > > +.BR PR_PAC_APIAKEY ,
+> > > > +.BR PR_PAC_APIBKEY ,
+> > > > +.BR PR_PAC_APDAKEY ,
+> > > > +.B PR_PAC_APDBKEY
+> > > > +and
+> > > > +.BR PR_PAC_APGAKEY ;
+> > > > +or
+> > > > +.IR arg3 ,
+> > > > +.I arg4
+> > > > +and
+> > > > +.I arg5
+> > > > +were not all zero.
+> > > 
+> > > Do we care about other reasons for -EINVAL, such as the system not
+> > > supporting pointer authentication?
+> > 
+> > Again, I tried to catch that under the new "not supported by this
+> > platform" wording in the earlier patch.  Do you think that's sufficient,
+> > or do we need something else here?
+> 
+> As long as it's clear that the prctl() *can* fail and userspace can't just
+> ignore the return value, then I'm happy. If it's not obvious, then spelling
+> it out seems harmless to me.
 
-   Ich bin Herr Derek Russ, ein legitimer, seri=C3=B6ser Geldverleiher. Wir
-sind ein Unternehmen mit finanzieller Unterst=C3=BCtzung. Wir verleihen
-Gelder an Einzelpersonen in brauchen finanzielle Unterst=C3=BCtzung oder
-brauchen Geld, um Rechnungen zu bezahlen, um in das Gesch=C3=A4ft
-investieren. Gerne biete ich Ihnen einen Kredit an. Mailen Sie uns
-jetzt =C3=BCber (derek_russ@hotmail.com)
+OK, I'll try to figure out a way to capture this.
 
-Name des Beg=C3=BCnstigten:........
-Land:.............
-Ben=C3=B6tigte Menge............
-Leihdauer: ...........
-Telefonnummer.............
-Sex:............
-Heimatadresse:......
+Since prctl is really the wild west when it comes to error codes I was
+presuming that's it's best to say nothing and rely on people's common sense.
+But I guess this isn't great either.
 
-Gr=C3=BC=C3=9Fe.
-Herr Derek Russ
+
+How about summarising the key error cases here, and just putting a cross-
+reference in the ERRORS section rather than trying to describe them
+there?  I really don't want to duplicate this stuff -- that will get
+unmaintanable, fast (if it hasn't already).
+
+Cheers
+---Dave
