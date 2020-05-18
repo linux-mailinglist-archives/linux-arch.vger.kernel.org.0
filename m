@@ -2,100 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0B51D7FF6
-	for <lists+linux-arch@lfdr.de>; Mon, 18 May 2020 19:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E2E1D85C2
+	for <lists+linux-arch@lfdr.de>; Mon, 18 May 2020 20:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728139AbgERRVD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 18 May 2020 13:21:03 -0400
-Received: from foss.arm.com ([217.140.110.172]:44874 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726958AbgERRVD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 18 May 2020 13:21:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBD96106F;
-        Mon, 18 May 2020 10:21:02 -0700 (PDT)
-Received: from gaia (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BD183F305;
-        Mon, 18 May 2020 10:21:01 -0700 (PDT)
-Date:   Mon, 18 May 2020 18:20:55 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Vladimir Murzin <vladimir.murzin@arm.com>,
-        linux-arch@vger.kernel.org, Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Dave P Martin <Dave.Martin@arm.com>,
+        id S2387790AbgERSU7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 18 May 2020 14:20:59 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:58419 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2387783AbgERSU6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 18 May 2020 14:20:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1589826056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bgUgYOhXHVrOhAbBYxlnYyhMzdekwGrXn9fI5GzJacU=;
+        b=R02e7DTE6AfSGT/kUhzmH81a2fEJ34ufqbGIFaAWXoKyh0SMZ9MIko9KOY7BKG0o7gTdaq
+        vE5ALxgIHTPL919QCmHQ4btR5vr4lHE0Q12t/fIsbCUQiJNBAp7f6UqXLiGPz0g0n+P0eu
+        5oyquCeX6qaAQaeLejCDo3J7i0bVCA8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-266-kVRrudnWNEOZ64966nyy_Q-1; Mon, 18 May 2020 14:20:52 -0400
+X-MC-Unique: kVRrudnWNEOZ64966nyy_Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 428731005510;
+        Mon, 18 May 2020 18:20:48 +0000 (UTC)
+Received: from ovpn-115-234.rdu2.redhat.com (ovpn-115-234.rdu2.redhat.com [10.10.115.234])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6AF23398;
+        Mon, 18 May 2020 18:20:43 +0000 (UTC)
+Message-ID: <5260142047d0339e00d4a74865c2f0b7511c89f6.camel@redhat.com>
+Subject: Re: [PATCH 10/29] c6x: use asm-generic/cacheflush.h
+From:   Mark Salter <msalter@redhat.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Roman Zippel <zippel@linux-m68k.org>
+Cc:     linux-arch@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Michal Simek <monstr@monstr.eu>, Jessica Yu <jeyu@kernel.org>,
+        linux-ia64@vger.kernel.org, linux-c6x-dev@linux-c6x.org,
+        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        x86@kernel.org, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
+        openrisc@lists.librecores.org, linux-alpha@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 24/26] arm64: mte: Introduce early param to disable
- MTE support
-Message-ID: <20200518172054.GL9862@gaia>
-References: <20200515171612.1020-1-catalin.marinas@arm.com>
- <20200515171612.1020-25-catalin.marinas@arm.com>
- <a2ad6cbf-2632-3cda-eb49-74ddfbed2cec@arm.com>
- <20200518113103.GA32394@willie-the-truck>
+Date:   Mon, 18 May 2020 14:20:42 -0400
+In-Reply-To: <20200515143646.3857579-11-hch@lst.de>
+References: <20200515143646.3857579-1-hch@lst.de>
+         <20200515143646.3857579-11-hch@lst.de>
+Organization: Red Hat, Inc
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.2 (3.36.2-1.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200518113103.GA32394@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 18, 2020 at 12:31:03PM +0100, Will Deacon wrote:
-> On Mon, May 18, 2020 at 12:26:30PM +0100, Vladimir Murzin wrote:
-> > On 5/15/20 6:16 PM, Catalin Marinas wrote:
-> > > For performance analysis it may be desirable to disable MTE altogether
-> > > via an early param. Introduce arm64.mte_disable and, if true, filter out
-> > > the sanitised ID_AA64PFR1_EL1.MTE field to avoid exposing the HWCAP to
-> > > user.
-> > > 
-> > > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > > Cc: Will Deacon <will@kernel.org>
-> > > ---
-> > > 
-> > > Notes:
-> > >     New in v4.
-> > > 
-> > >  Documentation/admin-guide/kernel-parameters.txt |  4 ++++
-> > >  arch/arm64/kernel/cpufeature.c                  | 11 +++++++++++
-> > >  2 files changed, 15 insertions(+)
-> > > 
-> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > index f2a93c8679e8..7436e7462b85 100644
-> > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > @@ -373,6 +373,10 @@
-> > >  	arcrimi=	[HW,NET] ARCnet - "RIM I" (entirely mem-mapped) cards
-> > >  			Format: <io>,<irq>,<nodeID>
-> > >  
-> > > +	arm64.mte_disable=
-> > > +			[ARM64] Disable Linux support for the Memory
-> > > +			Tagging Extension (both user and in-kernel).
-> > > +
-> > 
-> > Should it really to take parameter (on/off/true/false)? It may lead to expectation
-> > that arm64.mte_disable=false should enable MT and, yes, double negatives make it
-> > look ugly, so if we do need parameter, can it be arm64.mte=on/off/true/false?
+On Fri, 2020-05-15 at 16:36 +0200, Christoph Hellwig wrote:
+> C6x needs almost no cache flushing routines of its own.  Rely on
+> asm-generic/cacheflush.h for the defaults.
 > 
-> I don't think "performance analysis" is a good justification for this
-> parameter tbh. We don't tend to add these options for other architectural
-> features, and I don't see why MTE is any different in this regard.
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  arch/c6x/include/asm/cacheflush.h | 19 +------------------
+>  1 file changed, 1 insertion(+), 18 deletions(-)
+> 
+> diff --git a/arch/c6x/include/asm/cacheflush.h b/arch/c6x/include/asm/cacheflush.h
+> index 4540b40475e6c..10922d528de6d 100644
+> --- a/arch/c6x/include/asm/cacheflush.h
+> +++ b/arch/c6x/include/asm/cacheflush.h
+> @@ -16,21 +16,6 @@
+>  #include <asm/page.h>
+>  #include <asm/string.h>
+>  
+> -/*
+> - * virtually-indexed cache management (our cache is physically indexed)
+> - */
+> -#define flush_cache_all()			do {} while (0)
+> -#define flush_cache_mm(mm)			do {} while (0)
+> -#define flush_cache_dup_mm(mm)			do {} while (0)
+> -#define flush_cache_range(mm, start, end)	do {} while (0)
+> -#define flush_cache_page(vma, vmaddr, pfn)	do {} while (0)
+> -#define flush_cache_vmap(start, end)		do {} while (0)
+> -#define flush_cache_vunmap(start, end)		do {} while (0)
+> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
+> -#define flush_dcache_page(page)			do {} while (0)
+> -#define flush_dcache_mmap_lock(mapping)		do {} while (0)
+> -#define flush_dcache_mmap_unlock(mapping)	do {} while (0)
+> -
+>  /*
+>   * physically-indexed cache management
+>   */
+> @@ -49,14 +34,12 @@ do {								  \
+>  			(unsigned long) page_address(page) + PAGE_SIZE)); \
+>  } while (0)
+>  
+> -
+>  #define copy_to_user_page(vma, page, vaddr, dst, src, len) \
+>  do {						     \
+>  	memcpy(dst, src, len);			     \
+>  	flush_icache_range((unsigned) (dst), (unsigned) (dst) + (len)); \
+>  } while (0)
+>  
+> -#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
+> -	memcpy(dst, src, len)
+> +#include <asm-generic/cacheflush.h>
+>  
+>  #endif /* _ASM_C6X_CACHEFLUSH_H */
 
-There is an expectation of performance impact with MTE enabled,
-especially if it's running in synchronous mode. For the in-kernel MTE,
-we could add a parameter which sets sync vs async at boot time rather
-than a big disable knob. It won't affect user space however.
+Acked-by: Mark Salter <msalter@redhat.com>
 
-The other 'justification' is if your hardware has weird unexpected
-behaviour but I'd like this handled via errata workarounds.
 
-I'll let the people who asked for this to chip in ;). I agree with you
-that we rarely add these (and I rejected a similar option a few weeks
-ago on the AMU patchset).
-
--- 
-Catalin
