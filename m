@@ -2,39 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9561DD0F0
-	for <lists+linux-arch@lfdr.de>; Thu, 21 May 2020 17:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CB71DD283
+	for <lists+linux-arch@lfdr.de>; Thu, 21 May 2020 17:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729894AbgEUPQ1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 May 2020 11:16:27 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:52727 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727898AbgEUPQ0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 May 2020 11:16:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590074185;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1jYcpHnQL3yWssjgDciSJYss0+WKenYias59GqFdGbA=;
-        b=iBbdXmtYwqbaZHtRXbFaX55NpV/NX0zy5I+EPLdxt4IHmIh/8fIf5rqXVtZQGkVFntNymg
-        LueazZJaovAJDDN7pBF4uVK7sZx2d9CAZb7nOjNAIF1zrI/cux6+U78k85wKYU7aiHEwCt
-        33GT3ZJeC4GAaL7O54KZf2E/fPb9ulQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-12-QcU_r6aePH625lEdCeW_7g-1; Thu, 21 May 2020 11:16:21 -0400
-X-MC-Unique: QcU_r6aePH625lEdCeW_7g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B2AB3100D0DB;
-        Thu, 21 May 2020 15:16:17 +0000 (UTC)
-Received: from treble (ovpn-112-59.rdu2.redhat.com [10.10.112.59])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0F010106A7B7;
-        Thu, 21 May 2020 15:15:58 +0000 (UTC)
-Date:   Thu, 21 May 2020 10:15:56 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        id S1728226AbgEUP5w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 May 2020 11:57:52 -0400
+Received: from mga05.intel.com ([192.55.52.43]:6270 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727968AbgEUP5w (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 May 2020 11:57:52 -0400
+IronPort-SDR: 0eEVmwzumtnz92CFANKpl7Uw5kFjC06+hfkC6qs7OgBN4I1TYxm/ltuGrUXLFWwvCZ/31vgtF8
+ 9s/1VzYrCfHQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 08:57:51 -0700
+IronPort-SDR: KU0u7F/zAaSUkGmX6X4pMq8vLPzvIdvXNk9DZoNS/uZkOqFyB2C3kJui/HVPQAVxZhcb2vff4Z
+ WGPr1cyxmXpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,418,1583222400"; 
+   d="scan'208";a="255344664"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by fmsmga008.fm.intel.com with ESMTP; 21 May 2020 08:57:51 -0700
+Message-ID: <a1e7c71c72de517a288e6273ba0c18dac2e937bc.camel@intel.com>
+Subject: Re: [PATCH v10 00/26] Control-flow Enforcement: Shadow Stack
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -60,38 +53,42 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
-Subject: Re: [PATCH v10 00/26] Control-flow Enforcement: Shadow Stack
-Message-ID: <20200521151556.pojijpmuc2rdd7ko@treble>
+Date:   Thu, 21 May 2020 08:57:57 -0700
+In-Reply-To: <20200521151556.pojijpmuc2rdd7ko@treble>
 References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
+         <20200521151556.pojijpmuc2rdd7ko@treble>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200429220732.31602-1-yu-cheng.yu@intel.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 29, 2020 at 03:07:06PM -0700, Yu-cheng Yu wrote:
-> Control-flow Enforcement (CET) is a new Intel processor feature that blocks
-> return/jump-oriented programming attacks.  Details can be found in "Intel
-> 64 and IA-32 Architectures Software Developer's Manual" [1].
+On Thu, 2020-05-21 at 10:15 -0500, Josh Poimboeuf wrote:
+> On Wed, Apr 29, 2020 at 03:07:06PM -0700, Yu-cheng Yu wrote:
+> > Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+> > return/jump-oriented programming attacks.  Details can be found in "Intel
+> > 64 and IA-32 Architectures Software Developer's Manual" [1].
+> > 
+> > This series depends on the XSAVES supervisor state series that was split
+> > out and submitted earlier [2].
+> > 
+> > I have gone through previous comments, and hope all concerns have been
+> > resolved now.  Please inform me if anything is overlooked.
+> > 
+> > Changes in v10:
 > 
-> This series depends on the XSAVES supervisor state series that was split
-> out and submitted earlier [2].
+> Hi Yu-cheng,
 > 
-> I have gone through previous comments, and hope all concerns have been
-> resolved now.  Please inform me if anything is overlooked.
-> 
-> Changes in v10:
+> Do you have a git branch with the latest Shadow Stack and IBT branches
+> applied?  I tried to apply IBT v9 on top of this, but I guess the SS
+> code has changed since then and it didn't apply cleanly.
 
-Hi Yu-cheng,
+It is here:
 
-Do you have a git branch with the latest Shadow Stack and IBT branches
-applied?  I tried to apply IBT v9 on top of this, but I guess the SS
-code has changed since then and it didn't apply cleanly.
+https://github.com/yyu168/linux_cet/commits/cet
 
--- 
-Josh
+Yu-cheng
 
