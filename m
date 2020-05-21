@@ -2,93 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CB71DD283
-	for <lists+linux-arch@lfdr.de>; Thu, 21 May 2020 17:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CFF1DD384
+	for <lists+linux-arch@lfdr.de>; Thu, 21 May 2020 18:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728226AbgEUP5w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 May 2020 11:57:52 -0400
-Received: from mga05.intel.com ([192.55.52.43]:6270 "EHLO mga05.intel.com"
+        id S1730173AbgEUQ5X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 May 2020 12:57:23 -0400
+Received: from mga02.intel.com ([134.134.136.20]:46206 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727968AbgEUP5w (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 21 May 2020 11:57:52 -0400
-IronPort-SDR: 0eEVmwzumtnz92CFANKpl7Uw5kFjC06+hfkC6qs7OgBN4I1TYxm/ltuGrUXLFWwvCZ/31vgtF8
- 9s/1VzYrCfHQ==
+        id S1730138AbgEUQ5V (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 May 2020 12:57:21 -0400
+IronPort-SDR: ytGNl485kZmMLgJZnTecbBroAA/trbVjDhuI7809p58y4e0LpSwyO0NqhHeFWmozinjmz6jX2x
+ o62ZMm0LrC6w==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 08:57:51 -0700
-IronPort-SDR: KU0u7F/zAaSUkGmX6X4pMq8vLPzvIdvXNk9DZoNS/uZkOqFyB2C3kJui/HVPQAVxZhcb2vff4Z
- WGPr1cyxmXpA==
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 09:57:19 -0700
+IronPort-SDR: 9SfFdTDsfAhfALwEknMLqp3h+TL9Dg7I6I5yl5HH9puVrI4kq6G9/gJCimlW63xkeR0vPBBGXK
+ i9FqhpFLOFAw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,418,1583222400"; 
-   d="scan'208";a="255344664"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga008.fm.intel.com with ESMTP; 21 May 2020 08:57:51 -0700
-Message-ID: <a1e7c71c72de517a288e6273ba0c18dac2e937bc.camel@intel.com>
-Subject: Re: [PATCH v10 00/26] Control-flow Enforcement: Shadow Stack
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-Date:   Thu, 21 May 2020 08:57:57 -0700
-In-Reply-To: <20200521151556.pojijpmuc2rdd7ko@treble>
-References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
-         <20200521151556.pojijpmuc2rdd7ko@treble>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+   d="scan'208";a="309094735"
+Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.147.236])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 May 2020 09:57:17 -0700
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     arjan@linux.intel.com, linux-kernel@vger.kernel.org,
+        kernel-hardening@lists.openwall.com, rick.p.edgecombe@intel.com,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, linux-arch@vger.kernel.org
+Subject: [PATCH v2 5/9] x86: Make sure _etext includes function sections
+Date:   Thu, 21 May 2020 09:56:36 -0700
+Message-Id: <20200521165641.15940-6-kristen@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200521165641.15940-1-kristen@linux.intel.com>
+References: <20200521165641.15940-1-kristen@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 2020-05-21 at 10:15 -0500, Josh Poimboeuf wrote:
-> On Wed, Apr 29, 2020 at 03:07:06PM -0700, Yu-cheng Yu wrote:
-> > Control-flow Enforcement (CET) is a new Intel processor feature that blocks
-> > return/jump-oriented programming attacks.  Details can be found in "Intel
-> > 64 and IA-32 Architectures Software Developer's Manual" [1].
-> > 
-> > This series depends on the XSAVES supervisor state series that was split
-> > out and submitted earlier [2].
-> > 
-> > I have gone through previous comments, and hope all concerns have been
-> > resolved now.  Please inform me if anything is overlooked.
-> > 
-> > Changes in v10:
-> 
-> Hi Yu-cheng,
-> 
-> Do you have a git branch with the latest Shadow Stack and IBT branches
-> applied?  I tried to apply IBT v9 on top of this, but I guess the SS
-> code has changed since then and it didn't apply cleanly.
+When using -ffunction-sections to place each function in
+it's own text section so it can be randomized at load time, the
+linker considers these .text.* sections "orphaned sections", and
+will place them after the first similar section (.text). In order
+to accurately represent the end of the text section and the
+orphaned sections, _etext must be moved so that it is after both
+.text and .text.* The text size must also be calculated to
+include .text AND .text.*
 
-It is here:
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Tested-by: Tony Luck <tony.luck@intel.com>
+---
+ arch/x86/kernel/vmlinux.lds.S     | 18 +++++++++++++++++-
+ include/asm-generic/vmlinux.lds.h |  2 +-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-https://github.com/yyu168/linux_cet/commits/cet
-
-Yu-cheng
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 1bf7e312361f..044f7528a2f0 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -147,8 +147,24 @@ SECTIONS
+ #endif
+ 	} :text =0xcccc
+ 
+-	/* End of text section, which should occupy whole number of pages */
++#ifdef CONFIG_FG_KASLR
++	/*
++	 * -ffunction-sections creates .text.* sections, which are considered
++	 * "orphan sections" and added after the first similar section (.text).
++	 * Adding this ALIGN statement causes the address of _etext
++	 * to be below that of all the .text.* orphaned sections
++	 */
++	. = ALIGN(PAGE_SIZE);
++#endif
+ 	_etext = .;
++
++	/*
++	 * the size of the .text section is used to calculate the address
++	 * range for orc lookups. If we just use SIZEOF(.text), we will
++	 * miss all the .text.* sections. Calculate the size using _etext
++	 * and _stext and save the value for later.
++	 */
++	text_size = _etext - _stext;
+ 	. = ALIGN(PAGE_SIZE);
+ 
+ 	X86_ALIGN_RODATA_BEGIN
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 71e387a5fe90..f5baee74854c 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -813,7 +813,7 @@
+ 	. = ALIGN(4);							\
+ 	.orc_lookup : AT(ADDR(.orc_lookup) - LOAD_OFFSET) {		\
+ 		orc_lookup = .;						\
+-		. += (((SIZEOF(.text) + LOOKUP_BLOCK_SIZE - 1) /	\
++		. += (((text_size + LOOKUP_BLOCK_SIZE - 1) /	\
+ 			LOOKUP_BLOCK_SIZE) + 1) * 4;			\
+ 		orc_lookup_end = .;					\
+ 	}
+-- 
+2.20.1
 
