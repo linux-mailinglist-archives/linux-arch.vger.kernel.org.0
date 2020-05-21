@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF211DD94A
-	for <lists+linux-arch@lfdr.de>; Thu, 21 May 2020 23:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A034E1DD951
+	for <lists+linux-arch@lfdr.de>; Thu, 21 May 2020 23:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730674AbgEUVRm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 May 2020 17:17:42 -0400
-Received: from mga02.intel.com ([134.134.136.20]:63545 "EHLO mga02.intel.com"
+        id S1730646AbgEUVRs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 May 2020 17:17:48 -0400
+Received: from mga02.intel.com ([134.134.136.20]:63542 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730521AbgEUVRl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1730667AbgEUVRl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Thu, 21 May 2020 17:17:41 -0400
-IronPort-SDR: xnQjqdv2kk8YIjJSY6cE0KMU1f2odmqQEFN68C7g3qkpDIxtFspNNGeW11DxcS8+P4YkVvvO6l
- M6V5IHmGXXwQ==
+IronPort-SDR: L9eRd4aaPYFF+2dA98qGhRdxLCgfwjkZkAOfE2SD6Xs9HsCCgKSHR+lVGGi3hx6cTb7svhxgQ4
+ vH7iOxiNZtrg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 14:17:40 -0700
-IronPort-SDR: /r9zDoD7SFGxhHoYqXSzLpcMKQdLR//ClQAx8/S2eThDAud+UvEpi8XCme+YutCu00NsB6QJjr
- mRmRSBwuq7iA==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 14:17:41 -0700
+IronPort-SDR: HzXYuv8kWkLJC92jOBWvCxxBL/zJnsSUtC4UNvgl2oi5BfjFgwJh4qU+XkicsAvhE4lKFDX2im
+ Cn4RN1uYb1Iw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,419,1583222400"; 
-   d="scan'208";a="440623140"
+   d="scan'208";a="440623147"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga005.jf.intel.com with ESMTP; 21 May 2020 14:17:39 -0700
+  by orsmga005.jf.intel.com with ESMTP; 21 May 2020 14:17:40 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -51,9 +51,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [RFC PATCH 4/5] selftest/x86: Fix sysret_rip with ENDBR
-Date:   Thu, 21 May 2020 14:17:19 -0700
-Message-Id: <20200521211720.20236-5-yu-cheng.yu@intel.com>
+Subject: [RFC PATCH 5/5] selftest/x86: Add CET quick test
+Date:   Thu, 21 May 2020 14:17:20 -0700
+Message-Id: <20200521211720.20236-6-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200521211720.20236-1-yu-cheng.yu@intel.com>
 References: <20200521211720.20236-1-yu-cheng.yu@intel.com>
@@ -64,37 +64,162 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Insert endbr64 to assembly code of sysret_rip.
+Introduce a quick test to verify shadow stack and IBT are working.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- tools/testing/selftests/x86/sysret_rip.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/x86/Makefile         |   2 +-
+ tools/testing/selftests/x86/cet_quick_test.c | 128 +++++++++++++++++++
+ 2 files changed, 129 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/cet_quick_test.c
 
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 84d74be1d902..027682a0f377 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -27,8 +27,9 @@ asm (
- 	".pushsection \".text\", \"ax\"\n\t"
- 	".balign 4096\n\t"
- 	"test_page: .globl test_page\n\t"
--	".fill 4094,1,0xcc\n\t"
-+	".fill 4090,1,0xcc\n\t"
- 	"test_syscall_insn:\n\t"
-+	"endbr64\n\t"
- 	"syscall\n\t"
- 	".ifne . - test_page - 4096\n\t"
- 	".error \"test page is not one page long\"\n\t"
-@@ -151,7 +152,7 @@ static void test_syscall_fallthrough_to(unsigned long ip)
- 
- 	if (sigsetjmp(jmpbuf, 1) == 0) {
- 		asm volatile ("call *%[syscall_insn]" :: "a" (SYS_getpid),
--			      [syscall_insn] "rm" (ip - 2));
-+			      [syscall_insn] "rm" (ip - 6));
- 		errx(1, "[FAIL]\tSyscall trampoline returned");
- 	}
- 
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index f1bf5ab87160..26e68272117a 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -14,7 +14,7 @@ CAN_BUILD_CET := $(shell ./check_cc.sh $(CC) trivial_program.c -fcf-protection)
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+ 			protection_keys test_vdso test_vsyscall mov_ss_trap \
+-			syscall_arg_fault
++			syscall_arg_fault cet_quick_test
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+diff --git a/tools/testing/selftests/x86/cet_quick_test.c b/tools/testing/selftests/x86/cet_quick_test.c
+new file mode 100644
+index 000000000000..e84bbbcfd26f
+--- /dev/null
++++ b/tools/testing/selftests/x86/cet_quick_test.c
+@@ -0,0 +1,128 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Quick tests to verify Shadow Stack and IBT are working */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <signal.h>
++#include <string.h>
++#include <ucontext.h>
++
++ucontext_t ucp;
++int result[4] = {-1, -1, -1, -1};
++int test_id;
++
++void stack_hacked(unsigned long x)
++{
++	result[test_id] = -1;
++	test_id++;
++	setcontext(&ucp);
++}
++
++#pragma GCC push_options
++#pragma GCC optimize ("O0")
++void ibt_violation(void)
++{
++#ifdef __i386__
++	asm volatile("lea 1f, %eax");
++	asm volatile("jmp *%eax");
++#else
++	asm volatile("lea 1f, %rax");
++	asm volatile("jmp *%rax");
++#endif
++	asm volatile("1:");
++	result[test_id] = -1;
++	test_id++;
++	setcontext(&ucp);
++}
++
++void shstk_violation(void)
++{
++#ifdef __i386__
++	unsigned long x = 0;
++
++	((unsigned long *)&x)[2] = (unsigned long)stack_hacked;
++#else
++	unsigned long long x = 0;
++
++	((unsigned long long *)&x)[2] = (unsigned long)stack_hacked;
++#endif
++}
++#pragma GCC pop_options
++
++void segv_handler(int signum, siginfo_t *si, void *uc)
++{
++	result[test_id] = 0;
++	test_id++;
++	setcontext(&ucp);
++}
++
++void user1_handler(int signum, siginfo_t *si, void *uc)
++{
++	shstk_violation();
++}
++
++void user2_handler(int signum, siginfo_t *si, void *uc)
++{
++	ibt_violation();
++}
++
++int main(int argc, char *argv[])
++{
++	struct sigaction sa;
++	int r;
++
++	r = sigemptyset(&sa.sa_mask);
++	if (r)
++		return -1;
++
++	sa.sa_flags = SA_SIGINFO;
++
++	/*
++	 * Control protection fault handler
++	 */
++	sa.sa_sigaction = segv_handler;
++	r = sigaction(SIGSEGV, &sa, NULL);
++	if (r)
++		return -1;
++
++	/*
++	 * Handler to test Shadow stack
++	 */
++	sa.sa_sigaction = user1_handler;
++	r = sigaction(SIGUSR1, &sa, NULL);
++	if (r)
++		return -1;
++
++	/*
++	 * Handler to test IBT
++	 */
++	sa.sa_sigaction = user2_handler;
++	r = sigaction(SIGUSR2, &sa, NULL);
++	if (r)
++		return -1;
++
++	test_id = 0;
++	r = getcontext(&ucp);
++	if (r)
++		return -1;
++
++	if (test_id == 0)
++		shstk_violation();
++	else if (test_id == 1)
++		ibt_violation();
++	else if (test_id == 2)
++		raise(SIGUSR1);
++	else if (test_id == 3)
++		raise(SIGUSR2);
++
++	r = 0;
++	printf("[%s]\tShadow stack\n", result[0] ? "FAIL":"OK");
++	r += result[0];
++	printf("[%s]\tIBT\n", result[1] ? "FAIL":"OK");
++	r += result[1];
++	printf("[%s]\tShadow stack in signal\n", result[2] ? "FAIL":"OK");
++	r += result[2];
++	printf("[%s]\tIBT in signal\n", result[3] ? "FAIL":"OK");
++	r += result[3];
++	return r;
++}
 -- 
 2.21.0
 
