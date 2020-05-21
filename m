@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2091DDA76
-	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 00:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCBB1DDA81
+	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 00:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730041AbgEUWrT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 May 2020 18:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        id S1730732AbgEUWs4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 May 2020 18:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730329AbgEUWrS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 May 2020 18:47:18 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AAAC08C5C0
-        for <linux-arch@vger.kernel.org>; Thu, 21 May 2020 15:47:18 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id q9so4080173pjm.2
-        for <linux-arch@vger.kernel.org>; Thu, 21 May 2020 15:47:18 -0700 (PDT)
+        with ESMTP id S1730041AbgEUWsz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 May 2020 18:48:55 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56399C05BD43
+        for <linux-arch@vger.kernel.org>; Thu, 21 May 2020 15:48:54 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id u22so3576749plq.12
+        for <linux-arch@vger.kernel.org>; Thu, 21 May 2020 15:48:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=rM+9EQuq5q2z+8Rnep+GSyMO4ogI1cr2dU/BPSckSc0=;
-        b=F5pZZOodmnglpG9At4hjeCVVXyzpzR4//cFTakNlKlvYwN0D+RuXv3b3KfBXiqoIPd
-         /NyMZuiJBlrSFqpYzdTFBIiE/Ajl6B2wuAI+W1w9YFfa7uRzrvVkreh5wHd+nlLnew6l
-         kqRmg/Q/gn8MWqph8HYDUDERDWiswmiGynNGs=
+        bh=GyTf6Xj9P6LVcKZuqtG5D3WfhPVAAS23C/vfOfVmvVo=;
+        b=JQ5+k5fG9g4wICrJVrj+Br5mMHgmfUrY1fz0/Q+Ow5rb2eZ4Bix1+T2xIANfTB4ZFd
+         Y328LIcEeJtuQYMvWdCOldUGLOQX2yLMevOhzN95bRCKS32ODcWOBunRXDnXc3n6JjtR
+         Uz35IGJqcsdhQ7q1JVctK60WwdGIv6BOfFTb0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=rM+9EQuq5q2z+8Rnep+GSyMO4ogI1cr2dU/BPSckSc0=;
-        b=E1jhqwn2Z7rIKsB+6soIG+COEXXnFwf6eiWkP2O2O/RUi5KiPeoVHka9FI0Jv5iMM+
-         3SEnbK2nXoDo/HgPbISzdfGTEaLwOIg4te3V4hX18yn2nclPV7aH/Yrg3gwuSbw3FgbA
-         Dc1PyDRR7MtIu6d8N3V1pIaoQorGpeD3+vxh4LaF9hyVP42rB0ufkcFgV2GXavjU+vxT
-         Jj6+iUtmteLdhK3Awb1T30nHB582gLp5FeI5jVcnfgdR33cZpFZ4AUqQ7uQsWxnYkoOD
-         oJuEnMIoUh5eRXBXtICxJb/p5/AI+M2EU1oQculi5wAeZOvhtfxBDz6ECHaByb1vBYsN
-         EObA==
-X-Gm-Message-State: AOAM532U0hblYphp8jYCJsv+TyNxsUg47b1UyqAbpG7LMYbV5EnvrLOc
-        r0/WqjGIQpho6EoKMgJ9PobLBg==
-X-Google-Smtp-Source: ABdhPJwybfeAkdZSGfnmkfJKXBXqvxYAb7XHY72AtmJcsitduYysU62VqrkmK64cVlAk1k1RabLKSA==
-X-Received: by 2002:a17:902:7b86:: with SMTP id w6mr11680926pll.292.1590101237858;
-        Thu, 21 May 2020 15:47:17 -0700 (PDT)
+        bh=GyTf6Xj9P6LVcKZuqtG5D3WfhPVAAS23C/vfOfVmvVo=;
+        b=GvFcyFzsQUisTCXNbp4uHshhr4khyqL0vlPPhmiPiWR+9KIH1alvn61+afGn/Tu8jK
+         fzSwvWxjkqjuUizi5hJc/tyh6IRAC2lWhpQQAanOY0/T3jTL+L73+w8LXHdIEb//4Nyk
+         lgAPpugRX2C+R/2EmHefWxLedmW3zLQLesXKCL/d5oCuRLWRDZB4r6LtEK/lwpvIc7uF
+         DKDsz2oluFpJ5W+Vskf7L63UcikZxwJDx7NDyBQPtTa9Jl7U3n3CG4MjaJEof6u4HVum
+         V6ef2cMNL7KGOJ6DAXD+/ADY7hHrT8xMvYiy6F2p9HmaEQMQsJI9Lf/MW2IMbp1zlyu2
+         +b1w==
+X-Gm-Message-State: AOAM531ZmhtC9mF+CzIWLOkE0iliCudhMzq5czGqebU5H4NhD9PvVWv1
+        OZQQ1i+B5q3OB6To88jT/D6MPQ==
+X-Google-Smtp-Source: ABdhPJy3Q2xXlUY5QDcApxlF/OSND06IZDqLO/7UxztEP9ScV3THnWlBAlZ9dNNqxf+7dp9/go+Z2A==
+X-Received: by 2002:a17:90a:ad49:: with SMTP id w9mr927815pjv.20.1590101333920;
+        Thu, 21 May 2020 15:48:53 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o11sm5192507pfd.195.2020.05.21.15.47.16
+        by smtp.gmail.com with ESMTPSA id k1sm5352804pfg.205.2020.05.21.15.48.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2020 15:47:16 -0700 (PDT)
-Date:   Thu, 21 May 2020 15:47:15 -0700
+        Thu, 21 May 2020 15:48:53 -0700 (PDT)
+Date:   Thu, 21 May 2020 15:48:52 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
@@ -72,7 +72,7 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
 Subject: Re: [RFC PATCH 3/5] selftest/x86: Fix sigreturn_64 test.
-Message-ID: <202005211545.30156BFC4@keescook>
+Message-ID: <202005211547.793B36B@keescook>
 References: <20200521211720.20236-1-yu-cheng.yu@intel.com>
  <20200521211720.20236-4-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
@@ -123,11 +123,6 @@ On Thu, May 21, 2020 at 02:17:18PM -0700, Yu-cheng Yu wrote:
 >  	unsigned short my_cs, my_ss;
 >  
 > +#ifdef __x86_64__
-
-I think this should also be gated by whether the compiler will know what
-to do with the shadow stack instructions. (Perhaps the earlier Makefile
-define can be exported and tested here.)
-
 > +	/* Alloc a shadow stack within 32-bit address range */
 > +	unsigned long arg, ssp_64, ssp_32;
 > +	ssp_64 = _get_ssp();
@@ -140,6 +135,11 @@ define can be exported and tested here.)
 > +		asm volatile("SAVEPREVSSP");
 > +	}
 > +#endif
+
+If the headers and code are going to be repeated, I would put that in a
+shared header so they're not copy/pasted between these two tests.
+
+-Kees
 
 -- 
 Kees Cook
