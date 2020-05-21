@@ -2,51 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCBB1DDA81
-	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 00:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153BC1DDA97
+	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 00:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730732AbgEUWs4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 May 2020 18:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730041AbgEUWsz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 May 2020 18:48:55 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56399C05BD43
-        for <linux-arch@vger.kernel.org>; Thu, 21 May 2020 15:48:54 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id u22so3576749plq.12
-        for <linux-arch@vger.kernel.org>; Thu, 21 May 2020 15:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GyTf6Xj9P6LVcKZuqtG5D3WfhPVAAS23C/vfOfVmvVo=;
-        b=JQ5+k5fG9g4wICrJVrj+Br5mMHgmfUrY1fz0/Q+Ow5rb2eZ4Bix1+T2xIANfTB4ZFd
-         Y328LIcEeJtuQYMvWdCOldUGLOQX2yLMevOhzN95bRCKS32ODcWOBunRXDnXc3n6JjtR
-         Uz35IGJqcsdhQ7q1JVctK60WwdGIv6BOfFTb0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GyTf6Xj9P6LVcKZuqtG5D3WfhPVAAS23C/vfOfVmvVo=;
-        b=GvFcyFzsQUisTCXNbp4uHshhr4khyqL0vlPPhmiPiWR+9KIH1alvn61+afGn/Tu8jK
-         fzSwvWxjkqjuUizi5hJc/tyh6IRAC2lWhpQQAanOY0/T3jTL+L73+w8LXHdIEb//4Nyk
-         lgAPpugRX2C+R/2EmHefWxLedmW3zLQLesXKCL/d5oCuRLWRDZB4r6LtEK/lwpvIc7uF
-         DKDsz2oluFpJ5W+Vskf7L63UcikZxwJDx7NDyBQPtTa9Jl7U3n3CG4MjaJEof6u4HVum
-         V6ef2cMNL7KGOJ6DAXD+/ADY7hHrT8xMvYiy6F2p9HmaEQMQsJI9Lf/MW2IMbp1zlyu2
-         +b1w==
-X-Gm-Message-State: AOAM531ZmhtC9mF+CzIWLOkE0iliCudhMzq5czGqebU5H4NhD9PvVWv1
-        OZQQ1i+B5q3OB6To88jT/D6MPQ==
-X-Google-Smtp-Source: ABdhPJy3Q2xXlUY5QDcApxlF/OSND06IZDqLO/7UxztEP9ScV3THnWlBAlZ9dNNqxf+7dp9/go+Z2A==
-X-Received: by 2002:a17:90a:ad49:: with SMTP id w9mr927815pjv.20.1590101333920;
-        Thu, 21 May 2020 15:48:53 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k1sm5352804pfg.205.2020.05.21.15.48.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2020 15:48:53 -0700 (PDT)
-Date:   Thu, 21 May 2020 15:48:52 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        id S1730626AbgEUW6I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 May 2020 18:58:08 -0400
+Received: from mga12.intel.com ([192.55.52.136]:41812 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730041AbgEUW6I (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 May 2020 18:58:08 -0400
+IronPort-SDR: m/+JG8SNOxRB8o0q7/vu90Fi3Q8SIYcsTs2xydLaOyDZrqGPDRV0aXmWxvJdeDnZsry5z0S4EM
+ +q6eVYZdHqRw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 15:58:07 -0700
+IronPort-SDR: Pg/DQq+A1fZna0tY6aIC7YuoCureh5EJFUU5QUpeIJhVVZ7IF9jqkj24ksePGgTdF8N6hvK+yH
+ Tc8EMpeTdWTw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,419,1583222400"; 
+   d="scan'208";a="300481142"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by fmsmga002.fm.intel.com with ESMTP; 21 May 2020 15:58:07 -0700
+Message-ID: <b97aeac13967cfad5d6a962d29a87215c77996e8.camel@intel.com>
+Subject: Re: [RFC PATCH 2/5] selftest/x86: Enable CET for selftests/x86
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Kees Cook <keescook@chromium.org>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -71,75 +52,31 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
-Subject: Re: [RFC PATCH 3/5] selftest/x86: Fix sigreturn_64 test.
-Message-ID: <202005211547.793B36B@keescook>
+Date:   Thu, 21 May 2020 15:58:11 -0700
+In-Reply-To: <202005211544.26CD475832@keescook>
 References: <20200521211720.20236-1-yu-cheng.yu@intel.com>
- <20200521211720.20236-4-yu-cheng.yu@intel.com>
+         <20200521211720.20236-3-yu-cheng.yu@intel.com>
+         <202005211544.26CD475832@keescook>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200521211720.20236-4-yu-cheng.yu@intel.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 21, 2020 at 02:17:18PM -0700, Yu-cheng Yu wrote:
-> When shadow stack is enabled, selftests/x86/sigreturn_64 triggers a fault
-> when doing sigreturn to 32-bit context but the task's shadow stack pointer
-> is above 32-bit address range.  Fix it by:
+On Thu, 2020-05-21 at 15:44 -0700, Kees Cook wrote:
+> On Thu, May 21, 2020 at 02:17:17PM -0700, Yu-cheng Yu wrote:
+> > To build CET-enabled applications, GCC needs to support '-fcf-protection'.
+> > Update x86 selftest makefile to detect and enable CET for x86 selftest
+> > applications.
+> > 
+> > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> - Allocate a small shadow stack below 32-bit address,
-> - Switch to the new shadow stack,
-> - Run tests,
-> - Switch back to the original 64-bit shadow stack.
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> ---
->  tools/testing/selftests/x86/sigreturn.c | 28 +++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/x86/sigreturn.c b/tools/testing/selftests/x86/sigreturn.c
-> index 57c4f67f16ef..5bcd74d416ff 100644
-> --- a/tools/testing/selftests/x86/sigreturn.c
-> +++ b/tools/testing/selftests/x86/sigreturn.c
-> @@ -45,6 +45,14 @@
->  #include <stdbool.h>
->  #include <sys/ptrace.h>
->  #include <sys/user.h>
-> +#include <x86intrin.h>
-> +#include <asm/prctl.h>
-> +#include <sys/prctl.h>
-> +
-> +#ifdef __x86_64__
-> +int arch_prctl(int code, unsigned long *addr);
-> +#define ARCH_CET_ALLOC_SHSTK 0x3004
-> +#endif
->  
->  /* Pull in AR_xyz defines. */
->  typedef unsigned int u32;
-> @@ -766,6 +774,20 @@ int main()
->  	int total_nerrs = 0;
->  	unsigned short my_cs, my_ss;
->  
-> +#ifdef __x86_64__
-> +	/* Alloc a shadow stack within 32-bit address range */
-> +	unsigned long arg, ssp_64, ssp_32;
-> +	ssp_64 = _get_ssp();
-> +
-> +	if (ssp_64 != 0) {
-> +		arg = 0x1001;
-> +		arch_prctl(ARCH_CET_ALLOC_SHSTK, &arg);
-> +		ssp_32 = arg + 0x1000 - 8;
-> +		asm volatile("RSTORSSP (%0)\n":: "r" (ssp_32));
-> +		asm volatile("SAVEPREVSSP");
-> +	}
-> +#endif
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-If the headers and code are going to be repeated, I would put that in a
-shared header so they're not copy/pasted between these two tests.
+Thanks!  I will fix issues you pointed out in the series.
 
--Kees
+Yu-cheng
 
--- 
-Kees Cook
