@@ -2,141 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AFF1DD5BC
-	for <lists+linux-arch@lfdr.de>; Thu, 21 May 2020 20:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971C61DD649
+	for <lists+linux-arch@lfdr.de>; Thu, 21 May 2020 20:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729451AbgEUSLX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 May 2020 14:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727883AbgEUSLW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 May 2020 14:11:22 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93D5C061A0F
-        for <linux-arch@vger.kernel.org>; Thu, 21 May 2020 11:11:21 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id m7so3156902plt.5
-        for <linux-arch@vger.kernel.org>; Thu, 21 May 2020 11:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QnbqNy9EV06MW5CdU8p7rG6H8xARB4MCiMEyZtqlPZY=;
-        b=g/kstoEF7jBH50MDuXScB/Wy07PeKyWkq6ndhA3tjBPgWJ0fihAAPJUK0c+ShkSt/7
-         wNJiwUfFT3bKmn3+xX8i8/Aqrw/2AHceGXIuENBN9r3NnYy7oCRDmrpBRbLHh6v6yWO8
-         bVxXeURBoZhPWu0Orftx1teKFHlJomMID6Lbg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QnbqNy9EV06MW5CdU8p7rG6H8xARB4MCiMEyZtqlPZY=;
-        b=NOadgonB62Qd2yDlp36x9q8p6D0JdjQQPEOqLAgX9MfFnQQgrxxFgtVKE2SNhKLcGU
-         4ZQj+mQg1W3Kfu41zHtz+enWiCnx/1O1hVDYZvu/2ZKNeMH/eavsPpEl+oYMvTzwdReR
-         i7RUbgz5KdsoHnPzddVQms5yhQ7FJ6U0vVwrJ9qlz0dE4n6JfWv1DkAFNjyR8Tgdg+bl
-         oXc6Txy2C6kpZ9oIJl2JTQTt7fTIUgcrPX55ZXnWbi9947Vy5LSO908IoYAR6nm0cBxt
-         UJEtOJfB9lE3i99uMOQDLr00WgMw94eSK0CCxDOxDXbnHsAhUF1Z39Cc81QibQUAL0/2
-         apsQ==
-X-Gm-Message-State: AOAM530rK7AXxKPIdnmqdsRVKX63w1qfy+j8n2iCi1Z34ikMFh0mI5gg
-        bkwCyfSWgqBE5TXJMvH3yu40HA==
-X-Google-Smtp-Source: ABdhPJy113rjg4c4EN6iCv8PasCClmRYQtUFgwcjDCT+6DDqbtZLHo/8b4GBbIQvhAQar9rQTc/TEw==
-X-Received: by 2002:a17:902:bf43:: with SMTP id u3mr10554884pls.240.1590084681259;
-        Thu, 21 May 2020 11:11:21 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v1sm4969026pjn.9.2020.05.21.11.11.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2020 11:11:20 -0700 (PDT)
-Date:   Thu, 21 May 2020 11:11:18 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        arjan@linux.intel.com, linux-kernel@vger.kernel.org,
-        kernel-hardening@lists.openwall.com, rick.p.edgecombe@intel.com,
-        Tony Luck <tony.luck@intel.com>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 5/9] x86: Make sure _etext includes function sections
-Message-ID: <202005211109.4EE4DCBA3@keescook>
-References: <20200521165641.15940-1-kristen@linux.intel.com>
- <20200521165641.15940-6-kristen@linux.intel.com>
+        id S1729639AbgEUSut (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 May 2020 14:50:49 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:34848 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728911AbgEUSut (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 May 2020 14:50:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590087047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rs+m7lfqAN3pPyrPrrr6uOK5gesHtkkEPEmJgvQPL0I=;
+        b=Gt9seAKZTodQwjTWNWkJfoowcMAikL2ECziMoF/FGY5aUpra4zOLtv1whKGLCs0XTQvpV3
+        uk9qFWv9tKAzJqr3QmOQDmrLVapHB/t4lr/Dx54nz5RhKrB5QiglBHEfn1aGLD6YdigU+G
+        d4Cfz0Bhu0zkeP/xP6O71X1PLW3sgQk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-234-pa3aOYhsPzKJFP-_NlnKEw-1; Thu, 21 May 2020 14:50:33 -0400
+X-MC-Unique: pa3aOYhsPzKJFP-_NlnKEw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B8E9D805720;
+        Thu, 21 May 2020 18:50:29 +0000 (UTC)
+Received: from treble (ovpn-112-59.rdu2.redhat.com [10.10.112.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C17A85C1B0;
+        Thu, 21 May 2020 18:50:17 +0000 (UTC)
+Date:   Thu, 21 May 2020 13:50:15 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Subject: Re: [PATCH v10 00/26] Control-flow Enforcement: Shadow Stack
+Message-ID: <20200521185015.aopfkpwpfhzwd4hs@treble>
+References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
+ <20200521151556.pojijpmuc2rdd7ko@treble>
+ <a1e7c71c72de517a288e6273ba0c18dac2e937bc.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200521165641.15940-6-kristen@linux.intel.com>
+In-Reply-To: <a1e7c71c72de517a288e6273ba0c18dac2e937bc.camel@intel.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 21, 2020 at 09:56:36AM -0700, Kristen Carlson Accardi wrote:
-> When using -ffunction-sections to place each function in
-> it's own text section so it can be randomized at load time, the
-> linker considers these .text.* sections "orphaned sections", and
-> will place them after the first similar section (.text). In order
-> to accurately represent the end of the text section and the
-> orphaned sections, _etext must be moved so that it is after both
-> .text and .text.* The text size must also be calculated to
-> include .text AND .text.*
+On Thu, May 21, 2020 at 08:57:57AM -0700, Yu-cheng Yu wrote:
+> On Thu, 2020-05-21 at 10:15 -0500, Josh Poimboeuf wrote:
+> > On Wed, Apr 29, 2020 at 03:07:06PM -0700, Yu-cheng Yu wrote:
+> > > Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+> > > return/jump-oriented programming attacks.  Details can be found in "Intel
+> > > 64 and IA-32 Architectures Software Developer's Manual" [1].
+> > > 
+> > > This series depends on the XSAVES supervisor state series that was split
+> > > out and submitted earlier [2].
+> > > 
+> > > I have gone through previous comments, and hope all concerns have been
+> > > resolved now.  Please inform me if anything is overlooked.
+> > > 
+> > > Changes in v10:
+> > 
+> > Hi Yu-cheng,
+> > 
+> > Do you have a git branch with the latest Shadow Stack and IBT branches
+> > applied?  I tried to apply IBT v9 on top of this, but I guess the SS
+> > code has changed since then and it didn't apply cleanly.
 > 
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Tested-by: Tony Luck <tony.luck@intel.com>
-> ---
->  arch/x86/kernel/vmlinux.lds.S     | 18 +++++++++++++++++-
->  include/asm-generic/vmlinux.lds.h |  2 +-
->  2 files changed, 18 insertions(+), 2 deletions(-)
+> It is here:
 > 
-> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-> index 1bf7e312361f..044f7528a2f0 100644
-> --- a/arch/x86/kernel/vmlinux.lds.S
-> +++ b/arch/x86/kernel/vmlinux.lds.S
-> @@ -147,8 +147,24 @@ SECTIONS
->  #endif
->  	} :text =0xcccc
->  
-> -	/* End of text section, which should occupy whole number of pages */
-> +#ifdef CONFIG_FG_KASLR
-> +	/*
-> +	 * -ffunction-sections creates .text.* sections, which are considered
-> +	 * "orphan sections" and added after the first similar section (.text).
-> +	 * Adding this ALIGN statement causes the address of _etext
-> +	 * to be below that of all the .text.* orphaned sections
-> +	 */
-> +	. = ALIGN(PAGE_SIZE);
-> +#endif
->  	_etext = .;
-> +
-> +	/*
-> +	 * the size of the .text section is used to calculate the address
-> +	 * range for orc lookups. If we just use SIZEOF(.text), we will
-> +	 * miss all the .text.* sections. Calculate the size using _etext
-> +	 * and _stext and save the value for later.
-> +	 */
-> +	text_size = _etext - _stext;
->  	. = ALIGN(PAGE_SIZE);
+> https://github.com/yyu168/linux_cet/commits/cet
 
-I don't think there's any need for this #ifdef (nor the trailing ALIGN).
-I think leave the comment to explain why the ALIGN is being moved before
-the _etext.
+Thanks.  FYI, I got the following warning on an AMD system.
 
-A repeated ALIGN won't move the position:
+[   18.936979] get of unsupported state
+[   18.936989] WARNING: CPU: 251 PID: 1794 at arch/x86/kernel/fpu/xstate.c:919 get_xsave_addr+0x83/0x90
+[   18.949676] Modules linked in:
+[   18.952731] CPU: 251 PID: 1794 Comm: dracut-rootfs-g Not tainted 5.7.0-rc6+ #162
+[   18.960121] Hardware name: AMD Corporation DAYTONA_X/DAYTONA_X, BIOS RDY1005C 11/22/2019
+[   18.968198] RIP: 0010:get_xsave_addr+0x83/0x90
+[   18.972637] Code: 5b c3 48 83 c4 08 31 c0 5b c3 80 3d f9 c2 7a 01 00 75 bc 48 c7 c7 c4 cb 8f a9 89 74 24 04 c6 05 e5 c2 7a 01 01 e8 3f 49 0a 00 <0f> 0b 8b 74 24 04 eb 9d 31 c0 c3 66 90 0f 1f 44 00 00 48 89 fe 0f
+[   18.991373] RSP: 0018:ffffb8db103cfcd8 EFLAGS: 00010286
+[   18.996591] RAX: 0000000000000000 RBX: ffff947da1189440 RCX: 0000000000000000
+[   19.003715] RDX: 0000000000000000 RSI: ffffffffaa6809d8 RDI: ffffffffaa67e58c
+[   19.010839] RBP: ffff947da1188000 R08: 0000000468bb5e6c R09: 0000000000000018
+[   19.017962] R10: 0000000000000002 R11: 00000000000000f0 R12: ffffb8db103cfd20
+[   19.025087] R13: ffff947da1189400 R14: 0000000000000000 R15: 0000000000000007
+[   19.032211] FS:  00007f0a81b15740(0000) GS:ffff947dcf8c0000(0000) knlGS:0000000000000000
+[   19.040321] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   19.046057] CR2: 00007f0a81b156c0 CR3: 0000003fa125a000 CR4: 0000000000340ee0
+[   19.053183] Call Trace:
+[   19.055637]  cet_restore_signal+0x26/0xf0
+[   19.059649]  __fpu__restore_sig+0x4cc/0x6e0
+[   19.063832]  ? remove_wait_queue+0x20/0x60
+[   19.067928]  ? reuse_swap_page+0x6e/0x340
+[   19.071939]  restore_sigcontext+0x162/0x1b0
+[   19.076128]  ? recalc_sigpending+0x17/0x50
+[   19.080223]  ? __set_task_blocked+0x34/0xa0
+[   19.084401]  __do_sys_rt_sigreturn+0x92/0xde
+[   19.088675]  do_syscall_64+0x55/0x1b0
+[   19.092342]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   19.097394] RIP: 0033:0x7f0a811389d1
+[   19.100970] Code: 64 c7 00 16 00 00 00 b8 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 41 ba 08 00 00 00 b8 0e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 07 c3 66 0f 1f 44 00 00 48 8b 15 81 44 38 00
+[   19.119709] RSP: 002b:00007ffd643d5dd8 EFLAGS: 00000246
+[   19.124933] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f0a811389d1
+[   19.132056] RDX: 0000000000000000 RSI: 00007ffd643d5e60 RDI: 0000000000000002
+[   19.139182] RBP: 000055e140190e20 R08: 000055e14017a014 R09: 0000000000000001
+[   19.146307] R10: 0000000000000008 R11: 0000000000000246 R12: 000055e13f47e4e0
+[   19.153436] R13: 00007ffd643d5e60 R14: 0000000000000000 R15: 0000000000000000
 
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -147,9 +147,11 @@ SECTIONS
- #endif
-        } :text =0xcccc
- 
-+       . = ALIGN(PAGE_SIZE);
-        /* End of text section, which should occupy whole number of * pages */
-        _etext = .;
-        . = ALIGN(PAGE_SIZE);
-+       _ktext = .;
- 
-        X86_ALIGN_RODATA_BEGIN
-        RO_DATA(PAGE_SIZE)
-
-
-$ nm vmlinux | grep '_[ek]text'
-ffffffff81e02000 R _etext
-ffffffff81e02000 R _ktext
-
--- 
-Kees Cook
