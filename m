@@ -2,104 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D65141DBAC1
-	for <lists+linux-arch@lfdr.de>; Wed, 20 May 2020 19:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9561DD0F0
+	for <lists+linux-arch@lfdr.de>; Thu, 21 May 2020 17:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbgETRIH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 May 2020 13:08:07 -0400
-Received: from foss.arm.com ([217.140.110.172]:60208 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726826AbgETRIG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 20 May 2020 13:08:06 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E73D130E;
-        Wed, 20 May 2020 10:08:05 -0700 (PDT)
-Received: from gaia (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EBC813F305;
-        Wed, 20 May 2020 10:08:02 -0700 (PDT)
-Date:   Wed, 20 May 2020 18:08:00 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Zhenyu Ye <yezhenyu2@huawei.com>
-Cc:     linux-arch@vger.kernel.org, suzuki.poulose@arm.com, maz@kernel.org,
-        linux-kernel@vger.kernel.org, xiexiangyou@huawei.com,
-        steven.price@arm.com, zhangshaokun@hisilicon.com,
-        linux-mm@kvack.org, arm@kernel.org, prime.zeng@hisilicon.com,
-        guohanjun@huawei.com, olof@lixom.net, kuhn.chenqun@huawei.com,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH v3 2/2] arm64: tlb: Use the TLBI RANGE feature in
- arm64
-Message-ID: <20200520170759.GE18302@gaia>
-References: <20200414112835.1121-1-yezhenyu2@huawei.com>
- <20200414112835.1121-3-yezhenyu2@huawei.com>
- <20200514152840.GC1907@gaia>
- <54468aae-dbb1-66bd-c633-82fc75936206@huawei.com>
+        id S1729894AbgEUPQ1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 May 2020 11:16:27 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:52727 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727898AbgEUPQ0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 May 2020 11:16:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590074185;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1jYcpHnQL3yWssjgDciSJYss0+WKenYias59GqFdGbA=;
+        b=iBbdXmtYwqbaZHtRXbFaX55NpV/NX0zy5I+EPLdxt4IHmIh/8fIf5rqXVtZQGkVFntNymg
+        LueazZJaovAJDDN7pBF4uVK7sZx2d9CAZb7nOjNAIF1zrI/cux6+U78k85wKYU7aiHEwCt
+        33GT3ZJeC4GAaL7O54KZf2E/fPb9ulQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-12-QcU_r6aePH625lEdCeW_7g-1; Thu, 21 May 2020 11:16:21 -0400
+X-MC-Unique: QcU_r6aePH625lEdCeW_7g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B2AB3100D0DB;
+        Thu, 21 May 2020 15:16:17 +0000 (UTC)
+Received: from treble (ovpn-112-59.rdu2.redhat.com [10.10.112.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0F010106A7B7;
+        Thu, 21 May 2020 15:15:58 +0000 (UTC)
+Date:   Thu, 21 May 2020 10:15:56 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Subject: Re: [PATCH v10 00/26] Control-flow Enforcement: Shadow Stack
+Message-ID: <20200521151556.pojijpmuc2rdd7ko@treble>
+References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <54468aae-dbb1-66bd-c633-82fc75936206@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200429220732.31602-1-yu-cheng.yu@intel.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 18, 2020 at 08:21:02PM +0800, Zhenyu Ye wrote:
-> On 2020/5/14 23:28, Catalin Marinas wrote:
-> > On Tue, Apr 14, 2020 at 07:28:35PM +0800, Zhenyu Ye wrote:
-> >> +		}
-> >> +		scale++;
-> >> +		range_size >>= TLB_RANGE_MASK_SHIFT;
-> >> +	}
-> > 
-> > So, you start from scale 0 and increment it until you reach the maximum.
-> > I think (haven't done the maths on paper) you could also start from the
-> > top with something like scale = ilog2(range_size) / 5. Not sure it's
-> > significantly better though, maybe avoiding the loop 3 times if your
-> > range is 2MB (which happens with huge pages).
+On Wed, Apr 29, 2020 at 03:07:06PM -0700, Yu-cheng Yu wrote:
+> Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+> return/jump-oriented programming attacks.  Details can be found in "Intel
+> 64 and IA-32 Architectures Software Developer's Manual" [1].
 > 
-> This optimization is only effective when the range is a multiple of 256KB
-> (when the page size is 4KB), and I'm worried about the performance
-> of ilog2().  I traced the __flush_tlb_range() last year and found that in
-> most cases the range is less than 256K (see details in [1]).
-
-THP or hugetlbfs would exercise bigger strides but I guess it depends on
-the use-case. ilog2() should be reduced to a few instructions on arm64
-AFAICT (haven't tried but it should use the CLZ instruction).
-
-> > Anyway, I think it would be more efficient if we combine the
-> > __flush_tlb_range() and the _directly one into the same function with a
-> > single loop for both. For example, if the stride is 2MB already, we can
-> > handle this with a single classic TLBI without all the calculations for
-> > the range operation. The hardware may also handle this better since the
-> > software already told it there can be only one entry in that 2MB range.
-> > So each loop iteration could figure which operation to use based on
-> > cpucaps, TLBI range ops, stride and reduce range_size accordingly.
+> This series depends on the XSAVES supervisor state series that was split
+> out and submitted earlier [2].
 > 
-> Summarize your suggestion in one sentence: use 'stride' to optimize the
-> preformance of TLBI.  This can also be done by dividing into two functions,
-> and this should indeed be taken into account in the TLBI RANGE feature.
+> I have gone through previous comments, and hope all concerns have been
+> resolved now.  Please inform me if anything is overlooked.
 > 
-> But if we figure which operation to use based on cpucaps in each loop
-> iteration, then cpus_have_const_cap() will be called frequently, which
-> may affect performance of TLBI.  In my opinion, we should do as few
-> judgments as possible in the loop, so judge the cpucaps outside the
-> loop maybe a good choice.
+> Changes in v10:
 
-cpus_have_const_cap() is a static label, so should be patched with a
-branch or nop. My point was that in the classic __flush_tlb_range()
-loop, instead of an addr += stride we could have something more dynamic
-depending on whether the CPU supports range TLBI ops or not. But we
-would indeed have more (static) branches in the loop, so possibly some
-performance degradation.
+Hi Yu-cheng,
 
-If the code looks ok, I'd favour this and we can look at the
-optimisation later. But I can't really tell how the code would look
-without attempting to merge the two.
-
-Anyway, a first step would be to to add the the range and stride to the
-decision (i.e. (end-start)/stride > 1) before jumping to the range
-operations. You can avoid the additional checks in the new TLBI
-functions since we know we have at least two (huge)pages.
+Do you have a git branch with the latest Shadow Stack and IBT branches
+applied?  I tried to apply IBT v9 on top of this, but I guess the SS
+code has changed since then and it didn't apply cleanly.
 
 -- 
-Catalin
+Josh
+
