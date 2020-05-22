@@ -2,137 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB551DEB83
-	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 17:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5221DEC50
+	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 17:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730369AbgEVPKK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 May 2020 11:10:10 -0400
-Received: from mga12.intel.com ([192.55.52.136]:38059 "EHLO mga12.intel.com"
+        id S1730096AbgEVPnL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 May 2020 11:43:11 -0400
+Received: from foss.arm.com ([217.140.110.172]:38248 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729931AbgEVPKK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 22 May 2020 11:10:10 -0400
-IronPort-SDR: tPfV+Jvicw1Ya/yQczp8lMnqPu1DcTSmYnFSO2Fo4vjKg9wqZ3INEtZiE+he/WcpLwsIdBeGBV
- c2LmAs5gyDAw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 08:10:09 -0700
-IronPort-SDR: ICX66KiVS7ynOm0TtiHoLqVvaMKYuZAKDIVrXtjZd+youn2HnEcznyDbZ3QRNEjO4m32Md26v3
- gzK5lB5dFfwg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,422,1583222400"; 
-   d="scan'208";a="344197433"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga001.jf.intel.com with ESMTP; 22 May 2020 08:10:08 -0700
-Message-ID: <cc3d7668eb7dd738a85f0b0935624496efae43be.camel@intel.com>
-Subject: Re: [RFC PATCH 5/5] selftest/x86: Add CET quick test
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-Date:   Fri, 22 May 2020 08:10:14 -0700
-In-Reply-To: <20200522092848.GJ325280@hirez.programming.kicks-ass.net>
-References: <20200521211720.20236-1-yu-cheng.yu@intel.com>
-         <20200521211720.20236-6-yu-cheng.yu@intel.com>
-         <20200522092848.GJ325280@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1729040AbgEVPnL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 22 May 2020 11:43:11 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6B4E555D;
+        Fri, 22 May 2020 08:43:08 -0700 (PDT)
+Received: from gaia (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 901663F305;
+        Fri, 22 May 2020 08:43:00 -0700 (PDT)
+Date:   Fri, 22 May 2020 16:42:55 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Zhenyu Ye <yezhenyu2@huawei.com>
+Cc:     peterz@infradead.org, mark.rutland@arm.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
+        npiggin@gmail.com, arnd@arndb.de, rostedt@goodmis.org,
+        maz@kernel.org, suzuki.poulose@arm.com, tglx@linutronix.de,
+        yuzhao@google.com, Dave.Martin@arm.com, steven.price@arm.com,
+        broonie@kernel.org, guohanjun@huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org,
+        xiexiangyou@huawei.com, prime.zeng@hisilicon.com,
+        zhangshaokun@hisilicon.com, kuhn.chenqun@huawei.com
+Subject: Re: [PATCH v2 5/6] mm: tlb: Provide flush_*_tlb_range wrappers
+Message-ID: <20200522154254.GD26492@gaia>
+References: <20200423135656.2712-1-yezhenyu2@huawei.com>
+ <20200423135656.2712-6-yezhenyu2@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200423135656.2712-6-yezhenyu2@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 2020-05-22 at 11:28 +0200, Peter Zijlstra wrote:
-> On Thu, May 21, 2020 at 02:17:20PM -0700, Yu-cheng Yu wrote:
-> 
-> > +#pragma GCC push_options
-> > +#pragma GCC optimize ("O0")
-> > +void ibt_violation(void)
-> > +{
-> > +#ifdef __i386__
-> > +	asm volatile("lea 1f, %eax");
-> > +	asm volatile("jmp *%eax");
-> > +#else
-> > +	asm volatile("lea 1f, %rax");
-> > +	asm volatile("jmp *%rax");
-> > +#endif
-> > +	asm volatile("1:");
-> > +	result[test_id] = -1;
-> > +	test_id++;
-> > +	setcontext(&ucp);
-> > +}
-> > +
-> > +void shstk_violation(void)
-> > +{
-> > +#ifdef __i386__
-> > +	unsigned long x = 0;
-> > +
-> > +	((unsigned long *)&x)[2] = (unsigned long)stack_hacked;
-> > +#else
-> > +	unsigned long long x = 0;
-> > +
-> > +	((unsigned long long *)&x)[2] = (unsigned long)stack_hacked;
-> > +#endif
-> > +}
-> > +#pragma GCC pop_options
-> 
-> This is absolutely atrocious.
-> 
-> The #pragma like Kees already said just need to go. Also, there's
-> absolutely no clue what so ever what it attempts to achieve.
-> 
-> The __i386__ ifdeffery is horrible crap. Splitting an asm with #ifdef
-> like that is also horrible crap.
-> 
-> This is not how you write code.
-> 
-> Get asm/asm.h into userspace and then write something like:
-> 
-> 
-> void ibt_violation(void)
-> {
-> 	asm volatile("lea  1f, %" _ASM_AX "\n\t"
-> 		     "jmp  *%" _ASM_AX "\n\t"
-> 		     "1:\n\t" ::: "a");
-> 
-> 	WRITE_ONCE(result[test_id], -1);
-> 	WRITE_ONCE(test_id, test_id+1);
-> 
-> 	setcontext(&ucp);
-> }
-> 
-> void shstk_violation(void)
-> {
-> 	unsigned long x = 0;
-> 
-> 	WRITE_ONCE(x[2], stack_hacked);
-> }
+On Thu, Apr 23, 2020 at 09:56:55PM +0800, Zhenyu Ye wrote:
+> diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
+> index 3d7c01e76efc..3eff199d3507 100644
+> --- a/mm/pgtable-generic.c
+> +++ b/mm/pgtable-generic.c
+> @@ -101,6 +101,28 @@ pte_t ptep_clear_flush(struct vm_area_struct *vma, unsigned long address,
+>  
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  
+> +#ifndef __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+> +
+> +#define FLUSH_Pxx_TLB_RANGE(_pxx)					\
+> +void flush_##_pxx##_tlb_range(struct vm_area_struct *vma,		\
+> +			      unsigned long addr, unsigned long end)	\
+> +{									\
+> +		struct mmu_gather tlb;					\
+> +									\
+> +		tlb_gather_mmu(&tlb, vma->vm_mm, addr, end);		\
+> +		tlb_start_vma(&tlb, vma);				\
+> +		tlb_flush_##_pxx##_range(&tlb, addr, end - addr);	\
+> +		tlb_end_vma(&tlb, vma);					\
+> +		tlb_finish_mmu(&tlb, addr, end);			\
+> +}
 
-Thanks!  I will change it.
+I may have confused myself (flush_p??_tlb_* vs. tlb_flush_p??_*) but do
+actually need this whole tlb_gather thing here? IIUC (by grep'ing),
+flush_p?d_tlb_range() is only called on huge pages, so we should know
+the level already.
 
-Yu-cheng
-
+-- 
+Catalin
