@@ -2,103 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 486711DEE5C
-	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 19:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDBC1DEE77
+	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 19:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730572AbgEVRgD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 May 2020 13:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730600AbgEVRgD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 May 2020 13:36:03 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC37C08C5C0
-        for <linux-arch@vger.kernel.org>; Fri, 22 May 2020 10:36:03 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id x18so3546538pll.6
-        for <linux-arch@vger.kernel.org>; Fri, 22 May 2020 10:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d2JbpNQ5BB8THZLFRZdUsN5zyBBBg1g/qGCRRq9W1mM=;
-        b=KCChTIHcglv8zga3a5aOx2ivsb/AjYh4uFhKYSzdjk8Zy7lmmEqJJ6I41tdc7Qxcel
-         SKXsc6lA7boxff1mWCeR6Hym/HbT/Y8JCY54dDB2dKV7LUqpig3/sEfxfj3YlbMjxk78
-         cf4xmQWG34WMeCDIKi5DinQN2V4caGJiIsSXQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d2JbpNQ5BB8THZLFRZdUsN5zyBBBg1g/qGCRRq9W1mM=;
-        b=USh/3A7gORru0SdreXtXmVNE9xcJqnwmS66mj55qBjLyYLdBYPZAt+7e8p5vpKxWXk
-         syfH8qChihn4boLEOzaarUoVtj/f0LUA7MY3Ie6MwB2gUxeZSkHffWTqdS24wEU7ZOSi
-         rwvNxwQ6NL23zOZQ5gU689UkA/lQyFiCFiGt2EaMQlost3iYnNSCwXOulr/sxBawQxwE
-         pXJ+4MqkNtdSbPU0U6ut0JuBeoe5juqN5ZiNrIoGBFINFe69bY0h/oDxTfcSLKC9/AEu
-         gLqsJ7D005i/44OWwop5FgHzpnWu4xTLb/MC8JKxnI2JHiwoCVzrFc/hh20oQFjKs9Fw
-         C6Kw==
-X-Gm-Message-State: AOAM533b5DqdSWkq452LUomsy5o+1sN9OdmmRzkFFxOv4bssLy5SPJiR
-        2ScWrV2b2Dgea1xvHAy3hSQWoA==
-X-Google-Smtp-Source: ABdhPJy3bKJ2cO/LbOCqUoRt6uBWzveUTeVTjmUCNI6pxDVh8fOHpftgmCyiWGsqex2F3Yb7IJd/Xw==
-X-Received: by 2002:a17:902:82c9:: with SMTP id u9mr15646877plz.179.1590168962631;
-        Fri, 22 May 2020 10:36:02 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q3sm6224293pgp.69.2020.05.22.10.36.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 10:36:01 -0700 (PDT)
-Date:   Fri, 22 May 2020 10:36:00 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-Subject: Re: [RFC PATCH 5/5] selftest/x86: Add CET quick test
-Message-ID: <202005221034.59F5DF75@keescook>
-References: <20200521211720.20236-1-yu-cheng.yu@intel.com>
- <20200521211720.20236-6-yu-cheng.yu@intel.com>
- <20200522092848.GJ325280@hirez.programming.kicks-ass.net>
- <202005221020.B578B8C6@keescook>
- <20200522172711.GA317569@hirez.programming.kicks-ass.net>
+        id S1730674AbgEVRnx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 May 2020 13:43:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726373AbgEVRnx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 22 May 2020 13:43:53 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C4E5620723;
+        Fri, 22 May 2020 17:43:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590169432;
+        bh=t22SyB9/K0m7E486hZD+8n3eS0aL0e1D5tiaHegV7t4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FbvkIrVI+T2eCWT0T7gRxnb98/8VdBn4hzMhVK3rF9tB4lYEISVUrrayGEoSOG25L
+         4BK+yKfkU4EyB9swUyvf9VivrR5ydvB7E5qmyVnKp5RM1l4MO88lptxGLiPYSbL1Mm
+         H5mYORDCqyVUzKjzY3buBkk1ShuYVqCYoKDrX78Y=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id AFA063522E41; Fri, 22 May 2020 10:43:52 -0700 (PDT)
+Date:   Fri, 22 May 2020 10:43:52 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Peter Zijlstra <peterz@infradead.org>, parri.andrea@gmail.com,
+        will@kernel.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        andriin@fb.com
+Subject: Re: Some -serious- BPF-related litmus tests
+Message-ID: <20200522174352.GJ2869@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200522003850.GA32698@paulmck-ThinkPad-P72>
+ <20200522094407.GK325280@hirez.programming.kicks-ass.net>
+ <20200522143201.GB32434@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200522172711.GA317569@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200522143201.GB32434@rowland.harvard.edu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 22, 2020 at 07:27:11PM +0200, Peter Zijlstra wrote:
-> On Fri, May 22, 2020 at 10:22:51AM -0700, Kees Cook wrote:
+On Fri, May 22, 2020 at 10:32:01AM -0400, Alan Stern wrote:
+> On Fri, May 22, 2020 at 11:44:07AM +0200, Peter Zijlstra wrote:
+> > On Thu, May 21, 2020 at 05:38:50PM -0700, Paul E. McKenney wrote:
+> > > Hello!
+> > > 
+> > > Just wanted to call your attention to some pretty cool and pretty serious
+> > > litmus tests that Andrii did as part of his BPF ring-buffer work:
+> > > 
+> > > https://lore.kernel.org/bpf/20200517195727.279322-3-andriin@fb.com/
+> > > 
+> > > Thoughts?
+> > 
+> > I find:
+> > 
+> > 	smp_wmb()
+> > 	smp_store_release()
+> > 
+> > a _very_ weird construct. What is that supposed to even do?
 > 
-> > But yes, I think getting a copy of asm.h would be nice here. I don't
-> > think the WRITE_ONCE() is needed in this particular case. Hmm.
-> 
-> Paranoia on my end because I had no clue wth he wanted with his -O0
-> magic gunk.
+> Indeed, it looks like one or the other of those is redundant (depending 
+> on the context).
 
-Heh, yes, which is why I asked for many more comments. ;) I *think* it
-was entirely to control the stack (and ssp) behavior (i.e. don't inline,
-don't elide unused stack variables, etc).
+Probably.  Peter instead asked what it was supposed to even do.  ;-)
 
--- 
-Kees Cook
+> Also, what use is a spinlock that is accessed in only one thread?
+
+Multiple writers synchronize via the spinlock in this case.  I am
+guessing that his larger 16-hour test contended this spinlock.
+
+> Finally, I doubt that these tests belong under tools/memory-model.  
+> Shouldn't they go under the new Documentation/ directory for litmus 
+> tests?  And shouldn't the patch update a README file?
+
+Agreed, and I responded to that effect to his original patch:
+
+https://lore.kernel.org/bpf/20200522003433.GG2869@paulmck-ThinkPad-P72/
+
+							Thanx, Paul
