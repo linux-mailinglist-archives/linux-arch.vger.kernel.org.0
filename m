@@ -2,51 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1D81DEE23
-	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 19:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602921DEE3D
+	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 19:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730728AbgEVRW6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 May 2020 13:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730747AbgEVRWz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 May 2020 13:22:55 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50698C061A0E
-        for <linux-arch@vger.kernel.org>; Fri, 22 May 2020 10:22:54 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id f4so5270013pgi.10
-        for <linux-arch@vger.kernel.org>; Fri, 22 May 2020 10:22:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=amaxCECevOSXJrGQyIuXx97hyD0UaNdLUI7ilZbNErE=;
-        b=QdOKlWAUfaOgmRv2+ys3+AI8VRaQjQGwiQE2Q9ixqsSc47+pg8ot2k8eV9uY4lzp++
-         i0TuH4yEnQR5YabGAbnFYlP73coOX4eGfIXprx+hq/fwlynG47mBziM1nHeMmGvyGC/p
-         xuiDofpqRF65/vevf6CbCee7998FCjaJgYfFs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=amaxCECevOSXJrGQyIuXx97hyD0UaNdLUI7ilZbNErE=;
-        b=lr6sedF0dk4Tt597a6A9wsX0e75zjG4EV+mclB51LmFcJO9fL17hef5ZVeQ11enHkh
-         kmpsBCERrAHuaMxPkFkOOojSvwkRfwjZA7JgLvYu8wHHYKfjhTtQcuRccn0AgWYOgw1v
-         0jF4A2PGO5EDexwtrSEeeULGdiXUFqjKzFKtNHNa/zLwrYO5TuUTEAi0WcpuT+zkgAV+
-         O6NbWFJeFNNjTY/NGkN0Qrbfo4QZw949/iHJgg6k/xJ7SbSGhrF2Scg1P7+dLR0JJB+7
-         INbNSVZFDxblHMpjuyX7ySceakjv5A7zhJf5GqCX886fnsIQFQB4dEYG045qGnzSd5Ye
-         WTIw==
-X-Gm-Message-State: AOAM5331DL5BQ//gmlEOwZEzSNjB/KtTG3Q4tL0kzY+MKBt9UEJgJBAY
-        MU3dFtBU1ZhLY7q5ayTj165/mg==
-X-Google-Smtp-Source: ABdhPJxp9FF04TnejNRz/NvrR22fKHIQ7m8bWd6qeiuqYrLZnucmLNFQPYrNAd8AJZHV+du2CRuRLQ==
-X-Received: by 2002:aa7:9ab6:: with SMTP id x22mr4840028pfi.136.1590168173772;
-        Fri, 22 May 2020 10:22:53 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d22sm6676581pgh.64.2020.05.22.10.22.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 10:22:52 -0700 (PDT)
-Date:   Fri, 22 May 2020 10:22:51 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
+        id S1730720AbgEVR3s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 May 2020 13:29:48 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:48418 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730554AbgEVR3r (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 May 2020 13:29:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xp/n5IlXvNYZw1QeKHpP6RwwzQHWUekVgDIojWgljN4=; b=gOKxCu3cJi0QhaY/PHqOuAEj0C
+        nguZNzHzd1uHaQ2IK91Bz0G7iqmIodCmPIX020e0af4N9LkKsB2ZH9GI9GK2uP0As8mrH/dOBIEvU
+        OeERwnp2jVo2O50jF1bR5n9U+p/U/BkaO8V+0EwejxQaMcwtoYHvrBWyYFKNcvr1VizA5vHAxQVkZ
+        1SiNEL+EwmW1tinerNONOO4poWq+RyvFdYBaMwf8M5G8W0h4EgN0D6eEJfO+glllebZ4t+OJXzVyE
+        FLrEQCr0w6lhkqOyUOlrgf/3j2jxxfoL2C/eVxPvioBsXscLKWMK+BiM2Qh7MbGVSnGw1p6ZN6zuK
+        daMDXh7g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jcBRx-0007SW-CE; Fri, 22 May 2020 17:27:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1FC98305E45;
+        Fri, 22 May 2020 19:27:11 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0E41B20BDB12E; Fri, 22 May 2020 19:27:11 +0200 (CEST)
+Date:   Fri, 22 May 2020 19:27:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -72,29 +59,24 @@ Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
 Subject: Re: [RFC PATCH 5/5] selftest/x86: Add CET quick test
-Message-ID: <202005221020.B578B8C6@keescook>
+Message-ID: <20200522172711.GA317569@hirez.programming.kicks-ass.net>
 References: <20200521211720.20236-1-yu-cheng.yu@intel.com>
  <20200521211720.20236-6-yu-cheng.yu@intel.com>
  <20200522092848.GJ325280@hirez.programming.kicks-ass.net>
+ <202005221020.B578B8C6@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200522092848.GJ325280@hirez.programming.kicks-ass.net>
+In-Reply-To: <202005221020.B578B8C6@keescook>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 22, 2020 at 11:28:48AM +0200, Peter Zijlstra wrote:
-> Get asm/asm.h into userspace and then write something like:
+On Fri, May 22, 2020 at 10:22:51AM -0700, Kees Cook wrote:
 
-Yeah, selftests is going to start suffering from the same "tools/ header
-duplication" problem. I've also had cases (see the logic in the Makefile
-in selftests/x86) where selftests is duplicating existing Kconfig and
-Makefile logic ("can I build this way?")
+> But yes, I think getting a copy of asm.h would be nice here. I don't
+> think the WRITE_ONCE() is needed in this particular case. Hmm.
 
-But yes, I think getting a copy of asm.h would be nice here. I don't
-think the WRITE_ONCE() is needed in this particular case. Hmm.
-
--- 
-Kees Cook
+Paranoia on my end because I had no clue wth he wanted with his -O0
+magic gunk.
