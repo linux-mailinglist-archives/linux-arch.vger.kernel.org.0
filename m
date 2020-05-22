@@ -2,123 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B711DE492
-	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 12:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAF51DE4ED
+	for <lists+linux-arch@lfdr.de>; Fri, 22 May 2020 12:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728669AbgEVKhV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 May 2020 06:37:21 -0400
-Received: from foss.arm.com ([217.140.110.172]:32958 "EHLO foss.arm.com"
+        id S1728641AbgEVK5A (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 May 2020 06:57:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56712 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728362AbgEVKhU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 22 May 2020 06:37:20 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E358D6E;
-        Fri, 22 May 2020 03:37:19 -0700 (PDT)
-Received: from gaia (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C2FC23F305;
-        Fri, 22 May 2020 03:37:17 -0700 (PDT)
-Date:   Fri, 22 May 2020 11:37:15 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Patrick Daly <pdaly@codeaurora.org>
-Cc:     Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 24/26] arm64: mte: Introduce early param to disable
- MTE support
-Message-ID: <20200522103714.GA26492@gaia>
-References: <20200515171612.1020-1-catalin.marinas@arm.com>
- <20200515171612.1020-25-catalin.marinas@arm.com>
- <a2ad6cbf-2632-3cda-eb49-74ddfbed2cec@arm.com>
- <20200518113103.GA32394@willie-the-truck>
- <20200518172054.GL9862@gaia>
- <20200522055710.GA25791@pdaly-linux.qualcomm.com>
+        id S1728371AbgEVK5A (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 22 May 2020 06:57:00 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C6A0020679;
+        Fri, 22 May 2020 10:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590145019;
+        bh=Lh7d7fjKNY7SzfKndVpbX94Aqe2UUFTEu4zvw1niz+o=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=S5BAtuOqFeMMeXX6M2mkB76V1Iyu66qYTRsNdlNuNl4VhAbwmtMe7+wmYggLrdEQ8
+         lg+uMd/4lEJwbuCjRJT/hQU9v2sFiAgQnL9jBi0Uviqv0SuH69OewBruLrEhajMcmL
+         Phhh0XdHAXukgp1qpLC9s40OnMa8UpuINo4Kstc0=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 8170A3520C6D; Fri, 22 May 2020 03:56:59 -0700 (PDT)
+Date:   Fri, 22 May 2020 03:56:59 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        andriin@fb.com
+Subject: Re: Some -serious- BPF-related litmus tests
+Message-ID: <20200522105659.GH2869@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200522003850.GA32698@paulmck-ThinkPad-P72>
+ <20200522094407.GK325280@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200522055710.GA25791@pdaly-linux.qualcomm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200522094407.GK325280@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Patrick,
-
-On Thu, May 21, 2020 at 10:57:10PM -0700, Patrick Daly wrote:
-> On Mon, May 18, 2020 at 06:20:55PM +0100, Catalin Marinas wrote:
-> > On Mon, May 18, 2020 at 12:31:03PM +0100, Will Deacon wrote:
-> > > On Mon, May 18, 2020 at 12:26:30PM +0100, Vladimir Murzin wrote:
-> > > > On 5/15/20 6:16 PM, Catalin Marinas wrote:
-> > > > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > index f2a93c8679e8..7436e7462b85 100644
-> > > > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > @@ -373,6 +373,10 @@
-> > > > >  	arcrimi=	[HW,NET] ARCnet - "RIM I" (entirely mem-mapped) cards
-> > > > >  			Format: <io>,<irq>,<nodeID>
-> > > > >  
-> > > > > +	arm64.mte_disable=
-> > > > > +			[ARM64] Disable Linux support for the Memory
-> > > > > +			Tagging Extension (both user and in-kernel).
-> > > > > +
-> > > > 
-> > > > Should it really to take parameter (on/off/true/false)? It may lead to expectation
-> > > > that arm64.mte_disable=false should enable MT and, yes, double negatives make it
-> > > > look ugly, so if we do need parameter, can it be arm64.mte=on/off/true/false?
-> > > 
-> > > I don't think "performance analysis" is a good justification for this
-> > > parameter tbh. We don't tend to add these options for other architectural
-> > > features, and I don't see why MTE is any different in this regard.
+On Fri, May 22, 2020 at 11:44:07AM +0200, Peter Zijlstra wrote:
+> On Thu, May 21, 2020 at 05:38:50PM -0700, Paul E. McKenney wrote:
+> > Hello!
 > > 
-> > There is an expectation of performance impact with MTE enabled,
-> > especially if it's running in synchronous mode. For the in-kernel MTE,
-> > we could add a parameter which sets sync vs async at boot time rather
-> > than a big disable knob. It won't affect user space however.
+> > Just wanted to call your attention to some pretty cool and pretty serious
+> > litmus tests that Andrii did as part of his BPF ring-buffer work:
 > > 
-> > The other 'justification' is if your hardware has weird unexpected
-> > behaviour but I'd like this handled via errata workarounds.
+> > https://lore.kernel.org/bpf/20200517195727.279322-3-andriin@fb.com/
 > > 
-> > I'll let the people who asked for this to chip in ;). I agree with you
-> > that we rarely add these (and I rejected a similar option a few weeks
-> > ago on the AMU patchset).
+> > Thoughts?
 > 
-> We've been looking into other ways this on/off behavior could be achieved.
-
-The actual question here is what the on/off behaviour is needed for. We
-can figure out the best mechanism for this once we know what we want to
-achieve. My wild guess above was performance analysis but that can be
-toggled by either kernel boot parameter or run-time sysctl (or just the
-Kconfig option).
-
-If it is about forcing user space not to use MTE, we may look into some
-other sysctl controls (we already have one for the tagged address ABI).
-
-If it is for working around hardware not supporting MTE (i.e. no
-allocation tag storage), this should be handled differently, not by
-kernel parameter.
-
-> The "arm,armv8.5-memtag" DT flag already provides what we want - meaning
-> that this flag could be removed if the system did not support MTE.
+> I find:
 > 
-> I did see your remark on "arm64: mte: Check the DT memory nodes for MTE support"
-> questioning whether it was the right approach - is this still the case?
+> 	smp_wmb()
+> 	smp_store_release()
+> 
+> a _very_ weird construct. What is that supposed to even do?
 
-My plan is to remove the DT patch altogether _if_ I get confirmation
-from the CPU designers. The idea is that if ID_AA64PFR1_EL1.MTE > 1,
-Linux can assume system-wide MTE support. If an MTE-capable CPU is
-deployed in an SoC without tag storage, a tie-off should change the ID
-field to 1 (or 0). If we do find hardware with an ID field > 1 and no
-tag storage, it will be handled as an SoC erratum in the kernel,
-probably tied to the new SoC Id advertised by firmware (Sudeep had some
-patches recently).
+Indeed, and I asked about that in my review of the patch containing the
+code.  It -could- make sense if there is a prior read and a later store:
 
-Thanks.
+	r1 = READ_ONCE(a);
+	WRITE_ONCE(b, 1);
+	smp_wmb();
+	smp_store_release(&c, 1);
+	WRITE_ONCE(d, 1);
 
--- 
-Catalin
+So a->c and b->c is smp_store_release() and b->d is smp_wmb().  But if
+there were only stores, the smp_wmb() would suffice.  And if there wasn't
+the trailing store, smp_store_release() would suffice.
+
+But that would at least want a comment, in my opinion.  ;-)
+
+							Thanx, Paul
