@@ -2,98 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC061E07AA
-	for <lists+linux-arch@lfdr.de>; Mon, 25 May 2020 09:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A97E1E088F
+	for <lists+linux-arch@lfdr.de>; Mon, 25 May 2020 10:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388951AbgEYHTz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 May 2020 03:19:55 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:46226 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388948AbgEYHTz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 25 May 2020 03:19:55 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 9EC1B2FB3E70016EC513;
-        Mon, 25 May 2020 15:19:52 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Mon, 25 May 2020
- 15:19:44 +0800
-Subject: Re: [PATCH v2 5/6] mm: tlb: Provide flush_*_tlb_range wrappers
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     <peterz@infradead.org>, <mark.rutland@arm.com>, <will@kernel.org>,
-        <aneesh.kumar@linux.ibm.com>, <akpm@linux-foundation.org>,
-        <npiggin@gmail.com>, <arnd@arndb.de>, <rostedt@goodmis.org>,
-        <maz@kernel.org>, <suzuki.poulose@arm.com>, <tglx@linutronix.de>,
-        <yuzhao@google.com>, <Dave.Martin@arm.com>, <steven.price@arm.com>,
-        <broonie@kernel.org>, <guohanjun@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
-        <kuhn.chenqun@huawei.com>
-References: <20200423135656.2712-1-yezhenyu2@huawei.com>
- <20200423135656.2712-6-yezhenyu2@huawei.com> <20200522154254.GD26492@gaia>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <ddba6d98-29b5-0748-ba74-ec022f509270@huawei.com>
-Date:   Mon, 25 May 2020 15:19:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1728173AbgEYIQ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 May 2020 04:16:29 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:52540 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727894AbgEYIQ3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 May 2020 04:16:29 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id C429A1C02AB; Mon, 25 May 2020 10:16:26 +0200 (CEST)
+Date:   Mon, 25 May 2020 10:16:26 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     "Karstens, Nate" <Nate.Karstens@garmin.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        David Laight <David.Laight@aculab.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Changli Gao <xiaosuo@gmail.com>,
+        "a.josey@opengroup.org" <a.josey@opengroup.org>
+Subject: Re: [PATCH v2] Implement close-on-fork
+Message-ID: <20200525081626.GA16796@amd>
+References: <20200515152321.9280-1-nate.karstens@garmin.com>
+ <20200515155730.GF16070@bombadil.infradead.org>
+ <5b1929aa9f424e689c7f430663891827@garmin.com>
+ <1589559950.3653.11.camel@HansenPartnership.com>
+ <4964fe0ccdf7495daf4045c195b14ed6@garmin.com>
 MIME-Version: 1.0
-In-Reply-To: <20200522154254.GD26492@gaia>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.173.220.25]
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
+Content-Disposition: inline
+In-Reply-To: <4964fe0ccdf7495daf4045c195b14ed6@garmin.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020/5/22 23:42, Catalin Marinas wrote:
-> On Thu, Apr 23, 2020 at 09:56:55PM +0800, Zhenyu Ye wrote:
->> diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
->> index 3d7c01e76efc..3eff199d3507 100644
->> --- a/mm/pgtable-generic.c
->> +++ b/mm/pgtable-generic.c
->> @@ -101,6 +101,28 @@ pte_t ptep_clear_flush(struct vm_area_struct *vma, unsigned long address,
->>  
->>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
->>  
->> +#ifndef __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
->> +
->> +#define FLUSH_Pxx_TLB_RANGE(_pxx)					\
->> +void flush_##_pxx##_tlb_range(struct vm_area_struct *vma,		\
->> +			      unsigned long addr, unsigned long end)	\
->> +{									\
->> +		struct mmu_gather tlb;					\
->> +									\
->> +		tlb_gather_mmu(&tlb, vma->vm_mm, addr, end);		\
->> +		tlb_start_vma(&tlb, vma);				\
->> +		tlb_flush_##_pxx##_range(&tlb, addr, end - addr);	\
->> +		tlb_end_vma(&tlb, vma);					\
->> +		tlb_finish_mmu(&tlb, addr, end);			\
->> +}
-> 
-> I may have confused myself (flush_p??_tlb_* vs. tlb_flush_p??_*) but do
-> actually need this whole tlb_gather thing here? IIUC (by grep'ing),
-> flush_p?d_tlb_range() is only called on huge pages, so we should know
-> the level already.
-> 
 
-tlb_flush_##_pxx##_range() is used to set tlb->cleared_*,
-flush_##_pxx##_tlb_range() will actually flush the TLB entry.
+--5vNYLRcllDrimb99
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In arch64, tlb_flush_p?d_range() is defined as:
+Hi!
 
-	#define flush_pmd_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
-	#define flush_pud_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
+>=20
+> If the feedback from the community is truly and finally that system() sho=
+uld not be used in these applications, then is there support for updating t=
+he man page to better communicate that?
+>=20
 
-So even if we know the level here, we can not pass the value to tlbi
-instructions (flush_tlb_range() is a common kernel interface and retro-fit it
-needs lots of changes), according to Peter's suggestion, I finally decide to
-pass the value of TTL by the tlb_gather_* frame.[1]
+Clarifying documenation might be the best way forward. Note you'd have
+to do that anyway, since people would not know about O_CLOFORK without
+pointers in documentation.
 
-[1] https://lore.kernel.org/linux-arm-kernel/20200331142927.1237-1-yezhenyu2@huawei.com/
+Best regards,
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
 
-Thanks,
-Zhenyu
+--5vNYLRcllDrimb99
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl7LftoACgkQMOfwapXb+vJqEACcD+lR3XKYglSp+Req63ZwDi9m
+e/8An0k5uMvqkwoEcFAXFS3vLQ/eJejy
+=GABB
+-----END PGP SIGNATURE-----
+
+--5vNYLRcllDrimb99--
