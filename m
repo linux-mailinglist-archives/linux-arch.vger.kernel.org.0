@@ -2,60 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE8C1E0B5C
-	for <lists+linux-arch@lfdr.de>; Mon, 25 May 2020 12:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E541E0CD8
+	for <lists+linux-arch@lfdr.de>; Mon, 25 May 2020 13:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389446AbgEYKFp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 May 2020 06:05:45 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40252 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389302AbgEYKFo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 25 May 2020 06:05:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id AEA73ACE6;
-        Mon, 25 May 2020 10:05:45 +0000 (UTC)
-Date:   Mon, 25 May 2020 12:05:40 +0200
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org, hpa@zytor.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v3 2/7] mm/vmalloc: Track which page-table levels were
- modified
-Message-ID: <20200525100540.GB5075@suse.de>
-References: <20200515140023.25469-1-joro@8bytes.org>
- <20200515140023.25469-3-joro@8bytes.org>
- <20200515130142.4ca90ee590e9d8ab88497676@linux-foundation.org>
- <20200516125641.GK8135@suse.de>
- <20200518151828.ad3c714a29209b359e326ec4@linux-foundation.org>
+        id S2390176AbgEYLZp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 May 2020 07:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390222AbgEYLZf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 May 2020 07:25:35 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2B9C061A0E;
+        Mon, 25 May 2020 04:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ANDzJv60v//5Dwat0pXngs482cz+pE/nrDBtCUUbCnc=; b=JKmmwVcfb+OxJwCjR8JlLiHTiL
+        cLHYQstgQJXP6arayZjaNXdaBg3QVX0PiBFwouZg8p/u0uzELExb3XCePi7Mfx0A5LyUAsJ/YfOL+
+        J0ZB3CsTq7I0OpnERiJjMzZU3oX31GXbB7e/jW4ZDw5dVf1Y1T7ts9fHdhQ3/oKCaITYRC4J9C8mH
+        m5rix7E+G6EAhOhuND9zGic+WD6MkIqXDVeq3qLrVyCvGtU/9vyD1kaHwMEdN/yBEU6L90S8DV+4S
+        JDhrhlFkd+5Ar2rnZvjefAuMMtlmqTko8UhZX1OSn46ObtW4wB2PM8aU5/q6SsQ2Co0XfDamzNFyG
+        Nj31Neog==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jdBER-00069t-Kp; Mon, 25 May 2020 11:25:23 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 71A54302753;
+        Mon, 25 May 2020 13:25:21 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5B21D285ECE65; Mon, 25 May 2020 13:25:21 +0200 (CEST)
+Date:   Mon, 25 May 2020 13:25:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     paulmck@kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        parri.andrea@gmail.com, will@kernel.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>
+Subject: Re: Some -serious- BPF-related litmus tests
+Message-ID: <20200525112521.GD317569@hirez.programming.kicks-ass.net>
+References: <20200522003850.GA32698@paulmck-ThinkPad-P72>
+ <20200522094407.GK325280@hirez.programming.kicks-ass.net>
+ <20200522143201.GB32434@rowland.harvard.edu>
+ <20200522174352.GJ2869@paulmck-ThinkPad-P72>
+ <006e2bc6-7516-1584-3d8c-e253211c157e@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200518151828.ad3c714a29209b359e326ec4@linux-foundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <006e2bc6-7516-1584-3d8c-e253211c157e@fb.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 18, 2020 at 03:18:28PM -0700, Andrew Morton wrote:
-> It would be nice to get all this (ie, linux-next) retested before we
-> send it upstream, please.
+On Fri, May 22, 2020 at 12:38:21PM -0700, Andrii Nakryiko wrote:
+> On 5/22/20 10:43 AM, Paul E. McKenney wrote:
+> > On Fri, May 22, 2020 at 10:32:01AM -0400, Alan Stern wrote:
 
-Tested these patches as in next-20200522, with three 2, 3, and 4-level
-paging. On 4-level (aka 64-bit) I also re-ran the Stevens trace-cmd
-reproducer, no issues found and the trace-cmd problem is still fixed.
+> > > Also, what use is a spinlock that is accessed in only one thread?
+> > 
+> > Multiple writers synchronize via the spinlock in this case.  I am
+> > guessing that his larger 16-hour test contended this spinlock.
+> 
+> Yes, spinlock is for coordinating multiple producers. 2p1c cases (bounded
+> and unbounded) rely on this already. 1p1c cases are sort of subsets (but
+> very fast to verify) checking only consumer/producer interaction.
 
-Thanks,
+Does that spinlock imply that we can now never fix that atrocious
+bpf_prog_active trainwreck ?
 
-	Joerg
+How does that spinlock not trigger the USED <- IN-NMI lockdep check:
+
+  f6f48e180404 ("lockdep: Teach lockdep about "USED" <- "IN-NMI" inversions")
+
+?
+
+That is; how can you use a spinlock on the producer side at all?
