@@ -2,226 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E57511E2381
-	for <lists+linux-arch@lfdr.de>; Tue, 26 May 2020 16:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC2E1E2461
+	for <lists+linux-arch@lfdr.de>; Tue, 26 May 2020 16:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729722AbgEZOC4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 May 2020 10:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729443AbgEZOCz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 May 2020 10:02:55 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9B4C03E96D;
-        Tue, 26 May 2020 07:02:55 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id q8so10222729pfu.5;
-        Tue, 26 May 2020 07:02:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NGv0b3sqSZz4J/ThZXZTwBEkggDBhoocKOg+9IO8Xkk=;
-        b=oliWRWBPObuvQ7vMTWH2uKfiDi0RSoqlMQ7U43KHU82DwsYFVMTjsERhGKECZvaXdd
-         VqtPz50Gy4fhcaVmM75UqJ+RlqQHCi88/exRwmJXt1oftVNL+qCRw2p2vLFljEKWLQBu
-         d77O3tA3B2O/R67eJnFWJ1/XePbMDa0GySmIo6P3ZeSFmGShX+EsPYg/gEGY+WxkzADX
-         dzOqdkOQFAGcjr5SXtmV9XEELAp0SNb4QfBidoXjMUBWvXKbXiri3u2/bTCXi4dWvhsq
-         a4Ucq3wwS/ED4df3jRycBgm5BKDDAUr/ZnaBqbGL+HVxQVqw8QzbvxCxjUu4D//tchxg
-         xmqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NGv0b3sqSZz4J/ThZXZTwBEkggDBhoocKOg+9IO8Xkk=;
-        b=YvvrPxaU16/3QbmxAUrYh2dKEhzJ7lNhQ1fYohGaFkEIXp2AUhtYF1iafevrXUQ5rt
-         MmQpjobHNsIemgZuE84qSUTmQJ4iKRxvCativodz2DQjTstlU+LTWW8F5BYLBbFBFG0w
-         CLK1PqhEsCw3Olh7Z3gT2NeudXScoKeKHCB1W4sef2jL3foqzVwmRNxT2XjlVRikPLP+
-         yAeeAYEGsJz/W07L2eho5BPlsrY6PGocAh62mge67SRpGemZh7GIEiM+lhcCBv+c7wjK
-         oABMfFPK/kkLthihzKSZLsYzcjvguEd/69s7nU1N6yCfAq4y0tHIv86LHGxdqLniDaXY
-         SfYw==
-X-Gm-Message-State: AOAM531S3cGnTsVnJuyHK/UYgbdwcVAnFn0vD1SCtS8WQmBKcHsC/rgL
-        WErQpTk68lVwgE7BN7aT34UPgOnWZY4=
-X-Google-Smtp-Source: ABdhPJwb6cWmkX8XhkzuNnMuoJOPsv3VeGzTVMCLLtfzKvPkAleDajUEOe9hRdH66uyMBGj+mmwR9g==
-X-Received: by 2002:a05:6a00:46:: with SMTP id i6mr22969520pfk.146.1590501774224;
-        Tue, 26 May 2020 07:02:54 -0700 (PDT)
-Received: from [192.168.11.3] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id q201sm15501726pfq.40.2020.05.26.07.02.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2020 07:02:53 -0700 (PDT)
-Subject: Re: Some -serious- BPF-related litmus tests
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     luc.maranget@inria.fr, Andrii Nakryiko <andriin@fb.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Peter Zijlstra <peterz@infradead.org>, parri.andrea@gmail.com,
-        will@kernel.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, dlustig@nvidia.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org
-References: <20200522003850.GA32698@paulmck-ThinkPad-P72>
- <20200522094407.GK325280@hirez.programming.kicks-ass.net>
- <20200522143201.GB32434@rowland.harvard.edu>
- <20200522174352.GJ2869@paulmck-ThinkPad-P72>
- <006e2bc6-7516-1584-3d8c-e253211c157e@fb.com>
- <ac799c98-45dd-d056-386f-cbebc7270c0c@gmail.com>
- <CAEf4BzYGbLfGA=NN=dP1RqDj7yp_Fnu0L-1bgQojPMt0-Y_X=g@mail.gmail.com>
- <69ed3604-4275-d73e-a5d6-2b70dd877104@gmail.com>
- <CAEf4BzajE6jCkbBQ+f0cG=Y+vAEPWGNhfOMFVVhoDZWjNV-oGA@mail.gmail.com>
- <d1113b47-a920-c0e4-9aa4-88781368a26f@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <b92f9c0a-826c-d074-5389-8c340f7cccf2@gmail.com>
-Date:   Tue, 26 May 2020 23:02:48 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1729102AbgEZOp3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 May 2020 10:45:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:51692 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727007AbgEZOp2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 26 May 2020 10:45:28 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33E151FB;
+        Tue, 26 May 2020 07:45:28 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 372023F305;
+        Tue, 26 May 2020 07:45:27 -0700 (PDT)
+Date:   Tue, 26 May 2020 15:45:25 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arch@vger.kernel.org, linux-man@vger.kernel.org,
+        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH 13/14] prctl.2: Add SVE prctls (arm64)
+Message-ID: <20200526144524.GR5031@arm.com>
+References: <1589301419-24459-1-git-send-email-Dave.Martin@arm.com>
+ <1589301419-24459-14-git-send-email-Dave.Martin@arm.com>
+ <20200513084351.GB18196@willie-the-truck>
+ <20200513104635.GD21779@arm.com>
+ <a01fc572-cac8-1932-c3e5-c70184417ca3@gmail.com>
+ <20200513140200.GP21779@arm.com>
+ <20200513211153.GB28594@willie-the-truck>
 MIME-Version: 1.0
-In-Reply-To: <d1113b47-a920-c0e4-9aa4-88781368a26f@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200513211153.GB28594@willie-the-truck>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 26 May 2020 19:50:47 +0900, Akira Yokosawa wrote:
-> On Mon, 25 May 2020 16:31:05 -0700, Andrii Nakryiko wrote:
->> On Mon, May 25, 2020 at 3:01 PM Akira Yokosawa <akiyks@gmail.com> wrot=
-e:
->>>
-> [...]
->>> Yes, that should work.
->>
->> Ok, assigning to zero didn't work (it still complained about
->> uninitialized read), but using a separate int *lenFail to assign to
->> rLenPtr worked. Curiously, if I used rLenPtr =3D len1; in error case, =
-it
->> actually takes a bit more time to verify.
->>
->> So I've converted everything else as you suggested. I compiled latest
->> herd7 and it doesn't produce any warnings. But it's also extremely
->> slow, compared to the herd7 that I get by default. Validating simple
->> 1p1c cases takes about 2.5x times longer (0.03s vs 0.07),
+On Wed, May 13, 2020 at 10:11:54PM +0100, Will Deacon wrote:
+> On Wed, May 13, 2020 at 03:02:00PM +0100, Dave Martin wrote:
+> > On Wed, May 13, 2020 at 01:01:12PM +0200, Michael Kerrisk (man-pages) wrote:
+> > > On 5/13/20 12:46 PM, Dave Martin wrote:
+> > > > On Wed, May 13, 2020 at 09:43:52AM +0100, Will Deacon wrote:
+> > > >> On Tue, May 12, 2020 at 05:36:58PM +0100, Dave Martin wrote:
 
-Wait a moment!
+[...]
 
-This 0.03s was the run time of the original 1p1c litmus test, wasn't it?
-Then you are comparing apples and oranges.
+> > > >>> +If
+> > > >>> +.B PR_SVE_VL_INHERIT
+> > > >>> +is also included in
+> > > >>> +.IR arg2 ,
+> > > >>> +it takes effect
+> > > >>> +.I after
+> > > >>> +this deferred change.
+> > > >>
+> > > >> I find this a bit hard to follow, since it's not clear to me whether the
+> > > >> INHERIT flag is effectively set before or after the next execve(). In other
+> > > >> words, if both PR_SVE_SET_VL_ONEXEC and PR_SVE_VL_INHERIT are specified,
+> > > >> is the vector length preserved or reset on the next execve()?
+> > > > 
+> > > > It makes no difference, because the ONEXEC handling takes priority over
+> > > > the INHERIT handling. But either way INHERIT is never cleared by execve()
+> > > > and will apply at subsequent execs().
+> > > > 
+> > > > Explaining all this properly seems out of scope here.  Maybe this should
+> > > > be trimmed down rather than elaborated?  Or perhaps just explain it in
+> > > > terms of what the kernel does instead of futile attempts to make it
+> > > > intuitive?
+> 
+> Hmm, if we don't explain it in the man page then we should at least point
+> people to somewhere where they can get the gory details, because I think
+> they're necessary in order to use the prctl() request correctly. I'm still
+> not confident that I understand the semantics of setting both
+> PR_SVE_SET_VL_ONEXEC and PR_SVE_VL_INHERIT without reading the code, which
+> may change.
 
-How long does your default herd7 take to complete the updated 1p1c test?
+On this point, can you review the following wording?
 
-        Thanks, Akira
+I simply enumerate the possible flag combinations now, rather than tying
+myself in knots trying to describe the two flags independently.
 
->>                                                           but trying
->> to validate 2p1c case, which normally validates in 42s (unbounded) and=
+Cheers
+---Dave
 
->> 110s (bounded), it took more than 20 minutes and hasn't finished,
->> before I gave up. So I don't know what's going on there...
->=20
-> herdtools7 has recently been heavily restructured.
-> On the performance regression, I must defer to Luc.
->=20
-> Luc, do you have any idea?
->=20
->>
->> As for klitmus7, I managed to generate everything without warnings,
->> but couldn't make it build completely due to:
->>
->> $ make
->> make -C /lib/modules/5.6.13-01802-g938d64da97c6/build/
->=20
-> So you are on Linux 5.6.x which requires cutting-edge klitmus7.
->=20
->> M=3D/home/andriin/local/linux-trees/tools/memory-model/mymodules modul=
-es
->> make[1]: Entering directory `/data/users/andriin/linux-build/fb-config=
-'
->> make[2]: Entering directory `/data/users/andriin/linux-build/default-x=
-86_64'
->>   CC [M]  /home/andriin/local/linux-trees/tools/memory-model/mymodules=
-/litmus000.o
->> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus000=
-=2Ec:
->> In function =E2=80=98zyva=E2=80=99:
->> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus000=
-=2Ec:507:12:
->> warning: ISO C90 forbids variable length array =E2=80=98th=E2=80=99 [-=
-Wvla]
->>      struct task_struct *th[nth];
->>             ^~~~~~~~~~~
->> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus000=
-=2Ec:
->> In function =E2=80=98litmus_init=E2=80=99:
->> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus000=
-=2Ec:605:67:
->> error: passing argument 4 of =E2=80=98proc_create=E2=80=99 from incomp=
-atible pointer
->> type [-Werror=3Dincompatible-pointer-types]
->>    struct proc_dir_entry *litmus_pde =3D
->> proc_create("litmus",0,NULL,&litmus_proc_fops);
->>
->> ^~~~~~~~~~~~~~~~~
->> In file included from
->> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus000=
-=2Ec:15:
->> /data/users/andriin/linux-fb/include/linux/proc_fs.h:64:24: note:
->> expected =E2=80=98const struct proc_ops *=E2=80=99 but argument is of =
-type =E2=80=98const
->> struct file_operations *=E2=80=99
->>  struct proc_dir_entry *proc_create(const char *name, umode_t mode,
->> struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
->>                         ^~~~~~~~~~~
->> cc1: some warnings being treated as errors
->> make[3]: *** [/home/andriin/local/linux-trees/tools/memory-model/mymod=
-ules/litmus000.o]
->> Error 1
->> make[2]: *** [/home/andriin/local/linux-trees/tools/memory-model/mymod=
-ules]
->> Error 2
->> make[2]: Leaving directory `/data/users/andriin/linux-build/default-x8=
-6_64'
->> make[1]: *** [sub-make] Error 2
->> make[1]: Leaving directory `/data/users/andriin/linux-build/fb-config'=
+--8<--
 
->> make: *** [all] Error 2
->>
->=20
-> These errors suggest the klitmus7 you used is version 7.52 or some such=
-=2E
-> You said you have built herd7 from the source.  Have you also built kli=
-tmus7?
->=20
-> The up-to-date klitmus7 should generate code compatible with Linux 5.6.=
-x.
->=20
-> Could you try with the latest one?
->=20
->         Thanks, Akira
->=20
->>
->> But at least it doesn't complain about atomic_t anymore. So anyways,
->> I'm going to post updated litmus tests separately from BPF ringbuf
->> patches, because Documentation/litmus-tests is not yet present in
->> bpf-next.
->>
->>>
->>> You can find a basic introduction of klitmus7 in tools/memory-model/R=
-EADME.
->>>
->>>         Thanks, Akira
->>>
->>>>
->>>>>
->>>>> Please note that if you are on Linux 5.6 (or later), you need an up=
--to-date
->>>>> klitmus7 due to a change in kernel API.
->>>>>
->>>>> Any question is welcome!
->>>>>
->>>>>         Thanks, Akira
->>>>>
->>
->> [...]
->>
->=20
+       PR_SVE_SET_VL (since Linux 4.15, only on arm64)
+              Configure the thread's SVE vector length, as specified by  (int)
+              arg2.  Arguments arg3, arg4 and arg5 are ignored.
 
+              The bits of arg2 corresponding to PR_SVE_VL_LEN_MASK must be set
+              to the desired vector length in bytes.  This is  interpreted  as
+              an  upper  bound:  the kernel will select the greatest available
+              vector length that does not exceed the value specified.  In par-
+              ticular,  specifying  SVE_VL_MAX (defined in <asm/sigcontext.h>)
+              for the PR_SVE_VL_LEN_MASK bits requests the  maximum  supported
+              vector length.
+
+              In  addition,  arg2  may  include  the following combinations of
+              flags:
+
+              0      Perform the change immediately.  At the next execve(2) in
+                     the  thread, the vector length will be reset to the value
+                     configured in /proc/sys/abi/sve_default_vector_length.
+
+              PR_SVE_VL_INHERIT
+                     Perform the  change  immediately.   Subsequent  execve(2)
+                     calls will preserve the new vector length.
+
+              PR_SVE_SET_VL_ONEXEC
+                     Defer  the  change,  so  that it is performed at the next
+                     execve(2) in the thread.  Further  execve(2)  calls  will
+                     reset  the  vector  length  to  the  value  configured in
+                     /proc/sys/abi/sve_default_vector_length.
+
+              PR_SVE_SET_VL_ONEXEC | PR_SVE_VL_INHERIT
+                     Defer the change, so that it is  performed  at  the  next
+                     execve(2)  in  the  thread.  Further execve(2) calls will
+                     preserve the new vector length.
+
+              In all cases, any previously pending  deferred  change  is  can-
+              celed.
+
+              The  call fails with error EINVAL if SVE is not supported on the
+              platform, if arg2 is unrecognized or invalid, or  the  value  in
+              the  bits of arg2 corresponding to PR_SVE_VL_LEN_MASK is outside
+              the range SVE_VL_MIN..SVE_VL_MAX, or is not a multiple of 16.
+
+              On success, a nonnegative value is returned that  describes  the
+              selected  configuration,  which may differ from the current con-
+              figuration if PR_SVE_SET_VL_ONEXEC was specified.  The value  is
+              encoded in the same way as the return value of PR_SVE_GET_VL.
+
+              The  configuration  (including  any  pending deferred change) is
+              inherited across fork(2) and clone(2).
+
+              For more information, see  the  kernel  source  file  Documenta-
+              tion/arm64/sve.rst  (or Documentation/arm64/sve.txt before Linux
+              5.3).
+
+              Warning: Because the compiler or  run-time  environment  may  be
+              using SVE, using this call without the PR_SVE_SET_VL_ONEXEC flag
+              can lead to unpredicable behaviour in the calling process.   The
+              conditions for using it safely are complex and system-dependent.
+              Don't use it unless you really know what you are doing.
+
+-->8--
