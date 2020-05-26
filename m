@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BBB1E3266
-	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 00:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9241E3353
+	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 01:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391595AbgEZWXc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 May 2020 18:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
+        id S2389745AbgEZXAh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 May 2020 19:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389382AbgEZWXc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 May 2020 18:23:32 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB357C061A0F;
-        Tue, 26 May 2020 15:23:30 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id z26so10821745pfk.12;
-        Tue, 26 May 2020 15:23:30 -0700 (PDT)
+        with ESMTP id S2389579AbgEZXAg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 May 2020 19:00:36 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236BEC061A0F;
+        Tue, 26 May 2020 16:00:36 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id n15so491399pjt.4;
+        Tue, 26 May 2020 16:00:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=g70fzYswEC8HrYqT6MEAf4OLxXoMz4BqVHGqp/tb5jI=;
-        b=QuwxUqpiqAKsubBszgvzAdntvuvl+6RVP4dlKUG5jZQktdEmErRwK6l+F5VjwxVq6P
-         44A0tu4Dk5sX3Krp+K9vzk+IJoMPQ6WkOxCE+FfNz3alARAadkV+4UDE0rhT+5RQONgm
-         DZjfbcS9YprBlOH4LEw8w/M+j1qFBXpgf7RCD1/zzS1bAsav/P48luhNo4MFbisNlk6E
-         K47Db7YuA52V+mAL3HoOcJfKPF1pzEhNJy+Ga39Y1C5N6qiE0ILTQhv3BBD5YTcuCkiV
-         l1HfvO93JsxAR6vPfislP/JMFVoLNVzQlbrW7UNRlbMDlEuK+899rKRQ387zFOXaqlp3
-         LAoA==
+        bh=CCd7Vtb/eQ9Zt//vnQsGWWLBXoCU2zwFDR1s9G+IfPc=;
+        b=uaiTTtc9dI0vOan4RIKV0wMf5/k3LzOSUJth08vgL0DOo94ZtFAZR41yh2AgEi7Y+R
+         +5kKjD/pius9sDnLO0++GL2APlxN0dFYP0OPgNP1qyHIG4muDykXTvkqeUbfzm9NgD3o
+         iQqJY+4MO67++SGLwgnPxplalX2/L5KbV90cSuGoWwjreyc2AQ9uPyW0gpVLQJPcdNDi
+         ciEIz/ACV9SFI4/cSzTtLeoWn1vJ2ovRKpUjxdkLZoM9c0eFW0wbh5wEujUQG3uL/73k
+         2s0+kX9ZbkAWZgwkp7gHR4y/MF/5Wj8mfFxQzwl6BGrNhCxXv1e0+zcQ//n8YjVDFajC
+         8bwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=g70fzYswEC8HrYqT6MEAf4OLxXoMz4BqVHGqp/tb5jI=;
-        b=ezElZzMczHHpbSQgBRMf48nnzweuzdsbd/IjZh7hPBj42AenO85nWOYOx0Oow5qDOo
-         SeXxyaUvE6MWiED/KIgDKWf+L7s5/jwBqTmWE+NIAgN1r+0fXXlzsgnrXZhBN5JIWwK/
-         1evchYfiwn6P+JuRTYdHuMgiQexpIHGLks3OkORP03ePfJ7XAcKbSOx6me901PKvb6AK
-         qrFYC0sJiwI7jWC+RMDbQngEFs3XqIxSqIVlIryz+AIFNVTVlVWPHHrEOPokxyGqPAGW
-         iNVlnqz+7PVA2r80fzkLvKfpUgFctyy2Wyc9TZti+j0psqdvkUlylcTF1ltM4NKmORr+
-         NXlg==
-X-Gm-Message-State: AOAM532v2NmjQV9r4yziYyTZhCsdPf66cyLYuCt5riGeMwpBGvEIzg3U
-        ddx6O5nBKQAGvGbA3KropzQsz92ciVc=
-X-Google-Smtp-Source: ABdhPJz/MfMI3dIM8HjADVKC8SJmSd++dFtFBjajoAEp1B8ZfQAylAu+XKAPph7dj2hODmA788+hdA==
-X-Received: by 2002:a63:504d:: with SMTP id q13mr985857pgl.330.1590531809784;
-        Tue, 26 May 2020 15:23:29 -0700 (PDT)
+        bh=CCd7Vtb/eQ9Zt//vnQsGWWLBXoCU2zwFDR1s9G+IfPc=;
+        b=kpLjuR0JQlktpAgZJVltBjNMkcvlpiStxNkW8ofAiOieCRf8E0bWaiCdIKORr/Cn3+
+         TAuhX87lD4st/ryjyF+w/rYJfBabhe7sTCGi7DmWXa94OFEOgVA+quFEYjDExiiDtgec
+         ADIawLC+fWzI7IvuuRkxGyYeVZSOFduhbDwXiFY52HcIGPhZ5nRtp/nh8uLHxrBewXgA
+         E/70iCeRbtKuw0BTbyM48E26QiL0BjniC2wvnhIQGJn/2/ICNxZfJ1HzrnvLvHy/3aRz
+         hP99FvxaWg9+h+pmcHajcJzF2dmJZcOgrxukV9xPGjC3BhgSggmhwYS0aIh696CO+9aY
+         E79w==
+X-Gm-Message-State: AOAM532vFon4m30JvKNre28T/ZxfXzWp3DB2SWduVrrJw2DyyDPNP0Yx
+        e5scF1thurn2HMVgzzBpDZMrJjxap0U=
+X-Google-Smtp-Source: ABdhPJys9Mh3yxXBue9FLvcm9GHwfvHUOkIO6WHCL4taPoDYotQHL2gWm0yvyQjiGRjGj59vDAZpkA==
+X-Received: by 2002:a17:90a:1b6c:: with SMTP id q99mr1584654pjq.214.1590534035171;
+        Tue, 26 May 2020 16:00:35 -0700 (PDT)
 Received: from [192.168.11.3] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id y18sm443907pfr.100.2020.05.26.15.23.25
+        by smtp.gmail.com with ESMTPSA id q100sm471944pjc.11.2020.05.26.16.00.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2020 15:23:29 -0700 (PDT)
+        Tue, 26 May 2020 16:00:34 -0700 (PDT)
 Subject: Re: Some -serious- BPF-related litmus tests
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     luc.maranget@inria.fr, Andrii Nakryiko <andriin@fb.com>,
@@ -69,14 +69,15 @@ References: <20200522003850.GA32698@paulmck-ThinkPad-P72>
  <69ed3604-4275-d73e-a5d6-2b70dd877104@gmail.com>
  <CAEf4BzajE6jCkbBQ+f0cG=Y+vAEPWGNhfOMFVVhoDZWjNV-oGA@mail.gmail.com>
  <d1113b47-a920-c0e4-9aa4-88781368a26f@gmail.com>
- <CAEf4BzZ0mCmUomn0poLk_ADJs9J-fZ0Um6QEqwg1TUL86TtgUg@mail.gmail.com>
+ <b92f9c0a-826c-d074-5389-8c340f7cccf2@gmail.com>
+ <CAEf4BzZF6JO9Tpc2wRk1GDHKfDr0LeYz7LrHz93W1uNjSaq=bg@mail.gmail.com>
 From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <ce622dcb-9527-8450-6cc3-ed068a5313c3@gmail.com>
-Date:   Wed, 27 May 2020 07:23:24 +0900
+Message-ID: <e994dbc1-4b8c-971f-5ec9-4e039b2658a2@gmail.com>
+Date:   Wed, 27 May 2020 08:00:25 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzZ0mCmUomn0poLk_ADJs9J-fZ0Um6QEqwg1TUL86TtgUg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZF6JO9Tpc2wRk1GDHKfDr0LeYz7LrHz93W1uNjSaq=bg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
@@ -85,210 +86,227 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 26 May 2020 13:15:49 -0700, Andrii Nakryiko wrote:
-> On Tue, May 26, 2020 at 3:50 AM Akira Yokosawa <akiyks@gmail.com> wrote=
+On Tue, 26 May 2020 13:19:36 -0700, Andrii Nakryiko wrote:
+> On Tue, May 26, 2020 at 7:02 AM Akira Yokosawa <akiyks@gmail.com> wrote=
 :
 >>
->> On Mon, 25 May 2020 16:31:05 -0700, Andrii Nakryiko wrote:
->>> On Mon, May 25, 2020 at 3:01 PM Akira Yokosawa <akiyks@gmail.com> wro=
-te:
+>> On Tue, 26 May 2020 19:50:47 +0900, Akira Yokosawa wrote:
+>>> On Mon, 25 May 2020 16:31:05 -0700, Andrii Nakryiko wrote:
+>>>> On Mon, May 25, 2020 at 3:01 PM Akira Yokosawa <akiyks@gmail.com> wr=
+ote:
+>>>>>
+>>> [...]
+>>>>> Yes, that should work.
 >>>>
->> [...]
->>>> Yes, that should work.
->>>
->>> Ok, assigning to zero didn't work (it still complained about
->>> uninitialized read), but using a separate int *lenFail to assign to
->>> rLenPtr worked. Curiously, if I used rLenPtr =3D len1; in error case,=
- it
->>> actually takes a bit more time to verify.
->>>
->>> So I've converted everything else as you suggested. I compiled latest=
+>>>> Ok, assigning to zero didn't work (it still complained about
+>>>> uninitialized read), but using a separate int *lenFail to assign to
+>>>> rLenPtr worked. Curiously, if I used rLenPtr =3D len1; in error case=
+, it
+>>>> actually takes a bit more time to verify.
+>>>>
+>>>> So I've converted everything else as you suggested. I compiled lates=
+t
+>>>> herd7 and it doesn't produce any warnings. But it's also extremely
+>>>> slow, compared to the herd7 that I get by default. Validating simple=
 
->>> herd7 and it doesn't produce any warnings. But it's also extremely
->>> slow, compared to the herd7 that I get by default. Validating simple
->>> 1p1c cases takes about 2.5x times longer (0.03s vs 0.07), but trying
->>> to validate 2p1c case, which normally validates in 42s (unbounded) an=
-d
->>> 110s (bounded), it took more than 20 minutes and hasn't finished,
->>> before I gave up. So I don't know what's going on there...
+>>>> 1p1c cases takes about 2.5x times longer (0.03s vs 0.07),
 >>
->> herdtools7 has recently been heavily restructured.
->> On the performance regression, I must defer to Luc.
+>> Wait a moment!
 >>
->> Luc, do you have any idea?
+>> This 0.03s was the run time of the original 1p1c litmus test, wasn't i=
+t?
+>> Then you are comparing apples and oranges.
 >>
->>>
->>> As for klitmus7, I managed to generate everything without warnings,
->>> but couldn't make it build completely due to:
->>>
->>> $ make
->>> make -C /lib/modules/5.6.13-01802-g938d64da97c6/build/
+>> How long does your default herd7 take to complete the updated 1p1c tes=
+t?
 >>
->> So you are on Linux 5.6.x which requires cutting-edge klitmus7.
->>
+>>         Thanks, Akira
 >=20
-> Right, so I retried with the klitmus7 built from sources:
+> It could be new test vs old test, so I re-ran again. Identical
+> 1p1c-unbound test:
 >=20
-> $ klitmus7 -version
+> OLD version:
 >=20
->                                     7.55+01(dev)
+> $ herd7 -version && herd7 -unroll 0 -conf linux-kernel.cfg
+> ../../Documentation/litmus-tests/bpf-rb/bpf-rb+1p1c+unbound.litmus
+> 7.52, Rev: exported
+> Test bpf-rb+1p1c+unbound Allowed
+> States 2
+> 0:rFail=3D0; 1:rFail=3D0; cx=3D0; len1=3D1; px=3D1;
+> 0:rFail=3D0; 1:rFail=3D0; cx=3D1; len1=3D1; px=3D1;
+> Ok
+> Witnesses
+> Positive: 3 Negative: 0
+> Condition exists (0:rFail=3D0 /\ 1:rFail=3D0 /\ px=3D1 /\ len1=3D1 /\ (=
+cx=3D0 \/ cx=3D1))
+> Observation bpf-rb+1p1c+unbound Always 3 0
+> Time bpf-rb+1p1c+unbound 0.03
+> Hash=3D20a68cc69b09fbb79f407f825c015623
 >=20
-> Still can't compile, though task_struct problem went away, proc_ops
-> error is still present:
+> LATEST from sources version:
 >=20
-> $ make
-> grep: /lib/modules/5.7.0-rc5-02014-gb16540c748e9/build/include/linux/pr=
-oc_fs.h:
-> No such file or directory
+> $ herd7 -version && herd7 -unroll 0 -conf linux-kernel.cfg
+> ../../Documentation/litmus-tests/bpf-rb/bpf-rb+1p1c+unbound.litmus
+> 7.55+01(dev), Rev: 61e23aaee7bba87ccf4cdf1a620a3a9fa8f9a586
+> Test bpf-rb+1p1c+unbound Allowed
+> States 2
+> 0:rFail=3D0; 1:rFail=3D0; cx=3D0; len1=3D1; px=3D1;
+> 0:rFail=3D0; 1:rFail=3D0; cx=3D1; len1=3D1; px=3D1;
+> Ok
+> Witnesses
+> Positive: 3 Negative: 0
+> Condition exists (0:rFail=3D0 /\ 1:rFail=3D0 /\ px=3D1 /\ len1=3D1 /\ (=
+cx=3D0 \/ cx=3D1))
+> Observation bpf-rb+1p1c+unbound Always 3 0
+> Time bpf-rb+1p1c+unbound 0.06
+> Hash=3D20a68cc69b09fbb79f407f825c015623
+>=20
+> Still 2x difference.
 
-Hmm, have you installed kernel-headers on your system?
-You are now on Linux 5.7-rc5 based system...
+I see opposite tendency on a different set of time consuming
+litmus tests comparing herd7 7.52 and HEAD.
+
+                                                herd7 7.52     herd7 HEAD=
+
+C-SB+l-o-o-u+l-o-o-u+l-o-o-u+l-o-o-u+l-o-o-u      8.44           6.12
+C-SB+l-o-o-u+l-o-o-u+l-o-o-u+l-o-o-u-C           77.19          69.92
+C-SB+l-o-o-u+l-o-o-u+l-o-o-u+l-o-o-u-CE         355.62         287.27
+C-SB+l-o-o-u+l-o-o-u+l-o-o-u+l-o-o-u-X          157.87         191.50
+C-SB+l-o-o-u+l-o-o-u+l-o-o-u+l-o-o-u              2.36           0.94
+C-SB+l-o-o-u+l-o-o-u-+l-o-o-u-C                   2.32           0.93
+C-SB+l-o-o-u+l-o-o-u-+l-o-o-u-CE                  5.64           3.52
+C-SB+l-o-o-u+l-o-o-u+l-o-o-u-X                    3.18           2.52
+C-SB+l-o-o-u+l-o-o-u+l-o-o-u-XE                  11.81          10.35
+C-SB+l-o-o-u+l-o-o-u+l-o-o-u                      0.25           0.19
+C-SB+l-o-o-u+l-o-o-u-C                            0.15           0.12
+C-SB+l-o-o-u+l-o-o-u-CE                           0.26           0.20
+C-SB+l-o-o-u+l-o-o-u-X                            0.17           0.14
+C-SB+l-o-o-u+l-o-o-u-XE                           0.38           0.30
+C-SB+l-o-o-u+l-o-o-u                              0.04           0.03
+
+NOTE: These were taken on a fairly old PC, with power-saving mode enabled=
+=2E
+
+Did you used the original 1p1c unbound test?
+I'd like you to compare the updated 1p1c unbound test.
 
         Thanks, Akira
 
-> make -C /lib/modules/5.7.0-rc5-02014-gb16540c748e9/build/
-> M=3D/home/andriin/local/linux-trees/tools/memory-model/mymodules module=
-s
-> make[1]: Entering directory `/data/users/andriin/linux-build/fb-config'=
+>=20
+>>
+>>>>                                                           but trying=
 
-> make[2]: Entering directory `/data/users/andriin/linux-build/default-x8=
-6_64'
-> grep: /lib/modules/5.7.0-rc5-02014-gb16540c748e9/build/include/linux/pr=
-oc_fs.h:
-> No such file or directory
->   CC [M]  /home/andriin/local/linux-trees/tools/memory-model/mymodules/=
-litmus000.o
-> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus000.=
-c:
-> In function =E2=80=98litmus_init=E2=80=99:
-> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus000.=
-c:621:67:
-> error: passing argument 4 of =E2=80=98proc_create=E2=80=99 from incompa=
-tible pointer
-> type [-Werror=3Dincompatible-pointer-types]
->    struct proc_dir_entry *litmus_pde =3D
-> proc_create("litmus",0,NULL,&litmus_proc_ops);
->=20
-> ^~~~~~~~~~~~~~~~
-> In file included from
-> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus000.=
-c:15:
-> /data/users/andriin/linux/include/linux/proc_fs.h:79:24: note:
-> expected =E2=80=98const struct proc_ops *=E2=80=99 but argument is of t=
-ype =E2=80=98const
-> struct file_operations *=E2=80=99
->  struct proc_dir_entry *proc_create(const char *name, umode_t mode,
-> struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
->                         ^~~~~~~~~~~
-> cc1: some warnings being treated as errors
-> make[3]: *** [/home/andriin/local/linux-trees/tools/memory-model/mymodu=
-les/litmus000.o]
-> Error 1
-> make[2]: *** [/home/andriin/local/linux-trees/tools/memory-model/mymodu=
-les]
-> Error 2
-> make[2]: Leaving directory `/data/users/andriin/linux-build/default-x86=
-_64'
-> make[1]: *** [sub-make] Error 2
-> make[1]: Leaving directory `/data/users/andriin/linux-build/fb-config'
-> make: *** [all] Error 2
->=20
-> Don't know if I'm missing some headers or whatever.
->=20
->>> M=3D/home/andriin/local/linux-trees/tools/memory-model/mymodules modu=
-les
->>> make[1]: Entering directory `/data/users/andriin/linux-build/fb-confi=
-g'
->>> make[2]: Entering directory `/data/users/andriin/linux-build/default-=
+>>>> to validate 2p1c case, which normally validates in 42s (unbounded) a=
+nd
+>>>> 110s (bounded), it took more than 20 minutes and hasn't finished,
+>>>> before I gave up. So I don't know what's going on there...
+>>>
+>>> herdtools7 has recently been heavily restructured.
+>>> On the performance regression, I must defer to Luc.
+>>>
+>>> Luc, do you have any idea?
+>>>
+>>>>
+>>>> As for klitmus7, I managed to generate everything without warnings,
+>>>> but couldn't make it build completely due to:
+>>>>
+>>>> $ make
+>>>> make -C /lib/modules/5.6.13-01802-g938d64da97c6/build/
+>>>
+>>> So you are on Linux 5.6.x which requires cutting-edge klitmus7.
+>>>
+>>>> M=3D/home/andriin/local/linux-trees/tools/memory-model/mymodules mod=
+ules
+>>>> make[1]: Entering directory `/data/users/andriin/linux-build/fb-conf=
+ig'
+>>>> make[2]: Entering directory `/data/users/andriin/linux-build/default=
+-x86_64'
+>>>>   CC [M]  /home/andriin/local/linux-trees/tools/memory-model/mymodul=
+es/litmus000.o
+>>>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus0=
+00.c:
+>>>> In function =E2=80=98zyva=E2=80=99:
+>>>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus0=
+00.c:507:12:
+>>>> warning: ISO C90 forbids variable length array =E2=80=98th=E2=80=99 =
+[-Wvla]
+>>>>      struct task_struct *th[nth];
+>>>>             ^~~~~~~~~~~
+>>>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus0=
+00.c:
+>>>> In function =E2=80=98litmus_init=E2=80=99:
+>>>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus0=
+00.c:605:67:
+>>>> error: passing argument 4 of =E2=80=98proc_create=E2=80=99 from inco=
+mpatible pointer
+>>>> type [-Werror=3Dincompatible-pointer-types]
+>>>>    struct proc_dir_entry *litmus_pde =3D
+>>>> proc_create("litmus",0,NULL,&litmus_proc_fops);
+>>>>
+>>>> ^~~~~~~~~~~~~~~~~
+>>>> In file included from
+>>>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus0=
+00.c:15:
+>>>> /data/users/andriin/linux-fb/include/linux/proc_fs.h:64:24: note:
+>>>> expected =E2=80=98const struct proc_ops *=E2=80=99 but argument is o=
+f type =E2=80=98const
+>>>> struct file_operations *=E2=80=99
+>>>>  struct proc_dir_entry *proc_create(const char *name, umode_t mode,
+>>>> struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
+>>>>                         ^~~~~~~~~~~
+>>>> cc1: some warnings being treated as errors
+>>>> make[3]: *** [/home/andriin/local/linux-trees/tools/memory-model/mym=
+odules/litmus000.o]
+>>>> Error 1
+>>>> make[2]: *** [/home/andriin/local/linux-trees/tools/memory-model/mym=
+odules]
+>>>> Error 2
+>>>> make[2]: Leaving directory `/data/users/andriin/linux-build/default-=
 x86_64'
->>>   CC [M]  /home/andriin/local/linux-trees/tools/memory-model/mymodule=
-s/litmus000.o
->>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus00=
-0.c:
->>> In function =E2=80=98zyva=E2=80=99:
->>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus00=
-0.c:507:12:
->>> warning: ISO C90 forbids variable length array =E2=80=98th=E2=80=99 [=
--Wvla]
->>>      struct task_struct *th[nth];
->>>             ^~~~~~~~~~~
->>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus00=
-0.c:
->>> In function =E2=80=98litmus_init=E2=80=99:
->>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus00=
-0.c:605:67:
->>> error: passing argument 4 of =E2=80=98proc_create=E2=80=99 from incom=
-patible pointer
->>> type [-Werror=3Dincompatible-pointer-types]
->>>    struct proc_dir_entry *litmus_pde =3D
->>> proc_create("litmus",0,NULL,&litmus_proc_fops);
+>>>> make[1]: *** [sub-make] Error 2
+>>>> make[1]: Leaving directory `/data/users/andriin/linux-build/fb-confi=
+g'
+>>>> make: *** [all] Error 2
+>>>>
 >>>
->>> ^~~~~~~~~~~~~~~~~
->>> In file included from
->>> /home/andriin/local/linux-trees/tools/memory-model/mymodules/litmus00=
-0.c:15:
->>> /data/users/andriin/linux-fb/include/linux/proc_fs.h:64:24: note:
->>> expected =E2=80=98const struct proc_ops *=E2=80=99 but argument is of=
- type =E2=80=98const
->>> struct file_operations *=E2=80=99
->>>  struct proc_dir_entry *proc_create(const char *name, umode_t mode,
->>> struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
->>>                         ^~~~~~~~~~~
->>> cc1: some warnings being treated as errors
->>> make[3]: *** [/home/andriin/local/linux-trees/tools/memory-model/mymo=
-dules/litmus000.o]
->>> Error 1
->>> make[2]: *** [/home/andriin/local/linux-trees/tools/memory-model/mymo=
-dules]
->>> Error 2
->>> make[2]: Leaving directory `/data/users/andriin/linux-build/default-x=
-86_64'
->>> make[1]: *** [sub-make] Error 2
->>> make[1]: Leaving directory `/data/users/andriin/linux-build/fb-config=
-'
->>> make: *** [all] Error 2
+>>> These errors suggest the klitmus7 you used is version 7.52 or some su=
+ch.
+>>> You said you have built herd7 from the source.  Have you also built k=
+litmus7?
 >>>
->>
->> These errors suggest the klitmus7 you used is version 7.52 or some suc=
-h.
->> You said you have built herd7 from the source.  Have you also built kl=
-itmus7?
->=20
-> I did, but it wasn't in the PATH. I retried with latest klitmus7 and
-> still run into problems.
->=20
->>
->> The up-to-date klitmus7 should generate code compatible with Linux 5.6=
-=2Ex.
->>
->> Could you try with the latest one?
->>
->>         Thanks, Akira
->>
+>>> The up-to-date klitmus7 should generate code compatible with Linux 5.=
+6.x.
 >>>
->>> But at least it doesn't complain about atomic_t anymore. So anyways,
->>> I'm going to post updated litmus tests separately from BPF ringbuf
->>> patches, because Documentation/litmus-tests is not yet present in
->>> bpf-next.
+>>> Could you try with the latest one?
+>>>
+>>>         Thanks, Akira
 >>>
 >>>>
->>>> You can find a basic introduction of klitmus7 in tools/memory-model/=
-README.
->>>>
->>>>         Thanks, Akira
+>>>> But at least it doesn't complain about atomic_t anymore. So anyways,=
+
+>>>> I'm going to post updated litmus tests separately from BPF ringbuf
+>>>> patches, because Documentation/litmus-tests is not yet present in
+>>>> bpf-next.
 >>>>
 >>>>>
+>>>>> You can find a basic introduction of klitmus7 in tools/memory-model=
+/README.
+>>>>>
+>>>>>         Thanks, Akira
+>>>>>
 >>>>>>
->>>>>> Please note that if you are on Linux 5.6 (or later), you need an u=
-p-to-date
->>>>>> klitmus7 due to a change in kernel API.
->>>>>>
->>>>>> Any question is welcome!
->>>>>>
->>>>>>         Thanks, Akira
->>>>>>
->>>
->>> [...]
+>>>>>>>
+>>>>>>> Please note that if you are on Linux 5.6 (or later), you need an =
+up-to-date
+>>>>>>> klitmus7 due to a change in kernel API.
+>>>>>>>
+>>>>>>> Any question is welcome!
+>>>>>>>
+>>>>>>>         Thanks, Akira
+>>>>>>>
+>>>>
+>>>> [...]
+>>>>
 >>>
 >>
 
