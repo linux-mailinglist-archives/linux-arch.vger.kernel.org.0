@@ -2,160 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E970C1E356E
-	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 04:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D881E3635
+	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 05:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725905AbgE0CRe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 May 2020 22:17:34 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:61628 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725271AbgE0CRe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 26 May 2020 22:17:34 -0400
-X-Greylist: delayed 311 seconds by postgrey-1.27 at vger.kernel.org; Tue, 26 May 2020 22:17:31 EDT
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1590545853; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=Bmk5WkxY5L5x6WBMTF6uxk/H1gCBb/eUTlTTCX/Pjmw=; b=Fk/T8J31FrhT2w8JmhtKf9snKPGB9fTwSe6dVHQKJwH1wfxbDtE7mVnzuysSfRlobdaSmQbw
- 3VxexfTEnxeiDXonlmZ+TqkwIEfbpjz851sK0gzY/ExZHlbcHNbzL1xH7Ra7MtZtArIGhE8x
- XKnG3dnydNQg0TjHckt9DLflBRA=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5MDNlZiIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 5ecdcc76cb045869337fdaed (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 27 May 2020 02:12:06
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 29FB9C43387; Wed, 27 May 2020 02:12:05 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from pdaly-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pdaly)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id CAB9AC433C9;
-        Wed, 27 May 2020 02:12:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CAB9AC433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=pdaly@codeaurora.org
-Date:   Tue, 26 May 2020 19:11:53 -0700
-From:   Patrick Daly <pdaly@codeaurora.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arch@vger.kernel.org,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 24/26] arm64: mte: Introduce early param to disable
- MTE support
-Message-ID: <20200527021153.GA24439@pdaly-linux.qualcomm.com>
-References: <20200515171612.1020-1-catalin.marinas@arm.com>
- <20200515171612.1020-25-catalin.marinas@arm.com>
- <a2ad6cbf-2632-3cda-eb49-74ddfbed2cec@arm.com>
- <20200518113103.GA32394@willie-the-truck>
- <20200518172054.GL9862@gaia>
- <20200522055710.GA25791@pdaly-linux.qualcomm.com>
- <20200522103714.GA26492@gaia>
+        id S1728400AbgE0DHm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 May 2020 23:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725893AbgE0DHm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 May 2020 23:07:42 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A995CC061A0F;
+        Tue, 26 May 2020 20:07:41 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id c20so22643120ilk.6;
+        Tue, 26 May 2020 20:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=NoLQZ4xLsmiigYDKwkyKj0BqR8pGmA2XjKXfyOFiOGQ=;
+        b=ecfBllBPvCa8XsDJLnfADTkGN6+8/grXE/wm7/P7v6KQSOnpvILfr+A6G3RD8gSt1V
+         bcG0w7NqoMDFPFyROpM8wFf1TYhiaV8A/yQdMf9lkSv2kwCGRV5h7KxRLIdClrUbpvPy
+         Z6M31H9tEWows4qRtj1lW1QCP3kCmsDMg3qLw7KmFS9Pc78lBjjoNaVC2JVWePQNm4ly
+         Tidg8o08isU+NfUD2ZB/3QCYh3eoTB5tJsct5E8/E1FGNgWlwWvgNzZltULIrNilc3rv
+         IGxIk+BMAQxjIZ0ACpSWUyfugyumeGFBCfSjXGxQ2ryIa+/Q00dCx2AwZR+HOHTOxdHK
+         8Teg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NoLQZ4xLsmiigYDKwkyKj0BqR8pGmA2XjKXfyOFiOGQ=;
+        b=IlVUS3JGcm6yv//f30wWqtRqgLJqg0oM/QYlqDL8UQNBnd7paJR8IKrAgTtcgjnzbY
+         a1n+L1jHDRitLBT3YhNbSE6psnlfPgIWDI7d1yqYmVpMARtlDLFtLPtm3UeJJrMpz9dZ
+         h3B3FsbBGu9HfxWCMr/DD1RuQK2d3PWj3zVwz2r83MUpVhKagl7iMCg1GMi/oQkjCneR
+         oTItvoAGeDGximB7EBK3sPR+N68/J8fHaEO/bNaz4rh2E6CkL6cYTBqdSCF57M8sDLU5
+         /t/lVRi3bw96BRABNTbwpFMqDsJ6c3xXi3VV532oYHdVqO75XYW3Z08Gz8aiQesLc4qx
+         wMew==
+X-Gm-Message-State: AOAM530DV6W6SLZlEunsNyi2wiqnupHOfVtXmI6CQHgBUrPmO06n8Rc6
+        ZA4xGqjRAJn9ZoS9B6l2pFzr3kd1RbEjBr1b2yc=
+X-Google-Smtp-Source: ABdhPJxoQlLUksMMTrEeJnBpX7aUmXahzXq+87mU2xG6zjv9GcII3cRppMGcRbjSLU7EEh3E31xctx4o5xAsG0rwNZg=
+X-Received: by 2002:a92:1b86:: with SMTP id f6mr2004630ill.9.1590548860893;
+ Tue, 26 May 2020 20:07:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200522103714.GA26492@gaia>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <20200526205322.23465-1-mic@digikod.net> <20200526205322.23465-8-mic@digikod.net>
+In-Reply-To: <20200526205322.23465-8-mic@digikod.net>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 27 May 2020 06:07:29 +0300
+Message-ID: <CAOQ4uxibpDTyjCJWLGG9jr-Gv9PwO==o50b9O8HGQeUfVMDFag@mail.gmail.com>
+Subject: Re: [PATCH v18 07/12] landlock: Support filesystem access-control
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
+        Richard Weinberger <richard@nod.at>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 22, 2020 at 11:37:15AM +0100, Catalin Marinas wrote:
-> Hi Patrick,
-> 
-> On Thu, May 21, 2020 at 10:57:10PM -0700, Patrick Daly wrote:
-> > On Mon, May 18, 2020 at 06:20:55PM +0100, Catalin Marinas wrote:
-> > > On Mon, May 18, 2020 at 12:31:03PM +0100, Will Deacon wrote:
-> > > > On Mon, May 18, 2020 at 12:26:30PM +0100, Vladimir Murzin wrote:
-> > > > > On 5/15/20 6:16 PM, Catalin Marinas wrote:
-> > > > > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > > index f2a93c8679e8..7436e7462b85 100644
-> > > > > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > > > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > > @@ -373,6 +373,10 @@
-> > > > > >  	arcrimi=	[HW,NET] ARCnet - "RIM I" (entirely mem-mapped) cards
-> > > > > >  			Format: <io>,<irq>,<nodeID>
-> > > > > >  
-> > > > > > +	arm64.mte_disable=
-> > > > > > +			[ARM64] Disable Linux support for the Memory
-> > > > > > +			Tagging Extension (both user and in-kernel).
-> > > > > > +
-> > > > > 
-> > > > > Should it really to take parameter (on/off/true/false)? It may lead to expectation
-> > > > > that arm64.mte_disable=false should enable MT and, yes, double negatives make it
-> > > > > look ugly, so if we do need parameter, can it be arm64.mte=on/off/true/false?
-> > > > 
-> > > > I don't think "performance analysis" is a good justification for this
-> > > > parameter tbh. We don't tend to add these options for other architectural
-> > > > features, and I don't see why MTE is any different in this regard.
-> > > 
-> > > There is an expectation of performance impact with MTE enabled,
-> > > especially if it's running in synchronous mode. For the in-kernel MTE,
-> > > we could add a parameter which sets sync vs async at boot time rather
-> > > than a big disable knob. It won't affect user space however.
-> > > 
-> > > The other 'justification' is if your hardware has weird unexpected
-> > > behaviour but I'd like this handled via errata workarounds.
-> > > 
-> > > I'll let the people who asked for this to chip in ;). I agree with you
-> > > that we rarely add these (and I rejected a similar option a few weeks
-> > > ago on the AMU patchset).
-> > 
-> > We've been looking into other ways this on/off behavior could be achieved.
-> 
-> The actual question here is what the on/off behaviour is needed for. We
-> can figure out the best mechanism for this once we know what we want to
-> achieve. My wild guess above was performance analysis but that can be
-> toggled by either kernel boot parameter or run-time sysctl (or just the
-> Kconfig option).
-> 
-> If it is about forcing user space not to use MTE, we may look into some
-> other sysctl controls (we already have one for the tagged address ABI).
+On Wed, May 27, 2020 at 3:36 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+>
+> Thanks to the Landlock objects and ruleset, it is possible to identify
+> inodes according to a process's domain.  To enable an unprivileged
+> process to express a file hierarchy, it first needs to open a directory
+> (or a file) and pass this file descriptor to the kernel through
+> landlock(2).  When checking if a file access request is allowed, we walk
+> from the requested dentry to the real root, following the different
+> mount layers.  The access to each "tagged" inodes are collected
+> according to their rule layer level, and ANDed to create access to the
+> requested file hierarchy.  This makes possible to identify a lot of
+> files without tagging every inodes nor modifying the filesystem, while
+> still following the view and understanding the user has from the
+> filesystem.
+>
 
-We want to allow the end user to be able to easily "opt out" of MTE in favour
-of better power, perf and battery life.
+Hi Mickael,
 
-In terms of deciding policy, a sysctl is much more accessible than
-reompiling with CONFIG_MTE=n, or replacing userspace libraries with
-equivalents which don't use PROT_MTE.
+Nice work! I am interested in the problem of system wide file access
+rules based on directory hierarchy [1][2]. Not the same problem, but
+with obvious overlaps.
 
---Patrick
+I sketched this untested POC [2] a while ago -
+It introduces the concept of "border control" LSM hooks to avoid the
+need to check which sections in the hierarchy an inode belongs to
+on every syscall.
 
-> 
-> If it is for working around hardware not supporting MTE (i.e. no
-> allocation tag storage), this should be handled differently, not by
-> kernel parameter.
-> 
-> > The "arm,armv8.5-memtag" DT flag already provides what we want - meaning
-> > that this flag could be removed if the system did not support MTE.
-> > 
-> > I did see your remark on "arm64: mte: Check the DT memory nodes for MTE support"
-> > questioning whether it was the right approach - is this still the case?
-> 
-> My plan is to remove the DT patch altogether _if_ I get confirmation
-> from the CPU designers. The idea is that if ID_AA64PFR1_EL1.MTE > 1,
-> Linux can assume system-wide MTE support. If an MTE-capable CPU is
-> deployed in an SoC without tag storage, a tie-off should change the ID
-> field to 1 (or 0). If we do find hardware with an ID field > 1 and no
-> tag storage, it will be handled as an SoC erratum in the kernel,
-> probably tied to the new SoC Id advertised by firmware (Sudeep had some
-> patches recently).
+With this, you could cache a topology with id's per section and
+cache the section id + topology generation in the inode's security state.
+When inode crosses border control hooks, it's section id is updated.
+When directory hierarchy topology changes, some or all of the cached
+section id's are invalidated and rules <-> sections relations may need
+to be changed.
 
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Do you think something like that could be useful for landlock?
+
+Note that the POC is using d_mountpoint() as the only type of "fence"
+mark. It is sufficient for controlling rename in and out of containers, so
+I just used an already available dentry flag for "fence".
+If the border control hook concept is useful, this could be extended to
+a more generic d_border_passing(), with some internal kernel API
+to manage it and with all the bike shedding that comes with it...
+
+Thanks,
+Amir.
+
+[1] https://lore.kernel.org/linux-fsdevel/CAOQ4uxhBVhyyJv0+xSFQiGQEj60AbD3S=
+ADfKK40uAiC4GF2p9Q@mail.gmail.com/
+[2] https://lore.kernel.org/linux-fsdevel/CAOQ4uxgn=3DYNj8cJuccx2KqxEVGZy1z=
+3DBVYXrD=3DMc7Dc=3DJe+-w@mail.gmail.com/
+[3] https://github.com/amir73il/linux/commits/rename_xmnt
