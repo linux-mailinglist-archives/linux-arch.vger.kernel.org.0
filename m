@@ -2,83 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4796E1E4D99
-	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 20:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CCE1E4FFA
+	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 23:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728881AbgE0S6E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 May 2020 14:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728814AbgE0S5w (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 May 2020 14:57:52 -0400
-Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A778C08C5C1
-        for <linux-arch@vger.kernel.org>; Wed, 27 May 2020 11:57:51 -0700 (PDT)
-Received: by mail-vk1-xa42.google.com with SMTP id d22so3114903vkf.12
-        for <linux-arch@vger.kernel.org>; Wed, 27 May 2020 11:57:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Fpy63c23dOxhykDpgNkYc0e/jj9ydzntDTyR3TzEzwU=;
-        b=oOKshksVyBGLuBuCUd+quyrBbn2DnFXm50ek2FV+nnWC10Vc2Z+I/gtnZ3IypCD4Fx
-         gXxBIP/wzAOJJn3wMPNcaKdJWfUFEnNJ5iy4/634yFP9C3y53gykgiFGJMLnkrv4pa82
-         VbuMfy2wCmwUgkNUPBxU6zhgaM/LAqgX8x8OcC5SVPHdLp9OCdamyiEYDplt+F6T7rNt
-         CZTpMTKKshLKGQva+1GCcfaQ41m4P/vZatfw8XQwBH6PLECjyYmMfm+6otaRyYZlkoJf
-         +2He5a/1crn1NqJGKgI1w+i51L81dUzCLvEqmjYDk4ee1jckJiZXgZst1qGmRZZ/x/cZ
-         mzTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fpy63c23dOxhykDpgNkYc0e/jj9ydzntDTyR3TzEzwU=;
-        b=C1vdyfSV12wmUpdlpgNwos8wCVFjs7q+48w1umBPhW+RDg2x+2Au6TGovRAkHjeKz9
-         ztBzbmHPpasS3gmvX3+wDvkZaOaI695Q77CvmdCQj58sKwfCFBZoIaB8vzTuLUcr+VMZ
-         4FLoZ+whDnDCmoVNvC4iMWYDkUuAylC3CPLNwYOuYQR4Kr2XwM9Ggk8a1FONQMmsg8aH
-         q1UScjgpGOj5Pbq/eDN2sVseCoXpuJ3xUMCbTZq7gVAsKcGzUWwnG4USScesyjW67+ZZ
-         FbM/j243IKjFSgB/zt04l0CKr5hHHmk1c4MejWV9eiKvNgku5IvOIz9xUbxSgzE5PYNL
-         M4fQ==
-X-Gm-Message-State: AOAM531oetBR6UtcokUmGYrXoR3Frw5ZRZIC6t7oLyFLtvLg12//tkYj
-        JPsGnCEFxJ6y2k+MLOUIN+wT6FepQIf/3bfYkZDDUw==
-X-Google-Smtp-Source: ABdhPJy5pnTtE6wlYRg72H36Ak9B9JFNQGA1lIglUkxy0n+VMKw19LyxtiwzE6wUtHu+jW7Au2sEYmLPPI/5udXhrcU=
-X-Received: by 2002:a1f:bf0e:: with SMTP id p14mr6001114vkf.15.1590605870320;
- Wed, 27 May 2020 11:57:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200515171612.1020-1-catalin.marinas@arm.com> <20200515171612.1020-12-catalin.marinas@arm.com>
-In-Reply-To: <20200515171612.1020-12-catalin.marinas@arm.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Wed, 27 May 2020 11:57:39 -0700
-Message-ID: <CAMn1gO5ApcHOgQ_oLjiGDdCx9znz7N50w-BbzGPYpAzPQC3OQQ@mail.gmail.com>
-Subject: Re: [PATCH v4 11/26] arm64: mte: Add PROT_MTE support to mmap() and mprotect()
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        id S1728717AbgE0VRq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 May 2020 17:17:46 -0400
+Received: from foss.arm.com ([217.140.110.172]:44720 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726482AbgE0VRp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 27 May 2020 17:17:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5206E31B;
+        Wed, 27 May 2020 14:17:45 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 76D0B3F52E;
+        Wed, 27 May 2020 14:17:43 -0700 (PDT)
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Michael Kerrisk <mtk.manpages@gmail.com>
+Cc:     linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Waiman Long <longman@redhat.com>,
         Will Deacon <will@kernel.org>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Evgenii Stepanov <eugenis@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: [PATCH v2 0/6] prctl.2 man page updates for Linux 5.6
+Date:   Wed, 27 May 2020 22:17:32 +0100
+Message-Id: <1590614258-24728-1-git-send-email-Dave.Martin@arm.com>
+X-Mailer: git-send-email 2.1.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 15, 2020 at 10:16 AM Catalin Marinas
-<catalin.marinas@arm.com> wrote:
->
-> To enable tagging on a memory range, the user must explicitly opt in via
-> a new PROT_MTE flag passed to mmap() or mprotect(). Since this is a new
-> memory type in the AttrIndx field of a pte, simplify the or'ing of these
-> bits over the protection_map[] attributes by making MT_NORMAL index 0.
+A bunch of updates to the prctl(2) man page to fill in missing
+prctls (mostly) up to Linux 5.6 (along with a few other tweaks and
+fixes).
 
-Should the userspace stack always be mapped as if with PROT_MTE if the
-hardware supports it? Such a change would be invisible to non-MTE
-aware userspace since it would already need to opt in to tag checking
-via prctl. This would let userspace avoid a complex stack
-initialization sequence when running with stack tagging enabled on the
-main thread.
+Patches from the v1 series [1] that have been applied or rejected
+already have been dropped.
 
-Peter
+People not Cc'd on the whole series can find the whole series at
+https://lore.kernel.org/linux-man/ .
+
+Patches:
+
+ * Patch 1 is a new (but trivial) formatting fix, unrelated to the new
+   prctls.
+
+ * Patches 2-3 relate to the speculation control prctls.  These are
+   unmodified from v1, but need review.
+
+ * Patches 4-5 relate to the arm64 prctls from v1, with reviewer
+   feedback incorporated.  (See notes in the patches.)
+
+ * Patch 6 is *draft* wording for the arm64 address tagging prctls.
+   The semantics of address tagging is particularly slippery, so
+   this needs discussion before merging.
+
+
+[1] https://lore.kernel.org/linux-man/29a02b16-dd61-6186-1340-fcc7d5225ad0@gmail.com/T/#t
+
+
+Dave Martin (6):
+  prctl.2: ffix use literal hyphens when referencing kernel docs
+  prctl.2: Add PR_SPEC_INDIRECT_BRANCH for SPECULATION_CTRL prctls
+  prctl.2: Add PR_SPEC_DISABLE_NOEXEC for SPECULATION_CTRL prctls
+  prctl.2: Add SVE prctls (arm64)
+  prctl.2: Add PR_PAC_RESET_KEYS (arm64)
+  prctl.2: Add tagged address ABI control prctls (arm64)
+
+ man2/prctl.2 | 444 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 435 insertions(+), 9 deletions(-)
+
+-- 
+2.1.4
+
