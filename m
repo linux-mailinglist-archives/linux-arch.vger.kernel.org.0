@@ -2,168 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB6D1E4434
-	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 15:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F371E1E4441
+	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 15:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388661AbgE0Npp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 May 2020 09:45:45 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:36630 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388603AbgE0Npp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 May 2020 09:45:45 -0400
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18CCF5B4;
-        Wed, 27 May 2020 15:45:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1590587141;
-        bh=FOT36A7X8Hk3Rh2sgJfgv1jk67oSyBWaXMLvby3ZVn0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K8tyyqP2+EBqMtHIXAixv68AVoyRavwX2+DntbLh2vrjNKUdhw1kPp5L8v8XcEQke
-         5hoxdGk3u1oikaekAvVN79PzMi7aqfwFJI9F8IdAk1sxTLb8aiHOOnYPs49h177hrO
-         RBBxk1jZGiThAgDTQMwbMwsU3yghDgrHe9UIOuIk=
-Date:   Wed, 27 May 2020 16:45:27 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Roman Zippel <zippel@linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-c6x-dev@linux-c6x.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Arnd Bergmann <arnd@arndb.de>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: omap3isp: Shuffle cacheflush.h and include mm.h
-Message-ID: <20200527134527.GD6171@pendragon.ideasonboard.com>
-References: <20200515143646.3857579-7-hch@lst.de>
- <20200527043426.3242439-1-natechancellor@gmail.com>
- <CAMuHMdVSduTOi5bUgF9sLQdGADwyL1+qALWsKgin1TeOLGhAKQ@mail.gmail.com>
- <20200527081337.GA3506499@ubuntu-s3-xlarge-x86>
+        id S2388565AbgE0NrY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 May 2020 09:47:24 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:38093 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388082AbgE0NrX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 May 2020 09:47:23 -0400
+Received: from threadripper.lan ([149.172.98.151]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MlfCk-1jD5sb39N4-00ili0; Wed, 27 May 2020 15:46:31 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rusty Russell <rusty@rustcorp.com.au>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Richard Henderson <rth@twiddle.net>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cpumask: guard cpumask_of_node() macro argument
+Date:   Wed, 27 May 2020 15:46:08 +0200
+Message-Id: <20200527134623.930247-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200527081337.GA3506499@ubuntu-s3-xlarge-x86>
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:IPQ9B4qOEDeVAT6zCkUFk/+6gE2JJSw998N7HuX7io/aAOYDheD
+ X7YwErGg89se16bhTbTpYxiVy/sw26V0IO/Cfn4vsmDbUr0Mb24lIdcaqoqoY7c4003P+DK
+ YHN04TmVug/66eTQdd3ev9jx1nEETULaY0f+ly7FgTxV1G9cqhn9D0+bToxd4kFFn/L3GaI
+ +UIcf3wttnFElnuPeAO/Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:K+yJ/bPAuoE=:EInc6+3xGy+xs6R42Qb+42
+ YeCHSr7b/3wnG5P+D8owS3CVbIA16q8f/9rY3+UtseNBx4ByBki8PhZRrxXJoFNxe/QxQYEXP
+ JjZbBuCPkTbiGH3Fx1rKtd3sUv8INsHrO1G4diNJqPGQIrFeAPXcljY4WlqZYugGM/m7p4p+h
+ 6xVSRMRJ7MI8szHGihSUT8KybBiDftBRbeLfdWX4c2XArLyH0j0r+XGkhor/Zztm4uJqJKWEI
+ QZjlQ1nDYkmDAc0W4qiqtt7MlrBxmEGscfev2FnmXA0jRY78aRKbbWPJ8FvOx78vNlZyhJ/1h
+ 2d3sj7z52hGAquNP3Yafpz8oyUgcVpFK0p63kCnv3Izzfp8F+DBeRVX+mJi7jt2NAa8CvtCb+
+ yQhp8XUFFjEnTpIr1HtDH9e3VNpyl8gmi1dTwaibVMRcsnqRgYHewjpZi90hWh7BH5AvhJ7vn
+ fgD6WTVKRtH9dDNQQLhWag05DDop4Awos1EpLIfqcvMJFk0xGNAn+yy192lRk2LRIqz8sUENc
+ mO+7Gs6PcSqTYr20bRM+HqazeUSi+zZTCzMZ4oUKsO1MoOLtiOyWLVVRzVqpr/GLm6G2psafE
+ H8bo9D0rQMvkpLc9COWHKcCYSQAunKF6gygRO0tdW3Z8HqitPCEPq+YAiWNSnpLsb1BE6rq4N
+ NizITXqEZsm818NveA0i9kdB8vCDAU41M92Pxz4Z1+OX295FjCqN2V8O8nnSNFItNuDhfuKCU
+ 6uRnOn/hTQIeVl6nj38ZppcZguMuccYIdsuAcyJe0ivCdnRR86m4lCos/KctzdahU+l3rFF9c
+ w3r7W1yOkLLU2BdN8fExQuGlAlyXRKhDwA4TOZqHDFfhX/KktU=
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Nathan,
+drivers/hwmon/amd_energy.c:195:15: error: invalid operands to binary expression ('void' and 'int')
+                                        (channel - data->nr_cpus));
+                                        ~~~~~~~~~^~~~~~~~~~~~~~~~~
+include/asm-generic/topology.h:51:42: note: expanded from macro 'cpumask_of_node'
+    #define cpumask_of_node(node)       ((void)node, cpu_online_mask)
+                                               ^~~~
+include/linux/cpumask.h:618:72: note: expanded from macro 'cpumask_first_and'
+ #define cpumask_first_and(src1p, src2p) cpumask_next_and(-1, (src1p), (src2p))
+                                                                       ^~~~~
 
-(CC'ing Sakari Ailus and the linux-media mailing list)
+Fixes: f0b848ce6fe9 ("cpumask: Introduce cpumask_of_{node,pcibus} to replace {node,pcibus}_to_cpumask")
+Fixes: 8abee9566b7e ("hwmon: Add amd_energy driver to report energy counters")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ include/asm-generic/topology.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, May 27, 2020 at 01:13:37AM -0700, Nathan Chancellor wrote:
-> On Wed, May 27, 2020 at 09:02:51AM +0200, Geert Uytterhoeven wrote:
-> > On Wed, May 27, 2020 at 6:37 AM Nathan Chancellor wrote:
-> > > After mm.h was removed from the asm-generic version of cacheflush.h,
-> > > s390 allyesconfig shows several warnings of the following nature:
-> > >
-> > > In file included from ./arch/s390/include/generated/asm/cacheflush.h:1,
-> > >                  from drivers/media/platform/omap3isp/isp.c:42:
-> > > ./include/asm-generic/cacheflush.h:16:42: warning: 'struct mm_struct'
-> > > declared inside parameter list will not be visible outside of this
-> > > definition or declaration
-> > >
-> > > cacheflush.h does not include mm.h nor does it include any forward
-> > > declaration of these structures hence the warning. To avoid this,
-> > > include mm.h explicitly in this file and shuffle cacheflush.h below it.
-> > >
-> > > Fixes: 19c0054597a0 ("asm-generic: don't include <linux/mm.h> in cacheflush.h")
-> > > Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-> > 
-> > Thanks for your patch!
-> > 
-> > > I am aware the fixes tag is kind of irrelevant because that SHA will
-> > > change in the next linux-next revision and this will probably get folded
-> > > into the original patch anyways but still.
-> > >
-> > > The other solution would be to add forward declarations of these structs
-> > > to the top of cacheflush.h, I just chose to do what Christoph did in the
-> > > original patch. I am happy to do that instead if you all feel that is
-> > > better.
-> > 
-> > That actually looks like a better solution to me, as it would address the
-> > problem for all users.
-
-Headers should be self-contained, so that would be the best fix in my
-opinion.
-
-This being said, as cacheflush.h isn't needed in isp.c, I think we
-should also drop it. It seems to have been included there since the
-first driver version, and was likely a left-over from the out-of-tree
-development. Manual cache handling was part of
-drivers/media/platform/omap3isp/ispqueue.c and has been removed in
-commit fbac1400bd1a ("[media] omap3isp: Move to videobuf2").
-
-cacheflush.h can also be dropped from ispvideo.c which suffers from the
-same issue.
-
-> > >  drivers/media/platform/omap3isp/isp.c | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-> > > index a4ee6b86663e..54106a768e54 100644
-> > > --- a/drivers/media/platform/omap3isp/isp.c
-> > > +++ b/drivers/media/platform/omap3isp/isp.c
-> > > @@ -39,8 +39,6 @@
-> > >   *     Troy Laramy <t-laramy@ti.com>
-> > >   */
-> > >
-> > > -#include <asm/cacheflush.h>
-> > > -
-> > >  #include <linux/clk.h>
-> > >  #include <linux/clkdev.h>
-> > >  #include <linux/delay.h>
-> > > @@ -49,6 +47,7 @@
-> > >  #include <linux/i2c.h>
-> > >  #include <linux/interrupt.h>
-> > >  #include <linux/mfd/syscon.h>
-> > > +#include <linux/mm.h>
-> > >  #include <linux/module.h>
-> > >  #include <linux/omap-iommu.h>
-> > >  #include <linux/platform_device.h>
-> > > @@ -58,6 +57,8 @@
-> > >  #include <linux/sched.h>
-> > >  #include <linux/vmalloc.h>
-> > >
-> > > +#include <asm/cacheflush.h>
-> > > +
-> > >  #ifdef CONFIG_ARM_DMA_USE_IOMMU
-> > >  #include <asm/dma-iommu.h>
-> > >  #endif
-> > 
-> > Why does this file need <asm/cacheflush.h> at all?
-> > It doesn't call any of the flush_*() functions, and seems to compile fine
-> > without (on arm32).
-> > 
-> > Perhaps it was included at the top intentionally, to override the definitions
-> > of copy_{to,from}_user_page()? Fortunately that doesn't seem to be the
-> > case, from a quick look at the assembler output.
-> > 
-> > So let's just remove the #include instead?
-> 
-> Sounds good to me. I can send a patch if needed or I suppose Andrew can
-> just make a small fixup patch for it. Let me know what I should do.
-
+diff --git a/include/asm-generic/topology.h b/include/asm-generic/topology.h
+index 238873739550..5aa8705df87e 100644
+--- a/include/asm-generic/topology.h
++++ b/include/asm-generic/topology.h
+@@ -48,7 +48,7 @@
+   #ifdef CONFIG_NEED_MULTIPLE_NODES
+     #define cpumask_of_node(node)	((node) == 0 ? cpu_online_mask : cpu_none_mask)
+   #else
+-    #define cpumask_of_node(node)	((void)node, cpu_online_mask)
++    #define cpumask_of_node(node)	((void)(node), cpu_online_mask)
+   #endif
+ #endif
+ #ifndef pcibus_to_node
 -- 
-Regards,
+2.26.2
 
-Laurent Pinchart
