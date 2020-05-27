@@ -2,134 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D881E3635
-	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 05:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A3E1E3770
+	for <lists+linux-arch@lfdr.de>; Wed, 27 May 2020 06:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728400AbgE0DHm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 May 2020 23:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S1727900AbgE0Egz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 May 2020 00:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725893AbgE0DHm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 May 2020 23:07:42 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A995CC061A0F;
-        Tue, 26 May 2020 20:07:41 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id c20so22643120ilk.6;
-        Tue, 26 May 2020 20:07:41 -0700 (PDT)
+        with ESMTP id S1727881AbgE0Egy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 May 2020 00:36:54 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF762C061A0F;
+        Tue, 26 May 2020 21:36:54 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id 185so2988049pgb.10;
+        Tue, 26 May 2020 21:36:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NoLQZ4xLsmiigYDKwkyKj0BqR8pGmA2XjKXfyOFiOGQ=;
-        b=ecfBllBPvCa8XsDJLnfADTkGN6+8/grXE/wm7/P7v6KQSOnpvILfr+A6G3RD8gSt1V
-         bcG0w7NqoMDFPFyROpM8wFf1TYhiaV8A/yQdMf9lkSv2kwCGRV5h7KxRLIdClrUbpvPy
-         Z6M31H9tEWows4qRtj1lW1QCP3kCmsDMg3qLw7KmFS9Pc78lBjjoNaVC2JVWePQNm4ly
-         Tidg8o08isU+NfUD2ZB/3QCYh3eoTB5tJsct5E8/E1FGNgWlwWvgNzZltULIrNilc3rv
-         IGxIk+BMAQxjIZ0ACpSWUyfugyumeGFBCfSjXGxQ2ryIa+/Q00dCx2AwZR+HOHTOxdHK
-         8Teg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lOpmpojWwwDKmdgvBgyDR/91akL7lsEVaaRXHGRRif0=;
+        b=RhgQiHKjSFxt0e4hdk9XFdFmwXlaqqy/oTAekflZtHFdhEKO64qFc1mpKDXZr69CPy
+         jdKKGgMYF3/PwLMQqZRA0p7MJV/Go6tkta/h4swizRoRpVhai4LlQKtDfpzOQXol3xcY
+         3TW/CBGWUO1G35QH1UIuJXs9WTI3G+E29PktRQFzMSdgmMsbx+ViIkPx4XIoQKnwHjtI
+         iuFirKyvXOkp6bKvGs8xYK3w/Dn4sctZ1lOJtxsH8Aa2nP03Bsx7PgwJODEguoGDFtQe
+         EV7yB1UHGazYqjCw0y7SPUOzeb1Rx+s20xn4YP/gkyyGkm4H/LKnhLTIPlstwN50FD9J
+         kU0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NoLQZ4xLsmiigYDKwkyKj0BqR8pGmA2XjKXfyOFiOGQ=;
-        b=IlVUS3JGcm6yv//f30wWqtRqgLJqg0oM/QYlqDL8UQNBnd7paJR8IKrAgTtcgjnzbY
-         a1n+L1jHDRitLBT3YhNbSE6psnlfPgIWDI7d1yqYmVpMARtlDLFtLPtm3UeJJrMpz9dZ
-         h3B3FsbBGu9HfxWCMr/DD1RuQK2d3PWj3zVwz2r83MUpVhKagl7iMCg1GMi/oQkjCneR
-         oTItvoAGeDGximB7EBK3sPR+N68/J8fHaEO/bNaz4rh2E6CkL6cYTBqdSCF57M8sDLU5
-         /t/lVRi3bw96BRABNTbwpFMqDsJ6c3xXi3VV532oYHdVqO75XYW3Z08Gz8aiQesLc4qx
-         wMew==
-X-Gm-Message-State: AOAM530DV6W6SLZlEunsNyi2wiqnupHOfVtXmI6CQHgBUrPmO06n8Rc6
-        ZA4xGqjRAJn9ZoS9B6l2pFzr3kd1RbEjBr1b2yc=
-X-Google-Smtp-Source: ABdhPJxoQlLUksMMTrEeJnBpX7aUmXahzXq+87mU2xG6zjv9GcII3cRppMGcRbjSLU7EEh3E31xctx4o5xAsG0rwNZg=
-X-Received: by 2002:a92:1b86:: with SMTP id f6mr2004630ill.9.1590548860893;
- Tue, 26 May 2020 20:07:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lOpmpojWwwDKmdgvBgyDR/91akL7lsEVaaRXHGRRif0=;
+        b=D04p47AQjHiFVOLa1Xh9S82T1TQSXfPu4wykqPdRaEnJY3choB7Zy/8EsvzJAaIKgq
+         Rbg6/DEh5iBwjGiA3ps9Ygt67mVmPEUNfb2Yv7Ktb2XxyoDw6EVp03UAvw9fDxBVfo0+
+         8YysgchrbyChFVHXA8wh0ht8hp+uDYVkOV50iyixHGSLe584qU74hnQK8EZyNI65MBFR
+         HKuFkNlwEjxNWIUKgcJ3/q8JXhuSGzcGRLQ2gFZaJBmVRtADBfafD1T6or1QgWLUsusu
+         CKDVZ0NqgIhSMu/JIcHL32GNOG7eqXsVb+f4E4a77Q4ezQOouP6OzeNP4L/+O9looQRt
+         353w==
+X-Gm-Message-State: AOAM532ZbR1SF3hgJuyeojKsQhntXLGLx5PXTeCF5wAgIB2eawYyCiNo
+        oannJ3fyqSMhNoXMHvoFdIA=
+X-Google-Smtp-Source: ABdhPJxaG/pR1wu1n7WufrFJ+x4wcg8X7uq9rcDJKu3YRWfpwt3nhECM4aeG8mrZfzsEkO9ezvPt1w==
+X-Received: by 2002:aa7:9302:: with SMTP id 2mr2035203pfj.164.1590554214171;
+        Tue, 26 May 2020 21:36:54 -0700 (PDT)
+Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id e13sm893604pfm.103.2020.05.26.21.36.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 21:36:53 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     hch@lst.de
+Cc:     akpm@linux-foundation.org, arnd@arndb.de, jeyu@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-fsdevel@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        monstr@monstr.eu, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org, x86@kernel.org, zippel@linux-m68k.org,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] media: omap3isp: Shuffle cacheflush.h and include mm.h
+Date:   Tue, 26 May 2020 21:34:27 -0700
+Message-Id: <20200527043426.3242439-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.27.0.rc0
+In-Reply-To: <20200515143646.3857579-7-hch@lst.de>
+References: <20200515143646.3857579-7-hch@lst.de>
 MIME-Version: 1.0
-References: <20200526205322.23465-1-mic@digikod.net> <20200526205322.23465-8-mic@digikod.net>
-In-Reply-To: <20200526205322.23465-8-mic@digikod.net>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 27 May 2020 06:07:29 +0300
-Message-ID: <CAOQ4uxibpDTyjCJWLGG9jr-Gv9PwO==o50b9O8HGQeUfVMDFag@mail.gmail.com>
-Subject: Re: [PATCH v18 07/12] landlock: Support filesystem access-control
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
-        Richard Weinberger <richard@nod.at>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 27, 2020 at 3:36 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
->
-> Thanks to the Landlock objects and ruleset, it is possible to identify
-> inodes according to a process's domain.  To enable an unprivileged
-> process to express a file hierarchy, it first needs to open a directory
-> (or a file) and pass this file descriptor to the kernel through
-> landlock(2).  When checking if a file access request is allowed, we walk
-> from the requested dentry to the real root, following the different
-> mount layers.  The access to each "tagged" inodes are collected
-> according to their rule layer level, and ANDed to create access to the
-> requested file hierarchy.  This makes possible to identify a lot of
-> files without tagging every inodes nor modifying the filesystem, while
-> still following the view and understanding the user has from the
-> filesystem.
->
+After mm.h was removed from the asm-generic version of cacheflush.h,
+s390 allyesconfig shows several warnings of the following nature:
 
-Hi Mickael,
+In file included from ./arch/s390/include/generated/asm/cacheflush.h:1,
+                 from drivers/media/platform/omap3isp/isp.c:42:
+./include/asm-generic/cacheflush.h:16:42: warning: 'struct mm_struct'
+declared inside parameter list will not be visible outside of this
+definition or declaration
 
-Nice work! I am interested in the problem of system wide file access
-rules based on directory hierarchy [1][2]. Not the same problem, but
-with obvious overlaps.
+cacheflush.h does not include mm.h nor does it include any forward
+declaration of these structures hence the warning. To avoid this,
+include mm.h explicitly in this file and shuffle cacheflush.h below it.
 
-I sketched this untested POC [2] a while ago -
-It introduces the concept of "border control" LSM hooks to avoid the
-need to check which sections in the hierarchy an inode belongs to
-on every syscall.
+Fixes: 19c0054597a0 ("asm-generic: don't include <linux/mm.h> in cacheflush.h")
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
 
-With this, you could cache a topology with id's per section and
-cache the section id + topology generation in the inode's security state.
-When inode crosses border control hooks, it's section id is updated.
-When directory hierarchy topology changes, some or all of the cached
-section id's are invalidated and rules <-> sections relations may need
-to be changed.
+I am aware the fixes tag is kind of irrelevant because that SHA will
+change in the next linux-next revision and this will probably get folded
+into the original patch anyways but still.
 
-Do you think something like that could be useful for landlock?
+The other solution would be to add forward declarations of these structs
+to the top of cacheflush.h, I just chose to do what Christoph did in the
+original patch. I am happy to do that instead if you all feel that is
+better.
 
-Note that the POC is using d_mountpoint() as the only type of "fence"
-mark. It is sufficient for controlling rename in and out of containers, so
-I just used an already available dentry flag for "fence".
-If the border control hook concept is useful, this could be extended to
-a more generic d_border_passing(), with some internal kernel API
-to manage it and with all the bike shedding that comes with it...
+ drivers/media/platform/omap3isp/isp.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thanks,
-Amir.
+diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+index a4ee6b86663e..54106a768e54 100644
+--- a/drivers/media/platform/omap3isp/isp.c
++++ b/drivers/media/platform/omap3isp/isp.c
+@@ -39,8 +39,6 @@
+  *	Troy Laramy <t-laramy@ti.com>
+  */
+ 
+-#include <asm/cacheflush.h>
+-
+ #include <linux/clk.h>
+ #include <linux/clkdev.h>
+ #include <linux/delay.h>
+@@ -49,6 +47,7 @@
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/mfd/syscon.h>
++#include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/omap-iommu.h>
+ #include <linux/platform_device.h>
+@@ -58,6 +57,8 @@
+ #include <linux/sched.h>
+ #include <linux/vmalloc.h>
+ 
++#include <asm/cacheflush.h>
++
+ #ifdef CONFIG_ARM_DMA_USE_IOMMU
+ #include <asm/dma-iommu.h>
+ #endif
+-- 
+2.27.0.rc0
 
-[1] https://lore.kernel.org/linux-fsdevel/CAOQ4uxhBVhyyJv0+xSFQiGQEj60AbD3S=
-ADfKK40uAiC4GF2p9Q@mail.gmail.com/
-[2] https://lore.kernel.org/linux-fsdevel/CAOQ4uxgn=3DYNj8cJuccx2KqxEVGZy1z=
-3DBVYXrD=3DMc7Dc=3DJe+-w@mail.gmail.com/
-[3] https://github.com/amir73il/linux/commits/rename_xmnt
