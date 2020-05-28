@@ -2,126 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 457F91E629B
-	for <lists+linux-arch@lfdr.de>; Thu, 28 May 2020 15:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4849B1E677E
+	for <lists+linux-arch@lfdr.de>; Thu, 28 May 2020 18:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390546AbgE1NpM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 28 May 2020 09:45:12 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:58601 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390432AbgE1NpH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 28 May 2020 09:45:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590673506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Re4jEEmAvLF/IwOE4h8IS6wOLBf53DSbCjXiPd7qbRw=;
-        b=eFEFLx+1a4HWFjnLGWV6Jyjg0ZiNvRc/kW1kLadciIr44Rz7oki/l1dWKuu05XLjmd0uW6
-        hNAQTOVsjvOzvxnxs7juxQeckP4uxzSPWk7ua6MBjoeOTB/WKic/iZMFjUGBndJ8zAV0PV
-        U0KIuO0pbcKFFAKAXAXQ69z1I2TfyJw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-184-i0VHkOeVO46Jri8xBsBn8A-1; Thu, 28 May 2020 09:45:02 -0400
-X-MC-Unique: i0VHkOeVO46Jri8xBsBn8A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 39D4918FE860;
-        Thu, 28 May 2020 13:45:01 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-118-217.rdu2.redhat.com [10.10.118.217])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 895637A1EF;
-        Thu, 28 May 2020 13:45:00 +0000 (UTC)
-Subject: Re: [PATCH v2 3/6] prctl.2: Add PR_SPEC_DISABLE_NOEXEC for
- SPECULATION_CTRL prctls
-To:     Dave Martin <Dave.Martin@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Cc:     linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <1590614258-24728-1-git-send-email-Dave.Martin@arm.com>
- <1590614258-24728-4-git-send-email-Dave.Martin@arm.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <35acb48d-6703-bed5-8c6d-739411eea679@redhat.com>
-Date:   Thu, 28 May 2020 09:45:00 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S2405023AbgE1QeT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 May 2020 12:34:19 -0400
+Received: from foss.arm.com ([217.140.110.172]:55122 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405004AbgE1QeS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 28 May 2020 12:34:18 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2A7D30E;
+        Thu, 28 May 2020 09:34:17 -0700 (PDT)
+Received: from gaia (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 165B93F305;
+        Thu, 28 May 2020 09:34:15 -0700 (PDT)
+Date:   Thu, 28 May 2020 17:34:13 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc:     Peter Collingbourne <pcc@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Evgenii Stepanov <eugenis@google.com>, nd@arm.com
+Subject: Re: [PATCH v4 11/26] arm64: mte: Add PROT_MTE support to mmap() and
+ mprotect()
+Message-ID: <20200528163412.GC2961@gaia>
+References: <20200515171612.1020-1-catalin.marinas@arm.com>
+ <20200515171612.1020-12-catalin.marinas@arm.com>
+ <CAMn1gO5ApcHOgQ_oLjiGDdCx9znz7N50w-BbzGPYpAzPQC3OQQ@mail.gmail.com>
+ <20200528091445.GA2961@gaia>
+ <20200528110509.GA18623@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <1590614258-24728-4-git-send-email-Dave.Martin@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200528110509.GA18623@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/27/20 5:17 PM, Dave Martin wrote:
-> Add the PR_SPEC_DISABLE_NOEXEC mode added in Linux 5.1
-> for the PR_SPEC_STORE_BYPASS "misfeature" of
-> PR_SET_SPECULATION_CTRL and PR_GET_SPECULATION_CTRL.
->
-> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-> Cc: Waiman Long <longman@redhat.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> ---
->   man2/prctl.2 | 22 ++++++++++++++++++++--
->   1 file changed, 20 insertions(+), 2 deletions(-)
->
-> diff --git a/man2/prctl.2 b/man2/prctl.2
-> index b6fb51c..cab9915 100644
-> --- a/man2/prctl.2
-> +++ b/man2/prctl.2
-> @@ -1187,6 +1187,12 @@ The speculation feature is disabled, mitigation is enabled.
->   Same as
->   .B PR_SPEC_DISABLE
->   but cannot be undone.
-> +.TP
-> +.BR PR_SPEC_DISABLE_NOEXEC " (since Linux 5.1)"
-> +Same as
-> +.BR PR_SPEC_DISABLE ,
-> +but but the state will be cleared on
-> +.BR execve (2).
->   .RE
->   .IP
->   If all bits are 0,
-> @@ -1251,6 +1257,17 @@ with the same value for
->   .I arg2
->   will fail with the error
->   .BR EPERM .
-> +.\" commit 71368af9027f18fe5d1c6f372cfdff7e4bde8b48
-> +.TP
-> +.BR PR_SPEC_DISABLE_NOEXEC " (since Linux 5.1)"
-> +Same as
-> +.BR PR_SPEC_DISABLE ,
-> +but but the state will be cleared on
-> +.BR execve (2).
-> +Currently only supported for
-> +.I arg2
-> +equal to
-> +.B PR_SPEC_STORE_BYPASS.
->   .RE
->   .IP
->   Any unsupported value in
-> @@ -1899,11 +1916,12 @@ was
->   .BR PR_SET_SPECULATION_CTRL
->   and
->   .IR arg3
-> -is neither
-> +is not
->   .BR PR_SPEC_ENABLE ,
->   .BR PR_SPEC_DISABLE ,
-> +.BR PR_SPEC_FORCE_DISABLE ,
->   nor
-> -.BR PR_SPEC_FORCE_DISABLE .
-> +.BR PR_SPEC_DISABLE_NOEXEC .
->   .SH VERSIONS
->   The
->   .BR prctl ()
+On Thu, May 28, 2020 at 12:05:09PM +0100, Szabolcs Nagy wrote:
+> The 05/28/2020 10:14, Catalin Marinas wrote:
+> > On Wed, May 27, 2020 at 11:57:39AM -0700, Peter Collingbourne wrote:
+> > > On Fri, May 15, 2020 at 10:16 AM Catalin Marinas
+> > > <catalin.marinas@arm.com> wrote:
+> > > > To enable tagging on a memory range, the user must explicitly opt in via
+> > > > a new PROT_MTE flag passed to mmap() or mprotect(). Since this is a new
+> > > > memory type in the AttrIndx field of a pte, simplify the or'ing of these
+> > > > bits over the protection_map[] attributes by making MT_NORMAL index 0.
+> > > 
+> > > Should the userspace stack always be mapped as if with PROT_MTE if the
+> > > hardware supports it? Such a change would be invisible to non-MTE
+> > > aware userspace since it would already need to opt in to tag checking
+> > > via prctl. This would let userspace avoid a complex stack
+> > > initialization sequence when running with stack tagging enabled on the
+> > > main thread.
+> > 
+> > I don't think the stack initialisation is that difficult. On program
+> > startup (can be the dynamic loader). Something like (untested):
+> > 
+> > 	register unsigned long stack asm ("sp");
+> > 	unsigned long page_sz = sysconf(_SC_PAGESIZE);
+> > 
+> > 	mprotect((void *)(stack & ~(page_sz - 1)), page_sz,
+> > 		 PROT_READ | PROT_WRITE | PROT_MTE | PROT_GROWSDOWN);
+> > 
+> > (the essential part it PROT_GROWSDOWN so that you don't have to specify
+> > a stack lower limit)
+> 
+> does this work even if the currently mapped stack is more than page_sz?
+> determining the mapped main stack area is i think non-trivial to do in
+> userspace (requires parsing /proc/self/maps or similar).
 
-Acked-by: Waiman Long <longman@redhat.com>
+Because of PROT_GROWSDOWN, the kernel adjusts the start of the range
+down automatically. It is potentially problematic if the top of the
+stack is more than a page away and you want the whole stack coloured. I
+haven't run a test but my reading of the kernel code is that the stack
+vma would be split in this scenario, so the range beyond sp+page_sz
+won't have PROT_MTE set.
 
+My assumption is that if you do this during program start, the stack is
+smaller than a page. Alternatively, could we use argv or envp to
+determine the top of the user stack (the bottom is taken care of by the
+kernel)?
+
+> > I'm fine, however, with enabling PROT_MTE on the main stack based on
+> > some ELF note.
+> 
+> note that would likely mean an elf note on the dynamic linker
+> (because a dynamic linked executable may not be loaded by the
+> kernel and ctors in loaded libs run before the executable entry
+> code anyway, so the executable alone cannot be in charge of this
+> decision) i.e. one global switch for all dynamic linked binaries.
+
+I guess parsing such note in the kernel is only useful for static
+binaries.
+
+> i think a dynamic linker can map a new stack and switch to it
+> if it needs to control the properties of the stack at runtime
+> (it's wasteful though).
+
+There is already user code to check for HWCAP2_MTE and the prctl(), so
+adding an mprotect() doesn't look like a significant overhead.
+
+> and i think there should be a runtime mechanism for the brk area:
+> it should be possible to request that future brk expansions are
+> mapped as PROT_MTE so an mte aware malloc implementation can use
+> brk. i think this is not important in the initial design, but if
+> a prctl flag can do it that may be useful to add (may be at a
+> later time).
+
+Looking at the kernel code briefly, I think this would work. We do end
+up with two vmas for the brk, only the expansion having PROT_MTE, and
+I'd to find a way to store the extra flag.
+
+From a coding perspective, it's easier to just set PROT_MTE by default
+on both brk and initial stack ;) (VM_DATA_DEFAULT_FLAGS).
+
+> (and eventually there should be a way to use PROT_MTE on
+> writable global data and appropriate code generation that
+> takes colors into account when globals are accessed, but
+> that requires significant ELF, ld.so and compiler changes,
+> that need not be part of the initial mte design).
+
+The .data section needs to be driven by the ELF information. It's also a
+file mapping and we don't support PROT_MTE on them even if MAP_PRIVATE.
+There are complications like DAX where the file you mmap for CoW may be
+hosted on memory that does not support MTE (copied to RAM on write).
+
+Is there a use-case for global data to be tagged?
+
+-- 
+Catalin
