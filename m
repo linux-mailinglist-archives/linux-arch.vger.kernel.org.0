@@ -2,105 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C26981E573B
-	for <lists+linux-arch@lfdr.de>; Thu, 28 May 2020 08:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA8A1E5803
+	for <lists+linux-arch@lfdr.de>; Thu, 28 May 2020 08:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbgE1GFJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 28 May 2020 02:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S1725839AbgE1G6C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 May 2020 02:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726865AbgE1GFI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 28 May 2020 02:05:08 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA6AC05BD1E;
-        Wed, 27 May 2020 23:05:07 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id y13so8767629eju.2;
-        Wed, 27 May 2020 23:05:07 -0700 (PDT)
+        with ESMTP id S1725308AbgE1G6B (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 28 May 2020 02:58:01 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862D0C05BD1E;
+        Wed, 27 May 2020 23:58:01 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id a2so30814202ejb.10;
+        Wed, 27 May 2020 23:58:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=cc:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Gr2QJjfQwZw9TOoef9/CtZwlj2xaVVZ2MosCnhi+D4Y=;
-        b=uT664BfCKD11g59N8NxYNnQAplKNgks3tcQJtPsg7EMK8v+bHKLWEx+us61PDVoIEF
-         Etojnh0KAUk3Dq74XioSiL2SIkDcVQ+r6Rkyyvux71cTcPX3s1pUMcrqZoRwaanfkGHv
-         t2PCfR6IovtThJ5/d29Kw3XIRWcd+gcesYcP1jsxf6lxI3y/CuVMVYWxxedyuqzRixZJ
-         HNIMCiPmwjFwo78VSSDRn8+VRvoUBBD1qmpniDXb1FUt8U58R+5uDnH0Za+/3aWCUw+x
-         +kufOH7t5VY7XVfBrlZ6rMBI6a2gdAW7ZOzjAN7I+4McB4v8L6QP3+kiJ/mKcMNOiI4a
-         0QWQ==
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=l30+XH7GIqcPUFeaZG9f/zXlLL1cUH8oN11gUUpIQH8=;
+        b=t/IILzIyVUFJKLVaKcWqmVulVV3hiYboHW7owxFQMjo4HkTxeqiIsWaaSi3tTSXQGG
+         JyD/vL32GnFKt7rYUM1qP4DY80SPsqSSuI2uxfO1vn+MwSc1L5ijQ6E62up8o9IT0NBW
+         UWBqRM499LidI+guRHky7fd5LI/B9TwFXwQYqLa0Rt8jNCFftaM8QM1DrWDjje9TcDWx
+         F2d62XVAKpy6CAMNUDe1YEBMiD7GOdU2wUX2wKiQWMXcI9hSto4X9kcyiZ0R7u9uHdJo
+         x1utqSDzWcHW+N8BB20XbgfeOQTBLrU+50zkBsPrZjmLnfHUw+CagIdoSgh6Jy0SRJ2L
+         ++uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Gr2QJjfQwZw9TOoef9/CtZwlj2xaVVZ2MosCnhi+D4Y=;
-        b=CxCOCN/vkEJg5A4kQq+IuRWIDSataCtoEknESP1oEaLTon8rLg7vsIbaH8mUZqxvaz
-         ul+uTc7MBZ8IJq4mJ8oS4P5WOi+BwHSbfxTy1x2VhAypOTcUaGvqHsP5SHCuSb4spXv4
-         H1+zyfSnhoUl94TzpaQpWYzX4C78g72F77ORCuYCfkwNCTibXGkPGzAKsZvSsMDk/z5m
-         P0MCcbgDTq9SPsOX0e/xEsWQM341duUU9VtKl8zMy1fk6LrQBSp8o6zY/YsjGHQpSSIg
-         SMcPJGhLkK7dtSUXlrM8rTy3GnFMDJeNgQPajgVV6qGXQIjLWjGlHbm5kgawORX58sWB
-         J51g==
-X-Gm-Message-State: AOAM5334yCp0vQRZPjGKwPBHprEhGhM8nkgFcVZjPyJk06iguBq0uMyh
-        sNPv466T5hnBod9p1x75oXagv5B6ynY=
-X-Google-Smtp-Source: ABdhPJxjVLMKxzwXsFiCP+cJ7nLEssCwZug0h9DUfmwi6L1qHjlZIWcNchUGODktXsRFZRS6d4H40Q==
-X-Received: by 2002:a17:906:4088:: with SMTP id u8mr1634002ejj.422.1590645905844;
-        Wed, 27 May 2020 23:05:05 -0700 (PDT)
-Received: from ?IPv6:2001:a61:2516:6501:a84b:ccd6:785a:2f0f? ([2001:a61:2516:6501:a84b:ccd6:785a:2f0f])
-        by smtp.gmail.com with ESMTPSA id nw22sm4561913ejb.48.2020.05.27.23.05.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2020 23:05:05 -0700 (PDT)
-Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/6] prctl.2: ffix use literal hyphens when referencing
- kernel docs
-To:     Dave Martin <Dave.Martin@arm.com>
-References: <1590614258-24728-1-git-send-email-Dave.Martin@arm.com>
- <1590614258-24728-2-git-send-email-Dave.Martin@arm.com>
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <43a7fb5b-7626-0f05-a13f-a4d35eb3289f@gmail.com>
-Date:   Thu, 28 May 2020 08:05:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=l30+XH7GIqcPUFeaZG9f/zXlLL1cUH8oN11gUUpIQH8=;
+        b=t6Zyjz8aaBg6go9Jrk7EgnPRZAXKh2PYWQxP2JhilHXwfze1dpw2U5FUqz6CSjvX77
+         uU3lyM6Lmlvobbjcl63uKkJpwtVPAO4pG/dtxvnljdt9BhMNH1kkX9Y+Ah8HnXt7V16D
+         8KJTay1RtVwnletRswwn5XItNDUATcFSdW8xi34nvKLEeIcl9wByQDNXG+gIrjAVmBl0
+         T9WJif4Q6bwXKAhMdraK0gxQma2IWDhY6I8Zakn350Eea+DCiSVOr1f4+11r9zMT+Si2
+         o3ZTKlgDo5PNcWmAyYByVkeOKF7GVHGjDhqt0T+epDTTdjYO3Qyn2zZYcBb6bskDA0BK
+         obAg==
+X-Gm-Message-State: AOAM532Rjtl+SHJ6Hri8Cu4q42nDFdVe4xMAeLdxDSTHD/BnN2vyp6LN
+        MUyEsY3mp64QTAu7JJZU8WOE5Z0U96qNZwtBDYw=
+X-Google-Smtp-Source: ABdhPJwIUqdDsy4Ne4drAA5CiYn8Fuz53Xu/Z9G4g6JWO0nsFtF7JHCXsyBvqrV+JFPNGYy9fdNYyuD2DqhoY2pJa/g=
+X-Received: by 2002:a17:906:8492:: with SMTP id m18mr1660565ejx.168.1590649080199;
+ Wed, 27 May 2020 23:58:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1590614258-24728-2-git-send-email-Dave.Martin@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1590614258-24728-1-git-send-email-Dave.Martin@arm.com> <1590614258-24728-4-git-send-email-Dave.Martin@arm.com>
+In-Reply-To: <1590614258-24728-4-git-send-email-Dave.Martin@arm.com>
+Reply-To: mtk.manpages@gmail.com
+From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Date:   Thu, 28 May 2020 08:57:49 +0200
+Message-ID: <CAKgNAkg4P4GTVEoVXZd6yzpr97S0H+N8pdtwptJXaJBHfLAzKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] prctl.2: Add PR_SPEC_DISABLE_NOEXEC for
+ SPECULATION_CTRL prctls
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-man <linux-man@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Waiman Long <longman@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/27/20 11:17 PM, Dave Martin wrote:
-> There is one case of a cross-reference to a kernel documentation
-> filename that uses unescaped hyphens.
-> 
-> To avoid misrendering, escape these as \- similarly to other
-> instances.
-> 
-> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-> ---
->  man2/prctl.2 | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/man2/prctl.2 b/man2/prctl.2
-> index 968a75a..dc99218 100644
-> --- a/man2/prctl.2
-> +++ b/man2/prctl.2
-> @@ -1261,7 +1261,7 @@ This parameter may enforce a read-only policy which will result in the
->  call failing with the error
->  .BR ENXIO .
->  For further details, see the kernel source file
-> -.IR Documentation/admin-guide/kernel-parameters.txt .
-> +.IR Documentation/admin\-guide/kernel\-parameters.txt .
->  .\"
->  .\" prctl PR_TASK_PERF_EVENTS_DISABLE
->  .TP
+Hi Dave,
 
-Thanks, Dave. Applied.
+On Wed, 27 May 2020 at 23:18, Dave Martin <Dave.Martin@arm.com> wrote:
+>
+> Add the PR_SPEC_DISABLE_NOEXEC mode added in Linux 5.1
+> for the PR_SPEC_STORE_BYPASS "misfeature" of
+> PR_SET_SPECULATION_CTRL and PR_GET_SPECULATION_CTRL.
+>
+> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+
+I had already applied your earlier send of this patch (in a private
+branch). I'll push those changes shortly.
 
 Cheers,
 
 Michael
+
+> ---
+>  man2/prctl.2 | 22 ++++++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+>
+> diff --git a/man2/prctl.2 b/man2/prctl.2
+> index b6fb51c..cab9915 100644
+> --- a/man2/prctl.2
+> +++ b/man2/prctl.2
+> @@ -1187,6 +1187,12 @@ The speculation feature is disabled, mitigation is enabled.
+>  Same as
+>  .B PR_SPEC_DISABLE
+>  but cannot be undone.
+> +.TP
+> +.BR PR_SPEC_DISABLE_NOEXEC " (since Linux 5.1)"
+> +Same as
+> +.BR PR_SPEC_DISABLE ,
+> +but but the state will be cleared on
+> +.BR execve (2).
+>  .RE
+>  .IP
+>  If all bits are 0,
+> @@ -1251,6 +1257,17 @@ with the same value for
+>  .I arg2
+>  will fail with the error
+>  .BR EPERM .
+> +.\" commit 71368af9027f18fe5d1c6f372cfdff7e4bde8b48
+> +.TP
+> +.BR PR_SPEC_DISABLE_NOEXEC " (since Linux 5.1)"
+> +Same as
+> +.BR PR_SPEC_DISABLE ,
+> +but but the state will be cleared on
+> +.BR execve (2).
+> +Currently only supported for
+> +.I arg2
+> +equal to
+> +.B PR_SPEC_STORE_BYPASS.
+>  .RE
+>  .IP
+>  Any unsupported value in
+> @@ -1899,11 +1916,12 @@ was
+>  .BR PR_SET_SPECULATION_CTRL
+>  and
+>  .IR arg3
+> -is neither
+> +is not
+>  .BR PR_SPEC_ENABLE ,
+>  .BR PR_SPEC_DISABLE ,
+> +.BR PR_SPEC_FORCE_DISABLE ,
+>  nor
+> -.BR PR_SPEC_FORCE_DISABLE .
+> +.BR PR_SPEC_DISABLE_NOEXEC .
+>  .SH VERSIONS
+>  The
+>  .BR prctl ()
+> --
+> 2.1.4
+>
 
 
 -- 
