@@ -2,102 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC031E5E39
-	for <lists+linux-arch@lfdr.de>; Thu, 28 May 2020 13:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457F91E629B
+	for <lists+linux-arch@lfdr.de>; Thu, 28 May 2020 15:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388387AbgE1L3P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 28 May 2020 07:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388380AbgE1L3N (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 28 May 2020 07:29:13 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55979C05BD1E
-        for <linux-arch@vger.kernel.org>; Thu, 28 May 2020 04:29:13 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id y85so24495238oie.11
-        for <linux-arch@vger.kernel.org>; Thu, 28 May 2020 04:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=N4B6coLUE20yWII+LUIABugQJKjhGsqyeJfwse6+TUo=;
-        b=X/Ftpv9XS6u0/oSsTl55o5O5CfCD1+Q3x2g6xxEUsmZ3BNX9gXywqvnMwU3MT8yk3T
-         2Ya/e9iSUKCykqQkl3/mWc14oEbUqXiuWJX7tnDiHs4T4ql1KhQzOwtYp5BO5Nz49WQM
-         SCX2OD9cl/0/j7tMHrl6qaX+HyfbfONMdPPgP86USFa4JwSCegw2ewL1XOeO4wtr3wzu
-         SO6HO8TO6mxsXkBstZnyvs3z64LV6wLs4IqwSbWNsHYeuT/36k9wsJDIhF8NWEIFIrnK
-         Ckp5aBT67vuwwvpIAAqafTmpprcKnXxrUwSphE/R2jjUW4NwK5RQ8kmjaFs5yk9/wZHm
-         9srQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=N4B6coLUE20yWII+LUIABugQJKjhGsqyeJfwse6+TUo=;
-        b=pDUgIaVE8lCyl9MQ8cg680yRKuaBas06BtMT8EATBm+61LjPRIwhljGrnuBQBo2t4w
-         57pkwMX7AmLCpnBD3FgN0pPrYoE8/i+oGyunDuu55QsY9LSAvZ/fUf4c5o0nAi2h+T3m
-         ROjmjIVWFQcMdy2E6tYXxS686NerDFeTOW2UCxAZrT6uyGkLO9nKduUtNlrA3NsImW83
-         jStm1HLFQdoTL73DFQ51eNfN8DZihluUb+SJW/e5/ETeY1g4kd9sjMBzTUepljFpP6GE
-         3HJqhVQz1LJyw3u19Sd3NxBU6W3tk+mxx0Z11qB9hIODYppnHgHyJw7lVzrbgZBkiBK0
-         kpaA==
-X-Gm-Message-State: AOAM531kITVbs3pJvn7uWbro6YLI2F089PkAokxeOM4p4GGYQAT66Wig
-        /K5Vi2WgiqHwBvksqodkno8TK7P3RgM3IMIpAwc=
-X-Google-Smtp-Source: ABdhPJz6cl4iqZLhoIJBjEcVLE7mFEl1uGExsFQfsdHk268bS9DrXE40N8v70+KdTBzix0DlzLyT1rP/OGR8B53DXF4=
-X-Received: by 2002:aca:ef8b:: with SMTP id n133mr1744158oih.162.1590665352687;
- Thu, 28 May 2020 04:29:12 -0700 (PDT)
+        id S2390546AbgE1NpM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 May 2020 09:45:12 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:58601 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2390432AbgE1NpH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 28 May 2020 09:45:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590673506;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Re4jEEmAvLF/IwOE4h8IS6wOLBf53DSbCjXiPd7qbRw=;
+        b=eFEFLx+1a4HWFjnLGWV6Jyjg0ZiNvRc/kW1kLadciIr44Rz7oki/l1dWKuu05XLjmd0uW6
+        hNAQTOVsjvOzvxnxs7juxQeckP4uxzSPWk7ua6MBjoeOTB/WKic/iZMFjUGBndJ8zAV0PV
+        U0KIuO0pbcKFFAKAXAXQ69z1I2TfyJw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-184-i0VHkOeVO46Jri8xBsBn8A-1; Thu, 28 May 2020 09:45:02 -0400
+X-MC-Unique: i0VHkOeVO46Jri8xBsBn8A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 39D4918FE860;
+        Thu, 28 May 2020 13:45:01 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-118-217.rdu2.redhat.com [10.10.118.217])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 895637A1EF;
+        Thu, 28 May 2020 13:45:00 +0000 (UTC)
+Subject: Re: [PATCH v2 3/6] prctl.2: Add PR_SPEC_DISABLE_NOEXEC for
+ SPECULATION_CTRL prctls
+To:     Dave Martin <Dave.Martin@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Cc:     linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <1590614258-24728-1-git-send-email-Dave.Martin@arm.com>
+ <1590614258-24728-4-git-send-email-Dave.Martin@arm.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <35acb48d-6703-bed5-8c6d-739411eea679@redhat.com>
+Date:   Thu, 28 May 2020 09:45:00 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Received: by 2002:a4a:d016:0:0:0:0:0 with HTTP; Thu, 28 May 2020 04:29:12
- -0700 (PDT)
-Reply-To: iincc200@gmail.com
-From:   MRS HEBA IBRAHIM <mrshebaibrahim1414@gmail.com>
-Date:   Thu, 28 May 2020 12:29:12 +0100
-Message-ID: <CAANWZFz7pobOebD-iD9uDy+4M_TgnN9FBViWjMD-3VOuvj5Lxg@mail.gmail.com>
-Subject: YOUR VISA CARD SUM OF US$1.200,000.00
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1590614258-24728-4-git-send-email-Dave.Martin@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Attention:Beneficiary
+On 5/27/20 5:17 PM, Dave Martin wrote:
+> Add the PR_SPEC_DISABLE_NOEXEC mode added in Linux 5.1
+> for the PR_SPEC_STORE_BYPASS "misfeature" of
+> PR_SET_SPECULATION_CTRL and PR_GET_SPECULATION_CTRL.
+>
+> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>   man2/prctl.2 | 22 ++++++++++++++++++++--
+>   1 file changed, 20 insertions(+), 2 deletions(-)
+>
+> diff --git a/man2/prctl.2 b/man2/prctl.2
+> index b6fb51c..cab9915 100644
+> --- a/man2/prctl.2
+> +++ b/man2/prctl.2
+> @@ -1187,6 +1187,12 @@ The speculation feature is disabled, mitigation is enabled.
+>   Same as
+>   .B PR_SPEC_DISABLE
+>   but cannot be undone.
+> +.TP
+> +.BR PR_SPEC_DISABLE_NOEXEC " (since Linux 5.1)"
+> +Same as
+> +.BR PR_SPEC_DISABLE ,
+> +but but the state will be cleared on
+> +.BR execve (2).
+>   .RE
+>   .IP
+>   If all bits are 0,
+> @@ -1251,6 +1257,17 @@ with the same value for
+>   .I arg2
+>   will fail with the error
+>   .BR EPERM .
+> +.\" commit 71368af9027f18fe5d1c6f372cfdff7e4bde8b48
+> +.TP
+> +.BR PR_SPEC_DISABLE_NOEXEC " (since Linux 5.1)"
+> +Same as
+> +.BR PR_SPEC_DISABLE ,
+> +but but the state will be cleared on
+> +.BR execve (2).
+> +Currently only supported for
+> +.I arg2
+> +equal to
+> +.B PR_SPEC_STORE_BYPASS.
+>   .RE
+>   .IP
+>   Any unsupported value in
+> @@ -1899,11 +1916,12 @@ was
+>   .BR PR_SET_SPECULATION_CTRL
+>   and
+>   .IR arg3
+> -is neither
+> +is not
+>   .BR PR_SPEC_ENABLE ,
+>   .BR PR_SPEC_DISABLE ,
+> +.BR PR_SPEC_FORCE_DISABLE ,
+>   nor
+> -.BR PR_SPEC_FORCE_DISABLE .
+> +.BR PR_SPEC_DISABLE_NOEXEC .
+>   .SH VERSIONS
+>   The
+>   .BR prctl ()
 
-This is to official inform you that we have been having a meeting for
-the past Seven month which ended Two days ago with Dr. Robert B.
-Rollick the World Bank President and Hon. Mrs. Christine Laggard (IMF)
-Director General, in the meeting we treated on Scam victim problems.
+Acked-by: Waiman Long <longman@redhat.com>
 
-United Nation have agreed to compensate you with the sum of One
-million two Hundred  Thousand Dollars (USD$1.200,000.00) this also
-includes international businesses that failed due to Government
-problems etc?. We have arranged your payment through Master Card ATM
-which is the latest instruction from World Bank Group.
-
-For the collection of your Master Card ATM contact our representative
-Dr.Usman Mohammed and forward the following details to him.
-
-1. Full Name:.........
-2. Country:........
-3. Delivery Address:..........
-4. Telephone:..............& Occupation.......
-5. Your Age...... /Sex..........
-6: Your Nearest Airport..........
-
-Contact Dr.USMAN MOHAMMED with below email and phone number and
-forward all your details to him.
-
-Email:(  inforemitunitinfo@qq.com  )
-
-Telephone +226  61 10 85 06
-
-Note: for the immediate collection of your Master Card ATM contact our
-representative Agent. Usman Mohammed to enable you confirm your
-payment without further delay and note any other contact you made out
-side his office is at of your own risk.
-
-Thanks
-Mrs.Heba Ibrahim.
-
-CC: Hon. Mrs. Christine Lagarde
-CC: World Bank Group
-CC: Mr. Ant=C3=B3nio  Guterres Secretary-General
