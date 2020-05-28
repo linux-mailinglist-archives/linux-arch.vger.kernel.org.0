@@ -2,77 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 183EF1E5265
-	for <lists+linux-arch@lfdr.de>; Thu, 28 May 2020 02:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26981E573B
+	for <lists+linux-arch@lfdr.de>; Thu, 28 May 2020 08:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725768AbgE1A7p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 May 2020 20:59:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35564 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725267AbgE1A7p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 27 May 2020 20:59:45 -0400
-Received: from guoren-Inspiron-7460.lan (unknown [89.208.247.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 90CFE207CB;
-        Thu, 28 May 2020 00:59:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590627584;
-        bh=vzFsK0uZn8FT7qx2c568pKl6hoqO6DKr1GFwtLmOzXw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=0fsjCmS+jQjb+yzf5tQemzRFuHLSODBnpUVwKmHxlu92C2mUBd6nV8KcRqy3E3+U+
-         Ah5h5ZM9mEoozL/zlBE0941UNgIu2/EMWKfmT8/6mPKLNfEWyQ7sQd3Xn8Z2X9WhWa
-         nOTWizI3n1yTsssTKQnk1bmqflnlO0PkE0T9TwYc=
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky updates for v5.7-rc8
-Date:   Thu, 28 May 2020 08:59:32 +0800
-Message-Id: <1590627572-10100-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1727867AbgE1GFJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 May 2020 02:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726865AbgE1GFI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 28 May 2020 02:05:08 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA6AC05BD1E;
+        Wed, 27 May 2020 23:05:07 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id y13so8767629eju.2;
+        Wed, 27 May 2020 23:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=cc:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Gr2QJjfQwZw9TOoef9/CtZwlj2xaVVZ2MosCnhi+D4Y=;
+        b=uT664BfCKD11g59N8NxYNnQAplKNgks3tcQJtPsg7EMK8v+bHKLWEx+us61PDVoIEF
+         Etojnh0KAUk3Dq74XioSiL2SIkDcVQ+r6Rkyyvux71cTcPX3s1pUMcrqZoRwaanfkGHv
+         t2PCfR6IovtThJ5/d29Kw3XIRWcd+gcesYcP1jsxf6lxI3y/CuVMVYWxxedyuqzRixZJ
+         HNIMCiPmwjFwo78VSSDRn8+VRvoUBBD1qmpniDXb1FUt8U58R+5uDnH0Za+/3aWCUw+x
+         +kufOH7t5VY7XVfBrlZ6rMBI6a2gdAW7ZOzjAN7I+4McB4v8L6QP3+kiJ/mKcMNOiI4a
+         0QWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Gr2QJjfQwZw9TOoef9/CtZwlj2xaVVZ2MosCnhi+D4Y=;
+        b=CxCOCN/vkEJg5A4kQq+IuRWIDSataCtoEknESP1oEaLTon8rLg7vsIbaH8mUZqxvaz
+         ul+uTc7MBZ8IJq4mJ8oS4P5WOi+BwHSbfxTy1x2VhAypOTcUaGvqHsP5SHCuSb4spXv4
+         H1+zyfSnhoUl94TzpaQpWYzX4C78g72F77ORCuYCfkwNCTibXGkPGzAKsZvSsMDk/z5m
+         P0MCcbgDTq9SPsOX0e/xEsWQM341duUU9VtKl8zMy1fk6LrQBSp8o6zY/YsjGHQpSSIg
+         SMcPJGhLkK7dtSUXlrM8rTy3GnFMDJeNgQPajgVV6qGXQIjLWjGlHbm5kgawORX58sWB
+         J51g==
+X-Gm-Message-State: AOAM5334yCp0vQRZPjGKwPBHprEhGhM8nkgFcVZjPyJk06iguBq0uMyh
+        sNPv466T5hnBod9p1x75oXagv5B6ynY=
+X-Google-Smtp-Source: ABdhPJxjVLMKxzwXsFiCP+cJ7nLEssCwZug0h9DUfmwi6L1qHjlZIWcNchUGODktXsRFZRS6d4H40Q==
+X-Received: by 2002:a17:906:4088:: with SMTP id u8mr1634002ejj.422.1590645905844;
+        Wed, 27 May 2020 23:05:05 -0700 (PDT)
+Received: from ?IPv6:2001:a61:2516:6501:a84b:ccd6:785a:2f0f? ([2001:a61:2516:6501:a84b:ccd6:785a:2f0f])
+        by smtp.gmail.com with ESMTPSA id nw22sm4561913ejb.48.2020.05.27.23.05.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 May 2020 23:05:05 -0700 (PDT)
+Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/6] prctl.2: ffix use literal hyphens when referencing
+ kernel docs
+To:     Dave Martin <Dave.Martin@arm.com>
+References: <1590614258-24728-1-git-send-email-Dave.Martin@arm.com>
+ <1590614258-24728-2-git-send-email-Dave.Martin@arm.com>
+From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Message-ID: <43a7fb5b-7626-0f05-a13f-a4d35eb3289f@gmail.com>
+Date:   Thu, 28 May 2020 08:05:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <1590614258-24728-2-git-send-email-Dave.Martin@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+On 5/27/20 11:17 PM, Dave Martin wrote:
+> There is one case of a cross-reference to a kernel documentation
+> filename that uses unescaped hyphens.
+> 
+> To avoid misrendering, escape these as \- similarly to other
+> instances.
+> 
+> Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+> ---
+>  man2/prctl.2 | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/man2/prctl.2 b/man2/prctl.2
+> index 968a75a..dc99218 100644
+> --- a/man2/prctl.2
+> +++ b/man2/prctl.2
+> @@ -1261,7 +1261,7 @@ This parameter may enforce a read-only policy which will result in the
+>  call failing with the error
+>  .BR ENXIO .
+>  For further details, see the kernel source file
+> -.IR Documentation/admin-guide/kernel-parameters.txt .
+> +.IR Documentation/admin\-guide/kernel\-parameters.txt .
+>  .\"
+>  .\" prctl PR_TASK_PERF_EVENTS_DISABLE
+>  .TP
 
-Please pull the 4 fixups for v5.7-rc8.
+Thanks, Dave. Applied.
 
-Best Regards
- Guo Ren
+Cheers,
 
-The following changes since commit 9cb1fd0efd195590b828b9b865421ad345a4a145:
+Michael
 
-  Linux 5.7-rc7 (2020-05-24 15:32:54 -0700)
 
-are available in the git repository at:
-
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.7-rc8
-
-for you to fetch changes up to f36e0aab6f1f78d770ce859df3f07a9c5763ce5f:
-
-  csky: Fixup CONFIG_DEBUG_RSEQ (2020-05-28 00:18:36 +0000)
-
-----------------------------------------------------------------
-csky updates for 5.7-rc8
-
-Another 4 fixups for csky:
- - fixup req_syscall debug
- - fixup abiv2 syscall_trace
- - fixup preempt enable
- - Cleanup regs usage in entry.S
-
-----------------------------------------------------------------
-Guo Ren (4):
-      csky: Fixup CONFIG_PREEMPT panic
-      csky: Fixup abiv2 syscall_trace break a4 & a5
-      csky: Coding convention in entry.S
-      csky: Fixup CONFIG_DEBUG_RSEQ
-
- arch/csky/abiv1/inc/abi/entry.h     |   6 --
- arch/csky/abiv2/inc/abi/entry.h     |   8 +--
- arch/csky/include/asm/thread_info.h |   6 ++
- arch/csky/kernel/entry.S            | 117 ++++++++++++++++++------------------
- 4 files changed, 66 insertions(+), 71 deletions(-)
+-- 
+Michael Kerrisk
+Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
+Linux/UNIX System Programming Training: http://man7.org/training/
