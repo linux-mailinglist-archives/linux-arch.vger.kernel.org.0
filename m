@@ -2,159 +2,337 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D671E753A
-	for <lists+linux-arch@lfdr.de>; Fri, 29 May 2020 07:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3A41E7597
+	for <lists+linux-arch@lfdr.de>; Fri, 29 May 2020 07:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725777AbgE2FOe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 May 2020 01:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
+        id S1725852AbgE2Fun (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 May 2020 01:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbgE2FOd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 May 2020 01:14:33 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A44C08C5C6;
-        Thu, 28 May 2020 22:14:33 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id b27so1182868qka.4;
-        Thu, 28 May 2020 22:14:33 -0700 (PDT)
+        with ESMTP id S1725562AbgE2Fun (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 May 2020 01:50:43 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A913C08C5C6;
+        Thu, 28 May 2020 22:50:42 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id g18so1018318qtu.13;
+        Thu, 28 May 2020 22:50:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tg5+TcCm6QNV2OPAv532ciWBLdBm392xLd7vnlNNWYg=;
-        b=rkqmUI+qUByunzA1ZP1hJzA5a/3shMd9H6A8mlXNa7h5wPDtsVM01uYPl7A2deaxN4
-         pL60QomkW89QfHSMVq4yfJVp3x49WPKcb8IY6kPCMfJdt2KLOGvAJptl3t6RAyFJfzjR
-         HhFwVpVFoZVhfKVieixaMqHVFLqsLqtjjkIAsEbYWphRWhTVo+XsFJY6mRPwoIF8+ls1
-         m5ipphp573Qhi5OhFXeYRxnOz9dxNGxH8lL7LFiAjxvGSFRlIOKQF1+cELWYiMd6SaOa
-         LroA8JHxqPyuWeWMNA5bVSRvz6quKa9HJk+FeI4ieiCMQMD6MiCJxnN0ai3VFAFqLx7C
-         HUqA==
+        bh=a3Gk4/XYGIC/kid5xA4UWr5Yurfg4GXkX9ju8HCOHk0=;
+        b=tsPw1aZKojE7l5I6TkPKMccGLXMQZQ2HedzxFOPD49pxxBx/kfgMLW40bMRbmXSHK/
+         RZf43FApOnbBTutAjUMSIac3qumQAwzMFVuv+iza3l22NpivvWLElqKyikseS1L3KfPJ
+         zqHztM0E4OamC05hSH+Hh5Y4KF+cGfCufblypa/ql1PuW0RyHEJJQgHEsy4I2Zv1iGPE
+         Fo2caa7xedMMdBGmqRBXrtsleXR9k2A7R2o9l/ttTefjtxy7gtOxR3gzZqp5V7xch4Fc
+         QX+wBzGfPauBB09Tn/qR64ZSIwtWpie53HW8UC4XUfFHucL0NeQseZVZG/MfRw7wIMyH
+         m17Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tg5+TcCm6QNV2OPAv532ciWBLdBm392xLd7vnlNNWYg=;
-        b=kXMlhxy3lofMOgjZA+G22xGPtTg/vFqWkTFM0195BzaJlPYfLyQFwhJcR/e+FkPvOM
-         R2pO4lbiZ9a7tL+6lDKvDOn90fG2F26CFGbf5pgSzMVTKfhi2ZTi8RU/4iifEXTlv+nX
-         UezHIttcNwHGxiQzDleT/wRec6wlSlMG9uUSlCUxG6UpIPZunF7Ev72VtxgJ9oTg0zOg
-         Ksh4CWFs1d0vRipCOscSUR1dzjbEmlKqOpnT136iIh+AAFWic58G0Ehw25XvA5dxv8tR
-         P5ABxj0VjvV7uLvCEHEUKreM9s1L1lV7lhfsbB6reIx9Pu4xNDp2dBw/8UhHOBvB8L8N
-         b5dw==
-X-Gm-Message-State: AOAM530LjTXZhaulUQgDjGX33fGVvkG8eiimcx0iG5y2xHjLa450PNnb
-        Uck4ZepZFg7eVKsBb5mYNcQx45+8yo9HZ/O4UEU=
-X-Google-Smtp-Source: ABdhPJxsz2Q98YaknWIgWYhmOvgRsuMnXDtm8aEBREL4WHnhJWqdasWcw2Z5aegERXwEZX2eQZmbgGkefPOkElF7EKg=
-X-Received: by 2002:a37:4595:: with SMTP id s143mr6768210qka.449.1590729272407;
- Thu, 28 May 2020 22:14:32 -0700 (PDT)
+        bh=a3Gk4/XYGIC/kid5xA4UWr5Yurfg4GXkX9ju8HCOHk0=;
+        b=YlGsAUEkIr31YTKxBQmwxRumfw2TEt8NXxIi9a872B36OtrNGwW7B8wucoPuwvZOpV
+         4S5cdpKob/MpE+gcmbaTthAebAX+/uPMAoYm/ROKvVnovQh/MsFA0OM+jA+QiwAZyA9a
+         3YijqXD9/l7pKvIlUKwgPbIA1bR+r6Chgd0R2DpxhQkxtm/SqRQOeE+u8TfYhEPGmPG7
+         dlc9zYi4NZ6H+2DcQOcr/GfJu+MgwkhWnEiB5KI8EjyO0+mNGcHv+E6vtSxoIXz7f0L+
+         LOpp6DbwUI3OXnrB4XT44CIbPdnB58TR186WE/rGnhIzkvT+6W3sz1kau7oUebebYdrl
+         jRhg==
+X-Gm-Message-State: AOAM533sBpm+/+oeqbEesT7rHE2RKKYEgoVTxQ7Lp6CelZYEnbCFy+5B
+        OPo+Pm8OZ+H1IWsjdcFAD+L8SOgT5SHGxlF7xVg=
+X-Google-Smtp-Source: ABdhPJzKgofgvtxnTmYL8qn+ggoNENomYP0krGoxLpHFMwMpmqzJPjMop+trzl/lYzgZyt4YHFKt5G6XeF+0FcwMuV4=
+X-Received: by 2002:ac8:342b:: with SMTP id u40mr6967274qtb.59.1590731441275;
+ Thu, 28 May 2020 22:50:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200522003850.GA32698@paulmck-ThinkPad-P72> <20200522094407.GK325280@hirez.programming.kicks-ass.net>
- <20200522143201.GB32434@rowland.harvard.edu> <20200522174352.GJ2869@paulmck-ThinkPad-P72>
- <006e2bc6-7516-1584-3d8c-e253211c157e@fb.com> <20200525112521.GD317569@hirez.programming.kicks-ass.net>
- <20200525154730.GW2869@paulmck-ThinkPad-P72> <20200525170257.GA325280@hirez.programming.kicks-ass.net>
- <20200525172154.GZ2869@paulmck-ThinkPad-P72> <20200528220047.GB211369@google.com>
- <20200528221659.GS2483@worktop.programming.kicks-ass.net>
-In-Reply-To: <20200528221659.GS2483@worktop.programming.kicks-ass.net>
+References: <20200528062408.547149-1-andriin@fb.com> <20200528225427.GA225299@google.com>
+In-Reply-To: <20200528225427.GA225299@google.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 28 May 2020 22:14:21 -0700
-Message-ID: <CAEf4BzYf6jjrStc08R1bDASFyEdKj6vYg_MOaipUJ3vbdqNrSg@mail.gmail.com>
-Subject: Re: Some -serious- BPF-related litmus tests
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
+Date:   Thu, 28 May 2020 22:50:30 -0700
+Message-ID: <CAEf4BzZ_g2RwOgaRL1Qa9yo-8dH4kpgNaBOWZznNxqxhJUM1aA@mail.gmail.com>
+Subject: Re: [PATCH linux-rcu] docs/litmus-tests: add BPF ringbuf MPSC litmus tests
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>, parri.andrea@gmail.com,
-        will@kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, Akira Yokosawa <akiyks@gmail.com>,
-        dlustig@nvidia.com, open list <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org
+        will@kernel.org, Peter Ziljstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        Akira Yokosawa <akiyks@gmail.com>, dlustig@nvidia.com,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 28, 2020 at 3:17 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, May 28, 2020 at 3:54 PM Joel Fernandes <joel@joelfernandes.org> wrote:
 >
-> On Thu, May 28, 2020 at 06:00:47PM -0400, Joel Fernandes wrote:
+> Hello Andrii,
+> This is quite exciting. Some comments below:
 >
-> > Any idea why this choice of locking-based ring buffer implementation in BPF?
-> > The ftrace ring buffer can support NMI interruptions as well for writes.
-> >
-> > Also, is it possible for BPF to reuse the ftrace ring buffer implementation
-> > or does it not meet the requirements?
+> On Wed, May 27, 2020 at 11:24:08PM -0700, Andrii Nakryiko wrote:
+> [...]
+> > diff --git a/Documentation/litmus-tests/bpf-rb/bpf-rb+1p1c+bounded.litmus b/Documentation/litmus-tests/bpf-rb/bpf-rb+1p1c+bounded.litmus
+> > new file mode 100644
+> > index 000000000000..558f054fb0b4
+> > --- /dev/null
+> > +++ b/Documentation/litmus-tests/bpf-rb/bpf-rb+1p1c+bounded.litmus
+> > @@ -0,0 +1,91 @@
+> > +C bpf-rb+1p1c+bounded
+> > +
+> > +(*
+> > + * Result: Always
+> > + *
+> > + * This litmus test validates BPF ring buffer implementation under the
+> > + * following assumptions:
+> > + * - 1 producer;
+> > + * - 1 consumer;
+> > + * - ring buffer has capacity for only 1 record.
+> > + *
+> > + * Expectations:
+> > + * - 1 record pushed into ring buffer;
+> > + * - 0 or 1 element is consumed.
+> > + * - no failures.
+> > + *)
+> > +
+> > +{
+> > +     atomic_t dropped;
+> > +}
+> > +
+> > +P0(int *lenFail, int *len1, int *cx, int *px)
+> > +{
+> > +     int *rLenPtr;
+> > +     int rLen;
+> > +     int rPx;
+> > +     int rCx;
+> > +     int rFail;
+> > +
+> > +     rFail = 0;
+> > +
+> > +     rCx = smp_load_acquire(cx);
+> > +     rPx = smp_load_acquire(px);
 >
-> Both perf and ftrace are per-cpu, which, according to the patch
-> description is too much memory overhead for them. Neither have ever
-> considered anything else, atomic ops are expensive.
+> Is it possible for you to put some more comments around which ACQUIRE is
+> paired with which RELEASE? And, in general more comments around the reason
+> for a certain memory barrier and what pairs with what. In the kernel sources,
+> the barriers needs a comment anyway.
+>
+> > +     if (rCx < rPx) {
+> > +             if (rCx == 0) {
+> > +                     rLenPtr = len1;
+> > +             } else {
+> > +                     rLenPtr = lenFail;
+> > +                     rFail = 1;
+> > +             }
+> > +
+> > +             rLen = smp_load_acquire(rLenPtr);
+> > +             if (rLen == 0) {
+> > +                     rFail = 1;
+> > +             } else if (rLen == 1) {
+> > +                     rCx = rCx + 1;
+> > +                     smp_store_release(cx, rCx);
+> > +             }
+> > +     }
+> > +}
+> > +
+> > +P1(int *lenFail, int *len1, spinlock_t *rb_lock, int *px, int *cx, atomic_t *dropped)
+> > +{
+> > +     int rPx;
+> > +     int rCx;
+> > +     int rFail;
+> > +     int *rLenPtr;
+> > +
+> > +     rFail = 0;
+> > +
+> > +     rCx = smp_load_acquire(cx);
+> > +     spin_lock(rb_lock);
+> > +
+> > +     rPx = *px;
+> > +     if (rPx - rCx >= 1) {
+> > +             atomic_inc(dropped);
+>
+> Why does 'dropped' need to be atomic if you are always incrementing under a
+> lock?
 
-Right, as mentioned in commit description to [0], desire to use shared
-ring buffer across multiple CPUs to save memory and absorb bigger
-spikes with overall lower memory use was one of main motivations.
-Ordered events was another one. Both perf buffer and ftrace buffer use
-strictly per-CPU buffers, which in practice makes a lot of developers
-make hard and non-obvious choice between using too much memory or
-losing too much events due to running out of space in a buffer.
-
-  [0] https://patchwork.ozlabs.org/project/netdev/patch/20200526063255.1675186-2-andriin@fb.com/
+It doesn't, strictly speaking, but making it atomic in litmus test was
+just more convenient, especially that I initially also had a lock-less
+variant of this algorithm.
 
 >
-> On top of that, they want multi-producer support. Yes, doing that gets
-> interesting really fast, but using spinlocks gets you a trainwreck like
-> this.
+> > +             spin_unlock(rb_lock);
+> > +     } else {
+> > +             if (rPx == 0) {
+> > +                     rLenPtr = len1;
+> > +             } else {
+> > +                     rLenPtr = lenFail;
+> > +                     rFail = 1;
+> > +             }
+> > +
+> > +             *rLenPtr = -1;
 >
-> This thing so readily wanting to drop data on the floor should worry
+> Clarify please the need to set the length intermittently to -1. Thanks.
 
-It's true that *in NMI context*, if spinlock is already taken,
-reservation will fail, so under high contention there will be
-potentially high number of drops. So for such cases perfbuf might be a
-better approach and BPF applications will have to deal with higher
-memory usage. In practice, though, most BPF programs are not running
-in NMI context, so there won't be any drop due to spinlock usage.
-Having both perfbuf and this new BPF ringbuf gives people choice and
-more options to tailor to their needs.
-
-There is another cluster of applications which are unnecessarily more
-complicated just for the fact that there is no ordering between
-correlated events that happen on different CPUs. Per-CPU buffers are
-not well suited for such cases, unfortunately.
-
-> people, but apparently they've not spend enough time debugging stuff
-> with partial logs yet. Of course, bpf_prog_active already makes BPF
-> lossy, so maybe they went with that.
-
-Not sure which "partial logs" you mean, I'll assume dropped samples?
-All production BPF applications are already designed to handle data
-loss, because it could and does happen due to running out of buffer
-space. Of course, amount of such drops is minimized however possible,
-but applications still need to be able to handle that.
-
-Now, though, there will be more options. Now it's not just a question
-of whether to allocate a tiny 64KB per-CPU buffer on 80 core server
-and use reasonable 5MB for perfbuf overall, but suffer high and
-frequent data loss whenever a burst of incoming events happen. Or bump
-it up to, say, 256KB (or higher) and use 20MB+ now, which most of the
-time will be completely unused, but be able to absorb 4x more events.
-Now it might be more than enough to just allocate a single shared 5MB
-buffer and be able to absorb much higher spikes (of course, assuming
-not all CPUs will be spiking at the same time, in which case nothing
-can really help you much w.r.t. data loss).
-
-So many BPF users are acutely aware of data loss and care a lot, but
-there are other constraints that they have to take into account.
-
-As for expensiveness of spinlock and atomics, a lot of applications we
-are seeing do not require huge throughput that per-CPU data structures
-provide, so such overhead is acceptable. Even under high contention,
-BPF ringbuf performance is pretty reasonable and will satisfy a lot of
-applications, see [1].
-
-  [1] https://patchwork.ozlabs.org/project/netdev/patch/20200526063255.1675186-5-andriin@fb.com/
+This corresponds to setting a "busy bit" in kernel implementation.
+These litmus tests are supposed to be correlated with in-kernel
+implementation, I'm not sure I want to maintain extra 4 copies of
+comments here and in kernel code. Especially for 2-producer cases,
+there are 2 identical P1 and P2, which is unfortunate, but I haven't
+figured out how to have a re-usable pieces of code with litmus tests
+:)
 
 >
-> All reasons why I never bother with BPF, aside from it being more
-> difficult than hacking up a kernel in the first place.
+> > +             smp_store_release(px, rPx + 1);
+> > +
+> > +             spin_unlock(rb_lock);
+> > +
+> > +             smp_store_release(rLenPtr, 1);
+> > +     }
+> > +}
+> > +
+> > +exists (
+> > +     0:rFail=0 /\ 1:rFail=0
+> > +     /\
+> > +     (
+> > +             (dropped=0 /\ px=1 /\ len1=1 /\ (cx=0 \/ cx=1))
+> > +     )
+> > +)
+> > diff --git a/Documentation/litmus-tests/bpf-rb/bpf-rb+1p1c+unbound.litmus b/Documentation/litmus-tests/bpf-rb/bpf-rb+1p1c+unbound.litmus
+> > new file mode 100644
+> > index 000000000000..7ab5d0e6e49f
+> > --- /dev/null
+> > +++ b/Documentation/litmus-tests/bpf-rb/bpf-rb+1p1c+unbound.litmus
+>
+> I wish there was a way to pass args to litmus tests, then perhaps it would
+> have been possible to condense some of these tests. :-)
 
-It's not my goal to pitch BPF here, but for a lot of real-world use
-cases, hacking kernel is not an option at all, for many reasons. One
-of them is that kernel upgrades across huge fleet of servers take a
-long time, which teams can't afford to wait. In such cases, BPF is a
-perfect solution, which can't be beaten, as evidenced by a wide
-variety of BPF applications solving real problems.
+It wouldn't help much, actually, because litmus tests can't have
+arrays. See all those "if selectors" between len1 and len2, I had to
+do explicitly.
+
+>
+> > diff --git a/Documentation/litmus-tests/bpf-rb/bpf-rb+2p1c+bounded.litmus b/Documentation/litmus-tests/bpf-rb/bpf-rb+2p1c+bounded.litmus
+> > new file mode 100644
+> > index 000000000000..83f80328c92b
+> > --- /dev/null
+> > +++ b/Documentation/litmus-tests/bpf-rb/bpf-rb+2p1c+bounded.litmus
+> [...]
+> > +P0(int *lenFail, int *len1, int *cx, int *px)
+> > +{
+> > +     int *rLenPtr;
+> > +     int rLen;
+> > +     int rPx;
+> > +     int rCx;
+> > +     int rFail;
+> > +
+> > +     rFail = 0;
+> > +
+> > +     rCx = smp_load_acquire(cx);
+> > +     rPx = smp_load_acquire(px);
+> > +     if (rCx < rPx) {
+> > +             if (rCx == 0) {
+> > +                     rLenPtr = len1;
+> > +             } else if (rCx == 1) {
+> > +                     rLenPtr = len1;
+> > +             } else {
+> > +                     rLenPtr = lenFail;
+> > +                     rFail = 1;
+> > +             }
+> > +
+> > +             rLen = smp_load_acquire(rLenPtr);
+> > +             if (rLen == 0) {
+> > +                     rFail = 1;
+> > +             } else if (rLen == 1) {
+> > +                     rCx = rCx + 1;
+> > +                     smp_store_release(cx, rCx);
+> > +             }
+> > +     }
+> > +
+> > +     rPx = smp_load_acquire(px);
+> > +     if (rCx < rPx) {
+> > +             if (rCx == 0) {
+> > +                     rLenPtr = len1;
+> > +             } else if (rCx == 1) {
+> > +                     rLenPtr = len1;
+> > +             } else {
+> > +                     rLenPtr = lenFail;
+> > +                     rFail = 1;
+> > +             }
+> > +
+> > +             rLen = smp_load_acquire(rLenPtr);
+> > +             if (rLen == 0) {
+> > +                     rFail = 1;
+> > +             } else if (rLen == 1) {
+> > +                     rCx = rCx + 1;
+> > +                     smp_store_release(cx, rCx);
+> > +             }
+> > +     }
+> > +}
+> > +
+> > +P1(int *lenFail, int *len1, spinlock_t *rb_lock, int *px, int *cx, atomic_t *dropped)
+> > +{
+> > +     int rPx;
+> > +     int rCx;
+> > +     int rFail;
+> > +     int *rLenPtr;
+> > +
+> > +     rFail = 0;
+> > +     rLenPtr = lenFail;
+> > +
+> > +     rCx = smp_load_acquire(cx);
+> > +     spin_lock(rb_lock);
+> > +
+> > +     rPx = *px;
+> > +     if (rPx - rCx >= 1) {
+> > +             atomic_inc(dropped);
+> > +             spin_unlock(rb_lock);
+> > +     } else {
+> > +             if (rPx == 0) {
+> > +                     rLenPtr = len1;
+> > +             } else if (rPx == 1) {
+> > +                     rLenPtr = len1;
+> > +             } else {
+> > +                     rLenPtr = lenFail;
+> > +                     rFail = 1;
+> > +             }
+> > +
+> > +             *rLenPtr = -1;
+> > +             smp_store_release(px, rPx + 1);
+> > +
+> > +             spin_unlock(rb_lock);
+> > +
+> > +             smp_store_release(rLenPtr, 1);
+>
+> I ran a test replacing the last 2 statements above with the following and it
+> still works:
+>
+>                 spin_unlock(rb_lock);
+>                 WRITE_ONCE(*rLenPtr, 1);
+>
+> Wouldn't you expect the test to catch an issue? The spin_unlock is already a
+> RELEASE barrier.
+
+Well, apparently it's not an issue and WRITE_ONCE would work as well
+:) My original version actually used WRITE_ONCE here. See [0] and
+discussion in [1] after which I removed all the WRITE_ONCE/READ_ONCE
+in favor of store_release/load_acquire for consistency.
+
+  [0] https://patchwork.ozlabs.org/project/netdev/patch/20200513192532.4058934-3-andriin@fb.com/
+  [1] https://patchwork.ozlabs.org/project/netdev/patch/20200513192532.4058934-2-andriin@fb.com/
+
+>
+> Suggestion: It is hard to review the patch because it is huge, it would be
+> good to split this up into 4 patches for each of the tests. But upto you :)
+
+Those 4 files are partial copies of each other, not sure splitting
+them actually would be easier. If anyone else thinks the same, though,
+I'll happily split.
+
+>
+> thanks,
+>
+>  - Joel
+>
+> [...]
+>
