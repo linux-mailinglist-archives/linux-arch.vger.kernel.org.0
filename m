@@ -2,188 +2,171 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E18D51E7D5D
-	for <lists+linux-arch@lfdr.de>; Fri, 29 May 2020 14:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C301E84CB
+	for <lists+linux-arch@lfdr.de>; Fri, 29 May 2020 19:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgE2MhH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 May 2020 08:37:07 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:37462 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726459AbgE2MhG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 May 2020 08:37:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DptdA1/V+5FkC3vPba0mtFM4V0F9ANd+9Ig+L5lvr7Q=; b=qXYsXDjDNmBXT8VWhFUDC9YDld
-        oIgSZAsorhm+KlpiAXKflk7WhSslRt205AP30suHRrQrKIzOkOjUl8P17PmsiX5nazLaZuXizywjI
-        cwZRsGBmu8FoEglYiduB64OUUqork3+TlBNyW87Mdt+0+NeNBtQIo9xcr78LM9gdb2iDDmn/G8bjF
-        JSAxJTr3cyx64178NPHUFbTNzkp+c/awB65bE/NznrhbmbQSZqX9UAcdpV91BWMgjW3ihWWyaa9hw
-        5XMLpkx6y5fx8qJhVle97YE20kaLP83rmjAY485MT7teqsMEYmI9YoGVRpgGTHDd84Babaf3S8LGP
-        m+I03HZg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jeeFX-0005PL-P9; Fri, 29 May 2020 12:36:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1D333301A80;
-        Fri, 29 May 2020 14:36:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 05A9E203C05AF; Fri, 29 May 2020 14:36:27 +0200 (CEST)
-Date:   Fri, 29 May 2020 14:36:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
+        id S1726829AbgE2RbZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 May 2020 13:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726968AbgE2RXG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 May 2020 13:23:06 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D362C08C5C8
+        for <linux-arch@vger.kernel.org>; Fri, 29 May 2020 10:23:03 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id f18so2940088qkh.1
+        for <linux-arch@vger.kernel.org>; Fri, 29 May 2020 10:23:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5QAaubCrSkbMtN2AeIrJ/eYnjpFRXFZ0sKgmmAcHtXo=;
+        b=ArfyHqMUwzGeH73k2mBJsFUozWtJpj5oE8H9B7d7NEfa1b3Y64UjetLoU1oWDOLJCJ
+         rF3mfwv/zQIH7hznhfFML65UdVKly2VQMoDIfNyLVqGvta7AXIc8vcbmi0FOkkI1osCr
+         tGh1IJNnVkRi9HzqZ6D49ebWEAk3OHrSOggRA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5QAaubCrSkbMtN2AeIrJ/eYnjpFRXFZ0sKgmmAcHtXo=;
+        b=typvdX/ocgs4Gnbig4NyaLgDExssiC0PNo4jpBTynPtViD5BVvH+7V4hKHzRaasai6
+         P9MQlpifGYRQczPeY8BsIcqDwb90S4s9wJ8T1aL9T54hB1w5+n0g8m9XCMA4j6deXnDk
+         YYljdDzhNyJsbuXsQE0Fi0GSQE68u1t6z/r2ezq6ByZeIjk4u9nWWV3j/GlFWWlmVS+d
+         wIOiOBSVmvOq2Bi7mB6ZkTDWPfaFMzosQHRrbKOqs5AhtvMlp6Lx75IVdDb1oPe41t0h
+         r5IO/Xxnvs+ELc7KPRMEkOtGWMz0M+3Ryw3OvCTOIHrcsgPawcgVLBmrQbeBU+wBtnJK
+         k9tg==
+X-Gm-Message-State: AOAM532rzb8mPIQNR4k41Yf7Is4XjHFofoltIrxb84Ve98wWZ4N3dQ5q
+        jWRKv9eT+TUnZZjnxMVbzy8s/w==
+X-Google-Smtp-Source: ABdhPJwV/l5nKHQb4UcPORNyXvM5Pvo0rXR6QThXF7jRC6+aNS2y0G6UpNyzmVsu48cOJo/NokUwKA==
+X-Received: by 2002:a37:5ce:: with SMTP id 197mr8515029qkf.334.1590772982379;
+        Fri, 29 May 2020 10:23:02 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id h5sm7408513qkk.108.2020.05.29.10.23.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2020 10:23:01 -0700 (PDT)
+Date:   Fri, 29 May 2020 13:23:01 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
         Andrii Nakryiko <andriin@fb.com>,
-        Alan Stern <stern@rowland.harvard.edu>, parri.andrea@gmail.com,
-        will@kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, Akira Yokosawa <akiyks@gmail.com>,
-        dlustig@nvidia.com, open list <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Zijlstra <peterz@infradead.org>, parri.andrea@gmail.com,
+        will@kernel.org, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        Akira Yokosawa <akiyks@gmail.com>, dlustig@nvidia.com,
+        open list <linux-kernel@vger.kernel.org>,
         linux-arch@vger.kernel.org
 Subject: Re: Some -serious- BPF-related litmus tests
-Message-ID: <20200529123626.GL706495@hirez.programming.kicks-ass.net>
-References: <20200522143201.GB32434@rowland.harvard.edu>
+Message-ID: <20200529172301.GB196085@google.com>
+References: <20200522003850.GA32698@paulmck-ThinkPad-P72>
+ <20200522094407.GK325280@hirez.programming.kicks-ass.net>
+ <20200522143201.GB32434@rowland.harvard.edu>
  <20200522174352.GJ2869@paulmck-ThinkPad-P72>
  <006e2bc6-7516-1584-3d8c-e253211c157e@fb.com>
- <20200525112521.GD317569@hirez.programming.kicks-ass.net>
- <20200525154730.GW2869@paulmck-ThinkPad-P72>
- <20200525170257.GA325280@hirez.programming.kicks-ass.net>
- <20200525172154.GZ2869@paulmck-ThinkPad-P72>
- <20200528220047.GB211369@google.com>
- <20200528221659.GS2483@worktop.programming.kicks-ass.net>
- <CAEf4BzYf6jjrStc08R1bDASFyEdKj6vYg_MOaipUJ3vbdqNrSg@mail.gmail.com>
+ <20200525145325.GB2066@tardis>
+ <CAEf4BzYCjbnU=cNyLnYRoZdMPKnBP4w8t+VRkXrC1GW-aFVkEA@mail.gmail.com>
+ <20200528214823.GA211369@google.com>
+ <CAEf4BzbzyA0mn7O-+x2peGa9WUuaGSi0+Gpyy-6t5iJwVLYf5A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzYf6jjrStc08R1bDASFyEdKj6vYg_MOaipUJ3vbdqNrSg@mail.gmail.com>
+In-Reply-To: <CAEf4BzbzyA0mn7O-+x2peGa9WUuaGSi0+Gpyy-6t5iJwVLYf5A@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 28, 2020 at 10:14:21PM -0700, Andrii Nakryiko wrote:
-
-> There is another cluster of applications which are unnecessarily more
-> complicated just for the fact that there is no ordering between
-> correlated events that happen on different CPUs. Per-CPU buffers are
-> not well suited for such cases, unfortunately.
-
-And yet, I've been debugging concurrency issues with ftrace for well
-over a decade.
-
-In fact, adding a spinlock in the mix will make a certain class of
-concurrency problems go-away! because you introduce artificial
-serialization between CPUs.
-
-Heck, even the ftrace buffer can sometimes make problems go way just
-because of the overhead of tracing itself changes the timing.
-
-It is perfectly possible to reconstruct order with per-cpu buffers in so
-far as that there is order to begin with. Esp on modern CPUs that have
-synchronized TSC.
-
-Computers are not SC, pretending that events are is just a lie.
-
-> > people, but apparently they've not spend enough time debugging stuff
-> > with partial logs yet. Of course, bpf_prog_active already makes BPF
-> > lossy, so maybe they went with that.
+On Thu, May 28, 2020 at 09:38:35PM -0700, Andrii Nakryiko wrote:
+> On Thu, May 28, 2020 at 2:48 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> >
+> > On Mon, May 25, 2020 at 11:38:23AM -0700, Andrii Nakryiko wrote:
+> > > On Mon, May 25, 2020 at 7:53 AM Boqun Feng <boqun.feng@gmail.com> wrote:
+> > > >
+> > > > Hi Andrii,
+> > > >
+> > > > On Fri, May 22, 2020 at 12:38:21PM -0700, Andrii Nakryiko wrote:
+> > > > > On 5/22/20 10:43 AM, Paul E. McKenney wrote:
+> > > > > > On Fri, May 22, 2020 at 10:32:01AM -0400, Alan Stern wrote:
+> > > > > > > On Fri, May 22, 2020 at 11:44:07AM +0200, Peter Zijlstra wrote:
+> > > > > > > > On Thu, May 21, 2020 at 05:38:50PM -0700, Paul E. McKenney wrote:
+> > > > > > > > > Hello!
+> > > > > > > > >
+> > > > > > > > > Just wanted to call your attention to some pretty cool and pretty serious
+> > > > > > > > > litmus tests that Andrii did as part of his BPF ring-buffer work:
+> > > > > > > > >
+> > > > > > > > > https://lore.kernel.org/bpf/20200517195727.279322-3-andriin@fb.com/
+> > > > > > > > >
+> > > > > > > > > Thoughts?
+> > > > > > > >
+> > > > > > > > I find:
+> > > > > > > >
+> > > > > > > >         smp_wmb()
+> > > > > > > >         smp_store_release()
+> > > > > > > >
+> > > > > > > > a _very_ weird construct. What is that supposed to even do?
+> > > > > > >
+> > > > > > > Indeed, it looks like one or the other of those is redundant (depending
+> > > > > > > on the context).
+> > > > > >
+> > > > > > Probably.  Peter instead asked what it was supposed to even do.  ;-)
+> > > > >
+> > > > > I agree, I think smp_wmb() is redundant here. Can't remember why I thought
+> > > > > that it's necessary, this algorithm went through a bunch of iterations,
+> > > > > starting as completely lockless, also using READ_ONCE/WRITE_ONCE at some
+> > > > > point, and settling on smp_read_acquire/smp_store_release, eventually. Maybe
+> > > > > there was some reason, but might be that I was just over-cautious. See reply
+> > > > > on patch thread as well ([0]).
+> > > > >
+> > > > >   [0] https://lore.kernel.org/bpf/CAEf4Bza26AbRMtWcoD5+TFhnmnU6p5YJ8zO+SoAJCDtp1jVhcQ@mail.gmail.com/
+> > > > >
+> > > >
+> > > > While we are at it, could you explain a bit on why you use
+> > > > smp_store_release() on consumer_pos? I ask because IIUC, consumer_pos is
+> > > > only updated at consumer side, and there is no other write at consumer
+> > > > side that we want to order with the write to consumer_pos. So I fail
+> > > > to find why smp_store_release() is necessary.
+> > > >
+> > > > I did the following modification on litmus tests, and I didn't see
+> > > > different results (on States) between two versions of litmus tests.
+> > > >
+> > >
+> > > This is needed to ensure that producer can reliably detect whether it
+> > > needs to trigger poll notification.
+> >
+> > Boqun's question is on the consumer side though. Are you saying that on the
+> > consumer side, the loads prior to the smp_store_release() on the consumer
+> > side should have been seen by the consumer?  You are already using
+> > smp_load_acquire() so that should be satisified already because the
+> > smp_load_acquire() makes sure that the smp_load_acquire()'s happens before
+> > any future loads and stores.
 > 
-> Not sure which "partial logs" you mean, I'll assume dropped samples?
+> Consumer is reading two things: producer_pos and each record's length
+> header, and writes consumer_pos. I re-read this paragraph many times,
+> but I'm still a bit confused on what exactly you are trying to say.
 
-Yep. Trying to reconstruct what actually happened from incomplete logs
-is one of the most frustrating things in the world.
+This is what I was saying in the other thread. I think you missed that
+comment. If you are adding litmus documentation, at least it should be clear
+what memory ordering is being verified. Both me and Boqun tried to remove a
+memory barrier each and the test still passes. So what exactly are you
+verifying from a memory consistency standpoint? I know you have those various
+rFail things and conditions - but I am assuming the goal here is to verify
+memory consistency as well. Or are we just throwing enough memory barriers at
+the problem to make sure the test passes, without understanding exactly what
+ordering is needed?
 
-> All production BPF applications are already designed to handle data
-> loss, because it could and does happen due to running out of buffer
-> space. Of course, amount of such drops is minimized however possible,
-> but applications still need to be able to handle that.
+> Can you please specify in each case release()/acquire() of which
+> variable you are talking about?
 
-Running out of space is fixable and 'obvious'. Missing random events in
-the middle is bloody infuriating. Even more so if you can't tell there's
-gaps in the midle.
+I don't want to speculate and confuse the thread more. I am afraid the burden
+of specifying what the various release/acquire orders is on the author of the
+code introducing the memory barriers ;-). That is, IMHO you should probably add
+code comments in the test about why a certain memory barrier is needed.
 
-AFAICT, you don't even mark a reservation fail.... ah, you leave that to
-the user :-( And it can't tell if it's spurious or space related.
+That said, I need to do more diligence and read the actual BPF ring buffer
+code to understand what you're modeling. I will try to make time to do that.
 
-Same with bpf_prog_active, it's silent 'random' data loss. You can
-easily tell where a CPU buffer starts and stops, and thus if the events
-are contained within, but not if there's random bits missing from the
-middle.
+thanks!
 
-> Now, though, there will be more options. Now it's not just a question
-> of whether to allocate a tiny 64KB per-CPU buffer on 80 core server
-> and use reasonable 5MB for perfbuf overall, but suffer high and
-> frequent data loss whenever a burst of incoming events happen. Or bump
-> it up to, say, 256KB (or higher) and use 20MB+ now, which most of the
-> time will be completely unused, but be able to absorb 4x more events.
-> Now it might be more than enough to just allocate a single shared 5MB
-> buffer and be able to absorb much higher spikes (of course, assuming
-> not all CPUs will be spiking at the same time, in which case nothing
-> can really help you much w.r.t. data loss).
+ - Joel
 
-Muwhahaha, a single shared buffer with 80 CPUs! That's bloody murder on
-performance.
-
-> So many BPF users are acutely aware of data loss and care a lot, but
-> there are other constraints that they have to take into account.
-> 
-> As for expensiveness of spinlock and atomics, a lot of applications we
-> are seeing do not require huge throughput that per-CPU data structures
-> provide, so such overhead is acceptable. Even under high contention,
-> BPF ringbuf performance is pretty reasonable and will satisfy a lot of
-> applications, see [1].
-
-I've done benchmarks on contended atomic ops, and they go from ~20
-cycles (uncontended, cache hot) to well over 10k cycles when you jump on
-them with say a dozen cores across a few nodes (more numa, more
-horrible).
-
->   [1] https://patchwork.ozlabs.org/project/netdev/patch/20200526063255.1675186-5-andriin@fb.com/
-
-From that: "Ringbuf, multi-producer contention", right? I read that as:
-'performance is bloody horrible if you add contention'.
-
-I suppose most of your users have very low event rates, otherwise I
-can't see that working.
-
-> > All reasons why I never bother with BPF, aside from it being more
-> > difficult than hacking up a kernel in the first place.
-> 
-> It's not my goal to pitch BPF here, but for a lot of real-world use
-> cases, hacking kernel is not an option at all, for many reasons. One
-> of them is that kernel upgrades across huge fleet of servers take a
-> long time, which teams can't afford to wait. In such cases, BPF is a
-> perfect solution, which can't be beaten, as evidenced by a wide
-> variety of BPF applications solving real problems.
-
-Yeah; lots of people use it because they really have nothing better for
-their situation.
-
-As long as people understand the constraints (and that's a *BIG* if) I
-suppose it's usable.
-
-It's just things I don't want to have to worry about.
-
-Anyway, all that said, I like how you did the commits, I should look to
-see if I can retro-fit the perf buffer to have some of that. Once
-question though; why are you using xchg() for the commit? Isn't that
-more expensive than it should be?
-
-That is, why isn't that:
-
-  smp_store_release(&hdr->len, new_len);
-
-? Or are you needing the smp_mb() for the store->load ordering for the
-->consumer_pos load? That really needs a comment.
-
-I think you can get rid of the smp_load_acquire() there, you're ordering
-a load->store and could rely on the branch to do that:
-
-	cons_pos = READ_ONCE(&rb->consumer_pos) & rb->mask;
-	if ((flags & BPF_RB_FORCE_WAKEUP) || (cons_pos == rec_pos && !(flags &BPF_RB_NO_WAKEUP))
-		irq_work_queue(&rq->work);
-
-should be a control dependency.
