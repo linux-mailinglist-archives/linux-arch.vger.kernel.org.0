@@ -2,59 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 982391E8FD8
-	for <lists+linux-arch@lfdr.de>; Sat, 30 May 2020 10:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852BE1E8FF6
+	for <lists+linux-arch@lfdr.de>; Sat, 30 May 2020 11:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725889AbgE3Ipm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 30 May 2020 04:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
+        id S1728460AbgE3JUy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 30 May 2020 05:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbgE3Ipl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 May 2020 04:45:41 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781E3C03E969;
-        Sat, 30 May 2020 01:45:40 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id k18so1926532ion.0;
-        Sat, 30 May 2020 01:45:40 -0700 (PDT)
+        with ESMTP id S1725889AbgE3JUy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 May 2020 05:20:54 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E189DC03E969;
+        Sat, 30 May 2020 02:20:53 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id q9so2541833pjm.2;
+        Sat, 30 May 2020 02:20:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FwSC2AMRfcDtu2KYVqxdYpNUHJ8zNAGOiDtCzdUYjdI=;
-        b=bLEU2K4xEBOo3itAlkXlHBgwWe/HgI5nYwfv8zmn3jJh6XTBB9hL2W/d0/jC/vcqIO
-         CaE3gbunqGJnPSOYkrhyLrSyHTusX3lvFHkGb7y1HvnBfsRHE5sKLFSXD1/QI1lmuIu+
-         OOZM6NF3eKiMNEl2VycJDxechxDSzCwYeYuI14YO/tEttobvgGJUAFcOC/BS182J4gSm
-         TAUX+q/CnYwHr3hV0xGef4P/JPvH/Ui++FJp+rwlqdC6c7llYPvH7caVYnpLIW+Wrh33
-         FtQ8m8g+Pv3aUgHBtD8dlzkMnWWpakh1blIaG5FFbWvpNiIZ6TftwE/CVZRJWDpUa75i
-         7NiQ==
+        bh=bs9UYgoSrJr54RlOKcX9RuR9hr2tsGVOxFS0YjFci+U=;
+        b=nkIiznnXDeCF1KvcW4aLGDkQV37ZDQTnvgj6Qctif8HyGgR6N1vtKTNWJRiJz33Fli
+         z7zKy0SlwnZAf4/aprdq4ZD5HFInck80N6muDG7Yf12KOeKBVrsSJ9ZRsT1tUn8sVw0k
+         ORNiFHJC/HZSnb1DLKygVeQmzLHWEA6W/+dPMvjr8iZRxxQn4u2mqU3EGhsDmJil2uMf
+         BKm2TRispGb6nEg6+Vono/c6cPPuPtJafduR7v1LChFCjV0Ai3h0ZQ0J7yv3V8q1CdWM
+         1/olHrxGHbHL20M1KOu6rZZjbF36ivkw95LkOvOz4Qg47v15sb7g3Hyse3x5bBCXv/AK
+         KFDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FwSC2AMRfcDtu2KYVqxdYpNUHJ8zNAGOiDtCzdUYjdI=;
-        b=aGlq++M2Gwg9BioBalsBN5oRPW7T2CKmn6ejQMYWu0GZjy490jT3WbG2n0Hnk6z0Sv
-         JtiRR965nVvNhqg++gBACoUNnMJTqqfM+qonMPn3n9FpgzhPoEt9nYpUgjYDVPodebFa
-         QqKbqGjnPKC7dcNeTR7h0wlNGYxqrtBmoUlnDYB/NwfveSJVEM+7w4JJEZ2yuMt8tWPA
-         UxhyM0sNzG97I8WVKk3kRDqACPIm1/XGvuImZuZd5e/V9g93/La9P69jJrqIbLdIg+iX
-         OsfcUtOxMXLg4HIc/KRq7ygTyGfjeTVwQv5vAM1Fj8ildS/6fP00VgqTY/y+ha9/eWlj
-         W65A==
-X-Gm-Message-State: AOAM532juO+nx2HzPT8ChXY46ndGUb0JSWEvFilzUESGt1j6cGriMqzx
-        IFxiz3WNsDyTyglxi8AcoPiQhdIYC+LU/SnfvTc=
-X-Google-Smtp-Source: ABdhPJyZPathfKmbTyTWR015mWTyhfWIaC1GWkZfU12DczvLxtj0mTtbvpgi8fd4y5st7rCFwbdQ4pJT87ZwiR+GNcY=
-X-Received: by 2002:a05:6638:54:: with SMTP id a20mr9093075jap.3.1590828339714;
- Sat, 30 May 2020 01:45:39 -0700 (PDT)
+        bh=bs9UYgoSrJr54RlOKcX9RuR9hr2tsGVOxFS0YjFci+U=;
+        b=f50W1nU5sSSVlkmK3J4/wmb+i18rvbbE8CTFLyX1Fo/fGu7YXhmRfsRPccpH6sAfmN
+         NJf+t7PfOjWk5o1t+7Jt3yjZGtXIGDioqwweQRRQYNyKki+BhmjJ9MG1l9niTXTy8PlH
+         wKGR0lXsb7NLZGMW7ipG0hdzulf5QD2ZwbUfXgxJMis1oFkftWZXCphKtfcYoZeNZJfq
+         LoDaFrEscjwFSEDVGDdOlAmhZ2/8otuJVyC41C+pnq6CJB3M1WO1qGi980EpYgMUFSP3
+         ayi/rNMuEPFLvfrcadaynOUQcC/NQGi2dkcN+Q4p99TMiySkBPkVOueQM/NGMpTBAGxP
+         Lv1A==
+X-Gm-Message-State: AOAM530s4eYwGUlYCWh+f8TVO4Lblw3d44uVACDIoj5JeKhF9n9sdYPa
+        Qvyl45KQJxk2H7/No53O8j5nsy3KAvl4zcSJrac=
+X-Google-Smtp-Source: ABdhPJxZRMR0P9gBuQGFn/vs24p5Ultrlgik5g66vpVEr97ZIWJeBAsecw1LAkfejTfoWC01Obcq6d84xjViYsSKvlc=
+X-Received: by 2002:a17:90b:3651:: with SMTP id nh17mr13762769pjb.228.1590830453188;
+ Sat, 30 May 2020 02:20:53 -0700 (PDT)
 MIME-Version: 1.0
 References: <17cb2b080b9c4c36cf84436bc5690739590acc53.1590017578.git.syednwaris@gmail.com>
  <202005242236.NtfLt1Ae%lkp@intel.com> <CACG_h5oOsThkSfdN_adWHxHfAWfg=W72o5RM6JwHGVT=Zq9MiQ@mail.gmail.com>
  <20200529183824.GW1634618@smile.fi.intel.com> <CACG_h5pcd-3NWgE29enXAX8=zS-RWQZrh56wKaFbm8fLoCRiiw@mail.gmail.com>
  <CAHp75Vdv4V5PLQxM1+ypHacso6rrR6CiXTX43M=6UuZ6xbYY7g@mail.gmail.com>
- <CACG_h5qGEsyRBHj+O5nmwsHpi3rkVQd1hVMDnnauAmqqTa_pbg@mail.gmail.com> <CAHp75VdPcNOuV_JO4y3vSDmy7we3kiZL2kZQgFQYmwqb6x7NEQ@mail.gmail.com>
-In-Reply-To: <CAHp75VdPcNOuV_JO4y3vSDmy7we3kiZL2kZQgFQYmwqb6x7NEQ@mail.gmail.com>
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-Date:   Sat, 30 May 2020 14:15:28 +0530
-Message-ID: <CACG_h5pDHCp_b=UJ7QZCEDqmJgUdPSaNLR+0sR1Bgc4eCbqEKw@mail.gmail.com>
+ <CACG_h5qGEsyRBHj+O5nmwsHpi3rkVQd1hVMDnnauAmqqTa_pbg@mail.gmail.com>
+ <CAHp75VdPcNOuV_JO4y3vSDmy7we3kiZL2kZQgFQYmwqb6x7NEQ@mail.gmail.com> <CACG_h5pDHCp_b=UJ7QZCEDqmJgUdPSaNLR+0sR1Bgc4eCbqEKw@mail.gmail.com>
+In-Reply-To: <CACG_h5pDHCp_b=UJ7QZCEDqmJgUdPSaNLR+0sR1Bgc4eCbqEKw@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 30 May 2020 12:20:36 +0300
+Message-ID: <CAHp75VfBe-LMiAi=E4Cy8OasmE8NdSqevp+dsZtTEOLwF-TgmA@mail.gmail.com>
 Subject: Re: [PATCH v7 1/4] bitops: Introduce the the for_each_set_clump macro
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Syed Nayyar Waris <syednwaris@gmail.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -68,125 +69,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, May 30, 2020 at 3:49 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sat, May 30, 2020 at 1:11 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> > On Sat, May 30, 2020 at 3:13 AM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Fri, May 29, 2020 at 11:07 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> > > > On Sat, May 30, 2020 at 12:08 AM Andy Shevchenko
-> > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > On Fri, May 29, 2020 at 11:38:18PM +0530, Syed Nayyar Waris wrote:
-> > > > > > On Sun, May 24, 2020 at 8:15 PM kbuild test robot <lkp@intel.com> wrote:
-> > >
-> > > ...
-> > >
-> > > > > > Taking the example statement (in my patch) where compilation warning
-> > > > > > is getting reported:
-> > > > > > return (map[index] >> offset) & GENMASK(nbits - 1, 0);
-> > > > > >
-> > > > > > 'nbits' is of type 'unsigned long'.
-> > > > > > In above, the sanity check is comparing '0' with unsigned value. And
-> > > > > > unsigned value can't be less than '0' ever, hence the warning.
-> > > > > > But this warning will occur whenever there will be '0' as one of the
-> > > > > > 'argument' and an unsigned variable as another 'argument' for GENMASK.
-> > >
-> > > > > Proper fix is to fix GENMASK(), but allowed workaround is to use
-> > > > >         (BIT(nbits) - 1)
-> > > > > instead.
-> > >
-> > > > When I used BIT macro (earlier), I had faced a problem. I want to tell
-> > > > you about that.
-> > > >
-> > > > Inside functions 'bitmap_set_value' and 'bitmap_get_value' when nbits (or
-> > > > clump size) is BITS_PER_LONG, unexpected calculation happens.
-> > > >
-> > > > Explanation:
-> > > > Actually when nbits (clump size) is 64 (BITS_PER_LONG is 64 on my computer),
-> > > > (BIT(nbits) - 1)
-> > > > gives a value of zero and when this zero is ANDed with any value, it
-> > > > makes it full zero. This is unexpected and incorrect calculation happening.
-> > > >
-> > > > What actually happens is in the macro expansion of BIT(64), that is 1
-> > > > << 64, the '1' overflows from leftmost bit position (most significant
-> > > > bit) and re-enters at the rightmost bit position (least significant
-> > > > bit), therefore 1 << 64 becomes '0x1', and when another '1' is
-> > > > subtracted from this, the final result becomes 0.
-> > > >
-> > > > Since this macro is being used in both bitmap_get_value and
-> > > > bitmap_set_value functions, it will give unexpected results when nbits or clump
-> > > > size is BITS_PER_LONG (32 or 64 depending on arch).
-> > >
-> > > I see, something like
-> > > https://elixir.bootlin.com/linux/latest/source/include/linux/dma-mapping.h#L139
-> > > should be done.
-> > > But yes, let's try to fix GENMASK().
-> > >
-> > > So, if we modify the following
-> > >
-> > >   #define GENMASK_INPUT_CHECK(h, l) \
-> > >     (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> > >     __builtin_constant_p((l) > (h)), (l) > (h), 0)))
-> > >
-> > > to be
-> > >
-> > >   #define GENMASK_INPUT_CHECK(h, l) \
-> > >     (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
-> > >     __builtin_constant_p((l) > (h)), (l) ? (l) > (h) : 0, 0)))
-> > >
-> > > would it work?
-> >
-> > Sorry Andy it is not working. Actually the warning will be thrown,
-> > whenever there will be comparison between 'h' and 'l'. If one of them
-> > is '0' and the other is unsigned variable.
-> > In above, still there is comparison being done between 'h' and 'l', so
-> > the warning is getting thrown.
->
-> Ah, okay
->
-> what about (l) && ((l) > (h)) ?
+On Sat, May 30, 2020 at 11:45 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+> On Sat, May 30, 2020 at 3:49 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
 
-When I finally changed:
-__builtin_constant_p((l) > (h)), (l) > (h), 0)))
-to:
-__builtin_constant_p((l) && ((l) > (h))), (l) ? (l) > (h) : 0, 0)))
+...
 
-It is still throwing same compilation error at the same location where
-comparison is being done between 'l' and 'h'.
+> I am still investigating more on this. Let me know if you have any suggestions.
 
-Actually the short-circuit logic is not happening. For:
-(l) && ((l) > (h))
-Even if 'l' is zero, it still proceeds to compare 'l' and 'h' , that
-is '((l) > (h))' is checked.
-I think it is happening because '__builtin_constant_p' will check the
-complete argument: (l) && ((l) > (h)),
-'__builtin_constant_p' checks whether the argument is compile time
-constant or not, so therefore, it will evaluate the WHOLE argument,
-that is (including) the comparison operation.
-https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
+As far as I understand the start pointers are implementations of abs()
+macro followed by min()/max().
+I think in the latter case it's actually something which might help here.
 
-I am still investigating more on this. Let me know if you have any suggestions.
+Sorry, right now I have no time to dive deeper.
 
->
-> > > > William also knows about this issue:
-> > > > "This is undefined behavior in the C standard (section 6.5.7 in the N1124)"
-> > >
-> > > I think it is about 6.5.7.3  here, 1U << 31 (or 63) is okay.
-> >
-> > Actually for:
-> > (BIT(nbits) - 1)
-> > When nbits will be BITS_PER_LONG it will be 1U << 32 (or 64). Isn't it ?
-> > The expression,
-> > BIT(64) - 1
-> > can become unexpectedly zero (incorrectly).
->
-> Yes, that's why I pointed out to the paragraph. It's about right
-> operand to be "great than or equal to" the size of type of left
-> operand.
->
-
-Thank You. I understand now. :-)
-
-Regards
-Syed Nayyar Waris
+-- 
+With Best Regards,
+Andy Shevchenko
