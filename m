@@ -2,119 +2,169 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D28431E9725
-	for <lists+linux-arch@lfdr.de>; Sun, 31 May 2020 13:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9771E9899
+	for <lists+linux-arch@lfdr.de>; Sun, 31 May 2020 17:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728266AbgEaLBE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 31 May 2020 07:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        id S1728059AbgEaPh0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 31 May 2020 11:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728165AbgEaLBE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 May 2020 07:01:04 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0A6C061A0E;
-        Sun, 31 May 2020 04:01:02 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id n15so2121402pfd.0;
-        Sun, 31 May 2020 04:01:02 -0700 (PDT)
+        with ESMTP id S1725912AbgEaPhZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 May 2020 11:37:25 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4968C061A0E;
+        Sun, 31 May 2020 08:37:25 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id e9so1161974pgo.9;
+        Sun, 31 May 2020 08:37:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pv6M/ubzOrR2GpHct2V9mx36XIAqlU5lXxjX4nPRe8g=;
-        b=YG4n2UPCARQM4F8D3Yzto1lnn1CByWD9LQYK9620mtA0+Nci7rBwlMTuDrz9f7ddtX
-         ZEzZ339tXSj5NzcIfczwsen2Ed9vy5sUz4sEgt8IDelttbchalVGWEvnPiOwAUF7cwAS
-         sUn0S1IvYmJlDuu475OK6gY7zuJQj9SmBpbAIaszTypMIv+q2bYfWYbOYdvMtSvrDfdv
-         iM+nMCU5oJVCSsmYfMUSO4On84V7AiX4aghx2L7S8D/dvXC7/BkbI+QtyAs3BxP8mvXM
-         pLRrhQ0xUapiRdIkwxyXz/3fZyckNSLNhRv22VE2j/k8Bfy/HMEhb5HNxqFvLBbtka73
-         iSuw==
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=RaTO38o9otyhYtq1I6wSK46Ur78WV2gmS3uYSc0rOJo=;
+        b=aQoWA365yhz+rJoQQtJnW+97BMhM2Y11i5nm/jMQ0/ZAlPMsE5CnR9BVmxARnmFr5A
+         hZLJmjPNFF41fgmqUR+VT8spvER4bHSEfUTC8sPeQSiagOo/l944spzLT/3fAHEKrHMe
+         ndpOBbvIyFb7R6ci8GTEXOyToWCGLb3zERup6DvnUlSJdaWAWVGhNuxU82bh0TDBKv4F
+         EdsXvLW742dVFM33n3sQYqpVrmKRUNJF8MbES5JrdMbfAVIiK7Ea2zjQA2vKDbKp++Jk
+         fnmHGLucCggg7NQGIo5G+JzDPDlmn21xPVGhiUxTJRKS/teZL0nfru6qIJV6//U22V0l
+         9a/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pv6M/ubzOrR2GpHct2V9mx36XIAqlU5lXxjX4nPRe8g=;
-        b=JkNenq3ggO0FhfxfnVZLmmFA+Prt7mFyRPKx8ORBLlQWtsic/n2l7vm5yqSACtsjaM
-         3Bf0MTKQhXGbcjZhhGyNAguUlj4RMBUr3Bie8rVgxXfmSVkMHUHM3lPA86so6sDMtJW0
-         cnRL3ds2yozKq2irwv40NjpcREqM1McjKbwLXj0fK90hCospm2Yrk3ctEDhlt+19e/oK
-         wdlHjSq0fFuPydtvumAypy+fD22npEY27c6QQxt8oTLAROVrGvO4boTPfrJwXB4bRCIy
-         hghqCIugP3wd5zSHq5fMbWq20jLEt+AR+O3RBgG+SVruDvH3P48FaP7gFAv3506acPsu
-         pO3Q==
-X-Gm-Message-State: AOAM531Q8fg8nkc9+ul5qHE/nYbvxU2Z+dN/sBND4T530DakqdVTjL7b
-        ARw/TG0bL92pDkUMa1HtydyrFYbGTqgbGrZmu7k=
-X-Google-Smtp-Source: ABdhPJx0TrnbFI3b834Ncn0t7vRgYuKR/nqkJEpsHfz1JlHeGNMDgFt3qEwkR7uRnVKoKzhm6Oiu7jZpxX42nMnkY80=
-X-Received: by 2002:a63:545a:: with SMTP id e26mr14919928pgm.4.1590922862169;
- Sun, 31 May 2020 04:01:02 -0700 (PDT)
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=RaTO38o9otyhYtq1I6wSK46Ur78WV2gmS3uYSc0rOJo=;
+        b=QCuHg19kMuQfdQWdrieciBSrsYApnIQGUZnQ1IgDhE5zemjjNn2zf2hm+0b9Yp3eX/
+         5JCCvbK/eFt8zWRtoYStOuzyh22DCIKTT4o9GHVtvdSx6ciMDtmnd2VbMi2QzRTp1sGr
+         rYxjpML8fIH5dvMZ9yTKJEijWDwC4SKNsYyVuwAlVwFczVsjwgPJsQoEEinrUbxZ9Div
+         JiVJonMiJBt+ISQ5onqq8VJwnatD+acKvRcA3j88WSfseZiP5FYmZmdapgqaHZaZ4jWC
+         hqyCnwbmGAmt6pH9jA9/3bts7ZKJAQcCbhn+bYW/ZG/56lb3wXY+rR27zqyBmLFUg+fE
+         5WMA==
+X-Gm-Message-State: AOAM531fTBfJEReJMMzm/lnhO22JCUuaIfn5wd4X7jNwOKt7npRLUteT
+        qCNeIks6d5KDrC2xkPf/R+E=
+X-Google-Smtp-Source: ABdhPJydC3neD6RHO7mbHQQLZqjcsbEtlUXPGAvXxXtwPZJMkMspaVnWd79MkaqZDLL6Y2m3HtOpbg==
+X-Received: by 2002:a62:1a45:: with SMTP id a66mr4385268pfa.54.1590939445243;
+        Sun, 31 May 2020 08:37:25 -0700 (PDT)
+Received: from [192.168.11.3] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id m2sm4976955pjk.52.2020.05.31.08.37.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 May 2020 08:37:24 -0700 (PDT)
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jade Alglave <jade.alglave@arm.com>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Joel Fernandes <joel@joelfernandes.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: [RFC PATCH -rcu lkmm] tools/memory-model/README: Expand dependency of
+ klitmus7
+Message-ID: <4a05e568-aa30-423a-badc-f79f0af815a0@gmail.com>
+Date:   Mon, 1 Jun 2020 00:37:20 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-References: <17cb2b080b9c4c36cf84436bc5690739590acc53.1590017578.git.syednwaris@gmail.com>
- <202005242236.NtfLt1Ae%lkp@intel.com> <CACG_h5oOsThkSfdN_adWHxHfAWfg=W72o5RM6JwHGVT=Zq9MiQ@mail.gmail.com>
- <20200529183824.GW1634618@smile.fi.intel.com> <CACG_h5pcd-3NWgE29enXAX8=zS-RWQZrh56wKaFbm8fLoCRiiw@mail.gmail.com>
- <CAHp75Vdv4V5PLQxM1+ypHacso6rrR6CiXTX43M=6UuZ6xbYY7g@mail.gmail.com>
- <CACG_h5qGEsyRBHj+O5nmwsHpi3rkVQd1hVMDnnauAmqqTa_pbg@mail.gmail.com>
- <CAHp75VdPcNOuV_JO4y3vSDmy7we3kiZL2kZQgFQYmwqb6x7NEQ@mail.gmail.com>
- <CACG_h5pDHCp_b=UJ7QZCEDqmJgUdPSaNLR+0sR1Bgc4eCbqEKw@mail.gmail.com>
- <CAHp75VfBe-LMiAi=E4Cy8OasmE8NdSqevp+dsZtTEOLwF-TgmA@mail.gmail.com> <CACG_h5p1UpLRoA+ubE4NTFQEvg-oT6TFmsLXXTAtBvzN9z3iPg@mail.gmail.com>
-In-Reply-To: <CACG_h5p1UpLRoA+ubE4NTFQEvg-oT6TFmsLXXTAtBvzN9z3iPg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 31 May 2020 14:00:45 +0300
-Message-ID: <CAHp75Vdxa1_ANBLEOB6g25x3O0V5h3yjZve8qpz-xkisD3KTLg@mail.gmail.com>
-Subject: Re: [PATCH v7 1/4] bitops: Introduce the the for_each_set_clump macro
-To:     Syed Nayyar Waris <syednwaris@gmail.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, May 31, 2020 at 4:11 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> On Sat, May 30, 2020 at 2:50 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Sat, May 30, 2020 at 11:45 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> > > On Sat, May 30, 2020 at 3:49 AM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
+From 87048d7212f6cb16b0a2b85fa6d2f34c28b078c0 Mon Sep 17 00:00:00 2001
+From: Akira Yokosawa <akiyks@gmail.com>
+Date: Sun, 31 May 2020 20:04:32 +0900
+Subject: [PATCH RFC] tools/memory-model/README: Expand dependency of klitmus7
 
-...
+klitmus7 is independent of the memory model but depends on the
+build-target kernel release.
+It occasionally lost compatibility due to kernel API changes [1, 2, 3].
+It was remedied in a backwards-compatible manner respectively [4, 5, 6].
 
-> #if (l) == 0
-> #define GENMASK_INPUT_CHECK(h, l)  0
-> #elif
-> #define GENMASK_INPUT_CHECK(h, l) \
->         (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
->                 __builtin_constant_p((l) > (h)), (l) > (h), 0)))
-> #endif
->
-> I have verified that this works. Basically this just avoids the sanity
-> check when the 'lower' bound 'l' is zero. Let me know if it looks
-> fine.
+Reflect this fact in README.
 
-Unfortunately, it's not enough. We need to take care about the following cases
-1) h or l negative;
-2) h == 0, if l == 0, I dunno what is this. it's basically either 0 or warning;
-3) l == 0;
-4) h and l > 0.
+[1]: b899a850431e ("compiler.h: Remove ACCESS_ONCE()")
+[2]: 0bb95f80a38f ("Makefile: Globally enable VLA warning")
+[3]: d56c0d45f0e2 ("proc: decouple proc from VFS with "struct proc_ops"")
+[4]: https://github.com/herd/herdtools7/commit/e87d7f9287d1
+     ("klitmus: Use WRITE_ONCE and READ_ONCE in place of deprecated ACCESS_ONCE")
+[5]: https://github.com/herd/herdtools7/commit/a0cbb10d02be
+     ("klitmus: Avoid variable length array")
+[6]: https://github.com/herd/herdtools7/commit/46b9412d3a58
+     ("klitmus: Linux kernel v5.6.x compat")
 
-Now, on top of that (since it's a macro) we have to keep in mind that
-h and l can be signed and / or unsigned types.
-And macro shall work for all 4 cases (by type signedess).
+NOTE: [5] was ahead of herdtools7 7.53, which did not make an
+official release.  Code generated by klitmus7 without [5] can still be
+built targeting Linux 4.20--5.5 if you don't care VLA warnings.
 
-> Regarding min, max macro that you suggested I am also looking further into it.
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+---
+Hi all,
 
-Since this has been introduced in v5.7 and not only your code is
-affected by this I think we need to ping original author either to fix
-or revert.
+Recent struggle of Andrii with the use of klitmus7 on an up-to-date
+Linux system prompted me to add some explanation of klitmus7's dependency
+in README.
 
-So, I Cc'ed to the author and reviewers, because they probably know
-better why that had been done in the first place and breaking existing
-code.
+As herdtools7 7.56 is still under development, I called out just HEAD
+in the compatibility table.  Once 7.56 is released, the table can be
+updated.
 
+I'm not sure if this is the right place to carry such info.
+Anyway, I'd be glad if this patch can trigger a meaningful update of
+README.
+
+        Thanks, Akira
+--
+ tools/memory-model/README | 30 ++++++++++++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/tools/memory-model/README b/tools/memory-model/README
+index b9c562e92981..90af203c3cf1 100644
+--- a/tools/memory-model/README
++++ b/tools/memory-model/README
+@@ -28,8 +28,34 @@ downloaded separately:
+ See "herdtools7/INSTALL.md" for installation instructions.
+ 
+ Note that although these tools usually provide backwards compatibility,
+-this is not absolutely guaranteed.  Therefore, if a later version does
+-not work, please try using the exact version called out above.
++this is not absolutely guaranteed.
++
++For example, a future version of herd7 might not work with the model
++in this release.  A compatible model will likely be made available in
++a later release of Linux kernel.
++
++If you absolutely need to run the model in this particular release,
++please try using the exact version called out above.
++
++klitmus7 is independent of the model provided here.  It has its own
++dependency on a target kernel release where converted code is built
++and executed.  Any change in kernel APIs essential to klitmus7 will
++necessitate an upgrade of klitmus7.
++
++If you find any compatibility issues in klitmus7, please inform the
++memory model maintainers.
++
++klitmus7 Compatibility Table
++----------------------------
++
++	============  ==========
++	target Linux  herdtools7
++	------------  ----------
++	     -- 4.18  7.48 --
++	4.15 -- 4.19  7.49 --
++	4.20 -- 5.5   7.54 --
++	5.6  --       HEAD
++	============  ==========
+ 
+ 
+ ==================
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+
