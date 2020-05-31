@@ -2,115 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4321E9081
-	for <lists+linux-arch@lfdr.de>; Sat, 30 May 2020 12:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C341E94DE
+	for <lists+linux-arch@lfdr.de>; Sun, 31 May 2020 03:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728585AbgE3KYh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 30 May 2020 06:24:37 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:46334 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728769AbgE3KYh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 30 May 2020 06:24:37 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id D9A0AB18BFA3BD7B1064;
-        Sat, 30 May 2020 18:24:31 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Sat, 30 May 2020
- 18:24:23 +0800
-Subject: Re: [PATCH v2 5/6] mm: tlb: Provide flush_*_tlb_range wrappers
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     <peterz@infradead.org>, <mark.rutland@arm.com>, <will@kernel.org>,
-        <aneesh.kumar@linux.ibm.com>, <akpm@linux-foundation.org>,
-        <npiggin@gmail.com>, <arnd@arndb.de>, <rostedt@goodmis.org>,
-        <maz@kernel.org>, <suzuki.poulose@arm.com>, <tglx@linutronix.de>,
-        <yuzhao@google.com>, <Dave.Martin@arm.com>, <steven.price@arm.com>,
-        <broonie@kernel.org>, <guohanjun@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
-        <kuhn.chenqun@huawei.com>
-References: <20200423135656.2712-1-yezhenyu2@huawei.com>
- <20200423135656.2712-6-yezhenyu2@huawei.com> <20200522154254.GD26492@gaia>
- <ddba6d98-29b5-0748-ba74-ec022f509270@huawei.com>
- <20200526145244.GG17051@gaia>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <0c6f79e4-f29a-d373-2e43-c4f87cf78b49@huawei.com>
-Date:   Sat, 30 May 2020 18:24:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1729520AbgEaBLz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 30 May 2020 21:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729356AbgEaBLz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 May 2020 21:11:55 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67E5C03E969;
+        Sat, 30 May 2020 18:11:53 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id y18so3374030iow.3;
+        Sat, 30 May 2020 18:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YrUMJm73ZwzzC/W/oEuS2gLBD11t/qt40SB7aK49T1o=;
+        b=IO4bvnPGqPLbcJI6dJRkmQY8L+lFKPKe/NdaEYfuqiiXxtf20if7b9qbw7EnfZzDP1
+         ghy6+v4llD2fcVGy3xTQEvRD5/04wEUr0cYnGVFnJ11kOfc+0vkO/nVPucvr50w83Hct
+         YBb6UPtLPpid1jfdR0W8XVjal769GuVWDD4OE1t46vxRrH3LQc0M9OGdWVyXBsYzMfk9
+         trzqWe/CU2qoLVWGssJ72TvYNjjADLFHcXJIl51pkfuIFxwQjlphcR734x598OlBRz9P
+         DM1uuV8HiCuoHSgqHizOwNct99WKAq1h80eFL23gKJeLNd10Nt7syTqXv5IVqklHUl3N
+         jT0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YrUMJm73ZwzzC/W/oEuS2gLBD11t/qt40SB7aK49T1o=;
+        b=InwJKz/zd3NqZ5LFLTxUV7D2/d0bRW8mEreQBecBhX2AzPN7+YQ7QRIvJMrCimlM9q
+         HCcDXkvYPC4IeriMUHXUZ2jHtspuUBoKeRSg3KV2YJ65yv+q9RwYzAxDncDlCGJNNj0+
+         SrQMvBS9yu/qpX6m3bM7nvX7+jU5bDI1apZakzg7Pbcm2GAxQ9gTuGMPA7NPP7ppT6sj
+         ACTVj18E6MLoWB52iQcSu4+vy7hgOQS3uUFxPsJ+vAvj+GlUKpw2SGdvlDUYPXBWK2vJ
+         +NEZ2V7/BiYkJqqKuChZABX1l2FZGtEUtx0yUkIV3kbW2k9530rRgclbo3LgZzRYXbRX
+         SPDA==
+X-Gm-Message-State: AOAM531FN9yQ3yXby8LSwkV3QfFnA4MMz3Exf6x05uDUFhBQIIaA2PoX
+        h/iHP2/0GnDaTGrQRtTIY2rt2oFPeNmSal/HK0k=
+X-Google-Smtp-Source: ABdhPJwgOK0kayqBC3P/C+aX3scAH8mfpMC3PT1bgnuxLFh1WOBjeG17mZ/ecclNE4eVN28/1u0X4TUO9d6uWoIGk38=
+X-Received: by 2002:a02:cc49:: with SMTP id i9mr6735852jaq.52.1590887513109;
+ Sat, 30 May 2020 18:11:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200526145244.GG17051@gaia>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.173.220.25]
-X-CFilter-Loop: Reflected
+References: <17cb2b080b9c4c36cf84436bc5690739590acc53.1590017578.git.syednwaris@gmail.com>
+ <202005242236.NtfLt1Ae%lkp@intel.com> <CACG_h5oOsThkSfdN_adWHxHfAWfg=W72o5RM6JwHGVT=Zq9MiQ@mail.gmail.com>
+ <20200529183824.GW1634618@smile.fi.intel.com> <CACG_h5pcd-3NWgE29enXAX8=zS-RWQZrh56wKaFbm8fLoCRiiw@mail.gmail.com>
+ <CAHp75Vdv4V5PLQxM1+ypHacso6rrR6CiXTX43M=6UuZ6xbYY7g@mail.gmail.com>
+ <CACG_h5qGEsyRBHj+O5nmwsHpi3rkVQd1hVMDnnauAmqqTa_pbg@mail.gmail.com>
+ <CAHp75VdPcNOuV_JO4y3vSDmy7we3kiZL2kZQgFQYmwqb6x7NEQ@mail.gmail.com>
+ <CACG_h5pDHCp_b=UJ7QZCEDqmJgUdPSaNLR+0sR1Bgc4eCbqEKw@mail.gmail.com> <CAHp75VfBe-LMiAi=E4Cy8OasmE8NdSqevp+dsZtTEOLwF-TgmA@mail.gmail.com>
+In-Reply-To: <CAHp75VfBe-LMiAi=E4Cy8OasmE8NdSqevp+dsZtTEOLwF-TgmA@mail.gmail.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Sun, 31 May 2020 06:41:41 +0530
+Message-ID: <CACG_h5p1UpLRoA+ubE4NTFQEvg-oT6TFmsLXXTAtBvzN9z3iPg@mail.gmail.com>
+Subject: Re: [PATCH v7 1/4] bitops: Introduce the the for_each_set_clump macro
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Catalin,
+On Sat, May 30, 2020 at 2:50 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Sat, May 30, 2020 at 11:45 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+> > On Sat, May 30, 2020 at 3:49 AM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+>
+> ...
+>
+> > I am still investigating more on this. Let me know if you have any suggestions.
+>
+> As far as I understand the start pointers are implementations of abs()
+> macro followed by min()/max().
+> I think in the latter case it's actually something which might help here.
+>
+> Sorry, right now I have no time to dive deeper.
 
-Sorry for taking so long to reply to you.
+No Problem. Thank you for sharing your initial pointers.
 
-On 2020/5/26 22:52, Catalin Marinas wrote:
-> On Mon, May 25, 2020 at 03:19:42PM +0800, Zhenyu Ye wrote:
->>
->> tlb_flush_##_pxx##_range() is used to set tlb->cleared_*,
->> flush_##_pxx##_tlb_range() will actually flush the TLB entry.
->>
->> In arch64, tlb_flush_p?d_range() is defined as:
->>
->> 	#define flush_pmd_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
->> 	#define flush_pud_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
-> 
-> Currently, flush_p??_tlb_range() are generic and defined as above. I
-> think in the generic code they can remain an alias for
-> flush_tlb_range().
-> 
-> On arm64, we can redefine them as:
-> 
-> #define flush_pte_tlb_range(vma, addr, end)	__flush_tlb_range(vma, addr, end, 3)
-> #define flush_pmd_tlb_range(vma, addr, end)	__flush_tlb_range(vma, addr, end, 2)
-> #define flush_pud_tlb_range(vma, addr, end)	__flush_tlb_range(vma, addr, end, 1)
-> #define flush_p4d_tlb_range(vma, addr, end)	__flush_tlb_range(vma, addr, end, 0)
-> 
-> (unless the compiler optimises away all the mmu_gather stuff in your
-> macro above but they don't look trivial to me)
-> 
+By the way, as I was working on it I found a way to avoid comparison
+with '0' in '__builtin_constant_p'. And because of this, no
+compilation warnings are getting produced.
 
-I changed generic code before considering that other structures may also
-use this feature, such as Power9. And Peter may want to replace all
-flush_tlb_range() by tlb_flush() in the future, see [1] for details.
+Change the following:
 
-If only enable this feature on aarch64, your codes are better.
-
-[1] https://lore.kernel.org/linux-arm-kernel/20200402163849.GM20713@hirez.programming.kicks-ass.net/
-
-> Also, I don't see the new flush_pte_* and flush_p4d_* macros used
-> anywhere and I don't think they are needed. The pte equivalent is
-> flush_tlb_page() (we need to make sure it's not used on a pmd in the
-> hugetlb context).
-> 
-
-flush_tlb_page() is used to flush only one page.  If we add the flush_pte_tlb_range(),
-then we can use it to flush a range of pages in the future.
-
-But flush_pte_* and flush_p4d_* macros are really not used anywhere.
-I will remove them in next version of series, and add them if someone needs.
-
->> So even if we know the level here, we can not pass the value to tlbi
->> instructions (flush_tlb_range() is a common kernel interface and retro-fit it
->> needs lots of changes), according to Peter's suggestion, I finally decide to
->> pass the value of TTL by the tlb_gather_* frame.[1]
-> 
-> My comment was about the generic implementation using mmu_gather as you
-> are proposing. We don't need to change the flush_tlb_range() interface,
-> nor do we need to rewrite flush_p??_tlb_range().
-> 
-
-Thanks,
-Zhenyu
+#define GENMASK_INPUT_CHECK(h, l) \
+        (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+                __builtin_constant_p((l) > (h)), (l) > (h), 0)))
 
 
+To this:
+
+#if (l) == 0
+#define GENMASK_INPUT_CHECK(h, l)  0
+#elif
+#define GENMASK_INPUT_CHECK(h, l) \
+        (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+                __builtin_constant_p((l) > (h)), (l) > (h), 0)))
+#endif
+
+I have verified that this works. Basically this just avoids the sanity
+check when the 'lower' bound 'l' is zero. Let me know if it looks
+fine.
+
+Regarding min, max macro that you suggested I am also looking further into it.
+
+Regards
+Syed Nayyar Waris
