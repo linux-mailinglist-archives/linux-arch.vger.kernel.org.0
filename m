@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 234ED1EA640
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Jun 2020 16:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066FE1EA642
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Jun 2020 16:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726218AbgFAOrj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Jun 2020 10:47:39 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:5834 "EHLO huawei.com"
+        id S1727124AbgFAOrn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Jun 2020 10:47:43 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:43664 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727862AbgFAOri (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 1 Jun 2020 10:47:38 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 87036E95A74B1ED3EDA3;
-        Mon,  1 Jun 2020 22:47:28 +0800 (CST)
+        id S1726017AbgFAOrn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 1 Jun 2020 10:47:43 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 95E84B8E01852B58C409;
+        Mon,  1 Jun 2020 22:47:33 +0800 (CST)
 Received: from DESKTOP-KKJBAGG.china.huawei.com (10.173.220.25) by
  DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.487.0; Mon, 1 Jun 2020 22:47:22 +0800
+ 14.3.487.0; Mon, 1 Jun 2020 22:47:23 +0800
 From:   Zhenyu Ye <yezhenyu2@huawei.com>
 To:     <catalin.marinas@arm.com>, <will@kernel.org>,
         <suzuki.poulose@arm.com>, <maz@kernel.org>, <steven.price@arm.com>,
@@ -26,9 +26,9 @@ CC:     <yezhenyu2@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
         <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
         <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
         <kuhn.chenqun@huawei.com>
-Subject: [RFC PATCH v4 1/2] arm64: tlb: Detect the ARMv8.4 TLBI RANGE feature
-Date:   Mon, 1 Jun 2020 22:47:12 +0800
-Message-ID: <20200601144713.2222-2-yezhenyu2@huawei.com>
+Subject: [RFC PATCH v4 2/2] arm64: tlb: Use the TLBI RANGE feature in arm64
+Date:   Mon, 1 Jun 2020 22:47:13 +0800
+Message-ID: <20200601144713.2222-3-yezhenyu2@huawei.com>
 X-Mailer: git-send-email 2.22.0.windows.1
 In-Reply-To: <20200601144713.2222-1-yezhenyu2@huawei.com>
 References: <20200601144713.2222-1-yezhenyu2@huawei.com>
@@ -42,81 +42,158 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ARMv8.4-TLBI provides TLBI invalidation instruction that apply to a
-range of input addresses. This patch detect this feature.
+Add __TLBI_VADDR_RANGE macro and rewrite __flush_tlb_range().
+
+In this patch, we only use the TLBI RANGE feature if the stride == PAGE_SIZE,
+because when stride > PAGE_SIZE, usually only a small number of pages need
+to be flushed and classic tlbi intructions are more effective.
+
+We can also use 'end - start < threshold number' to decide which way
+to go, however, different hardware may have different thresholds, so
+I'm not sure if this is feasible.
 
 Signed-off-by: Zhenyu Ye <yezhenyu2@huawei.com>
 ---
- arch/arm64/include/asm/cpucaps.h |  3 ++-
- arch/arm64/include/asm/sysreg.h  |  4 ++++
- arch/arm64/kernel/cpufeature.c   | 11 +++++++++++
- 3 files changed, 17 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/tlbflush.h | 98 +++++++++++++++++++++++++++----
+ 1 file changed, 86 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
-index 8eb5a088ae65..950095a72617 100644
---- a/arch/arm64/include/asm/cpucaps.h
-+++ b/arch/arm64/include/asm/cpucaps.h
-@@ -61,7 +61,8 @@
- #define ARM64_HAS_AMU_EXTN			51
- #define ARM64_HAS_ADDRESS_AUTH			52
- #define ARM64_HAS_GENERIC_AUTH			53
-+#define ARM64_HAS_TLBI_RANGE			54
+diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+index bc3949064725..818f27c82024 100644
+--- a/arch/arm64/include/asm/tlbflush.h
++++ b/arch/arm64/include/asm/tlbflush.h
+@@ -50,6 +50,16 @@
+ 		__tlbi(op, (arg) | USER_ASID_FLAG);				\
+ } while (0)
  
--#define ARM64_NCAPS				54
-+#define ARM64_NCAPS				55
- 
- #endif /* __ASM_CPUCAPS_H */
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index c4ac0ac25a00..4cc3efd633bc 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -594,6 +594,7 @@
- 
- /* id_aa64isar0 */
- #define ID_AA64ISAR0_RNDR_SHIFT		60
-+#define ID_AA64ISAR0_TLBI_RANGE_SHIFT	56
- #define ID_AA64ISAR0_TS_SHIFT		52
- #define ID_AA64ISAR0_FHM_SHIFT		48
- #define ID_AA64ISAR0_DP_SHIFT		44
-@@ -607,6 +608,9 @@
- #define ID_AA64ISAR0_SHA1_SHIFT		8
- #define ID_AA64ISAR0_AES_SHIFT		4
- 
-+#define ID_AA64ISAR0_TLBI_RANGE_NI	0x0
-+#define ID_AA64ISAR0_TLBI_RANGE		0x2
++#define __tlbi_last_level(op1, op2, arg, last_level) do {		\
++	if (last_level)	{						\
++		__tlbi(op1, arg);					\
++		__tlbi_user(op1, arg);					\
++	} else {							\
++		__tlbi(op2, arg);					\
++		__tlbi_user(op2, arg);					\
++	}								\
++} while (0)
 +
- /* id_aa64isar1 */
- #define ID_AA64ISAR1_I8MM_SHIFT		52
- #define ID_AA64ISAR1_DGH_SHIFT		48
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 9fac745aa7bb..31bcfd0722b5 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -124,6 +124,7 @@ static bool __system_matches_cap(unsigned int n);
-  */
- static const struct arm64_ftr_bits ftr_id_aa64isar0[] = {
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_RNDR_SHIFT, 4, 0),
-+	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_TLBI_RANGE_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_TS_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_FHM_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR0_DP_SHIFT, 4, 0),
-@@ -1779,6 +1780,16 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
- 		.min_field_value = 1,
- 	},
- #endif
-+	{
-+		.desc = "TLB range maintenance instruction",
-+		.capability = ARM64_HAS_TLBI_RANGE,
-+		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-+		.matches = has_cpuid_feature,
-+		.sys_reg = SYS_ID_AA64ISAR0_EL1,
-+		.field_pos = ID_AA64ISAR0_TLBI_RANGE_SHIFT,
-+		.sign = FTR_UNSIGNED,
-+		.min_field_value = ID_AA64ISAR0_TLBI_RANGE,
-+	},
- 	{},
- };
+ /* This macro creates a properly formatted VA operand for the TLBI */
+ #define __TLBI_VADDR(addr, asid)				\
+ 	({							\
+@@ -59,6 +69,47 @@
+ 		__ta;						\
+ 	})
  
++/*
++ * __TG defines translation granule of the system, which is decided by
++ * PAGE_SHIFT.  Used by TTL.
++ *  - 4KB	: 1
++ *  - 16KB	: 2
++ *  - 64KB	: 3
++ */
++#define __TG	((PAGE_SHIFT - 12) / 2 + 1)
++
++/*
++ * This macro creates a properly formatted VA operand for the TLBI RANGE.
++ * The value bit assignments are:
++ *
++ * +----------+------+-------+-------+-------+----------------------+
++ * |   ASID   |  TG  | SCALE |  NUM  |  TTL  |        BADDR         |
++ * +-----------------+-------+-------+-------+----------------------+
++ * |63      48|47  46|45   44|43   39|38   37|36                   0|
++ *
++ * The address range is determined by below formula:
++ * [BADDR, BADDR + (NUM + 1) * 2^(5*SCALE + 1) * PAGESIZE)
++ *
++ */
++#define __TLBI_VADDR_RANGE(addr, asid, scale, num, ttl)		\
++	({							\
++		unsigned long __ta = (addr) >> PAGE_SHIFT;	\
++		__ta &= GENMASK_ULL(36, 0);			\
++		__ta |= (unsigned long)(ttl) << 37;		\
++		__ta |= (unsigned long)(num) << 39;		\
++		__ta |= (unsigned long)(scale) << 44;		\
++		__ta |= (unsigned long)(__TG) << 46;		\
++		__ta |= (unsigned long)(asid) << 48;		\
++		__ta;						\
++	})
++
++/* This macro defines the range pages of the TLBI RANGE. */
++#define __TLBI_RANGE_SIZES(num, scale)	((num + 1) << (5 * scale + 1) << PAGE_SHIFT)
++
++#define TLB_RANGE_MASK_SHIFT 5
++#define TLB_RANGE_MASK GENMASK_ULL(TLB_RANGE_MASK_SHIFT - 1, 0)
++
++
+ /*
+  *	TLB Invalidation
+  *	================
+@@ -181,32 +232,55 @@ static inline void __flush_tlb_range(struct vm_area_struct *vma,
+ 				     unsigned long start, unsigned long end,
+ 				     unsigned long stride, bool last_level)
+ {
++	int num = 0;
++	int scale = 0;
+ 	unsigned long asid = ASID(vma->vm_mm);
+ 	unsigned long addr;
++	unsigned long range_pages;
+ 
+ 	start = round_down(start, stride);
+ 	end = round_up(end, stride);
++	range_pages = (end - start) >> PAGE_SHIFT;
+ 
+ 	if ((end - start) >= (MAX_TLBI_OPS * stride)) {
+ 		flush_tlb_mm(vma->vm_mm);
+ 		return;
+ 	}
+ 
+-	/* Convert the stride into units of 4k */
+-	stride >>= 12;
++	dsb(ishst);
+ 
+-	start = __TLBI_VADDR(start, asid);
+-	end = __TLBI_VADDR(end, asid);
++	/*
++	 * The minimum size of TLB RANGE is 2 pages;
++	 * Use normal TLB instruction to handle odd pages.
++	 * If the stride != PAGE_SIZE, this will never happen.
++	 */
++	if (range_pages % 2 == 1) {
++		addr = __TLBI_VADDR(start, asid);
++		__tlbi_last_level(vale1is, vae1is, addr, last_level);
++		start += 1 << PAGE_SHIFT;
++		range_pages >>= 1;
++	}
+ 
+-	dsb(ishst);
+-	for (addr = start; addr < end; addr += stride) {
+-		if (last_level) {
+-			__tlbi(vale1is, addr);
+-			__tlbi_user(vale1is, addr);
+-		} else {
+-			__tlbi(vae1is, addr);
+-			__tlbi_user(vae1is, addr);
++	while (range_pages > 0) {
++		if (cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) &&
++		    stride == PAGE_SIZE) {
++			num = (range_pages & TLB_RANGE_MASK) - 1;
++			if (num >= 0) {
++				addr = __TLBI_VADDR_RANGE(start, asid, scale,
++							  num, 0);
++				__tlbi_last_level(rvale1is, rvae1is, addr,
++						  last_level);
++				start += __TLBI_RANGE_SIZES(num, scale);
++			}
++			scale++;
++			range_pages >>= TLB_RANGE_MASK_SHIFT;
++			continue;
+ 		}
++
++		addr = __TLBI_VADDR(start, asid);
++		__tlbi_last_level(vale1is, vae1is, addr, last_level);
++		start += stride;
++		range_pages -= stride >> 12;
+ 	}
+ 	dsb(ish);
+ }
 -- 
 2.19.1
 
