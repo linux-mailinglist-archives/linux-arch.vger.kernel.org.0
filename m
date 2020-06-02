@@ -2,219 +2,213 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D35601EC191
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Jun 2020 20:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954871EC248
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Jun 2020 21:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbgFBSDs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Jun 2020 14:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S1726223AbgFBTBp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Jun 2020 15:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728254AbgFBSDr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Jun 2020 14:03:47 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A701C08C5C0
-        for <linux-arch@vger.kernel.org>; Tue,  2 Jun 2020 11:03:46 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id a4so5433564pfo.4
-        for <linux-arch@vger.kernel.org>; Tue, 02 Jun 2020 11:03:46 -0700 (PDT)
+        with ESMTP id S1726174AbgFBTBo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Jun 2020 15:01:44 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8780C08C5C0;
+        Tue,  2 Jun 2020 12:01:42 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id m18so13921523ljo.5;
+        Tue, 02 Jun 2020 12:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Y1Y2fkE2q57cl3sVFwSCV2Rlv9H/o7RdqOXAJOzk5BI=;
-        b=PxjxUeYNGDO7nTddPMYiH16uFfFjhvhXlC7DHTn2Gwug8w9r+bMImzNz39NlxB5UPp
-         LgwcLmqrHUTSMexgkNWCMeryIJyQPTKKd2n7s06lhDTBUQJZ7jvQC+VHeC526lAKgHRI
-         Hwyx+1bfTWqtXOoxgkAPqd07kmOEteBXyu/Zg=
+        bh=YWq/x05MQc6IbPohW5E+6GnnmsE60aX1v6C+jGwg3BE=;
+        b=uRIcabU/K5MiAlHjLpzZpWk66ZOe+VvQI4kjUFAHBKOVKIxn9AWH6DSWv1dQaPRi12
+         r2jrObnxLi9UskXv3H7hhEjUDc2fYVehhLRBl9i+Y8V1kZkWrG8V9QqHNebkkWGQ9gFM
+         0xYS+MqDcTIYxgo5vW96wutF6dWmVzE46pjAJtPxrtgSGXHDHw3WEXQkwnJm8+xxcKyB
+         ILPOksYH4K6DaU9/hACvuoPFrTPDvg9hvj/1ovk4sG3h8s60Q/bUX6xhEt+BD5NN0LVm
+         SJVLI4bOJHH3//TBpJ3psFUIAx1xDOErx++m8BYZmyzVFSvdT/W/F7vmXKpz1xvvuqSx
+         srOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Y1Y2fkE2q57cl3sVFwSCV2Rlv9H/o7RdqOXAJOzk5BI=;
-        b=mEqQhL2TE3g5/NdqzrjKyw0je9rECSTNzUln/8l9l8L7Tp+g0TxS9DVW8zrNwRqCax
-         wHN3L5+gg0MPLN/EQTN2HkGHh2ggiAAnEXxEUgGiC8M3RuoWyfNUGIEXPWTDiiLyNMzS
-         tEAbeVGQqAw74tRumKmZylvoFA+FOpx81PwLfSoiIx3XVm002nvpAUMMfd4yyNGv5Vlo
-         phuFMUr2HVO6qC28zj0uRvYrxmQ0K3rWPIIdHMuYbhfC31VD385PP8dbdB5+sRWw7vC6
-         n0oU3UQVrOS5u2TmpCQ3wOHB1WZA+GaDCVpBL/CzJvbqPCoaKBsvZWAh9dwR54CG6B1G
-         833w==
-X-Gm-Message-State: AOAM531hD1md1jU5ngiCxbX8wK2GMtOBSMQ7hV7XL7K/QgwXVws9qSfY
-        T5/39OPmS5wBHYXsSNTbDs/xNQ==
-X-Google-Smtp-Source: ABdhPJzj7E3Rw5Brt6uT6kfU748sbin8+qytbSZ/kf72ZyhfLBgJc/YaDn8GH05YuWtNdSM8MF7q0Q==
-X-Received: by 2002:aa7:8298:: with SMTP id s24mr27113500pfm.122.1591121025745;
-        Tue, 02 Jun 2020 11:03:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u17sm2726262pgo.90.2020.06.02.11.03.44
+        bh=YWq/x05MQc6IbPohW5E+6GnnmsE60aX1v6C+jGwg3BE=;
+        b=KLRn6jiAz6b3+RL3EKNFH6rGGLwEnvjvV2mpoeknV+1g5I7PyBs+5bagQ1u7JildCH
+         TOdoQwgca8+jcvFRUblbeGN+LAXoKzeViQbIGUMRuvFbfa/h8c1XweJRUOlT1QdehIAb
+         xEyzZsxw/Bd2i97wGQ0cbZEsQUXjcJXk+vcdH5Np8FT3q62gQOV/5J7rG8jNlbGh0V9T
+         1eS9Oc/zhDHZMhOr6ZLqKjM3emT8TxrfO8EF0QHhEBvOspM0sjXA+c44NHFm2srUFXWG
+         zqJXZ+WQd3Bl9qvzQre10hNWYNM8if/c5ADQqgK+erg4mb0Vb8pw7U9vLBIv4NyDSWTv
+         zCKg==
+X-Gm-Message-State: AOAM530avsVF67yfAggEs2BZWcH7eZbHjCuZFLuRahf8HMJQeajEJ6TK
+        mhv82oqOh3flnII5nEl9jFM=
+X-Google-Smtp-Source: ABdhPJzfJ/PMHA/Pav2ioZ6zdPvYtWclCrUcnwqgz87dVGTuveVsFoKyAJT42aBqV0dn7S10CBmYHg==
+X-Received: by 2002:a2e:9055:: with SMTP id n21mr228737ljg.217.1591124501247;
+        Tue, 02 Jun 2020 12:01:41 -0700 (PDT)
+Received: from rikard (h-158-174-22-22.NA.cust.bahnhof.se. [158.174.22.22])
+        by smtp.gmail.com with ESMTPSA id w17sm679159ljj.108.2020.06.02.12.01.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2020 11:03:44 -0700 (PDT)
-Date:   Tue, 2 Jun 2020 11:03:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Matt Turner <mattst88@gmail.com>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org
-Subject: Re: Regression bisected to f2f84b05e02b (bug: consolidate
- warn_slowpath_fmt() usage)
-Message-ID: <202006021052.E52618F@keescook>
-References: <20200602024804.GA3776630@p50-ethernet.mattst88.com>
+        Tue, 02 Jun 2020 12:01:40 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+X-Google-Original-From: Rikard Falkeborn <rikard.falkeborn>
+Date:   Tue, 2 Jun 2020 21:01:36 +0200
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Syed Nayyar Waris <syednwaris@gmail.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 1/4] bitops: Introduce the the for_each_set_clump macro
+Message-ID: <20200602190136.GA913@rikard>
+References: <CACG_h5pcd-3NWgE29enXAX8=zS-RWQZrh56wKaFbm8fLoCRiiw@mail.gmail.com>
+ <CAHp75Vdv4V5PLQxM1+ypHacso6rrR6CiXTX43M=6UuZ6xbYY7g@mail.gmail.com>
+ <CACG_h5qGEsyRBHj+O5nmwsHpi3rkVQd1hVMDnnauAmqqTa_pbg@mail.gmail.com>
+ <CAHp75VdPcNOuV_JO4y3vSDmy7we3kiZL2kZQgFQYmwqb6x7NEQ@mail.gmail.com>
+ <CACG_h5pDHCp_b=UJ7QZCEDqmJgUdPSaNLR+0sR1Bgc4eCbqEKw@mail.gmail.com>
+ <CAHp75VfBe-LMiAi=E4Cy8OasmE8NdSqevp+dsZtTEOLwF-TgmA@mail.gmail.com>
+ <CACG_h5p1UpLRoA+ubE4NTFQEvg-oT6TFmsLXXTAtBvzN9z3iPg@mail.gmail.com>
+ <CAHp75Vdxa1_ANBLEOB6g25x3O0V5h3yjZve8qpz-xkisD3KTLg@mail.gmail.com>
+ <20200531223716.GA20752@rikard>
+ <20200601083330.GB1634618@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200602024804.GA3776630@p50-ethernet.mattst88.com>
+In-Reply-To: <20200601083330.GB1634618@smile.fi.intel.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 01, 2020 at 07:48:04PM -0700, Matt Turner wrote:
-> I bisected a regression on alpha to f2f84b05e02b (bug: consolidate
-> warn_slowpath_fmt() usage) which looks totally innocuous.
+On Mon, Jun 01, 2020 at 11:33:30AM +0300, Andy Shevchenko wrote:
+> On Mon, Jun 01, 2020 at 12:37:16AM +0200, Rikard Falkeborn wrote:
+> > + Emil who was working on a patch for this
+> > 
+> > On Sun, May 31, 2020 at 02:00:45PM +0300, Andy Shevchenko wrote:
+> > > On Sun, May 31, 2020 at 4:11 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+> > > > On Sat, May 30, 2020 at 2:50 PM Andy Shevchenko
+> > > > <andy.shevchenko@gmail.com> wrote:
+> > > > > On Sat, May 30, 2020 at 11:45 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+> > > > > > On Sat, May 30, 2020 at 3:49 AM Andy Shevchenko
+> > > > > > <andy.shevchenko@gmail.com> wrote:
+> > > 
+> > > ...
+> > > 
+> > Sorry about that, it seems it's only triggered by gcc-9, that's why I
+> > missed it.
 > 
-> Reverting it on master confirms that it somehow is the trigger. At or a
-> little after starting userspace, I'll see an oops like this:
+> I guess every compiler (more or less recent) will warn here.
+> (Sorry, there is a cut in the thread, the problem is with comparison unsigned
+>  type(s) to 0).
 > 
-> Unable to handle kernel paging request at virtual address 0000000000000000
-> CPU 0
-> kworker/u2:5(98): Oops -1
-> pc = [<0000000000000000>]  ra = [<0000000000000000>]  ps = 0000    Not tainted
-> pc is at 0x0
-
-^^^^ so, the instruction pointer is NULL. The only way I can imagine
-that happening would be from this line:
-
-        worker->current_func(work);
-
-> ra is at 0x0
-> v0 = 0000000000000007  t0 = 0000000000000001  t1 = 0000000000000001
-> t2 = 0000000000000000  t3 = fffffc00bfe68780  t4 = 0000000000000001
-> t5 = fffffc00bf8cc780  t6 = 00000000026f8000  t7 = fffffc00bfe70000
-> s0 = fffffc000250d310  s1 = fffffc000250d310  s2 = fffffc000250d310
-> s3 = fffffc000250ca40  s4 = fffffc000250caa0  s5 = 0000000000000000
-> s6 = fffffc000250ca40
-> a0 = fffffc00024f0488  a1 = fffffc00bfe73d98  a2 = fffffc00bfe68800
-> a3 = fffffc00bf881400  a4 = 0001000000000000  a5 = 0000000000000002
-> t8 = 0000000000000000  t9 = 0000000000000000  t10= 0000000001321800
-> t11= 000000000000ba4e  pv = fffffc000189ca00  at = 0000000000000000
-> gp = fffffc000253e430  sp = 0000000043a83c2e
-> Disabling lock debugging due to kernel taint
-> Trace:
-> [<fffffc000105c8ac>] process_one_work+0x25c/0x5a0
-
-Can you verify where this     ^^^^^^^^^^^^^^   is?
-
-> [<fffffc000105cc4c>] worker_thread+0x5c/0x7d0
-> [<fffffc0001066c88>] kthread+0x188/0x1f0
-> [<fffffc0001011b48>] ret_from_kernel_thread+0x18/0x20
-> [<fffffc0001066b00>] kthread+0x0/0x1f0
-> [<fffffc000105cbf0>] worker_thread+0x0/0x7d0
+> > > > #if (l) == 0
+> > > > #define GENMASK_INPUT_CHECK(h, l)  0
+> > > > #elif
+> > > > #define GENMASK_INPUT_CHECK(h, l) \
+> > > >         (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+> > > >                 __builtin_constant_p((l) > (h)), (l) > (h), 0)))
+> > > > #endif
+> > > >
+> > > > I have verified that this works. Basically this just avoids the sanity
+> > > > check when the 'lower' bound 'l' is zero. Let me know if it looks
+> > > > fine.
+> > 
+> > I don't understand how you mean this? You can't use l before you have
+> > defined GENMASK_INPUT_CHECK to take l as input? Am I missing something?
+> > 
+> > How about the following (with an added comment about why the casts are
+> > necessary):
+> > 
+> > diff --git a/include/linux/bits.h b/include/linux/bits.h
+> > index 4671fbf28842..5fdb9909fbff 100644
+> > --- a/include/linux/bits.h
+> > +++ b/include/linux/bits.h
+> > @@ -23,7 +23,7 @@
+> >  #include <linux/build_bug.h>
+> >  #define GENMASK_INPUT_CHECK(h, l) \
+> >         (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+> > -               __builtin_constant_p((l) > (h)), (l) > (h), 0)))
+> > +               __builtin_constant_p((int)(l) > (int)(h)), (int)(l) > (int)(h), 0)))
+> >  #else
+> >  /*
+> >   * BUILD_BUG_ON_ZERO is not available in h files included from asm files,
+> > 
+> > I can send a proper patch if this is ok.
+> > > 
+> > > Unfortunately, it's not enough. We need to take care about the following cases
+> > 
+> > The __GENMASK macro is only valid for values of h and l between 0 and 63
+> > (or 31, if unsigned long is 32 bits). Negative values or values >=
+> > sizeof(unsigned long) (or unsigned long long for GENMASK_ULL) result in
+> > compiler warnings (-Wshift-count-negative or -Wshift-count-overflow). So
+> > when I wrote the GENMASK_INPUT_CHECK macro, the intention was to catch
+> > cases where l and h were swapped and let the existing compiler warnings
+> > catch negative or too large values.
 > 
-> Code:
->  00000000
->  00000000
->  00063301
->  000012e2
->  00001111
->  0005ffde
+> GENAMSK sometimes is used with non-constant arguments that's why your check
+> made a regression.
 > 
-> It seems to cause a hard lock on an SMP system, but not on a system with
-> a single CPU. Similarly, if I boot the SMP system (2 CPUs) with
-> maxcpus=1 the oops doesn't happen. Until I tested on a non-SMP system
-> today I suspected that it was unaffected, but I saw the oops there too.
-> With the revert applied, I don't see a warning or an oops.
+> What I described below are the cases to consider w/o what should we do. What
+> you answered is the same what I implied. So, we are on the same page here.
 > 
-> Any clues how this patch could have triggered the oops?
+> > > 1) h or l negative;
+> > 
+> > Any of these cases will trigger a compiler warning (h negative triggers 
+> > Wshift-count-overflow, l negative triggers Wshift-count-negative).
+> > 
+> > > 2) h == 0, if l == 0, I dunno what is this. it's basically either 0 or warning;
+> > 
+> > h == l == 0 is a complicated way of saying 1 (or BIT(0)). l negative
+> > triggers compiler warning.
+> 
+> Oh, yes GENMASK(h, l), when h==l==0 should be equivalent to BIT(0) with no
+> warning given.
+> 
+> > > 3) l == 0;
+> > 
+> > if h is negative, compiler warning (see 1). If h == 0, see 2. If h is
+> > positive, there is no error in GENMASK_INPUT_CHECK.
+> > 
+> > > 4) h and l > 0.
+> > 
+> > The comparisson works as intended.
+> 
+> > > Now, on top of that (since it's a macro) we have to keep in mind that
+> > > h and l can be signed and / or unsigned types.
+> > > And macro shall work for all 4 cases (by type signedess).
+> > 
+> > If we cast to int, we don't need to worry about the signedness. If
+> > someone enters a value that can't be cast to int, there will still
+> > be a compiler warning about shift out of range.
+> 
+> If the argument unsigned long long will it be the warning (it should not)?
 
-I cannot begin to imagine. :P Compared to other things I've seen like
-this in the past maybe it's some kind of effect from the code size
-changing the location/alignment or timing of something else?
+No, there should be no warning there.
 
-Various questions ranging in degrees of sanity:
+The inputs to GENMASK() needs to be between 0 and 31 (or 63 depending on the
+size of unsigned long). For any other values, there will be undefined behaviour,
+since the operands to the shifts in __GENMASK will be too large (or negative).
 
-Does alpha use work queues for WARN?
-
-Which work queue is getting a NULL function? (And then things like "if
-WARN was much slower or much faster, is there a race to something
-setting itself to NULL?")
-
-Was there a WARN before the above Oops?
-
-Does WARN have side-effects on alpha?
-
-Does __WARN_printf() do something bad that warn_slowpath_null() doesn't?
-
-Does making incremental changes narrow anything down? (e.g. instead of
-this revert, remove the __warn() call in warn_slowpath_fmt() that was
-added? (I mean, that'll be quite broken for WARN, but will it not oops?)
-
-Does alpha have hardware breakpoints? When I had to track down a
-corruption in the io scheduler, I ended up setting breakpoints on the
-thing that went crazy (in this case, I assume the work queue function
-pointer) to figure out what touched it.
-
-... I can't think of anything else.
-
--Kees
+Rikard
 
 > 
-> Here's the revert, with a trivial conflict resolved, that I've used in
-> testing:
+> > > > Regarding min, max macro that you suggested I am also looking further into it.
+> > > 
+> > > Since this has been introduced in v5.7 and not only your code is
+> > > affected by this I think we need to ping original author either to fix
+> > > or revert.
+> > > 
+> > > So, I Cc'ed to the author and reviewers, because they probably know
+> > > better why that had been done in the first place and breaking existing
+> > > code.
 > 
-> From fdbdd0f606f0f412ee06c1152e33a22ca17102bc Mon Sep 17 00:00:00 2001
-> From: Matt Turner <mattst88@gmail.com>
-> Date: Sun, 24 May 2020 20:46:00 -0700
-> Subject: [PATCH] Revert "bug: consolidate warn_slowpath_fmt() usage"
+> Please, when you do something there, add a test case to test_bitops.c.
 > 
-> This reverts commit f2f84b05e02b7710a201f0017b3272ad7ef703d1.
-> ---
->  include/asm-generic/bug.h |  3 ++-
->  kernel/panic.c            | 15 +++++++--------
->  2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-> index 384b5c835ced..a4a311d4b4b0 100644
-> --- a/include/asm-generic/bug.h
-> +++ b/include/asm-generic/bug.h
-> @@ -82,7 +82,8 @@ struct bug_entry {
->  extern __printf(4, 5)
->  void warn_slowpath_fmt(const char *file, const int line, unsigned taint,
->  		       const char *fmt, ...);
-> -#define __WARN()		__WARN_printf(TAINT_WARN, NULL)
-> +extern void warn_slowpath_null(const char *file, const int line);
-> +#define __WARN()		warn_slowpath_null(__FILE__, __LINE__)
->  #define __WARN_printf(taint, arg...)					\
->  	warn_slowpath_fmt(__FILE__, __LINE__, taint, arg)
->  #else
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index b69ee9e76cb2..c8ed8046b484 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -603,20 +603,19 @@ void warn_slowpath_fmt(const char *file, int line, unsigned taint,
->  {
->  	struct warn_args args;
-> -	pr_warn(CUT_HERE);
-> -
-> -	if (!fmt) {
-> -		__warn(file, line, __builtin_return_address(0), taint,
-> -		       NULL, NULL);
-> -		return;
-> -	}
-> -
->  	args.fmt = fmt;
->  	va_start(args.args, fmt);
->  	__warn(file, line, __builtin_return_address(0), taint, NULL, &args);
->  	va_end(args.args);
->  }
->  EXPORT_SYMBOL(warn_slowpath_fmt);
-> +
-> +void warn_slowpath_null(const char *file, int line)
-> +{
-> +	pr_warn(CUT_HERE);
-> +	__warn(file, line, __builtin_return_address(0), TAINT_WARN, NULL, NULL);
-> +}
-> +EXPORT_SYMBOL(warn_slowpath_null);
->  #else
->  void __warn_printk(const char *fmt, ...)
->  {
 > -- 
-> 2.26.2
-
-
-
--- 
-Kees Cook
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
