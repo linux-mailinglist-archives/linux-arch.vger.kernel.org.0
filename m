@@ -2,42 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9691EBB2D
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Jun 2020 14:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECA11EBD6D
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Jun 2020 15:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725940AbgFBMGR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Jun 2020 08:06:17 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:5333 "EHLO huawei.com"
+        id S1725958AbgFBN7I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Jun 2020 09:59:08 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:5769 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725921AbgFBMGR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 2 Jun 2020 08:06:17 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 81E03B2E8FAAB54CD06E;
-        Tue,  2 Jun 2020 20:06:15 +0800 (CST)
-Received: from [127.0.0.1] (10.173.220.25) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Tue, 2 Jun 2020
- 20:06:09 +0800
-Subject: Re: [RFC PATCH v4 2/2] arm64: tlb: Use the TLBI RANGE feature in
- arm64
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <suzuki.poulose@arm.com>, <maz@kernel.org>, <steven.price@arm.com>,
-        <guohanjun@huawei.com>, <olof@lixom.net>
-CC:     <linux-arm-kernel@lists.infradead.org>,
+        id S1725841AbgFBN7I (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 2 Jun 2020 09:59:08 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id A2F4C9FFFE30778C5DEF;
+        Tue,  2 Jun 2020 21:59:05 +0800 (CST)
+Received: from DESKTOP-KKJBAGG.china.huawei.com (10.173.220.25) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 2 Jun 2020 21:58:58 +0800
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+To:     <catalin.marinas@arm.com>, <peterz@infradead.org>,
+        <mark.rutland@arm.com>, <will@kernel.org>,
+        <aneesh.kumar@linux.ibm.com>, <akpm@linux-foundation.org>,
+        <npiggin@gmail.com>, <arnd@arndb.de>, <rostedt@goodmis.org>,
+        <maz@kernel.org>, <suzuki.poulose@arm.com>, <tglx@linutronix.de>,
+        <yuzhao@google.com>, <Dave.Martin@arm.com>, <steven.price@arm.com>,
+        <broonie@kernel.org>, <guohanjun@huawei.com>
+CC:     <yezhenyu2@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
         <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
         <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
         <kuhn.chenqun@huawei.com>
-References: <20200601144713.2222-1-yezhenyu2@huawei.com>
- <20200601144713.2222-3-yezhenyu2@huawei.com>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <7f15f835-cf73-be5b-8bb0-cabb6e4eeed2@huawei.com>
-Date:   Tue, 2 Jun 2020 20:06:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+Subject: [PATCH v4 0/6] arm64: tlb: add support for TTL feature
+Date:   Tue, 2 Jun 2020 21:58:30 +0800
+Message-ID: <20200602135836.1620-1-yezhenyu2@huawei.com>
+X-Mailer: git-send-email 2.22.0.windows.1
 MIME-Version: 1.0
-In-Reply-To: <20200601144713.2222-3-yezhenyu2@huawei.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.173.220.25]
 X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
@@ -45,84 +44,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi all,
+In order to reduce the cost of TLB invalidation, ARMv8.4 provides
+the TTL field in TLBI instruction.  The TTL field indicates the
+level of page table walk holding the leaf entry for the address
+being invalidated.  This series provide support for this feature.
 
-Some optimizations to the codes:
+When ARMv8.4-TTL is implemented, the operand for TLBIs looks like
+below:
 
-On 2020/6/1 22:47, Zhenyu Ye wrote:
-> -	start = __TLBI_VADDR(start, asid);
-> -	end = __TLBI_VADDR(end, asid);
-> +	/*
-> +	 * The minimum size of TLB RANGE is 2 pages;
-> +	 * Use normal TLB instruction to handle odd pages.
-> +	 * If the stride != PAGE_SIZE, this will never happen.
-> +	 */
-> +	if (range_pages % 2 == 1) {
-> +		addr = __TLBI_VADDR(start, asid);
-> +		__tlbi_last_level(vale1is, vae1is, addr, last_level);
-> +		start += 1 << PAGE_SHIFT;
-> +		range_pages >>= 1;
-> +	}
->  
+* +----------+-------+----------------------+
+* |   ASID   |  TTL  |        BADDR         |
+* +----------+-------+----------------------+
+* |63      48|47   44|43                   0|
 
-We flush a single page here, and below loop does the same thing
-if cpu not support TLB RANGE feature.  So may we use a goto statement
-to simplify the code.
+See patches for details, Thanks.
 
-> +	while (range_pages > 0) {
-> +		if (cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) &&
-> +		    stride == PAGE_SIZE) {
-> +			num = (range_pages & TLB_RANGE_MASK) - 1;
-> +			if (num >= 0) {
-> +				addr = __TLBI_VADDR_RANGE(start, asid, scale,
-> +							  num, 0);
-> +				__tlbi_last_level(rvale1is, rvae1is, addr,
-> +						  last_level);
-> +				start += __TLBI_RANGE_SIZES(num, scale);
-> +			}
-> +			scale++;
-> +			range_pages >>= TLB_RANGE_MASK_SHIFT;
-> +			continue;
->  		}
-> +
-> +		addr = __TLBI_VADDR(start, asid);
-> +		__tlbi_last_level(vale1is, vae1is, addr, last_level);
-> +		start += stride;
-> +		range_pages -= stride >> 12;
->  	}
->  	dsb(ish);
->  }
-> 
+--
+ChangeList:
+v4:
+implement flush_*_tlb_range only on arm64.
 
-Just like:
+v3:
+minor changes: reduce the indentation levels of __tlbi_level().
 
---8<---
-	if (range_pages %2 == 1)
-		goto flush_single_tlb;
+v2:
+rebase series on Linux 5.7-rc1 and simplify the code implementation.
 
-	while (range_pages > 0) {
-		if (cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) &&
-		    stride == PAGE_SIZE) {
-			num = ((range_pages >> 1) & TLB_RANGE_MASK) - 1;
-			if (num >= 0) {
-				addr = __TLBI_VADDR_RANGE(start, asid, scale,
-							  num, 0);
-				__tlbi_last_level(rvale1is, rvae1is, addr,
-						  last_level);
-				start += __TLBI_RANGE_SIZES(num, scale);
-			}
-			scale++;
-			range_pages >>= TLB_RANGE_MASK_SHIFT;
-			continue;
-		}
+v1:
+add support for TTL feature in arm64.
 
-flush_single_tlb:
-		addr = __TLBI_VADDR(start, asid);
-		__tlbi_last_level(vale1is, vae1is, addr, last_level);
-		start += stride;
-		range_pages -= stride >> PAGE_SHIFT;
-	}
---8<---
 
+Marc Zyngier (2):
+  arm64: Detect the ARMv8.4 TTL feature
+  arm64: Add level-hinted TLB invalidation helper
+
+Peter Zijlstra (Intel) (1):
+  tlb: mmu_gather: add tlb_flush_*_range APIs
+
+Zhenyu Ye (3):
+  arm64: Add tlbi_user_level TLB invalidation helper
+  arm64: tlb: Set the TTL field in flush_tlb_range
+  arm64: tlb: Set the TTL field in flush_*_tlb_range
+
+ arch/arm64/include/asm/cpucaps.h  |  3 +-
+ arch/arm64/include/asm/pgtable.h  | 10 ++++++
+ arch/arm64/include/asm/sysreg.h   |  1 +
+ arch/arm64/include/asm/tlb.h      | 29 +++++++++++++++-
+ arch/arm64/include/asm/tlbflush.h | 54 +++++++++++++++++++++++++-----
+ arch/arm64/kernel/cpufeature.c    | 11 +++++++
+ include/asm-generic/tlb.h         | 55 ++++++++++++++++++++++---------
+ 7 files changed, 138 insertions(+), 25 deletions(-)
+
+-- 
+2.19.1
 
 
