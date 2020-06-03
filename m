@@ -2,102 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE251ED83C
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Jun 2020 23:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E001ED856
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Jun 2020 00:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbgFCV7h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Jun 2020 17:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
+        id S1726769AbgFCWDs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Jun 2020 18:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbgFCV7g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Jun 2020 17:59:36 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD191C08C5C0;
-        Wed,  3 Jun 2020 14:59:36 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id 23so1507066pfw.10;
-        Wed, 03 Jun 2020 14:59:36 -0700 (PDT)
+        with ESMTP id S1726584AbgFCWDs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Jun 2020 18:03:48 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1822C08C5C0;
+        Wed,  3 Jun 2020 15:03:47 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id n23so4741336ljh.7;
+        Wed, 03 Jun 2020 15:03:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jnwF1Toq1zg+I3R9H/up2SBuKxY8hOvcaRaCLXmqEXc=;
-        b=Yx2NibBUqoCv/OV7CuvgU0yPb0k5dEgIjh2e7TZrKO6n28nrlKQ9ODCFCQlOPbHVxL
-         p36WBWpm1IGVdoLE3c32MTZx4ZgEnQDZkL/b/VmfzuPw/jWEhv5yMEwGs6s/9n9i1SHJ
-         d7B6B/87MRihs3ip1BE/dGvwMRX4RT8JHc3Vh/Sjh4NfcJ5SDD7BBDApd88td4YvPCwD
-         DsK7uh38qMa3h/+UZw2JSsOB1vybwkFEm4pOxeLq8HCSzBAVtIyLw+tghnV/JdJysJmY
-         uL9lsvXEFGzBTJSnMvYQLtTzAVDm7QbXNJEPYoFl+ay1XoCKy+YVhNnWr+fU1SLCivOG
-         WM9w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=H+XTLQsKZQTaS9x71LzVKV5AjJXygW6lHQ5XJHRgP84=;
+        b=dUUV7Qbai/yDpIobYnOkyFTEKHStSfOTL7JXeJnkrMY43Tl9uo52DQH9zRrvUzx/w3
+         GSZGZ/WndxwyE4L03kLVW7iMNw5BGG66juvXScuxw+cwNGWAD0o9Pzf5Wa4C05LE+kz3
+         6edGMjmh6RHvltFZxAgm+XvnXFZAPos/2Eipstk8yrbceVQhvIuHmHF5KAZRo6fz4rm9
+         a+2BjnmwdwcQCkd8sQjxHLCuOBx8wG4RwUG+hU+8BFkjaGnKrIUhXCoNxb1yxFazlnPl
+         p18p+lmGavi7O1UfJ8w0C8LpyeWAMLu8UCXLK4Wb5OZ2OHpbkW8UcrS6MlvrQTRI2RUN
+         1QqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jnwF1Toq1zg+I3R9H/up2SBuKxY8hOvcaRaCLXmqEXc=;
-        b=dsKpsB9z7UD14J0koTWiUMXoCPAL7StVZgIvwB8cnD2f/kZTevaxnPgkQqzlDB7T+5
-         KRHhhcbRSd0dBzKWIZVbR3+P84Y4FdbMrPCBbRDxxI+dsjdy5eb6luGYwBtQv2ga/Nf2
-         icC+wx7s4SQqQhYvotmNMDeH3JibeZNaNzvSpogZqnYWFOeF/X7CZzJAOrdWGqmB2zSi
-         KVJxXiu5EGnJYz+3efoR89RgRTnQZqRJJcF5vvZzUAmAxU8n97jsDdURHoA2xo8FuUPq
-         8XBcSWzfV4c0QWcbUxH/esvoLzPiD11zZV73gBJ7S4xdCFH4L2uj+Qty7YHlr0jJH4Mf
-         ZlTA==
-X-Gm-Message-State: AOAM530uTFyMpYlMnM9qehFXeIwM6ZM2Wm7T0SKInHj8X7MPpQp1kC6O
-        wC/BQKmmYkP8UIsuwptjPZPIxAK2GO/EAWRMryQ=
-X-Google-Smtp-Source: ABdhPJwe/UN28Z8IzKpuwEHFOD1+W9b4Y3sdNM9oTVjMFxDCtr0nl4zSecglffjDiMj06pAkjlfWwQMjsR2P1c6Pxpc=
-X-Received: by 2002:a63:545a:: with SMTP id e26mr1395213pgm.4.1591221576413;
- Wed, 03 Jun 2020 14:59:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=H+XTLQsKZQTaS9x71LzVKV5AjJXygW6lHQ5XJHRgP84=;
+        b=BUqyLVlE1JmjTO/HIx/bbnySSBLTt2A9LNpgshzWELQkv8KmI5nBwkN36TVeeUYSaY
+         IzQ/2k3gDwDgfssQqBn9Izv0VHICd2cbFKBs4OLflBkDNOOKfhlEjYqLSwtpgNmS30KV
+         4aMP317bP31klVgwqlvCTgBknLHE3Wk3KSI9MF1AnpTyqrFYC/ltgWBzvjZF9wiZ+zy+
+         A/H8kFLG+tv/YjMWEYoTJPsDWCFgFn1YTiaOjdd92iq0f6qj+cj75vQ/BPHIG9/BpE/c
+         Ijzjhp3Af4441ZmA3Nyv9dl+Q0rPsNaNH/oeeKK0SwGHTxBcHu+ye4AdpqvMdGFUCSY6
+         hYMQ==
+X-Gm-Message-State: AOAM530BP1XttWRNUjh4c/aBWmOo1Fpp4emWEf18aH+UOoeTUyk0s9gZ
+        FwrKiREeQmZ0oWMrPVvcF9HDqVayVAA=
+X-Google-Smtp-Source: ABdhPJyP9AiP4JeY72sPHecrHeTUQlgX6Z1xUv01fOjjXP/M4bAb8Ix7LABoB5UKJcg/KxXYvkwJZg==
+X-Received: by 2002:a2e:8ec1:: with SMTP id e1mr573114ljl.23.1591221826167;
+        Wed, 03 Jun 2020 15:03:46 -0700 (PDT)
+Received: from localhost.localdomain (h-158-174-22-22.NA.cust.bahnhof.se. [158.174.22.22])
+        by smtp.gmail.com with ESMTPSA id c7sm794800ljj.109.2020.06.03.15.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2020 15:03:45 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     rikard.falkeborn@gmail.com
+Cc:     akpm@linux-foundation.org, andy.shevchenko@gmail.com,
+        arnd@arndb.de, emil.l.velikov@gmail.com, keescook@chromium.org,
+        linus.walleij@linaro.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syednwaris@gmail.com,
+        vilhelm.gray@gmail.com, yamada.masahiro@socionext.com,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH] linux/bits.h: fix unsigned less than zero warnings
+Date:   Thu,  4 Jun 2020 00:02:26 +0200
+Message-Id: <20200603220226.916269-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200603215314.GA916134@rikard>
+References: <20200603215314.GA916134@rikard>
 MIME-Version: 1.0
-References: <CACG_h5qGEsyRBHj+O5nmwsHpi3rkVQd1hVMDnnauAmqqTa_pbg@mail.gmail.com>
- <CAHp75VdPcNOuV_JO4y3vSDmy7we3kiZL2kZQgFQYmwqb6x7NEQ@mail.gmail.com>
- <CACG_h5pDHCp_b=UJ7QZCEDqmJgUdPSaNLR+0sR1Bgc4eCbqEKw@mail.gmail.com>
- <CAHp75VfBe-LMiAi=E4Cy8OasmE8NdSqevp+dsZtTEOLwF-TgmA@mail.gmail.com>
- <CACG_h5p1UpLRoA+ubE4NTFQEvg-oT6TFmsLXXTAtBvzN9z3iPg@mail.gmail.com>
- <CAHp75Vdxa1_ANBLEOB6g25x3O0V5h3yjZve8qpz-xkisD3KTLg@mail.gmail.com>
- <20200531223716.GA20752@rikard> <20200601083330.GB1634618@smile.fi.intel.com>
- <20200602190136.GA913@rikard> <CAHp75VdUf8=y+y4Q3OtWc7owxg0uX8LhZY4Nrgnezuv+aSyzUg@mail.gmail.com>
- <20200603215314.GA916134@rikard> <CAHp75VeQ+3rRAs+5Tmn=Tj_jkdKff=crwX9S3bPGLO6iVQ8Kqg@mail.gmail.com>
-In-Reply-To: <CAHp75VeQ+3rRAs+5Tmn=Tj_jkdKff=crwX9S3bPGLO6iVQ8Kqg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 4 Jun 2020 00:59:19 +0300
-Message-ID: <CAHp75VdVqKfGC1+yLOTORLXLRcLxXXUPW2v3iY0uGAS7CDUifQ@mail.gmail.com>
-Subject: Re: [PATCH v7 1/4] bitops: Introduce the the for_each_set_clump macro
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Emil Velikov <emil.l.velikov@gmail.com>,
-        Syed Nayyar Waris <syednwaris@gmail.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 4, 2020 at 12:58 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Jun 4, 2020 at 12:53 AM Rikard Falkeborn
-> <rikard.falkeborn@gmail.com> wrote:
-> > On Wed, Jun 03, 2020 at 11:49:37AM +0300, Andy Shevchenko wrote:
-> > > On Tue, Jun 2, 2020 at 10:01 PM Rikard Falkeborn
-> > > <rikard.falkeborn@gmail.com> wrote:
->
-> ...
->
-> > I'd be very surprised if compilers warned for explicit casts but  I'll
-> > send a proper patch soon to let the build robot try it.
->
-> I noticed that you should have received kbuild bot report about a
-> driver where it appears.
->
-> You patch broke all cases where (l) = 0 and (h) is type of unsigned
-> (not a const from compiler point of view).
+When calling the GENMASK and GENMASK_ULL macros with zero lower bit and
+an unsigned unknown high bit, some gcc versions warn due to the
+comparisons of the high and low bit in GENMASK_INPUT_CHECK.
 
-I will ask to revert for rc1 if there will be no fix.
+To silence the warnings, cast the inputs to int before doing the
+comparisons. The only valid inputs to GENMASK() and GENMASK_ULL() are
+are 0 to 31 or 63. Anything outside this is undefined due to the shifts
+in GENMASK()/GENMASK_ULL(). Therefore, casting the inputs to int do not
+change the values for valid known inputs. For unknown values, the check
+does not change anything since it's a compile-time check only.
 
+As an example of the warning, kindly reported by the kbuild test robot:
 
+from drivers/mfd/atmel-smc.c:11:
+drivers/mfd/atmel-smc.c: In function 'atmel_smc_cs_encode_ncycles':
+include/linux/bits.h:26:28: warning: comparison of unsigned expression < 0 is always false [-Wtype-limits]
+26 |   __builtin_constant_p((l) > (h)), (l) > (h), 0)))
+|                            ^
+include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
+16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+|                                                              ^
+include/linux/bits.h:39:3: note: in expansion of macro 'GENMASK_INPUT_CHECK'
+39 |  (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+|   ^~~~~~~~~~~~~~~~~~~
+>> drivers/mfd/atmel-smc.c:49:25: note: in expansion of macro 'GENMASK'
+49 |  unsigned int lsbmask = GENMASK(msbpos - 1, 0);
+|                         ^~~~~~~
+
+Fixes: 295bcca84916 ("linux/bits.h: add compile time sanity check of GENMASK inputs")
+Reported-by: kbuild test robot <lkp@intel.com>
+Reported-by: Emil Velikov <emil.l.velikov@gmail.com>
+Reported-by: Syed Nayyar Waris <syednwaris@gmail.com>
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ include/linux/bits.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/bits.h b/include/linux/bits.h
+index 4671fbf28842..293d1ee71a48 100644
+--- a/include/linux/bits.h
++++ b/include/linux/bits.h
+@@ -21,9 +21,10 @@
+ #if !defined(__ASSEMBLY__) && \
+ 	(!defined(CONFIG_CC_IS_GCC) || CONFIG_GCC_VERSION >= 49000)
+ #include <linux/build_bug.h>
++/* Avoid Wtype-limits warnings by casting the inputs to int */
+ #define GENMASK_INPUT_CHECK(h, l) \
+ 	(BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+-		__builtin_constant_p((l) > (h)), (l) > (h), 0)))
++		__builtin_constant_p((int)(l) > (int)(h)), (int)(l) > (int)(h), 0)))
+ #else
+ /*
+  * BUILD_BUG_ON_ZERO is not available in h files included from asm files,
 -- 
-With Best Regards,
-Andy Shevchenko
+2.27.0
+
