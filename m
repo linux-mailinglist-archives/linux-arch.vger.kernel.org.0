@@ -2,74 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9B51ECD17
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Jun 2020 12:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A081ED12A
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Jun 2020 15:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726159AbgFCKDm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Jun 2020 06:03:42 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54135 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725881AbgFCKDm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 3 Jun 2020 06:03:42 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cPcq6WP6z9sTK;
-        Wed,  3 Jun 2020 20:03:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1591178620;
-        bh=+tIstlXPrES0K82dOfQBGtH8J5rOTemXGe1SApntEBM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=KoA2pXZIjGpMNpYW0K1cDO5TC6I4mRAn4yiN9onrDEluLyh+SdZxjTxdeFHOnxC1r
-         3khNJd3oguW2gkFGU9+sZRhgJcCQgOZuC0fkd7mW5wnmfzlKWIibrak0a2RaK1a2LN
-         D2extDCJQZY77r1BLtM7VTDvjCT+HAthHBg4qzSBfP2lx57Mcqgg5L1oKZOw89c4WG
-         77Sq5FfLAQvyUoSyyenHYF7ocujUdq0FXmka/P0zTqcklUhajrm60ExP/zYuIC8kVL
-         9nPgGMkgbNGa1O2rUMOAW17MP/z8zKBO1yjH1CT5CmBuAKOa4myeX2qp17PvgEs3mq
-         nR7Af5BwxCyow==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, nathanl@linux.ibm.com
-Cc:     linux-arch@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, luto@kernel.org, tglx@linutronix.de,
-        vincenzo.frascino@arm.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v8 0/8] powerpc: switch VDSO to C implementation
-In-Reply-To: <438ce3d7-aa0f-0284-7518-6c6339742aab@csgroup.eu>
-References: <cover.1588079622.git.christophe.leroy@c-s.fr> <438ce3d7-aa0f-0284-7518-6c6339742aab@csgroup.eu>
-Date:   Wed, 03 Jun 2020 20:04:02 +1000
-Message-ID: <87zh9kh3e5.fsf@mpe.ellerman.id.au>
+        id S1725954AbgFCNsa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Jun 2020 09:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725834AbgFCNs3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Jun 2020 09:48:29 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37855C08C5C0
+        for <linux-arch@vger.kernel.org>; Wed,  3 Jun 2020 06:48:29 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id 202so1366405lfe.5
+        for <linux-arch@vger.kernel.org>; Wed, 03 Jun 2020 06:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=bMU/R6ullFPJoyI5cK62AVEhMCXN31Rj9S4cMdr72T3cC3QhFm4SG7DqgeiyWx8YMF
+         B36QRPnYRfgSIyr7KPsMsFr37QgeijF8OQgdKdOybwMl3zWcKYkq1foYMhiku6AH/JpH
+         RQudNyXg/D2XzEl+0K+aLGtwvkSgHBznzrQ88o0a1I5opW/PYByFtl3cMcTi7ozQ5z3t
+         HGF05y3w5qPjNLN2jggkM6WsklZPGXULgwOMZtniZXi6+9QzCv/uhIf2jnVjctOr4Duh
+         /rORfi+ZbEztxqAHG773N7xkUef159nEGjQ6TGDFXXAWOKFQhO1lNsPI3a+hRDASCyfE
+         luIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=dTkGP4qpxaHE4KgYUVQ8fwpeDV7fc3fz2ouZA9s1CQMYfZVj/FMRJoNwQPcM0dh/ht
+         deD5oXFHui/dTVU04hz6QCooeY5YHmVKpWv9JeERvF/zWoyp5Qx6XAgiz7Kl/ZvK9n9D
+         nc8vbuZ9EGYS4q42L8Yguo10pn8Jh43QfWLhdhvNEXDb5GebRfI0YQZ+isf30OlnE+wJ
+         7krlp+ggkQl8X7fFysvC/ztt78+f1TiqV7n3T2ZddVXTMpg2L5UGi3SxNF5wgJRCGMLF
+         9fs8QGz50OwT5/u//2MZ3Te1RQQM5zKjy+wsqK8J3cbILyc06itzpDbwRXpqvrgyhaUK
+         8TUw==
+X-Gm-Message-State: AOAM530sSJ/YPLBpWW4mCUo8TJy+yYUXpagGwcanBVBS0ObJWsciKMTZ
+        BYhsTpNXYLady7QVZX6NeEi+RsIHBQYkw6ZViLw=
+X-Google-Smtp-Source: ABdhPJyXIGK/fer5genXUqGP4qhT1l9BkdXDTlfBQ0lPU4JnnUIDg78wwiuY54vEXni41HnsMTY5q01Ev6IbkzvjoDg=
+X-Received: by 2002:a19:ae18:: with SMTP id f24mr2528317lfc.150.1591192107600;
+ Wed, 03 Jun 2020 06:48:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Reply-To: susanjones.wife@gmail.com
+Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:48:27 -0700 (PDT)
+From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
+Date:   Wed, 3 Jun 2020 14:48:27 +0100
+X-Google-Sender-Auth: CX1LZ7YfNQPyALxaOBiV6tNAajo
+Message-ID: <CALBhdBeX2Y4FkCAknXQzKBB4njye5Ybu7ih1JoB6KjFCr8v0Jw@mail.gmail.com>
+Subject: HELLO: I AM MRS SUSAN JONES
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Hi Michael,
->
-> Le 28/04/2020 =C3=A0 15:16, Christophe Leroy a =C3=A9crit=C2=A0:
->> This is the seventh version of a series to switch powerpc VDSO to
->> generic C implementation.
->>=20
->> Main changes since v7 are:
->> - Added gettime64 on PPC32
->>=20
->> This series applies on today's powerpc/merge branch.
->>=20
->> See the last patches for details on changes and performance.
->
-> Do you have any plans for this series ?
+-- 
+OUR GOLDEN OPPORTUNITY
 
-Review it and merge it one day :/
+Hello Dear Friend,
 
-> Even if you don't feel like merging it this cycle, I think patches 1 to=20
-> 3 are worth it.
+Complement of the day, i hope you are doing great today. However, I am
+Mrs.Susan Jones, an auditor with one of the new generation banks here
+in Burkina Faso.
 
-I'd rather take the whole series for v5.9.
+I am writing you this letter based on the latest development at my
+Department. i discovered some abandoned huge amount of money, Ten
+Million, Five hundred thousand  United States Dollars.($10.500.000).
+Now I am only contacting you as a foreigner because this money cannot
+be approved to a local bank account here, but can only be approved to
+any foreign account and foreign beneficiary because the money is in US
+dollars
 
-Sorry it missed this window, I just didn't get time to look at it.
+This will be  a legitimate transaction once you accept to build trust
+with me and follow simple instruction doing the transfer process,
+until the total sum transfer out of the bank here to your own bank
+account any where in the world, and I agreed to share the total money
+50/50 with you once you successful confirmed it in your bank account.
+But any expenses doing the transfer process will be deduct from the
+amount before sharing, If you are interested to work with me and
+provide a good receiving bank account, get back to me as soon as
+possible with the following details below.
 
-cheers
+Your full name
+Your Profession
+Your direct mobile phone number
+Your Scanned International passport or any of your identity
+
+NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
+AVOID TIME WASTED.
+
+As soon as I receive these data's, I will forward to you the
+application form which you will send to the bank for the claim and
+transfer of the fund into your bank account as the  new beneficial.
+
+I am waiting to hear from you soon
+
+Yours
+Mrs.Susan Jones
