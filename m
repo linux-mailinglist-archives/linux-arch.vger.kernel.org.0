@@ -2,125 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E001ED856
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Jun 2020 00:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799CC1EDB37
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Jun 2020 04:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbgFCWDs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Jun 2020 18:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726584AbgFCWDs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Jun 2020 18:03:48 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1822C08C5C0;
-        Wed,  3 Jun 2020 15:03:47 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id n23so4741336ljh.7;
-        Wed, 03 Jun 2020 15:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=H+XTLQsKZQTaS9x71LzVKV5AjJXygW6lHQ5XJHRgP84=;
-        b=dUUV7Qbai/yDpIobYnOkyFTEKHStSfOTL7JXeJnkrMY43Tl9uo52DQH9zRrvUzx/w3
-         GSZGZ/WndxwyE4L03kLVW7iMNw5BGG66juvXScuxw+cwNGWAD0o9Pzf5Wa4C05LE+kz3
-         6edGMjmh6RHvltFZxAgm+XvnXFZAPos/2Eipstk8yrbceVQhvIuHmHF5KAZRo6fz4rm9
-         a+2BjnmwdwcQCkd8sQjxHLCuOBx8wG4RwUG+hU+8BFkjaGnKrIUhXCoNxb1yxFazlnPl
-         p18p+lmGavi7O1UfJ8w0C8LpyeWAMLu8UCXLK4Wb5OZ2OHpbkW8UcrS6MlvrQTRI2RUN
-         1QqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=H+XTLQsKZQTaS9x71LzVKV5AjJXygW6lHQ5XJHRgP84=;
-        b=BUqyLVlE1JmjTO/HIx/bbnySSBLTt2A9LNpgshzWELQkv8KmI5nBwkN36TVeeUYSaY
-         IzQ/2k3gDwDgfssQqBn9Izv0VHICd2cbFKBs4OLflBkDNOOKfhlEjYqLSwtpgNmS30KV
-         4aMP317bP31klVgwqlvCTgBknLHE3Wk3KSI9MF1AnpTyqrFYC/ltgWBzvjZF9wiZ+zy+
-         A/H8kFLG+tv/YjMWEYoTJPsDWCFgFn1YTiaOjdd92iq0f6qj+cj75vQ/BPHIG9/BpE/c
-         Ijzjhp3Af4441ZmA3Nyv9dl+Q0rPsNaNH/oeeKK0SwGHTxBcHu+ye4AdpqvMdGFUCSY6
-         hYMQ==
-X-Gm-Message-State: AOAM530BP1XttWRNUjh4c/aBWmOo1Fpp4emWEf18aH+UOoeTUyk0s9gZ
-        FwrKiREeQmZ0oWMrPVvcF9HDqVayVAA=
-X-Google-Smtp-Source: ABdhPJyP9AiP4JeY72sPHecrHeTUQlgX6Z1xUv01fOjjXP/M4bAb8Ix7LABoB5UKJcg/KxXYvkwJZg==
-X-Received: by 2002:a2e:8ec1:: with SMTP id e1mr573114ljl.23.1591221826167;
-        Wed, 03 Jun 2020 15:03:46 -0700 (PDT)
-Received: from localhost.localdomain (h-158-174-22-22.NA.cust.bahnhof.se. [158.174.22.22])
-        by smtp.gmail.com with ESMTPSA id c7sm794800ljj.109.2020.06.03.15.03.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2020 15:03:45 -0700 (PDT)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     rikard.falkeborn@gmail.com
-Cc:     akpm@linux-foundation.org, andy.shevchenko@gmail.com,
-        arnd@arndb.de, emil.l.velikov@gmail.com, keescook@chromium.org,
-        linus.walleij@linaro.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syednwaris@gmail.com,
-        vilhelm.gray@gmail.com, yamada.masahiro@socionext.com,
-        kbuild test robot <lkp@intel.com>
-Subject: [PATCH] linux/bits.h: fix unsigned less than zero warnings
-Date:   Thu,  4 Jun 2020 00:02:26 +0200
-Message-Id: <20200603220226.916269-1-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200603215314.GA916134@rikard>
-References: <20200603215314.GA916134@rikard>
+        id S1726567AbgFDCc7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Jun 2020 22:32:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47750 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726337AbgFDCc7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 3 Jun 2020 22:32:59 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 07D7120657;
+        Thu,  4 Jun 2020 02:32:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591237979;
+        bh=nkcDQQdUvb7qTq1n10CXRDABnrT77AQLwUdiWRqhWYE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=VDAsQwAP33wgORMvfS0T+A9ovT5WL/cPjVJ2dfiljT19QNdJcCOpYO3tSZPsGnOKq
+         00BWW2zwYry1ftG5Zye5MhDZ8JG3au1ubrQi+reBdrw1ZvsLbv4rJNJKR98BPz1k1e
+         PcwPUhM4XAgeqRffBrlkM/H4EZkGXQD7wYVjW1Mg=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id DB1073522946; Wed,  3 Jun 2020 19:32:58 -0700 (PDT)
+Date:   Wed, 3 Jun 2020 19:32:58 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     Akira Yokosawa <akiyks@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jade Alglave <jade.alglave@arm.com>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH -rcu lkmm] tools/memory-model/README: Expand
+ dependency of klitmus7
+Message-ID: <20200604023258.GV29598@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <4a05e568-aa30-423a-badc-f79f0af815a0@gmail.com>
+ <20200601043433.GA21675@andrea>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200601043433.GA21675@andrea>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When calling the GENMASK and GENMASK_ULL macros with zero lower bit and
-an unsigned unknown high bit, some gcc versions warn due to the
-comparisons of the high and low bit in GENMASK_INPUT_CHECK.
+On Mon, Jun 01, 2020 at 06:34:33AM +0200, Andrea Parri wrote:
+> On Mon, Jun 01, 2020 at 12:37:20AM +0900, Akira Yokosawa wrote:
+> > From 87048d7212f6cb16b0a2b85fa6d2f34c28b078c0 Mon Sep 17 00:00:00 2001
+> > From: Akira Yokosawa <akiyks@gmail.com>
+> > Date: Sun, 31 May 2020 20:04:32 +0900
+> > Subject: [PATCH RFC] tools/memory-model/README: Expand dependency of klitmus7
+> > 
+> > klitmus7 is independent of the memory model but depends on the
+> > build-target kernel release.
+> > It occasionally lost compatibility due to kernel API changes [1, 2, 3].
+> > It was remedied in a backwards-compatible manner respectively [4, 5, 6].
+> > 
+> > Reflect this fact in README.
+> > 
+> > [1]: b899a850431e ("compiler.h: Remove ACCESS_ONCE()")
+> > [2]: 0bb95f80a38f ("Makefile: Globally enable VLA warning")
+> > [3]: d56c0d45f0e2 ("proc: decouple proc from VFS with "struct proc_ops"")
+> > [4]: https://github.com/herd/herdtools7/commit/e87d7f9287d1
+> >      ("klitmus: Use WRITE_ONCE and READ_ONCE in place of deprecated ACCESS_ONCE")
+> > [5]: https://github.com/herd/herdtools7/commit/a0cbb10d02be
+> >      ("klitmus: Avoid variable length array")
+> > [6]: https://github.com/herd/herdtools7/commit/46b9412d3a58
+> >      ("klitmus: Linux kernel v5.6.x compat")
+> > 
+> > NOTE: [5] was ahead of herdtools7 7.53, which did not make an
+> > official release.  Code generated by klitmus7 without [5] can still be
+> > built targeting Linux 4.20--5.5 if you don't care VLA warnings.
+> > 
+> > Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+> 
+> Acked-by: Andrea Parri <parri.andrea@gmail.com>
 
-To silence the warnings, cast the inputs to int before doing the
-comparisons. The only valid inputs to GENMASK() and GENMASK_ULL() are
-are 0 to 31 or 63. Anything outside this is undefined due to the shifts
-in GENMASK()/GENMASK_ULL(). Therefore, casting the inputs to int do not
-change the values for valid known inputs. For unknown values, the check
-does not change anything since it's a compile-time check only.
+Queued, thank you both!
 
-As an example of the warning, kindly reported by the kbuild test robot:
+							Thanx, Paul
 
-from drivers/mfd/atmel-smc.c:11:
-drivers/mfd/atmel-smc.c: In function 'atmel_smc_cs_encode_ncycles':
-include/linux/bits.h:26:28: warning: comparison of unsigned expression < 0 is always false [-Wtype-limits]
-26 |   __builtin_constant_p((l) > (h)), (l) > (h), 0)))
-|                            ^
-include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
-16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-|                                                              ^
-include/linux/bits.h:39:3: note: in expansion of macro 'GENMASK_INPUT_CHECK'
-39 |  (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-|   ^~~~~~~~~~~~~~~~~~~
->> drivers/mfd/atmel-smc.c:49:25: note: in expansion of macro 'GENMASK'
-49 |  unsigned int lsbmask = GENMASK(msbpos - 1, 0);
-|                         ^~~~~~~
-
-Fixes: 295bcca84916 ("linux/bits.h: add compile time sanity check of GENMASK inputs")
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Emil Velikov <emil.l.velikov@gmail.com>
-Reported-by: Syed Nayyar Waris <syednwaris@gmail.com>
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- include/linux/bits.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/bits.h b/include/linux/bits.h
-index 4671fbf28842..293d1ee71a48 100644
---- a/include/linux/bits.h
-+++ b/include/linux/bits.h
-@@ -21,9 +21,10 @@
- #if !defined(__ASSEMBLY__) && \
- 	(!defined(CONFIG_CC_IS_GCC) || CONFIG_GCC_VERSION >= 49000)
- #include <linux/build_bug.h>
-+/* Avoid Wtype-limits warnings by casting the inputs to int */
- #define GENMASK_INPUT_CHECK(h, l) \
- 	(BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
--		__builtin_constant_p((l) > (h)), (l) > (h), 0)))
-+		__builtin_constant_p((int)(l) > (int)(h)), (int)(l) > (int)(h), 0)))
- #else
- /*
-  * BUILD_BUG_ON_ZERO is not available in h files included from asm files,
--- 
-2.27.0
-
+>   Andrea
+> 
+> 
+> > ---
+> > Hi all,
+> > 
+> > Recent struggle of Andrii with the use of klitmus7 on an up-to-date
+> > Linux system prompted me to add some explanation of klitmus7's dependency
+> > in README.
+> > 
+> > As herdtools7 7.56 is still under development, I called out just HEAD
+> > in the compatibility table.  Once 7.56 is released, the table can be
+> > updated.
+> > 
+> > I'm not sure if this is the right place to carry such info.
+> > Anyway, I'd be glad if this patch can trigger a meaningful update of
+> > README.
+> > 
+> >         Thanks, Akira
+> > --
+> >  tools/memory-model/README | 30 ++++++++++++++++++++++++++++--
+> >  1 file changed, 28 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/memory-model/README b/tools/memory-model/README
+> > index b9c562e92981..90af203c3cf1 100644
+> > --- a/tools/memory-model/README
+> > +++ b/tools/memory-model/README
+> > @@ -28,8 +28,34 @@ downloaded separately:
+> >  See "herdtools7/INSTALL.md" for installation instructions.
+> >  
+> >  Note that although these tools usually provide backwards compatibility,
+> > -this is not absolutely guaranteed.  Therefore, if a later version does
+> > -not work, please try using the exact version called out above.
+> > +this is not absolutely guaranteed.
+> > +
+> > +For example, a future version of herd7 might not work with the model
+> > +in this release.  A compatible model will likely be made available in
+> > +a later release of Linux kernel.
+> > +
+> > +If you absolutely need to run the model in this particular release,
+> > +please try using the exact version called out above.
+> > +
+> > +klitmus7 is independent of the model provided here.  It has its own
+> > +dependency on a target kernel release where converted code is built
+> > +and executed.  Any change in kernel APIs essential to klitmus7 will
+> > +necessitate an upgrade of klitmus7.
+> > +
+> > +If you find any compatibility issues in klitmus7, please inform the
+> > +memory model maintainers.
+> > +
+> > +klitmus7 Compatibility Table
+> > +----------------------------
+> > +
+> > +	============  ==========
+> > +	target Linux  herdtools7
+> > +	------------  ----------
+> > +	     -- 4.18  7.48 --
+> > +	4.15 -- 4.19  7.49 --
+> > +	4.20 -- 5.5   7.54 --
+> > +	5.6  --       HEAD
+> > +	============  ==========
+> >  
+> >  
+> >  ==================
+> > -- 
+> > 2.17.1
+> > 
