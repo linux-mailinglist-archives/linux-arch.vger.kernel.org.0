@@ -2,85 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB1A1EF3C5
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Jun 2020 11:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24041EF48D
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Jun 2020 11:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726264AbgFEJL1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Jun 2020 05:11:27 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:51160 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726261AbgFEJLZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 5 Jun 2020 05:11:25 -0400
-Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxXesqDNpeHOw9AA--.611S3;
-        Fri, 05 Jun 2020 17:11:07 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S1726303AbgFEJq2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Jun 2020 05:46:28 -0400
+Received: from relay5.mymailcheap.com ([159.100.248.207]:57802 "EHLO
+        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726287AbgFEJq2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Jun 2020 05:46:28 -0400
+X-Greylist: delayed 416 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Jun 2020 05:46:27 EDT
+Received: from relay3.mymailcheap.com (relay3.mymailcheap.com [217.182.119.155])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id 074932632F;
+        Fri,  5 Jun 2020 09:39:30 +0000 (UTC)
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay3.mymailcheap.com (Postfix) with ESMTPS id 920AE3ECDF;
+        Fri,  5 Jun 2020 11:39:27 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by filter2.mymailcheap.com (Postfix) with ESMTP id 714562A8B2;
+        Fri,  5 Jun 2020 11:39:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1591349967;
+        bh=Mc+KjRBNjHChZugfBRKNmW7QiUMUHq4bLRjFgN61C1k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=z8y/Uewab6ayLKQzwu/SmIq6I/LY0DlIitaA8ocevUcr8WvbeXSWqZL6D7TRws1t4
+         EEKOfQ1RLAK2HeV4SbGuRRrlY4/Jn8eyUTqMtagZfnU4XpED/mwv5N1lJAmZk7ce76
+         e7FU4X6b8svHI3WlBbGqetpBUuKygUFQJDnDK81E=
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id nqLx46V5Ntsd; Fri,  5 Jun 2020 11:39:26 +0200 (CEST)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Fri,  5 Jun 2020 11:39:26 +0200 (CEST)
+Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id 9A5CC40FC0;
+        Fri,  5 Jun 2020 09:39:23 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="B5JBJHJG";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from localhost (unknown [60.177.191.23])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 746EF40FC0;
+        Fri,  5 Jun 2020 09:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
+        s=default; t=1591349959;
+        bh=Mc+KjRBNjHChZugfBRKNmW7QiUMUHq4bLRjFgN61C1k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B5JBJHJGNTVBAPlWuCkYxb56+3QNYhdHNdSzlbJh4cA5HresEMMGXO+zn1lFR1vVp
+         vSB0tSMniQIhftXQgt0NpzRV7O44txfV7cda/ePLSLWn++CrZ1IJ52nICGUnwv6Dmb
+         4MNtOdZoO5T40dUwkN+Ed9YtX254a647/eiAl5Ec=
+Date:   Fri, 5 Jun 2020 17:39:09 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Bibo Mao <maobibo@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Andrew Morton <akpm@linux-foundation.org>,
         Paul Burton <paulburton@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 2/2] MIPS: Add writable-applies-readable policy with pgrot
-Date:   Fri,  5 Jun 2020 17:11:06 +0800
-Message-Id: <1591348266-28392-2-git-send-email-maobibo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
+Subject: Re: [PATCH 1/2] MIPS: set page access bit with pgprot on some MIPS
+ platform
+Message-ID: <20200605173909.000018ff@flygoat.com>
 In-Reply-To: <1591348266-28392-1-git-send-email-maobibo@loongson.cn>
 References: <1591348266-28392-1-git-send-email-maobibo@loongson.cn>
-X-CM-TRANSID: AQAAf9DxXesqDNpeHOw9AA--.611S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr1fJryDXF1xAF4rGr45Wrg_yoW8Gw45pF
-        9rA343JrWqgFy0yryUuFWrGayUGr4Dta47Jw17WF1xAws8Xw18KF93KF92qryruFsava10
-        y3WxWr48JayxAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Eb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv
-        6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-        02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
-        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK6svPMxAIw28IcxkI7VAKI4
-        8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
-        wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
-        v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
-        Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
-        AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Q_-PUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 9A5CC40FC0
+X-Spamd-Result: default: False [-0.10 / 10.00];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         ARC_NA(0.00)[];
+         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
+         RECEIVED_SPAMHAUS_PBL(0.00)[60.177.191.23:received];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         R_SPF_SOFTFAIL(0.00)[~all];
+         ML_SERVERS(-3.10)[148.251.23.173];
+         DKIM_TRACE(0.00)[flygoat.com:+];
+         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
+         RCPT_COUNT_SEVEN(0.00)[8];
+         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
+         RCVD_COUNT_TWO(0.00)[2];
+         MID_RHS_MATCH_FROM(0.00)[];
+         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
+X-Rspamd-Server: mail20.mymailcheap.com
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Linux system, writable applies readable privilege in most
-architectures, this patch adds this policy on MIPS platform
-where hardware rixi is supported.
+On Fri,  5 Jun 2020 17:11:05 +0800
+Bibo Mao <maobibo@loongson.cn> wrote:
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- arch/mips/mm/cache.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> On MIPS system which has rixi hardware bit, page access bit is not
+> set in pgrot. For memory reading, there will be one page fault to
+> allocate physical page; however valid bit is not set, there will
+> be the second fast tlb-miss fault handling to set valid/access bit.
+> 
+> This patch set page access/valid bit with pgrot if there is reading
+> access privilege. It will reduce one tlb-miss handling for memory
+> reading access.
+> 
+> The valid/access bit will be cleared in order to track memory
+> accessing activity. If the page is accessed, tlb-miss fast handling
+> will set valid/access bit, pte_sw_mkyoung is not necessary in slow
+> page fault path. This patch removes pte_sw_mkyoung function which
+> is defined as empty function except MIPS system.
+> 
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index f814e43..dae0617 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -160,7 +160,7 @@ static inline void setup_protection_map(void)
- 	if (cpu_has_rixi) {
- 		protection_map[0]  = __pgprot(__PC | __PP | __NX | __NR);
- 		protection_map[1]  = __pgprot(__PC | __PP | __NX | ___R);
--		protection_map[2]  = __pgprot(__PC | __PP | __NX | __NR);
-+		protection_map[2]  = __pgprot(__PC | __PP | __NX | ___R);
- 		protection_map[3]  = __pgprot(__PC | __PP | __NX | ___R);
- 		protection_map[4]  = __pgprot(__PC | __PP | ___R);
- 		protection_map[5]  = __pgprot(__PC | __PP | ___R);
-@@ -169,7 +169,7 @@ static inline void setup_protection_map(void)
- 
- 		protection_map[8]  = __pgprot(__PC | __PP | __NX | __NR);
- 		protection_map[9]  = __pgprot(__PC | __PP | __NX | ___R);
--		protection_map[10] = __pgprot(__PC | __PP | __NX | ___W | __NR);
-+		protection_map[10] = __pgprot(__PC | __PP | __NX | ___W | ___R);
- 		protection_map[11] = __pgprot(__PC | __PP | __NX | ___W | ___R);
- 		protection_map[12] = __pgprot(__PC | __PP | ___R);
- 		protection_map[13] = __pgprot(__PC | __PP | ___R);
--- 
-1.8.3.1
+Thanks for tracking it down.
 
+Could you please make the patch tittle more clear?
+"Some" looks confuse to me, "systems with RIXI" would be better.
+
+- Jiaxun
