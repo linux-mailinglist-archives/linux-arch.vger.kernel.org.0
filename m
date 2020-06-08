@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0031F21C3
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Jun 2020 00:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB351F21C5
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Jun 2020 00:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbgFHWSb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Jun 2020 18:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S1726794AbgFHWSe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Jun 2020 18:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726723AbgFHWSb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Jun 2020 18:18:31 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589B8C08C5C2;
-        Mon,  8 Jun 2020 15:18:30 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id h188so11225759lfd.7;
-        Mon, 08 Jun 2020 15:18:30 -0700 (PDT)
+        with ESMTP id S1726723AbgFHWSd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Jun 2020 18:18:33 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F62C08C5C3;
+        Mon,  8 Jun 2020 15:18:31 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id r125so11190926lff.13;
+        Mon, 08 Jun 2020 15:18:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2hQkPROiISnXWALhr4YLCxsy0Vsz4rv9nG/scMPpoOI=;
-        b=beUSOy2EhmTM9u/jVy9bfblUr19Lyu33DmAThiud5RSpYafm9+FT7bMYfNBm47IfUe
-         tYC6OL4/VUqAAEpnu0jUde6sBLcrATzvGC64bNOf/+ep0+8N6bUatieNlGQ8G9x+75f+
-         Pxh9TH77sY4dAap0RDkcrHPh4moQ9iIOizy+6myV2oO88TDu4pG63KbZavjK9lRKe8ef
-         BtbQtrSMi8DMyFJZ7eb/zTRYNJrLuDzOjPS38jLLGYgVpw6+Ey1E8/D/wz8jkPpju0w+
-         JmMWoqiQy7t6NRxNvT0xubl0XEDl6CmsrXIxPLpdxEkyWPZg4Y9iZ++x4sKFHFt3HB3+
-         pE4w==
+        bh=3cj4YRriK6RG2zO+1VlCMmTo55/LdEBC06tW7WJo9oc=;
+        b=Ejr4QghZfg7ORiC6TAW55v4FZzVyc7T9LothiKRr5uPhJC+4RtkJ/vTPx0tTkxa4Yc
+         e0VmKf29I5onAa+vj3jKRSS8X1LJCUYOoEnn3/t+aLfyOeY4PjPnGZH9VytJRDoimWRV
+         W8hF+pM8u5X55tWNnw577pfDTPAaALWDq6475dpUfJtmoebxylNrWW1z7twPpDzLY0vF
+         BOcC9qG4EEDf2BRuxvacrsbVBvH8SBrxsJq1n4gU1kR3qpRqeUDQyFG/yk/F/BxI2AV6
+         ZYAeDyUhBVGUzd0gK0fwergPdFSjTjX7+ddDOzVVpwmSwXWwb6IG7yFlaa5iWavTapvZ
+         dCfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2hQkPROiISnXWALhr4YLCxsy0Vsz4rv9nG/scMPpoOI=;
-        b=cy66omiuNwzk1Q2CX7Iby7RabWanNtl4nz/s8nY+Ys7WkTH6LXvRm23MVokesmPAlE
-         K5RzGLw3KhRykGeRTL9xxRnxM9k6l85TUFtEAqqqTf3BHcn33GFUOOCNHGtem2nJEAbu
-         qgUFEba+BNLNmENl2Pf7o7xRZ4uj4McJPIEDRUAODuGqu8itVCn2nmReCC/OIpo/Hp0q
-         G+rwgthDjPU6hblTopC4AudX9dT3DGi9GXOJRLD+pyBVHUS4GOOEIvNw4Bd1EypxL59q
-         Yr17WgMId9bv2qP7yWus91xpEDRRbV5lJD9Z1l8FUlKgVSe6Qm/vzSibC0L/am/5lhfw
-         /+Qg==
-X-Gm-Message-State: AOAM533L+Kb3z2+1/W1VAoTgNR7nyhOCSP1K1e5rLBMwQzNmCMdVHgtj
-        +BLEQRzvsZF538tR1n9jhMA=
-X-Google-Smtp-Source: ABdhPJwpKkUOMrWqo8P4ydPPvvIh9mpB3LIFOiikbjbunKK88RL3x6FOksf37Lt9t2xQNHJMcCa8wA==
-X-Received: by 2002:a05:6512:3e7:: with SMTP id n7mr13795896lfq.118.1591654708559;
-        Mon, 08 Jun 2020 15:18:28 -0700 (PDT)
+        bh=3cj4YRriK6RG2zO+1VlCMmTo55/LdEBC06tW7WJo9oc=;
+        b=Jw3QmkCCnQQzErNjRJnpx9ndwExvPIa3jZS8WRm4pcCpd0pBC4Q2+wMsimjqG7TAgY
+         wjx/X9e26RJXSVqbvCaW7s09OAjo7Y/2WlmnQRcMjVb+dzUsoxiGH+YmLKq2QpZ+XvgF
+         OGC8yGoNdOkLfjGYl5f8YJB7smPeCydecACaZlukCuG34+gKYkJsPtIM4h2m7R9P27HQ
+         oDmPczpZTcE1w+omiBcKvFQLcD26Fbv5500Osx0fHYob3BBpMBDCdnhywkz3fi2lNLPB
+         6WoDvmjlSAsRJdTQ91KvFZqZ0HXFbCpXsYAOsKZLLMjUw1KPH+cfg9soW1YpuWiHN/Mo
+         CMng==
+X-Gm-Message-State: AOAM532i/bNNqxKFeg0FK2UEgr8L7jFs3AQXaC6TwPne5hGFai3M5mMg
+        6eHw58aQw0mO8z04KdZ4MsNOSfSoLLQ=
+X-Google-Smtp-Source: ABdhPJxOVzHt7OGf4JQ/FA1hUGewxMnqHBONXLD4NI04VY1UulUbPCgAR9/lRZYz74qTjaANihgjFg==
+X-Received: by 2002:a05:6512:110e:: with SMTP id l14mr12917094lfg.25.1591654709878;
+        Mon, 08 Jun 2020 15:18:29 -0700 (PDT)
 Received: from localhost.localdomain (h-82-196-111-136.NA.cust.bahnhof.se. [82.196.111.136])
-        by smtp.gmail.com with ESMTPSA id n1sm3966237ljg.131.2020.06.08.15.18.27
+        by smtp.gmail.com with ESMTPSA id n1sm3966237ljg.131.2020.06.08.15.18.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2020 15:18:27 -0700 (PDT)
+        Mon, 08 Jun 2020 15:18:29 -0700 (PDT)
 From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
 To:     rikard.falkeborn@gmail.com
 Cc:     akpm@linux-foundation.org, andy.shevchenko@gmail.com,
@@ -55,12 +55,13 @@ Cc:     akpm@linux-foundation.org, andy.shevchenko@gmail.com,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         lkp@intel.com, syednwaris@gmail.com, vilhelm.gray@gmail.com,
         yamada.masahiro@socionext.com
-Subject: [PATCH v3 1/2] linux/bits.h: fix unsigned less than zero warnings
-Date:   Tue,  9 Jun 2020 00:18:22 +0200
-Message-Id: <20200608221823.35799-1-rikard.falkeborn@gmail.com>
+Subject: [PATCH v3 2/2] bits: Add tests of GENMASK
+Date:   Tue,  9 Jun 2020 00:18:23 +0200
+Message-Id: <20200608221823.35799-2-rikard.falkeborn@gmail.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200608184222.GA899@rikard>
+In-Reply-To: <20200608221823.35799-1-rikard.falkeborn@gmail.com>
 References: <20200608184222.GA899@rikard>
+ <20200608221823.35799-1-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -68,65 +69,141 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When calling the GENMASK and GENMASK_ULL macros with zero lower bit and
-an unsigned unknown high bit, some gcc versions warn due to the
-comparisons of the high and low bit in GENMASK_INPUT_CHECK.
+Add tests of GENMASK and GENMASK_ULL.
 
-To silence the warnings, only perform the check if both inputs are
-known. This does not trigger any warnings, from the Wtype-limits help:
+A few test cases that should fail compilation are provided
+under #ifdef TEST_GENMASK_FAILURES
 
-	Warn if a comparison is always true or always false due to the
-	limited range of the data type, but do not warn for constant
-	expressions.
-
-As an example of the warning, kindly reported by the kbuild test robot:
-
-from drivers/mfd/atmel-smc.c:11:
-drivers/mfd/atmel-smc.c: In function 'atmel_smc_cs_encode_ncycles':
-include/linux/bits.h:26:28: warning: comparison of unsigned expression < 0 is always false [-Wtype-limits]
-26 |   __builtin_constant_p((l) > (h)), (l) > (h), 0)))
-|                            ^
-include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_ON_ZERO'
-16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-|                                                              ^
-include/linux/bits.h:39:3: note: in expansion of macro 'GENMASK_INPUT_CHECK'
-39 |  (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-|   ^~~~~~~~~~~~~~~~~~~
->> drivers/mfd/atmel-smc.c:49:25: note: in expansion of macro 'GENMASK'
-49 |  unsigned int lsbmask = GENMASK(msbpos - 1, 0);
-|                         ^~~~~~~
-
-Fixes: 295bcca84916 ("linux/bits.h: add compile time sanity check of GENMASK inputs")
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Emil Velikov <emil.l.velikov@gmail.com>
-Reported-by: Syed Nayyar Waris <syednwaris@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 ---
+I did not move it to test_bitops.c, because I think it makes more sense
+that test_bitops.c tests bitops.h and test_bits.c tests bits.h, but if
+you disagree, I can move it.
+
 v2-v3
-Added Andys Reviewed-by.
+Updated commit message and ifdef after suggestion fron Geert. Also fixed
+a typo in the description of the file.
 
-v1->v2
-Change to require both high and low bit to be constant expressions
-instead of introducing somewhat arbitrary casts
+v1-v2
+New patch.
 
- include/linux/bits.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ lib/Kconfig.debug | 11 +++++++
+ lib/Makefile      |  1 +
+ lib/test_bits.c   | 73 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 85 insertions(+)
+ create mode 100644 lib/test_bits.c
 
-diff --git a/include/linux/bits.h b/include/linux/bits.h
-index 4671fbf28842..35ca3f5d11a0 100644
---- a/include/linux/bits.h
-+++ b/include/linux/bits.h
-@@ -23,7 +23,8 @@
- #include <linux/build_bug.h>
- #define GENMASK_INPUT_CHECK(h, l) \
- 	(BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
--		__builtin_constant_p((l) > (h)), (l) > (h), 0)))
-+		__builtin_constant_p(l) && __builtin_constant_p(h), \
-+		(l) > (h), 0)))
- #else
- /*
-  * BUILD_BUG_ON_ZERO is not available in h files included from asm files,
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 333e878d8af9..9557cb570fb9 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2182,6 +2182,17 @@ config LINEAR_RANGES_TEST
+ 
+ 	  If unsure, say N.
+ 
++config BITS_TEST
++	tristate "KUnit test for bits.h"
++	depends on KUNIT
++	help
++	  This builds the bits unit test.
++	  Tests the logic of macros defined in bits.h.
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index 315516fa4ef4..2ce9892e3e63 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -314,3 +314,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
+ # KUnit tests
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
++obj-$(CONFIG_BITS_TEST) += test_bits.o
+diff --git a/lib/test_bits.c b/lib/test_bits.c
+new file mode 100644
+index 000000000000..e2fcf24463bf
+--- /dev/null
++++ b/lib/test_bits.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Test cases for functions and macros in bits.h
++ */
++
++#include <kunit/test.h>
++#include <linux/bits.h>
++
++
++void genmask_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, 1ul, GENMASK(0, 0));
++	KUNIT_EXPECT_EQ(test, 3ul, GENMASK(1, 0));
++	KUNIT_EXPECT_EQ(test, 6ul, GENMASK(2, 1));
++	KUNIT_EXPECT_EQ(test, 0xFFFFFFFFul, GENMASK(31, 0));
++
++#ifdef TEST_GENMASK_FAILURES
++	/* these should fail compilation */
++	GENMASK(0, 1);
++	GENMASK(0, 10);
++	GENMASK(9, 10);
++#endif
++
++
++}
++
++void genmask_ull_test(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, 1ull, GENMASK_ULL(0, 0));
++	KUNIT_EXPECT_EQ(test, 3ull, GENMASK_ULL(1, 0));
++	KUNIT_EXPECT_EQ(test, 0x000000ffffe00000ull, GENMASK_ULL(39, 21));
++	KUNIT_EXPECT_EQ(test, 0xffffffffffffffffull, GENMASK_ULL(63, 0));
++
++#ifdef TEST_GENMASK_FAILURES
++	/* these should fail compilation */
++	GENMASK_ULL(0, 1);
++	GENMASK_ULL(0, 10);
++	GENMASK_ULL(9, 10);
++#endif
++}
++
++void genmask_input_check_test(struct kunit *test)
++{
++	unsigned int x, y;
++	int z, w;
++
++	/* Unknown input */
++	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(x, 0));
++	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(0, x));
++	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(x, y));
++
++	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(z, 0));
++	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(0, z));
++	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(z, w));
++
++	/* Valid input */
++	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(1, 1));
++	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(39, 21));
++}
++
++
++static struct kunit_case bits_test_cases[] = {
++	KUNIT_CASE(genmask_test),
++	KUNIT_CASE(genmask_ull_test),
++	KUNIT_CASE(genmask_input_check_test),
++	{}
++};
++
++static struct kunit_suite bits_test_suite = {
++	.name = "bits-test",
++	.test_cases = bits_test_cases,
++};
++kunit_test_suite(bits_test_suite);
 -- 
 2.27.0
 
