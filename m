@@ -2,92 +2,225 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3F91F3D56
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Jun 2020 15:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6872F1F3DAA
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Jun 2020 16:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730397AbgFINww (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Jun 2020 09:52:52 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:45372 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730347AbgFINwv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Jun 2020 09:52:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591710770;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1QZxzGJLd7MwraWpl9HYsPVgjFSkkdnN13rxpeDTWvE=;
-        b=BLKM8tZ4N1q9E0IuymYcR8pZDXGiMMMea1s1+R809d5Z1pkacLw73WTXXFCaojw+gDu5Xp
-        FaesldTLbUD+JH7cOhRokmCgM8oV+NBj5PJ3KrW4v0O964XL2uIrfUhT9WlbxCRYnxJWqG
-        XEG6NRsM8mjmCEsNmOStjK/Zru6sGk4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-335-347KQqv8OfOLOyQ5JWpIlg-1; Tue, 09 Jun 2020 09:52:41 -0400
-X-MC-Unique: 347KQqv8OfOLOyQ5JWpIlg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ABD3880B734;
-        Tue,  9 Jun 2020 13:52:33 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-113-78.ams2.redhat.com [10.36.113.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 708335C1BD;
-        Tue,  9 Jun 2020 13:52:19 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Palmer Dabbelt <palmer@sifive.com>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, rth@twiddle.net,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        tony.luck@intel.com, fenghua.yu@intel.com, geert@linux-m68k.org,
-        monstr@monstr.eu, ralf@linux-mips.org, paul.burton@mips.com,
-        jhogan@kernel.org, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, benh@kernel.crashing.org, paulus@samba.org,
-        mpe@ellerman.id.au, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
-        dalias@libc.org, davem@davemloft.net, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, peterz@infradead.org, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, dhowells@redhat.com, firoz.khan@linaro.org,
-        stefan@agner.ch, schwidefsky@de.ibm.com, axboe@kernel.dk,
-        christian@brauner.io, hare@suse.com, deepa.kernel@gmail.com,
-        tycho@tycho.ws, kim.phillips@arm.com, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: Add a new fchmodat4() syscall, v2
-References: <20190717012719.5524-1-palmer@sifive.com>
-Date:   Tue, 09 Jun 2020 15:52:17 +0200
-In-Reply-To: <20190717012719.5524-1-palmer@sifive.com> (Palmer Dabbelt's
-        message of "Tue, 16 Jul 2019 18:27:15 -0700")
-Message-ID: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        id S1728751AbgFIOLh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Jun 2020 10:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728601AbgFIOLh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Jun 2020 10:11:37 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B39AC05BD1E;
+        Tue,  9 Jun 2020 07:11:37 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id m2so1466162pjv.2;
+        Tue, 09 Jun 2020 07:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nbjkRUfSxpIRE9L5muPwAXEXsssIxPhz/mzHngdljkU=;
+        b=sRpl8CGOWQm3GO7DaHHkPpb/9FpBaD4iVeWbMU4EydSBchwheAOtjl940fZFnh+RYi
+         NDzYwvO9oCwAIROiyKkXSzkOCDrWcifDn4ds6T/3T8s355i+4RGCs790Cc6UcBdj+vRS
+         AmbzjJ9P9RBfiLv2Omhce9haa2cEOi/zGQ5x69bAf/fef5sxQ2Up3NkTnw8CMA6KhfZX
+         wXMCTphw/EwBGAzXHla+rH5idT9EChPwsYNT/LeBp0pCUlxybyc3Nkd/BvUgc37N6OLQ
+         2dN8KWWyuaqJTuSG9fte5JdVsiNnu8usZHSG+UzZynbk21GI0xYrpdRVzYsU9vfmN55a
+         xDog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nbjkRUfSxpIRE9L5muPwAXEXsssIxPhz/mzHngdljkU=;
+        b=noQ1JBqKLCbSOQxDg4d6uIfjRG4jPhnhpZof4YA8bEfoVj3vtjtkhIwZ0Q0aHK3+Nq
+         ikdYmsqUNusWNIXwPl8jGwxOEDFPMIOQ+/2eShYkVjAAchucBrEPfknFcX7iWHbnkiXB
+         8c1h1X7eh1tSn3ouWiQBQlkMPbwEkfrAez3KTJbdKrkobPVs9F9ZMXxguqiGzvNf+tFr
+         asrlZzvHxtXsX78jG+WVmObrOiaPx40Vqh8L9U3kJsJfq/8PvJSvWESE8CgR29qS9OXt
+         80icqrNxa63n86UklOI7WFr1TQvFepZVsoMv4zo8gk78pqfvvdsDRGodAfcJzmTWACvy
+         75YA==
+X-Gm-Message-State: AOAM5333iiL+wZIOhhQYEjdgxjh8+IBxUDDweOV/OFxyi5FrHNU0eXoS
+        zD7lDf6Xc2nhx3zoQ10Jsaq1B2lHR6VHFqEqwNbwHmjX+P0L6A==
+X-Google-Smtp-Source: ABdhPJydk5VqnSyXHiOiGowirvy31UTQ1SVtGHfwpdnmnMK0c1HE6VTY0bKT0gf1ey2haF1RJyvCZgfCn7pYMKIXHOA=
+X-Received: by 2002:a17:90a:220f:: with SMTP id c15mr5287273pje.129.1591711896706;
+ Tue, 09 Jun 2020 07:11:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+References: <20200608184222.GA899@rikard> <20200608221823.35799-1-rikard.falkeborn@gmail.com>
+ <20200608221823.35799-2-rikard.falkeborn@gmail.com>
+In-Reply-To: <20200608221823.35799-2-rikard.falkeborn@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 9 Jun 2020 17:11:24 +0300
+Message-ID: <CAHp75VeMDkZjd1d8nTYRk8duJ4mR0NxqYhqOmuqAjcJk8K2hzg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] bits: Add tests of GENMASK
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kbuild test robot <lkp@intel.com>,
+        Syed Nayyar Waris <syednwaris@gmail.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Palmer Dabbelt:
+On Tue, Jun 9, 2020 at 1:18 AM Rikard Falkeborn
+<rikard.falkeborn@gmail.com> wrote:
+>
+> Add tests of GENMASK and GENMASK_ULL.
+>
+> A few test cases that should fail compilation are provided
+> under #ifdef TEST_GENMASK_FAILURES
+>
 
-> This patch set adds fchmodat4(), a new syscall. The actual
-> implementation is super simple: essentially it's just the same as
-> fchmodat(), but LOOKUP_FOLLOW is conditionally set based on the flags.
-> I've attempted to make this match "man 2 fchmodat" as closely as
-> possible, which says EINVAL is returned for invalid flags (as opposed to
-> ENOTSUPP, which is currently returned by glibc for AT_SYMLINK_NOFOLLOW).
-> I have a sketch of a glibc patch that I haven't even compiled yet, but
-> seems fairly straight-forward:
+LGTM, thanks!
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-What's the status here?  We'd really like to see this system call in the
-kernel because our emulation in glibc has its problems (especially if
-/proc is not mounted).
+> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> ---
+> I did not move it to test_bitops.c, because I think it makes more sense
+> that test_bitops.c tests bitops.h and test_bits.c tests bits.h, but if
+> you disagree, I can move it.
 
-Thanks,
-Florian
+We could do it later and actually other way around, since you are
+using KUnit, while the test_bitops.h doesn't.
 
+>
+> v2-v3
+> Updated commit message and ifdef after suggestion fron Geert. Also fixed
+> a typo in the description of the file.
+>
+> v1-v2
+> New patch.
+>
+>  lib/Kconfig.debug | 11 +++++++
+>  lib/Makefile      |  1 +
+>  lib/test_bits.c   | 73 +++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 85 insertions(+)
+>  create mode 100644 lib/test_bits.c
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 333e878d8af9..9557cb570fb9 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2182,6 +2182,17 @@ config LINEAR_RANGES_TEST
+>
+>           If unsure, say N.
+>
+> +config BITS_TEST
+> +       tristate "KUnit test for bits.h"
+> +       depends on KUNIT
+> +       help
+> +         This builds the bits unit test.
+> +         Tests the logic of macros defined in bits.h.
+> +         For more information on KUnit and unit tests in general please refer
+> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +         If unsure, say N.
+> +
+>  config TEST_UDELAY
+>         tristate "udelay test driver"
+>         help
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 315516fa4ef4..2ce9892e3e63 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -314,3 +314,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
+>  # KUnit tests
+>  obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+>  obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+> +obj-$(CONFIG_BITS_TEST) += test_bits.o
+> diff --git a/lib/test_bits.c b/lib/test_bits.c
+> new file mode 100644
+> index 000000000000..e2fcf24463bf
+> --- /dev/null
+> +++ b/lib/test_bits.c
+> @@ -0,0 +1,73 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Test cases for functions and macros in bits.h
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <linux/bits.h>
+> +
+> +
+> +void genmask_test(struct kunit *test)
+> +{
+> +       KUNIT_EXPECT_EQ(test, 1ul, GENMASK(0, 0));
+> +       KUNIT_EXPECT_EQ(test, 3ul, GENMASK(1, 0));
+> +       KUNIT_EXPECT_EQ(test, 6ul, GENMASK(2, 1));
+> +       KUNIT_EXPECT_EQ(test, 0xFFFFFFFFul, GENMASK(31, 0));
+> +
+> +#ifdef TEST_GENMASK_FAILURES
+> +       /* these should fail compilation */
+> +       GENMASK(0, 1);
+> +       GENMASK(0, 10);
+> +       GENMASK(9, 10);
+> +#endif
+> +
+> +
+> +}
+> +
+> +void genmask_ull_test(struct kunit *test)
+> +{
+> +       KUNIT_EXPECT_EQ(test, 1ull, GENMASK_ULL(0, 0));
+> +       KUNIT_EXPECT_EQ(test, 3ull, GENMASK_ULL(1, 0));
+> +       KUNIT_EXPECT_EQ(test, 0x000000ffffe00000ull, GENMASK_ULL(39, 21));
+> +       KUNIT_EXPECT_EQ(test, 0xffffffffffffffffull, GENMASK_ULL(63, 0));
+> +
+> +#ifdef TEST_GENMASK_FAILURES
+> +       /* these should fail compilation */
+> +       GENMASK_ULL(0, 1);
+> +       GENMASK_ULL(0, 10);
+> +       GENMASK_ULL(9, 10);
+> +#endif
+> +}
+> +
+> +void genmask_input_check_test(struct kunit *test)
+> +{
+> +       unsigned int x, y;
+> +       int z, w;
+> +
+> +       /* Unknown input */
+> +       KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(x, 0));
+> +       KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(0, x));
+> +       KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(x, y));
+> +
+> +       KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(z, 0));
+> +       KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(0, z));
+> +       KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(z, w));
+> +
+> +       /* Valid input */
+> +       KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(1, 1));
+> +       KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(39, 21));
+> +}
+> +
+> +
+> +static struct kunit_case bits_test_cases[] = {
+> +       KUNIT_CASE(genmask_test),
+> +       KUNIT_CASE(genmask_ull_test),
+> +       KUNIT_CASE(genmask_input_check_test),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite bits_test_suite = {
+> +       .name = "bits-test",
+> +       .test_cases = bits_test_cases,
+> +};
+> +kunit_test_suite(bits_test_suite);
+> --
+> 2.27.0
+>
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
