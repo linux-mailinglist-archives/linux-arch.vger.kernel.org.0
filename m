@@ -2,262 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 899741F3CC0
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Jun 2020 15:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3F91F3D56
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Jun 2020 15:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729175AbgFINiU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Jun 2020 09:38:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56554 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728400AbgFINiS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 9 Jun 2020 09:38:18 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730397AbgFINww (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Jun 2020 09:52:52 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:45372 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730347AbgFINwv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Jun 2020 09:52:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591710770;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1QZxzGJLd7MwraWpl9HYsPVgjFSkkdnN13rxpeDTWvE=;
+        b=BLKM8tZ4N1q9E0IuymYcR8pZDXGiMMMea1s1+R809d5Z1pkacLw73WTXXFCaojw+gDu5Xp
+        FaesldTLbUD+JH7cOhRokmCgM8oV+NBj5PJ3KrW4v0O964XL2uIrfUhT9WlbxCRYnxJWqG
+        XEG6NRsM8mjmCEsNmOStjK/Zru6sGk4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-335-347KQqv8OfOLOyQ5JWpIlg-1; Tue, 09 Jun 2020 09:52:41 -0400
+X-MC-Unique: 347KQqv8OfOLOyQ5JWpIlg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A594A20760;
-        Tue,  9 Jun 2020 13:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591709898;
-        bh=f1sQCbbciaw4Ga3Y8vVZNl0kGnRv/j2g4lYw38F0/YU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rjPEk+zeq6u8nNYAMVt9OrcfHl0tBdqTdg98cN6OepIhyitfDJGoEOgC41/ZdoKrQ
-         xya2vwUDONkAkNh5CpE0BYSs5fN94h5jLei4ehRj0Lg72Y/j6uN7irH4qfMt4fr1N+
-         /72bbHfHZ/Y6wBC+sQ2SGnVlG/7k11doa8U25vN0=
-Date:   Tue, 9 Jun 2020 14:38:13 +0100
-From:   Will Deacon <will@kernel.org>
-To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Cc:     Dave Martin <Dave.Martin@arm.com>, linux-man@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        andreyknvl@google.com
-Subject: Re: [RFC PATCH v2 6/6] prctl.2: Add tagged address ABI control
- prctls (arm64)
-Message-ID: <20200609133812.GA27794@willie-the-truck>
-References: <1590614258-24728-1-git-send-email-Dave.Martin@arm.com>
- <1590614258-24728-7-git-send-email-Dave.Martin@arm.com>
- <88ac761e-64b3-e1e3-3cdc-1f413a6d69d6@gmail.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ABD3880B734;
+        Tue,  9 Jun 2020 13:52:33 +0000 (UTC)
+Received: from oldenburg2.str.redhat.com (ovpn-113-78.ams2.redhat.com [10.36.113.78])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 708335C1BD;
+        Tue,  9 Jun 2020 13:52:19 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Palmer Dabbelt <palmer@sifive.com>
+Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, rth@twiddle.net,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        tony.luck@intel.com, fenghua.yu@intel.com, geert@linux-m68k.org,
+        monstr@monstr.eu, ralf@linux-mips.org, paul.burton@mips.com,
+        jhogan@kernel.org, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, benh@kernel.crashing.org, paulus@samba.org,
+        mpe@ellerman.id.au, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
+        dalias@libc.org, davem@davemloft.net, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        x86@kernel.org, peterz@infradead.org, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, dhowells@redhat.com, firoz.khan@linaro.org,
+        stefan@agner.ch, schwidefsky@de.ibm.com, axboe@kernel.dk,
+        christian@brauner.io, hare@suse.com, deepa.kernel@gmail.com,
+        tycho@tycho.ws, kim.phillips@arm.com, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: Add a new fchmodat4() syscall, v2
+References: <20190717012719.5524-1-palmer@sifive.com>
+Date:   Tue, 09 Jun 2020 15:52:17 +0200
+In-Reply-To: <20190717012719.5524-1-palmer@sifive.com> (Palmer Dabbelt's
+        message of "Tue, 16 Jul 2019 18:27:15 -0700")
+Message-ID: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88ac761e-64b3-e1e3-3cdc-1f413a6d69d6@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 09, 2020 at 01:04:25PM +0200, Michael Kerrisk (man-pages) wrote:
-> Do we have any review comments for this (extensive!) patch from Dave?
+* Palmer Dabbelt:
 
-(Adding Andrey, since he was involved with this ABI)
+> This patch set adds fchmodat4(), a new syscall. The actual
+> implementation is super simple: essentially it's just the same as
+> fchmodat(), but LOOKUP_FOLLOW is conditionally set based on the flags.
+> I've attempted to make this match "man 2 fchmodat" as closely as
+> possible, which says EINVAL is returned for invalid flags (as opposed to
+> ENOTSUPP, which is currently returned by glibc for AT_SYMLINK_NOFOLLOW).
+> I have a sketch of a glibc patch that I haven't even compiled yet, but
+> seems fairly straight-forward:
 
-Regardless, it would be good to have Catalin's ack and I think he was
-planning to take a look at this.
+What's the status here?  We'd really like to see this system call in the
+kernel because our emulation in glibc has its problems (especially if
+/proc is not mounted).
 
-Will
+Thanks,
+Florian
 
-> On 5/27/20 11:17 PM, Dave Martin wrote:
-> > ** This patch is a draft for review and should not be applied before it
-> >    has been discussed. **
-> > 
-> > Add documentation for the the PR_SET_TAGGED_ADDR_CTRL and
-> > PR_GET_TAGGED_ADDR_CTRL prctls added in Linux 5.4 for arm64.
-> > 
-> > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> > ---
-> > 
-> >  man2/prctl.2 | 156 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 156 insertions(+)
-> > 
-> > diff --git a/man2/prctl.2 b/man2/prctl.2
-> > index 3ee2702..062fd51 100644
-> > --- a/man2/prctl.2
-> > +++ b/man2/prctl.2
-> > @@ -1504,6 +1504,143 @@ For more information, see the kernel source file
-> >  (or
-> >  .I Documentation/arm64/sve.txt
-> >  before Linux 5.3).
-> > +.\" prctl PR_SET_TAGGED_ADDR_CTRL
-> > +.\" commit 63f0c60379650d82250f22e4cf4137ef3dc4f43d
-> > +.TP
-> > +.BR PR_SET_TAGGED_ADDR_CTRL " (since Linux 5.4, only on arm64)"
-> > +Controls support for passing tagged userspace addresses to the kernel
-> > +(i.e., addresses where bits 56\(em63 are not all zero).
-> > +.IP
-> > +The level of support is selected by
-> > +.IR "(unsigned int) arg2" ,
-> > +which can be one of the following:
-> > +.RS
-> > +.TP
-> > +.B 0
-> > +Addresses that are passed
-> > +for the purpose of being dereferenced by the kernel
-> > +must be untagged.
-> > +.TP
-> > +.B PR_TAGGED_ADDR_ENABLE
-> > +Addresses that are passed
-> > +for the purpose of being dereferenced by the kernel
-> > +may be tagged, with the exceptions summarized below.
-> > +.RE
-> > +.IP
-> > +The remaining arguments
-> > +.IR arg3 ", " arg4 " and " arg5
-> > +must all be zero.
-> > +.IP
-> > +On success, the mode specified in
-> > +.I arg2
-> > +is set for the calling thread and the the return value is 0.
-> > +If the arguments are invalid,
-> > +the mode specified in
-> > +.I arg2
-> > +is unrecognized,
-> > +or if this feature is disabled or unsupported by the kernel,
-> > +the call fails with
-> > +.BR EINVAL .
-> > +.IP
-> > +In particular, if
-> > +.BR prctl ( PR_SET_TAGGED_ADDR_CTRL ,
-> > +0, 0, 0, 0)
-> > +fails with
-> > +.B EINVAL
-> > +then all addresses passed to the kernel must be untagged.
-> > +.IP
-> > +Irrespective of which mode is set,
-> > +addresses passed to certain interfaces
-> > +must always be untagged:
-> > +.RS
-> > +.IP \(em
-> > +.BR brk (2),
-> > +.BR mmap (2),
-> > +.BR shmat (2),
-> > +and the
-> > +.I new_address
-> > +argument of
-> > +.BR mremap (2).
-> > +.IP
-> > +(Prior to Linux 5.6 these accepted tagged addresses,
-> > +but the behaviour may not be what you expect.
-> > +Don't rely on it.)
-> > +.IP \(em
-> > +\(oqpolymorphic\(cq interfaces
-> > +that accept pointers to arbitrary types cast to a
-> > +.I void *
-> > +or other generic type, specifically
-> > +.BR prctl (2),
-> > +.BR ioctl (2),
-> > +and in general
-> > +.BR setsockopt (2)
-> > +(only certain specific
-> > +.BR setsockopt (2)
-> > +options allow tagged addresses).
-> > +.IP \(em
-> > +.BR shmdt (2).
-> > +.RE
-> > +.IP
-> > +This list of exclusions may shrink
-> > +when moving from one kernel version to a later kernel version.
-> > +While the kernel may make some guarantees
-> > +for backwards compatibility reasons,
-> > +for the purposes of new software
-> > +the effect of passing tagged addresses to these interfaces
-> > +is unspecified.
-> > +.IP
-> > +The mode set by this call is inherited across
-> > +.BR fork (2)
-> > +and
-> > +.BR clone (2).
-> > +The mode is reset by
-> > +.BR execve (2)
-> > +to 0
-> > +(i.e., tagged addresses not permitted in the user/kernel ABI).
-> > +.IP
-> > +.B Warning:
-> > +Because the compiler or run-time environment
-> > +may make use of address tagging,
-> > +a successful
-> > +.B PR_SET_TAGGED_ADDR_CTRL
-> > +may crash the calling process.
-> > +The conditions for using it safely are complex and system-dependent.
-> > +Don't use it unless you know what you are doing.
-> > +.IP
-> > +For more information, see the kernel source file
-> > +.IR Documentation/arm64/tagged\-address\-abi.rst .
-> > +.\" prctl PR_GET_TAGGED_ADDR_CTRL
-> > +.\" commit 63f0c60379650d82250f22e4cf4137ef3dc4f43d
-> > +.TP
-> > +.BR PR_GET_TAGGED_ADDR_CTRL " (since Linux 5.4, only on arm64)"
-> > +Returns the current tagged address mode
-> > +for the calling thread.
-> > +.IP
-> > +Arguments
-> > +.IR arg2 ", " arg3 ", " arg4 " and " arg5
-> > +must all be zero.
-> > +.IP
-> > +If the arguments are invalid
-> > +or this feature is disabled or unsupported by the kernel,
-> > +the call fails with
-> > +.BR EINVAL .
-> > +In particular, if
-> > +.BR prctl ( PR_GET_TAGGED_ADDR_CTRL ,
-> > +0, 0, 0, 0)
-> > +fails with
-> > +.BR EINVAL ,
-> > +then this feature is definitely unsupported or disabled,
-> > +and all addresses passed to the kernel must be untagged.
-> > +.IP
-> > +Otherwise, the call returns a nonnegative value
-> > +describing the current tagged address mode,
-> > +encoded in the same way as the
-> > +.I arg2
-> > +argument of
-> > +.BR PR_SET_TAGGED_ADDR_CTRL .
-> > +.IP
-> > +For more information, see the kernel source file
-> > +.IR Documentation/arm64/tagged\-address\-abi.rst .
-> >  .\"
-> >  .\" prctl PR_TASK_PERF_EVENTS_DISABLE
-> >  .TP
-> > @@ -1749,6 +1886,7 @@ On success,
-> >  .BR PR_GET_SPECULATION_CTRL ,
-> >  .BR PR_SVE_GET_VL ,
-> >  .BR PR_SVE_SET_VL ,
-> > +.BR PR_GET_TAGGED_ADDR_CTRL ,
-> >  .BR PR_GET_THP_DISABLE ,
-> >  .BR PR_GET_TIMING ,
-> >  .BR PR_GET_TIMERSLACK ,
-> > @@ -2057,6 +2195,24 @@ is
-> >  .B PR_SVE_GET_VL
-> >  and SVE is not available on this platform.
-> >  .TP
-> > +.B EINVAL
-> > +.I option
-> > +is
-> > +.BR PR_SET_TAGGED_ADDR_CTRL
-> > +and the arguments are invalid or unsupported.
-> > +See the description of
-> > +.B PR_SET_TAGGED_ADDR_CTRL
-> > +above for details.
-> > +.TP
-> > +.B EINVAL
-> > +.I option
-> > +is
-> > +.BR PR_GET_TAGGED_ADDR_CTRL
-> > +and the arguments are invalid or unsupported.
-> > +See the description of
-> > +.B PR_GET_TAGGED_ADDR_CTRL
-> > +above for details.
-> > +.TP
-> >  .B ENODEV
-> >  .I option
-> >  was
-> > 
-> 
-> 
-> -- 
-> Michael Kerrisk
-> Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-> Linux/UNIX System Programming Training: http://man7.org/training/
