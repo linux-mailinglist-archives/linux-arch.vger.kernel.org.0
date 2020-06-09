@@ -2,207 +2,258 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F42C1F3A5C
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Jun 2020 14:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0A21F3C5B
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Jun 2020 15:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729109AbgFIMFq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Jun 2020 08:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728051AbgFIMFq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Jun 2020 08:05:46 -0400
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644F4C05BD1E;
-        Tue,  9 Jun 2020 05:05:45 -0700 (PDT)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id F011E2C3; Tue,  9 Jun 2020 14:05:39 +0200 (CEST)
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     peterz@infradead.org, jroedel@suse.de,
-        Andy Lutomirski <luto@kernel.org>,
-        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
-        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        manvanth@linux.vnet.ibm.com, linux-next@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, hch@lst.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] mm: Move p?d_alloc_track to separate header file
-Date:   Tue,  9 Jun 2020 14:05:33 +0200
-Message-Id: <20200609120533.25867-1-joro@8bytes.org>
-X-Mailer: git-send-email 2.17.1
+        id S1729632AbgFIN1G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Jun 2020 09:27:06 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5871 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729538AbgFIN1D (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 9 Jun 2020 09:27:03 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id E66F3B3BF6A4142A6804;
+        Tue,  9 Jun 2020 21:26:57 +0800 (CST)
+Received: from [127.0.0.1] (10.173.220.25) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Tue, 9 Jun 2020
+ 21:26:51 +0800
+Subject: Re: [RFC PATCH v3 2/2] arm64: tlb: Use the TLBI RANGE feature in
+ arm64
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     <will@kernel.org>, <suzuki.poulose@arm.com>, <maz@kernel.org>,
+        <steven.price@arm.com>, <guohanjun@huawei.com>, <olof@lixom.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
+        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
+        <kuhn.chenqun@huawei.com>
+References: <20200414112835.1121-1-yezhenyu2@huawei.com>
+ <20200414112835.1121-3-yezhenyu2@huawei.com> <20200514152840.GC1907@gaia>
+ <54468aae-dbb1-66bd-c633-82fc75936206@huawei.com>
+Message-ID: <504c7588-97e5-e014-fca0-c5511ae0d256@huawei.com>
+Date:   Tue, 9 Jun 2020 21:26:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
+MIME-Version: 1.0
+In-Reply-To: <54468aae-dbb1-66bd-c633-82fc75936206@huawei.com>
+Content-Type: multipart/mixed;
+        boundary="------------63F030C8259FBE42240E3096"
+X-Originating-IP: [10.173.220.25]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+--------------63F030C8259FBE42240E3096
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
 
-The functions are only used in two source files, so there is no need
-for them to be in the global <linux/mm.h> header. Move them to the new
-<linux/pgalloc-track.h> header and include it only where needed.
+Hi Catalin,
 
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
----
- include/linux/mm.h            | 45 -------------------------------
- include/linux/pgalloc-track.h | 51 +++++++++++++++++++++++++++++++++++
- lib/ioremap.c                 |  1 +
- mm/vmalloc.c                  |  1 +
- 4 files changed, 53 insertions(+), 45 deletions(-)
- create mode 100644 include/linux/pgalloc-track.h
+On 2020/5/18 20:21, Zhenyu Ye wrote:
+> I will test the performance of your suggestion and then reply you again
+> here.
+> 
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9d6042178ca7..22d8b2a2c9bc 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2092,51 +2092,11 @@ static inline pud_t *pud_alloc(struct mm_struct *mm, p4d_t *p4d,
- 		NULL : pud_offset(p4d, address);
- }
- 
--static inline p4d_t *p4d_alloc_track(struct mm_struct *mm, pgd_t *pgd,
--				     unsigned long address,
--				     pgtbl_mod_mask *mod_mask)
--
--{
--	if (unlikely(pgd_none(*pgd))) {
--		if (__p4d_alloc(mm, pgd, address))
--			return NULL;
--		*mod_mask |= PGTBL_PGD_MODIFIED;
--	}
--
--	return p4d_offset(pgd, address);
--}
--
--static inline pud_t *pud_alloc_track(struct mm_struct *mm, p4d_t *p4d,
--				     unsigned long address,
--				     pgtbl_mod_mask *mod_mask)
--{
--	if (unlikely(p4d_none(*p4d))) {
--		if (__pud_alloc(mm, p4d, address))
--			return NULL;
--		*mod_mask |= PGTBL_P4D_MODIFIED;
--	}
--
--	return pud_offset(p4d, address);
--}
--
- static inline pmd_t *pmd_alloc(struct mm_struct *mm, pud_t *pud, unsigned long address)
- {
- 	return (unlikely(pud_none(*pud)) && __pmd_alloc(mm, pud, address))?
- 		NULL: pmd_offset(pud, address);
- }
--
--static inline pmd_t *pmd_alloc_track(struct mm_struct *mm, pud_t *pud,
--				     unsigned long address,
--				     pgtbl_mod_mask *mod_mask)
--{
--	if (unlikely(pud_none(*pud))) {
--		if (__pmd_alloc(mm, pud, address))
--			return NULL;
--		*mod_mask |= PGTBL_PUD_MODIFIED;
--	}
--
--	return pmd_offset(pud, address);
--}
- #endif /* CONFIG_MMU */
- 
- #if USE_SPLIT_PTE_PTLOCKS
-@@ -2252,11 +2212,6 @@ static inline void pgtable_pte_page_dtor(struct page *page)
- 	((unlikely(pmd_none(*(pmd))) && __pte_alloc_kernel(pmd))? \
- 		NULL: pte_offset_kernel(pmd, address))
- 
--#define pte_alloc_kernel_track(pmd, address, mask)			\
--	((unlikely(pmd_none(*(pmd))) &&					\
--	  (__pte_alloc_kernel(pmd) || ({*(mask)|=PGTBL_PMD_MODIFIED;0;})))?\
--		NULL: pte_offset_kernel(pmd, address))
--
- #if USE_SPLIT_PMD_PTLOCKS
- 
- static struct page *pmd_to_page(pmd_t *pmd)
-diff --git a/include/linux/pgalloc-track.h b/include/linux/pgalloc-track.h
-new file mode 100644
-index 000000000000..1dcc865029a2
---- /dev/null
-+++ b/include/linux/pgalloc-track.h
-@@ -0,0 +1,51 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_PGALLLC_TRACK_H
-+#define _LINUX_PGALLLC_TRACK_H
-+
-+#if defined(CONFIG_MMU)
-+static inline p4d_t *p4d_alloc_track(struct mm_struct *mm, pgd_t *pgd,
-+				     unsigned long address,
-+				     pgtbl_mod_mask *mod_mask)
-+{
-+	if (unlikely(pgd_none(*pgd))) {
-+		if (__p4d_alloc(mm, pgd, address))
-+			return NULL;
-+		*mod_mask |= PGTBL_PGD_MODIFIED;
-+	}
-+
-+	return p4d_offset(pgd, address);
-+}
-+
-+static inline pud_t *pud_alloc_track(struct mm_struct *mm, p4d_t *p4d,
-+				     unsigned long address,
-+				     pgtbl_mod_mask *mod_mask)
-+{
-+	if (unlikely(p4d_none(*p4d))) {
-+		if (__pud_alloc(mm, p4d, address))
-+			return NULL;
-+		*mod_mask |= PGTBL_P4D_MODIFIED;
-+	}
-+
-+	return pud_offset(p4d, address);
-+}
-+
-+static inline pmd_t *pmd_alloc_track(struct mm_struct *mm, pud_t *pud,
-+				     unsigned long address,
-+				     pgtbl_mod_mask *mod_mask)
-+{
-+	if (unlikely(pud_none(*pud))) {
-+		if (__pmd_alloc(mm, pud, address))
-+			return NULL;
-+		*mod_mask |= PGTBL_PUD_MODIFIED;
-+	}
-+
-+	return pmd_offset(pud, address);
-+}
-+#endif /* CONFIG_MMU */
-+
-+#define pte_alloc_kernel_track(pmd, address, mask)			\
-+	((unlikely(pmd_none(*(pmd))) &&					\
-+	  (__pte_alloc_kernel(pmd) || ({*(mask)|=PGTBL_PMD_MODIFIED;0;})))?\
-+		NULL: pte_offset_kernel(pmd, address))
-+
-+#endif /* _LINUX_PGALLLC_TRACK_H */
-diff --git a/lib/ioremap.c b/lib/ioremap.c
-index ad485f08173b..608fcccd21c8 100644
---- a/lib/ioremap.c
-+++ b/lib/ioremap.c
-@@ -11,6 +11,7 @@
- #include <linux/sched.h>
- #include <linux/io.h>
- #include <linux/export.h>
-+#include <linux/pgalloc-track.h>
- #include <asm/cacheflush.h>
- #include <asm/pgtable.h>
- 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 3091c2ca60df..edc43f003165 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -35,6 +35,7 @@
- #include <linux/bitops.h>
- #include <linux/rbtree_augmented.h>
- #include <linux/overflow.h>
-+#include <linux/pgalloc-track.h>
- 
- #include <linux/uaccess.h>
- #include <asm/tlbflush.h>
--- 
-2.26.2
+I have sent the v4 of this series [1], and compared the performance of
+these two different implement.  The test code is in the attachment (directly
+call the __flush_tlb_range()).
 
+First, I tested the v4 on a machine whose cpus do not support tlb range.
+Fortunately, the newly added judgment in loop has very little effect on
+performance.  When page nums are 256 (loop 256 times), the impact is less
+than 0.5%:
+
+	[page num]	[before change]		[v4 change]
+	1		1457			1491
+	2		1911			1957
+	3		2382			2377
+	4		2827			2852
+	5		3282			3349
+	6		3763			3781
+	7		4295			4252
+	8		4716			4716
+	9		5186			5218
+	10		5618			5648
+	16		8427			8454
+	32		15938			15951
+	64		30890			30977
+	128		60802			60863
+	256		120826			121395
+	512		1508			1555
+
+Then I tested them on a FPGA machine whose cpus support the tlb range
+feature (this machine is not the same as above).  Below is the test
+data when the stride = PTE:
+
+	[page num]	[before change]	[v3 change]	[v4 change]
+	1		16051		15094		13524
+	2		11366		11270		11146
+	3		11582		11536		12171
+	4		11694		11199		11101
+	5		12138		11506		12267
+	6		12290		11214		11105
+	7		12400		11448		12002
+	8		12837		11225		11097
+	9		14791		11529		12140
+	10		15461		11218		11087
+	16		18233		11192		11094
+	32		26983		11224		11079
+	64		43840		11237		11092
+	128		77754		11247		11098
+	256		145514		11223		11089
+	512		280932		11197		11111
+
+We can see the v3 and v4 are very similar in this scene, and both
+of them performance improved very much compared to current
+implementation.  When the page nums are 256, the performance is
+improved by more than 10 times.  And the TLBI RANGE instruction
+cost less time than classic TLBI in all secenes on this machine,
+even if the page num is small. (but this may be different on
+different machines)
+
+Everything performs will util now, but I added a new judgment of
+stride in the v4:
+
+	if (cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) &&
+	    stride == PAGE_SIZE)
+		use tlbi range here...
+
+So when the stride != PTE, then there will use the classic tlbi
+instruction and flush the tlbs one by one, where the performance
+becomes worse than v3:
+
+	[page num]	[before change]	[v3 change]	[v4 change]
+	1		14047		11332		11611
+	2		11568		11255		11701
+	3		11664		11231		11759
+	4		12097		11204		12173
+	5		12229		11236		12374
+	6		12399		11203		12497
+	7		12802		11266		12914
+	8		14764		17098		14907
+	9		15370		17106		15551
+	10		16130		17103		16137
+	16		19029		17175		19194
+	32		27300		17097		27604
+	64		44172		17075		44609
+	128		77878		17176		78548
+	256		145185		12022		146063
+	512		279822		12029		279922
+
+And as we can see, "handle the 2MB with a single classic TLBI"
+costs the same time as a single TLBI RANGE instruction.  So should
+I remove the judgment of stride and only figure which to use based
+on cpucaps in the loop?  But if removes the judgment, the logic
+will be the same as v3.(both of them only judge cpucaps)
+
+Waiting for your suggestions...
+
+Thanks,
+Zhenyu
+
+--------------63F030C8259FBE42240E3096
+Content-Type: text/plain; charset="UTF-8"; name="test-tlb-range-perf.c"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="test-tlb-range-perf.c"
+
+#include <linux/kernel.h>
+#include <linux/module.h>
+#include <linux/init.h>
+#include <linux/delay.h>
+#include <asm/tlb.h>
+#include <linux/time.h>
+#include <asm/current.h>
+#include <linux/sched.h>
+#include <linux/delay.h>
+#include <linux/mm.h>
+
+#define TESTTIMES 10000
+
+void testRangePerf(void);
+
+static int __init test_init(void)
+{
+    printk("BEGIN TEST\n");
+
+    testRangePerf();
+
+    printk("END TEST\n");
+    return 0;
+}
+
+
+static void __exit test_exit(void)
+{
+    return;
+}
+
+void testRangePerf(void)
+{
+    int i, j;
+    struct timespec64 start, end;
+    struct task_struct *ts;
+    struct vm_area_struct *vma;
+
+    printk("BEGIN testRangePerf\n");
+
+    ts = current;
+    vma = ts->mm->mmap;
+
+    printk("vma->start: %lx, vma->end: %lx, ttl = 0, PAGE_SIZE = 0x%lx\n", vma->vm_start, vma->vm_end, PAGE_SIZE);
+    for (i = 1; i <= 10; i++) {
+        ktime_get_ts64(&start);
+        for (j = 0; j < TESTTIMES; j++) {
+            __flush_tlb_range(vma, vma->vm_start, vma->vm_start + PAGE_SIZE * i, PAGE_SIZE, false);
+        }
+        ktime_get_ts64(&end);
+        printk("test __flush_tlb_range with %04d pages, used time: %12lld ns\n", i,
+               ((end.tv_sec - start.tv_sec) * 1000000000 + end.tv_nsec - start.tv_nsec) / TESTTIMES);
+        msleep(100);
+    }
+
+    for (i = 16; i <= 512; i+=i) {
+        ktime_get_ts64(&start);
+        for (j = 0; j < TESTTIMES; j++) {
+            __flush_tlb_range(vma, vma->vm_start, vma->vm_start + PAGE_SIZE * i, PAGE_SIZE, false);
+        }
+        ktime_get_ts64(&end);
+        printk("test __flush_tlb_range with %04d pages, used time: %12lld ns\n", i,
+               ((end.tv_sec - start.tv_sec) * 1000000000 + end.tv_nsec - start.tv_nsec) / TESTTIMES);
+        msleep(100);
+    }
+
+    printk("vma->start: %lx, vma->end: %lx, ttl = 0, PAGE_SIZE = 0x%lx\n", vma->vm_start, vma->vm_end, PMD_SIZE);
+    for (i = 1; i <= 10; i++) {
+        ktime_get_ts64(&start);
+        for (j = 0; j < TESTTIMES; j++) {
+            __flush_tlb_range(vma, vma->vm_start, vma->vm_start + PMD_SIZE * i, PMD_SIZE, false);
+        }
+        ktime_get_ts64(&end);
+        printk("test __flush_tlb_range with %04d pages, used time: %12lld ns\n", i,
+               ((end.tv_sec - start.tv_sec) * 1000000000 + end.tv_nsec - start.tv_nsec) / TESTTIMES);
+        msleep(100);
+    }
+
+    for (i = 16; i <= 512; i+=i) {
+        ktime_get_ts64(&start);
+        for (j = 0; j < TESTTIMES; j++) {
+            __flush_tlb_range(vma, vma->vm_start, vma->vm_start + PMD_SIZE * i, PMD_SIZE, false);
+        }
+        ktime_get_ts64(&end);
+        printk("test __flush_tlb_range with %04d pages, used time: %12lld ns\n", i,
+               ((end.tv_sec - start.tv_sec) * 1000000000 + end.tv_nsec - start.tv_nsec) / TESTTIMES);
+        msleep(100);
+    }
+}
+
+module_init(test_init)
+module_exit(test_exit)
+
+MODULE_LICENSE("Dual BSD/GPL"); 
+MODULE_AUTHOR("Eillon");
+MODULE_DESCRIPTION("do TTL test");
+MODULE_VERSION("1.0");
+--------------63F030C8259FBE42240E3096--
