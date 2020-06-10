@@ -2,171 +2,307 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A981F5525
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jun 2020 14:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1961F57C6
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jun 2020 17:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728540AbgFJMso (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Jun 2020 08:48:44 -0400
-Received: from foss.arm.com ([217.140.110.172]:58356 "EHLO foss.arm.com"
+        id S1728621AbgFJP0j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Jun 2020 11:26:39 -0400
+Received: from foss.arm.com ([217.140.110.172]:59992 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727927AbgFJMso (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 10 Jun 2020 08:48:44 -0400
+        id S1726979AbgFJP0j (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 10 Jun 2020 11:26:39 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96B891F1;
-        Wed, 10 Jun 2020 05:48:43 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D485D3F66F;
-        Wed, 10 Jun 2020 05:48:42 -0700 (PDT)
-Date:   Wed, 10 Jun 2020 13:48:40 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arch@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 4/6] prctl.2: Add SVE prctls (arm64)
-Message-ID: <20200610124838.GG25945@arm.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F08741F1;
+        Wed, 10 Jun 2020 08:26:37 -0700 (PDT)
+Received: from gaia (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E144F3F6CF;
+        Wed, 10 Jun 2020 08:26:36 -0700 (PDT)
+Date:   Wed, 10 Jun 2020 16:26:34 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: Re: [RFC PATCH v2 6/6] prctl.2: Add tagged address ABI control
+ prctls (arm64)
+Message-ID: <20200610152634.GJ26099@gaia>
 References: <1590614258-24728-1-git-send-email-Dave.Martin@arm.com>
- <1590614258-24728-5-git-send-email-Dave.Martin@arm.com>
- <20200609095734.GA25362@willie-the-truck>
- <20200609140948.GA25945@arm.com>
- <20200609144905.GA28353@willie-the-truck>
- <20200610094440.GD25945@arm.com>
- <20200610101649.GA17788@willie-the-truck>
+ <1590614258-24728-7-git-send-email-Dave.Martin@arm.com>
+ <20200609172232.GA63286@C02TF0J2HF1T.local>
+ <20200610100641.GF25945@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200610101649.GA17788@willie-the-truck>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200610100641.GF25945@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 10, 2020 at 11:16:49AM +0100, Will Deacon wrote:
-> [Dropped linux-man and Michael]
-> 
-> On Wed, Jun 10, 2020 at 10:44:42AM +0100, Dave Martin wrote:
-> > On Tue, Jun 09, 2020 at 03:49:05PM +0100, Will Deacon wrote:
-> > > On Tue, Jun 09, 2020 at 03:11:42PM +0100, Dave Martin wrote:
-> > > > On Tue, Jun 09, 2020 at 10:57:35AM +0100, Will Deacon wrote:
-> > > > > On Wed, May 27, 2020 at 10:17:36PM +0100, Dave Martin wrote:
-> > > > > > +.RS
-> > > > > > +.TP
-> > > > > > +.B 0
-> > > > > > +Perform the change immediately.
-> > > > > > +At the next
-> > > > > > +.BR execve (2)
-> > > > > > +in the thread,
-> > > > > > +the vector length will be reset to the value configured in
-> > > > > > +.IR /proc/sys/abi/sve_default_vector_length .
-> > > > > 
-> > > > > (implementation note: does this mean that 'sve_default_vl' should be
-> > > > >  an atomic_t, as it can be accessed concurrently? We probably need
-> > > > >  {READ,WRITE}_ONCE() at the very least, as I'm not seeing any locks
-> > > > >  that help us here...)
-> > > > 
-> > > > Is this purely theoretical?  Can you point to what could go wrong?
-> > > 
-> > > If the write is torn by the compiler, then a concurrent reader could end
-> > > up seeing a bogus value. There could also be ToCToU issues if it's re-read.
+On Wed, Jun 10, 2020 at 11:06:42AM +0100, Dave P Martin wrote:
+> On Tue, Jun 09, 2020 at 06:22:32PM +0100, Catalin Marinas wrote:
+> > On Wed, May 27, 2020 at 10:17:38PM +0100, Dave P Martin wrote:
+> > > --- a/man2/prctl.2
+> > > +++ b/man2/prctl.2
+> > > @@ -1504,6 +1504,143 @@ For more information, see the kernel source file
+> > >  (or
+> > >  .I Documentation/arm64/sve.txt
+> > >  before Linux 5.3).
+> > > +.\" prctl PR_SET_TAGGED_ADDR_CTRL
+> > > +.\" commit 63f0c60379650d82250f22e4cf4137ef3dc4f43d
+> > > +.TP
+> > > +.BR PR_SET_TAGGED_ADDR_CTRL " (since Linux 5.4, only on arm64)"
+> > > +Controls support for passing tagged userspace addresses to the kernel
+> > > +(i.e., addresses where bits 56\(em63 are not all zero).
 > > 
-> > It won't be torn in practice, no decision logic depends on the value
-> > read, and you can't even get from the write to the read or vice-versa
-> > without crossing a TU boundary (even under LTO), so there's basically
-> > zero scope for sabotXXXXXoptimisation by the compiler.
+> > Nitpick: maybe say "userspace addresses" again inside the brackets since
+> > kernel addresses have all top bits 1.
 > 
-> Perhaps, but I'm not brave enough to state that :) Look at this crazy
-> thing, for example:
-> 
-> https://lore.kernel.org/lkml/CAG48ez2nFks+yN1Kp4TZisso+rjvv_4UW0FTo8iFUd4Qyq1qDw@mail.gmail.com/
-> 
-> Could the same sort of technique be applied to:
-> 
-> 
-> 	vl = current->thread.sve_vl_onexec ?
-> 	     current->thread.sve_vl_onexec : sve_default_vl;
-> 
-> 	if (WARN_ON(!sve_vl_valid(vl)))
-> 		vl = SVE_VL_MIN;
-> 
-> 	supported_vl = find_supported_vector_length(vl);
-> 
-> 
-> so that the compiled code does something like:
-> 
-> 
-> 	if (within_valid_bounds(sve_default_vl)) {
-> 		supported_vl = jump_table(sve_default_vl); // Reload the variable
-> 	} else {
-> 		WARN_ON(1);
-> 		supported_vl = SVE_VL_MIN;
-> 	}
-> 
-> 
-> ?
-> 
-> I'd certainly prefer not to have to think about that!
+> Happy to do that.  This is a user-facing interface though: userspace
+> addresses are the only kind of address there is.
 
-Well sure, but the compiler has much to lose and nothing to gain from
-such a transformation here.  This is a bit different from a load of
-conditional code that can be heavily const-folded during specialisation.
+Living in the kernel land for too long, it's hard to switch perspective ;).
+I think the original sentence makes sense anyway, it should be obvious
+that it refers to user addresses.
 
-Anyway, I'm not saying that you're not correct about the risk, just that
-this feels like a common pattern.
-
-
-> > Only root is allowed to write this thing anyway.
+> > > +.IP
+> > > +The level of support is selected by
+> > > +.IR "(unsigned int) arg2" ,
 > > 
-> > > > While I doubt I thought about this very hard and I agree that you're
-> > > > right in principle, I think there are probably non-atomic sysctls and
-> > > > debugs files etc. all over the place.
-> > > > 
-> > > > I didn't want to clutter the code unnecessarily.
-> > > 
-> > > Right, but KCSAN is coming along and so somebody less familiar with the code
-> > > will hit this eventually.
-> > 
-> > So the issue is theoretical, probably one of very many similar issues,
-> > and anyway we have a tool for tracking them down if we need to?
-> > 
-> > I'm playing devil's advocate here, but I'd debate whether it's worth
-> > it -- or even wise -- to fix these piecemeal unless we're confident this
-> > is an egregious case.  Doing so may encourage a false sense of safety.
-> > When we're in a position to do a treewide cleanup, that would be better,
-> > no?
+> > We use (unsigned long) for arg2.
 > 
-> That's a good point, but it is inevitable that people will try to attempt
-> treewide introduction of {READ,WRITE}_ONCE() based solely on KCSAN reports
-> rather than an understanding of the code, and so I'd much rather somebody
-> who understands the code (that's you ;) deals with it first.
+> Hmmm, not quite sure how I came up with unsigned int here.  I'll just
+> drop this: the type in the prctl() prototype is unsigned long anyway.
 > 
-> If the race is benign, then you can annotate the accesses with data_race()
-> and add a comment along the lines of your "It won't be torn in practice..."
-> paragraph above.
+> The type is actually moot in this case, since the valid values all fit
+> in an unsigned int.
 
-Oh, it's complex enough to reason about that we should definitely use
-proper atomics here so that we don't have to think about it.  Also, I'd
-concede that the fact that this code has a custom sysctl accessor may
-make justify a special case fix.
+Passing an int doesn't require that the top 32-bit of the long are
+zeroed (in case anyone writes the low-level SVC by hand).
 
-For most users, it would be better to clip sysctl's wings so that only
-atomic accesses are allowed if the default implementation is used.  sysctl
-is not a fast path: for single values of fundamental types, there's no
-reason I can think of not to use atomics across the board.
+> > > +which can be one of the following:
+> > > +.RS
+> > > +.TP
+> > > +.B 0
+> > > +Addresses that are passed
+> > > +for the purpose of being dereferenced by the kernel
+> > > +must be untagged.
+> > > +.TP
+> > > +.B PR_TAGGED_ADDR_ENABLE
+> > > +Addresses that are passed
+> > > +for the purpose of being dereferenced by the kernel
+> > > +may be tagged, with the exceptions summarized below.
+> > > +.RE
+> > > +.IP
+> > > +The remaining arguments
+> > > +.IR arg3 ", " arg4 " and " arg5
+> > > +must all be zero.
+> > 
+> > Indeed. The above commit didn't have this, we added it later in commit
+> > 3e91ec89f527b9870fe42dcbdb74fd389d123a95.
+> 
+> Ah, missed that.  Did any full kernel release expose the unchecked
+> behaviour?
 
+No, they both went into 5.4-rc1. I probably didn't want to rebase the
+series and just added a patch on top.
 
-> Anyway, this is entirely independent to the manpage effort, just that the
-> concurrency wasn't clear to me before I read what you'd written and thought
-> I'd mention this before I forget. It's also looking less likely that KCSAN
-> is going to land for 5.8, so there's no urgency to this at all.
+> Mind you, there's probably no need to document in any case.
 
-Sure, and I don't think I thought much beyond "I wonder what happens if
-... nah, probably fine, if it mattered then everyone would be doing it."
+I agree. Just mentioned it because I looked at the commit you mentioned
+and there was no check for the arg3..arg5, so went to check the history.
 
-I'm pretty sure I didn't get that wording out of the C spec.
+> > > +.IP
+> > > +On success, the mode specified in
+> > > +.I arg2
+> > > +is set for the calling thread and the the return value is 0.
+> > > +If the arguments are invalid,
+> > > +the mode specified in
+> > > +.I arg2
+> > > +is unrecognized,
+> > > +or if this feature is disabled or unsupported by the kernel,
+> > > +the call fails with
+> > > +.BR EINVAL .
+> > > +.IP
+> > > +In particular, if
+> > > +.BR prctl ( PR_SET_TAGGED_ADDR_CTRL ,
+> > > +0, 0, 0, 0)
+> > > +fails with
+> > > +.B EINVAL
+> > > +then all addresses passed to the kernel must be untagged.
+> > > +.IP
+> > > +Irrespective of which mode is set,
+> > > +addresses passed to certain interfaces
+> > > +must always be untagged:
+> > 
+> > Maybe you could add some extra info from the kernel comment (commit
+> > b2a84de2a2deb76a6a51609845341f508c518c03) along the lines of "... to
+> > avoid the creation of aliasing mappings in userspace).
+> 
+> It depends.  It's useful if it helps people to guess highly accurately
+> the rule for in interface that is too new or that we don't explicitly
+> document (such as a random setsockopt or perf widget).
+> 
+> If not, it might be best to say nothing and make guarantees only about
+> the explicitly listed interfaces though.
 
-It's a good spot though, and I may look at a fix if I get around to it.
-Can't promise when, though.
+Fine by me to keep it as it is. We can always update the man page if new
+syscalls come into this category.
 
-Cheers
----Dave
+> > > +.RS
+> > > +.IP \(em
+> > > +.BR brk (2),
+> > > +.BR mmap (2),
+> > > +.BR shmat (2),
+> > > +and the
+> > > +.I new_address
+> > > +argument of
+> > > +.BR mremap (2).
+> > > +.IP
+> > > +(Prior to Linux 5.6 these accepted tagged addresses,
+> > > +but the behaviour may not be what you expect.
+> > > +Don't rely on it.)
+> > 
+> > shmat() was not part of the subsequent fix
+> > (dcde237319e626d1ec3c9d8b7613032f0fd4663a), it always rejected tagged
+> > address. But I guess it doesn't matter much, the user should not pass
+> > tagged addresses to these syscalls anyway.
+> > 
+> > You could move shmat() down together with shmdt().
+> 
+> I guess I was highlighting that shmdt() is a special case, because the
+> user would guess from the pattern of the other listed calls that shmdt()
+> should accept tagged addresses.  If you think separating it just adds to
+> the confusion, I'm happy not too call it out specially here.
+> 
+> OTOH, we could fix shmdt() and document the legacy behaviour as a bug in
+> specific kernel versions rather than the canonical behaviour.  But I
+> guess that's one for later.
+
+If we patch shmdt() to allow tagged addresses, then it makes sense to
+keep shmat() with the rest of the above. Just pointing out that shmat()
+never allowed tagged pointers
+
+> > > +.IP \(em
+> > > +\(oqpolymorphic\(cq interfaces
+> > > +that accept pointers to arbitrary types cast to a
+> > > +.I void *
+> > > +or other generic type, specifically
+> > > +.BR prctl (2),
+> > > +.BR ioctl (2),
+> > > +and in general
+> > > +.BR setsockopt (2)
+> > > +(only certain specific
+> > > +.BR setsockopt (2)
+> > > +options allow tagged addresses).
+> > > +.IP \(em
+> > > +.BR shmdt (2).
+> > > +.RE
+> > > +.IP
+> > > +This list of exclusions may shrink
+> > > +when moving from one kernel version to a later kernel version.
+> > > +While the kernel may make some guarantees
+> > > +for backwards compatibility reasons,
+> > > +for the purposes of new software
+> > > +the effect of passing tagged addresses to these interfaces
+> > > +is unspecified.
+> > > +.IP
+> > > +The mode set by this call is inherited across
+> > > +.BR fork (2)
+> > > +and
+> > > +.BR clone (2).
+> > > +The mode is reset by
+> > > +.BR execve (2)
+> > > +to 0
+> > > +(i.e., tagged addresses not permitted in the user/kernel ABI).
+> > > +.IP
+> > > +.B Warning:
+> > > +Because the compiler or run-time environment
+> > > +may make use of address tagging,
+> > > +a successful
+> > > +.B PR_SET_TAGGED_ADDR_CTRL
+> > > +may crash the calling process.
+> > 
+> > I don't think PR_SET_TAGGED_ADDR_CTRL could crash the calling process.
+> > Rather disabling tagged addresses would break it. If a process is using
+> 
+> This is precisely how PR_SET_TAGGED_ADDR_CTRL could crash the calling
+> process, no?
+
+I see your point. E.g. it was enabled by glibc but disabled by a user
+application.
+
+> Rather than try to explain the different cases in detail here and have
+> the reader take it as gospel, I thought it would be better to scare them
+> a bit and encourage them to so some homework.  Perhaps I'm being too
+> cautious.
+
+That's fine, leave the warning in place.
+
+> > tagged addresses but does not pass them to the kernel, it will continue
+> > to do so even when the syscalls accept such addresses.
+> > 
+> > > +The conditions for using it safely are complex and system-dependent.
+> > > +Don't use it unless you know what you are doing.
+> > 
+> > This syscall is intended for the C library if the heap allocator
+> > generates tagged addresses. So it's not a general purpose prctl() random
+> > application code could call. Anyway I'm fine with your warning of not
+> > doing it but you may want to clarify the intent.
+> 
+> Maybe add something like
+> 
+> "This call is primarily intended for use by the run-time environment."
+
+That works as well, maybe in addition to the warning. Up to you.
+
+> > > +.IP
+> > > +For more information, see the kernel source file
+> > > +.IR Documentation/arm64/tagged\-address\-abi.rst .
+> > > +.\" prctl PR_GET_TAGGED_ADDR_CTRL
+> > > +.\" commit 63f0c60379650d82250f22e4cf4137ef3dc4f43d
+> > > +.TP
+> > > +.BR PR_GET_TAGGED_ADDR_CTRL " (since Linux 5.4, only on arm64)"
+> > > +Returns the current tagged address mode
+> > > +for the calling thread.
+> > > +.IP
+> > > +Arguments
+> > > +.IR arg2 ", " arg3 ", " arg4 " and " arg5
+> > > +must all be zero.
+> > > +.IP
+> > > +If the arguments are invalid
+> > > +or this feature is disabled or unsupported by the kernel,
+> > > +the call fails with
+> > > +.BR EINVAL .
+> > > +In particular, if
+> > > +.BR prctl ( PR_GET_TAGGED_ADDR_CTRL ,
+> > > +0, 0, 0, 0)
+> > > +fails with
+> > > +.BR EINVAL ,
+> > > +then this feature is definitely unsupported or disabled,
+> > 
+> > I guess it's outside the scope of the prctl.2 to describe how the
+> > feature was disabled (e.g. sysctl).
+> 
+> We could include it here, but I'm thinking we might want a more
+> comprehensive separate page to describe how to use MTE in general.
+> 
+> For now, is referencing the kernel documentation enough?
+
+I think simply saying "unsupported or disabled" is sufficient in the man
+page. The sysctl is not aimed at the user sw/run-time developers but
+rather those controlling the system. For the latter, the kernel
+documentation is sufficient.
+
+So with the (unsigned int) fixed, feel free to add:
+
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+
+I don't have a strong opinion on the other nitpicks, so I'll leave the
+decision to you.
+
+-- 
+Catalin
