@@ -2,25 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E321F8AD7
-	for <lists+linux-arch@lfdr.de>; Sun, 14 Jun 2020 23:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2689A1F8B08
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jun 2020 00:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727906AbgFNVIO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 14 Jun 2020 17:08:14 -0400
-Received: from a3.inai.de ([88.198.85.195]:39502 "EHLO a3.inai.de"
+        id S1727928AbgFNWBG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 14 Jun 2020 18:01:06 -0400
+Received: from correo.us.es ([193.147.175.20]:33352 "EHLO mail.us.es"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726844AbgFNVIO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 14 Jun 2020 17:08:14 -0400
-Received: by a3.inai.de (Postfix, from userid 25121)
-        id 8928C58726429; Sun, 14 Jun 2020 23:08:08 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by a3.inai.de (Postfix) with ESMTP id 70F1D60C2707A;
-        Sun, 14 Jun 2020 23:08:08 +0200 (CEST)
-Date:   Sun, 14 Jun 2020 23:08:08 +0200 (CEST)
-From:   Jan Engelhardt <jengelh@inai.de>
-To:     David Howells <dhowells@redhat.com>
-cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        id S1727918AbgFNWBF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 14 Jun 2020 18:01:05 -0400
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id EB525FF90D
+        for <linux-arch@vger.kernel.org>; Mon, 15 Jun 2020 00:01:04 +0200 (CEST)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id DE6FFDA86E
+        for <linux-arch@vger.kernel.org>; Mon, 15 Jun 2020 00:01:04 +0200 (CEST)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id C7BD5DA73D; Mon, 15 Jun 2020 00:01:04 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WHITELIST autolearn=disabled version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 79E35DA72F;
+        Mon, 15 Jun 2020 00:01:02 +0200 (CEST)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Mon, 15 Jun 2020 00:01:02 +0200 (CEST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (unknown [90.77.255.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id 1FBD4426CCBA;
+        Mon, 15 Jun 2020 00:01:02 +0200 (CEST)
+Date:   Mon, 15 Jun 2020 00:01:01 +0200
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Jan Engelhardt <jengelh@inai.de>
+Cc:     David Howells <dhowells@redhat.com>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
         Florian Westphal <fw@strlen.de>,
         "David S. Miller" <davem@davemloft.net>,
@@ -40,45 +61,34 @@ cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>,
         coreteam@netfilter.org, netdev@vger.kernel.org,
         linux-arch@vger.kernel.org
 Subject: Re: Good idea to rename files in include/uapi/ ?
-In-Reply-To: <174102.1592165965@warthog.procyon.org.uk>
-Message-ID: <nycvar.YFH.7.77.849.2006142244200.30230@n3.vanv.qr>
-References: <9feded75-4b45-2821-287b-af00ec5f910f@al2klimov.de> <174102.1592165965@warthog.procyon.org.uk>
-User-Agent: Alpine 2.22 (LSU 394 2020-01-19)
+Message-ID: <20200614220101.GA9367@salvia>
+References: <9feded75-4b45-2821-287b-af00ec5f910f@al2klimov.de>
+ <174102.1592165965@warthog.procyon.org.uk>
+ <nycvar.YFH.7.77.849.2006142244200.30230@n3.vanv.qr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <nycvar.YFH.7.77.849.2006142244200.30230@n3.vanv.qr>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Sun, Jun 14, 2020 at 11:08:08PM +0200, Jan Engelhardt wrote:
+> 
+> On Sunday 2020-06-14 22:19, David Howells wrote:
+> >Alexander A. Klimov <grandmaster@al2klimov.de> wrote:
+> >
+> >> *Is it a good idea to rename files in include/uapi/ ?*
+> >
+> >Very likely not.  If programs out there are going to be built on a
+> >case-sensitive filesystem (which happens all the time), they're going to break
+> >if you rename the headers.  We're kind of stuck with them.
+> 
+> Netfilter has precedent for removing old headers, e.g.
+> 7200135bc1e61f1437dc326ae2ef2f310c50b4eb's ipt_ULOG.h.
 
-On Sunday 2020-06-14 22:19, David Howells wrote:
->Alexander A. Klimov <grandmaster@al2klimov.de> wrote:
->
->> *Is it a good idea to rename files in include/uapi/ ?*
->
->Very likely not.  If programs out there are going to be built on a
->case-sensitive filesystem (which happens all the time), they're going to break
->if you rename the headers.  We're kind of stuck with them.
-
-Netfilter has precedent for removing old headers, e.g.
-7200135bc1e61f1437dc326ae2ef2f310c50b4eb's ipt_ULOG.h.
-
-Even if kernels would not remove such headers, the iptables userspace
-code wants to be buildable with all kinds of kernels, including past
-releases, which do not have modern headers like xt_l2tp.h.
-
-The mantra for userspace programs is therefore "copy the headers" —
-because you never know what /usr/include/linux you get. iptables and
-iproute2 are two example codebases that employ this. And when headers
-do get copied, header removals from the kernel side are no longer a
-big deal either.
-
-A header file rename is no problem. We even have dummy headers
-already because of this... or related changes. Just look at
-xt_MARK.h, all it does is include xt_mark.h. Cf.
-28b949885f80efb87d7cebdcf879c99db12c37bd .
-
-The boilerplate for xt_*h is quite high thanks to the miniscule
-splitting of headers. Does not feel right in this day and age.
+That's only because NFLOG has been there for ~10 years, so it was safe
+to remove ULOG support.
