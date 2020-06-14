@@ -2,46 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2689A1F8B08
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jun 2020 00:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA82F1F8B3A
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jun 2020 00:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727928AbgFNWBG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 14 Jun 2020 18:01:06 -0400
-Received: from correo.us.es ([193.147.175.20]:33352 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727918AbgFNWBF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 14 Jun 2020 18:01:05 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id EB525FF90D
-        for <linux-arch@vger.kernel.org>; Mon, 15 Jun 2020 00:01:04 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id DE6FFDA86E
-        for <linux-arch@vger.kernel.org>; Mon, 15 Jun 2020 00:01:04 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id C7BD5DA73D; Mon, 15 Jun 2020 00:01:04 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WHITELIST autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 79E35DA72F;
-        Mon, 15 Jun 2020 00:01:02 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Mon, 15 Jun 2020 00:01:02 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (unknown [90.77.255.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 1FBD4426CCBA;
-        Mon, 15 Jun 2020 00:01:02 +0200 (CEST)
-Date:   Mon, 15 Jun 2020 00:01:01 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     David Howells <dhowells@redhat.com>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        id S1727963AbgFNWrz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 14 Jun 2020 18:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727928AbgFNWrz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 14 Jun 2020 18:47:55 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A90C05BD43;
+        Sun, 14 Jun 2020 15:47:54 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.93 #3 (Red Hat Linux))
+        id 1jkbPH-008wE4-VA; Sun, 14 Jun 2020 22:47:16 +0000
+Date:   Sun, 14 Jun 2020 23:47:15 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
         Florian Westphal <fw@strlen.de>,
         "David S. Miller" <davem@davemloft.net>,
@@ -52,6 +30,7 @@ Cc:     David Howells <dhowells@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
         Jade Alglave <j.alglave@ucl.ac.uk>,
         Luc Maranget <luc.maranget@inria.fr>,
         "Paul E. McKenney" <paulmck@kernel.org>,
@@ -61,34 +40,44 @@ Cc:     David Howells <dhowells@redhat.com>,
         coreteam@netfilter.org, netdev@vger.kernel.org,
         linux-arch@vger.kernel.org
 Subject: Re: Good idea to rename files in include/uapi/ ?
-Message-ID: <20200614220101.GA9367@salvia>
+Message-ID: <20200614224715.GJ23230@ZenIV.linux.org.uk>
 References: <9feded75-4b45-2821-287b-af00ec5f910f@al2klimov.de>
- <174102.1592165965@warthog.procyon.org.uk>
- <nycvar.YFH.7.77.849.2006142244200.30230@n3.vanv.qr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <nycvar.YFH.7.77.849.2006142244200.30230@n3.vanv.qr>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Virus-Scanned: ClamAV using ClamSMTP
+In-Reply-To: <9feded75-4b45-2821-287b-af00ec5f910f@al2klimov.de>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jun 14, 2020 at 11:08:08PM +0200, Jan Engelhardt wrote:
+On Sun, Jun 14, 2020 at 09:41:17PM +0200, Alexander A. Klimov wrote:
+> Hello there!
 > 
-> On Sunday 2020-06-14 22:19, David Howells wrote:
-> >Alexander A. Klimov <grandmaster@al2klimov.de> wrote:
-> >
-> >> *Is it a good idea to rename files in include/uapi/ ?*
-> >
-> >Very likely not.  If programs out there are going to be built on a
-> >case-sensitive filesystem (which happens all the time), they're going to break
-> >if you rename the headers.  We're kind of stuck with them.
-> 
-> Netfilter has precedent for removing old headers, e.g.
-> 7200135bc1e61f1437dc326ae2ef2f310c50b4eb's ipt_ULOG.h.
+> At the moment one can't checkout a clean working directory w/o any changed
+> files on a case-insensitive FS as the following file names have lower-case
+> duplicates:
 
-That's only because NFLOG has been there for ~10 years, so it was safe
-to remove ULOG support.
+And if you use a filesystem that is limited to 14 characters in name (or that
+weird 8 + 3 thing) you'll also have problems.  Doctor, it hurts when I do it...
+
+> Also even on a case-sensitive one VIm seems to have trouble with editing
+> both case-insensitively equal files at the same time.
+
+So file a bug report against vim.  Or use a vi variant without such a problem
+(FWIW, nvi has nothing of that sort).
+
+> I was going to make a patch renaming the respective duplicates, but I'm not
+> sure:
+> 
+> *Is it a good idea to rename files in include/uapi/ ?*
+
+It is not.  Strictly speaking, C99 allows implementation to consider the
+header names differing only in case as refering to the same file, but then
+it allows to ignore everything between the 8th character and the first
+dot in those.  Not done on Unices, so #include <Shite.h> is not going to
+pick /usr/include/shite.h
+
+If it's used by any userland code, that's it - changing the name (in any fashion)
+will break that userland code.  If it isn't, it shouldn't have been in include/uabi
+in the first place.
