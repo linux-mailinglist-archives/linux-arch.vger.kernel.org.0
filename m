@@ -2,136 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B95271F9ACB
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jun 2020 16:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC7B1F9AD8
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jun 2020 16:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730654AbgFOOsl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Jun 2020 10:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730476AbgFOOsk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Jun 2020 10:48:40 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69523C061A0E;
-        Mon, 15 Jun 2020 07:48:39 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id c8so18137913iob.6;
-        Mon, 15 Jun 2020 07:48:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CFYHq9QU1VF3rchooKVX3EvDkFFGgQYVgoX+nSdXTuc=;
-        b=PRxkgdzs6hj4NpKjLdU4+mZo+kiLgpl3v8qO3FUtkLItVntqN/v1UtTbvyh1fAkJDQ
-         /r/QUNFX0i3kNhar6p3HMQRIc0/hnPpxSyfCSOk/7QGhSriP8dugDYCbD3NVmr3r39T+
-         L0RU8h1FEoVzRUIqiHPXWetm4KkkvOZ8sZuPa8pJIZPJbfJz9/qmImf4Haoxykq/U+Wm
-         z0McY86vBdXb73lWVCJytm+tusWr8I6JfrKJ++433fcbFQ7IdZZfKn+gl9mRtO93JHfb
-         KS+ugwQDy31DiZDXPTjkRurzgAFvHZ4Gbe2s6FFN7LQGjbdA1Klosmt+SwHoidzFhQqC
-         XkJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CFYHq9QU1VF3rchooKVX3EvDkFFGgQYVgoX+nSdXTuc=;
-        b=gu9PBb2xVGRKsDeAvPl9dTwQsZgQo83ED5+xLkeqKLebPGrluehaGJyzD5Rog37869
-         LNj/HGqUyMaGNCUgXT9+XI9PEnVluj/BcfKm0wxHhbU/ioq3FO+/ZNrlkPKvcb/ya5yY
-         JsM93Nk4l4fGc5QIJft26rXR6n8qQamrRMInu3+WjuwcIKpfBeFbga9nuAHF2Qe0I90i
-         Ec0UT8XIXr5COHFwYhXQF74UzQm/MUxiNlFJIphd5FbuvrIbfU5pXTi3x4uu9LfQC4Zr
-         hQGVdXPJPsPJdcMxMR8tjNSFkOnVbTQvGpljZ1CIZ6pUew1wb1E7Ot8Erpy96GGBxyam
-         q5Gg==
-X-Gm-Message-State: AOAM5300G7d+CpmXZt7VC/rgKW4r+5pLQX89/wkvCN3fmcBqLrzWnYbP
-        TUFgxN7kWSNPd5Vw3QkzK3q0J/YecSriAkDCuE//
-X-Google-Smtp-Source: ABdhPJyd6RZmdZpxGVu6c3gRb+Y3l0bsTdnHuSOZYnX1P537cI9jfkNEPZLpydEoTLgL6kUKfHIZe+3b9Hy/JybhE4I=
-X-Received: by 2002:a02:3501:: with SMTP id k1mr6072971jaa.133.1592232518583;
- Mon, 15 Jun 2020 07:48:38 -0700 (PDT)
+        id S1730565AbgFOOvU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Jun 2020 10:51:20 -0400
+Received: from foss.arm.com ([217.140.110.172]:49770 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728304AbgFOOvU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 15 Jun 2020 10:51:20 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11A7E31B;
+        Mon, 15 Jun 2020 07:51:19 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11A833F6CF;
+        Mon, 15 Jun 2020 07:51:17 -0700 (PDT)
+Date:   Mon, 15 Jun 2020 15:51:16 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-man@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: Re: [RFC PATCH v2 6/6] prctl.2: Add tagged address ABI control
+ prctls (arm64)
+Message-ID: <20200615145115.GL25945@arm.com>
+References: <1590614258-24728-1-git-send-email-Dave.Martin@arm.com>
+ <1590614258-24728-7-git-send-email-Dave.Martin@arm.com>
+ <20200609172232.GA63286@C02TF0J2HF1T.local>
+ <20200610100641.GF25945@arm.com>
+ <20200610152634.GJ26099@gaia>
+ <20200610164209.GH25945@arm.com>
+ <20200610174205.GL26099@gaia>
 MIME-Version: 1.0
-References: <20200615130032.931285-1-hch@lst.de> <20200615130032.931285-3-hch@lst.de>
- <CAK8P3a0bRD3RzE_X6Tjzu9Tj+OhHhP+S=k6+VYODBGko8oQhew@mail.gmail.com> <20200615141239.GA12951@lst.de>
-In-Reply-To: <20200615141239.GA12951@lst.de>
-From:   Brian Gerst <brgerst@gmail.com>
-Date:   Mon, 15 Jun 2020 10:48:26 -0400
-Message-ID: <CAMzpN2heSzZzg16ws3yQkd7YZwmPPx_4RFCpb9JYfFWJ9gfPhA@mail.gmail.com>
-Subject: Re: [PATCH 2/6] exec: simplify the compat syscall handling
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200610174205.GL26099@gaia>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 10:13 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Mon, Jun 15, 2020 at 03:31:35PM +0200, Arnd Bergmann wrote:
-> > >  #ifdef CONFIG_COMPAT
-> > > -       if (unlikely(argv.is_compat)) {
-> > > +       if (in_compat_syscall()) {
-> > > +               const compat_uptr_t __user *compat_argv =
-> > > +                       compat_ptr((unsigned long)argv);
-> > >                 compat_uptr_t compat;
-> > >
-> > > -               if (get_user(compat, argv.ptr.compat + nr))
-> > > +               if (get_user(compat, compat_argv + nr))
-> > >                         return ERR_PTR(-EFAULT);
-> > >
-> > >                 return compat_ptr(compat);
-> > >         }
-> > >  #endif
-> >
-> > I would expect that the "#ifdef CONFIG_COMPAT" can be removed
-> > now, since compat_ptr() and in_compat_syscall() are now defined
-> > unconditionally. I have not tried that though.
->
-> True, I'll give it a spin.
->
-> > > +/*
-> > > + * x32 syscalls are listed in the same table as x86_64 ones, so we need to
-> > > + * define compat syscalls that are exactly the same as the native version for
-> > > + * the syscall table machinery to work.  Sigh..
-> > > + */
-> > > +#ifdef CONFIG_X86_X32
-> > >  COMPAT_SYSCALL_DEFINE3(execve, const char __user *, filename,
-> > > -       const compat_uptr_t __user *, argv,
-> > > -       const compat_uptr_t __user *, envp)
-> > > +                      const char __user *const __user *, argv,
-> > > +                      const char __user *const __user *, envp)
-> > >  {
-> > > -       return do_compat_execve(AT_FDCWD, getname(filename), argv, envp, 0);
-> > > +       return do_execveat(AT_FDCWD, getname(filename), argv, envp, 0, NULL);
-> > >  }
-> >
-> > Maybe move it to arch/x86/kernel/process_64.c or arch/x86/entry/syscall_x32.c
-> > to keep it out of the common code if this is needed.
->
-> I'd rather keep it in common code as that allows all the low-level
-> exec stuff to be marked static, and avoid us growing new pointless
-> compat variants through copy and paste.
-> smart compiler to d
->
-> > I don't really understand
-> > the comment, why can't this just use this?
->
-> That errors out with:
->
-> ld: arch/x86/entry/syscall_x32.o:(.rodata+0x1040): undefined reference to
-> `__x32_sys_execve'
-> ld: arch/x86/entry/syscall_x32.o:(.rodata+0x1108): undefined reference to
-> `__x32_sys_execveat'
-> make: *** [Makefile:1139: vmlinux] Error 1
+On Wed, Jun 10, 2020 at 06:42:05PM +0100, Catalin Marinas wrote:
+> On Wed, Jun 10, 2020 at 05:42:09PM +0100, Dave P Martin wrote:
+> > On Wed, Jun 10, 2020 at 04:26:34PM +0100, Catalin Marinas wrote:
+> > > On Wed, Jun 10, 2020 at 11:06:42AM +0100, Dave P Martin wrote:
+> > > > On Tue, Jun 09, 2020 at 06:22:32PM +0100, Catalin Marinas wrote:
+> > > > > On Wed, May 27, 2020 at 10:17:38PM +0100, Dave P Martin wrote:
+> > > > > > +.IP
+> > > > > > +The level of support is selected by
+> > > > > > +.IR "(unsigned int) arg2" ,
+> > > > > 
+> > > > > We use (unsigned long) for arg2.
+> > > > 
+> > > > Hmmm, not quite sure how I came up with unsigned int here.  I'll just
+> > > > drop this: the type in the prctl() prototype is unsigned long anyway.
+> > > > 
+> > > > The type is actually moot in this case, since the valid values all fit
+> > > > in an unsigned int.
+> > > 
+> > > Passing an int doesn't require that the top 32-bit of the long are
+> > > zeroed (in case anyone writes the low-level SVC by hand).
+> > 
+> > Fair point, I was forgetting that wrinkle.  Anyway, the convention in
+> > this page seems to be that if the type is unsigned long, we don't
+> > mention it, because the prctl() prototype says that already.
+> > 
+> > Question: the glibc prototype for prctl is variadic, so surely any
+> > calls that don't explicitly cast the args to unsigned long are already
+> > theoretically broken?  The #defines (and 0) are all implicitly int.
+> > This probably affects lots of prctls.
+> > 
+> > We may get away with it because the compiler is almost certainly going
+> > to favour a mov over a ldr for getting small integers into regs, and mov
+> > <Wd> fortunately zeroes the top bits for us anyway.
+> 
+> So does LDR Wd.
+> 
+> Anyway, I think glibc (or my reading of it) has something like like:
+> 
+>   register long _x1 asm ("x1") = _x1tmp;
+> 
+> before invoking the SVC. I assume this would do the right conversion to
+> long. I can't tell about other libraries but I'd say it's their
+> responsibility to convert the args to long before calling the kernel's
+> prctl().
 
-I think I have a fix for this, by modifying the syscall wrappers to
-add an alias for the __x32 variant to the native __x64_sys_foo().
-I'll get back to you with a patch.
+Ignore me.  I was worrying that glibc would propagate junk in the high
+bits of int arguments, due to treating them as longs.  Actually, it
+will, but it doesn't matter where we explicitly cast the argument to int
+inside the kernel (thanks as usual to -fno-strict-overflow).
 
---
-Brian Gerst
+Cheers
+---Dave
