@@ -2,145 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6671F8F37
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jun 2020 09:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8A61F950A
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jun 2020 13:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728380AbgFOHRy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Jun 2020 03:17:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36892 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726299AbgFOHRx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 15 Jun 2020 03:17:53 -0400
-Received: from [10.44.0.192] (unknown [103.48.210.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DFCCF206D7;
-        Mon, 15 Jun 2020 07:17:31 +0000 (UTC)
-Subject: Re: [PATCH 04/21] mm: free_area_init: use maximal zone PFNs rather
- than zone sizes
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Hoan@os.amperecomputing.com, James.Bottomley@hansenpartnership.com,
-        akpm@linux-foundation.org, bcain@codeaurora.org, bhe@redhat.com,
-        catalin.marinas@arm.com, corbet@lwn.net, dalias@libc.org,
-        davem@davemloft.net, deller@gmx.de, geert@linux-m68k.org,
-        green.hu@gmail.com, guoren@kernel.org, gxt@pku.edu.cn,
-        heiko.carstens@de.ibm.com, jcmvbkbc@gmail.com,
-        ley.foon.tan@intel.com, linux-alpha@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-c6x-dev@linux-c6x.org, linux-csky@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
-        mattst88@gmail.com, mhocko@kernel.org, monstr@monstr.eu,
-        mpe@ellerman.id.au, msalter@redhat.com, nickhu@andestech.com,
-        openrisc@lists.librecores.org, paul.walmsley@sifive.com,
-        richard@nod.at, rppt@linux.ibm.com, shorne@gmail.com,
-        sparclinux@vger.kernel.org, tony.luck@intel.com,
-        tsbogend@alpha.franken.de, uclinux-h8-devel@lists.sourceforge.jp,
-        vgupta@synopsys.com, x86@kernel.org, ysato@users.sourceforge.jp
-References: <20200412194859.12663-5-rppt@kernel.org>
- <f53e68db-ed81-6ef6-5087-c7246d010ea2@linux-m68k.org>
- <20200615062234.GA7882@kernel.org>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-Message-ID: <24563231-ed19-6f4f-617e-4d6bfc7553e4@linux-m68k.org>
-Date:   Mon, 15 Jun 2020 17:17:28 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1728326AbgFOLLg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Jun 2020 07:11:36 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:44602 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728285AbgFOLLf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Jun 2020 07:11:35 -0400
+Received: by mail-ot1-f66.google.com with SMTP id e5so12749939ote.11;
+        Mon, 15 Jun 2020 04:11:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5CY9W/R8PVfuC9sqxRBqVw1uewgeiGQUga39MZZDtgE=;
+        b=cADIiUIGUGJE+40d8zPhf8ygYfhxpUrZArnY35sI3QiKhj309Xm6Fy41ThKAr2FUie
+         E7Xr6v1bQ4T8Sk3ZF10BDVwXIYoMl/J/idI48oldQSZ78F5Q1bqdOk+cV35mCYmXMLOB
+         zsNZScnu+TLV02N+zH21xC6zrNZb2/xgpGGpkxvCtbrZ8VpwD3r0UZ4j2Du/Sngn3vVJ
+         khDTNkCMnGFJg8Ih7LpAkYFgT1qhInaniRgwyw2Ks80J3Xuwefa3o92VdjpJMR9Iutfp
+         3Y7qBBr2kAY/hq4wiHsQAdSzJxwUBL8ZGQ/f2J/o963oTdKsbOm97DGh/YJrqY4CQGLa
+         qgeg==
+X-Gm-Message-State: AOAM5305BchxN+ni0uFyntydTGkyT8O5G/Et72cLKna2xxrKdAg3Rm3B
+        7NtRLlGdhHVg+wmAk7uo+moMLLsUYEJv+DYhDDA=
+X-Google-Smtp-Source: ABdhPJxqwi8MnZ0bTP5LApZwYenNqY/5jKzHiLXqehYN7pgYecrM9cD9SN/qL/FqLS7oLc+l+cgfu73Tu03M1ONzZbQ=
+X-Received: by 2002:a9d:c29:: with SMTP id 38mr19723723otr.107.1592219494134;
+ Mon, 15 Jun 2020 04:11:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200615062234.GA7882@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <9feded75-4b45-2821-287b-af00ec5f910f@al2klimov.de>
+ <20200614223456.13807a00@redhat.com> <5033402c-d95c-eecd-db84-75195b159fab@al2klimov.de>
+In-Reply-To: <5033402c-d95c-eecd-db84-75195b159fab@al2klimov.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 15 Jun 2020 13:11:22 +0200
+Message-ID: <CAMuHMdVvYRzOA-cOj41_0g1OXw+xhJ29=FZNAL5v_fWsBjwm4g@mail.gmail.com>
+Subject: Re: Good idea to rename files in include/uapi/ ?
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     Stefano Brivio <sbrivio@redhat.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>,
+        coreteam@netfilter.org, netdev <netdev@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Mike,
+Hi Alexander,
 
-On 15/6/20 4:22 pm, Mike Rapoport wrote:
-> On Mon, Jun 15, 2020 at 01:53:42PM +1000, Greg Ungerer wrote:
->> From: Mike Rapoport <rppt@linux.ibm.com>
->>> Currently, architectures that use free_area_init() to initialize memory map
->>> and node and zone structures need to calculate zone and hole sizes. We can
->>> use free_area_init_nodes() instead and let it detect the zone boundaries
->>> while the architectures will only have to supply the possible limits for
->>> the zones.
->>>
->>> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
->>
->> This is causing some new warnings for me on boot on at least one non-MMU m68k target:
-> 
-> There were a couple of changes that cause this. The free_area_init()
-> now relies on memblock data and architectural limits for zone sizes
-> rather than on explisit pfns calculated by the arch code. I've update
-> motorola variant and missed coldfire. Angelo sent a fix for mcfmmu.c
-> [1] and I've updated it to include nommu as well
-> 
-> [1] https://lore.kernel.org/linux-m68k/20200614225119.777702-1-angelo.dureghello@timesys.com
-> 
->>From 55b8523df2a5c4565b132c0691990f0821040fec Mon Sep 17 00:00:00 2001
-> From: Angelo Dureghello <angelo.dureghello@timesys.com>
-> Date: Mon, 15 Jun 2020 00:51:19 +0200
-> Subject: [PATCH] m68k: fix registration of memory regions with memblock
-> 
-> Commit 3f08a302f533 ("mm: remove CONFIG_HAVE_MEMBLOCK_NODE_MAP option")
-> introduced assumption that UMA systems have their memory at node 0 and
-> updated most of them, but it forgot nommu and coldfire variants of m68k.
-> 
-> The later change in free area initialization in commit fa3354e4ea39 ("mm:
-> free_area_init: use maximal zone PFNs rather than zone sizes") exposed that
-> and caused a lot of "BUG: Bad page state in process swapper" reports.
+On Mon, Jun 15, 2020 at 1:11 AM Alexander A. Klimov
+<grandmaster@al2klimov.de> wrote:
+> Am 14.06.20 um 22:34 schrieb Stefano Brivio:
+> > On Sun, 14 Jun 2020 21:41:17 +0200
+> >> Also even on a case-sensitive one VIm seems to have trouble with editing
+> >> both case-insensitively equal files at the same time.
+> >
+> > ...what trouble exactly?
+> vi -O2 include/uapi/linux/netfilter/xt_CONNMARK.h
+> include/uapi/linux/netfilter/xt_connmark.h
+>
+> ... opens the first file two times.
 
-Even with this patch applied I am still seeing the same messages.
+Works fine for me, using vim 2:8.0.1453-1ubuntu1.3.
+You must be using a buggy version.
 
-Regards
-Greg
+Gr{oetje,eeting}s,
 
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> Using memblock_add_node() with nid = 0 to register memory banks solves the
-> problem.
-> 
-> Fixes: 3f08a302f533 ("mm: remove CONFIG_HAVE_MEMBLOCK_NODE_MAP option")
-> Fixes: fa3354e4ea39 ("mm: free_area_init: use maximal zone PFNs rather than zone sizes")
-> Signed-off-by: Angelo Dureghello <angelo.dureghello@timesys.com>
-> Co-developed-by: Mike Rapoport <rppt@linux.ibm.com>
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->   arch/m68k/kernel/setup_no.c | 2 +-
->   arch/m68k/mm/mcfmmu.c       | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/m68k/kernel/setup_no.c b/arch/m68k/kernel/setup_no.c
-> index e779b19e0193..0c4589a39ba9 100644
-> --- a/arch/m68k/kernel/setup_no.c
-> +++ b/arch/m68k/kernel/setup_no.c
-> @@ -138,7 +138,7 @@ void __init setup_arch(char **cmdline_p)
->   	pr_debug("MEMORY -> ROMFS=0x%p-0x%06lx MEM=0x%06lx-0x%06lx\n ",
->   		 __bss_stop, memory_start, memory_start, memory_end);
->   
-> -	memblock_add(memory_start, memory_end - memory_start);
-> +	memblock_add_node(memory_start, memory_end - memory_start, 0);
->   
->   	/* Keep a copy of command line */
->   	*cmdline_p = &command_line[0];
-> diff --git a/arch/m68k/mm/mcfmmu.c b/arch/m68k/mm/mcfmmu.c
-> index 29f47923aa46..7d04210d34f0 100644
-> --- a/arch/m68k/mm/mcfmmu.c
-> +++ b/arch/m68k/mm/mcfmmu.c
-> @@ -174,7 +174,7 @@ void __init cf_bootmem_alloc(void)
->   	m68k_memory[0].addr = _rambase;
->   	m68k_memory[0].size = _ramend - _rambase;
->   
-> -	memblock_add(m68k_memory[0].addr, m68k_memory[0].size);
-> +	memblock_add_node(m68k_memory[0].addr, m68k_memory[0].size, 0);
->   
->   	/* compute total pages in system */
->   	num_pages = PFN_DOWN(_ramend - _rambase);
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
