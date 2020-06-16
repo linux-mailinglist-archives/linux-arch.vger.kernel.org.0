@@ -2,48 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5E61FA436
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jun 2020 01:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D101FA770
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jun 2020 06:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgFOXg1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 15 Jun 2020 19:36:27 -0400
-Received: from mail.bnv.gob.ve ([201.249.200.115]:41330 "EHLO
-        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726763AbgFOXg1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Jun 2020 19:36:27 -0400
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id DAEFE3633AA0;
-        Mon, 15 Jun 2020 17:55:06 -0400 (-04)
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id jf94gQ1eUUbn; Mon, 15 Jun 2020 17:55:06 -0400 (-04)
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id 8BCF43633A66;
-        Mon, 15 Jun 2020 17:55:06 -0400 (-04)
-X-Virus-Scanned: amavisd-new at bnv.gob.ve
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id KleZlbyWK1MW; Mon, 15 Jun 2020 17:55:06 -0400 (-04)
-Received: from [10.122.16.20] (unknown [105.12.7.63])
-        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 762A63633A6B;
-        Mon, 15 Jun 2020 17:54:57 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: donation of Euro 2,000,000.00.
-To:     Recipients <manuel@info.com>
-From:   "manuel franco" <manuel@info.com>
-Date:   Mon, 15 Jun 2020 23:54:48 +0200
-Reply-To: manuelfrancospende22@gmail.com
-Message-Id: <20200615215457.762A63633A6B@correo.bnv.gob.ve>
+        id S1725562AbgFPEIh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Jun 2020 00:08:37 -0400
+Received: from foss.arm.com ([217.140.110.172]:58900 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725306AbgFPEIh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 16 Jun 2020 00:08:37 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 002E51F1;
+        Mon, 15 Jun 2020 21:08:36 -0700 (PDT)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.80.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2DADD3F6CF;
+        Mon, 15 Jun 2020 21:08:34 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/pgtable: Move extern zero_pfn outside __HAVE_COLOR_ZERO_PAGE
+Date:   Tue, 16 Jun 2020 09:38:18 +0530
+Message-Id: <1592280498-15442-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-You have a donation of Euro 2,000,000.00.
+zero_pfn variable is required whether __HAVE_COLOR_ZERO_PAGE is enabled
+or not. Also it should not really be declared individually in all functions
+where it gets used. Just move the declaration outside, which also makes it
+available for other potential users.
 
-My name is Manuel Franco from the United States.
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+Applies on 5.8-rc1. If the earlier motivation was to hide zero_pfn from
+general visibility, we could just put in a comment and update the commit
+message that my_zero_pfn() should always be used rather than zero_pfn.
+Build tested on many platforms and boot tested on arm64, x86.
 
-I won the America lottery worth $768 million and I am donating a portion of it to just 5 lucky people and a few Orphanage homes as a memorandum of goodwill to humanity.email: manuelfrancospende@gmail.com
+ include/linux/pgtable.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 32b6c52d41b9..078e9864abca 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1020,10 +1020,11 @@ extern void untrack_pfn(struct vm_area_struct *vma, unsigned long pfn,
+ extern void untrack_pfn_moved(struct vm_area_struct *vma);
+ #endif
+ 
++extern unsigned long zero_pfn;
++
+ #ifdef __HAVE_COLOR_ZERO_PAGE
+ static inline int is_zero_pfn(unsigned long pfn)
+ {
+-	extern unsigned long zero_pfn;
+ 	unsigned long offset_from_zero_pfn = pfn - zero_pfn;
+ 	return offset_from_zero_pfn <= (zero_page_mask >> PAGE_SHIFT);
+ }
+@@ -1033,13 +1034,11 @@ static inline int is_zero_pfn(unsigned long pfn)
+ #else
+ static inline int is_zero_pfn(unsigned long pfn)
+ {
+-	extern unsigned long zero_pfn;
+ 	return pfn == zero_pfn;
+ }
+ 
+ static inline unsigned long my_zero_pfn(unsigned long addr)
+ {
+-	extern unsigned long zero_pfn;
+ 	return zero_pfn;
+ }
+ #endif
+-- 
+2.20.1
+
