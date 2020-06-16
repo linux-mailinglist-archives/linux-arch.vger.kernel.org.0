@@ -2,132 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9BC1FAAE2
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jun 2020 10:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A1B1FAD0B
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jun 2020 11:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbgFPIOa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Jun 2020 04:14:30 -0400
-Received: from mga07.intel.com ([134.134.136.100]:63987 "EHLO mga07.intel.com"
+        id S1726052AbgFPJtB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Jun 2020 05:49:01 -0400
+Received: from foss.arm.com ([217.140.110.172]:34568 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726112AbgFPIO2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Jun 2020 04:14:28 -0400
-IronPort-SDR: VjF7EhjUJZC/gDac0uLwgddFY/LmBl0lzFa09CLc/oRPKpdFHWRS5Y4DwV+WMIuZUcH3ImsM9s
- +TPs++Ds6bNg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 01:14:27 -0700
-IronPort-SDR: iVknjRVF13XZH0gD8Jhr/izjiPVFRea5kevTpSrhIL3CDBHqaAWBOMfZ+S1kS7FViiDdc3O5rX
- kYCDPvJO4xOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,518,1583222400"; 
-   d="scan'208";a="476351950"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Jun 2020 01:14:25 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jl6jk-00Dmpc-EB; Tue, 16 Jun 2020 11:14:28 +0300
-Date:   Tue, 16 Jun 2020 11:14:28 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     linus.walleij@linaro.org, akpm@linux-foundation.org,
-        vilhelm.gray@gmail.com, arnd@arndb.de, linux-arch@vger.kernel.org,
+        id S1725911AbgFPJtB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 16 Jun 2020 05:49:01 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB3001FB;
+        Tue, 16 Jun 2020 02:49:00 -0700 (PDT)
+Received: from [10.163.80.105] (unknown [10.163.80.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0160C3F6CF;
+        Tue, 16 Jun 2020 02:48:58 -0700 (PDT)
+Subject: Re: [PATCH] mm/pgtable: Move extern zero_pfn outside
+ __HAVE_COLOR_ZERO_PAGE
+To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 1/4] bitops: Introduce the for_each_set_clump macro
-Message-ID: <20200616081428.GP2428291@smile.fi.intel.com>
-References: <cover.1592224128.git.syednwaris@gmail.com>
- <fe12eedf3666f4af5138de0e70b67a07c7f40338.1592224129.git.syednwaris@gmail.com>
+References: <1592280498-15442-1-git-send-email-anshuman.khandual@arm.com>
+ <f55dff2d-d32e-8de1-0177-e6ba713e0cd9@redhat.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <19858112-8f10-493c-9873-84f2000b00b0@arm.com>
+Date:   Tue, 16 Jun 2020 15:18:53 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe12eedf3666f4af5138de0e70b67a07c7f40338.1592224129.git.syednwaris@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <f55dff2d-d32e-8de1-0177-e6ba713e0cd9@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 06:21:18PM +0530, Syed Nayyar Waris wrote:
-> This macro iterates for each group of bits (clump) with set bits,
-> within a bitmap memory region. For each iteration, "start" is set to
-> the bit offset of the found clump, while the respective clump value is
-> stored to the location pointed by "clump". Additionally, the
-> bitmap_get_value and bitmap_set_value functions are introduced to
-> respectively get and set a value of n-bits in a bitmap memory region.
-> The n-bits can have any size less than or equal to BITS_PER_LONG.
-> Moreover, during setting value of n-bit in bitmap, if a situation arise
-> that the width of next n-bit is exceeding the word boundary, then it
-> will divide itself such that some portion of it is stored in that word,
-> while the remaining portion is stored in the next higher word. Similar
-> situation occurs while retrieving value of n-bits from bitmap.
-
-On the second view...
-
-> +static inline unsigned long bitmap_get_value(const unsigned long *map,
-> +					      unsigned long start,
-> +					      unsigned long nbits)
-> +{
-> +	const size_t index = BIT_WORD(start);
-> +	const unsigned long offset = start % BITS_PER_LONG;
-
-> +	const unsigned long ceiling = roundup(start + 1, BITS_PER_LONG);
-
-This perhaps should use round_up()
-
-> +	const unsigned long space = ceiling - start;
-
-And I think I see a scenario to complain.
-
-If start == 0, then ceiling will be 64.
-space == 64. Not good.
-
-> +	unsigned long value_low, value_high;
-> +
-> +	if (space >= nbits)
-> +		return (map[index] >> offset) & GENMASK(nbits - 1, 0);
-> +	else {
-> +		value_low = map[index] & BITMAP_FIRST_WORD_MASK(start);
-> +		value_high = map[index + 1] & BITMAP_LAST_WORD_MASK(start + nbits);
-> +		return (value_low >> offset) | (value_high << space);
-> +	}
-> +}
-
-...
-
-> +/**
-> + * bitmap_set_value - set n-bit value within a memory region
-> + * @map: address to the bitmap memory region
-> + * @value: value of nbits
-> + * @start: bit offset of the n-bit value
-> + * @nbits: size of value in bits
-> + */
-> +static inline void bitmap_set_value(unsigned long *map,
-> +				    unsigned long value,
-> +				    unsigned long start, unsigned long nbits)
-> +{
-> +	const size_t index = BIT_WORD(start);
-> +	const unsigned long offset = start % BITS_PER_LONG;
-
-> +	const unsigned long ceiling = roundup(start + 1, BITS_PER_LONG);
-> +	const unsigned long space = ceiling - start;
-
-Ditto for both lines.
-
-> +	value &= GENMASK(nbits - 1, 0);
-> +
-> +	if (space >= nbits) {
-> +		map[index] &= ~(GENMASK(nbits + offset - 1, offset));
-> +		map[index] |= value << offset;
-> +	} else {
-> +		map[index] &= ~BITMAP_FIRST_WORD_MASK(start);
-> +		map[index] |= value << offset;
-> +		map[index + 1] &= ~BITMAP_LAST_WORD_MASK(start + nbits);
-> +		map[index + 1] |= (value >> space);
-> +	}
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
 
 
+On 06/16/2020 01:09 PM, David Hildenbrand wrote:
+> On 16.06.20 06:08, Anshuman Khandual wrote:
+>> zero_pfn variable is required whether __HAVE_COLOR_ZERO_PAGE is enabled
+> 
+> Why is that relevant for this patch?
+
+That just states how it is organized right now wrt __HAVE_COLOR_ZERO_PAGE.
+
+> 
+>> or not. Also it should not really be declared individually in all functions
+>> where it gets used. Just move the declaration outside, which also makes it
+>> available for other potential users.
+> 
+> So, all you're essentially doing is exposing zero_pfn in pgtable.h now.
+
+Right, but it just happens in the process of consolidating three different
+instances of 'extern unsigned long zero_pfn' in the same file which are
+redundant.
+
+> 
+> If everybody should just use my_zero_pfn(), I don't really see the
+> benefit of this patch, sorry.
+
+It consolidates redundant declarations and reduces code. We could just have
+a comment for zero_pfn stating that it should not be used directly.
