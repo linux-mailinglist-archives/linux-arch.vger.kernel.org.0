@@ -2,139 +2,213 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 754911FAD62
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jun 2020 12:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022CD1FBE8F
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jun 2020 20:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728220AbgFPKFF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Jun 2020 06:05:05 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:52950 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726052AbgFPKFD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jun 2020 06:05:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592301901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=J0xCvBNxBr8ailwkBNv83wqSIDs01QXxn0Xd5jhE5ZA=;
-        b=PMxyHlvd2LkHARookU7gx1TnbltybgHfgSAHQtCw3V566GTXLIYDF+KaaNejAhLC2Jt91z
-        Qlku0X9brHHNjffc1RHh01YT1osixVqT2Au2pG4KpJcEg1ubO3zdQi6D0DvEhpPipaE4uu
-        34nyg87+46jj0YEuC3J7aXckeThr/3s=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-337-yuOTUWTyMKumWDSPOVgMmw-1; Tue, 16 Jun 2020 06:04:55 -0400
-X-MC-Unique: yuOTUWTyMKumWDSPOVgMmw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AE5E3101C2C0;
-        Tue, 16 Jun 2020 10:04:53 +0000 (UTC)
-Received: from [10.36.114.106] (ovpn-114-106.ams2.redhat.com [10.36.114.106])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 42C685D9D5;
-        Tue, 16 Jun 2020 10:04:52 +0000 (UTC)
-Subject: Re: [PATCH] mm/pgtable: Move extern zero_pfn outside
- __HAVE_COLOR_ZERO_PAGE
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1592280498-15442-1-git-send-email-anshuman.khandual@arm.com>
- <f55dff2d-d32e-8de1-0177-e6ba713e0cd9@redhat.com>
- <19858112-8f10-493c-9873-84f2000b00b0@arm.com>
-From:   David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; prefer-encrypt=mutual; keydata=
- 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
-Organization: Red Hat GmbH
-Message-ID: <4ca94b8c-4817-828f-5452-aff547bc61f1@redhat.com>
-Date:   Tue, 16 Jun 2020 12:04:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1730264AbgFPSzl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Jun 2020 14:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730263AbgFPSzj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Jun 2020 14:55:39 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D69C06174E
+        for <linux-arch@vger.kernel.org>; Tue, 16 Jun 2020 11:55:39 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id w15so12376714lfe.11
+        for <linux-arch@vger.kernel.org>; Tue, 16 Jun 2020 11:55:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q0q8gubf8krgZV8oGCJJ77Manwa2gcrwHgDVVcoIMF4=;
+        b=Za9iu2csZgttP35aE+aT08tNb3V6uxoyuIhn76uFapZGtiQBoNJQlm46x1X88modKX
+         56L73dqUCWnkD91z+9cqMwv5Y5xo/wgnVPwKoQqgiOz23E0vmPXaA37iu5082TSSxz11
+         OBgSNYHUnDL9NHnY2O/1eCVT5xkEIS6vHlrTo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q0q8gubf8krgZV8oGCJJ77Manwa2gcrwHgDVVcoIMF4=;
+        b=itv+HH5mcNHkgRyVkCzSEy3egrfpba/nFtS2nwho73YAa6DTRBtlBqDTwqvx1T8TbL
+         TyyRvKtXW8C+zdioaviDcNa6a/9Dwq2SPNsp8VHCmlu3zRj4dGdNXSZ4/k/zSSmffrXf
+         asQEI9wZAgSqsYJ02PsAFGOezygnMWOp0lmjhtrv07s9lU/TpcF/NNefhcGPTQM71lz7
+         ynzJ8ASR8buAjHZTUbZzQVrxZSXhZebk3FcVFO/C+lCFuHWKeSWpy0FpquJQZyWDKOhX
+         DJdXWzd5gxlVQGFJeAUKEKPjB2FOkyiubi8ZxDFpWZnZsXqPZuQxtoVX06up1HUyMPt0
+         avBQ==
+X-Gm-Message-State: AOAM532KUsZC03k/1mot6ZeEXGDEbpoN6F6HCyMYy6ewVY53YqBs6c2+
+        AFFtv/axUjV/xb1FUrY4DYwMX7GQiBo=
+X-Google-Smtp-Source: ABdhPJzXTQXkBVL1qACpZYc/1XYpKmicjLHvcREhwPYL4JSrPu5bBNX6L/FoDkfYhaPs+oEA2iW0+g==
+X-Received: by 2002:a05:6512:682:: with SMTP id t2mr2447793lfe.101.1592333737065;
+        Tue, 16 Jun 2020 11:55:37 -0700 (PDT)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
+        by smtp.gmail.com with ESMTPSA id s18sm5399501ljj.63.2020.06.16.11.55.34
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jun 2020 11:55:34 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id y11so24907450ljm.9
+        for <linux-arch@vger.kernel.org>; Tue, 16 Jun 2020 11:55:34 -0700 (PDT)
+X-Received: by 2002:a2e:97c3:: with SMTP id m3mr2263094ljj.312.1592333733916;
+ Tue, 16 Jun 2020 11:55:33 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <19858112-8f10-493c-9873-84f2000b00b0@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+References: <20200615221607.7764-1-peterx@redhat.com>
+In-Reply-To: <20200615221607.7764-1-peterx@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 16 Jun 2020 11:55:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiTjaXHu+uxMi0xCZQOm4KVr0MucECAK=Zm4p4YZZ1XEg@mail.gmail.com>
+Message-ID: <CAHk-=wiTjaXHu+uxMi0xCZQOm4KVr0MucECAK=Zm4p4YZZ1XEg@mail.gmail.com>
+Subject: Re: [PATCH 00/25] mm: Page fault accounting cleanups
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        openrisc@lists.librecores.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: multipart/mixed; boundary="00000000000093703c05a8381612"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 16.06.20 11:48, Anshuman Khandual wrote:
-> 
-> 
-> On 06/16/2020 01:09 PM, David Hildenbrand wrote:
->> On 16.06.20 06:08, Anshuman Khandual wrote:
->>> zero_pfn variable is required whether __HAVE_COLOR_ZERO_PAGE is enabled
->>
->> Why is that relevant for this patch?
-> 
-> That just states how it is organized right now wrt __HAVE_COLOR_ZERO_PAGE.
-> 
->>
->>> or not. Also it should not really be declared individually in all functions
->>> where it gets used. Just move the declaration outside, which also makes it
->>> available for other potential users.
->>
->> So, all you're essentially doing is exposing zero_pfn in pgtable.h now.
-> 
-> Right, but it just happens in the process of consolidating three different
-> instances of 'extern unsigned long zero_pfn' in the same file which are
-> redundant.
-> 
->>
->> If everybody should just use my_zero_pfn(), I don't really see the
->> benefit of this patch, sorry.
-> 
-> It consolidates redundant declarations and reduces code. We could just have
-> a comment for zero_pfn stating that it should not be used directly.
-> 
+--00000000000093703c05a8381612
+Content-Type: text/plain; charset="UTF-8"
 
-... or just leave it as is and have self-documenting code.
+On Mon, Jun 15, 2020 at 3:16 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> This series tries to address all of them by introducing mm_fault_accounting()
+> first, so that we move all the page fault accounting into the common code base,
+> then call it properly from arch pf handlers just like handle_mm_fault().
 
--- 
-Thanks,
+Hmm.
 
-David / dhildenb
+So having looked at this a bit more, I'd actually like to go even
+further, and just get rid of the per-architecture code _entirely_.
 
+Here's a straw-man patch to the generic code - the idea is mostly laid
+out in the comment that I'm just quoting here directly too:
+
+        /*
+         * Do accounting in the common code, to avoid unnecessary
+         * architecture differences or duplicated code.
+         *
+         * We arbitrarily make the rules be:
+         *
+         *  - faults that never even got here (because the address
+         *    wasn't valid). That includes arch_vma_access_permitted()
+         *    failing above.
+         *
+         *    So this is expressly not a "this many hardware page
+         *    faults" counter. Use the hw profiling for that.
+         *
+         *  - incomplete faults (ie RETRY) do not count (see above).
+         *    They will only count once completed.
+         *
+         *  - the fault counts as a "major" fault when the final
+         *    successful fault is VM_FAULT_MAJOR, or if it was a
+         *    retry (which implies that we couldn't handle it
+         *    immediately previously).
+         *
+         *  - if the fault is done for GUP, regs wil be NULL and
+         *    no accounting will be done (but you _could_ pass in
+         *    your own regs and it would be accounted to the thread
+         *    doing the fault, not to the target!)
+         */
+
+the code itself in the patch is
+
+ (a) pretty trivial and self-evident
+
+ (b) INCOMPLETE
+
+that (b) is worth noting: this patch won't compile on its own. It
+intentionally leaves all the users without the new 'regs' argument,
+because you obviously simply need to remove all the code that
+currently tries to do any accounting.
+
+Comments?
+
+This is a bigger change, but I think it might be worth it to _really_
+consolidate the major/minor logic.
+
+One detail worth noting: I do wonder if we should put the
+
+    perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, addr);
+
+just in the arch code at the top of the fault handling, and consider
+it entirely unrelated to the major/minor fault handling. The
+major/minor faults fundamnetally are about successes. But the plain
+PERF_COUNT_SW_PAGE_FAULTS could be about things that fail, including
+things that never even get to this point at all.
+
+I'm not convinced it's useful to have three SW events that are defined
+to be A=B+C.
+
+But this does *not* do that part. It' sreally just an RFC patch.
+
+                    Linus
+
+--00000000000093703c05a8381612
+Content-Type: application/octet-stream; name=patch
+Content-Disposition: attachment; filename=patch
+Content-Transfer-Encoding: base64
+Content-ID: <f_kbiacfcm0>
+X-Attachment-Id: f_kbiacfcm0
+
+IGluY2x1ZGUvbGludXgvbW0uaCB8ICAzICsrLQogbW0vbWVtb3J5LmMgICAgICAgIHwgNDYgKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQogMiBmaWxlcyBjaGFu
+Z2VkLCA0NyBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luY2x1
+ZGUvbGludXgvbW0uaCBiL2luY2x1ZGUvbGludXgvbW0uaAppbmRleCBkYzdiODczMTBjMTAuLmU4
+MmE2MDQzMzljMCAxMDA2NDQKLS0tIGEvaW5jbHVkZS9saW51eC9tbS5oCisrKyBiL2luY2x1ZGUv
+bGludXgvbW0uaApAQCAtMTY0OCw3ICsxNjQ4LDggQEAgaW50IGludmFsaWRhdGVfaW5vZGVfcGFn
+ZShzdHJ1Y3QgcGFnZSAqcGFnZSk7CiAKICNpZmRlZiBDT05GSUdfTU1VCiBleHRlcm4gdm1fZmF1
+bHRfdCBoYW5kbGVfbW1fZmF1bHQoc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsCi0JCQl1bnNp
+Z25lZCBsb25nIGFkZHJlc3MsIHVuc2lnbmVkIGludCBmbGFncyk7CisJCQl1bnNpZ25lZCBsb25n
+IGFkZHJlc3MsIHVuc2lnbmVkIGludCBmbGFncywKKwkJCXN0cnVjdCBwdF9yZWdzICopOwogZXh0
+ZXJuIGludCBmaXh1cF91c2VyX2ZhdWx0KHN0cnVjdCB0YXNrX3N0cnVjdCAqdHNrLCBzdHJ1Y3Qg
+bW1fc3RydWN0ICptbSwKIAkJCSAgICB1bnNpZ25lZCBsb25nIGFkZHJlc3MsIHVuc2lnbmVkIGlu
+dCBmYXVsdF9mbGFncywKIAkJCSAgICBib29sICp1bmxvY2tlZCk7CmRpZmYgLS1naXQgYS9tbS9t
+ZW1vcnkuYyBiL21tL21lbW9yeS5jCmluZGV4IGRjN2YzNTQzYjFmZC4uZjE1MDU2MTUxZmIxIDEw
+MDY0NAotLS0gYS9tbS9tZW1vcnkuYworKysgYi9tbS9tZW1vcnkuYwpAQCAtNzIsNiArNzIsNyBA
+QAogI2luY2x1ZGUgPGxpbnV4L29vbS5oPgogI2luY2x1ZGUgPGxpbnV4L251bWEuaD4KIAorI2lu
+Y2x1ZGUgPGxpbnV4L3BlcmZfZXZlbnQuaD4KICNpbmNsdWRlIDx0cmFjZS9ldmVudHMva21lbS5o
+PgogCiAjaW5jbHVkZSA8YXNtL2lvLmg+CkBAIC00MzUzLDcgKzQzNTQsNyBAQCBzdGF0aWMgdm1f
+ZmF1bHRfdCBfX2hhbmRsZV9tbV9mYXVsdChzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSwKICAq
+IHJldHVybiB2YWx1ZS4gIFNlZSBmaWxlbWFwX2ZhdWx0KCkgYW5kIF9fbG9ja19wYWdlX29yX3Jl
+dHJ5KCkuCiAgKi8KIHZtX2ZhdWx0X3QgaGFuZGxlX21tX2ZhdWx0KHN0cnVjdCB2bV9hcmVhX3N0
+cnVjdCAqdm1hLCB1bnNpZ25lZCBsb25nIGFkZHJlc3MsCi0JCXVuc2lnbmVkIGludCBmbGFncykK
+KwkJdW5zaWduZWQgaW50IGZsYWdzLCBzdHJ1Y3QgcHRfcmVncyAqcmVncykKIHsKIAl2bV9mYXVs
+dF90IHJldDsKIApAQCAtNDM5NCw2ICs0Mzk1LDQ5IEBAIHZtX2ZhdWx0X3QgaGFuZGxlX21tX2Zh
+dWx0KHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hLCB1bnNpZ25lZCBsb25nIGFkZHJlc3MsCiAJ
+CQltZW1fY2dyb3VwX29vbV9zeW5jaHJvbml6ZShmYWxzZSk7CiAJfQogCisJaWYgKHJldCAmIFZN
+X0ZBVUxUX1JFVFJZKQorCQlyZXR1cm4gcmV0OworCisJLyoKKwkgKiBEbyBhY2NvdW50aW5nIGlu
+IHRoZSBjb21tb24gY29kZSwgdG8gYXZvaWQgdW5uZWNlc3NhcnkKKwkgKiBhcmNoaXRlY3R1cmUg
+ZGlmZmVyZW5jZXMgb3IgZHVwbGljYXRlZCBjb2RlLgorCSAqCisJICogV2UgYXJiaXRyYXJpbHkg
+bWFrZSB0aGUgcnVsZXMgYmU6CisJICoKKwkgKiAgLSBmYXVsdHMgdGhhdCBuZXZlciBldmVuIGdv
+dCBoZXJlIChiZWNhdXNlIHRoZSBhZGRyZXNzCisJICogICAgd2Fzbid0IHZhbGlkKS4gVGhhdCBp
+bmNsdWRlcyBhcmNoX3ZtYV9hY2Nlc3NfcGVybWl0dGVkKCkKKwkgKiAgICBmYWlsaW5nIGFib3Zl
+LgorCSAqCisJICogICAgU28gdGhpcyBpcyBleHByZXNzbHkgbm90IGEgInRoaXMgbWFueSBoYXJk
+d2FyZSBwYWdlCisJICogICAgZmF1bHRzIiBjb3VudGVyLiBVc2UgdGhlIGh3IHByb2ZpbGluZyBm
+b3IgdGhhdC4KKwkgKgorCSAqICAtIGluY29tcGxldGUgZmF1bHRzIChpZSBSRVRSWSkgZG8gbm90
+IGNvdW50IChzZWUgYWJvdmUpLgorCSAqICAgIFRoZXkgd2lsbCBvbmx5IGNvdW50IG9uY2UgY29t
+cGxldGVkLgorCSAqCisJICogIC0gdGhlIGZhdWx0IGNvdW50cyBhcyBhICJtYWpvciIgZmF1bHQg
+d2hlbiB0aGUgZmluYWwKKwkgKiAgICBzdWNjZXNzZnVsIGZhdWx0IGlzIFZNX0ZBVUxUX01BSk9S
+LCBvciBpZiBpdCB3YXMgYQorCSAqICAgIHJldHJ5ICh3aGljaCBpbXBsaWVzIHRoYXQgd2UgY291
+bGRuJ3QgaGFuZGxlIGl0CisJICogICAgaW1tZWRpYXRlbHkgcHJldmlvdXNseSkuCisJICoKKwkg
+KiAgLSBpZiB0aGUgZmF1bHQgaXMgZG9uZSBmb3IgR1VQLCByZWdzIHdpbCBiZSBOVUxMIGFuZAor
+CSAqICAgIG5vIGFjY291bnRpbmcgd2lsbCBiZSBkb25lIChidXQgeW91IF9jb3VsZF8gcGFzcyBp
+bgorCSAqICAgIHlvdXIgb3duIHJlZ3MgYW5kIGl0IHdvdWxkIGJlIGFjY291bnRlZCB0byB0aGUg
+dGhyZWFkCisJICogICAgZG9pbmcgdGhlIGZhdWx0LCBub3QgdG8gdGhlIHRhcmdldCEpCisJICov
+CisKKwlpZiAoIXJlZ3MpCisJCXJldHVybiByZXQ7CisKKwlwZXJmX3N3X2V2ZW50KFBFUkZfQ09V
+TlRfU1dfUEFHRV9GQVVMVFMsIDEsIHJlZ3MsIGFkZHJlc3MpOworCisJaWYgKChyZXQgJiBWTV9G
+QVVMVF9NQUpPUikgfHwgKGZsYWdzICYgRkFVTFRfRkxBR19UUklFRCkpIHsKKwkJY3VycmVudC0+
+bWFqX2ZsdCsrOworCQlwZXJmX3N3X2V2ZW50KFBFUkZfQ09VTlRfU1dfUEFHRV9GQVVMVFNfTUFK
+LCAxLCByZWdzLCBhZGRyZXNzKTsKKwl9IGVsc2UgeworCQljdXJyZW50LT5taW5fZmx0Kys7CisJ
+CXBlcmZfc3dfZXZlbnQoUEVSRl9DT1VOVF9TV19QQUdFX0ZBVUxUU19NSU4sIDEsIHJlZ3MsIGFk
+ZHJlc3MpOworCX0KKwogCXJldHVybiByZXQ7CiB9CiBFWFBPUlRfU1lNQk9MX0dQTChoYW5kbGVf
+bW1fZmF1bHQpOwo=
+--00000000000093703c05a8381612--
