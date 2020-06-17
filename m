@@ -2,108 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C4D1FC611
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jun 2020 08:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F5E1FC840
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jun 2020 10:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbgFQGSP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Jun 2020 02:18:15 -0400
-Received: from ozlabs.org ([203.11.71.1]:52297 "EHLO ozlabs.org"
+        id S1725894AbgFQIEM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Jun 2020 04:04:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39364 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726681AbgFQGSO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 17 Jun 2020 02:18:14 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1725773AbgFQIEM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 17 Jun 2020 04:04:12 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49mvyC3vtXz9sRW;
-        Wed, 17 Jun 2020 16:18:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592374692;
-        bh=mJkXDcG+JBwronSGoBFKwHoOQWlgz+qa4gI2fl3s5OA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V8PHZVtKEWbc4Z1DZixbQ0OxxIkURvtvl5Fh5EXAMbvxsk+fcG4V1fq2X6bQcKmf6
-         LFm/ID0UE2wWBOLBVbOHTwYbzddwK/qc3Ndi9qkuZHZ8GapyzcPKb0r3hXObURz925
-         n0FfWZdIVfDY896dB7j5dHkSYZvZY/a5MXd3Y0fpHdY2adTX1ogqNhHUM/uhwXn5Ap
-         5YFxggXNkehaHJqWA3nKptq6XmFmZg4n670PI0SNMH5Jojs9+YM3gIQKVV9Ph4QoSN
-         ZoDlIoBcE7EHnlcMHaOIbSPtlEIzJkXUq5FwJVeeZlas4sm3iUOpCWXKXjw5UNDKuz
-         K+CMdNUbIuxyw==
-Date:   Wed, 17 Jun 2020 16:18:10 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linux-kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC PATCH 1/2] Explicitly include linux/major.h where it is
- needed
-Message-ID: <20200617161810.256ff93f@canb.auug.org.au>
-In-Reply-To: <20200617055843.GB25631@kroah.com>
-References: <20200617092614.7897ccb2@canb.auug.org.au>
-        <20200617092747.0cadb2de@canb.auug.org.au>
-        <20200617055843.GB25631@kroah.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 91CE021475;
+        Wed, 17 Jun 2020 08:04:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592381051;
+        bh=MjCLvKpmywtlENNu3L8WcjVAZUYXfsV93TDu3ReXKuQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JTiufBj0BMszSpkVUzi+gNk/qprMzw2wYVoJRieWtNmkrCUlTJiL+eUPkxjEPJZ7D
+         Pl+CdboZUILER+bWki4NgM0L7KE262coRqRGnhsGEroSN9Uf1CdlIdoIHJwTchzbUV
+         5UjKXESI9ZrCTGdCfmJKt9pER0l8tsQDgS//NF2k=
+Date:   Wed, 17 Jun 2020 09:04:06 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        openrisc@lists.librecores.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 00/25] mm: Page fault accounting cleanups
+Message-ID: <20200617080405.GA3208@willie-the-truck>
+References: <20200615221607.7764-1-peterx@redhat.com>
+ <CAHk-=wiTjaXHu+uxMi0xCZQOm4KVr0MucECAK=Zm4p4YZZ1XEg@mail.gmail.com>
+ <87imfqecjx.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SR24Am7bJk6gmzp1XI0YNUE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87imfqecjx.fsf@mpe.ellerman.id.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---Sig_/SR24Am7bJk6gmzp1XI0YNUE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jun 17, 2020 at 10:55:14AM +1000, Michael Ellerman wrote:
+> Linus Torvalds <torvalds@linux-foundation.org> writes:
+> > On Mon, Jun 15, 2020 at 3:16 PM Peter Xu <peterx@redhat.com> wrote:
+> >> This series tries to address all of them by introducing mm_fault_accounting()
+> >> first, so that we move all the page fault accounting into the common code base,
+> >> then call it properly from arch pf handlers just like handle_mm_fault().
+> >
+> > Hmm.
+> >
+> > So having looked at this a bit more, I'd actually like to go even
+> > further, and just get rid of the per-architecture code _entirely_.
+> 
+> <snip>
+> 
+> > One detail worth noting: I do wonder if we should put the
+> >
+> >     perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, addr);
+> >
+> > just in the arch code at the top of the fault handling, and consider
+> > it entirely unrelated to the major/minor fault handling. The
+> > major/minor faults fundamnetally are about successes. But the plain
+> > PERF_COUNT_SW_PAGE_FAULTS could be about things that fail, including
+> > things that never even get to this point at all.
+> 
+> Yeah I think we should keep it in the arch code at roughly the top.
 
-Hi Greg,
+I agree. It's a nice idea to consolidate the code, but I don't see that
+it's really possible for PERF_COUNT_SW_PAGE_FAULTS without significantly
+changing the semantics (and a potentially less useful way. Of course,
+moving more of do_page_fault() out of the arch code would be great, but
+that's a much bigger effort.
 
-On Wed, 17 Jun 2020 07:58:43 +0200 Greg KH <gregkh@linuxfoundation.org> wro=
-te:
->
-> On Wed, Jun 17, 2020 at 09:27:47AM +1000, Stephen Rothwell wrote:
-> > This is in preparation for removing the include of major.h where it is
-> > not needed.
-> >=20
-> > These files were found using
-> >=20
-> > 	grep -E -L '[<"](uapi/)?linux/major\.h' $(git grep -l -w -f /tmp/xx)
-> >=20
-> > where /tmp/xx contains all the symbols defined in major.h.  There were
-> > a couple of files in that list that did not need the include since the
-> > references are in comments.
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au> =20
->=20
-> Any reason this had an RFC, but patch 2/2 did not?
+> If it's moved to the end you could have a process spinning taking bad
+> page faults (and fixing them up), and see no sign of it from the perf
+> page fault counters.
 
-I forgot :-)  I added RFC just to hopefully get some attention as this
-is just the start of a long slow use of my "spare" time.
+The current arm64 behaviour is that we record PERF_COUNT_SW_PAGE_FAULTS
+if _all_ of the following are true:
 
-> They look good to me, I will be glad to take these, but do you still
-> want reviews from others for this?  It seems simple enough to me...
+  1. The fault isn't handled by kprobes
+  2. The pagefault handler is enabled
+  3. We have an mm (current->mm)
+  4. The fault isn't an unexpected kernel fault on a user address (we oops
+     and kill the task in this case)
 
-Yeah, well, we all know the simplest patches usually cause the most pain :-)
+Which loosely corresponds to "we took a fault on a user address that it
+looks like we can handle".
 
-However, I have been fairly careful and it is an easy include file to
-work with.  And I have done my usual build checks, so the linux-next
-maintainer won't complain about build problems :-)
+That said, I'm happy to tweak this if it brings us into line with other
+architectures.
 
-I would like to hear from Arnd, at least, as I don't want to step on
-his toes (he is having a larger look at our include files).
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/SR24Am7bJk6gmzp1XI0YNUE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7ptaIACgkQAVBC80lX
-0GzKewf8D3i2VcdXPYbwXP1LbIeTDCjjxRMksxmNwVqp+V+AnAGCrFNYjpXQ0XLG
-0gS30xMjpcoGedPZ7TlbKO2u8Gyz5VgUgicU+JXaDbCzkgcxtFEdIZCmkeWg9527
-WzQZzxpBeEscgR3FvLylhGKrYbdfQT14dQsbnRQhlm+wHANvZdAC1mpmUPjeS7vn
-IbG/sr4xzvnHiup3Vy2j0oqgroHqmqCHKUMKaJEdfFBQSHjWsvfvOBFwAiATow3o
-eq9imn6UvaSEHU/VFKLNHhYtQKt3a4liB9ScnxlFXFyyYgRx/0ZziBcU6ffHqubd
-in7WwTgUBtvePKUxSDd2tctZFT8VlQ==
-=YfaS
------END PGP SIGNATURE-----
-
---Sig_/SR24Am7bJk6gmzp1XI0YNUE--
+Will
