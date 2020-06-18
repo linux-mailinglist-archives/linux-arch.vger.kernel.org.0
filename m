@@ -2,74 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C13431FF104
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jun 2020 13:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FC41FF555
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jun 2020 16:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726946AbgFRLuy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Jun 2020 07:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S1731225AbgFROqf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Jun 2020 10:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728383AbgFRLuw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Jun 2020 07:50:52 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C45C0613ED
-        for <linux-arch@vger.kernel.org>; Thu, 18 Jun 2020 04:50:51 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id k4so4810486oik.2
-        for <linux-arch@vger.kernel.org>; Thu, 18 Jun 2020 04:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9FvwAyBiYAKmamTx0d/y4FUMhFyffc1wuLxBpnegVTw=;
-        b=JhgQWfjyvxkbg+tIcXCBKAzmk55gwi3kSjzr+awJLVFZQQ6itn4MJ1F40uIypKLiVO
-         jROmt0kBQJ2Z/gdlEqTlYsK57H2WngYHrAcFfA5fIrewmKvk6CWI5v0dQefRkNA8NRUH
-         OuVrNPhPm8mOjocYogDntYf/lBVvtcgd+boAf7Vw2G5PzLX630UZS7quKOMJrG30rS84
-         I/VCnhwYT7y7UrHQ+beQw+U3XJo1qxvLwdRVBRi130AtoCfxdjp67iGzpQ3RbB7G8xfV
-         tF3dWQBNi6xRNLw+lX1G8tbgEE0YAjzvplZFW95AKDvDU5lKzDBJdvb/O8DlSWrEARH1
-         HkSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9FvwAyBiYAKmamTx0d/y4FUMhFyffc1wuLxBpnegVTw=;
-        b=E0tXox8n0rpQUC1WEgNaC7AmYPHN/b90k1XoEi3wSaEeUf2iiuwndBsidoNeYo0jpf
-         sCjqKUfyHY5L+qpEQ8t+wUTb0HSnRvB+GdjJ9i+WUsDwmA1OyjhFwlB1x9AO4qEmvhiS
-         ZCvp6Puq03JAd370yaWt9QMZoLEHwWvoy9wWOOCOv3D+FCkAFTOip+MWWBD+ROIc5J/5
-         I1hkD2iUzGbUF0TzAsaYx5sMT7WrJ8AJ+5RK7ZP0tIEp+0oLC8k7ZlzngCqWkp7wS0M4
-         V7c9pZdsVZRQATu2UwQq2e93LuFMtxzbR38nY55VzTR+Z39VizAsqk9Nm10xYGrf74aZ
-         FoBw==
-X-Gm-Message-State: AOAM530PkCapzvwsIyPMH+S4gUjYoxcN/K1JxOLUW4amfSliTMBfjX2s
-        i7rllxEiv0XtIe3pD18W/2fweyiYadpb4rwk9FA=
-X-Google-Smtp-Source: ABdhPJyx5tQb4OA1jv59DshAGPLZ+hnk/lrD9CQGk9KrkGYLK0ZFxdTZmAEgwnwTOhX2H4shDlCe78niwo9gO+uKQsg=
-X-Received: by 2002:aca:df04:: with SMTP id w4mr2487624oig.27.1592481050250;
- Thu, 18 Jun 2020 04:50:50 -0700 (PDT)
+        with ESMTP id S1730924AbgFROqe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Jun 2020 10:46:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0076CC06174E;
+        Thu, 18 Jun 2020 07:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=8QjkAe3/WcEFMISjfM9pTovm01qLhHp9DQnrjNzziO4=; b=iQdiM599hgB2VTm8/MEfD5e9/h
+        IO+hz1X0s5Cn8wiQUVQtVfCpXN59W+JiOWbUz/qJ+Wi+5bUk+U1urz45Ia/FGyF1aSr3MZF7Rg/RO
+        9l/NhXWgIFhwKv7iM8TBk9QM9JZaMJlnOKs46CqmjjC7PvYBa7IB9dsmrqZegeIraDlbLZVnHa1Ry
+        MB8cB00346xJgkB5dzB+ZgbJy2kUELzEQMHasMsO9m6eD/c6LMDo7CAQj0xy7Id7nKDZ4tXmEE8r2
+        eXLQH6EWKGpzA918dD+CZQD7w06kzvF4KETxfdtIlU9jidmRg2U4PNNHtcGi4earl04GyeDkRZpG4
+        skbgKaNw==;
+Received: from 195-192-102-148.dyn.cablelink.at ([195.192.102.148] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jlvoD-0006Ge-VD; Thu, 18 Jun 2020 14:46:30 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Gerst <brgerst@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: properly support exec and wait with kernel pointers v2
+Date:   Thu, 18 Jun 2020 16:46:21 +0200
+Message-Id: <20200618144627.114057-1-hch@lst.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Received: by 2002:a4a:d358:0:0:0:0:0 with HTTP; Thu, 18 Jun 2020 04:50:49
- -0700 (PDT)
-Reply-To: drsamuelco@gmail.com
-From:   Dr Samuel Cadwaladre <vivghanem@gmail.com>
-Date:   Thu, 18 Jun 2020 04:50:49 -0700
-Message-ID: <CAGbuYt47UzQEcuqV8+TghPQWy0dX-ig1OV_=SGqFp906aRY=Dw@mail.gmail.com>
-Subject: Dear friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dear Friend,
-I wish you and your family a blessed week!I have a confidential
-opportunity that is capable of changing our lives forever, if it
-interests you reply me for more details,I am a banker by profession
-here in my country, one of our customer(Late Engineer Andrew) who used
-to work with shell development company, On the 21st of April
-2012, our customer and his wife with their only daughter were involved
-in auto crash here in my country leaving the sum of (Ten million four
-hundred thousand united state dollars). I decided to contacted you for
-business negotiation so that the huge amount he left behind in a bank
-here will be transferred to your bank account before the bank
-confiscate it contact me on my private email for more
-detail(drsamuelco@gmail.com).
+Hi all,
 
-Best regards,
-Samuel Cadwaldre.
+this series first cleans up the exec code and then adds proper
+kernel_execveat and kernel_wait callers instead of relying on the fact
+that the early init code and kernel threads implicitly run with
+the address limit set to KERNEL_DS.
+
+Note that the cleanup removes the compat execve(at) handlers entirely, as
+we can handle the compat difference very nicely in a unified codebase.
+x32 needs two hacky #defines for that for now, although those can go
+away if the x32 syscall rework from Brian gets merged.
+
+Changes since v1:
+ - remove a pointless ifdef from get_user_arg_ptr
+ - remove the need for a compat syscall handler for x32
+
+
+Diffstat:
+ arch/arm64/include/asm/unistd32.h                  |    4 
+ arch/mips/kernel/syscalls/syscall_n32.tbl          |    4 
+ arch/mips/kernel/syscalls/syscall_o32.tbl          |    4 
+ arch/parisc/kernel/syscalls/syscall.tbl            |    4 
+ arch/powerpc/kernel/syscalls/syscall.tbl           |    4 
+ arch/s390/kernel/syscalls/syscall.tbl              |    4 
+ arch/sparc/kernel/syscalls.S                       |    4 
+ arch/x86/entry/syscall_x32.c                       |    7 
+ arch/x86/entry/syscalls/syscall_32.tbl             |    4 
+ arch/x86/entry/syscalls/syscall_64.tbl             |    4 
+ fs/exec.c                                          |  248 ++++++++-------------
+ include/linux/binfmts.h                            |   10 
+ include/linux/compat.h                             |    7 
+ include/linux/sched/task.h                         |    1 
+ include/uapi/asm-generic/unistd.h                  |    4 
+ init/main.c                                        |    5 
+ kernel/exit.c                                      |   16 +
+ kernel/umh.c                                       |   43 ---
+ tools/include/uapi/asm-generic/unistd.h            |    4 
+ tools/perf/arch/powerpc/entry/syscalls/syscall.tbl |    4 
+ tools/perf/arch/s390/entry/syscalls/syscall.tbl    |    4 
+ tools/perf/arch/x86/entry/syscalls/syscall_64.tbl  |    4 
+ 22 files changed, 170 insertions(+), 223 deletions(-)
