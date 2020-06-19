@@ -2,57 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3FB2002F2
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Jun 2020 09:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E382003DF
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jun 2020 10:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730919AbgFSHqf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Jun 2020 03:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S1730651AbgFSI3H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Jun 2020 04:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729548AbgFSHqf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Jun 2020 03:46:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDB4C06174E;
-        Fri, 19 Jun 2020 00:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LExsgrzaNyl8ZFPNIxBm2qDBZpOXhx0RBNl8C2nzaSw=; b=s9GduRbeIzfQ6rou+EY1Ez+mFQ
-        WKczu0uQfkh+8bNlk6SoQvnajAr3wdDyxlhWPRfiXZSqcjkhBdS6f2mY9UUTBFqyJ2U/liICIvOMC
-        k1ROtJP+IxZe8pWr95o2iWfZmCMEZYyzoJp76ILMc/f7jzh5gYxlWmq5CAiP8MQaPnlbhvxt3+lRF
-        ++RgOqoAE6HbplJO88O/VMURinrCndzkhPuR2J5KeOQyuDesAPiYYDaN3nGtqNCVDp5NB5Qf0yjvi
-        z7jlLtGYc5Is0XaPCy8R8suAgPHUO2pNuDfkZO/Mc8rLDn+dYvlY+x5y2y/gyMv2/VnGMMe76cUXl
-        BaMxIpZw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jmBjL-0001pk-JL; Fri, 19 Jun 2020 07:46:31 +0000
-Date:   Fri, 19 Jun 2020 00:46:31 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH] linux++, this: rename "struct notifier_block *this"
-Message-ID: <20200619074631.GA1427@infradead.org>
-References: <20200618210645.GB2212102@localhost.localdomain>
+        with ESMTP id S1731271AbgFSI3C (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Jun 2020 04:29:02 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48295C0613EF
+        for <linux-arch@vger.kernel.org>; Fri, 19 Jun 2020 01:29:01 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id g139so4263118lfd.10
+        for <linux-arch@vger.kernel.org>; Fri, 19 Jun 2020 01:29:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=irVvm75B8uOjhet4ds9NewlHhGnanjSr3qTRTZzIUE4=;
+        b=qkbi8YvZIpYdgXOhuLz+oLhk6FU5nre6FOh8jwCxVM9654uCe38mG3xi4sHqGzzDyG
+         SEH1hJrw2TFIChHUxX1ZXnbwARwg6RC5j0BV0+jMRPStvzbKMhHOWFkkmEsrWjqdX5F+
+         D1IOfQlW2zLQg/nVx9gJMOxi4uOERKvqBd1S1RhEt6EhjY5th0/tAvBfP2KAJAM96y7o
+         h72udRwv1GPKxwptl875dVONvJoltvXpQNW88Rr7UCqkXi2dwlS43kJ7lnlN+shZedPc
+         UEpFi+EUsizwMgSG5KrzWkYQzjXdopu2qfdbxfjTUi6dvlVTSJe8cWAu3gdUIqCShHxT
+         T2Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=irVvm75B8uOjhet4ds9NewlHhGnanjSr3qTRTZzIUE4=;
+        b=Q6qMhpydDNnHx47QMok8coYHufdK1kYikTXJ4WFuvxpK/YncwJmeJ9IjoWdDadrPEi
+         9e2YWBQawwopXhoxNNvmsK6xCAVBZXIcuVs469xxN+yCZsPnjt5GfXM6hD9zvPTNbgHU
+         GUR1yajTuEwqwPO1tLOF2XYQPxg1iiVcFq7TGh6xtAFqoZLNwfD4lg0/9efNwNerb+sb
+         5t5RHL8cdnGt26y9BuoBJ2GV/C2eY+Y3IDZdj04ubIP7Qa+j9jlMSfwYf1HJkKK/dw7f
+         xT/u3TxJyCmR82XRf3aDjM4WEqtcjoF+cVT41UTQ7kFNoAxvth/FwIiV5v2fMzwAIduj
+         tiVA==
+X-Gm-Message-State: AOAM531osiFSD1bvzRpsq2Tn3p5+0qSZcwRXuf4IV2qEDcB/1xCYTD4/
+        HH0CYDwMvFhA44VOajy0pGP4gA==
+X-Google-Smtp-Source: ABdhPJxnSAk4hCfsyIu7N052ONa1UuRXTstPiF0JmLx3L/kM6WdrlnqV1xaj4A+uNl5wLop8yEYwoQ==
+X-Received: by 2002:ac2:5c49:: with SMTP id s9mr1327184lfp.90.1592555339610;
+        Fri, 19 Jun 2020 01:28:59 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:8c9:4beb:2ce8:f19d:33e5:571e? ([2a00:1fa0:8c9:4beb:2ce8:f19d:33e5:571e])
+        by smtp.gmail.com with ESMTPSA id a16sm1058721ljb.107.2020.06.19.01.28.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Jun 2020 01:28:58 -0700 (PDT)
+Subject: Re: [PATCH 3/6] exec: cleanup the count() function
+To:     Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Gerst <brgerst@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200618144627.114057-1-hch@lst.de>
+ <20200618144627.114057-4-hch@lst.de>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <04e7876b-a8f3-3f6e-939c-bb0764ece1ac@cogentembedded.com>
+Date:   Fri, 19 Jun 2020 11:28:44 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200618210645.GB2212102@localhost.localdomain>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200618144627.114057-4-hch@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 12:06:45AM +0300, Alexey Dobriyan wrote:
-> Rename
-> 	struct notifier_block *this
-> to
-> 	struct notifier_block *nb
-> 
-> "nb" is arguably a better name for notifier block.
+Hello!
 
-But not enough better to cause tons of pointless churn.  Feel free
-to use better naming in new code you write or do significant changes
-to, but stop these pointless renames.
+On 18.06.2020 17:46, Christoph Hellwig wrote:
+
+> Remove the max argument as it is hard wired to MAX_ARG_STRINGS, and
+
+    Technically, argument is what's actually passed to a function, you're 
+removing a function parameter.
+
+> give the function a slightly less generic name.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+[...]
+
+MBR, Sergei
