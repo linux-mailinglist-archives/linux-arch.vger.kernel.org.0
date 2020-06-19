@@ -2,105 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E77D201A7D
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Jun 2020 20:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E07201B62
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jun 2020 21:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388798AbgFSSiR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Jun 2020 14:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32914 "EHLO
+        id S2389202AbgFSThY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Jun 2020 15:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732015AbgFSSiI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Jun 2020 14:38:08 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD03C0613EF
-        for <linux-arch@vger.kernel.org>; Fri, 19 Jun 2020 11:38:06 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id a9so12615177ljn.6
-        for <linux-arch@vger.kernel.org>; Fri, 19 Jun 2020 11:38:06 -0700 (PDT)
+        with ESMTP id S2389191AbgFSThX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Jun 2020 15:37:23 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D59DC0613EF
+        for <linux-arch@vger.kernel.org>; Fri, 19 Jun 2020 12:37:23 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id k6so4293481pll.9
+        for <linux-arch@vger.kernel.org>; Fri, 19 Jun 2020 12:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H3fbVijkwGqEXjgf746UVzNHZFijt5PEP/I+cIGFrOI=;
-        b=Pbi6ZcZ/j5UzKi4TuELv3vWZVoPaSRX4qHDHfjemlgk/7t9FABxdeWgh51bILfCKJ5
-         wi8F+rrtMy4gj2dpmCJd8yxSDI3bKAoHjCDk9Pmgk4ebmFXb7pgJH6u8Pl1d3HL2Cn+Y
-         CfZiRrUn8yF0xtr+Dhn2AXvWp8IgyXRWpqhQ8=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=o7if+DdFqLdTqlhmKOgGWwPbnBli3b0MNWvVpv3R4kw=;
+        b=FUB52KH7JaEZzQ1Sa88+rHDFmBQsWgAcadbsgEbWzKh0ASy5MJvrDDegCm1NTXAOS8
+         vGHr/8ouSL2waaiB0YbuZHgyMv/9ZwoFxlq+Rv9mQnqomECuQBKi0/XNW3pVwoYGpCEf
+         Goc0O9aqUxBX+7MjVIfo9KadJ7D/V9gTIEtuA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H3fbVijkwGqEXjgf746UVzNHZFijt5PEP/I+cIGFrOI=;
-        b=Y63lGW7RybnW0dinDhev/r/kVBbaFXneDlLrFyILxmli3pcpXqU92VVsaUaxU1V4Xf
-         iiBk+lhTJcpjbn2KCMoVlkELn9Lt6qgmScWDGO0DIf2kqyUYLIrhSSbSU6+w82G2BBIw
-         zNZ1OhNt4IxIOgb4+Sz8kn0HAEmRlRISXONNUB9ymFJtg2UTAKcqqE46og7hzZR2ErV3
-         h7ZY1uNml2nRyJxDHKDKt1Ryye/Me/keOMJpxHXVRdxIyrw7RAnLGW7XtSawoUX8DkwI
-         j0Jy0QgPRfiaYVjPh3Id2A6OcE5DkdwJ7/a7yP07mTEI2KVa6Zdm6nCWzMH7GBIuABlP
-         OyUw==
-X-Gm-Message-State: AOAM531CVDXueLnjrUC3HhoKxm/rIQqqcDkmM/lYy/rvVlDLbhfzP8Bl
-        nP3Q2CwwzjMZBY5j2q1Q7PhfnYj6fN8=
-X-Google-Smtp-Source: ABdhPJxA1INTld6MRx3xdIy53X3k3tRBY4dscp/Tc6YtpJUzSRk77wAF3Vonlhw8Ti2vid0lrot9IQ==
-X-Received: by 2002:a2e:83c7:: with SMTP id s7mr2607933ljh.68.1592591884747;
-        Fri, 19 Jun 2020 11:38:04 -0700 (PDT)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
-        by smtp.gmail.com with ESMTPSA id 5sm1286398ljr.64.2020.06.19.11.38.03
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2020 11:38:04 -0700 (PDT)
-Received: by mail-lf1-f45.google.com with SMTP id g139so5319233lfd.10
-        for <linux-arch@vger.kernel.org>; Fri, 19 Jun 2020 11:38:03 -0700 (PDT)
-X-Received: by 2002:a19:ae0f:: with SMTP id f15mr2684358lfc.142.1592591883165;
- Fri, 19 Jun 2020 11:38:03 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=o7if+DdFqLdTqlhmKOgGWwPbnBli3b0MNWvVpv3R4kw=;
+        b=YwXFA9aklGyBgVX5BJ14oVUaVP31xtI2O/zr8T3bS/Jhs6b3vnvU/fy9hlLfzPq56F
+         VvhLsmLj+ngbPwgGRAJYUki+JSHBW6/kaFcV16//hXiuhUbHzyspwVhPInjStFePzsY1
+         zcnm1ir1Ja3CW6wRz79xR25x/4iIDxbaiBe5iGvx63vH1S+x+tFEbrq6wLG+QAExAaaY
+         8ABRo3aSNGqfpvldg5rq/cIpX7dFOHjdQDNSB9YfY9aj+fWgoWnl1Co+CyUuFDFecCls
+         CdliwisMUFzudy+HqAbdxX60Xf9C0+YDHNN1KyeOmSnquw40X/85hDbXLYciBVbxolQc
+         oRJQ==
+X-Gm-Message-State: AOAM531ErxTs2ryB5PUMcNhWdnI1tSjQoQV5vfg9uT1Sowtp6emftkPv
+        5zyIQnUXfAR4u83G09kFa2iDkikqwEY=
+X-Google-Smtp-Source: ABdhPJy1kxnlCvJmO5IS+9Scdoew2zfX/pdbNf5xDUloU8j9e4g8x0h4K8xzytX/BaBY+vfXdU7CGQ==
+X-Received: by 2002:a17:90a:ea84:: with SMTP id h4mr4579161pjz.45.1592595442674;
+        Fri, 19 Jun 2020 12:37:22 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w10sm5773025pgm.70.2020.06.19.12.37.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2020 12:37:21 -0700 (PDT)
+Date:   Fri, 19 Jun 2020 12:37:20 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, linux-mips@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH] seccomp: Use -1 marker for end of mode 1 syscall list
+Message-ID: <202006191236.AC3E22AAB@keescook>
 MIME-Version: 1.0
-References: <20200618210645.GB2212102@localhost.localdomain>
-In-Reply-To: <20200618210645.GB2212102@localhost.localdomain>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 19 Jun 2020 11:37:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whz7xz1EBqfyS-C8zTx3_q54R1GuX9tDHdK1-TG91WH-Q@mail.gmail.com>
-Message-ID: <CAHk-=whz7xz1EBqfyS-C8zTx3_q54R1GuX9tDHdK1-TG91WH-Q@mail.gmail.com>
-Subject: Re: [PATCH] linux++, this: rename "struct notifier_block *this"
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        NetFilter <netfilter-devel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 2:06 PM Alexey Dobriyan <adobriyan@gmail.com> wrote:
->
-> Rename
->         struct notifier_block *this
-> to
->         struct notifier_block *nb
->
-> "nb" is arguably a better name for notifier block.
+The terminator for the mode 1 syscalls list was a 0, but that could be
+a valid syscall number (e.g. x86_64 __NR_read). By luck, __NR_read was
+listed first and the loop construct would not test it, so there was no
+bug. However, this is fragile. Replace the terminator with -1 instead,
+and make the variable name for mode 1 syscall lists more descriptive.
 
-Maybe it's a better name. But it doesn't seem worth it.
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+I'll be putting this into my for-next/seccomp tree. I would love a MIPS
+ack, if someone's got a moment to double-check this. :)
+---
+ arch/mips/include/asm/seccomp.h |  4 ++--
+ include/asm-generic/seccomp.h   |  2 +-
+ kernel/seccomp.c                | 10 +++++-----
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-Because C++ reserved words are entirely irrelevant.
+diff --git a/arch/mips/include/asm/seccomp.h b/arch/mips/include/asm/seccomp.h
+index e383d7e27b93..aa809589a181 100644
+--- a/arch/mips/include/asm/seccomp.h
++++ b/arch/mips/include/asm/seccomp.h
+@@ -9,12 +9,12 @@ static inline const int *get_compat_mode1_syscalls(void)
+ 	static const int syscalls_O32[] = {
+ 		__NR_O32_Linux + 3, __NR_O32_Linux + 4,
+ 		__NR_O32_Linux + 1, __NR_O32_Linux + 193,
+-		0, /* null terminated */
++		-1, /* negative terminated */
+ 	};
+ 	static const int syscalls_N32[] = {
+ 		__NR_N32_Linux + 0, __NR_N32_Linux + 1,
+ 		__NR_N32_Linux + 58, __NR_N32_Linux + 211,
+-		0, /* null terminated */
++		-1, /* negative terminated */
+ 	};
+ 
+ 	if (IS_ENABLED(CONFIG_MIPS32_O32) && test_thread_flag(TIF_32BIT_REGS))
+diff --git a/include/asm-generic/seccomp.h b/include/asm-generic/seccomp.h
+index 1321ac7821d7..6b6f42bc58f9 100644
+--- a/include/asm-generic/seccomp.h
++++ b/include/asm-generic/seccomp.h
+@@ -33,7 +33,7 @@ static inline const int *get_compat_mode1_syscalls(void)
+ 	static const int mode1_syscalls_32[] = {
+ 		__NR_seccomp_read_32, __NR_seccomp_write_32,
+ 		__NR_seccomp_exit_32, __NR_seccomp_sigreturn_32,
+-		0, /* null terminated */
++		-1, /* negative terminated */
+ 	};
+ 	return mode1_syscalls_32;
+ }
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 0ed57e8c49d0..866a432cd746 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -742,20 +742,20 @@ static inline void seccomp_log(unsigned long syscall, long signr, u32 action,
+  */
+ static const int mode1_syscalls[] = {
+ 	__NR_seccomp_read, __NR_seccomp_write, __NR_seccomp_exit, __NR_seccomp_sigreturn,
+-	0, /* null terminated */
++	-1, /* negative terminated */
+ };
+ 
+ static void __secure_computing_strict(int this_syscall)
+ {
+-	const int *syscall_whitelist = mode1_syscalls;
++	const int *allowed_syscalls = mode1_syscalls;
+ #ifdef CONFIG_COMPAT
+ 	if (in_compat_syscall())
+-		syscall_whitelist = get_compat_mode1_syscalls();
++		allowed_syscalls = get_compat_mode1_syscalls();
+ #endif
+ 	do {
+-		if (*syscall_whitelist == this_syscall)
++		if (*allowed_syscalls == this_syscall)
+ 			return;
+-	} while (*++syscall_whitelist);
++	} while (*++allowed_syscalls != -1);
+ 
+ #ifdef SECCOMP_DEBUG
+ 	dump_stack();
+-- 
+2.25.1
 
-We did this same dance almost three decades ago, and the fact is, C++
-has other reserved words that make it all pointless.
 
-There is no way I will accept the renaming of various "new" variables.
-We did it, it was bad, we undid it, and we now have a _lot_ more uses
-of 'new' and 'old', and no, we're not changing it for a braindead
-language that isn't relevant to the kernel.
-
-The fact is, C++ chose bad identifiers to make reserved words.
-
-If you want to build the kernel with C++, you'd be a lot better off just doing
-
-   /* C++ braindamage */
-   #define this __this
-   #define new __new
-
-and deal with that instead.
-
-Because no, the 'new' renaming will never happen, and while 'this'
-isn't nearly as common or relevant a name, once you have the same
-issue with 'new', what's the point of trying to deal with 'this'?
-
-             Linus
+-- 
+Kees Cook
