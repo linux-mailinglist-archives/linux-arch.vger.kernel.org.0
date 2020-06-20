@@ -2,121 +2,181 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5726202577
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Jun 2020 19:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40A82025E7
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Jun 2020 20:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727090AbgFTRCY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 20 Jun 2020 13:02:24 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38352 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbgFTRCX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Jun 2020 13:02:23 -0400
-Received: by mail-pf1-f195.google.com with SMTP id x207so6087215pfc.5;
-        Sat, 20 Jun 2020 10:02:23 -0700 (PDT)
+        id S1728448AbgFTSIJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 20 Jun 2020 14:08:09 -0400
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:44291 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728433AbgFTSII (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Jun 2020 14:08:08 -0400
+Received: by mail-oo1-f67.google.com with SMTP id e8so2547242ooi.11;
+        Sat, 20 Jun 2020 11:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZQmp7gjRdqQPcbV8CCSihis/262QMxzCnfpTGRwmu4Q=;
+        b=gXTvrGkPqyTWZrm8CfmKd18c2m1xgf8afBst1ViGwwJcS93nbKsbVbzzvU/ndvIwEp
+         LJareakbavwrix4ZHzlWKREVSbu0a+0rDa/vj068flfV68zLqBZ8+YxTyhU7lTGgdrNw
+         UkRNJc1pcW2sywWokEvZOBWq23rfGYOsY9TXnhKgaOYKtQWEgVZMb7SwqY7Taxe5bmZ6
+         BBYcDGhDrGMxFB6UEdqmMCu8tTN9AmptsTzGcf0LmisEhr7X7rMpfzaDogXwlzHEejMv
+         wqVGIyZIDlzWvQxwWGynYaozUwY6nQ35qNdS7eEKUr7o9Uy3WhI9/GZhpU9AC+sHGQF4
+         8ERg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hkYGXZYFNkz40ca5bdh2l8rwBQsGz5Dfq7lbQQ/ZMb4=;
-        b=X9q8UfJZmL34AI1GiO5Dnai9g9KS072++uMh4hlNtqTqlfTy5/ba7jBlkjyo535lWC
-         tUjHuWsJ6BPP/ng5gG33nwINjMbyZyZXMLjmIIqzIeVChyJTJIG4F6u8B9q4RB2Ma+y8
-         WJcvd4TZ3OI9OplZ3O/vxXPXbSeB8wfjr/U6oY6tCu2sC50Vye2G/kNYpLsk6cIOSamP
-         guRd24fxw8r53lgGCHCwHvgsFDXv+sVkbrHH5E41l0PLB8LSubGIpnQ6sJj/G6Mscd93
-         SSnVhc8HhP3+CXxlv76lEjbFs4oQuFkWahQsOtVi5j94GE4u11uRpTmvgCdU01InmuDF
-         noQw==
-X-Gm-Message-State: AOAM532IfNgmHSESpXOm/8YZ5RnmvNPpxNVpAeW2B8+AFwNFEkzkSkgR
-        tAqhwQpGJwLLW+PloRYKDzduPcQOyUA=
-X-Google-Smtp-Source: ABdhPJw4cY69dDBjGxi+dEmU+lne2Jaj+Kt7j3+OOL+ZesgQbK+T06ayny/Nuk+eU5cbc92qa9tynQ==
-X-Received: by 2002:a63:7c5e:: with SMTP id l30mr7050243pgn.276.1592672542711;
-        Sat, 20 Jun 2020 10:02:22 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id x18sm9195784pfr.106.2020.06.20.10.02.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZQmp7gjRdqQPcbV8CCSihis/262QMxzCnfpTGRwmu4Q=;
+        b=O5xoiCNLCXKYd4ruNVDiWJDUjCi2xGVJh+mFIC7tyACtHnW8kS+q4vVV6fntHG4bN4
+         NypmYZOpIrjtndXsDgcO263+lfmXXWQV3YmKvsbcxW5m8JXPD0nWVJZVhVdqZG8L9d9s
+         9Mf8vdpKDUqkgMbw0acuEmqDxN9tNzpZHsRtgnpaxG4sVl14/IIqQc8ZaN9k28q//QPd
+         JC0sLOB84TTuZ58dZO0GSVfutyrdDZMPAWUqtFH7PyX0yGNBCR5p63OzjkxBdT1tt8z3
+         wmP7GqWeM8A6BoIvT8lGBXTxe7JIu+auXb4Ai7zBSRVRGSQRk862hvlQ1UXZ3UYzztD3
+         /DmQ==
+X-Gm-Message-State: AOAM532cJRb7ZlHdj6JI+arfi+KFodP/2bXQw+STgAzEP6EGkxvWV/eI
+        UWilUZo1DfcTCFymILTF7xg=
+X-Google-Smtp-Source: ABdhPJyonijnaNyEy4O3V+iH+tbB3pTuMz/MSOEnqSQ9hGyKpx9k7UHWHH5XG8KyOcCofpgK7IN64g==
+X-Received: by 2002:a4a:9c44:: with SMTP id c4mr8318758ook.46.1592676426694;
+        Sat, 20 Jun 2020 11:07:06 -0700 (PDT)
+Received: from localhost.localdomain (c-24-9-77-57.hsd1.co.comcast.net. [24.9.77.57])
+        by smtp.googlemail.com with ESMTPSA id y31sm2077901otb.41.2020.06.20.11.07.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2020 10:02:20 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id B439940430; Sat, 20 Jun 2020 17:02:19 +0000 (UTC)
-Date:   Sat, 20 Jun 2020 17:02:19 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Gerst <brgerst@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] kernel: add a kernel_wait helper
-Message-ID: <20200620170219.GT11244@42.do-not-panic.com>
-References: <20200618144627.114057-1-hch@lst.de>
- <20200618144627.114057-7-hch@lst.de>
- <20200619211700.GS11244@42.do-not-panic.com>
- <20200620063538.GA2408@lst.de>
+        Sat, 20 Jun 2020 11:07:06 -0700 (PDT)
+From:   Jim Cromie <jim.cromie@gmail.com>
+To:     jbaron@akamai.com, linux-kernel@vger.kernel.org,
+        akpm@linuxfoundation.org, gregkh@linuxfoundation.org
+Cc:     linux@rasmusvillemoes.dk, Jim Cromie <jim.cromie@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
+        linux-arch@vger.kernel.org
+Subject: [PATCH v4 05/17] dyndbg: rename __verbose section to __dyndbg
+Date:   Sat, 20 Jun 2020 12:06:31 -0600
+Message-Id: <20200620180643.887546-6-jim.cromie@gmail.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200620180643.887546-1-jim.cromie@gmail.com>
+References: <20200620180643.887546-1-jim.cromie@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200620063538.GA2408@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 20, 2020 at 08:35:38AM +0200, Christoph Hellwig wrote:
-> On Fri, Jun 19, 2020 at 09:17:00PM +0000, Luis Chamberlain wrote:
-> > On Thu, Jun 18, 2020 at 04:46:27PM +0200, Christoph Hellwig wrote:
-> > > --- a/kernel/exit.c
-> > > +++ b/kernel/exit.c
-> > > @@ -1626,6 +1626,22 @@ long kernel_wait4(pid_t upid, int __user *stat_addr, int options,
-> > >  	return ret;
-> > >  }
-> > >  
-> > > +int kernel_wait(pid_t pid, int *stat)
-> > > +{
-> > > +	struct wait_opts wo = {
-> > > +		.wo_type	= PIDTYPE_PID,
-> > > +		.wo_pid		= find_get_pid(pid),
-> > > +		.wo_flags	= WEXITED,
-> > > +	};
-> > > +	int ret;
-> > > +
-> > > +	ret = do_wait(&wo);
-> > > +	if (ret > 0 && wo.wo_stat)
-> > > +		*stat = wo.wo_stat;
-> > 
-> > Since all we care about is WEXITED, that could be simplified
-> > to something like this:
-> > 
-> > if (ret > 0 && KWIFEXITED(wo.wo_stat)
-> >  	*stat = KWEXITSTATUS(wo.wo_stat)
-> > 
-> > Otherwise callers have to use W*() wrappers.
-> > 
-> > > +	put_pid(wo.wo_pid);
-> > > +	return ret;
-> > > +}
-> > 
-> > Then we don't get *any* in-kernel code dealing with the W*() crap.
-> > I just unwrapped this for the umh [0], given that otherwise we'd
-> > have to use KW*() callers elsewhere. Doing it upshot one level
-> > further would be even better.
-> > 
-> > [0] https://lkml.kernel.org/r/20200610154923.27510-1-mcgrof@kernel.org              
-> Do you just want to pick this patch up, add your suggested bits and
-> add it to the beginning of your series?  That should clean the whole
-> thing up a bit.  Nothing else in this series depends on the patch.
+dyndbg populates its callsite info into __verbose section, change that
+to a more specific and descriptive name, __dyndbg.
 
-Sure but let's wait to hear from the NFS folks.
+Also, per checkpatch:
+  simplify __attribute(..) to __section(__dyndbg) declaration.
 
-I'm waiting to hear from NFS folks if the one place where the UMH is
-fixed for the error code (on fs/nfsd/nfs4recover.c we never were
-disabling the upcall as the error code of -ENOENT or -EACCES was *never*
-properly checked for) to see how critical that was. If it can help
-stable kernels the fix can go in as I proposed, followed by this patch
-to further take the KWEXITSTATUS() up further, and ensure we *never*
-deal with this in-kernel. If its not a fix stable kernels should care
-for what you suggest of taking this patch first would be best and I'd be
-happy to do that.
+and 1 spelling fix, decriptor
 
-  Luis
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+ include/asm-generic/vmlinux.lds.h |  6 +++---
+ include/linux/dynamic_debug.h     |  4 ++--
+ kernel/module.c                   |  2 +-
+ lib/dynamic_debug.c               | 12 ++++++------
+ 4 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index db600ef218d7..05af5cef1ad6 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -320,9 +320,9 @@
+ 	*(__tracepoints)						\
+ 	/* implement dynamic printk debug */				\
+ 	. = ALIGN(8);							\
+-	__start___verbose = .;						\
+-	KEEP(*(__verbose))                                              \
+-	__stop___verbose = .;						\
++	__start___dyndbg = .;						\
++	KEEP(*(__dyndbg))						\
++	__stop___dyndbg = .;						\
+ 	LIKELY_PROFILE()		       				\
+ 	BRANCH_PROFILE()						\
+ 	TRACE_PRINTKS()							\
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index abcd5fde30eb..aa9ff9e1c0b3 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -80,7 +80,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 
+ #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)		\
+ 	static struct _ddebug  __aligned(8)			\
+-	__attribute__((section("__verbose"))) name = {		\
++	__section(__dyndbg) name = {				\
+ 		.modname = KBUILD_MODNAME,			\
+ 		.function = __func__,				\
+ 		.filename = __FILE__,				\
+@@ -133,7 +133,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 
+ /*
+  * "Factory macro" for generating a call to func, guarded by a
+- * DYNAMIC_DEBUG_BRANCH. The dynamic debug decriptor will be
++ * DYNAMIC_DEBUG_BRANCH. The dynamic debug descriptor will be
+  * initialized using the fmt argument. The function will be called with
+  * the address of the descriptor as first argument, followed by all
+  * the varargs. Note that fmt is repeated in invocations of this
+diff --git a/kernel/module.c b/kernel/module.c
+index e8a198588f26..1fb493167b9c 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -3232,7 +3232,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 	if (section_addr(info, "__obsparm"))
+ 		pr_warn("%s: Ignoring obsolete parameters\n", mod->name);
+ 
+-	info->debug = section_objs(info, "__verbose",
++	info->debug = section_objs(info, "__dyndbg",
+ 				   sizeof(*info->debug), &info->num_debug);
+ 
+ 	return 0;
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index c97872cffc8e..66c0bdf06ce7 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -39,8 +39,8 @@
+ 
+ #include <rdma/ib_verbs.h>
+ 
+-extern struct _ddebug __start___verbose[];
+-extern struct _ddebug __stop___verbose[];
++extern struct _ddebug __start___dyndbg[];
++extern struct _ddebug __stop___dyndbg[];
+ 
+ struct ddebug_table {
+ 	struct list_head link;
+@@ -1019,7 +1019,7 @@ static int __init dynamic_debug_init(void)
+ 	int n = 0, entries = 0, modct = 0;
+ 	int verbose_bytes = 0;
+ 
+-	if (&__start___verbose == &__stop___verbose) {
++	if (&__start___dyndbg == &__stop___dyndbg) {
+ 		if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
+ 			pr_warn("_ddebug table is empty in a CONFIG_DYNAMIC_DEBUG build\n");
+ 			return 1;
+@@ -1028,10 +1028,10 @@ static int __init dynamic_debug_init(void)
+ 		ddebug_init_success = 1;
+ 		return 0;
+ 	}
+-	iter = __start___verbose;
++	iter = __start___dyndbg;
+ 	modname = iter->modname;
+ 	iter_start = iter;
+-	for (; iter < __stop___verbose; iter++) {
++	for (; iter < __stop___dyndbg; iter++) {
+ 		entries++;
+ 		verbose_bytes += strlen(iter->modname) + strlen(iter->function)
+ 			+ strlen(iter->filename) + strlen(iter->format);
+@@ -1054,7 +1054,7 @@ static int __init dynamic_debug_init(void)
+ 	ddebug_init_success = 1;
+ 	vpr_info("%d modules, %d entries and %d bytes in ddebug tables, %d bytes in (readonly) verbose section\n",
+ 		 modct, entries, (int)(modct * sizeof(struct ddebug_table)),
+-		 verbose_bytes + (int)(__stop___verbose - __start___verbose));
++		 verbose_bytes + (int)(__stop___dyndbg - __start___dyndbg));
+ 
+ 	/* apply ddebug_query boot param, dont unload tables on err */
+ 	if (ddebug_setup_string[0] != '\0') {
+-- 
+2.26.2
+
