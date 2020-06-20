@@ -2,121 +2,174 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E3A202278
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Jun 2020 09:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5B62023FC
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Jun 2020 15:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726580AbgFTH5h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 20 Jun 2020 03:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S1728086AbgFTNp6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 20 Jun 2020 09:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbgFTH5g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Jun 2020 03:57:36 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86579C06174E;
-        Sat, 20 Jun 2020 00:57:36 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id l10so11754937wrr.10;
-        Sat, 20 Jun 2020 00:57:36 -0700 (PDT)
+        with ESMTP id S1728051AbgFTNp5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Jun 2020 09:45:57 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6ADC06174E;
+        Sat, 20 Jun 2020 06:45:57 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id i4so11457563iov.11;
+        Sat, 20 Jun 2020 06:45:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+ni8LF6DiZ7e+Sa1bH9I96UUmF2BBDFC3xDwZDcw058=;
-        b=NiF4Ek5JpVCT1lkixtJWNHFOi/+jzvu5yqUj3bVi28nBXxd1qGW6SwIjRWQsHVZvQ1
-         /sN9tsPubXkYpuqaIOe2WnxiwZqgQAakf0KNEk2oKNHTdNO+l1Oj0svHDl4FSnAMkWg0
-         sjQSuriza/6E772gnStLKc8Dd+ZP24hlrXp1pQFOacPEJCRv7X5MnaV2n105XjmEVS+c
-         7t4HeE/LZWVXKY6rYGMkUtcMqVNx8jBnpGXPoNYK8/OBSesF0B3kuXHEPqVIuQQhwKza
-         R6ye/M+q2rTGF6UJbvBK0WlWpo0wqfwIYsh4RMJFfuYb/4J3XwOTd1Pg3Q/A8JtMiS5J
-         KJRQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UNXH1YyCsCCl1PMwAp+oXRKvH3YYWfnwY9YvlVxqdww=;
+        b=rcxaeLlz/cgHimzyoWhZdWGHIbENtRp2IsSWqCwO0Cwf3isdxM8xKq/gDUNc3Zk7cE
+         p747aOnwWPvG/Y4JTrI5jg2xyU77w77Hrm+hXGJdlddukqkMncO2o5GLb61u2ggOZotB
+         errbF9SKLDVyYf0hySHJasYmmAXl57Cz29wl8NcccwTzNMbDKoIF1ojelhyUrglBmS+l
+         ieIZ4/MILunQnTe79G2qbK2a41INV/3Ce9jF4hAwgdRL/kGCjhnbHaSI25275MOH8OMc
+         fY4v9/iewjdumxIwwr0fLSDfn88cWr8lwjBtENKvY3qIxcEK7KeX1yWi8/4NBUMmIqTs
+         5gng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+ni8LF6DiZ7e+Sa1bH9I96UUmF2BBDFC3xDwZDcw058=;
-        b=effKCyDlDQeCPgiqd8WfGrAECWCVwvDTEwI3tOhp8P5FfsQ87uUT84LR+RHXjXNAlC
-         OUZieR9ZY6oWk1KKQ84PvTxmtGML20GOO4NWVcsFpMeN/lFKqy/yesRYyQ6wK38dzWQ9
-         HUPwtESq3r1zm+EmWXR4H2n/lDLIeM/L7zIEkjQsiauDPGcYSzv7fSSKZW4FYp3jC/wP
-         DLGqMbQs8AsmnR0CnV8lDqRymQCsGr4gnwe36vTcglZYSTvHSfcFUzJyd/i6GPlH0pAo
-         kJHdL+Vxk76i+jVSQkOrR/DpDTk1g1cfItD1fVa+KmVJyxocAHlwC60Zl1GcG0gmXEcp
-         Mfvw==
-X-Gm-Message-State: AOAM5301EQOHZmcA4V322O5uBJDtPlhv84AxgyNjEYoUF7qU5y51T2n4
-        FJ3QPIltlsEqHpAd+zdEJ2SkpGQ=
-X-Google-Smtp-Source: ABdhPJx2LzDP5vaEKmQra4DiB1bA7ic/ADuDUbl9U0GPCwzJ0K00W8lZUJcSkex4J9D5e32tWJ5TGQ==
-X-Received: by 2002:a05:6000:128e:: with SMTP id f14mr8750971wrx.276.1592639855172;
-        Sat, 20 Jun 2020 00:57:35 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.252.34])
-        by smtp.gmail.com with ESMTPSA id e25sm10429252wrc.69.2020.06.20.00.57.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2020 00:57:34 -0700 (PDT)
-Date:   Sat, 20 Jun 2020 10:57:32 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        NetFilter <netfilter-devel@vger.kernel.org>
-Subject: Re: [PATCH] linux++, this: rename "struct notifier_block *this"
-Message-ID: <20200620075732.GA468070@localhost.localdomain>
-References: <20200618210645.GB2212102@localhost.localdomain>
- <CAHk-=whz7xz1EBqfyS-C8zTx3_q54R1GuX9tDHdK1-TG91WH-Q@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UNXH1YyCsCCl1PMwAp+oXRKvH3YYWfnwY9YvlVxqdww=;
+        b=iMg/FfxPvIQE/nA5JCMaXIhZfLSo3F9H46qgVjDTRx8MQdEdarWadfVyczx59rRURq
+         AeomT/HtM/Ln+6kXZp/dSt1k7dTgAG6753LkeMhTsNURmEieFJMMQQFV/1AurlrxuKrj
+         F0NcdeQLxTylfWoA9785RY++bgjYykmEJXNkJhWkaadAmULlA2SeDFFkf9quokvCDyse
+         zhNoy/Sz+kJkpFwNNWsnI/fBNU5/BW8zf2Dnldr4N5Nj/mK8BclcSX1bL4hpg4ZI7Sf2
+         PSBChzAWfjScRd6zNWmvQ1XQtKUNcNxVd/vghMsUECeQ1FlTRjB2j577mDap1cCj4RX9
+         IUrw==
+X-Gm-Message-State: AOAM5334oWxB0gtZOEHZ10Nt0hqDrkOXFR0caHn2BeWPPoHLTW5Ol0qJ
+        TWBKdhkD/28UenQjhD3+rD7tjzmSrJzKSPoojHA=
+X-Google-Smtp-Source: ABdhPJyLtGRtpXnIWl94atiG4W1tkPfkoeM7pynAOTFue99EdcoR7NJAVK+TmeaitSyzQMqns7VsTbyYaihfRUHhPcM=
+X-Received: by 2002:a02:c4c8:: with SMTP id h8mr8758326jaj.64.1592660756641;
+ Sat, 20 Jun 2020 06:45:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whz7xz1EBqfyS-C8zTx3_q54R1GuX9tDHdK1-TG91WH-Q@mail.gmail.com>
+References: <cover.1592224128.git.syednwaris@gmail.com> <fe12eedf3666f4af5138de0e70b67a07c7f40338.1592224129.git.syednwaris@gmail.com>
+ <20200616081428.GP2428291@smile.fi.intel.com>
+In-Reply-To: <20200616081428.GP2428291@smile.fi.intel.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Sat, 20 Jun 2020 19:15:44 +0530
+Message-ID: <CACG_h5rDCX10qdbvtD93hL0-hNgJ-J_Orr6X_1WW-9u-CCU36g@mail.gmail.com>
+Subject: Re: [PATCH v8 1/4] bitops: Introduce the for_each_set_clump macro
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 11:37:47AM -0700, Linus Torvalds wrote:
-> On Thu, Jun 18, 2020 at 2:06 PM Alexey Dobriyan <adobriyan@gmail.com> wrote:
-> >
-> > Rename
-> >         struct notifier_block *this
-> > to
-> >         struct notifier_block *nb
-> >
-> > "nb" is arguably a better name for notifier block.
-> 
-> Maybe it's a better name. But it doesn't seem worth it.
-> 
-> Because C++ reserved words are entirely irrelevant.
-> 
-> We did this same dance almost three decades ago, and the fact is, C++
-> has other reserved words that make it all pointless.
+On Tue, Jun 16, 2020 at 1:44 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Jun 15, 2020 at 06:21:18PM +0530, Syed Nayyar Waris wrote:
+> > This macro iterates for each group of bits (clump) with set bits,
+> > within a bitmap memory region. For each iteration, "start" is set to
+> > the bit offset of the found clump, while the respective clump value is
+> > stored to the location pointed by "clump". Additionally, the
+> > bitmap_get_value and bitmap_set_value functions are introduced to
+> > respectively get and set a value of n-bits in a bitmap memory region.
+> > The n-bits can have any size less than or equal to BITS_PER_LONG.
+> > Moreover, during setting value of n-bit in bitmap, if a situation arise
+> > that the width of next n-bit is exceeding the word boundary, then it
+> > will divide itself such that some portion of it is stored in that word,
+> > while the remaining portion is stored in the next higher word. Similar
+> > situation occurs while retrieving value of n-bits from bitmap.
+>
+> On the second view...
+>
+> > +static inline unsigned long bitmap_get_value(const unsigned long *map,
+> > +                                           unsigned long start,
+> > +                                           unsigned long nbits)
+> > +{
+> > +     const size_t index = BIT_WORD(start);
+> > +     const unsigned long offset = start % BITS_PER_LONG;
+>
+> > +     const unsigned long ceiling = roundup(start + 1, BITS_PER_LONG);
+>
+> This perhaps should use round_up()
 
-The real problems are "class" and "new" indeed.
+Hi Andy. I will see with round_up(). I will check and inform you.
+Further below ...
 
-> There is no way I will accept the renaming of various "new" variables.
+>
+> > +     const unsigned long space = ceiling - start;
+>
+> And I think I see a scenario to complain.
+>
+> If start == 0, then ceiling will be 64.
+> space == 64. Not good.
 
-I'm not sending "new".
+Yes, you are right, when the 'start' is '0', then 'space' will be 64
+(on arch where BITS_PER_LONG is 64).
+But actually I want this to happen. I need 'space' to hold value 64
+when 'start' is '0'. The reason is as follows:
 
-> We did it, it was bad, we undid it, and we now have a _lot_ more uses
-> of 'new' and 'old', and no, we're not changing it for a braindead
-> language that isn't relevant to the kernel.
-> 
-> The fact is, C++ chose bad identifiers to make reserved words.
-> 
-> If you want to build the kernel with C++, you'd be a lot better off just doing
-> 
->    /* C++ braindamage */
->    #define this __this
->    #define new __new
-> 
-> and deal with that instead.
+Taking the example of bitmap_set_value(). If the nbits is 16 (as
+example) and 'start' is zero, The 'if' condition will be executed
+inside bitmap_set_value() when 'start' is zero because space(64) >=
+nbits(16) is true. This 'if' condition is for the case when nbits
+falls completely into the first word and the nbits doesn't have to
+divide itself into another higher word of the bitmap.
 
-Can't do this because of placement new.
+This is what I want to happen. I will think more about this and let
+you know further.
 
-> Because no, the 'new' renaming will never happen, and while 'this'
-> isn't nearly as common or relevant a name, once you have the same
-> issue with 'new', what's the point of trying to deal with 'this'?
+Kindly let me know If I have misunderstood something. Thanks !
 
-I'm not sending "new".
-
-There is stuff which can be merge without breaking source compatibility
-and readability of C version:
-
-	private		=> priv
-	virtual		=> virt
-	this		=> self (in some contexts)
-
-and those which can not. I'm not sending the latter.
+>
+> > +     unsigned long value_low, value_high;
+> > +
+> > +     if (space >= nbits)
+> > +             return (map[index] >> offset) & GENMASK(nbits - 1, 0);
+> > +     else {
+> > +             value_low = map[index] & BITMAP_FIRST_WORD_MASK(start);
+> > +             value_high = map[index + 1] & BITMAP_LAST_WORD_MASK(start + nbits);
+> > +             return (value_low >> offset) | (value_high << space);
+> > +     }
+> > +}
+>
+> ...
+>
+> > +/**
+> > + * bitmap_set_value - set n-bit value within a memory region
+> > + * @map: address to the bitmap memory region
+> > + * @value: value of nbits
+> > + * @start: bit offset of the n-bit value
+> > + * @nbits: size of value in bits
+> > + */
+> > +static inline void bitmap_set_value(unsigned long *map,
+> > +                                 unsigned long value,
+> > +                                 unsigned long start, unsigned long nbits)
+> > +{
+> > +     const size_t index = BIT_WORD(start);
+> > +     const unsigned long offset = start % BITS_PER_LONG;
+>
+> > +     const unsigned long ceiling = roundup(start + 1, BITS_PER_LONG);
+> > +     const unsigned long space = ceiling - start;
+>
+> Ditto for both lines.
+>
+> > +     value &= GENMASK(nbits - 1, 0);
+> > +
+> > +     if (space >= nbits) {
+> > +             map[index] &= ~(GENMASK(nbits + offset - 1, offset));
+> > +             map[index] |= value << offset;
+> > +     } else {
+> > +             map[index] &= ~BITMAP_FIRST_WORD_MASK(start);
+> > +             map[index] |= value << offset;
+> > +             map[index + 1] &= ~BITMAP_LAST_WORD_MASK(start + nbits);
+> > +             map[index + 1] |= (value >> space);
+> > +     }
+> > +}
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
