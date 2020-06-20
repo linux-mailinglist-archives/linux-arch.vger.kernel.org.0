@@ -2,181 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D40A82025E7
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Jun 2020 20:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4818B2025F0
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Jun 2020 20:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728448AbgFTSIJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 20 Jun 2020 14:08:09 -0400
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:44291 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728433AbgFTSII (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Jun 2020 14:08:08 -0400
-Received: by mail-oo1-f67.google.com with SMTP id e8so2547242ooi.11;
-        Sat, 20 Jun 2020 11:08:07 -0700 (PDT)
+        id S1728408AbgFTSR4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 20 Jun 2020 14:17:56 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:34650 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728399AbgFTSRz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Jun 2020 14:17:55 -0400
+Received: by mail-lj1-f195.google.com with SMTP id x18so15009789lji.1
+        for <linux-arch@vger.kernel.org>; Sat, 20 Jun 2020 11:17:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZQmp7gjRdqQPcbV8CCSihis/262QMxzCnfpTGRwmu4Q=;
-        b=gXTvrGkPqyTWZrm8CfmKd18c2m1xgf8afBst1ViGwwJcS93nbKsbVbzzvU/ndvIwEp
-         LJareakbavwrix4ZHzlWKREVSbu0a+0rDa/vj068flfV68zLqBZ8+YxTyhU7lTGgdrNw
-         UkRNJc1pcW2sywWokEvZOBWq23rfGYOsY9TXnhKgaOYKtQWEgVZMb7SwqY7Taxe5bmZ6
-         BBYcDGhDrGMxFB6UEdqmMCu8tTN9AmptsTzGcf0LmisEhr7X7rMpfzaDogXwlzHEejMv
-         wqVGIyZIDlzWvQxwWGynYaozUwY6nQ35qNdS7eEKUr7o9Uy3WhI9/GZhpU9AC+sHGQF4
-         8ERg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fvNVjKHLtWO1dFhcir+/iDU+Lfgpi6JKmP8lzEdvB4E=;
+        b=XZhtEb+0zgTmk7p1FKGgpCykCJGCR4QhBQlCJIvFhX2gO0uR1pqoBoOBIBXk8xm1oo
+         nnYsLEAqabKP6xPYAXRe3MXkcyadqTMH+s5IProFdvebzb7pzQ6AkXwlDow2qmIdedzm
+         oZw5CZPotJ22BL1wUHzVnLaBOGBVpYDODO31o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZQmp7gjRdqQPcbV8CCSihis/262QMxzCnfpTGRwmu4Q=;
-        b=O5xoiCNLCXKYd4ruNVDiWJDUjCi2xGVJh+mFIC7tyACtHnW8kS+q4vVV6fntHG4bN4
-         NypmYZOpIrjtndXsDgcO263+lfmXXWQV3YmKvsbcxW5m8JXPD0nWVJZVhVdqZG8L9d9s
-         9Mf8vdpKDUqkgMbw0acuEmqDxN9tNzpZHsRtgnpaxG4sVl14/IIqQc8ZaN9k28q//QPd
-         JC0sLOB84TTuZ58dZO0GSVfutyrdDZMPAWUqtFH7PyX0yGNBCR5p63OzjkxBdT1tt8z3
-         wmP7GqWeM8A6BoIvT8lGBXTxe7JIu+auXb4Ai7zBSRVRGSQRk862hvlQ1UXZ3UYzztD3
-         /DmQ==
-X-Gm-Message-State: AOAM532cJRb7ZlHdj6JI+arfi+KFodP/2bXQw+STgAzEP6EGkxvWV/eI
-        UWilUZo1DfcTCFymILTF7xg=
-X-Google-Smtp-Source: ABdhPJyonijnaNyEy4O3V+iH+tbB3pTuMz/MSOEnqSQ9hGyKpx9k7UHWHH5XG8KyOcCofpgK7IN64g==
-X-Received: by 2002:a4a:9c44:: with SMTP id c4mr8318758ook.46.1592676426694;
-        Sat, 20 Jun 2020 11:07:06 -0700 (PDT)
-Received: from localhost.localdomain (c-24-9-77-57.hsd1.co.comcast.net. [24.9.77.57])
-        by smtp.googlemail.com with ESMTPSA id y31sm2077901otb.41.2020.06.20.11.07.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2020 11:07:06 -0700 (PDT)
-From:   Jim Cromie <jim.cromie@gmail.com>
-To:     jbaron@akamai.com, linux-kernel@vger.kernel.org,
-        akpm@linuxfoundation.org, gregkh@linuxfoundation.org
-Cc:     linux@rasmusvillemoes.dk, Jim Cromie <jim.cromie@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
-        linux-arch@vger.kernel.org
-Subject: [PATCH v4 05/17] dyndbg: rename __verbose section to __dyndbg
-Date:   Sat, 20 Jun 2020 12:06:31 -0600
-Message-Id: <20200620180643.887546-6-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200620180643.887546-1-jim.cromie@gmail.com>
-References: <20200620180643.887546-1-jim.cromie@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fvNVjKHLtWO1dFhcir+/iDU+Lfgpi6JKmP8lzEdvB4E=;
+        b=WVBiTfNtkGt6Adfyy6nzu9i+f+BEELBmGQ0tKQv/vBpyIvqww5mIEYEvC4l2G70aav
+         2myNEnwQj5J9WT2Y8nPXMVoPf6adMA7NT/mA68OW6W6ig5mRIoO1Ue7AqJADxAmjp9cH
+         +WzqIXID4RPvtDLIlqBAF5InXFLGj1xcO9nIz3qjG40/O05NzkRaL/mJtpn0iAo+rmZk
+         Siib4WzHQsYBqjF6dxq48ucIzZZ+Q1IxZh3/lXq3hWa7be3ZrvnSPb4o8585ozYeNsQ+
+         qjhxG3A2b4UgVi7f5YR0/rEFS3iRLw0z8pP5jthvTxs76MOwrnRe0UmqcMBIe7DG7uU8
+         Xk2g==
+X-Gm-Message-State: AOAM530sP05oHkw/q8S59wOp9JuTzaZElDM2MPgggxBlU1Amuu4Afpyp
+        C/9uMs287sw+LDZ+SmvHRLunlCWxsAY=
+X-Google-Smtp-Source: ABdhPJyCdcyZJxJHd+4yg6kPsoHehGFme0CKdIHohTHXmr2tKbe7hPszET7bLCqF+cvp56ATrPpUJw==
+X-Received: by 2002:a2e:6c07:: with SMTP id h7mr4898030ljc.125.1592677012898;
+        Sat, 20 Jun 2020 11:16:52 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id d3sm1928689lfe.93.2020.06.20.11.16.51
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Jun 2020 11:16:51 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id o4so7375791lfi.7
+        for <linux-arch@vger.kernel.org>; Sat, 20 Jun 2020 11:16:51 -0700 (PDT)
+X-Received: by 2002:a19:ae0f:: with SMTP id f15mr5206631lfc.142.1592677011252;
+ Sat, 20 Jun 2020 11:16:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200618210645.GB2212102@localhost.localdomain>
+ <CAHk-=whz7xz1EBqfyS-C8zTx3_q54R1GuX9tDHdK1-TG91WH-Q@mail.gmail.com> <20200620075732.GA468070@localhost.localdomain>
+In-Reply-To: <20200620075732.GA468070@localhost.localdomain>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 20 Jun 2020 11:16:35 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjt=mTBqymWuRYeiXQxdEdf6si_it=Yzm7KR62ws0vknw@mail.gmail.com>
+Message-ID: <CAHk-=wjt=mTBqymWuRYeiXQxdEdf6si_it=Yzm7KR62ws0vknw@mail.gmail.com>
+Subject: Re: [PATCH] linux++, this: rename "struct notifier_block *this"
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-dyndbg populates its callsite info into __verbose section, change that
-to a more specific and descriptive name, __dyndbg.
+On Sat, Jun 20, 2020 at 12:57 AM Alexey Dobriyan <adobriyan@gmail.com> wrote:
+>
+> > If you want to build the kernel with C++, you'd be a lot better off just doing
+> >
+> >    /* C++ braindamage */
+> >    #define this __this
+> >    #define new __new
+> >
+> > and deal with that instead.
+>
+> Can't do this because of placement new.
 
-Also, per checkpatch:
-  simplify __attribute(..) to __section(__dyndbg) declaration.
+Can you explain?
 
-and 1 spelling fix, decriptor
+> > Because no, the 'new' renaming will never happen, and while 'this'
+> > isn't nearly as common or relevant a name, once you have the same
+> > issue with 'new', what's the point of trying to deal with 'this'?
+>
+> I'm not sending "new".
 
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- include/asm-generic/vmlinux.lds.h |  6 +++---
- include/linux/dynamic_debug.h     |  4 ++--
- kernel/module.c                   |  2 +-
- lib/dynamic_debug.c               | 12 ++++++------
- 4 files changed, 12 insertions(+), 12 deletions(-)
+My point about 'new' is that
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index db600ef218d7..05af5cef1ad6 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -320,9 +320,9 @@
- 	*(__tracepoints)						\
- 	/* implement dynamic printk debug */				\
- 	. = ALIGN(8);							\
--	__start___verbose = .;						\
--	KEEP(*(__verbose))                                              \
--	__stop___verbose = .;						\
-+	__start___dyndbg = .;						\
-+	KEEP(*(__dyndbg))						\
-+	__stop___dyndbg = .;						\
- 	LIKELY_PROFILE()		       				\
- 	BRANCH_PROFILE()						\
- 	TRACE_PRINTKS()							\
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index abcd5fde30eb..aa9ff9e1c0b3 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -80,7 +80,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 
- #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)		\
- 	static struct _ddebug  __aligned(8)			\
--	__attribute__((section("__verbose"))) name = {		\
-+	__section(__dyndbg) name = {				\
- 		.modname = KBUILD_MODNAME,			\
- 		.function = __func__,				\
- 		.filename = __FILE__,				\
-@@ -133,7 +133,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 
- /*
-  * "Factory macro" for generating a call to func, guarded by a
-- * DYNAMIC_DEBUG_BRANCH. The dynamic debug decriptor will be
-+ * DYNAMIC_DEBUG_BRANCH. The dynamic debug descriptor will be
-  * initialized using the fmt argument. The function will be called with
-  * the address of the descriptor as first argument, followed by all
-  * the varargs. Note that fmt is repeated in invocations of this
-diff --git a/kernel/module.c b/kernel/module.c
-index e8a198588f26..1fb493167b9c 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3232,7 +3232,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
- 	if (section_addr(info, "__obsparm"))
- 		pr_warn("%s: Ignoring obsolete parameters\n", mod->name);
- 
--	info->debug = section_objs(info, "__verbose",
-+	info->debug = section_objs(info, "__dyndbg",
- 				   sizeof(*info->debug), &info->num_debug);
- 
- 	return 0;
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index c97872cffc8e..66c0bdf06ce7 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -39,8 +39,8 @@
- 
- #include <rdma/ib_verbs.h>
- 
--extern struct _ddebug __start___verbose[];
--extern struct _ddebug __stop___verbose[];
-+extern struct _ddebug __start___dyndbg[];
-+extern struct _ddebug __stop___dyndbg[];
- 
- struct ddebug_table {
- 	struct list_head link;
-@@ -1019,7 +1019,7 @@ static int __init dynamic_debug_init(void)
- 	int n = 0, entries = 0, modct = 0;
- 	int verbose_bytes = 0;
- 
--	if (&__start___verbose == &__stop___verbose) {
-+	if (&__start___dyndbg == &__stop___dyndbg) {
- 		if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
- 			pr_warn("_ddebug table is empty in a CONFIG_DYNAMIC_DEBUG build\n");
- 			return 1;
-@@ -1028,10 +1028,10 @@ static int __init dynamic_debug_init(void)
- 		ddebug_init_success = 1;
- 		return 0;
- 	}
--	iter = __start___verbose;
-+	iter = __start___dyndbg;
- 	modname = iter->modname;
- 	iter_start = iter;
--	for (; iter < __stop___verbose; iter++) {
-+	for (; iter < __stop___dyndbg; iter++) {
- 		entries++;
- 		verbose_bytes += strlen(iter->modname) + strlen(iter->function)
- 			+ strlen(iter->filename) + strlen(iter->format);
-@@ -1054,7 +1054,7 @@ static int __init dynamic_debug_init(void)
- 	ddebug_init_success = 1;
- 	vpr_info("%d modules, %d entries and %d bytes in ddebug tables, %d bytes in (readonly) verbose section\n",
- 		 modct, entries, (int)(modct * sizeof(struct ddebug_table)),
--		 verbose_bytes + (int)(__stop___verbose - __start___verbose));
-+		 verbose_bytes + (int)(__stop___dyndbg - __start___dyndbg));
- 
- 	/* apply ddebug_query boot param, dont unload tables on err */
- 	if (ddebug_setup_string[0] != '\0') {
--- 
-2.26.2
+ (a) there's a lot more 'new' than 'this'
 
+ (b) without dealing with 'new', dealing with 'this' is pointless
+
+So why bother? Without some kind of pre-processing phase to make our C
+code palatable to a C++ parser, it will never work.
+
+And if you _do_ have a pre-processing phase (which might be a #define,
+but might also be a completely separate pass with some special tool),
+converting 'this' in the kernel sources isn't useful anyway, because
+you could just do it in the pre-processing phase instead.
+
+See? THAT is why I'm harping on 'new'. Not because you sent me a patch
+to deal with 'new', but because such a patch will never be accepted,
+and without that patch the pain from 'this' seems entirely irrelevant.
+
+What's your plan for 'new'? And why doesn't that plan then work for 'this'?
+
+              Linus
