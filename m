@@ -2,109 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C38204428
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 01:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A804C20443A
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 01:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731175AbgFVXAT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Jun 2020 19:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
+        id S1731380AbgFVXEV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Jun 2020 19:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731268AbgFVXAQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Jun 2020 19:00:16 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19285C061573
-        for <linux-arch@vger.kernel.org>; Mon, 22 Jun 2020 16:00:15 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id q22so6080915pgk.2
-        for <linux-arch@vger.kernel.org>; Mon, 22 Jun 2020 16:00:15 -0700 (PDT)
+        with ESMTP id S1730785AbgFVXEV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Jun 2020 19:04:21 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DF7C061573
+        for <linux-arch@vger.kernel.org>; Mon, 22 Jun 2020 16:04:20 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id 35so8264651ple.0
+        for <linux-arch@vger.kernel.org>; Mon, 22 Jun 2020 16:04:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=83TCNCBjNohNVrqhGduE8K74z3IQ6/Lu6H9fSwHcKBI=;
-        b=DEgcNUgmnqgavBlvTgADYfLgOafyX/H5FdDRdvi9Bb6S/WBs7kYll9YiPjRSOvgAEG
-         v7bulz7OBSDhmA+jwBGRGVdMGRWVjDRy6+FOm9QURTY20m2IeGFzm5+8yMNEN2Dr6Oa1
-         ibe8QqZwP9MNkKA71L+uamdauQHqW1Qj57tvg=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SzgCWMDg2RKJ2NhPQUi7yzswSotPjadK1/0BdT/7pNM=;
+        b=CjobsTwjEzfFB7mg3yto+C37iPxoADkBtXnwx5Zwh1qhWDXJI9D8xzTYannQoMeE59
+         wYG8uphNg+tfYmpQDrje8+ZiMkr9C6zDHh05LXr1dxnbGcD7rcatVqb208oPrAX1xxqB
+         rMhirMwPU0VMi65dec2Qn/HinSWsI/vcDRVsMIGJs+5yaNri6IK5LoQwvGPcoK+2WLMn
+         sqYEhxjSdosxf/hM9s6W6CVJJi/xnF0Je9pZD+TXn6ArUzc0GmkZz3Hco2I6Im31YEfK
+         tis4ESU+TFUPNnp/+ik9M+TOUIBnySvS0k8SDIEYVkUGO+TUFQ8DH2mreAVwZRufQBL7
+         psPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=83TCNCBjNohNVrqhGduE8K74z3IQ6/Lu6H9fSwHcKBI=;
-        b=ZcJkgFhP7bkwGPhB7CYcK2z5/FNOUzrUwtDvneDjJ71KCfLrcXkrP8VxjuB8utz2NB
-         QFMCP5xiiOj/fv52QUtUerihli7BL5m1jU9KG1+Z1AaXQBd/pG0E9D/FagBat6Qx6eb3
-         lP82wEkR0p3ZjKN8ROA77y0ZkJ6bDOPRc1gsuUICGB2ZEe4D3yjXI/ga4WwHTI2L/Jvx
-         HWXpdDa7xGiYMS6ZIfzX09Bjm7e7WfDMWawr/2IitCKFns9JyCRSp8MkBb8f2EVeiqmP
-         BzKpgDVW/yIIJWWoWCFlLLYWYs6cF77qTOpn/F6U++aVmTQJUdrauPEsJYvoNnDKVmNI
-         hKAg==
-X-Gm-Message-State: AOAM532xEV+Ah/YCmgEfElvlt/hSmwjWO3RY0O+zM2QR8SsUYToIh9dT
-        7ZMg7MIW8R1sjoJ2u4HQ24okEw==
-X-Google-Smtp-Source: ABdhPJzDfln86XAWzAEV3/P8Jj4TpYbAS/ch7Sm25KrySby0/SNFjM433WHLKjjRx44/ZmqpW6wv+w==
-X-Received: by 2002:a63:df56:: with SMTP id h22mr14511327pgj.140.1592866814612;
-        Mon, 22 Jun 2020 16:00:14 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v7sm14485890pfn.147.2020.06.22.16.00.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 16:00:13 -0700 (PDT)
-Date:   Mon, 22 Jun 2020 16:00:12 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Fangrui Song <maskray@google.com>
-Cc:     Borislav Petkov <bp@suse.de>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] x86/boot: Warn on orphan section placement
-Message-ID: <202006221600.81F5586@keescook>
-References: <20200622205341.2987797-1-keescook@chromium.org>
- <20200622205341.2987797-4-keescook@chromium.org>
- <20200622220628.t5fklwmbtqoird5f@google.com>
- <202006221543.EA2FCFA2FF@keescook>
- <20200622224928.o2a7jkq33guxfci4@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SzgCWMDg2RKJ2NhPQUi7yzswSotPjadK1/0BdT/7pNM=;
+        b=GWrqPtkx3F/6BNakabl/2fDvy0ndcVeok7DKZSrxkcTyPxGa2wt4uBMf4xs4SiBMPj
+         tu8TD2NDqSbQ+uvz9Y/PGP+HoxvQ7a6MlC0JHlePsdnCgnqX4yJFZav/bt99Qfw5uCEd
+         zJnHKbwoUGcC3U3cJGmTkemdtnITIgXApkfsdjqBFtbSYZDULOmc0WCoRdnesuLFmblW
+         DH914qfUxsx4RovooQBeKaF0ds01sfixASM8AQt3hRtNxWwIlR4i8r/Sagu9XkKfjxu8
+         kgKtGoUJXhYtTnDfKY2CBAPNLxLOfFcdsF9AeDN7AUXXcXBk6viSXiVgdNRlgU+x9qym
+         jjtg==
+X-Gm-Message-State: AOAM532dEZY9mC+FiMxaCuO+SP9Ddodr9G1oVJK9UfoNWMdCxn5YgB5+
+        m38YDpKtFmW3EtGcYzrnI3F5GAQ2jfRSfBEGETAnBw==
+X-Google-Smtp-Source: ABdhPJy9ExQlGK27NrlHcsj2o4KqK8zQSxV/IYN84Vo7oDdUJkzL59yBK014EWuci7pcT/EaZ13XpTPNDdTLyCE+wNI=
+X-Received: by 2002:a17:902:fe8b:: with SMTP id x11mr21225140plm.179.1592867060019;
+ Mon, 22 Jun 2020 16:04:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200622224928.o2a7jkq33guxfci4@google.com>
+References: <20200617210613.95432-1-ndesaulniers@google.com> <20200617212705.tq2q6bi446gydymo@google.com>
+In-Reply-To: <20200617212705.tq2q6bi446gydymo@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 22 Jun 2020 16:04:07 -0700
+Message-ID: <CAKwvOdniambW9_nVbDnd4A_+bdDdZMd2V1Q=Xw5EJYDGeh=eyQ@mail.gmail.com>
+Subject: Re: [PATCH] vmlinux.lds: consider .text.{hot|unlikely}.* part of
+ .text too
+To:     =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kees Cook <keescook@chromium.org>,
+        "# 3.4.x" <stable@vger.kernel.org>, Jian Cai <jiancai@google.com>,
+        Luis Lozano <llozano@google.com>,
+        Manoj Gupta <manojgupta@google.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 03:49:28PM -0700, Fangrui Song wrote:
-> On 2020-06-22, Kees Cook wrote:
-> > On Mon, Jun 22, 2020 at 03:06:28PM -0700, Fangrui Song wrote:
-> > > LLD may report warnings for 3 synthetic sections if they are orphans:
-> > > 
-> > > ld.lld: warning: <internal>:(.symtab) is being placed in '.symtab'
-> > > ld.lld: warning: <internal>:(.shstrtab) is being placed in '.shstrtab'
-> > > ld.lld: warning: <internal>:(.strtab) is being placed in '.strtab'
-> > > 
-> > > Are they described?
-> > 
-> > Perhaps:
-> > 
-> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> > index db600ef218d7..57e9c142e401 100644
-> > --- a/include/asm-generic/vmlinux.lds.h
-> > +++ b/include/asm-generic/vmlinux.lds.h
-> > @@ -792,6 +792,9 @@
-> > 		.stab.exclstr 0 : { *(.stab.exclstr) }			\
-> > 		.stab.index 0 : { *(.stab.index) }			\
-> > 		.stab.indexstr 0 : { *(.stab.indexstr) }		\
-> > +		.symtab 0 : { *(.symtab) }				\
-> > +		.strtab 0 : { *(.strtab) }				\
-> > +		.shstrtab 0 : { *(.shstrtab) }				\
-> > 		.comment 0 : { *(.comment) }
-> > 
-> > #ifdef CONFIG_GENERIC_BUG
-> 
-> This LGTM. Nit: .comment before .symtab is a more common order.
+On Wed, Jun 17, 2020 at 2:27 PM F=C4=81ng-ru=C3=AC S=C3=B2ng <maskray@googl=
+e.com> wrote:
+>
+>
+> On 2020-06-17, Nick Desaulniers wrote:
+> >ld.bfd's internal linker script considers .text.hot AND .text.hot.* to
+> >be part of .text, as well as .text.unlikely and .text.unlikely.*.
+>
+> >ld.lld will produce .text.hot.*/.text.unlikely.* sections.
+>
+> Correction to this sentence. lld is not relevant here.
+>
+> -ffunction-sections combined with profile-guided optimization can
+> produce .text.hot.* .text.unlikely.* sections.  Newer clang may produce
+> .text.hot. .text.unlikely. (without suffix, but with a trailing dot)
+> when -fno-unique-section-names is specified, as an optimization to make
+> .strtab smaller.
 
-Adjusted.
+Then why was the bug report reporting https://reviews.llvm.org/D79600
+as the result of a bisection, if LLD is not relevant?  Was the
+bisection wrong?
 
-> Reviewed-by: Fangrui Song <maskray@google.com>
+The upstream report wasn't initially public, for no good reason.  So I
+didn't include it, but if we end up taking v1, this should have
 
-Thanks!
+Link: https://bugs.chromium.org/p/chromium/issues/detail?id=3D1084760
 
--- 
-Kees Cook
+The kernel doesn't use -fno-unique-section-names; is that another flag
+that's added by CrOS' compiler wrapper?
+https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/t=
+hird_party/toolchain-utils/compiler_wrapper/config.go;l=3D110
+Looks like no.  It doesn't use `-fno-unique-section-names` or
+`-ffunction-sections`.
+
+
+>
+> We've already seen that GCC can place main in .text.startup without
+> -ffunction-sections. There may be other non -ffunction-sections cases
+> for .text.hot.* or .text.unlikely.*. So it is definitely a good idea to
+> be more specific even if we don't care about -ffunction-sections for
+> now.
+>
+> >Make sure to group these together.  Otherwise these orphan sections may
+> >be placed outside of the the _stext/_etext boundaries.
+> >
+> >Cc: stable@vger.kernel.org
+> >Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommitdiff;h=
+=3Dadd44f8d5c5c05e08b11e033127a744d61c26aee
+> >Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommitdiff;h=
+=3D1de778ed23ce7492c523d5850c6c6dbb34152655
+> >Link: https://reviews.llvm.org/D79600
+> >Reported-by: Jian Cai <jiancai@google.com>
+> >Debugged-by: Luis Lozano <llozano@google.com>
+> >Suggested-by: F=C4=81ng-ru=C3=AC S=C3=B2ng <maskray@google.com>
+> >Tested-by: Luis Lozano <llozano@google.com>
+> >Tested-by: Manoj Gupta <manojgupta@google.com>
+> >Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> >---
+> > include/asm-generic/vmlinux.lds.h | 4 +++-
+> > 1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> >diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vml=
+inux.lds.h
+> >index d7c7c7f36c4a..fe5aaef169e3 100644
+> >--- a/include/asm-generic/vmlinux.lds.h
+> >+++ b/include/asm-generic/vmlinux.lds.h
+> >@@ -560,7 +560,9 @@
+> >  */
+> > #define TEXT_TEXT                                                     \
+> >               ALIGN_FUNCTION();                                       \
+> >-              *(.text.hot TEXT_MAIN .text.fixup .text.unlikely)       \
+> >+              *(.text.hot .text.hot.*)                                \
+> >+              *(TEXT_MAIN .text.fixup)                                \
+> >+              *(.text.unlikely .text.unlikely.*)                      \
+> >               NOINSTR_TEXT                                            \
+> >               *(.text..refcount)                                      \
+> >               *(.ref.text)                                            \
+> >--
+> >2.27.0.290.gba653c62da-goog
+> >
+
+
+
+--
+Thanks,
+~Nick Desaulniers
