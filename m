@@ -2,215 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 849302028D9
-	for <lists+linux-arch@lfdr.de>; Sun, 21 Jun 2020 07:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BFD202F2C
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jun 2020 06:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729270AbgFUFmU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 21 Jun 2020 01:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbgFUFmT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 21 Jun 2020 01:42:19 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CBFC061794;
-        Sat, 20 Jun 2020 22:42:18 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id z9so15757018ljh.13;
-        Sat, 20 Jun 2020 22:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tehvOPApNmeMIqm7IK8TztXqGsAj0NZyCDwOm9nhvCw=;
-        b=L48tYFSPvrIjl+gZGDkayr95niJ8qRhXbt3YiTmUKPTO0HlzOhlF+XTubtPVng4JS1
-         +hKUP6o5nSTlxL4XupNrIVH9jo3XJWK4d+yeg+W4Re33YzXNbOXdAkuOW2PqYS1yMvPi
-         9DkQCQeSOMiljZOqMzLwUJ/+yhao+RZJFZDT+/klJJiPABXl0OJTn1ulx7MZ+2OYuAIF
-         +VFe6nFFhKGir1A1gHiWHtMli2LBhVf6dt1zsg5Vs/vivMZwFgujpP9h7plERUUC9cHT
-         CCN+l/7bg6UbIBGUfRhXAu6FIKdwTPHqklZaF3i0M5GnNBPQsRTbOrlRfr96bSVrN4/P
-         HJhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tehvOPApNmeMIqm7IK8TztXqGsAj0NZyCDwOm9nhvCw=;
-        b=D0wf+HjrOXQz6dXXjaOi5JlWfMhF/Z8qCHqEFGNfSaaJJ2o6PPhFYpJtNlDUrrWwiZ
-         M8/w18PD7O2Bg3D9zR4ip4mdTaEhZYg9M0jTrhTdTyom8S+02f5obT4aylsvyuU6HnYK
-         QYppQJgDi5ImS8dSjxsMc1sqeV/gV4GN+xJSAjZdH44YSLovv4MhSyrxLD4i88JcicmJ
-         BEje6MPbzuXLK+QGflg9riyw+iOl9MPdS254UoxkttDwq9+JcXlq5GWvShC1gq5LUZJG
-         87xfy25zSctAc7T9eWH8jXgwBF6izjY1Z4HIVzEM+DmVpcmzd1ri64E6JyItLqlvs4bG
-         UXrQ==
-X-Gm-Message-State: AOAM530q5+ZrSrGWlaMfXkpxd8IVdWsOvHMlnjNVjdafMYfpmXowwv6C
-        FEXOPripq6uiec6UTv2KUIUHLtB26Ok=
-X-Google-Smtp-Source: ABdhPJzekmsfJ2VdyZeXWRJUYclj6DNFR51L/fFwBGoDDZofJ5mu9yKq88aUgorfsVPecY7f1ohBPA==
-X-Received: by 2002:a2e:8783:: with SMTP id n3mr141238lji.224.1592718136480;
-        Sat, 20 Jun 2020 22:42:16 -0700 (PDT)
-Received: from localhost.localdomain (h-82-196-111-136.NA.cust.bahnhof.se. [82.196.111.136])
-        by smtp.gmail.com with ESMTPSA id i22sm1990323ljb.50.2020.06.20.22.42.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2020 22:42:15 -0700 (PDT)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     andy.shevchenko@gmail.com, arnd@arndb.de, emil.l.velikov@gmail.com,
-        geert@linux-m68k.org, keescook@chromium.org,
-        linus.walleij@linaro.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lkp@intel.com,
-        rikard.falkeborn@gmail.com, syednwaris@gmail.com,
-        vilhelm.gray@gmail.com, yamada.masahiro@socionext.com
-Subject: [PATCH v4 2/2] bits: Add tests of GENMASK
-Date:   Sun, 21 Jun 2020 07:42:10 +0200
-Message-Id: <20200621054210.14804-2-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200621054210.14804-1-rikard.falkeborn@gmail.com>
-References: <20200620213632.60c2c6b99ec9cf9392fa128d@linux-foundation.org>
- <20200621054210.14804-1-rikard.falkeborn@gmail.com>
+        id S1725995AbgFVEZS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Jun 2020 00:25:18 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:40997 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725943AbgFVEZQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 22 Jun 2020 00:25:16 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49qxCZ42vcz9sSF;
+        Mon, 22 Jun 2020 14:25:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592799914;
+        bh=81fk/3JF3x95g9UbYd0X5h2GkzbHPz5gmaEBxnj+jVM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eVLEF0MfrgFcjT4UopaKCdZqhjZCBkC8sCydLQ9rpzF8hQlysIiUlrEhVRRu1KbPu
+         xLQQKCzCgIn7jEHOh3zAUoxbqXhOWaE1C6lD5XEfLw03+d04InVN2f2k0y006OXJZn
+         HAXk8fJBbAm74ej4N0yssS0FE5AL5ZVMLQBTsD9Dplb9KDTLp2L82yHtZZ6TiBWn78
+         5T9XTcQZ10MiHxXSnmq2zpRJSZevl5teeqK3RrmfwwRAOD8e1q2qbtg64iMMDAP5s8
+         61qgMbTW9OJ1zi7aCJkktsNpFWKpuBsKC2Rc7yuytFLhL7fMCUeBZXEv8bYOmM7vit
+         uyoJrcO9LIIIw==
+Date:   Mon, 22 Jun 2020 14:25:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Linux-kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] Explicitly include linux/major.h where it is
+ needed
+Message-ID: <20200622142512.702bdc68@canb.auug.org.au>
+In-Reply-To: <20200617161810.256ff93f@canb.auug.org.au>
+References: <20200617092614.7897ccb2@canb.auug.org.au>
+        <20200617092747.0cadb2de@canb.auug.org.au>
+        <20200617055843.GB25631@kroah.com>
+        <20200617161810.256ff93f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/4E7sxZ+o7+5.7k+KqzAJoZd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add tests of GENMASK and GENMASK_ULL.
+--Sig_/4E7sxZ+o7+5.7k+KqzAJoZd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-A few test cases that should fail compilation are provided
-under #ifdef TEST_GENMASK_FAILURES
+Hi Arnd,
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
-Sorry about the missing MODULE_LICENSE. I assume you just will drop v3
-and use this instead, or should I have sent a patch with only
-MODULE_LICENSE added?
+On Wed, 17 Jun 2020 16:18:10 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Wed, 17 Jun 2020 07:58:43 +0200 Greg KH <gregkh@linuxfoundation.org> w=
+rote:
+> >
+> > On Wed, Jun 17, 2020 at 09:27:47AM +1000, Stephen Rothwell wrote: =20
+> > > This is in preparation for removing the include of major.h where it is
+> > > not needed.
+> > >=20
+> > > These files were found using
+> > >=20
+> > > 	grep -E -L '[<"](uapi/)?linux/major\.h' $(git grep -l -w -f /tmp/xx)
+> > >=20
+> > > where /tmp/xx contains all the symbols defined in major.h.  There were
+> > > a couple of files in that list that did not need the include since the
+> > > references are in comments.
+> > >=20
+> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>   =20
+> >=20
+> > Any reason this had an RFC, but patch 2/2 did not? =20
+>=20
+> I forgot :-)  I added RFC just to hopefully get some attention as this
+> is just the start of a long slow use of my "spare" time.
+>=20
+> > They look good to me, I will be glad to take these, but do you still
+> > want reviews from others for this?  It seems simple enough to me... =20
+>=20
+> Yeah, well, we all know the simplest patches usually cause the most pain =
+:-)
+>=20
+> However, I have been fairly careful and it is an easy include file to
+> work with.  And I have done my usual build checks, so the linux-next
+> maintainer won't complain about build problems :-)
+>=20
+> I would like to hear from Arnd, at least, as I don't want to step on
+> his toes (he is having a larger look at our include files).
 
-v3-v4
-Added missing MODULE_LICENSE.
+Any comment?
 
-v2-v3
-Updated commit message and ifdef after suggestion fron Geert. Also fixed
-a typo in the description of the file.
+--=20
+Cheers,
+Stephen Rothwell
 
-v1-v2
-New patch.
+--Sig_/4E7sxZ+o7+5.7k+KqzAJoZd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
- lib/Kconfig.debug | 11 +++++++
- lib/Makefile      |  1 +
- lib/test_bits.c   | 75 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 87 insertions(+)
- create mode 100644 lib/test_bits.c
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7wMqgACgkQAVBC80lX
+0GxoIAf+KqJYIQ6vTc/0E/3RWnBpf5RrYu0GH9BW7ka5MpfFK4pMfzJzcpt2TWeL
+O6efiNJ/SyHHA5BpeNsO/PLaYQH1uuXrOndVYqDzgC+9tOXzNNcg/QMbjV6R1krq
+VzdB0kRGcNvEO2dvHPVJeon6/CYuQsG4+TJKX80scHRRF0ASD6xE9WeiT9pIUlUB
+NUnjCkkVvYZnBJ+xkgwObQDlwCyODwQd0pgwQnsv/JC8+mOBvK79bxzWAoVQILai
+5mZOAn6Y/dyQyt8IITo4s3bcSLRr/W3bGFcS90h8aKdBc4xp3olDQAMnxJrUp+gn
+FAFRytt45UvyyiVGypIKzFMcHadQAg==
+=dZlI
+-----END PGP SIGNATURE-----
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index d74ac0fd6b2d..628097773b13 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2186,6 +2186,17 @@ config LINEAR_RANGES_TEST
- 
- 	  If unsure, say N.
- 
-+config BITS_TEST
-+	tristate "KUnit test for bits.h"
-+	depends on KUNIT
-+	help
-+	  This builds the bits unit test.
-+	  Tests the logic of macros defined in bits.h.
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config TEST_UDELAY
- 	tristate "udelay test driver"
- 	help
-diff --git a/lib/Makefile b/lib/Makefile
-index b1c42c10073b..d157f6c980f7 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -318,3 +318,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
- # KUnit tests
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-+obj-$(CONFIG_BITS_TEST) += test_bits.o
-diff --git a/lib/test_bits.c b/lib/test_bits.c
-new file mode 100644
-index 000000000000..89e0ea83511f
---- /dev/null
-+++ b/lib/test_bits.c
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Test cases for functions and macros in bits.h
-+ */
-+
-+#include <kunit/test.h>
-+#include <linux/bits.h>
-+
-+
-+void genmask_test(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, 1ul, GENMASK(0, 0));
-+	KUNIT_EXPECT_EQ(test, 3ul, GENMASK(1, 0));
-+	KUNIT_EXPECT_EQ(test, 6ul, GENMASK(2, 1));
-+	KUNIT_EXPECT_EQ(test, 0xFFFFFFFFul, GENMASK(31, 0));
-+
-+#ifdef TEST_GENMASK_FAILURES
-+	/* these should fail compilation */
-+	GENMASK(0, 1);
-+	GENMASK(0, 10);
-+	GENMASK(9, 10);
-+#endif
-+
-+
-+}
-+
-+void genmask_ull_test(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, 1ull, GENMASK_ULL(0, 0));
-+	KUNIT_EXPECT_EQ(test, 3ull, GENMASK_ULL(1, 0));
-+	KUNIT_EXPECT_EQ(test, 0x000000ffffe00000ull, GENMASK_ULL(39, 21));
-+	KUNIT_EXPECT_EQ(test, 0xffffffffffffffffull, GENMASK_ULL(63, 0));
-+
-+#ifdef TEST_GENMASK_FAILURES
-+	/* these should fail compilation */
-+	GENMASK_ULL(0, 1);
-+	GENMASK_ULL(0, 10);
-+	GENMASK_ULL(9, 10);
-+#endif
-+}
-+
-+void genmask_input_check_test(struct kunit *test)
-+{
-+	unsigned int x, y;
-+	int z, w;
-+
-+	/* Unknown input */
-+	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(x, 0));
-+	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(0, x));
-+	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(x, y));
-+
-+	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(z, 0));
-+	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(0, z));
-+	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(z, w));
-+
-+	/* Valid input */
-+	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(1, 1));
-+	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(39, 21));
-+}
-+
-+
-+static struct kunit_case bits_test_cases[] = {
-+	KUNIT_CASE(genmask_test),
-+	KUNIT_CASE(genmask_ull_test),
-+	KUNIT_CASE(genmask_input_check_test),
-+	{}
-+};
-+
-+static struct kunit_suite bits_test_suite = {
-+	.name = "bits-test",
-+	.test_cases = bits_test_cases,
-+};
-+kunit_test_suite(bits_test_suite);
-+
-+MODULE_LICENSE("GPL");
--- 
-2.27.0
-
+--Sig_/4E7sxZ+o7+5.7k+KqzAJoZd--
