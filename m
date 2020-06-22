@@ -2,59 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 331B3203BD7
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jun 2020 18:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1BD203DA7
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jun 2020 19:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729820AbgFVQCb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Jun 2020 12:02:31 -0400
-Received: from sonic302-21.consmr.mail.ne1.yahoo.com ([66.163.186.147]:37364
-        "EHLO sonic302-21.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729777AbgFVQCX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 22 Jun 2020 12:02:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592841741; bh=cK2qy9Lv5SAgMg9nAvfVmkJPj46H3ss3vOVyjpHm6Nk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=imnMzKvnrwdEkzevY9v55JCHWrS7mFcRp2xLflBpdsWBX5v32iTt1Jwj292Sqyxc6zTWfVf6UW3RltjDxv8H8ZAxxFg96tpPBoXA2f/GRkfTuiNcUr3yDzOGiHeT9IqR//B+9C8c9YoGDJPnAeuuKcQvLl1HS8J+STK4/r0WZ3jbtWFF0MKDjydg+AbeXShoRDHqwsqAaAi7D9jDq8wNDWBIR81puaAh7APGDPK32RqjpFS85hxXrbmotW59Gm/gC9SoLB52q4udtwMI++FS4HYmIHt+kUh9tNcMAsNUvFYo0HWMN59EiLf7lYGm/4AR40adfmghUfkmt4dYpTZmZQ==
-X-YMail-OSG: AhKkJLAVM1lDQ3XPPTTJWpEw.A_YPk4v7tBrtMEv9XTYrBN0vKxPyUyPokZyCLH
- 0NPJEnbM.Ixt5u0eXkMwZesEBqS.rCtCLJgnod2Yg.I9TXOm0suNzcmJ92mBaA3mHgRFUusjI.6E
- 3Gu4LEq019.le8uhDgpgUZ.YgtmiKAQJK6Bd4WPLqozbdEc8urSPipLpvwJTvKec65xmptWyRiVv
- 5wejfhjut7ltVV2EWvbGnxpPsKrHXW63gZY0z7W.qC8yTTTM6xXIAPM6OYdYDYNn.6t5yJFWlC1P
- OIdbZEYbWLsjaYGAZ3nhw68imywZs7JgVqTzxfR4ZQQxpuo3K8t9CM9O0hpOCt10FP__XXwyrmrD
- TCoCE7B_Edu3G.zjOUn_rksR4jYB.m1Rp.1vZ_bLxnQwCiAul5Wqfj8PNdUGzT.zvxnBCUVqWq9J
- 8hXM6oMyn8gklCF.R8KCTVo6NRJRq4thjGWIexrpJEGu0QolvkJTIALFEd6_slAReLmAOEup3xKy
- .77XY9y0L2WZlQcf1QY4ryEv90HkLK9R59Zd1MxuC8qefRgY6y6xUFmVBWO8SDJCCjnQpB48PRDP
- pRTSfD8hEjxrcMoyLQRR8ik6SRBEuL1N.zoJ2juJT7TtdJItukcqyaFlw7VOC6cm49vWb13NtnZ0
- gQ2bWEWTG5v0uAlc54_ulltpKs.Fgm6hkagBtyzunEJ52PGAuturV.LPWyLoBYPiB1KC1HlV8gI8
- yJqtTplsyPL2eALndgi_xv5WXRslUdVun50zfx9iDK5v_kT1lyZrnl7BpPa5N7roHYs5FCR3fGlt
- 00HJ7sf.lnan3Im8PEbT96k38NwI6o6wqQk3XTx1x0TOib38VwKLgaWNY916uiRI1upzFCMVqmW6
- hKW.i_z2qDWeeQaZVyBhDmfLTpSCKpEZXqJt.HWEa0uB7F6lyRoT1rQEzhMY_zbISz6YbRmtNDlq
- VLlEzjYA6uILpMVD7EkmwXGP0XOJgDIix93HShigByDXDbmOlbnVPelpKvxPRFg3gnhpf.0Rc47i
- 08Ic.liUMCD9zHGFCga9cXgoGaM8kFbRyDB3CB8uLHuuV8rIwOstkm24RLt0t3H1wtfuP85AC7r8
- v042NbRsPX1Mj80LTxFt.KStV8ND4Dc1.IiPBslhVUpEA9f2YrGnkjCHG4.U4j0M0U489djAouYX
- y9F8lECiGIH30pwUi5p9NUzViYBtaTM7ID67rbGjIKdkEdFs14rCm3KSzct0U2izLUB1NerwsRiF
- IQWasnNhp61WOxqpf4zyo6bEJMCV1B8QkTG.8HvHCcJtAwYQhWHkE5SwAzxSGopkwGBC4.Xf9
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Mon, 22 Jun 2020 16:02:21 +0000
-Date:   Mon, 22 Jun 2020 16:02:19 +0000 (UTC)
-From:   Karim Zakari <kariim1960z@gmail.com>
-Reply-To: kzakari04@gmail.com
-Message-ID: <1507214802.1850985.1592841739314@mail.yahoo.com>
-Subject: URGENT REPLY.
+        id S1729811AbgFVRRj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Jun 2020 13:17:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37668 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729309AbgFVRRi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 22 Jun 2020 13:17:38 -0400
+Received: from gaia (unknown [2.26.170.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7F0A120707;
+        Mon, 22 Jun 2020 17:17:36 +0000 (UTC)
+Date:   Mon, 22 Jun 2020 18:17:34 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Kevin Brodsky <kevin.brodsky@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org,
+        Branislav Rankov <Branislav.Rankov@arm.com>,
+        Dave P Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH 20/22] arm64: mte: Allow user control of the excluded
+ tags via prctl()
+Message-ID: <20200622171716.GC10226@gaia>
+References: <20191211184027.20130-1-catalin.marinas@arm.com>
+ <20191211184027.20130-21-catalin.marinas@arm.com>
+ <ef61bbc6-76d6-531d-2156-b57efc070da4@arm.com>
+ <CAMn1gO6KGbeSkuEJB_j+WG8DAjbn81OdfA6DQQ+FFA5F6dcsVQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1507214802.1850985.1592841739314.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16138 YMailNodin Mozilla/5.0 (Windows NT 6.1; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMn1gO6KGbeSkuEJB_j+WG8DAjbn81OdfA6DQQ+FFA5F6dcsVQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Peter,
 
+Revisiting the gcr_excl vs gcr_incl decision, so reviving an old thread.
 
-Good-Day Friend,
+On Mon, Dec 16, 2019 at 09:30:36AM -0800, Peter Collingbourne wrote:
+> On Mon, Dec 16, 2019 at 6:20 AM Kevin Brodsky <kevin.brodsky@arm.com> wrote:
+> > In this patch, the default exclusion mask remains 0 (i.e. all tags can be generated).
+> > After some more discussions, Branislav and I think that it would be better to start
+> > with the reverse, i.e. all tags but 0 excluded (mask = 0xfe or 0xff).
+> >
+> > This should simplify the MTE setup in the early C runtime quite a bit. Indeed, if all
+> > tags can be generated, doing any heap or stack tagging before the
+> > PR_SET_TAGGED_ADDR_CTRL prctl() is issued can cause problems, notably because tagged
+> > addresses could end up being passed to syscalls. Conversely, if IRG and ADDG never
+> > set the top byte by default, then tagging operations should be no-ops until the
+> > prctl() is issued. This would be particularly useful given that it may not be
+> > straightforward for the C runtime to issue the prctl() before doing anything else.
+> >
+> > Additionally, since the default tag checking mode is PR_MTE_TCF_NONE, it would make
+> > perfect sense not to generate tags by default.
+> 
+> This would indeed allow the early C runtime startup code to pass
+> tagged addresses to syscalls,
 
- Hope you are doing great Today. I have a proposed business deal worthy (US$16.5 Million Dollars) that will benefit both parties. This is legitimate' legal and your personality will not be compromised.
+I guess you meant that early C runtime code won't get tagged stack
+addresses, hence they can be passed to syscalls. Prior to the prctl(),
+the kernel doesn't accept tagged addresses anyway.
 
-Waiting for your response for more details, As you are willing to execute this business opportunity with me.
+> but I don't think it would entirely free
+> the code from the burden of worrying about stack tagging. Either way,
+> any stack frames that are active at the point when the prctl() is
+> issued would need to be compiled without stack tagging, because
+> otherwise those stack frames may use ADDG to rematerialize a stack
+> object address, which may produce a different address post-prctl.
 
-Sincerely Yours,
-Mr. Karim Zakari.
+If you want to guarantee that ADDG always returns tag 0, I guess that's
+only possible with a default exclude mask of 0xffff (or if you are
+careful enough with the start tag and offset passed).
+
+> Setting the exclude mask to 0xffff would at least make it more likely
+> for this problem to be detected, though.
+
+I thought it would be detected if we didn't have a 0xffff default
+exclude mask. With only tag 0 generated, any such problem could be
+hidden.
+
+> If we change the default in this way, maybe it would be worth
+> considering flipping the meaning of the tag mask and have it be a mask
+> of tags to allow. That would be consistent with the existing behaviour
+> where userspace sets bits in tagged_addr_ctrl in order to enable
+> tagging features.
+
+The first question is whether the C runtime requires a default
+GCR_EL1.Excl mask of 0xffff (or 0xfffe) so that IRG, ADDG, SUBG always
+generate tag 0. If the runtime is fine with a default exclude mask of 0,
+I'm tempted to go back to an exclude mask for prctl().
+
+(to me it feels more natural to use an exclude mask as it matches the
+ARM ARM definition but maybe I stare too much at the hardware specs ;))
+
+-- 
+Catalin
