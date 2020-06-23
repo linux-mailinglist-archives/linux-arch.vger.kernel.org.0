@@ -2,155 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2258620576E
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 18:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B739E20587F
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 19:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732923AbgFWQms (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Jun 2020 12:42:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52982 "EHLO mail.kernel.org"
+        id S1733119AbgFWRYe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Jun 2020 13:24:34 -0400
+Received: from mga11.intel.com ([192.55.52.93]:61940 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732953AbgFWQmr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 23 Jun 2020 12:42:47 -0400
-Received: from gaia (unknown [2.26.170.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6788C2070E;
-        Tue, 23 Jun 2020 16:42:44 +0000 (UTC)
-Date:   Tue, 23 Jun 2020 17:42:41 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Kevin Brodsky <kevin.brodsky@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org,
-        Branislav Rankov <Branislav.Rankov@arm.com>,
-        Dave P Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH 20/22] arm64: mte: Allow user control of the excluded
- tags via prctl()
-Message-ID: <20200623164211.GA5180@gaia>
-References: <20191211184027.20130-1-catalin.marinas@arm.com>
- <20191211184027.20130-21-catalin.marinas@arm.com>
- <ef61bbc6-76d6-531d-2156-b57efc070da4@arm.com>
- <CAMn1gO6KGbeSkuEJB_j+WG8DAjbn81OdfA6DQQ+FFA5F6dcsVQ@mail.gmail.com>
- <20200622171716.GC10226@gaia>
- <CAMn1gO5rhOG1W+nVe103v=smvARcFFp_Ct9XqH2Ca4BUMfpDdg@mail.gmail.com>
+        id S1733115AbgFWRYe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 23 Jun 2020 13:24:34 -0400
+IronPort-SDR: VjWH48xtl1tW/ZsDVI85ZEjOdFB0CNnWUglN/52CrXYIbnAfyTJXAESeNLbf93XlnyArIa3ICO
+ ceiu/P3cFTvA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="142391484"
+X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
+   d="scan'208";a="142391484"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 10:24:32 -0700
+IronPort-SDR: YI4pepBviYHOQzIhkqBYgYexGcacrD0mbKmC47qio85NV9rUDgee3rgg9SRCNUhXsw0UCZUY3t
+ q/7b9SHv46cA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
+   d="scan'208";a="423080063"
+Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.213.182.184])
+  by orsmga004.jf.intel.com with ESMTP; 23 Jun 2020 10:24:30 -0700
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     arjan@linux.intel.com, linux-kernel@vger.kernel.org,
+        kernel-hardening@lists.openwall.com, rick.p.edgecombe@intel.com,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH v3 04/10] x86: Makefile: Add build and config option for CONFIG_FG_KASLR
+Date:   Tue, 23 Jun 2020 10:23:21 -0700
+Message-Id: <20200623172327.5701-5-kristen@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200623172327.5701-1-kristen@linux.intel.com>
+References: <20200623172327.5701-1-kristen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMn1gO5rhOG1W+nVe103v=smvARcFFp_Ct9XqH2Ca4BUMfpDdg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 12:00:48PM -0700, Peter Collingbourne wrote:
-> On Mon, Jun 22, 2020 at 10:17 AM Catalin Marinas
-> <catalin.marinas@arm.com> wrote:
-> > On Mon, Dec 16, 2019 at 09:30:36AM -0800, Peter Collingbourne wrote:
-> > > On Mon, Dec 16, 2019 at 6:20 AM Kevin Brodsky <kevin.brodsky@arm.com> wrote:
-> > > > In this patch, the default exclusion mask remains 0 (i.e. all tags can be generated).
-> > > > After some more discussions, Branislav and I think that it would be better to start
-> > > > with the reverse, i.e. all tags but 0 excluded (mask = 0xfe or 0xff).
-> > > >
-> > > > This should simplify the MTE setup in the early C runtime quite a bit. Indeed, if all
-> > > > tags can be generated, doing any heap or stack tagging before the
-> > > > PR_SET_TAGGED_ADDR_CTRL prctl() is issued can cause problems, notably because tagged
-> > > > addresses could end up being passed to syscalls. Conversely, if IRG and ADDG never
-> > > > set the top byte by default, then tagging operations should be no-ops until the
-> > > > prctl() is issued. This would be particularly useful given that it may not be
-> > > > straightforward for the C runtime to issue the prctl() before doing anything else.
-> > > >
-> > > > Additionally, since the default tag checking mode is PR_MTE_TCF_NONE, it would make
-> > > > perfect sense not to generate tags by default.
-> > >
-> > > This would indeed allow the early C runtime startup code to pass
-> > > tagged addresses to syscalls,
-[...]
-> > > but I don't think it would entirely free
-> > > the code from the burden of worrying about stack tagging. Either way,
-> > > any stack frames that are active at the point when the prctl() is
-> > > issued would need to be compiled without stack tagging, because
-> > > otherwise those stack frames may use ADDG to rematerialize a stack
-> > > object address, which may produce a different address post-prctl.
-[...]
-> > > Setting the exclude mask to 0xffff would at least make it more likely
-> > > for this problem to be detected, though.
-> >
-> > I thought it would be detected if we didn't have a 0xffff default
-> > exclude mask. With only tag 0 generated, any such problem could be
-> > hidden.
-> 
-> I don't think that's the case, as long as you aren't using 0 as a
-> catch-all tag. Imagine that you have some hypothetical startup code
-> that looks like this:
-> 
-> void init() {
->   bool called_prctl = false;
->   prctl(PR_SET_TAGGED_ADDR_CTRL, ...); // effect is to change
-> GCR_EL1.Excl from 0xffff to 1
->   called_prctl = true;
-> }
-> 
-> This may be compiled as something like (well, a real compiler wouldn't
-> compile it like this but rather use sp-relative stores or eliminate
-> the dead stores entirely, but imagine that the stores to called_prctl
-> are obfuscated somehow, e.g. in another translation unit):
-> 
-> sub x19, sp, #16
-> irg x19, x19 // compute a tag base for the function
-> addg x0, x19, #0, #1 // add tag offset for "called_prctl"
-> stzg x0, [x0]
-> bl prctl
-> addg x0, x19, #0, #1 // rematerialize "called_prctl" address
-> mov w1, #1
-> strb w1, [x0]
-> ret
-> 
-> The first addg will materialize a tag of 0 due to the default Excl
-> value, so the stzg will set the memory tag to 0. However, the second
-> addg will materialize a tag of 1 because of the new Excl value, which
-> will result in a tag fault in the strb instruction.
-> 
-> This problem is less likely to be detected if we transition Excl from
-> 0 to 1. It will only be detected in the case where the irg instruction
-> produces a tag of 0xf, which would be incremented to 0 by the first
-> addg but to 1 by the second one.
+Allow user to select CONFIG_FG_KASLR if dependencies are met. Change
+the make file to build with -ffunction-sections if CONFIG_FG_KASLR.
 
-Thanks for the explanation. For some reason I thought ADDG would only be
-used once (per variable or frame). I now agree that a default exclude
-mask of 0xffff would catch such issues early.
+While the only architecture that supports CONFIG_FG_KASLR does not
+currently enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION, make sure these
+2 features play nicely together for the future by ensuring that if
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is selected when used with
+CONFIG_FG_KASLR the function sections will not be consolidated back
+into .text. Thanks to Kees Cook for the dead code elimination changes.
 
-> > > If we change the default in this way, maybe it would be worth
-> > > considering flipping the meaning of the tag mask and have it be a mask
-> > > of tags to allow. That would be consistent with the existing behaviour
-> > > where userspace sets bits in tagged_addr_ctrl in order to enable
-> > > tagging features.
-> >
-> > The first question is whether the C runtime requires a default
-> > GCR_EL1.Excl mask of 0xffff (or 0xfffe) so that IRG, ADDG, SUBG always
-> > generate tag 0. If the runtime is fine with a default exclude mask of 0,
-> > I'm tempted to go back to an exclude mask for prctl().
-> >
-> > (to me it feels more natural to use an exclude mask as it matches the
-> > ARM ARM definition but maybe I stare too much at the hardware specs ;))
-> 
-> I think that would be fine with me. With the transition from 0 to 1
-> the above problem would still be detected, but only 1/16 of the time.
-> But if the problem exists in the early startup code which will be
-> executed many times during a typical system boot, it makes it likely
-> that the problem will be detected eventually.
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Tony Luck <tony.luck@intel.com>
+---
+ Makefile                          |  6 +++++-
+ arch/x86/Kconfig                  |  4 ++++
+ include/asm-generic/vmlinux.lds.h | 16 ++++++++++++++--
+ init/Kconfig                      | 14 ++++++++++++++
+ 4 files changed, 37 insertions(+), 3 deletions(-)
 
-I'm not a big fan of hitting a problem 1/16 times, it makes debugging
-harder. So I'll stick to a default exclude mask of 0xffff, in which case
-it makes sense to invert the polarity for prctl() and make it an include
-mask (as in v4 of the patchset).
-
-Thanks.
-
+diff --git a/Makefile b/Makefile
+index ac2c61c37a73..363f53798fca 100644
+--- a/Makefile
++++ b/Makefile
+@@ -872,7 +872,7 @@ KBUILD_CFLAGS += $(call cc-option, -fno-inline-functions-called-once)
+ endif
+ 
+ ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+-KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
++KBUILD_CFLAGS_KERNEL += -fdata-sections
+ LDFLAGS_vmlinux += --gc-sections
+ endif
+ 
+@@ -880,6 +880,10 @@ ifdef CONFIG_LIVEPATCH
+ KBUILD_CFLAGS += $(call cc-option, -flive-patching=inline-clone)
+ endif
+ 
++ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_FG_KASLR),)
++KBUILD_CFLAGS += -ffunction-sections
++endif
++
+ ifdef CONFIG_SHADOW_CALL_STACK
+ CC_FLAGS_SCS	:= -fsanitize=shadow-call-stack
+ KBUILD_CFLAGS	+= $(CC_FLAGS_SCS)
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 6a0cc524882d..932cbc327af0 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -372,6 +372,10 @@ config CC_HAS_SANE_STACKPROTECTOR
+ 	   We have to make sure stack protector is unconditionally disabled if
+ 	   the compiler produces broken code.
+ 
++config ARCH_HAS_FG_KASLR
++	def_bool y
++	depends on RANDOMIZE_BASE && X86_64
++
+ menu "Processor type and features"
+ 
+ config ZONE_DMA
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index db600ef218d7..a5552cf28d5d 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -93,14 +93,12 @@
+  * sections to be brought in with rodata.
+  */
+ #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+-#define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
+ #define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..LPBX*
+ #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
+ #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]*
+ #define BSS_MAIN .bss .bss.[0-9a-zA-Z_]*
+ #define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
+ #else
+-#define TEXT_MAIN .text
+ #define DATA_MAIN .data
+ #define SDATA_MAIN .sdata
+ #define RODATA_MAIN .rodata
+@@ -108,6 +106,20 @@
+ #define SBSS_MAIN .sbss
+ #endif
+ 
++/*
++ * Both LD_DEAD_CODE_DATA_ELIMINATION and CONFIG_FG_KASLR options enable
++ * -ffunction-sections, which produces separately named .text sections. In
++ * the case of CONFIG_FG_KASLR, they need to stay distict so they can be
++ * separately randomized. Without CONFIG_FG_KASLR, the separate .text
++ * sections can be collected back into a common section, which makes the
++ * resulting image slightly smaller
++ */
++#if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(CONFIG_FG_KASLR)
++#define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
++#else
++#define TEXT_MAIN .text
++#endif
++
+ /*
+  * Align to a 32 byte boundary equal to the
+  * alignment gcc 4.5 uses for a struct
+diff --git a/init/Kconfig b/init/Kconfig
+index a46aa8f3174d..e29c032e4d66 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1990,6 +1990,20 @@ config PROFILING
+ config TRACEPOINTS
+ 	bool
+ 
++config FG_KASLR
++	bool "Function Granular Kernel Address Space Layout Randomization"
++	depends on $(cc-option, -ffunction-sections)
++	depends on ARCH_HAS_FG_KASLR
++	default n
++	help
++	  This option improves the randomness of the kernel text
++	  over basic Kernel Address Space Layout Randomization (KASLR)
++	  by reordering the kernel text at boot time. This feature
++	  uses information generated at compile time to re-layout the
++	  kernel text section at boot time at function level granularity.
++
++	  If unsure, say N.
++
+ endmenu		# General setup
+ 
+ source "arch/Kconfig"
 -- 
-Catalin
+2.20.1
+
