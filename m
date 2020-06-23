@@ -2,105 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C19942046A2
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 03:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C5320482A
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 05:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731690AbgFWBTn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Jun 2020 21:19:43 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55052 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731667AbgFWBTm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Jun 2020 21:19:42 -0400
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1C361327;
-        Tue, 23 Jun 2020 03:19:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592875180;
-        bh=A1BPBP7IBhvl06oo1JVRf8zGahYeO6mzOQ68hxqYL4U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AnagMKzrYkDtq6thkbxOVWtLV7eZh5FUbo8aY4leF4Z9ZmKdur1cCWCcBeubE591X
-         x+VYQwOnk9B04PTlgxtbrU3NbAQntb7L/LGNbhr23EP5y7Mt0L70qxrqKAGpfdBKNC
-         lAwhsag/fbjrQnRaPcty8A/vV7/y5mhrFHCrtxu8=
-Date:   Tue, 23 Jun 2020 04:19:15 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH 1/2] media: omap3isp: Remove cacheflush.h
-Message-ID: <20200623011915.GP5852@pendragon.ideasonboard.com>
-References: <20200622234740.72825-1-natechancellor@gmail.com>
- <20200622234740.72825-2-natechancellor@gmail.com>
+        id S1731760AbgFWD5T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Jun 2020 23:57:19 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37851 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730515AbgFWD5T (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 22 Jun 2020 23:57:19 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49rXXq4mX5z9sRf;
+        Tue, 23 Jun 2020 13:57:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592884636;
+        bh=SGaAFIZ55OPJuGe6GsMrtqm3VezTYTtWZ6QJtNyf7cI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ei8UJQ2e7Vl5arK9VnPMV88d6XWiFjV7Ukz+o2bsqTR6TaZ93LxVyQQf958+n0paj
+         Uk62JcCwdsNbBnImb3SdHYhiQsHg4Z5c+jZyQ7zG4pTam1SpxQQ0Yt1F4+4b6wQ/QE
+         DnS2LTQkCCMYajMCL+2Ijw+a5rBK6vo8unSIQWJMK/uvcjb8muDzPEuVwvwuHeg1+v
+         x3y4FFzbYT0uT3sMloUc1Bz+UcDcDVR9BBb5mOYLSwTHwGkeevDcIDmybZYjsZTlrF
+         EqRhsrSsJQdDLIQUlg8pHNa0LkK6lBhHstqhkD/WkUGiyPqUgAux8/2wGybYrzLJt5
+         v1vb6AlztnkVQ==
+Date:   Tue, 23 Jun 2020 13:57:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-arch@vger.kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: [PATCH] make asm-generic/cacheflush.h more standalone
+Message-ID: <20200623135714.4dae4b8a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200622234740.72825-2-natechancellor@gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/gxL3=hDPdEgWdgdriEUXhr+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Nathan,
+--Sig_/gxL3=hDPdEgWdgdriEUXhr+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch.
+Some s390 builds get these warnings:
 
-On Mon, Jun 22, 2020 at 04:47:39PM -0700, Nathan Chancellor wrote:
-> After mm.h was removed from the asm-generic version of cacheflush.h,
-> s390 allyesconfig shows several warnings of the following nature:
-> 
-> In file included from ./arch/s390/include/generated/asm/cacheflush.h:1,
->                  from drivers/media/platform/omap3isp/isp.c:42:
-> ./include/asm-generic/cacheflush.h:16:42: warning: 'struct mm_struct'
-> declared inside parameter list will not be visible outside of this
-> definition or declaration
-> 
-> As Geert and Laurent point out, this driver does not need this header in
-> the two files that include it. Remove it so there are no warnings.
-> 
-> Fixes: e0cf615d725c ("asm-generic: don't include <linux/mm.h> in cacheflush.h")
-> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+include/asm-generic/cacheflush.h:16:42: warning: 'struct mm_struct' declare=
+d inside parameter list will not be visible outside of this definition or d=
+eclaration
+include/asm-generic/cacheflush.h:22:46: warning: 'struct mm_struct' declare=
+d inside parameter list will not be visible outside of this definition or d=
+eclaration
+include/asm-generic/cacheflush.h:28:45: warning: 'struct vm_area_struct' de=
+clared inside parameter list will not be visible outside of this definition=
+ or declaration
+include/asm-generic/cacheflush.h:36:44: warning: 'struct vm_area_struct' de=
+clared inside parameter list will not be visible outside of this definition=
+ or declaration
+include/asm-generic/cacheflush.h:44:45: warning: 'struct page' declared ins=
+ide parameter list will not be visible outside of this definition or declar=
+ation
+include/asm-generic/cacheflush.h:52:50: warning: 'struct address_space' dec=
+lared inside parameter list will not be visible outside of this definition =
+or declaration
+include/asm-generic/cacheflush.h:58:52: warning: 'struct address_space' dec=
+lared inside parameter list will not be visible outside of this definition =
+or declaration
+include/asm-generic/cacheflush.h:75:17: warning: 'struct page' declared ins=
+ide parameter list will not be visible outside of this definition or declar=
+ation
+include/asm-generic/cacheflush.h:74:45: warning: 'struct vm_area_struct' de=
+clared inside parameter list will not be visible outside of this definition=
+ or declaration
+include/asm-generic/cacheflush.h:82:16: warning: 'struct page' declared ins=
+ide parameter list will not be visible outside of this definition or declar=
+ation
+include/asm-generic/cacheflush.h:81:50: warning: 'struct vm_area_struct' de=
+clared inside parameter list will not be visible outside of this definition=
+ or declaration
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Forward declare the named structs to get rid of these.
 
-> ---
->  drivers/media/platform/omap3isp/isp.c      | 2 --
->  drivers/media/platform/omap3isp/ispvideo.c | 1 -
->  2 files changed, 3 deletions(-)
-> 
-> diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-> index a4ee6b86663e..b91e472ee764 100644
-> --- a/drivers/media/platform/omap3isp/isp.c
-> +++ b/drivers/media/platform/omap3isp/isp.c
-> @@ -39,8 +39,6 @@
->   *	Troy Laramy <t-laramy@ti.com>
->   */
->  
-> -#include <asm/cacheflush.h>
-> -
->  #include <linux/clk.h>
->  #include <linux/clkdev.h>
->  #include <linux/delay.h>
-> diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/omap3isp/ispvideo.c
-> index 10c214bd0903..1ac9aef70dff 100644
-> --- a/drivers/media/platform/omap3isp/ispvideo.c
-> +++ b/drivers/media/platform/omap3isp/ispvideo.c
-> @@ -18,7 +18,6 @@
->  #include <linux/sched.h>
->  #include <linux/slab.h>
->  #include <linux/vmalloc.h>
-> -#include <asm/cacheflush.h>
->  
->  #include <media/v4l2-dev.h>
->  #include <media/v4l2-ioctl.h>
-> 
-> base-commit: 27f11fea33608cbd321a97cbecfa2ef97dcc1821
+Fixes: e0cf615d725c ("asm-generic: don't include <linux/mm.h> in cacheflush=
+.h")
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/asm-generic/cacheflush.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
--- 
-Regards,
+diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cachefl=
+ush.h
+index 907fa5d16494..4a674db4e1fa 100644
+--- a/include/asm-generic/cacheflush.h
++++ b/include/asm-generic/cacheflush.h
+@@ -2,6 +2,11 @@
+ #ifndef _ASM_GENERIC_CACHEFLUSH_H
+ #define _ASM_GENERIC_CACHEFLUSH_H
+=20
++struct mm_struct;
++struct vm_area_struct;
++struct page;
++struct address_space;
++
+ /*
+  * The cache doesn't need to be flushed when TLB entries change when
+  * the cache is mapped to physical memory, not virtual memory
+--=20
+2.27.0
 
-Laurent Pinchart
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gxL3=hDPdEgWdgdriEUXhr+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7xfZoACgkQAVBC80lX
+0Gz5jAf/TGFJGFjGN3TkM/wWdczKpOSNE/vrqZGpIBaG68WZWv1hno3xS2NBYppg
+luuXUwLZsA5afsboen5N1BE4n4yBiqk55ySVNI73QGoW7UC9itB10O2/zafkVq3u
+vLoYV0LLLPpxBsGEiEIoh1YlCu8UBPVRY/MJkH9vVqF+fvTBylFjsOuOFjxTGGMM
+QvXnWPrm6kpeABa3OFzmr8hUnSjCTKbMdRMrJY/8rMUSB+YItIUsqPX1+WKW9jwl
+FsO4gkf8bQT2deOUR9rGwP67ypW5kHln2q+WcqZ3wzwmmYq/mTgreyG4bnCKmIeR
++dZh2Qf3fkr8DLzekHAayhvTIFn2yA==
+=vDO3
+-----END PGP SIGNATURE-----
+
+--Sig_/gxL3=hDPdEgWdgdriEUXhr+--
