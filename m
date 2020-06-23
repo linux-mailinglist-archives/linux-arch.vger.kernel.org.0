@@ -2,38 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4A220464B
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 02:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5B4204638
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 02:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732385AbgFWAwe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1732381AbgFWAwe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Mon, 22 Jun 2020 20:52:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46462 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:46480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732365AbgFWAwe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1732368AbgFWAwe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Mon, 22 Jun 2020 20:52:34 -0400
 Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 486342076E;
+        by mail.kernel.org (Postfix) with ESMTPSA id 76D44207BC;
         Tue, 23 Jun 2020 00:52:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1592873553;
-        bh=anlHKj//g7q+uXXdFz0rSnxqzIqARPN1Tk58bO2fe6M=;
+        bh=Iqy7olmWTGFsAB7j1jAOyQi0betLtkAJ66NGYId1SDc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jbjQpTHZJL+Q2KlCRNNHS5k0/3XUUMtdoAJyBRGBJM4bEgNvqzPvzuWC4E1ci0WhG
-         r12QlZJ5QcPGgqLs2sWXF5F0+SssmtQsOKiBzhTffA9o6g+tInECjVbMUArxKy8d9D
-         OMZVFwvogfaaWUlCxRjsxuYxADydtrSNmwAMNi+I=
+        b=YhVn38JNBE+Duzezs5+vJuL8py6GLW5ne/ucgizcnofrzUh0/QGtyEd1IHnKkdvFR
+         kUajAUul164++BsWfgAB8s13WlKPjeao0Qa/3eg1TGYo9iy74iQseiLobaB3keS+ET
+         WskI+kr6xbB2mEK1eE8A3MBVp0JIuFY1Xs/uTPK8=
 From:   paulmck@kernel.org
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
         peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
         dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, Marco Elver <elver@google.com>,
+        akiyks@gmail.com,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH tip/core/rcu 02/14] tools/memory-model: Fix "conflict" definition
-Date:   Mon, 22 Jun 2020 17:52:19 -0700
-Message-Id: <20200623005231.27712-2-paulmck@kernel.org>
+Subject: [PATCH tip/core/rcu 03/14] Documentation: LKMM: Add litmus test for RCU GP guarantee where updater frees object
+Date:   Mon, 22 Jun 2020 17:52:20 -0700
+Message-Id: <20200623005231.27712-3-paulmck@kernel.org>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20200623005152.GA27459@paulmck-ThinkPad-P72>
 References: <20200623005152.GA27459@paulmck-ThinkPad-P72>
@@ -42,187 +43,67 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Marco Elver <elver@google.com>
+From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 
-The definition of "conflict" should not include the type of access nor
-whether the accesses are concurrent or not, which this patch addresses.
-The definition of "data race" remains unchanged.
+This adds an example for the important RCU grace period guarantee, which
+shows an RCU reader can never span a grace period.
 
-The definition of "conflict" as we know it and is cited by various
-papers on memory consistency models appeared in [1]: "Two accesses to
-the same variable conflict if at least one is a write; two operations
-conflict if they execute conflicting accesses."
-
-The LKMM as well as the C11 memory model are adaptations of
-data-race-free, which are based on the work in [2]. Necessarily, we need
-both conflicting data operations (plain) and synchronization operations
-(marked). For example, C11's definition is based on [3], which defines a
-"data race" as: "Two memory operations conflict if they access the same
-memory location, and at least one of them is a store, atomic store, or
-atomic read-modify-write operation. In a sequentially consistent
-execution, two memory operations from different threads form a type 1
-data race if they conflict, at least one of them is a data operation,
-and they are adjacent in <T (i.e., they may be executed concurrently)."
-
-[1] D. Shasha, M. Snir, "Efficient and Correct Execution of Parallel
-    Programs that Share Memory", 1988.
-	URL: http://snir.cs.illinois.edu/listed/J21.pdf
-
-[2] S. Adve, "Designing Memory Consistency Models for Shared-Memory
-    Multiprocessors", 1993.
-	URL: http://sadve.cs.illinois.edu/Publications/thesis.pdf
-
-[3] H.-J. Boehm, S. Adve, "Foundations of the C++ Concurrency Memory
-    Model", 2008.
-	URL: https://www.hpl.hp.com/techreports/2008/HPL-2008-56.pdf
-
-Signed-off-by: Marco Elver <elver@google.com>
-Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 Acked-by: Andrea Parri <parri.andrea@gmail.com>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/memory-model/Documentation/explanation.txt | 83 +++++++++++++-----------
- 1 file changed, 45 insertions(+), 38 deletions(-)
+ .../litmus-tests/rcu/RCU+sync+free.litmus          | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 Documentation/litmus-tests/rcu/RCU+sync+free.litmus
 
-diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-index e91a2eb..993f800 100644
---- a/tools/memory-model/Documentation/explanation.txt
-+++ b/tools/memory-model/Documentation/explanation.txt
-@@ -1987,28 +1987,36 @@ outcome undefined.
- 
- In technical terms, the compiler is allowed to assume that when the
- program executes, there will not be any data races.  A "data race"
--occurs when two conflicting memory accesses execute concurrently;
--two memory accesses "conflict" if:
-+occurs when there are two memory accesses such that:
- 
--	they access the same location,
-+1.	they access the same location,
- 
--	they occur on different CPUs (or in different threads on the
--	same CPU),
-+2.	at least one of them is a store,
- 
--	at least one of them is a plain access,
-+3.	at least one of them is plain,
- 
--	and at least one of them is a store.
-+4.	they occur on different CPUs (or in different threads on the
-+	same CPU), and
- 
--The LKMM tries to determine whether a program contains two conflicting
--accesses which may execute concurrently; if it does then the LKMM says
--there is a potential data race and makes no predictions about the
--program's outcome.
-+5.	they execute concurrently.
- 
--Determining whether two accesses conflict is easy; you can see that
--all the concepts involved in the definition above are already part of
--the memory model.  The hard part is telling whether they may execute
--concurrently.  The LKMM takes a conservative attitude, assuming that
--accesses may be concurrent unless it can prove they cannot.
-+In the literature, two accesses are said to "conflict" if they satisfy
-+1 and 2 above.  We'll go a little farther and say that two accesses
-+are "race candidates" if they satisfy 1 - 4.  Thus, whether or not two
-+race candidates actually do race in a given execution depends on
-+whether they are concurrent.
+diff --git a/Documentation/litmus-tests/rcu/RCU+sync+free.litmus b/Documentation/litmus-tests/rcu/RCU+sync+free.litmus
+new file mode 100644
+index 0000000..4ee67e1
+--- /dev/null
++++ b/Documentation/litmus-tests/rcu/RCU+sync+free.litmus
+@@ -0,0 +1,42 @@
++C RCU+sync+free
 +
-+The LKMM tries to determine whether a program contains race candidates
-+which may execute concurrently; if it does then the LKMM says there is
-+a potential data race and makes no predictions about the program's
-+outcome.
++(*
++ * Result: Never
++ *
++ * This litmus test demonstrates that an RCU reader can never see a write that
++ * follows a grace period, if it did not see writes that precede that grace
++ * period.
++ *
++ * This is a typical pattern of RCU usage, where the write before the grace
++ * period assigns a pointer, and the writes following the grace period destroy
++ * the object that the pointer used to point to.
++ *
++ * This is one implication of the RCU grace-period guarantee, which says (among
++ * other things) that an RCU read-side critical section cannot span a grace period.
++ *)
 +
-+Determining whether two accesses are race candidates is easy; you can
-+see that all the concepts involved in the definition above are already
-+part of the memory model.  The hard part is telling whether they may
-+execute concurrently.  The LKMM takes a conservative attitude,
-+assuming that accesses may be concurrent unless it can prove they
-+are not.
- 
- If two memory accesses aren't concurrent then one must execute before
- the other.  Therefore the LKMM decides two accesses aren't concurrent
-@@ -2171,8 +2179,8 @@ again, now using plain accesses for buf:
- 	}
- 
- This program does not contain a data race.  Although the U and V
--accesses conflict, the LKMM can prove they are not concurrent as
--follows:
-+accesses are race candidates, the LKMM can prove they are not
-+concurrent as follows:
- 
- 	The smp_wmb() fence in P0 is both a compiler barrier and a
- 	cumul-fence.  It guarantees that no matter what hash of
-@@ -2326,12 +2334,11 @@ could now perform the load of x before the load of ptr (there might be
- a control dependency but no address dependency at the machine level).
- 
- Finally, it turns out there is a situation in which a plain write does
--not need to be w-post-bounded: when it is separated from the
--conflicting access by a fence.  At first glance this may seem
--impossible.  After all, to be conflicting the second access has to be
--on a different CPU from the first, and fences don't link events on
--different CPUs.  Well, normal fences don't -- but rcu-fence can!
--Here's an example:
-+not need to be w-post-bounded: when it is separated from the other
-+race-candidate access by a fence.  At first glance this may seem
-+impossible.  After all, to be race candidates the two accesses must
-+be on different CPUs, and fences don't link events on different CPUs.
-+Well, normal fences don't -- but rcu-fence can!  Here's an example:
- 
- 	int x, y;
- 
-@@ -2367,7 +2374,7 @@ concurrent and there is no race, even though P1's plain store to y
- isn't w-post-bounded by any marked accesses.
- 
- Putting all this material together yields the following picture.  For
--two conflicting stores W and W', where W ->co W', the LKMM says the
-+race-candidate stores W and W', where W ->co W', the LKMM says the
- stores don't race if W can be linked to W' by a
- 
- 	w-post-bounded ; vis ; w-pre-bounded
-@@ -2380,8 +2387,8 @@ sequence, and if W' is plain then they also have to be linked by a
- 
- 	w-post-bounded ; vis ; r-pre-bounded
- 
--sequence.  For a conflicting load R and store W, the LKMM says the two
--accesses don't race if R can be linked to W by an
-+sequence.  For race-candidate load R and store W, the LKMM says the
-+two accesses don't race if R can be linked to W by an
- 
- 	r-post-bounded ; xb* ; w-pre-bounded
- 
-@@ -2413,20 +2420,20 @@ is, the rules governing the memory subsystem's choice of a store to
- satisfy a load request and its determination of where a store will
- fall in the coherence order):
- 
--	If R and W conflict and it is possible to link R to W by one
--	of the xb* sequences listed above, then W ->rfe R is not
--	allowed (i.e., a load cannot read from a store that it
-+	If R and W are race candidates and it is possible to link R to
-+	W by one of the xb* sequences listed above, then W ->rfe R is
-+	not allowed (i.e., a load cannot read from a store that it
- 	executes before, even if one or both is plain).
- 
--	If W and R conflict and it is possible to link W to R by one
--	of the vis sequences listed above, then R ->fre W is not
--	allowed (i.e., if a store is visible to a load then the load
--	must read from that store or one coherence-after it).
-+	If W and R are race candidates and it is possible to link W to
-+	R by one of the vis sequences listed above, then R ->fre W is
-+	not allowed (i.e., if a store is visible to a load then the
-+	load must read from that store or one coherence-after it).
- 
--	If W and W' conflict and it is possible to link W to W' by one
--	of the vis sequences listed above, then W' ->co W is not
--	allowed (i.e., if one store is visible to a second then the
--	second must come after the first in the coherence order).
-+	If W and W' are race candidates and it is possible to link W
-+	to W' by one of the vis sequences listed above, then W' ->co W
-+	is not allowed (i.e., if one store is visible to a second then
-+	the second must come after the first in the coherence order).
- 
- This is the extent to which the LKMM deals with plain accesses.
- Perhaps it could say more (for example, plain accesses might
++{
++int x = 1;
++int *y = &x;
++int z = 1;
++}
++
++P0(int *x, int *z, int **y)
++{
++	int *r0;
++	int r1;
++
++	rcu_read_lock();
++	r0 = rcu_dereference(*y);
++	r1 = READ_ONCE(*r0);
++	rcu_read_unlock();
++}
++
++P1(int *x, int *z, int **y)
++{
++	rcu_assign_pointer(*y, z);
++	synchronize_rcu();
++	WRITE_ONCE(*x, 0);
++}
++
++exists (0:r0=x /\ 0:r1=0)
 -- 
 2.9.5
 
