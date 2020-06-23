@@ -2,39 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6068D204650
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 02:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF63420464F
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jun 2020 02:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732494AbgFWAx0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1732389AbgFWAx0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Mon, 22 Jun 2020 20:53:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46528 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:46556 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732378AbgFWAwe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1732379AbgFWAwe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Mon, 22 Jun 2020 20:52:34 -0400
 Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE44F2083B;
-        Tue, 23 Jun 2020 00:52:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1B157207DD;
+        Tue, 23 Jun 2020 00:52:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1592873554;
-        bh=Nqe+8DuiAVCJwQv1C6+ZvslYr0CngL1ChkSEsGGUu6s=;
+        bh=jjp1onkfxL2eENBHHoIekG6O8re7lZ1C80KqLCuGG6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dg+CC5E+nNHbtF4eTKHmNvixKZ3PFjqjn3spaZ607EkzYzvaen85/T8OyMAmK6Bu8
-         qnhWo/LkERQx0A7o3LDBKxxnfogWTNevIO9GpgR9Etr2jz6mO8NDhtgf3Lt5eaZW+v
-         740NQR/ar9C9z5au3y/6HNHcxW2DFUA0DAWNBUlY=
+        b=nTpiI/J5f/v8WCOCinoF1VasCdlItA88LdHOr2tTh4w+T6wHzVXVVKoAfw+fgYTPD
+         jIxOdcsR+zIw0QPz971Sm7PLNpw+dbrQGJzOmhXHkcGzedKqZ5aauf6cF0P+4ihsFH
+         1TfBoJ3dgyIL3o0BKv2oxsfV0SKwt68DrsWfVN4o=
 From:   paulmck@kernel.org
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
         peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
         dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH tip/core/rcu 05/14] MAINTAINERS: Update maintainers for new Documentation/litmus-tests
-Date:   Mon, 22 Jun 2020 17:52:22 -0700
-Message-Id: <20200623005231.27712-5-paulmck@kernel.org>
+        akiyks@gmail.com, "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH tip/core/rcu 06/14] tools/memory-model: Add an exception for limitations on _unless() family
+Date:   Mon, 22 Jun 2020 17:52:23 -0700
+Message-Id: <20200623005231.27712-6-paulmck@kernel.org>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20200623005152.GA27459@paulmck-ThinkPad-P72>
 References: <20200623005152.GA27459@paulmck-ThinkPad-P72>
@@ -43,39 +41,44 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+From: Boqun Feng <boqun.feng@gmail.com>
 
-This commit adds Joel Fernandes as official LKMM reviewer.
+According to Luc, atomic_add_unless() is directly provided by herd7,
+therefore it can be used in litmus tests. So change the limitation
+section in README to unlimit the use of atomic_add_unless().
 
-Acked-by: Boqun Feng <boqun.feng@gmail.com>
+Cc: Luc Maranget <luc.maranget@inria.fr>
 Acked-by: Andrea Parri <parri.andrea@gmail.com>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-[ paulmck: Apply Joe Perches alphabetization feedback. ]
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/memory-model/README | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 68f21d4..696a02f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9960,6 +9960,7 @@ M:	Luc Maranget <luc.maranget@inria.fr>
- M:	"Paul E. McKenney" <paulmck@kernel.org>
- R:	Akira Yokosawa <akiyks@gmail.com>
- R:	Daniel Lustig <dlustig@nvidia.com>
-+R:	Joel Fernandes <joel@joelfernandes.org>
- L:	linux-kernel@vger.kernel.org
- L:	linux-arch@vger.kernel.org
- S:	Supported
-@@ -9968,6 +9969,7 @@ F:	Documentation/atomic_bitops.txt
- F:	Documentation/atomic_t.txt
- F:	Documentation/core-api/atomic_ops.rst
- F:	Documentation/core-api/refcount-vs-atomic.rst
-+F:	Documentation/litmus-tests/
- F:	Documentation/memory-barriers.txt
- F:	tools/memory-model/
+diff --git a/tools/memory-model/README b/tools/memory-model/README
+index fc07b52..b9c562e 100644
+--- a/tools/memory-model/README
++++ b/tools/memory-model/README
+@@ -207,11 +207,15 @@ The Linux-kernel memory model (LKMM) has the following limitations:
+ 		case as a store release.
  
+ 	b.	The "unless" RMW operations are not currently modeled:
+-		atomic_long_add_unless(), atomic_add_unless(),
+-		atomic_inc_unless_negative(), and
+-		atomic_dec_unless_positive().  These can be emulated
++		atomic_long_add_unless(), atomic_inc_unless_negative(),
++		and atomic_dec_unless_positive().  These can be emulated
+ 		in litmus tests, for example, by using atomic_cmpxchg().
+ 
++		One exception of this limitation is atomic_add_unless(),
++		which is provided directly by herd7 (so no corresponding
++		definition in linux-kernel.def).  atomic_add_unless() is
++		modeled by herd7 therefore it can be used in litmus tests.
++
+ 	c.	The call_rcu() function is not modeled.  It can be
+ 		emulated in litmus tests by adding another process that
+ 		invokes synchronize_rcu() and the body of the callback
 -- 
 2.9.5
 
