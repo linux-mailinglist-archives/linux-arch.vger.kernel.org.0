@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D51207CC3
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 22:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4FC207CCF
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 22:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406390AbgFXUP2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 16:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        id S2391411AbgFXUUs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 16:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406318AbgFXUP1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 16:15:27 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C1AC061573
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:15:26 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id b92so1672324pjc.4
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:15:26 -0700 (PDT)
+        with ESMTP id S2391376AbgFXUUr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 16:20:47 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4843BC061795
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:20:47 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id h185so1729592pfg.2
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IdPEcGBnqX+qJ5FRufYsC8Fmx34kZgyoik6khE35S6c=;
-        b=LAgCJBjwd1W/QzoEvVFv6uT/xdusvMrDmvZmLReTUlSLsK29qb2r44fWyhO1UhPjLz
-         uCqW0klYugm6yeBpcqwbanjBuPn8Y4d1Tu+ugG6egYFyGEsuoDAliH69triCGqr36dmi
-         BMDc2ZPjjlfibF6w3Ngt7Ai+eI0QCED0XjXlZ9iFn4S8F1kjfO+ZbKzEVcatJwMuVMIJ
-         QzCxLBIbzHXagWgFw39ff0eRVBOF+fHHz/VqrbQU+1mjgX/mE+n7M899/K/IafH7EGgM
-         IhB3AOn5dcpYIYEwgO3/nAL0oNHI/8GAMY6MwEGOhWPMzMzE8W8bLyDD9+yilUzPos45
-         Mszw==
+        bh=6VX8l56o/9phg5oRAnfBhOhnSRSgx40667vVlnrgP1c=;
+        b=Sts5HjeXaRIsjaUUSOulF2b0QJW/rtbjE50f2+QWQIT17OrFkVY+Z2bpYbafSTBuhE
+         jxvDPfNLBtSH2Ou4l6yD3zA3bSURrtxiM0TzakQ0Cyg+LVoz4iXNXXrN/3Pk6/icJOul
+         Z16sTB6L0/w6Dq6u/vlp+QWuyJg235QG/tvM1E3K4IedKvz3c0z9c6NfrN/bbHZ5G8fY
+         wgIDX2Wo3ZlTsNzOZMWvutvhS1YdbOeKKZVcOA3R3ompjsm/GmA4l7JPIX1erW80E4Xe
+         f7WqejKmK1rE7yp57rosd315QgC4GDBxxpJty94hEmaRpg571BdsL0lc7su+QmaUVxdz
+         A0Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IdPEcGBnqX+qJ5FRufYsC8Fmx34kZgyoik6khE35S6c=;
-        b=NT8Mvddy1LE8dN0Nbfc6/6L1qW9EbaXmkjk8w/N4pmhA8ympX3S+9/tUvB0CJRS7lG
-         wYQqHN6KObMVObU09CCMgzSfDSxaTi/mIX0eiBpXRNbw/SFT+ShjwZzNSWwIiZpM4oIo
-         HvXoD1f7YTZvn75jkvXyu7kBkUNtB67Rdn8lN4LCyur9V2odHEOdE8cX5s1EkkUBiGhh
-         jvZ3XOuVt36pRhLPZykVJ/CEicNlca6kqd9Rgnose3TgE9CVGcL3vY7lToNYXNHV09H9
-         ApreUZhBjz7n3/rx3O0qParQat0Te24Hi2LA1X+vqFmgxG+eIn9ZqdZdPEjqGyzrMoMQ
-         2jjQ==
-X-Gm-Message-State: AOAM530JvgH8I6NDNth9PCsfTQD3V319bOekiymmt5PVgjzFJAMU+VU6
-        vjnOeMgoV79/MxsOjgZocOk4I3OinfKPgfFb/ZjbVg==
-X-Google-Smtp-Source: ABdhPJwWls4hrMzUFcn8SBHGpHRCDnSeZUXTbN8ExG/y1RAi8xwaghxvTb/oqHElrII6pYkocNgNnEUPoflPuaWhmtc=
-X-Received: by 2002:a17:90a:3321:: with SMTP id m30mr30079924pjb.20.1593029725879;
- Wed, 24 Jun 2020 13:15:25 -0700 (PDT)
+        bh=6VX8l56o/9phg5oRAnfBhOhnSRSgx40667vVlnrgP1c=;
+        b=RxhgMM2lBXcAX0grjnpPWiwvr6V+3IAj8OLsYyOf+1mG8ID3XOYGvbJQ/8IB1S42bV
+         89acqAeCgg4R/kuD9CpnoxHIptw1+Q/o5EC5RunkPfRVsfc0rHccthQGLDUQn2V8A15D
+         7cMsDg1Nsd038q/+QFv7P29+OFus/Dw30zCamMYpe/rWx7RP6jybB3mi0PQMCGepDSM1
+         B9kNBONpMH8/cYqp+FKWZEFpmWqU8Osck4lcz4JY+Z/gRE/tSq6kov9opuz0dusCCMax
+         T1kEDW8NsZDpVqed59Y5+3TYaGBJgWl2NDVqmdymORfTp8vIGTJg07/S7DxM3hUvBhM4
+         ZNLg==
+X-Gm-Message-State: AOAM531gir2kcsqNgp+Ok5H1C2KW7zz771KTSvZtQmGNNku4PXX0B3lY
+        XA6IJiaTwJP+zrDy8RQo49ZScGDAS0Nr9rZj61ysTw==
+X-Google-Smtp-Source: ABdhPJyrliHHssGy3danayvmx9aPSjdbjHWaiTrvgu7jCsDLKzKm48Geyd4LzOvmXoNzU9YMecGFnsoNN/nEaFMMSFU=
+X-Received: by 2002:aa7:979b:: with SMTP id o27mr29432985pfp.284.1593030046391;
+ Wed, 24 Jun 2020 13:20:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200228012036.15682-1-brendanhiggins@google.com>
- <20200228012036.15682-5-brendanhiggins@google.com> <e5de96ed-fb76-d322-fa40-c6e870e76c36@gmail.com>
-In-Reply-To: <e5de96ed-fb76-d322-fa40-c6e870e76c36@gmail.com>
+References: <20200228012036.15682-5-brendanhiggins@google.com> <202003021439.A6B6FD8@keescook>
+In-Reply-To: <202003021439.A6B6FD8@keescook>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 24 Jun 2020 13:15:14 -0700
-Message-ID: <CAFd5g45Fi8n9YsMqV0FNrz3+wtoVtvg_Hvo7yg-MdJwwqxXqTQ@mail.gmail.com>
+Date:   Wed, 24 Jun 2020 13:20:35 -0700
+Message-ID: <CAFd5g45Jz-5wtO-YNuqPN2Zc_rJtoA1qbPLVs2wrJFQyZpd5QQ@mail.gmail.com>
 Subject: Re: [PATCH v3 4/7] init: main: add KUnit to kernel init
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Alan Maguire <alan.maguire@oracle.com>,
         Iurii Zaikin <yzaikin@google.com>,
@@ -78,7 +78,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 2, 2020 at 11:13 AM Frank Rowand <frowand.list@gmail.com> wrote:
+On Mon, Mar 2, 2020 at 2:45 PM Kees Cook <keescook@chromium.org> wrote:
 
 Sorry it took so long to respond. I am reviving this patchset now,
 about to send out a new revision and I just saw this comment.
@@ -91,51 +91,7 @@ about to send out a new revision and I just saw this comment.
 > > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 > > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> > ---
-> >  include/kunit/test.h | 9 +++++++++
-> >  init/main.c          | 4 ++++
-> >  lib/kunit/executor.c | 4 +---
-> >  3 files changed, 14 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index 8a02f93a6b505..8689dd1459844 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -197,6 +197,15 @@ void kunit_init_test(struct kunit *test, const char *name);
-> >
-> >  int kunit_run_tests(struct kunit_suite *suite);
-> >
-> > +#if IS_BUILTIN(CONFIG_KUNIT)
->
-> I suspected this would not work if a unittest was builtin but CONFIG_KUNIT
-> was set to module.
->
-> So I decided to experiment a bit to verify my assumptions (before applying
-> this patch series).  I tried to set CONFIG_KUNIT to module, then set
-> CONFIG_KUNIT_EXAMPLE_TEST to built in.  Kconfig does not let me do this
-> because KUNIT_EXAMPLE_TEST is inside a 'if KUNIT' in lib/kunit/Kconfig,
-> but instead switches KUNIT_EXAMPLE_TEST to a module, and warns that it
-> has done so.  This was a bit of a surprise, but seems reasonable.
->
-> So my next assumption is that the architecture of KUnit expects
-> each individual unit test config option to depend upon CONFIG_KUNIT.
-> If this is the case, please clearly document that requirement in
-> the KUnit documentation.
-
-Your assumption is correct. I will fix this in the Kconfig
-documentation in a separate patch.
-
-> > +int kunit_run_all_tests(void);
-> > +#else
-> > +static inline int kunit_run_all_tests(void)
-> > +{
-> > +     return 0;
-> > +}
-> > +#endif /* IS_BUILTIN(CONFIG_KUNIT) */
-> > +
-> >  /*
-> >   * If a test suite is built-in, module_init() gets translated into
-> >   * an initcall which we don't want as the idea is that for builtins
+> > [...]
 > > diff --git a/init/main.c b/init/main.c
 > > index ee4947af823f3..7875a5c486dc4 100644
 > > --- a/init/main.c
@@ -158,25 +114,25 @@ documentation in a separate patch.
 > >       console_on_rootfs();
 > >
 > >       /*
-> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> > index 6429927d598a5..b75a46c560847 100644
-> > --- a/lib/kunit/executor.c
-> > +++ b/lib/kunit/executor.c
-> > @@ -11,7 +11,7 @@ extern struct kunit_suite * const * const __kunit_suites_end[];
-> >
-> >  #if IS_BUILTIN(CONFIG_KUNIT)
-> >
-> > -static int kunit_run_all_tests(void)
-> > +int kunit_run_all_tests(void)
-> >  {
-> >       struct kunit_suite * const * const *suites, * const *subsuite;
-> >       bool has_test_failed = false;
-> > @@ -31,6 +31,4 @@ static int kunit_run_all_tests(void)
-> >       return 0;
-> >  }
-> >
-> > -late_initcall(kunit_run_all_tests);
-> > -
-> >  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
-> >
 >
+> I'm nervous about this happening before two key pieces of the kernel
+> setup, which might lead to weird timing-sensitive bugs or false
+> positives:
+>         async_synchronize_full()
+>         mark_readonly()
+>
+> Now, I realize kunit tests _should_ be self-contained, but this seems
+> like a possible robustness problem. Is there any reason this can't be
+> moved after rcu_end_inkernel_boot() in kernel_init() instead?
+
+I tried that, but it doesn't work without an initramfs. We could add
+an initramfs for KUnit at some point if highly desired, but I think
+that is outside the scope of this patchset. Additionally, this patch
+actually moves running tests to later in the init process, which is
+still an improvement over the way KUnit works today.
+
+There are some other reasons I wouldn't want to make that change right
+now, which will become apparent in a patch that I will send out in
+short order.
+
+Cheers
