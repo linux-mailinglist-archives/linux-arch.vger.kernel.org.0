@@ -2,133 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD13206849
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 01:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2AF2069BE
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 03:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388184AbgFWXYc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Jun 2020 19:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S2388534AbgFXBtv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Jun 2020 21:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388200AbgFWXYa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Jun 2020 19:24:30 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB10C061573;
-        Tue, 23 Jun 2020 16:24:30 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id m21so53374eds.13;
-        Tue, 23 Jun 2020 16:24:29 -0700 (PDT)
+        with ESMTP id S2388509AbgFXBtt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Jun 2020 21:49:49 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E31C061795
+        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 18:49:48 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id u8so410977pje.4
+        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 18:49:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qg4pRwyioF70kpz98uHFH8Xcc44ozp1PlRWmbay6J2w=;
-        b=HFEJGHPprM3bOHD1+gxF55zE2NhzUfb4wpVzfOFCcFMtGbT1FF78kNWmLMFjXIilby
-         1jhr3YEY6ZsI35Bs1jlAdLAkhnlHMfBAYVMwVL/zaSybG31MG70pvX6V/WWavmzfI5f2
-         WPywh5CHiIoHUtgJmpzJuvwTwZSyJl/YvslqqmVehhVe3jVYkCM7js49kUeyx5dHRvUn
-         jyEbWNJ6XXPTJJA/Ta9q6l+6oVojbl/5l/cSlMjJlLRRP9NHpeGcC0SbpzNVicdtLkJR
-         2Jf+fmPBbjMl9k9+sxbBkcQnVK0dyO+sdte2TwGGttmhRwkP5aAB8Ix/LeLBv3O+Mb9d
-         ACdQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XRX+a9QElrykJZmLdxem4I40g6I/9leCnrUb/OjtOMI=;
+        b=CIDABal4Q+UfzI6TBZvIf3fo33EAYBlTM+i4WnVSQcoUlRTxWm02Cj9OOEXCd4yS6L
+         307zhAh97TXGXcj5JjcKAZqxQURhTxfozAhzuBm60rS3Yo9aZZgowAfuLuMjWedb3dF6
+         EuQg6eb5KlOItUtb9njXU8b0lPFOb9RM4akWw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qg4pRwyioF70kpz98uHFH8Xcc44ozp1PlRWmbay6J2w=;
-        b=EgXWr1D7GeoO3xFPsYgOy0EFnVmlPEYLlLhurN8X4lL5TmUQ1Cd5K2pHujVoAwJYBv
-         VBpRnuJWuFQrCKpBTpcmh8+ZALX4Xda6k8EOwkN5NWIYcXfYGL1j7xwu4PQoSJ2n3cZS
-         SZBPitazp76RpC6NnaV5hN1C4aOFicIZk3ci88LCa2r7LaZ7RkFmhS3Bq/Tokram5S4L
-         /36HYf5rADqqvU04YVBvPZ6Rk7E2mx76eOEAKhoR46hmx//FBGH+3vlHeWTkc78ReIFI
-         l8pwR6DMrDbDpCR2EGf8rAHntaMmuzgNSvC5E8k2V2dHm/0s++LBaqopqxHyXHJ6gKbX
-         8qpQ==
-X-Gm-Message-State: AOAM532moFmeZSgC/19J7ITI2TeLqb5WqE2IZom+yfHyJ4EBojQls7uW
-        Xf5KoDafxk9asSDa/M+YPIg=
-X-Google-Smtp-Source: ABdhPJyAT1d/IwlKuS/na5EbKXi3//g9xDMtPn0+NfNC4Z6jKGX2hsbEiR3inayxc9aJtllFSa2blw==
-X-Received: by 2002:a50:a701:: with SMTP id h1mr23535578edc.170.1592954668632;
-        Tue, 23 Jun 2020 16:24:28 -0700 (PDT)
-Received: from andrea (ip-213-220-210-175.net.upcbroadband.cz. [213.220.210.175])
-        by smtp.gmail.com with ESMTPSA id rp21sm14247191ejb.97.2020.06.23.16.24.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XRX+a9QElrykJZmLdxem4I40g6I/9leCnrUb/OjtOMI=;
+        b=ANx+xKLXaeWElPN/Ggblrf9q3D+8zMUkShON+9Qv53bUZUljBoY4Tkb1QUQoEAdAqT
+         QrtczUfOOa44Y0pWKZ+J2KrScH6D12HsI5F817nubJzlWos0M+G6YNCucTsh9ahI3z/Z
+         Aj72gTwDaFAF9GXnFpns8OBAlVjvHf1SucbzTeNAZiBlfE4R396etKsIHvASXN4qdOZc
+         HxiFdFMNcRcpMmAZZGzSwoOzXdzMemlkHt2gi6hZUrO89QXSqzjBNnHyyzi6pguchOTB
+         coLMLTVbCymGE8rofk9r4nImbX0uRsQOxI6xGLBlw0BJBh9ONd4mxGjeJ8f7AisPMOWM
+         7q8w==
+X-Gm-Message-State: AOAM531XjD1YQIMj6MlKh7VfaerF0wnnWo47ugrcc53zSkrZuMS7HW+I
+        UUV8NxFRQq82kuldQ6cKNlMy2Q==
+X-Google-Smtp-Source: ABdhPJwl6JTcw+g/B90wVgoZK0xqnoCWxZXqyZZiqvL8XYPvPf3KqeE6RxoFL30elVgP9TzunKDaOQ==
+X-Received: by 2002:a17:90a:d186:: with SMTP id fu6mr4433095pjb.185.1592963388068;
+        Tue, 23 Jun 2020 18:49:48 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id nl11sm3230884pjb.0.2020.06.23.18.49.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 16:24:28 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 01:24:25 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
-        stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr
-Subject: Re: [PATCH 2/2] Documentation/litmus-tests: Add note on herd7 7.56
- in atomic litmus test
-Message-ID: <20200623232425.GB418699@andrea>
-References: <20200623005152.GA27459@paulmck-ThinkPad-P72>
- <20200623005231.27712-13-paulmck@kernel.org>
- <e3693dec-213a-3f65-eb1c-284bf8ca6e13@gmail.com>
- <20200623155419.GI9247@paulmck-ThinkPad-P72>
- <b3433b44-29af-4ef4-d047-b0b0d51a9fbd@gmail.com>
- <9e1d448a-cf3c-523d-e0a6-f46ac4706c48@gmail.com>
+        Tue, 23 Jun 2020 18:49:46 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/9] Warn on orphan section placement
+Date:   Tue, 23 Jun 2020 18:49:31 -0700
+Message-Id: <20200624014940.1204448-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9e1d448a-cf3c-523d-e0a6-f46ac4706c48@gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 07:09:01AM +0900, Akira Yokosawa wrote:
-> From f808c371075d2f92b955da1a83ecb3828db1972e Mon Sep 17 00:00:00 2001
-> From: Akira Yokosawa <akiyks@gmail.com>
-> Date: Wed, 24 Jun 2020 06:59:26 +0900
-> Subject: [PATCH 2/2] Documentation/litmus-tests: Add note on herd7 7.56 in atomic litmus test
-> 
-> herdtools 7.56 has enhanced herd7's C parser so that the "(void)expr"
-> construct in Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus is
-> accepted.
-> 
-> This is independent of LKMM's cat model, so mention the required
-> version in the header of the litmus test and its entry in README.
-> 
-> CC: Boqun Feng <boqun.feng@gmail.com>
-> Reported-by: Andrea Parri <parri.andrea@gmail.com>
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+v3:
+- merge series back together (I tried to make it separable, but no luck)
+- remove unwanted sections in libstub
+- remove unwanted .eh_frame sections for both .c and .S
+- handle sections seen during allnoconfig builds
+- handle synthetic and double-quoted sections reported by Clang
+- add reviewed-bys
+v2: https://lore.kernel.org/lkml/20200622205815.2988115-1-keescook@chromium.org/
+v1: https://lore.kernel.org/lkml/20200228002244.15240-1-keescook@chromium.org/
 
-Frankly, I was hoping that we could simply bump the herd7 version in
-tools/memory-model/README; I understand your point, but I admit that
-I haven't being playing with 7.52 for a while now...
+A recent bug[1] was solved for builds linked with ld.lld, and tracking
+it down took way longer than it needed to (a year). Ultimately, it
+boiled down to differences between ld.bfd and ld.lld's handling of
+orphan sections. Similarly, the recent FGKASLR series brough up orphan
+section handling too[2]. In both cases, it would have been nice if the
+linker was running with --orphan-handling=warn so that surprise sections
+wouldn't silently get mapped into the kernel image at locations up to the
+whim of the linker's orphan handling logic. Instead, all desired sections
+should be explicitly identified in the linker script (to be either kept or
+discarded) with any orphans throwing a warning. The powerpc architecture
+actually already does this, so this series extends coverage to x86, arm,
+and arm64.
 
-Acked-by: Andrea Parri <parri.andrea@gmail.com>
+All three architectures depend on the first two commits (to
+vmlinux.lds.h), and x86 and arm64 depend on the third patch (to
+libstub). As such, I'd like to land this series as a whole. Given that
+two thirds of it is in the arm universe, perhaps this can land via the
+arm64 tree? If x86 -tip is preferred, that works too. Or I could just
+carry this myself in -next. In all cases, I would really appreciate
+reviews/acks/etc. :)
 
-  Andrea
+Thanks!
 
+-Kees
 
-> ---
->  Documentation/litmus-tests/README                                | 1 +
->  .../atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus       | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/litmus-tests/README b/Documentation/litmus-tests/README
-> index b79e640214b9..7f5c6c3ed6c3 100644
-> --- a/Documentation/litmus-tests/README
-> +++ b/Documentation/litmus-tests/README
-> @@ -19,6 +19,7 @@ Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
->  
->  Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
->      Test that atomic_set() cannot break the atomicity of atomic RMWs.
-> +    NOTE: Require herd7 7.56 or later which supports "(void)expr".
->  
->  
->  RCU (/rcu directory)
-> diff --git a/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus b/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> index 49385314d911..ffd4d3e79c4a 100644
-> --- a/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> +++ b/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> @@ -4,6 +4,7 @@ C Atomic-RMW-ops-are-atomic-WRT-atomic_set
->   * Result: Never
->   *
->   * Test that atomic_set() cannot break the atomicity of atomic RMWs.
-> + * NOTE: This requires herd7 7.56 or later which supports "(void)expr".
->   *)
->  
->  {
-> -- 
-> 2.17.1
-> 
-> 
+This series is here:
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=linker/orphans/warn/v3
+
+[1] https://github.com/ClangBuiltLinux/linux/issues/282
+[2] https://lore.kernel.org/lkml/202002242122.AA4D1B8@keescook/
+
+Kees Cook (9):
+  vmlinux.lds.h: Add .gnu.version* to DISCARDS
+  vmlinux.lds.h: Add .symtab, .strtab, and .shstrtab to STABS_DEBUG
+  efi/libstub: Remove .note.gnu.property
+  x86/build: Warn on orphan section placement
+  x86/boot: Warn on orphan section placement
+  arm/build: Warn on orphan section placement
+  arm/boot: Warn on orphan section placement
+  arm64/build: Use common DISCARDS in linker script
+  arm64/build: Warn on orphan section placement
+
+ arch/arm/Makefile                             |  4 ++++
+ arch/arm/boot/compressed/Makefile             |  2 ++
+ arch/arm/boot/compressed/vmlinux.lds.S        | 17 ++++++--------
+ .../arm/{kernel => include/asm}/vmlinux.lds.h | 22 ++++++++++++++-----
+ arch/arm/kernel/vmlinux-xip.lds.S             |  5 ++---
+ arch/arm/kernel/vmlinux.lds.S                 |  5 ++---
+ arch/arm64/Makefile                           |  9 +++++++-
+ arch/arm64/kernel/smccc-call.S                |  2 --
+ arch/arm64/kernel/vmlinux.lds.S               | 16 ++++++++++----
+ arch/arm64/mm/mmu.c                           |  2 +-
+ arch/x86/Makefile                             |  4 ++++
+ arch/x86/boot/compressed/Makefile             |  3 ++-
+ arch/x86/boot/compressed/vmlinux.lds.S        | 11 ++++++++++
+ arch/x86/include/asm/asm.h                    |  6 ++++-
+ arch/x86/kernel/vmlinux.lds.S                 |  6 +++++
+ drivers/firmware/efi/libstub/Makefile         |  3 +++
+ include/asm-generic/vmlinux.lds.h             |  7 +++++-
+ 17 files changed, 92 insertions(+), 32 deletions(-)
+ rename arch/arm/{kernel => include/asm}/vmlinux.lds.h (92%)
+
+-- 
+2.25.1
+
