@@ -2,118 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6333B209719
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jun 2020 01:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB66209728
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jun 2020 01:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388718AbgFXXVq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 19:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
+        id S2387983AbgFXXYM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 19:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388711AbgFXXVp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 19:21:45 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C75C061573
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 16:21:44 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id ev7so1436399pjb.2
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 16:21:44 -0700 (PDT)
+        with ESMTP id S1729587AbgFXXYL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 19:24:11 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF993C061573;
+        Wed, 24 Jun 2020 16:24:10 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id z17so2746645edr.9;
+        Wed, 24 Jun 2020 16:24:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=XsZH2ZlxCr6iT3L+49rRTJJnEJ39rkW4+RYUadIzOtA=;
-        b=R9IB6Osrb2qY+Afwa3MRErRuIdvIh83bCWGDGkn1jNRVAI7V/i8wm4cDEgG3oqoLAv
-         ELOwYrGok06AlaYBhZeZ+3IfjuhQsuGjYu2XatVJ/71OLiUAIZZySCSiajaFHNciHcFf
-         e0IKPhqtq2BJSLy0T3JT47Wx5ej+SaC5oLqz/thfZAX/s5DAQJIfcE/zGNUmp4i50yLi
-         wUXNjKP97yKO1chFosjCP6jHbHl9M5gNbhQQQZuBjkNuOh9sE2u/RnliQkupdRrTnB78
-         ensm1H7mTXgoQvxbhovdB3WMbvG5GPp88KUT1PvrdRHxTRQ8uR2fd7wNsVlZSXgqslAt
-         PztA==
+        bh=MjT9jACDegh8i3/ldIssewU7scETwe65AzJWUVQFVO4=;
+        b=l8h9jCUE+bZzZMyYcjgcio25dx7uVJNJRuIhNeauHNsnDfb5u4QxxzhxSkvI91E3GR
+         YAeFRp8BmdzTAOYKQcVS8HQrY4xOVWMZbIVZ/IYcm6U+FV59rwH1iWuqZ8oaq3dw5SKY
+         Kkoy0emu4qmSdIwlRK/W/jga+Py23jwSARfPu18nL+VaUNHWLBY2B75xDYdSq0inAIwX
+         AbQDq0NVAemB+nsQPSCb0yWdIN/+Y3t6HaDpMoUB0dgAyI6fM1QLCinDReftAgCSyPdz
+         S8sgtixPEagpvnz7gdJWRZ6F0OSWHzo0LXYRujrRyHLZ5Td8K9M2W4Vl/jloE8HzXrk3
+         eeEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=XsZH2ZlxCr6iT3L+49rRTJJnEJ39rkW4+RYUadIzOtA=;
-        b=pXR3Snf9Q9dLRb6t+R1ILLs9XuEknEyrSQRbnlklUI1H427P3Q+k66woZe8pqJvqCO
-         34kB/6AgAxGT8FRj7XRs9LspaWdOTxLJz8x1vyR2SC9y+hea35ftL8hY+9mx4B+0j1H7
-         vat3jK76m+OLCtiQc1UZoU8qYkGqqwCWPDFCifQb1gXGInVFsiOWQ6IEYKUujZ9r4xLx
-         7CPHS/R+S/Rj4Apmb4bwJ+x835kvtTnSsw7DtoSKxX3KtDiAPq4cljHWH8nmClO/EUba
-         hfAANuOXGEnThqTLQfc6cSFpfJHpUqf3YRhmaCYbsKgN3vvZLUu+89lUmX6eKeM1h4nr
-         /L8w==
-X-Gm-Message-State: AOAM532T/zUCHfDxFXi9X/z+eqNhShoWBQhQyJA8u3Khbmc4ki6yfYwH
-        pywlB3JNZ2Zx/sCEw0xQRfJWcQ==
-X-Google-Smtp-Source: ABdhPJyQvGPhhCDkDPs//GgXdG4S7pu68Q1Tt12Ksb/sgYYUwtokZaIU62eANn1ZR6ZjIyAunxBX0w==
-X-Received: by 2002:a17:90a:ea18:: with SMTP id w24mr186844pjy.158.1593040903445;
-        Wed, 24 Jun 2020 16:21:43 -0700 (PDT)
-Received: from google.com ([2620:15c:201:2:ce90:ab18:83b0:619])
-        by smtp.gmail.com with ESMTPSA id u61sm6452415pjb.7.2020.06.24.16.21.42
+        bh=MjT9jACDegh8i3/ldIssewU7scETwe65AzJWUVQFVO4=;
+        b=nlyJx756zbgBHPQT9NJYCwYw4++07Hgx6WkijMERCOzIXnusfcGrJ6Qf8/sQcX6CR6
+         zIskLoqyLg4k1LyimpSvpUOFuwqKSq9rCn7eJ/TK0h2wTx5G//alY+yMG5kLZszQqt7n
+         lBmTUEm9cuQx5g5Ag50bMUHkEDsVYLgVgMg0skVwJ9368ggSd4EJnigLhIZDIQtT4zg8
+         gKoEA9L5J1CITV6KbsQP6vvOIsfS8Q99Xvbt04Zu5CDnBIcFkgGNDzp1WDzbAFmspTWN
+         UpoMqLEcL2mGGTTF/rSSGkm29bQbFr90F1RUUxJ01Yeu/wZmwM/1taGnPbmkDw2/aXVY
+         tsCg==
+X-Gm-Message-State: AOAM5332gdKHtbPOZhLTac4GkTVTvFG9tbvEJqrANIAs9hOImKLjwkUC
+        VsU5VxmEcHfzL/0QEmx6W/wFFCQybE32clTk
+X-Google-Smtp-Source: ABdhPJyLwHe+moQvFoRN9ZnTrDZ2zOH8S6VomM1fTNTwZtIHtwT6W0bunDPDMYGO+XnvxkGUsIYF4w==
+X-Received: by 2002:a05:6402:3048:: with SMTP id bu8mr5833355edb.367.1593041049384;
+        Wed, 24 Jun 2020 16:24:09 -0700 (PDT)
+Received: from andrea (ip-213-220-210-175.net.upcbroadband.cz. [213.220.210.175])
+        by smtp.gmail.com with ESMTPSA id o8sm7951828ejj.102.2020.06.24.16.24.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2020 16:21:42 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 16:21:37 -0700
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, kbuild-all@lists.01.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 11/22] pci: lto: fix PREL32 relocations
-Message-ID: <20200624232137.GA243469@google.com>
-References: <20200624203200.78870-12-samitolvanen@google.com>
- <202006250618.DQj64eMK%lkp@intel.com>
- <CAKwvOdnREuOmN_Vinn8pn6fxEpjzCM1_=9tDzbd2z884GNLFeA@mail.gmail.com>
+        Wed, 24 Jun 2020 16:24:08 -0700 (PDT)
+Date:   Thu, 25 Jun 2020 01:24:02 +0200
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, mingo@kernel.org, stern@rowland.harvard.edu,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: LKMM patches for next merge window
+Message-ID: <20200624232402.GA465543@andrea>
+References: <20200624185400.GA13594@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdnREuOmN_Vinn8pn6fxEpjzCM1_=9tDzbd2z884GNLFeA@mail.gmail.com>
+In-Reply-To: <20200624185400.GA13594@paulmck-ThinkPad-P72>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 04:03:48PM -0700, Nick Desaulniers wrote:
-> On Wed, Jun 24, 2020 at 3:50 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Sami,
-> >
-> > Thank you for the patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on 26e122e97a3d0390ebec389347f64f3730fdf48f]
-> >
-> > url:    https://github.com/0day-ci/linux/commits/Sami-Tolvanen/add-support-for-Clang-LTO/20200625-043816
-> > base:    26e122e97a3d0390ebec389347f64f3730fdf48f
-> > config: i386-alldefconfig (attached as .config)
-> > compiler: gcc-9 (Debian 9.3.0-13) 9.3.0
-> > reproduce (this is a W=1 build):
-> >         # save the attached .config to linux build tree
-> >         make W=1 ARCH=i386
+On Wed, Jun 24, 2020 at 11:54:00AM -0700, Paul E. McKenney wrote:
+> Hello!
 > 
-> Note: W=1 ^
+> Here is the list of LKMM patches I am considering for the next merge
+> window and the status of each.  Any I am missing or any that need to
+> wait or be modified?
 > 
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >    In file included from arch/x86/kernel/pci-dma.c:9:
-> > >> include/linux/compiler-gcc.h:72:45: warning: no previous prototype for '__UNIQUE_ID_via_no_dac190' [-Wmissing-prototypes]
-> >       72 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-> >          |                                             ^~~~~~~~~~~~
-> >    include/linux/pci.h:1914:7: note: in definition of macro '___DECLARE_PCI_FIXUP_SECTION'
-> >     1914 |  void stub(struct pci_dev *dev) { hook(dev); }   \
-> >          |       ^~~~
+> 						Thanx, Paul
 > 
-> Should `stub` be qualified as `static inline`? https://godbolt.org/z/cPBXxW
-> Or should stub be declared in this header, but implemented in a .c
-> file?  (I'm guessing the former, since the `hook` callback comes from
-> the macro).
+> ------------------------------------------------------------------------
+> 
+> 3ce5d69 docs: fix references for DMA*.txt files
+> 	Could someone please provide an ack?
 
-Does static inline guarantee that the compiler won't rename the symbol?
-The purpose of this change is to have a stable symbol name, which we can
-safely use in inline assembly.
+Fixing the N-th commit "move docs without updating in-tree references".
+;-/
 
-Sami
+Most importantly there appears to be some on-going discussion about it,
+cf.
+
+  https://lkml.kernel.org/r/20200623072240.GA974@lst.de
+
+(could you please sort this out?)
+
+  Andrea
+
+
+> 
+> ac1a749 tools/memory-model: Add recent references
+> be1ce3e tools/memory-model: Fix "conflict" definition
+> 24dca63 Documentation: LKMM: Add litmus test for RCU GP guarantee where updater frees object
+> 47ec95b Documentation: LKMM: Add litmus test for RCU GP guarantee where reader stores
+> bb2c938 MAINTAINERS: Update maintainers for new Documentation/litmus-tests
+> 05bee9a tools/memory-model: Add an exception for limitations on _unless() family
+> dc76257 Documentation/litmus-tests: Introduce atomic directory
+> d059e50 Documentation/litmus-tests/atomic: Add a test for atomic_set()
+> 7eecf76 Documentation/litmus-tests/atomic: Add a test for smp_mb__after_atomic()
+> 116f054 tools/memory-model: Fix reference to litmus test in recipes.txt
+> ffd32d4 Documentation/litmus-tests: Merge atomic's README into top-level one
+> a08ae99 Documentation/litmus-tests: Cite an RCU litmus test
+> 843285eb tools/memory-model/README: Expand dependency of klitmus7
+> 0296c57 tools/memory-model/README: Mention herdtools7 7.56 in compatibility table
+> 47e4f0a Documentation/litmus-tests: Add note on herd7 7.56 in atomic litmus test
+> 	All ready to go.
