@@ -2,109 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2849F207D5B
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 22:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD14207DAA
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 22:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406612AbgFXUdn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 16:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S2390042AbgFXUsQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 16:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406618AbgFXUdk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 16:33:40 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BE4C061796
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:33:38 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id y5so2427045qto.10
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:33:38 -0700 (PDT)
+        with ESMTP id S1729867AbgFXUsQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 16:48:16 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11BDC061573
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:48:15 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id t6so2030845pgq.1
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=tvg1Fbryi0kMABLSJZV+2LlG9cMfXZohRvKr2b10/ew=;
-        b=qDi1kJQp6Ay8PowzBhvgcAgfJKyEY22DJ3SehuRqjn/jA9tuCP3XgBFwyavVII/8H8
-         +qDUOb2y6OKXwsbI5cxksI3QZk1MHXAA03OHDhdjTbrRcF9EMaP1PLIUJPhY0/usboE5
-         WysdzKDHLGBWRBK078rHZqlAErXt2qVt2sq358db2q+vTaEhfb2Ztz8s+Npc56SUR/GU
-         zam+aC0Fi9TXcLLkm/vCwtmB9CZFKkHlUgIzUuWu5eMrmtKdAXKTOQSgFxHw8mPgwD7i
-         VrVAm6xkIce/iluM0BjvQMvc/W7Io0XF/CLOQ/Xz7mhbTAKzZSonAVtghl5cbcwT3k0W
-         qRXw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mEB3lYAl4SsCrlV3BTMPre2pXq7ZML14cKlVh3L5q6Y=;
+        b=lhCo7Ce8+px/1qsZVVvWEvl8b17OyY0VZ6phH6kNRqcIOvtIYFe0Bosc/F3kgxiZAE
+         hIt8Ui2UgLPzKPs5Pu8zXZBkVSaIoZREtMw1R5nWAh47Ns+jsFMToC89jWQxGRUdKYXP
+         CSG99NaJzj43AQOQGF2aC1BQwpgpJnQXPq1No=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=tvg1Fbryi0kMABLSJZV+2LlG9cMfXZohRvKr2b10/ew=;
-        b=bihPy9c4WopYi01SbSW5MmemBe4GklPi+Z3ThhBAr49NT2g9saWpOYTTP2h/xtk40V
-         XWmNRTK6RnXr0r1vo2zUQh4HCktOa1NT0M0SJQ7LYsrEG2FSRo0uZn8o6pYdOYqxmMSy
-         G+qIke49M5cVDp+V3OzlbM5nqpAiTZX/YZudPwxumnRJ4jGinEYemlEx06Gw4LvmdfxP
-         Cg17AgM4L4zT8ttP0Gqw3znUoXGyX2dsEemzRzCQdJ7SDpT0S+om4urac/dIJwcvkw4c
-         3vQjJFqABAZnqY5+sE/PU/InndJNf8/QKJHBi23ne/nJfbE0qwAYgE3Gu1jnwsIrXZmZ
-         JWlQ==
-X-Gm-Message-State: AOAM5316VxOrZtuYaTQHBxO3XdvBQZ+WyrKK9UNyNCcTeDxdYdBeDJ4o
-        J3ndmx4NfJ8MqvxRlkQQgn1rRt6hP/lcoQxFMhc=
-X-Google-Smtp-Source: ABdhPJyl5JOyQAzphL8fSerF19PzJDrN7smlmqxmskm8wB3636prwAzfuisg2Ek7D9XrgzzDEO8QBVxE0nwET9TpJnI=
-X-Received: by 2002:a05:6214:846:: with SMTP id dg6mr31350632qvb.210.1593030818021;
- Wed, 24 Jun 2020 13:33:38 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 13:32:00 -0700
-In-Reply-To: <20200624203200.78870-1-samitolvanen@google.com>
-Message-Id: <20200624203200.78870-23-samitolvanen@google.com>
-Mime-Version: 1.0
-References: <20200624203200.78870-1-samitolvanen@google.com>
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH 22/22] x86, build: allow LTO_CLANG and THINLTO to be selected
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mEB3lYAl4SsCrlV3BTMPre2pXq7ZML14cKlVh3L5q6Y=;
+        b=uTt1X5ekafTkML/z3VhYwRQE91i/cMB11YfIAi7mBqAt4uLLX380Kny9Tg+4cE+Gto
+         W84a2UBp6Aykl2+SAO47HU6ic5iib1s9ksOBMyPh2ZtJ+fTxzO/KsxNWq4fJ439WRH1C
+         /Qfs0YLOQGVtgkXIOaL8lRFnDFbvHWc05ElzYjhkr+Qa6XF3uS4K4qlP6F42kP9MprmT
+         sWSJJlp28EnLg+yS+7cCFNPF3TWcM+dN8OPbR0lr7o/Io/otx4MNLCDvb71HXsEBeLJX
+         qhM+5tHfz3qbPWM2Bi7QP21xXVkJ4Wa0UXbvn/+4DVuUmWkmSZyv7SoipGUDuvAPNr1x
+         9XbQ==
+X-Gm-Message-State: AOAM533veRcwRDcFdAwdqOu+QyJ+Ur6eGQbLD/dmUqyEDgJiEvpc2qrs
+        sILNkE/SgvC3OdJEiIlmWfUpYA==
+X-Google-Smtp-Source: ABdhPJxeJ8eBpJFffDOuMwexylg22gOTAro/oN0xNaO5l0HSv9qlqevOVqP5fuMF0UPCCX1u+a0H8Q==
+X-Received: by 2002:a63:be01:: with SMTP id l1mr23945501pgf.32.1593031695265;
+        Wed, 24 Jun 2020 13:48:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n11sm17739270pgm.1.2020.06.24.13.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2020 13:48:14 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 13:48:13 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v3 4/7] init: main: add KUnit to kernel init
+Message-ID: <202006241345.43D22CB261@keescook>
+References: <20200228012036.15682-5-brendanhiggins@google.com>
+ <202003021439.A6B6FD8@keescook>
+ <CAFd5g45Jz-5wtO-YNuqPN2Zc_rJtoA1qbPLVs2wrJFQyZpd5QQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFd5g45Jz-5wtO-YNuqPN2Zc_rJtoA1qbPLVs2wrJFQyZpd5QQ@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Allow CONFIG_LTO_CLANG and CONFIG_THINLTO to be enabled.
+On Wed, Jun 24, 2020 at 01:20:35PM -0700, Brendan Higgins wrote:
+> On Mon, Mar 2, 2020 at 2:45 PM Kees Cook <keescook@chromium.org> wrote:
+> > Now, I realize kunit tests _should_ be self-contained, but this seems
+> > like a possible robustness problem. Is there any reason this can't be
+> > moved after rcu_end_inkernel_boot() in kernel_init() instead?
+> 
+> I tried that, but it doesn't work without an initramfs. We could add
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- arch/x86/Kconfig  | 2 ++
- arch/x86/Makefile | 5 +++++
- 2 files changed, 7 insertions(+)
+I'm curious to know what happened. To me it looks like it would be
+possible to do it in here:
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 6a0cc524882d..df335b1f9c31 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -92,6 +92,8 @@ config X86
- 	select ARCH_SUPPORTS_ACPI
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
-+	select ARCH_SUPPORTS_LTO_CLANG		if X86_64
-+	select ARCH_SUPPORTS_THINLTO		if X86_64
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 00e378de8bc0..a1abc1e081ad 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -188,6 +188,11 @@ ifdef CONFIG_X86_64
- KBUILD_LDFLAGS += $(call ld-option, -z max-page-size=0x200000)
- endif
- 
-+ifdef CONFIG_LTO_CLANG
-+KBUILD_LDFLAGS	+= -plugin-opt=-code-model=kernel \
-+		   -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
-+endif
-+
- # Workaround for a gcc prelease that unfortunately was shipped in a suse release
- KBUILD_CFLAGS += -Wno-sign-compare
- #
+        system_state = SYSTEM_RUNNING;
+        numa_default_policy();
+
+        rcu_end_inkernel_boot();
+
+        do_sysctl_args();
+
+	put it here?
+
+        if (ramdisk_execute_command) {
+                ret = run_init_process(ramdisk_execute_command);
+
+That should be before anything happens with an initramfs. (i.e. boot the
+kernel without an initrd and it won't be required...)
+
+> an initramfs for KUnit at some point if highly desired, but I think
+> that is outside the scope of this patchset. Additionally, this patch
+> actually moves running tests to later in the init process, which is
+> still an improvement over the way KUnit works today.
+
+Later is better! :)
+
+> There are some other reasons I wouldn't want to make that change right
+> now, which will become apparent in a patch that I will send out in
+> short order.
+
+Cool; I'll look for it.
+
 -- 
-2.27.0.212.ge8ba1cc988-goog
-
+Kees Cook
