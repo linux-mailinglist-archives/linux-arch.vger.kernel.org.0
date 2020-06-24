@@ -2,125 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 382D8207A0B
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 19:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4B9207A39
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 19:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405418AbgFXRQU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 13:16:20 -0400
-Received: from foss.arm.com ([217.140.110.172]:45398 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405292AbgFXRQT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Jun 2020 13:16:19 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1C8B1FB;
-        Wed, 24 Jun 2020 10:16:18 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F027B3F71E;
-        Wed, 24 Jun 2020 10:16:15 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 18:16:13 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
+        id S2405524AbgFXR0Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 13:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405517AbgFXR0Y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 13:26:24 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64F5C0613ED
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 10:26:24 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id d6so1425254pjs.3
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 10:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MnQWlAViaAXgR6ChKk9flTU7iy/dP/Hqi3HZ30RWfcA=;
+        b=HHUTbvXU8iaNylfrBu2tKAp6t8jvzwGxJv4iQWDRdjnhiP1bSVaMJy3y6z9hlDLo5j
+         I3r9BcePoZxu3+e/4tWyl+hlZf6p8Dk3oi6OlIpMi2Bre5oCdOktwagNmvSvXj80p45/
+         qBNen7/kYI5dyPaI7TzcMXBYWgXUQStxnApBoGkLKlQUqKFCWrKmo07mBmRdo2Uq2UAY
+         SnhyDTWHaTW4W99fdN1AYeItiGEhnJVPXK8z9+1eONtpAatxhfK1DAjRnTnibVGkHFqt
+         SVfUg2fkin8g64ceJ6gtvnSPvBarq4d7rDD5V6XBCFnHYOlfMrs3xzt1x+d3BckHFWC3
+         AeRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MnQWlAViaAXgR6ChKk9flTU7iy/dP/Hqi3HZ30RWfcA=;
+        b=L0x8KeW5ZdcI6ezQcSZInPRNaiafhgcn9/1iA9SWEnjalF0XNx7Pw45mrt+de3xyMM
+         9lLIDchfmutHOtXwhYFHHRriN0EftErubqK0ffqYzry0VN9+ZVmSzD+d4U96xsQfQs3i
+         Y/HdERT7hGEhGrgy7VF7YoHoa5QwYrbGJF73tS0Xj7Y1/B9XWosul+ZxQn2wA42u2s/y
+         f//A6tAx5l1w9R6DCOWzsS9/xvnl+fcmPmYL1n+L3jL41lTEErxBP+Qgrh2kMQ2h7qAF
+         09v0xwdmMJYj9T7BYrH1tCXVWSE14WdCgcDt2FPcI8M7le3lNdVDbxt/6JXCNKDSLiif
+         dupg==
+X-Gm-Message-State: AOAM533/8NN3wtGwD2BWrW7IFvdL01OLNPaPhQ4T4qCtE4k+EOrq92eH
+        5H2XGXenB8yfE3/KevAV6+IRpQ==
+X-Google-Smtp-Source: ABdhPJy/02NChU1UMXqYAoZX4iMBIryqEQ4wkk5JgSfgSZouk+nUj0lvwCKX2dompigE5x6ivL/uXg==
+X-Received: by 2002:a17:90a:f3d6:: with SMTP id ha22mr29151692pjb.193.1593019583946;
+        Wed, 24 Jun 2020 10:26:23 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:0:9efe:9f1:9267:2b27])
+        by smtp.gmail.com with ESMTPSA id i191sm21217005pfe.99.2020.06.24.10.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2020 10:26:22 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 10:26:20 -0700
+From:   Fangrui Song <maskray@google.com>
+To:     Arvind Sankar <nivedita@alum.mit.edu>
+Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Will Deacon <will@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Fangrui Song <maskray@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        X86 ML <x86@kernel.org>, Russell King <linux@armlinux.org.uk>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Peter Collingbourne <pcc@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        James Morse <james.morse@arm.com>
-Subject: Re: [PATCH v3 3/9] efi/libstub: Remove .note.gnu.property
-Message-ID: <20200624171613.GJ25945@arm.com>
-References: <20200624033142.cinvg6rbg252j46d@google.com>
- <202006232143.66828CD3@keescook>
- <20200624104356.GA6134@willie-the-truck>
- <CAMj1kXHBT4ei0xhyL4jD7=CNRsn1rh7w6jeYDLjVOv4na0Z38Q@mail.gmail.com>
- <202006240820.A3468F4@keescook>
- <CAMj1kXHck12juGi=E=P4hWP_8vQhQ+-x3vBMc3TGeRWdQ-XkxQ@mail.gmail.com>
- <202006240844.7BE48D2B5@keescook>
- <CAMj1kXHqBs44uukRSdFwA_hcmX_yKVfjqdv9RoPbbu-6Wz+RaA@mail.gmail.com>
- <20200624162919.GH25945@arm.com>
- <CAMj1kXE1zWCjVt8iS4fv2gQHzrTF6=Ggd16nm+4TNWAG3zSWAQ@mail.gmail.com>
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/9] vmlinux.lds.h: Add .symtab, .strtab, and
+ .shstrtab to STABS_DEBUG
+Message-ID: <20200624172620.654hhjetiyzpgoxw@google.com>
+References: <20200624014940.1204448-1-keescook@chromium.org>
+ <20200624014940.1204448-3-keescook@chromium.org>
+ <20200624153930.GA1337895@rani.riverdale.lan>
+ <20200624161643.73x6navnwryckuit@google.com>
+ <20200624171121.GA1377921@rani.riverdale.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXE1zWCjVt8iS4fv2gQHzrTF6=Ggd16nm+4TNWAG3zSWAQ@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200624171121.GA1377921@rani.riverdale.lan>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 06:40:48PM +0200, Ard Biesheuvel wrote:
-> On Wed, 24 Jun 2020 at 18:29, Dave Martin <Dave.Martin@arm.com> wrote:
-> >
-> > On Wed, Jun 24, 2020 at 05:48:41PM +0200, Ard Biesheuvel wrote:
-> > > On Wed, 24 Jun 2020 at 17:45, Kees Cook <keescook@chromium.org> wrote:
-> > > >
-> > > > On Wed, Jun 24, 2020 at 05:31:06PM +0200, Ard Biesheuvel wrote:
-> > > > > On Wed, 24 Jun 2020 at 17:21, Kees Cook <keescook@chromium.org> wrote:
-> > > > > >
-> > > > > > On Wed, Jun 24, 2020 at 12:46:32PM +0200, Ard Biesheuvel wrote:
-> > > > > > > I'm not sure if there is a point to having PAC and/or BTI in the EFI
-> > > > > > > stub, given that it runs under the control of the firmware, with its
-> > > > > > > memory mappings and PAC configuration etc.
-> > > > > >
-> > > > > > Is BTI being ignored when the firmware runs?
-> > > > >
-> > > > > Given that it requires the 'guarded' attribute to be set in the page
-> > > > > tables, and the fact that the UEFI spec does not require it for
-> > > > > executables that it invokes, nor describes any means of annotating
-> > > > > such executables as having been built with BTI annotations, I think we
-> > > > > can safely assume that the EFI stub will execute with BTI disabled in
-> > > > > the foreseeable future.
-> > > >
-> > > > yaaaaaay. *sigh* How long until EFI catches up?
-> > > >
-> > > > That said, BTI shouldn't _hurt_, right? If EFI ever decides to enable
-> > > > it, we'll be ready?
-> > > >
-> > >
-> > > Sure. Although I anticipate that we'll need to set some flag in the
-> > > PE/COFF header to enable it, and so any BTI opcodes we emit without
-> > > that will never take effect in practice.
-> >
-> > In the meantime, it is possible to build all the in-tree parts of EFI
-> > for BTI, and just turn it off for out-of-tree EFI binaries?
-> >
-> 
-> Not sure I understand the question. What do you mean by out-of-tree
-> EFI binaries? And how would the firmware (which is out of tree itself,
-> and is in charge of the page tables, vector table, timer interrupt etc
-> when the EFI stub executes) distinguish such binaries from the EFI
-> stub?
 
-I'm not an EFI expert, but I'm guessing that you configure EFI with
-certain compiler flags and build it.  Possibly some standalone EFI
-executables are built out of the same tree and shipped with the
-firmware from the same build, but I'm speculating.  If not, we can just
-run all EFI executables with BTI off.
+On 2020-06-24, Arvind Sankar wrote:
+>On Wed, Jun 24, 2020 at 09:16:43AM -0700, Fangrui Song wrote:
+>>
+>> On 2020-06-24, Arvind Sankar wrote:
+>> >On Tue, Jun 23, 2020 at 06:49:33PM -0700, Kees Cook wrote:
+>> >> When linking vmlinux with LLD, the synthetic sections .symtab, .strtab,
+>> >> and .shstrtab are listed as orphaned. Add them to the STABS_DEBUG section
+>> >> so there will be no warnings when --orphan-handling=warn is used more
+>> >> widely. (They are added above comment as it is the more common
+>> >
+>> >Nit 1: is "after .comment" better than "above comment"? It's above in the
+>> >sense of higher file offset, but it's below in readelf output.
+>>
+>> I mean this order:)
+>>
+>>    .comment
+>>    .symtab
+>>    .shstrtab
+>>    .strtab
+>>
+>> This is the case in the absence of a linker script if at least one object file has .comment (mostly for GCC/clang version information) or the linker is LLD which adds a .comment
+>>
+>> >Nit 2: These aren't actually debugging sections, no? Is it better to add
+>> >a new macro for it, and is there any plan to stop LLD from warning about
+>> >them?
+>>
+>> https://reviews.llvm.org/D75149 "[ELF] --orphan-handling=: don't warn/error for unused synthesized sections"
+>> described that .symtab .shstrtab .strtab are different in GNU ld.
+>> Since many other GNU ld synthesized sections (.rela.dyn .plt ...) can be renamed or dropped
+>> via output section descriptions, I don't understand why the 3 sections
+>> can't be customized.
+>
+>So IIUC, lld will now warn about .rela.dyn etc only if they're non-empty?
 
-> > If there's no easy way to do this though, I guess we should wait for /
-> > push for a PE/COFF flag to describe this properly.
-> >
-> 
-> Yeah good point. I will take this to the forum.
+HEAD and future 11.0.0 will not warn about unused synthesized sections
+like .rela.dyn
 
-In the interim, we could set the GP bit in EFI's page tables for the
-executable code from the firmware image if we want this protection, but
-turn it off in pages mapping the executable code of EFI executables.
-This is better than nothing.
+For most synthesized sections, empty = unused.
 
-Cheers
----Dave
+>>
+>> I created a feature request: https://sourceware.org/bugzilla/show_bug.cgi?id=26168
+>> (If this is supported, it is a consistent behavior to warn for orphan
+>> .symtab/.strtab/.shstrtab
+>>
+>> There may be 50% chance that the maintainer decides that "LLD diverges"
+>> I would disagree: there is no fundamental problems with .symtab/.strtab/.shstrtab which make them special in output section descriptions or orphan handling.)
+>>
+>
+>.shstrtab is a little special in that it can't be discarded if the ELF
+>file contains any sections at all. But yeah, there's no reason they
+>can't be renamed or placed in a custom location in the file.
+
+https://sourceware.org/pipermail/binutils/2020-March/000179.html
+proposes -z nosectionheader. With this option, I believe .shstrtab is
+not needed. /DISCARD/ : { *(.shstrtab) }  should achieve a similar effect.
