@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F525207D60
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 22:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2849F207D5B
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 22:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406611AbgFXUds (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 16:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
+        id S2406612AbgFXUdn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 16:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406609AbgFXUdi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 16:33:38 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EDAC061795
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:33:37 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id c17so3510047ybf.7
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:33:37 -0700 (PDT)
+        with ESMTP id S2406618AbgFXUdk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 16:33:40 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BE4C061796
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:33:38 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id y5so2427045qto.10
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=vVvCAj3rXahkiTyB3fdf4JdbPFhKMTMNyBg/koJzOHM=;
-        b=A1OVxmohREiIQE9uWobns3DZjU2BjnF5/uRv4vfcaF2sodOxkh4sxle+6JGl3ADtOZ
-         3fmTbkzX8W7ahG1bTGpXMMU9CdKC8UZUye2VucpEx7325i3QESTUcI83ndSOc6E8Kmzu
-         N5PlhLkCWO4j4sIvQEk9eacQtD+bX2UY3Y5a4I1dsdat2Jm3e0YTj4ppvoCyl2YlPdbY
-         ZyEZAXO2uSqBN9R05BjPoqjam4RsnD1PfD+i8NAuT2L+OMarD3RxLispCXwkir37c5B5
-         L+Lu+ZWTjo7NmJwPgVCLx0NgAf7Qq1Qws+DG9FZOXnsn8vOlmmibTipSbU4GNNmhC8bb
-         0u7A==
+        bh=tvg1Fbryi0kMABLSJZV+2LlG9cMfXZohRvKr2b10/ew=;
+        b=qDi1kJQp6Ay8PowzBhvgcAgfJKyEY22DJ3SehuRqjn/jA9tuCP3XgBFwyavVII/8H8
+         +qDUOb2y6OKXwsbI5cxksI3QZk1MHXAA03OHDhdjTbrRcF9EMaP1PLIUJPhY0/usboE5
+         WysdzKDHLGBWRBK078rHZqlAErXt2qVt2sq358db2q+vTaEhfb2Ztz8s+Npc56SUR/GU
+         zam+aC0Fi9TXcLLkm/vCwtmB9CZFKkHlUgIzUuWu5eMrmtKdAXKTOQSgFxHw8mPgwD7i
+         VrVAm6xkIce/iluM0BjvQMvc/W7Io0XF/CLOQ/Xz7mhbTAKzZSonAVtghl5cbcwT3k0W
+         qRXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=vVvCAj3rXahkiTyB3fdf4JdbPFhKMTMNyBg/koJzOHM=;
-        b=o6SKOPBFXbFd3t6qRQvKKFNaJ3tK9UT+w1E8wVHnWfmU3setyycmDAluJX3aEx1cHG
-         MYMByVrDsdRSxNWNtm5V3GHt/B7ruBGVqPJ5pIa0ElR41tCD1GyW327XKOGOOOF1Df9H
-         VGlriYjPlt5HwxxljGnWLbkRqS4Ke3R2UdCOmdMA9wQ7srWVDgtLmpZjwsxhBEkCkYvj
-         vcURA8sfhbcoMbCP94PUPKlFxueb0Uu7QMlyKezhuNj95ZSPuHNwpzQbyhBVY5Q3TBLl
-         tH0BUWkAjcYb6Y4HvSz9fWHw2ipgIPcN/gjsSKJkixlBaHHMRPJkHgZKM/1xtPNWkIi9
-         icKg==
-X-Gm-Message-State: AOAM532g1AVR8r657rWKouzPWo6CMMSjd/BtdcLCe7ZFaWrXoAlzRCuS
-        qsVZ4aN7/yCG1kcsqH/9xBAgPCib0KfUmJ45Vhs=
-X-Google-Smtp-Source: ABdhPJxFwd5sYHcpKP7HH5wq1l18/N0yS86uUmxUS0eTeAHpLUaXB5pBxjwc02CZmZmfKSgokc5xwqXiDOu/w8PP8nk=
-X-Received: by 2002:a25:7450:: with SMTP id p77mr23380392ybc.155.1593030816256;
- Wed, 24 Jun 2020 13:33:36 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 13:31:59 -0700
+        bh=tvg1Fbryi0kMABLSJZV+2LlG9cMfXZohRvKr2b10/ew=;
+        b=bihPy9c4WopYi01SbSW5MmemBe4GklPi+Z3ThhBAr49NT2g9saWpOYTTP2h/xtk40V
+         XWmNRTK6RnXr0r1vo2zUQh4HCktOa1NT0M0SJQ7LYsrEG2FSRo0uZn8o6pYdOYqxmMSy
+         G+qIke49M5cVDp+V3OzlbM5nqpAiTZX/YZudPwxumnRJ4jGinEYemlEx06Gw4LvmdfxP
+         Cg17AgM4L4zT8ttP0Gqw3znUoXGyX2dsEemzRzCQdJ7SDpT0S+om4urac/dIJwcvkw4c
+         3vQjJFqABAZnqY5+sE/PU/InndJNf8/QKJHBi23ne/nJfbE0qwAYgE3Gu1jnwsIrXZmZ
+         JWlQ==
+X-Gm-Message-State: AOAM5316VxOrZtuYaTQHBxO3XdvBQZ+WyrKK9UNyNCcTeDxdYdBeDJ4o
+        J3ndmx4NfJ8MqvxRlkQQgn1rRt6hP/lcoQxFMhc=
+X-Google-Smtp-Source: ABdhPJyl5JOyQAzphL8fSerF19PzJDrN7smlmqxmskm8wB3636prwAzfuisg2Ek7D9XrgzzDEO8QBVxE0nwET9TpJnI=
+X-Received: by 2002:a05:6214:846:: with SMTP id dg6mr31350632qvb.210.1593030818021;
+ Wed, 24 Jun 2020 13:33:38 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 13:32:00 -0700
 In-Reply-To: <20200624203200.78870-1-samitolvanen@google.com>
-Message-Id: <20200624203200.78870-22-samitolvanen@google.com>
+Message-Id: <20200624203200.78870-23-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20200624203200.78870-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH 21/22] x86, relocs: Ignore L4_PAGE_OFFSET relocations
+Subject: [PATCH 22/22] x86, build: allow LTO_CLANG and THINLTO to be selected
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Will Deacon <will@kernel.org>
@@ -68,26 +68,43 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-L4_PAGE_OFFSET is a constant value, so don't warn about absolute
-relocations.
+Allow CONFIG_LTO_CLANG and CONFIG_THINLTO to be enabled.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- arch/x86/tools/relocs.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/Kconfig  | 2 ++
+ arch/x86/Makefile | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
-index ce7188cbdae5..8f3bf34840ce 100644
---- a/arch/x86/tools/relocs.c
-+++ b/arch/x86/tools/relocs.c
-@@ -47,6 +47,7 @@ static const char * const sym_regex_kernel[S_NSYMTYPES] = {
- 	[S_ABS] =
- 	"^(xen_irq_disable_direct_reloc$|"
- 	"xen_save_fl_direct_reloc$|"
-+	"L4_PAGE_OFFSET|"
- 	"VDSO|"
- 	"__crc_)",
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 6a0cc524882d..df335b1f9c31 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -92,6 +92,8 @@ config X86
+ 	select ARCH_SUPPORTS_ACPI
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
++	select ARCH_SUPPORTS_LTO_CLANG		if X86_64
++	select ARCH_SUPPORTS_THINLTO		if X86_64
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_USE_QUEUED_SPINLOCKS
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 00e378de8bc0..a1abc1e081ad 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -188,6 +188,11 @@ ifdef CONFIG_X86_64
+ KBUILD_LDFLAGS += $(call ld-option, -z max-page-size=0x200000)
+ endif
  
++ifdef CONFIG_LTO_CLANG
++KBUILD_LDFLAGS	+= -plugin-opt=-code-model=kernel \
++		   -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
++endif
++
+ # Workaround for a gcc prelease that unfortunately was shipped in a suse release
+ KBUILD_CFLAGS += -Wno-sign-compare
+ #
 -- 
 2.27.0.212.ge8ba1cc988-goog
 
