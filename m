@@ -2,132 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C12EA206B57
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 06:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD258206B6F
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 06:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728681AbgFXEoO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 00:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
+        id S2388584AbgFXEwL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 00:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727862AbgFXEoO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 00:44:14 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6D6C0613ED
-        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 21:44:13 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id jz3so624702pjb.0
-        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 21:44:13 -0700 (PDT)
+        with ESMTP id S2388401AbgFXEwL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 00:52:11 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B537C061755
+        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 21:52:11 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id z5so788008pgb.6
+        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 21:52:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Yc7m6q+AETZbQf/A/NW3gp84TMebMUYFiYcSc962UaI=;
-        b=foHqhRb7hf5KgQA5HSRO5284qQLj7K1f7jI6KtpF4wP8UIugY2Q4C+9vTK7tIsFkyu
-         gCNVka1KLRgmXwoVN0JFbY5Ac/BHQH24PxKAlxSyvl0q99hluofpS33VW/NvUHVQlz+U
-         gne2QItKrmtHY7DGvrNp9LyDns2aXJiINfTjY=
+        bh=6f53wfu9QNcdQT3ZJDSOeI3w2U50C/xG0fFlCdqBwh8=;
+        b=SOQtldw9KnegRbDuujQK6mSW72Ar+eCo9OL6sqQyLe4507FK6z15J0tVonL3ROJGKX
+         jmUWzV1kGTM8ch5wLol9h8AUoGlp2vmbh9AfB5HB82Nf6nd9MDgTkfuVbQTqVcoi6m9O
+         rflkv7LK/GEf+O4d4akCkHJ7Zge7ftnPwuhiE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Yc7m6q+AETZbQf/A/NW3gp84TMebMUYFiYcSc962UaI=;
-        b=mK7fEY57Hei8Zrk3X9r1UJKfF46co4cJWr+LiGt4Qy5uYLZf2mMBzJuhS59aN7f4VT
-         4CUSmAT7EI5okRXNNkGz923n03hD5ozyRSqYbMSWLtitV7V349LkF07HU13U/6NFOpvd
-         atvoxF9scr9Fqje7UGaeX8y/Pjn9cgfIPbthSSzGqdIxp35VHagPiqRuFS5nJO6me/Cy
-         A5p7hyQ9HHc958v0UtHiDOxC59LTgOVKg1GIHMkllcvGU8j181NAGRmjW59cY7b0qjYP
-         LIvGzCxXB98cNVim/pqs88w/M+a77EqKzly/55QtQgzfE8HFqx94VW1Db77/tIUdkHwf
-         8d1A==
-X-Gm-Message-State: AOAM532QYM7QXsFfDEvj9zZLVVM0saSdL+hcrJFr4NrGpLct1ze/mE2a
-        YwDJ/Wf19agbKoFqhcXExR62VQ==
-X-Google-Smtp-Source: ABdhPJwXxE4pwrV4JSPaLhEV6G1BlATgL4ZGVyFiXtLbOqPg4UWtN+ePnA8hBS3vgqyDG0O2W9xKlw==
-X-Received: by 2002:a17:90b:a02:: with SMTP id gg2mr6864076pjb.110.1592973853293;
-        Tue, 23 Jun 2020 21:44:13 -0700 (PDT)
+        bh=6f53wfu9QNcdQT3ZJDSOeI3w2U50C/xG0fFlCdqBwh8=;
+        b=jXxnA0KXITBrbr5uOWl+nkOtKQUCUR8+5MYFCzQrhE7/gUlukdlk2USFuVMkSyoLo8
+         tJGASLwvflksJhDZywYker147YwITm/hYHcfQ6gzg/0nYEOHdBY6LiGtq517Ivd73jQv
+         OraqLx3cHISAx8gTWi8YCiiUcNOxsGuyJXGUAKKW1xDgKo3nV5WqPTXeR1CfsA80iG7p
+         B0E6Qk0ZZ9P+7766PqwfydI/MzgW0xMdK32Ox7kzAlmuEh1+XPOqtvT83Bw8QlqsapYs
+         lx2zRf1Ee24kVddRnGHccnn060iGdOO8GytyeInS2KFyxfeeirNlyrq359kxRjhsh035
+         uUww==
+X-Gm-Message-State: AOAM530tvXRH9DZr8geV8bBejUtNL5ndjUIry/GDiIlUhjbF/FgCTZ3A
+        QlIIV2dcXPmBv312gCvJwR9HDw==
+X-Google-Smtp-Source: ABdhPJwX4es65nYyfcxHOhK/hXQNs9Mgx96rrroztpO1dJ1CT4SWu7NO7yDI/cU1cNN8RdLutBMqkA==
+X-Received: by 2002:a65:6710:: with SMTP id u16mr14011070pgf.45.1592974330709;
+        Tue, 23 Jun 2020 21:52:10 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c7sm3578791pfj.106.2020.06.23.21.44.12
+        by smtp.gmail.com with ESMTPSA id q92sm3895838pjh.12.2020.06.23.21.52.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 21:44:12 -0700 (PDT)
-Date:   Tue, 23 Jun 2020 21:44:11 -0700
+        Tue, 23 Jun 2020 21:52:09 -0700 (PDT)
+Date:   Tue, 23 Jun 2020 21:52:08 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Fangrui Song <maskray@google.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        James Morse <james.morse@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/9] efi/libstub: Remove .note.gnu.property
-Message-ID: <202006232143.66828CD3@keescook>
-References: <20200624014940.1204448-1-keescook@chromium.org>
- <20200624014940.1204448-4-keescook@chromium.org>
- <20200624033142.cinvg6rbg252j46d@google.com>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        arjan@linux.intel.com, linux-kernel@vger.kernel.org,
+        kernel-hardening@lists.openwall.com, rick.p.edgecombe@intel.com,
+        Tony Luck <tony.luck@intel.com>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3 05/10] x86: Make sure _etext includes function sections
+Message-ID: <202006232152.733212868D@keescook>
+References: <20200623172327.5701-1-kristen@linux.intel.com>
+ <20200623172327.5701-6-kristen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200624033142.cinvg6rbg252j46d@google.com>
+In-Reply-To: <20200623172327.5701-6-kristen@linux.intel.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 08:31:42PM -0700, 'Fangrui Song' via Clang Built Linux wrote:
-> On 2020-06-23, Kees Cook wrote:
-> > In preparation for adding --orphan-handling=warn to more architectures,
-> > make sure unwanted sections don't end up appearing under the .init
-> > section prefix that libstub adds to itself during objcopy.
-> > 
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > drivers/firmware/efi/libstub/Makefile | 3 +++
-> > 1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-> > index 75daaf20374e..9d2d2e784bca 100644
-> > --- a/drivers/firmware/efi/libstub/Makefile
-> > +++ b/drivers/firmware/efi/libstub/Makefile
-> > @@ -66,6 +66,9 @@ lib-$(CONFIG_X86)		+= x86-stub.o
-> > CFLAGS_arm32-stub.o		:= -DTEXT_OFFSET=$(TEXT_OFFSET)
-> > CFLAGS_arm64-stub.o		:= -DTEXT_OFFSET=$(TEXT_OFFSET)
-> > 
-> > +# Remove unwanted sections first.
-> > +STUBCOPY_FLAGS-y		+= --remove-section=.note.gnu.property
-> > +
-> > #
-> > # For x86, bootloaders like systemd-boot or grub-efi do not zero-initialize the
-> > # .bss section, so the .bss section of the EFI stub needs to be included in the
+On Tue, Jun 23, 2020 at 10:23:22AM -0700, Kristen Carlson Accardi wrote:
+> When using -ffunction-sections to place each function in
+> it's own text section so it can be randomized at load time, the
+> linker considers these .text.* sections "orphaned sections", and
+> will place them after the first similar section (.text). In order
+> to accurately represent the end of the text section and the
+> orphaned sections, _etext must be moved so that it is after both
+> .text and .text.* The text size must also be calculated to
+> include .text AND .text.*
 > 
-> arch/arm64/Kconfig enables ARM64_PTR_AUTH by default. When the config is on
-> 
-> ifeq ($(CONFIG_ARM64_BTI_KERNEL),y)
-> branch-prot-flags-$(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET_BTI) := -mbranch-protection=pac-ret+leaf+bti
-> else
-> branch-prot-flags-$(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET) := -mbranch-protection=pac-ret+leaf
-> endif
-> 
-> This option creates .note.gnu.property:
-> 
-> % readelf -n drivers/firmware/efi/libstub/efi-stub.o
-> 
-> Displaying notes found in: .note.gnu.property
->   Owner                Data size        Description
->   GNU                  0x00000010       NT_GNU_PROPERTY_TYPE_0
->       Properties: AArch64 feature: PAC
-> 
-> If .note.gnu.property is not desired in drivers/firmware/efi/libstub, specifying
-> -mbranch-protection=none can override -mbranch-protection=pac-ret+leaf
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
 
-We want to keep the branch protection enabled. But since it's not a
-"regular" ELF, we don't need to keep the property that identifies the
-feature.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
