@@ -2,95 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3474B2096E4
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jun 2020 01:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6333B209719
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jun 2020 01:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388094AbgFXXGD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 19:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S2388718AbgFXXVq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 19:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728399AbgFXXGB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 19:06:01 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA308C0613ED
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 16:06:01 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id d6so1995621pjs.3
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 16:06:01 -0700 (PDT)
+        with ESMTP id S2388711AbgFXXVp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 19:21:45 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C75C061573
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 16:21:44 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ev7so1436399pjb.2
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 16:21:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=shst53ZJE1d+vIhz2clceIGi2VB/auhmYdgL62EAsJA=;
-        b=v4eMG/3rTtJikwtUeVEWC+d0Ch65aCTzn2lI4XytauNvCzrEjxfgA6aO+yV6VxXBx3
-         mb6CDo0wNoFZ1v4nkYj+/6EWy37Ni5nLIOMzCNLEZ2dadozowAf9iZnCoXAn7+HLcyE9
-         RoOT6e38CrOgiSMwqrLKdO8N7M+/LB2H0MPGEArcqToIp05l+M0z0UH0D4sz1uNsTgmt
-         9mmpfTiacr3PdC/F4zU2Yb9SYNEeuuG0ifqnJKaNC2BdOBDaQw26XwaMnJ0wHebahY7x
-         fvvlvTbNep+cdAWoA5BqhP7JrVtoCYLEUqHK25wchmImEauPU24++/TQpkcZFXvICfaj
-         +O3w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XsZH2ZlxCr6iT3L+49rRTJJnEJ39rkW4+RYUadIzOtA=;
+        b=R9IB6Osrb2qY+Afwa3MRErRuIdvIh83bCWGDGkn1jNRVAI7V/i8wm4cDEgG3oqoLAv
+         ELOwYrGok06AlaYBhZeZ+3IfjuhQsuGjYu2XatVJ/71OLiUAIZZySCSiajaFHNciHcFf
+         e0IKPhqtq2BJSLy0T3JT47Wx5ej+SaC5oLqz/thfZAX/s5DAQJIfcE/zGNUmp4i50yLi
+         wUXNjKP97yKO1chFosjCP6jHbHl9M5gNbhQQQZuBjkNuOh9sE2u/RnliQkupdRrTnB78
+         ensm1H7mTXgoQvxbhovdB3WMbvG5GPp88KUT1PvrdRHxTRQ8uR2fd7wNsVlZSXgqslAt
+         PztA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=shst53ZJE1d+vIhz2clceIGi2VB/auhmYdgL62EAsJA=;
-        b=U+cDfZy01mS/7HjsAd0yw7PWHbH/UavV7BL1oykXoxXnJ4sZ+V4dCW2T3F9eKG1snP
-         f3z0FeDBhW/z/MbHDWx86mIp4e0odI82bhkbbSuroXixhYyKcLgMH1BvRkoXnyb9nMpN
-         RVP5fBpL1FOWXX7Cv8ds1LMwGIz0Ahtfr+Y9BixNxHEtR7zVnZZ3NBA0Q26X6icPHVl0
-         SaZu7lrd74PSVUOqrVyqH7vqOA0qqCCeN9HKUHPFyYywGv57wQjGctD7zzbLJo73HlO3
-         Vf3UWAa0LegPg7JgKqCs9aBNvmT2F/VNPfajLymBo8+5RVET4YD+/MuwGLnTuBGWlUs8
-         ObIQ==
-X-Gm-Message-State: AOAM530ggOdg2vY7x88i5DRi1yv7NuzCIHxbQ4Yppxg9gCFrDJRHdEBK
-        azybIG02XqDHFX72Lza1YER6rmyVxX5cj8cMm2lnOw==
-X-Google-Smtp-Source: ABdhPJxZs7Ep0+V5E2sSAX0aVY+ZMKk8PTjnuF9HO3m5vxhQOU6AbFmmPJG+dflauBb0xhpYFgB/b9UTwA/KqW822v8=
-X-Received: by 2002:a17:902:fe8b:: with SMTP id x11mr30115455plm.179.1593039960944;
- Wed, 24 Jun 2020 16:06:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <20200624203200.78870-18-samitolvanen@google.com> <CAKwvOdnEbCfYZ9o=OF51oswyqDvN4iP-9syWUDhxfueq4q0xcw@mail.gmail.com>
- <20200624215231.GC120457@google.com>
-In-Reply-To: <20200624215231.GC120457@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 24 Jun 2020 16:05:48 -0700
-Message-ID: <CAKwvOdnWfhU7n0VfoydC7epJPrj+ASZzyNRpBCNuvT_5E+=FcQ@mail.gmail.com>
-Subject: Re: [PATCH 17/22] arm64: vdso: disable LTO
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XsZH2ZlxCr6iT3L+49rRTJJnEJ39rkW4+RYUadIzOtA=;
+        b=pXR3Snf9Q9dLRb6t+R1ILLs9XuEknEyrSQRbnlklUI1H427P3Q+k66woZe8pqJvqCO
+         34kB/6AgAxGT8FRj7XRs9LspaWdOTxLJz8x1vyR2SC9y+hea35ftL8hY+9mx4B+0j1H7
+         vat3jK76m+OLCtiQc1UZoU8qYkGqqwCWPDFCifQb1gXGInVFsiOWQ6IEYKUujZ9r4xLx
+         7CPHS/R+S/Rj4Apmb4bwJ+x835kvtTnSsw7DtoSKxX3KtDiAPq4cljHWH8nmClO/EUba
+         hfAANuOXGEnThqTLQfc6cSFpfJHpUqf3YRhmaCYbsKgN3vvZLUu+89lUmX6eKeM1h4nr
+         /L8w==
+X-Gm-Message-State: AOAM532T/zUCHfDxFXi9X/z+eqNhShoWBQhQyJA8u3Khbmc4ki6yfYwH
+        pywlB3JNZ2Zx/sCEw0xQRfJWcQ==
+X-Google-Smtp-Source: ABdhPJyQvGPhhCDkDPs//GgXdG4S7pu68Q1Tt12Ksb/sgYYUwtokZaIU62eANn1ZR6ZjIyAunxBX0w==
+X-Received: by 2002:a17:90a:ea18:: with SMTP id w24mr186844pjy.158.1593040903445;
+        Wed, 24 Jun 2020 16:21:43 -0700 (PDT)
+Received: from google.com ([2620:15c:201:2:ce90:ab18:83b0:619])
+        by smtp.gmail.com with ESMTPSA id u61sm6452415pjb.7.2020.06.24.16.21.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2020 16:21:42 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 16:21:37 -0700
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, kbuild-all@lists.01.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         clang-built-linux <clang-built-linux@googlegroups.com>,
         Kernel Hardening <kernel-hardening@lists.openwall.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 11/22] pci: lto: fix PREL32 relocations
+Message-ID: <20200624232137.GA243469@google.com>
+References: <20200624203200.78870-12-samitolvanen@google.com>
+ <202006250618.DQj64eMK%lkp@intel.com>
+ <CAKwvOdnREuOmN_Vinn8pn6fxEpjzCM1_=9tDzbd2z884GNLFeA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdnREuOmN_Vinn8pn6fxEpjzCM1_=9tDzbd2z884GNLFeA@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 2:52 PM Sami Tolvanen <samitolvanen@google.com> wrote:
->
-> On Wed, Jun 24, 2020 at 01:58:57PM -0700, 'Nick Desaulniers' via Clang Built Linux wrote:
-> > On Wed, Jun 24, 2020 at 1:33 PM Sami Tolvanen <samitolvanen@google.com> wrote:
-> > >
-> > > Filter out CC_FLAGS_LTO for the vDSO.
+On Wed, Jun 24, 2020 at 04:03:48PM -0700, Nick Desaulniers wrote:
+> On Wed, Jun 24, 2020 at 3:50 PM kernel test robot <lkp@intel.com> wrote:
 > >
-> > Just curious about this patch (and the following one for x86's vdso),
-> > do you happen to recall specifically what the issues with the vdso's
-> > are?
->
-> I recall the compiler optimizing away functions at some point, but as
-> LTO is not really needed in the vDSO, it's just easiest to disable it
-> there.
+> > Hi Sami,
+> >
+> > Thank you for the patch! Perhaps something to improve:
+> >
+> > [auto build test WARNING on 26e122e97a3d0390ebec389347f64f3730fdf48f]
+> >
+> > url:    https://github.com/0day-ci/linux/commits/Sami-Tolvanen/add-support-for-Clang-LTO/20200625-043816
+> > base:    26e122e97a3d0390ebec389347f64f3730fdf48f
+> > config: i386-alldefconfig (attached as .config)
+> > compiler: gcc-9 (Debian 9.3.0-13) 9.3.0
+> > reproduce (this is a W=1 build):
+> >         # save the attached .config to linux build tree
+> >         make W=1 ARCH=i386
+> 
+> Note: W=1 ^
+> 
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> >    In file included from arch/x86/kernel/pci-dma.c:9:
+> > >> include/linux/compiler-gcc.h:72:45: warning: no previous prototype for '__UNIQUE_ID_via_no_dac190' [-Wmissing-prototypes]
+> >       72 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+> >          |                                             ^~~~~~~~~~~~
+> >    include/linux/pci.h:1914:7: note: in definition of macro '___DECLARE_PCI_FIXUP_SECTION'
+> >     1914 |  void stub(struct pci_dev *dev) { hook(dev); }   \
+> >          |       ^~~~
+> 
+> Should `stub` be qualified as `static inline`? https://godbolt.org/z/cPBXxW
+> Or should stub be declared in this header, but implemented in a .c
+> file?  (I'm guessing the former, since the `hook` callback comes from
+> the macro).
 
-Sounds fishy; with extern linkage then I would think it's not safe to
-eliminate functions.  Probably unnecessary for the initial
-implementation, and something we can follow up on, but always good to
-have an answer to the inevitable question "why?" in the commit
-message.
--- 
-Thanks,
-~Nick Desaulniers
+Does static inline guarantee that the compiler won't rename the symbol?
+The purpose of this change is to have a stable symbol name, which we can
+safely use in inline assembly.
+
+Sami
