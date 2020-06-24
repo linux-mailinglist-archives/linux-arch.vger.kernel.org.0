@@ -2,52 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7956C20779D
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 17:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858E22077B3
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 17:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404195AbgFXPgX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 11:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        id S2404154AbgFXPjf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 11:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403931AbgFXPgW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 11:36:22 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD133C0613ED
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 08:36:22 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id e9so1582587pgo.9
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 08:36:22 -0700 (PDT)
+        with ESMTP id S2404146AbgFXPje (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 11:39:34 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2170CC061573;
+        Wed, 24 Jun 2020 08:39:34 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id u12so1999849qth.12;
+        Wed, 24 Jun 2020 08:39:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20161025;
+        h=sender:from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=XJUzgH5TgVAKrlAz/oLGoEzf+4q4DR2SPe5g3v8Hoz0=;
-        b=L87UOx1rFbEBv6EAXMjq42JQm86UtPUvAjrSDFUjZV7/S2Fdwtz80FtkbJzD8kccUr
-         iRuRTc98qsUUvW4wRLaZIRPNfFKjSXe1ODNggmES4VHyXOVp9NEfQINR136Asyjj1o/J
-         v+lhjyzt2oK0bGeFeFUl+FR9FpGwVWyk6cXTQ=
+        bh=w86BiXeWW0qXr0CkddcsMzd0Qk3FGLVo77ySYOXx/9Y=;
+        b=XvOvolokMbI6BM9fwAWbp0DSocFt1o+A8uoY/Reo4LDwzU4hQMNEqsXUMCfFLmPpRt
+         oCGEUO7LJxfBoH6B4ugepuzR+W4BODGMKcD7n1kE8A3WQ3SLB+IBcIoTnjNohCiQzyKt
+         CBCdrmzky74TFEFrPd2Kfsr2+14tR9HsbJRf+0G5kDdkEtuuh73IrvlaLZwDuMTWfMdb
+         b+KS8pKoeDZyEW9HiZwMnTpp9wrt1CTAjBBJL+PFTzvo0sggPInyyKPq+J2T92oK6+DA
+         9pwLFWMXKwWdX1Nk7yDVPqpI15TQlqEik3eyKHAU8SGeuJh/Z3+7WK6+QdceBuBfHG31
+         HCRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XJUzgH5TgVAKrlAz/oLGoEzf+4q4DR2SPe5g3v8Hoz0=;
-        b=keNgV9hy0aur7rAQE3jjjPZ/qFwhuvjz5e4vam0LCOQ9zUPlZNAkjahTlzMU5QkM3j
-         Swz04OR20GDlJqtnj8/RsWz+KnonKf+1gFlzmT7vZQXV45HEAduPStgLG4HSbKFT3xmz
-         F8FvJtnllbvxS6cbZ+L89bxlvsHBnXqR7iiuI4Hxo6HpZr/qy5aDgrhotqQl8McCkb+I
-         hQ89j9rd3ppbXL6jkpciOFj+h91s1n9WW0IXcORcYcPbVnY7BMjOWEvQ+icvK5YAdzkH
-         uOJ0pEAAMheTcVM7uxhguhjOWk0sLFPb5ivKxdpa8aTWoXGw5vZNnOTt2blDGodeMdGp
-         yWgg==
-X-Gm-Message-State: AOAM5318zSSBztxWYUDue3xNyVkJEnsEcX2YyutAQfLfy9/h3fsCqabg
-        39XKE1emxxfOcPkZpUWvQlfLfg==
-X-Google-Smtp-Source: ABdhPJzh0NIgxXcoqTxHGxMf5jIULfS15W7YCEH1YCRk0fdSR5z7SraN22S3afSROtaHxZ0aAd1AOA==
-X-Received: by 2002:a63:aa42:: with SMTP id x2mr21604671pgo.361.1593012982182;
-        Wed, 24 Jun 2020 08:36:22 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j36sm17984549pgj.39.2020.06.24.08.36.21
+        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=w86BiXeWW0qXr0CkddcsMzd0Qk3FGLVo77ySYOXx/9Y=;
+        b=tNVSVtv3Ns8wezMgihfE9gLI3DLgN9b50jsoNNcUX+rb32cifYeUXdWNCFGWPIkLsD
+         2eRN7cT54ozqDLbHIsl6/4PvBYPOPMkyFr0mTQw2R02C3hJJBfH4bzdJE2O9EYfkR0fM
+         KWBEdQGBkEZoN/RZF52Y1/w+VD15bjBf7vEmRRetzKG6j/+6htJWTLvCDcnUiaxmbX9A
+         9Up1ei0p0/ptnnKKDDkoZoOlGvai2IADi93k/HfurCSqJVPtzVzBK2KNe3GJjWnQhXee
+         euJoMxcZ6epJJFOMCT/MI9aONMxFHt5/pIW48oYWvHA1KYLhJipNAFmEEoENjQOJ0NIt
+         7SmQ==
+X-Gm-Message-State: AOAM531G+ZQ68rJEV0uq4JwDSncRtRod5pbq/y2g8jY5BrFhSu+Nunk+
+        YGB1yBEIqoflkTgH8Mf2nBY=
+X-Google-Smtp-Source: ABdhPJzqJsdRmlzGOwYnHtzAydQW9Iu1ltabpuAtDnDhT9pt2nyjZR92f7BI3Glrce11dxNr8bQdzQ==
+X-Received: by 2002:ac8:51d5:: with SMTP id d21mr26957465qtn.154.1593013173114;
+        Wed, 24 Jun 2020 08:39:33 -0700 (PDT)
+Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
+        by smtp.gmail.com with ESMTPSA id l56sm4306072qtl.33.2020.06.24.08.39.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2020 08:36:21 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 08:36:20 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Wed, 24 Jun 2020 08:39:32 -0700 (PDT)
+From:   Arvind Sankar <nivedita@alum.mit.edu>
+X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
+Date:   Wed, 24 Jun 2020 11:39:30 -0400
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Will Deacon <will@kernel.org>, Fangrui Song <maskray@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>,
         Peter Collingbourne <pcc@google.com>,
@@ -64,69 +69,63 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 9/9] arm64/build: Warn on orphan section placement
-Message-ID: <202006240835.E474048BBF@keescook>
+Subject: Re: [PATCH v3 2/9] vmlinux.lds.h: Add .symtab, .strtab, and
+ .shstrtab to STABS_DEBUG
+Message-ID: <20200624153930.GA1337895@rani.riverdale.lan>
 References: <20200624014940.1204448-1-keescook@chromium.org>
- <20200624014940.1204448-10-keescook@chromium.org>
- <20200624075712.GB5853@willie-the-truck>
+ <20200624014940.1204448-3-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200624075712.GB5853@willie-the-truck>
+In-Reply-To: <20200624014940.1204448-3-keescook@chromium.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 08:57:12AM +0100, Will Deacon wrote:
-> On Tue, Jun 23, 2020 at 06:49:40PM -0700, Kees Cook wrote:
-> > We don't want to depend on the linker's orphan section placement
-> > heuristics as these can vary between linkers, and may change between
-> > versions. All sections need to be explicitly named in the linker
-> > script.
-> > 
-> > Avoid .eh_frame* by making sure both -fno-asychronous-unwind-tables and
-> > -fno-unwind-tables are present in both CFLAGS and AFLAGS. Remove one
-> > last instance of .eh_frame by removing the needless Call Frame Information
-> > annotations from arch/arm64/kernel/smccc-call.S.
-> > 
-> > Add .plt, .data.rel.ro, .igot.*, and .iplt to discards as they are not
-> > actually used. While .got.plt is also not used, it must be included
-> > otherwise ld.bfd will fail to link with the error:
-> > 
-> >     aarch64-linux-gnu-ld: discarded output section: `.got.plt'
-> > 
-> > However, as it'd be better to validate that it stays effectively empty,
-> > add an assert.
-> > 
-> > Explicitly include debug sections when they're present.
-> > 
-> > Fix a case of needless quotes in __section(), which Clang doesn't like.
-> > 
-> > Finally, enable orphan section warnings.
-> > 
-> > Thanks to Ard Biesheuvel for many hints on correct ways to handle
-> > mysterious sections. :)
-> 
-> Sorry to be a pain, but this patch is doing 3 or 4 independent things at
-> once. Please could you split it up a bit?
-> e.g.
-> 
->  - Removal of cfi directives from smccc macro
->  - Removal of quotes around section name for clang
->  - Avoid generating .eh_frame
->  - Ensure all sections are accounted for in linker script and warn on orphans
-> 
-> That way it's a bit easier to manage, we can revert/backport bits later if
-> necessary and you get more patches in the kernel ;)
+On Tue, Jun 23, 2020 at 06:49:33PM -0700, Kees Cook wrote:
+> When linking vmlinux with LLD, the synthetic sections .symtab, .strtab,
+> and .shstrtab are listed as orphaned. Add them to the STABS_DEBUG section
+> so there will be no warnings when --orphan-handling=warn is used more
+> widely. (They are added above comment as it is the more common
 
-Yeah, this one patch did grow a bit. ;) I've split it up now.
+Nit 1: is "after .comment" better than "above comment"? It's above in the
+sense of higher file offset, but it's below in readelf output.
+Nit 2: These aren't actually debugging sections, no? Is it better to add
+a new macro for it, and is there any plan to stop LLD from warning about
+them?
 
-> You can also add my Ack on all the patches:
+> order[1].)
 > 
-> Acked-by: Will Deacon <will@kernel.org>
-
-Thanks!
-
--- 
-Kees Cook
+> ld.lld: warning: <internal>:(.symtab) is being placed in '.symtab'
+> ld.lld: warning: <internal>:(.shstrtab) is being placed in '.shstrtab'
+> ld.lld: warning: <internal>:(.strtab) is being placed in '.strtab'
+> 
+> [1] https://lore.kernel.org/lkml/20200622224928.o2a7jkq33guxfci4@google.com/
+> 
+> Reported-by: Fangrui Song <maskray@google.com>
+> Reviewed-by: Fangrui Song <maskray@google.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index 1248a206be8d..8e71757f485b 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -792,7 +792,10 @@
+>  		.stab.exclstr 0 : { *(.stab.exclstr) }			\
+>  		.stab.index 0 : { *(.stab.index) }			\
+>  		.stab.indexstr 0 : { *(.stab.indexstr) }		\
+> -		.comment 0 : { *(.comment) }
+> +		.comment 0 : { *(.comment) }				\
+> +		.symtab 0 : { *(.symtab) }				\
+> +		.strtab 0 : { *(.strtab) }				\
+> +		.shstrtab 0 : { *(.shstrtab) }
+>  
+>  #ifdef CONFIG_GENERIC_BUG
+>  #define BUG_TABLE							\
+> -- 
+> 2.25.1
+> 
