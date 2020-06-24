@@ -2,51 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BBB2077DF
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 17:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF93B2078E2
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 18:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404287AbgFXPsy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 11:48:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41196 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404137AbgFXPsy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Jun 2020 11:48:54 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4BB7C20A8B;
-        Wed, 24 Jun 2020 15:48:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593013733;
-        bh=SiOccSYDq3Ujl7Qm6Nh9lr81LZ11ZdVVR+s/kwlHeOU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nmm+51b9WSfuZVeBEdjeJFGECh07l9JW/yiiBpt1qkXd8cZx7k0aHGwmZnPz6pZG8
-         g8/1xJgtXyTnlK37REkGB5d+Ukr9b6G2pTfuGkkt3Kf46J6KyT/tw5sd0IjX4FSrDT
-         6g9b7KPsamhuad8caHmHZPS6HfQh/caZs2MDUlZU=
-Received: by mail-ot1-f50.google.com with SMTP id n5so2373531otj.1;
-        Wed, 24 Jun 2020 08:48:53 -0700 (PDT)
-X-Gm-Message-State: AOAM531py8qiC6uBuO651wgI2n9EvG8A6aerPh55tTLNikdij6ZlElkR
-        pI0VImorSsqheznzE+3v/tX5gkvgtxKLy12yWP8=
-X-Google-Smtp-Source: ABdhPJy7f5kUbglm41IsevGTp/GRt9FgnT8Y+c1SPNB4P7tPiV04yjmDIrwCKi5qqnP9kihr/urjcaBCWYo7IocupoA=
-X-Received: by 2002:a9d:4a8f:: with SMTP id i15mr393127otf.77.1593013732575;
- Wed, 24 Jun 2020 08:48:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624014940.1204448-1-keescook@chromium.org>
- <20200624014940.1204448-4-keescook@chromium.org> <20200624033142.cinvg6rbg252j46d@google.com>
- <202006232143.66828CD3@keescook> <20200624104356.GA6134@willie-the-truck>
- <CAMj1kXHBT4ei0xhyL4jD7=CNRsn1rh7w6jeYDLjVOv4na0Z38Q@mail.gmail.com>
- <202006240820.A3468F4@keescook> <CAMj1kXHck12juGi=E=P4hWP_8vQhQ+-x3vBMc3TGeRWdQ-XkxQ@mail.gmail.com>
- <202006240844.7BE48D2B5@keescook>
-In-Reply-To: <202006240844.7BE48D2B5@keescook>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 24 Jun 2020 17:48:41 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHqBs44uukRSdFwA_hcmX_yKVfjqdv9RoPbbu-6Wz+RaA@mail.gmail.com>
-Message-ID: <CAMj1kXHqBs44uukRSdFwA_hcmX_yKVfjqdv9RoPbbu-6Wz+RaA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/9] efi/libstub: Remove .note.gnu.property
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Will Deacon <will@kernel.org>, Fangrui Song <maskray@google.com>,
+        id S2404874AbgFXQQt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 12:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404829AbgFXQQr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 12:16:47 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B27C0613ED
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 09:16:47 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id g17so1224272plq.12
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 09:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=r9Atz1n5S97FsyRtwbW9FxEwVR3HptLSj7YkFtdgBWc=;
+        b=IOKX5uP5HrCSDaBldb1Tlqjq7QjS/iWV7iYPBJGBjm5MBfZlGZ65fHIb7gwqwcoeRw
+         dpXx4RbkMXKmlmUkJyMmOhKjGP7uq2faKSrJkx0pPbJOJB7HDj5gJYJ2qr85eHA/cnXV
+         H6UkqiZT7Hf4A7Y6EJAKS9VnW6TG4YJJIJmC+zN1+gKqnpwjbbJGFpXjQv5PDJQkvtpY
+         D/il9Ds6lNa0aRabxw+vMLX7xAiBD/HhgWYaeid2aqPseFEPjLtTY//si6OJ/tdrxJqy
+         ei45oSHSPuORVmZon0PcThpNgkP0FKv3aL/MUReCE1NqPG/qnNGcmVu2OID8z6Gczdpa
+         L/Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=r9Atz1n5S97FsyRtwbW9FxEwVR3HptLSj7YkFtdgBWc=;
+        b=kHjjCzjTNKa+WHrtKWU+LBwwLHpwCv4YJjx7QJ/mZLxfkNy+GV30w/j8Z57ZArXWRQ
+         uEl1nWcjMuvFqZpzFSwTAP15PEYP44EKLjKmjAwhKTUnuawofF7kaK1s+Ds/K2pMv6On
+         ARbF/1g9LpYn+gjIYrhqOw33n2vBFe0Nnlb81l9y29YhBNP4A/dTx+98v7TSgjjljC3h
+         wWa0NfVtmrzIT0/Q2dx2OhsloVOl1KagT7ZdCePSFmoZtr1pUFkpvQPIwZPw0iNYcjT9
+         srB1B/lrJj4uMpLo5pE4qvbjL8xf3xW/zDppN3B22ilR/v0tq6o+7ZKWr2E9Fl1WokwR
+         kgkw==
+X-Gm-Message-State: AOAM530FfCQNt5kfwgsdF6Ll1GyI2ArkJInjMwXMafyUdA+eccE3Jzt9
+        NT7bBGVCoUJj5+7q3+EjlqgxAw==
+X-Google-Smtp-Source: ABdhPJzR5oxdlp9qxvLSBQa9QdrzRcyjkIYkFPOJwAujW1umQ1cg0Dv9Hmvl7bclAIhrUSrRff3SUA==
+X-Received: by 2002:a17:90a:7c4e:: with SMTP id e14mr29364901pjl.175.1593015406860;
+        Wed, 24 Jun 2020 09:16:46 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:0:9efe:9f1:9267:2b27])
+        by smtp.gmail.com with ESMTPSA id oc6sm6480133pjb.43.2020.06.24.09.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2020 09:16:46 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 09:16:43 -0700
+From:   Fangrui Song <maskray@google.com>
+To:     Arvind Sankar <nivedita@alum.mit.edu>
+Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Peter Collingbourne <pcc@google.com>,
         James Morse <james.morse@arm.com>,
         Borislav Petkov <bp@suse.de>,
@@ -54,46 +61,95 @@ Cc:     Will Deacon <will@kernel.org>, Fangrui Song <maskray@google.com>,
         Ingo Molnar <mingo@redhat.com>,
         Russell King <linux@armlinux.org.uk>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, X86 ML <x86@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/9] vmlinux.lds.h: Add .symtab, .strtab, and
+ .shstrtab to STABS_DEBUG
+Message-ID: <20200624161643.73x6navnwryckuit@google.com>
+References: <20200624014940.1204448-1-keescook@chromium.org>
+ <20200624014940.1204448-3-keescook@chromium.org>
+ <20200624153930.GA1337895@rani.riverdale.lan>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20200624153930.GA1337895@rani.riverdale.lan>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 24 Jun 2020 at 17:45, Kees Cook <keescook@chromium.org> wrote:
->
-> On Wed, Jun 24, 2020 at 05:31:06PM +0200, Ard Biesheuvel wrote:
-> > On Wed, 24 Jun 2020 at 17:21, Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Wed, Jun 24, 2020 at 12:46:32PM +0200, Ard Biesheuvel wrote:
-> > > > I'm not sure if there is a point to having PAC and/or BTI in the EFI
-> > > > stub, given that it runs under the control of the firmware, with its
-> > > > memory mappings and PAC configuration etc.
-> > >
-> > > Is BTI being ignored when the firmware runs?
-> >
-> > Given that it requires the 'guarded' attribute to be set in the page
-> > tables, and the fact that the UEFI spec does not require it for
-> > executables that it invokes, nor describes any means of annotating
-> > such executables as having been built with BTI annotations, I think we
-> > can safely assume that the EFI stub will execute with BTI disabled in
-> > the foreseeable future.
->
-> yaaaaaay. *sigh* How long until EFI catches up?
->
-> That said, BTI shouldn't _hurt_, right? If EFI ever decides to enable
-> it, we'll be ready?
->
 
-Sure. Although I anticipate that we'll need to set some flag in the
-PE/COFF header to enable it, and so any BTI opcodes we emit without
-that will never take effect in practice.
+On 2020-06-24, Arvind Sankar wrote:
+>On Tue, Jun 23, 2020 at 06:49:33PM -0700, Kees Cook wrote:
+>> When linking vmlinux with LLD, the synthetic sections .symtab, .strtab,
+>> and .shstrtab are listed as orphaned. Add them to the STABS_DEBUG section
+>> so there will be no warnings when --orphan-handling=warn is used more
+>> widely. (They are added above comment as it is the more common
+>
+>Nit 1: is "after .comment" better than "above comment"? It's above in the
+>sense of higher file offset, but it's below in readelf output.
+
+I mean this order:)
+
+   .comment
+   .symtab
+   .shstrtab
+   .strtab
+
+This is the case in the absence of a linker script if at least one object file has .comment (mostly for GCC/clang version information) or the linker is LLD which adds a .comment
+
+>Nit 2: These aren't actually debugging sections, no? Is it better to add
+>a new macro for it, and is there any plan to stop LLD from warning about
+>them?
+
+https://reviews.llvm.org/D75149 "[ELF] --orphan-handling=: don't warn/error for unused synthesized sections"
+described that .symtab .shstrtab .strtab are different in GNU ld.
+Since many other GNU ld synthesized sections (.rela.dyn .plt ...) can be renamed or dropped
+via output section descriptions, I don't understand why the 3 sections
+can't be customized.
+
+I created a feature request: https://sourceware.org/bugzilla/show_bug.cgi?id=26168
+(If this is supported, it is a consistent behavior to warn for orphan
+.symtab/.strtab/.shstrtab
+
+There may be 50% chance that the maintainer decides that "LLD diverges"
+I would disagree: there is no fundamental problems with .symtab/.strtab/.shstrtab which make them special in output section descriptions or orphan handling.)
+
+>> order[1].)
+>>
+>> ld.lld: warning: <internal>:(.symtab) is being placed in '.symtab'
+>> ld.lld: warning: <internal>:(.shstrtab) is being placed in '.shstrtab'
+>> ld.lld: warning: <internal>:(.strtab) is being placed in '.strtab'
+>>
+>> [1] https://lore.kernel.org/lkml/20200622224928.o2a7jkq33guxfci4@google.com/
+>>
+>> Reported-by: Fangrui Song <maskray@google.com>
+>> Reviewed-by: Fangrui Song <maskray@google.com>
+>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>> ---
+>>  include/asm-generic/vmlinux.lds.h | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+>> index 1248a206be8d..8e71757f485b 100644
+>> --- a/include/asm-generic/vmlinux.lds.h
+>> +++ b/include/asm-generic/vmlinux.lds.h
+>> @@ -792,7 +792,10 @@
+>>  		.stab.exclstr 0 : { *(.stab.exclstr) }			\
+>>  		.stab.index 0 : { *(.stab.index) }			\
+>>  		.stab.indexstr 0 : { *(.stab.indexstr) }		\
+>> -		.comment 0 : { *(.comment) }
+>> +		.comment 0 : { *(.comment) }				\
+>> +		.symtab 0 : { *(.symtab) }				\
+>> +		.strtab 0 : { *(.strtab) }				\
+>> +		.shstrtab 0 : { *(.shstrtab) }
+>>
+>>  #ifdef CONFIG_GENERIC_BUG
+>>  #define BUG_TABLE							\
+>> --
+>> 2.25.1
+>>
