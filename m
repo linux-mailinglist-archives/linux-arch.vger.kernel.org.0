@@ -2,122 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 581F8206ADB
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 06:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12EA206B57
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 06:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725831AbgFXEFG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 00:05:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56600 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725765AbgFXEFF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Jun 2020 00:05:05 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB1BA2070E;
-        Wed, 24 Jun 2020 04:05:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592971504;
-        bh=UN9AXOXZVMh4VcN/L7a9gqChekTy955irMIWoZV9chI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=G2fm4SY0SO1gCyEyonbU08pLiG2aQZp/buBlZx/PMtFrFFx9xpfopeTtOA/9Gg/7r
-         F17pnTMhzT8/CEIloxuTVFVbb4FlqmWCjd8x/2GBInM77wA76+0FaROqOCtYzaHP6J
-         yjNoGLVYA2g0KGVBw5mvR7AvqBxmZ1DWvgncv6/8=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id B3329352265B; Tue, 23 Jun 2020 21:05:04 -0700 (PDT)
-Date:   Tue, 23 Jun 2020 21:05:04 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Andrea Parri <parri.andrea@gmail.com>
-Cc:     Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
-        stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr
-Subject: Re: [PATCH 2/2] Documentation/litmus-tests: Add note on herd7 7.56
- in atomic litmus test
-Message-ID: <20200624040504.GB9247@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200623005152.GA27459@paulmck-ThinkPad-P72>
- <20200623005231.27712-13-paulmck@kernel.org>
- <e3693dec-213a-3f65-eb1c-284bf8ca6e13@gmail.com>
- <20200623155419.GI9247@paulmck-ThinkPad-P72>
- <b3433b44-29af-4ef4-d047-b0b0d51a9fbd@gmail.com>
- <9e1d448a-cf3c-523d-e0a6-f46ac4706c48@gmail.com>
- <20200623232425.GB418699@andrea>
+        id S1728681AbgFXEoO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 00:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727862AbgFXEoO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 00:44:14 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6D6C0613ED
+        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 21:44:13 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id jz3so624702pjb.0
+        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 21:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Yc7m6q+AETZbQf/A/NW3gp84TMebMUYFiYcSc962UaI=;
+        b=foHqhRb7hf5KgQA5HSRO5284qQLj7K1f7jI6KtpF4wP8UIugY2Q4C+9vTK7tIsFkyu
+         gCNVka1KLRgmXwoVN0JFbY5Ac/BHQH24PxKAlxSyvl0q99hluofpS33VW/NvUHVQlz+U
+         gne2QItKrmtHY7DGvrNp9LyDns2aXJiINfTjY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Yc7m6q+AETZbQf/A/NW3gp84TMebMUYFiYcSc962UaI=;
+        b=mK7fEY57Hei8Zrk3X9r1UJKfF46co4cJWr+LiGt4Qy5uYLZf2mMBzJuhS59aN7f4VT
+         4CUSmAT7EI5okRXNNkGz923n03hD5ozyRSqYbMSWLtitV7V349LkF07HU13U/6NFOpvd
+         atvoxF9scr9Fqje7UGaeX8y/Pjn9cgfIPbthSSzGqdIxp35VHagPiqRuFS5nJO6me/Cy
+         A5p7hyQ9HHc958v0UtHiDOxC59LTgOVKg1GIHMkllcvGU8j181NAGRmjW59cY7b0qjYP
+         LIvGzCxXB98cNVim/pqs88w/M+a77EqKzly/55QtQgzfE8HFqx94VW1Db77/tIUdkHwf
+         8d1A==
+X-Gm-Message-State: AOAM532QYM7QXsFfDEvj9zZLVVM0saSdL+hcrJFr4NrGpLct1ze/mE2a
+        YwDJ/Wf19agbKoFqhcXExR62VQ==
+X-Google-Smtp-Source: ABdhPJwXxE4pwrV4JSPaLhEV6G1BlATgL4ZGVyFiXtLbOqPg4UWtN+ePnA8hBS3vgqyDG0O2W9xKlw==
+X-Received: by 2002:a17:90b:a02:: with SMTP id gg2mr6864076pjb.110.1592973853293;
+        Tue, 23 Jun 2020 21:44:13 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c7sm3578791pfj.106.2020.06.23.21.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2020 21:44:12 -0700 (PDT)
+Date:   Tue, 23 Jun 2020 21:44:11 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Fangrui Song <maskray@google.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/9] efi/libstub: Remove .note.gnu.property
+Message-ID: <202006232143.66828CD3@keescook>
+References: <20200624014940.1204448-1-keescook@chromium.org>
+ <20200624014940.1204448-4-keescook@chromium.org>
+ <20200624033142.cinvg6rbg252j46d@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200623232425.GB418699@andrea>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200624033142.cinvg6rbg252j46d@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 01:24:25AM +0200, Andrea Parri wrote:
-> On Wed, Jun 24, 2020 at 07:09:01AM +0900, Akira Yokosawa wrote:
-> > From f808c371075d2f92b955da1a83ecb3828db1972e Mon Sep 17 00:00:00 2001
-> > From: Akira Yokosawa <akiyks@gmail.com>
-> > Date: Wed, 24 Jun 2020 06:59:26 +0900
-> > Subject: [PATCH 2/2] Documentation/litmus-tests: Add note on herd7 7.56 in atomic litmus test
+On Tue, Jun 23, 2020 at 08:31:42PM -0700, 'Fangrui Song' via Clang Built Linux wrote:
+> On 2020-06-23, Kees Cook wrote:
+> > In preparation for adding --orphan-handling=warn to more architectures,
+> > make sure unwanted sections don't end up appearing under the .init
+> > section prefix that libstub adds to itself during objcopy.
 > > 
-> > herdtools 7.56 has enhanced herd7's C parser so that the "(void)expr"
-> > construct in Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus is
-> > accepted.
-> > 
-> > This is independent of LKMM's cat model, so mention the required
-> > version in the header of the litmus test and its entry in README.
-> > 
-> > CC: Boqun Feng <boqun.feng@gmail.com>
-> > Reported-by: Andrea Parri <parri.andrea@gmail.com>
-> > Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> 
-> Frankly, I was hoping that we could simply bump the herd7 version in
-> tools/memory-model/README; I understand your point, but I admit that
-> I haven't being playing with 7.52 for a while now...
-
-Maybe in a few years it will no longer be relevant, and could then
-be removed?
-
-> Acked-by: Andrea Parri <parri.andrea@gmail.com>
-
-I queued both, thank you both!
-
-						Thanx, Paul
-
->   Andrea
-> 
-> 
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > > ---
-> >  Documentation/litmus-tests/README                                | 1 +
-> >  .../atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus       | 1 +
-> >  2 files changed, 2 insertions(+)
+> > drivers/firmware/efi/libstub/Makefile | 3 +++
+> > 1 file changed, 3 insertions(+)
 > > 
-> > diff --git a/Documentation/litmus-tests/README b/Documentation/litmus-tests/README
-> > index b79e640214b9..7f5c6c3ed6c3 100644
-> > --- a/Documentation/litmus-tests/README
-> > +++ b/Documentation/litmus-tests/README
-> > @@ -19,6 +19,7 @@ Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
-> >  
-> >  Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> >      Test that atomic_set() cannot break the atomicity of atomic RMWs.
-> > +    NOTE: Require herd7 7.56 or later which supports "(void)expr".
-> >  
-> >  
-> >  RCU (/rcu directory)
-> > diff --git a/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus b/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> > index 49385314d911..ffd4d3e79c4a 100644
-> > --- a/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> > +++ b/Documentation/litmus-tests/atomic/Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-> > @@ -4,6 +4,7 @@ C Atomic-RMW-ops-are-atomic-WRT-atomic_set
-> >   * Result: Never
-> >   *
-> >   * Test that atomic_set() cannot break the atomicity of atomic RMWs.
-> > + * NOTE: This requires herd7 7.56 or later which supports "(void)expr".
-> >   *)
-> >  
-> >  {
-> > -- 
-> > 2.17.1
+> > diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+> > index 75daaf20374e..9d2d2e784bca 100644
+> > --- a/drivers/firmware/efi/libstub/Makefile
+> > +++ b/drivers/firmware/efi/libstub/Makefile
+> > @@ -66,6 +66,9 @@ lib-$(CONFIG_X86)		+= x86-stub.o
+> > CFLAGS_arm32-stub.o		:= -DTEXT_OFFSET=$(TEXT_OFFSET)
+> > CFLAGS_arm64-stub.o		:= -DTEXT_OFFSET=$(TEXT_OFFSET)
 > > 
-> > 
+> > +# Remove unwanted sections first.
+> > +STUBCOPY_FLAGS-y		+= --remove-section=.note.gnu.property
+> > +
+> > #
+> > # For x86, bootloaders like systemd-boot or grub-efi do not zero-initialize the
+> > # .bss section, so the .bss section of the EFI stub needs to be included in the
+> 
+> arch/arm64/Kconfig enables ARM64_PTR_AUTH by default. When the config is on
+> 
+> ifeq ($(CONFIG_ARM64_BTI_KERNEL),y)
+> branch-prot-flags-$(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET_BTI) := -mbranch-protection=pac-ret+leaf+bti
+> else
+> branch-prot-flags-$(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET) := -mbranch-protection=pac-ret+leaf
+> endif
+> 
+> This option creates .note.gnu.property:
+> 
+> % readelf -n drivers/firmware/efi/libstub/efi-stub.o
+> 
+> Displaying notes found in: .note.gnu.property
+>   Owner                Data size        Description
+>   GNU                  0x00000010       NT_GNU_PROPERTY_TYPE_0
+>       Properties: AArch64 feature: PAC
+> 
+> If .note.gnu.property is not desired in drivers/firmware/efi/libstub, specifying
+> -mbranch-protection=none can override -mbranch-protection=pac-ret+leaf
+
+We want to keep the branch protection enabled. But since it's not a
+"regular" ELF, we don't need to keep the property that identifies the
+feature.
+
+-- 
+Kees Cook
