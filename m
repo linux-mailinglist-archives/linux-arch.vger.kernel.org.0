@@ -2,214 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AF92069CB
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 03:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC64206A6F
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 05:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388133AbgFXBuF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Jun 2020 21:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388603AbgFXBt5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Jun 2020 21:49:57 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9164FC0617BB
-        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 18:49:55 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id i4so386785pjd.0
-        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 18:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IXUgLosNUEP93cpEKoNn7oauK0Oksg2zT1r8iNc2N3M=;
-        b=ckmxDB65sTOYu6rx9OIJTqHdVaF3Rq0JK7kAA6vc5D+eoog4QFJCUkaQ7pr9Dbdqt8
-         TtXjq1UpX+tQQMj1dqLxz4cB6MRk2G2LEF5f5B4Oh7F/T4fCQlQiO3iYpi7PtQCLvvql
-         oPHshW80+ZhzYGTcFezjfbhx/X9l9btanp8ng=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IXUgLosNUEP93cpEKoNn7oauK0Oksg2zT1r8iNc2N3M=;
-        b=p7+sk0FYT+s1YnIPiSo/GRJ7gUxruMp5Gb4hzawva5AkilnbG3IBb7jcR0sa13eZtt
-         HGEmxOr9nmszUtg+WapUeOb2b/HvEYoGcA6uodu9HYoycHGZIG2QeVu4540ybwhhJMhn
-         wzHkCyUwzmr0O1jxO8RDnOj4jjbbhXjVK8lo6krg7s65A8xaRo4bRDeV/VC5N1a4T355
-         aSZyvajjJnOHjeXLfjsByr82Tu8Nbk9EVjSQmhqPoBtHSzgCbCCFLupm34vHq2Jybllz
-         wqKhhZZReoVt+EjqaNE5dCv1hAIWbmBXRfsdSIUznrq18Ah+MYSC/didYrX6pJlpndoP
-         I3JA==
-X-Gm-Message-State: AOAM532JU4vtIfDSclJEq7rXyhJpKbemH25H8o5KXy2uqI+ZrTdlqrVV
-        4Bx9gAppQvbIxv/E5t4cq7JLYw==
-X-Google-Smtp-Source: ABdhPJwdum6Og6TIMupJ78tyY9GEfwXuR/37zHl5lfG7CPnDCX7KdCztzVd+hqJLR+uQSWvHTMGz/w==
-X-Received: by 2002:a17:90a:1117:: with SMTP id d23mr26427976pja.136.1592963395150;
-        Tue, 23 Jun 2020 18:49:55 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mp15sm3525013pjb.45.2020.06.23.18.49.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 18:49:51 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+        id S2388536AbgFXDNb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Jun 2020 23:13:31 -0400
+Received: from foss.arm.com ([217.140.110.172]:43162 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387985AbgFXDNa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 23 Jun 2020 23:13:30 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D1A01FB;
+        Tue, 23 Jun 2020 20:13:29 -0700 (PDT)
+Received: from [10.163.82.47] (unknown [10.163.82.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C237B3F71E;
+        Tue, 23 Jun 2020 20:13:19 -0700 (PDT)
+Subject: Re: [PATCH V3 0/4] mm/debug_vm_pgtable: Add some more tests
+To:     linux-mm@kvack.org
+Cc:     christophe.leroy@c-s.fr, ziy@nvidia.com,
+        gerald.schaefer@de.ibm.com, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        James Morse <james.morse@arm.com>,
-        Borislav Petkov <bp@suse.de>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 9/9] arm64/build: Warn on orphan section placement
-Date:   Tue, 23 Jun 2020 18:49:40 -0700
-Message-Id: <20200624014940.1204448-10-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200624014940.1204448-1-keescook@chromium.org>
-References: <20200624014940.1204448-1-keescook@chromium.org>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+References: <1592192277-8421-1-git-send-email-anshuman.khandual@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <70ddc7dd-b688-b73e-642a-6363178c8cdd@arm.com>
+Date:   Wed, 24 Jun 2020 08:43:10 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1592192277-8421-1-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We don't want to depend on the linker's orphan section placement
-heuristics as these can vary between linkers, and may change between
-versions. All sections need to be explicitly named in the linker
-script.
 
-Avoid .eh_frame* by making sure both -fno-asychronous-unwind-tables and
--fno-unwind-tables are present in both CFLAGS and AFLAGS. Remove one
-last instance of .eh_frame by removing the needless Call Frame Information
-annotations from arch/arm64/kernel/smccc-call.S.
 
-Add .plt, .data.rel.ro, .igot.*, and .iplt to discards as they are not
-actually used. While .got.plt is also not used, it must be included
-otherwise ld.bfd will fail to link with the error:
+On 06/15/2020 09:07 AM, Anshuman Khandual wrote:
+> This series adds some more arch page table helper validation tests which
+> are related to core and advanced memory functions. This also creates a
+> documentation, enlisting expected semantics for all page table helpers as
+> suggested by Mike Rapoport previously (https://lkml.org/lkml/2020/1/30/40).
+> 
+> There are many TRANSPARENT_HUGEPAGE and ARCH_HAS_TRANSPARENT_HUGEPAGE_PUD
+> ifdefs scattered across the test. But consolidating all the fallback stubs
+> is not very straight forward because ARCH_HAS_TRANSPARENT_HUGEPAGE_PUD is
+> not explicitly dependent on ARCH_HAS_TRANSPARENT_HUGEPAGE.
+> 
+> Tested on arm64, x86 platforms but only build tested on all other enabled
+> platforms through ARCH_HAS_DEBUG_VM_PGTABLE i.e powerpc, arc, s390. The
+> following failure on arm64 still exists which was mentioned previously. It
+> will be fixed with the upcoming THP migration on arm64 enablement series.
+> 
+> WARNING .... mm/debug_vm_pgtable.c:860 debug_vm_pgtable+0x940/0xa54
+> WARN_ON(!pmd_present(pmd_mkinvalid(pmd_mkhuge(pmd))))
+> 
+> This series is based on v5.8-rc1.
+> 
+> Changes in V3:
+> 
+> - Replaced HAVE_ARCH_SOFT_DIRTY with MEM_SOFT_DIRTY
+> - Added HAVE_ARCH_HUGE_VMAP checks in pxx_huge_tests() per Gerald
+> - Updated documentation for pmd_thp_tests() per Zi Yan
+> - Replaced READ_ONCE() with huge_ptep_get() per Gerald
+> - Added pte_mkhuge() and masking with PMD_MASK per Gerald
+> - Replaced pte_same() with holding pfn check in pxx_swap_tests()
+> - Added documentation for all (#ifdef #else #endif) per Gerald
+> - Updated pmd_protnone_tests() per Gerald
+> - Updated HugeTLB PTE creation in hugetlb_advanced_tests() per Gerald
+> - Replaced [pmd|pud]_mknotpresent() with [pmd|pud]_mkinvalid()
+> - Added has_transparent_hugepage() check for PMD and PUD tests
+> - Added a patch which debug prints all individual tests being executed
+> - Updated documentation for renamed [pmd|pud]_mkinvalid() helpers
 
-    aarch64-linux-gnu-ld: discarded output section: `.got.plt'
+Hello Gerald/Christophe/Vineet,
 
-However, as it'd be better to validate that it stays effectively empty,
-add an assert.
+It would be really great if you could give this series a quick test
+on s390/ppc/arc platforms respectively. Thank you.
 
-Explicitly include debug sections when they're present.
-
-Fix a case of needless quotes in __section(), which Clang doesn't like.
-
-Finally, enable orphan section warnings.
-
-Thanks to Ard Biesheuvel for many hints on correct ways to handle
-mysterious sections. :)
-
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/arm64/Makefile             |  9 ++++++++-
- arch/arm64/kernel/smccc-call.S  |  2 --
- arch/arm64/kernel/vmlinux.lds.S | 11 ++++++++++-
- arch/arm64/mm/mmu.c             |  2 +-
- 4 files changed, 19 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index a0d94d063fa8..fb3aa2d7de4d 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -29,6 +29,10 @@ LDFLAGS_vmlinux	+= --fix-cortex-a53-843419
-   endif
- endif
- 
-+# We never want expected sections to be placed heuristically by the
-+# linker. All sections should be explicitly named in the linker script.
-+LDFLAGS_vmlinux += --orphan-handling=warn
-+
- ifeq ($(CONFIG_ARM64_USE_LSE_ATOMICS), y)
-   ifneq ($(CONFIG_ARM64_LSE_ATOMICS), y)
- $(warning LSE atomics not supported by binutils)
-@@ -47,13 +51,16 @@ endif
- 
- KBUILD_CFLAGS	+= -mgeneral-regs-only	\
- 		   $(compat_vdso) $(cc_has_k_constraint)
--KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
- KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
- KBUILD_AFLAGS	+= $(compat_vdso)
- 
- KBUILD_CFLAGS	+= $(call cc-option,-mabi=lp64)
- KBUILD_AFLAGS	+= $(call cc-option,-mabi=lp64)
- 
-+# Avoid generating .eh_frame* sections.
-+KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables -fno-unwind-tables
-+KBUILD_AFLAGS	+= -fno-asynchronous-unwind-tables -fno-unwind-tables
-+
- ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
- prepare: stack_protector_prepare
- stack_protector_prepare: prepare0
-diff --git a/arch/arm64/kernel/smccc-call.S b/arch/arm64/kernel/smccc-call.S
-index 1f93809528a4..d62447964ed9 100644
---- a/arch/arm64/kernel/smccc-call.S
-+++ b/arch/arm64/kernel/smccc-call.S
-@@ -9,7 +9,6 @@
- #include <asm/assembler.h>
- 
- 	.macro SMCCC instr
--	.cfi_startproc
- 	\instr	#0
- 	ldr	x4, [sp]
- 	stp	x0, x1, [x4, #ARM_SMCCC_RES_X0_OFFS]
-@@ -21,7 +20,6 @@
- 	b.ne	1f
- 	str	x6, [x4, ARM_SMCCC_QUIRK_STATE_OFFS]
- 1:	ret
--	.cfi_endproc
- 	.endm
- 
- /*
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index 5427f502c3a6..f6c781768f83 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -94,7 +94,8 @@ SECTIONS
- 	/DISCARD/ : {
- 		*(.interp .dynamic)
- 		*(.dynsym .dynstr .hash .gnu.hash)
--		*(.eh_frame)
-+		*(.plt) *(.data.rel.ro)
-+		*(.igot.*) *(.iplt)
- 	}
- 
- 	. = KIMAGE_VADDR + TEXT_OFFSET;
-@@ -244,8 +245,16 @@ SECTIONS
- 	_end = .;
- 
- 	STABS_DEBUG
-+	DWARF_DEBUG
- 
- 	HEAD_SYMBOLS
-+
-+	/*
-+	 * Make sure that the .got.plt is either completely empty or it
-+	 * contains only the lazy dispatch entries.
-+	 */
-+	.got.plt (INFO) : { *(.got.plt) }
-+	ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18, ".got.plt not empty")
- }
- 
- #include "image-vars.h"
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 1df25f26571d..dce024ea6084 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -42,7 +42,7 @@
- u64 idmap_t0sz = TCR_T0SZ(VA_BITS);
- u64 idmap_ptrs_per_pgd = PTRS_PER_PGD;
- 
--u64 __section(".mmuoff.data.write") vabits_actual;
-+u64 __section(.mmuoff.data.write) vabits_actual;
- EXPORT_SYMBOL(vabits_actual);
- 
- u64 kimage_voffset __ro_after_init;
--- 
-2.25.1
-
+- Anshuman
