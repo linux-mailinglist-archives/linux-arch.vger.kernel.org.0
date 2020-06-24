@@ -2,137 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4FC207CCF
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 22:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A991207CFA
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 22:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391411AbgFXUUs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 16:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
+        id S2390200AbgFXUct (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 16:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391376AbgFXUUr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 16:20:47 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4843BC061795
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:20:47 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id h185so1729592pfg.2
-        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:20:47 -0700 (PDT)
+        with ESMTP id S1727981AbgFXUcs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 16:32:48 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E107AC061573
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:32:47 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id z7so3554887ybz.1
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6VX8l56o/9phg5oRAnfBhOhnSRSgx40667vVlnrgP1c=;
-        b=Sts5HjeXaRIsjaUUSOulF2b0QJW/rtbjE50f2+QWQIT17OrFkVY+Z2bpYbafSTBuhE
-         jxvDPfNLBtSH2Ou4l6yD3zA3bSURrtxiM0TzakQ0Cyg+LVoz4iXNXXrN/3Pk6/icJOul
-         Z16sTB6L0/w6Dq6u/vlp+QWuyJg235QG/tvM1E3K4IedKvz3c0z9c6NfrN/bbHZ5G8fY
-         wgIDX2Wo3ZlTsNzOZMWvutvhS1YdbOeKKZVcOA3R3ompjsm/GmA4l7JPIX1erW80E4Xe
-         f7WqejKmK1rE7yp57rosd315QgC4GDBxxpJty94hEmaRpg571BdsL0lc7su+QmaUVxdz
-         A0Aw==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=geZqQu8Pc2IZyEmyfjSbirVoyCHoNCVPX8WSrD5/a0I=;
+        b=Uawx1HymTuOmFuIsE6m0edc2JOJkrIL4ohCvAqVmbJ8lL51+F8GFU8Edzr7cqZcv2w
+         HodyjPnW3CEUXq8PkZVULO6ZyoUtxp9+p+vdtGUCMz8qqae3fj+ztQ8oZGg5KLQxzxtv
+         WsCNEibFNfuA+bNlcIR8b4sSEDOv2SkH85c5Dy7chvY+wP/aaRR1NsYEhp1bKM54GsoI
+         2QcLu0Jhfop40Tu+FeyQ89Qe5QVYishLUcPnbhRan/pilxFWfHclHWVyGJPxpvvrwTh0
+         JNHLSYYTI2a6tpFbw45+Zc3Ez5EH+jMImL6HifoQ7sZW+Y10m8LKlencaSHV2sNpKm9n
+         vXag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6VX8l56o/9phg5oRAnfBhOhnSRSgx40667vVlnrgP1c=;
-        b=RxhgMM2lBXcAX0grjnpPWiwvr6V+3IAj8OLsYyOf+1mG8ID3XOYGvbJQ/8IB1S42bV
-         89acqAeCgg4R/kuD9CpnoxHIptw1+Q/o5EC5RunkPfRVsfc0rHccthQGLDUQn2V8A15D
-         7cMsDg1Nsd038q/+QFv7P29+OFus/Dw30zCamMYpe/rWx7RP6jybB3mi0PQMCGepDSM1
-         B9kNBONpMH8/cYqp+FKWZEFpmWqU8Osck4lcz4JY+Z/gRE/tSq6kov9opuz0dusCCMax
-         T1kEDW8NsZDpVqed59Y5+3TYaGBJgWl2NDVqmdymORfTp8vIGTJg07/S7DxM3hUvBhM4
-         ZNLg==
-X-Gm-Message-State: AOAM531gir2kcsqNgp+Ok5H1C2KW7zz771KTSvZtQmGNNku4PXX0B3lY
-        XA6IJiaTwJP+zrDy8RQo49ZScGDAS0Nr9rZj61ysTw==
-X-Google-Smtp-Source: ABdhPJyrliHHssGy3danayvmx9aPSjdbjHWaiTrvgu7jCsDLKzKm48Geyd4LzOvmXoNzU9YMecGFnsoNN/nEaFMMSFU=
-X-Received: by 2002:aa7:979b:: with SMTP id o27mr29432985pfp.284.1593030046391;
- Wed, 24 Jun 2020 13:20:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200228012036.15682-5-brendanhiggins@google.com> <202003021439.A6B6FD8@keescook>
-In-Reply-To: <202003021439.A6B6FD8@keescook>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 24 Jun 2020 13:20:35 -0700
-Message-ID: <CAFd5g45Jz-5wtO-YNuqPN2Zc_rJtoA1qbPLVs2wrJFQyZpd5QQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/7] init: main: add KUnit to kernel init
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=geZqQu8Pc2IZyEmyfjSbirVoyCHoNCVPX8WSrD5/a0I=;
+        b=BlzGJSOPj6paET6DFrBD9kBRor0KvSq+YzNBacEvkfUrrc9L47Fpqe41HF2NYksi1M
+         5KTuz+Z3tYaHWRfmBnMZz6NgC60CvjQuB8Ybmv6IKBD1ArMllic0mKUPuby5SfR83eXI
+         fX58pd3aCYRqlu2gAVVuuep0lOnoI3GMAdsadzi1/IiOLKG2NGu4fb7xZz1AZinvKr5h
+         n35/oyemWsUsRcv/XNPj2cxqMy/+4n4Wsn6mnQdQUwJsiQFGT1HO+aHKbnHfxZbpfXJu
+         X8GMkdfOR/lvfYVMwFRG1y+6qN1sEgMr/4DBKOkGym+4SB3U7hZd2yrmv6z8VQ7l3lri
+         MK7w==
+X-Gm-Message-State: AOAM532aBQIs1fm1HX/QGdPUyl8PMo4bGGT5a5LehJBdBfV0BoEsXd5s
+        e6yZB/khbKT3BUtZTSU/xp97a/zBDX0hZCrz2rE=
+X-Google-Smtp-Source: ABdhPJxWR9GEuM9Xe3hags9/hH99MHEAXvV4G6BQoWnGF1JJpG+hf2xaFzi6meCZqAzm99eCovUBw+L4m3sg7uT3BU4=
+X-Received: by 2002:a25:3342:: with SMTP id z63mr44129932ybz.200.1593030767109;
+ Wed, 24 Jun 2020 13:32:47 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 13:31:38 -0700
+Message-Id: <20200624203200.78870-1-samitolvanen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
+Subject: [PATCH 00/22] add support for Clang LTO
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 2, 2020 at 2:45 PM Kees Cook <keescook@chromium.org> wrote:
+This patch series adds support for building x86_64 and arm64 kernels
+with Clang's Link Time Optimization (LTO).
 
-Sorry it took so long to respond. I am reviving this patchset now,
-about to send out a new revision and I just saw this comment.
+In addition to performance, the primary motivation for LTO is to allow
+Clang's Control-Flow Integrity (CFI) to be used in the kernel. Google's
+Pixel devices have shipped with LTO+CFI kernels since 2018.
 
-> On 2/27/20 7:20 PM, Brendan Higgins wrote:
-> > Remove KUnit from init calls entirely, instead call directly from
-> > kernel_init().
-> >
-> > Co-developed-by: Alan Maguire <alan.maguire@oracle.com>
-> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> > [...]
-> > diff --git a/init/main.c b/init/main.c
-> > index ee4947af823f3..7875a5c486dc4 100644
-> > --- a/init/main.c
-> > +++ b/init/main.c
-> > @@ -104,6 +104,8 @@
-> >  #define CREATE_TRACE_POINTS
-> >  #include <trace/events/initcall.h>
-> >
-> > +#include <kunit/test.h>
-> > +
-> >  static int kernel_init(void *);
-> >
-> >  extern void init_IRQ(void);
-> > @@ -1444,6 +1446,8 @@ static noinline void __init kernel_init_freeable(void)
-> >
-> >       do_basic_setup();
-> >
-> > +     kunit_run_all_tests();
-> > +
-> >       console_on_rootfs();
-> >
-> >       /*
->
-> I'm nervous about this happening before two key pieces of the kernel
-> setup, which might lead to weird timing-sensitive bugs or false
-> positives:
->         async_synchronize_full()
->         mark_readonly()
->
-> Now, I realize kunit tests _should_ be self-contained, but this seems
-> like a possible robustness problem. Is there any reason this can't be
-> moved after rcu_end_inkernel_boot() in kernel_init() instead?
+Most of the patches are build system changes for handling LLVM bitcode,
+which Clang produces with LTO instead of ELF object files, postponing
+ELF processing until a later stage, and ensuring initcall ordering.
 
-I tried that, but it doesn't work without an initramfs. We could add
-an initramfs for KUnit at some point if highly desired, but I think
-that is outside the scope of this patchset. Additionally, this patch
-actually moves running tests to later in the init process, which is
-still an improvement over the way KUnit works today.
+Note that first objtool patch in the series is already in linux-next,
+but as it's needed with LTO, I'm including it also here to make testing
+easier.
 
-There are some other reasons I wouldn't want to make that change right
-now, which will become apparent in a patch that I will send out in
-short order.
+Sami Tolvanen (22):
+  objtool: use sh_info to find the base for .rela sections
+  kbuild: add support for Clang LTO
+  kbuild: lto: fix module versioning
+  kbuild: lto: fix recordmcount
+  kbuild: lto: postpone objtool
+  kbuild: lto: limit inlining
+  kbuild: lto: merge module sections
+  kbuild: lto: remove duplicate dependencies from .mod files
+  init: lto: ensure initcall ordering
+  init: lto: fix PREL32 relocations
+  pci: lto: fix PREL32 relocations
+  modpost: lto: strip .lto from module names
+  scripts/mod: disable LTO for empty.c
+  efi/libstub: disable LTO
+  drivers/misc/lkdtm: disable LTO for rodata.o
+  arm64: export CC_USING_PATCHABLE_FUNCTION_ENTRY
+  arm64: vdso: disable LTO
+  arm64: allow LTO_CLANG and THINLTO to be selected
+  x86, vdso: disable LTO only for vDSO
+  x86, ftrace: disable recordmcount for ftrace_make_nop
+  x86, relocs: Ignore L4_PAGE_OFFSET relocations
+  x86, build: allow LTO_CLANG and THINLTO to be selected
 
-Cheers
+ .gitignore                            |   1 +
+ Makefile                              |  27 ++-
+ arch/Kconfig                          |  65 +++++++
+ arch/arm64/Kconfig                    |   2 +
+ arch/arm64/Makefile                   |   1 +
+ arch/arm64/kernel/vdso/Makefile       |   4 +-
+ arch/x86/Kconfig                      |   2 +
+ arch/x86/Makefile                     |   5 +
+ arch/x86/entry/vdso/Makefile          |   5 +-
+ arch/x86/kernel/ftrace.c              |   1 +
+ arch/x86/tools/relocs.c               |   1 +
+ drivers/firmware/efi/libstub/Makefile |   2 +
+ drivers/misc/lkdtm/Makefile           |   1 +
+ include/asm-generic/vmlinux.lds.h     |  12 +-
+ include/linux/compiler-clang.h        |   4 +
+ include/linux/compiler.h              |   2 +-
+ include/linux/compiler_types.h        |   4 +
+ include/linux/init.h                  |  78 +++++++-
+ include/linux/pci.h                   |  15 +-
+ kernel/trace/ftrace.c                 |   1 +
+ lib/Kconfig.debug                     |   2 +-
+ scripts/Makefile.build                |  55 +++++-
+ scripts/Makefile.lib                  |   6 +-
+ scripts/Makefile.modfinal             |  40 +++-
+ scripts/Makefile.modpost              |  26 ++-
+ scripts/generate_initcall_order.pl    | 270 ++++++++++++++++++++++++++
+ scripts/link-vmlinux.sh               | 100 +++++++++-
+ scripts/mod/Makefile                  |   1 +
+ scripts/mod/modpost.c                 |  16 +-
+ scripts/mod/modpost.h                 |   9 +
+ scripts/mod/sumversion.c              |   6 +-
+ scripts/module-lto.lds                |  26 +++
+ scripts/recordmcount.c                |   3 +-
+ tools/objtool/elf.c                   |   2 +-
+ 34 files changed, 737 insertions(+), 58 deletions(-)
+ create mode 100755 scripts/generate_initcall_order.pl
+ create mode 100644 scripts/module-lto.lds
+
+
+base-commit: 26e122e97a3d0390ebec389347f64f3730fdf48f
+-- 
+2.27.0.212.ge8ba1cc988-goog
+
