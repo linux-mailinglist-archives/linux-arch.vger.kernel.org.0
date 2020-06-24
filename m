@@ -2,118 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EFC2074DE
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 15:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DBC2075E3
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 16:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390102AbgFXNtB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 09:49:01 -0400
-Received: from foss.arm.com ([217.140.110.172]:51856 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389590AbgFXNtB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Jun 2020 09:49:01 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F21631B;
-        Wed, 24 Jun 2020 06:49:00 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E3913F6CF;
-        Wed, 24 Jun 2020 06:48:57 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 14:48:55 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Fangrui Song <maskray@google.com>,
+        id S2391108AbgFXOl0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 10:41:26 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2384 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389836AbgFXOlZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Jun 2020 10:41:25 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05OEXFqX135508;
+        Wed, 24 Jun 2020 10:40:26 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31uwyym7wv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Jun 2020 10:40:26 -0400
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05OEXTZ2137306;
+        Wed, 24 Jun 2020 10:40:26 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31uwyym7ut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Jun 2020 10:40:25 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05OEbebC005715;
+        Wed, 24 Jun 2020 14:40:22 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 31uusjgqb6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Jun 2020 14:40:22 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05OEeJGu19136648
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Jun 2020 14:40:20 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C6EA85205A;
+        Wed, 24 Jun 2020 14:40:19 +0000 (GMT)
+Received: from oc3871087118.ibm.com (unknown [9.145.59.63])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 16FBF52051;
+        Wed, 24 Jun 2020 14:40:18 +0000 (GMT)
+Date:   Wed, 24 Jun 2020 16:40:16 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Gerald Schaefer <gerald.schaefer@de.ibm.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+        christophe.leroy@c-s.fr, ziy@nvidia.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>,
-        Peter Collingbourne <pcc@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v3 3/9] efi/libstub: Remove .note.gnu.property
-Message-ID: <20200624134854.GF25945@arm.com>
-References: <20200624014940.1204448-1-keescook@chromium.org>
- <20200624014940.1204448-4-keescook@chromium.org>
- <20200624033142.cinvg6rbg252j46d@google.com>
- <202006232143.66828CD3@keescook>
- <20200624104356.GA6134@willie-the-truck>
- <CAMj1kXHBT4ei0xhyL4jD7=CNRsn1rh7w6jeYDLjVOv4na0Z38Q@mail.gmail.com>
- <20200624112647.GC6134@willie-the-truck>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH V3 0/4] mm/debug_vm_pgtable: Add some more tests
+Message-ID: <20200624144015.GD24934@oc3871087118.ibm.com>
+References: <1592192277-8421-1-git-send-email-anshuman.khandual@arm.com>
+ <70ddc7dd-b688-b73e-642a-6363178c8cdd@arm.com>
+ <20200624110539.GC24934@oc3871087118.ibm.com>
+ <20200624134808.0c460862@thinkpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200624112647.GC6134@willie-the-truck>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200624134808.0c460862@thinkpad>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-24_08:2020-06-24,2020-06-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ clxscore=1015 bulkscore=0 priorityscore=1501 cotscore=-2147483648
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 mlxlogscore=870
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006240106
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 12:26:47PM +0100, Will Deacon wrote:
-> On Wed, Jun 24, 2020 at 12:46:32PM +0200, Ard Biesheuvel wrote:
-> > On Wed, 24 Jun 2020 at 12:44, Will Deacon <will@kernel.org> wrote:
-> > > On Tue, Jun 23, 2020 at 09:44:11PM -0700, Kees Cook wrote:
-> > > > On Tue, Jun 23, 2020 at 08:31:42PM -0700, 'Fangrui Song' via Clang Built Linux wrote:
-> > > > > arch/arm64/Kconfig enables ARM64_PTR_AUTH by default. When the config is on
-> > > > >
-> > > > > ifeq ($(CONFIG_ARM64_BTI_KERNEL),y)
-> > > > > branch-prot-flags-$(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET_BTI) := -mbranch-protection=pac-ret+leaf+bti
-> > > > > else
-> > > > > branch-prot-flags-$(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET) := -mbranch-protection=pac-ret+leaf
-> > > > > endif
-> > > > >
-> > > > > This option creates .note.gnu.property:
-> > > > >
-> > > > > % readelf -n drivers/firmware/efi/libstub/efi-stub.o
-> > > > >
-> > > > > Displaying notes found in: .note.gnu.property
-> > > > >   Owner                Data size        Description
-> > > > >   GNU                  0x00000010       NT_GNU_PROPERTY_TYPE_0
-> > > > >       Properties: AArch64 feature: PAC
-> > > > >
-> > > > > If .note.gnu.property is not desired in drivers/firmware/efi/libstub, specifying
-> > > > > -mbranch-protection=none can override -mbranch-protection=pac-ret+leaf
-> > > >
-> > > > We want to keep the branch protection enabled. But since it's not a
-> > > > "regular" ELF, we don't need to keep the property that identifies the
-> > > > feature.
-> > >
-> > > For the kernel Image, how do we remove these sections? The objcopy flags
-> > > in arch/arm64/boot/Makefile look both insufficient and out of date. My
-> > > vmlinux ends up with both a ".notes" and a ".init.note.gnu.property"
-> > > segment.
-> > >
+On Wed, Jun 24, 2020 at 01:48:08PM +0200, Gerald Schaefer wrote:
+> On Wed, 24 Jun 2020 13:05:39 +0200
+> Alexander Gordeev <agordeev@linux.ibm.com> wrote:
+> 
+> > On Wed, Jun 24, 2020 at 08:43:10AM +0530, Anshuman Khandual wrote:
 > > 
-> > The latter is the fault of the libstub make rules, that prepend .init
-> > to all section names.
+> > [...]
+> > 
+> > > Hello Gerald/Christophe/Vineet,
+> > > 
+> > > It would be really great if you could give this series a quick test
+> > > on s390/ppc/arc platforms respectively. Thank you.
+> > 
+> > That worked for me with the default and debug s390 configurations.
+> > Would you like to try with some particular options or combinations
+> > of the options?
 > 
-> Hmm. I tried adding -mbranch-protection=none to arm64 cflags for the stub,
-> but I still see this note in vmlinux. It looks like it comes in via the
-> stub copy of lib-ctype.o, but I don't know why that would force the
-> note. The cflags look ok to me [1] and I confirmed that the note is
-> being generated by the compiler.
-> 
-> > I'm not sure if there is a point to having PAC and/or BTI in the EFI
-> > stub, given that it runs under the control of the firmware, with its
-> > memory mappings and PAC configuration etc.
-> 
-> Agreed, I just can't figure out how to get rid of the note.
+> It will be enabled automatically on all archs that set
+> ARCH_HAS_DEBUG_VM_PGTABLE, which we do for s390 unconditionally.
+> Also, DEBUG_VM has to be set, which we have only in the debug config.
+> So only the s390 debug config will have it enabled, you can check
+> dmesg for "debug_vm_pgtable" to see when / where it was run, and if it
+> triggered any warnings.
 
-Because this section is generated by the linker itself I think you might
-have to send it to /DISCARD/ in the link, or strip it explicitly after
-linking.
+Yes, that is what I did ;)
 
-Cheers
----Dave
+I should have been more clear. I wonder whether Anshuman has in
+mind other options which possibly makes sense to set or unset
+and check how it goes with non-standard configurations.
+
+> I also checked with the v3 series, and it works fine for s390.
