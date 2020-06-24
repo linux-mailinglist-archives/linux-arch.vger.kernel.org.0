@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C747207AE0
+	by mail.lfdr.de (Postfix) with ESMTP id D3A21207AE1
 	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 19:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405856AbgFXRxT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 13:53:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55246 "EHLO mail.kernel.org"
+        id S2405858AbgFXRxV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 13:53:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405363AbgFXRxS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Jun 2020 13:53:18 -0400
+        id S2405857AbgFXRxU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Jun 2020 13:53:20 -0400
 Received: from localhost.localdomain (unknown [2.26.170.173])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7186B2077D;
-        Wed, 24 Jun 2020 17:53:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B09C62082F;
+        Wed, 24 Jun 2020 17:53:18 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
@@ -27,9 +27,9 @@ Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v5 13/25] mm: Introduce arch_validate_flags()
-Date:   Wed, 24 Jun 2020 18:52:32 +0100
-Message-Id: <20200624175244.25837-14-catalin.marinas@arm.com>
+Subject: [PATCH v5 14/25] arm64: mte: Validate the PROT_MTE request via arch_validate_flags()
+Date:   Wed, 24 Jun 2020 18:52:33 +0100
+Message-Id: <20200624175244.25837-15-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200624175244.25837-1-catalin.marinas@arm.com>
 References: <20200624175244.25837-1-catalin.marinas@arm.com>
@@ -40,85 +40,44 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Similarly to arch_validate_prot() called from do_mprotect_pkey(), an
-architecture may need to sanity-check the new vm_flags.
-
-Define a dummy function always returning true. In addition to
-do_mprotect_pkey(), also invoke it from mmap_region() prior to updating
-vma->vm_page_prot to allow the architecture code to veto potentially
-inconsistent vm_flags.
+Make use of the newly introduced arch_validate_flags() hook to
+sanity-check the PROT_MTE request passed to mmap() and mprotect(). If
+the mapping does not support MTE, these syscalls will return -EINVAL.
 
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Will Deacon <will@kernel.org>
 ---
+ arch/arm64/include/asm/mman.h | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-Notes:
-    v2:
-    - Some comments updated.
-
- include/linux/mman.h | 13 +++++++++++++
- mm/mmap.c            |  9 +++++++++
- mm/mprotect.c        |  6 ++++++
- 3 files changed, 28 insertions(+)
-
-diff --git a/include/linux/mman.h b/include/linux/mman.h
-index 15c1162b9d65..09dd414b81b6 100644
---- a/include/linux/mman.h
-+++ b/include/linux/mman.h
-@@ -103,6 +103,19 @@ static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
- #define arch_validate_prot arch_validate_prot
- #endif
+diff --git a/arch/arm64/include/asm/mman.h b/arch/arm64/include/asm/mman.h
+index b01051be7750..e3e28f7daf62 100644
+--- a/arch/arm64/include/asm/mman.h
++++ b/arch/arm64/include/asm/mman.h
+@@ -49,8 +49,10 @@ static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
+ 	 * register (1) as VM_MTE in the vma->vm_flags and (2) as
+ 	 * VM_MTE_ALLOWED. Note that the latter can only be set during the
+ 	 * mmap() call since mprotect() does not accept MAP_* flags.
++	 * Checking for VM_MTE only is sufficient since arch_validate_flags()
++	 * does not permit (VM_MTE & !VM_MTE_ALLOWED).
+ 	 */
+-	if ((vm_flags & VM_MTE) && (vm_flags & VM_MTE_ALLOWED))
++	if (vm_flags & VM_MTE)
+ 		prot |= PTE_ATTRINDX(MT_NORMAL_TAGGED);
  
-+#ifndef arch_validate_flags
-+/*
-+ * This is called from mmap() and mprotect() with the updated vma->vm_flags.
-+ *
-+ * Returns true if the VM_* flags are valid.
-+ */
-+static inline bool arch_validate_flags(unsigned long flags)
+ 	return __pgprot(prot);
+@@ -72,4 +74,14 @@ static inline bool arch_validate_prot(unsigned long prot,
+ }
+ #define arch_validate_prot(prot, addr) arch_validate_prot(prot, addr)
+ 
++static inline bool arch_validate_flags(unsigned long vm_flags)
 +{
-+	return true;
++	if (!system_supports_mte())
++		return true;
++
++	/* only allow VM_MTE if VM_MTE_ALLOWED has been set previously */
++	return !(vm_flags & VM_MTE) || (vm_flags & VM_MTE_ALLOWED);
 +}
-+#define arch_validate_flags arch_validate_flags
-+#endif
++#define arch_validate_flags(vm_flags) arch_validate_flags(vm_flags)
 +
- /*
-  * Optimisation macro.  It is equivalent to:
-  *      (x & bit1) ? bit2 : 0
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 59a4682ebf3f..19518a03fe9a 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1792,6 +1792,15 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 		vma_set_anonymous(vma);
- 	}
- 
-+	/* Allow architectures to sanity-check the vm_flags */
-+	if (!arch_validate_flags(vma->vm_flags)) {
-+		error = -EINVAL;
-+		if (file)
-+			goto unmap_and_free_vma;
-+		else
-+			goto free_vma;
-+	}
-+
- 	vma_link(mm, vma, prev, rb_link, rb_parent);
- 	/* Once vma denies write, undo our temporary denial count */
- 	if (file) {
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index ce8b8a5eacbb..56c02beb6041 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -603,6 +603,12 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
- 			goto out;
- 		}
- 
-+		/* Allow architectures to sanity-check the new flags */
-+		if (!arch_validate_flags(newflags)) {
-+			error = -EINVAL;
-+			goto out;
-+		}
-+
- 		error = security_file_mprotect(vma, reqprot, prot);
- 		if (error)
- 			goto out;
+ #endif /* ! __ASM_MMAN_H__ */
