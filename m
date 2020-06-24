@@ -2,179 +2,181 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D14207BD8
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 20:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D51207CC3
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 22:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406135AbgFXS5x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 14:57:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51674 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405469AbgFXS5x (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Jun 2020 14:57:53 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 39C6E20885;
-        Wed, 24 Jun 2020 18:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593025072;
-        bh=1q8ObYC1d3xeQvTv85PYxr6jPgZILDb6CEH1WVxbD1k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ure8PVgT6k9gjmIefiqObzVAEOez615ezDzC+o5R21oW4ht7pcoR4nr3sD2QVr9Zm
-         sNR1DI5Tsim86pEAXN8E5ewBiZtD5fzfsgyJNVv5KxnnzUCfgvv8yFXYpK5oj/7BFS
-         PkyQPQCG13fciljs/3nXNlEeWZYd3j+AwqDUhA8A=
-Received: by mail-ot1-f47.google.com with SMTP id t6so2921743otk.9;
-        Wed, 24 Jun 2020 11:57:52 -0700 (PDT)
-X-Gm-Message-State: AOAM530yu8Q9pZkMSIMQmN1aD2+naTLWi46OuS0GZr6T7SYjqqJDL2zo
-        VuJsB9IGnV3aH94OcyGHOF/HJi/pWJk6VC3d/8g=
-X-Google-Smtp-Source: ABdhPJwnicjOZZNzxsEV7447Hc2eD0SiEbqezDL1exyj3Xj6RtxCd11bwPQmeP1XwCm8ZE+DXKq8uMQmp4fSgOIo/Dk=
-X-Received: by 2002:a9d:688:: with SMTP id 8mr3612674otx.108.1593025071500;
- Wed, 24 Jun 2020 11:57:51 -0700 (PDT)
+        id S2406390AbgFXUP2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 16:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406318AbgFXUP1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Jun 2020 16:15:27 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C1AC061573
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:15:26 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id b92so1672324pjc.4
+        for <linux-arch@vger.kernel.org>; Wed, 24 Jun 2020 13:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IdPEcGBnqX+qJ5FRufYsC8Fmx34kZgyoik6khE35S6c=;
+        b=LAgCJBjwd1W/QzoEvVFv6uT/xdusvMrDmvZmLReTUlSLsK29qb2r44fWyhO1UhPjLz
+         uCqW0klYugm6yeBpcqwbanjBuPn8Y4d1Tu+ugG6egYFyGEsuoDAliH69triCGqr36dmi
+         BMDc2ZPjjlfibF6w3Ngt7Ai+eI0QCED0XjXlZ9iFn4S8F1kjfO+ZbKzEVcatJwMuVMIJ
+         QzCxLBIbzHXagWgFw39ff0eRVBOF+fHHz/VqrbQU+1mjgX/mE+n7M899/K/IafH7EGgM
+         IhB3AOn5dcpYIYEwgO3/nAL0oNHI/8GAMY6MwEGOhWPMzMzE8W8bLyDD9+yilUzPos45
+         Mszw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IdPEcGBnqX+qJ5FRufYsC8Fmx34kZgyoik6khE35S6c=;
+        b=NT8Mvddy1LE8dN0Nbfc6/6L1qW9EbaXmkjk8w/N4pmhA8ympX3S+9/tUvB0CJRS7lG
+         wYQqHN6KObMVObU09CCMgzSfDSxaTi/mIX0eiBpXRNbw/SFT+ShjwZzNSWwIiZpM4oIo
+         HvXoD1f7YTZvn75jkvXyu7kBkUNtB67Rdn8lN4LCyur9V2odHEOdE8cX5s1EkkUBiGhh
+         jvZ3XOuVt36pRhLPZykVJ/CEicNlca6kqd9Rgnose3TgE9CVGcL3vY7lToNYXNHV09H9
+         ApreUZhBjz7n3/rx3O0qParQat0Te24Hi2LA1X+vqFmgxG+eIn9ZqdZdPEjqGyzrMoMQ
+         2jjQ==
+X-Gm-Message-State: AOAM530JvgH8I6NDNth9PCsfTQD3V319bOekiymmt5PVgjzFJAMU+VU6
+        vjnOeMgoV79/MxsOjgZocOk4I3OinfKPgfFb/ZjbVg==
+X-Google-Smtp-Source: ABdhPJwWls4hrMzUFcn8SBHGpHRCDnSeZUXTbN8ExG/y1RAi8xwaghxvTb/oqHElrII6pYkocNgNnEUPoflPuaWhmtc=
+X-Received: by 2002:a17:90a:3321:: with SMTP id m30mr30079924pjb.20.1593029725879;
+ Wed, 24 Jun 2020 13:15:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200624033142.cinvg6rbg252j46d@google.com> <202006232143.66828CD3@keescook>
- <20200624104356.GA6134@willie-the-truck> <CAMj1kXHBT4ei0xhyL4jD7=CNRsn1rh7w6jeYDLjVOv4na0Z38Q@mail.gmail.com>
- <202006240820.A3468F4@keescook> <CAMj1kXHck12juGi=E=P4hWP_8vQhQ+-x3vBMc3TGeRWdQ-XkxQ@mail.gmail.com>
- <202006240844.7BE48D2B5@keescook> <CAMj1kXHqBs44uukRSdFwA_hcmX_yKVfjqdv9RoPbbu-6Wz+RaA@mail.gmail.com>
- <20200624162919.GH25945@arm.com> <CAMj1kXE1zWCjVt8iS4fv2gQHzrTF6=Ggd16nm+4TNWAG3zSWAQ@mail.gmail.com>
- <20200624171613.GJ25945@arm.com> <CAMj1kXG+Xh=a1exFXuRJ9EYbT+0xnC=votGGX1dmzBgZgEaC-w@mail.gmail.com>
-In-Reply-To: <CAMj1kXG+Xh=a1exFXuRJ9EYbT+0xnC=votGGX1dmzBgZgEaC-w@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 24 Jun 2020 20:57:40 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFabTkfxMDT8zz1xbOpkuWQ2=1c37T3NeB0wvuCt4Op1A@mail.gmail.com>
-Message-ID: <CAMj1kXFabTkfxMDT8zz1xbOpkuWQ2=1c37T3NeB0wvuCt4Op1A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/9] efi/libstub: Remove .note.gnu.property
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Will Deacon <will@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Fangrui Song <maskray@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        X86 ML <x86@kernel.org>, Russell King <linux@armlinux.org.uk>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@suse.de>,
-        Kees Cook <keescook@chromium.org>,
+References: <20200228012036.15682-1-brendanhiggins@google.com>
+ <20200228012036.15682-5-brendanhiggins@google.com> <e5de96ed-fb76-d322-fa40-c6e870e76c36@gmail.com>
+In-Reply-To: <e5de96ed-fb76-d322-fa40-c6e870e76c36@gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 24 Jun 2020 13:15:14 -0700
+Message-ID: <CAFd5g45Fi8n9YsMqV0FNrz3+wtoVtvg_Hvo7yg-MdJwwqxXqTQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/7] init: main: add KUnit to kernel init
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Collingbourne <pcc@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        James Morse <james.morse@arm.com>
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 24 Jun 2020 at 20:23, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Wed, 24 Jun 2020 at 19:16, Dave Martin <Dave.Martin@arm.com> wrote:
-> >
-> > On Wed, Jun 24, 2020 at 06:40:48PM +0200, Ard Biesheuvel wrote:
-> > > On Wed, 24 Jun 2020 at 18:29, Dave Martin <Dave.Martin@arm.com> wrote:
-> > > >
-> > > > On Wed, Jun 24, 2020 at 05:48:41PM +0200, Ard Biesheuvel wrote:
-> > > > > On Wed, 24 Jun 2020 at 17:45, Kees Cook <keescook@chromium.org> wrote:
-> > > > > >
-> > > > > > On Wed, Jun 24, 2020 at 05:31:06PM +0200, Ard Biesheuvel wrote:
-> > > > > > > On Wed, 24 Jun 2020 at 17:21, Kees Cook <keescook@chromium.org> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, Jun 24, 2020 at 12:46:32PM +0200, Ard Biesheuvel wrote:
-> > > > > > > > > I'm not sure if there is a point to having PAC and/or BTI in the EFI
-> > > > > > > > > stub, given that it runs under the control of the firmware, with its
-> > > > > > > > > memory mappings and PAC configuration etc.
-> > > > > > > >
-> > > > > > > > Is BTI being ignored when the firmware runs?
-> > > > > > >
-> > > > > > > Given that it requires the 'guarded' attribute to be set in the page
-> > > > > > > tables, and the fact that the UEFI spec does not require it for
-> > > > > > > executables that it invokes, nor describes any means of annotating
-> > > > > > > such executables as having been built with BTI annotations, I think we
-> > > > > > > can safely assume that the EFI stub will execute with BTI disabled in
-> > > > > > > the foreseeable future.
-> > > > > >
-> > > > > > yaaaaaay. *sigh* How long until EFI catches up?
-> > > > > >
-> > > > > > That said, BTI shouldn't _hurt_, right? If EFI ever decides to enable
-> > > > > > it, we'll be ready?
-> > > > > >
-> > > > >
-> > > > > Sure. Although I anticipate that we'll need to set some flag in the
-> > > > > PE/COFF header to enable it, and so any BTI opcodes we emit without
-> > > > > that will never take effect in practice.
-> > > >
-> > > > In the meantime, it is possible to build all the in-tree parts of EFI
-> > > > for BTI, and just turn it off for out-of-tree EFI binaries?
-> > > >
-> > >
-> > > Not sure I understand the question. What do you mean by out-of-tree
-> > > EFI binaries? And how would the firmware (which is out of tree itself,
-> > > and is in charge of the page tables, vector table, timer interrupt etc
-> > > when the EFI stub executes) distinguish such binaries from the EFI
-> > > stub?
-> >
-> > I'm not an EFI expert, but I'm guessing that you configure EFI with
-> > certain compiler flags and build it.
->
-> 'EFI' is not something you build. It is a specification that describes
-> how a conformant firmware implementation interfaces with a conformant
-> OS.
->
-> Sorry to be pedantic, but that is really quite relevant. By adhering
-> to the EFI spec rigorously, we no longer have to care about who
-> implements the opposite side, and how.
->
-> So yes, of course there are ways to build the opposite side with BTI
-> enabled, in a way that all its constituent pieces keep working as
-> expected. A typical EDK2 based implementation of EFI consists of
-> 50-100 individual PE/COFF executables that all get loaded, relocated
-> and started like ordinary user space programs.
->
-> What we cannot do, though, is invent our own Linux specific way of
-> decorating the kernel's PE/COFF header with an annotation that
-> instructs a Linux specific EFI loader when to enable the GP bit for
-> the .text pages.
->
-> > Possibly some standalone EFI
-> > executables are built out of the same tree and shipped with the
-> > firmware from the same build, but I'm speculating.  If not, we can just
-> > run all EFI executables with BTI off.
-> >
-> > > > If there's no easy way to do this though, I guess we should wait for /
-> > > > push for a PE/COFF flag to describe this properly.
-> > > >
-> > >
-> > > Yeah good point. I will take this to the forum.
-> >
-> > In the interim, we could set the GP bit in EFI's page tables for the
-> > executable code from the firmware image if we want this protection, but
-> > turn it off in pages mapping the executable code of EFI executables.
-> > This is better than nothing.
-> >
->
-> We need to distinguish between the EFI stub and the EFI runtime services here.
->
-> The EFI stub consists of kernel code that executes in the context of
-> the firmware, at which point the loader has no control whatsoever over
-> page tables, vector tables, etc. This is the stage where the loading
-> and starting of PE/COFF images takes place. If we want to enable BTI
-> for code running in this context, we need PE/COFF annotations, as
-> discussed above.
->
-> The EFI runtime services are firmware code that gets invoked by the OS
-> at runtime. Whether or not such code is emitted with BTI annotations
-> is a separate matter (but should also be taken to the forum
-> nonetheless), and does not need any changes at the PE/COFF level.
-> However, for this code, I'd like the sandboxing to be much more
-> rigorous than it is today, to the point where the security it provides
+On Mon, Mar 2, 2020 at 11:13 AM Frank Rowand <frowand.list@gmail.com> wrote:
 
-...  the security *bti* provides ...
+Sorry it took so long to respond. I am reviving this patchset now,
+about to send out a new revision and I just saw this comment.
 
-> doesn't even matter deeply to the OS itself. (I had some patches a
-> while ago that reused the KPTI infrastructure to unmap the entire
-> kernel while EFI runtime services are in progress. There was also an
-> intern in the team that implemented something similar on top of KVM)
+> On 2/27/20 7:20 PM, Brendan Higgins wrote:
+> > Remove KUnit from init calls entirely, instead call directly from
+> > kernel_init().
+> >
+> > Co-developed-by: Alan Maguire <alan.maguire@oracle.com>
+> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> > ---
+> >  include/kunit/test.h | 9 +++++++++
+> >  init/main.c          | 4 ++++
+> >  lib/kunit/executor.c | 4 +---
+> >  3 files changed, 14 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 8a02f93a6b505..8689dd1459844 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -197,6 +197,15 @@ void kunit_init_test(struct kunit *test, const char *name);
+> >
+> >  int kunit_run_tests(struct kunit_suite *suite);
+> >
+> > +#if IS_BUILTIN(CONFIG_KUNIT)
+>
+> I suspected this would not work if a unittest was builtin but CONFIG_KUNIT
+> was set to module.
+>
+> So I decided to experiment a bit to verify my assumptions (before applying
+> this patch series).  I tried to set CONFIG_KUNIT to module, then set
+> CONFIG_KUNIT_EXAMPLE_TEST to built in.  Kconfig does not let me do this
+> because KUNIT_EXAMPLE_TEST is inside a 'if KUNIT' in lib/kunit/Kconfig,
+> but instead switches KUNIT_EXAMPLE_TEST to a module, and warns that it
+> has done so.  This was a bit of a surprise, but seems reasonable.
+>
+> So my next assumption is that the architecture of KUnit expects
+> each individual unit test config option to depend upon CONFIG_KUNIT.
+> If this is the case, please clearly document that requirement in
+> the KUnit documentation.
+
+Your assumption is correct. I will fix this in the Kconfig
+documentation in a separate patch.
+
+> > +int kunit_run_all_tests(void);
+> > +#else
+> > +static inline int kunit_run_all_tests(void)
+> > +{
+> > +     return 0;
+> > +}
+> > +#endif /* IS_BUILTIN(CONFIG_KUNIT) */
+> > +
+> >  /*
+> >   * If a test suite is built-in, module_init() gets translated into
+> >   * an initcall which we don't want as the idea is that for builtins
+> > diff --git a/init/main.c b/init/main.c
+> > index ee4947af823f3..7875a5c486dc4 100644
+> > --- a/init/main.c
+> > +++ b/init/main.c
+> > @@ -104,6 +104,8 @@
+> >  #define CREATE_TRACE_POINTS
+> >  #include <trace/events/initcall.h>
+> >
+> > +#include <kunit/test.h>
+> > +
+> >  static int kernel_init(void *);
+> >
+> >  extern void init_IRQ(void);
+> > @@ -1444,6 +1446,8 @@ static noinline void __init kernel_init_freeable(void)
+> >
+> >       do_basic_setup();
+> >
+> > +     kunit_run_all_tests();
+> > +
+> >       console_on_rootfs();
+> >
+> >       /*
+> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> > index 6429927d598a5..b75a46c560847 100644
+> > --- a/lib/kunit/executor.c
+> > +++ b/lib/kunit/executor.c
+> > @@ -11,7 +11,7 @@ extern struct kunit_suite * const * const __kunit_suites_end[];
+> >
+> >  #if IS_BUILTIN(CONFIG_KUNIT)
+> >
+> > -static int kunit_run_all_tests(void)
+> > +int kunit_run_all_tests(void)
+> >  {
+> >       struct kunit_suite * const * const *suites, * const *subsuite;
+> >       bool has_test_failed = false;
+> > @@ -31,6 +31,4 @@ static int kunit_run_all_tests(void)
+> >       return 0;
+> >  }
+> >
+> > -late_initcall(kunit_run_all_tests);
+> > -
+> >  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
+> >
+>
