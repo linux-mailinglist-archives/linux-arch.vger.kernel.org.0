@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7B02069CD
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 03:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84AF92069CB
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 03:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388630AbgFXBuH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Jun 2020 21:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
+        id S2388133AbgFXBuF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Jun 2020 21:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388590AbgFXBt4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Jun 2020 21:49:56 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01039C061796
+        with ESMTP id S2388603AbgFXBt5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Jun 2020 21:49:57 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9164FC0617BB
         for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 18:49:55 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id x11so330788plo.7
-        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 18:49:54 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id i4so386785pjd.0
+        for <linux-arch@vger.kernel.org>; Tue, 23 Jun 2020 18:49:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NMAZshRZgRqtOcF48FwBwSDWqy/EeeOlwf50Pbmu5Nk=;
-        b=j28MIPdYYt3rY4/fE2dihfZR9TtTRv8EMgAkzm1ilSN6UZi55d+226fwO0IcvhUj4K
-         vHHrxFoODLtRR/epcOqkEuSfW+ofLwENnqR5DFbYOepfBQg9RkNmTQqNF+kXA9wtnTS1
-         Tk9UTZMAwnTwdOtIjCCjIuRRK9aYxJ1pREKZs=
+        bh=IXUgLosNUEP93cpEKoNn7oauK0Oksg2zT1r8iNc2N3M=;
+        b=ckmxDB65sTOYu6rx9OIJTqHdVaF3Rq0JK7kAA6vc5D+eoog4QFJCUkaQ7pr9Dbdqt8
+         TtXjq1UpX+tQQMj1dqLxz4cB6MRk2G2LEF5f5B4Oh7F/T4fCQlQiO3iYpi7PtQCLvvql
+         oPHshW80+ZhzYGTcFezjfbhx/X9l9btanp8ng=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NMAZshRZgRqtOcF48FwBwSDWqy/EeeOlwf50Pbmu5Nk=;
-        b=Oc9rvCy86wtkQkuf3T0JYqkQ1Fh5R25QiQIL1Pccb/pSReEUPwqAYSnGE/fro5cljA
-         SrApD5XbcYHO2UCftNowivnaUOOvDV9+6c8bzrR/nxbbhmQV/L3sBOJL9yVN6WsGylWt
-         VrflIJZodA/2xkwEqmVj91fou8cNHngsYuBh4zbTkCIscJvGtPMH7A8onP1nLBfbL4qn
-         K4y/vhtK7Xs3SahKRA8egSFINmLB2x/RY/f5SQN+WVgiZAiQRwC4xAI91nijyTisT9Ju
-         sJA8ZTgrJfgpR3Tu7R4oleGMrB9MngLyC1fBDKroNfJ6WhPRjzW1Rly4q/PyiXRC4Rl5
-         H6KA==
-X-Gm-Message-State: AOAM530rz5B/zAri6tnhglXarhYJpXrjDw0ggMtAI3j2u6MPk7DXwyGe
-        Hw6SWHB7yumyGTN2keuqSayPSQ==
-X-Google-Smtp-Source: ABdhPJx8Traz2lKjHxXn0KSX6VTp95qm0SkAntTLnpPXidTYMSKWi0+Ran7jdJt/zuP45e018upD0A==
-X-Received: by 2002:a17:90a:2843:: with SMTP id p3mr24514257pjf.187.1592963394576;
-        Tue, 23 Jun 2020 18:49:54 -0700 (PDT)
+        bh=IXUgLosNUEP93cpEKoNn7oauK0Oksg2zT1r8iNc2N3M=;
+        b=p7+sk0FYT+s1YnIPiSo/GRJ7gUxruMp5Gb4hzawva5AkilnbG3IBb7jcR0sa13eZtt
+         HGEmxOr9nmszUtg+WapUeOb2b/HvEYoGcA6uodu9HYoycHGZIG2QeVu4540ybwhhJMhn
+         wzHkCyUwzmr0O1jxO8RDnOj4jjbbhXjVK8lo6krg7s65A8xaRo4bRDeV/VC5N1a4T355
+         aSZyvajjJnOHjeXLfjsByr82Tu8Nbk9EVjSQmhqPoBtHSzgCbCCFLupm34vHq2Jybllz
+         wqKhhZZReoVt+EjqaNE5dCv1hAIWbmBXRfsdSIUznrq18Ah+MYSC/didYrX6pJlpndoP
+         I3JA==
+X-Gm-Message-State: AOAM532JU4vtIfDSclJEq7rXyhJpKbemH25H8o5KXy2uqI+ZrTdlqrVV
+        4Bx9gAppQvbIxv/E5t4cq7JLYw==
+X-Google-Smtp-Source: ABdhPJwdum6Og6TIMupJ78tyY9GEfwXuR/37zHl5lfG7CPnDCX7KdCztzVd+hqJLR+uQSWvHTMGz/w==
+X-Received: by 2002:a17:90a:1117:: with SMTP id d23mr26427976pja.136.1592963395150;
+        Tue, 23 Jun 2020 18:49:55 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id cv3sm3283177pjb.45.2020.06.23.18.49.48
+        by smtp.gmail.com with ESMTPSA id mp15sm3525013pjb.45.2020.06.23.18.49.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 18:49:50 -0700 (PDT)
+        Tue, 23 Jun 2020 18:49:51 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Will Deacon <will@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -64,9 +64,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 8/9] arm64/build: Use common DISCARDS in linker script
-Date:   Tue, 23 Jun 2020 18:49:39 -0700
-Message-Id: <20200624014940.1204448-9-keescook@chromium.org>
+Subject: [PATCH v3 9/9] arm64/build: Warn on orphan section placement
+Date:   Tue, 23 Jun 2020 18:49:40 -0700
+Message-Id: <20200624014940.1204448-10-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200624014940.1204448-1-keescook@chromium.org>
 References: <20200624014940.1204448-1-keescook@chromium.org>
@@ -77,40 +77,139 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Use the common DISCARDS rule for the linker script in an effort to
-regularize the linker script to prepare for warning on orphaned
-sections. Additionally clean up left-over no-op macros.
+We don't want to depend on the linker's orphan section placement
+heuristics as these can vary between linkers, and may change between
+versions. All sections need to be explicitly named in the linker
+script.
+
+Avoid .eh_frame* by making sure both -fno-asychronous-unwind-tables and
+-fno-unwind-tables are present in both CFLAGS and AFLAGS. Remove one
+last instance of .eh_frame by removing the needless Call Frame Information
+annotations from arch/arm64/kernel/smccc-call.S.
+
+Add .plt, .data.rel.ro, .igot.*, and .iplt to discards as they are not
+actually used. While .got.plt is also not used, it must be included
+otherwise ld.bfd will fail to link with the error:
+
+    aarch64-linux-gnu-ld: discarded output section: `.got.plt'
+
+However, as it'd be better to validate that it stays effectively empty,
+add an assert.
+
+Explicitly include debug sections when they're present.
+
+Fix a case of needless quotes in __section(), which Clang doesn't like.
+
+Finally, enable orphan section warnings.
+
+Thanks to Ard Biesheuvel for many hints on correct ways to handle
+mysterious sections. :)
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
-Acked-by: Will Deacon <will@kernel.org>
 ---
- arch/arm64/kernel/vmlinux.lds.S | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/arm64/Makefile             |  9 ++++++++-
+ arch/arm64/kernel/smccc-call.S  |  2 --
+ arch/arm64/kernel/vmlinux.lds.S | 11 ++++++++++-
+ arch/arm64/mm/mmu.c             |  2 +-
+ 4 files changed, 19 insertions(+), 5 deletions(-)
 
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index a0d94d063fa8..fb3aa2d7de4d 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -29,6 +29,10 @@ LDFLAGS_vmlinux	+= --fix-cortex-a53-843419
+   endif
+ endif
+ 
++# We never want expected sections to be placed heuristically by the
++# linker. All sections should be explicitly named in the linker script.
++LDFLAGS_vmlinux += --orphan-handling=warn
++
+ ifeq ($(CONFIG_ARM64_USE_LSE_ATOMICS), y)
+   ifneq ($(CONFIG_ARM64_LSE_ATOMICS), y)
+ $(warning LSE atomics not supported by binutils)
+@@ -47,13 +51,16 @@ endif
+ 
+ KBUILD_CFLAGS	+= -mgeneral-regs-only	\
+ 		   $(compat_vdso) $(cc_has_k_constraint)
+-KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
+ KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
+ KBUILD_AFLAGS	+= $(compat_vdso)
+ 
+ KBUILD_CFLAGS	+= $(call cc-option,-mabi=lp64)
+ KBUILD_AFLAGS	+= $(call cc-option,-mabi=lp64)
+ 
++# Avoid generating .eh_frame* sections.
++KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables -fno-unwind-tables
++KBUILD_AFLAGS	+= -fno-asynchronous-unwind-tables -fno-unwind-tables
++
+ ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
+ prepare: stack_protector_prepare
+ stack_protector_prepare: prepare0
+diff --git a/arch/arm64/kernel/smccc-call.S b/arch/arm64/kernel/smccc-call.S
+index 1f93809528a4..d62447964ed9 100644
+--- a/arch/arm64/kernel/smccc-call.S
++++ b/arch/arm64/kernel/smccc-call.S
+@@ -9,7 +9,6 @@
+ #include <asm/assembler.h>
+ 
+ 	.macro SMCCC instr
+-	.cfi_startproc
+ 	\instr	#0
+ 	ldr	x4, [sp]
+ 	stp	x0, x1, [x4, #ARM_SMCCC_RES_X0_OFFS]
+@@ -21,7 +20,6 @@
+ 	b.ne	1f
+ 	str	x6, [x4, ARM_SMCCC_QUIRK_STATE_OFFS]
+ 1:	ret
+-	.cfi_endproc
+ 	.endm
+ 
+ /*
 diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index 6827da7f3aa5..5427f502c3a6 100644
+index 5427f502c3a6..f6c781768f83 100644
 --- a/arch/arm64/kernel/vmlinux.lds.S
 +++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -6,6 +6,7 @@
-  */
- 
- #define RO_EXCEPTION_TABLE_ALIGN	8
-+#define RUNTIME_DISCARD_EXIT
- 
- #include <asm-generic/vmlinux.lds.h>
- #include <asm/cache.h>
-@@ -89,10 +90,8 @@ SECTIONS
- 	 * matching the same input section name.  There is no documented
- 	 * order of matching.
- 	 */
-+	DISCARDS
+@@ -94,7 +94,8 @@ SECTIONS
  	/DISCARD/ : {
--		EXIT_CALL
--		*(.discard)
--		*(.discard.*)
  		*(.interp .dynamic)
  		*(.dynsym .dynstr .hash .gnu.hash)
- 		*(.eh_frame)
+-		*(.eh_frame)
++		*(.plt) *(.data.rel.ro)
++		*(.igot.*) *(.iplt)
+ 	}
+ 
+ 	. = KIMAGE_VADDR + TEXT_OFFSET;
+@@ -244,8 +245,16 @@ SECTIONS
+ 	_end = .;
+ 
+ 	STABS_DEBUG
++	DWARF_DEBUG
+ 
+ 	HEAD_SYMBOLS
++
++	/*
++	 * Make sure that the .got.plt is either completely empty or it
++	 * contains only the lazy dispatch entries.
++	 */
++	.got.plt (INFO) : { *(.got.plt) }
++	ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18, ".got.plt not empty")
+ }
+ 
+ #include "image-vars.h"
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 1df25f26571d..dce024ea6084 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -42,7 +42,7 @@
+ u64 idmap_t0sz = TCR_T0SZ(VA_BITS);
+ u64 idmap_ptrs_per_pgd = PTRS_PER_PGD;
+ 
+-u64 __section(".mmuoff.data.write") vabits_actual;
++u64 __section(.mmuoff.data.write) vabits_actual;
+ EXPORT_SYMBOL(vabits_actual);
+ 
+ u64 kimage_voffset __ro_after_init;
 -- 
 2.25.1
 
