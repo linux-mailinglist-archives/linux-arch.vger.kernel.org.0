@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D243207AD3
+	by mail.lfdr.de (Postfix) with ESMTP id E994F207AD4
 	for <lists+linux-arch@lfdr.de>; Wed, 24 Jun 2020 19:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405846AbgFXRwt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Jun 2020 13:52:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54340 "EHLO mail.kernel.org"
+        id S2405715AbgFXRwv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Jun 2020 13:52:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54408 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405615AbgFXRwt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Jun 2020 13:52:49 -0400
+        id S2405615AbgFXRwv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Jun 2020 13:52:51 -0400
 Received: from localhost.localdomain (unknown [2.26.170.173])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EC19B2077D;
-        Wed, 24 Jun 2020 17:52:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 383EB2080C;
+        Wed, 24 Jun 2020 17:52:48 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
@@ -27,10 +27,12 @@ Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v5 00/25] arm64: Memory Tagging Extension user-space support
-Date:   Wed, 24 Jun 2020 18:52:19 +0100
-Message-Id: <20200624175244.25837-1-catalin.marinas@arm.com>
+Subject: [PATCH v5 01/25] arm64: mte: system register definitions
+Date:   Wed, 24 Jun 2020 18:52:20 +0100
+Message-Id: <20200624175244.25837-2-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200624175244.25837-1-catalin.marinas@arm.com>
+References: <20200624175244.25837-1-catalin.marinas@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -38,146 +40,199 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is the 5th version (4th version here [1]) of the series adding
-user-space support for the ARMv8.5 Memory Tagging Extension ([2], [3]).
-The patches are also available on this branch:
+From: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux devel/mte-v5
+Add Memory Tagging Extension system register definitions together with
+the relevant bitfields.
 
-There are no user ABI changes from v4 and I do not anticipate further
-updates affecting the ABI. Subsequent ABI improvements, if needed, will
-be done in a backwards-compatible manner. The glibc counterpart is also
-under discussion [4].
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+---
 
-My plan is to push these patches into linux-next for wider coverage,
-with an aim for merging into 5.9 unless major reworking is needed. I
-would be grateful if mm folks review/ack/nak those patches touching mm/
-(and, of course, any other patch in this series, feedback always
-welcomed). Thank you.
+Notes:
+    v2:
+    - Added SET_PSTATE_TCO() macro.
 
-Changes in this version:
+ arch/arm64/include/asm/kvm_arm.h     |  1 +
+ arch/arm64/include/asm/sysreg.h      | 53 ++++++++++++++++++++++++++++
+ arch/arm64/include/uapi/asm/ptrace.h |  1 +
+ arch/arm64/kernel/ptrace.c           |  2 +-
+ 4 files changed, 56 insertions(+), 1 deletion(-)
 
-- Removed the Device Tree memory node description requirement after
-  agreement with the hardware architects that the CPUID should reflect
-  the features supported by the general purpose memory.
-
-- Dropped the command line argument to disable MTE at boot in the
-  absence of a strong argument in its favour.
-
-- Fixed handling of compound pages (inadvertently clearing valid tags in
-  previously mapped small pages).
-
-- Some reworking of the copy_{user,}highpage() functions.
-
-- Rebased to 5.8-rc2
-
-[1] https://lore.kernel.org/linux-arm-kernel/20200515171612.1020-1-catalin.marinas@arm.com/
-[2] https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/enhancing-memory-safety
-[3] https://developer.arm.com/-/media/Arm%20Developer%20Community/PDF/Arm_Memory_Tagging_Extension_Whitepaper.pdf
-[4] https://sourceware.org/pipermail/libc-alpha/2020-June/115039.html
-
-Catalin Marinas (13):
-  arm64: mte: Use Normal Tagged attributes for the linear map
-  arm64: mte: Clear the tags when a page is mapped in user-space with
-    PROT_MTE
-  arm64: Avoid unnecessary clear_user_page() indirection
-  arm64: mte: Tags-aware aware memcmp_pages() implementation
-  arm64: mte: Add PROT_MTE support to mmap() and mprotect()
-  mm: Introduce arch_validate_flags()
-  arm64: mte: Validate the PROT_MTE request via arch_validate_flags()
-  mm: Allow arm64 mmap(PROT_MTE) on RAM-based files
-  arm64: mte: Allow user control of the tag check mode via prctl()
-  arm64: mte: Allow user control of the generated random tags via
-    prctl()
-  arm64: mte: Restore the GCR_EL1 register after a suspend
-  arm64: mte: Add PTRACE_{PEEK,POKE}MTETAGS support
-  fs: Handle intra-page faults in copy_mount_options()
-
-Kevin Brodsky (1):
-  mm: Introduce arch_calc_vm_flag_bits()
-
-Steven Price (4):
-  mm: Add PG_ARCH_2 page flag
-  mm: Add arch hooks for saving/restoring tags
-  arm64: mte: Enable swap of tagged pages
-  arm64: mte: Save tags when hibernating
-
-Vincenzo Frascino (7):
-  arm64: mte: system register definitions
-  arm64: mte: CPU feature detection and initial sysreg configuration
-  arm64: mte: Add specific SIGSEGV codes
-  arm64: mte: Handle synchronous and asynchronous tag check faults
-  arm64: mte: Tags-aware copy_{user_,}highpage() implementations
-  arm64: mte: Kconfig entry
-  arm64: mte: Add Memory Tagging Extension documentation
-
- Documentation/arm64/cpu-feature-registers.rst |   2 +
- Documentation/arm64/elf_hwcaps.rst            |   4 +
- Documentation/arm64/index.rst                 |   1 +
- .../arm64/memory-tagging-extension.rst        | 297 ++++++++++++++++
- arch/arm64/Kconfig                            |  29 ++
- arch/arm64/include/asm/cpucaps.h              |   3 +-
- arch/arm64/include/asm/cpufeature.h           |   6 +
- arch/arm64/include/asm/hwcap.h                |   1 +
- arch/arm64/include/asm/kvm_arm.h              |   3 +-
- arch/arm64/include/asm/memory.h               |  17 +-
- arch/arm64/include/asm/mman.h                 |  56 ++-
- arch/arm64/include/asm/mte.h                  |  86 +++++
- arch/arm64/include/asm/page.h                 |  19 +-
- arch/arm64/include/asm/pgtable-prot.h         |   2 +
- arch/arm64/include/asm/pgtable.h              |  46 ++-
- arch/arm64/include/asm/processor.h            |   4 +
- arch/arm64/include/asm/sysreg.h               |  61 ++++
- arch/arm64/include/asm/thread_info.h          |   4 +-
- arch/arm64/include/uapi/asm/hwcap.h           |   1 +
- arch/arm64/include/uapi/asm/mman.h            |   1 +
- arch/arm64/include/uapi/asm/ptrace.h          |   4 +
- arch/arm64/kernel/Makefile                    |   1 +
- arch/arm64/kernel/cpufeature.c                |  61 ++++
- arch/arm64/kernel/cpuinfo.c                   |   1 +
- arch/arm64/kernel/entry.S                     |  37 ++
- arch/arm64/kernel/hibernate.c                 | 118 +++++++
- arch/arm64/kernel/mte.c                       | 331 ++++++++++++++++++
- arch/arm64/kernel/process.c                   |  31 +-
- arch/arm64/kernel/ptrace.c                    |   9 +-
- arch/arm64/kernel/signal.c                    |   8 +
- arch/arm64/kernel/suspend.c                   |   4 +
- arch/arm64/kernel/syscall.c                   |  10 +
- arch/arm64/lib/Makefile                       |   2 +
- arch/arm64/lib/mte.S                          | 151 ++++++++
- arch/arm64/mm/Makefile                        |   1 +
- arch/arm64/mm/copypage.c                      |  25 +-
- arch/arm64/mm/dump.c                          |   4 +
- arch/arm64/mm/fault.c                         |   9 +-
- arch/arm64/mm/mmu.c                           |  22 +-
- arch/arm64/mm/mteswap.c                       |  82 +++++
- arch/arm64/mm/proc.S                          |   8 +-
- arch/x86/kernel/signal_compat.c               |   2 +-
- fs/namespace.c                                |  24 +-
- fs/proc/page.c                                |   3 +
- fs/proc/task_mmu.c                            |   4 +
- include/{linux => asm-generic}/pgtable.h      | 222 ++----------
- include/linux/kernel-page-flags.h             |   1 +
- include/linux/mm.h                            |   8 +
- include/linux/mman.h                          |  22 +-
- include/linux/page-flags.h                    |   3 +
- include/linux/pgtable.h                       |  23 ++
- include/trace/events/mmflags.h                |   9 +-
- include/uapi/asm-generic/siginfo.h            |   4 +-
- include/uapi/linux/prctl.h                    |   9 +
- mm/Kconfig                                    |   3 +
- mm/mmap.c                                     |   9 +
- mm/mprotect.c                                 |   6 +
- mm/page_io.c                                  |  10 +
- mm/shmem.c                                    |   9 +
- mm/swapfile.c                                 |   2 +
- mm/util.c                                     |   2 +-
- tools/vm/page-types.c                         |   2 +
- 62 files changed, 1704 insertions(+), 235 deletions(-)
- create mode 100644 Documentation/arm64/memory-tagging-extension.rst
- create mode 100644 arch/arm64/include/asm/mte.h
- create mode 100644 arch/arm64/kernel/mte.c
- create mode 100644 arch/arm64/lib/mte.S
- create mode 100644 arch/arm64/mm/mteswap.c
- copy include/{linux => asm-generic}/pgtable.h (85%)
-
+diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
+index 51c1d9918999..8a1cbfd544d6 100644
+--- a/arch/arm64/include/asm/kvm_arm.h
++++ b/arch/arm64/include/asm/kvm_arm.h
+@@ -12,6 +12,7 @@
+ #include <asm/types.h>
+ 
+ /* Hyp Configuration Register (HCR) bits */
++#define HCR_ATA		(UL(1) << 56)
+ #define HCR_FWB		(UL(1) << 46)
+ #define HCR_API		(UL(1) << 41)
+ #define HCR_APK		(UL(1) << 40)
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index 463175f80341..97bc523882f3 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -91,10 +91,12 @@
+ #define PSTATE_PAN			pstate_field(0, 4)
+ #define PSTATE_UAO			pstate_field(0, 3)
+ #define PSTATE_SSBS			pstate_field(3, 1)
++#define PSTATE_TCO			pstate_field(3, 4)
+ 
+ #define SET_PSTATE_PAN(x)		__emit_inst(0xd500401f | PSTATE_PAN | ((!!x) << PSTATE_Imm_shift))
+ #define SET_PSTATE_UAO(x)		__emit_inst(0xd500401f | PSTATE_UAO | ((!!x) << PSTATE_Imm_shift))
+ #define SET_PSTATE_SSBS(x)		__emit_inst(0xd500401f | PSTATE_SSBS | ((!!x) << PSTATE_Imm_shift))
++#define SET_PSTATE_TCO(x)		__emit_inst(0xd500401f | PSTATE_TCO | ((!!x) << PSTATE_Imm_shift))
+ 
+ #define __SYS_BARRIER_INSN(CRm, op2, Rt) \
+ 	__emit_inst(0xd5000000 | sys_insn(0, 3, 3, (CRm), (op2)) | ((Rt) & 0x1f))
+@@ -181,6 +183,8 @@
+ #define SYS_SCTLR_EL1			sys_reg(3, 0, 1, 0, 0)
+ #define SYS_ACTLR_EL1			sys_reg(3, 0, 1, 0, 1)
+ #define SYS_CPACR_EL1			sys_reg(3, 0, 1, 0, 2)
++#define SYS_RGSR_EL1			sys_reg(3, 0, 1, 0, 5)
++#define SYS_GCR_EL1			sys_reg(3, 0, 1, 0, 6)
+ 
+ #define SYS_ZCR_EL1			sys_reg(3, 0, 1, 2, 0)
+ 
+@@ -218,6 +222,8 @@
+ #define SYS_ERXADDR_EL1			sys_reg(3, 0, 5, 4, 3)
+ #define SYS_ERXMISC0_EL1		sys_reg(3, 0, 5, 5, 0)
+ #define SYS_ERXMISC1_EL1		sys_reg(3, 0, 5, 5, 1)
++#define SYS_TFSR_EL1			sys_reg(3, 0, 5, 6, 0)
++#define SYS_TFSRE0_EL1			sys_reg(3, 0, 5, 6, 1)
+ 
+ #define SYS_FAR_EL1			sys_reg(3, 0, 6, 0, 0)
+ #define SYS_PAR_EL1			sys_reg(3, 0, 7, 4, 0)
+@@ -368,6 +374,7 @@
+ 
+ #define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
+ #define SYS_CLIDR_EL1			sys_reg(3, 1, 0, 0, 1)
++#define SYS_GMID_EL1			sys_reg(3, 1, 0, 0, 4)
+ #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
+ 
+ #define SYS_CSSELR_EL1			sys_reg(3, 2, 0, 0, 0)
+@@ -460,6 +467,7 @@
+ #define SYS_ESR_EL2			sys_reg(3, 4, 5, 2, 0)
+ #define SYS_VSESR_EL2			sys_reg(3, 4, 5, 2, 3)
+ #define SYS_FPEXC32_EL2			sys_reg(3, 4, 5, 3, 0)
++#define SYS_TFSR_EL2			sys_reg(3, 4, 5, 6, 0)
+ #define SYS_FAR_EL2			sys_reg(3, 4, 6, 0, 0)
+ 
+ #define SYS_VDISR_EL2			sys_reg(3, 4, 12, 1,  1)
+@@ -516,6 +524,7 @@
+ #define SYS_AFSR0_EL12			sys_reg(3, 5, 5, 1, 0)
+ #define SYS_AFSR1_EL12			sys_reg(3, 5, 5, 1, 1)
+ #define SYS_ESR_EL12			sys_reg(3, 5, 5, 2, 0)
++#define SYS_TFSR_EL12			sys_reg(3, 5, 5, 6, 0)
+ #define SYS_FAR_EL12			sys_reg(3, 5, 6, 0, 0)
+ #define SYS_MAIR_EL12			sys_reg(3, 5, 10, 2, 0)
+ #define SYS_AMAIR_EL12			sys_reg(3, 5, 10, 3, 0)
+@@ -531,6 +540,15 @@
+ 
+ /* Common SCTLR_ELx flags. */
+ #define SCTLR_ELx_DSSBS	(BIT(44))
++#define SCTLR_ELx_ATA	(BIT(43))
++
++#define SCTLR_ELx_TCF_SHIFT	40
++#define SCTLR_ELx_TCF_NONE	(UL(0x0) << SCTLR_ELx_TCF_SHIFT)
++#define SCTLR_ELx_TCF_SYNC	(UL(0x1) << SCTLR_ELx_TCF_SHIFT)
++#define SCTLR_ELx_TCF_ASYNC	(UL(0x2) << SCTLR_ELx_TCF_SHIFT)
++#define SCTLR_ELx_TCF_MASK	(UL(0x3) << SCTLR_ELx_TCF_SHIFT)
++
++#define SCTLR_ELx_ITFSB	(BIT(37))
+ #define SCTLR_ELx_ENIA	(BIT(31))
+ #define SCTLR_ELx_ENIB	(BIT(30))
+ #define SCTLR_ELx_ENDA	(BIT(27))
+@@ -559,6 +577,14 @@
+ #endif
+ 
+ /* SCTLR_EL1 specific flags. */
++#define SCTLR_EL1_ATA0		(BIT(42))
++
++#define SCTLR_EL1_TCF0_SHIFT	38
++#define SCTLR_EL1_TCF0_NONE	(UL(0x0) << SCTLR_EL1_TCF0_SHIFT)
++#define SCTLR_EL1_TCF0_SYNC	(UL(0x1) << SCTLR_EL1_TCF0_SHIFT)
++#define SCTLR_EL1_TCF0_ASYNC	(UL(0x2) << SCTLR_EL1_TCF0_SHIFT)
++#define SCTLR_EL1_TCF0_MASK	(UL(0x3) << SCTLR_EL1_TCF0_SHIFT)
++
+ #define SCTLR_EL1_BT1		(BIT(36))
+ #define SCTLR_EL1_BT0		(BIT(35))
+ #define SCTLR_EL1_UCI		(BIT(26))
+@@ -595,6 +621,7 @@
+ #define MAIR_ATTR_DEVICE_GRE		UL(0x0c)
+ #define MAIR_ATTR_NORMAL_NC		UL(0x44)
+ #define MAIR_ATTR_NORMAL_WT		UL(0xbb)
++#define MAIR_ATTR_NORMAL_TAGGED		UL(0xf0)
+ #define MAIR_ATTR_NORMAL		UL(0xff)
+ #define MAIR_ATTR_MASK			UL(0xff)
+ 
+@@ -683,6 +710,10 @@
+ #define ID_AA64PFR1_SSBS_PSTATE_INSNS	2
+ #define ID_AA64PFR1_BT_BTI		0x1
+ 
++#define ID_AA64PFR1_MTE_NI		0x0
++#define ID_AA64PFR1_MTE_EL0		0x1
++#define ID_AA64PFR1_MTE			0x2
++
+ /* id_aa64zfr0 */
+ #define ID_AA64ZFR0_F64MM_SHIFT		56
+ #define ID_AA64ZFR0_F32MM_SHIFT		52
+@@ -875,6 +906,28 @@
+ #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
+ #define CPACR_EL1_ZEN		(CPACR_EL1_ZEN_EL1EN | CPACR_EL1_ZEN_EL0EN)
+ 
++/* TCR EL1 Bit Definitions */
++#define SYS_TCR_EL1_TCMA1	(BIT(58))
++#define SYS_TCR_EL1_TCMA0	(BIT(57))
++
++/* GCR_EL1 Definitions */
++#define SYS_GCR_EL1_RRND	(BIT(16))
++#define SYS_GCR_EL1_EXCL_MASK	0xffffUL
++
++/* RGSR_EL1 Definitions */
++#define SYS_RGSR_EL1_TAG_MASK	0xfUL
++#define SYS_RGSR_EL1_SEED_SHIFT	8
++#define SYS_RGSR_EL1_SEED_MASK	0xffffUL
++
++/* GMID_EL1 field definitions */
++#define SYS_GMID_EL1_BS_SHIFT	0
++#define SYS_GMID_EL1_BS_SIZE	4
++
++/* TFSR{,E0}_EL1 bit definitions */
++#define SYS_TFSR_EL1_TF0_SHIFT	0
++#define SYS_TFSR_EL1_TF1_SHIFT	1
++#define SYS_TFSR_EL1_TF0	(UL(1) << SYS_TFSR_EL1_TF0_SHIFT)
++#define SYS_TFSR_EL1_TF1	(UK(2) << SYS_TFSR_EL1_TF1_SHIFT)
+ 
+ /* Safe value for MPIDR_EL1: Bit31:RES1, Bit30:U:0, Bit24:MT:0 */
+ #define SYS_MPIDR_SAFE_VAL	(BIT(31))
+diff --git a/arch/arm64/include/uapi/asm/ptrace.h b/arch/arm64/include/uapi/asm/ptrace.h
+index 42cbe34d95ce..06413d9f2341 100644
+--- a/arch/arm64/include/uapi/asm/ptrace.h
++++ b/arch/arm64/include/uapi/asm/ptrace.h
+@@ -51,6 +51,7 @@
+ #define PSR_PAN_BIT	0x00400000
+ #define PSR_UAO_BIT	0x00800000
+ #define PSR_DIT_BIT	0x01000000
++#define PSR_TCO_BIT	0x02000000
+ #define PSR_V_BIT	0x10000000
+ #define PSR_C_BIT	0x20000000
+ #define PSR_Z_BIT	0x40000000
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 68b7f34a08f5..4582014dda25 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -1873,7 +1873,7 @@ void syscall_trace_exit(struct pt_regs *regs)
+  * We also reserve IL for the kernel; SS is handled dynamically.
+  */
+ #define SPSR_EL1_AARCH64_RES0_BITS \
+-	(GENMASK_ULL(63, 32) | GENMASK_ULL(27, 25) | GENMASK_ULL(23, 22) | \
++	(GENMASK_ULL(63, 32) | GENMASK_ULL(27, 26) | GENMASK_ULL(23, 22) | \
+ 	 GENMASK_ULL(20, 13) | GENMASK_ULL(5, 5))
+ #define SPSR_EL1_AARCH32_RES0_BITS \
+ 	(GENMASK_ULL(63, 32) | GENMASK_ULL(22, 22) | GENMASK_ULL(20, 20))
