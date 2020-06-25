@@ -2,81 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF19209AFC
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jun 2020 10:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580B4209B3E
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jun 2020 10:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390586AbgFYIDl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Jun 2020 04:03:41 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:53550 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390556AbgFYIDj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 25 Jun 2020 04:03:39 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 0DDC312E9D91E7029AFE;
-        Thu, 25 Jun 2020 16:03:37 +0800 (CST)
-Received: from DESKTOP-KKJBAGG.china.huawei.com (10.173.220.25) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 25 Jun 2020 16:03:31 +0800
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-To:     <catalin.marinas@arm.com>, <peterz@infradead.org>,
-        <mark.rutland@arm.com>, <will@kernel.org>,
-        <aneesh.kumar@linux.ibm.com>, <akpm@linux-foundation.org>,
-        <npiggin@gmail.com>, <arnd@arndb.de>, <rostedt@goodmis.org>,
-        <maz@kernel.org>, <suzuki.poulose@arm.com>, <tglx@linutronix.de>,
-        <yuzhao@google.com>, <Dave.Martin@arm.com>, <steven.price@arm.com>,
-        <broonie@kernel.org>, <guohanjun@huawei.com>
-CC:     <yezhenyu2@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
-        <kuhn.chenqun@huawei.com>
-Subject: [RESEND PATCH v5 6/6] arm64: tlb: Set the TTL field in flush_*_tlb_range
-Date:   Thu, 25 Jun 2020 16:03:14 +0800
-Message-ID: <20200625080314.230-7-yezhenyu2@huawei.com>
-X-Mailer: git-send-email 2.22.0.windows.1
-In-Reply-To: <20200625080314.230-1-yezhenyu2@huawei.com>
-References: <20200625080314.230-1-yezhenyu2@huawei.com>
+        id S2390531AbgFYIY5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Jun 2020 04:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389522AbgFYIY4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Jun 2020 04:24:56 -0400
+Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C13C061573;
+        Thu, 25 Jun 2020 01:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3AMdYg8fQNUtXAfj2fZZ8NPZ9U5EFgepOOFBuun2GQY=; b=ibvgrw/6VgAeXKGL/ZvFOV5Ile
+        k/DG2hTUgCNpBFh0SVRZtiOzJ0tqIzRrnNRTZQdCWgPu3f3vKwwqumEO3VAaSPjMg/ls3R3fwVjKM
+        Nhs12sSgDR+t8SDyMh/h3ITlxN3ZcgcTvbI7CAd5D8YCcq8qCphd0KnXhjA+ZVPLtaGvU/eak1k++
+        6iVJ/9DrfMDdhwuZ5/zvsYALWHu77JxkNZKUQ+1riHrSFoU2dIT3hgk0fU4PGeIKpR0kVxQwAc5hC
+        H0eBkD5up1mt7ynRtI/herLh3Yr5SxMM5rpkTFOeHKnOBtnv2OaV3fJ7KHA9qL8uVglbMrLJEM+Gs
+        wUku04xw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1joNBS-0000yr-J3; Thu, 25 Jun 2020 08:24:34 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2EE4E301A7A;
+        Thu, 25 Jun 2020 10:24:33 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 234DB2215AD45; Thu, 25 Jun 2020 10:24:33 +0200 (CEST)
+Date:   Thu, 25 Jun 2020 10:24:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [PATCH 00/22] add support for Clang LTO
+Message-ID: <20200625082433.GC117543@hirez.programming.kicks-ass.net>
+References: <20200624203200.78870-1-samitolvanen@google.com>
+ <20200624211540.GS4817@hirez.programming.kicks-ass.net>
+ <CAKwvOdmxz91c-M8egR9GdR1uOjeZv7-qoTP=pQ55nU8TCpkK6g@mail.gmail.com>
+ <20200625080313.GY4817@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.173.220.25]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200625080313.GY4817@hirez.programming.kicks-ass.net>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch implement flush_{pmd|pud}_tlb_range() in arm64 by
-calling __flush_tlb_range() with the corresponding stride and
-tlb_level values.
+On Thu, Jun 25, 2020 at 10:03:13AM +0200, Peter Zijlstra wrote:
+> On Wed, Jun 24, 2020 at 02:31:36PM -0700, Nick Desaulniers wrote:
+> > On Wed, Jun 24, 2020 at 2:15 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Wed, Jun 24, 2020 at 01:31:38PM -0700, Sami Tolvanen wrote:
+> > > > This patch series adds support for building x86_64 and arm64 kernels
+> > > > with Clang's Link Time Optimization (LTO).
+> > > >
+> > > > In addition to performance, the primary motivation for LTO is to allow
+> > > > Clang's Control-Flow Integrity (CFI) to be used in the kernel. Google's
+> > > > Pixel devices have shipped with LTO+CFI kernels since 2018.
+> > > >
+> > > > Most of the patches are build system changes for handling LLVM bitcode,
+> > > > which Clang produces with LTO instead of ELF object files, postponing
+> > > > ELF processing until a later stage, and ensuring initcall ordering.
+> > > >
+> > > > Note that first objtool patch in the series is already in linux-next,
+> > > > but as it's needed with LTO, I'm including it also here to make testing
+> > > > easier.
+> > >
+> > > I'm very sad that yet again, memory ordering isn't addressed. LTO vastly
+> > > increases the range of the optimizer to wreck things.
+> > 
+> > Hi Peter, could you expand on the issue for the folks on the thread?
+> > I'm happy to try to hack something up in LLVM if we check that X does
+> > or does not happen; maybe we can even come up with some concrete test
+> > cases that can be added to LLVM's codebase?
+> 
+> I'm sure Will will respond, but the basic issue is the trainwreck C11
+> made of dependent loads.
+> 
+> Anyway, here's a link to the last time this came up:
+> 
+>   https://lore.kernel.org/linux-arm-kernel/20171116174830.GX3624@linux.vnet.ibm.com/
 
-Signed-off-by: Zhenyu Ye <yezhenyu2@huawei.com>
----
- arch/arm64/include/asm/pgtable.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Another good read:
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 758e2d1577d0..d5d3fbe73953 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -40,6 +40,16 @@ extern void __pmd_error(const char *file, int line, unsigned long val);
- extern void __pud_error(const char *file, int line, unsigned long val);
- extern void __pgd_error(const char *file, int line, unsigned long val);
- 
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+#define __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
-+
-+/* Set stride and tlb_level in flush_*_tlb_range */
-+#define flush_pmd_tlb_range(vma, addr, end)	\
-+	__flush_tlb_range(vma, addr, end, PMD_SIZE, false, 2)
-+#define flush_pud_tlb_range(vma, addr, end)	\
-+	__flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
-+#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-+
- /*
-  * ZERO_PAGE is a global shared page that is always zero: used
-  * for zero-mapped memory areas etc..
--- 
-2.26.2
+  https://lore.kernel.org/lkml/20150520005510.GA23559@linux.vnet.ibm.com/
 
+and having (partially) re-read that, I now worry intensily about things
+like latch_tree_find(), cyc2ns_read_begin, __ktime_get_fast_ns().
 
+It looks like kernel/time/sched_clock.c uses raw_read_seqcount() which
+deviates from the above patterns by, for some reason, using a primitive
+that includes an extra smp_rmb().
+
+And this is just the few things I could remember off the top of my head,
+who knows what else is out there.
