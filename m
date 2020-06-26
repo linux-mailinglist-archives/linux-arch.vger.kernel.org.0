@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E53A220BB5A
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jun 2020 23:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC18D20BB5F
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jun 2020 23:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbgFZVWY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Jun 2020 17:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
+        id S1725803AbgFZVXO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Jun 2020 17:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbgFZVWX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Jun 2020 17:22:23 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46197C03E97A
-        for <linux-arch@vger.kernel.org>; Fri, 26 Jun 2020 14:22:23 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 67so1086328pfg.5
-        for <linux-arch@vger.kernel.org>; Fri, 26 Jun 2020 14:22:23 -0700 (PDT)
+        with ESMTP id S1725833AbgFZVXN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Jun 2020 17:23:13 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8948FC03E97B
+        for <linux-arch@vger.kernel.org>; Fri, 26 Jun 2020 14:23:12 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id x8so3817970plm.10
+        for <linux-arch@vger.kernel.org>; Fri, 26 Jun 2020 14:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DPaM2QLp1Lnyo/tFOjZRrBK9GEiSK4tLpveqTF1QTWw=;
-        b=TFElbCjpLxOIFHGP0g+klWMfLi0l2Mun3MxomGTHA0v9jh/9cfSmaHKqFtA4RT6jRm
-         4xzaHn3a057w+xMpnbwSdQNls0bvhcqTTFxuifRkxMCIho8BIk5JWH0r+EJJml6d8S5N
-         IsXJvYxj2SL3HF4o5D1uBwhALv9jY3C3tWulumPnGm8T4x7r1RmHVZS5Ug2DclvsP0xR
-         sFOIwsCxvF6aV1Nj1SOAJunuK7BRTUwezp0PPzwRLdniCcRaiK5RCcSn7cJhUKWnHoFm
-         wpmGYvCAqzTEprPMaK7A1ERbYa7IUuNMzW2ZkRudy2BcDJa9pWbc0YGeu0tzrYO4kW1e
-         IXcg==
+        bh=CvJoXjPb3PppSXrTvZvJe33y7yc/YsOEYDjM/f5h460=;
+        b=V4+waQO8b0iUP2RZw/9wwuSg1yJTxiHT0OF4g7SF9fKIzoFlXU6ot0auFw3DJDBR0p
+         MbiGN8aOp87G0zacaSAFT7QrcUII1OlL5ZJdBCNbrfDgLWo8Xo07JOjx5OykYTd3bbuF
+         qDCxZQPmgDAryI5UWavy9oWaqjeoKgoMhzprLtGpkwY4B7WeL/Z145HYp+Rdd1SoD8c6
+         3BJH7MM784WaQY5yKAj70FP0deHmf6UKu+Ay4aV4LdsxdfEIupTDZoN+0XY1PELwlMmu
+         hhn1UVkn6JRYANDcsLxYRtknIt/x4emnPr4cN4nzAKmjLtv5/apaBUms8FL3Yc4BwsJs
+         H47A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DPaM2QLp1Lnyo/tFOjZRrBK9GEiSK4tLpveqTF1QTWw=;
-        b=Opg5blp7vRcK49oO4gNPC6+s94d+nMrtG04/AYj7ZfZZiMmqzuQu3eQMWDL8sPiKuT
-         CCTSu7R8+QFyEww76bywmWoHhsSjbYxw0MklFnnYNjXr2gveNyYzu7WDq8y675wJdw23
-         HAQ4WYwyIgHUXQhtRWYr3vtsmKRZn+J1XeoYlMrwZ8hnBLsikpyff1ncLzxy5FBXz+/W
-         wW311sz26a9Pc10AFn3M1fyFGxYu0jZMIE4/xL9EHQLb0MT98N+AdNtDyM045S6WAO5b
-         Zk7BNg/2pfKod/hik/njWV/QxYu2YKw3XhrFnMrUmRCwlie0MOKVX60mfME7qXSH/dDP
-         GOEA==
-X-Gm-Message-State: AOAM530ALCWVU4wlfUgmhKCYinSiflgkc3RlAOyV1H9ZANsXVId8FeFA
-        exneuHH1AhYVHgl6gwh8qrs/mUhI73Zafp7t8pwsDg==
-X-Google-Smtp-Source: ABdhPJxiKEYutNObsmIBYphNH4Rjrm9h5SZbvVD0vbhM3XAclfw4B+ryQw8//QlKHbH2sO6uKDOQuVwPIVH3OMEUjA0=
-X-Received: by 2002:a63:d501:: with SMTP id c1mr631501pgg.159.1593206542565;
- Fri, 26 Jun 2020 14:22:22 -0700 (PDT)
+        bh=CvJoXjPb3PppSXrTvZvJe33y7yc/YsOEYDjM/f5h460=;
+        b=CPep8ui41aD6SXtDEFMHuxT59PE3JmJMHW7nY4n4083LFTe3Wt4AJGr2D0BEHGQaSP
+         0B2FkF/V0dG+XGnp9s0DQFxOBA/IX1TkcTHvukooLI5jh1NqnwdxqvqFWcfjs2tsQQA+
+         /wXrNnlsSXkwSMFo4hPLWuKv8DsbCVlYdcX7sUOLFRVy+8P1dC/8IGKHWXNGYWGwEFFE
+         3wtNGjOOuyHrPJzBTAEqEDHPbE9rNWCIW7nzamh6VQs8b4krLtiHcJHUn9orqSD0vN1L
+         +CgnedRMMNYCoQLZvLSs4MhqVmU8gFqbVD59H0TI6cJW/cjCjul4+T1bt7yw8f1rCSLJ
+         rqAA==
+X-Gm-Message-State: AOAM53285N5H6PWd4Cf2IWy0n7NcoQ/fu2ff3oN/5vUfsMLflDhr+SZt
+        /XKeQofOxLtwp+57dkQ5IsxyOJHS8HHKT8uanmKkfw==
+X-Google-Smtp-Source: ABdhPJwAirQYhcHGLt1+JjXg5NVX+m/8Nr12fmbDVwUgoHtdJsK/GnGlRIvrgvOirMw8ViXfV6UFbIIy77mdcmwl2RU=
+X-Received: by 2002:a17:90a:6ac8:: with SMTP id b8mr5607777pjm.217.1593206591785;
+ Fri, 26 Jun 2020 14:23:11 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200626210917.358969-1-brendanhiggins@google.com>
- <20200626210917.358969-2-brendanhiggins@google.com> <202006261416.F4EAAE47E3@keescook>
-In-Reply-To: <202006261416.F4EAAE47E3@keescook>
+ <20200626210917.358969-3-brendanhiggins@google.com> <202006261420.02E8E62@keescook>
+In-Reply-To: <202006261420.02E8E62@keescook>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 26 Jun 2020 14:22:11 -0700
-Message-ID: <CAFd5g47vu5vmrXnS0sLu+hdC2HmYz7GY82sE8rhcHfNkuC1NRw@mail.gmail.com>
-Subject: Re: [PATCH v5 01/12] vmlinux.lds.h: add linker section for KUnit test suites
+Date:   Fri, 26 Jun 2020 14:23:00 -0700
+Message-ID: <CAFd5g47ZKJHzseyZT73uYB+EpAkyfN+gBj5X8ufZVnD6eG19eQ@mail.gmail.com>
+Subject: Re: [PATCH v5 02/12] arch: arm64: add linker section for KUnit test suites
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
@@ -86,57 +86,39 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Fri, Jun 26, 2020 at 2:20 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> On Fri, Jun 26, 2020 at 02:09:06PM -0700, Brendan Higgins wrote:
-> > Add a linker section where KUnit can put references to its test suites.
-> > This patch is the first step in transitioning to dispatching all KUnit
-> > tests from a centralized executor rather than having each as its own
-> > separate late_initcall.
+> On Fri, Jun 26, 2020 at 02:09:07PM -0700, Brendan Higgins wrote:
+> > Add a linker section to arm64 where KUnit can put references to its test
+> > suites. This patch is an early step in transitioning to dispatching all
+> > KUnit tests from a centralized executor rather than having each as its
+> > own separate late_initcall.
 > >
-> > Co-developed-by: Iurii Zaikin <yzaikin@google.com>
-> > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
 > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 > > ---
-> >  include/asm-generic/vmlinux.lds.h | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
+> >  arch/arm64/kernel/vmlinux.lds.S | 3 +++
+> >  1 file changed, 3 insertions(+)
 > >
-> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> > index db600ef218d7d..4f9b036fc9616 100644
-> > --- a/include/asm-generic/vmlinux.lds.h
-> > +++ b/include/asm-generic/vmlinux.lds.h
-> > @@ -881,6 +881,13 @@
-> >               KEEP(*(.con_initcall.init))                             \
-> >               __con_initcall_end = .;
-> >
-> > +/* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
->
-> Nit on naming:
->
-> > +#define KUNIT_TEST_SUITES                                            \
->
-> I would call this KUNIT_TABLE to maintain the same names as other things
-> of this nature.
->
-> > +             . = ALIGN(8);                                           \
-> > +             __kunit_suites_start = .;                               \
-> > +             KEEP(*(.kunit_test_suites))                             \
-> > +             __kunit_suites_end = .;
-> > +
-> >  #ifdef CONFIG_BLK_DEV_INITRD
-> >  #define INIT_RAM_FS                                                  \
-> >       . = ALIGN(4);                                                   \
-> > @@ -1056,6 +1063,7 @@
-> >               INIT_CALLS                                              \
-> >               CON_INITCALL                                            \
-> >               INIT_RAM_FS                                             \
-> > +             KUNIT_TEST_SUITES                                       \
+> > diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+> > index 6827da7f3aa54..a1cae9cc655d7 100644
+> > --- a/arch/arm64/kernel/vmlinux.lds.S
+> > +++ b/arch/arm64/kernel/vmlinux.lds.S
+> > @@ -181,6 +181,9 @@ SECTIONS
+> >               INIT_RAM_FS
+> >               *(.init.rodata.* .init.bss)     /* from the EFI stub */
 > >       }
+> > +     .kunit_test_suites : {
+> > +             KUNIT_TEST_SUITES
+> > +     }
 >
-> Nack: this must be in INIT_DATA, not in INIT_DATA_SECTION. Not all
-> architectures use the INIT_DATA_SECTION macro (e.g. arm64), but everything
-> uses INIT_DATA.
+> See my reply to 01/12. Then this patch can be dropped. :)
 
-Oh, maybe that would eliminate the need for the other linkerscript
-patches? That would be nice.
+Sweet, presumably this one and others.
 
-Alright, will fix.
+> >       .exit.data : {
+> >               EXIT_DATA
+> >       }
+> > --
+> > 2.27.0.212.ge8ba1cc988-goog
+> >
+>
+> --
+> Kees Cook
