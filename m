@@ -2,67 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD9220B05D
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jun 2020 13:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B5520B05F
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jun 2020 13:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728411AbgFZLXX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Jun 2020 07:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S1728443AbgFZLX3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Jun 2020 07:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728381AbgFZLXX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Jun 2020 07:23:23 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDC1C08C5C1;
-        Fri, 26 Jun 2020 04:23:22 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id e22so6612381edq.8;
-        Fri, 26 Jun 2020 04:23:22 -0700 (PDT)
+        with ESMTP id S1728381AbgFZLX3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Jun 2020 07:23:29 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB5FC08C5C1;
+        Fri, 26 Jun 2020 04:23:28 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id h28so6649067edz.0;
+        Fri, 26 Jun 2020 04:23:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=cc:subject:to:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ciuqSgZ+hL4nxKfgJGE3cydIVaJ+VlAia/yWCHAu2R8=;
-        b=HKz7KDJKvpBJUZNR7HJ12j3IV5wF7mCDe1q9GBCbbMrSHw0qMCnHT+0jUBlOC3s+5+
-         sSD7RAJ8W68m1hgJZMu3zvaUptd0/t3/Y9tPBCc0A8ewzcOs9wfsso4cpDi8F7Ylwxju
-         V8awRxmuhgDdzAEM4OJoFh/du5SIYl8sX/rXBfKWDGTJX7+ZOxVXFILLaBsVuE/wDroq
-         Tei/SFCZyz78a6VrHVJzihJOOGUkECg4uuP1pEOZb5o97KV6yt66dn3iGNP1359KLe61
-         ywd8tf9m746HgDvJ4LPeftf5jS1yOdqALoPT587QXPpTmat073GgNTta7B4A+T8Mzo82
-         DOPw==
+        bh=n+tht2DGNjBrmARE6GPyjVkkvtq8Xj+55csOpCDEf8A=;
+        b=teoMQEZx/+IkQWYbD58QpSoZ2D+BL0cSKEu3XLbKu1cYdeUStLfNlJFeOiJHIpFLGz
+         On0fODc1R/LIL8kNNkVVGTjI8wwrWFqGJ/nZHZ686KFpR0nIlBcpIGP5hcC8nh1CPsa2
+         fd2tnIbLJqhqwrgTbER2pnyhneRgtHGY48h7VN6yAA6l5Dljt+tUP/EYhknVYz0AZPE5
+         IbFAsYRi5AaWR6VyjBQCDljiVm6vEyozIjgAe6kZC5O59c8nKinUepu2tB38nnlEeqyg
+         QufFVB0i2vKAqQuXx/AWHnloGVd2o6qm/5R1pxoN29+9JgOSvtEfRK7qJPHYO9J3QDYq
+         KQmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:cc:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ciuqSgZ+hL4nxKfgJGE3cydIVaJ+VlAia/yWCHAu2R8=;
-        b=Sggi6zTbTwUTjIYDhGJQ7/4n5RgXLXdocZAoeqn8yqzmF4nrXtSMIkzvMLKrECsUPI
-         LkrL13Bu85T6OOUN/JHpozfIrB/m4TkANwRUieRU9pz8hGW0gnQ5H7QWvdPdX5RJXUw+
-         DDvK0te8F3SlnztJkkY4W6BILlKXje4DUkHIa2EVqXTFC08JYCnXKhsnvJfRjhiSlBbj
-         C4UEFCo2eSYsha8iQMk7uP/t9eJi9l44OSG0uPcmpoTaOIFu2IgoMEU0XJaR5+50WDy5
-         m88oPbAmBOh5PGrtlIX2FMNvHMmKF9SgRDeusNxSUsuOmSxqi1ZVcEeZs2LUqJM8xMc5
-         LdVA==
-X-Gm-Message-State: AOAM530rvs6xGLpvoFCamusSZffSH3i3hbetmUfnDCAcZPPB4HJCORNk
-        0qO/fzVaKNRqumqcZzNzn2/1H0Ux
-X-Google-Smtp-Source: ABdhPJxM4aYtV222LfN/yYYIlLsKB0i+RMisOAzvfChq7nZUqG10TGG5vQkPYxyn5d70HUSSuJ65Hg==
-X-Received: by 2002:a50:afe1:: with SMTP id h88mr2772659edd.295.1593170599549;
-        Fri, 26 Jun 2020 04:23:19 -0700 (PDT)
+        bh=n+tht2DGNjBrmARE6GPyjVkkvtq8Xj+55csOpCDEf8A=;
+        b=Hvlrr4D4+yKGfcEVhLs5Mfbei2ePy3DVCE35bAZ6R2WFbFxMP/+wb+GImCJ3c+KCZw
+         WBTT5xiclafIiww3JFwnEkqAUAaEJQ3fS4CPV4T/qI/sxBDgqMCG3h/cSYAviumkoP8b
+         LTxPgsgf2y/GTMeB3Z2vqLMpQwRJ099wphF3JHMEG77Eq7avLRakeny217HcSXXp9Gqf
+         m0XFteqttNnuMGPONuJocp2HiL1r99+SxhaaykXplkOiV7q0M7OQJR3Fc+tguqcQlwex
+         1k7Vy9fOWXJ948GGrnu1n0XUpTY4SpylUFFK1owrLVDbRykd3Qc7MipCP3ZRRyVHvdyb
+         NE4Q==
+X-Gm-Message-State: AOAM533Ud+2Hym7kaILnFCMK7Kqz6DmRkTZnUUy3f3QQq9M/C8bCNdIf
+        i6jSYnuf6pZSYsSinh7J2OQ=
+X-Google-Smtp-Source: ABdhPJxiYLI2/4TKg5gS1zTkmkQjcYL3InoAu3asWDGa93+g2osyJGPfwfgHVBN1u5JHQCkoqCWMuw==
+X-Received: by 2002:a50:cf05:: with SMTP id c5mr2955330edk.232.1593170607485;
+        Fri, 26 Jun 2020 04:23:27 -0700 (PDT)
 Received: from ?IPv6:2001:a61:253c:8201:b2fb:3ef8:ca:1604? ([2001:a61:253c:8201:b2fb:3ef8:ca:1604])
-        by smtp.gmail.com with ESMTPSA id v24sm2834322ejo.72.2020.06.26.04.23.18
+        by smtp.gmail.com with ESMTPSA id r6sm20942428edx.83.2020.06.26.04.23.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jun 2020 04:23:18 -0700 (PDT)
+        Fri, 26 Jun 2020 04:23:27 -0700 (PDT)
 Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 1/2] prctl.2: Add SVE prctls (arm64)
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: Re: [PATCH v3 2/2] prctl.2: Add tagged address ABI control prctls
+ (arm64)
 To:     Dave Martin <Dave.Martin@arm.com>
 References: <1593020162-9365-1-git-send-email-Dave.Martin@arm.com>
- <1593020162-9365-2-git-send-email-Dave.Martin@arm.com>
+ <1593020162-9365-3-git-send-email-Dave.Martin@arm.com>
 From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <d4514e68-c6c1-e4b4-6d3c-4118c5285534@gmail.com>
-Date:   Fri, 26 Jun 2020 13:23:18 +0200
+Message-ID: <660e8900-ca23-d022-79bd-3b16c70d36d2@gmail.com>
+Date:   Fri, 26 Jun 2020 13:23:26 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <1593020162-9365-2-git-send-email-Dave.Martin@arm.com>
+In-Reply-To: <1593020162-9365-3-git-send-email-Dave.Martin@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -74,232 +74,226 @@ X-Mailing-List: linux-arch@vger.kernel.org
 Hi Dave,
 
 On 6/24/20 7:36 PM, Dave Martin wrote:
-> Add documentation for the the PR_SVE_SET_VL and PR_SVE_GET_VL
-> prctls added in Linux 4.15 for arm64.
+> Add documentation for the the PR_SET_TAGGED_ADDR_CTRL and
+> PR_GET_TAGGED_ADDR_CTRL prctls added in Linux 5.4 for arm64.
 > 
 > Signed-off-by: Dave Martin <Dave.Martin@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> 
-> ---
-> 
-> Since v2:
-> 
->  * Clarify that the arg2 enumeration for PR_SVE_SET_VL applies to the
->    bith _other than_ the PR_SVE_VL_LEN_MASK bits, rather than to all the
->    bits.
-> 
->  * Clarify return value semantics for PR_SVE_SET_VL, to highlight that
->    there is no PR_SVE_SET_VL_ONEXEC in the return value and refer to
->    PR_SVE_GET_VL for the rest of the definition.  Also clarify when the
->    vector length given in the return value actually takes effect.
-> 
->  * Reorder some documentation cross-references to avoid ambiguity about
->    what they apply to.
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-Nicely written patch! I've applied locally, but won't push just yet, to
-allow for some reviews/acks to come in.
+Thanks for another nicely written patch! I've applied locally, 
+but won't push just yet, to allow for some (more) reviews/acks
+to come in.
 
 Thanks,
 
 Michael
 
-
 > ---
->  man2/prctl.2 | 170 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 170 insertions(+)
+> 
+> Kept Catalin's Reviewed-by, since the changes are pretty minor.
+> 
+> Changes since v2:
+> 
+>  * Clarified type of PR_SET_TAGGED_ADDR_CTRL arg2.
+> 
+>  * Added Linux commit where enforecement of zeroing reserved args was
+>    added for PR_SET_TAGGED_ADDR_CTRL.
+> 
+>  * Added explicit text regarding how to disable the tagged-address ABI
+>    globally through sysctl.
+> 
+>  * Rearrange the tagged argument syscall exclusion list so that shmdt()
+>    isn't called out specially.  The reader probably doesn't care about
+>    this history here.
+> 
+>  * Minor rewordings.
+> ---
+>  man2/prctl.2 | 161 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 161 insertions(+)
 > 
 > diff --git a/man2/prctl.2 b/man2/prctl.2
-> index 88b791b..46ea9d2 100644
+> index 46ea9d2..cf92f3b 100644
 > --- a/man2/prctl.2
 > +++ b/man2/prctl.2
-> @@ -1370,6 +1370,158 @@ call failing with the error
->  .BR ENXIO .
->  For further details, see the kernel source file
->  .IR Documentation/admin\-guide/kernel\-parameters.txt .
-> +.\" prctl PR_SVE_SET_VL
-> +.\" commit 2d2123bc7c7f843aa9db87720de159a049839862
-> +.\" linux-5.6/Documentation/arm64/sve.rst
+> @@ -1522,6 +1522,148 @@ For more information, see the kernel source file
+>  (or
+>  .I Documentation/arm64/sve.txt
+>  before Linux 5.3).
+> +.\" prctl PR_SET_TAGGED_ADDR_CTRL
+> +.\" commit 63f0c60379650d82250f22e4cf4137ef3dc4f43d
 > +.TP
-> +.BR PR_SVE_SET_VL " (since Linux 4.15, only on arm64)"
-> +Configure the thread's SVE vector length,
-> +as specified by
-> +.IR "(int) arg2" .
-> +Arguments
-> +.IR arg3 ", " arg4 " and " arg5
-> +are ignored.
+> +.BR PR_SET_TAGGED_ADDR_CTRL " (since Linux 5.4, only on arm64)"
+> +Controls support for passing tagged userspace addresses to the kernel
+> +(i.e., addresses where bits 56\(em63 are not all zero).
 > +.IP
-> +The bits of
-> +.I arg2
-> +corresponding to
-> +.B PR_SVE_VL_LEN_MASK
-> +must be set to the desired vector length in bytes.
-> +This is interpreted as an upper bound:
-> +the kernel will select the greatest available vector length
-> +that does not exceed the value specified.
-> +In particular, specifying
-> +.B SVE_VL_MAX
-> +(defined in
-> +.I <asm/sigcontext.h>)
-> +for the
-> +.B PR_SVE_VL_LEN_MASK
-> +bits requests the maximum supported vector length.
-> +.IP
-> +In addition, the other bits of
-> +.I arg2
-> +must be set to one of the following combinations of flags:
+> +The level of support is selected by
+> +.IR "arg2" ,
+> +which can be one of the following:
 > +.RS
 > +.TP
 > +.B 0
-> +Perform the change immediately.
-> +At the next
-> +.BR execve (2)
-> +in the thread,
-> +the vector length will be reset to the value configured in
-> +.IR /proc/sys/abi/sve_default_vector_length .
+> +Addresses that are passed
+> +for the purpose of being dereferenced by the kernel
+> +must be untagged.
 > +.TP
-> +.B PR_SVE_VL_INHERIT
-> +Perform the change immediately.
-> +Subsequent
-> +.BR execve (2)
-> +calls will preserve the new vector length.
-> +.TP
-> +.B PR_SVE_SET_VL_ONEXEC
-> +Defer the change, so that it is performed at the next
-> +.BR execve (2)
-> +in the thread.
-> +Further
-> +.BR execve (2)
-> +calls will reset the vector length to the value configured in
-> +.IR /proc/sys/abi/sve_default_vector_length .
-> +.TP
-> +.B "PR_SVE_SET_VL_ONEXEC | PR_SVE_VL_INHERIT"
-> +Defer the change, so that it is performed at the next
-> +.BR execve (2)
-> +in the thread.
-> +Further
-> +.BR execve (2)
-> +calls will preserve the new vector length.
+> +.B PR_TAGGED_ADDR_ENABLE
+> +Addresses that are passed
+> +for the purpose of being dereferenced by the kernel
+> +may be tagged, with the exceptions summarized below.
 > +.RE
 > +.IP
-> +In all cases,
-> +any previously pending deferred change is canceled.
+> +The remaining arguments
+> +.IR arg3 ", " arg4 " and " arg5
+> +must all be zero.
+> +.\" Enforcement added in
+> +.\" commit 3e91ec89f527b9870fe42dcbdb74fd389d123a95
 > +.IP
-> +The call fails with error
+> +On success, the mode specified in
+> +.I arg2
+> +is set for the calling thread and the the return value is 0.
+> +If the arguments are invalid,
+> +the mode specified in
+> +.I arg2
+> +is unrecognized,
+> +or if this feature is unsupported by the kernel
+> +or disabled via
+> +.IR /proc/sys/abi/tagged_addr_disabled ,
+> +the call fails with
+> +.BR EINVAL .
+> +.IP
+> +In particular, if
+> +.BR prctl ( PR_SET_TAGGED_ADDR_CTRL ,
+> +0, 0, 0, 0)
+> +fails with
 > +.B EINVAL
-> +if SVE is not supported on the platform, if
-> +.I arg2
-> +is unrecognized or invalid, or the value in the bits of
-> +.I arg2
-> +corresponding to
-> +.B PR_SVE_VL_LEN_MASK
-> +is outside the range
-> +.BR SVE_VL_MIN .. SVE_VL_MAX
-> +or is not a multiple of 16.
+> +then all addresses passed to the kernel must be untagged.
 > +.IP
-> +On success,
-> +a nonnegative value is returned that describes the
-> +.I selected
-> +configuration.
-> +If
-> +.B PR_SVE_SET_VL_ONEXEC
-> +was included in
-> +.IR arg2 ,
-> +then the configuration described by the return value
-> +will take effect at the next
-> +.BR execve ().
-> +Otherwise, the configuration is already in effect when the
-> +.B PR_SVE_SET_VL
-> +call returns.
-> +In either case, the value is encoded in the same way as the return value of
-> +.BR PR_SVE_GET_VL .
-> +Note that there is no explicit flag in the return value
-> +corresponding to
-> +.BR PR_SVE_SET_VL_ONEXEC .
+> +Irrespective of which mode is set,
+> +addresses passed to certain interfaces
+> +must always be untagged:
+> +.RS
+> +.IP \(em
+> +.BR brk (2),
+> +.BR mmap (2),
+> +.BR shmat (2),
+> +.BR shmdt (2),
+> +and the
+> +.I new_address
+> +argument of
+> +.BR mremap (2).
 > +.IP
-> +The configuration (including any pending deferred change)
-> +is inherited across
+> +(Prior to Linux 5.6 these accepted tagged addresses,
+> +but the behaviour may not be what you expect.
+> +Don't rely on it.)
+> +.IP \(em
+> +\(oqpolymorphic\(cq interfaces
+> +that accept pointers to arbitrary types cast to a
+> +.I void *
+> +or other generic type, specifically
+> +.BR prctl (2),
+> +.BR ioctl (2),
+> +and in general
+> +.BR setsockopt (2)
+> +(only certain specific
+> +.BR setsockopt (2)
+> +options allow tagged addresses).
+> +.RE
+> +.IP
+> +This list of exclusions may shrink
+> +when moving from one kernel version to a later kernel version.
+> +While the kernel may make some guarantees
+> +for backwards compatibility reasons,
+> +for the purposes of new software
+> +the effect of passing tagged addresses to these interfaces
+> +is unspecified.
+> +.IP
+> +The mode set by this call is inherited across
 > +.BR fork (2)
 > +and
 > +.BR clone (2).
+> +The mode is reset by
+> +.BR execve (2)
+> +to 0
+> +(i.e., tagged addresses not permitted in the user/kernel ABI).
 > +.IP
 > +For more information, see the kernel source file
-> +.I Documentation/arm64/sve.rst
-> +.\"commit b693d0b372afb39432e1c49ad7b3454855bc6bed
-> +(or
-> +.I Documentation/arm64/sve.txt
-> +before Linux 5.3).
+> +.IR Documentation/arm64/tagged\-address\-abi.rst .
 > +.IP
 > +.B Warning:
-> +Because the compiler or run-time environment
-> +may be using SVE, using this call without the
-> +.B PR_SVE_SET_VL_ONEXEC
-> +flag may crash the calling process.
-> +The conditions for using it safely are complex and system-dependent.
-> +Don't use it unless you really know what you are doing.
-> +.\" prctl PR_SVE_GET_VL
+> +This call is primarily intended for use by the run-time environment.
+> +A successful
+> +.B PR_SET_TAGGED_ADDR_CTRL
+> +call elsewhere may crash the calling process.
+> +The conditions for using it safely are complex and system-dependent;
+> +Don't use it unless you know what you are doing.
+> +.\" prctl PR_GET_TAGGED_ADDR_CTRL
+> +.\" commit 63f0c60379650d82250f22e4cf4137ef3dc4f43d
 > +.TP
-> +.BR PR_SVE_GET_VL " (since Linux 4.15, only on arm64)"
-> +Get the thread's current SVE vector length configuration.
+> +.BR PR_GET_TAGGED_ADDR_CTRL " (since Linux 5.4, only on arm64)"
+> +Returns the current tagged address mode
+> +for the calling thread.
 > +.IP
 > +Arguments
 > +.IR arg2 ", " arg3 ", " arg4 " and " arg5
-> +are ignored.
+> +must all be zero.
 > +.IP
-> +Providing that the kernel and platform support SVE
-> +this operation always succeeds,
-> +returning a nonnegative value that describes the
-> +.I current
-> +configuration.
-> +The bits corresponding to
-> +.B PR_SVE_VL_LEN_MASK
-> +contain the currently configured vector length in bytes.
-> +The bit corresponding to
-> +.B PR_SVE_VL_INHERIT
-> +indicates whether the vector length will be inherited
-> +across
-> +.BR execve (2).
+> +If the arguments are invalid
+> +or this feature is disabled or unsupported by the kernel,
+> +the call fails with
+> +.BR EINVAL .
+> +In particular, if
+> +.BR prctl ( PR_GET_TAGGED_ADDR_CTRL ,
+> +0, 0, 0, 0)
+> +fails with
+> +.BR EINVAL ,
+> +then this feature is definitely either unsupported,
+> +or disabled via
+> +.IR /proc/sys/abi/tagged_addr_disabled .
+> +In this case,
+> +all addresses passed to the kernel must be untagged.
 > +.IP
-> +Note that there is no way to determine whether there is
-> +a pending vector length change that has not yet taken effect.
+> +Otherwise, the call returns a nonnegative value
+> +describing the current tagged address mode,
+> +encoded in the same way as the
+> +.I arg2
+> +argument of
+> +.BR PR_SET_TAGGED_ADDR_CTRL .
 > +.IP
 > +For more information, see the kernel source file
-> +.I Documentation/arm64/sve.rst
-> +.\"commit b693d0b372afb39432e1c49ad7b3454855bc6bed
-> +(or
-> +.I Documentation/arm64/sve.txt
-> +before Linux 5.3).
+> +.IR Documentation/arm64/tagged\-address\-abi.rst .
 >  .\"
 >  .\" prctl PR_TASK_PERF_EVENTS_DISABLE
 >  .TP
-> @@ -1613,6 +1765,8 @@ On success,
->  .BR PR_GET_NO_NEW_PRIVS ,
->  .BR PR_GET_SECUREBITS ,
+> @@ -1767,6 +1909,7 @@ On success,
 >  .BR PR_GET_SPECULATION_CTRL ,
-> +.BR PR_SVE_GET_VL ,
-> +.BR PR_SVE_SET_VL ,
+>  .BR PR_SVE_GET_VL ,
+>  .BR PR_SVE_SET_VL ,
+> +.BR PR_GET_TAGGED_ADDR_CTRL ,
 >  .BR PR_GET_THP_DISABLE ,
 >  .BR PR_GET_TIMING ,
 >  .BR PR_GET_TIMERSLACK ,
-> @@ -1904,6 +2058,22 @@ See the description of
->  .B PR_PAC_RESET_KEYS
->  above for details.
+> @@ -2074,6 +2217,24 @@ is
+>  .B PR_SVE_GET_VL
+>  and SVE is not available on this platform.
 >  .TP
 > +.B EINVAL
 > +.I option
 > +is
-> +.B PR_SVE_SET_VL
-> +and the arguments are invalid or unsupported,
-> +or SVE is not available on this platform.
+> +.BR PR_SET_TAGGED_ADDR_CTRL
+> +and the arguments are invalid or unsupported.
 > +See the description of
-> +.B PR_SVE_SET_VL
+> +.B PR_SET_TAGGED_ADDR_CTRL
 > +above for details.
 > +.TP
 > +.B EINVAL
 > +.I option
 > +is
-> +.B PR_SVE_GET_VL
-> +and SVE is not available on this platform.
+> +.BR PR_GET_TAGGED_ADDR_CTRL
+> +and the arguments are invalid or unsupported.
+> +See the description of
+> +.B PR_GET_TAGGED_ADDR_CTRL
+> +above for details.
 > +.TP
 >  .B ENODEV
 >  .I option
