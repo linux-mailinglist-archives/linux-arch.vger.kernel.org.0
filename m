@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BDF20BBA3
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jun 2020 23:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BEC20BBA9
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jun 2020 23:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725866AbgFZVdE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Jun 2020 17:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
+        id S1725838AbgFZVfq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Jun 2020 17:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725836AbgFZVdC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Jun 2020 17:33:02 -0400
+        with ESMTP id S1725793AbgFZVfp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Jun 2020 17:35:45 -0400
 Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEF2C03E979
-        for <linux-arch@vger.kernel.org>; Fri, 26 Jun 2020 14:33:02 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id w2so4686395pgg.10
-        for <linux-arch@vger.kernel.org>; Fri, 26 Jun 2020 14:33:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1A3C03E97A
+        for <linux-arch@vger.kernel.org>; Fri, 26 Jun 2020 14:35:45 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id d4so5497357pgk.4
+        for <linux-arch@vger.kernel.org>; Fri, 26 Jun 2020 14:35:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=isGI70+czOYX8LYvRhZpcPAvKyFNKEPZ2af3yPbAFwI=;
-        b=LiYJGYFoXJP9NdTWRWQnsw8sojKk2XNyauPgbVrUQ4KV6YX9RKsid/d8JtVlvnpxBa
-         kZjOaTyiQ7C5PlTOVs3B8l8qGn6OcJon3YnViItkxbqWEA1SEy38nFZN308uIc2d/U0P
-         UcJCd+T2lawIni5nxisTS95QZKtBi43/FYsys=
+        bh=DqOaaV58EjOIY1VepCG+GQtVeu6B1YTzNiLFMCCxxtU=;
+        b=YEN4h/JS6rsbM2TA8UohIHdNyG9IbIr7SJGjr/bFVHhrG/Xom9uuW4VVJlxpjCalyc
+         VzYDhmbP8IO2Aln4UuRyuqd6Tgy9Qku2VWWKJ3oZdsqEk7RJQDbYUlIcQKhd+fpKbBRk
+         cijP8DnapIIWZQIeC0Y6ZFYLszmtMLfDZQXr0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=isGI70+czOYX8LYvRhZpcPAvKyFNKEPZ2af3yPbAFwI=;
-        b=nfc9Jiu26cGzA6QEMNbZArRUhfE7fUZWMlVb8ZvWohd8WItMtNrcub60ZvaNPD0yIc
-         Mhe26ZNjX821IhmeYKJQ70j3z/E9nzQbE1SiCjJy8vBAyO+VPuJHlTtuqjTEyouYSjpT
-         SzgObEqlJNgpAF9I915PigFTvABwXev6l9q1NZJ4d7WQW6KhHxVIBniqnUUAznlPPSbJ
-         JREa5WCbK4Abb8UNwSSZw9awsjWTyOW9gIykD7IQIiRwhEhstP6wOE8OE5e/PBz5toQY
-         1Rmbv6j0fNfEA82I4jpGfhyEfEQBY+2o4s1oOlhyJQ8OHEWAc73mZLeKSr7toDBQ49/e
-         Ke8A==
-X-Gm-Message-State: AOAM533n1T20cdd2Umy4/t+zEm/CcWtk1m933kixW/M3baEIprdwuRZz
-        j+di2XrhKLmQP2cncwRsvX83YA==
-X-Google-Smtp-Source: ABdhPJxK5PIGVit9dOqCU8WR/AxLS9sbmSmKWgE1WwIbdSsDXubZymhiuhL1Ke1iv631E7AwjZS6EA==
-X-Received: by 2002:a63:417:: with SMTP id 23mr663893pge.44.1593207181950;
-        Fri, 26 Jun 2020 14:33:01 -0700 (PDT)
+        bh=DqOaaV58EjOIY1VepCG+GQtVeu6B1YTzNiLFMCCxxtU=;
+        b=RGc+OIqHOP/cvnesPWlGS9T6oD0sQXdtP9SEtkCmmbBvTUSNS7A/QUPTmH3aqC+WIq
+         /2eNfrHWp+DpLtnT7y6+6FKp0Kzm98ghnNGtVEQabBpioo+LXKscekxCYlcZvrktTHio
+         CwVnL7VA/0ltF0C0hE+LEpvlJPoHz3A/kM6tudbXEkfhPtr07wuJQCcAauqfeUbW0d1Q
+         EBhO5d67k96gKTc/VAKQNSCMxn3Ym0rzIeQ5Aohs8r4i886Qda3Hig2UZK4PQDjzIHUs
+         WtB1pO1mZQnr7H/78XlFVPm5raPmLatmE4kvhiuVXsPJOK5y6Wj44MGubicAl9eoZFMO
+         O3kA==
+X-Gm-Message-State: AOAM531CeEPDbL+oEMowjKPV7KgmPLK201c3B3bWRHPRaw2tPNl2PP3Q
+        CmdyRMR3v4kcLlvWeQUohffh9Q==
+X-Google-Smtp-Source: ABdhPJzxc7cz1MJJ6rNuO5CPPtEcoMO4+f1C1i4DCl9wrVYJnO0GAsRDswfDPhhwjkUn/N4AdYEJaA==
+X-Received: by 2002:a63:371c:: with SMTP id e28mr692197pga.114.1593207345125;
+        Fri, 26 Jun 2020 14:35:45 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p19sm26713683pff.116.2020.06.26.14.33.00
+        by smtp.gmail.com with ESMTPSA id w135sm7739381pfc.106.2020.06.26.14.35.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 14:33:01 -0700 (PDT)
-Date:   Fri, 26 Jun 2020 14:33:00 -0700
+        Fri, 26 Jun 2020 14:35:43 -0700 (PDT)
+Date:   Fri, 26 Jun 2020 14:35:43 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Brendan Higgins <brendanhiggins@google.com>
 Cc:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
@@ -60,29 +60,61 @@ Cc:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v5 08/12] init: main: add KUnit to kernel init
-Message-ID: <202006261431.BB35444FB6@keescook>
+Subject: Re: [PATCH v5 09/12] kunit: test: add test plan to KUnit TAP format
+Message-ID: <202006261434.119AE33DBB@keescook>
 References: <20200626210917.358969-1-brendanhiggins@google.com>
- <20200626210917.358969-9-brendanhiggins@google.com>
+ <20200626210917.358969-10-brendanhiggins@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200626210917.358969-9-brendanhiggins@google.com>
+In-Reply-To: <20200626210917.358969-10-brendanhiggins@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 02:09:13PM -0700, Brendan Higgins wrote:
-> Remove KUnit from init calls entirely, instead call directly from
-> kernel_init().
+On Fri, Jun 26, 2020 at 02:09:14PM -0700, Brendan Higgins wrote:
+> TAP 14 allows an optional test plan to be emitted before the start of
+> the start of testing[1]; this is valuable because it makes it possible
+> for a test harness to detect whether the number of tests run matches the
+> number of tests expected to be run, ensuring that no tests silently
+> failed.
 > 
-> Co-developed-by: Alan Maguire <alan.maguire@oracle.com>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Link[1]: https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14-specification.md#the-plan
 > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Look good, except...
+
+> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-all_passed.log b/tools/testing/kunit/test_data/test_is_test_passed-all_passed.log
+> index 62ebc0288355c4b122ccc18ae2505f971efa57bc..bc0dc8fe35b760b1feb74ec419818dbfae1adb5c 100644
+> GIT binary patch
+> delta 28
+> jcmbQmGoME|#4$jjEVZaOGe1wk(1goSPtRy09}gP<dC~`u
+> 
+> delta 23
+> ecmbQwGmD2W#4$jjEVZaOGe1wk&}5@94;uhhkp{*9
+> 
+> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-crash.log b/tools/testing/kunit/test_data/test_is_test_passed-crash.log
+> index 0b249870c8be417a5865bd40a24c8597bb7f5ab1..4d97f6708c4a5ad5bb2ac879e12afca6e816d83d 100644
+> GIT binary patch
+> delta 15
+> WcmX>hepY;fFN>j`p3z318g2k9Uj*m?
+> 
+> delta 10
+> RcmX>renNbL@5Z2NZU7lr1S$Xk
+> 
+> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-failure.log b/tools/testing/kunit/test_data/test_is_test_passed-failure.log
+> index 9e89d32d5667a59d137f8adacf3a88fdb7f88baf..7a416497e3bec044eefc1535f7d84ee85703ba97 100644
+> GIT binary patch
+> delta 28
+> jcmZ3&yOLKp#4$jjEVZaOGe1wk(1goSPtRy0-!wJ=eKrU$
+> 
+> delta 23
+> ecmZ3<yM&i7#4$jjEVZaOGe1wk&}5_VG&TTPhX-Z=
+
+What is happening here?? Those logs appear as text to me. Why did git
+freak out?
 
 -- 
 Kees Cook
