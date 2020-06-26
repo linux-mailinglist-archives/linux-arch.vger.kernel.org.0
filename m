@@ -2,140 +2,254 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AEA20B0C2
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jun 2020 13:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B5D20B40A
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jun 2020 16:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726916AbgFZLnX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Jun 2020 07:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725836AbgFZLnW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Jun 2020 07:43:22 -0400
-Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D4AC08C5C1;
-        Fri, 26 Jun 2020 04:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dY6UukHlcZ+e82YPYVTQRIm6jOfXAELNJfA0ddnH3+0=; b=HW7pMPohMNzcNWBrOKQR8629sZ
-        nWVaNWWPYIkUbTocP1X7DaVMrLJyG+42HOb3gYa31ahAN0A9SDdMsxfvrhpa2NhQm82vYxw9YspeO
-        1M5y3dWrFnrmgzCjiVs8YhefAkoxs/xTmpxvoQ3Nbpz8Q+In7EI/KlCNxjmjP5rgTbfm6eBTBeF76
-        vizq1+U5H2tltHhneBCOdiW/U+nLYPmp4Zav8pPi8++UvCfn9aFu2mm4se8UZowRKHXBhSuBX1exq
-        mHY2ns73zDMjIkR2nTGxS88dg/TS6tMHFLQutMWIVA9O+RXcOX0QKMAQPFwX25yccxW0i76etxb+g
-        WXnTya+A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jomkW-0001Sj-F5; Fri, 26 Jun 2020 11:42:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        id S1726466AbgFZOyr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Jun 2020 10:54:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50250 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726139AbgFZOyr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 26 Jun 2020 10:54:47 -0400
+Received: from gaia (unknown [2.26.170.173])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BFB7D301DFC;
-        Fri, 26 Jun 2020 13:42:26 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B3EF429CC71EB; Fri, 26 Jun 2020 13:42:26 +0200 (CEST)
-Date:   Fri, 26 Jun 2020 13:42:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        mhelsley@vmware.com
-Subject: Re: [RFC][PATCH] objtool,x86_64: Replace recordmcount with objtool
-Message-ID: <20200626114226.GH4817@hirez.programming.kicks-ass.net>
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <20200624203200.78870-5-samitolvanen@google.com>
- <20200624212737.GV4817@hirez.programming.kicks-ass.net>
- <20200624214530.GA120457@google.com>
- <20200625074530.GW4817@hirez.programming.kicks-ass.net>
- <20200625161503.GB173089@google.com>
- <20200625200235.GQ4781@hirez.programming.kicks-ass.net>
- <20200625224042.GA169781@google.com>
- <20200626112931.GF4817@hirez.programming.kicks-ass.net>
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CAB3C20775;
+        Fri, 26 Jun 2020 14:54:43 +0000 (UTC)
+Date:   Fri, 26 Jun 2020 15:54:41 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Richard Earnshaw <rearnsha@arm.com>, libc-alpha@sourceware.org,
+        nd@arm.com
+Subject: Re: [PATCH v5 25/25] arm64: mte: Add Memory Tagging Extension
+ documentation
+Message-ID: <20200626145439.GB25805@gaia>
+References: <20200624175244.25837-1-catalin.marinas@arm.com>
+ <20200624175244.25837-26-catalin.marinas@arm.com>
+ <20200625122216.GJ16726@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200626112931.GF4817@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200625122216.GJ16726@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 01:29:31PM +0200, Peter Zijlstra wrote:
-> On Thu, Jun 25, 2020 at 03:40:42PM -0700, Sami Tolvanen wrote:
+Hi Szabolcs,
 
-> > Anyway, since objtool is run before recordmcount, I just left this unchanged
-> > for testing and ignored the recordmcount warnings about __mcount_loc already
-> > existing. Something is a bit off still though, I see this at boot:
+On Thu, Jun 25, 2020 at 01:22:17PM +0100, Szabolcs Nagy wrote:
+> The 06/24/2020 18:52, Catalin Marinas wrote:
+> > From: Vincenzo Frascino <vincenzo.frascino@arm.com>
 > > 
-> >   ------------[ ftrace bug ]------------
-> >   ftrace failed to modify
-> >   [<ffffffff81000660>] __tracepoint_iter_initcall_level+0x0/0x40
-> >    actual:   0f:1f:44:00:00
-> >   Initializing ftrace call sites
-> >   ftrace record flags: 0
-> >    (0)
-> >    expected tramp: ffffffff81056500
-> >   ------------[ cut here ]------------
+> > Memory Tagging Extension (part of the ARMv8.5 Extensions) provides
+> > a mechanism to detect the sources of memory related errors which
+> > may be vulnerable to exploitation, including bounds violations,
+> > use-after-free, use-after-return, use-out-of-scope and use before
+> > initialization errors.
 > > 
-> > Otherwise, this looks pretty good.
+> > Add Memory Tagging Extension documentation for the arm64 linux
+> > kernel support.
+> > 
+> > Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Will Deacon <will@kernel.org>
 > 
-> Ha! it is trying to convert the "CALL __fentry__" into a NOP and not
-> finding the CALL -- because objtool already made it a NOP...
+> there are are still libc side discussions, but the
+> linux abi looks ok to me from user space pov.
+> i'm adding libc-alpha on cc, the patch set is e.g. at
+> http://lists.infradead.org/pipermail/linux-arm-kernel/2020-June/579787.html
 > 
-> Weird, I thought recordmcount would also write NOPs, it certainly has
-> code for that. I suppose we can use CC_USING_NOP_MCOUNT to avoid those,
-> but I'd rather Steve explain this before I wreck things further.
+> Acked-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
 
-Something like so would ignore whatever text is there and rewrite it
-with ideal_nop.
+Thanks for the review. If there are any ABI changes required as a result
+of the libc-alpha discussions, please let me know.
 
----
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index c84d28e90a58..98a6a93d7615 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -109,9 +109,11 @@ static int __ref
- ftrace_modify_code_direct(unsigned long ip, const char *old_code,
- 			  const char *new_code)
- {
--	int ret = ftrace_verify_code(ip, old_code);
--	if (ret)
--		return ret;
-+	if (old_code) {
-+		int ret = ftrace_verify_code(ip, old_code);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	/* replace the text with the new text */
- 	if (ftrace_poke_late)
-@@ -124,9 +126,8 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
- int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec, unsigned long addr)
- {
- 	unsigned long ip = rec->ip;
--	const char *new, *old;
-+	const char *new;
- 
--	old = ftrace_call_replace(ip, addr);
- 	new = ftrace_nop_replace();
- 
- 	/*
-@@ -138,7 +139,7 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec, unsigned long ad
- 	 * just modify the code directly.
- 	 */
- 	if (addr == MCOUNT_ADDR)
--		return ftrace_modify_code_direct(ip, old, new);
-+		return ftrace_modify_code_direct(ip, NULL, new);
- 
- 	/*
- 	 * x86 overrides ftrace_replace_code -- this function will never be used
+> > +PROT_MTE
+> > +--------
+> > +
+> > +To access the allocation tags, a user process must enable the Tagged
+> > +memory attribute on an address range using a new ``prot`` flag for
+> > +``mmap()`` and ``mprotect()``:
+> > +
+> > +``PROT_MTE`` - Pages allow access to the MTE allocation tags.
+> > +
+> > +The allocation tag is set to 0 when such pages are first mapped in the
+> > +user address space and preserved on copy-on-write. ``MAP_SHARED`` is
+> > +supported and the allocation tags can be shared between processes.
+> > +
+> > +**Note**: ``PROT_MTE`` is only supported on ``MAP_ANONYMOUS`` and
+> > +RAM-based file mappings (``tmpfs``, ``memfd``). Passing it to other
+> > +types of mapping will result in ``-EINVAL`` returned by these system
+> > +calls.
+> > +
+> > +**Note**: The ``PROT_MTE`` flag (and corresponding memory type) cannot
+> > +be cleared by ``mprotect()``.
+> > +
+> > +**Note**: ``madvise()`` memory ranges with ``MADV_DONTNEED`` and
+> > +``MADV_FREE`` may have the allocation tags cleared (set to 0) at any
+> > +point after the system call.
+> 
+> OK.
+> 
+> I expect in the future to have a way to query the
+> PROT_MTE status of mappings (e.g. via /proc/self).
+
+Currently you can do this via /proc/<pid>/smaps.
+
+> The MAP_SHARED behaviour is not entirely clear here
+> but i guess it's possible to have PROT_MTE in one
+> process and no PROT_MTE in others on the same mapping.
+
+Yes, it is.
+
+> then allocation tags only affect the process where
+> PROT_MTE was used, later on another process may set
+> PROT_MTE and then the shared allocation tags affect
+> that process too.
+
+Yes. Since PROT_MTE allows access to the allocation tags, each process
+can control it independently.
+
+> The madvise behaviour looks a bit risky from user
+> space pov since now it's not just the memory content
+> that can disappear after a MADV_DONTNEED, but pointer
+> to that memory can become invalid too. but i think
+> this is OK: in libc we will have to say that madvise
+> on memory returned by malloc is not valid.
+
+From a kernel perspective, it never returned a tagged pointer on mmap(),
+so reverting the allocation tag to 0 is fine. I don't really have a
+better solution here other than not calling madvise() on malloc'ed
+memory.
+
+A more invasive option may be to return tagged pointers on mmap() and
+guarantee that the libc will not change them. A subsequent access on
+DONTNEED memory would restore the original colour.
+
+> As noted before, this design is not ideal for stack
+> tagging (mprotecting the initial stack with PROT_MTE
+> may be problematic if we don't know the bounds),
+
+I don't think you need the bounds (with PROT_GROWSDOWN). Maybe the upper
+one but functions up the call chain should not use stack tagging anyway.
+
+> but
+> the expectation is to introduce some ELF marking and
+> then linux can just start the process with PROT_MTE
+> stack if the dynamic linker has the marking. Same for
+> the brk area (default PROT_MTE based on ELF marking).
+
+This should work. Since stack tagging cannot use instructions in the NOP
+space anyway and the program needs recompiling, having an ELF marking
+would help (for heap tagging, you only need to change the libc and
+dynamic loader). I think we do similar checks for BTI.
+
+> > +Tag Check Faults
+> > +----------------
+> > +
+> > +When ``PROT_MTE`` is enabled on an address range and a mismatch between
+> > +the logical and allocation tags occurs on access, there are three
+> > +configurable behaviours:
+> > +
+> > +- *Ignore* - This is the default mode. The CPU (and kernel) ignores the
+> > +  tag check fault.
+> > +
+> > +- *Synchronous* - The kernel raises a ``SIGSEGV`` synchronously, with
+> > +  ``.si_code = SEGV_MTESERR`` and ``.si_addr = <fault-address>``. The
+> > +  memory access is not performed. If ``SIGSEGV`` is ignored or blocked
+> > +  by the offending thread, the containing process is terminated with a
+> > +  ``coredump``.
+> > +
+> > +- *Asynchronous* - The kernel raises a ``SIGSEGV``, in the offending
+> > +  thread, asynchronously following one or multiple tag check faults,
+> > +  with ``.si_code = SEGV_MTEAERR`` and ``.si_addr = 0`` (the faulting
+> > +  address is unknown).
+> > +
+> > +The user can select the above modes, per thread, using the
+> > +``prctl(PR_SET_TAGGED_ADDR_CTRL, flags, 0, 0, 0)`` system call where
+> > +``flags`` contain one of the following values in the ``PR_MTE_TCF_MASK``
+> > +bit-field:
+> > +
+> > +- ``PR_MTE_TCF_NONE``  - *Ignore* tag check faults
+> > +- ``PR_MTE_TCF_SYNC``  - *Synchronous* tag check fault mode
+> > +- ``PR_MTE_TCF_ASYNC`` - *Asynchronous* tag check fault mode
+> > +
+> > +The current tag check fault mode can be read using the
+> > +``prctl(PR_GET_TAGGED_ADDR_CTRL, 0, 0, 0, 0)`` system call.
+> > +
+> > +Tag checking can also be disabled for a user thread by setting the
+> > +``PSTATE.TCO`` bit with ``MSR TCO, #1``.
+> > +
+> > +**Note**: Signal handlers are always invoked with ``PSTATE.TCO = 0``,
+> > +irrespective of the interrupted context. ``PSTATE.TCO`` is restored on
+> > +``sigreturn()``.
+> > +
+> > +**Note**: There are no *match-all* logical tags available for user
+> > +applications.
+> > +
+> > +**Note**: Kernel accesses to the user address space (e.g. ``read()``
+> > +system call) are not checked if the user thread tag checking mode is
+> > +``PR_MTE_TCF_NONE`` or ``PR_MTE_TCF_ASYNC``. If the tag checking mode is
+> > +``PR_MTE_TCF_SYNC``, the kernel makes a best effort to check its user
+> > +address accesses, however it cannot always guarantee it.
+> 
+> OK.
+> 
+> i know the kernel likes to operate on os-threads,
+> but in userspace this causes the slight wart that if
+> somebody wants to use heap tagging with LD_PRELOADed
+> malloc and the first malloc is called after a thread
+> is already created then the malloc implementation
+> cannot set up the prctl right for all threads in the
+> process.
+
+Ah, so you can't have a constructor called with LD_PRELOAD.
+
+> (for userspace i think it is only useful to
+> allow threads with different MTE settings if there
+> are some threads in a process that are not managed by
+> the c runtime and don't call into libc, so as far as
+> normal c code is concerned a per process setting
+> would be nicer).
+
+My assumption was that the c runtime would set this up and all threads
+inherit the initial configuration. How important is the LD_PRELOAD
+use-case?
+
+The slight trouble with having this setting global is synchronising all
+the threads. Maybe if we only allow single global configuration (rather
+than having the option of per-thread and global), user-space could force
+the synchronisation with something like membarrier().
+
+> for interposers the workaround is
+> to interpose thread creating libc apis, which is not
+> perfect (libc internally may create threads in not
+> interposable ways e.g. for implementing aio and then
+> use heap memory in such threads), but i think early
+> threads before an LD_PRELOAD initializer may run is
+> not a common scenario and this type of MTE usage is
+> for debugging, i.e. does not have to be perfect.
+
+Feedback welcome, both from the glibc and the bionic/Android camps.
+
+> as noted before (i think by Kevin) it would be nice
+> to query the tag check status of other threads e.g.
+> via a /proc/ thing (but i don't see an immediate need
+> for this other than debugging MTE faults).
+
+I have a plan to add some information in /proc/<pid>/status at some
+point.
+
+-- 
+Catalin
