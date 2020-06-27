@@ -2,40 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF7320BF52
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jun 2020 09:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB75320BF5A
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Jun 2020 09:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725991AbgF0HTM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Jun 2020 03:19:12 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:59605 "EHLO pegase1.c-s.fr"
+        id S1725954AbgF0H10 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Jun 2020 03:27:26 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:27838 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbgF0HTM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 27 Jun 2020 03:19:12 -0400
+        id S1725885AbgF0H10 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 27 Jun 2020 03:27:26 -0400
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 49v4qS6JbBz9tyWF;
-        Sat, 27 Jun 2020 09:18:44 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 49v50y2n7Lz9tyWd;
+        Sat, 27 Jun 2020 09:26:58 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id R0Xe0WEpH3V0; Sat, 27 Jun 2020 09:18:44 +0200 (CEST)
+        with ESMTP id pXgL3pLy5jWH; Sat, 27 Jun 2020 09:26:58 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 49v4qS4vSnz9tyWD;
-        Sat, 27 Jun 2020 09:18:44 +0200 (CEST)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 49v50y1hbJz9tyWZ;
+        Sat, 27 Jun 2020 09:26:58 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E336F8B772;
-        Sat, 27 Jun 2020 09:18:45 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6F5AE8B772;
+        Sat, 27 Jun 2020 09:26:59 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id t5lVUH5_v1hK; Sat, 27 Jun 2020 09:18:45 +0200 (CEST)
+        with ESMTP id A0nwexkhePdw; Sat, 27 Jun 2020 09:26:59 +0200 (CEST)
 Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 483478B75B;
-        Sat, 27 Jun 2020 09:18:43 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3D7FC8B75B;
+        Sat, 27 Jun 2020 09:26:57 +0200 (CEST)
 Subject: Re: [PATCH V3 2/4] mm/debug_vm_pgtable: Add tests validating advanced
  arch page table helpers
 To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     christophe.leroy@c-s.fr, ziy@nvidia.com,
-        gerald.schaefer@de.ibm.com,
+Cc:     ziy@nvidia.com, gerald.schaefer@de.ibm.com,
         Andrew Morton <akpm@linux-foundation.org>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Vineet Gupta <vgupta@synopsys.com>,
@@ -61,8 +60,8 @@ Cc:     christophe.leroy@c-s.fr, ziy@nvidia.com,
 References: <1592192277-8421-1-git-send-email-anshuman.khandual@arm.com>
  <1592192277-8421-3-git-send-email-anshuman.khandual@arm.com>
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <6da177e6-9219-9ccf-a402-f4293c7564f7@csgroup.eu>
-Date:   Sat, 27 Jun 2020 09:18:41 +0200
+Message-ID: <4da41eee-5ce0-2a5e-40eb-4424655b3489@csgroup.eu>
+Date:   Sat, 27 Jun 2020 09:26:55 +0200
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
@@ -152,6 +151,9 @@ Le 15/06/2020 à 05:37, Anshuman Khandual a écrit :
 > +static void __init pte_advanced_tests(struct mm_struct *mm,
 > +			struct vm_area_struct *vma, pte_t *ptep,
 > +			unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+
+Align args properly.
+
 > +{
 > +	pte_t pte = pfn_pte(pfn, prot);
 > +
@@ -159,18 +161,12 @@ Le 15/06/2020 à 05:37, Anshuman Khandual a écrit :
 > +	set_pte_at(mm, vaddr, ptep, pte);
 > +	ptep_set_wrprotect(mm, vaddr, ptep);
 > +	pte = READ_ONCE(*ptep);
-
-same
-
 > +	WARN_ON(pte_write(pte));
 > +
 > +	pte = pfn_pte(pfn, prot);
 > +	set_pte_at(mm, vaddr, ptep, pte);
 > +	ptep_get_and_clear(mm, vaddr, ptep);
 > +	pte = READ_ONCE(*ptep);
-
-same
-
 > +	WARN_ON(!pte_none(pte));
 > +
 > +	pte = pfn_pte(pfn, prot);
@@ -181,27 +177,18 @@ same
 > +	pte = pte_mkdirty(pte);
 > +	ptep_set_access_flags(vma, vaddr, ptep, pte, 1);
 > +	pte = READ_ONCE(*ptep);
-
-same
-
 > +	WARN_ON(!(pte_write(pte) && pte_dirty(pte)));
 > +
 > +	pte = pfn_pte(pfn, prot);
 > +	set_pte_at(mm, vaddr, ptep, pte);
 > +	ptep_get_and_clear_full(mm, vaddr, ptep, 1);
 > +	pte = READ_ONCE(*ptep);
-
-same
-
 > +	WARN_ON(!pte_none(pte));
 > +
 > +	pte = pte_mkyoung(pte);
 > +	set_pte_at(mm, vaddr, ptep, pte);
 > +	ptep_test_and_clear_young(vma, vaddr, ptep);
 > +	pte = READ_ONCE(*ptep);
-
-same
-
 > +	WARN_ON(pte_young(pte));
 > +}
 > +
@@ -222,6 +209,9 @@ same
 > +static void __init pmd_advanced_tests(struct mm_struct *mm,
 > +		struct vm_area_struct *vma, pmd_t *pmdp,
 > +		unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+
+Align args properly
+
 > +{
 > +	pmd_t pmd = pfn_pmd(pfn, prot);
 > +
@@ -313,6 +303,9 @@ same
 > +static void pud_advanced_tests(struct mm_struct *mm,
 > +		struct vm_area_struct *vma, pud_t *pudp,
 > +		unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+
+Align args properly
+
 > +{
 > +	pud_t pud = pfn_pud(pfn, prot);
 > +
@@ -389,6 +382,9 @@ same
 > +static void pud_advanced_tests(struct mm_struct *mm,
 > +		struct vm_area_struct *vma, pud_t *pudp,
 > +		unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+
+Align args properly
+
 > +{
 > +}
 > +static void __init pud_leaf_tests(unsigned long pfn, pgprot_t prot) { }
@@ -402,11 +398,17 @@ same
 > +static void __init pmd_advanced_tests(struct mm_struct *mm,
 > +		struct vm_area_struct *vma, pmd_t *pmdp,
 > +		unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+
+Align args properly
+
 > +{
 > +}
 > +static void __init pud_advanced_tests(struct mm_struct *mm,
 > +		struct vm_area_struct *vma, pud_t *pudp,
 > +		unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+
+Align args properly
+
 > +{
 > +}
 > +static void __init pmd_leaf_tests(unsigned long pfn, pgprot_t prot) { }
@@ -433,9 +435,6 @@ same
 > +{
 > +	struct page *page = pfn_to_page(pfn);
 > +	pte_t pte = READ_ONCE(*ptep);
-
-Remplace with ptep_get() to avoid build failure on powerpc 8xx.
-
 > +	unsigned long paddr = (__pfn_to_phys(pfn) | RANDOM_ORVALUE) & PMD_MASK;
 > +
 > +	pte = pte_mkhuge(mk_pte(pfn_to_page(PHYS_PFN(paddr)), prot));
