@@ -2,89 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CE620C46A
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jun 2020 23:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1576720C693
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Jun 2020 09:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726356AbgF0Vyi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Jun 2020 17:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbgF0Vye (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Jun 2020 17:54:34 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA27BC03E97B
-        for <linux-arch@vger.kernel.org>; Sat, 27 Jun 2020 14:54:33 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id e22so9580055edq.8
-        for <linux-arch@vger.kernel.org>; Sat, 27 Jun 2020 14:54:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
-        b=PYwOu/B9Zh1rGzZM903Cpprywb83FCHUtNAUuiOO0o6zs6WHjlze2LXOC3hVAaGqcP
-         lg7H4pa9zGY5Ifm/Occ0RSYzXURL4hgFya6cts8HRx910s07nHPIQwuHOvC3CwSKWut7
-         W7lHESSwdkUYp3mu8F/+ONYut3Xpn3qtWv5jbLpGSjBshJ6ekhTBSCO1eoCC+HE4g/pN
-         3Oq9TtTNO3vJkKpqsqb3C/rPMy7fWmWmLKFmTu0RNDEBF2l3QJGtADAOwr4WGY+PWDtj
-         ZF9Zp08l9P41yL3JuvQth6+fpngrtjfi+iLA8IyUin9bEaOUirNwHBVJYrXrLbKq6R8z
-         N31g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
-        b=dma4W+oZ3ENcVHuTNRMvbUQJ/lMlRhrUbgW9jlrWZhPLNKr67rkltBrMpZeQG/1tvp
-         1dfEP671jmIH0QpQMudqPuD5YwP39Zuy7kJ0LCOp16XXyNQRQyQUaWehkBlwGXh2wFAp
-         rkG9ne0a/GcJb9hY9HjHXM/60HtK6nWkaVEBRAlP+jnrp3CGEGT6n81qM5X1OJT12FeZ
-         3XPCW+looze2VTRntNZQ3zFLSfi4zYdk2NfJTBRUu7P19Fiz+2sAAvt4g4WZu63hpjtC
-         fhEX8ky0qj5/Q2hEaVKtDAiyndwAcTsoIezTWOJwgbMUqrBbm+oX0hWgTmDxknKwdqrq
-         y6fQ==
-X-Gm-Message-State: AOAM531USUvZn1LsLajJF7AXQ2FnyHnTEpbOZnYAiHqAGnR4Em83EhT/
-        jZf57rHGTT1hJXqREC+ikfrYJjUqqC91d2uUV1A=
-X-Google-Smtp-Source: ABdhPJy7OcR58Wulf3SrU9Hht/iHCkUTpvI0mqyV7myFOjn+5WspC4moqDhEDDIlhUbuX6rLtkz2lPM5XKvW/5XrhRs=
-X-Received: by 2002:a50:ee84:: with SMTP id f4mr9900212edr.183.1593294872387;
- Sat, 27 Jun 2020 14:54:32 -0700 (PDT)
+        id S1726036AbgF1HAQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 28 Jun 2020 03:00:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51372 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725975AbgF1HAM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 28 Jun 2020 03:00:12 -0400
+Received: from kernel.org (unknown [87.71.40.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D042720702;
+        Sun, 28 Jun 2020 06:59:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593327604;
+        bh=hu/tW2f/lIs0zzXJSvCrgwdLd0PRG2JIRHvUCcaAjqM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qm3qqF3d78J/gFOwv6YVJb71itb3mymeRhGcaLrkXQY5dETAmGwNnfv+uXEMscIi2
+         mPZsATFBdJNygr2fnTWo/ejLleXfIjFaiD5KXp/1ygh8w33HlLwG0oN/C/qRCb8sbq
+         bU6JOX1KtJfeNxxfnsJIYZnBX1A1gh84k+HeVxCY=
+Date:   Sun, 28 Jun 2020 09:59:51 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Joerg Roedel <joro@8bytes.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH 9/8] mm: Account PMD tables like PTE tables
+Message-ID: <20200628065951.GB576120@kernel.org>
+References: <20200627143453.31835-1-rppt@kernel.org>
+ <20200627184642.GF25039@casper.infradead.org>
 MIME-Version: 1.0
-Received: by 2002:a50:2842:0:0:0:0:0 with HTTP; Sat, 27 Jun 2020 14:54:31
- -0700 (PDT)
-Reply-To: un.org@i.ua
-From:   helen <info.isaacgeorge@gmail.com>
-Date:   Sat, 27 Jun 2020 22:54:31 +0100
-Message-ID: <CAABX3N8zm7a58jU5g8fzjfpsKNf48aUsUHECRV0m9PDLWU814A@mail.gmail.com>
-Subject: 
-To:     zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200627184642.GF25039@casper.infradead.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-MONEY-GRAM TRANSFERRED PAYMENT INFO:
+On Sat, Jun 27, 2020 at 07:46:42PM +0100, Matthew Wilcox wrote:
+> We account the PTE level of the page tables to the process in order to
+> make smarter OOM decisions and help diagnose why memory is fragmented.
+> For these same reasons, we should account pages allocated for PMDs.
+> With larger process address spaces and ASLR, the number of PMDs in use
+> is higher than it used to be so the inaccuracy is starting to matter.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-Below is the sender=E2=80=99s information
+Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
 
+> ---
+>  include/linux/mm.h | 24 ++++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index dc7b87310c10..b283e25fcffa 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2271,7 +2271,7 @@ static inline spinlock_t *pmd_lockptr(struct mm_struct *mm, pmd_t *pmd)
+>  	return ptlock_ptr(pmd_to_page(pmd));
+>  }
+>  
+> -static inline bool pgtable_pmd_page_ctor(struct page *page)
+> +static inline bool pmd_ptlock_init(struct page *page)
+>  {
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  	page->pmd_huge_pte = NULL;
+> @@ -2279,7 +2279,7 @@ static inline bool pgtable_pmd_page_ctor(struct page *page)
+>  	return ptlock_init(page);
+>  }
+>  
+> -static inline void pgtable_pmd_page_dtor(struct page *page)
+> +static inline void pmd_ptlock_free(struct page *page)
+>  {
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  	VM_BUG_ON_PAGE(page->pmd_huge_pte, page);
+> @@ -2296,8 +2296,8 @@ static inline spinlock_t *pmd_lockptr(struct mm_struct *mm, pmd_t *pmd)
+>  	return &mm->page_table_lock;
+>  }
+>  
+> -static inline bool pgtable_pmd_page_ctor(struct page *page) { return true; }
+> -static inline void pgtable_pmd_page_dtor(struct page *page) {}
+> +static inline bool pmd_ptlock_init(struct page *page) { return true; }
+> +static inline void pmd_ptlock_free(struct page *page) {}
+>  
+>  #define pmd_huge_pte(mm, pmd) ((mm)->pmd_huge_pte)
+>  
+> @@ -2310,6 +2310,22 @@ static inline spinlock_t *pmd_lock(struct mm_struct *mm, pmd_t *pmd)
+>  	return ptl;
+>  }
+>  
+> +static inline bool pgtable_pmd_page_ctor(struct page *page)
+> +{
+> +	if (!pmd_ptlock_init(page))
+> +		return false;
+> +	__SetPageTable(page);
+> +	inc_zone_page_state(page, NR_PAGETABLE);
+> +	return true;
+> +}
+> +
+> +static inline void pgtable_pmd_page_dtor(struct page *page)
+> +{
+> +	pmd_ptlock_free(page);
+> +	__ClearPageTable(page);
+> +	dec_zone_page_state(page, NR_PAGETABLE);
+> +}
+> +
+>  /*
+>   * No scalability reason to split PUD locks yet, but follow the same pattern
+>   * as the PMD locks to make it easier if we decide to.  The VM should not be
+> -- 
+> 2.27.0
+> 
 
-
-1. MG. REFERENCE NO#: 36360857
-
-2. SENDER'S NAME: Johnson Williams
-
-3. AMOUNT TO PICKUP: US$10,000
-
-
-
-Go to any Money Gram office near you and pick up the payment Track the
-
-Reference Number by visiting and click the link below
-
-(https://secure.moneygram.com/embed/track) and enter the Reference
-
-Number: 36360857 and the Last Name: Williams, you will find the payment
-
-available for pickup instantly.
-
-Yours Sincerely,
-
-Mrs. Helen Marvis
-United Nations Liaison Office
-Directorate for International Payments
+-- 
+Sincerely yours,
+Mike.
