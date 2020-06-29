@@ -2,46 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AAD20E066
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF55520E1E8
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731535AbgF2Up7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 16:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
+        id S1731179AbgF2VAu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 17:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731518AbgF2TN4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:13:56 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D35DC08EB00
-        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:50 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id w2so7020862pgg.10
-        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:50 -0700 (PDT)
+        with ESMTP id S1731221AbgF2TM7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:12:59 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2347CC08EB02
+        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:51 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id b92so7565286pjc.4
+        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=g0c7XOOnQF00ZfjeTQGIw9PaJthVip/aX3zS1dRtJoE=;
-        b=M9ZSb4qoWIq549nkDC9nITi2Y+iOVB3dYWRDDV3WRmfzVjtQks65kDEF7l1+ij9SlB
-         Ohi65fuChmNNYze5qrvJVk6IOjVJ/rxa8jvdv0qO+qmBCzMBaCbtUOo4//H/OjguzP5R
-         T/UGeSUbVaM1bo/CG0rdGvwUKCmIM2bIikow4=
+        bh=T0P/zigfbEYVemiv+chkLi1sxk82Ehd4Rswu0BvpDuE=;
+        b=G5louE6Uyd2kc+xV2J1VjkFKPj4o3+7iuP5vPYPCWk+r8gutkK73zgcof6KUBrCFWp
+         NA/YHDMZXOj7EKNzEtTGayNRzAljV3w+YWfaERiAi1wGVtDGv2A1+AtbnH1n8Rlsjznr
+         ZVcm+cqp/UVyef3E1570F2Ni4TsttMaQCB9Os=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=g0c7XOOnQF00ZfjeTQGIw9PaJthVip/aX3zS1dRtJoE=;
-        b=JRPzwNOTB+FHEjn3znvc4QaCc2lqbdKVTXtmxD5H7QiwXV9xvIwXn22Hlmj9ITPVK+
-         h2L06V5tz4ozWC2j5rH2QuHJEvtAIVcqgqlQHGxV3xBVz0OphSoYgsXehuVnEyaiA4ji
-         pTxpZmTzYm5n9RhOGFX3wSPUnNsrgCuT54qCN017iQ7p2aNX6Y+jW/BjUkO/O03emYpm
-         w2w/pFGEgzXAcQYetjTqitzrQ0y8rg0s45T7e6vdL9KE0ZCwph+4KOk7oMwTB9KFCvSp
-         ek4oy9pEYf5PCZn6X+X/SLHMglG+w6TuTVaHqdqSusxRA8RzMb1Bo6AQxu8x9DTZsfrx
-         yWfw==
-X-Gm-Message-State: AOAM533mNtC42OjJc3g7I+zQjKAZkvWA5+aTM4pR4YnEd2YdCbwAP+J5
-        7JvMunrnhExkTNhPwYId5RDKgQ==
-X-Google-Smtp-Source: ABdhPJw58QIF5f/Yv5c9CUFM9Nx42xHsS2ePKHv+mXeT2M6dXWhB9Q/p3SvpYavVwb4WSrkztjUiRQ==
-X-Received: by 2002:a63:4419:: with SMTP id r25mr2949678pga.198.1593411530134;
+        bh=T0P/zigfbEYVemiv+chkLi1sxk82Ehd4Rswu0BvpDuE=;
+        b=O+oAvdDDFGlY4Uln0ZF/pJJhGFkbWgE7G29xZkg5qp+UGCuOsIpU/92wPDBzqxWlnf
+         utRAiPi2y3CzQbrljyiNJM0aY0sF/vr2sn1bwSn34eZiOkuNpB7YlE9coiwwcbJwlqUF
+         qTwC0Ggr7GJsiQ1H8vjc5PQZ2mRpQctuy9z3fY4xNX0yZxPAvysgug6i0qlm8Y4DkM+5
+         17hhKSVHvWZGS06ZCXek/ZCZ65XQTe+uVqKqg842Q4YKtK0WRa0hbsI1UO41gyFT5SZf
+         tWsGUaB3OEnDgokiFARtlPD+ohzmXSHfI5p7ZXVEy6AoVVe6FJpL00/C+DSOOBVKrQyY
+         MX2A==
+X-Gm-Message-State: AOAM531xMulnsxZGeEKwxYyyPVqCwwvVmMGtU3wt2XkcbFgUWLXmIl9/
+        FlKOw38YA6UsyEo8l/uNmYOXYg==
+X-Google-Smtp-Source: ABdhPJxGErTr5qdj/h+EXAH5O68jFfE2tqj+62XVCx45BXGt9Nz2IQt9L7atafYyKCZkdIT/G4UB5A==
+X-Received: by 2002:a17:90a:8a8b:: with SMTP id x11mr10404879pjn.127.1593411530770;
         Sun, 28 Jun 2020 23:18:50 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q10sm34391423pfk.86.2020.06.28.23.18.46
+        by smtp.gmail.com with ESMTPSA id mp15sm17957978pjb.45.2020.06.28.23.18.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 28 Jun 2020 23:18:47 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -64,9 +64,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 07/17] arm64/build: Use common DISCARDS in linker script
-Date:   Sun, 28 Jun 2020 23:18:30 -0700
-Message-Id: <20200629061840.4065483-8-keescook@chromium.org>
+Subject: [PATCH v4 08/17] arm64/mm: Remove needless section quotes
+Date:   Sun, 28 Jun 2020 23:18:31 -0700
+Message-Id: <20200629061840.4065483-9-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200629061840.4065483-1-keescook@chromium.org>
 References: <20200629061840.4065483-1-keescook@chromium.org>
@@ -77,40 +77,27 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Use the common DISCARDS rule for the linker script in an effort to
-regularize the linker script to prepare for warning on orphaned
-sections. Additionally clean up left-over no-op macros.
+Fix a case of needless quotes in __section(), which Clang doesn't like.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
 Acked-by: Will Deacon <will@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/arm64/kernel/vmlinux.lds.S | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/arm64/mm/mmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index 55ae731b6368..b5a94ec1eada 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -6,6 +6,7 @@
-  */
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 1df25f26571d..dce024ea6084 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -42,7 +42,7 @@
+ u64 idmap_t0sz = TCR_T0SZ(VA_BITS);
+ u64 idmap_ptrs_per_pgd = PTRS_PER_PGD;
  
- #define RO_EXCEPTION_TABLE_ALIGN	8
-+#define RUNTIME_DISCARD_EXIT
+-u64 __section(".mmuoff.data.write") vabits_actual;
++u64 __section(.mmuoff.data.write) vabits_actual;
+ EXPORT_SYMBOL(vabits_actual);
  
- #include <asm-generic/vmlinux.lds.h>
- #include <asm/cache.h>
-@@ -89,10 +90,8 @@ SECTIONS
- 	 * matching the same input section name.  There is no documented
- 	 * order of matching.
- 	 */
-+	DISCARDS
- 	/DISCARD/ : {
--		EXIT_CALL
--		*(.discard)
--		*(.discard.*)
- 		*(.interp .dynamic)
- 		*(.dynsym .dynstr .hash .gnu.hash)
- 		*(.eh_frame)
+ u64 kimage_voffset __ro_after_init;
 -- 
 2.25.1
 
