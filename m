@@ -2,90 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7E120C948
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Jun 2020 19:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B3A20D143
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 20:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbgF1Rio (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 28 Jun 2020 13:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726622AbgF1Rio (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Jun 2020 13:38:44 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52DDC03E97A
-        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 10:38:43 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id n24so15538422lji.10
-        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 10:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/bJJuAbxLOI8ZB5kWrg6GnM3H9CKnk3zJ1in7nW69lY=;
-        b=ccVWs/T2gU7hDJss2BQBphhLh+zdOMVqloE0cOCtA7vvj4OozfoCGUsE9RUj48EOqR
-         jo9+RT0GPN06WZ07i2d5epcE+ZFSv33GO0HkTDhWp3TNRlLy+rMUFy0mW2UYYblH80OY
-         WRgFleQAXvFkUj8W1c+aczZsZjuSuwEtnPUbwMiHRVHS4UAUbcpIlQm7iXvEDkNJPI2R
-         xZZBwF6KxJQnGWLZZ+OsascBgteBYhFPh++AmgnbjqosyiJmVQh6WzHmul2UEklshMMA
-         amj+mcQjRkk5/UyzmzE03cJpFIP8qNSF1ToWuoELGeelmNAXQ3ABNpwXxritWvYAaCxJ
-         Bx3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/bJJuAbxLOI8ZB5kWrg6GnM3H9CKnk3zJ1in7nW69lY=;
-        b=kImf6PgXYdznXk5gMlN5mMemyfYBrcqvxegeYvCLTIpm0HCOo/a2F+7A6XgNiVmck8
-         r9LY8nljyQ6ye/p8aLn4eX4oyRkJvaj1eU8V4m2hSBIGZPplM3LtcrEs2HHly9Sz9e59
-         +5dI7xop/O/fqGIrjzAwKdSaS8SICVGj1DCnIXnaAKckue3VoOjzr2LTXtU1VOJDTgiB
-         3LF4pVXNXrfmPkzCnDQBBlFvegyKkQ3xYtaLTkSIkBs8P76MqdY/e1E1h5a5Ds3uXOBx
-         vELcMTlafVZ1+jG1VBXs30U8X3aoDeizZkaCvWOAePx12zDQkY5gWOeZLc9FRsuszWjH
-         DGfg==
-X-Gm-Message-State: AOAM5331+TlcaiY4XwgfTMhs0BRyexxMyc3KFdVFRT5zh+/Rhf8Wd6Ny
-        nk5064fsbsfgHLYkasZMstjxYxj2jqMOkd2d140=
-X-Google-Smtp-Source: ABdhPJxWzSE3lOMTOd41pzP74kaZmWrv3o2qsh7r1DsqMPYT87CqgG+8sUQFo+o4wqp3fwoLHuJIYP06idwqhoTcGAc=
-X-Received: by 2002:a2e:9c3:: with SMTP id 186mr6474536ljj.293.1593365922168;
- Sun, 28 Jun 2020 10:38:42 -0700 (PDT)
+        id S1728152AbgF2Sj5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 14:39:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:35142 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727076AbgF2Sj4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Jun 2020 14:39:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77D68D6E;
+        Mon, 29 Jun 2020 01:32:52 -0700 (PDT)
+Received: from [10.163.83.176] (unknown [10.163.83.176])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94C2D3F71E;
+        Mon, 29 Jun 2020 01:32:41 -0700 (PDT)
+Subject: Re: [PATCH V3 0/4] mm/debug_vm_pgtable: Add some more tests
+To:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>
+Cc:     linux-mm@kvack.org, christophe.leroy@c-s.fr, ziy@nvidia.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+References: <1592192277-8421-1-git-send-email-anshuman.khandual@arm.com>
+ <70ddc7dd-b688-b73e-642a-6363178c8cdd@arm.com>
+ <20200624110539.GC24934@oc3871087118.ibm.com>
+ <20200624134808.0c460862@thinkpad>
+ <20200624144015.GD24934@oc3871087118.ibm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <c4a8b4fe-b9f4-b2ec-12ea-7143e4ca0464@arm.com>
+Date:   Mon, 29 Jun 2020 14:02:31 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Received: by 2002:a05:6504:297:0:0:0:0 with HTTP; Sun, 28 Jun 2020 10:38:41
- -0700 (PDT)
-Reply-To: mrjohnscottyounger35@gmail.com
-From:   John Scott Younger <william1noah12@gmail.com>
-Date:   Sun, 28 Jun 2020 18:38:41 +0100
-Message-ID: <CANHFD5_deBPaA8fm6D5kW=LvS1zY2dxVm6ShER3SGELz3T+5vw@mail.gmail.com>
-Subject: Your attention to this news update.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200624144015.GD24934@oc3871087118.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
--- 
-Your attention to this news update.
 
-The report / analysis received from our correspondence shows that you
-have NOT received your PAYMENT, due to administrative injustice from
-unpatriotic and uncivil payment officials. Following the resolution of
-the U.S Department of State, you are mandated to kindly reinstate your
-fund acquisition details for accreditation.
 
-Sequel to the joint /collaborative effort by United Nations and US
-Department of State, to review, nullify and release all STOP ORDER on
-beneficiary transferred sum and consignment HELD at custom port
-authorities. At this juncture, you are advised to forward information
-of agencies that has put a HOLD on your consignment or STOP ORDER on
-your transferred sum.
+On 06/24/2020 08:10 PM, Alexander Gordeev wrote:
+> On Wed, Jun 24, 2020 at 01:48:08PM +0200, Gerald Schaefer wrote:
+>> On Wed, 24 Jun 2020 13:05:39 +0200
+>> Alexander Gordeev <agordeev@linux.ibm.com> wrote:
+>>
+>>> On Wed, Jun 24, 2020 at 08:43:10AM +0530, Anshuman Khandual wrote:
+>>>
+>>> [...]
+>>>
+>>>> Hello Gerald/Christophe/Vineet,
+>>>>
+>>>> It would be really great if you could give this series a quick test
+>>>> on s390/ppc/arc platforms respectively. Thank you.
+>>>
+>>> That worked for me with the default and debug s390 configurations.
+>>> Would you like to try with some particular options or combinations
+>>> of the options?
+>>
+>> It will be enabled automatically on all archs that set
+>> ARCH_HAS_DEBUG_VM_PGTABLE, which we do for s390 unconditionally.
+>> Also, DEBUG_VM has to be set, which we have only in the debug config.
+>> So only the s390 debug config will have it enabled, you can check
+>> dmesg for "debug_vm_pgtable" to see when / where it was run, and if it
+>> triggered any warnings.
+> 
+> Yes, that is what I did ;)
+> 
+> I should have been more clear. I wonder whether Anshuman has in
+> mind other options which possibly makes sense to set or unset
+> and check how it goes with non-standard configurations.
 
-This office is commission to investigate/rectify ISSUES affecting
-beneficiaries whose payment is HELD/STOP unjustly with the intent of
-demanding un-official fees/levies. Be informed that all administrative
-injustice imposed on beneficiaries by some dubious person(s) has come
-to the knowledge of oversight committee of United Nations and US
-Department of State.
+After enabling CONFIG_DEBUG_VM either explicitly or via DEBUG_VM, ideally
+any memory config combination on s390 which can change platform page table
+helpers (validated with CONFIG_DEBUG_VM) should also get tested. Recently,
+there was a kernel crash on ppc64 [1] and a build failure on ppc32 [2] for
+some particular configs. Hence it will be great if you could run this test
+on multiple s390 configurations.
 
-Thus our objective is to resolve all challenges facing release of your
-payment. Therefore get back to my office with the required information
-for assessment.
+[1] 787d563b8642f35c5 ("mm/debug_vm_pgtable: fix kernel crash by checking for THP support")
+[2] 9449c9cb420b249eb ("mm/debug_vm_pgtable: fix build failure with powerpc 8xx")
 
-Our in service,
-
-John Scott Younger
-Human Right Activist
-Tel:- + 44 770 002 8251
+- Anshuman
