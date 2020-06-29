@@ -2,56 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1944320D261
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 20:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D8E20D1F6
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 20:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729381AbgF2Ss6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 14:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729136AbgF2Srm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 14:47:42 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C001C02E2C4;
-        Mon, 29 Jun 2020 07:01:28 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id e3so1342915qvo.10;
-        Mon, 29 Jun 2020 07:01:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8FrjxWdY/Gjwce8t0JyeJsnYTMhQlskObJO/oLUWzfo=;
-        b=KsYeoNtN/hmKD60koJPvKXhY1HT5rh0BdsIymjK2OY+Ah5csm67fWOMInZoSB5MyiF
-         z81tpEOU7gbEs2Eu9dK1IU73/ldLFTcOuXQ4NQt1zxjMaUlUH9xpuPmQkDZyG2XpHE5A
-         z0rDQ6F3p6odfLFvjQ20/v+vqn3osPhCyUtrTurdqBrAHPO36wwugYL1OqGKXGdazN2M
-         p5mNNLqMsIqkd1lea0NNKZvGNZ4NvI4uksXON6N73LrjpsMxdX6M9+heVdl/zTyGvkYj
-         tkHXxI8XU7hiVfWyn9RhwdGCF2zdf8eMUPHFh6FNadOyOkvVyTEcnpjW7aa7VVLEWYLN
-         vdxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8FrjxWdY/Gjwce8t0JyeJsnYTMhQlskObJO/oLUWzfo=;
-        b=DSuuW0+07wcgDzTyrYqX0uyN8GZtYZA9b0ZFzEyTViLNb4h6pZE597I9G0VIgucvJD
-         aiZeyxbU/LSSBjt/pL+KcMGE7PdanaXo0F2JQdC4l7Q+lwLAbtqljTLF5jCwAHMlBPUx
-         g9V1dJ5kIS/ynUdt8Uj9EbrQvD1UKTOBhjBgT3ZyiKXpXLYea3P9JO587LRoRz2KeeNv
-         eZqifAnr1Wkk1Tbua5iQLkIIx1PjQ4rLVNJNpBwRZBFoa/yWLwkUM8sbJjjbKMZOzgjN
-         W751EaDIWYcQSSdewozHh8vpCX0MUn8gZqR6oLzx/ggkpNe6LzEx+ImM9X0Jc6Xo6gRe
-         H7ow==
-X-Gm-Message-State: AOAM531JKlq/ZGAplHoVs4tch6+PMhfQcqxtbGk2MjY0gdNj9heTXIcP
-        cO3qNZhciqnutr86w2breH3RRck7yxyKPa0VQlQ=
-X-Google-Smtp-Source: ABdhPJwRvnHK4e9FuZZ286EO2eHunvWxUS+jw1hxD70l+wfbFL9aDwHZRKLC21a2KPKCyOwmNUkOhP18WuRSaAVXDjg=
-X-Received: by 2002:ad4:4cc3:: with SMTP id i3mr8130354qvz.114.1593439286277;
- Mon, 29 Jun 2020 07:01:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200627143453.31835-1-rppt@kernel.org>
-In-Reply-To: <20200627143453.31835-1-rppt@kernel.org>
-From:   Pekka Enberg <penberg@gmail.com>
-Date:   Mon, 29 Jun 2020 17:01:14 +0300
-Message-ID: <CAOJsxLE47WP9aMY3nh=E7C1a_esHt=sBFWCnsVA2umZ7TZ6TTA@mail.gmail.com>
-Subject: Re: [PATCH 0/8] mm: cleanup usage of <asm/pgalloc.h>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
+        id S1727108AbgF2SpQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 14:45:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35680 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729264AbgF2SpP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Jun 2020 14:45:15 -0400
+Received: from kernel.org (unknown [87.71.40.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5E93025581;
+        Mon, 29 Jun 2020 15:59:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593446372;
+        bh=O/nZ0BxK4nESVxMtlEZ3aR9HUzEjAJ3vpNzo90oK+Gw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ve2Rt8tVmffLLnlIRt4m0+FLkplbTh12wsmkxiiXh2shMIztHBj9/nk/f9S/ai5jU
+         3BFQpw5Dz/XZFCZs/y8ymsBDt+3vvNo/l/kVYqcYBemM5Bac+QbcUhusbQGI9QlPev
+         vYsxGXmlFAgYBNiTAVuThytC5RkEIP2ptiiEd7Jg=
+Date:   Mon, 29 Jun 2020 18:59:20 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
         Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andy Lutomirski <luto@kernel.org>,
@@ -65,35 +40,59 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Stafford Horne <shorne@gmail.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Steven Rostedt <rostedt@goodmis.org>,
-        linux-alpha@vger.kernel.org,
-        "list@ebiederm.org:DOCUMENTATION <linux-doc@vger.kernel.org>,
-        list@ebiederm.org:MEMORY MANAGEMENT <linux-mm@kvack.org>," 
-        <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        ia64 <linux-ia64@vger.kernel.org>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-mm@kvack.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH 4/8] asm-generic: pgalloc: provide generic
+ pmd_alloc_one() and pmd_free_one()
+Message-ID: <20200629155920.GD1492837@kernel.org>
+References: <20200627143453.31835-1-rppt@kernel.org>
+ <20200627143453.31835-5-rppt@kernel.org>
+ <20200627190304.GG25039@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200627190304.GG25039@casper.infradead.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 27, 2020 at 5:35 PM Mike Rapoport <rppt@kernel.org> wrote:
-> Most architectures have very similar versions of pXd_alloc_one() and
-> pXd_free_one() for intermediate levels of page table.
-> These patches add generic versions of these functions in
-> <asm-generic/pgalloc.h> and enable use of the generic functions where
-> appropriate.
+On Sat, Jun 27, 2020 at 08:03:04PM +0100, Matthew Wilcox wrote:
+> On Sat, Jun 27, 2020 at 05:34:49PM +0300, Mike Rapoport wrote:
+> > More elaborate versions on arm64 and x86 account memory for the user page
+> > tables and call to pgtable_pmd_page_ctor() as the part of PMD page
+> > initialization.
+> > 
+> > Move the arm64 version to include/asm-generic/pgalloc.h and use the generic
+> > version on several architectures.
+> > 
+> > The pgtable_pmd_page_ctor() is a NOP when ARCH_ENABLE_SPLIT_PMD_PTLOCK is
+> > not enabled, so there is no functional change for most architectures except
+> > of the addition of __GFP_ACCOUNT for allocation of user page tables.
+> 
+> Thanks for including this line; it reminded me that we're not setting
+> the PageTable flag on the page, nor accounting it to the zone page stats.
+> Hope you don't mind me tagging a patch to do that on as 9/8.
 
-Very nice cleanup series to the page table code!
+We also never set PageTable flag for early page tables and for the page
+tables allocated directly with get_free_page(), e.g PTI, KASAN.
 
-FWIW:
+> We could also do with a pud_page_[cd]tor and maybe even p4d/pgd versions.
+> But that brings me to the next question -- could/should some of this
+> be moved over to asm-generic/pgalloc.h?  The ctor/dtor aren't called
+> from anywhere else, and there's value to reducing the total amount of
+> code in mm.h, but then there's also value to keeping all the ifdef
+> ARCH_ENABLE_SPLIT_PMD_PTLOCK code together too.  So I'm a bit torn.
+> What do you think?
 
-Reviewed-by: Pekka Enberg <penberg@kernel.org>
+-- 
+Sincerely yours,
+Mike.
