@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FADA20E0AB
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4558320DD8A
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733159AbgF2Usl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 16:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S1731100AbgF2TMn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 15:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731513AbgF2TNs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:13:48 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647F9C08EAF9
+        with ESMTP id S1730997AbgF2TMm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:12:42 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5A5C08EAFC
         for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:49 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id u5so7455406pfn.7
+Received: by mail-pj1-x1044.google.com with SMTP id u8so7309821pje.4
         for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6elEkxiTC64v4srgfUTdZozPZdv37lYm4BTjSvBzmZk=;
-        b=gkyZjcRb94k71tMgV+9TZXhAbV0rJLLGSga2JTiQ29d2jw/h/CmWsxzOrVYJYO18pb
-         Rgwb6hMV5w9pjKWTXXBfcS3XfIYbnAKMBcHYDl5Yg6lCPR5OD9BbzveaWsROz9zqj2rC
-         FsLqZQZBh83rrB7TDNLbJAZPzlxe+TFWfVRNo=
+        bh=Sx4qtxhnzkaAUuvKla0BBnxBLtInQMeed/tdFBRnaf0=;
+        b=SPivvXbhkz1HNs4hv3hB3lAGf7mxY7QzuyuiHLUvE2NTzUDgKcMtvoCr5OvTnpEGNI
+         BKEe727LLu354Czz0UrLwsb8Oq9z1awx0ZhcCb/nUDxWPW65pd8mBz8whR+nh3hBfift
+         6e7dxeB4Nqxb9mSsbs5XD4usOXZc+u6wbNETc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6elEkxiTC64v4srgfUTdZozPZdv37lYm4BTjSvBzmZk=;
-        b=sgL7r96M0xSTaGz+qrAc0wGG7uz+cXSdwcdo8NGlVhVuqPW1EzDpVAcOQsWhknMq2C
-         aLUipZ5EUe7IfOa3vG3TliW2KNsFbF7/CY2l2OpeDxI8xh47xHFu/fMWUdv3q+ju31Pt
-         KWPBKXlYvtX1pyQCE+5HMTDcWgnFsAKRXv0MMW3WQO7PRwH7FsePxouxIFV8ygTZwOz4
-         uDAGfhmuxmDw2TNhjkYkkN5IYT/2KH8EAYRGjfFsfB5x6zfU/rmzSP/KHvWpWYiwA3fB
-         kQ3T6Ha8YJooMjDkoa1VJIYTZbYR3VMOYEZEy0sU31I3XN98+HoNxPoCceTVWALjaypa
-         3xCw==
-X-Gm-Message-State: AOAM530UpVWTuUmzEoxGRzYHhqT5/FB+Vag9EW+4sTIVYs+XNGunowFO
-        sUad2dJVNuUB1XmDaPzwPp9CEg==
-X-Google-Smtp-Source: ABdhPJxJXKXKGxIgf9KhhNRZoNxE/RymgaC1Wp90l3FioPTL2ggfsfaH6bGQODamxEof1p/UWIkdKA==
-X-Received: by 2002:a62:f24b:: with SMTP id y11mr12809730pfl.85.1593411528989;
-        Sun, 28 Jun 2020 23:18:48 -0700 (PDT)
+        bh=Sx4qtxhnzkaAUuvKla0BBnxBLtInQMeed/tdFBRnaf0=;
+        b=IHnY1fRn1dKn02xdU3jh1jhigiS0TN1ve3bnYlCfgL8SF1+WUTzd6HtkpVB0w0Vkz5
+         B8V7UGcJ7OpvEDa23qi1KmaMigBl7YZFnGNMsLjT64sNO6X/jGYPLluFgF48IkW7xXL7
+         hMcQSVmwD4aWSis2sTRWgTCg/MQX4Cn3dWuOlplBB91yuxh89Jrh0oCFAX95tM0EP8VQ
+         0BbGgFIogEBv/E1Nwowv+W6iY6IZW/kcKelh8ywdSWpodVjZqy3DCquAvu7U1UXjc+O0
+         qGuDobdYTu/UlHlkRhSg7ScxFT9djNEcBT1NNM2uoWpugcvTc9ZCgF7IS9vC+FQ3arJY
+         CaHA==
+X-Gm-Message-State: AOAM532hOaSnwJYdhUdXMB4DQc9KEZVjAZnb8A8FwscBQnlYOUUAnmSx
+        hmCiwFcQ8DK30aPM3QMh8nZItA==
+X-Google-Smtp-Source: ABdhPJwNi3xJzPNT7Gdq2Pw3b3VdTrLvNjNwn9RzBwTGL5D87SEILQ2r1+XLJOB0Z/PotUqW7oYIyg==
+X-Received: by 2002:a17:902:6945:: with SMTP id k5mr11956092plt.336.1593411529540;
+        Sun, 28 Jun 2020 23:18:49 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f18sm15312315pgv.84.2020.06.28.23.18.45
+        by smtp.gmail.com with ESMTPSA id n65sm32225037pfn.17.2020.06.28.23.18.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 28 Jun 2020 23:18:47 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Will Deacon <will@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
         Ard Biesheuvel <ardb@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        clang-built-linux@googlegroups.com,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Atish Patra <atish.patra@wdc.com>, linux-efi@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Peter Collingbourne <pcc@google.com>,
@@ -59,15 +59,14 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Ingo Molnar <mingo@redhat.com>,
         Russell King <linux@armlinux.org.uk>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 05/17] ctype: Work around Clang -mbranch-protection=none bug
-Date:   Sun, 28 Jun 2020 23:18:28 -0700
-Message-Id: <20200629061840.4065483-6-keescook@chromium.org>
+Subject: [PATCH v4 06/17] efi/libstub: Disable -mbranch-protection
+Date:   Sun, 28 Jun 2020 23:18:29 -0700
+Message-Id: <20200629061840.4065483-7-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200629061840.4065483-1-keescook@chromium.org>
 References: <20200629061840.4065483-1-keescook@chromium.org>
@@ -78,41 +77,36 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In preparation for building efi/libstub with -mbranch-protection=none
-(EFI does not support branch protection features[1]), add no-op code
-to work around a Clang bug that emits an unwanted .note.gnu.property
-section for object files without code[2].
+In preparation for adding --orphan-handling=warn to more architectures,
+this disables -mbranch-protection, as EFI does not yet support it[1].
+This was noticed due to it producing unwanted .note.gnu.property sections
+(prefixed with .init due to the objcopy build step).
 
 [1] https://lore.kernel.org/lkml/CAMj1kXHck12juGi=E=P4hWP_8vQhQ+-x3vBMc3TGeRWdQ-XkxQ@mail.gmail.com
-[2] https://bugs.llvm.org/show_bug.cgi?id=46480
 
 Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Dave Martin <Dave.Martin@arm.com>
-Cc: clang-built-linux@googlegroups.com
+Cc: Arvind Sankar <nivedita@alum.mit.edu>
+Cc: Atish Patra <atish.patra@wdc.com>
+Cc: linux-efi@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- lib/ctype.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/firmware/efi/libstub/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/lib/ctype.c b/lib/ctype.c
-index c819fe269eb2..21245ed57d90 100644
---- a/lib/ctype.c
-+++ b/lib/ctype.c
-@@ -36,3 +36,13 @@ _L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,	/* 224-239 */
- _L,_L,_L,_L,_L,_L,_L,_P,_L,_L,_L,_L,_L,_L,_L,_L};	/* 240-255 */
- 
- EXPORT_SYMBOL(_ctype);
-+
-+/*
-+ * Clang will generate .note.gnu.property sections for object files
-+ * without code, even in the presence of -mbranch-protection=none.
-+ * To work around this, define an unused static function.
-+ * https://bugs.llvm.org/show_bug.cgi?id=46480
-+ */
-+#ifdef CONFIG_CC_IS_CLANG
-+void __maybe_unused __clang_needs_code_here(void) { }
-+#endif
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index 75daaf20374e..10fa342ef40c 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -18,7 +18,8 @@ cflags-$(CONFIG_X86)		+= -m$(BITS) -D__KERNEL__ \
+ # arm64 uses the full KBUILD_CFLAGS so it's necessary to explicitly
+ # disable the stackleak plugin
+ cflags-$(CONFIG_ARM64)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+-				   -fpie $(DISABLE_STACKLEAK_PLUGIN)
++				   -fpie $(DISABLE_STACKLEAK_PLUGIN) \
++				   $(call cc-option,-mbranch-protection=none)
+ cflags-$(CONFIG_ARM)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+ 				   -fno-builtin -fpic \
+ 				   $(call cc-option,-mno-single-pic-base)
 -- 
 2.25.1
 
