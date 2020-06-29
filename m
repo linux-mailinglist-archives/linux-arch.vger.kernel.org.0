@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED47820D22E
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 20:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 475FE20D1A7
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 20:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727115AbgF2SrU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 14:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
+        id S1729075AbgF2Smo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 14:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729133AbgF2Smw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 14:42:52 -0400
+        with ESMTP id S1728961AbgF2Smm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 14:42:42 -0400
 Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5D2C033C2C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCB9C033C2E;
         Mon, 29 Jun 2020 11:26:35 -0700 (PDT)
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jpyUD-002DxR-O7; Mon, 29 Jun 2020 18:26:33 +0000
+        id 1jpyUE-002DyH-9j; Mon, 29 Jun 2020 18:26:34 +0000
 From:   Al Viro <viro@ZenIV.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         David Miller <davem@davemloft.net>,
         Tony Luck <tony.luck@intel.com>, Will Deacon <will@kernel.org>
-Subject: [PATCH 36/41] parisc: switch to ->get2()
-Date:   Mon, 29 Jun 2020 19:26:23 +0100
-Message-Id: <20200629182628.529995-36-viro@ZenIV.linux.org.uk>
+Subject: [PATCH 40/41] regset(): kill ->get_size()
+Date:   Mon, 29 Jun 2020 19:26:27 +0100
+Message-Id: <20200629182628.529995-40-viro@ZenIV.linux.org.uk>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200629182628.529995-1-viro@ZenIV.linux.org.uk>
 References: <20200629182349.GA2786714@ZenIV.linux.org.uk>
@@ -37,152 +37,130 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Al Viro <viro@zeniv.linux.org.uk>
 
+not used anymore
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/parisc/kernel/ptrace.c | 84 +++++++++------------------------------------
- 1 file changed, 16 insertions(+), 68 deletions(-)
+ arch/arm64/kernel/ptrace.c | 13 -------------
+ include/linux/regset.h     | 48 +---------------------------------------------
+ 2 files changed, 1 insertion(+), 60 deletions(-)
 
-diff --git a/arch/parisc/kernel/ptrace.c b/arch/parisc/kernel/ptrace.c
-index b51418ad8655..6dd7a4debb9c 100644
---- a/arch/parisc/kernel/ptrace.c
-+++ b/arch/parisc/kernel/ptrace.c
-@@ -391,31 +391,11 @@ void do_syscall_trace_exit(struct pt_regs *regs)
- 
- static int fpr_get(struct task_struct *target,
- 		     const struct user_regset *regset,
--		     unsigned int pos, unsigned int count,
--		     void *kbuf, void __user *ubuf)
-+		     struct membuf to)
- {
- 	struct pt_regs *regs = task_regs(target);
--	__u64 *k = kbuf;
--	__u64 __user *u = ubuf;
--	__u64 reg;
--
--	pos /= sizeof(reg);
--	count /= sizeof(reg);
--
--	if (kbuf)
--		for (; count > 0 && pos < ELF_NFPREG; --count)
--			*k++ = regs->fr[pos++];
--	else
--		for (; count > 0 && pos < ELF_NFPREG; --count)
--			if (__put_user(regs->fr[pos++], u++))
--				return -EFAULT;
- 
--	kbuf = k;
--	ubuf = u;
--	pos *= sizeof(reg);
--	count *= sizeof(reg);
--	return user_regset_copyout_zero(&pos, &count, &kbuf, &ubuf,
--					ELF_NFPREG * sizeof(reg), -1);
-+	return membuf_write(&to, regs->fr, ELF_NFPREG * sizeof(__u64));
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 8745aecffcae..5fb2623b7f13 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -740,18 +740,6 @@ static unsigned int sve_size_from_header(struct user_sve_header const *header)
+ 	return ALIGN(header->size, SVE_VQ_BYTES);
  }
  
- static int fpr_set(struct task_struct *target,
-@@ -527,30 +507,14 @@ static void set_reg(struct pt_regs *regs, int num, unsigned long val)
- 
- static int gpr_get(struct task_struct *target,
- 		     const struct user_regset *regset,
--		     unsigned int pos, unsigned int count,
--		     void *kbuf, void __user *ubuf)
-+		     struct membuf to)
- {
- 	struct pt_regs *regs = task_regs(target);
--	unsigned long *k = kbuf;
--	unsigned long __user *u = ubuf;
--	unsigned long reg;
-+	unsigned int pos;
- 
--	pos /= sizeof(reg);
--	count /= sizeof(reg);
+-static unsigned int sve_get_size(struct task_struct *target,
+-				 const struct user_regset *regset)
+-{
+-	struct user_sve_header header;
 -
--	if (kbuf)
--		for (; count > 0 && pos < ELF_NGREG; --count)
--			*k++ = get_reg(regs, pos++);
--	else
--		for (; count > 0 && pos < ELF_NGREG; --count)
--			if (__put_user(get_reg(regs, pos++), u++))
--				return -EFAULT;
--	kbuf = k;
--	ubuf = u;
--	pos *= sizeof(reg);
--	count *= sizeof(reg);
--	return user_regset_copyout_zero(&pos, &count, &kbuf, &ubuf,
--					ELF_NGREG * sizeof(reg), -1);
-+	for (pos = 0; pos < ELF_NGREG; pos++)
-+		membuf_store(&to, get_reg(regs, pos));
-+	return 0;
- }
- 
- static int gpr_set(struct task_struct *target,
-@@ -588,12 +552,12 @@ static const struct user_regset native_regsets[] = {
- 	[REGSET_GENERAL] = {
- 		.core_note_type = NT_PRSTATUS, .n = ELF_NGREG,
- 		.size = sizeof(long), .align = sizeof(long),
--		.get = gpr_get, .set = gpr_set
-+		.get2 = gpr_get, .set = gpr_set
+-	if (!system_supports_sve())
+-		return 0;
+-
+-	sve_init_header_from_task(&header, target);
+-	return sve_size_from_header(&header);
+-}
+-
+ static int sve_get(struct task_struct *target,
+ 		   const struct user_regset *regset,
+ 		   struct membuf to)
+@@ -1130,7 +1118,6 @@ static const struct user_regset aarch64_regsets[] = {
+ 		.align = SVE_VQ_BYTES,
+ 		.get2 = sve_get,
+ 		.set = sve_set,
+-		.get_size = sve_get_size,
  	},
- 	[REGSET_FP] = {
- 		.core_note_type = NT_PRFPREG, .n = ELF_NFPREG,
- 		.size = sizeof(__u64), .align = sizeof(__u64),
--		.get = fpr_get, .set = fpr_set
-+		.get2 = fpr_get, .set = fpr_set
- 	}
- };
+ #endif
+ #ifdef CONFIG_ARM64_PTR_AUTH
+diff --git a/include/linux/regset.h b/include/linux/regset.h
+index eeabf5cbbbd7..d82bb32e434c 100644
+--- a/include/linux/regset.h
++++ b/include/linux/regset.h
+@@ -133,28 +133,6 @@ typedef int user_regset_writeback_fn(struct task_struct *target,
+ 				     int immediate);
  
-@@ -607,31 +571,15 @@ static const struct user_regset_view user_parisc_native_view = {
- 
- static int gpr32_get(struct task_struct *target,
- 		     const struct user_regset *regset,
--		     unsigned int pos, unsigned int count,
--		     void *kbuf, void __user *ubuf)
-+		     struct membuf to)
- {
- 	struct pt_regs *regs = task_regs(target);
--	compat_ulong_t *k = kbuf;
--	compat_ulong_t __user *u = ubuf;
--	compat_ulong_t reg;
-+	unsigned int pos;
- 
--	pos /= sizeof(reg);
--	count /= sizeof(reg);
-+	for (pos = 0; pos < ELF_NGREG; pos++)
-+		membuf_store(&to, (compat_ulong_t)get_reg(regs, pos));
- 
--	if (kbuf)
--		for (; count > 0 && pos < ELF_NGREG; --count)
--			*k++ = get_reg(regs, pos++);
--	else
--		for (; count > 0 && pos < ELF_NGREG; --count)
--			if (__put_user((compat_ulong_t) get_reg(regs, pos++), u++))
--				return -EFAULT;
+ /**
+- * user_regset_get_size_fn - type of @get_size function in &struct user_regset
+- * @target:	thread being examined
+- * @regset:	regset being examined
+- *
+- * This call is optional; usually the pointer is %NULL.
+- *
+- * When provided, this function must return the current size of regset
+- * data, as observed by the @get function in &struct user_regset.  The
+- * value returned must be a multiple of @size.  The returned size is
+- * required to be valid only until the next time (if any) @regset is
+- * modified for @target.
+- *
+- * This function is intended for dynamically sized regsets.  A regset
+- * that is statically sized does not need to implement it.
+- *
+- * This function should not be called directly: instead, callers should
+- * call regset_size() to determine the current size of a regset.
+- */
+-typedef unsigned int user_regset_get_size_fn(struct task_struct *target,
+-					     const struct user_regset *regset);
 -
--	kbuf = k;
--	ubuf = u;
--	pos *= sizeof(reg);
--	count *= sizeof(reg);
--	return user_regset_copyout_zero(&pos, &count, &kbuf, &ubuf,
--					ELF_NGREG * sizeof(reg), -1);
-+	return 0;
+-/**
+  * struct user_regset - accessible thread CPU state
+  * @n:			Number of slots (registers).
+  * @size:		Size in bytes of a slot (register).
+@@ -165,7 +143,6 @@ typedef unsigned int user_regset_get_size_fn(struct task_struct *target,
+  * @set:		Function to store values.
+  * @active:		Function to report if regset is active, or %NULL.
+  * @writeback:		Function to write data back to user memory, or %NULL.
+- * @get_size:		Function to return the regset's size, or %NULL.
+  *
+  * This data structure describes a machine resource we call a register set.
+  * This is part of the state of an individual thread, not necessarily
+@@ -173,12 +150,7 @@ typedef unsigned int user_regset_get_size_fn(struct task_struct *target,
+  * similar slots, given by @n.  Each slot is @size bytes, and aligned to
+  * @align bytes (which is at least @size).  For dynamically-sized
+  * regsets, @n must contain the maximum possible number of slots for the
+- * regset, and @get_size must point to a function that returns the
+- * current regset size.
+- *
+- * Callers that need to know only the current size of the regset and do
+- * not care about its internal structure should call regset_size()
+- * instead of inspecting @n or calling @get_size.
++ * regset.
+  *
+  * For backward compatibility, the @get and @set methods must pad to, or
+  * accept, @n * @size bytes, even if the current regset size is smaller.
+@@ -218,7 +190,6 @@ struct user_regset {
+ 	user_regset_set_fn		*set;
+ 	user_regset_active_fn		*active;
+ 	user_regset_writeback_fn	*writeback;
+-	user_regset_get_size_fn		*get_size;
+ 	unsigned int			n;
+ 	unsigned int 			size;
+ 	unsigned int 			align;
+@@ -422,21 +393,4 @@ static inline int copy_regset_from_user(struct task_struct *target,
+ 	return regset->set(target, regset, offset, size, NULL, data);
  }
  
- static int gpr32_set(struct task_struct *target,
-@@ -672,12 +620,12 @@ static const struct user_regset compat_regsets[] = {
- 	[REGSET_GENERAL] = {
- 		.core_note_type = NT_PRSTATUS, .n = ELF_NGREG,
- 		.size = sizeof(compat_long_t), .align = sizeof(compat_long_t),
--		.get = gpr32_get, .set = gpr32_set
-+		.get2 = gpr32_get, .set = gpr32_set
- 	},
- 	[REGSET_FP] = {
- 		.core_note_type = NT_PRFPREG, .n = ELF_NFPREG,
- 		.size = sizeof(__u64), .align = sizeof(__u64),
--		.get = fpr_get, .set = fpr_set
-+		.get2 = fpr_get, .set = fpr_set
- 	}
- };
- 
+-/**
+- * regset_size - determine the current size of a regset
+- * @target:	thread to be examined
+- * @regset:	regset to be examined
+- *
+- * Note that the returned size is valid only until the next time
+- * (if any) @regset is modified for @target.
+- */
+-static inline unsigned int regset_size(struct task_struct *target,
+-				       const struct user_regset *regset)
+-{
+-	if (!regset->get_size)
+-		return regset->n * regset->size;
+-	else
+-		return regset->get_size(target, regset);
+-}
+-
+ #endif	/* <linux/regset.h> */
 -- 
 2.11.0
 
