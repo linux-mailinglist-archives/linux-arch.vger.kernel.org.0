@@ -2,149 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E8E20E28B
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jun 2020 00:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A82420E920
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jun 2020 01:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730991AbgF2VGd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 17:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387498AbgF2VGX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 17:06:23 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A9BC061755;
-        Mon, 29 Jun 2020 14:06:23 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id z2so14024217qts.5;
-        Mon, 29 Jun 2020 14:06:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=doBBGB7xlE5VTXsZgCgPieACb98RUxeYYlyjRqBYqwk=;
-        b=LqI1i8wzqXm8nU2Ic1Xkncf9ppAoV7PBHkxQVw49w+S1bUMRA+mPYwotwm1xevj+wz
-         W7EprSOUg3PFhG5CK6k3/cDlwyEbzt528fqOgPyORXJYnow9dML18ccBtnqZJa0UdbP8
-         f7kr1bzbgY0PbKRDt0Abfldoi/agCPG37BmIgJT9nW7J546oknUZM4hZiVXOCrNV9smK
-         XGUkCXgopqK8G1MfzuL2Vf+yhTTvEPxPfxyb2lV+eZJ49nK25nTOmOpNG0bDxTKPO7Jb
-         6d2EuO6hIIQsf3ZYt5qo346hnRJUH4p0HrQMgsRCSErlVd5C9z0ucwkOvhk8rUv6mZf8
-         iEAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=doBBGB7xlE5VTXsZgCgPieACb98RUxeYYlyjRqBYqwk=;
-        b=Mw7z0IPBrrKxo1cx6we3Bj8CJITITGTFu5TF3Ifee8VFhBJZk6S/WtkczAGhXvg/sz
-         Fa22CDEo3ccaJ60bHmrxgb4pNiq1vD3/pM7BBRiwl71rA2ZRr0x6Da2xEf6GMcTxAU7c
-         I181Iq7awoZmGByzhA1VjyeoQLSRzq0+jJ1jHMB5UVlCdkchBmFNQkM2MAdiwH2Fk5ii
-         69EBUufYGSg+nE4CMzZVgwLhymd/GY/SmA3OZltOisnDKHKXnD3oyHVUbYE+s7k9EcOF
-         DhKoCsEB5qvNyT9WViMaE3iBfh85SVOGNCAG789JOA7qnXec9QmvcG9X4oA19y2upyRX
-         9Nvg==
-X-Gm-Message-State: AOAM531SLhhC8Rkiea0p2HbIu7PHEH8lmj5HKPYrl5sseOvbfDRV+5Kl
-        KvkLdenNYAe6k1IccPG9JaY=
-X-Google-Smtp-Source: ABdhPJwWfhACQdRSjlXr+8tYrYr5Js2ar1sW///HmVXlxpOfUFTESwvc3U+xILMwk4hI3IsVsOzReg==
-X-Received: by 2002:ac8:48da:: with SMTP id l26mr17036060qtr.214.1593464782360;
-        Mon, 29 Jun 2020 14:06:22 -0700 (PDT)
-Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id u68sm864480qkd.59.2020.06.29.14.06.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 14:06:21 -0700 (PDT)
-From:   Arvind Sankar <nivedita@alum.mit.edu>
-X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
-Date:   Mon, 29 Jun 2020 17:06:19 -0400
-To:     Arvind Sankar <nivedita@alum.mit.edu>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        James Morse <james.morse@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [PATCH v4 08/17] arm64/mm: Remove needless section quotes
-Message-ID: <20200629210619.GA1603907@rani.riverdale.lan>
-References: <20200629061840.4065483-1-keescook@chromium.org>
- <20200629061840.4065483-9-keescook@chromium.org>
- <CAKwvOd=r6bsBfSZxVYrnbm1Utq==ApWBDjx+0Fxsm90Aq3Jghw@mail.gmail.com>
- <202006291301.46FEF3B7@keescook>
- <20200629205448.GA1474367@rani.riverdale.lan>
+        id S1729324AbgF2XMH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 19:12:07 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48215 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727819AbgF2XMH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Jun 2020 19:12:07 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49wjtX2TZzz9s6w;
+        Tue, 30 Jun 2020 09:12:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1593472325;
+        bh=941EdfoYDRZUrkZYne4BILEiumD128Dyv5nWhLt38Wc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sLMbOT6wQ3hn2zT7RtTkfHIS9I9MK5SK0XLE+DE+ooG1LgQcEekhbNTX/JQ5HbaDk
+         7QDWgcXu4C9BzGOYD7KcTBRqyvvzpeb/mG4rNK062CMNXwOxAr4rxya7HCsD1fJW4x
+         5VC3b+hMVe9whHbjzbd9wlLUpl5r6MjEA0dbfSvFuechCeYEi6VyChxgjb3QK8vSKQ
+         3KGHuVr+C8Rio/hfn9CS39Mb0RDYu4QeZWZFUncFwkyOMGeMQJHphXkY6CvDl+whLL
+         fu05tmZNgeVyHv1je3224wbTRpP4uacBfsI2PwoNvuDVxNSu9+2QNAL9mN4FP1EmjA
+         EAqeE2a9Bmm9g==
+Date:   Tue, 30 Jun 2020 09:12:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linux-kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [RFC PATCH 1/2] Explicitly include linux/major.h where it is
+ needed
+Message-ID: <20200630091203.55cdd5d9@canb.auug.org.au>
+In-Reply-To: <20200617055843.GB25631@kroah.com>
+References: <20200617092614.7897ccb2@canb.auug.org.au>
+        <20200617092747.0cadb2de@canb.auug.org.au>
+        <20200617055843.GB25631@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200629205448.GA1474367@rani.riverdale.lan>
+Content-Type: multipart/signed; boundary="Sig_/BCTuQZc6gP7JPm+u0nl1Qal";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 04:54:48PM -0400, Arvind Sankar wrote:
-> On Mon, Jun 29, 2020 at 01:04:31PM -0700, Kees Cook wrote:
-> > On Mon, Jun 29, 2020 at 12:53:47PM -0700, Nick Desaulniers wrote:
-> > > On Sun, Jun 28, 2020 at 11:18 PM Kees Cook <keescook@chromium.org> wrote:
-> > > >
-> > > > Fix a case of needless quotes in __section(), which Clang doesn't like.
-> > > >
-> > > > Acked-by: Will Deacon <will@kernel.org>
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > 
-> > > Yep, I remember bugs from this.  Probably should scan the kernel for
-> > > other instances of this.  +Joe for checkpatch.pl validation.
-> > 
-> > I think the others are safe because they're in macros:
-> 
-> Why does that make it safe -- the commit msg is a bit sparse, but I
-> assume the problem is that it generates
-> 	__attribute__((__section__("\".foo\"")))
-> from
-> 	__section(".foo")
-> after preprocessing, and clang keeps the quotes in the section name when
-> generating assembly, while gcc appears to strip them off.
-> 
-> It does that even if nested in another macro, no?
+--Sig_/BCTuQZc6gP7JPm+u0nl1Qal
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yep, I can see things like:
-[25] ".discard.ksym"   PROGBITS         0000000000000000  0000217c
-       0000000000000000  0000000000000000  WA       0     0     4
+Hi Greg,
 
-Doesn't seem to cause a build error, but that can't be good.
+On Wed, 17 Jun 2020 07:58:43 +0200 Greg KH <gregkh@linuxfoundation.org> wro=
+te:
+>
+> On Wed, Jun 17, 2020 at 09:27:47AM +1000, Stephen Rothwell wrote:
+> > This is in preparation for removing the include of major.h where it is
+> > not needed.
+> >=20
+> > These files were found using
+> >=20
+> > 	grep -E -L '[<"](uapi/)?linux/major\.h' $(git grep -l -w -f /tmp/xx)
+> >=20
+> > where /tmp/xx contains all the symbols defined in major.h.  There were
+> > a couple of files in that list that did not need the include since the
+> > references are in comments.
+> >=20
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au> =20
+>=20
+> Any reason this had an RFC, but patch 2/2 did not?
+>=20
+> They look good to me, I will be glad to take these, but do you still
+> want reviews from others for this?  It seems simple enough to me...
 
-> 
-> > 
-> > $ git grep -4 '__section("'
-> > include/linux/compiler.h-# define KENTRY(sym)                                           \
-> 
-> Am I missing something, or is KENTRY unused in the tree?
-> 
-> > include/linux/compiler.h-       extern typeof(sym) sym;                                 \
-> > include/linux/compiler.h-       static const unsigned long __kentry_##sym               \
-> > include/linux/compiler.h-       __used                                                  \
-> > include/linux/compiler.h:       __section("___kentry" "+" #sym )                        \
-> > include/linux/compiler.h-       = (unsigned long)&sym;
-> > --
-> > include/linux/export.h-#define __ksym_marker(sym)       \
-> > include/linux/export.h: static int __ksym_marker_##sym[0] __section(".discard.ksym") __used
-> > --
-> > include/linux/srcutree.h-# define __DEFINE_SRCU(name, is_static)                                \
-> > include/linux/srcutree.h-       is_static struct srcu_struct name;                              \
-> > include/linux/srcutree.h-       struct srcu_struct * const __srcu_struct_##name                 \
-> > include/linux/srcutree.h:               __section("___srcu_struct_ptrs") = &name
-> > 
-> > 
-> > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > 
-> > Thanks!
-> > 
-> > -- 
-> > Kees Cook
+I am going to do another round of this patchset splitting out most of
+the "safe" removals that can be done anytime so other maintainers can
+take them.  Then there will be the left over order dependent changes at
+the end.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/BCTuQZc6gP7JPm+u0nl1Qal
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl76dUMACgkQAVBC80lX
+0GwhGQgAhvHebmqV9c+voc8vdC1Luf8C7PWLbdIb6f1iaY+N1bSNKmatpFwTZ1Up
+yf4+QbGQUZbKdTwc7VvNADVmLtek6h9aPVEF+hNKSMFPwCiBCOhpMGCSx4bXFRsj
+irlLoWruvzaAywFE6Qh8GOYbp+SSnW0T6KGnwfrn965opehsULzWBbBOoWY2euF8
+73/adQZJiKUYpTQpvGDKdDBogQRAYs6AFer+7NUxXnH6FN9Zv4wicjMcSpWqss73
+apAKvefLfTY0y+HD7JMoui4msRP+oP9AX7szdZQG81Ns7N26Kl6Uz09DsQCxp5mT
+s5688o6hb+MACM2k5TVUFdQd+GE74g==
+=aVuJ
+-----END PGP SIGNATURE-----
+
+--Sig_/BCTuQZc6gP7JPm+u0nl1Qal--
