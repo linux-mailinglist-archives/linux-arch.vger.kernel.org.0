@@ -2,123 +2,420 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D51F20D3F2
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 21:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDE320D6E7
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 22:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730434AbgF2TD3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 15:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730247AbgF2TD0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:03:26 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94700C031C40;
-        Mon, 29 Jun 2020 12:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=+IitMUk+eOYapugNWdcU2qNl/SJeRY/e+GCy2zsMLo8=; b=N+rbp9GAXyeaJr2JEOHz+UXKi
-        RsSRxVTngHhTRvU12HFs410qqK0KgYvJnLV4c+gxMbCoh3lnabXdW68dUe+tiDxwUQf835ZcIukvO
-        nP+iLDAsjH6047RD10Y8a3A+vLOoAIdwFz5UwQ2vjB/iPjCPwyjp8PTOsP1erptR/bqeZGFkElxUE
-        YTaLVJEib0JGcCyLbw2ccxW1Y35fnPlTX4rz1m2859yaEtnKzdu6gF39mRrYiZLlsKQEKRCiINLWl
-        z0QldW6EbOGfQyx1S0HxtBSebUfIaVLEDFaPlc4HlkrZS+WwFMrEEJcwTNdvYY2LcRWZaTe5c6mzz
-        zvLOSXRqA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33208)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1jpz3m-00088W-9q; Mon, 29 Jun 2020 20:03:18 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1jpz3k-0007MT-Qr; Mon, 29 Jun 2020 20:03:16 +0100
-Date:   Mon, 29 Jun 2020 20:03:16 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Arvind Sankar <nivedita@alum.mit.edu>
-Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
+        id S1730249AbgF2TY6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 15:24:58 -0400
+Received: from foss.arm.com ([217.140.110.172]:40110 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732408AbgF2TY4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:24:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3BD271FB;
+        Mon, 29 Jun 2020 01:09:48 -0700 (PDT)
+Received: from [10.163.83.176] (unknown [10.163.83.176])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0F113F71E;
+        Mon, 29 Jun 2020 01:09:38 -0700 (PDT)
+Subject: Re: [PATCH V3 2/4] mm/debug_vm_pgtable: Add tests validating advanced
+ arch page table helpers
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org
+Cc:     christophe.leroy@c-s.fr, ziy@nvidia.com,
+        gerald.schaefer@de.ibm.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        James Morse <james.morse@arm.com>,
-        Borislav Petkov <bp@suse.de>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 14/17] arm/build: Warn on orphan section placement
-Message-ID: <20200629190316.GY1551@shell.armlinux.org.uk>
-References: <20200629061840.4065483-1-keescook@chromium.org>
- <20200629061840.4065483-15-keescook@chromium.org>
- <20200629155401.GB900899@rani.riverdale.lan>
- <20200629180703.GX1551@shell.armlinux.org.uk>
- <20200629181514.GA1046442@rani.riverdale.lan>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1592192277-8421-1-git-send-email-anshuman.khandual@arm.com>
+ <1592192277-8421-3-git-send-email-anshuman.khandual@arm.com>
+ <6da177e6-9219-9ccf-a402-f4293c7564f7@csgroup.eu>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <bdea0704-11a5-aab3-c9ce-a9e388394836@arm.com>
+Date:   Mon, 29 Jun 2020 13:39:28 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200629181514.GA1046442@rani.riverdale.lan>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <6da177e6-9219-9ccf-a402-f4293c7564f7@csgroup.eu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 02:15:14PM -0400, Arvind Sankar wrote:
-> On Mon, Jun 29, 2020 at 07:07:04PM +0100, Russell King - ARM Linux admin wrote:
-> > On Mon, Jun 29, 2020 at 11:54:01AM -0400, Arvind Sankar wrote:
-> > > On Sun, Jun 28, 2020 at 11:18:37PM -0700, Kees Cook wrote:
-> > > > We don't want to depend on the linker's orphan section placement
-> > > > heuristics as these can vary between linkers, and may change between
-> > > > versions. All sections need to be explicitly named in the linker
-> > > > script.
-> > > > 
-> > > > Specifically, this would have made a recently fixed bug very obvious:
-> > > > 
-> > > > ld: warning: orphan section `.fixup' from `arch/arm/lib/copy_from_user.o' being placed in section `.fixup'
-> > > > 
-> > > > Discard unneeded sections .iplt, .rel.iplt, .igot.plt, and .modinfo.
-> > > > 
-> > > > Add missing text stub sections .vfp11_veneer and .v4_bx.
-> > > > 
-> > > > Add debug sections explicitly.
-> > > > 
-> > > > Finally enable orphan section warning.
-> > > 
-> > > This is unrelated to this patch as such, but I noticed that ARM32/64 places
-> > > the .got section inside .text -- is that expected on ARM?
-> > 
-> > Do you mean in general, in the kernel vmlinux, in the decompressor
-> > vmlinux or ... ?
-> > 
+
+On 06/27/2020 12:48 PM, Christophe Leroy wrote:
+> Le 15/06/2020 à 05:37, Anshuman Khandual a écrit :
+>> This adds new tests validating for these following arch advanced page table
+>> helpers. These tests create and test specific mapping types at various page
+>> table levels.
+>>
+>> 1. pxxp_set_wrprotect()
+>> 2. pxxp_get_and_clear()
+>> 3. pxxp_set_access_flags()
+>> 4. pxxp_get_and_clear_full()
+>> 5. pxxp_test_and_clear_young()
+>> 6. pxx_leaf()
+>> 7. pxx_set_huge()
+>> 8. pxx_(clear|mk)_savedwrite()
+>> 9. huge_pxxp_xxx()
+>>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Mike Rapoport <rppt@linux.ibm.com>
+>> Cc: Vineet Gupta <vgupta@synopsys.com>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>> Cc: Paul Mackerras <paulus@samba.org>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+>> Cc: Vasily Gorbik <gor@linux.ibm.com>
+>> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: "H. Peter Anvin" <hpa@zytor.com>
+>> Cc: Kirill A. Shutemov <kirill@shutemov.name>
+>> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+>> Cc: linux-snps-arc@lists.infradead.org
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linuxppc-dev@lists.ozlabs.org
+>> Cc: linux-s390@vger.kernel.org
+>> Cc: linux-riscv@lists.infradead.org
+>> Cc: x86@kernel.org
+>> Cc: linux-mm@kvack.org
+>> Cc: linux-arch@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>   mm/debug_vm_pgtable.c | 306 ++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 306 insertions(+)
+>>
+>> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+>> index ffa163d4c63c..e3f9f8317a98 100644
+>> --- a/mm/debug_vm_pgtable.c
+>> +++ b/mm/debug_vm_pgtable.c
+>> @@ -21,6 +21,7 @@
+>>   #include <linux/module.h>
+>>   #include <linux/pfn_t.h>
+>>   #include <linux/printk.h>
+>> +#include <linux/pgtable.h>
+>>   #include <linux/random.h>
+>>   #include <linux/spinlock.h>
+>>   #include <linux/swap.h>
+>> @@ -28,6 +29,7 @@
+>>   #include <linux/start_kernel.h>
+>>   #include <linux/sched/mm.h>
+>>   #include <asm/pgalloc.h>
+>> +#include <asm/tlbflush.h>
+>>     #define VMFLAGS    (VM_READ|VM_WRITE|VM_EXEC)
+>>   @@ -55,6 +57,54 @@ static void __init pte_basic_tests(unsigned long pfn, pgprot_t prot)
+>>       WARN_ON(pte_write(pte_wrprotect(pte_mkwrite(pte))));
+>>   }
+>>   +static void __init pte_advanced_tests(struct mm_struct *mm,
+>> +            struct vm_area_struct *vma, pte_t *ptep,
+>> +            unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+>> +{
+>> +    pte_t pte = pfn_pte(pfn, prot);
+>> +
+>> +    pte = pfn_pte(pfn, prot);
+>> +    set_pte_at(mm, vaddr, ptep, pte);
+>> +    ptep_set_wrprotect(mm, vaddr, ptep);
+>> +    pte = READ_ONCE(*ptep);
 > 
-> Sorry, in the kernel vmlinux. ARM_TEXT includes *(.got) for 32-bit, and
-> the 64-bit vmlinux.lds.S includes it in .text as well. The decompressor
-> for 32-bit keeps it separate for non-EFI stub kernel and puts it inside
-> .data for EFI stub.
+> same
+> 
+>> +    WARN_ON(pte_write(pte));
+>> +
+>> +    pte = pfn_pte(pfn, prot);
+>> +    set_pte_at(mm, vaddr, ptep, pte);
+>> +    ptep_get_and_clear(mm, vaddr, ptep);
+>> +    pte = READ_ONCE(*ptep);
+> 
+> same
+> 
+>> +    WARN_ON(!pte_none(pte));
+>> +
+>> +    pte = pfn_pte(pfn, prot);
+>> +    pte = pte_wrprotect(pte);
+>> +    pte = pte_mkclean(pte);
+>> +    set_pte_at(mm, vaddr, ptep, pte);
+>> +    pte = pte_mkwrite(pte);
+>> +    pte = pte_mkdirty(pte);
+>> +    ptep_set_access_flags(vma, vaddr, ptep, pte, 1);
+>> +    pte = READ_ONCE(*ptep);
+> 
+> same
+> 
+>> +    WARN_ON(!(pte_write(pte) && pte_dirty(pte)));
+>> +
+>> +    pte = pfn_pte(pfn, prot);
+>> +    set_pte_at(mm, vaddr, ptep, pte);
+>> +    ptep_get_and_clear_full(mm, vaddr, ptep, 1);
+>> +    pte = READ_ONCE(*ptep);
+> 
+> same
+> 
+>> +    WARN_ON(!pte_none(pte));
+>> +
+>> +    pte = pte_mkyoung(pte);
+>> +    set_pte_at(mm, vaddr, ptep, pte);
+>> +    ptep_test_and_clear_young(vma, vaddr, ptep);
+>> +    pte = READ_ONCE(*ptep);
+> 
+> same
+> 
+>> +    WARN_ON(pte_young(pte));
+>> +}
+>> +
+>> +static void __init pte_savedwrite_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +    pte_t pte = pfn_pte(pfn, prot);
+>> +
+>> +    WARN_ON(!pte_savedwrite(pte_mk_savedwrite(pte_clear_savedwrite(pte))));
+>> +    WARN_ON(pte_savedwrite(pte_clear_savedwrite(pte_mk_savedwrite(pte))));
+>> +}
+>>   #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>>   static void __init pmd_basic_tests(unsigned long pfn, pgprot_t prot)
+>>   {
+>> @@ -77,6 +127,89 @@ static void __init pmd_basic_tests(unsigned long pfn, pgprot_t prot)
+>>       WARN_ON(!pmd_bad(pmd_mkhuge(pmd)));
+>>   }
+>>   +static void __init pmd_advanced_tests(struct mm_struct *mm,
+>> +        struct vm_area_struct *vma, pmd_t *pmdp,
+>> +        unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+>> +{
+>> +    pmd_t pmd = pfn_pmd(pfn, prot);
+>> +
+>> +    if (!has_transparent_hugepage())
+>> +        return;
+>> +
+>> +    /* Align the address wrt HPAGE_PMD_SIZE */
+>> +    vaddr = (vaddr & HPAGE_PMD_MASK) + HPAGE_PMD_SIZE;
+>> +
+>> +    pmd = pfn_pmd(pfn, prot);
+>> +    set_pmd_at(mm, vaddr, pmdp, pmd);
+>> +    pmdp_set_wrprotect(mm, vaddr, pmdp);
+>> +    pmd = READ_ONCE(*pmdp);
+>> +    WARN_ON(pmd_write(pmd));
+>> +
+>> +    pmd = pfn_pmd(pfn, prot);
+>> +    set_pmd_at(mm, vaddr, pmdp, pmd);
+>> +    pmdp_huge_get_and_clear(mm, vaddr, pmdp);
+>> +    pmd = READ_ONCE(*pmdp);
+>> +    WARN_ON(!pmd_none(pmd));
+>> +
+>> +    pmd = pfn_pmd(pfn, prot);
+>> +    pmd = pmd_wrprotect(pmd);
+>> +    pmd = pmd_mkclean(pmd);
+>> +    set_pmd_at(mm, vaddr, pmdp, pmd);
+>> +    pmd = pmd_mkwrite(pmd);
+>> +    pmd = pmd_mkdirty(pmd);
+>> +    pmdp_set_access_flags(vma, vaddr, pmdp, pmd, 1);
+>> +    pmd = READ_ONCE(*pmdp);
+>> +    WARN_ON(!(pmd_write(pmd) && pmd_dirty(pmd)));
+>> +
+>> +    pmd = pmd_mkhuge(pfn_pmd(pfn, prot));
+>> +    set_pmd_at(mm, vaddr, pmdp, pmd);
+>> +    pmdp_huge_get_and_clear_full(vma, vaddr, pmdp, 1);
+>> +    pmd = READ_ONCE(*pmdp);
+>> +    WARN_ON(!pmd_none(pmd));
+>> +
+>> +    pmd = pmd_mkyoung(pmd);
+>> +    set_pmd_at(mm, vaddr, pmdp, pmd);
+>> +    pmdp_test_and_clear_young(vma, vaddr, pmdp);
+>> +    pmd = READ_ONCE(*pmdp);
+>> +    WARN_ON(pmd_young(pmd));
+>> +}
+>> +
+>> +static void __init pmd_leaf_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +    pmd_t pmd = pfn_pmd(pfn, prot);
+>> +
+>> +    /*
+>> +     * PMD based THP is a leaf entry.
+>> +     */
+>> +    pmd = pmd_mkhuge(pmd);
+>> +    WARN_ON(!pmd_leaf(pmd));
+>> +}
+>> +
+>> +static void __init pmd_huge_tests(pmd_t *pmdp, unsigned long pfn, pgprot_t prot)
+>> +{
+>> +    pmd_t pmd;
+>> +
+>> +    if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMAP))
+>> +        return;
+>> +    /*
+>> +     * X86 defined pmd_set_huge() verifies that the given
+>> +     * PMD is not a populated non-leaf entry.
+>> +     */
+>> +    WRITE_ONCE(*pmdp, __pmd(0));
+>> +    WARN_ON(!pmd_set_huge(pmdp, __pfn_to_phys(pfn), prot));
+>> +    WARN_ON(!pmd_clear_huge(pmdp));
+>> +    pmd = READ_ONCE(*pmdp);
+>> +    WARN_ON(!pmd_none(pmd));
+>> +}
+>> +
+>> +static void __init pmd_savedwrite_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +    pmd_t pmd = pfn_pmd(pfn, prot);
+>> +
+>> +    WARN_ON(!pmd_savedwrite(pmd_mk_savedwrite(pmd_clear_savedwrite(pmd))));
+>> +    WARN_ON(pmd_savedwrite(pmd_clear_savedwrite(pmd_mk_savedwrite(pmd))));
+>> +}
+>> +
+>>   #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+>>   static void __init pud_basic_tests(unsigned long pfn, pgprot_t prot)
+>>   {
+>> @@ -100,12 +233,115 @@ static void __init pud_basic_tests(unsigned long pfn, pgprot_t prot)
+>>        */
+>>       WARN_ON(!pud_bad(pud_mkhuge(pud)));
+>>   }
+>> +
+>> +static void pud_advanced_tests(struct mm_struct *mm,
+>> +        struct vm_area_struct *vma, pud_t *pudp,
+>> +        unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+>> +{
+>> +    pud_t pud = pfn_pud(pfn, prot);
+>> +
+>> +    if (!has_transparent_hugepage())
+>> +        return;
+>> +
+>> +    /* Align the address wrt HPAGE_PUD_SIZE */
+>> +    vaddr = (vaddr & HPAGE_PUD_MASK) + HPAGE_PUD_SIZE;
+>> +
+>> +    set_pud_at(mm, vaddr, pudp, pud);
+>> +    pudp_set_wrprotect(mm, vaddr, pudp);
+>> +    pud = READ_ONCE(*pudp);
+>> +    WARN_ON(pud_write(pud));
+>> +
+>> +#ifndef __PAGETABLE_PMD_FOLDED
+>> +    pud = pfn_pud(pfn, prot);
+>> +    set_pud_at(mm, vaddr, pudp, pud);
+>> +    pudp_huge_get_and_clear(mm, vaddr, pudp);
+>> +    pud = READ_ONCE(*pudp);
+>> +    WARN_ON(!pud_none(pud));
+>> +
+>> +    pud = pfn_pud(pfn, prot);
+>> +    set_pud_at(mm, vaddr, pudp, pud);
+>> +    pudp_huge_get_and_clear_full(mm, vaddr, pudp, 1);
+>> +    pud = READ_ONCE(*pudp);
+>> +    WARN_ON(!pud_none(pud));
+>> +#endif /* __PAGETABLE_PMD_FOLDED */
+>> +    pud = pfn_pud(pfn, prot);
+>> +    pud = pud_wrprotect(pud);
+>> +    pud = pud_mkclean(pud);
+>> +    set_pud_at(mm, vaddr, pudp, pud);
+>> +    pud = pud_mkwrite(pud);
+>> +    pud = pud_mkdirty(pud);
+>> +    pudp_set_access_flags(vma, vaddr, pudp, pud, 1);
+>> +    pud = READ_ONCE(*pudp);
+>> +    WARN_ON(!(pud_write(pud) && pud_dirty(pud)));
+>> +
+>> +    pud = pud_mkyoung(pud);
+>> +    set_pud_at(mm, vaddr, pudp, pud);
+>> +    pudp_test_and_clear_young(vma, vaddr, pudp);
+>> +    pud = READ_ONCE(*pudp);
+>> +    WARN_ON(pud_young(pud));
+>> +}
+>> +
+>> +static void __init pud_leaf_tests(unsigned long pfn, pgprot_t prot)
+>> +{
+>> +    pud_t pud = pfn_pud(pfn, prot);
+>> +
+>> +    /*
+>> +     * PUD based THP is a leaf entry.
+>> +     */
+>> +    pud = pud_mkhuge(pud);
+>> +    WARN_ON(!pud_leaf(pud));
+>> +}
+>> +
+>> +static void __init pud_huge_tests(pud_t *pudp, unsigned long pfn, pgprot_t prot)
+>> +{
+>> +    pud_t pud;
+>> +
+>> +    if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMAP))
+>> +        return;
+>> +    /*
+>> +     * X86 defined pud_set_huge() verifies that the given
+>> +     * PUD is not a populated non-leaf entry.
+>> +     */
+>> +    WRITE_ONCE(*pudp, __pud(0));
+>> +    WARN_ON(!pud_set_huge(pudp, __pfn_to_phys(pfn), prot));
+>> +    WARN_ON(!pud_clear_huge(pudp));
+>> +    pud = READ_ONCE(*pudp);
+>> +    WARN_ON(!pud_none(pud));
+>> +}
+>>   #else  /* !CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD */
+>>   static void __init pud_basic_tests(unsigned long pfn, pgprot_t prot) { }
+>> +static void pud_advanced_tests(struct mm_struct *mm,
+>> +        struct vm_area_struct *vma, pud_t *pudp,
+>> +        unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+>> +{
+>> +}
+>> +static void __init pud_leaf_tests(unsigned long pfn, pgprot_t prot) { }
+>> +static void __init pud_huge_tests(pud_t *pudp, unsigned long pfn, pgprot_t prot)
+>> +{
+>> +}
+>>   #endif /* CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD */
+>>   #else  /* !CONFIG_TRANSPARENT_HUGEPAGE */
+>>   static void __init pmd_basic_tests(unsigned long pfn, pgprot_t prot) { }
+>>   static void __init pud_basic_tests(unsigned long pfn, pgprot_t prot) { }
+>> +static void __init pmd_advanced_tests(struct mm_struct *mm,
+>> +        struct vm_area_struct *vma, pmd_t *pmdp,
+>> +        unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+>> +{
+>> +}
+>> +static void __init pud_advanced_tests(struct mm_struct *mm,
+>> +        struct vm_area_struct *vma, pud_t *pudp,
+>> +        unsigned long pfn, unsigned long vaddr, pgprot_t prot)
+>> +{
+>> +}
+>> +static void __init pmd_leaf_tests(unsigned long pfn, pgprot_t prot) { }
+>> +static void __init pud_leaf_tests(unsigned long pfn, pgprot_t prot) { }
+>> +static void __init pmd_huge_tests(pmd_t *pmdp, unsigned long pfn, pgprot_t prot)
+>> +{
+>> +}
+>> +static void __init pud_huge_tests(pud_t *pudp, unsigned long pfn, pgprot_t prot)
+>> +{
+>> +}
+>> +static void __init pmd_savedwrite_tests(unsigned long pfn, pgprot_t prot) { }
+>>   #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>>     static void __init p4d_basic_tests(unsigned long pfn, pgprot_t prot)
+>> @@ -495,8 +731,56 @@ static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot)
+>>       WARN_ON(!pte_huge(pte_mkhuge(pte)));
+>>   #endif /* CONFIG_ARCH_WANT_GENERAL_HUGETLB */
+>>   }
+>> +
+>> +static void __init hugetlb_advanced_tests(struct mm_struct *mm,
+>> +                      struct vm_area_struct *vma,
+>> +                      pte_t *ptep, unsigned long pfn,
+>> +                      unsigned long vaddr, pgprot_t prot)
+>> +{
+>> +    struct page *page = pfn_to_page(pfn);
+>> +    pte_t pte = READ_ONCE(*ptep);
+> 
+> Remplace with ptep_get() to avoid build failure on powerpc 8xx.
 
-The main 32-bit kernel image doesn't use the .got - I don't think it
-actually even exists.
-
-The decompressor (non-EFI) uses the .got as a way of getting position
-independence, and that must be part of the binary image at a fixed
-offset from the .text section.  The decompressor self-fixes up the
-GOT entries.
-
-In the case of the decompressor being flashed and executed from NOR
-flash, the decompressor must be built for the specific address(es)
-that it will reside (which does away with the .got table.)
-
-For EFI, it needs to be in the .data section (which is in that case
-always a fixed offset from .text) so that it can be written to so the
-fix-ups work.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Sure, will replace all open PTE pointer accesses with ptep_get().
