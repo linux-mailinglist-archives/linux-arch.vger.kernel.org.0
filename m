@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C109620D627
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 22:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5C620D634
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 22:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731988AbgF2TSF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 15:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        id S1732006AbgF2TSW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 15:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731886AbgF2TRn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:17:43 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69549C03079F;
-        Mon, 29 Jun 2020 08:41:55 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id d4so15937212otk.2;
-        Mon, 29 Jun 2020 08:41:55 -0700 (PDT)
+        with ESMTP id S1731870AbgF2TRm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:17:42 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8E7C0307A1;
+        Mon, 29 Jun 2020 08:42:39 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id t18so3124611otq.5;
+        Mon, 29 Jun 2020 08:42:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=18DuSBZeLijFT5byeb07kqFnxpD8Og5k3o71uVKMsdg=;
-        b=pdqY7+o2ViXtdwzpRg7V0spv+w3RMUTM8pq1mA6PmxJQxaN+pwXkRL4gutZbEnUAKk
-         7oZWR0fNzNN95BqoUgj38z60RkoZbqe4xAnV7jSf0z2PY1Vs68uxoB44TPGrQzkJO7a0
-         Vyua6rOkYqe3j2a+SNQtf1aAGahjOQ6olRQRMR+QKVRHTqTrB26RJMcrE0bQrdpP0kxb
-         GXkekPVusG/8EahYhVxY3eQGoN00/OYTFsMlyutG2FEKFwqzG7+e2D6I98d2I2Ajzi8X
-         2phUh4VE9sJpVENYIDLD7jo8f7GkC33+xzVej1zgc1PQXMy/mwSU4BfTjAdKNWzeDASN
-         aDpQ==
-X-Gm-Message-State: AOAM532mh0D7t76EfolXynbkKGtSx7oXy9QJfDi+g7PO2w/qt/ymCT0a
-        6P7ZpiPFXLDHyBHypymp52y56QVZgAapKfX/hxQ=
-X-Google-Smtp-Source: ABdhPJyfGDnofAtWY6Vq9zQSiEjHHywgsNVHJzUbnOYeAK8rSOSVeLQNZQAOcMed2+/KO3c+bzP8Q5CiqDzs7aUNX9g=
-X-Received: by 2002:a05:6830:1451:: with SMTP id w17mr1238896otp.250.1593445314725;
- Mon, 29 Jun 2020 08:41:54 -0700 (PDT)
+        bh=ByBiz3Yf8Ie7OVrqv/Mz9cEMnJyRfxViWcmC4BsTpCo=;
+        b=hE0uYABTBummnjR4Ws7/8m9VVzWu3XAHX7c2WGmbGrae6o+12esgMGqEHBl4sl73+C
+         AToMRiaGu1UVkN6DOweDnKiho6a8hv9J3XvoKydijrHEboTGALRT/TGeQckwC85r+b4J
+         2Zw18I8VuJDeNxe3bifM4EJtPrXvUqSlhjN1qO2qKunLb61XO2XoQcnD32wfqTCgt4M4
+         qD5BwJwOaUF+gQPy18XRVJlH05V+T7VbWoBAjJKR6IJZzaQwjLTk14QaP1C47epEVNId
+         N8NjARUfAf/n6uX5Qr3IgkkCHJdghf7za3mZIYyyIDv8CttxvvDCJw+1wK4I4eGBWt50
+         P2cA==
+X-Gm-Message-State: AOAM533m/nSIvlk6XUAXMgV8JRrLeMfpbqqzPNRNzbHEdYH+T3ZNHbdE
+        MVvWhQJ4846m4ksPjwoaF6YS5nNSR8//g+GmAMg=
+X-Google-Smtp-Source: ABdhPJzZv9yrcqjQPIqNSuZYxDZ0MHssHdmPppPpB4X3a0jGl41oFltbqUVWyGPYv/nioiv+o7pFkroyCV6uhkj/ZSQ=
+X-Received: by 2002:a05:6830:1451:: with SMTP id w17mr1241594otp.250.1593445359003;
+ Mon, 29 Jun 2020 08:42:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200627143453.31835-1-rppt@kernel.org> <20200627143453.31835-2-rppt@kernel.org>
-In-Reply-To: <20200627143453.31835-2-rppt@kernel.org>
+References: <20200627143453.31835-1-rppt@kernel.org> <20200627143453.31835-7-rppt@kernel.org>
+In-Reply-To: <20200627143453.31835-7-rppt@kernel.org>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 29 Jun 2020 17:41:43 +0200
-Message-ID: <CAMuHMdUOrrrtKuhtWJvzKNNLXY1fx+Ym1oXGN2J_CZ7RqByGHQ@mail.gmail.com>
-Subject: Re: [PATCH 1/8] mm: remove unneeded includes of <asm/pgalloc.h>
+Date:   Mon, 29 Jun 2020 17:42:28 +0200
+Message-ID: <CAMuHMdWP07XqvgrXjCG+n5FssH3BwdDEWA4fD9TQgvVy93uMhQ@mail.gmail.com>
+Subject: Re: [PATCH 6/8] asm-generic: pgalloc: provide generic pgd_free()
 To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
@@ -80,25 +80,13 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 27, 2020 at 4:35 PM Mike Rapoport <rppt@kernel.org> wrote:
+On Sat, Jun 27, 2020 at 4:36 PM Mike Rapoport <rppt@kernel.org> wrote:
 > From: Mike Rapoport <rppt@linux.ibm.com>
 >
-> In the most cases <asm/pgalloc.h> header is required only for allocations
-> of page table memory. Most of the .c files that include that header do not
-> use symbols declared in <asm/pgalloc.h> and do not require that header.
+> Most architectures define pgd_free() as a wrapper for free_page().
 >
-> As for the other header files that used to include <asm/pgalloc.h>, it is
-> possible to move that include into the .c file that actually uses symbols
-> from <asm/pgalloc.h> and drop the include from the header file.
->
-> The process was somewhat automated using
->
->         sed -i -E '/[<"]asm\/pgalloc\.h/d' \
->                 $(grep -L -w -f /tmp/xx \
->                         $(git grep -E -l '[<"]asm/pgalloc\.h'))
->
-> where /tmp/xx contains all the symbols defined in
-> arch/*/include/asm/pgalloc.h.
+> Provide a generic version in asm-generic/pgalloc.h and enable its use for
+> most architectures.
 >
 > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 
