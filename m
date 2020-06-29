@@ -2,54 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2498B20D1C5
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 20:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A042320D50F
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 21:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728492AbgF2Snu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 14:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S1731756AbgF2TOU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 15:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729138AbgF2Smw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 14:42:52 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDBEC033C3C
-        for <linux-arch@vger.kernel.org>; Mon, 29 Jun 2020 11:37:18 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id d10so7429368pls.5
-        for <linux-arch@vger.kernel.org>; Mon, 29 Jun 2020 11:37:18 -0700 (PDT)
+        with ESMTP id S1731730AbgF2TOP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:14:15 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13DEC08EB07
+        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:51 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id h22so7569395pjf.1
+        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mHYFnEmrPBB0EoPbZgrylZKEYeUJ7dEY2zbQRVE/TE0=;
-        b=Q8HPwYcPpk6cvqNepdjj7GzG1i+hF0OU2K7lY/4cN3hqsYfjspAjYrh+e2x1oQ7izt
-         iGyhkr4NRFSf1YHoPA7GUZuTdUCb2hwxF7gz7vNnMwVjF3WqMxXPlRNOJMDLab1+merl
-         8ySrtV3vm5xm4BTKo0/QkZC1k/74EuL1hVQtU=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Y6H7F3yYvyF+nG4ZythWO1q4A4EGexkc0hsQxsFmb9Y=;
+        b=iVT4bBfQ6leUk5glF2pMl9eJljlvaaSp/YPWKEyom1eoXY38lZNBJs89R68n/TkQRK
+         VemoTUlkPcEIj0X5LaHDBpYNb6JR+gzylEyj/6uGQ0zrcsVW6Z2e50vFcw4/LufZ0RlH
+         Rr1I65xQHvasMD9B6f8+m9p7uXXbJGaZKEgRU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mHYFnEmrPBB0EoPbZgrylZKEYeUJ7dEY2zbQRVE/TE0=;
-        b=HWgSqs1GlqmleRM/Ep1dVqQDN4zkeVe5xVea+aRdUs25b1GPFUmkWfrrxaeVrfeI+I
-         yeXTsEy2s2UA4Fi8io7DrIhsG45omu8fedGWrJoBEdYQt3sWd5/AvwtIXp2qat9Dcd35
-         RMf2m4OUkVQBC1T+DP29sZQUmgh6sWD55Cd6aQeoatJmu7K02wcX2w4SzHphI7n4mhF1
-         JmHNgCCyU3KFihoOStc0MC0sPUNJ8niDcs6BI4UUMWLX0dMlzKhLTXoioURgvx6ap/71
-         3LWm7VvLdo260b6UydCXTjj9p6fsr6VP3z2BDZ+mGSMubI2K8lX1+O79XkQgkmEK92BV
-         9wsA==
-X-Gm-Message-State: AOAM530uNEl4RjMfxxgJxstKvmbemC6mi4RqFfRtBfj2L560pc3ABGTP
-        mBi60rldNZ6EwP9GOdvJ/MAA2g==
-X-Google-Smtp-Source: ABdhPJyO5LBgTD5AtbVt3yk/cj+JfeKTEZLWvpJPG/3xUjAxL4UTeU1IkJQNAdsLcqAC0lW924PkIQ==
-X-Received: by 2002:a17:90a:e884:: with SMTP id h4mr9418062pjy.229.1593455837971;
-        Mon, 29 Jun 2020 11:37:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Y6H7F3yYvyF+nG4ZythWO1q4A4EGexkc0hsQxsFmb9Y=;
+        b=ky9OqiYWqLPWVH4kdolnFdxDN1WdXjrHLO/hiVFO3yvcJmk2lllhL2IeXfJHkEKziQ
+         G7LF2HBLoAkp8yutvgkFSCcX7zMr5vMMDgHOc1ZBE0ubDBqko+5SLoicSyq1gHOEpIE8
+         ft+WHZUFZAYEyeIhd32a/qgUwru2ywklYdXyb8pJ45odbsgJEbWUgKNxjWX6E5zxETvu
+         u9lqi0Wn498boSEZZ50+N+NMNyqzfTcYiutk7Ch3fAxf0YYYiuyTZ5wtTQt8UX9kXemu
+         BhV/y7jpezNIwkPs/zFN9s+M7V9/5RGKINY1o0Waf6tjYjaw1yRiilB95pVaGpbxauPU
+         76qg==
+X-Gm-Message-State: AOAM533glnyzI7zCrhX8Lz2Gx9Pi2zVoAX8UtPmzpd+HSBNvS7WpcOmR
+        DQgTZhE8Q+SxWKSUz2e1YDH0BA==
+X-Google-Smtp-Source: ABdhPJyhkXUuny1/EwAfUvLAv2Ye21VG04The4ylXZoGinmuezptDR1f9Ju6NVe3PkYUF+OdvxyLJw==
+X-Received: by 2002:a17:90a:d585:: with SMTP id v5mr15976566pju.38.1593411531309;
+        Sun, 28 Jun 2020 23:18:51 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n15sm457229pgs.25.2020.06.29.11.37.16
+        by smtp.gmail.com with ESMTPSA id 199sm23398281pgc.79.2020.06.28.23.18.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 11:37:17 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 11:37:16 -0700
+        Sun, 28 Jun 2020 23:18:48 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
+To:     Will Deacon <will@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Peter Collingbourne <pcc@google.com>,
@@ -60,50 +58,55 @@ Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Arvind Sankar <nivedita@alum.mit.edu>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, X86 ML <x86@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>
-Subject: Re: [PATCH v4 05/17] ctype: Work around Clang
- -mbranch-protection=none bug
-Message-ID: <202006291136.E6DF8242@keescook>
+        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 10/17] arm64/kernel: Remove needless Call Frame Information annotations
+Date:   Sun, 28 Jun 2020 23:18:33 -0700
+Message-Id: <20200629061840.4065483-11-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200629061840.4065483-1-keescook@chromium.org>
 References: <20200629061840.4065483-1-keescook@chromium.org>
- <20200629061840.4065483-6-keescook@chromium.org>
- <CAMj1kXE+toCd=Bx-zw7D9bvDRNB2aPn5-_7CY7MOKcVGA-azVg@mail.gmail.com>
- <202006290806.3BDE2A8@keescook>
- <CAKwvOd=DMfmvfiEX7KDPLs75SbNz+LAGSwC3V_=LgGH3kjtE=g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=DMfmvfiEX7KDPLs75SbNz+LAGSwC3V_=LgGH3kjtE=g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 11:02:51AM -0700, Nick Desaulniers wrote:
-> This is definitely better than the empty function.  Though a patch is
-> posted for fixing this in LLVM. Assuming that lands before this, we
-> might not actually need this workaround?
-> 
-> arch/arm64/Kconfig
-> 1625 config ARM64_BTI_KERNEL
-> ...
-> 1633   # https://reviews.llvm.org/rGb8ae3fdfa579dbf366b1bb1cbfdbf8c51db7fa55
-> 1634   depends on !CC_IS_CLANG || CLANG_VERSION >= 100001
-> 
-> So if Daniel's patch lands AND is backported into the clang 10.0.1
-> release, then we might not need to carry this workaround?  Either way,
+Remove last instance of an .eh_frame section by removing the needless Call
+Frame Information annotations which were likely leftovers from 32-bit arm.
 
-True, though as I mentioned in the review, I don't think it's quite
-right -- the warning getting removed is actually quite valuable.
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+Acked-by: Will Deacon <will@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ arch/arm64/kernel/smccc-call.S | 2 --
+ 1 file changed, 2 deletions(-)
 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-Thanks!
-
+diff --git a/arch/arm64/kernel/smccc-call.S b/arch/arm64/kernel/smccc-call.S
+index 1f93809528a4..d62447964ed9 100644
+--- a/arch/arm64/kernel/smccc-call.S
++++ b/arch/arm64/kernel/smccc-call.S
+@@ -9,7 +9,6 @@
+ #include <asm/assembler.h>
+ 
+ 	.macro SMCCC instr
+-	.cfi_startproc
+ 	\instr	#0
+ 	ldr	x4, [sp]
+ 	stp	x0, x1, [x4, #ARM_SMCCC_RES_X0_OFFS]
+@@ -21,7 +20,6 @@
+ 	b.ne	1f
+ 	str	x6, [x4, ARM_SMCCC_QUIRK_STATE_OFFS]
+ 1:	ret
+-	.cfi_endproc
+ 	.endm
+ 
+ /*
 -- 
-Kees Cook
+2.25.1
+
