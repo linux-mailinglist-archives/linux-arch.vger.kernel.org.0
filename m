@@ -2,109 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6885720E1CA
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083B620DD6F
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731584AbgF2U7c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 16:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S1727959AbgF2Syh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 14:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731246AbgF2TNB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:13:01 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B250C0005E9;
-        Mon, 29 Jun 2020 04:52:27 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id l12so16228482ejn.10;
-        Mon, 29 Jun 2020 04:52:27 -0700 (PDT)
+        with ESMTP id S1729807AbgF2Sww (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 14:52:52 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9B7C031C7A;
+        Mon, 29 Jun 2020 11:15:17 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id z2so13590859qts.5;
+        Mon, 29 Jun 2020 11:15:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=cc:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=z4T8FYIuY1Y9y77Ieqlt8yjK4mMZI204Yh7+ny2pOxI=;
-        b=NSw0+NYOEWUX09qhxIhnQuDptMz9usR2acyi5MT3qtQDq+jauX9JV0dCNi+hWPVZKA
-         8PITL1jUFfcQhJboYmU1vI/EQ5kfRyxTWQ2mdSe93/utFbWDgAAn4jX2K2chejuh0RUw
-         PVc6VhEVd6bgpByATmWgDNn9QcLyc9jiDyAcd+Kj5gU6D3ToMNpIMN/1ot03nTRx/gYY
-         iWVIvcp2xEutzLW5dxNzSdIJgGZUKeYFTjyTpgmrEkHSnqxAx1OYq+20VnYPq/LT6QYU
-         Ths+XT2EYO4scy8hAvLNjOZbH0sBhjW7D7TgenH6hwS9ZPS5Gombm09nV7zneDKp9HUF
-         Qo3A==
+        h=sender:from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ksn6KEgSSy4O04+EmiHmLNcv0njEAGgzFW6T11ji+vI=;
+        b=Xjvp/RucTJD7ys4so77HqyBdKQg72774rOpK0Iy63xJF5nLNOOILQoRIXkvOl8GSiV
+         +dq1LOTSqRzP649aH77rs+eXXLE6NrmWrR2ZfZCPcZIIXq+sCkRejxszABRcdazkcaLO
+         sosTZdgioDe0Awvmhn8VQ9Xq7tdlEZdqFPTfi0ICfdG4ZOw15yRKYNYyr7GlNnUU/Jc6
+         j+yXaf+nXfjR9kDYWQi3iHL2zZJ08F13kaTJcXndLsH6fIgDkpVttULkAJxaKMU4AZTG
+         otU+pDZSB+sDNIHb74V0Qlsb3g2ppZAYET8gjxxd9JFf9PRwuZVBIXjVJQHbrkmo8MjZ
+         lAEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=z4T8FYIuY1Y9y77Ieqlt8yjK4mMZI204Yh7+ny2pOxI=;
-        b=sKDr8ozB9dwf+BIP+yOM/F/bWYvc+uvl1Jk5SJjiP+Q0ip2dsxVN+2WkYaAp+toban
-         i96LLtJHxhmlV+0XLTtKCtidGnijXVhrmsO1/VUzDmu3+vJxtsS5+R97a4nhyAPysCE2
-         Aroc3VISYEobd/XbrtSqlIxmA2Eb3au96q6pCVaKag4E2JX8qFGDzoyM6MpeULXQmCRt
-         ZIubiPDuHIMyGLYfocu5iQpVrEIkLvT7YGPvntrYDAX42JmdIphzfYmMaY8VhC5DUd0i
-         yPjGMJPqvlY9kXfPg21vMTT2yY1+8RpVYb8/RKgQtgYUa65W48Jue9FnH98YwPenYsMu
-         2/Dw==
-X-Gm-Message-State: AOAM530+w7k3zenp4VIIEtrhkTaIOneRzOzprBzGen9ZCKF7K8yZ6b6k
-        QJR2NPclAXapqR4qDRmHKrc=
-X-Google-Smtp-Source: ABdhPJw9VywqY/CryAfoqmrag72OopJvW/lVO6GIt4MIPEZf6gSRTEOjsN3NrsEflaVIfLx4tCcXFA==
-X-Received: by 2002:a17:907:7283:: with SMTP id dt3mr13997833ejc.195.1593431545811;
-        Mon, 29 Jun 2020 04:52:25 -0700 (PDT)
-Received: from ?IPv6:2001:a61:253c:8201:b2fb:3ef8:ca:1604? ([2001:a61:253c:8201:b2fb:3ef8:ca:1604])
-        by smtp.gmail.com with ESMTPSA id w8sm28008278eds.41.2020.06.29.04.52.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jun 2020 04:52:25 -0700 (PDT)
-Cc:     mtk.manpages@gmail.com, linux-man@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ksn6KEgSSy4O04+EmiHmLNcv0njEAGgzFW6T11ji+vI=;
+        b=MMCFgfFy9XnVzlCnOmLXySRIJgDwwaAj3tfCJEP31d9kQcaS9N9s1aLPJeQJhQvxE+
+         3SRMx35eiwg5VzdZH60FFBN5CbgZ5KcZobnftXPg3HbGkyoznqcd8lp5p9RThLhLr01h
+         3NzspdNOa9bTIjExPT0NysjWKc/fTEqr4DWl0stTG7/Z9aV3cFLQbHgE09rj0NfZ1kEs
+         naM2suTJS37VlRM7S8QUsUj2uBFy34PjijFIkeyC29bKWJepv99TJC/rpbV2t64K88ua
+         q0uLpEwwqJ/QsgY/vak953jOQ9hJpK938DYmqNY+9YigJtuZQsEl9V90RUuhxKPl8ToV
+         MhBw==
+X-Gm-Message-State: AOAM532ECWZ/23VgLyHR8ClfLpqlvHPq6zguAWeTv/2/v5t3pFttUnoH
+        +P6Lp7caVaj2RH1UsbMqys0=
+X-Google-Smtp-Source: ABdhPJzHr+OXXpT2ladJEzyIUGa3Qh7oKbbNWJhQOzQ+NHJbTju9YGsvUo+VZ1jPBQ+dsZ58uYQ4Zw==
+X-Received: by 2002:ac8:7242:: with SMTP id l2mr16374761qtp.320.1593454516576;
+        Mon, 29 Jun 2020 11:15:16 -0700 (PDT)
+Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
+        by smtp.gmail.com with ESMTPSA id z17sm592545qth.24.2020.06.29.11.15.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 11:15:16 -0700 (PDT)
+From:   Arvind Sankar <nivedita@alum.mit.edu>
+X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
+Date:   Mon, 29 Jun 2020 14:15:14 -0400
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Subject: Re: [PATCH v3 0/2] prctl.2 man page updates for Linux 5.6
-To:     Dave Martin <Dave.Martin@arm.com>
-References: <1593020162-9365-1-git-send-email-Dave.Martin@arm.com>
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <c17e330c-69f7-da7a-feae-cb8b8f5d7ea0@gmail.com>
-Date:   Mon, 29 Jun 2020 13:52:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 14/17] arm/build: Warn on orphan section placement
+Message-ID: <20200629181514.GA1046442@rani.riverdale.lan>
+References: <20200629061840.4065483-1-keescook@chromium.org>
+ <20200629061840.4065483-15-keescook@chromium.org>
+ <20200629155401.GB900899@rani.riverdale.lan>
+ <20200629180703.GX1551@shell.armlinux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <1593020162-9365-1-git-send-email-Dave.Martin@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20200629180703.GX1551@shell.armlinux.org.uk>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Dave,
+On Mon, Jun 29, 2020 at 07:07:04PM +0100, Russell King - ARM Linux admin wrote:
+> On Mon, Jun 29, 2020 at 11:54:01AM -0400, Arvind Sankar wrote:
+> > On Sun, Jun 28, 2020 at 11:18:37PM -0700, Kees Cook wrote:
+> > > We don't want to depend on the linker's orphan section placement
+> > > heuristics as these can vary between linkers, and may change between
+> > > versions. All sections need to be explicitly named in the linker
+> > > script.
+> > > 
+> > > Specifically, this would have made a recently fixed bug very obvious:
+> > > 
+> > > ld: warning: orphan section `.fixup' from `arch/arm/lib/copy_from_user.o' being placed in section `.fixup'
+> > > 
+> > > Discard unneeded sections .iplt, .rel.iplt, .igot.plt, and .modinfo.
+> > > 
+> > > Add missing text stub sections .vfp11_veneer and .v4_bx.
+> > > 
+> > > Add debug sections explicitly.
+> > > 
+> > > Finally enable orphan section warning.
+> > 
+> > This is unrelated to this patch as such, but I noticed that ARM32/64 places
+> > the .got section inside .text -- is that expected on ARM?
+> 
+> Do you mean in general, in the kernel vmlinux, in the decompressor
+> vmlinux or ... ?
+> 
 
-On 6/24/20 7:36 PM, Dave Martin wrote:
-> A bunch of updates to the prctl(2) man page to fill in missing
-> prctls (mostly) up to Linux 5.6 (along with a few other tweaks and
-> fixes).
-> 
-> Patches from the v2 series [1] that have been applied or rejected
-> already have been dropped.
-> 
-> All that remain here now are the SVE and tagged address ABI controls
-> for arm64.
-> 
-> 
-> 
-> [1] https://lore.kernel.org/linux-man/1590614258-24728-1-git-send-email-Dave.Martin@arm.com/
-> 
-> 
-> Dave Martin (2):
->   prctl.2: Add SVE prctls (arm64)
->   prctl.2: Add tagged address ABI control prctls (arm64)
-> 
->  man2/prctl.2 | 331 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 331 insertions(+)
-Thanks. I've pushed these changes to master now.
-
-Cheers,
-
-Michael
-
-
-
--- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
+Sorry, in the kernel vmlinux. ARM_TEXT includes *(.got) for 32-bit, and
+the 64-bit vmlinux.lds.S includes it in .text as well. The decompressor
+for 32-bit keeps it separate for non-EFI stub kernel and puts it inside
+.data for EFI stub.
